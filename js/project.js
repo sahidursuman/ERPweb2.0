@@ -1,4 +1,6 @@
-var APP_ROOT = "http://localhost:8080/huochaitou/";
+// var APP_ROOT = "http://localhost:8080/huochaitou/";
+var APP_ROOT = "/huochaitou/";
+var ASSETS_ROOT = '/';
 var APP_VERSION = "1.0.0";
 var globalLoadingLayer;
 var globelEditorInstants = {};
@@ -476,7 +478,7 @@ function logout(){
 }
 
 function viewAllMsg(){
-	seajs.use(""+APP_ROOT+"app/js/template/system/message/message.js",function(message){ 
+	seajs.use("" + ASSETS_ROOT +"js/template/system/message/message.js",function(message){ 
 		message.listMsg(0,0);
 	});	
 }
@@ -504,7 +506,7 @@ function listMenu(menuTemplate){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
-					seajs.use(""+APP_ROOT+"app/js/template/resource/guide/guide.js",function(guide){ 
+					seajs.use("" + ASSETS_ROOT +"js/template/resource/guide/guide.js",function(guide){ 
 						guide.listGuide(0,"","");
 					});
 				});
@@ -514,7 +516,7 @@ function listMenu(menuTemplate){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
-					seajs.use(""+APP_ROOT+"app/js/template/resource/busCompany/busCompany.js",function(busCompany){
+					seajs.use("" + ASSETS_ROOT +"js/template/resource/busCompany/busCompany.js",function(busCompany){
 						busCompany.listBusCompany(0,"","");
 					});
 				});
@@ -524,7 +526,7 @@ function listMenu(menuTemplate){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
-					seajs.use(""+APP_ROOT+"app/js/template/resource/restaurant/restaurant.js",function(restaurant){
+					seajs.use("" + ASSETS_ROOT +"js/template/resource/restaurant/restaurant.js",function(restaurant){
 						restaurant.listRestaurant(0,"","");
 					});
 				});
@@ -533,7 +535,7 @@ function listMenu(menuTemplate){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
-					seajs.use(""+APP_ROOT+"app/js/template/resource/hotel/hotel.js",function(hotel){
+					seajs.use("" + ASSETS_ROOT +"js/template/resource/hotel/hotel.js",function(hotel){
 						hotel.listHotel(0,"","");
 					});
 				});
@@ -543,7 +545,7 @@ function listMenu(menuTemplate){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
-					seajs.use(""+APP_ROOT+"app/js/template/resource/partnerAgency/partnerAgency.js?version=",function(partnerAgency){
+					seajs.use("" + ASSETS_ROOT +"js/template/resource/partnerAgency/partnerAgency.js?version=",function(partnerAgency){
 						partnerAgency.listPartnerAgency(0,"",1);
 					});
 				});
@@ -553,7 +555,7 @@ function listMenu(menuTemplate){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
-					seajs.use(""+APP_ROOT+"app/js/template/resource/lineProduct/lineProduct.js",function(lineProduct){
+					seajs.use("" + ASSETS_ROOT +"js/template/resource/lineProduct/lineProduct.js",function(lineProduct){
 						lineProduct.listLineProduct(0,"",1);
 					});
 					$("#main-container")[0].index = 0;
@@ -564,7 +566,7 @@ function listMenu(menuTemplate){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
-					seajs.use(""+APP_ROOT+"app/js/template/resource/shop/shop.js",function(shop){
+					seajs.use("" + ASSETS_ROOT +"js/template/resource/shop/shop.js",function(shop){
 						shop.listShop(0,"","");
 					});
 				});
@@ -575,7 +577,7 @@ function listMenu(menuTemplate){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
-					seajs.use(""+APP_ROOT+"app/js/template/resource/travelLine/travelLine.js",function(travelLine){
+					seajs.use("" + ASSETS_ROOT +"js/template/resource/travelLine/travelLine.js",function(travelLine){
 						travelLine.listTravelLine(0,"",1);
 					});
 				});	
@@ -585,7 +587,7 @@ function listMenu(menuTemplate){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
-					seajs.use(""+APP_ROOT+"app/js/template/resource/scenic/scenic.js",function(scenic){
+					seajs.use("" + ASSETS_ROOT +"js/template/resource/scenic/scenic.js",function(scenic){
 						scenic.listScenic(0,"","");
 					});
 				});		
@@ -594,7 +596,7 @@ function listMenu(menuTemplate){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
-					seajs.use(""+APP_ROOT+"app/js/template/resource/insurance/insurance.js",function(insurance){
+					seajs.use("" + ASSETS_ROOT +"js/template/resource/insurance/insurance.js",function(insurance){
 						insurance.listInsurance(0,"","");
 					});
 				});	
@@ -603,7 +605,7 @@ function listMenu(menuTemplate){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
-					seajs.use(""+APP_ROOT+"app/js/template/resource/selfpay/selfpay.js",function(selfpay){
+					seajs.use("" + ASSETS_ROOT +"js/template/resource/selfpay/selfpay.js",function(selfpay){
 						selfpay.listSelfPay(0,"","");
 					});
 				});	
@@ -612,7 +614,7 @@ function listMenu(menuTemplate){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
-					seajs.use(""+APP_ROOT+"app/js/template/resource/ticket/ticket.js",function(ticket){ 
+					seajs.use("" + ASSETS_ROOT +"js/template/resource/ticket/ticket.js",function(ticket){ 
 						ticket.listTicket(0,"","");
 					});
 				});
@@ -621,7 +623,7 @@ function listMenu(menuTemplate){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
-					seajs.use(""+APP_ROOT+"app/js/template/resource/touristGroup/touristGroup.js",function(touristGroup){ 
+					seajs.use("" + ASSETS_ROOT +"js/template/resource/touristGroup/touristGroup.js",function(touristGroup){ 
 						touristGroup.listTouristGroup(0,"","","","","","","");
 					});
 				});
@@ -631,7 +633,7 @@ function listMenu(menuTemplate){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
-					seajs.use(""+APP_ROOT+"app/js/template/resource/tripPlan/tripPlan.js",function(tripPlan){ 
+					seajs.use("" + ASSETS_ROOT +"js/template/resource/tripPlan/tripPlan.js",function(tripPlan){ 
 						tripPlan.listTripPlan(0,"","","","","");
 					});
 				});
@@ -641,7 +643,7 @@ function listMenu(menuTemplate){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
-					seajs.use(""+APP_ROOT+"app/js/template/financial/guide/guide.js",function(guide){ 
+					seajs.use("" + ASSETS_ROOT +"js/template/financial/guide/guide.js",function(guide){ 
 						guide.listFinancialGuide(0,"","","");
 					});
 				});
@@ -651,7 +653,7 @@ function listMenu(menuTemplate){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
-					seajs.use(""+APP_ROOT+"app/js/template/arrange/arrangeTourist/arrangeTourist.js",function(arrangeTourist){ 
+					seajs.use("" + ASSETS_ROOT +"js/template/arrange/arrangeTourist/arrangeTourist.js",function(arrangeTourist){ 
 						arrangeTourist.listArrangeTouristMain();
 					});
 				});
@@ -661,7 +663,7 @@ function listMenu(menuTemplate){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
-					seajs.use(""+APP_ROOT+"app/js/template/arrange/transit/transit.js",function(transit){ 
+					seajs.use("" + ASSETS_ROOT +"js/template/arrange/transit/transit.js",function(transit){ 
 						transit.listTransit(0,"","","","","","","","","");
 					});
 				});
@@ -671,7 +673,7 @@ function listMenu(menuTemplate){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
-					seajs.use(""+APP_ROOT+"app/js/template/financial/ticket/ticket.js",function(ticket){
+					seajs.use("" + ASSETS_ROOT +"js/template/financial/ticket/ticket.js",function(ticket){
 						var date = new Date();
 						var year = date.getFullYear();
 						var month = ""
@@ -684,7 +686,7 @@ function listMenu(menuTemplate){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
-					seajs.use(""+APP_ROOT+"app/js/template/system/user/user.js",function(user){ 
+					seajs.use("" + ASSETS_ROOT +"js/template/system/user/user.js",function(user){ 
 						user.listUser(0,"",1);
 					});
 				});
@@ -694,7 +696,7 @@ function listMenu(menuTemplate){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
-					seajs.use(""+APP_ROOT+"app/js/template/system/department/business.js",function(business){
+					seajs.use("" + ASSETS_ROOT +"js/template/system/department/business.js",function(business){
 						business.listBusiness(0, "");
 					});
 				});
@@ -704,7 +706,7 @@ function listMenu(menuTemplate){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
-					seajs.use(""+APP_ROOT+"app/js/template/system/travelAgency/travelAgency.js",function(TravelAgency){
+					seajs.use("" + ASSETS_ROOT +"js/template/system/travelAgency/travelAgency.js",function(TravelAgency){
 						TravelAgency.listTravelAgency();
 					});
 				});
@@ -714,7 +716,7 @@ function listMenu(menuTemplate){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
-					seajs.use(""+APP_ROOT+"app/js/template/financial/busCompany/busCompany.js",function(busCompany){ 
+					seajs.use("" + ASSETS_ROOT +"js/template/financial/busCompany/busCompany.js",function(busCompany){ 
 						var date = new Date();
 						var year = date.getFullYear();
 						busCompany.listBusCompany(0,"",year,"");
@@ -726,7 +728,7 @@ function listMenu(menuTemplate){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
-					seajs.use(""+APP_ROOT+"app/js/template/financial/hotel/hotel.js",function(hotel){
+					seajs.use("" + ASSETS_ROOT +"js/template/financial/hotel/hotel.js",function(hotel){
 						var date = new Date();
 						var year = date.getFullYear();
 						var month = ""
@@ -738,7 +740,7 @@ function listMenu(menuTemplate){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
-					seajs.use(""+APP_ROOT+"app/js/template/system/information/information.js",function(information){
+					seajs.use("" + ASSETS_ROOT +"js/template/system/information/information.js",function(information){
 						information.listInformation();
 					});
 				});
@@ -747,7 +749,7 @@ function listMenu(menuTemplate){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
-					seajs.use(""+APP_ROOT+"app/js/template/financial/Restaurant/Restaurant.js",function( Restaurant){
+					seajs.use("" + ASSETS_ROOT +"js/template/financial/Restaurant/Restaurant.js",function( Restaurant){
 						var date = new Date();
 						var year = date.getFullYear();
 						var month = ""//date.getMonth()+1
@@ -760,7 +762,7 @@ function listMenu(menuTemplate){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
-					seajs.use(""+APP_ROOT+"app/js/template/financial/Scenic/Scenic.js",function( Scenic){
+					seajs.use("" + ASSETS_ROOT +"js/template/financial/Scenic/Scenic.js",function( Scenic){
 						var date = new Date();
 						var year = date.getFullYear();
 						var month = ""//date.getMonth()+1
@@ -773,7 +775,7 @@ function listMenu(menuTemplate){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
-					seajs.use(""+APP_ROOT+"app/js/template/financial/Self/Self.js",function( Self){
+					seajs.use("" + ASSETS_ROOT +"js/template/financial/Self/Self.js",function( Self){
 						var date = new Date();
 						var year = date.getFullYear();
 						var month = ""
@@ -786,7 +788,7 @@ function listMenu(menuTemplate){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
-					seajs.use(""+APP_ROOT+"app/js/template/financial/insure/insure.js",function(Insure){
+					seajs.use("" + ASSETS_ROOT +"js/template/financial/insure/insure.js",function(Insure){
 						var date = new Date();
 						var year = date.getFullYear();
 						var month = ""//date.getMonth()+1
@@ -799,7 +801,7 @@ function listMenu(menuTemplate){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
-					seajs.use(""+APP_ROOT+"app/js/template/financial/Client/Client.js",function(Client){
+					seajs.use("" + ASSETS_ROOT +"js/template/financial/Client/Client.js",function(Client){
 						Client.listClient(0,"","","","");
 					});
 				});   
@@ -809,7 +811,7 @@ function listMenu(menuTemplate){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
-					seajs.use(""+APP_ROOT+"app/js/template/financial/replace/replace.js",function(Replace){
+					seajs.use("" + ASSETS_ROOT +"js/template/financial/replace/replace.js",function(Replace){
 						var date = new Date();
 						var year = date.getFullYear();
 						var month = "";
@@ -822,7 +824,7 @@ function listMenu(menuTemplate){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
-					seajs.use(""+APP_ROOT+"app/js/template/financial/transfer/transfer.js",function(transfer){
+					seajs.use("" + ASSETS_ROOT +"js/template/financial/transfer/transfer.js",function(transfer){
 						var date = new Date();
 						var year = date.getFullYear();
 						transfer.listTransfer(0,"",year,"");
@@ -834,7 +836,7 @@ function listMenu(menuTemplate){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
-					seajs.use(""+APP_ROOT+"app/js/template/financial/shop/shop.js",function(shop){
+					seajs.use("" + ASSETS_ROOT +"js/template/financial/shop/shop.js",function(shop){
 						shop.listFinancialShop(0,"","","");
 					});
 				});
@@ -844,7 +846,7 @@ function listMenu(menuTemplate){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
-					seajs.use(""+APP_ROOT+"app/js/template/financial/else/else.js",function(Else){
+					seajs.use("" + ASSETS_ROOT +"js/template/financial/else/else.js",function(Else){
 						Else.listElse();
 					});
 				});
@@ -854,7 +856,7 @@ function listMenu(menuTemplate){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
-					seajs.use(""+APP_ROOT+"app/js/template/financial/Vertical/Vertical.js",function(Vertical){
+					seajs.use("" + ASSETS_ROOT +"js/template/financial/Vertical/Vertical.js",function(Vertical){
 						Vertical.listVertical();
 					});
 				});
@@ -864,7 +866,7 @@ function listMenu(menuTemplate){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
-					seajs.use(""+APP_ROOT+"app/js/template/arrange/plan/plan.js",function(plan){
+					seajs.use("" + ASSETS_ROOT +"js/template/arrange/plan/plan.js",function(plan){
 						//plan.listPlan();
 					});
 				});*/
@@ -874,7 +876,7 @@ function listMenu(menuTemplate){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
-					seajs.use(""+APP_ROOT+"app/js/template/arrange/tripPlan/tripPlan.js",function(tripPlan){
+					seajs.use("" + ASSETS_ROOT +"js/template/arrange/tripPlan/tripPlan.js",function(tripPlan){
 						tripPlan.listTripPlan(0,"","","","","","");
 					});
 				});
@@ -884,7 +886,7 @@ function listMenu(menuTemplate){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
-					seajs.use(""+APP_ROOT+"app/js/template/arrange/booking/booking.js",function(booking){
+					seajs.use("" + ASSETS_ROOT +"js/template/arrange/booking/booking.js",function(booking){
 						booking.listbooking(0,"","","","","");
 					});
 				});
@@ -894,7 +896,7 @@ function listMenu(menuTemplate){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
-					seajs.use(""+APP_ROOT+"app/js/template/arrange/arrangeTransfer/arrangeTransfer.js",function(transfer){ 
+					seajs.use("" + ASSETS_ROOT +"js/template/arrange/arrangeTransfer/arrangeTransfer.js",function(transfer){ 
 						transfer.getlistTransferSumData(0,"","","","","","",2);
 					});
 				});
@@ -903,7 +905,7 @@ function listMenu(menuTemplate){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
-					seajs.use(""+APP_ROOT+"app/js/template/financial/count/count.js",function(count){
+					seajs.use("" + ASSETS_ROOT +"js/template/financial/count/count.js",function(count){
 						
 						
 						count.getlistCount(0,"","","","","","","","");
@@ -915,7 +917,7 @@ function listMenu(menuTemplate){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
-					seajs.use(""+APP_ROOT+"app/js/template/financial/turnProfit/turnProfit.js",function(TurnProfit){
+					seajs.use("" + ASSETS_ROOT +"js/template/financial/turnProfit/turnProfit.js",function(TurnProfit){
 						/*var tu = new Date()
 						var vYear = tu.getFullYear()
 						var vMon = tu.getMonth() + 1
@@ -935,7 +937,7 @@ function listMenu(menuTemplate){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");   
-					seajs.use(""+APP_ROOT+"app/js/template/financial/replaceProfit/replaceProfit.js",function(replaceProfit){
+					seajs.use("" + ASSETS_ROOT +"js/template/financial/replaceProfit/replaceProfit.js",function(replaceProfit){
 						replaceProfit.listReplaceProfit(0,"","","","","","","","","","");
 					});
 				});
@@ -944,7 +946,7 @@ function listMenu(menuTemplate){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
-					seajs.use(""+APP_ROOT+"app/js/template/financial/totalProfit/totalProfit.js",function(totalProfit){
+					seajs.use("" + ASSETS_ROOT +"js/template/financial/totalProfit/totalProfit.js",function(totalProfit){
 						totalProfit.listTotalProfit();
 					});
 				});
@@ -953,7 +955,7 @@ function listMenu(menuTemplate){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
-					seajs.use(""+APP_ROOT+"app/js/template/financial/collectDetail/collectDetail.js",function(collectDetail){
+					seajs.use("" + ASSETS_ROOT +"js/template/financial/collectDetail/collectDetail.js",function(collectDetail){
 						collectDetail.listCollectDetail();
 					});
 				});
