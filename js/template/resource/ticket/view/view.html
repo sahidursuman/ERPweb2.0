@@ -1,0 +1,68 @@
+<div class="col-xs-12">
+	<form class="form-horizontal ticketMainForm" role="form" style="margin-top:10px" onsubmit="return false">
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right">票务公司名称:</label>
+			<div class="col-sm-3">
+				<label class="control-label">{{ticket.name}}</label>
+			</div>
+			<label class="col-sm-2 control-label no-padding-right">是否启用:</label>
+			<div class="col-sm-3">
+				<label class="control-label">
+					{{if ticket.status == 0}}
+						已停用
+					{{else}}
+						已启用
+					{{/if}}
+				</label>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right">联系人:</label>
+			<div class="col-sm-3">
+				<label class="control-label">{{ticket.managerName}}</label>
+			</div>
+			<label class="col-sm-2 control-label no-padding-right">联系电话:</label>
+			<div class="col-sm-3">
+				<label class="control-label">{{ticket.mobileNumber}}</label>
+			</div>
+		</div> 
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right">座机号码:</label>
+			<div class="col-sm-3">
+				<label class="control-label">{{ticket.telNumber}}</label>
+			</div>
+			<label class="col-sm-2 control-label no-padding-right">传真号码:</label> 
+			<div class="col-sm-3">
+					<label class="control-label">{{ticket.faxNumber}}</label>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right">票务公司所在省市:</label>
+			<div class="col-sm-8">
+				<label class="control-label">
+					{{if ticket.province != null}} 
+						{{ticket.province.name}}
+					{{/if}}
+					{{if ticket.city != null}}
+						-{{ticket.city.name}}
+					{{/if}}
+					{{if ticket.district != null}}
+						-{{ticket.district.name}}
+					{{/if}}
+				</label>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right">详细地址:</label>
+			<div class="col-sm-6">
+					<label class="control-label">{{ticket.street}}</label>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right">简介:</label>
+			<div class="col-sm-8">
+				<label class="control-label">{{ticket.remark}}</label>
+			</div>
+		</div>
+	</form>
+</div>

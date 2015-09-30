@@ -1,0 +1,160 @@
+<div class="row check">
+		<div class="col-xs-12 border" >
+            <form class="form-horizontal" role="form" onsubmit="return false">
+                <div class="search-area  editable editable-click" style="margin-top: 10px">
+                    <div class="form-group"> <label style="float: left;margin: 5px auto auto 15px" class=" control-label "> 导游：{{guideName}}</label>
+
+                        <label class="col-sm-1 control-label no-padding-right">账期：</label>
+
+
+                        <select class="col-sm-1" name="year">
+                            {{each yearList as year}}
+							<option value="{{year}}">{{year}}</option>
+							{{/each}} 
+                        </select>
+                        <label class="col-sm-1 control-label no-padding-right"></label>
+                        <select class="col-sm-1" name="month">
+                            <option value="">全部</option>
+                            <option value="1">1月</option>
+                            <option value="2">2月</option>
+                            <option value="3">3月</option>
+                            <option value="4">4月</option>
+                            <option value="5">5月</option>
+                            <option value="6">6月</option>
+                            <option value="7">7月</option>
+                            <option value="8">8月</option>
+                            <option value="9">9月</option>
+                            <option value="10">10月</option>
+                            <option value="11">11月</option>
+                            <option value="12">12月</option>
+                        </select>
+
+                        <button class=" btn-sm  btn-guideChecking-search search-btn btn-height" style="margin-left: 60px">
+                            <i class="ace-icon fa fa-search"></i>
+                            	搜索
+                        </button>
+                        <button type="button" class="btn btn-sm btn-primary btn-success btn-guideExport">
+							<span>导出报表</span>
+							<i class="ace-icon fa fa-arrow-right icon-on-right"></i>
+						</button>
+                    </div>
+
+                </div>
+            </form>
+            <form class="form-horizontal" role="form" onsubmit="return false">
+                <div class="form-group ">
+
+
+                    <label class=" control-label pull-left" style="margin-left: 15px">总预支款：{{sumGuidePreMoney}}</label>
+                    <label class="col-sm-1 control-label no-padding-right">总团队收入：{{sumGuideIncomeMoney}}</label>
+                    <label class="col-sm-1 control-label no-padding-right">总导游现付：{{sumGuideNowPayedMoney}}</label>
+                    <label class="col-sm-1 control-label no-padding-right">总导服费：{{sumGuideFee}}</label>
+                    <label class="col-sm-1 control-label no-padding-right">总导游返佣：{{sumGuideRebateMoney}}</label>
+                    <label class="col-sm-1 control-label no-padding-right">总退补款：{{sumBackGuideMoney}}</label>
+                    <label class="col-sm-1 control-label no-padding-right">总实际退补：{{sumRealBackGuideMoney}}</label>
+                </div>
+            </form>
+        </div>
+<div class="clearfix"></div>
+				<table class="table table-striped table-bordered table-hover all" style="margin-top: 30px">
+					<thead>
+						<tr>
+                           <th>团号</th>
+                           <th>线路</th>
+                           <th>预支款</th>
+                           <th>现收团款</th>
+                           <th>其他收入</th>
+                           <th>导游现付</th>
+                           <th>导服费</th>
+                           <th>管理费</th>
+                           <th>购物导拥</th>
+                           <th>自费导拥</th>
+                           <th>退补款</th>
+                           <th class="col-sm-1"> <span class="necessary">*</span>实际退补款</th>
+                           <th class="col-sm-1">说明</th>
+                           <th class="col-sm-1">对账时间</th>
+                           <th>对账人</th>
+                           <th>对账</th>
+                        </tr>
+					</thead>
+					<tbody>
+					{{each guideList as guide}}
+						<tr data-entity-id="{{guide.id}}" data-entity-isConfirmAccount="{{guide.isConfirmAccount}}" data-entity-startTime="{{guide.startTime}}">
+							<td>
+							   <a class="cost-detail" data-entity-id="{{guide.id}}" onsubmit="return false" href="javascript:void(0)">{{guide.tripNumber}}</a>
+							</td>
+							<td>{{guide.lineProductName}}</td>
+							<td>{{guide.guidePreMoney}}</td>
+							<td>{{guide.guideNowIncomeMoney}}</td>
+							<td>{{guide.otherIncomeMoney}}</td>
+							<td>{{guide.guideNowPayedMoney}}</td>
+							<td>{{guide.guideFee}}</td>
+							<td>{{guide.manageFee}}</td>
+							<td>{{guide.guideShopRebateMoney}}</td>
+							<td>{{guide.guideSelfpayRebateMoney}}</td>
+							<td>{{guide.backGuideMoney}}</td>
+							<td class="col-sm-1">
+								<input data-entity-value="{{guide.realBackGuideMoney}}"  type="text" name="realBackGuideMoney" value="{{guide.realBackGuideMoney}}" class="col-sm-12"  {{if guide.isConfirmAccount == 1 && roleType != 1 }} disabled = "true" {{/if}}/>
+							</td>
+							<td>
+								<input data-entity-value="{{guide.billRemark}}" type="text" name="billRemark" value="{{guide.billRemark}}" class="col-sm-12" {{if guide.isConfirmAccount == 1 && roleType != 1 }} disabled = "true" {{/if}}/>
+							</td>
+							<td>{{guide.checkTime}}</td>
+							<td>{{guide.checkUserRealName}}</td>
+							<td>
+								<input type="checkbox" class="ace"  name="isConfirmAccount" data-entity-checkStatus="{{guide.isConfirmAccount}}" {{if guide.isConfirmAccount == 1}}checked="checked"{{/if}} {{if guide.isConfirmAccount == 1 && roleType != 1 }} disabled = "true" {{/if}}/>
+								<span class="lbl"></span>
+							</td>
+						</tr>
+					{{/each}}
+					</tbody>
+				</table>
+
+            <div class="row pageMode" style="margin-top: 40px">
+                <div class="col-xs-6">
+                    <div class="dataTables_info" id="dynamic-table_info" role="status" aria-live="polite">共计 {{recordSize}} 条记录</div>
+                </div>
+                <div class="col-xs-6">
+                    <div class="dataTables_paginate paging_simple_numbers" id="dynamic-table_paginate">
+                        <ul class="pagination">
+                            <li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="first" href="javascript:void(0)">首页</a></li>
+                            <li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="previous"href="javascript:void(0)">上一页</a></li>
+                            <li class="paginate_button" aria-controls="dynamic-table" tabindex="0">
+                                <a href="javascript:void(0)">
+                                    {{if totalPage == 0}}
+									    0/0
+									{{else}}
+										{{pageNo+1}}/{{totalPage}}
+									{{/if}}
+                                </a>
+                            </li>
+                            <li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="next"  href="javascript:void(0)">下一页</a></li>
+                            <li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="last" href="javascript:void(0)">尾页</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group pull-right col-sm-4" style="text-align: right;margin-top: 40px;padding-right: 40px">
+                <label class="control-label no-padding-right" style="margin-left: 17px" ><span style="margin-left: 30px"><input type="checkbox" class="selectAll">全选</span></label>
+            </div>
+            <div style="clear: both"></div>
+
+            <br>
+
+
+            <form class="form-horizontal" role="form" onsubmit="return false">
+                <div class="form-group" style="text-align: center;">
+                	<button class="btn btn-xs btn-primary btn-guide-close" style="margin-left:20px">
+                        <i class="ace-icon fa fa-times-circle"></i>
+                       	 关闭
+                    </button>
+                    <button class="btn btn-xs btn-primary btn-confirm-guide-checking">
+                        <i class="ace-icon fa fa-check-circle"></i>
+                       	 确认对账
+                    </button>
+                </div>
+            </form>
+
+
+</div>

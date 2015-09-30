@@ -1,0 +1,448 @@
+<div class="col-sm-12 countUpdate">
+    <div class="col-xs-12 border">
+        <form class="form-horizontal" role="form" onsubmit="return false">
+            <div class="search-area  editable editable-click" style="margin-top: 10px;">
+                <div class="form-group">
+                    <label class="col-sm-3" >团号: {{financialGuide.tripNumber}}</label>
+                    <label class="col-sm-2" >导游: {{financialGuide.guideName}}</label>
+                    <label class="col-sm-2" >全陪: {{accompanyGuideName}}</label>
+                    <label class="col-sm-2" >团队人数:{{financialGuide.adultCount}}大{{financialGuide.childCount}}小</label>
+                </div>
+            </div>
+        </form>
+        <form class="form-horizontal" role="form" onsubmit="return false">
+            <div class="search-area  editable editable-click" style="margin-top: 10px;">
+                <div class="form-group">
+                    <label class="col-sm-3" >线路：{{financialGuide.lineProductName}}</label>
+                    <label class="col-sm-2" >天数：{{financialGuide.days}}</label>
+                    <label class="col-sm-2" >出团日期：{{financialGuide.startTime | dateFormat:'yyyy-MM-dd'}}</label>
+                    <label class="col-sm-2" >完团日期：{{financialGuide.endTime | dateFormat:'yyyy-MM-dd'}}</label>
+                </div>
+            </div>
+        </form>
+
+        <div class="col-sm-12 widget-container-col" >
+            <div class="pull-left" >预支款：{{financialGuide.guidePreMoney}}</div>
+            <div class="pull-left" style="margin-left: 50px;">团队收入：{{financialGuide.guideNowIncomeMoney + financialGuide.otherIncomeMoney}}</div>
+            <div class="pull-left" style="margin-left: 50px;">导游现付：{{financialGuide.guideNowPayedMoney}}</div>
+            <div class="pull-left" style="margin-left: 20px;">导服费：{{financialGuide.guideFee}}</div>
+            <div class="pull-left" style="margin-left: 50px;">导游返佣：{{financialGuide.guideShopRebateMoney}}</div>
+            <div class="pull-left" style="margin-left: 50px;">退补款：{{financialGuide.backGuideMoney}}</div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    <input type="hidden" value="{{WEB_IMG_URL_BIG}}" name="WEB_IMG_URL_BIG" />
+    <input type="hidden" value="{{WEB_IMG_URL_SMALL}}" name="WEB_IMG_URL_SMALL" />
+    <div class="clearfix"></div>
+
+    <div class="col-sm-13 widget-container-col">
+        <div class="widget-box ui-sortable-handle">
+            <div class="widget-header">
+                <h5 class="widget-title"><i class="ace-icon fa fa-bus"></i>现收团款</h5>
+            </div>
+            <div class="widget-body">
+                <div class="widget-main">
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead><tr>
+                            <th>小组</th>
+                            <th>姓名</th>
+                            <th>联系电话</th>
+                            <th>证件类型</th>
+                            <th>证件号</th>
+                            <th>应收款</th>
+                            <th>已收款</th>
+                            <th>导游现收</th>
+                            <th>联系人</th>
+                        </tr></thead>
+                        <tbody>
+                        {{each groupList as group}}
+                            {{each group as member index}}
+	                        <tr>
+	                        	{{if index == 0}}
+	                        		<td rowspan="{{group.length}}">{{member.groupNumber}}</td>
+	                        	{{/if}}
+	                        		<td>{{member.name}}</td>
+		                            <td>{{member.mobileNumber}}</td>
+		                            <td>
+		                            	{{if member.idCardType == 0}}身份证{{/if}}{{if member.idCardType == 1}}护照{{/if}}{{if member.idCardType ==2}}其他{{/if}}
+		                            </td>
+		                            <td>{{member.idCardNumber}}</td>
+		                            <td>{{member.needPayAllMoney}}</td>
+		                            <td>{{member.payedMoney}}</td>
+		                            <td>{{member.currentNeedPayMoney}}</td>
+		                            <td>
+		                            	{{if member.isContactUser == 1}}是{{/if}}
+		                            </td>
+	                        </tr>
+	                        {{/each}} 
+                        {{/each}} 
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-13 widget-container-col">
+        <div class="widget-box ui-sortable-handle">
+            <div class="widget-header">
+                <h5 class="widget-title"><i class="ace-icon fa fa fa-smile-o"></i>其他收入</h5>
+            </div>
+            <div class="widget-body">
+                <div class="widget-main">
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead><tr>
+                            <th>日期</th>
+                            <th>单价</th>
+                            <th>数量</th>
+                            <th>应收</th>
+                            <th>单据</th>
+
+                        </tr></thead>
+                        <tbody>
+                        {{each arrangeIncomePaymentList as arrangeIncomePayment}}
+                        <tr>
+                            <td>{{arrangeIncomePayment.dateTime | dateFormat:'yyyy-MM-dd'}}</td>
+                            <td>{{arrangeIncomePayment.price}}</td>
+                            <td>{{arrangeIncomePayment.count}}</td>
+                            <td>{{arrangeIncomePayment.needIncomeMoney}}</td>
+                            <td><a class="costDetailImg" url="{{arrangeIncomePayment.billImage}}" href="#">查看</a></td>
+                        </tr>
+						{{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-13 widget-container-col">
+        <div class="widget-box ui-sortable-handle">
+            <div class="widget-header">
+                <h5 class="widget-title"><i class="ace-icon fa fa-shopping-cart"></i>购物导佣</h5>
+            </div>
+            <div class="widget-body">
+                <div class="widget-main">
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th>进店日期</th>
+                            <th>商品</th>
+                            <th>金额</th>
+                            <th>社佣</th>
+                            <th>导佣</th>
+                            <th>单据</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{each shopArrangeList as shopArrange}}
+                        <tr>
+                            <td>{{shopArrange.dateTime | dateFormat:'yyyy-MM-dd'}}</td>
+                            <td>{{shopArrange.shopPolicyName}}</td>
+                            <td>{{shopArrange.consumeMoney}}</td>
+                            <td>{{shopArrange.travelAgencyRate}}</td>
+                            <td>{{shopArrange.guideRate}}</td>
+                            <td><a class="costDetailImg" url="{{shopArrange.billImage}}" href="#">查看</a></td>
+                        </tr>
+						{{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-sm-13 widget-container-col">
+        <div class="widget-box ui-sortable-handle">
+            <div class="widget-header">
+                <h5 class="widget-title"><i class="ace-icon fa fa-tree"></i>自费导佣</h5>
+            </div>
+            <div class="widget-body">
+                <div class="widget-main">
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead><tr>
+                            <th>日期</th>
+                            <th>单价</th>
+                            <th>低价</th>
+                            <th>计划数量</th>
+                            <th>实际数量</th>
+                            <th>应付</th>
+                            <th>社付</th>
+                            <th>导付</th>
+                            <th>单据</th>
+
+                        </tr></thead>
+                        <tbody>
+                        {{each selfPayArrangeList as selfPayArrange}}
+                        <tr>
+                            <td>{{selfPayArrange.dateTime | dateFormat:'yyyy-MM-dd'}}</td>
+                            <td>{{selfPayArrange.price}}</td>
+                            <td>{{selfPayArrange.lowestPrice}}</td>
+                            <td>{{selfPayArrange.memberCount}}</td>
+                            <td>{{selfPayArrange.realCount}}</td>
+                            <td>{{selfPayArrange.needPayMoney}}</td>
+                            <td>{{selfPayArrange.payedMoney}}</td>
+                            <td>{{selfPayArrange.guidePayMoney}}</td>
+                            <td><a class="costDetailImg" url="{{selfPayArrange.billImage}}" href="#">查看</a></td>
+                        </tr>
+                        {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-13 widget-container-col">
+        <div class="widget-box ui-sortable-handle">
+            <div class="widget-header">
+                <h5 class="widget-title"><i class="ace-icon fa fa fa-car"></i>现付车费</h5>
+            </div>
+            <div class="widget-body">
+                <div class="widget-main">
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead><tr>
+                            <th>司机</th>
+                            <th>车型</th>
+                            <th>车牌号</th>
+                            <th>优惠</th>
+                            <th>应付</th>
+                            <th>社付</th>
+                            <th>导付</th>
+                            <th>单据</th>
+                        </tr></thead>
+                        <tbody>
+                        {{each busCompanyArrangeList as busCompanyArrange}}
+                        <tr>
+                            <td>{{busCompanyArrange.driverName}}</td>
+                            <td>{{busCompanyArrange.brand}}</td>
+                            <td>{{busCompanyArrange.licenseNumber}}</td>
+                            <td>{{busCompanyArrange.reduceMoney}}</td>
+                            <td>{{busCompanyArrange.needPayMoney}}</td>
+                            <td>{{busCompanyArrange.payedMoney}}</td>
+                            <td>{{busCompanyArrange.guidePayMoney}}</td>
+                            <td><a class="costDetailImg" url="{{busCompanyArrange.billImage}}" href="#">查看</a></td>
+                        </tr>
+						{{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-sm-13 widget-container-col">
+        <div class="widget-box ui-sortable-handle">
+            <div class="widget-header">
+                <h5 class="widget-title"><i class="ace-icon fa fa fa-hotel"></i>现付餐费</h5>
+            </div>
+            <div class="widget-body">
+                <div class="widget-main">
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th>用餐日期</th>
+                            <th>用餐类型</th>
+                            <th>餐标</th>
+                            <th>人数</th>
+                            <th>优惠</th>
+                            <th>应付</th>
+                            <th>社付</th>
+                            <th>导付</th>
+                            <th>单据</th>
+
+                        </tr></thead>
+                        <tbody>
+                        {{each restaurantArrangeList as restaurantArrange}}
+                        <tr>
+                            <td>{{restaurantArrange.dateTime | dateFormat:'yyyy-MM-dd'}}</td>
+                            <td>{{restaurantArrange.type}}</td>
+                            <td>{{restaurantArrange.price}}/人</td>
+                            <td>{{restaurantArrange.memberCount}}</td>
+                            <td>{{restaurantArrange.reduceMoney}}</td>
+                            <td>{{restaurantArrange.needPayMoney}}</td>
+                            <td>{{restaurantArrange.payedMoney}}</td>
+                            <td>{{restaurantArrange.guidePayMoney}}</td>
+                            <td><a class="costDetailImg" url="{{restaurantArrange.billImage}}" href="#">查看</a></td>
+                        </tr>
+                        {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-13 widget-container-col">
+        <div class="widget-box ui-sortable-handle">
+            <div class="widget-header">
+                <h5 class="widget-title"><i class="ace-icon fa fa-car"></i>现付房费</h5>
+            </div>
+            <div class="widget-body">
+                <div class="widget-main">
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead><tr>
+                            <th>入住日期</th>
+                            <th>房型</th>
+                            <th>单价</th>
+                            <th>数量</th>
+                            <th>优惠</th>
+                            <th>应付</th>
+                            <th>社付</th>
+                            <th>导付</th>
+                            <th>单据</th>
+                        </tr></thead>
+                        <tbody>
+                        {{each hotelArrangeList as hotelArrange}}
+                        <tr>
+                            <td>{{hotelArrange.dateTime | dateFormat:'yyyy-MM-dd'}}</td>
+                            <td>{{hotelArrange.type}}</td>
+                            <td>{{hotelArrange.price}}/人</td>
+                            <td>{{hotelArrange.memberCount}}</td>
+                            <td>{{hotelArrange.reduceMoney}}</td>
+                            <td>{{hotelArrange.needPayMoney}}</td>
+                            <td>{{hotelArrange.payedMoney}}</td>
+                            <td>{{hotelArrange.guidePayMoney}}</td>
+                            <td><a class="costDetailImg" url="{{hotelArrange.billImage}}" href="#">查看</a></td>
+                        </tr>
+                        {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-13 widget-container-col">
+        <div class="widget-box ui-sortable-handle">
+            <div class="widget-header">
+                <h5 class="widget-title"><i class="ace-icon fa fa-car"></i>现付景区费用</h5>
+            </div>
+            <div class="widget-body">
+                <div class="widget-main">
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead><tr>
+                            <th>日期</th>
+                            <th>景区</th>
+                            <th>收费项目</th>
+                            <th>单价</th>
+                            <th>数量</th>
+                            <th>优惠</th>
+                            <th>应付</th>
+                            <th>社付</th>
+                            <th>导付</th>
+                            <th>单据</th>
+                        </tr></thead>
+                        <tbody>
+                        {{each scenicArrangeList as scenicArrange}}
+                        <tr>
+                            <td>{{scenicArrange.dateTime | dateFormat:'yyyy-MM-dd'}}</td>
+                            <td>{{scenicArrange.name}}</td>
+                            <td>{{scenicArrange.scenicItem}}</td>
+                            <td>{{scenicArrange.price}}</td>
+                            <td>{{scenicArrange.memberCount}}</td>
+                            <td>{{scenicArrange.reduceMoney}}</td>
+                            <td>{{scenicArrange.needPayMoney}}</td>
+                            <td>{{scenicArrange.payedMoney}}</td>
+                            <td>{{scenicArrange.guidePayMoney}}</td>
+                            <td><a class="costDetailImg" url="{{scenicArrange.billImage}}" href="#">查看</a></td>
+                        </tr>
+                        {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-13 widget-container-col">
+        <div class="widget-box ui-sortable-handle">
+            <div class="widget-header">
+                <h5 class="widget-title"><i class="ace-icon fa fa-smile-o"></i>现付票务费</h5>
+            </div>
+            <div class="widget-body">
+                <div class="widget-main">
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead><tr>
+                            <th>日期</th>
+                            <th>类型</th>
+                            <th>单价</th>
+                            <th>数量</th>
+                            <th>优惠</th>
+                            <th>应付</th>
+                            <th>社付</th>
+                            <th>导付</th>
+                            <th>单据</th>
+                        </tr></thead>
+                        <tbody>
+                        {{each ticketArrangeList as ticketArrange}}
+                        <tr>
+                            <td>{{ticketArrange.dateTime | dateFormat:'yyyy-MM-dd'}}</td>
+                            <td>
+                            {{if ticketArrange.type == 1}}
+								 机票                           
+                            {{/if}}
+                            {{if ticketArrange.type == 2}}
+								 汽车票                           
+                            {{/if}}
+                            {{if ticketArrange.type == 3}}
+								 火车票                           
+                            {{/if}}
+                            {{if ticketArrange.type == 4}}
+								 轮船票                           
+                            {{/if}}
+                            </td>
+                            <td>{{ticketArrange.price}}</td>
+                            <td>{{ticketArrange.memberCount}}</td>
+                            <td>{{ticketArrange.reduceMoney}}</td>
+                            <td>{{ticketArrange.needPayMoney}}</td>
+                            <td>{{ticketArrange.payedMoney}}</td>
+                            <td>{{ticketArrange.guidePayMoney}}</td>
+                            <td><a class="costDetailImg" url="{{ticketArrange.billImage}}" href="#">查看</a></td>
+                        </tr>
+                        {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-13 widget-container-col">
+        <div class="widget-box ui-sortable-handle">
+            <div class="widget-header">
+                <h5 class="widget-title"><i class="ace-icon fa fa-smile-o"></i>现付其他费用</h5>
+            </div>
+            <div class="widget-body">
+                <div class="widget-main">
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead><tr>
+                            <th>日期</th>
+                            <th>单价</th>
+                            <th>数量</th>
+                            <th>优惠</th>
+                            <th>应付</th>
+                            <th>社付</th>
+                            <th>导付</th>
+                            <th>单据</th>
+                        </tr></thead>
+                        <tbody>
+                        {{each otherArrangeList as otherArrange}}
+                        <tr>
+                            <td>{{otherArrange.dateTime | dateFormat:'yyyy-MM-dd'}}</td>
+                            <td>{{otherArrange.price}}</td>
+                            <td>{{otherArrange.memberCount}}</td>
+                            <td>{{otherArrange.reduceMoney}}</td>
+                            <td>{{otherArrange.needPayMoney}}</td>
+                            <td>{{otherArrange.payedMoney}}</td>
+                            <td>{{otherArrange.guidePayMoney}}</td>
+                            <td><a class="costDetailImg" url="{{otherArrange.billImage}}" href="#">查看</a></td>
+                        </tr>
+                        {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

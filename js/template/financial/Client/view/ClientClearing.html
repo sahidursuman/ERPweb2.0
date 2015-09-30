@@ -1,0 +1,133 @@
+<div class= "row Cleaning ClientClearMain">
+
+    <div class="col-sm-12 " style="border: 1px solid #ccc">
+        <form class="form-horizontal" role="form" onsubmit="return false">
+            <div class="search-area  editable editable-click" style="margin-top: 10px">
+                <div class="form-group"> <label style="float: left;margin: 5px auto auto 15px" class=" control-label "> 客户：{{pname}}</label>
+
+                    <label class="col-sm-1 control-label no-padding-right">账期：</label>
+                    <select class="col-sm-1" name="ClientClear_year">
+                        <option value="2015" {{if year==2015}}selected="selected"{{/if}}>2015年</option>
+                        <option value="2014" {{if year==2014}}selected="selected"{{/if}}>2014年</option>
+                    </select>
+                     
+					<input type="hidden" name="ClientClear_pid" value="{{pid}}" />
+                    <label class="col-sm-1 control-label no-padding-right">起始月：</label>
+                    <select class="col-sm-1" name="ClientClear_startMonth">
+                        <option value="1" {{if startMonth==1}}selected="selected"{{/if}}>1月</option>
+                        <option value="2" {{if startMonth==2}}selected="selected"{{/if}}>2月</option>
+                        <option value="3" {{if startMonth==3}}selected="selected"{{/if}}>3月</option>
+                        <option value="4" {{if startMonth==4}}selected="selected"{{/if}}>4月</option>
+                        <option value="5" {{if startMonth==5}}selected="selected"{{/if}}>5月</option>
+                        <option value="6" {{if startMonth==6}}selected="selected"{{/if}}>6月</option>
+                        <option value="7" {{if startMonth==7}}selected="selected"{{/if}}>7月</option>
+                        <option value="8" {{if startMonth==8}}selected="selected"{{/if}}>8月</option>
+                        <option value="9" {{if startMonth==9}}selected="selected"{{/if}}>9月</option>
+                        <option value="10" {{if startMonth==10}}selected="selected"{{/if}}>10月</option>
+                        <option value="11" {{if startMonth==11}}selected="selected"{{/if}}>11月</option>
+                        <option value="12" {{if startMonth==12}}selected="selected"{{/if}}>12月</option>
+                    </select>
+                    <label class="col-sm-1 control-label no-padding-right">结束月：</label>
+                    <select style="margin-left: 20px" class="col-sm-1" name="ClientClear_endMonth">
+                        <option value="12" {{if endMonth==12}}selected="selected"{{/if}}>12月</option>
+                        <option value="11" {{if endMonth==11}}selected="selected"{{/if}}>11月</option>
+                        <option value="10" {{if endMonth==10}}selected="selected"{{/if}}>10月</option>
+                        <option value="9" {{if endMonth==9}}selected="selected"{{/if}}>9月</option>
+                        <option value="8" {{if endMonth==8}}selected="selected"{{/if}}>8月</option>
+                        <option value="4" {{if endMonth==4}}selected="selected"{{/if}}>4月</option>
+                        <option value="5" {{if endMonth==5}}selected="selected"{{/if}}>5月</option>
+                        <option value="6" {{if endMonth==6}}selected="selected"{{/if}}>6月</option>
+                        <option value="7" {{if endMonth==7}}selected="selected"{{/if}}>7月</option>
+                        <option value="3" {{if endMonth==3}}selected="selected"{{/if}}>3月</option>
+                        <option value="2" {{if endMonth==2}}selected="selected"{{/if}}>2月</option>
+                        <option value="1" {{if endMonth==1}}selected="selected"{{/if}}>1月</option>
+                    </select>
+                    <button name="searchButton" class=" btn-sm  btn-arrangeTourist-search btn-height search-btn" style="margin-left: 60px">
+                        <i class="ace-icon fa fa-search"></i>
+                        	搜索
+                    </button>
+                </div>
+
+            </div>
+        </form>
+        <form class="form-horizontal" role="form" onsubmit="return false">
+            <div class="form-group col-sm-12" style="padding-bottom: 0">
+                <label class=" control-label pull-left " >总人数：{{totalPersonCount}}   </label>
+                <label class=" control-label no-padding-right" style="margin-left: 20px">总账面应收:{{needPayMoneys}}</label>
+                <label class=" control-label no-padding-right" style="margin-left: 20px">总实际应收:{{realNeedPayMoneys}}</label>
+                <label class=" control-label no-padding-right" style="margin-left: 20px">总实际已收:{{realPayedMoneys}}</label>
+                <label class=" control-label no-padding-right" style="margin-left: 20px">总账面未收:{{unPayedMoneys}}</label>
+                <label class=" control-label no-padding-right" style="margin-left: 20px">总实际未收:{{realUnPayedMoneys}}</label>
+                <label class=" control-label no-padding-right" style="margin-left: 20px">总返款:{{backMoneys}}</label>
+            </div>
+        </form>
+
+    </div>
+    <button name="ClientClear_recordButton" class="btn btn-sm btn-success btn-guide-add pull-right" style="margin-top: 10px"> <i class="ace-icon fa fa-wrench icon-animated-wrench bigger-125"></i> 操作记录 </button>
+    <table class="table table-striped table-bordered table-hover all">
+        <thead>
+        <tr>
+          <th> 账期</th>
+          <th> 账面应收</th>
+          <th> 实际应收</th>
+          <th> 实际已收</th>
+          <th> 账面未收</th>
+          <th> 未收对账</th>
+          <th> 返款</th>
+          <th> 实际未收</th>
+          <th> 收款金额</th>
+          <th> 收款方式</th>
+          <th> 备注</th>
+          <th> 对账进度</th>
+          <th> 操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{each financialPartnerAgencySettlementList as rs}}
+        <tr>
+            <td>{{rs.year}}年{{rs.month}}月</td>
+            <td>{{rs.needPayMoney}}</td>
+            <td>{{rs.realNeedPayMoney}}</td>
+            <td>{{rs.realPayedMoney}}</td>
+            <td>{{rs.unPayedMoney}}</td>
+            <td>{{rs.checkUnIncomeMoney}}</td>
+            <td>{{rs.backMoney}}</td>
+            <td>{{rs.realUnPayedMoney}}</td> 
+            <td><input name="ClientClear_payMoney" value="" /></td>
+            <td>
+                <label class="col-sm-1 control-label no-padding-right" >
+                    <select name="ClientClear_payType">
+                    	<option value="备注" {{if rs.payType=="备注"}}selected="selected"{{/if}}>请选择...</option>
+                        <option value="转账" {{if rs.payType=="转账"}}selected="selected"{{/if}}>转账</option>
+                        <option value="在线支付" {{if rs.payType=="在线支付"}}selected="selected"{{/if}}>在线支付</option>
+                        <option value="线下付款" {{if rs.payType=="线下付款"}}selected="selected"{{/if}}>线下付款</option>
+                    </select>
+                </label>
+            </td>
+            <td><input name="ClientClear_remark" value="{{rs.remark}}" /></td>
+            <td>
+				{{if rs.isConfirmAccount!=rs.isConfirmAccounts}}
+				<span style="color:#ff9900">{{rs.isConfirmAccount}}/{{rs.isConfirmAccounts}}</span>
+				{{else}}
+				<span style="color:green">{{rs.isConfirmAccount}}/{{rs.isConfirmAccounts}}</span>
+				{{/if}}
+			</td>
+            <td>
+                <button data-entity-id="{{rs.id}}" title="保存" data-entity-startTime="" name="ClientClear_saveButton" style="border:none" class="btn btn-primary btn-sm btn-divide">
+                    	保存
+
+                </button>
+                <button data-entity-id="{{rs.partnerAgencyId}}" title="对账明细" data-entity-year="{{rs.year}}" data-entity-month="{{rs.month}}" name="ClientClear_findCheckButton" style="border:none" class="btn btn-primary btn-sm btn-transfter">
+                    	对账明细
+
+                </button>
+            </td>
+        </tr>
+		{{/each}}
+
+
+
+        </tbody>
+    </table>
+
+</div>

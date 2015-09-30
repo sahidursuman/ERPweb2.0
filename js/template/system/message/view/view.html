@@ -1,0 +1,16 @@
+<div class="col-xs-12">
+	<form class="form-horizontal msgFrom" role="form" style="margin-top:10px" onsubmit="return false">
+		<div class="form-group">
+			<label class="col-sm-3 control-label no-padding-right">发送时间:</label> 
+			<div class="col-sm-8">
+				<label class="control-label">{{msg.createTime | dateFormat:'yyyy-MM-dd hh:mm:ss'}}</label>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label no-padding-right">消息内容:</label>
+			<div class="col-sm-8">
+				<label class="control-label" style="text-align: left">{{msg.content}}</label>
+			</div>
+		</div>
+	</form>
+</div>

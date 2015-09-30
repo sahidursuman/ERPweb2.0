@@ -1,0 +1,1123 @@
+var APP_ROOT = "http://localhost:8080/huochaitou/";
+var APP_VERSION = "1.0.0";
+var globalLoadingLayer;
+var globelEditorInstants = {};
+var imgUrl = "http://7xlg3o.com2.z0.glb.qiniucdn.com/";//正式的图片地址
+imgUrl  = "http://7xlw2q.com2.z0.glb.qiniucdn.com/"; //测试
+var listwidth = parseInt($("#tabList li").eq(0).css("width"));//ul总宽度，初始化数据为“工作台”tab宽度
+
+function addTab(tabId,tabName,html){
+	$("#tabList li").removeClass("active");
+	if($("#tabList li.tab-"+tabId+"").length > 0){
+		$("#tabList li.tab-"+tabId+"").addClass("active");
+		setTimeout(function() {
+			var maxwidth = parseInt($(".breadcrumbs-fixed").css("width"))-70;//可视区域宽度
+			if(listwidth > maxwidth){//只有当ul宽度大于可视区宽度时需要处理
+				var index = $("#tabList li.tab-"+tabId+"").index();
+				var widthleft = 0,maxleft = 0,minleft = 0;
+				//widthleft为ul在当前元素左侧的宽度，maxleft绝对值为当前元素在可视区显示时ul可向左平移的最小宽度，minleft为最大
+				for(var i = 0; i <= index; i++){
+					if(i < index){
+						widthleft += parseInt($("#tabList li").eq(i).css("width"));
+					} 
+					if(i == index){
+						minleft = -(widthleft - 35);
+						widthleft += parseInt($("#tabList li").eq(i).css("width"));
+						maxleft = -(widthleft - (maxwidth + 35));
+					} 
+				}
+				marginLeft = parseInt($("#tabList").css("marginLeft"));
+				//只有当marginLeft取值在minleft~maxleft时，当前tab才在可视区域内
+				if(marginLeft > maxleft){
+					$("#tabList").css("marginLeft",maxleft);
+				} 
+				if(marginLeft < minleft){
+					$("#tabList").css("marginLeft",minleft);
+				} 
+			}
+		}, 50);	
+		$("#tabList li.tab-"+tabId+"").find("span").text(tabName);
+		
+	}
+	else{
+		$("#tabList").append("<li class=\"tab-"+tabId+" active\"><a data-toggle=\"tab\" href=\"#tab-"+tabId+"-content\" aria-expanded=\"true\"><span>"+tabName+"</span><i class=\"ace-icon fa fa-close tab-close\"></i></a></li>");
+		setTimeout(function() {
+			listwidth += parseInt($("#tabList li.tab-"+tabId+"").css("width"));
+			var maxwidth = parseInt($(".breadcrumbs-fixed").css("width"))-70;
+			if(listwidth > maxwidth){
+				var maxleft = -(listwidth - (maxwidth + 35));//ul可向左平移的最大宽度，maxleft取负值,35为左侧移动符号宽度
+				$("#tabList").css("marginLeft",maxleft);
+			}
+			$("#tabList .tab-"+tabId+" .tab-close").click(function(){
+				var index = $(this).parent().parent().index();
+				listwidth -= parseInt($("#tabList li").eq(index).css("width"));
+				$(this).parent().parent().remove();
+				$("#tab-"+tabId+"-content").remove();
+				if($("#tabList li.active").length == 0){
+					var preTab = $("#tabList li").get(index-1);
+					$(preTab).addClass("active");
+					var preTabId = $(preTab).find("a").attr("href");
+					$(""+preTabId+"").addClass("active");
+				}
+				var marginLeft = parseInt($("#tabList").css("marginLeft"));
+				var maxwidth = parseInt($(".breadcrumbs-fixed").css("width")) - 70;
+				if(listwidth > maxwidth){
+					var widthleft = 0;
+					for(var i = 0;i < $("#tabList").find("li.active").index();i++){
+						widthleft += parseInt($("#tabList li").eq(i).css("width"))
+					}
+					if((listwidth + marginLeft - 35) < maxwidth){//左侧有隐藏部分并且当前可视区未填满
+						marginLeft = -(listwidth - (maxwidth + 35));
+						if(marginLeft < -(widthleft - 35)){//active项在左侧隐藏
+							marginLeft = -(widthleft - 35);  
+							console.log("1");
+						}
+					} else if(marginLeft < -(widthleft - 35)){//active项在左侧隐藏
+						marginLeft = -(widthleft - 35);  
+						console.log("2");
+					}
+				} else {
+					marginLeft = 35;
+				}
+				$("#tabList").css("marginLeft",marginLeft);
+			});
+		}, 50);		
+	} 
+	$("#tabContent .tab-pane-menu").removeClass("active");
+	if($("#tab-"+tabId+"-content").length > 0){
+		$("#tab-"+tabId+"-content").addClass("active");
+	}
+	else{
+		$("#tabContent").append("<div id=\"tab-"+tabId+"-content\" class=\"tab-pane tab-pane-menu active\"></div>");
+	}
+	$("#tab-"+tabId+"-content").html(html);
+}
+function closeTab(tabId){
+	var _this = $("#tabList .tab-"+tabId+" .tab-close");
+	var index = _this.parent().parent().index();
+	listwidth -= parseInt($("#tabList li").eq(index).css("width"));
+	_this.parent().parent().remove();
+	$("#tab-"+tabId+"-content").remove();
+	if($("#tabList li.active").length == 0){
+		var preTab = $("#tabList li").get(index-1);
+		$(preTab).addClass("active");
+		var preTabId = $(preTab).find("a").attr("href");
+		$(""+preTabId+"").addClass("active");
+	}
+	var marginLeft = parseInt($("#tabList").css("marginLeft"));
+	var maxwidth = parseInt($(".breadcrumbs-fixed").css("width")) - 70;
+	if(listwidth > maxwidth){
+		var widthleft = 0;
+		for(var i = 0;i < $("#tabList").find("li.active").index();i++){
+			widthleft += parseInt($("#tabList li").eq(i).css("width"))
+		}
+		if((listwidth + marginLeft - 35) < maxwidth){//左侧有隐藏部分并且当前可视区未填满
+			marginLeft = -(listwidth - (maxwidth + 35));
+			if(marginLeft < -(widthleft - 35)){//active项在左侧隐藏
+				marginLeft = -(widthleft - 35);  
+				console.log("1");
+			}
+		} else if(marginLeft < -(widthleft - 35)){//active项在左侧隐藏
+			marginLeft = -(widthleft - 35);  
+			console.log("2");
+		}
+	} else {
+		marginLeft = 35;
+	}
+	$("#tabList").css("marginLeft",marginLeft);
+}
+function openLoadingLayer(){
+	var globalLoadingLayer = layer.open({
+		zIndex:1028,
+		type:3
+	});
+	return globalLoadingLayer;
+}
+
+function closeGlobalLayer() {
+	if (!!layer && typeof layer.close === 'function') {
+		layer.close(globalLoadingLayer);		
+	}
+}
+
+function init_editor(ue_key,options)  {
+	var ue = globelEditorInstants[ue_key];
+	
+	if (ue) {
+		ue.destroy();
+	}
+	
+	ue = UE.getEditor(ue_key,options);
+	ue.ready(function(){
+		ue.setHeight(400);
+	});
+	globelEditorInstants[ue_key] = ue;
+	
+	return ue;
+}
+
+function showDialog(data){
+	if(data.success == 0){
+		showMessageDialog($( "#confirm-dialog-message" ),data.message);
+		return false;
+	}
+	else if(data.success == -1){
+		showLogoutDialog($( "#confirm-dialog-message" ),data.message);
+		return false;
+	}
+	else if(data.success == -2){
+		showAutoLoginDialog($( "#confirm-dialog-message" ),data.message);
+		return false;
+	}
+	return true;
+}
+function showMessageDialog(dialogObj,message, fn){
+	dialogObj.removeClass('hide').dialog({
+		modal: true,
+		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
+		title_html: true,
+		draggable:false,
+		buttons: [ 
+			{
+				text: "确定",
+				"class" : "btn btn-primary btn-minier",
+				click: function() {
+					$( this ).dialog( "close" );
+					if(fn){
+						fn();
+					}
+				}
+			}
+		],
+		open:function(event,ui){
+			$(this).find("p").html(message);
+		}
+	});
+}
+function showConfirmMsg(dialogObj,message, confirmFn ,cancelFn){
+	dialogObj.removeClass('hide').dialog({
+		modal: true,
+		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
+		title_html: true,
+		draggable:false,
+		buttons: [
+			{
+				text: "放弃",
+				"class" : "btn btn-minier",
+				click: function() {
+					$( this ).dialog( "close" );
+					if(typeof cancelFn === "function"){
+						cancelFn();
+					}
+				}
+			},
+			{
+				text: "保存",
+				"class" : "btn btn-primary btn-minier",
+				click: function() {
+					$( this ).dialog( "close" );
+					if(typeof confirmFn === "function"){
+						confirmFn();
+					}
+				}
+			}
+		],
+		open:function(event,ui){
+			$(this).find("p").text(message);
+		}
+	});
+}
+function showConfirmDialog(dialogObj,message, fn){
+	dialogObj.removeClass('hide').dialog({
+		modal: true,
+		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
+		title_html: true,
+		draggable:false,
+		buttons: [
+			{
+				text: "取消",
+				"class" : "btn btn-minier",
+				click: function() {
+					$( this ).dialog( "close" );
+				}
+			},
+			{
+				text: "确定",
+				"class" : "btn btn-primary btn-minier",
+				click: function() {
+					$( this ).dialog( "close" );
+					if(fn){
+						fn();
+					}
+				}
+			}
+		],
+		open:function(event,ui){
+			$(this).find("p").text(message);
+		}
+	});
+}
+function showLogoutDialog(dialogObj,message){
+	dialogObj.removeClass('hide').dialog({
+		modal: true,
+		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
+		title_html: true,
+		draggable:false,
+		buttons: [ 
+			{
+				text: "重新登录",
+				"class" : "btn btn-primary btn-minier",
+				click: function() {
+					window.location.href = "login.html";
+				}
+			}
+		],
+		open:function(event,ui){
+			$(this).find("p").text(message);
+		}
+	});
+}
+function exportXLS(url){
+	var iframe = document.createElement("iframe");
+	iframe.src = url;
+	iframe.style.display = "none";
+	document.body.appendChild(iframe);
+}
+function checkLogin(fn){
+	$.ajax({
+		url:""+APP_ROOT+"base.do?method=autoLogin&token="+$.cookie("token")+"&operation=self",
+		type:"POST",
+		dataType:"json",
+		success:function(data){
+			if(data.success == 1){
+				fn();
+			}
+			else{
+				showLogoutDialog($( "#confirm-dialog-message" ),"当前账号登陆状态已失效，请重新登录");
+			}
+		}
+	});
+}
+function showAutoLoginDialog(dialogObj,message){
+	dialogObj.removeClass('hide').dialog({
+		modal: true,
+		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
+		title_html: true,
+		draggable:false,
+		buttons: [ 
+			{
+				text: "自动登录",
+				"class" : "btn btn-primary btn-minier",
+				click: function() {
+					$( this ).dialog( "close" );
+					$.ajax({
+						url:""+APP_ROOT+"base.do?method=autoLogin&token="+$.cookie("token")+"&operation=self",
+						type:"POST",
+						dataType:"json",
+						success:function(data){
+							if(data.success == 1){
+								showMessageDialog($( "#confirm-dialog-message" ),data.message);
+							}
+							else{
+								showLogoutDialog($( "#confirm-dialog-message" ),data.message);
+							}
+						}
+					});
+				}
+			}
+		],
+		open:function(event,ui){
+			$(this).find("p").text(message);
+		}
+	});
+}
+function login(){
+	var userName = $("input[name=userName]").val();
+	var password = $("input[name=password]").val();
+	$.ajax({
+		url:""+APP_ROOT+"base.do?method=login",
+		type:"POST",
+		data:"userName="+userName+"&password="+password+"",
+		dataType:"json",
+		beforeSend:function(){
+			globalLoadingLayer = layer.open({
+				type:3
+			});
+		},
+		success:function(data){
+			if(data.success == 1){
+				window.location.href = "index.html";
+			}
+			else if(data.success == 2){ // 首次登陆，先修改密码
+				var userId = data.id;
+				var updatePasswordLayer=layer.open({
+				    type: 1,
+				    title: "首次登录，先修改密码",
+				    skin: 'layui-layer-lan', //加上边框
+				    area: ['500px', '300px'], //宽高
+				    content: "<div class='login-userData-form clearfix'><div class='col-sm-12' style='margin:25px 0 5px 0'><div class='form-group'>"+
+				    "<div class='search-area'><div class='col-xs-12'><div class='input-group'>"+
+				    "<input class='col-xs-12 date-picker' name='oldPassword' placeholder='请输入旧密码' value='' type='password' />"+
+				    "<span class='input-group-addon'><i class='ace-icon fa fa-lock'></i></span></div></div></div></div></div>"+
+				    "<div class='col-sm-12' style='margin:5px 0'><div class='form-group'><div class='search-area'><div class='col-xs-12'>"+
+				    "<div class='input-group'><input class='col-xs-12' name='newPassword' placeholder='请输入新密码' value='' type='password' />"+
+				    "<span class='input-group-addon'><i class='ace-icon fa fa-lock'></i></span></div></div></div></div></div>"+
+				    "<div class='col-sm-12' style='margin:5px 0'><div class='form-group'><div class='search-area'><div class='col-xs-12'>"+
+				    "<div class='input-group'><input class='col-xs-12' name='newPassword1' placeholder='请输入新密码' value='' type='password' />"+
+				    "<span class='input-group-addon'><i class='ace-icon fa fa-lock'></i></span></div></div></div></div></div>"+
+				    "<div class='col-xs-12'><div class='input-group'><h4 class='lighter'>"+
+				    "<p class='red password-validate'></p></h4></div></div>"+
+				    "<form class='form-horizontal col-sm-12' role='form' style='margin-top:30px;' onsubmit='return false'><div class='form-group' style='text-align: center;'>"+
+				    " <button class='btn btn-danger btn-cancelUserInfo'>"+
+				    "<i class='ace-icon fa fa-times'></i> 取消 </button> <button class='btn btn-primary btn-UserSaveInfo'> <i class='ace-icon fa fa-check'></i> 修改 </button></div></form></div>",
+				    success:function(){
+				    	var $loginObj=$(".login-userData-form");
+				    	//修改用户密码  
+				    	$loginObj.find(".btn-UserSaveInfo").click(function(){
+				    		var newPassword=$loginObj.find("input[name='newPassword']").val();
+				    		var newPassword1=$loginObj.find("input[name='newPassword1']").val(); 
+				    		var oldPassword=$loginObj.find("input[name='oldPassword']").val(); 
+				  			if(newPassword!=newPassword1){
+				  				//两次密码是否一致性的验证   
+				  				$loginObj.find(".password-validate").text("两次输入的密码不一致！");
+				  				return false;
+				  			}
+				  			else{
+				  				$.ajax({
+				  					url:""+APP_ROOT+"base.do?method=rePassword&menuKey=system_userinfo&operation=self",
+				  					data:"oldPassword="+oldPassword+"&newPassword="+newPassword+"&userId="+userId, 
+				  					type:"POST",
+				  					datatype:"json",
+				  					beforSend:function(){
+				  						globalLoadingLayer = openLoadingLayer();
+				  					},
+				  					success:function(data){
+				  						layer.close(globalLoadingLayer);
+				  						var result = showDialog(data);
+				  						if(result){
+				  							layer.close(updatePasswordLayer);
+				  							showMessageDialog($( "#dialog-message" ),"修改成功，请用新密码登陆");
+				  							window.location.href = "login.html";
+				  						}else{
+				  							$loginObj.find("input[name='newPassword']").val("");
+								    		$loginObj.find("input[name='newPassword1']").val(""); 
+								    		$loginObj.find("input[name='oldPassword']").val(""); 
+				  							$loginObj.find(".password-validate").text(data.message);
+				  							return false;
+				  						}
+				  					}
+				  				});
+				    		}
+				    	});
+				    	//取消 
+				    	$loginObj.find(".btn-cancelUserInfo").click(function(){
+				    		layer.close(updatePasswordLayer);
+				    		layer.close(globalLoadingLayer);
+				    	})
+				    	layer.close(globalLoadingLayer);
+				    }   
+				});
+			}
+			else{
+				layer.close(globalLoadingLayer);
+				showMessageDialog($( "#dialog-message" ),data.message);
+				window.forbiddenError = true;
+			}
+		}
+	});
+}
+
+function logout(){
+	var dialog = $( "#confirm-dialog-message" ).removeClass('hide').dialog({
+		modal: true,
+		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
+		title_html: true,
+		draggable:false,
+		buttons: [
+			{
+				text: "取消",
+				"class" : "btn btn-minier",
+				click: function() {
+					$( this ).dialog( "close" ); 
+				} 
+			},
+			{
+				text: "确定",
+				"class" : "btn btn-primary btn-minier",
+				click: function() {
+					$( this ).dialog( "close" );
+					$.ajax({
+						url:""+APP_ROOT+"back/user.do?method=logOut&token="+$.cookie("token")+"&operation=self",
+						type:"POST",
+						dataType:"json",
+						beforeSend:function(){
+							globalLoadingLayer = layer.open({
+								type:3
+							});
+						},
+						success:function(data){
+							layer.close(globalLoadingLayer);
+							if(data.success == 0){
+								showMessageDialog($( "#confirm-dialog-message" ),data.message);
+							}
+							else{
+								window.location.href = "login.html";
+							}
+						}
+					});
+				} 
+			}
+		],
+		open:function(event,ui){
+			$(this).find("p").text("你确认要退出系统？");
+		}
+	});
+	
+}
+
+function viewAllMsg(){
+	seajs.use(""+APP_ROOT+"app/js/template/system/message/message.js",function(message){ 
+		message.listMsg(0,0);
+	});	
+}
+
+function trim(str){
+	 return str.replace(/(^\s*)|(\s*$)/g, ""); 
+}
+
+function listMenu(menuTemplate){
+	$.ajax({
+		url:""+APP_ROOT+"back/user.do?method=listMenu&token="+$.cookie("token")+"&operation=self",
+		type:"POST",
+		dataType:"json",
+		success:function(data){
+			var result = showDialog(data);
+			if(result){
+				var menuList = data.menuList;
+				menuList = JSON.parse(menuList);
+				data.menuList = menuList;
+				var html = template("menu-template",data);
+				$("#sidebar .nav-list").html(html);
+				
+				//绑定导游菜单功能//
+				$("#sidebar .nav-list .resource_guide").click(function(){
+					$("#sidebar .nav-list li").removeClass("active");
+					$(this).addClass("active");
+					$(this).parent().parent().addClass("active");
+					seajs.use(""+APP_ROOT+"app/js/template/resource/guide/guide.js",function(guide){ 
+						guide.listGuide(0,"","");
+					});
+				});
+				
+				//绑定车队菜单功能
+				$("#sidebar .nav-list .resource_busCompany").click(function(){
+					$("#sidebar .nav-list li").removeClass("active");
+					$(this).addClass("active");
+					$(this).parent().parent().addClass("active");
+					seajs.use(""+APP_ROOT+"app/js/template/resource/busCompany/busCompany.js",function(busCompany){
+						busCompany.listBusCompany(0,"","");
+					});
+				});
+				
+				//绑定餐厅菜单功能
+				$("#sidebar .nav-list .resource_restaurant").click(function(){
+					$("#sidebar .nav-list li").removeClass("active");
+					$(this).addClass("active");
+					$(this).parent().parent().addClass("active");
+					seajs.use(""+APP_ROOT+"app/js/template/resource/restaurant/restaurant.js",function(restaurant){
+						restaurant.listRestaurant(0,"","");
+					});
+				});
+				//绑定酒店菜单功能
+				$("#sidebar .nav-list .resource_hotel").click(function(){
+					$("#sidebar .nav-list li").removeClass("active");
+					$(this).addClass("active");
+					$(this).parent().parent().addClass("active");
+					seajs.use(""+APP_ROOT+"app/js/template/resource/hotel/hotel.js",function(hotel){
+						hotel.listHotel(0,"","");
+					});
+				});
+				
+				//绑定同行菜单功能
+				$("#sidebar .nav-list .resource_partnerAgency").click(function(){
+					$("#sidebar .nav-list li").removeClass("active");
+					$(this).addClass("active");
+					$(this).parent().parent().addClass("active");
+					seajs.use(""+APP_ROOT+"app/js/template/resource/partnerAgency/partnerAgency.js?version=",function(partnerAgency){
+						partnerAgency.listPartnerAgency(0,"",1);
+					});
+				});
+				
+				//绑定线路产品菜单功能
+				$("#sidebar .nav-list .resource_lineProduct").click(function(){
+					$("#sidebar .nav-list li").removeClass("active");
+					$(this).addClass("active");
+					$(this).parent().parent().addClass("active");
+					seajs.use(""+APP_ROOT+"app/js/template/resource/lineProduct/lineProduct.js",function(lineProduct){
+						lineProduct.listLineProduct(0,"",1);
+					});
+					$("#main-container")[0].index = 0;
+				});
+				
+				//绑定商家管理功能
+				$("#sidebar .nav-list .resource_shop").click(function(){
+					$("#sidebar .nav-list li").removeClass("active");
+					$(this).addClass("active");
+					$(this).parent().parent().addClass("active");
+					seajs.use(""+APP_ROOT+"app/js/template/resource/shop/shop.js",function(shop){
+						shop.listShop(0,"","");
+					});
+				});
+
+				
+				//绑定线路模板菜单功能
+				$("#sidebar .nav-list .resource_travelLine").click(function(){
+					$("#sidebar .nav-list li").removeClass("active");
+					$(this).addClass("active");
+					$(this).parent().parent().addClass("active");
+					seajs.use(""+APP_ROOT+"app/js/template/resource/travelLine/travelLine.js",function(travelLine){
+						travelLine.listTravelLine(0,"",1);
+					});
+				});	
+					
+				//绑定景区菜单功能
+				$("#sidebar .nav-list .resource_scenic").click(function(){
+					$("#sidebar .nav-list li").removeClass("active");
+					$(this).addClass("active");
+					$(this).parent().parent().addClass("active");
+					seajs.use(""+APP_ROOT+"app/js/template/resource/scenic/scenic.js",function(scenic){
+						scenic.listScenic(0,"","");
+					});
+				});		
+				//绑定保险菜单功能
+				$("#sidebar .nav-list .resource_insurance").click(function(){
+					$("#sidebar .nav-list li").removeClass("active");
+					$(this).addClass("active");
+					$(this).parent().parent().addClass("active");
+					seajs.use(""+APP_ROOT+"app/js/template/resource/insurance/insurance.js",function(insurance){
+						insurance.listInsurance(0,"","");
+					});
+				});	
+				//绑定自费项目菜单功能
+				$("#sidebar .nav-list .resource_selfpay").click(function(){
+					$("#sidebar .nav-list li").removeClass("active");
+					$(this).addClass("active");
+					$(this).parent().parent().addClass("active");
+					seajs.use(""+APP_ROOT+"app/js/template/resource/selfpay/selfpay.js",function(selfpay){
+						selfpay.listSelfPay(0,"","");
+					});
+				});	
+				//绑定交通票务菜单功能
+				$("#sidebar .nav-list .resource_ticket").click(function(){
+					$("#sidebar .nav-list li").removeClass("active");
+					$(this).addClass("active");
+					$(this).parent().parent().addClass("active");
+					seajs.use(""+APP_ROOT+"app/js/template/resource/ticket/ticket.js",function(ticket){ 
+						ticket.listTicket(0,"","");
+					});
+				});
+				//绑定游客管理菜单功能
+				$("#sidebar .nav-list .resource_touristGroup").click(function(){
+					$("#sidebar .nav-list li").removeClass("active");
+					$(this).addClass("active");
+					$(this).parent().parent().addClass("active");
+					seajs.use(""+APP_ROOT+"app/js/template/resource/touristGroup/touristGroup.js",function(touristGroup){ 
+						touristGroup.listTouristGroup(0,"","","","","","","");
+					});
+				});
+				
+				//绑定发团安排菜单功能
+				$("#sidebar .nav-list .arrange_all").click(function(){
+					$("#sidebar .nav-list li").removeClass("active");
+					$(this).addClass("active");
+					$(this).parent().parent().addClass("active");
+					seajs.use(""+APP_ROOT+"app/js/template/resource/tripPlan/tripPlan.js",function(tripPlan){ 
+						tripPlan.listTripPlan(0,"","","","","");
+					});
+				});
+				
+				//绑定财务管理菜单功能 
+				$("#sidebar .nav-list .financial_guide").click(function(){
+					$("#sidebar .nav-list li").removeClass("active");
+					$(this).addClass("active");
+					$(this).parent().parent().addClass("active");
+					seajs.use(""+APP_ROOT+"app/js/template/financial/guide/guide.js",function(guide){ 
+						guide.listFinancialGuide(0,"","","");
+					});
+				});
+				
+				//绑定分团转客菜单功能
+				$("#sidebar .nav-list .arrange_tourist").click(function(){
+					$("#sidebar .nav-list li").removeClass("active");
+					$(this).addClass("active");
+					$(this).parent().parent().addClass("active");
+					seajs.use(""+APP_ROOT+"app/js/template/arrange/arrangeTourist/arrangeTourist.js",function(arrangeTourist){ 
+						arrangeTourist.listArrangeTouristMain();
+					});
+				});
+
+				//绑定中转安排菜单功能
+				$("#sidebar .nav-list .arrange_transit").click(function(){
+					$("#sidebar .nav-list li").removeClass("active");
+					$(this).addClass("active");
+					$(this).parent().parent().addClass("active");
+					seajs.use(""+APP_ROOT+"app/js/template/arrange/transit/transit.js",function(transit){ 
+						transit.listTransit(0,"","","","","","","","","");
+					});
+				});
+				
+				//绑定交通票务菜单功能
+				$("#sidebar .nav-list .financial_ticket").click(function(){
+					$("#sidebar .nav-list li").removeClass("active");
+					$(this).addClass("active");
+					$(this).parent().parent().addClass("active");
+					seajs.use(""+APP_ROOT+"app/js/template/financial/ticket/ticket.js",function(ticket){
+						var date = new Date();
+						var year = date.getFullYear();
+						var month = ""
+						ticket.listTicket(0,"",year,"");
+					});
+				});
+				
+				//绑定系统人员管理菜单功能
+				$("#sidebar .nav-list .system_user").click(function(){
+					$("#sidebar .nav-list li").removeClass("active");
+					$(this).addClass("active");
+					$(this).parent().parent().addClass("active");
+					seajs.use(""+APP_ROOT+"app/js/template/system/user/user.js",function(user){ 
+						user.listUser(0,"",1);
+					});
+				});
+				
+				//绑定系统部门管理菜单功能
+				$("#sidebar .nav-list .system_department").click(function(){
+					$("#sidebar .nav-list li").removeClass("active");
+					$(this).addClass("active");
+					$(this).parent().parent().addClass("active");
+					seajs.use(""+APP_ROOT+"app/js/template/system/department/business.js",function(business){
+						business.listBusiness(0, "");
+					});
+				});
+				
+				//绑定系统旅行社
+				$("#sidebar .nav-list .system_travelAgency").click(function(){
+					$("#sidebar .nav-list li").removeClass("active");
+					$(this).addClass("active");
+					$(this).parent().parent().addClass("active");
+					seajs.use(""+APP_ROOT+"app/js/template/system/travelAgency/travelAgency.js",function(TravelAgency){
+						TravelAgency.listTravelAgency();
+					});
+				});
+				
+				//绑定车队帐务菜单功能
+				$("#sidebar .nav-list .financial_busCompany").click(function(){
+					$("#sidebar .nav-list li").removeClass("active");
+					$(this).addClass("active");
+					$(this).parent().parent().addClass("active");
+					seajs.use(""+APP_ROOT+"app/js/template/financial/busCompany/busCompany.js",function(busCompany){ 
+						var date = new Date();
+						var year = date.getFullYear();
+						busCompany.listBusCompany(0,"",year,"");
+					});
+				});
+
+				//绑定酒店账务菜单功能
+				$("#sidebar .nav-list .financial_rummery").click(function(){
+					$("#sidebar .nav-list li").removeClass("active");
+					$(this).addClass("active");
+					$(this).parent().parent().addClass("active");
+					seajs.use(""+APP_ROOT+"app/js/template/financial/hotel/hotel.js",function(hotel){
+						var date = new Date();
+						var year = date.getFullYear();
+						var month = ""
+						hotel.listHotel(0,"",year,month);
+					});
+				});
+				//绑定系统信息菜单功能
+				$("#sidebar .nav-list .system_information").click(function(){
+					$("#sidebar .nav-list li").removeClass("active");
+					$(this).addClass("active");
+					$(this).parent().parent().addClass("active");
+					seajs.use(""+APP_ROOT+"app/js/template/system/information/information.js",function(information){
+						information.listInformation();
+					});
+				});
+				//绑定系餐厅账务菜单功能
+				$("#sidebar .nav-list .financial_restaurant").click(function(){
+					$("#sidebar .nav-list li").removeClass("active");
+					$(this).addClass("active");
+					$(this).parent().parent().addClass("active");
+					seajs.use(""+APP_ROOT+"app/js/template/financial/Restaurant/Restaurant.js",function( Restaurant){
+						var date = new Date();
+						var year = date.getFullYear();
+						var month = ""//date.getMonth()+1
+						Restaurant.listRestaurant(0,"",year,month);/*new Date().getFullYear()*/
+					});
+				});
+      
+				//绑定景区账务
+				$("#sidebar .nav-list .financial_scenic").click(function(){
+					$("#sidebar .nav-list li").removeClass("active");
+					$(this).addClass("active");
+					$(this).parent().parent().addClass("active");
+					seajs.use(""+APP_ROOT+"app/js/template/financial/Scenic/Scenic.js",function( Scenic){
+						var date = new Date();
+						var year = date.getFullYear();
+						var month = ""//date.getMonth()+1
+						Scenic.listScenic(0,"",year,month);
+					});
+				});
+				  
+				//绑定自费账务菜单功能
+				$("#sidebar .nav-list .financial_self").click(function(){
+					$("#sidebar .nav-list li").removeClass("active");
+					$(this).addClass("active");
+					$(this).parent().parent().addClass("active");
+					seajs.use(""+APP_ROOT+"app/js/template/financial/Self/Self.js",function( Self){
+						var date = new Date();
+						var year = date.getFullYear();
+						var month = ""
+					    Self.listSelf(0,"",year,month);
+					});
+				});
+
+				//绑定保险账务菜单功能
+				$("#sidebar .nav-list .financial_insure").click(function(){
+					$("#sidebar .nav-list li").removeClass("active");
+					$(this).addClass("active");
+					$(this).parent().parent().addClass("active");
+					seajs.use(""+APP_ROOT+"app/js/template/financial/insure/insure.js",function(Insure){
+						var date = new Date();
+						var year = date.getFullYear();
+						var month = ""//date.getMonth()+1
+						Insure.listInsure(0,"",year,"");
+					});
+				});
+
+				//绑定客户账务菜单功能
+				$("#sidebar .nav-list .financial_Client").click(function(){
+					$("#sidebar .nav-list li").removeClass("active");
+					$(this).addClass("active");
+					$(this).parent().parent().addClass("active");
+					seajs.use(""+APP_ROOT+"app/js/template/financial/Client/Client.js",function(Client){
+						Client.listClient(0,"","","","");
+					});
+				});   
+
+				//绑定系代订账务菜单功能
+				$("#sidebar .nav-list .financial_replace").click(function(){
+					$("#sidebar .nav-list li").removeClass("active");
+					$(this).addClass("active");
+					$(this).parent().parent().addClass("active");
+					seajs.use(""+APP_ROOT+"app/js/template/financial/replace/replace.js",function(Replace){
+						var date = new Date();
+						var year = date.getFullYear();
+						var month = "";
+						Replace.listReplace(0,"",year,month);
+					});
+				});
+
+				//绑定转客菜单功能
+				$("#sidebar .nav-list .financial_transfer").click(function(){
+					$("#sidebar .nav-list li").removeClass("active");
+					$(this).addClass("active");
+					$(this).parent().parent().addClass("active");
+					seajs.use(""+APP_ROOT+"app/js/template/financial/transfer/transfer.js",function(transfer){
+						var date = new Date();
+						var year = date.getFullYear();
+						transfer.listTransfer(0,"",year,"");
+					});
+				});
+
+				//绑定购物菜单功能
+				$("#sidebar .nav-list .financial_shop").click(function(){
+					$("#sidebar .nav-list li").removeClass("active");
+					$(this).addClass("active");
+					$(this).parent().parent().addClass("active");
+					seajs.use(""+APP_ROOT+"app/js/template/financial/shop/shop.js",function(shop){
+						shop.listFinancialShop(0,"","","");
+					});
+				});
+				
+				//绑定其他支出菜单功能
+				$("#sidebar .nav-list .financial_else").click(function(){
+					$("#sidebar .nav-list li").removeClass("active");
+					$(this).addClass("active");
+					$(this).parent().parent().addClass("active");
+					seajs.use(""+APP_ROOT+"app/js/template/financial/else/else.js",function(Else){
+						Else.listElse();
+					});
+				});
+
+				//绑定其他支出菜单功能
+				$("#sidebar .nav-list .financial_vertical").click(function(){
+					$("#sidebar .nav-list li").removeClass("active");
+					$(this).addClass("active");
+					$(this).parent().parent().addClass("active");
+					seajs.use(""+APP_ROOT+"app/js/template/financial/Vertical/Vertical.js",function(Vertical){
+						Vertical.listVertical();
+					});
+				});
+				
+				//绑定分团计划菜单功能
+				/*$("#sidebar .nav-list .arrange_plan").click(function(){
+					$("#sidebar .nav-list li").removeClass("active");
+					$(this).addClass("active");
+					$(this).parent().parent().addClass("active");
+					seajs.use(""+APP_ROOT+"app/js/template/arrange/plan/plan.js",function(plan){
+						//plan.listPlan();
+					});
+				});*/
+
+				//绑定发团计划菜单功能
+				$("#sidebar .nav-list .arrange_plan").click(function(){
+					$("#sidebar .nav-list li").removeClass("active");
+					$(this).addClass("active");
+					$(this).parent().parent().addClass("active");
+					seajs.use(""+APP_ROOT+"app/js/template/arrange/tripPlan/tripPlan.js",function(tripPlan){
+						tripPlan.listTripPlan(0,"","","","","","");
+					});
+				});
+				
+				//绑定项目代订菜单功能
+				$("#sidebar .nav-list .arrange_booking").click(function(){
+					$("#sidebar .nav-list li").removeClass("active");
+					$(this).addClass("active");
+					$(this).parent().parent().addClass("active");
+					seajs.use(""+APP_ROOT+"app/js/template/arrange/booking/booking.js",function(booking){
+						booking.listbooking(0,"","","","","");
+					});
+				});
+				
+				//绑定转客管理菜单功能
+				$("#sidebar .nav-list .arrange_transfer").click(function(){
+					$("#sidebar .nav-list li").removeClass("active");
+					$(this).addClass("active");
+					$(this).parent().parent().addClass("active");
+					seajs.use(""+APP_ROOT+"app/js/template/arrange/arrangeTransfer/arrangeTransfer.js",function(transfer){ 
+						transfer.getlistTransferSumData(0,"","","","","","",2);
+					});
+				});
+				//绑定按团统计菜单功能
+				$("#sidebar .nav-list .financial_count").click(function(){
+					$("#sidebar .nav-list li").removeClass("active");
+					$(this).addClass("active");
+					$(this).parent().parent().addClass("active");
+					seajs.use(""+APP_ROOT+"app/js/template/financial/count/count.js",function(count){
+						
+						
+						count.getlistCount(0,"","","","","","","","");
+					});
+				});
+				
+				//绑定转客利润菜单功能
+				$("#sidebar .nav-list .financial_turnProfit").click(function(){
+					$("#sidebar .nav-list li").removeClass("active");
+					$(this).addClass("active");
+					$(this).parent().parent().addClass("active");
+					seajs.use(""+APP_ROOT+"app/js/template/financial/turnProfit/turnProfit.js",function(TurnProfit){
+						/*var tu = new Date()
+						var vYear = tu.getFullYear()
+						var vMon = tu.getMonth() + 1
+						var vDay = tu.getDate()
+						var startTime = vYear+"-"+vMon+"-"+vDay;
+						var tmp = new Date(startTime);
+						tmp = tmp-7*24*60*60*1000;
+						tmp = new Date(tmp);
+						var endTime = tmp.getFullYear()+"-"+(tmp.getMonth()+1)+"-"+tmp.getDate();*/
+						TurnProfit.listTurnProfit(0,"","","","","","","","");
+					});
+				});
+
+
+				//绑定代订利润功能
+				$("#sidebar .nav-list .financial_replaceProfit").click(function(){
+					$("#sidebar .nav-list li").removeClass("active");
+					$(this).addClass("active");
+					$(this).parent().parent().addClass("active");   
+					seajs.use(""+APP_ROOT+"app/js/template/financial/replaceProfit/replaceProfit.js",function(replaceProfit){
+						replaceProfit.listReplaceProfit(0,"","","","","","","","","","");
+					});
+				});
+				//绑定总利润菜单功能
+				$("#sidebar .nav-list .financial_totalProfit").click(function(){
+					$("#sidebar .nav-list li").removeClass("active");
+					$(this).addClass("active");
+					$(this).parent().parent().addClass("active");
+					seajs.use(""+APP_ROOT+"app/js/template/financial/totalProfit/totalProfit.js",function(totalProfit){
+						totalProfit.listTotalProfit();
+					});
+				});
+				//绑定収支明细菜单功能
+				$("#sidebar .nav-list .financial_collectDetail").click(function(){
+					$("#sidebar .nav-list li").removeClass("active");
+					$(this).addClass("active");
+					$(this).parent().parent().addClass("active");
+					seajs.use(""+APP_ROOT+"app/js/template/financial/collectDetail/collectDetail.js",function(collectDetail){
+						collectDetail.listCollectDetail();
+					});
+				});
+				
+				//dateTime
+				$(document).on("click",".input-group-addon",function(){
+					var $that = $(this);
+
+					if ($that.children('.fa-calendar').length || $that.children('.fa-clock-o').length)  {
+						var $allInputs = $that.prevAll('input[type="text"]');
+						$allInputs.eq($allInputs.length-1).focus();
+					}
+				})
+			}
+		}
+	});
+}
+
+//override dialog's title function to allow for HTML titles//
+$.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
+	_title: function(title) {
+		var $title = this.options.title || '&nbsp;';
+		if( ("title_html" in this.options) && this.options.title_html == true )
+			title.html($title);
+		else title.text($title);
+	}
+}));
+
+/**
+ * 根据请求结果获取状态信息
+ * @param  {[type]} XMLHttpRequest [description]
+ * @return {[type]}                [description]
+ */
+function getAjaxErrorInfo (XMLHttpRequest)  {
+	var status = XMLHttpRequest.status;
+
+	try {
+	    var fixedResponse = XMLHttpRequest.responseText.replace(/\\'/g, "'");
+	    var jsonObj = JSON.parse(fixedResponse);
+	    return jsonObj.description;
+	} catch (e) {
+	    if (status > 200) {
+	        switch (status) {
+	            case 401:
+	                return _statusText._401;
+	            case 403:
+	                return _statusText._403;
+	            case 404:
+	                return _statusText._404;
+	            case 413:
+	                return _statusText._413;
+	            case 500:
+	                return _statusText._500;
+	            case 501:
+	                return _statusText._501;
+	            case 502:
+	                return _statusText._502;
+	            case 503:
+	                return _statusText._503;
+	            case 504:
+	                return _statusText._504;
+	            case 505:
+	                return _statusText._505;
+	            default:
+	                break;
+	        }
+	    }
+	}
+
+	return _statusText._unused + ':' + status;
+}
+
+var _statusText = {
+    _401: '无权访问:未登录或者会话已过期',
+    _403: '服务器拒绝访问',
+    _404: '没有找到所请求的服务',
+    _413: '请求内容过大',
+    _500: '服务器内部错误',
+    _501: '服务器未实现该服务',
+    _502: '线路不通，无法到达',
+    _503: '所请求的服务不可用',
+    _504: '网关超时',
+    _505: '服务器不支持请求所使用的HTTP版本',
+    _unused: '未转化异常'
+};
+
+//重新封装jquery的ajax方法
+(function ($) {
+    //备份jquery的ajax方法
+
+    var _ajax = $.ajax;
+    //重写jquery的ajax方法
+
+    $.ajax = function (opt) {
+        //GET方法要做编码,暂不编码,等服务器弄好拦截器再进行编码
+
+        // if ((opt.type == "GET" || opt.type == "get") && opt.data && typeof opt.data === 'object') {
+        //     $.each(opt.data, function (key, value) {
+        //         //opt.data[key] = encodeURIComponent(value);
+
+        //     });
+        // }
+        //json提交要修改contentType和格式化json
+
+        if (opt.submitType == "json") {
+            opt.data = JSON.stringify(opt.data);
+            opt.contentType = "application/json";
+        }
+        //备份opt中error和success方法
+
+        var fn =
+        {
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+            },
+            success: function (data, textStatus) {
+            }
+        };
+
+        if (opt.error) {
+            fn.error = opt.error;
+        }
+        if (opt.success) {
+            fn.success = opt.success;
+        }
+
+        //扩展增强处理
+        opt = $.extend({}, {
+            timeout: 60000,
+            cache: false,
+            showLoading: true,
+            removeLoading: true,
+            showError: true
+        }, opt);
+        $.extend(opt, opt,
+            {
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    //判断是否是当前页面的ajax请求错误
+
+                    if (!!XMLHttpRequest && XMLHttpRequest.readyState == 4) {
+                        if (opt.showError != false) {
+                            var status;
+                            try {
+                                status = $.parseJSON(XMLHttpRequest.responseText).errorCode;
+                            } catch (e) {
+                                // console.warn(e)
+                                status = XMLHttpRequest.status;
+                            }
+
+                            showMessageDialog($( "#confirm-dialog-message" ),getAjaxErrorInfo(XMLHttpRequest), closeGlobalLayer);
+
+                        }
+                        fn.error(XMLHttpRequest, textStatus, errorThrown);
+                    }
+                    else {
+                        console.info(opt.url + "请求异常:readyState = " + XMLHttpRequest.readyState);
+                        showMessageDialog($( "#confirm-dialog-message" ), '服务器开小差了，请您稍后再试', closeGlobalLayer);
+                    }
+                },
+                success: function (data, textStatus) {
+                    //若要移除loading,则移除
+
+                    fn.success(data, textStatus);
+                }
+            });
+        return _ajax(opt);
+    };
+})(jQuery);

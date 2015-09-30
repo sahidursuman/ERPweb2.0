@@ -1,0 +1,65 @@
+<div class="col-xs-12">
+	<form class="form-horizontal userMainForm" role="form" style="margin-top:10px" onsubmit="return false">
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right">用户名:</label>
+			<div class="col-sm-3" style="line-height: 32px;">
+				{{user.userName}}
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right">姓名:</label>
+			<div class="col-sm-3">
+				<input type="text" name="realName" class="col-sm-12" value="{{user.realName}}" />
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>联系电话:</label>
+			<div class="col-sm-3">
+				<input type="text" name="mobileNumber" class="col-sm-12" value="{{user.mobileNumber}}" />
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>所属子部门:</label>
+			<div class="col-sm-3">
+				<select name="groupId" class="col-sm-12">
+					{{each groups as group}}
+					<option value="{{group.id}}" {{if group.id == user.groupId}}selected="selected"{{/if}}>{{group.name}}</option>
+					{{/each}}
+				</select>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right">审核角色:</label>
+			<div class="col-sm-3">
+				<select name="roleType" class="col-sm-12">
+					<option {{if user.roleType == 0 }}selected="selected"{{/if}} value="0">无</option>
+					<option {{if user.roleType == 1 }}selected="selected"{{/if}} value="1">管理员</option>
+					<option {{if user.roleType == 2 }}selected="selected"{{/if}} value="2">财务</option>
+					<option {{if user.roleType == 3 }}selected="selected"{{/if}} value="3">计调</option>
+				</select>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right">登录密码:</label>
+			<div class="col-sm-3">
+				<input type="password" name="password" class="col-sm-12" />
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right">启用标志:</label>
+			<div class="col-sm-2 checkbox" style="margin-left:-10px">
+				<label>
+					<input {{if user.status == 1}}checked="checked"{{/if}} type="checkbox" name="" class="ace user-status" />
+					<span class="lbl">
+						启用
+					</span>
+				</label>
+			</div>
+		</div>
+		<div class="space-10"></div>
+		<button class="btn btn-block btn-primary btn-submit-user">
+			<i class="ace-icon fa fa-check"></i>
+			提交信息
+		</button>
+	</form>
+</div>

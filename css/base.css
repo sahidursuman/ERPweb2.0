@@ -1,0 +1,71 @@
+::-webkit-scrollbar
+{
+	width: 10px;
+	height: 8px;
+	background-color: #F5F5F5;
+}
+
+::-webkit-scrollbar-thumb
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+	background-color: #555;
+}
+.input-default-height{height:28.892px}
+.search-area{margin-bottom:10px}
+.table th, .table td {
+    text-align: center;
+}
+body{color:#000; font-family: "microsoft yahei"}
+a{cursor: pointer;}
+a:hover, a:focus{text-decoration: none;}
+.input-group-addon{cursor:pointer;}
+.necessary{color:red}
+th .necessary{font-weight:100}
+.nav-tabs li.active a,.nav-tabs li.active a span{color:#5085AF;font-weight:bold;}
+.nav-tabs li.active a:hover,.nav-tabs li.active a:hover span{color:#5085AF;font-weight:bold;}
+.nav-tabs .tab-close{width: 16px;height: 16px;cursor: pointer;line-height: 16px;margin-left:15px}
+.nav-tabs .tab-close:hover{background: #b74635;border-radius:16px;color:#fff}
+.widget-body .wysiwyg-editor{border-width: 1px;}
+.ui-autocomplete {max-height: 200px;overflow-y: auto;overflow-x: hidden; z-index:9999;}
+.ui-autocomplete .ui-menu-item{height: 16px;overflow: hidden;}
+.timeline-item{margin-bottom: 0;}
+.ui-dialog, .ui-jqdialog{z-index:99040!important;}
+select {height: 33px}
+.font-size-14 span{font-size: 14px;}
+.show-grid{padding: 10px 0;}
+.border{border: 1px solid #ddd; padding-top: 10px; padding-bottom: 10px;}
+.border.no-border-bottom{border-bottom: none;}
+.border.no-border-right{border-right: none;}
+.border.no-border-left{border-left: none;}
+.border.no-border-top{border-top: none;}
+input:read-only{background: #EFEBEB!important;}
+.tripPlanViewList.table>thead>tr>th,
+.tripPlanViewList.table>tbody>tr>td{padding-left: 0; padding-right: 0;word-break: break-all;}
+.tripPlanViewList .td-col-3{width: 3%;}
+.tripPlanViewList .td-col-5{width: 5%;}
+.tripPlanViewList .td-col-6{width: 6%;}
+.tripPlanViewList .td-col-8{width: 8%;}
+.tripPlanViewList .td-col-9{width: 9%;}
+.tripPlanViewList .td-col-10{width: 10%;}
+.tripPlanViewList .td-col-15{width: 15%;}
+.border-top{border-top: 1px solid #ddd;}
+textarea, input[type=text], input[type=password], input[type=datetime], input[type=datetime-local], input[type=date], input[type=month], input[type=time], input[type=week], input[type=number], input[type=email], input[type=url], input[type=search], input[type=tel], input[type=color]{color:#333;}
+textarea:focus, input[type=text]:focus, input[type=password]:focus, input[type=datetime]:focus, input[type=datetime-local]:focus, input[type=date]:focus, input[type=month]:focus, input[type=time]:focus, input[type=week]:focus, input[type=number]:focus, input[type=email]:focus, input[type=url]:focus, input[type=search]:focus, input[type=tel]:focus, input[type=color]:focus{color:#333;}
+.form-control, select{color:#333;}
+.form-control:focus, select:focus{color:#333;}
+.widget-body .table thead:first-child tr{color:#707070;font-weight:400;background:#F2F2F2;background-image:-webkit-linear-gradient(top,#f8f8f8 0,#ececec 100%);background-image:-o-linear-gradient(top,#f8f8f8 0,#ececec 100%);background-image:linear-gradient(to bottom,#f8f8f8 0,#ececec 100%);background-repeat:repeat-x;filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff8f8f8', endColorstr='#ffececec', GradientType=0)}
+.ui-dialog-titlebar-close{display: none} 
+
+.layui-layer-title{font-size:16px;}
+.ui-spinner .btn{background-color:#fff!important;
+	border:1px solid #B5B5B5!important;
+	/*border-right:1px solid #B5B5B5!important ;*/
+	/*border-left: 1px solid #B5B5B5!important;*/
+	color:#b5b5b5!important;height:14px;line-height:10px;}
+.ui-spinner .btn i.fa-sort-asc{line-height:17px;}
+.ui-spinner .btn i.fa-sort-desc{line-height:17px;}
+.fuckIcon{position: absolute;margin-top: -20px;}
+.ui-spinner .ui-spinner-down{bottom:1px;right:5px;}
+.input-group-addon{background:none;padding:0;border:0;position:relative;left:-19px;}
+.widget-body .table thead:first-child tr{color:#707070;font-weight:400;background:#F2F2F2;background-image:-webkit-linear-gradient(top,#f8f8f8 0,#ececec 100%);background-image:-o-linear-gradient(top,#f8f8f8 0,#ececec 100%);background-image:linear-gradient(to bottom,#f8f8f8 0,#ececec 100%);background-repeat:repeat-x;filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff8f8f8', endColorstr='#ffececec', GradientType=0)}
+.ui-dialog-titlebar-close{display: none}

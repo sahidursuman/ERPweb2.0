@@ -1,0 +1,187 @@
+<div class="row check clientCheckingMain">
+	<div class="col-xs-12 border">
+		<form class="form-horizontal" role="form" onsubmit="return false">
+			<div class="search-area  editable editable-click"
+				style="margin-top: 10px">
+				<div class="form-group">
+					<label class=" control-label pull-left" style="margin-left: 15px">客户：{{travelAgencyName}}</label> <label class="col-sm-1 control-label no-padding-right">账期：</label> 
+					<select class="col-sm-1" name="ClientCheck_searchYear">
+						<option value="2015" {{if year==2015}}selected="selected"{{/if}}>2015</option>
+						<option value="2014" {{if year==2014}}selected="selected"{{/if}}>2014</option>
+					</select> <label class="col-sm-1 control-label no-padding-right"></label> 
+					<input type="hidden" id="ClientCheck_pager_pagerNo" value="{{pager.pageNo}}" /> 
+					<input type="hidden" value="{{fromPartnerAgencyId}}" name="ClientCheck_fromPartnerAgencyId" />
+					<select class="col-sm-1" name="ClientCheck_searchMonth">
+						<option value="">全部</option>
+						<option value="1" {{if month==1}}selected="selected"{{/if}}>1月</option>
+						<option value="2" {{if month==2}}selected="selected"{{/if}}>2月</option>
+						<option value="3" {{if month==3}}selected="selected"{{/if}}>3月</option>
+						<option value="4" {{if month==4}}selected="selected"{{/if}}>4月</option>
+						<option value="5" {{if month==5}}selected="selected"{{/if}}>5月</option>
+						<option value="6" {{if month==6}}selected="selected"{{/if}}>6月</option>
+						<option value="7" {{if month==7}}selected="selected"{{/if}}>7月</option>
+						<option value="8" {{if month==8}}selected="selected"{{/if}}>8月</option>
+						<option value="9" {{if month==9}}selected="selected"{{/if}}>9月</option>
+						<option value="10" {{if month==10}}selected="selected"{{/if}}>10月</option>
+						<option value="11" {{if month==11}}selected="selected"{{/if}}>11月</option>
+						<option value="12" {{if month==12}}selected="selected"{{/if}}>12月</option>
+					</select>
+					<button name="ClientCheck_searchButton" class="btn btn-sm btn-primary btn-arrangeTourist-search" style="margin-left: 60px">
+						<i class="ace-icon fa fa-search"></i> 搜索
+					</button>
+					<button type="button" class="btn btn-sm btn-primary btn-success btn-clientExport">
+							<span>导出报表</span>
+							<i class="ace-icon fa fa-arrow-right icon-on-right"></i>
+					</button>
+				</div>
+
+			</div>
+		</form>
+		<form class="form-horizontal" role="form" onsubmit="return false">
+			<div class="form-group col-sm-12">
+				<label class="col-sm-2  ">总人数：{{allPerson}}</label> 
+				<label class="col-sm-2 ">总应收：{{allNeedPayBook}}</label> 
+				<label class="col-sm-2 ">总已收：{{allPayedActual}}</label> 
+				<label class="col-sm-2 ">总未收：{{allNoPay}}</label> 
+				<label class="col-sm-2 ">总实际未收：{{allNoPayActual}}</label> 
+				<label class="col-sm-2 ">总返款：{{allBackMoney}}</label>
+			</div>
+		</form>
+	</div>
+
+	<div class="clearfix"></div>
+	<table class="table table-striped table-bordered table-hover all"
+		style="margin-top: 30px">
+		<thead>
+			<tr>
+				<th>序号</th>
+				<th>线路产品</th>
+				<th>出游日期</th>
+				<th>联系人</th>
+				<th style="width: 100px;">人数 </th>
+				<th>录入人</th>
+				<th>录入时间</th>
+				<th>应收</th>
+				<th style="width: 180px;">明细</th>
+				<th>已收</th>
+				<th>未收</th>
+				<th style="width: 100px">未收对账</th>
+				<th style="width: 100px">返款</th>
+				<th>实际未收</th>
+				<th style="width: 100px">说明</th>
+				<th>对账时间</th>
+				<th>对账人</th>
+				<th style="width: 60px;">对账</th>
+			</tr>
+		</thead>
+		<tbody class="checkingTbody">
+			{{each pager.resultList as rs index}}  
+			<tr data-entity-id="{{rs.id}}" name="eachTr">
+				<td>{{index+1}}</td>
+				<td>{{rs.lineProduct.name}}</td>
+				<td>{{rs.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
+				<td>{{if rs.contactMember != null}}{{rs.contactMember.name}}{{/if}}</td>
+				<td>{{rs.adultCount}}大{{rs.childCount}}小<a class="btn-show-group" href="#">展开</a></td>
+				<td>{{if rs.user != null}}{{rs.user.realName}}{{/if}}</td>
+				<td>{{rs.createTime}}</td>
+				<td>{{rs.needPayAllMoney}}</td>
+				<td>大人：{{rs.adultPrice}} * {{rs.adultCount}} = {{rs.adultPrice * rs.adultCount}}<br> 小孩：{{rs.childPrice}} * {{rs.childCount}} = {{rs.childPrice * rs.childCount}}<br> 
+					{{each rs.touristGroupFeeList as fee}} {{fee.describeInfo}}:{{fee.price}} * {{fee.count}} = {{fee.count * fee.price}}<br> {{/each}}
+				</td>
+				<td>社收{{rs.payedMoney}},导游现收{{rs.currentNeedPayMoney}}</td>
+				<!-- 未收 -->
+				<td><label name="ClientCheck_notGet">{{rs.needPayAllMoney-rs.payedMoney-rs.currentNeedPayMoney}}</label></td>
+				<!--未收对账 -->
+				<td><input style="width: 100px" type="text" name="ClientCheck_checkUnIncomeMoney" value="{{rs.checkUnIncomeMoney}}" data-entity-id="{{rs.checkUnIncomeMoney}}" {{if rs.isConfirmAccount == 1 && role != 1 }} disabled = "true" {{/if}}/></td>
+				<!-- 返款 -->
+				<td><input style="width: 100px" type="text" name="ClientCheck_backMoney" value="{{rs.backMoney}}" data-entity-id="{{rs.backMoney}}" {{if rs.isConfirmAccount == 1 && role != 1 }} disabled = "true" {{/if}} /></td>
+				<!-- 实际未收 -->
+				<td>{{if rs.isConfirmAccount == 1}}<label name="ClientCheck_actualNotGet">{{rs.realUnPayedMoney}}</label>{{else}}<label name="ClientCheck_actualNotGet">{{rs.checkUnIncomeMoney-rs.backMoney}}</label>{{/if}}
+				</td>
+				<!--说明 -->  
+				<td>{{if rs.isConfirmAccount == 1}}<input type="text" style="width: 100px" name="ClientCheck_remark" value="{{rs.checkRemark}}"  data-entity-id="{{rs.checkRemark}}" {{if rs.isConfirmAccount == 1 && role != 1 }} disabled = "true" {{/if}} />{{else}}<input style="width: 100px" type="text" name="ClientCheck_remark" value="" data-entity-id="" {{if rs.isConfirmAccount == 1 && role != 1 }} disabled = "true" {{/if}} />{{/if}}
+				</td>
+				<td>{{if rs.checkTime != null}}{{rs.checkTime | dateFormat:'yyyy-MM-dd'}}{{else}}-{{/if}}</td>
+				<td>{{rs.checkUserRealName}}</td>
+				<td><input type="checkbox" class="ace" name="ClientCheck_checkBox" data-entity-id="{{rs.isConfirmAccount}}" {{if rs.isConfirmAccount== 1}}checked="true"{{/if}}  {{if rs.isConfirmAccount == 1 && role != 1 }} disabled = "true" {{/if}} >
+				    <span class="lbl"></span>
+				</td>
+			</tr>
+ 
+			<tr class="hide" name="member">
+				<td colspan="17">
+					<table class="table table-striped table-bordered table-hover">
+						<thead>
+							<tr>
+								<th>序号</th>
+								<th>姓名</th>
+								<th>联系电话</th>
+								<th>证件类型</th>
+								<th>证件号</th>
+								<th>是否联系人</th>
+							</tr>
+						</thead>
+						<tbody>
+							{{each rs.touristGroupMemberList as visitor index}}
+							<tr>
+								<td>{{index+1}}</td>
+								<td>{{visitor.name}}</td>
+								<td>{{visitor.mobileNumber}}</td>
+								<td>{{if visitor.idCardType == 0}}身份证{{/if}}{{if visitor.idCardType == 1}}护照{{/if}}{{if visitor.idCardType == 2}}其他{{/if}}</td>
+								<td>{{visitor.idCardNumber}}</td>
+								<td>{{if visitor.isContactUser == 1}}是{{/if}}</td>
+							</tr>
+							{{/each}}
+						</tbody>
+					</table>
+				</td>
+			</tr>
+			{{/each}}
+		</tbody>
+	</table>
+
+	<div class="row pageMode" style="margin-top: 40px">
+		<div class="col-xs-6">
+			<div class="dataTables_info" id="dynamic-table_info" role="status"
+				aria-live="polite">共计{{pager.totalCount}}条记录</div>
+		</div>
+		<div class="col-xs-6">
+			<div class="dataTables_paginate paging_simple_numbers"
+				id="dynamic-table_paginate">
+				<ul class="pagination">
+					<li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="first" href="javascript:void(0)">首页</a></li>
+					<li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="previous" href="javascript:void(0)">上一页</a></li>
+					<li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a href="javascript:void(0)"> 
+						{{if pager.totalPage == 0}} 0/0 {{else}} {{pager.pageNo+1}}/{{pager.totalPage}} {{/if}} </a></li>
+					<li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="next" href="javascript:void(0)">下一页</a></li>
+					<li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="last" href="javascript:void(0)">尾页</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<div class="form-group col-sm-12 "
+		style="padding-right: 20px; margin-top: 20px">
+
+		<label class="control-label pull-right"><input type="checkbox"
+			name="ClientCheck_checkAllBox"> 全选</label>
+	</div>
+	<div class="clearfix"></div>
+
+
+	<br>
+
+
+	<form class="form-horizontal" role="form" onsubmit="return false">
+		<div class="form-group" style="text-align: center;">
+			<button class="btn btn-xs btn-primary btn-close-tab">
+				<i class="ace-icon fa fa-times-circle"></i> 关闭页面
+			</button>
+			<button class="btn btn-xs btn-primary" name="ClientCheck_checkButton">
+				<i class="ace-icon fa fa-check-circle"></i> 确认对账
+			</button>
+		</div>
+	</form>
+
+
+</div>

@@ -1,0 +1,143 @@
+<div class="search-area">
+	<input name="user_realname" class="col-xs-2 input-default-height" value="{{searchParam.inputName}}" placeholder="账号、姓名"/>&nbsp;
+	<div class="btn-group btn-status">
+		<button data-value="{{searchParam.status}}" data-toggle="dropdown" class="btn btn-sm btn-primary dropdown-toggle" aria-expanded="false">
+			<span>
+				{{if searchParam.status == 1}}
+					已启用
+				{{else}}
+					已停用
+				{{/if}}				
+			</span>
+			<i class="ace-icon fa fa-angle-down icon-on-right"></i>
+		</button>
+		<ul class="dropdown-menu">
+			<li>
+				<a data-value="1" href="javascript:void(0)">已启用</a>
+			</li>
+
+			<li>
+				<a data-value="0" href="javascript:void(0)">已停用</a>
+			</li>
+		</ul>
+	</div>
+	<button class="btn btn-sm btn-primary btn-user-search">
+		<i class="ace-icon fa fa-search"></i>
+		搜索
+	</button>
+	<button class="btn btn-sm btn-success btn-user-add" style="margin-left:20px;">
+		<i class="ace-icon fa fa-plus"></i>
+		新增人员
+	</button>
+</div>
+<div class="space-20"></div>
+<div class="row userList">	
+	<div class="col-xs-12">
+		<table class="table table-striped table-bordered table-hover">
+			<thead>
+				<tr>
+					<th>姓名</th>
+					<th>账号</th>
+					<th>初始密码</th>
+					<th>联系电话</th>
+					<th>部门</th>
+					<th>审核角色</th>
+					<th>状态</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				{{each userList as user}}
+					<tr class="user-{{user.id}}">
+						<td>{{user.realName}}</td>
+						<td>{{user.userName}}</td>
+						<td>{{defaultPassword}}</td>
+						<td>{{user.mobileNumber}}</td>
+						<td>{{user.group.name}}</td>
+						<td>{{if user.roleType == 1}}管理员{{/if}}{{if user.roleType == 2}}财务{{/if}}{{if user.roleType == 3}}计调{{/if}}</td>
+						<td>
+							{{if user.status == 0}}
+								已停用
+							{{else user.status == 1}}
+								已启用
+							{{/if}}
+						</td>
+						<td>
+							<div class="hidden-sm hidden-xs btn-group">
+								<button data-entity-id="{{user.id}}" class="btn btn-xs btn-danger btn-user-auth" title="授权">
+									<i class="ace-icon fa fa-key bigger-120"></i>
+								</button>
+								
+								<button data-entity-id="{{user.id}}" class="btn btn-xs btn-info btn-user-edit" title="修改">
+									<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
+								</button>
+								
+								<button data-entity-id="{{user.id}}" class="btn btn-xs btn-success btn-user-view" title="查看">
+									<i class="ace-icon fa fa-search-plus bigger-120"></i>
+								</button>
+							</div>
+			
+							<div class="hidden-md hidden-lg">
+								<div class="inline pos-rel">
+									<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
+										<i class="ace-icon fa fa-cog icon-only bigger-110"></i>
+									</button>
+			
+									<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+										<li>
+											<a data-entity-id="{{user.id}}" href="javascript:void(0)" class="tooltip-error btn-user-auth" data-rel="tooltip">
+												<span class="red">
+													<i class="ace-icon fa fa-search-plus bigger-120"></i>
+												</span>
+											</a>
+										</li>
+										
+										<li>
+											<a data-entity-id="{{user.id}}" href="javascript:void(0)" class="tooltip-success btn-user-edit" data-rel="tooltip">
+												<span class="green">
+													<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
+												</span>
+											</a>
+										</li>
+										
+										<li>
+											<a data-entity-id="{{user.id}}" href="javascript:void(0)" class="tooltip-error btn-user-view" data-rel="tooltip">
+												<span class="red">
+													<i class="ace-icon fa fa-search-plus bigger-120"></i>
+												</span>
+											</a>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</td>
+					</tr>
+				{{/each}} 
+			</tbody>
+		</table>
+		<div class="row pageMode">
+			<div class="col-xs-6">
+				<div class="dataTables_info" id="dynamic-table_info" role="status" aria-live="polite">共计 {{recordSize}} 条记录</div>
+			</div>
+			<div class="col-xs-6">
+				<div class="dataTables_paginate paging_simple_numbers" id="dynamic-table_paginate">
+					<ul class="pagination">
+						<li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="first" href="javascript:void(0)">首页</a></li>
+						<li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="previous"href="javascript:void(0)">上一页</a></li>
+						<li class="paginate_button" aria-controls="dynamic-table" tabindex="0">
+							<a href="javascript:void(0)">
+								{{if totalPage == 0}}
+									0/0
+								{{else}}
+									{{pageNo+1}}/{{totalPage}}
+								{{/if}}
+							</a>
+						</li>
+						<li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="next"  href="javascript:void(0)">下一页</a></li>
+						<li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="last" href="javascript:void(0)">尾页</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,220 @@
+<div class="col-xs-12">
+	<form class="form-horizontal busCompanyMainForm" role="form" style="margin-top:10px" onsubmit="return false">
+		<div class="widget-box ui-sortable-handle">
+			<div class="widget-header">
+				<h5 class="widget-title">
+					<i class="ace-icon fa fa-info-circle"></i>
+					车队主体信息
+				</h5>
+			</div>
+			<div class="widget-body">
+				<div class="widget-main">
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-right">车队名称:</label>
+						<div class="col-sm-3">
+							<label class="control-label">{{busCompany.companyName}}</label>
+						</div>
+						<label class="col-sm-1 control-label no-padding-right">是否启用:</label>
+						<div class="col-sm-2">
+							<label class="control-label">
+								{{if busCompany.status == 0}}
+									已停用
+								{{else}}
+									已启用
+								{{/if}}
+							</label>
+						</div>
+					</div>
+					<div class="form-group">
+					    <label class="col-sm-2 control-label no-padding-right">车队类型:</label>
+						<div class="col-sm-3">
+							<label class="control-label">
+								{{if busCompany.type == 0}}
+									个人
+								{{else}}
+									集团
+								{{/if}}
+							</label>
+						</div>
+					</div>
+					<div class="form-group">
+					    <label class="col-sm-2 control-label no-padding-right">联系人:</label>
+						<div class="col-sm-3">
+							<label class="control-label">{{busCompany.managerName}}</label>
+						</div>
+						<label class="col-sm-1 control-label no-padding-right">联系电话:</label>
+						<div class="col-sm-3">
+							<label class="control-label">{{busCompany.mobileNumber}}</label>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-right">座机号码:</label>
+						<div class="col-sm-3">
+							<label class="control-label">{{busCompany.telNumber}}</label>
+						</div>
+						<label class="col-sm-1 control-label no-padding-right">传真号码:</label>
+						<div class="col-sm-3">
+							<label class="control-label">{{busCompany.faxNumber}}</label>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-right">车队所在省市:</label>
+						<div class="col-sm-8">
+							<label class="control-label">
+								{{if busCompany.province != null}}
+									{{busCompany.province.name}}
+								{{/if}}
+								{{if busCompany.city != null}}
+									-{{busCompany.city.name}}
+								{{/if}}
+								{{if busCompany.district != null}}
+									-{{busCompany.district.name}}
+								{{/if}}
+							</label>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-right">详细地址:</label>
+						<div class="col-sm-6">
+							<label class="control-label">
+								{{busCompany.street}}
+							</label>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-right">车队简介:</label>
+						<div class="col-sm-8">
+							<label class="control-label" style="text-align: left;">{{busCompany.remark}}</label>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+	<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
+		<div class="form-group busList">
+			<div class="col-xs-12 col-sm-12 widget-container-col">
+				<div class="widget-box ui-sortable-handle">
+					<div class="widget-header">
+						<h5 class="widget-title">
+							<i class="ace-icon fa fa-bus"></i>
+							车辆列表
+						</h5>
+					</div>
+
+					<div class="widget-body">
+						<div class="widget-main no-padding">
+							<table class="table table-striped table-bordered table-hover busList"> 
+								<thead>
+									<tr>
+										<th>车牌号</th>
+										<th>车辆品牌</th>
+										<th>座位数</th>
+										<th>购买时间</th>
+										<th>协议包车</th>
+										<th>包车时限</th>
+										<th>包车价格</th>
+										<th>备注</th>
+									</tr>
+								</thead>
+								<tbody>
+									{{each busCompany.busList as bus}}
+										<tr>
+											<td>{{bus.licenseNumber}}</td>
+											<td>{{bus.brand}}</td>
+											<td>{{bus.seatCount}}</td>
+											<td>{{bus.buyTime | dateFormat:'yyyy-MM-dd'}}</td>
+											<td>
+												{{if bus.isChartered == 0}}
+													否
+												{{else}}
+													是
+												{{/if}}
+											</td>
+											<td>
+												{{each bus.priceList as price}}
+												<div>
+												{{if bus.isChartered == 0}}
+													-
+												{{else}}
+													{{price.startTime | dateFormat:'yyyy-MM-dd'}}至{{price.endTime | dateFormat:'yyyy-MM-dd'}}
+												{{/if}}
+												</div>
+												{{/each}}
+											<td>
+												{{each bus.priceList as price}}
+												<div>
+												{{if bus.isChartered == 0}}
+													-
+												{{else}}
+													{{price.contractPrice}}元
+												{{/if}}
+												</div>
+												{{/each}}
+											<td>{{bus.remark}}</td>
+										</tr>
+									{{/each}}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="form-group driverList">
+			<div class="col-xs-12 col-sm-12 widget-container-col">
+				<div class="widget-box ui-sortable-handle">
+					<div class="widget-header">
+						<h5 class="widget-title">
+							<i class="ace-icon fa fa-user"></i>
+							司机列表
+						</h5>
+					</div>
+
+					<div class="widget-body">
+						<div class="widget-main no-padding">
+							<table class="table table-striped table-bordered table-hover driverList">
+								<thead>
+									<tr>
+										<th>司机姓名</th>
+										<th>司机性别</th>
+										<th>司机电话</th>
+										<th>司机驾龄</th>
+										<th>驾驶证编号</th>
+										<th>是否启用</th>
+										<th>备注</th>
+									</tr>
+								</thead>
+								<tbody>
+									{{each busCompany.driverList as driver}}
+										<tr>
+											<td>{{driver.name}}</td>
+											<td>
+												{{if driver.gender == 0}}
+													男
+												{{else}}
+													女
+												{{/if}}
+											</td>
+											<td>{{driver.mobileNumber}}</td>
+											<td>{{driver.driveYears}}</td>
+											<td>{{driver.licenseId}}</td>
+											<td>
+												{{if driver.status == 0}}
+													已停用
+												{{else driver.status == 1}}
+													已启用
+												{{/if}}
+											</td>
+											<td>{{driver.remark}}</td>
+										</tr>
+									{{/each}}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>

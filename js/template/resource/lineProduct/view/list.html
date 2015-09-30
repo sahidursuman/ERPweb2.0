@@ -1,0 +1,195 @@
+<div class="search-area">
+	<input name="lineProduct_name" class="col-xs-2 input-default-height" value="{{searchParam.name}}" placeholder="请输线路产品名称关键词"/>&nbsp;
+	<button class=" btn-sm  btn-lineProduct-search pull-left search-btn">
+		<i class="ace-icon fa fa-search"></i>
+		搜索
+	</button>
+	<div class="btn-group btn-status" style="margin-left: 20px">
+		<button data-value="{{searchParam.status}}" data-toggle="dropdown" class=" btn-sm dropdown-toggle block-up" aria-expanded="false">
+			<span>
+				{{if searchParam.status == 1}}
+					已启用
+				{{else}}
+					已停用
+				{{/if}}
+			</span>
+			<i class="ace-icon fa fa-angle-down icon-on-right"></i>
+		</button>
+		<ul class="dropdown-menu">
+			<li>
+				<a data-value="1" href="javascript:void(0)">已启用</a>
+			</li>
+
+			<li>
+				<a data-value="0" href="javascript:void(0)">已停用</a>
+			</li>
+		</ul>
+	</div>
+
+	<!-- <button class="btn btn-sm btn-success btn-lineProduct-add" style="float: right;">
+		<i class="ace-icon fa fa-plus"></i>
+		新增线路产品
+	</button> -->
+</div>
+<div class="row lineProductList">
+	<div class="col-xs-12">
+		<table class="table table-striped table-bordered table-hover">
+			<thead>
+				<tr class="bg-blur">
+					<th>线路产品名称</th>
+					<th>线路类别</th>
+					<th>针对客源</th>
+					<th>行程天数</th>
+					<th>导游</th>
+					<th>车队</th>
+					<th>餐厅</th>
+					<th>酒店</th>
+					<th>购物</th>
+					<th>景区</th>
+					<th>票务</th>
+					<th>保险</th>
+					<th>自费</th>
+					<th>是否启用</th>
+					<!-- <th>报价</th> -->
+					<th>操作</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				{{each lineProductList as lineProduct}}
+					<tr class="lineProduct-{{lineProduct.id}}">
+						<td>{{lineProduct.name}}</td>
+						<td>{{lineProduct.type}}</td>
+						<td>
+						{{if lineProduct.customerType == 1}}
+							团体
+						{{else}}
+							散客
+						{{/if}}
+						</td>
+						<td>{{lineProduct.days}}</td>
+						<td>
+						{{if lineProduct.guideStatus == 1}}
+							<i class="ace-icon fa fa-check green"></i>
+						{{else}}
+							<i class="ace-icon fa fa-times red"></i>
+						{{/if}}
+						</td>
+						<td>
+						{{if lineProduct.busCompanyStatus == 1}}
+							<i class="ace-icon fa fa-check green"></i>
+						{{else}}
+							<i class="ace-icon fa fa-times red"></i>
+						{{/if}}
+						</td>
+						<td>
+						{{if lineProduct.restaurantStatus == 1}}
+							<i class="ace-icon fa fa-check green"></i>
+						{{else}}
+							<i class="ace-icon fa fa-times red"></i>
+						{{/if}}
+						</td>
+						<td>
+						{{if lineProduct.hotelStatus == 1}}
+							<i class="ace-icon fa fa-check green"></i>
+						{{else}}
+							<i class="ace-icon fa fa-times red"></i>
+						{{/if}}
+						</td>
+						<td>
+						{{if lineProduct.shopStatus == 1}}
+							<i class="ace-icon fa fa-check green"></i>
+						{{else}}
+							<i class="ace-icon fa fa-times red"></i>
+						{{/if}}
+						</td>
+						<td>
+						{{if lineProduct.scenicStatus == 1}}
+							<i class="ace-icon fa fa-check green"></i>
+						{{else}}
+							<i class="ace-icon fa fa-times red"></i>
+						{{/if}}
+						</td>
+						<td>
+						{{if lineProduct.ticketStatus == 1}}
+							<i class="ace-icon fa fa-check green"></i>
+						{{else}}
+							<i class="ace-icon fa fa-times red"></i>
+						{{/if}}
+						</td>
+						<td>
+						{{if lineProduct.insuranceStatus == 1}}
+							<i class="ace-icon fa fa-check green"></i>
+						{{else}}
+							<i class="ace-icon fa fa-times red"></i>
+						{{/if}}
+						</td>
+						<td>
+						{{if lineProduct.selfPayStatus == 1}}
+							<i class="ace-icon fa fa-check green"></i>
+						{{else}}
+							<i class="ace-icon fa fa-times red"></i>
+						{{/if}}
+						</td>
+						<td>
+						{{if lineProduct.status == 1}}
+							<i class="ace-icon fa fa-check green bigger-130"></i>
+							已启用
+						{{else}}
+							<i class="ace-icon fa fa-times red bigger-125"></i>
+							已停用
+						{{/if}}
+						</td>
+						<!-- <td>
+							<button data-entiy-id="{{lineProduct.id}}" class="btn btn-xs btn-success btn-lineProduct-quote" title="报价">
+								<i class="ace-icon fa fa-usd"></i>
+								报价
+							</button>
+						</td> -->
+						<td>
+							<a data-entiy-id="{{lineProduct.id}}" class=" btn-lineProduct-view cursor" title="查看">
+								查看 |
+							</a>
+							<a data-entiy-id="{{lineProduct.id}}" class=" btn-lineProduct-edit cursor" title="编辑">
+								编辑 |
+							</a>
+							<a data-entiy-id="{{lineProduct.id}}" class=" btn-lineProduct-clipboard cursor" title="复制">
+								复制 |
+							</a>
+							<a data-entiy-id="{{lineProduct.id}}" class=" btn-lineProduct-export cursor" title="导出">
+								导出 |
+							</a>
+							<a data-entiy-id="{{lineProduct.id}}" class=" btn-lineProduct-delete cursor" title="删除">
+								删除
+							</a>
+						</td>
+					</tr>
+				{{/each}}
+			</tbody>
+		</table>
+		<div class="row pageMode">
+			<div class="col-xs-6">
+				<div class="dataTables_info" id="dynamic-table_info" role="status" aria-live="polite">共计 {{recordSize}} 条记录</div>
+			</div>
+			<div class="col-xs-6">
+				<div class="dataTables_paginate paging_simple_numbers" id="dynamic-table_paginate">
+					<ul class="pagination">
+						<li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="first" href="javascript:void(0)">首页</a></li>
+						<li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="previous"href="javascript:void(0)">上一页</a></li>
+						<li class="paginate_button" aria-controls="dynamic-table" tabindex="0">
+							<a href="javascript:void(0)">
+								{{if totalPage == 0}}
+									0/0
+								{{else}}
+									{{pageNo+1}}/{{totalPage}}
+								{{/if}}
+							</a>
+						</li>
+						<li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="next"  href="javascript:void(0)">下一页</a></li>
+						<li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="last" href="javascript:void(0)">尾页</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

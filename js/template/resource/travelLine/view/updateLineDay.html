@@ -1,0 +1,98 @@
+<div class="col-xs-12">
+	<form class="form-horizontal updateTravelLineDayForm" role="form" style="margin-top:10px" onsubmit="return false">
+		<div class="widget-box ui-sortable-handle">
+			<div class="widget-header">
+				<h5 class="widget-title">
+					<i class="ace-icon fa fa-info-circle"></i>
+					日程安排主体信息 
+				</h5>
+			</div>
+			<div class="widget-body">
+				<div class="widget-main">
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>行程日期:</label>
+						<div class="col-sm-3">
+							<select name="whichDay" class="col-sm-12">
+								<option {{if lineDay.whichDay == 1}}selected="selected"{{/if}} value="1">第1天</option>
+								<option {{if lineDay.whichDay == 2}}selected="selected"{{/if}} value="2">第2天</option>
+								<option {{if lineDay.whichDay == 3}}selected="selected"{{/if}} value="3">第3天</option>
+								<option {{if lineDay.whichDay == 4}}selected="selected"{{/if}} value="4">第4天</option>
+								<option {{if lineDay.whichDay == 5}}selected="selected"{{/if}} value="5">第5天</option>
+								<option {{if lineDay.whichDay == 6}}selected="selected"{{/if}} value="6">第6天</option>
+								<option {{if lineDay.whichDay == 7}}selected="selected"{{/if}} value="7">第7天</option>
+								<option {{if lineDay.whichDay == 8}}selected="selected"{{/if}} value="8">第8天</option>
+								<option {{if lineDay.whichDay == 9}}selected="selected"{{/if}} value="9">第9天</option>
+								<option {{if lineDay.whichDay == 10}}selected="selected"{{/if}} value="10">第10天</option>
+								<option {{if lineDay.whichDay == 11}}selected="selected"{{/if}} value="11">第11天</option>
+								<option {{if lineDay.whichDay == 12}}selected="selected"{{/if}} value="12">第12天</option>
+								<option {{if lineDay.whichDay == 13}}selected="selected"{{/if}} value="13">第13天</option>
+								<option {{if lineDay.whichDay == 14}}selected="selected"{{/if}} value="14">第14天</option>
+								<option {{if lineDay.whichDay == 15}}selected="selected"{{/if}} value="15">第15天</option>
+								<option {{if lineDay.whichDay == 16}}selected="selected"{{/if}} value="16">第16天</option>
+								<option {{if lineDay.whichDay == 17}}selected="selected"{{/if}} value="17">第17天</option>
+								<option {{if lineDay.whichDay == 18}}selected="selected"{{/if}} value="18">第18天</option>
+								<option {{if lineDay.whichDay == 19}}selected="selected"{{/if}} value="19">第19天</option>
+								<option {{if lineDay.whichDay == 20}}selected="selected"{{/if}} value="20">第20天</option>
+								<option {{if lineDay.whichDay == 21}}selected="selected"{{/if}} value="21">第21天</option>
+								<option {{if lineDay.whichDay == 22}}selected="selected"{{/if}} value="22">第22天</option>
+								<option {{if lineDay.whichDay == 23}}selected="selected"{{/if}} value="23">第23天</option>
+								<option {{if lineDay.whichDay == 24}}selected="selected"{{/if}} value="24">第24天</option>
+								<option {{if lineDay.whichDay == 25}}selected="selected"{{/if}} value="25">第25天</option>
+								<option {{if lineDay.whichDay == 26}}selected="selected"{{/if}} value="26">第26天</option>
+								<option {{if lineDay.whichDay == 27}}selected="selected"{{/if}} value="27">第27天</option>
+								<option {{if lineDay.whichDay == 28}}selected="selected"{{/if}} value="28">第28天</option>
+								<option {{if lineDay.whichDay == 29}}selected="selected"{{/if}} value="29">第29天</option>
+								<option {{if lineDay.whichDay == 30}}selected="selected"{{/if}} value="30">第30天</option>
+								<option {{if lineDay.whichDay == 31}}selected="selected"{{/if}} value="31">第31天</option>
+							</select>
+						</div>
+						<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>酒店星级:</label>
+						<div class="col-sm-3">
+							<select name="hotelLevel" class="col-sm-12">
+								<option {{if lineDay.hotelLevel == 1}}selected="selected"{{/if}} value="0">未选择</option>
+								<option {{if lineDay.hotelLevel == 1}}selected="selected"{{/if}} value="1">三星以下</option>
+								<option {{if lineDay.hotelLevel == 2}}selected="selected"{{/if}} value="2">三星</option>
+								<option {{if lineDay.hotelLevel == 3}}selected="selected"{{/if}} value="3">准四星</option>
+								<option {{if lineDay.hotelLevel == 4}}selected="selected"{{/if}} value="4">四星</option>
+								<option {{if lineDay.hotelLevel == 5}}selected="selected"{{/if}} value="5">准五星</option>
+								<option {{if lineDay.hotelLevel == 6}}selected="selected"{{/if}} value="6">五星</option>
+								<option {{if lineDay.hotelLevel == 7}}selected="selected"{{/if}} value="7">五星以上</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>行程标题:</label>
+						<div class="col-sm-3">
+							<input type="text" name="title" value="{{lineDay.title}}" class="col-sm-12">
+						</div>
+						<label class="col-sm-2 control-label no-padding-right">住宿地点:</label>
+						<div class="col-sm-3">
+							<input type="text" name="restPosition" value="{{lineDay.restPosition}}" class="col-sm-12">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-right">沿途风景:</label>
+						<div class="col-sm-3">
+							<input type="text" name="roadScenic" value="{{lineDay.roadScenic}}" class="col-sm-12">
+						</div>
+						<label class="col-sm-2 control-label no-padding-right">含餐情况:</label>
+						<div class="col-sm-3">
+							<input type="text" name="repastDetail" value="{{lineDay.repastDetail}}" class="col-sm-12">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>行程详情:</label>
+						<div class="clearfix"></div>
+						<script id="detailEditor-update-travelLine" type="text/plain" style="width: 100%"></script>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="space-10"></div>
+		<button class="btn btn-block btn-primary btn-submit-line-day">
+			<i class="ace-icon fa fa-check"></i>
+			提交信息
+		</button>
+		<div class="space-20"></div>
+	</form>
+</div>

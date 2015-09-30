@@ -1,0 +1,38 @@
+/*TMODJS:{"debug":true,"version":96,"md5":"4eb34600145f29c5eefad591892ca81f"}*/
+define(function(require) {
+    return require("../../../template")("resource/guide/view/view", function($data, $filename) {
+        try {
+            var $utils = this, $helpers = $utils.$helpers, $line = 0, $escape = $utils.$escape, guide = $data.guide, $out = "";
+            return $out += '<div class="col-xs-12"> <form class="form-horizontal guideMainForm" role="form" style="margin-top:10px" onsubmit="return false"> <div class="form-group"> <label class="col-sm-2 control-label no-padding-right">姓名:</label> <div class="col-sm-3"> <label class="control-label">', 
+            $line = 6, $out += $escape(guide.realname), $out += '</label> </div> <label class="col-sm-2 control-label no-padding-right">性别:</label> <div class="col-sm-3"> <label class="control-label"> ', 
+            $line = 11, 1 == guide.gender ? ($out += " 女 ", $line = 13) : ($out += " 男 ", $line = 15), 
+            $out += ' </label> </div> </div> <div class="form-group"> <label class="col-sm-2 control-label no-padding-right">电话:</label> <div class="col-sm-3"> <label class="control-label">', 
+            $line = 22, $out += $escape(guide.mobileNumber), $out += '</label> </div> <label class="col-sm-2 control-label no-padding-right">所属公司:</label> <div class="col-sm-3"> <label class="control-label">', 
+            $line = 26, $out += $escape(guide.company), $out += '</label> </div> </div> <div class="form-group"> <label class="col-sm-2 control-label no-padding-right">证编号:</label> <div class="col-sm-3"> <label class="control-label">', 
+            $line = 32, $out += $escape(guide.guideCardNumber), $out += '</label> </div> <label class="col-sm-2 control-label no-padding-right">身份证:</label> <div class="col-sm-3"> <label class="control-label">', 
+            $line = 36, $out += $escape(guide.idCardNumber), $out += '</label> </div> </div> <div class="form-group"> <label class="col-sm-2 control-label no-padding-right">等级:</label> <div class="col-sm-3"> <label class="control-label"> ', 
+            $line = 43, 1 == guide.guideLevel ? ($out += " 初级导游 ", $line = 45) : 2 == guide.guideLevel ? ($out += " 中级导游 ", 
+            $line = 47) : 3 == guide.guideLevel ? ($out += " 高级导游 ", $line = 49) : 4 == guide.guideLevel && ($out += " 特级导游 ", 
+            $line = 51), $out += ' </label> </div> <label class="col-sm-2 control-label no-padding-right">学历:</label> <div class="col-sm-3"> <label class="control-label"> ', 
+            $line = 57, 1 == guide.guideEducation ? ($out += " 小学 ", $line = 59) : 2 == guide.guideEducation ? ($out += " 初中 ", 
+            $line = 61) : 3 == guide.guideEducation ? ($out += " 高中 ", $line = 63) : 4 == guide.guideEducation ? ($out += " 中专 ", 
+            $line = 65) : 5 == guide.guideEducation ? ($out += " 大专 ", $line = 67) : 6 == guide.guideEducation ? ($out += " 本科 ", 
+            $line = 69) : 7 == guide.guideEducation ? ($out += " 研究生 ", $line = 71) : 8 == guide.guideEducation ? ($out += " 硕士 ", 
+            $line = 73) : 9 == guide.guideEducation && ($out += " 博士 ", $line = 75), $out += ' </label> </div> </div> <div class="form-group"> <label class="col-sm-2 control-label no-padding-right">加入时间:</label> <div class="col-sm-3"> <label class="control-label">', 
+            $line = 82, $out += $escape($helpers.dateFormat(guide.joinTime, "yyyy-MM-dd")), 
+            $out += '</label> </div> <label class="col-sm-2 control-label no-padding-right">是否启用:</label> <div class="col-sm-2"> <label class="control-label"> ', 
+            $line = 87, 0 == guide.status ? ($out += " 已停用 ", $line = 89) : ($out += " 已启用 ", 
+            $line = 91), $out += ' </label> </div> </div> <div class="form-group"> <label class="col-sm-2 control-label no-padding-right">简介:</label> <div class="col-sm-8"> <label class="control-label">', 
+            $line = 98, $out += $escape(guide.remark), $out += "</label> </div> </div> </form> </div> ", 
+            new String($out);
+        } catch (e) {
+            throw {
+                filename: $filename,
+                name: "Render Error",
+                message: e.message,
+                line: $line,
+                source: '<div class="col-xs-12">\r\n	<form class="form-horizontal guideMainForm" role="form" style="margin-top:10px" onsubmit="return false">\r\n		<div class="form-group">\r\n			<label class="col-sm-2 control-label no-padding-right">姓名:</label>\r\n			<div class="col-sm-3">\r\n				<label class="control-label">{{guide.realname}}</label>\r\n			</div>\r\n			<label class="col-sm-2 control-label no-padding-right">性别:</label> \r\n			<div class="col-sm-3">\r\n				<label class="control-label">\r\n					{{if guide.gender == 1}}\r\n						女\r\n					{{else}}\r\n						男 \r\n					{{/if}}\r\n				</label>\r\n			</div>\r\n		</div>\r\n		<div class="form-group">\r\n			<label class="col-sm-2 control-label no-padding-right">电话:</label>\r\n			<div class="col-sm-3">\r\n				<label class="control-label">{{guide.mobileNumber}}</label>\r\n			</div>\r\n			<label class="col-sm-2 control-label no-padding-right">所属公司:</label>\r\n			<div class="col-sm-3">\r\n				<label class="control-label">{{guide.company}}</label>\r\n			</div>\r\n		</div>\r\n		<div class="form-group">\r\n			<label class="col-sm-2 control-label no-padding-right">证编号:</label>\r\n			<div class="col-sm-3">\r\n				<label class="control-label">{{guide.guideCardNumber}}</label>\r\n			</div>\r\n			<label class="col-sm-2 control-label no-padding-right">身份证:</label>\r\n			<div class="col-sm-3">\r\n				<label class="control-label">{{guide.idCardNumber}}</label>\r\n			</div>\r\n		</div>\r\n		<div class="form-group">\r\n			<label class="col-sm-2 control-label no-padding-right">等级:</label>\r\n			<div class="col-sm-3">\r\n				<label class="control-label">\r\n					{{if guide.guideLevel == 1}}\r\n						初级导游\r\n					{{else if guide.guideLevel == 2}}\r\n						中级导游\r\n					{{else if guide.guideLevel == 3}}\r\n						高级导游\r\n					{{else if guide.guideLevel == 4}}\r\n						特级导游\r\n					{{/if}}\r\n				</label>\r\n			</div>\r\n			<label class="col-sm-2 control-label no-padding-right">学历:</label>\r\n			<div class="col-sm-3">\r\n				<label class="control-label">\r\n					{{if guide.guideEducation == 1}}\r\n						小学\r\n					{{else if guide.guideEducation == 2}}\r\n						初中\r\n					{{else if guide.guideEducation == 3}}\r\n						高中\r\n					{{else if guide.guideEducation == 4}}\r\n						中专\r\n					{{else if guide.guideEducation == 5}}\r\n						大专\r\n					{{else if guide.guideEducation == 6}}\r\n						本科\r\n					{{else if guide.guideEducation == 7}}\r\n						研究生\r\n					{{else if guide.guideEducation == 8}}\r\n						硕士\r\n					{{else if guide.guideEducation == 9}}\r\n						博士\r\n					{{/if}}\r\n				</label>\r\n			</div>\r\n		</div>\r\n		<div class="form-group">\r\n			<label class="col-sm-2 control-label no-padding-right">加入时间:</label>\r\n			<div class="col-sm-3">\r\n				<label class="control-label">{{guide.joinTime | dateFormat:\'yyyy-MM-dd\'}}</label>\r\n			</div>\r\n			<label class="col-sm-2 control-label no-padding-right">是否启用:</label>\r\n			<div class="col-sm-2">\r\n				<label class="control-label">\r\n					{{if guide.status == 0}}\r\n						已停用\r\n					{{else guide.status == 1}}\r\n						已启用\r\n					{{/if}}\r\n				</label>\r\n			</div>\r\n		</div>\r\n		<div class="form-group">\r\n			<label class="col-sm-2 control-label no-padding-right">简介:</label>\r\n			<div class="col-sm-8">\r\n				<label class="control-label">{{guide.remark}}</label>\r\n			</div>\r\n		</div>\r\n	</form>\r\n</div>\r\n'.split(/\n/)[$line - 1].replace(/^\s+/, "")
+            };
+        }
+    });
+});
