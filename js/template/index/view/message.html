@@ -1,0 +1,15 @@
+{{each msgList as msg}}
+	<li class="" data-entity-id="{{msg.id}}">
+		<a href="#" class="clearfix"  style="text-align: left">
+			<span class="msg-pic pull-left"></span>
+				<span class="msg-title">
+					<span class="blue"><i class="ace-icon fa fa-bell {{if msg.isRead == 1}} green{{/if}}"></i>消息内容</span>
+						{{msg.content | interceptStr}}
+				</span>
+				<span class="msg-time">
+					<i class="ace-icon fa fa-clock-o"></i>
+					<span>{{msg.createTime | dateFormat:'hh:mm:ss'}}</span>
+				</span>
+		</a>
+	</li>
+{{/each}}

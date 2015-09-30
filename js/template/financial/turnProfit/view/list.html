@@ -1,0 +1,129 @@
+<div class="row resource_hotel" >
+    <div class="col-sm-12" style="margin-bottom: 10px">
+        <form class="form-horizontal" role="form" onsubmit="return false">
+            <div style="height:1px;width:98.5%;background-color: #ccc;position: absolute;margin-top:55px;margin-bottom:10px;"></div>
+            <div class="search-area  editable editable-click" style="margin-top: 10px;border: 0px">
+                    <div class="col-xs-1" style="padding: 10px 0px 0px 10px">
+                        <input type="text" value="{{searchParam.lineProductName}}" name="chooseLineProductName" class="col-xs-12 clearBlur" placeholder="线路产品" />
+                        <input type="hidden" value="{{searchParam.lineProductId}}" name="lineProductId" />
+                    </div>
+                <div class="col-xs-1" style="padding: 10px 0px 0px 10px">
+                    <input type="text" value="{{searchParam.partnerAgencyName}}"  name="chooseLineTurnprofits" class="col-xs-12" placeholder="组团社" />
+                    <input type="hidden" value="{{searchParam.partnerAgencyId}}" name="partnerAgencyId" />
+                </div>
+                <div class="col-xs-1" style="padding: 10px 0px 0px 10px">
+                    <input type="text" value="{{searchParam.transferPartnerAgencyName}}" name="partnerTurnprofits" class="col-xs-12" placeholder="同行地接" />
+                    <input type="hidden" value="{{searchParam.transferPartnerAgencyId}}" name="transferPartnerAgencyId" />
+                </div>
+                <div class="col-xs-3" style="padding: 10px 0px 0px 10px">
+                    <div class="col-xs-6">
+                        <div class="input-group">
+                            <input class="col-xs-12 date-picker" name="startTime" placeholder="开始日期" value="{{searchParam.startTime}}" type="text" />
+						<span class="input-group-addon">
+							<i class="fa fa-calendar"></i>
+						</span>
+                        </div>
+                    </div>  
+                    <div class="col-xs-6">	  
+                        <div class="input-group">
+                            <input class="col-xs-12 date-picker" name="endTime" placeholder="结束日期" value="{{searchParam.endTime}}" type="text" />
+						<span class="input-group-addon">
+							<i class="fa fa-calendar"></i>   
+						</span>  
+                        </div>
+
+                    </div>
+
+                </div>
+
+                </div>
+            <button class="btn-sm  btn-height search-btn btn-arrangeTourist-search" style="margin-top: 10px">
+                <i class="ace-icon fa fa-search"></i>
+                搜索
+            </button>
+        </form>
+        <!--<form class="form-horizontal" role="form" onsubmit="return false">-->
+    </div>
+        <!--</form>-->
+        <div style="clear:both;height:0px;line-height:0px;"></div>
+    </div>
+    <div class="form-group border" style="margin:10px;" >
+        <label class="control-label" style="margin-left:12px;">总人数：{{sumPersonCount}}</label>
+        <label class="control-label" style="margin-left:12px;">总应收：{{sumNeedIncomeMoney}}</label>
+        <label class="control-label" style="margin-left:12px;">总应付：{{sumNeedPayMoney}}</label>
+        <label class="control-label" style="margin-left:12px;">毛利：{{sumGrossProfit}}</label>
+        <label class="control-label" style="margin-left:12px;">人均毛利：{{sumAveragerGrossProfit}}</label>
+    </div>
+<div class="space-20"></div>     
+<div class="row ticketList">
+    <div class="col-xs-12"  style="margin-top: -15px">
+        <table class="table table-striped table-bordered table-hover">
+            <thead>
+            <tr class="bg-blur">
+                 <td class="col-sm-1"> 线路产品</td>
+                 <td> 出游日期</td>
+                 <td> 游客</td>  
+                 <td> 人数</td>
+                 <td> 组团社</td>   
+                 <td > 团款应收</td>
+                 <td> 中转</td>
+                 <td> 中转应付</td>
+                 <td> 同行地接</td>
+                 <td> 转客应付</td>  
+                 <td> 毛利</td>
+                 <td> 人均毛利</td>
+            </tr>
+            </thead>
+            <tbody>
+            {{each touristGroupTransferList as turnProfit index}}
+            <tr class="turnProfit.id">  
+                <td>{{turnProfit.lineProductName}}</td>
+                <!--给日期转码-->
+                <td>{{turnProfit.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
+                <td>{{turnProfit.contact}}</td>
+                <td>{{turnProfit.adultCount}}大{{turnProfit.childCount}}</td>
+                <td>{{turnProfit.partnerAgencyName}}</td>
+                <td>{{turnProfit.needInComeMoney}}</td>
+                <td>{{turnProfit.change}}</td>
+                <td>{{turnProfit.changeNeedPayMoney}}</td>
+                <td>{{turnProfit.transferPartnerAgencyName}}</td>
+                <td>
+               {{turnProfit.transNeedPayAllMoney}}
+                </td>
+                <td>
+                    <span style="color: red">{{turnProfit.grossProfit}}</span>
+                </td>
+                <td>
+                  <span style="color: red"> {{turnProfit.averageGrossProfit}}</span>
+                </td>
+            </tr>   
+            {{/each}}
+            </tbody>
+        </table>
+        <div class="row pageMode">
+            <div class="col-xs-6">
+                <div class="dataTables_info" id="dynamic-table_info" role="status" aria-live="polite">共计 {{recordSize}} 条记录</div>
+            </div>
+            <div class="col-xs-6">
+                <div class="dataTables_paginate paging_simple_numbers" id="dynamic-table_paginate">
+                    <ul class="pagination">
+                        <li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="first" href="javascript:void(0)">首页</a></li>
+                        <li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="previous"href="javascript:void(0)">上一页</a></li>
+                        <li class="paginate_button" aria-controls="dynamic-table" tabindex="0">
+                            <a href="javascript:void(0)">
+                                {{if totalPage == 0}}
+                                0/0
+                                {{else}}
+                                {{pageNo+1}}/{{totalPage}}
+                                {{/if}}
+                            </a>
+                        </li>
+                        <li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="next" href="javascript:void(0)">下一页</a></li>
+                        <li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="last" href="javascript:void(0)">尾页</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

@@ -1,0 +1,133 @@
+<div class="col-xs-12">
+	<form class="form-horizontal scenicMainForm" role="form" style="margin-top:10px" onsubmit="return false">
+		<div class="widget-box ui-sortable-handle">
+			<div class="widget-header">
+				<h5 class="widget-title">
+					<i class="ace-icon fa fa-info-circle"></i>
+					景区主体信息
+				</h5>
+			</div>
+			<div class="widget-body">
+				<div class="widget-main">
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-right">景区名称:</label>
+						<div class="col-sm-3">
+							<label class="control-label">{{scenic.name}}</label>
+						</div>
+						<label class="col-sm-1 control-label no-padding-right">是否启用:</label>
+						<div class="col-sm-2">
+							<label class="control-label">
+								{{if scenic.status == 0}}
+									已停用
+								{{else}}
+									已启用
+								{{/if}}
+							</label>
+						</div>
+					</div>
+					<div class="form-group">
+					    <label class="col-sm-2 control-label no-padding-right">联系人:</label>
+						<div class="col-sm-3">
+							<label class="control-label">{{scenic.managerName}}</label>
+						</div>
+						<label class="col-sm-1 control-label no-padding-right">联系电话:</label>
+						<div class="col-sm-3">
+							<label class="control-label">{{scenic.mobileNumber}}</label>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-right">座机号码:</label>
+						<div class="col-sm-3">
+							<label class="control-label">{{scenic.telNumber}}</label>
+						</div>
+						<label class="col-sm-1 control-label no-padding-right">传真号码:</label>
+						<div class="col-sm-3">
+							<label class="control-label">{{scenic.faxNumber}}</label>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-right">景区所在省市:</label>
+						<div class="col-sm-8">
+							<label class="control-label">
+								{{if scenic.province != null}} 
+									{{scenic.province.name}}
+								{{/if}}
+								{{if scenic.city != null}}
+									-{{scenic.city.name}}
+								{{/if}}
+								{{if scenic.district != null}}
+									-{{scenic.district.name}}
+								{{/if}}
+							</label>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-right">季节政策:</label>
+						<div class="col-sm-6">
+							<label class="control-label">{{scenic.seasonPolicy}}</label>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-right">景区简介:</label>
+						<div class="col-sm-8">
+							<label class="control-label">{{scenic.remark}}</label>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+	<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
+		<div class="form-group">
+			<div class="col-xs-12 col-sm-12 widget-container-col">
+				<div class="widget-box ui-sortable-handle">
+					<div class="widget-header">
+						<h5 class="widget-title">
+							<i class="ace-icon fa fa-building"></i>
+							项目列表
+						</h5>
+					</div>
+
+					<div class="widget-body">
+						<div class="widget-main no-padding">
+							<table class="table table-striped table-bordered table-hover scenicItemStandardList"> 
+								<thead>
+									<tr>
+										<th>收费项目</th>
+										<th>时间范围</th>
+										<th>单价</th>
+										<th>备注</th>
+									</tr>
+								</thead>
+								<tbody>
+									{{each scenic.scenicItemList as item}}
+									<tr data-entity-id="{{item.id}}">
+										<td>{{item.name}}</td>
+										<td>
+											{{each item.priceList as price}}	
+											<div>
+												{{price.startTime | dateFormat:'yyyy-MM-dd'}}至{{price.endTime | dateFormat:'yyyy-MM-dd'}}
+											</div>
+											{{/each}}									
+										</td>
+										<td>
+											{{each item.priceList as price}}	
+											<div>
+												{{price.contractPrice}}
+											</div>
+											{{/each}}
+										</td>
+										<td>
+											{{item.remark}}
+										</td>
+									</tr>	
+									{{/each}} 
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>

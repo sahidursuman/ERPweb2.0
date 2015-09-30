@@ -1,0 +1,48 @@
+<div class="col-xs-12">
+	<form class="form-horizontal guideMainForm" role="form" style="margin-top:10px" onsubmit="return false">
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right">用户名:</label>
+			<div class="col-sm-3">
+				<label class="control-label">{{user.userName}}</label>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right">姓名:</label>
+			<div class="col-sm-3">
+				<label class="control-label">{{user.realName}}</label>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right">联系电话:</label>
+			<div class="col-sm-3">
+				<label class="control-label">{{user.mobileNumber}}</label>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right">审核角色:</label>
+			<div class="col-sm-3">
+				<label class="control-label">{{if user.roleType == 1 }}管理员{{/if}}
+				{{if user.roleType == 2 }}财务{{/if}}
+				{{if user.roleType == 3 }}计调{{/if}}</label>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right">部门:</label>
+			<div class="col-sm-3">
+				<label class="control-label">{{groupname}}</label>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right">启用状态:</label>
+			<div class="col-sm-2">
+				<label class="control-label">
+					{{if user.status == 1}}
+						已启用
+					{{else user.status == 0}}
+						已停用
+					{{/if}}
+				</label>
+			</div>
+		</div>
+	</form>
+</div>

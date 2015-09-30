@@ -1,0 +1,4 @@
+/*TMODJS:{"debug":true,"version":35,"md5":"389bab9fd5692555007a3dcb4411d472"}*/
+define(function(require) {
+    return require("../../../template")("system/department/view/add", '<div class="col-xs-12"> <form class="form-horizontal businessMainForm" role="form" style="margin-top:50px" onsubmit="return false"> <div class="form-group"> <label class="col-sm-4 control-label no-padding-right"><span class="necessary">*</span>业务部门名称:</label> <div class="col-sm-6"> <input type="text" name="name" class="col-sm-12" /> </div> </div> <div class="space-10"></div> <button class="btn btn-block btn-primary btn-submit-business"> <i class="ace-icon fa fa-check"></i> 提交信息 </button> </form> </div> ');
+});

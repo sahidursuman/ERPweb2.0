@@ -1,0 +1,164 @@
+<div class="row ticketChecking">
+    <div class="col-xs-12 border">
+            <form class="form-horizontal" role="form" onsubmit="return false">
+                <div class="search-area editable editable-click" >
+                    <div class="form-group"> 
+                        <label style="float: left;margin: 0px auto auto 15px" class="control-label pull-left"> 票务商家:{{companyName}}</label>
+                        
+                        <label class="control-label col-sm-1" style="float:left;">账期:</label>
+	                        <select class="col-sm-1" name="year" style="margin-left:20px">
+								{{each yearList as year index}}
+									<option value="{{year.value}}" {{if searchParam.year == year.value}}selected="selected"{{/if}}>{{year.value}}</option>
+								{{/each}}
+							</select>
+							<select class="col-sm-1" name="month" style="margin-left:5px">
+							    <option value ="">全部</option>
+								{{each monthList as month index}}
+									<option value="{{month.value}}" {{if searchParam.month == month.value}}selected="selected"{{/if}}>{{month.value}}月</option>
+								{{/each}}
+							</select>
+                        <button class="btn-height btn-sm search-btn btn-checking-search" >
+                             <i class="ace-icon fa fa-search"></i>
+                                                                                                 搜索
+                        </button>
+                        
+                        <button type="button" class="btn btn-sm btn-primary btn-success btn-ticketExport">
+							<span>导出报表</span>
+							<i class="ace-icon fa fa-arrow-right icon-on-right"></i>
+						</button>
+                    </div>
+                </div>
+            </form>
+            <form class="form-horizontal" role="form" onsubmit="return false">
+                <div class="form-group ">
+                    <label class=" control-label pull-left" style="margin-left: 15px">总账面应付：{{sumNeedPayMoney}}</label>
+                    <label class=" control-label " style="margin-left:30px;">总实际已付：{{sumRealPayedMoney}}</label>
+                    <label class=" control-label " style="margin-left:30px;">总账面未付：{{sumUnPayedMoney}}</label>
+                    <label class=" control-label " style="margin-left:30px;">总实际未付：{{sumRealUnPayedMoney}}</label>
+                </div>
+            </form>
+        </div>
+        <input type="hidden" value="{{WEB_IMG_URL_BIG}}" name="WEB_IMG_URL_BIG" />
+    	<input type="hidden" value="{{WEB_IMG_URL_SMALL}}" name="WEB_IMG_URL_SMALL" />
+    <div class="clearfix"></div>
+        <table class="table table-striped table-bordered table-hover all" style="margin-top: 30px">
+            <thead>
+            <tr>
+              <th>序号</th>
+              <th>账务类别</th>
+              <th>日期</th>
+              <th>类型</th>
+              <th>班次</th>
+              <th>座位级别</th>
+              <th>数量</th>
+              <th>单价</th>
+              <th>优惠</th>
+              <th>账面应付</th>
+              <th>实际已付</th>
+              <th>账面未付</th>
+              <th>单据</th>
+              <th> <span class="necessary">*</span>实际未付</th>
+              <th>说明</th>
+              <th>对账时间</th>
+              <th>对账人</th>
+              <th>对账</th>
+            </tr>
+            </thead>
+            <tbody>
+               {{each financialTicketList as checking index}}
+					    <tr data-entity-id="{{checking.id}}" data-entity-isConfirmAccount="{{checking.isConfirmAccount}}" data-entity-realUnPayedMoney="{{checking.realUnPayedMoney}}" data-entity-remark="{{checking.remark}}">
+				         <td>{{index+1}}</td>
+							<td>
+								{{if checking.arrangeType == 0}}
+									{{checking.tripNumber}}{{","}}{{checking.lineProductName}}{{","}}{{checking.guideName}}
+							  	{{else}}
+									{{checking.tripNumber}}{{","}}{{checking.arrangeRealname}}{{","}}{{checking.arrangeMobileNumber}}
+							  	{{/if}}
+							</td>
+							<td name="startTime">{{checking.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
+							<td>
+								{{if checking.type == 1}}
+								  飞机票
+								  {{else if checking.type == 2}}
+								  汽车票
+								  {{else if checking.type == 3}}
+								  火车票
+								  {{else if checking.type == 4}}
+								  轮船票
+								{{/if}}
+							</td>
+							<td>{{checking.shift}}</td>
+							<td>{{checking.seatLevel}}</td>
+							<td>{{checking.realCount}}</td>
+							<td>{{checking.price}}</td>
+							<td>{{checking.reduceMoney}}</td>
+							<td>{{checking.needPayMoney}}</td>
+							<td>
+								{{"社付:"}}{{checking.travelAgencyPayedMoney}}{{","}}
+							    {{"导付:"}}{{checking.guidePayedMoney}}
+							</td> 
+							<td>{{checking.unPayedMoney}}</td>
+							<td><a href="#" class="ticketImg" url="{{checking.billImages}}">查看</a></td>
+							<td><input type="text" name="FinancialticketRealUnPayedMoney" value="{{checking.realUnPayedMoney}}" style="text-align:center" {{if checking.isConfirmAccount == 1 && roleType != 1 }} disabled = "true" {{/if}}></td>
+	                        <td><input type="text" name="FinancialticketRemark" value="{{checking.remark}}" style="text-align:center" {{if checking.isConfirmAccount == 1 && roleType != 1 }} disabled = "true" {{/if}}></td>
+							<td>{{if checking.checkTime == null || checking.checkTime == ""}}-{{else}}{{checking.checkTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
+	                        <td>{{checking.checkUserRealName}}</td>
+							<td>
+							   <label class="pos-rel">
+							   		<input type="checkbox" data-entity-checkStatus="{{checking.isConfirmAccount}}" class="ace ticketFinancial" 
+							   		{{if checking.isConfirmAccount == 1}}checked="checked"{{/if}} {{if checking.isConfirmAccount == 1 && roleType != 1 }} disabled = "true" {{/if}}  />
+							   		<span class="lbl"></span>
+							   </label>
+							</td>
+					     </tr>
+			    {{/each}}
+            </tbody>
+        </table>
+        <div class="row pageMode" style="margin-top: 40px">
+            <div class="col-xs-6">
+                <div class="dataTables_info" id="dynamic-table_info" role="status" aria-live="polite">共计{{recordSize}}条记录</div>
+            </div>
+            <div class="col-xs-6">
+                <div class="dataTables_paginate paging_simple_numbers" id="dynamic-table_paginate">
+                    <ul class="pagination">
+                        <li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="first" href="javascript:void(0)">首页</a></li>
+                        <li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="previous"href="javascript:void(0)">上一页</a></li>
+                        <li class="paginate_button" aria-controls="dynamic-table" tabindex="0">
+                            <a href="javascript:void(0)">
+                                 {{if totalPage == 0}}
+                                    {{"0"}}/{{"0"}}
+                                 {{else}}
+                                    {{pageNo+1}}/{{totalPage}}
+                                 {{/if}}
+                            </a>
+                        </li>
+                        <li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="next"  href="javascript:void(0)">下一页</a></li>
+                        <li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="last" href="javascript:void(0)">尾页</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="form-group pull-right col-sm-4" style="text-align: right;margin-top: 40px;padding-right: 10px">
+               <label class="pos-rel" style="margin-left:20px">
+				    <span class="lbl">		
+					<input type="checkbox" class="ticket-selectAll"/>全选</span>
+				</label>
+            </div>
+        <div style="clear: both"></div>
+        <br>
+        <form class="form-horizontal" role="form" onsubmit="return false">
+            <div class="form-group" style="text-align: center;">
+                <button class="btn btn-xs btn-primary btn-ticketFinancial-close">
+                    <i class="ace-icon fa fa-times-circle"></i>
+                  			 关闭
+                </button>
+                <button class="btn btn-xs btn-primary btn-ticketFinancial-checking">
+                    <i class="ace-icon fa fa-check-circle"></i>
+                   			 确认对账
+                </button>
+                
+            </div>
+        </form>
+
+
+</div>

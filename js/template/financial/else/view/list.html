@@ -1,0 +1,122 @@
+<div class="row">
+    <div class="search-area ">
+        <div class="form-group"> <label class="pull-left" style="margin-left: 15px">项目名称：</label>
+            <div class="col-sm-2">
+                <select name="lineProductId" class="col-xs-12">
+                    <option></option>
+                </select> </div>
+
+            <label class=" control-label pull-left" style="margin-left: 15px">
+                日期：
+            </label>
+
+            <select class="col-sm-1">
+                <option>2015</option>
+                <option>2014</option>
+            </select>
+            <select style="margin-left: 20px" class="col-sm-1">
+                <option>5月</option>
+                <option>4月</option>
+            </select>
+
+
+            <button class=" btn-sm  btn-arrangeTourist-search search-btn btn-height" style="margin-left: 60px">
+                <i class="ace-icon fa fa-search"></i>
+                搜索
+            </button>
+    </div>
+    <div class="space-20"></div>
+    <div class="row ticketList">
+        <div class="col-xs-12">
+            <table class="table table-striped table-bordered table-hover">
+                <thead>
+                <tr class="bg-blur">
+
+                    <th>购物店</th>
+                    <th class="col-sm-1">总人数</th>
+                    <th>购物总额</th>
+                    <th>总账面返佣</th>
+                    <th>总实际返佣</th>
+                    <th>总已结账</th>
+                    <th>总未结账</th>
+                    <th>对账进度</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {{each ticketList as ticket}}
+                <tr class="ticket-{{ticket.id}}">
+                    <td>888</td>
+                    <td>{{ticket.name}}</td>
+                    <td>{{ticket.managerName}}</td>
+                    <td>{{ticket.mobileNumber}}</td>
+                    <td>{{ticket.companyPhoneNumber}}</td>
+                    <td>
+                        {{if ticket.province!=null}}
+                        {{ticket.province.name}}
+                        {{/if}}
+                        {{if ticket.city!=null}}
+                        -{{ticket.city.name}}
+                        {{/if}}
+                        {{if ticket.district!=null}}
+                        -{{ticket.district.name}}
+                        {{/if}}
+                    </td>
+                    <td>
+                        {{if ticket.payType==0}}
+                        现付
+                        {{else}}
+                        账期
+                        {{/if}}
+                    </td>
+                    <td>
+                        {{if ticket.status == 0}}
+                        已停用
+                        {{else ticket.status == 1}}
+                        已启用
+                        {{/if}}
+                    </td>
+                    <td>
+                        <button class="btn btn-primary btn-sm  btn-divide">
+                            <i class="ace-icon fa fa-stack-overflow"></i>
+                            对账
+                        </button>
+
+
+                        <button data-entity-id="92" class="btn btn-xs btn-success btn-guide-view btn-transfter">
+                            <i class="ace-icon fa fa-building-o bigger-120"></i>
+                            结算
+                        </button>
+                    </td>
+                </tr>
+                {{/each}}
+                </tbody>
+            </table>
+            <div class="row pageMode">
+                <div class="col-xs-6">
+                    <div class="dataTables_info" id="dynamic-table_info" role="status" aria-live="polite">共计 {{recordSize}} 条记录</div>
+                </div>
+                <div class="col-xs-6">
+                    <div class="dataTables_paginate paging_simple_numbers" id="dynamic-table_paginate">
+                        <ul class="pagination">
+                            <li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="first" href="javascript:void(0)">首页</a></li>
+                            <li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="previous"href="javascript:void(0)">上一页</a></li>
+                            <li class="paginate_button" aria-controls="dynamic-table" tabindex="0">
+                                <a href="javascript:void(0)">
+                                    {{if totalPage == 0}}
+                                    0/0
+                                    {{else}}
+                                    {{pageNo+1}}/{{totalPage}}
+                                    {{/if}}
+                                </a>
+                            </li>
+                            <li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="next"  href="javascript:void(0)">下一页</a></li>
+                            <li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="last" href="javascript:void(0)">尾页</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

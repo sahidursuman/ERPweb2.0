@@ -1,0 +1,1557 @@
+<div class="col-xs-12 addQouteMainForm">
+	<div style="position:fixed;right:0px;top:0px;width: 53px;background: #428bca;height:100%;z-index:99;border-left:1px solid #DDD">
+		<div style="width:50px;height:280px;position: absolute;top:50%;left:0px;margin-top:-100px;z-index:98">
+			<button data-class="offer-bus-company-list" class="btn btn-info btn-sm btn-offer">
+				<i class="ace-icon fa fa-bus icon-only bigger-150"></i>
+				<br/>车队<br/>询价
+				<div style="margin-top:5px"><span class="badge badge-danger" style="color:#fff">4</span></div>
+			</button>
+			<button data-class="offer-guide-list" class="btn btn-purple btn-sm btn-offer">
+				<i class="ace-icon fa fa-user icon-only bigger-150"></i>
+				<br/>导游<br/>询价
+				<div style="margin-top:5px"><span class="badge badge-danger" style="color:#fff">4</span></div>
+			</button>
+			<button data-class="offer-hotel-list" class="btn btn-success btn-sm btn-offer">
+				<i class="ace-icon fa fa-building icon-only bigger-150"></i>
+				<br/>酒店<br/>询价
+				<div style="margin-top:5px"><span class="badge badge-danger" style="color:#fff">4</span></div>
+			</button>
+		</div>
+		<div class="offer-list offer-bus-company-list hide" style="width: 0px;height:100%;position: absolute;left:0px;top:0px;background: #6fb3e0;padding-top:100px">
+			<div class="col-sm-12">
+				<div class="tabbable hide">
+					<ul class="nav nav-tabs padding-12 tab-color-blue background-blue">
+						<li class="active">
+							<a data-toggle="tab" href="#offerBusCompanySearch" aria-expanded="true">车队询价搜索</a>
+						</li>
+						<li class="">
+							<a data-toggle="tab" href="#offerBusCompanyResult" aria-expanded="false">车队询价结果</a>
+						</li>
+						<li class="">
+							<a data-toggle="tab" href="#offerBusCompanyAcceptResult" aria-expanded="false">已接受</a>
+						</li>
+					</ul>
+
+					<div class="tab-content" style="background: #fff">
+						<div id="offerBusCompanySearch" class="tab-pane active">
+							<div class="scrollable">
+								<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
+									<div class="form-group">
+										<label class="col-sm-2 control-label no-padding-right">发团日期：</label>
+										<div class="col-sm-2">
+											<label class="control-label">2015-08-30</label>
+										</div>
+										<label class="col-sm-2 control-label no-padding-right">线路产品：</label>
+										<div class="col-sm-4">
+											<label class="control-label">九寨沟3日游金牌团</label>
+										</div>
+										<label class="col-sm-1 control-label no-padding-right">天数：</label>
+										<div class="col-sm-1">
+											<label class="control-label">3</label>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label no-padding-right">需求座位数：</label>
+										<div class="col-sm-3">
+											<input type="text" value="45" class="col-xs-12"/>
+										</div>
+										<button class="btn btn-primary btn-sm">
+											<i class="ace-icon fa fa-search"></i>
+											搜索
+										</button>
+									</div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label no-padding-right">需求车辆品牌：</label>
+										<div class="col-sm-3">
+											<input type="text" value="金龙大巴" class="col-xs-12"/>
+										</div>
+										<label class="col-sm-2 control-label no-padding-right">需求座位价：</label>
+										<div class="col-sm-3">
+											<input type="text" value="250" class="col-xs-12"/>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label no-padding-right">询价过期时间：</label>
+										<div class="col-sm-3">
+											<select class="col-xs-12">
+												<option>请选择</option>
+												<option>5分钟后</option>
+												<option>10分钟后</option>
+												<option>15分钟后</option>
+												<option>20分钟后</option>
+												<option>25分钟后</option>
+												<option>30分钟后</option>
+											</select>
+										</div>
+									</div>
+									<div class="col-xs-12 col-sm-12 widget-container-col">
+										<div class="widget-box ui-sortable-handle">
+											<div class="widget-header">
+												<h5 class="widget-title">
+													<i class="ace-icon fa fa-bus"></i>
+													车队列表
+												</h5>
+												<div class="widget-toolbar no-border">
+													<a href="javascript:void(0)" class="btn-hotel-standard-add">
+														<i class="ace-icon fa fa-question"></i>
+														一键询价
+													</a>
+												</div>
+											</div>
+						
+											<div class="widget-body">
+												<div class="widget-main">
+													<table class="table table-striped table-bordered table-hover">
+														<thead>
+															<tr>
+																<th>
+																	<label class="pos-rel">
+																		<input type="checkbox" class="ace">
+																		<span class="lbl"></span>
+																	</label>
+																</th>
+																<th>车队名称</th>
+																<th>车队电话</th>
+																<th>车辆数</th>
+																<th>查看车辆列表</th>
+															</tr>
+														</thead>
+														<tbody>
+															<tr>
+																<td>
+																	<label class="pos-rel">
+																		<input type="checkbox" class="ace">
+																		<span class="lbl"></span>
+																	</label>
+																</td>
+																<td>顶好车队</td>
+																<td>18745236547</td>
+																<td>4</td>
+																<td><button class="btn btn-primary btn-xs  btn-show-bus"><i class="ace-icon fa fa-chevron-up"></i></button></td>
+															</tr>
+															<tr class="hide">
+																<td colspan="5">
+																	<table class="table table-striped table-bordered table-hover">
+																		<thead>
+																			<tr>
+																				<th>车辆牌照</th>
+																				<th>车辆品牌</th>
+																				<th>座位数</th>
+																			</tr>
+																		</thead>
+																		<tbody>
+																			<tr>
+																				<td>川A45784</td>
+																				<td>金龙大巴</td>
+																				<td>39</td>
+																			</tr>
+																			<tr>
+																				<td>川A45784</td>
+																				<td>金龙大巴</td>
+																				<td>39</td>
+																			</tr>
+																			<tr>
+																				<td>川A45784</td>
+																				<td>金龙大巴</td>
+																				<td>39</td>
+																			</tr>
+																			<tr>
+																				<td>川A45784</td>
+																				<td>金龙大巴</td>
+																				<td>39</td>
+																			</tr>
+																		</tbody>
+																	</table>
+																</td>
+															</tr>
+															<tr>
+																<td>
+																	<label class="pos-rel">
+																		<input type="checkbox" class="ace">
+																		<span class="lbl"></span>
+																	</label>
+																</td>
+																<td>顶好车队</td>
+																<td>18745236547</td>
+																<td>4</td>
+																<td><button class="btn btn-primary btn-xs btn-show-bus"><i class="ace-icon fa fa-chevron-up"></i></button></td>
+															</tr>
+															<tr class="hide">
+																<td colspan="5">
+																	<table class="table table-striped table-bordered table-hover">
+																		<thead>
+																			<tr>
+																				<th>车辆牌照</th>
+																				<th>车辆品牌</th>
+																				<th>座位数</th>
+																			</tr>
+																		</thead>
+																		<tbody>
+																			<tr>
+																				<td>川A45784</td>
+																				<td>金龙大巴</td>
+																				<td>39</td>
+																			</tr>
+																			<tr>
+																				<td>川A45784</td>
+																				<td>金龙大巴</td>
+																				<td>39</td>
+																			</tr>
+																			<tr>
+																				<td>川A45784</td>
+																				<td>金龙大巴</td>
+																				<td>39</td>
+																			</tr>
+																			<tr>
+																				<td>川A45784</td>
+																				<td>金龙大巴</td>
+																				<td>39</td>
+																			</tr>
+																		</tbody>
+																	</table>
+																</td>
+															</tr>
+														</tbody>
+													</table>
+													<button class="btn btn-primary btn-block">下一页</button>
+												</div>
+											</div>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+
+						<div id="offerBusCompanyResult" class="tab-pane">
+							<div class="scrollable">
+								<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
+									<div class="form-group">
+										<label class="col-sm-2 control-label no-padding-right">发团日期：</label>
+										<div class="col-sm-2">
+											<label class="control-label">2015-08-30</label>
+										</div>
+										<label class="col-sm-2 control-label no-padding-right">线路产品：</label>
+										<div class="col-sm-4">
+											<label class="control-label">九寨沟3日游金牌团</label>
+										</div>
+										<label class="col-sm-1 control-label no-padding-right">天数：</label>
+										<div class="col-sm-1">
+											<label class="control-label">3</label>
+										</div>
+									</div>
+									<div class="col-xs-12 col-sm-12 widget-container-col">
+										<div class="widget-box ui-sortable-handle">
+											<div class="widget-header">
+												<h5 class="widget-title">
+													<i class="ace-icon fa fa-bus"></i>
+													询价结果列表
+												</h5>
+											</div>
+											<div class="widget-body">
+												<div class="widget-main">
+													<div class="form-group">
+														<label class="col-sm-2 control-label no-padding-right">需求座位数：</label>
+														<div class="col-sm-3">
+															<label class="control-label">45</label>
+														</div>
+														<label class="col-sm-3 control-label no-padding-right">需求车辆品牌：</label>
+														<div class="col-sm-4">
+															<label class="control-label">金龙大巴</label>
+														</div>
+													</div>
+													<table class="table table-striped table-bordered table-hover">
+														<thead>
+															<tr>
+																<th>车队名称</th>
+																<th>车队电话</th>
+																<th>座位价</th>
+																<th>询价状态</th>
+																<th>过期时间</th>
+																<th>操作</th>
+															</tr>
+														</thead>
+														<tbody>
+															<tr>
+																<td>顶好车队</td>
+																<td>15214874452</td>
+																<td>230</td>
+																<td><span class="label label-lg label-inverse arrowed arrowed-right">待处理</span></td>
+																<td>2015-08-30 15:23</td>
+																<td>
+																	<button class="btn btn-danger btn-xs">
+																		<i class="ace-icon fa fa-trash  bigger-110 icon-only"></i>
+																	</button>
+																	<button class="btn btn-success btn-xs">
+																		<i class="ace-icon fa fa-shopping-cart  bigger-110 icon-only"></i>
+																	</button>
+																</td>
+															</tr>
+															<tr><td colspan="6" style="text-align: left;">反馈内容：有车车有车车有车车有车车有车车有车车有车车有车车</td></tr>
+															<tr><td colspan="6">&nbsp;</td></tr>
+															<tr>
+																<td>顶好车队</td>
+																<td>15214874452</td>
+																<td>230</td>
+																<td><span class="label label-lg label-primary arrowed arrowed-right">已接受</span></td>
+																<td>2015-08-30 15:23</td>
+																<td>
+																	<button class="btn btn-danger btn-xs">
+																		<i class="ace-icon fa fa-trash  bigger-110 icon-only"></i>
+																	</button>
+																	<button class="btn btn-success btn-xs">
+																		<i class="ace-icon fa fa-shopping-cart  bigger-110 icon-only"></i>
+																	</button>
+																</td>
+															</tr>
+															<tr><td colspan="6" style="text-align: left;">反馈内容：有车车有车车有车车有车车有车车有车车有车车有车车</td></tr>
+															<tr><td colspan="6">&nbsp;</td></tr>
+														</tbody>
+													</table>
+												</div>
+											</div>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+						<div id="offerBusCompanyAcceptResult" class="tab-pane">
+							<div class="scrollable">
+								<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
+									<div class="form-group">
+										<label class="col-sm-2 control-label no-padding-right">发团日期：</label>
+										<div class="col-sm-2">
+											<label class="control-label">2015-08-30</label>
+										</div>
+										<label class="col-sm-2 control-label no-padding-right">线路产品：</label>
+										<div class="col-sm-4">
+											<label class="control-label">九寨沟3日游金牌团</label>
+										</div>
+										<label class="col-sm-1 control-label no-padding-right">天数：</label>
+										<div class="col-sm-1">
+											<label class="control-label">3</label>
+										</div>
+									</div>
+									<div class="col-xs-12 col-sm-12 widget-container-col">
+										<div class="widget-box ui-sortable-handle">
+											<div class="widget-header">
+												<h5 class="widget-title">
+													<i class="ace-icon fa fa-bus"></i>
+													询价结果列表
+												</h5>
+											</div>
+											<div class="widget-body">
+												<div class="widget-main">
+													<table class="table table-striped table-bordered table-hover">
+														<thead>
+															<tr>
+																<th>车队名称</th>
+																<th>车队电话</th>
+																<th>座位价</th>
+																<th>询价状态</th>
+																<th>过期时间</th>
+																<th>操作</th>
+															</tr>
+														</thead>
+														<tbody>
+															<tr>
+																<td>顶好车队</td>
+																<td>15214874452</td>
+																<td>230</td>
+																<td><span class="label label-lg label-primary arrowed arrowed-right">已接受</span></td>
+																<td>2015-08-30 15:23</td>
+																<td>
+																	<button class="btn btn-danger btn-xs">
+																		<i class="ace-icon fa fa-trash  bigger-110 icon-only"></i>
+																	</button>
+																	<button class="btn btn-success btn-xs">
+																		<i class="ace-icon fa fa-shopping-cart  bigger-110 icon-only"></i>
+																	</button>
+																</td>
+															</tr>
+															<tr>
+																<td colspan="6">
+																	<div class="form-group" style="margin-bottom:0px">
+																		<label class="col-sm-2 control-label no-padding-right">需求座位数：</label>
+																		<div class="col-sm-3">
+																			<label class="control-label">45</label>
+																		</div>
+																		<label class="col-sm-3 control-label no-padding-right">需求车辆品牌：</label>
+																		<div class="col-sm-4">
+																			<label class="control-label">金龙大巴</label>
+																		</div>
+																	</div>
+																</td>
+															</tr>
+															<tr><td colspan="6" style="text-align: left;">反馈内容：有车车有车车有车车有车车有车车有车车有车车有车车</td></tr>
+															<tr><td colspan="6">&nbsp;</td></tr>
+															<tr>
+																<td>顶好车队</td>
+																<td>15214874452</td>
+																<td>230</td>
+																<td><span class="label label-lg label-primary arrowed arrowed-right">已接受</span></td>
+																<td>2015-08-30 15:23</td>
+																<td>
+																	<button class="btn btn-danger btn-xs">
+																		<i class="ace-icon fa fa-trash  bigger-110 icon-only"></i>
+																	</button>
+																	<button class="btn btn-success btn-xs">
+																		<i class="ace-icon fa fa-shopping-cart  bigger-110 icon-only"></i>
+																	</button>
+																</td>
+															</tr>
+															<tr>
+																<td colspan="6">
+																	<div class="form-group" style="margin-bottom:0px">
+																		<label class="col-sm-2 control-label no-padding-right">需求座位数：</label>
+																		<div class="col-sm-3">
+																			<label class="control-label">45</label>
+																		</div>
+																		<label class="col-sm-3 control-label no-padding-right">需求车辆品牌：</label>
+																		<div class="col-sm-4">
+																			<label class="control-label">金龙大巴</label>
+																		</div>
+																	</div>
+																</td>
+															</tr>
+															<tr><td colspan="6" style="text-align: left;">反馈内容：有车车有车车有车车有车车有车车有车车有车车有车车</td></tr>
+															<tr><td colspan="6">&nbsp;</td></tr>
+														</tbody>
+													</table>
+												</div>
+											</div>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="offer-list offer-guide-list hide" style="width: 0px;height:100%;position: absolute;left:0px;top:0px;background: #9585bf;padding-top:100px">
+			<div class="col-sm-12">
+				<div class="tabbable hide">
+					<ul class="nav nav-tabs padding-12 tab-color-blue background-blue">
+						<li class="active">
+							<a data-toggle="tab" href="#offerGuideSearch" aria-expanded="true">导游询价搜索</a>
+						</li>
+
+						<li class="">
+							<a data-toggle="tab" href="#offerGuideResult" aria-expanded="false">导游询价结果</a>
+						</li>
+					</ul>
+
+					<div class="tab-content" style="background: #fff">
+						<div id="offerGuideSearch" class="tab-pane active">
+							<div class="scrollable">
+								<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
+									<div class="form-group">
+										<label class="col-sm-2 control-label no-padding-right">发团日期：</label>
+										<div class="col-sm-2">
+											<label class="control-label">2015-08-30</label>
+										</div>
+										<label class="col-sm-2 control-label no-padding-right">线路产品：</label>
+										<div class="col-sm-4">
+											<label class="control-label">九寨沟3日游金牌团</label>
+										</div>
+										<label class="col-sm-1 control-label no-padding-right">天数：</label>
+										<div class="col-sm-1">
+											<label class="control-label">3</label>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label no-padding-right">需求导游性别：</label>
+										<div class="col-sm-3">
+											<select class="col-xs-12">
+												<option value="0" selected="selected">男</option>
+												<option value="1">女</option>
+											</select>
+										</div>
+										<button class="btn btn-primary btn-sm">
+											<i class="ace-icon fa fa-search"></i>
+											搜索
+										</button>
+									</div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label no-padding-right">给予导服费：</label>
+										<div class="col-sm-2">
+											<input type="text" class="col-xs-12" value="0"/>
+										</div>
+										<label class="col-sm-2 control-label no-padding-right">报账周期：</label>
+										<div class="col-sm-2">
+											<input type="text" class="col-xs-12" value=""/>
+										</div>
+										<label class="col-sm-2 control-label no-padding-right">垫付说明：</label>
+										<div class="col-sm-2">
+											<input type="text" class="col-xs-12" value=""/>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label no-padding-right">询价过期时间：</label>
+										<div class="col-sm-3">
+											<select class="col-xs-12">
+												<option>请选择</option>
+												<option>5分钟后</option>
+												<option>10分钟后</option>
+												<option>15分钟后</option>
+												<option>20分钟后</option>
+												<option>25分钟后</option>
+												<option>30分钟后</option>
+											</select>
+										</div>
+									</div>
+									<div class="col-xs-12 col-sm-12 widget-container-col">
+										<div class="widget-box ui-sortable-handle">
+											<div class="widget-header">
+												<h5 class="widget-title">
+													<i class="ace-icon fa fa-user"></i>
+													导游列表
+												</h5>
+												<div class="widget-toolbar no-border">
+													<a href="javascript:void(0)" class="btn-hotel-standard-add">
+														<i class="ace-icon fa fa-question"></i>
+														一键询价
+													</a>
+												</div>
+											</div>
+						
+											<div class="widget-body">
+												<div class="widget-main">
+													<table class="table table-striped table-bordered table-hover">
+														<thead>
+															<tr>
+																<th>
+																	<label class="pos-rel">
+																		<input type="checkbox" class="ace">
+																		<span class="lbl"></span>
+																	</label>
+																</th>
+																<th>导游姓名</th>
+																<th>导游性别</th>
+																<th>导游等级</th>
+																<th>联系电话</th>
+															</tr>
+														</thead>
+														<tbody>
+															<tr>
+																<td>
+																	<label class="pos-rel">
+																		<input type="checkbox" class="ace">
+																		<span class="lbl"></span>
+																	</label>
+																</td>
+																<td>张三</td>
+																<td>男</td>
+																<td>初级导游资格</td>
+																<td>18475423654</td>
+															</tr>
+															<tr>
+																<td>
+																	<label class="pos-rel">
+																		<input type="checkbox" class="ace">
+																		<span class="lbl"></span>
+																	</label>
+																</td>
+																<td>张三</td>
+																<td>女</td>
+																<td>初级导游资格</td>
+																<td>18541259856</td>
+															</tr>
+														</tbody>
+													</table>
+													<button class="btn btn-primary btn-block">下一页</button>
+												</div>
+											</div>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+
+						<div id="offerGuideResult" class="tab-pane">
+							<div class="scrollable">
+								<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
+									<div class="form-group">
+										<label class="col-sm-2 control-label no-padding-right">发团日期：</label>
+										<div class="col-sm-2">
+											<label class="control-label">2015-08-30</label>
+										</div>
+										<label class="col-sm-2 control-label no-padding-right">线路产品：</label>
+										<div class="col-sm-4">
+											<label class="control-label">九寨沟3日游金牌团</label>
+										</div>
+										<label class="col-sm-1 control-label no-padding-right">天数：</label>
+										<div class="col-sm-1">
+											<label class="control-label">3</label>
+										</div>
+									</div>
+									<div class="col-xs-12 col-sm-12 widget-container-col">
+										<div class="widget-box ui-sortable-handle">
+											<div class="widget-header">
+												<h5 class="widget-title">
+													<i class="ace-icon fa fa-user"></i>
+													询价结果列表
+												</h5>
+											</div>
+						
+											<div class="widget-body">
+												<div class="widget-main">
+													<div class="form-group">
+														<label class="col-sm-2 control-label no-padding-right">给予导服费：</label>
+														<div class="col-sm-3">
+															<label class="control-label">200</label>
+														</div>
+														<label class="col-sm-3 control-label no-padding-right">需求导游性别：</label>
+														<div class="col-sm-3">
+															<label class="control-label">男</label>
+														</div>
+													</div>
+													<table class="table table-striped table-bordered table-hover">
+														<thead>
+															<tr>
+																<th>导游姓名</th>
+																<th>导服费</th>
+																<th>联系电话</th>
+																<th>询价状态</th>
+																<th>过期时间</th>
+																<th>操作</th>
+															</tr>
+														</thead>
+														<tbody>
+															<tr>
+																<td>张三</td>
+																<td>400</td>
+																<td>18235452145</td>
+																<td><span class="label label-lg label-inverse arrowed arrowed-right">待处理</span></td>
+																<td>2015-08-30 15:23</td>
+																<td>
+																	<button class="btn btn-danger btn-xs">
+																		<i class="ace-icon fa fa-trash  bigger-110 icon-only"></i>
+																	</button>
+																	<button class="btn btn-success btn-xs">
+																		<i class="ace-icon fa fa-shopping-cart  bigger-110 icon-only"></i>
+																	</button>
+																</td>
+															</tr>
+															<tr><td colspan="6" style="text-align: left;">反馈内容：可以带团</td></tr>
+															<tr><td colspan="6">&nbsp;</td></tr>
+															<tr>
+																<td>张三</td>
+																<td>400</td>
+																<td>18235452145</td>
+																<td><span class="label label-lg label-inverse arrowed arrowed-right">待处理</span></td>
+																<td>2015-08-30 15:23</td>
+																<td>
+																	<button class="btn btn-danger btn-xs">
+																		<i class="ace-icon fa fa-trash  bigger-110 icon-only"></i>
+																	</button>
+																	<button class="btn btn-success btn-xs">
+																		<i class="ace-icon fa fa-shopping-cart  bigger-110 icon-only"></i>
+																	</button>
+																</td>
+															</tr>
+															<tr><td colspan="6" style="text-align: left;">反馈内容：可以带团</td></tr>
+															<tr><td colspan="6">&nbsp;</td></tr>
+														</tbody>
+													</table>
+												</div>
+											</div>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="offer-list offer-hotel-list hide" style="width: 0px;height:100%;position: absolute;left:0px;top:0px;background: #87b87f;padding-top:100px">
+			<div class="col-sm-12">
+				<div class="tabbable hide">
+					<ul class="nav nav-tabs padding-12 tab-color-blue background-blue">
+						<li class="active">
+							<a data-toggle="tab" href="#offerHotelSearch" aria-expanded="true">酒店询价搜索</a>
+						</li>
+
+						<li class="">
+							<a data-toggle="tab" href="#offerHotelResult" aria-expanded="false">酒店询价结果</a>
+						</li>
+					</ul>
+
+					<div class="tab-content" style="background: #fff">
+						<div id="offerHotelSearch" class="tab-pane active">
+							<div class="scrollable">
+								<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
+									<div class="form-group">
+										<label class="col-sm-2 control-label no-padding-right">发团日期：</label>
+										<div class="col-sm-2">
+											<label class="control-label">2015-08-30</label>
+										</div>
+										<label class="col-sm-2 control-label no-padding-right">线路产品：</label>
+										<div class="col-sm-4">
+											<label class="control-label">九寨沟3日游金牌团</label>
+										</div>
+										<label class="col-sm-1 control-label no-padding-right">天数：</label>
+										<div class="col-sm-1">
+											<label class="control-label">3</label>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label no-padding-right">需求酒店星级：</label>
+										<div class="col-sm-3">
+											<select class="col-xs-12">
+												<option selected="selected" value="1">三星以下</option>
+												<option value="2">三星</option>
+												<option value="3">准四星</option>
+												<option value="4">四星</option>
+												<option value="5">准五星</option>
+												<option value="6">五星</option>
+												<option value="7">五星以上</option>
+											</select>
+										</div>
+										<label class="col-sm-2 control-label no-padding-right">入住时间：</label>
+										<div class="col-sm-3">
+											<select class="col-xs-12">
+												<option selected="selected" value="1">第一天</option>
+												<option value="2">第二天</option>
+												<option value="3">第三天</option>
+											</select>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label no-padding-right">酒店所在地区：</label>
+										<div class="col-sm-10">
+											<select class="col-xs-3">
+												<option value="">请选择</option>
+											</select>
+											<select class="col-xs-3" style="margin-left:2px;">
+												<option value="">请选择</option>
+											</select>
+											<select class="col-xs-3" style="margin-left:2px;">
+												<option value="">请选择</option>
+											</select>
+											<button class="btn btn-primary btn-sm" style="margin-left:10px">
+												<i class="ace-icon fa fa-search"></i>
+												搜索
+											</button>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label no-padding-right">询价过期时间：</label>
+										<div class="col-sm-3">
+											<select class="col-xs-12">
+												<option>请选择</option>
+												<option>5分钟后</option>
+												<option>10分钟后</option>
+												<option>15分钟后</option>
+												<option>20分钟后</option>
+												<option>25分钟后</option>
+												<option>30分钟后</option>
+											</select>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label no-padding-right">需求房型信息：</label>
+										<div class="col-sm-10">
+											<input type="text" class="col-xs-3" placeholder="请输入需求房型"/>
+											<input type="text" class="col-xs-3" placeholder="请输入需求房间数" style="margin-left:2px"/>
+											<input type="text" class="col-xs-3" placeholder="请输入需求价格" style="margin-left:2px;margin-right:2px"/>
+											<button class="btn btn-success btn-sm"><i class="ace-icon fa fa-plus icon-only"></i></button>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label no-padding-right"></label>
+										<div class="col-sm-10">
+											<input type="text" class="col-xs-3" placeholder="请输入需求房型"/>
+											<input type="text" class="col-xs-3" placeholder="请输入需求房间数" style="margin-left:2px"/>
+											<input type="text" class="col-xs-3" placeholder="请输入需求价格" style="margin-left:2px;margin-right:2px"/>
+											<button class="btn btn-danger btn-sm"><i class="ace-icon fa fa-minus icon-only"></i></button>
+										</div>
+									</div>
+									<div class="col-xs-12 col-sm-12 widget-container-col">
+										<div class="widget-box ui-sortable-handle">
+											<div class="widget-header">
+												<h5 class="widget-title">
+													<i class="ace-icon fa fa-building"></i>
+													酒店列表
+												</h5>
+												<div class="widget-toolbar no-border">
+													<a href="javascript:void(0)" class="btn-hotel-standard-add">
+														<i class="ace-icon fa fa-question"></i>
+														一键询价
+													</a>
+												</div>
+											</div>
+						
+											<div class="widget-body">
+												<div class="widget-main">
+													<table class="table table-striped table-bordered table-hover">
+														<thead>
+															<tr>
+																<th>
+																	<label class="pos-rel">
+																		<input type="checkbox" class="ace">
+																		<span class="lbl"></span>
+																	</label>
+																</th>
+																<th>酒店名称</th>
+																<th>酒店星级</th>
+																<th>负责人姓名</th>
+																<th>联系电话</th>
+																<th>查看房型列表</th>
+															</tr>
+														</thead>
+														<tbody>
+															<tr>
+																<td>
+																	<label class="pos-rel">
+																		<input type="checkbox" class="ace">
+																		<span class="lbl"></span>
+																	</label>
+																</td>
+																<td>香格拉大酒店</td>
+																<td>五星</td>
+																<td>张三</td>
+																<td>18414523658</td>
+																<td><button class="btn btn-primary btn-xs  btn-show-hotel-room"><i class="ace-icon fa fa-chevron-up"></i></button></td>
+															</tr>
+															<tr class="hide">
+																<td colspan="6">
+																	<table class="table table-striped table-bordered table-hover">
+																		<thead>
+																			<tr>
+																				<th>房型</th>
+																				<th>含餐情况</th>
+																			</tr>
+																		</thead>
+																		<tbody>
+																			<tr>
+																				<td>单人间</td>
+																				<td>含早,含中</td>
+																			</tr>
+																			<tr>
+																				<td>单人间</td>
+																				<td>含早,含中</td>
+																			</tr>
+																		</tbody>
+																	</table>
+																</td>
+															</tr>
+															<tr>
+																<td>
+																	<label class="pos-rel">
+																		<input type="checkbox" class="ace">
+																		<span class="lbl"></span>
+																	</label>
+																</td>
+																<td>香格拉大酒店</td>
+																<td>五星</td>
+																<td>张三</td>
+																<td>18414523658</td>
+																<td><button class="btn btn-primary btn-xs  btn-show-hotel-room"><i class="ace-icon fa fa-chevron-up"></i></button></td>
+															</tr>
+															<tr class="hide">
+																<td colspan="6">
+																	<table class="table table-striped table-bordered table-hover">
+																		<thead>
+																			<tr>
+																				<th>房型</th>
+																				<th>含餐情况</th>
+																			</tr>
+																		</thead>
+																		<tbody>
+																			<tr>
+																				<td>单人间</td>
+																				<td>含早,含中</td>
+																			</tr>
+																			<tr>
+																				<td>单人间</td>
+																				<td>含早,含中</td>
+																			</tr>
+																		</tbody>
+																	</table>
+																</td>
+															</tr>
+														</tbody>
+													</table>
+													<button class="btn btn-primary btn-block">下一页</button>
+												</div>
+											</div>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+
+						<div id="offerHotelResult" class="tab-pane">
+							<div class="scrollable">
+								<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
+									<div class="form-group">
+										<label class="col-sm-2 control-label no-padding-right">发团日期：</label>
+										<div class="col-sm-2">
+											<label class="control-label">2015-08-30</label>
+										</div>
+										<label class="col-sm-2 control-label no-padding-right">线路产品：</label>
+										<div class="col-sm-4">
+											<label class="control-label">九寨沟3日游金牌团</label>
+										</div>
+										<label class="col-sm-1 control-label no-padding-right">天数：</label>
+										<div class="col-sm-1">
+											<label class="control-label">3</label>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label no-padding-right">需求房型信息：</label>
+										<div class="col-sm-10">
+											<label class="control-label">单人间 20间 200元/间</label>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label no-padding-right"></label>
+										<div class="col-sm-10">
+											<label class="control-label">标准间 10间 300元/间</label>
+										</div>
+									</div>
+									<div class="col-xs-12 col-sm-12 widget-container-col">
+										<div class="widget-box ui-sortable-handle">
+											<div class="widget-header">
+												<h5 class="widget-title">
+													<i class="ace-icon fa fa-building"></i>
+													询价结果列表
+												</h5>
+											</div>
+						
+											<div class="widget-body">
+												<div class="widget-main">
+													<div class="col-xs-12 col-sm-12 widget-container-col">
+														<div class="widget-box ui-sortable-handle">
+															<div class="widget-header">
+																<h5 class="widget-title">
+																	<i class="ace-icon fa fa-building"></i>
+																	第1天
+																</h5>
+															</div>
+															<div class="widget-body">
+																<div class="widget-main">
+																	<table class="table table-striped table-bordered table-hover">
+																		<thead>
+																			<tr>
+																				<th>酒店名称</th>
+																				<th>酒店等级</th>
+																				<th>联系电话</th>
+																				<th>询价状态</th>
+																				<th>过期时间</th>
+																				<th>操作</th>
+																			</tr>
+																		</thead>
+																		<tbody>
+																			<tr>
+																				<td>香格里拉酒店</td>
+																				<td>四星</td>
+																				<td>18235452145</td>
+																				<td><span class="label label-lg label-inverse arrowed arrowed-right">待处理</span></td>
+																				<td>2015-08-30 15:23</td>
+																				<td>
+																					<button class="btn btn-danger btn-xs">
+																						<i class="ace-icon fa fa-trash  bigger-110 icon-only"></i>
+																					</button>
+																					<button class="btn btn-success btn-xs">
+																						<i class="ace-icon fa fa-shopping-cart  bigger-110 icon-only"></i>
+																					</button>
+																				</td>
+																			</tr>
+																			<tr><td colspan="6" style="text-align: left;">反馈内容：房间充足，可以过来入住</td></tr>
+																			<tr><td colspan="6">&nbsp;</td></tr>
+																			<tr>
+																				<td>香格里拉酒店</td>
+																				<td>四星</td>
+																				<td>18235452145</td>
+																				<td><span class="label label-lg label-inverse arrowed arrowed-right">待处理</span></td>
+																				<td>2015-08-30 15:23</td>
+																				<td>
+																					<button class="btn btn-danger btn-xs">
+																						<i class="ace-icon fa fa-trash  bigger-110 icon-only"></i>
+																					</button>
+																					<button class="btn btn-success btn-xs">
+																						<i class="ace-icon fa fa-shopping-cart  bigger-110 icon-only"></i>
+																					</button>
+																				</td>
+																			</tr>
+																			<tr><td colspan="6" style="text-align: left;">房间充足，可以过来入住</td></tr>
+																			<tr><td colspan="6">&nbsp;</td></tr>
+																		</tbody>
+																	</table>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="clearfix"></div>
+													<div class="col-xs-12 col-sm-12 widget-container-col">
+														<div class="widget-box ui-sortable-handle">
+															<div class="widget-header">
+																<h5 class="widget-title">
+																	<i class="ace-icon fa fa-building"></i>
+																	第2天
+																</h5>
+															</div>
+															<div class="widget-body">
+																<div class="widget-main">
+																	<table class="table table-striped table-bordered table-hover">
+																		<thead>
+																			<tr>
+																				<th>酒店名称</th>
+																				<th>酒店等级</th>
+																				<th>联系电话</th>
+																				<th>询价状态</th>
+																				<th>过期时间</th>
+																				<th>操作</th>
+																			</tr>
+																		</thead>
+																		<tbody>
+																			<tr>
+																				<td>香格里拉酒店</td>
+																				<td>四星</td>
+																				<td>18235452145</td>
+																				<td><span class="label label-lg label-inverse arrowed arrowed-right">待处理</span></td>
+																				<td>2015-08-30 15:23</td>
+																				<td>
+																					<button class="btn btn-danger btn-xs">
+																						<i class="ace-icon fa fa-trash  bigger-110 icon-only"></i>
+																					</button>
+																					<button class="btn btn-success btn-xs">
+																						<i class="ace-icon fa fa-shopping-cart  bigger-110 icon-only"></i>
+																					</button>
+																				</td>
+																			</tr>
+																			<tr><td colspan="6" style="text-align: left;">反馈内容：房间充足，可以过来入住</td></tr>
+																			<tr><td colspan="6">&nbsp;</td></tr>
+																			<tr>
+																				<td>香格里拉酒店</td>
+																				<td>四星</td>
+																				<td>18235452145</td>
+																				<td><span class="label label-lg label-inverse arrowed arrowed-right">待处理</span></td>
+																				<td>2015-08-30 15:23</td>
+																				<td>
+																					<button class="btn btn-danger btn-xs">
+																						<i class="ace-icon fa fa-trash  bigger-110 icon-only"></i>
+																					</button>
+																					<button class="btn btn-success btn-xs">
+																						<i class="ace-icon fa fa-shopping-cart  bigger-110 icon-only"></i>
+																					</button>
+																				</td>
+																			</tr>
+																			<tr><td colspan="6" style="text-align: left;">房间充足，可以过来入住</td></tr>
+																			<tr><td colspan="6">&nbsp;</td></tr>
+																		</tbody>
+																	</table>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="clearfix"></div>
+													<div class="col-xs-12 col-sm-12 widget-container-col">
+														<div class="widget-box ui-sortable-handle">
+															<div class="widget-header">
+																<h5 class="widget-title">
+																	<i class="ace-icon fa fa-building"></i>
+																	第1天
+																</h5>
+															</div>
+															<div class="widget-body">
+																<div class="widget-main">
+																	<table class="table table-striped table-bordered table-hover">
+																		<thead>
+																			<tr>
+																				<th>酒店名称</th>
+																				<th>酒店等级</th>
+																				<th>联系电话</th>
+																				<th>询价状态</th>
+																				<th>过期时间</th>
+																				<th>操作</th>
+																			</tr>
+																		</thead>
+																		<tbody>
+																			<tr>
+																				<td>香格里拉酒店</td>
+																				<td>四星</td>
+																				<td>18235452145</td>
+																				<td><span class="label label-lg label-inverse arrowed arrowed-right">待处理</span></td>
+																				<td>2015-08-30 15:23</td>
+																				<td>
+																					<button class="btn btn-danger btn-xs">
+																						<i class="ace-icon fa fa-trash  bigger-110 icon-only"></i>
+																					</button>
+																					<button class="btn btn-success btn-xs">
+																						<i class="ace-icon fa fa-shopping-cart  bigger-110 icon-only"></i>
+																					</button>
+																				</td>
+																			</tr>
+																			<tr><td colspan="6" style="text-align: left;">反馈内容：房间充足，可以过来入住</td></tr>
+																			<tr><td colspan="6">&nbsp;</td></tr>
+																			<tr>
+																				<td>香格里拉酒店</td>
+																				<td>四星</td>
+																				<td>18235452145</td>
+																				<td><span class="label label-lg label-inverse arrowed arrowed-right">待处理</span></td>
+																				<td>2015-08-30 15:23</td>
+																				<td>
+																					<button class="btn btn-danger btn-xs">
+																						<i class="ace-icon fa fa-trash  bigger-110 icon-only"></i>
+																					</button>
+																					<button class="btn btn-success btn-xs">
+																						<i class="ace-icon fa fa-shopping-cart  bigger-110 icon-only"></i>
+																					</button>
+																				</td>
+																			</tr>
+																			<tr><td colspan="6" style="text-align: left;">房间充足，可以过来入住</td></tr>
+																			<tr><td colspan="6">&nbsp;</td></tr>
+																		</tbody>
+																	</table>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="clearfix"></div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div style="margin-right:53px">
+		<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
+			<div class="widget-box ui-sortable-handle">
+				<div class="widget-header">
+					<h5 class="widget-title">
+						<i class="ace-icon fa fa-info-circle"></i>
+						线路产品主体信息
+					</h5>
+				</div>
+				<div class="widget-body">
+					<div class="widget-main">
+						<div class="form-group">
+							<label class="col-sm-2 control-label no-padding-right">线路产品名称:</label>
+							<div class="col-sm-2">
+								<label class="control-label">九寨黄龙双汽3日游</label>
+							</div>
+							<label class="col-sm-2 control-label no-padding-right">售卖标志:</label>
+							<div class="col-sm-2">
+								<label class="control-label">已启用</label>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label no-padding-right">天数:</label>
+							<div class="col-sm-2">
+								<label class="control-label">3天</label>
+							</div>
+							<label class="col-sm-2 control-label no-padding-right">类别:</label>
+							<div class="col-sm-2">
+								<label class="control-label">纯玩</label>
+							</div>
+							<label class="col-sm-2 control-label no-padding-right">应用范围:</label>
+							<div class="col-sm-2">
+								<label class="control-label">团体</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+		<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
+			<div class="form-group">
+				<div class="col-xs-12 col-sm-12 widget-container-col">
+					<div class="widget-box ui-sortable-handle">
+						<div class="widget-header">
+							<h5 class="widget-title">
+								<i class="ace-icon fa fa-bus"></i>
+								成本快速查看器
+							</h5>
+						</div>
+						<div class="widget-body">
+							<div class="widget-main">
+								<div class="calendar" style="width:500px;margin:0 auto"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+		<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
+			<div class="form-group">
+				<div class="col-xs-12 col-sm-12 widget-container-col">
+					<div class="widget-box ui-sortable-handle">
+						<div class="widget-header">
+							<h5 class="widget-title">
+								<i class="ace-icon fa fa-bus"></i>
+								报价参数
+							</h5>
+						</div>
+						<div class="widget-body">
+							<div class="widget-main">
+								<table class="table table-striped table-bordered table-hover">
+									<tr>
+										<td>
+											<div class="form-group">
+												<label class="col-sm-2 control-label no-padding-right">大人数:</label>
+												<div class="col-sm-2">
+													<input type="text" class="col-xs-12"/>
+												</div>
+												<label class="col-sm-2 control-label no-padding-right">小孩数:</label>
+												<div class="col-sm-2">
+													<input type="text" class="col-xs-12"/>
+												</div>
+												<label class="col-sm-2 control-label no-padding-right">单房差数:</label>
+												<div class="col-sm-2">
+													<input type="text" class="col-xs-12"/>
+												</div>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<div class="form-group">
+												<label class="col-sm-2 control-label no-padding-right">大人成本价:480</label>
+												<div class="col-sm-3">
+													<select class="col-xs-6">
+														<option>比例调幅</option>
+														<option selected="selected">定额调幅</option>
+													</select>
+													<input type="text" value="70" class="col-xs-3" style="margin-left:2px"/>
+												</div>
+												<label class="col-sm-2 control-label no-padding-right">大人报价:550</label>
+											</div>
+											<div class="form-group">
+												<label class="col-sm-2 control-label no-padding-right">小孩成本价:480</label>
+												<div class="col-sm-3">
+													<select class="col-xs-6">
+														<option>比例调幅</option>
+														<option selected="selected">定额调幅</option>
+													</select>
+													<input type="text" value="70" class="col-xs-3" style="margin-left:2px"/>
+												</div>
+												<label class="col-sm-2 control-label no-padding-right">小孩报价:550</label>
+											</div>
+											<div class="form-group">
+												<label class="col-sm-2 control-label no-padding-right">单房差成本价:480</label>
+												<div class="col-sm-3">
+													<select class="col-xs-6">
+														<option>比例调幅</option>
+														<option selected="selected">定额调幅</option>
+													</select>
+													<input type="text" value="70" class="col-xs-3" style="margin-left:2px"/>
+												</div>
+												<label class="col-sm-2 control-label no-padding-right">单房差报价:550</label>
+											</div>
+											<div class="form-group">
+												<label class="col-sm-2 control-label no-padding-right">总成本:480</label>
+												<div class="col-sm-3">
+												</div>
+												<label class="col-sm-2 control-label no-padding-right">总报价报价:550</label>
+												<label class="col-sm-2 control-label no-padding-right">毛利预估:550</label>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<div class="form-group">
+												<label class="col-sm-2 control-label no-padding-right">询价客户:</label>
+												<div class="col-sm-2">
+													<select class="col-xs-12">
+														<option selected="selected">后街地接社</option>
+														<option>后街地接社</option>
+														<option>后街地接社</option>
+														<option>后街地接社</option>
+													</select>
+												</div>
+												<label class="col-sm-2 control-label no-padding-right">询价人:</label>
+												<div class="col-sm-2">
+													<input type="text" class="col-xs-12"/>
+												</div>
+												<label class="col-sm-2 control-label no-padding-right">联系电话:</label>
+												<div class="col-sm-2">
+													<input type="text" class="col-xs-12"/>
+												</div>
+											</div>
+										</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+		<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
+			<div class="form-group">
+				<div class="col-xs-12 col-sm-12 widget-container-col">
+					<div class="widget-box ui-sortable-handle">
+						<div class="widget-header">
+							<h5 class="widget-title">
+								<i class="ace-icon fa fa-bus"></i>
+								基础安排模板
+							</h5>
+						</div>
+						<div class="widget-body">
+							<div class="widget-main">
+									<div class="col-xs-12 col-sm-12 widget-container-col">
+										<div class="widget-box ui-sortable-handle">
+											<div class="widget-header">
+												<h5 class="widget-title">
+													<i class="ace-icon fa fa-user"></i>
+													导游安排
+												</h5>
+											</div>
+						
+											<div class="widget-body">
+												<div class="widget-main">
+													<table class="table table-striped table-bordered table-hover arrangeGuideList">
+														<thead>
+															<tr>
+																<th>导游姓名</th>
+																<th>导游服务费</th>
+																<th>导游性别</th>
+																<th>导游电话</th>
+																<th>导游等级</th>
+																<th>驾驶所属公司</th>
+																<th>备注</th>
+															</tr>
+														</thead>
+														<tbody>
+															<tr>
+																<td><input class="chooseGuide col-xs-12" name="guideName" type="text"/><input type="hidden" name="guideNameId"></td>
+																<td><input name="guideFee" type="text" class=" col-xs-12"/></td>
+																<td><input name="gender" type="text" readonly="readonly" class=" col-xs-12"/></td>
+																<td><input name="mobileNumber" type="text" readonly="readonly" class=" col-xs-12"/></td>
+																<td><input name="guideLevel" type="text" readonly="readonly" class=" col-xs-12"/></td>
+																<td><input name="company" type="text" readonly="readonly" class=" col-xs-12"/></td>
+																<td><input name="remark" type="text" class=" col-xs-12"/></td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="clearfix"></div>
+									<div class="col-xs-12 col-sm-12 widget-container-col">
+										<div class="widget-box ui-sortable-handle">
+											<div class="widget-header">
+												<h5 class="widget-title">
+													<i class="ace-icon fa fa-medkit"></i>
+													保险安排
+												</h5>
+											</div>
+						
+											<div class="widget-body">
+												<div class="widget-main">
+													<table class="table table-striped table-bordered table-hover arrangeInsuranceList">
+														<thead>
+															<tr>
+																<th>公司名称</th>
+																<th>保险类型</th>
+																<th>保险价格</th>
+																<th>公司电话</th>
+																<th>负责人姓名</th>
+																<th>联系电话</th>
+																<th>备注</th>
+															</tr>
+														</thead>
+														<tbody>
+															<tr>
+																<td><input class="chooseInsurance col-xs-12" name="insuranceName" type="text"/><input type="hidden" name="insuranceId"/></td>
+																<td><input name="type" type="text" class=" col-xs-12"/></td>
+																<td><input name="price" type="text" class=" col-xs-12"/></td>
+																<td><input name="companyPhoneNumber" type="text" readonly="readonly" class=" col-xs-12"/></td>
+																<td><input name="managerName" type="text" readonly="readonly" class=" col-xs-12"/></td>
+																<td><input name="mobileNumber" type="text" readonly="readonly" class=" col-xs-12"/></td>
+																<td><input name="remark" type="text" class=" col-xs-12"/></td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="clearfix"></div>
+									<div class="col-xs-12 col-sm-12 widget-container-col">
+										<div class="widget-box ui-sortable-handle">
+											<div class="widget-header">
+												<h5 class="widget-title">
+													<i class="ace-icon fa fa-bus"></i>
+													车队安排
+												</h5>
+											</div>
+						
+											<div class="widget-body">
+												<div class="widget-main">
+													<table class="table table-striped table-bordered table-hover arrangeBusCompanyList">
+														<thead>
+															<tr>
+																
+																<th>需求座位数</th>
+																<th>车队名称</th>
+																<th>车辆牌照</th>
+																<th>座位价</th>
+																<th>实际座位数</th>
+																<th>联系电话</th>
+																<th>包车价</th>
+																<th>备注</th>
+															</tr>
+														</thead>
+														<tbody>
+															<tr>
+																<td><input name="needSeatCount" type="text" class="col-xs-12"/></td>
+																<td><input name="companyName" class="chooseBusCompany col-xs-12" type="text"/><input type="hidden" name="busCompanyId"></td>
+																<td><input name="licenseNumber" class="chooseBusLicenseNumber col-xs-12" type="text"/><input type="hidden" name="busLicenseNumberId"></td>
+																<td><input name="seatPrice" type="text" class="col-xs-12"/></td>
+																<td><input name="seatCount" type="text" readonly="readonly" class="col-xs-12"/></td>
+																<td><input name="mobileNumber" type="text" readonly="readonly" class="col-xs-12"/></td>
+																<td><input name="charteredPrice" type="text" readonly="readonly" class="col-xs-12"/></td>
+																<td><input name="remark" type="text" class="col-xs-12"/></td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="clearfix"></div>					
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-group lineDayArrangeTemplate">
+				<div class="col-xs-12 col-sm-12 widget-container-col">
+					<div class="widget-box ui-sortable-handle widgetSchedule">
+						<div class="widget-header">
+							<h5 class="widget-title">
+								<i class="ace-icon fa fa-user"></i>
+								行程安排模板
+							</h5>
+						</div>
+			
+						<div class="widget-body">
+							<div class="widget-main">
+								{{each daysList as day i}}
+								<div class="col-xs-12 col-sm-12 widget-container-col travelLineDayList">
+									<div class="widget-box ui-sortable-handle">
+										<div class="widget-header">
+											<h5 class="widget-title">
+												<i class="ace-icon fa fa-user"></i>
+												第{{i+1}}天：{{day.lineProductDay.title}}
+											</h5>
+										</div>
+					
+										<div class="widget-body">
+											<div class="widget-main scheduleContainer">
+												<h5 class="header">行程详情：</h5>
+												<div class="detailEditor wysiwyg-editor" style="height: 200px;overflow: scroll;">
+													{{#day.lineProductDay.detail}}
+												</div>
+												<div style="margin-top:10px;margin-bottom:10px">
+													<button class="btn btn-app btn-inverse btn-xs addRestaurant">
+														<i class="ace-icon fa fa-plus bigger-160"></i>
+														餐饮
+													</button>
+													<button class="btn btn-app btn-inverse btn-xs addResourceHotel">
+														<i class="ace-icon fa fa-plus bigger-160"></i>
+														酒店
+													</button>
+													<button class="btn btn-app btn-inverse btn-xs addResourceScenic">
+														<i class="ace-icon fa fa-plus bigger-160"></i>
+														景区
+													</button>
+													<button class="btn btn-app btn-inverse btn-xs addResourceShopping">
+														<i class="ace-icon fa fa-plus bigger-160"></i>
+														购物
+													</button>
+													<button class="btn btn-app btn-inverse btn-xs addResourceSelfPaying">
+														<i class="ace-icon fa fa-plus bigger-160"></i>
+														自费
+													</button>
+													<button class="btn btn-app btn-inverse btn-xs addResourceTraffic">
+														<i class="ace-icon fa fa-plus bigger-160"></i>
+														交通
+													</button>
+												</div>
+												<div id="timeline-1">
+													<div class="row">
+														<div class="col-xs-12 col-sm-12">
+															<div class="timeline-container">
+																<div class="timeline-items scheduleListContainer">
+																
+																
+																</div><!-- /.timeline-items -->
+															</div><!-- /.timeline-container -->
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="clearfix"></div>
+								
+								{{/each}}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-group driverList">
+				<div class="col-xs-12 col-sm-12 widget-container-col">
+					<div class="widget-box ui-sortable-handle">
+						<div class="widget-header">
+							<h5 class="widget-title">
+								<i class="ace-icon fa fa-user"></i>
+								特别说明
+							</h5>
+						</div>
+	
+						<div class="widget-body">
+							<div class="widget-main">
+								<div class="form-group">
+									<label class="col-sm-2 control-label no-padding-right">费用包含:</label>
+									<div class="col-sm-8">
+										<textarea class="form-control" class="col-sm-12" readonly="readonly">{{lineProduct.includeFee}}</textarea>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label no-padding-right">费用不含:</label>
+									<div class="col-sm-8">
+										<textarea class="form-control" class="col-sm-12" readonly="readonly">{{lineProduct.excludeFee}}</textarea>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label no-padding-right">行程特色:</label>
+									<div class="col-sm-8">
+										<textarea class="form-control" class="col-sm-12" readonly="readonly">{{lineProduct.lineFeature}}</textarea>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label no-padding-right">行程须知:</label>
+									<div class="col-sm-8">
+										<textarea class="form-control" class="col-sm-12" readonly="readonly">{{lineProduct.lineNotice}}</textarea>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="space-10"></div>
+			<button class="btn btn-block btn-primary btn-submit-busCompany submitInfoLineProduct">
+				<i class="ace-icon fa fa-check"></i>
+				提交信息
+			</button>
+			<div class="space-20"></div>
+		</form>
+	</div>
+</div>

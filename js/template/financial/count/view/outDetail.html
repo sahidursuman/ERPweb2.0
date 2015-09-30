@@ -1,0 +1,401 @@
+<div class="col-sm-13 financialOutDetail">
+	<div>
+		<button data-entity-id="{{tripPlanId}}" class="btn btn-xs btn-success btn-transfter btn-download" style="margin: 0px 20px 20px 0px;width:110px;height:35px;float: right;">
+			<i class="ace-icon fa fa-file-excel-o"></i>导出电子表格
+		</button>
+	</div>
+    <div class="col-xs-12 col-sm-12 widget-container-col">
+        <div class="widget-box ui-sortable-handle">
+            <div class="widget-header">
+                <h5 class="widget-title">
+                    接团
+                </h5>
+            </div>
+            <div class="widget-body"> 
+                <div class="widget-main">
+                    <table class="table table-striped table-bordered table-hover" style="margin-top: 30px">
+                    	<thead>
+                    	<tr>
+                    		<th colspan="13" style="text-align: left;font-size:18px;">接团车辆</th>
+                    	</tr>
+                    	<tr>
+                    		<th>车座数量</th>
+                    		<th>车辆品牌</th>
+                    		<th>车牌号</th>
+                    		<th>所属车主</th>
+                    		<th>司机</th>
+                    		<th>司机电话</th>
+                    		<th>用车时间</th>
+                    		<th>上车地点</th>
+                    		<th>车费</th>
+                    		<th>优惠</th>
+                    		<th>应付</th>
+                    		<th>已付</th>
+                    		<th>付款方式</th>
+                    	</tr>
+                    	</thead>
+                        <tbody>
+                        {{each outBusList as outBus}}
+                        {{if outBus.serviceType == 0}}
+                        <tr>
+	                        <td>{{if outBus.bus != null}}{{outBus.bus.seatCount}}{{/if}}</td>
+	                        <td>{{if outBus.bus != null}}{{outBus.bus.brand}}{{/if}}</td>
+	                        <td>{{if outBus.bus != null}}{{outBus.bus.licenseNumber}}{{/if}}</td>
+	                        <td>{{if outBus.busCompany != null}}{{outBus.busCompany.companyName}}{{/if}}</td>
+	                        <td>{{if outBus.driver != null}}{{outBus.driver.name}}{{/if}}</td>
+	                        <td>{{if outBus.driver != null}}{{outBus.driver.mobileNumber}}{{/if}}</td>
+	                        <td>{{outBus.useTime | dateFormat:'yyyy-MM-dd'}}</td>
+	                        <td>{{outBus.boardLocation}}</td>
+	                        <td>{{outBus.fee}}</td>
+	                        <td>{{outBus.reduceMoney}}</td>
+                            <td>{{outBus.needPayMoney}}</td>
+                            <td>{{outBus.payedMoney}}</td>
+                            <td>{{if outBus.payType == 0}}
+                            	现付
+                            {{else if outBus.payType == 1}}
+                            	签单
+                            {{else if outBus.payType == 2}}
+                            	转账
+                            {{/if}}</td>
+                        </tr>
+                        {{/if}}
+                        {{/each}}
+                        </tbody>
+                    </table>
+                    
+                    
+                    <table class="table table-striped table-bordered table-hover" style="margin-top: 30px">
+                    	<thead>
+                    	<tr>
+                    		<th colspan="12" style="text-align: left;font-size:18px;">酒店安排</th>
+                    	</tr>
+                    	<tr>
+                    		<th>日期</th>
+                    		<th>星级</th>
+                    		<th>酒店</th>
+                    		<th>联系人</th>
+                    		<th>联系电话</th>
+                    		<th>房型</th>
+                    		<th>单价</th>
+                    		<th>数量</th>
+                    		<th>优惠</th>
+                    		<th>应付</th>
+                    		<th>已付</th>
+                    		<th>付款方式</th>
+                    	</tr>
+                    	</thead>
+                        <tbody>
+                        {{each outHotelList as outHotel}}
+                        {{if outHotel.serviceType == 0}}
+                        <tr>
+	                        <td>{{outHotel.checkInTime | dateFormat:'yyyy-MM-dd'}}</td>
+	                        <td>{{if outHotel.hotel != null}}{{if outHotel.hotel.level == 1}} 三星以下{{else if outHotel.hotel.level==2}}三星{{else if outHotel.hotel.level==3}}准四星{{else if outHotel.hotel.level==4}}四星{{else if outHotel.hotel.level==5}}准五星{{else if outHotel.hotel.level==6}}五星{{else if outHotel.hotel.level==7}}五星{{/if}}{{/if}}</td>
+	                        <td>{{if outHotel.hotel != null}}{{outHotel.hotel.name}}{{/if}}</td>
+	                        <td>{{if outHotel.hotel != null}}{{outHotel.hotel.managerName}}{{/if}}</td>
+	                        <td>{{if outHotel.hotel != null}}{{outHotel.hotel.mobileNumber}}{{/if}}</td>
+	                        <td>{{if outHotel.hotelRoom != null}}{{outHotel.hotelRoom.type}}{{/if}}</td>
+	                        <td>{{outHotel.price}}</td>
+	                        <td>{{outHotel.memberCount}}</td>
+	                        <td>{{outHotel.reduceMoney}}</td>
+	                        <td>{{outHotel.needPayMoney}}</td>
+                            <td>{{outHotel.payedMoney}}</td>
+                            <td>{{if outHotel.payType == 0}}
+                            	现付
+                            {{else if outHotel.payType == 1}}
+                            	签单
+                            {{else if outHotel.payType == 2}}
+                            	转账
+                            {{/if}}</td>
+                        </tr>
+                        {{/if}}
+                        {{/each}}
+                        </tbody>
+                    </table>
+                    
+                    
+                    <table class="table table-striped table-bordered table-hover" style="margin-top: 30px">
+                    	<thead>
+                    	<tr>
+                    		<th colspan="13" style="text-align: left;font-size:18px;">票务安排</th>
+                    	</tr>
+                    	<tr>
+                    		<th>票务公司</th>
+                    		<th>类型</th>
+                    		<th>出发城市</th>
+                    		<th>到达城市</th>
+                    		<th>日期</th>
+                    		<th>班次</th>
+                    		<th>座位级别</th>
+                    		<th>单价</th>
+                    		<th>数量</th>
+                    		<th>优惠</th>
+                    		<th>应付</th>
+                    		<th>已付</th>
+                    		<th>付款方式</th>
+                    	</tr>
+                    	</thead>
+                        <tbody>
+                        {{each outTicketList as outTicket}}
+                        {{if outTicket.serviceType == 0}}
+                        <tr>
+	                        <td>{{if outTicket.ticket != null}}{{outTicket.ticket.name}}{{/if}}</td>
+	                        <td>{{if outTicket.type == 1}}
+	                        	机票
+	                        {{else if outTicket.type == 2}}
+	                        	汽车票
+	                        {{else if outTicket.type == 3}}
+	                        	火车票
+	                        {{else if outTicket.type == 4}}
+	                        	轮船票
+	                        {{/if}}</td>
+	                        <td>{{outTicket.startingCity}}</td>
+	                        <td>{{outTicket.arriveCity}}</td>
+	                        <td>{{outTicket.startTime}}</td>
+	                        <td>{{outTicket.shift}}</td>
+	                        <td>{{outTicket.seatLevel}}</td>
+	                        <td>{{outTicket.price}}</td>
+	                        <td>{{outTicket.memberCount}}</td>
+                            <td>{{outTicket.reduceMoney}}</td>
+                            <td>{{outTicket.needPayMoney}}</td>
+                            <td>{{outTicket.payedMoney}}</td>
+                            <td>{{if outTicket.payType == 0}}
+                            	现付
+                            {{else if outTicket.payType == 1}}
+                            	签单
+                            {{else if outTicket.payType == 2}}
+                            	转账
+                            {{/if}}</td>
+                        </tr>
+                        {{/if}}
+                        {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xs-12 col-sm-12 widget-container-col">
+        <div class="widget-box ui-sortable-handle">
+            <div class="widget-header">
+                <h5 class="widget-title">
+                    小车
+                </h5>
+            </div>
+            <div class="widget-body">
+                <div class="widget-main">
+                    <table class="table table-striped table-bordered table-hover" style="margin-top: 30px">
+                    	<thead>
+                    	<tr>
+                    		<th colspan="13" style="text-align: left;font-size:18px;">中转小车</th>
+                    	</tr>
+                    	<tr>
+                    		<th>车座数量</th>
+                    		<th>车辆品牌</th>
+                    		<th>车牌号</th>
+                    		<th>所属车主</th>
+                    		<th>司机</th>
+                    		<th>司机电话</th>
+                    		<th>用户时间</th>
+                    		<th>上车地点</th>
+                    		<th>车费</th>
+                    		<th>优惠</th>
+                    		<th>应付</th>
+                    		<th>已付</th>
+                    		<th>付款方式</th>
+                    	</tr>
+                    	</thead>
+                        <tbody>
+                        {{each outBusList as outBus}}
+                        {{if outBus.serviceType == 2}}
+                        <tr>
+	                        <td>{{if outBus.bus != null}}{{outBus.bus.seatCount}}{{/if}}</td>
+	                        <td>{{if outBus.bus != null}}{{outBus.bus.brand}}{{/if}}</td>
+	                        <td>{{if outBus.bus != null}}{{outBus.bus.licenseNumber}}{{/if}}</td>
+	                        <td>{{if outBus.busCompany != null}}{{outBus.busCompany.companyName}}{{/if}}</td>
+	                        <td>{{if outBus.driver != null}}{{outBus.driver.name}}{{/if}}</td>
+	                        <td>{{if outBus.driver != null}}{{outBus.driver.mobileNumber}}{{/if}}</td>
+	                        <td>{{outBus.useTime | dateFormat:'yyyy-MM-dd'}}</td>
+	                        <td>{{outBus.boardLocation}}</td>
+	                        <td>{{outBus.fee}}</td>
+	                        <td>{{outBus.reduceMoney}}</td>
+                            <td>{{outBus.needPayMoney}}</td>
+                            <td>{{outBus.payedMoney}}</td>
+                            <td>{{outBus.payType}}</td>
+                        </tr>
+                        {{/if}}
+                        {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    
+    <div class="col-xs-12 col-sm-12 widget-container-col">
+        <div class="widget-box ui-sortable-handle">
+            <div class="widget-header">
+                <h5 class="widget-title">
+                    送团
+                </h5>
+            </div>
+            <div class="widget-body">
+                <div class="widget-main">
+                    <table class="table table-striped table-bordered table-hover" style="margin-top: 30px">
+                    	<thead>
+                    	<tr>
+                    		<th colspan="13" style="text-align: left;font-size:18px;">送团车辆</th>
+                    	</tr>
+                    	<tr>
+                    		<th>车座数量</th>
+                    		<th>车辆品牌</th>
+                    		<th>车牌号</th>
+                    		<th>所属车主</th>
+                    		<th>司机</th>
+                    		<th>司机电话</th>
+                    		<th>用户时间</th>
+                    		<th>上车地点</th>
+                    		<th>车费</th>
+                    		<th>优惠</th>
+                    		<th>应付</th>
+                    		<th>已付</th>
+                    		<th>付款方式</th>
+                    	</tr>
+                    	</thead>
+                        <tbody>
+                        {{each outBusList as outBus}}
+                        {{if outBus.serviceType == 1}}
+                        <tr>
+	                        <td>{{if outBus.bus != null}}{{outBus.bus.seatCount}}{{/if}}</td>
+	                        <td>{{if outBus.bus != null}}{{outBus.bus.brand}}{{/if}}</td>
+	                        <td>{{if outBus.bus != null}}{{outBus.bus.licenseNumber}}{{/if}}</td>
+	                        <td>{{if outBus.busCompany != null}}{{outBus.busCompany.companyName}}{{/if}}</td>
+	                        <td>{{if outBus.driver != null}}{{outBus.driver.name}}{{/if}}</td>
+	                        <td>{{if outBus.driver != null}}{{outBus.driver.mobileNumber}}{{/if}}</td>
+	                        <td>{{outBus.useTime | dateFormat:'yyyy-MM-dd'}}</td>
+	                        <td>{{outBus.boardLocation}}</td>
+	                        <td>{{outBus.fee}}</td>
+	                        <td>{{outBus.reduceMoney}}</td>
+                            <td>{{outBus.needPayMoney}}</td>
+                            <td>{{outBus.payedMoney}}</td>
+                            <td>{{outBus.payType}}</td>
+                        </tr>
+                        {{/if}}
+                        {{/each}}
+                        </tbody>
+                    </table>
+                    
+                    
+                    <table class="table table-striped table-bordered table-hover" style="margin-top: 30px">
+                    	<thead>
+                    	<tr>
+                    		<th colspan="12" style="text-align: left;font-size:18px;">酒店安排</th>
+                    	</tr>
+                    	<tr>
+                    		<th>日期</th>
+                    		<th>星级</th>
+                    		<th>酒店</th>
+                    		<th>联系人</th>
+                    		<th>联系电话</th>
+                    		<th>房型</th>
+                    		<th>单价</th>
+                    		<th>数量</th>
+                    		<th>优惠</th>
+                    		<th>应付</th>
+                    		<th>已付</th>
+                    		<th>付款方式</th>
+                    	</tr>
+                    	</thead>
+                        <tbody>
+                        {{each outHotelList as outHotel}}
+                        {{if outHotel.serviceType == 1}}
+                        <tr>
+	                        <td>{{outHotel.checkInTime | dateFormat:'yyyy-MM-dd'}}</td>
+	                        <td>{{if outHotel.hotel != null}}{{if outHotel.hotel.level == 1}} 三星以下{{else if outHotel.hotel.level==2}}三星{{else if outHotel.hotel.level==3}}准四星{{else if outHotel.hotel.level==4}}四星{{else if outHotel.hotel.level==5}}准五星{{else if outHotel.hotel.level==6}}五星{{else if outHotel.hotel.level==7}}五星{{/if}}{{/if}}</td>
+	                        <td>{{if outHotel.hotel != null}}{{outHotel.hotel.name}}{{/if}}</td>
+	                        <td>{{if outHotel.hotel != null}}{{outHotel.hotel.managerName}}{{/if}}</td>
+	                        <td>{{if outHotel.hotel != null}}{{outHotel.hotel.mobileNumber}}{{/if}}</td>
+	                        <td>{{if outHotel.hotelRoom != null}}{{outHotel.hotelRoom.type}}{{/if}}</td>
+	                        <td>{{outHotel.price}}</td>
+	                        <td>{{outHotel.memberCount}}</td>
+	                        <td>{{outHotel.reduceMoney}}</td>
+	                        <td>{{outHotel.needPayMoney}}</td>
+                            <td>{{outHotel.payedMoney}}</td>
+                            <td>{{if outHotel.payType == 0}}
+                            	现付
+                            {{else if outHotel.payType == 1}}
+                            	签单
+                            {{else if outHotel.payType == 2}}
+                            	转账
+                            {{/if}}</td>
+                        </tr>
+                        {{/if}}
+                        {{/each}}
+                        </tbody>
+                    </table>
+                    
+                    
+                    <table class="table table-striped table-bordered table-hover" style="margin-top: 30px">
+                    	<thead>
+                    	<tr>
+                    		<th colspan="13" style="text-align: left;font-size:18px;">票务安排</th>
+                    	</tr>
+                    	<tr>
+                    		<th>票务公司</th>
+                    		<th>类型</th>
+                    		<th>出发城市</th>
+                    		<th>到达城市</th>
+                    		<th>日期</th>
+                    		<th>班次</th>
+                    		<th>座位级别</th>
+                    		<th>单价</th>
+                    		<th>数量</th>
+                    		<th>优惠</th>
+                    		<th>应付</th>
+                    		<th>已付</th>
+                    		<th>付款方式</th>
+                    	</tr>
+                    	</thead>
+                        <tbody>
+                        {{each outTicketList as outTicket}}
+                        {{if outTicket.serviceType == 1}}
+                        <tr>
+	                        <td>{{if outTicket.ticket != null}}{{outTicket.ticket.name}}{{/if}}</td>
+	                        <td>{{if outTicket.type == 1}}
+	                        	机票
+	                        {{else if outTicket.type == 2}}
+	                        	汽车票
+	                        {{else if outTicket.type == 3}}
+	                        	火车票
+	                        {{else if outTicket.type == 4}}
+	                        	轮船票
+	                        {{/if}}</td>
+	                        <td>{{outTicket.startingCity}}</td>
+	                        <td>{{outTicket.arriveCity}}</td>
+	                        <td>{{outTicket.startTime}}</td>
+	                        <td>{{outTicket.shift}}</td>
+	                        <td>{{outTicket.seatLevel}}</td>
+	                        <td>{{outTicket.price}}</td>
+	                        <td>{{outTicket.memberCount}}</td>
+                            <td>{{outTicket.reduceMoney}}</td>
+                            <td>{{outTicket.needPayMoney}}</td>
+                            <td>{{outTicket.payedMoney}}</td>
+                            <td>{{if outTicket.payType == 0}}
+                            	现付
+                            {{else if outTicket.payType == 1}}
+                            	签单
+                            {{else if outTicket.payType == 2}}
+                            	转账
+                            {{/if}}</td>
+                        </tr>
+                        {{/if}}
+                        {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

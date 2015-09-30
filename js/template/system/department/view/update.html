@@ -1,0 +1,16 @@
+<div class="col-xs-12">
+	<form class="form-horizontal businessMainForm" role="form" style="margin-top:50px" onsubmit="return false">
+		<input type="hidden" name="id" value="{{businessGroup.id}}" />
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>部门名称:</label>
+			<div class="col-sm-4">
+				<input type="text" name="name" class="col-sm-12" value="{{businessGroup.name}}" />
+			</div>
+		</div>
+		<div class="space-10"></div>
+		<button class="btn btn-block btn-primary btn-submit-business">
+			<i class="ace-icon fa fa-check"></i>
+			提交信息
+		</button>
+	</form>
+</div>

@@ -1,0 +1,75 @@
+
+<div class="search-area" style="margin:5px 22px 0px 22px;">
+	<input type="hidden" value="{{businessGroup.id}}" id="businessGroupId" />
+	<div style="float: left;font-size:15px;">
+		<table>
+			<tr>
+				<td>部门信息：</td>
+				<td>{{businessGroup.name}}</td>
+			</tr>
+			<tr>
+				<td>创建时间：</td>
+				<td>{{businessGroup.createTime | dateFormat: 'yyyy-MM-dd'}}</td>
+			</tr>
+		</table>
+	</div>
+	<div style="clear: both;"></div>
+	<div style="float: right;">
+		<button class="btn btn-sm btn-success btn-group-add" >
+			<i class="ace-icon fa fa-plus"></i>
+			新增子部门
+		</button>
+	</div>
+	<div style="clear: both;"></div>
+</div>
+<div class="row groupList" style="margin:5px 10px 0px 10px;">	
+	<div class="col-xs-12">
+		<table class="table table-striped table-bordered table-hover">
+			<thead>
+				<tr>
+					<th>子部门名称</th>
+					<th>创建时间</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+		
+			<tbody id="groupContent">
+				{{each groupList as group}}
+					<tr class="business-{{group.id}}">
+						<td>{{group.name}}</td>
+						<td>{{group.createTime | dateFormat: 'yyyy-MM-dd'}}</td>
+						<td>
+							<div class="hidden-sm hidden-xs btn-group">
+								
+								<button data-entity-id="{{group.id}}" class="btn btn-xs btn-info btn-group-edit">
+									<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
+								</button>
+								<button data-entity-id="{{group.id}}" class="btn btn-xs btn-info btn-group-del">
+									<i class="ace-icon fa fa-trash-o bigger-120"></i>
+								</button>
+							</div>
+			
+							<div class="hidden-md hidden-lg">
+								<div class="inline pos-rel">
+									<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
+										<i class="ace-icon fa fa-cog icon-only bigger-110"></i>
+									</button>
+									<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+										<li>
+											<a data-entity-id="{{group.id}}" href="javascript:void(0)" class="tooltip-success btn-group-edit" data-rel="tooltip">
+												<span class="green">
+													<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
+												</span>
+											</a>
+										</li>
+										
+									</ul>
+								</div>
+							</div>
+						</td>
+					</tr>
+				{{/each}} 
+			</tbody>
+		</table>
+	</div>
+</div>

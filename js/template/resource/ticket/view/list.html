@@ -1,0 +1,155 @@
+<div class="search-area">
+	<input name="ticket_name" class="col-xs-2 input-default-height" value="{{searchParam.name}}" placeholder="请输入导游姓名关键词"/>&nbsp;
+	<button class=" btn-sm  btn-ticket-search pull-left search-btn">
+		<i class="ace-icon fa fa-search"></i>
+		搜索
+	</button>
+	<div class="btn-group btn-status" style="margin-left: 20px;">
+		<button data-value="{{searchParam.status}}" data-toggle="dropdown" class=" btn-sm  dropdown-toggle   block-up" aria-expanded="false">
+			<span>
+				{{if searchParam.status == ""}}
+					全部
+				{{else if searchParam.status == 1}}
+					已启用
+				{{else}}
+					已停用
+				{{/if}}				
+			</span>
+			<i class="ace-icon fa fa-angle-down icon-on-right"></i>
+		</button>
+		<ul class="dropdown-menu">
+		    <li>
+				<a data-value="" href="javascript:void(0)">全部</a>
+			</li>
+			<li>
+				<a data-value="1" href="javascript:void(0)">已启用</a>
+			</li>
+
+			<li>
+				<a data-value="0" href="javascript:void(0)">已停用</a>
+			</li>
+		</ul>
+	</div>
+
+	<button class="btn btn-sm btn-success btn-ticket-add" style="margin-left: 20px">
+		<i class="ace-icon fa fa-plus"></i>
+		新增票务
+	</button>
+</div>
+<div class="row ticketList">	
+	<div class="col-xs-12">
+		<table class="table table-striped table-bordered table-hover">
+			<thead>
+				<tr class="bg-blur">
+					<th class="col-sm-3">票务公司名称</th>
+					<th class="col-sm-2">联系人</th>
+					<th class="col-sm-1">联系电话</th>
+					<th class="col-sm-1">公司电话</th>
+					<th class="col-sm-2">地区</th> 
+					<th class="col-sm-1">启用标志</th>
+					<th class="col-sm-2">操作</th>
+				</tr>
+			</thead>
+		
+			<tbody>
+				{{each ticketList as ticket}}
+					<tr class="ticket-{{ticket.id}}">
+						<td>{{ticket.name}}</td>
+						<td>{{ticket.managerName}}</td>
+						<td>{{ticket.mobileNumber}}</td>
+						<td>{{ticket.telNumber}}</td>
+						<td>
+							{{if ticket.province!=null}}
+								{{ticket.province.name}}
+							{{/if}}
+							{{if ticket.city!=null}}
+								-{{ticket.city.name}}
+							{{/if}}
+							{{if ticket.district!=null}}
+								-{{ticket.district.name}}
+							{{/if}}
+						</td>
+						<td>
+							{{if ticket.status == 0}}
+							<i class="ace-icon fa fa-times red bigger-125"></i>
+								已停用
+							{{else ticket.status == 1}}
+							<i class="ace-icon fa fa-check green bigger-130"></i>
+								已启用
+							{{/if}}
+						</td>
+						<td>
+							<div class="hidden-sm hidden-xs btn-group">
+								<a data-entity-id="{{ticket.id}}" class="btn-ticket-view cursor ">
+									查看 |
+								</a>
+								<a data-entity-id="{{ticket.id}}" class="btn-ticket-edit cursor ">
+									编辑 |
+								</a>
+								<a data-entity-id="{{ticket.id}}" class="btn-ticket-delete cursor">
+									删除
+								</a>
+							</div>
+			
+							<div class="hidden-md hidden-lg">
+								<div class="inline pos-rel">
+									<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
+										<i class="ace-icon fa fa-cog icon-only bigger-110"></i>
+									</button>
+			
+									<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+										<li>
+											<a data-entity-id="{{ticket.id}}" href="javascript:void(0)" class="tooltip-error btn-ticket-view" data-rel="tooltip">
+												<span class="red">
+													<i class="ace-icon fa fa-search-plus bigger-120"></i>
+												</span>
+											</a>
+										</li>
+										<li>
+											<a data-entity-id="{{ticket.id}}" href="javascript:void(0)" class="tooltip-success btn-ticket-edit" data-rel="tooltip">
+												<span class="green">
+													<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
+												</span>
+											</a>
+										</li>
+										<li>
+											<a data-entity-id="{{ticket.id}}" href="javascript:void(0)" class="tooltip-error btn-ticket-delete" data-rel="tooltip">
+												<span class="red">
+													<i class="ace-icon fa fa-trash-o bigger-120"></i>
+												</span>
+											</a>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</td>
+					</tr>
+				{{/each}} 
+			</tbody>
+		</table>
+		<div class="row pageMode">
+			<div class="col-xs-6">
+				<div class="dataTables_info" id="dynamic-table_info" role="status" aria-live="polite">共计 {{recordSize}} 条记录</div>
+			</div>
+			<div class="col-xs-6">
+				<div class="dataTables_paginate paging_simple_numbers" id="dynamic-table_paginate">
+					<ul class="pagination">
+						<li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="first" href="javascript:void(0)">首页</a></li>
+						<li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="previous"href="javascript:void(0)">上一页</a></li>
+						<li class="paginate_button" aria-controls="dynamic-table" tabindex="0">
+							<a href="javascript:void(0)">
+								{{if totalPage == 0}}
+									0/0
+								{{else}}
+									{{pageNo+1}}/{{totalPage}}
+								{{/if}}
+							</a>
+						</li>
+						<li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="next"  href="javascript:void(0)">下一页</a></li>
+						<li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="last" href="javascript:void(0)">尾页</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
