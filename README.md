@@ -7,7 +7,7 @@
 
 ### 1.2 nginx管理程序
 	
-	nginx.bat，用于windows管理nginx的服务器，提供启动、停止、重启、退出功能。
+	/bin/nginx.bat，用于windows管理nginx的服务器，提供启动、停止、重启、退出功能。
 
 	需要修改NGINX_DIR变量，指向nginx的安装目录。
 
