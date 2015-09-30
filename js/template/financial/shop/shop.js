@@ -256,8 +256,9 @@ define(function(require, exports) {
 					var result = showDialog(data);
 					if(result){
 						var html = shopClearingTemplate(data);
+						addTab(menuKey+"-clearing","购物结算",html);
 						var validator;
-                 	    //判断页面是否存在
+                 	   /* //判断页面是否存在
                  	    if($("#"+clearTabId+"").length > 0) {
                  	    	if(shop.edited){
                  	    		addTab(menuKey+"-clearing","购物结算");
@@ -285,7 +286,7 @@ define(function(require, exports) {
                  	    	$("#"+clearTabId+"").on("change",function(){
                  	    		shop.edited = true; 
                  	    	});
-                 	    };
+                 	    };*/
 						//获取table中的tr
 	                    var $tr = $("#"+clearTabId+ " .all tbody tr")
 	                    //给每个tr添加表单验证

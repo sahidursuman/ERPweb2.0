@@ -334,7 +334,14 @@ define(function(require, exports) {
                         var html = transferClearing(data);
 	                    var validator;
                  	    //判断页面是否存在
-                 	    if($("#tab-"+blanceTabId+"-content").length > 0) {
+	                    addTab(blanceTabId,"转客结算",html);
+	                  //获取table中的tr
+	                    var $tr = $("#" +"tab-"+ blanceTabId + "-content"+" .all tbody tr")
+	                    //给每个tr添加表单验证
+                        $tr.each(function(){
+                        	$(this).find('.btn-transferBlance-save').data('validata', rule.check($(this)));
+                        });
+                 	    /*if($("#tab-"+blanceTabId+"-content").length > 0) {
                  	    	if(Transfer.edited){
                  	    		addTab(blanceTabId,"转客结算");
                  	    		showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
@@ -361,7 +368,7 @@ define(function(require, exports) {
                  	    	$("#tab-"+blanceTabId+"-content").on("change",function(){
                  	    		Transfer.edited = true; 
                  	    	});
-                 	    };
+                 	    };*/
                         
                         //搜索按钮事件
                         $("#" +"tab-"+ blanceTabId + "-content"+" .btn-blance-search").click(function(){

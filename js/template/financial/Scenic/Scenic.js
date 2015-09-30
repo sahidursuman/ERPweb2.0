@@ -132,11 +132,6 @@ define(function(require, exports) {
                     globalLoadingLayer = openLoadingLayer();
                 },
                 success:function(data){
-                	//表单验证
-                	var $obj = $("scenicCleaning .form-horizontal");
-                	
-                
-                	
                     layer.close(globalLoadingLayer);
                     var result = showDialog(data);
                     if(result){
@@ -158,7 +153,7 @@ define(function(require, exports) {
 	                    var $tr = $("#" +"tab-"+ blanceTabId + "-content"+" .all tbody tr")
 	                    //给每个tr添加表单验证
                         $tr.each(function(){
-                        	$(this).find('btn-scenicBlance-save').data('validata', rule.check($(this)));
+                        	$(this).find('.btn-scenicBlance-save').data('validata', rule.check($(this)));
                         });
                         //搜索按钮事件
                         $("#" +"tab-"+ blanceTabId + "-content"+" .btn-blance-search").click(function(){
