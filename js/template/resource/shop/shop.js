@@ -838,7 +838,6 @@ define(function(require, exports) {
 			    	});
 			    	// 提交数据，临时保存起来
 			    	$(".btn-submit-shop-policy").click(function(){
-						console.log(modiPolicyValidator);
 			    		if( policyValidator != undefined){
 			    			if(!policyValidator.form()){return;}
 			    		}else{
