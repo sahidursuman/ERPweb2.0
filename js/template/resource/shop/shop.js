@@ -5,7 +5,7 @@ define(function(require, exports) {
 	var updateTemplate = require("./view/update");
 	var viewTemplate = require("./view/view");
 	var policyTemplate = require("./view/shopPolicy");
-	var updatePolicyTemplate = require("./view/updateShopPolicy");
+	var updatePolicyTemplate = require("./view/shopPolicy");
 	var tabId = "tab-"+menuKey+"-content";
 	var rule = require('./shopRule');
 	
@@ -433,7 +433,7 @@ define(function(require, exports) {
 									}
 						    		var data = {}
 						    		data.policyData = policyData;
-						    		shop.updateShopPolicy(data,$policyInput);
+						    		shop.updatePolicy(data,$policyInput);
 						    	}
 
 						    	$(".shopStandardList .btn-shop-rate-add").off().on("click", showPolicyList);
