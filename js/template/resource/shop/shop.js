@@ -950,6 +950,7 @@ define(function(require, exports) {
 			    	$(".shopPolicyList .priceArea button.del").unbind().click(shop.deletePolicyPriceArea);
 			    	// 提交数据，临时保存起来
 			    	$(".btn-submit-shop-policy").click(function(){
+						console.log(modiPolicyValidator);
 			    		if( modiPolicyValidator != undefined){
 			    			if(!modiPolicyValidator.form()){return;}
 			    		}else{
