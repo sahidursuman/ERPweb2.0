@@ -54,7 +54,7 @@ define(function(require, exports) {
 							busCompany.addBusCompany();
 						});
 
-
+    
 						//搜索栏状态button下拉事件
 						$("#"+tabId+" .search-area .btn-status .dropdown-menu a").click(function(){
 							$(this).parent().parent().parent().find("button").attr("data-value",$(this).attr("data-value"));
