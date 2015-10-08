@@ -193,7 +193,12 @@
 						}
 						break;
 					case 'landline':	// 固定电话
-						if (!!data && !/^0\d{2,3}-?\d{7,8}$/.test(data)) {
+						if (!!data && !/^0[1-9]\d{1,2}-?\d{7,8}$/.test(data)) {
+							res = rules[i].errMsg;
+						}
+						break;
+					case 'phone-num':	// 固定电话或者手机号码
+						if (!!data && !/^(1[34587]\d{9})|(0[1-9]\d{1,2}-?\d{7,8})$/.test(data)) {
 							res = rules[i].errMsg;
 						}
 						break;
