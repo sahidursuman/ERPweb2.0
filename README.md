@@ -11,3 +11,8 @@
 
 	需要修改NGINX_DIR变量，指向nginx的安装目录。
 
+### 2.nodeJs 脚本设置
+
+	npm install -g tmodjs
+	tmod E:\workspace\huochaitou\src\main\webapp\app\js\template  --output E:\workspace\huochaitou\src\main\webapp\app\js\template  --type cmd --debug
+
