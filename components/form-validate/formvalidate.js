@@ -197,6 +197,11 @@
 							res = rules[i].errMsg;
 						}
 						break;
+					case 'phone-num':	// 固定电话或者手机号码
+						if (!!data && !/^(1[34587]\d{9})|(0[1-9]\d{1,2}-?\d{7,8})$/.test(data)) {
+							res = rules[i].errMsg;
+						}
+						break;
 					case 'id': 	//身份证
 						if (!!data && !/^\d{6}(18|19|20)?\d{2}(0[1-9]|1[012])(0[1-9]|[12]\d|3[01])\d{3}(\d|X)$/i.test(data))  {
 							res = rules[i].errMsg;
