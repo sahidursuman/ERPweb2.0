@@ -9,7 +9,7 @@ imgUrl  = "http://7xlw2q.com2.z0.glb.qiniucdn.com/"; //测试
 var listwidth = parseInt($("#tabList li").eq(0).css("width"));//ul总宽度，初始化数据为“工作台”tab宽度
 
 function addTab(tabId,tabName,html){
-	$("#tabList li").removeClass("active");
+	$("#tabList li").removeClass("active");//
 	if($("#tabList li.tab-"+tabId+"").length > 0){
 		$("#tabList li.tab-"+tabId+"").addClass("active");
 		setTimeout(function() {
