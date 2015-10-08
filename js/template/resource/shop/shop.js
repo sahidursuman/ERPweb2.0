@@ -838,10 +838,11 @@ define(function(require, exports) {
 			    	});
 			    	// 提交数据，临时保存起来
 			    	$(".btn-submit-shop-policy").click(function(){
+						console.log(modiPolicyValidator);
 			    		if( policyValidator != undefined){
 			    			if(!policyValidator.form()){return;}
 			    		}else{
-			    			showMessageDialog($( "#confirm-dialog-message" ),"政策不能为空");
+			    			showMessageDialog($( "#confirm-dialog-message" ),"政策不能为空1");
 			    			return;
 			    		}
 			    		var result = shop.submitShopPolicy(obj);
