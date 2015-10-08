@@ -152,12 +152,12 @@ define(function(require, exports) {
 					});
 					var $busList = $(".addBusCompanyContainer .busList");
 					$busList.find(".btn-bus-add").click(function(){
-						var html = "<tr><td><input class=\"col-sm-12\" name=\"licenseNumber\" type=\"text\" /></td><td><input class=\"col-sm-12\" name=\"brand\" type=\"text\" /></td><td><input class=\"col-sm-12\" name=\"seatCount\" type=\"text\" value=\"1\"/></td><td class=\"col-sm-1\"><div class=\"input-group col-sm-12\"><input name=\"buyTime\" type=\"text\" class=\"datepicker\" /><span class=\"input-group-addon\"><i class=\"fa fa-calendar\"></i></span></div></td><td><select name=\"isChartered\" class=\"col-sm-12\"><option value=\"1\">是</option><option value=\"0\" selected=\"selected\">否</option></select></td>" +
+						var html = "<tr><td><input class=\"col-sm-12\" name=\"licenseNumber\" type=\"text\" maxlength=\"10\"/></td><td><input class=\"col-sm-12\" name=\"brand\" type=\"text\" maxlength=\"32\"/></td><td><input class=\"col-sm-12\" name=\"seatCount\" type=\"text\" value=\"1\"  maxlength=\"3\"/></td><td class=\"col-sm-1\"><div class=\"input-group col-sm-12\"><input name=\"buyTime\" type=\"text\" class=\"datepicker\" /><span class=\"input-group-addon\"><i class=\"fa fa-calendar\"></i></span></div></td><td><select name=\"isChartered\" class=\"col-sm-12\"><option value=\"1\">是</option><option value=\"0\" selected=\"selected\">否</option></select></td>" +
 								"<td class=\"time\">" +
 								"<div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input name=\"startTime\" type=\"text\" readonly=\"readonly\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" readonly=\"readonly\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea hide\" style=\"float:right\"><button class=\"btn  btn-sm btn-white add\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i></button></label></div>" +
 								"</td>" +
-								"<td><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input style=\"width:100px;\" name=\"contractPrice\" type=\"text\" readonly=\"readonly\"/><label>&nbsp;元</label></div></td>" +
-								"<td><input name=\"remark\" type=\"text\" class=\"col-sm-12\"/></td><td style=\"width:70px\"><a class=\"btn-xs btn-bus-delete\">删除</a></td></tr>";
+								"<td><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input style=\"width:100px;\" name=\"contractPrice\" type=\"text\" readonly=\"readonly\" maxlength=\"5\"/><label>&nbsp;元</label></div></td>" +
+								"<td><input name=\"remark\" maxlength=\"1000\" type=\"text\" class=\"col-sm-12\"/></td><td style=\"width:70px\"><a class=\"btn-xs btn-bus-delete\">删除</a></td></tr>";
 						$busList.find("tbody").append(html);
 
 						$busList.find("select[name=isChartered]").change(function(){
@@ -217,7 +217,7 @@ define(function(require, exports) {
 							$busList.find(".datepicker").datepicker({
 								autoclose: true,
 								todayHighlight: true,
-								format: 'yyyy-mm-dd',
+								format: 'yyyy-mm-dd',  
 								language: 'zh-CN'
 							});
 							$busList.find(".timeArea button.del").click(function(){
@@ -240,7 +240,7 @@ define(function(require, exports) {
 					});
 					var $driverList = $(".addBusCompanyContainer .driverList");
 					$driverList.find(".btn-driver-add").click(function(){
-						var html = "<tr><td><input name=\"driverName\" type=\"text\" class=\"col-sm-12\" /></td><td><select name=\"gender\" class=\"col-sm-12\"><option value=\"0\">男</option><option value=\"1\">女</option></select></td><td><input name=\"mobileNumber\" type=\"text\" class=\"col-sm-12\" /></td><td><input name=\"driveYears\" type=\"text\" value=\"1\"/></td><td><input name=\"licenseId\" class=\"col-sm-12\" type=\"text\" /></td><td><select name=\"status\" class=\"col-sm-12\"><option value=\"1\">启用</option><option value=\"0\">停用</option></select></td><td><input name=\"remark\" type=\"text\" class=\"col-sm-12\" /></td><td style=\"width:70px\"><a data-entiy-id=\"\" class=\" btn-xs btn-driver-delete\">删除</a></td></tr>";
+						var html = "<tr><td><input name=\"driverName\" maxlength=\"32\" type=\"text\" class=\"col-sm-12\" /></td><td><select name=\"gender\" class=\"col-sm-12\"><option value=\"0\">男</option><option value=\"1\">女</option></select></td><td><input name=\"mobileNumber\" maxlength=\"11\" type=\"text\" class=\"col-sm-12\" /></td><td><input name=\"driveYears\" maxlength=\"2\" type=\"text\" value=\"1\"/></td><td><input name=\"licenseId\" class=\"col-sm-12\" maxlength=\"18\" type=\"text\" /></td><td><select name=\"status\" class=\"col-sm-12\"><option value=\"1\">启用</option><option value=\"0\">停用</option></select></td><td><input name=\"remark\" type=\"text\" class=\"col-sm-12\" /></td><td style=\"width:70px\"><a data-entiy-id=\"\" class=\" btn-xs btn-driver-delete\">删除</a></td></tr>";
 						$driverList.find("tbody").append(html);
 
 						$driverList.find(".btn-driver-delete").click(function(){
@@ -255,7 +255,6 @@ define(function(require, exports) {
 								$(this).next().addClass('btn ').html('<i class="ace-icon fa fa-plus"></i>').next().addClass('btn ').html('<i class="ace-icon fa fa-minus"></i>')
 							}
 						});
-
 						// 更新表单验证的事件绑定
 						validator = rule.update(validator);
 					});
