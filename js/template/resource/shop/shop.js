@@ -5,7 +5,7 @@ define(function(require, exports) {
 	var updateTemplate = require("./view/update");
 	var viewTemplate = require("./view/view");
 	var policyTemplate = require("./view/shopPolicy");
-	var updatePolicyTemplate = require("./view/shopPolicy");
+	var updatePolicyTemplate = require("./view/updateShopPolicy");
 	var tabId = "tab-"+menuKey+"-content";
 	var rule = require('./shopRule');
 	
@@ -433,7 +433,7 @@ define(function(require, exports) {
 									}
 						    		var data = {}
 						    		data.policyData = policyData;
-						    		shop.updatePolicy(data,$policyInput);
+						    		shop.updateShopPolicy(data,$policyInput);
 						    	}
 
 						    	$(".shopStandardList .btn-shop-rate-add").off().on("click", showPolicyList);
@@ -841,7 +841,7 @@ define(function(require, exports) {
 			    		if( policyValidator != undefined){
 			    			if(!policyValidator.form()){return;}
 			    		}else{
-			    			showMessageDialog($( "#confirm-dialog-message" ),"政策不能为空1");
+			    			showMessageDialog($( "#confirm-dialog-message" ),"政策不能为空");
 			    			return;
 			    		}
 			    		var result = shop.submitShopPolicy(obj);
@@ -950,7 +950,6 @@ define(function(require, exports) {
 			    	$(".shopPolicyList .priceArea button.del").unbind().click(shop.deletePolicyPriceArea);
 			    	// 提交数据，临时保存起来
 			    	$(".btn-submit-shop-policy").click(function(){
-						console.log(modiPolicyValidator);
 			    		if( modiPolicyValidator != undefined){
 			    			if(!modiPolicyValidator.form()){return;}
 			    		}else{
