@@ -14,5 +14,5 @@
 ### 2.nodeJs 脚本设置
 
 	npm install -g tmodjs
-	tmod E:\workspace\huochaitou\src\main\webapp\app\js\template  --output E:\workspace\huochaitou\src\main\webapp\app\js\template  --type cmd --debug
+	tmod E:\workspace\huochaitou\src\main\webapp\app\js\template  --output E:\workspace\huochaitou\src\main\webapp\app\js\template  --type cmd --debug 
 
