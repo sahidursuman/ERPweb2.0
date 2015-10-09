@@ -78,10 +78,12 @@
 										<input name="childTransferMoney" value="{{if touristGroup != null}}{{touristGroup.transChildPrice}}{{/if}}" type="text" class="col-sm-12  no-padding-right costPrice" />
 									</td>
 									<td></td>
-								</tr>   
+								</tr>  
 
+
+								<!--游客小组费用start--> 
 								{{each touristGroup.touristGroupFeeList as transferList}}         
-									<tr>
+									<tr  data-entity-id="{{transferList.id}}">    
 										<td>
 											<span name="type" value="0">其他费用</span>   
 										</td>   
@@ -96,10 +98,11 @@
 										</td>
 										<td><a class="  addCost-delete cursor">删除</a></td>
 									</tr>
-								{{/each}}    
+								{{/each}} 
+								<!--游客小组费end-->    
 
 
-
+								<!--转客其他费用start-->
 								{{each touristGroup.touristGroupTransferFeeSet as transferOtherFee}}
 								<tr data-entity-id="{{transferOtherFee.id}}">
 									<td>
@@ -114,27 +117,19 @@
 									<td>
 										<input name="otherPrice" value="{{transferOtherFee.otherPrice}}" type="text" class="col-sm-12  no-padding-right costPrice" />
 									</td>
-									<td><a class="  addCost-delete cursor">删除</a></td>
+									<td><a class="addCost-delete cursor">删除</a></td>
 								</tr>
 								{{/each}}
-
+								<!--转客其他费用end-->
 							</tbody>
 						</table>
 					</div>
 				</div>
 			</div>
 		</div>
-	</form>
+	</form>   
 
-   
-
-
-
-
-
-
-
-
+	<!--收客信息 start-->
 	<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
 		<div class="widget-box ui-sortable-handle">
 			<div class="widget-header">
@@ -145,7 +140,7 @@
 			</div>
 			<div class="widget-body" style="padding-top:25px;">
 				<div class="form-group">
-					<label class="col-sm-2 control-label no-padding-right">备注：</label>  
+					<label class="col-sm-2 control-label no-padding-right">转客备注：</label>  
 					<div class="col-sm-8">
 						<input readonly="readonly" value="{{if touristGroup != null}}{{touristGroup.transRemark}}{{/if}}" class="col-sm-12  no-padding-right" type="text">  
 					</div>
@@ -162,8 +157,8 @@
 									<th>数量</th>
 									<th>单价</th>  
 								</tr>
-							</thead>
-							<tbody class="editFeeTbody">
+							</thead>   
+							<tbody>
 
 									<tr>
 										<td>结算价</td>
@@ -181,17 +176,17 @@
 									</tr>  
 									{{each touristGroupFeeList as touristGroupFlist}}    	                                           
 											<tr>       
-												<td>  
+												<td>    
 													<span name="type" value="0">其他费用</span>          
 												</td>   
 												<td>
-													<input name="describe" readonly="readonly" value="{{touristGroupFlist.describeInfo}}" type="text" class="col-sm-12  no-padding-right" />
+													<input readonly="readonly" value="{{touristGroupFlist.describeInfo}}" type="text" class="col-sm-12  no-padding-right" />
 												</td>
 												<td>
-													<input name="count" value="{{touristGroupFlist.count}}" readonly="readonly"  type="text" class="col-sm-12  no-padding-right costCount" />
+													<input  value="{{touristGroupFlist.count}}" readonly="readonly"  type="text" class="col-sm-12  no-padding-right costCount" />
 												</td>
 												<td>
-													<input name="otherPrice" value="{{touristGroupFlist.price}}" readonly="readonly" type="text" class="col-sm-12  no-padding-right costPrice" />   
+													<input  value="{{touristGroupFlist.price}}" readonly="readonly" type="text" class="col-sm-12  no-padding-right costPrice" />   
 												</td>
 											</tr> 
 									{{/each}}    
@@ -202,7 +197,7 @@
 			</div>   
 		</div>  
 	</form>     
-
+	<!--收客信息 end-->  
 
 
 	<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
