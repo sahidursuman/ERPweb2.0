@@ -54,7 +54,7 @@
 			</p>
 		</div>
 	<!--======================================================================================	-->
-		<div id="navbar" class="navbar navbar-default navbar-fixed-top ">
+		<div id="navbar" class="navbar navbar-default navbar-fixed-top max-nav ">
 			<div class="navbar-container" id="navbar-container">
 				<button type="button" class="navbar-toggle menu-toggler pull-left" id="menu-toggler" data-target="#sidebar">
 					<span class="sr-only">Toggle sidebar</span>
@@ -97,7 +97,7 @@
 									<i class="ace-icon fa fa-envelope-o"></i>
 								</li>
 
-								<li class="dropdown-footer" style="color: white!important;text-align: right!important;height: 30px!important;line-height: 33px!important;background: #ffa467">
+								<li class="dropdown-footer" style="color: white!important;text-align: right!important;height: 30px!important;line-height: 33px!important;background: #ed8b10">
 									<label href="javascript:void(0)" onclick="viewAllMsg()" style="cursor: pointer;text-align: right!important;">
 										更多
 										<i class="ace-icon fa fa-arrow-right"></i>
@@ -114,9 +114,9 @@
 							</label>
 
 							<ul class=" dropdown-menu dropdown-close user-style" >
-								<li style="margin-top: 10px">姓名 <span class="userName"></span></li>  
-								<li >部门 <span class="department"></span></li>   
-								<li style="padding-bottom: 40px">电话 <span class="phoneNumber"></span></li>
+								<li style="margin-top: 10px">姓名 <span class="userName Spacing"></span></li>
+								<li >部门 <span class="department Spacing"></span></li>
+								<li style="padding-bottom: 40px">电话 <span class="phoneNumber Spacing"></span></li>
 								<li  class="dropdown-close border-li-h" style="color: white!important;text-align: right!important;">
 									<label onclick="showUpdateUserInfoOrPasswordLayer()" style="cursor: pointer">
 										修改
@@ -126,7 +126,7 @@
 							</ul>  
 						</li>
 
-						<div style="background: #227fb5;height: 70px;float: left;margin-left: 20px">
+						<div style="background: #227fb5;height: 71px;float: right;">
 							<!--<li style="width: 85px;float:left;">-->
 								<!--<img src="images/help.png">-->
 								<!--<p>帮助</p>-->
@@ -259,15 +259,15 @@
 				<div class="main-content-inner">
 					<div class="breadcrumbs breadcrumbs-fixed" style="border-bottom:none;background-color: #fff;padding:0 0 0 0">
 						<div style="width:100%;height:41px;overflow: hidden;position: relative;">
-							<button id="tab_left_scroll" class="btn btn-white btn-primary" style="z-index:99;width:35px;height:35px;position: absolute;left: 0px;top:-2px;">
+							<button id="tab_left_scroll" class="btn btn-white btn-primary" style="z-index:99;width:35px;height:36px;position: absolute;left: 0;top:0;">
 								<i class="ace-icon fa fa-chevron-left"></i>
 							</button>
 							<ul id="tabList" class="nav nav-tabs nav-line" >
-								<li class="tab-dashborad active">
+								<li class="tab-dashborad active " style="height: 32px!important;">
 									<a data-toggle="tab" href="#tab-dashboard-content" aria-expanded="true">工作台</a>
 								</li>
 							</ul>
-							<button id="tab_right_scroll" class="btn btn-white btn-primary" style="z-index:99;width:35px;height:35px;position: absolute;right: 0px;top:-2px;">
+							<button id="tab_right_scroll" class="btn btn-white btn-primary" style="z-index:99;width:35px;height:36px;position: absolute;right: 0;top:0;">
 								<i class="ace-icon fa fa-chevron-right"></i>
 							</button>
 						</div>
