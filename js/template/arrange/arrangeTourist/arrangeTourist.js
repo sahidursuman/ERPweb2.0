@@ -1275,6 +1275,8 @@ define(function(require, exports) {
 					if(result){
 						var touristGroupInfo = JSON.parse(data.touristGroup);
 						data.touristGroup = touristGroupInfo;
+						var touristGroupFeeList = JSON.parse(data.touristGroupFeeList);
+						data.touristGroupFeeList = touristGroupFeeList;
 						var html = editFeeTemplate(data);
 						var updateTouristGroupLayer = layer.open({
 						    type: 1,
@@ -1283,7 +1285,7 @@ define(function(require, exports) {
 						    area: ['95%', '90%'], //宽高
 						    zIndex:1028,
 						    content: html,
-						    success:function(){
+						    success:function(){  
 						    	var feeId = "";//data.touristGroupTransferFeeSet.id;
 						    	//给新增费用项绑定事件
 						    	$(".editFeeMainForm .newEditFee").click(function(){
@@ -1336,6 +1338,9 @@ define(function(require, exports) {
 							    			PayMoneyF();
 					    				})
 					    			}
+
+
+
 					    			PayMoneyF();
 					    			$(".editFeeMainForm input[name=payedMoney]").keyup(function(){
 										PayMoneyF();
@@ -1347,6 +1352,8 @@ define(function(require, exports) {
 										PayMoneyF();
 									})
 						    	});
+
+
 						    	
 						    	//新增费用项目  算应收
 								$(".editFeeMainForm input[name=payedMoney]").keyup(function(){
@@ -1357,7 +1364,7 @@ define(function(require, exports) {
 								})
 								$(".editFeeMainForm .editFeeTbody").find(".addOrReduceSelect").change(function(){
 									PayMoneyF();
-								})
+								})  
 								
 								function PayMoneyF(){
 									var needPayMoney = 0;
@@ -1394,6 +1401,8 @@ define(function(require, exports) {
 									var currentNPM = needPayMoney-payedMN;
 									currentNeedPayM.val(currentNPM);
 								}  
+
+
 								//转客费用提交按钮  
 								$(".editFeeMain .btn-updateFee").click(function(){
 									var form = $(".editFeeMain .editFeeMainForm").serialize();
@@ -1569,7 +1578,7 @@ define(function(require, exports) {
 			data.busCompant =JSON.parse(data.busCompant);
 			data.bus =JSON.parse(data.bus);
 			var validatorCreateTripPlan;
-			var html = updateTripPlanTemplate(data);
+			var html = updateTripPlanTemplate(data);  
 				chooseMergeLayer = layer.open({
 			    type: 1,
 			    title:"修改发团计划",
