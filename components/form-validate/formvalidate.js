@@ -309,4 +309,14 @@
 		return validate;
 	};
 
+	$.fn.toggleTip = function(msg)  {
+		return this.each(function() {
+			var $that = $(this),
+				validate = new Validate();
+				
+			validate.setStyle();
+			validate.setMessage($that, msg);
+		});
+	}
+
 }(window.jQuery);
