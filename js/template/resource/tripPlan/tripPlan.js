@@ -204,6 +204,25 @@ define(function(require, exports) {
 					layer.close(globalLoadingLayer);
 					var result = showDialog(data);
 					if(result){
+						$(document).on("mouseenter",".whichDaysContainer",function(){
+							var whichDay = $(this).find("select").val(),
+								$this = $(this)
+								startTime = $("#tripPlan_addPlan_content").find("span[name=startTime_Choose]").text(),
+								date = new Date(startTime.replace("-", "/").replace("-", "/"));
+							console.log(whichDay)
+							console.log(whichDay-1)
+							var timer = date.getTime()+(whichDay-1)*24*60*60*1000;
+							console.log(timer)
+							date.setTime(timer);
+							console.log(date)
+							//var datetime = date.getFullYear()+ "-"+ ((date.getMonth() + 1) > 10 ? (date.getMonth() + 1) : "0"+ (date.getMonth() + 1))+ "-"+ (date.getDate() < 10 ? "0" + date.getDate() : date.getDate());
+							var datetime = date.getFullYear()+ "-"+ (date.getMonth() + 1) + "-"+ (date.getDate() < 10 ? "0" + date.getDate() : date.getDate());
+							console.log(datetime)
+							layer.tips(datetime, $this, {
+					    		tips: [1, '#3595CC'],
+					    		time: 1500
+							});
+						})	
 						var tripPlanInfo = JSON.parse(data.tripPlan),
 							 insuranceList = JSON.parse(data.insuranceList),
 							 hotelList = JSON.parse(data.hotelList),
