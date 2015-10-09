@@ -112,6 +112,10 @@
 											<thead>
 												<tr>
 													<th>小组</th>
+													<th>线路产品</th>    
+													<th>住宿标准 </th>
+													<th>自费</th> 
+
 													<th>来源</th>
 													<th>联系人</th>
 													<th>联系电话</th>
@@ -119,12 +123,16 @@
 													<th>年龄</th>
 													<th>人数</th>
 													<th>备注</th>
-													<th>查看成员</th>
+													<th>查看成员</th>   
 												</tr>
 											</thead>
 											<tbody class="addTripPlanTouristTbody">{{each touristGroupList as touristGroup}}
 												<tr data-entity-id="{{touristGroup.id}}">
 													<td></td>
+													<td>{{touristGroup.lineProduct.name}}</td>    
+													<td>{{touristGroup.hotelLevel}}</td>
+													<td>{{touristGroup.includeSelfPay}}</td>    
+
 													<td>{{if touristGroup.partnerAgency != null}}{{touristGroup.partnerAgency.travelAgencyName}}{{/if}}</td>
 													<td>{{if touristGroup.contactMember != null}}{{touristGroup.contactMember.name}}{{/if}}</td>
 													<td>{{if touristGroup.contactMember != null}}{{touristGroup.contactMember.mobileNumber}}{{/if}}</td>
