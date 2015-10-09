@@ -10,7 +10,7 @@
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>酒店名称:</label>
 						<div class="col-sm-3">
-							<input type="text" name="name" class="col-sm-12" value="{{hotel.name}}">
+							<input type="text" name="name" class="col-sm-12" value="{{hotel.name}}" maxlength="32">
 							<input type="text" name="id" hidden="hidden" value="{{hotel.id}}">
 						</div>
 					</div>
@@ -31,21 +31,21 @@
 					<div class="form-group">
 					    <label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>联系人:</label>
 						<div class="col-sm-3">
-							<input type="text" name="managerName" class="col-sm-12" value="{{hotel.managerName}}">
+							<input type="text" name="managerName" class="col-sm-12" value="{{hotel.managerName}}" maxlength="32">
 						</div>
 						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>联系电话:</label>
 						<div class="col-sm-3">
-							<input type="text" name="mobileNumber" class="col-sm-12" value="{{hotel.mobileNumber}}">
+							<input type="text" name="mobileNumber" class="col-sm-12" value="{{hotel.mobileNumber}}" maxlength="11">
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right">座机号码:</label>
 						<div class="col-sm-3">
-							<input type="text" name="telNumber" class="col-sm-12" value="{{hotel.telNumber}}" />
+							<input type="text" name="telNumber" class="col-sm-12" value="{{hotel.telNumber}}" maxlength="20"/>
 						</div>
 						<label class="col-sm-1 control-label no-padding-right">传真号码:</label>
 						<div class="col-sm-3">
-							<input type="text" name="faxNumber" class="col-sm-12" value="{{hotel.faxNumber}}" />
+							<input type="text" name="faxNumber" class="col-sm-12" value="{{hotel.faxNumber}}" maxlength="20"/>
 						</div>
 					</div>
 					<div class="form-group">
@@ -65,13 +65,13 @@
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right">详细地址:</label>
 						<div class="col-sm-6">
-							<input type="text" name="street" class="col-sm-12" placeholder="请输入街道地址" value="{{hotel.street}}"/>
+							<input type="text" name="street" class="col-sm-12" placeholder="请输入街道地址" value="{{hotel.street}}" maxlength="100"/>
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right">酒店设施:</label>
 						<div class="col-sm-3">
-							<input type="text" name="facility" class="col-sm-12" value="{{hotel.facility}}">
+							<input type="text" name="facility" class="col-sm-12" value="{{hotel.facility}}" maxlength="1000">
 						</div>
 					</div>
 					<div class="form-group">
@@ -132,7 +132,7 @@
 								<tbody>
 									{{each hotel.hotelRoomList as room}}
 									<tr data-entity-id="{{room.id}}">
-										<td><input name="type" type="text" class="col-sm-12" value="{{room.type}}"/></td>
+										<td><input name="type" type="text" class="col-sm-12" value="{{room.type}}" maxlength="32"/></td>
 										<td class="time">
 											{{each room.priceList as price i}}
 											<div data-index="{{i+1}}" data-entity-id="{{price.id}}" class="clearfix {{if i > 0}}appendDiv{{/if}} div-{{i+1}}" style="margin-top:2px">
@@ -156,14 +156,14 @@
 										<td> 
 											{{each room.priceList as price i}}
 											<div data-index="{{i+1}}" class="clearfix div-{{i+1}}" style="margin-top:2px">
-												<input name="marketPrice" type="text" class="col-sm-12" value="{{price.marketPrice}}"/>
+												<input name="marketPrice" type="text" class="col-sm-12" value="{{price.marketPrice}}" maxlength="7"/>
 											</div>
 											{{/each}}
 										</td>
 										<td>
 											{{each room.priceList as price i}}
 											<div data-index="{{i+1}}" class="clearfix div-{{i+1}}" style="margin-top:2px">
-												<input name="contractPrice" type="text" class="col-sm-12" value="{{price.contractPrice}}"/>
+												<input name="contractPrice" type="text" class="col-sm-12" value="{{price.contractPrice}}" maxlength="7"/>
 											</div>
 											{{/each}}
 										</td>
@@ -186,16 +186,16 @@
 											</select>
 										</td>
 										<td>
-											<input name="broadband" class="col-sm-12" type="text" value="{{room.broadband}}"/>
+											<input name="broadband" class="col-sm-12" type="text" value="{{room.broadband}}" maxlength="100"/>
 										</td>
 										<td>
-											<input name="areaSize" class="col-sm-12" type="text" value="{{room.areaSize}}"/>
+											<input name="areaSize" class="col-sm-12" type="text" value="{{room.areaSize}}" maxlength="5"/>
 										</td>
 										<td>
-										 	<input name="guestNumber" class="col-sm-12" type="text" value="{{room.guestNumber}}"/>
+										 	<input name="guestNumber" class="col-sm-12" type="text" value="{{room.guestNumber}}" maxlength="4"/>
 										 </td>
 										<td>
-											<input name="remark" class="col-sm-12" type="text" value="{{room.remark}}"/>
+											<input name="remark" class="col-sm-12" type="text" value="{{room.remark}}" maxlength="1000"/>
 										</td>
 										<td style="width:70px">
 											<a data-entity-id="" href="#" class=" btn-xs  btn-hotel-standard-delete">删除</a>

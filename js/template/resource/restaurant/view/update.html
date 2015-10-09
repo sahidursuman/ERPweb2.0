@@ -14,33 +14,33 @@
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>餐厅名称:</label>
 						<div class="col-sm-3">
-							<input type="text" name="name" class="col-sm-12" value="{{restaurant.name}}">
+							<input type="text" name="name" class="col-sm-12" value="{{restaurant.name}}" maxlength="32">
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>联系人:</label>
 						<div class="col-sm-3">
-							<input type="text" name="managerName" value="{{restaurant.managerName}}" class="col-sm-12">
+							<input type="text" name="managerName" value="{{restaurant.managerName}}" class="col-sm-12" maxlength="32">
 						</div>
 						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>联系电话:</label>
 						<div class="col-sm-3">
-							<input type="text" name="mobileNumber" value="{{restaurant.mobileNumber}}" class="col-sm-12">
+							<input type="text" name="mobileNumber" value="{{restaurant.mobileNumber}}" class="col-sm-12" maxlength="11">
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right">座机号码:</label>
 						<div class="col-sm-3">
-							<input type="text" name="telNumber" class="col-sm-12" value="{{restaurant.telNumber}}" />
+							<input type="text" name="telNumber" class="col-sm-12" value="{{restaurant.telNumber}}" maxlength="20"/>
 						</div>
 						<label class="col-sm-1 control-label no-padding-right">传真号码:</label>
 						<div class="col-sm-3">
-							<input type="text" name="faxNumber" class="col-sm-12" value="{{restaurant.faxNumber}}" />
+							<input type="text" name="faxNumber" class="col-sm-12" value="{{restaurant.faxNumber}}" maxlength="20"/>
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right">餐厅设施:</label>
 						<div class="col-sm-3">
-							<input type="text" name="facility" value="{{restaurant.facility}}" class="col-sm-12">
+							<input type="text" name="facility" value="{{restaurant.facility}}" class="col-sm-12" maxlength="500">
 						</div>
 					</div>
 					<div class="form-group">
@@ -60,7 +60,7 @@
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right">详细地址:</label>
 						<div class="col-sm-6">
-							<input type="text" name="street" class="col-sm-12" value="{{restaurant.street}}" placeholder="请输入街道地址"/>
+							<input type="text" name="street" class="col-sm-12" value="{{restaurant.street}}" placeholder="请输入街道地址" maxlength="100"/>
 						</div>
 					</div>  
 					<div class="form-group">
@@ -127,10 +127,10 @@
 												</select>
 											</td>
 											<td>
-												<input name="typeName" value="{{restaurantStandard.typeName}}" type="text">
+												<input name="typeName" value="{{restaurantStandard.typeName}}" type="text" maxlength="100">
 											</td>
 											<td>
-												<input name="menuList" value="{{restaurantStandard.menuList}}" type="text">
+												<input name="menuList" value="{{restaurantStandard.menuList}}" type="text" maxlength="1000">
 											</td>
 											<td class="time">
 												{{each restaurantStandard.priceList as price i}}
@@ -155,7 +155,7 @@
 											<td>
 												{{each restaurantStandard.priceList as price i}}
 												<div data-index="{{i+1}}" class="clearfix div-{{i+1}}" style="margin-top:2px">
-													<input name="contractPrice" type="text" value="{{price.contractPrice}}"/><label>&nbsp;元</label>
+													<input name="contractPrice" type="text" value="{{price.contractPrice}}" maxlength="7"/><label>&nbsp;元</label>
 												</div>
 												{{/each}}
 											</td>
