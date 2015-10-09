@@ -259,17 +259,19 @@
 				<div class="main-content-inner">
 					<div class="breadcrumbs breadcrumbs-fixed" style="border-bottom:none;background-color: #fff;padding:0 0 0 0">
 						<div style="width:100%;height:41px;overflow: hidden;position: relative;">
-							<button id="tab_left_scroll" class="btn btn-white btn-primary" style="z-index:99;width:35px;height:36px;position: absolute;left: 0;top:0;">
-								<i class="ace-icon fa fa-chevron-left"></i>
-							</button>
+							<div id="tab_left_scroll"  class="btn-com">
+								<img src="images/left_a.jpg" class="left_a">
+								<img src="images/left_b.jpg" class="left_b">
+							</div>
 							<ul id="tabList" class="nav nav-tabs nav-line" >
-								<li class="tab-dashborad active " style="height: 32px!important;">
+								<li class=" active " style="height: 31px">
 									<a data-toggle="tab" href="#tab-dashboard-content" aria-expanded="true">工作台</a>
 								</li>
 							</ul>
-							<button id="tab_right_scroll" class="btn btn-white btn-primary" style="z-index:99;width:35px;height:36px;position: absolute;right: 0;top:0;">
-								<i class="ace-icon fa fa-chevron-right"></i>
-							</button>
+							<div id="tab_right_scroll" class="btn-right-nav" >
+								<img src="images/right_a.jpg" class="right_a">
+								<img src="images/right_b.jpg" class="right_b">
+							</div>
 						</div>
 					</div>
 					<div class="page-content">
@@ -648,12 +650,28 @@
 					$("#alter-user").hide();
 				})
 			});
-//			$(document).ready(function(){
-//				$(".alter-user").click(function(){
-//					$(this).removeClass("user-active");
-//					$("#alter-user").hide();
-//				})
-//			});
+
+			$(document).ready(function(){
+				$(".left_a").mouseenter(function(){
+//					alert();
+					$(this).hide();
+					$(".left_b").show();
+				});
+				$(".left_b").mouseleave(function(){
+					$(this).hide();
+					$(".left_a").show();
+				})
+
+				$(".right_a").mouseenter(function(){
+//					alert();
+					$(this).hide();
+					$(".right_b").show();
+				});
+				$(".right_b").mouseleave(function(){
+					$(this).hide();
+					$(".right_a").show();
+				})
+			});
 		</script>
 	
 	</body>
