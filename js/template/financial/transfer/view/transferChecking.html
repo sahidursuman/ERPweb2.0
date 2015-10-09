@@ -23,7 +23,7 @@
                         </button>
                         
                         <button type="button" class="btn btn-sm btn-primary btn-success btn-transferExport">
-							<span>导出报表</span>
+							<span>导出报表</span>   
 							<i class="ace-icon fa fa-arrow-right icon-on-right"></i>
 						</button>
                     </div>
@@ -79,7 +79,7 @@
             </thead>   
             <tbody>
             {{each financialTransferList as checking index}}
-            <tr data-entity-id="{{checking.id}}" data-entity-isConfirmAccount="{{checking.isConfirmAccount}}" data-entity-realUnPayedMoney="{{checking.realUnPayedMoney}}" data-entity-remark="{{checking.remark}}">
+            <tr data-entity-id="{{checking.id}}" data-entity-isConfirmAccount="{{checking.isConfirmAccount}}" data-entity-realUnPayedMoney="{{checking.transRealUnPayedMoney}}" data-entity-remark="{{checking.transRemark}}">
                 <td>{{index+1}}</td>
                 <td>{{checking.lineProductName}}</td>
                 <td name="startTime">{{checking.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
