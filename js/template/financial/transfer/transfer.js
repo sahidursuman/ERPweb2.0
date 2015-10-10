@@ -279,38 +279,12 @@ define(function(require, exports) {
 				                	 if (!validator.form()) { return; } 
 				                	 Transfer.saveCheckingData(pageNo,partnerAgencyId,partnerAgencyName,year,month);
 			                      })
-				                 //给查看单据绑定事件
-				                 $("#" +"tab-"+ checkTabId+"-content"+" .TransferImg").click(function(){
-			                	 
-			                	 if(true){
-									var html =billImagesTemplate();
-						    		var billImagesTemplateLayer =layer.open({
-						    			type: 1,
-									    title:"查看单据",
-									    skin: 'layui-layer-rim', //加上边框
-									    area: ['50%', '70%'], //宽高
-									    zIndex:1030,
-									    content: html,
-									    success: function() {
-									    	layer.config({
-									        	extend: ['extend/layer.ext.js'], //加载新皮肤
-									            skin: 'demo-class'
-									        });
-									    	layer.ready(function(){ //为了layer.ext.js加载完毕再执行
-									    	    layer.photos({
-									    	        photos: '#layer-photos-demo'
-									    	    });
-									    	});     
-									    }
-						    		})
-			                	}
-			                 });
-				             //取消按钮事件
-				             $("#" +"tab-"+ checkTabId+"-content"+" .btn-transferFinancial-close").click(function(){
-				            	 showConfirmDialog($( "#confirm-dialog-message" ), "确定关闭本选项卡?",function(){
-				            		 closeTab(checkTabId)
-				            	 });
-				             });
+					             //取消按钮事件
+					             $("#" +"tab-"+ checkTabId+"-content"+" .btn-transferFinancial-close").click(function(){
+					            	 showConfirmDialog($( "#confirm-dialog-message" ), "确定关闭本选项卡?",function(){
+					            		 closeTab(checkTabId)
+					            	 });
+					             });
 	                     }    
 		                 
 	             }
@@ -391,12 +365,7 @@ define(function(require, exports) {
                         });
                         //对账明细按钮事件
                         $("#" +"tab-"+ blanceTabId+"-content"+" .btn-restaurantBlance-checkDetail").click(function(){
-                        	/*Hotel.searchCheckData={
-                        			partnerAgencyId:partnerAgencyId,
-                        			partnerAgencyName:partnerAgencyName,
-                        			year:$(this).attr("data-entity-year"),
-                        			month:$(this).attr("data-entity-month"),
-                        	}*/
+                        	
                         	Transfer.searchCheckData={
     		                 	    partnerAgencyId:partnerAgencyId,
     		                 	    partnerAgencyName:partnerAgencyName,
