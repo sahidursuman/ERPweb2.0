@@ -527,7 +527,6 @@ function listMenu(menuTemplate){
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/guide/guide.js",function(guide){ 
 						guide.listGuide(0,"","");
-						modals["resource_guide"] = guide;
 					});
 				});
 				
@@ -538,7 +537,6 @@ function listMenu(menuTemplate){
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/busCompany/busCompany.js",function(busCompany){
 						busCompany.listBusCompany(0,"","");
-						modals["resource_busCompany"] = busCompany;
 					});
 				});
 				
@@ -549,7 +547,6 @@ function listMenu(menuTemplate){
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/restaurant/restaurant.js",function(restaurant){
 						restaurant.listRestaurant(0,"","");
-						modals["resource_restaurant"] = restaurant;
 					});
 				});
 				//绑定酒店菜单功能
@@ -559,7 +556,6 @@ function listMenu(menuTemplate){
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/hotel/hotel.js",function(hotel){
 						hotel.listHotel(0,"","");
-						modals["resource_hotel"] = hotel;
 					});
 				});
 				
@@ -570,7 +566,6 @@ function listMenu(menuTemplate){
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/partnerAgency/partnerAgency.js?version=",function(partnerAgency){
 						partnerAgency.listPartnerAgency(0,"",1);
-						modals["resource_partnerAgency"] = partnerAgency;
 					});
 				});
 				
@@ -593,7 +588,6 @@ function listMenu(menuTemplate){
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/shop/shop.js",function(shop){
 						shop.listShop(0,"","");
-						modals["resource_shop"] = shop;
 					});
 				});
 
@@ -605,7 +599,6 @@ function listMenu(menuTemplate){
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/travelLine/travelLine.js",function(travelLine){
 						travelLine.listTravelLine(0,"",1);
-						modals["resource_travelLine"] = travelLine;
 					});
 				});	
 					
@@ -616,7 +609,6 @@ function listMenu(menuTemplate){
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/scenic/scenic.js",function(scenic){
 						scenic.listScenic(0,"","");
-						modals["resource_scenic"] = scenic;
 					});
 				});		
 				//绑定保险菜单功能
@@ -644,7 +636,6 @@ function listMenu(menuTemplate){
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/ticket/ticket.js",function(ticket){ 
 						ticket.listTicket(0,"","");
-						modals["resource_ticket"] = ticket;
 					});
 				});
 				//绑定游客管理菜单功能
