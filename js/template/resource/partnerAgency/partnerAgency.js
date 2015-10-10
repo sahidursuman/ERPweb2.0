@@ -430,10 +430,10 @@ define(function(require, exports) {
 		},
 		addContact:function($obj,validator){
 			var html = '<tr>'+
-				'<td><input class="col-sm-12" type="text" name="contactRealname"/></td>'+
-				'<td><input class="col-sm-12" type="text" name="contactMobileNumber"/></td>'+
-				'<td><input class="col-sm-12" type="text" name="departmentName"/></td>'+
-				'<td><input class="col-sm-12" type="text" name="dutyName"/></td>'+
+				'<td><input class="col-sm-12" type="text" name="contactRealname" maxlength="32"/></td>'+
+				'<td><input class="col-sm-12" type="text" name="contactMobileNumber" maxlength="20"/></td>'+
+				'<td><input class="col-sm-12" type="text" name="departmentName" maxlength="45"/></td>'+
+				'<td><input class="col-sm-12" type="text" name="dutyName" maxlength="45"/></td>'+
 				'<td><button class="btn btn-xs btn-danger btn-contact-delete"><i class="ace-icon fa fa-trash-o"></i></button></td>'+
 			'</tr>';
 			$obj.append(html);
