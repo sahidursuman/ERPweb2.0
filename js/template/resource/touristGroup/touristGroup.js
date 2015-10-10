@@ -492,7 +492,7 @@ define(function(require, exports) {
 							    			}
 							    		}
 							    		
-							    		$("input[name=lineProductIdName]").val(travelLineName);
+							    		$("input[name=lineProductIdName]").val(travelLineName).trigger('change');
 							    		$("input[name=lineProductId]").val(travelLineId);
 							    	});
 									
@@ -1144,7 +1144,7 @@ define(function(require, exports) {
 										    			}
 										    		}
 										    		
-										    		$("input[name=lineProductIdName]").val(travelLineName);
+										    		$("input[name=lineProductIdName]").val(travelLineName).trigger('change');
 										    		$("input[name=lineProductId]").val(travelLineId);
 										    	});
 												
