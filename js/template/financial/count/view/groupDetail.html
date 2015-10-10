@@ -12,7 +12,8 @@
                    	<th>应收</th>
                    	<th>已收</th>
                    	<th>现收</th>
-                   	<th>明细</th>
+                    <th>明细</th>
+                   	<th>备注</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -47,6 +48,7 @@
                 			{{/each}}
                 		{{/if}}
                 	</td>
+                    <td>{{if touristGroup.touristGroupMember != null}}{{touristGroup.touristGroupMember.transRemark}}{{/if}}</td>
                 </tr>
                 {{/each}}
                 </tbody>
