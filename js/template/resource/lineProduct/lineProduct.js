@@ -10,6 +10,7 @@ define(function(require, exports) {
 	
 	var lineProduct = {
 		searchData : {},
+		edited : false,
 		listLineProduct:function(page,name,status){
 			$.ajax({
 				url:""+APP_ROOT+"back/lineProduct.do?method=listLineProduct&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
@@ -304,10 +305,36 @@ define(function(require, exports) {
 						if(clipboardMode){
 							title = "新增线路产品";
 						}
-						addTab(menuKey+"-update",title,html);
+						//已修改提示
 						var tab = "tab-resource_lineProduct-update-content";
-						// 初始化并绑定表单验证
 			    		var validator = rule.lineProductCheckor($('.updateLineProductContainer'));
+						if($(".tab-"+menuKey+"-update").length > 0) {
+                 	    	if(lineProduct.edited){
+								addTab(menuKey+"-update",title,html);
+                 	    		showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
+                 	    			 validator = rule.lineProductCheckor($('.updateLineProductContainer'));
+				            		 if (!validator.form()) { 
+				            			 return; 
+				            		 }
+				            		 lineProduct.submitInfoLineProduct(tab,clipboardMode, validator,0);
+									 lineProduct.edited = false;
+				            		 addTab(menuKey+"-update",title,html);
+				            		 validator = rule.lineProductCheckor($("#"+tab+""));
+				            	 },function(){
+				            		 addTab(menuKey+"-update",title,html);
+				            		 validator = rule.lineProductCheckor($("#"+tab+""));
+				            	 });							
+                 	    	 }else{
+	                 	    	addTab(menuKey+"-update",title,html);
+	                 	        validator = rule.lineProductCheckor($("#"+tab+""));
+                 	    	 } 
+                 	    }else{
+                 	    	addTab(menuKey+"-update",title,html);
+                 	    	validator = rule.lineProductCheckor($("#"+tab+""));
+                 	    	$("#"+tab+"").on("change",function(){
+                 	    		lineProduct.edited = true;
+                 	    	});
+                 	    };						
 				    	
 			    		for(var i=0;i<lineProductDetail.days;i++){
 							var ue = init_editor("detailEditor-update-lineProduct-"+i+"");
@@ -352,9 +379,8 @@ define(function(require, exports) {
 						lineProduct.bindTicketEvent($("#"+tab+" .viewUpdateTicketList .chooseTicketName"));
 						
 						$("#"+tab+" .updateLineProductContainer .submitInfoLineProduct").on("click", function(){
-							lineProduct.submitInfoLineProduct(tab,clipboardMode, validator);
-						})//绑定提交事件
-						
+							lineProduct.submitInfoLineProduct(tab,clipboardMode, validator,1);
+						});//绑定提交事件
 						
 						$("#"+tab+" .viewUpdateRestaurantList .deleteScheduleList").off().on("click", lineProduct.deleteLineProductDaysArrange);
 						$("#"+tab+" .viewUpdateHotelList .deleteResourceHotelList").off().on("click", lineProduct.deleteLineProductDaysArrange);
@@ -1913,7 +1939,7 @@ define(function(require, exports) {
 				});
 			});
 		},
-		submitInfoLineProduct:function(tab,clipboardMode, validator){
+		submitInfoLineProduct:function(tab,clipboardMode, validator,isClose){
 			if (!validator.form())   return;
 
 			var $form = $(".updateLineProductContainer form"), travelLineData;
@@ -2135,8 +2161,11 @@ define(function(require, exports) {
 					if(result){
 						//layer.close(addTravelLineLayer);
 						showMessageDialog($( "#confirm-dialog-message" ),data.message, function(){
-							closeTab(menuKey+"-update");
-							lineProduct.listLineProduct(0,"",1);
+							//lineProduct.listLineProduct(0,"",1);
+							if(isClose == 1){
+								closeTab(menuKey+"-update");
+								lineProduct.listLineProduct(0,"",1);
+							}
 						});
 					}
 				}
@@ -2283,7 +2312,17 @@ define(function(require, exports) {
 				var url = ""+APP_ROOT+"back/export.do?method=exportLineProduct&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view&lineProductId="+id+"";
 				exportXLS(url);
 			});
+		},
+		isEdited : function(){
+			return lineProduct.edited;
+		},
+		save : function(){
+			var tab = "tab-resource_lineProduct-update-content";
+			var validator = rule.lineProductCheckor($('.updateLineProductContainer'));
+			lineProduct.submitInfoLineProduct(tab,false,validator,1);
 		}
 	}
 	exports.listLineProduct = lineProduct.listLineProduct;
+	exports.save = lineProduct.save;
+	exports.isEdited = lineProduct.isEdited;
 });
