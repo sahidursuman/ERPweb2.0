@@ -1185,7 +1185,7 @@ define(function(require, exports) {
 						
 						
 						//初始化 组社团数据
-						touristGroup.getPartnerAgencyList($("#"+tab+" .choosePartnerAgencyDiv select[name=fromPartnerAgencyId]"),data.touristGroupDetail.fromPartnerAgencyId);
+						touristGroup.getPartnerAgencyList($("#"+tab+" .choosePartnerAgencyDiv input[name=fromPartnerAgency]"),data.touristGroupDetail.fromPartnerAgencyId);
 						
 						//update点击提交按钮事件
 						$("#"+tab+" .touristGroupMainFormRS .btn-submit-addTouristGroup").click(function(){
