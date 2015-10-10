@@ -147,8 +147,7 @@
                                                     			<select class="col-sm-12 no-padding" name="payType">
                                                     				<option {{if insurance.payType == 0}}selected="selected"{{/if}} value="0">现付</option>
                                                                     <option {{if insurance.payType == 1}}selected="selected"{{/if}} value="1">签单</option>
-                                                                    <option {{if insurance.payType == 2}}selected="selected"{{/if}} value="2">转账</option>
-                                                                    <option {{if insurance.payType == 3}}selected="selected"{{/if}} value="3">网付</option>
+                                                                  	<option {{if insurance.payType == 2}}selected="selected"{{/if}} value="2">转账</option>
                                                     			</select>
                                                     		</td> 
                                                     		<td><input type="text" name="remark" value="{{insurance.remark}}" class="col-sm-12"/></td>
@@ -173,8 +172,7 @@
                                                     			<select class="col-sm-12" name="payType">
                                                     				<option value="0">现付</option>
                                                                     <option value="1">签单</option>
-                                                                    <option value="2">转账</option>
-                                                                    <option value="3">网付</option>
+                                                                  	<option value="2">转账</option>
                                                     			</select>
                                                     		</td>
                                                     		<td><input type="text" name="remark" value="" class="col-sm-12"/></td>
@@ -237,7 +235,6 @@
                                                                         <option {{if guide.payType == 0}}selected="selected"{{/if}} value="0">现付</option>
                                                                         <option {{if guide.payType == 1}}selected="selected"{{/if}} value="1">签单</option>
                                                                         <option {{if guide.payType == 2}}selected="selected"{{/if}} value="2">转账</option>
-                                                                        <option {{if guide.payType == 3}}selected="selected"{{/if}} value="3">网付</option>
                                                                     </select>
                                                                 </td>
                                                                 <td><input type="text" name="remark" value="{{guide.remark}}" class="col-sm-12"/></td>
@@ -317,7 +314,6 @@
                                                                         <option {{if busCompany.payType == 0}}selected="selected"{{/if}} value="0">现付</option>
                                                                         <option {{if busCompany.payType == 1}}selected="selected"{{/if}} value="1">签单</option>
                                                                         <option {{if busCompany.payType == 2}}selected="selected"{{/if}} value="2">转账</option>
-                                                                        <option {{if busCompany.payType == 3}}selected="selected"{{/if}} value="3">网付</option>
                                                                     </select>
                                                                 </td>
                                                                 <td><input name="guidePayMoney" type="text" value="{{busCompany.guidePayMoney}}" class="col-sm-12" style="width: 60px;"/></td>
@@ -398,8 +394,7 @@
                                                                         <option {{if restaurant.payType == 0}}selected="selected"{{/if}} value="0">现付</option>
                                                                         <option {{if restaurant.payType == 1}}selected="selected"{{/if}} value="1">签单</option>
                                                                         <option {{if restaurant.payType == 2}}selected="selected"{{/if}} value="2">转账</option>
-                                                                        <option {{if restaurant.payType == 3}}selected="selected"{{/if}} value="3">网付</option>
-                                                                    </select>
+                                                                    </select> 
                                                                 </td>
                                                                 <td><input name="guidePayMoney" type="text" value="{{restaurant.guidePayMoney}}" class="col-sm-12" style="width: 60px;"/></td>
                                                                 <td><input name="remark" type="text" value="{{restaurant.remark}}" class="col-sm-12"/></td>
@@ -495,7 +490,6 @@
 	                                                    				<option {{if hotel.payType == 0}}selected="selected"{{/if}} value="0">现付</option>
                                                                         <option {{if hotel.payType == 1}}selected="selected"{{/if}} value="1">签单</option>
                                                                         <option {{if hotel.payType == 2}}selected="selected"{{/if}} value="2">转账</option>
-                                                                        <option {{if hotel.payType == 3}}selected="selected"{{/if}} value="3">网付</option>
 	                                                    			</select>
                                                                 </td> 
                                                                 <td><input type="text" name="guidePayMoney" class="col-sm-12" value="{{hotel.guidePayMoney}}" style="width: 60px;" /></td>
@@ -586,7 +580,6 @@
                                                                         <option {{if scenic.payType == 0}}selected="selected"{{/if}} value="0">现付</option>
                                                                         <option {{if scenic.payType == 1}}selected="selected"{{/if}} value="1">签单</option>
                                                                         <option {{if scenic.payType == 2}}selected="selected"{{/if}} value="2">转账</option>
-                                                                        <option {{if scenic.payType == 3}}selected="selected"{{/if}} value="3">网付</option>
                                                                     </select>
                                                                 </td>
                                                                 <td><input name="guidePayMoney" type="text" class="col-sm-12" value="{{scenic.guidePayMoney}}" style="width: 60px;" /></td>
@@ -723,7 +716,6 @@
                                                                         <option {{if selfPay.payType == 0}}selected="selected"{{/if}} value="0">现付</option>
                                                                         <option {{if selfPay.payType == 1}}selected="selected"{{/if}} value="1">签单</option>
                                                                         <option {{if selfPay.payType == 2}}selected="selected"{{/if}} value="2">转账</option>
-                                                                        <option {{if selfPay.payType == 3}}selected="selected"{{/if}} value="3">网付</option>
                                                                     </select>
                                                                 </td>
                                                                 <td><input type="text" name="guidePayMoney" class="col-sm-12" value="{{selfPay.guidePayMoney}}" style="width: 60px;" /></td>
@@ -812,7 +804,6 @@
                                                                         <option {{if ticket.payType == 0}}selected="selected"{{/if}} value="0">现付</option>
                                                                         <option {{if ticket.payType == 1}}selected="selected"{{/if}} value="1">签单</option>
                                                                         <option {{if ticket.payType == 2}}selected="selected"{{/if}} value="2">转账</option>
-                                                                        <option {{if ticket.payType == 3}}selected="selected"{{/if}} value="3">网付</option>
                                                                     </select>
                                                                 </td>
                                                                 <td><input type="text" name="guidePayMoney" class="col-sm-12" value="{{ticket.guidePayMoney}}" /></td>
@@ -888,7 +879,6 @@
                                                                         <option {{if other.payType == 0}}selected="selected"{{/if}} value="0">现付</option>
                                                                         <option {{if other.payType == 1}}selected="selected"{{/if}} value="1">签单</option>
                                                                         <option {{if other.payType == 2}}selected="selected"{{/if}} value="2">转账</option>
-                                                                        <option {{if other.payType == 3}}selected="selected"{{/if}} value="3">网付</option>
                                                                     </select>
                                                                 </td>
                                                                 <td><input type="text" name="guidePayMoney" class="col-sm-12" value="{{other.guidePayMoney}}" /></td>

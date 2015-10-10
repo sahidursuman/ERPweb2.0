@@ -4,7 +4,7 @@
 			<div class="widget-header">
 				<h5 class="widget-title">
 					<i class="ace-icon fa fa-info-circle"></i>
-					小组信息
+					小组信息                                                              
 				</h5>
 			</div>
 			<div class="widget-body">
@@ -83,11 +83,11 @@
 						</div>
 						<label class="col-sm-1 control-label no-padding-right">已收:</label>
 						<div class="col-sm-2">
-							<input type="text" name="payedMoney" class="col-sm-12" value="0" />
+							<input type="text" name="payedMoney" class="col-sm-12" value="0" maxlength="11" />
 						</div>
 						<label class="col-sm-1 control-label no-padding-right">现收:</label>
 						<div class="col-sm-2">
-							<input type="text" name="currentNeedPayMoney" class="col-sm-12" value="0" />
+							<input type="text" name="currentNeedPayMoney" class="col-sm-12" maxlength="11" value="0" />  
 						</div>
 					</div>
 					<div class="form-group">
@@ -128,10 +128,10 @@
 										大人
 									</td>
 									<td>
-										<span class="necessary col-sm-1">*</span><input name="adultCount" type="text" class="col-sm-11  no-padding-right costCount" />
+										<span class="necessary col-sm-1">*</span><input name="adultCount" type="text" maxlength="3" class="col-sm-11  no-padding-right costCount" />
 									</td>
 									<td>
-										<span class="necessary col-sm-1">*</span><input name="adultPrice" type="text" class="col-sm-11  no-padding-right  costPrice" />
+										<span class="necessary col-sm-1">*</span><input name="adultPrice" maxlength="9" type="text" class="col-sm-11  no-padding-right  costPrice" />
 									</td>
 									<td></td>
 								</tr>
@@ -143,10 +143,10 @@
 										小孩
 									</td>
 									<td>
-										<input name="childCount" type="text" value="0" class="col-sm-11  no-padding-right costCount" style="float:right;" />
+										<input name="childCount" type="text" value="0" class="col-sm-11  no-padding-right costCount" maxlength="3" style="float:right;" />
 									</td>
 									<td>
-										<input name="childPrice" type="text" value="0" class="col-sm-11  no-padding-right costPrice" style="float:right;" />
+										<input name="childPrice" type="text" value="0" maxlength="4"  class="col-sm-11  no-padding-right costPrice" style="float:right;" />
 									</td>
 									<td></td>
 								</tr>
@@ -205,13 +205,13 @@
 								</div>
 								<label class="col-sm-2 control-label no-padding-right">包含自费：</label>
 								<div class="col-sm-3">
-										<input name="includeOwnExpense" type="text" class="col-sm-12" />
+										<input name="includeOwnExpense" type="text" class="col-sm-12" maxlength="1000" />  
 								</div>
 							</div>
 							<div class="form-group">
 								<label class="col-sm-2 control-label no-padding-right">备注：</label>
 								<div class="col-sm-8">
-									<input name="touristRemarks" class="col-sm-12  no-padding-right" type="text">
+									<input name="touristRemarks" class="col-sm-12  no-padding-right" maxlength="1000" type="text">
 								</div>
 							</div>
 							<div class="form-group">
@@ -225,8 +225,8 @@
 									<button class="btn btn-sm btn-success btn-add-tourist-more" style="float:left;">
 										<i class="ace-icon fa fa-plus"></i>
 										批量添加
-									</button>
-								</div>
+									</button>         
+								</div>   
 							</div>
 							<div class="form-group">
 								<div class="col-sm-2"></div>
@@ -236,7 +236,7 @@
 											<tr>
 												<th>序号</th>
 												<th> <span class="necessary">*</span>姓名</th>
-												<th> <span class="necessary">*</span>手机号码</th>
+												<th>手机号码</th>     
 												<th>证件类型</th>
 												<th>证件号</th>
 												<th>设为联系人</th>
@@ -275,7 +275,7 @@
 														<button class="btn btn-xs btn-danger btnDeleteTourist">
 															<i class="ace-icon fa fa-trash-o bigger-120"></i>
 														</button>
-												</td>
+												</td>  
 											</tr> -->
 										</tbody>
 									</table>
@@ -327,7 +327,7 @@
 										<div class="form-group">
 											<label class="col-sm-3 control-label no-padding-right">地点：</label>
 											<div class="col-sm-9">
-												<input name="receptionAddress" type="text" class="col-sm-8" />
+												<input name="receptionAddress" type="text" class="col-sm-8" maxlength="200" />
 											</div>
 										</div>
 										<div class="form-group">
@@ -361,7 +361,7 @@
 									<label class="col-sm-2 control-label no-padding-right">送：</label>
 									<div class="clo-sm-5 checkbox">
 										<label>
-											<input type="checkbox" class="ace send-check" value="0" name="touristSend">
+											<input type="checkbox" class="ace send-check" value="0" name="touristSend" maxlength="200">
 											<span class="lbl">
 												  
 											</span>
@@ -402,7 +402,7 @@
 							</div>
 						</div>
 					</div>
-				</div>
+				</div>  
 			</div>
 		</div>
 		<div class="space-10"></div>
