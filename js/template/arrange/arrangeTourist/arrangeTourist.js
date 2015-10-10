@@ -223,6 +223,7 @@ define(function(require, exports) {
 							});
 							choosenAdultAndChildCount();
 						});
+
 						$("#tab-"+menuKey+"-transfer-content .transferTouristMain .all tbody tr .transferCheckBox").click(function(){
 							choosenAdultAndChildCount();
 						});
@@ -523,10 +524,11 @@ define(function(require, exports) {
 				}
 			})	
 		},
-		//提交转客函数
+		//提交转客函数   
 		saveTransfer :function(){
-			var touristGroupId = [];
-			$(".transferTouristMain .transferTouristGroupTbody tr").each(function(){
+			var touristGroupId = [],     
+			$transferCheckObj=$(".transferTouristMain .transferTouristGroupTbody tr");    
+			$transferCheckObj.each(function(){
 				if($(this).find(".transferCheckBox").is(":checked")==true){
 					var id = {
 							id : $(this).attr("data-entity-id")
@@ -538,26 +540,32 @@ define(function(require, exports) {
 			
 			var transferTravelAgencyId = $(".transferTouristMain select[name=toPartnerAgency]").val();
 			console.log(transferTravelAgencyId);
-			$.ajax({
-				url:""+APP_ROOT+"back/transTourist.do?method=saveTransfer&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=add",
-				data:"partnerAgencyId="+transferTravelAgencyId+"&touristGroupId="+encodeURIComponent(touristGroupId)+"",
-				dataType:"json",
-				type:"POST",
-				beforeSend:function(){
-					globalLoadingLayer = openLoadingLayer();
-				},
-				success:function(data){
-					layer.close(globalLoadingLayer);
-					var result = showDialog(data);
-		        	if(result){
-		        		showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-							$(".tab-arrange_tourist-transfer i.tab-close").trigger("click");
-							window.open(APP_ROOT+"back/transTourist.do?method=exportTransfer&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view"+"&idJson="+touristGroupId+"");
-							arrangeTourist.listArrangeTouristMain();
-		        		})
-		        	}
-				}
-			})
+		
+			if($transferCheckObj.find(".transferCheckBox").is(":checked")==true){    
+					$.ajax({
+						url:""+APP_ROOT+"back/transTourist.do?method=saveTransfer&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=add",
+						data:"partnerAgencyId="+transferTravelAgencyId+"&touristGroupId="+encodeURIComponent(touristGroupId)+"",
+						dataType:"json",
+						type:"POST",
+						beforeSend:function(){
+							globalLoadingLayer = openLoadingLayer();
+						},
+						success:function(data){
+							layer.close(globalLoadingLayer);
+							var result = showDialog(data);
+				        	if(result){
+				        		showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+									$(".tab-arrange_tourist-transfer i.tab-close").trigger("click");
+									window.open(APP_ROOT+"back/transTourist.do?method=exportTransfer&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view"+"&idJson="+touristGroupId+"");
+									arrangeTourist.listArrangeTouristMain();
+				        		})
+				        	}
+						}
+					})
+				}else{
+                    showMessageDialog($( "#confirm-dialog-message" ), "请选择游客小组信息！");  
+			}
+			
 		},
 		//集合时间控件
 		dateTimePicker :function(){
