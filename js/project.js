@@ -4,7 +4,6 @@ var ASSETS_ROOT = '/';
 var APP_VERSION = "1.0.0";
 var globalLoadingLayer;
 var globelEditorInstants = {};
-var modals = {};
 var imgUrl = "http://7xlg3o.com2.z0.glb.qiniucdn.com/";//正式的图片地址
 imgUrl  = "http://7xlw2q.com2.z0.glb.qiniucdn.com/"; //测试
 var listwidth = parseInt($("#tabList li").eq(0).css("width"));//ul总宽度，初始化数据为“工作台”tab宽度
@@ -52,55 +51,37 @@ function addTab(tabId,tabName,html){
 				$("#tabList").css("marginLeft",maxleft);
 			}
 			$("#tabList .tab-"+tabId+" .tab-close").click(function(){
-				$that = $(this);
-				var str = tabId.split("-");
-				var modal = modals[str[0]];
-				if(str.length > 1 && str[1] != "view" && str[1] != "add" 
-					&& !!modal && !!modal.isEdited && modal.isEdited())
-				{//非列表、查看、添加,且有修改
-					
-				    console.log(str[1]);
-					showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){					
-						modal.save();
-						closeTab();
-					}, closeTab);
-				} else {
-					closeTab();
+				var index = $(this).parent().parent().index();
+				listwidth -= parseInt($("#tabList li").eq(index).css("width"));
+				$(this).parent().parent().remove();
+				$("#tab-"+tabId+"-content").remove();
+				if($("#tabList li.active").length == 0){
+					var preTab = $("#tabList li").get(index-1);
+					$(preTab).addClass("active");
+					var preTabId = $(preTab).find("a").attr("href");
+					$(""+preTabId+"").addClass("active");
 				}
-				
-				function closeTab() {					
-					var index = $that.parent().parent().index();
-					listwidth -= parseInt($("#tabList li").eq(index).css("width"));
-					$that.parent().parent().remove();
-					$("#tab-"+tabId+"-content").remove();
-					if($("#tabList li.active").length == 0){
-						var preTab = $("#tabList li").get(index-1);
-						$(preTab).addClass("active");
-						var preTabId = $(preTab).find("a").attr("href");
-						$(""+preTabId+"").addClass("active");
+				var marginLeft = parseInt($("#tabList").css("marginLeft"));
+				var maxwidth = parseInt($(".breadcrumbs-fixed").css("width")) - 70;
+				if(listwidth > maxwidth){
+					var widthleft = 0;
+					for(var i = 0;i < $("#tabList").find("li.active").index();i++){
+						widthleft += parseInt($("#tabList li").eq(i).css("width"))
 					}
-					var marginLeft = parseInt($("#tabList").css("marginLeft"));
-					var maxwidth = parseInt($(".breadcrumbs-fixed").css("width")) - 70;
-					if(listwidth > maxwidth){
-						var widthleft = 0;
-						for(var i = 0;i < $("#tabList").find("li.active").index();i++){
-							widthleft += parseInt($("#tabList li").eq(i).css("width"))
-						}
-						if((listwidth + marginLeft - 35) < maxwidth){//左侧有隐藏部分并且当前可视区未填满
-							marginLeft = -(listwidth - (maxwidth + 35));
-							if(marginLeft < -(widthleft - 35)){//active项在左侧隐藏
-								marginLeft = -(widthleft - 35);  
-								console.log("1");
-							}
-						} else if(marginLeft < -(widthleft - 35)){//active项在左侧隐藏
+					if((listwidth + marginLeft - 35) < maxwidth){//左侧有隐藏部分并且当前可视区未填满
+						marginLeft = -(listwidth - (maxwidth + 35));
+						if(marginLeft < -(widthleft - 35)){//active项在左侧隐藏
 							marginLeft = -(widthleft - 35);  
-							console.log("2");
+							console.log("1");
 						}
-					} else {
-						marginLeft = 35;
+					} else if(marginLeft < -(widthleft - 35)){//active项在左侧隐藏
+						marginLeft = -(widthleft - 35);  
+						console.log("2");
 					}
-					$("#tabList").css("marginLeft",marginLeft);
+				} else {
+					marginLeft = 35;
 				}
+				$("#tabList").css("marginLeft",marginLeft);
 			});
 		}, 50);		
 	} 
@@ -576,7 +557,6 @@ function listMenu(menuTemplate){
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/lineProduct/lineProduct.js",function(lineProduct){
 						lineProduct.listLineProduct(0,"",1);
-						modals["resource_lineProduct"] = lineProduct;
 					});
 					$("#main-container")[0].index = 0;
 				});
@@ -645,7 +625,6 @@ function listMenu(menuTemplate){
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/touristGroup/touristGroup.js",function(touristGroup){ 
 						touristGroup.listTouristGroup(0,"","","","","","","");
-						modals["resource_touristGroup"] = touristGroup;
 					});
 				});
 				

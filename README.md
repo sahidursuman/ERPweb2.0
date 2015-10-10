@@ -11,15 +11,3 @@
 
 	需要修改NGINX_DIR变量，指向nginx的安装目录。
 
-## 2.nodeJs 脚本设置
-### 2.1 初始化nodejs
-	
-	打开node.js command prompt  粘贴 npm install -g tmodjs 回车初始化
-
-### 2.2 脚本文件路径设置
-
-	打开node.js command prompt  粘贴 tmod E:\workspace\huochaitou\src\main\webapp\app\js\template  --output E:\workspace\huochaitou\src\main\webapp\app\js\template  --type cmd --debug  
-
-	其中  E:\workspace\huochaitou\src\main\webapp\app\js\template  路径为clone目标文件中的的template文件地址
-
-

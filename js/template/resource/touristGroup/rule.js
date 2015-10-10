@@ -22,15 +22,7 @@ var rule = {
 		gettTouristGroupSettings: function()  {
 			var $obj = this.$touristGroupContainer,
 				settings = [
-			     {
-					$ele: $obj.find('input[name="lineProductIdName"]'),
-					$valObj: $obj.find('input[name="lineProductId"]'),
-					rules: [{
-						type: 'null',
-						errMsg: '线路产品不能为空'
-					}]
-				},
-				{	//出游日期   
+			     {	//出游日期   
 					$ele: $obj.find('input[name="startTime"]'),
 					rules: [
 				        {
@@ -38,16 +30,7 @@ var rule = {
 				        	errMsg: '出游日期不能为空'
 				        }
 				    ]
-				},
-				{
-					$ele: $obj.find('input[name="fromPartnerAgency"]'),
-					$valObj: $obj.find('input[name="fromPartnerAgencyId"]'),
-					rules: [{
-						type: 'null',
-						errMsg: '客户来源不能为空'
-					}]
-				},
-				{	//联系人
+				},{	//联系人
 					$ele: $obj.find('input[name="partnerAgencyNameList"]'),
 					$valObj: $obj.find('input[name="partnerAgencyContactId"]'),  // 默认是undefined，用于autocomplete之类的插件
 					rules: [

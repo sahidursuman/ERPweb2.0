@@ -42,7 +42,6 @@ define(function(require, exports) {
 		    	        edited:false,
 		    	        blanceEdited:false,
 		    	        oldBlanceBusId:0,
-		    	        blanceStatus:false,
 		    	     //车队账务list 
 		    	        listBusCompany:function(page,busCompanyId,year,month){
 						$.ajax({
@@ -163,6 +162,8 @@ define(function(require, exports) {
 					                    var html = checkBill(data);
 				                 	    var validator;
 				                 	    //判断页面是否存在
+				                 	    console.log($("#" +"tab-"+checkTabId+"-content"));
+				                 	    console.log($("#" +"tab-"+checkTabId+"-content").length);
 				                 	    if($("#" +"tab-"+checkTabId+"-content").length > 0)
 				                 	    {
 				                 	    	
@@ -183,103 +184,105 @@ define(function(require, exports) {
 					                 	    	addTab(checkTabId,"车队对账",html);
 					                 	        validator = rule.check($('.busCompanyChecking'));
 				                 	    	 }
+			                 	    		 
 				                 	    }else{
 				                 	    	addTab(checkTabId,"车队对账",html);
-				                 	    	validator = rule.check($('.busCompanyChecking .all'));
+				                 	    	validator = rule.check($('.busCompanyChecking'));
+				                 	    	$("#" +"tab-"+checkTabId+"-content").on("change",function(){
+				                 	    		BusCompany.edited = true; 
+				                 	    	});
 				                 	    };
-				                 	   $("#" +"tab-"+checkTabId+"-content .all").on("change",function(){
-			                 	    		BusCompany.edited = true; 
-			                 	    	});
-				                 	 //给搜索按钮绑定事件
-						                 $("#" +"tab-"+ checkTabId+"-content"+" .btn-checking-search").click(function(){
-					                         BusCompany.searchCheckData={
-					                            busCompanyId:busCompanyId,
-					                            companyName:companyName,
-					                         	year:$("#" +"tab-"+ checkTabId+"-content"+"  select[name=year]").val(),
-					                         	month:$("#" +"tab-"+ checkTabId+"-content"+" select[name=month]").val(),
-					                         }
-					                         BusCompany.busCompanyCheck(0,BusCompany.searchCheckData.busCompanyId,BusCompany.searchCheckData.companyName,BusCompany.searchCheckData.year,BusCompany.searchCheckData.month)
-					                     });
-						               //车队导出事件btn-busCompanyExport
-						                 $("#" +"tab-"+ checkTabId+"-content"+" .btn-busCompanyExport").click(function(){
-						                	 var year=$("#" +"tab-"+ checkTabId+"-content"+"  select[name=year]").val();
-					                         var month=$("#" +"tab-"+ checkTabId+"-content"+" select[name=month]").val();
-					                         checkLogin(function(){
-						                        	var url = ""+APP_ROOT+"back/export.do?method=busCompany&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view"+"&busCompanyId="+busCompanyId+"&companyName="+companyName+"&year="+year+"&month="+month+"&sortType=auto";
-						                        	exportXLS(url)
-						                        });
-						                 });
-					                    //分页--首页按钮事件
-						                 $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.first").click(function(){
-						                	 BusCompany.busCompanyCheck(0,BusCompany.searchCheckData.busCompanyId,BusCompany.searchCheckData.companyName,BusCompany.searchCheckData.year,BusCompany.searchCheckData.month)
-						                 });
-										//分页--上一页事件
-						                 $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.previous").click(function(){
-											var previous = data.pageNo - 1;
-											if(data.pageNo == 0){
-												previous = 0;
-											}
-											BusCompany.busCompanyCheck(previous,BusCompany.searchCheckData.busCompanyId,BusCompany.searchCheckData.companyName,BusCompany.searchCheckData.year,BusCompany.searchCheckData.month)
-						                 });
-										//分页--下一页事件
-						                 $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.next").click(function(){
-											var next =  data.pageNo + 1;
-											if(data.pageNo == data.totalPage-1){
-												next = data.pageNo ;
-											}
-											BusCompany.busCompanyCheck(next,BusCompany.searchCheckData.busCompanyId,BusCompany.searchCheckData.companyName,BusCompany.searchCheckData.year,BusCompany.searchCheckData.month)
-						                 });
-										//分页--尾页事件
-						                 $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.last").click(function(){
-						                	BusCompany.busCompanyCheck(data.totalPage == 0 ? data.totalPage : data.totalPage-1,BusCompany.searchCheckData.busCompanyId,BusCompany.searchCheckData.companyName,BusCompany.searchCheckData.year,BusCompany.searchCheckData.month)
-						                 });
-							             //给全选绑定事件
-							                 $("#" +"tab-"+ checkTabId+"-content"+" .busCompany-selectAll").click(function(){
-							                	 var flag = this.checked;
-							                	 $(".busCompanyChecking .all tbody tr").each(function(){
-							                		 var checkedbox = $(this).find(".busCompanyFinancial")
-							                		 if(flag){
-							                			 checkedbox.prop("checked",true);
-							                		 }else{
-														 //判断对账状态
-														 if(checkedbox.attr("data-entity-checkStatus") == 1){
-															 checkedbox.prop("checked",true);
-														 }else{ 	
-															 checkedbox.prop("checked",false);
-														 }
-													 }
-							                	 });
-							                 });
-							               //给复选框绑定事件
-							                 $("#" +"tab-"+ checkTabId+"-content"+" .busCompanyFinancial").click(function(){
-							                	
-							                	 var flag = true
-							                	 $("#" +"tab-"+ checkTabId+"-content"+" .busCompanyFinancial").each(function(){
-							                		 if(!$(this).prop("checked")){
-								                			flag = false;
-								                		} 
-							                	 })
-							                	 $("#" +"tab-"+ checkTabId+"-content"+" .busCompany-selectAll").prop("checked",flag)
-							                 });
-						                 //给确认对账按钮绑定事件
-							                 $("#" +"tab-"+ checkTabId+"-content"+" .btn-busCompanyFinancial-checking").click(function(){
-							                	 if (!validator.form()) { return;}
-						                	 	 BusCompany.saveCheckingData(busCompanyId,companyName);
-							                 });
-						                 //给查看单据绑定事件
-						                 $("#" +"tab-"+ checkTabId+"-content"+" .busCompanyImg").click(function(){
-						                	 var WEB_IMG_URL_BIG = $("#" +"tab-"+ checkTabId+"-content").find("input[name=WEB_IMG_URL_BIG]").val();//大图
-						                	 var WEB_IMG_URL_SMALL = $("#" +"tab-"+ checkTabId+"-content").find("input[name=WEB_IMG_URL_SMALL]").val();//大图
-						                	 BusCompany.viewImage(this,WEB_IMG_URL_BIG,WEB_IMG_URL_SMALL);
-						                 });
-							             //取消按钮事件
-							             $("#" +"tab-"+ checkTabId+"-content"+" .btn-busCompanyFinancial-close").click(function(){
-							            	 showConfirmDialog($( "#confirm-dialog-message" ), "确定关闭本选项卡?",function(){
-							            		 closeTab(checkTabId)
-							            	 });
-							             });
+				                    /* //设置表单验证
+				                     var validator = rule.check($('.busCompanyChecking'));*/
 				                 }          
-					                 
+					                 //给搜索按钮绑定事件
+					                 $("#" +"tab-"+ checkTabId+"-content"+" .btn-checking-search").click(function(){
+				                         BusCompany.searchCheckData={
+				                            busCompanyId:busCompanyId,
+				                            companyName:companyName,
+				                         	year:$("#" +"tab-"+ checkTabId+"-content"+"  select[name=year]").val(),
+				                         	month:$("#" +"tab-"+ checkTabId+"-content"+" select[name=month]").val(),
+				                         }
+				                         BusCompany.busCompanyCheck(0,BusCompany.searchCheckData.busCompanyId,BusCompany.searchCheckData.companyName,BusCompany.searchCheckData.year,BusCompany.searchCheckData.month)
+				                     });
+					               //车队导出事件btn-busCompanyExport
+					                 $("#" +"tab-"+ checkTabId+"-content"+" .btn-busCompanyExport").click(function(){
+					                	 var year=$("#" +"tab-"+ checkTabId+"-content"+"  select[name=year]").val();
+				                         var month=$("#" +"tab-"+ checkTabId+"-content"+" select[name=month]").val();
+				                         checkLogin(function(){
+					                        	var url = ""+APP_ROOT+"back/export.do?method=busCompany&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view"+"&busCompanyId="+busCompanyId+"&companyName="+companyName+"&year="+year+"&month="+month+"&sortType=auto";
+					                        	exportXLS(url)
+					                        });
+					                 });
+				                    //分页--首页按钮事件
+					                 $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.first").click(function(){
+					                	 BusCompany.busCompanyCheck(0,BusCompany.searchCheckData.busCompanyId,BusCompany.searchCheckData.companyName,BusCompany.searchCheckData.year,BusCompany.searchCheckData.month)
+					                 });
+									//分页--上一页事件
+					                 $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.previous").click(function(){
+										var previous = data.pageNo - 1;
+										if(data.pageNo == 0){
+											previous = 0;
+										}
+										BusCompany.busCompanyCheck(previous,BusCompany.searchCheckData.busCompanyId,BusCompany.searchCheckData.companyName,BusCompany.searchCheckData.year,BusCompany.searchCheckData.month)
+					                 });
+									//分页--下一页事件
+					                 $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.next").click(function(){
+										var next =  data.pageNo + 1;
+										if(data.pageNo == data.totalPage-1){
+											next = data.pageNo ;
+										}
+										BusCompany.busCompanyCheck(next,BusCompany.searchCheckData.busCompanyId,BusCompany.searchCheckData.companyName,BusCompany.searchCheckData.year,BusCompany.searchCheckData.month)
+					                 });
+									//分页--尾页事件
+					                 $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.last").click(function(){
+					                	BusCompany.busCompanyCheck(data.totalPage == 0 ? data.totalPage : data.totalPage-1,BusCompany.searchCheckData.busCompanyId,BusCompany.searchCheckData.companyName,BusCompany.searchCheckData.year,BusCompany.searchCheckData.month)
+					                 });
+						             //给全选绑定事件
+						                 $("#" +"tab-"+ checkTabId+"-content"+" .busCompany-selectAll").click(function(){
+						                	 var flag = this.checked;
+						                	 $(".busCompanyChecking .all tbody tr").each(function(){
+						                		 var checkedbox = $(this).find(".busCompanyFinancial")
+						                		 if(flag){
+						                			 checkedbox.prop("checked",true);
+						                		 }else{
+													 //判断对账状态
+													 if(checkedbox.attr("data-entity-checkStatus") == 1){
+														 checkedbox.prop("checked",true);
+													 }else{ 	
+														 checkedbox.prop("checked",false);
+													 }
+												 }
+						                	 });
+						                 });
+						               //给复选框绑定事件
+						                 $("#" +"tab-"+ checkTabId+"-content"+" .busCompanyFinancial").click(function(){
+						                	
+						                	 var flag = true
+						                	 $("#" +"tab-"+ checkTabId+"-content"+" .busCompanyFinancial").each(function(){
+						                		 if(!$(this).prop("checked")){
+							                			flag = false;
+							                		} 
+						                	 })
+						                	 $("#" +"tab-"+ checkTabId+"-content"+" .busCompany-selectAll").prop("checked",flag)
+						                 });
+					                 //给确认对账按钮绑定事件
+						                 $("#" +"tab-"+ checkTabId+"-content"+" .btn-busCompanyFinancial-checking").click(function(){
+						                	 if (!validator.form()) { return;}
+					                	 	 BusCompany.saveCheckingData(busCompanyId,companyName);
+						                 });
+					                 //给查看单据绑定事件
+					                 $("#" +"tab-"+ checkTabId+"-content"+" .busCompanyImg").click(function(){
+					                	 var WEB_IMG_URL_BIG = $("#" +"tab-"+ checkTabId+"-content").find("input[name=WEB_IMG_URL_BIG]").val();//大图
+					                	 var WEB_IMG_URL_SMALL = $("#" +"tab-"+ checkTabId+"-content").find("input[name=WEB_IMG_URL_SMALL]").val();//大图
+					                	 BusCompany.viewImage(this,WEB_IMG_URL_BIG,WEB_IMG_URL_SMALL);
+					                 });
+						             //取消按钮事件
+						             $("#" +"tab-"+ checkTabId+"-content"+" .btn-busCompanyFinancial-close").click(function(){
+						            	 showConfirmDialog($( "#confirm-dialog-message" ), "确定关闭本选项卡?",function(){
+						            		 closeTab(checkTabId)
+						            	 });
+						             });
 				             }
 				    	 });
 				    },
@@ -304,70 +307,47 @@ define(function(require, exports) {
 				                    data.companyName = companyName
 				                    data.monthList = monthList
 			                        var html = Clearing(data);
-				                    //addTab(blanceTabId,"车队结算",html);
+				                    addTab(blanceTabId,"车队结算",html);
 				                    //var validator = rule.check($('.busCompanyCleaning'));
-				                   /* //获取table中的tr
+				                    //获取table中的tr
 				                    var $tr = $("#" +"tab-"+ blanceTabId + "-content"+" .all tbody tr")
 				                    //给每个tr添加表单验证
 			                        $tr.each(function(){
 			                        	$(this).find('.btn-busCompanyBlance-save').data('validata', rule.check($(this)));
-			                        });*/
+			                        });
 				                    //var validator = rule.check($('.busCompanyCleaning'));
-			                      //判断页面是否存在
+			                      /*//判断页面是否存在
 			                 	    if($("#" +"tab-"+blanceTabId+"-content").length > 0)
 			                 	    {
 			                 	    	
 			                 	    	 if(BusCompany.blanceEdited){
-			                 	    		addTab(blanceTabId,"车队结算");
 			                 	    		
-						                    //给每个tr添加表单验证
 			                 	    		showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
-			                 	    			var $tr = $("#" +"tab-"+ blanceTabId + "-content"+" .all tbody tr")
-			                 	    			$tr.each(function(){
-						                        	$(this).find('.btn-busCompanyBlance-save').data('validata', rule.check($(this)));
-						                        });
-			                 	    			 
-			                 	    			 var saveBtn = $("#" +"tab-"+ blanceTabId+"-content"+" .btn-busCompanyBlance-save")
-			                 	    			 if (!$(saveBtn).data('validata').form()) { return; }
+							            		 if (!validator.form()) { return; }
+							            		 addTab(blanceTabId,"车队结算");
+							            		 var saveBtn = $("#" +"tab-"+blanceTabId+"-content .btn-busCompanyBlance-save")
 							            		 BusCompany.saveBlanceData(saveBtn,BusCompany.oldBlanceBusId,companyName)
 							            		 BusCompany.blanceEdited = false;
 							            		 addTab(blanceTabId,"车队结算",html);
-							            		 var $tr = $("#" +"tab-"+ blanceTabId + "-content"+" .all tbody tr")
-								                    //给每个tr添加表单验证
-							                        $tr.each(function(){
-							                        	$(this).find('.btn-busCompanyBlance-save').data('validata', rule.check($(this)));
-							                        });
+							            		 validator = rule.check($('.busCompanyCleaning'));
 							            	 },function(){
 							            		 addTab(blanceTabId,"车队结算",html);
-							            		 var $tr = $("#" +"tab-"+ blanceTabId + "-content"+" .all tbody tr")
-								                    //给每个tr添加表单验证
-							                        $tr.each(function(){
-							                        	$(this).find('.btn-busCompanyBlance-save').data('validata', rule.check($(this)));
-							                        });
-							            		
+							            		 validator = rule.check($('.busCompanyCleaning'));
 							            	 });
 			                 	    	 }else{
 				                 	    	addTab(blanceTabId,"车队结算",html);
-				                 	    	var $tr = $("#" +"tab-"+ blanceTabId + "-content"+" .all tbody tr")
-						                    //给每个tr添加表单验证
-					                        $tr.each(function(){
-					                        	$(this).find('.btn-busCompanyBlance-save').data('validata', rule.check($(this)));
-					                        });
+				                 	        validator = rule.check($('.busCompanyCleaning'));
 			                 	    	 }
 		                 	    		 
 			                 	    }else{
 			                 	    	addTab(blanceTabId,"车队结算",html);
-			                 	    	var $tr = $("#" +"tab-"+ blanceTabId + "-content"+" .all tbody tr")
-					                    //给每个tr添加表单验证
-				                        $tr.each(function(){
-				                        	$(this).find('.btn-busCompanyBlance-save').data('validata', rule.check($(this)));
-				                        });
-			                 	    };
-			                 	   $("#" +"tab-"+blanceTabId+"-content .all").on('change', 'input, select', function() {
-			                 		    BusCompany.blanceEdited = true;
-			                 		    BusCompany.oldBlanceBusId = busCompanyId;
-	                 	    			$(this).closest('tr').data('blanceStatus',true);
-	                 	    		});
+			                 	    	validator = rule.check($('.busCompanyCleaning'));
+			                 	    	$("#" +"tab-"+ checkTabId+"-content"+" .all tbody tr")
+			                 	    	$("#" +"tab-"+blanceTabId+"-content").on("change",function(){
+			                 	    		BusCompany.blanceEdited = true;
+			                 	    		BusCompany.oldBlanceBusId = busCompanyId;
+			                 	    	});
+			                 	    };*/
 			                        //设置表单验证
 			                        //var validator = rule.check($('.busCompanyCleaning')); 
 			                        
@@ -537,7 +517,7 @@ define(function(require, exports) {
                 		   }
 					    });
                 	   if(JsonStr.length == 0){
-	                		   showMessageDialog($( "#confirm-dialog-message" ),"请您勾选或修改想要对账的项目");
+	                		   showMessageDialog($( "#confirm-dialog-message" ),"您当前未进行任何操作");
 	                		   return
                 	   }else{
                 		   JsonStr = JSON.stringify(JsonStr);
@@ -562,50 +542,10 @@ define(function(require, exports) {
                 	   }
                       },
                       //保存结算数据
-                      saveBlanceData:function(saveBtn,busCompanyId,companyName){
-                    	//console.log($obj+"-------");
-                    	var DataArr = [],
-            			JsonData,
-                    	$tr = $("#" +"tab-"+ blanceTabId+"-content"+" .all tbody tr");
+                    saveBlanceData:function($obj,busCompanyId,companyName){
+                    	console.log($obj+"-------");
                     	// 表单校验
-                    	//if (saveBtn.data('validata').form()) { return; }
-                    	$tr.each(function(i){
-                    		if($(this).data('blanceStatus')){
-                    			var blanceData = {
-		                        		id:$(this).attr("data-entity-id"),
-		                                busCompanyId:busCompanyId,
-		                                year:$(this).attr("data-entity-year"),
-		                                month:$(this).attr("data-entity-month"),
-		                                realPayedMoney:$tr.eq(i).find("[name=blancerealrealPayedMoney]").text(),
-		                                unPayedMoney:$tr.eq(i).find("[name=blanceunPayedMoney]").text(),
-		                                realUnPayedMoney:$tr.eq(i).find("[name=blancerealrealUnPayedMoney]").text(),
-		                                payMoney:$tr.eq(i).find("input[name=blancerealPayedMoney]").val(),
-		                                payType:$tr.eq(i).find("select[name=blancePayType]").val(),
-		                                remark:$tr.eq(i).find("input[name=blancerealRemark]").val()
-		                        	}
-                    			 DataArr.push(blanceData)
-	                        	 JsonData = JSON.stringify(DataArr)
-                    		}
-                    	})
-                    	$.ajax({
-                        		url:""+APP_ROOT+"back/financial/financialBusCompany.do?method=saveFcBusCompanySettlement&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
-                                type:"POST",
-                                data:"fcBusCompanySettlementStr="+JsonData,
-                                dataType:"json",
-                                beforeSend:function(){
-                                    globalLoadingLayer = openLoadingLayer();
-                                },
-                                success:function(data){
-                                	layer.close(globalLoadingLayer);
-                                    var result = showDialog(data);
-                                    if(result){
-                                    	showMessageDialog($( "#confirm-dialog-message" ),data.message);
-			                            BusCompany.busCompanyClear(0,BusCompany.searchBalanceData.busCompanyId,BusCompany.searchBalanceData.companyName,BusCompany.searchBalanceData.year,BusCompany.searchBalanceData.startMonth,BusCompany.searchBalanceData.endMonth);
-			                            BusCompany.blanceEdited = false
-                                    }
-                                }
-                        	})
-                    	/*$obj.each(function() {
+                    	$obj.each(function() {
                         	console.log($(this)+"+++++++");
                     		var $that = $(this),
                     			$tr = $(this).parent().parent(),
@@ -650,7 +590,7 @@ define(function(require, exports) {
 		                                }
 		                        	})
 	                    	}
-                    	})*/
+                    	})
                     },
 				    //显示单据
 				    viewImage:function(obj,WEB_IMG_URL_BIG,WEB_IMG_URL_SMALL) {
