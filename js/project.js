@@ -4,6 +4,7 @@ var ASSETS_ROOT = '/';
 var APP_VERSION = "1.0.0";
 var globalLoadingLayer;
 var globelEditorInstants = {};
+var modals = {};
 var imgUrl = "http://7xlg3o.com2.z0.glb.qiniucdn.com/";//正式的图片地址
 imgUrl  = "http://7xlw2q.com2.z0.glb.qiniucdn.com/"; //测试
 var listwidth = parseInt($("#tabList li").eq(0).css("width"));//ul总宽度，初始化数据为“工作台”tab宽度
@@ -51,37 +52,55 @@ function addTab(tabId,tabName,html){
 				$("#tabList").css("marginLeft",maxleft);
 			}
 			$("#tabList .tab-"+tabId+" .tab-close").click(function(){
-				var index = $(this).parent().parent().index();
-				listwidth -= parseInt($("#tabList li").eq(index).css("width"));
-				$(this).parent().parent().remove();
-				$("#tab-"+tabId+"-content").remove();
-				if($("#tabList li.active").length == 0){
-					var preTab = $("#tabList li").get(index-1);
-					$(preTab).addClass("active");
-					var preTabId = $(preTab).find("a").attr("href");
-					$(""+preTabId+"").addClass("active");
-				}
-				var marginLeft = parseInt($("#tabList").css("marginLeft"));
-				var maxwidth = parseInt($(".breadcrumbs-fixed").css("width")) - 70;
-				if(listwidth > maxwidth){
-					var widthleft = 0;
-					for(var i = 0;i < $("#tabList").find("li.active").index();i++){
-						widthleft += parseInt($("#tabList li").eq(i).css("width"))
-					}
-					if((listwidth + marginLeft - 35) < maxwidth){//左侧有隐藏部分并且当前可视区未填满
-						marginLeft = -(listwidth - (maxwidth + 35));
-						if(marginLeft < -(widthleft - 35)){//active项在左侧隐藏
-							marginLeft = -(widthleft - 35);  
-							console.log("1");
-						}
-					} else if(marginLeft < -(widthleft - 35)){//active项在左侧隐藏
-						marginLeft = -(widthleft - 35);  
-						console.log("2");
-					}
+				$that = $(this);
+				var str = tabId.split("-");
+				var modal = modals[str[0]];
+				if(str.length > 1 && str[1] != "view" && str[1] != "add" 
+					&& !!modal && !!modal.isEdited && modal.isEdited())
+				{//非列表、查看、添加,且有修改
+					
+				    console.log(str[1]);
+					showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){					
+						modal.save();
+						closeTab();
+					}, closeTab);
 				} else {
-					marginLeft = 35;
+					closeTab();
 				}
-				$("#tabList").css("marginLeft",marginLeft);
+				
+				function closeTab() {					
+					var index = $that.parent().parent().index();
+					listwidth -= parseInt($("#tabList li").eq(index).css("width"));
+					$that.parent().parent().remove();
+					$("#tab-"+tabId+"-content").remove();
+					if($("#tabList li.active").length == 0){
+						var preTab = $("#tabList li").get(index-1);
+						$(preTab).addClass("active");
+						var preTabId = $(preTab).find("a").attr("href");
+						$(""+preTabId+"").addClass("active");
+					}
+					var marginLeft = parseInt($("#tabList").css("marginLeft"));
+					var maxwidth = parseInt($(".breadcrumbs-fixed").css("width")) - 70;
+					if(listwidth > maxwidth){
+						var widthleft = 0;
+						for(var i = 0;i < $("#tabList").find("li.active").index();i++){
+							widthleft += parseInt($("#tabList li").eq(i).css("width"))
+						}
+						if((listwidth + marginLeft - 35) < maxwidth){//左侧有隐藏部分并且当前可视区未填满
+							marginLeft = -(listwidth - (maxwidth + 35));
+							if(marginLeft < -(widthleft - 35)){//active项在左侧隐藏
+								marginLeft = -(widthleft - 35);  
+								console.log("1");
+							}
+						} else if(marginLeft < -(widthleft - 35)){//active项在左侧隐藏
+							marginLeft = -(widthleft - 35);  
+							console.log("2");
+						}
+					} else {
+						marginLeft = 35;
+					}
+					$("#tabList").css("marginLeft",marginLeft);
+				}
 			});
 		}, 50);		
 	} 
@@ -508,6 +527,7 @@ function listMenu(menuTemplate){
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/guide/guide.js",function(guide){ 
 						guide.listGuide(0,"","");
+						modals["resource_guide"] = guide;
 					});
 				});
 				
@@ -518,6 +538,7 @@ function listMenu(menuTemplate){
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/busCompany/busCompany.js",function(busCompany){
 						busCompany.listBusCompany(0,"","");
+						modals["resource_busCompany"] = busCompany;
 					});
 				});
 				
@@ -528,6 +549,7 @@ function listMenu(menuTemplate){
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/restaurant/restaurant.js",function(restaurant){
 						restaurant.listRestaurant(0,"","");
+						modals["resource_restaurant"] = restaurant;
 					});
 				});
 				//绑定酒店菜单功能
@@ -537,6 +559,7 @@ function listMenu(menuTemplate){
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/hotel/hotel.js",function(hotel){
 						hotel.listHotel(0,"","");
+						modals["resource_hotel"] = hotel;
 					});
 				});
 				
@@ -547,6 +570,7 @@ function listMenu(menuTemplate){
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/partnerAgency/partnerAgency.js?version=",function(partnerAgency){
 						partnerAgency.listPartnerAgency(0,"",1);
+						modals["resource_partnerAgency"] = partnerAgency;
 					});
 				});
 				
@@ -557,6 +581,7 @@ function listMenu(menuTemplate){
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/lineProduct/lineProduct.js",function(lineProduct){
 						lineProduct.listLineProduct(0,"",1);
+						modals["resource_lineProduct"] = lineProduct;
 					});
 					$("#main-container")[0].index = 0;
 				});
@@ -568,6 +593,7 @@ function listMenu(menuTemplate){
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/shop/shop.js",function(shop){
 						shop.listShop(0,"","");
+						modals["resource_shop"] = shop;
 					});
 				});
 
@@ -579,6 +605,7 @@ function listMenu(menuTemplate){
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/travelLine/travelLine.js",function(travelLine){
 						travelLine.listTravelLine(0,"",1);
+						modals["resource_travelLine"] = travelLine;
 					});
 				});	
 					
@@ -589,6 +616,7 @@ function listMenu(menuTemplate){
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/scenic/scenic.js",function(scenic){
 						scenic.listScenic(0,"","");
+						modals["resource_scenic"] = scenic;
 					});
 				});		
 				//绑定保险菜单功能
@@ -616,6 +644,7 @@ function listMenu(menuTemplate){
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/ticket/ticket.js",function(ticket){ 
 						ticket.listTicket(0,"","");
+						modals["resource_ticket"] = ticket;
 					});
 				});
 				//绑定游客管理菜单功能
@@ -625,6 +654,7 @@ function listMenu(menuTemplate){
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/touristGroup/touristGroup.js",function(touristGroup){ 
 						touristGroup.listTouristGroup(0,"","","","","","","");
+						modals["resource_touristGroup"] = touristGroup;
 					});
 				});
 				
