@@ -60,7 +60,7 @@ table tr th{
     border: 1px solid white !important;
 }
 .table-border {
-    border: 1px solid #ececec!important;
+    border: 1px solid #ececec !important;
 }
 .title-size{
     font-size: 16px!important;
@@ -193,7 +193,6 @@ table tr th{
     text-indent: 1em;
     margin-left: 10px;
     width: 240px;
-
 }
 #alter-user {
     color: #393939;
@@ -208,6 +207,27 @@ table tr th{
     width: 340px;
     height: 300px;
 }
+
+/*/修改弹出页面的close样式/*/
+.layui-layer-setwin .layui-layer-close1{
+    width:17px;height:17px;cursor:pointer;
+    background-position:0;
+}
+.layui-layer-ico{ background: url(../images/incon01.png); }
+.layui-layer-setwin .layui-layer-close1:hover{background-position:0;}
+.layui-layer-rim {border:1px solid #8D8D8D;border:1px solid rgba(0,0,0,.3);
+    border-radius:5px;box-shadow:none;
+    filter:alpha(opacity=10);
+    -moz-opacity:0.1;
+    -khtml-opacity: 0.1;
+    opacity: 0.1;}
+.layui-layer-title{
+    border-bottom:0;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+/*dqq style*/
 .viewI{
     margin: 0px 5px 0px 5px;
     font-style: inherit;
@@ -221,4 +241,74 @@ table tr th{
 }
 .phonePer{
 	margin:0px 0px 0px 18px;
+}
+
+.whereQ{
+    width: 650px;
+    margin: auto;
+    font-size: 12px;
+    font-family: "微软雅黑";
+    color: #393939;
+}
+
+.whereQ td {
+    border: 1px solid #ececec;
+    padding: 7px 0px 7px 0px;
+}
+.whereQ .style-myself{
+    width: 87px;
+    border: 2px solid #5d5d5d;
+    text-align: right;
+}
+.whereQ .styleOne-self{
+    text-indent:10px;
+}
+/*/车队管理/*/
+.whereOne{
+    width: 984px;
+    margin: auto;
+    font-size: 12px;
+    font-family: "微软雅黑";
+    color: #393939;
+}
+.whereOne .style-myself{
+    width: 90px;
+    border: 2px solid #5d5d5d;
+    text-align: right;
+}
+
+.whereOne .styleOne-self{
+    width: 360px;
+    text-indent:10px;
+}
+.HeadManage{
+    height: 34px;
+    background-color: #f7f8f8;
+    font-size: 14px;
+    color: #428bca;
+    text-indent:15px;
+    padding: 0px;
+}
+.whereTwo{
+    width: 984px;
+}
+.whereTwo tr td{
+    text-align: center;
+}
+.whereTwo .style-myself{
+    text-align: center;
+}
+.style-myselfOne{
+    width: 105px !important;
+}
+/*restaurant时间宽度*/
+.whereTwo .rangeTime{
+ width: 150px!important;
+}
+.whereTwo .rangeTimeWidth{
+   width: 180px!important;
+}
+/*remarkWidth*/
+.whereTwo .remarkWidth{
+  width: 200px!important;
 }
