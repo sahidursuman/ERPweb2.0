@@ -19,7 +19,6 @@
 			<li>
 				<a data-value="1" href="javascript:void(0)">已启用</a>
 			</li>
-
 			<li>
 				<a data-value="0" href="javascript:void(0)">已停用</a>
 			</li>
@@ -59,20 +58,19 @@
 						</td>
 						<td>
 							<a data-entiy-id="{{travelLine.id}}" class=" btn-line-pre-scan cursor" >
-								预览 |
-							</a>
+								预览
+							</a><a href="" class="cursor"> |</a>
 							<a data-entiy-id="{{travelLine.id}}" class=" btn-line-scan cursor" >
-								查看 |
-							</a>
+								查看
+							</a><a href="" class="cursor"> |</a>
 							<a data-entiy-id="{{travelLine.id}}" class="btn-line-edit cursor ">
-								编辑 |
-							</a>
+								编辑
+							</a><a href="" class="cursor"> |</a>
 							<a data-entiy-id="{{travelLine.id}}" class=" btn-line-clipboard cursor ">
-								复制 |
-							</a>
+								复制
+							</a><a href="" class="cursor"> |</a>
 							<a data-entiy-id="{{travelLine.id}}" class=" btn-line-delete cursor ">
 								删除
-								
 							</a>
 						</td>
 					</tr>
@@ -97,6 +95,7 @@
 								{{/if}}
 							</a>
 						</li>
+
 						<li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="next"  href="javascript:void(0)">下一页</a></li>
 						<li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="last" href="javascript:void(0)">尾页</a></li>
 					</ul>
