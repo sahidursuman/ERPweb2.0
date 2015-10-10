@@ -5,7 +5,7 @@
                     <div class="form-group"> 
                         <label style="float: left;margin: 0px auto auto 15px" class="control-label pull-left"> 同行地接:{{transferPartnerAgencyName}}</label>
                         
-                        <label class="control-label col-sm-1" style="float:left;">账期:</label>
+                        <label class="control-label col-sm-1" style="float:left;">:</label>
 	                        <select class="col-sm-1" name="year" style="margin-left:20px">
 								{{each yearList as year index}}
 									<option value="{{year.value}}" {{if searchParam.year == year.value}}selected="selected"{{/if}}>{{year.value}}</option>
@@ -23,7 +23,7 @@
                         </button>
                         
                         <button type="button" class="btn btn-sm btn-primary btn-success btn-transferExport">
-							<span>导出报表</span>   
+							<span>导出报表</span>
 							<i class="ace-icon fa fa-arrow-right icon-on-right"></i>
 						</button>
                     </div>
@@ -79,7 +79,7 @@
             </thead>   
             <tbody>
             {{each financialTransferList as checking index}}
-            <tr data-entity-id="{{checking.id}}" data-entity-isConfirmAccount="{{checking.isConfirmAccount}}" data-entity-realUnPayedMoney="{{checking.transRealUnPayedMoney}}" data-entity-remark="{{checking.transRemark}}">
+            <tr data-entity-id="{{checking.id}}" data-entity-isConfirmAccount="{{checking.isConfirmAccount}}" data-entity-realUnPayedMoney="{{checking.realUnPayedMoney}}" data-entity-remark="{{checking.remark}}">
                 <td>{{index+1}}</td>
                 <td>{{checking.lineProductName}}</td>
                 <td name="startTime">{{checking.startTime | dateFormat: 'yyyy-MM-dd'}}</td>

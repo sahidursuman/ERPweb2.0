@@ -13,7 +13,7 @@
 						<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>线路产品:</label>
 						<div class="col-sm-2">
 							{{if touristGroupDetail.status != 0}}  
-								<input type="text" value="{{if touristGroupDetail.lineProduct != null}}{{touristGroupDetail.lineProduct.name}}{{/if}}" name="lineProductIdName" class="col-sm-8 bind-change" readonly="readonly" /> 
+								<input type="text" value="{{if touristGroupDetail.lineProduct != null}}{{touristGroupDetail.lineProduct.name}}{{/if}}" name="lineProductIdName" class="col-sm-8" readonly="readonly" /> 
 								<input type="hidden" value="{{touristGroupDetail.lineProductId}}" name="lineProductId" />
 								<button class="col-sm-4 btn btn-sm btn-primary btn-travelLine-search" style="padding-bottom:5px;">
 									<i class="ace-icon fa fa-search "></i>搜索
@@ -49,8 +49,14 @@
 					<div class="form-group choosePartnerAgencyDiv">
 						<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>客户来源:</label>
 						<div class="col-sm-2">
-							<input type="text" name="fromPartnerAgency" class="col-sm-12" placeholder="请输入客户来源" value="{{if touristGroupDetail.partnerAgency != null}}{{touristGroupDetail.partnerAgency.travelAgencyName}}{{/if}}">
-							<input type="hidden" value="{{if touristGroupDetail.partnerAgency != null}}{{touristGroupDetail.partnerAgency.id}}{{/if}}" name="fromPartnerAgencyId">
+							<!-- <input type="text" name="PartnerAgencyName" class="col-sm-12 choosePartnerAgency ui-autocomplete-input" />
+							<input type="hidden" name="PartnerAgencyNameId" /> -->
+							<select name="fromPartnerAgencyId" class="col-sm-12">
+								<option selected="selected" value="{{if touristGroupDetail.partnerAgency != null}}{{touristGroupDetail.partnerAgency.id}}{{/if}}">{{if touristGroupDetail.partnerAgency != null}}{{touristGroupDetail.partnerAgency.travelAgencyName}}{{/if}}</option>
+							</select>
+							<!--
+							<input class="chooseGuide" name="guideName" type="text"/><input type="hidden" name="guideNameId"> 
+							 -->
 						</div>
 						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>同行联系人:</label>
 						<div class="col-sm-2">
@@ -405,7 +411,7 @@
 			</div>
 		</div>
 		<div class="space-10"></div>
-		<button class="btn btn-block btn-primary btn-submit-addTouristGroup" data-entity-id="{{touristGroupDetail.id}}">
+		<button class="btn btn-block btn-primary btn-submit-addTouristGroup">
 			<i class="ace-icon fa fa-check"></i>
 			提交信息
 		</button>

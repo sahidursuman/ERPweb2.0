@@ -181,112 +181,136 @@ define(function(require, exports) {
 	                 	    }else{
 	                 	    	addTab(checkTabId,"转客对账",html);
 	                 	    	validator = rule.check($('.transferChecking'));
-	                 	    	
+	                 	    	$("#tab-"+checkTabId+"-content").on("change",function(){
+	                 	    		Transfer.edited = true; 
+	                 	    	});
 	                 	    };
-	                 	   $("#tab-"+checkTabId+"-content .all").on("change",function(){
-                	    		Transfer.edited = true; 
-                	    	});
-	                 	//展开事件
-		                     $("#" +"tab-"+ checkTabId+"-content"+" .seeGroup").click(function(){
-		                    	var tr = $(this).parent().parent().next();
-		                    	if($(this).text()=="展开"){
-		                    		$(this).text("收起");
-		                    	}else{$(this).text("展开");}
-		                     	if(tr.hasClass("hide")){
-										$(this).find("i").removeClass("fa-chevron-up");
-										$(this).find("i").addClass("fa-chevron-down");
-										tr.removeClass("hide");
-									}
-									else{
-										$(this).find("i").removeClass("fa-chevron-down");
-										$(this).find("i").addClass("fa-chevron-up");
-										tr.addClass("hide");
-									}
-		                        })
-			                 //给搜索按钮绑定事件
-			                 $("#" +"tab-"+ checkTabId+"-content"+" .btn-checking-search").click(function(){
-		                         Transfer.searchCheckData={
-		                            partnerAgencyId:partnerAgencyId,
-		                            partnerAgencyName:partnerAgencyName,
-		                         	year:$("#" +"tab-"+ checkTabId+"-content"+"  select[name=year]").val(),
-		                         	month:$("#" +"tab-"+ checkTabId+"-content"+" select[name=month]").val(),
-		                         }
-		                         Transfer.transferCheckList(0,Transfer.searchCheckData.partnerAgencyId,Transfer.searchCheckData.partnerAgencyName,Transfer.searchCheckData.year,Transfer.searchCheckData.month)
-		                     });
-		                     //导出事件btn-transferExport
-		                     $("#" +"tab-"+ checkTabId+"-content"+" .btn-transferExport").click(function(){
-			                	 var year=$("#" +"tab-"+ checkTabId+"-content"+"  select[name=year]").val();
-		                      	 var month=$("#" +"tab-"+ checkTabId+"-content"+" select[name=month]").val();
-		                      	 checkLogin(function(){
-		                         	var url = ""+APP_ROOT+"back/export.do?method=transPartnerAgency&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view"+"&partnerAgencyId="+partnerAgencyId+"&partnerAgencyName="+partnerAgencyName+"&year="+year+"&month="+month+"&sortType=auto";
-		                         	exportXLS(url)
-		                         });
-			                 });
-		                    //分页--首页按钮事件
-			                 $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.first").click(function(){
-			                	 Transfer.transferCheckList(0,Transfer.searchCheckData.partnerAgencyId,Transfer.searchCheckData.partnerAgencyName,Transfer.searchCheckData.year,Transfer.searchCheckData.month)
-			                 });
-							//分页--上一页事件
-			                 $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.previous").click(function(){
-								var previous = data.pageNo - 1;
-								if(data.pageNo == 0){
-									previous = 0;
-								}
-								Transfer.transferCheckList(previous,Transfer.searchCheckData.partnerAgencyId,Transfer.searchCheckData.partnerAgencyName,Transfer.searchCheckData.year,Transfer.searchCheckData.month)
-			                 });
-							//分页--下一页事件
-			                 $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.next").click(function(){
-								var next =  data.pageNo + 1;
-								if(data.pageNo == data.totalPage-1){
-									next = data.pageNo ;
-								}
-								Transfer.transferCheckList(next,Transfer.searchCheckData.partnerAgencyId,Transfer.searchCheckData.partnerAgencyName,Transfer.searchCheckData.year,Transfer.searchCheckData.month)
-			                 });
-							//分页--尾页事件
-			                 $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.last").click(function(){
-			                	Transfer.transferCheckList(data.totalPage == 0 ? data.totalPage : data.totalPage-1,Transfer.searchCheckData.partnerAgencyId,Transfer.searchCheckData.partnerAgencyName,Transfer.searchCheckData.year,Transfer.searchCheckData.month)
-			                 });
-				             //给全选绑定事件
-				                 $("#" +"tab-"+ checkTabId+"-content"+" .transfer-selectAll").click(function(){
-				                	 var flag = this.checked;
-				                	 $(".transferChecking .all tbody tr").each(function(){
-				                		 var checkedbox = $(this).find(".transferFinancial")
-				                		 if(flag){
-				                			 checkedbox.prop("checked",true);
-				                		 }else{
-											 //判断对账状态
-											 if(checkedbox.attr("data-entity-checkStatus") == 1){
-												 checkedbox.prop("checked",true);
-											 }else{ 	
-												 checkedbox.prop("checked",false);
-											 }
-										 }
-				                	 });
-				                 });
-				               //给复选框绑定事件
-				                 $("#" +"tab-"+ checkTabId+"-content"+" .transferFinancial").click(function(){
-				                	 var flag = true
-				                	 $("#" +"tab-"+ checkTabId+"-content"+" .transferFinancial").each(function(){
-				                		 if(!$(this).prop("checked")){
-					                			flag = false;
-					                		} 
-				                	 })
-				                	 $("#" +"tab-"+ checkTabId+"-content"+" .transfer-selectAll").prop("checked",flag)
-				                 });
-				                 //给确认对账按钮绑定事件
-				                 $("#" +"tab-"+ checkTabId+"-content"+" .btn-transferFinancial-checking").click(function(){
-				                	 // 表单校验
-				                	 if (!validator.form()) { return; } 
-				                	 Transfer.saveCheckingData(pageNo,partnerAgencyId,partnerAgencyName,year,month);
-			                      })
-					             //取消按钮事件
-					             $("#" +"tab-"+ checkTabId+"-content"+" .btn-transferFinancial-close").click(function(){
-					            	 showConfirmDialog($( "#confirm-dialog-message" ), "确定关闭本选项卡?",function(){
-					            		 closeTab(checkTabId)
-					            	 });
-					             });
 	                     }    
-		                 
+		                 //展开事件
+	                     $("#" +"tab-"+ checkTabId+"-content"+" .seeGroup").click(function(){
+	                    	var tr = $(this).parent().parent().next();
+	                    	if($(this).text()=="展开"){
+	                    		$(this).text("收起");
+	                    	}else{$(this).text("展开");}
+	                     	if(tr.hasClass("hide")){
+									$(this).find("i").removeClass("fa-chevron-up");
+									$(this).find("i").addClass("fa-chevron-down");
+									tr.removeClass("hide");
+								}
+								else{
+									$(this).find("i").removeClass("fa-chevron-down");
+									$(this).find("i").addClass("fa-chevron-up");
+									tr.addClass("hide");
+								}
+	                        })
+		                 //给搜索按钮绑定事件
+		                 $("#" +"tab-"+ checkTabId+"-content"+" .btn-checking-search").click(function(){
+	                         Transfer.searchCheckData={
+	                            partnerAgencyId:partnerAgencyId,
+	                            partnerAgencyName:partnerAgencyName,
+	                         	year:$("#" +"tab-"+ checkTabId+"-content"+"  select[name=year]").val(),
+	                         	month:$("#" +"tab-"+ checkTabId+"-content"+" select[name=month]").val(),
+	                         }
+	                         Transfer.transferCheckList(0,Transfer.searchCheckData.partnerAgencyId,Transfer.searchCheckData.partnerAgencyName,Transfer.searchCheckData.year,Transfer.searchCheckData.month)
+	                     });
+	                     //导出事件btn-transferExport
+	                     $("#" +"tab-"+ checkTabId+"-content"+" .btn-transferExport").click(function(){
+		                	 var year=$("#" +"tab-"+ checkTabId+"-content"+"  select[name=year]").val();
+	                      	 var month=$("#" +"tab-"+ checkTabId+"-content"+" select[name=month]").val();
+	                      	 checkLogin(function(){
+	                         	var url = ""+APP_ROOT+"back/export.do?method=transPartnerAgency&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view"+"&partnerAgencyId="+partnerAgencyId+"&partnerAgencyName="+partnerAgencyName+"&year="+year+"&month="+month+"&sortType=auto";
+	                         	exportXLS(url)
+	                         });
+		                 });
+	                    //分页--首页按钮事件
+		                 $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.first").click(function(){
+		                	 Transfer.transferCheckList(0,Transfer.searchCheckData.partnerAgencyId,Transfer.searchCheckData.partnerAgencyName,Transfer.searchCheckData.year,Transfer.searchCheckData.month)
+		                 });
+						//分页--上一页事件
+		                 $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.previous").click(function(){
+							var previous = data.pageNo - 1;
+							if(data.pageNo == 0){
+								previous = 0;
+							}
+							Transfer.transferCheckList(previous,Transfer.searchCheckData.partnerAgencyId,Transfer.searchCheckData.partnerAgencyName,Transfer.searchCheckData.year,Transfer.searchCheckData.month)
+		                 });
+						//分页--下一页事件
+		                 $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.next").click(function(){
+							var next =  data.pageNo + 1;
+							if(data.pageNo == data.totalPage-1){
+								next = data.pageNo ;
+							}
+							Transfer.transferCheckList(next,Transfer.searchCheckData.partnerAgencyId,Transfer.searchCheckData.partnerAgencyName,Transfer.searchCheckData.year,Transfer.searchCheckData.month)
+		                 });
+						//分页--尾页事件
+		                 $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.last").click(function(){
+		                	Transfer.transferCheckList(data.totalPage == 0 ? data.totalPage : data.totalPage-1,Transfer.searchCheckData.partnerAgencyId,Transfer.searchCheckData.partnerAgencyName,Transfer.searchCheckData.year,Transfer.searchCheckData.month)
+		                 });
+			             //给全选绑定事件
+			                 $("#" +"tab-"+ checkTabId+"-content"+" .transfer-selectAll").click(function(){
+			                	 var flag = this.checked;
+			                	 $(".transferChecking .all tbody tr").each(function(){
+			                		 var checkedbox = $(this).find(".transferFinancial")
+			                		 if(flag){
+			                			 checkedbox.prop("checked",true);
+			                		 }else{
+										 //判断对账状态
+										 if(checkedbox.attr("data-entity-checkStatus") == 1){
+											 checkedbox.prop("checked",true);
+										 }else{ 	
+											 checkedbox.prop("checked",false);
+										 }
+									 }
+			                	 });
+			                 });
+			               //给复选框绑定事件
+			                 $("#" +"tab-"+ checkTabId+"-content"+" .transferFinancial").click(function(){
+			                	 var flag = true
+			                	 $("#" +"tab-"+ checkTabId+"-content"+" .transferFinancial").each(function(){
+			                		 if(!$(this).prop("checked")){
+				                			flag = false;
+				                		} 
+			                	 })
+			                	 $("#" +"tab-"+ checkTabId+"-content"+" .transfer-selectAll").prop("checked",flag)
+			                 });
+			                 //给确认对账按钮绑定事件
+			                 $("#" +"tab-"+ checkTabId+"-content"+" .btn-transferFinancial-checking").click(function(){
+			                	 // 表单校验
+			                	 if (!validator.form()) { return; } 
+			                	 Transfer.saveCheckingData(pageNo,partnerAgencyId,partnerAgencyName,year,month);
+		                      })
+			                 //给查看单据绑定事件
+			                 $("#" +"tab-"+ checkTabId+"-content"+" .TransferImg").click(function(){
+		                	 
+		                	 if(true){
+								var html =billImagesTemplate();
+					    		var billImagesTemplateLayer =layer.open({
+					    			type: 1,
+								    title:"查看单据",
+								    skin: 'layui-layer-rim', //加上边框
+								    area: ['50%', '70%'], //宽高
+								    zIndex:1030,
+								    content: html,
+								    success: function() {
+								    	layer.config({
+								        	extend: ['extend/layer.ext.js'], //加载新皮肤
+								            skin: 'demo-class'
+								        });
+								    	layer.ready(function(){ //为了layer.ext.js加载完毕再执行
+								    	    layer.photos({
+								    	        photos: '#layer-photos-demo'
+								    	    });
+								    	});     
+								    }
+					    		})
+		                	}
+		                 });
+			             //取消按钮事件
+			             $("#" +"tab-"+ checkTabId+"-content"+" .btn-transferFinancial-close").click(function(){
+			            	 showConfirmDialog($( "#confirm-dialog-message" ), "确定关闭本选项卡?",function(){
+			            		 closeTab(checkTabId)
+			            	 });
+			             });
 	             }
 	    	 });
 	    },
@@ -365,7 +389,12 @@ define(function(require, exports) {
                         });
                         //对账明细按钮事件
                         $("#" +"tab-"+ blanceTabId+"-content"+" .btn-restaurantBlance-checkDetail").click(function(){
-                        	
+                        	/*Hotel.searchCheckData={
+                        			partnerAgencyId:partnerAgencyId,
+                        			partnerAgencyName:partnerAgencyName,
+                        			year:$(this).attr("data-entity-year"),
+                        			month:$(this).attr("data-entity-month"),
+                        	}*/
                         	Transfer.searchCheckData={
     		                 	    partnerAgencyId:partnerAgencyId,
     		                 	    partnerAgencyName:partnerAgencyName,
@@ -456,33 +485,17 @@ define(function(require, exports) {
 	 		   var flag = $(this).find(".transferFinancial").is(":checked");
 	 		   newUnPayedMoney = $tr.eq(i).find("input[name=FinancialTransferRealUnPayedMoney]").val();
 			   newRemark = $tr.eq(i).find("input[name=FinancialTransferRemark]").val();
-			   oldUnPayedMoney = $(this).attr("data-entity-realUnPayedMoney");
-			   oldRemark = $(this).attr("data-entity-remark");
 			   if(flag){
-				   if($(this).attr("data-entity-isConfirmAccount") == 1){
-    				   //判断是否是修改对账
-    				   if(oldUnPayedMoney !== newUnPayedMoney || oldRemark !== newRemark){
-    					   var checkData = {
-    		 					   id:$(this).attr("data-entity-id"),
-    		 					   partnerAgencyId:partnerAgencyId,
-    		 					   partnerAgencyName:partnerAgencyName,
-    		 					   startTime:$tr.eq(i).find("td[name=startTime]").text(),
-    		 					   transRealUnPayedMoney:newUnPayedMoney,
-    		 					   transRemark:newRemark,
-    		 					   isConfirmAccount:1
-    		     			   }
-    					   JsonStr.push(checkData)
-    				   }
-    			   }else{ var checkData = {
-	 					   id:$(this).attr("data-entity-id"),
-	 					   partnerAgencyId:partnerAgencyId,
-	 					   partnerAgencyName:partnerAgencyName,
-	 					   startTime:$tr.eq(i).find("td[name=startTime]").text(),
-	 					   transRealUnPayedMoney:newUnPayedMoney,
-	 					   transRemark:newRemark,
-	 					   isConfirmAccount:1
-	     			   }
-				   JsonStr.push(checkData)}
+ 				   var checkData = {
+ 					   id:$(this).attr("data-entity-id"),
+ 					   partnerAgencyId:partnerAgencyId,
+ 					   partnerAgencyName:partnerAgencyName,
+ 					   startTime:$tr.eq(i).find("td[name=startTime]").text(),
+ 					   transRealUnPayedMoney:newUnPayedMoney,
+ 					   transRemark:newRemark,
+ 					   isConfirmAccount:1
+     			   }
+ 				   JsonStr.push(checkData)
 	 		   }else{
 	 			   if($(this).attr("data-entity-isConfirmAccount") == 1){
 	 				   var checkData = {

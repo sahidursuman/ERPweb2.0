@@ -15,20 +15,22 @@
             <label class="col-sm-1 control-label no-padding-right">起始月：</label> 
              <select class="col-sm-1" style="margin-left:20px" name="startMonth">
                         {{each monthList as month index}}
-							<option value="{{month.value}}" {{if searchParam.monthStart == month.value}}selected="selected"{{/if}}>{{month.value}}月</option>
+							<option value="{{month.value}}" {{if searchParam.monthStart == month.value}}selected="selected"{{/if}}>{{month.value}}</option>
 						{{/each}}
                     </select>
-            <label class="col-sm-1 control-label no-padding-right">结束月：</label>    
+            <label class="col-sm-1 control-label no-padding-right">结束月：</label>
            <select style="margin-left: 20px" class="col-sm-1" name="endMonth">
                         {{each monthList as month index}}
-							<option value="{{month.value}}" {{if searchParam.monthEnd == month.value}}selected="selected"{{/if}}>{{month.value}}月</option>
-						{{/each}}  
+							<option value="{{month.value}}" {{if searchParam.monthEnd == month.value}}selected="selected"{{/if}}>{{month.value}}</option>
+						{{/each}}
            </select>
             <button class="btn-sm  btn-blance-search search-btn btn-height" style="margin-left: 60px">
               <i class="ace-icon fa fa-search"></i>
                                    搜索
-            </button>   
+            </button>
+
           </div>
+
         </div>
     </form>
       <form class="form-horizontal" role="form" onsubmit="return false">
@@ -73,7 +75,7 @@
     <tbody>
     
      {{each fcBusCompanySettlementList as busCompanySettlement}}  
-     <tr data-entity-id="{{busCompanySettlement.id}}" data-entity-year="{{busCompanySettlement.year}}" data-entity-month="{{busCompanySettlement.month}}">
+     <tr>
             <td style="width:100px;">{{busCompanySettlement.year}}{{"年"}}{{busCompanySettlement.month}}{{"月"}}</td>
             <td style="width:100px;">{{busCompanySettlement.needPayMoney}}</td>
             <td style="width:100px;" name="blancerealNeedPayMoney">{{busCompanySettlement.realNeedPayMoney}}</td>

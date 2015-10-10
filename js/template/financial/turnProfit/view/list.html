@@ -1,20 +1,21 @@
 <div class="row resource_hotel" >
-    <div class="col-sm-12">
-     	<div class="form-group">
-            <div class="search-area border" style="margin:0px;border-style:solid solid none solid">
-                    <div class="col-xs-1">
+    <div class="col-sm-12" style="margin-bottom: 10px">
+        <form class="form-horizontal" role="form" onsubmit="return false">
+            <div style="height:1px;width:98.5%;background-color: #ccc;position: absolute;margin-top:55px;margin-bottom:10px;"></div>
+            <div class="search-area  editable editable-click" style="margin-top: 10px;border: 0px">
+                    <div class="col-xs-1" style="padding: 10px 0px 0px 10px">
                         <input type="text" value="{{searchParam.lineProductName}}" name="chooseLineProductName" class="col-xs-12 clearBlur" placeholder="线路产品" />
                         <input type="hidden" value="{{searchParam.lineProductId}}" name="lineProductId" />
                     </div>
-                <div class="col-xs-1">
+                <div class="col-xs-1" style="padding: 10px 0px 0px 10px">
                     <input type="text" value="{{searchParam.partnerAgencyName}}"  name="chooseLineTurnprofits" class="col-xs-12" placeholder="组团社" />
                     <input type="hidden" value="{{searchParam.partnerAgencyId}}" name="partnerAgencyId" />
                 </div>
-                <div class="col-xs-1">
+                <div class="col-xs-1" style="padding: 10px 0px 0px 10px">
                     <input type="text" value="{{searchParam.transferPartnerAgencyName}}" name="partnerTurnprofits" class="col-xs-12" placeholder="同行地接" />
                     <input type="hidden" value="{{searchParam.transferPartnerAgencyId}}" name="transferPartnerAgencyId" />
                 </div>
-                <div class="col-xs-3">
+                <div class="col-xs-3" style="padding: 10px 0px 0px 10px">
                     <div class="col-xs-6">
                         <div class="input-group">
                             <input class="col-xs-12 date-picker" name="startTime" placeholder="开始日期" value="{{searchParam.startTime}}" type="text" />
@@ -32,25 +33,30 @@
                         </div>
 
                     </div>
+
                 </div>
-                <div class="col-xs-2">
-	                <button class="btn-sm  btn-height search-btn btn-arrangeTourist-search" style="border-top-width: 4px;border-bottom-width: 4px;">
-		                <i class="ace-icon fa fa-search"></i>
-		               	 搜索
-	            	</button>
+
                 </div>
-                <div style="clear:both;height:0px;line-height:0px;"></div>
-                </div>
-			    <div class="form-group border" style="margin:0px;border-style:dashed solid solid solid" >
-			        <label class="control-label" style="margin-left:12px;">总人数：{{sumPersonCount}}</label>
-			        <label class="control-label" style="margin-left:12px;">总应收：{{sumNeedIncomeMoney}}</label>
-			        <label class="control-label" style="margin-left:12px;">总应付：{{sumNeedPayMoney}}</label>
-			        <label class="control-label" style="margin-left:12px;">毛利：{{sumGrossProfit}}</label>
-			        <label class="control-label" style="margin-left:12px;">人均毛利：{{sumAveragerGrossProfit}}</label>
-			    </div>
-    		</div>
-<div class="row ticketList" style="margin-top:10px;">
-    <div class="col-xs-12">
+            <button class="btn-sm  btn-height search-btn btn-arrangeTourist-search" style="margin-top: 10px">
+                <i class="ace-icon fa fa-search"></i>
+                搜索
+            </button>
+        </form>
+        <!--<form class="form-horizontal" role="form" onsubmit="return false">-->
+    </div>
+        <!--</form>-->
+        <div style="clear:both;height:0px;line-height:0px;"></div>
+    </div>
+    <div class="form-group border" style="margin:10px;" >
+        <label class="control-label" style="margin-left:12px;">总人数：{{sumPersonCount}}</label>
+        <label class="control-label" style="margin-left:12px;">总应收：{{sumNeedIncomeMoney}}</label>
+        <label class="control-label" style="margin-left:12px;">总应付：{{sumNeedPayMoney}}</label>
+        <label class="control-label" style="margin-left:12px;">毛利：{{sumGrossProfit}}</label>
+        <label class="control-label" style="margin-left:12px;">人均毛利：{{sumAveragerGrossProfit}}</label>
+    </div>
+<div class="space-20"></div>     
+<div class="row ticketList">
+    <div class="col-xs-12"  style="margin-top: -15px">
         <table class="table table-striped table-bordered table-hover">
             <thead>
             <tr class="bg-blur">
@@ -70,19 +76,19 @@
             </thead>
             <tbody>
             {{each touristGroupTransferList as turnProfit index}}
-            <tr>  
+            <tr class="turnProfit.id">  
                 <td>{{turnProfit.lineProductName}}</td>
                 <!--给日期转码-->
                 <td>{{turnProfit.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
                 <td>{{turnProfit.contact}}</td>
-                <td><a href="javascript:void(0)" class="showPerson" data-entity-id = "{{turnProfit.touristGroupId}}">{{turnProfit.adultCount}}大{{turnProfit.childCount}}</a></td>
+                <td>{{turnProfit.adultCount}}大{{turnProfit.childCount}}</td>
                 <td>{{turnProfit.partnerAgencyName}}</td>
-                <td><a href="javascript:void(0)" class="showIncomeDetail" data-entity-id = "{{turnProfit.touristGroupId}}">{{turnProfit.needInComeMoney}}</a></td>
+                <td>{{turnProfit.needInComeMoney}}</td>
                 <td>{{turnProfit.change}}</td>
-                <td><a href="javascript:void(0)" class="showChangeNeedPayDetail"  data-entity-id = "{{turnProfit.touristGroupId}}">{{turnProfit.changeNeedPayMoney}}</a></td>
-                <td>{{turnProfit.transferPartnerAgencyName}}</td> 
+                <td>{{turnProfit.changeNeedPayMoney}}</td>
+                <td>{{turnProfit.transferPartnerAgencyName}}</td>
                 <td>
-                    <a href="javascript:void(0)" class="showTransNeedPayDeatil" data-entity-id = "{{turnProfit.tgTransferId}}">{{turnProfit.transNeedPayAllMoney}}</a>
+               {{turnProfit.transNeedPayAllMoney}}
                 </td>
                 <td>
                     <span style="color: red">{{turnProfit.grossProfit}}</span>
@@ -119,6 +125,5 @@
             </div>
         </div>
     </div>
-</div>
 </div>
 </div>

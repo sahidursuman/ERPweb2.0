@@ -41,8 +41,14 @@
 					<div class="form-group choosePartnerAgencyDiv">
 						<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>客户来源:</label>
 						<div class="col-sm-2">
-							<input type="text" name="fromPartnerAgency" class="col-sm-12" placeholder="请输入客户来源">
-							<input type="hidden" name="fromPartnerAgencyId">
+							<!-- <input type="text" name="PartnerAgencyName" class="col-sm-12 choosePartnerAgency ui-autocomplete-input" />
+							<input type="hidden" name="PartnerAgencyNameId" /> -->
+							<select name="fromPartnerAgencyId" class="col-sm-12">
+								<option selected="selected" value="">未选择</option>
+							</select>
+							<!--
+							<input class="chooseGuide" name="guideName" type="text"/><input type="hidden" name="guideNameId"> 
+							 -->
 						</div>
 						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>同行联系人:</label>
 						<div class="col-sm-2">
@@ -219,8 +225,8 @@
 									<button class="btn btn-sm btn-success btn-add-tourist-more" style="float:left;">
 										<i class="ace-icon fa fa-plus"></i>
 										批量添加
-									</button>
-								</div>
+									</button>         
+								</div>   
 							</div>
 							<div class="form-group">
 								<div class="col-sm-2"></div>
@@ -230,7 +236,7 @@
 											<tr>
 												<th>序号</th>
 												<th> <span class="necessary">*</span>姓名</th>
-												<th> <span class="necessary">*</span>手机号码</th>
+												<th>手机号码</th>     
 												<th>证件类型</th>
 												<th>证件号</th>
 												<th>设为联系人</th>
@@ -269,7 +275,7 @@
 														<button class="btn btn-xs btn-danger btnDeleteTourist">
 															<i class="ace-icon fa fa-trash-o bigger-120"></i>
 														</button>
-												</td>
+												</td>  
 											</tr> -->
 										</tbody>
 									</table>

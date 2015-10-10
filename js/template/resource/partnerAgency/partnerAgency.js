@@ -424,7 +424,7 @@ define(function(require, exports) {
 					}
 				],
 				open:function(event,ui){
-					$(this).find("p").text("你确定要删除该条记录？");
+					$(this).find("p").text("你确定要删除该条记录？");   
 				}
 			})
 		},
@@ -434,7 +434,7 @@ define(function(require, exports) {
 				'<td><input class="col-sm-12" type="text" name="contactMobileNumber"/></td>'+
 				'<td><input class="col-sm-12" type="text" name="departmentName"/></td>'+
 				'<td><input class="col-sm-12" type="text" name="dutyName"/></td>'+
-				'<td><button class="btn btn-xs btn-danger btn-contact-delete"><i class="ace-icon fa fa-trash-o"></i></button></td>'+
+				'<td><a class="btn-contact-delete">删除</a></td>'+           
 			'</tr>';
 			$obj.append(html);
 			
