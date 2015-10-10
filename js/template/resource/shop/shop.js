@@ -625,7 +625,7 @@ define(function(require, exports) {
 						    type: 1,
 						    title:"查看商家信息",
 						    skin: 'layui-layer-rim', //加上边框
-						    area: ['95%', '90%'], //宽高
+						    area: ['1024px', '600px'], //宽高
 						    zIndex:1028,
 						    content: html,
 						    success:function(){
