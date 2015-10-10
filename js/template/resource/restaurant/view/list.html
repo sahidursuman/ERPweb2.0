@@ -14,14 +14,14 @@
 					已启用
 				{{else}}
 					已停用
-				{{/if}}			
-				
-				
+				{{/if}}
+
+
 			</span>
 			<i class="ace-icon fa fa-angle-down icon-on-right"></i>
 		</button>
 		<ul class="dropdown-menu">
-		
+
 		<li>
 				<a data-value="" href="javascript:void(0)">全部</a>
 			</li>
@@ -39,7 +39,7 @@
 		新增餐厅
 	</button>
 </div>
-<div class="row restaurantList">	
+<div class="row restaurantList">
 	<div class="col-xs-12">
 		<table class="table  table-bordered table-hover">
 			<thead>
@@ -52,7 +52,7 @@
 					<th>操作</th>
 				</tr>
 			</thead>
-		
+
 			<tbody>
 				{{each restaurantList as restaurant}}
 					<tr class="restaurant-{{restaurant.id}}">
@@ -69,7 +69,7 @@
 							{{if restaurant.district != null}}
 								-{{restaurant.district.name}}
 							{{/if}}
-						</td> 
+						</td>
 						<td>
 
 							{{if restaurant.status == 0}}
@@ -82,23 +82,23 @@
 						</td>
 						<td>
 							<div class="hidden-sm hidden-xs btn-group">
-								<a data-entity-id="{{restaurant.id}}" class=" btn-restaurant-view"  style="text-decoration: none; cursor: pointer; ">
-									查看 |
-								</a>
-								
-								<a data-entity-id="{{restaurant.id}}" class="btn-restaurant-edit"  style="text-decoration: none; cursor: pointer; ">编辑 |
-								</a>
-								<a data-entity-id="{{restaurant.id}}" class="btn-restaurant-delete"   style="text-decoration: none; cursor: pointer; ">
+								<a data-entity-id="{{restaurant.id}}" class=" btn-restaurant-view cursor" >
+									查看
+								</a><a href="" class="cursor"> |</a>
+
+								<a data-entity-id="{{restaurant.id}}" class="btn-restaurant-edit cursor" >编辑
+								</a><a href="" class="cursor"> |</a>
+								<a data-entity-id="{{restaurant.id}}" class="btn-restaurant-delete">
 									删除
 								</a>
 							</div>
-			
+
 							<div class="hidden-md hidden-lg">
 								<div class="inline pos-rel">
 									<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
 										<i class="ace-icon fa fa-cog icon-only bigger-110"></i>
 									</button>
-			
+
 									<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
 										<li>
 											<a data-entity-id="{{restaurant.id}}" href="javascript:void(0)" class="tooltip-success btn-restaurant-view" data-rel="tooltip">
@@ -114,7 +114,7 @@
 												</span>
 											</a>
 										</li>
-			
+
 										<li>
 											<a data-entity-id="{{restaurant.id}}" href="javascript:void(0)" class="tooltip-error btn-restaurant-delete" data-rel="tooltip">
 												<span class="red">
@@ -127,7 +127,7 @@
 							</div>
 						</td>
 					</tr>
-				{{/each}} 
+				{{/each}}
 			</tbody>
 		</table>
 		<div class="row pageMode">
