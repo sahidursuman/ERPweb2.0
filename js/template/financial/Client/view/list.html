@@ -85,22 +85,16 @@
 					{{/if}}
 				</td>
 				<td>
-					<button data-entity-id="{{rs.id}}" class="btn btn-primary btn-sm  btn-divide">
-						<i class="ace-icon fa fa-stack-overflow"></i>
+					<a data-entity-id="{{rs.id}}" class="cursor btn-divide">
 						对账
-					</button>
-
-  
-					<button data-entity-id="{{rs.id}}" class="btn btn-sm btn-success btn-guide-view    btn-transfter">
-						<i class="ace-icon fa fa-building-o bigger-120"></i>
+					</a><a href="" class="cursor"> |</a>
+					<a data-entity-id="{{rs.id}}" class="btn-guide-view    btn-transfter">
 						结算
-					</button>
+					</a>
 				</td>
 			</tr>
 			{{/each}}
 			</tbody>
-
-
 		</table>
 		<div class="row pageMode">
 			<div class="col-xs-6">
