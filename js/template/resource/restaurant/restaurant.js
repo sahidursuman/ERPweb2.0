@@ -156,11 +156,11 @@ define(function(require, exports) {
 			    	$obj.find(".btn-restaurant-standard-add").click(function(){
 			    		var html = "<tr>" +
 			    				"<td><select name=\"type\"><option value=\"早餐\">早餐</option><option value=\"午餐\">午餐</option><option value=\"晚餐\">晚餐</option></select></td>" +
-			    				"<td><input name=\"typeName\" type=\"text\"/></td>" +
-			    				"<td><input name=\"menuList\" type=\"text\"/></td>" +
+			    				"<td><input name=\"typeName\" type=\"text\" maxlength=\"100\"/></td>" +
+			    				"<td><input name=\"menuList\" type=\"text\" maxlength=\"1000\"/></td>" +
 			    				"<td class=\"time\"><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right\"><button class=\"btn btn-success btn-sm btn-white add\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i></button></label></div></td>" +
-			    				"<td><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input name=\"contractPrice\" type=\"text\"/><label>&nbsp;元</label></div></td>" +
-			    				"<td><input name=\"remark\" type=\"text\"/></td>" +
+			    				"<td><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input name=\"contractPrice\" type=\"text\" maxlength=\"7\"/><label>&nbsp;元</label></div></td>" +
+			    				"<td><input name=\"remark\" type=\"text\" maxlength=\"1000\"/></td>" +
 			    				"<td style=\"width:70px\"><a data-entity-id=\"\" class=\"btn-restaurant-standard-delete\">删除</a></td>" +
 			    				"</tr>";
 			    		$obj.find(".restaurantStandardList tbody").append(html);
@@ -184,7 +184,7 @@ define(function(require, exports) {
 							var td = $(this).parent().parent().parent();
 							var index = td.find("div").length;
 							var timeLimitDiv = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right\"><button class=\"btn btn-danger btn-sm btn-white del\"><i class=\"ace-icon fa fa-minus bigger-110 icon-only\"></i></button></label></div>";
-							var contractPriceInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"contractPrice\" type=\"text\"/><label>&nbsp;元</label></div>";
+							var contractPriceInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"contractPrice\" maxlength=\"7\" type=\"text\"/><label>&nbsp;元</label></div>";
 							td.next().append(contractPriceInput);
 							td.append(timeLimitDiv);
 							mealValidator = rule.checkMeal($(".restaurantMainForm .restaurantStandardList"));

@@ -41,6 +41,14 @@ define(function(require, exports) {
 					type : 'landline',
 					errMsg : '座机号码格式不正确'
 				} ]
+			},{ // 固定电话
+				$ele : $obj.find('input[name="faxNumber"]'),
+				rules : [
+
+				{
+					type : 'landline',
+					errMsg : '传真号码格式不正确'
+				} ]
 			} ]);
 			return validator;
 		},
@@ -78,7 +86,10 @@ define(function(require, exports) {
 				rules : [ {
 					type : 'float',
 					errMsg : '请输入数字'
-				} ]
+				} ,{
+					type : 'NoNumber',
+					errMsg : '消费金额不能为负数'
+				}]
 			}, { //市场价
 				$ele : $obj.find('input[name="costMoneyEnd"]'),
 				rules : [ {
@@ -90,7 +101,10 @@ define(function(require, exports) {
 				rules : [ {
 					type : 'float',
 					errMsg : '请输入数字'
-				} ]
+				},{
+					type : 'NoNumber',
+					errMsg : '消费金额不能为负数'
+				}]
 			}, { //旅行社返佣
 				$ele : $obj.find('input[name="travelAgencyRate"]'),
 				rules : [ {
