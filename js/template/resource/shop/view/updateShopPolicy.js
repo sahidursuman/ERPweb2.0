@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":51,"md5":"2aeff7773e906290b0db3b49711be436"}*/
+/*TMODJS:{"debug":true,"version":52,"md5":"2aeff7773e906290b0db3b49711be436"}*/
 define(function(require) {
     return require("../../../template")("resource/shop/view/updateShopPolicy", function($data, $filename) {
         try {
