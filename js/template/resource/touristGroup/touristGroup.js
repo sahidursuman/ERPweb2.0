@@ -87,7 +87,7 @@ define(function(require, exports) {
 				    	
 				    	if(data.searchParam == '{}'){
 				    		touristGroup.getLineProductList($(".touristGroupSearchForm select[name=lineProductId]"));
-				    		touristGroup.getPartnerAgencyList($(".touristGroupSearchForm select[name=partnerAgencyId]"));
+				    		touristGroup.getPartnerAgencyList($(".touristGroupSearchForm input[name=fromPartnerAgency]"));
 				    		touristGroup.getCreatorUserList($(".touristGroupSearchForm select[name=userId]"));
 				    	}
 				    	else{
@@ -492,7 +492,7 @@ define(function(require, exports) {
 							    			}
 							    		}
 							    		
-							    		$("input[name=lineProductIdName]").val(travelLineName);
+							    		$("input[name=lineProductIdName]").val(travelLineName).trigger('change');
 							    		$("input[name=lineProductId]").val(travelLineId);
 							    	});
 									
@@ -504,7 +504,7 @@ define(function(require, exports) {
 			    	}
 			    	
 					//初始化 组社团数据
-			    	touristGroup.getPartnerAgencyList($("#"+Tab+" .choosePartnerAgencyDiv select[name=fromPartnerAgencyId]"));
+			    	touristGroup.getPartnerAgencyList($("#"+Tab+" .choosePartnerAgencyDiv input[name='fromPartnerAgency']"));
 			    	
 			    	
 			    	//添加小组页面提交按钮事件绑定
@@ -1144,7 +1144,7 @@ define(function(require, exports) {
 										    			}
 										    		}
 										    		
-										    		$("input[name=lineProductIdName]").val(travelLineName);
+										    		$("input[name=lineProductIdName]").val(travelLineName).trigger('change');
 										    		$("input[name=lineProductId]").val(travelLineId);
 										    	});
 												
@@ -1157,7 +1157,7 @@ define(function(require, exports) {
 						    	
 						    	
 								//初始化 组社团数据
-						    	touristGroup.getPartnerAgencyList($("#"+tab+" .choosePartnerAgencyDiv select[name=fromPartnerAgencyId]"),data.touristGroupDetail.fromPartnerAgencyId);
+						    	touristGroup.getPartnerAgencyList($("#"+tab+" .choosePartnerAgencyDiv input[name='fromPartnerAgency']"),data.touristGroupDetail.fromPartnerAgencyId);
 					    		
 					    		//update点击提交按钮事件
 						    	$("#"+tab+" .touristGroupMainFormRS .btn-submit-addTouristGroup").click(function(){
@@ -1371,7 +1371,7 @@ define(function(require, exports) {
 				}
 			}).unbind("click").click(function(){
 				var objM = this,
-					partnerAgencyId = $("."+className+" .touristGroupMainForm").find("select[name=fromPartnerAgencyId]").val();
+					partnerAgencyId = $("."+className+" .touristGroupMainForm").find("input[name=fromPartnerAgencyId]").val();
 				if(partnerAgencyId){
 					$.ajax({
 						url:""+APP_ROOT+"back/partnerAgency.do?method=getContactListByPartnerAgencyId&token="+$.cookie("token")+"&menuKey=resource_partnerAgency&operation=view",
@@ -1412,30 +1412,64 @@ define(function(require, exports) {
 			})
 		},
 		getPartnerAgencyList:function(obj,partnerAId){
-			$.ajax({
-				url:""+APP_ROOT+"back/partnerAgency.do?method=getPartnerAgency&token="+$.cookie("token")+"&menuKey=resource_partnerAgency&operation=view",
-				type:"POST",
-				dataType:"json",
-				success:function(data){
-					var html = "<option value=''>未选择</option>";
-					var partnerAgencyList = JSON.parse(data.partnerAgencyList);
-					if(partnerAgencyList != null && partnerAgencyList.length > 0){ 
-						for(var i=0;i<partnerAgencyList.length;i++){
-							if (partnerAId != null && partnerAgencyList[i].id == partnerAId) {
-								html += "<option selected=\"selected\" value='"+partnerAgencyList[i].id+"'>"+partnerAgencyList[i].travelAgencyName+"</option>";
-							} else {
-								html += "<option value='"+partnerAgencyList[i].id+"'>"+partnerAgencyList[i].travelAgencyName+"</option>";
-							}
-						}
-						$(obj).html(html);
+			// $.ajax({
+			// 	url:""+APP_ROOT+"back/partnerAgency.do?method=getPartnerAgency&token="+$.cookie("token")+"&menuKey=resource_partnerAgency&operation=view",
+			// 	type:"POST",
+			// 	dataType:"json",
+			// 	success:function(data){
+			// 		var html = "<option value=''>未选择</option>";
+			// 		var partnerAgencyList = JSON.parse(data.partnerAgencyList);
+			// 		if(partnerAgencyList != null && partnerAgencyList.length > 0){ 
+			// 			for(var i=0;i<partnerAgencyList.length;i++){
+			// 				if (partnerAId != null && partnerAgencyList[i].id == partnerAId) {
+			// 					html += "<option selected=\"selected\" value='"+partnerAgencyList[i].id+"'>"+partnerAgencyList[i].travelAgencyName+"</option>";
+			// 				} else {
+			// 					html += "<option value='"+partnerAgencyList[i].id+"'>"+partnerAgencyList[i].travelAgencyName+"</option>";
+			// 				}
+			// 			}
+			// 			$(obj).html(html);
+			// 		}
+			//     	//给组社团select绑定事件
+			//     	$(".choosePartnerAgencyDiv select[name=fromPartnerAgencyId]").change(function(){
+			// 			$(".choosePartnerAgencyDiv input[name=partnerAgencyNameList]").val("");
+			// 			$(".choosePartnerAgencyDiv input[name=partnerAgencyContactId]").val("");
+			//     	});
+			// 	}
+			// })
+			console.info($(obj).val());
+			$(obj).autocomplete({
+				minLength: 0,
+				change: function(event, ui) {
+					if (!!ui.item)  {
+						$(this).val('').nextAll('input[name="fromPartnerAgencyId"]').val('');
 					}
-			    	//给组社团select绑定事件
-			    	$(".choosePartnerAgencyDiv select[name=fromPartnerAgencyId]").change(function(){
-						$(".choosePartnerAgencyDiv input[name=partnerAgencyNameList]").val("");
-						$(".choosePartnerAgencyDiv input[name=partnerAgencyContactId]").val("");
-			    	});
+				},
+				select: function(event, ui) {
+					$(this).blur().nextAll('input[name="fromPartnerAgencyId"]').val(ui.item.id);
 				}
 			})
+			.click(function(event) {
+				var $objC = $(this);
+				$.ajax({
+					url:""+APP_ROOT+"back/partnerAgency.do?method=findPartnerAnencyList&token="+$.cookie("token")+"&menuKey=resource_partnerAgency&operation=view",
+                    dataType: "json",
+                    data:"travelAgencyName="+$objC.val(),
+                    success: function(data) {
+                    	layer.close(globalLoadingLayer);
+						var result = showDialog(data);
+						if(result){
+							var partnerAgencyList = JSON.parse(data.partnerAgencyList);
+							if(partnerAgencyList != null && partnerAgencyList.length > 0){
+								for(var i=0;i<partnerAgencyList.length;i++){
+									partnerAgencyList[i].value = partnerAgencyList[i].travelAgencyName;
+								}
+							}
+							$objC.autocomplete('option','source', partnerAgencyList);
+							$objC.autocomplete('search', '');
+						}
+                    }
+                });
+			});
 		},
 		getLineProductList:function(obj,lineProductId){
 			$.ajax({
@@ -2253,7 +2287,7 @@ define(function(require, exports) {
 		addPartnerManager :function(className){
 			$("."+className+"").find(".addPartnerManager").click(function(){
 				var obj = this;
-				var PartnerId = $(obj).parent().parent().parent().parent().find("select[name=fromPartnerAgencyId]").val();
+				var PartnerId = $(obj).parent().parent().parent().parent().find("input[name=fromPartnerAgencyId]").val();
 				if(PartnerId){
 					var html = addPartnerManagerTemplate();
 					var addPartnerManagerLayer = layer.open({
@@ -2292,7 +2326,7 @@ define(function(require, exports) {
 										if(result){
 											var contact = JSON.parse(data.partnerAgencyContact);
 											layer.close(addPartnerManagerLayer);
-											$("."+className+"").find("input[name=partnerAgencyNameList]").val(contact.contactRealname+" - ["+contact.contactMobileNumber+"]");
+											$("."+className+"").find("input[name=partnerAgencyNameList]").val(contact.contactRealname+" - ["+contact.contactMobileNumber+"]").trigger('change');
 											$("."+className+"").find("input[name=partnerAgencyContactId]").val(contact.id);
 										}
 									}
