@@ -4,10 +4,8 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta charset="utf-8" />
 		<title>首页 -- 火柴头管理系统 </title>
-
 		<meta name="description" content="overview &amp; stats" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-
 		<!-- bootstrap & fontawesome -->
 		<link rel="stylesheet" href="components/ace-admin/assets/css/bootstrap.min.css" />
 		<link rel="stylesheet" href="components/ace-admin/assets/font-awesome/4.4.0/css/font-awesome.min.css" />
@@ -258,10 +256,10 @@
 			<div class="main-content">
 				<div class="main-content-inner">
 					<div class="breadcrumbs breadcrumbs-fixed" style="border-bottom:none;background-color: #fff;padding:0 0 0 0">
-						<div style="width:100%;height:41px;overflow: hidden;position: relative;">
+						<div style="width:100%;overflow: hidden;position: relative;background: #dcdcdc">
 							<div id="tab_left_scroll"  class="btn-com">
 								<img src="images/left_a.jpg" class="left_a">
-								<img src="images/left_b.jpg" class="left_b">
+								<img src="images/left_b.jpg" class="left_b" style="">
 							</div>
 							<ul id="tabList" class="nav nav-tabs nav-line" >
 								<li class=" active " style="height: 31px">
@@ -653,7 +651,6 @@
 
 			$(document).ready(function(){
 				$(".left_a").mouseenter(function(){
-//					alert();
 					$(this).hide();
 					$(".left_b").show();
 				});
@@ -663,7 +660,6 @@
 				})
 
 				$(".right_a").mouseenter(function(){
-//					alert();
 					$(this).hide();
 					$(".right_b").show();
 				});
