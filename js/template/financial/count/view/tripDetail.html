@@ -406,7 +406,7 @@
                         	{{if index == 0}}<td rowspan="{{arrangeList.restaurantArrangeList.length}}">第{{arrange.whichDay}}天</td>{{/if}}
                         	{{if index == 0}}<td rowspan="{{arrangeList.restaurantArrangeList.length}}">{{if arrange.restaurant != null}}{{arrange.restaurant.name}}{{/if}}</td>{{/if}}
                         	<td>{{if arrange.restaurantStandard != null}}{{arrange.restaurantStandard.type}}{{/if}}</td>
-                        	<td>{{if arrange.restaurantStandard != null}}{{arrange.restaurantStandard.typeName}}<input type="hidden" name="price" value="{{arrange.price}}" />{{/if}}</td>
+                        	<td>{{if arrange.restaurantStandard != null}}{{arrange.restaurantStandard.price}}<input type="hidden" name="price" value="{{arrange.restaurantStandard.price}}" />{{/if}}</td>
                         	<td>{{if tripPlan.billStatus < 0}}{{arrange.memberCount}}{{else}}{{arrange.realCount}}{{/if}}<input style="display: none;" type="text" name="realCount" value="{{if tripPlan.billStatus < 0}}{{arrange.memberCount}}{{else}}{{arrange.realCount}}{{/if}}"/></td>
                         	<td>{{arrange.reduceMoney}}<input type="hidden" name="reduceMoney" value="{{arrange.reduceMoney}}" /></td>
                         	<td><span class="needPayMoney">{{arrange.needPayMoney}}</span></td>

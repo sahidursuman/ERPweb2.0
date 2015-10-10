@@ -379,10 +379,9 @@
 																										<th>餐厅名称</th>
 																										<th>餐厅电话</th>
 																										<!-- <th>账期模式</th> -->
-																										<th>餐标类型</th>
-																										<th>餐标名称</th>	
-																										<th>菜单列表</th>
-																										<th>每位价格</th>
+																										<th>用餐类型</th>
+																										<th>餐标</th>
+																										<th>菜单</th>
 																										<th>备注</th>
 																										<th style="width: 60px;">操作</th>
 																									</tr>
@@ -404,11 +403,10 @@
 																											</select>
 																										</td>
 																										<td>
-																											<input type="text" name="typeName" class="restaurantStandardsName col-xs-12 bind-change" value="{{restaurantList.restaurantStandard.typeName}}"/>
+																											<input type="text" name="price" class="restaurantStandardsName col-xs-12 bind-change" value="{{restaurantList.restaurantStandard.price}}"/>
 																											<input type="hidden" name="typeId" value="{{restaurantList.restaurantStandard.id}}"/>
 																										</td>
 																										<td><input class="col-xs-12" type="text" readonly="readonly" name="menuList" value="{{restaurantList.restaurantStandard.menuList}}"/></td>
-																										<td><input class="col-xs-12" type="text" readonly="readonly" name="pricePerPerson" value="{{restaurantList.price}}"/></td>
 																										<td><input class="col-xs-12" type="text" name="remark" value="{{restaurantList.remark}}"/></td>
 																										<td>
 																											<button data-entity-id="{{restaurantList.id}}" data-entity-name="restaurantTemplate" class="btn btn-xs btn-danger btn-restaurant-delete deleteScheduleList"> 
