@@ -78,7 +78,6 @@
                     <th >操作</th>
                 </tr>
                 </thead>
-
                 <tbody> 
                 {{each tripPlanList as financialTripPlan}}
                 	{{if financialTripPlan != null}}
@@ -113,18 +112,15 @@
                 		{{/if}}
                 	</td>
                 	<td>
-                        <button data-entity-billStatus="{{financialTripPlan.tripPlan.billStatus}}" data-entity-id="{{financialTripPlan.id}}" class="btn btn-primary btn-sm btn-count-update" >
-                            <i class="ace-icon fa fa-stack-overflow"></i>
+                        <a data-entity-billStatus="{{financialTripPlan.tripPlan.billStatus}}" data-entity-id="{{financialTripPlan.id}}" class="cursor btn-count-update" >
                            	审核
-                        </button>
-                        <button data-entity-id="{{financialTripPlan.id}}" class="btn btn-primary btn-sm btn-count-examine">
-                            <i class="ace-icon fa fa-building-o"></i>
+                        </a><a href="" class="cursor"> |</a>
+                        <a data-entity-id="{{financialTripPlan.id}}" class=" btn-count-examine cursor">
                            	明细
-                 		</button>
-                 		<button data-entity-billStatus="{{financialTripPlan.tripPlan.billStatus}}" data-entity-id="{{financialTripPlan.id}}" class="btn btn-success btn-sm btn-guide-account" >
-                            <i class="ace-icon fa fa-stack-overflow"></i>
+                 		</a><a href="" class="cursor"> |</a>
+                 		<a data-entity-billStatus="{{financialTripPlan.tripPlan.billStatus}}" data-entity-id="{{financialTripPlan.id}}" class="cursor btn-guide-account" >
                            	报账
-                        </button>
+                        </a>
                     </td>
                 	</tr> 
                 	{{/if}}
