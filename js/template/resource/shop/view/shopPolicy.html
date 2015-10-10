@@ -29,15 +29,11 @@
 									</tr>
 								</thead>
 								<tbody>
-									{{each policyData as policy i}}
+									{{each policyData as policy i}}  
 										<tr class="timeArea">
 										<td data-index="{{i+1}}" class="clearfix div-{{i+1}}" style="margin-bottom:3px">
 											<div>
-<<<<<<< HEAD
 												<input name="startTime" type="text" class="datepicker" style="width:100px" value="{{policy.startTime}}"/>
-=======
-												<input name="startTime"  type="text" class="date-picker" style="width:100px" value="{{policy.startTime}}"/>
->>>>>>> 3a7097733e071bc78859ea5597bc269630ccb984
 												<label>&nbsp;至&nbsp;</label>
 												<input name="endTime" type="text" class="datepicker" style="width:100px" value="{{policy.endTime}}"/>
 											</div>

@@ -414,13 +414,13 @@ define(function(require, exports) {
 									});
 						    	//新增价格列表
 						    	$price.find(".btn-price-add").click(function(){
-									var html = '<tr><td><input name="name" class="col-sm-12" type="text" style="min-width:100px;"/></td>'+
+									var html = '<tr><td><input name="name" class="col-sm-12" type="text" style="min-width:100px;" maxlength=\"50\"/></td>'+
 									'<td><select class="col-sm-12" name="customerType" style="min-width:100px;"><option value="0">散客</option><option value="1">团体</option></select></td>'+
 									'<td><div class="col-sm-12 no-padding dateTimeArea"><input name="startTime" type="text" class="datepicker col-sm-4" /><label class="col-sm-2 control-label center">&nbsp;至&nbsp;</label><input name="endTime" type="text" class="datepicker col-sm-4"/><label class="priceArea col-sm-2" style="padding-top:3px;"><button class="btn btn-success btn-sm btn-white add"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button></label></div></td>'+
-									'<td><div class="col-sm-12 no-padding"><input name="contractPrice" class="col-sm-12" type="text" /></div></td>'+
-									'<td><div class="col-sm-12 no-padding"><input name="marketPrice" class="col-sm-12" type="text"/></div></td>'+
-									'<td><div class="col-sm-12 no-padding"><input name="guideRate" class="col-sm-12" type="text"/></div></td>'+
-									'<td><div class="col-sm-12 no-padding"><input name="travelAgencyRate" class="col-sm-12" type="text"/></div></td>'+
+									'<td><div class="col-sm-12 no-padding"><input name="contractPrice" class="col-sm-12" type="text" maxlength=\"7\"/></div></td>'+
+									'<td><div class="col-sm-12 no-padding"><input name="marketPrice" class="col-sm-12" type="text" maxlength=\"7\"/></div></td>'+
+									'<td><div class="col-sm-12 no-padding"><input name="guideRate" class="col-sm-12" type="text" maxlength=\"5\"/></div></td>'+
+									'<td><div class="col-sm-12 no-padding"><input name="travelAgencyRate" class="col-sm-12" type="text" maxlength=\"5\"/></div></td>'+
 									'<td><input name="remark" type="text" class="col-sm-12" style="min-width:100px;"/></div></td>'+
 									'<td style="width:70px"><a class="btn-price-delete">删除</a></td></tr>';
 
