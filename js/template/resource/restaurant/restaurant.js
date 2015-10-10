@@ -482,9 +482,9 @@ define(function(require, exports) {
 						    	$obj.find(".btn-restaurant-standard-add").click(function(){
 						    		var html = "<tr>" +
 				    				"<td><select name=\"type\"><option value=\"早餐\">早餐</option><option value=\"午餐\">午餐</option><option value=\"晚餐\">晚餐</option></select></td>" +
-				    				"<td><input name=\"price\" type=\"text\"/></td>" +
-				    				"<td><input name=\"menuList\" type=\"text\"/></td>" +
-				    				"<td><input name=\"remark\" type=\"text\"/></td>" +
+				    				"<td><input class=\"col-sm-12\" name=\"price\" type=\"text\"/></td>" +
+				    				"<td><input class=\"col-sm-12\" name=\"menuList\" type=\"text\"/></td>" +
+				    				"<td><input class=\"col-sm-12\" name=\"remark\" type=\"text\"/></td>" +
 				    				"<td style=\"width:90px\"><a data-entity-id=\"\" class=\" btn-restaurant-standard-delete\">删除</a></td>" +
 				    				"</tr>";
 						    		

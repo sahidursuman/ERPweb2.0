@@ -108,8 +108,8 @@
 								<thead>
 									<tr>
 										<th class="table-border">用餐类型</th>
-										<th class="table-border"><span class="necessary">*</span>餐标</th>
-										<th class="table-border">菜单</th>
+										<th width="200" class="table-border"><span class="necessary">*</span>餐标</th>
+										<th width="200" class="table-border">菜单</th>
 										<th class="table-border">备注</th>
 										<th class="table-border">操作</th>
 									</tr>
@@ -124,15 +124,15 @@
 													<option {{if restaurantStandard.type == '晚餐'}} selected="selected" {{/if}} value="晚餐">晚餐</option>
 												</select>
 											</td>
-											<td>
-												<input name="price" value="{{restaurantStandard.price}}" type="text" maxlength="100">
+									 		<td>
+												<input name="price" value="{{restaurantStandard.price}}" class="col-sm-12" type="text" maxlength="100">
 
 											</td>
 											<td>
-												<input name="menuList" value="{{restaurantStandard.menuList}}" type="text">
+												<input name="menuList" value="{{restaurantStandard.menuList}}" class="col-sm-12" type="text">
 											</td>
 											<td>
-												<input name="remark" value="{{restaurantStandard.remark}}" type="text">
+												<input name="remark" value="{{restaurantStandard.remark}}" class="col-sm-12" type="text">
 											</td>
 											<td style="width:90px">
 												<a data-entiy-id="{{restaurantStandard.id}}" class="btn-restaurant-standard-delete">删除</a>
