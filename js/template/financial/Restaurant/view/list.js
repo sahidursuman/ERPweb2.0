@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":223,"md5":"548fb4a921a99be878712ab5a16f931a"}*/
+/*TMODJS:{"debug":true,"version":225,"md5":"548fb4a921a99be878712ab5a16f931a"}*/
 define(function(require) {
     return require("../../../template")("financial/Restaurant/view/list", function($data, $filename) {
         try {
