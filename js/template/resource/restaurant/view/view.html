@@ -102,10 +102,8 @@
 								<thead>
 									<tr>
 										<th>用餐类型</th>
-										<th>餐标名称</th>
-										<th>菜单列表</th>
-										<th>时间范围</th>
-										<th>每位价格</th>
+										<th>餐标</th>
+										<th>菜单</th>
 										<th>备注</th>
 										
 									</tr>
@@ -123,24 +121,10 @@
 												{{/if}}
 											</td>
 											<td>
-												{{restaurantStandard.typeName}}
+												{{restaurantStandard.price}}
 											</td>
 											<td>
 												{{restaurantStandard.menuList}}
-											</td>
-											<td>
-												{{each restaurantStandard.priceList as price}}
-												<div>
-												{{price.startTime | dateFormat:'yyyy-MM-dd'}}至{{price.endTime | dateFormat:'yyyy-MM-dd'}}
-												</div>
-												{{/each}}
-											</td>
-											<td>
-												{{each restaurantStandard.priceList as price}}
-												<div>
-												{{price.contractPrice}}元
-												</div>
-												{{/each}}
 											</td>
 											<td>
 												{{restaurantStandard.remark}}

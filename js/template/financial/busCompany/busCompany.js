@@ -162,8 +162,6 @@ define(function(require, exports) {
 					                    var html = checkBill(data);
 				                 	    var validator;
 				                 	    //判断页面是否存在
-				                 	    console.log($("#" +"tab-"+checkTabId+"-content"));
-				                 	    console.log($("#" +"tab-"+checkTabId+"-content").length);
 				                 	    if($("#" +"tab-"+checkTabId+"-content").length > 0)
 				                 	    {
 				                 	    	
