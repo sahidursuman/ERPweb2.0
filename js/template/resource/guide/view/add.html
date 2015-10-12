@@ -1,6 +1,6 @@
-<div class="col-xs-12 addGuideContainer"> 
+<div class="col-xs-12 addGuideContainer guideAdd">
 	<form class="form-horizontal guideMainForm" role="form" style="margin-top:10px" onsubmit="return false">
-		<div class="form-group">
+		<div class="form-group guideInterval">
 			<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>姓名:</label>
 			<div class="col-sm-3">
 				<input type="text" name="realname" class="col-sm-12" maxlength="32"/>
@@ -13,7 +13,7 @@
 				</select>
 			</div>
 		</div>
-		<div class="form-group">
+		<div class="form-group guideInterval">
 			<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>电话:</label>
 			<div class="col-sm-3">
 				<input type="text" name="mobileNumber" class="col-sm-12" maxlength="11"/>
@@ -23,7 +23,7 @@
 				<input type="text" name="company" class="col-sm-12" maxlength="45"/>
 			</div>
 		</div>
-		<div class="form-group">
+		<div class="form-group guideInterval">
 			<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>导游证编号:</label>
 			<div class="col-sm-3">
 				<input type="text" name="guideCardNumber" class="col-sm-12" maxlength="32"/>
@@ -33,7 +33,7 @@
 				<input type="text" name="idCardNumber" class="col-sm-12" maxlength="18"/>
 			</div>
 		</div>
-		<div class="form-group">
+		<div class="form-group guideInterval guideInterval">
 			<label class="col-sm-2 control-label no-padding-right">等级:</label>
 			<div class="col-sm-3">
 				<select name="guideLevel" class="col-sm-12">
@@ -58,7 +58,7 @@
 				</select>
 			</div>
 		</div>
-		<div class="form-group">
+		<div class="form-group guideInterval">
 			<label class="col-sm-2 control-label no-padding-right">加入时间:</label>
 			<div class="col-sm-3">
 				<div class="input-group">
@@ -78,14 +78,14 @@
 				</label>
 			</div>  
 		</div>
-		<div class="form-group">
+		<div class="form-group guideInterval">
 			<label class="col-sm-2 control-label no-padding-right">简介:</label>
 			<div class="col-sm-8">
 				<textarea class="form-control" name="remark" class="col-sm-12" maxlength="1000"></textarea>
 			</div>
 		</div>
 		<div class="space-10"></div>
-		<button class="btn btn-block btn-primary btn-submit-guide">
+		<button class="btn btn-block btn-primary btn-submit-guide guideSubmit">
 			<i class="ace-icon fa fa-check"></i>
 			提交信息
 		</button>

@@ -108,7 +108,7 @@ define(function(require, exports) {
 			    type: 1,
 			    title:"新增餐厅",
 			    skin: 'layui-layer-rim', //加上边框
-			    area: ['95%', '90%'], //宽高
+			    area: ['1190px', '700px'], //宽高
 			    zIndex:1028,
 			    content: html,
 			    success:function(){
@@ -325,7 +325,7 @@ define(function(require, exports) {
 						    type: 1,
 						    title:"修改餐厅",
 						    skin: 'layui-layer-rim', //加上边框
-						    area: ['95%', '90%'], //宽高
+						    area: ['1190px', '700px'], //宽高
 						    zIndex:1028,
 						    content: html,
 						    success:function(){
@@ -457,7 +457,7 @@ define(function(require, exports) {
 						    	//给餐标列表新增按钮绑定事件
 						    	$obj.find(".btn-restaurant-standard-add").click(function(){
 						    		var html = "<tr>" +
-				    				"<td><select name=\"type\"><option value=\"早餐\">早餐</option><option value=\"午餐\">午餐</option><option value=\"晚餐\">晚餐</option></select></td>" +
+				    				"<td><select name=\"type\" style=\"width: 60px\"><option value=\"早餐\">早餐</option><option value=\"午餐\">午餐</option><option value=\"晚餐\">晚餐</option></select></td>" +
 				    				"<td><input name=\"typeName\" type=\"text\"/></td>" +
 				    				"<td><input name=\"menuList\" type=\"text\"/></td>" +
 				    				"<td class=\"time\"><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right\"><button class=\"btn btn-success btn-sm btn-white add\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i></button></label></div></td>" +

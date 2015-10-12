@@ -99,7 +99,7 @@ define(function(require, exports) {
 			    type: 1,
 			    title:"新增自费项目",
 			    skin: 'layui-layer-rim', //加上边框
-			    area: ['90%', '90%'], //宽高
+			    area: ['1190px', '700px'], //宽高
 			    zIndex:1028,
 			    content: html,
 			    success:function(){
@@ -312,7 +312,7 @@ define(function(require, exports) {
 						    type: 1,
 						    title:"编辑自费项目信息",
 						    skin: 'layui-layer-rim', //加上边框
-						    area: ['90%', '90%'], //宽高
+						    area: ['1190px', '700px'], //宽高
 						    zIndex:1028,
 						    content: html,
 						    success:function(){
