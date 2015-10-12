@@ -397,7 +397,7 @@ define(function(require, exports) {
 			                                success:function(data){
 			                                	layer.close(globalLoadingLayer);
 			                                    var result = showDialog(data);
-			                                	if(result){
+			                                	if(result){  	 
 			                                		if(data.financialBusCompanySettlementRecordList.length == 0){
 			                                			showMessageDialog($( "#confirm-dialog-message" ),"暂时还没有操作记录");
 			                                		}else{
