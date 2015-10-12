@@ -120,35 +120,54 @@
 										<table class="table table-striped table-bordered table-hover"> 
 											<thead>
 												<tr>
+												
 													<th>小组</th>
-													<th>来源</th>
+													<th>线路产品</th>    
+													<th>住宿标准 </th>
+													<th>自费</th>  
+													<th>来源</th>   
+												
 													<th>联系人</th>
 													<th>联系电话</th>
 													<th>客源地</th>
 													<th>年龄</th>
 													<th>人数</th>
 													<th>备注</th>
-													<th>操作</th>
+													<th>操作</th>      
 												</tr>
 											</thead>
 											<tbody class="addTripPlanTouristTbody">{{each addTripPlan.touristGroupList as touristGroupList}}
 												<tr data-entity-id="{{touristGroupList.id}}">
-													<td></td>
-													<td>
+												    <td></td> 
+
+												    <td>{{touristGroupList.lineProduct.name}}</td>    
+													<td>{{touristGroupList.hotelLevel}}</td>
+													<td>{{touristGroupList.includeSelfPay}}</td>   
+		                        
+													<td>  
 														{{if touristGroupList.partnerAgency != null}}
 															{{touristGroupList.partnerAgency.travelAgencyName}}
 														{{/if}}
-													</td>
+													</td>  
+													
+
+
+
 													<td>
 														{{if touristGroupList.contactMember != null}}
 															{{touristGroupList.contactMember.name}}
 														{{/if}}
 													</td>
+
 													<td>
 														{{if touristGroupList.contactMember != null}}
 															{{touristGroupList.contactMember.mobileNumber}}
 														{{/if}}
 													</td>
+
+
+												 
+
 													<td>{{touristGroupList.areaData}}</td>
 													<td>{{touristGroupList.ageData}}</td>
 													<td>{{touristGroupList.adultCount}}大{{touristGroupList.childCount}}小</td>

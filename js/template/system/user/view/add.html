@@ -14,14 +14,10 @@
 		</div>
 		<div class="form-group">
 			<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>所属子部门:</label>
-			<div class="col-sm-3">  
+			<div class="col-sm-3">
 				<select name="groupId" class="col-sm-12">
 					{{each groupList as group}}
-						<optgroup label="{{group.name}}">
-							{{each group.subOrg as item}}
-							<option value="{{item.orgId}}">{{item.orgName}}</option>
-							{{/each}}
-						</optgroup>
+					<option value="{{group.id}}">{{group.name}}</option>
 					{{/each}}
 				</select>
 			</div>

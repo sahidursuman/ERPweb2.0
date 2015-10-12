@@ -198,6 +198,8 @@ define(function(require, exports) {
 						format: 'yyyy-mm-dd',
 						language: 'zh-CN'
 					});
+					//航班时间
+					touristGroup.dateTimePicker($("#"+Tab+" .touristGroupMainFormRS input[name=leaveShiftTime],input[name=arriveShiftTime]"));
 			    	//选择联系人列表
 			    	touristGroup.getPartnerAgencyManagerList("addTouristGroup");
 			    	//为该组团社添加新联系人
@@ -626,14 +628,14 @@ define(function(require, exports) {
 				    	var outArrangeRemarkJson = "";
 				    	var arriveTime = $("#"+Tab+" .touristGroupMainFormRS").find("input[name=receptionTime]").val();
 				    	var arrivePosition = $("#"+Tab+" .touristGroupMainFormRS").find("input[name=receptionAddress]").val();
-				    	//var receptionNumber = $(".touristGroupMainFormRS").find("input[name=receptionNumber]").val();
-				    	//var receptionNumberTime = $(".touristGroupMainFormRS").find("input[name=receptionNumberTime]").val();
+				    	var arriveShift = $(".touristGroupMainFormRS").find("input[name=arriveShift]").val();
+				    	var arriveShiftTime = $(".touristGroupMainFormRS").find("input[name=arriveShiftTime]").val();
 			    		var leaveTime = $("#"+Tab+" .touristGroupMainFormRS").find("input[name=sendTime]").val();
 				    	var leavePosition = $("#"+Tab+" .touristGroupMainFormRS").find("input[name=sendAddress]").val();
-				    	//var sendNumber = $(".touristGroupMainFormRS").find("input[name=sendNumber]").val();
-				    	//var sendNumberTime = $(".touristGroupMainFormRS").find("input[name=sendNumberTime]").val();
+				    	var leaveShift = $(".touristGroupMainFormRS").find("input[name=leaveShift]").val();
+				    	var leaveShiftTime = $(".touristGroupMainFormRS").find("input[name=leaveShiftTime]").val();
 				    	
-				    	outArrangeRemarkJson +="{\"arriveTime\":\""+arriveTime+"\",\"arrivePosition\":\""+arrivePosition+"\",\"leaveTime\":\""+leaveTime+"\",\"leavePosition\":\""+leavePosition+"\"}"
+				    	outArrangeRemarkJson +="{\"arriveTime\":\""+arriveTime+"\",\"arrivePosition\":\""+arrivePosition+"\",\"leaveTime\":\""+leaveTime+"\",\"leavePosition\":\""+leavePosition+"\",\"arriveShift\":\""+arriveShift+"\",\"arriveShiftTime\":\""+arriveShiftTime+"\",\"leaveShift\":\""+leaveShift+"\",\"leaveShiftTime\":\""+leaveShiftTime+"\"}"
 				    	//outArrangeRemarkJson += "]";
 				    	
 				    	//touristGroupJsonAdd +="{\"touristGroupFeeJsonAdd\":\""+encodeURIComponent(touristGroupFeeJsonAdd)+"\",\"touristGroupMemberJsonAdd\":\""+encodeURIComponent(touristGroupMemberJsonAdd)+"\",\"touristGroupTransitJson\":\""+encodeURIComponent(touristGroupTransitJson)+"\"}"
@@ -782,6 +784,8 @@ define(function(require, exports) {
 			    		var validator=rule.checktouristGroup($(".updateTouristGroupMainForm"));  
 						
 						var tab = "tab-resource_touristGroup-update-content";
+								//航班时间
+								touristGroup.dateTimePicker($("#"+tab+" .touristGroupMainFormRS input[name=leaveShiftTime],input[name=arriveShiftTime]"));
 						    	var updateTouristGroup = id;
 						    	if(data.touristGroupDetail.status != 0){
 							    	//出游日期 时间控件
@@ -1317,14 +1321,14 @@ define(function(require, exports) {
 							    	var outArrangeRemarkJson = "";
 							    	var arriveTime = $("#"+tab+" .touristGroupMainFormRS").find("input[name=receptionTime]").val();
 							    	var arrivePosition = $("#"+tab+" .touristGroupMainFormRS").find("input[name=receptionAddress]").val();
-							    	//var receptionNumber = $(".touristGroupMainFormRS").find("input[name=receptionNumber]").val();
-							    	//var receptionNumberTime = $(".touristGroupMainFormRS").find("input[name=receptionNumberTime]").val();
+							    	var arriveShift = $(".touristGroupMainFormRS").find("input[name=arriveShift]").val();
+							    	var arriveShiftTime = $(".touristGroupMainFormRS").find("input[name=arriveShiftTime]").val();
 						    		var leaveTime = $("#"+tab+" .touristGroupMainFormRS").find("input[name=sendTime]").val();
 							    	var leavePosition = $("#"+tab+" .touristGroupMainFormRS").find("input[name=sendAddress]").val();
-							    	//var sendNumber = $(".touristGroupMainFormRS").find("input[name=sendNumber]").val();
-							    	//var sendNumberTime = $(".touristGroupMainFormRS").find("input[name=sendNumberTime]").val();
+							    	var leaveShift = $(".touristGroupMainFormRS").find("input[name=leaveShift]").val();
+							    	var leaveShiftTime = $(".touristGroupMainFormRS").find("input[name=leaveShiftTime]").val();
 							    	
-							    	outArrangeRemarkJson +="{\"arriveTime\":\""+arriveTime+"\",\"arrivePosition\":\""+arrivePosition+"\",\"leaveTime\":\""+leaveTime+"\",\"leavePosition\":\""+leavePosition+"\"}"
+							    	outArrangeRemarkJson +="{\"arriveTime\":\""+arriveTime+"\",\"arrivePosition\":\""+arrivePosition+"\",\"leaveTime\":\""+leaveTime+"\",\"leavePosition\":\""+leavePosition+"\",\"arriveShift\":\""+arriveShift+"\",\"arriveShiftTime\":\""+arriveShiftTime+"\",\"leaveShift\":\""+leaveShift+"\",\"leaveShiftTime\":\""+leaveShiftTime+"\"}"
 							    	
 							    	
 							    	$.ajax({
@@ -2390,6 +2394,15 @@ define(function(require, exports) {
 			    	});
 			    	
 			    }
+			});
+		},
+		dateTimePicker :function(obj){
+			console.log(obj)
+	    	obj.datetimepicker({
+				autoclose: true,
+				todayHighlight: true,
+				format: 'L',
+				language: 'zh-CN'
 			});
 		}
 	}

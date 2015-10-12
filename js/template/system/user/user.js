@@ -322,9 +322,8 @@ define(function(require, exports) {
 					if(result){
 						var userInfo = JSON.parse(data.user);
 						data.user = userInfo;
-						var groupInfo = user.covertOrg({groupList: JSON.parse(data.groups)})
-
-						data.groups = groupInfo.groupList;
+						var groupInfo = JSON.parse(data.groups);
+						data.groups = groupInfo;
 						var html = updateTemplate(data);
 						var updateUserLayer = layer.open({
 						    type: 1,
@@ -411,10 +410,7 @@ define(function(require, exports) {
 				},
 				success:function(data){
 					layer.close(globalLoadingLayer);
-
 					var result = showDialog(data);
-					// 数据格式转换
-					data = user.covertOrg(data);
 					if(result){
 						var html = addTemplate(data);
 						var addUserLayer = layer.open({
@@ -463,52 +459,6 @@ define(function(require, exports) {
 					}
 				}
 			});
-		},
-		// 组织数据结构
-		covertOrg: function(data)  {
-			var res = [];
-			if (!!data && !!data.groupList)  {
-				for (var i = 0, len = data.groupList.length, tmp;i < len; i++)  {
-					tmp = data.groupList[i];
-					pushData(tmp.businessGroup.id, tmp.businessGroup.name, tmp.id, tmp.name);
-				}
-
-				// 恢复格式
-				res = {
-					groupList: res
-				};
-			} else {
-				res = data;
-			}
-
-			return res;
-
-			function pushData(parentID, parentName, id, name) {
-				var obj = {
-						id: parentID,
-						name: parentName,
-						subOrg: []
-					};
-					
-				// 获取父对象
-				for (var i = 0, len = res.length; i < len; i ++)  {
-					if (res[i].id === parentID)  {
-						obj = res[i];
-						break;
-					}
-				}
-
-				// 添加子节点
-				obj.subOrg.push({
-					orgId: id,
-					orgName: name
-				});
-
-				if (obj.subOrg.length === 1)  {
-					// 首次加入
-					res.push(obj);
-				}
-			}
 		}
 	}
 	exports.listUser = user.listUser;
