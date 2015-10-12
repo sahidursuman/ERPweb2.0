@@ -55,15 +55,19 @@ function addTab(tabId,tabName,html){
 				$that = $(this);
 				var str = tabId.split("-");
 				var modal = modals[str[0]];
-				if(str.length > 1 && str[1] != "view" && str[1] != "add" 
-					&& !!modal && !!modal.isEdited && modal.isEdited())
-				{//非列表、查看、添加,且有修改
-					
-				    console.log(str[1]);
-					showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){					
-						modal.save();
-						closeTab();
-					}, closeTab);
+				if(str.length > 1 && str[1] != "view" && !!modal && !!modal.isEdited && modal.isEdited(str[1])){//非列表、查看,且有修改
+					if(str[1] == "add"){
+						showConfirmMsg($( "#confirm-dialog-message" ), "未保存的数据，是否放弃?","放弃","留在此页",function(){	
+							console.log("留在当前页");
+						},function(){
+							closeTab();
+						});
+					} else{
+						showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已修改的数据?",function(){					
+							modal.save(str[1]);
+							closeTab();
+						}, closeTab);
+					}
 				} else {
 					closeTab();
 				}
@@ -215,13 +219,33 @@ function showMessageDialog(dialogObj,message, fn){
 		}
 	});
 }
-function showConfirmMsg(dialogObj,message, confirmFn ,cancelFn){
-	dialogObj.removeClass('hide').dialog({
-		modal: true,
-		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-		title_html: true,
-		draggable:false,
-		buttons: [
+function showConfirmMsg(dialogObj,message,btnStr1,btnStr2,confirmFn ,cancelFn){
+	var buttons;
+	if(!!btnStr1 && btnStr1 != "" && !!btnStr2 && btnStr2 != ""){
+		buttons = [
+			{
+				text: btnStr1,
+				"class" : "btn btn-minier",
+				click: function() {
+					$( this ).dialog( "close" );
+					if(typeof cancelFn === "function"){
+						cancelFn();
+					}
+				}
+			},
+			{
+				text: btnStr2,
+				"class" : "btn btn-primary btn-minier",
+				click: function() {
+					$( this ).dialog( "close" );
+					if(typeof confirmFn === "function"){
+						confirmFn();
+					}
+				}
+			}
+		]
+	} else{
+		buttons = [
 			{
 				text: "放弃",
 				"class" : "btn btn-minier",
@@ -242,7 +266,14 @@ function showConfirmMsg(dialogObj,message, confirmFn ,cancelFn){
 					}
 				}
 			}
-		],
+		]
+	}
+	dialogObj.removeClass('hide').dialog({
+		modal: true,
+		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
+		title_html: true,
+		draggable:false,
+		buttons: buttons,
 		open:function(event,ui){
 			$(this).find("p").text(message);
 		}
@@ -599,6 +630,7 @@ function listMenu(menuTemplate){
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/travelLine/travelLine.js",function(travelLine){
 						travelLine.listTravelLine(0,"",1);
+						modals["resource_travelLine"] = travelLine;
 					});
 				});	
 					
