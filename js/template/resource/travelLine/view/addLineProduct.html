@@ -17,7 +17,7 @@
 						</div>
 						<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>线路产品名称:</label>
 						<div class="col-sm-3">
-							<input type="text" name="name" class="col-sm-12 bind-change" placeholder="请输入线路产品名称">
+							<input type="text" name="name" class="col-sm-12 bind-change" placeholder="请输入线路产品名称" maxlength="80">  
 						</div>
 					</div>
 					<div class="form-group">
@@ -27,7 +27,7 @@
 						</div>
 						<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>线路类型:</label>
 						<div class="col-sm-3">
-							<input type="text" name="type" class="col-sm-12">
+							<input type="text" name="type" class="col-sm-12" maxlength="80">
 						</div>
 						
 					</div>
@@ -50,9 +50,9 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-sm-2 control-label no-padding-right">线路产品备注:</label>
+						<label class="col-sm-2 control-label no-padding-right">线路产品备注:</label>  
 						<div class="col-sm-8">
-							<textarea class="form-control" name="remark" class="col-sm-12" ></textarea>
+							<textarea class="form-control" name="remark" class="col-sm-12" maxlength="1000" ></textarea>
 						</div>
 					</div>
 				</div>
@@ -95,7 +95,7 @@
 															<th>导游所属公司</th>
 															<th>备注</th>
 														</tr>
-													</thead>
+													</thead>  
 													<tbody>
 														<tr>
 															<td><input class="chooseGuide col-xs-12 bind-change" name="guideName" type="text"/><input type="hidden" name="guideNameId"></td>
