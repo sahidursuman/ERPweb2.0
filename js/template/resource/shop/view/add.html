@@ -10,7 +10,7 @@
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>商家名称:</label>
 						<div class="col-sm-3">
-							<input type="text" name="name" class="col-sm-12">
+							<input type="text" name="name" class="col-sm-12" maxlength="100">
 						</div>
 						<label class="col-sm-1 control-label no-padding-right"><span class="necessary"></span>启用标志:</label>
 						<div class="col-sm-2 checkbox" style="margin-left:-10px">
@@ -25,31 +25,31 @@
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>联系人:</label>
 						<div class="col-sm-3">
-							<input type="text" name="managerName" class="col-sm-12">
+							<input type="text" name="managerName" class="col-sm-12" maxlength="20">
 						</div>
 						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>联系电话:</label>
 						<div class="col-sm-3">
-							<input type="text" name="mobileNumber" class="col-sm-12">
+							<input type="text" name="mobileNumber" class="col-sm-12" maxlength="11">
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right">座机号码:</label>
 						<div class="col-sm-3">
-							<input type="text" name="telNumber" class="col-sm-12">
+							<input type="text" name="telNumber" class="col-sm-12" maxlength="20">
 						</div>
 						<label class="col-sm-1 control-label no-padding-right">传真号码:</label>
 						<div class="col-sm-3">
-							<input type="text" name="faxNumber" class="col-sm-12">
+							<input type="text" name="faxNumber" class="col-sm-12" maxlength="20">
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right">人数返佣(元/人):</label>
 						<div class="col-sm-3">
-							<input type="text" name="customerRebateMoney" class="col-sm-12">
+							<input type="text" name="customerRebateMoney" class="col-sm-12" maxlength="5">
 						</div>
 						<label class="col-sm-1 control-label no-padding-right">停车返佣(元/辆):</label>
 						<div class="col-sm-3">
-							<input type="text" name="parkingRebateMoney" class="col-sm-12">
+							<input type="text" name="parkingRebateMoney" class="col-sm-12" maxlength="5">
 						</div>
 					</div>
 					
@@ -70,7 +70,7 @@
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right">详细地址:</label>
 						<div class="col-sm-6">
-							<input type="text" name="street" class="col-sm-12" placeholder="请输入街道地址"/>
+							<input type="text" name="street" class="col-sm-12" placeholder="请输入街道地址" maxlength="100" />
 						</div>
 					</div>
 					<div class="form-group">
@@ -83,7 +83,7 @@
 			</div>
 		</div>
 	</form>
-	<form class="form-horizontal shopPolicyForm" role="form" style="margin-top:10px" onsubmit="return false">
+	<form class="form-horizontal shopPolicyForm" role="form" style="margin-top:10px" onsubmit="return false">  
 		<div class="form-group">
 			<div class="col-xs-12 col-sm-12 widget-container-col">
 				<div class=" ui-sortable-handle">
@@ -94,7 +94,7 @@
 								<button class="btn btn-sm btn-success btn-busCompany-add " style="margin-left: 20px;">
 									<i class="ace-icon fa fa-plus"></i>
 									新增
-								</button>
+								</button>  
 							</a>
 						</h5>
 					<div class="widget-body">

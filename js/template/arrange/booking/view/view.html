@@ -59,6 +59,8 @@
 								签单
 								{{else if bookingOrder.getType==2}}
 								转账
+								{{else}}
+								网付
 								{{/if}}
 							</label>
 						</div>
@@ -81,6 +83,8 @@
 								签单
 								{{else if bookingOrder.payType==2}}
 								转账
+								{{else}}  
+								网付 
 								{{/if}}
 							</label>
 						</div>
@@ -237,7 +241,7 @@
 											机票
 											{{else if ticketList.type==2}}
 											汽车票
-											{{else if ticketList.type==3}}
+											{{else if ticketList.type==3}}  
 											火车票
 											{{else if ticketList.type==4}}
 											轮船票
