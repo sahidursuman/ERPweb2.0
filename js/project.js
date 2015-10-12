@@ -7,6 +7,7 @@ var globelEditorInstants = {};
 var imgUrl = "http://7xlg3o.com2.z0.glb.qiniucdn.com/";//正式的图片地址
 imgUrl  = "http://7xlw2q.com2.z0.glb.qiniucdn.com/"; //测试
 var listwidth = parseInt($("#tabList li").eq(0).css("width"));//ul总宽度，初始化数据为“工作台”tab宽度
+// window.UEDITOR_HOME_URL = APP_ROOT + 'app/components/ueditor/';
 
 function addTab(tabId,tabName,html){
 	$("#tabList li").removeClass("active");
