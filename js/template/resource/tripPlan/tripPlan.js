@@ -1877,16 +1877,16 @@ define(function(require, exports) {
 			var table = $(".table-tripPlan-container tbody tr"), price = 0, num = 0, reduceMoney = 0;
 			table.each(function(){
 				var _this = $(this);
-				_this.find("input[name=price], input[name=fee]").on("keyup", function(){
+				_this.find("input[name=price], input[name=fee]").on("change", function(){
 					plusPrice(this);
 				});
-				_this.find("input[name=memberCount], input[name=memberCount], input[name=needRoomCount]").on("keyup", function(){
+				_this.find("input[name=memberCount], input[name=memberCount], input[name=needRoomCount]").on("change", function(){
 					plusPrice(this);
 				});
-				_this.find("input[name=reduceMoney]").on("keyup", function(){
+				_this.find("input[name=reduceMoney]").on("change", function(){
 					plusPrice(this);
 				});
-				_this.find("input[name=payedMoney]").on("keyup", function(){
+				_this.find("input[name=payedMoney]").on("change", function(){
 					plusPrice(this);
 				});
 				_this.find("select[name=payType]").on("change", function(){
