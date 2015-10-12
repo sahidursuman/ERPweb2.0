@@ -6,13 +6,13 @@
 					<i class="ace-icon fa fa-info-circle"></i>
 					保险主体信息
 				</h5>
-			</div>
+			</div> 
 			<div class="widget-body">
 				<div class="widget-main">
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>公司名称:</label>
 						<div class="col-sm-3">
-							<input type="text" name="name" class="col-sm-12" value="{{insurance.name}}">
+							<input type="text" name="name" class="col-sm-12" value="{{insurance.name}}" maxlength="50">
 							<input type="text" name="id" hidden="hidden" value="{{insurance.id}}">
 						</div>
 						<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>是否启用:</label>
@@ -28,21 +28,21 @@
 					<div class="form-group">
 					    <label class="col-sm-2 control-label no-padding-right">联系人:</label>
 						<div class="col-sm-3">
-							<input type="text" name="managerName" class="col-sm-12" value="{{insurance.managerName}}">
+							<input type="text" name="managerName" class="col-sm-12" value="{{insurance.managerName}}" maxlength="32">
 						</div>
 						<label class="col-sm-2 control-label no-padding-right">联系电话:</label>
 						<div class="col-sm-3">
-							<input type="text" name="mobileNumber" class="col-sm-12" value="{{insurance.mobileNumber}}">
+							<input type="text" name="mobileNumber" class="col-sm-12" value="{{insurance.mobileNumber}}" maxlength="11">
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right">座机号码:</label>
 						<div class="col-sm-3">
-							<input type="text" name="telNumber" class="col-sm-12" value="{{insurance.telNumber}}" />
+							<input type="text" name="telNumber" class="col-sm-12" value="{{insurance.telNumber}}" maxlength="20" />
 						</div>
 						<label class="col-sm-2 control-label no-padding-right">传真号码:</label>
 						<div class="col-sm-3">
-							<input type="text" name="faxNumber" class="col-sm-12" value="{{insurance.faxNumber}}" />
+							<input type="text" name="faxNumber" class="col-sm-12" value="{{insurance.faxNumber}}"  maxlength="20" />
 						</div>
 					</div>
 					<div class="form-group">
@@ -62,13 +62,13 @@
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right">详细地址:</label>
 						<div class="col-sm-6">
-							<input type="text" name="street" class="col-sm-12" placeholder="请输入街道地址" value="{{insurance.street}}" />
+							<input type="text" name="street" class="col-sm-12" placeholder="请输入街道地址" value="{{insurance.street}}"  maxlength="100" />
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right">保险公司简介:</label>
 						<div class="col-sm-8">
-							<textarea class="form-control" name="remark" class="col-sm-12" >{{insurance.remark}}</textarea>
+							<textarea class="form-control" name="remark" class="col-sm-12" maxlength="100">{{insurance.remark}}</textarea>
 						</div>
 					</div>
 				</div>
