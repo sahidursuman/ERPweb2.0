@@ -20,9 +20,14 @@ define(function(require, exports) {
 			createTimeEnd : "",
 			status : ""
 		},
+		edited : false,
+		isEdited : function(){
+			return touristGroup.edited;
+		},
+
 		listTouristGroup:function(page,partnerAgencyIdS,lineProductIdS,startTimeS,userIdS,createTimeStartS,createTimeEndS,statusS){
 			touristGroup.searchData = {
-				partnerAgencyId : partnerAgencyIdS,
+				partnerAgencyId : partnerAgencyIdS,    
 				lineProductId : lineProductIdS,
 				startTime : startTimeS,
 				userId : userIdS,
@@ -87,7 +92,7 @@ define(function(require, exports) {
 				    	
 				    	if(data.searchParam == '{}'){
 				    		touristGroup.getLineProductList($(".touristGroupSearchForm select[name=lineProductId]"));
-				    		touristGroup.getPartnerAgencyList($(".touristGroupSearchForm select[name=partnerAgencyId]"));
+				    		touristGroup.getPartnerAgencyList($(".touristGroupSearchForm input[name=fromPartnerAgency]"));
 				    		touristGroup.getCreatorUserList($(".touristGroupSearchForm select[name=userId]"));
 				    	}
 				    	else{

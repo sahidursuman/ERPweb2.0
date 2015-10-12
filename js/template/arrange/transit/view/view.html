@@ -27,17 +27,17 @@
 				</li>
 				{{/if}}
 				{{if isNeedBus == 1}}
-				<li class="" style="width:125px;">
-					<a aria-expanded="false" data-toggle="tab" href="#carListV" style="text-align:center;">
+				<li {{if isNeedArriveService == 0}}class="active"{{/if}} style="width:125px;">					
+				<a aria-expanded="false" data-toggle="tab" href="#carListV" style="text-align:center;">
 						&nbsp;小车&nbsp;
 					</a>
 				</li>
 				{{/if}}
 				{{if isNeedLeaveService == 1}}
-				<li class="" style="width:125px;">
+				<li {{if isNeedArriveService == 0 && isNeedBus == 0}}class="active"{{/if}} style="width:125px;">				
 					<a aria-expanded="false" data-toggle="tab" href="#sendListV" style="text-align:center;">
 						&nbsp;送团&nbsp;
-					</a>
+					</a>  
 				</li>
 				{{/if}}
 			</ul>

@@ -47,7 +47,17 @@ define(function(require, exports) {
 						arrangeTourist.touristGroupMergeData = {
 								touristGroupMergeList : []
 						}
-						arrangeTourist.listArrangeTourist(0,"","");
+						arrangeTourist.listArrangeTourist(0,"","");  
+
+						//给搜索按钮绑定事件
+						$("#"+tabId+" .arrangeTouristMain .btn-arrangeTourist-search").click(function(){
+							arrangeTourist.searchData = {
+									lineProductId : $("#tab-"+menuKey+"-content .arrangeTouristMain select[name=lineProductId]").val(),
+									startTime : $("#tab-"+menuKey+"-content .arrangeTouristMain input[name=startTime]").val()
+							}
+							arrangeTourist.listArrangeTourist(0,arrangeTourist.searchData.lineProductId,arrangeTourist.searchData.startTime);
+						});
+
 						//开始并团按钮绑定事件
 						$("#"+tabId+" .arrangeTouristMain .arrangeTouristMergeList .btn-start-touristGroup-merge").click(arrangeTourist.startTouristGroupMerge);
 					}
