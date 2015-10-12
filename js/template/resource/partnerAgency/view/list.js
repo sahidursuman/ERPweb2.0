@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":106,"md5":"dad2b29622f67950496cf82522343423"}*/
+/*TMODJS:{"debug":true,"version":109,"md5":"dad2b29622f67950496cf82522343423"}*/
 define(function(require) {
     return require("../../../template")("resource/partnerAgency/view/list", function($data, $filename) {
         try {
