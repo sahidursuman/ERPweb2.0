@@ -10,7 +10,6 @@ define(function(require, exports) {
 	
 	var lineProduct = {
 		searchData : {},
-		edited : false,
 		listLineProduct:function(page,name,status){
 			$.ajax({
 				url:""+APP_ROOT+"back/lineProduct.do?method=listLineProduct&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
@@ -305,36 +304,10 @@ define(function(require, exports) {
 						if(clipboardMode){
 							title = "新增线路产品";
 						}
-						//已修改提示
+						addTab(menuKey+"-update",title,html);
 						var tab = "tab-resource_lineProduct-update-content";
+						// 初始化并绑定表单验证
 			    		var validator = rule.lineProductCheckor($('.updateLineProductContainer'));
-						if($(".tab-"+menuKey+"-update").length > 0) {
-                 	    	if(lineProduct.edited){
-								addTab(menuKey+"-update",title,html);
-                 	    		showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
-                 	    			 validator = rule.lineProductCheckor($('.updateLineProductContainer'));
-				            		 if (!validator.form()) { 
-				            			 return; 
-				            		 }
-				            		 lineProduct.submitInfoLineProduct(tab,clipboardMode, validator,0);
-									 lineProduct.edited = false;
-				            		 addTab(menuKey+"-update",title,html);
-				            		 validator = rule.lineProductCheckor($("#"+tab+""));
-				            	 },function(){
-				            		 addTab(menuKey+"-update",title,html);
-				            		 validator = rule.lineProductCheckor($("#"+tab+""));
-				            	 });							
-                 	    	 }else{
-	                 	    	addTab(menuKey+"-update",title,html);
-	                 	        validator = rule.lineProductCheckor($("#"+tab+""));
-                 	    	 } 
-                 	    }else{
-                 	    	addTab(menuKey+"-update",title,html);
-                 	    	validator = rule.lineProductCheckor($("#"+tab+""));
-                 	    	$("#"+tab+"").on("change",function(){
-                 	    		lineProduct.edited = true;
-                 	    	});
-                 	    };						
 				    	
 			    		for(var i=0;i<lineProductDetail.days;i++){
 							var ue = init_editor("detailEditor-update-lineProduct-"+i+"");
@@ -379,8 +352,9 @@ define(function(require, exports) {
 						lineProduct.bindTicketEvent($("#"+tab+" .viewUpdateTicketList .chooseTicketName"));
 						
 						$("#"+tab+" .updateLineProductContainer .submitInfoLineProduct").on("click", function(){
-							lineProduct.submitInfoLineProduct(tab,clipboardMode, validator,1);
-						});//绑定提交事件
+							lineProduct.submitInfoLineProduct(tab,clipboardMode, validator);
+						})//绑定提交事件
+						
 						
 						$("#"+tab+" .viewUpdateRestaurantList .deleteScheduleList").off().on("click", lineProduct.deleteLineProductDaysArrange);
 						$("#"+tab+" .viewUpdateHotelList .deleteResourceHotelList").off().on("click", lineProduct.deleteLineProductDaysArrange);
@@ -983,14 +957,13 @@ define(function(require, exports) {
 			//添加行程安排餐饮
 			var scheduleDetails = '<div class="timeline-item clearfix updateRestaurantList updateLineProductDaysDetail scheduleList ui-sortable-handle" data-entity-index='+lineProduct.updateLineProductIndex+'><div class="timeline-info"><i class="timeline-indicator ace-icon fa fa-cutlery btn btn-success no-hover"></i><span class="label label-info label-sm">餐饮</span></div>'+
 			'<div class="widget-box transparent"><div class="widget-body"><div class="widget-main"><table class="table table-striped table-bordered table-hover">'+
-			'<thead><tr><th>餐厅名称</th><th>餐厅电话</th><th>餐标类型</th><th>餐标名称</th>	<th>菜单列表</th><th>每位价格</th><th>备注</th>	<th style="width: 60px;">操作</th></tr></thead>'+
+			'<thead><tr><th>餐厅名称</th><th>餐厅电话</th><th>用餐类型</th><th>餐标</th>	<th>菜单</th><th>备注</th>	<th style="width: 60px;">操作</th></tr></thead>'+
 			'<tbody><tr>'+
 			'<td><input type="text" class="col-xs-12 chooseRestaurantName bind-change"/><input type="hidden" name="restaurantId"/></td>'+
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
 			'<td><select name="type" class="col-xs-12 restauranType"><option value="早餐">早餐</option><option value="午餐">午餐</option><option value="晚餐">晚餐</option></select></td>'+
-			'<td><input type="text" name="typeName" class="col-xs-12 restaurantStandardsName bind-change"/><input type="hidden" name="typeId"/></td>'+
+			'<td><input type="text" name="price" class="col-xs-12 restaurantStandardsName bind-change"/><input type="hidden" name="typeId"/></td>'+
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="menuList"/></td>'+
-			'<td><input type="text" class="col-xs-12" readonly="readonly" name="pricePerPerson"/></td>'+
 			'<td><input type="text" class="col-xs-12" name="remark"/></td><td><button class="btn btn-xs btn-danger btn-restaurant-delete deleteScheduleList"> <i class="ace-icon fa fa-trash-o bigger-120"></i> </button></td></tr>'+
 			'</tbody></table></div></div></div></div>';
 
@@ -1110,7 +1083,6 @@ define(function(require, exports) {
 								var restaurantStandard = JSON.parse(data.restaurantStandard);
 								
 								objParent.find("input[name=menuList]").val(restaurantStandard.menuList);
-								objParent.find("input[name=pricePerPerson]").val(restaurantStandard.contractPrice);
 								objParent.find("input[name=remark]").val(restaurantStandard.remark);
 							}
 	                    }
@@ -1121,17 +1093,17 @@ define(function(require, exports) {
 				eatType = $(objEat).parent().parent().find("[name=type]").val(),
 				restaurantNameId = $(objEat).parent().parent().find("[name=restaurantId]").val();
 				$.ajax({
-					url:""+APP_ROOT+"back/restaurant.do?method=findStandardTypeName&token="+$.cookie("token")+"&menuKey=resource_restaurant&operation=view",
+					url:""+APP_ROOT+"back/restaurant.do?method=getRestaurantStandardByType&token="+$.cookie("token")+"&menuKey=resource_restaurant&operation=view",
                     dataType: "json",
-                    data:"id="+restaurantNameId+"&type="+eatType,
+                    data:"restaurantId="+restaurantNameId+"&type="+eatType,
                     success: function(data) {
                     	layer.close(globalLoadingLayer);
 						var result = showDialog(data);
 						if(result){
-							var restaurantStandardList = JSON.parse(data.restaurantStandardList);
+							var restaurantStandardList = data.restaurantStandardList;
 							if(restaurantStandardList && restaurantStandardList.length > 0){
 								for(var i=0; i<restaurantStandardList.length; i++){
-									restaurantStandardList[i].value = restaurantStandardList[i].typeName;
+									restaurantStandardList[i].value = restaurantStandardList[i].price;
 								}
 
 								$(objEat).autocomplete('option','source', restaurantStandardList);
@@ -1939,7 +1911,7 @@ define(function(require, exports) {
 				});
 			});
 		},
-		submitInfoLineProduct:function(tab,clipboardMode, validator,isClose){
+		submitInfoLineProduct:function(tab,clipboardMode, validator){
 			if (!validator.form())   return;
 
 			var $form = $(".updateLineProductContainer form"), travelLineData;
@@ -2022,7 +1994,7 @@ define(function(require, exports) {
 									id : scheduleList.eq(j).find("[name=templateId]").val(),
 									restaurantId : restaurantId,
 									standardId : standardId,
-									price : scheduleList.eq(j).find("[name=pricePerPerson]").val(),
+									price : scheduleList.eq(j).find("[name=price]").val(),
 									remark : scheduleList.eq(j).find("[name=remark]").val(),
 									orderIndex : scheduleList.eq(j).attr("data-entity-index")
 								}
@@ -2161,11 +2133,8 @@ define(function(require, exports) {
 					if(result){
 						//layer.close(addTravelLineLayer);
 						showMessageDialog($( "#confirm-dialog-message" ),data.message, function(){
-							//lineProduct.listLineProduct(0,"",1);
-							if(isClose == 1){
-								closeTab(menuKey+"-update");
-								lineProduct.listLineProduct(0,"",1);
-							}
+							closeTab(menuKey+"-update");
+							lineProduct.listLineProduct(0,"",1);
 						});
 					}
 				}
@@ -2312,17 +2281,7 @@ define(function(require, exports) {
 				var url = ""+APP_ROOT+"back/export.do?method=exportLineProduct&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view&lineProductId="+id+"";
 				exportXLS(url);
 			});
-		},
-		isEdited : function(){
-			return lineProduct.edited;
-		},
-		save : function(){
-			var tab = "tab-resource_lineProduct-update-content";
-			var validator = rule.lineProductCheckor($('.updateLineProductContainer'));
-			lineProduct.submitInfoLineProduct(tab,false,validator,1);
 		}
 	}
 	exports.listLineProduct = lineProduct.listLineProduct;
-	exports.save = lineProduct.save;
-	exports.isEdited = lineProduct.isEdited;
 });

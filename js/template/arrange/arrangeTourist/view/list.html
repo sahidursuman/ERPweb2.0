@@ -38,18 +38,14 @@
 				<td>{{arrangeTourist.sumPayedMoney}}</td>
 				<td>{{arrangeTourist.sumCurrentNeedPayMoney}}</td>
 				<td>
-					<button data-entity-id="{{arrangeTourist.lineProductId}}" data-entity-startTime="{{arrangeTourist.startTime}}" class="btn btn-success btn-sm btn-divide">
-						<i class="ace-icon fa fa-users"></i>
+					<a data-entity-id="{{arrangeTourist.lineProductId}}" data-entity-startTime="{{arrangeTourist.startTime}}" class="   btn-divide cursor">
 						分团
-					</button>
-					<button data-entity-id="{{arrangeTourist.lineProductId}}" data-entity-startTime="{{arrangeTourist.startTime}}" class=" btn btn-sm btn-success btn-transfer">
-						<i class="ace-icon fa  fa-exchange"></i>
+					</a><a href="" class="cursor"> |</a>
+					<a data-entity-id="{{arrangeTourist.lineProductId}}" data-entity-startTime="{{arrangeTourist.startTime}}" class=" btn-transfer cursor">
 						转客
-					</button>
+					</a>
 				</td>
-
 			</tr>
-
 		{{/each}}
 
 	</tbody>

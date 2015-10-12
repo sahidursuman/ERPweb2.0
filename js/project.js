@@ -4,10 +4,11 @@ var ASSETS_ROOT = '/';
 var APP_VERSION = "1.0.0";
 var globalLoadingLayer;
 var globelEditorInstants = {};
-var modals = {};
 var imgUrl = "http://7xlg3o.com2.z0.glb.qiniucdn.com/";//正式的图片地址
 imgUrl  = "http://7xlw2q.com2.z0.glb.qiniucdn.com/"; //测试
 var listwidth = parseInt($("#tabList li").eq(0).css("width"));//ul总宽度，初始化数据为“工作台”tab宽度
+// window.UEDITOR_HOME_URL = APP_ROOT + 'app/components/ueditor/';
+var modals = {};
 
 function addTab(tabId,tabName,html){
 	$("#tabList li").removeClass("active");
@@ -57,16 +58,20 @@ function addTab(tabId,tabName,html){
 				var modal = modals[str[0]];
 				if(str.length > 1 && str[1] != "view" && !!modal && !!modal.isEdited && modal.isEdited(str[1])){//非列表、查看,且有修改
 					if(str[1] == "add"){
-						showConfirmMsg($( "#confirm-dialog-message" ), "未保存的数据，是否放弃?","放弃","留在此页",function(){	
+						showConfirmMsg($( "#confirm-dialog-message" ), "未保存的数据，是否放弃?",function(){	
 							console.log("留在当前页");
 						},function(){
 							closeTab();
-						});
+							modal.clearEdit(str[1]);
+						},"放弃","留在此页");
 					} else{
 						showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已修改的数据?",function(){					
 							modal.save(str[1]);
 							closeTab();
-						}, closeTab);
+						}, function(){
+							closeTab();
+							modal.clearEdit(str[1]);
+						});
 					}
 				} else {
 					closeTab();
@@ -219,7 +224,7 @@ function showMessageDialog(dialogObj,message, fn){
 		}
 	});
 }
-function showConfirmMsg(dialogObj,message,btnStr1,btnStr2,confirmFn ,cancelFn){
+function showConfirmMsg(dialogObj,message,confirmFn ,cancelFn,btnStr1,btnStr2){
 	var buttons;
 	if(!!btnStr1 && btnStr1 != "" && !!btnStr2 && btnStr2 != ""){
 		buttons = [
@@ -607,7 +612,6 @@ function listMenu(menuTemplate){
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/lineProduct/lineProduct.js",function(lineProduct){
 						lineProduct.listLineProduct(0,"",1);
-						modals["resource_lineProduct"] = lineProduct;
 					});
 					$("#main-container")[0].index = 0;
 				});

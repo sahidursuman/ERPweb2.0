@@ -156,12 +156,10 @@ define(function(require, exports) {
 			    	$obj.find(".btn-restaurant-standard-add").click(function(){
 			    		var html = "<tr>" +
 			    				"<td><select name=\"type\"><option value=\"早餐\">早餐</option><option value=\"午餐\">午餐</option><option value=\"晚餐\">晚餐</option></select></td>" +
-			    				"<td><input name=\"typeName\" type=\"text\" maxlength=\"100\"/></td>" +
-			    				"<td><input name=\"menuList\" type=\"text\" maxlength=\"1000\"/></td>" +
-			    				"<td class=\"time\"><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right\"><button class=\"btn btn-success btn-sm btn-white add\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i></button></label></div></td>" +
-			    				"<td><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input name=\"contractPrice\" type=\"text\" maxlength=\"7\"/><label>&nbsp;元</label></div></td>" +
-			    				"<td><input name=\"remark\" type=\"text\" maxlength=\"1000\"/></td>" +
-			    				"<td style=\"width:70px\"><a data-entity-id=\"\" class=\"btn-restaurant-standard-delete\">删除</a></td>" +
+			    				"<td class=\"price\"><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input name=\"price\" type=\"text\" style=\"margin-right:10px;\" /></div></td>" +
+			    				"<td><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input name=\"menuList\" type=\"text\" class=\"col-sm-12\" /></div></td>" +
+			    				"<td><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input name=\"remark\" type=\"text\" class=\"col-sm-12\" /></div></td>" +
+			    				"<td style=\"width:90px\"><a class=\"btn-restaurant-standard-delete\">删除</a></td>" +
 			    				"</tr>";
 			    		$obj.find(".restaurantStandardList tbody").append(html);
 			    		mealValidator = rule.checkMeal($(".restaurantMainForm .restaurantStandardList"));
@@ -171,6 +169,30 @@ define(function(require, exports) {
 				    			$(this).remove();
 				    		});
 				    	});
+				    	//给餐标列表button按钮绑定事件
+				    	/*$obj.find(".restaurantStandardList tbody button.add").unbind().click(function(){
+				    		var td = $(this).parent().parent(),
+								index = td.find("div").length,
+								priceDiv = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"price\" type=\"text\" style=\"margin-right:10px;\" /><button class=\"btn btn-danger btn-sm btn-white del\"><i class=\"ace-icon fa fa-minus bigger-110 icon-only\"></i></button></div>",
+				    			menuListDiv = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"menuList\" type=\"text\" class=\"col-sm-12\" /></div>",
+				    			remarkDiv = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"remark\" type=\"text\" class=\"col-sm-12\" /></div></div>";
+				    		td.append(priceDiv);
+				    		td.next().append(menuListDiv);
+				    		td.next().next().append(remarkDiv);
+				    		$obj.find(".restaurantStandardList tbody button.del").click(function(){
+								var div = $(this).parent();
+								var divIndex = div.attr("data-index");
+								div.fadeOut(function(){
+									$(this).remove();
+								});
+								div.parent().next().find(".div-"+divIndex+"").fadeOut(function(){
+									$(this).remove();
+								});
+								div.parent().next().next().find(".div-"+divIndex+"").fadeOut(function(){
+									$(this).remove();
+								});
+							});
+				    	});*/
 				    	
 			    		$obj.find(".restaurantStandardList .datepicker").datepicker({
 							autoclose: true,
@@ -180,7 +202,7 @@ define(function(require, exports) {
 						});
 				    	
 				    	// button按钮动态添加时限区间
-			    		$obj.find(".restaurantStandardList .timeArea button.add").unbind().click(function(){
+			    		/*$obj.find(".restaurantStandardList .timeArea button.add").unbind().click(function(){
 							var td = $(this).parent().parent().parent();
 							var index = td.find("div").length;
 							var timeLimitDiv = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right\"><button class=\"btn btn-danger btn-sm btn-white del\"><i class=\"ace-icon fa fa-minus bigger-110 icon-only\"></i></button></label></div>";
@@ -204,7 +226,7 @@ define(function(require, exports) {
 									$(this).remove();
 								});
 							});
-						});
+						});*/
 				    	
 			    	});
 			    	
@@ -227,22 +249,24 @@ define(function(require, exports) {
 			    		priceJsonTr.each(function(j){
 			    			var restaurantJson = {
 				    			type : priceJsonTr.eq(j).find("select[name=type]").val(),
-				    			typeName : priceJsonTr.eq(j).find("input[name=typeName]").val(),
-				    			menuList : priceJsonTr.eq(j).find("input[name=menuList]").val(),
-				    			remark : priceJsonTr.eq(j).find("input[name=remark]").val(),
-				    			priceJsonAddList : []
+				    			price : priceJsonTr.eq(j).find("input[name=price]").val(),
+	    						menuList : priceJsonTr.eq(j).find("input[name=menuList]").val(),
+		    					remark : priceJsonTr.eq(j).find("input[name=remark]").val()
 						    };
-				    		var priceJsonAddTr = priceJsonTr.eq(j).find("td.time div");
+				    		/*var priceJsonAddTr = priceJsonTr.eq(j).find("td.price div");
 				    		priceJsonAddTr.each(function(i){
 				    			var divIndex = priceJsonAddTr.eq(i).attr("data-index");
 				    			var	priceJson = {
-			    					divIndex : divIndex,	
+			    					divIndex : divIndex,
 			    					startTime : priceJsonAddTr.eq(i).find("input[name=startTime]").val(),
 			    					endTime : priceJsonAddTr.eq(i).find("input[name=endTime]").val(),
 			    					contractPrice : priceJsonAddTr.eq(i).parent().next().find(".div-" + divIndex + "").find("input[name=contractPrice]").val()
+			    					price : priceJsonAddTr.eq(i).find("input[name=price]").val(),
+			    					menuList : priceJsonAddTr.eq(i).parent().next().find(".div-" + divIndex + "").find("input[name=menuList]").val(),
+			    					remark : priceJsonAddTr.eq(i).parent().next().next().find(".div-" + divIndex + "").find("input[name=remark]").val()
 				    			};
-				    			restaurantJson.priceJsonAddList.push(priceJson);
-				    		});
+				    			
+				    		});*/
 				    		restaurantStandardJsonAdd.push(restaurantJson);
 			    		})
 			    		
@@ -458,12 +482,10 @@ define(function(require, exports) {
 						    	$obj.find(".btn-restaurant-standard-add").click(function(){
 						    		var html = "<tr>" +
 				    				"<td><select name=\"type\"><option value=\"早餐\">早餐</option><option value=\"午餐\">午餐</option><option value=\"晚餐\">晚餐</option></select></td>" +
-				    				"<td><input name=\"typeName\" type=\"text\"/></td>" +
-				    				"<td><input name=\"menuList\" type=\"text\"/></td>" +
-				    				"<td class=\"time\"><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right\"><button class=\"btn btn-success btn-sm btn-white add\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i></button></label></div></td>" +
-				    				"<td><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input name=\"contractPrice\" type=\"text\"/><label>&nbsp;元</label></div></td>" +
-				    				"<td><input name=\"remark\" type=\"text\"/></td>" +
-				    				"<td style=\"width:70px\"><a data-entity-id=\"\" class=\" btn-restaurant-standard-delete\">删除</a></td>" +
+				    				"<td><input class=\"col-sm-12\" name=\"price\" type=\"text\"/></td>" +
+				    				"<td><input class=\"col-sm-12\" name=\"menuList\" type=\"text\"/></td>" +
+				    				"<td><input class=\"col-sm-12\" name=\"remark\" type=\"text\"/></td>" +
+				    				"<td style=\"width:90px\"><a data-entity-id=\"\" class=\" btn-restaurant-standard-delete\">删除</a></td>" +
 				    				"</tr>";
 						    		
 //						    		var selLength = $(".restaurantStandardList select[name=type]").length;
@@ -499,7 +521,7 @@ define(function(require, exports) {
 									});
 							    	
 							    	// button按钮动态修改包车时限区间
-						    		$obj.find(".restaurantStandardList .timeArea button.add").unbind().click(function(){
+						    		/*$obj.find(".restaurantStandardList .timeArea button.add").unbind().click(function(){
 										var td = $(this).parent().parent().parent();
 										var index = td.find("div").length;
 										var timeLimitDiv = "<div data-index=\""+(index+1)+"\" data-entity-id=\"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right\"><button class=\"btn btn-danger btn-sm btn-white delete\"><i class=\"ace-icon fa fa-minus bigger-110 icon-only\"></i></button></label></div>";
@@ -531,7 +553,7 @@ define(function(require, exports) {
 												$(this).remove();
 											});
 										});
-									});
+									});*/
 									
 						    		$obj.find(".restaurantStandardList .btn-restaurant-standard-delete").click(function(){
 										var tr = $(this).parent().parent();
@@ -582,14 +604,12 @@ define(function(require, exports) {
 						    				id : id,
 						    				divIndex : divIndex,
 						    				type : restaurantStandardJsonAddTr.eq(i).find("select[name=type]").val(),
-						    				typeName : restaurantStandardJsonAddTr.eq(i).find("input[name=typeName]").val(),
+						    				price : restaurantStandardJsonAddTr.eq(i).find("input[name=price]").val(),
 						    				menuList : restaurantStandardJsonAddTr.eq(i).find("input[name=menuList]").val(),
 						    				remark : restaurantStandardJsonAddTr.eq(i).find("input[name=remark]").val(),
-						    				priceJsonAddList : [],
-						    				priceJsonDelList : []
 						    			};
 						    			//有效
-						    			var priceJsonAddTr = restaurantStandardJsonAddTr.eq(i).find("td.time div:not(.deleted)");
+						    			/*var priceJsonAddTr = restaurantStandardJsonAddTr.eq(i).find("td.time div:not(.deleted)");
 						    			priceJsonAddTr.each(function(j){
 						    				var entityId = priceJsonAddTr.eq(j).attr("data-entity-id");
 						    				var divIndex = priceJsonAddTr.eq(j).attr("data-index");
@@ -601,9 +621,9 @@ define(function(require, exports) {
 					    						contractPrice : priceJsonAddTr.eq(j).parent().next().find(".div-"+divIndex+"").find("input[name=contractPrice]").val()
 						    				};
 						    				restaurantStandardJson.priceJsonAddList.push(priceJsonAdd);
-						    			});
+						    			});*/
 						    			//已删除
-						    			var priceJsonDelTr = restaurantStandardJsonAddTr.eq(i).find("td.time div.deleted");
+						    			/*var priceJsonDelTr = restaurantStandardJsonAddTr.eq(i).find("td.time div.deleted");
 						    			priceJsonDelTr.each(function(j){
 						    				var entityId = priceJsonDelTr.eq(j).attr("data-entity-id");
 						    				var priceJsonDel = {
@@ -612,7 +632,7 @@ define(function(require, exports) {
 						    				if(entityId){
 						    					restaurantStandardJson.priceJsonDelList.push(priceJsonDel);
 						    				}
-						    			});
+						    			});*/
 						    			restaurantStandardJsonAdd.push(restaurantStandardJson);
 						    		});
 						    		

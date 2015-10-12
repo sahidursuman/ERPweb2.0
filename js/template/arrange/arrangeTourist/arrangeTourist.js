@@ -48,14 +48,6 @@ define(function(require, exports) {
 								touristGroupMergeList : []
 						}
 						arrangeTourist.listArrangeTourist(0,"","");
-						//给搜索按钮绑定事件
-						$("#"+tabId+" .arrangeTouristMain .btn-arrangeTourist-search").click(function(){
-							arrangeTourist.searchData = {
-									lineProductId : $("#tab-"+menuKey+"-content .arrangeTouristMain select[name=lineProductId]").val(),
-									startTime : $("#tab-"+menuKey+"-content .arrangeTouristMain input[name=startTime]").val()
-							}
-							arrangeTourist.listArrangeTourist(0,arrangeTourist.searchData.lineProductId,arrangeTourist.searchData.startTime);
-						});
 						//开始并团按钮绑定事件
 						$("#"+tabId+" .arrangeTouristMain .arrangeTouristMergeList .btn-start-touristGroup-merge").click(arrangeTourist.startTouristGroupMerge);
 					}
@@ -100,7 +92,14 @@ define(function(require, exports) {
 							var startTime = $(this).attr("data-entity-startTime");
 							arrangeTourist.transferTourist(lineProductId,startTime);
 						});
-						
+						//给搜索按钮绑定事件
+						$("#"+tabId+" .arrangeTouristMain .btn-arrangeTourist-search").click(function(){
+							arrangeTourist.searchData = {
+									lineProductId : $("#tab-"+menuKey+"-content .arrangeTouristMain select[name=lineProductId]").val(),
+									startTime : $("#tab-"+menuKey+"-content .arrangeTouristMain input[name=startTime]").val()
+							}
+							arrangeTourist.listArrangeTourist(0,arrangeTourist.searchData.lineProductId,arrangeTourist.searchData.startTime);
+						});
 						//分页--首页按钮事件
 						$("#"+tabId+" .arrangeTouristMain .pageMode a.first").click(function(){
 							arrangeTourist.listArrangeTourist(0,arrangeTourist.searchData.lineProductId,arrangeTourist.searchData.startTime);
@@ -224,6 +223,7 @@ define(function(require, exports) {
 							});
 							choosenAdultAndChildCount();
 						});
+
 						$("#tab-"+menuKey+"-transfer-content .transferTouristMain .all tbody tr .transferCheckBox").click(function(){
 							choosenAdultAndChildCount();
 						});
@@ -524,10 +524,11 @@ define(function(require, exports) {
 				}
 			})	
 		},
-		//提交转客函数
+		//提交转客函数   
 		saveTransfer :function(){
-			var touristGroupId = [];
-			$(".transferTouristMain .transferTouristGroupTbody tr").each(function(){
+			var touristGroupId = [],     
+			$transferCheckObj=$(".transferTouristMain .transferTouristGroupTbody tr");    
+			$transferCheckObj.each(function(){
 				if($(this).find(".transferCheckBox").is(":checked")==true){
 					var id = {
 							id : $(this).attr("data-entity-id")
@@ -539,26 +540,32 @@ define(function(require, exports) {
 			
 			var transferTravelAgencyId = $(".transferTouristMain select[name=toPartnerAgency]").val();
 			console.log(transferTravelAgencyId);
-			$.ajax({
-				url:""+APP_ROOT+"back/transTourist.do?method=saveTransfer&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=add",
-				data:"partnerAgencyId="+transferTravelAgencyId+"&touristGroupId="+encodeURIComponent(touristGroupId)+"",
-				dataType:"json",
-				type:"POST",
-				beforeSend:function(){
-					globalLoadingLayer = openLoadingLayer();
-				},
-				success:function(data){
-					layer.close(globalLoadingLayer);
-					var result = showDialog(data);
-		        	if(result){
-		        		showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-							$(".tab-arrange_tourist-transfer i.tab-close").trigger("click");
-							window.open(APP_ROOT+"back/transTourist.do?method=exportTransfer&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view"+"&idJson="+touristGroupId+"");
-							arrangeTourist.listArrangeTouristMain();
-		        		})
-		        	}
-				}
-			})
+		
+			if($transferCheckObj.find(".transferCheckBox").is(":checked")==true){    
+					$.ajax({
+						url:""+APP_ROOT+"back/transTourist.do?method=saveTransfer&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=add",
+						data:"partnerAgencyId="+transferTravelAgencyId+"&touristGroupId="+encodeURIComponent(touristGroupId)+"",
+						dataType:"json",
+						type:"POST",
+						beforeSend:function(){
+							globalLoadingLayer = openLoadingLayer();
+						},
+						success:function(data){
+							layer.close(globalLoadingLayer);
+							var result = showDialog(data);
+				        	if(result){
+				        		showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+									$(".tab-arrange_tourist-transfer i.tab-close").trigger("click");
+									window.open(APP_ROOT+"back/transTourist.do?method=exportTransfer&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view"+"&idJson="+touristGroupId+"");
+									arrangeTourist.listArrangeTouristMain();
+				        		})
+				        	}
+						}
+					})
+				}else{
+                    showMessageDialog($( "#confirm-dialog-message" ), "请选择游客小组信息！");  
+			}
+			
 		},
 		//集合时间控件
 		dateTimePicker :function(){
@@ -1276,6 +1283,8 @@ define(function(require, exports) {
 					if(result){
 						var touristGroupInfo = JSON.parse(data.touristGroup);
 						data.touristGroup = touristGroupInfo;
+						var touristGroupFeeList = JSON.parse(data.touristGroupFeeList);
+						data.touristGroupFeeList = touristGroupFeeList;
 						var html = editFeeTemplate(data);
 						var updateTouristGroupLayer = layer.open({
 						    type: 1,
@@ -1284,7 +1293,7 @@ define(function(require, exports) {
 						    area: ['95%', '90%'], //宽高
 						    zIndex:1028,
 						    content: html,
-						    success:function(){
+						    success:function(){  
 						    	var feeId = "";//data.touristGroupTransferFeeSet.id;
 						    	//给新增费用项绑定事件
 						    	$(".editFeeMainForm .newEditFee").click(function(){
@@ -1337,6 +1346,9 @@ define(function(require, exports) {
 							    			PayMoneyF();
 					    				})
 					    			}
+
+
+
 					    			PayMoneyF();
 					    			$(".editFeeMainForm input[name=payedMoney]").keyup(function(){
 										PayMoneyF();
@@ -1348,6 +1360,8 @@ define(function(require, exports) {
 										PayMoneyF();
 									})
 						    	});
+
+
 						    	
 						    	//新增费用项目  算应收
 								$(".editFeeMainForm input[name=payedMoney]").keyup(function(){
@@ -1358,7 +1372,7 @@ define(function(require, exports) {
 								})
 								$(".editFeeMainForm .editFeeTbody").find(".addOrReduceSelect").change(function(){
 									PayMoneyF();
-								})
+								})  
 								
 								function PayMoneyF(){
 									var needPayMoney = 0;
@@ -1395,6 +1409,8 @@ define(function(require, exports) {
 									var currentNPM = needPayMoney-payedMN;
 									currentNeedPayM.val(currentNPM);
 								}  
+
+
 								//转客费用提交按钮  
 								$(".editFeeMain .btn-updateFee").click(function(){
 									var form = $(".editFeeMain .editFeeMainForm").serialize();
@@ -1570,7 +1586,7 @@ define(function(require, exports) {
 			data.busCompant =JSON.parse(data.busCompant);
 			data.bus =JSON.parse(data.bus);
 			var validatorCreateTripPlan;
-			var html = updateTripPlanTemplate(data);
+			var html = updateTripPlanTemplate(data);  
 				chooseMergeLayer = layer.open({
 			    type: 1,
 			    title:"修改发团计划",

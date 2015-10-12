@@ -66,22 +66,21 @@
                    
                     
                     <td>
-                        <button data-entity-id="{{rest.restaurantId}}" data-entity-restaurantName="{{rest.restaurantName}}" data-entity-year="{{searchParam.year}}" data-entity-month="{{searchParam.month}}" class="btn btn-primary btn-sm  btn-divide " >
-                            <i class="ace-icon fa fa-stack-overflow"></i>
+                        <a data-entity-id="{{rest.restaurantId}}" data-entity-restaurantName="{{rest.restaurantName}}" data-entity-year="{{searchParam.year}}" data-entity-month="{{searchParam.month}}" class="cursor btn-divide " >
+
                             	对账
-                        </button>
+                        </a><a href="" class="cursor"> |</a>
 
 
-                        <button data-entity-id="{{rest.restaurantId}}" data-entity-restaurantName="{{rest.restaurantName}}" data-entity-year="{{searchParam.year}}" 
+                        <a data-entity-id="{{rest.restaurantId}}" data-entity-restaurantName="{{rest.restaurantName}}" data-entity-year="{{searchParam.year}}"
                                 {{if searchParam.month == ""}}
                                  	 data-entity-startMonth=1 data-entity-endMonth=12 
                                   {{else}}
                                  	 data-entity-startMonth="{{searchParam.month}}" data-entity-endMonth="{{searchParam.month}}" 
                                 {{/if}}
-                        		class="btn btn-sm btn-success btn-balance">
-                            <i class="ace-icon fa fa-building-o bigger-120"></i>
+                        		class="cursor btn-balance">
                            		 结算
-                        </button>
+                        </a>
                     </td>
                 </tr>
                 {{/each}}
