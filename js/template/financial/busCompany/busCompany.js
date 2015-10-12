@@ -313,8 +313,9 @@ define(function(require, exports) {
 			                        $tr.each(function(){
 			                        	$(this).find('.btn-busCompanyBlance-save').data('validata', rule.check($(this)));
 			                        });
+				                    
 				                    //var validator = rule.check($('.busCompanyCleaning'));
-			                      /*//判断页面是否存在
+			                      //判断页面是否存在
 			                 	    if($("#" +"tab-"+blanceTabId+"-content").length > 0)
 			                 	    {
 			                 	    	
@@ -341,14 +342,10 @@ define(function(require, exports) {
 			                 	    	addTab(blanceTabId,"车队结算",html);
 			                 	    	validator = rule.check($('.busCompanyCleaning'));
 			                 	    	$("#" +"tab-"+ checkTabId+"-content"+" .all tbody tr")
-			                 	    	$("#" +"tab-"+blanceTabId+"-content").on("change",function(){
-			                 	    		BusCompany.blanceEdited = true;
-			                 	    		BusCompany.oldBlanceBusId = busCompanyId;
+			                 	    	$("#" +"tab-"+blanceTabId+"-content .all").on("change",function(){
+			                 	    		
 			                 	    	});
-			                 	    };*/
-			                        //设置表单验证
-			                        //var validator = rule.check($('.busCompanyCleaning')); 
-			                        
+			                 	    };
 			                        //搜索按钮事件
 			                        $("#" +"tab-"+ blanceTabId + "-content"+" .btn-blance-search").click(function(){
 			                            BusCompany.searchBalanceData={

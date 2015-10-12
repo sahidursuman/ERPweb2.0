@@ -150,10 +150,39 @@ define(function(require, exports) {
 	                    data.insuranceCompanyName = insuranceCompanyName
 	                    data.searchParam = Insure.searchCheckData  
                      var html = insuranceChecking(data);
-                     addTab(checkTabId,"保险对账",html);
-                     
+                     //addTab(checkTabId,"保险对账",html);
+                 	   var validator;
+                	    //判断页面是否存在
+                	    if($("#" +"tab-"+checkTabId+"-content").length > 0)
+                	    {
+                	    	
+                	    	 if(BusCompany.edited){
+                	    		addTab(checkTabId,"车队对账");
+                	    		showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
+                	    			 var validator = rule.check($('.insuranceChecking'));
+				            		 if (!validator.form()) { return; }
+				            		 BusCompany.saveCheckingData(busCompanyId,companyName)
+				            		 BusCompany.edited = false;
+				            		 addTab(checkTabId,"车队对账",html);
+				            		 var validator = rule.check($('.insuranceChecking'));
+				            	 },function(){
+				            		 addTab(checkTabId,"车队对账",html);
+				            		 var validator = rule.check($('.insuranceChecking'));
+				            	 });
+                	    	 }else{
+	                 	    	addTab(checkTabId,"车队对账",html);
+	                 	    	var validator = rule.check($('.insuranceChecking'));
+                	    	 }
+            	    		 
+                	    }else{
+                	    	addTab(checkTabId,"车队对账",html);
+                	    	validator = rule.check($('.busCompanyChecking'));
+                	    	$("#" +"tab-"+checkTabId+"-content").on("change",function(){
+                	    		BusCompany.edited = true; 
+                	    	});
+                	    };
                      //设置表单验证
-                     var validator = rule.check($('.insuranceChecking'));  
+                     //var validator = rule.check($('.insuranceChecking'));  
                  }          
 	                 //给搜索按钮绑定事件
 	                 $("#" +"tab-"+ checkTabId+"-content"+" .btn-checking-search").click(function(){
