@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":38,"md5":"49b2dd344ff325e1a86842c91391d886"}*/
+/*TMODJS:{"debug":true,"version":39,"md5":"49b2dd344ff325e1a86842c91391d886"}*/
 define(function(require) {
     return require("../../../template")("resource/ticket/view/list", function($data, $filename) {
         try {

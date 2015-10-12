@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":56,"md5":"67e1b2352d7bf5f35f4289d305f89ac0"}*/
+/*TMODJS:{"debug":true,"version":57,"md5":"67e1b2352d7bf5f35f4289d305f89ac0"}*/
 define(function(require) {
     return require("../../../template")("resource/scenic/view/list", function($data, $filename) {
         try {

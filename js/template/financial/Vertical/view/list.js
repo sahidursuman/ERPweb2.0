@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":27,"md5":"179ba12fdb38c28552ed51d0745635ff"}*/
+/*TMODJS:{"debug":true,"version":29,"md5":"179ba12fdb38c28552ed51d0745635ff"}*/
 define(function(require) {
     return require("../../../template")("financial/Vertical/view/list", function($data, $filename) {
         try {

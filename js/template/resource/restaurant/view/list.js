@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":60,"md5":"db8ebc9944b36b28da75d8d40eb762ba"}*/
+/*TMODJS:{"debug":true,"version":61,"md5":"db8ebc9944b36b28da75d8d40eb762ba"}*/
 define(function(require) {
     return require("../../../template")("resource/restaurant/view/list", function($data, $filename) {
         try {

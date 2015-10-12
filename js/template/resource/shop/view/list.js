@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":86,"md5":"9be3a51ad5577b456a5958a268c47643"}*/
+/*TMODJS:{"debug":true,"version":87,"md5":"9be3a51ad5577b456a5958a268c47643"}*/
 define(function(require) {
     return require("../../../template")("resource/shop/view/list", function($data, $filename) {
         try {
