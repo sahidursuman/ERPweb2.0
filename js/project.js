@@ -963,9 +963,9 @@ function listMenu(menuTemplate){
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/financial/count/count.js",function(count){
+						count.init()
 						
-						
-						count.getlistCount(0,"","","","","","","","");
+						// count.getlistCount(0,"","","","","","","","");
 					});
 				});
 				
