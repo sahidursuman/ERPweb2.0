@@ -177,6 +177,14 @@ function init_editor(ue_key,options)  {
 		ue.destroy();
 	}
 	
+	// 富文本编辑器的公共配置
+	options = $.extend({
+		// 服务器统一请求接口路径
+        serverUrl: APP_ROOT + "app/components/ueditor/jsp/controller.jsp",
+        //是否启用元素路径：否
+		elementPathEnabled: false
+	}, options);
+
 	ue = UE.getEditor(ue_key,options);
 	ue.ready(function(){
 		ue.setHeight(400);
