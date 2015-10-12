@@ -75,7 +75,7 @@
     <tbody>
     
      {{each fcBusCompanySettlementList as busCompanySettlement}}  
-     <tr>
+     <tr data-entity-id="{{busCompanySettlement.id}}" data-entity-year="{{busCompanySettlement.year}}" data-entity-month="{{busCompanySettlement.month}}">
             <td style="width:100px;">{{busCompanySettlement.year}}{{"年"}}{{busCompanySettlement.month}}{{"月"}}</td>
             <td style="width:100px;">{{busCompanySettlement.needPayMoney}}</td>
             <td style="width:100px;" name="blancerealNeedPayMoney">{{busCompanySettlement.realNeedPayMoney}}</td>
