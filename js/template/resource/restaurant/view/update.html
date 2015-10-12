@@ -14,33 +14,33 @@
 					<div class="form-group guideInterval">
 						<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>餐厅名称:</label>
 						<div class="col-sm-3">
-							<input type="text" name="name" class="col-sm-12" value="{{restaurant.name}}" maxlength="32">
+							<input type="text" name="name" class="col-sm-12" value="{{restaurant.name}}">
 						</div>
 					</div>
 					<div class="form-group guideInterval">
 						<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>联系人:</label>
 						<div class="col-sm-3">
-							<input type="text" name="managerName" value="{{restaurant.managerName}}" class="col-sm-12" maxlength="32">
+							<input type="text" name="managerName" value="{{restaurant.managerName}}" class="col-sm-12">
 						</div>
 						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>联系电话:</label>
 						<div class="col-sm-3">
-							<input type="text" name="mobileNumber" value="{{restaurant.mobileNumber}}" class="col-sm-12" maxlength="11">
+							<input type="text" name="mobileNumber" value="{{restaurant.mobileNumber}}" class="col-sm-12">
 						</div>
 					</div>
 					<div class="form-group guideInterval">
 						<label class="col-sm-2 control-label no-padding-right">座机号码:</label>
 						<div class="col-sm-3">
-							<input type="text" name="telNumber" class="col-sm-12" value="{{restaurant.telNumber}}" maxlength="20"/>
+							<input type="text" name="telNumber" class="col-sm-12" value="{{restaurant.telNumber}}" />
 						</div>
 						<label class="col-sm-1 control-label no-padding-right">传真号码:</label>
 						<div class="col-sm-3">
-							<input type="text" name="faxNumber" class="col-sm-12" value="{{restaurant.faxNumber}}" maxlength="20"/>
+							<input type="text" name="faxNumber" class="col-sm-12" value="{{restaurant.faxNumber}}" />
 						</div>
 					</div>
 					<div class="form-group guideInterval">
 						<label class="col-sm-2 control-label no-padding-right">餐厅设施:</label>
 						<div class="col-sm-3">
-							<input type="text" name="facility" value="{{restaurant.facility}}" class="col-sm-12" maxlength="500">
+							<input type="text" name="facility" value="{{restaurant.facility}}" class="col-sm-12">
 						</div>
 					</div>
 					<div class="form-group guideInterval">
@@ -109,10 +109,8 @@
 								<thead>
 									<tr>
 										<th class="table-border">用餐类型</th>
-										<th class="table-border"><span class="necessary">*</span>餐标名称</th>
-										<th class="table-border">菜单列表</th>
-										<th class="table-border">时间范围</th>
-										<th class="table-border"><span class="necessary">*</span>每位价格</th>
+										<th width="200" class="table-border"><span class="necessary">*</span>餐标</th>
+										<th width="200" class="table-border">菜单</th>
 										<th class="table-border">备注</th>
 										<th class="table-border">操作</th>
 									</tr>
@@ -127,43 +125,17 @@
 													<option {{if restaurantStandard.type == '晚餐'}} selected="selected" {{/if}} value="晚餐">晚餐</option>
 												</select>
 											</td>
-											<td>
-												<input name="typeName" value="{{restaurantStandard.typeName}}" type="text" maxlength="100">
+									 		<td>
+												<input name="price" value="{{restaurantStandard.price}}" class="col-sm-12" type="text" maxlength="100">
+
 											</td>
 											<td>
-												<input name="menuList" value="{{restaurantStandard.menuList}}" type="text" maxlength="1000">
-											</td>
-											<td class="time">
-												{{each restaurantStandard.priceList as price i}}
-												<div data-index="{{i+1}}" data-entity-id="{{price.id}}" class="clearfix {{if i > 0}}appendDiv{{/if}} div-{{i+1}}" style="margin-top:2px">
-													<input name="startTime" type="text" class="date-picker" style="width:100px" value="{{price.startTime | dateFormat:'yyyy-MM-dd'}}"/><label>&nbsp;至&nbsp;</label><input name="endTime" type="text" class="date-picker" style="width:100px" value="{{price.endTime | dateFormat:'yyyy-MM-dd'}}"/>
-													{{if i == 0}}
-													<label class="timeArea" style="float:right">
-														<button class="btn btn-success btn-sm btn-white add">
-															<i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
-														</button>
-													</label>
-													{{else}}
-													<label class="timeArea" style="float:right">
-														<button class="btn btn-danger btn-sm btn-white delete">
-															<i class="ace-icon fa fa-minus bigger-110 icon-only"></i>
-														</button>
-													</label>
-													{{/if}}
-												</div>
-												{{/each}}
+												<input name="menuList" value="{{restaurantStandard.menuList}}" class="col-sm-12" type="text">
 											</td>
 											<td>
-												{{each restaurantStandard.priceList as price i}}
-												<div data-index="{{i+1}}" class="clearfix div-{{i+1}}" style="margin-top:2px">
-													<input name="contractPrice" type="text" value="{{price.contractPrice}}" maxlength="7"/><label>&nbsp;元</label>
-												</div>
-												{{/each}}
+												<input name="remark" value="{{restaurantStandard.remark}}" class="col-sm-12" type="text">
 											</td>
-											<td>
-												<input name="remark" value="{{restaurantStandard.remark}}" type="text">
-											</td>
-											<td style="width:70px">
+											<td style="width:90px">
 												<a data-entiy-id="{{restaurantStandard.id}}" class="btn-restaurant-standard-delete">删除</a>
 											</td>
 										</tr> 

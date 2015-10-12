@@ -12,7 +12,7 @@
 						<div class="form-group">
 							<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>同行名称:</label>
 							<div class="col-sm-3">
-								<input type="text" name="travelAgencyName" class="col-sm-12" />
+								<input type="text" name="travelAgencyName" class="col-sm-12" maxlength="100" />
 							</div>
 							<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>类型:</label> 
 							<div class="col-sm-3">
@@ -26,11 +26,11 @@
 						<div class="form-group">
 							<label class="col-sm-2 control-label no-padding-right">座机号码:</label>
 							<div class="col-sm-3">
-								<input type="text" name="telNumber" class="col-sm-12" />
+								<input type="text" name="telNumber" class="col-sm-12" maxlength="20"/>
 							</div>
 							<label class="col-sm-2 control-label no-padding-right">传真号码:</label>
 							<div class="col-sm-3">
-								<input type="text" name="faxNumber" class="col-sm-12" />
+								<input type="text" name="faxNumber" class="col-sm-12" maxlength="20"/>
 							</div>
 						</div>
 						<div class="form-group">
@@ -48,7 +48,7 @@
 									<!-- <input class="choosePartnerManager col-sm-12" name="partnerAgencyNameList" type="text" /> -->
 									<select class="col-sm-12" name="headPartnerAgency">
 									</select>
-									<input type="hidden" name="headerAgencyName"/>
+									<input type="hidden" name="headerAgencyName" maxlength="20"/>
 									<span class="input-group-addon addheaderPartnerAgency" style="cursor:pointer;" title="添加总社">
 										<i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
 									</span>
@@ -72,7 +72,7 @@
 						<div class="form-group">
 							<label class="col-sm-2 control-label no-padding-right">详细地址:</label>
 							<div class="col-sm-6">
-								<input type="text" name="street" class="col-sm-12" placeholder="请输入街道地址"/>
+								<input type="text" name="street" class="col-sm-12" placeholder="请输入街道地址" maxlength="100" />
 							</div>
 						</div>
 						<div class="form-group">
@@ -89,7 +89,7 @@
 						<div class="form-group">
 							<label class="col-sm-2 control-label no-padding-right">简介:</label>
 							<div class="col-sm-8">
-								<textarea class="form-control" name="remark" class="col-sm-12" ></textarea>
+								<textarea class="form-control" name="remark" class="col-sm-12" maxlength="1000"></textarea>               
 							</div>
 						</div>
 					</div>
@@ -119,7 +119,7 @@
 								<th> 所属部门</th>
 								<th>所属职位</th>
 								<th>操作</th>
-							</tr>
+							</tr>  
 						</thead>
 						<tbody class="partnerList">            
 							

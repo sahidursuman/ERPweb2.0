@@ -78,24 +78,27 @@
                     <th >操作</th>
                 </tr>
                 </thead>
-
                 <tbody> 
                 {{each tripPlanList as financialTripPlan}}
                 	{{if financialTripPlan != null}}
                 	<tr data-entity-id="{{financialTripPlan.id}}">
-                	<td>{{financialTripPlan.tripPlan.tripNumber}}</td>
-                	<td>{{financialTripPlan.tripPlan.startTime | dateFormat:'yyyy-MM-dd'}}</td>
-                	<td>{{financialTripPlan.tripPlan.endTime | dateFormat:'yyyy-MM-dd'}}</td>
-                	<td>{{if financialTripPlan.tripPlan.lineProduct != null}}{{financialTripPlan.tripPlan.lineProduct.name}}{{/if}}</td>
-                	<td>{{financialTripPlan.tripPlan.touristAdultCount+financialTripPlan.tripPlan.touristChildCount}}</td>
-                	<td>{{financialTripPlan.tripPlan.touristAdultCount+financialTripPlan.tripPlan.touristChildCount}}</td>
-                	<td>{{if financialTripPlan.tripPlan.guide != null}}{{financialTripPlan.tripPlan.guide.realname}}{{/if}}</td>
-                	<td>{{if financialTripPlan.tripPlan.bus != null}}{{financialTripPlan.tripPlan.bus.licenseNumber}}{{/if}}</td>
-                	<td>{{financialTripPlan.getAllMoney}}</td>
-                	<td>{{financialTripPlan.payAllMoney}}</td>
-                	<td>{{financialTripPlan.grossProfitMoney}}</td>
-                	<td>{{financialTripPlan.perGrossProfitMoney}}</td>
-                	<td>{{if financialTripPlan.tripPlan.billStatus == -1}}
+                	<td style="vertical-align:middle" {{if financialTripPlan.tripPlan.tripPlanDetails.length > 1}}rowspan="{{financialTripPlan.tripPlan.tripPlanDetails.length}}"{{/if}}>{{financialTripPlan.tripPlan.tripNumber}}</td>
+                    {{each financialTripPlan.tripPlan.tripPlanDetails as tripPlanDetails index}}
+                        {{if index == 0}}
+                            <td>{{tripPlanDetails.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
+                            <td>{{tripPlanDetails.endTime | dateFormat: 'yyyy-MM-dd'}}</td>
+                            <td>{{tripPlanDetails.lineProductName}}</td>
+                            <td>{{tripPlanDetails.sumMemberCount}}</td> 
+                        {{/if}}
+                    {{/each}}
+                	<td style="vertical-align:middle" {{if financialTripPlan.tripPlan.tripPlanDetails.length > 1}}rowspan="{{financialTripPlan.tripPlan.tripPlanDetails.length}}"{{/if}}>{{financialTripPlan.tripPlan.touristAdultCount+financialTripPlan.tripPlan.touristChildCount}}</td>
+                	<td style="vertical-align:middle" {{if financialTripPlan.tripPlan.tripPlanDetails.length > 1}}rowspan="{{financialTripPlan.tripPlan.tripPlanDetails.length}}"{{/if}}>{{if financialTripPlan.tripPlan.guide != null}}{{financialTripPlan.tripPlan.guide.realname}}{{/if}}</td>
+                	<td style="vertical-align:middle" {{if financialTripPlan.tripPlan.tripPlanDetails.length > 1}}rowspan="{{financialTripPlan.tripPlan.tripPlanDetails.length}}"{{/if}}>{{if financialTripPlan.tripPlan.bus != null}}{{financialTripPlan.tripPlan.bus.licenseNumber}}{{/if}}</td>
+                	<td style="vertical-align:middle" {{if financialTripPlan.tripPlan.tripPlanDetails.length > 1}}rowspan="{{financialTripPlan.tripPlan.tripPlanDetails.length}}"{{/if}}>{{financialTripPlan.getAllMoney}}</td>
+                	<td style="vertical-align:middle" {{if financialTripPlan.tripPlan.tripPlanDetails.length > 1}}rowspan="{{financialTripPlan.tripPlan.tripPlanDetails.length}}"{{/if}}>{{financialTripPlan.payAllMoney}}</td>
+                	<td style="vertical-align:middle" {{if financialTripPlan.tripPlan.tripPlanDetails.length > 1}}rowspan="{{financialTripPlan.tripPlan.tripPlanDetails.length}}"{{/if}}>{{financialTripPlan.grossProfitMoney}}</td>
+                	<td style="vertical-align:middle" {{if financialTripPlan.tripPlan.tripPlanDetails.length > 1}}rowspan="{{financialTripPlan.tripPlan.tripPlanDetails.length}}"{{/if}}>{{financialTripPlan.perGrossProfitMoney}}</td>
+                	<td style="vertical-align:middle" {{if financialTripPlan.tripPlan.tripPlanDetails.length > 1}}rowspan="{{financialTripPlan.tripPlan.tripPlanDetails.length}}"{{/if}}>{{if financialTripPlan.tripPlan.billStatus == -1}}
                 		<font color="#ff9900">待报账</font>
                 		{{else if financialTripPlan.tripPlan.billStatus == 0}}
                 		<font color="#ff9900">待审核</font>
@@ -105,28 +108,37 @@
                 		<font color="green">财务已审</font>
                 		{{/if}}
                 	</td>
-                	<td>
+                	<td style="vertical-align:middle" {{if financialTripPlan.tripPlan.tripPlanDetails.length > 1}}rowspan="{{financialTripPlan.tripPlan.tripPlanDetails.length}}"{{/if}}>
                 		{{if financialTripPlan.tripPlan.billStatus == 2}}
                 			{{if financialTripPlan.tripPlan.financialCheckUser != null}}{{financialTripPlan.tripPlan.financialCheckUser.realName}}{{/if}}
                 		{{else if financialTripPlan.tripPlan.billStatus == 1}}
                 			{{if financialTripPlan.tripPlan.oPCheckUser != null}}{{financialTripPlan.tripPlan.oPCheckUser.realName}}{{/if}}
                 		{{/if}}
                 	</td>
-                	<td>
-                        <button data-entity-billStatus="{{financialTripPlan.tripPlan.billStatus}}" data-entity-id="{{financialTripPlan.id}}" class="btn btn-primary btn-sm btn-count-update" >
-                            <i class="ace-icon fa fa-stack-overflow"></i>
+                	<td style="vertical-align:middle" {{if financialTripPlan.tripPlan.tripPlanDetails.length > 1}}rowspan="{{financialTripPlan.tripPlan.tripPlanDetails.length}}"{{/if}}>
+                        <a data-entity-billStatus="{{financialTripPlan.tripPlan.billStatus}}" data-entity-id="{{financialTripPlan.id}}" class="cursor btn-count-update">
                            	审核
-                        </button>
-                        <button data-entity-id="{{financialTripPlan.id}}" class="btn btn-primary btn-sm btn-count-examine">
-                            <i class="ace-icon fa fa-building-o"></i>
+                        </a><a href="" class="cursor"> |</a>
+                        <a data-entity-id="{{financialTripPlan.id}}" class=" btn-count-examine cursor">
                            	明细
-                 		</button>
-                 		<button data-entity-billStatus="{{financialTripPlan.tripPlan.billStatus}}" data-entity-id="{{financialTripPlan.id}}" class="btn btn-success btn-sm btn-guide-account" >
-                            <i class="ace-icon fa fa-stack-overflow"></i>
+                 		</a><a href="" class="cursor"> |</a>
+                 		<a data-entity-billStatus="{{financialTripPlan.tripPlan.billStatus}}" data-entity-id="{{financialTripPlan.id}}" class="cursor btn-guide-account" >
                            	报账
-                        </button>
+                        </a>
                     </td>
                 	</tr> 
+                    {{if financialTripPlan.tripPlan.tripPlanDetails.length > 1}}
+                    {{each financialTripPlan.tripPlan.tripPlanDetails as tripPlanDetails index}}
+                        {{if index>0}}
+                        <tr>
+                            <td>{{tripPlanDetails.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
+                            <td>{{tripPlanDetails.endTime | dateFormat: 'yyyy-MM-dd'}}</td>
+                            <td>{{tripPlanDetails.lineProductName}}</td>
+                            <td>{{tripPlanDetails.sumMemberCount}}</td> 
+                        </tr>
+                        {{/if}}
+                    {{/each}}
+                    {{/if}}
                 	{{/if}}
                 {{/each}}
                 </tbody>

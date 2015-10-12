@@ -9,7 +9,7 @@
 						<option value="{{hotel.id}}" {{if searchParam.hotel == hotel.id}}selected="selected"{{/if}}>{{hotel.name}}</option>
 					{{/each}} 
                 </select>        
-             </div>    
+             </div>
            <label class="control-label col-sm-1" >账期:</label>
 			<div class="col-sm-2" >
 				<select class="col-sm-5" name="year" >
@@ -67,20 +67,18 @@
                    
                     
                     <td>
-                        <button data-entity-id="{{hotel.hotelId}}" data-entity-hotelName="{{hotel.hotelName}}" data-entity-year="{{searchParam.year}}" data-entity-month="{{searchParam.month}}" class="btn btn-primary btn-sm  btn-financialHotel-check " >
-                            <i class="ace-icon fa fa-stack-overflow"></i>
+                        <a data-entity-id="{{hotel.hotelId}}" data-entity-hotelName="{{hotel.hotelName}}" data-entity-year="{{searchParam.year}}" data-entity-month="{{searchParam.month}}" class="cursor  btn-financialHotel-check " >
                             	对账
-                        </button>
-                        <button data-entity-id="{{hotel.hotelId}}" data-entity-hotelName="{{hotel.hotelName}}" data-entity-year="{{searchParam.year}}" 
+                        </a><a href="" class="cursor"> |</a>
+                        <a data-entity-id="{{hotel.hotelId}}" data-entity-hotelName="{{hotel.hotelName}}" data-entity-year="{{searchParam.year}}"
                                 {{if searchParam.month == ""}}
                                  	 data-entity-startMonth=1 data-entity-endMonth=12 
                                   {{else}}
                                  	 data-entity-startMonth="{{searchParam.month}}" data-entity-endMonth="{{searchParam.month}}" 
                                 {{/if}}
-                        		class="btn btn-success btn-sm btn-financialHotel-balance">
-                            <i class="ace-icon fa fa-building-o bigger-120"></i>
+                        		class="cursor btn-financialHotel-balance">
                            		 结算
-                        </button>
+                        </a>
                     </td>
                 </tr>
                 {{/each}}

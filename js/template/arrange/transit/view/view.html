@@ -9,10 +9,18 @@
 			<label class="col-sm-2 control-label no-padding-right">联系电话：{{touristGroup.contactMember.mobileNumber}}</label>
 			<label class="col-sm-2 control-label no-padding-right">出游日期：{{if touristGroup.startTime != null}}{{touristGroup.startTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</label>
 			<label class="col-sm-3 control-label no-padding-right">人数合计：大人{{touristGroup.adultCount}}小孩{{touristGroup.childCount}}</label>
-			{{if arriveTime != null}}<label class="col-sm-2 control-label no-padding-right">接团日期：{{arriveTime | dateFormat: 'yyyy-MM-dd'}}</label>{{/if}}
-			{{if arrivePosition != null && arrivePosition != ""}}<label class="col-sm-2 control-label no-padding-right">接团地点：{{arrivePosition}}</label>{{/if}}
-			{{if leaveTime != null}}<label class="col-sm-2 control-label no-padding-right">送团日期：{{leaveTime | dateFormat: 'yyyy-MM-dd'}}</label>{{/if}}
-			{{if leavePosition != null && leavePosition != ""}}<label class="col-sm-2 control-label no-padding-right">送团地点：{{leavePosition}}</label>{{/if}}
+		</div>
+		<div class="form-group">
+			{{if arriveTime != null}}<div class="col-sm-1"></div><label class="col-sm-2 control-label no-padding-right" style="text-align: left;">接团日期：{{arriveTime | dateFormat: 'yyyy-MM-dd'}}</label>{{/if}}
+			{{if arrivePosition != null && arrivePosition != ""}}<label class="col-sm-2 control-label no-padding-right" style="text-align: left;">接团地点：{{arrivePosition}}</label>{{/if}}
+			{{if arriveShift != null}}<label class="col-sm-2 control-label no-padding-right" style="text-align: left;">接团班次：{{arriveShift}}</label>{{/if}}
+			{{if arriveShiftTime != null}}<label class="col-sm-3 control-label no-padding-right" style="text-align: left;">接团班次时间：{{arriveShiftTime}}</label>{{/if}}
+		</div>
+		<div class="form-group">
+			{{if leaveTime != null}}<div class="col-sm-1"></div><label class="col-sm-2 control-label no-padding-right" style="text-align: left;">送团日期：{{leaveTime | dateFormat: 'yyyy-MM-dd'}}</label>{{/if}}
+			{{if leavePosition != null && leavePosition != ""}}<label class="col-sm-2 control-label no-padding-right" style="text-align: left;">送团地点：{{leavePosition}}</label>{{/if}}
+			{{if leaveShift != null}}<label class="col-sm-2 control-label no-padding-right" style="text-align: left;">送团班次：{{leaveShift}}</label>{{/if}}
+			{{if leaveShiftTime != null}}<label class="col-sm-3 control-label no-padding-right" style="text-align: left;">送团班次时间：{{leaveShiftTime}}</label>{{/if}}
 		</div>
 	</form>
 	
@@ -27,14 +35,14 @@
 				</li>
 				{{/if}}
 				{{if isNeedBus == 1}}
-				<li {{if isNeedArriveService == 0}}class="active"{{/if}} style="width:125px;">
+				<li class="" style="width:125px;">
 					<a aria-expanded="false" data-toggle="tab" href="#carListV" style="text-align:center;">
 						&nbsp;小车&nbsp;
 					</a>
 				</li>
 				{{/if}}
 				{{if isNeedLeaveService == 1}}
-				<li {{if isNeedArriveService == 0 && isNeedBus == 0}}class="active"{{/if}} style="width:125px;">
+				<li class="" style="width:125px;">
 					<a aria-expanded="false" data-toggle="tab" href="#sendListV" style="text-align:center;">
 						&nbsp;送团&nbsp;
 					</a>
@@ -88,7 +96,7 @@
 													<td>{{outBus.reduceMoney}}</td>
 													<td>{{outBus.needPayMoney}}</td>
 													<td>{{outBus.payedMoney}}</td>
-													<td>{{if outBus.payType == 0}}现付{{else if outBus.payType == 1}}签单{{else if outBus.payType == 2}}转账{{else}}网付{{/if}}</td>
+													<td>{{if outBus.payType == 0}}现付{{else if outBus.payType == 1}}签单{{else if outBus.payType == 2}}转账{{/if}}</td>
 												</tr>{{/if}}{{/each}}
 											</tbody>
 										</table>
@@ -155,7 +163,7 @@
 													<td>{{outHotel.reduceMoney}}</td>
 													<td>{{outHotel.needPayMoney}}</td>
 													<td>{{outHotel.payedMoney}}</td>
-													<td>{{if outHotel.payType == 0}}现付{{else if outHotel.payType == 1}}签单{{else if outHotel.payType == 2}}转账{{else}}网付{{/if}}</td>
+													<td>{{if outHotel.payType == 0}}现付{{else if outHotel.payType == 1}}签单{{else if outHotel.payType == 2}}转账{{/if}}</td>
 												</tr>{{/if}}{{/each}}
 											</tbody>
 										</table>
@@ -216,7 +224,7 @@
 													<td>{{outTicket.reduceMoney}}</td>
 													<td>{{outTicket.needPayMoney}}</td>
 													<td>{{outTicket.payedMoney}}</td>
-													<td>{{if outTicket.payType == 0}}现付{{else if outTicket.payType == 1}}签单{{else if outTicket.payType == 2}}转账{{else}}网付{{/if}}</td>
+													<td>{{if outTicket.payType == 0}}现付{{else if outTicket.payType == 1}}签单{{else if outTicket.payType == 2}}转账{{/if}}</td>
 												</tr>{{/if}}{{/each}}
 											</tbody>
 										</table>
@@ -273,7 +281,7 @@
 													<td>{{outBus.reduceMoney}}</td>
 													<td>{{outBus.needPayMoney}}</td>
 													<td>{{outBus.payedMoney}}</td>
-													<td>{{if outBus.payType == 0}}现付{{else if outBus.payType == 1}}签单{{else if outBus.payType == 2}}转账{{else}}网付{{/if}}</td>
+													<td>{{if outBus.payType == 0}}现付{{else if outBus.payType == 1}}签单{{else if outBus.payType == 2}}转账{{/if}}</td>
 												</tr>{{/if}}{{/each}}
 											</tbody>
 										</table>
@@ -330,7 +338,7 @@
 													<td>{{outBus.reduceMoney}}</td>
 													<td>{{outBus.needPayMoney}}</td>
 													<td>{{outBus.payedMoney}}</td>
-													<td>{{if outBus.payType == 0}}现付{{else if outBus.payType == 1}}签单{{else if outBus.payType == 2}}转账{{else}}网付{{/if}}</td>
+													<td>{{if outBus.payType == 0}}现付{{else if outBus.payType == 1}}签单{{else if outBus.payType == 2}}转账{{/if}}</td>
 												</tr>{{/if}}{{/each}}
 											</tbody>
 										</table>
@@ -397,7 +405,7 @@
 													<td>{{outHotel.reduceMoney}}</td>
 													<td>{{outHotel.needPayMoney}}</td>
 													<td>{{outHotel.payedMoney}}</td>
-													<td>{{if outHotel.payType == 0}}现付{{else if outHotel.payType == 1}}签单{{else if outHotel.payType == 2}}转账{{else}}网付{{/if}}</td>
+													<td>{{if outHotel.payType == 0}}现付{{else if outHotel.payType == 1}}签单{{else if outHotel.payType == 2}}转账{{/if}}</td>
 												</tr>{{/if}}{{/each}}
 											</tbody>
 										</table>
@@ -458,7 +466,7 @@
 													<td>{{outTicket.reduceMoney}}</td>
 													<td>{{outTicket.needPayMoney}}</td>
 													<td>{{outTicket.payedMoney}}</td>
-													<td>{{if outTicket.payType == 0}}现付{{else if outTicket.payType == 1}}签单{{else if outTicket.payType == 2}}转账{{else}}网付{{/if}}</td>
+													<td>{{if outTicket.payType == 0}}现付{{else if outTicket.payType == 1}}签单{{else if outTicket.payType == 2}}转账{{/if}}</td>
 												</tr>{{/if}}{{/each}}
 											</tbody>
 										</table>

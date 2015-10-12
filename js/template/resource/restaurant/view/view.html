@@ -58,9 +58,7 @@
 			<tr>
 				<td class="style-myself">用餐类型</td>
 				<td class="style-myself">餐标</td>
-				<td class="style-myself">菜单列表</td>
-				<td class="style-myself">时间范围</td>
-				<td class="style-myself">每位价格</td>
+				<td class="style-myself">菜单</td>
 				<td class="style-myself">备注</td>
 			</tr>
 			{{each restaurant.restaurantStandardList as restaurantStandard}}
@@ -74,16 +72,6 @@
 					{{/if}}</td>
 				<td>{{restaurantStandard.typeName}}</td>
 				<td class="rangeTime">{{restaurantStandard.menuList}}</td>
-				<td class="rangeTimeWidth">{{each restaurantStandard.priceList as price}}
-						{{price.startTime | dateFormat:'yyyy-MM-dd'}}至{{price.endTime | dateFormat:'yyyy-MM-dd'}}
-					            {{/each}}</td>
-				<td>
-					{{each restaurantStandard.priceList as price}}
-					<div>
-						{{price.contractPrice}}元
-					</div>
-					{{/each}}
-				</td>
 				<td class="">{{restaurantStandard.remark}}</td>
 			</tr>
 			{{/each}}

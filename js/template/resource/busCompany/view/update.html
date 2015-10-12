@@ -11,7 +11,7 @@
 					<div class="form-group guideInterval">
 						<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>车队名称:</label>
 						<div class="col-sm-3">
-							<input type="text" name="companyName" class="col-sm-12" value="{{busCompany.companyName}}" maxlength="32">
+							<input type="text" name="companyName" class="col-sm-12" value="{{busCompany.companyName}}">
 						</div>
 						<label class="col-sm-1 control-label no-padding-right">是否启用:</label>
 						<div class="col-sm-2 checkbox" style="margin-left:-10px">
@@ -35,21 +35,21 @@
 					<div class="form-group guideInterval">
 					    <label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>联系人:</label>
 						<div class="col-sm-3">
-							<input type="text" name="managerName" class="col-sm-12" value="{{busCompany.managerName}}" maxlength="45"/>
+							<input type="text" name="managerName" class="col-sm-12" value="{{busCompany.managerName}}" />
 						</div>
 				    	<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>联系电话:</label>
 						<div class="col-sm-3">
-							<input type="text" name="mobileNumber" class="col-sm-12" value="{{busCompany.mobileNumber}}" maxlength="11"/>
+							<input type="text" name="mobileNumber" class="col-sm-12" value="{{busCompany.mobileNumber}}" />
 						</div>
 					</div>
 					<div class="form-group guideInterval">
 						<label class="col-sm-2 control-label no-padding-right">座机号码:</label>
 						<div class="col-sm-3">
-							<input type="text" name="telNumber" class="col-sm-12" value="{{busCompany.telNumber}}" maxlength="20"/>
+							<input type="text" name="telNumber" class="col-sm-12" value="{{busCompany.telNumber}}" />
 						</div>
 						<label class="col-sm-1 control-label no-padding-right">传真号码:</label>
 						<div class="col-sm-3">
-							<input type="text" name="faxNumber" class="col-sm-12" value="{{busCompany.faxNumber}}" maxlength="20"/>
+							<input type="text" name="faxNumber" class="col-sm-12" value="{{busCompany.faxNumber}}" />
 						</div>
 					</div>
 					<div class="form-group guideInterval">
@@ -115,8 +115,8 @@
 								<tbody>
 									{{each busCompany.busList as bus}}
 										<tr data-entity-id="{{bus.id}}">
-											<td><input  name="licenseNumber" type="text" class="col-sm-12" value="{{bus.licenseNumber}}" maxlength="10"/></td>
-											<td><input name="brand" type="text" class="col-sm-12" value="{{bus.brand}}" maxlength="32"/></td>
+											<td><input  name="licenseNumber" type="text" class="col-sm-12" value="{{bus.licenseNumber}}"/></td>
+											<td><input name="brand" type="text" class="col-sm-12" value="{{bus.brand}}"/></td>
 											<td><input name="seatCount" class="col-sm-12" type="text" value="{{bus.seatCount}}"/></td>
 											<td class="col-sm-1"><div class="input-group col-sm-12"><input name="buyTime" type="text" class="date-picker" value="{{bus.buyTime | dateFormat:'yyyy-MM-dd'}}"/><span class="input-group-addon"><i class="fa fa-calendar"></i></span></div></td>
 											<td>
@@ -165,11 +165,11 @@
 													{{/each}}
 												{{else}}
 													<div data-index="1" class="clearfix div-1" style="margin-top:2px">
-														<input style="width:100px;" name="contractPrice" type="text" readonly="readonly" value="" maxlength="5"/><label>&nbsp;元</label>
+														<input style="width:100px;" name="contractPrice" type="text" readonly="readonly" value=""/><label>&nbsp;元</label>
 													</div>
 												{{/if}}
 											</td>
-											<td><input name="remark" class="col-sm-12" type="text" value="{{bus.remark}}" maxlength="1000"/></td>
+											<td><input name="remark" class="col-sm-12" type="text" value="{{bus.remark}}"/></td>
 											<td style="width:70px"><a class="btn-bus-delete">删除</a></td>
 										</tr>
 									{{/each}}
@@ -211,23 +211,23 @@
 								<tbody>
 									{{each busCompany.driverList as driver}}
 										<tr data-entity-id="{{driver.id}}">
-											<td><input name="driverName" class="col-sm-12" type="text" value="{{driver.name}}" maxlength="32"/></td>
+											<td><input name="driverName" class="col-sm-12" type="text" value="{{driver.name}}"/></td>
 											<td>
 												<select name="gender" class="col-sm-12">
 													<option {{if driver.gender == 0}}selected="selected"{{/if}} value="0">男</option>
 													<option {{if driver.gender == 1}}selected="selected"{{/if}} value="1">女</option>
 												</select>
 											</td>
-											<td><input name="mobileNumber" class="col-sm-12" type="text" value="{{driver.mobileNumber}}" maxlength="11"/></td>
-											<td><input name="driveYears" type="text" value="{{driver.driveYears}}" maxlength="2"/></td>
-											<td><input name="licenseId" class="col-sm-12" type="text" value="{{driver.licenseId}}" maxlength="18"/></td>
+											<td><input name="mobileNumber" class="col-sm-12" type="text" value="{{driver.mobileNumber}}"/></td>
+											<td><input name="driveYears" type="text" value="{{driver.driveYears}}"/></td>
+											<td><input name="licenseId" class="col-sm-12" type="text" value="{{driver.licenseId}}"/></td>
 											<td>
 												<select name="status" class="col-sm-12">
 													<option {{if driver.status == 0}}selected="selected"{{/if}} value="1">启用</option>
 													<option {{if driver.status == 0}}selected="selected"{{/if}} value="0">停用</option>
 												</select>
 											</td>
-											<td><input name="remark" class="col-sm-12" type="text" value="{{driver.remark}}" maxlength="1000"/></td>
+											<td><input name="remark" class="col-sm-12" type="text" value="{{driver.remark}}" /></td>
 											<td style="width:70px">
 												<a class=" btn-driver-delete">删除</a>
 											</td>

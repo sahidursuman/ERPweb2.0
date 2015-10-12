@@ -23,11 +23,7 @@
 			<div class="col-sm-3">
 				<select name="groupId" class="col-sm-12">
 					{{each groups as group}}
-						<optgroup label="{{group.name}}">
-							{{each group.subOrg as item}}
-							<option value="{{item.orgId}}" {{if item.orgId == user.groupId}}selected="selected"{{/if}}>{{item.orgName}}</option>
-							{{/each}}
-						</optgroup>
+					<option value="{{group.id}}" {{if group.id == user.groupId}}selected="selected"{{/if}}>{{group.name}}</option>
 					{{/each}}
 				</select>
 			</div>

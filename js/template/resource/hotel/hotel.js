@@ -197,8 +197,8 @@ define(function(require, exports) {
 							roomTd = td;
 							var index = td.find("div").length;
 							var timeLimitDiv = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right; padding-top:3px;\"><a href=\"#\" class=\"btn-white del\">删除</a></label></div>";
-							var marketPriceInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"marketPrice\" type=\"text\" class='col-sm-12 marketPrice' maxlength=\"7\"/></div>";
-							var contractPriceInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"contractPrice\" type=\"text\" class='col-sm-12 price' maxlength=\"7\"/></div>";
+							var marketPriceInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"marketPrice\" type=\"text\" class='col-sm-12 marketPrice'/></div>";
+							var contractPriceInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"contractPrice\" type=\"text\" class='col-sm-12 price'/></div>";
 							td.next().append(marketPriceInput);
 							td.next().next().append(contractPriceInput);
 							td.append(timeLimitDiv);
