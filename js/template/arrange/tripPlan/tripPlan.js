@@ -38,7 +38,6 @@ define(function(require, exports) {
 					globalLoadingLayer = openLoadingLayer();
 				},
 				success:function(data){
-					console.log(data);
 					layer.close(globalLoadingLayer);
 					var result = showDialog(data);
 					if(result){
@@ -427,7 +426,6 @@ define(function(require, exports) {
 					globalLoadingLayer = openLoadingLayer();
 				},
 				success:function(data){
-					console.log(data);
 					layer.close(globalLoadingLayer);
 					var result = showDialog(data);
 					if(result){
@@ -541,7 +539,6 @@ define(function(require, exports) {
 								})
 										
 								var saveTripPlan = JSON.stringify(saveTripP);
-								console.log(saveTripPlan);
 								$.ajax({
 									url:""+APP_ROOT+"back/tripPlan.do?method=updateTripPlan&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 									data:"saveTripPlan="+encodeURIComponent(saveTripPlan)+"",
@@ -666,7 +663,6 @@ define(function(require, exports) {
 									globalLoadingLayer = openLoadingLayer();
 								},
 								success: function(data) {
-									console.log(data);
 									data.lineProduct = JSON.parse(data.lineProduct);
 									data.lineProductDays = JSON.parse(data.lineProductDays);
 									data.guide = JSON.parse(data.guide);
@@ -679,9 +675,6 @@ define(function(require, exports) {
 										tripPlan.setTripPlanLineValue(data);
 										
 										var daysLength = data.lineProductDays.length;
-										console.log(data.lineProductDays[0].whichDay);
-										console.log(data.lineProductDays[0].repastDetail);
-										console.log(data.lineProductDays[0].title);
 										var html = "";
 										for(i=0;i<daysLength;i++){
 											function hotelLevel(){
@@ -726,11 +719,8 @@ define(function(require, exports) {
 				trMemberCount = 0;
 			tr.each(function(){
 				trMemberCount += parseInt($(this).find(".tripPlanTrMemberCount").text());
-			console.log("*-*-***-"+$(this).find(".tripPlanTrMemberCount"))
 			})
-			console.log(tr);
 			$("#"+tab+" ."+className+"").text(trMemberCount);
-			console.log("-------------");
 			trMemberCount = 0;
 		},
 		confirmTripPlan : function(id){
@@ -1422,9 +1412,7 @@ define(function(require, exports) {
 						dateType:"json",
 						type:"POST",
 						success:function(data){
-							console.log(data)
 							var result = showDialog(data);
-							console.log(data.busList);
 							if(result){
 								var licenseList = JSON.parse(data.busList);
 								if(licenseList && licenseList.length > 0){
@@ -1469,7 +1457,6 @@ define(function(require, exports) {
 			}).unbind("click").click(function(){
 				var obj = this;
 				var busLicenseNumberId = $(this).parent().parent().parent().find("input[name=busLicenseNumberId]").val();
-				console.log(busLicenseNumberId);
 				if(busLicenseNumberId){
 					$.ajax({
 						url:""+APP_ROOT+"back/busCompany.do?method=getDrivers&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
