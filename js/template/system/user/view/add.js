@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":85,"md5":"f434cdaea97d57bdcc5f9d98b58f6f37"}*/
+/*TMODJS:{"debug":true,"version":88,"md5":"f434cdaea97d57bdcc5f9d98b58f6f37"}*/
 define(function(require) {
     return require("../../../template")("system/user/view/add", function($data, $filename) {
         try {
