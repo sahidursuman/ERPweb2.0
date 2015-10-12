@@ -1827,7 +1827,7 @@ define(function(require, exports) {
 			'<td><input type="text" class="col-xs-12" name="price"/></td>'+
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="managerName"/></td>'+
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
-			'<td><input type="text" class="col-xs-12" readonly="readonly" name="companyPhoneNumber"/></td>'+
+			'<td><input type="text" class="col-xs-12" readonly="readonly" name="telNumber"/></td>'+
 			'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
 			'<td><button class="btn btn-xs btn-danger btn-restaurant-delete deleteResourceTicketList"> <i class="ace-icon fa fa-trash-o bigger-120"></i> </button></td></tr></tbody></table></div></div></div></div>';
 			$(this).parents(".updateLineProductDaysList").find(".updateLineProductDaysDetailContainer").append(shoppingDetails);
@@ -1861,7 +1861,7 @@ define(function(require, exports) {
 								thisParent.find("select[name=type]").val(ui.item.type  || 1);
 								thisParent.find("input[name=managerName]").val(ticket.managerName);
 								thisParent.find("input[name=mobileNumber]").val(ticket.mobileNumber);
-								thisParent.find("input[name=companyPhoneNumber]").val(ticket.companyPhoneNumber);
+								thisParent.find("input[name=telNumber]").val(ticket.telNumber);
 
 								// 更新表单验证的配置
 								validator = rule.lineProductUpdate(validator);
@@ -1878,7 +1878,7 @@ define(function(require, exports) {
 						thisParent.find("input[name=price]").val("");
 						thisParent.find("input[name=managerName]").val("");
 						thisParent.find("input[name=mobileNumber]").val("");
-						thisParent.find("input[name=companyPhoneNumber]").val("");
+						thisParent.find("input[name=telNumber]").val("");
 
 						// 更新表单验证的配置
 						validator = rule.lineProductUpdate(validator);
