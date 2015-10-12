@@ -106,7 +106,7 @@
 													</td>
 													<td><input class="col-sm-12" name="driverMobileNumber" readonly="readonly" type="text" value="{{if outBus.driver != null}}{{outBus.driver.mobileNumber}}{{/if}}" /></td>
 													<td><input class="col-sm-12 datetimepicker" name="bususeTime" type="text" value="{{if outBus.useTime != null}}{{outBus.useTime}}{{/if}}" /></td>
-													<td><input class="col-sm-12" name="boardLocation" type="text" value="{{outBus.boardLocation}}" /></td>
+													<td><input class="col-sm-12" name="boardLocation" type="text"  value="{{outBus.boardLocation}}" /></td>
 													<td><input class="col-sm-12 price" name="busFee" type="text" value="{{outBus.fee}}" /><input type="hidden" class="count" value="1" /></td>
 													<td><input class="col-sm-12 discount" name="busReduceMoney" type="text" value="{{outBus.reduceMoney}}" /></td>
 													<td><input class="col-sm-12 needPay" readonly="readonly" name="busNeedPayMoney" type="text" value="{{outBus.needPayMoney}}" /></td>
@@ -207,7 +207,8 @@
                                                				<option value="0" {{if outHotel.payType == 0}}selected="selected"{{/if}}>现付</option>
                                                             <option value="1" {{if outHotel.payType == 1}}selected="selected"{{/if}}>签单</option>
                                                             <option value="2" {{if outHotel.payType == 2}}selected="selected"{{/if}}>转账</option>
-                                               			</select>
+                                                            <option value="3" {{if outHotel.payType == 3}}selected="selected"{{/if}}>网付</option>  
+                                               			</select>  
                                                		</td>
 													<!-- <input class="col-sm-12" name="hotelPayType" value="{{outHotel.payType}}" type="text" /></td> -->
 													<td>
@@ -298,6 +299,7 @@
                                                				<option value="0" {{if outTicket.payType == 0}}selected="selected"{{/if}}>现付</option>
                                                             <option value="1" {{if outTicket.payType == 1}}selected="selected"{{/if}}>签单</option>
                                                             <option value="2" {{if outTicket.payType == 2}}selected="selected"{{/if}}>转账</option>
+                                                            <option value="3" {{if outTicket.payType == 3}}selected="selected"{{/if}}>网付</option>
                                                			</select>
                                                		</td>
 														<!-- <input class="col-sm-12" name="ticketPayType" value="{{outTicket.payType}}" type="text" /></td> -->
@@ -384,6 +386,7 @@
                                                				<option value="0" {{if outBus.payType == 0}}selected="selected"{{/if}}>现付</option>
                                                             <option value="1" {{if outBus.payType == 1}}selected="selected"{{/if}}>签单</option>
                                                             <option value="2" {{if outBus.payType == 2}}selected="selected"{{/if}}>转账</option>
+                                                            <option value="3" {{if outBus.payType == 3}}selected="selected"{{/if}}>网付</option>
                                                			</select>
 														<!-- <input class="col-sm-12" name="busPayType" type="text" value="{{outBus.payType}}" /> -->
 													</td>
@@ -411,7 +414,7 @@
 								<div class="widget-header">
 									<h5 class="widget-title">
 										<i class="ace-icon fa fa-user"></i>
-										送团车俩
+										送团车俩  
 									</h5>
 					
 									<div class="widget-toolbar no-border">
@@ -470,6 +473,7 @@
                                                				<option value="0" {{if outBus.payType == 0}}selected="selected"{{/if}}>现付</option>
                                                             <option value="1" {{if outBus.payType == 1}}selected="selected"{{/if}}>签单</option>
                                                             <option value="2" {{if outBus.payType == 2}}selected="selected"{{/if}}>转账</option>
+                                                            <option value="3" {{if outBus.payType == 3}}selected="selected"{{/if}}>网付</option>
                                                			</select>
 														<!-- <input class="col-sm-12" name="busPayType" type="text" value="{{outBus.payType}}" /> -->
 													</td>
@@ -560,6 +564,7 @@
                                                				<option value="0" {{if outHotel.payType == 0}}selected="selected"{{/if}}>现付</option>
                                                             <option value="1" {{if outHotel.payType == 1}}selected="selected"{{/if}}>签单</option>
                                                             <option value="2" {{if outHotel.payType == 2}}selected="selected"{{/if}}>转账</option>
+                                                            <option value="3" {{if outHotel.payType == 3}}selected="selected"{{/if}}>网付</option>
                                                			</select>
                                                		</td>
 													<!-- <input class="col-sm-12" name="hotelPayType" value="{{outHotel.payType}}" type="text" /></td> -->
@@ -651,6 +656,7 @@
                                                				<option value="0" {{if outTicket.payType == 0}}selected="selected"{{/if}}>现付</option>
                                                             <option value="1" {{if outTicket.payType == 1}}selected="selected"{{/if}}>签单</option>
                                                             <option value="2" {{if outTicket.payType == 2}}selected="selected"{{/if}}>转账</option>
+                                                            <option value="3" {{if outTicket.payType == 3}}selected="selected"{{/if}}>网付</option>
                                                			</select>
                                                		</td>
 														<!-- <input class="col-sm-12" name="ticketPayType" value="{{outTicket.payType}}" type="text" /></td> -->

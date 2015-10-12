@@ -473,7 +473,7 @@ define(function(require, exports) {
 			'<td><input class="col-sm-12" name="hotelPayedMoney" value="" type="text" /></td>'+
 			'<td><select class="" name="hotelPayType" >'+
 			'<option value="0">现付</option>'+
-			'<option value="1">签单</option><option value="2">转账</option></select></td>'+
+			'<option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>'+
 			'<td><button class="btn btn-xs btn-danger arrange-delete"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></td>'+
 			'</tr>';
 			$("#"+id+" .hotelList tbody").append(html);
@@ -504,7 +504,7 @@ define(function(require, exports) {
 			'<td><input class="col-sm-12" name="ticketPayedMoney" value="" type="text" /></td>'+
 			'<td><select class="" name="ticketPayType" >'+
 			'<option value="0">现付</option>'+
-			'<option value="1">签单</option><option value="2">转账</option></select></td>'+
+			'<option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>'+
 			'<td><button class="btn btn-xs btn-danger arrange-delete"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></td>'+
 			'</tr>';
 			$("#"+id+" .ticketList tbody").append(html);

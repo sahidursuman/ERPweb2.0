@@ -503,7 +503,7 @@ define(function(require, exports) {
 			'<td><input type="text" name="reduceMoney" class="col-sm-12"/></td>' +
 			'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12"/></td>' +
 			'<td><input type="text" name="payedMoney" class="col-sm-12"/></td>' +
-			'<td><select name="payType" class="col-sm-12 no-padding" style="width:55px;"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option></select></td>' +
+			'<td><select name="payType" class="col-sm-12 no-padding" style="width:55px;"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>' +
 			'<td><input type="text" name="guidePayMoney" class="col-sm-12"/></td>' +
 			'<td><input type="text" name="remark" class="col-sm-12"/></td>' +
 			'<td><button class="btn btn-xs btn-danger btn-deleteTripPlanList" title="删除"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></td></tr>';
