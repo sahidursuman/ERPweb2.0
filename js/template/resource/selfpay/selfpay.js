@@ -424,7 +424,7 @@ define(function(require, exports) {
 									'<td><input name="remark" type="text" class="col-sm-12" style="min-width:100px;"/></div></td>'+
 									'<td style="width:70px"><a class="btn-price-delete">删除</a></td></tr>';
 
-									$price.find("tbody").append(html);
+									$price.find("tbody").append(html); 
 									//修改是的项目价格价格列表验证
 									priceItemValidator = rule.checkItems($(".update-selfpay-form .priceList"));
 									$price.find(".datepicker").datepicker({
