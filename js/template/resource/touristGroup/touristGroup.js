@@ -334,23 +334,17 @@ define(function(require, exports) {
 			var validator=rule.checktouristGroup($(".addTouristGroup"));  
 			if($(".tab-"+menuKey+"-add").length > 0) {
 				if(!!touristGroup.edited["add"] && touristGroup.edited["add"] == "add"){
-					showConfirmMsg($( "#confirm-dialog-message" ), "未保存的数据，是否",function(){
-						 validator = rule.checktouristGroup($('.addTouristGroup'));
-						 if (!validator.form()) { 
-							 return; 
-						 }
-						 touristGroup.submitAddTouristGroup();
-						 touristGroup.edited["add"] = "";
-						addTab(menuKey+"-add","添加游客",html);				
+					showConfirmMsg($( "#confirm-dialog-message" ), "未保存的数据，是否放弃?",function(){
+						console.log("继续编辑");			
 					},function(){
-						addTab(menuKey+"-add","添加游客",html);			
-					}); 							
+						addTab(menuKey+"-add","添加游客",html);
+						touristGroup.edited["add"] = "";
+					},"放弃","继续编辑"); 							
 				 }else{
-					addTab(menuKey+"-add","添加游客",html);			
+					addTab(menuKey+"-add","添加游客",html);					
 				 } 
 			}else{
-				addTab(menuKey+"-add","添加游客",html);			
-				validator = rule.checktouristGroup($("#"+tab+""));
+				addTab(menuKey+"-add","添加游客",html);		
 			};	
 			touristGroup.initAdd();
 		},
@@ -360,7 +354,6 @@ define(function(require, exports) {
 			var tab = "tab-resource_touristGroup-add-content";
 			$('.addTouristGroup').on("change",function(){
 				touristGroup.edited["add"] = "add";
-				console.log("change-add");
 			});	
 			//出游日期 时间控件
 			$("#"+tab+" .touristGroupMainForm input[name=startTime]").datepicker({
@@ -580,8 +573,9 @@ define(function(require, exports) {
 				            		 addTab(menuKey+"-update","编辑小组",html);				
 				            		 validator = rule.checktouristGroup($('.updateTouristGroup'));
 				            	},function(){
-				            		addTab(menuKey+"-update","编辑小组",html);				
-				            	    validator = rule.checktouristGroup($('.updateTouristGroup'));
+				            		addTab(menuKey+"-update","编辑小组",html);	
+									validator = rule.checktouristGroup($('.updateTouristGroup'));									
+									touristGroup.edited["update"] = "";
 				            	}); 							
                  	    	 }else{
 	                 	    	addTab(menuKey+"-update","编辑小组",html);				
@@ -602,7 +596,6 @@ define(function(require, exports) {
 			var updateTouristGroup = id;
 			$('.updateTouristGroup').on("change",function(){
 				touristGroup.edited["update"] = "update";
-				console.log("change-update");
 			});	
 			if(data.touristGroupDetail.status != 0){
 				//出游日期 时间控件
@@ -1263,6 +1256,7 @@ define(function(require, exports) {
 						showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
 							closeTab(menuKey+"-add");
 							touristGroup.listTouristGroup(0,"","","","","","","");
+							touristGroup.edited["add"] = "";
 						});
 					}
 				}
