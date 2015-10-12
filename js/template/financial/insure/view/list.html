@@ -62,20 +62,19 @@
 	                    {{/if}}
                     </td>
                     <td>
-                        <button data-entity-id="{{insurance.insuranceId}}" data-entity-insuranceCompanyName="{{insurance.insuranceCompanyName}}" data-entity-year="{{searchParam.year}}" data-entity-month="{{searchParam.month}}" class="btn btn-primary btn-sm btn-insurance-check" >
-                            <i class="ace-icon fa fa-stack-overflow"></i>
+                        <a data-entity-id="{{insurance.insuranceId}}" data-entity-insuranceCompanyName="{{insurance.insuranceCompanyName}}" data-entity-year="{{searchParam.year}}" data-entity-month="{{searchParam.month}}" class="cursor btn-insurance-check" >
                             	 对账
-                        </button>
-                        <button data-entity-id="{{insurance.insuranceId}}" data-entity-insuranceCompanyName="{{insurance.insuranceCompanyName}}" data-entity-year="{{searchParam.year}}" 
+                        </a><a href="" class="cursor"> |</a>
+                        <a data-entity-id="{{insurance.insuranceId}}" data-entity-insuranceCompanyName="{{insurance.insuranceCompanyName}}" data-entity-year="{{searchParam.year}}"
                                 {{if searchParam.month == ""}}
                                  	 data-entity-startMonth=1 data-entity-endMonth=12 
                                   {{else}}
                                  	 data-entity-startMonth="{{searchParam.month}}" data-entity-endMonth="{{searchParam.month}}" 
                                 {{/if}}
-                        		class="btn btn-sm btn-success btn-insurance-balance">
-                            <i class="ace-icon fa fa-building-o bigger-120"></i>
+                        		class="cursor btn-insurance-balance">
+
                            		 结算
-                        </button>
+                        </a>
                     </td>
                 </tr>
                 {{/each}}

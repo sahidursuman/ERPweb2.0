@@ -9,11 +9,11 @@
 			<div class="col-xs-2">
 				<div class="col-xs-12">
 					<div class="input-group">
-						<input class="col-xs-12 date-picker" name="startTime" placeholder="出团日期" value="{{searchParam.startTime}}" type="text" />	
+						<input class="col-xs-12 date-picker" name="startTime" placeholder="出团日期" value="{{searchParam.startTime}}" type="text" />
 						<span class="input-group-addon">
 							<i class="fa fa-calendar"></i>
 						</span>
-					</div> 
+					</div>
 				</div>
 			</div>
 			<div class="col-xs-1">
@@ -26,7 +26,7 @@
 				<input type="text" name="creator" class="col-xs-12" placeholder="创建人" value="{{searchParam.creator}}" />
 			</div>
 			<div class="col-xs-2">
-				<div class="btn-group btn-status">    
+				<div class="btn-group btn-status">
 					<button data-value="{{searchParam.status}}" data-toggle="dropdown" class="btn-sm  dropdown-toggle block-up" style="height: 31px" aria-expanded="false">
 						<span>
 							{{if searchParam.status == "-1"}}
@@ -56,7 +56,7 @@
 						</li>
 					</ul>
 				</div>
-			
+
 				<button class=" btn-sm  btn-tripPlan-search search-btn" style="margin-left: 20px">
 					<i class="ace-icon fa fa-search"></i>
 					搜索
@@ -72,8 +72,8 @@
 					<th>团号</th>
 					<th>出团日期</th>
 					<th>完团日期</th>
-					<th>线路产品</th>
-					<th>人数</th>		
+					<th >线路产品</th>
+					<th>人数</th>
 					<th>团队人数</th>
 					<th>导游</th>
 					<th>车牌号</th>
@@ -81,17 +81,17 @@
 					<th>创建人</th>
 					<th>创建时间</th>
 					<th>状态</th>
-					<th style="width:200px;">操作</th>
+					<th style="width:260px;">操作</th>
 				</tr>
 			</thead>
-			<tbody>      
+			<tbody>
 				{{each tripPlanList as tripPlan}}
 					<tr data-entity-id="{{tripPlan.id}}">
 						<td style="vertical-align:middle" {{if tripPlan.tripPlanDetails.length > 1}}rowspan="{{tripPlan.tripPlanDetails.length}}"{{/if}}>{{tripPlan.tripNumber}}</td>
 						{{if tripPlan.tripPlanDetails.length == 0}}
 							<td>{{if tripPlan.startTime != null}}{{tripPlan.startTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
 							<td>{{if tripPlan.endTime != null}}{{tripPlan.endTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
-							<td>{{tripPlan.lineProduct.name}}</td>	
+							<td>{{tripPlan.lineProduct.name}}</td>
 							<td>{{tripPlan.touristAdultCount+tripPlan.touristChildCount}}</td>
 						{{else}}
 							{{each tripPlan.tripPlanDetails as tripPlanDetails index}}
@@ -99,14 +99,14 @@
 								<td>{{tripPlanDetails.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
 								<td>{{tripPlanDetails.endTime | dateFormat: 'yyyy-MM-dd'}}</td>
 								<td>{{tripPlanDetails.lineProductName}}</td>
-								<td>{{tripPlanDetails.sumMemberCount}}</td>	
+								<td>{{tripPlanDetails.sumMemberCount}}</td>
 								{{/if}}
 							{{/each}}
 						{{/if}}
 						<td style="vertical-align:middle" {{if tripPlan.tripPlanDetails.length > 1}}rowspan="{{tripPlan.tripPlanDetails.length}}"{{/if}}>{{tripPlan.touristAdultCount+tripPlan.touristChildCount}}</td>
 						<td style="vertical-align:middle" {{if tripPlan.tripPlanDetails.length > 1}}rowspan="{{tripPlan.tripPlanDetails.length}}"{{/if}}>{{if tripPlan.guide != null}}{{tripPlan.guide.realname}}{{/if}}</td>
 						<td style="vertical-align:middle" {{if tripPlan.tripPlanDetails.length > 1}}rowspan="{{tripPlan.tripPlanDetails.length}}"{{/if}}>{{if tripPlan.bus!=null}}{{tripPlan.bus.licenseNumber}}{{/if}}</td>
-						<td style="vertical-align:middle" {{if tripPlan.tripPlanDetails.length > 1}}rowspan="{{tripPlan.tripPlanDetails.length}}"{{/if}}>{{tripPlan.surplusSeat}}</td>  
+						<td style="vertical-align:middle" {{if tripPlan.tripPlanDetails.length > 1}}rowspan="{{tripPlan.tripPlanDetails.length}}"{{/if}}>{{tripPlan.surplusSeat}}</td>
 						<td style="vertical-align:middle" {{if tripPlan.tripPlanDetails.length > 1}}rowspan="{{tripPlan.tripPlanDetails.length}}"{{/if}}>{{if tripPlan.user!=null}}{{tripPlan.user.realName}}{{/if}}</td>
 						<td style="vertical-align:middle" {{if tripPlan.tripPlanDetails.length > 1}}rowspan="{{tripPlan.tripPlanDetails.length}}"{{/if}}>{{tripPlan.createTime}}</td>
 						<td style="vertical-align:middle" {{if tripPlan.tripPlanDetails.length > 1}}rowspan="{{tripPlan.tripPlanDetails.length}}"{{/if}}>
@@ -119,16 +119,25 @@
 							{{else tripPlan.status == 1}}
 							<i class="ace-icon fa fa-check green bigger-130"></i>
 								已发团
-							{{/if}}	
+							{{/if}}
 						</td>
 						<td style="vertical-align:middle" {{if tripPlan.tripPlanDetails.length > 1}}rowspan="{{tripPlan.tripPlanDetails.length}}"{{/if}}>
-							<a data-entity-id="{{tripPlan.id}}" billStatus="{{tripPlan.billStatus}}" statusValue="{{tripPlan.status}}" title="确认发团" class="{{if tripPlan.status != -1}}btn-Plan-confirm{{/if}} cursor" {{if tripPlan.status == -1}} style="color:#bbb;"{{/if}}>确认|</a>
-							<a data-entity-id="{{tripPlan.id}}" title="查看计划" class="btn-Plan-view cursor"> 查看|</a>
-						    <a data-entity-id="{{tripPlan.id}}" billStatus="{{tripPlan.billStatus}}" title="编辑计划" class="{{if tripPlan.status != -1}}btn-Plan-edit{{/if}} cursor" {{if tripPlan.status == -1}} style="color:#bbb;"{{/if}}> 编辑|</a>
-							<a data-entity-id="{{tripPlan.id}}" title="导出计划" class="btn-Plan-export cursor"> 导出|</a>
+							<a data-entity-id="{{tripPlan.id}}" billStatus="{{tripPlan.billStatus}}" statusValue="{{tripPlan.status}}" title="确认发团" class="{{if tripPlan.status != -1}}btn-Plan-confirm{{/if}} cursor" {{if tripPlan.status == -1}} style="color:#bbb;"{{/if}}>
+							确认
+							</a><a href="" class="cursor"> |</a>
+							<a data-entity-id="{{tripPlan.id}}" title="查看计划" class="btn-Plan-view cursor">
+								查看
+							</a><a href="" class="cursor"> |</a>
+						    <a data-entity-id="{{tripPlan.id}}" billStatus="{{tripPlan.billStatus}}" title="编辑计划" class="{{if tripPlan.status != -1}}btn-Plan-edit{{/if}} cursor" {{if tripPlan.status == -1}} style="color:#bbb;"{{/if}}>
+							编辑
+							</a><a href="" class="cursor"> |</a>
+							<a data-entity-id="{{tripPlan.id}}" title="导出计划" class="btn-Plan-export cursor">
+								导出
+							</a><a href="" class="cursor"> |</a>
 							<a data-entity-id="{{tripPlan.id}}" billStatus="{{tripPlan.billStatus}}" title="取消计划" class="{{if tripPlan.status != -1}}btn-Plan-cancel{{/if}} cursor" {{if tripPlan.status == -1}} style="color:#bbb;"{{/if}}>取消</a>
 						</td>
 					</tr>
+
 					{{if tripPlan.tripPlanDetails.length > 1}}
 					{{each tripPlan.tripPlanDetails as tripPlanDetails index}}
 						{{if index>0}}
@@ -136,14 +145,16 @@
 							<td>{{tripPlanDetails.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
 							<td>{{tripPlanDetails.endTime | dateFormat: 'yyyy-MM-dd'}}</td>
 							<td>{{tripPlanDetails.lineProductName}}</td>
-							<td>{{tripPlanDetails.sumMemberCount}}</td>	
+							<td>{{tripPlanDetails.sumMemberCount}}</td>
 						</tr>
+
 						{{/if}}
 					{{/each}}
 					{{/if}}
 				{{/each}}
 			</tbody>
 		</table>
+
 		<div class="row pageMode">
 					<div class="col-xs-6">
 						<div class="dataTables_info" id="dynamic-table_info" role="status" aria-live="polite">共计 {{recordSize}} 条记录</div>
