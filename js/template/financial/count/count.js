@@ -795,7 +795,7 @@ define(function(require, exports) {
 			});
 			
             // 批注
-            var $tab = $('.financial-count-tripdetail-update-tab:visible'),
+            var $tab = $('.financial-count-update-update-tab'),
                 $financialRemark = $tab.find('input[name="accountFinancialCheckComment"]'),
                 $accountOPCheckComment = $tab.find('input[name="accountOPCheckComment"]'),
                 remarkList = [];
@@ -805,7 +805,7 @@ define(function(require, exports) {
                 financeCheckRemark = $accountOPCheckComment.eq(i).val();
                 if (opCheckRemark || financeCheckRemark)  {
                     remarkList.push({
-                        type: i,
+                        type: (i+''),               // server要求字符串
                         opCheckRemark: opCheckRemark,
                         financeCheckRemark: financeCheckRemark
                     })

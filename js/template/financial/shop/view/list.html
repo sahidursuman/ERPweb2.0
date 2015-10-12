@@ -74,16 +74,14 @@
 	                    {{/if}}
 					</td>
                     <td>
-                        <button data-entity-id="{{sumList.shopId}}" class="btn btn-primary btn-sm  btn-divide btn-shop-checking">
-                            <i class="ace-icon fa fa-stack-overflow"></i>
+                        <a data-entity-id="{{sumList.shopId}}" class="cursor btn-divide btn-shop-checking">
                             对账
-                        </button>
+                        </a><a href="" class="cursor"> |</a>
 
 
-                        <button data-entity-id="{{sumList.shopId}}" class="btn btn-sm btn-success btn-guide-view btn-transfter btn-shop-clearing">
-                            <i class="ace-icon fa fa-building-o bigger-120"></i>
+                        <a data-entity-id="{{sumList.shopId}}" class="cursor btn-guide-view btn-transfter btn-shop-clearing">
                             结算
-                        </button>
+                        </a>
                     </td>
                 </tr>
                 {{/each}}

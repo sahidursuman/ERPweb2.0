@@ -35,7 +35,7 @@
 								<td name="contactMemberMobileNumber">{{touristGroup.contactMember.mobileNumber}}</td>
 								<td name="areaData">{{touristGroup.areaData}}</td>
 								<td name="ageData">{{touristGroup.ageData}}</td>
-								<td name="peopleCount">{{touristGroup.adultCount}}大人{{touristGroup.childCount}}小孩</td>
+								<td name="peopleCount">{{touristGroup.adultCount+touristGroup.childCount}}</td>
 								<td name="remark">{{touristGroup.remark}}</td>
 								<td>
 									<button data-entity-id="{{touristGroup.id}}" class="btn btn-xs btn-success addGroupView">

@@ -122,7 +122,7 @@
 					<th class="col-sm-1">录入时间</th>
 					<th>状态</th>
 					<!-- <th>安排</th> -->
-					<th style="width:128px;">操作</th>
+					<th style="width:150px;">操作</th>
 				</tr>
 			</thead>
 		
@@ -198,16 +198,15 @@
 					<td>
 						<div class="hidden-sm hidden-xs btn-group">
 							<a data-entity-id="{{touristGroup.id}}" class=" btn-touristGroup-view cursor">
-								查看 |
-							</a>
+								查看
+							</a><a href="" class="cursor"> |</a>
 							<a data-entity-id="{{touristGroup.id}}" class="btn-touristGroup-edit cursor">
-								编辑 |
-							</a>
+								编辑
+							</a><a href="" class="cursor"> |</a>
 							<a data-entity-id="{{touristGroup.id}}" class="{{if touristGroup.status == 1}}btn-touristGroup-delete{{/if}} cursor" {{if touristGroup.status != 1}}style="color:#bbb;"{{/if}}>
 								删除
 							</a>
 						</div>
-	
 						<div class="hidden-md hidden-lg">
 							<div class="inline pos-rel">
 								<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">

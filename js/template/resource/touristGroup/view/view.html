@@ -267,7 +267,7 @@
 
 					<div class="widget-body">
 						<div class="widget-main">
-							<div class="form-group">
+							<div class="form-group"> 
 								<div class="col-sm-2"></div>
 								<div class="col-sm-3">
 									<label class="col-sm-2 control-label no-padding-right">接：</label>
@@ -294,18 +294,18 @@
 												<label class="control-label">{{if touristGroupDetail.isNeedArriveService==1}}{{if touristGroupDetail.outRemarkArrange !=null}}{{touristGroupDetail.outRemarkArrange.arrivePosition}}{{/if}}{{/if}}</label>
 											</div>
 										</div>
-										<!-- <div class="form-group">
+										<div class="form-group">
 											<label class="col-sm-3 control-label no-padding-right">班次：</label>
 											<div class="col-sm-9">
-												<input name="receptionNumber" type="text" class="col-sm-8" />
+												<label class="control-label">{{if touristGroupDetail.isNeedLeaveService==1}}{{if touristGroupDetail.outRemarkArrange != null}}{{touristGroupDetail.outRemarkArrange.arriveShift}}{{/if}}{{/if}}</label>
 											</div>
 										</div>
 										<div class="form-group">
 											<label class="col-sm-3 control-label no-padding-right">班次时间：</label>
 											<div class="col-sm-9">
-												<input name="receptionNumberTime" type="text" class="col-sm-8" />
+												<label class="control-label">{{if touristGroupDetail.isNeedLeaveService==1}}{{if touristGroupDetail.outRemarkArrange != null}}{{touristGroupDetail.outRemarkArrange.arriveShiftTime}}{{/if}}{{/if}}</label>
 											</div>
-										</div> -->
+										</div>
 									</div>
 								</div>
 								
@@ -346,18 +346,18 @@
 												<label class="control-label">{{if touristGroupDetail.isNeedLeaveService==1}}{{if touristGroupDetail.outRemarkArrange != null}}{{touristGroupDetail.outRemarkArrange.leavePosition}}{{/if}}{{/if}}</label>
 											</div>
 										</div>
-										<!-- <div class="form-group">
+										<div class="form-group">
 											<label class="col-sm-3 control-label no-padding-right">班次：</label>
 											<div class="col-sm-9">
-												<input name="sendNumber" type="text" class="col-sm-8" />
+												<label class="control-label">{{if touristGroupDetail.isNeedLeaveService==1}}{{if touristGroupDetail.outRemarkArrange != null}}{{touristGroupDetail.outRemarkArrange.leaveShift}}{{/if}}{{/if}}</label>
 											</div>
 										</div>
 										<div class="form-group">
 											<label class="col-sm-3 control-label no-padding-right">班次时间：</label>
 											<div class="col-sm-9">
-												<input name="sendNumberTime" type="text" class="col-sm-8" />
+												<label class="control-label">{{if touristGroupDetail.isNeedLeaveService==1}}{{if touristGroupDetail.outRemarkArrange != null}}{{touristGroupDetail.outRemarkArrange.leaveShiftTime}}{{/if}}{{/if}}</label>
 											</div>
-										</div> -->
+										</div>
 									</div>
 								</div>
 							</div>
