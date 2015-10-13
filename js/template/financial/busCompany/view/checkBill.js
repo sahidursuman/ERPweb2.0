@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":324,"md5":"91d91c60511b9820a4bb7bbeb3d89598"}*/
+/*TMODJS:{"debug":true,"version":325,"md5":"91d91c60511b9820a4bb7bbeb3d89598"}*/
 define(function(require) {
     return require("../../../template")("financial/busCompany/view/checkBill", function($data, $filename) {
         try {
