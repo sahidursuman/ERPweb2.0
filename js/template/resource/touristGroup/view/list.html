@@ -57,8 +57,8 @@
 
 		<label class="pull-left text-right control-label no-padding-right">针对客源:</label>
 		<div class="col-sm-1 ">
-			<select name="customerType" class="col-xs-6">   
-				<option selected="selected" value="">全部</option>   
+			<select name="customerType" class="col-xs-12">   
+				<option value="">全部</option>   
 				<option value="0" {{if searchParam.customerType == 0}}selected="selected"{{/if}}>散客</option>
 				<option value="1" {{if searchParam.customerType == 1}}selected="selected"{{/if}}>团体</option>     
 			</select> 
@@ -74,7 +74,7 @@
 				<option value="3" {{if searchParam.status == 3}}selected="selected"{{/if}}>已转客</option>
 			</select> 
 		</div>
-		 <div class="col-sm-1" style="width:20px;">    
+		 <div class="col-sm-1" style="width:100px;">
 			 <button class=" btn-sm  btn-touristGroupList-search search-btn">
 				 <i class="ace-icon fa fa-search"></i>
 				 搜索
