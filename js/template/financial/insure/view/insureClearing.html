@@ -70,7 +70,7 @@
         </thead>
         <tbody>
         {{each fcInsuranceSettlementList as SettlementList index}}
-        <tr>
+        <tr data-entity-id="{{SettlementList.id}}" data-entity-year="{{SettlementList.year}}" style="border:none" data-entity-month="{{SettlementList.month}}">
             <td style="width:100px;">{{SettlementList.year}}{{"年"}}{{SettlementList.month}}{{"月"}}</td>
             <td style="width:100px;">{{SettlementList.needPayMoney}}</td>
             <td style="width:100px;" name="blancerealNeedPayMoney">{{SettlementList.realNeedPayMoney}}</td>
@@ -84,7 +84,7 @@
                         <option value="转账">转账</option>
                         <option value="在线支付">在线支付</option>
                         <option value="线下付款">线下付款</option>
-                    </select>
+                    </select>  
             </td>
             <td class="col-sm-1" style="width:400px;"><input name="blancerealRemark" type="text" style="width:370px;" ></td>
             <td>

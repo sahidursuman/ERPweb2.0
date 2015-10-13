@@ -69,7 +69,7 @@
 					    <tr data-entity-id="{{checking.id}}" data-entity-isConfirmAccount="{{checking.isConfirmAccount}}" data-entity-realUnPayedMoney="{{checking.realUnPayedMoney}}" data-entity-remark="{{checking.remark}}">
 				         <td>{{index+1}}</td>
 							<td>
-								{{if checking.arrangeType == 0}}
+								{{if checking.arrangeType == 0}}  
 									{{checking.tripNumber}}{{","}}{{checking.lineProductName}}{{","}}{{checking.guideName}}
 							  	{{else}}
 									{{checking.tripNumber}}{{","}}{{checking.arrangeRealname}}{{","}}{{checking.arrangeMobileNumber}}
@@ -89,8 +89,8 @@
 							</td>   
 							<td>{{checking.unPayedMoney}}</td>
 							<td><a href="#" class="busCompanyImg" url="{{checking.billImages}}">查看</a></td>
-							<td><input type="text" name="FinancialbusCompanyRealUnPayedMoney" value="{{checking.realUnPayedMoney}}" style="text-align:center" {{if checking.isConfirmAccount == 1 && roleType != 1 }} disabled = "true" {{/if}}></td>
-	                        <td><input type="text" name="FinancialbusCompanyRemark" value="{{checking.remark}}" style="text-align:center" {{if checking.isConfirmAccount == 1 && roleType != 1 }} disabled = "true" {{/if}}></td>
+							<td><input type="text" maxlength="10" name="FinancialbusCompanyRealUnPayedMoney" value="{{checking.realUnPayedMoney}}" style="text-align:center" {{if checking.isConfirmAccount == 1 && roleType != 1 }} disabled = "true" {{/if}}></td>
+	                        <td><input type="text" maxlength="1000" name="FinancialbusCompanyRemark" value="{{checking.remark}}" style="text-align:center" {{if checking.isConfirmAccount == 1 && roleType != 1 }} disabled = "true" {{/if}}></td>
 							<td>{{if checking.checkTime == null || checking.checkTime == ""}}-{{else}}{{checking.checkTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
 	                        <td>{{checking.checkUserRealName}}</td>
 							<td>
