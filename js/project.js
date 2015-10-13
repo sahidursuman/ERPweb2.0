@@ -177,6 +177,14 @@ function init_editor(ue_key,options)  {
 		ue.destroy();
 	}
 	
+	// 富文本编辑器的公共配置
+	options = $.extend({
+		// 服务器统一请求接口路径
+        serverUrl: APP_ROOT + "app/components/ueditor/jsp/controller.jsp",
+        //是否启用元素路径：否
+		elementPathEnabled: false
+	}, options);
+
 	ue = UE.getEditor(ue_key,options);
 	ue.ready(function(){
 		ue.setHeight(400);
@@ -722,6 +730,7 @@ function listMenu(menuTemplate){
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/arrange/transit/transit.js",function(transit){ 
 						transit.listTransit(0,"","","","","","","","","");
+						modals["arrange_transit"] = transit;
 					});
 				});
 				
@@ -963,9 +972,9 @@ function listMenu(menuTemplate){
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/financial/count/count.js",function(count){
+						count.init()
 						
-						
-						count.getlistCount(0,"","","","","","","","");
+						// count.getlistCount(0,"","","","","","","","");
 					});
 				});
 				

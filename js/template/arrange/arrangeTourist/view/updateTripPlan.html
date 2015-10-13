@@ -107,6 +107,15 @@
 							<div class="widget-main">
 								<div class="form-group">
 									<div class="col-xs-12">
+										<!-- 	<button class="btn btn-sm btn-success addTouristGroup">
+											<i class="ace-icon fa fa-plus"></i>
+											添加游客小组
+										</button> -->
+										<div style="display: inline-block;padding-left: 30px;">总人数：<span class="tripPlanAllMemberCount"></span></div>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="col-xs-12">
 										<table class="table table-striped table-bordered table-hover"> 
 											<thead>
 												<tr>
@@ -129,7 +138,7 @@
 													<td>{{if touristGroup.contactMember != null}}{{touristGroup.contactMember.mobileNumber}}{{/if}}</td>
 													<td>{{touristGroup.areaData}}</td>
 													<td>{{touristGroup.ageData}}</td>
-													<td>{{touristGroup.adultCount + touristGroup.childCount}}</td>
+													<td class="tripPlanTrMemberCount">{{touristGroup.adultCount + touristGroup.childCount}}</td>
 													<td>{{touristGroup.remark}}</td>
 													<td>
 														<div class="hidden-sm hidden-xs btn-group">

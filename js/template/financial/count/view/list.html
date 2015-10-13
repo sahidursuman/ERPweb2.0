@@ -83,7 +83,13 @@
                 	{{if financialTripPlan != null}}
                 	<tr data-entity-id="{{financialTripPlan.id}}">
                 	<td style="vertical-align:middle" {{if financialTripPlan.tripPlan.tripPlanDetails.length > 1}}rowspan="{{financialTripPlan.tripPlan.tripPlanDetails.length}}"{{/if}}>{{financialTripPlan.tripPlan.tripNumber}}</td>
-                    {{each financialTripPlan.tripPlan.tripPlanDetails as tripPlanDetails index}}
+                    {{if financialTripPlan.tripPlan.tripPlanDetails.length == 0}}
+                        <td>{{if financialTripPlan.tripPlan != null}}{{financialTripPlan.tripPlan.startTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
+                        <td>{{if financialTripPlan.tripPlan != null}}{{financialTripPlan.tripPlan.endTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
+                        <td>{{financialTripPlan.tripPlan.lineProduct.name}}</td>
+                        <td>{{financialTripPlan.tripPlan.touristAdultCount + financialTripPlan.tripPlan.touristChildCount}}</td>
+                    {{else}}
+                        {{each financialTripPlan.tripPlan.tripPlanDetails as tripPlanDetails index}}
                         {{if index == 0}}
                             <td>{{tripPlanDetails.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
                             <td>{{tripPlanDetails.endTime | dateFormat: 'yyyy-MM-dd'}}</td>
@@ -91,6 +97,7 @@
                             <td>{{tripPlanDetails.sumMemberCount}}</td> 
                         {{/if}}
                     {{/each}}
+                    {{/if}}
                 	<td style="vertical-align:middle" {{if financialTripPlan.tripPlan.tripPlanDetails.length > 1}}rowspan="{{financialTripPlan.tripPlan.tripPlanDetails.length}}"{{/if}}>{{financialTripPlan.tripPlan.touristAdultCount+financialTripPlan.tripPlan.touristChildCount}}</td>
                 	<td style="vertical-align:middle" {{if financialTripPlan.tripPlan.tripPlanDetails.length > 1}}rowspan="{{financialTripPlan.tripPlan.tripPlanDetails.length}}"{{/if}}>{{if financialTripPlan.tripPlan.guide != null}}{{financialTripPlan.tripPlan.guide.realname}}{{/if}}</td>
                 	<td style="vertical-align:middle" {{if financialTripPlan.tripPlan.tripPlanDetails.length > 1}}rowspan="{{financialTripPlan.tripPlan.tripPlanDetails.length}}"{{/if}}>{{if financialTripPlan.tripPlan.bus != null}}{{financialTripPlan.tripPlan.bus.licenseNumber}}{{/if}}</td>

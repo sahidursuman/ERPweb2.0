@@ -11,7 +11,7 @@
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>车队名称:</label>
 						<div class="col-sm-3">
-							<input type="text" name="companyName" class="col-sm-12" value="{{busCompany.companyName}}">
+							<input type="text" name="companyName" class="col-sm-12" value="{{busCompany.companyName}}" maxlength="32">
 						</div>
 						<label class="col-sm-1 control-label no-padding-right">是否启用:</label>
 						<div class="col-sm-2 checkbox" style="margin-left:-10px">
@@ -35,21 +35,21 @@
 					<div class="form-group">
 					    <label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>联系人:</label>
 						<div class="col-sm-3">
-							<input type="text" name="managerName" class="col-sm-12" value="{{busCompany.managerName}}" />
+							<input type="text" name="managerName" class="col-sm-12" value="{{busCompany.managerName}}" maxlength="45"/>
 						</div>
 				    	<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>联系电话:</label>
 						<div class="col-sm-3">
-							<input type="text" name="mobileNumber" class="col-sm-12" value="{{busCompany.mobileNumber}}" />
+							<input type="text" name="mobileNumber" class="col-sm-12" value="{{busCompany.mobileNumber}}" maxlength="11" />
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right">座机号码:</label>
 						<div class="col-sm-3">
-							<input type="text" name="telNumber" class="col-sm-12" value="{{busCompany.telNumber}}" />
+							<input type="text" name="telNumber" class="col-sm-12" value="{{busCompany.telNumber}}"  maxlength="20" />
 						</div>
 						<label class="col-sm-1 control-label no-padding-right">传真号码:</label>
 						<div class="col-sm-3">
-							<input type="text" name="faxNumber" class="col-sm-12" value="{{busCompany.faxNumber}}" />
+							<input type="text" name="faxNumber" class="col-sm-12" value="{{busCompany.faxNumber}}" maxlength="20" />
 						</div>
 					</div>
 					<div class="form-group">
@@ -69,13 +69,13 @@
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right">详细地址:</label>
 						<div class="col-sm-6">
-							<input type="text" name="street" class="col-sm-12" placeholder="请输入街道地址" value="{{busCompany.street}}"/>
+							<input type="text" name="street" class="col-sm-12" placeholder="请输入街道地址" value="{{busCompany.street}}" maxlength="1000" />
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right">车队简介:</label>
 						<div class="col-sm-8">
-							<textarea class="form-control" name="remark" class="col-sm-12" >{{busCompany.remark}}</textarea>
+							<textarea class="form-control" name="remark" class="col-sm-12" maxlength="1000" >{{busCompany.remark}}</textarea>
 						</div>
 					</div>
 				</div>
@@ -115,8 +115,8 @@
 								<tbody>
 									{{each busCompany.busList as bus}}
 										<tr data-entity-id="{{bus.id}}">
-											<td><input  name="licenseNumber" type="text" class="col-sm-12" value="{{bus.licenseNumber}}"/></td>
-											<td><input name="brand" type="text" class="col-sm-12" value="{{bus.brand}}"/></td>
+											<td><input  name="licenseNumber" type="text" class="col-sm-12" value="{{bus.licenseNumber}}" maxlength="10" /></td>
+											<td><input name="brand" type="text" class="col-sm-12" value="{{bus.brand}}" maxlength="32" /></td>
 											<td><input name="seatCount" class="col-sm-12" type="text" value="{{bus.seatCount}}"/></td>
 											<td class="col-sm-1"><div class="input-group col-sm-12"><input name="buyTime" type="text" class="date-picker" value="{{bus.buyTime | dateFormat:'yyyy-MM-dd'}}"/><span class="input-group-addon"><i class="fa fa-calendar"></i></span></div></td>
 											<td>
@@ -126,7 +126,7 @@
 												</select>
 											</td>
 											<td class="time">
-												{{if bus.isChartered == 1}}
+												{{if bus.isChartered == 1}} 
 													{{each bus.priceList as price i}}
 													<div data-index="{{i+1}}" data-entity-id="{{price.id}}" class="clearfix {{if i > 0}}appendDiv{{/if}} div-{{i+1}}" style="margin-top:2px">
 														<input name="startTime" type="text" {{if bus.isChartered == 0}}readonly="readonly"{{/if}} class="date-picker" style="width:100px" value="{{if bus.isChartered == 1}}{{price.startTime | dateFormat:'yyyy-MM-dd'}}{{/if}}"/><label>&nbsp;至&nbsp;</label><input name="endTime" type="text" {{if bus.isChartered == 0}}readonly="readonly"{{/if}} class="date-picker" style="width:100px" value="{{if bus.isChartered == 1}}{{price.endTime | dateFormat:'yyyy-MM-dd'}}{{/if}}"/>

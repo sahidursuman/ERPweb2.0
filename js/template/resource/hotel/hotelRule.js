@@ -32,7 +32,24 @@ define(function(require, exports) {
 	    	    	        	errMsg: '联系电话格式不正确'
 	    	    	        }
 	    	        ]
-	    	    }    
+	    	    } ,{	// 座机电话
+	    	    	$ele: $obj.find('input[name="telNumber"]'),
+	    	    	rules: [
+							
+	    	    	        {
+	    	    	        	type: 'landline',
+	    	    	        	errMsg: '座机号码格式不正确'
+	    	    	        }
+	    	        ]
+	    	    },{	//传真  
+	    	    	$ele: $obj.find('input[name="faxNumber"]'),
+	    	    	rules: [
+	    	    	        {
+	    	    	        	type: 'landline',
+	    	    	        	errMsg: '传真号码格式不正确'
+	    	    	        }
+	    	        ]
+	    	    }   
                 ]);
 			return validator;
 		},

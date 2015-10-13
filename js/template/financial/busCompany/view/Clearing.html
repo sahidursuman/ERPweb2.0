@@ -15,13 +15,13 @@
             <label class="col-sm-1 control-label no-padding-right">起始月：</label> 
              <select class="col-sm-1" style="margin-left:20px" name="startMonth">
                         {{each monthList as month index}}
-							<option value="{{month.value}}" {{if searchParam.monthStart == month.value}}selected="selected"{{/if}}>{{month.value}}</option>
+							<option value="{{month.value}}" {{if searchParam.monthStart == month.value}}selected="selected"{{/if}}>{{month.value}}月</option>
 						{{/each}}
                     </select>
             <label class="col-sm-1 control-label no-padding-right">结束月：</label>
            <select style="margin-left: 20px" class="col-sm-1" name="endMonth">
                         {{each monthList as month index}}
-							<option value="{{month.value}}" {{if searchParam.monthEnd == month.value}}selected="selected"{{/if}}>{{month.value}}</option>
+							<option value="{{month.value}}" {{if searchParam.monthEnd == month.value}}selected="selected"{{/if}}>{{month.value}}月</option>  
 						{{/each}}
            </select>
             <button class="btn-sm  btn-blance-search search-btn btn-height" style="margin-left: 60px">
