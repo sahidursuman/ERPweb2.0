@@ -1,5 +1,5 @@
-<div class="col-xs-12 update-selfpay-form">
-	<form class="form-horizontal selfpayMainForm" role="form" style="margin-top:10px" onsubmit="return false">
+<div class="col-xs-12 update-selfpay-form globalAdd">
+	<form class="form-horizontal selfpayMainForm formOneList" role="form" style="margin-top:10px" onsubmit="return false">
 		<input name="selfpayId" type="hidden" value="{{selfpay.id}}" />
 		<div class=" ui-sortable-handle">
 				<h5 >
@@ -8,68 +8,61 @@
 				</h5>
 			<div class="widget-body">
 				<div class="widget-main">
-					<div class="form-group">
+					<div class="form-group guideInterval">
 						<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>公司名称:</label>
 						<div class="col-sm-3">
-							<input type="text" name="name" value="{{selfpay.name}}" class="col-sm-12" maxlength="100">
+							<input type="text" name="name" value="{{selfpay.name}}" class="col-sm-12">
 						</div>
 					</div>
-					<div class="form-group">
+					<div class="form-group guideInterval">
 					    <label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>联系人:</label>
 						<div class="col-sm-3">
-							<input type="text" name="managerName" value="{{selfpay.managerName}}" class="col-sm-12" maxlength="32">
+							<input type="text" name="managerName" value="{{selfpay.managerName}}" class="col-sm-12">
 						</div>
 						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>联系电话:</label>
 						<div class="col-sm-3">
-							<input type="text" name="mobileNumber" value="{{selfpay.mobileNumber}}" class="col-sm-12" maxlength="11">
+							<input type="text" name="mobileNumber" value="{{selfpay.mobileNumber}}" class="col-sm-12">
 						</div>
 					</div>
-					<div class="form-group">
+					<div class="form-group guideInterval">
 					    <label class="col-sm-2 control-label no-padding-right">座机号码:</label>
 						<div class="col-sm-3">
-							<input type="text" name="telNumber" class="col-sm-12" value="{{selfpay.telNumber}}" maxlength="20"/>
+							<input type="text" name="telNumber" class="col-sm-12" value="{{selfpay.telNumber}}" />
 						</div>
 						<label class="col-sm-1 control-label no-padding-right">传真号码:</label>
 						<div class="col-sm-3">
-							<input type="text" name="faxNumber" class="col-sm-12" value="{{selfpay.faxNumber}}" maxlength="20"/>
+							<input type="text" name="faxNumber" class="col-sm-12" value="{{selfpay.faxNumber}}" />
 						</div>
 					</div>
-					
-                                                                                                             
-                                                                                                  
                    <!--添加人数返佣start-->                  
-					<div class="form-group">
+					<div class="form-group guideInterval">
 						<label class="col-sm-2 control-label no-padding-right">人数返佣(元/人):</label>
 						<div class="col-sm-4">    
-							<input type="text" name="customerRebateMoney" value="{{selfpay.customerRebateMoney}}" class="col-sm-12" maxlength="10">
+							<input type="text" name="customerRebateMoney" value="{{selfpay.customerRebateMoney}}" class="col-sm-12">
 						</div>
 					</div>
-                  <!--添加人数返佣end-->    
-
-
-
-
-					<div class="form-group">
+                  <!--添加人数返佣end-->
+					<div class="form-group guideInterval">
 						<label class="col-sm-2 control-label no-padding-right">公司所在省市:</label>
 						<div class="col-sm-8">
-							<select name="provinceId" class="col-sm-3" style="margin-right:3px">
+							<select name="provinceId" style="margin-right:3px">
 								<option selected="selected" value="">未选择</option>
 							</select>
-							<select name="cityId" class="col-sm-3"  style="margin-right:3px">
+							<select name="cityId"  style="margin-right:3px">
 								<option selected="selected" value="">未选择</option>
 							</select>
-							<select name="districtId" class="col-sm-3">
+							<select name="districtId" >
 								<option selected="selected" value="">未选择</option>
 							</select>
 						</div>
 					</div>
-					<div class="form-group">
+					<div class="form-group guideInterval">
 						<label class="col-sm-2 control-label no-padding-right">详细地址:</label>
 						<div class="col-sm-6">
-							<input type="text" name="street" value="{{selfpay.street}}" class="col-sm-12" placeholder="请输入街道地址" maxlength="100"/>
+							<input type="text" name="street" value="{{selfpay.street}}" class="col-sm-12 addressMinute" placeholder="请输入街道地址"/>
 						</div>
 					</div>
-					<div class="form-group">
+					<div class="form-group guideInterval">
 						<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>是否启用:</label>
 						<div class="col-sm-2 checkbox" style="margin-left:-10px">
 							<label>
@@ -80,7 +73,7 @@
 							</label> 
 						</div>
 					</div>
-					<div class="form-group">
+					<div class="form-group guideInterval">
 						<label class="col-sm-2 control-label no-padding-right">公司简介:</label>
 						<div class="col-sm-8">
 							<textarea class="form-control" name="remark" class="col-sm-12" >{{selfpay.remark}}</textarea>
@@ -125,7 +118,7 @@
 								<tbody>{{each selfpay.selfPayItemList as itemList}}
 									<tr data-entity-id="{{itemList.id}}">
 										<td>
-											<input name="name" value="{{itemList.name}}" class="col-sm-12" type="text" style="min-width:100px;" maxlength="100">
+											<input name="name" value="{{itemList.name}}" class="col-sm-12" type="text" style="min-width:100px;">
 										</td>
 										<td>
 											<select class="col-sm-12" name="customerType" style="min-width:100px;">
@@ -161,42 +154,42 @@
 										<td>{{each itemList.SelfPayRebateList as rebateList index}}
 											{{if index == 0}}
 											<div class="col-sm-12 no-padding">
-												<input name="contractPrice" value="{{rebateList.price}}" class="col-sm-12" type="text" maxlength="10">
+												<input name="contractPrice" value="{{rebateList.price}}" class="col-sm-12" type="text">
 											</div>{{else}}
 											<div class="col-sm-12 no-padding" style="padding-top:2px!important;">
-												<input name="contractPrice" value="{{rebateList.price}}" class="col-sm-12" type="text" maxlength="10">
+												<input name="contractPrice" value="{{rebateList.price}}" class="col-sm-12" type="text">
 											</div>{{/if}}{{/each}}
 										</td>
 										<td>{{each itemList.SelfPayRebateList as rebateList index}}
 											{{if index == 0}}
 											<div class="col-sm-12 no-padding">
-												<input name="marketPrice" value="{{rebateList.marketPrice}}" class="col-sm-12" type="text" maxlength="10">
+												<input name="marketPrice" value="{{rebateList.marketPrice}}" class="col-sm-12" type="text">
 											</div>{{else}}
 											<div class="col-sm-12 no-padding" style="padding-top:2px!important;">
-												<input name="marketPrice" value="{{rebateList.marketPrice}}" class="col-sm-12" type="text" maxlength="10">
+												<input name="marketPrice" value="{{rebateList.marketPrice}}" class="col-sm-12" type="text">
 											</div>{{/if}}{{/each}}
 										</td>
 										<td>{{each itemList.SelfPayRebateList as rebateList index}}
 											{{if index == 0}}
 											<div class="col-sm-12 no-padding">
-												<input name="guideRate" value="{{rebateList.guideRate*100 | toFixed}}" class="col-sm-12" type="text" maxlength="5">
+												<input name="guideRate" value="{{rebateList.guideRate*100 | toFixed}}" class="col-sm-12" type="text">
 											</div>{{else}}
 											<div class="col-sm-12 no-padding" style="padding-top:2px!important;">
-												<input name="guideRate" value="{{rebateList.guideRate*100 | toFixed}}" class="col-sm-12" type="text" maxlength="5">
+												<input name="guideRate" value="{{rebateList.guideRate*100 | toFixed}}" class="col-sm-12" type="text">
 											</div>{{/if}}{{/each}}
 										</td>
 										<td>{{each itemList.SelfPayRebateList as rebateList index}}
 											{{if index == 0}}
 											<div class="col-sm-12 no-padding">
-												<input name="travelAgencyRate" value="{{rebateList.travelAgencyRate*100 | toFixed}}" class="col-sm-12" type="text" maxlength="5">
+												<input name="travelAgencyRate" value="{{rebateList.travelAgencyRate*100 | toFixed}}" class="col-sm-12" type="text">
 											</div>{{else}}
 											<div class="col-sm-12 no-padding" style="padding-top:2px!important;">
-												<input name="travelAgencyRate" value="{{rebateList.travelAgencyRate*100 | toFixed}}" class="col-sm-12" type="text" maxlength="5">
+												<input name="travelAgencyRate" value="{{rebateList.travelAgencyRate*100 | toFixed}}" class="col-sm-12" type="text">
 											</div>{{/if}}{{/each}}
 										</td>
 										<td>
-											<input name="remark" value="{{itemList.remark}}" type="text" class="col-sm-12" style="min-width:100px;" maxlength="1000">
-										</td> 
+											<input name="remark" value="{{itemList.remark}}" type="text" class="col-sm-12" style="min-width:100px;">
+										</td>
 										<td style="width:70px">
 											<button class="btn btn-xs btn-danger btn-price-delete">
 												<i class="ace-icon fa fa-trash-o bigger-120"></i>
@@ -212,7 +205,7 @@
 		</div>
 		
 		<div class="space-10"></div>
-		<button class="btn btn-block btn-primary btn-submit-selfpay">
+		<button class="btn btn-block btn-primary btn-submit-selfpay guideSubmit">
 			<i class="ace-icon fa fa-check"></i>
 			提交信息
 		</button>

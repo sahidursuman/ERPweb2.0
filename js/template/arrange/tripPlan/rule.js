@@ -21,11 +21,7 @@ var rule = {
 	  	    	        {
 	  	    	        	type: 'null', 
 	  	    	        	errMsg: '计划人数不能为空'       
-	  	    	        },
-    	    	        {
-    	    	        	type: 'int',
-    	    	        	errMsg: '请输入数字'
-    	    	        }
+	  	    	        }
 		    	        ]
 		       },{//车队
 		    	    $ele: $checkdCreateTripPlanObj.find('input[name="BusCompanyName"]'), 
@@ -65,15 +61,15 @@ var rule = {
 	  	    	        	errMsg: '司机不能为空'
 	  	    	        }
 		    	        ]
-		         },{//全陪电话
+		         },{//司机
 		    	       	$ele: $checkdCreateTripPlanObj.find('input[name="accompanyGuideMobile"]'),  
 		    	    	rules: [
 	  	    	        {
-	    	    	        	type: 'mobile-phone',
-	    	    	        	errMsg: '全陪电话格式不正确'
-	    	    	    }
+	  	    	        	type: 'mobile-phone',
+	  	    	        	errMsg: '全陪电话格式不正确'
+	  	    	        }
 		    	        ]
-		         }
+			      }
 	    	  ]);
 		return validatorCreateTripPlan;
 		}	
