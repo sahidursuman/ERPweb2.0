@@ -116,6 +116,24 @@ var rule = {
 	      	    	        	errMsg: '天数输入不合法'
 	      	    	        }
 	  	    	        ]
+	    	      },
+	    	      {//成本单价
+	  	    	    	$ele: $checkBookingHoteObj.find('input[name="costPrice"]'),
+	  	    	    	rules: [
+	      	    	        {
+	      	    	        	type: 'int', 
+	      	    	        	errMsg: '成本单价输入不合法'
+	      	    	        }
+	  	    	        ]
+	    	      },
+	    	      {//销售单价
+	  	    	    	$ele: $checkBookingHoteObj.find('input[name="salePrice"]'),
+	  	    	    	rules: [
+	      	    	        {
+	      	    	        	type: 'int', 
+	      	    	        	errMsg: '销售单价输入不合法'
+	      	    	        }
+	  	    	        ]
 	    	      }
   	    	  ]);
 			return validatorHotel;
@@ -161,6 +179,24 @@ var rule = {
 	      	    	        },{
 	      	    	        	type: 'float', 
 	      	    	        	errMsg: '数量输入格式不正确'    
+	      	    	        }
+	  	    	        ]
+	    	      },
+	    	      {//成本单价
+	  	    	    	$ele: $checkBookingScenicObj.find('input[name="costPrice"]'),
+	  	    	    	rules: [
+	      	    	        {
+	      	    	        	type: 'int', 
+	      	    	        	errMsg: '成本单价输入不合法'
+	      	    	        }
+	  	    	        ]
+	    	      },
+	    	      {//销售单价
+	  	    	    	$ele: $checkBookingScenicObj.find('input[name="salePrice"]'),
+	  	    	    	rules: [
+	      	    	        {
+	      	    	        	type: 'int', 
+	      	    	        	errMsg: '销售单价输入不合法'
 	      	    	        }
 	  	    	        ]
 	    	      }
@@ -215,6 +251,23 @@ var rule = {
 	      	    	        {
 	      	    	        	type: 'null', 
 	      	    	        	errMsg: '座位级别不能为空'
+	      	    	        }
+	  	    	        ]
+	    	      },{//成本单价
+	  	    	    	$ele: $checkBookingTicketObj.find('input[name="costPrice"]'),
+	  	    	    	rules: [
+	      	    	        {
+	      	    	        	type: 'int', 
+	      	    	        	errMsg: '成本单价输入不合法'
+	      	    	        }
+	  	    	        ]
+	    	      },
+	    	      {//销售单价
+	  	    	    	$ele: $checkBookingTicketObj.find('input[name="salePrice"]'),
+	  	    	    	rules: [
+	      	    	        {
+	      	    	        	type: 'int', 
+	      	    	        	errMsg: '销售单价输入不合法'
 	      	    	        }
 	  	    	        ]
 	    	      }
@@ -281,6 +334,23 @@ var rule = {
 	      	    	        	errMsg: '数量输入格式不正确'
 	      	    	        }
 	  	    	        ]
+	    	      },{//成本单价
+	  	    	    	$ele: $checkBookingBusObj.find('input[name="costPrice"]'),
+	  	    	    	rules: [
+	      	    	        {
+	      	    	        	type: 'int', 
+	      	    	        	errMsg: '成本单价输入不合法'
+	      	    	        }
+	  	    	        ]
+	    	      },
+	    	      {//销售单价
+	  	    	    	$ele: $checkBookingBusObj.find('input[name="salePrice"]'),
+	  	    	    	rules: [
+	      	    	        {
+	      	    	        	type: 'int', 
+	      	    	        	errMsg: '销售单价输入不合法'
+	      	    	        }
+	  	    	        ]
 	    	      }
  
   	    	  ]);
@@ -322,6 +392,23 @@ var rule = {
 	      	    	        {
 	      	    	        	type: 'null', 
 	      	    	        	errMsg: '所属职位不能为空'
+	      	    	        }
+	  	    	        ]
+	    	      },{//成本单价
+	  	    	    	$ele: $checkdPartnerManagerObj.find('input[name="costPrice"]'),
+	  	    	    	rules: [
+	      	    	        {
+	      	    	        	type: 'int', 
+	      	    	        	errMsg: '成本单价输入不合法'
+	      	    	        }
+	  	    	        ]
+	    	      },
+	    	      {//销售单价
+	  	    	    	$ele: $checkdPartnerManagerObj.find('input[name="salePrice"]'),
+	  	    	    	rules: [
+	      	    	        {
+	      	    	        	type: 'int', 
+	      	    	        	errMsg: '销售单价输入不合法'
 	      	    	        }
 	  	    	        ]
 	    	      }
