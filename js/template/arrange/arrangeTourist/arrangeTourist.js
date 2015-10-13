@@ -936,6 +936,11 @@ define(function(require, exports) {
 									var addGListLength = $(".addTouristGroupList .all tbody tr").find("input:checked").length;
 									$(".addTouristGroupList .all tbody tr").find("input:checked").each(function(i){
 											var id = $(this).parent().parent().parent().attr("data-entity-id");
+											//-----------------------------
+											var lineProductName=$(this).parent().parent().parent().find("td[name=lineProductName]").text();
+											var hotelLevel=$(this).parent().parent().parent().find("td[name=hotelLevel]").text();
+											var includeSelfPay=$(this).parent().parent().parent().find("td[name=includeSelfPay]").text();
+											//----------------------------------
 											var travelAgencyName = $(this).parent().parent().parent().find("td[name=travelAgencyName]").text();
 											var contactMemberName = $(this).parent().parent().parent().find("td[name=contactMemberName]").text();
 											var contactMemberMobileNumber = $(this).parent().parent().parent().find("td[name=contactMemberMobileNumber]").text();
@@ -944,10 +949,10 @@ define(function(require, exports) {
 											var peopleCount = $(this).parent().parent().parent().find("td[name=peopleCount]").text();
 											var remark = $(this).parent().parent().parent().find("td[name=remark]").text();
 											if(i==addGListLength-1){
-												addGroupIdJson += "{\"id\":\""+id+"\",\"travelAgencyName\":\""+travelAgencyName+"\",\"contactMemberName\":\""+contactMemberName+"\",\"contactMemberMobileNumber\":\""+contactMemberMobileNumber+"\",\"areaData\":\""+areaData+"\",\"ageData\":\""+ageData+"\",\"peopleCount\":\""+peopleCount+"\",\"remark\":\""+remark+"\"}"
+												addGroupIdJson += "{\"id\":\""+id+"\",\"lineProductName\":\""+lineProductName+"\",\"hotelLevel\":\""+hotelLevel+"\",\"includeSelfPay\":\""+includeSelfPay+"\",\"travelAgencyName\":\""+travelAgencyName+"\",\"contactMemberName\":\""+contactMemberName+"\",\"contactMemberMobileNumber\":\""+contactMemberMobileNumber+"\",\"areaData\":\""+areaData+"\",\"ageData\":\""+ageData+"\",\"peopleCount\":\""+peopleCount+"\",\"remark\":\""+remark+"\"}"
 											}
 											else{
-												addGroupIdJson += "{\"id\":\""+id+"\",\"travelAgencyName\":\""+travelAgencyName+"\",\"contactMemberName\":\""+contactMemberName+"\",\"contactMemberMobileNumber\":\""+contactMemberMobileNumber+"\",\"areaData\":\""+areaData+"\",\"ageData\":\""+ageData+"\",\"peopleCount\":\""+peopleCount+"\",\"remark\":\""+remark+"\"},"
+												addGroupIdJson += "{\"id\":\""+id+"\",\"lineProductName\":\""+lineProductName+"\",\"hotelLevel\":\""+hotelLevel+"\",\"includeSelfPay\":\""+includeSelfPay+"\",\"travelAgencyName\":\""+travelAgencyName+"\",\"contactMemberName\":\""+contactMemberName+"\",\"contactMemberMobileNumber\":\""+contactMemberMobileNumber+"\",\"areaData\":\""+areaData+"\",\"ageData\":\""+ageData+"\",\"peopleCount\":\""+peopleCount+"\",\"remark\":\""+remark+"\"},"
 											}
 									});
 									addGroupIdJson += "]";
@@ -958,6 +963,10 @@ define(function(require, exports) {
 										var html=
 											"<tr data-entity-id=\""+addGroupIdJson[i].id+"\">"+
 												"<td></td>"+
+												"<td>"+addGroupIdJson[i].lineProductName+"</td>"+
+												"<td>"+addGroupIdJson[i].hotelLevel+"</td>"+
+												"<td>"+addGroupIdJson[i].includeSelfPay+"</td>"+ 
+
 												"<td>"+addGroupIdJson[i].travelAgencyName+"</td>"+
 												"<td>"+addGroupIdJson[i].contactMemberName+"</td>"+
 												"<td>"+addGroupIdJson[i].contactMemberMobileNumber+"</td>"+
