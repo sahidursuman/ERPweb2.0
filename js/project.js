@@ -689,7 +689,7 @@ function listMenu(menuTemplate){
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/touristGroup/touristGroup.js",function(touristGroup){ 
-						touristGroup.listTouristGroup(0,"","","","","","","");
+						touristGroup.listTouristGroup(0,"","","","","","","","");
 						modals["resource_touristGroup"] = touristGroup;
 					});
 				});
