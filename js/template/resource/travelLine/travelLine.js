@@ -15,6 +15,10 @@ define(function(require, exports) {
 		pageData:{
 			pageNo:0
 		},
+		searchData : {
+			name : "",
+			status : ""
+		},
 		listTravelLine:function(page,name,status){
 			$.ajax({
 				url:""+APP_ROOT+"back/travelLine.do?method=listTravelLine&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
@@ -75,52 +79,51 @@ define(function(require, exports) {
 						});
 						
 						//搜索栏状态button下拉事件
-						$("#"+tabId+"  .search-area .btn-status .dropdown-menu a").click(function(){
+						$("#"+tabId+" .search-area .btn-status .dropdown-menu a").click(function(){
 							$(this).parent().parent().parent().find("button").attr("data-value",$(this).attr("data-value"));
 							$(this).parent().parent().parent().find("span").text($(this).text());
+							travelLine.searchData = {
+								name : $("#"+tabId+" input[name=travelLine_name]").val(),
+								status : $("#"+tabId+" .btn-status").find("button").attr("data-value")
+							}
+							travelLine.listTravelLine(0,travelLine.searchData.name,travelLine.searchData.status);
 						});
 						
 						//搜索按钮事件
 						$("#"+tabId+"  .btn-travelLine-search").click(function(){
-							var name = $("#"+tabId+"  input[name=travelLine_name]").val();
-							var status = $("#"+tabId+"  .btn-status").find("button").attr("data-value");
-							travelLine.listTravelLine(0,name,status);
+							travelLine.searchData = {
+								name : $("#"+tabId+"  input[name=travelLine_name]").val(),
+								status : $("#"+tabId+"  .btn-status").find("button").attr("data-value")
+							}
+							travelLine.listTravelLine(0,travelLine.searchData.name,travelLine.searchData.status);
 						});
 						
 						//分页--首页按钮事件
 						$("#"+tabId+"  .pageMode a.first").click(function(){
-							var name = $("#"+tabId+"  input[name=travelLine_name]").val();
-							var status = $("#"+tabId+"  .btn-status").find("button").attr("data-value");
-							travelLine.listTravelLine(0,name,status);
+							travelLine.listTravelLine(0,travelLine.searchData.name,travelLine.searchData.status);
 						});
 						
 						//分页--上一页事件
 						$("#"+tabId+"  .pageMode a.previous").click(function(){
-							var name = $("#"+tabId+"  input[name=travelLine_name]").val();
-							var status = $("#"+tabId+"  .btn-status").find("button").attr("data-value");
 							var previous = data.pageNo - 1;
 							if(data.pageNo == 0){
 								previous = 0;
 							}
-							travelLine.listTravelLine(previous,name,status);
+							travelLine.listTravelLine(previous,travelLine.searchData.name,travelLine.searchData.status);
 						});
 						
 						//分页--下一页事件
 						$("#"+tabId+"  .pageMode a.next").click(function(){
-							var name = $("#"+tabId+"  input[name=travelLine_name]").val();
-							var status = $("#"+tabId+"  .btn-status").find("button").attr("data-value");
 							var next =  data.pageNo + 1;
 							if(data.pageNo == data.totalPage-1){
 								next = data.pageNo ;
 							}
-							travelLine.listTravelLine(next,name,status);
+							travelLine.listTravelLine(next,travelLine.searchData.name,travelLine.searchData.status);
 						});
 						
 						//分页--尾页事件
 						$("#"+tabId+"  .pageMode a.last").click(function(){
-							var name = $("#"+tabId+"  input[name=travelLine_name]").val();
-							var status = $("#"+tabId+"  .btn-status").find("button").attr("data-value");
-							travelLine.listTravelLine(data.totalPage-1,name,status);
+							travelLine.listTravelLine(data.totalPage-1,travelLine.searchData.name,travelLine.searchData.status);
 						});
 					}
 				}
@@ -198,7 +201,7 @@ define(function(require, exports) {
 								if(result){
 									layer.close(addTravelLineLayer);
 									showMessageDialog($( "#confirm-dialog-message" ),data.message);
-									travelLine.listTravelLine(data.totalPage-1,name,status);
+									travelLine.listTravelLine(0,"","");
 									
 									// 查看线路行程安排
 									/*layer.open({
@@ -433,7 +436,9 @@ define(function(require, exports) {
 									    success:function(){
 									    	// 绑定表单验证
 									    	var dayCheckor = rule.travelLineDayCheckor($('.travelLineDayForm'));
-									    	
+									    	// 初始化UEditor
+									    	var ue = init_editor("detailEditor-add-travelLine",{zIndex:99999999});
+
 									    	$(".travelLineDayForm .btn-submit-line-day").click(function(){
 									    		if( !dayCheckor.form() )  return;
 
@@ -466,7 +471,7 @@ define(function(require, exports) {
 												}
 									    		var restPosition = $(".travelLineDayForm input[name=restPosition]").val();
 									    		var roadScenic = $(".travelLineDayForm input[name=roadScenic]").val();
-									    		var detail = encodeURIComponent($(".travelLineDayForm .detailEditor").html());
+									    		var detail = encodeURIComponent(ue.getContent());
 									    		if(trim(detail) == ""){
 													showMessageDialog($( "#confirm-dialog-message" ), "请输入行程详情");
 													return false;
@@ -577,7 +582,7 @@ define(function(require, exports) {
 											if(result){
 												layer.close(updateTravelLineLayer);
 												showMessageDialog($( "#confirm-dialog-message" ),data.message);
-												travelLine.listTravelLine(travelLine.pageData.pageNo,"",1);
+												travelLine.listTravelLine(travelLine.pageData.pageNo,travelLine.searchData.name,travelLine.searchData.status);
 											}
 										}
 									});
@@ -634,7 +639,7 @@ define(function(require, exports) {
 									var result = showDialog(data);
 									if(result){
 										$("#"+tabId+"  .travelLineList .travelLine-"+id+"").fadeOut(function(){
-											travelLine.listTravelLine(0,"",1);
+											travelLine.listTravelLine(travelLine.pageData,travelLine.searchData.name,travelLine.searchData.status);
 										});
 									}
 								}
