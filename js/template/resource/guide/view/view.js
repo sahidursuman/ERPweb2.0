@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":185,"md5":"f854290065d67887af8df61265ecb912"}*/
+/*TMODJS:{"debug":true,"version":186,"md5":"f854290065d67887af8df61265ecb912"}*/
 define(function(require) {
     return require("../../../template")("resource/guide/view/view", function($data, $filename) {
         try {
