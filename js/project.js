@@ -730,6 +730,7 @@ function listMenu(menuTemplate){
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/arrange/transit/transit.js",function(transit){ 
 						transit.listTransit(0,"","","","","","","","","");
+						modals["arrange_transit"] = transit;
 					});
 				});
 				
