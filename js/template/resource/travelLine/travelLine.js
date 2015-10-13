@@ -436,7 +436,9 @@ define(function(require, exports) {
 									    success:function(){
 									    	// 绑定表单验证
 									    	var dayCheckor = rule.travelLineDayCheckor($('.travelLineDayForm'));
-									    	
+									    	// 初始化UEditor
+									    	var ue = init_editor("detailEditor-add-travelLine",{zIndex:99999999});
+
 									    	$(".travelLineDayForm .btn-submit-line-day").click(function(){
 									    		if( !dayCheckor.form() )  return;
 
@@ -469,7 +471,7 @@ define(function(require, exports) {
 												}
 									    		var restPosition = $(".travelLineDayForm input[name=restPosition]").val();
 									    		var roadScenic = $(".travelLineDayForm input[name=roadScenic]").val();
-									    		var detail = encodeURIComponent($(".travelLineDayForm .detailEditor").html());
+									    		var detail = encodeURIComponent(ue.getContent());
 									    		if(trim(detail) == ""){
 													showMessageDialog($( "#confirm-dialog-message" ), "请输入行程详情");
 													return false;
