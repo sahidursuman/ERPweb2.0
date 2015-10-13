@@ -1060,7 +1060,7 @@ define(function(require, exports) {
 			'<td><select name="type" class="col-xs-12 restauranType"><option value="早餐">早餐</option><option value="午餐">午餐</option><option value="晚餐">晚餐</option></select></td>'+
 			'<td><input type="text" name="price" class="col-xs-12 restaurantStandardsName bind-change"/><input type="hidden" name="typeId"/></td>'+
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="menuList"/></td>'+
-			'<td><input type="text" class="col-xs-12" name="remark"/></td><td><a data-entity-id="27" class=" btn-restaurant-delete deleteScheduleList cursor"> 删除</a></td></tr>'+
+			'<td><input type="text" class="col-xs-12" name="remark" maxLength="500" /></td><td><a data-entity-id="27" class=" btn-restaurant-delete deleteScheduleList cursor"> 删除</a></td></tr>'+
 			'</tbody></table></div></div></div></div>',
 			validator = e.data;
 
@@ -1225,7 +1225,7 @@ define(function(require, exports) {
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="contractPrice" style="width:70px;"/></td>'+
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="containBreakfast"/></td>'+
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
-			'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
+			'<td><input type="text" class="col-xs-12" name="remark" maxLength="500" /></td>'+
 			'<td><a data-entity-id="27" class=" btn-restaurant-delete deleteResourceHotelList cursor"> 删除</a></td></tr></tbody></table></div></div></div></div>';
 
 			var validator = e.data;
@@ -1400,7 +1400,7 @@ define(function(require, exports) {
 			'<td><input type="text" class="col-xs-12 chooseChargingProjects bind-change" name="chargingProjects"/><input type="hidden" name="chargingId"/></td>'+
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="price"/></td>'+
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
-			'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
+			'<td><input type="text" class="col-xs-12" name="remark" maxLength="500" /></td>'+
 			'<td><a data-entity-id="27" class=" btn-restaurant-delete deleteResourceScenicList cursor"> 删除 </a></td></tr></tbody></table></div></div></div></div>';
 			$(this).parents(".scheduleContainer").find(".scheduleListContainer").append(scenicDetails);
 			var validator = e.data;
@@ -1562,7 +1562,7 @@ define(function(require, exports) {
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="parkingRebateMoney" style="width: 100px;"/></td>'+
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="customerRebateMoney" style="width: 100px;"/></td>'+
-			'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
+			'<td><input type="text" class="col-xs-12" name="remark" maxLength="500" /></td>'+
 			'<td><a data-entity-id="27" class=" btn-restaurant-delete deleteResourceShopList cursor">删除 </a></td></tr></tbody></table></div></div></div></div>';
 			$(this).parents(".scheduleContainer").find(".scheduleListContainer").append(shoppingDetails);
 
@@ -1716,7 +1716,7 @@ define(function(require, exports) {
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="contractPrice"/></td>'+
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="managerName"/></td>'+
-			'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
+			'<td><input type="text" class="col-xs-12" name="remark" maxLength="500" /></td>'+
 			'<td><a data-entity-id="27" class=" btn-restaurant-delete deleteResourceSelfPayList cursor"> 删除 </a></td></tr></tbody></table></div></div></div></div>';
 			$(this).parents(".scheduleContainer").find(".scheduleListContainer").append(selfPayingDetails);
 
@@ -1872,7 +1872,7 @@ define(function(require, exports) {
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="managerName"/></td>'+
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="telNumber"/></td>'+
-			'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
+			'<td><input type="text" class="col-xs-12" name="remark" maxLength="500" /></td>'+
 			'<td><a data-entity-id="27" class="btn-restaurant-delete deleteResourceTicketList cursor"> 删除 </a></td></tr></tbody></table></div></div></div></div>';
 			$(this).parents(".scheduleContainer").find(".scheduleListContainer").append(shoppingDetails);
 			travelLine.routeIndex += 1;
