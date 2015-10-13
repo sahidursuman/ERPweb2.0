@@ -300,8 +300,7 @@ define(function(require, exports) {
 						'<td><input type="text" name="memberCount" class="col-sm-12"/></td>' +
 						'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12"/></td>' +
 						'<td><input type="text" name="payedMoney" class="col-sm-12"/></td>' +
-						'<td><select name="payType" class="col-sm-12 no-padding"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option></select></td>' +
-						'<td><input name="remark" type="text" class="col-sm-12"/></td>' +
+						'<td><select name="payType" class="col-sm-12 no-padding"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>' +						'<td><input name="remark" type="text" class="col-sm-12"/></td>' +
 						'<td><button class="btn btn-xs btn-danger btn-deleteTripPlanList" title="删除">	<i class="ace-icon fa fa-trash-o bigger-120"></i></button></td></tr>';
 			tableContainer.append(html);
 			tripPlan.bindDeleteEvent();
@@ -316,7 +315,7 @@ define(function(require, exports) {
 			'<td><input type="text" name="mobileNumber" class="col-sm-12" readonly="readonly"/></td>' +
 			'<td><input type="text" name="guideFee" class="col-sm-12"/></td>' +
 			'<td><input type="text" name="manageFee" class="col-sm-12"/></td>' +
-			'<td><select name="payType" class="col-sm-12 no-padding"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option></select></td>' +
+			'<td><select name="payType" class="col-sm-12 no-padding"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>' +
 			'<td><input name="remark" type="text" class="col-sm-12"/></td>' +
 			'<td><button class="btn btn-xs btn-success" title="发送订单"><i class="ace-icon fa fa-paper-plane-o bigger-120"></i></button></td></tr>';
 			tableContainer.append(html);
@@ -338,7 +337,7 @@ define(function(require, exports) {
 			'<td><input type="text" name="reduceMoney" class="col-sm-12" style="width: 60px;"/></td>' +
 			'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12" style="width: 60px;"/></td>' +
 			'<td><input type="text" name="payedMoney" class="col-sm-12" style="width: 60px;"/></td>' +
-			'<td><select name="payType" class="col-sm-12 no-padding"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option></select></td>' +
+			'<td><select name="payType" class="col-sm-12 no-padding"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>' +
 			'<td><input type="text" name="" class="col-sm-12" style="width: 60px;"/></td>' +
 			'<td><input type="text" name="remark" class="col-sm-12"/></td>' +
 			'<td><button class="btn btn-xs btn-success" title="发送订单"><i class="ace-icon fa fa-paper-plane-o bigger-120"></i></button></td></tr>';
@@ -363,7 +362,7 @@ define(function(require, exports) {
 			'<td><input name="reduceMoney" type="text" class="col-sm-12" style="width: 60px;"/></td>' +
 			'<td><input name="needPayMoney" readonly="readonly" type="text" class="col-sm-12" style="width: 60px;"/></td>' +
 			'<td><input name="payedMoney" type="text" class="col-sm-12" style="width: 60px;"/></td>' +
-			'<td><select name="payType" class="col-sm-12 no-padding" style="width:55px;"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option></select></td>' +
+			'<td><select name="payType" class="col-sm-12 no-padding" style="width:55px;"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>' +
 			'<td><input name="guidePayMoney" type="text" class="col-sm-12" style="width: 60px;"/></td>' +
 			'<td><input name="remark" type="text" class="col-sm-12"/></td>' +
 			//'<td><button class="btn btn-xs btn-success" title="发送订单"><i class="ace-icon fa fa-paper-plane-o bigger-120"></i></button></td></tr>';
@@ -393,7 +392,7 @@ define(function(require, exports) {
 			'<td><input type="text" class="col-sm-12" name="reduceMoney" style="width: 60px;"/></td>' +
 			'<td><input type="text" class="col-sm-12" name="needPayMoney" readonly="readonly" style="width: 60px;"/></td>' +
 			'<td><input type="text" class="col-sm-12" name="payedMoney" style="width: 60px;"/></td>' +
-			'<td><select name="payType" class="col-sm-12 no-padding" style="width:55px;"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option></select></td>' +
+			'<td><select name="payType" class="col-sm-12 no-padding" style="width:55px;"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>' +
 			'<td><input type="text" class="col-sm-12" name="guidePayMoney" style="width: 60px;"/></td>' +
 			'<td><input type="text" class="col-sm-12" name="remark"/></td>' +
 			//'<td><button class="btn btn-xs btn-success" title="发送订单"><i class="ace-icon fa fa-paper-plane-o bigger-120"></i></button> <button class="btn btn-xs btn-danger btn-deleteTripPlanList" title="删除"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></td></tr>';
@@ -423,12 +422,12 @@ define(function(require, exports) {
 			'<td><input type="text" name="reduceMoney" class="col-sm-12" style="width: 60px;"/></td>' +
 			'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12" style="width: 60px;"/></td>' +
 			'<td><input type="text" name="payedMoney" class="col-sm-12" style="width: 60px;"/></td>' +
-			'<td><select name="payType" class="col-sm-12 no-padding" style="width:55px;"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option></select></td>' +
+			'<td><select name="payType" class="col-sm-12 no-padding" style="width:55px;"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>' +
 			'<td><input type="text" name="guidePayMoney" class="col-sm-12" style="width: 60px;"/></td>' +
 			'<td><input type="text" name="remark" class="col-sm-12"/></td>' +
 			'<td><button class="btn btn-xs btn-danger btn-deleteTripPlanList" title="删除"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></td></tr>';
 			tableContainer.append(html);
-			tripPlan.bindDeleteEvent();
+			tripPlan.bindDeleteEvent(); 
 			tripPlan.bindScenicChoose();
 			tripPlan.bindMoneyTripPlan();
 			tripPlan.setChooseDays("tripPlan_addPlan_scenic");
@@ -474,7 +473,7 @@ define(function(require, exports) {
 			'<td><input type="text" name="reduceMoney" class="col-sm-12"/></td>' +
 			'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12"/></td>' +
 			'<td><input type="text" name="payedMoney" class="col-sm-12"/></td>' +
-			'<td><select name="payType" class="col-sm-12 no-padding" style="width:55px;"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option></select></td>' +
+			'<td><select name="payType" class="col-sm-12 no-padding" style="width:55px;"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>' +
 			'<td><input type="text" name="guidePayMoney" class="col-sm-12"/></td>' +
 			'<td><input type="text" name="remark" class="col-sm-12"/></td>' +
 			'<td><button class="btn btn-xs btn-danger btn-deleteTripPlanList" title="删除"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></td></tr>';
@@ -504,7 +503,7 @@ define(function(require, exports) {
 			'<td><input type="text" name="reduceMoney" class="col-sm-12"/></td>' +
 			'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12"/></td>' +
 			'<td><input type="text" name="payedMoney" class="col-sm-12"/></td>' +
-			'<td><select name="payType" class="col-sm-12 no-padding" style="width:55px;"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option></select></td>' +
+			'<td><select name="payType" class="col-sm-12 no-padding" style="width:55px;"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>' +
 			'<td><input type="text" name="guidePayMoney" class="col-sm-12"/></td>' +
 			'<td><input type="text" name="remark" class="col-sm-12"/></td>' +
 			'<td><button class="btn btn-xs btn-danger btn-deleteTripPlanList" title="删除"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></td></tr>';
@@ -531,7 +530,7 @@ define(function(require, exports) {
 			'<td><input type="text" name="reduceMoney" class="col-sm-12"/></td>' +
 			'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12"/></td>' +
 			'<td><input type="text" name="payedMoney" class="col-sm-12"/></td>' +
-			'<td><select name="payType" class="col-sm-12 no-padding" style="width:55px;"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option></select></td>' +
+			'<td><select name="payType" class="col-sm-12 no-padding" style="width:55px;"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>' +
 			'<td><input type="text" name="guidePayMoney" class="col-sm-12"/></td>' +
 			'<td><input type="text" name="remark" class="col-sm-12"/></td>' +
 			'<td><button class="btn btn-xs btn-danger btn-deleteTripPlanList" title="删除"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></td></tr>';
@@ -865,7 +864,7 @@ define(function(require, exports) {
 								parents.find("input[name=mobileNumber]").val(restaurant.mobileNumber);
 								parents.find("input[name=managerName]").val(restaurant.managerName);
 								parents.find("input[name=typeName]").val("");
-								parents.find("input[name=restaurantStandardId]").val("");
+								parents.find("input[name=restaurantStandardId]").val(""); 
 							}
 	                    }
 					});
@@ -1873,22 +1872,36 @@ define(function(require, exports) {
 				});
 			}
 		},
+		//计算 应付 导付
 		calculatePrice : function(){
 			var table = $(".table-tripPlan-container tbody tr"), price = 0, num = 0, reduceMoney = 0;
 			table.each(function(){
 				var _this = $(this);
-				_this.find("input[name=price], input[name=fee]").on("keyup", function(){
+				_this.find("input[name=price], input[name=fee]").on("change", function(){
 					plusPrice(this);
 				});
-				_this.find("input[name=memberCount], input[name=memberCount], input[name=needRoomCount]").on("keyup", function(){
+				_this.find("input[name=memberCount], input[name=memberCount], input[name=needRoomCount]").on("change", function(){
 					plusPrice(this);
 				});
-				_this.find("input[name=reduceMoney]").on("keyup", function(){
+				_this.find("input[name=reduceMoney]").on("change", function(){
 					plusPrice(this);
+				});
+				_this.find("input[name=payedMoney]").on("change", function(){
+					plusPrice(this);
+				});
+				_this.find("select[name=payType]").on("change", function(){
+					if($(this).val()!=0){
+						$(this).parent().parent().find("input[name=guidePayMoney]").val("");
+					}else{
+						plusPrice(this);
+					}
 				});
 				
 				function plusPrice(obj){
 					var parents = $(obj).parent().parent();
+					var payType = parents.find("select[name=payType]").val(),
+						payedMoney = parents.find("input[name=payedMoney]").val(),
+						payedMoney = isNaN(payedMoney) ? 0 : payedMoney;
 					price = parseFloat(parents.find("input[name=price], input[name=fee]").val());
 					price = isNaN(price) ? 0 : price;
 					num = parseFloat(parents.find("input[name=memberCount], input[name=memberCount], input[name=needRoomCount]").val());
@@ -1897,6 +1910,10 @@ define(function(require, exports) {
 					reduceMoney = isNaN(reduceMoney) ? 0 : reduceMoney;
 
 					parents.find("input[name=needPayMoney]").val(price * num - reduceMoney);
+					
+					if(payType == 0){
+						parents.find("input[name=guidePayMoney]").val((price * num - reduceMoney)-payedMoney);
+					}
 				}
 			});			
 		},

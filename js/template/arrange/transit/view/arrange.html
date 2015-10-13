@@ -106,16 +106,17 @@
 													</td>
 													<td><input class="col-sm-12" name="driverMobileNumber" readonly="readonly" type="text" value="{{if outBus.driver != null}}{{outBus.driver.mobileNumber}}{{/if}}" /></td>
 													<td><input class="col-sm-12 datetimepicker" name="bususeTime" type="text" value="{{if outBus.useTime != null}}{{outBus.useTime}}{{/if}}" /></td>
-													<td><input class="col-sm-12" name="boardLocation" type="text" value="{{outBus.boardLocation}}" maxlength="200" /></td>
+													<td><input class="col-sm-12" name="boardLocation" type="text"  value="{{outBus.boardLocation}}" /></td>
 													<td><input class="col-sm-12 price" name="busFee" type="text" value="{{outBus.fee}}" /><input type="hidden" class="count" value="1" /></td>
-													<td><input class="col-sm-12 discount" name="busReduceMoney" type="text" value="{{outBus.reduceMoney}}" maxlength="9" /></td>
-													<td><input class="col-sm-12 needPay" readonly="readonly" name="busNeedPayMoney" type="text" value="{{outBus.needPayMoney}}"  maxlength="9" /></td>
+													<td><input class="col-sm-12 discount" name="busReduceMoney" type="text" value="{{outBus.reduceMoney}}" /></td>
+													<td><input class="col-sm-12 needPay" readonly="readonly" name="busNeedPayMoney" type="text" value="{{outBus.needPayMoney}}" /></td>
 													<td><input class="col-sm-12" name="busPayedMoney" type="text" value="{{outBus.payedMoney}}" /></td>
 													<td>
 														<select class="" name="busPayType">
                                                				<option value="0" {{if outBus.payType == 0}}selected="selected"{{/if}}>现付</option>
                                                             <option value="1" {{if outBus.payType == 1}}selected="selected"{{/if}}>签单</option>
                                                             <option value="2" {{if outBus.payType == 2}}selected="selected"{{/if}}>转账</option>
+                                                            <option value="3" {{if outBus.payType == 3}}selected="selected"{{/if}}>网付</option>
                                                			</select>
 														<!-- <input class="col-sm-12" name="busPayType" type="text" value="{{outBus.payType}}" /> -->
 													</td>
@@ -128,7 +129,7 @@
 											</tbody>
 										</table>
 									</div>
-								</div>    
+								</div>
 							</div>
 						</div>
 					</div>
@@ -196,17 +197,18 @@
 														<input class="col-sm-12 bind-change" name="hotelRoomType" value="{{outHotel.hotelRoom.type}}" type="text" />
 														<input type="hidden" name="hotelRoomTypeId" value="{{outHotel.hotelRoom.id}}" />
 													</td>
-													<td><input class="col-sm-12 price" name="hotelPrice" value="{{outHotel.price}}" type="text" maxlength="9" /></td>
-													<td><input class="col-sm-12 count" name="hotelMemberCount" value="{{outHotel.memberCount}}" type="text"  maxlength="4" /></td>
+													<td><input class="col-sm-12 price" name="hotelPrice" value="{{outHotel.price}}" type="text" /></td>
+													<td><input class="col-sm-12 count" name="hotelMemberCount" value="{{outHotel.memberCount}}" type="text" /></td>
 													<td><input class="col-sm-12 discount" name="hotelReduceMoney" value="{{outHotel.reduceMoney}}" type="text" /></td>
-													<td><input class="col-sm-12 needPay" readonly="readonly" name="hotelNeedPayMoney" value="{{outHotel.needPayMoney}}" type="text" maxlength="9" /></td>
+													<td><input class="col-sm-12 needPay" readonly="readonly" name="hotelNeedPayMoney" value="{{outHotel.needPayMoney}}" type="text" /></td>
 													<td><input class="col-sm-12" name="hotelPayedMoney" value="{{outHotel.payedMoney}}" type="text" /></td>
 													<td>
 														<select class="" name="hotelPayType">
                                                				<option value="0" {{if outHotel.payType == 0}}selected="selected"{{/if}}>现付</option>
                                                             <option value="1" {{if outHotel.payType == 1}}selected="selected"{{/if}}>签单</option>
                                                             <option value="2" {{if outHotel.payType == 2}}selected="selected"{{/if}}>转账</option>
-                                               			</select>
+                                                            <option value="3" {{if outHotel.payType == 3}}selected="selected"{{/if}}>网付</option>  
+                                               			</select>  
                                                		</td>
 													<!-- <input class="col-sm-12" name="hotelPayType" value="{{outHotel.payType}}" type="text" /></td> -->
 													<td>
@@ -276,11 +278,11 @@
 															<option value="4" {{if outTicket.type == 4}}selected="selected"{{/if}}>轮船票</option>
 														</select>
 													</td>
-													<td><input class="col-sm-12" name="ticketStartCity" value="{{outTicket.startingCity}}" type="text"  maxlength="32" /></td>
-													<td><input class="col-sm-12" name="ticketArriveCity" value="{{outTicket.arriveCity}}" type="text"  maxlength="32" /></td>  
+													<td><input class="col-sm-12" name="ticketStartCity" value="{{outTicket.startingCity}}" type="text" /></td>
+													<td><input class="col-sm-12" name="ticketArriveCity" value="{{outTicket.arriveCity}}" type="text" /></td>
 													<td><input class="col-sm-12" name="ticketStartTime" value="{{if outTicket.startTime != null}}{{outTicket.startTime}}{{/if}}" type="text" /></td>
-													<td><input class="col-sm-12" name="ticketShift" value="{{outTicket.shift}}" type="text" maxlength="32" /></td>  
-													<td><input class="col-sm-12" name="ticketSeatLevel" value="{{outTicket.seatLevel}}" type="text" maxlength="16" />
+													<td><input class="col-sm-12" name="ticketShift" value="{{outTicket.shift}}" type="text" /></td>
+													<td><input class="col-sm-12" name="ticketSeatLevel" value="{{outTicket.seatLevel}}" type="text" />
 														<!-- <select class="" name="ticketSeatLevel" >
 															<option value="0" {{if outTicket.seatLevel == 0}}selected="selected"{{/if}}>普通</option>
 															<option value="1" {{if outTicket.seatLevel == 1}}selected="selected"{{/if}}>高级</option>
@@ -289,14 +291,15 @@
 													</td>
 													<td><input class="col-sm-12 price" name="ticketPrice" value="{{outTicket.price}}" type="text" /></td>
 													<td><input class="col-sm-12 count" name="ticketMemberCount" value="{{outTicket.memberCount}}" type="text" /></td>
-													<td><input class="col-sm-12 discount" name="ticketReduceMoney" value="{{outTicket.reduceMoney}}" type="text" maxlength="9" /></td>
-													<td><input class="col-sm-12 needPay" readonly="readonly" name="ticketNeedPayMoney" value="{{outTicket.needPayMoney}}" type="text" maxlength="9" /></td>
-													<td><input class="col-sm-12" name="ticketPayedMoney" value="{{outTicket.payedMoney}}" type="text" maxlength="9"  /></td>  
+													<td><input class="col-sm-12 discount" name="ticketReduceMoney" value="{{outTicket.reduceMoney}}" type="text" /></td>
+													<td><input class="col-sm-12 needPay" readonly="readonly" name="ticketNeedPayMoney" value="{{outTicket.needPayMoney}}" type="text" /></td>
+													<td><input class="col-sm-12" name="ticketPayedMoney" value="{{outTicket.payedMoney}}" type="text" /></td>
 													<td>
 														<select class="" name="ticketPayType">
                                                				<option value="0" {{if outTicket.payType == 0}}selected="selected"{{/if}}>现付</option>
                                                             <option value="1" {{if outTicket.payType == 1}}selected="selected"{{/if}}>签单</option>
                                                             <option value="2" {{if outTicket.payType == 2}}selected="selected"{{/if}}>转账</option>
+                                                            <option value="3" {{if outTicket.payType == 3}}selected="selected"{{/if}}>网付</option>
                                                			</select>
                                                		</td>
 														<!-- <input class="col-sm-12" name="ticketPayType" value="{{outTicket.payType}}" type="text" /></td> -->
@@ -383,6 +386,7 @@
                                                				<option value="0" {{if outBus.payType == 0}}selected="selected"{{/if}}>现付</option>
                                                             <option value="1" {{if outBus.payType == 1}}selected="selected"{{/if}}>签单</option>
                                                             <option value="2" {{if outBus.payType == 2}}selected="selected"{{/if}}>转账</option>
+                                                            <option value="3" {{if outBus.payType == 3}}selected="selected"{{/if}}>网付</option>
                                                			</select>
 														<!-- <input class="col-sm-12" name="busPayType" type="text" value="{{outBus.payType}}" /> -->
 													</td>
@@ -410,7 +414,7 @@
 								<div class="widget-header">
 									<h5 class="widget-title">
 										<i class="ace-icon fa fa-user"></i>
-										送团车俩
+										送团车俩  
 									</h5>
 					
 									<div class="widget-toolbar no-border">
@@ -469,6 +473,7 @@
                                                				<option value="0" {{if outBus.payType == 0}}selected="selected"{{/if}}>现付</option>
                                                             <option value="1" {{if outBus.payType == 1}}selected="selected"{{/if}}>签单</option>
                                                             <option value="2" {{if outBus.payType == 2}}selected="selected"{{/if}}>转账</option>
+                                                            <option value="3" {{if outBus.payType == 3}}selected="selected"{{/if}}>网付</option>
                                                			</select>
 														<!-- <input class="col-sm-12" name="busPayType" type="text" value="{{outBus.payType}}" /> -->
 													</td>
@@ -559,6 +564,7 @@
                                                				<option value="0" {{if outHotel.payType == 0}}selected="selected"{{/if}}>现付</option>
                                                             <option value="1" {{if outHotel.payType == 1}}selected="selected"{{/if}}>签单</option>
                                                             <option value="2" {{if outHotel.payType == 2}}selected="selected"{{/if}}>转账</option>
+                                                            <option value="3" {{if outHotel.payType == 3}}selected="selected"{{/if}}>网付</option>
                                                			</select>
                                                		</td>
 													<!-- <input class="col-sm-12" name="hotelPayType" value="{{outHotel.payType}}" type="text" /></td> -->
@@ -650,6 +656,7 @@
                                                				<option value="0" {{if outTicket.payType == 0}}selected="selected"{{/if}}>现付</option>
                                                             <option value="1" {{if outTicket.payType == 1}}selected="selected"{{/if}}>签单</option>
                                                             <option value="2" {{if outTicket.payType == 2}}selected="selected"{{/if}}>转账</option>
+                                                            <option value="3" {{if outTicket.payType == 3}}selected="selected"{{/if}}>网付</option>
                                                			</select>
                                                		</td>
 														<!-- <input class="col-sm-12" name="ticketPayType" value="{{outTicket.payType}}" type="text" /></td> -->
@@ -673,7 +680,7 @@
 		</div>
 		<div class="form-group">
 			<form class="form-horizontal" role="form" onsubmit="return false">
-				<button style="margin-top:50px" class="btn btn-block btn-success btn-updateArrange">
+				<button style="margin-top:50px" class="btn btn-block btn-success btn-updateArrange" data-entity-id="{{touristGroup.id}}">
 					<i class="ace-icon fa fa-check"></i>
 					保存信息
 				</button>

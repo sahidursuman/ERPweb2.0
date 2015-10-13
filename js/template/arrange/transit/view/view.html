@@ -35,17 +35,17 @@
 				</li>
 				{{/if}}
 				{{if isNeedBus == 1}}
-				<li class="" style="width:125px;">
-					<a aria-expanded="false" data-toggle="tab" href="#carListV" style="text-align:center;">
+				<li {{if isNeedArriveService == 0}}class="active"{{/if}} style="width:125px;">					
+				<a aria-expanded="false" data-toggle="tab" href="#carListV" style="text-align:center;">
 						&nbsp;小车&nbsp;
 					</a>
 				</li>
 				{{/if}}
 				{{if isNeedLeaveService == 1}}
-				<li class="" style="width:125px;">
+				<li {{if isNeedArriveService == 0 && isNeedBus == 0}}class="active"{{/if}} style="width:125px;">				
 					<a aria-expanded="false" data-toggle="tab" href="#sendListV" style="text-align:center;">
 						&nbsp;送团&nbsp;
-					</a>
+					</a>  
 				</li>
 				{{/if}}
 			</ul>
@@ -96,7 +96,7 @@
 													<td>{{outBus.reduceMoney}}</td>
 													<td>{{outBus.needPayMoney}}</td>
 													<td>{{outBus.payedMoney}}</td>
-													<td>{{if outBus.payType == 0}}现付{{else if outBus.payType == 1}}签单{{else if outBus.payType == 2}}转账{{/if}}</td>
+													<td>{{if outBus.payType == 0}}现付{{else if outBus.payType == 1}}签单{{else if outBus.payType == 2}}转账{{else}}网付{{/if}}</td>
 												</tr>{{/if}}{{/each}}
 											</tbody>
 										</table>
@@ -163,7 +163,7 @@
 													<td>{{outHotel.reduceMoney}}</td>
 													<td>{{outHotel.needPayMoney}}</td>
 													<td>{{outHotel.payedMoney}}</td>
-													<td>{{if outHotel.payType == 0}}现付{{else if outHotel.payType == 1}}签单{{else if outHotel.payType == 2}}转账{{/if}}</td>
+													<td>{{if outHotel.payType == 0}}现付{{else if outHotel.payType == 1}}签单{{else if outHotel.payType == 2}}转账{{else}}网付{{/if}}</td>
 												</tr>{{/if}}{{/each}}
 											</tbody>
 										</table>
@@ -224,7 +224,7 @@
 													<td>{{outTicket.reduceMoney}}</td>
 													<td>{{outTicket.needPayMoney}}</td>
 													<td>{{outTicket.payedMoney}}</td>
-													<td>{{if outTicket.payType == 0}}现付{{else if outTicket.payType == 1}}签单{{else if outTicket.payType == 2}}转账{{/if}}</td>
+													<td>{{if outTicket.payType == 0}}现付{{else if outTicket.payType == 1}}签单{{else if outTicket.payType == 2}}转账{{else}}网付{{/if}}</td>
 												</tr>{{/if}}{{/each}}
 											</tbody>
 										</table>
@@ -281,7 +281,7 @@
 													<td>{{outBus.reduceMoney}}</td>
 													<td>{{outBus.needPayMoney}}</td>
 													<td>{{outBus.payedMoney}}</td>
-													<td>{{if outBus.payType == 0}}现付{{else if outBus.payType == 1}}签单{{else if outBus.payType == 2}}转账{{/if}}</td>
+													<td>{{if outBus.payType == 0}}现付{{else if outBus.payType == 1}}签单{{else if outBus.payType == 2}}转账{{else}}网付{{/if}}</td>
 												</tr>{{/if}}{{/each}}
 											</tbody>
 										</table>
@@ -338,7 +338,7 @@
 													<td>{{outBus.reduceMoney}}</td>
 													<td>{{outBus.needPayMoney}}</td>
 													<td>{{outBus.payedMoney}}</td>
-													<td>{{if outBus.payType == 0}}现付{{else if outBus.payType == 1}}签单{{else if outBus.payType == 2}}转账{{/if}}</td>
+													<td>{{if outBus.payType == 0}}现付{{else if outBus.payType == 1}}签单{{else if outBus.payType == 2}}转账{{else}}网付{{/if}}</td>
 												</tr>{{/if}}{{/each}}
 											</tbody>
 										</table>
@@ -405,7 +405,7 @@
 													<td>{{outHotel.reduceMoney}}</td>
 													<td>{{outHotel.needPayMoney}}</td>
 													<td>{{outHotel.payedMoney}}</td>
-													<td>{{if outHotel.payType == 0}}现付{{else if outHotel.payType == 1}}签单{{else if outHotel.payType == 2}}转账{{/if}}</td>
+													<td>{{if outHotel.payType == 0}}现付{{else if outHotel.payType == 1}}签单{{else if outHotel.payType == 2}}转账{{else}}网付{{/if}}</td>
 												</tr>{{/if}}{{/each}}
 											</tbody>
 										</table>
@@ -466,7 +466,7 @@
 													<td>{{outTicket.reduceMoney}}</td>
 													<td>{{outTicket.needPayMoney}}</td>
 													<td>{{outTicket.payedMoney}}</td>
-													<td>{{if outTicket.payType == 0}}现付{{else if outTicket.payType == 1}}签单{{else if outTicket.payType == 2}}转账{{/if}}</td>
+													<td>{{if outTicket.payType == 0}}现付{{else if outTicket.payType == 1}}签单{{else if outTicket.payType == 2}}转账{{else}}网付{{/if}}</td>
 												</tr>{{/if}}{{/each}}
 											</tbody>
 										</table>
