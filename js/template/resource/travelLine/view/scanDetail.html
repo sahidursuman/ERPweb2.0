@@ -1,12 +1,10 @@
 <div class="col-xs-12">
 	<form class="form-horizontal travelLineMainForm" role="form" style="margin-top:10px" onsubmit="return false">
-		<div class="widget-box ui-sortable-handle">
-			<div class="widget-header">
-				<h5 class="widget-title">
-					<i class="ace-icon fa fa-info-circle"></i>
-					线路主体信息
+		<div class=" ui-sortable-handle">
+				<h5 >
+					<span class="badge badge-primary">1</span>
+					<label class="middle title-size">线路主体信息</label>
 				</h5>
-			</div>
 			<div class="form-group">
 				<label class="col-sm-2 control-label no-padding-right">线路名称:</label>
 				<div class="col-sm-4">
@@ -52,18 +50,17 @@
 	<form class="form-horizontal travelLineDayList" role="form" style="margin-top:10px" onsubmit="return false">
 		<div class="form-group">
 			<div class="col-xs-12 col-sm-12 widget-container-col">
-				<div class="widget-box ui-sortable-handle">
-					<div class="widget-header">
-						<h5 class="widget-title">
-							<i class="ace-icon fa fa-line-day"></i>
-							日程列表
+				<div class=" ui-sortable-handle">
+						<h5 class="">
+							<span class="badge badge-primary">2</span>
+							<label class="middle title-size">日程列表</label>
 						</h5>
-					</div>
 					<div class="widget-body">
 						<div class="widget-main no-padding">
 							<table class="table table-striped table-bordered table-hover lineDayList"> 
 								<thead>
 									<tr>
+
 										<th>日期</th>
 										<th>含餐情况</th>
 										<th>住宿地点</th>
@@ -97,9 +94,9 @@
 												</td>
 												<td>{{line.title}}</td>
 												<td>
-													<button data-entiy-id="{{line.id}}" class="btn btn-xs btn-success btn-guide-scan">
-														<i class="ace-icon fa fa-search-plus bigger-120"></i>
-													</button>
+													<a data-entiy-id="{{line.id}}" class="cursor btn-guide-scan">
+														查看
+													</a>
 												</td>
 											</tr>
 										{{/each}}
