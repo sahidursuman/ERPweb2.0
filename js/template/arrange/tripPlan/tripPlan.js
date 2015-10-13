@@ -57,26 +57,17 @@ define(function(require, exports) {
 						$("#tab-"+menuKey+"-content .search-area .btn-status .dropdown-menu a").click(function(){
 							$(this).parent().parent().parent().find("button").attr("data-value",$(this).attr("data-value"));
 							$(this).parent().parent().parent().find("span").text($(this).text());
-							tripPlan.searchData = {
-								words : $("#tab-"+menuKey+"-content .tripPlanMain input[name=word]").val(),
-								startTime : $("#tab-"+menuKey+"-content .tripPlanMain input[name=startTime]").val(),
-								realname : $("#tab-"+menuKey+"-content .tripPlanMain input[name=realname]").val(),
-								licenseNumber : $("#tab-"+menuKey+"-content .tripPlanMain input[name=licenseNumber]").val(),
-								creator : $("#tab-"+menuKey+"-content .tripPlanMain input[name=creator]").val(),
-								status : $("#tab-"+menuKey+"-content .btn-status").find("button").attr("data-value")
-							}
-							tripPlan.listTripPlan(0,tripPlan.searchData.words,tripPlan.searchData.startTime,tripPlan.searchData.realname,tripPlan.searchData.licenseNumber,tripPlan.searchData.creator,tripPlan.searchData.status);
 						});
 						
 						//给搜索按钮绑定事件
 						$("#tab-"+menuKey+"-content .tripPlanMain .btn-tripPlan-search").click(function(){
 							tripPlan.searchData = {
-								words : $("#tab-"+menuKey+"-content .tripPlanMain input[name=word]").val(),
-								startTime : $("#tab-"+menuKey+"-content .tripPlanMain input[name=startTime]").val(),
-								realname : $("#tab-"+menuKey+"-content .tripPlanMain input[name=realname]").val(),
-								licenseNumber : $("#tab-"+menuKey+"-content .tripPlanMain input[name=licenseNumber]").val(),
-								creator : $("#tab-"+menuKey+"-content .tripPlanMain input[name=creator]").val(),
-								status : $("#tab-"+menuKey+"-content .btn-status").find("button").attr("data-value")
+									words : $("#tab-"+menuKey+"-content .tripPlanMain input[name=word]").val(),
+									startTime : $("#tab-"+menuKey+"-content .tripPlanMain input[name=startTime]").val(),
+									realname : $("#tab-"+menuKey+"-content .tripPlanMain input[name=realname]").val(),
+									licenseNumber : $("#tab-"+menuKey+"-content .tripPlanMain input[name=licenseNumber]").val(),
+									creator : $("#tab-"+menuKey+"-content .tripPlanMain input[name=creator]").val(),
+									status : $("#tab-"+menuKey+"-content .btn-status").find("button").attr("data-value")
 							}
 							tripPlan.listTripPlan(0,tripPlan.searchData.words,tripPlan.searchData.startTime,tripPlan.searchData.realname,tripPlan.searchData.licenseNumber,tripPlan.searchData.creator,tripPlan.searchData.status);
 						});
