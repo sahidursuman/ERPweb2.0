@@ -79,19 +79,19 @@ define(function(require, exports) {
 						});
 						
 						//搜索栏状态button下拉事件
-						$("#"+tabId+"  .search-area .btn-status .dropdown-menu a").click(function(){
+						$("#"+tabId+" .search-area .btn-status .dropdown-menu a").click(function(){
 							$(this).parent().parent().parent().find("button").attr("data-value",$(this).attr("data-value"));
 							$(this).parent().parent().parent().find("span").text($(this).text());
-							searchData = {
-								name : $("#"+tabId+"  input[name=travelLine_name]").val(),
-								status : $("#"+tabId+"  .btn-status").find("button").attr("data-value")
+							travelLine.searchData = {
+								name : $("#"+tabId+" input[name=travelLine_name]").val(),
+								status : $("#"+tabId+" .btn-status").find("button").attr("data-value")
 							}
 							travelLine.listTravelLine(0,travelLine.searchData.name,travelLine.searchData.status);
 						});
 						
 						//搜索按钮事件
 						$("#"+tabId+"  .btn-travelLine-search").click(function(){
-							searchData = {
+							travelLine.searchData = {
 								name : $("#"+tabId+"  input[name=travelLine_name]").val(),
 								status : $("#"+tabId+"  .btn-status").find("button").attr("data-value")
 							}
