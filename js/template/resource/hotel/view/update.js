@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":43,"md5":"f446060069aa59232da83298dc09d366"}*/
+/*TMODJS:{"debug":true,"version":44,"md5":"f446060069aa59232da83298dc09d366"}*/
 define(function(require) {
     return require("../../../template")("resource/hotel/view/update", function($data, $filename) {
         try {
