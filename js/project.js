@@ -955,6 +955,7 @@ function listMenu(menuTemplate){
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/arrange/booking/booking.js",function(booking){
 						booking.listbooking(0,"","","","","");
+						modals["arrange_booking"] = booking;
 					});
 				});
 				
