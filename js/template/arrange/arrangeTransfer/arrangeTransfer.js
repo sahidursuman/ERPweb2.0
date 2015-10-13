@@ -880,7 +880,7 @@ define(function(require, exports) {
 	    			"<td><input  name=\"discribe\" type=\"text\" class=\"col-sm-12  no-padding-right\" /></td>"+
 	    			"<td><input  name=\"count\" type=\"text\" class=\"col-sm-12  no-padding-right count\" /></td>"+
 	    			"<td><input  name=\"otherPrice\" type=\"text\" class=\"col-sm-12  no-padding-right price\" /></td>"+
-	    			"<td><button class=\"btn btn-xs btn-danger  btn-edittransfer-delete\"><i class=\"ace-icon fa fa-trash-o bigger-120\"></i></button></td>"+
+	    			"<td><a class=\"cursor btn-edittransfer-delete\">删除</a></td>"+
 	    			"</tr>";
 		    		$obj.find(".addTransferCost").append(html);
 		    		
