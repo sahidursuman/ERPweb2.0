@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":93,"md5":"9e30711ddea50f3cc9848ae97fa4536b"}*/
+/*TMODJS:{"debug":true,"version":95,"md5":"9e30711ddea50f3cc9848ae97fa4536b"}*/
 define(function(require) {
     return require("../../../template")("resource/travelLine/view/list", function($data, $filename) {
         try {
