@@ -1872,22 +1872,36 @@ define(function(require, exports) {
 				});
 			}
 		},
+		//计算 应付 导付
 		calculatePrice : function(){
 			var table = $(".table-tripPlan-container tbody tr"), price = 0, num = 0, reduceMoney = 0;
 			table.each(function(){
 				var _this = $(this);
-				_this.find("input[name=price], input[name=fee]").on("keyup", function(){
+				_this.find("input[name=price], input[name=fee]").on("change", function(){
 					plusPrice(this);
 				});
-				_this.find("input[name=memberCount], input[name=memberCount], input[name=needRoomCount]").on("keyup", function(){
+				_this.find("input[name=memberCount], input[name=memberCount], input[name=needRoomCount]").on("change", function(){
 					plusPrice(this);
 				});
-				_this.find("input[name=reduceMoney]").on("keyup", function(){
+				_this.find("input[name=reduceMoney]").on("change", function(){
 					plusPrice(this);
+				});
+				_this.find("input[name=payedMoney]").on("change", function(){
+					plusPrice(this);
+				});
+				_this.find("select[name=payType]").on("change", function(){
+					if($(this).val()!=0){
+						$(this).parent().parent().find("input[name=guidePayMoney]").val("");
+					}else{
+						plusPrice(this);
+					}
 				});
 				
 				function plusPrice(obj){
 					var parents = $(obj).parent().parent();
+					var payType = parents.find("select[name=payType]").val(),
+						payedMoney = parents.find("input[name=payedMoney]").val(),
+						payedMoney = isNaN(payedMoney) ? 0 : payedMoney;
 					price = parseFloat(parents.find("input[name=price], input[name=fee]").val());
 					price = isNaN(price) ? 0 : price;
 					num = parseFloat(parents.find("input[name=memberCount], input[name=memberCount], input[name=needRoomCount]").val());
@@ -1896,6 +1910,10 @@ define(function(require, exports) {
 					reduceMoney = isNaN(reduceMoney) ? 0 : reduceMoney;
 
 					parents.find("input[name=needPayMoney]").val(price * num - reduceMoney);
+					
+					if(payType == 0){
+						parents.find("input[name=guidePayMoney]").val((price * num - reduceMoney)-payedMoney);
+					}
 				}
 			});			
 		},

@@ -619,7 +619,8 @@ function listMenu(menuTemplate){
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/lineProduct/lineProduct.js",function(lineProduct){
-						lineProduct.listLineProduct(0,"",1);
+						lineProduct.listLineProduct(0,"","");
+						modals["resource_lineProduct"] = lineProduct;
 					});
 					$("#main-container")[0].index = 0;
 				});
@@ -730,6 +731,7 @@ function listMenu(menuTemplate){
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/arrange/transit/transit.js",function(transit){ 
 						transit.listTransit(0,"","","","","","","","","");
+						modals["arrange_transit"] = transit;
 					});
 				});
 				

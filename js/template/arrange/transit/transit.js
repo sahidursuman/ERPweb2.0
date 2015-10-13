@@ -16,6 +16,13 @@ define(function(require, exports) {
 			shuttleType : "",
 			shuttleTime : ""
 		},
+		edited : {},
+		isEdited : function(editedType){
+			if(!!transit.edited[editedType] && transit.edited[editedType] != ""){
+				return true;
+			}
+			return false;
+		},
 		listTransit :function(page,fromPartnerAgencyId,lineProductId,startTime,arrangeUserId,arrangeStartTime,arrangeEndTime,status,shuttleType,shuttleTime){
 			$.ajax({
 				url:""+APP_ROOT+"back/touristGroup.do?method=findTouristGroupTransitArrange&token="+$.cookie("token")+"&menuKey=resource_touristGroup"+"&operation=view",
@@ -33,89 +40,90 @@ define(function(require, exports) {
 					var result = showDialog(data);
 					//如果正确则就执行
 					if(result){
-						console.log(data);
 						data.outRemarkArrangeList = JSON.parse(data.outRemarkArrangeList);
 						data.searchParam.arrangeUserList = JSON.parse(data.searchParam.arrangeUserList);
 						data.searchParam.lineProductList = JSON.parse(data.searchParam.lineProductList);
 						data.searchParam.partnerAgencyList = JSON.parse(data.searchParam.partnerAgencyList);
 						var html = listTemplate(data);
 						addTab(menuKey,"中转安排",html);
-						
-						var tab = "tab-arrange_transit-content";
-						// 时间控件
-				    	transit.datePicker(tab);
-				    	//编辑中转安排
-				    	$("#"+tab+" .btn-transit-edit").click(function(){
-				    		var id = $(this).attr("data-entity-id");
-				    		transit.updateTransit(id);
-				    	})
-				    	//查看中转安排
-				    	$("#"+tab+" .btn-transit-view").click(function(){
-				    		var id = $(this).attr("data-entity-id");
-				    		transit.viewTransit(id);
-				    	})
-				    	//发送中转安排信息
-				    	$("#"+tab+" .btn-transit-send").click(function(){
-				    		var id = $(this).attr("data-entity-id");
-				    		transit.sendTransit(id);
-				    	})
-				    	//导出中转安排信息 
-				    	$("#"+tab+" .btn-transit-export").click(function(){
-				    		var id = $(this).attr("data-entity-id");
-				    		transit.exportTransit(id);
-				    	})
-				    	//线路下拉搜索
-				    	transit.lineProductChoose(tab);
-				    	//组团社下拉搜索
-				    	transit.partnerAgencyChoose(tab);
-				    	//安排人下拉搜索			    	
-				    	transit.arrangeUserChoose(tab);
-				    	
-				    	//筛选事件绑定
-				    	$("#"+tab+" .btn-touristGroupList-search").click(function(){
-				    		transit.searchData = {
-				    			fromPartnerAgencyId : $("#"+tab+" input[name=partnerAgencyId]").val(),
-				    			lineProductId : $("#"+tab+" input[name=lineProductId]").val(),
-				    			startTime : $("#"+tab+" input[name=startTime]").val(),
-				    			arrangeUserId :$("#"+tab+" input[name=arrangeUserId]").val(),
-				    			arrangeStartTime : $("#"+tab+" input[name=arrangeStartTime]").val(),
-				    			arrangeEndTime : $("#"+tab+" input[name=arrangeEndTime]").val(),
-				    			status : $("#"+tab+" select[name=status]").val(),
-				    			shuttleType :$("#"+tab+" select[name=shuttleType]").val(),
-			    				shuttleTime :$("#"+tab+" input[name=shuttleTime]").val()
-				    		}
-				    		transit.listTransit(0,transit.searchData.fromPartnerAgencyId,transit.searchData.lineProductId,transit.searchData.startTime,transit.searchData.arrangeUserId,transit.searchData.arrangeStartTime,transit.searchData.arrangeEndTime,transit.searchData.status,transit.searchData.shuttleType,transit.searchData.shuttleTime)
-						})
-						//分页--首页按钮事件
-						$("#"+tab+" .pageMode a.first").click(function(){
-							if(data.pageNo == 0 || data.totalPage == 0)return;
-							transit.listTransit(0,transit.searchData.fromPartnerAgencyId,transit.searchData.lineProductId,transit.searchData.startTime,transit.searchData.arrangeUserId,transit.searchData.arrangeStartTime,transit.searchData.arrangeEndTime,transit.searchData.status,transit.searchData.shuttleType,transit.searchData.shuttleTime);
-						});
-						//分页--上一页事件
-				    	$("#"+tab+" .pageMode a.previous").click(function(){	
-							if(data.totalPage == 0)return;
-							var previous = data.pageNo - 1;
-							if(data.pageNo == 0){
-								previous = 0;
-							}
-							transit.listTransit(previous,transit.searchData.fromPartnerAgencyId,transit.searchData.lineProductId,transit.searchData.startTime,transit.searchData.arrangeUserId,transit.searchData.arrangeStartTime,transit.searchData.arrangeEndTime,transit.searchData.status,transit.searchData.shuttleType,transit.searchData.shuttleTime);
-						});
-						//分页--下一页事件
-				    	$("#"+tab+" .pageMode a.next").click(function(){
-							if(data.pageNo+1 == data.totalPage || data.totalPage == 0)return;
-							var next =  data.pageNo + 1;
-							if(data.pageNo == data.totalPage-1){
-								next = data.pageNo ;
-							}
-							transit.listTransit(next,transit.searchData.fromPartnerAgencyId,transit.searchData.lineProductId,transit.searchData.startTime,transit.searchData.arrangeUserId,transit.searchData.arrangeStartTime,transit.searchData.arrangeEndTime,transit.searchData.status,transit.searchData.shuttleType,transit.searchData.shuttleTime);
-						});
-						//分页--尾页事件
-				    	$("#"+tab+" .pageMode a.last").click(function(){
-							if(data.pageNo == data.totalPage-1 || data.totalPage == 0)return;
-							transit.listTransit(data.totalPage-1,transit.searchData.fromPartnerAgencyId,transit.searchData.lineProductId,transit.searchData.startTime,transit.searchData.arrangeUserId,transit.searchData.arrangeStartTime,transit.searchData.arrangeEndTime,transit.searchData.status,transit.searchData.shuttleType,transit.searchData.shuttleTime);
-						});
+						transit.initList(data);
 					}
 				}
+			});
+		},
+		initList : function(data){
+			var tab = "tab-arrange_transit-content";
+			// 时间控件
+			transit.datePicker(tab);
+			//编辑中转安排
+			$("#"+tab+" .btn-transit-edit").click(function(){
+				var id = $(this).attr("data-entity-id");
+				transit.updateTransit(id);
+			});
+			//查看中转安排
+			$("#"+tab+" .btn-transit-view").click(function(){
+				var id = $(this).attr("data-entity-id");
+				transit.viewTransit(id);
+			});
+			//发送中转安排信息
+			$("#"+tab+" .btn-transit-send").click(function(){
+				var id = $(this).attr("data-entity-id");
+				transit.sendTransit(id);
+			});
+			//导出中转安排信息 
+			$("#"+tab+" .btn-transit-export").click(function(){
+				var id = $(this).attr("data-entity-id");
+				transit.exportTransit(id);
+			});
+			//线路下拉搜索
+			transit.lineProductChoose(tab);
+			//组团社下拉搜索
+			transit.partnerAgencyChoose(tab);
+			//安排人下拉搜索			    	
+			transit.arrangeUserChoose(tab);
+			
+			//筛选事件绑定
+			$("#"+tab+" .btn-touristGroupList-search").click(function(){
+				transit.searchData = {
+					fromPartnerAgencyId : $("#"+tab+" input[name=partnerAgencyId]").val(),
+					lineProductId : $("#"+tab+" input[name=lineProductId]").val(),
+					startTime : $("#"+tab+" input[name=startTime]").val(),
+					arrangeUserId :$("#"+tab+" input[name=arrangeUserId]").val(),
+					arrangeStartTime : $("#"+tab+" input[name=arrangeStartTime]").val(),
+					arrangeEndTime : $("#"+tab+" input[name=arrangeEndTime]").val(),
+					status : $("#"+tab+" select[name=status]").val(),
+					shuttleType :$("#"+tab+" select[name=shuttleType]").val(),
+					shuttleTime :$("#"+tab+" input[name=shuttleTime]").val()
+				}
+				transit.listTransit(0,transit.searchData.fromPartnerAgencyId,transit.searchData.lineProductId,transit.searchData.startTime,transit.searchData.arrangeUserId,transit.searchData.arrangeStartTime,transit.searchData.arrangeEndTime,transit.searchData.status,transit.searchData.shuttleType,transit.searchData.shuttleTime)
+			})
+			//分页--首页按钮事件
+			$("#"+tab+" .pageMode a.first").click(function(){
+				if(data.pageNo == 0 || data.totalPage == 0)return;
+				transit.listTransit(0,transit.searchData.fromPartnerAgencyId,transit.searchData.lineProductId,transit.searchData.startTime,transit.searchData.arrangeUserId,transit.searchData.arrangeStartTime,transit.searchData.arrangeEndTime,transit.searchData.status,transit.searchData.shuttleType,transit.searchData.shuttleTime);
+			});
+			//分页--上一页事件
+			$("#"+tab+" .pageMode a.previous").click(function(){	
+				if(data.totalPage == 0)return;
+				var previous = data.pageNo - 1;
+				if(data.pageNo == 0){
+					previous = 0;
+				}
+				transit.listTransit(previous,transit.searchData.fromPartnerAgencyId,transit.searchData.lineProductId,transit.searchData.startTime,transit.searchData.arrangeUserId,transit.searchData.arrangeStartTime,transit.searchData.arrangeEndTime,transit.searchData.status,transit.searchData.shuttleType,transit.searchData.shuttleTime);
+			});
+			//分页--下一页事件
+			$("#"+tab+" .pageMode a.next").click(function(){
+				if(data.pageNo+1 == data.totalPage || data.totalPage == 0)return;
+				var next =  data.pageNo + 1;
+				if(data.pageNo == data.totalPage-1){
+					next = data.pageNo ;
+				}
+				transit.listTransit(next,transit.searchData.fromPartnerAgencyId,transit.searchData.lineProductId,transit.searchData.startTime,transit.searchData.arrangeUserId,transit.searchData.arrangeStartTime,transit.searchData.arrangeEndTime,transit.searchData.status,transit.searchData.shuttleType,transit.searchData.shuttleTime);
+			});
+			//分页--尾页事件
+			$("#"+tab+" .pageMode a.last").click(function(){
+				if(data.pageNo == data.totalPage-1 || data.totalPage == 0)return;
+				transit.listTransit(data.totalPage-1,transit.searchData.fromPartnerAgencyId,transit.searchData.lineProductId,transit.searchData.startTime,transit.searchData.arrangeUserId,transit.searchData.arrangeStartTime,transit.searchData.arrangeEndTime,transit.searchData.status,transit.searchData.shuttleType,transit.searchData.shuttleTime);
 			});
 		},
 		viewTransit :function(id){
@@ -190,9 +198,7 @@ define(function(require, exports) {
 				open:function(event,ui){
 					$(this).find("p").text("是否发送通知？");
 				}
-			})
-			
-			
+			})			
 		},
 		exportTransit :function(id){
 			var url = ""+APP_ROOT+"back/export.do?method=exportOutTouristGroup&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view"+"&id="+id;
@@ -222,138 +228,118 @@ define(function(require, exports) {
 						data.sendGroup.outTicketList = JSON.parse(data.sendGroup.outTicketList);
 						data.touristGroup = JSON.parse(data.touristGroup);
 						var html =arrangeTemplate(data);
-						addTab(menuKey+"-update","编辑中转安排",html);
-						
+						//已修改提示
 						var tab = "tab-arrange_transit-update-content";
-						// 设置表单验证
-						transit.validator = rule.setTranistCheckor($('#' + tab));
+			    		var validator = rule.setTranistCheckor($(".arrangeTouristMain"));
+						if($(".tab-"+menuKey+"-update").length > 0) {
+                 	    	if(!!transit.edited["update"]){
+                 	    		showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
+                 	    			 validator = rule.setTranistCheckor($(".arrangeTouristMain"));
+				            		 if (!validator.form()) { 
+				            			 return; 
+				            		 }
+				            		 transit.submitUpdateTransit($(".arrangeTouristMain .btn-updateArrange").attr("data-entity-id"),0);
+									 transit.edited["update"] = "";
+				            		 addTab(menuKey+"-update","编辑中转安排",html);			
+				            		 validator = rule.setTranistCheckor($(".arrangeTouristMain"));
+				            	},function(){
+				            		addTab(menuKey+"-update","编辑中转安排",html);;	
+									validator = rule.setTranistCheckor($(".arrangeTouristMain"));								
+									transit.edited["update"] = "";
+				            	}); 							
+                 	    	 }else{
+	                 	    	addTab(menuKey+"-update","编辑中转安排",html);			
+	                 	        validator = rule.setTranistCheckor($(".arrangeTouristMain"));
+                 	    	 } 
+                 	    }else{
+                 	    	addTab(menuKey+"-update","编辑中转安排",html);				
+                 	    	validator = rule.setTranistCheckor($(".arrangeTouristMain"));
+                 	    };	
 						
-						$("#"+tab+" .count,#"+tab+" .price,#"+tab+" .discount").blur(transit.calculation);
-				    	//接待-------------------------开始---------------------------------------------------------	
-				    	$("#"+tab+" #receptionList .btn-bus-add").click(function(){
-				    		var thisObj = $(this);
-				    		var id = transit.getArrangeTrId(thisObj);
-				    		transit.addOutBusList(id,0,tab);
-				    	})
-				    	$("#"+tab+" #receptionList .btn-hotel-add").click(function(){
-				    		var thisObj = $(this);
-				    		var id = transit.getArrangeTrId(thisObj);
-				    		transit.addOutHotel(id,0,tab);
-				    	})
-				    	$("#"+tab+" #receptionList .btn-ticket-add").click(function(){
-				    		var thisObj = $(this);
-				    		var id = transit.getArrangeTrId(thisObj);
-				    		transit.addTicketList(id,0,tab);
-				    	})
-				    	//小车--------------------------开始--------------------------------------------------------	
-				    	$("#"+tab+" #carList .btn-bus-add").click(function(){
-				    		var thisObj = $(this);
-				    		var id = transit.getArrangeTrId(thisObj);
-				    		transit.addOutBusList(id,2,tab);
-				    	})
-				    	//送团--------------------------开始--------------------------------------------------------	
-				    	$("#"+tab+" #sendList .btn-bus-add").click(function(){
-				    		var thisObj = $(this);
-				    		var id = transit.getArrangeTrId(thisObj);
-				    		transit.addOutBusList(id,1,tab);
-				    	})
-				    	$("#"+tab+" #sendList .btn-hotel-add").click(function(){
-				    		var thisObj = $(this);
-				    		var id = transit.getArrangeTrId(thisObj);
-				    		transit.addOutHotel(id,1,tab);
-				    	})
-				    	$("#"+tab+" #sendList .btn-ticket-add").click(function(){
-				    		var thisObj = $(this);
-				    		var id = transit.getArrangeTrId(thisObj);
-				    		transit.addTicketList(id,1,tab);
-				    	})
-				    	
-				    	//删除安排事件绑定
-				    	$("#"+tab+" .arrangeTouristMain .busList .arrange-delete").click(function(){
-				    		var thisObj = $(this);
-				    		transit.delArrangeJudge (thisObj,"bus");
-				    	})
-				    	$("#"+tab+" .arrangeTouristMain .hotelList .arrange-delete").click(function(){
-				    		var thisObj = $(this);
-				    		transit.delArrangeJudge (thisObj,"hotel");
-				    	})
-				    	$("#"+tab+" .arrangeTouristMain .ticketList .arrange-delete").click(function(){
-				    		var thisObj = $(this);
-				    		transit.delArrangeJudge (thisObj,"ticket");
-				    	})
-				    	
-				    	//车辆信息 联动
-				    	transit.bindBusCompanyChoose(tab);
-				    	//酒店信息 联动
-				    	transit.bindHotelChoose(tab);
-				    	//票务信息 联动
-				    	transit.bindTicketChoose(tab);
-				    	//日期插件绑定
-				    	transit.outArrangeDateTimepicker("receptionList","bususeTime",tab);
-				    	transit.outArrangeDatepicker("receptionList","hotelCheckInTime",tab);
-				    	transit.outArrangeDateTimepicker("receptionList","ticketStartTime",tab);
-				    	transit.outArrangeDateTimepicker("carList","bususeTime",tab);
-				    	transit.outArrangeDateTimepicker("sendList","bususeTime",tab);
-				    	transit.outArrangeDatepicker("sendList","hotelCheckInTime",tab);
-				    	transit.outArrangeDateTimepicker("sendList","ticketStartTime",tab);
-				    	//提交安排事件绑定
-				    	$("#"+tab+" .arrangeTouristMain .btn-updateArrange").click(function(){
-				    		if (!transit.validator.form())  return;
-				    		
-				    		var touristGroupArrange = {
-				    				touristGroup : {},
-				    				outBusList : [],
-				    				outHotelList : [],
-				    				outTicketList : []
-				    		};
-				    		//小组ID
-				    		touristGroupArrange.touristGroup = {
-				    				id : transit.getArrangeValue("touristGroup")
-				    		};
-				    		//接送车安排 JSON
-				    		var receptionOutBusTr = $("#"+tab+" .arrangeTouristMain #receptionList .busList tbody tr");
-				    		transit.outBusJson(receptionOutBusTr,touristGroupArrange.outBusList);
-				    		var carOutBusTr = $("#"+tab+" .arrangeTouristMain #carList .busList tbody tr");
-				    		transit.outBusJson(carOutBusTr,touristGroupArrange.outBusList);
-				    		var sendOutBusTr = $("#"+tab+" .arrangeTouristMain #sendList .busList tbody tr");
-				    		transit.outBusJson(sendOutBusTr,touristGroupArrange.outBusList);
-				    		//酒店安排 JSON
-				    		var receptionOutHotelTr = $("#"+tab+" .arrangeTouristMain #receptionList .hotelList tbody tr");
-				    		transit.outHotelJson(receptionOutHotelTr,touristGroupArrange.outHotelList);
-				    		var sendOutHotelTr = $("#"+tab+" .arrangeTouristMain #sendList .hotelList tbody tr");
-				    		transit.outHotelJson(sendOutHotelTr,touristGroupArrange.outHotelList);
-				    		//票务安排 JSON
-				    		var receptionOutTicketTr = $("#"+tab+" .arrangeTouristMain #receptionList .ticketList tbody tr");
-				    		transit.outTicketJson(receptionOutTicketTr,touristGroupArrange.outTicketList);
-				    		var sendOutTicketTr = $("#"+tab+" .arrangeTouristMain #sendList .ticketList tbody tr");
-				    		transit.outTicketJson(sendOutTicketTr,touristGroupArrange.outTicketList);
-				    		
-				    		touristGroupArrange = JSON.stringify(touristGroupArrange);
-				    		console.log(touristGroupArrange);
-				    		$.ajax({
-				    			url:""+APP_ROOT+"back/touristGroup.do?method=saveTouristGroupArrange&token="+$.cookie("token")+"&menuKey=resource_touristGroup"+"&operation=update",
-								type:"POST",
-								dataType:"json",
-								data:"touristGroupArrange="+encodeURIComponent(touristGroupArrange),
-								beforeSend:function(){
-									//打开一个遮罩层
-									globalLoadingLayer = openLoadingLayer();
-								},
-								success:function(data){
-									layer.close(globalLoadingLayer);
-									var result = showDialog(data);
-									if(result){
-										showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-											closeTab(menuKey+"-update");
-											transit.listTransit(0,"","","","","","","","","");
-										});
-									}
-								}
-				    		})
-				    	})
-
+						transit.initUpdate(id,data);
 		        	}
 				}
+			})
+		},
+		initUpdate : function(id,data){
+			var tab = "tab-arrange_transit-update-content";
+			// 设置表单验证
+			var validator = rule.setTranistCheckor($(".arrangeTouristMain"));
+			$('.arrangeTouristMain').on("change",function(){
+				transit.edited["update"] = "update";
+			});	
+			$("#"+tab+" .count,#"+tab+" .price,#"+tab+" .discount").blur(transit.calculation);
+			//接待-------------------------开始---------------------------------------------------------	
+			$("#"+tab+" #receptionList .btn-bus-add").click(function(){
+				var thisObj = $(this);
+				var id = transit.getArrangeTrId(thisObj);
+				transit.addOutBusList(id,0,tab);
+			})
+			$("#"+tab+" #receptionList .btn-hotel-add").click(function(){
+				var thisObj = $(this);
+				var id = transit.getArrangeTrId(thisObj);
+				transit.addOutHotel(id,0,tab);
+			})
+			$("#"+tab+" #receptionList .btn-ticket-add").click(function(){
+				var thisObj = $(this);
+				var id = transit.getArrangeTrId(thisObj);
+				transit.addTicketList(id,0,tab);
+			})
+			//小车--------------------------开始--------------------------------------------------------	
+			$("#"+tab+" #carList .btn-bus-add").click(function(){
+				var thisObj = $(this);
+				var id = transit.getArrangeTrId(thisObj);
+				transit.addOutBusList(id,2,tab);
+			})
+			//送团--------------------------开始--------------------------------------------------------	
+			$("#"+tab+" #sendList .btn-bus-add").click(function(){
+				var thisObj = $(this);
+				var id = transit.getArrangeTrId(thisObj);
+				transit.addOutBusList(id,1,tab);
+			})
+			$("#"+tab+" #sendList .btn-hotel-add").click(function(){
+				var thisObj = $(this);
+				var id = transit.getArrangeTrId(thisObj);
+				transit.addOutHotel(id,1,tab);
+			})
+			$("#"+tab+" #sendList .btn-ticket-add").click(function(){
+				var thisObj = $(this);
+				var id = transit.getArrangeTrId(thisObj);
+				transit.addTicketList(id,1,tab);
+			})
+			
+			//删除安排事件绑定
+			$("#"+tab+" .arrangeTouristMain .busList .arrange-delete").click(function(){
+				var thisObj = $(this);
+				transit.delArrangeJudge (thisObj,"bus");
+			})
+			$("#"+tab+" .arrangeTouristMain .hotelList .arrange-delete").click(function(){
+				var thisObj = $(this);
+				transit.delArrangeJudge (thisObj,"hotel");
+			})
+			$("#"+tab+" .arrangeTouristMain .ticketList .arrange-delete").click(function(){
+				var thisObj = $(this);
+				transit.delArrangeJudge (thisObj,"ticket");
+			})
+			
+			//车辆信息 联动
+			transit.bindBusCompanyChoose(tab);
+			//酒店信息 联动
+			transit.bindHotelChoose(tab);
+			//票务信息 联动
+			transit.bindTicketChoose(tab);
+			//日期插件绑定
+			transit.outArrangeDateTimepicker("receptionList","bususeTime",tab);
+			transit.outArrangeDatepicker("receptionList","hotelCheckInTime",tab);
+			transit.outArrangeDateTimepicker("receptionList","ticketStartTime",tab);
+			transit.outArrangeDateTimepicker("carList","bususeTime",tab);
+			transit.outArrangeDateTimepicker("sendList","bususeTime",tab);
+			transit.outArrangeDatepicker("sendList","hotelCheckInTime",tab);
+			transit.outArrangeDateTimepicker("sendList","ticketStartTime",tab);
+			
+			//提交安排事件绑定
+			$("#"+tab+" .arrangeTouristMain .btn-updateArrange").click(function(){
+				transit.submitUpdateTransit(id,1);
 			})
 		},
 		//接送车辆JSON组装
@@ -672,7 +658,7 @@ define(function(require, exports) {
 				select:function(event,ui){
 					var _this = this, parent = $(_this).parent().parent()
 					$(this).blur();
-					
+					var validator = rule.setTranistCheckor($(".arrangeTouristMain"));
 					parent.find("input[name=busCompanyId]").val(ui.item.id).trigger('change');
 					parent.find("input[name=busLicenseNumber]").val("");
 					parent.find("input[name=busLicenseNumberId]").val("");
@@ -680,7 +666,7 @@ define(function(require, exports) {
 					parent.find("input[name=driverName]").val("");
 					parent.find("input[name=driverId]").val("");
 					parent.find("input[name=driverMobileNumber]").val("");
-					rule.updateTranistCheckor(transit.validator);
+					rule.updateTranistCheckor(validator);
 					
 					var obj = this;
 					/*if(chooseBusLicenseNumber){
@@ -800,7 +786,8 @@ define(function(require, exports) {
 				select:function(event,ui){
 					var _this = this, parents = $(_this).parent().parent();
 					parents.find("input[name=hotelId]").val(ui.item.id).trigger('change');
-					rule.updateTranistCheckor(transit.validator);
+					var validator = rule.setTranistCheckor($(".arrangeTouristMain"));
+					rule.updateTranistCheckor(validator);
 					$.ajax({
 						url:""+APP_ROOT+"back/hotel.do?method=getHotelById&token="+$.cookie("token")+"&menuKey=resource_hotel&operation=view",
 	                    dataType: "json",
@@ -908,7 +895,8 @@ define(function(require, exports) {
 					var _this = this;
 					var thisParent = $(_this).parent().parent();
 					thisParent.find("input[name=tickeId]").val(ui.item.id).trigger('change');
-					rule.updateTranistCheckor(transit.validator);
+					var validator = rule.setTranistCheckor($(".arrangeTouristMain"));
+					rule.updateTranistCheckor(validator);
 				},
 				change : function(event, ui){
 					if(ui.item == null){
@@ -952,7 +940,8 @@ define(function(require, exports) {
 				language: 'zh-CN'
 			})
 			.on('changeDate', function() {
-				rule.updateTranistCheckor(transit.validator);
+				var validator = rule.setTranistCheckor($(".arrangeTouristMain"));
+				rule.updateTranistCheckor(validator);
 			});
 		},
 		outArrangeDateTimepicker :function(clas,name,tab){
@@ -1128,7 +1117,78 @@ define(function(require, exports) {
 				discount = Tr.find(".discount").val() || 0,
 				needPay = (count * price)-discount;
 			Tr.find(".needPay").val(needPay);
+		},
+		submitUpdateTransit : function(id,isClose){
+			var tab = "tab-arrange_transit-update-content";
+			var validator = rule.setTranistCheckor($(".arrangeTouristMain"));
+			if (!validator.form())  return;	    		
+			var touristGroupArrange = {
+					touristGroup : {},
+					outBusList : [],
+					outHotelList : [],
+					outTicketList : []
+			};
+			//小组ID
+			touristGroupArrange.touristGroup = {
+				id : transit.getArrangeValue("touristGroup")
+			};
+			//接送车安排 JSON
+			var receptionOutBusTr = $("#"+tab+" .arrangeTouristMain #receptionList .busList tbody tr");
+			transit.outBusJson(receptionOutBusTr,touristGroupArrange.outBusList);
+			var carOutBusTr = $("#"+tab+" .arrangeTouristMain #carList .busList tbody tr");
+			transit.outBusJson(carOutBusTr,touristGroupArrange.outBusList);
+			var sendOutBusTr = $("#"+tab+" .arrangeTouristMain #sendList .busList tbody tr");
+			transit.outBusJson(sendOutBusTr,touristGroupArrange.outBusList);
+			//酒店安排 JSON
+			var receptionOutHotelTr = $("#"+tab+" .arrangeTouristMain #receptionList .hotelList tbody tr");
+			transit.outHotelJson(receptionOutHotelTr,touristGroupArrange.outHotelList);
+			var sendOutHotelTr = $("#"+tab+" .arrangeTouristMain #sendList .hotelList tbody tr");
+			transit.outHotelJson(sendOutHotelTr,touristGroupArrange.outHotelList);
+			//票务安排 JSON
+			var receptionOutTicketTr = $("#"+tab+" .arrangeTouristMain #receptionList .ticketList tbody tr");
+			transit.outTicketJson(receptionOutTicketTr,touristGroupArrange.outTicketList);
+			var sendOutTicketTr = $("#"+tab+" .arrangeTouristMain #sendList .ticketList tbody tr");
+			transit.outTicketJson(sendOutTicketTr,touristGroupArrange.outTicketList);
+			
+			touristGroupArrange = JSON.stringify(touristGroupArrange);
+			console.log(touristGroupArrange);
+			$.ajax({
+				url:""+APP_ROOT+"back/touristGroup.do?method=saveTouristGroupArrange&token="+$.cookie("token")+"&menuKey=resource_touristGroup"+"&operation=update",
+				type:"POST",
+				dataType:"json",
+				data:"touristGroupArrange="+encodeURIComponent(touristGroupArrange),
+				beforeSend:function(){
+					//打开一个遮罩层
+					globalLoadingLayer = openLoadingLayer();
+				},
+				success:function(data){
+					layer.close(globalLoadingLayer);
+					var result = showDialog(data);
+					if(result){
+						showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+							transit.edited["update"] = "";
+							if(isClose ==1){
+								closeTab(menuKey+"-update");
+								transit.listTransit(0,"","","","","","","","","");
+							}
+						});
+					}
+				}
+			})
+		},
+		save : function(saveType){
+			console.log("save : 中转安排");
+			if(saveType == "update"){
+				var id = $(".arrangeTouristMain .btn-updateArrange").attr("data-entity-id");
+				transit.submitUpdateTransit(id,1);
+			}
+		},
+		clearEdit : function(clearType){
+			transit.edited[clearType] = "";
 		}
 	}
 	exports.listTransit = transit.listTransit;
+	exports.isEdited = transit.isEdited;
+	exports.save = transit.save;
+	exports.clearEdit = transit.clearEdit;
 })

@@ -1866,7 +1866,7 @@ define(function(require, exports) {
 			'<td><input type="text" class="col-xs-12" name="price"/></td>'+
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="managerName"/></td>'+
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
-			'<td><input type="text" class="col-xs-12" readonly="readonly" name="companyPhoneNumber"/></td>'+
+			'<td><input type="text" class="col-xs-12" readonly="readonly" name="telNumber"/></td>'+
 			'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
 			'<td><a data-entity-id="27" class="btn-restaurant-delete deleteResourceTicketList cursor"> 删除 </a></td></tr></tbody></table></div></div></div></div>';
 			$(this).parents(".scheduleContainer").find(".scheduleListContainer").append(shoppingDetails);
@@ -1901,7 +1901,7 @@ define(function(require, exports) {
 								}
 								thisParent.find("input[name=managerName]").val(ticket.managerName);
 								thisParent.find("input[name=mobileNumber]").val(ticket.mobileNumber);
-								thisParent.find("input[name=companyPhoneNumber]").val(ticket.companyPhoneNumber);
+								thisParent.find("input[name=telNumber]").val(ticket.telNumber);
 							}
 	                    }
 	                });
@@ -1916,7 +1916,7 @@ define(function(require, exports) {
 						thisParent.find("input[name=price]").val("");
 						thisParent.find("input[name=managerName]").val("");
 						thisParent.find("input[name=mobileNumber]").val("");
-						thisParent.find("input[name=companyPhoneNumber]").val("");
+						thisParent.find("input[name=telNumber]").val("");
 					}
 					// 更新表单验证的配置
 					validator = rule.lineProductUpdate(validator);
