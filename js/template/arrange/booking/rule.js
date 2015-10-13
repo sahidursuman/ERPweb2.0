@@ -39,7 +39,7 @@ var rule = {
 					$ele: $obj.find('input[name="getedMoney"]'),
 					rules: [
 				        {
-				        	type: 'int', 
+				        	type: 'float', 
 				        	errMsg: '已收数字不合法'
 				        }
 				    ]
@@ -47,8 +47,16 @@ var rule = {
 					$ele: $obj.find('input[name="payedMoney"]'),
 					rules: [
 				        {
-				        	type: 'int', 
+				        	type: 'float', 
 				        	errMsg: '已付数字不合法'
+				        }
+				    ]
+				},{	//已付
+					$ele: $obj.find('input[name="touristMobileNumber"]'),
+					rules: [
+				        {
+				        	type: 'mobile-phone', 
+				        	errMsg: '游客电话号码格式不正确'
 				        }
 				    ]
 				}
@@ -112,7 +120,7 @@ var rule = {
 	  	    	    	$ele: $checkBookingHoteObj.find('input[name="days"]'),
 	  	    	    	rules: [
 	      	    	        {
-	      	    	        	type: 'int', 
+	      	    	        	type: 'float',
 	      	    	        	errMsg: '天数输入不合法'
 	      	    	        }
 	  	    	        ]
@@ -121,7 +129,7 @@ var rule = {
 	  	    	    	$ele: $checkBookingHoteObj.find('input[name="costPrice"]'),
 	  	    	    	rules: [
 	      	    	        {
-	      	    	        	type: 'int', 
+	      	    	        	type: 'float',
 	      	    	        	errMsg: '成本单价输入不合法'
 	      	    	        }
 	  	    	        ]
@@ -130,7 +138,7 @@ var rule = {
 	  	    	    	$ele: $checkBookingHoteObj.find('input[name="salePrice"]'),
 	  	    	    	rules: [
 	      	    	        {
-	      	    	        	type: 'int', 
+	      	    	        	type: 'float',
 	      	    	        	errMsg: '销售单价输入不合法'
 	      	    	        }
 	  	    	        ]
@@ -186,7 +194,7 @@ var rule = {
 	  	    	    	$ele: $checkBookingScenicObj.find('input[name="costPrice"]'),
 	  	    	    	rules: [
 	      	    	        {
-	      	    	        	type: 'int', 
+	      	    	        	type: 'float',
 	      	    	        	errMsg: '成本单价输入不合法'
 	      	    	        }
 	  	    	        ]
@@ -195,7 +203,7 @@ var rule = {
 	  	    	    	$ele: $checkBookingScenicObj.find('input[name="salePrice"]'),
 	  	    	    	rules: [
 	      	    	        {
-	      	    	        	type: 'int', 
+	      	    	        	type: 'float', 
 	      	    	        	errMsg: '销售单价输入不合法'
 	      	    	        }
 	  	    	        ]
@@ -257,7 +265,7 @@ var rule = {
 	  	    	    	$ele: $checkBookingTicketObj.find('input[name="costPrice"]'),
 	  	    	    	rules: [
 	      	    	        {
-	      	    	        	type: 'int', 
+	      	    	        	type: 'float', 
 	      	    	        	errMsg: '成本单价输入不合法'
 	      	    	        }
 	  	    	        ]
@@ -266,7 +274,7 @@ var rule = {
 	  	    	    	$ele: $checkBookingTicketObj.find('input[name="salePrice"]'),
 	  	    	    	rules: [
 	      	    	        {
-	      	    	        	type: 'int', 
+	      	    	        	type: 'float', 
 	      	    	        	errMsg: '销售单价输入不合法'
 	      	    	        }
 	  	    	        ]
@@ -338,7 +346,7 @@ var rule = {
 	  	    	    	$ele: $checkBookingBusObj.find('input[name="costPrice"]'),
 	  	    	    	rules: [
 	      	    	        {
-	      	    	        	type: 'int', 
+	      	    	        	type: 'float', 
 	      	    	        	errMsg: '成本单价输入不合法'
 	      	    	        }
 	  	    	        ]
@@ -347,7 +355,7 @@ var rule = {
 	  	    	    	$ele: $checkBookingBusObj.find('input[name="salePrice"]'),
 	  	    	    	rules: [
 	      	    	        {
-	      	    	        	type: 'int', 
+	      	    	        	type: 'float', 
 	      	    	        	errMsg: '销售单价输入不合法'
 	      	    	        }
 	  	    	        ]
@@ -398,7 +406,7 @@ var rule = {
 	  	    	    	$ele: $checkdPartnerManagerObj.find('input[name="costPrice"]'),
 	  	    	    	rules: [
 	      	    	        {
-	      	    	        	type: 'int', 
+	      	    	        	type: 'float', 
 	      	    	        	errMsg: '成本单价输入不合法'
 	      	    	        }
 	  	    	        ]
@@ -407,7 +415,7 @@ var rule = {
 	  	    	    	$ele: $checkdPartnerManagerObj.find('input[name="salePrice"]'),
 	  	    	    	rules: [
 	      	    	        {
-	      	    	        	type: 'int', 
+	      	    	        	type: 'float', 
 	      	    	        	errMsg: '销售单价输入不合法'
 	      	    	        }
 	  	    	        ]
