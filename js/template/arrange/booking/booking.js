@@ -118,9 +118,11 @@ define(function(require, exports) {
 					},function(){
 						addTab(menuKey+"-add","新增项目代订",html);
 						booking.edited["add"] = "";
+						booking.initAdd();
 					},"放弃","继续编辑"); 							
 				 }else{
-					addTab(menuKey+"-add","新增项目代订",html);				
+					addTab(menuKey+"-add","新增项目代订",html);	
+					booking.initAdd();
 				 } 
 			}else{
 				addTab(menuKey+"-add","新增项目代订",html);		
@@ -219,10 +221,12 @@ define(function(require, exports) {
 				            		}
 				            		booking.submitBooking("update",0);
 									booking.edited["update"] = "";
-				            		addTab(menuKey+"-update","修改项目代订",html);	
+				            		addTab(menuKey+"-update","修改项目代订",html);
+									booking.initUpdate();
 									booking.initUpdate();									
 				            	},function(){
-				            		addTab(menuKey+"-update","修改项目代订",html);										
+				            		addTab(menuKey+"-update","修改项目代订",html);
+									booking.initUpdate();
 									booking.edited["update"] = "";
 				            	}); 							
                  	    	}else{
