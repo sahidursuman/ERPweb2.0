@@ -312,7 +312,7 @@
 				{{each ticketList as ticket}}
 					<tr>
 						<td>{{ticket.ticket.name}}</td>
-						<td>{{ticket.type}}</td>
+						<td>{{if ticket.type == 1}}机票{{else if ticket.type == 2}}汽车票{{else if ticket.type == 3}}火车票{{else if ticket.type == 4}}轮船票{{/if}}</td>
 						<td>{{ticket.startingCity}}</td>
 						<td>{{ticket.arriveCity}}</td>
 						<td>{{if ticket.startTime != null}}{{ticket.startTime}}{{/if}}</td>
