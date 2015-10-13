@@ -339,11 +339,11 @@ define(function(require, exports) {
 			'<td><input name="hotelRoom" value="" type="text" class="col-sm-12 chooseHotelRoom bind-change"/><input name="hotelRoomId" type="hidden" value="" /></td>'+
 			'<td><input name="days" value="" type="text" class="col-sm-12" /></td>'+
 			'<td><input name="roomCount" value="" type="text" class="col-sm-12"/></td>'+
-			'<td><input name="costPrice" value="" type="text" class="col-sm-12" style="width:55px;" /><label class="col-sm-4 control-label" style="padding: 7px 0 0 0;width:25px;" >/天</label></td>'+
-			'<td><input name="salePrice" value="" type="text" class="col-sm-12" style="width:55px;" /><label class="col-sm-4 control-label" style="padding: 7px 0 0 0;width:25px;" >/天</label></td>'+
+			'<td><input name="costPrice" value="" type="text" class="col-sm-12" /><label class="col-sm-4 control-label" style="padding: 7px 0 0 0;width:25px;" >/天</label></td>'+
+			'<td><input name="salePrice" value="" type="text" class="col-sm-12" /><label class="col-sm-4 control-label" style="padding: 7px 0 0 0;width:25px;" >/天</label></td>'+
 			'<td><input name="sumCostMoney" readonly="readonly" value="" type="text" class="col-sm-12"/></td>'+
 			'<td><input name="sumNeedGetMoney" readonly="readonly" value="" type="text" class="col-sm-12"/></td>'+
-			'<td><button class="btn btn-xs btn-danger btn-hotel-booking-delete"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></td>'+
+			'<td><a class="cursor btn-hotel-booking-delete">删除</a></td>'+
 			'</tr>';
 			event.data.$this.find("tbody.hotelBookingList").append(html);
 			event.data.$this.find(".bookingHotelList .btn-hotel-booking-delete").off().on("click",{cateName : "hotel", _this : event.data.$this},booking.deleteList);
@@ -372,7 +372,7 @@ define(function(require, exports) {
 			'<td><input name="sumCostMoney" value="" readonly="readonly" type="text" class="col-sm-12"/></td>'+
 			'<td><input name="sumNeedGetMoney" value="" readonly="readonly" type="text" class="col-sm-12"/></td>'+
 			'<td><input name="orderNumber" value="" type="text" class="col-sm-12" /></td>'+
-			'<td><button class="btn btn-xs btn-danger btn-scenic-booking-delete"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></td></tr>';
+			'<td><a class="cursor btn-scenic-booking-delete">删除</a></td></tr>';
 			event.data.$this.find("tbody.scenicBookingList").append(html);
 			event.data.$this.find(".bookingScenicList .btn-scenic-booking-delete").off().on("click",{cateName : "scenic", _this : event.data.$this},booking.deleteList);
 			//时间控件
@@ -403,7 +403,7 @@ define(function(require, exports) {
 				'<td><input name="salePrice" value="" type="text" class="col-sm-12"/></td>'+
 				'<td><input name="sumCostMoney" value="" readonly="readonly" type="text" class="col-sm-12"/></td>'+
 				'<td><input name="sumNeedGetMoney" value="" readonly="readonly" type="text" class="col-sm-12"/></td>'+
-				'<td><button class="btn btn-xs btn-danger btn-ticket-booking-delete"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></td></tr>';
+				'<td><a class="cursor btn-ticket-booking-delete">删除</a></td></tr>';
 			event.data.$this.find("tbody.ticketBookingList").append(html);
 			event.data.$this.find(".bookingTicketList .btn-ticket-booking-delete").off().on("click",{cateName : "ticket", _this : event.data.$this},booking.deleteList);
 			//时间控件
@@ -413,7 +413,6 @@ define(function(require, exports) {
 	    	
 	    	//票务验证
 			var validatorTicket= rule.checkBookingTicket($(".ticketBookingList"));
-
 	    	//计算
 	    	event.data.$this.find("[name=roomCount],[name=costPrice],[name=salePrice],[name=days]").blur(function(){
 		    	booking.calculation(event.data.$this);
@@ -431,7 +430,7 @@ define(function(require, exports) {
 			'<td><input name="salePrice" value="" type="text" class="col-sm-12"/></td>'+
 			'<td><input name="sumCostMoney" value="" readonly="readonly" type="text" class="col-sm-12"/></td>'+
 			'<td><input name="sumNeedGetMoney" value="" readonly="readonly" type="text" class="col-sm-12"/></td>'+
-			'<td><button class="btn btn-xs btn-danger btn-bus-booking-delete"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></td></tr>';
+			'<td><a class="cursor btn-bus-booking-delete">删除</a></td></tr>';
 			event.data.$this.find("tbody.busBookingList").append(html);
 			event.data.$this.find(".bookingBusList .btn-bus-booking-delete").off().on("click",{cateName : "bus", _this : event.data.$this},booking.deleteList);
 			//时间控件
@@ -510,6 +509,7 @@ define(function(require, exports) {
 				})
 			}
 		},
+
 		datepicker :function(){
 			$(".datepicker").datepicker({
 				autoclose: true,

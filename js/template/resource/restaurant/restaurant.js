@@ -31,38 +31,38 @@ define(function(require, exports) {
 						data.restaurantList = restaurantList;
 						var html = listTemplate(data);
 						addTab(menuKey,"餐厅管理",html);
-						
+
 						$("#"+tabId+" .restaurantList .btn-restaurant-edit").click(function(){
 							var id = $(this).attr("data-entity-id");
 							restaurant.updateRestaurant(id,data.pageNo);
 						});
-						
+
 						$("#"+tabId+" .restaurantList .btn-restaurant-delete").click(function(){
 							var id = $(this).attr("data-entity-id");
 							restaurant.deleteRestaurant(id,data.pageNo);
 						});
-						
-						
+
+
 						$("#"+tabId+" .restaurantList .btn-restaurant-view").click(function(){
 							var id = $(this).attr("data-entity-id");
 							restaurant.viewRestaurant(id);
 						});
-						
-						
+
+
 						$("#"+tabId+" .btn-restaurant-add").click(function(){
 							restaurant.addRestaurant();
 						});
-						
+
 						//搜索栏状态button下拉事件
 						$("#"+tabId+" .search-area .btn-status .dropdown-menu a").click(function(){
 							$(this).parent().parent().parent().find("button").attr("data-value",$(this).attr("data-value"));
 							$(this).parent().parent().parent().find("span").text($(this).text());
-							
+
 							restaurant.searchData={
 									name : $("#"+tabId+" .search-area input[name=restaurant_name]").val(),
 									status:$("#"+tabId+" .search-area .btn-status").find("button").attr("data-value")
 							}
-							
+
 							restaurant.listRestaurant(0,restaurant.searchData.name,restaurant.searchData.status);
 						});
 						//搜索按钮事件
@@ -97,7 +97,7 @@ define(function(require, exports) {
 						$("#"+tabId+" .pageMode a.last").click(function(){
 							restaurant.listRestaurant(data.totalPage == 0 ? data.totalPage : data.totalPage-1,restaurant.searchData.name,restaurant.searchData.status);
 						});
-														
+
 					}
 				}
 			});
@@ -125,10 +125,10 @@ define(function(require, exports) {
 			    			$(this).parent().parent().find(".payPeriod").addClass("hide");
 			    		}
 			    	});
-			    	
+
 			    	//初始化省数据
 			    	restaurant.getProvinceList($obj.find("select[name=provinceId]"));
-			    	
+
 			    	//给省份select绑定事件
 			    	$obj.find("select[name=provinceId]").change(function(){
 			    		var provinceId = $(this).val();
@@ -140,7 +140,7 @@ define(function(require, exports) {
 			    		}
 			    		$obj.find("select[name=districtId]").html("<option value=''>未选择</option>");
 			    	});
-			    	
+
 			    	//给城市select绑定事件
 			    	$obj.find("select[name=cityId]").change(function(){
 			    		var cityId = $(this).val();
@@ -151,7 +151,7 @@ define(function(require, exports) {
 			    			$obj.find("select[name=districtId]").html("<option value=''>未选择</option>");
 			    		}
 			    	});
-			    	
+
 			    	//给餐标列表新增按钮绑定事件
 			    	$obj.find(".btn-restaurant-standard-add").click(function(){
 			    		var html = "<tr>" +
@@ -171,14 +171,14 @@ define(function(require, exports) {
 				    			$(this).remove();
 				    		});
 				    	});
-				    	
+
 			    		$obj.find(".restaurantStandardList .datepicker").datepicker({
 							autoclose: true,
 							todayHighlight: true,
 							format: 'yyyy-mm-dd',
 							language: 'zh-CN'
 						});
-				    	
+
 				    	// button按钮动态添加时限区间
 			    		$obj.find(".restaurantStandardList .timeArea button.add").unbind().click(function(){
 							var td = $(this).parent().parent().parent();
@@ -205,22 +205,22 @@ define(function(require, exports) {
 								});
 							});
 						});
-				    	
+
 			    	});
-			    	
+
 			    	//给提交按钮绑定事件 mealValidator validator
 			    	$obj.find(".btn-submit-restaurant").click(function(){
 			    		if(!validator.form()){return}
 			    		if(mealValidator !=undefined){
 			    			if(!mealValidator.form()){return}
 			    		}
-			    		
+
 			    		var status = 0;
 						if($obj.find(".restaurant-status").is(":checked") == true){
 							status = 1;
 						}
 			    		var form = $obj.serialize()+"&status="+status+"";
-			    		
+
 			    		var $this = $(this),
 			    		restaurantStandardJsonAdd = [];
 			    		var priceJsonTr = $obj.find(".restaurantStandardList tbody tr");
@@ -236,7 +236,7 @@ define(function(require, exports) {
 				    		priceJsonAddTr.each(function(i){
 				    			var divIndex = priceJsonAddTr.eq(i).attr("data-index");
 				    			var	priceJson = {
-			    					divIndex : divIndex,	
+			    					divIndex : divIndex,
 			    					startTime : priceJsonAddTr.eq(i).find("input[name=startTime]").val(),
 			    					endTime : priceJsonAddTr.eq(i).find("input[name=endTime]").val(),
 			    					contractPrice : priceJsonAddTr.eq(i).parent().next().find(".div-" + divIndex + "").find("input[name=contractPrice]").val()
@@ -245,7 +245,7 @@ define(function(require, exports) {
 				    		});
 				    		restaurantStandardJsonAdd.push(restaurantJson);
 			    		})
-			    		
+
 			    		/*var restaurantStandardJsonAdd = "[";
 			    		var restaurantStandardListLength = $obj.find(".restaurantStandardList tbody tr").length;
 			    		$obj.find(".restaurantStandardList tbody tr").each(function(i){
@@ -268,7 +268,7 @@ define(function(require, exports) {
 			    			});
 			    			priceJsonAdd += "]";
 							console.log(priceJsonAdd);
-							
+
 			    			if(i == (restaurantStandardListLength-1)){
 			    				var restaurantStandardJson = "{\"type\":\""+type+"\",\"typeName\":\""+typeName+"\",\"priceJsonAdd\":\""+encodeURIComponent(priceJsonAdd)+"\",\"menuList\":\""+menuList+"\",\"remark\":\""+remark+"\"}";
 			    			}
@@ -299,7 +299,7 @@ define(function(require, exports) {
 							}
 						});
 			    	});
-			    	
+
 			    	$obj.find(".btn-restaurant-standard-add").click();
 			    }
 			});
@@ -320,7 +320,7 @@ define(function(require, exports) {
 						var restaurantInfo = JSON.parse(data.restaurant);
 						data.restaurant = restaurantInfo;
 						var html = updateTemplate(data);
-						
+
 						var updateRestaurantLayer = layer.open({
 						    type: 1,
 						    title:"修改餐厅",
@@ -341,7 +341,7 @@ define(function(require, exports) {
 						    			$(this).parent().parent().find(".payPeriod").addClass("hide");
 						    		}
 						    	});
-						    	
+
 						    	//给省份select绑定事件
 						    	$obj.find("select[name=provinceId]").change(function(){
 						    		var provinceId = $(this).val();
@@ -353,7 +353,7 @@ define(function(require, exports) {
 						    		}
 						    		$obj.find("select[name=districtId]").html("<option value=''>未选择</option>");
 						    	});
-						    	
+
 						    	//给城市select绑定事件
 						    	$obj.find("select[name=cityId]").change(function(){
 						    		var cityId = $(this).val();
@@ -387,7 +387,7 @@ define(function(require, exports) {
 									format: 'yyyy-mm-dd',
 									language: 'zh-CN'
 								});
-						    	
+
 						    	// 修改时修改原来的standard，
 						    	$obj.find(".restaurantStandardList .timeArea button.add").click(function(){
 						    		var td = $(this).parent().parent().parent();
@@ -422,7 +422,7 @@ define(function(require, exports) {
 										});
 									});
 						    	});
-						    	
+
 						    	// 修改时删除原来的standard，
 						    	$obj.find(".restaurantStandardList .timeArea button.delete").click(function(){
 									var div = $(this).parent().parent();
@@ -442,7 +442,7 @@ define(function(require, exports) {
 										$(this).remove();
 									});
 								});
-						    	
+
 						    	$obj.find(".restaurantStandardList .btn-restaurant-standard-delete").click(function(){
 						    		var tr = $(this).parent().parent();
 						    		var standardId = tr.attr("data-entity-id");
@@ -453,7 +453,7 @@ define(function(require, exports) {
 										});
 						    		}
 								});
-						    	
+
 						    	//给餐标列表新增按钮绑定事件
 						    	$obj.find(".btn-restaurant-standard-add").click(function(){
 						    		var html = "<tr>" +
@@ -465,22 +465,22 @@ define(function(require, exports) {
 				    				"<td><input name=\"remark\" type=\"text\"/></td>" +
 				    				"<td style=\"width:70px\"><a data-entity-id=\"\" class=\" btn-restaurant-standard-delete\">删除</a></td>" +
 				    				"</tr>";
-						    		
+
 //						    		var selLength = $(".restaurantStandardList select[name=type]").length;
 //						    		if (selLength >= 3) {
 //										html = "";
 //									}
-						    		
+
 						    		$obj.find(".restaurantStandardList tbody").append(html);
 						    		mealValidator = rule.checkMeal($(".updateRestaurantContainer .restaurantStandardList"));
-						    		
+
 //						    		var selArr = $(".restaurantStandardList select[name=type]");
 //						    		for (var i = 0; i < selArr.length-1; i++) {
 //						    			$(selArr[i]).attr("disabled","true");
 //						    			var selected = $(selArr[i]).val();
 //						    			$($(".restaurantStandardList select[name=type]")[selArr.length-1]).find("option[value="+selected+"]").remove();
 //									}
-						    		
+
 						    		//给餐标列表删除按钮绑定事件
 						    		$obj.find(".restaurantStandardList tbody .btn-restaurant-standard-delete").click(function(){
 							    		var restaurantStandardId = $(this).attr("data-entity-id");
@@ -490,14 +490,14 @@ define(function(require, exports) {
 								    		});
 							    		}
 							    	});
-							    	
+
 						    		$obj.find(".restaurantStandardList .datepicker").datepicker({
 										autoclose: true,
 										todayHighlight: true,
 										format: 'yyyy-mm-dd',
 										language: 'zh-CN'
 									});
-							    	
+
 							    	// button按钮动态修改包车时限区间
 						    		$obj.find(".restaurantStandardList .timeArea button.add").unbind().click(function(){
 										var td = $(this).parent().parent().parent();
@@ -532,7 +532,7 @@ define(function(require, exports) {
 											});
 										});
 									});
-									
+
 						    		$obj.find(".restaurantStandardList .btn-restaurant-standard-delete").click(function(){
 										var tr = $(this).parent().parent();
 							    		var standardId = tr.attr("data-entity-id");
@@ -542,9 +542,9 @@ define(function(require, exports) {
 											});
 							    		}
 									});
-							    	
+
 						    	});
-						    	
+
 						    	//删除餐标
 						    	//给餐标列表删除按钮绑定事件
 						    	$obj.find(".restaurantStandardList tbody .btn-restaurant-standard-delete").click(function(){
@@ -557,8 +557,8 @@ define(function(require, exports) {
 							    		});
 						    		}
 						    	});
-						    	
-						    	
+
+
 						    	//提交表单
 						    	$obj.find(".btn-submit-restaurant").click(function(){
 						    		if(!validator.form()){return}
@@ -569,10 +569,10 @@ define(function(require, exports) {
 									if($(".restaurantMainForm .restaurant-status").is(":checked") == true){
 										status = 1;
 									}
-									
+
 						    		var form = $obj.serialize()+"&status="+status+"";
 						    		console.log(form);
-						    		
+
 						    		var restaurantStandardJsonAdd = [];
 						    		var restaurantStandardJsonAddTr =$obj.find(".restaurantStandardList tbody tr:not(.deleted)");
 						    		restaurantStandardJsonAddTr.each(function(i){
@@ -615,8 +615,8 @@ define(function(require, exports) {
 						    			});
 						    			restaurantStandardJsonAdd.push(restaurantStandardJson);
 						    		});
-						    		
-						    		
+
+
 						    		var restaurantStandardJsonDel = [];
 						    		restaurantStandardJsonDelTr = $obj.find(".restaurantStandardList tbody tr.deleted");
 						    		restaurantStandardJsonDelTr.each(function(i){
@@ -629,7 +629,7 @@ define(function(require, exports) {
 						    			}
 						    		});
 						    		console.log(restaurantStandardJsonDel);
-						    		
+
 						    		/*var restaurantStandardJsonAdd = "[";
 						    		var restaurantStandardListLength = $obj.find(".restaurantStandardList tbody tr:not(.deleted)").length;
 						    		$obj.find(".restaurantStandardList tbody tr:not(.deleted)").each(function(i){
@@ -642,7 +642,7 @@ define(function(require, exports) {
 						    			// 打包修改后的新添加和修改过的数据
 						    			var priceJsonAdd = "[";
 						    			var priceJsonDel = "[";
-						    			
+
 						    			var priceUpdateLength = $(this).find("td.time div:not(.deleted)").length;
 						    			$(this).find("td.time div:not(.deleted)").each(function(i){
 											var divIndex = $(this).attr("data-index");
@@ -667,7 +667,7 @@ define(function(require, exports) {
 											}
 											priceJsonAdd += priceAdd;
 										});
-										
+
 										var priceDeleteLength = $(this).find("td.time div.deleted").length;
 										$(this).find("td.time div.deleted").each(function(i){
 											var divIndex = $(this).attr("data-index");
@@ -683,10 +683,10 @@ define(function(require, exports) {
 											}
 											priceJsonDel += priceDel;
 										});
-						    			
+
 										priceJsonAdd += "]";
 										priceJsonDel += "]";
-										
+
 						    			if(i == (restaurantStandardListLength-1)){
 						    				if(id != null && id != "")
 						    					var restaurantStandardJson = "{\"id\":\""+id+"\",\"type\":\""+type+"\",\"typeName\":\""+typeName+"\",\"priceJsonAdd\":\""+encodeURIComponent(priceJsonAdd)+"\",\"priceJsonDel\":\""+encodeURIComponent(priceJsonDel)+"\",\"menuList\":\""+menuList+"\",\"remark\":\""+remark+"\"}";
@@ -702,13 +702,13 @@ define(function(require, exports) {
 						    			restaurantStandardJsonAdd += restaurantStandardJson;
 						    		});
 						    		restaurantStandardJsonAdd += "]";
-						    		
+
 						    		var restaurantStandardJsonDel = "[";
 						    		var restaurantStandardListLength = $obj.find(".restaurantStandardList tbody tr.deleted").length;
 						    		$obj.find(".restaurantStandardList tbody tr.deleted").each(function(i){
 						    			var restaurantStandardJson = "";
 						    			var id = $(this).attr("data-entity-id");
-						    			
+
 						    			// 删除bus关联的price表的数据
 										var priceJsonDel = "[";
 										var priceLength = $(this).find("td.time div").length;
@@ -724,7 +724,7 @@ define(function(require, exports) {
 											priceJsonDel += priceJson;
 										});
 										priceJsonDel += "]";
-						    			
+
 						    			if(i == (restaurantStandardListLength-1)){
 						    				var restaurantStandardJson = "{\"id\":\""+id+"\",\"priceJsonDel\":\""+encodeURIComponent(priceJsonDel)+"\"}";
 						    			}
@@ -733,7 +733,7 @@ define(function(require, exports) {
 						    			}
 						    			restaurantStandardJsonDel += restaurantStandardJson;*/
 						    		/*restaurantStandardJsonDel += "]";
-						    		
+
 						    		console.info(restaurantStandardJsonAdd);
 						    		console.info(restaurantStandardJsonDel);*/
 						    		restaurantStandardJsonAdd = JSON.stringify(restaurantStandardJsonAdd);
@@ -743,7 +743,7 @@ define(function(require, exports) {
 						    		console.log(restaurantStandardJsonDel);
 						    		$.ajax({
 										url:""+APP_ROOT+"back/restaurant.do?method=updateRestaurant&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
-										type:"POST",														
+										type:"POST",
 										data:form+"&restaurantStandardJsonAdd="+encodeURIComponent(restaurantStandardJsonAdd)+"&restaurantStandardJsonDel="+encodeURIComponent(restaurantStandardJsonDel),
 										dataType:"json",
 										beforeSend:function(){
@@ -788,7 +788,7 @@ define(function(require, exports) {
 					    zIndex:1028,
 					    content: html,
 					    success:function(){
-					    	
+
 					    }
 					});
 				}
@@ -801,7 +801,7 @@ define(function(require, exports) {
 				title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
 				title_html: true,
 				draggable:false,
-				buttons: [ 
+				buttons: [
 					{
 						text: "取消",
 						"class" : "btn btn-minier",
@@ -902,7 +902,7 @@ define(function(require, exports) {
 								} else {
 									html += "<option value='"+districtList[i].id+"'>"+districtList[i].name+"</option>";
 								}
-								
+
 							}
 						}
 						$(obj).html(html);

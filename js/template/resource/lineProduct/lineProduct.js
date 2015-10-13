@@ -7,7 +7,7 @@ define(function(require, exports) {
 	var addQouteTemplate = require("./view/addQoute");
 	var updateLineProductTemplate = require("./view/updateLineProduct")
 	var tabId = "tab-"+menuKey+"-content";
-	
+
 	var lineProduct = {
 		searchData : {},
 		listLineProduct:function(page,name,status){
@@ -30,7 +30,7 @@ define(function(require, exports) {
 						data.lineProductList = lineProductList;
 						var html = listTemplate(data);
 						addTab(menuKey,"线路产品管理",html);
-//						
+//
 //						$("#"+tabId+" .lineProductList .btn-lineProduct-edit").click(function(){
 //							var id = $(this).attr("data-lineProduct-id");
 //							lineProduct.updateLineProduct(id);
@@ -39,12 +39,11 @@ define(function(require, exports) {
 //							var id = $(this).attr("data-lineProduct-id");
 //							lineProduct.deleteLineProduct(this,id);
 //						});
-//						
 						$("#"+tabId+" .btn-lineProduct-quote").click(function(){
 							var id = $(this).attr("data-entiy-id");
 							lineProduct.addQoute(id);
 						});
-						
+
 						$("#"+tabId+" .btn-lineProduct-add").click(function(){
 							lineProduct.addLineProduct();
 						});
@@ -96,7 +95,7 @@ define(function(require, exports) {
 							if(data.pageNo == data.totalPage-1 || data.totalPage == 0)return;
 							lineProduct.listLineProduct(data.totalPage-1,lineProduct.searchData.name,lineProduct.searchData.status);
 						});
-						
+
 						$("#"+tabId+" .lineProductList .btn-lineProduct-view").on("click", lineProduct.viewLineProductDetail);//查看
 						$("#"+tabId+" .lineProductList .btn-lineProduct-edit").on("click", function(){
 							var id = $(this).attr("data-entiy-id");
@@ -134,7 +133,7 @@ define(function(require, exports) {
 						var cityId = $(this).val();
 						lineProduct.getDistrictList($(".add-lineProduct-form select[name=districtId]"),cityId);
 					});
-					
+
 					$(".add-lineProduct-form select[name=payType]").change(function(){
 						var payType = $(this).val();
 						if(payType == 1){
@@ -144,7 +143,7 @@ define(function(require, exports) {
 							$(this).parent().find(".payPeriod").addClass("hide");
 						}
 					});
-					
+
 					$(".add-lineProduct-form .btn-bus-add").click(function(){
 						var html = "<tr><td><input  name=\"licenseNumber\" type=\"text\" /></td><td><input name=\"brand\" type=\"text\" /></td><td><input name=\"seatCount\" type=\"text\" value=\"1\"/></td><td class=\"col-sm-1\"><div class=\"input-group col-sm-12\"><input name=\"buyTime\" type=\"text\" class=\"date-picker\" /><span class=\"input-group-addon\"><i class=\"fa fa-calendar\"></i></span></div></td><td><select name=\"isChartered\"><option value=\"1\">是</option><option value=\"0\" selected=\"selected\">否</option></select></td><td><input name=\"charteredStartTime\" type=\"text\" readonly=\"readonly\" class=\"date-picker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"charteredEndTime\" type=\"text\" readonly=\"readonly\" class=\"date-picker\" style=\"width:100px\"/></td><td><input name=\"charteredPrice\" type=\"text\" readonly=\"readonly\"/><label>&nbsp;元</label></td><td><input name=\"remark\" type=\"text\"/></td><td style=\"width:70px\"><button class=\"btn btn-xs btn-danger btn-bus-delete\"><i class=\"ace-icon fa fa-trash-o bigger-120\"></i></button></td></tr>";
 						$(".add-lineProduct-form .busList tbody").append(html);
@@ -162,7 +161,7 @@ define(function(require, exports) {
 							language: 'zh-CN'
 						});
 					});
-					
+
 					$(".add-lineProduct-form .btn-driver-add").click(function(){
 						var html = "<tr><td><input name=\"driverName\" type=\"text\" /></td><td><select name=\"gender\"><option value=\"0\">男</option><option value=\"1\">女</option></select></td><td><input name=\"mobileNumber\" type=\"text\" /></td><td><input name=\"driveYears\" type=\"text\" value=\"1\"/></td><td><input name=\"licenseId\" type=\"text\" /></td><td><select name=\"status\"><option value=\"1\">启用</option><option value=\"0\">停用</option></select></td><td><input name=\"remark\" type=\"text\" /></td><td style=\"width:70px\"><button data-entiy-id=\"\" class=\"btn btn-xs btn-danger btn-driver-delete\"><i class=\"ace-icon fa fa-trash-o bigger-120\"></i></button></td></tr>";
 						$(".add-lineProduct-form .driverList tbody").append(html);
@@ -179,10 +178,10 @@ define(function(require, exports) {
 							}
 						});
 					});
-					
+
 					$(".add-lineProduct-form .btn-bus-add").click();
 					$(".add-lineProduct-form .btn-driver-add").click();
-					
+
 					$(".add-lineProduct-form .btn-submit-lineProduct").click(function(){
 						var status = 0;
 						if($(".add-lineProduct-form .lineProduct-status").is(":checked") == true){
@@ -293,7 +292,7 @@ define(function(require, exports) {
 								insuranceTemplate : insuranceTemplate,
 								daysList : daysList
 						};
-						
+
 						//data.viewLineProduct.guideTemplate.guide = data.viewLineProduct.guideTemplate.guide || {};
 						//data.viewLineProduct.insuranceTemplate.insurance = data.viewLineProduct.insuranceTemplate.insurance || {};
 						//data.viewLineProduct.busCompanyTemplate.busCompany = data.viewLineProduct.busCompanyTemplate.busCompany || {};
@@ -308,12 +307,12 @@ define(function(require, exports) {
 						var tab = "tab-resource_lineProduct-update-content";
 						// 初始化并绑定表单验证
 			    		var validator = rule.lineProductCheckor($('.updateLineProductContainer'));
-				    	
+
 			    		for(var i=0;i<lineProductDetail.days;i++){
 							var ue = init_editor("detailEditor-update-lineProduct-"+i+"");
 						}
-			    		
-				    	
+
+
 				    	var updateList =$("#"+tab+" .updateLineProductDaysListContainer .updateLineProductDaysList");
 				    	if(updateList.length > 0){
 				    		for(var k=0; k<updateList.length; k++){
@@ -328,14 +327,14 @@ define(function(require, exports) {
 						                b = parseInt(/data-entity-index=\"(\d+)/.exec(b)[1], 10);
 						                return a-b;
 						            });
-						    		
+
 						    		updateDays.html(arr.join(""));
 						    	}
 				    		}
 				    		var daysDetailList = $("#"+tab+" .updateLineProductDaysDetail");
 				    		lineProduct.updateLineProductIndex = parseInt(daysDetailList.eq(daysDetailList.length-1).attr("data-entity-index")) + 1;
 				    	}
-				    	
+
 				    	//添加具体行程安排相应事件
 				    	$("#"+tab+" .updateLineProductDaysList .addRestaurant").bind("click", validator, lineProduct.addRestaurant);//餐饮
 				    	$("#"+tab+" .updateLineProductDaysList .addResourceHotel").bind("click", validator, lineProduct.addResourceHotel);//酒店
@@ -343,26 +342,26 @@ define(function(require, exports) {
 				    	$("#"+tab+" .updateLineProductDaysList .addResourceShopping").bind("click", validator, lineProduct.addResourceShopping);//购物
 				    	$("#"+tab+" .updateLineProductDaysList .addResourceSelfPaying").bind("click", validator, lineProduct.addResourceSelfPaying);//自费
 				    	$("#"+tab+" .updateLineProductDaysList .addResourceTraffic").bind("click", validator, lineProduct.addResourceTraffic);//交通
-						
+
 						lineProduct.bindRestaurantEvent($("#"+tab+" .viewUpdateRestaurantList .chooseRestaurantName"), $("#"+tab+" .viewUpdateRestaurantList .restaurantStandardsName"));
 						lineProduct.bindHotelEvent($("#"+tab+" .viewUpdateHotelList .chooseHotelName"), $("#"+tab+" .viewUpdateHotelList .chooseHotelRoom"), $("#"+tab+" .viewUpdateHotelList .resourceHotelStar"));
 						lineProduct.bindScenicEvent($("#"+tab+" .viewUpdateScenicList .chooseScenicName"));
 						lineProduct.bindShopEvent($("#"+tab+" .viewUpdateShopList .chooseVendorName"));
 						lineProduct.bindSelfPay($("#"+tab+" .viewUpdateSelfPayList .chooseCompanyName"));
 						lineProduct.bindTicketEvent($("#"+tab+" .viewUpdateTicketList .chooseTicketName"));
-						
+
 						$("#"+tab+" .updateLineProductContainer .submitInfoLineProduct").on("click", function(){
 							lineProduct.submitInfoLineProduct(tab,clipboardMode, validator);
 						})//绑定提交事件
-						
-						
+
+
 						$("#"+tab+" .viewUpdateRestaurantList .deleteScheduleList").off().on("click", lineProduct.deleteLineProductDaysArrange);
 						$("#"+tab+" .viewUpdateHotelList .deleteResourceHotelList").off().on("click", lineProduct.deleteLineProductDaysArrange);
 						$("#"+tab+" .viewUpdateScenicList .deleteResourceScenicList").off().on("click", lineProduct.deleteLineProductDaysArrange);
 						$("#"+tab+" .viewUpdateShopList .deleteResourceShopList").off().on("click", lineProduct.deleteLineProductDaysArrange);
 						$("#"+tab+" .viewUpdateSelfPayList .deleteResourceSelfPayList").off().on("click", lineProduct.deleteLineProductDaysArrange);
 						$("#"+tab+" .viewUpdateTicketList .deleteResourceTicketList").off().on("click", lineProduct.deleteLineProductDaysArrange);
-						
+
 						$("#"+tab+" .updateLineProductDaysDetailContainer").sortable({
 							containment: 'parent',
 							handle: ace.vars['touch'] ? '.table-bordered thead' : false,
@@ -454,8 +453,8 @@ define(function(require, exports) {
 			                    }
 			                });
 						});
-						
-						
+
+
 						$("#"+tab+" .updateInsuranceList .chooseInsurance").autocomplete({
 							minLength:0,
 							change:function(event,ui){
@@ -517,7 +516,7 @@ define(function(require, exports) {
 			                    }
 			                });
 						});
-						
+
 						var chooseBusLicenseNumber;
 						$("#"+tab+" .updateBusCompanyList .chooseBusCompany").autocomplete({
 							minLength:0,
@@ -537,28 +536,28 @@ define(function(require, exports) {
 							},
 							select:function(event,ui){
 								$(this).blur();
-								
+
 								$(this).parent().parent().find("input[name=busCompanyId]").val(ui.item.id).trigger('change');
 								$(this).parent().parent().find("input[name=licenseNumber]").val("");
 								$(this).parent().parent().find("input[name=seatPrice]").val("");
 								$(this).parent().parent().find("input[name=seatCount]").val("");
 								$(this).parent().parent().find("input[name=charteredPrice]").val("");
 								$(this).parent().parent().find("input[name=mobileNumber]").val("");
-								
+
 								// 更新表单验证的配置
 								validator = rule.lineProductUpdate(validator);
 
 								var obj = this, mobileNumber = "";
-								
+
 								if(chooseBusLicenseNumber){
 									$(".updateBusCompanyList .chooseBusLicenseNumber").autocomplete( "destroy");
 								}
-								
+
 								//给车辆绑定autocomplete事件
 								chooseBusLicenseNumber = $(".updateBusCompanyList .chooseBusLicenseNumber").autocomplete({
 									minLength:0,
 									select:function(event,ui){
-										
+
 										//获得busId，到后台查询bus相应信息
 										//var mobileNumber = data.mobileNumber;
 										//$(obj).parent().parent().find("input[name=mobileNumber]").val(mobileNumber);
@@ -580,7 +579,7 @@ define(function(require, exports) {
 												}
 						                    }
 						                 });
-										
+
 									},
 									change:function(event,ui){
 										if(ui.item == null){
@@ -613,18 +612,18 @@ define(function(require, exports) {
 														busList[i].value = busList[i].licenseNumber;
 													}
 												}
-												
-												
+
+
 												$(objBus).autocomplete('option','source', busList);
 												$(objBus).autocomplete('search', '');
 											}
 					                    }
 					                 });
 								});
-								
-								
-								
-								
+
+
+
+
 							}
 						}).click(function(){
 							var obj = this;
@@ -653,7 +652,7 @@ define(function(require, exports) {
 					}
 				}
 			});
-			
+
 
 		},
 		deleteLineProductDaysArrange : function(){
@@ -663,7 +662,7 @@ define(function(require, exports) {
 				title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
 				title_html: true,
 				draggable:false,
-				buttons: [ 
+				buttons: [
 					{
 						text: "取消",
 						"class" : "btn btn-minier",
@@ -676,10 +675,10 @@ define(function(require, exports) {
 						"class" : "btn btn-primary btn-minier",
 						click: function() {
 							$( this ).dialog( "close" );
-							var id = $(obj).attr("data-entity-id"), objParents = $(obj).parents(".updateLineProductDaysDetail"), 
+							var id = $(obj).attr("data-entity-id"), objParents = $(obj).parents(".updateLineProductDaysDetail"),
 							    name = $(obj).attr("data-entity-name"),
 							    templateJsonDel = {name:name, id:id};
-							
+
 							$.ajax({
 								url:""+APP_ROOT+"back/lineProduct.do?method=deleteLineProductArrangeTemplate&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=delete",
 								type:"POST",
@@ -691,7 +690,7 @@ define(function(require, exports) {
 								success:function(data){
 									layer.close(globalLoadingLayer);
 									var result = showDialog(data);
-									if(result){										
+									if(result){
 										objParents.remove();
 									}
 								}
@@ -713,7 +712,7 @@ define(function(require, exports) {
 				title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
 				title_html: true,
 				draggable:false,
-				buttons: [ 
+				buttons: [
 					{
 						text: "取消",
 						"class" : "btn btn-minier",
@@ -812,9 +811,9 @@ define(function(require, exports) {
 			}
 		},
 		viewLineProductDetail : function(){
-			
+
 			var id = $(this).attr("data-entiy-id");
-			
+
 			$.ajax({
 	    		url:""+APP_ROOT+"back/lineProduct.do?method=getLineProductById&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 				type:"POST",
@@ -841,7 +840,7 @@ define(function(require, exports) {
 								insuranceTemplate : insuranceTemplate,
 								daysList : daysList
 						};
-						
+
 						var html = viewDetailTemplate(data);
 						addTab(menuKey+"-view","查看线路产品",html);
 				    	var tab = "tab-resource_lineProduct-view-content",
@@ -864,7 +863,7 @@ define(function(require, exports) {
 						    	}
 				    		}
 				    	}
-				    	
+
 				    	var date = new Date();
 						var d = date.getDate();
 						var m = date.getMonth();
@@ -947,12 +946,12 @@ define(function(require, exports) {
 							}
 						});
 					}
-					
+
 				}
 	    	})
-			
+
 		},
-		
+
 		addRestaurant:function(e){
 			//添加行程安排餐饮
 			var scheduleDetails = '<div class="timeline-item clearfix updateRestaurantList updateLineProductDaysDetail scheduleList ui-sortable-handle" data-entity-index='+lineProduct.updateLineProductIndex+'><div class="timeline-info"><i class="timeline-indicator ace-icon fa fa-cutlery btn btn-success no-hover"></i><span class="label label-info label-sm">餐饮</span></div>'+
@@ -976,8 +975,8 @@ define(function(require, exports) {
 				lineProduct.updateRouteIndex();
 			}
 			$(".updateRestaurantList .deleteScheduleList").off().on("click", deleteScheduleList);
-			
-			
+
+
 			$(".updateRestaurantList .restauranType").on("change", function(){
 				var typeParent = $(this).parent().parent();
 				typeParent.find("input[name=typeName]").val("");
@@ -985,11 +984,11 @@ define(function(require, exports) {
 				typeParent.find("input[name=pricePerPerson]").val("");
 				typeParent.find("input[name=remark]").val("");
 			});
-			
+
 			lineProduct.bindRestaurantEvent($(".updateRestaurantList .chooseRestaurantName"), $(".updateRestaurantList .restaurantStandardsName"), e.data);
-			
-			
-			
+
+
+
 		},
 		bindRestaurantEvent : function( obj, typeObj, validator) {
 			//绑定选择餐厅名称事件
@@ -1016,7 +1015,7 @@ define(function(require, exports) {
 					objParent.find("input[name=typeName]").val("");
 					objParent.find("input[name=menuList]").val("");
 					objParent.find("input[name=pricePerPerson]").val("");
-					
+
 					$.ajax({
 						url:""+APP_ROOT+"back/restaurant.do?method=findRestaurantById&token="+$.cookie("token")+"&menuKey=resource_restaurant&operation=view",
 	                    dataType: "json",
@@ -1056,7 +1055,7 @@ define(function(require, exports) {
                     }
                 });
 			});
-			
+
 			//为餐标名称绑定事件
 			typeObj.autocomplete({
 				minLength:0,
@@ -1082,7 +1081,7 @@ define(function(require, exports) {
 							var result = showDialog(data);
 							if(result){
 								var restaurantStandard = JSON.parse(data.restaurantStandard);
-								
+
 								objParent.find("input[name=menuList]").val(restaurantStandard.menuList);
 								objParent.find("input[name=pricePerPerson]").val(restaurantStandard.contractPrice);
 								objParent.find("input[name=remark]").val(restaurantStandard.remark);
@@ -1120,8 +1119,8 @@ define(function(require, exports) {
                     }
 				});
 			});
-			
-			
+
+
 		},
 		//添加酒店
 		addResourceHotel:function(e){
@@ -1147,7 +1146,7 @@ define(function(require, exports) {
 				lineProduct.updateRouteIndex();
 			}
 			$(".updateHotelList .deleteResourceHotelList").off().on("click", deleteResourceHotelList);
-			
+
 			//绑定选择酒店名称事件
 			lineProduct.bindHotelEvent($(".updateHotelList .chooseHotelName"), $(".updateHotelList .chooseHotelRoom"), $(".updateHotelList .resourceHotelStar"), e.data)
 		},
@@ -1169,11 +1168,11 @@ define(function(require, exports) {
 				select:function(event,ui){
 					var obj=this, hotelDataId = ui.item.id,
 					    objParent = $(obj).parent().parent();
-					objParent.find("input[name=hotelId]").val(hotelDataId).trigger('change');	
-					objParent.find("input[name=hotelRoom]").val("");					
+					objParent.find("input[name=hotelId]").val(hotelDataId).trigger('change');
+					objParent.find("input[name=hotelRoom]").val("");
 					objParent.find("input[name=contractPrice]").val("");
 					objParent.find("input[name=containBreakfast]").val("");
-					
+
 					$.ajax({
 						url:""+APP_ROOT+"back/hotel.do?method=getHotelById&token="+$.cookie("token")+"&menuKey=resource_hotel&operation=view",
 	                    dataType: "json",
@@ -1190,7 +1189,7 @@ define(function(require, exports) {
 							}
 	                    }
 					});
-					
+
 				},
 				change:function(event, ui){
 					if(ui.item == null){
@@ -1237,8 +1236,8 @@ define(function(require, exports) {
                     }
                 });
 			});
-			
-			
+
+
 			typeObj.autocomplete({
 				minLength:0,
 				select:function(event, ui){
@@ -1307,8 +1306,8 @@ define(function(require, exports) {
                     }
                 });
 			});
-			
-			
+
+
 		},
 		//添加景区
 		addResourceScenic:function(e){
@@ -1331,7 +1330,7 @@ define(function(require, exports) {
 				lineProduct.updateRouteIndex();
 			}
 			$(".updateScenicList .deleteResourceScenicList").off().on("click", deleteResourceScenicList);
-			
+
 			//绑定选择景区名称事件
 			lineProduct.bindScenicEvent($(".updateScenicList .chooseScenicName"), e.data);
 		},
@@ -1345,7 +1344,7 @@ define(function(require, exports) {
 					objParent.find("input[name=scenicId]").val(scenicNameId).trigger('change');
 					// 更新表单验证的配置
 					validator = rule.lineProductUpdate(validator);
-					
+
 					$.ajax({
 						url:""+APP_ROOT+"back/scenic.do?method=getScenicById&token="+$.cookie("token")+"&menuKey=resource_scenic&operation=view",
 	                    dataType: "json",
@@ -1399,7 +1398,7 @@ define(function(require, exports) {
                     }
                 });
 			});
-			
+
 			var objParent = $(obj).parent().parent();
 			objParent.find(".chooseChargingProjects").autocomplete({
 				minLength:0,
@@ -1407,7 +1406,7 @@ define(function(require, exports) {
 					var nameUiId = nameUi.item.id, _this = this;
 					var thisParent = $(_this).parent().parent();
 					thisParent.find("input[name=chargingId]").val(nameUiId).trigger('change');
-					
+
 					$.ajax({
 						url:""+APP_ROOT+"back/scenic.do?method=findItemDetailById&token="+$.cookie("token")+"&menuKey=resource_scenic&operation=view",
 	                    dataType: "json",
@@ -1435,7 +1434,7 @@ define(function(require, exports) {
 				}
 			}).unbind("click").click(function(){
 				var scenicObj = this;
-				
+
 				if($(scenicObj).parent().parent().find(".chooseScenicName").val() == ""){
 					layer.tips('请先选景区名称。', scenicObj, {
 					    tips: [1, '#3595CC'],
@@ -1469,8 +1468,8 @@ define(function(require, exports) {
                     }
                 });
 			});
-			
-			
+
+
 		},
 		//添加购物
 		addResourceShopping:function(e){
@@ -1494,7 +1493,7 @@ define(function(require, exports) {
 				lineProduct.updateRouteIndex();
 			}
 			$(".updateShoppingList .deleteResourceShopList").off().on("click", deleteResourceShopList);
-			
+
 			//绑定选择商家名称事件
 			lineProduct.bindShopEvent($(".updateShoppingList .chooseVendorName"), e.data);
 		},
@@ -1527,7 +1526,7 @@ define(function(require, exports) {
 							}
 	                    }
 	                });
-					
+
 				},
 				change:function(event, ui){
 					if(ui.item == null){
@@ -1572,8 +1571,8 @@ define(function(require, exports) {
                     }
                 });
 			});
-			
-			
+
+
 			var objParent = $(obj).parent().parent();
 			objParent.find(".chooseGoodsPolicy").autocomplete({
 				minLength:0,
@@ -1611,7 +1610,7 @@ define(function(require, exports) {
 				}
 			}).unbind("click").click(function(){
 				var shopObj = this;
-				
+
 				if($(shopObj).parent().parent().find(".chooseScenicName").val() == ""){
 					layer.tips('请先选商家名称。', shopObj, {
 					    tips: [1, '#3595CC'],
@@ -1645,10 +1644,10 @@ define(function(require, exports) {
                     }
                 });
 			});
-			
-			
+
+
 		},
-		
+
 		//添加自费
 		addResourceSelfPaying:function(e){
 			//添加行程安排自费
@@ -1671,12 +1670,12 @@ define(function(require, exports) {
 				lineProduct.updateRouteIndex();
 			}
 			$(".updateSelfPayList .deleteResourceSelfPayList").off().on("click", deleteResourceSelfPayList);
-			
+
 			//绑定选择自费名称事件
 			lineProduct.bindSelfPay($(".updateSelfPayList .chooseCompanyName"), e.data);
-			
+
 		},
-		
+
 		bindSelfPay : function(obj, validator){
 			obj.autocomplete({
 				minLength:0,
@@ -1691,7 +1690,7 @@ define(function(require, exports) {
 							var result = showDialog(data);
 							if(result){
 								var selfpay = JSON.parse(data.selfpay) || {};
-								
+
 								var thisParent = $(_this).parent().parent();
 								thisParent.find("input[name=companyId]").val(ui.item.id).trigger('change');
 								thisParent.find("input[name=mobileNumber]").val(selfpay.mobileNumber);
@@ -1701,7 +1700,7 @@ define(function(require, exports) {
 								validator = rule.lineProductUpdate(validator);
 								//var SelfPayRebateList=JSON.parse(data.SelfPayRebateList);
 								//thisParent.find("input[name=contractPrice]").val(SelfPayRebateList.price);
-								
+
 							}
 	                    }
 	                });
@@ -1729,7 +1728,7 @@ define(function(require, exports) {
 						var result = showDialog(data);
 						if(result){
 							var selfPayList = JSON.parse(data.selfPayList);
-	
+
 							if(selfPayList && selfPayList.length > 0){
 								for(var i=0; i < selfPayList.length; i++){
 									selfPayList[i].value = selfPayList[i].name;
@@ -1746,8 +1745,8 @@ define(function(require, exports) {
 					}
 				})
 			});
-			
-			
+
+
 			var objItem = $(obj).parent().parent().find(".chooseItemName");
 			objItem.autocomplete({
 				minLength:0,
@@ -1761,13 +1760,13 @@ define(function(require, exports) {
 	                    	layer.close(globalLoadingLayer);
 							var result = showDialog(data);
 							if(result){
-								
-								var selfPayRebate = JSON.parse(data.selfPayRebate); 
+
+								var selfPayRebate = JSON.parse(data.selfPayRebate);
 								console.info(selfPayRebate);
     							var thisParent = $(_this).parent().parent();
 								thisParent.find("input[name=selfPayItemId]").val(ui.item.id).trigger('change');
 								thisParent.find("input[name=contractPrice]").val(selfPayRebate.price);
-								
+
 							}
 	                    }
 	                });
@@ -1795,11 +1794,11 @@ define(function(require, exports) {
 						layer.close(globalLoadingLayer);
 						var result = showDialog(data);
 						if(result){
-							var selfPayItemList = JSON.parse(data.selfPayItemList); 
-	
+							var selfPayItemList = JSON.parse(data.selfPayItemList);
+
 							if(selfPayItemList && selfPayItemList.length > 0){
 								for(var i=0; i < selfPayItemList.length; i++){
-									
+
 									selfPayItemList[i].value = selfPayItemList[i].name;
 								}
 								$(obj).autocomplete('option','source', selfPayItemList);
@@ -1814,8 +1813,8 @@ define(function(require, exports) {
 					}
 				})
 			});
-			
-			
+
+
 		},
 		//添加交通
 		addResourceTraffic:function(e){
@@ -1840,7 +1839,7 @@ define(function(require, exports) {
 				lineProduct.updateRouteIndex();
 			}
 			$(".updateTicketList .deleteResourceTicketList").off().on("click", deleteResourceShopList);
-			
+
 			//绑定选择自费名称事件
 			lineProduct.bindTicketEvent($(".updateTicketList .chooseTicketName"), e.data);
 		},
@@ -1927,8 +1926,8 @@ define(function(require, exports) {
 				return objValue;
 			}
 			function trim(str)
-	         { 
-	             return str.replace(/(^\s*)|(\s*$)/g, ""); 
+	         {
+	             return str.replace(/(^\s*)|(\s*$)/g, "");
 	         }
 			var name = getValue($form.eq(0), "name");
 			if(trim(name) == ""){
@@ -1968,9 +1967,9 @@ define(function(require, exports) {
 					}],
 					lineDayList : []
 			}
-			
+
 			var dayList = $form.find(".updateLineProductDaysList");
-			
+
 			for(var i=0; i<dayList.length; i++){
 				travelLineData.lineDayList[i] = {
 						detailEditor : UE.getEditor("detailEditor-update-lineProduct-"+i+"").getContent(),
@@ -2048,7 +2047,7 @@ define(function(require, exports) {
 								}
 							travelLineData.lineDayList[i].scenic.push(scenicJson);
 						}
-						
+
 					}
 				}
 				//获取购物
@@ -2089,7 +2088,7 @@ define(function(require, exports) {
 								}
 							travelLineData.lineDayList[i].selfPay.push(selfPayJson);
 						}
-						
+
 					}
 				}
 				//获取交通
@@ -2109,8 +2108,8 @@ define(function(require, exports) {
 							travelLineData.lineDayList[i].ticket.push(ticketJson);
 						}
 					}
-				} 
-				
+				}
+
 			}
 			var lineDataJson = JSON.stringify(travelLineData);
 			var id = getValue($form.eq(0), "lineProductId");
@@ -2120,7 +2119,7 @@ define(function(require, exports) {
 				url = ""+APP_ROOT+"back/lineProduct.do?method=addLineProduct&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=add";
 				submitData = "LineProductJsonAdd="+encodeURIComponent(lineDataJson);
 			}
-			
+
 			$.ajax({
     			url:url,
 				type:"POST",
@@ -2167,7 +2166,7 @@ define(function(require, exports) {
 					if(result){
 						var html = addQouteTemplate(data);
 						addTab(menuKey+"-qoute","新增产品报价",html);
-						
+
 						var date = new Date();
 						var d = date.getDate();
 						var m = date.getMonth();
@@ -2223,10 +2222,10 @@ define(function(require, exports) {
 								alert(start);
 							}
 						});
-						
+
 						$('#tab-'+menuKey+'-qoute-content .addQouteMainForm .btn-offer').click(function(){
 							var dataClass = $(this).attr("data-class");
-							var isChooseCurrent = $(this).parent().parent().find(".offer-list:not(.hide)").hasClass(dataClass); 
+							var isChooseCurrent = $(this).parent().parent().find(".offer-list:not(.hide)").hasClass(dataClass);
 							$(this).parent().parent().find(".offer-list").addClass("hide");
 							$(this).parent().parent().find(".offer-list").css("width","0px");
 							$(this).parent().parent().find(".offer-list").css("left","0px");
