@@ -1,17 +1,13 @@
 <div class="updateTransfer clearfix">
 		<div  class="col-xs-12 clearfix">
 			<form class="form-horizontal clearfix" role="form" style="margin-top:10px" onsubmit="return false">
-				<div class="widget-box ui-sortable-handle">
-						<div class="widget-header">
-							<h5 class="widget-title">
-								<i class="ace-icon fa fa-building"></i>
-								修改小组信息
+				<div class=" ui-sortable-handle">
+							<h5 class="">
+								<span class="badge badge-primary">1</span>
+								<label class="middle title-size">修改小组信息</label>
 							</h5>
-						</div>
-					
-				
 						<div class="widget-body">
-							<div class="widget-body">     
+							<div class="widget-body">
 								<div class="widget-main">				
 									<input type="hidden" name="status" value="{{touristGroupTransfer.touristGroup.status}}"/>
 								    <input type="hidden" name="touristGroupTransferId" value="{{touristGroupTransfer.id}}">
@@ -71,11 +67,11 @@
 									<table class="table table-striped table-bordered table-hover addTransferCostTable">
 										<thead>
 											<tr>   
-												<th>类型</th>
-												<th>说明</th>
-												<th>数量</th>
-												<th>转客单价</th>
-												<th>操作</th>
+												<th class="th-border">类型</th>
+												<th class="th-border">说明</th>
+												<th class="th-border">数量</th>
+												<th class="th-border">转客单价</th>
+												<th class="th-border">操作</th>
 											</tr>
 										</thead>
 									  <tbody class="addTransferCost">        
@@ -109,7 +105,11 @@
 														<td><input type="text" name="discribe" value="{{transferFee1.discribe}}"  class="col-sm-12"/></td>
 														<td><input type="text" name="count" value="{{transferFee1.count}}"  class="col-sm-12 count"/></td>	
 														<td><input type="text" name="otherPrice" value="{{transferFee1.otherPrice}}"  class="col-sm-12 price"/></td>
-														<td><button class="btn btn-xs btn-danger  btn-edittransferId-delete"><i class="ace-icon fa fa-trash-o bigger-120"></i></button> </td>
+														<td>
+															<a class="cursor  btn-edittransferId-delete">
+																删除
+															</a>
+														</td>
 												  </tr>
 												  {{/if}}  
 											  {{/each}}	
@@ -126,13 +126,11 @@
 
 	 <div  class="col-xs-12">    
 		<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
-			<div class="widget-box ui-sortable-handle">
-					<div class="widget-header">
-							<h5 class="widget-title">
-								<i class="ace-icon fa fa-building"></i>
-								线路产品信息
-							</h5>
-					</div>
+			<div class=" ui-sortable-handle">
+					<h5 class="">
+						<span class="badge badge-primary">2</span>
+						<label class="middle title-size">线路产品信息</label>
+					</h5>
 					<div class="widget-body clearfix">
 					 <div class="widget-main">
 						<div class="form-group col-sm-12">
@@ -187,27 +185,7 @@
 								 <input name="remark" value="{{touristGroupTransfer.touristGroup.remark}}" type="text" class="col-xs-12" readonly="readonly" />
 							  </div>
 						   </div>
-						</div>       
-						
-<!-- 						<div class="form-group col-sm-12">       -->
-<!-- 						   <div class="search-area">	   -->
-<!-- 							  <label class="col-sm-1 control-label no-padding-right">应收：</label> -->
-<!-- 							  <div class="col-sm-2"> -->
-<!-- 								 <input name="needPayAllMoney" value="{{touristGroupTransfer.touristGroup.needPayAllMoney}}" readonly="readonly" type="text" class="col-xs-12"/> -->
-<!-- 							  </div> -->
-							  
-<!-- 							 <label class="col-sm-1 control-label no-padding-right">已收：</label> -->
-<!-- 							  <div class="col-sm-2"> -->
-<!-- 								 <input name="payedMoney" value="{{touristGroupTransfer.touristGroup.payedMoney}}" readonly="readonly" type="text" class="col-xs-12"/> -->
-<!-- 							  </div> -->
-							  
-<!-- 							   <label class="col-sm-1 control-label no-padding-right">现收：</label> -->
-<!-- 							  <div class="col-sm-2"> -->
-<!-- 								 <input name="currentNeedPayMoney" value="{{touristGroupTransfer.touristGroup.currentNeedPayMoney}}" readonly="readonly" type="text" class="col-xs-12"/> -->
-<!-- 							  </div> -->
-							  
-<!-- 						   </div> -->
-<!-- 						</div> -->
+						</div>
 					 </div>
 				  </div>
 			</div>
@@ -242,23 +220,20 @@
 	   	<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
 			<div class="form-group">
 				<div class="col-xs-12 col-sm-12 widget-container-col" style="margin-top:-15px">
-					<div class="widget-box ui-sortable-handle">
-						<div class="widget-header">
-							<h5 class="widget-title">
-								<i class="ace-icon fa fa-building"></i>
-								收客信息
+					<div class=" ui-sortable-handle">
+							<h5 class="">
+								<span class="badge badge-primary">4</span>
+								<label class="middle title-size">收客信息</label>
 							</h5>
-						</div>
-	
 						<div class="widget-body">
 							<div class="widget-main no-padding">
 								<table class="table table-striped table-bordered table-hover">
 									<thead>
 										<tr>
-											<th>类型</th>
-											<th>说明</th>
-											<th>数量</th>
-											<th>收客单价</th>
+											<th class="th-border">类型</th>
+											<th class="th-border">说明</th>
+											<th class="th-border">数量</th>
+											<th class="th-border">收客单价</th>
 										</tr>
 									</thead>
 								  <tbody>      
@@ -302,25 +277,22 @@
 		<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
 				<div class="form-group">
 					<div class="col-xs-12 col-sm-12 widget-container-col">
-						<div class="widget-box ui-sortable-handle">
-							<div class="widget-header">
-								<h5 class="widget-title">
-									<i class="ace-icon fa fa-building"></i>
-									游客小组信息
+						<div class=" ui-sortable-handle">
+								<h5 class="">
+									<span class="badge badge-primary">5</span>
+									<label class="middle title-size">游客小组信息</label>
 								</h5>
-							</div>
-		
 							<div class="widget-body">
 								<div class="widget-main no-padding">
 										<table class="table table-striped table-bordered table-hover">
 											<thead>
 												<tr>
-													<th>序号</th>
-													<th>姓名</th>
-													<th>联系电话</th>
-													<th>证件类型</th>
-													<th>证件号</th>
-													<th>联系人</th>
+													<th class="th-border">序号</th>
+													<th class="th-border">姓名</th>
+													<th class="th-border">联系电话</th>
+													<th class="th-border">证件类型</th>
+													<th class="th-border">证件号</th>
+													<th class="th-border">联系人</th>
 												</tr>
 											</thead>
 										  <tbody>    
@@ -343,15 +315,12 @@
 				</div>
 		</form>
 	</div>
-
-
-	<!-- 游客信息start -->	
-	<form class="form-horizontal" role="form" onsubmit="return false"> 
+	<form class="form-horizontal" role="form" onsubmit="return false">
 		<div class="form-group" style="text-align: center;">
-		    <button class="btn btn-danger btn-cancelTransfer"> 
+		    <button class="btn btn-sm btn-danger btn-cancelTransfer">
 				<i class="ace-icon fa fa-times"></i> 取消
 			</button> 
-			<button class="btn btn-primary btn-saveTransoutInfo"> 
+			<button class="btn btn-sm btn-primary btn-saveTransoutInfo" style="margin-left: 20px">
 			    <i class="ace-icon fa fa-check"></i> 保存 
 			</button> 
 		</div> 
