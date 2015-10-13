@@ -18,7 +18,7 @@ input{
     font-size:12px;
 }
 .nav-tabs>li>a{
-    padding: 2px 12px 8px;
+    padding: 7px 12px 8px;
 
 }
 
@@ -32,7 +32,7 @@ label{
     /*background: #dcdcdc;*/
 }
 .nav-tabs>li{
-    margin-top: 7px;
+    margin-top: 5px;
 }
 .nav-tabs{border-color:#dcdcdc }
 .block-up{
@@ -92,7 +92,7 @@ table tr th{
     height:38px;
     position: absolute;
     left:0;
-    top:-1px ;
+    top:0;
     cursor : pointer;
 }
 .nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus{border-top: 0;margin-top: 2px}
@@ -102,6 +102,7 @@ table tr th{
 .right_b{
     display: none;
 }
+.layui-layer-setwin .layui-layer-close1{width: 16px;height: 16px}
 .btn-right-nav{
     z-index:99;
     width:35px;
@@ -125,6 +126,7 @@ table tr th{
 .layui-layer-ico{
     background: url("../images/icon.png")!important;
 }
+
 
 /*导航点击样式active*/
 .liA{ background: #0d8f41; width: 85px; display: inline-block;  }
