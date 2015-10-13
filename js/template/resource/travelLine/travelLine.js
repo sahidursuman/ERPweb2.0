@@ -12,6 +12,7 @@ define(function(require, exports) {
 	var tabId = "tab-"+menuKey+"-content";
 	var addLineId = menuKey+"-addLine";
 	var lookID = menuKey+"-look";
+	var updateId = menuKey+"update";
 	var travelLine = {
 		pageData:{
 			pageNo:0
@@ -49,10 +50,7 @@ define(function(require, exports) {
 						//});
                            //新增线路+++++++
 						$("#"+tabId+"  .btn-travelLine-add").click(function(){
-							//alert();
 							travelLine.addTravelLine();
-							//var addTemplates = addTemplate(data);
-							//addTab(menuKey+"addLine","新增线路",addTemplates);
 						});
 
 						//修改线路button按钮事件
@@ -377,29 +375,24 @@ define(function(require, exports) {
 				type:"POST",
 				data:"id="+id+"",
 				dataType:"json",
-				beforeSend:function(){
-					globalLoadingLayer = openLoadingLayer();
-				},
+
 				success:function(data){
-					layer.close(globalLoadingLayer);
+
 					var result = showDialog(data);
 					if (result) {
 						var travelLineInfo = JSON.parse(data.travelLine);
 						data.travelLine = travelLineInfo;
 						data.clipboardMode = clipboardMode;
 						var html = updateTemplate(data);
+						addTab(updateId,"修改线路",html);
+
 						var title = "修改线路模板信息";
 						if(clipboardMode){
 							title = "新增线路模板信息";
 						}
-						var updateTravelLineLayer = layer.open({
-							 type: 1,
-						    title:title,
-						    skin: 'layui-layer-rim', //加上边框
-						    area: ['95%', '90%'], //宽高
-						    zIndex:1028,
-						    content: html,
-						    success:function(){
+
+
+
 						    	// 初始化并绑定表单验证
 						    	var validator = rule.traveLineCheckor($('.travelLineUpdateMainForm'));
 
@@ -412,7 +405,7 @@ define(function(require, exports) {
 						    			type:1,
 						    			title:"新增日程",
 						    			skin: 'layui-layer-rim', //加上边框
-						 			    area: ['80%', '60%'], //宽高
+						 			    area: ['50%', '40%'], //宽高
 						 			    zIndex:1029,
 									    content: lineDayHtml,
 									    success:function(){
@@ -569,9 +562,9 @@ define(function(require, exports) {
 									
 						    	});
 						    }
-						});
+
 					}
-				}
+
 			});
 		},
 		scanLineProductDay:function(id){
