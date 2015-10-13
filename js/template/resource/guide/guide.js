@@ -110,7 +110,7 @@ define(function(require, exports) {
 			    type: 1,
 			    title:"新增导游",
 			    skin: 'layui-layer-rim', //加上边框
-			    area: ['650px', '430px'], //宽高
+			    area: ['690px', '430px'], //宽高
 			    zIndex:1028,
 			    content: html,
 			    success:function(){
@@ -175,7 +175,7 @@ define(function(require, exports) {
 						    type: 1,
 						    title:"修改导游",
 						    skin: 'layui-layer-rim', //加上边框
-						    area: ['650px', '430px'], //宽高
+						    area: ['690px', '430px'], //宽高
 						    zIndex:1028,
 						    content: html,
 						    success:function(){
@@ -288,7 +288,7 @@ define(function(require, exports) {
 						    type: 1,
 						    title:"查看导游",
 						    skin: 'layui-layer-rim', //加上边框
-						    area: ['650px', '430px'], //宽高
+						    area: ['690px', '430px'], //宽高
 						    zIndex:1028,
 						    content: html
 						});
