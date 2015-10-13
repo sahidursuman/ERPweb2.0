@@ -81,6 +81,23 @@ define(function(require, exports) {
 			transit.partnerAgencyChoose(tab);
 			//安排人下拉搜索			    	
 			transit.arrangeUserChoose(tab);
+			//搜索栏状态button下拉事件
+			$("#"+tab+" .search-area .btn-status .dropdown-menu a").click(function(){
+				$(this).parent().parent().parent().find("button").attr("data-value",$(this).attr("data-value"));
+				$(this).parent().parent().parent().find("span").text($(this).text());
+				transit.searchData = {
+					fromPartnerAgencyId : $("#"+tab+" input[name=partnerAgencyId]").val(),
+					lineProductId : $("#"+tab+" input[name=lineProductId]").val(),
+					startTime : $("#"+tab+" input[name=startTime]").val(),
+					arrangeUserId :$("#"+tab+" input[name=arrangeUserId]").val(),
+					arrangeStartTime : $("#"+tab+" input[name=arrangeStartTime]").val(),
+					arrangeEndTime : $("#"+tab+" input[name=arrangeEndTime]").val(),
+					status : $("#"+tab+" .btn-status").find("button").attr("data-value"),
+					shuttleType :$("#"+tab+" select[name=shuttleType]").val(),
+					shuttleTime :$("#"+tab+" input[name=shuttleTime]").val()
+				}
+				transit.listTransit(0,transit.searchData.fromPartnerAgencyId,transit.searchData.lineProductId,transit.searchData.startTime,transit.searchData.arrangeUserId,transit.searchData.arrangeStartTime,transit.searchData.arrangeEndTime,transit.searchData.status,transit.searchData.shuttleType,transit.searchData.shuttleTime)
+			});
 			
 			//筛选事件绑定
 			$("#"+tab+" .btn-touristGroupList-search").click(function(){
@@ -91,7 +108,7 @@ define(function(require, exports) {
 					arrangeUserId :$("#"+tab+" input[name=arrangeUserId]").val(),
 					arrangeStartTime : $("#"+tab+" input[name=arrangeStartTime]").val(),
 					arrangeEndTime : $("#"+tab+" input[name=arrangeEndTime]").val(),
-					status : $("#"+tab+" select[name=status]").val(),
+					status : $("#"+tab+" .btn-status").find("button").attr("data-value"),
 					shuttleType :$("#"+tab+" select[name=shuttleType]").val(),
 					shuttleTime :$("#"+tab+" input[name=shuttleTime]").val()
 				}

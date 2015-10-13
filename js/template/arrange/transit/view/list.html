@@ -27,13 +27,32 @@
 				</div>
 			</div>
 			<div class="col-xs-3" style="padding-left:0px;">
-				<label class="col-xs-4 text-right control-label no-padding-right">状态:</label>
-				<div class="col-xs-8">
-					<select name="status" class="col-sm-12">
-						<option selected="selected" value="">全部</option>
-						<option {{if searchParam.status != null}}{{if searchParam.status == "0"}}selected="selected"{{/if}}{{/if}} value='0'>未安排</option>
-						<option {{if searchParam.status != null}}{{if searchParam.status == "1"}}selected="selected"{{/if}}{{/if}} value='1'>已安排</option>
-					</select>
+				<label class="col-xs-4 text-right control-label no-padding-right">状态:</label>				
+				<div class="btn-group btn-status" style="margin-left: 20px">
+					<button data-value="{{searchParam.status}}" data-toggle="dropdown" class=" btn-sm dropdown-toggle block-up" aria-expanded="false">
+						<span>
+						   {{if searchParam.status == ""}}
+								全部
+							{{else if searchParam.status == 1}}
+								已安排
+							{{else}}
+								未安排
+							{{/if}}
+						</span>
+						<i class="ace-icon fa fa-angle-down icon-on-right"></i>
+					</button>
+					<ul class="dropdown-menu">
+						<li>
+							<a data-value="" href="javascript:void(0)">全部</a>
+						</li>
+						<li>
+							<a data-value="1" href="javascript:void(0)">已安排</a>
+						</li>
+
+						<li>
+							<a data-value="0" href="javascript:void(0)">未安排</a>
+						</li>
+					</ul>
 				</div>
 			</div>
 		</div>
