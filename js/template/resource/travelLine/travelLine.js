@@ -325,7 +325,7 @@ define(function(require, exports) {
 										type: 1,
 										title:"日程安排",
 										skin: 'layui-layer-rim', //加上边框
-										area: ['60%', '80%'], //宽高
+										area: ['65%', '60%'], //宽高
 										zIndex:1030,
 										content: lineDayhtml,
 										success:function(){
