@@ -263,31 +263,7 @@ define(function(require, exports) {
 			var html = addTripPlanTemplate();
 			
 			
-			var validatorCreateTripPlan;    
-			//判断页面是否存在
-//			if($("#" +"tab-"+checkTable+"-content").length > 0){  
-//				 if(tripPlan.edited){
-//						addTab(menuKey+"-addTripPlan","新增计划");
-//						showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
-//						 validatorCreateTripPlan = rule.checkdCreateTripPlan($('.newAddTripPlanMain'));  
-//						 if (!validatorCreateTripPlan.form()) { return; }
-//						 //tripPlan.saveAddTripPlan("addTripPlanMain",1,"","addTripPlanTouristTbody",validatorCreateTripPlan);
-//						 tripPlan.edited = false;
-//						 addTab(menuKey+"-add","新增计划",html);
-//						 validator = rule.checkdCreateTripPlan($('.newAddTripPlanMain'));   
-//					 },function(){
-//						 addTab(menuKey+"-add","新增计划",html);
-//						 validatorCreateTripPlan = rule.checkdCreateTripPlan($('.newAddTripPlanMain'));        
-//					 });
-//					 }else{
-//				    	addTab(menuKey+"-add","新增计划",html);
-//				    	validatorCreateTripPlan = rule.checkdCreateTripPlan($('.newAddTripPlanMain'));
-//					 }
-//			}else{  
-//				addTab(menuKey+"-add","新增计划",html);
-//				validatorCreateTripPlan=rule.checkdCreateTripPlan($(".newAddTripPlanMain"));
-//			}    
-					
+			var validatorCreateTripPlan;
 			addTab(menuKey+"-add","新增计划",html);	      	  
 			var validatorCreateTripPlan=rule.checkdCreateTripPlan($(".newAddTripPlanMain"));
 			var tab = "tab-arrange_plan-add-content";
@@ -430,7 +406,7 @@ define(function(require, exports) {
 						data.driver =JSON.parse(data.driver);
 						data.busCompant =JSON.parse(data.busCompant);
 						data.bus =JSON.parse(data.bus);
-						var html = updateTemplate(data);
+						var html =updateTemplate (data);
 						addTab(menuKey+"-update","编辑发团计划",html);
 						var tab = "tab-arrange_plan-update-content";
 						
@@ -583,7 +559,7 @@ define(function(require, exports) {
 				    			type: 1,
 							    title:"选择路线",
 							    skin: 'layui-layer-rim', //加上边框
-							    area: ['85%', '80%'], //宽高
+							    area: ['70%', '75%'], //宽高
 							    zIndex:1029,
 							    content: html,
 							    success: function(data) {
@@ -984,7 +960,7 @@ define(function(require, exports) {
 							    type: 1,
 							    title:"添加游客小组",
 							    skin: 'layui-layer-rim', //加上边框
-							    area: ['95%', '90%'], //宽高
+							    area: ['60%', '50%'], //宽高
 							    zIndex:1028,
 							    content: html,
 							    success:function(){
@@ -1044,12 +1020,12 @@ define(function(require, exports) {
 													"<td>"+addGroupIdJson[i].remark+"</td>"+
 													"<td>"+
 													"<div class=\"hidden-sm hidden-xs btn-group\">"+
-													"<button data-entity-id=\""+addGroupIdJson[i].id+"\" class=\"btn btn-xs btn-success touristGroupView\">"+
-														"<i class=\"ace-icon fa fa-search-plus bigger-120\"></i>"+
-													"</button>"+
-													"<button data-entity-id=\""+addGroupIdJson[i].id+"\" class=\"btn btn-xs btn-danger touristGroupDelete\">"+
-														"<i class=\"ace-icon fa fa-trash-o bigger-120\"></i>"+
-													"</button>"+
+													"<a data-entity-id=\""+addGroupIdJson[i].id+"\" class=\"cursor touristGroupView\">"+
+														"查看"+
+													"</a>"+"<a class='cursor'> |</a>"+
+													"<a data-entity-id=\""+addGroupIdJson[i].id+"\" class=\"cursor touristGroupDelete\">"+
+														"删除"+
+													"</a>"+
 													"</div>"+
 													"</td>"+
 												"</tr>";
@@ -1110,7 +1086,7 @@ define(function(require, exports) {
 						    type: 1,
 						    title:"查看小组信息",
 						    skin: 'layui-layer-rim', //加上边框
-						    area: ['80%', '90%'], //宽高
+						    area: ['60%', '50%'], //宽高
 						    zIndex:1028,
 						    content: html,
 						    success:function(data){
