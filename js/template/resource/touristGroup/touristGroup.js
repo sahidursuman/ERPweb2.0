@@ -105,6 +105,22 @@ define(function(require, exports) {
 				touristGroup.getPartnerAgencySearchList($(".touristGroupSearchForm select[name=partnerAgencyId]"),data.searchParam.fromPartnerAgencyId);
 				touristGroup.getCreatorUserList($(".touristGroupSearchForm select[name=userId]"),data.searchParam.creator);
 			}
+			
+			//搜索栏状态button下拉事件
+			$("#tab-resource_touristGroup-content .search-area .btn-status .dropdown-menu a").click(function(){
+				$(this).parent().parent().parent().find("button").attr("data-value",$(this).attr("data-value"));
+				$(this).parent().parent().parent().find("span").text($(this).text());
+				touristGroup.searchData = {					
+					partnerAgencyId : $(".touristGroupSearchForm select[name=partnerAgencyId]").find("option:selected").val(),
+					lineProductId : $(".touristGroupSearchForm select[name=lineProductId]").find("option:selected").val(),
+					startTime : $(".touristGroupSearchForm input[name=startTime]").val(),
+					userId : $(".touristGroupSearchForm select[name=userId]").find("option:selected").val(),
+					createTimeStart : $(".touristGroupSearchForm input[name=createTimeStart]").val(),
+					createTimeEnd : $(".touristGroupSearchForm input[name=createTimeEnd]").val(),
+					status : $(".touristGroupSearchForm .btn-status").find("button").attr("data-value")
+				}
+				touristGroup.listTouristGroup(0,touristGroup.searchData.partnerAgencyId,touristGroup.searchData.lineProductId,touristGroup.searchData.startTime,touristGroup.searchData.userId,touristGroup.searchData.createTimeStart,touristGroup.searchData.createTimeEnd,touristGroup.searchData.status);
+			});
 			//筛选事件绑定
 			$(".touristGroupSearchForm .btn-touristGroupList-search").click(function(){
 				touristGroup.searchData = {
@@ -114,7 +130,7 @@ define(function(require, exports) {
 					userId : $(".touristGroupSearchForm select[name=userId]").find("option:selected").val(),
 					createTimeStart : $(".touristGroupSearchForm input[name=createTimeStart]").val(),
 					createTimeEnd : $(".touristGroupSearchForm input[name=createTimeEnd]").val(),
-					status : $(".touristGroupSearchForm select[name=status]").find("option:selected").val()
+					status : $(".touristGroupSearchForm .btn-status").find("button").attr("data-value")
 				}
 				touristGroup.listTouristGroup(0,touristGroup.searchData.partnerAgencyId,touristGroup.searchData.lineProductId,touristGroup.searchData.startTime,touristGroup.searchData.userId,touristGroup.searchData.createTimeStart,touristGroup.searchData.createTimeEnd,touristGroup.searchData.status);
 			});
