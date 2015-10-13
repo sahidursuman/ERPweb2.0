@@ -84,8 +84,8 @@
 							</td> 
 							<td>{{checking.unPayedMoney}}</td>
 							<td><a href="#" class="hotelImg" url="{{checking.billImages}}">查看</a></td>
-							<td><input type="text" name="FinancialHotelRealUnPayedMoney" value="{{checking.realUnPayedMoney}}" style="text-align:center" {{if checking.isConfirmAccount == 1 && roleType != 1 }} disabled = "true" {{/if}}></td>
-	                        <td><input type="text" name="FinancialHotelRemark" value="{{checking.remark}}" style="text-align:center" {{if checking.isConfirmAccount == 1 && roleType != 1 }} disabled = "true" {{/if}}></td>
+							<td><input type="text" maxlength="10" name="FinancialHotelRealUnPayedMoney" value="{{checking.realUnPayedMoney}}" style="text-align:center" {{if checking.isConfirmAccount == 1 && roleType != 1 }} disabled = "true" {{/if}}></td>
+	                        <td><input type="text" maxlength="1000" name="FinancialHotelRemark" value="{{checking.remark}}" style="text-align:center" {{if checking.isConfirmAccount == 1 && roleType != 1 }} disabled = "true" {{/if}}></td>
 							<td>{{if checking.checkTime == null || checking.checkTime == ""}}-{{else}}{{checking.checkTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
 	                        <td>{{checking.checkUserRealName}}</td>
 							<td>
