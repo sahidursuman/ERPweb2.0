@@ -240,10 +240,12 @@ define(function(require, exports) {
 				            		 }
 				            		 transit.submitUpdateTransit($(".arrangeTouristMain .btn-updateArrange").attr("data-entity-id"),0);
 									 transit.edited["update"] = "";
-				            		 addTab(menuKey+"-update","编辑中转安排",html);			
+				            		 addTab(menuKey+"-update","编辑中转安排",html);	
+									 transit.initUpdate(id,data);									 
 				            		 validator = rule.setTranistCheckor($(".arrangeTouristMain"));
 				            	},function(){
-				            		addTab(menuKey+"-update","编辑中转安排",html);;	
+				            		addTab(menuKey+"-update","编辑中转安排",html);
+									transit.initUpdate(id,data);									
 									validator = rule.setTranistCheckor($(".arrangeTouristMain"));								
 									transit.edited["update"] = "";
 				            	}); 							
@@ -254,7 +256,7 @@ define(function(require, exports) {
                  	    }else{
                  	    	addTab(menuKey+"-update","编辑中转安排",html);				
                  	    	validator = rule.setTranistCheckor($(".arrangeTouristMain"));
-                 	    };	
+                 	    }
 						
 						transit.initUpdate(id,data);
 		        	}
