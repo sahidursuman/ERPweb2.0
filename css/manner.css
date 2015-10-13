@@ -126,6 +126,12 @@ table tr th{
 .layui-layer-ico{
     background: url("../images/icon.png")!important;
 }
+table tr td{
+    font-size: 12px!important;
+}
+.th-border{
+    border: 1px solid #ececec!important;
+}
 
 
 /*导航点击样式active*/
