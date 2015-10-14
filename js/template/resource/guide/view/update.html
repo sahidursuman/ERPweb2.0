@@ -1,9 +1,9 @@
-<div class="col-xs-12 updateGuideContainer"> 
+<div class="col-xs-12 updateGuideContainer guideAdd">
 	<form class="form-horizontal guideMainForm" role="form" style="margin-top:10px" onsubmit="return false">
-		<div class="form-group">
+		<div class="form-group guideInterval">
 			<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>姓名:</label>
 			<div class="col-sm-3">
-				<input type="text" name="realname" class="col-sm-12" value={{guide.realname}} maxlength="32"/>
+				<input type="text" name="realname" class="col-sm-12" value={{guide.realname}}  maxlength="32"/>
 			</div>
 			<label class="col-sm-2 control-label no-padding-right">性别:</label>
 			<div class="col-sm-3">
@@ -13,28 +13,28 @@
 				</select>
 			</div>
 		</div>
-		<div class="form-group">
+		<div class="form-group guideInterval"> 
 			<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>电话:</label>
 			<div class="col-sm-3">
-				<input type="text" name="mobileNumber" class="col-sm-12" value="{{guide.mobileNumber}}" maxlength="11"/>
+				<input type="text" name="mobileNumber" class="col-sm-12" value="{{guide.mobileNumber}}"  maxlength="11" />
 			</div>
 			<label class="col-sm-2 control-label no-padding-right">所属公司:</label>
 			<div class="col-sm-3">
-				<input type="text" name="company" class="col-sm-12" value="{{guide.company}}" maxlength="200"/>
+				<input type="text" name="company" class="col-sm-12" value="{{guide.company}}" maxlength="200" />
 			</div>
-		</div>  
-		<div class="form-group">
+		</div>
+		<div class="form-group guideInterval">
 			<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>导游证编号:</label>
 			<div class="col-sm-3">
-				<input type="text" name="guideCardNumber" class="col-sm-12" value="{{guide.guideCardNumber}}" maxlength="32"/>
+				<input type="text" name="guideCardNumber" class="col-sm-12" value="{{guide.guideCardNumber}}" maxlength="32" />
 			</div>
 			<label class="col-sm-2 control-label no-padding-right">身份证:</label>
 			<div class="col-sm-3">
-				<input type="text" name="idCardNumber" class="col-sm-12" value="{{guide.idCardNumber}}" maxlength="18"/>
+				<input type="text" name="idCardNumber" class="col-sm-12" value="{{guide.idCardNumber}}" maxlength="11" />  
 			</div>
 		</div>
-		<div class="form-group">
-			<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>等级:</label>
+		<div class="form-group guideInterval">
+			<label class="col-sm-2 control-label no-padding-right">等级:</label>
 			<div class="col-sm-3">
 				<select name="guideLevel" class="col-sm-12">
 					<option value="1" {{if guide.guideLevel == 1}}selected="selected"{{/if}}>初级导游</option>
@@ -58,7 +58,7 @@
 				</select>
 			</div>
 		</div>
-		<div class="form-group">
+		<div class="form-group guideInterval">
 			<label class="col-sm-2 control-label no-padding-right">加入时间:</label>
 			<div class="col-sm-3">
 				<div class="input-group">
@@ -78,14 +78,14 @@
 				</label>
 			</div>
 		</div>
-		<div class="form-group">
+		<div class="form-group guideInterval">
 			<label class="col-sm-2 control-label no-padding-right">简介:</label>
 			<div class="col-sm-8">
 				<textarea class="form-control" name="remark" class="col-sm-12">{{guide.remark}}</textarea>
 			</div>
 		</div>
 		<div class="space-10"></div>
-		<button class="btn btn-block btn-primary btn-submit-guide">
+		<button class="btn btn-block btn-primary btn-submit-guide guideSubmit">
 			<i class="ace-icon fa fa-check"></i>
 			提交信息
 		</button>

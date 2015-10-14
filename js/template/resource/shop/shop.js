@@ -129,7 +129,7 @@ define(function(require, exports) {
 			    type: 1,
 			    title:"新增商家",
 			    skin: 'layui-layer-rim', //加上边框
-			    area: ['95%', '90%'], //宽高
+			    area: ['1190px', '700px'], //宽高
 			    zIndex:1028,
 			    content: html,
 			    success:function(){
@@ -169,7 +169,7 @@ define(function(require, exports) {
 			    		var html = '<tr ><td><input name=\"name\" class="col-sm-12" type=\"text\" maxlength=\"100\" /></td>';
 			    		html += '<td><select name="customerType" class="col-sm-12"><option value="0" selected="selected">散客</option><option value="1">团体</option></select></td>';
 			    		html += "<td><button data-entity-id=\"\" class=\"btn btn-xs btn-success btn-shop-rate-add\"><i class=\"ace-icon fa fa-recorder bigger-240\"></i>添加政策</button><input hidden-index=\""+(index+1)+"\" type=\"hidden\" name=\"policyInput\"></td>";
-			    		html += '<td><input name="remark" class="col-sm-12" type="text" maxlength=\"1000\"/></td>';
+			    		html += '<td><input name="remark" class="col-sm-12" type="text" maxlength=\"1000\" /></td>'; 
 			    		html += '<td style="width:70px"><a data-entity-id="" class=" btn-shop-standard-delete">删除</a></td>';
 			    		html += "</tr>";
 			    		$(".shopStandardList tbody").append(html);
@@ -297,7 +297,7 @@ define(function(require, exports) {
 						    type: 1,
 						    title:"修改商家",
 						    skin: 'layui-layer-rim', //加上边框
-						    area: ['95%', '90%'], //宽高
+						    area: ['1190px', '700px'], //宽高
 						    zIndex:1028,
 						    content: html,
 						    success:function(){
@@ -625,7 +625,7 @@ define(function(require, exports) {
 						    type: 1,
 						    title:"查看商家信息",
 						    skin: 'layui-layer-rim', //加上边框
-						    area: ['95%', '90%'], //宽高
+						    area: ['1024px', '600px'], //宽高
 						    zIndex:1028,
 						    content: html,
 						    success:function(){
@@ -710,10 +710,10 @@ define(function(require, exports) {
     		var td = obj.parent().parent().parent();
 			var index = td.find("div").length;
 			var timeLimitDiv = "<div data-index=\""+(index+1)+"\" data-entity-id=\"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right\"><button class=\"btn btn-danger btn-sm btn-white delete\"><i class=\"ace-icon fa fa-minus bigger-110 icon-only\"></i></button></label></div>";
-			var guideRateInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"guideRate\" type=\"text\" maxlength=\"5\"/></div>";
-			var travelAgencyRateInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"travelAgencyRate\" type=\"text\" maxlength=\"5\"/></div>";
-			var customerRebateMoneyInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"customerRebateMoney\" type=\"text\" maxlength=\"7\"/></div>";
-			var parkingRebateMoneyInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"parkingRebateMoney\" type=\"text\" maxlength=\"7\"/></div>";
+			var guideRateInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"guideRate\" type=\"text\"/></div>";
+			var travelAgencyRateInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"travelAgencyRate\" type=\"text\"/></div>";
+			var customerRebateMoneyInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"customerRebateMoney\" type=\"text\"/></div>";
+			var parkingRebateMoneyInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"parkingRebateMoney\" type=\"text\"/></div>";
 			td.append(timeLimitDiv);
 			td.next().append(guideRateInput);
 			td.next().next().append(travelAgencyRateInput);
@@ -787,7 +787,7 @@ define(function(require, exports) {
 				 type: 1,
 			    title:"新增购物政策",
 			    skin: 'layui-layer-rim', //加上边框
-			    area: ['85%', '80%'], //宽高
+			    area: ['1190px', '80%'], //宽高
 			    zIndex:1029,
 			    content: html,
 			    success:function(){
@@ -795,11 +795,11 @@ define(function(require, exports) {
 			    	var policyHtml = '<tr class="timeArea">'+
 			    	'<td data-index="1" class="clearfix div-1" style="margin-bottom:3px"><div><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/>'+
 			    	'<label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/></div></td><td><div data-index="1" class="clearfix div-1" style="margin-bottom:3px">'+
-			    	'<input name="costMoneyStart" maxlength=\"7\" min=\"0\" type=\"text\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label>'+
-			    	'<input name=\"costMoneyEnd\"  maxlength=\"7\" type=\"text\" style=\"width:100px\"/><label class=\"priceArea\" style=\"float:right\">'+
+			    	'<input name="costMoneyStart" type=\"text\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label>'+
+			    	'<input name=\"costMoneyEnd\" type=\"text\" style=\"width:100px\"/><label class=\"priceArea\" style=\"float:right\">'+
 			    	'<button class=\"btn btn-success btn-sm btn-white add\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i>'+
-			    	'</button></label></div></td><td><div data-index="1" class="clearfix div-1" style="margin-bottom:3px"><input name="guideRate" maxlength=\"5\" type="text"/>'+
-			    	'</div></td><td><div data-index="1" class="clearfix div-1" style="margin-bottom:3px"><input name="travelAgencyRate" maxlength=\"5\" type="text"/>'+
+			    	'</button></label></div></td><td><div data-index="1" class="clearfix div-1" style="margin-bottom:3px"><input name="guideRate" type="text"/>'+
+			    	'</div></td><td><div data-index="1" class="clearfix div-1" style="margin-bottom:3px"><input name="travelAgencyRate" type="text"/>'+
 			    	'</div></td><td style=\"width:70px\"><button data-entity-id=\"\" class=\"btn btn-xs btn-danger btn-shop-policy-delete\">'+
 			    	'<i class=\"ace-icon fa fa-trash-o bigger-120\"></i></button></td></tr>';
 //			    	$(".policyForm .shopPolicyList tbody").append(policyHtml);
@@ -859,7 +859,7 @@ define(function(require, exports) {
 				 type: 1,
 			    title:"修改购物政策",
 			    skin: 'layui-layer-rim', //加上边框
-			    area: ['85%', '80%'], //宽高
+			    area: ['1190px', '80%'], //宽高
 			    zIndex:1029,
 			    content: html,
 			    success:function(){
@@ -867,11 +867,11 @@ define(function(require, exports) {
 			    	var policyHtml = '<tr class="timeArea">'+
 			    	'<td data-index="1" class="clearfix div-1" style="margin-bottom:3px"><div><input name=\"startTime\" type=\"text\" class=\"datepicker col-sm-5\"/>'+
 			    	'<label class="col-sm-2 control-label center">&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker col-sm-5\"/></div></td><td><div data-index="1" class="clearfix div-1" style="margin-bottom:3px">'+
-			    	'<input name="costMoneyStart" type=\"text\" maxlength=\"7\" class="col-sm-4"/><label class="col-sm-2 control-label center">&nbsp;至&nbsp;</label>'+
-			    	'<input name=\"costMoneyEnd\" type=\"text\" maxlength=\"7\" class="col-sm-4"/><label class=\"priceArea col-sm-2\">'+
+			    	'<input name="costMoneyStart" type=\"text\" class="col-sm-4"/><label class="col-sm-2 control-label center">&nbsp;至&nbsp;</label>'+
+			    	'<input name=\"costMoneyEnd\" type=\"text\" class="col-sm-4"/><label class=\"priceArea col-sm-2\">'+
 			    	'<button class=\"btn btn-success btn-sm btn-white add\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i>'+
-			    	'</button></label></div></td><td><div data-index="1" class="clearfix div-1" style="margin-bottom:3px"><input name="guideRate" type="text" maxlength=\"5\"/>'+
-			    	'</div></td><td><div data-index="1" class="clearfix div-1" style="margin-bottom:3px"><input name="travelAgencyRate" type="text" maxlength=\"5\"/>'+
+			    	'</button></label></div></td><td><div data-index="1" class="clearfix div-1" style="margin-bottom:3px"><input name="guideRate" type="text"/>'+
+			    	'</div></td><td><div data-index="1" class="clearfix div-1" style="margin-bottom:3px"><input name="travelAgencyRate" type="text"/>'+
 			    	'</div></td><td style=\"width:70px\"><button data-entity-id=\"\" class=\"btn btn-xs btn-danger btn-shop-policy-delete\">'+
 			    	'<i class=\"ace-icon fa fa-trash-o bigger-120\"></i></button></td></tr>';
 //			    	$(".policyForm .shopPolicyList tbody").append(policyHtml);
@@ -982,8 +982,8 @@ define(function(require, exports) {
 			var td = obj.parent().parent().parent();
 			var index = td.find("div").length;
 			var priceAreaDiv = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-bottom:3px\"><input name=\"costMoneyStart\" type=\"text\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"costMoneyEnd\" type=\"text\" style=\"width:100px\"/><label class=\"priceArea\" style=\"float:right\"><button class=\"btn btn-danger btn-sm btn-white del\"><i class=\"ace-icon fa fa-minus bigger-110 icon-only\"></i></button></label></div>";
-			var guideRateInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-bottom:3px\"><input name=\"guideRate\" type=\"text\" maxlength=\"5\"/></div>";
-			var travelAgencyRateInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-bottom:3px\"><input name=\"travelAgencyRate\" type=\"text\" maxlength=\"5\"/></div>";
+			var guideRateInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-bottom:3px\"><input name=\"guideRate\" type=\"text\"/></div>";
+			var travelAgencyRateInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-bottom:3px\"><input name=\"travelAgencyRate\" type=\"text\"/></div>";
 			td.append(priceAreaDiv);
 			td.next().append(guideRateInput);
 			td.next().next().append(travelAgencyRateInput);
@@ -992,8 +992,8 @@ define(function(require, exports) {
 			var td = obj.parent().parent().parent();
 			var index = td.find("div").length;
 			var priceAreaDiv = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-bottom:3px\"><input name=\"costMoneyStart\" type=\"text\" class=\"col-sm-4\"/><label class=\"col-sm-2 control-label center\">&nbsp;至&nbsp;</label><input name=\"costMoneyEnd\" type=\"text\" class=\"col-sm-4\"/><label class=\"priceArea col-sm-2\"><button class=\"btn btn-danger btn-sm btn-white del\"><i class=\"ace-icon fa fa-minus bigger-110 icon-only\"></i></button></label></div>";
-			var guideRateInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-bottom:3px\"><input name=\"guideRate\" type=\"text\" class=\"col-sm-12\" maxlength=\"5\"/></div>";
-			var travelAgencyRateInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-bottom:3px\"><input name=\"travelAgencyRate\"class=\"col-sm-12\"  type=\"text\" maxlength=\"5\"/></div>";
+			var guideRateInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-bottom:3px\"><input name=\"guideRate\" type=\"text\" class=\"col-sm-12\"/></div>";
+			var travelAgencyRateInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-bottom:3px\"><input name=\"travelAgencyRate\"class=\"col-sm-12\"  type=\"text\"/></div>";
 			td.append(priceAreaDiv);
 			td.next().append(guideRateInput);
 			td.next().next().append(travelAgencyRateInput);

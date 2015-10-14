@@ -1,6 +1,7 @@
 define(function(require, exports) {
     var menuKey = "financial_count";
-    var listTemplate = require("./view/list");
+    var listHeaderTemplate = require("./view/listHeader");
+    var listTableTemplate = require("./view/listTable");
     var updateTemplate = require("./view/update");
     var viewLogTemplate = require("./view/viewLog");
     var billImageTempLate = require("./view/billImage");
@@ -12,6 +13,57 @@ define(function(require, exports) {
     var uKey = menuKey + "checkBill";
     
     var count = {
+        init: function() {
+            count.initCount();
+        },
+        initCount: function(tripNumber,lineProductId,lineProductName,guideId,guideName,startTime,endTime,status) {
+            // init page
+            $.ajax({
+                url: ""+APP_ROOT+"back/financialTripPlan.do?method=findFinancialListPageCount&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
+                type: 'get',
+                data: {
+                    "tripNumber":tripNumber,
+                    "lineProductId":lineProductId,
+                    "guideId":guideId,
+                    "guideName":guideName,
+                    "startTime":startTime,
+                    "endTime":endTime,
+                    "billStatus":status,
+                },
+                dataType: 'json',
+                beforeSend:function(){
+                    globalLoadingLayer = openLoadingLayer();
+                },
+                success: function(data) {
+                    layer.close(globalLoadingLayer);
+                    var result = showDialog(data);
+                    if(result){
+                        addTab(menuKey, "按团统计", listHeaderTemplate(data));
+
+                        // 按照搜索条件，初始化报表
+                        count.getlistCount(0, tripNumber,lineProductId,lineProductName,guideId,guideName,startTime,endTime,status);
+                        // bind event
+                        $('.btn-arrangeTourist-search').on('click', function(event) {
+                            event.preventDefault();
+                            /* Act on the event */
+                            // 按照搜索条件，初始化报表
+                            var tripNumber = $('.financialCount .search-area').find('input[name=tripNumber]').val();
+                            var lineProductId = $('.financialCount .search-area').find('input[name=lineProductId]').val();
+                            var guideId = $('.financialCount .search-area').find('input[name=guideId]').val();
+                            var endTime = $('.financialCount .search-area').find('input[name=entTime]').val();
+                            var startTime = $('.financialCount .search-area').find('input[name=startTime]').val();
+                            var status = $('.financialCount .search-area .btn-status').find('button').attr('data-value');
+                            var lineProductName = $('.financialCount .search-area').find('input[name=chooseLineProductName]').val();
+                            var guideName = $('.financialCount .search-area').find('input[name=chooseGuideRealName]').val();
+                            count.initCount(tripNumber,lineProductId,lineProductName,guideId,guideName,startTime,endTime,status);
+                        });
+                    }
+                }
+            });            
+            
+            
+            // trigger base
+        },
         getlistCount:function(page,tripNumber,lineProductId,lineProductName,guideId,guideName,startTime,endTime,status){
            $.ajax({
                 url:""+APP_ROOT+"back/financialTripPlan.do?method=listFinancialTripPlan&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
@@ -39,10 +91,7 @@ define(function(require, exports) {
                     	
         				var tripPlanList = JSON.parse(data.tripPlanList);
         				data.tripPlanList = tripPlanList;
-                        var html = listTemplate(data);
-                        addTab(menuKey,"按团统计",html);
-                        
-                        
+                        $('.counterList').html(listTableTemplate(data))
                         
                       //搜索按钮事件
                         $(".main-content .financialCount .clearBlur").blur(function(){
@@ -51,11 +100,6 @@ define(function(require, exports) {
                         		$(this).val("");
                         		$(this).next().val("");
                         	}
-                        });
-                        
-                        //搜索按钮事件
-                        $(".main-content .financialCount .btn-arrangeTourist-search").click(function(){
-                        	count.search(0);
                         });
                         
                         //搜索栏状态button下拉事件
@@ -288,10 +332,12 @@ define(function(require, exports) {
                     			"WEB_IMG_URL_SMALL":data.WEB_IMG_URL_SMALL,
                     			"touristGroup":data.touristGroup,
                     			"financialTripPlanId":data.financialTripPlanId,
-                    			"arrangeIncomePaymentList":JSON.parse(data.arrangeIncomePaymentList)
-                    	}
-                    	
-                    	var html = updateTemplate(tmp);
+                    			"arrangeIncomePaymentList":JSON.parse(data.arrangeIncomePaymentList),
+                                "remarkArrangeList": JSON.parse(data.remarkArrangeList)
+                        }
+
+                        data = count.covertRemark(tmp);
+                    	var html = updateTemplate(data);
                     	
             			var financialCountUpdate = addTab(uKey, guide == "guide"?"单团报账":"单团审核", html);
             			
@@ -575,6 +621,7 @@ define(function(require, exports) {
 					"scenicArrangeList":[],
 					"ticketArrangeList":[],
 					"otherArrangeList":[],
+                    "remarkArrangeList":[],
 					"log":{
 						"type":"1",
 						"info":{
@@ -595,8 +642,6 @@ define(function(require, exports) {
 			//团信息
 			var tripPlan = {
 					"id":count.changeTwoDecimalToString($('.countUpdate').find('.main-table .financial-tripPlanId').val()),
-					"opCheckRemark":$('.countUpdate').find('input[name=accountOPCheckComment]').val(),
-					"financialCheckRemark":$('.countUpdate').find('input[name=accountFinancialCheckComment]').val(),
 					"grossProfitMoney":count.changeTwoDecimalToString(parseFloat($('.countUpdate').find('.main-table .grossProfitMoney').text())),
 					"perGrossProfitMoney":count.changeTwoDecimalToString(parseFloat($('.countUpdate').find('.main-table .perGrossProfitMoney').text())),
 					"getAllMoney":count.changeTwoDecimalToString(parseFloat($('.countUpdate').find('.main-table .tripIncome').text())),
@@ -793,6 +838,25 @@ define(function(require, exports) {
 				}
 			});
 			
+            // 批注
+            var $tab = $('.financial-count-update-update-tab'),
+                $financialRemark = $tab.find('input[name="accountFinancialCheckComment"]'),
+                $accountOPCheckComment = $tab.find('input[name="accountOPCheckComment"]'),
+                remarkList = [];
+
+            for (var i = 0, len = $financialRemark.length, opCheckRemark, financeCheckRemark; i < len; i ++)  {
+                opCheckRemark = $financialRemark.eq(i).val();
+                financeCheckRemark = $accountOPCheckComment.eq(i).val();
+                if (opCheckRemark || financeCheckRemark)  {
+                    remarkList.push({
+                        type: (i+''),               // server要求字符串
+                        opCheckRemark: opCheckRemark,
+                        financeCheckRemark: financeCheckRemark
+                    })
+                }
+            }
+            saveJson.remarkArrangeList = remarkList;
+
 			//其他
 			$('.countUpdate').find('#other').find('tr').each(function() {
 				if($(this).attr('otherArrangeId')) {
@@ -1469,10 +1533,11 @@ define(function(require, exports) {
                     			"WEB_IMG_URL_SMALL":data.WEB_IMG_URL_SMALL,
                     			"touristGroup":data.touristGroup,
                     			"financialTripPlanId":data.financialTripPlanId,
-                    			"arrangeIncomePaymentList":JSON.parse(data.arrangeIncomePaymentList)
+                    			"arrangeIncomePaymentList":JSON.parse(data.arrangeIncomePaymentList),
+                                "remarkArrangeList": JSON.parse(data.remarkArrangeList)
                     	}
-                    	
-                    	data = tmp;
+
+                    	data = count.covertRemark(tmp);
 		    			var html = tripDetailTempLate(data);
 		    			var financialTripDetail = addTab(menuKey + "tripDetail", "单团明细", html);
 		    			
@@ -1624,6 +1689,26 @@ define(function(require, exports) {
                 }
 	    	});
 	    },
+        // 将type转换成索引号
+        covertRemark : function(data)  {
+            var list = [], tmp;
+
+            if (!!data && !!data.remarkArrangeList)  {
+                for (var i = 0, len = data.remarkArrangeList.length; i < len; i++)  {
+                    tmp = data.remarkArrangeList[i];
+
+                    list[tmp.type] = {
+                        opCheckRemark: tmp.opCheckRemark,
+                        financeCheckRemark: tmp.financeCheckRemark
+                    }
+                }
+
+            }
+
+            data.remarkArrangeList = list;
+            
+            return data;
+        },
 	    ViewOutDetail : function (id) {
 	    	$.ajax({
 	    		url:""+APP_ROOT+"back/financialTripPlan.do?method=findOutTripArrange&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=self",
@@ -1668,5 +1753,5 @@ define(function(require, exports) {
              });
 	    }
     }
-    exports.getlistCount = count.getlistCount;
+    exports.init = count.init;
 });

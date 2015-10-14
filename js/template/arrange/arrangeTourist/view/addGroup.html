@@ -7,11 +7,10 @@
 						<thead>
 							<tr>
 								<th class="th-border">
-									<label class="pos-rel">
-										<input type="checkbox" class="ace addMainCheckBox">
-										<span class="lbl"></span>
-									</label></th>
-
+								<label class="pos-rel">
+									<input type="checkbox" class="ace addMainCheckBox">
+									<span class="lbl"></span>
+								</label></th>
 								<th class="th-border">来源</th>
 								<th class="th-border">联系人</th>
 								<th class="th-border">联系电话</th>
@@ -30,12 +29,15 @@
 										<span class="lbl"></span>
 									</label>
 								</td>
+								<td name="lineProductName">{{touristGroup.lineProduct.name}}</td>    
+								<td name="hotelLevel">{{touristGroup.hotelLevel}}</td>
+								<td name="includeSelfPay">{{touristGroup.includeSelfPay}}</td>    
 								<td name="travelAgencyName">{{touristGroup.partnerAgency.travelAgencyName}}</td>
 								<td name="contactMemberName">{{touristGroup.contactMember.name}}</td>
 								<td name="contactMemberMobileNumber">{{touristGroup.contactMember.mobileNumber}}</td>
 								<td name="areaData">{{touristGroup.areaData}}</td>
 								<td name="ageData">{{touristGroup.ageData}}</td>
-								<td name="peopleCount">{{touristGroup.adultCount}}大人{{touristGroup.childCount}}小孩</td>
+								<td name="peopleCount">{{touristGroup.adultCount + touristGroup.childCount}}</td>
 								<td name="remark">{{touristGroup.remark}}</td>
 								<td>
 									<a data-entity-id="{{touristGroup.id}}" class="cursor addGroupView">

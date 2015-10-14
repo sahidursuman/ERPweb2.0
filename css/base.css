@@ -10,7 +10,7 @@
 	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
 	background-color: #555;
 }
-.input-default-height{height:28.892px}
+.input-default-height{height:24px}
 .search-area{margin-bottom:10px}
 .table th, .table td {
     text-align: center;
@@ -69,3 +69,13 @@ textarea:focus, input[type=text]:focus, input[type=password]:focus, input[type=d
 .input-group-addon{background:none;padding:0;border:0;position:relative;left:-19px;}
 .widget-body .table thead:first-child tr{color:#707070;font-weight:400;background:#F2F2F2;background-image:-webkit-linear-gradient(top,#f8f8f8 0,#ececec 100%);background-image:-o-linear-gradient(top,#f8f8f8 0,#ececec 100%);background-image:linear-gradient(to bottom,#f8f8f8 0,#ececec 100%);background-repeat:repeat-x;filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff8f8f8', endColorstr='#ffececec', GradientType=0)}
 .ui-dialog-titlebar-close{display: none}
+
+/*表格内容设置省略符号*/
+table{
+	table-layout:fixed;
+}  
+table td{
+	white-space:nowrap;
+	overflow:hidden; 
+	text-overflow:ellipsis;
+}  

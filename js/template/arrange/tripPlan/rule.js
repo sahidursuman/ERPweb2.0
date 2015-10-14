@@ -61,7 +61,15 @@ var rule = {
 	  	    	        	errMsg: '司机不能为空'
 	  	    	        }
 		    	        ]
-		         }
+		         },{//司机
+		    	       	$ele: $checkdCreateTripPlanObj.find('input[name="accompanyGuideMobile"]'),  
+		    	    	rules: [
+	  	    	        {
+	  	    	        	type: 'mobile-phone',
+	  	    	        	errMsg: '全陪电话格式不正确'
+	  	    	        }
+		    	        ]
+			      }
 	    	  ]);
 		return validatorCreateTripPlan;
 		}	

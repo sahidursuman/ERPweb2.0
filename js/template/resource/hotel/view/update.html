@@ -1,5 +1,5 @@
-<div class="col-xs-12 updateHotelContainer">
-	<form class="form-horizontal hotelMainForm" role="form" style="margin-top:10px" onsubmit="return false">
+<div class="col-xs-12 updateHotelContainer globalAdd">
+	<form class="form-horizontal hotelMainForm formOneList" role="form" style="margin-top:10px" onsubmit="return false">
 		<div class=" ui-sortable-handle">
 				<h5 >
 					<span class="badge badge-primary">1</span>
@@ -7,17 +7,17 @@
 				</h5>
 			<div class="widget-body">
 				<div class="widget-main">
-					<div class="form-group">
+					<div class="form-group guideInterval">
 						<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>酒店名称:</label>
 						<div class="col-sm-3">
 							<input type="text" name="name" class="col-sm-12" value="{{hotel.name}}" maxlength="32">
 							<input type="text" name="id" hidden="hidden" value="{{hotel.id}}">
 						</div>
 					</div>
-					<div class="form-group">
+					<div class="form-group guideInterval">
 					    <label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>酒店星级:</label>
 						<div class="col-sm-3">
-							<select name="level" class="col-sm-12">
+							<select name="level">
 								<option selected="selected" value="1" {{if hotel.level == 1}}selected="selected"{{/if}}>三星以下</option>
 								<option value="2" {{if hotel.level == 2}}selected="selected"{{/if}}>三星</option>
 								<option value="3" {{if hotel.level == 3}}selected="selected"{{/if}}>准四星</option>
@@ -28,53 +28,53 @@
 							</select>
 						</div>
 					</div>
-					<div class="form-group">
+					<div class="form-group guideInterval">
 					    <label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>联系人:</label>
 						<div class="col-sm-3">
-							<input type="text" name="managerName" class="col-sm-12" value="{{hotel.managerName}}" maxlength="32">
+							<input type="text" name="managerName" class="col-sm-12" value="{{hotel.managerName}}"  maxlength="32">
 						</div>
 						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>联系电话:</label>
 						<div class="col-sm-3">
 							<input type="text" name="mobileNumber" class="col-sm-12" value="{{hotel.mobileNumber}}" maxlength="11">
 						</div>
 					</div>
-					<div class="form-group">
+					<div class="form-group guideInterval">
 						<label class="col-sm-2 control-label no-padding-right">座机号码:</label>
 						<div class="col-sm-3">
-							<input type="text" name="telNumber" class="col-sm-12" value="{{hotel.telNumber}}" maxlength="20"/>
+							<input type="text" name="telNumber" class="col-sm-12" value="{{hotel.telNumber}}" maxlength="20" />
 						</div>
 						<label class="col-sm-1 control-label no-padding-right">传真号码:</label>
 						<div class="col-sm-3">
-							<input type="text" name="faxNumber" class="col-sm-12" value="{{hotel.faxNumber}}" maxlength="20"/>
+							<input type="text" name="faxNumber" class="col-sm-12" value="{{hotel.faxNumber}}" maxlength="20" />
 						</div>
 					</div>
-					<div class="form-group">
+					<div class="form-group guideInterval">
 						<label class="col-sm-2 control-label no-padding-right">酒店所在省市:</label>
 						<div class="col-sm-8">
-							<select name="provinceId" class="col-sm-3" style="margin-right:3px">
+							<select name="provinceId" style="margin-right:3px">
 								<option selected="selected" value="" >未选择</option>
 							</select>
-							<select name="cityId" class="col-sm-3"  style="margin-right:3px">
+							<select name="cityId"  style="margin-right:3px">
 								<option selected="selected" value="">未选择</option>
 							</select>
-							<select name="districtId" class="col-sm-3">
+							<select name="districtId" >
 								<option selected="selected" value="">未选择</option>
 							</select>
 						</div>
 					</div>
-					<div class="form-group">
+					<div class="form-group guideInterval">
 						<label class="col-sm-2 control-label no-padding-right">详细地址:</label>
 						<div class="col-sm-6">
-							<input type="text" name="street" class="col-sm-12" placeholder="请输入街道地址" value="{{hotel.street}}" maxlength="100"/>
+							<input type="text" name="street" class="col-sm-12 addressMinute" placeholder="请输入街道地址" value="{{hotel.street}}" maxlength="100"/>
 						</div>
 					</div>
-					<div class="form-group">
+					<div class="form-group guideInterval">
 						<label class="col-sm-2 control-label no-padding-right">酒店设施:</label>
 						<div class="col-sm-3">
 							<input type="text" name="facility" class="col-sm-12" value="{{hotel.facility}}" maxlength="1000">
 						</div>
 					</div>
-					<div class="form-group">
+					<div class="form-group guideInterval">
 						<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>是否启用:</label>
 						<div class="col-sm-2 checkbox" style="margin-left:-10px">
 							<label>
@@ -86,7 +86,7 @@
 						</div>
 					</div>
 
-					<div class="form-group">
+					<div class="form-group guideInterval">
 						<label class="col-sm-2 control-label no-padding-right">酒店简介:</label>
 						<div class="col-sm-8">
 							<textarea class="form-control" name="remark" class="col-sm-12" >{{hotel.remark}}</textarea>
@@ -114,25 +114,25 @@
 						<div class="widget-main no-padding">
 							<table class="table table-striped table-bordered table-hover hotelRoomStandardList"> 
 								<thead>
-									<tr>
-										<th class="table-border">房型</th>
-										<th class="table-border">时间范围</th>
-										<th class="table-border" style="width:100px">对外价</th>
-										<th class="table-border" style="width:100px">旅行社价(元)</th>
-										<th class="table-border">早餐</th>
-										<th class="table-border">午餐</th>
-										<th class="table-border">晚餐</th>
-										<th class="table-border">宽带</th>
-										<th class="table-border" style="width:105px">建筑面积(平方)</th>
-										<th class="table-border" style="width:100px">最多入住人数</th>
-										<th class="table-border">备注</th>
-										<th class="table-border">操作</th>
-									</tr>
+								<tr>
+									<th class="table-border" width="80"><span class="necessary">*</span>房型</th>
+									<th class="table-border"><span class="necessary">*</span>时间范围</th>
+									<th class="table-border" style="width:100px"><span class="necessary">*</span>市场价(元)</th>
+									<th class="table-border" style="width:100px"><span class="necessary">*</span>旅行社价(元)</th>
+									<th class="table-border" style="width: 75px">早餐</th>
+									<th class="table-border" width="70">午餐</th>
+									<th class="table-border" width="70">晚餐</th>
+									<th class="table-border" width="70">宽带</th>
+									<th class="table-border" style="width:110px">建筑面积(平方)</th>
+									<th class="table-border" style="width:100px">最多入住人数</th>
+									<th class="table-border" width="80">备注</th>
+									<th class="table-border">操作</th>
+								</tr>
 								</thead>
 								<tbody>
 									{{each hotel.hotelRoomList as room}}
 									<tr data-entity-id="{{room.id}}">
-										<td><input name="type" type="text" class="col-sm-12" value="{{room.type}}" maxlength="32"/></td>
+										<td><input name="type" type="text" class="col-sm-12" value="{{room.type}}" maxlength="32" /></td>
 										<td class="time">
 											{{each room.priceList as price i}}
 											<div data-index="{{i+1}}" data-entity-id="{{price.id}}" class="clearfix {{if i > 0}}appendDiv{{/if}} div-{{i+1}}" style="margin-top:2px">
@@ -156,14 +156,14 @@
 										<td> 
 											{{each room.priceList as price i}}
 											<div data-index="{{i+1}}" class="clearfix div-{{i+1}}" style="margin-top:2px">
-												<input name="marketPrice" type="text" class="col-sm-12" value="{{price.marketPrice}}" maxlength="7"/>
+												<input name="marketPrice" type="text" class="col-sm-12" value="{{price.marketPrice}}" maxlength="7" />
 											</div>
 											{{/each}}
 										</td>
 										<td>
 											{{each room.priceList as price i}}
 											<div data-index="{{i+1}}" class="clearfix div-{{i+1}}" style="margin-top:2px">
-												<input name="contractPrice" type="text" class="col-sm-12" value="{{price.contractPrice}}" maxlength="7"/>
+												<input name="contractPrice" type="text" class="col-sm-12" value="{{price.contractPrice}}" maxlength="7" />
 											</div>
 											{{/each}}
 										</td>
@@ -179,28 +179,28 @@
 												<option value="1" {{if room.containLunch == 1}}selected="selected"{{/if}}>包含</option>
 											</select>
 										</td>
-										<td>
+										<td> 
 											<select name="containDinner" class="col-sm-12 no-padding">
 												<option value="0" {{if room.containDinner == 0}}selected="selected"{{/if}}>不含</option>
 												<option value="1" {{if room.containDinner == 1}}selected="selected"{{/if}}>包含</option>
 											</select>
 										</td>
 										<td>
-											<input name="broadband" class="col-sm-12" type="text" value="{{room.broadband}}" maxlength="100"/>
+											<input name="broadband" class="col-sm-12" type="text" value="{{room.broadband}}" maxlength="100" />
 										</td>
 										<td>
-											<input name="areaSize" class="col-sm-12" type="text" value="{{room.areaSize}}" maxlength="5"/>
+											<input name="areaSize" class="col-sm-12" type="text" value="{{room.areaSize}}" maxlength="5" />
 										</td>
 										<td>
-										 	<input name="guestNumber" class="col-sm-12" type="text" value="{{room.guestNumber}}" maxlength="4"/>
+										 	<input name="guestNumber" class="col-sm-12" type="text" value="{{room.guestNumber}}" maxlength="4" />
 										 </td>
 										<td>
-											<input name="remark" class="col-sm-12" type="text" value="{{room.remark}}" maxlength="1000"/>
+											<input name="remark" class="col-sm-12" type="text" value="{{room.remark}}" maxlength="1000" />
 										</td>
 										<td style="width:70px">
 											<a data-entity-id="" href="#" class=" btn-xs  btn-hotel-standard-delete">删除</a>
 										</td>
-									</tr>	
+									</tr>	  
 									{{/each}} 
 								</tbody>
 							</table>
@@ -210,7 +210,7 @@
 			</div>
 		</div>
 		<div class="space-10"></div>
-		<button class="btn btn-block btn-primary btn-submit-hotel">
+		<button class="btn btn-block btn-primary btn-submit-hotel guideSubmit">
 			<i class="ace-icon fa fa-check"></i>
 			提交信息
 		</button>

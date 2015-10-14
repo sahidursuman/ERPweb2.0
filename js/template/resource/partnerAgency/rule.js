@@ -10,7 +10,7 @@ define(function(require, exports) {
 	 * @param  {object} $container 同行表单的顶级元素
 	 * @return {object}            同行表单验证对象
 	 */
-	rule.partnerAgencyCheckor = function($container) {
+	rule.partnerAgencyCheckor = function($container) {  
 		this.$container = $container;
 
 		var settings = this.getPartnerAgenSettings($container);
@@ -37,28 +37,44 @@ define(function(require, exports) {
 	    	    	rules:[
 	    	    	       {
 	    	    	    	   type:'null',
-	    	    	    	   errMsg:'联系人姓名不能为空'    
+	    	    	    	   errMsg:'联系人姓名不能为空'                    
 	    	    	       }
 	    	    	      ]
 	    	    },{//联系人电话
-                         $ele: $container.find('.widget-body input[name=contactMobileNumber]'),	    	    	
+                    $ele: $container.find('.widget-body input[name=contactMobileNumber]'),	      	    	
 	    	    	rules:[{
 	    	    	    	   type:'null',
-	    	    	    	   errMsg:'联系人电话不能为空'    
+	    	    	    	   errMsg:'座机电话或联系人电话不能为空'    
 	    	    	       },
 	    	    	       {
-	    	    	    	   type: 'mobile-phone',
-	    	    	        	errMsg: '联系人电话格式不正确'   
+	    	    	    	   type: 'phone-num',
+	    	    	        	errMsg: '座机电话或联系人电话格式不正确'                                                   
 	    	    	       }]
 	    	    	
-	    	    },{//总社名称
+	    	    },{//总社名称                                    
 		    	       	$ele: $container.find('input[name="headerAgencyName"]'),  
 		    	    	rules: [
 	  	    	        {
 	  	    	        	type: 'null', 
 	  	    	        	errMsg: '总社名称不能为空'
 	  	    	        }]
-			        },
+			},{//座机号码
+                    $ele: $container.find('input[name=telNumber]'),	      	    	
+	    	    	rules:[
+	    	    	       {
+	    	    	    	   type: 'phone-num',
+	    	    	        	errMsg: '座机号码格式不正确'                                                   
+	    	    	       }]
+	    	    	
+	    	    },{//传真号码
+                    $ele: $container.find('input[name=faxNumber]'),	      	    	
+	    	    	rules:[
+	    	    	       {
+	    	    	    	   type: 'phone-num',
+	    	    	        	errMsg: '传真号码格式不正确'                                                
+	    	    	       }]
+	    	    	
+	    	    }
 		];
 
 		$container.find('.partnerList').find('tr').each(function() {
@@ -69,25 +85,27 @@ define(function(require, exports) {
 						rules: [
 							{
 								type: 'null',
-								errMsg: '联系人姓名不能为空'
+								errMsg: '联系人姓名不能为空'  
 							}
 						]
-					},
-					{//联系人电话
+					},{//联系人电话
 						$ele: $that.find('input[name="contactMobileNumber"]'),
 						rules: [
 							{
 								type: 'null',
-								errMsg: '联系人电话不能为空'
+								errMsg: '座机电话或联系人电话不能为空'
 							},
 							{
-								type: 'mobile-phone',
-								errMsg: '联系人电话格式不正确'
+								type: 'phone-num',                           
+								errMsg: '座机电话或联系人电话格式不正确'
 							}
 						]
-					}
+					}  
+
 				);
-		});  
+		});
+
+                      
 
 		return settings;
 	};

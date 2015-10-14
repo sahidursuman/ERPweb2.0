@@ -72,414 +72,422 @@
         </tbody>
     </table>
     
-    <div class="col-sm-13 widget-container-col">
-        <div class="widget-box ui-sortable-handle">
-            <div class="widget-header">
-                <h5 class="widget-title"><i class="ace-icon fa fa-bus"></i>旅游车安排</h5>
+
+    <div class="tabbable">
+        <ul class="nav nav-tabs">
+            <li class="active col-sm-1 no-padding align-center">
+                <a data-toggle="tab" href="#financial-count-tripbus-plan" aria-expanded="true">旅游车安排</a>
+            </li>
+            <li class="col-sm-1 no-padding align-center">
+                <a data-toggle="tab" href="#financial-count-restaurant-plan" aria-expanded="true">餐安排</a>
+            </li>
+            <li class="col-sm-1 no-padding align-center">
+                <a data-toggle="tab" href="#financial-count-hotel-plan" aria-expanded="true">房安排</a>
+            </li>
+            <li class="col-sm-1 no-padding align-center">
+                <a data-toggle="tab" href="#financial-count-scenic-plan" aria-expanded="true">景点安排</a>
+            </li>
+            <li class="col-sm-1 no-padding align-center">
+                <a data-toggle="tab" href="#financial-count-shop-plan" aria-expanded="true">购物安排</a>
+            </li>
+            <li class="col-sm-1 no-padding align-center">
+                <a data-toggle="tab" href="#financial-count-selfpay-plan" aria-expanded="true">自费安排</a>
+            </li>
+            <li class="col-sm-1 no-padding align-center">
+                <a data-toggle="tab" href="#financial-count-ticket-plan" aria-expanded="true">票务安排</a>
+            </li>
+            <li class="col-sm-1 no-padding align-center">
+                <a data-toggle="tab" href="#financial-count-other-plan" aria-expanded="true">其他安排</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <!-- 旅游车安排 -->
+            <div id="financial-count-tripbus-plan" class="tab-pane fade active in">
+                <table class="table table-striped table-bordered table-hover" style="margin-top: 30px">
+                    <thead><tr>
+                        <th>司机</th>
+                        <th>司机电话</th>
+                        <th>车牌号</th>
+                        <th>车辆品牌</th>
+                        <th>合同号</th>
+                        <th>应付</th>
+                        <th>导付</th>
+                        <th>付款方式</th>
+                        <th>备注</th>
+                    </tr></thead>
+                    <tbody>
+                    {{each busCompanyList as busCommanyArrange}}
+                    {{if busCommanyArrange != null && busCommanyArrange.id > 0}}
+                    <tr>
+                        <td>{{busCommanyArrange.driver.name}}</td>
+                        <td>{{busCommanyArrange.driver.mobileNumber}}</td>
+                        <td>{{busCommanyArrange.bus.licenseNumber}}</td>
+                        <td>{{busCommanyArrange.bus.brand}}</td>
+                        <td>{{busCommanyArrange.contractNumber}}</td>
+                        <td>{{busCommanyArrange.needPayMoney}}</td>
+                        <td>{{busCommanyArrange.guidePayMoney}}</td>
+                        <td>{{if busCommanyArrange.payType == 0}}
+                            现付
+                            {{else if busCommanyArrange.payType == 1}}
+                            签单
+                            {{else if busCommanyArrange.payType == 2}}
+                            转账
+                            {{/if}}
+                        </td>
+                        <td>{{busCommanyArrange.remark}}</td>
+                    </tr>
+                    {{/if}}
+                    {{/each}}
+                    </tbody>
+                </table>
             </div>
-            <div class="widget-body">
-                <div class="widget-main">
-                    <table class="table table-striped table-bordered table-hover" style="margin-top: 30px">
-                        <thead><tr>
-                            <th>司机</th>
-                            <th>司机电话</th>
-                            <th>车牌号</th>
-                            <th>车辆品牌</th>
-                            <th>合同号</th>
-                            <th>应付</th>
-                            <th>导付</th>
-                            <th>付款方式</th>
-                            <th>备注</th>
-                        </tr></thead>
-                        <tbody>
-                        {{each busCompanyList as busCommanyArrange}}
-                        {{if busCommanyArrange != null && busCommanyArrange.id > 0}}
+            <!-- 餐安排 -->
+            <div id="financial-count-restaurant-plan" class="tab-pane fade">
+                <table class="table table-striped table-bordered table-hover" style="margin-top: 30px">
+                    <thead><tr>
+                        <th>日期</th>
+                        <th>餐厅</th>
+                        <th>联系电话</th>
+                        <th>地址</th>
+                        <th>类型</th>
+                        <th>餐标</th>
+                        <th>人数</th>
+                        <th>应付</th>
+                        <th>导付</th>
+                        <th>付款方式</th>
+                        <th>备注</th>
+                    </tr></thead>
+                    <tbody>
+                    {{each restaurantList as restaurantArrange}}
+                        {{if restaurantArrange != null && restaurantArrange.id > 0}}
                         <tr>
-                        	<td>{{busCommanyArrange.driver.name}}</td>
-                        	<td>{{busCommanyArrange.driver.mobileNumber}}</td>
-                        	<td>{{busCommanyArrange.bus.licenseNumber}}</td>
-                        	<td>{{busCommanyArrange.bus.brand}}</td>
-                        	<td>{{busCommanyArrange.contractNumber}}</td>
-                        	<td>{{busCommanyArrange.needPayMoney}}</td>
-                        	<td>{{busCommanyArrange.guidePayMoney}}</td>
-                        	<td>{{if busCommanyArrange.payType == 0}}
-                        		现付
-                        		{{else if busCommanyArrange.payType == 1}}
-                        		签单
-                        		{{else if busCommanyArrange.payType == 2}}
-                        		转账
-                        		{{/if}}
-                        	</td>
-                        	<td>{{busCommanyArrange.remark}}</td>
+                        <td>第{{restaurantArrange.whichDay}}天</td>
+                        <td>{{restaurantArrange.restaurant.name}}</td>
+                        <td>{{restaurantArrange.restaurant.mobileNumber}}</td>
+                        <td>
+                        {{if restaurantArrange.restaurant.province != null}}
+                            {{restaurantArrange.restaurant.province.name}}
+                        {{/if}}
+                        {{if restaurantArrange.restaurant.city != null}}
+                            {{restaurantArrange.restaurant.city.name}}
+                        {{/if}}
+                        {{if restaurantArrange.restaurant.district != null}}
+                            {{restaurantArrange.restaurant.district.name}}
+                        {{/if}}
+                        {{restaurantArrange.restaurant.street}}
+                        </td>
+                        <td>{{restaurantArrange.restaurantStandard.type}}</td>
+                        <td>{{restaurantArrange.price}}</td>
+                        <td>{{restaurantArrange.memberCount}}</td>
+                        <td>{{restaurantArrange.needPayMoney}}</td>
+                        <td>{{restaurantArrange.guidePayMoney}}</td>
+                        <td>{{if restaurantArrange.payType == 0}}
+                            现付
+                            {{else if restaurantArrange.payType == 1}}
+                            签单
+                            {{else if restaurantArrange.payType == 2}}
+                            转账
+                            {{/if}}</td>
+                        <td>{{restaurantArrange.remark}}</td></tr>
+                        {{/if}}
+                    {{/each}}
+                    </tbody>
+                </table>
+            </div>
+            <!-- 房安排 -->
+            <div id="financial-count-hotel-plan" class="tab-pane fade">
+                <table class="table table-striped table-bordered table-hover" style="margin-top: 30px">
+                    <thead><tr>
+                        <th>日期</th>
+                        <th>星级</th>
+                        <th>酒店</th>
+                        <th>联系电话</th>
+                        <th>地址</th>
+                        <th>房型</th>
+                        <th>数量</th>
+                        <th>应付</th>
+                        <th>导付</th>
+                        <th>付款方式</th>
+                        <th>备注</th>
+                    </tr></thead>
+                    <tbody>
+                    {{each hotelList as hotelArrange}}
+                    {{if hotelArrange != null && hotelArrange.id > 0}}
+                        <tr>
+                        <td>第{{hotelArrange.whichDay}}天</td>
+                        <td>{{hotelArrange.hotel.level}}</td>
+                        <td>{{hotelArrange.hotel.name}}</td>
+                        <td>{{hotelArrange.hotel.mobileNumber}}</td>
+                        <td>
+                        {{if hotelArrange.hotel.province != null}}
+                            {{hotelArrange.hotel.province.name}}
+                        {{/if}}
+                        {{if hotelArrange.hotel.city != null}}
+                            {{hotelArrange.hotel.city.name}}
+                        {{/if}}
+                        {{if hotelArrange.hotel.district != null}}
+                            {{hotelArrange.hotel.district.name}}
+                        {{/if}}
+                        {{hotelArrange.hotel.street}}
+                        </td>
+                        <td>{{hotelArrange.hotelRoom.type}}</td>
+                        <td>{{hotelArrange.memberCount}}</td>
+                        <td>{{hotelArrange.needPayMoney}}</td>
+                        <td>{{hotelArrange.guidePayMoney}}</td>
+                        <td>{{if hotelArrange.payType == 0}}
+                            现付
+                            {{else if hotelArrange.payType == 1}}
+                            签单
+                            {{else if hotelArrange.payType == 2}}
+                            转账
+                            {{/if}}</td>
+                        <td>{{hotelArrange.remark}}</td></tr>
+                    {{/if}}
+                    {{/each}}
+                    </tbody>
+                </table>
+            </div>
+            <!-- 景点安排 -->
+            <div id="financial-count-scenic-plan" class="tab-pane fade">
+                <table class="table table-striped table-bordered table-hover" style="margin-top: 30px">
+                    <thead><tr>
+                        <th>日期</th>
+                        <th>时间</th>
+                        <th>景区</th>
+                        <th>收费项</th>
+                        <th>游览时长</th>
+                        <th>单价</th>
+                        <th>数量</th>
+                        <th>订单号</th>
+                        <th>应付</th>
+                        <th>导付</th>
+                        <th>付款方式</th>
+                        <th>备注</th>
+                    </tr></thead>
+                    <tbody>
+                    {{each scenicList as scenicArrange}}
+                        {{if scenicArrange != null && scenicArrange.id > 0}}
+                        <tr>
+                        <td>第{{scenicArrange.whichDay}}天</td>
+                        <td>{{scenicArrange.tourTime}}</td>
+                        <td>{{scenicArrange.scenic.name}}</td>
+                        <td>{{scenicArrange.scenicItem.name}}</td>
+                        <td>{{scenicArrange.tourDuration}}</td>
+                        <td>{{scenicArrange.price}}</td>
+                        <td>{{scenicArrange.memberCount}}</td>
+                        <td>{{if scenicArrange.orderNumber != null && scenicArrange.orderNumber != "null"}}{{scenicArrange.orderNumber}}{{/if}}</td>、
+                        <td>{{scenicArrange.needPayMoney}}</td>
+                        <td>{{scenicArrange.guidePayMoney}}</td>
+                        <td>{{if scenicArrange.payType == 0}}
+                            现付
+                            {{else if scenicArrange.payType == 1}}
+                            签单
+                            {{else if scenicArrange.payType == 2}}
+                            转账
+                            {{/if}}</td>
+                        <td>{{scenicArrange.remark}}</td>
                         </tr>
                         {{/if}}
-                        {{/each}}
-                        </tbody>
-                    </table>
-                </div>
+                    {{/each}}
+                    </tbody>
+                </table>
             </div>
-        </div>
-    </div>
-    
-    <div class="col-sm-13 widget-container-col">
-        <div class="widget-box ui-sortable-handle">
-            <div class="widget-header">
-                <h5 class="widget-title"><i class="ace-icon fa fa-cutlery"></i>餐安排</h5>
-            </div>
-            <div class="widget-body">
-                <div class="widget-main">
-                    <table class="table table-striped table-bordered table-hover" style="margin-top: 30px">
-                        <thead><tr>
-                            <th>日期</th>
-                            <th>餐厅</th>
-                            <th>联系电话</th>
-                            <th>地址</th>
-                            <th>类型</th>
-                            <th>餐标</th>
-                            <th>人数</th>
-                            <th>应付</th>
-                            <th>导付</th>
-                            <th>付款方式</th>
-                            <th>备注</th>
-                        </tr></thead>
-                        <tbody>
-                       	{{each restaurantList as restaurantArrange}}
-                       		{{if restaurantArrange != null && restaurantArrange.id > 0}}
-                       		<tr>
-                       		<td>第{{restaurantArrange.whichDay}}天</td>
-                       		<td>{{restaurantArrange.restaurant.name}}</td>
-                       		<td>{{restaurantArrange.restaurant.mobileNumber}}</td>
-                       		<td>
-                       		{{if restaurantArrange.restaurant.province != null}}
-                       			{{restaurantArrange.restaurant.province.name}}
-                       		{{/if}}
-                       		{{if restaurantArrange.restaurant.city != null}}
-                       			{{restaurantArrange.restaurant.city.name}}
-                       		{{/if}}
-                       		{{if restaurantArrange.restaurant.district != null}}
-                       			{{restaurantArrange.restaurant.district.name}}
-                       		{{/if}}
-                       		{{restaurantArrange.restaurant.street}}
-                       		</td>
-                       		<td>{{restaurantArrange.restaurantStandard.type}}</td>
-                       		<td>{{restaurantArrange.restaurantStandard.typeName}}</td>
-                       		<td>{{restaurantArrange.memberCount}}</td>
-                       		<td>{{restaurantArrange.needPayMoney}}</td>
-                       		<td>{{restaurantArrange.guidePayMoney}}</td>
-                       		<td>{{if restaurantArrange.payType == 0}}
-                        		现付
-                        		{{else if restaurantArrange.payType == 1}}
-                        		签单
-                        		{{else if restaurantArrange.payType == 2}}
-                        		转账
-                        		{{/if}}</td>
-                       		<td>{{restaurantArrange.remark}}</td></tr>
-                       		{{/if}}
-                       	{{/each}}
-                       	</tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <div class="col-sm-13 widget-container-col">
-        <div class="widget-box ui-sortable-handle">
-            <div class="widget-header">
-                <h5 class="widget-title"><i class="ace-icon fa fa-hotel"></i>房安排</h5>
-            </div>
-            <div class="widget-body">
-                <div class="widget-main">
-                    <table class="table table-striped table-bordered table-hover" style="margin-top: 30px">
-                        <thead><tr>
-                            <th>日期</th>
-                            <th>星级</th>
-                            <th>酒店</th>
-                            <th>联系电话</th>
-                            <th>地址</th>
-                            <th>房型</th>
-                            <th>数量</th>
-                            <th>应付</th>
-                            <th>导付</th>
-                            <th>付款方式</th>
-                            <th>备注</th>
-                        </tr></thead>
-                        <tbody>
-                        {{each hotelList as hotelArrange}}
-                        {{if hotelArrange != null && hotelArrange.id > 0}}
-                        	<tr>
-                        	<td>第{{hotelArrange.whichDay}}天</td>
-                        	<td>{{hotelArrange.hotel.level}}</td>
-                        	<td>{{hotelArrange.hotel.name}}</td>
-                        	<td>{{hotelArrange.hotel.mobileNumber}}</td>
-                        	<td>
-                        	{{if hotelArrange.hotel.province != null}}
-                       			{{hotelArrange.hotel.province.name}}
-                       		{{/if}}
-                       		{{if hotelArrange.hotel.city != null}}
-                       			{{hotelArrange.hotel.city.name}}
-                       		{{/if}}
-                       		{{if hotelArrange.hotel.district != null}}
-                       			{{hotelArrange.hotel.district.name}}
-                       		{{/if}}
-                       		{{hotelArrange.hotel.street}}
-                        	</td>
-                        	<td>{{hotelArrange.hotelRoom.type}}</td>
-                        	<td>{{hotelArrange.memberCount}}</td>
-                        	<td>{{hotelArrange.needPayMoney}}</td>
-                        	<td>{{hotelArrange.guidePayMoney}}</td>
-                        	<td>{{if hotelArrange.payType == 0}}
-                        		现付
-                        		{{else if hotelArrange.payType == 1}}
-                        		签单
-                        		{{else if hotelArrange.payType == 2}}
-                        		转账
-                        		{{/if}}</td>
-                        	<td>{{hotelArrange.remark}}</td></tr>
+            <!-- 购物安排 -->
+            <div id="financial-count-shop-plan" class="tab-pane fade">
+                <table class="table table-striped table-bordered table-hover" style="margin-top: 30px">
+                    <thead><tr>
+                        <th>日期</th>
+                        <th>购物点</th>
+                        <th>商品</th>
+                        <th>联系电话</th>
+                        <th>地址</th>
+                        <th>备注</th>
+                    </tr></thead>
+                    <tbody>
+                    {{each shopList as shopArrange}}
+                    {{if shopArrange != null && shopArrange.id > 0}}
+                    <tr>
+                        <td>第{{shopArrange.whichDay}}天</td>
+                        <td>{{shopArrange.shop.name}}</td>
+                        <td>{{shopArrange.shopPolicy.name}}</td>
+                        <td>{{shopArrange.shop.mobileNumber}}</td>
+                        <td>
+                        {{if shopArrange.shop.province != null}}
+                            {{shopArrange.shop.province.name}}
                         {{/if}}
-                        {{/each}}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    
-    <div class="col-sm-13 widget-container-col">
-        <div class="widget-box ui-sortable-handle">
-            <div class="widget-header">
-                <h5 class="widget-title"><i class="ace-icon fa fa-tree"></i>景点安排</h5>
-            </div>
-            <div class="widget-body">
-                <div class="widget-main">
-                    <table class="table table-striped table-bordered table-hover" style="margin-top: 30px">
-                        <thead><tr>
-                            <th>日期</th>
-                            <th>时间</th>
-                            <th>景区</th>
-                            <th>收费项</th>
-                            <th>游览时长</th>
-                            <th>单价</th>
-                            <th>数量</th>
-                            <th>订单号</th>
-                            <th>应付</th>
-                            <th>导付</th>
-                            <th>付款方式</th>
-                            <th>备注</th>
-                        </tr></thead>
-                        <tbody>
-                        {{each scenicList as scenicArrange}}
-                        	{{if scenicArrange != null && scenicArrange.id > 0}}
-                        	<tr>
-                        	<td>第{{scenicArrange.whichDay}}天</td>
-                        	<td>{{scenicArrange.tourTime}}</td>
-                        	<td>{{scenicArrange.scenic.name}}</td>
-                        	<td>{{scenicArrange.scenicItem.name}}</td>
-                        	<td>{{scenicArrange.tourDuration}}</td>
-                        	<td>{{scenicArrange.price}}</td>
-                        	<td>{{scenicArrange.memberCount}}</td>
-                        	<td>{{if scenicArrange.orderNumber != null && scenicArrange.orderNumber != "null"}}{{scenicArrange.orderNumber}}{{/if}}</td>、
-                        	<td>{{scenicArrange.needPayMoney}}</td>
-                        	<td>{{scenicArrange.guidePayMoney}}</td>
-                        	<td>{{if scenicArrange.payType == 0}}
-                        		现付
-                        		{{else if scenicArrange.payType == 1}}
-                        		签单
-                        		{{else if scenicArrange.payType == 2}}
-                        		转账
-                        		{{/if}}</td>
-                        	<td>{{scenicArrange.remark}}</td>
-                        	</tr>
-                        	{{/if}}
-                        {{/each}}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <div class="col-sm-13 widget-container-col">
-        <div class="widget-box ui-sortable-handle">
-            <div class="widget-header">
-                <h5 class="widget-title"><i class="ace-icon fa fa-shopping-cart"></i>购物安排</h5>
-            </div>
-            <div class="widget-body">
-                <div class="widget-main">
-                    <table class="table table-striped table-bordered table-hover" style="margin-top: 30px">
-                        <thead><tr>
-                            <th>日期</th>
-                            <th>购物点</th>
-                            <th>商品</th>
-                            <th>联系电话</th>
-                            <th>地址</th>
-                            <th>备注</th>
-                        </tr></thead>
-                        <tbody>
-                        {{each shopList as shopArrange}}
-                        {{if shopArrange != null && shopArrange.id > 0}}
-                        <tr>
-                        	<td>第{{shopArrange.whichDay}}天</td>
-                        	<td>{{shopArrange.shop.name}}</td>
-                        	<td>{{shopArrange.shopPolicy.name}}</td>
-                        	<td>{{shopArrange.shop.mobileNumber}}</td>
-                        	<td>
-                        	{{if shopArrange.shop.province != null}}
-                       			{{shopArrange.shop.province.name}}
-                       		{{/if}}
-                       		{{if shopArrange.shop.city != null}}
-                       			{{shopArrange.shop.city.name}}
-                       		{{/if}}
-                       		{{if shopArrange.shop.district != null}}
-                       			{{shopArrange.shop.district.name}}
-                       		{{/if}}
-                       		{{shopArrange.shop.street}}</td>
-                        	<td>{{shopArrange.remark}}</td>
-                        </tr>
+                        {{if shopArrange.shop.city != null}}
+                            {{shopArrange.shop.city.name}}
                         {{/if}}
-                        {{/each}}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    
-    <div class="col-sm-13 widget-container-col">
-        <div class="widget-box ui-sortable-handle">
-            <div class="widget-header">
-                <h5 class="widget-title"><i class="ace-icon fa fa-credit-card"></i>自费安排</h5>
-            </div>
-            <div class="widget-body">
-                <div class="widget-main">
-                    <table class="table table-striped table-bordered table-hover" style="margin-top: 30px">
-                        <thead><tr>
-                            <th>日期</th>
-                            <th>自费商家</th>
-                            <th>项目</th>
-                            <th>联系电话</th>
-                            <th>地址</th>
-                            <th>单价</th>
-                            <th>底价</th>
-                            <th>数量</th>
-                            <th>应付</th>
-                            <th>导付</th>
-                            <th>付款方式</th>
-                            <th>备注</th>
-                        </tr></thead>
-                        <tbody>
-                        {{each selfPayList as selfPayArrange}}
-                        {{if selfPayArrange != null && selfPayArrange.id > 0}}
-                        <tr>
-                        	<td>第{{selfPayArrange.whichDay}}天</td>
-                        	<td>{{if selfPayArrange.selfPay != null}}{{selfPayArrange.selfPay.name}}{{/if}}</td>
-                        	<td>{{if selfPayArrange.selfPayItem != null}}{{selfPayArrange.selfPayItem.name}}{{/if}}</td>
-                        	<td>{{selfPayArrange.selfPay.mobileNumber}}</td>
-                        	<td>
-                        	{{if selfPayArrange.selfPay != null}}
-                        	{{if selfPayArrange.selfPay.province != null}}
-                       			{{selfPayArrange.selfPay.province.name}} 
-                       		{{/if}}
-                       		{{if selfPayArrange.selfPay.city != null}}
-                       			{{selfPayArrange.selfPay.city.name}}
-                       		{{/if}}
-                       		{{if selfPayArrange.selfPay.district != null}}
-                       			{{selfPayArrange.selfPay.district.name}}
-                       		{{/if}}
-                       		{{selfPayArrange.selfPay.street}}
-                       		{{/if}}</td>
-                        	<td>{{selfPayArrange.marketPrice}}</td>
-                        	<td>{{selfPayArrange.price}}</td>
-                        	<td>{{selfPayArrange.memberCount}}</td>
-                        	<td>{{selfPayArrange.needPayMoney}}</td>
-                        	<td>{{selfPayArrange.guidePayMoney}}</td>
-                        	<td>{{if selfPayArrange.payType == 0}}
-                        		现付
-                        		{{else if selfPayArrange.payType == 1}}
-                        		签单
-                        		{{else if selfPayArrange.payType == 2}}
-                        		转账
-                        		{{/if}}</td>
-                        	<td>{{selfPayArrange.remark}}</td>
-                        </tr>
+                        {{if shopArrange.shop.district != null}}
+                            {{shopArrange.shop.district.name}}
                         {{/if}}
-                        {{/each}}
-                        </tbody>
-                    </table>
-                </div>
+                        {{shopArrange.shop.street}}</td>
+                        <td>{{shopArrange.remark}}</td>
+                    </tr>
+                    {{/if}}
+                    {{/each}}
+                    </tbody>
+                </table>
             </div>
-        </div>
-    </div>
-    
-    
-    
-    <div class="col-sm-13 widget-container-col">
-        <div class="widget-box ui-sortable-handle">
-            <div class="widget-header">
-                <h5 class="widget-title"><i class="ace-icon fa fa-car"></i>票务安排</h5>
-            </div>
-            <div class="widget-body">
-                <div class="widget-main">
-                    <table class="table table-striped table-bordered table-hover" style="margin-top: 30px">
-                        <thead><tr>
-                            <th>票务公司</th>
-                            <th>类型</th>
-                            <th>出发城市</th>
-                            <th>到达城市</th>
-                            <th>日期</th>
-                            <th>班次</th>
-                            <th>座位级别</th>
-                            <th>单价</th>
-                            <th>数量</th>
-                            <th>应付</th>
-                            <th>导付</th>
-                            <th>付款方式</th>
-                            <th>备注</th>
-                        </tr></thead>
-                        <tbody>
-                        {{each ticketList as ticketArrange}}
-                        {{if ticketArrange != null && ticketArrange.id > 0 }}
-                        <tr>
-                        	<td>{{ticketArrange.ticket.name}}</td>
-                        	<td>
-                        		{{if ticketArrange.type == 1}}
-                        		机票
-                        		{{ else if ticketArrange.type == 2}}
-								汽车票
-                        		{{ else if ticketArrange.type == 3}}
-                        		火车票
-                        		{{ else if ticketArrange.type == 4}}
-                        		轮船票
-                        		{{/if}}
-                        	</td>
-                        	<td>{{ticketArrange.startingCity}}</td>
-                        	<td>{{ticketArrange.arriveCity}}</td>
-                        	<td>{{ticketArrange.startTime}}</td>
-                        	<td>{{ticketArrange.shift}}</td>
-                        	<td>{{ticketArrange.seatLevel}}</td>
-                        	<td>{{ticketArrange.price}}</td>
-                        	<td>{{ticketArrange.memberCount}}</td>
-                        	<td>{{ticketArrange.needPayMoney}}</td>
-                        	<td>{{ticketArrange.guidePayMoney}}</td>
-                        	<td>{{if ticketArrange.payType == 0}}
-                        		现付
-                        		{{else if ticketArrange.payType == 1}}
-                        		签单
-                        		{{else if ticketArrange.payType == 2}}
-                        		转账
-                        		{{/if}}</td>
-                        	<td>{{ticketArrange.remark}}</td>
-                        </tr>
+            <!-- 自费安排 -->
+            <div id="financial-count-selfpay-plan" class="tab-pane fade">
+                <table class="table table-striped table-bordered table-hover" style="margin-top: 30px">
+                    <thead><tr>
+                        <th>日期</th>
+                        <th>自费商家</th>
+                        <th>项目</th>
+                        <th>联系电话</th>
+                        <th>地址</th>
+                        <th>单价</th>
+                        <th>底价</th>
+                        <th>数量</th>
+                        <th>应付</th>
+                        <th>导付</th>
+                        <th>付款方式</th>
+                        <th>备注</th>
+                    </tr></thead>
+                    <tbody>
+                    {{each selfPayList as selfPayArrange}}
+                    {{if selfPayArrange != null && selfPayArrange.id > 0}}
+                    <tr>
+                        <td>第{{selfPayArrange.whichDay}}天</td>
+                        <td>{{if selfPayArrange.selfPay != null}}{{selfPayArrange.selfPay.name}}{{/if}}</td>
+                        <td>{{if selfPayArrange.selfPayItem != null}}{{selfPayArrange.selfPayItem.name}}{{/if}}</td>
+                        <td>{{selfPayArrange.selfPay.mobileNumber}}</td>
+                        <td>
+                        {{if selfPayArrange.selfPay != null}}
+                        {{if selfPayArrange.selfPay.province != null}}
+                            {{selfPayArrange.selfPay.province.name}} 
                         {{/if}}
-                        {{/each}}
-                        </tbody>
-                    </table>
-                </div>
+                        {{if selfPayArrange.selfPay.city != null}}
+                            {{selfPayArrange.selfPay.city.name}}
+                        {{/if}}
+                        {{if selfPayArrange.selfPay.district != null}}
+                            {{selfPayArrange.selfPay.district.name}}
+                        {{/if}}
+                        {{selfPayArrange.selfPay.street}}
+                        {{/if}}</td>
+                        <td>{{selfPayArrange.marketPrice}}</td>
+                        <td>{{selfPayArrange.price}}</td>
+                        <td>{{selfPayArrange.memberCount}}</td>
+                        <td>{{selfPayArrange.needPayMoney}}</td>
+                        <td>{{selfPayArrange.guidePayMoney}}</td>
+                        <td>{{if selfPayArrange.payType == 0}}
+                            现付
+                            {{else if selfPayArrange.payType == 1}}
+                            签单
+                            {{else if selfPayArrange.payType == 2}}
+                            转账
+                            {{/if}}</td>
+                        <td>{{selfPayArrange.remark}}</td>
+                    </tr>
+                    {{/if}}
+                    {{/each}}
+                    </tbody>
+                </table>
+            </div>
+            <!-- 票务安排 -->
+            <div id="financial-count-ticket-plan" class="tab-pane fade">
+                <table class="table table-striped table-bordered table-hover" style="margin-top: 30px">
+                    <thead><tr>
+                        <th>票务公司</th>
+                        <th>类型</th>
+                        <th>出发城市</th>
+                        <th>到达城市</th>
+                        <th>日期</th>
+                        <th>班次</th>
+                        <th>座位级别</th>
+                        <th>单价</th>
+                        <th>数量</th>
+                        <th>应付</th>
+                        <th>导付</th>
+                        <th>付款方式</th>
+                        <th>备注</th>
+                    </tr></thead>
+                    <tbody>
+                    {{each ticketList as ticketArrange}}
+                    {{if ticketArrange != null && ticketArrange.id > 0 }}
+                    <tr>
+                        <td>{{ticketArrange.ticket.name}}</td>
+                        <td>
+                            {{if ticketArrange.type == 1}}
+                            机票
+                            {{ else if ticketArrange.type == 2}}
+                            汽车票
+                            {{ else if ticketArrange.type == 3}}
+                            火车票
+                            {{ else if ticketArrange.type == 4}}
+                            轮船票
+                            {{/if}}
+                        </td>
+                        <td>{{ticketArrange.startingCity}}</td>
+                        <td>{{ticketArrange.arriveCity}}</td>
+                        <td>{{ticketArrange.startTime}}</td>
+                        <td>{{ticketArrange.shift}}</td>
+                        <td>{{ticketArrange.seatLevel}}</td>
+                        <td>{{ticketArrange.price}}</td>
+                        <td>{{ticketArrange.memberCount}}</td>
+                        <td>{{ticketArrange.needPayMoney}}</td>
+                        <td>{{ticketArrange.guidePayMoney}}</td>
+                        <td>{{if ticketArrange.payType == 0}}
+                            现付
+                            {{else if ticketArrange.payType == 1}}
+                            签单
+                            {{else if ticketArrange.payType == 2}}
+                            转账
+                            {{/if}}</td>
+                        <td>{{ticketArrange.remark}}</td>
+                    </tr>
+                    {{/if}}
+                    {{/each}}
+                    </tbody>
+                </table>
+            </div>
+            <!-- 其他安排 -->
+            <div id="financial-count-other-plan" class="tab-pane fade">
+                <table class="table table-striped table-bordered table-hover" style="margin-top: 30px">
+                    <thead><tr>
+                        <th>日期</th>
+                        <th>项目</th>
+                        <th>联系人</th>
+                        <th>联系电话</th>
+                        <th>单价</th>
+                        <th>数量</th>
+                        <th>应付</th>
+                        <th>导付</th>
+                        <th>付款方式</th>
+                        <th>备注</th>
+                    </tr></thead>
+                    <tbody>
+                    {{each otherList as otherArrange}}
+                    {{if otherArrange != null && otherArrange.id > 0}}
+                    <tr>
+                        <td>第{{otherArrange.whichDay}}天</td>
+                        <td>{{otherArrange.name}}</td>
+                        <td>{{otherArrange.managerName}}</td>
+                        <td>{{otherArrange.mobileNumber}}</td>
+                        <td>{{otherArrange.price}}</td>
+                        <td>{{otherArrange.memberCount}}</td>
+                        <td>{{otherArrange.needPayMoney}}</td>
+                        <td>{{otherArrange.guidePayMoney}}</td>
+                        <td>{{if otherArrange.payType == 0}}
+                            现付
+                            {{else if otherArrange.payType == 1}}
+                            签单
+                            {{else if otherArrange.payType == 2}}
+                            转账
+                            {{/if}}</td>
+                        <td>{{otherArrange.remark}}</td>
+                    </tr>
+                    {{/if}}
+                    {{/each}}
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
+    
+   
     
     <div class="col-sm-13 widget-container-col" style="display: none;">
         <div class="widget-box ui-sortable-handle">
@@ -522,54 +530,5 @@
     </div>
     
     
-     <div class="col-sm-13 widget-container-col">
-        <div class="widget-box ui-sortable-handle">
-            <div class="widget-header">
-                <h5 class="widget-title"><i class="ace-icon fa fa-smile-o"></i>其他安排</h5>
-            </div>
-            <div class="widget-body">
-                <div class="widget-main">
-                    <table class="table table-striped table-bordered table-hover" style="margin-top: 30px">
-                        <thead><tr>
-                            <th>日期</th>
-                            <th>项目</th>
-                            <th>联系人</th>
-                            <th>联系电话</th>
-                            <th>单价</th>
-                            <th>数量</th>
-                            <th>应付</th>
-                            <th>导付</th>
-                            <th>付款方式</th>
-                            <th>备注</th>
-                        </tr></thead>
-                        <tbody>
-                        {{each otherList as otherArrange}}
-                        {{if otherArrange != null && otherArrange.id > 0}}
-                        <tr>
-                        	<td>第{{otherArrange.whichDay}}天</td>
-                        	<td>{{otherArrange.name}}</td>
-                        	<td>{{otherArrange.managerName}}</td>
-                        	<td>{{otherArrange.mobileNumber}}</td>
-                        	<td>{{otherArrange.price}}</td>
-                        	<td>{{otherArrange.memberCount}}</td>
-                        	<td>{{otherArrange.needPayMoney}}</td>
-                        	<td>{{otherArrange.guidePayMoney}}</td>
-                        	<td>{{if otherArrange.payType == 0}}
-                        		现付
-                        		{{else if otherArrange.payType == 1}}
-                        		签单
-                        		{{else if otherArrange.payType == 2}}
-                        		转账
-                        		{{/if}}</td>
-                        	<td>{{otherArrange.remark}}</td>
-                        </tr>
-                        {{/if}}
-                        {{/each}}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
     <div style="height:30px;"></div>
 </div>

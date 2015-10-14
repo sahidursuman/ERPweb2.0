@@ -13,7 +13,7 @@
 						<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>线路产品:</label>
 						<div class="col-sm-2">
 							{{if touristGroupDetail.status != 0}}  
-								<input type="text" value="{{if touristGroupDetail.lineProduct != null}}{{touristGroupDetail.lineProduct.name}}{{/if}}" name="lineProductIdName" class="col-sm-8" readonly="readonly" /> 
+								<input type="text" value="{{if touristGroupDetail.lineProduct != null}}{{touristGroupDetail.lineProduct.name}}{{/if}}" name="lineProductIdName" class="col-sm-8 bind-change" readonly="readonly" /> 							
 								<input type="hidden" value="{{touristGroupDetail.lineProductId}}" name="lineProductId" />
 								<button class="col-sm-4 btn btn-sm btn-primary btn-travelLine-search" style="padding-bottom:5px;">
 									<i class="ace-icon fa fa-search "></i>搜索
@@ -49,11 +49,18 @@
 					<div class="form-group choosePartnerAgencyDiv">
 						<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>客户来源:</label>
 						<div class="col-sm-2">
+							<input type="text" name="fromPartnerAgency" class="col-sm-12" placeholder="请输入客户来源" value="{{if touristGroupDetail.partnerAgency != null}}{{touristGroupDetail.partnerAgency.travelAgencyName}}{{/if}}">
+							<input type="hidden" value="{{if touristGroupDetail.partnerAgency != null}}{{touristGroupDetail.partnerAgency.id}}{{/if}}" name="fromPartnerAgencyId">
+
+							<!--<input type="hidden" value="{{if touristGroupDetail.partnerAgency != null}}{{touristGroupDetail.partnerAgency.id}}{{/if}}" name="fromPartnerAgencyId">
+							<input type="text" name="fromPartnerAgency" class="col-sm-12" placeholder="请输入客户来源" value="{{if touristGroupDetail.partnerAgency != null}}{{touristGroupDetail.partnerAgency.travelAgencyName}}{{/if}}">
+							<input type="hidden" value="{{if touristGroupDetail.partnerAgency != null}}{{touristGroupDetail.partnerAgency.id}}{{/if}}" name="fromPartnerAgencyId"> --> 
+
 							<!-- <input type="text" name="PartnerAgencyName" class="col-sm-12 choosePartnerAgency ui-autocomplete-input" />
 							<input type="hidden" name="PartnerAgencyNameId" /> -->
-							<select name="fromPartnerAgencyId" class="col-sm-12">
+							<!--<select name="fromPartnerAgencyId" class="col-sm-12">
 								<option selected="selected" value="{{if touristGroupDetail.partnerAgency != null}}{{touristGroupDetail.partnerAgency.id}}{{/if}}">{{if touristGroupDetail.partnerAgency != null}}{{touristGroupDetail.partnerAgency.travelAgencyName}}{{/if}}</option>
-							</select>
+							</select>-->
 							<!--
 							<input class="chooseGuide" name="guideName" type="text"/><input type="hidden" name="guideNameId"> 
 							 -->
@@ -335,18 +342,18 @@
 												<input name="receptionAddress" value="{{if touristGroupDetail.isNeedArriveService==1}}{{if touristGroupDetail.outRemarkArrange != null}}{{touristGroupDetail.outRemarkArrange.arrivePosition}}{{/if}}{{/if}}" type="text" class="col-sm-8" />
 											</div>
 										</div>
-										<!-- <div class="form-group">
+										<div class="form-group">
 											<label class="col-sm-3 control-label no-padding-right">班次：</label>
 											<div class="col-sm-9">
-												<input name="receptionNumber" type="text" class="col-sm-8" />
+												<input name="arriveShift" type="text" class="col-sm-8" value="{{if touristGroupDetail.isNeedArriveService==1}}{{if touristGroupDetail.outRemarkArrange != null}}{{touristGroupDetail.outRemarkArrange.arriveShift}}{{/if}}{{/if}}" />
 											</div>
 										</div>
 										<div class="form-group">
 											<label class="col-sm-3 control-label no-padding-right">班次时间：</label>
 											<div class="col-sm-9">
-												<input name="receptionNumberTime" type="text" class="col-sm-8" />
+												<input name="arriveShiftTime" type="text" class="col-sm-8" value="{{if touristGroupDetail.isNeedArriveService==1}}{{if touristGroupDetail.outRemarkArrange != null}}{{touristGroupDetail.outRemarkArrange.arriveShiftTime}}{{/if}}{{/if}}" />
 											</div>
-										</div> -->
+										</div>
 									</div>
 								</div>
 								
@@ -379,7 +386,7 @@
 												<div class="input-group">
 													<input type="text" value="{{if touristGroupDetail.isNeedLeaveService==1}}{{if touristGroupDetail.outRemarkArrange != null}}{{touristGroupDetail.outRemarkArrange.leaveTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}{{/if}}" name="sendTime" class="col-sm-12 date-picker datepicker" />
 													<span class="input-group-addon">
-														<i class="fa fa-calendar"></i>
+														<i class="fa fa-calendar"></i> 
 													</span>
 												</div>
 											</div>
@@ -390,18 +397,18 @@
 												<input name="sendAddress" value="{{if touristGroupDetail.isNeedLeaveService==1}}{{if touristGroupDetail.outRemarkArrange != null}}{{touristGroupDetail.outRemarkArrange.leavePosition}}{{/if}}{{/if}}" type="text" class="col-sm-8" />
 											</div>
 										</div>
-										<!-- <div class="form-group">
+										<div class="form-group">
 											<label class="col-sm-3 control-label no-padding-right">班次：</label>
 											<div class="col-sm-9">
-												<input name="sendNumber" type="text" class="col-sm-8" />
+												<input name="leaveShift" type="text" class="col-sm-8" value="{{if touristGroupDetail.isNeedLeaveService==1}}{{if touristGroupDetail.outRemarkArrange != null}}{{touristGroupDetail.outRemarkArrange.leaveShift}}{{/if}}{{/if}}" />
 											</div>
 										</div>
 										<div class="form-group">
 											<label class="col-sm-3 control-label no-padding-right">班次时间：</label>
 											<div class="col-sm-9">
-												<input name="sendNumberTime" type="text" class="col-sm-8" />
+												<input name="leaveShiftTime" type="text" class="col-sm-8" value="{{if touristGroupDetail.isNeedLeaveService==1}}{{if touristGroupDetail.outRemarkArrange != null}}{{touristGroupDetail.outRemarkArrange.leaveShiftTime}}{{/if}}{{/if}}" />
 											</div>
-										</div> -->
+										</div>
 									</div>
 								</div>
 							</div>
@@ -411,10 +418,10 @@
 			</div>
 		</div>
 		<div class="space-10"></div>
-		<button class="btn btn-block btn-primary btn-submit-addTouristGroup">
+		<button class="btn btn-block btn-primary btn-submit-addTouristGroup" data-entity-id="{{touristGroupDetail.id}}">
 			<i class="ace-icon fa fa-check"></i>
 			提交信息
-		</button>
+		</button>  
 		<div class="space-20"></div>
 	</form>
 	

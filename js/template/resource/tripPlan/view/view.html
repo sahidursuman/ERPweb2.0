@@ -134,7 +134,7 @@
 						<td>{{if restaurant.restaurant != null}}{{restaurant.restaurant.name}}{{/if}}</td>
 						<td>{{if restaurant.restaurant != null}}{{restaurant.restaurant.mobileNumber}}{{/if}}</td>
 						<td>{{if restaurant.restaurantStandard != null}}{{restaurant.restaurantStandard.type}}{{/if}}</td>
-						<td>{{if restaurant.restaurantStandard != null}}{{restaurant.restaurantStandard.typeName}}{{/if}}</td>
+						<td>{{if restaurant.restaurantStandard != null}}{{restaurant.restaurantStandard.price}}{{/if}}</td>
 						<td>{{restaurant.memberCount}}</td>
 						<td>{{restaurant.guidePayMoney}}</td>
 						<td>{{if restaurant.payType == 0}}现付{{else if restaurant.payType==1}}签单{{else if restaurant.payType==2}}转账{{else}}网付{{/if}}</td>
@@ -171,7 +171,7 @@
 						<td>{{hotel.hotel.name}}</td>
 						<td>{{hotel.hotel.mobileNumber}}</td>
 						<td>{{hotel.hotelRoom.type}}</td>
-						<td>{{hotel.needRoomCount}}</td>
+						<td>{{hotel.memberCount}}</td>
 						<td>{{hotel.guidePayMoney}}</td>
 						<td>{{if hotel.payType == 0}}现付{{else if hotel.payType==1}}签单{{else if hotel.payType==2}}转账{{else}}网付{{/if}}</td>
 						<td>{{hotel.remark}}</td>
@@ -312,7 +312,7 @@
 				{{each ticketList as ticket}}
 					<tr>
 						<td>{{ticket.ticket.name}}</td>
-						<td>{{ticket.type}}</td>
+						<td>{{if ticket.type == 1}}机票{{else if ticket.type == 2}}汽车票{{else if ticket.type == 3}}火车票{{else if ticket.type == 4}}轮船票{{/if}}</td>
 						<td>{{ticket.startingCity}}</td>
 						<td>{{ticket.arriveCity}}</td>
 						<td>{{if ticket.startTime != null}}{{ticket.startTime}}{{/if}}</td>
@@ -398,8 +398,9 @@
 						<td>{{other.remark}}</td>
 					</tr>
 				{{/each}}
-				</tbody> 
+				</tbody>   
 			</table> 
 		</div>
 	</div>
 </div>
+   

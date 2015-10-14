@@ -13,9 +13,14 @@ define(function(require, exports) {
 	var addLineId = menuKey+"-addLine";
 	var lookID = menuKey+"-look";
 	var updateId = menuKey+"update";
+
 	var travelLine = {
 		pageData:{
 			pageNo:0
+		},
+		searchData : {
+			name : "",
+			status : ""
 		},
 		listTravelLine:function(page,name,status){
 			$.ajax({
@@ -32,8 +37,6 @@ define(function(require, exports) {
 					if (result) {
 						var travelLineList = data.travelLineList;
 						travelLine.pageData.pageNo = data.pageNo;
-
-
 						travelLineList = JSON.parse(travelLineList);
 						data.travelLineList = travelLineList;
 						var html = listTemplate(data);
@@ -45,20 +48,16 @@ define(function(require, exports) {
 							travelLine.addLineProduct(id);
 						});
 						//新增线路button按钮事件
-						//$("#"+tabId+"  .btn-travelLine-add").click(function(){
-						//	travelLine.addTravelLine();
-						//});
-                           //新增线路+++++++
 						$("#"+tabId+"  .btn-travelLine-add").click(function(){
 							travelLine.addTravelLine();
 						});
-
+						
 						//修改线路button按钮事件
 						$("#"+tabId+"  .btn-line-edit").click(function(){
 							var id = $(this).attr("data-entiy-id");
 							travelLine.updateTravelLine(id,false);
 						});
-
+						
 						//删除线路button按钮事件
 						$("#"+tabId+"  .btn-line-delete").click(function(){
 							var id = $(this).attr("data-entiy-id");
@@ -83,52 +82,51 @@ define(function(require, exports) {
 						});
 						
 						//搜索栏状态button下拉事件
-						$("#"+tabId+"  .search-area .btn-status .dropdown-menu a").click(function(){
+						$("#"+tabId+" .search-area .btn-status .dropdown-menu a").click(function(){
 							$(this).parent().parent().parent().find("button").attr("data-value",$(this).attr("data-value"));
 							$(this).parent().parent().parent().find("span").text($(this).text());
+							travelLine.searchData = {
+								name : $("#"+tabId+" input[name=travelLine_name]").val(),
+								status : $("#"+tabId+" .btn-status").find("button").attr("data-value")
+							}
+							travelLine.listTravelLine(0,travelLine.searchData.name,travelLine.searchData.status);
 						});
 						
 						//搜索按钮事件
 						$("#"+tabId+"  .btn-travelLine-search").click(function(){
-							var name = $("#"+tabId+"  input[name=travelLine_name]").val();
-							var status = $("#"+tabId+"  .btn-status").find("button").attr("data-value");
-							travelLine.listTravelLine(0,name,status);
+							travelLine.searchData = {
+								name : $("#"+tabId+"  input[name=travelLine_name]").val(),
+								status : $("#"+tabId+"  .btn-status").find("button").attr("data-value")
+							}
+							travelLine.listTravelLine(0,travelLine.searchData.name,travelLine.searchData.status);
 						});
 						
 						//分页--首页按钮事件
 						$("#"+tabId+"  .pageMode a.first").click(function(){
-							var name = $("#"+tabId+"  input[name=travelLine_name]").val();
-							var status = $("#"+tabId+"  .btn-status").find("button").attr("data-value");
-							travelLine.listTravelLine(0,name,status);
+							travelLine.listTravelLine(0,travelLine.searchData.name,travelLine.searchData.status);
 						});
 						
 						//分页--上一页事件
 						$("#"+tabId+"  .pageMode a.previous").click(function(){
-							var name = $("#"+tabId+"  input[name=travelLine_name]").val();
-							var status = $("#"+tabId+"  .btn-status").find("button").attr("data-value");
 							var previous = data.pageNo - 1;
 							if(data.pageNo == 0){
 								previous = 0;
 							}
-							travelLine.listTravelLine(previous,name,status);
+							travelLine.listTravelLine(previous,travelLine.searchData.name,travelLine.searchData.status);
 						});
 						
 						//分页--下一页事件
 						$("#"+tabId+"  .pageMode a.next").click(function(){
-							var name = $("#"+tabId+"  input[name=travelLine_name]").val();
-							var status = $("#"+tabId+"  .btn-status").find("button").attr("data-value");
 							var next =  data.pageNo + 1;
 							if(data.pageNo == data.totalPage-1){
 								next = data.pageNo ;
 							}
-							travelLine.listTravelLine(next,name,status);
+							travelLine.listTravelLine(next,travelLine.searchData.name,travelLine.searchData.status);
 						});
 						
 						//分页--尾页事件
 						$("#"+tabId+"  .pageMode a.last").click(function(){
-							var name = $("#"+tabId+"  input[name=travelLine_name]").val();
-							var status = $("#"+tabId+"  .btn-status").find("button").attr("data-value");
-							travelLine.listTravelLine(data.totalPage-1,name,status);
+							travelLine.listTravelLine(data.totalPage-1,travelLine.searchData.name,travelLine.searchData.status);
 						});
 					}
 				}
@@ -206,7 +204,6 @@ define(function(require, exports) {
 				});
 			});
 
-
 			// 以弹出框的形式添加线路下行程信息
 			$(".travelLineDayList .btn-line-day-add").click(function(){
 				function trim(str){
@@ -279,8 +276,6 @@ define(function(require, exports) {
 					}
 				});
 			});
-
-
 		},
 		scanDetail:function(id){
 			$.ajax({
@@ -299,7 +294,6 @@ define(function(require, exports) {
 						data.travelLine = travelLineInfo;
 						var html = scanDetailTemplate(data);
 						addTab(lookID,"查看线路",html);
-
 					}
 					
 					$(".travelLineDayList .btn-guide-scan").click(function(){
@@ -375,9 +369,8 @@ define(function(require, exports) {
 				type:"POST",
 				data:"id="+id+"",
 				dataType:"json",
-
 				success:function(data){
-
+					layer.close(globalLoadingLayer);
 					var result = showDialog(data);
 					if (result) {
 						var travelLineInfo = JSON.parse(data.travelLine);
@@ -385,186 +378,183 @@ define(function(require, exports) {
 						data.clipboardMode = clipboardMode;
 						var html = updateTemplate(data);
 						addTab(updateId,"修改线路",html);
-
 						var title = "修改线路模板信息";
 						if(clipboardMode){
 							title = "新增线路模板信息";
 						}
+						
+				    	// 初始化并绑定表单验证
+				    	var validator = rule.traveLineCheckor($('.travelLineUpdateMainForm'));
 
+				    	// 1.处理添加和删除的Json数据包的处理
+				    	
+				    	// 添加行程安排
+				    	$(".travelLineDayList .btn-line-day-add").click(function(){
+				    		var lineDayHtml = addLineDayTemplate();
+				    		var addTravelLineDayLayer = layer.open({
+				    			type:1,
+				    			title:"新增日程",
+				    			skin: 'layui-layer-rim', //加上边框
+				 			    area: ['50%', '40%'], //宽高
+				 			    zIndex:1029,
+							    content: lineDayHtml,
+							    success:function(){
+							    	// 绑定表单验证
+							    	var dayCheckor = rule.travelLineDayCheckor($('.travelLineDayForm'));
+							    	// 初始化UEditor
+							    	var ue = init_editor("detailEditor-add-travelLine",{zIndex:99999999});
 
+							    	$(".travelLineDayForm .btn-submit-line-day").click(function(){
+							    		if( !dayCheckor.form() )  return;
 
-						    	// 初始化并绑定表单验证
-						    	var validator = rule.traveLineCheckor($('.travelLineUpdateMainForm'));
-
-						    	// 1.处理添加和删除的Json数据包的处理
-						    	
-						    	// 添加行程安排
-						    	$(".travelLineDayList .btn-line-day-add").click(function(){
-						    		var lineDayHtml = addLineDayTemplate();
-						    		var addTravelLineDayLayer = layer.open({
-						    			type:1,
-						    			title:"新增日程",
-						    			skin: 'layui-layer-rim', //加上边框
-						 			    area: ['50%', '40%'], //宽高
-						 			    zIndex:1029,
-									    content: lineDayHtml,
-									    success:function(){
-									    	// 绑定表单验证
-									    	var dayCheckor = rule.travelLineDayCheckor($('.travelLineDayForm'));
-									    	
-									    	$(".travelLineDayForm .btn-submit-line-day").click(function(){
-									    		if( !dayCheckor.form() )  return;
-
-									    		function trim(str){ 
-										             return str.replace(/(^\s*)|(\s*$)/g, ""); 
-										        }
-									    		var repastDetail = $(".travelLineDayForm input[name=repastDetail]").val();
-									    		var hotelLevel = $(".travelLineDayForm select[name=hotelLevel]").val();
-									    		var whichDay = $(".travelLineDayForm select[name=whichDay]").val();
-									    		var level = "未选择";
-									    		if (hotelLevel == 1) {
-									    			level = "三星以下";
-												}else if (hotelLevel == 2) {
-													level = "三星";
-												}else if(hotelLevel == 3){
-													level = "准四星";
-												}else if(hotelLevel == 4){
-													level = "四星";
-												}else if(hotelLevel == 5){
-													level = "准五星";
-												}else if(hotelLevel == 6){
-													level = "五星";
-												}else if(hotelLevel == 7){
-													level = "五星以上";
-												}
-									    		var title = $(".travelLineDayForm input[name=title]").val();
-									    		if(trim(title) == ""){
-													showMessageDialog($( "#confirm-dialog-message" ), "请输入行程标题");
-													return false;
-												}
-									    		var restPosition = $(".travelLineDayForm input[name=restPosition]").val();
-									    		var roadScenic = $(".travelLineDayForm input[name=roadScenic]").val();
-									    		var detail = encodeURIComponent($(".travelLineDayForm .detailEditor").html());
-									    		if(trim(detail) == ""){
-													showMessageDialog($( "#confirm-dialog-message" ), "请输入行程详情");
-													return false;
-												}
+							    		function trim(str){ 
+								             return str.replace(/(^\s*)|(\s*$)/g, ""); 
+								        }
+							    		var repastDetail = $(".travelLineDayForm input[name=repastDetail]").val();
+							    		var hotelLevel = $(".travelLineDayForm select[name=hotelLevel]").val();
+							    		var whichDay = $(".travelLineDayForm select[name=whichDay]").val();
+							    		var level = "未选择";
+							    		if (hotelLevel == 1) {
+							    			level = "三星以下";
+										}else if (hotelLevel == 2) {
+											level = "三星";
+										}else if(hotelLevel == 3){
+											level = "准四星";
+										}else if(hotelLevel == 4){
+											level = "四星";
+										}else if(hotelLevel == 5){
+											level = "准五星";
+										}else if(hotelLevel == 6){
+											level = "五星";
+										}else if(hotelLevel == 7){
+											level = "五星以上";
+										}
+							    		var title = $(".travelLineDayForm input[name=title]").val();
+							    		if(trim(title) == ""){
+											showMessageDialog($( "#confirm-dialog-message" ), "请输入行程标题");
+											return false;
+										}
+							    		var restPosition = $(".travelLineDayForm input[name=restPosition]").val();
+							    		var roadScenic = $(".travelLineDayForm input[name=roadScenic]").val();
+							    		var detail = encodeURIComponent(ue.getContent());
+							    		if(trim(detail) == ""){
+											showMessageDialog($( "#confirm-dialog-message" ), "请输入行程详情");
+											return false;
+										}
 //									    		var day = $(".travelLineDayList .lineDayList tbody tr").length + 1;
-									    		var lineDayHtml = "<tr><td>第"+whichDay+"天<input name=\"whichDay\" value=\""+whichDay+"\" type=\"hidden\"/></td><td>"+repastDetail+"</td><td>"+restPosition+"</td><td>"+level+"</td><td>"+title+"</td>" +
-									    				"<td style=\"width:120px\"><div class=\"btn-group\"><a data-entiy-id=\"\" class=\" btn-line-day-edit cursor\">修改|</a>" +
-									    				"<a data-entiy-id=\"\" class=\" btn-line-day-delete cursor\">删除</a></div>" +
-									    				"<input type=\"hidden\" name=\"hotelLevel\" value=\""+hotelLevel+"\"/>" +
-									    				"<input type=\"hidden\" name=\"roadScenic\" value=\""+roadScenic+"\"/>" +
-									    				"<input type=\"hidden\" name=\"detail\" value=\""+detail+"\"/></td></tr>";
-									    		$(".travelLineDayList .lineDayList tbody").append(lineDayHtml);
-									    		$(".travelLineDayList .lineDayList .btn-line-day-edit").unbind().click(function(){
-									    			travelLine.bindEditButton($(this));
-									    		});
-									    		
-									    		$(".travelLineDayList .lineDayList .btn-line-day-delete").click(function(){
-									    			travelLine.deleteDayDialog($(this));
-												});
-									    		
-									    		layer.close(addTravelLineDayLayer);
-									    	});
-									    }
-						    		});
-						    		
-						    	});
-						    	
-						    	// 删除日期行程
-						    	$(".travelLineDayList .lineDayList .btn-line-day-delete").click(function(){
-						    		travelLine.deleteDayDialog($(this));
-						    	});
-						    	
-						    	// 修改日期行程
-						    	$(".travelLineDayList .lineDayList .btn-line-day-edit").unbind().click(function(){
-						    		travelLine.bindEditButton($(this));
-						    	});
-						    	
-						    	// 2.序列化form表单，并通过Ajax实现保存操作
-						    	$(".travelLineDayList .btn-submit-travelLine").unbind().click(function(){
-						    		if ( !validator.form() )  return;
+							    		var lineDayHtml = "<tr><td>第"+whichDay+"天<input name=\"whichDay\" value=\""+whichDay+"\" type=\"hidden\"/></td><td>"+repastDetail+"</td><td>"+restPosition+"</td><td>"+level+"</td><td>"+title+"</td>" +
+							    				"<td style=\"width:120px\"><div class=\"btn-group\"><a data-entiy-id=\"\" class=\" btn-line-day-edit cursor\">修改|</a>" +
+							    				"<a data-entiy-id=\"\" class=\" btn-line-day-delete cursor\">删除</a></div>" +
+							    				"<input type=\"hidden\" name=\"hotelLevel\" value=\""+hotelLevel+"\"/>" +
+							    				"<input type=\"hidden\" name=\"roadScenic\" value=\""+roadScenic+"\"/>" +
+							    				"<input type=\"hidden\" name=\"detail\" value=\""+detail+"\"/></td></tr>";
+							    		$(".travelLineDayList .lineDayList tbody").append(lineDayHtml);
+							    		$(".travelLineDayList .lineDayList .btn-line-day-edit").unbind().click(function(){
+							    			travelLine.bindEditButton($(this));
+							    		});
+							    		
+							    		$(".travelLineDayList .lineDayList .btn-line-day-delete").click(function(){
+							    			travelLine.deleteDayDialog($(this));
+										});
+							    		
+							    		layer.close(addTravelLineDayLayer);
+							    	});
+							    }
+				    		});
+				    		
+				    	});
+				    	
+				    	// 删除日期行程
+				    	$(".travelLineDayList .lineDayList .btn-line-day-delete").click(function(){
+				    		travelLine.deleteDayDialog($(this));
+				    	});
+				    	
+				    	// 修改日期行程
+				    	$(".travelLineDayList .lineDayList .btn-line-day-edit").unbind().click(function(){
+				    		travelLine.bindEditButton($(this));
+				    	});
+				    	
+				    	// 2.序列化form表单，并通过Ajax实现保存操作
+				    	$(".travelLineDayList .btn-submit-travelLine").unbind().click(function(){
+				    		if ( !validator.form() )  return;
 
-						    		var status = 0;
-									if($(".travelLineUpdateMainForm .travelLine-status").is(":checked") == true){
-										status = 1;
+				    		var status = 0;
+							if($(".travelLineUpdateMainForm .travelLine-status").is(":checked") == true){
+								status = 1;
+							}
+							var form = $(".travelLineUpdateMainForm").serialize()+"&status="+status+"";
+				    		var travelLineJsonAdd = "[";
+				    		var lineDayListLength = $(".travelLineDayList .lineDayList tbody tr:not(.deleted)").length;
+				    		$(".travelLineDayList .lineDayList tbody tr:not(.deleted)").each(function(i){
+				    			var lineDayJson = "";
+				    			var id = $(this).find(" .btn-line-day-delete").attr("data-entiy-id");
+				    			var repastDetail = $(this).find("td")[1].innerHTML;
+				    			var restPosition = $(this).find("td")[2].innerHTML;
+				    			var title = $(this).find("td")[4].innerHTML;
+				    			var whichDay = $(this).find("input[name=whichDay]").val();
+				    			var roadScenic = $(this).find("input[name=roadScenic]").val();
+				    			var detail = $(this).find("input[name=detail]").val();
+				    			var hotelLevel = $(this).find("input[name=hotelLevel]").val();
+				    			if (i == (lineDayListLength -1)) {
+				    				if (id != null && id != "") {
+				    					lineDayJson = "{\"id\":\""+id+"\",\"whichDay\":\""+whichDay+"\",\"repastDetail\":\""+repastDetail+"\",\"hotelLevel\":\""+hotelLevel+"\",\"title\":\""+title+"\",\"restPosition\":\""+restPosition+"\",\"roadScenic\":\""+roadScenic+"\",\"detail\":\""+detail+"\"}";
+									}else{
+										lineDayJson = "{\"whichDay\":\""+whichDay+"\",\"repastDetail\":\""+repastDetail+"\",\"hotelLevel\":\""+hotelLevel+"\",\"title\":\""+title+"\",\"restPosition\":\""+restPosition+"\",\"roadScenic\":\""+roadScenic+"\",\"detail\":\""+detail+"\"}";
 									}
-									var form = $(".travelLineUpdateMainForm").serialize()+"&status="+status+"";
-						    		var travelLineJsonAdd = "[";
-						    		var lineDayListLength = $(".travelLineDayList .lineDayList tbody tr:not(.deleted)").length;
-						    		$(".travelLineDayList .lineDayList tbody tr:not(.deleted)").each(function(i){
-						    			var lineDayJson = "";
-						    			var id = $(this).find(" .btn-line-day-delete").attr("data-entiy-id");
-						    			var repastDetail = $(this).find("td")[1].innerHTML;
-						    			var restPosition = $(this).find("td")[2].innerHTML;
-						    			var title = $(this).find("td")[4].innerHTML;
-						    			var whichDay = $(this).find("input[name=whichDay]").val();
-						    			var roadScenic = $(this).find("input[name=roadScenic]").val();
-						    			var detail = $(this).find("input[name=detail]").val();
-						    			var hotelLevel = $(this).find("input[name=hotelLevel]").val();
-						    			if (i == (lineDayListLength -1)) {
-						    				if (id != null && id != "") {
-						    					lineDayJson = "{\"id\":\""+id+"\",\"whichDay\":\""+whichDay+"\",\"repastDetail\":\""+repastDetail+"\",\"hotelLevel\":\""+hotelLevel+"\",\"title\":\""+title+"\",\"restPosition\":\""+restPosition+"\",\"roadScenic\":\""+roadScenic+"\",\"detail\":\""+detail+"\"}";
-											}else{
-												lineDayJson = "{\"whichDay\":\""+whichDay+"\",\"repastDetail\":\""+repastDetail+"\",\"hotelLevel\":\""+hotelLevel+"\",\"title\":\""+title+"\",\"restPosition\":\""+restPosition+"\",\"roadScenic\":\""+roadScenic+"\",\"detail\":\""+detail+"\"}";
-											}
-										}else{
-											if (id != null && id != "") {
-												lineDayJson = "{\"id\":\""+id+"\",\"whichDay\":\""+whichDay+"\",\"repastDetail\":\""+repastDetail+"\",\"hotelLevel\":\""+hotelLevel+"\",\"title\":\""+title+"\",\"restPosition\":\""+restPosition+"\",\"roadScenic\":\""+roadScenic+"\",\"detail\":\""+detail+"\"},";
-											}else {
-												lineDayJson = "{\"whichDay\":\""+whichDay+"\",\"repastDetail\":\""+repastDetail+"\",\"hotelLevel\":\""+hotelLevel+"\",\"title\":\""+title+"\",\"restPosition\":\""+restPosition+"\",\"roadScenic\":\""+roadScenic+"\",\"detail\":\""+detail+"\"},";
-											}
-										}
-						    			travelLineJsonAdd += lineDayJson; 
-						    		});
-						    		travelLineJsonAdd += "]";
-						    	
-						    		var travelLineJsonDel = "[";
-									var travelLineListLength = $(".travelLineDayList .lineDayList tbody tr.deleted").length;
-									$(".travelLineDayList .lineDayList tbody tr.deleted").each(function(i){
-										var travelLineDayJson = "";
-										var id = $(this).find(".btn-line-day-delete").attr("data-entiy-id");
-										if(i == (travelLineListLength-1)){
-											travelLineDayJson = "{\"id\":\""+id+"\"}";
-										}
-										else{
-											travelLineDayJson = "{\"id\":\""+id+"\"},";
-										}
-										travelLineJsonDel += travelLineDayJson;
-									});
-									travelLineJsonDel += "]";
-						    	
-									var url = ""+APP_ROOT+"back/travelLine.do?method=updateTravelLine&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update";
-									if(clipboardMode){
-										url = ""+APP_ROOT+"back/travelLine.do?method=saveTravelLine&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=add";
+								}else{
+									if (id != null && id != "") {
+										lineDayJson = "{\"id\":\""+id+"\",\"whichDay\":\""+whichDay+"\",\"repastDetail\":\""+repastDetail+"\",\"hotelLevel\":\""+hotelLevel+"\",\"title\":\""+title+"\",\"restPosition\":\""+restPosition+"\",\"roadScenic\":\""+roadScenic+"\",\"detail\":\""+detail+"\"},";
+									}else {
+										lineDayJson = "{\"whichDay\":\""+whichDay+"\",\"repastDetail\":\""+repastDetail+"\",\"hotelLevel\":\""+hotelLevel+"\",\"title\":\""+title+"\",\"restPosition\":\""+restPosition+"\",\"roadScenic\":\""+roadScenic+"\",\"detail\":\""+detail+"\"},";
 									}
-									$.ajax({
-										url:url,
-										type:"POST",
-										data:form+"&travelLineJsonAdd="+encodeURIComponent(travelLineJsonAdd)+"&travelLineJsonDel="+encodeURIComponent(travelLineJsonDel)+"",
-										dataType:"json",
-										beforeSend:function(){
-											globalLoadingLayer = layer.open({
-												type:3
-											});
-										},
-										success:function(data){
-											layer.close(globalLoadingLayer);
-											var result = showDialog(data);
-											if(result){
-												layer.close(updateTravelLineLayer);
-												showMessageDialog($( "#confirm-dialog-message" ),data.message);
-												travelLine.listTravelLine(travelLine.pageData.pageNo,"",1);
-											}
-										}
+								}
+				    			travelLineJsonAdd += lineDayJson; 
+				    		});
+				    		travelLineJsonAdd += "]";
+				    	
+				    		var travelLineJsonDel = "[";
+							var travelLineListLength = $(".travelLineDayList .lineDayList tbody tr.deleted").length;
+							$(".travelLineDayList .lineDayList tbody tr.deleted").each(function(i){
+								var travelLineDayJson = "";
+								var id = $(this).find(".btn-line-day-delete").attr("data-entiy-id");
+								if(i == (travelLineListLength-1)){
+									travelLineDayJson = "{\"id\":\""+id+"\"}";
+								}
+								else{
+									travelLineDayJson = "{\"id\":\""+id+"\"},";
+								}
+								travelLineJsonDel += travelLineDayJson;
+							});
+							travelLineJsonDel += "]";
+				    	
+							var url = ""+APP_ROOT+"back/travelLine.do?method=updateTravelLine&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update";
+							if(clipboardMode){
+								url = ""+APP_ROOT+"back/travelLine.do?method=saveTravelLine&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=add";
+							}
+							$.ajax({
+								url:url,
+								type:"POST",
+								data:form+"&travelLineJsonAdd="+encodeURIComponent(travelLineJsonAdd)+"&travelLineJsonDel="+encodeURIComponent(travelLineJsonDel)+"",
+								dataType:"json",
+								beforeSend:function(){
+									globalLoadingLayer = layer.open({
+										type:3
 									});
-									
-						    	});
-						    }
-
+								},
+								success:function(data){
+									layer.close(globalLoadingLayer);
+									var result = showDialog(data);
+									if(result){
+										layer.close(updateTravelLineLayer);
+										showMessageDialog($( "#confirm-dialog-message" ),data.message);
+										travelLine.listTravelLine(travelLine.pageData.pageNo,travelLine.searchData.name,travelLine.searchData.status);
+									}
+								}
+							});
+							
+				    	});
 					}
-
+				}
 			});
 		},
 		scanLineProductDay:function(id){
@@ -612,7 +602,7 @@ define(function(require, exports) {
 									var result = showDialog(data);
 									if(result){
 										$("#"+tabId+"  .travelLineList .travelLine-"+id+"").fadeOut(function(){
-											travelLine.listTravelLine(0,"",1);
+											travelLine.listTravelLine(travelLine.pageData,travelLine.searchData.name,travelLine.searchData.status);
 										});
 									}
 								}
@@ -1026,14 +1016,13 @@ define(function(require, exports) {
 			//添加行程安排餐饮
 			var scheduleDetails = '<div class="timeline-item clearfix scheduleList" index='+travelLine.routeIndex+'><div class="timeline-info"><i class="timeline-indicator ace-icon fa fa-cutlery btn btn-success no-hover"></i><span class="label label-info label-sm">餐饮</span></div>'+
 			'<div class="widget-box transparent"><div class="widget-body"><div class="widget-main"><table class="table table-striped table-bordered table-hover">'+
-			'<thead><tr><th>餐厅名称</th><th>餐厅电话</th><th>餐标类型</th><th>餐标名称</th>	<th>菜单列表</th><th>每位价格</th><th>备注</th>	<th style="width: 60px;">操作</th></tr></thead>'+
+			'<thead><tr><th>餐厅名称</th><th>餐厅电话</th><th>用餐类型</th><th>餐标</th>	<th>菜单列表</th><th>备注</th>	<th style="width: 60px;">操作</th></tr></thead>'+
 			'<tbody><tr>'+
 			'<td><input type="text" class="col-xs-12 chooseRestaurantName bind-change"/><input type="hidden" name="restaurantId"/></td>'+
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
 			'<td><select name="type" class="col-xs-12 restauranType"><option value="早餐">早餐</option><option value="午餐">午餐</option><option value="晚餐">晚餐</option></select></td>'+
-			'<td><input type="text" name="typeName" class="col-xs-12 restaurantStandardsName bind-change"/><input type="hidden" name="typeId"/></td>'+
+			'<td><input type="text" name="price" class="col-xs-12 restaurantStandardsName bind-change"/><input type="hidden" name="typeId"/></td>'+
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="menuList"/></td>'+
-			'<td><input type="text" class="col-xs-12" readonly="readonly" name="pricePerPerson"/></td>'+
 			'<td><input type="text" class="col-xs-12" name="remark"/></td><td><a data-entity-id="27" class=" btn-restaurant-delete deleteScheduleList cursor"> 删除</a></td></tr>'+
 			'</tbody></table></div></div></div></div>',
 			validator = e.data;
@@ -1050,9 +1039,10 @@ define(function(require, exports) {
 			
 			$(".scheduleList .restauranType").on("change", function(){
 				var typeParent = $(this).parent().parent();
-				typeParent.find("input[name=typeName]").val("");
+				typeParent.find("input[name=price]").val("");
 				typeParent.find("input[name=menuList]").val("");
 				typeParent.find("input[name=pricePerPerson]").val("");
+				typeParent.find("input[name=remark]").val("");
 			});
 			
 			
@@ -1106,6 +1096,7 @@ define(function(require, exports) {
 											objParent.find("input[name=pricePerPerson]").val("");
 											objParent.find("input[name=menuList]").val("");
 											objParent.find("input[name=typeId]").val("");
+											objParent.find("input[name=remark]").val("");
 										}
 									},select:function(event,ui){
 										var objEatName = this;
@@ -1122,7 +1113,7 @@ define(function(require, exports) {
 													var restaurantStandard = JSON.parse(data.restaurantStandard);
 													
 													objParent.find("input[name=menuList]").val(restaurantStandard.menuList);
-													objParent.find("input[name=pricePerPerson]").val(restaurantStandard.contractPrice);
+													objParent.find("input[name=remark]").val(restaurantStandard.remark);
 												}
 						                    }
 										});
@@ -1131,17 +1122,17 @@ define(function(require, exports) {
 									var objEat = this,
 								    eatType = $(objEat).parent().parent().find("[name=type]").val();
 									$.ajax({
-										url:""+APP_ROOT+"back/restaurant.do?method=findStandardTypeName&token="+$.cookie("token")+"&menuKey=resource_restaurant&operation=view",
+										url:""+APP_ROOT+"back/restaurant.do?method=getRestaurantStandardByType&token="+$.cookie("token")+"&menuKey=resource_restaurant&operation=view",
 					                    dataType: "json",
-					                    data:"id="+restaurantNameId+"&type="+eatType,
+					                    data:"restaurantId="+restaurantNameId+"&type="+eatType,
 					                    success: function(data) {
 					                    	layer.close(globalLoadingLayer);
 											var result = showDialog(data);
 											if(result){
-												var restaurantStandardList = JSON.parse(data.restaurantStandardList);
+												var restaurantStandardList = data.restaurantStandardList;
 												if(restaurantStandardList && restaurantStandardList.length > 0){
 													for(var i=0; i<restaurantStandardList.length; i++){
-														restaurantStandardList[i].value = restaurantStandardList[i].typeName;
+														restaurantStandardList[i].value = restaurantStandardList[i].price;
 													}
 
 													$(objEat).autocomplete('option','source', restaurantStandardList);
@@ -1843,7 +1834,7 @@ define(function(require, exports) {
 			'<td><input type="text" class="col-xs-12" name="price"/></td>'+
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="managerName"/></td>'+
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
-			'<td><input type="text" class="col-xs-12" readonly="readonly" name="companyPhoneNumber"/></td>'+
+			'<td><input type="text" class="col-xs-12" readonly="readonly" name="telNumber"/></td>'+
 			'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
 			'<td><a data-entity-id="27" class="btn-restaurant-delete deleteResourceTicketList cursor"> 删除 </a></td></tr></tbody></table></div></div></div></div>';
 			$(this).parents(".scheduleContainer").find(".scheduleListContainer").append(shoppingDetails);
@@ -1878,7 +1869,7 @@ define(function(require, exports) {
 								}
 								thisParent.find("input[name=managerName]").val(ticket.managerName);
 								thisParent.find("input[name=mobileNumber]").val(ticket.mobileNumber);
-								thisParent.find("input[name=companyPhoneNumber]").val(ticket.companyPhoneNumber);
+								thisParent.find("input[name=telNumber]").val(ticket.telNumber);
 							}
 	                    }
 	                });
@@ -1893,7 +1884,7 @@ define(function(require, exports) {
 						thisParent.find("input[name=price]").val("");
 						thisParent.find("input[name=managerName]").val("");
 						thisParent.find("input[name=mobileNumber]").val("");
-						thisParent.find("input[name=companyPhoneNumber]").val("");
+						thisParent.find("input[name=telNumber]").val("");
 					}
 					// 更新表单验证的配置
 					validator = rule.lineProductUpdate(validator);

@@ -4,7 +4,8 @@
     border:2px solid #51b0c2!important;
     color: white;
     font-size: 10px;
-    height: 29px;
+    height: 24px;
+    line-height: 10px;
 }
 .search-btn:hover{
     background: #359fb2!important;
@@ -72,7 +73,7 @@ table tr th{
     border: 1px solid white !important;
 }
 .table-border {
-    border: 1px solid #ececec!important;
+    border: 1px solid #ececec !important;
 }
 .title-size{
     font-size: 14px!important;
@@ -242,7 +243,6 @@ table tr td{
     text-indent: 1em;
     margin-left: 10px;
     width: 240px;
-
 }
 #alter-user {
     color: #393939;
@@ -257,6 +257,38 @@ table tr td{
     width: 340px;
     height: 300px;
 }
+
+/*/修改弹出页面的close样式/*/
+.layui-layer-setwin .layui-layer-close1{
+    width:17px;height:17px;cursor:pointer;
+    background-position:0;
+}
+.layui-layer-ico{ background: url(../images/incon01.png); }
+.layui-layer-setwin .layui-layer-close1:hover{background-position:0;}
+.layui-layer-rim {border:1px solid #8D8D8D;border:1px solid rgba(0,0,0,.3);
+    border-radius:5px;box-shadow:none;
+    filter:alpha(opacity=10);
+    -moz-opacity:0.1;
+    -khtml-opacity: 0.1;
+    opacity: 0.1;}
+.layui-layer-title{
+    border-bottom:0;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+.layui-layer-title{
+    height: 40px;
+    line-height: 40px;
+}
+
+.ui-spinner .btn{
+    border: 1px solid #d5d5d5!important;
+    height: 13px!important;
+}
+.fa-sort-desc{
+    margin-top: -2px!important;
+}
+/*dqq style*/
 .viewI{
     margin: 0px 5px 0px 5px;
     font-style: inherit;
@@ -270,6 +302,177 @@ table tr td{
 }
 .phonePer{
 	margin:0px 0px 0px 18px;
+}
+
+.whereQ{
+    width: 650px;
+    margin: auto;
+    font-size: 12px;
+    font-family: "微软雅黑";
+    color: #393939;
+}
+
+.whereQ td {
+    border: 1px solid #ececec;
+    padding: 7px 0px 7px 0px;
+}
+.whereQ .style-myself{
+    width: 87px;
+    border: 2px solid #5d5d5d;
+    text-align: right;
+}
+.whereQ .styleOne-self{
+    text-indent:10px;
+}
+/*/车队管理/*/
+.whereOne{
+    width: 984px;
+    margin: auto;
+    font-size: 12px;
+    font-family: "微软雅黑";
+    color: #393939;
+}
+.whereOne .style-myself{
+    width: 90px;
+    border: 2px solid #5d5d5d;
+    text-align: right;
+}
+
+.whereOne .styleOne-self{
+    width: 360px;
+    text-indent:10px;
+}
+.HeadManage{
+    height: 34px;
+    background-color: #f7f8f8;
+    font-size: 14px;
+    color: #428bca;
+    text-indent:15px;
+    padding: 0px;
+}
+.whereTwo{
+    width: 984px;
+}
+.whereTwo tr td{
+    text-align: center;
+}
+.whereTwo .style-myself{
+    text-align: center;
+}
+.style-myselfOne{
+    width: 105px !important;
+}
+/*restaurant时间宽度*/
+.whereTwo .rangeTime{
+ width: 150px!important;
+}
+.whereTwo .rangeTimeWidth{
+   width: 180px!important;
+}
+/*remarkWidth*/
+.whereTwo .remarkWidth{
+  width: 200px!important;
+}
+
+/*修改添加页面及编辑页面的input button样式*/
+/*导游管理*/
+.guideAdd label{
+    font-size: 12px!important;
+}
+.guideAdd input,select{
+    height: 24px!important;
+    /*line-height: 12px;*/
+    padding: 0px;
+    font-size: 12px;
+}
+.insuranceWidth input{
+    width: 195px!important;
+}
+.form-horizontal .control-label{
+    padding-top: 2px;
+}
+.guideAdd textarea{
+    height: 45px;
+}
+.guideAdd button{
+    height: 24px;
+    font-size: 12px;
+    line-height: 12px;
+}
+.guideAdd .guideSubmit{
+    height: 36px!important;
+    font-size: 14px;
+}
+.guideAdd .guideInputList{
+    width: 220px!important;
+    font-size: 12px;
+    padding: 0px 0px 0px 10px;
+}
+.guideAdd .guideInterval{
+  margin-bottom: 10px!important;
+}
+.checkbox{
+    line-height: 12px;
+}
+/*车队管理*/
+.globalAdd label{
+    font-size: 12px!important;
+}
+.globalAdd input,select{
+    height: 24px!important;
+    /*line-height: 12px;*/
+    padding: 0px;
+    font-size: 12px;
+}
+.formOneList input{
+    width: 220px;
+    height: 24px!important;
+    /*line-height: 12px;*/
+    padding: 0px;
+    font-size: 12px;
+}
+.form-horizontal .control-label{
+    padding-top: 2px;
+}
+.globalAdd textarea{
+    height: 45px;
+}
+.globalAdd button{
+    height: 24px;
+    font-size: 12px;
+    line-height: 12px;
+}
+.globalAdd .guideSubmit{
+    height: 36px!important;
+    font-size: 14px;
+}
+.globalAdd .guideInputList{
+    width: 220px!important;
+    font-size: 12px;
+    padding: 0px 0px 0px 10px;
+}
+.globalAdd .guideInterval{
+    margin-bottom: 10px!important;
+}
+.checkbox{
+    line-height: 12px;
+}
+.addressMinute{
+    width: 612px!important;
+}
+
+.badge{display:inline-block;min-width:10px;padding:2px 5px;
+    font-size:12px;color:#fff;line-height:1;
+    vertical-align:baseline;white-space:nowrap;text-align:center;
+    background-color:#777;border-radius:10px}
+.navInformation{
+   font-size: 14px!important;font-weight: bold;
+}
+.foodsAll{
+    width: 51px!important;
+}
+.table-border{
+    background-color: #f7f8f8!important;
 }
 .Spacing{
     margin-left: 8px;

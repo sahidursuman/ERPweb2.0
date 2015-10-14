@@ -13,7 +13,7 @@
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>同行名称:</label>
 						<div class="col-sm-3">
-							<input type="text" name="travelAgencyName" value={{partnerAgencyJson.travelAgencyName}} class="col-sm-12" />
+							<input type="text" name="travelAgencyName" value={{partnerAgencyJson.travelAgencyName}} class="col-sm-12" maxlength="100"/>
 						</div>
 						<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>类型:</label> 
 						<div class="col-sm-3">
@@ -27,13 +27,13 @@
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right">座机号码:</label>
 						<div class="col-sm-3">
-							<input type="text" name="telNumber" value="{{partnerAgencyJson.telNumber}}" class="col-sm-12" />
+							<input type="text" name="telNumber" value="{{partnerAgencyJson.telNumber}}" class="col-sm-12" maxlength="20"/>
 						</div>
 						<label class="col-sm-2 control-label no-padding-right">传真号码:</label>
 						<div class="col-sm-3">
-							<input type="text" name="faxNumber" value="{{partnerAgencyJson.faxNumber}}" class="col-sm-12" />
+							<input type="text" name="faxNumber" value="{{partnerAgencyJson.faxNumber}}" class="col-sm-12" maxlength="20"/>
 						</div>
-					</div>
+					</div>  
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right">等级:</label>
 						<div class="col-sm-3">
@@ -49,7 +49,7 @@
 								<!-- <input class="choosePartnerManager col-sm-12" name="partnerAgencyNameList" type="text" /> -->
 								<select class="col-sm-12" name="headPartnerAgency">
 								</select>
-								<input type="hidden" name="headerAgencyName"/>
+								<input type="hidden" name="headerAgencyName" maxlength="100"/>
 								<span class="input-group-addon addheaderPartnerAgency" style="cursor:pointer;" title="添加总社">
 									<i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
 								</span>
@@ -63,7 +63,7 @@
 								<option selected="selected" value="">未选择</option>
 							</select>
 							<select name="cityId" class="col-sm-3"  style="margin-right:3px">
-								<option selected="selected" value="">未选择</option>
+								<option selected="selected" value="">未选择</option>  
 							</select>
 							<select name="districtId" class="col-sm-3">
 								<option selected="selected" value="">未选择</option>
@@ -73,7 +73,7 @@
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right">详细地址:</label>
 						<div class="col-sm-6">
-							<input type="text" name="street" value="{{partnerAgencyJson.street}}" class="col-sm-12" placeholder="请输入街道地址"/>
+							<input type="text" name="street" value="{{partnerAgencyJson.street}}" class="col-sm-12" placeholder="请输入街道地址" maxlength="50"/>
 						</div>										  
 					</div>
 					<div class="form-group">
@@ -90,7 +90,7 @@
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right">简介:</label>
 						<div class="col-sm-8">
-							<textarea class="form-control" name="remark" class="col-sm-12" >{{partnerAgencyJson.remark}}</textarea>
+							<textarea class="form-control" name="remark" class="col-sm-12" maxlength="500">{{partnerAgencyJson.remark}}</textarea>
 						</div>
 					</div>
 				</div>
@@ -125,17 +125,17 @@
 						<tbody>
 							{{each partnerAgencyJson.partnerAgencyContactList as contact}}
 								<tr data-entity-id="{{contact.id}}">
-									<td><input class="col-sm-12" type="text" name="contactRealname" value="{{contact.contactRealname}}"/></td>
-									<td><input class="col-sm-12" type="text" name="contactMobileNumber" value="{{contact.contactMobileNumber}}"/></td>
-									<td><input class="col-sm-12" type="text" name="departmentName" value="{{contact.departmentName}}"/></td>
-									<td><input class="col-sm-12" type="text" name="dutyName" value="{{contact.dutyName}}"/></td>
-									<td><button data-entity-id="{{contact.id}}" class="btn btn-xs btn-danger btn-contact-delete needConfirm"><i class="ace-icon fa fa-trash-o"></i></button></td>
+									<td><input class="col-sm-12" type="text" name="contactRealname" value="{{contact.contactRealname}}" maxlength="32"/></td>
+									<td><input class="col-sm-12" type="text" name="contactMobileNumber" value="{{contact.contactMobileNumber}}" maxlength="20"/></td>
+									<td><input class="col-sm-12" type="text" name="departmentName" value="{{contact.departmentName}}" maxlength="45"/></td>
+									<td><input class="col-sm-12" type="text" name="dutyName" value="{{contact.dutyName}}" maxlength="45"/></td>
+									<td><a data-entity-id="{{contact.id}}" class="btn-contact-delete needConfirm">删除</a></td>
 								</tr>
 							{{/each}}
 						</tbody>
 					</table>
 				</div>
-			</div>
+			</div>  
 		</div>
 		<div class="space-10"></div>
 		<button class="btn btn-block btn-primary btn-submit-partnerAgency">

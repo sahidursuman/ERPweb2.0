@@ -115,7 +115,7 @@ define(function(require, exports) {
 			    type: 1,
 			    title:"新增景区信息",
 			    skin: 'layui-layer-rim', //加上边框
-			    area: ['95%', '90%'], //宽高
+			    area: ['1190px', '700px'], //宽高
 			    zIndex:1028,
 			    content: html,
 			    success:function(){
@@ -160,10 +160,10 @@ define(function(require, exports) {
 			    	//给房间列表新增按钮绑定事件
 			    	$project.find(".btn-scenic-standard-add").click(function(){
 			    		var html = "<tr>" +
-			    				"<td><input name=\"name\" class='col-sm-12' type=\"text\"/></td>" +
+			    				"<td><input name=\"name\" class='col-sm-12' type=\"text\" maxlength=\"100\"/></td>" +
 			    				"<td class=\"time\"><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right;padding-top:3px;\"><button class=\"btn btn-success btn-sm btn-white add\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i></button></label></div></td>" +
-			    				"<td><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input name=\"contractPrice\" class='col-sm-12' type=\"text\"/></div></td>" +
-			    				"<td><input name=\"remark\" class='col-sm-12' type=\"text\"/></td>" +
+			    				"<td><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input name=\"contractPrice\" class='col-sm-12' type=\"text\" maxlength=\"7\"/></div></td>" +
+			    				"<td><input name=\"remark\" class='col-sm-12' type=\"text\" maxlength=\"1000\"/></td>" +
 			    				"<td style=\"width:70px\"><a data-entity-id=\"\" class=\" btn-scenic-standard-delete\">删除</a></td>" +
 			    				"</tr>";
 			    		$project.find(".scenicItemStandardList tbody").append(html);
@@ -188,7 +188,7 @@ define(function(require, exports) {
 							var td = $(this).parent().parent().parent();
 							var index = td.find("div").length;
 							var timeLimitDiv = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right;padding-top:3px;\"><button class=\"btn btn-danger btn-sm btn-white del\"><i class=\"ace-icon fa fa-minus bigger-110 icon-only\"></i></button></label></div>";
-							var contractPriceInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"contractPrice\" class='col-sm-12' type=\"text\"/></div>";
+							var contractPriceInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"contractPrice\" class='col-sm-12' type=\"text\" maxlength=\"7\"/></div>";
 							td.next().append(contractPriceInput);
 							td.append(timeLimitDiv);
 							itemValidator = rule.checkItems($(".addScenicContainer .scenicItemStandardList"));
@@ -327,7 +327,7 @@ define(function(require, exports) {
 						    type: 1,
 						    title:"编辑景区信息",
 						    skin: 'layui-layer-rim', //加上边框
-						    area: ['95%', '90%'], //宽高
+						    area: ['1190px', '700px'], //宽高
 						    zIndex:1028,
 						    content: html,
 						    success:function(){
@@ -426,10 +426,10 @@ define(function(require, exports) {
 						    	//给项目列表新增按钮绑定事件
 						    	$project.find(".btn-scenic-standard-add").click(function(){
 						    		var html = "<tr>" +
-						    				"<td><input name=\"name\" class='col-sm-12' type=\"text\"/></td>" +
+						    				"<td><input name=\"name\" class='col-sm-12' type=\"text\" maxlength=\"100\"/></td>" +
 						    				"<td class=\"time\"><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right\"><button class=\"btn btn-success btn-sm btn-white add\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i></button></label></div></td>" +
-						    				"<td><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input name=\"contractPrice\" class='col-sm-12' type=\"text\"/></div></td>" +
-						    				"<td><input name=\"remark\" class='col-sm-12' type=\"text\"/></td>" +
+						    				"<td><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input name=\"contractPrice\" class='col-sm-12' type=\"text\" maxlength=\"7\"/></div></td>" +
+						    				"<td><input name=\"remark\" class='col-sm-12' type=\"text\" maxlength=\"1000\"/></td>" +
 						    				"<td style=\"width:70px\"><a data-entity-id=\"\" class=\"btn-scenic-standard-delete\">删除</a></td>" +
 						    				"</tr>";
 						    		$project.find(".scenicItemStandardList tbody").append(html);
@@ -635,7 +635,7 @@ define(function(require, exports) {
 						    type: 1,
 						    title:"查看景区公司",
 						    skin: 'layui-layer-rim', //加上边框
-						    area: ['60%', '60%'], //宽高
+						    area: ['1024px', '600px'], //宽高
 						    zIndex:1028,
 						    content: html
 						});
@@ -718,7 +718,7 @@ define(function(require, exports) {
     			td = obj.parent().parent().parent(), 
     			index = td.find("div").length,
 				timeLimitDiv = "<div data-index=\""+(index+1)+"\" data-entity-id=\"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right\"><button class=\"btn btn-danger btn-sm btn-white delete\"><i class=\"ace-icon fa fa-minus bigger-110 icon-only\"></i></button></label></div>",
-    			contractPriceInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"contractPrice\" class='col-sm-12' type=\"text\"/></div>";
+    			contractPriceInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"contractPrice\" class='col-sm-12' type=\"text\" maxlength=\"7\"/></div>";
 			td.append(timeLimitDiv);
 			td.next().append(contractPriceInput);
 			$project.find(".scenicItemStandardList .datepicker").datepicker({

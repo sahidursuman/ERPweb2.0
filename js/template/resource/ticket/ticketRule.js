@@ -53,8 +53,7 @@ define(function(require, exports) {
 	    	    	        	errMsg: '座机号码格式不正确'
 	    	    	        }
 	    	        ]
-	    	    } ,
-	    	    {	// 传真
+	    	    } ,{	// 传真
 	    	    	$ele: $obj.find('input[name="faxNumber"]'),
 	    	    	rules: [
 							
@@ -63,7 +62,7 @@ define(function(require, exports) {
 	    	    	        	errMsg: '传真号码格式不正确'
 	    	    	        }
 	    	        ]
-	    	    } 
+	    	    }   
                 ]);
 			return validator;
 		}
