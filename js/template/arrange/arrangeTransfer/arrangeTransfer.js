@@ -84,7 +84,7 @@ define(function(require, exports) {
 					var startTime=data.startDay;
 					var endTime = transfer.dateCalculation(startTime,6);
 					$transferOut.find("input[name=createTime]").eq(1).val(endTime);
-					
+
 					$("#" +tabId+" .transferTouristMain .date-picker").datepicker({
 						autoclose: true,
 						todayHighlight: true,
@@ -186,7 +186,7 @@ define(function(require, exports) {
 		},
 		//默认时间是一周的计算
 		dateCalculation:function(dt, days){
-			dt = dt.replace('-', '/');//js不认2000-1-31,只认2000/1/31 
+			dt = dt.split('-').join('/');//js不认2000-1-31,只认2000/1/31 
 			var t1 = new Date(new Date(dt).valueOf() + days*24*60*60*1000);// 日期加上指定的天数 
 			return t1.getFullYear() + "-" + (t1.getMonth()+1) + "-" + t1.getDate();
 		}, 
