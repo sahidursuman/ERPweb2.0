@@ -10,7 +10,7 @@ define(function(require, exports) {
 	var partnerAgency = {
 		searchData:{
 			travelAgencyName:"",
-			status:""
+			status:"1"
 		},
 		listPartnerAgency:function(page,travelAgencyName,status){
 			$.ajax({
@@ -58,11 +58,6 @@ define(function(require, exports) {
 						$("#"+tabId+" .search-area .btn-status .dropdown-menu a").click(function(){
 							$(this).parent().parent().parent().find("button").attr("data-value",$(this).attr("data-value"));
 							$(this).parent().parent().parent().find("span").text($(this).text());
-							partnerAgency.searchData = {
-								travelAgencyName : $("#"+tabId+" .search-area input[name=partnerAgency_travelAgencyName]").val(),
-								status : $("#"+tabId+" .search-area .btn-status").find("button").attr("data-value")
-							};
-							partnerAgency.listPartnerAgency(0,partnerAgency.searchData.travelAgencyName,partnerAgency.searchData.status);
 						});
 						
 						//搜索按钮事件

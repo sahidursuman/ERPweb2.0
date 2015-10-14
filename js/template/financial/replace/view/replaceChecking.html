@@ -101,8 +101,8 @@
                 <td>{{checking.needIncomeMoney}}</td>
                 <td>{{checking.incomeMoney}}</td>
                 <td>{{checking.unIncomeMoney}}</td>
-                <td><input type="text" name="FinancialBookingRealUnPayedMoney" value="{{checking.realUnIncomeMoney}}" style="text-align:center" {{if checking.isConfirmAccount == 1 && roleType != 1 }} disabled = "true" {{/if}}></td>
-                <td><input type="text" name="FinancialbookingRemark" value="{{checking.remark}}" style="text-align:center" {{if checking.isConfirmAccount == 1 && roleType != 1 }} disabled = "true" {{/if}}></td>
+                <td><input type="text" maxlength="9" name="FinancialBookingRealUnPayedMoney" value="{{checking.realUnIncomeMoney}}" style="text-align:center" {{if checking.isConfirmAccount == 1 && roleType != 1 }} disabled = "true" {{/if}}></td>
+                <td><input type="text" maxlength="1000" name="FinancialbookingRemark" value="{{checking.remark}}" style="text-align:center" {{if checking.isConfirmAccount == 1 && roleType != 1 }} disabled = "true" {{/if}}></td>
                 <td>{{if checking.checkTime == null || checking.checkTime == ""}}-{{else}}{{checking.checkTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
                 <td>{{checking.checkUser}}</td>
                 <td>  
