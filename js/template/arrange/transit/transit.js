@@ -780,7 +780,7 @@ define(function(require, exports) {
 						parents.find("input[name=hotelRoomTypeId]").val("");
 						parents.find("input[name=hotelMobileNumber]").val("");
 						parents.find("input[name=hotelManagerName]").val("");
-						parentObj.find("input[name=hotelPrice]").val("");
+						parents.find("input[name=hotelPrice]").val("");
 					}
 				},
 				select:function(event,ui){
@@ -902,7 +902,7 @@ define(function(require, exports) {
 					if(ui.item == null){
 						$(this).val("");
 						var thisParent = $(this).parent().parent();
-						thisParent.find("input[name=tickeId]").val(ui.item.id).trigger('change');
+						thisParent.find("input[name=tickeId]").val("").trigger('change');
 					}
 				}
 			}).off("click").on("click", function(){
