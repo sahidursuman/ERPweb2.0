@@ -10,7 +10,7 @@
 				</h5>
 			</div>
 			<div class="widget-body">
-				<div class="widget-main">
+				<div class="widget-main widget-mainFrist">
 					<div class="form-group guideInterval">
 						<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>餐厅名称:</label>
 						<div class="col-sm-3">
@@ -41,12 +41,7 @@
 							<input type="text" name="faxNumber" class="col-sm-12" value="{{restaurant.faxNumber}}" />
 						</div>
 					</div>
-					<div class="form-group guideInterval">
-						<label class="col-sm-2 control-label no-padding-right">餐厅设施:</label>
-						<div class="col-sm-3">
-							<input type="text" name="facility" value="{{restaurant.facility}}" class="col-sm-12">
-						</div>
-					</div>
+
 					<div class="form-group guideInterval">
 						<label class="col-sm-2 control-label no-padding-right">餐厅所在省市:</label>
 						<div class="col-sm-3">
@@ -72,6 +67,12 @@
 						</div>
 					</div>
 					<div class="form-group guideInterval">
+						<label class="col-sm-2 control-label no-padding-right">餐厅设施:</label>
+						<div class="col-sm-6">
+							<input type="text" name="facility" value="{{restaurant.facility}}" class="col-sm-12 addressMinute">
+						</div>
+					</div>
+					<div class="form-group guideInterval">
 						<label class="col-sm-2 control-label no-padding-right">详细地址:</label>
 						<div class="col-sm-6">
 							<input type="text" name="street" class="col-sm-12 addressMinute" value="{{restaurant.street}}" placeholder="请输入街道地址" maxlength="100"/>
@@ -94,11 +95,7 @@
 		<div class="form-group">
 			<div class="col-xs-12 col-sm-12 widget-container-col">
 				<div class=" ui-sortable-handle">
-
 						<h5 class="">
-							<!--<span class="badge badge-primary">2</span>-->
-							<!--餐标列表-->
-
 							<span class="badge badge-primary">2</span>
 							<label class="middle title-size navInformation">餐标列表</label>
 
@@ -118,7 +115,7 @@
 										<th width="200" class="table-border"><span class="necessary">*</span>餐标</th>
 										<th width="200" class="table-border">菜单</th>
 										<th class="table-border">备注</th>
-										<th class="table-border">操作</th>
+										<th class="table-border" style="width: 60px">操作</th>
 									</tr>
 								</thead>
 								<tbody>
