@@ -609,7 +609,7 @@ function listMenu(menuTemplate){
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/partnerAgency/partnerAgency.js?version=",function(partnerAgency){
-						partnerAgency.listPartnerAgency(0,"",1);
+						partnerAgency.listPartnerAgency(0,"","");
 					});
 				});
 				
@@ -642,7 +642,7 @@ function listMenu(menuTemplate){
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/travelLine/travelLine.js",function(travelLine){
-						travelLine.listTravelLine(0,"",1);
+						travelLine.listTravelLine(0,"","");
 						modals["resource_travelLine"] = travelLine;
 					});
 				});	
@@ -956,6 +956,7 @@ function listMenu(menuTemplate){
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/arrange/booking/booking.js",function(booking){
 						booking.listbooking(0,"","","","","");
+						modals["arrange_booking"] = booking;
 					});
 				});
 				
@@ -1037,6 +1038,35 @@ function listMenu(menuTemplate){
 						$allInputs.eq($allInputs.length-1).focus();
 					}
 				})
+				// 处理中英文长度控制问题
+				.on('input', 'input[type="text"]', function(event) {
+					event.preventDefault();
+					
+					// 未设置maxlength，退出
+					if (this.attributes.maxlength === undefined)  {
+						return;
+					}
+
+					var $that = $(this), 
+					max = $that.attr('maxlength'),
+					ctrlOldVal = $that.data('ctrlOldVal'),
+					val = $that.val();
+					
+					if (chEnWordCount(val) > max)  {
+						$that.val(ctrlOldVal);
+					} else {
+						$that.data('ctrlOldVal', val);
+					}
+
+					function chEnWordCount(str){  
+						var count = 0;
+
+						if (!!str)  {
+					    	count = str.replace(/[^\x00-\xff]/g,"**").length;  
+						}
+					    return count;  
+					} 
+				});
 			}
 		}
 	});
