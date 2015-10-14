@@ -36,8 +36,10 @@ define(function(require, exports) {
 	        "year":"",
 	        "startMonth":"",
 	        "endMonth":""
-        },//back/ticket.do?method=listTicket back/financial/financialTransfer.do?method=listSumFcTransfer
-        edited : false,
+        },//back/Transfer.do?method=listTransfer back/financial/financialTransfer.do?method=listSumFcTransfer
+        edited:false,
+        blanceEdited:false,
+        oldBlancePartnerAgencyId:0,
         listTransfer:function(page,partnerAgencyId,year,month){
             $.ajax({
                 url:""+APP_ROOT+"back/financial/financialTransfer.do?method=listSumFcTransfer&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
@@ -157,35 +159,35 @@ define(function(require, exports) {
 	                        var html = transferChecking(data);
 	                        var validator;
 	                 	    //判断页面是否存在
-	                 	    if($("#tab-"+checkTabId+"-content").length > 0) {
-	                 	    	if(Transfer.edited){
+	                        if($("#" +"tab-"+checkTabId+"-content").length > 0)
+	                 	      {
+	                 	    	 if(Transfer.edited){
 	                 	    		addTab(checkTabId,"转客对账");
 	                 	    		showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
 	                 	    			 validator = rule.check($('.transferChecking'));
-					            		 if (!validator.form()) { 
-					            			 return; 
-					            		 }
-					            		 Transfer.saveCheckingData(pageNo,partnerAgencyId,partnerAgencyName,year,month);
-					            		 Transfer.edited = false;
-					            		 addTab(checkTabId,"转客对账",html);
-					            		 validator = rule.check($('.transferChecking'));
-					            	 },function(){
-					            		 addTab(checkTabId,"转客对账",html);
-					            		 validator = rule.check($('.transferChecking'));
-					            	 });
+	  				            		 if (!validator.form()) { return; }
+	  				            		 Transfer.saveCheckingData(partnerAgencyId,partnerAgencyName)
+	  				            		 Transfer.edited = false;
+	  				            		 addTab(checkTabId,"转客对账",html);
+	  				            		 validator = rule.check($('.transferChecking'));
+	  				            	 },function(){
+	  				            		 addTab(checkTabId,"转客对账",html);
+	  				            		 Transfer.edited = false;
+	  				            		 validator = rule.check($('.transferChecking'));
+	  				            	 });
 	                 	    	 }else{
-	                 	    		addTab(checkTabId,"转客对账",html);
-		                 	        validator = rule.check($('.transferChecking'));
+	  	                 	    	addTab(checkTabId,"转客对账",html);
+	  	                 	        validator = rule.check($('.transferChecking'));
 	                 	    	 }
-	             	    		 
 	                 	    }else{
 	                 	    	addTab(checkTabId,"转客对账",html);
+	                 	    	Transfer.edited = false;
 	                 	    	validator = rule.check($('.transferChecking'));
-	                 	    	
 	                 	    };
-	                 	   $("#tab-"+checkTabId+"-content .all").on("change",function(){
-                	    		Transfer.edited = true; 
-                	    	});
+	             	    	$("#" +"tab-"+checkTabId+"-content .all").on("change",function(){
+	             	    		Transfer.edited = true; 
+	             	    	});   
+	                          
 	                 	//展开事件
 		                     $("#" +"tab-"+ checkTabId+"-content"+" .seeGroup").click(function(){
 		                    	var tr = $(this).parent().parent().next();
@@ -276,8 +278,8 @@ define(function(require, exports) {
 				                 //给确认对账按钮绑定事件
 				                 $("#" +"tab-"+ checkTabId+"-content"+" .btn-transferFinancial-checking").click(function(){
 				                	 // 表单校验
-				                	 if (!validator.form()) { return; } 
-				                	 Transfer.saveCheckingData(pageNo,partnerAgencyId,partnerAgencyName,year,month);
+				                	 if (!validator.form()) { return; }
+  				            		 Transfer.saveCheckingData(partnerAgencyId,partnerAgencyName)
 			                      })
 					             //取消按钮事件
 					             $("#" +"tab-"+ checkTabId+"-content"+" .btn-transferFinancial-close").click(function(){
@@ -310,42 +312,39 @@ define(function(require, exports) {
                         var html = transferClearing(data);
 	                    var validator;
                  	    //判断页面是否存在
-	                    addTab(blanceTabId,"转客结算",html);
+	                   // addTab(blanceTabId,"转客结算",html);
 	                  //获取table中的tr
-	                    var $tr = $("#" +"tab-"+ blanceTabId + "-content"+" .all tbody tr")
-	                    //给每个tr添加表单验证
-                        $tr.each(function(){
-                        	$(this).find('.btn-transferBlance-save').data('validata', rule.check($(this)));
-                        });
-                 	    /*if($("#tab-"+blanceTabId+"-content").length > 0) {
-                 	    	if(Transfer.edited){
-                 	    		addTab(blanceTabId,"转客结算");
-                 	    		showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
-                 	    			 validator = rule.check($('.transferCleaning'));
-				            		 if (!validator.form()) { 
-				            			 return; 
-				            		 }
-				            		 Transfer.saveClearingData(pageNo,partnerAgencyId,partnerAgencyName,year,startMonth,endMonth,$("#tab-"+blanceTabId+"-content .btn-transferBlance-save"));
-				            		 Transfer.edited = false;
+	                    if($("#" +"tab-"+blanceTabId+"-content").length > 0)
+	             	    {
+	             	    	 if(Transfer.blanceEdited){
+	             	    		addTab(blanceTabId,"转客结算");
+			                    //给每个tr添加表单验证
+	             	    		showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
+	             	    			 Transfer.validatorTable()
+	             	    			 var saveBtn = $("#" +"tab-"+ blanceTabId+"-content"+" .btn-transferBlance-save")
+	             	    			 if (!$(saveBtn).data('validata').form()) { return; }
+	             	    			 Transfer.saveBlanceData(Transfer.oldBlancePartnerAgencyId,partnerAgencyName)
+				            		 Transfer.blanceEdited = false;
 				            		 addTab(blanceTabId,"转客结算",html);
-				            		 validator = rule.check($('.transferCleaning'));
+				            		 Transfer.validatorTable();
 				            	 },function(){
-				            		 addTab(blanceTabId,"转客结算",html);
-				            		 validator = rule.check($('.transferCleaning'));
+				            		    addTab(blanceTabId,"转客结算",html);
+				            		    Transfer.blanceEdited = false;
+				            		    Transfer.validatorTable();
 				            	 });
-                 	    	 }else{
-                 	    		addTab(blanceTabId,"转客结算",html);
-	                 	        validator = rule.check($('.transferCleaning'));
-                 	    	 }
-             	    		 
-                 	    }else{
-                 	    	addTab(blanceTabId,"转客结算",html);
-                 	    	validator = rule.check($('.transferCleaning'));
-                 	    	$("#tab-"+blanceTabId+"-content").on("change",function(){
-                 	    		Transfer.edited = true; 
-                 	    	});
-                 	    };*/
-                        
+	             	    	 }else{
+	                 	    	addTab(blanceTabId,"转客结算",html);
+	                 	    	Transfer.validatorTable();
+	             	    	 }
+	             	    }else{
+	             	    	addTab(blanceTabId,"转客结算",html);
+	             	    	Transfer.validatorTable();
+	             	    };
+	             	   $("#" +"tab-"+blanceTabId+"-content .all").on('change', 'input, select', function() {
+	             		   	Transfer.blanceEdited = true;
+	             		   	Transfer.oldBlancePartnerAgencyId = partnerAgencyId;
+	    	    			$(this).closest('tr').data('blanceStatus',true);
+	    	    		});
                         //搜索按钮事件
                         $("#" +"tab-"+ blanceTabId + "-content"+" .btn-blance-search").click(function(){
                             Transfer.searchBalanceData={
@@ -411,41 +410,20 @@ define(function(require, exports) {
                                 }
                         	});
                         });
-                      /*
-                       * 结算没有分页，需求变动的话，保险起见先注释
-                       * //分页--首页按钮事件
-                        $("#" +"tab-"+ blanceTabId+"-content"+" .pageMode a.first").click(function(){
-							Transfer.transferBalanceList(0,Transfer.searchBalanceData.partnerAgencyId,Transfer.searchBalanceData.partnerAgencyName,Transfer.searchBalanceData.year,Transfer.searchBalanceData.startMonth,Transfer.searchBalanceData.endMonth);
-						});
-						//分页--上一页事件
-                        $("#" +"tab-"+ blanceTabId+"-content"+" .pageMode a.previous").click(function(){
-							var previous = data.pageNo - 1;
-							if(data.pageNo == 0){
-								previous = 0;
-							}
-							Transfer.transferBalanceList(0,Transfer.searchBalanceData.partnerAgencyId,Transfer.searchBalanceData.partnerAgencyName,Transfer.searchBalanceData.year,Transfer.searchBalanceData.startMonth,Transfer.searchBalanceData.endMonth);
-						});
-						//分页--下一页事件
-                        $("#" +"tab-"+ blanceTabId+"-content"+" .pageMode a.next").click(function(){
-							var next =  data.pageNo + 1;
-							if(data.pageNo == data.totalPage-1){
-								next = data.pageNo ;
-							}
-							Transfer.transferBalanceList(0,Transfer.searchBalanceData.partnerAgencyId,Transfer.searchBalanceData.partnerAgencyName,Transfer.searchBalanceData.year,Transfer.searchBalanceData.startMonth,Transfer.searchBalanceData.endMonth);
-						});
-						//分页--尾页事件
-                        $("#" +"tab-"+ blanceTabId+"-content"+" .pageMode a.last").click(function(){
-							Transfer.transferBalanceList(0,Transfer.searchBalanceData.partnerAgencyId,Transfer.searchBalanceData.partnerAgencyName,Transfer.searchBalanceData.year,Transfer.searchBalanceData.startMonth,Transfer.searchBalanceData.endMonth);
-						});*/
-                        
-                        
-                        //给结算按钮绑定事件
-						
                     }
                 }
            });
 	    },
-	    saveCheckingData : function(pageNo,partnerAgencyId,partnerAgencyName,year,month){
+	  //给每个tr增加验证
+	    validatorTable:function(){
+	    	//获取table中的tr
+ 	    	var $tr = $("#" +"tab-"+ blanceTabId + "-content"+" .all tbody tr")
+            //给每个tr添加表单验证
+            $tr.each(function(){
+            	$(this).find('.btn-transferBlance-save').data('validata', rule.check($(this)));
+            });
+	    },
+	    saveCheckingData : function(partnerAgencyId,partnerAgencyName){
 	    	var JsonStr = [],
                 oldUnPayedMoney,
                 newUnPayedMoney,
@@ -524,51 +502,49 @@ define(function(require, exports) {
 	     	   });
 	 	   }
 	    },
-	    saveClearingData : function(pageNo,partnerAgencyId,partnerAgencyName,year,startMonth,endMonth,obj){
-	    	var tr = $(obj).parent().parent(),
-	    	    DataArr = [],
-	    		JsonData,
-	    		needPayMoney = tr.find("input[name=blancerealPayedMoney]").val();
-	    	//判断是否填写付款/收款金额 
-	    	if(needPayMoney == null || needPayMoney == ""){
-	    		showMessageDialog($( "#confirm-dialog-message" ),"请输入付款金额");
-	    		return;
-	    	}else{
-	    		var blanceData = {
-            		id:$(obj).attr("data-entity-id"),
-                    partnerAgencyId:partnerAgencyId,
-                    year:$(obj).attr("data-entity-year"),
-                    month:$(obj).attr("data-entity-month"),
-                    realPayedMoney:tr.find("td[name=blancerealrealPayedMoney]").text(),
-                    unPayedMoney:tr.find("td[name=blanceunPayedMoney]").text(),
-                    realUnPayedMoney:tr.find("td[name=blancerealrealUnPayedMoney]").text(),
-                    payMoney:tr.find("input[name=blancerealPayedMoney]").val(),
-                    payType:tr.find("select[name=blancePayType]").val(),
-                    remark:tr.find("input[name=blancerealRemark]").val()
-            	}
-            	DataArr.push(blanceData)
-            	JsonData = JSON.stringify(DataArr)
-            	$.ajax({
-            		url:""+APP_ROOT+"back/financial/financialTransfer.do?method=saveFcTransferSettlement&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
-                    type:"POST",
-                    data:"fcTransferSettlementStr="+JsonData,
-                    dataType:"json",
-                    beforeSend:function(){
-                        globalLoadingLayer = openLoadingLayer();
-                    },
-                    success:function(data){
-                    	layer.close(globalLoadingLayer);
-                        var result = showDialog(data);
-                        if(result){
-                        	showMessageDialog($( "#confirm-dialog-message" ),data.message);
-                        	Transfer.edited = false;
-                            Transfer.transferBalanceList(0,Transfer.searchBalanceData.partnerAgencyId,Transfer.searchBalanceData.partnerAgencyName,Transfer.searchBalanceData.year,Transfer.searchBalanceData.startMonth,Transfer.searchBalanceData.endMonth);
-                        }
-                    }
-            	})
-	    	}
-	    }
+	    saveBlanceData : function(partnerAgencyId,partnerAgencyName){
 
+          	var DataArr = [],
+  			JsonData,
+          	$tr = $("#" +"tab-"+ blanceTabId+"-content"+" .all tbody tr");
+          	$tr.each(function(i){
+          		if($(this).data('blanceStatus')){
+          			var blanceData = {
+                    		id:$(this).attr("data-entity-id"),
+                            partnerAgencyId:partnerAgencyId,
+                            year:$(this).attr("data-entity-year"),
+                            month:$(this).attr("data-entity-month"),
+                            realPayedMoney:$tr.eq(i).find("td[name=blancerealrealPayedMoney]").text(),
+                            unPayedMoney:$tr.eq(i).find("td[name=blanceunPayedMoney]").text(),
+                            realUnPayedMoney:$tr.eq(i).find("td[name=blancerealrealUnPayedMoney]").text(),
+                            payMoney:$tr.eq(i).find("input[name=blancerealPayedMoney]").val(),
+                            payType:$tr.eq(i).find("select[name=blancePayType]").val(),
+                            remark:$tr.eq(i).find("input[name=blancerealRemark]").val()
+                    	}
+          			 DataArr.push(blanceData)
+          		}
+          	})
+          	JsonData = JSON.stringify(DataArr)
+          	$.ajax({
+        		url:""+APP_ROOT+"back/financial/financialTransfer.do?method=saveFcTransferSettlement&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
+                type:"POST",
+                data:"fcTransferSettlementStr="+JsonData,
+                dataType:"json",
+                beforeSend:function(){
+                    globalLoadingLayer = openLoadingLayer();
+                },
+                success:function(data){
+                	layer.close(globalLoadingLayer);
+                    var result = showDialog(data);
+                    if(result){
+                    	showMessageDialog($( "#confirm-dialog-message" ),data.message);
+                    	Transfer.blanceEdited = false;
+                        Transfer.transferBalanceList(0,Transfer.searchBalanceData.partnerAgencyId,Transfer.searchBalanceData.partnerAgencyName,Transfer.searchBalanceData.year,Transfer.searchBalanceData.startMonth,Transfer.searchBalanceData.endMonth);
+                    }
+                }
+        	})
+	    	
+	    }
     }
     exports.listTransfer = Transfer.listTransfer;
 });

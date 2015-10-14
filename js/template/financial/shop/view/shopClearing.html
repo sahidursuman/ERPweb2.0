@@ -88,19 +88,19 @@
         </thead>
         <tbody>
         {{each shopSettlementList as shopSettlement}}
-        <tr>
+        <tr data-entity-id="{{shopSettlement.id}}">
             <td>{{shopSettlement.year}}年{{shopSettlement.month}}月</td>
             <td>{{shopSettlement.personCount}}</td>
             <td>{{shopSettlement.consumeMoney}}</td>
             <td>{{shopSettlement.travelAgencyRebateMoney}}</td>
             <td>{{shopSettlement.guideRebateMoney}}</td>
-            <td>{{shopSettlement.customerRebateMoney}}</td>
+            <td>{{shopSettlement.customerRebateMoney}}</td> 
             <td>{{shopSettlement.parkingRebateMoney}}</td>
             <td>{{shopSettlement.rebateMoney}}</td>
             <td>{{shopSettlement.realRebateMoney}}</td>
             <td>{{shopSettlement.alreadyCloseAccountMoney}}</td>
             <td>{{shopSettlement.unCloseAccountMoney}}</td>
-            <td class="col-sm-1"><input name="payMoney" type="text" class="col-sm-12"></td>
+            <td class="col-sm-1"><input name="payMoney" maxlength="9" type="text" class="col-sm-12"></td>
             <td>
                 <label class=" control-label no-padding-right" >
                     <select name="payType">
@@ -110,7 +110,7 @@
                     </select>
                 </label>
             </td>
-            <td class="col-sm-1"><input name="remark" type="text" class="col-sm-12"></td>
+            <td class="col-sm-1"><input name="remark" type="text" class="col-sm-12" maxlength="1000"></td>
             <td>
 	        	{{if shopSettlement.allCount != shopSettlement.checkedCount}}
                   <span style="color:#ff9900"> {{shopSettlement.checkedCount}}{{"/"}}{{shopSettlement.allCount}}</span>

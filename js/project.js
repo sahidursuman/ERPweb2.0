@@ -791,6 +791,7 @@ function listMenu(menuTemplate){
 						var date = new Date();
 						var year = date.getFullYear();
 						busCompany.listBusCompany(0,"",year,"");
+						modals["financial_busCompany"] = busCompany;
 					});
 				});
 

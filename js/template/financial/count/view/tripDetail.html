@@ -212,8 +212,8 @@
                             <th colspan="6">打单</th>
                             <th colspan="2">社佣</th>
                             <th colspan="2">导佣</th>
-                            <th colspan="2">人数返佣</th>
-                            <th colspan="2">停车返佣</th>
+                            <th rowspan="2">人数返佣</th>
+                            <th rowspan="2">停车返佣</th>
                             <th rowspan="2">导游报账备注</th>
                         </tr>
                         <tr>
@@ -227,10 +227,6 @@
                             <th>返佣</th>
                             <th>比例%</th>
                             <th>返佣</th>
-							<th>元/人</th>
-							<th>返佣</th>
-							<th>元/车</th>
-							<th>返佣</th>
                         </tr>
                     </thead>
                     <tbody id="shopping">
@@ -258,11 +254,12 @@
                             <td><span>{{arrange.guideRateMoney}}</span>
                                 <input type="hidden" name="guideRateMoney" value="{{arrange.guideRateMoney}}" />
                             </td>
-                            {{if index == 0 }}<td rowspan="{{shopArrangeList.shopArrangePolicy.length}}">{{if arrange.customerRebateMoney < 1}}{{arrange.shop.customerRebateMoney}}{{else}}{{arrange.customerRebateMoney}}{{/if}}<input type="hidden" name="customerRebateMoney{{arrange.whichDay}}_{{arrange.shopId}}" value="{{if arrange.customerRebateMoney < 1}}{{arrange.shop.customerRebateMoney}}{{else}}{{arrange.customerRebateMoney}}{{/if}}" /><input type="hidden" name="touristAdultCount{{arrange.whichDay}}_{{arrange.shopId}}" value="{{tripPlan.touristAdultCount}}" /></td>{{/if}}
-							{{if index == 0 }}<td rowspan="{{shopArrangeList.shopArrangePolicy.length}}"><span class="sumCustomerRebateMoney{{arrange.whichDay}}_{{arrange.shopId}} sumCustomerRebateMoney">{{shopArrangeList.customerRebateMoney}}</span></td>{{/if}}
-							{{if index == 0 }}<td rowspan="{{shopArrangeList.shopArrangePolicy.length}}">{{if arrange.parkingRebateMoney < 1}}{{arrange.shop.parkingRebateMoney}}{{else}}{{arrange.parkingRebateMoney}}{{/if}}<input type="hidden" name="parkingRebateMoney{{arrange.whichDay}}_{{arrange.shopId}}" value="{{if arrange.parkingRebateMoney < 1}}{{arrange.shop.parkingRebateMoney}}{{else}}{{arrange.parkingRebateMoney}}{{/if}}" /><input type="hidden" name="busNumber{{arrange.whichDay}}_{{arrange.shopId}}" value="{{busCompanyArrange.length}}" /></td>{{/if}}
-							{{if index == 0 }}<td rowspan="{{shopArrangeList.shopArrangePolicy.length}}"><span class="sumParkingRebateMoney{{arrange.whichDay}}_{{arrange.shopId}} sumParkingRebateMoney">{{shopArrangeList.parkingRebateMoney}}</span></td>{{/if}}
-							<td>{{arrange.billRemark}}</td>
+                            {{if index == 0 }}
+                            <td rowspan="{{shopArrangeList.shopArrangePolicy.length}}" class="sumCustomerRebateMoney">{{if arrange.customerRebateMoney
+                                < 1}}{{arrange.shop.customerRebateMoney}}{{else}}{{arrange.customerRebateMoney}}{{/if}}</td>{{/if}} {{if index == 0 }}
+                                    <td rowspan="{{shopArrangeList.shopArrangePolicy.length}}" class="sumParkingRebateMoney">{{if arrange.parkingRebateMoney
+                                        < 1}}{{arrange.shop.parkingRebateMoney}}{{else}}{{arrange.parkingRebateMoney}}{{/if}}</td>{{/if}}
+                                            <td>{{arrange.billRemark}}</td>
                         </tr>
                         {{/if}} {{/each}} {{/each}} {{/if}} {{/each}}
                     </tbody>
