@@ -702,6 +702,7 @@ function listMenu(menuTemplate){
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/tripPlan/tripPlan.js",function(tripPlan){ 
 						tripPlan.listTripPlan(0,"","","","","");
+						modals["arrange_all"] = tripPlan;
 					});
 				});
 				
