@@ -63,14 +63,14 @@
         </thead>
         <tbody>
         {{each fcBookingOrderSettlementList as SettlementList index}}
-        <tr>
+        <tr data-entity-id="{{SettlementList.id}}" data-entity-year="{{SettlementList.year}}" data-entity-month="{{SettlementList.month}}">
             <td style="width:100px;">{{SettlementList.year}}{{"年"}}{{SettlementList.month}}{{"月"}}</td>
             <td style="width:100px;">{{SettlementList.needIncomeMoney}}</td>
             <td style="width:100px;" name="blancerealNeedIncomeMoney">{{SettlementList.realNeedIncomeMoney}}</td>
             <td style="width:100px;" name="blancerealIncomeMoney">{{SettlementList.realIncomeMoney}}</td>
             <td style="width:100px;" name="blanceununIncomeMoney">{{SettlementList.unIncomeMoney}}</td>
             <td style="width:100px;" name="blancerealrealUnIncomeMoney">{{SettlementList.realUnIncomeMoney}}</td>
-            <td class="col-sm-1"><input name="blancerealIncomeMoney" type="text" ></td>
+            <td class="col-sm-1"><input name="blancerealIncomeMoney" type="text" maxlength="10"></td>
             <td style="width:120px;">
                 <select style="text-align:center" name="blanceIncomeType">
                     <option value="" selected="selected">请选择...</option>
@@ -80,7 +80,7 @@
                     <option value="线下付款">线下付款</option>
                 </select>
             </td>
-            <td class="col-sm-1" style="width:400px;"><input name="blancerealRemark" type="text" style="width:370px;" ></td>
+            <td class="col-sm-1" style="width:400px;"><input name="blancerealRemark" type="text" style="width:370px;" maxlength="1000"></td>
             <td>
                 {{if SettlementList.allCount != SettlementList.checkedCount}}
                 <span style="color:#ff9900"> {{SettlementList.checkedCount}}{{"/"}}{{SettlementList.allCount}}</span>

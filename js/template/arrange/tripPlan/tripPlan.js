@@ -20,6 +20,13 @@ define(function(require, exports) {
 			creator : "",
 			status : ""
 		},
+		edited : {},
+		isEdited : function(editedType){
+			if(!!tripPlan.edited[editedType] && tripPlan.edited[editedType] != ""){
+				return true;
+			}
+			return false;
+		},
 		listTripPlan:function(page,words,startTime,realname,licenseNumber,creator,status){
 			tripPlan.searchData = {
 				words : words,
@@ -44,227 +51,258 @@ define(function(require, exports) {
 						data.tripPlanList = JSON.parse(data.tripPlanList);
 						var html = listTemplate(data);
 						addTab(menuKey,"发团计划",html);
-						
-						//出游日期 时间控件（筛选搜索）
-				    	$("#tab-"+menuKey+"-content .tripPlanMain input[name=startTime]").datepicker({
-							autoclose: true,
-							todayHighlight: true,
-							format: 'yyyy-mm-dd',
-							language: 'zh-CN'
-						});
-						
-						//搜索栏状态button下拉事件
-						$("#tab-"+menuKey+"-content .search-area .btn-status .dropdown-menu a").click(function(){
-							$(this).parent().parent().parent().find("button").attr("data-value",$(this).attr("data-value"));
-							$(this).parent().parent().parent().find("span").text($(this).text());
-						});
-						
-						//给搜索按钮绑定事件
-						$("#tab-"+menuKey+"-content .tripPlanMain .btn-tripPlan-search").click(function(){
-							tripPlan.searchData = {
-									words : $("#tab-"+menuKey+"-content .tripPlanMain input[name=word]").val(),
-									startTime : $("#tab-"+menuKey+"-content .tripPlanMain input[name=startTime]").val(),
-									realname : $("#tab-"+menuKey+"-content .tripPlanMain input[name=realname]").val(),
-									licenseNumber : $("#tab-"+menuKey+"-content .tripPlanMain input[name=licenseNumber]").val(),
-									creator : $("#tab-"+menuKey+"-content .tripPlanMain input[name=creator]").val(),
-									status : $("#tab-"+menuKey+"-content .btn-status").find("button").attr("data-value")
-							}
-							tripPlan.listTripPlan(0,tripPlan.searchData.words,tripPlan.searchData.startTime,tripPlan.searchData.realname,tripPlan.searchData.licenseNumber,tripPlan.searchData.creator,tripPlan.searchData.status);
-						});
-						
-						//分页--首页按钮事件
-						$("#tab-"+menuKey+"-content .pageMode a.first").click(function(){
-							if(data.pageNo == 0 || data.totalPage == 0)return;
-							tripPlan.listTripPlan(0,tripPlan.searchData.words,tripPlan.searchData.startTime,tripPlan.searchData.realname,tripPlan.searchData.licenseNumber,tripPlan.searchData.creator,tripPlan.searchData.status);
-						});
-						//分页--上一页事件
-						$("#tab-"+menuKey+"-content  .pageMode a.previous").click(function(){
-							if(data.totalPage == 0)return;
-							var previous = data.pageNo - 1;
-							if(data.pageNo == 0){
-								previous = 0;
-							}
-							tripPlan.listTripPlan(previous,tripPlan.searchData.words,tripPlan.searchData.startTime,tripPlan.searchData.realname,tripPlan.searchData.licenseNumber,tripPlan.searchData.creator,tripPlan.searchData.status);
-						});
-						//分页--下一页事件
-						$("#tab-"+menuKey+"-content .pageMode a.next").click(function(){
-							if(data.pageNo+1 == data.totalPage || data.totalPage == 0)return;
-							var next =  data.pageNo + 1;
-							if(data.pageNo == data.totalPage-1){
-								next = data.pageNo ;
-							}
-							tripPlan.listTripPlan(next,tripPlan.searchData.words,tripPlan.searchData.startTime,tripPlan.searchData.realname,tripPlan.searchData.licenseNumber,tripPlan.searchData.creator,tripPlan.searchData.status);
-						});
-						//分页--尾页事件
-						$("#tab-"+menuKey+"-content  .pageMode a.last").click(function(){
-							if(data.pageNo == data.totalPage-1 || data.totalPage == 0)return;
-							tripPlan.listTripPlan(data.totalPage-1,tripPlan.searchData.words,tripPlan.searchData.startTime,tripPlan.searchData.realname,tripPlan.searchData.licenseNumber,tripPlan.searchData.creator,tripPlan.searchData.status);
-						});
-						
-						//新增发团计划
-						$(".tripPlanMain .btn-Plan-add").click(function(){
-							tripPlan.addTripPlan();
-						});
-						
-						//查看发团计划信息  
-						$(".tripPlanMain .btn-Plan-view").click(function(){
-							var id = $(this).parent().parent().attr("data-entity-id");
-							tripPlan.viewTripPlan(id);
-						});
-						
-						//取消发团计划信息 
-						$(".tripPlanMain .btn-Plan-cancel").click(function(){
-							var id = $(this).parent().parent().attr("data-entity-id");
-							var billStatus = $(this).attr("billStatus");
-							if(billStatus != -1){
-								var dialogObj = $( "#confirm-dialog-message" );
-								dialogObj.removeClass('hide').dialog({
-									modal: true,
-									title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-									title_html: true,
-									draggable:false,
-									buttons: [ 
-										{
-											text: "确定",
-											"class" : "btn btn-primary btn-minier",
-											click: function() {
-												$( this ).dialog( "close" );
-											}
-										}
-									],
-									open:function(event,ui){
-										$(this).find("p").text("该团已审核，无法取消");
-									}
-								});
-							}else{
-								tripPlan.cancelTripPlan(id);	
-							}
-						})	
-						
-						//编辑发团计划信息
-						$(".tripPlanMain .btn-Plan-edit").click(function(){
-							var billStatus = $(this).attr("billStatus");
-							if(billStatus != -1){
-								var dialogObj = $( "#confirm-dialog-message" );
-								dialogObj.removeClass('hide').dialog({
-									modal: true,
-									title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-									title_html: true,
-									draggable:false,
-									buttons: [ 
-										{
-											text: "确定",
-											"class" : "btn btn-primary btn-minier",
-											click: function() {
-												$( this ).dialog( "close" );
-											}
-										}
-									],
-									open:function(event,ui){
-										$(this).find("p").text("该团已审核，无法编辑");
-									}
-								});
-							}else{
-								var id = $(this).attr("data-entity-id");
-								tripPlan.updateTripPlan(id);
-							}
-						});
-						
-						//确认发团按钮事件
-						$(".tripPlanMain .btn-Plan-confirm").click(function(){
-							var id = $(this).parent().parent().attr("data-entity-id");
-							var statusValue = $(this).attr("statusValue");
-							var billStatus = $(this).attr("billStatus");
-							
-							if(billStatus != -1){
-								var dialogObj = $( "#confirm-dialog-message" );
-								dialogObj.removeClass('hide').dialog({
-									modal: true,
-									title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-									title_html: true,
-									draggable:false,
-									buttons: [ 
-										{
-											text: "确定",
-											"class" : "btn btn-primary btn-minier",
-											click: function() {
-												$( this ).dialog( "close" );
-											}
-										}
-									],
-									open:function(event,ui){
-										$(this).find("p").text("该团已审核，无法确认");
-									}
-								});
-							}else{
-								if(statusValue==0){
-									tripPlan.confirmTripPlan(id);
-								}else{
-									var dialogObj = $( "#confirm-dialog-message" );
-									dialogObj.removeClass('hide').dialog({
-										modal: true,
-										title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-										title_html: true,
-										draggable:false,
-										buttons: [
-											{
-												text: "取消",
-												"class" : "btn btn-minier",
-												click: function() {
-													$( this ).dialog( "close" );
-												}
-											},
-											{
-												text: "确定",
-												"class" : "btn btn-primary btn-minier",
-												click: function() {
-													$( this ).dialog( "close" );
-													$.ajax({
-														url:""+APP_ROOT+"back/tripPlan.do?method=noticeGuideTripPlanAfterConfirmTripPlanAgain&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
-														data:"id="+id,
-														dataType:"json",
-														beforeSend:function(){
-															//打开一个遮罩层
-															globalLoadingLayer = openLoadingLayer();
-														},
-														success: function(data) {
-										                	layer.close(globalLoadingLayer);
-										                	var result =showDialog(data);
-										                	var dataD = data;
-															if(result){
-																showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-																	tripPlan.listTripPlan(0,"","","","","","");
-																});
-															}
-														}
-													})
-												}
-											}
-										],
-										open:function(event,ui){
-											$(this).find("p").text("是否给导游发送短信？");
-										}
-									})
-								}
-							}
-						});
-						//导出计划按钮事件
-						$(".tripPlanMain .btn-Plan-export").click(function(){
-							var id = $(this).parent().parent().attr("data-entity-id");
-							tripPlan.exportTripPlan(id);
-						});
+						tripPlan.initList(data);
 					}
 				}
 			});
 		},
+		initList : function(data){
+			//出游日期 时间控件（筛选搜索）
+			$("#tab-"+menuKey+"-content .tripPlanMain input[name=startTime]").datepicker({
+				autoclose: true,
+				todayHighlight: true,
+				format: 'yyyy-mm-dd',
+				language: 'zh-CN'
+			});
+			
+			//搜索栏状态button下拉事件
+			$("#tab-"+menuKey+"-content .search-area .btn-status .dropdown-menu a").click(function(){
+				$(this).parent().parent().parent().find("button").attr("data-value",$(this).attr("data-value"));
+				$(this).parent().parent().parent().find("span").text($(this).text());
+				tripPlan.searchData = {
+					words : $("#tab-"+menuKey+"-content .tripPlanMain input[name=word]").val(),
+					startTime : $("#tab-"+menuKey+"-content .tripPlanMain input[name=startTime]").val(),
+					realname : $("#tab-"+menuKey+"-content .tripPlanMain input[name=realname]").val(),
+					licenseNumber : $("#tab-"+menuKey+"-content .tripPlanMain input[name=licenseNumber]").val(),
+					creator : $("#tab-"+menuKey+"-content .tripPlanMain input[name=creator]").val(),
+					status : $("#tab-"+menuKey+"-content .btn-status").find("button").attr("data-value")
+				}
+				tripPlan.listTripPlan(0,tripPlan.searchData.words,tripPlan.searchData.startTime,tripPlan.searchData.realname,tripPlan.searchData.licenseNumber,tripPlan.searchData.creator,tripPlan.searchData.status);
+			});
+			
+			//给搜索按钮绑定事件
+			$("#tab-"+menuKey+"-content .tripPlanMain .btn-tripPlan-search").click(function(){
+				tripPlan.searchData = {
+						words : $("#tab-"+menuKey+"-content .tripPlanMain input[name=word]").val(),
+						startTime : $("#tab-"+menuKey+"-content .tripPlanMain input[name=startTime]").val(),
+						realname : $("#tab-"+menuKey+"-content .tripPlanMain input[name=realname]").val(),
+						licenseNumber : $("#tab-"+menuKey+"-content .tripPlanMain input[name=licenseNumber]").val(),
+						creator : $("#tab-"+menuKey+"-content .tripPlanMain input[name=creator]").val(),
+						status : $("#tab-"+menuKey+"-content .btn-status").find("button").attr("data-value")
+				}
+				tripPlan.listTripPlan(0,tripPlan.searchData.words,tripPlan.searchData.startTime,tripPlan.searchData.realname,tripPlan.searchData.licenseNumber,tripPlan.searchData.creator,tripPlan.searchData.status);
+			});
+			
+			//分页--首页按钮事件
+			$("#tab-"+menuKey+"-content .pageMode a.first").click(function(){
+				if(data.pageNo == 0 || data.totalPage == 0)return;
+				tripPlan.listTripPlan(0,tripPlan.searchData.words,tripPlan.searchData.startTime,tripPlan.searchData.realname,tripPlan.searchData.licenseNumber,tripPlan.searchData.creator,tripPlan.searchData.status);
+			});
+			//分页--上一页事件
+			$("#tab-"+menuKey+"-content  .pageMode a.previous").click(function(){
+				if(data.totalPage == 0)return;
+				var previous = data.pageNo - 1;
+				if(data.pageNo == 0){
+					previous = 0;
+				}
+				tripPlan.listTripPlan(previous,tripPlan.searchData.words,tripPlan.searchData.startTime,tripPlan.searchData.realname,tripPlan.searchData.licenseNumber,tripPlan.searchData.creator,tripPlan.searchData.status);
+			});
+			//分页--下一页事件
+			$("#tab-"+menuKey+"-content .pageMode a.next").click(function(){
+				if(data.pageNo+1 == data.totalPage || data.totalPage == 0)return;
+				var next =  data.pageNo + 1;
+				if(data.pageNo == data.totalPage-1){
+					next = data.pageNo ;
+				}
+				tripPlan.listTripPlan(next,tripPlan.searchData.words,tripPlan.searchData.startTime,tripPlan.searchData.realname,tripPlan.searchData.licenseNumber,tripPlan.searchData.creator,tripPlan.searchData.status);
+			});
+			//分页--尾页事件
+			$("#tab-"+menuKey+"-content  .pageMode a.last").click(function(){
+				if(data.pageNo == data.totalPage-1 || data.totalPage == 0)return;
+				tripPlan.listTripPlan(data.totalPage-1,tripPlan.searchData.words,tripPlan.searchData.startTime,tripPlan.searchData.realname,tripPlan.searchData.licenseNumber,tripPlan.searchData.creator,tripPlan.searchData.status);
+			});
+			
+			//新增发团计划
+			$(".tripPlanMain .btn-Plan-add").click(function(){
+				tripPlan.addTripPlan();
+			});
+			
+			//查看发团计划信息  
+			$(".tripPlanMain .btn-Plan-view").click(function(){
+				var id = $(this).parent().parent().attr("data-entity-id");
+				tripPlan.viewTripPlan(id);
+			});
+			
+			//取消发团计划信息 
+			$(".tripPlanMain .btn-Plan-cancel").click(function(){
+				var id = $(this).parent().parent().attr("data-entity-id");
+				var billStatus = $(this).attr("billStatus");
+				if(billStatus != -1){
+					var dialogObj = $( "#confirm-dialog-message" );
+					dialogObj.removeClass('hide').dialog({
+						modal: true,
+						title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
+						title_html: true,
+						draggable:false,
+						buttons: [ 
+							{
+								text: "确定",
+								"class" : "btn btn-primary btn-minier",
+								click: function() {
+									$( this ).dialog( "close" );
+								}
+							}
+						],
+						open:function(event,ui){
+							$(this).find("p").text("该团已审核，无法取消");
+						}
+					});
+				}else{
+					tripPlan.cancelTripPlan(id);	
+				}
+			})	
+			
+			//编辑发团计划信息
+			$(".tripPlanMain .btn-Plan-edit").click(function(){
+				var billStatus = $(this).attr("billStatus");
+				if(billStatus != -1){
+					var dialogObj = $( "#confirm-dialog-message" );
+					dialogObj.removeClass('hide').dialog({
+						modal: true,
+						title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
+						title_html: true,
+						draggable:false,
+						buttons: [ 
+							{
+								text: "确定",
+								"class" : "btn btn-primary btn-minier",
+								click: function() {
+									$( this ).dialog( "close" );
+								}
+							}
+						],
+						open:function(event,ui){
+							$(this).find("p").text("该团已审核，无法编辑");
+						}
+					});
+				}else{
+					var id = $(this).attr("data-entity-id");
+					tripPlan.updateTripPlan(id);
+				}
+			});
+			
+			//确认发团按钮事件
+			$(".tripPlanMain .btn-Plan-confirm").click(function(){
+				var id = $(this).parent().parent().attr("data-entity-id");
+				var statusValue = $(this).attr("statusValue");
+				var billStatus = $(this).attr("billStatus");
+				
+				if(billStatus != -1){
+					var dialogObj = $( "#confirm-dialog-message" );
+					dialogObj.removeClass('hide').dialog({
+						modal: true,
+						title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
+						title_html: true,
+						draggable:false,
+						buttons: [ 
+							{
+								text: "确定",
+								"class" : "btn btn-primary btn-minier",
+								click: function() {
+									$( this ).dialog( "close" );
+								}
+							}
+						],
+						open:function(event,ui){
+							$(this).find("p").text("该团已审核，无法确认");
+						}
+					});
+				}else{
+					if(statusValue==0){
+						tripPlan.confirmTripPlan(id);
+					}else{
+						var dialogObj = $( "#confirm-dialog-message" );
+						dialogObj.removeClass('hide').dialog({
+							modal: true,
+							title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
+							title_html: true,
+							draggable:false,
+							buttons: [
+								{
+									text: "取消",
+									"class" : "btn btn-minier",
+									click: function() {
+										$( this ).dialog( "close" );
+									}
+								},
+								{
+									text: "确定",
+									"class" : "btn btn-primary btn-minier",
+									click: function() {
+										$( this ).dialog( "close" );
+										$.ajax({
+											url:""+APP_ROOT+"back/tripPlan.do?method=noticeGuideTripPlanAfterConfirmTripPlanAgain&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
+											data:"id="+id,
+											dataType:"json",
+											beforeSend:function(){
+												//打开一个遮罩层
+												globalLoadingLayer = openLoadingLayer();
+											},
+											success: function(data) {
+												layer.close(globalLoadingLayer);
+												var result =showDialog(data);
+												var dataD = data;
+												if(result){
+													showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+														tripPlan.listTripPlan(0,"","","","","","");
+													});
+												}
+											}
+										})
+									}
+								}
+							],
+							open:function(event,ui){
+								$(this).find("p").text("是否给导游发送短信？");
+							}
+						})
+					}
+				}
+			});
+			//导出计划按钮事件
+			$(".tripPlanMain .btn-Plan-export").click(function(){
+				var id = $(this).parent().parent().attr("data-entity-id");
+				tripPlan.exportTripPlan(id);
+			});
+		},
 		//新增计划
 		addTripPlan:function(){
-			var html = addTripPlanTemplate();
-			
-			
-			var validatorCreateTripPlan;
-			addTab(menuKey+"-add","新增计划",html);	      	  
-			var validatorCreateTripPlan=rule.checkdCreateTripPlan($(".newAddTripPlanMain"));
+			var html = addTripPlanTemplate();   
+			//判断页面是否存在
+			if($("#" +"tab-"+checkTable+"-content").length > 0){  
+				addTab(menuKey+"-add","新增计划");
+				 if(!!tripPlan.edited["add"] && tripPlan.edited["add"] != ""){
+						showConfirmMsg($( "#confirm-dialog-message" ), "未保存的数据，是否放弃?",function(){
+							console.log("继续编辑");	
+					 },function(){
+						addTab(menuKey+"-add","新增计划",html);
+						tripPlan.edited["add"] = "";
+						tripPlan.initAdd();						 
+					 },"放弃","继续编辑");
+				}else{
+					addTab(menuKey+"-add","新增计划",html);
+					tripPlan.initAdd();
+				}
+			}else{  
+				addTab(menuKey+"-add","新增计划",html);
+				tripPlan.initAdd();
+			}    
+		},
+		initAdd : function(){
+			$('.newAddTripPlan').on("change",function(){
+				tripPlan.edited["add"] = "add";
+			});	
+			var validator = rule.checkdCreateTripPlan($(".newAddTripPlanMain"));
 			var tab = "tab-arrange_plan-add-content";
 	    	//搜索线路
 	    	$("#" + tab + " .newAddTripPlanMain .search-banner").click(function(){
@@ -293,69 +331,8 @@ define(function(require, exports) {
 				closeTab(menuKey+"-add");
 			})
 			//保存计划   btn-savelTripPlan
-			function getValue(name){
-				var thisObj = $("#" + tab + " .newAddTripPlan").find("[name="+name+"]"), objValue;
-				if(thisObj.attr("type") == "checkbox"){
-					objValue = thisObj.is(":checked") ? 1 : 0;
-				}else{
-					objValue = thisObj.val();
-				}
-				return objValue;
-			}
 			$("#" + tab + " .newAddTripPlan .btn-saveTripPlan").click(function(){
-				var planTouristCount = parseInt(getValue("planTouristCount")),
-					memberCount = parseInt($("#" + tab + " .tripPlanAllMemberCount").text());
-				if(planTouristCount < memberCount){
-					showMessageDialog($( "#confirm-dialog-message" ),"小组总人数不能大于计划人数",function(){
-					});
-				}else{
-					// 表单校验
-					if (!validatorCreateTripPlan.form()) { return; }
-					
-					var saveTripP = {
-						"tripPlan": {
-							"startTime": getValue("startTime"),
-				            "accompanyGuideName": getValue("accompanyGuideName"),
-				            "accompanyGuideMobile": getValue("accompanyGuideMobile"),
-				            "planTouristCount": getValue("planTouristCount"),
-				            "setPlacePosition": getValue("setPlacePosition"),
-				            "setPlaceTime": getValue("setPlaceTime")
-						},
-						"lineProductId": getValue("lineProductId"),
-				        "driverId": getValue("driverId"),
-				        "guideId": getValue("AddTPchooseGuideId"),
-				        "busId": getValue("busLicenseNumberId"),
-				        "touristGroupId": []
-					}
-					var touristGroupList = $("#" + tab + " .newAddTripPlan .addTripPlanTouristTbody tr").length;
-					$("#" + tab + " .newAddTripPlan .addTripPlanTouristTbody tr").each(function(i){
-						saveTripP.touristGroupId[i] = {
-							"id": $(this).attr("data-entity-id")
-						}
-					})
-							
-					var saveTripPlan = JSON.stringify(saveTripP);
-					$.ajax({
-						url:""+APP_ROOT+"back/tripPlan.do?method=addTripPlan&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-						data:"saveTripPlan="+encodeURIComponent(saveTripPlan),
-						dataType: "json",
-						type:"POST",
-						beforeSend:function(){
-							globalLoadingLayer = openLoadingLayer();
-						},
-						success:function(data){
-							var result = showDialog(data);
-							layer.close(globalLoadingLayer);
-							if(result){
-								showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-									closeTab(menuKey+"-add");
-									tripPlan.listTripPlan(0,"","","","","","");
-								});
-							}
-							
-						}
-					})
-				}
+				tripPlan.submitAddTripPlan();
 			});
 		},
 		//查看计划
@@ -413,134 +390,161 @@ define(function(require, exports) {
 						data.driver =JSON.parse(data.driver);
 						data.busCompant =JSON.parse(data.busCompant);
 						data.bus =JSON.parse(data.bus);
-						var html =updateTemplate (data);
-						addTab(menuKey+"-update","编辑发团计划",html);
-						var tab = "tab-arrange_plan-update-content";
-						
-						//编辑发团计划验证
-						var validatorCreateTripPlan=rule.checkdCreateTripPlan($(".newAddTripPlanMain"));
-						    	
-				    	//小组排序
-				    	tripPlan.MenberNumber("updateTripPlanTouristTbody");
-
-				    	//小组总人数计算
-				    	tripPlan.tripPlanAllMemberCount("tripPlanAllMemberCount",tab,"updateTripPlanTouristTbody");
-
-				    	//搜索线路
-				    	$("#" + tab + " .newAddTripPlanMain .search-banner").click(function(){
-							var searchTravelLinelayer;
-				    		tripPlan.searchLineProduct(true,0,"");
-				    	})
-						tripPlan.busCompanyChoose();
-				    	tripPlan.brandChoose();
-				    	tripPlan.licenseNumberChoose();
-				    	tripPlan.driverChoose();
-						tripPlan.guideChoose();
-						tripPlan.setPlanceTimeDateTimePicker();
-						
-						tripPlan.seatCountChoose();
-				    	tripPlan.brandChoose();
-				    	tripPlan.licenseNumberChoose();
-				    	//tripPlan.busChoose();
-				    	tripPlan.driverChoose();
-						tripPlan.guideChoose();
-						//tripPlan.addTripPlanDatepicker("startTime");
-						tripPlan.setPlanceTimeDateTimePicker();
-						//新增游客小组
-						$("#" + tab + " .newAddTripPlanMain .newAddTouristGroup").on("click",function(){
-							var lineProductId = $("#" + tab + " .newAddTripPlanMain input[name=lineProductId]").val();
-							var startTime = $("#" + tab + " .newAddTripPlanMain input[name=startTime]").val();
-							tripPlan.addTouristGroup(lineProductId,startTime,"updateTripPlanTouristTbody",tab);
-						})
-						//查看旅游小组成员
-				    	$("#" + tab + " .newAddTripPlan .touristGroupView").on("click",function(){
-				    		var id = $(this).attr("data-entity-id");
-				    		tripPlan.viewTouristGroup(id);
-				    	})
-				    	//删除小组
-				    	$("#" + tab + " .newAddTripPlan .touristGroupDelete").on("click",function(){
-				    		var obj = $(this);
-				    		var id = obj.attr("data-entity-id");
-				    		var tripPlanId = $(".newAddTripPlan input[name=tripPlanId]").val();
-				    		 tripPlan.deleteTouristGroup(obj,id,tripPlanId,tab,"updateTripPlanTouristTbody");
-				    	})
-				    	//编辑 提交事件绑定
-				    	//取消计划   btn-cancelTripPlan
-						$("#" + tab + " .newAddTripPlan .btn-updatecancelTripPlan").click(function(){
-							closeTab(menuKey+"-update");
-						})
-						//保存计划   btn-savelTripPlan
-						function getValue(name){
-							var thisObj = $("#" + tab + " .updateTripPlan").find("[name="+name+"]"), objValue;
-							if(thisObj.attr("type") == "checkbox"){
-								objValue = thisObj.is(":checked") ? 1 : 0;
-							}else{
-								objValue = thisObj.val();
-							}
-							return objValue;
-						}
-						$("#" + tab + " .newAddTripPlan .btn-updateTripPlan").click(function(){
-							var planTouristCount = parseInt(getValue("planTouristCount")),
-								memberCount = parseInt($("#" + tab + " .tripPlanAllMemberCount").text());
-							if(planTouristCount < memberCount){
-								showMessageDialog($( "#confirm-dialog-message" ),"小组总人数不能大于计划人数",function(){
-								});
-							}else{
-								// 表单校验
-								if (!validatorCreateTripPlan.form()) { return; }
-								
-								//获取计划Id
-						    	var tripPlanId = $("#" + tab + " .newAddTripPlan input[name=tripPlanId]").val();
-								var saveTripP = {
-									"tripPlanId" : tripPlanId,
-									"tripPlan": {
-										"startTime": getValue("startTime"),
-							            "accompanyGuideName": getValue("accompanyGuideName"),
-							            "accompanyGuideMobile": getValue("accompanyGuideMobile"),
-							            "planTouristCount": getValue("planTouristCount"),
-							            "setPlacePosition": getValue("setPlacePosition"),
-							            "setPlaceTime": getValue("setPlaceTime")
-									},
-									"lineProductId": getValue("lineProductId"),
-							        "driverId": getValue("driverId"),
-							        "guideId": getValue("AddTPchooseGuideId"),
-							        "busId": getValue("busLicenseNumberId"),
-							        "touristGroupId": []
-								}
-								var touristGroupList = $("#" + tab + " .newAddTripPlan .updateTripPlanTouristTbody tr").length;
-								$("#" + tab + " .newAddTripPlan .updateTripPlanTouristTbody tr").each(function(i){
-									saveTripP.touristGroupId[i] = {
-										"id": $(this).attr("data-entity-id")
-									}
-								})
-										
-								var saveTripPlan = JSON.stringify(saveTripP);
-								$.ajax({
-									url:""+APP_ROOT+"back/tripPlan.do?method=updateTripPlan&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-									data:"saveTripPlan="+encodeURIComponent(saveTripPlan)+"",
-									dataType: "json",
-									type:"POST",
-									beforeSend:function(){
-										globalLoadingLayer = openLoadingLayer();
-									},
-									success:function(data){
-										var result = showDialog(data);
-										layer.close(globalLoadingLayer);
-										if(result){
-											showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-												closeTab(menuKey+"-update");
-												tripPlan.listTripPlan(0,"","","","","","");
-											});
-										}
-										
-									}
-								})
-							}
-						});
-					}
+						var html = updateTemplate(data);
+						//已修改提示
+			    		var validator =rule.checkdCreateTripPlan($(".updateTripPlan"));
+						if($(".tab-"+menuKey+"-update").length > 0) {
+							addTab(menuKey+"-update","编辑发团计划");
+                 	    	if(!!tripPlan.edited["update"] && tripPlan.edited["update"] !=""){
+                 	    		showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
+                 	    			 validator = rule.checkdCreateTripPlan($(".updateTripPlan"));
+				            		 if (!validator.form()) { 
+				            			 return; 
+				            		 }
+				            		 tripPlan.submitUpdateTripPlan(0);
+									 tripPlan.edited["update"] = "";
+				            		 addTab(menuKey+"-update","编辑发团计划",html);
+									 tripPlan.initUpdate();
+				            		 validator = rule.checkdCreateTripPlan($(".updateTripPlan"));
+				            	},function(){
+				            		addTab(menuKey+"-update","编辑发团计划",html);
+									tripPlan.initUpdate();								
+									tripPlan.edited["update"] = "";
+				            	}); 							
+                 	    	 }else{
+	                 	    	addTab(menuKey+"-update","编辑发团计划",html);	
+								tripPlan.initUpdate();
+                 	    	 } 
+                 	    }else{
+                 	    	addTab(menuKey+"-update","编辑小组",html);	
+							tripPlan.initUpdate();
+                 	    }	
+					}	
 				}
 				
 			});	
+		},
+		initUpdate : function(){
+			$('.updateTripPlan').on("change",function(){
+				tripPlan.edited["update"] = "update";
+			});	
+			var tab = "tab-arrange_plan-update-content";		
+			//编辑发团计划验证
+			var validator = rule.checkdCreateTripPlan($(".updateTripPlan"));
+					
+			//小组排序
+			tripPlan.MenberNumber("updateTripPlanTouristTbody");
+
+			//小组总人数计算
+			tripPlan.tripPlanAllMemberCount("tripPlanAllMemberCount",tab,"updateTripPlanTouristTbody");
+
+			//搜索线路
+			$("#" + tab + " .updateTripPlan .search-banner").click(function(){
+				var searchTravelLinelayer;
+				tripPlan.searchLineProduct(true,0,"");
+			})
+			tripPlan.busCompanyChoose();
+			tripPlan.brandChoose();
+			tripPlan.licenseNumberChoose();
+			tripPlan.driverChoose();
+			tripPlan.guideChoose();
+			tripPlan.setPlanceTimeDateTimePicker();
+			
+			tripPlan.seatCountChoose();
+			tripPlan.brandChoose();
+			tripPlan.licenseNumberChoose();
+			//tripPlan.busChoose();
+			tripPlan.driverChoose();
+			tripPlan.guideChoose();
+			//tripPlan.addTripPlanDatepicker("startTime");
+			tripPlan.setPlanceTimeDateTimePicker();
+			//新增游客小组
+			$("#" + tab + " .updateTripPlan .newAddTouristGroup").on("click",function(){
+				var lineProductId = $("#" + tab + " .updateTripPlan input[name=lineProductId]").val();
+				var startTime = $("#" + tab + " .updateTripPlan input[name=startTime]").val();
+				tripPlan.addTouristGroup(lineProductId,startTime,"updateTripPlanTouristTbody",tab);
+			})
+			//查看旅游小组成员
+			$("#" + tab + " .updateTripPlan .touristGroupView").on("click",function(){
+				var id = $(this).attr("data-entity-id");
+				tripPlan.viewTouristGroup(id);
+			})
+			//删除小组
+			$("#" + tab + " .updateTripPlan .touristGroupDelete").on("click",function(){
+				var obj = $(this);
+				var id = obj.attr("data-entity-id");
+				var tripPlanId = $(".updateTripPlan input[name=tripPlanId]").val();
+				 tripPlan.deleteTouristGroup(obj,id,tripPlanId,tab,"updateTripPlanTouristTbody");
+			})
+			//编辑 提交事件绑定
+			//取消计划   btn-cancelTripPlan
+			$("#" + tab + " .updateTripPlan .btn-updatecancelTripPlan").click(function(){
+				closeTab(menuKey+"-update");
+				tripPlan.edited["update"] = "";
+			})
+			//保存计划   btn-savelTripPlan
+			$("#" + tab + " .updateTripPlan .btn-updateTripPlan").click(function(){
+				tripPlan.submitUpdateTripPlan(1);
+			});
+
+			$("#" + tab + " .newAddTripPlan .btn-updateTripPlan").click(function(){
+				var planTouristCount = parseInt(getValue("planTouristCount")),
+					memberCount = parseInt($("#" + tab + " .tripPlanAllMemberCount").text());
+				if(planTouristCount < memberCount){
+					showMessageDialog($( "#confirm-dialog-message" ),"小组总人数不能大于计划人数",function(){
+					});
+				}else{
+					// 表单校验
+					if (!validatorCreateTripPlan.form()) { return; }
+					
+					//获取计划Id
+			    	var tripPlanId = $("#" + tab + " .newAddTripPlan input[name=tripPlanId]").val();
+					var saveTripP = {
+						"tripPlanId" : tripPlanId,
+						"tripPlan": {
+							"startTime": getValue("startTime"),
+				            "accompanyGuideName": getValue("accompanyGuideName"),
+				            "accompanyGuideMobile": getValue("accompanyGuideMobile"),
+				            "planTouristCount": getValue("planTouristCount"),
+				            "setPlacePosition": getValue("setPlacePosition"),
+				            "setPlaceTime": getValue("setPlaceTime")
+						},
+						"lineProductId": getValue("lineProductId"),
+				        "driverId": getValue("driverId"),
+				        "guideId": getValue("AddTPchooseGuideId"),
+				        "busId": getValue("busLicenseNumberId"),
+				        "touristGroupId": []
+					}
+					var touristGroupList = $("#" + tab + " .newAddTripPlan .updateTripPlanTouristTbody tr").length;
+					$("#" + tab + " .newAddTripPlan .updateTripPlanTouristTbody tr").each(function(i){
+						saveTripP.touristGroupId[i] = {
+							"id": $(this).attr("data-entity-id")
+						}
+					})
+							
+					var saveTripPlan = JSON.stringify(saveTripP);
+					$.ajax({
+						url:""+APP_ROOT+"back/tripPlan.do?method=updateTripPlan&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
+						data:"saveTripPlan="+encodeURIComponent(saveTripPlan)+"",
+						dataType: "json",
+						type:"POST",
+						beforeSend:function(){
+							globalLoadingLayer = openLoadingLayer();
+						},
+						success:function(data){
+							var result = showDialog(data);
+							layer.close(globalLoadingLayer);
+							if(result){
+								showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+									closeTab(menuKey+"-update");
+									tripPlan.listTripPlan(0,"","","","","","");
+								});
+							}
+							
+						}
+					})
+				}
+			});
 		},
 		//搜索关键词初始化
 		lineSearchData : {
@@ -1465,7 +1469,160 @@ define(function(require, exports) {
 					});
 				}
 			})
+		},
+		submitAddTripPlan : function (){
+			var tab = "tab-arrange_plan-add-content";
+			function getValue(name){
+				var thisObj = $("#" + tab + " .newAddTripPlan").find("[name="+name+"]"), objValue;
+				if(thisObj.attr("type") == "checkbox"){
+					objValue = thisObj.is(":checked") ? 1 : 0;
+				}else{
+					objValue = thisObj.val();
+				}
+				return objValue;
+			}
+			var planTouristCount = parseInt(getValue("planTouristCount")),
+			memberCount = parseInt($("#" + tab + " .tripPlanAllMemberCount").text());
+			if(planTouristCount < memberCount){
+				showMessageDialog($( "#confirm-dialog-message" ),"小组总人数不能大于计划人数",function(){
+				});
+			}else{
+				// 表单校验
+				var validator = rule.checkdCreateTripPlan($(".newAddTripPlanMain"));
+				if (!validator.form()) { return; }
+				
+				var saveTripP = {
+					"tripPlan": {
+						"startTime": getValue("startTime"),
+						"accompanyGuideName": getValue("accompanyGuideName"),
+						"accompanyGuideMobile": getValue("accompanyGuideMobile"),
+						"planTouristCount": getValue("planTouristCount"),
+						"setPlacePosition": getValue("setPlacePosition"),
+						"setPlaceTime": getValue("setPlaceTime")
+					},
+					"lineProductId": getValue("lineProductId"),
+					"driverId": getValue("driverId"),
+					"guideId": getValue("AddTPchooseGuideId"),
+					"busId": getValue("busLicenseNumberId"),
+					"touristGroupId": []
+				}
+				var touristGroupList = $("#" + tab + " .newAddTripPlan .addTripPlanTouristTbody tr").length;
+				$("#" + tab + " .newAddTripPlan .addTripPlanTouristTbody tr").each(function(i){
+					saveTripP.touristGroupId[i] = {
+						"id": $(this).attr("data-entity-id")
+					}
+				})
+						
+				var saveTripPlan = JSON.stringify(saveTripP);
+				$.ajax({
+					url:""+APP_ROOT+"back/tripPlan.do?method=addTripPlan&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
+					data:"saveTripPlan="+encodeURIComponent(saveTripPlan),
+					dataType: "json",
+					type:"POST",
+					beforeSend:function(){
+						globalLoadingLayer = openLoadingLayer();
+					},
+					success:function(data){
+						var result = showDialog(data);
+						layer.close(globalLoadingLayer);
+						if(result){
+							showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+								closeTab(menuKey+"-add");
+								tripPlan.edited["add"] = "";
+								tripPlan.listTripPlan(0,"","","","","","");
+							});
+						}
+					}
+				})
+			}
+		},
+		submitUpdateTripPlan : function(isClose){
+			var tab = "tab-arrange_plan-update-content";
+			function getValue(name){
+				var thisObj = $("#" + tab + " .updateTripPlan").find("[name="+name+"]"), objValue;
+				if(thisObj.attr("type") == "checkbox"){
+					objValue = thisObj.is(":checked") ? 1 : 0;
+				}else{
+					objValue = thisObj.val();
+				}
+				return objValue;
+			}
+			var planTouristCount = parseInt(getValue("planTouristCount")),
+				memberCount = parseInt($("#" + tab + " .tripPlanAllMemberCount").text());
+			if(planTouristCount < memberCount){
+				showMessageDialog($( "#confirm-dialog-message" ),"小组总人数不能大于计划人数",function(){
+				});
+			}else{
+				var validator = rule.checkdCreateTripPlan($(".updateTripPlan"));
+				// 表单校验
+				if (!validator.form()) { return; }
+				
+				//获取计划Id
+				var tripPlanId = $("#" + tab + " .updateTripPlan input[name=tripPlanId]").val();
+				var saveTripP = {
+					"tripPlanId" : tripPlanId,
+					"tripPlan": {
+						"startTime": getValue("startTime"),
+						"accompanyGuideName": getValue("accompanyGuideName"),
+						"accompanyGuideMobile": getValue("accompanyGuideMobile"),
+						"planTouristCount": getValue("planTouristCount"),
+						"setPlacePosition": getValue("setPlacePosition"),
+						"setPlaceTime": getValue("setPlaceTime")
+					},
+					"lineProductId": getValue("lineProductId"),
+					"driverId": getValue("driverId"),
+					"guideId": getValue("AddTPchooseGuideId"),
+					"busId": getValue("busLicenseNumberId"),
+					"touristGroupId": []
+				}
+				var touristGroupList = $("#" + tab + " .updateTripPlan .updateTripPlanTouristTbody tr").length;
+				$("#" + tab + " .updateTripPlan .updateTripPlanTouristTbody tr").each(function(i){
+					saveTripP.touristGroupId[i] = {
+						"id": $(this).attr("data-entity-id")
+					}
+				})
+						
+				var saveTripPlan = JSON.stringify(saveTripP);
+				$.ajax({
+					url:""+APP_ROOT+"back/tripPlan.do?method=updateTripPlan&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
+					data:"saveTripPlan="+encodeURIComponent(saveTripPlan)+"",
+					dataType: "json",
+					type:"POST",
+					beforeSend:function(){
+						globalLoadingLayer = openLoadingLayer();
+					},
+					success:function(data){
+						var result = showDialog(data);
+						layer.close(globalLoadingLayer);
+						if(result){
+							showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+								tripPlan.edited["update"] = "";
+								if(isClose == 1){
+									closeTab(menuKey+"-update");
+									tripPlan.listTripPlan(0,"","","","","","");
+								}
+							});
+						}
+						
+					}
+				})
+			}
+		},
+		save : function(saveType){
+			if(saveType == "add"){
+				console.log("saveadd");
+				tripPlan.submitAddTripPlan();
+			} else if(saveType == "update"){
+				var validator = rule.checkdCreateTripPlan($(".updateTripPlan"));
+				tripPlan.submitUpdateTripPlan(1);
+			}
+		},
+		clearEdit : function(clearType){
+			tripPlan.edited[clearType] = "";
 		}
 	}
 	exports.listTripPlan = tripPlan.listTripPlan;
+	exports.isEdited = tripPlan.isEdited;
+	exports.save = tripPlan.save;
+	exports.clearEdit = tripPlan.clearEdit;
 });

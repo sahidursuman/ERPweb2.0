@@ -1,5 +1,5 @@
-<div class="newAddTripPlan">
-	<div class="col-xs-12 newAddTripPlanMain updateTripPlan">
+<div class="updateTripPlan">
+	<div class="col-xs-12 newAddTripPlanMain">
 		<form class="form-horizontal newAddTripPlanMainForm" role="form" style="margin-top:10px" onsubmit="return false">
 			<div class="form-group">
 				<div class="col-xs-12 col-sm-12 widget-container-col">
@@ -16,6 +16,9 @@
 									<div class="col-sm-2">
 										<input class="col-sm-12" readonly="readonly" type="text" name="name" id="" value="{{lineProduct.name}}" />
 										<input type="hidden" name="lineProductId" value="{{lineProduct.id}}" />
+										<!-- <button class="col-sm-4 btn btn-sm btn-primary btn-Plan-search" style="padding-bottom:5px;">
+											<i class="ace-icon fa fa-search "></i>搜索
+										</button> --> 
 									</div>
 									<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>出团日期：</label>
 									<div class="col-sm-2">
@@ -29,7 +32,7 @@
 								<div class="form-group">
 									<label class="col-sm-1 control-label no-padding-right"> <span class="necessary">*</span>计划人数：</label>
 									<div class="col-sm-2">
-										<input class="col-sm-12" type="text" name="planTouristCount" id="" value="{{tripPlan.planTouristCount}}" />
+										<input class="col-sm-12" type="text" name="planTouristCount" id="" value="{{tripPlan.planTouristCount}}" maxlength="6"/>
 									</div>
 									<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>车座数：</label>
 									<div class="col-sm-2">
@@ -69,15 +72,15 @@
 								<div class="form-group">
 									<label class="col-sm-1 control-label no-padding-right">全陪：</label>
 									<div class="col-sm-2">
-										<input class="col-sm-12" type="text" name="accompanyGuideName" id="" value="{{tripPlan.accompanyGuideName}}"  maxlength="16" />
+										<input class="col-sm-12" type="text" name="accompanyGuideName" id="" value="{{tripPlan.accompanyGuideName}}" />
 									</div>							
 									<label class="col-sm-1 control-label no-padding-right">全陪电话：</label>
 									<div class="col-sm-2">
-										<input class="col-sm-12" type="text" name="accompanyGuideMobile" id="" value="{{tripPlan.accompanyGuideMobile}}" maxlength="11" />
+										<input class="col-sm-12" type="text" name="accompanyGuideMobile" id="" value="{{tripPlan.accompanyGuideMobile}}" />
 									</div>
 									<label class="col-sm-1 control-label no-padding-right">集合地点：</label>
 									<div class="col-sm-2">
-										<input class="col-sm-12" type="text" name="setPlacePosition" id="" value="{{tripPlan.setPlacePosition}}" maxlength="50" />
+										<input class="col-sm-12" type="text" name="setPlacePosition" id="" value="{{tripPlan.setPlacePosition}}" />
 									</div>
 									<label class="col-sm-1 control-label no-padding-right">集合时间：</label>
 									<div class="col-sm-2">

@@ -430,16 +430,21 @@ table tr td{
     line-height: 12px;
 }
 /*车队管理*/
-.globalAdd label{
-    font-size: 12px !important;
+.navInformation{
+    font-size: 14px !important;
 }
+/*.globalAdd label{*/
+    /*font-size: 12px !important;*/
+/*}*/
 .globalAdd input,select{
     height: 24px !important;
     /*line-height: 12px;*/
     padding: 0px;
     font-size: 12px;
 }
-
+.widget-mainFrist{
+    margin-left: -100px;
+}
 .formOneList input{
     width: 220px;
     height: 24px !important;
@@ -454,6 +459,10 @@ table tr td{
     height: 45px;
     font-size: 12px !important;
 }
+.widget-container-col input{
+    padding: 0px 0px 0px 10px;
+}
+
 .globalAdd button{
     height: 24px;
     font-size: 12px;
@@ -465,6 +474,9 @@ table tr td{
     font-size: 14px;
     line-height: 23px !important;
 }
+/*.datepicker{*/
+    /*width: 130px;*/
+/*}*/
 .globalAdd .guideInputList{
     width: 220px !important;
     font-size: 12px;
@@ -498,3 +510,7 @@ table tr td{
      margin-top: -3px;
     padding-top: 5px !important;
 }
+ .delete{
+     margin-left: 3px;
+     padding-top: 5px !important;
+ }

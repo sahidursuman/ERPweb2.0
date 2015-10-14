@@ -172,7 +172,7 @@
 						<td>{{hotel.hotel.name}}</td>
 						<td>{{hotel.hotel.mobileNumber}}</td>
 						<td>{{hotel.hotelRoom.type}}</td>
-						<td>{{hotel.memberCount}}</td>
+						<td>{{hotel.needRoomCount}}</td>
 						<td>{{hotel.guidePayMoney}}</td>
 						<td>{{if hotel.payType == 0}}现付{{else if hotel.payType==1}}签单{{else if hotel.payType==2}}转账{{else}}网付{{/if}}</td>
 						<td>{{hotel.remark}}</td>
@@ -325,7 +325,7 @@
 				{{each ticketList as ticket}}
 					<tr>
 						<td>{{ticket.ticket.name}}</td>
-						<td>{{if ticket.type == 1}}机票{{else if ticket.type == 2}}汽车票{{else if ticket.type == 3}}火车票{{else if ticket.type == 4}}轮船票{{/if}}</td>
+						<td>{{ticket.type}}</td>
 						<td>{{ticket.startingCity}}</td>
 						<td>{{ticket.arriveCity}}</td>
 						<td>{{if ticket.startTime != null}}{{ticket.startTime}}{{/if}}</td>

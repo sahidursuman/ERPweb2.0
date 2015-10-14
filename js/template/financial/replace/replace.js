@@ -39,7 +39,9 @@ define(function(require, exports) {
             	"startMonth":"",
             	"endMonth":""
             },	
-    		
+            edited:false,
+            blanceEdited:false,
+            oldBlancePartnerAgencyId:0,
     		//代订账务列表 back/financial/financialInsurance.do
         listReplace:function(page,partnerAgencyId,year,month){
         	
@@ -157,9 +159,37 @@ define(function(require, exports) {
                         data.partnerAgencyName = partnerAgencyName
                         data.searchParam = Replace.searchCheckData
                         var html = replaceChecking(data);
-                        addTab(checkTabId,"代订对账",html);
-                        //设置表单验证
-                        var validator = rule.check($('.bookingChecking'));   
+                        var validator;
+                	    //addTab(checkTabId,"代订对账",html);
+                	   if($("#" +"tab-"+checkTabId+"-content").length > 0)
+               	      {
+               	    	
+               	    	 if(Replace.edited){
+               	    		addTab(checkTabId,"代订对账");
+               	    		showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
+               	    			 validator = rule.check($('.bookingChecking'));
+				            		 if (!validator.form()) { return; }
+				            		 Replace.saveCheckingData(partnerAgencyId,partnerAgencyName)
+				            		 Replace.edited = false;
+				            		 addTab(checkTabId,"代订对账",html);
+				            		 validator = rule.check($('.bookingChecking'));
+				            	 },function(){
+				            		 addTab(checkTabId,"代订对账",html);
+				            		 Replace.edited = false;
+				            		 validator = rule.check($('.bookingChecking'));
+				            	 });
+               	    	 }else{
+	                 	    	addTab(checkTabId,"代订对账",html);
+	                 	        validator = rule.check($('.bookingChecking'));
+               	    	 }
+        	    		 
+               	    }else{
+               	    	addTab(checkTabId,"代订对账",html);
+               	    	validator = rule.check($('.bookingChecking'));
+               	    };
+           	    	$("#" +"tab-"+checkTabId+"-content .all").on("change",function(){
+           	    		Replace.edited = true; 
+           	    	});   
                         
                     }
                     //给搜索按钮绑定事件
@@ -235,89 +265,8 @@ define(function(require, exports) {
 	                 });
                     //给确认对账按钮绑定事件
                     $("#" +"tab-"+ checkTabId+"-content"+" .btn-bookingFinancial-checking").click(function(){
-                    	
-                    	// 表单校验
-                    	if (!validator.form()) { return; }
-                    	
-                        var JsonStr = [],
-                            oldrealUnIncomeMoney,
-                            newrealUnIncomeMoney,
-                            oldRemark,
-                            newRemark,
-                            $tr = $("#" +"tab-"+ checkTabId+"-content"+" .all tbody tr");
-                        $tr.each(function(i){
-                            var flag = $(this).find(".bookingFinancial").is(":checked");
-                            if(flag){
-                                if($(this).attr("data-entity-isConfirmAccount") == 1){
-                                    //取值用于是否修改对账判断
-                                    oldrealUnIncomeMoney = $(this).attr("data-entity-realUnIncomeMoney");
-                                    oldRemark = $(this).attr("data-entity-remark");
-                                    newrealUnIncomeMoney = $tr.eq(i).find("input[name=FinancialBookingRealUnPayedMoney]").val();
-                                    newRemark = $tr.eq(i).find("input[name=FinancialbookingRemark]").val();
-                                    //判断是否是修改对账
-                                    if(oldrealUnIncomeMoney !== newrealUnIncomeMoney || oldRemark !== newRemark){
-                                        var checkData = {
-                                            id:$(this).attr("data-entity-id"),
-                                            partnerAgencyId:partnerAgencyId,
-                                            partnerAgencyName:partnerAgencyName,
-                                            createTime:$(this).attr("data-entity-createTime"),
-                                            realUnIncomeMoney:$tr.eq(i).find("input[name=FinancialBookingRealUnPayedMoney]").val(),
-                                            remark:$tr.eq(i).find("input[name=FinancialbookingRemark]").val(),
-                                            isConfirmAccount:1
-                                        }
-                                        JsonStr.push(checkData)
-                                    }
-                                }else{
-                                    var checkData = {
-                                        id:$(this).attr("data-entity-id"),
-                                        partnerAgencyId:partnerAgencyId,
-                                        partnerAgencyName:partnerAgencyName,
-                                        createTime:$(this).attr("data-entity-createTime"),
-                                        realUnIncomeMoney:$tr.eq(i).find("input[name=FinancialBookingRealUnPayedMoney]").val(),
-                                        remark:$tr.eq(i).find("input[name=FinancialbookingRemark]").val(),
-                                        isConfirmAccount:1
-                                    }
-                                    JsonStr.push(checkData)
-                                }
-                            }else{
-                                if($(this).attr("data-entity-isConfirmAccount") == 1){
-                                    var checkData = {
-                                        id:$(this).attr("data-entity-id"),
-                                        partnerAgencyId:partnerAgencyId,
-                                        partnerAgencyName:partnerAgencyName,
-                                        createTime:$(this).attr("data-entity-createTime"),
-                                        realUnIncomeMoney:$tr.eq(i).find("input[name=FinancialBookingRealUnPayedMoney]").val(),
-                                        remark:$tr.eq(i).find("input[name=FinancialbookingRemark]").val(),
-                                        isConfirmAccount:0
-                                    }
-                                    JsonStr.push(checkData)
-                                }
-                            }
-                        });
-                        //判断用户是否操作
-	                	   if(JsonStr.length == 0){
-	                		   showMessageDialog($( "#confirm-dialog-message" ),"您当前未进行任何操作");
-	                		   return
-	                	   }else{
-	                		   JsonStr = JSON.stringify(JsonStr);
-	                           $.ajax({
-	                               url:""+APP_ROOT+"back/financial/financialBookingOrder.do?method=accountChecking&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
-	                               type:"POST",
-	                               data:"financialBookingOrderListStr="+encodeURIComponent(JsonStr),
-	                               dataType:"json",
-	                               beforeSend:function(){
-	                                   globalLoadingLayer = openLoadingLayer();
-	                               },
-	                               success:function(data){
-	                                   layer.close(globalLoadingLayer);
-	                                   var result = showDialog(data);
-	                                   if(result){
-	                                       showMessageDialog($( "#confirm-dialog-message" ),data.message);
-	                                       Replace.replaceCheckList(0,Replace.searchCheckData.partnerAgencyId,Replace.searchCheckData.partnerAgencyName,Replace.searchCheckData.year,Replace.searchCheckData.month)                                }
-	                               }
-	                           });
-	                	   }
-                        
+                    	 if (!validator.form()) { return; }
+	            		 Replace.saveCheckingData(partnerAgencyId,partnerAgencyName)
                     })
                     //取消按钮事件
                     $("#" +"tab-"+ checkTabId+"-content"+" .btn-bookingFinancial-close").click(function(){
@@ -346,13 +295,38 @@ define(function(require, exports) {
                         data.monthList = monthList
                         data.partnerAgencyName = partnerAgencyName
                         var html = replaceClearing(data);
-                        addTab(blanceTabId,"代订结算",html);
-                      //获取table中的tr
-	                    var $tr = $("#" +"tab-"+ blanceTabId + "-content"+" .all tbody tr")
-	                    //给每个tr添加表单验证
-                        $tr.each(function(){
-                        	$(this).find('.btn-bookingBlance-save').data('validata', rule.check($(this)));
-                        });
+	                    if($("#" +"tab-"+blanceTabId+"-content").length > 0)
+	             	    {
+	             	    	 if(Replace.blanceEdited){
+	             	    		addTab(blanceTabId,"代订结算");
+			                    //给每个tr添加表单验证
+	             	    		showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
+	             	    			 Replace.validatorTable()
+	             	    			 var saveBtn = $("#" +"tab-"+ blanceTabId+"-content"+" .btn-bookingBlance-save")
+	             	    			 if (!$(saveBtn).data('validata').form()) { return; }
+	             	    			 Replace.saveBlanceData(Replace.oldBlancePartnerAgencyId,partnerAgencyName)
+				            		 Replace.blanceEdited = false;
+				            		 addTab(blanceTabId,"代订结算",html);
+				            		 Replace.validatorTable();
+				            	 },function(){
+				            		    addTab(blanceTabId,"代订结算",html);
+				            		    Replace.blanceEdited = false;
+				            		    Replace.validatorTable();
+				            	 });
+	             	    	 }else{
+	                 	    	addTab(blanceTabId,"代订结算",html);
+	                 	    	Replace.validatorTable();
+	             	    	 }
+	         	    		 
+	             	    }else{
+	             	    	addTab(blanceTabId,"代订结算",html);
+	             	    	Replace.validatorTable();
+	             	    };
+	             	   $("#" +"tab-"+blanceTabId+"-content .all").on('change', 'input, select', function() {
+	             		    Replace.blanceEdited = true;
+	             		    Replace.oldBlancePartnerAgencyId = partnerAgencyId;
+	    	    			$(this).closest('tr').data('blanceStatus',true);
+	    	    		});
  
                         
                         //搜索按钮事件
@@ -368,51 +342,8 @@ define(function(require, exports) {
                         });
                         //保存按钮事件
                         $("#" +"tab-"+ blanceTabId+"-content"+" .btn-bookingBlance-save").click(function(){
-                        	
-                        	// 表单校验
                         	if (!$(this).data('validata').form()) { return; }
-                            var tr = $(this).parent().parent(),
-                                DataArr = [],
-                                JsonData,
-                                needIncomeMoney = tr.find("input[name=blancerealIncomeMoney]").val();
-                            if(needIncomeMoney == null || needIncomeMoney == ""){
-                            	showMessageDialog($( "#confirm-dialog-message" ),"请输入收款金额");
-                            	return
-                            }else{
-                            	var blanceData = {
-                                        id:$(this).attr("data-entity-id"),
-                                        partnerAgencyId:partnerAgencyId,
-                                        year:$(this).attr("data-entity-year"),
-                                        month:$(this).attr("data-entity-month"),
-                                        realNeedIncomeMoney:tr.find("td[name=blancerealNeedIncomeMoney]").text(),
-                                        realIncomeMoney:tr.find("td[name=blancerealIncomeMoney]").text(),
-                                        unIncomeMoney:tr.find("td[name=blanceununIncomeMoney]").text(),
-                                        realUnIncomeMoney:tr.find("td[name=blancerealrealUnIncomeMoney]").text(),
-                                        incomeType:tr.find("select[name=blancePayType]").val(),
-                                        incomeMoney:tr.find("input[name=blancerealIncomeMoney]").val(),
-                                        remark:tr.find("input[name=blancerealRemark]").val()
-                                    }
-                                    DataArr.push(blanceData)
-                                    JsonData = JSON.stringify(DataArr)
-                                    $.ajax({
-                                        url:""+APP_ROOT+"back/financial/financialBookingOrder.do?method=saveFcBookingOrderSettlement&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
-                                        type:"POST",
-                                        data:"fcBookingOrderSettlementStr="+JsonData,
-                                        dataType:"json",
-                                        beforeSend:function(){
-                                            globalLoadingLayer = openLoadingLayer();
-                                        },
-                                        success:function(data){
-                                            layer.close(globalLoadingLayer);
-                                            var result = showDialog(data);
-                                            if(result){
-                                                showMessageDialog($( "#confirm-dialog-message" ),data.message);
-                                                Replace.replaceBalanceList(0,Replace.searchBalanceData.partnerAgencyId,Replace.searchBalanceData.partnerAgencyName,Replace.searchBalanceData.year,Replace.searchBalanceData.startMonth,Replace.searchBalanceData.endMonth);
-                                            }
-                                        }
-                                    })
-                            }
-                            
+        	    			 Replace.saveBlanceData(Replace.oldBlancePartnerAgencyId,partnerAgencyName)
                         });
                         //对账明细按钮事件
                         $("#" +"tab-"+ blanceTabId+"-content"+" .btn-bookingBlance-checkDetail").click(function(){
@@ -456,39 +387,141 @@ define(function(require, exports) {
                                 }
                             });
                         });
-                        /*
-                         * 结算没有分页，需求变动的话，保险起见先注释
-                         * //分页--首页按钮事件
-                         $("#" +"tab-"+ blanceTabId+"-content"+" .pageMode a.first").click(function(){
-                         Replace.ReplaceBalanceList(0,Replace.searchBalanceData.partnerAgencyId,Replace.searchBalanceData.partnerAgencyName,Replace.searchBalanceData.year,Replace.searchBalanceData.startMonth,Replace.searchBalanceData.endMonth);
-                         });
-                         //分页--上一页事件
-                         $("#" +"tab-"+ blanceTabId+"-content"+" .pageMode a.previous").click(function(){
-                         var previous = data.pageNo - 1;
-                         if(data.pageNo == 0){
-                         previous = 0;
-                         }
-                         Replace.ReplaceBalanceList(0,Replace.searchBalanceData.partnerAgencyId,Replace.searchBalanceData.partnerAgencyName,Replace.searchBalanceData.year,Replace.searchBalanceData.startMonth,Replace.searchBalanceData.endMonth);
-                         });
-                         //分页--下一页事件
-                         $("#" +"tab-"+ blanceTabId+"-content"+" .pageMode a.next").click(function(){
-                         var next =  data.pageNo + 1;
-                         if(data.pageNo == data.totalPage-1){
-                         next = data.pageNo ;
-                         }
-                         Replace.ReplaceBalanceList(0,Replace.searchBalanceData.partnerAgencyId,Replace.searchBalanceData.partnerAgencyName,Replace.searchBalanceData.year,Replace.searchBalanceData.startMonth,Replace.searchBalanceData.endMonth);
-                         });
-                         //分页--尾页事件
-                         $("#" +"tab-"+ blanceTabId+"-content"+" .pageMode a.last").click(function(){
-                         Replace.ReplaceBalanceList(0,Replace.searchBalanceData.partnerAgencyId,Replace.searchBalanceData.partnerAgencyName,Replace.searchBalanceData.year,Replace.searchBalanceData.startMonth,Replace.searchBalanceData.endMonth);
-                         });*/
-
-
-                        //给结算按钮绑定事件
-
                     }
                 }
             });
+        },
+      //给每个tr增加验证
+	    validatorTable:function(){
+	    	var $tr = $("#" +"tab-"+ blanceTabId + "-content"+" .all tbody tr")
+            //给每个tr添加表单验证
+            $tr.each(function(){
+            	$(this).find('.btn-bookingBlance-save').data('validata', rule.check($(this)));
+            });
+	    },
+        //对账数据处理
+        saveCheckingData:function(partnerAgencyId,partnerAgencyName){
+            var JsonStr = [],
+                oldrealUnIncomeMoney,
+                newrealUnIncomeMoney,
+                oldRemark,
+                newRemark,
+                $tr = $("#" +"tab-"+ checkTabId+"-content"+" .all tbody tr");
+            $tr.each(function(i){
+                var flag = $(this).find(".bookingFinancial").is(":checked");
+                if(flag){
+                    if($(this).attr("data-entity-isConfirmAccount") == 1){
+                        //取值用于是否修改对账判断
+                        oldrealUnIncomeMoney = $(this).attr("data-entity-realUnIncomeMoney");
+                        oldRemark = $(this).attr("data-entity-remark");
+                        newrealUnIncomeMoney = $tr.eq(i).find("input[name=FinancialBookingRealUnPayedMoney]").val();
+                        newRemark = $tr.eq(i).find("input[name=FinancialbookingRemark]").val();
+                        //判断是否是修改对账
+                        if(oldrealUnIncomeMoney !== newrealUnIncomeMoney || oldRemark !== newRemark){
+                            var checkData = {
+                                id:$(this).attr("data-entity-id"),
+                                partnerAgencyId:partnerAgencyId,
+                                partnerAgencyName:partnerAgencyName,
+                                createTime:$(this).attr("data-entity-createTime"),
+                                realUnIncomeMoney:$tr.eq(i).find("input[name=FinancialBookingRealUnPayedMoney]").val(),
+                                remark:$tr.eq(i).find("input[name=FinancialbookingRemark]").val(),
+                                isConfirmAccount:1
+                            }
+                            JsonStr.push(checkData)
+                        }
+                    }else{
+                        var checkData = {
+                            id:$(this).attr("data-entity-id"),
+                            partnerAgencyId:partnerAgencyId,
+                            partnerAgencyName:partnerAgencyName,
+                            createTime:$(this).attr("data-entity-createTime"),
+                            realUnIncomeMoney:$tr.eq(i).find("input[name=FinancialBookingRealUnPayedMoney]").val(),
+                            remark:$tr.eq(i).find("input[name=FinancialbookingRemark]").val(),
+                            isConfirmAccount:1
+                        }
+                        JsonStr.push(checkData)
+                    }
+                }else{
+                    if($(this).attr("data-entity-isConfirmAccount") == 1){
+                        var checkData = {
+                            id:$(this).attr("data-entity-id"),
+                            partnerAgencyId:partnerAgencyId,
+                            partnerAgencyName:partnerAgencyName,
+                            createTime:$(this).attr("data-entity-createTime"),
+                            realUnIncomeMoney:$tr.eq(i).find("input[name=FinancialBookingRealUnPayedMoney]").val(),
+                            remark:$tr.eq(i).find("input[name=FinancialbookingRemark]").val(),
+                            isConfirmAccount:0
+                        }
+                        JsonStr.push(checkData)
+                    }
+                }
+            });
+            //判断用户是否操作
+        	   if(JsonStr.length == 0){
+        		   showMessageDialog($( "#confirm-dialog-message" ),"您当前未进行任何操作");
+        		   return
+        	   }else{
+        		   JsonStr = JSON.stringify(JsonStr);
+                   $.ajax({
+                       url:""+APP_ROOT+"back/financial/financialBookingOrder.do?method=accountChecking&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
+                       type:"POST",
+                       data:"financialBookingOrderListStr="+encodeURIComponent(JsonStr),
+                       dataType:"json",
+                       beforeSend:function(){
+                           globalLoadingLayer = openLoadingLayer();
+                       },
+                       success:function(data){
+                           layer.close(globalLoadingLayer);
+                           var result = showDialog(data);
+                           if(result){
+                               showMessageDialog($( "#confirm-dialog-message" ),data.message);
+                               Replace.edited = false;
+                               Replace.replaceCheckList(0,Replace.searchCheckData.partnerAgencyId,Replace.searchCheckData.partnerAgencyName,Replace.searchCheckData.year,Replace.searchCheckData.month)                                }
+                       }
+                   });
+        	   }
+        },
+        saveBlanceData:function(partnerAgencyId,partnerAgencyName){
+          	var DataArr = [],
+    			JsonData,
+          	$tr = $("#" +"tab-"+ blanceTabId+"-content"+" .all tbody tr");
+          	$tr.each(function(i){
+          		if($(this).data('blanceStatus')){
+          			var blanceData = {
+                            id:$(this).attr("data-entity-id"),
+                            partnerAgencyId:partnerAgencyId,
+                            year:$(this).attr("data-entity-year"),
+                            month:$(this).attr("data-entity-month"),
+                            realNeedIncomeMoney:$tr.eq(i).find("td[name=blancerealNeedIncomeMoney]").text(),
+                            realIncomeMoney:$tr.eq(i).find("td[name=blancerealIncomeMoney]").text(),
+                            unIncomeMoney:$tr.eq(i).find("td[name=blanceununIncomeMoney]").text(),
+                            realUnIncomeMoney:$tr.eq(i).find("td[name=blancerealrealUnIncomeMoney]").text(),
+                            incomeType:$tr.eq(i).find("select[name=blancePayType]").val(),
+                            incomeMoney:$tr.eq(i).find("input[name=blancerealIncomeMoney]").val(),
+                            remark:$tr.eq(i).find("input[name=blancerealRemark]").val()
+                        }
+          			 DataArr.push(blanceData)
+          		}
+          	})
+          	JsonData = JSON.stringify(DataArr)
+          	$.ajax({
+                url:""+APP_ROOT+"back/financial/financialBookingOrder.do?method=saveFcBookingOrderSettlement&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
+                type:"POST",
+                data:"fcBookingOrderSettlementStr="+JsonData,
+                dataType:"json",
+                beforeSend:function(){
+                    globalLoadingLayer = openLoadingLayer();
+                },
+                success:function(data){
+                    layer.close(globalLoadingLayer);
+                    var result = showDialog(data);
+                    if(result){
+                        showMessageDialog($( "#confirm-dialog-message" ),data.message);
+                        Replace.blanceEdited = false;
+                        Replace.replaceBalanceList(0,Replace.searchBalanceData.partnerAgencyId,Replace.searchBalanceData.partnerAgencyName,Replace.searchBalanceData.year,Replace.searchBalanceData.startMonth,Replace.searchBalanceData.endMonth);
+                    }
+                }
+            })
         }
 
     }

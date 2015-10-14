@@ -77,14 +77,14 @@
     <tbody>
     
      {{each fcTransferSettlementList as transferSettlement}}  
-     <tr>
+     <tr data-entity-id="{{transferSettlement.id}}" data-entity-year="{{transferSettlement.year}}" data-entity-month="{{transferSettlement.month}}">
             <td style="width:100px;">{{transferSettlement.year}}{{"年"}}{{transferSettlement.month}}{{"月"}}</td>
             <td style="width:100px;">{{transferSettlement.needPayMoney}}</td>
             <td style="width:100px;" name="blancerealNeedPayMoney">{{transferSettlement.realNeedPayMoney}}</td>
             <td style="width:100px;" name="blancerealrealPayedMoney">{{transferSettlement.realPayedMoney}}</td>
             <td style="width:100px;" name="blanceunPayedMoney">{{transferSettlement.unPayedMoney}}</td>
             <td style="width:100px;" name="blancerealrealUnPayedMoney">{{transferSettlement.realUnPayedMoney}}</td>
-            <td class="col-sm-1"><input name="blancerealPayedMoney" type="text" ></td>
+            <td class="col-sm-1"><input name="blancerealPayedMoney" type="text" maxlength="9"></td>
             <td style="width:120px;">
                     <select style="text-align:center" name="blancePayType">
                         <option value="" selected="selected">请选择...</option>
@@ -93,7 +93,7 @@
                         <option value="线下付款">线下付款</option>
                     </select>
               </td>
-            <td class="col-sm-1" style="width:400px;"><input name="blancerealRemark" type="text" style="width:370px;" ></td>
+            <td class="col-sm-1" style="width:400px;"><input name="blancerealRemark" type="text" style="width:370px;" maxlenght="1000"></td>
             <td>
                {{if transferSettlement.allCount != transferSettlement.checkedCount}}
 	                <span style="color:#ff9900"> {{transferSettlement.checkedCount}}{{"/"}}{{transferSettlement.allCount}}</span>

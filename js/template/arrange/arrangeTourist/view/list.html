@@ -17,7 +17,7 @@
 	</thead>
 	<tbody>
 		{{each arrangeTouristGroupList as arrangeTourist}}
-			<tr data-entity-id="{{arrangeTourist.lineProductId}}" data-entity-startTime="{{arrangeTourist.startTime}}" data-entity-days="{{arrangeTourist.days}}" data-entity-name="{{arrangeTourist.name}}" data-entity-type="{{arrangeTourist.type}}" class="tr-{{arrangeTourist.lineProductId}}-{{arrangeTourist.startTime}}">
+			<tr data-entity-id="{{arrangeTourist.lineProductId}}" data-entity-startTime="{{arrangeTourist.startTime}}" data-entity-days="{{arrangeTourist.days}}" data-entity-name="{{arrangeTourist.name}}" data-entity-type="{{arrangeTourist.type}}" data-entity-memberCount="{{arrangeTourist.sumNoOperationAdultCount+arrangeTourist.sumNoOperationChildCount}}" class="tr-{{arrangeTourist.lineProductId}}-{{arrangeTourist.startTime}}">
 				<td>
 					<label class="pos-rel"> <input type="checkbox" class="ace touristGroupMergeCheckBox"> <span class="lbl"></span> </label>
 				</td>

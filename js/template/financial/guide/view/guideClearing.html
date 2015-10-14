@@ -81,7 +81,7 @@
         </thead>
         <tbody>
         {{each guideSettlementList as guideSettlement}}
-        <tr>
+        <tr data-entity-id="{{guideSettlement.id}}">
         	<td>{{guideSettlement.year}}年{{guideSettlement.month}}月</td>
             <td>{{guideSettlement.guidePreMoney}}</td>
             <td>{{guideSettlement.teamIncomeMoney}}</td>
@@ -92,7 +92,7 @@
             <td>{{guideSettlement.realBackGuideMoney}}</td>
             <td>{{guideSettlement.alreadyColseAccountMoney}}</td>
             <td>{{guideSettlement.unCloseAccountMoney}}</td>
-            <td class="col-sm-1"><input name="payMoney" type="text" class="col-sm-12"></td>
+            <td class="col-sm-1"><input name="payMoney" type="text" class="col-sm-12" maxlength="9"></td>
             <td>
                 <label class=" control-label no-padding-right" >
                     <select name="payType">
@@ -102,7 +102,7 @@
                     </select>
                 </label>
             </td>
-            <td class="col-sm-1"><input name="remark" type="text" class="col-sm-12"></td>
+            <td class="col-sm-1"><input name="remark" type="text" class="col-sm-12" maxlength="1000"></td>
             <td>
            			{{if guideSettlement.allCount != guideSettlement.checkedCount}}
                       <span style="color:#ff9900"> {{guideSettlement.checkedCount}}{{"/"}}{{guideSettlement.allCount}}</span>

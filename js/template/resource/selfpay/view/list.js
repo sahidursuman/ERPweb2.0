@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":68,"md5":"6d61e76f7fe292cdbcdcdb5f9d2f4683"}*/
+/*TMODJS:{"debug":true,"version":66,"md5":"6d61e76f7fe292cdbcdcdb5f9d2f4683"}*/
 define(function(require) {
     return require("../../../template")("resource/selfpay/view/list", function($data, $filename) {
         try {

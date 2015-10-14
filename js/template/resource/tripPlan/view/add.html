@@ -225,7 +225,7 @@
                                                                         <option {{if guide.payType == 3}}selected="selected"{{/if}} value="3">网付</option>
                                                                     </select>
                                                                 </td>
-                                                                <td><input type="text" name="remark" value="{{guide.remark}}" class="col-sm-12" maxlength="500"/></td>
+                                                                <td><input type="text" name="remark" value="{{guide.remark}}" class="col-sm-12"/></td>
                                                                 <td style="display: none;">
                                                                     <button class="btn btn-xs btn-success" title="发送订单">
                                                                         <i class="ace-icon fa fa-paper-plane-o bigger-120"></i>
@@ -298,7 +298,7 @@
                                                                     </select>
                                                                 </td>
                                                                 <td><input name="guidePayMoney" type="text" value="{{busCompany.guidePayMoney}}" class="col-sm-12" style="width: 60px;"/></td>
-                                                                <td><input name="remark" type="text" value="{{busCompany.remark}}" class="col-sm-12"maxlength="500"/></td>
+                                                                <td><input name="remark" type="text" value="{{busCompany.remark}}" class="col-sm-12"/></td>
                                                                 <td style="display: none;">
                                                                     <button class="btn btn-xs btn-success" title="发送订单">
                                                                         <i class="ace-icon fa fa-paper-plane-o bigger-120"></i>
@@ -377,7 +377,7 @@
                                                                     </select> 
                                                                 </td>
                                                                 <td><input name="guidePayMoney" type="text" value="{{restaurant.guidePayMoney}}" class="col-sm-12" style="width: 60px;"/></td>
-                                                                <td><input name="remark" type="text" value="{{restaurant.remark}}" class="col-sm-12"maxlength="500"/></td>
+                                                                <td><input name="remark" type="text" value="{{restaurant.remark}}" class="col-sm-12"/></td>
                                                                 <td>
                                                                 	<a class="cursor btn-deleteTripPlanList" data-entiy-id="{{restaurant.id}}" data-entity-name="restaurant" title="删除">
                                                                         删除
@@ -469,7 +469,7 @@
 	                                                    			</select>
                                                                 </td> 
                                                                 <td><input type="text" name="guidePayMoney" class="col-sm-12" value="{{hotel.guidePayMoney}}" style="width: 60px;" /></td>
-                                                                <td><input type="text" name="remark" class="col-sm-12" value="{{hotel.remark}}" maxlength="500" /></td>
+                                                                <td><input type="text" name="remark" class="col-sm-12" value="{{hotel.remark}}" /></td>
                                                                 <td>
                                                                     <a class="cursor btn-deleteTripPlanList" data-entiy-id="{{hotel.id}}" data-entity-name="hotel" title="删除">
                                                                         删除
@@ -555,7 +555,7 @@
                                                                     </select>
                                                                 </td>
                                                                 <td><input name="guidePayMoney" type="text" class="col-sm-12" value="{{scenic.guidePayMoney}}" style="width: 60px;" /></td>
-                                                                <td><input name="remark" type="text" class="col-sm-12" value="{{scenic.remark}}" maxlength="500"/></td>
+                                                                <td><input name="remark" type="text" class="col-sm-12" value="{{scenic.remark}}"/></td>
                                                                 <td>
                                                                     <a class="cursor btn-deleteTripPlanList" data-entiy-id="{{scenic.id}}" data-entity-name="scenic" title="删除">
                                                                         删除
@@ -610,7 +610,7 @@
                                                                 <td><input type="text" name="managerName" readonly="readonly" class="col-sm-12" value="{{if shop.shop != null}}{{shop.shop.managerName}}{{/if}}" /></td>
                                                                 <td><input type="text" name="mobileNumber" readonly="readonly" class="col-sm-12" value="{{if shop.shop != null}}{{shop.shop.mobileNumber}}{{/if}}" /></td>
                                                                 <td><input type="text" name="goodsPolicy" class="col-sm-12" value="{{if shop.shopPolicy != null}}{{shop.shopPolicy.name}}{{/if}}" /><input type="hidden" name="shopPolicyId" value="{{if shop.shopPolicy != null}}{{shop.shopPolicy.id}}{{/if}}"/></td>
-                                                                <td><input type="text" name="remark" class="col-sm-12" value="{{shop.remark}}" maxlength="500" /></td>
+                                                                <td><input type="text" name="remark" class="col-sm-12" value="{{shop.remark}}" /></td>
                                                                 <td>
                                                                     <a class="cursor btn-deleteTripPlanList" data-entiy-id="{{shop.id}}" data-entity-name="shop" title="删除">
                                                                         删除
@@ -688,7 +688,7 @@
                                                                     </select>
                                                                 </td>
                                                                 <td><input type="text" name="guidePayMoney" class="col-sm-12" value="{{selfPay.guidePayMoney}}" style="width: 60px;" /></td>
-                                                                <td><input type="text" name="remark" class="col-sm-12" value="{{selfPay.remark}}" maxlength="500" /></td>
+                                                                <td><input type="text" name="remark" class="col-sm-12" value="{{selfPay.remark}}" /></td>
                                                                 <td>
                                                                     <a class="cursor btn-deleteTripPlanList" data-entiy-id="{{selfPay.id}}" data-entity-name="selfpay" title="删除">
                                                                         删除
@@ -775,7 +775,7 @@
                                                                     </select>
                                                                 </td>
                                                                 <td><input type="text" name="guidePayMoney" class="col-sm-12" value="{{ticket.guidePayMoney}}" /></td>
-                                                                <td><input type="text" name="remark" class="col-sm-12" value="{{ticket.remark}}" maxlength="500"/></td>
+                                                                <td><input type="text" name="remark" class="col-sm-12" value="{{ticket.remark}}" /></td>
                                                                 <td>
                                                                     <a class="cursor btn-deleteTripPlanList" data-entiy-id="{{ticket.id}}" data-entity-name="ticket" title="删除">
                                                                         删除
@@ -849,7 +849,7 @@
                                                                     </select>  
                                                                 </td>
                                                                 <td><input type="text" name="guidePayMoney" class="col-sm-12" value="{{other.guidePayMoney}}" /></td>
-                                                                <td><input type="text" name="remark" class="col-sm-12" value="{{other.remark}}" maxlength="500" /></td>
+                                                                <td><input type="text" name="remark" class="col-sm-12" value="{{other.remark}}" /></td>
                                                                 <td>
                                                                     <a class="cursor btn-deleteTripPlanList" data-entiy-id="{{other.id}}" data-entity-name="other" title="删除">
                                                                         删除
