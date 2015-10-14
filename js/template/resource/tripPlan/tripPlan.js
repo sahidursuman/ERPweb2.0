@@ -106,7 +106,7 @@ define(function(require, exports) {
 							language: 'zh-CN'
 						});
 						
-						$("#" +tabId+ " .tripPlanViewList .btn-tripPlan-view").on("click", tripPlan.viewTripPlan)
+						$("#" +tabId+ " .tripPlanViewList .btn-tripPlan-view").on("click", tripPlan.viewTripPlan);
 						$("#"+tabId+" .tripPlanViewList .btn-tripPlan-plan").on("click", function(){
 							var billStatus = $(this).attr("billStatus");
 							var id = $(this).attr("data-entiy-id");

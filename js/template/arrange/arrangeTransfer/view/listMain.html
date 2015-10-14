@@ -8,7 +8,6 @@
 						我社转出	
 					</a>
 				</li> 
-		
 				<li>
 					<a data-toggle="tab" href="#transferIn" class="transferIn"  aria-expanded="false" data-value="1" >
 					<i class="fa fa-hourglass"></i>
@@ -16,8 +15,6 @@
 					</a>
 				</li>
 			</ul>
-				
-						
 			<div class="tab-content">
 				<!--我社转出start -1-->
 				<div id="transferOut" class="tab-pane fade active in clearfix" >							
@@ -150,7 +147,6 @@
 							  </h1>
 						 </div>
 					</div>
-
 					<div class="form-group" style="margin-bottom:30px; ">
 						<div class="search-area">
 							<label class="pull-left control-label no-padding-right">同行线路产品：</label> 
@@ -221,49 +217,6 @@
 													{{user.realName}}
 												</option>
 											{{/if}}
-<<<<<<< HEAD
-							             {{/each}}       
-									  </select> 
-							      </div>
-						      <label class="control-label no-padding-right pull-left">转客人：</label> 
-							  <div class="col-sm-2"> 
-								  <select name="creator" class="col-xs-12">    
-								  		<option value="">全部</option>
-									     {{each user2 as user}}
-									     		{{if user!=null}}
-									     			{{if user.id!=null}}
-														<option value="{{user.id}}" {{if creator==user.id}}selected="selected"{{/if}} >
-														    {{user.realName}}
-														</option>
-												    {{/if}}
-												{{/if}}
-							             {{/each}}
-								  </select> 
-						      </div>
-							      <label class="control-label no-padding-right pull-left">状态：</label>
-								  <div class="col-sm-1"> 
-									  <select name="status" class="col-xs-12"> 
-									  	  <option value="" >全部</option>
-										  <option value="0" >未确认</option>
-										  <option value="1">已接收</option> 
-									  </select> 
-							      </div>    
-							   <button class="btn-sm btn-transferIn-search pull-right search-btn">
-							   <i class="ace-icon fa fa-search"></i>
-									搜索
-							   </button>&nbsp;
-						  </div>
-					    </div>
-						  <!-- 同行转入搜索end -->  
-				      <!--分页&&数据List-->
-	                  <div class="col-xs-12 transferInList" ></div>
-	                  <!--我社转出end -->
-					</div>				 
-		   		</div>	 
-			</div>
-	  	</div>
-  	</div>
-=======
 										{{/if}}
 									{{/each}}
 							    </select> 
@@ -310,4 +263,3 @@
 		</div>
 	</div>
 </div>
->>>>>>> 74adcd2a8d9ac6a64a83f0f972017f70b3fac2f7

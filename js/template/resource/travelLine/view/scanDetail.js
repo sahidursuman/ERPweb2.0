@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":64,"md5":"9c5091abee58a6dd5a7a92602176485a"}*/
+/*TMODJS:{"debug":true,"version":65,"md5":"9c5091abee58a6dd5a7a92602176485a"}*/
 define(function(require) {
     return require("../../../template")("resource/travelLine/view/scanDetail", function($data, $filename) {
         try {

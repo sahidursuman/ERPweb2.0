@@ -161,7 +161,7 @@ define(function(require, exports) {
 			    	$obj.find(".btn-hotel-standard-add").click(function(){
 			    		var html = "<tr>" +
 			    				"<td><input name=\"type\" type=\"text\" class='col-sm-12'  maxlength=\"32\" /></td>" +
-			    				"<td class=\"time\"><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px;width: 80px\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right; padding-top:3px;\"><button class=\"btn btn-success btn-sm btn-white add\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i></button></label></div></td>" +
+			    				"<td class=\"time\"><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px;width: 258px\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right; padding-top:3px;\"><button class=\"btn btn-success btn-sm btn-white add\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i></button></label></div></td>" +
 			    				"<td><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input name=\"marketPrice\" class='col-sm-12 marketPrice' type=\"text\"/></div></td>" +
 			    				"<td><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input name=\"contractPrice\" class='col-sm-12 price' type=\"text\"/></div></td>" +
 			    				"<td><select name=\"containBreakfast\" class='no-padding foodsAll'><option value=\"0\">不含</option><option value=\"1\">包含</option></select></td>" +
@@ -433,7 +433,7 @@ define(function(require, exports) {
 						    	$obj.find(".btn-hotel-standard-add").click(function(){
 							    		var html = "<tr>" +
 							    				"<td><input name=\"type\" type=\"text\" class='col-sm-12'/></td>" +
-							    				"<td class=\"time\"><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:80px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:80px\"/><label class=\"timeArea\" style=\"float:right\"><button class=\"btn btn-success btn-sm btn-white add\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i></button></label></div></td>" +
+							    				"<td class=\"time\"><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px;width: 258px\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:80px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:80px\"/><label class=\"timeArea\" style=\"float:right\"><button class=\"btn btn-success btn-sm btn-white add\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i></button></label></div></td>" +
 							    				"<td><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input name=\"marketPrice\" class='col-sm-12' type=\"text\"/></div></td>" +
 							    				"<td><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input name=\"contractPrice\" class='col-sm-12' type=\"text\"/></div></td>" +
 							    				"<td><select name=\"containBreakfast\" class='no-padding foodsAll\'><option value=\"0\">不含</option><option value=\"1\">包含</option></select></td>" +
