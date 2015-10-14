@@ -1,5 +1,5 @@
-<div class="search-area">
-	<input name="partnerAgency_travelAgencyName" class="col-xs-2 input-default-height" value="{{searchParam.travelAgencyName}}" placeholder="请输入旅行社名称关键词"/>&nbsp;
+<div class="search-area globalAdd">
+	<input name="partnerAgency_travelAgencyName" class="col-xs-2 input-default-height guideInputList" value="{{searchParam.travelAgencyName}}" placeholder="请输入旅行社名称关键词"/>&nbsp;
 	<button class="btn-sm btn-partnerAgency-search search-btn">
 		<i class="ace-icon fa fa-search"></i>
 		搜索
@@ -7,7 +7,7 @@
 	<div class="btn-group btn-status" style="margin-left: 20px">
 		<button data-value="{{searchParam.status}}" data-toggle="dropdown" class=" btn-sm  dropdown-toggle block-up" aria-expanded="false">
 			<span>
-				{{if searchParam.status == "1"}}   
+				{{if searchParam.status == "1"}}
 					已启用
 				{{else if searchParam.status == "0"}}   
 					已停用   
