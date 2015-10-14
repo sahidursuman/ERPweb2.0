@@ -1,20 +1,20 @@
-<div class="col-xs-12 updateBusCompanyContainer">
-	<form class="form-horizontal busCompanyMainForm" role="form" style="margin-top:10px" onsubmit="return false">
+<div class="col-xs-12 updateBusCompanyContainer globalAdd">
+	<form class="form-horizontal busCompanyMainForm formOneList" role="form" style="margin-top:10px" onsubmit="return false">
 		<input name="id" type="hidden" value="{{busCompany.id}}"/>
 		<div class=" ui-sortable-handle">
 				<h5 >
 					<span class="badge badge-primary">1</span>
-					<label class="middle title-size">车队主体信息</label>
+					<label class="middle title-size navInformation">车队主体信息</label>
 				</h5>
 			<div class="widget-body">
 				<div class="widget-main">
-					<div class="form-group">
+					<div class="form-group guideInterval">
 						<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>车队名称:</label>
 						<div class="col-sm-3">
-							<input type="text" name="companyName" class="col-sm-12" value="{{busCompany.companyName}}">
+							<input type="text" name="companyName" class="col-sm-12" value="{{busCompany.companyName}}" maxlength="32">
 						</div>
 						<label class="col-sm-1 control-label no-padding-right">是否启用:</label>
-						<div class="col-sm-2 checkbox" style="margin-left:-10px">
+						<div class="col-sm-2 checkbox" style="margin-left:-10px;margin-top: -6px">
 							<label>
 								<input {{if busCompany.status == 1}}checked="checked"{{/if}} type="checkbox" class="ace busCompany-status" value="1">
 								<span class="lbl">
@@ -23,59 +23,59 @@
 							</label>
 						</div>
 					</div>
-					<div class="form-group">
+					<div class="form-group guideInterval">
 					    <label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>车队类型:</label>
 						<div class="col-sm-3">
-							<select name="type" class="col-sm-12">
+							<select name="type">
 								<option {{if busCompany.type == 0}}selected="selected"{{/if}} value="0">个人</option>
 								<option {{if busCompany.type == 1}}selected="selected"{{/if}} value="1">集团</option>
 							</select>
 						</div>
 					</div>
-					<div class="form-group">
+					<div class="form-group guideInterval">
 					    <label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>联系人:</label>
 						<div class="col-sm-3">
-							<input type="text" name="managerName" class="col-sm-12" value="{{busCompany.managerName}}" />
+							<input type="text" name="managerName" class="col-sm-12" value="{{busCompany.managerName}}" maxlength="45"/>
 						</div>
 				    	<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>联系电话:</label>
 						<div class="col-sm-3">
-							<input type="text" name="mobileNumber" class="col-sm-12" value="{{busCompany.mobileNumber}}" />
+							<input type="text" name="mobileNumber" class="col-sm-12" value="{{busCompany.mobileNumber}}" maxlength="11" />
 						</div>
 					</div>
-					<div class="form-group">
+					<div class="form-group guideInterval">
 						<label class="col-sm-2 control-label no-padding-right">座机号码:</label>
 						<div class="col-sm-3">
-							<input type="text" name="telNumber" class="col-sm-12" value="{{busCompany.telNumber}}" />
+							<input type="text" name="telNumber" class="col-sm-12" value="{{busCompany.telNumber}}"  maxlength="20" />
 						</div>
 						<label class="col-sm-1 control-label no-padding-right">传真号码:</label>
 						<div class="col-sm-3">
-							<input type="text" name="faxNumber" class="col-sm-12" value="{{busCompany.faxNumber}}" />
+							<input type="text" name="faxNumber" class="col-sm-12" value="{{busCompany.faxNumber}}" maxlength="20" />
 						</div>
 					</div>
-					<div class="form-group">
+					<div class="form-group guideInterval">
 						<label class="col-sm-2 control-label no-padding-right">车队所在省市:</label>
 						<div class="col-sm-9">
-							<select name="provinceId" class="col-sm-3" style="margin-right:3px">
+							<select name="provinceId" style="margin-right:3px">
 								<option selected="selected" value="">未选择</option>
 							</select>
-							<select name="cityId" class="col-sm-3"  style="margin-right:3px">
+							<select name="cityId"  style="margin-right:3px">
 								<option selected="selected" value="">未选择</option>
 							</select>
-							<select name="districtId" class="col-sm-3">
+							<select name="districtId" >
 								<option selected="selected" value="">未选择</option>
 							</select>
 						</div>
 					</div>
-					<div class="form-group">
+					<div class="form-group guideInterval">
 						<label class="col-sm-2 control-label no-padding-right">详细地址:</label>
 						<div class="col-sm-6">
-							<input type="text" name="street" class="col-sm-12" placeholder="请输入街道地址" value="{{busCompany.street}}"/>
+							<input type="text" name="street" class="col-sm-12 addressMinute" placeholder="请输入街道地址" value="{{busCompany.street}}" maxlength="1000" />
 						</div>
 					</div>
-					<div class="form-group">
+					<div class="form-group guideInterval">
 						<label class="col-sm-2 control-label no-padding-right">车队简介:</label>
 						<div class="col-sm-8">
-							<textarea class="form-control" name="remark" class="col-sm-12" >{{busCompany.remark}}</textarea>
+							<textarea class="form-control" name="remark" class="col-sm-12" maxlength="1000" >{{busCompany.remark}}</textarea>
 						</div>
 					</div>
 				</div>
@@ -83,12 +83,12 @@
 		</div>
 	</form>
 	<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
-		<div class="form-group busList">
+		<div class="form-group busList guideInterval">
 			<div class="col-xs-12 col-sm-12 widget-container-col">
 				<div class=" ui-sortable-handle">
 						<h5 class="">
 							<span class="badge badge-primary">2</span>
-							<label class="middle title-size">车辆列表</label>
+							<label class="middle title-size navInformation">车辆列表</label>
 							<a href="javascript:void(0)" class="btn-bus-add">
 								<button class="btn btn-sm btn-success btn-busCompany-add " style="margin-left: 20px;">
 								<i class="ace-icon fa fa-plus"></i>
@@ -101,8 +101,8 @@
 							<table class="table table-striped table-bordered table-hover busList"> 
 								<thead>
 									<tr>
-										<th class="table-border">车牌号</th>
-										<th class="table-border">车辆品牌</th>
+										<th class="table-border"><span class="necessary">*</span>车牌号</th>
+										<th class="table-border"><span class="necessary">*</span>车辆品牌</th>
 										<th class="table-border">座位数</th>
 										<th class="table-border">购买时间</th>
 										<th class="table-border">协议包车</th>
@@ -115,8 +115,8 @@
 								<tbody>
 									{{each busCompany.busList as bus}}
 										<tr data-entity-id="{{bus.id}}">
-											<td><input  name="licenseNumber" type="text" class="col-sm-12" value="{{bus.licenseNumber}}"/></td>
-											<td><input name="brand" type="text" class="col-sm-12" value="{{bus.brand}}"/></td>
+											<td><input  name="licenseNumber" type="text" class="col-sm-12" value="{{bus.licenseNumber}}" maxlength="10" /></td>
+											<td><input name="brand" type="text" class="col-sm-12" value="{{bus.brand}}" maxlength="32" /></td>
 											<td><input name="seatCount" class="col-sm-12" type="text" value="{{bus.seatCount}}"/></td>
 											<td class="col-sm-1"><div class="input-group col-sm-12"><input name="buyTime" type="text" class="date-picker" value="{{bus.buyTime | dateFormat:'yyyy-MM-dd'}}"/><span class="input-group-addon"><i class="fa fa-calendar"></i></span></div></td>
 											<td>
@@ -126,7 +126,7 @@
 												</select>
 											</td>
 											<td class="time">
-												{{if bus.isChartered == 1}}
+												{{if bus.isChartered == 1}} 
 													{{each bus.priceList as price i}}
 													<div data-index="{{i+1}}" data-entity-id="{{price.id}}" class="clearfix {{if i > 0}}appendDiv{{/if}} div-{{i+1}}" style="margin-top:2px">
 														<input name="startTime" type="text" {{if bus.isChartered == 0}}readonly="readonly"{{/if}} class="date-picker" style="width:100px" value="{{if bus.isChartered == 1}}{{price.startTime | dateFormat:'yyyy-MM-dd'}}{{/if}}"/><label>&nbsp;至&nbsp;</label><input name="endTime" type="text" {{if bus.isChartered == 0}}readonly="readonly"{{/if}} class="date-picker" style="width:100px" value="{{if bus.isChartered == 1}}{{price.endTime | dateFormat:'yyyy-MM-dd'}}{{/if}}"/>
@@ -180,12 +180,12 @@
 				</div>
 			</div>
 		</div>
-		<div class="form-group driverList">
+		<div class="form-group driverList guideInterval">
 			<div class="col-xs-12 col-sm-12 widget-container-col">
 				<div class=" ui-sortable-handle">
 						<h5>
 							<span class="badge badge-primary">3</span>
-							<label class="middle title-size">司机列表</label>
+							<label class="middle title-size navInformation">司机列表</label>
 							<a href="javascript:void(0)" class="btn-driver-add">
 								<button class="btn btn-sm btn-success btn-busCompany-add " style="margin-left: 20px;">
 								<i class="ace-icon fa fa-plus"></i>
@@ -198,9 +198,9 @@
 							<table class="table table-striped table-bordered table-hover driverList">
 								<thead>
 									<tr>
-										<th class="table-border">司机姓名</th>
+										<th class="table-border"><span class="necessary">*</span>司机姓名</th>
 										<th class="table-border">司机性别</th>
-										<th class="table-border">司机电话</th>
+										<th class="table-border"><span class="necessary">*</span>司机电话</th>
 										<th class="table-border">司机驾龄</th>
 										<th class="table-border">驾驶证编号</th>
 										<th class="table-border">是否启用</th>
@@ -241,7 +241,7 @@
 			</div>
 		</div>
 		<div class="space-10"></div>
-		<button class="btn btn-block btn-primary btn-submit-busCompany">
+		<button class="btn btn-block btn-primary btn-submit-busCompany guideSubmit">
 			<i class="ace-icon fa fa-check"></i>
 			提交信息
 		</button>

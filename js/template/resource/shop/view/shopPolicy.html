@@ -1,6 +1,6 @@
-<div class="col-sm-12 shopPolicyContainer">
-	<form class="form-horizontal policyForm" role="form" style="margin-top:10px" onsubmit="return false">
-		<div class="form-group">
+<div class="col-sm-12 shopPolicyContainer globalAdd">
+	<form class="form-horizontal policyForm formOneList" role="form" style="margin-top:10px" onsubmit="return false">
+		<div class="form-group guideInterval">
 			<div class="col-xs-12 col-sm-12 widget-container-col">
 				<div class="widget-box ui-sortable-handle">
 					<div class="widget-header">
@@ -33,17 +33,17 @@
 										<tr class="timeArea">
 										<td data-index="{{i+1}}" class="clearfix div-{{i+1}}" style="margin-bottom:3px">
 											<div>
-												<input name="startTime" type="text" class="date-picker" style="width:100px" value="{{policy.startTime}}"/>
+												<input name="startTime" type="text" class="datepicker" style="width:100px" value="{{policy.startTime}}"/>
 												<label>&nbsp;至&nbsp;</label>
-												<input name="endTime" type="text" class="date-picker" style="width:100px" value="{{policy.endTime}}"/>
+												<input name="endTime" type="text" class="datepicker" style="width:100px" value="{{policy.endTime}}"/>
 											</div>
 										</td>
 										<td>
 											{{each policy.costMoneyList as cost j}}
 											<div data-index="{{j+1}}" class="clearfix div-{{j+1}}" style="margin-bottom:3px">
-												<input name="costMoneyStart" type="text" style="width:100px" value="{{cost.costMoneyStart}}"/>
+												<input name="costMoneyStart" type="text" style="width:100px" value="{{cost.costMoneyStart}}" maxlength="6" />
 												<label>&nbsp;至&nbsp;</label>
-												<input name="costMoneyEnd" type="text" style="width:100px" value="{{cost.costMoneyEnd}}"/>
+												<input name="costMoneyEnd" type="text" style="width:100px" value="{{cost.costMoneyEnd}}" maxlength="6" />
 												<label class="priceArea" style="float:right">
 													<button data-entity-id="{{cost.id}}" class="btn btn-success btn-sm btn-white {{if j == 0}}add{{else}}del{{/if}}">
 														<i class="ace-icon fa {{if j == 0}}fa-plus{{else}}fa-minus{{/if}} bigger-110 icon-only"></i>
@@ -82,7 +82,7 @@
 			</div>
 		</div>
 		<div class="space-10"></div>
-		<button class="btn btn-block btn-primary btn-submit-shop-policy">
+		<button class="btn btn-block btn-primary btn-submit-shop-policy guideSubmit">
 			<i class="ace-icon fa fa-check"></i>
 			提交信息
 		</button>

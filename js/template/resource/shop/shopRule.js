@@ -41,7 +41,16 @@ define(function(require, exports) {
 					type : 'landline',
 					errMsg : '座机号码格式不正确'
 				} ]
-			} ]);
+			},{ // 固定电话
+				$ele : $obj.find('input[name="faxNumber"]'),
+				rules : [
+
+				{
+					type : 'landline',
+					errMsg : '传真号码格式不正确'
+				} ]
+			}   
+		  ]);
 			return validator;
 		},
 		//对政策列表进行验证

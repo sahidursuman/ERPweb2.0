@@ -129,7 +129,7 @@ define(function(require, exports) {
 			    type: 1,
 			    title:"新增商家",
 			    skin: 'layui-layer-rim', //加上边框
-			    area: ['95%', '90%'], //宽高
+			    area: ['1190px', '700px'], //宽高
 			    zIndex:1028,
 			    content: html,
 			    success:function(){
@@ -166,10 +166,10 @@ define(function(require, exports) {
 			    	//给政策列表新增按钮绑定事件
 			    	$(".btn-shop-standard-add").click(function(){
 			    		var index = $(".shopStandardList tbody tr").length;
-			    		var html = '<tr ><td><input name=\"name\" class="col-sm-12" type=\"text\"/></td>';
+			    		var html = '<tr ><td><input name=\"name\" class="col-sm-12" type=\"text\" maxlength=\"100\" /></td>';
 			    		html += '<td><select name="customerType" class="col-sm-12"><option value="0" selected="selected">散客</option><option value="1">团体</option></select></td>';
 			    		html += "<td><button data-entity-id=\"\" class=\"btn btn-xs btn-success btn-shop-rate-add\"><i class=\"ace-icon fa fa-recorder bigger-240\"></i>添加政策</button><input hidden-index=\""+(index+1)+"\" type=\"hidden\" name=\"policyInput\"></td>";
-			    		html += '<td><input name="remark" class="col-sm-12" type="text"/></td>';
+			    		html += '<td><input name="remark" class="col-sm-12" type="text" maxlength=\"1000\" /></td>'; 
 			    		html += '<td style="width:70px"><a data-entity-id="" class=" btn-shop-standard-delete">删除</a></td>';
 			    		html += "</tr>";
 			    		$(".shopStandardList tbody").append(html);
@@ -297,7 +297,7 @@ define(function(require, exports) {
 						    type: 1,
 						    title:"修改商家",
 						    skin: 'layui-layer-rim', //加上边框
-						    area: ['95%', '90%'], //宽高
+						    area: ['1190px', '700px'], //宽高
 						    zIndex:1028,
 						    content: html,
 						    success:function(){
@@ -625,7 +625,7 @@ define(function(require, exports) {
 						    type: 1,
 						    title:"查看商家信息",
 						    skin: 'layui-layer-rim', //加上边框
-						    area: ['95%', '90%'], //宽高
+						    area: ['1024px', '600px'], //宽高
 						    zIndex:1028,
 						    content: html,
 						    success:function(){
@@ -787,7 +787,7 @@ define(function(require, exports) {
 				 type: 1,
 			    title:"新增购物政策",
 			    skin: 'layui-layer-rim', //加上边框
-			    area: ['85%', '80%'], //宽高
+			    area: ['1190px', '80%'], //宽高
 			    zIndex:1029,
 			    content: html,
 			    success:function(){
@@ -859,7 +859,7 @@ define(function(require, exports) {
 				 type: 1,
 			    title:"修改购物政策",
 			    skin: 'layui-layer-rim', //加上边框
-			    area: ['85%', '80%'], //宽高
+			    area: ['1190px', '80%'], //宽高
 			    zIndex:1029,
 			    content: html,
 			    success:function(){

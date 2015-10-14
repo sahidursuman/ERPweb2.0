@@ -116,7 +116,7 @@ define(function(require, exports) {
 			    type: 1,
 			    title:"新增酒店",
 			    skin: 'layui-layer-rim', //加上边框
-			    area: ['95%', '90%'], //宽高
+			    area: ['1190px', '700px'], //宽高
 			    zIndex:1028,
 			    content: html,
 			    success:function(){
@@ -160,17 +160,17 @@ define(function(require, exports) {
 			    	//给房间列表新增按钮绑定事件
 			    	$obj.find(".btn-hotel-standard-add").click(function(){
 			    		var html = "<tr>" +
-			    				"<td><input name=\"type\" type=\"text\" class='col-sm-12'/></td>" +
-			    				"<td class=\"time\"><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right; padding-top:3px;\"><button class=\"btn btn-success btn-sm btn-white add\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i></button></label></div></td>" +
+			    				"<td><input name=\"type\" type=\"text\" class='col-sm-12'  maxlength=\"32\" /></td>" +
+			    				"<td class=\"time\"><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px;width: 258px\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right; padding-top:3px;\"><button class=\"btn btn-success btn-sm btn-white add\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i></button></label></div></td>" +
 			    				"<td><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input name=\"marketPrice\" class='col-sm-12 marketPrice' type=\"text\"/></div></td>" +
 			    				"<td><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input name=\"contractPrice\" class='col-sm-12 price' type=\"text\"/></div></td>" +
-			    				"<td><select name=\"containBreakfast\" class='col-sm-12 no-padding'><option value=\"0\">不含</option><option value=\"1\">包含</option></select></td>" +
-			    				"<td><select name=\"containLunch\" class='col-sm-12 no-padding'><option value=\"0\">不含</option><option value=\"1\">包含</option></select></td>" +
-			    				"<td><select name=\"containDinner\" class='col-sm-12 no-padding'><option value=\"0\">不含</option><option value=\"1\">包含</option></select></td>" +
-			    				"<td><input name=\"broadband\" class='col-sm-12' type=\"text\"/></td>" +
-			    				"<td><input name=\"areaSize\" class='col-sm-12' type=\"text\"/></td>" +
-			    				"<td><input name=\"guestNumber\" class='col-sm-12' type=\"text\"/></td>" +
-			    				"<td><input name=\"remark\" class='col-sm-12' type=\"text\"/></td>" +
+			    				"<td><select name=\"containBreakfast\" class='no-padding foodsAll'><option value=\"0\">不含</option><option value=\"1\">包含</option></select></td>" +
+			    				"<td><select name=\"containLunch\" class='no-padding foodsAll'><option value=\"0\">不含</option><option value=\"1\">包含</option></select></td>" +
+			    				"<td><select name=\"containDinner\" class='no-padding foodsAll'><option value=\"0\">不含</option><option value=\"1\">包含</option></select></td>" +
+			    				"<td><input name=\"broadband\" class='col-sm-12' type=\"text\"  maxlength=\"100\" /></td>" + 
+			    				"<td><input name=\"areaSize\" class='col-sm-12' type=\"text\"  maxlength=\"5\" /></td>" +
+			    				"<td><input name=\"guestNumber\" class='col-sm-12' type=\"text\"  maxlength=\"4\" /></td>" +
+			    				"<td><input name=\"remark\" class='col-sm-12' type=\"text\"  maxlength=\"1000\" /></td>" +
 			    				"<td style=\"width:70px\"><a data-entity-id=\"\" href=\"#\" class=\" btn-xs  btn-hotel-standard-delete\">删除</a></td>" +
 			    				"</tr>";
 			    		$obj.find(".hotelRoomStandardList tbody").append(html);
@@ -334,7 +334,7 @@ define(function(require, exports) {
 						    type: 1,
 						    title:"编辑酒店信息",
 						    skin: 'layui-layer-rim', //加上边框
-						    area: ['95%', '90%'], //宽高
+						    area: ['1190px', '700px'], //宽高
 						    zIndex:1028,
 						    content: html,
 						    success:function(){
@@ -433,12 +433,12 @@ define(function(require, exports) {
 						    	$obj.find(".btn-hotel-standard-add").click(function(){
 							    		var html = "<tr>" +
 							    				"<td><input name=\"type\" type=\"text\" class='col-sm-12'/></td>" +
-							    				"<td class=\"time\"><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right\"><button class=\"btn btn-success btn-sm btn-white add\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i></button></label></div></td>" +
+							    				"<td class=\"time\"><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px;width: 258px\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:80px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:80px\"/><label class=\"timeArea\" style=\"float:right\"><button class=\"btn btn-success btn-sm btn-white add\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i></button></label></div></td>" +
 							    				"<td><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input name=\"marketPrice\" class='col-sm-12' type=\"text\"/></div></td>" +
 							    				"<td><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input name=\"contractPrice\" class='col-sm-12' type=\"text\"/></div></td>" +
-							    				"<td><select name=\"containBreakfast\" class='col-sm-12 no-padding'><option value=\"0\">不含</option><option value=\"1\">包含</option></select></td>" +
-							    				"<td><select name=\"containLunch\" class='col-sm-12 no-padding'><option value=\"0\">不含</option><option value=\"1\">包含</option></select></td>" +
-							    				"<td><select name=\"containDinner\" class='col-sm-12 no-padding'><option value=\"0\">不含</option><option value=\"1\">包含</option></select></td>" +
+							    				"<td><select name=\"containBreakfast\" class='no-padding foodsAll\'><option value=\"0\">不含</option><option value=\"1\">包含</option></select></td>" +
+							    				"<td><select name=\"containLunch\" class='cno-padding foodsAll'><option value=\"0\">不含</option><option value=\"1\">包含</option></select></td>" +
+							    				"<td><select name=\"containDinner\" class='no-padding foodsAll'><option value=\"0\">不含</option><option value=\"1\">包含</option></select></td>" +
 							    				"<td><input name=\"broadband\" class='col-sm-12' type=\"text\"/></td>" +
 							    				"<td><input name=\"areaSize\" class='col-sm-12' type=\"text\"/></td>" +
 							    				"<td><input name=\"guestNumber\" class='col-sm-12' type=\"text\"/></td>" +
@@ -658,7 +658,7 @@ define(function(require, exports) {
 						    type: 1,
 						    title:"查看酒店信息",
 						    skin: 'layui-layer-rim', //加上边框
-						    area: ['95%', '90%'], //宽高
+						    area: ['1024px', '600px'], //宽高
 						    zIndex:1028,
 						    content: html,
 						    success:function(){

@@ -101,7 +101,7 @@
 						<td>{{if busCompany.bus != null}}{{busCompany.bus.brand}}{{/if}}</td>
 						<td>{{busCompany.contractNumber}}</td>
 						<td>{{busCompany.guidePayMoney}}</td>
-						<td>{{if busCompany.payType == 0}}现付{{else if busCompany.payType==1}}签单{{else}}转账{{/if}}</td>
+						<td>{{if busCompany.payType == 0}}现付{{else if busCompany.payType==1}}签单{{else if busCompany.payType==2}}转账{{else}}网付{{/if}}</td>
 						<td>{{busCompany.remark}}</td>
 					</tr>
 				{{/each}}
@@ -137,7 +137,7 @@
 						<td>{{if restaurant.restaurantStandard != null}}{{restaurant.restaurantStandard.price}}{{/if}}</td>
 						<td>{{restaurant.memberCount}}</td>
 						<td>{{restaurant.guidePayMoney}}</td>
-						<td>{{if restaurant.payType == 0}}现付{{else if restaurant.payType==1}}签单{{else}}转账{{/if}}</td>
+						<td>{{if restaurant.payType == 0}}现付{{else if restaurant.payType==1}}签单{{else if restaurant.payType==2}}转账{{else}}网付{{/if}}</td>
 						<td>{{restaurant.remark}}</td>
 					</tr>
                 {{/each}}
@@ -171,9 +171,9 @@
 						<td>{{hotel.hotel.name}}</td>
 						<td>{{hotel.hotel.mobileNumber}}</td>
 						<td>{{hotel.hotelRoom.type}}</td>
-						<td>{{hotel.needRoomCount}}</td>
+						<td>{{hotel.memberCount}}</td>
 						<td>{{hotel.guidePayMoney}}</td>
-						<td>{{if hotel.payType == 0}}现付{{else if hotel.payType==1}}签单{{else}}转账{{/if}}</td>
+						<td>{{if hotel.payType == 0}}现付{{else if hotel.payType==1}}签单{{else if hotel.payType==2}}转账{{else}}网付{{/if}}</td>
 						<td>{{hotel.remark}}</td>
 					</tr>
 				{{/each}}
@@ -213,7 +213,7 @@
 						<td>{{scenic.memberCount}}</td>
 						<td>{{scenic.orderNumber}}</td>
 						<td>{{scenic.guidePayMoney}}</td>
-						<td>{{if scenic.payType == 0}}现付{{else if scenic.payType==1}}签单{{else}}转账{{/if}}</td>
+						<td>{{if scenic.payType == 0}}现付{{else if scenic.payType==1}}签单{{else if scenic.payType==2}}转账{{else}}网付{{/if}}</td>
 						<td>{{scenic.remark}}</td>
 					</tr>
 				{{/each}}
@@ -279,7 +279,7 @@
 						<td>{{selfPay.price}}</td>
 						<td>{{selfPay.memberCount}}</td>
 						<td>{{selfPay.guidePayMoney}}</td>
-						<td>{{if selfPay.payType == 0}}现付{{else if selfPay.payType==1}}签单{{else}}转账{{/if}}</td>
+						<td>{{if selfPay.payType == 0}}现付{{else if selfPay.payType==1}}签单{{else if selfPay.payType==2}}转账{{else}}网付{{/if}}</td>
 						<td>{{selfPay.remark}}</td>
 					</tr>
 				{{/each}}
@@ -312,7 +312,7 @@
 				{{each ticketList as ticket}}
 					<tr>
 						<td>{{ticket.ticket.name}}</td>
-						<td>{{ticket.type}}</td>
+						<td>{{if ticket.type == 1}}机票{{else if ticket.type == 2}}汽车票{{else if ticket.type == 3}}火车票{{else if ticket.type == 4}}轮船票{{/if}}</td>
 						<td>{{ticket.startingCity}}</td>
 						<td>{{ticket.arriveCity}}</td>
 						<td>{{if ticket.startTime != null}}{{ticket.startTime}}{{/if}}</td>
@@ -321,7 +321,7 @@
 						<td>{{ticket.price}}</td>
 						<td>{{ticket.memberCount}}</td>
 						<td>{{ticket.guidePayMoney}}</td>
-						<td>{{if ticket.payType == 0}}现付{{else if ticket.payType==1}}签单{{else}}转账{{/if}}</td>
+						<td>{{if ticket.payType == 0}}现付{{else if ticket.payType==1}}签单{{else if ticket.payType==2}}转账{{else}}网付{{/if}}</td>
 						<td>{{ticket.remark}}</td>
 					</tr>
 				{{/each}}
@@ -394,12 +394,13 @@
 						<td>{{other.price}}</td>
 						<td>{{other.memberCount}}</td>
 						<td>{{other.guidePayMoney}}</td>
-						<td>{{if other.payType == 0}}现付{{else if other.payType==1}}签单{{else}}转账{{/if}}</td>
+						<td>{{if other.payType == 0}}现付{{else if other.payType==1}}签单{{else if other.payType==1}}转账{{else}}网付{{/if}}</td>
 						<td>{{other.remark}}</td>
 					</tr>
 				{{/each}}
-				</tbody> 
+				</tbody>   
 			</table> 
 		</div>
 	</div>
 </div>
+   

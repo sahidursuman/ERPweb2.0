@@ -1,5 +1,5 @@
-<div class="col-xs-12 update-selfpay-form">
-	<form class="form-horizontal selfpayMainForm" role="form" style="margin-top:10px" onsubmit="return false">
+<div class="col-xs-12 update-selfpay-form globalAdd">
+	<form class="form-horizontal selfpayMainForm formOneList" role="form" style="margin-top:10px" onsubmit="return false">
 		<input name="selfpayId" type="hidden" value="{{selfpay.id}}" />
 		<div class=" ui-sortable-handle">
 				<h5 >
@@ -8,13 +8,13 @@
 				</h5>
 			<div class="widget-body">
 				<div class="widget-main">
-					<div class="form-group">
+					<div class="form-group guideInterval">
 						<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>公司名称:</label>
 						<div class="col-sm-3">
 							<input type="text" name="name" value="{{selfpay.name}}" class="col-sm-12">
 						</div>
 					</div>
-					<div class="form-group">
+					<div class="form-group guideInterval">
 					    <label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>联系人:</label>
 						<div class="col-sm-3">
 							<input type="text" name="managerName" value="{{selfpay.managerName}}" class="col-sm-12">
@@ -24,7 +24,7 @@
 							<input type="text" name="mobileNumber" value="{{selfpay.mobileNumber}}" class="col-sm-12">
 						</div>
 					</div>
-					<div class="form-group">
+					<div class="form-group guideInterval">
 					    <label class="col-sm-2 control-label no-padding-right">座机号码:</label>
 						<div class="col-sm-3">
 							<input type="text" name="telNumber" class="col-sm-12" value="{{selfpay.telNumber}}" />
@@ -34,44 +34,37 @@
 							<input type="text" name="faxNumber" class="col-sm-12" value="{{selfpay.faxNumber}}" />
 						</div>
 					</div>
-					
-                                                                                                             
-                                                                                                  
                    <!--添加人数返佣start-->                  
-					<div class="form-group">
+					<div class="form-group guideInterval">
 						<label class="col-sm-2 control-label no-padding-right">人数返佣(元/人):</label>
 						<div class="col-sm-4">    
 							<input type="text" name="customerRebateMoney" value="{{selfpay.customerRebateMoney}}" class="col-sm-12">
 						</div>
 					</div>
-                  <!--添加人数返佣end-->    
-
-
-
-
-					<div class="form-group">
+                  <!--添加人数返佣end-->
+					<div class="form-group guideInterval">
 						<label class="col-sm-2 control-label no-padding-right">公司所在省市:</label>
 						<div class="col-sm-8">
-							<select name="provinceId" class="col-sm-3" style="margin-right:3px">
+							<select name="provinceId" style="margin-right:3px">
 								<option selected="selected" value="">未选择</option>
 							</select>
-							<select name="cityId" class="col-sm-3"  style="margin-right:3px">
+							<select name="cityId"  style="margin-right:3px">
 								<option selected="selected" value="">未选择</option>
 							</select>
-							<select name="districtId" class="col-sm-3">
+							<select name="districtId" >
 								<option selected="selected" value="">未选择</option>
 							</select>
 						</div>
 					</div>
-					<div class="form-group">
+					<div class="form-group guideInterval">
 						<label class="col-sm-2 control-label no-padding-right">详细地址:</label>
 						<div class="col-sm-6">
-							<input type="text" name="street" value="{{selfpay.street}}" class="col-sm-12" placeholder="请输入街道地址"/>
+							<input type="text" name="street" value="{{selfpay.street}}" class="col-sm-12 addressMinute" placeholder="请输入街道地址"/>
 						</div>
 					</div>
-					<div class="form-group">
+					<div class="form-group guideInterval">
 						<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>是否启用:</label>
-						<div class="col-sm-2 checkbox" style="margin-left:-10px">
+						<div class="col-sm-2 checkbox" style="margin-left:-10px;margin-top: -6px">
 							<label>
 								<input {{if selfpay.status == 1}} checked="checked"{{/if}}  type="checkbox" class="ace selfpay-status" value="1">
 								<span class="lbl">
@@ -80,7 +73,7 @@
 							</label> 
 						</div>
 					</div>
-					<div class="form-group">
+					<div class="form-group guideInterval">
 						<label class="col-sm-2 control-label no-padding-right">公司简介:</label>
 						<div class="col-sm-8">
 							<textarea class="form-control" name="remark" class="col-sm-12" >{{selfpay.remark}}</textarea>
@@ -137,9 +130,9 @@
 											{{if index == 0}}
 											<div class="col-sm-12 no-padding dateTimeArea" data-index="1">
 												<input type="hidden" name="rebateListId" value="{{rebateList.id}}" />
-												<input name="startTime" value="{{rebateList.startTime | dateFormat: 'yyyy-MM-dd'}}" type="text" class="date-picker col-sm-4">
+												<input name="startTime" value="{{rebateList.startTime | dateFormat: 'yyyy-MM-dd'}}" type="text" class="datepicker col-sm-4">
 												<label class="col-sm-2 control-label center">&nbsp;至&nbsp;</label>
-												<input name="endTime" value="{{rebateList.endTime | dateFormat: 'yyyy-MM-dd'}}" type="text" class="date-picker col-sm-4">
+												<input name="endTime" value="{{rebateList.endTime | dateFormat: 'yyyy-MM-dd'}}" type="text" class="datepicker col-sm-4">
 												<label class="priceArea col-sm-2" style="padding-top:3px;">
 													<button class="btn btn-success btn-sm btn-white add">
 														<i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
@@ -148,9 +141,9 @@
 											</div>{{else}}
 											<div class="col-sm-12 no-padding dateTimeArea" data-index="2">
 												<input type="hidden" name="rebateListId" value="{{rebateList.id}}" />
-												<input name="startTime" value="{{rebateList.startTime | dateFormat: 'yyyy-MM-dd'}}" type="text" class="date-picker col-sm-4">
+												<input name="startTime" value="{{rebateList.startTime | dateFormat: 'yyyy-MM-dd'}}" type="text" class="datepicker col-sm-4">
 												<label class="col-sm-2 control-label center">&nbsp;至&nbsp;</label>
-												<input name="endTime" value="{{rebateList.endTime | dateFormat: 'yyyy-MM-dd'}}" type="text" class="date-picker col-sm-4">
+												<input name="endTime" value="{{rebateList.endTime | dateFormat: 'yyyy-MM-dd'}}" type="text" class="datepicker col-sm-4">
 												<label class="priceArea col-sm-2" style="padding-top:3px;">
 													<button class="btn btn-success btn-sm btn-white del">
 														<i class="ace-icon fa fa-minus bigger-110 icon-only"></i>
@@ -198,9 +191,10 @@
 											<input name="remark" value="{{itemList.remark}}" type="text" class="col-sm-12" style="min-width:100px;">
 										</td>
 										<td style="width:70px">
-											<button class="btn btn-xs btn-danger btn-price-delete">
-												<i class="ace-icon fa fa-trash-o bigger-120"></i>
-											</button>
+											<!--<button class="btn btn-xs btn-danger btn-price-delete">-->
+												<!--<i class="ace-icon fa fa-trash-o bigger-120"></i>-->
+											<!--</button>-->
+											<a class="btn-price-delete">删除</a>
 										</td>
 									</tr>{{/each}}
 								</tbody>
@@ -212,7 +206,7 @@
 		</div>
 		
 		<div class="space-10"></div>
-		<button class="btn btn-block btn-primary btn-submit-selfpay">
+		<button class="btn btn-block btn-primary btn-submit-selfpay guideSubmit">
 			<i class="ace-icon fa fa-check"></i>
 			提交信息
 		</button>

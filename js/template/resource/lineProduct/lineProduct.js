@@ -10,6 +10,13 @@ define(function(require, exports) {
 	
 	var lineProduct = {
 		searchData : {},
+		edited : {},
+		isEdited : function(editedType){
+			if(!!lineProduct.edited[editedType] && lineProduct.edited[editedType] != ""){
+				return true;
+			}
+			return false;
+		},
 		listLineProduct:function(page,name,status){
 			$.ajax({
 				url:""+APP_ROOT+"back/lineProduct.do?method=listLineProduct&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
@@ -30,239 +37,165 @@ define(function(require, exports) {
 						data.lineProductList = lineProductList;
 						var html = listTemplate(data);
 						addTab(menuKey,"线路产品管理",html);
-//						
-//						$("#"+tabId+" .lineProductList .btn-lineProduct-edit").click(function(){
-//							var id = $(this).attr("data-lineProduct-id");
-//							lineProduct.updateLineProduct(id);
-//						});
-//						$("#"+tabId+" .lineProductList .btn-lineProduct-delete").click(function(){
-//							var id = $(this).attr("data-lineProduct-id");
-//							lineProduct.deleteLineProduct(this,id);
-//						});
-//						
-						$("#"+tabId+" .btn-lineProduct-quote").click(function(){
-							var id = $(this).attr("data-entiy-id");
-							lineProduct.addQoute(id);
-						});
-						
-						$("#"+tabId+" .btn-lineProduct-add").click(function(){
-							lineProduct.addLineProduct();
-						});
-
-						//搜索栏状态button下拉事件
-						$("#"+tabId+" .search-area .btn-status .dropdown-menu a").click(function(){
-							$(this).parent().parent().parent().find("button").attr("data-value",$(this).attr("data-value"));
-							$(this).parent().parent().parent().find("span").text($(this).text());
-						});
-						//搜索按钮事件
-						lineProduct.searchData = {
-							name : $("#"+tabId+" input[name=lineProduct_name]").val(),
-							status : $("#"+tabId+" .btn-status").find("button").attr("data-value")
-						};
-						$("#"+tabId+" .btn-lineProduct-search").click(function(){
-							lineProduct.searchData = {
-								name : $("#"+tabId+" input[name=lineProduct_name]").val(),
-								status : $("#"+tabId+" .btn-status").find("button").attr("data-value")
-							};
-							lineProduct.listLineProduct(0,lineProduct.searchData.name,lineProduct.searchData.status);
-						});
-						//分页--首页按钮事件
-						$("#"+tabId+" .pageMode a.first").click(function(){
-							if(data.pageNo == 0 || data.totalPage == 0)return;
-							lineProduct.listLineProduct(0,lineProduct.searchData.name,lineProduct.searchData.status);
-						});
-						//分页--上一页事件
-						$("#"+tabId+" .pageMode a.previous").click(function(){
-							if(data.totalPage == 0)return;
-							var previous = data.pageNo - 1;
-							if(data.pageNo == 0){
-								previous = 0;
-								return false;
-							}
-							lineProduct.listLineProduct(previous,lineProduct.searchData.name,lineProduct.searchData.status);
-						});
-						//分页--下一页事件
-						$("#"+tabId+" .pageMode a.next").click(function(){
-							if(data.totalPage == 0)return;
-							var next =  data.pageNo + 1;
-							if(data.pageNo == data.totalPage-1){
-								next = data.pageNo ;
-								return false;
-							}
-							lineProduct.listLineProduct(next,lineProduct.searchData.name,lineProduct.searchData.status);
-						});
-						//分页--尾页事件
-						$("#"+tabId+" .pageMode a.last").click(function(){
-							if(data.pageNo == data.totalPage-1 || data.totalPage == 0)return;
-							lineProduct.listLineProduct(data.totalPage-1,lineProduct.searchData.name,lineProduct.searchData.status);
-						});
-						
-						$("#"+tabId+" .lineProductList .btn-lineProduct-view").on("click", lineProduct.viewLineProductDetail);//查看
-						$("#"+tabId+" .lineProductList .btn-lineProduct-edit").on("click", function(){
-							var id = $(this).attr("data-entiy-id");
-							lineProduct.updateLineProduct(id,false);
-						});//修改
-						$("#"+tabId+" .lineProductList .btn-lineProduct-delete").click(lineProduct.deleteLineProduct);//删除
-						$("#"+tabId+" .lineProductList .btn-lineProduct-clipboard").on("click", function(){
-							var id = $(this).attr("data-entiy-id");
-							lineProduct.updateLineProduct(id,true);
-						});//复制
-						$("#"+tabId+" .lineProductList .btn-lineProduct-export").on("click", function(){
-							var id = $(this).attr("data-entiy-id");
-							lineProduct.exportLineProduct(id);
-						});//复制
+						lineProduct.initList(data);
 					}
 				}
 			});
+		},
+		initList : function(data){
+			$("#"+tabId+" .btn-lineProduct-quote").click(function(){
+				var id = $(this).attr("data-entiy-id");
+				lineProduct.addQoute(id);
+			});
+			
+			$("#"+tabId+" .btn-lineProduct-add").click(function(){
+				lineProduct.addLineProduct();
+			});
+
+			//搜索栏状态button下拉事件
+			$("#"+tabId+" .search-area .btn-status .dropdown-menu a").click(function(){
+				$(this).parent().parent().parent().find("button").attr("data-value",$(this).attr("data-value"));
+				$(this).parent().parent().parent().find("span").text($(this).text());
+				lineProduct.searchData = {
+					name : $("#"+tabId+" input[name=lineProduct_name]").val(),
+					status : $("#"+tabId+" .btn-status").find("button").attr("data-value")
+				}
+				lineProduct.listLineProduct(0,lineProduct.searchData.name,lineProduct.searchData.status);
+			});
+			
+			//搜索按钮事件
+			lineProduct.searchData = {
+				name : $("#"+tabId+" input[name=lineProduct_name]").val(),
+				status : $("#"+tabId+" .btn-status").find("button").attr("data-value")
+			};
+			$("#"+tabId+" .btn-lineProduct-search").click(function(){
+				lineProduct.searchData = {
+					name : $("#"+tabId+" input[name=lineProduct_name]").val(),
+					status : $("#"+tabId+" .btn-status").find("button").attr("data-value")
+				};
+				lineProduct.listLineProduct(0,lineProduct.searchData.name,lineProduct.searchData.status);
+			});
+			//分页--首页按钮事件
+			$("#"+tabId+" .pageMode a.first").click(function(){
+				if(data.pageNo == 0 || data.totalPage == 0)return;
+				lineProduct.listLineProduct(0,lineProduct.searchData.name,lineProduct.searchData.status);
+			});
+			//分页--上一页事件
+			$("#"+tabId+" .pageMode a.previous").click(function(){
+				if(data.totalPage == 0)return;
+				var previous = data.pageNo - 1;
+				if(data.pageNo == 0){
+					previous = 0;
+					return false;
+				}
+				lineProduct.listLineProduct(previous,lineProduct.searchData.name,lineProduct.searchData.status);
+			});
+			//分页--下一页事件
+			$("#"+tabId+" .pageMode a.next").click(function(){
+				if(data.totalPage == 0)return;
+				var next =  data.pageNo + 1;
+				if(data.pageNo == data.totalPage-1){
+					next = data.pageNo ;
+					return false;
+				}
+				lineProduct.listLineProduct(next,lineProduct.searchData.name,lineProduct.searchData.status);
+			});
+			//分页--尾页事件
+			$("#"+tabId+" .pageMode a.last").click(function(){
+				if(data.pageNo == data.totalPage-1 || data.totalPage == 0)return;
+				lineProduct.listLineProduct(data.totalPage-1,lineProduct.searchData.name,lineProduct.searchData.status);
+			});
+			
+			$("#"+tabId+" .lineProductList .btn-lineProduct-view").on("click", lineProduct.viewLineProductDetail);//查看
+			$("#"+tabId+" .lineProductList .btn-lineProduct-edit").on("click", function(){
+				var id = $(this).attr("data-entiy-id");
+				lineProduct.updateLineProduct(id,false);
+			});//修改
+			$("#"+tabId+" .lineProductList .btn-lineProduct-delete").click(lineProduct.deleteLineProduct);//删除
+			$("#"+tabId+" .lineProductList .btn-lineProduct-clipboard").on("click", function(){
+				var id = $(this).attr("data-entiy-id");
+				lineProduct.updateLineProduct(id,true);
+			});//复制
+			$("#"+tabId+" .lineProductList .btn-lineProduct-export").on("click", function(){
+				var id = $(this).attr("data-entiy-id");
+				lineProduct.exportLineProduct(id);
+			});//复制
 		},
 		addLineProduct:function(){
 			var html = addTemplate();
 			var addLineProductLayer = layer.open({
 			    type: 1,
-			    title:"新增线路产品",
+			    title:"新增产品",
 			    skin: 'layui-layer-rim', //加上边框
 			    area: ['95%', '90%'], //宽高
 			    zIndex:1028,
 			    content: html,
 			    success:function(){
-			    	lineProduct.getProvinceList($(".add-lineProduct-form select[name=provinceId]"));
-					$(".add-lineProduct-form select[name=provinceId]").change(function(){
-						var provinceId = $(this).val();
-						lineProduct.getCityList($(".add-lineProduct-form select[name=cityId]"),provinceId);
-					});
-					$(".add-lineProduct-form select[name=cityId]").change(function(){
-						var cityId = $(this).val();
-						lineProduct.getDistrictList($(".add-lineProduct-form select[name=districtId]"),cityId);
-					});
-					
-					$(".add-lineProduct-form select[name=payType]").change(function(){
-						var payType = $(this).val();
-						if(payType == 1){
-							$(this).parent().find(".payPeriod").removeClass("hide");
-						}
-						else{
-							$(this).parent().find(".payPeriod").addClass("hide");
-						}
-					});
-					
-					$(".add-lineProduct-form .btn-bus-add").click(function(){
-						var html = "<tr><td><input  name=\"licenseNumber\" type=\"text\" /></td><td><input name=\"brand\" type=\"text\" /></td><td><input name=\"seatCount\" type=\"text\" value=\"1\"/></td><td class=\"col-sm-1\"><div class=\"input-group col-sm-12\"><input name=\"buyTime\" type=\"text\" class=\"date-picker\" /><span class=\"input-group-addon\"><i class=\"fa fa-calendar\"></i></span></div></td><td><select name=\"isChartered\"><option value=\"1\">是</option><option value=\"0\" selected=\"selected\">否</option></select></td><td><input name=\"charteredStartTime\" type=\"text\" readonly=\"readonly\" class=\"date-picker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"charteredEndTime\" type=\"text\" readonly=\"readonly\" class=\"date-picker\" style=\"width:100px\"/></td><td><input name=\"charteredPrice\" type=\"text\" readonly=\"readonly\"/><label>&nbsp;元</label></td><td><input name=\"remark\" type=\"text\"/></td><td style=\"width:70px\"><button class=\"btn btn-xs btn-danger btn-bus-delete\"><i class=\"ace-icon fa fa-trash-o bigger-120\"></i></button></td></tr>";
-						$(".add-lineProduct-form .busList tbody").append(html);
-						$(".add-lineProduct-form .busList input[name=seatCount]").spinner({
-							min:1,
-							step:1,
-							create: function( event, ui ) {
-								$(this).next().addClass('btn btn-success').html('<i class="ace-icon fa fa-plus"></i>').next().addClass('btn btn-danger').html('<i class="ace-icon fa fa-minus"></i>')
-							}
-						});
-						$(".add-lineProduct-form .date-picker").datepicker({
-							autoclose: true,
-							todayHighlight: true,
-							format: 'yyyy-mm-dd',
-							language: 'zh-CN'
-						});
-					});
-					
-					$(".add-lineProduct-form .btn-driver-add").click(function(){
-						var html = "<tr><td><input name=\"driverName\" type=\"text\" /></td><td><select name=\"gender\"><option value=\"0\">男</option><option value=\"1\">女</option></select></td><td><input name=\"mobileNumber\" type=\"text\" /></td><td><input name=\"driveYears\" type=\"text\" value=\"1\"/></td><td><input name=\"licenseId\" type=\"text\" /></td><td><select name=\"status\"><option value=\"1\">启用</option><option value=\"0\">停用</option></select></td><td><input name=\"remark\" type=\"text\" /></td><td style=\"width:70px\"><button data-entiy-id=\"\" class=\"btn btn-xs btn-danger btn-driver-delete\"><i class=\"ace-icon fa fa-trash-o bigger-120\"></i></button></td></tr>";
-						$(".add-lineProduct-form .driverList tbody").append(html);
-						$(".add-lineProduct-form .driverList .btn-driver-delete").click(function(){
-							$(this).parent().parent().fadeOut(function(){
-								$(this).remove();
-							});
-						});
-						$(".add-lineProduct-form .driverList input[name=driveYears]").spinner({
-							min:1,
-							step:1,
-							create: function( event, ui ) {
-								$(this).next().addClass('btn btn-success').html('<i class="ace-icon fa fa-plus"></i>').next().addClass('btn btn-danger').html('<i class="ace-icon fa fa-minus"></i>')
-							}
-						});
-					});
-					
-					$(".add-lineProduct-form .btn-bus-add").click();
-					$(".add-lineProduct-form .btn-driver-add").click();
-					
-					$(".add-lineProduct-form .btn-submit-lineProduct").click(function(){
-						var status = 0;
-						if($(".add-lineProduct-form .lineProduct-status").is(":checked") == true){
-							status = 1;
-						}
-						var form = $(".add-lineProduct-form form.lineProductMainForm").serialize()+"&status="+status+"";
-						var busJsonAdd = "[";
-						var busListLength = $(".add-lineProduct-form .busList tbody tr").length;
-						$(".add-lineProduct-form .busList tbody tr").each(function(i){
-							var busJson = "";
-							var licenseNumber = $(this).find("input[name=licenseNumber]").val();
-							var brand = $(this).find("input[name=brand]").val();
-							var seatCount = $(this).find("input[name=seatCount]").val();
-							var buyTime = $(this).find("input[name=buyTime]").val();
-							if(buyTime == ""){
-								buyTime = "0000-00-00";
-							}
-							var isChartered = $(this).find("select[name=isChartered]").val();
-							var charteredStartTime = "0000-00-00";
-							var charteredEndTime = "0000-00-00";
-							var charteredPrice = "0";
-							if(isChartered == 1){
-								charteredStartTime = $(this).find("input[name=charteredStartTime]").val();
-								charteredEndTime = $(this).find("input[name=charteredEndTime]").val();
-								charteredPrice = $(this).find("input[name=charteredPrice]").val();
-							}
-							var remark = $(this).find("input[name=remark]").val();
-							if(i == (busListLength-1)){
-								busJson = "{\"licenseNumber\":\""+licenseNumber+"\",\"brand\":\""+brand+"\",\"seatCount\":\""+seatCount+"\",\"buyTime\":\""+buyTime+"\",\"isChartered\":\""+isChartered+"\",\"charteredStartTime\":\""+charteredStartTime+"\",\"charteredEndTime\":\""+charteredEndTime+"\",\"charteredPrice\":\""+charteredPrice+"\",\"remark\":\""+remark+"\"}";
-							}
-							else{
-								busJson = "{\"licenseNumber\":\""+licenseNumber+"\",\"brand\":\""+brand+"\",\"seatCount\":\""+seatCount+"\",\"buyTime\":\""+buyTime+"\",\"isChartered\":\""+isChartered+"\",\"charteredStartTime\":\""+charteredStartTime+"\",\"charteredEndTime\":\""+charteredEndTime+"\",\"charteredPrice\":\""+charteredPrice+"\",\"remark\":\""+remark+"\"},";
-							}
-							busJsonAdd += busJson;
-						});
-						busJsonAdd += "]";
-						var driverJsonAdd = "[";
-						var driverListLength = $(".add-lineProduct-form .driverList tbody tr").length;
-						$(".add-lineProduct-form .driverList tbody tr").each(function(i){
-							var driverJson = "";
-							var name = $(this).find("input[name=driverName]").val();
-							var gender = $(this).find("select[name=gender]").val();
-							var mobileNumber = $(this).find("input[name=mobileNumber]").val();
-							var driveYears = $(this).find("input[name=driveYears]").val();
-							var licenseId = $(this).find("input[name=licenseId]").val();
-							var status = $(this).find("select[name=status]").val();
-							var remark = $(this).find("input[name=remark]").val();
-							if(i == (driverListLength-1)){
-								driverJson = "{\"name\":\""+name+"\",\"gender\":\""+gender+"\",\"mobileNumber\":\""+mobileNumber+"\",\"driveYears\":\""+driveYears+"\",\"licenseId\":\""+licenseId+"\",\"status\":\""+status+"\",\"remark\":\""+remark+"\"}";
-							}
-							else{
-								driverJson = "{\"name\":\""+name+"\",\"gender\":\""+gender+"\",\"mobileNumber\":\""+mobileNumber+"\",\"driveYears\":\""+driveYears+"\",\"licenseId\":\""+licenseId+"\",\"status\":\""+status+"\",\"remark\":\""+remark+"\"},";
-							}
-							driverJsonAdd += driverJson;
-						});
-						driverJsonAdd += "]";
-						console.log(busJsonAdd);
-						console.log(driverJsonAdd);
-						$.ajax({
-							url:""+APP_ROOT+"back/lineProduct.do?method=addLineProduct&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=add",
-							type:"POST",
-							data:form+"&busJsonAdd="+encodeURIComponent(busJsonAdd)+"&driverJsonAdd="+encodeURIComponent(driverJsonAdd)+"",
-							dataType:"json",
-							beforeSend:function(){
-								globalLoadingLayer = layer.open({
-									type:3
-								});
-							},
-							success:function(data){
-								layer.close(globalLoadingLayer);
-								var result = showDialog(data);
-								if(result){
-									layer.close(addLineProductLayer);
-									showMessageDialog($( "#confirm-dialog-message" ),data.message);
-									lineProduct.listLineProduct(0,"",1);
-								}
-							}
-						});
-					});
+			    	lineProduct.initAdd();
 			    }
+			});
+		},
+		initAdd : function(){
+			lineProduct.getProvinceList($(".add-lineProduct-form select[name=provinceId]"));
+			$(".add-lineProduct-form select[name=provinceId]").change(function(){
+				var provinceId = $(this).val();
+				lineProduct.getCityList($(".add-lineProduct-form select[name=cityId]"),provinceId);
+			});
+			$(".add-lineProduct-form select[name=cityId]").change(function(){
+				var cityId = $(this).val();
+				lineProduct.getDistrictList($(".add-lineProduct-form select[name=districtId]"),cityId);
+			});
+			
+			$(".add-lineProduct-form select[name=payType]").change(function(){
+				var payType = $(this).val();
+				if(payType == 1){
+					$(this).parent().find(".payPeriod").removeClass("hide");
+				}
+				else{
+					$(this).parent().find(".payPeriod").addClass("hide");
+				}
+			});
+			
+			$(".add-lineProduct-form .btn-bus-add").click(function(){
+				var html = "<tr><td><input  name=\"licenseNumber\" type=\"text\" /></td><td><input name=\"brand\" type=\"text\" /></td><td><input name=\"seatCount\" type=\"text\" value=\"1\"/></td><td class=\"col-sm-1\"><div class=\"input-group col-sm-12\"><input name=\"buyTime\" type=\"text\" class=\"date-picker\" /><span class=\"input-group-addon\"><i class=\"fa fa-calendar\"></i></span></div></td><td><select name=\"isChartered\"><option value=\"1\">是</option><option value=\"0\" selected=\"selected\">否</option></select></td><td><input name=\"charteredStartTime\" type=\"text\" readonly=\"readonly\" class=\"date-picker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"charteredEndTime\" type=\"text\" readonly=\"readonly\" class=\"date-picker\" style=\"width:100px\"/></td><td><input name=\"charteredPrice\" type=\"text\" readonly=\"readonly\"/><label>&nbsp;元</label></td><td><input name=\"remark\" type=\"text\"/></td><td style=\"width:70px\"><button class=\"btn btn-xs btn-danger btn-bus-delete\"><i class=\"ace-icon fa fa-trash-o bigger-120\"></i></button></td></tr>";
+				$(".add-lineProduct-form .busList tbody").append(html);
+				$(".add-lineProduct-form .busList input[name=seatCount]").spinner({
+					min:1,
+					step:1,
+					create: function( event, ui ) {
+						$(this).next().addClass('btn btn-success').html('<i class="ace-icon fa fa-plus"></i>').next().addClass('btn btn-danger').html('<i class="ace-icon fa fa-minus"></i>')
+					}
+				});
+				$(".add-lineProduct-form .date-picker").datepicker({
+					autoclose: true,
+					todayHighlight: true,
+					format: 'yyyy-mm-dd',
+					language: 'zh-CN'
+				});
+			});
+			
+			$(".add-lineProduct-form .btn-driver-add").click(function(){
+				var html = "<tr><td><input name=\"driverName\" type=\"text\" /></td><td><select name=\"gender\"><option value=\"0\">男</option><option value=\"1\">女</option></select></td><td><input name=\"mobileNumber\" type=\"text\" /></td><td><input name=\"driveYears\" type=\"text\" value=\"1\"/></td><td><input name=\"licenseId\" type=\"text\" /></td><td><select name=\"status\"><option value=\"1\">启用</option><option value=\"0\">停用</option></select></td><td><input name=\"remark\" type=\"text\" /></td><td style=\"width:70px\"><button data-entiy-id=\"\" class=\"btn btn-xs btn-danger btn-driver-delete\"><i class=\"ace-icon fa fa-trash-o bigger-120\"></i></button></td></tr>";
+				$(".add-lineProduct-form .driverList tbody").append(html);
+				$(".add-lineProduct-form .driverList .btn-driver-delete").click(function(){
+					$(this).parent().parent().fadeOut(function(){
+						$(this).remove();
+					});
+				});
+				$(".add-lineProduct-form .driverList input[name=driveYears]").spinner({
+					min:1,
+					step:1,
+					create: function( event, ui ) {
+						$(this).next().addClass('btn btn-success').html('<i class="ace-icon fa fa-plus"></i>').next().addClass('btn btn-danger').html('<i class="ace-icon fa fa-minus"></i>')
+					}
+				});
+			});
+			
+			$(".add-lineProduct-form .btn-bus-add").click();
+			$(".add-lineProduct-form .btn-driver-add").click();
+			
+			$(".add-lineProduct-form .btn-submit-lineProduct").click(function(){
+				lineProduct.submitAddLineProduct();
 			});
 		},
 		updateLineProductIndex:0,
@@ -294,367 +227,384 @@ define(function(require, exports) {
 								daysList : daysList
 						};
 						
-						//data.viewLineProduct.guideTemplate.guide = data.viewLineProduct.guideTemplate.guide || {};
-						//data.viewLineProduct.insuranceTemplate.insurance = data.viewLineProduct.insuranceTemplate.insurance || {};
-						//data.viewLineProduct.busCompanyTemplate.busCompany = data.viewLineProduct.busCompanyTemplate.busCompany || {};
-						//data.viewLineProduct.busCompanyTemplate.bus = data.viewLineProduct.busCompanyTemplate.bus || {};
 						data.viewLineProduct.clipboardMode = clipboardMode;
 						var html = updateLineProductTemplate(data.viewLineProduct);
 						var title = "修改线路产品";
 						if(clipboardMode){
 							title = "新增线路产品";
 						}
-						addTab(menuKey+"-update",title,html);
+						//已修改提示
 						var tab = "tab-resource_lineProduct-update-content";
-						// 初始化并绑定表单验证
 			    		var validator = rule.lineProductCheckor($('.updateLineProductContainer'));
-				    	
-			    		for(var i=0;i<lineProductDetail.days;i++){
-							var ue = init_editor("detailEditor-update-lineProduct-"+i+"");
-						}
-			    		
-				    	
-				    	var updateList =$("#"+tab+" .updateLineProductDaysListContainer .updateLineProductDaysList");
-				    	if(updateList.length > 0){
-				    		for(var k=0; k<updateList.length; k++){
-				    			var updateDays = updateList.eq(k).find(".updateLineProductDaysDetailContainer");
-				    			if( updateDays.find(".updateLineProductDaysDetail").length > 0){
-						    		var arr = [], daysList = updateDays.find(".updateLineProductDaysDetail");
-						    		for(var i=0; i<daysList.length; i++){
-						    			arr.push(daysList[i].outerHTML);
-						    		}
-						    		arr.sort(function(a,b){
-						                a = parseInt(/data-entity-index=\"(\d+)/.exec(a)[1], 10);
-						                b = parseInt(/data-entity-index=\"(\d+)/.exec(b)[1], 10);
-						                return a-b;
-						            });
-						    		
-						    		updateDays.html(arr.join(""));
-						    	}
-				    		}
-				    		var daysDetailList = $("#"+tab+" .updateLineProductDaysDetail");
-				    		lineProduct.updateLineProductIndex = parseInt(daysDetailList.eq(daysDetailList.length-1).attr("data-entity-index")) + 1;
-				    	}
-				    	
-				    	//添加具体行程安排相应事件
-				    	$("#"+tab+" .updateLineProductDaysList .addRestaurant").bind("click", validator, lineProduct.addRestaurant);//餐饮
-				    	$("#"+tab+" .updateLineProductDaysList .addResourceHotel").bind("click", validator, lineProduct.addResourceHotel);//酒店
-				    	$("#"+tab+" .updateLineProductDaysList .addResourceScenic").bind("click", validator, lineProduct.addResourceScenic);//景区
-				    	$("#"+tab+" .updateLineProductDaysList .addResourceShopping").bind("click", validator, lineProduct.addResourceShopping);//购物
-				    	$("#"+tab+" .updateLineProductDaysList .addResourceSelfPaying").bind("click", validator, lineProduct.addResourceSelfPaying);//自费
-				    	$("#"+tab+" .updateLineProductDaysList .addResourceTraffic").bind("click", validator, lineProduct.addResourceTraffic);//交通
-						
-						lineProduct.bindRestaurantEvent($("#"+tab+" .viewUpdateRestaurantList .chooseRestaurantName"), $("#"+tab+" .viewUpdateRestaurantList .restaurantStandardsName"));
-						lineProduct.bindHotelEvent($("#"+tab+" .viewUpdateHotelList .chooseHotelName"), $("#"+tab+" .viewUpdateHotelList .chooseHotelRoom"), $("#"+tab+" .viewUpdateHotelList .resourceHotelStar"));
-						lineProduct.bindScenicEvent($("#"+tab+" .viewUpdateScenicList .chooseScenicName"));
-						lineProduct.bindShopEvent($("#"+tab+" .viewUpdateShopList .chooseVendorName"));
-						lineProduct.bindSelfPay($("#"+tab+" .viewUpdateSelfPayList .chooseCompanyName"));
-						lineProduct.bindTicketEvent($("#"+tab+" .viewUpdateTicketList .chooseTicketName"));
-						
-						$("#"+tab+" .updateLineProductContainer .submitInfoLineProduct").on("click", function(){
-							lineProduct.submitInfoLineProduct(tab,clipboardMode, validator);
-						})//绑定提交事件
-						
-						
-						$("#"+tab+" .viewUpdateRestaurantList .deleteScheduleList").off().on("click", lineProduct.deleteLineProductDaysArrange);
-						$("#"+tab+" .viewUpdateHotelList .deleteResourceHotelList").off().on("click", lineProduct.deleteLineProductDaysArrange);
-						$("#"+tab+" .viewUpdateScenicList .deleteResourceScenicList").off().on("click", lineProduct.deleteLineProductDaysArrange);
-						$("#"+tab+" .viewUpdateShopList .deleteResourceShopList").off().on("click", lineProduct.deleteLineProductDaysArrange);
-						$("#"+tab+" .viewUpdateSelfPayList .deleteResourceSelfPayList").off().on("click", lineProduct.deleteLineProductDaysArrange);
-						$("#"+tab+" .viewUpdateTicketList .deleteResourceTicketList").off().on("click", lineProduct.deleteLineProductDaysArrange);
-						
-						$("#"+tab+" .updateLineProductDaysDetailContainer").sortable({
-							containment: 'parent',
-							handle: ace.vars['touch'] ? '.table-bordered thead' : false,
-							forceHelperSize:true,
-							forcePlaceholderSize:true,
-							tolerance:'pointer',
-							update: function(event, ui) {
-								var itemList = $("#"+tab+" .updateLineProductDaysDetailContainer .timeline-item");
-								for(var i=0; i<itemList.length; i++){
-									itemList.eq(i).attr("data-entity-index", i);
-								}
-							}
-						});
-						//导游安排
-						$("#"+tab+" .updateGuideList .chooseGuide").autocomplete({
-							minLength:0,
-							change:function(event,ui){
-								if(ui.item == null){
-									$(this).val("");
-									$(this).parent().parent().find("input[name=guideNameId]").val("");
-									$(this).parent().parent().find("input[name=guideFee]").val("");
-									$(this).parent().parent().find("input[name=gender]").val("");
-									$(this).parent().parent().find("input[name=mobileNumber]").val("");
-									$(this).parent().parent().find("input[name=guideLevel]").val("");
-									$(this).parent().parent().find("input[name=company]").val("");
-								}
-								// 更新表单验证的配置
-								validator = rule.lineProductUpdate(validator);
-							},
-							select:function(event,ui){
-								$(this).blur();
-								var obj = this;
-								$.ajax({
-									url:""+APP_ROOT+"back/guide.do?method=getGuideById&token="+$.cookie("token")+"&menuKey=resource_guide&operation=view",
-				                    dataType: "json",
-				                    data:"id="+ui.item.id,
-				                    success: function(data) {
-				                    	layer.close(globalLoadingLayer);
-										var result = showDialog(data);
-										if(result){
-											var guide = JSON.parse(data.guide);
-											$(obj).parent().parent().find("input[name=guideNameId]").val(guide.id).trigger('change');
-											if(guide.gender == 0){
-												$(obj).parent().parent().find("input[name=gender]").val("男");
-											}
-											else{
-												$(obj).parent().parent().find("input[name=gender]").val("女");
-											}
-											$(obj).parent().parent().find("input[name=mobileNumber]").val(guide.mobileNumber);
-											var guideLevel = guide.guideLevel;
-											if(guideLevel == 1){
-												$(obj).parent().parent().find("input[name=guideLevel]").val("初级导游资格");
-											}
-											else if(guideLevel == 2){
-												$(obj).parent().parent().find("input[name=guideLevel]").val("中级导游资格");
-											}
-											else if(guideLevel == 3){
-												$(obj).parent().parent().find("input[name=guideLevel]").val("高级导游资格");
-											}
-											else if(guideLevel == 4){
-												$(obj).parent().parent().find("input[name=guideLevel]").val("特级导游资格");
-											}
-											$(obj).parent().parent().find("input[name=company]").val(guide.company);
-
-											// 更新表单验证的配置
-											validator = rule.lineProductUpdate(validator);
-										}
-				                    }
-				                });
-							}
-						}).click(function(){
-							var obj = this;
-							$.ajax({
-								url:""+APP_ROOT+"back/guide.do?method=findAll&token="+$.cookie("token")+"&menuKey=resource_guide&operation=view",
-			                    dataType: "json",
-			                    success: function(data) {
-			                    	layer.close(globalLoadingLayer);
-									var result = showDialog(data);
-									if(result){
-										var guideList = JSON.parse(data.guideList);
-										if(guideList != null && guideList.length > 0){
-											for(var i=0;i<guideList.length;i++){
-												guideList[i].value = guideList[i].realname;
-											}
-										}
-										$(obj).autocomplete('option','source', guideList);
-										$(obj).autocomplete('search', '');
-									}
-			                    }
-			                });
-						});
-						
-						
-						$("#"+tab+" .updateInsuranceList .chooseInsurance").autocomplete({
-							minLength:0,
-							change:function(event,ui){
-								if(ui.item == null){
-									$(this).val("");
-									$(this).parent().parent().find("input[name=insuranceId]").val("");
-									$(this).parent().parent().find("input[name=type]").val("");
-									$(this).parent().parent().find("input[name=price]").val("");
-									$(this).parent().parent().find("input[name=telNumber]").val("");
-									$(this).parent().parent().find("input[name=managerName]").val("");
-									$(this).parent().parent().find("input[name=mobileNumber]").val("");
-								}
-
-								// 更新表单验证的配置
-								validator = rule.lineProductUpdate(validator);
-							},
-							select:function(event,ui){
-								$(this).blur();
-								var obj = this;
-								$.ajax({
-									url:""+APP_ROOT+"back/insurance.do?method=getInsuranceById&token="+$.cookie("token")+"&menuKey=resource_insurance&operation=view",
-				                    dataType: "json",
-				                    data:"id="+ui.item.id,
-				                    success: function(data) {
-				                    	layer.close(globalLoadingLayer);
-										var result = showDialog(data);
-										if(result){
-											var insurance = JSON.parse(data.insurance);
-											console.log(insurance);
-											$(obj).parent().parent().find("input[name=insuranceId]").val(insurance.id).trigger('change');
-											$(obj).parent().parent().find("input[name=telNumber]").val(insurance.telNumber);
-											$(obj).parent().parent().find("input[name=managerName]").val(insurance.managerName);
-											$(obj).parent().parent().find("input[name=mobileNumber]").val(insurance.telNumber);
-
-											// 更新表单验证的配置
-											validator = rule.lineProductUpdate(validator);
-										}
-				                    }
-				                });
-							}
-						}).click(function(){
-							var obj = this;
-							$.ajax({
-								url:""+APP_ROOT+"back/insurance.do?method=findAll&token="+$.cookie("token")+"&menuKey=resource_insurance&operation=view",
-			                    dataType: "json",
-			                    success: function(data) {
-			                    	layer.close(globalLoadingLayer);
-									var result = showDialog(data);
-									if(result){
-										var insuranceList = JSON.parse(data.insuranceList);
-										if(insuranceList != null && insuranceList.length > 0){
-											for(var i=0;i<insuranceList.length;i++){
-												insuranceList[i].value = insuranceList[i].name;
-											}
-										}
-										$(obj).autocomplete('option','source', insuranceList);
-										$(obj).autocomplete('search', '');
-									}
-			                    }
-			                });
-						});
-						
-						var chooseBusLicenseNumber;
-						$("#"+tab+" .updateBusCompanyList .chooseBusCompany").autocomplete({
-							minLength:0,
-							change:function(event,ui){
-								if(ui.item == null){
-									$(this).val("");
-									$(this).parent().parent().find("input[name=busCompanyId]").val("");
-									$(this).parent().parent().find("input[name=licenseNumber]").val("");
-									$(this).parent().parent().find("input[name=seatPrice]").val("");
-									$(this).parent().parent().find("input[name=seatCount]").val("");
-									$(this).parent().parent().find("input[name=charteredPrice]").val("");
-									$(this).parent().parent().find("input[name=mobileNumber]").val("");
-								}
-
-								// 更新表单验证的配置
-								validator = rule.lineProductUpdate(validator);
-							},
-							select:function(event,ui){
-								$(this).blur();
-								
-								$(this).parent().parent().find("input[name=busCompanyId]").val(ui.item.id).trigger('change');
-								$(this).parent().parent().find("input[name=licenseNumber]").val("");
-								$(this).parent().parent().find("input[name=seatPrice]").val("");
-								$(this).parent().parent().find("input[name=seatCount]").val("");
-								$(this).parent().parent().find("input[name=charteredPrice]").val("");
-								$(this).parent().parent().find("input[name=mobileNumber]").val("");
-								
-								// 更新表单验证的配置
-								validator = rule.lineProductUpdate(validator);
-
-								var obj = this, mobileNumber = "";
-								
-								if(chooseBusLicenseNumber){
-									$(".updateBusCompanyList .chooseBusLicenseNumber").autocomplete( "destroy");
-								}
-								
-								//给车辆绑定autocomplete事件
-								chooseBusLicenseNumber = $(".updateBusCompanyList .chooseBusLicenseNumber").autocomplete({
-									minLength:0,
-									select:function(event,ui){
-										
-										//获得busId，到后台查询bus相应信息
-										//var mobileNumber = data.mobileNumber;
-										//$(obj).parent().parent().find("input[name=mobileNumber]").val(mobileNumber);
-										$.ajax({
-											url:""+APP_ROOT+"back/busCompany.do?method=findBusDetailById&token="+$.cookie("token")+"&menuKey=resource_busCompany&operation=view",
-						                    dataType: "json",
-						                    data:"id="+ui.item.id,
-						                    success: function(data) {
-						                    	layer.close(globalLoadingLayer);
-												var result = showDialog(data);
-												if(result){
-													var d = JSON.parse(data.bus), objParent = $(obj).parent().parent();
-													objParent.find("input[name=busLicenseNumberId]").val(ui.item.id).trigger('change');
-													objParent.find("input[name=seatPrice]").val(d.seatPrice);
-													objParent.find("input[name=seatCount]").val(d.seatCount);
-													objParent.find("input[name=mobileNumber]").val(d.mobileNumber);
-													objParent.find("input[name=charteredPrice]").val(d.charteredPrice);
-													objParent.find("input[name=remark]").val(d.remark);
-												}
-						                    }
-						                 });
-										
-									},
-									change:function(event,ui){
-										if(ui.item == null){
-											$(this).val("");
-											var objParent = $(this).parent().parent();
-											objParent.find("input[name=busLicenseNumberId]").val("");
-											objParent.find("input[name=licenseNumber]").val("");
-											objParent.find("input[name=seatPrice]").val("");
-											objParent.find("input[name=seatCount]").val("");
-											objParent.find("input[name=mobileNumber]").val("");
-											objParent.find("input[name=charteredPrice]").val("");
-											objParent.find("input[name=remark]").val("");
-										}
-									}
-								}).unbind("click").click(function(){
-									var objBus = this;
-									var busCompanyId = ui.item.id;
-									var needSeatCount = $(obj).parent().parent().find("input[name=needSeatCount]").val();
-									$.ajax({
-										url:""+APP_ROOT+"back/busCompany.do?method=findBusListBySeat&token="+$.cookie("token")+"&menuKey=resource_busCompany&operation=view",
-					                    dataType: "json",
-					                    data:"id="+busCompanyId+"&seatCount="+needSeatCount,
-					                    success: function(data) {
-					                    	layer.close(globalLoadingLayer);
-											var result = showDialog(data);
-											if(result){
-												var busList = JSON.parse(data.busList);
-												if(busList != null && busList.length){
-													for(var i=0;i<busList.length;i++){
-														busList[i].value = busList[i].licenseNumber;
-													}
-												}
-												
-												
-												$(objBus).autocomplete('option','source', busList);
-												$(objBus).autocomplete('search', '');
-											}
-					                    }
-					                 });
-								});
-								
-								
-								
-								
-							}
-						}).click(function(){
-							var obj = this;
-							console.log(obj)
-							var needSeatCount = $(obj).parent().parent().find("input[name=needSeatCount]").val();
-							$.ajax({
-								url:""+APP_ROOT+"back/busCompany.do?method=findBusCompanyBySeat&token="+$.cookie("token")+"&menuKey=resource_busCompany&operation=view",
-			                    dataType: "json",
-			                    data:"seatCount="+needSeatCount,
-			                    success: function(data) {
-			                    	layer.close(globalLoadingLayer);
-									var result = showDialog(data);
-									if(result){
-										var busCompanyList = JSON.parse(data.busCompanyList);
-										if(busCompanyList != null && busCompanyList.length > 0){
-											for(var i=0;i<busCompanyList.length;i++){
-												busCompanyList[i].value = busCompanyList[i].companyName;
-											}
-										}
-										$(obj).autocomplete('option','source', busCompanyList);
-										$(obj).autocomplete('search', '');
-									}
-			                    }
-			                });
-						});
+						if($(".tab-"+menuKey+"-update").length > 0) {
+                 	    	if(!!lineProduct.edited["update"] && lineProduct.edited["update"] != ""){
+                 	    		showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
+				            		 if (!validator.form()) { 
+				            			 return; 
+				            		 }
+				            		 lineProduct.submitUpdateLineProduct($(".updateLineProductContainer form").eq(0).find("input[name=lineProductId]").val(),clipboardMode,0);
+									 lineProduct.edited["update"] = "";
+				            		 addTab(menuKey+"-update",title,html);
+									 lineProduct.initUpdate(id,clipboardMode,data);
+				            		 validator = rule.lineProductCheckor($("#"+tab+""));
+				            	 },function(){
+									 lineProduct.edited["update"] = "";
+				            		 addTab(menuKey+"-update",title,html);
+									 lineProduct.initUpdate(id,clipboardMode,data);
+				            		 validator = rule.lineProductCheckor($("#"+tab+""));
+				            	 });							
+                 	    	 }else{
+	                 	    	addTab(menuKey+"-update",title,html);
+	                 	        validator = rule.lineProductCheckor($("#"+tab+""));
+                 	    	 } 
+                 	    }else{
+                 	    	addTab(menuKey+"-update",title,html);
+                 	    	validator = rule.lineProductCheckor($("#"+tab+""));
+                 	    };	
+						lineProduct.initUpdate(id,clipboardMode,data);
 					}
 				}
 			});
+		},
+		initUpdate : function(id,clipboardMode,data){
+			var tab = "tab-resource_lineProduct-update-content";
+			var validator = rule.lineProductCheckor($('.updateLineProductContainer'));
+			$(".updateLineProductContainer").on("change",function(){
+				lineProduct.edited["update"] = "update";
+			});
+			for(var i=0;i<data.viewLineProduct.lineProduct.days;i++){
+				var ue = init_editor("detailEditor-update-lineProduct-"+i+"");
+			}
+			var updateList =$("#"+tab+" .updateLineProductDaysListContainer .updateLineProductDaysList");
+			if(updateList.length > 0){
+				for(var k=0; k<updateList.length; k++){
+					var updateDays = updateList.eq(k).find(".updateLineProductDaysDetailContainer");
+					if( updateDays.find(".updateLineProductDaysDetail").length > 0){
+						var arr = [], daysList = updateDays.find(".updateLineProductDaysDetail");
+						for(var i=0; i<daysList.length; i++){
+							arr.push(daysList[i].outerHTML);
+						}
+						arr.sort(function(a,b){
+							a = parseInt(/data-entity-index=\"(\d+)/.exec(a)[1], 10);
+							b = parseInt(/data-entity-index=\"(\d+)/.exec(b)[1], 10);
+							return a-b;
+						});
+						
+						updateDays.html(arr.join(""));
+					}
+				}
+				var daysDetailList = $("#"+tab+" .updateLineProductDaysDetail");
+				lineProduct.updateLineProductIndex = parseInt(daysDetailList.eq(daysDetailList.length-1).attr("data-entity-index")) + 1;
+			}
 			
+			//添加具体行程安排相应事件
+			$("#"+tab+" .updateLineProductDaysList .addRestaurant").bind("click", validator, lineProduct.addRestaurant);//餐饮
+			$("#"+tab+" .updateLineProductDaysList .addResourceHotel").bind("click", validator, lineProduct.addResourceHotel);//酒店
+			$("#"+tab+" .updateLineProductDaysList .addResourceScenic").bind("click", validator, lineProduct.addResourceScenic);//景区
+			$("#"+tab+" .updateLineProductDaysList .addResourceShopping").bind("click", validator, lineProduct.addResourceShopping);//购物
+			$("#"+tab+" .updateLineProductDaysList .addResourceSelfPaying").bind("click", validator, lineProduct.addResourceSelfPaying);//自费
+			$("#"+tab+" .updateLineProductDaysList .addResourceTraffic").bind("click", validator, lineProduct.addResourceTraffic);//交通
+			
+			lineProduct.bindRestaurantEvent($("#"+tab+" .viewUpdateRestaurantList .chooseRestaurantName"), $("#"+tab+" .viewUpdateRestaurantList .restaurantStandardsName"));
+			lineProduct.bindHotelEvent($("#"+tab+" .viewUpdateHotelList .chooseHotelName"), $("#"+tab+" .viewUpdateHotelList .chooseHotelRoom"), $("#"+tab+" .viewUpdateHotelList .resourceHotelStar"));
+			lineProduct.bindScenicEvent($("#"+tab+" .viewUpdateScenicList .chooseScenicName"));
+			lineProduct.bindShopEvent($("#"+tab+" .viewUpdateShopList .chooseVendorName"));
+			lineProduct.bindSelfPay($("#"+tab+" .viewUpdateSelfPayList .chooseCompanyName"));
+			lineProduct.bindTicketEvent($("#"+tab+" .viewUpdateTicketList .chooseTicketName"));
+			
+			$("#"+tab+" .updateLineProductContainer .submitInfoLineProduct").on("click", function(){
+				lineProduct.submitUpdateLineProduct(id,clipboardMode, 1);
+			});//绑定提交事件
+			
+			$("#"+tab+" .viewUpdateRestaurantList .deleteScheduleList").off().on("click", lineProduct.deleteLineProductDaysArrange);
+			$("#"+tab+" .viewUpdateHotelList .deleteResourceHotelList").off().on("click", lineProduct.deleteLineProductDaysArrange);
+			$("#"+tab+" .viewUpdateScenicList .deleteResourceScenicList").off().on("click", lineProduct.deleteLineProductDaysArrange);
+			$("#"+tab+" .viewUpdateShopList .deleteResourceShopList").off().on("click", lineProduct.deleteLineProductDaysArrange);
+			$("#"+tab+" .viewUpdateSelfPayList .deleteResourceSelfPayList").off().on("click", lineProduct.deleteLineProductDaysArrange);
+			$("#"+tab+" .viewUpdateTicketList .deleteResourceTicketList").off().on("click", lineProduct.deleteLineProductDaysArrange);
+			
+			$("#"+tab+" .updateLineProductDaysDetailContainer").sortable({
+				containment: 'parent',
+				handle: ace.vars['touch'] ? '.table-bordered thead' : false,
+				forceHelperSize:true,
+				forcePlaceholderSize:true,
+				tolerance:'pointer',
+				update: function(event, ui) {
+					var itemList = $("#"+tab+" .updateLineProductDaysDetailContainer .timeline-item");
+					for(var i=0; i<itemList.length; i++){
+						itemList.eq(i).attr("data-entity-index", i);
+					}
+				}
+			});
+			//导游安排
+			$("#"+tab+" .updateGuideList .chooseGuide").autocomplete({
+				minLength:0,
+				change:function(event,ui){
+					if(ui.item == null){
+						$(this).val("");
+						$(this).parent().parent().find("input[name=guideNameId]").val("");
+						$(this).parent().parent().find("input[name=guideFee]").val("");
+						$(this).parent().parent().find("input[name=gender]").val("");
+						$(this).parent().parent().find("input[name=mobileNumber]").val("");
+						$(this).parent().parent().find("input[name=guideLevel]").val("");
+						$(this).parent().parent().find("input[name=company]").val("");
+					}
+					// 更新表单验证的配置
+					validator = rule.lineProductUpdate(validator);
+				},
+				select:function(event,ui){
+					$(this).blur();
+					var obj = this;
+					$.ajax({
+						url:""+APP_ROOT+"back/guide.do?method=getGuideById&token="+$.cookie("token")+"&menuKey=resource_guide&operation=view",
+						dataType: "json",
+						data:"id="+ui.item.id,
+						success: function(data) {
+							layer.close(globalLoadingLayer);
+							var result = showDialog(data);
+							if(result){
+								var guide = JSON.parse(data.guide);
+								$(obj).parent().parent().find("input[name=guideNameId]").val(guide.id).trigger('change');
+								if(guide.gender == 0){
+									$(obj).parent().parent().find("input[name=gender]").val("男");
+								}
+								else{
+									$(obj).parent().parent().find("input[name=gender]").val("女");
+								}
+								$(obj).parent().parent().find("input[name=mobileNumber]").val(guide.mobileNumber);
+								var guideLevel = guide.guideLevel;
+								if(guideLevel == 1){
+									$(obj).parent().parent().find("input[name=guideLevel]").val("初级导游资格");
+								}
+								else if(guideLevel == 2){
+									$(obj).parent().parent().find("input[name=guideLevel]").val("中级导游资格");
+								}
+								else if(guideLevel == 3){
+									$(obj).parent().parent().find("input[name=guideLevel]").val("高级导游资格");
+								}
+								else if(guideLevel == 4){
+									$(obj).parent().parent().find("input[name=guideLevel]").val("特级导游资格");
+								}
+								$(obj).parent().parent().find("input[name=company]").val(guide.company);
 
+								// 更新表单验证的配置
+								validator = rule.lineProductUpdate(validator);
+							}
+						}
+					});
+				}
+			}).click(function(){
+				var obj = this;
+				$.ajax({
+					url:""+APP_ROOT+"back/guide.do?method=findAll&token="+$.cookie("token")+"&menuKey=resource_guide&operation=view",
+					dataType: "json",
+					success: function(data) {
+						layer.close(globalLoadingLayer);
+						var result = showDialog(data);
+						if(result){
+							var guideList = JSON.parse(data.guideList);
+							if(guideList != null && guideList.length > 0){
+								for(var i=0;i<guideList.length;i++){
+									guideList[i].value = guideList[i].realname;
+								}
+							}
+							$(obj).autocomplete('option','source', guideList);
+							$(obj).autocomplete('search', '');
+						}
+					}
+				});
+			});
+			
+			$("#"+tab+" .updateInsuranceList .chooseInsurance").autocomplete({
+				minLength:0,
+				change:function(event,ui){
+					if(ui.item == null){
+						$(this).val("");
+						$(this).parent().parent().find("input[name=insuranceId]").val("");
+						$(this).parent().parent().find("input[name=type]").val("");
+						$(this).parent().parent().find("input[name=price]").val("");
+						$(this).parent().parent().find("input[name=telNumber]").val("");
+						$(this).parent().parent().find("input[name=managerName]").val("");
+						$(this).parent().parent().find("input[name=mobileNumber]").val("");
+					}
+
+					// 更新表单验证的配置
+					validator = rule.lineProductUpdate(validator);
+				},
+				select:function(event,ui){
+					$(this).blur();
+					var obj = this;
+					$.ajax({
+						url:""+APP_ROOT+"back/insurance.do?method=getInsuranceById&token="+$.cookie("token")+"&menuKey=resource_insurance&operation=view",
+						dataType: "json",
+						data:"id="+ui.item.id,
+						success: function(data) {
+							layer.close(globalLoadingLayer);
+							var result = showDialog(data);
+							if(result){
+								var insurance = JSON.parse(data.insurance);
+								console.log(insurance);
+								$(obj).parent().parent().find("input[name=insuranceId]").val(insurance.id).trigger('change');
+								$(obj).parent().parent().find("input[name=telNumber]").val(insurance.telNumber);
+								$(obj).parent().parent().find("input[name=managerName]").val(insurance.managerName);
+								$(obj).parent().parent().find("input[name=mobileNumber]").val(insurance.telNumber);
+
+								// 更新表单验证的配置
+								validator = rule.lineProductUpdate(validator);
+							}
+						}
+					});
+				}
+			}).click(function(){
+				var obj = this;
+				$.ajax({
+					url:""+APP_ROOT+"back/insurance.do?method=findAll&token="+$.cookie("token")+"&menuKey=resource_insurance&operation=view",
+					dataType: "json",
+					success: function(data) {
+						layer.close(globalLoadingLayer);
+						var result = showDialog(data);
+						if(result){
+							var insuranceList = JSON.parse(data.insuranceList);
+							if(insuranceList != null && insuranceList.length > 0){
+								for(var i=0;i<insuranceList.length;i++){
+									insuranceList[i].value = insuranceList[i].name;
+								}
+							}
+							$(obj).autocomplete('option','source', insuranceList);
+							$(obj).autocomplete('search', '');
+						}
+					}
+				});
+			});
+			
+			var chooseBusLicenseNumber;
+			$("#"+tab+" .updateBusCompanyList .chooseBusCompany").autocomplete({
+				minLength:0,
+				change:function(event,ui){
+					if(ui.item == null){
+						$(this).val("");
+						$(this).parent().parent().find("input[name=busCompanyId]").val("");
+						$(this).parent().parent().find("input[name=licenseNumber]").val("");
+						$(this).parent().parent().find("input[name=seatPrice]").val("");
+						$(this).parent().parent().find("input[name=seatCount]").val("");
+						$(this).parent().parent().find("input[name=charteredPrice]").val("");
+						$(this).parent().parent().find("input[name=mobileNumber]").val("");
+					}
+
+					// 更新表单验证的配置
+					validator = rule.lineProductUpdate(validator);
+				},
+				select:function(event,ui){
+					$(this).blur();
+					
+					$(this).parent().parent().find("input[name=busCompanyId]").val(ui.item.id).trigger('change');
+					$(this).parent().parent().find("input[name=licenseNumber]").val("");
+					$(this).parent().parent().find("input[name=seatPrice]").val("");
+					$(this).parent().parent().find("input[name=seatCount]").val("");
+					$(this).parent().parent().find("input[name=charteredPrice]").val("");
+					$(this).parent().parent().find("input[name=mobileNumber]").val("");
+					
+					// 更新表单验证的配置
+					validator = rule.lineProductUpdate(validator);
+
+					var obj = this, mobileNumber = "";
+					
+					if(chooseBusLicenseNumber){
+						$(".updateBusCompanyList .chooseBusLicenseNumber").autocomplete( "destroy");
+					}
+					
+					//给车辆绑定autocomplete事件
+					chooseBusLicenseNumber = $(".updateBusCompanyList .chooseBusLicenseNumber").autocomplete({
+						minLength:0,
+						select:function(event,ui){
+							
+							//获得busId，到后台查询bus相应信息
+							//var mobileNumber = data.mobileNumber;
+							//$(obj).parent().parent().find("input[name=mobileNumber]").val(mobileNumber);
+							$.ajax({
+								url:""+APP_ROOT+"back/busCompany.do?method=findBusDetailById&token="+$.cookie("token")+"&menuKey=resource_busCompany&operation=view",
+								dataType: "json",
+								data:"id="+ui.item.id,
+								success: function(data) {
+									layer.close(globalLoadingLayer);
+									var result = showDialog(data);
+									if(result){
+										var d = JSON.parse(data.bus), objParent = $(obj).parent().parent();
+										objParent.find("input[name=busLicenseNumberId]").val(ui.item.id).trigger('change');
+										objParent.find("input[name=seatPrice]").val(d.seatPrice);
+										objParent.find("input[name=seatCount]").val(d.seatCount);
+										objParent.find("input[name=mobileNumber]").val(d.mobileNumber);
+										objParent.find("input[name=charteredPrice]").val(d.charteredPrice);
+										objParent.find("input[name=remark]").val(d.remark);
+									}
+								}
+							 });
+							
+						},
+						change:function(event,ui){
+							if(ui.item == null){
+								$(this).val("");
+								var objParent = $(this).parent().parent();
+								objParent.find("input[name=busLicenseNumberId]").val("");
+								objParent.find("input[name=licenseNumber]").val("");
+								objParent.find("input[name=seatPrice]").val("");
+								objParent.find("input[name=seatCount]").val("");
+								objParent.find("input[name=mobileNumber]").val("");
+								objParent.find("input[name=charteredPrice]").val("");
+								objParent.find("input[name=remark]").val("");
+							}
+						}
+					}).unbind("click").click(function(){
+						var objBus = this;
+						var busCompanyId = ui.item.id;
+						var needSeatCount = $(obj).parent().parent().find("input[name=needSeatCount]").val();
+						$.ajax({
+							url:""+APP_ROOT+"back/busCompany.do?method=findBusListBySeat&token="+$.cookie("token")+"&menuKey=resource_busCompany&operation=view",
+							dataType: "json",
+							data:"id="+busCompanyId+"&seatCount="+needSeatCount,
+							success: function(data) {
+								layer.close(globalLoadingLayer);
+								var result = showDialog(data);
+								if(result){
+									var busList = JSON.parse(data.busList);
+									if(busList != null && busList.length){
+										for(var i=0;i<busList.length;i++){
+											busList[i].value = busList[i].licenseNumber;
+										}
+									}
+									
+									
+									$(objBus).autocomplete('option','source', busList);
+									$(objBus).autocomplete('search', '');
+								}
+							}
+						 });
+					});					
+				}
+			}).click(function(){
+				var obj = this;
+				console.log(obj)
+				var needSeatCount = $(obj).parent().parent().find("input[name=needSeatCount]").val();
+				$.ajax({
+					url:""+APP_ROOT+"back/busCompany.do?method=findBusCompanyBySeat&token="+$.cookie("token")+"&menuKey=resource_busCompany&operation=view",
+					dataType: "json",
+					data:"seatCount="+needSeatCount,
+					success: function(data) {
+						layer.close(globalLoadingLayer);
+						var result = showDialog(data);
+						if(result){
+							var busCompanyList = JSON.parse(data.busCompanyList);
+							if(busCompanyList != null && busCompanyList.length > 0){
+								for(var i=0;i<busCompanyList.length;i++){
+									busCompanyList[i].value = busCompanyList[i].companyName;
+								}
+							}
+							$(obj).autocomplete('option','source', busCompanyList);
+							$(obj).autocomplete('search', '');
+						}
+					}
+				});
+			});
 		},
 		deleteLineProductDaysArrange : function(){
 			var dialogObj = $( "#confirm-dialog-message" ), obj = this;
@@ -741,7 +691,7 @@ define(function(require, exports) {
 									var result = showDialog(data);
 									if(result){
 										$("#"+tabId+" .lineProductList .lineProduct-"+id+"").fadeOut(function(){
-											lineProduct.listLineProduct(0,"",1);
+											lineProduct.listLineProduct(0,lineProduct.searchData.name,lineProduct.searchData.status);
 										});
 									}
 								}
@@ -1827,7 +1777,7 @@ define(function(require, exports) {
 			'<td><input type="text" class="col-xs-12" name="price"/></td>'+
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="managerName"/></td>'+
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
-			'<td><input type="text" class="col-xs-12" readonly="readonly" name="companyPhoneNumber"/></td>'+
+			'<td><input type="text" class="col-xs-12" readonly="readonly" name="telNumber"/></td>'+
 			'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
 			'<td><button class="btn btn-xs btn-danger btn-restaurant-delete deleteResourceTicketList"> <i class="ace-icon fa fa-trash-o bigger-120"></i> </button></td></tr></tbody></table></div></div></div></div>';
 			$(this).parents(".updateLineProductDaysList").find(".updateLineProductDaysDetailContainer").append(shoppingDetails);
@@ -1861,7 +1811,7 @@ define(function(require, exports) {
 								thisParent.find("select[name=type]").val(ui.item.type  || 1);
 								thisParent.find("input[name=managerName]").val(ticket.managerName);
 								thisParent.find("input[name=mobileNumber]").val(ticket.mobileNumber);
-								thisParent.find("input[name=companyPhoneNumber]").val(ticket.companyPhoneNumber);
+								thisParent.find("input[name=telNumber]").val(ticket.telNumber);
 
 								// 更新表单验证的配置
 								validator = rule.lineProductUpdate(validator);
@@ -1878,7 +1828,7 @@ define(function(require, exports) {
 						thisParent.find("input[name=price]").val("");
 						thisParent.find("input[name=managerName]").val("");
 						thisParent.find("input[name=mobileNumber]").val("");
-						thisParent.find("input[name=companyPhoneNumber]").val("");
+						thisParent.find("input[name=telNumber]").val("");
 
 						// 更新表单验证的配置
 						validator = rule.lineProductUpdate(validator);
@@ -1911,7 +1861,9 @@ define(function(require, exports) {
 				});
 			});
 		},
-		submitInfoLineProduct:function(tab,clipboardMode, validator){
+		submitUpdateLineProduct:function(id,clipboardMode,isClose){
+			var tab = "tab-resource_lineProduct-update-content";
+			var validator = rule.lineProductCheckor($('.updateLineProductContainer'));
 			if (!validator.form())   return;
 
 			var $form = $(".updateLineProductContainer form"), travelLineData;
@@ -1934,50 +1886,50 @@ define(function(require, exports) {
 				return false;
 			}
 			travelLineData = {
-					lineProduct : [{
-						id: getValue($form.eq(0), "lineProductId"),
-						name : getValue($form.eq(0), "name"),
-						travellineId: getValue($form.eq(0), "travellineId"),
-						remark : getValue($form.eq(0), "remark"),
-						type : getValue($form.eq(0), "type"),
-						customerType : getValue($form.eq(0), "customerType"),
-						status : getValue($form.eq(0), "status")
-					}],
-					guide : [{
-						id : getValue($form.eq(1).find(".updateGuideList"), "templateId"),
-						guideId : getValue($form.eq(1).find(".updateGuideList"), "guideNameId"),
-						price : getValue($form.eq(1).find(".updateGuideList"), "guideFee"),
-						remark : getValue($form.eq(1).find(".updateGuideList"), "remark")
-					}],
-					insurance : [{
-						id : getValue($form.eq(1).find(".updateInsuranceList"), "templateId"),
-						insuranceId : getValue($form.eq(1).find(".updateInsuranceList"), "insuranceId"),
-						type : getValue($form.eq(1).find(".updateInsuranceList"), "type"),
-						price : getValue($form.eq(1).find(".updateInsuranceList"), "price"),
-						remark : getValue($form.eq(1).find(".updateInsuranceList"), "remark")
-					}],
-					busCompany : [{
-						id : getValue($form.eq(1).find(".updateBusCompanyList"), "templateId"),
-						busCompanyId : getValue($form.eq(1).find(".updateBusCompanyList"), "busCompanyId"),
-						needSeatCount : getValue($form.eq(1).find(".updateBusCompanyList"), "needSeatCount"),
-						busId : getValue($form.eq(1).find(".updateBusCompanyList"), "busLicenseNumberId"),
-						price : getValue($form.eq(1).find(".updateBusCompanyList"), "seatPrice"),
-						remark : getValue($form.eq(1).find(".updateBusCompanyList"), "remark")
-					}],
-					lineDayList : []
+				lineProduct : [{
+					id: getValue($form.eq(0), "lineProductId"),
+					name : getValue($form.eq(0), "name"),
+					travellineId: getValue($form.eq(0), "travellineId"),
+					remark : getValue($form.eq(0), "remark"),
+					type : getValue($form.eq(0), "type"),
+					customerType : getValue($form.eq(0), "customerType"),
+					status : getValue($form.eq(0), "status")
+				}],
+				guide : [{
+					id : getValue($form.eq(1).find(".updateGuideList"), "templateId"),
+					guideId : getValue($form.eq(1).find(".updateGuideList"), "guideNameId"),
+					price : getValue($form.eq(1).find(".updateGuideList"), "guideFee"),
+					remark : getValue($form.eq(1).find(".updateGuideList"), "remark")
+				}],
+				insurance : [{
+					id : getValue($form.eq(1).find(".updateInsuranceList"), "templateId"),
+					insuranceId : getValue($form.eq(1).find(".updateInsuranceList"), "insuranceId"),
+					type : getValue($form.eq(1).find(".updateInsuranceList"), "type"),
+					price : getValue($form.eq(1).find(".updateInsuranceList"), "price"),
+					remark : getValue($form.eq(1).find(".updateInsuranceList"), "remark")
+				}],
+				busCompany : [{
+					id : getValue($form.eq(1).find(".updateBusCompanyList"), "templateId"),
+					busCompanyId : getValue($form.eq(1).find(".updateBusCompanyList"), "busCompanyId"),
+					needSeatCount : getValue($form.eq(1).find(".updateBusCompanyList"), "needSeatCount"),
+					busId : getValue($form.eq(1).find(".updateBusCompanyList"), "busLicenseNumberId"),
+					price : getValue($form.eq(1).find(".updateBusCompanyList"), "seatPrice"),
+					remark : getValue($form.eq(1).find(".updateBusCompanyList"), "remark")
+				}],
+				lineDayList : []
 			}
 			
 			var dayList = $form.find(".updateLineProductDaysList");
 			
 			for(var i=0; i<dayList.length; i++){
 				travelLineData.lineDayList[i] = {
-						detailEditor : UE.getEditor("detailEditor-update-lineProduct-"+i+"").getContent(),
-						restaurant : [],
-						hotel : [],
-						scenic : [],
-						shop : [],
-						selfPay : [],
-						ticket : []
+					detailEditor : UE.getEditor("detailEditor-update-lineProduct-"+i+"").getContent(),
+					restaurant : [],
+					hotel : [],
+					scenic : [],
+					shop : [],
+					selfPay : [],
+					ticket : []
 				}
 				//获取餐饮
 				var scheduleList = dayList.eq(i).find(".scheduleList");
@@ -1991,13 +1943,13 @@ define(function(require, exports) {
 								return false;
 							}
 							var restaurantJson = {
-									id : scheduleList.eq(j).find("[name=templateId]").val(),
-									restaurantId : restaurantId,
-									standardId : standardId,
-									price : scheduleList.eq(j).find("[name=price]").val(),
-									remark : scheduleList.eq(j).find("[name=remark]").val(),
-									orderIndex : scheduleList.eq(j).attr("data-entity-index")
-								}
+								id : scheduleList.eq(j).find("[name=templateId]").val(),
+								restaurantId : restaurantId,
+								standardId : standardId,
+								price : scheduleList.eq(j).find("[name=price]").val(),
+								remark : scheduleList.eq(j).find("[name=remark]").val(),
+								orderIndex : scheduleList.eq(j).attr("data-entity-index")
+							}
 							travelLineData.lineDayList[i].restaurant.push(restaurantJson);
 						}
 					}
@@ -2014,13 +1966,13 @@ define(function(require, exports) {
 								return false;
 							}
 							var hotelJson = {
-									id : hotelList.eq(j).find("[name=templateId]").val(),
-									hotelId : hotelId,
-									hotelRoomId : hotelRoomId,
-									price : hotelList.eq(j).find("[name=contractPrice]").val(),
-									remark : hotelList.eq(j).find("[name=remark]").val(),
-									orderIndex : hotelList.eq(j).attr("data-entity-index")
-								}
+								id : hotelList.eq(j).find("[name=templateId]").val(),
+								hotelId : hotelId,
+								hotelRoomId : hotelRoomId,
+								price : hotelList.eq(j).find("[name=contractPrice]").val(),
+								remark : hotelList.eq(j).find("[name=remark]").val(),
+								orderIndex : hotelList.eq(j).attr("data-entity-index")
+							}
 							travelLineData.lineDayList[i].hotel.push(hotelJson)
 						}
 					}
@@ -2037,13 +1989,13 @@ define(function(require, exports) {
 								return false;
 							}
 							var scenicJson= {
-									id : scenicList.eq(j).find("[name=templateId]").val(),
-									scenicId : scenicId,
-									itemId : itemId,
-									price : scenicList.eq(j).find("[name=price]").val(),
-									remark : scenicList.eq(j).find("[name=remark]").val(),
-									orderIndex : scenicList.eq(j).attr("data-entity-index")
-								}
+								id : scenicList.eq(j).find("[name=templateId]").val(),
+								scenicId : scenicId,
+								itemId : itemId,
+								price : scenicList.eq(j).find("[name=price]").val(),
+								remark : scenicList.eq(j).find("[name=remark]").val(),
+								orderIndex : scenicList.eq(j).attr("data-entity-index")
+							}
 							travelLineData.lineDayList[i].scenic.push(scenicJson);
 						}
 						
@@ -2061,12 +2013,12 @@ define(function(require, exports) {
 								return false;
 							}
 							var shopJson = {
-									id : shopList.eq(j).find("[name=templateId]").val(),
-									shopId : shopId,
-									policyId : policyId,
-									remark : shopList.eq(j).find("[name=remark]").val(),
-									orderIndex : shopList.eq(j).attr("data-entity-index")
-								}
+								id : shopList.eq(j).find("[name=templateId]").val(),
+								shopId : shopId,
+								policyId : policyId,
+								remark : shopList.eq(j).find("[name=remark]").val(),
+								orderIndex : shopList.eq(j).attr("data-entity-index")
+							}
 							travelLineData.lineDayList[i].shop.push(shopJson);
 						}
 					}
@@ -2078,13 +2030,13 @@ define(function(require, exports) {
 						var selfPayId = selfPayList.eq(j).find("[name=companyId]").val();
 						if(selfPayId){
 							var selfPayJson = {
-									id : selfPayList.eq(j).find("[name=templateId]").val(),
-									selfPayItemId :selfPayList.eq(j).find("[name=selfPayItemId]").val(),
-									selfPayId : selfPayId,
-									price : selfPayList.eq(j).find("[name=contractPrice]").val(),
-									remark : selfPayList.eq(j).find("[name=remark]").val(),
-									orderIndex : selfPayList.eq(j).attr("data-entity-index")
-								}
+								id : selfPayList.eq(j).find("[name=templateId]").val(),
+								selfPayItemId :selfPayList.eq(j).find("[name=selfPayItemId]").val(),
+								selfPayId : selfPayId,
+								price : selfPayList.eq(j).find("[name=contractPrice]").val(),
+								remark : selfPayList.eq(j).find("[name=remark]").val(),
+								orderIndex : selfPayList.eq(j).attr("data-entity-index")
+							}
 							travelLineData.lineDayList[i].selfPay.push(selfPayJson);
 						}
 						
@@ -2097,13 +2049,13 @@ define(function(require, exports) {
 						var ticketId = ticketList.eq(j).find("[name=tickeId]").val();
 						if(ticketId){
 							ticketJson = {
-									id : ticketList.eq(j).find("[name=templateId]").val(),
-									ticketId : ticketId,
-									type : ticketList.eq(j).find("[name=type]").val(),
-									price : ticketList.eq(j).find("[name=price]").val(),
-									remark : ticketList.eq(j).find("[name=remark]").val(),
-									orderIndex : ticketList.eq(j).attr("data-entity-index")
-								}
+								id : ticketList.eq(j).find("[name=templateId]").val(),
+								ticketId : ticketId,
+								type : ticketList.eq(j).find("[name=type]").val(),
+								price : ticketList.eq(j).find("[name=price]").val(),
+								remark : ticketList.eq(j).find("[name=remark]").val(),
+								orderIndex : ticketList.eq(j).attr("data-entity-index")
+							}
 							travelLineData.lineDayList[i].ticket.push(ticketJson);
 						}
 					}
@@ -2131,10 +2083,12 @@ define(function(require, exports) {
 					layer.close(globalLoadingLayer);
 					var result = showDialog(data);
 					if(result){
-						//layer.close(addTravelLineLayer);
 						showMessageDialog($( "#confirm-dialog-message" ),data.message, function(){
-							closeTab(menuKey+"-update");
-							lineProduct.listLineProduct(0,"",1);
+							lineProduct.edited["update"] = "";
+							if(isClose == 1){
+								closeTab(menuKey+"-update");
+								lineProduct.listLineProduct(0,lineProduct.searchData.name,lineProduct.searchData.status);
+							}
 						});
 					}
 				}
@@ -2281,7 +2235,109 @@ define(function(require, exports) {
 				var url = ""+APP_ROOT+"back/export.do?method=exportLineProduct&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view&lineProductId="+id+"";
 				exportXLS(url);
 			});
+		},
+		submitAddLineProduct : function(){
+			var status = 0;
+			if($(".add-lineProduct-form .lineProduct-status").is(":checked") == true){
+				status = 1;
+			}
+			var form = $(".add-lineProduct-form form.lineProductMainForm").serialize()+"&status="+status+"";
+			var busJsonAdd = [];
+			var busListStr = $(".add-lineProduct-form .busList tbody tr");
+			busListStr.each(function(i){
+				var licenseNumber = busListStr.eq(i).find("input[name=licenseNumber]").val();
+				var brand = busListStr.eq(i).find("input[name=brand]").val();
+				var seatCount = busListStr.eq(i).find("input[name=seatCount]").val();
+				var buyTime = busListStr.eq(i).find("input[name=buyTime]").val();
+				if(buyTime == ""){
+					buyTime = "0000-00-00";
+				}
+				var isChartered = busListStr.eq(i).find("select[name=isChartered]").val();
+				var charteredStartTime = "0000-00-00";
+				var charteredEndTime = "0000-00-00";
+				var charteredPrice = "0";
+				if(isChartered == 1){
+					charteredStartTime = busListStr.eq(i).find("input[name=charteredStartTime]").val();
+					charteredEndTime = busListStr.eq(i).find("input[name=charteredEndTime]").val();
+					charteredPrice = busListStr.eq(i).find("input[name=charteredPrice]").val();
+				}
+				var remark = busListStr.eq(i).find("input[name=remark]").val();
+				var busJson = {
+					licenseNumber : licenseNumber,
+					brand : brand,
+					seatCount : seatCount,
+					buyTime : buyTime,
+					isChartered : isChartered,
+					charteredStartTime : charteredStartTime,
+					charteredEndTime : charteredEndTime,
+					charteredPrice : charteredPrice,
+					remark : remark
+				};
+				busJsonAdd.push(busJson);
+			});
+			
+			var driverJsonAdd = [];
+			var driverListStr = $(".add-lineProduct-form .driverList tbody tr");
+			driverListStr.each(function(i){
+				var name = driverListStr.eq(i).find("input[name=driverName]").val();
+				var gender = driverListStr.eq(i).find("select[name=gender]").val();
+				var mobileNumber = driverListStr.eq(i).find("input[name=mobileNumber]").val();
+				var driveYears = driverListStr.eq(i).find("input[name=driveYears]").val();
+				var licenseId = driverListStr.eq(i).find("input[name=licenseId]").val();
+				var status = driverListStr.eq(i).find("select[name=status]").val();
+				var remark = driverListStr.eq(i).find("input[name=remark]").val();
+				var driverJson = {
+					name : name,
+					gender : gender,
+					mobileNumber : mobileNumber,
+					driveYears : driveYears,
+					licenseId : licenseId,
+					status : status,
+					remark : remark
+				};
+				driverJsonAdd.push(driverJson);
+			});
+			busJsonAdd = JSON.stringify(busJsonAdd);
+			driverJsonAdd = JSON.stringify(driverJsonAdd);
+			$.ajax({
+				url:""+APP_ROOT+"back/lineProduct.do?method=addLineProduct&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=add",
+				type:"POST",
+				data:form+"&busJsonAdd="+encodeURIComponent(busJsonAdd)+"&driverJsonAdd="+encodeURIComponent(driverJsonAdd)+"",
+				dataType:"json",
+				beforeSend:function(){
+					globalLoadingLayer = layer.open({
+						type:3
+					});
+				},
+				success:function(data){
+					layer.close(globalLoadingLayer);
+					var result = showDialog(data);
+					if(result){
+						layer.close(addLineProductLayer);
+						showMessageDialog($( "#confirm-dialog-message" ),data.message);
+						lineProduct.edited["update"] = "";
+						lineProduct.listLineProduct(0,"","");
+					}
+				}
+			});
+		},
+		save : function(saveType){
+			if(saveType == "add"){
+				console.log("saveadd");
+				lineProduct.submitAddLineProduct();
+			} else if(saveType == "update"){
+				var id = $(".updateLineProductContainer form").eq(0).find("input[name=lineProductId]").val();
+				console.log(id);
+				var validator = rule.lineProductCheckor($('.updateLineProductContainer'));
+				lineProduct.submitUpdateLineProduct(id,false,1);
+			}
+		},
+		clearEdit : function(clearType){
+			lineProduct.edited[clearType] = "";
 		}
 	}
-	exports.listLineProduct = lineProduct.listLineProduct;
+	exports.listLineProduct = lineProduct.listLineProduct;  
+	exports.save = lineProduct.save;
+	exports.isEdited = lineProduct.isEdited;
+	exports.clearEdit = lineProduct.clearEdit;
 });

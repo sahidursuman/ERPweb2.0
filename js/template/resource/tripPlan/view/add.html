@@ -18,7 +18,6 @@
             <span class="col-sm-8 control-label tripPlanLineProductDays">{{tripPlan.lineProduct.days}}</span>  
         </div>
         
-         
         <div class="col-sm-3 font-size-14 border no-border-top">
             <span class="col-sm-4 control-label align-right no-padding">团号：</span>
             <span class="col-sm-8 control-label">{{tripPlan.tripNumber}}</span>
@@ -148,9 +147,10 @@
                                                     				<option {{if insurance.payType == 0}}selected="selected"{{/if}} value="0">现付</option>
                                                                     <option {{if insurance.payType == 1}}selected="selected"{{/if}} value="1">签单</option>
                                                                   	<option {{if insurance.payType == 2}}selected="selected"{{/if}} value="2">转账</option>
+                                                                    <option {{if insurance.payType == 3}}selected="selected"{{/if}} value="3">网付</option>
                                                     			</select>
                                                     		</td> 
-                                                    		<td><input type="text" name="remark" value="{{insurance.remark}}" class="col-sm-12"/></td>
+                                                    		<td><input type="text" name="remark" value="{{insurance.remark}}" class="col-sm-12" maxlength="500" /></td>
                                                     		<!-- <td>
                                                     			{{if index!=0}}<button class="btn btn-xs btn-danger btn-deleteTripPlanList" data-entiy-id="{{insurance.id}}" data-entity-name="insurance" title="删除">
                                                     				<i class="ace-icon fa fa-trash-o bigger-120"></i>
@@ -173,7 +173,8 @@
                                                     				<option value="0">现付</option>
                                                                     <option value="1">签单</option>
                                                                   	<option value="2">转账</option>
-                                                    			</select>
+                                                                    <option value="3">网付</option>   
+                                                                </select>
                                                     		</td>
                                                     		<td><input type="text" name="remark" value="" class="col-sm-12"/></td>
                                                     		<td>
@@ -235,9 +236,10 @@
                                                                         <option {{if guide.payType == 0}}selected="selected"{{/if}} value="0">现付</option>
                                                                         <option {{if guide.payType == 1}}selected="selected"{{/if}} value="1">签单</option>
                                                                         <option {{if guide.payType == 2}}selected="selected"{{/if}} value="2">转账</option>
+                                                                        <option {{if guide.payType == 3}}selected="selected"{{/if}} value="3">网付</option>
                                                                     </select>
                                                                 </td>
-                                                                <td><input type="text" name="remark" value="{{guide.remark}}" class="col-sm-12"/></td>
+                                                                <td><input type="text" name="remark" value="{{guide.remark}}" class="col-sm-12" maxlength="500"/></td>
                                                                 <td style="display: none;">
                                                                     <button class="btn btn-xs btn-success" title="发送订单">
                                                                         <i class="ace-icon fa fa-paper-plane-o bigger-120"></i>
@@ -314,10 +316,11 @@
                                                                         <option {{if busCompany.payType == 0}}selected="selected"{{/if}} value="0">现付</option>
                                                                         <option {{if busCompany.payType == 1}}selected="selected"{{/if}} value="1">签单</option>
                                                                         <option {{if busCompany.payType == 2}}selected="selected"{{/if}} value="2">转账</option>
+                                                                        <option {{if busCompany.payType == 3}}selected="selected"{{/if}} value="3">网付</option> 
                                                                     </select>
                                                                 </td>
                                                                 <td><input name="guidePayMoney" type="text" value="{{busCompany.guidePayMoney}}" class="col-sm-12" style="width: 60px;"/></td>
-                                                                <td><input name="remark" type="text" value="{{busCompany.remark}}" class="col-sm-12"/></td>
+                                                                <td><input name="remark" type="text" value="{{busCompany.remark}}" class="col-sm-12"maxlength="500"/></td>
                                                                 <td style="display: none;">
                                                                     <button class="btn btn-xs btn-success" title="发送订单">
                                                                         <i class="ace-icon fa fa-paper-plane-o bigger-120"></i>
@@ -394,10 +397,11 @@
                                                                         <option {{if restaurant.payType == 0}}selected="selected"{{/if}} value="0">现付</option>
                                                                         <option {{if restaurant.payType == 1}}selected="selected"{{/if}} value="1">签单</option>
                                                                         <option {{if restaurant.payType == 2}}selected="selected"{{/if}} value="2">转账</option>
+                                                                        <option {{if restaurant.payType == 3}}selected="selected"{{/if}} value="3">网付</option>
                                                                     </select> 
                                                                 </td>
                                                                 <td><input name="guidePayMoney" type="text" value="{{restaurant.guidePayMoney}}" class="col-sm-12" style="width: 60px;"/></td>
-                                                                <td><input name="remark" type="text" value="{{restaurant.remark}}" class="col-sm-12"/></td>
+                                                                <td><input name="remark" type="text" value="{{restaurant.remark}}" class="col-sm-12"maxlength="500"/></td>
                                                                 <td>
                                                                 	<button class="btn btn-xs btn-danger btn-deleteTripPlanList" data-entiy-id="{{restaurant.id}}" data-entity-name="restaurant" title="删除">
                                                                         <i class="ace-icon fa fa-trash-o bigger-120"></i>
@@ -490,10 +494,11 @@
 	                                                    				<option {{if hotel.payType == 0}}selected="selected"{{/if}} value="0">现付</option>
                                                                         <option {{if hotel.payType == 1}}selected="selected"{{/if}} value="1">签单</option>
                                                                         <option {{if hotel.payType == 2}}selected="selected"{{/if}} value="2">转账</option>
+                                                                        <option {{if hotel.payType == 3}}selected="selected"{{/if}} value="3">网付</option> 
 	                                                    			</select>
                                                                 </td> 
                                                                 <td><input type="text" name="guidePayMoney" class="col-sm-12" value="{{hotel.guidePayMoney}}" style="width: 60px;" /></td>
-                                                                <td><input type="text" name="remark" class="col-sm-12" value="{{hotel.remark}}" /></td>
+                                                                <td><input type="text" name="remark" class="col-sm-12" value="{{hotel.remark}}" maxlength="500" /></td>
                                                                 <td>
                                                                     <!-- <button class="btn btn-xs btn-success" title="发送订单">
                                                                         <i class="ace-icon fa fa-paper-plane-o bigger-120"></i>
@@ -580,10 +585,11 @@
                                                                         <option {{if scenic.payType == 0}}selected="selected"{{/if}} value="0">现付</option>
                                                                         <option {{if scenic.payType == 1}}selected="selected"{{/if}} value="1">签单</option>
                                                                         <option {{if scenic.payType == 2}}selected="selected"{{/if}} value="2">转账</option>
+                                                                        <option {{if scenic.payType == 3}}selected="selected"{{/if}} value="3">网付</option>
                                                                     </select>
                                                                 </td>
                                                                 <td><input name="guidePayMoney" type="text" class="col-sm-12" value="{{scenic.guidePayMoney}}" style="width: 60px;" /></td>
-                                                                <td><input name="remark" type="text" class="col-sm-12" value="{{scenic.remark}}"/></td>
+                                                                <td><input name="remark" type="text" class="col-sm-12" value="{{scenic.remark}}" maxlength="500"/></td>
                                                                 <td>
                                                                     <button class="btn btn-xs btn-danger btn-deleteTripPlanList" data-entiy-id="{{scenic.id}}" data-entity-name="scenic" title="删除">
                                                                         <i class="ace-icon fa fa-trash-o bigger-120"></i>
@@ -640,7 +646,7 @@
                                                                 <td><input type="text" name="managerName" readonly="readonly" class="col-sm-12" value="{{if shop.shop != null}}{{shop.shop.managerName}}{{/if}}" /></td>
                                                                 <td><input type="text" name="mobileNumber" readonly="readonly" class="col-sm-12" value="{{if shop.shop != null}}{{shop.shop.mobileNumber}}{{/if}}" /></td>
                                                                 <td><input type="text" name="goodsPolicy" class="col-sm-12" value="{{if shop.shopPolicy != null}}{{shop.shopPolicy.name}}{{/if}}" /><input type="hidden" name="shopPolicyId" value="{{if shop.shopPolicy != null}}{{shop.shopPolicy.id}}{{/if}}"/></td>
-                                                                <td><input type="text" name="remark" class="col-sm-12" value="{{shop.remark}}" /></td>
+                                                                <td><input type="text" name="remark" class="col-sm-12" value="{{shop.remark}}" maxlength="500" /></td>
                                                                 <td>
                                                                     <button class="btn btn-xs btn-danger btn-deleteTripPlanList" data-entiy-id="{{shop.id}}" data-entity-name="shop" title="删除">
                                                                         <i class="ace-icon fa fa-trash-o bigger-120"></i>
@@ -716,10 +722,11 @@
                                                                         <option {{if selfPay.payType == 0}}selected="selected"{{/if}} value="0">现付</option>
                                                                         <option {{if selfPay.payType == 1}}selected="selected"{{/if}} value="1">签单</option>
                                                                         <option {{if selfPay.payType == 2}}selected="selected"{{/if}} value="2">转账</option>
+                                                                        <option {{if selfPay.payType == 3}}selected="selected"{{/if}} value="3">网付</option>
                                                                     </select>
                                                                 </td>
                                                                 <td><input type="text" name="guidePayMoney" class="col-sm-12" value="{{selfPay.guidePayMoney}}" style="width: 60px;" /></td>
-                                                                <td><input type="text" name="remark" class="col-sm-12" value="{{selfPay.remark}}" /></td>
+                                                                <td><input type="text" name="remark" class="col-sm-12" value="{{selfPay.remark}}" maxlength="500" /></td>
                                                                 <td>
                                                                     <button class="btn btn-xs btn-danger btn-deleteTripPlanList" data-entiy-id="{{selfPay.id}}" data-entity-name="selfpay" title="删除">
                                                                         <i class="ace-icon fa fa-trash-o bigger-120"></i>
@@ -804,10 +811,11 @@
                                                                         <option {{if ticket.payType == 0}}selected="selected"{{/if}} value="0">现付</option>
                                                                         <option {{if ticket.payType == 1}}selected="selected"{{/if}} value="1">签单</option>
                                                                         <option {{if ticket.payType == 2}}selected="selected"{{/if}} value="2">转账</option>
+                                                                        <option {{if ticket.payType == 3}}selected="selected"{{/if}} value="3">网付</option>
                                                                     </select>
                                                                 </td>
                                                                 <td><input type="text" name="guidePayMoney" class="col-sm-12" value="{{ticket.guidePayMoney}}" /></td>
-                                                                <td><input type="text" name="remark" class="col-sm-12" value="{{ticket.remark}}" /></td>
+                                                                <td><input type="text" name="remark" class="col-sm-12" value="{{ticket.remark}}" maxlength="500"/></td>
                                                                 <td>
                                                                     <button class="btn btn-xs btn-danger btn-deleteTripPlanList" data-entiy-id="{{ticket.id}}" data-entity-name="ticket" title="删除">
                                                                         <i class="ace-icon fa fa-trash-o bigger-120"></i>
@@ -879,10 +887,11 @@
                                                                         <option {{if other.payType == 0}}selected="selected"{{/if}} value="0">现付</option>
                                                                         <option {{if other.payType == 1}}selected="selected"{{/if}} value="1">签单</option>
                                                                         <option {{if other.payType == 2}}selected="selected"{{/if}} value="2">转账</option>
-                                                                    </select>
+                                                                        <option {{if other.payType == 3}}selected="selected"{{/if}} value="3">网付</option>
+                                                                    </select>  
                                                                 </td>
                                                                 <td><input type="text" name="guidePayMoney" class="col-sm-12" value="{{other.guidePayMoney}}" /></td>
-                                                                <td><input type="text" name="remark" class="col-sm-12" value="{{other.remark}}" /></td>
+                                                                <td><input type="text" name="remark" class="col-sm-12" value="{{other.remark}}" maxlength="500" /></td>
                                                                 <td>
                                                                     <button class="btn btn-xs btn-danger btn-deleteTripPlanList" data-entiy-id="{{other.id}}" data-entity-name="other" title="删除">
                                                                         <i class="ace-icon fa fa-trash-o bigger-120"></i>

@@ -1,185 +1,128 @@
-<div class="col-xs-12">
-	<form class="form-horizontal shopMainForm" role="form" style="margin-top:10px" onsubmit="return false">
-		<div class="widget-box ui-sortable-handle">
-			<div class="widget-header">
-				<h5 class="widget-title">
-					<i class="ace-icon fa fa-info-circle"></i>
-					商家主体信息
-				</h5>
-			</div>
-			<input type="hidden" name="id" value="{{shop.id}}">
-			<div class="widget-body">
-				<div class="widget-main">
-					<div class="form-group">
-						<label class="col-sm-2 control-label no-padding-right">商家名称:</label>
-						<div class="col-sm-3">
-							<label class="control-label">{{shop.name}}</label>
-						</div>
-						<label class="col-sm-1 control-label no-padding-right"><span class="necessary"></span>启用标志:</label>
-						<div class="col-sm-2">
-							<label class="control-label">
-								{{if shop.status == 0}}
-									已停用
-								{{else}}
-									已启用
-								{{/if}}
-							</label>
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="col-sm-2 control-label no-padding-right">联系人:</label>
-						<div class="col-sm-3">
-							<label class="control-label">{{shop.managerName}}</label>
-						</div>
-						<label class="col-sm-1 control-label no-padding-right">联系电话:</label>
-						<div class="col-sm-3">
-							<label class="control-label">{{shop.mobileNumber}}</label>
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="col-sm-2 control-label no-padding-right">座机号码:</label>
-						<div class="col-sm-3">
-							<label class="control-label">{{shop.telNumber}}</label>
-						</div>
-						<label class="col-sm-1 control-label no-padding-right">传真号码:</label>
-						<div class="col-sm-3">
-							<label class="control-label">{{shop.faxNumber}}</label>
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="col-sm-2 control-label no-padding-right">人数返佣(元/人):</label>
-						<div class="col-sm-3">
-							<label class="control-label">{{shop.customerRebateMoney}}</label>
-						</div>
-						<label class="col-sm-1 control-label no-padding-right">停车返佣(元/辆):</label>
-						<div class="col-sm-3">
-							<label class="control-label">{{shop.parkingRebateMoney}}</label>
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="col-sm-2 control-label no-padding-right">商家所在省市:</label>
-						<div class="col-sm-8">
-							<label class="control-label">
-								{{if shop.province != null}}
-									{{shop.province.name}}
-								{{/if}}
-								{{if shop.city != null}}
-									-{{shop.city.name}}
-								{{/if}}
-								{{if shop.district != null}}
-									-{{shop.district.name}}
-								{{/if}}
-							</label>
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="col-sm-2 control-label no-padding-right">详细地址:</label>
-						<div class="col-sm-6">
-							<label class="control-label">{{shop.street}}</label>
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="col-sm-2 control-label no-padding-right">商家简介:</label>
-						<div class="col-sm-8">
-							<label class="control-label">{{shop.remark}}</label>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+
+  <form class="form-horizontal shopMainForm" role="form" style="margin-top:10px" onsubmit="return false">
+	  <table class="whereQ whereOne">
+		  <tr>
+			  <td colspan="4" class="HeadManage">商家主体信息</td>
+		  </tr>
+		  <tr>
+			  <td class="style-myself">商家名称：</td>
+			  <td class="styleOne-self">{{shop.name}}</td>
+			  <td class="style-myself">是否启用：</td>
+			  <td class="styleOne-self">{{if shop.status == 0}}
+				  已停用
+				  {{else}}
+				  已启用
+				  {{/if}}</td>
+		  </tr>
+		  <tr>
+			  <td class="style-myself">联系人：</td>
+			  <td class="styleOne-self">{{shop.managerName}}</td>
+			  <td class="style-myself">联系电话：</td>
+			  <td class="styleOne-self">{{shop.mobileNumber}}</td>
+		  </tr>
+		  <tr>
+			  <td class="style-myself">座机号码：</td>
+			  <td class="styleOne-self">{{shop.telNumber}}</td>
+			  <td class="style-myself">传真号码：</td>
+			  <td class="styleOne-self">{{shop.faxNumber}}</td>
+		  </tr>
+		  <tr>
+			  <td class="style-myself style-myselfOne">人数返佣(元/人)：</td>
+			  <td class="styleOne-self">{{shop.customerRebateMoney}}</td>
+			  <td class="style-myself style-myselfOne">停车返佣(辆/人)：</td>
+			  <td class="styleOne-self">{{shop.parkingRebateMoney}}	</td>
+		  </tr>
+		  <tr>
+			  <td class="style-myself">商家所在省市：</td>
+			  <td class="styleOne-self" colspan="3">{{if shop.province != null}}
+				  {{shop.province.name}}
+				  {{/if}}
+				  {{if shop.city != null}}
+				  -{{shop.city.name}}
+				  {{/if}}
+				  {{if shop.district != null}}
+				  -{{shop.district.name}}
+				  {{/if}}</td>
+		  </tr>
+		  <tr>
+			  <td class="style-myself">详细地址：</td>
+			  <td class="styleOne-self" colspan="3">{{shop.street}}</td>
+		  </tr>
+		  <tr>
+			  <td class="style-myself">商家简介：</td>
+			  <td class="styleOne-self" colspan="3">{{shop.remark}}</td>
+		  </tr>
+	  </table>
 	</form>
 	<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
-		<div class="form-group">
-			<div class="col-xs-12 col-sm-12 widget-container-col">
-				<div class="widget-box ui-sortable-handle">
-					<div class="widget-header">
-						<h5 class="widget-title">
-							<i class="ace-icon fa fa-shopping-cart"></i>
-							商品列表
-						</h5>
+		<table class="whereQ whereTwo">
+			<tr>
+				<td colspan="8" class="HeadManage" style="text-align: left">商品列表</td>
+			</tr>
+			<tr>
+				<td class="style-myself">商品名称</td>
+				<td class="style-myself">针对客源</td>
+				<td class="style-myself">时间范围</td>
+				<td class="style-myself">时间区间</td>
+				<td class="style-myself">导佣比例(%)</td>
+				<td class="style-myself">社佣比例(%)</td>
+				<td>备注</td>
+			</tr>
+			{{each shop.shopPolicyList as shopPolicy}}
+			<tr data-entity-id="{{shopPolicy.id}}">
+				<td>
+					{{shopPolicy.name}}
+				</td>
+				<td>
+					{{if shopPolicy.customerType == 0}}
+						散客
+						{{else}}
+						团体
+						{{/if}}
+				</td>
+				<td class="rangeTimeWidth" >
+					{{each shopPolicy.shopTimeAreaList as hopTimeArea i}}
+					<div>
+						{{hopTimeArea.startTime | dateFormat:'yyyy-MM-dd'}}至{{hopTimeArea.endTime | dateFormat:'yyyy-MM-dd'}}
 					</div>
+					{{/each}}
+				</td>
+				<td class="no-padding">
+					{{each shopPolicy.shopTimeAreaList as hopTimeArea i}}
 
-					<div class="widget-body">
-						<div class="widget-main no-padding">
-							<table class="table table-striped table-bordered table-hover shopStandardList"> 
-								<thead>
-									<tr>
-										<th class="col-sm-2">商品名称</th>
-										<th class="col-sm-1">针对客源</th>
-										<th class="col-sm-3">时间范围</th>
-										<th class="col-sm-2">价格区间</th>
-										<th class="col-sm-1">导佣比例(%)</th>
-										<th class="col-sm-1">社佣比例(%)</th>
-										<th class="col-sm-2">备注</th>
-									</tr>
-								</thead>
-								<tbody>
-									{{each shop.shopPolicyList as shopPolicy}}
-										<tr data-entity-id="{{shopPolicy.id}}">
-											<td>
-												<div class="col-sm-12">{{shopPolicy.name}}</div>
-											</td>
-											<td>
-												<div class="col-sm-12">{{if shopPolicy.customerType == 0}}
-													散客
-												{{else}}
-													团体
-												{{/if}}</div>
-											</td>
-											<td class="no-padding">
-												{{each shopPolicy.shopTimeAreaList as hopTimeArea i}}
-												<div class="col-sm-12{{if i != 0}} border-top{{/if}}" style="padding-bottom: 7px;">
-													<label class="col-sm-12 control-label center">{{hopTimeArea.startTime | dateFormat:'yyyy-MM-dd'}}至{{hopTimeArea.endTime | dateFormat:'yyyy-MM-dd'}}</label>
-													{{each hopTimeArea.shopCostRebateList as shopCostRebate j}}
-														{{if j != 0}}
-															<label class="col-sm-12 control-label center">&nbsp;</label>
-														{{/if}}
-													{{/each}}
-												</div>
-												{{/each}}
-											</td>
-											<td class="no-padding">
-												{{each shopPolicy.shopTimeAreaList as hopTimeArea i}}
-												<div class="col-sm-12{{if i != 0}} border-top{{/if}}" style="padding-bottom: 7px;">
-													{{each hopTimeArea.shopCostRebateList as shopCostRebate}}
-													<label class="col-sm-12 control-label center">
-														{{shopCostRebate.costMoneyStart}}至{{shopCostRebate.costMoneyEnd}}
-													</label>
-													{{/each}}
-												</div>
-												{{/each}}
-											</td>
-											<td class="no-padding">
-											{{each shopPolicy.shopTimeAreaList as hopTimeArea i}}
-											<div class="col-sm-12{{if i != 0}} border-top{{/if}}" style="padding-bottom: 7px;">
-												{{each hopTimeArea.shopCostRebateList as shopCostRebate}}
-												<label class="col-sm-12 control-label center">
-													{{shopCostRebate.guideRate*100 | toFixed}}
-												</label>
-												{{/each}}
-											</div>
-											{{/each}} 
-											</td>
-											<td class="no-padding">
-											{{each shopPolicy.shopTimeAreaList as hopTimeArea i}}
-											<div class="col-sm-12{{if i != 0}} border-top{{/if}}" style="padding-bottom: 7px;">
-												{{each hopTimeArea.shopCostRebateList as shopCostRebate}}
-												<label class="col-sm-12 control-label center">
-													{{shopCostRebate.travelAgencyRate*100 | toFixed}}
-												</label>
-												{{/each}}
-											</div>
-											{{/each}}
-											</td>
-											<td><div class="col-sm-12">{{shopPolicy.remark}}</div></td>
-										</tr>
-									{{/each}}
-								</tbody>
-							</table>
-						</div>
+						{{each hopTimeArea.shopCostRebateList as shopCostRebate}}
+
+							{{shopCostRebate.costMoneyStart}}至{{shopCostRebate.costMoneyEnd}}
+
+						{{/each}}
+
+					{{/each}}
+				</td>
+				<td class="no-padding">
+					{{each shopPolicy.shopTimeAreaList as hopTimeArea i}}
+					<div class="col-sm-12{{if i != 0}} border-top{{/if}}" style="padding-bottom: 7px;">
+						{{each hopTimeArea.shopCostRebateList as shopCostRebate}}
+						<label class="col-sm-12 control-label center">
+							{{shopCostRebate.guideRate*100 | toFixed}}
+						</label>
+						{{/each}}
 					</div>
-				</div>
-			</div>
-		</div>
+					{{/each}}
+				</td>
+				<td class="no-padding">
+					{{each shopPolicy.shopTimeAreaList as hopTimeArea i}}
+					<div class="col-sm-12{{if i != 0}} border-top{{/if}}" style="padding-bottom: 7px;">
+						{{each hopTimeArea.shopCostRebateList as shopCostRebate}}
+						<label class="col-sm-12 control-label center">
+							{{shopCostRebate.travelAgencyRate*100 | toFixed}}
+						</label>
+						{{/each}}
+					</div>
+					{{/each}}
+				</td>
+				<td class="remarkWidth">{{shopPolicy.remark}}</td>
+			</tr>
+			{{/each}}
+		</table>
 	</form>
-</div>
+

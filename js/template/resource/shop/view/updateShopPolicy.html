@@ -1,6 +1,6 @@
-<div class="col-sm-12 shopPolicyContainer">
-	<form class="form-horizontal policyForm" role="form" style="margin-top:10px" onsubmit="return false">
-		<div class="form-group">
+<div class="col-sm-12 shopPolicyContainer globalAdd">
+	<form class="form-horizontal policyForm formOneList" role="form" style="margin-top:10px" onsubmit="return false">
+		<div class="form-group guideInterval">
 			<div class="col-xs-12 col-sm-12 widget-container-col">
 				<div class="widget-box ui-sortable-handle">
 					<div class="widget-header">
@@ -33,17 +33,17 @@
 										<tr class="timeArea" data-entity-id="{{policy.id}}">
 										<td data-index="{{i+1}}" class="clearfix div-{{i+1}}" style="margin-bottom:3px">
 											<div>
-												<input name="startTime" type="text" class="date-picker col-sm-5" value="{{policy.startTime | dateFormat:'yyyy-MM-dd'}}"/>
+												<input name="startTime" type="text" class="datepicker col-sm-5" value="{{policy.startTime | dateFormat:'yyyy-MM-dd'}}"/>
 												<label class="priceArea col-sm-2 center">&nbsp;至&nbsp;</label>
-												<input name="endTime" type="text" class="date-picker col-sm-5" value="{{policy.endTime | dateFormat:'yyyy-MM-dd'}}"/>
+												<input name="endTime" type="text" class="datepicker col-sm-5" value="{{policy.endTime | dateFormat:'yyyy-MM-dd'}}"/>
 											</div>
 										</td>
 										<td> 
 											{{each policy.costMoneyList as cost j}}
 											<div data-index="{{j+1}}" class="clearfix div-{{j+1}} shopPolicyPriceList" style="margin-bottom:3px">
-												<input name="costMoneyStart" type="text" class="col-sm-4" value="{{cost.costMoneyStart}}" data-entity-id="{{cost.id}}"/>
+												<input name="costMoneyStart" type="text" class="col-sm-4" value="{{cost.costMoneyStart}}" data-entity-id="{{cost.id}}" maxlength="6"/>
 												<label class="col-sm-2 control-label center">&nbsp;至&nbsp;</label>
-												<input name="costMoneyEnd" type="text" class="col-sm-4" value="{{cost.costMoneyEnd}}"/>
+												<input name="costMoneyEnd" type="text" class="col-sm-4" value="{{cost.costMoneyEnd}}" maxlength="6" />
 												<label class="priceArea col-sm-2">
 													<button data-entity-id="{{cost.id}}" class="btn {{if j==0}}btn-success{{else}}btn-danger{{/if}} btn-sm btn-white {{if j == 0}}add{{else}}del{{/if}}">
 														<i class="ace-icon fa {{if j == 0}}fa-plus{{else}}fa-minus{{/if}} bigger-110 icon-only"></i>
@@ -55,14 +55,14 @@
 										<td>
 											{{each policy.costMoneyList as cost j}}
 											<div data-index="{{j+1}}" class="clearfix div-{{j+1}}" style="margin-bottom:3px">
-												<input name="guideRate" class="col-sm-12" type="text" value="{{cost.guideRate*100 | toFixed}}"/>
+												<input name="guideRate" class="col-sm-12" type="text" value="{{cost.guideRate*100 | toFixed}}"  maxlength="5"/>
 											</div>
-											{{/each}}
+											{{/each}}  
 										</td>
 										<td>
 											{{each policy.costMoneyList as cost j}}
 											<div data-index="{{j+1}}" class="clearfix div-{{j+1}}" style="margin-bottom:3px">
-												<input name="travelAgencyRate" class="col-sm-12" type="text" value="{{cost.travelAgencyRate*100 | toFixed}}"/>
+												<input name="travelAgencyRate" class="col-sm-12" type="text" value="{{cost.travelAgencyRate*100 | toFixed}}"  maxlength="5"/>
 											</div>
 											{{/each}}
 										</td>
@@ -82,7 +82,7 @@
 			</div>
 		</div>
 		<div class="space-10"></div>
-		<button class="btn btn-block btn-primary btn-submit-shop-policy">
+		<button class="btn btn-block btn-primary btn-submit-shop-policy guideSubmit">
 			<i class="ace-icon fa fa-check"></i>
 			提交信息
 		</button>
