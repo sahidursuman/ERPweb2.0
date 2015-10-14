@@ -13,9 +13,8 @@
 							<input type="text" name="name" class="col-sm-12" value="{{hotel.name}}" maxlength="32">
 							<input type="text" name="id" hidden="hidden" value="{{hotel.id}}">
 						</div>
-					</div>
-					<div class="form-group guideInterval">
-					    <label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>酒店星级:</label>
+
+						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>酒店星级:</label>
 						<div class="col-sm-3">
 							<select name="level">
 								<option selected="selected" value="1" {{if hotel.level == 1}}selected="selected"{{/if}}>三星以下</option>
@@ -50,7 +49,7 @@
 					</div>
 					<div class="form-group guideInterval">
 						<label class="col-sm-2 control-label no-padding-right">酒店所在省市:</label>
-						<div class="col-sm-8">
+						<div class="col-sm-3">
 							<select name="provinceId" style="margin-right:3px">
 								<option selected="selected" value="" >未选择</option>
 							</select>
@@ -60,6 +59,16 @@
 							<select name="districtId" >
 								<option selected="selected" value="">未选择</option>
 							</select>
+						</div>
+
+						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>是否启用:</label>
+						<div class="col-sm-3 checkbox" style="margin-left:-10px;margin-top: -6px">
+							<label>
+								<input  type="checkbox" class="ace hotel-status" value="1" name="status"  {{if hotel.status == 1}}checked="checked"{{/if}} >
+								<span class="lbl">
+									启用
+								</span>
+							</label>
 						</div>
 					</div>
 					<div class="form-group guideInterval">
@@ -71,18 +80,7 @@
 					<div class="form-group guideInterval">
 						<label class="col-sm-2 control-label no-padding-right">酒店设施:</label>
 						<div class="col-sm-3">
-							<input type="text" name="facility" class="col-sm-12" value="{{hotel.facility}}" maxlength="1000">
-						</div>
-					</div>
-					<div class="form-group guideInterval">
-						<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>是否启用:</label>
-						<div class="col-sm-2 checkbox" style="margin-left:-10px">
-							<label>
-								<input  type="checkbox" class="ace hotel-status" value="1" name="status"  {{if hotel.status == 1}}checked="checked"{{/if}} >
-								<span class="lbl">
-									启用
-								</span>
-							</label>
+							<input type="text" name="facility" class="col-sm-12 addressMinute" value="{{hotel.facility}}" maxlength="1000">
 						</div>
 					</div>
 
@@ -135,7 +133,7 @@
 										<td><input name="type" type="text" class="col-sm-12" value="{{room.type}}" maxlength="32" /></td>
 										<td class="time">
 											{{each room.priceList as price i}}
-											<div data-index="{{i+1}}" data-entity-id="{{price.id}}" class="clearfix {{if i > 0}}appendDiv{{/if}} div-{{i+1}}" style="margin-top:2px">
+											<div data-index="{{i+1}}" data-entity-id="{{price.id}}" class="clearfix {{if i > 0}}appendDiv{{/if}} div-{{i+1}}" style="margin-top:2px;width: 258px">
 												<input name="startTime" type="text" class="datepicker" style="width:100px" value="{{price.startTime | dateFormat:'yyyy-MM-dd'}}"/><label>&nbsp;至&nbsp;</label><input name="endTime" type="text" class="datepicker" style="width:100px" value="{{price.endTime | dateFormat:'yyyy-MM-dd'}}"/>
 												{{if i == 0}}
 												<label class="timeArea" style="float:right;padding-top:3px;">
@@ -162,7 +160,7 @@
 										</td>
 										<td>
 											{{each room.priceList as price i}}
-											<div data-index="{{i+1}}" class="clearfix div-{{i+1}}" style="margin-top:2px">
+											<div data-index="{{i+1}}" class="clearfix div-{{i+1}}" style="margin-top:2px;">
 												<input name="contractPrice" type="text" class="col-sm-12" value="{{price.contractPrice}}" maxlength="7" />
 											</div>
 											{{/each}}
