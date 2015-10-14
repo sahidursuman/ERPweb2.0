@@ -169,6 +169,7 @@ define(function(require, exports) {
 				            		 validator = rule.check($('.insuranceChecking'));
 				            	 },function(){
 				            		 addTab(checkTabId,"保险对账",html);
+				            		 Insure.edited = false;
 				            		 validator = rule.check($('.insuranceChecking'));
 				            	 });
                 	    	 }else{
@@ -179,11 +180,11 @@ define(function(require, exports) {
                 	    }else{
                 	    	addTab(checkTabId,"保险对账",html);
                 	    	validator = rule.check($('.insuranceChecking'));
-                	    	$("#" +"tab-"+checkTabId+"-content").on("change",function(){
-                	    		Insure.edited = true; 
-                	    	});
+                	    	
                 	    };
-                 	   
+                	    $("#" +"tab-"+checkTabId+"-content .all").on("change",function(){
+            	    		Insure.edited = true; 
+            	    	});
                  }          
 	                 //给搜索按钮绑定事件
 	                 $("#" +"tab-"+ checkTabId+"-content"+" .btn-checking-search").click(function(){
@@ -321,7 +322,7 @@ define(function(require, exports) {
                                 });
              	    			 var saveBtn = $("#" +"tab-"+ blanceTabId+"-content"+" .btn-hotelBlance-save")
              	    			 if (!$(saveBtn).data('validata').form()) { return; }
-             	    			 Insure.saveBlanceData(saveBtn,Hotel.oldBlanceHotelId,hotelName)
+             	    			 Insure.saveBlanceData(saveBtn,Insure.oldBlanceInsuranceId,insuranceCompanyName)
 			            		 Insure.blanceEdited = false;
 			            		 addTab(blanceTabId,"保险结算",html);
 			            		//获取table中的tr
@@ -332,6 +333,7 @@ define(function(require, exports) {
 			                     });
 			            	 },function(){
 			            		    addTab(blanceTabId,"保险结算",html);
+			            		    Insure.blanceEdited = false;
 			            		 	//获取table中的tr
 			            		    var $tr = $("#" +"tab-"+ blanceTabId + "-content"+" .all tbody tr")
 			                        //给每个tr添加表单验证
@@ -376,8 +378,10 @@ define(function(require, exports) {
                     });
                    //保存按钮事件
                     $("#" +"tab-"+ blanceTabId+"-content"+" .btn-hotelBlance-save").click(function(){
-                    	
-                    	// 表单校验
+                    	var saveBtn = $("#" +"tab-"+ blanceTabId+"-content"+" .btn-hotelBlance-save")
+    	    			 if (!$(saveBtn).data('validata').form()) { return; }
+    	    			 Insure.saveBlanceData(saveBtn,Insure.oldBlanceInsuranceId,insuranceCompanyName)
+                    	/*// 表单校验
                     	if (!$(this).data('validata').form()) { return; }
                     	var tr = $(this).parent().parent(),
                     	    DataArr = [],
@@ -418,7 +422,7 @@ define(function(require, exports) {
                                         }
                                     }
                             	})
-                    	}
+                    	}*/
                     	
                     	//
                     });
@@ -610,7 +614,7 @@ define(function(require, exports) {
 	   }
 	   
       },
-      saveBlanceData:function(saveBtn,hotelId,hotelName){
+      saveBlanceData:function(saveBtn,insuranceId,insuranceCompanyName){
 	    	var $tr = $("#" +"tab-"+ blanceTabId+"-content"+" .all tbody tr"),
 	    	DataArr = [],
 		    JsonData;
@@ -621,12 +625,12 @@ define(function(require, exports) {
     		                insuranceId:insuranceId,
     		                year:$(this).attr("data-entity-year"),
     		                month:$(this).attr("data-entity-month"),
-    		                realPayedMoney:$tr.find("td[name=blancerealrealPayedMoney]").text(),
-    		                unPayedMoney:$tr.find("td[name=blanceunPayedMoney]").text(),
-    		                realUnPayedMoney:$tr.find("td[name=blancerealrealUnPayedMoney]").text(),
-    		                payMoney:$tr.find("input[name=blancerealPayedMoney]").val(),
-    		                payType:$tr.find("select[name=blancePayType]").val(),
-    		                remark:$tr.find("input[name=blancerealRemark]").val()
+    		                realPayedMoney:$tr.eq(i).find("td[name=blancerealrealPayedMoney]").text(),
+    		                unPayedMoney:$tr.eq(i).find("td[name=blanceunPayedMoney]").text(),
+    		                realUnPayedMoney:$tr.eq(i).find("td[name=blancerealrealUnPayedMoney]").text(),
+    		                payMoney:$tr.eq(i).find("input[name=blancerealPayedMoney]").val(),
+    		                payType:$tr.eq(i).find("select[name=blancePayType]").val(),
+    		                remark:$tr.eq(i).find("input[name=blancerealRemark]").val()
     		        	}
           			 DataArr.push(blanceData)
           		}

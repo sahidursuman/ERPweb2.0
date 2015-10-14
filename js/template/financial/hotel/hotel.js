@@ -172,6 +172,7 @@ define(function(require, exports) {
 					            		 validator = rule.check($('.hotelChecking'));
 					            	 },function(){
 					            		 addTab(checkTabId,"酒店对账",html);
+					            		 Hotel.edited = false;
 					            		 validator = rule.check($('.hotelChecking'));
 					            	 });
 	                 	    	 }else{
@@ -182,10 +183,10 @@ define(function(require, exports) {
 	                 	    }else{
 	                 	    	addTab(checkTabId,"酒店对账",html);
 	                 	    	validator = rule.check($('.hotelChecking'));
-	                 	    	$("#" +"tab-"+checkTabId+"-content").on("change",function(){
-	                 	    		Hotel.edited = true; 
-	                 	    	});
 	                 	    };
+	                 	   $("#" +"tab-"+checkTabId+"-content .all").on("change",function(){
+                	    		Hotel.edited = true; 
+                	    	});
 	                 }          
 		                 //给搜索按钮绑定事件
 		                 $("#" +"tab-"+ checkTabId+"-content"+" .btn-checking-search").click(function(){
@@ -332,6 +333,7 @@ define(function(require, exports) {
 			                        });
 				            	 },function(){
 				            		    addTab(blanceTabId,"酒店结算",html);
+				            		    Hotel.blanceEdited = false;
 				            		 	//获取table中的tr
 					                    var $tr = $("#" +"tab-"+ blanceTabId + "-content"+" .all tbody tr")
 					                    //给每个tr添加表单验证
@@ -580,12 +582,12 @@ define(function(require, exports) {
                             hotelId:hotelId,
                             year:$(this).attr("data-entity-year"),
                             month:$(this).attr("data-entity-month"),
-                            realPayedMoney:$tr.find("td[name=blancerealrealPayedMoney]").text(),
-                            unPayedMoney:$tr.find("td[name=blanceunPayedMoney]").text(),
-                            realUnPayedMoney:$tr.find("td[name=blancerealrealUnPayedMoney]").text(),
-                            payMoney:$tr.find("input[name=blancerealPayedMoney]").val(),
-                            payType:$tr.find("select[name=blancePayType]").val(),
-                            remark:$tr.find("input[name=blancerealRemark]").val()
+                            realPayedMoney:$tr.eq(i).find("td[name=blancerealrealPayedMoney]").text(),
+                            unPayedMoney:$tr.eq(i).find("td[name=blanceunPayedMoney]").text(),
+                            realUnPayedMoney:$tr.eq(i).find("td[name=blancerealrealUnPayedMoney]").text(),
+                            payMoney:$tr.eq(i).find("input[name=blancerealPayedMoney]").val(),
+                            payType:$tr.eq(i).find("select[name=blancePayType]").val(),
+                            remark:$tr.eq(i).find("input[name=blancerealRemark]").val()
                     	}
           			 DataArr.push(blanceData)
           		}
