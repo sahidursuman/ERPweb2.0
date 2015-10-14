@@ -39,6 +39,9 @@ define(function(require, exports) {
 		  "endMonth":""
 
 		},
+		edited:false,
+        blanceEdited:false,
+        oldBlanceTicketId:0,
 		listTicket:function(pageNo,ticketId,year,month){
 			$.ajax({
 				url:""+APP_ROOT+"back/financial/financialTicket.do?method=listSumFcTicket&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
@@ -151,13 +154,43 @@ define(function(require, exports) {
 		                    data.monthList = monthList
 		                    data.companyName = companyName
 		                    data.searchParam = Ticket.searchCheckData  
-	                     var html = ticketChecking(data);
-	                     addTab(checkTabId,"票务对账",html);
-	                     
-	                     //设置表单验证
-	                     var validator = rule.check($('.ticketChecking'));  
-	                 }           
-		                 //给搜索按钮绑定事件
+		                    var html = ticketChecking(data);
+	                 	    //addTab(checkTabId,"票务对账",html);
+	                 	    var validator;
+	                 	    //addTab(checkTabId,"票务对账",html);
+	                 	   if($("#" +"tab-"+checkTabId+"-content").length > 0)
+	                	    {
+	                	    	
+	                	    	 if(Ticket.edited){
+	                	    		addTab(checkTabId,"票务对账");
+	                	    		showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
+	                	    			 validator = rule.check($('.ticketChecking'));
+					            		 if (!validator.form()) { return; }
+					            		 Ticket.saveCheckingData(ticketId,companyName)
+					            		 Ticket.edited = false;
+					            		 addTab(checkTabId,"票务对账",html);
+					            		 validator = rule.check($('.ticketChecking'));
+					            	 },function(){
+					            		 addTab(checkTabId,"票务对账",html);
+					            		 Ticket.edited = false;
+					            		 validator = rule.check($('.ticketChecking'));
+					            	 });
+	                	    	 }else{
+		                 	    	addTab(checkTabId,"票务对账",html);
+		                 	        validator = rule.check($('.ticketChecking'));
+	                	    	 }
+	         	    		 
+	                	    }else{
+	                	    	addTab(checkTabId,"票务对账",html);
+	                	    	validator = rule.check($('.ticketChecking'));
+	                	    };
+	                	    
+                	    	$("#" +"tab-"+checkTabId+"-content .all").on("change",function(){
+                	    		Ticket.edited = true; 
+                	    	});
+	                     /*//设置表单验证
+	                     var validator = rule.check($('.ticketChecking'));  */
+	                     //给搜索按钮绑定事件
 		                 $("#" +"tab-"+ checkTabId+"-content"+" .btn-checking-search").click(function(){
 	                         Ticket.searchCheckData={
 	                            ticketId:ticketId,
@@ -227,93 +260,11 @@ define(function(require, exports) {
 			                	 })
 			                	 $("#" +"tab-"+ checkTabId+"-content"+" .ticket-selectAll").prop("checked",flag)
 			                 });
-		                 //给确认对账按钮绑定事件
+		                 //给确认对账按钮绑定事件 
 			                 $("#" +"tab-"+ checkTabId+"-content"+" .btn-ticketFinancial-checking").click(function(){
-			                	// 表单校验
-			                	 if (!validator.form()) { return; } 
-			                	 
-			                   var JsonStr = [],
-			                       oldUnPayedMoney,
-			                       newUnPayedMoney,
-			                       oldRemark,
-			                       newRemark,
-		                	       $tr = $("#" +"tab-"+ checkTabId+"-content"+" .all tbody tr");
-		                	   $tr.each(function(i){
-		                		   var flag = $(this).find(".ticketFinancial").is(":checked");
-		                		   if(flag){
-		                			   if($(this).attr("data-entity-isConfirmAccount") == 1){
-		                				   //取值用于是否修改对账判断
-		                				   oldUnPayedMoney = $(this).attr("data-entity-realUnPayedMoney");
-		                				   oldRemark = $(this).attr("data-entity-remark");
-		                				   newUnPayedMoney = $tr.eq(i).find("input[name=FinancialticketRealUnPayedMoney]").val();
-		                				   newRemark = $tr.eq(i).find("input[name=FinancialticketRemark]").val();
-		                				   //判断是否是修改对账
-		                				   if(oldUnPayedMoney !== newUnPayedMoney || oldRemark !== newRemark){
-		                					   var checkData = {
-				                					   id:$(this).attr("data-entity-id"),
-				                					   ticketId:ticketId,
-				                					   companyName:companyName,
-				                					   startTime:$tr.eq(i).find("td[name=startTime]").text(),
-				                					   realUnPayedMoney:$tr.eq(i).find("input[name=FinancialticketRealUnPayedMoney]").val(),
-				                					   remark:$tr.eq(i).find("input[name=FinancialticketRemark]").val(),
-				                					   isConfirmAccount:1
-				                			   }
-		                					   JsonStr.push(checkData)
-		                				   }
-		                			   }else{
-		                				   var checkData = {
-			                					   id:$(this).attr("data-entity-id"),
-			                					   ticketId:ticketId,
-			                					   companyName:companyName,
-			                					   startTime:$tr.eq(i).find("td[name=startTime]").text(),
-			                					   realUnPayedMoney:$tr.eq(i).find("input[name=FinancialticketRealUnPayedMoney]").val(),
-			                					   remark:$tr.eq(i).find("input[name=FinancialticketRemark]").val(),
-			                					   isConfirmAccount:1
-			                			   }
-		                				   JsonStr.push(checkData)
-		                			   }
-		                		   }else{
-		                			   if($(this).attr("data-entity-isConfirmAccount") == 1){
-		                				   var checkData = {
-			                					   id:$(this).attr("data-entity-id"),
-			                					   ticketId:ticketId,
-			                					   companyName:companyName,
-			                					   startTime:$tr.eq(i).find("td[name=startTime]").text(),
-			                					   realUnPayedMoney:$tr.eq(i).find("input[name=FinancialticketRealUnPayedMoney]").val(),
-			                					   remark:$tr.eq(i).find("input[name=FinancialticketRemark]").val(),
-			                					   isConfirmAccount:0
-			                			   } 
-		                				   JsonStr.push(checkData)
-		                			   }
-		                		   }
-							    });
-		                	 //判断用户是否操作
-		                	   if(JsonStr.length == 0){
-		                		   showMessageDialog($( "#confirm-dialog-message" ),"您当前未进行任何操作");
-		                		   return
-		                	   }else{
-		                		   JsonStr = JSON.stringify(JsonStr);
-			                	   //return
-			                	   $.ajax({
-			                		   url:""+APP_ROOT+"back/financial/financialTicket.do?method=accountChecking&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
-			                           type:"POST",
-			                           data:"financialTicketListStr="+encodeURIComponent(JsonStr),
-			                           dataType:"json",
-			                           beforeSend:function(){
-											globalLoadingLayer = openLoadingLayer();
-										},
-										success:function(data){
-											layer.close(globalLoadingLayer);
-											var result = showDialog(data);
-											if(result){
-												showMessageDialog($( "#confirm-dialog-message" ),data.message);
-							                	Ticket.ticketCheckList(0,Ticket.searchCheckData.ticketId,Ticket.searchCheckData.companyName,Ticket.searchCheckData.year,Ticket.searchCheckData.month)
-											}
-										}
-			                	   });
-		                	   }
-		                	   
-		                      })
+			                	 if (!validator.form()) { return; }
+			            		 Ticket.saveCheckingData(ticketId,companyName)
+			                 })
 		                 //给查看单据绑定事件
 		                 $("#" +"tab-"+ checkTabId+"-content"+" .ticketImg").click(function(){
 		                	 var WEB_IMG_URL_BIG = $("#" +"tab-"+ checkTabId+"-content").find("input[name=WEB_IMG_URL_BIG]").val();//大图
@@ -326,6 +277,8 @@ define(function(require, exports) {
 			            		 closeTab(checkTabId)
 			            	 });
 			             });
+	                 }           
+		                
 	             }
 	    	 });
 	    },
@@ -351,13 +304,45 @@ define(function(require, exports) {
 	                    data.monthList = monthList
 	                    data.companyName = companyName
                         var html = ticketClearing(data);
-                        addTab(blanceTabId,"票务结算",html);
+                       // addTab(blanceTabId,"票务结算",html);
                       //获取table中的tr
-	                    var $tr = $("#" +"tab-"+ blanceTabId + "-content"+" .all tbody tr")
+	                   /* var $tr = $("#" +"tab-"+ blanceTabId + "-content"+" .all tbody tr")
 	                    //给每个tr添加表单验证
                         $tr.each(function(){
                         	$(this).find('.btn-ticketBlance-save').data('validata', rule.check($(this)));
-                        });
+                        });*/
+	                    if($("#" +"tab-"+blanceTabId+"-content").length > 0)
+	             	    {
+	             	    	 if(Ticket.blanceEdited){
+	             	    		addTab(blanceTabId,"票务结算");
+			                    //给每个tr添加表单验证
+	             	    		showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
+	             	    			 Ticket.validatorTable()
+	             	    			 var saveBtn = $("#" +"tab-"+ blanceTabId+"-content"+" .btn-ticketBlance-save")
+	             	    			 if (!$(saveBtn).data('validata').form()) { return; }
+	             	    			 Ticket.saveBlanceData(Ticket.oldBlanceTicketId,companyName)
+				            		 Ticket.blanceEdited = false;
+				            		 addTab(blanceTabId,"票务结算",html);
+				            		 Ticket.validatorTable();
+				            	 },function(){
+				            		    addTab(blanceTabId,"票务结算",html);
+				            		    Ticket.blanceEdited = false;
+				            		    Ticket.validatorTable();
+				            	 });
+	             	    	 }else{
+	                 	    	addTab(blanceTabId,"票务结算",html);
+	                 	    	Ticket.validatorTable();
+	             	    	 }
+	         	    		 
+	             	    }else{
+	             	    	addTab(blanceTabId,"票务结算",html);
+	             	    	Ticket.validatorTable();
+	             	    };
+	             	   $("#" +"tab-"+blanceTabId+"-content .all").on('change', 'input, select', function() {
+	             		   	Ticket.blanceEdited = true;
+	             		   	Ticket.oldBlanceTicketId = ticketId;
+	    	    			$(this).closest('tr').data('blanceStatus',true);
+	    	    		});
                         //搜索按钮事件
                         $("#" +"tab-"+ blanceTabId + "-content"+" .btn-blance-search").click(function(){
                             Ticket.searchBalanceData={
@@ -371,50 +356,9 @@ define(function(require, exports) {
                         });
                        //保存按钮事件
                         $("#" +"tab-"+ blanceTabId+"-content"+" .btn-ticketBlance-save").click(function(){
-                        	// 表单校验
-                        	if (!$(this).data('validata').form()) { return; }
-                        	
-                        	var tr = $(this).parent().parent(),
-                        	    DataArr = [],
-                        		JsonData,
-                        		needPayMoney = tr.find("input[name=blancerealPayedMoney]").val();
-                        	//判断是否填写付款/收款金额 
-                        	if(needPayMoney == null || needPayMoney == ""){
-                        		showMessageDialog($( "#confirm-dialog-message" ),"请输入付款金额");
-                        		return
-                        	}else{
-                        		var blanceData = {
-                                		id:$(this).attr("data-entity-id"),
-                                        ticketId:ticketId,
-                                        year:$(this).attr("data-entity-year"),
-                                        month:$(this).attr("data-entity-month"),
-                                        realPayedMoney:tr.find("td[name=blancerealrealPayedMoney]").text(),
-                                        unPayedMoney:tr.find("td[name=blanceunPayedMoney]").text(),
-                                        realUnPayedMoney:tr.find("td[name=blancerealrealUnPayedMoney]").text(),
-                                        payMoney:tr.find("input[name=blancerealPayedMoney]").val(),
-                                        payType:tr.find("select[name=blancePayType]").val(),
-                                        remark:tr.find("input[name=blancerealRemark]").val()
-                                	} 
-                                	 DataArr.push(blanceData)
-                                	 JsonData = JSON.stringify(DataArr)
-                                	$.ajax({
-                                		url:""+APP_ROOT+"back/financial/financialTicket.do?method=saveFcTicketSettlement&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
-                                        type:"POST",
-                                        data:"fcTicketSettlementStr="+JsonData,
-                                        dataType:"json",
-                                        beforeSend:function(){
-                                            globalLoadingLayer = openLoadingLayer();
-                                        },
-                                        success:function(data){
-                                        	layer.close(globalLoadingLayer);
-                                            var result = showDialog(data);
-                                            if(result){
-                                            	showMessageDialog($( "#confirm-dialog-message" ),data.message);
-        										Ticket.ticketBalanceList(0,Ticket.searchBalanceData.ticketId,Ticket.searchBalanceData.companyName,Ticket.searchBalanceData.year,Ticket.searchBalanceData.startMonth,Ticket.searchBalanceData.endMonth);
-                                            }
-                                        }
-                                	})
-                        	}
+                        	 var saveBtn = $("#" +"tab-"+ blanceTabId+"-content"+" .btn-ticketBlance-save")
+        	    			 if (!$(saveBtn).data('validata').form()) { return; }
+        	    			 Ticket.saveBlanceData(Ticket.oldBlanceTicketId,companyName)
                         });
                         //对账明细按钮事件
                         $("#" +"tab-"+ blanceTabId+"-content"+" .btn-ticketBlance-checkDetail").click(function(){
@@ -463,6 +407,15 @@ define(function(require, exports) {
                     }
                 }
            });
+	    },
+	    //给每个tr增加验证
+	    validatorTable:function(){
+	    	//获取table中的tr
+ 	    	var $tr = $("#" +"tab-"+ blanceTabId + "-content"+" .all tbody tr")
+            //给每个tr添加表单验证
+            $tr.each(function(){
+            	$(this).find('.btn-ticketBlance-save').data('validata', rule.check($(this)));
+            });
 	    },
 	    //显示单据
 	    viewImage:function(obj,WEB_IMG_URL_BIG,WEB_IMG_URL_SMALL) {
@@ -516,7 +469,133 @@ define(function(require, exports) {
 			    		$('#layer-photos-financial-count [data-rel="colorbox"]').colorbox(colorbox_params);
 				}
 			});
-	    }
+	    },
+	    //保存对账数据
+	    saveCheckingData:function(ticketId,companyName){
+	    	var JsonStr = [],
+            oldUnPayedMoney,
+            newUnPayedMoney,
+            oldRemark,
+            newRemark,
+ 	        $tr = $("#" +"tab-"+ checkTabId+"-content"+" .all tbody tr");
+	 	    $tr.each(function(i){
+	 		   var flag = $(this).find(".ticketFinancial").is(":checked");
+	 		   if(flag){
+	 			   if($(this).attr("data-entity-isConfirmAccount") == 1){
+	 				   //取值用于是否修改对账判断
+	 				   oldUnPayedMoney = $(this).attr("data-entity-realUnPayedMoney");
+	 				   oldRemark = $(this).attr("data-entity-remark");
+	 				   newUnPayedMoney = $tr.eq(i).find("input[name=FinancialticketRealUnPayedMoney]").val();
+	 				   newRemark = $tr.eq(i).find("input[name=FinancialticketRemark]").val();
+	 				   //判断是否是修改对账
+	 				   if(oldUnPayedMoney !== newUnPayedMoney || oldRemark !== newRemark){
+	 					   var checkData = {
+	         					   id:$(this).attr("data-entity-id"),
+	         					   ticketId:ticketId,
+	         					   companyName:companyName,
+	         					   startTime:$tr.eq(i).find("td[name=startTime]").text(),
+	         					   realUnPayedMoney:$tr.eq(i).find("input[name=FinancialticketRealUnPayedMoney]").val(),
+	         					   remark:$tr.eq(i).find("input[name=FinancialticketRemark]").val(),
+	         					   isConfirmAccount:1
+	         			   }
+	 					   JsonStr.push(checkData)
+	 				   }
+	 			   }else{
+	 				   var checkData = {
+	     					   id:$(this).attr("data-entity-id"),
+	     					   ticketId:ticketId,
+	     					   companyName:companyName,
+	     					   startTime:$tr.eq(i).find("td[name=startTime]").text(),
+	     					   realUnPayedMoney:$tr.eq(i).find("input[name=FinancialticketRealUnPayedMoney]").val(),
+	     					   remark:$tr.eq(i).find("input[name=FinancialticketRemark]").val(),
+	     					   isConfirmAccount:1
+	     			   }
+	 				   JsonStr.push(checkData)
+	 			   }
+	 		   }else{
+	 			   if($(this).attr("data-entity-isConfirmAccount") == 1){
+	 				   var checkData = {
+	     					   id:$(this).attr("data-entity-id"),
+	     					   ticketId:ticketId,
+	     					   companyName:companyName,
+	     					   startTime:$tr.eq(i).find("td[name=startTime]").text(),
+	     					   realUnPayedMoney:$tr.eq(i).find("input[name=FinancialticketRealUnPayedMoney]").val(),
+	     					   remark:$tr.eq(i).find("input[name=FinancialticketRemark]").val(),
+	     					   isConfirmAccount:0
+	     			   } 
+	 				   JsonStr.push(checkData)
+	 			   }
+	 		   }
+		    });
+		 	   //判断用户是否操作
+		 	   if(JsonStr.length == 0){
+		 		   showMessageDialog($( "#confirm-dialog-message" ),"您当前未进行任何操作");
+		 		   return
+		 	   }else{
+		 		   JsonStr = JSON.stringify(JsonStr);
+		     	   //return
+		     	   $.ajax({
+		     		   url:""+APP_ROOT+"back/financial/financialTicket.do?method=accountChecking&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
+		                type:"POST",
+		                data:"financialTicketListStr="+encodeURIComponent(JsonStr),
+		                dataType:"json",
+		                beforeSend:function(){
+								globalLoadingLayer = openLoadingLayer();
+							},
+							success:function(data){
+								layer.close(globalLoadingLayer);
+								var result = showDialog(data);
+								if(result){
+									showMessageDialog($( "#confirm-dialog-message" ),data.message);
+				                	Ticket.ticketCheckList(0,Ticket.searchCheckData.ticketId,Ticket.searchCheckData.companyName,Ticket.searchCheckData.year,Ticket.searchCheckData.month)
+				                	Ticket.edited = false;
+								}
+							}
+		     	   });
+		 	   }
+	    },
+	    //结算保存
+	    saveBlanceData:function(ticketId,companyName){
+	    	var $tr = $("#" +"tab-"+ blanceTabId+"-content"+" .all tbody tr"),
+	    	DataArr = [],
+		    JsonData;
+	    	$tr.each(function(i){
+          		if($(this).data('blanceStatus')){
+          			var blanceData = {
+                    		id:$(this).attr("data-entity-id"),
+                            ticketId:ticketId,
+                            year:$(this).attr("data-entity-year"),
+                            month:$(this).attr("data-entity-month"),
+                            realPayedMoney:$tr.eq(i).find("td[name=blancerealrealPayedMoney]").text(),
+                            unPayedMoney:$tr.eq(i).find("td[name=blanceunPayedMoney]").text(),
+                            realUnPayedMoney:$tr.eq(i).find("td[name=blancerealrealUnPayedMoney]").text(),
+                            payMoney:$tr.eq(i).find("input[name=blancerealPayedMoney]").val(),
+                            payType:$tr.eq(i).find("select[name=blancePayType]").val(),
+                            remark:$tr.eq(i).find("input[name=blancerealRemark]").val()
+                    	}
+          			 DataArr.push(blanceData)
+          		}
+          	})
+	    	JsonData = JSON.stringify(DataArr)
+	    	$.ajax({
+	    		url:""+APP_ROOT+"back/financial/financialTicket.do?method=saveFcTicketSettlement&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
+	            type:"POST",
+	            data:"fcTicketSettlementStr="+JsonData,
+	            dataType:"json",
+	            beforeSend:function(){
+	                globalLoadingLayer = openLoadingLayer();
+	            },
+	            success:function(data){
+	            	layer.close(globalLoadingLayer);
+	                var result = showDialog(data);
+	                if(result){
+	                	showMessageDialog($( "#confirm-dialog-message" ),data.message);
+						Ticket.ticketBalanceList(0,Ticket.searchBalanceData.ticketId,Ticket.searchBalanceData.companyName,Ticket.searchBalanceData.year,Ticket.searchBalanceData.startMonth,Ticket.searchBalanceData.endMonth);
+						Ticket.blanceEdited = false;
+	                }
+	            }
+	    	})
+		}
 	}
 	exports.listTicket = Ticket.listTicket;
 });

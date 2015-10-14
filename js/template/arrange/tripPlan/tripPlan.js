@@ -468,7 +468,7 @@ define(function(require, exports) {
 				    	//tripPlan.busChoose();
 				    	tripPlan.driverChoose();
 						tripPlan.guideChoose();
-						//tripPlan.addTripPlanDatepicker("startTime");
+						tripPlan.addTripPlanDatepicker("startTime");
 						tripPlan.setPlanceTimeDateTimePicker();
 						//新增游客小组
 						$("#" + tab + " .newAddTripPlanMain .newAddTouristGroup").on("click",function(){

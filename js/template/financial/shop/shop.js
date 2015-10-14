@@ -7,13 +7,15 @@ define(function(require, exports) {
 		billImagesTemplate = require("./view/shopLookImg"),
 		shopRecords = require("./view/shopRecords"),
         tabId = "tab-"+menuKey+"-content",
-        checkTabId = "tab-"+ menuKey+"-checking"+"-content",
+        checkTabId = "tab-"+ menuKey+"-checking"+"-content",//
         clearTabId = "tab-"+ menuKey+"-clearing"+"-content";
     $("#" + tabId + "").off().on("edited.api",function(){
     	shop.edited = true;
     });
 	var shop = {
-		edited : false,
+		edited:false,
+        blanceEdited:false,
+        oldBlanceShopId:0,
 		listFinancialShop:function(page,shopId,year,month){   
 			$.ajax({
 				url:""+APP_ROOT+"back/financialShop.do?method=listFinancialShop&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
@@ -28,7 +30,7 @@ define(function(require, exports) {
 					var result = showDialog(data);
 					if(result){
 						var html = listTemplate(data);
-						addTab(menuKey,"购物帐务",html);
+						addTab(menuKey,"购物账务",html);
 						
 						$("#"+tabId+ " select[name=shopId]").val(data.shopId);
 						$("#"+tabId+ " select[name=year]").val(data.year);
@@ -114,6 +116,7 @@ define(function(require, exports) {
 				            		 validator = rule.check($('.shop-checking'));
 				            	 },function(){
 				            		 addTab(menuKey+"-checking","购物对账",html);
+				            		 shop.edited = false;
 				            		 validator = rule.check($('.shop-checking'));
 				            	 });
                  	    	 }else{
@@ -124,10 +127,11 @@ define(function(require, exports) {
                  	    }else{
                  	    	addTab(menuKey+"-checking","购物对账",html);
                  	    	validator = rule.check($('.shop-checking'));
-                 	    	$("#"+checkTabId+"").on("change",function(){
-                 	    		shop.edited = true; 
-                 	    	});
+                 	    	
                  	    };
+                 	   $("#"+checkTabId+ " .all").on("change",function(){
+            	    		shop.edited = true; 
+            	    	});
 						$("#"+checkTabId+ " select[name=year]").val(data.year);
 						$("#"+checkTabId+ " select[name=month]").val(data.month);
 						
@@ -256,44 +260,38 @@ define(function(require, exports) {
 					var result = showDialog(data);
 					if(result){
 						var html = shopClearingTemplate(data);
-						addTab(menuKey+"-clearing","购物结算",html);
-						var validator;
-                 	   /* //判断页面是否存在
-                 	    if($("#"+clearTabId+"").length > 0) {
-                 	    	if(shop.edited){
+						var validator;       
+                 	    //判断页面是否存在 #tab-financial_shop-clearing-content  "tab-"+ menuKey+"-clearing"+"-content" 
+                 	    if($("#tab-"+menuKey+"-clearing-content").length > 0) {
+                 	    	if(shop.blanceEdited){
                  	    		addTab(menuKey+"-clearing","购物结算");
                  	    		showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
-                 	    			 validator = rule.check($('.shop-clearing'));
-				            		 if (!validator.form()) { 
-				            			 return; 
-				            		 }
-				            		 shop.saveShopSettlement(shopId,year,start_month,end_month,$("#"+clearTabId+" .btn-settlement-save"));
-				            		 shop.edited = false;
+                 	    			 shop.validatorTable();
+                 	    			 var saveBtn = $("#"+clearTabId+" .btn-settlement-save");
+	             	    			 if (!$(saveBtn).data('validata').form()) { return; };
+				            		 shop.saveShopSettlement(shopId,year,start_month,end_month);
+				            		 shop.blanceEdited = false;
 				            		 addTab(menuKey+"-clearing","购物结算",html);
-				            		 validator = rule.check($('.shop-clearing'));
+				            		 shop.validatorTable();
 				            	 },function(){
 				            		 addTab(menuKey+"-clearing","购物结算",html);
-				            		 validator = rule.check($('.shop-clearing'));
+				            		 shop.blanceEdited = false;
+				            		 shop.validatorTable();
 				            	 });
                  	    	 }else{
 	                 	    	addTab(menuKey+"-clearing","购物结算",html);
-	                 	        validator = rule.check($('.shop-clearing'));
+	                 	    	shop.validatorTable();
                  	    	 }
              	    		 
                  	    }else{
                  	    	addTab(menuKey+"-clearing","购物结算",html);
-                 	    	validator = rule.check($('.shop-clearing'));
-                 	    	$("#"+clearTabId+"").on("change",function(){
-                 	    		shop.edited = true; 
-                 	    	});
-                 	    };*/
-						//获取table中的tr
-	                    var $tr = $("#"+clearTabId+ " .all tbody tr")
-	                    //给每个tr添加表单验证
-                        $tr.each(function(){
-                        	$(this).find('.btn-settlement-save').data('validata', rule.check($(this)));
-                        });					
-						
+                 	    	shop.validatorTable();
+                 	    };
+                 	   $("#"+clearTabId+" .all").on('change', 'input, select', function() {
+                 		  shop.blanceEdited = true;
+	    	    		  $(this).closest('tr').data('blanceStatus',true);
+	    	    		});
+											
 						$("#"+clearTabId+ " select[name=year]").val(year);
 						$("#"+clearTabId+ " select[name=start_month]").val(start_month);
 						$("#"+clearTabId+ " select[name=end_month]").val(end_month);
@@ -348,39 +346,22 @@ define(function(require, exports) {
 		                
 						//保存按钮事件
                         $("#"+clearTabId+" .btn-settlement-save").click(function(){
-                        	// 表单校验
                         	if (!$(this).data('validata').form()) { return; }
-                        	
-                        	var $tr = $(this).parent().parent();
-                        	var id = $(this).attr("data-entity-id"); 
-                        	var payMoney = $tr.find("input[name='payMoney']").val();
-                        	var payType = $tr.find("select[name='payType'] :selected").text();
-                        	var remark = $tr.find(" input[name='remark']").val();
-                        	if(payMoney == null || payMoney == ""){
-                        		showMessageDialog($( "#confirm-dialog-message" ),"请输入收款金额");
-                        		return
-                        	}else{$.ajax({
-                        		url:""+APP_ROOT+"back/financialShop.do?method=saveFinancialShopSettlement&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
-                                type:"POST",
-                                data:"id="+id+"&payMoney="+payMoney+"&payType="+payType+"&remark="+remark,
-                                dataType:"json",
-                                beforeSend:function(){
-                                    globalLoadingLayer = openLoadingLayer();
-                                },
-                                success:function(data){
-                                	layer.close(globalLoadingLayer);
-                                    var result = showDialog(data);
-                                    if(result){
-                                    	showMessageDialog($( "#confirm-dialog-message" ),data.message);
-										shop.listShopSettlement(shopId,year,start_month,end_month);
-                                    }
-                                }
-                        	})}                     		
+		            		shop.saveShopSettlement(shop.oldBlanceShopId,year,start_month,end_month);
                         });
 					}
 				}
 			});
 		},
+		//给每个tr增加验证
+	    validatorTable:function(){
+	    	//获取table中的tr
+            var $tr = $("#"+clearTabId+ " .all tbody tr")
+            //给每个tr添加表单验证
+            $tr.each(function(){
+            	$(this).find('.btn-settlement-save').data('validata', rule.check($(this)));
+            });	
+	    },
 		//显示单据
 	    viewImage:function(obj,WEB_IMG_URL_BIG,WEB_IMG_URL_SMALL) {
 	    	var data = {
@@ -503,35 +484,38 @@ define(function(require, exports) {
 		},
 		//保存结算
 		saveShopSettlement : function(shopId,year,start_month,end_month,obj){
-			var $tr = $(obj).parent().parent();
-        	var id = $(obj).attr("data-entity-id"); 
-        	var payMoney = $tr.find("input[name='payMoney']").val();
-        	var payType = $tr.find("select[name='payType'] :selected").text();
-        	var remark = $tr.find("input[name='remark']").val();
-        	console.log(payMoney);
-        	if(payMoney == null || payMoney == ""){
-        		showMessageDialog($( "#confirm-dialog-message" ),"请输入收款金额");
-        		return;
-        	}else{
-        		$.ajax({
-	        		url:""+APP_ROOT+"back/financialShop.do?method=saveFinancialShopSettlement&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
-	                type:"POST",
-	                data:"id="+id+"&payMoney="+payMoney+"&payType="+payType+"&remark="+remark,
-	                dataType:"json",
-	                beforeSend:function(){
-	                    globalLoadingLayer = openLoadingLayer();
-	                },
-	                success:function(data){
-	                	layer.close(globalLoadingLayer);
-	                    var result = showDialog(data);
-	                    if(result){
-	                    	showMessageDialog($( "#confirm-dialog-message" ),data.message);
-	                    	shop.edited = false;
-							shop.listShopSettlement(shopId,year,start_month,end_month);
-	                    }
-	                }
-        		})
-        	}                    		
+	    	var $tr = $("#"+clearTabId+ " .all tbody tr");
+	    	var id ; 
+        	var payMoney ;
+        	var payType;
+        	var remark;
+	    	$tr.each(function(i){
+          		if($(this).data('blanceStatus')){
+                	 id = $(this).attr("data-entity-id"); 
+                	 payMoney = $tr.eq(i).find("input[name='payMoney']").val();
+                	 payType = $tr.eq(i).find("select[name='payType'] :selected").text();
+                	 remark = $tr.eq(i).find(" input[name='remark']").val();
+          		}
+          	})
+          	console.log(payMoney);
+	    	$.ajax({
+        		url:""+APP_ROOT+"back/financialShop.do?method=saveFinancialShopSettlement&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
+                type:"POST",
+                data:"id="+id+"&payMoney="+payMoney+"&payType="+payType+"&remark="+remark,
+                dataType:"json",
+                beforeSend:function(){
+                    globalLoadingLayer = openLoadingLayer();
+                },
+                success:function(data){
+                	layer.close(globalLoadingLayer);
+                    var result = showDialog(data);
+                    if(result){
+                    	showMessageDialog($( "#confirm-dialog-message" ),data.message);
+                    	shop.blanceEdited = false;
+						shop.listShopSettlement(shopId,year,start_month,end_month);
+                    }
+                }
+        	})
 		}
 	}
 	exports.listFinancialShop = shop.listFinancialShop;
