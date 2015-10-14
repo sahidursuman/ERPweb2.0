@@ -14,9 +14,8 @@
 						<div class="col-sm-3">
 							<input type="text" name="name" class="col-sm-12">  
 						</div>
-					</div>
-                    <div class="form-group guideInterval">
-                        <label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>酒店星级:</label>
+
+						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>酒店星级:</label>
 						<div class="col-sm-3">
 							<select name="level">
 								<option selected="selected" value="1">三星以下</option>
@@ -28,7 +27,7 @@
 								<option value="7">五星以上</option>
 							</select>
 						</div>
-                    </div>
+					</div>
 					<div class="form-group guideInterval">
 					    <label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>联系人:</label>
 						<div class="col-sm-3">
@@ -51,7 +50,7 @@
 					</div>
 					<div class="form-group guideInterval">
 						<label class="col-sm-2 control-label no-padding-right">酒店所在省市:</label>
-						<div class="col-sm-8">
+						<div class="col-sm-3">
 							<select name="provinceId" style="margin-right:3px">
 								<option selected="selected" value="">未选择</option>
 							</select>
@@ -62,6 +61,16 @@
 								<option selected="selected" value="">未选择</option>
 							</select>
 						</div>
+
+						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>是否启用:</label>
+						<div class="col-sm-3 checkbox" style="margin-left:-10px;margin-top: -6px">
+							<label>
+								<input checked="checked" type="checkbox" class="ace hotel-status" value="1" name="status">
+								<span class="lbl">
+									启用
+								</span>
+							</label>
+						</div>
 					</div>
 					<div class="form-group guideInterval">
 						<label class="col-sm-2 control-label no-padding-right">详细地址:</label>
@@ -71,22 +80,10 @@
 					</div>
 					<div class="form-group guideInterval">
 						<label class="col-sm-2 control-label no-padding-right">酒店设施:</label>
-						<div class="col-sm-3">
-							<input type="text" name="facility" class="col-sm-12">
+						<div class="col-sm-6">
+							<input type="text" name="facility" class="col-sm-12 addressMinute">
 						</div>
 					</div>
-					<div class="form-group guideInterval">
-						<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>是否启用:</label>
-						<div class="col-sm-2 checkbox" style="margin-left:-10px">
-							<label>
-								<input checked="checked" type="checkbox" class="ace hotel-status" value="1" name="status">
-								<span class="lbl">
-									启用
-								</span>
-							</label>
-						</div>
-					</div>
-
 					<div class="form-group guideInterval">
 						<label class="col-sm-2 control-label no-padding-right">酒店简介:</label>
 						<div class="col-sm-8">

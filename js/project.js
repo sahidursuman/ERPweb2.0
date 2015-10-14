@@ -1040,6 +1040,35 @@ function listMenu(menuTemplate){
 						$allInputs.eq($allInputs.length-1).focus();
 					}
 				})
+				// 处理中英文长度控制问题
+				.on('input', 'input[type="text"]', function(event) {
+					event.preventDefault();
+					
+					// 未设置maxlength，退出
+					if (this.attributes.maxlength === undefined)  {
+						return;
+					}
+
+					var $that = $(this), 
+					max = $that.attr('maxlength'),
+					ctrlOldVal = $that.data('ctrlOldVal'),
+					val = $that.val();
+					
+					if (chEnWordCount(val) > max)  {
+						$that.val(ctrlOldVal);
+					} else {
+						$that.data('ctrlOldVal', val);
+					}
+
+					function chEnWordCount(str){  
+						var count = 0;
+
+						if (!!str)  {
+					    	count = str.replace(/[^\x00-\xff]/g,"**").length;  
+						}
+					    return count;  
+					} 
+				});
 			}
 		}
 	});

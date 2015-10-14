@@ -75,14 +75,14 @@
     <tbody>
     
      {{each fcBusCompanySettlementList as busCompanySettlement}}  
-     <tr data-entity-id="{{busCompanySettlement.id}}" data-entity-year="{{busCompanySettlement.year}}" data-entity-month="{{busCompanySettlement.month}}">
+     <tr>
             <td style="width:100px;">{{busCompanySettlement.year}}{{"年"}}{{busCompanySettlement.month}}{{"月"}}</td>
             <td style="width:100px;">{{busCompanySettlement.needPayMoney}}</td>
             <td style="width:100px;" name="blancerealNeedPayMoney">{{busCompanySettlement.realNeedPayMoney}}</td>
             <td style="width:100px;" name="blancerealrealPayedMoney">{{busCompanySettlement.realPayedMoney}}</td>
             <td style="width:100px;" name="blanceunPayedMoney">{{busCompanySettlement.unPayedMoney}}</td>
             <td style="width:100px;" name="blancerealrealUnPayedMoney">{{busCompanySettlement.realUnPayedMoney}}</td>
-            <td class="col-sm-1"><input name="blancerealPayedMoney" type="text" maxlength="10"></td>
+            <td class="col-sm-1"><input name="blancerealPayedMoney" type="text" ></td>
             <td style="width:120px;">
                     <select style="text-align:center" name="blancePayType">
                         <option value="" selected="selected">请选择...</option>
@@ -90,8 +90,8 @@
                         <option value="在线支付">在线支付</option>
                         <option value="线下付款">线下付款</option>
                     </select>
-              </td> 
-            <td class="col-sm-1" style="width:400px;"><input name="blancerealRemark" type="text" style="width:370px;" maxlength="1000"></td>
+              </td>
+            <td class="col-sm-1" style="width:400px;"><input name="blancerealRemark" type="text" style="width:370px;" ></td>
             <td>
                {{if busCompanySettlement.allCount != busCompanySettlement.checkedCount}}
 	                <span style="color:#ff9900"> {{busCompanySettlement.checkedCount}}{{"/"}}{{busCompanySettlement.allCount}}</span>
