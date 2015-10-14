@@ -65,6 +65,7 @@ function addTab(tabId,tabName,html){
 							modal.clearEdit(str[1]);
 						},"放弃","留在此页");
 					} else{
+						console.log(str[1]);
 						showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已修改的数据?",function(){					
 							modal.save(str[1]);
 							closeTab();
@@ -966,6 +967,7 @@ function listMenu(menuTemplate){
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/arrange/arrangeTransfer/arrangeTransfer.js",function(transfer){ 
 						transfer.getlistTransferSumData(0,"","","","","","",2);
+						modals["arrange_transfer"] = transfer;
 					});
 				});
 				//绑定按团统计菜单功能
