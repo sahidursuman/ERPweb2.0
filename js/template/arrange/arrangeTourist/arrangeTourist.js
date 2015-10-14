@@ -276,6 +276,12 @@ define(function(require, exports) {
 		addTouristGroupMerge:function(){
 			var $merge = $("#"+tabId+" .arrangeTouristMain .arrangeTouristMergeList .list");
 			var $parents = $(this).parent().parent().parent();
+			var memberCount = $parents.attr("data-entity-memberCount");
+			if(memberCount == 0){
+				$(this).prop("checked",false);
+				showMessageDialog($( "#confirm-dialog-message" ), "未分团人数为0，不能加入并团选择");
+				return;
+			}
 			var lineProductId = $parents.attr("data-entity-id");
 			var startTime = $parents.attr("data-entity-startTime");
 			var days = $parents.attr("data-entity-days");
@@ -307,6 +313,7 @@ define(function(require, exports) {
 			else{
 				arrangeTourist.removeTouristGroupMergeData($merge,lineProductId,startTime);
 			}
+			
 		},
 		//生成计划函数
 		generationPlan :function(event){
