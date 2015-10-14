@@ -13,18 +13,7 @@
 						<div class="col-sm-3">
 							<input type="text" name="companyName" class="col-sm-12" value="{{busCompany.companyName}}" maxlength="32">
 						</div>
-						<label class="col-sm-1 control-label no-padding-right">是否启用:</label>
-						<div class="col-sm-2 checkbox" style="margin-left:-10px;margin-top: -6px">
-							<label>
-								<input {{if busCompany.status == 1}}checked="checked"{{/if}} type="checkbox" class="ace busCompany-status" value="1">
-								<span class="lbl">
-									启用
-								</span>
-							</label>
-						</div>
-					</div>
-					<div class="form-group guideInterval">
-					    <label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>车队类型:</label>
+						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>车队类型:</label>
 						<div class="col-sm-3">
 							<select name="type">
 								<option {{if busCompany.type == 0}}selected="selected"{{/if}} value="0">个人</option>
@@ -32,6 +21,9 @@
 							</select>
 						</div>
 					</div>
+					<!--<div class="form-group guideInterval">-->
+					   <!-- -->
+					<!--</div>-->
 					<div class="form-group guideInterval">
 					    <label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>联系人:</label>
 						<div class="col-sm-3">
@@ -54,7 +46,7 @@
 					</div>
 					<div class="form-group guideInterval">
 						<label class="col-sm-2 control-label no-padding-right">车队所在省市:</label>
-						<div class="col-sm-9">
+						<div class="col-sm-3">
 							<select name="provinceId" style="margin-right:3px">
 								<option selected="selected" value="">未选择</option>
 							</select>
@@ -64,6 +56,16 @@
 							<select name="districtId" >
 								<option selected="selected" value="">未选择</option>
 							</select>
+						</div>
+
+						<label class="col-sm-1 control-label no-padding-right">是否启用:</label>
+						<div class="col-sm-3 checkbox" style="margin-left:-10px;margin-top: -6px">
+							<label>
+								<input {{if busCompany.status == 1}}checked="checked"{{/if}} type="checkbox" class="ace busCompany-status" value="1">
+								<span class="lbl">
+									启用
+								</span>
+							</label>
 						</div>
 					</div>
 					<div class="form-group guideInterval">
@@ -98,15 +100,15 @@
 						</h5>
 					<div class="widget-body">
 						<div class="widget-main no-padding">
-							<table class="table table-striped table-bordered table-hover busList"> 
+							<table class="table table-striped table-bordered table-hover busList" style="border: 1px solid #ccc">
 								<thead>
 									<tr>
 										<th class="table-border"><span class="necessary">*</span>车牌号</th>
 										<th class="table-border"><span class="necessary">*</span>车辆品牌</th>
 										<th class="table-border">座位数</th>
-										<th class="table-border">购买时间</th>
-										<th class="table-border">协议包车</th>
-										<th class="table-border">包车时限</th>
+										<th class="table-border"style="width:150px;">购买时间</th>
+										<th class="table-border" style="width: 70px">协议包车</th>
+										<th class="table-border"style="width:270px;">包车时限</th>
 										<th class="table-border">包车价格</th>
 										<th class="table-border">备注</th>
 										<th class="table-border">操作</th>
@@ -118,9 +120,9 @@
 											<td><input  name="licenseNumber" type="text" class="col-sm-12" value="{{bus.licenseNumber}}" maxlength="10" /></td>
 											<td><input name="brand" type="text" class="col-sm-12" value="{{bus.brand}}" maxlength="32" /></td>
 											<td><input name="seatCount" class="col-sm-12" type="text" value="{{bus.seatCount}}"/></td>
-											<td class="col-sm-1"><div class="input-group col-sm-12"><input name="buyTime" type="text" class="date-picker" value="{{bus.buyTime | dateFormat:'yyyy-MM-dd'}}"/><span class="input-group-addon"><i class="fa fa-calendar"></i></span></div></td>
+											<td class="col-sm-1"><div class="input-group col-sm-12"><input name="buyTime" type="text" class="date-picker datepicker" value="{{bus.buyTime | dateFormat:'yyyy-MM-dd'}}"/><span class="input-group-addon"><i class="fa fa-calendar"></i></span></div></td>
 											<td>
-												<select name="isChartered" class="col-sm-12">
+												<select name="isChartered">
 													<option value="1" {{if bus.isChartered == 1}}selected="selected"{{/if}}>是</option>
 													<option value="0" {{if bus.isChartered == 0}}selected="selected"{{/if}}>否</option>
 												</select>
@@ -195,11 +197,11 @@
 						</h5>
 					<div class="widget-body">
 						<div class="widget-main no-padding">
-							<table class="table table-striped table-bordered table-hover driverList">
+							<table class="table table-striped table-bordered table-hover driverList" style="border: 1px solid #ccc">
 								<thead>
 									<tr>
 										<th class="table-border"><span class="necessary">*</span>司机姓名</th>
-										<th class="table-border">司机性别</th>
+										<th class="table-border" style="width: 80px">司机性别</th>
 										<th class="table-border"><span class="necessary">*</span>司机电话</th>
 										<th class="table-border">司机驾龄</th>
 										<th class="table-border">驾驶证编号</th>
@@ -213,7 +215,7 @@
 										<tr data-entity-id="{{driver.id}}">
 											<td><input name="driverName" class="col-sm-12" type="text" value="{{driver.name}}"/></td>
 											<td>
-												<select name="gender" class="col-sm-12">
+												<select name="gender">
 													<option {{if driver.gender == 0}}selected="selected"{{/if}} value="0">男</option>
 													<option {{if driver.gender == 1}}selected="selected"{{/if}} value="1">女</option>
 												</select>
