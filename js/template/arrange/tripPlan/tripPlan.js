@@ -303,6 +303,7 @@ define(function(require, exports) {
 			tripPlan.guideChoose();
 			tripPlan.addTripPlanDatepicker("startTime");
 			tripPlan.setPlanceTimeDateTimePicker();
+			tripPlan.setTripPlanPicker();
 			//新增游客小组
 			$("#" + tab + " .newAddTripPlanMain .newAddTouristGroup").on("click",function(){
 				var lineProductId = $("#" + tab + " .newAddTripPlanMain input[name=lineProductId]").val();
@@ -343,7 +344,10 @@ define(function(require, exports) {
 				            "accompanyGuideMobile": getValue("accompanyGuideMobile"),
 				            "planTouristCount": getValue("planTouristCount"),
 				            "setPlacePosition": getValue("setPlacePosition"),
-				            "setPlaceTime": getValue("setPlaceTime")
+				            "setPlaceTime": getValue("setPlaceTime"),
+				            "executeTime" :getValue("executeTime"),
+				            "executeTimeType" :getValue("executeTimeType")+""
+
 						},
 						"lineProductId": getValue("lineProductId"),
 				        "driverId": getValue("driverId"),
@@ -351,6 +355,7 @@ define(function(require, exports) {
 				        "busId": getValue("busLicenseNumberId"),
 				        "touristGroupId": []
 					}
+					
 					var touristGroupList = $("#" + tab + " .newAddTripPlan .addTripPlanTouristTbody tr").length;
 					$("#" + tab + " .newAddTripPlan .addTripPlanTouristTbody tr").each(function(i){
 						saveTripP.touristGroupId[i] = {
@@ -359,6 +364,7 @@ define(function(require, exports) {
 					})
 							
 					var saveTripPlan = JSON.stringify(saveTripP);
+
 					$.ajax({
 						url:""+APP_ROOT+"back/tripPlan.do?method=addTripPlan&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 						data:"saveTripPlan="+encodeURIComponent(saveTripPlan),
@@ -379,6 +385,13 @@ define(function(require, exports) {
 							
 						}
 					})
+
+
+
+
+
+
+
 				}
 			});
 		},
@@ -470,6 +483,8 @@ define(function(require, exports) {
 						tripPlan.guideChoose();
 						//tripPlan.addTripPlanDatepicker("startTime");
 						tripPlan.setPlanceTimeDateTimePicker();
+						tripPlan.setTripPlanPicker();
+
 						//新增游客小组
 						$("#" + tab + " .newAddTripPlanMain .newAddTouristGroup").on("click",function(){
 							var lineProductId = $("#" + tab + " .newAddTripPlanMain input[name=lineProductId]").val();
@@ -523,7 +538,9 @@ define(function(require, exports) {
 							            "accompanyGuideMobile": getValue("accompanyGuideMobile"),
 							            "planTouristCount": getValue("planTouristCount"),
 							            "setPlacePosition": getValue("setPlacePosition"),
-							            "setPlaceTime": getValue("setPlaceTime")
+							            "executeTime": getValue("executeTime"),
+							            "executeTimeType": getValue("executeTimeType")+""
+
 									},
 									"lineProductId": getValue("lineProductId"),
 							        "driverId": getValue("driverId"),
@@ -974,6 +991,17 @@ define(function(require, exports) {
 				language: 'zh-CN'
 			});
 		},
+
+		//发团定时   
+		setTripPlanPicker:function(){
+	    	$(".newAddTripPlan input[name=executeTime]").datetimepicker({
+				autoclose: true,
+				todayHighlight: true,
+				format: 'L',
+				language: 'zh-CN'
+			});
+		},   
+
 		//添加游客小组
 		addTouristGroup :function(lineProductId,startTime,tBody,tab){
 			//添加游客小组 （多选）			

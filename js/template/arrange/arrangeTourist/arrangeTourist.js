@@ -303,6 +303,7 @@ define(function(require, exports) {
 		},
 		//生成计划函数
 		generationPlan :function(event){
+			
 			var tab = event.data.tab;
 			var idJson = [];
 			$("#"+tab+" .divideTouristMain .all tbody tr").each(function(){
@@ -379,6 +380,10 @@ define(function(require, exports) {
 					    	arrangeTourist.tripPlanAllMemberCount("tripPlanAllMemberCount",tab,"addTripPlanTouristTbody");
 							//集合时间   时间控件
 					    	arrangeTourist.dateTimePicker();
+
+					    	//发团信息 时间控件  
+					    	arrangeTourist.setTripPlanPicker();
+
 							//查看旅游小组成员
 							$("#"+tab+" .addTripPlanMain .addTripPlanView").unbind().click(arrangeTourist.viewTouristGroup);
 							//删除小组   addTripPlanViewDelete
@@ -614,6 +619,17 @@ define(function(require, exports) {
 				language: 'zh-CN'
 			});
 		},
+
+		 //发团定时   
+		setTripPlanPicker:function(){
+	    	$(".addMergePlanTime").datetimepicker({
+				autoclose: true,
+				todayHighlight: true,
+				format: 'L',
+				language: 'zh-CN'
+			});
+		}, 
+
 		bindRemoveTouristGroupMerge:function($merge,lineProductId,startTime){
 			var obj = $(this);
 			var dialog = $( "#confirm-dialog-message" ).removeClass('hide').dialog({
@@ -719,6 +735,10 @@ define(function(require, exports) {
 											arrangeTourist.datePicker();
 											//集合时间   时间控件
 											arrangeTourist.dateTimePicker();
+
+											//定时控件
+											arrangeTourist.setTripPlanPicker();
+
 									    	//查看旅游小组成员
 											$("#"+tab+" .addMergePlan .addTripPlanView").click(arrangeTourist.viewTouristGroup);
 											//删除小组  
@@ -1582,7 +1602,11 @@ define(function(require, exports) {
 					            "accompanyGuideMobile": getValue("accompanyGuideMobile"),
 					            "planTouristCount": getValue("planTouristCount"),
 					            "setPlacePosition": getValue("setPlacePosition"),
-					            "setPlaceTime": getValue("setPlaceTime")
+					            "setPlaceTime": getValue("setPlaceTime"),
+					            "executeTime" :getValue("executeTime"),
+				                "executeTimeType" :getValue("executeTimeType")+""
+
+
 							},
 							"lineProductId": getValue("lineProductId"),
 					        "driverId": getValue("driverId"),
