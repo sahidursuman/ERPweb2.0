@@ -302,7 +302,7 @@ define(function(require, exports) {
 						'<td><input type="text" name="payedMoney" class="col-sm-12"/></td>' +
 						'<td><select name="payType" class="col-sm-12 no-padding"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>' +		
 						'<td><input name="remark" type="text" class="col-sm-12" maxlength="500"/></td>' +
-						'<td><button class="btn btn-xs btn-danger btn-deleteTripPlanList" title="删除">	<i class="ace-icon fa fa-trash-o bigger-120"></i></button></td></tr>';
+						'<td><a class="cursor btn-deleteTripPlanList" title="删除">删除</a></td></tr>';
 			tableContainer.append(html);
 			tripPlan.bindDeleteEvent();
 			tripPlan.bindInsuranceChoose();
@@ -367,7 +367,7 @@ define(function(require, exports) {
 			'<td><input name="guidePayMoney" type="text" class="col-sm-12" style="width: 60px;"/></td>' +
 			'<td><input name="remark" type="text" class="col-sm-12" maxlength="500"/></td>' +
 			//'<td><button class="btn btn-xs btn-success" title="发送订单"><i class="ace-icon fa fa-paper-plane-o bigger-120"></i></button></td></tr>';
-			'<td><button class="btn btn-xs btn-danger btn-deleteTripPlanList" data-entity-name="restaurant" title="删除"> <i class="ace-icon fa fa-trash-o bigger-120"></i> </button></td>';
+			'<td><a class="cursor btn-deleteTripPlanList" data-entity-name="restaurant" title="删除">删除</a></td>';
 			tableContainer.append(html);
 			tripPlan.bindDeleteEvent();
 			tripPlan.bindRestaurantChoose();
@@ -396,8 +396,7 @@ define(function(require, exports) {
 			'<td><select name="payType" class="col-sm-12 no-padding" style="width:55px;"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>' +
 			'<td><input type="text" class="col-sm-12" name="guidePayMoney" style="width: 60px;"/></td>' +
 			'<td><input type="text" class="col-sm-12" name="remark" maxlength="500"/></td>' +
-			//'<td><button class="btn btn-xs btn-success" title="发送订单"><i class="ace-icon fa fa-paper-plane-o bigger-120"></i></button> <button class="btn btn-xs btn-danger btn-deleteTripPlanList" title="删除"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></td></tr>';
-			'<td><button class="btn btn-xs btn-danger btn-deleteTripPlanList" title="删除"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></td></tr>';
+			'<td><a class="cursor btn-deleteTripPlanList" title="删除"></a></td></tr>';
 			tableContainer.append(html);
 			tripPlan.bindDeleteEvent();
 			tripPlan.bindHotelChoose();
@@ -426,7 +425,7 @@ define(function(require, exports) {
 			'<td><select name="payType" class="col-sm-12 no-padding" style="width:55px;"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>' +
 			'<td><input type="text" name="guidePayMoney" class="col-sm-12" style="width: 60px;"/></td>' +
 			'<td><input type="text" name="remark" class="col-sm-12" maxlength="500"/></td>' +
-			'<td><button class="btn btn-xs btn-danger btn-deleteTripPlanList" title="删除"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></td></tr>';
+			'<td><a class="cursor btn-deleteTripPlanList" title="删除">删除</a></td></tr>';
 			tableContainer.append(html);
 			tripPlan.bindDeleteEvent(); 
 			tripPlan.bindScenicChoose();
@@ -445,7 +444,7 @@ define(function(require, exports) {
                 '<td><input type="text" name="mobileNumber" readonly="readonly" class="col-sm-12" value="" /></td>'+
                 '<td><input type="text" name="goodsPolicy" class="col-sm-12" value="" /><input type="hidden" name="shopPolicyId" value=""/></td>'+
                 '<td><input type="text" name="remark" class="col-sm-12" value="" maxlength="500" /></td>'+
-                '<td><button class="btn btn-xs btn-danger btn-deleteTripPlanList" data-entiy-id="" data-entity-name="shop" title="删除"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></td></tr>';
+                '<td><a class="cursor btn-deleteTripPlanList" data-entiy-id="" data-entity-name="shop" title="删除">删除</a></td></tr>';
 			tableContainer.append(html);
 			tripPlan.bindDeleteEvent();
 			tripPlan.bindShopChoose();
@@ -477,7 +476,7 @@ define(function(require, exports) {
 			'<td><select name="payType" class="col-sm-12 no-padding" style="width:55px;"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>' +
 			'<td><input type="text" name="guidePayMoney" class="col-sm-12"/></td>' +
 			'<td><input type="text" name="remark" class="col-sm-12" maxlength="500"/></td>' +
-			'<td><button class="btn btn-xs btn-danger btn-deleteTripPlanList" title="删除"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></td></tr>';
+			'<td><a class="cursor btn-deleteTripPlanList" title="删除">删除</a></td></tr>';
 			tableContainer.append(html);
 			tripPlan.bindDeleteEvent();
 			tripPlan.bindSelfPayChoose();
@@ -507,7 +506,7 @@ define(function(require, exports) {
 			'<td><select name="payType" class="col-sm-12 no-padding" style="width:55px;"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>' +
 			'<td><input type="text" name="guidePayMoney" class="col-sm-12"/></td>' +
 			'<td><input type="text" name="remark" class="col-sm-12" maxlength="500"/></td>' +
-			'<td><button class="btn btn-xs btn-danger btn-deleteTripPlanList" title="删除"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></td></tr>';
+			'<td><a class="cursor btn-deleteTripPlanList" title="删除">删除</a></td></tr>';
 			tableContainer.append(html);
 			tripPlan.bindDeleteEvent();
 			tripPlan.bindTicketChoose();
@@ -534,7 +533,7 @@ define(function(require, exports) {
 			'<td><select name="payType" class="col-sm-12 no-padding" style="width:55px;"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>' +
 			'<td><input type="text" name="guidePayMoney" class="col-sm-12"/></td>' +
 			'<td><input type="text" name="remark" class="col-sm-12" maxlength="500"/></td>' +
-			'<td><button class="btn btn-xs btn-danger btn-deleteTripPlanList" title="删除"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></td></tr>';
+			'<td><a class="cursor btn-deleteTripPlanList" title="删除">删除</a></td></tr>';
 			tableContainer.append(html);
 			tripPlan.bindDeleteEvent();
 			tripPlan.bindMoneyTripPlan();
