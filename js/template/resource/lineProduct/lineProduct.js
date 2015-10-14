@@ -245,12 +245,10 @@ define(function(require, exports) {
 				            		 lineProduct.submitUpdateLineProduct($(".updateLineProductContainer form").eq(0).find("input[name=lineProductId]").val(),clipboardMode,0);
 									 lineProduct.edited["update"] = "";
 				            		 addTab(menuKey+"-update",title,html);
-									 lineProduct.initUpdate(id,clipboardMode,data);
 				            		 validator = rule.lineProductCheckor($("#"+tab+""));
 				            	 },function(){
 									 lineProduct.edited["update"] = "";
 				            		 addTab(menuKey+"-update",title,html);
-									 lineProduct.initUpdate(id,clipboardMode,data);
 				            		 validator = rule.lineProductCheckor($("#"+tab+""));
 				            	 });							
                  	    	 }else{

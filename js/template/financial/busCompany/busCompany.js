@@ -177,6 +177,7 @@ define(function(require, exports) {
 								            		 validator = rule.check($('.busCompanyChecking'));
 								            	 },function(){
 								            		 addTab(checkTabId,"车队对账",html);
+								            		 BusCompany.edited = false;
 								            		 validator = rule.check($('.busCompanyChecking'));
 								            	 });
 				                 	    	 }else{
@@ -339,6 +340,7 @@ define(function(require, exports) {
 							                        });
 							            	 },function(){
 							            		 addTab(blanceTabId,"车队结算",html);
+							            		 BusCompany.blanceEdited = false;
 							            		 var $tr = $("#" +"tab-"+ blanceTabId + "-content"+" .all tbody tr")
 								                    //给每个tr添加表单验证
 							                        $tr.each(function(){
