@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":150,"md5":"c6ecfb20eb9d09218d26e6e1abca0356"}*/
+/*TMODJS:{"debug":true,"version":151,"md5":"c6ecfb20eb9d09218d26e6e1abca0356"}*/
 define(function(require) {
     return require("../../../template")("financial/Restaurant/view/restaurantClearing", function($data, $filename) {
         try {

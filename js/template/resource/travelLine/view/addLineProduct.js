@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":102,"md5":"1c654b7a3391a35aa2223c97d8dc08fd"}*/
+/*TMODJS:{"debug":true,"version":103,"md5":"1c654b7a3391a35aa2223c97d8dc08fd"}*/
 define(function(require) {
     return require("../../../template")("resource/travelLine/view/addLineProduct", function($data, $filename) {
         try {

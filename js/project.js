@@ -56,6 +56,7 @@ function addTab(tabId,tabName,html){
 				$that = $(this);
 				var str = tabId.split("-");
 				var modal = modals[str[0]];
+				console.log(str[1]);
 				if(str.length > 1 && str[1] != "view" && !!modal && !!modal.isEdited && modal.isEdited(str[1])){//非列表、查看,且有修改
 					if(str[1] == "add"){
 						showConfirmMsg($( "#confirm-dialog-message" ), "未保存的数据，是否放弃?",function(){	
@@ -65,6 +66,7 @@ function addTab(tabId,tabName,html){
 							modal.clearEdit(str[1]);
 						},"放弃","留在此页");
 					} else{
+						console.log(str[1]);
 						showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已修改的数据?",function(){					
 							modal.save(str[1]);
 							closeTab();
@@ -701,6 +703,7 @@ function listMenu(menuTemplate){
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/tripPlan/tripPlan.js",function(tripPlan){ 
 						tripPlan.listTripPlan(0,"","","","","");
+						modals["arrange_all"] = tripPlan;
 					});
 				});
 				
@@ -721,6 +724,7 @@ function listMenu(menuTemplate){
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/arrange/arrangeTourist/arrangeTourist.js",function(arrangeTourist){ 
 						arrangeTourist.listArrangeTouristMain();
+						modals["arrange_tourist"] = arrangeTourist;
 					});
 				});
 
@@ -946,6 +950,7 @@ function listMenu(menuTemplate){
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/arrange/tripPlan/tripPlan.js",function(tripPlan){
 						tripPlan.listTripPlan(0,"","","","","","");
+						modals["arrange_plan"] = tripPlan;
 					});
 				});
 				
@@ -967,6 +972,7 @@ function listMenu(menuTemplate){
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/arrange/arrangeTransfer/arrangeTransfer.js",function(transfer){ 
 						transfer.getlistTransferSumData(0,"","","","","","",2);
+						modals["arrange_transfer"] = transfer;
 					});
 				});
 				//绑定按团统计菜单功能
