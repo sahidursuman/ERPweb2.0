@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":82,"md5":"6ccf33ddfcbf474df01fa474a3f26bd9"}*/
+/*TMODJS:{"debug":true,"version":84,"md5":"6ccf33ddfcbf474df01fa474a3f26bd9"}*/
 define(function(require) {
     return require("../../../template")("financial/Self/view/SelfChecking", function($data, $filename) {
         try {
