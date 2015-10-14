@@ -87,7 +87,7 @@ table tr th{
     background: #076598;
     border-bottom: 6px solid #04558c;
 }
-.nav-tabs{top:0}
+.nav-tabs{top:-1px}
 .btn-com{
     z-index:99;
     width:30px;
@@ -97,7 +97,7 @@ table tr th{
     top:0;
     cursor : pointer;
 }
-.nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus{border-top: 0;margin-top: 2px}
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus{margin-top: 2px}
 .left_b{
     display: none;
 }
@@ -198,8 +198,10 @@ table tr td{
 .main-content {
     margin-top: 77px;
 }
+.nav-tabs>li>a, .nav-tabs>li>a:focus{line-height: 16px}
 .nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus{
     background: white;
+    margin-top: -2px!important;
 }
 .border-li-h{
    cursor: pointer!important;
