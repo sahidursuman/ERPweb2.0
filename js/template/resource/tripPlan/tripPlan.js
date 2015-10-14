@@ -255,8 +255,6 @@ define(function(require, exports) {
 						
 						tripPlan.dateTimePicker();  
 						$("#tripPlan_addPlan_insurance .addInsurance").on("click", tripPlan.addInsurance);
-						//$("#tripPlan_addPlan_guide .addGuide").on("click", tripPlan.addGuide);
-						//$("#tripPlan_addPlan_bus .addBus").on("click", tripPlan.addBus);
 						$("#tripPlan_addPlan_restaurant .addRestaurant").on("click",{validator:validator},tripPlan.addRestaurant);   
 						$("#tripPlan_addPlan_hotel .addHotel").on("click",{validator:validator},tripPlan.addHotel);
 						$("#tripPlan_addPlan_scenic .addScenic").on("click",{validator:validator},tripPlan.addScenic);
