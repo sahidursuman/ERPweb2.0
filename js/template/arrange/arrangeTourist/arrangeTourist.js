@@ -109,14 +109,6 @@ define(function(require, exports) {
 							var startTime = $(this).attr("data-entity-startTime");
 							arrangeTourist.transferTourist(lineProductId,startTime);
 						});
-						//给搜索按钮绑定事件
-						$("#"+tabId+" .arrangeTouristMain .btn-arrangeTourist-search").click(function(){
-							arrangeTourist.searchData = {
-									lineProductId : $("#tab-"+menuKey+"-content .arrangeTouristMain select[name=lineProductId]").val(),
-									startTime : $("#tab-"+menuKey+"-content .arrangeTouristMain input[name=startTime]").val()
-							}
-							arrangeTourist.listArrangeTourist(0,arrangeTourist.searchData.lineProductId,arrangeTourist.searchData.startTime);
-						});
 						//分页--首页按钮事件
 						$("#"+tabId+" .arrangeTouristMain .pageMode a.first").click(function(){
 							arrangeTourist.listArrangeTourist(0,arrangeTourist.searchData.lineProductId,arrangeTourist.searchData.startTime);
