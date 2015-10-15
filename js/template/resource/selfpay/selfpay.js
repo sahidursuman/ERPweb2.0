@@ -261,7 +261,7 @@ define(function(require, exports) {
 			td.eq(3).append('<div class="col-sm-12 no-padding" style="padding-top:2px!important;"><input name="contractPrice" value="" class="col-sm-12" type="text" maxlength="10"></div>');
 			td.eq(4).append('<div class="col-sm-12 no-padding" style="padding-top:2px!important;"><input name="marketPrice" value="" class="col-sm-12" type="text" maxlength="10"></div>');
 			td.eq(5).append('<div class="col-sm-12 no-padding" style="padding-top:2px!important;"><input name="guideRate" value="" class="col-sm-12" type="text" maxlength="5"></div>');
-			td.eq(6).append('<div class="col-sm-12 no-padding" style="padding-top:2px!important;"><input name="travelAgencyRate" readonly="readonly" value="" class="col-sm-12" type="text" maxlength="5"></div>');
+			td.eq(6).append('<div class="col-sm-12 no-padding" style="padding-top:2px!important;"><input name="travelAgencyRate" value="" class="col-sm-12" type="text" maxlength="5"></div>');
 			$parents.find(".dateTimeArea button.del").off().on("click", selfpay.deteleDateArea);
 			$parents.find(".dateTimeArea").eq($parents.find(".dateTimeArea").length - 1).attr("data-index", $parents.find(".dateTimeArea").length);
 			selfpay.numberRate("update-selfpay-form");
