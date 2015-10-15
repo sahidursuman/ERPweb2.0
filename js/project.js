@@ -818,6 +818,7 @@ function listMenu(menuTemplate){
 						var year = date.getFullYear();
 						var month = ""
 						hotel.listHotel(0,"",year,month);
+						modals["financial_rummery"] = hotel;
 					});
 				});
 				//绑定系统信息菜单功能
