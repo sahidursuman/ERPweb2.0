@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":23,"md5":"f266121ab95af7a5bc5a66986b48112b"}*/
+/*TMODJS:{"debug":true,"version":24,"md5":"f266121ab95af7a5bc5a66986b48112b"}*/
 define(function(require) {
     return require("../../../template")("arrange/arrangeTourist/view/chooseTravelLine", function($data, $filename) {
         try {
