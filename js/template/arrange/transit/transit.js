@@ -426,7 +426,7 @@ define(function(require, exports) {
 			'<td><input class="col-sm-12 needPay" readonly="readonly" name="busNeedPayMoney" type="text" value="" /></td>'+
 			'<td><input class="col-sm-12" name="busPayedMoney" type="text" value="" /></td>'+
 			'<td><select class="" name="busPayType" ><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>'+  
-			'<td><button class="btn btn-xs btn-danger arrange-delete" title="删除"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></td>'+
+			'<td><a class="cursor arrange-delete" title="删除">删除</a></td>'+
 			'</tr>';
 			$("#"+id+" .busList tbody").append(html);
 	    	$("#"+tab+" .arrangeTouristMain .busList .arrange-delete").click(function(){
@@ -460,7 +460,7 @@ define(function(require, exports) {
 			'<td><select class="" name="hotelPayType" >'+
 			'<option value="0">现付</option>'+
 			'<option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>'+
-			'<td><button class="btn btn-xs btn-danger arrange-delete"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></td>'+
+			'<td><a class="cursor arrange-delete">删除</a></td>'+
 			'</tr>';
 			$("#"+id+" .hotelList tbody").append(html);
 			$("#"+tab+" .arrangeTouristMain .hotelList .arrange-delete").click(function(){
@@ -491,7 +491,7 @@ define(function(require, exports) {
 			'<td><select class="" name="ticketPayType" >'+
 			'<option value="0">现付</option>'+
 			'<option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>'+
-			'<td><button class="btn btn-xs btn-danger arrange-delete"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></td>'+
+			'<td><a class=" arrange-delete">删除</a></td>'+
 			'</tr>';
 			$("#"+id+" .ticketList tbody").append(html);
 	    	$("#"+tab+" .arrangeTouristMain .ticketList .arrange-delete").click(function(){

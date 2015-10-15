@@ -67,6 +67,10 @@ label{
 table tr td{
     border: 1px solid #ececec !important;
 }
+.test-iocn{
+    position: relative;
+    left: -16px;
+}
 
 table tr th{
 

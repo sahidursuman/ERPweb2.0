@@ -31,7 +31,7 @@ define(function(require, exports) {
 		},
 		//获取统计数据
 		getTouristStatisticData:function(page,partnerAgencyIdS,lineProductIdS,startTimeS,userIdS,createTimeStartS,createTimeEndS,customerTypeS,statusS){
-		
+
 			$.ajax({
 				url:""+APP_ROOT+"back/touristGroup.do?method=getTouristStatisticData&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 				type:"POST",
