@@ -50,6 +50,24 @@ define(function(require, exports) {
 					if(result){
 						var html = listMainTemplate(data);
 						addTab(menuKey,"游客管理",html);
+						//搜索栏状态button下拉事件
+						$(".touristGroupSearchForm .btn-status .dropdown-menu a").click(function(){
+							$(this).parent().parent().parent().find("button").attr("data-value",$(this).attr("data-value"));
+							$(this).parent().parent().parent().find("span").text($(this).text());
+							touristGroup.searchData = {
+								partnerAgencyId : $(".touristGroupSearchForm select[name=partnerAgencyId]").find("option:selected").val(),
+								lineProductId : $(".touristGroupSearchForm select[name=lineProductId]").find("option:selected").val(),
+								startTime : $(".touristGroupSearchForm input[name=startTime]").val(),
+								userId : $(".touristGroupSearchForm select[name=userId]").find("option:selected").val(),
+								createTimeStart : $(".touristGroupSearchForm input[name=createTimeStart]").val(),
+								createTimeEnd : $(".touristGroupSearchForm input[name=createTimeEnd]").val(),
+								customerType : $(".touristGroupSearchForm select[name=customerType]").find("option:selected").val(),
+								status : $(".touristGroupSearchForm select[name=status]").find("option:selected").val()
+							}
+							touristGroup.getTouristStatisticData(0,touristGroup.searchData.partnerAgencyId,touristGroup.searchData.lineProductId,touristGroup.searchData.startTime,touristGroup.searchData.userId,touristGroup.searchData.createTimeStart,touristGroup.searchData.createTimeEnd,touristGroup.searchData.customerType,touristGroup.searchData.status);
+							//下拉数据初始化
+							touristGroup.initList(data);
+						});
 						//筛选事件绑定
 						$(".touristGroupSearchForm .btn-touristGroupList-search").click(function(){
 							touristGroup.searchData = {
@@ -377,20 +395,23 @@ define(function(require, exports) {
 			var tab = "tab-resource_touristGroup-add-content";
 			var validator=rule.checktouristGroup($(".addTouristGroup"));  
 			if($(".tab-"+menuKey+"-add").length > 0) {
+				addTab(menuKey+"-add","添加游客");
 				if(!!touristGroup.edited["add"] && touristGroup.edited["add"] == "add"){
 					showConfirmMsg($( "#confirm-dialog-message" ), "未保存的数据，是否放弃?",function(){
 						console.log("继续编辑");			
 					},function(){
 						addTab(menuKey+"-add","添加游客",html);
+						touristGroup.initAdd();
 						touristGroup.edited["add"] = "";
 					},"放弃","继续编辑"); 							
 				 }else{
-					addTab(menuKey+"-add","添加游客",html);					
+					addTab(menuKey+"-add","添加游客",html);	
+                    touristGroup.initAdd();					
 				 } 
 			}else{
-				addTab(menuKey+"-add","添加游客",html);		
-			};	
-			touristGroup.initAdd();
+				addTab(menuKey+"-add","添加游客",html);	
+                touristGroup.initAdd();				
+			}
 		},
 		initAdd : function(){
 			//游客管理验证 
@@ -606,7 +627,8 @@ define(function(require, exports) {
 						var tab = "tab-resource_touristGroup-update-content";
 			    		var validator=rule.checktouristGroup($(".updateTouristGroup"));  
 						if($(".tab-"+menuKey+"-update").length > 0) {
-                 	    	if(!!touristGroup.edited["update"]){
+							addTab(menuKey+"-update","编辑小组");	
+                 	    	if(!!touristGroup.edited["update"] && touristGroup.edited["update"] != ""){
                  	    		showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
                  	    			 validator = rule.checktouristGroup($('.updateTouristGroup'));
 				            		 if (!validator.form()) { 
@@ -614,22 +636,25 @@ define(function(require, exports) {
 				            		 }
 				            		 touristGroup.submitUpdateTouristGroup($(".updateTouristGroup .btn-submit-addTouristGroup").attr("data-entity-id"),0);
 									 touristGroup.edited["update"] = "";
-				            		 addTab(menuKey+"-update","编辑小组",html);				
+				            		 addTab(menuKey+"-update","编辑小组",html);	
+									 touristGroup.initUpdate(id,data);
 				            		 validator = rule.checktouristGroup($('.updateTouristGroup'));
 				            	},function(){
 				            		addTab(menuKey+"-update","编辑小组",html);	
+									touristGroup.initUpdate(id,data);
 									validator = rule.checktouristGroup($('.updateTouristGroup'));									
 									touristGroup.edited["update"] = "";
 				            	}); 							
                  	    	 }else{
-	                 	    	addTab(menuKey+"-update","编辑小组",html);				
+	                 	    	addTab(menuKey+"-update","编辑小组",html);	
+								touristGroup.initUpdate(id,data);
 	                 	        validator = rule.checktouristGroup($('.updateTouristGroup'));
                  	    	 } 
                  	    }else{
-                 	    	addTab(menuKey+"-update","编辑小组",html);				
+                 	    	addTab(menuKey+"-update","编辑小组",html);	
+							touristGroup.initUpdate(id,data);
                  	    	validator = rule.checktouristGroup($("#"+tab+""));
-                 	    };	
-						touristGroup.initUpdate(id,data);
+                 	    }
 					}
 				}
 			});
@@ -641,7 +666,8 @@ define(function(require, exports) {
 			$('.updateTouristGroup').on("change",function(){
 				touristGroup.edited["update"] = "update";
 			});	
-			if(data.touristGroupDetail.status != 0){
+			// 已发团(0)、已分团(2)、已转客(3)、已取消(4)、已拆分(5),不能修改。未分团(1)才能修改
+			if(data.touristGroupDetail.status == 1){
 				//出游日期 时间控件
 				$("#"+tab+" .touristGroupMainForm input[name=startTime]").datepicker({
 					autoclose: true,

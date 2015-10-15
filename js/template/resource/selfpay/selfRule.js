@@ -139,6 +139,19 @@ define(function(require, exports) {
 				        	errMsg: '请输入数字'
 				        }
 				    ]
+				},
+				{	//旅行社返佣
+					$ele: $obj.find('input[name="travelAgencyRate"]'),
+					rules: [
+						{
+							type: 'null', 
+							errMsg: '旅行社返佣不能为空'
+						},
+				        {
+				        	type: 'float', 
+				        	errMsg: '请输入数字'
+				        }
+				    ]
 				}
                 ]);
 			return itemValidator

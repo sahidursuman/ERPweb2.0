@@ -10,8 +10,8 @@
 					<div class="form-group">
 						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>线路产品:</label>
 						<div class="col-sm-2">
-							{{if touristGroupDetail.status != 0}}
-								<input type="text" value="{{if touristGroupDetail.lineProduct != null}}{{touristGroupDetail.lineProduct.name}}{{/if}}" name="lineProductIdName" class="col-sm-8 bind-change" readonly="readonly" />
+							{{if touristGroupDetail.status == 1}}  
+								<input type="text" value="{{if touristGroupDetail.lineProduct != null}}{{touristGroupDetail.lineProduct.name}}{{/if}}" name="lineProductIdName" class="col-sm-8 bind-change" readonly="readonly" /> 							
 								<input type="hidden" value="{{touristGroupDetail.lineProductId}}" name="lineProductId" />
 								<button class="col-sm-4 btn btn-sm btn-primary btn-travelLine-search" style="padding-bottom:5px;">
 									<i class="ace-icon fa fa-search "></i>搜索
@@ -24,7 +24,7 @@
 						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>出游日期:</label>
 						<div class="col-sm-2">
 							<!-- <input type="text" name="startTime" class="col-sm-12" /> -->
-							{{if touristGroupDetail.status != 0}}
+							{{if touristGroupDetail.status == 1}}
 								<div class="input-group">
 									<input type="text" name="startTime" value="{{touristGroupDetail.startTime | dateFormat: 'yyyy-MM-dd'}}" class="col-sm-12 date-picker datepicker" />
 									<span class="input-group-addon">
@@ -32,7 +32,7 @@
 									</span>
 								</div>
 							{{else}}
-								<input type="text" name="startTime" value="{{touristGroupDetail.startTime | dateFormat: 'yyyy-MM-dd'}}" class="col-sm-12" readonly="readonly"/>
+								<input type="text" name="startTime" value="{{touristGroupDetail.startTime | dateFormat: 'yyyy-MM-dd'}}" class="col-sm-12" readonly="readonly" />
 							{{/if}}
 						</div>
 						<label class="col-sm-1 control-label no-padding-right">是否购买保险:</label>
