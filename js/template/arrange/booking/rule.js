@@ -10,6 +10,7 @@ var rule = {
 			var validator = $obj.formValidate([
 				{	//同行客户验证 
 					$ele: $obj.find('input[name="partnerAgencyName"]'),
+					$valObj: $obj.find('input[name="partnerAgencyId"]'),
 					rules: [
 				        {
 				        	type: 'null', 
