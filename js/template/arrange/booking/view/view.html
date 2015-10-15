@@ -1,12 +1,10 @@
 <div class="col-xs-12 updateBooking">
 	<form class="form-horizontal bookingMainForm" role="form" style="margin-top:10px" onsubmit="return false">
-		<div class="widget-box ui-sortable-handle">
-			<div class="widget-header">
-				<h5 class="widget-title">
-					<i class="ace-icon fa fa-info-circle"></i>
-					代订信息
+		<div class=" ui-sortable-handle">
+				<h5 class="">
+					<span class="badge badge-primary">1</span>
+					<label class="middle title-size ">代订信息</label>
 				</h5>
-			</div>
 			<div class="widget-body">
 				<div class="widget-main">   
 					<div class="form-group">
@@ -96,30 +94,27 @@
 	<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
 		<div class="form-group">
 			<div class="col-xs-12 col-sm-12 widget-container-col bookingHotelList">
-				<div class="widget-box ui-sortable-handle">
-					<div class="widget-header">
-						<h5 class="widget-title">
-							<i class="ace-icon fa fa-building"></i>
-							酒店代订
+				<div class=" ui-sortable-handle">
+						<h5 class="">
+							<span class="badge badge-primary">2</span>
+							<label class="middle title-size">酒店代订</label>
 						</h5>
-					</div>
-
 					<div class="widget-body">
 						<div class="widget-main no-padding">
-							<table class="table table-striped table-bordered table-hover"> 
+							<table class="table table-striped table-bordered table-hover margin-top">
 								<thead>
 									<tr>
-										<th width="150">入住日期</th>
-										<th width="150">离店日期</th>
-										<th>星级</th>
-										<th>酒店</th>
-										<th>房型</th>
-										<th>天数</th>
-										<th>数量</th>
-										<th>成本单价</th>
-										<th>销售单价</th>
-										<th>成本</th>
-										<th>应收</th>
+										<th class="th-border" width="150">入住日期</th>
+										<th class="th-border" width="150">离店日期</th>
+										<th class="th-border">星级</th>
+										<th class="th-border">酒店</th>
+										<th class="th-border">房型</th>
+										<th class="th-border">天数</th>
+										<th class="th-border">数量</th>
+										<th class="th-border">成本单价</th>
+										<th class="th-border">销售单价</th>
+										<th class="th-border">成本</th>
+										<th class="th-border">应收</th>
 									</tr>
 								</thead>
 								<tbody class="hotelBookingList">{{each bookingOrder.bookingHotelList as hotelList}}
@@ -161,28 +156,25 @@
 		</div>
 		<div class="form-group">
 			<div class="col-xs-12 col-sm-12 widget-container-col bookingScenicList">
-				<div class="widget-box ui-sortable-handle">
-					<div class="widget-header">
-						<h5 class="widget-title">
-							<i class="ace-icon fa fa-building"></i>
-							景区项目代订
+				<div class=" ui-sortable-handle">
+						<h5 class="">
+							<span class="badge badge-primary">3</span>
+							<label class="middle title-size">景区项目代订</label>
 						</h5>
-					</div>
-
 					<div class="widget-body">
 						<div class="widget-main no-padding">
-							<table class="table table-striped table-bordered table-hover"> 
+							<table class="table table-striped table-bordered table-hover margin-top">
 								<thead>
 									<tr>
-										<th width="150">日期</th>
-										<th>景区</th>
-										<th>收费项</th>
-										<th>数量</th>
-										<th>成本单价</th>
-										<th>销售单价</th>
-										<th>成本</th>
-										<th>应收</th>
-										<th>订单号</th>
+										<th class="th-border" width="150">日期</th>
+										<th class="th-border">景区</th>
+										<th class="th-border">收费项</th>
+										<th class="th-border">数量</th>
+										<th class="th-border">成本单价</th>
+										<th class="th-border">销售单价</th>
+										<th class="th-border">成本</th>
+										<th class="th-border">应收</th>
+										<th class="th-border">订单号</th>
 									</tr>
 								</thead>
 								<tbody class="scenicBookingList">{{each bookingOrder.bookingScenicList as scenicList}}
@@ -206,31 +198,28 @@
 		</div>
 		<div class="form-group">
 			<div class="col-xs-12 col-sm-12 widget-container-col bookingTicketList">
-				<div class="widget-box ui-sortable-handle">
-					<div class="widget-header">
-						<h5 class="widget-title">
-							<i class="ace-icon fa fa-building"></i>
-							票务代订
+				<div class=" ui-sortable-handle">
+						<h5 class="">
+							<span class="badge badge-primary">4</span>
+							<label class="middle title-size">票务代订</label>
 						</h5>
-					</div>
-
 					<div class="widget-body">
 						<div class="widget-main no-padding">
-							<table class="table table-striped table-bordered table-hover"> 
+							<table class="table table-striped table-bordered table-hover margin-top">
 								<thead>
 									<tr>
-										<th>票务公司</th>
-										<th>类型</th>
-										<th>出发城市</th>
-										<th>到达城市</th>
-										<th>班次</th>
-										<th>座位级别</th>
-										<th width="150">时间</th>
-										<th>数量</th>
-										<th>成本单价</th>
-										<th>销售单价</th>
-										<th>成本</th>
-										<th>应收</th>
+										<th class="th-border">票务公司</th>
+										<th class="th-border">类型</th>
+										<th class="th-border">出发城市</th>
+										<th class="th-border">到达城市</th>
+										<th class="th-border">班次</th>
+										<th class="th-border">座位级别</th>
+										<th class="th-border" width="150">时间</th>
+										<th class="th-border">数量</th>
+										<th class="th-border">成本单价</th>
+										<th class="th-border">销售单价</th>
+										<th class="th-border">成本</th>
+										<th class="th-border">应收</th>
 									</tr>
 								</thead>
 								<tbody class="ticketBookingList">{{each bookingOrder.bookingTicketList as ticketList}}
@@ -267,29 +256,27 @@
 		</div>
 		<div class="form-group">
 			<div class="col-xs-12 col-sm-12 widget-container-col bookingBusList">
-				<div class="widget-box ui-sortable-handle">
-					<div class="widget-header">
-						<h5 class="widget-title">
-							<i class="ace-icon fa fa-building"></i>
-							旅游车代订
+				<div class=" ui-sortable-handle">
+						<h5 class="">
+							<span class="badge badge-primary">5</span>
+							<label class="cursor title-size">旅游车代订</label>
 						</h5>
-					</div>
 
 					<div class="widget-body">
 						<div class="widget-main no-padding">
-							<table class="table table-striped table-bordered table-hover"> 
+							<table class="table table-striped table-bordered table-hover margin-top">
 								<thead>
 									<tr>
-										<th width="150">开始日期</th>
-										<th width="150">结束日期</th>
-										<th>车座数</th>
-										<th>车辆品牌</th>
-										<th>所属车队</th>
-										<th>数量</th>
-										<th>成本单价</th>
-										<th>销售单价</th>
-										<th>成本</th>
-										<th>应收</th>
+										<th class="th-border" width="150">开始日期</th>
+										<th class="th-border" width="150">结束日期</th>
+										<th class="th-border">车座数</th>
+										<th class="th-border">车辆品牌</th>
+										<th class="th-border">所属车队</th>
+										<th class="th-border">数量</th>
+										<th class="th-border">成本单价</th>
+										<th class="th-border">销售单价</th>
+										<th class="th-border">成本</th>
+										<th class="th-border">应收</th>
 									</tr>
 								</thead>
 								<tbody class="busBookingList">{{each bookingOrder.bookingBusCompanieList as busList}}
