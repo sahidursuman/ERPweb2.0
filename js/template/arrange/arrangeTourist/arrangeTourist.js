@@ -511,7 +511,7 @@ define(function(require, exports) {
 						    type: 1,
 						    title:"选择计划",
 						    skin: 'layui-layer-rim', //加上边框
-						    area: ['95%', '90%'], //宽高
+						    area: ['60%', '50%'], //宽高
 						    zIndex:1028,
 						    content: html,
 						    success:function(){
@@ -897,7 +897,7 @@ define(function(require, exports) {
 						    type: 1,
 						    title:"查看小组信息",
 						    skin: 'layui-layer-rim', //加上边框
-						    area: ['80%', '90%'], //宽高
+						    area: ['60%', '50%'], //宽高
 						    zIndex:1028,
 						    content: html,
 						    success:function(){
@@ -944,7 +944,7 @@ define(function(require, exports) {
 						    type: 1,
 						    title:"添加游客小组",
 						    skin: 'layui-layer-rim', //加上边框
-						    area: ['95%', '90%'], //宽高
+						    area: ['60%', '50%'], //宽高
 						    zIndex:1028,
 						    content: html,
 						    success:function(){
@@ -1332,7 +1332,7 @@ define(function(require, exports) {
 						    type: 1,
 						    title:"查看发团计划",
 						    skin: 'layui-layer-rim', //加上边框
-						    area: ['95%', '90%'], //宽高
+						    area: ['60%', '50%'], //宽高
 						    zIndex:1028,
 						    content: html,
 						    success:function(){
@@ -1371,7 +1371,7 @@ define(function(require, exports) {
 						    type: 1,
 						    title:"编辑费用信息",
 						    skin: 'layui-layer-rim', //加上边框
-						    area: ['95%', '90%'], //宽高
+						    area: ['60%', '50%'], //宽高
 						    zIndex:1028,
 						    content: html,
 						    success:function(){  

@@ -13,14 +13,14 @@
 		<div class="form-group">
 			{{if arriveTime != null}}<div class="col-sm-1"></div><label class="col-sm-2 control-label no-padding-right" style="text-align: left;">接团日期：{{arriveTime | dateFormat: 'yyyy-MM-dd'}}</label>{{/if}}
 			{{if arrivePosition != null && arrivePosition != ""}}<label class="col-sm-2 control-label no-padding-right" style="text-align: left;">接团地点：{{arrivePosition}}</label>{{/if}}
-			{{if arriveShift != null}}<label class="col-sm-2 control-label no-padding-right" style="text-align: left;">接团班次：{{arriveShift}}</label>{{/if}}
-			{{if arriveShiftTime != null}}<label class="col-sm-3 control-label no-padding-right" style="text-align: left;">接团班次时间：{{arriveShiftTime}}</label>{{/if}}
+			{{if arriveShift != null}}<label class="col-sm-2 control-label no-padding-right" style="text-align: left;">接团班次：{{if arriveShift != null}}{{arriveShift}}{{/if}}</label>{{/if}}
+			{{if arriveShiftTime != null}}<label class="col-sm-3 control-label no-padding-right" style="text-align: left;">接团班次时间：{{if arriveShiftTime != null}}{{arriveShiftTime}}{{/if}}</label>{{/if}}
 		</div>
 		<div class="form-group">
 			{{if leaveTime != null}}<div class="col-sm-1"></div><label class="col-sm-2 control-label no-padding-right" style="text-align: left;">送团日期：{{leaveTime | dateFormat: 'yyyy-MM-dd'}}</label>{{/if}}
 			{{if leavePosition != null && leavePosition != ""}}<label class="col-sm-2 control-label no-padding-right" style="text-align: left;">送团地点：{{leavePosition}}</label>{{/if}}
-			{{if leaveShift != null}}<label class="col-sm-2 control-label no-padding-right" style="text-align: left;">送团班次：{{leaveShift}}</label>{{/if}}
-			{{if leaveShiftTime != null}}<label class="col-sm-3 control-label no-padding-right" style="text-align: left;">送团班次时间：{{leaveShiftTime}}</label>{{/if}}
+			{{if leaveShift != null}}<label class="col-sm-2 control-label no-padding-right" style="text-align: left;">送团班次：{{if leaveShift != null}}{{leaveShift}}{{/if}}</label>{{/if}}
+			{{if leaveShiftTime != null}}<label class="col-sm-3 control-label no-padding-right" style="text-align: left;">送团班次时间：{{if leaveShiftTime != null}}{{leaveShiftTime}}{{/if}}</label>{{/if}}
 		</div>
 	</form>
 	
@@ -80,6 +80,7 @@
 													<th>应付款</th>
 													<th>已付款</th>
 													<th>付款方式</th>
+													<th>备注</th>
 												</tr>
 											</thead>
 											<tbody>{{each receiveGroup.outBusList as outBus}}
@@ -97,6 +98,7 @@
 													<td>{{outBus.needPayMoney}}</td>
 													<td>{{outBus.payedMoney}}</td>
 													<td>{{if outBus.payType == 0}}现付{{else if outBus.payType == 1}}签单{{else if outBus.payType == 2}}转账{{else}}网付{{/if}}</td>
+													<td>{{outBus.remark}}</td>
 												</tr>{{/if}}{{/each}}
 											</tbody>
 										</table>
@@ -132,6 +134,7 @@
 													<th>应付款</th>
 													<th>已付款</th>
 													<th>付款方式</th>
+													<th>备注</th>
 												</tr>
 											</thead>
 											<tbody>{{each receiveGroup.outHotelList as outHotel}}
@@ -164,6 +167,7 @@
 													<td>{{outHotel.needPayMoney}}</td>
 													<td>{{outHotel.payedMoney}}</td>
 													<td>{{if outHotel.payType == 0}}现付{{else if outHotel.payType == 1}}签单{{else if outHotel.payType == 2}}转账{{else}}网付{{/if}}</td>
+													<td>{{outHotel.remark}}</td>
 												</tr>{{/if}}{{/each}}
 											</tbody>
 										</table>
@@ -200,6 +204,7 @@
 													<th>应付款</th>
 													<th>已付款</th>
 													<th>付款方式</th>
+													<th>备注</th>
 												</tr>
 											</thead>
 											<tbody>{{each receiveGroup.outTicketList as outTicket}}
@@ -225,6 +230,107 @@
 													<td>{{outTicket.needPayMoney}}</td>
 													<td>{{outTicket.payedMoney}}</td>
 													<td>{{if outTicket.payType == 0}}现付{{else if outTicket.payType == 1}}签单{{else if outTicket.payType == 2}}转账{{else}}网付{{/if}}</td>
+													<td>{{outTicket.remark}}</td>
+												</tr>{{/if}}{{/each}}
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-group restaurantList">
+						<div class="col-xs-12 col-sm-12 widget-container-col">
+							<div class="widget-box ui-sortable-handle">
+								<div class="widget-header">
+									<h5 class="widget-title">
+										<i class="ace-icon fa fa-user"></i>
+										餐厅安排
+									</h5>
+								</div>
+								<div class="widget-body">
+									<div class="widget-main no-padding">
+										<table class="table table-striped table-bordered table-hover restaurantListTable">
+											<thead>
+												<tr>
+													<th>日期</th>
+													<th>餐厅</th>
+													<th>联系人</th>
+													<th>联系电话</th>
+													<th>类型</th>
+													<th>餐标</th>
+													<th>人数</th>
+													<th>优惠</th>
+													<th>应付款</th>
+													<th>已付款</th>
+													<th>付款方式</th>
+													<th>备注</th>
+												</tr>
+											</thead>
+											<tbody>{{each receiveGroup.outRestaurantList as outRestaurant}}
+												{{if outRestaurant.id != null && outRestaurant.restaurant != null}}
+												<tr data-entity-id="{{outRestaurant.id}}">
+													<td>{{outRestaurant.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
+													<td>{{outRestaurant.restaurant.name}}</td>
+													<td>{{outRestaurant.restaurant.managerName}}</td>
+													<td>{{outRestaurant.restaurant.mobileNumber}}</td>
+													<td>{{if outRestaurant.standardType == "早餐"}}早餐{{else if outRestaurant.standardType == "午餐"}}午餐{{else}}晚餐{{/if}}</td>
+													<td>{{outRestaurant.price}}</td>
+													<td>{{outRestaurant.memberCount}}</td>
+													<td>{{outRestaurant.reduceMoney}}</td>
+													<td>{{outRestaurant.needPayMoney}}</td>
+													<td>{{outRestaurant.payedMoney}}</td>
+													<td>{{if outRestaurant.payType == 0}}现付{{else if outRestaurant.payType == 1}}签单{{else if outRestaurant.payType == 2}}转账{{else}}网付{{/if}}</td>
+													<td>{{outRestaurant.remark}}</td>
+												</tr>{{/if}}{{/each}}
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-group otherList">
+						<div class="col-xs-12 col-sm-12 widget-container-col">
+							<div class="widget-box ui-sortable-handle">
+								<div class="widget-header">
+									<h5 class="widget-title">
+										<i class="ace-icon fa fa-user"></i>
+										其他安排
+									</h5>
+								</div>
+								<div class="widget-body">
+									<div class="widget-main no-padding">
+										<table class="table table-striped table-bordered table-hover otherListTable">
+											<thead>
+												<tr>
+													<th>日期</th>
+													<th>项目</th>
+													<th>联系人</th>
+													<th>联系电话</th>
+													<th>单价</th>
+													<th>数量</th>
+													<th>优惠</th>
+													<th>应付款</th>
+													<th>已付款</th>
+													<th>付款方式</th>
+													<th>备注</th>
+												</tr>
+											</thead>
+											<tbody>{{each receiveGroup.outOtherList as outOther}}
+											{{if outOther != null && outOther.name != null}}
+												<tr data-entity-id="{{outOther.id}}">
+													<td>{{outOther.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
+													<td>{{outOther.name}}</td>
+													<td>{{outOther.managerName}}</td>
+													<td>{{outOther.mobileNumber}}</td>
+													<td>{{outOther.price}}</td>
+													<td>{{outOther.memberCount}}</td>
+													<td>{{outOther.reduceMoney}}</td>
+													<td>{{outOther.needPayMoney}}</td>
+													<td>{{outOther.payedMoney}}</td>
+													<td>{{if outOther.payType == 0}}现付{{else if outTicket.payType == 1}}签单{{else if outTicket.payType == 2}}转账{{else}}网付{{/if}}</td>
+													<td>{{outOther.remark}}</td>
 												</tr>{{/if}}{{/each}}
 											</tbody>
 										</table>
@@ -265,6 +371,7 @@
 													<th>应付款</th>
 													<th>已付款</th>
 													<th>付款方式</th>
+													<th>备注</th>
 												</tr>
 											</thead>
 											<tbody>{{each bus as outBus}}
@@ -282,6 +389,7 @@
 													<td>{{outBus.needPayMoney}}</td>
 													<td>{{outBus.payedMoney}}</td>
 													<td>{{if outBus.payType == 0}}现付{{else if outBus.payType == 1}}签单{{else if outBus.payType == 2}}转账{{else}}网付{{/if}}</td>
+													<td>{{outBus.remark}}</td>
 												</tr>{{/if}}{{/each}}
 											</tbody>
 										</table>
@@ -322,6 +430,7 @@
 													<th>应付款</th>
 													<th>已付款</th>
 													<th>付款方式</th>
+													<th>备注</th>
 												</tr>
 											</thead>
 											<tbody>{{each sendGroup.outBusList as outBus}}
@@ -339,6 +448,7 @@
 													<td>{{outBus.needPayMoney}}</td>
 													<td>{{outBus.payedMoney}}</td>
 													<td>{{if outBus.payType == 0}}现付{{else if outBus.payType == 1}}签单{{else if outBus.payType == 2}}转账{{else}}网付{{/if}}</td>
+													<td>{{outBus.remark}}</td>
 												</tr>{{/if}}{{/each}}
 											</tbody>
 										</table>
@@ -374,6 +484,7 @@
 													<th>应付款</th>
 													<th>已付款</th>
 													<th>付款方式</th>
+													<th>备注</th>
 												</tr>
 											</thead>
 											<tbody>{{each sendGroup.outHotelList as outHotel}}
@@ -406,6 +517,7 @@
 													<td>{{outHotel.needPayMoney}}</td>
 													<td>{{outHotel.payedMoney}}</td>
 													<td>{{if outHotel.payType == 0}}现付{{else if outHotel.payType == 1}}签单{{else if outHotel.payType == 2}}转账{{else}}网付{{/if}}</td>
+													<td>{{outHotel.remark}}</td>
 												</tr>{{/if}}{{/each}}
 											</tbody>
 										</table>
@@ -442,6 +554,7 @@
 													<th>应付款</th>
 													<th>已付款</th>
 													<th>付款方式</th>
+													<th>备注</th>
 												</tr>
 											</thead>
 											<tbody>{{each sendGroup.outTicketList as outTicket}}
@@ -467,6 +580,107 @@
 													<td>{{outTicket.needPayMoney}}</td>
 													<td>{{outTicket.payedMoney}}</td>
 													<td>{{if outTicket.payType == 0}}现付{{else if outTicket.payType == 1}}签单{{else if outTicket.payType == 2}}转账{{else}}网付{{/if}}</td>
+													<td>{{outTicket.remark}}</td>
+												</tr>{{/if}}{{/each}}
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-group restaurantList">
+						<div class="col-xs-12 col-sm-12 widget-container-col">
+							<div class="widget-box ui-sortable-handle">
+								<div class="widget-header">
+									<h5 class="widget-title">
+										<i class="ace-icon fa fa-user"></i>
+										餐厅安排
+									</h5>
+								</div>
+								<div class="widget-body">
+									<div class="widget-main no-padding">
+										<table class="table table-striped table-bordered table-hover restaurantListTable">
+											<thead>
+												<tr>
+													<th>日期</th>
+													<th>餐厅</th>
+													<th>联系人</th>
+													<th>联系电话</th>
+													<th>类型</th>
+													<th>餐标</th>
+													<th>人数</th>
+													<th>优惠</th>
+													<th>应付款</th>
+													<th>已付款</th>
+													<th>付款方式</th>
+													<th>备注</th>
+												</tr>
+											</thead>
+											<tbody>{{each sendGroup.outRestaurantList as outRestaurant}}
+												{{if outRestaurant.id != null && outRestaurant.restaurant != null}}
+												<tr data-entity-id="{{outRestaurant.id}}">
+													<td>{{outRestaurant.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
+													<td>{{outRestaurant.restaurant.name}}</td>
+													<td>{{outRestaurant.restaurant.managerName}}</td>
+													<td>{{outRestaurant.restaurant.mobileNumber}}</td>
+													<td>{{if outRestaurant.standardType == "早餐"}}早餐{{else if outRestaurant.standardType == "午餐"}}午餐{{else}}晚餐{{/if}}</td>
+													<td>{{outRestaurant.price}}</td>
+													<td>{{outRestaurant.memberCount}}</td>
+													<td>{{outRestaurant.reduceMoney}}</td>
+													<td>{{outRestaurant.needPayMoney}}</td>
+													<td>{{outRestaurant.payedMoney}}</td>
+													<td>{{if outRestaurant.payType == 0}}现付{{else if outRestaurant.payType == 1}}签单{{else if outRestaurant.payType == 2}}转账{{else}}网付{{/if}}</td>
+													<td>{{outRestaurant.remark}}</td>
+												</tr>{{/if}}{{/each}}
+											</tbody>
+										</table> 
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-group otherList">
+						<div class="col-xs-12 col-sm-12 widget-container-col">
+							<div class="widget-box ui-sortable-handle">
+								<div class="widget-header">
+									<h5 class="widget-title">
+										<i class="ace-icon fa fa-user"></i>
+										其他安排
+									</h5>
+								</div>
+								<div class="widget-body">
+									<div class="widget-main no-padding">
+										<table class="table table-striped table-bordered table-hover otherListTable">
+											<thead>
+												<tr>
+													<th>日期</th>
+													<th>项目</th>
+													<th>联系人</th>
+													<th>联系电话</th>
+													<th>单价</th>
+													<th>数量</th>
+													<th>优惠</th>
+													<th>应付款</th>
+													<th>已付款</th>
+													<th>付款方式</th>
+													<th>备注</th>
+												</tr>
+											</thead>
+											<tbody>{{each sendGroup.outOtherList as outOther}}
+											{{if outOther != null && outOther.name != null}}
+												<tr data-entity-id="{{outOther.id}}">
+													<td>{{outOther.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
+													<td>{{outOther.name}}</td>
+													<td>{{outOther.managerName}}</td>
+													<td>{{outOther.mobileNumber}}</td>
+													<td>{{outOther.price}}</td>
+													<td>{{outOther.memberCount}}</td>
+													<td>{{outOther.reduceMoney}}</td>
+													<td>{{outOther.needPayMoney}}</td>
+													<td>{{outOther.payedMoney}}</td>
+													<td>{{if outOther.payType == 0}}现付{{else if outTicket.payType == 1}}签单{{else if outTicket.payType == 2}}转账{{else}}网付{{/if}}</td>
+													<td>{{outOther.remark}}</td>
 												</tr>{{/if}}{{/each}}
 											</tbody>
 										</table>

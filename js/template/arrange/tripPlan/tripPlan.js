@@ -486,6 +486,65 @@ define(function(require, exports) {
 			$("#" + tab + " .updateTripPlan .btn-updateTripPlan").click(function(){
 				tripPlan.submitUpdateTripPlan(1);
 			});
+
+			$("#" + tab + " .newAddTripPlan .btn-updateTripPlan").click(function(){
+				var planTouristCount = parseInt(getValue("planTouristCount")),
+					memberCount = parseInt($("#" + tab + " .tripPlanAllMemberCount").text());
+				if(planTouristCount < memberCount){
+					showMessageDialog($( "#confirm-dialog-message" ),"小组总人数不能大于计划人数",function(){
+					});
+				}else{
+					// 表单校验
+					if (!validatorCreateTripPlan.form()) { return; }
+					
+					//获取计划Id
+			    	var tripPlanId = $("#" + tab + " .newAddTripPlan input[name=tripPlanId]").val();
+					var saveTripP = {
+						"tripPlanId" : tripPlanId,
+						"tripPlan": {
+							"startTime": getValue("startTime"),
+				            "accompanyGuideName": getValue("accompanyGuideName"),
+				            "accompanyGuideMobile": getValue("accompanyGuideMobile"),
+				            "planTouristCount": getValue("planTouristCount"),
+				            "setPlacePosition": getValue("setPlacePosition"),
+				            "setPlaceTime": getValue("setPlaceTime")
+						},
+						"lineProductId": getValue("lineProductId"),
+				        "driverId": getValue("driverId"),
+				        "guideId": getValue("AddTPchooseGuideId"),
+				        "busId": getValue("busLicenseNumberId"),
+				        "touristGroupId": []
+					}
+					var touristGroupList = $("#" + tab + " .newAddTripPlan .updateTripPlanTouristTbody tr").length;
+					$("#" + tab + " .newAddTripPlan .updateTripPlanTouristTbody tr").each(function(i){
+						saveTripP.touristGroupId[i] = {
+							"id": $(this).attr("data-entity-id")
+						}
+					})
+							
+					var saveTripPlan = JSON.stringify(saveTripP);
+					$.ajax({
+						url:""+APP_ROOT+"back/tripPlan.do?method=updateTripPlan&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
+						data:"saveTripPlan="+encodeURIComponent(saveTripPlan)+"",
+						dataType: "json",
+						type:"POST",
+						beforeSend:function(){
+							globalLoadingLayer = openLoadingLayer();
+						},
+						success:function(data){
+							var result = showDialog(data);
+							layer.close(globalLoadingLayer);
+							if(result){
+								showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+									closeTab(menuKey+"-update");
+									tripPlan.listTripPlan(0,"","","","","","");
+								});
+							}
+							
+						}
+					})
+				}
+			});
 		},
 		//搜索关键词初始化
 		lineSearchData : {
@@ -520,7 +579,7 @@ define(function(require, exports) {
 				    			type: 1,
 							    title:"选择路线",
 							    skin: 'layui-layer-rim', //加上边框
-							    area: ['85%', '80%'], //宽高
+							    area: ['70%', '75%'], //宽高
 							    zIndex:1029,
 							    content: html,
 							    success: function(data) {
@@ -926,7 +985,7 @@ define(function(require, exports) {
 							    type: 1,
 							    title:"添加游客小组",
 							    skin: 'layui-layer-rim', //加上边框
-							    area: ['95%', '90%'], //宽高
+							    area: ['60%', '50%'], //宽高
 							    zIndex:1028,
 							    content: html,
 							    success:function(){
@@ -986,12 +1045,12 @@ define(function(require, exports) {
 													"<td>"+addGroupIdJson[i].remark+"</td>"+
 													"<td>"+
 													"<div class=\"hidden-sm hidden-xs btn-group\">"+
-													"<button data-entity-id=\""+addGroupIdJson[i].id+"\" class=\"btn btn-xs btn-success touristGroupView\">"+
-														"<i class=\"ace-icon fa fa-search-plus bigger-120\"></i>"+
-													"</button>"+
-													"<button data-entity-id=\""+addGroupIdJson[i].id+"\" class=\"btn btn-xs btn-danger touristGroupDelete\">"+
-														"<i class=\"ace-icon fa fa-trash-o bigger-120\"></i>"+
-													"</button>"+
+													"<a data-entity-id=\""+addGroupIdJson[i].id+"\" class=\"cursor touristGroupView\">"+
+														"查看"+
+													"</a>"+"<a class='cursor'> |</a>"+
+													"<a data-entity-id=\""+addGroupIdJson[i].id+"\" class=\"cursor touristGroupDelete\">"+
+														"删除"+
+													"</a>"+
 													"</div>"+
 													"</td>"+
 												"</tr>";
@@ -1054,7 +1113,7 @@ define(function(require, exports) {
 						    type: 1,
 						    title:"查看小组信息",
 						    skin: 'layui-layer-rim', //加上边框
-						    area: ['80%', '90%'], //宽高
+						    area: ['60%', '50%'], //宽高
 						    zIndex:1028,
 						    content: html,
 						    success:function(data){
