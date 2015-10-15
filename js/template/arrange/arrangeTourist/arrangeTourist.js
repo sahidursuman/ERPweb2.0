@@ -1012,8 +1012,8 @@ define(function(require, exports) {
 												"<button data-entity-id=\""+addGroupIdJson[i].id+"\" class=\"btn btn-xs btn-success addTripPlanView\">"+
 													"<i class=\"ace-icon fa fa-search-plus bigger-120\"></i>"+
 												"</button>"+
-												"<button data-entity-id=\""+addGroupIdJson[i].id+"\" class=\"btn btn-xs btn-danger addTripPlanDelete\">"+
-													"<i class=\"ace-icon fa fa-trash-o bigger-120\"></i>"+
+												"<button data-entity-id=\""+addGroupIdJson[i].id+"\" class=\"cursor addTripPlanDelete\">"+
+													"删除"+
 												"</button>"+
 												"</div>"+
 												"</td>"+
@@ -1371,7 +1371,7 @@ define(function(require, exports) {
 						    type: 1,
 						    title:"编辑费用信息",
 						    skin: 'layui-layer-rim', //加上边框
-						    area: ['60%', '50%'], //宽高
+						    area: ['60%', '75%'], //宽高
 						    zIndex:1028,
 						    content: html,
 						    success:function(){  
@@ -1384,7 +1384,7 @@ define(function(require, exports) {
 					    			"<td><input  name=\"describe\" type=\"text\" class=\"col-sm-12  no-padding-right\" /></td>"+
 					    			"<td><input  name=\"count\" type=\"text\" class=\"col-sm-12  no-padding-right costCount\" /></td>"+
 					    			"<td><input  name=\"otherPrice\" type=\"text\" class=\"col-sm-12  no-padding-right costPrice\" /></td>"+
-					    			"<td><button class=\"btn btn-xs btn-danger addCost-delete\"><i class=\"ace-icon fa fa-trash-o bigger-120\"></i></button></td>"+
+					    			"<td><a class=\"cursor addCost-delete\">删除</a></td>"+
 					    			"</tr>";
 						    		$(".editFeeMainForm .editFeeTbody").append(html);
 						    		
