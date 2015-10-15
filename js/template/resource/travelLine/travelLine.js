@@ -10,7 +10,10 @@ define(function(require, exports) {
 	var updateLineDayTemplate = require("./view/updateLineDay");
 	var addLineProductTemplate = require("./view/addLineProduct");
 	var tabId = "tab-"+menuKey+"-content";
-	
+	var addLineId = menuKey+"-addLine";
+	var lookID = menuKey+"-look";
+	var updateId = menuKey+"update";
+
 	var travelLine = {
 		pageData:{
 			pageNo:0
@@ -131,169 +134,147 @@ define(function(require, exports) {
 		},
 		addTravelLine:function(){
 			var html = addTemplate();
-			var addTravelLineLayer = layer.open({  
-			    type: 1,
-			    title:"新增线路",
-			    skin: 'layui-layer-rim', //加上边框
-			    area: ['95%', '90%'], //宽高   
-			    zIndex:1028,
-			    content: html,
-			    success:function(){
-			    	// 初始化并绑定表单验证
-			    	var validator = rule.traveLineCheckor($('.travelLineMainForm'));               
+			addTab(addLineId,"新增线路",html);
+			//事件绑定
+			// 初始化并绑定表单验证
+			var validator = rule.traveLineCheckor($('.travelLineMainForm'));
 
-			    	$(".travelLineDayList .btn-submit-travelLine").unbind().click(function(){
-			    		// 表单验证
-			    		if (!validator.form())  return;
+			$(".travelLineDayList .btn-submit-travelLine").unbind().click(function(){
+				// 表单验证
+				if (!validator.form())  return;
 
-			    		var status = 0;
-						if($(".travelLineMainForm .travelLine-status").is(":checked") == true){
-							status = 1;
+				var status = 0;
+				if($(".travelLineMainForm .travelLine-status").is(":checked") == true){
+					status = 1;
+				}
+				var form = $(".travelLineMainForm").serialize()+"&status="+status+"";
+				var travelLineJsonAdd = "[";
+				var lineDayListLength = $(".travelLineDayList .lineDayList tbody tr").length;
+				$(".travelLineDayList .lineDayList tbody tr").each(function(i){
+					var lineDayJson = "";
+					var repastDetail = $(this).find("td")[1].innerHTML;
+					var restPosition = $(this).find("td")[2].innerHTML;
+					var level = $(this).find("td")[3].innerHTML;
+					var title = $(this).find("td")[4].innerHTML;
+					var roadScenic = $(this).find("input[name=roadScenic]").val();
+					var detail = $(this).find("input[name=detail]").val();
+					var whichDay = $(this).find("input[name=whichDay]").val();
+					var hotelLevel = 0;
+					if (level == "三星以下") {
+						hotelLevel = 1;
+					}else  if(level == "三星"){
+						hotelLevel = 2;
+					}else if(level == "准四星"){
+						hotelLevel = 3;
+					}else if(level == "四星"){
+						hotelLevel = 4;
+					}else if(level == "准五星"){
+						hotelLevel = 5;
+					}else if(level == "五星"){
+						hotelLevel = 6;
+					}else if(level == "五星以上"){
+						hotelLevel = 7;
+					}
+					if (i == (lineDayListLength -1)) {
+						lineDayJson = "{\"whichDay\":\""+whichDay+"\",\"repastDetail\":\""+repastDetail+"\",\"hotelLevel\":\""+hotelLevel+"\",\"title\":\""+title+"\",\"restPosition\":\""+restPosition+"\",\"roadScenic\":\""+roadScenic+"\",\"detail\":\""+detail+"\"}";
+					}else{
+						lineDayJson = "{\"whichDay\":\""+whichDay+"\",\"repastDetail\":\""+repastDetail+"\",\"hotelLevel\":\""+hotelLevel+"\",\"title\":\""+title+"\",\"restPosition\":\""+restPosition+"\",\"roadScenic\":\""+roadScenic+"\",\"detail\":\""+detail+"\"},";
+					}
+					travelLineJsonAdd += lineDayJson;
+				});
+				travelLineJsonAdd += "]";
+				// 保存线路
+				$.ajax({
+					url:""+APP_ROOT+"back/travelLine.do?method=saveTravelLine&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=add",
+					type:"POST",
+					data:form+"&travelLineJsonAdd="+encodeURIComponent(travelLineJsonAdd)+"",
+					dataType:"json",
+					beforeSend:function(){
+						globalLoadingLayer = openLoadingLayer();
+					},
+					success:function(data){
+						layer.close(globalLoadingLayer);
+						var result = showDialog(data);
+						if(result){
+							layer.close(addTravelLineLayer);
+							showMessageDialog($( "#confirm-dialog-message" ),data.message);
+							travelLine.listTravelLine(data.totalPage-1,name,status);
 						}
-			    		var form = $(".travelLineMainForm").serialize()+"&status="+status+"";
-			    		var travelLineJsonAdd = "[";
-			    		var lineDayListLength = $(".travelLineDayList .lineDayList tbody tr").length;
-			    		$(".travelLineDayList .lineDayList tbody tr").each(function(i){
-			    			var lineDayJson = "";
-			    			var repastDetail = $(this).find("td")[1].innerHTML;
-			    			var restPosition = $(this).find("td")[2].innerHTML;
-			    			var level = $(this).find("td")[3].innerHTML;
-			    			var title = $(this).find("td")[4].innerHTML;
-			    			var roadScenic = $(this).find("input[name=roadScenic]").val();
-			    			var detail = $(this).find("input[name=detail]").val();
-			    			var whichDay = $(this).find("input[name=whichDay]").val();
-			    			var hotelLevel = 0;
-			    			if (level == "三星以下") {
-			    				hotelLevel = 1;
-							}else  if(level == "三星"){
-								hotelLevel = 2;
-							}else if(level == "准四星"){
-								hotelLevel = 3;
-							}else if(level == "四星"){
-								hotelLevel = 4;
-							}else if(level == "准五星"){
-								hotelLevel = 5;
-							}else if(level == "五星"){
-								hotelLevel = 6;
-							}else if(level == "五星以上"){
-								hotelLevel = 7;
-							}
-			    			if (i == (lineDayListLength -1)) {
-			    				lineDayJson = "{\"whichDay\":\""+whichDay+"\",\"repastDetail\":\""+repastDetail+"\",\"hotelLevel\":\""+hotelLevel+"\",\"title\":\""+title+"\",\"restPosition\":\""+restPosition+"\",\"roadScenic\":\""+roadScenic+"\",\"detail\":\""+detail+"\"}";
-							}else{
-								lineDayJson = "{\"whichDay\":\""+whichDay+"\",\"repastDetail\":\""+repastDetail+"\",\"hotelLevel\":\""+hotelLevel+"\",\"title\":\""+title+"\",\"restPosition\":\""+restPosition+"\",\"roadScenic\":\""+roadScenic+"\",\"detail\":\""+detail+"\"},";
-							}
-			    			travelLineJsonAdd += lineDayJson; 
-			    		});
-			    		travelLineJsonAdd += "]";
-			    		// 保存线路
-			    		$.ajax({
-			    			url:""+APP_ROOT+"back/travelLine.do?method=saveTravelLine&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=add",
-							type:"POST",
-							data:form+"&travelLineJsonAdd="+encodeURIComponent(travelLineJsonAdd)+"",
-							dataType:"json",
-							beforeSend:function(){
-								globalLoadingLayer = openLoadingLayer();
-							},
-							success:function(data){
-								layer.close(globalLoadingLayer);
-								var result = showDialog(data);
-								if(result){
-									layer.close(addTravelLineLayer);
-									showMessageDialog($( "#confirm-dialog-message" ),data.message);
-									travelLine.listTravelLine(0,"","");
-									
-									// 查看线路行程安排
-									/*layer.open({
-										type:2,
-										title:"线路日程详情",
-										area: ['360px', '720px'],
-										scrollbar:true,
-								        content: APP_ROOT + 'back/travelLine.do?method=getLineProductDayDetail&token='+$.cookie("token")+'&menuKey='+menuKey+'&operation=view&travelLineId='+data.id,
-								        success:function(){
-								        	
-								        }
-									});*/
-								}
-							}
-			    		});
-	    			});
-			    	
-			    	
-			    	// 以弹出框的形式添加线路下行程信息
-			    	$(".travelLineDayList .btn-line-day-add").click(function(){
-			    		function trim(str){ 
-				             return str.replace(/(^\s*)|(\s*$)/g, ""); 
-				        }
-			    		var lineDayHtml = addLineDayTemplate();
-			    		var addTravelLineDayLayer = layer.open({
-			    			type:1,
-			    			title:"新增日程",
-			    			skin: 'layui-layer-rim', //加上边框
-			 			    area: ['80%', '60%'], //宽高
-			 			    zIndex:1029,
-						    content: lineDayHtml,
-						    success:function(){
-						    	var dayCheckor = rule.travelLineDayCheckor($('.travelLineDayForm'));
-						    	
-						    	var ue = init_editor("detailEditor-add-travelLine",{zIndex:99999999});
-						    	
-						    	$(".travelLineDayForm .btn-submit-line-day").click(function(){
-						    		// 数据校验
-						    		if (!dayCheckor.form()) return;
+					}
+				});
+			});
 
-						    		var repastDetail = $(".travelLineDayForm input[name=repastDetail]").val();
-						    		var hotelLevel = $(".travelLineDayForm select[name=hotelLevel]").val();
-						    		var whichDay = $(".travelLineDayForm select[name=whichDay]").val();
-						    		var level = "未选择";
-						    		if (hotelLevel == 1) {
-						    			level = "三星以下";
-									}else if (hotelLevel == 2) {
-										level = "三星";
-									}else if(hotelLevel == 3){
-										level = "准四星";
-									}else if(hotelLevel == 4){
-										level = "四星";
-									}else if(hotelLevel == 5){
-										level = "准五星";
-									}else if(hotelLevel == 6){
-										level = "五星";
-									}else if(hotelLevel == 7){
-										level = "五星以上";
-									}
-						    		var title = $(".travelLineDayForm input[name=title]").val();
-						    		if (trim(title) == "") {
-						    			showMessageDialog($( "#confirm-dialog-message" ), "请输入行程标题");
-										return false;
-									}
-						    		var restPosition = $(".travelLineDayForm input[name=restPosition]").val();
-						    		var roadScenic = $(".travelLineDayForm input[name=roadScenic]").val();
-						    		var detail = encodeURIComponent(ue.getContent());
-						    		if (trim(detail) == "") {
-						    			showMessageDialog($( "#confirm-dialog-message" ), "请输入行程详情");
-										return false;
-									}
+			// 以弹出框的形式添加线路下行程信息
+			$(".travelLineDayList .btn-line-day-add").click(function(){
+				function trim(str){
+					return str.replace(/(^\s*)|(\s*$)/g, "");
+				}
+				var lineDayHtml = addLineDayTemplate();
+				var addTravelLineDayLayer = layer.open({
+					type:1,
+					title:"新增日程",
+					skin: 'layui-layer-rim', //加上边框
+					area: ['80%', '60%'], //宽高
+					zIndex:1029,
+					content: lineDayHtml,
+					success:function(){
+						var dayCheckor = rule.travelLineDayCheckor($('.travelLineDayForm'));
+
+						var ue = init_editor("detailEditor-add-travelLine",{zIndex:99999999});
+
+						$(".travelLineDayForm .btn-submit-line-day").click(function(){
+							// 数据校验
+							if (!dayCheckor.form()) return;
+
+							var repastDetail = $(".travelLineDayForm input[name=repastDetail]").val();
+							var hotelLevel = $(".travelLineDayForm select[name=hotelLevel]").val();
+							var whichDay = $(".travelLineDayForm select[name=whichDay]").val();
+							var level = "三星以下";
+							if (hotelLevel == 1) {
+								level = "三星以下";
+							}else if (hotelLevel == 2) {
+								level = "三星";
+							}else if(hotelLevel == 3){
+								level = "准四星";
+							}else if(hotelLevel == 4){
+								level = "四星";
+							}else if(hotelLevel == 5){
+								level = "准五星";
+							}else if(hotelLevel == 6){
+								level = "五星";
+							}else if(hotelLevel == 7){
+								level = "五星以上";
+							}
+							var title = $(".travelLineDayForm input[name=title]").val();
+							if (trim(title) == "") {
+								showMessageDialog($( "#confirm-dialog-message" ), "请输入行程标题");
+								return false;
+							}
+							var restPosition = $(".travelLineDayForm input[name=restPosition]").val();
+							var roadScenic = $(".travelLineDayForm input[name=roadScenic]").val();
+							var detail = encodeURIComponent(ue.getContent());
+							if (trim(detail) == "") {
+								showMessageDialog($( "#confirm-dialog-message" ), "请输入行程详情");
+								return false;
+							}
 //						    		var day = $(".travelLineDayList .lineDayList tbody tr").length + 1;
-						    		var lineDayHtml = "<tr><td>第"+whichDay+"天<input name=\"whichDay\" value=\""+whichDay+"\" type=\"hidden\"/></td><td>"+repastDetail+"</td><td>"+restPosition+"</td><td>"+level+"</td><td>"+title+"</td>" +
-						    		"<td style=\"width:120px\"><div class=\"btn-group\"><a data-entiy-id=\"\" class=\"btn-line-day-edit cursor\">修改|</a>" +
-				    				"<a data-entiy-id=\"\" class=\" btn-line-day-delete cursor\">删除</a></div>" +
-						    				"<input type=\"hidden\" name=\"hotelLevel\" value=\""+hotelLevel+"\"/>" +
-						    				"<input type=\"hidden\" name=\"roadScenic\" value=\""+roadScenic+"\"/>" +
-						    				"<input type=\"hidden\" name=\"detail\" value=\""+detail+"\"/></td></tr>";
-						    		$(".travelLineDayList .lineDayList tbody").append(lineDayHtml);
-						    		$(".travelLineDayList .lineDayList .btn-line-day-edit").unbind().click(function(){
-						    			travelLine.bindEditButton($(this));
-						    		});
-						    		$(".travelLineDayList .lineDayList .btn-line-day-delete").click(function(){
-						    			travelLine.deleteDayDialog($(this));
-									});
-						    		layer.close(addTravelLineDayLayer);
-						    	});
-						    }
-			    		});
-			    	});
-			   
-			    }
+							var lineDayHtml = "<tr><td>第"+whichDay+"天<input name=\"whichDay\" value=\""+whichDay+"\" type=\"hidden\"/></td><td>"+repastDetail+"</td><td>"+restPosition+"</td><td>"+level+"</td><td>"+title+"</td>" +
+								"<td style=\"width:120px\"><div class=\"btn-group\"><a data-entiy-id=\"\" class=\"btn-line-day-edit cursor\">修改|</a>" +
+								"<a data-entiy-id=\"\" class=\" btn-line-day-delete cursor\">删除</a></div>" +
+								"<input type=\"hidden\" name=\"hotelLevel\" value=\""+hotelLevel+"\"/>" +
+								"<input type=\"hidden\" name=\"roadScenic\" value=\""+roadScenic+"\"/>" +
+								"<input type=\"hidden\" name=\"detail\" value=\""+detail+"\"/></td></tr>";
+							$(".travelLineDayList .lineDayList tbody").append(lineDayHtml);
+							$(".travelLineDayList .lineDayList .btn-line-day-edit").unbind().click(function(){
+								travelLine.bindEditButton($(this));
+							});
+							$(".travelLineDayList .lineDayList .btn-line-day-delete").click(function(){
+								travelLine.deleteDayDialog($(this));
+							});
+							layer.close(addTravelLineDayLayer);
+						});
+					}
+				});
 			});
 		},
 		scanDetail:function(id){
@@ -312,14 +293,7 @@ define(function(require, exports) {
 						var travelLineInfo = JSON.parse(data.travelLine);
 						data.travelLine = travelLineInfo;
 						var html = scanDetailTemplate(data);
-						layer.open({
-						    type: 1,
-						    title:"查看线路详情",
-						    skin: 'layui-layer-rim', //加上边框
-						    area: ['90%', '80%'], //宽高
-						    zIndex:1029,
-						    content: html
-						});
+						addTab(lookID,"查看线路",html);
 					}
 					
 					$(".travelLineDayList .btn-guide-scan").click(function(){
@@ -343,7 +317,7 @@ define(function(require, exports) {
 										type: 1,
 										title:"日程安排",
 										skin: 'layui-layer-rim', //加上边框
-										area: ['1024px', '500px'], //宽高
+										area: ['65%', '60%'], //宽高
 										zIndex:1030,
 										content: lineDayhtml,
 										success:function(){
@@ -395,9 +369,6 @@ define(function(require, exports) {
 				type:"POST",
 				data:"id="+id+"",
 				dataType:"json",
-				beforeSend:function(){
-					globalLoadingLayer = openLoadingLayer();
-				},
 				success:function(data){
 					layer.close(globalLoadingLayer);
 					var result = showDialog(data);
@@ -406,190 +377,182 @@ define(function(require, exports) {
 						data.travelLine = travelLineInfo;
 						data.clipboardMode = clipboardMode;
 						var html = updateTemplate(data);
+						addTab(updateId,"修改线路",html);
 						var title = "修改线路模板信息";
 						if(clipboardMode){
 							title = "新增线路模板信息";
 						}
-						var updateTravelLineLayer = layer.open({
-							 type: 1,
-						    title:title,
-						    skin: 'layui-layer-rim', //加上边框
-						    area: ['95%', '90%'], //宽高
-						    zIndex:1028,
-						    content: html,
-						    success:function(){
-						    	// 初始化并绑定表单验证
-						    	var validator = rule.traveLineCheckor($('.travelLineUpdateMainForm'));
+						
+				    	// 初始化并绑定表单验证
+				    	var validator = rule.traveLineCheckor($('.travelLineUpdateMainForm'));
 
-						    	// 1.处理添加和删除的Json数据包的处理
-						    	
-						    	// 添加行程安排
-						    	$(".travelLineDayList .btn-line-day-add").click(function(){
-						    		var lineDayHtml = addLineDayTemplate();
-						    		var addTravelLineDayLayer = layer.open({
-						    			type:1,
-						    			title:"新增日程",
-						    			skin: 'layui-layer-rim', //加上边框
-						 			    area: ['80%', '60%'], //宽高
-						 			    zIndex:1029,
-									    content: lineDayHtml,
-									    success:function(){
-									    	// 绑定表单验证
-									    	var dayCheckor = rule.travelLineDayCheckor($('.travelLineDayForm'));
-									    	// 初始化UEditor
-									    	var ue = init_editor("detailEditor-add-travelLine",{zIndex:99999999});
+				    	// 1.处理添加和删除的Json数据包的处理
+				    	
+				    	// 添加行程安排
+				    	$(".travelLineDayList .btn-line-day-add").click(function(){
+				    		var lineDayHtml = addLineDayTemplate();
+				    		var addTravelLineDayLayer = layer.open({
+				    			type:1,
+				    			title:"新增日程",
+				    			skin: 'layui-layer-rim', //加上边框
+				 			    area: ['50%', '40%'], //宽高
+				 			    zIndex:1029,
+							    content: lineDayHtml,
+							    success:function(){
+							    	// 绑定表单验证
+							    	var dayCheckor = rule.travelLineDayCheckor($('.travelLineDayForm'));
+							    	// 初始化UEditor
+							    	var ue = init_editor("detailEditor-add-travelLine",{zIndex:99999999});
 
-									    	$(".travelLineDayForm .btn-submit-line-day").click(function(){
-									    		if( !dayCheckor.form() )  return;
+							    	$(".travelLineDayForm .btn-submit-line-day").click(function(){
+							    		if( !dayCheckor.form() )  return;
 
-									    		function trim(str){ 
-										             return str.replace(/(^\s*)|(\s*$)/g, ""); 
-										        }
-									    		var repastDetail = $(".travelLineDayForm input[name=repastDetail]").val();
-									    		var hotelLevel = $(".travelLineDayForm select[name=hotelLevel]").val();
-									    		var whichDay = $(".travelLineDayForm select[name=whichDay]").val();
-									    		var level = "未选择";
-									    		if (hotelLevel == 1) {
-									    			level = "三星以下";
-												}else if (hotelLevel == 2) {
-													level = "三星";
-												}else if(hotelLevel == 3){
-													level = "准四星";
-												}else if(hotelLevel == 4){
-													level = "四星";
-												}else if(hotelLevel == 5){
-													level = "准五星";
-												}else if(hotelLevel == 6){
-													level = "五星";
-												}else if(hotelLevel == 7){
-													level = "五星以上";
-												}
-									    		var title = $(".travelLineDayForm input[name=title]").val();
-									    		if(trim(title) == ""){
-													showMessageDialog($( "#confirm-dialog-message" ), "请输入行程标题");
-													return false;
-												}
-									    		var restPosition = $(".travelLineDayForm input[name=restPosition]").val();
-									    		var roadScenic = $(".travelLineDayForm input[name=roadScenic]").val();
-									    		var detail = encodeURIComponent(ue.getContent());
-									    		if(trim(detail) == ""){
-													showMessageDialog($( "#confirm-dialog-message" ), "请输入行程详情");
-													return false;
-												}
+							    		function trim(str){ 
+								             return str.replace(/(^\s*)|(\s*$)/g, ""); 
+								        }
+							    		var repastDetail = $(".travelLineDayForm input[name=repastDetail]").val();
+							    		var hotelLevel = $(".travelLineDayForm select[name=hotelLevel]").val();
+							    		var whichDay = $(".travelLineDayForm select[name=whichDay]").val();
+							    		var level = "三星以下";
+							    		if (hotelLevel == 1) {
+							    			level = "三星以下";
+										}else if (hotelLevel == 2) {
+											level = "三星";
+										}else if(hotelLevel == 3){
+											level = "准四星";
+										}else if(hotelLevel == 4){
+											level = "四星";
+										}else if(hotelLevel == 5){
+											level = "准五星";
+										}else if(hotelLevel == 6){
+											level = "五星";
+										}else if(hotelLevel == 7){
+											level = "五星以上";
+										}
+							    		var title = $(".travelLineDayForm input[name=title]").val();
+							    		if(trim(title) == ""){
+											showMessageDialog($( "#confirm-dialog-message" ), "请输入行程标题");
+											return false;
+										}
+							    		var restPosition = $(".travelLineDayForm input[name=restPosition]").val();
+							    		var roadScenic = $(".travelLineDayForm input[name=roadScenic]").val();
+							    		var detail = encodeURIComponent(ue.getContent());
+							    		if(trim(detail) == ""){
+											showMessageDialog($( "#confirm-dialog-message" ), "请输入行程详情");
+											return false;
+										}
 //									    		var day = $(".travelLineDayList .lineDayList tbody tr").length + 1;
-									    		var lineDayHtml = "<tr><td>第"+whichDay+"天<input name=\"whichDay\" value=\""+whichDay+"\" type=\"hidden\"/></td><td>"+repastDetail+"</td><td>"+restPosition+"</td><td>"+level+"</td><td>"+title+"</td>" +
-									    				"<td style=\"width:120px\"><div class=\"btn-group\"><a data-entiy-id=\"\" class=\" btn-line-day-edit cursor\">修改|</a>" +
-									    				"<a data-entiy-id=\"\" class=\" btn-line-day-delete cursor\">删除</a></div>" +
-									    				"<input type=\"hidden\" name=\"hotelLevel\" value=\""+hotelLevel+"\"/>" +
-									    				"<input type=\"hidden\" name=\"roadScenic\" value=\""+roadScenic+"\"/>" +
-									    				"<input type=\"hidden\" name=\"detail\" value=\""+detail+"\"/></td></tr>";
-									    		$(".travelLineDayList .lineDayList tbody").append(lineDayHtml);
-									    		$(".travelLineDayList .lineDayList .btn-line-day-edit").unbind().click(function(){
-									    			travelLine.bindEditButton($(this));
-									    		});
-									    		
-									    		$(".travelLineDayList .lineDayList .btn-line-day-delete").click(function(){
-									    			travelLine.deleteDayDialog($(this));
-												});
-									    		
-									    		layer.close(addTravelLineDayLayer);
-									    	});
-									    }
-						    		});
-						    		
-						    	});
-						    	
-						    	// 删除日期行程
-						    	$(".travelLineDayList .lineDayList .btn-line-day-delete").click(function(){
-						    		travelLine.deleteDayDialog($(this));
-						    	});
-						    	
-						    	// 修改日期行程
-						    	$(".travelLineDayList .lineDayList .btn-line-day-edit").unbind().click(function(){
-						    		travelLine.bindEditButton($(this));
-						    	});
-						    	
-						    	// 2.序列化form表单，并通过Ajax实现保存操作
-						    	$(".travelLineDayList .btn-submit-travelLine").unbind().click(function(){
-						    		if ( !validator.form() )  return;
+							    		var lineDayHtml = "<tr><td>第"+whichDay+"天<input name=\"whichDay\" value=\""+whichDay+"\" type=\"hidden\"/></td><td>"+repastDetail+"</td><td>"+restPosition+"</td><td>"+level+"</td><td>"+title+"</td>" +
+							    				"<td style=\"width:120px\"><div class=\"btn-group\"><a data-entiy-id=\"\" class=\" btn-line-day-edit cursor\">修改|</a>" +
+							    				"<a data-entiy-id=\"\" class=\" btn-line-day-delete cursor\">删除</a></div>" +
+							    				"<input type=\"hidden\" name=\"hotelLevel\" value=\""+hotelLevel+"\"/>" +
+							    				"<input type=\"hidden\" name=\"roadScenic\" value=\""+roadScenic+"\"/>" +
+							    				"<input type=\"hidden\" name=\"detail\" value=\""+detail+"\"/></td></tr>";
+							    		$(".travelLineDayList .lineDayList tbody").append(lineDayHtml);
+							    		$(".travelLineDayList .lineDayList .btn-line-day-edit").unbind().click(function(){
+							    			travelLine.bindEditButton($(this));
+							    		});
+							    		
+							    		$(".travelLineDayList .lineDayList .btn-line-day-delete").click(function(){
+							    			travelLine.deleteDayDialog($(this));
+										});
+							    		
+							    		layer.close(addTravelLineDayLayer);
+							    	});
+							    }
+				    		});
+				    		
+				    	});
+				    	
+				    	// 删除日期行程
+				    	$(".travelLineDayList .lineDayList .btn-line-day-delete").click(function(){
+				    		travelLine.deleteDayDialog($(this));
+				    	});
+				    	
+				    	// 修改日期行程
+				    	$(".travelLineDayList .lineDayList .btn-line-day-edit").unbind().click(function(){
+				    		travelLine.bindEditButton($(this));
+				    	});
+				    	
+				    	// 2.序列化form表单，并通过Ajax实现保存操作
+				    	$(".travelLineDayList .btn-submit-travelLine").unbind().click(function(){
+				    		if ( !validator.form() )  return;
 
-						    		var status = 0;
-									if($(".travelLineUpdateMainForm .travelLine-status").is(":checked") == true){
-										status = 1;
+				    		var status = 0;
+							if($(".travelLineUpdateMainForm .travelLine-status").is(":checked") == true){
+								status = 1;
+							}
+							var form = $(".travelLineUpdateMainForm").serialize()+"&status="+status+"";
+				    		var travelLineJsonAdd = "[";
+				    		var lineDayListLength = $(".travelLineDayList .lineDayList tbody tr:not(.deleted)").length;
+				    		$(".travelLineDayList .lineDayList tbody tr:not(.deleted)").each(function(i){
+				    			var lineDayJson = "";
+				    			var id = $(this).find(" .btn-line-day-delete").attr("data-entiy-id");
+				    			var repastDetail = $(this).find("td")[1].innerHTML;
+				    			var restPosition = $(this).find("td")[2].innerHTML;
+				    			var title = $(this).find("td")[4].innerHTML;
+				    			var whichDay = $(this).find("input[name=whichDay]").val();
+				    			var roadScenic = $(this).find("input[name=roadScenic]").val();
+				    			var detail = $(this).find("input[name=detail]").val();
+				    			var hotelLevel = $(this).find("input[name=hotelLevel]").val();
+				    			if (i == (lineDayListLength -1)) {
+				    				if (id != null && id != "") {
+				    					lineDayJson = "{\"id\":\""+id+"\",\"whichDay\":\""+whichDay+"\",\"repastDetail\":\""+repastDetail+"\",\"hotelLevel\":\""+hotelLevel+"\",\"title\":\""+title+"\",\"restPosition\":\""+restPosition+"\",\"roadScenic\":\""+roadScenic+"\",\"detail\":\""+detail+"\"}";
+									}else{
+										lineDayJson = "{\"whichDay\":\""+whichDay+"\",\"repastDetail\":\""+repastDetail+"\",\"hotelLevel\":\""+hotelLevel+"\",\"title\":\""+title+"\",\"restPosition\":\""+restPosition+"\",\"roadScenic\":\""+roadScenic+"\",\"detail\":\""+detail+"\"}";
 									}
-									var form = $(".travelLineUpdateMainForm").serialize()+"&status="+status+"";
-						    		var travelLineJsonAdd = "[";
-						    		var lineDayListLength = $(".travelLineDayList .lineDayList tbody tr:not(.deleted)").length;
-						    		$(".travelLineDayList .lineDayList tbody tr:not(.deleted)").each(function(i){
-						    			var lineDayJson = "";
-						    			var id = $(this).find(" .btn-line-day-delete").attr("data-entiy-id");
-						    			var repastDetail = $(this).find("td")[1].innerHTML;
-						    			var restPosition = $(this).find("td")[2].innerHTML;
-						    			var title = $(this).find("td")[4].innerHTML;
-						    			var whichDay = $(this).find("input[name=whichDay]").val();
-						    			var roadScenic = $(this).find("input[name=roadScenic]").val();
-						    			var detail = $(this).find("input[name=detail]").val();
-						    			var hotelLevel = $(this).find("input[name=hotelLevel]").val();
-						    			if (i == (lineDayListLength -1)) {
-						    				if (id != null && id != "") {
-						    					lineDayJson = "{\"id\":\""+id+"\",\"whichDay\":\""+whichDay+"\",\"repastDetail\":\""+repastDetail+"\",\"hotelLevel\":\""+hotelLevel+"\",\"title\":\""+title+"\",\"restPosition\":\""+restPosition+"\",\"roadScenic\":\""+roadScenic+"\",\"detail\":\""+detail+"\"}";
-											}else{
-												lineDayJson = "{\"whichDay\":\""+whichDay+"\",\"repastDetail\":\""+repastDetail+"\",\"hotelLevel\":\""+hotelLevel+"\",\"title\":\""+title+"\",\"restPosition\":\""+restPosition+"\",\"roadScenic\":\""+roadScenic+"\",\"detail\":\""+detail+"\"}";
-											}
-										}else{
-											if (id != null && id != "") {
-												lineDayJson = "{\"id\":\""+id+"\",\"whichDay\":\""+whichDay+"\",\"repastDetail\":\""+repastDetail+"\",\"hotelLevel\":\""+hotelLevel+"\",\"title\":\""+title+"\",\"restPosition\":\""+restPosition+"\",\"roadScenic\":\""+roadScenic+"\",\"detail\":\""+detail+"\"},";
-											}else {
-												lineDayJson = "{\"whichDay\":\""+whichDay+"\",\"repastDetail\":\""+repastDetail+"\",\"hotelLevel\":\""+hotelLevel+"\",\"title\":\""+title+"\",\"restPosition\":\""+restPosition+"\",\"roadScenic\":\""+roadScenic+"\",\"detail\":\""+detail+"\"},";
-											}
-										}
-						    			travelLineJsonAdd += lineDayJson; 
-						    		});
-						    		travelLineJsonAdd += "]";
-						    	
-						    		var travelLineJsonDel = "[";
-									var travelLineListLength = $(".travelLineDayList .lineDayList tbody tr.deleted").length;
-									$(".travelLineDayList .lineDayList tbody tr.deleted").each(function(i){
-										var travelLineDayJson = "";
-										var id = $(this).find(".btn-line-day-delete").attr("data-entiy-id");
-										if(i == (travelLineListLength-1)){
-											travelLineDayJson = "{\"id\":\""+id+"\"}";
-										}
-										else{
-											travelLineDayJson = "{\"id\":\""+id+"\"},";
-										}
-										travelLineJsonDel += travelLineDayJson;
-									});
-									travelLineJsonDel += "]";
-						    	
-									var url = ""+APP_ROOT+"back/travelLine.do?method=updateTravelLine&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update";
-									if(clipboardMode){
-										url = ""+APP_ROOT+"back/travelLine.do?method=saveTravelLine&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=add";
+								}else{
+									if (id != null && id != "") {
+										lineDayJson = "{\"id\":\""+id+"\",\"whichDay\":\""+whichDay+"\",\"repastDetail\":\""+repastDetail+"\",\"hotelLevel\":\""+hotelLevel+"\",\"title\":\""+title+"\",\"restPosition\":\""+restPosition+"\",\"roadScenic\":\""+roadScenic+"\",\"detail\":\""+detail+"\"},";
+									}else {
+										lineDayJson = "{\"whichDay\":\""+whichDay+"\",\"repastDetail\":\""+repastDetail+"\",\"hotelLevel\":\""+hotelLevel+"\",\"title\":\""+title+"\",\"restPosition\":\""+restPosition+"\",\"roadScenic\":\""+roadScenic+"\",\"detail\":\""+detail+"\"},";
 									}
-									$.ajax({
-										url:url,
-										type:"POST",
-										data:form+"&travelLineJsonAdd="+encodeURIComponent(travelLineJsonAdd)+"&travelLineJsonDel="+encodeURIComponent(travelLineJsonDel)+"",
-										dataType:"json",
-										beforeSend:function(){
-											globalLoadingLayer = layer.open({
-												type:3
-											});
-										},
-										success:function(data){
-											layer.close(globalLoadingLayer);
-											var result = showDialog(data);
-											if(result){
-												layer.close(updateTravelLineLayer);
-												showMessageDialog($( "#confirm-dialog-message" ),data.message);
-												travelLine.listTravelLine(travelLine.pageData.pageNo,travelLine.searchData.name,travelLine.searchData.status);
-											}
-										}
+								}
+				    			travelLineJsonAdd += lineDayJson; 
+				    		});
+				    		travelLineJsonAdd += "]";
+				    	
+				    		var travelLineJsonDel = "[";
+							var travelLineListLength = $(".travelLineDayList .lineDayList tbody tr.deleted").length;
+							$(".travelLineDayList .lineDayList tbody tr.deleted").each(function(i){
+								var travelLineDayJson = "";
+								var id = $(this).find(".btn-line-day-delete").attr("data-entiy-id");
+								if(i == (travelLineListLength-1)){
+									travelLineDayJson = "{\"id\":\""+id+"\"}";
+								}
+								else{
+									travelLineDayJson = "{\"id\":\""+id+"\"},";
+								}
+								travelLineJsonDel += travelLineDayJson;
+							});
+							travelLineJsonDel += "]";
+				    	
+							var url = ""+APP_ROOT+"back/travelLine.do?method=updateTravelLine&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update";
+							if(clipboardMode){
+								url = ""+APP_ROOT+"back/travelLine.do?method=saveTravelLine&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=add";
+							}
+							$.ajax({
+								url:url,
+								type:"POST",
+								data:form+"&travelLineJsonAdd="+encodeURIComponent(travelLineJsonAdd)+"&travelLineJsonDel="+encodeURIComponent(travelLineJsonDel)+"",
+								dataType:"json",
+								beforeSend:function(){
+									globalLoadingLayer = layer.open({
+										type:3
 									});
-									
-						    	});
-						    }
-						});
+								},
+								success:function(data){
+									layer.close(globalLoadingLayer);
+									var result = showDialog(data);
+									if(result){
+										layer.close(updateTravelLineLayer);
+										showMessageDialog($( "#confirm-dialog-message" ),data.message);
+										travelLine.listTravelLine(travelLine.pageData.pageNo,travelLine.searchData.name,travelLine.searchData.status);
+									}
+								}
+							});
+							
+				    	});
 					}
 				}
 			});
@@ -689,7 +652,7 @@ define(function(require, exports) {
 			    		var repastDetail = $(".updateTravelLineDayForm input[name=repastDetail]").val();
 			    		var hotelLevel = $(".updateTravelLineDayForm select[name=hotelLevel]").val();
 			    		var whichDay = $(".updateTravelLineDayForm select[name=whichDay]").val();
-			    		var level = "未选择";
+			    		var level = "三星以下";
 			    		if (hotelLevel == 1) {
 			    			level = "三星以下";
 						}else if (hotelLevel == 2) {

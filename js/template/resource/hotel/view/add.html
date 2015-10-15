@@ -8,14 +8,15 @@
 				</h5>
 			</div>
 			<div class="widget-body">
-				<div class="widget-main">
+				<div class="widget-main widget-mainFrist">
 					<div class="form-group guideInterval">
 						<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>酒店名称:</label>
 						<div class="col-sm-3">
 							<input type="text" name="name" class="col-sm-12">  
 						</div>
-
-						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>酒店星级:</label>
+					</div>
+                    <div class="form-group guideInterval">
+                        <label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>酒店星级:</label>
 						<div class="col-sm-3">
 							<select name="level">
 								<option selected="selected" value="1">三星以下</option>
@@ -27,7 +28,7 @@
 								<option value="7">五星以上</option>
 							</select>
 						</div>
-					</div>
+                    </div>
 					<div class="form-group guideInterval">
 					    <label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>联系人:</label>
 						<div class="col-sm-3">
@@ -50,7 +51,7 @@
 					</div>
 					<div class="form-group guideInterval">
 						<label class="col-sm-2 control-label no-padding-right">酒店所在省市:</label>
-						<div class="col-sm-3">
+						<div class="col-sm-8">
 							<select name="provinceId" style="margin-right:3px">
 								<option selected="selected" value="">未选择</option>
 							</select>
@@ -61,16 +62,6 @@
 								<option selected="selected" value="">未选择</option>
 							</select>
 						</div>
-
-						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>是否启用:</label>
-						<div class="col-sm-3 checkbox" style="margin-left:-10px;margin-top: -6px">
-							<label>
-								<input checked="checked" type="checkbox" class="ace hotel-status" value="1" name="status">
-								<span class="lbl">
-									启用
-								</span>
-							</label>
-						</div>
 					</div>
 					<div class="form-group guideInterval">
 						<label class="col-sm-2 control-label no-padding-right">详细地址:</label>
@@ -80,10 +71,22 @@
 					</div>
 					<div class="form-group guideInterval">
 						<label class="col-sm-2 control-label no-padding-right">酒店设施:</label>
-						<div class="col-sm-6">
-							<input type="text" name="facility" class="col-sm-12 addressMinute">
+						<div class="col-sm-3">
+							<input type="text" name="facility" class="col-sm-12">
 						</div>
 					</div>
+					<div class="form-group guideInterval">
+						<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>是否启用:</label>
+						<div class="col-sm-2 checkbox" style="margin-left:-10px">
+							<label>
+								<input checked="checked" type="checkbox" class="ace hotel-status" value="1" name="status">
+								<span class="lbl">
+									启用
+								</span>
+							</label>
+						</div>
+					</div>
+
 					<div class="form-group guideInterval">
 						<label class="col-sm-2 control-label no-padding-right">酒店简介:</label>
 						<div class="col-sm-8">
@@ -117,7 +120,7 @@
 								<thead>
 									<tr>
 										<th class="table-border" width="80"><span class="necessary">*</span>房型</th>
-										<th class="table-border"><span class="necessary">*</span>时间范围</th>
+										<th class="table-border"style="width:290px;"><span class="necessary">*</span>时间范围</th>
 										<th class="table-border" style="width:100px"><span class="necessary">*</span>市场价(元)</th>
 										<th class="table-border" style="width:100px"><span class="necessary">*</span>旅行社价(元)</th>
 										<th class="table-border" style="width: 75px">早餐</th>
@@ -127,7 +130,7 @@
 										<th class="table-border" style="width:110px">建筑面积(平方)</th>
 										<th class="table-border" style="width:100px">最多入住人数</th>
 										<th class="table-border" width="80">备注</th>
-										<th class="table-border">操作</th>
+										<th class="table-border" width="55">操作</th>
 									</tr>
 								</thead>
 								<tbody>

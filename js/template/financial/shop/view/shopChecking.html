@@ -94,9 +94,9 @@
                 <td>{{shop.rebateMoney}}</td>
                 <td class="col-sm-1">
 	               	{{if shop.isConfirmAccount == 0}}
-	                   <input data-entity-value="{{shop.rebateMoney}}"  type="text" name="realRebateMoney" value="{{shop.rebateMoney}}" class="col-sm-12" />
+	                   <input data-entity-value="{{shop.rebateMoney}}"  maxlength="9" type="text" name="realRebateMoney" value="{{shop.rebateMoney}}" class="col-sm-12" />
                    {{else}}
-                   	   <input data-entity-value="{{shop.realRebateMoney}}"  type="text" name="realRebateMoney" value="{{shop.realRebateMoney}}" class="col-sm-12" {{if shop.isConfirmAccount == 1 && roleType != 1 }} disabled = "true" {{/if}}/>
+                   	   <input data-entity-value="{{shop.realRebateMoney}}"  maxlength="1000" type="text" name="realRebateMoney" value="{{shop.realRebateMoney}}" class="col-sm-12" {{if shop.isConfirmAccount == 1 && roleType != 1 }} disabled = "true" {{/if}}/>
                    {{/if}}
 				</td>
                 <td>
