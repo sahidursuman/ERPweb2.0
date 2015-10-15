@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":235,"md5":"686c5e19ff54771caadc297db18ed81a"}*/
+/*TMODJS:{"debug":true,"version":236,"md5":"686c5e19ff54771caadc297db18ed81a"}*/
 define(function(require) {
     return require("../../../template")("arrange/arrangeTransfer/view/updateTransfer", function($data, $filename) {
         try {

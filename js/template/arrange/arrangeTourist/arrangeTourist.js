@@ -616,6 +616,17 @@ define(function(require, exports) {
 				language: 'zh-CN'
 			});
 		},
+		  //发团定时   
+		setTripPlanPicker:function(){
+	    	$(".addMergePlanTime").datetimepicker({
+				autoclose: true,
+				todayHighlight: true,
+				format: 'L',
+				language: 'zh-CN'
+			});
+		},
+		
+
 		bindRemoveTouristGroupMerge:function($merge,lineProductId,startTime){
 			var obj = $(this);
 			var dialog = $( "#confirm-dialog-message" ).removeClass('hide').dialog({
@@ -853,6 +864,8 @@ define(function(require, exports) {
 			arrangeTourist.datePicker();
 			//集合时间   时间控件
 			arrangeTourist.dateTimePicker();
+
+			arrangeTourist.setTripPlanPicker();
 			//查看旅游小组成员
 			$("#"+tab+" .addMergePlan .addTripPlanView").click(arrangeTourist.viewTouristGroup);
 			//删除小组  
@@ -1725,6 +1738,7 @@ define(function(require, exports) {
 			
 			//集合时间   时间控件
 			arrangeTourist.dateTimePicker();
+
 			//查看旅游小组成员
 			$("#"+tab+" .mergeTripPlan .addTripPlanMain .touristGroupView").unbind().click(arrangeTourist.viewTouristGroup);
 			//删除小组   addTripPlanViewDelete
