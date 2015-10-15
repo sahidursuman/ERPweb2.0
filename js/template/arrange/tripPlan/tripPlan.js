@@ -453,6 +453,16 @@ define(function(require, exports) {
 						var html = updateTemplate(data);
 						addTab(menuKey+"-update","编辑发团计划",html);
 						var tab = "tab-arrange_plan-update-content";
+
+						var isSendTouristMessage=data.tripPlan.isSendTouristMessage;
+
+						//判断短信状态
+						if (isSendTouristMessage==1) {
+							$(".newAddTripPlanMain ").find("span.lbl").attr("disabled","disabled");
+							$(".newAddTripPlanMain ").find("input[name='executeTime']").attr("disabled","disabled");
+						} else{
+						};
+
 						
 						//编辑发团计划验证
 						var validatorCreateTripPlan=rule.checkdCreateTripPlan($(".newAddTripPlanMain"));

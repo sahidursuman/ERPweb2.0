@@ -100,14 +100,22 @@
 		<div class="form-horizontal col-sm-12">
 			<div class="pull-left  no-padding-right">
 				<label class="control-label no-padding-right">游客短信定时发送:</label>
+				{{if tripPlan.executeTimeType=1}}
+				<label>
+					<input type="checkbox"  checked="checked" class="ace buyInsurance-status" value="{{tripPlan.executeTimeType}}" name="executeTimeType">
+					<span class="lbl">
+					</span>
+				</label>
+				{{else}}
 				<label>
 					<input type="checkbox" class="ace buyInsurance-status" value="{{tripPlan.executeTimeType}}" name="executeTimeType">
 					<span class="lbl">
 					</span>
 				</label>
+				{{/if}}
 			</div>
 			<div class="col-sm-2">
-				<input class="form-control col-sm-4 datetimepicker" type="text" name="executeTime" value="" />
+				<input class="form-control col-sm-4 datetimepicker" type="text" name="executeTime" value="{{tripPlan.executeTime}}" />
 			</div>
         </div>
 
