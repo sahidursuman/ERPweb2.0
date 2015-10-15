@@ -1,0 +1,85 @@
+<div class="col-xs-12 operationMainForm">
+	<div class="form-group" style="padding-bottom:15px;">
+		<input type="hidden" name="touristGroupId" value="{{ptGroup.id}}" />
+		<input type="hidden" name="touristGroupStartTime" value="{{ptGroup.startTime | dateFormat: 'yyyy-MM-dd'}}" />
+		<input type="hidden" name="touristGroupDays" value="{{ptGroup.lineProduct.days}}" />
+		<label class="control-label col-xs-2">线路产品: {{ptGroup.lineProduct.name}}</label>
+		<label class="control-label col-xs-2">类别：{{ptGroup.lineProduct.type}}</label>
+		<label class="control-label col-xs-2">应用范围：{{if ptGroup.lineProduct.customerType == 0}}散客{{else}}团体{{/if}}</label>
+		<label class="control-label col-xs-2">天数：{{ptGroup.lineProduct.days}}天</label>
+		<label class="control-label col-xs-2">出游日期: {{ptGroup.startTime | dateFormat: 'yyyy-MM-dd'}}</label>
+		<label class="control-label col-xs-2">人数合计: {{ptGroup.adultCount}}大{{ptGroup.childCount}}小</label> 
+	</div>
+	<div class="form-group">
+		<button class="btn btn-sm btn-success btn-operation-add"> <i class="ace-icon fa fa-plus"></i>新增分段</button>
+	</div>
+	<div class="form-group">
+		<table class="table table-striped table-bordered table-hover">
+			<thead>
+				<tr class="bg-blur">
+					<th>线路产品</th>
+					<th>针对客源</th>
+					<th>行程天数</th>
+					<th>出游日期</th>
+					<th>本段现收团款</th>
+					<th>状态</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+			<tbody class="subsectionOperationTbody">{{each subtGroupList as subList}}
+			{{if subList.id != null}}
+				<tr data-entity-id="{{subList.id}}">
+					<td>
+						<input type="hidden" name="lineProductId" value="{{subList.lineProduct.id}}" />
+						<input class="{{if subList.status == 1}}chooseLineProduct{{/if}} col-sm-12" name="lineProduct" {{if subList.status != 1}}readonly="readonly"{{/if}} type="text" value="{{subList.lineProduct.name}}" />
+					</td>
+					<td><input type="text" name="customerType" class="col-sm-12" readonly="readonly" value="{{if subList.lineProduct.customerType == 0}}散客{{else}}团体{{/if}}" /></td>
+					<td><input type="text" name="days" class="col-sm-10" readonly="readonly" value="{{subList.lineProduct.days}}" /><span class="col-sm-2" style="line-height: 30px">天</span></td>
+					<td><input class="{{if subList.status == 1}}datepicker{{/if}} col-sm-12" name="startTime" type="text" {{if subList.status != 1}}readonly="readonly"{{/if}} value="{{subList.startTime | dateFormat: 'yyyy-MM-dd'}}" /></td>
+					<td>
+						{{if mark == 0}}
+							{{if subList.status == 1}}
+								<input type="radio" name="operateCurrentNeedPayMoney" {{if subList.operateCurrentNeedPayMoney == 1}}checked="checked"{{/if}} />
+							{{else}}
+								-
+							{{/if}}
+						{{else if mark == 1 && subList.operateCurrentNeedPayMoney == 1}}
+							本段现收
+						{{else}}
+							-
+						{{/if}}
+						<input type="hidden" name="operateCurrentNeedPayMoney" value="{{subList.operateCurrentNeedPayMoney}}" />
+					</td>
+					<td>
+					{{if subList.status == 0}}
+						已发团
+					{{else if subList.status == 1}}
+						未分团
+					{{else if subList.status == 2}}
+						已分团
+					{{else if subList.status == 3}}
+						已转客
+					{{else if subList.status == 4}}
+						已取消
+					{{else if subList.status == 5}}
+						已分段
+					{{else if subList.status == 6}}
+						已内转
+					{{/if}}
+					</td>
+					<td>
+						<div class="hidden-sm hidden-xs btn-group">
+						<a data-entity-id="{{subList.id}}" class=" {{if subList.status == 1}}btn-operation-delete{{/if}} cursor" {{if subList.status != 1}}style="color: #bbb;"{{/if}}>
+							删除
+						</a>
+					</div>
+					</td>
+				</tr>{{/if}}{{/each}}
+			</tbody>
+		</table>
+	</div>
+	<div class="form-group" style="text-align: center;">
+		<button class="btn btn-sm btn-danger btn-operation-close"> <i class="ace-icon fa fa-times"></i> 取消 </button> 
+		<button class="btn btn-sm btn-success btn-operation-save"> <i class="ace-icon fa fa-check"></i> 保存 </button> 
+	</div>
+</div>
