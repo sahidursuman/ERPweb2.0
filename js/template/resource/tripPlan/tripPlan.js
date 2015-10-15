@@ -41,7 +41,7 @@ define(function(require, exports) {
 				}
 			});
 		},
-		initList : function(){
+		initList : function(data){
 			var search = $("#"+tabId+" .search-tripPlanContainer");
 			tripPlan.searchData = {
 				tripNumber : search.find("input[name=tripNumber]").val(),
