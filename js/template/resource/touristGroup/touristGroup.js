@@ -666,7 +666,8 @@ define(function(require, exports) {
 			$('.updateTouristGroup').on("change",function(){
 				touristGroup.edited["update"] = "update";
 			});	
-			if(data.touristGroupDetail.status != 0){
+			// 已发团(0)、已分团(2)、已转客(3)、已取消(4)、已拆分(5),不能修改。未分团(1)才能修改
+			if(data.touristGroupDetail.status == 1){
 				//出游日期 时间控件
 				$("#"+tab+" .touristGroupMainForm input[name=startTime]").datepicker({
 					autoclose: true,
