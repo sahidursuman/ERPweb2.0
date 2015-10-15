@@ -36,12 +36,12 @@ define(function(require, exports) {
 						data.tripPlanList = tripPlanList
 						var html = listTemplate(data);
 						addTab(menuKey,"发团安排管理",html);
-						tripPlan.initList();
+						tripPlan.initList(data);
 					}	
 				}
 			});
 		},
-		initList : function(){
+		initList : function(data){
 			var search = $("#"+tabId+" .search-tripPlanContainer");
 			tripPlan.searchData = {
 				tripNumber : search.find("input[name=tripNumber]").val(),
