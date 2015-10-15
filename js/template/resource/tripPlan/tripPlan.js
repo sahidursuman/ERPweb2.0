@@ -36,7 +36,7 @@ define(function(require, exports) {
 						data.tripPlanList = tripPlanList
 						var html = listTemplate(data);
 						addTab(menuKey,"发团安排管理",html);
-						tripPlan.initList();
+						tripPlan.initList(data);
 					}	
 				}
 			});
