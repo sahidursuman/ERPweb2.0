@@ -82,6 +82,23 @@ define(function(require, exports) {
 			//安排人下拉搜索			    	
 			transit.arrangeUserChoose(tab);
 			
+			//搜索栏状态button下拉事件
+			$("#"+tab+" .btn-status .dropdown-menu a").click(function(){
+				$(this).parent().parent().parent().find("button").attr("data-value",$(this).attr("data-value"));
+				$(this).parent().parent().parent().find("span").text($(this).text());
+				transit.searchData = {
+					fromPartnerAgencyId : $("#"+tab+" input[name=partnerAgencyId]").val(),
+					lineProductId : $("#"+tab+" input[name=lineProductId]").val(),
+					startTime : $("#"+tab+" input[name=startTime]").val(),
+					arrangeUserId :$("#"+tab+" input[name=arrangeUserId]").val(),
+					arrangeStartTime : $("#"+tab+" input[name=arrangeStartTime]").val(),
+					arrangeEndTime : $("#"+tab+" input[name=arrangeEndTime]").val(),
+					status : $("#"+tab+" select[name=status]").val(),
+					shuttleType :$("#"+tab+" select[name=shuttleType]").val(),
+					shuttleTime :$("#"+tab+" input[name=shuttleTime]").val()
+				}
+				transit.listTransit(0,transit.searchData.fromPartnerAgencyId,transit.searchData.lineProductId,transit.searchData.startTime,transit.searchData.arrangeUserId,transit.searchData.arrangeStartTime,transit.searchData.arrangeEndTime,transit.searchData.status,transit.searchData.shuttleType,transit.searchData.shuttleTime)
+			});
 			//筛选事件绑定
 			$("#"+tab+" .btn-touristGroupList-search").click(function(){
 				transit.searchData = {
@@ -96,7 +113,7 @@ define(function(require, exports) {
 					shuttleTime :$("#"+tab+" input[name=shuttleTime]").val()
 				}
 				transit.listTransit(0,transit.searchData.fromPartnerAgencyId,transit.searchData.lineProductId,transit.searchData.startTime,transit.searchData.arrangeUserId,transit.searchData.arrangeStartTime,transit.searchData.arrangeEndTime,transit.searchData.status,transit.searchData.shuttleType,transit.searchData.shuttleTime)
-			})
+			});
 			//分页--首页按钮事件
 			$("#"+tab+" .pageMode a.first").click(function(){
 				if(data.pageNo == 0 || data.totalPage == 0)return;
@@ -232,7 +249,8 @@ define(function(require, exports) {
 						var tab = "tab-arrange_transit-update-content";
 			    		var validator = rule.setTranistCheckor($(".arrangeTouristMain"));
 						if($(".tab-"+menuKey+"-update").length > 0) {
-                 	    	if(!!transit.edited["update"]){
+							addTab(menuKey+"-update","编辑中转安排");
+                 	    	if(!!transit.edited["update"] && transit.edited["update"] != ""){
                  	    		showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
                  	    			 validator = rule.setTranistCheckor($(".arrangeTouristMain"));
 				            		 if (!validator.form()) { 
@@ -240,23 +258,25 @@ define(function(require, exports) {
 				            		 }
 				            		 transit.submitUpdateTransit($(".arrangeTouristMain .btn-updateArrange").attr("data-entity-id"),0);
 									 transit.edited["update"] = "";
-				            		 addTab(menuKey+"-update","编辑中转安排",html);			
+				            		 addTab(menuKey+"-update","编辑中转安排",html);	
+									 transit.initUpdate(id,data);
 				            		 validator = rule.setTranistCheckor($(".arrangeTouristMain"));
 				            	},function(){
-				            		addTab(menuKey+"-update","编辑中转安排",html);;	
+				            		addTab(menuKey+"-update","编辑中转安排",html);
+									transit.initUpdate(id,data);
 									validator = rule.setTranistCheckor($(".arrangeTouristMain"));								
 									transit.edited["update"] = "";
 				            	}); 							
                  	    	 }else{
-	                 	    	addTab(menuKey+"-update","编辑中转安排",html);			
+	                 	    	addTab(menuKey+"-update","编辑中转安排",html);
+								transit.initUpdate(id,data);
 	                 	        validator = rule.setTranistCheckor($(".arrangeTouristMain"));
                  	    	 } 
                  	    }else{
-                 	    	addTab(menuKey+"-update","编辑中转安排",html);				
+                 	    	addTab(menuKey+"-update","编辑中转安排",html);
+							transit.initUpdate(id,data);
                  	    	validator = rule.setTranistCheckor($(".arrangeTouristMain"));
-                 	    };	
-						
-						transit.initUpdate(id,data);
+                 	    }
 		        	}
 				}
 			})
