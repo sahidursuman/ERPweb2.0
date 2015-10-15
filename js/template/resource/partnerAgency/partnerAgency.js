@@ -1,5 +1,5 @@
 define(function(require, exports) {
-	var rule = require("./rule"); 
+	var rule = require("./rule");
 	var menuKey = "resource_partnerAgency",
 		listTemplate = require("./view/list"),
 		addTemplate = require("./view/add"),
@@ -30,36 +30,36 @@ define(function(require, exports) {
 						data.partnerAgencyList = partnerAgencyList;
 						var html = listTemplate(data);
 						addTab(menuKey,"同行管理",html);
-						
+
 						//新增同行旅行社button事件
 						$("#"+tabId+" .btn-partnerAgency-add").click(function(){
 							partnerAgency.addPartnerAgency();
 						});
-						
+
 						//修改同行旅行社button事件
 						$("#"+tabId+" .btn-partnerAgency-edit").click(function(){
 							var id = $(this).attr("data-entiy-id");
 							partnerAgency.updatePartnerAgency(id);
 						});
-						
+
 						//查看同行旅行社详情button事件
 						$("#"+tabId+" .btn-partnerAgency-view").click(function(){
 							var id = $(this).attr("data-entiy-id");
 							partnerAgency.viewPartnerAgency(id);
 						});
-						
+
 						//删除同行旅行社button事件
 						$("#"+tabId+" .btn-partnerAgency-delete").click(function(){
 							var id = $(this).attr("data-entiy-id");
 							partnerAgency.deletePartnerAgency(id);
 						});
-						
+
 						//搜索栏状态button下拉事件
 						$("#"+tabId+" .search-area .btn-status .dropdown-menu a").click(function(){
 							$(this).parent().parent().parent().find("button").attr("data-value",$(this).attr("data-value"));
 							$(this).parent().parent().parent().find("span").text($(this).text());
 						});
-						
+
 						//搜索按钮事件
 						$("#"+tabId+" .btn-partnerAgency-search").click(function(){
 							var travelAgencyName = $("#"+tabId+" .search-area input[name=partnerAgency_travelAgencyName]").val();
@@ -70,12 +70,12 @@ define(function(require, exports) {
 							};
 							partnerAgency.listPartnerAgency(0,partnerAgency.searchData.travelAgencyName,partnerAgency.searchData.status);
 						});
-						
+
 						//分页--首页按钮事件
 						$("#"+tabId+" .pageMode a.first").click(function(){
 							partnerAgency.listPartnerAgency(0,partnerAgency.searchData.travelAgencyName,partnerAgency.searchData.status);
 						});
-						
+
 						//分页--上一页事件
 						$("#"+tabId+" .pageMode a.previous").click(function(){
 							var previous = data.pageNo - 1;
@@ -84,7 +84,7 @@ define(function(require, exports) {
 							}
 							partnerAgency.listPartnerAgency(previous,partnerAgency.searchData.travelAgencyName,partnerAgency.searchData.status);
 						});
-						
+
 						//分页--下一页事件
 						$("#"+tabId+" .pageMode a.next").click(function(){
 							var next =  data.pageNo + 1;
@@ -93,7 +93,7 @@ define(function(require, exports) {
 							}
 							partnerAgency.listPartnerAgency(next,partnerAgency.searchData.travelAgencyName,partnerAgency.searchData.status);
 						});
-						
+
 						//分页--尾页事件
 						$("#"+tabId+" .pageMode a.last").click(function(){
 							partnerAgency.listPartnerAgency(data.totalPage == 0 ? 0: data.totalPage - 1,partnerAgency.searchData.travelAgencyName,partnerAgency.searchData.status);
@@ -101,7 +101,7 @@ define(function(require, exports) {
 					}
 				}
 			});
-			
+
 		},
 		addPartnerAgency:function(){
 			var html = addTemplate();
@@ -109,15 +109,15 @@ define(function(require, exports) {
 			    type: 1,
 			    title:"新增同行旅行社",
 			    skin: 'layui-layer-rim', //加上边框
-			    area: ['60%', '60%'], //宽高
+			    area: ['65%', '60%'], //宽高
 			    zIndex:1028,
 			    content: html,
 			    success:function(){
-			    	
+
 			    	var $obj = $(".addPartnerAgencyContainer .form-horizontal");
 			    	// 设置表单验证
 			    	var validator = rule.partnerAgencyCheckor($('.partnerAgencyMainForm'));
-			    	
+
 			    	var $obj = $(".addPartnerAgencyContainer .partnerAgencyMainForm");
 			    	partnerAgency.getProvinceList($obj.find("select[name=provinceId]"));
 			    	$obj.find("select[name=provinceId]").change(function(){
@@ -139,27 +139,27 @@ define(function(require, exports) {
 							$obj.find("select[name=districtId]").html("<option value=''>未选择</option>");
 						}
 					});
-			    	
-			    	
+
+
 			    	// 新加总社信息下拉列表
 			    	partnerAgency.getHeaderPartnerAgency($obj.find("select[name=headPartnerAgency]"),null);
 			    	$(".addPartnerAgencyContainer .addheaderPartnerAgency").click(function(){ // 弹出添加总社框
 			    		partnerAgency.addheaderPartnerAgency($obj);
 			    	});
-			    	
+
 			    	$tbody = $(".addPartnerAgencyContainer .contactList tbody");
 			    	$(".addPartnerAgencyContainer .contactList .btn-contact-add").click(function(){
 			    		partnerAgency.addContact($tbody,validator);
 			    	});
-			    	
+
 			    	partnerAgency.addContact($tbody,validator);
-			    	
-			    	
+
+
 			    	$obj.find(".btn-submit-partnerAgency").click(function(){
-			    		
+
 			    		// 表单校验
-			    		if (!validator.form()) { return; }	
-			    		
+			    		if (!validator.form()) { return; }
+
 			    		var contactList = [];
 			    		$obj.find(".contactList tbody tr").each(function(){
 			    			var contactRealname = $(this).find("input[name=contactRealname]").val();
@@ -179,9 +179,9 @@ define(function(require, exports) {
 							status = 1;
 						}
 						var form = $obj.serialize()+"&status="+status+"";
-						
+
 						var contactListJsonAdd = JSON.stringify(contactList);
-						
+
 						$.ajax({
 							url:""+APP_ROOT+"back/partnerAgency.do?method=savePartnerAgency&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=add",
 							type:"POST",
@@ -242,7 +242,7 @@ define(function(require, exports) {
 					globalLoadingLayer = openLoadingLayer();
 				},
 				success:function(data){
-					
+
 					layer.close(globalLoadingLayer);
 					var result = showDialog(data);
 					var  validator="";
@@ -279,7 +279,7 @@ define(function(require, exports) {
 										$obj.find("select[name=districtId]").html("<option value=''>未选择</option>");
 									}
 								});
-						    	
+
 						    	var headerAgencyId = "";
 						    	if(data.partnerAgencyJson.partnerHeaderAgency!= null){
 						    		headerAgencyId = data.partnerAgencyJson.partnerHeaderAgency.id;
@@ -288,7 +288,7 @@ define(function(require, exports) {
 						    	$obj.find(".addheaderPartnerAgency").click(function(){ // 弹出添加总社框
 						    		partnerAgency.addheaderPartnerAgency($obj);
 						    	});
-						    	
+
 						    	//级联选择城市列表
 						    	var provinceId = "";
 						    	if(data.partnerAgencyJson.provinceId != null){
@@ -305,20 +305,20 @@ define(function(require, exports) {
 							    	partnerAgency.getCityList($obj.find("select[name=cityId]"),provinceId,cityId);
 						    	}
 						    	partnerAgency.getProvinceList($obj.find("select[name=provinceId]"),provinceId);
-						    	
-						    	
+
+
 						    	$tbody = $(".updatePartnerAgencyContainer .contactList tbody");
 						    	$(".updatePartnerAgencyContainer .contactList .btn-contact-add").click(function(){
 						    		partnerAgency.addContact($tbody,validator);
 						    	});
-						    	
+
 						    	partnerAgency.bindRemoveContact();
-						    	
+
 						    	$obj.find(".btn-submit-partnerAgency").click(function(){
-						    		
+
 						    		//同行编辑验证
 						    		if(!validator.form()){ return ;}
-						    		
+
 						    		var contactList = [];
 						    		$obj.find(".contactList tbody tr").each(function(){
 						    			var contactRealname = $(this).find("input[name=contactRealname]").val();
@@ -343,20 +343,20 @@ define(function(require, exports) {
 								    			};
 						    				}
 							    			contactList.push(contact);
-						    			}   
-						   
+						    			}
+
 						    		});
-						    		
-						    		
+
+
 						    		var status = 0;
 									if($obj.find(".partnerAgency-status").is(":checked") == true){
 										status = 1;
 									}
-									
+
 									var form = $obj.serialize()+"&status="+status+"";
-									
+
 									var contactListJsonAdd = JSON.stringify(contactList);
-									
+
 									$.ajax({
 										url:""+APP_ROOT+"back/partnerAgency.do?method=updatePartnerAgency&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
 										type:"POST",
@@ -389,7 +389,7 @@ define(function(require, exports) {
 				title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
 				title_html: true,
 				draggable:false,
-				buttons: [ 
+				buttons: [
 					{
 						text: "取消",
 						"class" : "btn btn-minier",
@@ -424,7 +424,7 @@ define(function(require, exports) {
 					}
 				],
 				open:function(event,ui){
-					$(this).find("p").text("你确定要删除该条记录？");   
+					$(this).find("p").text("你确定要删除该条记录？");
 				}
 			})
 		},
@@ -434,13 +434,13 @@ define(function(require, exports) {
 				'<td><input class="col-sm-12" type="text" name="contactMobileNumber" maxlength="20"/></td>'+
 				'<td><input class="col-sm-12" type="text" name="departmentName" maxlength="45"/></td>'+
 				'<td><input class="col-sm-12" type="text" name="dutyName" maxlength="45"/></td>'+
-				'<td><a class="btn-contact-delete">删除</a></td>'+           
+				'<td><a class="btn-contact-delete">删除</a></td>'+
 			'</tr>';
 			$obj.append(html);
-			
+
 			// 更新表单验证的事件绑定
-			validator = rule.update(validator);   
-	 
+			validator = rule.update(validator);
+
 			$obj.find(".btn-contact-delete:not(.needConfirm)").click(function(){
 				$(this).parent().parent().remove();
 			});
@@ -536,7 +536,7 @@ define(function(require, exports) {
 								} else {
 									html += "<option value='"+districtList[i].id+"'>"+districtList[i].name+"</option>";
 								}
-								
+
 							}
 						}
 						$(obj).html(html);
@@ -583,7 +583,7 @@ define(function(require, exports) {
 			    			type:"POST",
 			    			data:"headerAgencyName="+headerAgencyName,
 			    			dataType:"json",
-			    			success:function(data){  
+			    			success:function(data){
 			    				if(data.success == 1) {
 			    					var headerAgency = data.headerAgency;
 			    					var option = '<option value=\"'+headerAgency.id+'\" selected=\"selected\">'+headerAgency.name+'</option>';
