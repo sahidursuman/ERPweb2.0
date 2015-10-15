@@ -843,11 +843,9 @@ define(function(require, exports) {
 			});
 			//绑定修改分团转客信息
 			$obj.find(".btn-saveTransoutInfo").click(function(){
-				console.log("submit");
 				// 表单校验
 				if (!validator.form()) { return; }
 				transfer.saveTransfer($obj,1);  
-				closeTab(menuKey+"-updateTransfer");
 			});
 			
 			//删除有费用的id记录
@@ -860,6 +858,7 @@ define(function(require, exports) {
 			//取消分团转客信息
 			$obj.find(".btn-cancelTransfer").click(function(){
 				closeTab(menuKey+"-updateTransfer");
+				transfer.edited["updateTransfer"] = "";
 			});
 			//已付keyup事件
 			$obj.find("input[name=transPayedMoney]").keyup(function(){

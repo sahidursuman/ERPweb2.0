@@ -237,6 +237,7 @@ define(function(require, exports) {
 						var tab = "tab-resource_lineProduct-update-content";
 			    		var validator = rule.lineProductCheckor($('.updateLineProductContainer'));
 						if($(".tab-"+menuKey+"-update").length > 0) {
+							addTab(menuKey+"-update",title);
                  	    	if(!!lineProduct.edited["update"] && lineProduct.edited["update"] != ""){
                  	    		showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
 				            		 if (!validator.form()) { 
@@ -245,6 +246,7 @@ define(function(require, exports) {
 				            		 lineProduct.submitUpdateLineProduct($(".updateLineProductContainer form").eq(0).find("input[name=lineProductId]").val(),clipboardMode,0);
 									 lineProduct.edited["update"] = "";
 				            		 addTab(menuKey+"-update",title,html);
+									 lineProduct.initUpdate(id,clipboardMode,data);
 				            		 validator = rule.lineProductCheckor($("#"+tab+""));
 				            	 },function(){
 									 lineProduct.edited["update"] = "";
@@ -253,13 +255,14 @@ define(function(require, exports) {
 				            	 });							
                  	    	 }else{
 	                 	    	addTab(menuKey+"-update",title,html);
+								lineProduct.initUpdate(id,clipboardMode,data);
 	                 	        validator = rule.lineProductCheckor($("#"+tab+""));
                  	    	 } 
                  	    }else{
                  	    	addTab(menuKey+"-update",title,html);
+							lineProduct.initUpdate(id,clipboardMode,data);
                  	    	validator = rule.lineProductCheckor($("#"+tab+""));
-                 	    };	
-						lineProduct.initUpdate(id,clipboardMode,data);
+                 	    }
 					}
 				}
 			});

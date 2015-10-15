@@ -1047,6 +1047,15 @@ function listMenu(menuTemplate){
 						collectDetail.listCollectDetail();
 					});
 				});
+				//绑定中转安排菜单功能
+				$("#sidebar .nav-list .resource_subsection").click(function(){
+					$("#sidebar .nav-list li").removeClass("active");
+					$(this).addClass("active");
+					$(this).parent().parent().addClass("active");
+					seajs.use("" + ASSETS_ROOT +"js/template/resource/subsection/subsection.js",function(subsection){
+						subsection.listMainSubsection();
+					});
+				});
 				
 				//dateTime
 				$(document).on("click",".input-group-addon",function(){
@@ -1058,7 +1067,7 @@ function listMenu(menuTemplate){
 					}
 				})
 				// 处理中英文长度控制问题
-				.on('input', 'input[type="text"]', function(event) {
+				.on('input', 'input[type="text"],textarea', function(event) {
 					event.preventDefault();
 					
 					// 未设置maxlength，退出

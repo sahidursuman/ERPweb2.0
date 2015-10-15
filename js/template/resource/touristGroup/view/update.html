@@ -1,32 +1,30 @@
 <div class="col-xs-12 updateTouristGroup globalAdd">
 	<form class="form-horizontal touristGroupMainForm updateTouristGroupMainForm" role="form" style="margin-top:10px" onsubmit="return false">
-		<div class="widget-box ui-sortable-handle">
-			<div class="widget-header">
-				<h5 class="widget-title">
-					<i class="ace-icon fa fa-info-circle"></i>
-					修改小组信息
+		<div class=" ui-sortable-handle">
+				<h5 class="">
+					<span class="badge badge-primary">1</span>
+					<label class="middle title-size">修改小组信息</label>
 				</h5>
-			</div>
 			<div class="widget-body">
 				<div class="widget-main formOneList">
 					<div class="form-group">
-						<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>线路产品:</label>
+						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>线路产品:</label>
 						<div class="col-sm-2">
-							{{if touristGroupDetail.status != 0}}  
-								<input type="text" style="width: 155px" value="{{if touristGroupDetail.lineProduct != null}}{{touristGroupDetail.lineProduct.name}}{{/if}}" name="lineProductIdName" class="col-sm-8 bind-change" readonly="readonly" />
+							{{if touristGroupDetail.status == 1}}  
+								<input type="text"  style="width: 155px" value="{{if touristGroupDetail.lineProduct != null}}{{touristGroupDetail.lineProduct.name}}{{/if}}" name="lineProductIdName" class="col-sm-8 bind-change" readonly="readonly" />
 								<input type="hidden" value="{{touristGroupDetail.lineProductId}}" name="lineProductId" />
 								<button class="col-sm-4 btn btn-sm btn-primary btn-travelLine-search" style="padding-bottom:5px;width: 62px">
 									<i class="ace-icon fa fa-search "></i>搜索
 								</button>
 							{{else}}
-								<input type="text" value="{{if touristGroupDetail.lineProduct != null}}{{touristGroupDetail.lineProduct.name}}{{/if}}" name="lineProductIdName" class="col-sm-12" readonly="readonly" /> 
+								<input type="text" value="{{if touristGroupDetail.lineProduct != null}}{{touristGroupDetail.lineProduct.name}}{{/if}}" name="lineProductIdName" class="col-sm-12" readonly="readonly" />
 								<input type="hidden" value="{{touristGroupDetail.lineProductId}}" name="lineProductId" />
 							{{/if}}
 						</div>
 						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>出游日期:</label>
 						<div class="col-sm-2">
 							<!-- <input type="text" name="startTime" class="col-sm-12" /> -->
-							{{if touristGroupDetail.status != 0}}
+							{{if touristGroupDetail.status == 1}}
 								<div class="input-group">
 									<input type="text" name="startTime" value="{{touristGroupDetail.startTime | dateFormat: 'yyyy-MM-dd'}}" class="col-sm-12 date-picker datepicker" />
 									<span class="input-group-addon" style="left: -30px">
@@ -34,7 +32,7 @@
 									</span>
 								</div>
 							{{else}}
-								<input type="text" name="startTime" value="{{touristGroupDetail.startTime | dateFormat: 'yyyy-MM-dd'}}" class="col-sm-12" readonly="readonly"/>
+								<input type="text" name="startTime" value="{{touristGroupDetail.startTime | dateFormat: 'yyyy-MM-dd'}}" class="col-sm-12" readonly="readonly" />
 							{{/if}}
 						</div>
 						<label class="col-sm-1 control-label no-padding-right">是否购买保险:</label>
@@ -47,7 +45,7 @@
 					</div>
 
 					<div class="form-group choosePartnerAgencyDiv">
-						<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>客户来源:</label>
+						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>客户来源:</label>
 						<div class="col-sm-2">
 							<input type="text" name="fromPartnerAgency" class="col-sm-12" placeholder="请输入客户来源" value="{{if touristGroupDetail.partnerAgency != null}}{{touristGroupDetail.partnerAgency.travelAgencyName}}{{/if}}">
 							<input type="hidden" value="{{if touristGroupDetail.partnerAgency != null}}{{touristGroupDetail.partnerAgency.id}}{{/if}}" name="fromPartnerAgencyId">
@@ -75,7 +73,7 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-sm-2 control-label no-padding-right">应收:</label>
+						<label class="col-sm-1 control-label no-padding-right">应收:</label>
 						<div class="col-sm-2">
 							<input value="{{touristGroupDetail.needPayAllMoney}}" readonly="readonly" type="text" name="needPayAllMoney" class="col-sm-12" />
 						</div>
@@ -89,32 +87,30 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-sm-2 control-label no-padding-right">未收:</label>
+						<label class="col-sm-1 control-label no-padding-right">未收:</label>
 						<div class="col-sm-2">
 							<input value="{{touristGroupDetail.unIncomeMoney}}" readonly="readonly" type="text" name="unIncomeMoney" class="col-sm-12" />
 						</div>
 					</div>
 				</div>
 				<div class="form-group">
-					<div class="col-sm-2"></div>
 					<div class="col-sm-8">
-						<button class="btn btn-sm btn-success btn-touristGroup-addCost2" style="float:left;">
+						<button class="btn btn-sm btn-success btn-touristGroup-addCost2" style="float:left; margin-left: -10px">
 							<i class="ace-icon fa fa-plus"></i>
 							新增费用项
 						</button>
 					</div>
 				</div>
 				<div class="form-group">
-					<div class="col-sm-2"></div>
 					<div class="col-sm-8">
-						<table class="table table-striped table-bordered table-hover addCostList"> 
+						<table class="table table-striped table-bordered table-hover addCostList margin-top">
 							<thead>
 								<tr>
-									<th>类型</th>
-									<th>说明</th>
-									<th>数量</th>
-									<th>单价</th>
-									<th>操作</th>
+									<th class="th-border">类型</th>
+									<th class="th-border">说明</th>
+									<th class="th-border">数量</th>
+									<th class="th-border">单价</th>
+									<th class="th-border">操作</th>
 								</tr>
 							</thead>
 							<tbody class="addCostTbody">
@@ -165,7 +161,7 @@
 									<td>
 										<input name="price" value="{{feeList.price}}" type="text" class="col-sm-12  no-padding-right costPrice" />
 									</td>
-									<td><button class="btn btn-xs btn-danger addCost-delete"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></td>
+									<td><a class="cursor addCost-delete">删除</a></td>
 								</tr>{{/each}}
 							</tbody>
 						</table>
@@ -174,22 +170,18 @@
 			</div>
 		</div>
 	</form>
-	
 	<form class="form-horizontal touristGroupMainFormMember" role="form" style="margin-top:10px" onsubmit="return false">
 		<div class="form-group">
 			<div class="col-xs-12 col-sm-12 widget-container-col">
-				<div class="widget-box ui-sortable-handle">
-					<div class="widget-header">
-						<h5 class="widget-title">
-							<i class="ace-icon fa fa-building"></i>
-							游客名单
+				<div class=" ui-sortable-handle">
+						<h5 class="">
+							<span class="badge badge-primary">2</span>
+							<label class="middle title-size">游客名单</label>
 						</h5>
-					</div>
-
 					<div class="widget-body">
 						<div class="widget-main">
 							<div class="form-group">
-								<label class="col-sm-2 control-label no-padding-right">住宿标准：</label>
+								<label class="col-sm-1 control-label no-padding-right">住宿标准：</label>
 								<div class="col-sm-3">
 									<select name="level" class="col-sm-12">
 										<option{{if touristGroupDetail.hotelLevel == 1}} selected="selected"{{/if}} value="1">三星以下</option>
@@ -207,13 +199,12 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-sm-2 control-label no-padding-right">备注：</label>
+								<label class="col-sm-1 control-label no-padding-right">备注：</label>
 								<div class="col-sm-8">
 									<input name="touristRemarks" value="{{touristGroupDetail.remark}}" class="col-sm-12  no-padding-right" type="text">
 								</div>
 							</div>
 							<div class="form-group">
-								<div class="col-sm-2"></div>
 								<div class="col-sm-8">
 									<button class="btn btn-sm btn-success btn-add-tourist" style="float:left;">
 										<i class="ace-icon fa fa-plus"></i>
@@ -225,20 +216,18 @@
 										批量添加
 									</button>
 								</div>
-							</div>
 							<div class="form-group">
-								<div class="col-sm-2"></div>
 								<div class="col-sm-8">
-									<table class="table table-striped table-bordered table-hover addTouristList"> 
+									<table class="table table-striped table-bordered table-hover addTouristList margin-top">
 										<thead>
 											<tr>
-												<th>序号</th>
-												<th> <span class="necessary">*</span>姓名</th>
-												<th> <span class="necessary">*</span>手机号码</th>
-												<th>证件类型</th>
-												<th>证件号</th>
-												<th>设为联系人</th>
-												<th>操作</th>
+												<th class="th-border">序号</th>
+												<th class="th-border"> <span class="necessary">*</span>姓名</th>
+												<th class="th-border"> <span class="necessary">*</span>手机号码</th>
+												<th class="th-border">证件类型</th>
+												<th class="th-border">证件号</th>
+												<th class="th-border">设为联系人</th>
+												<th class="th-border">操作</th>
 											</tr>
 										</thead>
 										<tbody class="addTouristTbody">{{each touristGroupDetail.touristGroupMemberList as memberList}}
@@ -270,9 +259,9 @@
 													</div>
 												</td>
 												<td>
-														<button class="btn btn-xs btn-danger btnDeleteTourist">
-															<i class="ace-icon fa fa-trash-o bigger-120"></i>
-														</button>
+														<a class="cursor btnDeleteTourist">
+															删除
+														</a>
 												</td>
 											</tr>{{/each}}
 										</tbody>
@@ -288,25 +277,21 @@
 	<form class="form-horizontal touristGroupMainFormRS" role="form" style="margin-top:10px" onsubmit="return false">
 		<div class="form-group">
 			<div class="col-xs-12 col-sm-12 widget-container-col">
-				<div class="widget-box ui-sortable-handle">
-					<div class="widget-header">
-						<h5 class="widget-title">
-							<i class="ace-icon fa fa-building"></i>
-							中转
+				<div class=" ui-sortable-handle">
+						<h5 class="">
+							<span class="badge badge-primary">3</span>
+							<label class="middle title-size">中转</label>
 						</h5>
-					</div>
-
 					<div class="widget-body">
 						<div class="widget-main">
 							<div class="form-group">
-								<div class="col-sm-2"></div>
 								<div class="col-sm-3">
 									<label class="col-sm-2 control-label no-padding-right">接：</label>
-									<div class="clo-sm-5 checkbox">
+									<div class="clo-sm-1 checkbox">
 										<label>
 											<input type="checkbox" class="ace reception-check" {{if touristGroupDetail.isNeedArriveService==1}}checked="checked"{{/if}} value="0" name="touristReception">
 											<span class="lbl">
-												 
+
 											</span>
 										</label>
 									</div>
@@ -342,26 +327,25 @@
 										</div>
 									</div>
 								</div>
-								
 								<div class="col-sm-3">
 									<label class="col-sm-2 control-label no-padding-right">小车：</label>
-									<div class="clo-sm-5 checkbox">
+									<div class="clo-sm-1 checkbox">
 										<label>
 											<input type="checkbox" {{if touristGroupDetail.isNeedBus==1}}checked="checked"{{/if}} class="ace smallCar" value="0" name="smallCar">
 											<span class="lbl">
-												 
+
 											</span>
 										</label>
 									</div>
 								</div>
-								
+
 								<div class="col-sm-3">
 									<label class="col-sm-2 control-label no-padding-right">送：</label>
-									<div class="clo-sm-5 checkbox">
+									<div class="clo-sm-1 checkbox">
 										<label>
 											<input type="checkbox" {{if touristGroupDetail.isNeedLeaveService==1}}checked="checked"{{/if}} class="ace send-check" value="0" name="touristSend">
 											<span class="lbl">
-												 
+
 											</span>
 										</label>
 									</div>
@@ -372,7 +356,7 @@
 												<div class="input-group">
 													<input type="text" value="{{if touristGroupDetail.isNeedLeaveService==1}}{{if touristGroupDetail.outRemarkArrange != null}}{{touristGroupDetail.outRemarkArrange.leaveTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}{{/if}}" name="sendTime" class="col-sm-12 date-picker datepicker" />
 													<span class="input-group-addon">
-														<i class="fa fa-calendar"></i> 
+														<i class="fa fa-calendar"></i>
 													</span>
 												</div>
 											</div>
@@ -407,10 +391,7 @@
 		<button class="btn btn-block btn-primary btn-submit-addTouristGroup guideSubmit" data-entity-id="{{touristGroupDetail.id}}">
 			<i class="ace-icon fa fa-check"></i>
 			提交信息
-		</button>  
+		</button>
 		<div class="space-20"></div>
 	</form>
-	
-	
-	
 </div>

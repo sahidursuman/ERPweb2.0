@@ -7,7 +7,6 @@
 		<label class="control-label col-sm-2">现收款合计：{{statistics.currentNeedPay}}元</label>
 		<label class="control-label col-sm-2">未收款合计：{{statistics.unIncomeMoney}}元</label>
 	</div>
-
 	 <div class="form-horizontal" style="margin-top:20px;">
 		<label class="pull-left text-right control-label no-padding-right">来源:</label>
 		<div class="col-sm-1">
@@ -74,16 +73,42 @@
 		</div>
 
 		<label class="pull-left text-right control-label no-padding-right">状态:</label>
-		<div class="col-sm-1 ">
-			<select name="status" class="col-xs-12"> 
-				<option selected="selected" value="">全部</option> 
-				<option value="0" {{if searchParam.status == 0}}selected="selected"{{/if}}>已发团</option>
-				<option value="1" {{if searchParam.status == 1}}selected="selected"{{/if}}>未分团</option>
-				<option value="2" {{if searchParam.status == 2}}selected="selected"{{/if}}>已分团</option>
-				<option value="3" {{if searchParam.status == 3}}selected="selected"{{/if}}>已转客</option>
-			</select> 
+		<div class="col-sm-1 btn-group btn-status" style="margin-left: 20px">
+			<button data-value="{{searchParam.status}}" data-toggle="dropdown" class=" btn-sm dropdown-toggle block-up" aria-expanded="false">
+				<span>
+				   {{if searchParam.status == null}}
+						全部
+					{{else if searchParam.status == 1}}
+						未分团
+					{{else if searchParam.status == 2}}
+						已分团
+					{{else if searchParam.status == 2}}
+						已转客
+					{{else}}
+						已发团
+					{{/if}}
+				</span>
+				<i class="ace-icon fa fa-angle-down icon-on-right"></i>
+			</button>
+			<ul class="dropdown-menu">
+				<li>
+					<a data-value="" href="javascript:void(0)">全部</a>
+				</li>
+				<li>
+					<a data-value="0" href="javascript:void(0)">已发团</a>
+				</li>
+				<li>
+					<a data-value="1" href="javascript:void(0)">未分团</a>
+				</li>
+				<li>
+					<a data-value="2" href="javascript:void(0)">已分团</a>
+				</li>
+				<li>
+					<a data-value="3" href="javascript:void(0)">已转客</a>
+				</li>
+			</ul>
 		</div>
-		 <div class="col-sm-1" style="width:100px;">
+		<div class="col-sm-1" style="width:100px;">
 			 <button class=" btn-sm  btn-touristGroupList-search search-btn">
 				 <i class="ace-icon fa fa-search"></i>
 				 搜索

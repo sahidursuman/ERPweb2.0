@@ -1,5 +1,5 @@
 <div id="tripPlan_addPlan_content" class="container-fluid globalAdd">
-	<input type="hidden" value="{{tripPlan.isArranged}}" id="isArranged"> 
+	<input type="hidden" value="{{tripPlan.isArranged}}" id="isArranged">
     <div class="row show-grid">
         <div class="col-sm-2 font-size-12 ">
             <span class="pull-left control-label align-right no-padding-right">线路：</span>
@@ -81,7 +81,7 @@
                     </li>
                     <li class="col-sm-1 no-padding align-center">
                         <a data-toggle="tab" href="#tripPlan_addPlan_hotel" aria-expanded="false">住宿</a>
-                    </li> 
+                    </li>
                     <li class="col-sm-1 no-padding align-center">
                         <a data-toggle="tab" href="#tripPlan_addPlan_scenic" aria-expanded="false">景区</a>
                     </li>
@@ -94,9 +94,9 @@
                     <li class="col-sm-1 no-padding align-center">
                         <a data-toggle="tab" href="#tripPlan_addPlan_ticket" aria-expanded="false">票务</a>
                     </li>
-                    <li class="col-sm-1 no-padding align-center"> 
-                        <a data-toggle="tab" href="#tripPlan_addPlan_other" aria-expanded="false">其它</a>
-                    </li> 
+                    <li class="col-sm-1 no-padding align-center">
+                        <a data-toggle="tab" href="#tripPlan_addPlan_other" aria-expanded="false">其他</a>
+                    </li>
                 </ul>
                 <div class="tab-content" style="position:relative;top: -2px">
                     <div id="tripPlan_addPlan_insurance" class="tab-pane fade active in">
@@ -128,8 +128,8 @@
                                                             <th class="th-border">备注</th>
                                                             <th class="th-border">操作</th>
                                                         </tr>
-                                                    </thead> 
-                                                    <tbody> 
+                                                    </thead>
+                                                    <tbody>
                                                     	{{each insuranceList as insurance index}}
                                                         {{if insurance != "[]" || insurance != null}}
                                                     	<tr>
@@ -147,7 +147,7 @@
                                                                   	<option {{if insurance.payType == 2}}selected="selected"{{/if}} value="2">转账</option>
                                                                     <option {{if insurance.payType == 3}}selected="selected"{{/if}} value="3">网付</option>
                                                     			</select>
-                                                    		</td> 
+                                                    		</td>
                                                     		<td><input type="text" name="remark" value="{{insurance.remark}}" class="col-sm-12" maxlength="500" /></td>
                                                             <td> <a class="cursor btn-deleteTripPlanList" data-entiy-id="4" data-entity-name="hotel" title="删除"> 删除 </a> </td>
                                                         </tr>
@@ -167,7 +167,7 @@
                                                     				<option value="0">现付</option>
                                                                     <option value="1">签单</option>
                                                                   	<option value="2">转账</option>
-                                                                    <option value="3">网付</option>   
+                                                                    <option value="3">网付</option>
                                                                 </select>
                                                     		</td>
                                                     		<td><input type="text" name="remark" value="" class="col-sm-12"/></td>
@@ -272,7 +272,7 @@
                                                         <th class="th-border">备注</th>
                                                         <th class="th-border" style="display: none;">操作</th>
                                                     </tr>
-                                                    </thead> 
+                                                    </thead>
                                                     <tbody>
                                                         {{each busCompanyList as busCompany}}
                                                         {{if busCompany != "[]" || busCompany != null}}
@@ -294,7 +294,7 @@
                                                                         <option {{if busCompany.payType == 0}}selected="selected"{{/if}} value="0">现付</option>
                                                                         <option {{if busCompany.payType == 1}}selected="selected"{{/if}} value="1">签单</option>
                                                                         <option {{if busCompany.payType == 2}}selected="selected"{{/if}} value="2">转账</option>
-                                                                        <option {{if busCompany.payType == 3}}selected="selected"{{/if}} value="3">网付</option> 
+                                                                        <option {{if busCompany.payType == 3}}selected="selected"{{/if}} value="3">网付</option>
                                                                     </select>
                                                                 </td>
                                                                 <td><input name="guidePayMoney" type="text" value="{{busCompany.guidePayMoney}}" class="col-sm-12" style="width: 60px;"/></td>
@@ -374,7 +374,7 @@
                                                                         <option {{if restaurant.payType == 1}}selected="selected"{{/if}} value="1">签单</option>
                                                                         <option {{if restaurant.payType == 2}}selected="selected"{{/if}} value="2">转账</option>
                                                                         <option {{if restaurant.payType == 3}}selected="selected"{{/if}} value="3">网付</option>
-                                                                    </select> 
+                                                                    </select>
                                                                 </td>
                                                                 <td><input name="guidePayMoney" type="text" value="{{restaurant.guidePayMoney}}" class="col-sm-12" style="width: 60px;"/></td>
                                                                 <td><input name="remark" type="text" value="{{restaurant.remark}}" class="col-sm-12"/></td>
@@ -450,7 +450,7 @@
                                                                         {{/if}}
                                                                     </select>
                                                                     <input type="hidden" name="id" value="{{hotel.id}}" />
-                                                                </td> 
+                                                                </td>
                                                                 <td><input type="text" class="col-sm-12 chooseHotel" name="name" value="{{if hotel.hotel !=null}}{{hotel.hotel.name}}{{/if}}" /><input type="hidden" name="hotelId" value="{{if hotel.hotel !=null}}{{hotel.hotel.id}}{{/if}}"></td>
                                                                 <td><input type="text" class="col-sm-12" name="managerName" readonly="readonly" value="{{if hotel.hotel !=null}}{{hotel.hotel.managerName}}{{/if}}" /></td>
                                                                 <td><input type="text" class="col-sm-12" name="mobileNumber" readonly="readonly" value="{{if hotel.hotel !=null}}{{hotel.hotel.mobileNumber}}{{/if}}" /></td>
@@ -465,9 +465,9 @@
 	                                                    				<option {{if hotel.payType == 0}}selected="selected"{{/if}} value="0">现付</option>
                                                                         <option {{if hotel.payType == 1}}selected="selected"{{/if}} value="1">签单</option>
                                                                         <option {{if hotel.payType == 2}}selected="selected"{{/if}} value="2">转账</option>
-                                                                        <option {{if hotel.payType == 3}}selected="selected"{{/if}} value="3">网付</option> 
+                                                                        <option {{if hotel.payType == 3}}selected="selected"{{/if}} value="3">网付</option>
 	                                                    			</select>
-                                                                </td> 
+                                                                </td>
                                                                 <td><input type="text" name="guidePayMoney" class="col-sm-12" value="{{hotel.guidePayMoney}}" style="width: 60px;" /></td>
                                                                 <td><input type="text" name="remark" class="col-sm-12" value="{{hotel.remark}}" /></td>
                                                                 <td>
@@ -619,7 +619,7 @@
                                                             </tr>
                                                             {{/if}}
                                                         {{/each}}
-                                                    </tbody> 
+                                                    </tbody>
                                                 </table>
                                             </div>
                                         </div>
@@ -627,7 +627,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div> 
+                    </div>
                     <div id="tripPlan_addPlan_selfPay" class="tab-pane fade">
                         <div class="form-horizontal">
                             <div class="form-group">
@@ -740,7 +740,7 @@
                                                         <th class="th-border" style="width: 72px;">付款方式</th>
                                                         <th class="th-border" style="width: 77px;">导付</th>
                                                         <th class="th-border">备注</th>
-                                                        <th class="th-border">操作</th>
+                                                        <th class="th-border"  style="width: 100px">操作</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
@@ -826,7 +826,7 @@
                                                         <th class="th-border">备注</th>
                                                         <th class="th-border">操作</th>
                                                     </tr>
-                                                    </thead> 
+                                                    </thead>
                                                     <tbody>
                                                         {{each otherList as other}}
                                                         {{if other != "[]" || other != null}}
@@ -846,7 +846,7 @@
                                                                         <option {{if other.payType == 1}}selected="selected"{{/if}} value="1">签单</option>
                                                                         <option {{if other.payType == 2}}selected="selected"{{/if}} value="2">转账</option>
                                                                         <option {{if other.payType == 3}}selected="selected"{{/if}} value="3">网付</option>
-                                                                    </select>  
+                                                                    </select>
                                                                 </td>
                                                                 <td><input type="text" name="guidePayMoney" class="col-sm-12" value="{{other.guidePayMoney}}" /></td>
                                                                 <td><input type="text" name="remark" class="col-sm-12" value="{{other.remark}}" /></td>
@@ -854,7 +854,7 @@
                                                                     <a class="cursor btn-deleteTripPlanList" data-entiy-id="{{other.id}}" data-entity-name="other" title="删除">
                                                                         删除
                                                                     </a>
-                                                                </td>      
+                                                                </td>
                                                             </tr>
                                                             {{/if}}
                                                         {{/each}}
@@ -873,9 +873,9 @@
         <div class="col-sm-12">
         	<div class="space-10"></div>
         	<button data-entiy-id="{{tripPlan.id}}" class="btn btn-block btn-primary btn-submit-tripPlan guideSubmit">
-            	<i class="ace-icon fa fa-check"></i> 提交信息 
+            	<i class="ace-icon fa fa-check"></i> 提交信息
         	</button>
         	<div class="space-20"></div>
         </div>
     </div>
-</div>  
+</div>

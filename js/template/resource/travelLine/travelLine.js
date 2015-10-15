@@ -12,7 +12,7 @@ define(function(require, exports) {
 	var tabId = "tab-"+menuKey+"-content";
 	var addLineId = menuKey+"-addLine";
 	var lookID = menuKey+"-look";
-	var updateId = menuKey+"update";
+	var updateId = menuKey+"-update";
 
 	var travelLine = {
 		pageData:{
@@ -21,6 +21,14 @@ define(function(require, exports) {
 		searchData : {
 			name : "",
 			status : ""
+		},
+		updateClipboardMode : false,
+		edited : {},
+		isEdited : function(editedType){
+			if(!!travelLine.edited[editedType] && travelLine.edited[editedType] != ""){
+				return true;
+			}
+			return false;
 		},
 		listTravelLine:function(page,name,status){
 			$.ajax({
@@ -41,167 +49,127 @@ define(function(require, exports) {
 						data.travelLineList = travelLineList;
 						var html = listTemplate(data);
 						addTab(menuKey,"线路模板管理",html);
-						
-						//新增线路产品button按钮事件
-						$("#"+tabId+"  .btn-lineProduct-add").click(function(){
-							var id = $(this).attr("data-entiy-id");
-							travelLine.addLineProduct(id);
-						});
-						//新增线路button按钮事件
-						$("#"+tabId+"  .btn-travelLine-add").click(function(){
-							travelLine.addTravelLine();
-						});
-						
-						//修改线路button按钮事件
-						$("#"+tabId+"  .btn-line-edit").click(function(){
-							var id = $(this).attr("data-entiy-id");
-							travelLine.updateTravelLine(id,false);
-						});
-						
-						//删除线路button按钮事件
-						$("#"+tabId+"  .btn-line-delete").click(function(){
-							var id = $(this).attr("data-entiy-id");
-							travelLine.deleteTravelLine(id);
-						});
-						
-						//复制线路模板
-						$("#"+tabId+" .btn-line-clipboard").click(function(){
-							var id = $(this).attr("data-entiy-id");
-							travelLine.updateTravelLine(id,true);
-						});
-						
-						$("#"+tabId+" .btn-line-pre-scan").click(function(){
-							var id = $(this).attr("data-entiy-id");
-							travelLine.scanLineProductDay(id);
-						});
-
-						//查看详情线路button按钮事件
-						$("#"+tabId+"  .btn-line-scan").click(function(){
-							var id = $(this).attr("data-entiy-id");
-							travelLine.scanDetail(id);
-						});
-						
-						//搜索栏状态button下拉事件
-						$("#"+tabId+" .search-area .btn-status .dropdown-menu a").click(function(){
-							$(this).parent().parent().parent().find("button").attr("data-value",$(this).attr("data-value"));
-							$(this).parent().parent().parent().find("span").text($(this).text());
-							travelLine.searchData = {
-								name : $("#"+tabId+" input[name=travelLine_name]").val(),
-								status : $("#"+tabId+" .btn-status").find("button").attr("data-value")
-							}
-							travelLine.listTravelLine(0,travelLine.searchData.name,travelLine.searchData.status);
-						});
-						
-						//搜索按钮事件
-						$("#"+tabId+"  .btn-travelLine-search").click(function(){
-							travelLine.searchData = {
-								name : $("#"+tabId+"  input[name=travelLine_name]").val(),
-								status : $("#"+tabId+"  .btn-status").find("button").attr("data-value")
-							}
-							travelLine.listTravelLine(0,travelLine.searchData.name,travelLine.searchData.status);
-						});
-						
-						//分页--首页按钮事件
-						$("#"+tabId+"  .pageMode a.first").click(function(){
-							travelLine.listTravelLine(0,travelLine.searchData.name,travelLine.searchData.status);
-						});
-						
-						//分页--上一页事件
-						$("#"+tabId+"  .pageMode a.previous").click(function(){
-							var previous = data.pageNo - 1;
-							if(data.pageNo == 0){
-								previous = 0;
-							}
-							travelLine.listTravelLine(previous,travelLine.searchData.name,travelLine.searchData.status);
-						});
-						
-						//分页--下一页事件
-						$("#"+tabId+"  .pageMode a.next").click(function(){
-							var next =  data.pageNo + 1;
-							if(data.pageNo == data.totalPage-1){
-								next = data.pageNo ;
-							}
-							travelLine.listTravelLine(next,travelLine.searchData.name,travelLine.searchData.status);
-						});
-						
-						//分页--尾页事件
-						$("#"+tabId+"  .pageMode a.last").click(function(){
-							travelLine.listTravelLine(data.totalPage-1,travelLine.searchData.name,travelLine.searchData.status);
-						});
+						travelLine.initList(data);
 					}
 				}
 			});
 		},
+		initList : function(data){
+			//新增线路产品button按钮事件
+			$("#"+tabId+"  .btn-lineProduct-add").click(function(){
+				var id = $(this).attr("data-entiy-id");
+				travelLine.addLineProduct(id);
+			});
+			//新增线路button按钮事件
+			$("#"+tabId+"  .btn-travelLine-add").click(function(){
+				travelLine.addTravelLine();
+			});
+			
+			//修改线路button按钮事件
+			$("#"+tabId+"  .btn-line-edit").click(function(){
+				var id = $(this).attr("data-entiy-id");
+				travelLine.updateTravelLine(id,false);
+			});
+			
+			//删除线路button按钮事件
+			$("#"+tabId+"  .btn-line-delete").click(function(){
+				var id = $(this).attr("data-entiy-id");
+				travelLine.deleteTravelLine(id);
+			});
+			
+			//复制线路模板
+			$("#"+tabId+" .btn-line-clipboard").click(function(){
+				var id = $(this).attr("data-entiy-id");
+				travelLine.updateTravelLine(id,true);
+			});
+			
+			$("#"+tabId+" .btn-line-pre-scan").click(function(){
+				var id = $(this).attr("data-entiy-id");
+				travelLine.scanLineProductDay(id);
+			});
+
+			//查看详情线路button按钮事件
+			$("#"+tabId+"  .btn-line-scan").click(function(){
+				var id = $(this).attr("data-entiy-id");
+				travelLine.scanDetail(id);
+			});
+			
+			//搜索栏状态button下拉事件
+			$("#"+tabId+" .search-area .btn-status .dropdown-menu a").click(function(){
+				$(this).parent().parent().parent().find("button").attr("data-value",$(this).attr("data-value"));
+				$(this).parent().parent().parent().find("span").text($(this).text());
+				travelLine.searchData = {
+					name : $("#"+tabId+" input[name=travelLine_name]").val(),
+					status : $("#"+tabId+" .btn-status").find("button").attr("data-value")
+				}
+				travelLine.listTravelLine(0,travelLine.searchData.name,travelLine.searchData.status);
+			});
+			
+			//搜索按钮事件
+			$("#"+tabId+"  .btn-travelLine-search").click(function(){
+				travelLine.searchData = {
+					name : $("#"+tabId+"  input[name=travelLine_name]").val(),
+					status : $("#"+tabId+"  .btn-status").find("button").attr("data-value")
+				}
+				travelLine.listTravelLine(0,travelLine.searchData.name,travelLine.searchData.status);
+			});
+			
+			//分页--首页按钮事件
+			$("#"+tabId+"  .pageMode a.first").click(function(){
+				travelLine.listTravelLine(0,travelLine.searchData.name,travelLine.searchData.status);
+			});
+			
+			//分页--上一页事件
+			$("#"+tabId+"  .pageMode a.previous").click(function(){
+				var previous = data.pageNo - 1;
+				if(data.pageNo == 0){
+					previous = 0;
+				}
+				travelLine.listTravelLine(previous,travelLine.searchData.name,travelLine.searchData.status);
+			});
+			
+			//分页--下一页事件
+			$("#"+tabId+"  .pageMode a.next").click(function(){
+				var next =  data.pageNo + 1;
+				if(data.pageNo == data.totalPage-1){
+					next = data.pageNo ;
+				}
+				travelLine.listTravelLine(next,travelLine.searchData.name,travelLine.searchData.status);
+			});
+			
+			//分页--尾页事件
+			$("#"+tabId+"  .pageMode a.last").click(function(){
+				travelLine.listTravelLine(data.totalPage-1,travelLine.searchData.name,travelLine.searchData.status);
+			});
+		},
 		addTravelLine:function(){
 			var html = addTemplate();
-			addTab(addLineId,"新增线路",html);
-			//事件绑定
-			// 初始化并绑定表单验证
-			var validator = rule.traveLineCheckor($('.travelLineMainForm'));
-
+			//已填写提示  
+			if($(".tab-"+menuKey+"-addLine").length > 0) {
+				addTab(addLineId,"新增线路");
+				if(!!travelLine.edited["addLine"] && travelLine.edited["addLine"] != ""){
+					showConfirmMsg($( "#confirm-dialog-message" ), "未保存的数据，是否放弃?",function(){
+						console.log("继续编辑");			
+					},function(){
+						addTab(addLineId,"新增线路",html);
+						travelLine.initAdd();
+						travelLine.edited["addLine"] = "";
+					},"放弃","继续编辑"); 							
+				 }else{
+					addTab(addLineId,"新增线路",html);
+                    travelLine.initAdd();					
+				 } 
+			}else{
+				addTab(addLineId,"新增线路",html);	
+                travelLine.initAdd();				
+			}
+		},
+		initAdd : function(){
+			$('#tab-resource_travelLine-addLine-content').on("change",function(){
+				travelLine.edited["addLine"] = "addLine";
+			});	
 			$(".travelLineDayList .btn-submit-travelLine").unbind().click(function(){
-				// 表单验证
-				if (!validator.form())  return;
-
-				var status = 0;
-				if($(".travelLineMainForm .travelLine-status").is(":checked") == true){
-					status = 1;
-				}
-				var form = $(".travelLineMainForm").serialize()+"&status="+status+"";
-				var travelLineJsonAdd = "[";
-				var lineDayListLength = $(".travelLineDayList .lineDayList tbody tr").length;
-				$(".travelLineDayList .lineDayList tbody tr").each(function(i){
-					var lineDayJson = "";
-					var repastDetail = $(this).find("td")[1].innerHTML;
-					var restPosition = $(this).find("td")[2].innerHTML;
-					var level = $(this).find("td")[3].innerHTML;
-					var title = $(this).find("td")[4].innerHTML;
-					var roadScenic = $(this).find("input[name=roadScenic]").val();
-					var detail = $(this).find("input[name=detail]").val();
-					var whichDay = $(this).find("input[name=whichDay]").val();
-					var hotelLevel = 0;
-					if (level == "三星以下") {
-						hotelLevel = 1;
-					}else  if(level == "三星"){
-						hotelLevel = 2;
-					}else if(level == "准四星"){
-						hotelLevel = 3;
-					}else if(level == "四星"){
-						hotelLevel = 4;
-					}else if(level == "准五星"){
-						hotelLevel = 5;
-					}else if(level == "五星"){
-						hotelLevel = 6;
-					}else if(level == "五星以上"){
-						hotelLevel = 7;
-					}
-					if (i == (lineDayListLength -1)) {
-						lineDayJson = "{\"whichDay\":\""+whichDay+"\",\"repastDetail\":\""+repastDetail+"\",\"hotelLevel\":\""+hotelLevel+"\",\"title\":\""+title+"\",\"restPosition\":\""+restPosition+"\",\"roadScenic\":\""+roadScenic+"\",\"detail\":\""+detail+"\"}";
-					}else{
-						lineDayJson = "{\"whichDay\":\""+whichDay+"\",\"repastDetail\":\""+repastDetail+"\",\"hotelLevel\":\""+hotelLevel+"\",\"title\":\""+title+"\",\"restPosition\":\""+restPosition+"\",\"roadScenic\":\""+roadScenic+"\",\"detail\":\""+detail+"\"},";
-					}
-					travelLineJsonAdd += lineDayJson;
-				});
-				travelLineJsonAdd += "]";
-				// 保存线路
-				$.ajax({
-					url:""+APP_ROOT+"back/travelLine.do?method=saveTravelLine&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=add",
-					type:"POST",
-					data:form+"&travelLineJsonAdd="+encodeURIComponent(travelLineJsonAdd)+"",
-					dataType:"json",
-					beforeSend:function(){
-						globalLoadingLayer = openLoadingLayer();
-					},
-					success:function(data){
-						layer.close(globalLoadingLayer);
-						var result = showDialog(data);
-						if(result){
-							layer.close(addTravelLineLayer);
-							showMessageDialog($( "#confirm-dialog-message" ),data.message);
-							travelLine.listTravelLine(data.totalPage-1,name,status);
-						}
-					}
-				});
+				travelLine.submitAddTravelLine();
 			});
 
 			// 以弹出框的形式添加线路下行程信息
@@ -377,184 +345,142 @@ define(function(require, exports) {
 						data.travelLine = travelLineInfo;
 						data.clipboardMode = clipboardMode;
 						var html = updateTemplate(data);
-						addTab(updateId,"修改线路",html);
 						var title = "修改线路模板信息";
 						if(clipboardMode){
 							title = "新增线路模板信息";
 						}
-						
-				    	// 初始化并绑定表单验证
-				    	var validator = rule.traveLineCheckor($('.travelLineUpdateMainForm'));
-
-				    	// 1.处理添加和删除的Json数据包的处理
-				    	
-				    	// 添加行程安排
-				    	$(".travelLineDayList .btn-line-day-add").click(function(){
-				    		var lineDayHtml = addLineDayTemplate();
-				    		var addTravelLineDayLayer = layer.open({
-				    			type:1,
-				    			title:"新增日程",
-				    			skin: 'layui-layer-rim', //加上边框
-				 			    area: ['50%', '40%'], //宽高
-				 			    zIndex:1029,
-							    content: lineDayHtml,
-							    success:function(){
-							    	// 绑定表单验证
-							    	var dayCheckor = rule.travelLineDayCheckor($('.travelLineDayForm'));
-							    	// 初始化UEditor
-							    	var ue = init_editor("detailEditor-add-travelLine",{zIndex:99999999});
-
-							    	$(".travelLineDayForm .btn-submit-line-day").click(function(){
-							    		if( !dayCheckor.form() )  return;
-
-							    		function trim(str){ 
-								             return str.replace(/(^\s*)|(\s*$)/g, ""); 
-								        }
-							    		var repastDetail = $(".travelLineDayForm input[name=repastDetail]").val();
-							    		var hotelLevel = $(".travelLineDayForm select[name=hotelLevel]").val();
-							    		var whichDay = $(".travelLineDayForm select[name=whichDay]").val();
-							    		var level = "三星以下";
-							    		if (hotelLevel == 1) {
-							    			level = "三星以下";
-										}else if (hotelLevel == 2) {
-											level = "三星";
-										}else if(hotelLevel == 3){
-											level = "准四星";
-										}else if(hotelLevel == 4){
-											level = "四星";
-										}else if(hotelLevel == 5){
-											level = "准五星";
-										}else if(hotelLevel == 6){
-											level = "五星";
-										}else if(hotelLevel == 7){
-											level = "五星以上";
-										}
-							    		var title = $(".travelLineDayForm input[name=title]").val();
-							    		if(trim(title) == ""){
-											showMessageDialog($( "#confirm-dialog-message" ), "请输入行程标题");
-											return false;
-										}
-							    		var restPosition = $(".travelLineDayForm input[name=restPosition]").val();
-							    		var roadScenic = $(".travelLineDayForm input[name=roadScenic]").val();
-							    		var detail = encodeURIComponent(ue.getContent());
-							    		if(trim(detail) == ""){
-											showMessageDialog($( "#confirm-dialog-message" ), "请输入行程详情");
-											return false;
-										}
-//									    		var day = $(".travelLineDayList .lineDayList tbody tr").length + 1;
-							    		var lineDayHtml = "<tr><td>第"+whichDay+"天<input name=\"whichDay\" value=\""+whichDay+"\" type=\"hidden\"/></td><td>"+repastDetail+"</td><td>"+restPosition+"</td><td>"+level+"</td><td>"+title+"</td>" +
-							    				"<td style=\"width:120px\"><div class=\"btn-group\"><a data-entiy-id=\"\" class=\" btn-line-day-edit cursor\">修改|</a>" +
-							    				"<a data-entiy-id=\"\" class=\" btn-line-day-delete cursor\">删除</a></div>" +
-							    				"<input type=\"hidden\" name=\"hotelLevel\" value=\""+hotelLevel+"\"/>" +
-							    				"<input type=\"hidden\" name=\"roadScenic\" value=\""+roadScenic+"\"/>" +
-							    				"<input type=\"hidden\" name=\"detail\" value=\""+detail+"\"/></td></tr>";
-							    		$(".travelLineDayList .lineDayList tbody").append(lineDayHtml);
-							    		$(".travelLineDayList .lineDayList .btn-line-day-edit").unbind().click(function(){
-							    			travelLine.bindEditButton($(this));
-							    		});
-							    		
-							    		$(".travelLineDayList .lineDayList .btn-line-day-delete").click(function(){
-							    			travelLine.deleteDayDialog($(this));
-										});
-							    		
-							    		layer.close(addTravelLineDayLayer);
-							    	});
-							    }
-				    		});
-				    		
-				    	});
-				    	
-				    	// 删除日期行程
-				    	$(".travelLineDayList .lineDayList .btn-line-day-delete").click(function(){
-				    		travelLine.deleteDayDialog($(this));
-				    	});
-				    	
-				    	// 修改日期行程
-				    	$(".travelLineDayList .lineDayList .btn-line-day-edit").unbind().click(function(){
-				    		travelLine.bindEditButton($(this));
-				    	});
-				    	
-				    	// 2.序列化form表单，并通过Ajax实现保存操作
-				    	$(".travelLineDayList .btn-submit-travelLine").unbind().click(function(){
-				    		if ( !validator.form() )  return;
-
-				    		var status = 0;
-							if($(".travelLineUpdateMainForm .travelLine-status").is(":checked") == true){
-								status = 1;
-							}
-							var form = $(".travelLineUpdateMainForm").serialize()+"&status="+status+"";
-				    		var travelLineJsonAdd = "[";
-				    		var lineDayListLength = $(".travelLineDayList .lineDayList tbody tr:not(.deleted)").length;
-				    		$(".travelLineDayList .lineDayList tbody tr:not(.deleted)").each(function(i){
-				    			var lineDayJson = "";
-				    			var id = $(this).find(" .btn-line-day-delete").attr("data-entiy-id");
-				    			var repastDetail = $(this).find("td")[1].innerHTML;
-				    			var restPosition = $(this).find("td")[2].innerHTML;
-				    			var title = $(this).find("td")[4].innerHTML;
-				    			var whichDay = $(this).find("input[name=whichDay]").val();
-				    			var roadScenic = $(this).find("input[name=roadScenic]").val();
-				    			var detail = $(this).find("input[name=detail]").val();
-				    			var hotelLevel = $(this).find("input[name=hotelLevel]").val();
-				    			if (i == (lineDayListLength -1)) {
-				    				if (id != null && id != "") {
-				    					lineDayJson = "{\"id\":\""+id+"\",\"whichDay\":\""+whichDay+"\",\"repastDetail\":\""+repastDetail+"\",\"hotelLevel\":\""+hotelLevel+"\",\"title\":\""+title+"\",\"restPosition\":\""+restPosition+"\",\"roadScenic\":\""+roadScenic+"\",\"detail\":\""+detail+"\"}";
-									}else{
-										lineDayJson = "{\"whichDay\":\""+whichDay+"\",\"repastDetail\":\""+repastDetail+"\",\"hotelLevel\":\""+hotelLevel+"\",\"title\":\""+title+"\",\"restPosition\":\""+restPosition+"\",\"roadScenic\":\""+roadScenic+"\",\"detail\":\""+detail+"\"}";
-									}
-								}else{
-									if (id != null && id != "") {
-										lineDayJson = "{\"id\":\""+id+"\",\"whichDay\":\""+whichDay+"\",\"repastDetail\":\""+repastDetail+"\",\"hotelLevel\":\""+hotelLevel+"\",\"title\":\""+title+"\",\"restPosition\":\""+restPosition+"\",\"roadScenic\":\""+roadScenic+"\",\"detail\":\""+detail+"\"},";
-									}else {
-										lineDayJson = "{\"whichDay\":\""+whichDay+"\",\"repastDetail\":\""+repastDetail+"\",\"hotelLevel\":\""+hotelLevel+"\",\"title\":\""+title+"\",\"restPosition\":\""+restPosition+"\",\"roadScenic\":\""+roadScenic+"\",\"detail\":\""+detail+"\"},";
-									}
-								}
-				    			travelLineJsonAdd += lineDayJson; 
-				    		});
-				    		travelLineJsonAdd += "]";
-				    	
-				    		var travelLineJsonDel = "[";
-							var travelLineListLength = $(".travelLineDayList .lineDayList tbody tr.deleted").length;
-							$(".travelLineDayList .lineDayList tbody tr.deleted").each(function(i){
-								var travelLineDayJson = "";
-								var id = $(this).find(".btn-line-day-delete").attr("data-entiy-id");
-								if(i == (travelLineListLength-1)){
-									travelLineDayJson = "{\"id\":\""+id+"\"}";
-								}
-								else{
-									travelLineDayJson = "{\"id\":\""+id+"\"},";
-								}
-								travelLineJsonDel += travelLineDayJson;
-							});
-							travelLineJsonDel += "]";
-				    	
-							var url = ""+APP_ROOT+"back/travelLine.do?method=updateTravelLine&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update";
-							if(clipboardMode){
-								url = ""+APP_ROOT+"back/travelLine.do?method=saveTravelLine&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=add";
-							}
-							$.ajax({
-								url:url,
-								type:"POST",
-								data:form+"&travelLineJsonAdd="+encodeURIComponent(travelLineJsonAdd)+"&travelLineJsonDel="+encodeURIComponent(travelLineJsonDel)+"",
-								dataType:"json",
-								beforeSend:function(){
-									globalLoadingLayer = layer.open({
-										type:3
-									});
-								},
-								success:function(data){
-									layer.close(globalLoadingLayer);
-									var result = showDialog(data);
-									if(result){
-										layer.close(updateTravelLineLayer);
-										showMessageDialog($( "#confirm-dialog-message" ),data.message);
-										travelLine.listTravelLine(travelLine.pageData.pageNo,travelLine.searchData.name,travelLine.searchData.status);
-									}
-								}
-							});
-							
-				    	});
+						//已修改提示
+			    		var validator = rule.traveLineCheckor($('.travelLineUpdateMainForm'));
+						if($(".tab-"+menuKey+"-update").length > 0) {
+							addTab(updateId,"修改线路");
+                 	    	if(!!travelLine.edited["update"] && travelLine.edited["update"] != ""){
+                 	    		showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
+                 	    			 validator = rule.traveLineCheckor($('.travelLineUpdateMainForm'));
+				            		 if (!validator.form()) { 
+				            			 return; 
+				            		 }
+				            		 travelLine.submitUpdateTraveLine(clipboardMode,0);
+									 travelLine.edited["update"] = "";
+				            		 addTab(updateId,"修改线路",html);	
+									 travelLine.initUpdate(clipboardMode);
+				            		 validator = rule.traveLineCheckor($('.travelLineUpdateMainForm'));
+				            	},function(){
+				            		addTab(updateId,"修改线路",html);
+									travelLine.initUpdate(clipboardMode);
+									validator = rule.traveLineCheckor($('.travelLineUpdateMainForm'));									
+									travelLine.edited["update"] = "";
+				            	}); 							
+                 	    	 }else{
+	                 	    	addTab(updateId,"修改线路",html);
+								travelLine.initUpdate(clipboardMode);
+	                 	        validator = rule.traveLineCheckor($('.travelLineUpdateMainForm'));
+                 	    	 } 
+                 	    }else{
+                 	    	addTab(updateId,"修改线路",html);
+							travelLine.initUpdate(clipboardMode);
+                 	    	validator = rule.traveLineCheckor($('.travelLineUpdateMainForm'));
+                 	    }
 					}
 				}
+			});
+		},
+		initUpdate : function(clipboardMode){
+			$('#tab-resource_travelLine-update-content').on("change",function(){
+				travelLine.edited["update"] = "update";
+			});
+			// 初始化并绑定表单验证
+			var validator = rule.traveLineCheckor($('.travelLineUpdateMainForm'));
+
+			travelLine.updateClipboardMode = clipboardMode;
+			// 添加行程安排
+			$(".travelLineDayList .btn-line-day-add").click(function(){
+				var lineDayHtml = addLineDayTemplate();
+				var addTravelLineDayLayer = layer.open({
+					type:1,
+					title:"新增日程",
+					skin: 'layui-layer-rim', //加上边框
+					area: ['50%', '40%'], //宽高
+					zIndex:1029,
+					content: lineDayHtml,
+					success:function(){
+						// 绑定表单验证
+						var dayCheckor = rule.travelLineDayCheckor($('.travelLineDayForm'));
+						// 初始化UEditor
+						var ue = init_editor("detailEditor-add-travelLine",{zIndex:99999999});
+
+						$(".travelLineDayForm .btn-submit-line-day").click(function(){
+							if( !dayCheckor.form() )  return;
+
+							function trim(str){ 
+								 return str.replace(/(^\s*)|(\s*$)/g, ""); 
+							}
+							var repastDetail = $(".travelLineDayForm input[name=repastDetail]").val();
+							var hotelLevel = $(".travelLineDayForm select[name=hotelLevel]").val();
+							var whichDay = $(".travelLineDayForm select[name=whichDay]").val();
+							var level = "三星以下";
+							if (hotelLevel == 1) {
+								level = "三星以下";
+							}else if (hotelLevel == 2) {
+								level = "三星";
+							}else if(hotelLevel == 3){
+								level = "准四星";
+							}else if(hotelLevel == 4){
+								level = "四星";
+							}else if(hotelLevel == 5){
+								level = "准五星";
+							}else if(hotelLevel == 6){
+								level = "五星";
+							}else if(hotelLevel == 7){
+								level = "五星以上";
+							}
+							var title = $(".travelLineDayForm input[name=title]").val();
+							if(trim(title) == ""){
+								showMessageDialog($( "#confirm-dialog-message" ), "请输入行程标题");
+								return false;
+							}
+							var restPosition = $(".travelLineDayForm input[name=restPosition]").val();
+							var roadScenic = $(".travelLineDayForm input[name=roadScenic]").val();
+							var detail = encodeURIComponent(ue.getContent());
+							if(trim(detail) == ""){
+								showMessageDialog($( "#confirm-dialog-message" ), "请输入行程详情");
+								return false;
+							}
+//									    		var day = $(".travelLineDayList .lineDayList tbody tr").length + 1;
+							var lineDayHtml = "<tr><td>第"+whichDay+"天<input name=\"whichDay\" value=\""+whichDay+"\" type=\"hidden\"/></td><td>"+repastDetail+"</td><td>"+restPosition+"</td><td>"+level+"</td><td>"+title+"</td>" +
+									"<td style=\"width:120px\"><div class=\"btn-group\"><a data-entiy-id=\"\" class=\" btn-line-day-edit cursor\">修改|</a>" +
+									"<a data-entiy-id=\"\" class=\" btn-line-day-delete cursor\">删除</a></div>" +
+									"<input type=\"hidden\" name=\"hotelLevel\" value=\""+hotelLevel+"\"/>" +
+									"<input type=\"hidden\" name=\"roadScenic\" value=\""+roadScenic+"\"/>" +
+									"<input type=\"hidden\" name=\"detail\" value=\""+detail+"\"/></td></tr>";
+							$(".travelLineDayList .lineDayList tbody").append(lineDayHtml);
+							$(".travelLineDayList .lineDayList .btn-line-day-edit").unbind().click(function(){
+								travelLine.bindEditButton($(this));
+							});
+							
+							$(".travelLineDayList .lineDayList .btn-line-day-delete").click(function(){
+								travelLine.deleteDayDialog($(this));
+							});
+							
+							layer.close(addTravelLineDayLayer);
+						});
+					}
+				});
+				
+			});
+			
+			// 删除日期行程
+			$(".travelLineDayList .lineDayList .btn-line-day-delete").click(function(){
+				travelLine.deleteDayDialog($(this));
+			});
+			
+			// 修改日期行程
+			$(".travelLineDayList .lineDayList .btn-line-day-edit").unbind().click(function(){
+				travelLine.bindEditButton($(this));
+			});
+			
+			// 2.序列化form表单，并通过Ajax实现保存操作
+			$(".travelLineDayList .btn-submit-travelLine").unbind().click(function(){
+				travelLine.submitUpdateTraveLine(clipboardMode,1);
 			});
 		},
 		scanLineProductDay:function(id){
@@ -705,311 +631,330 @@ define(function(require, exports) {
 						
 						// 初始化表单验证
 						var validator = rule.lineProductCheckor($('.lineProductContainer'));
-						
-						for(var i=0;i<data.travelLine.days;i++){
-							var ue = init_editor("detailEditor-add-lineProduct-"+i+"");
+						//已填写提示  
+						if($(".tab-"+menuKey+"-addLine").length > 0) {
+							addTab(menuKey+"-add","新增线路产品");
+							if(!!travelLine.edited["add"] && travelLine.edited["add"] != ""){
+								showConfirmMsg($( "#confirm-dialog-message" ), "未保存的数据，是否放弃?",function(){
+									console.log("继续编辑");			
+								},function(){
+									addTab(menuKey+"-add","新增线路产品",html);
+									travelLine.initAddLineProduct(data);
+									travelLine.edited["add"] = "";
+								},"放弃","继续编辑"); 							
+							 }else{
+								addTab(menuKey+"-add","新增线路产品",html);
+								travelLine.initAddLineProduct(data);					
+							 } 
+						}else{
+							addTab(menuKey+"-add","新增线路产品",html);
+							travelLine.initAddLineProduct(data);				
 						}
-
-						//添加具体行程安排相应事件
-						$(".widgetSchedule .addRestaurant").bind("click", validator, travelLine.addRestaurant);//餐饮
-						$(".widgetSchedule .addResourceHotel").bind("click", validator, travelLine.addResourceHotel);//酒店
-						$(".widgetSchedule .addResourceScenic").bind("click", validator, travelLine.addResourceScenic);//景区
-						$(".widgetSchedule .addResourceShopping").bind("click", validator, travelLine.addResourceShopping);//购物
-						$(".widgetSchedule .addResourceSelfPaying").bind("click", validator, travelLine.addResourceSelfPaying);//自费
-						$(".widgetSchedule .addResourceTraffic").bind("click", validator, travelLine.addResourceTraffic);//交通
-						
-						$(".lineProductContainer .submitInfoLineProduct").bind("click", validator, travelLine.submitInfoLineProduct)//绑定提交事件
-						$('.scheduleListContainer').sortable({
-							containment: 'parent',
-							handle: ace.vars['touch'] ? '.table-bordered thead' : false,
-							forceHelperSize:true,
-							forcePlaceholderSize:true,
-							tolerance:'pointer',
-							update: function(event, ui) {
-								var itemList = $(".scheduleListContainer .timeline-item");
-								for(var i=0; i<itemList.length; i++){
-									itemList.eq(i).attr("index", i);
-								}
-							}
-						});
-			
-						
-						$(".arrangeGuideList .chooseGuide").autocomplete({
-							minLength:0,
-							change:function(event,ui){
-								if(ui.item == null){
-									$(this).val("");
-									$(this).parent().parent().find("input[name=guideNameId]").val("");
-									$(this).parent().parent().find("input[name=guideFee]").val("");
-									$(this).parent().parent().find("input[name=gender]").val("");
-									$(this).parent().parent().find("input[name=mobileNumber]").val("");
-									$(this).parent().parent().find("input[name=guideLevel]").val("");
-									$(this).parent().parent().find("input[name=company]").val("");
-								}
-
-								// 更新表单验证的配置
-								validator = rule.lineProductUpdate(validator);
-							},
-							select:function(event,ui){
-								$(this).blur();
-								var obj = this;
-								$.ajax({
-									url:""+APP_ROOT+"back/guide.do?method=getGuideById&token="+$.cookie("token")+"&menuKey=resource_guide&operation=view",
-				                    dataType: "json",
-				                    data:"id="+ui.item.id,
-				                    success: function(data) {
-				                    	layer.close(globalLoadingLayer);
-										var result = showDialog(data);
-										if(result){
-											var guide = JSON.parse(data.guide);
-											$(obj).parent().parent().find("input[name=guideNameId]").val(guide.id).trigger('change');
-											if(guide.gender == 0){
-												$(obj).parent().parent().find("input[name=gender]").val("男");
-											}
-											else{
-												$(obj).parent().parent().find("input[name=gender]").val("女");
-											}
-											$(obj).parent().parent().find("input[name=mobileNumber]").val(guide.mobileNumber);
-											var guideLevel = guide.guideLevel;
-											if(guideLevel == 1){
-												$(obj).parent().parent().find("input[name=guideLevel]").val("初级导游资格");
-											}
-											else if(guideLevel == 2){
-												$(obj).parent().parent().find("input[name=guideLevel]").val("中级导游资格");
-											}
-											else if(guideLevel == 3){
-												$(obj).parent().parent().find("input[name=guideLevel]").val("高级导游资格");
-											}
-											else if(guideLevel == 4){
-												$(obj).parent().parent().find("input[name=guideLevel]").val("特级导游资格");
-											}
-											$(obj).parent().parent().find("input[name=company]").val(guide.company);
-
-											// 更新表单验证的配置
-											validator = rule.lineProductUpdate(validator);
-										}
-				                    }
-				                });
-							}
-						}).click(function(){
-							var obj = this;
-							$.ajax({
-								url:""+APP_ROOT+"back/guide.do?method=findAll&token="+$.cookie("token")+"&menuKey=resource_guide&operation=view",
-			                    dataType: "json",
-			                    success: function(data) {
-			                    	layer.close(globalLoadingLayer);
-									var result = showDialog(data);
-									if(result){
-										var guideList = JSON.parse(data.guideList);
-										if(guideList != null && guideList.length > 0){
-											for(var i=0;i<guideList.length;i++){
-												guideList[i].value = guideList[i].realname;
-											}
-										}
-										$(obj).autocomplete('option','source', guideList);
-										$(obj).autocomplete('search', '');
-									}
-			                    }
-			                });
-						});
-						
-						
-						$(".arrangeInsuranceList .chooseInsurance").autocomplete({
-							minLength:0,
-							change:function(event,ui){
-								if(ui.item == null){
-									$(this).val("");
-									$(this).parent().parent().find("input[name=insuranceId]").val("");
-									$(this).parent().parent().find("input[name=type]").val("");
-									$(this).parent().parent().find("input[name=price]").val("");
-									$(this).parent().parent().find("input[name=telNumber]").val("");
-									$(this).parent().parent().find("input[name=managerName]").val("");
-									$(this).parent().parent().find("input[name=mobileNumber]").val("");
-								}
-
-								// 更新表单验证的配置
-								validator = rule.lineProductUpdate(validator);
-							},
-							select:function(event,ui){
-								$(this).blur();
-								var obj = this;
-								$.ajax({
-									url:""+APP_ROOT+"back/insurance.do?method=getInsuranceById&token="+$.cookie("token")+"&menuKey=resource_insurance&operation=view",
-				                    dataType: "json",
-				                    data:"id="+ui.item.id,
-				                    success: function(data) {
-				                    	layer.close(globalLoadingLayer);
-										var result = showDialog(data);
-										if(result){
-											var insurance = JSON.parse(data.insurance);
-											$(obj).parent().parent().find("input[name=insuranceId]").val(insurance.id).trigger('change');
-											$(obj).parent().parent().find("input[name=telNumber]").val(insurance.telNumber);
-											$(obj).parent().parent().find("input[name=managerName]").val(insurance.managerName);
-											$(obj).parent().parent().find("input[name=mobileNumber]").val(insurance.mobileNumber);
-
-											// 更新表单验证的配置
-											validator = rule.lineProductUpdate(validator);
-										}
-				                    }
-				                });
-							}
-						}).click(function(){
-							var obj = this;
-							$.ajax({
-								url:""+APP_ROOT+"back/insurance.do?method=findAll&token="+$.cookie("token")+"&menuKey=resource_insurance&operation=view",
-			                    dataType: "json",
-			                    success: function(data) {
-			                    	layer.close(globalLoadingLayer);
-									var result = showDialog(data);
-									if(result){
-										var insuranceList = JSON.parse(data.insuranceList);
-										if(insuranceList != null && insuranceList.length > 0){
-											for(var i=0;i<insuranceList.length;i++){
-												insuranceList[i].value = insuranceList[i].name;
-											}
-										}
-										$(obj).autocomplete('option','source', insuranceList);
-										$(obj).autocomplete('search', '');
-									}
-			                    }
-			                });
-						});
-						
-						var chooseBusLicenseNumber;
-						$(".arrangeBusCompanyList .chooseBusCompany").autocomplete({
-							minLength:0,
-							change:function(event,ui){
-								if(ui.item == null){
-									$(this).val("");
-									$(this).parent().parent().find("input[name=busCompanyId]").val("");
-									$(this).parent().parent().find("input[name=licenseNumber]").val("");
-									$(this).parent().parent().find("input[name=seatPrice]").val("");
-									$(this).parent().parent().find("input[name=seatCount]").val("");
-									$(this).parent().parent().find("input[name=charteredPrice]").val("");
-									$(this).parent().parent().find("input[name=mobileNumber]").val("");
-								}
-
-								// 更新表单验证的配置
-								validator = rule.lineProductUpdate(validator);
-							},
-							select:function(event,ui){
-								$(this).blur();
-								
-								$(this).parent().parent().find("input[name=busCompanyId]").val(ui.item.id).trigger('change');
-								$(this).parent().parent().find("input[name=licenseNumber]").val("");
-								$(this).parent().parent().find("input[name=seatPrice]").val("");
-								$(this).parent().parent().find("input[name=seatCount]").val("");
-								$(this).parent().parent().find("input[name=charteredPrice]").val("");
-								$(this).parent().parent().find("input[name=mobileNumber]").val("");
-								
-								// 更新表单验证的配置
-								validator = rule.lineProductUpdate(validator);
-								
-								var obj = this, mobileNumber = "";
-								
-								if(chooseBusLicenseNumber){
-									$(".arrangeBusCompanyList .chooseBusLicenseNumber").autocomplete( "destroy");
-								}
-								
-								//给车辆绑定autocomplete事件
-								chooseBusLicenseNumber = $(".arrangeBusCompanyList .chooseBusLicenseNumber").autocomplete({
-									minLength:0,
-									select:function(event,ui){
-										
-										//获得busId，到后台查询bus相应信息
-										//var mobileNumber = data.mobileNumber;
-										//$(obj).parent().parent().find("input[name=mobileNumber]").val(mobileNumber);
-										$.ajax({
-											url:""+APP_ROOT+"back/busCompany.do?method=findBusDetailById&token="+$.cookie("token")+"&menuKey=resource_busCompany&operation=view",
-						                    dataType: "json",
-						                    data:"id="+ui.item.id,
-						                    success: function(data) {
-						                    	layer.close(globalLoadingLayer);
-												var result = showDialog(data);
-												if(result){
-													var d = JSON.parse(data.bus), objParent = $(obj).parent().parent();
-													objParent.find("input[name=busLicenseNumberId]").val(ui.item.id).trigger('change');
-													objParent.find("input[name=seatPrice]").val(d.seatPrice);
-													objParent.find("input[name=seatCount]").val(d.seatCount);
-													objParent.find("input[name=mobileNumber]").val(d.mobileNumber);
-													objParent.find("input[name=charteredPrice]").val(d.charteredPrice);
-												}
-						                    }
-						                 });
-										
-									},
-									change:function(event,ui){
-										if(ui.item == null){
-											$(this).val("");
-											var objParent = $(this).parent().parent();
-											objParent.find("input[name=busLicenseNumberId]").val("");
-											objParent.find("input[name=licenseNumber]").val("");
-											objParent.find("input[name=seatPrice]").val("");
-											objParent.find("input[name=seatCount]").val("");
-											objParent.find("input[name=mobileNumber]").val("");
-											objParent.find("input[name=charteredPrice]").val("");
-										}
-									}
-								}).unbind("click").click(function(){
-									var objBus = this;
-									var busCompanyId = ui.item.id;
-									var needSeatCount = $(obj).parent().parent().find("input[name=needSeatCount]").val();
-									$.ajax({
-										url:""+APP_ROOT+"back/busCompany.do?method=findBusListBySeat&token="+$.cookie("token")+"&menuKey=resource_busCompany&operation=view",
-					                    dataType: "json",
-					                    data:"id="+busCompanyId+"&seatCount="+needSeatCount,
-					                    success: function(data) {
-					                    	layer.close(globalLoadingLayer);
-											var result = showDialog(data);
-											if(result){
-												var busList = JSON.parse(data.busList);
-												if(busList != null && busList.length){
-													for(var i=0;i<busList.length;i++){
-														busList[i].value = busList[i].licenseNumber;
-													}
-												}
-												
-												
-												$(objBus).autocomplete('option','source', busList);
-												$(objBus).autocomplete('search', '');
-											}
-					                    }
-					                 });
-								});
-								
-								
-								
-								
-							}
-						}).click(function(){
-							var obj = this;
-							var needSeatCount = $(obj).parent().parent().find("input[name=needSeatCount]").val();
-							$.ajax({
-								url:""+APP_ROOT+"back/busCompany.do?method=findBusCompanyBySeat&token="+$.cookie("token")+"&menuKey=resource_busCompany&operation=view",
-			                    dataType: "json",
-			                    data:"seatCount="+needSeatCount,
-			                    success: function(data) {
-			                    	layer.close(globalLoadingLayer);
-									var result = showDialog(data);
-									if(result){
-										var busCompanyList = JSON.parse(data.busCompanyList);
-										if(busCompanyList != null && busCompanyList.length > 0){
-											for(var i=0;i<busCompanyList.length;i++){
-												busCompanyList[i].value = busCompanyList[i].companyName;
-											}
-										}
-										$(obj).autocomplete('option','source', busCompanyList);
-										$(obj).autocomplete('search', '');
-									}
-			                    }
-			                });
-						});
-						
-						
 					}
 				}
 			});
 			
+		},
+		initAddLineProduct : function(data){
+			$('.lineProductContainer').on("change",function(){
+				travelLine.edited["add"] = "add";
+				console.log("change-add");
+			});
+			var validator = rule.lineProductCheckor($('.lineProductContainer'));
+			for(var i=0;i<data.travelLine.days;i++){
+				var ue = init_editor("detailEditor-add-lineProduct-"+i+"");
+			}
+
+			//添加具体行程安排相应事件
+			$(".widgetSchedule .addRestaurant").bind("click", validator, travelLine.addRestaurant);//餐饮
+			$(".widgetSchedule .addResourceHotel").bind("click", validator, travelLine.addResourceHotel);//酒店
+			$(".widgetSchedule .addResourceScenic").bind("click", validator, travelLine.addResourceScenic);//景区
+			$(".widgetSchedule .addResourceShopping").bind("click", validator, travelLine.addResourceShopping);//购物
+			$(".widgetSchedule .addResourceSelfPaying").bind("click", validator, travelLine.addResourceSelfPaying);//自费
+			$(".widgetSchedule .addResourceTraffic").bind("click", validator, travelLine.addResourceTraffic);//交通
+			
+			$(".lineProductContainer .submitInfoLineProduct").bind("click",travelLine.submitAddLineProduct);//绑定提交事件
+			$('.scheduleListContainer').sortable({
+				containment: 'parent',
+				handle: ace.vars['touch'] ? '.table-bordered thead' : false,
+				forceHelperSize:true,
+				forcePlaceholderSize:true,
+				tolerance:'pointer',
+				update: function(event, ui) {
+					var itemList = $(".scheduleListContainer .timeline-item");
+					for(var i=0; i<itemList.length; i++){
+						itemList.eq(i).attr("index", i);
+					}
+				}
+			});
+
+			
+			$(".arrangeGuideList .chooseGuide").autocomplete({
+				minLength:0,
+				change:function(event,ui){
+					if(ui.item == null){
+						$(this).val("");
+						$(this).parent().parent().find("input[name=guideNameId]").val("");
+						$(this).parent().parent().find("input[name=guideFee]").val("");
+						$(this).parent().parent().find("input[name=gender]").val("");
+						$(this).parent().parent().find("input[name=mobileNumber]").val("");
+						$(this).parent().parent().find("input[name=guideLevel]").val("");
+						$(this).parent().parent().find("input[name=company]").val("");
+					}
+
+					// 更新表单验证的配置
+					validator = rule.lineProductUpdate(validator);
+				},
+				select:function(event,ui){
+					$(this).blur();
+					var obj = this;
+					$.ajax({
+						url:""+APP_ROOT+"back/guide.do?method=getGuideById&token="+$.cookie("token")+"&menuKey=resource_guide&operation=view",
+						dataType: "json",
+						data:"id="+ui.item.id,
+						success: function(data) {
+							layer.close(globalLoadingLayer);
+							var result = showDialog(data);
+							if(result){
+								var guide = JSON.parse(data.guide);
+								$(obj).parent().parent().find("input[name=guideNameId]").val(guide.id).trigger('change');
+								if(guide.gender == 0){
+									$(obj).parent().parent().find("input[name=gender]").val("男");
+								}
+								else{
+									$(obj).parent().parent().find("input[name=gender]").val("女");
+								}
+								$(obj).parent().parent().find("input[name=mobileNumber]").val(guide.mobileNumber);
+								var guideLevel = guide.guideLevel;
+								if(guideLevel == 1){
+									$(obj).parent().parent().find("input[name=guideLevel]").val("初级导游资格");
+								}
+								else if(guideLevel == 2){
+									$(obj).parent().parent().find("input[name=guideLevel]").val("中级导游资格");
+								}
+								else if(guideLevel == 3){
+									$(obj).parent().parent().find("input[name=guideLevel]").val("高级导游资格");
+								}
+								else if(guideLevel == 4){
+									$(obj).parent().parent().find("input[name=guideLevel]").val("特级导游资格");
+								}
+								$(obj).parent().parent().find("input[name=company]").val(guide.company);
+
+								// 更新表单验证的配置
+								validator = rule.lineProductUpdate(validator);
+							}
+						}
+					});
+				}
+			}).click(function(){
+				var obj = this;
+				$.ajax({
+					url:""+APP_ROOT+"back/guide.do?method=findAll&token="+$.cookie("token")+"&menuKey=resource_guide&operation=view",
+					dataType: "json",
+					success: function(data) {
+						layer.close(globalLoadingLayer);
+						var result = showDialog(data);
+						if(result){
+							var guideList = JSON.parse(data.guideList);
+							if(guideList != null && guideList.length > 0){
+								for(var i=0;i<guideList.length;i++){
+									guideList[i].value = guideList[i].realname;
+								}
+							}
+							$(obj).autocomplete('option','source', guideList);
+							$(obj).autocomplete('search', '');
+						}
+					}
+				});
+			});
+			
+			
+			$(".arrangeInsuranceList .chooseInsurance").autocomplete({
+				minLength:0,
+				change:function(event,ui){
+					if(ui.item == null){
+						$(this).val("");
+						$(this).parent().parent().find("input[name=insuranceId]").val("");
+						$(this).parent().parent().find("input[name=type]").val("");
+						$(this).parent().parent().find("input[name=price]").val("");
+						$(this).parent().parent().find("input[name=telNumber]").val("");
+						$(this).parent().parent().find("input[name=managerName]").val("");
+						$(this).parent().parent().find("input[name=mobileNumber]").val("");
+					}
+
+					// 更新表单验证的配置
+					validator = rule.lineProductUpdate(validator);
+				},
+				select:function(event,ui){
+					$(this).blur();
+					var obj = this;
+					$.ajax({
+						url:""+APP_ROOT+"back/insurance.do?method=getInsuranceById&token="+$.cookie("token")+"&menuKey=resource_insurance&operation=view",
+						dataType: "json",
+						data:"id="+ui.item.id,
+						success: function(data) {
+							layer.close(globalLoadingLayer);
+							var result = showDialog(data);
+							if(result){
+								var insurance = JSON.parse(data.insurance);
+								$(obj).parent().parent().find("input[name=insuranceId]").val(insurance.id).trigger('change');
+								$(obj).parent().parent().find("input[name=telNumber]").val(insurance.telNumber);
+								$(obj).parent().parent().find("input[name=managerName]").val(insurance.managerName);
+								$(obj).parent().parent().find("input[name=mobileNumber]").val(insurance.mobileNumber);
+
+								// 更新表单验证的配置
+								validator = rule.lineProductUpdate(validator);
+							}
+						}
+					});
+				}
+			}).click(function(){
+				var obj = this;
+				$.ajax({
+					url:""+APP_ROOT+"back/insurance.do?method=findAll&token="+$.cookie("token")+"&menuKey=resource_insurance&operation=view",
+					dataType: "json",
+					success: function(data) {
+						layer.close(globalLoadingLayer);
+						var result = showDialog(data);
+						if(result){
+							var insuranceList = JSON.parse(data.insuranceList);
+							if(insuranceList != null && insuranceList.length > 0){
+								for(var i=0;i<insuranceList.length;i++){
+									insuranceList[i].value = insuranceList[i].name;
+								}
+							}
+							$(obj).autocomplete('option','source', insuranceList);
+							$(obj).autocomplete('search', '');
+						}
+					}
+				});
+			});
+			
+			var chooseBusLicenseNumber;
+			$(".arrangeBusCompanyList .chooseBusCompany").autocomplete({
+				minLength:0,
+				change:function(event,ui){
+					if(ui.item == null){
+						$(this).val("");
+						$(this).parent().parent().find("input[name=busCompanyId]").val("");
+						$(this).parent().parent().find("input[name=licenseNumber]").val("");
+						$(this).parent().parent().find("input[name=seatPrice]").val("");
+						$(this).parent().parent().find("input[name=seatCount]").val("");
+						$(this).parent().parent().find("input[name=charteredPrice]").val("");
+						$(this).parent().parent().find("input[name=mobileNumber]").val("");
+					}
+
+					// 更新表单验证的配置
+					validator = rule.lineProductUpdate(validator);
+				},
+				select:function(event,ui){
+					$(this).blur();
+					
+					$(this).parent().parent().find("input[name=busCompanyId]").val(ui.item.id).trigger('change');
+					$(this).parent().parent().find("input[name=licenseNumber]").val("");
+					$(this).parent().parent().find("input[name=seatPrice]").val("");
+					$(this).parent().parent().find("input[name=seatCount]").val("");
+					$(this).parent().parent().find("input[name=charteredPrice]").val("");
+					$(this).parent().parent().find("input[name=mobileNumber]").val("");
+					
+					// 更新表单验证的配置
+					validator = rule.lineProductUpdate(validator);
+					
+					var obj = this, mobileNumber = "";
+					
+					if(chooseBusLicenseNumber){
+						$(".arrangeBusCompanyList .chooseBusLicenseNumber").autocomplete( "destroy");
+					}
+					
+					//给车辆绑定autocomplete事件
+					chooseBusLicenseNumber = $(".arrangeBusCompanyList .chooseBusLicenseNumber").autocomplete({
+						minLength:0,
+						select:function(event,ui){
+							
+							//获得busId，到后台查询bus相应信息
+							//var mobileNumber = data.mobileNumber;
+							//$(obj).parent().parent().find("input[name=mobileNumber]").val(mobileNumber);
+							$.ajax({
+								url:""+APP_ROOT+"back/busCompany.do?method=findBusDetailById&token="+$.cookie("token")+"&menuKey=resource_busCompany&operation=view",
+								dataType: "json",
+								data:"id="+ui.item.id,
+								success: function(data) {
+									layer.close(globalLoadingLayer);
+									var result = showDialog(data);
+									if(result){
+										var d = JSON.parse(data.bus), objParent = $(obj).parent().parent();
+										objParent.find("input[name=busLicenseNumberId]").val(ui.item.id).trigger('change');
+										objParent.find("input[name=seatPrice]").val(d.seatPrice);
+										objParent.find("input[name=seatCount]").val(d.seatCount);
+										objParent.find("input[name=mobileNumber]").val(d.mobileNumber);
+										objParent.find("input[name=charteredPrice]").val(d.charteredPrice);
+									}
+								}
+							 });
+							
+						},
+						change:function(event,ui){
+							if(ui.item == null){
+								$(this).val("");
+								var objParent = $(this).parent().parent();
+								objParent.find("input[name=busLicenseNumberId]").val("");
+								objParent.find("input[name=licenseNumber]").val("");
+								objParent.find("input[name=seatPrice]").val("");
+								objParent.find("input[name=seatCount]").val("");
+								objParent.find("input[name=mobileNumber]").val("");
+								objParent.find("input[name=charteredPrice]").val("");
+							}
+						}
+					}).unbind("click").click(function(){
+						var objBus = this;
+						var busCompanyId = ui.item.id;
+						var needSeatCount = $(obj).parent().parent().find("input[name=needSeatCount]").val();
+						$.ajax({
+							url:""+APP_ROOT+"back/busCompany.do?method=findBusListBySeat&token="+$.cookie("token")+"&menuKey=resource_busCompany&operation=view",
+							dataType: "json",
+							data:"id="+busCompanyId+"&seatCount="+needSeatCount,
+							success: function(data) {
+								layer.close(globalLoadingLayer);
+								var result = showDialog(data);
+								if(result){
+									var busList = JSON.parse(data.busList);
+									if(busList != null && busList.length){
+										for(var i=0;i<busList.length;i++){
+											busList[i].value = busList[i].licenseNumber;
+										}
+									}
+									
+									
+									$(objBus).autocomplete('option','source', busList);
+									$(objBus).autocomplete('search', '');
+								}
+							}
+						 });
+					});
+				}
+			}).click(function(){
+				var obj = this;
+				var needSeatCount = $(obj).parent().parent().find("input[name=needSeatCount]").val();
+				$.ajax({
+					url:""+APP_ROOT+"back/busCompany.do?method=findBusCompanyBySeat&token="+$.cookie("token")+"&menuKey=resource_busCompany&operation=view",
+					dataType: "json",
+					data:"seatCount="+needSeatCount,
+					success: function(data) {
+						layer.close(globalLoadingLayer);
+						var result = showDialog(data);
+						if(result){
+							var busCompanyList = JSON.parse(data.busCompanyList);
+							if(busCompanyList != null && busCompanyList.length > 0){
+								for(var i=0;i<busCompanyList.length;i++){
+									busCompanyList[i].value = busCompanyList[i].companyName;
+								}
+							}
+							$(obj).autocomplete('option','source', busCompanyList);
+							$(obj).autocomplete('search', '');
+						}
+					}
+				});
+			});
 		},
 		routeIndex : 0,
 		addRestaurant:function(e){
@@ -1916,7 +1861,7 @@ define(function(require, exports) {
 				})
 			});
 		},
-		submitInfoLineProduct:function(e){
+		submitInfoLineProduct:function(){
 			if (!e.data.form())  return;
 
 			var $form = $(".lineProductContainer > form"), travelLineData;
@@ -2155,41 +2100,207 @@ define(function(require, exports) {
 				title_html: true,
 				draggable:false,
 				buttons: [ 
-	    					{
-	    						text: "取消",
-	    						"class" : "btn btn-minier",
-	    						click: function() {
-	    							$( this ).dialog( "close" );
-	    						}
-	    					},
-	    					{
-	    						text: "确定",
-	    						"class" : "btn btn-primary btn-minier",
-	    						click: function() {
-	    							var lineDayId = obj.attr("data-entiy-id");
-						    		var tr = obj.parent().parent().parent();
-						    		if (lineDayId != null && lineDayId != "") {
-										tr.addClass("deleted");
-										tr.fadeOut(function(){
-											tr.hide();
-										});
-									}else{
-										tr.addClass("deleted");
-										tr.fadeOut(function(){
-											tr.remove();
-										});
-									}
-	    							$( this ).dialog( "close" );
-	    							
-	    						}
-	    					}
-	    				],
-    				open:function(event,ui){
-    					$(this).find("p").text("你确定要删除该条记录？");
-    				}
+					{
+						text: "取消",
+						"class" : "btn btn-minier",
+						click: function() {
+							$( this ).dialog( "close" );
+						}
+					},
+					{
+						text: "确定",
+						"class" : "btn btn-primary btn-minier",
+						click: function() {
+							var lineDayId = obj.attr("data-entiy-id");
+							var tr = obj.parent().parent().parent();
+							if (lineDayId != null && lineDayId != "") {
+								tr.addClass("deleted");
+								tr.fadeOut(function(){
+									tr.hide();
+								});
+							}else{
+								tr.addClass("deleted");
+								tr.fadeOut(function(){
+									tr.remove();
+								});
+							}
+							$( this ).dialog( "close" );
+							
+						}
+					}
+				],
+				open:function(event,ui){
+					$(this).find("p").text("你确定要删除该条记录？");
+				}
     		});
+		},
+		submitAddTravelLine : function(){
+			var validator = rule.traveLineCheckor($('.travelLineMainForm'));
+			// 表单验证
+			if (!validator.form())  return;
+
+			var status = 0;
+			if($(".travelLineMainForm .travelLine-status").is(":checked") == true){
+				status = 1;
+			}
+			var form = $(".travelLineMainForm").serialize()+"&status="+status+"";
+			var travelLineJsonAdd = [];
+			var lineDayListStr = $(".travelLineDayList .lineDayList tbody tr");
+			lineDayListStr.each(function(i){
+				var repastDetail = lineDayListStr.eq(i).find("td")[1].innerHTML;
+				var restPosition = lineDayListStr.eq(i).find("td")[2].innerHTML;
+				var level = lineDayListStr.eq(i).find("td")[3].innerHTML;
+				var title = lineDayListStr.eq(i).find("td")[4].innerHTML;
+				var roadScenic = lineDayListStr.eq(i).find("input[name=roadScenic]").val();
+				var detail = lineDayListStr.eq(i).find("input[name=detail]").val();
+				var whichDay = lineDayListStr.eq(i).find("input[name=whichDay]").val();
+				var hotelLevel = 0;
+				if (level == "三星以下") {
+					hotelLevel = 1;
+				}else  if(level == "三星"){
+					hotelLevel = 2;
+				}else if(level == "准四星"){
+					hotelLevel = 3;
+				}else if(level == "四星"){
+					hotelLevel = 4;
+				}else if(level == "准五星"){
+					hotelLevel = 5;
+				}else if(level == "五星"){
+					hotelLevel = 6;
+				}else if(level == "五星以上"){
+					hotelLevel = 7;
+				}
+				var lineDayJson = {
+					whichDay : whichDay,
+					repastDetail : repastDetail,
+					hotelLevel : hotelLevel,
+					title : title,
+					restPosition : restPosition,
+					roadScenic : roadScenic,
+					detail : detail
+				};
+				travelLineJsonAdd.push(lineDayJson);
+			});
+			travelLineJsonAdd = JSON.stringify(travelLineJsonAdd);
+			// 保存线路
+			$.ajax({
+				url:""+APP_ROOT+"back/travelLine.do?method=saveTravelLine&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=add",
+				type:"POST",
+				data:form+"&travelLineJsonAdd="+encodeURIComponent(travelLineJsonAdd)+"",
+				dataType:"json",
+				beforeSend:function(){
+					globalLoadingLayer = openLoadingLayer();
+				},
+				success:function(data){
+					layer.close(globalLoadingLayer);
+					var result = showDialog(data);
+					if(result){
+						//layer.close(addTravelLineLayer);
+						showMessageDialog($( "#confirm-dialog-message" ),data.message);
+						travelLine.edited["addLine"] = "";
+						closeTab(addLineId);
+						travelLine.listTravelLine(data.totalPage-1,name,status);
+					}
+				}
+			});
+		},
+		submitUpdateTraveLine : function(clipboardMode,isClose){
+			var validator = rule.traveLineCheckor($('.travelLineUpdateMainForm'));
+			if ( !validator.form() )  return;
+			var status = 0;
+			if($(".travelLineUpdateMainForm .travelLine-status").is(":checked") == true){
+				status = 1;
+			}
+			var form = $(".travelLineUpdateMainForm").serialize()+"&status="+status+"";
+			var travelLineJsonAdd = "[";
+			var lineDayListLength = $(".travelLineDayList .lineDayList tbody tr:not(.deleted)").length;
+			$(".travelLineDayList .lineDayList tbody tr:not(.deleted)").each(function(i){
+				var lineDayJson = "";
+				var id = $(this).find(" .btn-line-day-delete").attr("data-entiy-id");
+				var repastDetail = $(this).find("td")[1].innerHTML;
+				var restPosition = $(this).find("td")[2].innerHTML;
+				var title = $(this).find("td")[4].innerHTML;
+				var whichDay = $(this).find("input[name=whichDay]").val();
+				var roadScenic = $(this).find("input[name=roadScenic]").val();
+				var detail = $(this).find("input[name=detail]").val();
+				var hotelLevel = $(this).find("input[name=hotelLevel]").val();
+				if (i == (lineDayListLength -1)) {
+					if (id != null && id != "") {
+						lineDayJson = "{\"id\":\""+id+"\",\"whichDay\":\""+whichDay+"\",\"repastDetail\":\""+repastDetail+"\",\"hotelLevel\":\""+hotelLevel+"\",\"title\":\""+title+"\",\"restPosition\":\""+restPosition+"\",\"roadScenic\":\""+roadScenic+"\",\"detail\":\""+detail+"\"}";
+					}else{
+						lineDayJson = "{\"whichDay\":\""+whichDay+"\",\"repastDetail\":\""+repastDetail+"\",\"hotelLevel\":\""+hotelLevel+"\",\"title\":\""+title+"\",\"restPosition\":\""+restPosition+"\",\"roadScenic\":\""+roadScenic+"\",\"detail\":\""+detail+"\"}";
+					}
+				}else{
+					if (id != null && id != "") {
+						lineDayJson = "{\"id\":\""+id+"\",\"whichDay\":\""+whichDay+"\",\"repastDetail\":\""+repastDetail+"\",\"hotelLevel\":\""+hotelLevel+"\",\"title\":\""+title+"\",\"restPosition\":\""+restPosition+"\",\"roadScenic\":\""+roadScenic+"\",\"detail\":\""+detail+"\"},";
+					}else {
+						lineDayJson = "{\"whichDay\":\""+whichDay+"\",\"repastDetail\":\""+repastDetail+"\",\"hotelLevel\":\""+hotelLevel+"\",\"title\":\""+title+"\",\"restPosition\":\""+restPosition+"\",\"roadScenic\":\""+roadScenic+"\",\"detail\":\""+detail+"\"},";
+					}
+				}
+				travelLineJsonAdd += lineDayJson; 
+			});
+			travelLineJsonAdd += "]";
+		
+			var travelLineJsonDel = "[";
+			var travelLineListLength = $(".travelLineDayList .lineDayList tbody tr.deleted").length;
+			$(".travelLineDayList .lineDayList tbody tr.deleted").each(function(i){
+				var travelLineDayJson = "";
+				var id = $(this).find(".btn-line-day-delete").attr("data-entiy-id");
+				if(i == (travelLineListLength-1)){
+					travelLineDayJson = "{\"id\":\""+id+"\"}";
+				}
+				else{
+					travelLineDayJson = "{\"id\":\""+id+"\"},";
+				}
+				travelLineJsonDel += travelLineDayJson;
+			});
+			travelLineJsonDel += "]";
+		
+			var url = ""+APP_ROOT+"back/travelLine.do?method=updateTravelLine&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update";
+			if(travelLine.clipboardMode){
+				url = ""+APP_ROOT+"back/travelLine.do?method=saveTravelLine&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=add";
+			}
+			$.ajax({
+				url:url,
+				type:"POST",
+				data:form+"&travelLineJsonAdd="+encodeURIComponent(travelLineJsonAdd)+"&travelLineJsonDel="+encodeURIComponent(travelLineJsonDel)+"",
+				dataType:"json",
+				beforeSend:function(){
+					globalLoadingLayer = layer.open({
+						type:3
+					});
+				},
+				success:function(data){
+					layer.close(globalLoadingLayer);
+					var result = showDialog(data);
+					if(result){
+						//layer.close(updateTravelLineLayer);
+						showMessageDialog($( "#confirm-dialog-message" ),data.message);
+						travelLine.edited["update"] = "";
+						if(isClose == 1){
+							closeTab(updateId);
+							travelLine.listTravelLine(travelLine.pageData.pageNo,travelLine.searchData.name,travelLine.searchData.status);
+						}
+					}
+				}
+			});
+		},
+		save : function(saveType){
+			if(saveType == "addLine"){
+				travelLine.submitAddTravelLine();
+			} else if(saveType == "update"){
+				travelLine.submitUpdateTraveLine(travelLine.updateClipboardMode,1);
+			} else if(saveType == "add"){
+				travelLine.submitAddLineProduct();
+			}
+		},
+		clearEdit : function(clearType){
+			travelLine.edited[clearType] = "";
 		}
 	}
 	
 	exports.listTravelLine = travelLine.listTravelLine;
+	exports.isEdited = travelLine.isEdited;
+	exports.save = travelLine.save;
+	exports.clearEdit = travelLine.clearEdit;
 });
