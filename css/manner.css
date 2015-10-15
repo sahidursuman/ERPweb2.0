@@ -461,7 +461,7 @@ table tr td{
 /*.globalAdd label{*/
     /*font-size: 12px !important;*/
 /*}*/
-.globalAdd input,select{
+input,select{
     height: 24px !important;
     /*line-height: 12px;*/
     padding: 0px;
@@ -494,7 +494,7 @@ table tr td{
     line-height: 12px;
     padding-top: 2px;
 }
-.globalAdd .guideSubmit{
+ .guideSubmit{
     height: 36px !important;
     font-size: 14px;
     line-height: 23px !important;
@@ -502,13 +502,16 @@ table tr td{
 /*.datepicker{*/
     /*width: 130px;*/
 /*}*/
-.globalAdd .guideInputList{
+.guideInputList{
     width: 220px !important;
     font-size: 12px;
     padding: 0px 0px 0px 10px;
 }
 .globalAdd .guideInterval{
     margin-bottom: 10px !important;
+}
+.globalAdd .editFeeMainForm input{
+     padding: 0px 0px 0px 10px;
 }
 .checkbox{
     line-height: 12px;
@@ -539,3 +542,19 @@ table tr td{
      margin-left: 3px;
      padding-top: 5px !important;
  }
+
+/*分团管理*/
+/*分团转客*/
+.otherButton{
+    height: 24px;
+    width: 80px !important;
+    line-height: 10px !important;
+}
+/*线路产品*/
+.form-control{
+    font-size: 12px !important;
+}
+.deleteAllother{
+    height: 24px !important;
+    padding: 0px 0px 0px 6px;
+}
