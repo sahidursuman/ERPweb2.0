@@ -1,48 +1,46 @@
 <div class="col-xs-12">
 	<form class="form-horizontal travelLineMainForm" role="form" style="margin-top:10px" onsubmit="return false">
-		<div class="widget-box ui-sortable-handle">
-			<div class="widget-header">
-				<h5 class="widget-title">
-					<i class="ace-icon fa fa-info-circle"></i>
-					线路主体信息
+		<div class=" ui-sortable-handle">
+				<h5 >
+					<span class="badge badge-primary">1</span>
+					<label class="middle title-size">线路主体信息</label>
 				</h5>
-			</div>
 			<div class="form-group">
-				<label class="col-sm-2 control-label no-padding-right">线路名称:</label>
-				<div class="col-sm-4">
+				<label class="col-sm-1 control-label no-padding-right">线路名称:</label>
+				<div class="col-sm-3">
 					<label class="control-label">{{travelLine.name}}</label>
 				</div>
-				<label class="col-sm-2 control-label no-padding-right">行程天数:</label>
-				<div class="col-sm-4">
+				<label class="col-sm-1 control-label no-padding-right">行程天数:</label>
+				<div class="col-sm-3">
 					<label class="control-label">{{travelLine.days}}天</label>
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="col-sm-2 control-label no-padding-right">费用包含:</label>
+				<label class="col-sm-1 control-label no-padding-right">费用包含:</label>
 				<div class="col-sm-8">
 					<label class="control-label" style="text-align: left">{{travelLine.includeFee}}</label>
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="col-sm-2 control-label no-padding-right">费用不包含:</label>
+				<label class="col-sm-1 control-label no-padding-right">费用不包含:</label>
 				<div class="col-sm-8">
 					<label class="control-label" style="text-align: left">{{travelLine.excludeFee}}</label>
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="col-sm-2 control-label no-padding-right">行程特色:</label>
+				<label class="col-sm-1 control-label no-padding-right">行程特色:</label>
 				<div class="col-sm-8">
 					<label class="control-label" style="text-align: left">{{travelLine.lineFeature}}</label>
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="col-sm-2 control-label no-padding-right">行程须知:</label>
+				<label class="col-sm-1 control-label no-padding-right">行程须知:</label>
 				<div class="col-sm-8">
 					<label class="control-label" style="text-align: left">{{travelLine.lineNotice}}</label>
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="col-sm-2 control-label no-padding-right">行程备注:</label>
+				<label class="col-sm-1 control-label no-padding-right">行程备注:</label>
 				<div class="col-sm-8">
 					<label class="control-label" style="text-align: left">{{travelLine.remark}}</label>
 				</div>
@@ -52,24 +50,22 @@
 	<form class="form-horizontal travelLineDayList" role="form" style="margin-top:10px" onsubmit="return false">
 		<div class="form-group">
 			<div class="col-xs-12 col-sm-12 widget-container-col">
-				<div class="widget-box ui-sortable-handle">
-					<div class="widget-header">
-						<h5 class="widget-title">
-							<i class="ace-icon fa fa-line-day"></i>
-							日程列表
+				<div class=" ui-sortable-handle">
+						<h5 class="">
+							<span class="badge badge-primary">2</span>
+							<label class="middle title-size">日程列表</label>
 						</h5>
-					</div>
 					<div class="widget-body">
 						<div class="widget-main no-padding">
 							<table class="table table-striped table-bordered table-hover lineDayList"> 
 								<thead>
-									<tr>
-										<th>日期</th>
-										<th>含餐情况</th>
-										<th>住宿地点</th>
-										<th>酒店星级</th>
-										<th>行程标题</th>
-										<th>操作</th>
+									<tr >
+										<th class="th-border">日期</th>
+										<th class="th-border" >含餐情况</th>
+										<th class="th-border">住宿地点</th>
+										<th class="th-border">酒店星级</th>
+										<th class="th-border">行程标题</th>
+										<th class="th-border">操作</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -97,9 +93,9 @@
 												</td>
 												<td>{{line.title}}</td>
 												<td>
-													<button data-entiy-id="{{line.id}}" class="btn btn-xs btn-success btn-guide-scan">
-														<i class="ace-icon fa fa-search-plus bigger-120"></i>
-													</button>
+													<a data-entiy-id="{{line.id}}" class="cursor btn-guide-scan">
+														查看
+													</a>
 												</td>
 											</tr>
 										{{/each}}

@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":118,"md5":"305c75641f3dc3b90486907bac3b3e73"}*/
+/*TMODJS:{"debug":true,"version":117,"md5":"305c75641f3dc3b90486907bac3b3e73"}*/
 define(function(require) {
     return require("../../../template")("financial/busCompany/view/list", function($data, $filename) {
         try {

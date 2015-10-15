@@ -42,7 +42,8 @@ define(function(require, exports) {
 	    	    	        	errMsg: '座机号码格式不正确'
 	    	    	        }
 	    	        ]
-	    	    },{	// 传真电话  
+	    	    },
+	    	    {	// 传真电话
 	    	    	$ele: $obj.find('input[name="faxNumber"]'),
 	    	    	rules: [
 	    	    	        {

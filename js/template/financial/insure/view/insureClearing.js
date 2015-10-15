@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":42,"md5":"6f3198b1d18d9cde191f91f7c2185be0"}*/
+/*TMODJS:{"debug":true,"version":39,"md5":"6f3198b1d18d9cde191f91f7c2185be0"}*/
 define(function(require) {
     return require("../../../template")("financial/insure/view/insureClearing", function($data, $filename) {
         try {
