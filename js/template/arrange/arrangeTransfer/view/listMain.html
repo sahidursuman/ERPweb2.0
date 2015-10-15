@@ -1,39 +1,35 @@
 <div class="row col-xs-12 transferTouristMain">
-		<div class="col-xs-12">    
-			<div class="tabbable">
-				<ul class="nav nav-tabs" id="myTab">
-					<li class="active">
-						<a data-toggle="tab" href="#transferOut" class="transferOut" aria-expanded="true" data-value="2">
-						<i class="fa fa-paper-plane fa-2"></i>
-							我社转出	
-						</a>
-					</li> 
-		
-					<li>
-						<a data-toggle="tab" href="#transferIn" class="transferIn"  aria-expanded="false" data-value="1" >
-						<i class="fa fa-hourglass"></i>
-							同行转入
-						</a>
-					</li>
-				</ul>
-				
-						
-			    <div class="tab-content">
-			    <!--我社转出start -1-->
-					<div id="transferOut" class="tab-pane fade active in clearfix" >							
-						<div class="col-xs-12"> 
-						    <div class="page-header">    
-								<h1>
-									<small class="transferOut-Header-Cost">
-										<i class="ace-icon fa fa-angle-double-right"></i>                    
-										<lable style="min-width:10%; display:inline-block;  ">人数合计：<span class="totalAdultCount">0</span>大<span class="totalChildCount">0</span>小</lable>  
-									    <lable style="min-width:10%; display:inline-block;  ">应付款合计：<span class="totalNeedPay">0 </span>元</lable>    
-									    <lable style="min-width:10%; display:inline-block;  ">已付款合计:<span class="totalPayed">0</span>元</lable>          
-									</small>                 
-								  </h1>
-							 </div>
-					    </div>
-					        
+	<div class="col-xs-12">    
+		<div class="tabbable">
+			<ul class="nav nav-tabs" id="myTab">
+				<li class="active">
+					<a data-toggle="tab" href="#transferOut" class="transferOut" aria-expanded="true" data-value="2">
+					<i class="fa fa-paper-plane fa-2"></i>
+						我社转出	
+					</a>
+				</li> 
+				<li>
+					<a data-toggle="tab" href="#transferIn" class="transferIn"  aria-expanded="false" data-value="1" >
+					<i class="fa fa-hourglass"></i>
+						同行转入
+					</a>
+				</li>
+			</ul>
+			<div class="tab-content">
+				<!--我社转出start -1-->
+				<div id="transferOut" class="tab-pane fade active in clearfix" >							
+					<div class="col-xs-12"> 
+						<div class="page-header">    
+							<h1>
+								<small class="transferOut-Header-Cost">
+									<i class="ace-icon fa fa-angle-double-right"></i>                    
+									<lable style="min-width:10%; display:inline-block;  ">人数合计：<span class="totalAdultCount">0</span>大<span class="totalChildCount">0</span>小</lable>  
+									<lable style="min-width:10%; display:inline-block;  ">应付款合计：<span class="totalNeedPay">0 </span>元</lable>    
+									<lable style="min-width:10%; display:inline-block;  ">已付款合计:<span class="totalPayed">0</span>元</lable>          
+								</small>                 
+							  </h1>
+						 </div>
+					</div>
 						<div class="form-group form-horizontal">
 					  		<div class="search-area">
 							  <label class="pull-left control-label no-padding-right">同行地接：</label> 
@@ -124,56 +120,46 @@
 	                 </div>   
 
 					<!-- 同行转入搜索start2 -->		
-					<div id="transferIn" class="tab-pane fade clearfix" >  
-						
-					  <div class="col-xs-12"> 
-						    <div class="page-header">
-								<h1>
-									<small>
-										<i class="ace-icon fa fa-angle-double-right"></i>
-								        <lable style="min-width:10%; display:inline-block;  ">人数合计：<span class="totalAdultCount">0</span>大<span class="totalChildCount">0</span>小</lable>  
-									    <lable style="min-width:10%; display:inline-block;  ">应付款合计：<span class="totalNeedPay">0</span>元</lable>       
-									    <lable style="min-width:10%; display:inline-block;  ">已付款合计:<span class="totalPayed">0</span>元</lable>        
-									</small>
-								  </h1>
-							 </div>
-					    </div>
-						
-					    
-					
-					
-						<div class="form-group" style="margin-bottom:30px; ">
-						  	<div class="search-area">
-								  <label class="pull-left control-label no-padding-right">同行线路产品：</label> 
-								  <div class="col-sm-1"> 
-								  
-										 <select name="lineProductId" class="col-xs-12"> 
-										  	<option value="">全部</option>
-								             {{each lineProduct2 as lineProduct}}
-								             	{{if lineProduct!=null}}
-									             	{{if lineProduct.name!=null}}   
-										                <option value="{{lineProduct.id}}" {{if pager.eqMap.lineProductId==lineProduct.id}}selected="selected"{{/if}}>
-										                    {{lineProduct.name}}
-										                </option>
-									                {{/if}}
-								                {{/if}}
-								                
-								             {{/each}}
-										  </select> 
-							      </div> 
-							      
-							      
-							      
-							    <div class="form-group">
-									<div class="search-area">
-										<div class="col-xs-2 no-padding-right">
-											<div class="col-xs-12">
-												<div class="input-group">
-													<input class="col-xs-12 date-picker" name="createTime" placeholder="出游起始日期" value="{{startDay}}" type="text" />	
-													<span class="input-group-addon">
-														<i class="fa fa-calendar"></i>
-													</span>
-												</div>
+				<div id="transferIn" class="tab-pane fade clearfix" >  
+					<div class="col-xs-12"> 
+						<div class="page-header">
+							<h1>
+								<small>
+									<i class="ace-icon fa fa-angle-double-right"></i>
+									<lable style="min-width:10%; display:inline-block;  ">人数合计：<span class="totalAdultCount">0</span>大<span class="totalChildCount">0</span>小</lable>  
+									<lable style="min-width:10%; display:inline-block;  ">应付款合计：<span class="totalNeedPay">0</span>元</lable>       
+									<lable style="min-width:10%; display:inline-block;  ">已付款合计:<span class="totalPayed">0</span>元</lable>        
+								</small>
+							  </h1>
+						 </div>
+					</div>
+					<div class="form-group" style="margin-bottom:30px; ">
+						<div class="search-area">
+							<label class="pull-left control-label no-padding-right">同行线路产品：</label> 
+							<div class="col-sm-1"> 
+								<select name="lineProductId" class="col-xs-12"> 
+									<option value="">全部</option>
+									{{each lineProduct2 as lineProduct}}
+										{{if lineProduct!=null}}
+											{{if lineProduct.name!=null}}   
+												<option value="{{lineProduct.id}}" {{if pager.eqMap.lineProductId==lineProduct.id}}selected="selected"{{/if}}>
+													{{lineProduct.name}}
+												</option>
+											{{/if}}
+										{{/if}}
+										
+									{{/each}}
+								</select> 
+							</div> 
+							<div class="form-group">
+								<div class="search-area">
+									<div class="col-xs-2 no-padding-right">
+										<div class="col-xs-12">
+											<div class="input-group">
+												<input class="col-xs-12 date-picker" name="createTime" placeholder="出游起始日期" value="{{startDay}}" type="text" />	
+												<span class="input-group-addon">
+													<i class="fa fa-calendar"></i>
+												</span>
 											</div>
 										</div>
 										
@@ -221,68 +207,49 @@
 											    {{pa.name}}
 											</option>
 											{{/if}}
-											{{/if}}
-							             {{/each}}       
-									  </select> 
-							      </div>
-							      
-							      
-<!-- 								  <label class="control-label pull-left no-padding-right">同行联系人：</label> -->
-<!-- 								  <div class="col-sm-1"> -->
-<!-- 									  <select name="touristGroupId" > -->
-<!-- 									  		<option value="">全部</option>      -->
-<!-- 									     {{each partnerAgency as pa}} -->
-<!-- 									      {{if pa!=null}}  -->
-<!-- 						                  {{if pa.id!=null}}  -->
-<!-- 											<option value="{{pa.id}}" {{if managerId==pa.id}}selected="selected"{{/if}} > -->
-<!-- 											{{pa.managerName}} -->
-<!-- 											</option> -->
-<!-- 										   {{/if}} -->
-<!-- 										   {{/if}} -->
-<!-- 							             {{/each}} -->
-<!-- 									  </select>  -->
-<!-- 							      </div> -->
-							      
-							      
-							           
-							      
-						      <label class="control-label no-padding-right pull-left">转客人：</label> 
-							  <div class="col-sm-2"> 
-								  <select name="creator" class="col-xs-12">    
-								  		<option value="">全部</option>
-									     {{each user2 as user}}
-									     		{{if user!=null}}
-									     			{{if user.id!=null}}
-														<option value="{{user.id}}" {{if creator==user.id}}selected="selected"{{/if}} >
-														    {{user.realName}}
-														</option>
-												    {{/if}}
-												{{/if}}
-							             {{/each}}
-								  </select> 
-						      </div>
-							      
-			      
-							      <label class="control-label no-padding-right pull-left">状态：</label>
-								  <div class="col-sm-1"> 
-									  <select name="status" class="col-xs-12"> 
-									  	  <option value="" >全部</option>
-										  <option value="0" >未确认</option>
-										  <option value="1">已接收</option> 
-									  </select> 
-							      </div>    
-							   <button class="btn-sm btn-transferIn-search pull-right search-btn">
-							   <i class="ace-icon fa fa-search"></i>
-									搜索
-							   </button>&nbsp;
-						  </div>
-					    </div>
-						  <!-- 同行转入搜索end -->  
-				      <!--分页&&数据List-->
-	                  <div class="col-xs-12 transferInList" ></div>
-	                  <!--我社转出end -->
-					</div>				 
-		   		</div>	 
-			</div>
-	  	</div>
-  	</div>
+										{{/if}}
+									{{/each}}
+							    </select> 
+						    </div>
+
+						    <label class="control-label no-padding-right pull-left">状态：</label>
+						    <div class="btn-group btn-status" style="margin-left: 20px">
+								<button data-value="{{status}}" data-toggle="dropdown" class=" btn-sm dropdown-toggle block-up" aria-expanded="false">
+									<span>
+									   {{if status == null}}
+											全部
+										{{else if status == 1}}
+											已接收
+										{{else}}
+											未确认
+										{{/if}}
+									</span>
+									<i class="ace-icon fa fa-angle-down icon-on-right"></i>
+								</button>
+								<ul class="dropdown-menu">
+									<li>
+										<a data-value="" href="javascript:void(0)">全部</a>
+									</li>
+									<li>
+										<a data-value="0" href="javascript:void(0)">未确认</a>
+									</li>
+									<li>
+										<a data-value="1" href="javascript:void(0)">已接收</a>
+									</li>
+								</ul>
+							</div>
+						   <button class="btn-sm btn-transferIn-search pull-right search-btn">
+						   <i class="ace-icon fa fa-search"></i>
+								搜索
+						   </button>&nbsp;
+						</div>
+					</div>
+					<!-- 同行转入搜索end -->  
+				    <!--分页&&数据List-->
+				    <div class="col-xs-12 transferInList" ></div>
+				    <!--我社转出end -->
+				</div>				 
+		   	</div>	 
+		</div>
+	</div>
+</div>

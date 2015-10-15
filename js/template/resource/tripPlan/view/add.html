@@ -1,72 +1,72 @@
 <div id="tripPlan_addPlan_content" class="container-fluid">
 	<input type="hidden" value="{{tripPlan.isArranged}}" id="isArranged"> 
     <div class="row show-grid">
-        <div class="col-sm-3 font-size-14 border">
-            <span class="col-sm-4 control-label align-right no-padding-right">线路：</span>
+        <div class="col-sm-2 font-size-12 ">
+            <span class="pull-left control-label align-right no-padding-right">线路：</span>
             <span class="col-sm-8 control-label">{{tripPlan.lineProduct.name}}</span>
-        </div> 
-        <div class="col-sm-3 font-size-14 border no-border-left">
-            <span class="col-sm-4 control-label align-right no-padding">类别：</span>
+        </div>
+        <div class="col-sm-2 font-size-12  no-border-left">
+            <span class="pull-left control-label align-right no-padding">类别：</span>
             <span class="col-sm-8 control-label">{{tripPlan.lineProduct.type}}</span>
         </div>
-        <div class="col-sm-3 font-size-14 border no-border-left">
-            <span class="col-sm-4 control-label align-right no-padding">应用范围：</span>
+        <div class="col-sm-2 font-size-12  no-border-left">
+            <span class="pull-left control-label align-right no-padding">应用范围：</span>
             <span class="col-sm-8 control-label">{{if tripPlan.lineProduct.customerType == 0}}散客{{else}}团体{{/if}}</span>
         </div>
-        <div class="col-sm-3 font-size-14 border no-border-left"> 
-            <span class="col-sm-4 control-label align-right no-padding">天数：</span>
-            <span class="col-sm-8 control-label tripPlanLineProductDays">{{tripPlan.lineProduct.days}}</span>  
+        <div class="col-sm-2 font-size-12  no-border-left">
+            <span class="pull-left control-label align-right no-padding">天数：</span>
+            <span class="col-sm-8 control-label tripPlanLineProductDays">{{tripPlan.lineProduct.days}}</span>
         </div>
-        
-        <div class="col-sm-3 font-size-14 border no-border-top">
-            <span class="col-sm-4 control-label align-right no-padding">团号：</span>
+        <div style="margin-top: 25px">
+        <div class="col-sm-2 font-size-12  no-border-top">
+            <span class="pull-left control-label align-right no-padding">团号：</span>
             <span class="col-sm-8 control-label">{{tripPlan.tripNumber}}</span>
         </div>
-        <div class="col-sm-3 font-size-14 border no-border-top no-border-left">
-            <span class="col-sm-4 control-label align-right no-padding">出团日期：</span>
+        <div class="col-sm-2 font-size-12  no-border-top no-border-left">
+            <span class="pull-left control-label align-right no-padding">出团日期：</span>
             <span class="col-sm-8 control-label" name="startTime_Choose">{{tripPlan.startTime | dateFormat:'yyyy-MM-dd'}}</span>
         </div>
-        <div class="col-sm-3 font-size-14 border no-border-top no-border-left">
-            <span class="col-sm-4 control-label align-right no-padding">完团日期：</span>
+        <div class="col-sm-2 font-size-12  no-border-top no-border-left">
+            <span class="pull-left control-label align-right no-padding">完团日期：</span>
             <span class="col-sm-8 control-label">{{tripPlan.endTime | dateFormat:'yyyy-MM-dd'}}</span>
         </div>
-        <div class="col-sm-3 font-size-14 border no-border-top no-border-left">
-            <span class="col-sm-4 control-label align-right no-padding">团队人数：</span>
+        <div class="col-sm-2 font-size-12  no-border-top no-border-left">
+            <span class="pull-left control-label align-right no-padding">团队人数：</span>
             <span class="col-sm-8 control-label">{{tripPlan.touristAdultCount}}大{{tripPlan.touristChildCount}}小</span>
         </div>
-        
-        <div class="col-sm-3 font-size-14 border no-border-top">
-            <span class="col-sm-4 control-label align-right no-padding">导游：</span>
+        </div>
+        <div class="col-sm-2 font-size-12  no-border-top" style="margin-top: 5px">
+            <span class="pull-left control-label align-right no-padding">导游：</span>
             <span class="col-sm-8 control-label">{{if tripPlan.guide != null}}{{tripPlan.guide.realname}}{{/if}}</span>
-        </div> 
-        <div class="col-sm-3 font-size-14 border no-border-top no-border-left">
-            <span class="col-sm-4 control-label align-right no-padding">全陪：</span>
+        </div>
+        <div class="col-sm-2 font-size-12  no-border-top no-border-left" style="margin-top: 5px">
+            <span class="pull-left control-label align-right no-padding">全陪：</span>
             <span class="col-sm-8 control-label">{{tripPlan.accompanyGuideName}}</span>
         </div>
-    </div>
-    <div id="tripPlan_addPlan_tripPlan" class="row show-grid form-horizontal">
+    <div id="tripPlan_addPlan_tripPlan" class="show-grid form-horizontal">
     	<input type="hidden" name="tripPlanId" value="{{tripPlan.id}}"  />
-        <div class="col-sm-12">
-        	<div class="col-sm-3">
-                <label class="col-sm-6 control-label no-padding-right"><strong>计划导付金额：</strong></label>
+        <div class="col-sm-12" style="height: 40px; border-bottom: 1px solid #ccc;margin-top: 20px">
+        	<div class="col-sm-2">
+                <label class="pull-left control-label no-padding-right"><strong>计划导付金额：</strong></label>
                 <label class="col-sm-6 control-label align-left"><strong>{{tripPlan.guideAllPayMoney}}</strong></label>
                 <input type="hidden" name="guideAllPayMoney" value="{{tripPlan.guideAllPayMoney}}"  />
-            </div> 
-            <div class="col-sm-3">
-                <label class="col-sm-6 control-label no-padding-right"><strong>导游现收团款：</strong></label>
+            </div>
+            <div class="col-sm-2">
+                <label class="pull-left control-label no-padding-right"><strong>导游现收团款：</strong></label>
                 <label class="col-sm-6 control-label align-left"><strong>{{tripPlan.guideAllNowMoney}}</strong></label>
                 <input type="hidden" name="guideAllNowMoney" value="{{tripPlan.guideAllNowMoney}}"  />
             </div>
-            <div class="col-sm-3">
-                <label class="col-sm-6 control-label align-right"><strong>导游预支金额：</strong></label>
+            <div class="col-sm-2">
+                <label class="pull-left control-label align-right"><strong>导游预支金额：</strong></label>
                 <input type="text" class="col-sm-6" name="guideAllPreMoney" value="{{tripPlan.guideAllPreMoney}}"/>
             </div>
-        </div>
+            </div>
+     </div>
     </div>
-    <div class="row" id="tripPlan_tab_content">
+    <div class="row" id="tripPlan_tab_content" >
         <div class="col-sm-12">
             <div class="tabbable">
-                <ul class="nav nav-tabs">
+                <ul class="nav nav-tabs" style="margin-top: 25px">
                     <li class="active  col-sm-1 no-padding align-center">
                         <a data-toggle="tab" href="#tripPlan_addPlan_insurance" aria-expanded="true">保险</a>
                     </li>
@@ -98,37 +98,35 @@
                         <a data-toggle="tab" href="#tripPlan_addPlan_other" aria-expanded="false">其它</a>
                     </li> 
                 </ul>
-                <div class="tab-content">
+                <div class="tab-content" style="position:relative;top: -2px">
                     <div id="tripPlan_addPlan_insurance" class="tab-pane fade active in">
                         <div class="form-horizontal">
                             <div class="form-group">
                                 <div class="col-xs-12 col-sm-12 widget-container-col">
-                                    <div class="widget-box ui-sortable-handle">
-                                        <div class="widget-header">
-                                            <h5 class="widget-title">
+                                    <div class=" ui-sortable-handle">
+                                            <h5 class="title-size">
                                                 <i class="ace-icon fa fa-medkit"></i> 保险安排
-                                            </h5>
-                                            <!-- <div class="widget-toolbar no-border">
-                                                <a href="javascript:void(0)" class="addInsurance">
-                                                    <i class="ace-icon fa fa-plus"></i>
-                                                    	新增
+                                                <a href="">
+                                                    <button class="btn btn-sm btn-success " style="margin-left: 20px">
+                                                        <i class="ace-icon fa fa-plus"></i>
+                                                        新增
+                                                    </button>
                                                 </a>
-                                            </div> -->
-                                        </div>
-                                        <div class="widget-body">	
+                                            </h5>
+                                        <div class="widget-body">
                                             <div class="widget-main no-padding">
                                                 <table class="table table-striped table-bordered table-hover table-tripPlan-container">
                                                     <thead>
                                                         <tr>
-                                                            <th><span class="necessary">*</span>保险公司</th>
-                                                            <th>险种</th>
-                                                            <th>单价</th>
-                                                            <th>数量</th>
-                                                            <th>应付</th>
-                                                            <th>已付</th>
-                                                            <th>付款方式</th>
-                                                            <th>备注</th> 
-                                                            <!-- <th style="width: 60px;">操作</th> -->
+                                                            <th class="th-border"><span class="necessary">*</span>保险公司</th>
+                                                            <th class="th-border">险种</th>
+                                                            <th class="th-border">单价</th>
+                                                            <th class="th-border">数量</th>
+                                                            <th class="th-border">应付</th>
+                                                            <th class="th-border">已付</th>
+                                                            <th class="th-border">付款方式</th>
+                                                            <th class="th-border">备注</th>
+                                                            <th class="th-border">操作</th>
                                                         </tr>
                                                     </thead> 
                                                     <tbody> 
@@ -150,13 +148,9 @@
                                                                     <option {{if insurance.payType == 3}}selected="selected"{{/if}} value="3">网付</option>
                                                     			</select>
                                                     		</td> 
-                                                    		<td><input type="text" name="remark" value="{{insurance.remark}}" class="col-sm-12"/></td>
-                                                    		<!-- <td>
-                                                    			{{if index!=0}}<button class="btn btn-xs btn-danger btn-deleteTripPlanList" data-entiy-id="{{insurance.id}}" data-entity-name="insurance" title="删除">
-                                                    				<i class="ace-icon fa fa-trash-o bigger-120"></i>
-                                                    			</button>{{/if}}
-                                                    		</td> -->
-                                                    	</tr>
+                                                    		<td><input type="text" name="remark" value="{{insurance.remark}}" class="col-sm-12" maxlength="500" /></td>
+                                                            <td> <a class="cursor btn-deleteTripPlanList" data-entiy-id="4" data-entity-name="hotel" title="删除"> 删除 </a> </td>
+                                                        </tr>
                                                     	{{/if}}
                                                     	{{/each}}
                                                     	{{if insuranceList.length == 0}}
@@ -178,9 +172,9 @@
                                                     		</td>
                                                     		<td><input type="text" name="remark" value="" class="col-sm-12"/></td>
                                                     		<td>
-                                                    			<button style="display:none;" class="btn btn-xs btn-danger btn-deleteTripPlanList" data-entiy-id="" data-entity-name="insurance" title="删除">
-                                                    				<i class="ace-icon fa fa-trash-o bigger-120"></i>
-                                                    			</button>
+                                                    			<a  class="cursor btn-deleteTripPlanList" data-entiy-id="" data-entity-name="insurance" title="删除">
+                                                    				删除
+                                                    			</a>
                                                     		</td>
                                                     	</tr>
                                                     	{{/if}}
@@ -197,30 +191,22 @@
                         <div class="form-horizontal">
                             <div class="form-group">
                                 <div class="col-xs-12 col-sm-12 widget-container-col">
-                                    <div class="widget-box ui-sortable-handle">
-                                        <div class="widget-header">
-                                            <h5 class="widget-title">
+                                    <div class=" ui-sortable-handle">
+                                       <h5 class="title-size">
                                                 <i class="ace-icon fa fa-user"></i> 导游安排
                                             </h5>
-                                            <div class="widget-toolbar no-border">
-                                                <!-- <a href="javascript:void(0)" class="addGuide">
-                                                    <i class="ace-icon fa fa-question-circle"></i>
-                                                    	询价
-                                                </a> -->
-                                            </div>
-                                        </div>
                                         <div class="widget-body">
                                             <div class="widget-main no-padding">
                                                 <table class="table table-striped table-bordered table-hover table-tripPlan-container">
                                                     <thead>
                                                     <tr>
-                                                        <th><span class="necessary">*</span>导游</th>
-                                                        <th>联系电话</th>
-                                                        <th>导服费</th>
-                                                        <th>管理费</th>
-                                                        <th>付款方式</th>
-                                                        <th>备注</th>
-                                                        <th style="display: none;">操作</th> 
+                                                        <th class="th-border"><span class="necessary">*</span>导游</th>
+                                                        <th class="th-border">联系电话</th>
+                                                        <th class="th-border">导服费</th>
+                                                        <th class="th-border">管理费</th>
+                                                        <th class="th-border">付款方式</th>
+                                                        <th class="th-border">备注</th>
+                                                        <th  class="th-border" style="display: none;">操作</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
@@ -261,38 +247,30 @@
                         <div class="form-horizontal">
                             <div class="form-group">
                                 <div class="col-xs-12 col-sm-12 widget-container-col">
-                                    <div class="widget-box ui-sortable-handle">
-                                        <div class="widget-header">
-                                            <h5 class="widget-title">
+                                    <div class=" ui-sortable-handle">
+                                            <h5 class="title-size">
                                                 <i class="ace-icon fa fa-bus"></i> 旅游车安排
                                             </h5>
-                                            <div class="widget-toolbar no-border">
-                                                <!-- <a href="javascript:void(0)" class="addBus">
-                                                    <i class="ace-icon fa fa-question-circle"></i>
-                                                   	 询价 
-                                                </a> -->
-                                            </div>
-                                        </div>
                                         <div class="widget-body">
                                             <div class="widget-main no-padding">
                                                 <table class="table table-striped table-bordered table-hover table-tripPlan-container">
                                                     <thead>
                                                     <tr>
-                                                        <th>车座数</th>
-                                                        <th><span class="necessary">*</span>所属车队</th>
-                                                        <th>车牌号</th>
-                                                        <th>车辆品牌</th>
-                                                        <th>联系电话</th>
-                                                        <th>司机</th>
-                                                        <th>合同号</th>
-                                                        <th>车费</th>
-                                                        <th>优惠</th>
-                                                        <th>应付</th>
-                                                        <th>已付</th>
-                                                        <th>付款方式</th>
-                                                        <th>导付</th>
-                                                        <th>备注</th>
-                                                        <th style="display: none;">操作</th>
+                                                        <th class="th-border">车座数</th>
+                                                        <th class="th-border"><span class="necessary">*</span>所属车队</th>
+                                                        <th class="th-border">车牌号</th>
+                                                        <th class="th-border">车辆品牌</th>
+                                                        <th class="th-border">联系电话</th>
+                                                        <th class="th-border">司机</th>
+                                                        <th class="th-border">合同号</th>
+                                                        <th class="th-border">车费</th>
+                                                        <th class="th-border">优惠</th>
+                                                        <th class="th-border">应付</th>
+                                                        <th class="th-border">已付</th>
+                                                        <th class="th-border">付款方式</th>
+                                                        <th class="th-border">导付</th>
+                                                        <th class="th-border">备注</th>
+                                                        <th class="th-border" style="display: none;">操作</th>
                                                     </tr>
                                                     </thead> 
                                                     <tbody>
@@ -342,38 +320,36 @@
                         <div class="form-horizontal">
                             <div class="form-group">
                                 <div class="col-xs-12 col-sm-12 widget-container-col">
-                                    <div class="widget-box ui-sortable-handle">
-                                        <div class="widget-header">
-                                            <h5 class="widget-title">
+                                    <div class=" ui-sortable-handle">
+                                           <h5 class="title-size">
                                                 <i class="ace-icon fa fa-cutlery"></i> 餐安排
-                                            </h5>
-                                            <div class="widget-toolbar no-border">
                                                 <a href="javascript:void(0)" class="addRestaurant">
-                                                    <i class="ace-icon fa fa-plus"></i>
-                                                    	新增
+                                                    <button class="btn btn-sm btn-success btn-guide-add" style="margin-left: 20px">
+                                                        <i class="ace-icon fa fa-plus"></i>
+                                                        新增
+                                                    </button>
                                                 </a>
-                                            </div>
-                                        </div>
+                                            </h5>
                                         <div class="widget-body">
                                             <div class="widget-main no-padding">
                                                 <table class="table table-striped table-bordered table-hover table-tripPlan-container">
                                                     <thead>
                                                     <tr>
-                                                        <th style="width:100px;"><span class="necessary">*</span>日期</th>
-                                                        <th><span class="necessary">*</span>餐厅</th>
-                                                        <th>联系人</th>
-                                                        <th>联系电话</th>
-                                                        <th>类型</th>
-                                                        <th>餐标</th> 
-                                                        <th>单价</th>
-                                                        <th>人数</th>
-                                                        <th>优惠</th>
-                                                        <th>应付</th>
-                                                        <th>已付</th>
-                                                        <th>付款方式</th>
-                                                        <th>导付</th>
-                                                        <th>备注</th>
-                                                        <th>操作</th>
+                                                        <th class="th-border" style="width:100px;"><span class="necessary">*</span>日期</th>
+                                                        <th class="th-border"><span class="necessary">*</span>餐厅</th>
+                                                        <th class="th-border">联系人</th>
+                                                        <th class="th-border">联系电话</th>
+                                                        <th class="th-border">类型</th>
+                                                        <th class="th-border">餐标</th>
+                                                        <th class="th-border">单价</th>
+                                                        <th class="th-border">人数</th>
+                                                        <th class="th-border">优惠</th>
+                                                        <th class="th-border">应付</th>
+                                                        <th class="th-border">已付</th>
+                                                        <th class="th-border">付款方式</th>
+                                                        <th class="th-border">导付</th>
+                                                        <th class="th-border">备注</th>
+                                                        <th class="th-border">操作</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
@@ -403,9 +379,9 @@
                                                                 <td><input name="guidePayMoney" type="text" value="{{restaurant.guidePayMoney}}" class="col-sm-12" style="width: 60px;"/></td>
                                                                 <td><input name="remark" type="text" value="{{restaurant.remark}}" class="col-sm-12"/></td>
                                                                 <td>
-                                                                	<button class="btn btn-xs btn-danger btn-deleteTripPlanList" data-entiy-id="{{restaurant.id}}" data-entity-name="restaurant" title="删除">
-                                                                        <i class="ace-icon fa fa-trash-o bigger-120"></i>
-                                                                    </button> 
+                                                                	<a class="cursor btn-deleteTripPlanList" data-entiy-id="{{restaurant.id}}" data-entity-name="restaurant" title="删除">
+                                                                        删除
+                                                                    </a>
                                                                 </td>
                                                             </tr>
                                                             {{/if}}
@@ -423,42 +399,37 @@
                         <div class="form-horizontal">
                             <div class="form-group">
                                 <div class="col-xs-12 col-sm-12 widget-container-col">
-                                    <div class="widget-box ui-sortable-handle">
-                                        <div class="widget-header">
-                                            <h5 class="widget-title">
-                                                <i class="ace-icon fa fa-hotel"></i> 房安排
-                                            </h5>
-                                            <div class="widget-toolbar no-border">
+                                    <div class=" ui-sortable-handle">
+                                           <h5 class="title-size">
+                                                <i class="ace-icon fa fa-hotel"></i>
+                                                房安排
                                                 <a href="javascript:void(0)" class="addHotel">
+                                                    <button class="btn btn-sm btn-success btn-guide-add" style="margin-left: 20px">
                                                     <i class="ace-icon fa fa-plus"></i>
-                                                    	新增
+                                                    新增
+                                                    </button>
                                                 </a>
-                                                <!-- <a href="javascript:void(0)">
-                                                    <i class="ace-icon fa fa-question-circle"></i>
-                                                   	 询价
-                                                </a> -->
-                                            </div>
-                                        </div>
+                                            </h5>
                                         <div class="widget-body">
                                             <div class="widget-main no-padding">
                                                 <table class="table table-striped table-bordered table-hover table-tripPlan-container">
                                                     <thead>
                                                     <tr>
-                                                        <th style="width:100px;"><span class="necessary">*</span>日期</th>
-                                                        <th>星级</th>
-                                                        <th><span class="necessary">*</span>酒店</th>
-                                                        <th>联系人</th>
-                                                        <th>联系电话</th>
-                                                        <th>房型</th>
-                                                        <th>单价</th>
-                                                        <th>数量</th>
-                                                        <th>优惠</th>
-                                                        <th>应付</th>
-                                                        <th>已付</th>
-                                                        <th>付款方式</th>
-                                                        <th>导付</th>
-                                                        <th>备注</th>
-                                                        <th style="width: 90px;">操作</th>
+                                                        <th class="th-border" style="width:100px;"><span class="necessary">*</span>日期</th>
+                                                        <th class="th-border">星级</th>
+                                                        <th class="th-border"><span class="necessary">*</span>酒店</th>
+                                                        <th class="th-border">联系人</th>
+                                                        <th class="th-border">联系电话</th>
+                                                        <th class="th-border">房型</th>
+                                                        <th class="th-border">单价</th>
+                                                        <th class="th-border">数量</th>
+                                                        <th class="th-border">优惠</th>
+                                                        <th class="th-border">应付</th>
+                                                        <th class="th-border">已付</th>
+                                                        <th class="th-border">付款方式</th>
+                                                        <th class="th-border">导付</th>
+                                                        <th class="th-border">备注</th>
+                                                        <th class="th-border" style="width: 90px;">操作</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
@@ -500,12 +471,9 @@
                                                                 <td><input type="text" name="guidePayMoney" class="col-sm-12" value="{{hotel.guidePayMoney}}" style="width: 60px;" /></td>
                                                                 <td><input type="text" name="remark" class="col-sm-12" value="{{hotel.remark}}" /></td>
                                                                 <td>
-                                                                    <!-- <button class="btn btn-xs btn-success" title="发送订单">
-                                                                        <i class="ace-icon fa fa-paper-plane-o bigger-120"></i>
-                                                                    </button> -->
-                                                                    <button class="btn btn-xs btn-danger btn-deleteTripPlanList" data-entiy-id="{{hotel.id}}" data-entity-name="hotel" title="删除">
-                                                                        <i class="ace-icon fa fa-trash-o bigger-120"></i>
-                                                                    </button> 
+                                                                    <a class="cursor btn-deleteTripPlanList" data-entiy-id="{{hotel.id}}" data-entity-name="hotel" title="删除">
+                                                                        删除
+                                                                    </a>
                                                                 </td>
                                                     		</tr>
                                                     		{{/if}}
@@ -523,38 +491,36 @@
                         <div class="form-horizontal">
                             <div class="form-group">
                                 <div class="col-xs-12 col-sm-12 widget-container-col">
-                                    <div class="widget-box ui-sortable-handle">
-                                        <div class="widget-header">
-                                            <h5 class="widget-title">
+                                    <div class=" ui-sortable-handle">
+                                           <h5 class="title-size">
                                                 <i class="ace-icon fa fa-tree"></i> 景点安排
-                                            </h5>
-                                            <div class="widget-toolbar no-border">
                                                 <a href="javascript:void(0)" class="addScenic">
-                                                    <i class="ace-icon fa fa-plus"></i>
-                                                    	新增
+                                                    <button class="btn btn-sm btn-success btn-guide-add" style="margin-left: 20px">
+                                                        <i class="ace-icon fa fa-plus"></i>
+                                                        新增
+                                                    </button>
                                                 </a>
-                                            </div>
-                                        </div>
+                                            </h5>
                                         <div class="widget-body">
                                             <div class="widget-main no-padding">
                                                 <table class="table table-striped table-bordered table-hover table-tripPlan-container">
                                                     <thead>
                                                     <tr>
-                                                        <th style="width:100px;"><span class="necessary">*</span>日期</th>
-                                                        <th><span class="necessary">*</span>景区</th>
-                                                        <th>收费项</th>
-                                                        <th>时段</th>
-                                                        <th>时长</th>
-                                                        <th>订单号</th>
-                                                        <th>单价</th>
-                                                        <th>数量</th>
-                                                        <th>优惠</th>
-                                                        <th>应付</th>
-                                                        <th>已付</th>
-                                                        <th>付款方式</th>
-                                                        <th>导付</th>
-                                                        <th>备注</th>
-                                                        <th>操作</th>
+                                                        <th class="th-border" style="width:100px;"><span class="necessary">*</span>日期</th>
+                                                        <th class="th-border"><span class="necessary">*</span>景区</th>
+                                                        <th class="th-border">收费项</th>
+                                                        <th class="th-border">时段</th>
+                                                        <th class="th-border">时长</th>
+                                                        <th class="th-border">订单号</th>
+                                                        <th class="th-border">单价</th>
+                                                        <th class="th-border">数量</th>
+                                                        <th class="th-border">优惠</th>
+                                                        <th class="th-border">应付</th>
+                                                        <th class="th-border">已付</th>
+                                                        <th class="th-border">付款方式</th>
+                                                        <th class="th-border">导付</th>
+                                                        <th class="th-border">备注</th>
+                                                        <th class="th-border">操作</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
@@ -591,9 +557,9 @@
                                                                 <td><input name="guidePayMoney" type="text" class="col-sm-12" value="{{scenic.guidePayMoney}}" style="width: 60px;" /></td>
                                                                 <td><input name="remark" type="text" class="col-sm-12" value="{{scenic.remark}}"/></td>
                                                                 <td>
-                                                                    <button class="btn btn-xs btn-danger btn-deleteTripPlanList" data-entiy-id="{{scenic.id}}" data-entity-name="scenic" title="删除">
-                                                                        <i class="ace-icon fa fa-trash-o bigger-120"></i>
-                                                                    </button>
+                                                                    <a class="cursor btn-deleteTripPlanList" data-entiy-id="{{scenic.id}}" data-entity-name="scenic" title="删除">
+                                                                        删除
+                                                                    </a>
                                                                 </td>
                                                             </tr>
                                                             {{/if}}
@@ -611,30 +577,28 @@
                         <div class="form-horizontal">
                             <div class="form-group">
                                 <div class="col-xs-12 col-sm-12 widget-container-col">
-                                    <div class="widget-box ui-sortable-handle">
-                                        <div class="widget-header">
-                                            <h5 class="widget-title">
+                                    <div class=" ui-sortable-handle">
+                                           <h5 class="title-size">
                                                 <i class="ace-icon fa fa-shopping-cart"></i> 购物安排
-                                            </h5>
-                                            <div class="widget-toolbar no-border">
                                                 <a href="javascript:void(0)" class="addShop">
-                                                    <i class="ace-icon fa fa-plus"></i>
-                                                   	 新增
+                                                    <button class="btn btn-sm btn-success btn-guide-add" style="margin-left: 20px">
+                                                        <i class="ace-icon fa fa-plus"></i>
+                                                        新增
+                                                    </button>
                                                 </a>
-                                            </div> 
-                                        </div>
+                                            </h5>
                                         <div class="widget-body">
                                             <div class="widget-main no-padding">
                                                 <table class="table table-striped table-bordered table-hover table-tripPlan-container">
                                                     <thead>
                                                     <tr>
-                                                        <th style="width:100px;"><span class="necessary">*</span>日期</th>
-                                                        <th><span class="necessary">*</span>购物店</th>
-                                                        <th>联系人</th>
-                                                        <th>联系电话</th>
-                                                        <th>商品名</th>
-                                                        <th>备注</th>
-                                                        <th>操作</th>
+                                                        <th class="th-border" style="width:100px;"><span class="necessary">*</span>日期</th>
+                                                        <th class="th-border"><span class="necessary">*</span>购物店</th>
+                                                        <th class="th-border">联系人</th>
+                                                        <th class="th-border">联系电话</th>
+                                                        <th class="th-border">商品名</th>
+                                                        <th class="th-border">备注</th>
+                                                        <th class="th-border">操作</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
@@ -648,9 +612,9 @@
                                                                 <td><input type="text" name="goodsPolicy" class="col-sm-12" value="{{if shop.shopPolicy != null}}{{shop.shopPolicy.name}}{{/if}}" /><input type="hidden" name="shopPolicyId" value="{{if shop.shopPolicy != null}}{{shop.shopPolicy.id}}{{/if}}"/></td>
                                                                 <td><input type="text" name="remark" class="col-sm-12" value="{{shop.remark}}" /></td>
                                                                 <td>
-                                                                    <button class="btn btn-xs btn-danger btn-deleteTripPlanList" data-entiy-id="{{shop.id}}" data-entity-name="shop" title="删除">
-                                                                        <i class="ace-icon fa fa-trash-o bigger-120"></i>
-                                                                    </button>
+                                                                    <a class="cursor btn-deleteTripPlanList" data-entiy-id="{{shop.id}}" data-entity-name="shop" title="删除">
+                                                                        删除
+                                                                    </a>
                                                                 </td>
                                                             </tr>
                                                             {{/if}}
@@ -668,18 +632,16 @@
                         <div class="form-horizontal">
                             <div class="form-group">
                                 <div class="col-xs-12 col-sm-12 widget-container-col">
-                                    <div class="widget-box ui-sortable-handle">
-                                        <div class="widget-header">
-                                            <h5 class="widget-title">
+                                    <div class=" ui-sortable-handle">
+                                           <h5 class="title-size">
                                                 <i class="ace-icon fa fa-credit-card"></i> 自费安排
-                                            </h5>
-                                            <div class="widget-toolbar no-border">
                                                 <a href="javascript:void(0)" class="addSelfPay">
-                                                    <i class="ace-icon fa fa-plus"></i>
-                                                    	新增
+                                                    <button class="btn btn-sm btn-success btn-guide-add" style="margin-left: 20px">
+                                                        <i class="ace-icon fa fa-plus"></i>
+                                                        新增
+                                                    </button>
                                                 </a>
-                                            </div>
-                                        </div>
+                                            </h5>
                                         <div class="widget-body">
                                             <div class="widget-main no-padding">
                                                 <table class="table table-striped table-bordered table-hover table-tripPlan-container">
@@ -728,9 +690,9 @@
                                                                 <td><input type="text" name="guidePayMoney" class="col-sm-12" value="{{selfPay.guidePayMoney}}" style="width: 60px;" /></td>
                                                                 <td><input type="text" name="remark" class="col-sm-12" value="{{selfPay.remark}}" /></td>
                                                                 <td>
-                                                                    <button class="btn btn-xs btn-danger btn-deleteTripPlanList" data-entiy-id="{{selfPay.id}}" data-entity-name="selfpay" title="删除">
-                                                                        <i class="ace-icon fa fa-trash-o bigger-120"></i>
-                                                                    </button>
+                                                                    <a class="cursor btn-deleteTripPlanList" data-entiy-id="{{selfPay.id}}" data-entity-name="selfpay" title="删除">
+                                                                        删除
+                                                                    </a>
                                                                 </td>
                                                             </tr>
                                                         {{/if}}
@@ -748,39 +710,37 @@
                         <div class="form-horizontal">
                             <div class="form-group">
                                 <div class="col-xs-12 col-sm-12 widget-container-col">
-                                    <div class="widget-box ui-sortable-handle">
-                                        <div class="widget-header">
-                                            <h5 class="widget-title">
+                                    <div class=" ui-sortable-handle">
+                                           <h5 class="title-size">
                                                 <i class="ace-icon fa fa-car"></i> 票务安排
-                                            </h5>
-                                            <div class="widget-toolbar no-border">
                                                 <a href="javascript:void(0)" class="addTicket">
-                                                    <i class="ace-icon fa fa-plus"></i>
-                                                    	新增
+                                                    <button class="btn btn-sm btn-success btn-guide-add" style="margin-left: 20px">
+                                                        <i class="ace-icon fa fa-plus"></i>
+                                                        新增
+                                                    </button>
                                                 </a>
-                                            </div>
-                                        </div>
+                                            </h5>
                                         <div class="widget-body">
                                             <div class="widget-main no-padding">
                                                 <table class="table table-striped table-bordered table-hover table-tripPlan-container">
                                                     <thead>
                                                     <tr>
-                                                        <th><span class="necessary">*</span>票务公司</th>
-                                                        <th>类型</th>
-                                                        <th>出发城市</th>
-                                                        <th>到达城市</th>
-                                                        <th>班次</th>
-                                                        <th>日期</th>
-                                                        <th>座位级别</th>
-                                                        <th style="width: 77px;">单价</th>
-                                                        <th style="width: 77px;">数量</th>
-                                                        <th style="width: 77px;">优惠</th>
-                                                        <th style="width: 77px;">应付</th>
-                                                        <th style="width: 77px;">已付</th>
-                                                        <th style="width: 72px;">付款方式</th>
-                                                        <th style="width: 77px;">导付</th>
-                                                        <th>备注</th>
-                                                        <th>操作</th>
+                                                        <th class="th-border"><span class="necessary">*</span>票务公司</th>
+                                                        <th class="th-border">类型</th>
+                                                        <th class="th-border">出发城市</th>
+                                                        <th class="th-border">到达城市</th>
+                                                        <th class="th-border">班次</th>
+                                                        <th class="th-border">日期</th>
+                                                        <th class="th-border">座位级别</th>
+                                                        <th class="th-border" style="width: 77px;">单价</th>
+                                                        <th class="th-border" style="width: 77px;">数量</th>
+                                                        <th class="th-border" style="width: 77px;">优惠</th>
+                                                        <th class="th-border" style="width: 77px;">应付</th>
+                                                        <th class="th-border" style="width: 77px;">已付</th>
+                                                        <th class="th-border" style="width: 72px;">付款方式</th>
+                                                        <th class="th-border" style="width: 77px;">导付</th>
+                                                        <th class="th-border">备注</th>
+                                                        <th class="th-border">操作</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
@@ -817,9 +777,9 @@
                                                                 <td><input type="text" name="guidePayMoney" class="col-sm-12" value="{{ticket.guidePayMoney}}" /></td>
                                                                 <td><input type="text" name="remark" class="col-sm-12" value="{{ticket.remark}}" /></td>
                                                                 <td>
-                                                                    <button class="btn btn-xs btn-danger btn-deleteTripPlanList" data-entiy-id="{{ticket.id}}" data-entity-name="ticket" title="删除">
-                                                                        <i class="ace-icon fa fa-trash-o bigger-120"></i>
-                                                                    </button>
+                                                                    <a class="cursor btn-deleteTripPlanList" data-entiy-id="{{ticket.id}}" data-entity-name="ticket" title="删除">
+                                                                        删除
+                                                                    </a>
                                                                 </td>
                                                             </tr>
                                                             {{/if}}
@@ -837,36 +797,34 @@
                         <div class="form-horizontal">
                             <div class="form-group">
                                 <div class="col-xs-12 col-sm-12 widget-container-col">
-                                    <div class="widget-box ui-sortable-handle">
-                                        <div class="widget-header">
-                                            <h5 class="widget-title">
+                                    <div class=" ui-sortable-handle">
+                                           <h5 class="title-size">
                                                 <i class="ace-icon fa fa-smile-o"></i> 其他安排
-                                            </h5>
-                                            <div class="widget-toolbar no-border">
                                                 <a href="javascript:void(0)" class="addOther">
-                                                    <i class="ace-icon fa fa-plus"></i>
-                                                   	 新增
+                                                    <button class="btn btn-sm btn-success btn-guide-add" style="margin-left: 20px">
+                                                        <i class="ace-icon fa fa-plus"></i>
+                                                        新增
+                                                    </button>
                                                 </a>
-                                            </div>
-                                        </div>
+                                            </h5>
                                         <div class="widget-body">
                                             <div class="widget-main no-padding">
                                                 <table class="table table-striped table-bordered table-hover table-tripPlan-container">
                                                     <thead>
                                                     <tr>
-                                                        <th style="width:100px;"><span class="necessary">*</span>日期</th>
-                                                        <th><span class="necessary">*</span>项目</th> 
-                                                        <th>联系人</th>
-                                                        <th>联系电话</th>
-                                                        <th style="width: 77px;">单价</th>    
-                                                        <th style="width: 77px;">数量</th>  
-                                                        <th style="width: 77px;">优惠</th>    
-                                                        <th style="width: 77px;">应付</th>   
-                                                        <th style="width: 77px;">已付</th>      
-                                                        <th style="width: 72px;">付款方式</th>          
-                                                        <th style="width: 77px;">导付</th>
-                                                        <th>备注</th>
-                                                        <th>操作</th>
+                                                        <th class="th-border" style="width:100px;"><span class="necessary">*</span>日期</th>
+                                                        <th class="th-border"><span class="necessary">*</span>项目</th>
+                                                        <th class="th-border">联系人</th>
+                                                        <th class="th-border">联系电话</th>
+                                                        <th class="th-border" style="width: 77px;">单价</th>
+                                                        <th class="th-border" style="width: 77px;">数量</th>
+                                                        <th class="th-border" style="width: 77px;">优惠</th>
+                                                        <th class="th-border" style="width: 77px;">应付</th>
+                                                        <th class="th-border" style="width: 77px;">已付</th>
+                                                        <th class="th-border" style="width: 72px;">付款方式</th>
+                                                        <th class="th-border" style="width: 77px;">导付</th>
+                                                        <th class="th-border">备注</th>
+                                                        <th class="th-border">操作</th>
                                                     </tr>
                                                     </thead> 
                                                     <tbody>
@@ -893,9 +851,9 @@
                                                                 <td><input type="text" name="guidePayMoney" class="col-sm-12" value="{{other.guidePayMoney}}" /></td>
                                                                 <td><input type="text" name="remark" class="col-sm-12" value="{{other.remark}}" /></td>
                                                                 <td>
-                                                                    <button class="btn btn-xs btn-danger btn-deleteTripPlanList" data-entiy-id="{{other.id}}" data-entity-name="other" title="删除">
-                                                                        <i class="ace-icon fa fa-trash-o bigger-120"></i>
-                                                                    </button>     
+                                                                    <a class="cursor btn-deleteTripPlanList" data-entiy-id="{{other.id}}" data-entity-name="other" title="删除">
+                                                                        删除
+                                                                    </a>
                                                                 </td>      
                                                             </tr>
                                                             {{/if}}

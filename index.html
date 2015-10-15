@@ -193,15 +193,14 @@
 			<form class='form-horizontal col-sm-12' role='form' style='margin-top:30px;' onsubmit='return false'>
 				<div class='form-group' style='text-align: center;'>
 				<button class='btn btn-xs  btn-danger btn-cancelUserInfo' onclick="closePasswordLayer()">  
-					<i class='ace-icon btn-xs  fa fa-times'></i> 取消
+					<i class='ace-icon btn-xs  fa fa-times'>&nbsp;&nbsp;取消</i>
 				</button>
 					<button class='btn btn-xs btn-primary btn-UserSaveInfo'>   
-					<i class='btn-xs ace-icon fa fa-check '></i>
-						保存
+					<i class='btn-xs ace-icon fa fa-check '>&nbsp;&nbsp;保存</i>
+
 					</button>
 				</div>
 			</form>
-			
 		</div>
 <!--=======================================================================================-->
 		<div class="main-container" id="main-container">
@@ -419,7 +418,7 @@
 					    "<span class='input-group-addon'><i class='fa fa-calendar'></i></span></div></div></div></div></div>"+
 					    "<form class='form-horizontal col-sm-12' role='form' style='margin-top:30px;'><div class='form-group' style='text-align: center;'>"+
 					    "<button class='btn btn-primary btn-cancelUserInfo'> <i class='ace-icon fa fa-times'></i> 取消 </button>"+
-					    "<button class='btn btn-danger  btn-UserSaveInfo'> <i class='ace-icon fa fa-check '></i> 修改 </button> </div></form></div>",
+					    "<button class='btn btn-danger  btn-UserSaveInfo'> <i class='ace-icon fa fa-check '></i> </button> </div></form></div>",
 					    success:function(){
 					    	$.ajax({
 								url:""+APP_ROOT+"back/user.do?method=findUserInfo&token="+$.cookie("token")+"&operation=update",

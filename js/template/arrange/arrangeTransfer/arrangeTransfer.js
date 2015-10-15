@@ -803,7 +803,7 @@ define(function(require, exports) {
 				"<td><input  name=\"discribe\" type=\"text\" class=\"col-sm-12  no-padding-right\" /></td>"+
 				"<td><input  name=\"count\" type=\"text\" class=\"col-sm-12  no-padding-right count\" /></td>"+
 				"<td><input  name=\"otherPrice\" type=\"text\" class=\"col-sm-12  no-padding-right price\" /></td>"+
-				"<td><button class=\"btn btn-xs btn-danger  btn-edittransfer-delete\"><i class=\"ace-icon fa fa-trash-o bigger-120\"></i></button></td>"+
+				"<td><a class=\"cursor btn-edittransfer-delete\">删除</a></td>"+
 				"</tr>";
 				$obj.find(".addTransferCost").append(html);
 				
@@ -816,7 +816,6 @@ define(function(require, exports) {
 					var id = tr.attr("data-entity-id");
 					transfer.delTransferData(id,tr);
 				});
-
 				//其他费用数量
 				$obj.find("input[name=count]").keyup(function(){
 					transfer.PayMoneyF();
@@ -1062,7 +1061,7 @@ define(function(require, exports) {
 			transfer.edited[clearType] = "";
 		}
 	}
-	
+
 	exports.getlistTransferSumData = transfer.getlistTransferSumData; 
 	exports.isEdited = transfer.isEdited; 
 	exports.save = transfer.save; 
