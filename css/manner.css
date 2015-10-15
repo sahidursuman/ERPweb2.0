@@ -104,7 +104,6 @@ table tr th{
 .right_b{
     display: none;
 }
-.layui-layer-setwin .layui-layer-close1{width: 16px;height: 16px}
 .btn-right-nav{
     z-index:99;
     width:35px;
@@ -119,7 +118,6 @@ table tr th{
 }
 
 .list_ul li{
-    cursor: pointer;
     text-align: center;
 }
 .list_ul li img{
@@ -162,7 +160,6 @@ table tr td{
 
 }
 .user-style li{
-    cursor: pointer;
     height: 30px!important;
     color: #666666!important;
     text-align: left!important;
@@ -203,6 +200,7 @@ table tr td{
     background: white;
     margin-top: -2px!important;
 }
+.layui-layer-setwin .layui-layer-close1{width: 16px;height: 16px}
 .border-li-h{
    cursor: pointer!important;
     background: #0d8f41;
