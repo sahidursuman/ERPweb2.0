@@ -1058,7 +1058,7 @@ function listMenu(menuTemplate){
 					}
 				})
 				// 处理中英文长度控制问题
-				.on('input', 'input[type="text"]', function(event) {
+				.on('input', 'input[type="text"],textarea', function(event) {
 					event.preventDefault();
 					
 					// 未设置maxlength，退出
