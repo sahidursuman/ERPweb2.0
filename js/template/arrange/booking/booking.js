@@ -38,12 +38,12 @@ define(function(require, exports) {
 					if(result){
 						var html = listTemplate(data);
 						addTab(menuKey,"项目代订",html);
-						booking.initList();
+						booking.initList(data);
 					}
 				}
 			})
 		},
-		initList : function(){
+		initList : function(data){
 			//时间控件
 			booking.datepicker();
 			//给搜索按钮绑定事件
