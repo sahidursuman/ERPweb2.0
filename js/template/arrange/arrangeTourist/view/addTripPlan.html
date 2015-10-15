@@ -3,13 +3,11 @@
 		<form class="form-horizontal addTripPlanMainForm" role="form" style="margin-top:10px" onsubmit="return false">
 			<div class="form-group">
 				<div class="col-xs-12 col-sm-12 widget-container-col">
-					<div class="widget-box ui-sortable-handle">
-						<div class="widget-header">
-							<h5 class="widget-title">
-								<i class="ace-icon fa fa-building"></i>
-								基本信息
+					<div class=" ui-sortable-handle">
+							<h5 class="">
+								<span class="badge badge-primary">1</span>
+								<label class="middle title-size">基本信息</label>
 							</h5>
-						</div>
 						<div class="widget-body">
 							<div class="widget-main">
 								<div class="form-group">
@@ -17,9 +15,6 @@
 									<div class="col-sm-2">
 										<input class="col-sm-12" readonly="readonly" type="text" name="" id="" value="{{addTripPlan.lineProduct.name}}" />
 										<input type="hidden" name="lineProductId" value="{{addTripPlan.lineProduct.id}}" />
-										<!-- <button class="col-sm-4 btn btn-sm btn-primary btn-search" style="padding-bottom:5px;">
-											<i class="ace-icon fa fa-search "></i>搜索  
-										</button> -->
 									</div>
 									<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>出团日期：</label>
 									<div class="col-sm-2">
@@ -97,42 +92,35 @@
 		<form class="form-horizontal" role="form" onsubmit="return false">
 			<div class="form-group">
 				<div class="col-xs-12 col-sm-12 widget-container-col">
-					<div class="widget-box ui-sortable-handle">
-						<div class="widget-header">
-							<h5 class="widget-title">
-								<i class="ace-icon fa fa-building"></i>
-								游客名单
-							</h5>
-						</div>
-	
-						<div class="widget-body">
-							<div class="widget-main">
-								<div class="form-group">
-									<div class="col-xs-12">
+					<div class=" ui-sortable-handle">
+							<h5 class="">
+								<span class="badge badge-primary">2</span>
+								<label class="middle title-size">游客名单</label>
 										<button class="btn btn-sm btn-success addTouristGroup">
 											<i class="ace-icon fa fa-plus"></i>
 											添加游客小组
 										</button>
+								</h5>
 										<div style="display: inline-block;padding-left: 30px;">总人数：<span class="tripPlanAllMemberCount"></span></div>
-									</div>
+
 								</div>
 								<div class="form-group">
 									<div class="col-xs-12">
 										<table class="table table-striped table-bordered table-hover"> 
 											<thead>
 												<tr>
-													<th>小组</th>
-													<th>线路产品</th>    
-													<th>住宿标准 </th>
-													<th>自费</th>   
-													<th>来源</th>  
-													<th>联系人</th>
-													<th>联系电话</th>
-													<th>客源地</th>
-													<th>年龄</th>
-													<th>人数</th>
-													<th>备注</th>
-													<th>操作</th>
+													<th class="th-border">小组</th>
+													<th class="th-border">线路产品</th>
+													<th class="th-border">住宿标准 </th>
+													<th class="th-border">自费</th>
+													<th class="th-border">来源</th>
+													<th class="th-border">联系人</th>
+													<th class="th-border">联系电话</th>
+													<th class="th-border">客源地</th>
+													<th class="th-border">年龄</th>
+													<th class="th-border">人数</th>
+													<th class="th-border">备注</th>
+													<th class="th-border">操作</th>
 												</tr>
 											</thead>
 											<tbody class="addTripPlanTouristTbody">{{each addTripPlan.touristGroupList as touristGroupList}}
@@ -165,12 +153,12 @@
 													<td>{{touristGroupList.remark}}</td>
 													<td>
 													<div class="hidden-sm hidden-xs btn-group">
-														<button data-entity-id="{{touristGroupList.id}}" class="btn btn-xs btn-success addTripPlanView">
-															<i class="ace-icon fa fa-search-plus bigger-120"></i>
-														</button>
-														<button data-entity-id="{{touristGroupList.id}}" class="btn btn-xs btn-danger addTripPlanDelete">
-															<i class="ace-icon fa fa-trash-o bigger-120"></i>
-														</button>
+														<a data-entity-id="{{touristGroupList.id}}" class="cursor addTripPlanView">
+															查看
+														</a> <a href="" class="cursor"> |</a>
+														<a data-entity-id="{{touristGroupList.id}}" class="cursor addTripPlanDelete">
+															删除
+														</a>
 													</div>
 													</td>
 												</tr>{{/each}}
@@ -187,14 +175,11 @@
 		<form class="form-horizontal" role="form" onsubmit="return false">
 			<div class="form-group">
 				<div class="col-xs-12 col-sm-12 widget-container-col">
-					<div class="widget-box ui-sortable-handle">
-						<div class="widget-header">
-							<h5 class="widget-title">
-								<i class="ace-icon fa fa-building"></i>
-								线路
+					<div class=" ui-sortable-handle">
+							<h5 class="">
+								<span class="badge badge-primary">3</span>
+								<label class="middle title-size">线路</label>
 							</h5>
-						</div>
-	
 						<div class="widget-body">
 							<div class="widget-main">
 								<div class="form-group">
@@ -224,14 +209,11 @@
 		<form class="form-horizontal" role="form" onsubmit="return false">
 			<div class="form-group">
 				<div class="col-xs-12 col-sm-12 widget-container-col">
-					<div class="widget-box ui-sortable-handle">
-						<div class="widget-header">
+					<div class=" ui-sortable-handle">
 							<h5 class="widget-title">
-								<i class="ace-icon fa fa-building"></i>
-								日程
+								<span class="badge badge-primary">4</span>
+								<label class="middle title-size">日程</label>
 							</h5>
-						</div>
-	
 						<div class="widget-body">
 							<div class="widget-main">
 								<div class="form-group">
@@ -240,10 +222,10 @@
 											<table class="table table-striped table-bordered table-hover">
 												<thead>
 													<tr>
-														<th>日期</th>
-														<th>含餐情况</th>
-														<th>酒店星级</th>
-														<th>简要行程</th>
+														<th class="th-border">日期</th>
+														<th class="th-border">含餐情况</th>
+														<th class="th-border">酒店星级</th>
+														<th class="th-border">简要行程</th>
 													</tr>
 												</thead>
 												<tbody>{{each addTripPlan.lineProductDayList as lineProductDay}}
@@ -279,25 +261,25 @@
 						<div class="widget-body">
 							<div class="widget-main">
 								<div class="form-group">
-									<label class="col-sm-2 control-label no-padding-right">费用包含:</label>
+									<label class="col-sm-1 control-label no-padding-right">费用包含:</label>
 									<div class="col-sm-8">
 										<textarea class="form-control" class="col-sm-12" readonly="readonly">{{addTripPlan.lineProduct.includeFee}}</textarea>
 									</div>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-2 control-label no-padding-right">费用不含:</label>
+									<label class="col-sm-1 control-label no-padding-right">费用不含:</label>
 									<div class="col-sm-8">
 										<textarea class="form-control" class="col-sm-12" readonly="readonly">{{addTripPlan.lineProduct.excludeFee}}</textarea>
 									</div>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-2 control-label no-padding-right">行程特色:</label>
+									<label class="col-sm-1 control-label no-padding-right">行程特色:</label>
 									<div class="col-sm-8">
 										<textarea class="form-control" class="col-sm-12" readonly="readonly">{{addTripPlan.lineProduct.lineFeature}}</textarea>
 									</div>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-2 control-label no-padding-right">行程须知:</label>
+									<label class="col-sm-1 control-label no-padding-right">行程须知:</label>
 									<div class="col-sm-8">
 										<textarea class="form-control" class="col-sm-12" readonly="readonly">{{addTripPlan.lineProduct.lineNotice}}</textarea>
 									</div>
@@ -310,12 +292,12 @@
 		</form>
 		<form class="form-horizontal" role="form" onsubmit="return false">
 			<div class="form-group" style="text-align: center;">
-				<button class="btn btn-danger btn-cancelTripPlan">
+				<button class="btn btn-xs btn-danger btn-cancelTripPlan ">
 					<i class="ace-icon fa fa-times"></i>
 					取消
 				</button>
-				<button class="btn btn-primary btn-saveTripPlan">
-					<i class="ace-icon fa fa-check"></i>
+				<button class="btn btn-primary btn-saveTripPlan btn-xs" style="margin-left: 30px">
+					<i class="ace-icon  fa fa-check"></i>
 					保存
 				</button>
 			</div>

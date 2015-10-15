@@ -342,11 +342,9 @@ define(function(require, exports) {
 					},function(){
 						addTab(menuKey+"-add","添加游客",html);
 						touristGroup.edited["add"] = "";
-						touristGroup.initAdd();
 					},"放弃","继续编辑"); 							
 				 }else{
-					addTab(menuKey+"-add","添加游客",html);	
-					touristGroup.initAdd();					
+					addTab(menuKey+"-add","添加游客",html);					
 				 } 
 			}else{
 				addTab(menuKey+"-add","添加游客",html);		
@@ -575,12 +573,10 @@ define(function(require, exports) {
 				            		 }
 				            		 touristGroup.submitUpdateTouristGroup($(".updateTouristGroup .btn-submit-addTouristGroup").attr("data-entity-id"),0);
 									 touristGroup.edited["update"] = "";
-				            		 addTab(menuKey+"-update","编辑小组",html);	
-									 touristGroup.initUpdate(id,data);
+				            		 addTab(menuKey+"-update","编辑小组",html);				
 				            		 validator = rule.checktouristGroup($('.updateTouristGroup'));
 				            	},function(){
 				            		addTab(menuKey+"-update","编辑小组",html);	
-									touristGroup.initUpdate(id,data);
 									validator = rule.checktouristGroup($('.updateTouristGroup'));									
 									touristGroup.edited["update"] = "";
 				            	}); 							

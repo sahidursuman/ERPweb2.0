@@ -70,7 +70,7 @@
         </thead>
         <tbody>
         {{each fcTicketSettlementList as SettlementList index}}
-        <tr>
+        <tr data-entity-id="{{SettlementList.id}}" data-entity-year="{{SettlementList.year}}" style="border:none" data-entity-month="{{SettlementList.month}}">
             <td style="width:100px;">{{SettlementList.year}}{{"年"}}{{SettlementList.month}}{{"月"}}</td>
             <td style="width:100px;">{{SettlementList.needPayMoney}}</td>
             <td style="width:100px;" name="blancerealNeedPayMoney">{{SettlementList.realNeedPayMoney}}</td>

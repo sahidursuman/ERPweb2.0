@@ -77,7 +77,7 @@
             <td style="width:100px;" name="blancerealrealPayedMoney">{{SettlementList.realPayedMoney}}</td>
             <td style="width:100px;" name="blanceunPayedMoney">{{SettlementList.unPayedMoney}}</td>
             <td style="width:100px;" name="blancerealrealUnPayedMoney">{{SettlementList.realUnPayedMoney}}</td>
-            <td class="col-sm-1"><input name="blancerealPayedMoney" type="text" ></td>
+            <td class="col-sm-1"><input name="blancerealPayedMoney" type="text" maxlength="10"></td>
             <td style="width:120px;">
                     <select style="text-align:center" name="blancePayType">
                         <option value="" selected="selected">请选择...</option>
@@ -86,7 +86,7 @@
                         <option value="线下付款">线下付款</option>
                     </select>
             </td>
-            <td class="col-sm-1" style="width:400px;"><input name="blancerealRemark" type="text" style="width:370px;" ></td>
+            <td class="col-sm-1" style="width:400px;"><input name="blancerealRemark" type="text" style="width:370px;" maxlength="1000"></td> 
             <td>
                {{if SettlementList.allCount != SettlementList.checkedCount}}
 	                <span style="color:#ff9900"> {{SettlementList.checkedCount}}{{"/"}}{{SettlementList.allCount}}</span>

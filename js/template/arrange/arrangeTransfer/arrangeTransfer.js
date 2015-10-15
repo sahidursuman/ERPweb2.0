@@ -39,7 +39,13 @@ define(function(require, exports) {
 			startTime:"",
 			endTime:""	
 		},
-			
+		edited : {},
+		isEdited : function(editedType){
+			if(!!transfer.edited[editedType] && transfer.edited[editedType] != ""){
+				return true;
+			}
+			return false;
+		},	
 		//下拉数据  
 		getlistTransferSumData : function(page,partnerAgencyId,contactUserId,creator,startTime,endTime,status,type){
 			var pager = {
@@ -84,7 +90,7 @@ define(function(require, exports) {
 					var startTime=data.startDay;
 					var endTime = transfer.dateCalculation(startTime,6);
 					$transferOut.find("input[name=createTime]").eq(1).val(endTime);
-					
+
 					$("#" +tabId+" .transferTouristMain .date-picker").datepicker({
 						autoclose: true,
 						todayHighlight: true,
@@ -186,7 +192,7 @@ define(function(require, exports) {
 		},
 		//默认时间是一周的计算
 		dateCalculation:function(dt, days){
-			dt = dt.replace('-', '/');//js不认2000-1-31,只认2000/1/31 
+			dt = dt.split('-').join('/');//js不认2000-1-31,只认2000/1/31 
 			var t1 = new Date(new Date(dt).valueOf() + days*24*60*60*1000);// 日期加上指定的天数 
 			return t1.getFullYear() + "-" + (t1.getMonth()+1) + "-" + t1.getDate();
 		}, 
@@ -706,54 +712,90 @@ define(function(require, exports) {
 				},
 				success:function(data){
 					layer.close(globalLoadingLayer);
-					console.log(data);
 					var result = showDialog(data);
 					if(result){	
 						data.touristGroupTransfer=JSON.parse(data.touristGroupTransfer);
 						var html = updateTemplate(data);
-						//查询所有同行地接
-						transfer.getPartnerAgencyList(data.touristGroupTransfer.partnerAgency.id);
-						
-						//======================
 						// 设置表单验证
 						var validator;
-						//判断页面是否存在
-						if($("#" +"tab-"+checkTable+"-content").length > 0){
-							 if(transfer.edited){//判断是否编辑
-								transfer.updateTransferTemp(html);
+						if($(".tab-"+menuKey+"-updateTransfer").length > 0) {
+							addTab(menuKey+"-updateTransfer","编辑我社转出");
+							if(!!transfer.edited["updateTransfer"] && transfer.edited["updateTransfer"] != ""){
 								showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
-								validator = rule.transferCheckor($obj);      
-								if (!validator.form()) { return; }
-								transfer.saveTransfer();
-								transfer.edited = false;
-								transfer.updateTransferTemp(html);  
-							 },function(){   
-								 transfer.updateTransferTemp(html);      
-							 });
+									var $obj=$("#tab-arrange_transfer-updateTransfer-content .updateTransfer");
+									 validator = rule.transferCheckor($obj);
+									 if (!validator.form()) { 
+										 return; 
+									 }
+									 transfer.saveTransfer($obj,0);
+									 transfer.edited["updateTransfer"] = "";
+									 addTab(menuKey+"-updateTransfer","编辑我社转出",html);	
+									 transfer.initUpdateTransfer(data,validator); 
+									 validator = rule.transferCheckor($obj);
+								},function(){
+									var $obj=$("#tab-arrange_transfer-updateTransfer-content .updateTransfer");
+									addTab(menuKey+"-updateTransfer","编辑我社转出",html);
+									transfer.initUpdateTransfer(data,validator); 
+									validator = rule.transferCheckor($obj);									
+									transfer.edited["updateTransfer"] = "";
+								}); 							
 							 }else{
-								 transfer.updateTransferTemp(html);
-							 }
+								var $obj=$("#tab-arrange_transfer-updateTransfer-content .updateTransfer");
+								addTab(menuKey+"-updateTransfer","编辑我社转出",html);				
+								validator = rule.transferCheckor($obj);
+								transfer.initUpdateTransfer(data,validator);
+							 } 
 						}else{
-							transfer.updateTransferTemp(html);
-							//监听是否改变页面内容
-							$("#" +"tab-"+checkTable+"-content").on("change",function(){
-								transfer.edited = true; 
-							});
-						} 
-				    }		
+							var $obj=$("#tab-arrange_transfer-updateTransfer-content .updateTransfer");
+							addTab(menuKey+"-updateTransfer","编辑我社转出",html);				
+							validator = rule.transferCheckor($obj);
+							transfer.initUpdateTransfer(data,validator);
+						}	
+					}
 				}
 			});
 		},
-		updateTransferTemp:function(html){
-			addTab(menuKey+"-updateTransfer","编辑我社转出",html);
-			var $obj=$(".updateTransfer");
-			// 设置表单验证   
-			var validator = rule.transferCheckor($obj);
+		/* updateTransferTemp:function(html){
+			var $obj=$("#tab-arrange_transfer-updateTransfer-content .updateTransfer");
+			//已修改提示
+			var validator = rule.transferCheckor($obj);  
+			if($(".tab-"+menuKey+"-update").length > 0) {
+				if(!!transfer.edited["updateTransfer"] && transfer.edited["updateTransfer"] != ""){
+					showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
+						 validator = rule.transferCheckor($obj);
+						 if (!validator.form()) { 
+							 return; 
+						 }
+						 transfer.saveTransfer();
+						 transfer.edited["updateTransfer"] = "";
+						 addTab(menuKey+"-updateTransfer","编辑我社转出",html);	
+						 transfer.initUpdateTransfer($obj,validator); 
+						 validator = rule.transferCheckor($obj);
+					},function(){
+						addTab(menuKey+"-updateTransfer","编辑我社转出",html);
+						transfer.initUpdateTransfer($obj,validator); 
+						validator = rule.transferCheckor($obj);									
+						transfer.edited["updateTransfer"] = "";
+					}); 							
+				 }else{
+					addTab(menuKey+"-updateTransfer","编辑我社转出",html);				
+					validator = rule.transferCheckor($obj);
+				 } 
+			}else{
+				addTab(menuKey+"-updateTransfer","编辑我社转出",html);				
+				validator = rule.transferCheckor($obj);
+			}	
 			//转客事件绑定  
-			transfer.updateTransferBind($obj,validator);  
+			transfer.initUpdateTransfer($obj,validator);  
 			transfer.PayMoneyF();	
-		},
-		updateTransferBind:function($obj,validator){
+		}, */
+		initUpdateTransfer:function(data,validator){
+			var $obj=$("#tab-arrange_transfer-updateTransfer-content .updateTransfer");
+			$obj.on("change",function(){
+				transfer.edited["updateTransfer"] = "updateTransfer";
+			});
+			//查询所有同行地接
+			transfer.getPartnerAgencyList(data.touristGroupTransfer.partnerAgency.id);
 			//给新增费用绑定事件
 			$obj.find(".btn-transfer-addCost").click(function(){
 				var html="<tr class=\"transferFee1SelectId\">"+
@@ -761,7 +803,7 @@ define(function(require, exports) {
 				"<td><input  name=\"discribe\" type=\"text\" class=\"col-sm-12  no-padding-right\" /></td>"+
 				"<td><input  name=\"count\" type=\"text\" class=\"col-sm-12  no-padding-right count\" /></td>"+
 				"<td><input  name=\"otherPrice\" type=\"text\" class=\"col-sm-12  no-padding-right price\" /></td>"+
-				"<td><button class=\"btn btn-xs btn-danger  btn-edittransfer-delete\"><i class=\"ace-icon fa fa-trash-o bigger-120\"></i></button></td>"+
+				"<td><a class=\"cursor btn-edittransfer-delete\">删除</a></td>"+
 				"</tr>";
 				$obj.find(".addTransferCost").append(html);
 				
@@ -774,7 +816,6 @@ define(function(require, exports) {
 					var id = tr.attr("data-entity-id");
 					transfer.delTransferData(id,tr);
 				});
-
 				//其他费用数量
 				$obj.find("input[name=count]").keyup(function(){
 					transfer.PayMoneyF();
@@ -802,9 +843,10 @@ define(function(require, exports) {
 			});
 			//绑定修改分团转客信息
 			$obj.find(".btn-saveTransoutInfo").click(function(){
+				console.log("submit");
 				// 表单校验
 				if (!validator.form()) { return; }
-				transfer.saveTransfer();  
+				transfer.saveTransfer($obj,1);  
 				closeTab(menuKey+"-updateTransfer");
 			});
 			
@@ -934,10 +976,8 @@ define(function(require, exports) {
 			}
 		},
 		//编辑保存分团转客信息
-		saveTransfer:function(){ 
-			var $obj=$(".updateTransfer"),
+		saveTransfer:function($obj,isClose){ 
 			id = $obj.find("input[name=touristGroupTransferId]").val();
-				
 			remark =$obj.find("input[name=remark]").val(),
 			status = 1,
 			//startTime = $obj.find(" input[name=createTime]").val(),
@@ -999,16 +1039,31 @@ define(function(require, exports) {
 				success:function(data){
 					layer.close(globalLoadingLayer);
 					var result = showDialog(data);  
-					if(result){  		
-						//layer.close(editTemplateLayer);
+					if(result){  
+						transfer.edited["updateTransfer"] = "";
 						showMessageDialog($( "#confirm-dialog-message" ),data.message);
-						transfer.getlistTransferSumData(0,"","","","","","",2);
+						if(isClose == 1){
+							closeTab(menuKey+"-updateTransfer");
+							transfer.getlistTransferSumData(0,"","","","","","",2);
+						}
+						
 					}
 				}
 			});
-		}		
+		},
+		save : function(saveType){
+			if(saveType == "updateTransfer"){
+				var $obj = $("#tab-arrange_transfer-updateTransfer-content .updateTransfer");
+				transfer.saveTransfer($obj,1);
+			}
+		},
+		clearEdit : function(clearType){
+			transfer.edited[clearType] = "";
+		}
 	}
-	
-	exports.getlistTransferSumData=transfer.getlistTransferSumData; 
-	
+
+	exports.getlistTransferSumData = transfer.getlistTransferSumData; 
+	exports.isEdited = transfer.isEdited; 
+	exports.save = transfer.save; 
+	exports.clearEdit = transfer.clearEdit; 
 });

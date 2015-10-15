@@ -143,14 +143,14 @@ define(function(require, exports) {
 			    	});
 			    	//添加价格列表
 			    	$price.find(".btn-price-add").click(function(){
-						var html = '<tr><td><input name="name" class="col-sm-12" type="text" style="min-width:100px;" maxlength=\"50\"/></td>'+
+						var html = '<tr><td><input name="name" class="col-sm-12" type="text" style="min-width:100px;" maxlength="100"/></td>'+
 							'<td><select class="col-sm-12" name="customerType" style="min-width:100px;"><option value="0">散客</option><option value="1">团体</option></select></td>'+
 							'<td><div class="col-sm-12 no-padding dateTimeArea"><input name="startTime" type="text" class="datepicker col-sm-4" /><label class="col-sm-2 control-label center datepicker">&nbsp;至&nbsp;</label><input name="endTime" type="text" class="datepicker col-sm-4"/><label class="priceArea col-sm-2" style="padding-top:3px;"><button class="btn btn-success btn-sm btn-white add"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button></label></div></td>'+
-							'<td><div class="col-sm-12 no-padding"><input name="contractPrice" class="col-sm-12" type="text" maxlength=\"7\" /></div></td>'+
-							'<td><div class="col-sm-12 no-padding"><input name="marketPrice" class="col-sm-12" type="text" maxlength=\"7\" /></div></td>'+
-							'<td><div class="col-sm-12 no-padding"><input name="guideRate" class="col-sm-12" type="text" maxlength=\"5\"/></div></td>'+
-							'<td><div class="col-sm-12 no-padding"><input name="travelAgencyRate" class="col-sm-12" type="text" maxlength=\"5\" /></div></td>'+
-							'<td><input name="remark" type="text" class="col-sm-12" style="min-width:100px;"/></div></td>'+
+							'<td><div class="col-sm-12 no-padding"><input name="contractPrice" class="col-sm-12" type="text" maxlength="10"/></div></td>'+
+							'<td><div class="col-sm-12 no-padding"><input name="marketPrice" class="col-sm-12" type="text" maxlength="10"/></div></td>'+
+							'<td><div class="col-sm-12 no-padding"><input name="guideRate" class="col-sm-12" type="text" maxlength="5"/></div></td>'+
+							'<td><div class="col-sm-12 no-padding"><input name="travelAgencyRate" class="col-sm-12" type="text" maxlength="5"/></div></td>'+
+							'<td><input name="remark" type="text" class="col-sm-12" style="min-width:100px;" maxlength="1000"/></div></td>'+
 							'<td style="width:70px"><a class=" btn-price-delete">删除</a></td></tr>';
 						$price.find("tbody").append(html);
 						priceItemValidator = rule.checkItems($(".add-selfpay-form .priceList"));
@@ -169,7 +169,7 @@ define(function(require, exports) {
 				    	selfpay.numberRate("add-selfpay-form");
 				    	$price.find(".dateTimeArea button.add").off().on("click",function(){
 				    		selfpay.addDateArea($(this));
-				    		priceItemValidator = rule.checkItems($(".add-selfpay-form .priceList"));  
+				    		priceItemValidator = rule.checkItems($(".add-selfpay-form .priceList"));
 				    	})
 			    	});
 					
@@ -258,10 +258,10 @@ define(function(require, exports) {
 		addDateArea : function($obj){
 			var $parents = $obj.parent().parent().parent().parent(), td = $parents.find("td");
 			td.eq(2).append('<div class="col-sm-12 no-padding dateTimeArea"><input type="hidden" name="rebateListId" value="" /><input name="startTime" value="" type="text" class="datepicker col-sm-4"><label class="col-sm-2 control-label center">&nbsp;至&nbsp;</label><input name="endTime" value="" type="text" class="datepicker col-sm-4"><label class="priceArea col-sm-2" style="padding-top:3px;"><button class="btn btn-success btn-sm btn-white del"><i class="ace-icon fa fa-minus bigger-110 icon-only"></i></button></label></div>');
-			td.eq(3).append('<div class="col-sm-12 no-padding" style="padding-top:2px!important;"><input name="contractPrice" value="" class="col-sm-12" type="text"></div>');
-			td.eq(4).append('<div class="col-sm-12 no-padding" style="padding-top:2px!important;"><input name="marketPrice" value="" class="col-sm-12" type="text"></div>');
-			td.eq(5).append('<div class="col-sm-12 no-padding" style="padding-top:2px!important;"><input name="guideRate" value="" class="col-sm-12" type="text"></div>');
-			td.eq(6).append('<div class="col-sm-12 no-padding" style="padding-top:2px!important;"><input name="travelAgencyRate" readonly="readonly" value="" class="col-sm-12" type="text"></div>');
+			td.eq(3).append('<div class="col-sm-12 no-padding" style="padding-top:2px!important;"><input name="contractPrice" value="" class="col-sm-12" type="text" maxlength="10"></div>');
+			td.eq(4).append('<div class="col-sm-12 no-padding" style="padding-top:2px!important;"><input name="marketPrice" value="" class="col-sm-12" type="text" maxlength="10"></div>');
+			td.eq(5).append('<div class="col-sm-12 no-padding" style="padding-top:2px!important;"><input name="guideRate" value="" class="col-sm-12" type="text" maxlength="5"></div>');
+			td.eq(6).append('<div class="col-sm-12 no-padding" style="padding-top:2px!important;"><input name="travelAgencyRate" readonly="readonly" value="" class="col-sm-12" type="text" maxlength="5"></div>');
 			$parents.find(".dateTimeArea button.del").off().on("click", selfpay.deteleDateArea);
 			$parents.find(".dateTimeArea").eq($parents.find(".dateTimeArea").length - 1).attr("data-index", $parents.find(".dateTimeArea").length);
 			selfpay.numberRate("update-selfpay-form");
@@ -414,17 +414,17 @@ define(function(require, exports) {
 									});
 						    	//新增价格列表
 						    	$price.find(".btn-price-add").click(function(){
-									var html = '<tr><td><input name="name" class="col-sm-12" type="text" style="min-width:100px;"/></td>'+
+									var html = '<tr><td><input name="name" class="col-sm-12" type="text" style="min-width:100px;" maxlength="100"/></td>'+
 									'<td><select class="col-sm-12" name="customerType" style="min-width:100px;"><option value="0">散客</option><option value="1">团体</option></select></td>'+
 									'<td><div class="col-sm-12 no-padding dateTimeArea"><input name="startTime" type="text" class="datepicker col-sm-4" /><label class="col-sm-2 control-label center">&nbsp;至&nbsp;</label><input name="endTime" type="text" class="datepicker col-sm-4"/><label class="priceArea col-sm-2" style="padding-top:3px;"><button class="btn btn-success btn-sm btn-white add"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button></label></div></td>'+
-									'<td><div class="col-sm-12 no-padding"><input name="contractPrice" class="col-sm-12" type="text" /></div></td>'+
-									'<td><div class="col-sm-12 no-padding"><input name="marketPrice" class="col-sm-12" type="text"/></div></td>'+
-									'<td><div class="col-sm-12 no-padding"><input name="guideRate" class="col-sm-12" type="text"/></div></td>'+
-									'<td><div class="col-sm-12 no-padding"><input name="travelAgencyRate" class="col-sm-12" type="text"/></div></td>'+
+									'<td><div class="col-sm-12 no-padding"><input name="contractPrice" class="col-sm-12" type="text" maxlength="10"/></div></td>'+
+									'<td><div class="col-sm-12 no-padding"><input name="marketPrice" class="col-sm-12" type="text" maxlength="10"/></div></td>'+
+									'<td><div class="col-sm-12 no-padding"><input name="guideRate" class="col-sm-12" type="text" maxlength="5"/></div></td>'+
+									'<td><div class="col-sm-12 no-padding"><input name="travelAgencyRate" class="col-sm-12" type="text" maxlength="5"/></div></td>'+
 									'<td><input name="remark" type="text" class="col-sm-12" style="min-width:100px;"/></div></td>'+
 									'<td style="width:70px"><a class="btn-price-delete">删除</a></td></tr>';
 
-									$price.find("tbody").append(html);
+									$price.find("tbody").append(html); 
 									//修改是的项目价格价格列表验证
 									priceItemValidator = rule.checkItems($(".update-selfpay-form .priceList"));
 									$price.find(".datepicker").datepicker({

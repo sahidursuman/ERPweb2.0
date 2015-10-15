@@ -8,7 +8,6 @@
 						我社转出	
 					</a>
 				</li> 
-		
 				<li>
 					<a data-toggle="tab" href="#transferIn" class="transferIn"  aria-expanded="false" data-value="1" >
 					<i class="fa fa-hourglass"></i>
@@ -16,8 +15,6 @@
 					</a>
 				</li>
 			</ul>
-				
-						
 			<div class="tab-content">
 				<!--我社转出start -1-->
 				<div id="transferOut" class="tab-pane fade active in clearfix" >							
@@ -33,108 +30,94 @@
 							  </h1>
 						 </div>
 					</div>
-					        
-					<div class="form-group form-horizontal">
-						<div class="search-area">
-						    <label class="pull-left control-label no-padding-right">同行地接：</label> 
-						    <div class="col-sm-2"> 
-							    <select name="transferPartnerAgencyId" class="col-xs-12"> 
-									<option value="">全部</option>
-									{{each partnerAgency as partner}} 
-										{{if partner!=null}} 
-											{{if partner.id!=null}}     
-												<option value="{{partner.id}}" {{if partnerAgencyId==partner.id}}selected="selected"{{/if}} >
-													{{partner.travelAgencyName}}  
-												</option>
-											{{/if}}  
-										{{/if}}
-									{{/each}}       
-							    </select> 
-						    </div>
+						<div class="form-group form-horizontal">
+					  		<div class="search-area">
+							  <label class="pull-left control-label no-padding-right">同行地接：</label> 
+							  <div class="col-sm-2"> 
+								  <select name="transferPartnerAgencyId" class="col-xs-12"> 
+								  	 <option value="">全部</option>
+						              {{each partnerAgency as partner}} 
+						              {{if partner!=null}} 
+						              {{if partner.id!=null}}     
+										<option value="{{partner.id}}" {{if partnerAgencyId==partner.id}}selected="selected"{{/if}} >
+										    {{partner.travelAgencyName}}  
+										</option>
+									   {{/if}}  
+									   {{/if}}
+						             {{/each}}       
+								  </select> 
+						      </div>
 
-						    <label class="control-label no-padding-right pull-left">转客人：</label> 
-						    <div class="col-sm-2"> 
-							    <select name="creator" class="col-xs-12">    
-									<option value="">全部</option>
-									{{each user1 as user}}
-										{{if user!=null}}
-											{{if user.id!=null}}
-												<option value="{{user.id}}" {{if creator==user.id}}selected="selected"{{/if}} >
-													{{user.realName}}
-												</option>
-											{{/if}}
-										{{/if}}
-									{{/each}}
-							    </select> 
-						    </div>
-							<div class="form-group">
-								<div class="search-area">
-									<div class="col-xs-2">
-										<div class="col-xs-12">
-											<div class="input-group">
-												<input class="col-xs-12 date-picker" name="createTime" placeholder="转客起始日期" value="{{startDay}}" type="text" />	
-												<span class="input-group-addon">
-													<i class="fa fa-calendar"></i>
-												</span>
-											</div>
-										</div>
-									</div>
-						
-									<div class="col-xs-2">
-										<div class="col-xs-12">
-											<div class="input-group">
-												<input class="col-xs-12 date-picker" name="createTime" placeholder="转客结束日期" value="" type="text" />	
-												<span class="input-group-addon">
-													<i class="fa fa-calendar"></i>
-												</span>
-											</div>
-										</div>
-									</div>
-																		   	
-								    <label class="control-label no-padding-right pull-left" style="display: inline-block; padding-left: 12px;">状态：</label>   
-									<div class="btn-group btn-status" style="margin-left: 20px">
-										<button data-value="{{status}}" data-toggle="dropdown" class=" btn-sm dropdown-toggle block-up" aria-expanded="false">
-											<span>
-											   {{if status == null}}
-													全部
-												{{else if status == 1}}
-													已接收
-												{{else if status == 3}}
-													未使用
-												{{else}}
-													未确认
+						      <label class="control-label no-padding-right pull-left">转客人：</label> 
+							  <div class="col-sm-2"> 
+								  <select name="creator" class="col-xs-12">    
+								  		<option value="">全部</option>
+									     {{each user1 as user}}
+									     		{{if user!=null}}
+									     			{{if user.id!=null}}
+														<option value="{{user.id}}" {{if creator==user.id}}selected="selected"{{/if}} >
+														    {{user.realName}}
+														</option>
+												    {{/if}}
 												{{/if}}
-											</span>
-											<i class="ace-icon fa fa-angle-down icon-on-right"></i>
-										</button>
-										<ul class="dropdown-menu">
-											<li>
-												<a data-value="" href="javascript:void(0)">全部</a>
-											</li>
-											<li>
-												<a data-value="0" href="javascript:void(0)">未确认</a>
-											</li>
-											<li>
-												<a data-value="1" href="javascript:void(0)">已接收</a>
-											</li>
-											<li>
-												<a data-value="3" href="javascript:void(0)">未使用</a>
-											</li>
-										</ul>
+							             {{/each}}
+								  </select> 
+						      </div>
+						      
+				       
+						       	<div class="form-group">
+									<div class="search-area">
+										<div class="col-xs-2">
+											<div class="col-xs-12">
+												<div class="input-group">
+													<input class="col-xs-12 date-picker" name="createTime" placeholder="转客起始日期" value="{{startDay}}" type="text" />	
+													<span class="input-group-addon">
+														<i class="fa fa-calendar"></i>
+													</span>
+												</div>
+											</div>
+										</div>
+							
+										<div class="col-xs-2">
+											<div class="col-xs-12">
+												<div class="input-group">
+													<input class="col-xs-12 date-picker" name="createTime" placeholder="转客结束日期" value="" type="text" />	
+													<span class="input-group-addon">
+														<i class="fa fa-calendar"></i>
+													</span>
+												</div>
+											</div>
+										</div>
+										
+										
+										
+									   	
+								      <label class="control-label no-padding-right pull-left" style="display: inline-block; padding-left: 12px;  ">状态：</label> 
+									  <div class="col-sm-1"> 
+										  <select name="status" class="col-xs-12"> 
+										  	  <option value="">全部</option>
+											  <option value="0" >未确认</option>
+											  <option value="1">已接收</option>
+											  <option value="3">未使用</option>  
+										  </select> 
+								      </div>    
+										          
+									   <button class="btn-sm btn-transferOut-search search-btn">
+									   <i class="ace-icon fa fa-search"></i>
+											搜索
+									   </button>
+									   <button class="btn btn-sm btn-success btn-transfer-export">导出名单</button>
+								   
 									</div>
-									<button class="btn-sm btn-transferOut-search search-btn">
-									<i class="ace-icon fa fa-search"></i>
-										搜索
-									</button>
-									<button class="btn btn-sm btn-success btn-transfer-export">导出名单</button>
+									
 								</div>
-							</div>
-						</div>
-					</div>
-		            <!--我社转出end -->      
-		            <!--分页&&数据List-->
-		            <div class="col-xs-12 transferList" ></div>
-	            </div>   
+				              </div>
+		                  </div>
+		                  <!--我社转出end -->
+		                     
+		                  <!--分页&&数据List-->
+		                  <div class="col-xs-12 transferList" ></div>
+	                 </div>   
 
 					<!-- 同行转入搜索start2 -->		
 				<div id="transferIn" class="tab-pane fade clearfix" >  
@@ -150,7 +133,6 @@
 							  </h1>
 						 </div>
 					</div>
-
 					<div class="form-group" style="margin-bottom:30px; ">
 						<div class="search-area">
 							<label class="pull-left control-label no-padding-right">同行线路产品：</label> 
@@ -180,46 +162,50 @@
 												</span>
 											</div>
 										</div>
-									</div>
-
-									<div class="col-xs-2 no-padding-right">
-										<div class="col-xs-12">
-											<div class="input-group">
-												<input class="col-xs-12 date-picker" name="endTime" placeholder="出游结束日期" value="" type="text" />	
-												<span class="input-group-addon">
-													<i class="fa fa-calendar"></i>
-												</span>
+										
+										
+										<div class="col-xs-2 no-padding-right">
+											<div class="col-xs-12">
+												<div class="input-group">
+													<input class="col-xs-12 date-picker" name="endTime" placeholder="出游结束日期" value="" type="text" />	
+													<span class="input-group-addon">
+														<i class="fa fa-calendar"></i>
+													</span>
+												</div>
 											</div>
 										</div>
+										
 									</div>
 								</div>
-							</div>
-						    <label class="control-label no-padding-right pull-left">同行地接：</label> 
-							<div class="col-sm-1"> 
-							    <select name="transferPartnerAgencyId" class="col-xs-12"> 
-									<option value="">全部</option>
-								    {{each travelAgency as pa}} 
-										{{if pa!=null}} 
-											{{if pa.id!=null}}    
-												<option value="{{pa.id}}" {{if partnerAgencyId==pa.id}}selected="selected"{{/if}} >
-													{{pa.name}}
-												</option>
-											{{/if}}
-										{{/if}}
-								    {{/each}}       
-							     </select> 
-						    </div>
+						
+							      
 
-						    <label class="control-label no-padding-right pull-left">转客人：</label> 
-						    <div class="col-sm-2"> 
-							    <select name="creator" class="col-xs-12">    
-									<option value="">全部</option>
-									{{each user2 as user}}
-										{{if user!=null}}
-											{{if user.id!=null}}
-												<option value="{{user.id}}" {{if creator==user.id}}selected="selected"{{/if}} >
-													{{user.realName}}
-												</option>
+<!-- 								  <label class="control-label no-padding-right pull-left">同行地接：</label>  -->
+<!-- 								  <div class="col-sm-1">  -->
+<!-- 									  <select name="transferPartnerAgencyId" class="col-xs-12">  -->
+<!-- 									  		<option value="">全部</option> -->
+<!-- 							              {{each partnerAgency as pa}}  -->
+<!-- 							               {{if pa!=null}}  -->
+<!-- 						                   {{if pa.id!=null}}     -->
+<!-- 											<option value="{{pa.id}}" {{if partnerAgencyId==pa.id}}selected="selected"{{/if}} > -->
+<!-- 											    {{pa.travelAgencyName}} -->
+<!-- 											</option> -->
+<!-- 											{{/if}} -->
+<!-- 											{{/if}} -->
+<!-- 							             {{/each}}        -->
+<!-- 									  </select>  -->
+<!-- 							      </div> -->
+							      
+							       <label class="control-label no-padding-right pull-left">同行地接：</label> 
+								  <div class="col-sm-1"> 
+									  <select name="transferPartnerAgencyId" class="col-xs-12"> 
+									  		<option value="">全部</option>
+							              {{each travelAgency as pa}} 
+							               {{if pa!=null}} 
+						                   {{if pa.id!=null}}    
+											<option value="{{pa.id}}" {{if partnerAgencyId==pa.id}}selected="selected"{{/if}} >
+											    {{pa.name}}
+											</option>
 											{{/if}}
 										{{/if}}
 									{{/each}}
