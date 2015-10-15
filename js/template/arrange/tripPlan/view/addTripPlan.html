@@ -1,6 +1,6 @@
 <div class="newAddTripPlan clearfix">
-	<div class="col-xs-12 newAddTripPlanMain">
-		<form class="form-horizontal newAddTripPlanMainForm" role="form" style="margin-top:10px" onsubmit="return false">
+	<div class="col-xs-12 newAddTripPlanMain globalAdd">
+		<form class="form-horizontal newAddTripPlanMainForm formOneList" role="form" style="margin-top:10px" onsubmit="return false">
 			<div class="form-group">
 				<div class="col-xs-12 col-sm-12 widget-container-col">
 					<div class=" ui-sortable-handle">
@@ -13,7 +13,7 @@
 								<div class="form-group">
 									<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>线路名称：</label>
 									<div class="col-sm-2 search-banner">
-										<input class="col-sm-8" readonly="readonly" type="text" name="name" id="" value="" />
+										<input class="col-sm-8" readonly="readonly" style="width: 155px" type="text" name="name" id="" value="" />
 										<input type="hidden" name="lineProductId" value="" />
 										<button class=" btn btn-sm btn-primary btn-Plan-search">
 											<i class="ace-icon fa fa-search "></i>搜索
@@ -150,7 +150,7 @@
 				</div>
 			</div>
 		</form>
-		<form class="form-horizontal" role="form" onsubmit="return false">
+		<form class="form-horizontal formOneList" role="form" onsubmit="return false">
 			<div class="form-group">
 				<div class="col-xs-12 col-sm-12 widget-container-col">
 					<div class=" ui-sortable-handle">
@@ -255,12 +255,12 @@
 		</form>
 		<form class="form-horizontal" role="form" onsubmit="return false">
 			<div class="form-group" style="text-align: center;">
-				<button class="btn btn-sm btn-danger btn-cancelTripPlan">
+				<button class="btn btn-sm btn-danger btn-cancelTripPlan otherButton">
 					<i class="ace-icon fa fa-times"></i>
 					取消
 				</button>
 
-				<button class="btn btn-sm  btn-primary btn-saveTripPlan" style="margin-left: 30px">
+				<button class="btn btn-sm  btn-primary btn-saveTripPlan otherButton" style="margin-left: 30px">
 					<i class="ace-icon fa fa-check"></i>
 					保存
 				</button>
