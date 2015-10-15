@@ -915,7 +915,7 @@ define(function(require, exports) {
 			'<td><select name="type" class="col-xs-12 restauranType"><option value="早餐">早餐</option><option value="午餐">午餐</option><option value="晚餐">晚餐</option></select></td>'+
 			'<td><input type="text" name="price" class="col-xs-12 restaurantStandardsName bind-change"/><input type="hidden" name="typeId"/></td>'+
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="menuList"/></td>'+
-			'<td><input type="text" class="col-xs-12" name="remark"/></td><td><button class="btn btn-xs btn-danger btn-restaurant-delete deleteScheduleList"> <i class="ace-icon fa fa-trash-o bigger-120"></i> </button></td></tr>'+
+			'<td><input type="text" class="col-xs-12" name="remark"/></td><td><button class="btn btn-xs btn-danger btn-restaurant-delete deleteScheduleList deleteAllother"> <i class="ace-icon fa fa-trash-o bigger-120"></i> </button></td></tr>'+
 			'</tbody></table></div></div></div></div>';
 
 			$(this).parents(".updateLineProductDaysList").find(".updateLineProductDaysDetailContainer").append(scheduleDetails);
@@ -1086,7 +1086,7 @@ define(function(require, exports) {
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="containBreakfast"/></td>'+
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
 			'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
-			'<td><button class="btn btn-xs btn-danger btn-restaurant-delete deleteResourceHotelList"> <i class="ace-icon fa fa-trash-o bigger-120"></i> </button></td></tr></tbody></table></div></div></div></div>';
+			'<td><button class="btn btn-xs btn-danger btn-restaurant-delete deleteResourceHotelList deleteAllother"> <i class="ace-icon fa fa-trash-o bigger-120"></i> </button></td></tr></tbody></table></div></div></div></div>';
 
 			$(this).parents(".updateLineProductDaysList").find(".updateLineProductDaysDetailContainer").append(hotelDetails);
 			lineProduct.updateLineProductIndex += 1;
@@ -1271,7 +1271,7 @@ define(function(require, exports) {
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="price"/></td>'+
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
 			'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
-			'<td><button class="btn btn-xs btn-danger btn-restaurant-delete deleteResourceScenicList"> <i class="ace-icon fa fa-trash-o bigger-120"></i> </button></td></tr></tbody></table></div></div></div></div>';
+			'<td><button class="btn btn-xs btn-danger btn-restaurant-delete deleteResourceScenicList deleteAllother"> <i class="ace-icon fa fa-trash-o bigger-120"></i> </button></td></tr></tbody></table></div></div></div></div>';
 			$(this).parents(".updateLineProductDaysList").find(".updateLineProductDaysDetailContainer").append(scenicDetails);
 			lineProduct.updateLineProductIndex += 1;
 			//删除选中行程安排景区
@@ -1434,7 +1434,7 @@ define(function(require, exports) {
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="parkingRebateMoney"/></td>'+
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="customerRebateMoney"/></td>'+
 			'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
-			'<td><button class="btn btn-xs btn-danger btn-restaurant-delete deleteResourceShopList"> <i class="ace-icon fa fa-trash-o bigger-120"></i> </button></td></tr></tbody></table></div></div></div></div>';
+			'<td><button class="btn btn-xs btn-danger btn-restaurant-delete deleteResourceShopList deleteAllother"> <i class="ace-icon fa fa-trash-o bigger-120"></i> </button></td></tr></tbody></table></div></div></div></div>';
 			$(this).parents(".updateLineProductDaysList").find(".updateLineProductDaysDetailContainer").append(shoppingDetails);
 			lineProduct.updateLineProductIndex += 1;
 			//删除选中行程安排购物
@@ -1611,7 +1611,7 @@ define(function(require, exports) {
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="contractPrice"/></td>'+
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="managerName"/></td>'+
 			'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
-			'<td><button class="btn btn-xs btn-danger btn-restaurant-delete deleteResourceSelfPayList"> <i class="ace-icon fa fa-trash-o bigger-120"></i> </button></td></tr></tbody></table></div></div></div></div>';
+			'<td><button class="btn btn-xs btn-danger btn-restaurant-delete deleteResourceSelfPayList deleteAllother"> <i class="ace-icon fa fa-trash-o bigger-120"></i> </button></td></tr></tbody></table></div></div></div></div>';
 			$(this).parents(".updateLineProductDaysList").find(".updateLineProductDaysDetailContainer").append(selfPayingDetails);
 			lineProduct.updateLineProductIndex += 1;
 			//删除选中行程安排自费
@@ -1774,13 +1774,13 @@ define(function(require, exports) {
 			'<thead><tr><th>票务公司名称</th><th>类型</th><th>价格</th><th>负责人</th><th>联系电话</th><th>公司电话</th><th>备注</th><th style="width: 60px;">操作</th></tr></thead>'+
 			'<tbody><tr>'+
 			'<td><input type="text" class="col-xs-12 chooseTicketName bind-change"/><input type="hidden" name="tickeId"/></td>'+
-			'<td><select name="type" class="col-xs-12 form-control"><option value="1">机票</option><option value="2">汽车票</option><option value="3">火车票</option><option value="4">轮船票</option></select></td>'+
+			'<td><select name="type" class="col-xs-12 form-control" style="font-size: 12p !important;"><option value="1">机票</option><option value="2">汽车票</option><option value="3">火车票</option><option value="4">轮船票</option></select></td>'+
 			'<td><input type="text" class="col-xs-12" name="price"/></td>'+
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="managerName"/></td>'+
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="telNumber"/></td>'+
 			'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
-			'<td><button class="btn btn-xs btn-danger btn-restaurant-delete deleteResourceTicketList"> <i class="ace-icon fa fa-trash-o bigger-120"></i> </button></td></tr></tbody></table></div></div></div></div>';
+			'<td><button class="btn btn-xs btn-danger btn-restaurant-delete deleteResourceTicketList deleteAllother"> <i class="ace-icon fa fa-trash-o bigger-120"></i> </button></td></tr></tbody></table></div></div></div></div>';
 			$(this).parents(".updateLineProductDaysList").find(".updateLineProductDaysDetailContainer").append(shoppingDetails);
 			lineProduct.updateLineProductIndex += 1;
 			//删除选中行程安排交通

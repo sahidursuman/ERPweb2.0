@@ -1,4 +1,4 @@
-<div class="col-xs-12 addTouristGroup">
+<div class="col-xs-12 addTouristGroup globalAdd">
 	<form class="form-horizontal touristGroupMainForm" role="form" style="margin-top:10px" onsubmit="return false">
 		<div class=" ui-sortable-handle">
 				<h5 class="">
@@ -6,13 +6,13 @@
 					<label class="middle title-size">小组信息</label>
 				</h5>
 			<div class="widget-body">
-				<div class="widget-main">
+				<div class="widget-main formOneList">
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>线路产品:</label>
 						<div class="col-sm-2">
-							<input type="text" name="lineProductIdName" class="col-sm-8 bind-change" readonly="readonly" /> 
+							<input type="text" name="lineProductIdName" style="width: 155px" class="col-sm-8 bind-change" readonly="readonly" />
 							<input type="hidden" name="lineProductId" />
-							<button class="col-sm-4 btn btn-sm btn-primary btn-travelLine-search" style="padding-bottom:5px;">
+							<button class="col-sm-4 btn btn-sm btn-primary btn-travelLine-search" style="padding-bottom:5px;width: 62px">
 								<i class="ace-icon fa fa-search "></i>搜索
 							</button>
 						</div>
@@ -21,7 +21,7 @@
 							<!-- <input type="text" name="startTime" class="col-sm-12" /> -->
 							<div class="input-group">
 								<input type="text" name="startTime" class="col-sm-12 date-picker datepicker" />
-								<span class="input-group-addon">
+								<span class="input-group-addon"style="left:-30px;">
 									<i class="fa fa-calendar"></i>
 								</span>
 							</div>
@@ -56,7 +56,7 @@
 							<div class="input-group">
 								<input class="choosePartnerManager col-sm-12 bind-change" name="partnerAgencyNameList" type="text" />
 								<input type="hidden" name="partnerAgencyContactId" />
-								<span class="input-group-addon addPartnerManager" style="cursor:pointer;" title="为组团社新添加联系人">
+								<span class="input-group-addon addPartnerManager" style="cursor:pointer;left: -30px" title="为组团社新添加联系人">
 									<i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
 								</span>
 							</div>
@@ -67,7 +67,7 @@
 						</div>
 						<label class="col-sm-1 control-label no-padding-right">获得方式:</label>
 						<div class="col-sm-2">
-							<select name="getType" class="col-sm-12">
+							<select name="getType" class="col-sm-12" style="width: 220px">
 								<option selected="selected" value="1">旅行社系统</option>
 								<option value="2">传真</option>
 								<option value="3">短信</option>
@@ -400,7 +400,7 @@
 			</div>
 		</div>
 		<div class="space-10"></div>
-		<button class="btn btn-block btn-primary btn-submit-addTouristGroup">
+		<button class="btn btn-block btn-primary btn-submit-addTouristGroup guideSubmit">
 			<i class="ace-icon fa fa-check"></i>
 			提交信息
 		</button>
