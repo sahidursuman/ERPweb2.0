@@ -56,6 +56,7 @@ function addTab(tabId,tabName,html){
 				$that = $(this);
 				var str = tabId.split("-");
 				var modal = modals[str[0]];
+				console.log(modal.isEdited(str[1]));
 				if(str.length > 1 && str[1] != "view" && !!modal && !!modal.isEdited && modal.isEdited(str[1])){//非列表、查看,且有修改
 					if(str[1] == "add"){
 						showConfirmMsg($( "#confirm-dialog-message" ), "未保存的数据，是否放弃?",function(){
@@ -918,6 +919,7 @@ function listMenu(menuTemplate){
 						var date = new Date();
 						var year = date.getFullYear();
 						transfer.listTransfer(0,"",year,"");
+						modals["financial_transfer"] = transfer;
 					});
 				});
 				//绑定内转转出账务
@@ -951,6 +953,7 @@ function listMenu(menuTemplate){
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/financial/shop/shop.js",function(shop){
 						shop.listFinancialShop(0,"","","");
+						modals["financial_shop"] = shop;
 					});
 				});
 

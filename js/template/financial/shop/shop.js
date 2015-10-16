@@ -9,12 +9,24 @@ define(function(require, exports) {
         tabId = "tab-"+menuKey+"-content",
         checkTabId = "tab-"+ menuKey+"-checking"+"-content",//
         clearTabId = "tab-"+ menuKey+"-clearing"+"-content";
-    $("#" + tabId + "").off().on("edited.api",function(){
+   /*  $("#" + tabId + "").off().on("edited.api",function(){
     	shop.edited = true;
-    });
+    }); */
 	var shop = {
-		edited:false,
-        blanceEdited:false,
+		searchData : {
+			page : "",
+			shopId : "",
+			year : "",
+			month : ""
+		},
+		edited : {},
+		isEdited : function(editedType){
+			if(!!shop.edited[editedType] && shop.edited[editedType] != ""){
+				return true;
+			}
+			return false;
+		},
+		oldCheckShopId:0,
         oldBlanceShopId:0,
 		listFinancialShop:function(page,shopId,year,month){   
 			$.ajax({
@@ -29,6 +41,12 @@ define(function(require, exports) {
 					layer.close(globalLoadingLayer);
 					var result = showDialog(data);
 					if(result){
+						shop.searchData = {
+							page : page,
+							shopId : shopId,
+							year : year,
+							month : month
+						};
 						var html = listTemplate(data);
 						addTab(menuKey,"购物账务",html);
 						
@@ -103,20 +121,20 @@ define(function(require, exports) {
 						var validator;
                  	    //判断页面是否存在
                  	    if($("#"+checkTabId+"").length > 0) {
-                 	    	if(shop.edited){
+                 	    	if(!!shop.edited["checking"] && shop.edited["checking"] != ""){
                  	    		addTab(menuKey+"-checking","购物对账");
                  	    		showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
                  	    			 validator = rule.check($('.shop-checking'));
 				            		 if (!validator.form()) { 
 				            			 return; 
 				            		 }
-				            		 shop.saveCheckingData(page,shopId,year,month);
-				            		 shop.edited = false;
+				            		 shop.saveCheckingData(page,shopId,year,month,0);
+				            		 shop.edited["checking"] = "";
 				            		 addTab(menuKey+"-checking","购物对账",html);
 				            		 validator = rule.check($('.shop-checking'));
 				            	 },function(){
 				            		 addTab(menuKey+"-checking","购物对账",html);
-				            		 shop.edited = false;
+				            		 shop.edited["checking"] = "";
 				            		 validator = rule.check($('.shop-checking'));
 				            	 });
                  	    	 }else{
@@ -130,7 +148,8 @@ define(function(require, exports) {
                  	    	
                  	    };
                  	   $("#"+checkTabId+ " .all").on("change",function(){
-            	    		shop.edited = true; 
+            	    		shop.edited["checking"] = "checking"; 
+							shop.oldCheckShopId = shopId;
             	    	});
 						$("#"+checkTabId+ " select[name=year]").val(data.year);
 						$("#"+checkTabId+ " select[name=month]").val(data.month);
@@ -203,6 +222,7 @@ define(function(require, exports) {
 			            $("#"+checkTabId+ " .btn-shop-close").click(function(){
 			            	 showConfirmDialog($( "#confirm-dialog-message" ), "确定关闭本选项卡?",function(){
 			            		 closeTab(menuKey+"-checking");
+								 shop.edited["checking"] = "";
 			            	 });
 			            });
 		                //已对账的实际退补款不可修改
@@ -239,7 +259,7 @@ define(function(require, exports) {
 							if (!validator.form()) { 
 								return;
 							}
-							shop.saveCheckingData(page,shopId,year,month);
+							shop.saveCheckingData(page,shopId,year,month,0);
 			            });
 					}
 				}
@@ -263,19 +283,19 @@ define(function(require, exports) {
 						var validator;       
                  	    //判断页面是否存在 #tab-financial_shop-clearing-content  "tab-"+ menuKey+"-clearing"+"-content" 
                  	    if($("#tab-"+menuKey+"-clearing-content").length > 0) {
-                 	    	if(shop.blanceEdited){
+                 	    	if(!!shop.edited["clearing"] && shop.edited["clearing"] != ""){
                  	    		addTab(menuKey+"-clearing","购物结算");
                  	    		showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
                  	    			 shop.validatorTable();
                  	    			 var saveBtn = $("#"+clearTabId+" .btn-settlement-save");
 	             	    			 if (!$(saveBtn).data('validata').form()) { return; };
-				            		 shop.saveShopSettlement(shopId,year,start_month,end_month);
-				            		 shop.blanceEdited = false;
+				            		 shop.saveShopSettlement(shopId,year,start_month,end_month,0);
+				            		 shop.edited["clearing"] = "";
 				            		 addTab(menuKey+"-clearing","购物结算",html);
 				            		 shop.validatorTable();
 				            	 },function(){
 				            		 addTab(menuKey+"-clearing","购物结算",html);
-				            		 shop.blanceEdited = false;
+				            		 shop.edited["clearing"] = "";
 				            		 shop.validatorTable();
 				            	 });
                  	    	 }else{
@@ -288,7 +308,8 @@ define(function(require, exports) {
                  	    	shop.validatorTable();
                  	    };
                  	   $("#"+clearTabId+" .all").on('change', 'input, select', function() {
-                 		  shop.blanceEdited = true;
+                 		  shop.edited["clearing"] = "clearing";
+						  shop.oldBlanceShopId = shopId;
 	    	    		  $(this).closest('tr').data('blanceStatus',true);
 	    	    		});
 											
@@ -347,7 +368,7 @@ define(function(require, exports) {
 						//保存按钮事件
                         $("#"+clearTabId+" .btn-settlement-save").click(function(){
                         	if (!$(this).data('validata').form()) { return; }
-		            		shop.saveShopSettlement(shop.oldBlanceShopId,year,start_month,end_month);
+		            		shop.saveShopSettlement(shop.oldBlanceShopId,year,start_month,end_month,0);
                         });
 					}
 				}
@@ -415,7 +436,7 @@ define(function(require, exports) {
 				}
 			});
 	    },
-		saveCheckingData : function(page,shopId,year,month){
+		saveCheckingData : function(page,shopId,year,month,isClose){
 			console.log("test");
 			var JsonStr = [],$tr = $("#"+checkTabId+" .all tbody tr");
             var count = 0;
@@ -476,14 +497,19 @@ define(function(require, exports) {
 					var result = showDialog(data);
 					if(result){
 						showMessageDialog($( "#confirm-dialog-message" ),data.message);
-						shop.edited = false;
-						shop.listShopChecking(page,shopId,year,month);
+						shop.edited["checking"] = "";
+						if(isClose == 1){
+							closeTab(checkTabId);
+							shop.listFinancialShop(shop.searchData.page,shop.searchData.shopId,shop.searchData.year,shop.searchData.month);
+						} else {
+							shop.listShopChecking(page,shopId,year,month);
+						}
 					}
 				}
      	   });
 		},
 		//保存结算
-		saveShopSettlement : function(shopId,year,start_month,end_month,obj){
+		saveShopSettlement : function(shopId,year,start_month,end_month,obj,isClose){
 	    	var $tr = $("#"+clearTabId+ " .all tbody tr");
 	    	var id ; 
         	var payMoney ;
@@ -511,12 +537,31 @@ define(function(require, exports) {
                     var result = showDialog(data);
                     if(result){
                     	showMessageDialog($( "#confirm-dialog-message" ),data.message);
-                    	shop.blanceEdited = false;
-						shop.listShopSettlement(shopId,year,start_month,end_month);
+                    	shop.edited["clearing"] = "";
+						if(isClose == 1){
+							closeTab(clearTabId);
+							shop.listFinancialShop(shop.searchData.page,shop.searchData.shopId,shop.searchData.year,shop.searchData.month);
+						} else {
+							shop.listShopSettlement(shopId,year,start_month,end_month);
+						}
                     }
                 }
         	})
+		},
+		save : function(saveType){
+			console.log(saveType);
+			if(saveType == "checking"){
+				shop.saveCheckingData(0,shop.oldCheckShopId,"","",1);
+			} else if(saveType == "clearing"){
+				shop.saveShopSettlement(shop.oldBlanceShopId,"","","",1);
+			}
+		},
+		clearEdit : function(clearType){
+			shop.edited[clearType] = "";
 		}
 	}
 	exports.listFinancialShop = shop.listFinancialShop;
+	exports.isEdited = shop.isEdited;
+	exports.save = shop.save;
+	exports.clearEdit = shop.clearEdit;
 });
