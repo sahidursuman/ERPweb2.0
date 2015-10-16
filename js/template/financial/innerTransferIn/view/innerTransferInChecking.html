@@ -1,0 +1,190 @@
+<div class="row transferChecking">
+    <div class="col-xs-12 border">
+        <form class="form-horizontal" role="form" onsubmit="return false">
+                <div class="search-area editable editable-click" >
+                    <div class="form-group"> 
+                        <label style="float: left;margin: 0px auto auto 15px" class="control-label pull-left"> 部门:{{transferPartnerAgencyName}}</label>
+                        
+                        <label class="control-label col-sm-1" style="float:left;">账期:</label>
+                            <select class="col-sm-1" name="year" style="margin-left:20px">
+                                {{each yearList as year index}}
+                                    <option value="{{year.value}}" {{if searchParam.year == year.value}}selected="selected"{{/if}}>{{year.value}}</option>
+                                {{/each}}
+                            </select>
+                            <select class="col-sm-1" name="month" style="margin-left:5px">
+                                <option value ="">全部</option>
+                                {{each monthList as month index}}
+                                    <option value="{{month.value}}" {{if searchParam.month == month.value}}selected="selected"{{/if}}>{{month.value}}月</option>
+                                {{/each}}
+                            </select>
+                        <button class="btn-height btn-sm search-btn btn-checking-search" >
+                             <i class="ace-icon fa fa-search"></i>
+                                 搜索
+                        </button>
+                        
+                        <button type="button" class="btn btn-sm btn-primary btn-success btn-transferExport">
+                            <span>导出报表</span>
+                            <i class="ace-icon fa fa-arrow-right icon-on-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        <form class="form-horizontal" role="form" onsubmit="return false">
+            <div class="form-group ">
+                <label class=" control-label pull-left" style="margin-left: 15px">总人数:{{sumPersonCount}}<label>
+                <label class=" control-label " style="margin-left:30px;">总应收:{{sumNeedPayMoney}}</label>
+                <label class=" control-label " style="margin-left:30px;">总已收:{{sumRealPayedMoney}}</label>
+                <label class=" control-label " style="margin-left:30px;">总未收:{{sumUnPayedMoney}}</label>
+                <label class=" control-label " style="margin-left:30px;">总实际未收:{{sumRealUnPayedMoney}}</label>
+            </div>
+        </form>
+    </div>
+    <div class="clearfix"></div>
+        <table class="table table-striped table-bordered table-hover all" style="margin-top: 30px">
+            <thead>
+            <tr>
+             <th>序号</th>
+
+             <th>线路产品</th>
+
+             <th>出游日期</th>
+
+             <th>联系人</th>
+
+             <th>人数</th>
+
+             <th>接收人</th>
+
+             <th>接收时间</th>
+
+             <th>账面应收</th>
+             
+             <th>明细</th>
+
+             <th>已收</th>
+
+             <th>未收</th>
+
+             <th>未收对账</th>
+
+             <th>返款</th>
+
+             <th>实际未收</th>
+
+             <th>说明</th>
+
+             <th>对账时间</th>
+
+             <th>对账人</th>
+
+             <th>对账</th>  
+
+            </tr>
+            </thead>   
+            <tbody>
+            {{each financialTransferList as checking index}}
+            <tr data-entity-id="{{checking.id}}" data-entity-isConfirmAccount="{{checking.isConfirmAccount}}" data-entity-realUnPayedMoney="{{checking.transRealUnPayedMoney}}" data-entity-remark="{{checking.transRemark}}">                
+                <td>{{index+1}}</td>
+                <td>{{checking.lineProductName}}</td>
+                <td name="startTime">{{checking.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
+                <td>{{checking.contact}}</td>
+                <td>{{checking.adultCount}}大{{checking.childCount}}小<a href="#" class="seeGroup" style="margin-left:5px">展开</a></td>
+                <td>{{checking.operate}}</td>
+                <td>{{checking.operateTime | dateFormat: 'yyyy-MM-dd'}}</td>
+                <td>{{checking.needPayMoney}}</td>
+                <td>
+                    {{each checking.detailList as detail}}
+                        {{detail.describe}}：{{detail.count}}*{{detail.unitPrice}}={{detail.count*detail.unitPrice}}<br> 
+                    {{/each}}  
+                </td>
+                <td>{{checking.realPayedMoney}}</td>
+                <td>{{checking.unPayedMoney}}</td>
+                <td><input type="text" maxlength="9" name="FinancialTransferRealUnPayedMoney" value="{{checking.transRealUnPayedMoney}}" style="text-align:center" {{if checking.isConfirmAccount == 1 && roleType != 1 }} disabled = "true" {{/if}}></td>
+                <td><input type="text" maxlength="1000"  name=FinancialTransferRemark" value="{{checking.transRemark}}" style="text-align:center" {{if checking.isConfirmAccount == 1 && roleType != 1 }} disabled = "true" {{/if}}></td>
+                <td>{{if checking.checkTime == null || checking.checkTime == ""}}-{{else}}{{checking.checkTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
+                <td>{{checking.checkUser}}</td>
+                <td>
+                    <label class="pos-rel">
+                            <input type="checkbox" data-entity-checkStatus="{{checking.isConfirmAccount}}" class="ace transferFinancial" 
+                            {{if checking.isConfirmAccount == 1}}checked="checked"{{/if}} {{if checking.isConfirmAccount == 1 && roleType != 1 }} disabled = "true" {{/if}}  />
+                                <span class="lbl"></span>
+                    </label>
+                </td>
+            </tr>
+            <tr class="hide">
+                <td colspan="17">
+                    <table class="table table-striped table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>序号</th>
+                                    <th>姓名</th>
+                                    <th>联系电话</th>
+                                    <th>证件类型</th>
+                                    <th>证件号</th>
+                                    <th>是否联系人</th>
+                                </tr>
+                            </thead>  
+                            <tbody>
+                               {{each checking.touristGroupMemberList as visitor index}}
+                                <tr>
+                                    <td>{{index+1}}</td>
+                                    <td>{{visitor.name}}</td>
+                                    <td>{{visitor.mobileNumber}}</td>
+                                    <td>{{if visitor.idCardType == 0}}身份证{{/if}}{{if visitor.idCardType == 1}}护照{{/if}}{{if visitor.idCardType == 2}}其他{{/if}}</td>
+                                    <td>{{visitor.idCardNumber}}</td>
+                                    <td>{{if visitor.isContactUser == 1}}是{{/if}}</td>
+                                </tr>
+                              {{/each}} 
+                            </tbody>
+                    </table>
+                </td>
+            </tr>
+            {{/each}}
+         </tbody>
+        </table>
+        <div class="row pageMode" style="margin-top: 40px">
+            <div class="col-xs-6">
+                <div class="dataTables_info" id="dynamic-table_info" role="status" aria-live="polite">共计{{recordSize}}条记录</div>
+            </div>
+            <div class="col-xs-6">
+                <div class="dataTables_paginate paging_simple_numbers" id="dynamic-table_paginate">
+                    <ul class="pagination">
+                        <li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="first" href="javascript:void(0)">首页</a></li>
+                        <li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="previous"href="javascript:void(0)">上一页</a></li>
+                        <li class="paginate_button" aria-controls="dynamic-table" tabindex="0">
+                            <a href="javascript:void(0)">
+                                 {{if totalPage == 0}}
+                                    {{"0"}}/{{"0"}}
+                                 {{else}}
+                                    {{pageNo+1}}/{{totalPage}}
+                                 {{/if}}
+                            </a>
+                        </li>
+                        <li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="next"  href="javascript:void(0)">下一页</a></li>
+                        <li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="last" href="javascript:void(0)">尾页</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="form-group pull-right col-sm-4" style="text-align: right;margin-top: 40px;padding-right: 40px">
+                <label class="pos-rel" style="margin-left:20px">
+                    <span class="lbl"><input type="checkbox" class="transfer-selectAll"/>全选</span>
+                </label>
+       </div>
+       <div style="clear: both"></div>
+       <br>
+        <form class="form-horizontal" role="form" onsubmit="return false">
+            <div class="form-group" style="text-align: center;">
+                <button class="btn btn-xs btn-primary btn-createTripPlan btn-transferFinancial-close">
+                    <i class="ace-icon fa fa-times-circle"></i>
+                    关闭
+                </button>
+                <button class="btn btn-xs btn-primary btn-transferFinancial-checking">
+                    <i class="ace-icon fa fa-check-circle"></i>
+                     确认对账
+                </button>
+            </div>
+        </form>
+
+
+</div>
