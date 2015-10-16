@@ -407,6 +407,23 @@ define(function(require, exports) {
 			arrangeTourist.tripPlanAllMemberCount("tripPlanAllMemberCount",tab,"addTripPlanTouristTbody");
 			//集合时间   时间控件
 			arrangeTourist.dateTimePicker();
+
+			//短信发送  定时控件
+			arrangeTourist.setTripPlanPicker();
+
+
+			//游客短信及时发送显示隐藏
+			$("#"+tab+" .checkbox").unbind().click(function(){
+				if ($("#"+tab+" .checkbox input[name=executeTimeType]:radio:checked").val()==1) {
+					$(this).parent().parent().find(".addMergePlanTime").removeClass("hide");
+				} else{
+					$(this).parent().parent().find(".addMergePlanTime").addClass("hide");
+				};
+
+			})  
+
+
+
 			//查看旅游小组成员
 			$("#"+tab+" .addTripPlanView").unbind().click(arrangeTourist.viewTouristGroup);
 			//删除小组   addTripPlanViewDelete
@@ -622,7 +639,8 @@ define(function(require, exports) {
 				language: 'zh-CN'
 			});
 		},
-		  //发团定时   
+
+		//发团定时   
 		setTripPlanPicker:function(){
 	    	$(".addMergePlanTime").datetimepicker({
 				autoclose: true,
@@ -871,7 +889,20 @@ define(function(require, exports) {
 			//集合时间   时间控件
 			arrangeTourist.dateTimePicker();
 
+
+			//短信发送时间控件
 			arrangeTourist.setTripPlanPicker();
+
+			//游客短信及时发送显示隐藏
+			$("#"+tab+" .checkbox").unbind().click(function(){
+				if ($("#"+tab+" .checkbox input[name=executeTimeType]:radio:checked").val()==1) {
+					$(this).parent().parent().find(".addMergePlanTime").removeClass("hide");
+				} else{
+					$(this).parent().parent().find(".addMergePlanTime").addClass("hide");
+				};
+
+			});
+
 			//查看旅游小组成员
 			$("#"+tab+" .addMergePlan .addTripPlanView").click(arrangeTourist.viewTouristGroup);
 			//删除小组  
@@ -1618,6 +1649,7 @@ define(function(require, exports) {
 				return objValue;
 			}
 
+		    var executeTimeType=$("#"+tab+" .checkbox input[name=executeTimeType]:radio:checked").val();
 			var planTouristCount = parseInt(getValue("planTouristCount")),
 				memberCount = parseInt($("#" + tab + " .tripPlanAllMemberCount").text());
 			if(planTouristCount < memberCount){
@@ -1633,7 +1665,9 @@ define(function(require, exports) {
 						"accompanyGuideMobile": getValue("accompanyGuideMobile"),
 						"planTouristCount": getValue("planTouristCount"),
 						"setPlacePosition": getValue("setPlacePosition"),
-						"setPlaceTime": getValue("setPlaceTime")
+						"setPlaceTime": getValue("setPlaceTime"),
+						"executeTimeType": executeTimeType+"",  
+						"executeTime": getValue("executeTime")
 					},
 					"lineProductId": getValue("lineProductId"),
 					"driverId": getValue("driverId"),
@@ -1741,9 +1775,23 @@ define(function(require, exports) {
 			
 			//修改发团计划
 			var validator = rule.checkdCreateTripPlan($(".mergeTripPlan"));   
-			
-			//集合时间   时间控件
-			arrangeTourist.dateTimePicker();
+	
+
+			//短信发送  定时控件
+			arrangeTourist.setTripPlanPicker();
+
+
+			//游客短信及时发送显示隐藏
+			$("#"+tab+" .checkbox").unbind().click(function(){
+				if ($("#"+tab+" .checkbox input[name=executeTimeType]:radio:checked").val()==1) {
+					$(this).parent().parent().find(".addMergePlanTime").removeClass("hide");
+				} else{
+					$(this).parent().parent().find(".addMergePlanTime").addClass("hide");
+				};
+
+			})  
+
+
 
 			//查看旅游小组成员
 			$("#"+tab+" .mergeTripPlan .addTripPlanMain .touristGroupView").unbind().click(arrangeTourist.viewTouristGroup);
