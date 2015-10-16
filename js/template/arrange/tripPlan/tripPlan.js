@@ -405,6 +405,13 @@ define(function(require, exports) {
 						data.busCompant =JSON.parse(data.busCompant);
 						data.bus =JSON.parse(data.bus);
 						var html = updateTemplate(data);
+
+						//判定短信是否发送
+						var isSendMessageStatus=data.tripPlan.isSendTouristMessage;
+						//判断  立即发送  定时发送
+						var isCheckedStatus=data.tripPlan.executeTimeType;
+
+
 						//已修改提示
 			    		var validator =rule.checkdCreateTripPlan($(".updateTripPlan"));
 						if($(".tab-"+menuKey+"-update").length > 0) {
@@ -419,24 +426,59 @@ define(function(require, exports) {
 									 tripPlan.edited["update"] = "";
 				            		 addTab(menuKey+"-update","编辑发团计划",html);
 									 tripPlan.initUpdate();
+									 //短信状态
+									 tripPlan.isMessageStatus(isSendMessageStatus,isCheckedStatus);
+
 				            		 validator = rule.checkdCreateTripPlan($(".updateTripPlan"));
 				            	},function(){
 				            		addTab(menuKey+"-update","编辑发团计划",html);
-									tripPlan.initUpdate();								
+									tripPlan.initUpdate();	
+									//短信状态
+									 tripPlan.isMessageStatus(isSendMessageStatus,isCheckedStatus);							
 									tripPlan.edited["update"] = "";
 				            	}); 							
                  	    	 }else{
 	                 	    	addTab(menuKey+"-update","编辑发团计划",html);	
+	                 	    	//短信状态
+							    tripPlan.isMessageStatus(isSendMessageStatus,isCheckedStatus);
 								tripPlan.initUpdate();
                  	    	 } 
                  	    }else{
                  	    	addTab(menuKey+"-update","编辑发团计划",html);	
+                 	    	//短信状态
+							tripPlan.isMessageStatus(isSendMessageStatus,isCheckedStatus);
 							tripPlan.initUpdate();
                  	    }	
 					}	
 				}
 				
 			});	
+		},
+
+
+
+		isMessageStatus:function(isSendMessageStatus,isCheckedStatus){
+
+			var $Obj=$("#tab-arrange_plan-update-content");
+			if (isSendMessageStatus==1) {
+				$Obj.find(" .checkbox input[name=executeTimeType]").attr("disabled","disabled");
+				$Obj.find(".checkbox input[name=executeTime]").attr("disabled","disabled");
+			} else{
+				$Obj.find(".checkbox input[name=executeTimeType]").removeAttr("disabled");
+				$Obj.find(".checkbox input[name=executeTime]").removeAttr("disabled");
+			}
+
+			if (isCheckedStatus==0) {//立即发送
+
+				$Obj.find("input[name=executeTimeType]").eq(0).attr("checked","checked");
+
+			} else{//定时发送
+				$Obj.find("input[name=executeTimeType]").eq(1).attr("checked","checked");
+
+			};
+
+
+
 		},
 		initUpdate : function(){
 			$('.updateTripPlan').on("change",function(){
@@ -467,12 +509,14 @@ define(function(require, exports) {
 			tripPlan.setPlanceTimeDateTimePicker();
 
 
-			 //发团计划定时
+			//发团计划定时
 			tripPlan.setTripPlanPicker();
+
 			//游客短信及时发送显示隐藏
 			$("#"+tab+" .checkbox ").unbind().click(function(){
 				if ($("#"+tab+" .checkbox input[name=executeTimeType]:radio:checked").val()==1) {
 					$(this).parent().parent().find(".newAddTripTimer").removeClass("hide");
+
 				} else{
 					$(this).parent().parent().find(".newAddTripTimer").addClass("hide");
 				};
