@@ -818,6 +818,7 @@ function listMenu(menuTemplate){
 						var year = date.getFullYear();
 						var month = ""
 						hotel.listHotel(0,"",year,month);
+						modals["financial_rummery"]  = hotel;
 					});
 				});
 				//绑定系统信息菜单功能
@@ -918,6 +919,7 @@ function listMenu(menuTemplate){
 						var date = new Date();
 						var year = date.getFullYear();
 						transfer.listTransfer(0,"",year,"");
+						modals["financial_transfer"] = transfer;
 					});
 				});
 				//绑定内转转出账务
@@ -951,6 +953,7 @@ function listMenu(menuTemplate){
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/financial/shop/shop.js",function(shop){
 						shop.listFinancialShop(0,"","","");
+						modals["financial_shop"] = shop;
 					});
 				});
 
@@ -1016,6 +1019,28 @@ function listMenu(menuTemplate){
 						modals["arrange_transfer"] = transfer;
 					});
 				});
+
+
+				//绑定转客管理菜单功能
+				$("#sidebar .nav-list .arrange_inner_transfer").click(function(){
+					$("#sidebar .nav-list li").removeClass("active");
+					$(this).addClass("active");
+					$(this).parent().parent().addClass("active");
+					seajs.use("" + ASSETS_ROOT +"js/template/arrange/innerTransfer/innerTransfer.js",function(innerTransfer){ 
+						var searchParam = {
+								pageNo : "0",
+								type : "1",
+								first : "1",
+							}
+						innerTransfer.list(searchParam);
+					});
+				});
+
+
+
+
+
+
 				//绑定按团统计菜单功能
 				$("#sidebar .nav-list .financial_count").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");

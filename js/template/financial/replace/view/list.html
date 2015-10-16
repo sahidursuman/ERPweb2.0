@@ -1,9 +1,9 @@
-<div class="row Financialbooking" >
+<div class="row Financialbooking globalAdd" >
     <div class="form-horizontal search-area">    
         <div class="form-group" >      
           <label class="control-label pull-left" style="margin-left: 15px">客户:</label>
             <div class="col-sm-2">
-                <select  class="col-xs-12" name="partnerAgencyId">
+                <select  class="col-xs-12" name="partnerAgencyId" style="width:220px">
                     <option value ="">全部</option>
                     {{each partnerAgencyNameListNew as booking index}}
 						<option value="{{booking.id}}" {{if searchParam.partnerAgencyId == booking.id}}selected="selected"{{/if}}>{{booking.travelAgencyName}}</option>
@@ -60,8 +60,6 @@
 	                      <span style="color:green"> {{booking.checkedCount}}{{"/"}}{{booking.allCount}}</span>
 	                    {{/if}}
                     </td>
-                   
-                    
                     <td>
                         <a data-entity-id="{{booking.partnerAgencyId}}" data-entity-partnerAgencyName="{{booking.partnerAgencyName}}" data-entity-year="{{searchParam.year}}" data-entity-month="{{searchParam.month}}" class="cursor btn-financialbooking-check " >
 
@@ -74,7 +72,6 @@
                                  	 data-entity-startMonth="{{searchParam.month}}" data-entity-endMonth="{{searchParam.month}}" 
                                 {{/if}}
                         		class="cursor btn-financialbooking-balance">
-
                            		 结算
                         </a>
                     </td>

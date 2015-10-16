@@ -1,5 +1,5 @@
-<div class="row transferChecking">
-    <div class="col-xs-12 border">
+<div class="row transferChecking globalAdd">
+    <div class="col-xs-12 border" style="padding-bottom: 0px">
         <form class="form-horizontal" role="form" onsubmit="return false">
                 <div class="search-area editable editable-click" >
                     <div class="form-group"> 
@@ -80,7 +80,7 @@
                 <td>{{checking.realPayedMoney}}</td>
                 <td>{{checking.unPayedMoney}}</td>
                 <td><input type="text" maxlength="9" name="FinancialTransferRealUnPayedMoney" value="{{checking.transRealUnPayedMoney}}" style="text-align:center" {{if checking.isConfirmAccount == 1 && roleType != 1 }} disabled = "true" {{/if}}></td>
-	            <td><input type="text" maxlength="1000"  name=FinancialTransferRemark" value="{{checking.transRemark}}" style="text-align:center" {{if checking.isConfirmAccount == 1 && roleType != 1 }} disabled = "true" {{/if}}></td>
+	            <td><input type="text" maxlength="1000"  name="FinancialTransferRemark" value="{{checking.transRemark}}" style="text-align:center" {{if checking.isConfirmAccount == 1 && roleType != 1 }} disabled = "true" {{/if}}></td>
 				<td>{{if checking.checkTime == null || checking.checkTime == ""}}-{{else}}{{checking.checkTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
 	            <td>{{checking.checkUser}}</td>
 				<td>

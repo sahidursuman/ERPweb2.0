@@ -1,9 +1,8 @@
-<div class= "row bookingClearing">
+<div class= "row bookingClearing globalAdd">
     <div class="col-sm-12 " style="border: 1px solid #ccc">
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="search-area  editable editable-click" style="margin-top: 10px">
                 <div class="form-group"> <label class=" control-label pull-left " style="margin-left:30px"> 客户：{{partnerAgencyName}}</label>
-
                     <label class="col-sm-1 control-label no-padding-right">账期：</label>
                     <select class="col-sm-1" name="year">
                         {{each yearList as year index}}
@@ -94,7 +93,7 @@
                     	保存
                 </a><a class="cursor"> |</a>
                 <a data-entity-year="{{SettlementList.year}}"  data-entity-month="{{SettlementList.month}}" class="cursor btn-sm btn-bookingBlance-checkDetail">
-                    	对账明细
+                对账明细
                 </a>
             </td>
         </tr>
