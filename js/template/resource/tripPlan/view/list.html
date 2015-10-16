@@ -1,23 +1,23 @@
-<div class="search-area">
+<div class="search-area globalAdd">
 	<div class="form-horizontal search-tripPlanContainer">
 		<div class="col-xs-2">
-			<input type="text" name="tripNumber" class="col-xs-12" placeholder="团号" value="{{searchParam.tripNumber}}" />
+			<input type="text" name="tripNumber" class="col-xs-12 guideInputList" placeholder="团号" value="{{searchParam.tripNumber}}" />
 		</div>
 		<div class="col-xs-2">
-			<input type="text" name="startTime" class="col-xs-12 date-picker" placeholder="出团日期" value="{{searchParam.startTime}}" />
+			<input type="text" name="startTime" class="col-xs-12 date-picker guideInputList" placeholder="出团日期" value="{{searchParam.startTime}}" />
 		</div>
 		<div class="col-xs-2">
-			<input type="text" name="realname" class="col-xs-12" placeholder="导游" value="{{searchParam.realname}}" />
+			<input type="text" name="realname" class="col-xs-12 guideInputList" placeholder="导游" value="{{searchParam.realname}}" />
 		</div>
 		<div class="col-xs-2">
-			<input type="text" name="licenseNumber" class="col-xs-12" placeholder="车牌号" value="{{searchParam.licenseNumber}}" />
+			<input type="text" name="licenseNumber" class="col-xs-12 guideInputList" placeholder="车牌号" value="{{searchParam.licenseNumber}}" />
 		</div>
 		<div class="col-xs-2">
-			<button class=" btn-sm  btn-tripPlan-search search-btn">
+			<button class=" btn-sm  btn-tripPlan-search search-btn"style="margin-left:-30px;">
 				<i class="ace-icon fa fa-search"></i> 搜索
 			</button>
 			<div class="btn-group btn-status" style="margin-left: 20px;">
-				<button data-value="{{searchParam.status}}" name="status" data-toggle="dropdown" class=" btn-sm  dropdown-toggle block-up" style="height: 29px;  background: #ffffff!important; border: 1px solid #83bbd6!important;" aria-expanded="false">
+				<button data-value="{{searchParam.status}}" name="status" data-toggle="dropdown" class=" btn-sm  dropdown-toggle block-up" style="background: #ffffff!important; border: 1px solid #83bbd6!important;" aria-expanded="false">
 					<span>
 						{{if searchParam.status == ""}}   
 							全部

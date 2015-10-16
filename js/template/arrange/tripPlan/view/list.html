@@ -1,9 +1,9 @@
 <div class="row">
-	<div class="col-xs-12 tripPlanMain">
+	<div class="col-xs-12 tripPlanMain globalAdd">
 	  <div class="form-group">
 		<div class="search-area">
 			<div class="col-xs-2">
-				<input type="text" name="word" class="col-xs-12" placeholder="团号" value="{{searchParam.words}}" />
+				<input type="text" name="word" class="col-xs-12 guideInputList" placeholder="团号" value="{{searchParam.words}}" />
 			</div>
 
 			<div class="col-xs-2">
@@ -27,7 +27,7 @@
 			</div>
 			<div class="col-xs-2">
 				<div class="btn-group btn-status">
-					<button data-value="{{searchParam.status}}" data-toggle="dropdown" class="btn-sm  dropdown-toggle block-up" style="height: 31px" aria-expanded="false">
+					<button data-value="{{searchParam.status}}" data-toggle="dropdown" class="btn-sm  dropdown-toggle block-up" aria-expanded="false">
 						<span>
 							{{if searchParam.status == "-1"}}
 								已取消

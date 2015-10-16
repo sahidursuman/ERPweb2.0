@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":100,"md5":"e2a31b2af754935a3c5285d71a1dd513"}*/
+/*TMODJS:{"debug":true,"version":101,"md5":"e2a31b2af754935a3c5285d71a1dd513"}*/
 define(function(require) {
     return require("../../../template")("arrange/arrangeTourist/view/divide", function($data, $filename) {
         try {

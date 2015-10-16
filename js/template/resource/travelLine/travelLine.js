@@ -1861,8 +1861,9 @@ define(function(require, exports) {
 				})
 			});
 		},
-		submitInfoLineProduct:function(){
-			if (!e.data.form())  return;
+		submitAddLineProduct:function(){
+			var validator = rule.lineProductCheckor($('.lineProductContainer'));
+			if (!validator.form())  return;
 
 			var $form = $(".lineProductContainer > form"), travelLineData;
 			function getValue(obj, name){
@@ -1917,7 +1918,7 @@ define(function(require, exports) {
 			for(var i=0; i<dayList.length; i++){
 				
 				travelLineData.lineDayList[i] = {
-						detailEditor : UE.getEditor("detailEditor-add-lineProduct-"+i+"").getContent(),
+						detailEditor : encodeURIComponent(UE.getEditor("detailEditor-add-lineProduct-"+i+"").getContent()),
 						restaurant : [],
 						hotel : [],
 						scenic : [],

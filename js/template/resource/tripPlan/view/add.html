@@ -1,4 +1,4 @@
-<div id="tripPlan_addPlan_content" class="container-fluid">
+<div id="tripPlan_addPlan_content" class="container-fluid globalAdd">
 	<input type="hidden" value="{{tripPlan.isArranged}}" id="isArranged">
     <div class="row show-grid">
         <div class="col-sm-2 font-size-12 ">
@@ -95,7 +95,7 @@
                         <a data-toggle="tab" href="#tripPlan_addPlan_ticket" aria-expanded="false">票务</a>
                     </li>
                     <li class="col-sm-1 no-padding align-center">
-                        <a data-toggle="tab" href="#tripPlan_addPlan_other" aria-expanded="false">其它</a>
+                        <a data-toggle="tab" href="#tripPlan_addPlan_other" aria-expanded="false">其他</a>
                     </li>
                 </ul>
                 <div class="tab-content" style="position:relative;top: -2px">
@@ -106,7 +106,7 @@
                                     <div class=" ui-sortable-handle">
                                             <h5 class="title-size">
                                                 <i class="ace-icon fa fa-medkit"></i> 保险安排
-                                                <a href="">
+                                                <a href="javascript:void(0)" class="addInsurance">
                                                     <button class="btn btn-sm btn-success " style="margin-left: 20px">
                                                         <i class="ace-icon fa fa-plus"></i>
                                                         新增
@@ -872,7 +872,7 @@
         </div>
         <div class="col-sm-12">
         	<div class="space-10"></div>
-        	<button data-entiy-id="{{tripPlan.id}}" class="btn btn-block btn-primary btn-submit-tripPlan">
+        	<button data-entiy-id="{{tripPlan.id}}" class="btn btn-block btn-primary btn-submit-tripPlan guideSubmit">
             	<i class="ace-icon fa fa-check"></i> 提交信息
         	</button>
         	<div class="space-20"></div>

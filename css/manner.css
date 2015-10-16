@@ -67,6 +67,10 @@ label{
 table tr td{
     border: 1px solid #ececec !important;
 }
+.test-iocn{
+    position: relative;
+    left: -16px;
+}
 
 table tr th{
 
@@ -97,7 +101,20 @@ table tr th{
     top:0;
     cursor : pointer;
 }
-.nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus{margin-top: 2px}
+
+.model-scroll-left {
+    background: url('/images/left_a.jpg') center center no-repeat;
+}
+.model-scroll-left:hover {
+    background: url('/images/left_b.jpg') center center no-repeat;
+}
+
+.model-scroll-right {
+    background: url('/images/right_a.jpg') center center no-repeat;
+}
+.model-scroll-right:hover {
+    background: url('/images/right_b.jpg') center center no-repeat;
+}
 .left_b{
     display: none;
 }
@@ -106,10 +123,11 @@ table tr th{
 }
 .btn-right-nav{
     z-index:99;
+    height: 38px;
     width:35px;
     position: absolute;
     right: -5px;
-    top:-2px;
+    top:0;
     cursor: pointer;
 }
 
@@ -137,8 +155,16 @@ table tr td{
 
 
 /*导航点击样式active*/
-.liA{ background: #0d8f41; width: 85px; display: inline-block;  }
-.liB{ background: #ed8b10; width: 85px; display: inline-block;  }
+.user-ID:hover {
+    background: #0d8f41; 
+    width: 85px; 
+    display: inline-block;  
+}
+.news-ID:hover {
+    background: #ed8b10; 
+    width: 85px; 
+    display: inline-block;
+}
 .list_ul li p{
     height: 30px;
     margin-top: 10px;
@@ -198,7 +224,7 @@ table tr td{
 .nav-tabs>li>a, .nav-tabs>li>a:focus{line-height: 16px}
 .nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus{
     background: white;
-    margin-top: -2px!important;
+    margin-top: -1px!important;
 }
 .layui-layer-setwin .layui-layer-close1{width: 16px;height: 16px}
 .border-li-h{
@@ -434,7 +460,7 @@ table tr td{
 /*.globalAdd label{*/
     /*font-size: 12px !important;*/
 /*}*/
-.globalAdd input,select{
+input,select{
     height: 24px !important;
     /*line-height: 12px;*/
     padding: 0px;
@@ -467,7 +493,7 @@ table tr td{
     line-height: 12px;
     padding-top: 2px;
 }
-.globalAdd .guideSubmit{
+ .guideSubmit{
     height: 36px !important;
     font-size: 14px;
     line-height: 23px !important;
@@ -475,13 +501,16 @@ table tr td{
 /*.datepicker{*/
     /*width: 130px;*/
 /*}*/
-.globalAdd .guideInputList{
+.guideInputList{
     width: 220px !important;
     font-size: 12px;
     padding: 0px 0px 0px 10px;
 }
 .globalAdd .guideInterval{
     margin-bottom: 10px !important;
+}
+.globalAdd .editFeeMainForm input{
+     padding: 0px 0px 0px 10px;
 }
 .checkbox{
     line-height: 12px;
@@ -512,3 +541,19 @@ table tr td{
      margin-left: 3px;
      padding-top: 5px !important;
  }
+
+/*分团管理*/
+/*分团转客*/
+.otherButton{
+    height: 24px;
+    width: 80px !important;
+    line-height: 10px !important;
+}
+/*线路产品*/
+.form-control{
+    font-size: 12px !important;
+}
+.deleteAllother{
+    height: 24px !important;
+    padding: 0px 0px 0px 6px;
+}

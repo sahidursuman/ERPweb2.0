@@ -191,9 +191,13 @@ define(function(require, exports) {
 						//绑定查看游客成员列表按钮事件
 						$("#tab-"+menuKey+"-divide-content .divideTouristMain .groupView").unbind().click(arrangeTourist.viewTouristGroup);
 						//给生成计划绑定事件
-						$("#tab-"+menuKey+"-divide-content .divideTouristMain .btn-createTripPlan").off().on("click",{tab:"tab-"+menuKey+"-divide-content"},arrangeTourist.generationPlan);
+						$("#tab-"+menuKey+"-divide-content .divideTouristMain .btn-createTripPlan").on("click",function(){
+							arrangeTourist.generationPlan("tab-"+menuKey+"-divide-content");
+						});
 						//分团操作中 选择计划按钮事件绑定
-						$("#tab-"+menuKey+"-divide-content .divideTouristMain .btn-chooseTripPlan").off().on("click",{choose_lineProductId:choose_lineProductId,choose_startTime:choose_startTime},arrangeTourist.choosePlan);
+						$("#tab-"+menuKey+"-divide-content .divideTouristMain .btn-chooseTripPlan").on("click",function(){
+							arrangeTourist.choosePlan({choose_lineProductId:choose_lineProductId,choose_startTime:choose_startTime});
+						});
 					}
 				}
 			});
@@ -308,8 +312,8 @@ define(function(require, exports) {
 			
 		},
 		//生成计划函数
-		generationPlan :function(event){
-			var tab = event.data.tab;
+		generationPlan :function(tab){
+			var tab = tab;
 			var idJson = [];
 			$("#"+tab+" .divideTouristMain .all tbody tr").each(function(){
 				if($(this).find(".touristGroupCheckBox").is(":checked")){
@@ -404,15 +408,15 @@ define(function(require, exports) {
 			//集合时间   时间控件
 			arrangeTourist.dateTimePicker();
 			//查看旅游小组成员
-			$("#"+tab+" .addTripPlanMain .addTripPlanView").unbind().click(arrangeTourist.viewTouristGroup);
+			$("#"+tab+" .addTripPlanView").unbind().click(arrangeTourist.viewTouristGroup);
 			//删除小组   addTripPlanViewDelete
-			$("#"+tab+" .addTripPlanMain .addTripPlanDelete").off().on("click",function(){
+			$("#"+tab+" .addTripPlanDelete").off().on("click",function(){
 				var obj = $(this);
 				var id = $(this).attr("data-entity-id");
 				arrangeTourist.delTrouristGroup(obj,id,tab,"addTripPlanTouristTbody")
 			})
 			//添加游客小组 （多选）
-			$("#"+tab+" .addTripPlanMain .addTouristGroup").on("click",function(){
+			$("#"+tab+" .addTouristGroup").on("click",function(){
 				var lineProductId = $(".addTripPlanMain input[name=lineProductId]").val();
 				var startTime = $(".addTripPlanMain input[name=startTime]").val();
 				arrangeTourist.addTouristGroup(lineProductId,startTime,tab,"addTripPlanTouristTbody");
@@ -426,11 +430,13 @@ define(function(require, exports) {
 			//小组序号
 			arrangeTourist.MenberNumber("addTripPlanTouristTbody");
 			//取消生成计划   btn-cancelTripPlan
-			$("#"+tab+" .addTripPlanMain .btn-cancelTripPlan").click(function(){
+			$("#"+tab+" .btn-cancelTripPlan").click(function(){
 				closeTab(menuKey+"-addTripPlan");
+				arrangeTourist.edited["addTripPlan"] = "";
 			})
 			//保存生成计划
-			$("#"+tab+" .addTripPlanMain .btn-saveTripPlan").click(function(){
+			$("#"+tab+" .btn-saveTripPlan").click(function(){
+				console.log("save");
 				arrangeTourist.saveAddTripPlan(tab,"addTripPlanMain",1,"","addTripPlanTouristTbody",validator,1);
 			})			
 		},
