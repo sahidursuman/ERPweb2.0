@@ -881,6 +881,7 @@ function listMenu(menuTemplate){
 						var year = date.getFullYear();
 						var month = ""//date.getMonth()+1
 						Insure.listInsure(0,"",year,"");
+						modals["financial_insure"] = Insure;
 					});
 				});
 
@@ -904,6 +905,7 @@ function listMenu(menuTemplate){
 						var year = date.getFullYear();
 						var month = "";
 						Replace.listReplace(0,"",year,month);
+						modals["financial_replace"] = Replace;
 					});
 				});
 
