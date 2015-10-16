@@ -1,9 +1,9 @@
-<div class="row Scenic scenicMain">
+<div class="row Scenic scenicMain globalAdd">
    <div class="form-horizontal search-area">    
         <div class="form-group" >      
           <label class="control-label pull-left" style="margin-left: 15px">景区:</label>
             <div class="col-sm-2">
-                <select  class="col-xs-12" name="scenicId">
+                <select  class="col-xs-12" name="scenicId" style="width: 220px">
                     <option value ="">全部</option>
                     {{each scenicNameListNew as scenic index}}
 						<option value="{{scenic.id}}" {{if searchParam.scenicId == scenic.id}}selected="selected"{{/if}}>{{scenic.name}}</option>

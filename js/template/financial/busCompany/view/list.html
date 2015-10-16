@@ -1,9 +1,9 @@
-<div class="row FinancialbusCompany" >
+<div class="row FinancialbusCompany globalAdd" >
     <div class="form-horizontal search-area">    
         <div class="form-group" >      
           <label class="control-label pull-left" style="margin-left: 15px">车队:</label>
             <div class="col-sm-2">
-                <select  class="col-xs-12" name="busCompanyId">
+                <select  class="col-xs-12" name="busCompanyId" style="width: 220px">
                     <option value ="">全部</option>
                     {{each companyNameListNew as busCompany index}}
 						<option value="{{busCompany.id}}" {{if searchParam.busCompanyId == busCompany.id}}selected="selected"{{/if}}>{{busCompany.companyName}}</option>
