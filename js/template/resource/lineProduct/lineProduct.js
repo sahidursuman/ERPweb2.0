@@ -5,7 +5,7 @@ define(function(require, exports) {
 	var addTemplate = require("./view/add");
 	var viewDetailTemplate = require("./view/viewDetail");
 	var addQouteTemplate = require("./view/addQoute");
-	var updateLineProductTemplate = require("./view/updateLineProduct")
+	var updateLineProductTemplate = require("./view/updateLineProduct");
 	var tabId = "tab-"+menuKey+"-content";
 	
 	var lineProduct = {
@@ -157,7 +157,7 @@ define(function(require, exports) {
 			});
 			
 			$(".add-lineProduct-form .btn-bus-add").click(function(){
-				var html = "<tr><td><input  name=\"licenseNumber\" type=\"text\" /></td><td><input name=\"brand\" type=\"text\" /></td><td><input name=\"seatCount\" type=\"text\" value=\"1\"/></td><td class=\"col-sm-1\"><div class=\"input-group col-sm-12\"><input name=\"buyTime\" type=\"text\" class=\"date-picker\" /><span class=\"input-group-addon\"><i class=\"fa fa-calendar\"></i></span></div></td><td><select name=\"isChartered\"><option value=\"1\">是</option><option value=\"0\" selected=\"selected\">否</option></select></td><td><input name=\"charteredStartTime\" type=\"text\" readonly=\"readonly\" class=\"date-picker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"charteredEndTime\" type=\"text\" readonly=\"readonly\" class=\"date-picker\" style=\"width:100px\"/></td><td><input name=\"charteredPrice\" type=\"text\" readonly=\"readonly\"/><label>&nbsp;元</label></td><td><input name=\"remark\" type=\"text\"/></td><td style=\"width:70px\"><button class=\"btn btn-xs btn-danger btn-bus-delete\"><i class=\"ace-icon fa fa-trash-o bigger-120\"></i></button></td></tr>";
+				var html = "<tr><td><input  name=\"licenseNumber\" type=\"text\" /></td><td><input name=\"brand\" type=\"text\" /></td><td><input name=\"seatCount\" type=\"text\" value=\"1\"/></td><td class=\"col-sm-1\"><div class=\"input-group col-sm-12\"><input name=\"buyTime\" type=\"text\" class=\"date-picker\" /><span class=\"input-group-addon\"><i class=\"fa fa-calendar\"></i></span></div></td><td><select name=\"isChartered\"><option value=\"1\">是</option><option value=\"0\" selected=\"selected\">否</option></select></td><td><input name=\"charteredStartTime\" type=\"text\" readonly=\"readonly\" class=\"date-picker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"charteredEndTime\" type=\"text\" readonly=\"readonly\" class=\"date-picker\" style=\"width:100px\"/></td><td><input name=\"charteredPrice\" type=\"text\" readonly=\"readonly\"/><label>&nbsp;元</label></td><td><input name=\"remark\" type=\"text\"/></td><td style=\"width:70px\"><a class=\"cursor btn-bus-delete\">删除</a></td></tr>";
 				$(".add-lineProduct-form .busList tbody").append(html);
 				$(".add-lineProduct-form .busList input[name=seatCount]").spinner({
 					min:1,
@@ -175,7 +175,7 @@ define(function(require, exports) {
 			});
 			
 			$(".add-lineProduct-form .btn-driver-add").click(function(){
-				var html = "<tr><td><input name=\"driverName\" type=\"text\" /></td><td><select name=\"gender\"><option value=\"0\">男</option><option value=\"1\">女</option></select></td><td><input name=\"mobileNumber\" type=\"text\" /></td><td><input name=\"driveYears\" type=\"text\" value=\"1\"/></td><td><input name=\"licenseId\" type=\"text\" /></td><td><select name=\"status\"><option value=\"1\">启用</option><option value=\"0\">停用</option></select></td><td><input name=\"remark\" type=\"text\" /></td><td style=\"width:70px\"><button data-entiy-id=\"\" class=\"btn btn-xs btn-danger btn-driver-delete\"><i class=\"ace-icon fa fa-trash-o bigger-120\"></i></button></td></tr>";
+				var html = "<tr><td><input name=\"driverName\" type=\"text\" /></td><td><select name=\"gender\"><option value=\"0\">男</option><option value=\"1\">女</option></select></td><td><input name=\"mobileNumber\" type=\"text\" /></td><td><input name=\"driveYears\" type=\"text\" value=\"1\"/></td><td><input name=\"licenseId\" type=\"text\" /></td><td><select name=\"status\"><option value=\"1\">启用</option><option value=\"0\">停用</option></select></td><td><input name=\"remark\" type=\"text\" /></td><td style=\"width:70px\"><a data-entiy-id=\"\" class=\"btn btn-xs btn-danger btn-driver-delete\">删除></a></td></tr>";
 				$(".add-lineProduct-form .driverList tbody").append(html);
 				$(".add-lineProduct-form .driverList .btn-driver-delete").click(function(){
 					$(this).parent().parent().fadeOut(function(){
@@ -906,16 +906,16 @@ define(function(require, exports) {
 		
 		addRestaurant:function(e){
 			//添加行程安排餐饮
-			var scheduleDetails = '<div class="timeline-item clearfix updateRestaurantList updateLineProductDaysDetail scheduleList ui-sortable-handle" data-entity-index='+lineProduct.updateLineProductIndex+'><div class="timeline-info"><i class="timeline-indicator ace-icon fa fa-cutlery btn btn-success no-hover"></i><span class="label label-info label-sm">餐饮</span></div>'+
-			'<div class="widget-box transparent"><div class="widget-body"><div class="widget-main"><table class="table table-striped table-bordered table-hover">'+
-			'<thead><tr><th>餐厅名称</th><th>餐厅电话</th><th>用餐类型</th><th>餐标</th>	<th>菜单</th><th>备注</th>	<th style="width: 60px;">操作</th></tr></thead>'+
+			var scheduleDetails = '<div class="timeline-item clearfix updateRestaurantList updateLineProductDaysDetail scheduleList ui-sortable-handle" data-entity-index='+lineProduct.updateLineProductIndex+'><div class="timeline-info " style="color:#1fade0" ><i class="ace-icon fa fa-circle" ></i><span>餐饮</span></div>'+
+			'<div class="widget-box transparent" style="margin-top: 20px"><div class="widget-body"><div class=""><table class="table table-striped table-bordered table-hover">'+
+			'<thead><tr><th  class="th-border">餐厅名称</th><th class="th-border">餐厅电话</th><th class="th-border">用餐类型</th><th class="th-border">餐标</th>	<th class="th-border">菜单</th><th  class="th-border">备注</th>	<th  class="th-border" style="width: 60px;">操作</th></tr></thead>'+
 			'<tbody><tr>'+
 			'<td><input type="text" class="col-xs-12 chooseRestaurantName bind-change"/><input type="hidden" name="restaurantId"/></td>'+
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
 			'<td><select name="type" class="col-xs-12 restauranType"><option value="早餐">早餐</option><option value="午餐">午餐</option><option value="晚餐">晚餐</option></select></td>'+
 			'<td><input type="text" name="price" class="col-xs-12 restaurantStandardsName bind-change"/><input type="hidden" name="typeId"/></td>'+
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="menuList"/></td>'+
-			'<td><input type="text" class="col-xs-12" name="remark"/></td><td><button class="btn btn-xs btn-danger btn-restaurant-delete deleteScheduleList deleteAllother"> <i class="ace-icon fa fa-trash-o bigger-120"></i> </button></td></tr>'+
+			'<td><input type="text" class="col-xs-12" name="remark"/></td><td><a class="cursor btn-restaurant-delete deleteScheduleList deleteAllother">删除 </a></td></tr>'+
 			'</tbody></table></div></div></div></div>';
 
 			$(this).parents(".updateLineProductDaysList").find(".updateLineProductDaysDetailContainer").append(scheduleDetails);
@@ -1075,9 +1075,9 @@ define(function(require, exports) {
 		//添加酒店
 		addResourceHotel:function(e){
 			//添加行程安排酒店
-			var hotelDetails = '<div class="timeline-item clearfix updateHotelList updateLineProductDaysDetail resourceHotelList ui-sortable-handle" data-entity-index='+lineProduct.updateLineProductIndex+'><div class="timeline-info"><i class="timeline-indicator ace-icon fa fa-hotel btn btn-success no-hover"></i><span class="label label-info label-sm">酒店</span></div>'+
-			'<div class="widget-box transparent"><div class="widget-body"><div class="widget-main"><table class="table table-striped table-bordered table-hover">'+
-			'<thead><tr><th>酒店星级</th><th>酒店名称</th><th>房型</th><th>价格</th><th>早餐</th><th>电话</th><th>备注</th><th style="width: 60px;">操作</th></tr></thead>'+
+			var hotelDetails = '<div class="timeline-item clearfix updateHotelList updateLineProductDaysDetail resourceHotelList ui-sortable-handle" data-entity-index='+lineProduct.updateLineProductIndex+'><div class="timeline-info"  style="color:#1fade0" ><i class="ace-icon fa fa-circle" ></i><span >酒店</span></div>'+
+			'<div class="widget-box transparent" style="margin-top: 20px"><div class="widget-body"><div class=""><table class="table table-striped table-bordered table-hover">'+
+			'<thead><tr><th  class="th-border">酒店星级</th><th  class="th-border">酒店名称</th><th class="th-border">房型</th><th class="th-border">价格</th><th class="th-border">早餐</th><th class="th-border">电话</th><th class="th-border">备注</th><th  class="th-border" style="width: 60px;">操作</th></tr></thead>'+
 			'<tbody><tr>'+
 			'<td><select class="col-xs-12 resourceHotelStar"><option selected="selected" value="1">三星以下</option><option value="2">三星</option><option value="3">准四星</option><option value="4">四星</option><option value="5">准五星</option><option value="6">五星</option><option value="7">五星以上</option></select></td>'+
 			'<td><input type="text" class="col-xs-12 chooseHotelName bind-change" name="hotelNmae"/><input type="hidden" name="hotelId"/></td>'+
@@ -1086,7 +1086,7 @@ define(function(require, exports) {
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="containBreakfast"/></td>'+
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
 			'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
-			'<td><button class="btn btn-xs btn-danger btn-restaurant-delete deleteResourceHotelList deleteAllother"> <i class="ace-icon fa fa-trash-o bigger-120"></i> </button></td></tr></tbody></table></div></div></div></div>';
+			'<td><a class="cursor btn-restaurant-delete deleteResourceHotelList deleteAllother">删除 </a></td></tr></tbody></table></div></div></div></div>';
 
 			$(this).parents(".updateLineProductDaysList").find(".updateLineProductDaysDetailContainer").append(hotelDetails);
 			lineProduct.updateLineProductIndex += 1;
@@ -1262,16 +1262,16 @@ define(function(require, exports) {
 		//添加景区
 		addResourceScenic:function(e){
 			//添加行程安排景区
-			var scenicDetails = '<div class="timeline-item clearfix updateScenicList updateLineProductDaysDetail resourceScenicList ui-sortable-handle" data-entity-index='+lineProduct.updateLineProductIndex+'><div class="timeline-info"><i class="timeline-indicator ace-icon fa fa-tree btn btn-success no-hover"></i><span class="label label-info label-sm">景区</span></div>'+
-			'<div class="widget-box transparent"><div class="widget-body"><div class="widget-main"><table class="table table-striped table-bordered table-hover">'+
-			'<thead><tr><th>景区名称</th><th>收费项目</th><th>景区价格</th><th>联系电话</th><th>备注</th><th style="width: 60px;">操作</th></tr></thead>'+
+			var scenicDetails = '<div class="timeline-item clearfix updateScenicList updateLineProductDaysDetail resourceScenicList ui-sortable-handle" data-entity-index='+lineProduct.updateLineProductIndex+'><div class="timeline-info"  style="color:#1fade0" ><i class="ace-icon fa fa-circle" ></i><span >景区</span></div>'+
+			'<div class="widget-box transparent" style="margin-top: 20px"><div class="widget-body"><div class=""><table class="table table-striped table-bordered table-hover">'+
+			'<thead><tr><th class="th-border">景区名称</th><th class="th-border">收费项目</th><th class="th-border">景区价格</th><th class="th-border">联系电话</th><th class="th-border">备注</th><th style="width: 60px;"  class="th-border">操作</th></tr></thead>'+
 			'<tbody><tr>'+
 			'<td><input type="text" class="col-xs-12 chooseScenicName bind-change"/><input type="hidden" name="scenicId"/></td>'+
 			'<td><input type="text" class="col-xs-12 chooseChargingProjects bind-change" name="chargingProjects"/><input type="hidden" name="chargingId"/></td>'+
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="price"/></td>'+
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
 			'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
-			'<td><button class="btn btn-xs btn-danger btn-restaurant-delete deleteResourceScenicList deleteAllother"> <i class="ace-icon fa fa-trash-o bigger-120"></i> </button></td></tr></tbody></table></div></div></div></div>';
+			'<td><a class="cursor btn-restaurant-delete deleteResourceScenicList deleteAllother"> 删除</a></td></tr></tbody></table></div></div></div></div>';
 			$(this).parents(".updateLineProductDaysList").find(".updateLineProductDaysDetailContainer").append(scenicDetails);
 			lineProduct.updateLineProductIndex += 1;
 			//删除选中行程安排景区
@@ -1424,9 +1424,9 @@ define(function(require, exports) {
 		//添加购物
 		addResourceShopping:function(e){
 			//添加行程安排购物
-			var shoppingDetails = '<div class="timeline-item clearfix updateShoppingList updateLineProductDaysDetail resourceShoppingList ui-sortable-handle" data-entity-index='+lineProduct.updateLineProductIndex+'><div class="timeline-info"><i class="timeline-indicator ace-icon fa fa-shopping-cart btn btn-success no-hover"></i><span class="label label-info label-sm">购物</span></div>'+
-			'<div class="widget-box transparent"><div class="widget-body"><div class="widget-main"><table class="table table-striped table-bordered table-hover">'+
-			'<thead><tr><th>商家名称</th><th>商品政策</th><th>联系电话</th><th>停车返佣</th><th>人数返佣</th><th>备注</th><th style="width: 60px;">操作</th></tr></thead>'+
+			var shoppingDetails = '<div class="timeline-item clearfix updateShoppingList updateLineProductDaysDetail resourceShoppingList ui-sortable-handle" data-entity-index='+lineProduct.updateLineProductIndex+'><div class="timeline-info "  style="color:#1fade0" ><i class="ace-icon fa fa-circle" ></i><span>购物</span></div>'+
+			'<div class="widget-box transparent" style="margin-top: 20px"><div class="widget-body"><div class=""><table class="table table-striped table-bordered table-hover">'+
+			'<thead><tr><th class="th-border">商家名称</th><th class="th-border">商品政策</th><th class="th-border">联系电话</th><th class="th-border">停车返佣</th><th class="th-border">人数返佣</th><th class="th-border">备注</th><th class="th-border" style="width: 60px;">操作</th></tr></thead>'+
 			'<tbody><tr>'+
 			'<td><input type="text" class="col-xs-12 chooseVendorName bind-change"/><input type="hidden" name="shopId"/></td>'+
 			'<td><input type="text" class="col-xs-12 chooseGoodsPolicy bind-change" name="goodsPolicy"/><input type="hidden" name="shopPolicyId"/></td>'+
@@ -1434,7 +1434,7 @@ define(function(require, exports) {
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="parkingRebateMoney"/></td>'+
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="customerRebateMoney"/></td>'+
 			'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
-			'<td><button class="btn btn-xs btn-danger btn-restaurant-delete deleteResourceShopList deleteAllother"> <i class="ace-icon fa fa-trash-o bigger-120"></i> </button></td></tr></tbody></table></div></div></div></div>';
+			'<td><a class="cursor btn-restaurant-delete deleteResourceShopList deleteAllother"> 删除 </a></td></tr></tbody></table></div></div></div></div>';
 			$(this).parents(".updateLineProductDaysList").find(".updateLineProductDaysDetailContainer").append(shoppingDetails);
 			lineProduct.updateLineProductIndex += 1;
 			//删除选中行程安排购物
@@ -1601,9 +1601,9 @@ define(function(require, exports) {
 		//添加自费
 		addResourceSelfPaying:function(e){
 			//添加行程安排自费
-			var selfPayingDetails = '<div class="timeline-item clearfix updateSelfPayList updateLineProductDaysDetail resourceSelfPayList ui-sortable-handle" data-entity-index='+lineProduct.updateLineProductIndex+'><div class="timeline-info"><i class="timeline-indicator ace-icon fa fa-credit-card btn btn-success no-hover"></i><span class="label label-info label-sm">自费</span></div>'+
-			'<div class="widget-box transparent"><div class="widget-body"><div class="widget-main"><table class="table table-striped table-bordered table-hover">'+
-			'<thead><tr><th>公司名称</th><th>项目名称</th><th>联系电话</th><th>价格</th><th>负责人</th><th>备注</th><th style="width: 60px;">操作</th></tr></thead>'+
+			var selfPayingDetails = '<div class="timeline-item clearfix updateSelfPayList updateLineProductDaysDetail resourceSelfPayList ui-sortable-handle" data-entity-index='+lineProduct.updateLineProductIndex+'><div class="timeline-info" style="color:#1fade0" ><i class="ace-icon fa fa-circle" ></i><span >自费</span></div>'+
+			'<div class="widget-box transparent" style="margin-top: 20px"><div class="widget-body"><div class=""><table class="table table-striped table-bordered table-hover">'+
+			'<thead><tr><th class="th-border">公司名称</th><th class="th-border">项目名称</th><th class="th-border">联系电话</th><th class="th-border">价格</th><th class="th-border">负责人</th><th class="th-border">备注</th><th class="th-border" style="width: 60px;">操作</th></tr></thead>'+
 			'<tbody><tr>'+
 			'<td><input type="text" class="col-xs-12 chooseCompanyName bind-change"/><input type="hidden" name="companyId"/></td>'+
 			'<td><input type="text" class="col-xs-12 chooseItemName bind-change"/><input type="hidden" name="selfPayItemId"/></td>'+
@@ -1611,7 +1611,7 @@ define(function(require, exports) {
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="contractPrice"/></td>'+
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="managerName"/></td>'+
 			'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
-			'<td><button class="btn btn-xs btn-danger btn-restaurant-delete deleteResourceSelfPayList deleteAllother"> <i class="ace-icon fa fa-trash-o bigger-120"></i> </button></td></tr></tbody></table></div></div></div></div>';
+			'<td><a class="cursor btn-restaurant-delete deleteResourceSelfPayList deleteAllother"> 删除</a></td></tr></tbody></table></div></div></div></div>';
 			$(this).parents(".updateLineProductDaysList").find(".updateLineProductDaysDetailContainer").append(selfPayingDetails);
 			lineProduct.updateLineProductIndex += 1;
 			//删除选中行程安排自费
@@ -1769,18 +1769,18 @@ define(function(require, exports) {
 		//添加交通
 		addResourceTraffic:function(e){
 			//添加行程安排交通
-			var shoppingDetails = '<div class="timeline-item clearfix updateTicketList updateLineProductDaysDetail resourceTicketList ui-sortable-handle" data-entity-index='+lineProduct.updateLineProductIndex+'><div class="timeline-info"><i class="timeline-indicator ace-icon fa fa-car btn btn-success no-hover"></i><span class="label label-info label-sm">交通</span></div>'+
-			'<div class="widget-box transparent"><div class="widget-body"><div class="widget-main"><table class="table table-striped table-bordered table-hover">'+
-			'<thead><tr><th>票务公司名称</th><th>类型</th><th>价格</th><th>负责人</th><th>联系电话</th><th>公司电话</th><th>备注</th><th style="width: 60px;">操作</th></tr></thead>'+
+			var shoppingDetails = '<div class="timeline-item clearfix updateTicketList updateLineProductDaysDetail resourceTicketList ui-sortable-handle" data-entity-index='+lineProduct.updateLineProductIndex+'><div class="timeline-info" style="color:#1fade0" ><i class="ace-icon fa fa-circle" ></i><span >交通</span></div>'+
+			'<div class="widget-box transparent" style="margin-top: 20px"><div class="widget-body"><div class=""><table class="table table-striped table-bordered table-hover">'+
+			'<thead><tr><th class="th-border">票务公司名称</th><th class="th-border">类型</th><th class="th-border">价格</th><th class="th-border">负责人</th><th class="th-border">联系电话</th><th class="th-border">公司电话</th><th class="th-border">备注</th><th class="th-border" style="width: 60px;">操作</th></tr></thead>'+
 			'<tbody><tr>'+
 			'<td><input type="text" class="col-xs-12 chooseTicketName bind-change"/><input type="hidden" name="tickeId"/></td>'+
-			'<td><select name="type" class="col-xs-12 form-control" style="font-size: 12p !important;"><option value="1">机票</option><option value="2">汽车票</option><option value="3">火车票</option><option value="4">轮船票</option></select></td>'+
+			'<td><select name="type" class="col-xs-12 form-control" style="font-size: 12px !important;"><option value="1">机票</option><option value="2">汽车票</option><option value="3">火车票</option><option value="4">轮船票</option></select></td>'+
 			'<td><input type="text" class="col-xs-12" name="price"/></td>'+
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="managerName"/></td>'+
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="telNumber"/></td>'+
 			'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
-			'<td><button class="btn btn-xs btn-danger btn-restaurant-delete deleteResourceTicketList deleteAllother"> <i class="ace-icon fa fa-trash-o bigger-120"></i> </button></td></tr></tbody></table></div></div></div></div>';
+			'<td><a class="cursor btn-restaurant-delete deleteResourceTicketList deleteAllother">删除</a></td></tr></tbody></table></div></div></div></div>';
 			$(this).parents(".updateLineProductDaysList").find(".updateLineProductDaysDetailContainer").append(shoppingDetails);
 			lineProduct.updateLineProductIndex += 1;
 			//删除选中行程安排交通
