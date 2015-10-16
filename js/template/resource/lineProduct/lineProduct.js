@@ -1924,7 +1924,7 @@ define(function(require, exports) {
 			
 			for(var i=0; i<dayList.length; i++){
 				travelLineData.lineDayList[i] = {
-					detailEditor : UE.getEditor("detailEditor-update-lineProduct-"+i+"").getContent(),
+					detailEditor : encodeURIComponent(UE.getEditor("detailEditor-update-lineProduct-"+i+"").getContent()),
 					restaurant : [],
 					hotel : [],
 					scenic : [],
