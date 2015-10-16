@@ -1,8 +1,8 @@
-<div class="row">
+<div class="row globalAdd">
     <div class="search-area shopMain">
         <div class="form-group"> <label class="pull-left" style="margin-left: 15px">购物店：</label>
             <div class="col-sm-2">
-                <select name="shopId" class="col-xs-12">
+                <select name="shopId" class="col-xs-12" style="width: 220px">
                     <option value="">全部</option>
                     {{each shopInfoList as shopInfo}}
                     <option value="{{shopInfo.shopId}}">{{shopInfo.shopName}}</option>
