@@ -335,7 +335,7 @@
 			$(function(){
 				UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;
 				UE.Editor.prototype.getActionUrl = function(action) {
-				    if (action == 'uploadimage') {
+				    if (action == 'uploadimage' || action == 'catchimage') {
 				        return ''+APP_ROOT+'base.do?method=uploadImage';
 				    } else {
 				        return this._bkGetActionUrl.call(this, action);
