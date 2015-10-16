@@ -82,29 +82,41 @@ define(function(require, exports) {
 					type : 'null',
 					errMsg : '结束时间不能为空'
 				} ]
-			}, { //内部价
+			}, { //内部价 NoNumber
 				$ele : $obj.find('input[name="costMoneyStart"]'),
 				rules : [ {
 					type : 'float',
 					errMsg : '请输入数字'
+				},{
+					type : 'NoNumber',
+					errMsg : '请输入大于0的数字'
 				} ]
 			}, { //市场价
 				$ele : $obj.find('input[name="costMoneyEnd"]'),
 				rules : [ {
 					type : 'float',
 					errMsg : '请输入数字'
+				},{
+					type : 'NoNumber',
+					errMsg : '请输入大于0的数字'
 				} ]
 			}, { //导游返佣
 				$ele : $obj.find('input[name="guideRate"]'),
 				rules : [ {
 					type : 'float',
 					errMsg : '请输入数字'
+				},{
+					type : 'NoNumber',
+					errMsg : '请输入大于0的数字'
 				} ]
 			}, { //旅行社返佣
 				$ele : $obj.find('input[name="travelAgencyRate"]'),
 				rules : [ {
 					type : 'float',
 					errMsg : '请输入数字'
+				},{
+					type : 'NoNumber',
+					errMsg : '请输入大于0的数字'
 				} ]
 			} ]);
 			return shopItemValidator

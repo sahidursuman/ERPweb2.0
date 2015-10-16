@@ -43,7 +43,7 @@
 											<div data-index="{{j+1}}" class="clearfix div-{{j+1}} shopPolicyPriceList" style="margin-bottom:3px">
 												<input name="costMoneyStart" type="text" class="col-sm-4" value="{{cost.costMoneyStart}}" data-entity-id="{{cost.id}}" maxlength="6"/>
 												<label class="col-sm-2 control-label center">&nbsp;至&nbsp;</label>
-												<input name="costMoneyEnd" type="text" class="col-sm-4" value="{{cost.costMoneyEnd}}" maxlength="6" />
+												<input name="costMoneyEnd" type="text" class="col-sm-4" value="{{cost.costMoneyEnd}}" maxlength="9" />
 												<label class="priceArea col-sm-2">
 													<button data-entity-id="{{cost.id}}" class="btn {{if j==0}}btn-success{{else}}btn-danger{{/if}} btn-sm btn-white {{if j == 0}}add{{else}}del{{/if}}">
 														<i class="ace-icon fa {{if j == 0}}fa-plus{{else}}fa-minus{{/if}} bigger-110 icon-only"></i>
@@ -55,14 +55,14 @@
 										<td>
 											{{each policy.costMoneyList as cost j}}
 											<div data-index="{{j+1}}" class="clearfix div-{{j+1}}" style="margin-bottom:3px">
-												<input name="guideRate" class="col-sm-12" type="text" value="{{cost.guideRate*100 | toFixed}}"  maxlength="5"/>
+												<input name="guideRate" class="col-sm-12" type="text" value="{{cost.guideRate*100 | toFixed}}"  maxlength="9"/>
 											</div>
 											{{/each}}  
 										</td>
 										<td>
 											{{each policy.costMoneyList as cost j}}
 											<div data-index="{{j+1}}" class="clearfix div-{{j+1}}" style="margin-bottom:3px">
-												<input name="travelAgencyRate" class="col-sm-12" type="text" value="{{cost.travelAgencyRate*100 | toFixed}}"  maxlength="5"/>
+												<input name="travelAgencyRate" class="col-sm-12" type="text" value="{{cost.travelAgencyRate*100 | toFixed}}"  maxlength="9"/>
 											</div>
 											{{/each}}
 										</td>
