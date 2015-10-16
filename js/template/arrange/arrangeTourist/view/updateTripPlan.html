@@ -94,16 +94,23 @@
 		</form>
 
 
-		<div class="form-horizontal col-sm-12">
+		<div class="form-horizontal col-sm-12 checkbox">
 			<div class="pull-left  no-padding-right">
-				<label class="control-label no-padding-right">游客短信定时发送:</label>
+				<label class="control-label no-padding-right">游客短信发送:</label>
+				立即发送
 				<label>
-					<input type="checkbox" width="220" class="ace buyInsurance-status" value="0" name="executeTimeType">
+					<input type="radio" class="ace checked" checked="checked" value="0" name="executeTimeType">
 					<span class="lbl">
 					</span>
 				</label>
+				定时发送
+				<label>
+					<input type="radio" class="ace checked"  value="1" name="executeTimeType">
+					<span class="lbl">
+					</span>
+				</label> 
 			</div>
-			<div class="col-sm-2 addMergePlanTime">
+			<div class="col-sm-2 addMergePlanTime hide">
 				<input class="form-control col-sm-4 datetimepicker" type="text" name="executeTime" value="" />
 			</div>
         </div>

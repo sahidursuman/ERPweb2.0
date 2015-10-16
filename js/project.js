@@ -56,6 +56,7 @@ function addTab(tabId,tabName,html){
 				$that = $(this);
 				var str = tabId.split("-");
 				var modal = modals[str[0]];
+				console.log(modal.isEdited(str[1]));
 				if(str.length > 1 && str[1] != "view" && !!modal && !!modal.isEdited && modal.isEdited(str[1])){//非列表、查看,且有修改
 					if(str[1] == "add"){
 						showConfirmMsg($( "#confirm-dialog-message" ), "未保存的数据，是否放弃?",function(){
@@ -839,6 +840,7 @@ function listMenu(menuTemplate){
 						var year = date.getFullYear();
 						var month = ""//date.getMonth()+1
 						Restaurant.listRestaurant(0,"",year,month);/*new Date().getFullYear()*/
+						modals["financial_restaurant"] = Restaurant;
 					});
 				});
 
@@ -852,6 +854,7 @@ function listMenu(menuTemplate){
 						var year = date.getFullYear();
 						var month = ""//date.getMonth()+1
 						Scenic.listScenic(0,"",year,month);
+						modals["financial_scenic"] = Scenic;
 					});
 				});
 
@@ -865,6 +868,7 @@ function listMenu(menuTemplate){
 						var year = date.getFullYear();
 						var month = ""
 						Self.listSelf(0,"",year,month);
+						modals["financial_Self"] = Self;
 					});
 				});
 
@@ -878,6 +882,7 @@ function listMenu(menuTemplate){
 						var year = date.getFullYear();
 						var month = ""//date.getMonth()+1
 						Insure.listInsure(0,"",year,"");
+						modals["financial_insure"] = Insure;
 					});
 				});
 
@@ -901,6 +906,7 @@ function listMenu(menuTemplate){
 						var year = date.getFullYear();
 						var month = "";
 						Replace.listReplace(0,"",year,month);
+						modals["financial_replace"] = Replace;
 					});
 				});
 
@@ -913,6 +919,7 @@ function listMenu(menuTemplate){
 						var date = new Date();
 						var year = date.getFullYear();
 						transfer.listTransfer(0,"",year,"");
+						modals["financial_transfer"] = transfer;
 					});
 				});
 				//绑定内转转出账务
@@ -946,6 +953,7 @@ function listMenu(menuTemplate){
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/financial/shop/shop.js",function(shop){
 						shop.listFinancialShop(0,"","","");
+						modals["financial_shop"] = shop;
 					});
 				});
 
@@ -1011,6 +1019,28 @@ function listMenu(menuTemplate){
 						modals["arrange_transfer"] = transfer;
 					});
 				});
+
+
+				//绑定转客管理菜单功能
+				$("#sidebar .nav-list .arrange_inner_transfer").click(function(){
+					$("#sidebar .nav-list li").removeClass("active");
+					$(this).addClass("active");
+					$(this).parent().parent().addClass("active");
+					seajs.use("" + ASSETS_ROOT +"js/template/arrange/innerTransfer/innerTransfer.js",function(innerTransfer){ 
+						var searchParam = {
+								pageNo : "0",
+								type : "1",
+								first : "1",
+							}
+						innerTransfer.list(searchParam);
+					});
+				});
+
+
+
+
+
+
 				//绑定按团统计菜单功能
 				$("#sidebar .nav-list .financial_count").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
