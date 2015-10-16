@@ -1028,7 +1028,7 @@ define(function(require, exports) {
 													"</td>"+
 												"</tr>";
 											// 
-									    		$(".newAddTripPlan ."+tBody+"").append(html);
+									    		$("#"+tab+" ."+tBody+"").append(html);
 											}
 										}
 										layer.close(addGroupTemplateLayer);
