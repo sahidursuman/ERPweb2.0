@@ -923,7 +923,7 @@ function listMenu(menuTemplate){
 					});
 				});
 				//绑定内转转出账务
-				$("#sidebar .nav-list .financial_innerTransfer_in").click(function(){
+				$("#sidebar .nav-list .arrange_inner_transfer").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
@@ -1021,8 +1021,8 @@ function listMenu(menuTemplate){
 				});
 
 
-				//绑定转客管理菜单功能
-				$("#sidebar .nav-list .arrange_inner_transfer").click(function(){
+				//绑定内转管理菜单功能
+				$("#sidebar .nav-list .arrange_inner_Transfer").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
@@ -1035,10 +1035,6 @@ function listMenu(menuTemplate){
 						innerTransfer.list(searchParam);
 					});
 				});
-
-
-
-
 
 
 				//绑定按团统计菜单功能

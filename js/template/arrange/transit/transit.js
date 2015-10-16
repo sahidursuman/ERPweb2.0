@@ -46,11 +46,45 @@ define(function(require, exports) {
 						data.searchParam.partnerAgencyList = JSON.parse(data.searchParam.partnerAgencyList);
 						var html = listTemplate(data);
 						addTab(menuKey,"中转安排",html);
+						transit.initArrageTime();
 						transit.initList(data);
 					}
 				}
 			});
 		},
+
+	   //初始化安排时间
+	   initArrageTime:function(){
+	   		var $obj=$("#tab-arrange_transit-content ");
+			$obj.find("input[name=arrangeStartTime]").val(transit.dateCalculation(transit.getCurrentDate(),6));
+			$obj.find("input[name=arrangeEndTime]").val(transit.getCurrentDate());
+	   },
+
+	   //获取当前时间
+	   getCurrentDate:function() {
+		    var date = new Date(),
+		    seperator1 = "-",
+		    seperator2 = ":",
+		    month = date.getMonth() + 1,
+		    strDate = date.getDate();
+		    if (month >= 1 && month <= 9) {
+		        month = "0" + month;
+		    }
+		    if (strDate >= 0 && strDate <= 9) {
+		        strDate = "0" + strDate;
+		    }
+		    var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
+		            + " " ;
+		    return currentdate;
+       },
+		//默认时间是一周的计算
+		dateCalculation:function(dt, days){
+			dt = dt.split('-').join('/');//js不认2000-1-31,只认2000/1/31 
+			var t1 = new Date(new Date(dt).valueOf() -days*24*60*60*1000);// 日期加上指定的天数 
+			return t1.getFullYear() + "-" + (t1.getMonth()+1) + "-" + t1.getDate();
+		}, 
+
+
 		initList : function(data){
 			var tab = "tab-arrange_transit-content";
 			// 时间控件
