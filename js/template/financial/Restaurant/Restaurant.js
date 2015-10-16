@@ -279,7 +279,8 @@ define(function(require, exports) {
 			             //关闭按钮事件
 			             $("#" +"tab-"+ checkTabId+"-content"+" .btn-restaurantFinancial-close").click(function(){
 			            	 showConfirmDialog($( "#confirm-dialog-message" ), "确定关闭本选项卡?",function(){
-			            		 closeTab(checkTabId)
+			            		 closeTab(checkTabId);
+								 Restaurant.edited["checking"] = "";
 			            	 });
 			             });
 			             
