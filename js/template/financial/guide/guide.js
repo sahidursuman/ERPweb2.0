@@ -93,7 +93,7 @@ define(function(require, exports) {
 						});
 						//分页--尾页事件
 						$("#"+tabId+ " .pageMode a.last").click(function(){
-							guide.listFinancialGuide(data.totalPage-1,guideId,data.year,data.month);
+							guide.listFinancialGuide(data.totalPage == 0 ? data.totalPage : data.totalPage-1,guideId,data.year,data.month);
 						});
 						//给对账按钮绑定事件
 						$("#"+tabId+" .btn-divide").click(function(){
@@ -248,7 +248,7 @@ define(function(require, exports) {
 						});
 						//分页--尾页事件
 						$("#"+checkTabId+ " .pageMode a.last").click(function(){
-							guide.listGuideChecking(data.totalPage-1,guideId,data.year,data.month);
+							guide.listGuideChecking(data.totalPage == 0 ? data.totalPage : data.totalPage-1,guideId,data.year,data.month);
 						});
 						
 						//给全选绑定事件

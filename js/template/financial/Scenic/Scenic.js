@@ -21,9 +21,10 @@ define(function(require, exports) {
 	    }
     var Scenic = {
         searchData:{
-            "scenicId":"",
-            "year":"",
-            "month":""
+			pageNo : "",
+            scenicId: "",
+            year : "",
+            month :""
         },
         searchCheckData:{
         	"scenicId":"",
@@ -37,9 +38,15 @@ define(function(require, exports) {
         	"year":"",
         	"startMonth":"",
         	"endMonth":""
-        },
-        edited:false,
-        blanceEdited:false,
+        }, 
+		edited : {},
+		isEdited : function(editedType){
+			if(!!Scenic.edited[editedType] && Scenic.edited[editedType] != ""){
+				return true;
+			}
+			return false;
+		},
+		oldCheckScenicId : 0,
         oldBlanceScenicId:0,
         listScenic:function(pageNo,scenicId,year,month){
             $.ajax({
@@ -57,6 +64,7 @@ define(function(require, exports) {
                          data.yearList = yearList;
                          data.monthList = monthList;
                          Scenic.searchData={
+							 pageNo : pageNo,
                              scenicId:scenicId,
                              year:year,
                              month:month
@@ -139,34 +147,32 @@ define(function(require, exports) {
                     var result = showDialog(data);
                     if(result){
                     	Scenic.searchData={
-                                "scenicId":scenicId,
-                                "scenicName":scenicName,
-                                "startMonth":startMonth,
-                                "endMonth":endMonth,
-                                "year":year
+							"scenicId":scenicId,
+							"scenicName":scenicName,
+							"startMonth":startMonth,
+							"endMonth":endMonth,
+							"year":year
                         };
                     	data.yearList = yearList;
                         data.monthList = monthList;
                         data.scenicName = scenicName;
                         var html = ScenicClearing(data);
                         //addTab(blanceTabId,"景区结算",html);
-                        if($("#" +"tab-"+blanceTabId+"-content").length > 0)
-                 	    {
-                 	    	
-                 	    	 if(Scenic.blanceEdited){
+                        if($("#" +"tab-"+blanceTabId+"-content").length > 0) {
+                 	    	 if(!!Scenic.edited["blance"] && Scenic.edited["blance"] != ""){
                  	    		addTab(blanceTabId,"景区结算");
     		                    //给每个tr添加表单验证
                  	    		showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
                  	    			 Scenic.validatorTable();
                  	    			 var saveBtn = $("#" +"tab-"+ blanceTabId+"-content"+" .btn-scenicBlance-save")
                  	    			 if (!$(saveBtn).data('validata').form()) { return; }
-                 	    			 Scenic.saveBlanceData(Scenic.oldBlanceScenicId,scenicName)
-    			            		 Scenic.blanceEdited = false;
+                 	    			 Scenic.saveBlanceData(Scenic.oldBlanceScenicId,scenicName,0);
+    			            		 Scenic.edited["blance"] = "";
     			            		 addTab(blanceTabId,"景区结算",html);
     			            		 Scenic.validatorTable();
     			            	 },function(){
     			            		    addTab(blanceTabId,"景区结算",html);
-    			            		    Scenic.blanceEdited = false;
+    			            		    Scenic.edited["blance"] = "";
     			            		    Scenic.validatorTable();
     			            	 });
                  	    	 }else{
@@ -179,7 +185,7 @@ define(function(require, exports) {
                  	    	Scenic.validatorTable();
                  	    };
                  	   $("#" +"tab-"+blanceTabId+"-content .all").on('change', 'input, select', function() {
-                 		    Scenic.blanceEdited = true;
+                 		   Scenic.edited["blance"] = "blance";
                  		    Scenic.oldBlanceScenicId = scenicId;
 	    	    			$(this).closest('tr').data('blanceStatus',true);
 	    	    		});
@@ -200,7 +206,7 @@ define(function(require, exports) {
                         $("#" +"tab-"+ blanceTabId+"-content"+" .btn-scenicBlance-save").click(function(){
                         	 var saveBtn = $("#" +"tab-"+ blanceTabId+"-content"+" .btn-scenicBlance-save")
         	    			 if (!$(saveBtn).data('validata').form()) { return; }
-        	    			 Scenic.saveBlanceData(Scenic.oldBlanceScenicId,scenicName)
+        	    			 Scenic.saveBlanceData(Scenic.oldBlanceScenicId,scenicName,0);
                         });
                         //对账明细按钮事件
                         $("#" +"tab-"+ blanceTabId+"-content"+" .btn-scenicBlance-checkDetail").click(function(){
@@ -298,18 +304,18 @@ define(function(require, exports) {
 	                 	   if($("#" +"tab-"+checkTabId+"-content").length > 0)
 	                	    {
 	                	    	
-	                	    	 if(Scenic.edited){
+	                	    	 if(!!Scenic.edited["checking"] && Scenic.edited["checking"] != ""){
 	                	    		addTab(checkTabId,"景区对账");
 	                	    		showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
 	                	    			 validator = rule.check($('.ScenicChecking'));
 					            		 if (!validator.form()) { return; }
-					            		 Scenic.saveCheckingData(scenicId,scenicName)
-					            		 Scenic.edited = false;
+					            		 Scenic.saveCheckingData(scenicId,scenicName,0);
+					            		 Scenic.edited["checking"] = "";
 					            		 addTab(checkTabId,"景区对账",html);
 					            		 validator = rule.check($('.ScenicChecking'));
 					            	 },function(){
 					            		 addTab(checkTabId,"景区对账",html);
-					            		 Scenic.edited = false;
+					            		 Scenic.edited["checking"] = "";
 					            		 validator = rule.check($('.ScenicChecking'));
 					            	 });
 	                	    	 }else{
@@ -322,7 +328,8 @@ define(function(require, exports) {
 	                	    	validator = rule.check($('.ScenicChecking'));
 	                	    };
 	                	    $("#" +"tab-"+checkTabId+"-content .all").on("change",function(){
-                	    		Scenic.edited = true; 
+                	    		Scenic.edited["checking"] = "checking"; 
+								Scenic.oldCheckScenicId = scenicId;
                 	    	});
 	                 }          
 		                 //给搜索按钮绑定事件
@@ -400,92 +407,8 @@ define(function(require, exports) {
 			                 });
 		                 //给确认对账按钮绑定事件
 			                 $("#" +"tab-"+ checkTabId+"-content"+" .btn-scenicFinancial-checking").click(function(){
-			                	 
-			                	// 表单校验
-						    		if (!validator.form()) { return; }
-			                	 
-			                   var JsonStr = [],
-			                       oldUnPayedMoney,
-			                       newUnPayedMoney,
-			                       oldRemark,
-			                       newRemark,
-		                	       $tr = $("#" +"tab-"+ checkTabId+"-content"+" .all tbody tr");
-		                	   $tr.each(function(i){
-		                		   var flag = $(this).find(".scenicFinancial").is(":checked"),
-		                		   	   newUnPayedMoney = $tr.eq(i).find("input[name=FinancialScenicRealUnPayedMoney]").val(),
-                				       newRemark = $tr.eq(i).find("input[name=FinancialScenicRemark]").val();
-		                		   if(flag){
-		                			   if($(this).attr("data-entity-isConfirmAccount") == 1){
-		                				   //取值用于是否修改对账判断
-		                				   oldUnPayedMoney = $(this).attr("data-entity-realUnPayedMoney");
-		                				   oldRemark = $(this).attr("data-entity-remark");
-		                				  
-		                				   //判断是否是修改对账
-		                				   if(oldUnPayedMoney !== newUnPayedMoney || oldRemark !== newRemark){
-		                					   var checkData = {
-				                					   id:$(this).attr("data-entity-id"),
-				                					   scenicId:scenicId,
-				                					   scenicName:scenicName,
-				                					   startTime:$tr.eq(i).find("td[name=startTime]").text(),
-				                					   realUnPayedMoney:newUnPayedMoney,
-				                					   remark:newRemark,
-				                					   isConfirmAccount:1
-				                			   }
-		                					   JsonStr.push(checkData)
-		                				   }
-		                			   }else{
-		                				   var checkData = {
-			                					   id:$(this).attr("data-entity-id"),
-			                					   scenicId:scenicId,
-			                					   scenicName:scenicName,
-			                					   startTime:$tr.eq(i).find("td[name=startTime]").text(),
-			                					   realUnPayedMoney:newUnPayedMoney,
-			                					   remark:newRemark,
-			                					   isConfirmAccount:1
-			                			   }
-		                				   JsonStr.push(checkData)
-		                			   }
-		                		   }else{
-		                			   if($(this).attr("data-entity-isConfirmAccount") == 1){
-		                				   var checkData = {
-			                					   id:$(this).attr("data-entity-id"),
-			                					   scenicId:scenicId,
-			                					   scenicName:scenicName,
-			                					   startTime:$tr.eq(i).find("td[name=startTime]").text(),
-			                					   realUnPayedMoney:newUnPayedMoney,
-			                					   remark:newRemark,
-			                					   isConfirmAccount:0
-			                			   } 
-		                				   JsonStr.push(checkData)
-		                			   }
-		                		   }
-							    });
-		                	 //判断用户是否操作
-		                	   if(JsonStr.length == 0){
-		                		   showMessageDialog($( "#confirm-dialog-message" ),"您当前未进行任何操作");
-		                		   return
-		                	   }else{
-		                		   JsonStr = JSON.stringify(JsonStr);
-			                	   $.ajax({
-			                		   url:""+APP_ROOT+"back/financial/financialScenic.do?method=accountChecking&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
-			                           type:"POST",
-			                           data:"financialScenicListStr="+encodeURIComponent(JsonStr),
-			                           dataType:"json",
-			                           beforeSend:function(){
-											globalLoadingLayer = openLoadingLayer();
-										},
-										success:function(data){
-											layer.close(globalLoadingLayer);
-											var result = showDialog(data);
-											if(result){
-												showMessageDialog($( "#confirm-dialog-message" ),data.message);
-												Scenic.ScenicChecking(0,Scenic.searchCheckData.scenicId,Scenic.searchCheckData.scenicName,Scenic.searchCheckData.year,Scenic.searchCheckData.month)
-											}
-										}
-			                	   });
-		                	   }
-		                	   
-		                      })
+			                	 Scenic.saveCheckingData(scenicId,scenicName,0);
+		                    })
 		                 //给查看单据绑定事件
 		                 $("#" +"tab-"+ checkTabId+"-content"+" .scenicLookBillsImg").click(function(){
 		                	 var WEB_IMG_URL_BIG = $("#" +"tab-"+ checkTabId+"-content").find("input[name=WEB_IMG_URL_BIG]").val();//大图
@@ -495,7 +418,8 @@ define(function(require, exports) {
 						 //关闭按钮事件
 						 $("#" +"tab-"+ checkTabId+"-content"+" .btn-scenicFinancial-close").click(function(){
 							 showConfirmDialog($( "#confirm-dialog-message" ), "确定关闭本选项卡?",function(){
-								 closeTab(checkTabId)
+								 closeTab(checkTabId);
+								 Scenic.edited["checking"] = "";
 							 });
 						 });
 					 //给全选绑定事件
@@ -572,7 +496,7 @@ define(function(require, exports) {
 			});
 	    },
 	    //对账数据处理
-	    saveCheckingData:function(scenicId,scenicName){
+	    saveCheckingData:function(scenicId,scenicName,isClose){
            var JsonStr = [],
                oldUnPayedMoney,
                newUnPayedMoney,
@@ -648,15 +572,20 @@ define(function(require, exports) {
 						var result = showDialog(data);
 						if(result){
 							showMessageDialog($( "#confirm-dialog-message" ),data.message);
-							Scenic.edited = false;
-							Scenic.ScenicChecking(0,Scenic.searchCheckData.scenicId,Scenic.searchCheckData.scenicName,Scenic.searchCheckData.year,Scenic.searchCheckData.month)
+							Scenic.edited["checking"] = "";
+							if(isClose == 1){
+								closeTab(checkTabId);
+								Scenic.listScenic(Scenic.searchData.pageNo,Scenic.searchData.scenicId,Scenic.searchData.year,Scenic.searchData.month);
+							} else {
+								Scenic.ScenicChecking(0,Scenic.searchCheckData.scenicId,Scenic.searchCheckData.scenicName,Scenic.searchCheckData.year,Scenic.searchCheckData.month);
+							}	
 						}
 					}
         	   });
     	   }
 	    },
 	    //结算数据处理
-	    saveBlanceData:function(scenicId,scenicName){
+	    saveBlanceData:function(scenicId,scenicName,isClose){
 
 	    	var $tr = $("#" +"tab-"+ blanceTabId+"-content"+" .all tbody tr"),
 	    	DataArr = [],
@@ -692,13 +621,32 @@ define(function(require, exports) {
                     var result = showDialog(data);
                     if(result){
                     	showMessageDialog($( "#confirm-dialog-message" ),data.message);
-                    	Scenic.blanceEdited = false;
-                    	Scenic.ScenicClearing(Scenic.searchBalanceData.scenicId,Scenic.searchBalanceData.scenicName,Scenic.searchBalanceData.year,Scenic.searchBalanceData.startMonth,Scenic.searchBalanceData.endMonth);
+                    	Scenic.edited["blance"] = "";
+						if(isClose == 1){
+							closeTab(blanceTabId);
+							Scenic.listScenic(Scenic.searchData.pageNo,Scenic.searchData.scenicId,Scenic.searchData.year,Scenic.searchData.month);
+						} else {
+							Scenic.ScenicClearing(Scenic.searchBalanceData.scenicId,Scenic.searchBalanceData.scenicName,Scenic.searchBalanceData.year,Scenic.searchBalanceData.startMonth,Scenic.searchBalanceData.endMonth);
+						}	
                     }
                 }
         	})
-	    }
+	    },
+		save : function(saveType){
+			console.log(saveType);
+			if(saveType == "checking"){
+				Scenic.saveCheckingData(Scenic.oldCheckScenicId,"",1);
+			} else if(saveType == "blance"){
+				Scenic.saveBlanceData(Scenic.oldBlanceScenicId,"",1);
+			}
+		},
+		clearEdit : function(clearType){
+			Scenic.edited[clearType] = "";
+		}
 
     }
     exports.listScenic = Scenic.listScenic;
+	exports.isEdited = Scenic.isEdited;
+	exports.save = Scenic.save;
+	exports.clearEdit = Scenic.clearEdit;
 });
