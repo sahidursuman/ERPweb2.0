@@ -1564,6 +1564,7 @@ define(function(require, exports) {
 				}
 				return objValue;
 			}
+			var executeTimeType=$("#"+tab+" .checkbox input[name=executeTimeType]:radio:checked").val();
 			var planTouristCount = parseInt(getValue("planTouristCount")),
 				memberCount = parseInt($("#" + tab + " .tripPlanAllMemberCount").text());
 			if(planTouristCount < memberCount){
@@ -1574,6 +1575,8 @@ define(function(require, exports) {
 				// 表单校验
 				if (!validator.form()) { return; }
 				
+
+
 				//获取计划Id
 				var tripPlanId = $("#" + tab + " .updateTripPlan input[name=tripPlanId]").val();
 				var saveTripP = {
@@ -1584,7 +1587,11 @@ define(function(require, exports) {
 						"accompanyGuideMobile": getValue("accompanyGuideMobile"),
 						"planTouristCount": getValue("planTouristCount"),
 						"setPlacePosition": getValue("setPlacePosition"),
-						"setPlaceTime": getValue("setPlaceTime")
+						"setPlaceTime": getValue("setPlaceTime"),
+						"executeTimeType" : executeTimeType+"",
+						 executeTime :getValue("executeTime")  
+
+
 					},
 					"lineProductId": getValue("lineProductId"),
 					"driverId": getValue("driverId"),
