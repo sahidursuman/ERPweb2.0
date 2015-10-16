@@ -1,9 +1,9 @@
-<div class="row FinancialTicket" >
+<div class="row FinancialTicket globalAdd" >
     <div class="form-horizontal search-area">    
         <div class="form-group" >      
           <label class="control-label pull-left" style="margin-left: 15px">票务商家:</label>
             <div class="col-sm-2">
-                <select  class="col-xs-12" name="ticketId">
+                <select  class="col-xs-12" name="ticketId" style="width: 220px">
                     <option value ="">全部</option>
                     {{each companyNameListNew as ticket index}}
 						<option value="{{ticket.id}}" {{if searchParam.ticketId == ticket.id}}selected="selected"{{/if}}>{{ticket.name}}</option>

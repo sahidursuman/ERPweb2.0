@@ -52,6 +52,14 @@ var rule = {
 	  	    	        	errMsg: '司机不能为空'
 	  	    	        }
 		    	        ]
+			      },{//及时发送
+		    	       	$ele: $checkdCreateTripPlanObj.find('input[name="executeTime"]'),  
+		    	    	rules: [
+	  	    	        {
+	  	    	        	type: 'null', 
+	  	    	        	errMsg: '定时发送的时间不能为空'
+	  	    	        }
+		    	        ]
 			      }
 			      ]);
 			return validatorCreateTripPlan;

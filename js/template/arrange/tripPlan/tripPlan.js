@@ -317,8 +317,18 @@ define(function(require, exports) {
 			tripPlan.guideChoose();
 			tripPlan.addTripPlanDatepicker("startTime");
 			tripPlan.setPlanceTimeDateTimePicker();
-			//发团计划定时
+			 //发团计划定时
 			tripPlan.setTripPlanPicker();
+
+			//游客短信及时发送显示隐藏
+			$("#"+tab+" .newAddTripPlanMain ").unbind().click(function(){
+				if ($("#"+tab+" .newAddTripPlanMain input[name=executeTimeType]:radio:checked").val()==1) {
+					$(this).parent().parent().find(".newAddTripTimer").removeClass("hide");
+				} else{
+					$(this).parent().parent().find(".newAddTripTimer").addClass("hide");
+				};
+
+			})
 
 			//新增游客小组
 			$("#" + tab + " .newAddTripPlanMain .newAddTouristGroup").on("click",function(){
@@ -455,6 +465,20 @@ define(function(require, exports) {
 			tripPlan.guideChoose();
 			//tripPlan.addTripPlanDatepicker("startTime");
 			tripPlan.setPlanceTimeDateTimePicker();
+
+
+			 //发团计划定时
+			tripPlan.setTripPlanPicker();
+			//游客短信及时发送显示隐藏
+			$("#"+tab+" .checkbox ").unbind().click(function(){
+				if ($("#"+tab+" .checkbox input[name=executeTimeType]:radio:checked").val()==1) {
+					$(this).parent().parent().find(".newAddTripTimer").removeClass("hide");
+				} else{
+					$(this).parent().parent().find(".newAddTripTimer").addClass("hide");
+				};
+
+			})
+
 			//新增游客小组
 			$("#" + tab + " .updateTripPlan .newAddTouristGroup").on("click",function(){
 				var lineProductId = $("#" + tab + " .updateTripPlan input[name=lineProductId]").val();
@@ -1004,7 +1028,7 @@ define(function(require, exports) {
 													"</td>"+
 												"</tr>";
 											// 
-									    		$(".newAddTripPlan ."+tBody+"").append(html);
+									    		$("#"+tab+" ."+tBody+"").append(html);
 											}
 										}
 										layer.close(addGroupTemplateLayer);
