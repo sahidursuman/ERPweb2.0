@@ -6,7 +6,7 @@
     </div>
     <div class="col-xs-12 border">
         <form class="form-horizontal" role="form" onsubmit="return false">
-            <div class="search-area  editable editable-click" style="margin-top: 10px;cursor: default;">
+            <div class="search-area  editable editable-click" style="cursor: default;height:30px">
                 <div class="form-group">
                     <label class="col-sm-3" style="font-weight: bold;">线路: {{tripPlan.lineProduct.name}}</label>
                     <label class="col-sm-2" style="font-weight: bold;">类别: {{tripPlan.lineProduct.type}}</label>
@@ -16,7 +16,7 @@
             </div>
         </form>
         <form class="form-horizontal" role="form" onsubmit="return false">
-            <div class="search-area  editable editable-click" style="margin-top: 10px;cursor: default;">
+            <div class="search-area  editable editable-click" style="margin-top: 10px;cursor: default;height:30px">
                 <div class="form-group">
                     <label class="col-sm-3" style="font-weight: bold;">团号：{{tripPlan.tripNumber}}</label>
                     <label class="col-sm-2" style="font-weight: bold;">出团日期：{{tripPlan.startTime | dateFormat:'yyyy-MM-dd'}}</label>
@@ -26,8 +26,8 @@
             </div>
         </form>
         <form class="form-horizontal" role="form" onsubmit="return false">
-            <div class="search-area  editable editable-click" style="margin-top: 10px;border-bottom:0px;cursor: default;">
-                <div class="form-group">
+            <div class="search-area  editable editable-click" style="margin-top: 10px;border-bottom:0px;cursor: default;margin-left: -15px">
+                <div class="">
                     <label class="col-sm-3" style="font-weight: bold;">导游：{{if tripPlan.guide != null}}{{tripPlan.guide.realname}}{{/if}}</label>
                     <label class="col-sm-2" style="font-weight: bold;">全陪：{{tripPlan.accompanyGuideName}}</label>
                     <label class="col-sm-2" style="font-weight: bold;"></label>
@@ -36,6 +36,7 @@
             </div>
         </form>
     </div>
+    <div style="clear: both"></div>
     <table class="table table-striped table-bordered table-hover all main-table" style="margin-top: 30px;">
         <tbody>
             <tr>
@@ -176,17 +177,17 @@
             </li>
             {{/if}}
         </ul>
-        <div class="tab-content">
+        <div class="tab-content" style="position:relative;top: -2px">
             <!-- 团款 -->
             <div id="financial-count-tripdetail-money" class="tab-pane fade active in">
                 <table class="table table-striped table-bordered table-hover">
                     <tbody>
                         <tr>
-                            <td>应收</td>
-                            <td>已收</td>
-                            <td>现收</td>
-                            <td>明细</td>
-                            <tr>
+                            <td class="th-border">应收</td>
+                            <td class="th-border">已收</td>
+                            <td class="th-border">现收</td>
+                            <td class="th-border">明细</td>
+                            <tr class="th-border">
                                 <td><span class="">{{touristGroup.needPayAllMoney}}</span></td>
                                 <td><span class="">{{touristGroup.payedMoney}}</span></td>
                                 <td><span class="">{{touristGroup.currentNeedPayMoney}}</span></td>
@@ -209,24 +210,24 @@
                 <table class="table table-striped table-bordered table-hover">
                     <thead>
                         <tr>
-                            <th colspan="6">打单</th>
-                            <th colspan="2">社佣</th>
-                            <th colspan="2">导佣</th>
-                            <th rowspan="2">人数返佣</th>
-                            <th rowspan="2">停车返佣</th>
-                            <th rowspan="2">导游报账备注</th>
+                            <th class="th-border" colspan="6">打单</th>
+                            <th class="th-border" colspan="2">社佣</th>
+                            <th class="th-border" colspan="2">导佣</th>
+                            <th class="th-border" rowspan="2">人数返佣</th>
+                            <th class="th-border" rowspan="2">停车返佣</th>
+                            <th class="th-border" rowspan="2">导游报账备注</th>
                         </tr>
                         <tr>
-                            <th>时间</th>
-                            <th>购物店</th>
-                            <th>商品</th>
-                            <th>金额</th>
-                            <th>单据</th>
-                            <th>总金额</th>
-                            <th>比例%</th>
-                            <th>返佣</th>
-                            <th>比例%</th>
-                            <th>返佣</th>
+                            <th class="th-border">时间</th>
+                            <th class="th-border">购物店</th>
+                            <th class="th-border">商品</th>
+                            <th class="th-border">金额</th>
+                            <th class="th-border">单据</th>
+                            <th class="th-border">总金额</th>
+                            <th class="th-border">比例%</th>
+                            <th class="th-border">返佣</th>
+                            <th class="th-border">比例%</th>
+                            <th class="th-border">返佣</th>
                         </tr>
                     </thead>
                     <tbody id="shopping">
@@ -279,31 +280,31 @@
                 <table class="table table-striped table-bordered table-hover">
                     <thead>
                         <tr>
-                            <th colspan="12">消费</th>
-                            <th colspan="2">社佣</th>
-                            <th colspan="2">导佣</th>
-                            <th colspan="2">人数返佣</th>
-                            <th rowspan="2">导游报账备注</th>
+                            <th class="th-border" colspan="12">消费</th>
+                            <th class="th-border" colspan="2">社佣</th>
+                            <th class="th-border" colspan="2">导佣</th>
+                            <th class="th-border" colspan="2">人数返佣</th>
+                            <th class="th-border" rowspan="2">导游报账备注</th>
                         </tr>
                         <tr>
-                            <th>时间</th>
-                            <th>自费商家</th>
-                            <th>项目</th>
-                            <th>单价</th>
-                            <th>底价</th>
-                            <th>数量</th>
-                            <th>优惠</th>
-                            <th>应付</th>
-                            <th>已付</th>
-                            <th>导付</th>
-                            <th>现收</th>
-                            <th>单据</th>
-                            <th>比例%</th>
-                            <th>返佣</th>
-                            <th>比例%</th>
-                            <th>返佣</th>
-                            <th>元/人</th>
-                            <th>返佣</th>
+                            <th class="th-border">时间</th>
+                            <th class="th-border">自费商家</th>
+                            <th class="th-border">项目</th>
+                            <th class="th-border">单价</th>
+                            <th class="th-border">底价</th>
+                            <th class="th-border">数量</th>
+                            <th class="th-border">优惠</th>
+                            <th class="th-border">应付</th>
+                            <th class="th-border">已付</th>
+                            <th class="th-border">导付</th>
+                            <th class="th-border">现收</th>
+                            <th class="th-border">单据</th>
+                            <th class="th-border">比例%</th>
+                            <th class="th-border">返佣</th>
+                            <th class="th-border">比例%</th>
+                            <th class="th-border">返佣</th>
+                            <th class="th-border">元/人</th>
+                            <th class="th-border">返佣</th>
                         </tr>
                     </thead>
                     <tbody id="selfPay">
@@ -378,13 +379,13 @@
                 <table class="table table-striped table-bordered table-hover">
                     <thead>
                         <tr>
-                            <th>时间</th>
-                            <th>项目</th>
-                            <th>单价</th>
-                            <th>数量</th>
-                            <th>金额</th>
-                            <th>单据</th>
-                            <th>导游报账备注</th>
+                            <th class="th-border">时间</th>
+                            <th class="th-border">项目</th>
+                            <th class="th-border">单价</th>
+                            <th class="th-border">数量</th>
+                            <th class="th-border">金额</th>
+                            <th class="th-border">单据</th>
+                            <th class="th-border">导游报账备注</th>
                         </tr>
                     </thead>
                     <tbody id="otherIn">
@@ -422,17 +423,17 @@
                 <table class="table table-striped table-bordered table-hover">
                     <thead>
                         <tr>
-                            <th>车主</th>
-                            <th>车牌号</th>
-                            <th>座位数</th>
-                            <th>车费</th>
-                            <th>优惠</th>
-                            <th>应付</th>
-                            <th>已付</th>
-                            <th>导付</th>
-                            <th>单据</th>
-                            <th>差额</th>
-                            <th>导游报账备注</th>
+                            <th class="th-border">车主</th>
+                            <th class="th-border">车牌号</th>
+                            <th class="th-border">座位数</th>
+                            <th class="th-border">车费</th>
+                            <th class="th-border">优惠</th>
+                            <th class="th-border">应付</th>
+                            <th class="th-border">已付</th>
+                            <th class="th-border">导付</th>
+                            <th class="th-border">单据</th>
+                            <th class="th-border">差额</th>
+                            <th class="th-border">导游报账备注</th>
                         </tr>
                     </thead>
                     <tbody id="bus">
@@ -478,18 +479,18 @@
                 <table class="table table-striped table-bordered table-hover">
                     <thead>
                         <tr>
-                            <th>时间</th>
-                            <th>餐厅</th>
-                            <th>类型</th>
-                            <th>餐标</th>
-                            <th>人数</th>
-                            <th>优惠</th>
-                            <th>应付</th>
-                            <th>已付</th>
-                            <th>导付</th>
-                            <th>单据</th>
-                            <th>差额</th>
-                            <th>导游报账备注</th>
+                            <th class="th-border">时间</th>
+                            <th class="th-border">餐厅</th>
+                            <th class="th-border">类型</th>
+                            <th class="th-border">餐标</th>
+                            <th class="th-border">人数</th>
+                            <th class="th-border">优惠</th>
+                            <th class="th-border">应付</th>
+                            <th class="th-border">已付</th>
+                            <th class="th-border">导付</th>
+                            <th class="th-border">单据</th>
+                            <th class="th-border">差额</th>
+                            <th class="th-border">导游报账备注</th>
                     </thead>
                     <tbody id="restaurant">
                         {{each dayList as day}} {{if day.restaurantArrange != null}} {{each day.restaurantArrange as arrangeList}} {{each arrangeList.restaurantArrangeList as arrange index}} {{if arrange != null}}
@@ -537,18 +538,18 @@
                 <table class="table table-striped table-bordered table-hover">
                     <thead>
                         <tr>
-                            <th>时间</th>
-                            <th>酒店</th>
-                            <th>房型</th>
-                            <th>单价</th>
-                            <th>间数</th>
-                            <th>优惠</th>
-                            <th>应付</th>
-                            <th>已付</th>
-                            <th>导付</th>
-                            <th>单据</th>
-                            <th>差额</th>
-                            <th>导游报账备注</th>
+                            <th class="th-border">时间</th>
+                            <th class="th-border">酒店</th>
+                            <th class="th-border">房型</th>
+                            <th class="th-border">单价</th>
+                            <th class="th-border">间数</th>
+                            <th class="th-border">优惠</th>
+                            <th class="th-border">应付</th>
+                            <th class="th-border">已付</th>
+                            <th class="th-border">导付</th>
+                            <th class="th-border">单据</th>
+                            <th class="th-border">差额</th>
+                            <th class="th-border">导游报账备注</th>
                         </tr>
                     </thead>
                     <tbody id="hotelArrange">
@@ -597,18 +598,18 @@
                 <table class="table table-striped table-bordered table-hover">
                     <thead>
                         <tr>
-                            <th>时间</th>
-                            <th>景区</th>
-                            <th>收费项目</th>
-                            <th>单价</th>
-                            <th>数量</th>
-                            <th>优惠</th>
-                            <th>应付</th>
-                            <th>已付</th>
-                            <th>导付</th>
-                            <th>单据</th>
-                            <th>差额</th>
-                            <th>导游报账备注</th>
+                            <th class="th-border">时间</th>
+                            <th class="th-border">景区</th>
+                            <th class="th-border">收费项目</th>
+                            <th class="th-border">单价</th>
+                            <th class="th-border">数量</th>
+                            <th class="th-border">优惠</th>
+                            <th class="th-border">应付</th>
+                            <th class="th-border">已付</th>
+                            <th class="th-border">导付</th>
+                            <th class="th-border">单据</th>
+                            <th class="th-border">差额</th>
+                            <th class="th-border">导游报账备注</th>
                         </tr>
                     </thead>
                     <tbody id="scenic">
@@ -657,21 +658,21 @@
                 <table class="table table-striped table-bordered table-hover">
                     <thead>
                         <tr>
-                            <th>票务商家</th>
-                            <th>类型</th>
-                            <th>日期</th>
-                            <th>出发地</th>
-                            <th>目的地</th>
-                            <th>座席</th>
-                            <th>单价</th>
-                            <th>数量</th>
-                            <th>优惠</th>
-                            <th>应付</th>
-                            <th>已付</th>
-                            <th>导付</th>
-                            <th>单据</th>
-                            <th>差额</th>
-                            <th>导游报账备注</th>
+                            <th class="th-border">票务商家</th>
+                            <th class="th-border">类型</th>
+                            <th class="th-border">日期</th>
+                            <th class="th-border">出发地</th>
+                            <th class="th-border">目的地</th>
+                            <th class="th-border">座席</th>
+                            <th class="th-border">单价</th>
+                            <th class="th-border">数量</th>
+                            <th class="th-border">优惠</th>
+                            <th class="th-border">应付</th>
+                            <th class="th-border">已付</th>
+                            <th class="th-border">导付</th>
+                            <th class="th-border">单据</th>
+                            <th class="th-border">差额</th>
+                            <th class="th-border">导游报账备注</th>
                         </tr>
                     </thead>
                     <tbody id="ticket">
@@ -723,17 +724,17 @@
                 <table class="table table-striped table-bordered table-hover">
                     <thead>
                         <tr>
-                            <th>时间</th>
-                            <th>项目</th>
-                            <th>单价</th>
-                            <th>数量</th>
-                            <th>优惠</th>
-                            <th>应付</th>
-                            <th>已付</th>
-                            <th>导付</th>
-                            <th>单据</th>
-                            <th>差额</th>
-                            <th>导游报账备注</th>
+                            <th class="th-border">时间</th>
+                            <th class="th-border">项目</th>
+                            <th class="th-border">单价</th>
+                            <th class="th-border">数量</th>
+                            <th class="th-border">优惠</th>
+                            <th class="th-border">应付</th>
+                            <th class="th-border">已付</th>
+                            <th class="th-border">导付</th>
+                            <th class="th-border">单据</th>
+                            <th class="th-border">差额</th>
+                            <th class="th-border">导游报账备注</th>
                         </tr>
                     </thead>
                     <tbody id="other">
@@ -781,10 +782,10 @@
                 <table class="table table-striped table-bordered table-hover">
                     <thead>
                         <tr>
-                            <th>接团</th>
-                            <th>小车</th>
-                            <th>送团</th>
-                            <th>明细</th>
+                            <th class="th-border">接团</th>
+                            <th class="th-border">小车</th>
+                            <th class="th-border">送团</th>
+                            <th class="th-border">明细</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -796,6 +797,7 @@
                         </tr>
                     </tbody>
                 </table>
+
                 {{if tripPlan.billStatus > -1}}
                 <div style="width:60%;">
                     <div>

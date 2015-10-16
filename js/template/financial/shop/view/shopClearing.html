@@ -1,5 +1,5 @@
-<div class= "row Cleaning">
-    <div class="col-sm-12  border" >
+<div class= "row Cleaning globalAdd">
+    <div class="col-sm-12  border borderNormal" >
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="search-area  editable editable-click" style="margin-top: 10px">
                 <div class="form-group"> <label  class=" control-label pull-left" style="margin-left: 15px"> 购物店：{{searchParam.shopName}}</label>
@@ -63,7 +63,7 @@
         </form>
 
     </div>
-    <button class="btn btn-sm btn-success btn-shop-records pull-right" style="margin-top: 10px">
+    <button class="btn btn-sm btn-success btn-shop-records pull-right" style="margin-top: 10px;padding-top: 0px">
         <i class="ace-icon fa fa-wrench icon-animated-wrench bigger-125"></i> 操作记录 </button>
     <table class="table table-striped table-bordered table-hover all col-sm-12">
         <thead>
@@ -120,10 +120,10 @@
                 {{/if}}
             </td>
             <td>
-                <button data-entity-id="{{shopSettlement.id}}" class="btn btn-primary btn-sm btn-settlement-save" style="border:none">
+                <button data-entity-id="{{shopSettlement.id}}" class="btn btn-primary btn-sm btn-settlement-save buttonHeight" style="border:none">
                                                               保存
                 </button>
-                <button data-entity-year="{{shopSettlement.year}}" data-entity-month="{{shopSettlement.month}}" style="border:none" class="btn btn-primary btn-sm btn-transfter btn-shop-checkDetail">
+                <button data-entity-year="{{shopSettlement.year}}" data-entity-month="{{shopSettlement.month}}" style="border:none" class="btn btn-primary btn-sm btn-transfter btn-shop-checkDetail buttonHeight">
                    	 对账明细
                 </button>
             </td>
