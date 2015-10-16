@@ -14,16 +14,17 @@ define(function(require, exports) {
 	    for(var i=2013;i<=new Date().getFullYear();i++){
 	    	var yeardata={"value":i}
 	    	yearList.push(yeardata)
-	    };
+	    }
 	    for(var j = 1;j<=12;j++){
 	    	var monthData = {"value":j}
 	    	monthList.push(monthData);
 	    }
 	var Insure = {
 		searchData:{
-	    	"insuranceId":"",
-	    	"year":"",
-	    	"month":""
+			pageNo : "",
+	    	insuranceId : "",
+	    	year : "",
+	    	month : ""
 	    },
 	    searchCheckData:{
 	    	"insuranceId":"",
@@ -38,8 +39,14 @@ define(function(require, exports) {
 	    	"startMonth":"",
 	    	"endMonth":""
 	    },//back/financial/financialHotel.do
-	    edited:false,
-        blanceEdited:false,
+	    edited : {},
+		isEdited : function(editedType){
+			if(!!Insure.edited[editedType] && Insure.edited[editedType] != ""){
+				return true;
+			}
+			return false;
+		},
+		oldCheckInsuranceId:0,
         oldBlanceInsuranceId:0,
 		listInsure:function(pageNo,insuranceId,year,month){
 			$.ajax({
@@ -55,6 +62,7 @@ define(function(require, exports) {
 					var result = showDialog(data);
 					if(result){
 						Insure.searchData={
+							pageNo : pageNo,
 					    	insuranceId:insuranceId,
 					    	year:year,
 					    	month:month
@@ -158,18 +166,18 @@ define(function(require, exports) {
                  	   if($("#" +"tab-"+checkTabId+"-content").length > 0)
                 	    {
                 	    	
-                	    	 if(Insure.edited){
+                	    	 if(!!Insure.edited["checking"] && Insure.edited["checking"] != ""){
                 	    		addTab(checkTabId,"保险对账");
                 	    		showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
                 	    			 validator = rule.check($('.insuranceChecking'));
 				            		 if (!validator.form()) { return; }
-				            		 Insure.saveCheckingData(insuranceId,insuranceCompanyName)
-				            		 Insure.edited = false;
+				            		 Insure.saveCheckingData(insuranceId,insuranceCompanyName,0)
+				            		 Insure.edited["checking"] = "";
 				            		 addTab(checkTabId,"保险对账",html);
 				            		 validator = rule.check($('.insuranceChecking'));
 				            	 },function(){
 				            		 addTab(checkTabId,"保险对账",html);
-				            		 Insure.edited = false;
+				            		 Insure.edited["checking"] = "";
 				            		 validator = rule.check($('.insuranceChecking'));
 				            	 });
                 	    	 }else{
@@ -183,7 +191,8 @@ define(function(require, exports) {
                 	    	
                 	    };
                 	    $("#" +"tab-"+checkTabId+"-content .all").on("change",function(){
-            	    		Insure.edited = true; 
+            	    		Insure.edited["checking"] = "checking"; 
+							Insure.oldCheckInsuranceId = insuranceId;
             	    	});
                  }          
 	                 //给搜索按钮绑定事件
@@ -260,7 +269,7 @@ define(function(require, exports) {
 	                 //给确认对账按钮绑定事件
 		                 $("#" +"tab-"+ checkTabId+"-content"+" .btn-insuanceFinancial-checking").click(function(){
 		            		 if (!validator.form()) { return; }
-		            		 Insure.saveCheckingData(insuranceId,insuranceCompanyName)
+		            		 Insure.saveCheckingData(insuranceId,insuranceCompanyName,0);
 		                 })
 	                 //给查看单据绑定事件
 	                 $("#" +"tab-"+ checkTabId+"-content"+" .insuanceImg").click(function(){
@@ -272,7 +281,8 @@ define(function(require, exports) {
 		             //关闭按钮事件
 		             $("#" +"tab-"+ checkTabId+"-content"+" .btn-insuanceFinancial-close").click(function(){
 		            	 showConfirmDialog($( "#confirm-dialog-message" ), "确定关闭本选项卡?",function(){
-		            		 closeTab(checkTabId)
+		            		 closeTab(checkTabId);
+							 Insure.edited["checking"] = "";
 		            	 });
 		             });
              }
@@ -310,7 +320,7 @@ define(function(require, exports) {
                     if($("#" +"tab-"+blanceTabId+"-content").length > 0)
              	    {
              	    	
-             	    	 if(Insure.blanceEdited){
+             	    	 if(!!Insure.edited["blance"] && Insure.edited["blance"] != ""){
              	    		addTab(blanceTabId,"保险结算");
 		                    //给每个tr添加表单验证
              	    		showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
@@ -322,8 +332,8 @@ define(function(require, exports) {
                                 });
              	    			 var saveBtn = $("#" +"tab-"+ blanceTabId+"-content"+" .btn-hotelBlance-save")
              	    			 if (!$(saveBtn).data('validata').form()) { return; }
-             	    			 Insure.saveBlanceData(saveBtn,Insure.oldBlanceInsuranceId,insuranceCompanyName)
-			            		 Insure.blanceEdited = false;
+             	    			 Insure.saveBlanceData(saveBtn,Insure.oldBlanceInsuranceId,insuranceCompanyName,0)
+			            		 Insure.edited["blance"] = "";
 			            		 addTab(blanceTabId,"保险结算",html);
 			            		//获取table中的tr
 			            		 var $tr = $("#" +"tab-"+ blanceTabId + "-content"+" .all tbody tr")
@@ -333,7 +343,7 @@ define(function(require, exports) {
 			                     });
 			            	 },function(){
 			            		    addTab(blanceTabId,"保险结算",html);
-			            		    Insure.blanceEdited = false;
+			            		    Insure.edited["blance"] = "";
 			            		 	//获取table中的tr
 			            		    var $tr = $("#" +"tab-"+ blanceTabId + "-content"+" .all tbody tr")
 			                        //给每个tr添加表单验证
@@ -361,7 +371,7 @@ define(function(require, exports) {
                         });
              	    };
              	   $("#" +"tab-"+blanceTabId+"-content .all").on('change', 'input, select', function() {
-             		   	Insure.blanceEdited = true;
+             		   	Insure.edited["blance"] = "blance";
              		  	Insure.oldBlanceInsuranceId = insuranceId;
     	    			$(this).closest('tr').data('blanceStatus',true);
     	    		});
@@ -380,7 +390,7 @@ define(function(require, exports) {
                     $("#" +"tab-"+ blanceTabId+"-content"+" .btn-hotelBlance-save").click(function(){
                     	var saveBtn = $("#" +"tab-"+ blanceTabId+"-content"+" .btn-hotelBlance-save")
     	    			 if (!$(saveBtn).data('validata').form()) { return; }
-    	    			 Insure.saveBlanceData(saveBtn,Insure.oldBlanceInsuranceId,insuranceCompanyName)
+    	    			 Insure.saveBlanceData(saveBtn,Insure.oldBlanceInsuranceId,insuranceCompanyName,0);
                     	/*// 表单校验
                     	if (!$(this).data('validata').form()) { return; }
                     	var tr = $(this).parent().parent(),
@@ -528,7 +538,7 @@ define(function(require, exports) {
 		});
     },
     //处理对账数据
-    saveCheckingData:function(insuranceId,insuranceCompanyName){
+    saveCheckingData:function(insuranceId,insuranceCompanyName,isClose){
        var JsonStr = [],
            oldUnPayedMoney,
            newUnPayedMoney,
@@ -606,25 +616,30 @@ define(function(require, exports) {
 					var result = showDialog(data);
 					if(result){
 						showMessageDialog($( "#confirm-dialog-message" ),data.message);
-						Insure.insuranceCheckList(0,Insure.searchCheckData.insuranceId,Insure.searchCheckData.insuranceCompanyName,Insure.searchCheckData.year,Insure.searchCheckData.month)
-						Insure.edited = false;
+						Insure.edited["checking"] = "";
+						if(isClose == 1){
+							closeTab(checkTabId);
+							Insure.listInsure(Insure.searchData.pageNo,Insure.searchData.insuranceId,Insure.searchData.year,Insure.searchData.month);
+						} else{
+							Insure.insuranceCheckList(0,Insure.searchCheckData.insuranceId,Insure.searchCheckData.insuranceCompanyName,Insure.searchCheckData.year,Insure.searchCheckData.month);
+						}
 					}
 				}
     	   });
 	   }
 	   
       },
-      saveBlanceData:function(saveBtn,insuranceId,insuranceCompanyName){
+      saveBlanceData:function(saveBtn,insuranceId,insuranceCompanyName,isClose){
 	    	var $tr = $("#" +"tab-"+ blanceTabId+"-content"+" .all tbody tr"),
 	    	DataArr = [],
 		    JsonData;
 	    	$tr.each(function(i){
           		if($(this).data('blanceStatus')){
           			var blanceData = {
-    		        		id:$(this).attr("data-entity-id"),
+    		        		id:$(this).find(".btn-hotelBlance-save").attr("data-entity-id"),
     		                insuranceId:insuranceId,
-    		                year:$(this).attr("data-entity-year"),
-    		                month:$(this).attr("data-entity-month"),
+    		                year:$(this).find(".btn-hotelBlance-save").attr("data-entity-year"),
+    		                month:$(this).find(".btn-hotelBlance-save").attr("data-entity-month"),
     		                realPayedMoney:$tr.eq(i).find("td[name=blancerealrealPayedMoney]").text(),
     		                unPayedMoney:$tr.eq(i).find("td[name=blanceunPayedMoney]").text(),
     		                realUnPayedMoney:$tr.eq(i).find("td[name=blancerealrealUnPayedMoney]").text(),
@@ -649,12 +664,32 @@ define(function(require, exports) {
                     var result = showDialog(data);
                     if(result){
                     	showMessageDialog($( "#confirm-dialog-message" ),data.message);
-						Insure.insuranceBalanceList(0,Insure.searchBalanceData.insuranceId,Insure.searchBalanceData.insuranceCompanyName,Insure.searchBalanceData.year,Insure.searchBalanceData.startMonth,Insure.searchBalanceData.endMonth);
-						Insure.blanceEdited = false;
+						Insure.edited["blance"] = "";
+						if(isClose == 1){
+							closeTab(blanceTabId);
+							Insure.listInsure(Insure.searchData.pageNo,Insure.searchData.insuranceId,Insure.searchData.year,Insure.searchData.month);
+						} else{
+							Insure.insuranceBalanceList(0,Insure.searchBalanceData.insuranceId,Insure.searchBalanceData.insuranceCompanyName,Insure.searchBalanceData.year,Insure.searchBalanceData.startMonth,Insure.searchBalanceData.endMonth);
+						}
                     }
                 }
         	})
+		},
+		save : function(saveType){
+			console.log(saveType);
+			if(saveType == "checking"){
+				Insure.saveCheckingData(Insure.oldCheckInsuranceId,"",1);
+			} else if(saveType == "blance"){
+				 var saveBtn = $("#" +"tab-"+ blanceTabId+"-content"+" .btn-hotelBlance-save")
+				Insure.saveBlanceData(saveBtn,Insure.oldBlanceInsuranceId,"",1);
+			}
+		},
+		clearEdit : function(clearType){
+			Insure.edited[clearType] = "";
 		}
 	}
 	exports.listInsure = Insure.listInsure;
+	exports.isEdited = Insure.isEdited;
+	exports.save = Insure.save;
+	exports.clearEdit = Insure.clearEdit;
 });
