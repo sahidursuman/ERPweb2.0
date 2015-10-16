@@ -893,6 +893,7 @@ function listMenu(menuTemplate){
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/financial/Client/Client.js",function(Client){
 						Client.listClient(0,"","","","");
+						modals["financial_Client"] = Client;
 					});
 				});
 
