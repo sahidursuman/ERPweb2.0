@@ -420,7 +420,7 @@ define(function(require, exports) {
 								tripPlan.initUpdate();
                  	    	 } 
                  	    }else{
-                 	    	addTab(menuKey+"-update","编辑小组",html);	
+                 	    	addTab(menuKey+"-update","编辑发团计划",html);	
 							tripPlan.initUpdate();
                  	    }	
 					}	
@@ -447,13 +447,6 @@ define(function(require, exports) {
 				var searchTravelLinelayer;
 				tripPlan.searchLineProduct(true,0,"");
 			})
-			tripPlan.busCompanyChoose();
-			tripPlan.brandChoose();
-			tripPlan.licenseNumberChoose();
-			tripPlan.driverChoose();
-			tripPlan.guideChoose();
-			tripPlan.setPlanceTimeDateTimePicker();
-			
 			tripPlan.seatCountChoose();
 			tripPlan.brandChoose();
 			tripPlan.licenseNumberChoose();
@@ -832,7 +825,7 @@ define(function(require, exports) {
 		},
 		//导游autocomplete
 		guideChoose :function(){
-			var guaideNameChoose = $(".newAddTripPlan .AddTPchooseGuide");
+			var guaideNameChoose = $(".newAddTripPlanMain .AddTPchooseGuide");
 			guaideNameChoose.autocomplete({
 				minLength:0,
 				change:function(event,ui){
