@@ -97,25 +97,22 @@
 
 		<div class="form-horizontal col-sm-12 checkbox">
 			<div class="pull-left  no-padding-right">
-				<label class="control-label no-padding-right">游客短信定时发送:</label>
-				{{if tripPlan.executeTimeType=1}}
+				<label class="control-label no-padding-right">游客短信发送:</label>
 				定时发送
 				<label>
-					<input type="radio"  checked="checked" class="ace buyInsurance-status" value="{{tripPlan.executeTimeType}}" name="executeTimeType">
+					<input type="radio"  checked="checked" class="ace buyInsurance-status" disabled="" value="{{tripPlan.executeTimeType}}" name="executeTimeType">
 					<span class="lbl">
 					</span>
 				</label>
-				{{else}}
 				立即发送
 				<label>
-					<input type="radio" class="ace buyInsurance-status" value="{{tripPlan.executeTimeType}}" name="executeTimeType">
+					<input type="radio" class="ace buyInsurance-status" disabled="" value="{{tripPlan.executeTimeType}}" name="executeTimeType">
 					<span class="lbl">
 					</span>
 				</label>
-				{{/if}}
 			</div>
 			<div class="col-sm-2">
-				<input class="form-control col-sm-4 datetimepicker" type="text" name="executeTime" value="{{tripPlan.executeTime}}" />
+				<input class="form-control col-sm-4 datetimepicker" disabled="" type="text" name="executeTime" value="{{tripPlan.executeTime}}" />
 			</div>
         </div>
 
