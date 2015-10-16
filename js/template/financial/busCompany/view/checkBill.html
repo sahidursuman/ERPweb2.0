@@ -1,10 +1,9 @@
-<div class="row busCompanyChecking">
-    <div class="col-xs-12 border">
+<div class="row busCompanyChecking globalAdd">
+    <div class="col-xs-12 border" style="padding-bottom: 0px">
             <form class="form-horizontal" role="form" onsubmit="return false">
                 <div class="search-area editable editable-click" >
                     <div class="form-group"> 
                         <label style="float: left;margin: 0px auto auto 15px" class="control-label pull-left"> 车队:{{companyName}}</label>
-                        
                         <label class="control-label col-sm-1" style="float:left;">账期:</label>
 	                        <select class="col-sm-1" name="year" style="margin-left:20px">
 								{{each yearList as year index}}
@@ -18,9 +17,9 @@
 									<option value="{{month.value}}" {{if searchParam.month == month.value}}selected="selected"{{/if}}>{{month.value}}月</option>
 								{{/each}}
 							</select>
-                        <button class=" btn-sm  btn-checking-search search-btn btn-height" style="margin-left: 10px">
+                        <button class=" btn-sm  btn-checking-search search-btn btn-height" style="margin-left: 20px !important;">
                              <i class="ace-icon fa fa-search"></i>
-                                                                        搜索
+                                搜索
                         </button>
                         <button type="button" class="btn btn-sm btn-primary btn-success btn-busCompanyExport">
 							<span>导出报表</span>
