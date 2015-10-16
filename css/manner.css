@@ -566,3 +566,7 @@ input,select{
 .buttonHeight{
     padding-top: 3px !important;
 }
+/*标题颜色*/
+/*.table-hover tr th{*/
+    /*background-color: ;*/
+/*}*/

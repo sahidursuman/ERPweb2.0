@@ -1421,7 +1421,7 @@ define(function(require, exports) {
 			form +="&hotelLevel="+expectLevel+"&includeSelfPay="+includeOwnExpense+"&remark="+touristRemarks+"&buyInsurance="+buyInsurance+"&isNeedArriveService="+isNeedArriveService+"&isNeedBus="+isNeedBus+"&isNeedLeaveService="+isNeedLeaveService;
 
 			var touristGroupMemberJsonAdd = [];
-			var touristNameStr = $("#"+tab+" .touristGroupMainFormMember .addTouristList tbody tr");
+			var touristNameStr = $("#"+tab+" .touristGroupMainFormMember .addTouristList tbody tr:not(.deleted)");
 			touristNameStr.each(function(i){
 				var id = $(this).attr("data-entity-id");
 				var name = touristNameStr.eq(i).find("input[name=name]").val();
