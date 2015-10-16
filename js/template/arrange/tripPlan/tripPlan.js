@@ -455,10 +455,7 @@ define(function(require, exports) {
 			});	
 		},
 
-
-
 		isMessageStatus:function(isSendMessageStatus,isCheckedStatus){
-
 			var $Obj=$("#tab-arrange_plan-update-content");
 			if (isSendMessageStatus==1) {
 				$Obj.find(" .checkbox input[name=executeTimeType]").attr("disabled","disabled");
@@ -476,6 +473,7 @@ define(function(require, exports) {
 				$Obj.find("input[name=executeTimeType]").eq(1).attr("checked","checked");
 
 			};
+			$Obj.find(".newAddTripTimer").removeClass("hide");
 
 
 
@@ -513,15 +511,17 @@ define(function(require, exports) {
 			tripPlan.setTripPlanPicker();
 
 			//游客短信及时发送显示隐藏
-			$("#"+tab+" .checkbox ").unbind().click(function(){
-				if ($("#"+tab+" .checkbox input[name=executeTimeType]:radio:checked").val()==1) {
-					$(this).parent().parent().find(".newAddTripTimer").removeClass("hide");
 
-				} else{
-					$(this).parent().parent().find(".newAddTripTimer").addClass("hide");
-				};
 
-			})
+			//$("#"+tab+" .checkbox ").unbind().click(function(){
+				//if ($("#"+tab+" .checkbox input[name=executeTimeType]:radio:checked").val()==1) {
+					//$(this).parent().parent().find(".newAddTripTimer").removeClass("hide");
+
+				//} else{
+					//$(this).parent().parent().find(".newAddTripTimer").addClass("hide");
+				//};
+
+			//})
 
 			//新增游客小组
 			$("#" + tab + " .updateTripPlan .newAddTouristGroup").on("click",function(){

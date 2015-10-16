@@ -1,4 +1,3 @@
-
 <div class="row FinancialselfPay globalAdd" >
     <div class="form-horizontal search-area">    
         <div class="form-group" >      
@@ -11,21 +10,21 @@
 					{{/each}}
                 </select>        
              </div>    
-           <label class="control-label col-sm-1" >账期:</label>
+           <label class="control-label pull-left" >账期:</label>
 			<div class="col-sm-2" >
 				<select class="col-sm-5" name="year" >
 					{{each yearList as year index}}
 						<option value="{{year.value}}" {{if searchParam.year == year.value}}selected="selected"{{/if}}>{{year.value}}</option>
 					{{/each}}
 				</select> 
-				<select class="col-sm-5" name="month" style = "margin-left:10px;">
+				<select class="col-sm-5" name="month" style = "margin-left:25px;">
 				    <option value ="">全部</option>
 					{{each monthList as month index}}
 						<option value="{{month.value}}" {{if searchParam.month == month.value}}selected="selected"{{/if}}>{{month.value}}月</option>
 					{{/each}}
 				</select>
 			</div> 
-            <button class="btn-height btn-sm search-btn btn-selfPay-search"> <i class="ace-icon fa fa-search"></i> 搜索 </button> </div>
+            <button class=" btn-sm search-btn btn-selfPay-search"> <i class="ace-icon fa fa-search"></i> 搜索 </button> </div>
     </div>
     <div class="row selfPayList">
         <div class="col-xs-12">

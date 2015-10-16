@@ -22,24 +22,22 @@ define(function(require, exports) {
     var Hotel = {
         searchData:{
 			page : "",
-            hotelId :"",
+            hotelId : "",
             year : "",
             month : ""
         },
         searchCheckData:{
-			pageNo : "",
-            hotelId : "",
-            hotelName : "",
-            year : "",
-            month : ""
+            "hotelId":"",
+            "hotelName":"",
+            "year":"",
+            "month":""
         },
         searchBalanceData:{
-			pageNo : "",
-            hotelId : "",
-            hotelName : "",
-            year : "",
-            startMonth : "",
-            endMonth : ""
+            "hotelId":"",
+            "hotelName":"",
+            "year":"",
+            "startMonth":"",
+            "endMonth":""
         },
         edited : {},
 		isEdited : function(editedType){
@@ -48,6 +46,8 @@ define(function(require, exports) {
 			}
 			return false;
 		},
+		oldCheckHotelId:0,
+        oldBlanceHotelId:0,
         listHotel:function(page,hotelId,year,month){
             $.ajax({
                 url:""+APP_ROOT+"back/financial/financialHotel.do?method=listSumFcHotel&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
@@ -76,9 +76,9 @@ define(function(require, exports) {
                         //搜索按钮事件
                         $("#" + tabId + " .btn-financialHotel-search").click(function(){
                         	Hotel.searchData = {
-								hotelId:$("#" + tabId + " select[name=hotelId]").val(),
-								year:$("#" + tabId + "  select[name=year]").val(),
-								month:$("#" + tabId + " select[name=month]").val(),
+                                	hotelId:$("#" + tabId + " select[name=hotelId]").val(),
+                                	year:$("#" + tabId + "  select[name=year]").val(),
+                                	month:$("#" + tabId + " select[name=month]").val(),
                             }
                             Hotel.listHotel(0,Hotel.searchData.hotelId,Hotel.searchData.year,Hotel.searchData.month);
                         });
@@ -109,14 +109,29 @@ define(function(require, exports) {
                         });
                         //给对账按钮绑定事件
                         $("#" + tabId + "  .btn-financialHotel-check").click(function(){
-                        	Hotel.hotelCheckList(0,$(this).attr("data-entity-id"),$(this).attr("data-entity-hotelName"),$(this).attr("data-entity-year"),$(this).attr("data-entity-month"))
+                        	Hotel.searchCheckData={
+                            		hotelId:$(this).attr("data-entity-id"),
+                            		hotelName:$(this).attr("data-entity-hotelName"),
+                            		year:$(this).attr("data-entity-year"),
+                            		month:$(this).attr("data-entity-month")        
+                            }
+                        	Hotel.hotelCheckList(0,Hotel.searchCheckData.hotelId,Hotel.searchCheckData.hotelName,Hotel.searchCheckData.year,Hotel.searchCheckData.month)
                         });
                         //给结算按钮绑定事件
                         $("#" + tabId + "  .btn-financialHotel-balance").click(function(){
-                            Hotel.hotelBalanceList(0,$(this).attr("data-entity-id"),$(this).attr("data-entity-hotelName"),$(this).attr("data-entity-year"),$(this).attr("data-entity-startMonth"),$(this).attr("data-entity-endMonth"));
+                            Hotel.searchBalanceData={
+                                	"hotelId":$(this).attr("data-entity-id"),
+                                	"hotelName":$(this).attr("data-entity-hotelName"),
+                                	"year":$(this).attr("data-entity-year"),
+                                	"startMonth":$(this).attr("data-entity-startMonth"),
+                                	"endMonth":$(this).attr("data-entity-endMonth")
+                                }
+                            Hotel.hotelBalanceList(0,Hotel.searchBalanceData.hotelId,Hotel.searchBalanceData.hotelName,Hotel.searchBalanceData.year,Hotel.searchBalanceData.startMonth,Hotel.searchBalanceData.endMonth);
                         });
                     }
+
                 }
+
             });
         },
         //酒店对账处理
@@ -136,132 +151,140 @@ define(function(require, exports) {
 	            	 
 	                layer.close(globalLoadingLayer);
 	                var result = showDialog(data);
-	                if(result){
-	                 	data.financialHotelList = JSON.parse(data.financialHotelList);
+	                 if(result){
+	                 	 data.financialHotelList = JSON.parse(data.financialHotelList);
+	                 	    Hotel.searchCheckData={
+	                 	    hotelId:hotelId,
+	                 	    hotelName:hotelName,
+                       		year:year,
+                       		month:month        
+                           }
 		                    data.yearList = yearList
 		                    data.monthList = monthList
 		                    data.hotelName = hotelName
 		                    data.searchParam = Hotel.searchCheckData  
-	                    var html = hotelChecking(data);
-	                    //addTab(checkTabId,"酒店对账",html);
-	                    //判断页面是否存在
-						if($("#" +"tab-"+checkTabId+"-content").length > 0) {
-							 if(!!Hotel.edited["checking"] && Hotel.edited["checking"] != ""){
-								addTab(checkTabId,"酒店对账");
-								showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
-									validator = rule.check($('.hotelChecking'));
-									if (!validator.form()) { return; }
-									Hotel.saveCheckingData(pageNo,hotelId,hotelName,year,month,0);
-									Hotel.edited["checking"] = "";
-									addTab(checkTabId,"酒店对账",html);
-									validator = rule.check($('.hotelChecking'));
-								},function(){
-									addTab(checkTabId,"酒店对账",html);
-									Hotel.edited["checking"] = "";
-									validator = rule.check($('.hotelChecking'));
-								});
-							}else{
-								addTab(checkTabId,"酒店对账",html);
-								validator = rule.check($('.hotelChecking'));
+	                     var html = hotelChecking(data);
+	                     //addTab(checkTabId,"酒店对账",html);
+	                   //判断页面是否存在
+	                 	    if($("#" +"tab-"+checkTabId+"-content").length > 0)
+	                 	    {
+	                 	    	
+	                 	    	 if(!!Hotel.edited["checking"] && Hotel.edited["checking"] != ""){
+	                 	    		addTab(checkTabId,"酒店对账");
+	                 	    		showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
+	                 	    			 validator = rule.check($('.hotelChecking'));
+					            		 if (!validator.form()) { return; }
+					            		 Hotel.saveCheckingData(hotelId,hotelName,0);
+					            		 Hotel.edited["checking"] = "";
+					            		 addTab(checkTabId,"酒店对账",html);
+					            		 validator = rule.check($('.hotelChecking'));
+					            	 },function(){
+					            		 addTab(checkTabId,"酒店对账",html);
+					            		 Hotel.edited["checking"] = "";
+					            		 validator = rule.check($('.hotelChecking'));
+					            	 });
+	                 	    	 }else{
+		                 	    	addTab(checkTabId,"酒店对账",html);
+		                 	        validator = rule.check($('.hotelChecking'));
+	                 	    	 }
+              	    		 
+	                 	    }else{
+	                 	    	addTab(checkTabId,"酒店对账",html);
+	                 	    	validator = rule.check($('.hotelChecking'));
+	                 	    };
+	                 	   $("#" +"tab-"+checkTabId+"-content .all").on("change",function(){
+                	    		Hotel.edited["checking"] = "checking"; 
+								Hotel.oldCheckHotelId = hotelId;
+                	    	});
+	                 }          
+		                 //给搜索按钮绑定事件
+		                 $("#" +"tab-"+ checkTabId+"-content"+" .btn-checking-search").click(function(){
+	                         Hotel.searchCheckData={
+	                            hotelId:hotelId,
+	                            hotelName:hotelName,
+	                         	year:$("#" +"tab-"+ checkTabId+"-content"+"  select[name=year]").val(),
+	                         	month:$("#" +"tab-"+ checkTabId+"-content"+" select[name=month]").val(),
+	                         }
+	                         Hotel.hotelCheckList(0,Hotel.searchCheckData.hotelId,Hotel.searchCheckData.hotelName,Hotel.searchCheckData.year,Hotel.searchCheckData.month)
+	                     });
+                        //酒店导出事件btn-hotelExport
+		                 $("#" +"tab-"+ checkTabId+"-content"+" .btn-hotelExport").click(function(){
+		                	    var year=$("#" +"tab-"+ checkTabId+"-content"+"  select[name=year]").val();
+	                         	var month=$("#" +"tab-"+ checkTabId+"-content"+" select[name=month]").val();
+	                         	checkLogin(function(){
+	                         		var url = ""+APP_ROOT+"back/export.do?method=hotel&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view"+"&hotelId="+hotelId+"&hotelName="+hotelName+"&year="+year+"&month="+month+"&sortType=auto"
+	 	                        	exportXLS(url)
+	 	                        });
+		                 });
+	                    //分页--首页按钮事件
+		                 $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.first").click(function(){
+		                	 Hotel.hotelCheckList(0,Hotel.searchCheckData.hotelId,Hotel.searchCheckData.hotelName,Hotel.searchCheckData.year,Hotel.searchCheckData.month)
+		                 });
+						//分页--上一页事件
+		                 $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.previous").click(function(){
+							var previous = data.pageNo - 1;
+							if(data.pageNo == 0){
+								previous = 0;
 							}
-						}else{
-							addTab(checkTabId,"酒店对账",html);
-							validator = rule.check($('.hotelChecking'));
-						};
-					    $("#" +"tab-"+checkTabId+"-content .all").on("change",function(){
-							Hotel.edited["checking"] = "checking";
-							Hotel.searchCheckData={
-								pageNo : pageNo,
-								hotelId : hotelId,
-								hotelName : hotelName,
-								year : year,
-								month : month,
-							};
-							console.log("change-check");
-						});
-	                }          
-					//给搜索按钮绑定事件
-					$("#" +"tab-"+ checkTabId+"-content"+" .btn-checking-search").click(function(){
-						Hotel.hotelCheckList(pageNo,hotelId,hotelName,year,month,1)
-					});
-					//酒店导出事件btn-hotelExport
-					$("#" +"tab-"+ checkTabId+"-content"+" .btn-hotelExport").click(function(){
-							var year=$("#" +"tab-"+ checkTabId+"-content"+"  select[name=year]").val();
-							var month=$("#" +"tab-"+ checkTabId+"-content"+" select[name=month]").val();
-							checkLogin(function(){
-								var url = ""+APP_ROOT+"back/export.do?method=hotel&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view"+"&hotelId="+hotelId+"&hotelName="+hotelName+"&year="+year+"&month="+month+"&sortType=auto"
-								exportXLS(url)
-							});
-					});
-					//分页--首页按钮事件
-					$("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.first").click(function(){
-						 Hotel.hotelCheckList(0,Hotel.searchCheckData.hotelId,Hotel.searchCheckData.hotelName,Hotel.searchCheckData.year,Hotel.searchCheckData.month)
-					});
-					//分页--上一页事件
-					$("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.previous").click(function(){
-						var previous = data.pageNo - 1;
-						if(data.pageNo == 0){
-							previous = 0;
-						}
-						Hotel.hotelCheckList(previous,Hotel.searchCheckData.hotelId,Hotel.searchCheckData.hotelName,Hotel.searchCheckData.year,Hotel.searchCheckData.month)
-					});
-					//分页--下一页事件
-					$("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.next").click(function(){
-						var next =  data.pageNo + 1;
-						if(data.pageNo == data.totalPage-1){
-							next = data.pageNo ;
-						}
-						Hotel.hotelCheckList(next,Hotel.searchCheckData.hotelId,Hotel.searchCheckData.hotelName,Hotel.searchCheckData.year,Hotel.searchCheckData.month)
-					});
-					//分页--尾页事件
-					$("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.last").click(function(){
-						Hotel.hotelCheckList(data.totalPage == 0 ? data.totalPage : data.totalPage-1,Hotel.searchCheckData.hotelId,Hotel.searchCheckData.hotelName,Hotel.searchCheckData.year,Hotel.searchCheckData.month)
-					});
-					//给全选绑定事件
-					$("#" +"tab-"+ checkTabId+"-content"+" .hotel-selectAll").click(function(){
-						var flag = this.checked;
-						$(".hotelChecking .all tbody tr").each(function(){
-							var checkedbox = $(this).find(".hotelFinancial")
-							if(flag){
-								checkedbox.prop("checked",true);
-							}else{
-								//判断对账状态
-								if(checkedbox.attr("data-entity-checkStatus") == 1){
-								    checkedbox.prop("checked",true);
-								}else{ 	
-									checkedbox.prop("checked",false);
-								}
+							Hotel.hotelCheckList(previous,Hotel.searchCheckData.hotelId,Hotel.searchCheckData.hotelName,Hotel.searchCheckData.year,Hotel.searchCheckData.month)
+		                 });
+						//分页--下一页事件
+		                 $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.next").click(function(){
+							var next =  data.pageNo + 1;
+							if(data.pageNo == data.totalPage-1){
+								next = data.pageNo ;
 							}
-						});
-					});
-				    //给复选框绑定事件
-					$("#" +"tab-"+ checkTabId+"-content"+" .hotelFinancial").click(function(){
-						var flag = true
-						$("#" +"tab-"+ checkTabId+"-content"+" .hotelFinancial").each(function(){
-							if(!$(this).prop("checked")){
-								flag = false;
-							} 
-						})
-						$("#" +"tab-"+ checkTabId+"-content"+" .hotel-selectAll").prop("checked",flag)
-					});
-				    //给确认对账按钮绑定事件  Hotel.saveCheckingData(hotelId,hotelName)
-					$("#" +"tab-"+ checkTabId+"-content"+" .btn-hotelFinancial-checking").click(function(){
-						if (!validator.form()) { return; }
-						Hotel.saveCheckingData(pageNo,hotelId,hotelName,year,month,0)
-					})
-					//给查看单据绑定事件
-					$("#" +"tab-"+ checkTabId+"-content"+" .hotelImg").click(function(){
-						var WEB_IMG_URL_BIG = $("#" +"tab-"+ checkTabId+"-content").find("input[name=WEB_IMG_URL_BIG]").val();//大图
-						var WEB_IMG_URL_SMALL = $("#" +"tab-"+ checkTabId+"-content").find("input[name=WEB_IMG_URL_SMALL]").val();//大图
-						Hotel.viewImage(this,WEB_IMG_URL_BIG,WEB_IMG_URL_SMALL);
-					});
-					//取消按钮事件
-					$("#" +"tab-"+ checkTabId+"-content"+" .btn-hotelFinancial-close").click(function(){
-						 showConfirmDialog($( "#confirm-dialog-message" ), "确定关闭本选项卡?",function(){
-							 closeTab(checkTabId);
-							 Hotel.edited["checking"] = "";
-						});
-					});
+							Hotel.hotelCheckList(next,Hotel.searchCheckData.hotelId,Hotel.searchCheckData.hotelName,Hotel.searchCheckData.year,Hotel.searchCheckData.month)
+		                 });
+						//分页--尾页事件
+		                 $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.last").click(function(){
+		                	Hotel.hotelCheckList(data.totalPage == 0 ? data.totalPage : data.totalPage-1,Hotel.searchCheckData.hotelId,Hotel.searchCheckData.hotelName,Hotel.searchCheckData.year,Hotel.searchCheckData.month)
+		                 });
+			             //给全选绑定事件
+			                 $("#" +"tab-"+ checkTabId+"-content"+" .hotel-selectAll").click(function(){
+			                	 var flag = this.checked;
+			                	 $(".hotelChecking .all tbody tr").each(function(){
+			                		 var checkedbox = $(this).find(".hotelFinancial")
+			                		 if(flag){
+			                			 checkedbox.prop("checked",true);
+			                		 }else{
+										 //判断对账状态
+										 if(checkedbox.attr("data-entity-checkStatus") == 1){
+											 checkedbox.prop("checked",true);
+										 }else{ 	
+											 checkedbox.prop("checked",false);
+										 }
+									 }
+			                	 });
+			                 });
+			               //给复选框绑定事件
+			                 $("#" +"tab-"+ checkTabId+"-content"+" .hotelFinancial").click(function(){
+			                	 var flag = true
+			                	 $("#" +"tab-"+ checkTabId+"-content"+" .hotelFinancial").each(function(){
+			                		 if(!$(this).prop("checked")){
+				                			flag = false;
+				                		} 
+			                	 })
+			                	 $("#" +"tab-"+ checkTabId+"-content"+" .hotel-selectAll").prop("checked",flag)
+			                 });
+		                 //给确认对账按钮绑定事件  Hotel.saveCheckingData(hotelId,hotelName)
+			                 $("#" +"tab-"+ checkTabId+"-content"+" .btn-hotelFinancial-checking").click(function(){
+			                	 if (!validator.form()) { return; }
+			                	 Hotel.saveCheckingData(hotelId,hotelName,0);
+		                      })
+		                 //给查看单据绑定事件
+		                 $("#" +"tab-"+ checkTabId+"-content"+" .hotelImg").click(function(){
+		                	 var WEB_IMG_URL_BIG = $("#" +"tab-"+ checkTabId+"-content").find("input[name=WEB_IMG_URL_BIG]").val();//大图
+		                	 var WEB_IMG_URL_SMALL = $("#" +"tab-"+ checkTabId+"-content").find("input[name=WEB_IMG_URL_SMALL]").val();//大图
+		                	 Hotel.viewImage(this,WEB_IMG_URL_BIG,WEB_IMG_URL_SMALL);
+		                 });
+			             //取消按钮事件
+			             $("#" +"tab-"+ checkTabId+"-content"+" .btn-hotelFinancial-close").click(function(){
+			            	 showConfirmDialog($( "#confirm-dialog-message" ), "确定关闭本选项卡?",function(){
+			            		 closeTab(checkTabId);
+								 Hotel.edited["checking"] = "";
+			            	 });
+			             });
 	             }
 	    	 });
 	    },
@@ -279,8 +302,8 @@ define(function(require, exports) {
                 	
                 	var $obj = $(".hotelFinancialBalancing .form-horizontal");
                 	
-                    layer.close(globalLoadingLayer);
-                    var result = showDialog(data);
+                   layer.close(globalLoadingLayer);
+                   var result = showDialog(data);
                     if(result){
 	                    data.yearList = yearList
 	                    data.monthList = monthList
@@ -294,8 +317,10 @@ define(function(require, exports) {
                         $tr.each(function(){
                         	$(this).find('.btn-hotelBlance-save').data('validata', rule.check($(this)));
                         });*/
-	                    if($("#" +"tab-"+blanceTabId+"-content").length > 0) {
-                 	    	if(!!Hotel.edited["blance"] && Hotel.edited["blance"] != ""){
+	                    if($("#" +"tab-"+blanceTabId+"-content").length > 0)
+                 	    {
+                 	    	
+                 	    	 if(!!Hotel.edited["blance"] && Hotel.edited["blance"] != ""){
                  	    		addTab(blanceTabId,"酒店结算");
 			                    //给每个tr添加表单验证
                  	    		showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
@@ -305,28 +330,28 @@ define(function(require, exports) {
                                     $tr.each(function(){
                                     	$(this).find('.btn-hotelBlance-save').data('validata', rule.check($(this)));
                                     });
-                 	    			var saveBtn = $("#" +"tab-"+ blanceTabId+"-content"+" .btn-hotelBlance-save")
-                 	    			if (!$(saveBtn).data('validata').form()) { return; }
-				            		Hotel.saveBlanceData(pageNo,hotelId,hotelName,year,startMonth,endMonth,0);
-				            		Hotel.edited["blance"] = "";
-				            		addTab(blanceTabId,"酒店结算",html);
+                 	    			 var saveBtn = $("#" +"tab-"+ blanceTabId+"-content"+" .btn-hotelBlance-save");
+                 	    			 if (!$(saveBtn).data('validata').form()) { return; }
+				            		 Hotel.saveBlanceData(saveBtn,Hotel.oldBlanceHotelId,hotelName,0);
+				            		 Hotel.edited["blance"] = "";
+				            		 addTab(blanceTabId,"酒店结算",html);
 				            		//获取table中的tr
 				                    var $tr = $("#" +"tab-"+ blanceTabId + "-content"+" .all tbody tr")
 				                    //给每个tr添加表单验证
 			                        $tr.each(function(){
 			                        	$(this).find('.btn-hotelBlance-save').data('validata', rule.check($(this)));
 			                        });
-				            	},function(){
-									addTab(blanceTabId,"酒店结算",html);
-									Hotel.edited["blance"] = "";
-									//获取table中的tr
-									var $tr = $("#" +"tab-"+ blanceTabId + "-content"+" .all tbody tr")
-									//给每个tr添加表单验证
-									$tr.each(function(){
-										$(this).find('.btn-hotelBlance-save').data('validata', rule.check($(this)));
-									});
-				            	});
-                 	    	}else{
+				            	 },function(){
+				            		    addTab(blanceTabId,"酒店结算",html);
+				            		    Hotel.edited["blance"] = "";
+				            		 	//获取table中的tr
+					                    var $tr = $("#" +"tab-"+ blanceTabId + "-content"+" .all tbody tr")
+					                    //给每个tr添加表单验证
+				                        $tr.each(function(){
+				                        	$(this).find('.btn-hotelBlance-save').data('validata', rule.check($(this)));
+				                        });
+				            	 });
+                 	    	 }else{
 	                 	    	addTab(blanceTabId,"酒店结算",html);
 	                 	    	//获取table中的tr
 	    	                    var $tr = $("#" +"tab-"+ blanceTabId + "-content"+" .all tbody tr")
@@ -334,7 +359,7 @@ define(function(require, exports) {
 	                            $tr.each(function(){
 	                            	$(this).find('.btn-hotelBlance-save').data('validata', rule.check($(this)));
 	                            });
-                 	    	}
+                 	    	 }
              	    		 
                  	    }else{
                  	    	addTab(blanceTabId,"酒店结算",html);
@@ -347,37 +372,37 @@ define(function(require, exports) {
                  	    };
                  	   $("#" +"tab-"+blanceTabId+"-content .all").on('change', 'input, select', function() {
                  		    Hotel.edited["blance"] = "blance";
-							Hotel.searchBalanceData={
-								pageNo : pageNo,
-                                hotelId : hotelId,
-                                hotelName : hotelName,
-                            	year : year,
-                            	startMonth : startMonth,
-                            	endMonth : endMonth,
-                            }
+                 		    Hotel.oldBlanceHotelId = hotelId;
          	    			$(this).closest('tr').data('blanceStatus',true);
          	    		});
                         //搜索按钮事件
                         $("#" +"tab-"+ blanceTabId + "-content"+" .btn-blance-search").click(function(){
-                            
+                            Hotel.searchBalanceData={
+                                hotelId:hotelId,
+                                hotelName:hotelName,
+                            	year:$("#" +"tab-"+ blanceTabId + "-content"+"  select[name=year]").val(),
+                            	startMonth:$("#" +"tab-"+ blanceTabId + "-content"+" select[name=startMonth]").val(),
+                            	endMonth:$("#" +"tab-"+ blanceTabId + "-content"+" select[name=endMonth]").val(),
+                            }
                             Hotel.hotelBalanceList(0,Hotel.searchBalanceData.hotelId,Hotel.searchBalanceData.hotelName,Hotel.searchBalanceData.year,Hotel.searchBalanceData.startMonth,Hotel.searchBalanceData.endMonth);
                         });
                        //保存按钮事件
                         $("#" +"tab-"+ blanceTabId+"-content"+" .btn-hotelBlance-save").click(function(){
+                        	 var saveBtn = $("#" +"tab-"+ blanceTabId+"-content"+" .btn-hotelBlance-save")
          	    			 if (!$(this).data('validata').form()) { return; }
-		            		 Hotel.saveBlanceData(pageNo,hotelId,hotelName,year,startMonth,endMonth,0)
+		            		 Hotel.saveBlanceData(saveBtn,Hotel.oldBlanceHotelId,hotelName,0);
                         });
                         //对账明细按钮事件
                         $("#" +"tab-"+ blanceTabId+"-content"+" .btn-hotelBlance-checkDetail").click(function(){
                         	Hotel.searchCheckData={
-								hotelId:hotelId,
-								hotelName:hotelName,
-								year:$(this).attr("data-entity-year"),
-								month:$(this).attr("data-entity-month"),
+                        			hotelId:hotelId,
+                        			hotelName:hotelName,
+                        			year:$(this).attr("data-entity-year"),
+                        			month:$(this).attr("data-entity-month"),
                         	}
                         	Hotel.hotelCheckList(0,Hotel.searchCheckData.hotelId,Hotel.searchCheckData.hotelName,Hotel.searchCheckData.year,Hotel.searchCheckData.month)
                         });
-                        //给操作记录按钮绑定事件
+                      //给操作记录按钮绑定事件
                         $("#" +"tab-"+ blanceTabId+"-content"+" .btn-hotelBlance-Records").click(function(){
                         	$.ajax({
                         		url:""+APP_ROOT+"back/financial/financialHotel.do?method=listFcHotelSettlementRecord&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
@@ -471,7 +496,7 @@ define(function(require, exports) {
 			});
 	    },
 	    //保存对账数据
-	    saveCheckingData:function(pageNo,hotelId,hotelName,year,month,isClose){
+	    saveCheckingData:function(hotelId,hotelName,isClose){
            var JsonStr = [],
                oldUnPayedMoney,
                newUnPayedMoney,
@@ -546,19 +571,19 @@ define(function(require, exports) {
 						var result = showDialog(data);
 						if(result){
 							showMessageDialog($( "#confirm-dialog-message" ),data.message);
-							Hotel.edited["checking"] = "";
+						    Hotel.edited["checking"] = "";
 							if(isClose == 1){
 								closeTab(checkTabId);
 								Hotel.listHotel(Hotel.searchData.page,Hotel.searchData.hotelId,Hotel.searchData.year,Hotel.searchData.month);
 							} else{
-								Hotel.hotelCheckList(pageNo,hotelId,hotelName,year,month);
+								Hotel.hotelCheckList(0,Hotel.searchCheckData.hotelId,Hotel.searchCheckData.hotelName,Hotel.searchCheckData.year,Hotel.searchCheckData.month);
 							}
 						}
 					}
         	   });
     	   }
           },
-          saveBlanceData:function(pageNo,hotelId,hotelName,year,startMonth,endMonth,isClose){
+          saveBlanceData:function(saveBtn,hotelId,hotelName,isClose){
           	//console.log($obj+"-------");
           	var DataArr = [],
   			JsonData,
@@ -567,21 +592,19 @@ define(function(require, exports) {
           	//if (saveBtn.data('validata').form()) { return; }
           	$tr.each(function(i){
           		if($(this).data('blanceStatus')){
-					console.log(hotelId)
-					console.log(Hotel.searchBalanceData.hotelId);
           			var blanceData = {
-						id : $(this).find(".btn-hotelBlance-save").attr("data-entity-id"),
-						hotelId : Hotel.searchBalanceData.hotelId,
-						year : $(this).find(".btn-hotelBlance-save").attr("data-entity-year"),
-						month : $(this).find(".btn-hotelBlance-save").attr("data-entity-month"),
-						realPayedMoney : $tr.eq(i).find("td[name=blancerealrealPayedMoney]").text(),
-						unPayedMoney : $tr.eq(i).find("td[name=blanceunPayedMoney]").text(),
-						realUnPayedMoney : $tr.eq(i).find("td[name=blancerealrealUnPayedMoney]").text(),
-						payMoney : $tr.eq(i).find("input[name=blancerealPayedMoney]").val(),
-						payType : $tr.eq(i).find("select[name=blancePayType]").val(),
-						remark : $tr.eq(i).find("input[name=blancerealRemark]").val()
+						id:$(this).find(".btn-hotelBlance-save").attr("data-entity-id"),
+						hotelId:hotelId,
+						year:$(this).find(".btn-hotelBlance-save").attr("data-entity-year"),
+						month:$(this).find(".btn-hotelBlance-save").attr("data-entity-month"),
+						realPayedMoney:$tr.eq(i).find("td[name=blancerealrealPayedMoney]").text(),
+						unPayedMoney:$tr.eq(i).find("td[name=blanceunPayedMoney]").text(),
+						realUnPayedMoney:$tr.eq(i).find("td[name=blancerealrealUnPayedMoney]").text(),
+						payMoney:$tr.eq(i).find("input[name=blancerealPayedMoney]").val(),
+						payType:$tr.eq(i).find("select[name=blancePayType]").val(),
+						remark:$tr.eq(i).find("input[name=blancerealRemark]").val()
 					}
-					DataArr.push(blanceData);
+          			 DataArr.push(blanceData)
           		}
           	})
           	JsonData = JSON.stringify(DataArr)
@@ -598,22 +621,24 @@ define(function(require, exports) {
                     var result = showDialog(data);
                     if(result){
                     	showMessageDialog($( "#confirm-dialog-message" ),data.message);
-						Hotel.edited["blance"] = "";
+                        Hotel.edited["blance"] = "";
 						if(isClose == 1){
 							closeTab(blanceTabId);
 							Hotel.listHotel(Hotel.searchData.page,Hotel.searchData.hotelId,Hotel.searchData.year,Hotel.searchData.month);
-						} else{
-							Hotel.hotelBalanceList(pageNo,hotelId,hotelName,year,startMonth,endMonth);
+						} else {
+							Hotel.hotelBalanceList(0,Hotel.searchBalanceData.hotelId,Hotel.searchBalanceData.hotelName,Hotel.searchBalanceData.year,Hotel.searchBalanceData.startMonth,Hotel.searchBalanceData.endMonth);
 						}
                     }
                 }
         	})
         },
 		save : function(saveType){
+			console.log(saveType);
 			if(saveType == "checking"){
-				Hotel.saveCheckingData(Hotel.searchCheckData.pageNo,Hotel.searchCheckData.hotelId,Hotel.searchCheckData.hotelName,Hotel.searchCheckData.year,Hotel.searchCheckData.month,1);
+				Hotel.saveCheckingData(Hotel.oldCheckHotelId,"",1);
 			} else if(saveType == "blance"){
-				Hotel.saveBlanceData(Hotel.searchBalanceData.pageNo,Hotel.searchBalanceData.hotelId,Hotel.searchBalanceData.hotelName,Hotel.searchBalanceData.year,Hotel.searchBalanceData.startMonth,Hotel.searchBalanceData.endMonth,1);
+				var saveBtn = $("#" +"tab-"+ blanceTabId+"-content"+" .btn-hotelBlance-save")
+				Hotel.saveBlanceData(saveBtn,Hotel.oldBlanceHotelId,"",1);
 			}
 		},
 		clearEdit : function(clearType){
