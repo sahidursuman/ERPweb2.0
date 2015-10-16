@@ -1,8 +1,8 @@
 <div class="col-sm-12 arrangeDetail">
     <div class="col-xs-12 border">
         <form class="form-horizontal" role="form" onsubmit="return false">
-            <div class="search-area  editable editable-click" style="margin-top: 10px;">
-                <div class="form-group">
+            <div class="search-area  editable editable-click" style="height: 30px">
+                <div class="form-group" >
                     <label class="col-sm-3" style="font-weight: bold;">线路: {{tripPlan.lineProduct.name}}</label>
                     <label class="col-sm-2" style="font-weight: bold;">类别: {{tripPlan.lineProduct.type}}</label>
                     <label class="col-sm-2" style="font-weight: bold;">应用范围: {{if tripPlan.lineProduct != null}}{{if tripPlan.lineProduct.customerType == 0}}散客{{else if tripPlan.lineProduct.customerType == 1}}团体{{/if}}{{/if}}</label>
@@ -12,7 +12,7 @@
         </form> 
 
         <form class="form-horizontal" role="form" onsubmit="return false">
-            <div class="search-area  editable editable-click" style="margin-top: 10px;">
+            <div class="search-area  editable editable-click" style="height: 30px">
                 <div class="form-group">
                     <label class="col-sm-3" style="font-weight: bold;">团号：{{tripPlan.tripNumber}}</label>
                     <label class="col-sm-2" style="font-weight: bold;">出团日期：{{tripPlan.startTime | dateFormat:'yyyy-MM-dd'}}</label>
@@ -21,11 +21,10 @@
                 </div>
             </div>
         </form>
-        
         <form class="form-horizontal" role="form" onsubmit="return false">
-            <div class="search-area editable editable-click" style="margin-top: 10px;border-bottom:0px;">
-            	<div class="form-group editable editable-click" style="border-bottom:0px;">
-	                <label class="col-sm-3" style="font-weight: bold;">导游：{{tripPlan.guide.realname}}</label>
+            <div class="search-area editable editable-click" style="border-bottom: 0!important;">
+            	<div class=" editable editable-click" style="border-bottom:0px;">
+	                <label class="col-sm-3" style="font-weight: bold;margin-left: -15px">导游：{{tripPlan.guide.realname}}</label>
 	                <label class="col-sm-2" style="font-weight: bold;">司机：
 	                {{each busCompanyList as busCompany}}
 	                {{if busCompany.driver != null}}
@@ -100,20 +99,21 @@
                 <a data-toggle="tab" href="#financial-count-other-plan" aria-expanded="true">其他安排</a>
             </li>
         </ul>
-        <div class="tab-content">
+        <div class="tab-content" style="position:relative;top: -2px">
             <!-- 旅游车安排 -->
             <div id="financial-count-tripbus-plan" class="tab-pane fade active in">
                 <table class="table table-striped table-bordered table-hover" style="margin-top: 30px">
-                    <thead><tr>
-                        <th>司机</th>
-                        <th>司机电话</th>
-                        <th>车牌号</th>
-                        <th>车辆品牌</th>
-                        <th>合同号</th>
-                        <th>应付</th>
-                        <th>导付</th>
-                        <th>付款方式</th>
-                        <th>备注</th>
+                    <thead>
+                    <tr>
+                        <th class="th-border">司机</th>
+                        <th class="th-border">司机电话</th>
+                        <th class="th-border">车牌号</th>
+                        <th class="th-border">车辆品牌</th>
+                        <th class="th-border">合同号</th>
+                        <th class="th-border">应付</th>
+                        <th class="th-border">导付</th>
+                        <th class="th-border">付款方式</th>
+                        <th class="th-border">备注</th>
                     </tr></thead>
                     <tbody>
                     {{each busCompanyList as busCommanyArrange}}
@@ -145,17 +145,17 @@
             <div id="financial-count-restaurant-plan" class="tab-pane fade">
                 <table class="table table-striped table-bordered table-hover" style="margin-top: 30px">
                     <thead><tr>
-                        <th>日期</th>
-                        <th>餐厅</th>
-                        <th>联系电话</th>
-                        <th>地址</th>
-                        <th>类型</th>
-                        <th>餐标</th>
-                        <th>人数</th>
-                        <th>应付</th>
-                        <th>导付</th>
-                        <th>付款方式</th>
-                        <th>备注</th>
+                        <th class="th-border">日期</th>
+                        <th class="th-border">餐厅</th>
+                        <th class="th-border">联系电话</th>
+                        <th class="th-border">地址</th>
+                        <th class="th-border">类型</th>
+                        <th class="th-border">餐标</th>
+                        <th class="th-border">人数</th>
+                        <th class="th-border">应付</th>
+                        <th class="th-border">导付</th>
+                        <th class="th-border">付款方式</th>
+                        <th class="th-border">备注</th>
                     </tr></thead>
                     <tbody>
                     {{each restaurantList as restaurantArrange}}
@@ -198,17 +198,17 @@
             <div id="financial-count-hotel-plan" class="tab-pane fade">
                 <table class="table table-striped table-bordered table-hover" style="margin-top: 30px">
                     <thead><tr>
-                        <th>日期</th>
-                        <th>星级</th>
-                        <th>酒店</th>
-                        <th>联系电话</th>
-                        <th>地址</th>
-                        <th>房型</th>
-                        <th>数量</th>
-                        <th>应付</th>
-                        <th>导付</th>
-                        <th>付款方式</th>
-                        <th>备注</th>
+                        <th class="th-border">日期</th>
+                        <th class="th-border">星级</th>
+                        <th class="th-border">酒店</th>
+                        <th class="th-border">联系电话</th>
+                        <th class="th-border">地址</th>
+                        <th class="th-border">房型</th>
+                        <th class="th-border">数量</th>
+                        <th class="th-border">应付</th>
+                        <th class="th-border">导付</th>
+                        <th class="th-border">付款方式</th>
+                        <th class="th-border">备注</th>
                     </tr></thead>
                     <tbody>
                     {{each hotelList as hotelArrange}}
@@ -251,19 +251,20 @@
             <div id="financial-count-scenic-plan" class="tab-pane fade">
                 <table class="table table-striped table-bordered table-hover" style="margin-top: 30px">
                     <thead><tr>
-                        <th>日期</th>
-                        <th>时间</th>
-                        <th>景区</th>
-                        <th>收费项</th>
-                        <th>游览时长</th>
-                        <th>单价</th>
-                        <th>数量</th>
-                        <th>订单号</th>
-                        <th>应付</th>
-                        <th>导付</th>
-                        <th>付款方式</th>
-                        <th>备注</th>
-                    </tr></thead>
+                        <th class="th-border">日期</th>
+                        <th class="th-border">时间</th>
+                        <th class="th-border">景区</th>
+                        <th class="th-border">收费项</th>
+                        <th class="th-border">游览时长</th>
+                        <th class="th-border">单价</th>
+                        <th class="th-border">数量</th>
+                        <th class="th-border">订单号</th>
+                        <th class="th-border">应付</th>
+                        <th class="th-border">导付</th>
+                        <th class="th-border">付款方式</th>
+                        <th class="th-border">备注</th>
+                    </tr>
+                    </thead>
                     <tbody>
                     {{each scenicList as scenicArrange}}
                         {{if scenicArrange != null && scenicArrange.id > 0}}
@@ -296,12 +297,12 @@
             <div id="financial-count-shop-plan" class="tab-pane fade">
                 <table class="table table-striped table-bordered table-hover" style="margin-top: 30px">
                     <thead><tr>
-                        <th>日期</th>
-                        <th>购物点</th>
-                        <th>商品</th>
-                        <th>联系电话</th>
-                        <th>地址</th>
-                        <th>备注</th>
+                        <th class="th-border">日期</th>
+                        <th class="th-border">购物点</th>
+                        <th class="th-border">商品</th>
+                        <th class="th-border">联系电话</th>
+                        <th class="th-border">地址</th>
+                        <th class="th-border">备注</th>
                     </tr></thead>
                     <tbody>
                     {{each shopList as shopArrange}}
@@ -333,18 +334,18 @@
             <div id="financial-count-selfpay-plan" class="tab-pane fade">
                 <table class="table table-striped table-bordered table-hover" style="margin-top: 30px">
                     <thead><tr>
-                        <th>日期</th>
-                        <th>自费商家</th>
-                        <th>项目</th>
-                        <th>联系电话</th>
-                        <th>地址</th>
-                        <th>单价</th>
-                        <th>底价</th>
-                        <th>数量</th>
-                        <th>应付</th>
-                        <th>导付</th>
-                        <th>付款方式</th>
-                        <th>备注</th>
+                        <th class="th-border">日期</th>
+                        <th class="th-border">自费商家</th>
+                        <th class="th-border">项目</th>
+                        <th class="th-border">联系电话</th>
+                        <th class="th-border">地址</th>
+                        <th class="th-border">单价</th>
+                        <th class="th-border">底价</th>
+                        <th class="th-border">数量</th>
+                        <th class="th-border">应付</th>
+                        <th class="th-border">导付</th>
+                        <th class="th-border">付款方式</th>
+                        <th class="th-border">备注</th>
                     </tr></thead>
                     <tbody>
                     {{each selfPayList as selfPayArrange}}
@@ -390,19 +391,19 @@
             <div id="financial-count-ticket-plan" class="tab-pane fade">
                 <table class="table table-striped table-bordered table-hover" style="margin-top: 30px">
                     <thead><tr>
-                        <th>票务公司</th>
-                        <th>类型</th>
-                        <th>出发城市</th>
-                        <th>到达城市</th>
-                        <th>日期</th>
-                        <th>班次</th>
-                        <th>座位级别</th>
-                        <th>单价</th>
-                        <th>数量</th>
-                        <th>应付</th>
-                        <th>导付</th>
-                        <th>付款方式</th>
-                        <th>备注</th>
+                        <th class="th-border">票务公司</th>
+                        <th class="th-border">类型</th>
+                        <th class="th-border">出发城市</th>
+                        <th class="th-border">到达城市</th>
+                        <th class="th-border">日期</th>
+                        <th class="th-border">班次</th>
+                        <th class="th-border">座位级别</th>
+                        <th class="th-border">单价</th>
+                        <th class="th-border">数量</th>
+                        <th class="th-border">应付</th>
+                        <th class="th-border">导付</th>
+                        <th class="th-border">付款方式</th>
+                        <th class="th-border">备注</th>
                     </tr></thead>
                     <tbody>
                     {{each ticketList as ticketArrange}}
@@ -447,16 +448,16 @@
             <div id="financial-count-other-plan" class="tab-pane fade">
                 <table class="table table-striped table-bordered table-hover" style="margin-top: 30px">
                     <thead><tr>
-                        <th>日期</th>
-                        <th>项目</th>
-                        <th>联系人</th>
-                        <th>联系电话</th>
-                        <th>单价</th>
-                        <th>数量</th>
-                        <th>应付</th>
-                        <th>导付</th>
-                        <th>付款方式</th>
-                        <th>备注</th>
+                        <th class="th-border">日期</th>
+                        <th class="th-border">项目</th>
+                        <th class="th-border">联系人</th>
+                        <th class="th-border">联系电话</th>
+                        <th class="th-border">单价</th>
+                        <th class="th-border">数量</th>
+                        <th class="th-border">应付</th>
+                        <th class="th-border">导付</th>
+                        <th class="th-border">付款方式</th>
+                        <th class="th-border">备注</th>
                     </tr></thead>
                     <tbody>
                     {{each otherList as otherArrange}}
@@ -498,16 +499,16 @@
                 <div class="widget-main">
                     <table class="table table-striped table-bordered table-hover" style="margin-top: 30px">
                         <thead><tr>
-                            <th>日期</th>
-                            <th>同行地接</th>
-                            <th>项目</th>
-                            <th>联系人</th>
-                            <th>联系电话</th>
-                            <th>单价</th>
-                            <th>数量</th>
-                            <th>导付</th>
-                            <th>付款方式</th>
-                            <th>备注</th>
+                            <th class="th-border">日期</th>
+                            <th class="th-border">同行地接</th>
+                            <th class="th-border">项目</th>
+                            <th class="th-border">联系人</th>
+                            <th class="th-border">联系电话</th>
+                            <th class="th-border">单价</th>
+                            <th class="th-border">数量</th>
+                            <th class="th-border">导付</th>
+                            <th class="th-border">付款方式</th>
+                            <th class="th-border">备注</th>
                         </tr></thead>
                         <tbody>
                         <tr>
@@ -528,7 +529,5 @@
             </div>
         </div>
     </div>
-    
-    
     <div style="height:30px;"></div>
 </div>
