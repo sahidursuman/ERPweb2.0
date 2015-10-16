@@ -1011,7 +1011,7 @@ define(function(require, exports) {
 													"</td>"+
 												"</tr>";
 											// 
-									    		$("#"+tab+" ."+tBody+"").append(html);
+									    		$("#"+tab+" ."+tBody+"").append(html); 
 											}
 										}
 										layer.close(addGroupTemplateLayer);
