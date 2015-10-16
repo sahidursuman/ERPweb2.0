@@ -839,6 +839,7 @@ function listMenu(menuTemplate){
 						var year = date.getFullYear();
 						var month = ""//date.getMonth()+1
 						Restaurant.listRestaurant(0,"",year,month);/*new Date().getFullYear()*/
+						modals["financial_restaurant"] = Restaurant;
 					});
 				});
 
