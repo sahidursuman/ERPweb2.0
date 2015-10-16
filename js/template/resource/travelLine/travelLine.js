@@ -959,9 +959,9 @@ define(function(require, exports) {
 		routeIndex : 0,
 		addRestaurant:function(e){
 			//添加行程安排餐饮
-			var scheduleDetails = '<div class="timeline-item clearfix scheduleList" index='+travelLine.routeIndex+'><div class="timeline-info"><i class="timeline-indicator ace-icon fa fa-cutlery btn btn-success no-hover"></i><span class="label label-info label-sm">餐饮</span></div>'+
-			'<div class="widget-box transparent"><div class="widget-body"><div class="widget-main"><table class="table table-striped table-bordered table-hover">'+
-			'<thead><tr><th>餐厅名称</th><th>餐厅电话</th><th>用餐类型</th><th>餐标</th>	<th>菜单列表</th><th>备注</th>	<th style="width: 60px;">操作</th></tr></thead>'+
+			var scheduleDetails = '<div class="timeline-item clearfix scheduleList" index='+travelLine.routeIndex+'><div class="timeline-info" style="color:#1fade0 " ><i class="ace-icon fa fa-circle" ></i><span >餐饮</span></div>'+
+			'<div class="widget-box transparent" style="margin-top: 20px"><div class="widget-body"><div class=""><table class="table table-striped table-bordered table-hover">'+
+			'<thead><tr><th class="th-border">餐厅名称</th><th class="th-border">餐厅电话</th><th class="th-border">用餐类型</th><th class="th-border">餐标</th>	<th class="th-border">菜单列表</th><th class="th-border">备注</th>	<th style="width: 60px;" class="th-border">操作</th></tr></thead>'+
 			'<tbody><tr>'+
 			'<td><input type="text" class="col-xs-12 chooseRestaurantName bind-change"/><input type="hidden" name="restaurantId"/></td>'+
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
@@ -1123,9 +1123,9 @@ define(function(require, exports) {
 		//添加酒店
 		addResourceHotel:function(e){
 			//添加行程安排酒店
-			var hotelDetails = '<div class="timeline-item clearfix resourceHotelList" index='+travelLine.routeIndex+'><div class="timeline-info"><i class="timeline-indicator ace-icon fa fa-hotel btn btn-success no-hover"></i><span class="label label-info label-sm">酒店</span></div>'+
-			'<div class="widget-box transparent"><div class="widget-body"><div class="widget-main"><table class="table table-striped table-bordered table-hover">'+
-			'<thead><tr><th>酒店星级</th><th>酒店名称</th><th>房型</th><th>价格</th><th>早餐</th><th>电话</th><th>备注</th><th style="width: 60px;">操作</th></tr></thead>'+
+			var hotelDetails = '<div class="timeline-item clearfix resourceHotelList" index='+travelLine.routeIndex+'><div class="timeline-info" style="color:#1fade0 "><i class="ace-icon fa fa-circle" ></i><span >酒店</span></div>'+
+			'<div class="widget-box transparent" style="margin-top: 20px"><div class="widget-body"><div class=""><table class="table table-striped table-bordered table-hover">'+
+			'<thead><tr><th class="th-border">酒店星级</th><th class="th-border">酒店名称</th><th  class="th-border">房型</th><th class="th-border">价格</th><th  class="th-border">早餐</th><th  class="th-border">电话</th><th  class="th-border">备注</th><th style="width: 60px;">操作</th></tr></thead>'+
 			'<tbody><tr>'+
 			'<td><select class="col-xs-12 resourceHotelStar"><option selected="selected" value="1">三星以下</option><option value="2">三星</option><option value="3">准四星</option><option value="4">四星</option><option value="5">准五星</option><option value="6">五星</option><option value="7">五星以上</option></select></td>'+
 			'<td><input type="text" class="col-xs-12 chooseHotelName bind-change" name="hotelNmae"/><input type="hidden" name="hotelId"/></td>'+
@@ -1300,9 +1300,9 @@ define(function(require, exports) {
 		//添加景区
 		addResourceScenic:function(e){
 			//添加行程安排景区
-			var scenicDetails = '<div class="timeline-item clearfix resourceScenicList" index='+travelLine.routeIndex+'><div class="timeline-info"><i class="timeline-indicator ace-icon fa fa-tree btn btn-success no-hover"></i><span class="label label-info label-sm">景区</span></div>'+
-			'<div class="widget-box transparent"><div class="widget-body"><div class="widget-main"><table class="table table-striped table-bordered table-hover">'+
-			'<thead><tr><th>景区名称</th><th>收费项目</th><th>景区价格</th><th>联系电话</th><th>备注</th><th style="width: 60px;">操作</th></tr></thead>'+
+			var scenicDetails = '<div class="timeline-item clearfix resourceScenicList" index='+travelLine.routeIndex+'><div class="timeline-info" style="color:#1fade0 "><i class="ace-icon fa fa-circle" ></i><span ><span >景区</span></div>'+
+			'<div class="widget-box transparent" style="margin-top: 20px"><div class="widget-body"><div class=""><table class="table table-striped table-bordered table-hover">'+
+			'<thead><tr  ><th class="th-border">景区名称</th><th class="th-border">收费项目</th><th class="th-border">景区价格</th><th class="th-border">联系电话</th><th class="th-border">备注</th><th style="width: 60px;" class="th-border">操作</th></tr></thead>'+
 			'<tbody><tr>'+
 			'<td><input type="text" class="col-xs-12 chooseScenicName bind-change"/><input type="hidden" name="scenicId"/></td>'+
 			'<td><input type="text" class="col-xs-12 chooseChargingProjects bind-change" name="chargingProjects"/><input type="hidden" name="chargingId"/></td>'+
@@ -1461,9 +1461,9 @@ define(function(require, exports) {
 		//添加购物
 		addResourceShopping:function(e){
 			//添加行程安排购物
-			var shoppingDetails = '<div class="timeline-item clearfix resourceShoppingList" index='+travelLine.routeIndex+'><div class="timeline-info"><i class="timeline-indicator ace-icon fa fa-shopping-cart btn btn-success no-hover"></i><span class="label label-info label-sm">购物</span></div>'+
-			'<div class="widget-box transparent"><div class="widget-body"><div class="widget-main"><table class="table table-striped table-bordered table-hover">'+
-			'<thead><tr><th>商家名称</th><th>商品政策</th><th>联系电话</th><th>停车返佣</th><th>人数返佣</th><th>备注</th><th style="width: 60px;">操作</th></tr></thead>'+
+			var shoppingDetails = '<div class="timeline-item clearfix resourceShoppingList" index='+travelLine.routeIndex+'><div class="timeline-info" style="color:#1fade0" ><i class="ace-icon fa fa-circle" ></i><span >购物</span></div>'+
+			'<div class="widget-box transparent" style="margin-top: 20px"><div class="widget-body"><div class=""><table class="table table-striped table-bordered table-hover">'+
+			'<thead><tr><th class="th-border">商家名称</th><th class="th-border">商品政策</th><th class="th-border">联系电话</th><th class="th-border">停车返佣</th><th class="th-border">人数返佣</th><th class="th-border">备注</th><th class="th-border" style="width: 60px;">操作</th></tr></thead>'+
 			'<tbody><tr>'+
 			'<td><input type="text" class="col-xs-12 chooseVendorName bind-change"/><input type="hidden" name="shopId"/></td>'+
 			'<td><input type="text" class="col-xs-12 chooseGoodsPolicy bind-change" name="goodsPolicy"/><input type="hidden" name="shopPolicyId"/></td>'+
@@ -1615,9 +1615,9 @@ define(function(require, exports) {
 		//添加自费
 		addResourceSelfPaying:function(e){
 			//添加行程安排自费
-			var selfPayingDetails = '<div class="timeline-item clearfix resourceSelfPayList" index='+travelLine.routeIndex+'><div class="timeline-info"><i class="timeline-indicator ace-icon fa fa-credit-card btn btn-success no-hover"></i><span class="label label-info label-sm">自费</span></div>'+
-			'<div class="widget-box transparent"><div class="widget-body"><div class="widget-main"><table class="table table-striped table-bordered table-hover">'+
-			'<thead><tr><th>公司名称</th><th>项目名称</th><th>联系电话</th><th>价格</th><th>负责人</th><th>备注</th><th style="width: 60px;">操作</th></tr></thead>'+
+			var selfPayingDetails = '<div class="timeline-item clearfix resourceSelfPayList" index='+travelLine.routeIndex+'><div class="timeline-info" style="color:#1fade0" ><i class="ace-icon fa fa-circle" ></i><span >自费</span></div>'+
+			'<div class="widget-box transparent" style="margin-top: 20px"><div class="widget-body"><div class=""><table class="table table-striped table-bordered table-hover">'+
+			'<thead><tr><th class="th-border">公司名称</th><th class="th-border">项目名称</th><th class="th-border">联系电话</th><th class="th-border">价格</th><th class="th-border">负责人</th><th class="th-border">备注</th><th style="width: 60px;" class="th-border">操作</th></tr></thead>'+
 			'<tbody><tr>'+
 			'<td><input type="text" class="col-xs-12 chooseCompanyName bind-change"/><input type="hidden" name="companyId"/></td>'+
 			'<td><input type="text" class="col-xs-12 chooseItemName bind-change"/><input type="hidden" name="selfPayItemId"/></td>'+
@@ -1770,9 +1770,9 @@ define(function(require, exports) {
 		//添加交通
 		addResourceTraffic:function(e){
 			//添加行程安排交通
-			var shoppingDetails = '<div class="timeline-item clearfix resourceTicketList" index='+travelLine.routeIndex+'><div class="timeline-info"><i class="timeline-indicator ace-icon fa fa-car btn btn-success no-hover"></i><span class="label label-info label-sm">交通</span></div>'+
-			'<div class="widget-box transparent"><div class="widget-body"><div class="widget-main"><table class="table table-striped table-bordered table-hover">'+
-			'<thead><tr><th>票务公司名称</th><th>类型</th><th>价格</th><th>负责人</th><th>联系电话</th><th>公司电话</th><th>备注</th><th style="width: 60px;">操作</th></tr></thead>'+
+			var shoppingDetails = '<div class="timeline-item clearfix resourceTicketList" index='+travelLine.routeIndex+'><div class="timeline-info" style="color:#1fade0" ><i class="ace-icon fa fa-circle" ></i><span >交通</span></div>'+
+			'<div class="widget-box transparent" style="margin-top: 20px"><div class="widget-body"><div class=""><table class="table table-striped table-bordered table-hover">'+
+			'<thead><tr><th class="th-border">票务公司名称</th><th class="th-border">类型</th><th class="th-border">价格</th><th class="th-border">负责人</th><th class="th-border">联系电话</th><th class="th-border">公司电话</th><th class="th-border">备注</th><th class="th-border" style="width: 60px;">操作</th></tr></thead>'+
 			'<tbody><tr>'+
 			'<td><input type="text" class="col-xs-12 chooseTicketName bind-change"/><input type="hidden" name="tickeId"/></td>'+
 			'<td><select name="type" class="col-xs-12 form-control"><option value="1">机票</option><option value="2">汽车票</option><option value="3">火车票</option><option value="4">轮船票</option></select></td>'+
@@ -1861,8 +1861,9 @@ define(function(require, exports) {
 				})
 			});
 		},
-		submitInfoLineProduct:function(){
-			if (!e.data.form())  return;
+		submitAddLineProduct:function(){
+			var validator = rule.lineProductCheckor($('.lineProductContainer'));
+			if (!validator.form())  return;
 
 			var $form = $(".lineProductContainer > form"), travelLineData;
 			function getValue(obj, name){
@@ -1917,7 +1918,7 @@ define(function(require, exports) {
 			for(var i=0; i<dayList.length; i++){
 				
 				travelLineData.lineDayList[i] = {
-						detailEditor : UE.getEditor("detailEditor-add-lineProduct-"+i+"").getContent(),
+						detailEditor : encodeURIComponent(UE.getEditor("detailEditor-add-lineProduct-"+i+"").getContent()),
 						restaurant : [],
 						hotel : [],
 						scenic : [],

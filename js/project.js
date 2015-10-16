@@ -23,25 +23,25 @@ function addTab(tabId,tabName,html){
 				for(var i = 0; i <= index; i++){
 					if(i < index){
 						widthleft += parseInt($("#tabList li").eq(i).css("width"));
-					} 
+					}
 					if(i == index){
 						minleft = -(widthleft - 35);
 						widthleft += parseInt($("#tabList li").eq(i).css("width"));
 						maxleft = -(widthleft - (maxwidth + 35));
-					} 
+					}
 				}
 				marginLeft = parseInt($("#tabList").css("marginLeft"));
 				//只有当marginLeft取值在minleft~maxleft时，当前tab才在可视区域内
 				if(marginLeft > maxleft){
 					$("#tabList").css("marginLeft",maxleft);
-				} 
+				}
 				if(marginLeft < minleft){
 					$("#tabList").css("marginLeft",minleft);
-				} 
+				}
 			}
-		}, 50);	
+		}, 50);
 		$("#tabList li.tab-"+tabId+"").find("span").text(tabName);
-		
+
 	}
 	else{
 		$("#tabList").append("<li class=\"tab-"+tabId+" active\"><a data-toggle=\"tab\" href=\"#tab-"+tabId+"-content\" aria-expanded=\"true\"><span>"+tabName+"</span><i class=\"ace-icon fa fa-close tab-close\"></i></a></li>");
@@ -56,9 +56,10 @@ function addTab(tabId,tabName,html){
 				$that = $(this);
 				var str = tabId.split("-");
 				var modal = modals[str[0]];
+				console.log(modal.isEdited(str[1]));
 				if(str.length > 1 && str[1] != "view" && !!modal && !!modal.isEdited && modal.isEdited(str[1])){//非列表、查看,且有修改
 					if(str[1] == "add"){
-						showConfirmMsg($( "#confirm-dialog-message" ), "未保存的数据，是否放弃?",function(){	
+						showConfirmMsg($( "#confirm-dialog-message" ), "未保存的数据，是否放弃?",function(){
 							console.log("留在当前页");
 						},function(){
 							closeTab();
@@ -66,7 +67,7 @@ function addTab(tabId,tabName,html){
 						},"放弃","留在此页");
 					} else{
 						console.log(str[1]);
-						showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已修改的数据?",function(){					
+						showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已修改的数据?",function(){
 							modal.save(str[1]);
 							closeTab();
 						}, function(){
@@ -77,8 +78,8 @@ function addTab(tabId,tabName,html){
 				} else {
 					closeTab();
 				}
-				
-				function closeTab() {					
+
+				function closeTab() {
 					var index = $that.parent().parent().index();
 					listwidth -= parseInt($("#tabList li").eq(index).css("width"));
 					$that.parent().parent().remove();
@@ -99,11 +100,11 @@ function addTab(tabId,tabName,html){
 						if((listwidth + marginLeft - 35) < maxwidth){//左侧有隐藏部分并且当前可视区未填满
 							marginLeft = -(listwidth - (maxwidth + 35));
 							if(marginLeft < -(widthleft - 35)){//active项在左侧隐藏
-								marginLeft = -(widthleft - 35);  
+								marginLeft = -(widthleft - 35);
 								console.log("1");
 							}
 						} else if(marginLeft < -(widthleft - 35)){//active项在左侧隐藏
-							marginLeft = -(widthleft - 35);  
+							marginLeft = -(widthleft - 35);
 							console.log("2");
 						}
 					} else {
@@ -112,8 +113,8 @@ function addTab(tabId,tabName,html){
 					$("#tabList").css("marginLeft",marginLeft);
 				}
 			});
-		}, 50);		
-	} 
+		}, 50);
+	}
 	$("#tabContent .tab-pane-menu").removeClass("active");
 	if($("#tab-"+tabId+"-content").length > 0){
 		$("#tab-"+tabId+"-content").addClass("active");
@@ -145,11 +146,11 @@ function closeTab(tabId){
 		if((listwidth + marginLeft - 35) < maxwidth){//左侧有隐藏部分并且当前可视区未填满
 			marginLeft = -(listwidth - (maxwidth + 35));
 			if(marginLeft < -(widthleft - 35)){//active项在左侧隐藏
-				marginLeft = -(widthleft - 35);  
+				marginLeft = -(widthleft - 35);
 				console.log("1");
 			}
 		} else if(marginLeft < -(widthleft - 35)){//active项在左侧隐藏
-			marginLeft = -(widthleft - 35);  
+			marginLeft = -(widthleft - 35);
 			console.log("2");
 		}
 	} else {
@@ -167,22 +168,22 @@ function openLoadingLayer(){
 
 function closeGlobalLayer() {
 	if (!!layer && typeof layer.close === 'function') {
-		layer.close(globalLoadingLayer);		
+		layer.close(globalLoadingLayer);
 	}
 }
 
 function init_editor(ue_key,options)  {
 	var ue = globelEditorInstants[ue_key];
-	
+
 	if (ue) {
 		ue.destroy();
 	}
-	
+
 	// 富文本编辑器的公共配置
 	options = $.extend({
 		// 服务器统一请求接口路径
-        serverUrl: APP_ROOT + "app/components/ueditor/jsp/controller.jsp",
-        //是否启用元素路径：否
+		serverUrl: APP_ROOT + "app/components/ueditor/jsp/controller.jsp",
+		//是否启用元素路径：否
 		elementPathEnabled: false
 	}, options);
 
@@ -191,7 +192,7 @@ function init_editor(ue_key,options)  {
 		ue.setHeight(400);
 	});
 	globelEditorInstants[ue_key] = ue;
-	
+
 	return ue;
 }
 
@@ -216,7 +217,7 @@ function showMessageDialog(dialogObj,message, fn){
 		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
 		title_html: true,
 		draggable:false,
-		buttons: [ 
+		buttons: [
 			{
 				text: "确定",
 				"class" : "btn btn-primary btn-minier",
@@ -329,7 +330,7 @@ function showLogoutDialog(dialogObj,message){
 		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
 		title_html: true,
 		draggable:false,
-		buttons: [ 
+		buttons: [
 			{
 				text: "重新登录",
 				"class" : "btn btn-primary btn-minier",
@@ -370,7 +371,7 @@ function showAutoLoginDialog(dialogObj,message){
 		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
 		title_html: true,
 		draggable:false,
-		buttons: [ 
+		buttons: [
 			{
 				text: "自动登录",
 				"class" : "btn btn-primary btn-minier",
@@ -417,71 +418,71 @@ function login(){
 			else if(data.success == 2){ // 首次登陆，先修改密码
 				var userId = data.id;
 				var updatePasswordLayer=layer.open({
-				    type: 1,
-				    title: "首次登录，先修改密码",
-				    skin: 'layui-layer-lan', //加上边框
-				    area: ['500px', '300px'], //宽高
-				    content: "<div class='login-userData-form clearfix'><div class='col-sm-12' style='margin:25px 0 5px 0'><div class='form-group'>"+
-				    "<div class='search-area'><div class='col-xs-12'><div class='input-group'>"+
-				    "<input class='col-xs-12 date-picker' name='oldPassword' placeholder='请输入旧密码' value='' type='password' />"+
-				    "<span class='input-group-addon'><i class='ace-icon fa fa-lock'></i></span></div></div></div></div></div>"+
-				    "<div class='col-sm-12' style='margin:5px 0'><div class='form-group'><div class='search-area'><div class='col-xs-12'>"+
-				    "<div class='input-group'><input class='col-xs-12' name='newPassword' placeholder='请输入新密码' value='' type='password' />"+
-				    "<span class='input-group-addon'><i class='ace-icon fa fa-lock'></i></span></div></div></div></div></div>"+
-				    "<div class='col-sm-12' style='margin:5px 0'><div class='form-group'><div class='search-area'><div class='col-xs-12'>"+
-				    "<div class='input-group'><input class='col-xs-12' name='newPassword1' placeholder='请输入新密码' value='' type='password' />"+
-				    "<span class='input-group-addon'><i class='ace-icon fa fa-lock'></i></span></div></div></div></div></div>"+
-				    "<div class='col-xs-12'><div class='input-group'><h4 class='lighter'>"+
-				    "<p class='red password-validate'></p></h4></div></div>"+
-				    "<form class='form-horizontal col-sm-12' role='form' style='margin-top:30px;' onsubmit='return false'><div class='form-group' style='text-align: center;'>"+
-				    " <button class='btn btn-danger btn-cancelUserInfo'>"+
-				    "<i class='ace-icon fa fa-times'></i> 取消 </button> <button class='btn btn-primary btn-UserSaveInfo'> <i class='ace-icon fa fa-check'></i> 修改 </button></div></form></div>",
-				    success:function(){
-				    	var $loginObj=$(".login-userData-form");
-				    	//修改用户密码  
-				    	$loginObj.find(".btn-UserSaveInfo").click(function(){
-				    		var newPassword=$loginObj.find("input[name='newPassword']").val();
-				    		var newPassword1=$loginObj.find("input[name='newPassword1']").val(); 
-				    		var oldPassword=$loginObj.find("input[name='oldPassword']").val(); 
-				  			if(newPassword!=newPassword1){
-				  				//两次密码是否一致性的验证   
-				  				$loginObj.find(".password-validate").text("两次输入的密码不一致！");
-				  				return false;
-				  			}
-				  			else{
-				  				$.ajax({
-				  					url:""+APP_ROOT+"base.do?method=rePassword&menuKey=system_userinfo&operation=self",
-				  					data:"oldPassword="+oldPassword+"&newPassword="+newPassword+"&userId="+userId, 
-				  					type:"POST",
-				  					datatype:"json",
-				  					beforSend:function(){
-				  						globalLoadingLayer = openLoadingLayer();
-				  					},
-				  					success:function(data){
-				  						layer.close(globalLoadingLayer);
-				  						var result = showDialog(data);
-				  						if(result){
-				  							layer.close(updatePasswordLayer);
-				  							showMessageDialog($( "#dialog-message" ),"修改成功，请用新密码登陆");
-				  							window.location.href = "login.html";
-				  						}else{
-				  							$loginObj.find("input[name='newPassword']").val("");
-								    		$loginObj.find("input[name='newPassword1']").val(""); 
-								    		$loginObj.find("input[name='oldPassword']").val(""); 
-				  							$loginObj.find(".password-validate").text(data.message);
-				  							return false;
-				  						}
-				  					}
-				  				});
-				    		}
-				    	});
-				    	//取消 
-				    	$loginObj.find(".btn-cancelUserInfo").click(function(){
-				    		layer.close(updatePasswordLayer);
-				    		layer.close(globalLoadingLayer);
-				    	})
-				    	layer.close(globalLoadingLayer);
-				    }   
+					type: 1,
+					title: "首次登录，先修改密码",
+					skin: 'layui-layer-lan', //加上边框
+					area: ['500px', '300px'], //宽高
+					content: "<div class='login-userData-form clearfix'><div class='col-sm-12' style='margin:25px 0 5px 0'><div class='form-group'>"+
+					"<div class='search-area'><div class='col-xs-12'><div class='input-group'>"+
+					"<input class='col-xs-12 date-picker' name='oldPassword' placeholder='请输入旧密码' value='' type='password' />"+
+					"<span class='input-group-addon'><i class='ace-icon fa fa-lock'></i></span></div></div></div></div></div>"+
+					"<div class='col-sm-12' style='margin:5px 0'><div class='form-group'><div class='search-area'><div class='col-xs-12'>"+
+					"<div class='input-group'><input class='col-xs-12' name='newPassword' placeholder='请输入新密码' value='' type='password' />"+
+					"<span class='input-group-addon'><i class='ace-icon fa fa-lock'></i></span></div></div></div></div></div>"+
+					"<div class='col-sm-12' style='margin:5px 0'><div class='form-group'><div class='search-area'><div class='col-xs-12'>"+
+					"<div class='input-group'><input class='col-xs-12' name='newPassword1' placeholder='请输入新密码' value='' type='password' />"+
+					"<span class='input-group-addon'><i class='ace-icon fa fa-lock'></i></span></div></div></div></div></div>"+
+					"<div class='col-xs-12'><div class='input-group'><h4 class='lighter'>"+
+					"<p class='red password-validate'></p></h4></div></div>"+
+					"<form class='form-horizontal col-sm-12' role='form' style='margin-top:30px;' onsubmit='return false'><div class='form-group' style='text-align: center;'>"+
+					" <button class='btn btn-danger btn-cancelUserInfo'>"+
+					"<i class='ace-icon fa fa-times'></i> 取消 </button> <button class='btn btn-primary btn-UserSaveInfo'> <i class='ace-icon fa fa-check'></i> 修改 </button></div></form></div>",
+					success:function(){
+						var $loginObj=$(".login-userData-form");
+						//修改用户密码
+						$loginObj.find(".btn-UserSaveInfo").click(function(){
+							var newPassword=$loginObj.find("input[name='newPassword']").val();
+							var newPassword1=$loginObj.find("input[name='newPassword1']").val();
+							var oldPassword=$loginObj.find("input[name='oldPassword']").val();
+							if(newPassword!=newPassword1){
+								//两次密码是否一致性的验证
+								$loginObj.find(".password-validate").text("两次输入的密码不一致！");
+								return false;
+							}
+							else{
+								$.ajax({
+									url:""+APP_ROOT+"base.do?method=rePassword&menuKey=system_userinfo&operation=self",
+									data:"oldPassword="+oldPassword+"&newPassword="+newPassword+"&userId="+userId,
+									type:"POST",
+									datatype:"json",
+									beforSend:function(){
+										globalLoadingLayer = openLoadingLayer();
+									},
+									success:function(data){
+										layer.close(globalLoadingLayer);
+										var result = showDialog(data);
+										if(result){
+											layer.close(updatePasswordLayer);
+											showMessageDialog($( "#dialog-message" ),"修改成功，请用新密码登陆");
+											window.location.href = "login.html";
+										}else{
+											$loginObj.find("input[name='newPassword']").val("");
+											$loginObj.find("input[name='newPassword1']").val("");
+											$loginObj.find("input[name='oldPassword']").val("");
+											$loginObj.find(".password-validate").text(data.message);
+											return false;
+										}
+									}
+								});
+							}
+						});
+						//取消
+						$loginObj.find(".btn-cancelUserInfo").click(function(){
+							layer.close(updatePasswordLayer);
+							layer.close(globalLoadingLayer);
+						})
+						layer.close(globalLoadingLayer);
+					}
 				});
 			}
 			else{
@@ -504,8 +505,8 @@ function logout(){
 				text: "取消",
 				"class" : "btn btn-minier",
 				click: function() {
-					$( this ).dialog( "close" ); 
-				} 
+					$( this ).dialog( "close" );
+				}
 			},
 			{
 				text: "确定",
@@ -531,24 +532,24 @@ function logout(){
 							}
 						}
 					});
-				} 
+				}
 			}
 		],
 		open:function(event,ui){
 			$(this).find("p").text("你确认要退出系统？");
 		}
 	});
-	
+
 }
 
 function viewAllMsg(){
-	seajs.use("" + ASSETS_ROOT +"js/template/system/message/message.js",function(message){ 
+	seajs.use("" + ASSETS_ROOT +"js/template/system/message/message.js",function(message){
 		message.listMsg(0,0);
-	});	
+	});
 }
 
 function trim(str){
-	 return str.replace(/(^\s*)|(\s*$)/g, ""); 
+	return str.replace(/(^\s*)|(\s*$)/g, "");
 }
 
 function listMenu(menuTemplate){
@@ -564,34 +565,34 @@ function listMenu(menuTemplate){
 				data.menuList = menuList;
 				var html = template("menu-template",data);
 				$("#sidebar .nav-list").html(html);
-				
+
 				//绑定导游菜单功能//
 				$("#sidebar .nav-list .resource_guide").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/resource/guide/guide.js",function(guide){ 
-						guide.listGuide(0,"","");
+					seajs.use("" + ASSETS_ROOT +"js/template/resource/guide/guide.js",function(guide){
+						guide.listGuide(0,"",1);
 					});
 				});
-				
+
 				//绑定车队菜单功能
 				$("#sidebar .nav-list .resource_busCompany").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/busCompany/busCompany.js",function(busCompany){
-						busCompany.listBusCompany(0,"","");
+						busCompany.listBusCompany(0,"",1);
 					});
 				});
-				
+
 				//绑定餐厅菜单功能
 				$("#sidebar .nav-list .resource_restaurant").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/restaurant/restaurant.js",function(restaurant){
-						restaurant.listRestaurant(0,"","");
+						restaurant.listRestaurant(0,"",1);
 					});
 				});
 				//绑定酒店菜单功能
@@ -600,10 +601,10 @@ function listMenu(menuTemplate){
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/hotel/hotel.js",function(hotel){
-						hotel.listHotel(0,"","");
+						hotel.listHotel(0,"",1);
 					});
 				});
-				
+
 				//绑定同行菜单功能
 				$("#sidebar .nav-list .resource_partnerAgency").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
@@ -613,7 +614,7 @@ function listMenu(menuTemplate){
 						partnerAgency.listPartnerAgency(0,"","");
 					});
 				});
-				
+
 				//绑定线路产品菜单功能
 				$("#sidebar .nav-list .resource_lineProduct").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
@@ -625,18 +626,18 @@ function listMenu(menuTemplate){
 					});
 					$("#main-container")[0].index = 0;
 				});
-				
+
 				//绑定商家管理功能
 				$("#sidebar .nav-list .resource_shop").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/shop/shop.js",function(shop){
-						shop.listShop(0,"","");
+						shop.listShop(0,"",1);
 					});
 				});
 
-				
+
 				//绑定线路模板菜单功能
 				$("#sidebar .nav-list .resource_travelLine").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
@@ -646,95 +647,95 @@ function listMenu(menuTemplate){
 						travelLine.listTravelLine(0,"","");
 						modals["resource_travelLine"] = travelLine;
 					});
-				});	
-					
+				});
+
 				//绑定景区菜单功能
 				$("#sidebar .nav-list .resource_scenic").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/scenic/scenic.js",function(scenic){
-						scenic.listScenic(0,"","");
+						scenic.listScenic(0,"",1);
 					});
-				});		
+				});
 				//绑定保险菜单功能
 				$("#sidebar .nav-list .resource_insurance").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/insurance/insurance.js",function(insurance){
-						insurance.listInsurance(0,"","");
+						insurance.listInsurance(0,"",1);
 					});
-				});	
+				});
 				//绑定自费项目菜单功能
 				$("#sidebar .nav-list .resource_selfpay").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/selfpay/selfpay.js",function(selfpay){
-						selfpay.listSelfPay(0,"","");
+						selfpay.listSelfPay(0,"",1);
 					});
-				});	
+				});
 				//绑定交通票务菜单功能
 				$("#sidebar .nav-list .resource_ticket").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/resource/ticket/ticket.js",function(ticket){ 
-						ticket.listTicket(0,"","");
+					seajs.use("" + ASSETS_ROOT +"js/template/resource/ticket/ticket.js",function(ticket){
+						ticket.listTicket(0,"",1);
 					});
 				});
 				//绑定游客管理菜单功能
 				/*$("#sidebar .nav-list .resource_touristGroup").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/resource/touristGroup/touristGroup.js",function(touristGroup){ 
-						touristGroup.listTouristGroup(0,"","","","","","","","");
-						modals["resource_touristGroup"] = touristGroup;
-					});
-				});*/
+				 $("#sidebar .nav-list li").removeClass("active");
+				 $(this).addClass("active");
+				 $(this).parent().parent().addClass("active");
+				 seajs.use("" + ASSETS_ROOT +"js/template/resource/touristGroup/touristGroup.js",function(touristGroup){
+				 touristGroup.listTouristGroup(0,"","","","","","","","");
+				 modals["resource_touristGroup"] = touristGroup;
+				 });
+				 });*/
 
 
 				$("#sidebar .nav-list .resource_touristGroup").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/resource/touristGroup/touristGroup.js",function(touristGroup){ 
+					seajs.use("" + ASSETS_ROOT +"js/template/resource/touristGroup/touristGroup.js",function(touristGroup){
 						touristGroup.getTouristStatisticData(0,"","","","","","","","");
 						modals["resource_touristGroup"] = touristGroup;
 					});
 				});
 
-				
+
 				//绑定发团安排菜单功能
 				$("#sidebar .nav-list .arrange_all").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/resource/tripPlan/tripPlan.js",function(tripPlan){ 
+					seajs.use("" + ASSETS_ROOT +"js/template/resource/tripPlan/tripPlan.js",function(tripPlan){
 						tripPlan.listTripPlan(0,"","","","","");
 						modals["arrange_all"] = tripPlan;
 					});
 				});
-				
+
 				//绑定财务管理菜单功能 
 				$("#sidebar .nav-list .financial_guide").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/financial/guide/guide.js",function(guide){ 
+					seajs.use("" + ASSETS_ROOT +"js/template/financial/guide/guide.js",function(guide){
 						guide.listFinancialGuide(0,"","","");
 						modals["financial_guide"] = guide;
 					});
 				});
-				
+
 				//绑定分团转客菜单功能
 				$("#sidebar .nav-list .arrange_tourist").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/arrange/arrangeTourist/arrangeTourist.js",function(arrangeTourist){ 
+					seajs.use("" + ASSETS_ROOT +"js/template/arrange/arrangeTourist/arrangeTourist.js",function(arrangeTourist){
 						arrangeTourist.listArrangeTouristMain();
 						modals["arrange_tourist"] = arrangeTourist;
 					});
@@ -745,12 +746,12 @@ function listMenu(menuTemplate){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/arrange/transit/transit.js",function(transit){ 
+					seajs.use("" + ASSETS_ROOT +"js/template/arrange/transit/transit.js",function(transit){
 						transit.listTransit(0,"","","","","","","","","");
 						modals["arrange_transit"] = transit;
 					});
 				});
-				
+
 				//绑定交通票务菜单功能
 				$("#sidebar .nav-list .financial_ticket").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
@@ -764,17 +765,17 @@ function listMenu(menuTemplate){
 						modals["financial_ticket"] = ticket;
 					});
 				});
-				
+
 				//绑定系统人员管理菜单功能
 				$("#sidebar .nav-list .system_user").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/system/user/user.js",function(user){ 
+					seajs.use("" + ASSETS_ROOT +"js/template/system/user/user.js",function(user){
 						user.listUser(0,"",1);
 					});
 				});
-				
+
 				//绑定系统部门管理菜单功能
 				$("#sidebar .nav-list .system_department").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
@@ -784,7 +785,7 @@ function listMenu(menuTemplate){
 						business.listBusiness(0, "");
 					});
 				});
-				
+
 				//绑定系统旅行社
 				$("#sidebar .nav-list .system_travelAgency").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
@@ -794,13 +795,13 @@ function listMenu(menuTemplate){
 						TravelAgency.listTravelAgency();
 					});
 				});
-				
+
 				//绑定车队帐务菜单功能
 				$("#sidebar .nav-list .financial_busCompany").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/financial/busCompany/busCompany.js",function(busCompany){ 
+					seajs.use("" + ASSETS_ROOT +"js/template/financial/busCompany/busCompany.js",function(busCompany){
 						var date = new Date();
 						var year = date.getFullYear();
 						busCompany.listBusCompany(0,"",year,"");
@@ -839,9 +840,10 @@ function listMenu(menuTemplate){
 						var year = date.getFullYear();
 						var month = ""//date.getMonth()+1
 						Restaurant.listRestaurant(0,"",year,month);/*new Date().getFullYear()*/
+						modals["financial_restaurant"] = Restaurant;
 					});
 				});
-      
+
 				//绑定景区账务
 				$("#sidebar .nav-list .financial_scenic").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
@@ -852,9 +854,10 @@ function listMenu(menuTemplate){
 						var year = date.getFullYear();
 						var month = ""//date.getMonth()+1
 						Scenic.listScenic(0,"",year,month);
+						modals["financial_scenic"] = Scenic;
 					});
 				});
-				  
+
 				//绑定自费账务菜单功能
 				$("#sidebar .nav-list .financial_self").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
@@ -864,7 +867,8 @@ function listMenu(menuTemplate){
 						var date = new Date();
 						var year = date.getFullYear();
 						var month = ""
-					    Self.listSelf(0,"",year,month);
+						Self.listSelf(0,"",year,month);
+						modals["financial_Self"] = Self;
 					});
 				});
 
@@ -878,6 +882,7 @@ function listMenu(menuTemplate){
 						var year = date.getFullYear();
 						var month = ""//date.getMonth()+1
 						Insure.listInsure(0,"",year,"");
+						modals["financial_insure"] = Insure;
 					});
 				});
 
@@ -889,7 +894,7 @@ function listMenu(menuTemplate){
 					seajs.use("" + ASSETS_ROOT +"js/template/financial/Client/Client.js",function(Client){
 						Client.listClient(0,"","","","");
 					});
-				});   
+				});
 
 				//绑定系代订账务菜单功能
 				$("#sidebar .nav-list .financial_replace").click(function(){
@@ -901,6 +906,7 @@ function listMenu(menuTemplate){
 						var year = date.getFullYear();
 						var month = "";
 						Replace.listReplace(0,"",year,month);
+						modals["financial_replace"] = Replace;
 					});
 				});
 
@@ -913,9 +919,33 @@ function listMenu(menuTemplate){
 						var date = new Date();
 						var year = date.getFullYear();
 						transfer.listTransfer(0,"",year,"");
+						modals["financial_transfer"] = transfer;
 					});
 				});
-
+				//绑定内转转出账务
+				$("#sidebar .nav-list .financial_innerTransfer_in").click(function(){
+					$("#sidebar .nav-list li").removeClass("active");
+					$(this).addClass("active");
+					$(this).parent().parent().addClass("active");
+					seajs.use("" + ASSETS_ROOT +"js/template/financial/innerTransferIn/innerTransferIn.js",function(innerTransferIn){
+						var date = new Date();
+						var year = date.getFullYear();
+						var month = ""//date.getMonth()+1
+						innerTransferIn.listInnerTransferIn(0,"",year,month);
+					});
+				});
+				//绑定内转利润账务
+				$("#sidebar .nav-list .financial_innerTransfer_profit").click(function(){
+					$("#sidebar .nav-list li").removeClass("active");
+					$(this).addClass("active");
+					$(this).parent().parent().addClass("active");
+					seajs.use("" + ASSETS_ROOT +"js/template/financial/innerTransferProfit/innerTransferProfit.js",function(innerTransferProfit){
+						/*var date = new Date();
+						 var year = date.getFullYear();
+						 var month = ""//date.getMonth()+1
+						 */						innerTransferProfit.listInnerTransferProfit(0,"","","","","","","","");
+					});
+				});
 				//绑定购物菜单功能
 				$("#sidebar .nav-list .financial_shop").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
@@ -923,9 +953,10 @@ function listMenu(menuTemplate){
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/financial/shop/shop.js",function(shop){
 						shop.listFinancialShop(0,"","","");
+						modals["financial_shop"] = shop;
 					});
 				});
-				
+
 				//绑定其他支出菜单功能
 				$("#sidebar .nav-list .financial_else").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
@@ -945,16 +976,16 @@ function listMenu(menuTemplate){
 						Vertical.listVertical();
 					});
 				});
-				
+
 				//绑定分团计划菜单功能
 				/*$("#sidebar .nav-list .arrange_plan").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/arrange/plan/plan.js",function(plan){
-						//plan.listPlan();
-					});
-				});*/
+				 $("#sidebar .nav-list li").removeClass("active");
+				 $(this).addClass("active");
+				 $(this).parent().parent().addClass("active");
+				 seajs.use("" + ASSETS_ROOT +"js/template/arrange/plan/plan.js",function(plan){
+				 //plan.listPlan();
+				 });
+				 });*/
 
 				//绑定发团计划菜单功能
 				$("#sidebar .nav-list .arrange_plan").click(function(){
@@ -966,7 +997,7 @@ function listMenu(menuTemplate){
 						modals["arrange_plan"] = tripPlan;
 					});
 				});
-				
+
 				//绑定项目代订菜单功能
 				$("#sidebar .nav-list .arrange_booking").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
@@ -977,17 +1008,39 @@ function listMenu(menuTemplate){
 						modals["arrange_booking"] = booking;
 					});
 				});
-				
+
 				//绑定转客管理菜单功能
 				$("#sidebar .nav-list .arrange_transfer").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/arrange/arrangeTransfer/arrangeTransfer.js",function(transfer){ 
+					seajs.use("" + ASSETS_ROOT +"js/template/arrange/arrangeTransfer/arrangeTransfer.js",function(transfer){
 						transfer.getlistTransferSumData(0,"","","","","","",2);
 						modals["arrange_transfer"] = transfer;
 					});
 				});
+
+
+				//绑定转客管理菜单功能
+				$("#sidebar .nav-list .arrange_inner_transfer").click(function(){
+					$("#sidebar .nav-list li").removeClass("active");
+					$(this).addClass("active");
+					$(this).parent().parent().addClass("active");
+					seajs.use("" + ASSETS_ROOT +"js/template/arrange/innerTransfer/innerTransfer.js",function(innerTransfer){ 
+						var searchParam = {
+								pageNo : "0",
+								type : "1",
+								first : "1",
+							}
+						innerTransfer.list(searchParam);
+					});
+				});
+
+
+
+
+
+
 				//绑定按团统计菜单功能
 				$("#sidebar .nav-list .financial_count").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
@@ -995,11 +1048,11 @@ function listMenu(menuTemplate){
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/financial/count/count.js",function(count){
 						count.init()
-						
+
 						// count.getlistCount(0,"","","","","","","","");
 					});
 				});
-				
+
 				//绑定转客利润菜单功能
 				$("#sidebar .nav-list .financial_turnProfit").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
@@ -1007,14 +1060,14 @@ function listMenu(menuTemplate){
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/financial/turnProfit/turnProfit.js",function(TurnProfit){
 						/*var tu = new Date()
-						var vYear = tu.getFullYear()
-						var vMon = tu.getMonth() + 1
-						var vDay = tu.getDate()
-						var startTime = vYear+"-"+vMon+"-"+vDay;
-						var tmp = new Date(startTime);
-						tmp = tmp-7*24*60*60*1000;
-						tmp = new Date(tmp);
-						var endTime = tmp.getFullYear()+"-"+(tmp.getMonth()+1)+"-"+tmp.getDate();*/
+						 var vYear = tu.getFullYear()
+						 var vMon = tu.getMonth() + 1
+						 var vDay = tu.getDate()
+						 var startTime = vYear+"-"+vMon+"-"+vDay;
+						 var tmp = new Date(startTime);
+						 tmp = tmp-7*24*60*60*1000;
+						 tmp = new Date(tmp);
+						 var endTime = tmp.getFullYear()+"-"+(tmp.getMonth()+1)+"-"+tmp.getDate();*/
 						TurnProfit.listTurnProfit(0,"","","","","","","","");
 					});
 				});
@@ -1024,7 +1077,7 @@ function listMenu(menuTemplate){
 				$("#sidebar .nav-list .financial_replaceProfit").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");   
+					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/financial/replaceProfit/replaceProfit.js",function(replaceProfit){
 						replaceProfit.listReplaceProfit(0,"","","","","","","","","","");
 					});
@@ -1056,7 +1109,7 @@ function listMenu(menuTemplate){
 						subsection.listMainSubsection();
 					});
 				});
-				
+
 				//dateTime
 				$(document).on("click",".input-group-addon",function(){
 					var $that = $(this);
@@ -1066,35 +1119,35 @@ function listMenu(menuTemplate){
 						$allInputs.eq($allInputs.length-1).focus();
 					}
 				})
-				// 处理中英文长度控制问题
-				.on('input', 'input[type="text"],textarea', function(event) {
-					event.preventDefault();
-					
-					// 未设置maxlength，退出
-					if (this.attributes.maxlength === undefined)  {
-						return;
-					}
+					// 处理中英文长度控制问题
+					.on('input', 'input[type="text"],textarea', function(event) {
+						event.preventDefault();
 
-					var $that = $(this), 
-					max = $that.attr('maxlength'),
-					ctrlOldVal = $that.data('ctrlOldVal'),
-					val = $that.val();
-					
-					if (chEnWordCount(val) > max)  {
-						$that.val(ctrlOldVal);
-					} else {
-						$that.data('ctrlOldVal', val);
-					}
-
-					function chEnWordCount(str){  
-						var count = 0;
-
-						if (!!str)  {
-					    	count = str.replace(/[^\x00-\xff]/g,"**").length;  
+						// 未设置maxlength，退出
+						if (this.attributes.maxlength === undefined)  {
+							return;
 						}
-					    return count;  
-					} 
-				});
+
+						var $that = $(this),
+							max = $that.attr('maxlength'),
+							ctrlOldVal = $that.data('ctrlOldVal'),
+							val = $that.val();
+
+						if (chEnWordCount(val) > max)  {
+							$that.val(ctrlOldVal);
+						} else {
+							$that.data('ctrlOldVal', val);
+						}
+
+						function chEnWordCount(str){
+							var count = 0;
+
+							if (!!str)  {
+								count = str.replace(/[^\x00-\xff]/g,"**").length;
+							}
+							return count;
+						}
+					});
 			}
 		}
 	});
@@ -1119,133 +1172,133 @@ function getAjaxErrorInfo (XMLHttpRequest)  {
 	var status = XMLHttpRequest.status;
 
 	try {
-	    var fixedResponse = XMLHttpRequest.responseText.replace(/\\'/g, "'");
-	    var jsonObj = JSON.parse(fixedResponse);
-	    return jsonObj.description;
+		var fixedResponse = XMLHttpRequest.responseText.replace(/\\'/g, "'");
+		var jsonObj = JSON.parse(fixedResponse);
+		return jsonObj.description;
 	} catch (e) {
-	    if (status > 200) {
-	        switch (status) {
-	            case 401:
-	                return _statusText._401;
-	            case 403:
-	                return _statusText._403;
-	            case 404:
-	                return _statusText._404;
-	            case 413:
-	                return _statusText._413;
-	            case 500:
-	                return _statusText._500;
-	            case 501:
-	                return _statusText._501;
-	            case 502:
-	                return _statusText._502;
-	            case 503:
-	                return _statusText._503;
-	            case 504:
-	                return _statusText._504;
-	            case 505:
-	                return _statusText._505;
-	            default:
-	                break;
-	        }
-	    }
+		if (status > 200) {
+			switch (status) {
+				case 401:
+					return _statusText._401;
+				case 403:
+					return _statusText._403;
+				case 404:
+					return _statusText._404;
+				case 413:
+					return _statusText._413;
+				case 500:
+					return _statusText._500;
+				case 501:
+					return _statusText._501;
+				case 502:
+					return _statusText._502;
+				case 503:
+					return _statusText._503;
+				case 504:
+					return _statusText._504;
+				case 505:
+					return _statusText._505;
+				default:
+					break;
+			}
+		}
 	}
 
 	return _statusText._unused + ':' + status;
 }
 
 var _statusText = {
-    _401: '无权访问:未登录或者会话已过期',
-    _403: '服务器拒绝访问',
-    _404: '没有找到所请求的服务',
-    _413: '请求内容过大',
-    _500: '服务器内部错误',
-    _501: '服务器未实现该服务',
-    _502: '线路不通，无法到达',
-    _503: '所请求的服务不可用',
-    _504: '网关超时',
-    _505: '服务器不支持请求所使用的HTTP版本',
-    _unused: '未转化异常'
+	_401: '无权访问:未登录或者会话已过期',
+	_403: '服务器拒绝访问',
+	_404: '没有找到所请求的服务',
+	_413: '请求内容过大',
+	_500: '服务器内部错误',
+	_501: '服务器未实现该服务',
+	_502: '线路不通，无法到达',
+	_503: '所请求的服务不可用',
+	_504: '网关超时',
+	_505: '服务器不支持请求所使用的HTTP版本',
+	_unused: '未转化异常'
 };
 
 //重新封装jquery的ajax方法
 (function ($) {
-    //备份jquery的ajax方法
+	//备份jquery的ajax方法
 
-    var _ajax = $.ajax;
-    //重写jquery的ajax方法
+	var _ajax = $.ajax;
+	//重写jquery的ajax方法
 
-    $.ajax = function (opt) {
-        //GET方法要做编码,暂不编码,等服务器弄好拦截器再进行编码
+	$.ajax = function (opt) {
+		//GET方法要做编码,暂不编码,等服务器弄好拦截器再进行编码
 
-        // if ((opt.type == "GET" || opt.type == "get") && opt.data && typeof opt.data === 'object') {
-        //     $.each(opt.data, function (key, value) {
-        //         //opt.data[key] = encodeURIComponent(value);
+		// if ((opt.type == "GET" || opt.type == "get") && opt.data && typeof opt.data === 'object') {
+		//     $.each(opt.data, function (key, value) {
+		//         //opt.data[key] = encodeURIComponent(value);
 
-        //     });
-        // }
-        //json提交要修改contentType和格式化json
+		//     });
+		// }
+		//json提交要修改contentType和格式化json
 
-        if (opt.submitType == "json") {
-            opt.data = JSON.stringify(opt.data);
-            opt.contentType = "application/json";
-        }
-        //备份opt中error和success方法
+		if (opt.submitType == "json") {
+			opt.data = JSON.stringify(opt.data);
+			opt.contentType = "application/json";
+		}
+		//备份opt中error和success方法
 
-        var fn =
-        {
-            error: function (XMLHttpRequest, textStatus, errorThrown) {
-            },
-            success: function (data, textStatus) {
-            }
-        };
+		var fn =
+		{
+			error: function (XMLHttpRequest, textStatus, errorThrown) {
+			},
+			success: function (data, textStatus) {
+			}
+		};
 
-        if (opt.error) {
-            fn.error = opt.error;
-        }
-        if (opt.success) {
-            fn.success = opt.success;
-        }
+		if (opt.error) {
+			fn.error = opt.error;
+		}
+		if (opt.success) {
+			fn.success = opt.success;
+		}
 
-        //扩展增强处理
-        opt = $.extend({}, {
-            timeout: 60000,
-            cache: false,
-            showLoading: true,
-            removeLoading: true,
-            showError: true
-        }, opt);
-        $.extend(opt, opt,
-            {
-                error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    //判断是否是当前页面的ajax请求错误
+		//扩展增强处理
+		opt = $.extend({}, {
+			timeout: 60000,
+			cache: false,
+			showLoading: true,
+			removeLoading: true,
+			showError: true
+		}, opt);
+		$.extend(opt, opt,
+			{
+				error: function (XMLHttpRequest, textStatus, errorThrown) {
+					//判断是否是当前页面的ajax请求错误
 
-                    if (!!XMLHttpRequest && XMLHttpRequest.readyState == 4) {
-                        if (opt.showError != false) {
-                            var status;
-                            try {
-                                status = $.parseJSON(XMLHttpRequest.responseText).errorCode;
-                            } catch (e) {
-                                // console.warn(e)
-                                status = XMLHttpRequest.status;
-                            }
+					if (!!XMLHttpRequest && XMLHttpRequest.readyState == 4) {
+						if (opt.showError != false) {
+							var status;
+							try {
+								status = $.parseJSON(XMLHttpRequest.responseText).errorCode;
+							} catch (e) {
+								// console.warn(e)
+								status = XMLHttpRequest.status;
+							}
 
-                            showMessageDialog($( "#confirm-dialog-message" ),getAjaxErrorInfo(XMLHttpRequest), closeGlobalLayer);
+							showMessageDialog($( "#confirm-dialog-message" ),getAjaxErrorInfo(XMLHttpRequest), closeGlobalLayer);
 
-                        }
-                        fn.error(XMLHttpRequest, textStatus, errorThrown);
-                    }
-                    else {
-                        console.info(opt.url + "请求异常:readyState = " + XMLHttpRequest.readyState);
-                        showMessageDialog($( "#confirm-dialog-message" ), '服务器开小差了，请您稍后再试', closeGlobalLayer);
-                    }
-                },
-                success: function (data, textStatus) {
-                    //若要移除loading,则移除
+						}
+						fn.error(XMLHttpRequest, textStatus, errorThrown);
+					}
+					else {
+						console.info(opt.url + "请求异常:readyState = " + XMLHttpRequest.readyState);
+						showMessageDialog($( "#confirm-dialog-message" ), '服务器开小差了，请您稍后再试', closeGlobalLayer);
+					}
+				},
+				success: function (data, textStatus) {
+					//若要移除loading,则移除
 
-                    fn.success(data, textStatus);
-                }
-            });
-        return _ajax(opt);
-    };
+					fn.success(data, textStatus);
+				}
+			});
+		return _ajax(opt);
+	};
 })(jQuery);

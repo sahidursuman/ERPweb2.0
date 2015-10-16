@@ -31,7 +31,7 @@ define(function(require, exports) {
 		},
 		//获取统计数据
 		getTouristStatisticData:function(page,partnerAgencyIdS,lineProductIdS,startTimeS,userIdS,createTimeStartS,createTimeEndS,customerTypeS,statusS){
-		
+
 			$.ajax({
 				url:""+APP_ROOT+"back/touristGroup.do?method=getTouristStatisticData&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 				type:"POST",
@@ -467,7 +467,7 @@ define(function(require, exports) {
 					"<td><input  name=\"describeInfo\" type=\"text\" class=\"col-sm-12  no-padding-right\" /></td>"+
 					"<td><input  name=\"count\" type=\"text\" class=\"col-sm-11  no-padding-right costCount\" style=\"float:right;\" /></td>"+
 					"<td><input  name=\"price\" type=\"text\" class=\"col-sm-11  no-padding-right costPrice\" style=\"float:right;\" /></td>"+
-					"<td><button class=\"btn btn-xs btn-danger addCost-delete\"><i class=\"ace-icon fa fa-trash-o bigger-120\"></i></button></td>"+
+					"<td><a class=\"cursor addCost-delete\">删除</a></td>"+
 					"</tr>";
 				$("#"+tab+" .addCostList .addCostTbody").append(html);
 				//给新增费用项删除绑定事件
@@ -562,7 +562,7 @@ define(function(require, exports) {
 					"<td><select name=\"idCardType\" value=\"idCardTypeId\"><option value=\"0\" selected=\"selected\">身份证</option><option value=\"1\">护照</option><option value=\"2\">其它</option></select></td>"+
 					"<td><input name=\"idCardNumber\" type=\"text\" class=\"col-sm-12  no-padding-right\" /></td>"+
 					"<td><div class=\"checkbox\"><label><input type=\"checkbox\" class=\"ace \" value=\"1\" name=\"isContactUser\"><span class=\"lbl\"></span></label></div></td>"+
-					"<td><button class=\"btn btn-xs btn-danger btnDeleteTourist\"><i class=\"ace-icon fa fa-trash-o bigger-120\"></i></button></td>"+
+					"<td><a class=\"cursor btnDeleteTourist\">删除</a></td>"+
 					"</tr>"
 				;
 				$("#"+tab+" .addTouristList .addTouristTbody").append(html);
@@ -724,7 +724,7 @@ define(function(require, exports) {
 				"<td><input  name=\"describeInfo\" type=\"text\" class=\"col-sm-12  no-padding-right\" /></td>"+
 				"<td><input  name=\"count\" type=\"text\" class=\"col-sm-11  no-padding-right costCount\" style=\"float:right;\" /></td>"+
 				"<td><input  name=\"price\" type=\"text\" class=\"col-sm-11  no-padding-right costPrice\" style=\"float:right;\" /></td>"+
-				"<td><button class=\"btn btn-xs btn-danger addCost-delete\"><i class=\"ace-icon fa fa-trash-o bigger-120\"></i></button></td>"+
+				"<td><a class=\"cursor addCost-delete\">删除</a></td>"+
 				"</tr>";
 				$("#"+tab+" .addCostList .addCostTbody").append(html);
 				
@@ -842,7 +842,7 @@ define(function(require, exports) {
 					"<td><select name=\"idCardType\" value=\"idCardTypeId\"><option value=\"0\" selected=\"selected\">身份证</option><option value=\"1\">护照</option><option value=\"2\">其它</option></select></td>"+
 					"<td><input name=\"idCardNumber\" type=\"text\" class=\"col-sm-12  no-padding-right\" /></td>"+
 					"<td><div class=\"checkbox\"><label><input type=\"checkbox\" class=\"ace \" value=\"1\" name=\"isContactUser\"><span class=\"lbl\"></span></label></div></td>"+
-					"<td><button class=\"btn btn-xs btn-danger btnDeleteTourist\"><i class=\"ace-icon fa fa-trash-o bigger-120\"></i></button></td>"+
+					"<td><a class=\"cursor btnDeleteTourist\">删除</a></td>"+
 					"</tr>"
 				;
 				$("#"+tab+" .addTouristList .addTouristTbody").append(html);
@@ -1421,7 +1421,7 @@ define(function(require, exports) {
 			form +="&hotelLevel="+expectLevel+"&includeSelfPay="+includeOwnExpense+"&remark="+touristRemarks+"&buyInsurance="+buyInsurance+"&isNeedArriveService="+isNeedArriveService+"&isNeedBus="+isNeedBus+"&isNeedLeaveService="+isNeedLeaveService;
 
 			var touristGroupMemberJsonAdd = [];
-			var touristNameStr = $("#"+tab+" .touristGroupMainFormMember .addTouristList tbody tr");
+			var touristNameStr = $("#"+tab+" .touristGroupMainFormMember .addTouristList tbody tr:not(.deleted)");
 			touristNameStr.each(function(i){
 				var id = $(this).attr("data-entity-id");
 				var name = touristNameStr.eq(i).find("input[name=name]").val();
@@ -1680,7 +1680,7 @@ define(function(require, exports) {
 						    			"<td><select name=\"idCardType\"><option value=\"0\" selected=\"selected\">身份证</option>><option value=\"1\">护照</option><option value=\"2\">其它</option></select></td>"+
 						    			"<td><input name=\"idCardNumber\" type=\"text\" class=\"col-sm-12  no-padding-right\" value=\""+idCardNumber+"\" /></td>"+
 						    			"<td><div class=\"checkbox\"><label><input type=\"checkbox\" class=\"ace \" value=\"1\" name=\"isContactUser\"><span class=\"lbl\"></span></label></div></td>"+
-						    			"<td><button class=\"btn btn-xs btn-danger btnDeleteTourist\"><i class=\"ace-icon fa fa-trash-o bigger-120\"></i></button></td>"+
+						    			"<td><a class=\"cursor btnDeleteTourist\">删除</i></a></td>"+
 						    			"</tr>";
 						    		$(".addTouristList .addTouristTbody").append(html);
 						    		$(".addTouristList tr:not(.deleted)").each(function(i){
@@ -1848,7 +1848,7 @@ define(function(require, exports) {
 			'<td><input class="col-sm-12" name="busNeedPayMoney" type="text" value="" /></td>'+
 			'<td><input class="col-sm-12" name="busPayedMoney" type="text" value="" /></td>'+
 			'<td><select class="" name="busPayType" ><option value="0">现付</option><option value="1">账期</option></select></td>'+
-			'<td><button class="btn btn-xs btn-danger arrange-delete" title="删除"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></td>'+
+			'<td><a class="cursor arrange-delete" title="删除">删除</a></td>'+
 			'</tr>';
 			$("#"+id+" .busList tbody").append(html);
 	    	$(".arrangeTouristMain .busList .arrange-delete").click(function(){
@@ -1881,7 +1881,7 @@ define(function(require, exports) {
 			'<td><select class="" name="hotelPayType" >'+
 			'<option value="0">现付</option>'+
 			'<option value="1">账期</option></select></td>'+
-			'<td><button class="btn btn-xs btn-danger arrange-delete"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></td>'+
+			'<td><a class="cursor arrange-delete">删除</a></td>'+
 			'</tr>';
 			$("#"+id+" .hotelList tbody").append(html);
 	    	$(".arrangeTouristMain .hotelList .arrange-delete").click(function(){
@@ -1911,7 +1911,7 @@ define(function(require, exports) {
 			'<td><select class="" name="ticketPayType" >'+
 			'<option value="0">现付</option>'+
 			'<option value="1">账期</option></select></td>'+
-			'<td><button class="btn btn-xs btn-danger arrange-delete"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></td>'+
+			'<td><a class="cursor arrange-delete">删除</a></td>'+
 			'</tr>';
 			$("#"+id+" .ticketList tbody").append(html);
 	    	$(".arrangeTouristMain .ticketList .arrange-delete").click(function(){

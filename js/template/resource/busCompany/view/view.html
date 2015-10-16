@@ -1,4 +1,4 @@
-	<form class="form-horizontal busCompanyMainForm" role="form" style="margin-top:10px" onsubmit="return false">
+<form class="form-horizontal busCompanyMainForm" role="form" style="margin-top:10px" onsubmit="return false">
 	<table class="whereQ whereOne">
 		<tr>
 			<td colspan="4" class="HeadManage">车队主体信息</td>
@@ -52,88 +52,88 @@
 			<td class="styleOne-self" colspan="3">{{busCompany.remark}}</td>
 		</tr>
 	</table>
-	</form>
-	<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
-		<table class="whereQ whereTwo">
-			<tr>
-				<td colspan="8" class="HeadManage" style="text-align: left">车辆列表</td>
-			</tr>
-			<tr>
-				<td class="style-myself">车牌号</td>
-				<td class="styleOne-self">车辆品牌</td>
-				<td class="style-myself">座位数</td>
-				<td class="styleOne-self">购买时间</td>
-				<td class="styleOne-self">协议包车</td>
-				<td class="styleOne-self">包车时限</td>
-				<td class="styleOne-self">包车价格</td>
-				<td class="styleOne-self">备注</td>
-			</tr>
-			{{each busCompany.busList as bus}}
-			<tr>
-				<td class="style-myself">{{bus.licenseNumber}}</td>
-				<td class="styleOne-self">{{bus.brand}}</td>
-				<td class="style-myself">{{bus.seatCount}}</td>
-				<td class="styleOne-self">{{bus.buyTime | dateFormat:'yyyy-MM-dd'}}</td>
-				<td class="styleOne-self">{{if bus.isChartered == 0}}
-					否
+</form>
+<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
+	<table class="whereQ whereTwo">
+		<tr>
+			<td colspan="8" class="HeadManage" style="text-align: left">车辆列表</td>
+		</tr>
+		<tr>
+			<td class="style-myself">车牌号</td>
+			<td class="styleOne-self">车辆品牌</td>
+			<td class="style-myself">座位数</td>
+			<td class="styleOne-self">购买时间</td>
+			<td class="styleOne-self">协议包车</td>
+			<td class="styleOne-self">包车时限</td>
+			<td class="styleOne-self">包车价格</td>
+			<td class="styleOne-self">备注</td>
+		</tr>
+		{{each busCompany.busList as bus}}
+		<tr>
+			<td class="style-myself">{{bus.licenseNumber}}</td>
+			<td class="styleOne-self">{{bus.brand}}</td>
+			<td class="style-myself">{{bus.seatCount}}</td>
+			<td class="styleOne-self">{{if bus.buyTime == null || bus.buyTime == ""}}-{{else}}{{bus.buyTime | dateFormat:'yyyy-MM-dd'}}{{/if}}</td>
+			<td class="styleOne-self">{{if bus.isChartered == 0}}
+				否
+				{{else}}
+				是
+				{{/if}}</td>
+			<td class="styleOne-self">{{each bus.priceList as price}}
+				<div>
+					{{if bus.isChartered == 0}}
+					-
 					{{else}}
-					是
-					{{/if}}</td>
-				<td class="styleOne-self">{{each bus.priceList as price}}
-					<div>
-						{{if bus.isChartered == 0}}
-						-
-						{{else}}
-						{{price.startTime | dateFormat:'yyyy-MM-dd'}}至{{price.endTime | dateFormat:'yyyy-MM-dd'}}
-						{{/if}}
-					</div>
-					{{/each}}</td>
-				<td class="styleOne-self">{{each bus.priceList as price}}
-					<div>
-						{{if bus.isChartered == 0}}
-						-
-						{{else}}
-						{{price.contractPrice}}元
-						{{/if}}
-					</div>
-					{{/each}}</td>
-				<td class="styleOne-self">{{bus.remark}}</td>
-			</tr>
-			{{/each}}
-		</table>
+					{{price.startTime | dateFormat:'yyyy-MM-dd'}}至{{price.endTime | dateFormat:'yyyy-MM-dd'}}
+					{{/if}}
+				</div>
+				{{/each}}</td>
+			<td class="styleOne-self">{{each bus.priceList as price}}
+				<div>
+					{{if bus.isChartered == 0}}
+					-
+					{{else}}
+					{{price.contractPrice}}元
+					{{/if}}
+				</div>
+				{{/each}}</td>
+			<td class="styleOne-self">{{bus.remark}}</td>
+		</tr>
+		{{/each}}
+	</table>
 
-		<table class="whereQ whereTwo" style="margin-top: 10px;">
-			<tr>
-				<td colspan="8" class="HeadManage" style="text-align: left">司机列表</td>
-			</tr>
-			<tr>
-				<td class="style-myself">司机姓名</td>
-				<td class="styleOne-self">司机性别</td>
-				<td class="style-myself">司机电话</td>
-				<td class="styleOne-self">司机驾龄</td>
-				<td class="styleOne-self">驾驶证编号</td>
-				<td class="styleOne-self">是否启用</td>
-				<td class="styleOne-self">备注</td>
-			</tr>
-			{{each busCompany.driverList as driver}}
-			<tr>
-				<td class="style-myself">{{driver.name}}</td>
-				<td class="styleOne-self">{{if driver.gender == 0}}
-					男
-					{{else}}
-					女
-					{{/if}}</td>
-				<td class="style-myself">{{driver.mobileNumber}}</td>
-				<td class="styleOne-self">{{driver.driveYears}}</td>
-				<td class="styleOne-self">{{driver.licenseId}}</td>
-				<td class="styleOne-self">{{if driver.status == 0}}
-					已停用
-					{{else driver.status == 1}}
-					已启用
-					{{/if}}</td>
-				<td class="styleOne-self">{{driver.remark}}</td>
-			</tr>
-			{{/each}}
-		</table>
-	</form>
+	<table class="whereQ whereTwo" style="margin-top: 10px;">
+		<tr>
+			<td colspan="8" class="HeadManage" style="text-align: left">司机列表</td>
+		</tr>
+		<tr>
+			<td class="style-myself">司机姓名</td>
+			<td class="styleOne-self">司机性别</td>
+			<td class="style-myself">司机电话</td>
+			<td class="styleOne-self">司机驾龄</td>
+			<td class="styleOne-self">驾驶证编号</td>
+			<td class="styleOne-self">是否启用</td>
+			<td class="styleOne-self">备注</td>
+		</tr>
+		{{each busCompany.driverList as driver}}
+		<tr>
+			<td class="style-myself">{{driver.name}}</td>
+			<td class="styleOne-self">{{if driver.gender == 0}}
+				男
+				{{else}}
+				女
+				{{/if}}</td>
+			<td class="style-myself">{{driver.mobileNumber}}</td>
+			<td class="styleOne-self">{{driver.driveYears}}</td>
+			<td class="styleOne-self">{{driver.licenseId}}</td>
+			<td class="styleOne-self">{{if driver.status == 0}}
+				已停用
+				{{else driver.status == 1}}
+				已启用
+				{{/if}}</td>
+			<td class="styleOne-self">{{driver.remark}}</td>
+		</tr>
+		{{/each}}
+	</table>
+</form>
 

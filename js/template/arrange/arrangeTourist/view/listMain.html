@@ -1,11 +1,11 @@
 <div class="row">
-	<div class="col-xs-12 arrangeTouristMain">
+	<div class="col-xs-12 arrangeTouristMain globalAdd">
 		<div class="search-area">
 			<form class="form-horizontal" role="form" onsubmit="return false">
 				<div class="form-group">
 					<label class="col-sm-1 control-label no-padding-right">线路产品：</label>
 					<div class="col-sm-2">
-						<select name="lineProductId" class="col-xs-12">
+						<select name="lineProductId" class="col-xs-12 guideInputList">
 							<option></option>
 							{{each lineProductList as lineProduct}}
 								<option value="{{lineProduct.id}}">{{lineProduct.name}}</option>
@@ -14,9 +14,9 @@
 					</div>
 					<label class="col-sm-1 control-label no-padding-right">出游日期：</label>
 					<div class="col-sm-2">
-						<input name="startTime" value="" type="text" class="date-picker col-xs-12"/>
+						<input name="startTime" value="" type="text" class="date-picker col-xs-12 guideInputList"/>
 					</div>
-					<button class=" btn-sm  btn-arrangeTourist-search search-btn">
+					<button class=" btn-sm  btn-arrangeTourist-search search-btn" style="margin-left: -22px">
 						<i class="ace-icon fa fa-search"></i>
 						搜索
 					</button>

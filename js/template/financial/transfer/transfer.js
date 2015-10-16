@@ -20,9 +20,10 @@ define(function(require, exports) {
 	    }
     var Transfer = {
     	searchData:{
-	        "partnerAgencyId":"",
-	        "year":"",
-	        "month":""
+			page : "",
+	        partnerAgencyId : "",
+	        year : "",
+	        month : ""
         },
         searchCheckData:{
 	        "partnerAgencyId":"",
@@ -37,8 +38,14 @@ define(function(require, exports) {
 	        "startMonth":"",
 	        "endMonth":""
         },//back/Transfer.do?method=listTransfer back/financial/financialTransfer.do?method=listSumFcTransfer
-        edited:false,
-        blanceEdited:false,
+        edited : {},
+		isEdited : function(editedType){
+			if(!!Transfer.edited[editedType] && Transfer.edited[editedType] != ""){
+				return true;
+			}
+			return false;
+		},
+		oldCheckPartnerAgencyId:0,
         oldBlancePartnerAgencyId:0,
         listTransfer:function(page,partnerAgencyId,year,month){
             $.ajax({
@@ -54,6 +61,7 @@ define(function(require, exports) {
                     var result = showDialog(data);
                     if(result){
                     	Transfer.searchData={
+							page : page,
                     	    partnerAgencyId:partnerAgencyId,
                     	    year:year,
                     	    month:month
@@ -161,18 +169,18 @@ define(function(require, exports) {
 	                 	    //判断页面是否存在
 	                        if($("#" +"tab-"+checkTabId+"-content").length > 0)
 	                 	      {
-	                 	    	 if(Transfer.edited){
+	                 	    	 if(!!Transfer.edited["checking"] && Transfer.edited["checking"] != ""){
 	                 	    		addTab(checkTabId,"转客对账");
 	                 	    		showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
 	                 	    			 validator = rule.check($('.transferChecking'));
 	  				            		 if (!validator.form()) { return; }
-	  				            		 Transfer.saveCheckingData(partnerAgencyId,partnerAgencyName)
-	  				            		 Transfer.edited = false;
+	  				            		 Transfer.saveCheckingData(partnerAgencyId,partnerAgencyName,0);
+	  				            		 Transfer.edited["checking"] = "";
 	  				            		 addTab(checkTabId,"转客对账",html);
 	  				            		 validator = rule.check($('.transferChecking'));
 	  				            	 },function(){
 	  				            		 addTab(checkTabId,"转客对账",html);
-	  				            		 Transfer.edited = false;
+	  				            		 Transfer.edited["checking"] = "";
 	  				            		 validator = rule.check($('.transferChecking'));
 	  				            	 });
 	                 	    	 }else{
@@ -181,11 +189,12 @@ define(function(require, exports) {
 	                 	    	 }
 	                 	    }else{
 	                 	    	addTab(checkTabId,"转客对账",html);
-	                 	    	Transfer.edited = false;
 	                 	    	validator = rule.check($('.transferChecking'));
 	                 	    };
 	             	    	$("#" +"tab-"+checkTabId+"-content .all").on("change",function(){
-	             	    		Transfer.edited = true; 
+	             	    		Transfer.edited["checking"] = "checking"; 
+								Transfer.oldCheckPartnerAgencyId = partnerAgencyId;
+								
 	             	    	});   
 	                          
 	                 	//展开事件
@@ -279,12 +288,13 @@ define(function(require, exports) {
 				                 $("#" +"tab-"+ checkTabId+"-content"+" .btn-transferFinancial-checking").click(function(){
 				                	 // 表单校验
 				                	 if (!validator.form()) { return; }
-  				            		 Transfer.saveCheckingData(partnerAgencyId,partnerAgencyName)
+  				            		 Transfer.saveCheckingData(partnerAgencyId,partnerAgencyName,0);
 			                      })
 					             //取消按钮事件
 					             $("#" +"tab-"+ checkTabId+"-content"+" .btn-transferFinancial-close").click(function(){
 					            	 showConfirmDialog($( "#confirm-dialog-message" ), "确定关闭本选项卡?",function(){
-					            		 closeTab(checkTabId)
+					            		 closeTab(checkTabId);
+										 Transfer.edited["checking"] = "";
 					            	 });
 					             });
 	                     }    
@@ -316,20 +326,20 @@ define(function(require, exports) {
 	                  //获取table中的tr
 	                    if($("#" +"tab-"+blanceTabId+"-content").length > 0)
 	             	    {
-	             	    	 if(Transfer.blanceEdited){
+	             	    	 if(!!Transfer.edited["blance"] && Transfer.edited["blance"] != ""){
 	             	    		addTab(blanceTabId,"转客结算");
 			                    //给每个tr添加表单验证
 	             	    		showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
 	             	    			 Transfer.validatorTable()
 	             	    			 var saveBtn = $("#" +"tab-"+ blanceTabId+"-content"+" .btn-transferBlance-save")
 	             	    			 if (!$(saveBtn).data('validata').form()) { return; }
-	             	    			 Transfer.saveBlanceData(Transfer.oldBlancePartnerAgencyId,partnerAgencyName)
-				            		 Transfer.blanceEdited = false;
+	             	    			 Transfer.saveBlanceData(Transfer.oldBlancePartnerAgencyId,partnerAgencyName,0);
+				            		 Transfer.edited["blance"] = "";
 				            		 addTab(blanceTabId,"转客结算",html);
 				            		 Transfer.validatorTable();
 				            	 },function(){
 				            		    addTab(blanceTabId,"转客结算",html);
-				            		    Transfer.blanceEdited = false;
+				            		    Transfer.edited["blance"] = "";
 				            		    Transfer.validatorTable();
 				            	 });
 	             	    	 }else{
@@ -341,7 +351,7 @@ define(function(require, exports) {
 	             	    	Transfer.validatorTable();
 	             	    };
 	             	   $("#" +"tab-"+blanceTabId+"-content .all").on('change', 'input, select', function() {
-	             		   	Transfer.blanceEdited = true;
+	             		   	Transfer.edited["blance"] = "blance";
 	             		   	Transfer.oldBlancePartnerAgencyId = partnerAgencyId;
 	    	    			$(this).closest('tr').data('blanceStatus',true);
 	    	    		});
@@ -360,7 +370,7 @@ define(function(require, exports) {
                         $("#" +"tab-"+ blanceTabId+"-content"+" .btn-transferBlance-save").click(function(){
                         	// 表单校验
                         	if (!$(this).data('validata').form()) { return; }
-                        	Transfer.saveClearingData(pageNo,partnerAgencyId,partnerAgencyName,year,startMonth,endMonth,this);
+                        	Transfer.saveBlanceData(Transfer.oldBlancePartnerAgencyId,partnerAgencyName,0);
                         });
                         //对账明细按钮事件
                         $("#" +"tab-"+ blanceTabId+"-content"+" .btn-restaurantBlance-checkDetail").click(function(){
@@ -423,13 +433,13 @@ define(function(require, exports) {
             	$(this).find('.btn-transferBlance-save').data('validata', rule.check($(this)));
             });
 	    },
-	    saveCheckingData : function(partnerAgencyId,partnerAgencyName){
+	    saveCheckingData : function(partnerAgencyId,partnerAgencyName,isClose){
 	    	var JsonStr = [],
                 oldUnPayedMoney,
                 newUnPayedMoney,
                 oldRemark,
                 newRemark,
-        	$tr = $("#" +"tab-"+ checkTabId+"-content"+" .all tbody tr");
+				$tr = $("#" +"tab-"+ checkTabId+"-content"+" .all tbody tr");
     		$tr.each(function(i){
 	 		   var flag = $(this).find(".transferFinancial").is(":checked");
 	 		   newUnPayedMoney = $tr.eq(i).find("input[name=FinancialTransferRealUnPayedMoney]").val();
@@ -495,14 +505,19 @@ define(function(require, exports) {
 						var result = showDialog(data);
 						if(result){
 							showMessageDialog($( "#confirm-dialog-message" ),data.message);
-							Transfer.edited = false;
-		                	Transfer.transferCheckList(0,Transfer.searchCheckData.partnerAgencyId,Transfer.searchCheckData.partnerAgencyName,Transfer.searchCheckData.year,Transfer.searchCheckData.month)
+							Transfer.edited["checking"] = "";
+							if(isClose == 1){
+								closeTab(checkTabId);
+								Transfer.listTransfer(Transfer.searchData.page,Transfer.searchData.partnerAgencyId,Transfer.searchData.year,Transfer.searchData.month);
+							} else {
+								Transfer.transferCheckList(0,Transfer.searchCheckData.partnerAgencyId,Transfer.searchCheckData.partnerAgencyName,Transfer.searchCheckData.year,Transfer.searchCheckData.month)
+							}
 						}
 					}
 	     	   });
 	 	   }
 	    },
-	    saveBlanceData : function(partnerAgencyId,partnerAgencyName){
+	    saveBlanceData : function(partnerAgencyId,partnerAgencyName,isClose){
 
           	var DataArr = [],
   			JsonData,
@@ -538,15 +553,34 @@ define(function(require, exports) {
                     var result = showDialog(data);
                     if(result){
                     	showMessageDialog($( "#confirm-dialog-message" ),data.message);
-                    	Transfer.blanceEdited = false;
-                        Transfer.transferBalanceList(0,Transfer.searchBalanceData.partnerAgencyId,Transfer.searchBalanceData.partnerAgencyName,Transfer.searchBalanceData.year,Transfer.searchBalanceData.startMonth,Transfer.searchBalanceData.endMonth);
+                    	Transfer.edited["blance"] = "";
+						if(isClose == 1){
+							closeTab(blanceTabId);
+							Transfer.listTransfer(Transfer.searchData.page,Transfer.searchData.partnerAgencyId,Transfer.searchData.year,Transfer.searchData.month);
+						} else {
+							Transfer.transferBalanceList(0,Transfer.searchBalanceData.partnerAgencyId,Transfer.searchBalanceData.partnerAgencyName,Transfer.searchBalanceData.year,Transfer.searchBalanceData.startMonth,Transfer.searchBalanceData.endMonth);
+						}
                     }
                 }
         	})
 	    	
-	    }
+	    },
+		save : function(saveType){
+			console.log(saveType);
+			if(saveType == "checking"){
+				Transfer.saveCheckingData(Transfer.oldCheckPartnerAgencyId,"",1);
+			} else if(saveType == "blance"){
+				Transfer.saveBlanceData(Transfer.oldBlancePartnerAgencyId,"",1);
+			}
+		},
+		clearEdit : function(clearType){
+			Transfer.edited[clearType] = "";
+		}
     }
     exports.listTransfer = Transfer.listTransfer;
+	exports.isEdited = Transfer.isEdited;
+	exports.save = Transfer.save;
+	exports.clearEdit = Transfer.clearEdit;
 });
 /**
  * Created by Administrator on 2015/8/31.

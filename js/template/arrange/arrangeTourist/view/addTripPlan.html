@@ -1,6 +1,6 @@
-<div class="addTripPlan clearfix">
+<div class="addTripPlan clearfix globalAdd">
 	<div class="col-xs-12 addTripPlanMain">
-		<form class="form-horizontal addTripPlanMainForm" role="form" style="margin-top:10px" onsubmit="return false">
+		<form class="form-horizontal addTripPlanMainForm formOneList" role="form" style="margin-top:10px" onsubmit="return false">
 			<div class="form-group">
 				<div class="col-xs-12 col-sm-12 widget-container-col">
 					<div class=" ui-sortable-handle">
@@ -90,20 +90,28 @@
 			</div>
 		</form>
 
-		<div class="form-horizontal col-sm-12">
+		<div class="form-horizontal col-sm-12 checkbox">
 			<div class="pull-left  no-padding-right">
-				<label class="control-label no-padding-right">游客短信定时发送:</label>
+				<label class="control-label no-padding-right">游客短信发送:</label>
+				立即发送
 				<label>
-					<input type="checkbox" class="ace buyInsurance-status" value="0" name="executeTimeType">
+					<input type="radio" class="ace checked" checked="checked" value="0" name="executeTimeType">
 					<span class="lbl">
 					</span>
 				</label>
+				定时发送
+				<label>
+					<input type="radio" class="ace checked"  value="1" name="executeTimeType">
+					<span class="lbl">
+					</span>
+				</label> 
 			</div>
-			<div class="col-sm-2 addMergePlanTime">
+			<div class="col-sm-2 addMergePlanTime hide">
 				<input class="form-control col-sm-4 datetimepicker" type="text" name="executeTime" value="" />
 			</div>
         </div>
 
+        
 		<form class="form-horizontal" role="form" onsubmit="return false">
 			<div class="form-group">
 				<div class="col-xs-12 col-sm-12 widget-container-col">
@@ -307,11 +315,11 @@
 		</form>
 		<form class="form-horizontal" role="form" onsubmit="return false">
 			<div class="form-group" style="text-align: center;">
-				<button class="btn btn-xs btn-danger btn-cancelTripPlan ">
+				<button class="btn btn-xs btn-danger btn-cancelTripPlan otherButton">
 					<i class="ace-icon fa fa-times"></i>
 					取消
 				</button>
-				<button class="btn btn-primary btn-saveTripPlan btn-xs" style="margin-left: 30px">
+				<button class="btn btn-primary btn-saveTripPlan btn-xs otherButton" style="margin-left: 30px">
 					<i class="ace-icon  fa fa-check"></i>
 					保存
 				</button>

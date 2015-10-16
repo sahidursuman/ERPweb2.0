@@ -1,5 +1,5 @@
-<div class="col-xs-12 addBooking">
-	<form class="form-horizontal bookingMainForm" role="form" style="margin-top:10px" onsubmit="return false">
+<div class="col-xs-12 addBooking globalAdd">
+	<form class="form-horizontal bookingMainForm formOneList" role="form" style="margin-top:10px" onsubmit="return false">
 		<div class=" ui-sortable-handle">
 				<h5 class="">
 					<span class="badge badge-primary">1</span>
@@ -19,7 +19,7 @@
 							<div class="input-group">
 								<input type="text" name="contactRealname bind-change" class="col-sm-12 choosePartnerManager" value="">
 								<input type="hidden" name="partnerAgencyContactId" />
-								<span class="input-group-addon addPartnerManager" style="cursor:pointer;" title="为组团社新添加联系人">
+								<span class="input-group-addon addPartnerManager" style="cursor:pointer;left:-28px;" title="为组团社新添加联系人">
 									<i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
 								</span>
 							</div>
@@ -104,12 +104,12 @@
 						</h5>
 					<div class="widget-body">
 						<div class="widget-main no-padding">
-							<table class="table table-striped table-bordered table-hover" style="margin-top: 20px">
+							<table class="table table-striped table-bordered table-hover" style="margin-top: 20px;border: 1px solid #ccc">
 								<thead>
 									<tr>
 										<th class="th-border"width="100px" ><span class="necessary">*</span>入住日期</th>
 										<th class="th-border" width="100px"><span class="necessary">*</span>离店日期</th>
-										<th class="th-border"><span class="necessary">*</span>星级</th>
+										<th class="th-border"width="115px"><span class="necessary">*</span>星级</th>
 										<th class="th-border"><span class="necessary">*</span>酒店</th>
 										<th class="th-border"><span class="necessary">*</span>房型</th>
 										<th class="th-border"><span class="necessary"></span>天数</th>
@@ -118,7 +118,7 @@
 										<th class="th-border" width="110"> 销售单价</th>
 										<th class="th-border">成本</th>
 										<th class="th-border">应收</th>
-										<th class="th-border" style="width: 100px">操作</th>
+										<th class="th-border" width="70">操作</th>
 									</tr>
 								</thead>
 								<tbody class="hotelBookingList">
@@ -190,7 +190,7 @@
 						</h5>
 					<div class="widget-body">
 						<div class="widget-main no-padding">
-							<table class="table table-striped table-bordered table-hover" style="margin-top: 20px">
+							<table class="table table-striped table-bordered table-hover" style="margin-top: 20px;border: 1px solid #ccc">
 								<thead>
 									<tr>
 										<th class="th-border" width="50"><span class="necessary">*</span>日期</th>
@@ -255,7 +255,7 @@
 						</h5>
 					<div class="widget-body">
 						<div class="widget-main no-padding">
-							<table class="table table-striped table-bordered table-hover margin-top">
+							<table class="table table-striped table-bordered table-hover margin-top"  style="border: 1px solid #ccc">
 								<thead>
 									<tr>
 										<th class="th-border"><span class="necessary">*</span>票务公司</th>
@@ -270,7 +270,7 @@
 										<th class="th-border"> 销售单价</th>
 										<th class="th-border">成本</th>
 										<th class="th-border">应收</th>
-										<th class="th-border" style="width: 100px">操作</th>
+										<th class="th-border" width="70">操作</th>
 									</tr>
 								</thead>
 								<tbody class="ticketBookingList">
@@ -331,7 +331,7 @@
 						</div>
 					<div class="widget-body">
 						<div class="widget-main no-padding">
-							<table class="table table-striped table-bordered table-hover margin-top">
+							<table class="table table-striped table-bordered table-hover margin-top" style="border: 1px solid #ccc">
 								<thead>
 									<tr>
 										<th class="th-border" width="50"><span class="necessary">*</span>开始日期</th>
@@ -344,7 +344,7 @@
 										<th class="th-border">销售单价</th>
 										<th class="th-border">成本</th>
 										<th class="th-border">应收</th>
-										<th class="th-border" style="width: 100px;">操作</th>
+										<th class="th-border" width="70">操作</th>
 									</tr>
 								</thead>
 								<tbody class="busBookingList">
@@ -390,7 +390,7 @@
 			</div>
 		<div class="space-10"></div>
 		<div class="space-20"></div>
-		<button class="btn btn-block btn-primary btn-submit-booking">
+		<button class="btn btn-block btn-primary btn-submit-booking guideSubmit">
 			<i class="ace-icon fa fa-check"></i>
 			提交信息
 		</button>

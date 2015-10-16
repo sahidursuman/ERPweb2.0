@@ -3,7 +3,7 @@
         <div class="form-group" >      
           <label class="control-label pull-left" style="margin-left: 15px">酒店:</label>
             <div class="col-sm-2">
-                <select  class="col-xs-12" name="hotelId">
+                <select  class="col-xs-12" name="hotelId" style="width: 220px">
                     <option value ="">全部</option>
                     {{each hotelNameListNew as hotel index}}
 						<option value="{{hotel.id}}" {{if searchParam.hotel == hotel.id}}selected="selected"{{/if}}>{{hotel.name}}</option>

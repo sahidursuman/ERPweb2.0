@@ -14,33 +14,40 @@ define(function(require, exports) {
 	    for(var i=2013;i<=new Date().getFullYear();i++){
 	    	var yeardata={"value":i}
 	    	yearList.push(yeardata)
-	    };
+	    }
 	    for(var j = 1;j<=12;j++){
 	    	var monthData = {"value":j}
 	    	monthList.push(monthData);
 	    }
 	var Self = {			
-			searchData:{
-		           "selfPayId":"",
-		            "year":"",
-		            "month":""
-		        }, 
-		        searchCheckData:{
-		            "selfPayId":"",
-		            "hotelName":"",
-		            "year":"",
-		            "month":""
-		        },
-		        searchBalanceData:{
-		            "selfPayId":"",
-		            "selfPayName":"",
-		            "year":"",
-		            "startMonth":"",
-		            "endMonth":""
-		        },
-		        edited:false,
-		        blanceEdited:false,
-		        oldBlanceSelfPayId:0,
+		searchData:{
+			page : "",
+		   "selfPayId":"",
+			"year":"",
+			"month":""
+		}, 
+		searchCheckData:{
+			"selfPayId":"",
+			"hotelName":"",
+			"year":"",
+			"month":""
+		},
+		searchBalanceData:{
+			"selfPayId":"",
+			"selfPayName":"",
+			"year":"",
+			"startMonth":"",
+			"endMonth":""
+		},
+		edited : {},
+		isEdited : function(editedType){
+			if(!!Self.edited[editedType] && Self.edited[editedType] != ""){
+				return true;
+			}
+			return false;
+		},
+		oldCheckSelfPayId : 0,
+		oldBlanceSelfPayId:0,
 		listSelf:function(page,selfPayId,year,month){
 			$.ajax({
 				url:""+APP_ROOT+"back/financial/financialSelfPay.do?method=listSumFcSelfPay&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
@@ -57,10 +64,11 @@ define(function(require, exports) {
 					if(result){
 						data.selfPayNameListNew = JSON.parse(data.selfPayNameListNew);
 						Self.searchData={
-						selfPayId:selfPayId,
-//						var SelfList = data.SelfList;						
-						year:year,
-						month:month
+							page : page,
+							selfPayId:selfPayId,
+	//						var SelfList = data.SelfList;						
+							year:year,
+							month:month
 						}
 						data.yearList=yearList,
 						data.monthList=monthList,
@@ -148,34 +156,32 @@ define(function(require, exports) {
                 var result = showDialog(data);
                  if(result){
                  	 data.financialSelfPayList = JSON.parse(data.financialSelfPayList);
-                 	    Self.searchCheckData={
-                    		selfPayId:selfPayId,
-                    		selfPayName:selfPayName,
-                    		year:year,
-                    		month:month        
-                        }
-	                    data.yearList = yearList
-	                    data.monthList = monthList
-	                    data.selfPayName = selfPayName
-	                    data.searchParam = Self.searchCheckData  
-                       var html = SelfChecking(data);
-                 	   var validator;
-                	    //addTab(checkTabId,"自费对账",html);
-                	   if($("#" +"tab-"+checkTabId+"-content").length > 0)
-               	      {
-               	    	
-               	    	 if(Self.edited){
+					Self.searchCheckData={
+						selfPayId:selfPayId,
+						selfPayName:selfPayName,
+						year:year,
+						month:month        
+					}
+					data.yearList = yearList
+					data.monthList = monthList
+					data.selfPayName = selfPayName
+					data.searchParam = Self.searchCheckData  
+				   var html = SelfChecking(data);
+				   var validator;
+					//addTab(checkTabId,"自费对账",html);
+				   if($("#" +"tab-"+checkTabId+"-content").length > 0) {
+               	    	 if(!!Self.edited["checking"] && Self.edited["checking"] != ""){
                	    		addTab(checkTabId,"自费对账");
                	    		showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
                	    			 validator = rule.check($('.selfPayChecking'));
 				            		 if (!validator.form()) { return; }
-				            		 Self.saveCheckingData(selfPayId,selfPayName)
-				            		 Self.edited = false;
+				            		 Self.saveCheckingData(selfPayId,selfPayName,0);
+				            		 Self.edited["checking"] = "";
 				            		 addTab(checkTabId,"自费对账",html);
 				            		 validator = rule.check($('.selfPayChecking'));
 				            	 },function(){
 				            		 addTab(checkTabId,"自费对账",html);
-				            		 Self.edited = false;
+				            		 Self.edited["checking"] = "";
 				            		 validator = rule.check($('.selfPayChecking'));
 				            	 });
                	    	 }else{
@@ -188,97 +194,100 @@ define(function(require, exports) {
                	    	validator = rule.check($('.selfPayChecking'));
                	    };
            	    	$("#" +"tab-"+checkTabId+"-content .all").on("change",function(){
-           	    		Self.edited = true; 
+           	    		Self.edited["checking"] = "checking";
+						Self.oldCheckSelfPayId = selfPayId;
+						console.log("chenge-checking");
            	    	});
                  }          
-	                 //给搜索按钮绑定事件
-	                 $("#" +"tab-"+ checkTabId+"-content"+" .btn-checking-search").click(function(){
-                         Self.searchCheckData={
-                            selfPayId:selfPayId,  
-                            selfPayName:selfPayName,
-                         	year:$("#" +"tab-"+ checkTabId+"-content"+"  select[name=year]").val(),
-                         	month:$("#" +"tab-"+ checkTabId+"-content"+" select[name=month]").val(),
-                         }
-                         Self.selfPayCheckList(0,Self.searchCheckData.selfPayId,Self.searchCheckData.selfPayName,Self.searchCheckData.year,Self.searchCheckData.month)
-                     });
-	                 //导出事件btn-selfExport
-	                 $("#" +"tab-"+ checkTabId+"-content"+" .btn-selfExport").click(function(){
+				 //给搜索按钮绑定事件
+				 $("#" +"tab-"+ checkTabId+"-content"+" .btn-checking-search").click(function(){
+					 Self.searchCheckData={
+						selfPayId:selfPayId,  
+						selfPayName:selfPayName,
+						year:$("#" +"tab-"+ checkTabId+"-content"+"  select[name=year]").val(),
+						month:$("#" +"tab-"+ checkTabId+"-content"+" select[name=month]").val(),
+					 }
+					 Self.selfPayCheckList(0,Self.searchCheckData.selfPayId,Self.searchCheckData.selfPayName,Self.searchCheckData.year,Self.searchCheckData.month)
+				 });
+				 //导出事件btn-selfExport
+				 $("#" +"tab-"+ checkTabId+"-content"+" .btn-selfExport").click(function(){
 
-	                	 var year=$("#" +"tab-"+ checkTabId+"-content"+"  select[name=year]").val();
-                      	 var month=$("#" +"tab-"+ checkTabId+"-content"+" select[name=month]").val();
-                      	 checkLogin(function(){
-	                         	var url = ""+APP_ROOT+"back/export.do?method=selfPay&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view"+"&selfPayId="+selfPayId+"&selfPayName="+selfPayName+"&year="+year+"&month="+month+"&sortType=auto";
-	                         	exportXLS(url)
-	                         });
-	                 });
-                    //分页--首页按钮事件
-	                 $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.first").click(function(){
-	                	 Self.selfPayCheckList(0,Self.searchCheckData.selfPayId,Self.searchCheckData.selfPayName,Self.searchCheckData.year,Self.searchCheckData.month)
-	                 });
-					//分页--上一页事件
-	                 $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.previous").click(function(){
-						var previous = data.pageNo - 1;
-						if(data.pageNo == 0){
-							previous = 0;
-						}
-						Self.selfPayCheckList(previous,Self.searchCheckData.selfPayId,Self.searchCheckData.selfPayName,Self.searchCheckData.year,Self.searchCheckData.month)
-	                 });
-					//分页--下一页事件
-	                 $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.next").click(function(){
-						var next =  data.pageNo + 1;
-						if(data.pageNo == data.totalPage-1){
-							next = data.pageNo ;
-						}
-						Self.selfPayCheckList(next,Self.searchCheckData.selfPayId,Self.searchCheckData.selfPayName,Self.searchCheckData.year,Self.searchCheckData.month)
-	                 });
-					//分页--尾页事件
-	                 $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.last").click(function(){
-	                	Self.selfPayCheckList(data.totalPage == 0 ? data.totalPage : data.totalPage-1,Self.searchCheckData.selfPayId,Self.searchCheckData.selfPayName,Self.searchCheckData.year,Self.searchCheckData.month)
-	                 });
-		             //给全选绑定事件
-		                 $("#" +"tab-"+ checkTabId+"-content"+" .selectAll").click(function(){
-		                	 var flag = this.checked;
-		                	 $(".selfPayChecking .all tbody tr").each(function(){
-		                		 var checkedbox = $(this).find(".selfPayFinancial") 
-		                		 if(flag){
-		                			 checkedbox.prop("checked",true);
-		                		 }else{
-									 //判断对账状态
-									 if(checkedbox.attr("data-entity-checkStatus") == 1){
-										 checkedbox.prop("checked",true);
-									 }else{ 	
-										 checkedbox.prop("checked",false);
-									 }
+					 var year=$("#" +"tab-"+ checkTabId+"-content"+"  select[name=year]").val();
+					 var month=$("#" +"tab-"+ checkTabId+"-content"+" select[name=month]").val();
+					 checkLogin(function(){
+							var url = ""+APP_ROOT+"back/export.do?method=selfPay&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view"+"&selfPayId="+selfPayId+"&selfPayName="+selfPayName+"&year="+year+"&month="+month+"&sortType=auto";
+							exportXLS(url)
+						 });
+				 });
+				//分页--首页按钮事件
+				 $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.first").click(function(){
+					 Self.selfPayCheckList(0,Self.searchCheckData.selfPayId,Self.searchCheckData.selfPayName,Self.searchCheckData.year,Self.searchCheckData.month)
+				 });
+				//分页--上一页事件
+				 $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.previous").click(function(){
+					var previous = data.pageNo - 1;
+					if(data.pageNo == 0){
+						previous = 0;
+					}
+					Self.selfPayCheckList(previous,Self.searchCheckData.selfPayId,Self.searchCheckData.selfPayName,Self.searchCheckData.year,Self.searchCheckData.month)
+				 });
+				//分页--下一页事件
+				 $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.next").click(function(){
+					var next =  data.pageNo + 1;
+					if(data.pageNo == data.totalPage-1){
+						next = data.pageNo ;
+					}
+					Self.selfPayCheckList(next,Self.searchCheckData.selfPayId,Self.searchCheckData.selfPayName,Self.searchCheckData.year,Self.searchCheckData.month)
+				 });
+				//分页--尾页事件
+				 $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.last").click(function(){
+					Self.selfPayCheckList(data.totalPage == 0 ? data.totalPage : data.totalPage-1,Self.searchCheckData.selfPayId,Self.searchCheckData.selfPayName,Self.searchCheckData.year,Self.searchCheckData.month)
+				 });
+				 //给全选绑定事件
+					 $("#" +"tab-"+ checkTabId+"-content"+" .selectAll").click(function(){
+						 var flag = this.checked;
+						 $(".selfPayChecking .all tbody tr").each(function(){
+							 var checkedbox = $(this).find(".selfPayFinancial") 
+							 if(flag){
+								 checkedbox.prop("checked",true);
+							 }else{
+								 //判断对账状态
+								 if(checkedbox.attr("data-entity-checkStatus") == 1){
+									 checkedbox.prop("checked",true);
+								 }else{ 	
+									 checkedbox.prop("checked",false);
 								 }
-		                	 });
-		                 }); 
-		               //给复选框绑定事件
-		                 $("#" +"tab-"+ checkTabId+"-content"+" .selfPayFinancial").click(function(){
-		                	 var flag = true
-		                	 $("#" +"tab-"+ checkTabId+"-content"+" .selfPayFinancial").each(function(){
-		                		 if(!$(this).prop("checked")){
-			                			flag = false;
-			                		} 
-		                	 })
-		                	 $("#" +"tab-"+ checkTabId+"-content"+" .selectAll").prop("checked",flag)
-		                 });
-	                 //给确认对账按钮绑定事件
-		                 $("#" +"tab-"+ checkTabId+"-content"+" .btn-selfPayFinancial-checking").click(function(){
-		                	 if (!validator.form()) { return; }
-		            		 Self.saveCheckingData(selfPayId,selfPayName)
-		                 })
-	                 //给查看单据绑定事件
-	                 $("#" +"tab-"+ checkTabId+"-content"+" .selfPayImg").click(function(){
-	                	 var WEB_IMG_URL_BIG = $("#" +"tab-"+ checkTabId+"-content").find("input[name=WEB_IMG_URL_BIG]").val();//大图
-	                	 var WEB_IMG_URL_SMALL = $("#" +"tab-"+ checkTabId+"-content").find("input[name=WEB_IMG_URL_SMALL]").val();//大图
-	                	 Self.viewImage(this,WEB_IMG_URL_BIG,WEB_IMG_URL_SMALL);
-	                 });
-		             //关闭按钮事件
-		             $("#" +"tab-"+ checkTabId+"-content"+" .btn-selfPayFinancial-close").click(function(){
-		            	 showConfirmDialog($( "#confirm-dialog-message" ), "确定关闭本选项卡?",function(){
-		            		 closeTab(checkTabId)
-		            	 });
-		             });
+							 }
+						 });
+					 }); 
+				   //给复选框绑定事件
+					 $("#" +"tab-"+ checkTabId+"-content"+" .selfPayFinancial").click(function(){
+						 var flag = true
+						 $("#" +"tab-"+ checkTabId+"-content"+" .selfPayFinancial").each(function(){
+							 if(!$(this).prop("checked")){
+									flag = false;
+								} 
+						 })
+						 $("#" +"tab-"+ checkTabId+"-content"+" .selectAll").prop("checked",flag)
+					 });
+				 //给确认对账按钮绑定事件
+					 $("#" +"tab-"+ checkTabId+"-content"+" .btn-selfPayFinancial-checking").click(function(){
+						 if (!validator.form()) { return; }
+						 Self.saveCheckingData(selfPayId,selfPayName,0);
+					 })
+				 //给查看单据绑定事件
+				 $("#" +"tab-"+ checkTabId+"-content"+" .selfPayImg").click(function(){
+					 var WEB_IMG_URL_BIG = $("#" +"tab-"+ checkTabId+"-content").find("input[name=WEB_IMG_URL_BIG]").val();//大图
+					 var WEB_IMG_URL_SMALL = $("#" +"tab-"+ checkTabId+"-content").find("input[name=WEB_IMG_URL_SMALL]").val();//大图
+					 Self.viewImage(this,WEB_IMG_URL_BIG,WEB_IMG_URL_SMALL);
+				 });
+				 //关闭按钮事件
+				 $("#" +"tab-"+ checkTabId+"-content"+" .btn-selfPayFinancial-close").click(function(){
+					 showConfirmDialog($( "#confirm-dialog-message" ), "确定关闭本选项卡?",function(){
+						 closeTab(checkTabId);
+						 Self.edited["checking"] = "";
+					 });
+				 });
              }
     	 });
     },
@@ -310,20 +319,20 @@ define(function(require, exports) {
                     var validator = rule.check($('.selfPayFinancialBalancing'));*/
                     if($("#" +"tab-"+blanceTabId+"-content").length > 0)
              	    {
-             	    	 if(Self.blanceEdited){
+             	    	 if(!!Self.edited["blance"] && Self.edited["blance"] != ""){
              	    		addTab(blanceTabId,"自费结算");
 		                    //给每个tr添加表单验证
              	    		showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
              	    			 Self.validatorTable()
              	    			 var saveBtn = $("#" +"tab-"+ blanceTabId+"-content"+" .btn-selfPayBlance-save")
              	    			 if (!$(saveBtn).data('validata').form()) { return; }
-             	    			 Self.saveBlanceData(Self.oldBlanceSelfPayId,selfPayName)
-			            		 Self.blanceEdited = false;
+             	    			 Self.saveBlanceData(Self.oldBlanceSelfPayId,selfPayName,0);
+			            		 Self.edited["blance"] = "";
 			            		 addTab(blanceTabId,"自费结算",html);
 			            		 Self.validatorTable();
 			            	 },function(){
 			            		    addTab(blanceTabId,"自费结算",html);
-			            		    Self.blanceEdited = false;
+			            		    Self.edited["blance"] = "";
 			            		    Self.validatorTable();
 			            	 });
              	    	 }else{
@@ -336,7 +345,7 @@ define(function(require, exports) {
              	    	Self.validatorTable();
              	    };
              	   $("#" +"tab-"+blanceTabId+"-content .all").on('change', 'input, select', function() {
-             		    Self.blanceEdited = true;
+             		    Self.edited["blance"] = "blance";
              		    Self.oldBlanceSelfPayId = selfPayId;
     	    			$(this).closest('tr').data('blanceStatus',true);
     	    		});
@@ -355,7 +364,7 @@ define(function(require, exports) {
                    //保存按钮事件
                     $("#" +"tab-"+ blanceTabId+"-content"+" .btn-selfPayBlance-save").click(function(){
     	    			 if (!$(this).data('validata').form()) { return; }
-    	    			 Self.saveBlanceData(Self.oldBlanceSelfPayId,selfPayName)
+    	    			 Self.saveBlanceData(Self.oldBlanceSelfPayId,selfPayName,0);
                     });
                     //对账明细按钮事件
                     $("#" +"tab-"+ blanceTabId+"-content"+" .btn-selfPayBlance-checkDetail").click(function(){
@@ -469,7 +478,7 @@ define(function(require, exports) {
 			}
 		});
     },
-    saveCheckingData:function(selfPayId,selfPayName){
+    saveCheckingData:function(selfPayId,selfPayName,isClose){
        var JsonStr = [],
            oldUnPayedMoney,
            newUnPayedMoney,
@@ -546,15 +555,20 @@ define(function(require, exports) {
 					var result = showDialog(data);
 					if(result){
 						showMessageDialog($( "#confirm-dialog-message" ),data.message);
-						Self.edited = false;
-						Self.selfPayCheckList(0,Self.searchCheckData.selfPayId,Self.searchCheckData.selfPayName,Self.searchCheckData.year,Self.searchCheckData.month)
+						Self.edited["checking"] = "";
+						if(isClose == 1){
+							closeTab(checkTabId);
+							Self.listSelf(Self.searchData.page,Self.searchData.selfPayId,Self.searchData.year,Self.searchData.month);
+						} else{
+							Self.selfPayCheckList(0,Self.searchCheckData.selfPayId,Self.searchCheckData.selfPayName,Self.searchCheckData.year,Self.searchCheckData.month);
+						}
 					}
 				}
     	   });
 	   }
     },
     //结算处理
-    saveBlanceData:function(selfPayId,selfPayName){
+    saveBlanceData:function(selfPayId,selfPayName,isClose){
 
       	//console.log($obj+"-------");
       	var DataArr = [],
@@ -593,13 +607,32 @@ define(function(require, exports) {
                 var result = showDialog(data);
                 if(result){
                 	showMessageDialog($( "#confirm-dialog-message" ),data.message);
-                	Self.blanceEdited = false;
-					Self.selfPayBalanceList(0,Self.searchBalanceData.selfPayId,Self.searchBalanceData.selfPayName,Self.searchBalanceData.year,Self.searchBalanceData.startMonth,Self.searchBalanceData.endMonth);
+                	Self.edited["blance"] = "";
+					if(isClose == 1){
+						closeTab();
+						Self.listSelf(Self.searchData.page,Self.searchData.selfPayId,Self.searchData.year,Self.searchData.month);
+					} else{
+						Self.selfPayBalanceList(0,Self.searchBalanceData.selfPayId,Self.searchBalanceData.selfPayName,Self.searchBalanceData.year,Self.searchBalanceData.startMonth,Self.searchBalanceData.endMonth);
+					}
                 }
             }
     	})
       
-    }
+    },
+		save : function(saveType){
+			console.log(saveType);
+			if(saveType == "checking"){
+				Self.saveCheckingData(Self.oldCheckSelfPayId,"",1);
+			} else if(saveType == "blance"){
+				Self.saveBlanceData(Self.oldBlanceSelfPayId,"",1);
+			}
+		},
+		clearEdit : function(clearType){
+			Self.edited[clearType] = "";
+		}
 	}
 	exports.listSelf = Self.listSelf;
+	exports.isEdited = Self.isEdited;
+	exports.save = Self.save;
+	exports.clearEdit = Self.clearEdit;
 });

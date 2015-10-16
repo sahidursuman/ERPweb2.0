@@ -2,7 +2,7 @@
 	 <div class="form-horizontal">
 	 	<div class="col-xs-12">
 		 	<div class="col-xs-3" style="padding-left:0px;">
-				<label class="col-xs-4  text-right control-label no-padding-right">客户来源:</label>
+				<label class="pull-left  text-right control-label no-padding-right">客户来源:</label>
 				<div class="col-xs-8">
 					<input type="text" name="partnerAgency" placeholder="全部组团社" class="col-sm-12 choosePartnerAgency" value="{{searchParam.partnerAgencyList.travelAgencyName}}" />
 					<input type="hidden" name="partnerAgencyId" value="{{searchParam.partnerAgencyList.id}}" />
@@ -60,7 +60,7 @@
 		<div style="clear: both;margin-top:20px;padding-top:15px;"></div>
 		<div class="col-xs-12">
 			<div class="col-xs-3" style="padding-left:0px;">
-				<label class="col-xs-4 text-right control-label no-padding-right">安排人:</label>
+				<label class="pull-left text-right control-label no-padding-right">安排人:</label>
 				<div class="col-xs-8">
 					<input type="text" name="arrangeUser" placeholder="全部安排人" value="{{searchParam.arrangeUserList.name}}" class="col-xs-12 chooseArrangeUser" />
 					<input type="hidden" name="arrangeUserId" value="{{searchParam.arrangeUserList.id}}" />
@@ -187,7 +187,6 @@
 				</tr>{{/each}}
 			</tbody>
 		</table>
-		
 		<div class="row pageMode">
 			<div class="col-xs-6">
 				<div class="dataTables_info" id="dynamic-table_info" role="status" aria-live="polite">共计 {{recordSize}} 条记录</div>
