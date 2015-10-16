@@ -30,7 +30,7 @@
                             <i class="ace-icon fa fa-search"></i>
                             	搜索
                         </button>
-                        <button type="button" class="btn btn-sm btn-primary btn-success btn-guideExport">
+                        <button type="button" class="btn btn-sm btn-primary btn-success btn-guideExport" style="margin-left: 20px">
 							<span>导出报表</span>
 							<i class="ace-icon fa fa-arrow-right icon-on-right"></i>
 						</button>
@@ -39,7 +39,7 @@
             </form>
             <form class="form-horizontal" role="form" onsubmit="return false">
                 <div class="form-group col-sm-10">
-                    <label class=" control-label pull-left" style="margin-left: 15px">总预支款：{{sumGuidePreMoney}}</label>
+                    <label class=" control-label pull-left" style="margin-left: 5px">总预支款：{{sumGuidePreMoney}}</label>
                     <label class="col-sm-1 control-label no-padding-right">总团队收入：{{sumGuideIncomeMoney}}</label>
                     <label class="col-sm-1 control-label no-padding-right">总导游现付：{{sumGuideNowPayedMoney}}</label>
                     <label class="col-sm-1 control-label no-padding-right">总导服费：{{sumGuideFee}}</label>
@@ -53,22 +53,22 @@
 				<table class="table table-striped table-bordered table-hover all" style="margin-top: 30px">
 					<thead>
 						<tr>
-                           <th>团号</th>
-                           <th>线路</th>
-                           <th>预支款</th>
-                           <th>现收团款</th>
-                           <th>其他收入</th>
-                           <th>导游现付</th>
-                           <th>导服费</th>
-                           <th>管理费</th>
-                           <th>购物导拥</th>
-                           <th>自费导拥</th>
-                           <th>退补款</th>
-                           <th class="col-sm-1"> <span class="necessary">*</span>实际退补款</th>
-                           <th class="col-sm-1">说明</th>
-                           <th class="col-sm-1">对账时间</th>
-                           <th>对账人</th>
-                           <th>对账</th>
+                           <th class="th-border">团号</th>
+                           <th class="th-border">线路</th>
+                           <th class="th-border">预支款</th>
+                           <th class="th-border">现收团款</th>
+                           <th class="th-border">其他收入</th>
+                           <th class="th-border">导游现付</th>
+                           <th class="th-border">导服费</th>
+                           <th class="th-border">管理费</th>
+                           <th class="th-border">购物导拥</th>
+                           <th class="th-border">自费导拥</th>
+                           <th class="th-border">退补款</th>
+                           <th class="th-border col-sm-1" > <span class="necessary">*</span>实际退补款</th>
+                           <th class="th-border col-sm-1" >说明</th>
+                           <th class="th-border col-sm-1" >对账时间</th>
+                           <th class="th-border">对账人</th>
+                           <th class="th-border">对账</th>
                         </tr>
 					</thead>
 					<tbody>
@@ -129,26 +129,21 @@
                 </div>
             </div>
 
-            <div class="form-group pull-right col-sm-4" style="text-align: right;margin-top: 40px;padding-right: 40px">
-                <label class="control-label no-padding-right" style="margin-left: 17px" ><span style="margin-left: 30px"><input type="checkbox" class="selectAll">全选</span></label>
+            <div class="form-group  col-sm-12" >
+                <label class="control-label no-padding-right pull-right" ><input type="checkbox" class="selectAll">全选</label>
             </div>
             <div style="clear: both"></div>
-
             <br>
-
-
             <form class="form-horizontal" role="form" onsubmit="return false">
                 <div class="form-group" style="text-align: center;">
-                	<button class="btn btn-xs btn-primary btn-guide-close" style="margin-left:20px">
+                	<button class="btn btn-xs btn-primary btn-guide-close" >
                         <i class="ace-icon fa fa-times-circle"></i>
                        	 关闭
                     </button>
-                    <button class="btn btn-xs btn-primary btn-confirm-guide-checking">
+                    <button class="btn btn-xs btn-primary btn-confirm-guide-checking" style="margin-left:20px">
                         <i class="ace-icon fa fa-check-circle"></i>
-                       	 确认对账
+                       	 确认
                     </button>
                 </div>
             </form>
-
-
 </div>
