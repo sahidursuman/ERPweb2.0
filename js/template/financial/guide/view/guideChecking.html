@@ -1,12 +1,9 @@
 <div class="row check globalAdd">
-		<div class="col-xs-12 border" >
+		<div class="col-xs-12 border borderNormal " >
             <form class="form-horizontal" role="form" onsubmit="return false">
                 <div class="search-area  editable editable-click" style="margin-top: 10px">
                     <div class="form-group"> <label style="float: left;margin: 5px auto auto 15px" class=" control-label "> 导游：{{guideName}}</label>
-
                         <label class="col-sm-1 control-label no-padding-right">账期：</label>
-
-
                         <select class="col-sm-1" name="year">
                             {{each yearList as year}}
 							<option value="{{year}}">{{year}}</option>
@@ -38,20 +35,17 @@
 							<i class="ace-icon fa fa-arrow-right icon-on-right"></i>
 						</button>
                     </div>
-
                 </div>
             </form>
             <form class="form-horizontal" role="form" onsubmit="return false">
-                <div class="form-group ">
-
-
+                <div class="form-group col-sm-10">
                     <label class=" control-label pull-left" style="margin-left: 15px">总预支款：{{sumGuidePreMoney}}</label>
                     <label class="col-sm-1 control-label no-padding-right">总团队收入：{{sumGuideIncomeMoney}}</label>
                     <label class="col-sm-1 control-label no-padding-right">总导游现付：{{sumGuideNowPayedMoney}}</label>
                     <label class="col-sm-1 control-label no-padding-right">总导服费：{{sumGuideFee}}</label>
                     <label class="col-sm-1 control-label no-padding-right">总导游返佣：{{sumGuideRebateMoney}}</label>
                     <label class="col-sm-1 control-label no-padding-right">总退补款：{{sumBackGuideMoney}}</label>
-                    <label class="col-sm-1 control-label no-padding-right">总实际退补：{{sumRealBackGuideMoney}}</label>
+                    <label class="col-sm-2 control-label no-padding-right">总实际退补：{{sumRealBackGuideMoney}}</label>
                 </div>
             </form>
         </div>
