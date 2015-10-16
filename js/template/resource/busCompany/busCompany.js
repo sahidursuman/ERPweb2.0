@@ -1,11 +1,11 @@
 define(function(require, exports) {
-    var rule = require("./rule");
+	var rule = require("./rule");
 	var menuKey = "resource_busCompany",
-	    listTemplate = require("./view/list"),
-	    addTemplate = require("./view/add"),
-	    updateTemplate = require("./view/update"),
-	    viewTemplate = require("./view/view"),
-	    tabId = "tab-"+menuKey+"-content";
+		listTemplate = require("./view/list"),
+		addTemplate = require("./view/add"),
+		updateTemplate = require("./view/update"),
+		viewTemplate = require("./view/view"),
+		tabId = "tab-"+menuKey+"-content";
 
 
 	var busCompany = {
@@ -59,19 +59,19 @@ define(function(require, exports) {
 						$("#"+tabId+" .search-area .btn-status .dropdown-menu a").click(function(){
 							$(this).parent().parent().parent().find("button").attr("data-value",$(this).attr("data-value"));
 							$(this).parent().parent().parent().find("span").text($(this).text());
-							
+
 							busCompany.searchData={
-									companyName :$("#"+tabId+" .search-area input[name=busCompany_companyName]").val(),								
-									status :$("#"+tabId+" .search-area .btn-status").find("button").attr("data-value")								
-							}	
+								companyName :$("#"+tabId+" .search-area input[name=busCompany_companyName]").val(),
+								status :$("#"+tabId+" .search-area .btn-status").find("button").attr("data-value")
+							}
 							busCompany.listBusCompany(0,busCompany.searchData.companyName,busCompany.searchData.status)
 						});
 						//搜索按钮事件
 						$("#"+tabId+" .btn-busCompany-search").click(function(){
 							busCompany.searchData={
-									companyName :$("#"+tabId+" .search-area input[name=busCompany_companyName]").val(),								
-									status :$("#"+tabId+" .search-area .btn-status").find("button").attr("data-value")							
-							}	
+								companyName :$("#"+tabId+" .search-area input[name=busCompany_companyName]").val(),
+								status :$("#"+tabId+" .search-area .btn-status").find("button").attr("data-value")
+							}
 							busCompany.listBusCompany(0,busCompany.searchData.companyName,busCompany.searchData.status);
 						});
 						//分页--首页按钮事件
@@ -108,40 +108,40 @@ define(function(require, exports) {
 		addBusCompany:function(){
 			var html = addTemplate();
 			var addBusCompanyLayer = layer.open({
-			    type: 1,
-			    title:"新增车队",
-			    skin: 'layui-layer-rim', //加上边框
-			    area: ['70%', '700px'], //宽高
-			    zIndex:1028,
-			    content: html,
-			    success:function(){
-			    	var $obj = $(".addBusCompanyContainer .busCompanyMainForm"),
-			    	// 添加表单验证
-			    	validator = rule.busComCheckor($('.addBusCompanyContainer'));
+				type: 1,
+				title:"新增车队",
+				skin: 'layui-layer-rim', //加上边框
+				area: ['70%', '700px'], //宽高
+				zIndex:1028,
+				content: html,
+				success:function(){
+					var $obj = $(".addBusCompanyContainer .busCompanyMainForm"),
+					// 添加表单验证
+						validator = rule.busComCheckor($('.addBusCompanyContainer'));
 
-			    	busCompany.getProvinceList($obj.find("select[name=provinceId]"));
-			    	//给省份select绑定事件
-			    	$(".busCompanyMainForm select[name=provinceId]").change(function(){
-			    		var provinceId = $(this).val();
-			    		if(provinceId!=''){
-			    			busCompany.getCityList($obj.find("select[name=cityId]"),provinceId);
-			    		}else{
-			    			$obj.find("select[name=cityId]").html("<option value=''>未选择</option>");
-			    		}
-			    		$obj.find("select[name=districtId]").html("<option value=''>未选择</option>");
-			    	});
+					busCompany.getProvinceList($obj.find("select[name=provinceId]"));
+					//给省份select绑定事件
+					$(".busCompanyMainForm select[name=provinceId]").change(function(){
+						var provinceId = $(this).val();
+						if(provinceId!=''){
+							busCompany.getCityList($obj.find("select[name=cityId]"),provinceId);
+						}else{
+							$obj.find("select[name=cityId]").html("<option value=''>未选择</option>");
+						}
+						$obj.find("select[name=districtId]").html("<option value=''>未选择</option>");
+					});
 
-			    	//给城市select绑定事件
-			    	$obj.find("select[name=cityId]").change(function(){
-			    		var cityId = $(this).val();
-			       		if(cityId!=''){
-			       			busCompany.getDistrictList($obj.find("select[name=districtId]"),cityId);
-			    		}else{
-			    			$obj.find("select[name=districtId]").html("<option value=''>未选择</option>");
-			    		}
-			    	});
+					//给城市select绑定事件
+					$obj.find("select[name=cityId]").change(function(){
+						var cityId = $(this).val();
+						if(cityId!=''){
+							busCompany.getDistrictList($obj.find("select[name=districtId]"),cityId);
+						}else{
+							$obj.find("select[name=districtId]").html("<option value=''>未选择</option>");
+						}
+					});
 
-			    	$obj.find("select[name=payType]").change(function(){
+					$obj.find("select[name=payType]").change(function(){
 						var payType = $(this).val();
 						if(payType == 1){
 							$(this).parent().find(".payPeriod").removeClass("hide");
@@ -153,10 +153,10 @@ define(function(require, exports) {
 					var $busList = $(".addBusCompanyContainer .busList");
 					$busList.find(".btn-bus-add").click(function(){
 						var html = "<tr><td><input class=\"col-sm-12\" name=\"licenseNumber\" type=\"text\" maxlength=\"10\"/></td><td><input class=\"col-sm-12\" name=\"brand\" type=\"text\" maxlength=\"32\"/></td><td><input class=\"col-sm-12\" name=\"seatCount\" type=\"text\" value=\"1\"  maxlength=\"3\"/></td><td class=\"col-sm-1\"><div class=\"input-group col-sm-12\"><input name=\"buyTime\" type=\"text\" class=\"datepicker\" style='width: 130px' /><span class=\"input-group-addon\"><i class=\"fa fa-calendar\"></i></span></div></td><td><select name=\"isChartered\"><option value=\"1\">是</option><option value=\"0\" selected=\"selected\">否</option></select></td>" +								"<td class=\"time\">" +
-								"<div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input name=\"startTime\" type=\"text\" readonly=\"readonly\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" readonly=\"readonly\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea hide\" style=\"float:right\"><button class=\"btn  btn-sm btn-white add\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i></button></label></div>" +
-								"</td>" +
-								"<td><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input style=\"width:100px;\" name=\"contractPrice\" type=\"text\" readonly=\"readonly\"/><label>&nbsp;元</label></div></td>" +
-								"<td><input name=\"remark\"  maxlength=\"1000\"  type=\"text\" class=\"col-sm-12\"/></td><td style=\"width:70px\"><a class=\"btn-xs btn-bus-delete\">删除</a></td></tr>";
+							"<div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input name=\"startTime\" type=\"text\" readonly=\"readonly\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" readonly=\"readonly\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea hide\" style=\"float:right\"><button class=\"btn  btn-sm btn-white add\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i></button></label></div>" +
+							"</td>" +
+							"<td><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input style=\"width:100px;\" name=\"contractPrice\" type=\"text\" readonly=\"readonly\"/><label>&nbsp;元</label></div></td>" +
+							"<td><input name=\"remark\"  maxlength=\"1000\"  type=\"text\" class=\"col-sm-12\"/></td><td style=\"width:70px\"><a class=\"btn-xs btn-bus-delete\">删除</a></td></tr>";
 						$busList.find("tbody").append(html);
 
 						$busList.find("select[name=isChartered]").change(function(){
@@ -282,7 +282,7 @@ define(function(require, exports) {
 								licenseNumber : busJsonAddTr.eq(i).find("input[name=licenseNumber]").val(),
 								brand : busJsonAddTr.eq(i).find("input[name=brand]").val(),
 								seatCount : busJsonAddTr.eq(i).find("input[name=seatCount]").val(),
-								buyTime : (buyTime == "") ? "0000-00-00" : buyTime,
+								buyTime : (buyTime == "") ? "" : buyTime,
 								remark : busJsonAddTr.eq(i).find("input[name=remark]").val(),
 								isChartered : busJsonAddTr.eq(i).find("select[name=isChartered]").val(),
 								priceJsonAddList : []
@@ -320,67 +320,67 @@ define(function(require, exports) {
 						});
 
 						/*var busJsonAdd = "[";
-						var busListLength = $(".busList tbody tr").length;
-						$busList.find("tbody tr").each(function(i){
-							var busJson = "";
-							var licenseNumber = $(this).find("input[name=licenseNumber]").val();
-							var brand = $(this).find("input[name=brand]").val();
-							var seatCount = $(this).find("input[name=seatCount]").val();
-							var buyTime = $(this).find("input[name=buyTime]").val();
-							if(buyTime == ""){
-								buyTime = "0000-00-00";
-							}
-							var isChartered = $(this).find("select[name=isChartered]").val();
+						 var busListLength = $(".busList tbody tr").length;
+						 $busList.find("tbody tr").each(function(i){
+						 var busJson = "";
+						 var licenseNumber = $(this).find("input[name=licenseNumber]").val();
+						 var brand = $(this).find("input[name=brand]").val();
+						 var seatCount = $(this).find("input[name=seatCount]").val();
+						 var buyTime = $(this).find("input[name=buyTime]").val();
+						 if(buyTime == ""){
+						 buyTime = "0000-00-00";
+						 }
+						 var isChartered = $(this).find("select[name=isChartered]").val();
 
-							var priceJsonAdd = "[";
-							var priceLength = $(this).find("td.time div").length;
-							if(isChartered == 1){
-								$(this).find("td.time div").each(function(i){
-									var divIndex = $(this).attr("data-index");
-									var startTime = $(this).find("input[name=startTime]").val();
-									var endTime = $(this).find("input[name=endTime]").val();
-									var contractPrice = $(this).parent().next().find(".div-"+divIndex+"").find("input[name=contractPrice]").val();
-									if(i==(priceLength-1)){
-										priceJsonAdd += "{\"startTime\":\""+startTime+"\",\"endTime\":\""+endTime+"\",\"contractPrice\":\""+contractPrice+"\"}";
-									}else{
-										priceJsonAdd += "{\"startTime\":\""+startTime+"\",\"endTime\":\""+endTime+"\",\"contractPrice\":\""+contractPrice+"\"},";
-									}
-								});
-							}
-							priceJsonAdd += "]";
-							console.log(priceJsonAdd);
+						 var priceJsonAdd = "[";
+						 var priceLength = $(this).find("td.time div").length;
+						 if(isChartered == 1){
+						 $(this).find("td.time div").each(function(i){
+						 var divIndex = $(this).attr("data-index");
+						 var startTime = $(this).find("input[name=startTime]").val();
+						 var endTime = $(this).find("input[name=endTime]").val();
+						 var contractPrice = $(this).parent().next().find(".div-"+divIndex+"").find("input[name=contractPrice]").val();
+						 if(i==(priceLength-1)){
+						 priceJsonAdd += "{\"startTime\":\""+startTime+"\",\"endTime\":\""+endTime+"\",\"contractPrice\":\""+contractPrice+"\"}";
+						 }else{
+						 priceJsonAdd += "{\"startTime\":\""+startTime+"\",\"endTime\":\""+endTime+"\",\"contractPrice\":\""+contractPrice+"\"},";
+						 }
+						 });
+						 }
+						 priceJsonAdd += "]";
+						 console.log(priceJsonAdd);
 
 
-							var remark = $(this).find("input[name=remark]").val();
-							if(i == (busListLength-1)){
-								busJson = "{\"licenseNumber\":\""+licenseNumber+"\",\"brand\":\""+brand+"\",\"seatCount\":\""+seatCount+"\",\"buyTime\":\""+buyTime+"\",\"isChartered\":\""+isChartered+"\",\"priceJsonAdd\":\""+encodeURIComponent(priceJsonAdd)+"\",\"remark\":\""+remark+"\"}";
-							}
-							else{
-								busJson = "{\"licenseNumber\":\""+licenseNumber+"\",\"brand\":\""+brand+"\",\"seatCount\":\""+seatCount+"\",\"buyTime\":\""+buyTime+"\",\"isChartered\":\""+isChartered+"\",\"priceJsonAdd\":\""+encodeURIComponent(priceJsonAdd)+"\",\"remark\":\""+remark+"\"},";
-							}
-							busJsonAdd += busJson;
-						});
-						busJsonAdd += "]";
-						var driverJsonAdd = "[";
-						var driverListLength = $driverList.find("tbody tr").length;
-						$driverList.find("tbody tr").each(function(i){
-							var driverJson = "";
-							var name = $(this).find("input[name=driverName]").val();
-							var gender = $(this).find("select[name=gender]").val();
-							var mobileNumber = $(this).find("input[name=mobileNumber]").val();
-							var driveYears = $(this).find("input[name=driveYears]").val();
-							var licenseId = $(this).find("input[name=licenseId]").val();
-							var status = $(this).find("select[name=status]").val();
-							var remark = $(this).find("input[name=remark]").val();
-							if(i == (driverListLength-1)){
-								driverJson = "{\"name\":\""+name+"\",\"gender\":\""+gender+"\",\"mobileNumber\":\""+mobileNumber+"\",\"driveYears\":\""+driveYears+"\",\"licenseId\":\""+licenseId+"\",\"status\":\""+status+"\",\"remark\":\""+remark+"\"}";
-							}
-							else{
-								driverJson = "{\"name\":\""+name+"\",\"gender\":\""+gender+"\",\"mobileNumber\":\""+mobileNumber+"\",\"driveYears\":\""+driveYears+"\",\"licenseId\":\""+licenseId+"\",\"status\":\""+status+"\",\"remark\":\""+remark+"\"},";
-							}
-							driverJsonAdd += driverJson;
-						});
-						driverJsonAdd += "]";*/
+						 var remark = $(this).find("input[name=remark]").val();
+						 if(i == (busListLength-1)){
+						 busJson = "{\"licenseNumber\":\""+licenseNumber+"\",\"brand\":\""+brand+"\",\"seatCount\":\""+seatCount+"\",\"buyTime\":\""+buyTime+"\",\"isChartered\":\""+isChartered+"\",\"priceJsonAdd\":\""+encodeURIComponent(priceJsonAdd)+"\",\"remark\":\""+remark+"\"}";
+						 }
+						 else{
+						 busJson = "{\"licenseNumber\":\""+licenseNumber+"\",\"brand\":\""+brand+"\",\"seatCount\":\""+seatCount+"\",\"buyTime\":\""+buyTime+"\",\"isChartered\":\""+isChartered+"\",\"priceJsonAdd\":\""+encodeURIComponent(priceJsonAdd)+"\",\"remark\":\""+remark+"\"},";
+						 }
+						 busJsonAdd += busJson;
+						 });
+						 busJsonAdd += "]";
+						 var driverJsonAdd = "[";
+						 var driverListLength = $driverList.find("tbody tr").length;
+						 $driverList.find("tbody tr").each(function(i){
+						 var driverJson = "";
+						 var name = $(this).find("input[name=driverName]").val();
+						 var gender = $(this).find("select[name=gender]").val();
+						 var mobileNumber = $(this).find("input[name=mobileNumber]").val();
+						 var driveYears = $(this).find("input[name=driveYears]").val();
+						 var licenseId = $(this).find("input[name=licenseId]").val();
+						 var status = $(this).find("select[name=status]").val();
+						 var remark = $(this).find("input[name=remark]").val();
+						 if(i == (driverListLength-1)){
+						 driverJson = "{\"name\":\""+name+"\",\"gender\":\""+gender+"\",\"mobileNumber\":\""+mobileNumber+"\",\"driveYears\":\""+driveYears+"\",\"licenseId\":\""+licenseId+"\",\"status\":\""+status+"\",\"remark\":\""+remark+"\"}";
+						 }
+						 else{
+						 driverJson = "{\"name\":\""+name+"\",\"gender\":\""+gender+"\",\"mobileNumber\":\""+mobileNumber+"\",\"driveYears\":\""+driveYears+"\",\"licenseId\":\""+licenseId+"\",\"status\":\""+status+"\",\"remark\":\""+remark+"\"},";
+						 }
+						 driverJsonAdd += driverJson;
+						 });
+						 driverJsonAdd += "]";*/
 						busJsonAdd = JSON.stringify(busJsonAdd);
 						console.log(busJsonAdd);
 						console.log("---------------");
@@ -407,7 +407,7 @@ define(function(require, exports) {
 							}
 						});
 					});
-			    }
+				}
 			});
 		},
 		updateBusCompany:function(id,pageNo){
@@ -429,60 +429,60 @@ define(function(require, exports) {
 						data.busCompany = busCompanyInfo;
 						var html = updateTemplate(data);
 						var updateBusCompanyLayer = layer.open({
-						    type: 1,
-						    title:"修改车队",
-						    skin: 'layui-layer-rim', //加上边框
-						    area: ['70%', '750px'], //宽高
-						    zIndex:1028,
-						    content: html,
-						    success:function(){
-						    	var $obj = $(".updateBusCompanyContainer .busCompanyMainForm"),
-						    		$busList = $(".updateBusCompanyContainer .busList"),
-						    		$driverList = $(".updateBusCompanyContainer .driverList"),
-							    	// 添加表单验证
-							    	validator = rule.busComCheckor($('.updateBusCompanyContainer'));
-						    	//级联选择城市列表
-						    	var provinceId = "";
-						    	if(data.busCompany.provinceId != null){
-						    		provinceId = data.busCompany.provinceId;
-						    		var cityId = "";
-							    	if(data.busCompany.cityId != null){
-							    		cityId = data.busCompany.cityId;
+							type: 1,
+							title:"修改车队",
+							skin: 'layui-layer-rim', //加上边框
+							area: ['70%', '750px'], //宽高
+							zIndex:1028,
+							content: html,
+							success:function(){
+								var $obj = $(".updateBusCompanyContainer .busCompanyMainForm"),
+									$busList = $(".updateBusCompanyContainer .busList"),
+									$driverList = $(".updateBusCompanyContainer .driverList"),
+								// 添加表单验证
+									validator = rule.busComCheckor($('.updateBusCompanyContainer'));
+								//级联选择城市列表
+								var provinceId = "";
+								if(data.busCompany.provinceId != null){
+									provinceId = data.busCompany.provinceId;
+									var cityId = "";
+									if(data.busCompany.cityId != null){
+										cityId = data.busCompany.cityId;
 
-							    		var districtId = "";
-							    		if(data.busCompany.districtId != null){
-							    			districtId = data.busCompany.districtId;
-							    		}
-							    		busCompany.getDistrictList($obj.find("select[name=districtId]"),cityId,districtId);
-							    	}
-							    	busCompany.getCityList($obj.find("select[name=cityId]"),provinceId,cityId);
-						    	}
-						    	busCompany.getProvinceList($obj.find("select[name=provinceId]"),provinceId);
-
-
-						    	//给省份select绑定事件
-						    	$obj.find("select[name=provinceId]").change(function(){
-						    		var provinceId = $(this).val();
-						    		if(provinceId!=''){
-						    			busCompany.getCityList($obj.find("select[name=cityId]"),provinceId);
-						    		}else{
-						    			$obj.find("select[name=cityId]").html("<option value=''>未选择</option>");
-						    		}
-						    		$obj.find("select[name=districtId]").html("<option value=''>未选择</option>");
-						    	});
-
-						    	//给城市select绑定事件
-						    	$obj.find("select[name=cityId]").change(function(){
-						    		var cityId = $(this).val();
-						       		if(cityId!=''){
-						       			busCompany.getDistrictList($obj.find("select[name=districtId]"),cityId);
-						    		}else{
-						    			$obj.find("select[name=districtId]").html("<option value=''>未选择</option>");
-						    		}
-						    	});
+										var districtId = "";
+										if(data.busCompany.districtId != null){
+											districtId = data.busCompany.districtId;
+										}
+										busCompany.getDistrictList($obj.find("select[name=districtId]"),cityId,districtId);
+									}
+									busCompany.getCityList($obj.find("select[name=cityId]"),provinceId,cityId);
+								}
+								busCompany.getProvinceList($obj.find("select[name=provinceId]"),provinceId);
 
 
-						    	$obj.find("select[name=payType]").change(function(){
+								//给省份select绑定事件
+								$obj.find("select[name=provinceId]").change(function(){
+									var provinceId = $(this).val();
+									if(provinceId!=''){
+										busCompany.getCityList($obj.find("select[name=cityId]"),provinceId);
+									}else{
+										$obj.find("select[name=cityId]").html("<option value=''>未选择</option>");
+									}
+									$obj.find("select[name=districtId]").html("<option value=''>未选择</option>");
+								});
+
+								//给城市select绑定事件
+								$obj.find("select[name=cityId]").change(function(){
+									var cityId = $(this).val();
+									if(cityId!=''){
+										busCompany.getDistrictList($obj.find("select[name=districtId]"),cityId);
+									}else{
+										$obj.find("select[name=districtId]").html("<option value=''>未选择</option>");
+									}
+								});
+
+
+								$obj.find("select[name=payType]").change(function(){
 									var payType = $(this).val();
 									if(payType == 1){
 										$(this).parent().find(".payPeriod").removeClass("hide");
@@ -493,7 +493,7 @@ define(function(require, exports) {
 								});
 
 
-						    	$busList.find("input[name=seatCount]").spinner({
+								$busList.find("input[name=seatCount]").spinner({
 									min:1,
 									step:1,
 									create: function( event, ui ) {
@@ -501,50 +501,50 @@ define(function(require, exports) {
 									}
 								});
 
-						    	$driverList.find("input[name=driveYears]").spinner({
+								$driverList.find("input[name=driveYears]").spinner({
 									min:1,
 									step:1,
 									create: function( event, ui ) {
 										$(this).next().addClass('btn ').html('<i class="fa fa-sort-asc"></i>').next().addClass('btn ').html('<i class="fa fa-sort-desc"></i>')
 									}
 								});
-						    	function bindTime(obj, name,isRemove){
-						    		if(!isRemove){
-						    			obj.find("input[name="+name+"]").datepicker({
+								function bindTime(obj, name,isRemove){
+									if(!isRemove){
+										obj.find("input[name="+name+"]").datepicker({
 											autoclose: true,
 											todayHighlight: true,
 											format: 'yyyy-mm-dd',
 											language: 'zh-CN'
 										});
-						    		}else{
-						    			obj.find("input[name="+name+"]").datepicker("remove");
-						    		}
-						    	}
+									}else{
+										obj.find("input[name="+name+"]").datepicker("remove");
+									}
+								}
 
-						    	bindTime($busList, "buyTime");
-						    	/*$busList.find("input[name=buyTime]").datepicker({
-									autoclose: true,
-									todayHighlight: true,
-									format: 'yyyy-mm-dd',
-									language: 'zh-CN'
-								});*/
+								bindTime($busList, "buyTime");
+								/*$busList.find("input[name=buyTime]").datepicker({
+								 autoclose: true,
+								 todayHighlight: true,
+								 format: 'yyyy-mm-dd',
+								 language: 'zh-CN'
+								 });*/
 
-						   /* 	$driverList.find(".datepicker").datepicker({
-									autoclose: true,
-									todayHighlight: true,
-									format: 'yyyy-mm-dd',
-									language: 'zh-CN'
-								});*/
-						    	$busList.find("select[name=isChartered]").each(function(){
-						    		var $charParent = $(this).parent().parent();
-						    		if($(this).val() == "1"){
-							    		bindTime($charParent, "startTime");
+								/* 	$driverList.find(".datepicker").datepicker({
+								 autoclose: true,
+								 todayHighlight: true,
+								 format: 'yyyy-mm-dd',
+								 language: 'zh-CN'
+								 });*/
+								$busList.find("select[name=isChartered]").each(function(){
+									var $charParent = $(this).parent().parent();
+									if($(this).val() == "1"){
+										bindTime($charParent, "startTime");
 										bindTime($charParent, "endTime");
-							    	}
-						    	})
+									}
+								})
 
-						    	function bindIsChartered(){
-						    		$busList.find("select[name=isChartered]").change(function(){
+								function bindIsChartered(){
+									$busList.find("select[name=isChartered]").change(function(){
 										var $parents = $(this).parent().parent();
 										if($(this).val() == 1){
 											$parents.find("input[name=startTime]").removeAttr("readonly");
@@ -574,39 +574,39 @@ define(function(require, exports) {
 										// 更新表单验证的事件绑定
 										validator = rule.update(validator);
 									});
-						    	}
-						    	bindIsChartered();
+								}
+								bindIsChartered();
 
-						    	/*$driverList.find(".datepicker").datepicker({
-									autoclose: true,
-									todayHighlight: true,
-									format: 'yyyy-mm-dd',
-									language: 'zh-CN'
-								});*/
-					    		$busList.find(".btn-bus-delete").click(function(){
-						    		var tr = $(this).parent().parent();
-						    		var busId = tr.attr("data-entity-id");
-						    		if(busId != null && busId != ""){
-						    			tr.addClass("deleted");
+								/*$driverList.find(".datepicker").datepicker({
+								 autoclose: true,
+								 todayHighlight: true,
+								 format: 'yyyy-mm-dd',
+								 language: 'zh-CN'
+								 });*/
+								$busList.find(".btn-bus-delete").click(function(){
+									var tr = $(this).parent().parent();
+									var busId = tr.attr("data-entity-id");
+									if(busId != null && busId != ""){
+										tr.addClass("deleted");
 										$(this).parent().parent().fadeOut(function(){
 											$(this).hide();
 										});
-						    		}
+									}
 								});
 
-						    	$driverList.find(".btn-driver-delete").click(function(){
-						    		var tr = $(this).parent().parent();
-						    		var driverId = tr.attr("data-entity-id");
-						    		if(driverId != null && driverId != ""){
-						    			tr.addClass("deleted");
+								$driverList.find(".btn-driver-delete").click(function(){
+									var tr = $(this).parent().parent();
+									var driverId = tr.attr("data-entity-id");
+									if(driverId != null && driverId != ""){
+										tr.addClass("deleted");
 										$(this).parent().parent().fadeOut(function(){
 											$(this).hide();
 										});
-						    		}
+									}
 								});
 
-						    	function bindTimeAreaDelete(){
-						    		$busList.find(".timeArea button.delete").click(function(){
+								function bindTimeAreaDelete(){
+									$busList.find(".timeArea button.delete").click(function(){
 										var div = $(this).parent().parent();
 										var entityId = div.attr("data-entity-id");
 										var divIndex = div.attr("data-index");
@@ -624,11 +624,11 @@ define(function(require, exports) {
 											$(this).remove();
 										});
 									});
-						    	}
+								}
 
-						    	// 修改时修改原来的bus，
-						    	$busList.find(".timeArea button.add").click(function(){
-						    		var td = $(this).parent().parent().parent();
+								// 修改时修改原来的bus，
+								$busList.find(".timeArea button.add").click(function(){
+									var td = $(this).parent().parent().parent();
 									var index = td.find("div").length;
 									var timeLimitDiv = "<div data-index=\""+(index+1)+"\" data-entity-id=\"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right\"><button class=\"btn  btn-sm btn-white delete\"><i class=\"fa fa-minus bigger-110 icon-only\"></i></button></label></div>";
 									var contractPriceInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-top:2px\"><input style=\"width:100px;\" name=\"contractPrice\" type=\"text\" class=\"\"/><label>&nbsp;元</label></div>";
@@ -641,21 +641,21 @@ define(function(require, exports) {
 
 									// 更新表单验证的事件绑定
 									validator = rule.update(validator);
-						    	});
+								});
 
-						    	// 修改时删除原来的bus，
-						    	bindTimeAreaDelete();
+								// 修改时删除原来的bus，
+								bindTimeAreaDelete();
 
-						    	$busList.find(".btn-bus-add").click(function(){
+								$busList.find(".btn-bus-add").click(function(){
 									var html = "<tr><td><input  name=\"licenseNumber\" type=\"text\" class=\"col-sm-12\" /></td><td><input name=\"brand\" type=\"text\" class=\"col-sm-12\" /></td><td><input name=\"seatCount\" type=\"text\" class=\"col-sm-12\" value=\"1\"/></td><td class=\"col-sm-1\"><div class=\"input-group col-sm-12\"><input name=\"buyTime\" type=\"text\" class=\"datepicker\" style='width: 130px' /><span class=\"input-group-addon\"><i class=\"fa fa-calendar\"></i></span></div></td><td><select name=\"isChartered\"><option value=\"1\">是</option><option value=\"0\" selected=\"selected\">否</option></select></td>" +
-											"<td class=\"time\">" +
-											"<div data-index=\"1\" data-entity-id=\"\" class=\"clearfix div-1\" style=\"margin-top:2px\">" +
-											"<input name=\"startTime\" type=\"text\" readonly=\"readonly\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" readonly=\"readonly\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea hide\" style=\"float:right\"><button class=\"btn  btn-sm btn-white add\"><i class=\"fa fa-sort-asc bigger-110 icon-only\"></i></button></label></div>" +
-											"</td>" +
-											"<td class=\"price\">" +
-											"<div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input style=\"width:100px;\" name=\"contractPrice\" type=\"text\" readonly=\"readonly\" /><label>&nbsp;元</label></div>" +
-											"</td>" +
-											"<td><input name=\"remark\" type=\"text\" class=\"col-sm-12\"/></td><td style=\"width:70px\"><a class=\" btn-bus-delete\">删除</a></td></tr>";
+										"<td class=\"time\">" +
+										"<div data-index=\"1\" data-entity-id=\"\" class=\"clearfix div-1\" style=\"margin-top:2px\">" +
+										"<input name=\"startTime\" type=\"text\" readonly=\"readonly\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" readonly=\"readonly\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea hide\" style=\"float:right\"><button class=\"btn  btn-sm btn-white add\"><i class=\"fa fa-sort-asc bigger-110 icon-only\"></i></button></label></div>" +
+										"</td>" +
+										"<td class=\"price\">" +
+										"<div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input style=\"width:100px;\" name=\"contractPrice\" type=\"text\" readonly=\"readonly\" /><label>&nbsp;元</label></div>" +
+										"</td>" +
+										"<td><input name=\"remark\" type=\"text\" class=\"col-sm-12\"/></td><td style=\"width:70px\"><a class=\" btn-bus-delete\">删除</a></td></tr>";
 									$busList.find("tbody").append(html);
 									$busList.find("input[name=seatCount]").spinner({
 										min:1,
@@ -674,7 +674,7 @@ define(function(require, exports) {
 										var index = td.find("div").length;
 										var timeLimitDiv = "<div data-index=\""+(index+1)+"\" data-entity-id=\"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right\"><button class=\"btn  btn-sm btn-white delete\"><i class=\"fa fa-minus bigger-110 icon-only\"></i></button></label></div>";
 										var contractPriceInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-top:2px\"><input style=\" width: 100px;\" name=\"contractPrice\" type=\"text\" value=\"\"/><label>&nbsp;元</label></div>";
-										
+
 										td.next().append(contractPriceInput);
 										td.append(timeLimitDiv);
 										bindTimeAreaDelete();
@@ -683,29 +683,29 @@ define(function(require, exports) {
 									});
 									$(".busList .btn-bus-delete").click(function(){
 										var tr = $(this).parent().parent();
-							    		var driverId = tr.attr("data-entity-id");
-							    		if(!(driverId != null && driverId != "")){
+										var driverId = tr.attr("data-entity-id");
+										if(!(driverId != null && driverId != "")){
 											$(this).parent().parent().fadeOut(function(){
 												$(this).remove();
 											});
-							    		}
+										}
 									});
 
 									// 更新表单验证的事件绑定
 									validator = rule.update(validator);
 								});
 
-						    	$driverList.find(".btn-driver-add").click(function(){
+								$driverList.find(".btn-driver-add").click(function(){
 									var html = "<tr><td><input name=\"driverName\" type=\"text\" class=\"col-sm-12\" /></td><td><select name=\"gender\" class=\"col-sm-12\"><option value=\"0\">男</option><option value=\"1\">女</option></select></td><td><input name=\"mobileNumber\" class=\"col-sm-12\" type=\"text\" /></td><td><input name=\"driveYears\" class=\"col-sm-12\" type=\"text\" value=\"1\"/></td><td><input name=\"licenseId\" type=\"text\" class=\"col-sm-12\" /></td><td><select name=\"status\" class=\"col-sm-12\"><option value=\"1\">启用</option><option value=\"0\">停用</option></select></td><td><input name=\"remark\" type=\"text\" class=\"col-sm-12\" /></td><td style=\"width:70px\"><a data-entiy-id=\"\" class=\" btn-driver-delete\">删除</a></td></tr>";
 									$(".driverList tbody").append(html);
 									$(".driverList .btn-driver-delete").click(function(){
 										var tr = $(this).parent().parent();
-							    		var driverId = tr.attr("data-entity-id");
-							    		if(!(driverId != null && driverId != "")){
+										var driverId = tr.attr("data-entity-id");
+										if(!(driverId != null && driverId != "")){
 											$(this).parent().parent().fadeOut(function(){
 												$(this).remove();
 											});
-							    		}
+										}
 									});
 									$driverList.find("input[name=driveYears]").spinner({
 										min:1,
@@ -721,7 +721,7 @@ define(function(require, exports) {
 
 								$(".updateBusCompanyContainer .btn-submit-busCompany").click(function(){
 									if (!validator.form()) return;
-									
+
 									var status = 0;
 									if($obj.find(".busCompany-status").is(":checked") == true){
 										status = 1;
@@ -736,15 +736,15 @@ define(function(require, exports) {
 									var busListTr =  $busList.find("tbody tr:not(.deleted)");
 									busListTr.each(function(i){
 										var busJson = {
-												id : busListTr.eq(i).attr("data-entity-id"),
-												licenseNumber : busListTr.eq(i).find("input[name=licenseNumber]").val(),
-												brand : busListTr.eq(i).find("input[name=brand]").val(),
-												seatCount : busListTr.eq(i).find("input[name=seatCount]").val(),
-												buyTime : busListTr.eq(i).find("input[name=buyTime]").val() || "0000-00-00",
-												isChartered : busListTr.eq(i).find("select[name=isChartered]").val(),
-												priceJsonAdd : [],
-												priceJsonDel : [],
-												remark : busListTr.eq(i).find("input[name=remark]").val()
+											id : busListTr.eq(i).attr("data-entity-id"),
+											licenseNumber : busListTr.eq(i).find("input[name=licenseNumber]").val(),
+											brand : busListTr.eq(i).find("input[name=brand]").val(),
+											seatCount : busListTr.eq(i).find("input[name=seatCount]").val(),
+											buyTime : busListTr.eq(i).find("input[name=buyTime]").val() || "",
+											isChartered : busListTr.eq(i).find("select[name=isChartered]").val(),
+											priceJsonAdd : [],
+											priceJsonDel : [],
+											remark : busListTr.eq(i).find("input[name=remark]").val()
 										}
 										if(busJson.isChartered==1){
 											var priceUpdate = busListTr.eq(i).find("td.time div:not(.deleted)");
@@ -772,7 +772,7 @@ define(function(require, exports) {
 									var busListDelTr =  $busList.find("tbody tr.deleted");
 									busListDelTr.each(function(i){
 										var busJson = {
-												id : busListDelTr.attr("data-entity-id")
+											id : busListDelTr.attr("data-entity-id")
 										}
 										busJsonDel.push(busJson);
 									});
@@ -780,14 +780,14 @@ define(function(require, exports) {
 									var driverTr = $driverList.find("tbody tr:not(.deleted)");
 									driverTr.each(function(i){
 										var driverJson = {
-												id : driverTr.eq(i).attr("data-entity-id"),
-												name : driverTr.eq(i).find("input[name=driverName]").val(),
-												gender : driverTr.eq(i).find("select[name=gender]").val(),
-												mobileNumber : driverTr.eq(i).find("input[name=mobileNumber]").val(),
-												driveYears : driverTr.eq(i).find("input[name=driveYears]").val(),
-												licenseId : driverTr.eq(i).find("input[name=licenseId]").val(),
-												status : driverTr.eq(i).find("select[name=status]").val(),
-												remark : driverTr.eq(i).find("input[name=remark]").val()
+											id : driverTr.eq(i).attr("data-entity-id"),
+											name : driverTr.eq(i).find("input[name=driverName]").val(),
+											gender : driverTr.eq(i).find("select[name=gender]").val(),
+											mobileNumber : driverTr.eq(i).find("input[name=mobileNumber]").val(),
+											driveYears : driverTr.eq(i).find("input[name=driveYears]").val(),
+											licenseId : driverTr.eq(i).find("input[name=licenseId]").val(),
+											status : driverTr.eq(i).find("select[name=status]").val(),
+											remark : driverTr.eq(i).find("input[name=remark]").val()
 										}
 										driverJsonAdd.push(driverJson);
 									})
@@ -795,7 +795,7 @@ define(function(require, exports) {
 									var driverDelTr = $driverList.find("tbody tr.deleted");
 									driverDelTr.each(function(i){
 										var driverJson = {
-												id : driverDelTr.eq(i).attr("data-entity-id")
+											id : driverDelTr.eq(i).attr("data-entity-id")
 										}
 										driverJsonDel.push(driverJson);
 									})
@@ -826,7 +826,7 @@ define(function(require, exports) {
 										}
 									});
 								});
-						    }
+							}
 						});
 					}
 				}
@@ -899,15 +899,15 @@ define(function(require, exports) {
 						data.busCompany = busCompanyInfo;
 						var html = viewTemplate(data);
 						layer.open({
-						    type: 1,
-						    title:"查看车队",
-						    skin: 'layui-layer-rim', //加上边框
-						    area: ['1024px', '750px'], //宽高
-						    zIndex:1028,
-						    content: html,
-						    success:function(){
+							type: 1,
+							title:"查看车队",
+							skin: 'layui-layer-rim', //加上边框
+							area: ['1024px', '750px'], //宽高
+							zIndex:1028,
+							content: html,
+							success:function(){
 
-						    }
+							}
 						});
 					}
 				}

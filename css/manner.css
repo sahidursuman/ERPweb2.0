@@ -115,7 +115,6 @@ table tr th{
 .model-scroll-right:hover {
     background: url('/images/right_b.jpg') center center no-repeat;
 }
-.nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus{margin-top: 2px}
 .left_b{
     display: none;
 }
@@ -225,7 +224,7 @@ table tr td{
 .nav-tabs>li>a, .nav-tabs>li>a:focus{line-height: 16px}
 .nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus{
     background: white;
-    margin-top: -2px!important;
+    margin-top: -1px!important;
 }
 .layui-layer-setwin .layui-layer-close1{width: 16px;height: 16px}
 .border-li-h{
@@ -367,7 +366,7 @@ table tr td{
     border: 2px solid #5d5d5d;
     text-align: right;
 }
-
+.timeline-info{text-align: right}
 .whereOne .styleOne-self{
     width: 360px;
     text-indent:10px;

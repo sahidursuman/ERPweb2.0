@@ -116,14 +116,11 @@ define(function(require, exports) {
 				},
 				success:function(data){
 					layer.close(globalLoadingLayer);
-					console.log(data)
 					data.transitSubTgroupList = JSON.parse(data.transitSubTgroupList);
 					var result = showDialog(data);
 					if(result){
 						var html = listTemplate(data);
-						alert(0);
 						$("#"+tab+" .subsectionList").html(html);
-						alert(1);
 						show(tab);
 						hid(tab);
 						function show(tab){
@@ -292,7 +289,6 @@ define(function(require, exports) {
 	                success: function(data) {
 						var result = showDialog(data);
 						if(result){
-							console.log(data);
 							var lineProductList = data.lineProductList;
 							if(lineProductList && lineProductList.length > 0){
 								for(var i=0; i < lineProductList.length; i++){
