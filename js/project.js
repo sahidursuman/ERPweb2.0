@@ -853,6 +853,7 @@ function listMenu(menuTemplate){
 						var year = date.getFullYear();
 						var month = ""//date.getMonth()+1
 						Scenic.listScenic(0,"",year,month);
+						modals["financial_scenic"] = Scenic;
 					});
 				});
 
@@ -866,6 +867,7 @@ function listMenu(menuTemplate){
 						var year = date.getFullYear();
 						var month = ""
 						Self.listSelf(0,"",year,month);
+						modals["financial_Self"] = Self;
 					});
 				});
 
