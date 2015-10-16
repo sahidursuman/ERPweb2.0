@@ -1770,7 +1770,7 @@ define(function(require, exports) {
 		//添加交通
 		addResourceTraffic:function(e){
 			//添加行程安排交通
-			var shoppingDetails = '<div class="timeline-item clearfix resourceTicketList" index='+travelLine.routeIndex+'><div class="timeline-info"><i class="timeline-indicator ace-icon fa fa-car btn btn-success no-hover"></i><span class="label label-info label-sm">交通</span></div>'+
+			var shoppingDetails = '<div class="timeline-item clearfix resourceTicketList" index='+travelLine.routeIndex+'><div class="timeline-info"><span class="label label-info label-sm">交通</span></div>'+
 			'<div class="widget-box transparent"><div class="widget-body"><div class="widget-main"><table class="table table-striped table-bordered table-hover">'+
 			'<thead><tr><th>票务公司名称</th><th>类型</th><th>价格</th><th>负责人</th><th>联系电话</th><th>公司电话</th><th>备注</th><th style="width: 60px;">操作</th></tr></thead>'+
 			'<tbody><tr>'+
