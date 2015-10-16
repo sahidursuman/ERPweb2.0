@@ -73,7 +73,7 @@
 				</div>
 
 				<div class="navbar-buttons navbar-header pull-right" role="navigation">
-					<ul class="nav ace-nav list_ul" >
+					<ul class="nav ace-nav list_ul header-actions" >
 						<!--<li style="width: 85px">-->
 							<!--<img src="images/order.png">-->
 							<!--<p>订单</p>-->
@@ -116,7 +116,7 @@
 								<li >部门 <span class="department Spacing"></span></li>
 								<li style="padding-bottom: 40px">电话 <span class="phoneNumber Spacing"></span></li>
 								<li  class="dropdown-close border-li-h" style="color: white!important;text-align: right!important;">
-									<label onclick="showUpdateUserInfoOrPasswordLayer()" style="cursor: pointer">
+									<label id="update-userinfo-settings" style="cursor: pointer">
 										修改
 										<i class="ace-icon fa fa-arrow-right"></i>  
 									</label>
@@ -144,45 +144,49 @@
 
 		<!--修改个人信息-->
 		<div class='login-userData-form ' style="display: none">
-			<p class="pull-left alter color alter-user">修改个人资料</p>
-			<p class="pull-left alter Default alter-pwd">修改密码 </p>
+			<div class="userinfo-tabs">
+				<p class="pull-left alter color alter-user user-active">修改个人资料</p>
+				<p class="pull-left alter Default alter-pwd">修改密码 </p>
+			</div>
 			<div class="clearfix"></div>
 
-			<!--修改个人资料-->
-			<div id="alter-user">
-				<div class='update-login-User'>
-					<div class='input-group top-box'>
-						<label class="pull-left control-label label-font">用户名&nbsp; </label>
-						<input class='' readonly='readonly' name='userName' placeholder='用户名' value='' type='text' />
-					</div>
-
-					<div class='input-group top-box'>
-						<label class="pull-left control-label label-font">姓&nbsp;&nbsp;&nbsp;&nbsp;名 </label>
-						<input  name='realName' placeholder='用户真实名' value='' type='text' />
-
-					</div>
-
-					<div class='input-group top-box'>
-						<label class="pull-left control-label label-font">电&nbsp;&nbsp;&nbsp;&nbsp;话 </label>
-						<input  name='mobileNumber' placeholder='手机号码' value='' type='text' />
-
+			<div class="userinfo-content">
+				<!--修改个人资料-->
+				<div id="alter-user">
+					<div class='update-login-User'>
+						<div class='input-group top-box'>
+							<label class="pull-left control-label label-font" style="margin-right:8px;">用户名</label>
+							<input class='' readonly='readonly' name='userName' placeholder='用户名' value='' type='text' />
+						</div>
+				
+						<div class='input-group top-box'>
+							<label class="pull-left control-label label-font"><span class="necessary">*</span>姓&nbsp;&nbsp;&nbsp;&nbsp;名 </label>
+							<input  name='realName' placeholder='用户真实名' value='' type='text' />
+				
+						</div>
+				
+						<div class='input-group top-box'>
+							<label class="pull-left control-label label-font"><span class="necessary">*</span>电&nbsp;&nbsp;&nbsp;&nbsp;话 </label>
+							<input  name='mobileNumber' placeholder='手机号码' value='' type='text' />
+				
+						</div>
 					</div>
 				</div>
-			</div>
-			<!--修改密码-->
-			<div id="alter-pwd" style="display: none">
-				<div class='input-group top-box col-xs-12'>
-					<label class="pull-left control-label label-font  col-xs-2" >旧密码</label>
-					<input class='col-xs-10'  name='oldPassword' placeholder='请输入旧密码' value='' type='password' />
-
-				</div>
-				<div class='input-group top-box  col-xs-12'>
-					<label class="pull-left label-font col-xs-2"> 新密码</label>
-					<input class='col-xs-10' name='newPassword' placeholder='请输入新密码' value='' type='password' />
-				</div>
-				<div class="input-group top-box  col-xs-12">
-					<label class="pull-left label-font  col-xs-2">确认密码</label>
-					<input class='col-xs-10' name='newPassword1' placeholder='再输一次' value='' type='password' />
+				<!--修改密码-->
+				<div id="alter-pwd" class="hidden">
+					<div class='input-group top-box col-xs-12'>
+						<label class="pull-left control-label label-font  col-xs-2" ><span class="necessary">*</span>旧密码</label>
+						<input class='col-xs-10'  name='oldPassword' placeholder='请输入旧密码' value='' type='password' />
+				
+					</div>
+					<div class='input-group top-box  col-xs-12'>
+						<label class="pull-left label-font col-xs-2"><span class="necessary">*</span> 新密码</label>
+						<input class='col-xs-10' name='newPassword' placeholder='请输入新密码' value='' type='password' />
+					</div>
+					<div class="input-group top-box  col-xs-12">
+						<label class="pull-left label-font  col-xs-2"><span class="necessary">*</span>确认密码</label>
+						<input class='col-xs-10' name='newPassword1' placeholder='再输一次' value='' type='password' />
+					</div>
 				</div>
 			</div>
 
@@ -192,7 +196,7 @@
 			</div>
 			<form class='form-horizontal col-sm-12' role='form' style='margin-top:30px;' onsubmit='return false'>
 				<div class='form-group' style='text-align: center;'>
-				<button class='btn btn-xs  btn-danger btn-cancelUserInfo' onclick="closePasswordLayer()">  
+				<button class='btn btn-xs  btn-danger btn-cancelUserInfo'>  
 					<i class='ace-icon btn-xs  fa fa-times'>&nbsp;&nbsp;取消</i>
 				</button>
 					<button class='btn btn-xs btn-primary btn-UserSaveInfo'>   
@@ -256,19 +260,13 @@
 				<div class="main-content-inner">
 					<div class="breadcrumbs breadcrumbs-fixed" style="border-bottom:none;background-color: #fff;padding:0 0 0 0">
 						<div style="width:100%;overflow: hidden;position: relative;background: #dcdcdc">
-							<div id="tab_left_scroll"  class="btn-com">
-								<img src="images/left_a.jpg" class="left_a">
-								<img src="images/left_b.jpg" class="left_b" style="">
-							</div>
+							<div id="tab_left_scroll"  class="btn-com model-scroll-left"></div>
 							<ul id="tabList" class="nav nav-tabs nav-line" >
 								<li class=" active " style="height: 31px">
 									<a data-toggle="tab" href="#tab-dashboard-content" aria-expanded="true">工作台</a>
 								</li>
 							</ul>
-							<div id="tab_right_scroll" class="btn-right-nav" >
-								<img src="images/right_a.jpg" class="right_a">
-								<img src="images/right_b.jpg" class="right_b">
-							</div>
+							<div id="tab_right_scroll" class="btn-right-nav model-scroll-right" ></div>
 						</div>
 					</div>
 					<div class="page-content">
@@ -281,167 +279,6 @@
 				</div>
 			</div><!-- /.main-content -->
 		</div><!-- /.main-container -->
-
-		<!-- 登录用户信息start -->
-		<script type="text/javascript">
-			var updateUserInfoOrPasswordLayer;
-			function showUpdateUserInfoOrPasswordLayer(){
-				updateUserInfoOrPasswordLayer=layer.open({
-				    type: 1,
-				    title: "修改个人信息",
-				    skin: 'layui-layer-lan', //加上边框
-				    area: ['500px', '300px'], //宽高
-				    content: $(".login-userData-form"),
-				    success:function(){
-				    	
-				    }
-				});
-				updateUserInfo();
-				$(".alter-user").addClass("user-active");
-				$(".alter-pwd").removeClass("user-active");
-				$(".alter-user").removeClass("Default");
-				$(".alter-pwd").addClass("Default");
-				$("#alter-user").show();
-				$("#alter-pwd").hide();
-			}
-			
-
-			
-			/*修改密码 */
-			function updatePassword(){
-				$loginObj = $("#alter-pwd");
-		    	$(".btn-UserSaveInfo").unbind().click(function(){
-		    		var newPassword=$loginObj.find("input[name='newPassword']").val();
-		    		var newPassword1=$loginObj.find("input[name='newPassword1']").val();
-		    		var oldPassword=$loginObj.find("input[name='oldPassword']").val();
-		  			if(newPassword!=newPassword1){
-		  				//两次密码是否一致性的验证
-		  				$(".password-validate").text("两次输入的密码不一致！");
-		  				return false;
-		  			}else{
-		  				$.ajax({
-							url:""+APP_ROOT+"back/user.do?method=rePassword&token="+$.cookie("token")+"&menuKey=system_userinfo&operation=self",
-							data:"oldPassword="+oldPassword+"&newPassword="+newPassword,
-							datatype:"json",
-							beforSend:function(){
-								globalLoadingLayer = openLoadingLayer();
-							},
-							success:function(data){
-								layer.close(updateUserInfoOrPasswordLayer);
-								console.log(data);
-								var result = showDialog(data);
-								if(result){
-									showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-										$.ajax({
-											url:""+APP_ROOT+"back/user.do?method=logOut&token="+$.cookie("token")+"&operation=self",
-											type:"POST",
-											dataType:"json",
-											beforeSend:function(){
-												globalLoadingLayer = layer.open({
-													type:3
-												});
-											},
-											success:function(data){
-												layer.close(globalLoadingLayer);
-												if(data.success == 0){
-													showMessageDialog($( "#confirm-dialog-message" ),data.message);
-												}
-												else{
-													window.location.href = "login.html";
-												}
-											}
-										});
-									});
-							    }
-							}
-						})
-		  			}
-		    	});
-				    	
-			}
-			
-			
-			
-			function closePasswordLayer(){
-
-				layer.close(updateUserInfoOrPasswordLayer);
-			}
-			
-			
-			
-			
-			    
-			/*修改用户信息*/
-			function updateUserInfo(){ 
-				$updateObj = $(".login-userData-form");
-		    	$(".btn-UserSaveInfo").unbind().click(function(){
-		    		var userName=$updateObj.find("input[name='userName']").val();
-		    		var realName=$updateObj.find("input[name='realName']").val();
-		    		var mobileNumber=$updateObj.find("input[name='mobileNumber']").val();
-		    		var user = {
-		    				userName : userName,
-		    				realName : realName,
-		    				mobileNumber : mobileNumber
-		    		}
-		    		//提交修改用户信息
-		    	   	$.ajax({
-						url:""+APP_ROOT+"back/user.do?method=updateInfo&token="+$.cookie("token")+"&menuKey=system_userinfo&operation=self",
-						data:"user="+encodeURIComponent(JSON.stringify(user))+"",
-						datatype:"json",
-						beforSend:function(){
-							globalLoadingLayer = openLoadingLayer();
-						},
-						success:function(data){
-							layer.close(updateUserInfoOrPasswordLayer);
-							console.log(data);
-							var result = showDialog(data);
-							if(result){
-								showMessageDialog($( "#confirm-dialog-message" ),data.message);
-						    }
-						}
-					})
-		    	});
-		}
-
-			/*查看用户信息*/
-			function viewUserInfo(){
-				var viewUserInfoLayer=layer.open({
-					    type: 1,
-					    title: "修改用户密码",
-					    skin: 'layui-layer-lan', //加上边框
-					    area: ['480px', '280px'], //宽高
-					    content: "<div class='login-userData-form clearfix'><div class='col-sm-12'><div class='form-group'><div class='search-area'><div class='col-xs-12'>"+
-					    "<div class='input-group'><input class='col-xs-12 date-picker' name='password' placeholder='请输入旧密码' value='' type='password' />"+
-					    "<span class='input-group-addon'><i class='fa fa-calendar'></i></span></div></div></div></div></div>"+
-					    "<div class='col-sm-12'><div class='form-group'><div class='search-area'><div class='col-xs-12'>"+
-					    "<div class='input-group'><input class='col-xs-12 date-picker' name='newPassword' placeholder='请输入新密码' value='' type='password' />"+
-					    "<span class='input-group-addon'><i class='fa fa-calendar'></i></span></div></div></div></div></div>"+
-					    "<form class='form-horizontal col-sm-12' role='form' style='margin-top:30px;'><div class='form-group' style='text-align: center;'>"+
-					    "<button class='btn btn-primary btn-cancelUserInfo'> <i class='ace-icon fa fa-times'></i> 取消 </button>"+
-					    "<button class='btn btn-danger  btn-UserSaveInfo'> <i class='ace-icon fa fa-check '></i> </button> </div></form></div>",
-					    success:function(){
-					    	$.ajax({
-								url:""+APP_ROOT+"back/user.do?method=findUserInfo&token="+$.cookie("token")+"&operation=update",
-								//data:"password="+password+"newPassword="+newPassword,
-								datatype:"json",
-								beforSend:function(){
-									globalLoadingLayer = openLoadingLayer();
-								},
-								success:function(data){
-									layer.close(viewUserInfoLayer);
-									console.log(data);
-									var result = showDialog(data);
-									if(result){
-										showMessageDialog($( "#confirm-dialog-message" ),data.message);
-								    }
-								}
-							})
-					    }
-				})
-			}
-		</script>
-
-		<!-- 登录用户信息end -->
 
 		<!-- basic scripts -->
 		<script src="components/ace-admin/assets/js/jquery.1.11.1.min.js"></script>
@@ -489,6 +326,7 @@
 		<script src="components/ace-admin/assets/js/fuelux.tree.min.js"></script>
 		<script src="components/form-validate/formvalidate.js"></script>
 		<script src="js/project.js"></script>
+		<script src="js/index.js"></script>
 
 		<link rel="stylesheet" href="css/base.css" />
 		<link rel="stylesheet" href="css/manner.css" />
@@ -508,163 +346,6 @@
 				    [ /^(.*\.(?:css|js))(.*)$/i, '$1?version='+APP_VERSION+'' ]
 				  ]
 				});
-				$.ajax({
-					url:""+APP_ROOT+"base.do?method=checkLogin",
-					type:"GET",
-					dataType:"json",
-					beforeSend:function(){
-						globalLoadingLayer = layer.open({
-							type:3
-						});
-					},
-					success:function(data){
-						console.info(data);
-						layer.close(globalLoadingLayer);
-						if(data.success == 0){
-							window.location.href = "login.html";
-						}
-						else{
-							if(data.realName != ""){//department
-								$(".navbar .light-blue .userName").text(data.realName);
-								$("#loginUserInfo").find(".userName").text(data.realName);
-								$("#loginUserInfo").find(".phoneNumber").text(data.mobileNumber); 
-								$("#loginUserInfo").find(".phoneNumber").text(data.mobileNumber);  
-								$("#loginUserInfo").find(".department").text(data.groupName);  
-								
-								$(".login-userData-form").find("input[name='userName']").val(data.userName);    
-								$(".login-userData-form").find("input[name='realName']").val(data.realName);       
-								$(".login-userData-form").find("input[name='mobileNumber']").val(data.mobileNumber);       
-								    
-   
-								
-							}
-							else{
-								$(".navbar .light-blue .userName").text(data.userName);
-							}
-							$(".navbar .light-blue .groupName").text(data.groupName);
-							listMenu();
-							seajs.use(""+APP_ROOT+"app/js/template/index/index.js",function(index){
-								index.main();
-							});
-						}
-					}
-				});
-
-				var scroll;
-				var maxwidth = parseInt($(".breadcrumbs-fixed").css("width"))-70;//ul可视区域 宽度，70为两侧移动符号宽度
-				function scrollLeft(){
-					var listwidth = 0;//ul总宽度
-					$("#tabList li").each(function(i){
-						listwidth += parseInt($("#tabList li").eq(i).css("width"));
-					});
-					var marginLeft = parseInt($("#tabList").css("marginLeft"));
-					if(listwidth > maxwidth && marginLeft < 35){//当ul宽度大于可视区域宽度并且ul在左侧有隐藏部分时ul方可向右平移
-						marginLeft = marginLeft + 20;
-						if(marginLeft > 35){
-							marginLeft = 35;
-						}
-						$("#tabList").css("marginLeft",marginLeft);
-					}
-					scroll = setTimeout(scrollLeft,30);
-				}
-				$("#tab_left_scroll").mousedown(scrollLeft);
-				$("#tab_left_scroll").mouseup(function(){
-					clearTimeout(scroll);
-				});
-				function scrollRight(){
-					var listwidth = 0;
-					$("#tabList li").each(function(i){
-						listwidth += parseInt($("#tabList li").eq(i).css("width"));
-					});
-					var marginLeft = parseInt($("#tabList").css("marginLeft"));
-					var maxleft = -(listwidth - (maxwidth + 35));//ul可向左平移的最大宽度，maxleft取负值,35为左侧移动符号宽度
-					if(listwidth > maxwidth && marginLeft > maxleft){//当ul宽度大于可视区域宽度并且ul在右侧有隐藏部分时ul方可向左平移
-						marginLeft = marginLeft - 20;
-						if(marginLeft < maxleft){
-							marginLeft = maxleft;
-						}
-						$("#tabList").css("marginLeft",marginLeft);
-					}
-					scroll = setTimeout(scrollRight,30);
-				}
-				$("#tab_right_scroll").mousedown(scrollRight);
-				$("#tab_right_scroll").mouseup(function(){
-					clearTimeout(scroll);
-				});
-			});
-		   /*移入时导航样式*/
-		  $(document).ready(function(){
-			     $(".user-ID").mouseover(function(){
-			    	 $(this).addClass("liA");
-					 $(".user-style").show();
-			     })
-		  });
-
-
-			$(document).ready(function(){
-				$(".user-ID").mouseleave(function(){
-					$(this).removeClass("liA");
-					$(".user-style").hide();
-				})
-			});
-
-			$(document).ready(function(){
-				$(".news-ID").mouseover(function(){
-					$(this).addClass("liB");
-					$(".news-style").show();
-				})
-			});
-
-			$(document).ready(function(){
-				$(".news-ID").mouseleave(function(){
-					$(this).removeClass("liB");
-					$(".news-style").hide();
-				})
-			});
-//			修改个人资料
-			$(document).ready(function(){
-				$(".alter-user").click(function(){
-					updateUserInfo();
-					$(this).addClass("user-active");
-					$(".alter-pwd").removeClass("user-active");
-					$(".alter-user").removeClass("Default");
-					$(".alter-pwd").addClass("Default");
-					$("#alter-user").show();
-					$("#alter-pwd").hide();
-				})
-			});
-
-			$(document).ready(function(){
-				$(".alter-pwd").click(function(){
-					updatePassword();
-					$(this).addClass("user-active");
-					$(".alter-user").removeClass("user-active");
-					$(".alter-user").removeClass("color");
-					$(".alter-user").addClass("Default");
-					$(".alter-pwd").removeClass("Default");
-					$("#alter-pwd").show();
-					$("#alter-user").hide();
-				})
-			});
-
-			$(document).ready(function(){
-				$(".left_a").mouseenter(function(){
-					$(this).hide();
-					$(".left_b").show();
-				});
-				$(".left_b").mouseleave(function(){
-					$(this).hide();
-					$(".left_a").show();
-				})
-
-				$(".right_a").mouseenter(function(){
-					$(this).hide();
-					$(".right_b").show();
-				});
-				$(".right_b").mouseleave(function(){
-					$(this).hide();
-					$(".right_a").show();
-				})
 			});
 		</script>
 	

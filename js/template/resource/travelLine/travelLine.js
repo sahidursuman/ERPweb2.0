@@ -1861,8 +1861,9 @@ define(function(require, exports) {
 				})
 			});
 		},
-		submitInfoLineProduct:function(){
-			if (!e.data.form())  return;
+		submitAddLineProduct:function(){
+			var validator = rule.lineProductCheckor($('.lineProductContainer'));
+			if (!validator.form())  return;
 
 			var $form = $(".lineProductContainer > form"), travelLineData;
 			function getValue(obj, name){

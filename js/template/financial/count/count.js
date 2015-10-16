@@ -189,7 +189,7 @@ define(function(require, exports) {
 				minLength:0,
 				change:function(event,ui){
 					if(ui.item == null){
-						$(this).val("");
+						$(this).val("").nextAll('input[name="tripNumber"]').val('');
 					}
 				},
 				select:function(event,ui){

@@ -183,8 +183,11 @@ define(function(require, exports) {
 		    	booking.calculation($add);
 	    	})
 			//提交事件  
-			var $add = $(".addBooking");
-	    	$add.find(".btn-submit-booking").off().on("click","add",1,booking.submitBooking);
+	    	$('#'+ tab).find(".btn-submit-booking").off('click')
+	    	.on('click', function(event) {
+	    		event.preventDefault();
+	    		booking.submitBooking("add",1);
+	    	});
 		},
 		updateBooking :function(id){
 			$.ajax({
@@ -297,7 +300,10 @@ define(function(require, exports) {
 			})
 			//提交事件  
 			var $obj = $(".updateBooking");
-			$obj.find(".btn-submit-booking").off().on("click","update",1,booking.submitBooking);		
+			$('#'+ tab).find(".btn-submit-booking").on('click', function(event) {
+				event.preventDefault();
+				booking.submitBooking("update",1);
+			});	
 		},
 		viewBooking :function(id){
 			$.ajax({
@@ -399,8 +405,8 @@ define(function(require, exports) {
 			'<td><input name="hotelRoom" value="" type="text" class="col-sm-12 chooseHotelRoom bind-change"/><input name="hotelRoomId" type="hidden" value="" /></td>'+
 			'<td><input name="days" value="" type="text" class="col-sm-12" /></td>'+
 			'<td><input name="roomCount" value="" type="text" class="col-sm-12"/></td>'+
-			'<td><input name="costPrice" value="" type="text" class="col-sm-12" /><label class="col-sm-4 control-label" style="padding: 7px 0 0 0;width:25px;" >/天</label></td>'+
-			'<td><input name="salePrice" value="" type="text" class="col-sm-12" /><label class="col-sm-4 control-label" style="padding: 7px 0 0 0;width:25px;" >/天</label></td>'+
+			'<td><input name="costPrice" value="" type="text" class="col-sm-12" style="width: 55px"/><label class="col-sm-4 control-label" style="padding: 7px 0 0 0;width:25px;" >/天</label></td>'+
+			'<td><input name="salePrice" value="" type="text" class="col-sm-12"  style="width: 55px"/><label class="col-sm-4 control-label" style="padding: 7px 0 0 0;width:25px;" >/天</label></td>'+
 			'<td><input name="sumCostMoney" readonly="readonly" value="" type="text" class="col-sm-12"/></td>'+
 			'<td><input name="sumNeedGetMoney" readonly="readonly" value="" type="text" class="col-sm-12"/></td>'+
 			'<td><a class="cursor btn-hotel-booking-delete">删除</a></td>'+

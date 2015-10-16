@@ -81,9 +81,8 @@ define(function(require, exports) {
 			transit.partnerAgencyChoose(tab);
 			//安排人下拉搜索			    	
 			transit.arrangeUserChoose(tab);
-			
 			//搜索栏状态button下拉事件
-			$("#"+tab+" .btn-status .dropdown-menu a").click(function(){
+			$("#"+tab+" .search-area .btn-status .dropdown-menu a").click(function(){
 				$(this).parent().parent().parent().find("button").attr("data-value",$(this).attr("data-value"));
 				$(this).parent().parent().parent().find("span").text($(this).text());
 				transit.searchData = {
@@ -93,7 +92,8 @@ define(function(require, exports) {
 					arrangeUserId :$("#"+tab+" input[name=arrangeUserId]").val(),
 					arrangeStartTime : $("#"+tab+" input[name=arrangeStartTime]").val(),
 					arrangeEndTime : $("#"+tab+" input[name=arrangeEndTime]").val(),
-					status : $("#"+tab+" select[name=status]").val(),
+					//status : $("#"+tab+" select[name=status]").val(),
+					status :$("#"+tab+" .search-area .btn-status").find("button").attr("data-value"),
 					shuttleType :$("#"+tab+" select[name=shuttleType]").val(),
 					shuttleTime :$("#"+tab+" input[name=shuttleTime]").val()
 				}
@@ -108,19 +108,20 @@ define(function(require, exports) {
 					arrangeUserId :$("#"+tab+" input[name=arrangeUserId]").val(),
 					arrangeStartTime : $("#"+tab+" input[name=arrangeStartTime]").val(),
 					arrangeEndTime : $("#"+tab+" input[name=arrangeEndTime]").val(),
-					status : $("#"+tab+" select[name=status]").val(),
+					//status : $("#"+tab+" select[name=status]").val(),
+					status :$("#"+tab+" .search-area .btn-status").find("button").attr("data-value"),
 					shuttleType :$("#"+tab+" select[name=shuttleType]").val(),
 					shuttleTime :$("#"+tab+" input[name=shuttleTime]").val()
 				}
 				transit.listTransit(0,transit.searchData.fromPartnerAgencyId,transit.searchData.lineProductId,transit.searchData.startTime,transit.searchData.arrangeUserId,transit.searchData.arrangeStartTime,transit.searchData.arrangeEndTime,transit.searchData.status,transit.searchData.shuttleType,transit.searchData.shuttleTime)
-			});
+			})
 			//分页--首页按钮事件
 			$("#"+tab+" .pageMode a.first").click(function(){
 				if(data.pageNo == 0 || data.totalPage == 0)return;
 				transit.listTransit(0,transit.searchData.fromPartnerAgencyId,transit.searchData.lineProductId,transit.searchData.startTime,transit.searchData.arrangeUserId,transit.searchData.arrangeStartTime,transit.searchData.arrangeEndTime,transit.searchData.status,transit.searchData.shuttleType,transit.searchData.shuttleTime);
 			});
 			//分页--上一页事件
-			$("#"+tab+" .pageMode a.previous").click(function(){	
+			$("#"+tab+" .pageMode a.previous").click(function(){
 				if(data.totalPage == 0)return;
 				var previous = data.pageNo - 1;
 				if(data.pageNo == 0){
@@ -215,7 +216,7 @@ define(function(require, exports) {
 				open:function(event,ui){
 					$(this).find("p").text("是否发送通知？");
 				}
-			})			
+			})
 		},
 		exportTransit :function(id){
 			var url = ""+APP_ROOT+"back/export.do?method=exportOutTouristGroup&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view"+"&id="+id;
@@ -249,34 +250,31 @@ define(function(require, exports) {
 						var tab = "tab-arrange_transit-update-content";
 			    		var validator = rule.setTranistCheckor($(".arrangeTouristMain"));
 						if($(".tab-"+menuKey+"-update").length > 0) {
-							addTab(menuKey+"-update","编辑中转安排");
-                 	    	if(!!transit.edited["update"] && transit.edited["update"] != ""){
+                 	    	if(!!transit.edited["update"]){
                  	    		showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
                  	    			 validator = rule.setTranistCheckor($(".arrangeTouristMain"));
-				            		 if (!validator.form()) { 
-				            			 return; 
+				            		 if (!validator.form()) {
+				            			 return;
 				            		 }
 				            		 transit.submitUpdateTransit($(".arrangeTouristMain .btn-updateArrange").attr("data-entity-id"),0);
 									 transit.edited["update"] = "";
-				            		 addTab(menuKey+"-update","编辑中转安排",html);	
-									 transit.initUpdate(id,data);
+				            		 addTab(menuKey+"-update","编辑中转安排",html);
 				            		 validator = rule.setTranistCheckor($(".arrangeTouristMain"));
 				            	},function(){
-				            		addTab(menuKey+"-update","编辑中转安排",html);
-									transit.initUpdate(id,data);
-									validator = rule.setTranistCheckor($(".arrangeTouristMain"));								
+				            		addTab(menuKey+"-update","编辑中转安排",html);;
+									validator = rule.setTranistCheckor($(".arrangeTouristMain"));
 									transit.edited["update"] = "";
-				            	}); 							
+				            	});
                  	    	 }else{
 	                 	    	addTab(menuKey+"-update","编辑中转安排",html);
-								transit.initUpdate(id,data);
 	                 	        validator = rule.setTranistCheckor($(".arrangeTouristMain"));
-                 	    	 } 
+                 	    	 }
                  	    }else{
                  	    	addTab(menuKey+"-update","编辑中转安排",html);
-							transit.initUpdate(id,data);
                  	    	validator = rule.setTranistCheckor($(".arrangeTouristMain"));
-                 	    }
+                 	    };
+
+						transit.initUpdate(id,data);
 		        	}
 				}
 			})
@@ -289,7 +287,7 @@ define(function(require, exports) {
 				transit.edited["update"] = "update";
 			});	
 			$("#"+tab+" .count,#"+tab+" .price,#"+tab+" .discount").blur(transit.calculation);
-			//接待-------------------------开始---------------------------------------------------------	
+			//接待-------------------------开始---------------------------------------------------------
 			$("#"+tab+" #receptionList .btn-bus-add").click(function(){
 				var thisObj = $(this);
 				var id = transit.getArrangeTrId(thisObj);
@@ -445,8 +443,8 @@ define(function(require, exports) {
 			'<td><input class="col-sm-12 discount" name="busReduceMoney" type="text" value="" /></td>'+
 			'<td><input class="col-sm-12 needPay" readonly="readonly" name="busNeedPayMoney" type="text" value="" /></td>'+
 			'<td><input class="col-sm-12" name="busPayedMoney" type="text" value="" /></td>'+
-			'<td><select class="" name="busPayType" ><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>'+  
-			'<td><button class="btn btn-xs btn-danger arrange-delete" title="删除"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></td>'+
+			'<td><select class="" name="busPayType" ><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>'+
+			'<td><a class="cursor arrange-delete" title="删除">删除</a></td>'+
 			'</tr>';
 			$("#"+id+" .busList tbody").append(html);
 	    	$("#"+tab+" .arrangeTouristMain .busList .arrange-delete").click(function(){
@@ -480,7 +478,7 @@ define(function(require, exports) {
 			'<td><select class="" name="hotelPayType" >'+
 			'<option value="0">现付</option>'+
 			'<option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>'+
-			'<td><button class="btn btn-xs btn-danger arrange-delete"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></td>'+
+			'<td><a class="cursor arrange-delete">删除</a></td>'+
 			'</tr>';
 			$("#"+id+" .hotelList tbody").append(html);
 			$("#"+tab+" .arrangeTouristMain .hotelList .arrange-delete").click(function(){
@@ -511,7 +509,7 @@ define(function(require, exports) {
 			'<td><select class="" name="ticketPayType" >'+
 			'<option value="0">现付</option>'+
 			'<option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>'+
-			'<td><button class="btn btn-xs btn-danger arrange-delete"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></td>'+
+			'<td><a class="cursor arrange-delete">删除</a></td>'+
 			'</tr>';
 			$("#"+id+" .ticketList tbody").append(html);
 	    	$("#"+tab+" .arrangeTouristMain .ticketList .arrange-delete").click(function(){
@@ -531,8 +529,7 @@ define(function(require, exports) {
 			return obj.find("[name="+name+"]").val();
 		},
 		getArrangeTrId :function(thisObj){
-			var id = thisObj.parent().parent().parent().parent().parent().parent().attr("id");
-			return id;
+			return thisObj.closest('.tab-pane').attr("id");
 		},
 		//删除安排判断
     	delArrangeJudge :function(thisObj,type){
