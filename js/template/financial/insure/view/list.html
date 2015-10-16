@@ -1,9 +1,9 @@
-<div class="row Financialinsurance" >
+<div class="row Financialinsurance globalAdd" >
     <div class="form-horizontal search-area">    
         <div class="form-group" >      
           <label class="control-label pull-left" style="margin-left: 15px">保险公司:</label>
             <div class="col-sm-2">
-                <select  class="col-xs-12" name="insuranceId">
+                <select  class="col-xs-12" name="insuranceId" style="width: 220px">
                     <option value ="">全部</option>
                     {{each insuranceCompanyNameListNew as insurance index}}
 						<option value="{{insurance.id}}" {{if searchParam.insuranceId == insurance.id}}selected="selected"{{/if}}>{{insurance.name}}</option>
