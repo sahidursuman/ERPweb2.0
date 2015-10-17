@@ -759,6 +759,7 @@ define(function(require, exports) {
 
 			tripPlan.setValue("BusCompanyName",data.busCompanyTemplate.busCompany.companyName || "");
 			tripPlan.setValue("busCompanyId",data.busCompanyTemplate.busCompany.id || "");
+			tripPlan.setValue("needBusBrand",data.busCompanyTemplate.bus.brand || "");
 			tripPlan.setValue("LicenseNumber",data.busCompanyTemplate.bus.licenseNumber || "");
 			tripPlan.setValue("busLicenseNumberId",data.busCompanyTemplate.bus.id || "");
 			tripPlan.setValue("seatCount",data.busCompanyTemplate.bus.seatCount);
