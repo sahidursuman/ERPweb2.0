@@ -710,10 +710,10 @@ define(function(require, exports) {
     		var td = obj.parent().parent().parent();
 			var index = td.find("div").length;
 			var timeLimitDiv = "<div data-index=\""+(index+1)+"\" data-entity-id=\"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right\"><button class=\"btn btn-danger btn-sm btn-white delete\"><i class=\"ace-icon fa fa-minus bigger-110 icon-only\"></i></button></label></div>";
-			var guideRateInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"guideRate\" type=\"text\"/></div>";
-			var travelAgencyRateInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"travelAgencyRate\" type=\"text\"/></div>";
-			var customerRebateMoneyInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"customerRebateMoney\" type=\"text\"/></div>";
-			var parkingRebateMoneyInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"parkingRebateMoney\" type=\"text\"/></div>";
+			var guideRateInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"guideRate\" type=\"text\" maxlength=\"4\"/></div>";
+			var travelAgencyRateInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"travelAgencyRate\" type=\"text\" maxlength=\"4\"/></div>";
+			var customerRebateMoneyInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"customerRebateMoney\" type=\"text\" maxlength=\"9\"/></div>";
+			var parkingRebateMoneyInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"parkingRebateMoney\" type=\"text\" maxlength=\"9\"/></div>";
 			td.append(timeLimitDiv);
 			td.next().append(guideRateInput);
 			td.next().next().append(travelAgencyRateInput);
@@ -798,8 +798,8 @@ define(function(require, exports) {
 			    	'<input name="costMoneyStart" maxlength=\"9\" type=\"text\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label>'+
 			    	'<input name=\"costMoneyEnd\" maxlength=\"9\" type=\"text\" style=\"width:100px\"/><label class=\"priceArea\" style=\"float:right\">'+
 			    	'<button class=\"btn btn-success btn-sm btn-white add\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i>'+
-			    	'</button></label></div></td><td><div data-index="1" class="clearfix div-1" style="margin-bottom:3px"><input name="guideRate" maxlength=\"9\" type="text"/>'+
-			    	'</div></td><td><div data-index="1" class="clearfix div-1" style="margin-bottom:3px"><input name="travelAgencyRate" maxlength=\"9\" type="text"/>'+
+			    	'</button></label></div></td><td><div data-index="1" class="clearfix div-1" style="margin-bottom:3px"><input name="guideRate" maxlength=\"4\" type="text"/>'+
+			    	'</div></td><td><div data-index="1" class="clearfix div-1" style="margin-bottom:3px"><input name="travelAgencyRate" maxlength=\"4\" type="text"/>'+
 			    	'</div></td><td style=\"width:70px\"><button data-entity-id=\"\" class=\"btn btn-xs btn-danger btn-shop-policy-delete\">'+
 			    	'<i class=\"ace-icon fa fa-trash-o bigger-120\"></i></button></td></tr>';
 //			    	$(".policyForm .shopPolicyList tbody").append(policyHtml);
@@ -870,8 +870,8 @@ define(function(require, exports) {
 			    	'<input name="costMoneyStart" type=\"text\" maxlength=\"9\" class="col-sm-4"/><label class="col-sm-2 control-label center">&nbsp;至&nbsp;</label>'+
 			    	'<input name=\"costMoneyEnd\" type=\"text\" maxlength=\"9\" class="col-sm-4"/><label class=\"priceArea col-sm-2\">'+
 			    	'<button class=\"btn btn-success btn-sm btn-white add\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i>'+
-			    	'</button></label></div></td><td><div data-index="1" class="clearfix div-1" style="margin-bottom:3px"><input name="guideRate" maxlength=\"9\" type="text"/>'+
-			    	'</div></td><td><div data-index="1" class="clearfix div-1" style="margin-bottom:3px"><input name="travelAgencyRate" type="text" maxlength=\"9\"/>'+
+			    	'</button></label></div></td><td><div data-index="1" class="clearfix div-1" style="margin-bottom:3px"><input name="guideRate" maxlength=\"4\" type="text"/>'+
+			    	'</div></td><td><div data-index="1" class="clearfix div-1" style="margin-bottom:3px"><input name="travelAgencyRate" type="text" maxlength=\"4\"/>'+
 			    	'</div></td><td style=\"width:70px\"><button data-entity-id=\"\" class=\"btn btn-xs btn-danger btn-shop-policy-delete\">'+
 			    	'<i class=\"ace-icon fa fa-trash-o bigger-120\"></i></button></td></tr>';
 //			    	$(".policyForm .shopPolicyList tbody").append(policyHtml);
@@ -982,8 +982,8 @@ define(function(require, exports) {
 			var td = obj.parent().parent().parent();
 			var index = td.find("div").length;
 			var priceAreaDiv = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-bottom:3px\"><input name=\"costMoneyStart\" maxlength=\"9\" type=\"text\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"costMoneyEnd\" type=\"text\" style=\"width:100px\" maxlength=\"9\"/><label class=\"priceArea\" style=\"float:right\"><button class=\"btn btn-danger btn-sm btn-white del\"><i class=\"ace-icon fa fa-minus bigger-110 icon-only\"></i></button></label></div>";
-			var guideRateInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-bottom:3px\"><input name=\"guideRate\" type=\"text\" maxlength=\"9\"/></div>";
-			var travelAgencyRateInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-bottom:3px\"><input name=\"travelAgencyRate\" type=\"text\" maxlength=\"9\"/></div>";
+			var guideRateInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-bottom:3px\"><input name=\"guideRate\" type=\"text\" maxlength=\"4\"/></div>";
+			var travelAgencyRateInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-bottom:3px\"><input name=\"travelAgencyRate\" type=\"text\" maxlength=\"4\"/></div>";
 			td.append(priceAreaDiv);
 			td.next().append(guideRateInput);
 			td.next().next().append(travelAgencyRateInput);
@@ -992,8 +992,8 @@ define(function(require, exports) {
 			var td = obj.parent().parent().parent();
 			var index = td.find("div").length;
 			var priceAreaDiv = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-bottom:3px\"><input name=\"costMoneyStart\" maxlength=\"9\" type=\"text\" class=\"col-sm-4\"/><label class=\"col-sm-2 control-label center\">&nbsp;至&nbsp;</label><input name=\"costMoneyEnd\" type=\"text\" maxlength=\"9\" class=\"col-sm-4\"/><label class=\"priceArea col-sm-2\"><button class=\"btn btn-danger btn-sm btn-white del\"><i class=\"ace-icon fa fa-minus bigger-110 icon-only\"></i></button></label></div>";
-			var guideRateInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-bottom:3px\"><input name=\"guideRate\" type=\"text\" maxlength=\"9\" class=\"col-sm-12\"/></div>";
-			var travelAgencyRateInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-bottom:3px\"><input name=\"travelAgencyRate\" maxlength=\"9\" class=\"col-sm-12\"  type=\"text\"/></div>";
+			var guideRateInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-bottom:3px\"><input name=\"guideRate\" type=\"text\" maxlength=\"4\" class=\"col-sm-12\"/></div>";
+			var travelAgencyRateInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-bottom:3px\"><input name=\"travelAgencyRate\" maxlength=\"4\" class=\"col-sm-12\"  type=\"text\"/></div>";
 			td.append(priceAreaDiv);
 			td.next().append(guideRateInput);
 			td.next().next().append(travelAgencyRateInput);
