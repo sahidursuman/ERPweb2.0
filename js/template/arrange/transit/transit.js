@@ -283,6 +283,7 @@ define(function(require, exports) {
 			$("#"+tab+" #receptionList .btn-bus-add").click(function(){
 				var thisObj = $(this);
 				var id = transit.getArrangeTrId(thisObj);
+				console.log(id);
 				transit.addOutBusList(id,0,tab);
 			})
 			$("#"+tab+" #receptionList .btn-hotel-add").click(function(){
@@ -658,7 +659,7 @@ define(function(require, exports) {
 			return obj.find("[name="+name+"]").val();
 		},
 		getArrangeTrId :function(thisObj){
-			var id = thisObj.parent().parent().parent().parent().parent().parent().attr("id");
+			var id = thisObj.parent().parent().parent().parent().parent().attr("id");
 			return id;
 		},
 		//删除安排判断
