@@ -504,7 +504,13 @@ define(function(require, exports) {
 			tripPlan.driverChoose();
 			tripPlan.guideChoose();
 			//tripPlan.addTripPlanDatepicker("startTime");
-			tripPlan.setPlanceTimeDateTimePicker();
+			
+	    	$("#"+tab+" input[name=setPlaceTime]").datetimepicker({
+				autoclose: true,
+				todayHighlight: true,
+				format: 'L',
+				language: 'zh-CN'
+			});
 
 
 			//发团计划定时
