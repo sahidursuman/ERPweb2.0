@@ -91,7 +91,7 @@ define(function(require, exports) {
 						inner.transferOutfindPager(searchParam);	
 					
 						function getVal (name){
-							var val = $("#" +tabId+" .transferOut-content").find("[name="+name+"]").val();
+							var val = $("#" +tabId+" .innerTransfer_list").find("[name="+name+"]").val();
 							return val;
 						}
 
@@ -228,12 +228,12 @@ define(function(require, exports) {
 						//查看
 						$("#" +tabId+" .innerTransfer_list .btn-TransferOut-view").click(function(){
 							var id = $(this).attr("data-entity-id");
-							inner.view(id);
+							inner.viewTransferOut(id);
 						});
 						//编辑
 						$("#" +tabId+" .innerTransfer_list .btn-TransferOut-edit").click(function(){
 							var id = $(this).attr("data-entity-id");
-							inner.edit(id);
+							inner.editTransferOut(id);
 						});
 						//撤销
 						$("#" +tabId+" .innerTransfer_list .btn-TransferOut-delete").click(function(){
@@ -251,6 +251,49 @@ define(function(require, exports) {
 				});
 
 			},
+
+		    viewTransferOut:function(id){
+				$.ajax({  
+					url:url("edit","view"),
+					data:"id="+id,
+					dataType:'json',
+					before:function(){
+						globalLoadingLayer = layer.open();
+					},
+					success:function(data){
+						layer.close(globalLoadingLayer);
+						data.innerTransfer = JSON.parse(data.innerTransfer);
+						var html = viewTemplate(data);
+						addTab(menuKey+"-view","内转信息",html);
+					}
+				});
+		},
+
+		//我社转出编辑操作
+		editTransferOut:function(id){
+				$.ajax({  
+					url:url("edit","edit"),
+					data:"id="+id,
+					dataType:'json',
+					before:function(){
+						globalLoadingLayer = layer.open();
+					},
+					success:function(data){
+						layer.close(globalLoadingLayer);
+						data.innerTransfer = JSON.parse(data.innerTransfer);
+						data.businessGroup = JSON.parse(data.businessGroup);
+						var html = editTemplate(data);
+						addTab(menuKey+"-edit","修改内转信息",html);
+						
+						//新增其他费用按钮
+						$(".inner-edit-fee").find("button[name=addOhterFeeBtn]").click(function(){
+							var addTr = "<tr><td>其他费用</td><td><input type='text' name='discribe' value='' /></td><td><input type='text' name='count' value='' /></td><td><input type='text' name='price' value='' /></td><td><label nam='deleteLable'>删除</label></td></tr>"
+							$(".inner-edit-fee").find("tr[name=addDiv]").after(addTr);
+						});
+					}
+				});
+		},
+
 
 		//删除我部转出
 		deleteTransferOut:function(id){
@@ -300,16 +343,8 @@ define(function(require, exports) {
 		},	
 
 
-
-
-
-
-
-
-
-
 			//他部转入
-			listTransferIn:function(searchParam){
+		listTransferIn:function(searchParam){
 				globalLoadingLayer = layer.open({
 					zIndex:1028,
 					type:3
@@ -565,53 +600,7 @@ define(function(require, exports) {
 					$(this).find("p").text("是否拒绝转入操作？");
 				}
 			});
-		},
-
-
-
-
-
-	    view:function(id){
-				$.ajax({  
-					url:url("edit","view"),
-					data:"id="+id,
-					dataType:'json',
-					before:function(){
-						globalLoadingLayer = layer.open();
-					},
-					success:function(data){
-						layer.close(globalLoadingLayer);
-						data.innerTransfer = JSON.parse(data.innerTransfer);
-						var html = viewTemplate(data);
-						addTab(menuKey+"-view","内转信息",html);
-					}
-				});
-			},
-
-			edit:function(id){
-				$.ajax({  
-					url:url("edit","edit"),
-					data:"id="+id,
-					dataType:'json',
-					before:function(){
-						globalLoadingLayer = layer.open();
-					},
-					success:function(data){
-						layer.close(globalLoadingLayer);
-						data.innerTransfer = JSON.parse(data.innerTransfer);
-						data.businessGroup = JSON.parse(data.businessGroup);
-						var html = editTemplate(data);
-						addTab(menuKey+"-edit","修改内转信息",html);
-						
-						//新增其他费用按钮
-						$(".inner-edit-fee").find("button[name=addOhterFeeBtn]").click(function(){
-							var addTr = "<tr><td>其他费用</td><td><input type='text' name='discribe' value='' /></td><td><input type='text' name='count' value='' /></td><td><input type='text' name='price' value='' /></td><td><label nam='deleteLable'>删除</label></td></tr>"
-							$(".inner-edit-fee").find("tr[name=addDiv]").after(addTr);
-						});
-					}
-				});
-			},
-			
+		},		
 	}
 	
 	exports.list=inner.list; 
