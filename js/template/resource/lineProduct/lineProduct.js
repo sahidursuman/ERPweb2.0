@@ -1663,6 +1663,7 @@ define(function(require, exports) {
 						thisParent.find("input[name=mobileNumber]").val("");
 						thisParent.find("input[name=contractPrice]").val("");
 						thisParent.find("input[name=managerName]").val("");
+						thisParent.find("input[name=remark]").val("");
 
 						// 更新表单验证的配置
 						validator = rule.lineProductUpdate(validator);
@@ -1716,7 +1717,7 @@ define(function(require, exports) {
     							var thisParent = $(_this).parent().parent();
 								thisParent.find("input[name=selfPayItemId]").val(ui.item.id).trigger('change');
 								thisParent.find("input[name=contractPrice]").val(selfPayRebate.price);
-								
+								thisParent.find("input[name=remark]").val(ui.item.remark);
 							}
 	                    }
 	                });
