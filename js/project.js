@@ -932,6 +932,7 @@ function listMenu(menuTemplate){
 						var year = date.getFullYear();
 						var month = ""//date.getMonth()+1
 						innerTransferIn.listInnerTransferIn(0,"",year,month);
+						modals["financial_innerTransfer_in"] = innerTransferIn;
 					});
 				});
 				//绑定内转利润账务
