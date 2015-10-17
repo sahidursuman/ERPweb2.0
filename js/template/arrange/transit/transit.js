@@ -46,11 +46,45 @@ define(function(require, exports) {
 						data.searchParam.partnerAgencyList = JSON.parse(data.searchParam.partnerAgencyList);
 						var html = listTemplate(data);
 						addTab(menuKey,"中转安排",html);
+						transit.initArrageTime();
 						transit.initList(data);
 					}
 				}
 			});
 		},
+
+	   //初始化安排时间
+	   initArrageTime:function(){
+	   		var $obj=$("#tab-arrange_transit-content ");
+			$obj.find("input[name=arrangeStartTime]").val(transit.dateCalculation(transit.getCurrentDate(),6));
+			$obj.find("input[name=arrangeEndTime]").val(transit.getCurrentDate());
+	   },
+
+	   //获取当前时间
+	   getCurrentDate:function() {
+		    var date = new Date(),
+		    seperator1 = "-",
+		    seperator2 = ":",
+		    month = date.getMonth() + 1,
+		    strDate = date.getDate();
+		    if (month >= 1 && month <= 9) {
+		        month = "0" + month;
+		    }
+		    if (strDate >= 0 && strDate <= 9) {
+		        strDate = "0" + strDate;
+		    }
+		    var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
+		            + " " ;
+		    return currentdate;
+       },
+		//默认时间是一周的计算
+		dateCalculation:function(dt, days){
+			dt = dt.split('-').join('/');//js不认2000-1-31,只认2000/1/31 
+			var t1 = new Date(new Date(dt).valueOf() -days*24*60*60*1000);// 日期加上指定的天数 
+			return t1.getFullYear() + "-" + (t1.getMonth()+1) + "-" + t1.getDate();
+		}, 
+
+
 		initList : function(data){
 			var tab = "tab-arrange_transit-content";
 			// 时间控件
@@ -81,7 +115,24 @@ define(function(require, exports) {
 			transit.partnerAgencyChoose(tab);
 			//安排人下拉搜索			    	
 			transit.arrangeUserChoose(tab);
-			
+			//搜索栏状态button下拉事件
+			$("#"+tab+" .search-area .btn-status .dropdown-menu a").click(function(){
+				$(this).parent().parent().parent().find("button").attr("data-value",$(this).attr("data-value"));
+				$(this).parent().parent().parent().find("span").text($(this).text());
+				transit.searchData = {
+					fromPartnerAgencyId : $("#"+tab+" input[name=partnerAgencyId]").val(),
+					lineProductId : $("#"+tab+" input[name=lineProductId]").val(),
+					startTime : $("#"+tab+" input[name=startTime]").val(),
+					arrangeUserId :$("#"+tab+" input[name=arrangeUserId]").val(),
+					arrangeStartTime : $("#"+tab+" input[name=arrangeStartTime]").val(),
+					arrangeEndTime : $("#"+tab+" input[name=arrangeEndTime]").val(),
+					//status : $("#"+tab+" select[name=status]").val(),
+					status :$("#"+tab+" .search-area .btn-status").find("button").attr("data-value"),
+					shuttleType :$("#"+tab+" select[name=shuttleType]").val(),
+					shuttleTime :$("#"+tab+" input[name=shuttleTime]").val()
+				}
+				transit.listTransit(0,transit.searchData.fromPartnerAgencyId,transit.searchData.lineProductId,transit.searchData.startTime,transit.searchData.arrangeUserId,transit.searchData.arrangeStartTime,transit.searchData.arrangeEndTime,transit.searchData.status,transit.searchData.shuttleType,transit.searchData.shuttleTime)
+			});
 			//筛选事件绑定
 			$("#"+tab+" .btn-touristGroupList-search").click(function(){
 				transit.searchData = {
@@ -91,7 +142,8 @@ define(function(require, exports) {
 					arrangeUserId :$("#"+tab+" input[name=arrangeUserId]").val(),
 					arrangeStartTime : $("#"+tab+" input[name=arrangeStartTime]").val(),
 					arrangeEndTime : $("#"+tab+" input[name=arrangeEndTime]").val(),
-					status : $("#"+tab+" select[name=status]").val(),
+					//status : $("#"+tab+" select[name=status]").val(),
+					status :$("#"+tab+" .search-area .btn-status").find("button").attr("data-value"),
 					shuttleType :$("#"+tab+" select[name=shuttleType]").val(),
 					shuttleTime :$("#"+tab+" input[name=shuttleTime]").val()
 				}
@@ -103,7 +155,7 @@ define(function(require, exports) {
 				transit.listTransit(0,transit.searchData.fromPartnerAgencyId,transit.searchData.lineProductId,transit.searchData.startTime,transit.searchData.arrangeUserId,transit.searchData.arrangeStartTime,transit.searchData.arrangeEndTime,transit.searchData.status,transit.searchData.shuttleType,transit.searchData.shuttleTime);
 			});
 			//分页--上一页事件
-			$("#"+tab+" .pageMode a.previous").click(function(){	
+			$("#"+tab+" .pageMode a.previous").click(function(){
 				if(data.totalPage == 0)return;
 				var previous = data.pageNo - 1;
 				if(data.pageNo == 0){
@@ -202,7 +254,7 @@ define(function(require, exports) {
 				open:function(event,ui){
 					$(this).find("p").text("是否发送通知？");
 				}
-			})			
+			})
 		},
 		exportTransit :function(id){
 			var url = ""+APP_ROOT+"back/export.do?method=exportOutTouristGroup&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view"+"&id="+id;
@@ -248,13 +300,11 @@ define(function(require, exports) {
 				            		 }
 				            		 transit.submitUpdateTransit($(".arrangeTouristMain .btn-updateArrange").attr("data-entity-id"),0);
 									 transit.edited["update"] = "";
-				            		 addTab(menuKey+"-update","编辑中转安排",html);	
-									 transit.initUpdate(id,data);									 
+				            		 addTab(menuKey+"-update","编辑中转安排",html);
 				            		 validator = rule.setTranistCheckor($(".arrangeTouristMain"));
 				            	},function(){
-				            		addTab(menuKey+"-update","编辑中转安排",html);
-									transit.initUpdate(id,data);									
-									validator = rule.setTranistCheckor($(".arrangeTouristMain"));								
+				            		addTab(menuKey+"-update","编辑中转安排",html);;
+									validator = rule.setTranistCheckor($(".arrangeTouristMain"));
 									transit.edited["update"] = "";
 				            	}); 							
                  	    	 }else{
@@ -283,7 +333,6 @@ define(function(require, exports) {
 			$("#"+tab+" #receptionList .btn-bus-add").click(function(){
 				var thisObj = $(this);
 				var id = transit.getArrangeTrId(thisObj);
-				console.log(id);
 				transit.addOutBusList(id,0,tab);
 			})
 			$("#"+tab+" #receptionList .btn-hotel-add").click(function(){
@@ -519,7 +568,7 @@ define(function(require, exports) {
 			'<td><input class="col-sm-12" name="busPayedMoney" type="text" value="" /></td>'+
 			'<td><select class="" name="busPayType" ><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>'+ 
 			'<td><input class="col-sm-12" name="remark" type="text" value="" /></td>'+ 
-			'<td><button class="btn btn-xs btn-danger arrange-delete" title="删除"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></td>'+
+			'<td><a class="cursor arrange-delete" title="删除">删除</a></td>'+
 			'</tr>';
 			$("#"+id+" .busList tbody").append(html);
 	    	$("#"+tab+" .arrangeTouristMain .busList .arrange-delete").click(function(){
@@ -554,7 +603,7 @@ define(function(require, exports) {
 			'<option value="0">现付</option>'+
 			'<option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>'+
 			'<td><input class="col-sm-12" name="remark" type="text" value="" /></td>'+
-			'<td><button class="btn btn-xs btn-danger arrange-delete"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></td>'+
+			'<td><a class="cursor arrange-delete" title="删除">删除</a></td>'+
 			'</tr>';
 			$("#"+id+" .hotelList tbody").append(html);
 			$("#"+tab+" .arrangeTouristMain .hotelList .arrange-delete").click(function(){
@@ -586,7 +635,7 @@ define(function(require, exports) {
 			'<option value="0">现付</option>'+
 			'<option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>'+
 			'<td><input class="col-sm-12" name="remark" type="text" value="" /></td>'+
-			'<td><button class="btn btn-xs btn-danger arrange-delete"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></td>'+
+			'<td><a class="cursor arrange-delete" title="删除">删除</a></td>'+
 			'</tr>';
 			$("#"+id+" .ticketList tbody").append(html);
 	    	$("#"+tab+" .arrangeTouristMain .ticketList .arrange-delete").click(function(){
@@ -614,7 +663,7 @@ define(function(require, exports) {
 			'<td><input class="col-sm-12" name="payedMoney" type="text" value="" /></td>'+
 			'<td><select class="" name="payType"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>'+
 			'<td><input class="col-sm-12" name="remark" type="text" value="" /></td>'+
-			'<td><button class="btn btn-xs btn-danger arrange-delete" title="删除"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></td>'+
+			'<td><a class="cursor arrange-delete" title="删除">删除</a></td>'+
 			'</tr>';
 			$("#"+id+" .restaurantList tbody").append(html);
 			transit.bindRestaurantChoose(tab);
@@ -640,7 +689,7 @@ define(function(require, exports) {
 			'<td><input class="col-sm-12" name="payedMoney" type="text" value="" /></td>'+
 			'<td><select class="" name="payType"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>'+
 			'<td><input class="col-sm-12" name="remark" type="text" value="" /></td>'+
-			'<td><button class="btn btn-xs btn-danger arrange-delete" title="删除"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></td>'+
+			'<td><a class="cursor arrange-delete" title="删除">删除</a></td>'+
 			'</tr>';
 			$("#"+id+" .otherList tbody").append(html);
 	    	$("#"+tab+" .arrangeTouristMain .otherList .arrange-delete").click(function(){
@@ -659,7 +708,7 @@ define(function(require, exports) {
 			return obj.find("[name="+name+"]").val();
 		},
 		getArrangeTrId :function(thisObj){
-			var id = thisObj.parent().parent().parent().parent().parent().attr("id");
+			var id = thisObj.parent().parent().parent().parent().parent().parent().attr("id");
 			return id;
 		},
 		//删除安排判断
@@ -928,7 +977,7 @@ define(function(require, exports) {
 						parents.find("input[name=hotelRoomTypeId]").val("");
 						parents.find("input[name=hotelMobileNumber]").val("");
 						parents.find("input[name=hotelManagerName]").val("");
-						parentObj.find("input[name=hotelPrice]").val("");
+						parents.find("input[name=hotelPrice]").val("");
 					}
 				},
 				select:function(event,ui){
@@ -1050,7 +1099,7 @@ define(function(require, exports) {
 					if(ui.item == null){
 						$(this).val("");
 						var thisParent = $(this).parent().parent();
-						thisParent.find("input[name=tickeId]").val(ui.item.id).trigger('change');
+						thisParent.find("input[name=tickeId]").val("").trigger('change');
 					}
 				}
 			}).off("click").on("click", function(){
