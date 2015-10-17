@@ -12,32 +12,21 @@ define(function(require, exports) {
         checkTabId = "tab-"+ menuKey+"-checking"+"-content",
         clearTabId = "tab-"+ menuKey+"-clearing"+"-content";
 	var guide = {
+		searchData : {
+			page : "",
+			guideId : "",
+			year : "",
+			month : ""
+		},
 		edited : {},
-		//blanceEdited:false,
 		isEdited : function(editedType){
 			if(!!guide.edited[editedType] && guide.edited[editedType] != ""){
 				return true;
 			}
 			return false;
 		},
-		listData : {
-			page : "",
-			guideId : "",
-			year : "",
-			month : ""
-		},
-		checkingData : {
-			id : "",
-			page : "",
-			year : "",
-			month : ""
-		},
-		clearingData : {
-			id : "",
-			year : "",
-			start_month : "",
-			end_month : ""
-		},
+		oldCheckGuideId : 0,
+        oldBlanceGuideId:0,
 		listFinancialGuide:function(page,guideId,year,month){
 			$.ajax({
 				url:""+APP_ROOT+"back/financialGuide.do?method=listFinancialGuide&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
@@ -51,7 +40,7 @@ define(function(require, exports) {
 					layer.close(globalLoadingLayer);
 					var result = showDialog(data);
 					if(result){
-						guide.listData = {
+						guide.searchData = {
 							page : page,
 							guideId : guideId,
 							year : year,
@@ -93,7 +82,7 @@ define(function(require, exports) {
 						});
 						//分页--尾页事件
 						$("#"+tabId+ " .pageMode a.last").click(function(){
-							guide.listFinancialGuide(data.totalPage == 0 ? data.totalPage : data.totalPage-1,guideId,data.year,data.month);
+							guide.listFinancialGuide(data.totalPage-1,guideId,data.year,data.month);
 						});
 						//给对账按钮绑定事件
 						$("#"+tabId+" .btn-divide").click(function(){
@@ -109,9 +98,6 @@ define(function(require, exports) {
 							guide.listGuideSettlement(guideId,data.year,start_month,end_month);
 
 						});
-
-
-
 					}
 				}
 			});
@@ -126,10 +112,7 @@ define(function(require, exports) {
 					globalLoadingLayer = openLoadingLayer();
 				},
 				success:function(data){
-					
 					var $obj = $(".check .form-horizontal");
-			    	
-					
 					layer.close(globalLoadingLayer);
 					var result = showDialog(data);
 					if(result){
@@ -140,7 +123,6 @@ define(function(require, exports) {
 						if($("#"+checkTabId+"").length > 0) {
                  	    	if(!!guide.edited["checking"] && guide.edited["checking"] != ""){
                  	    		addTab(menuKey+"-checking","导游对账");
-								console.log("1");
                  	    		showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
                  	    			 validator = rule.check($('.check'));
 				            		 if (!validator.form()) { 
@@ -149,32 +131,25 @@ define(function(require, exports) {
 				            		 guide.saveCheckingData(page,guideId,year,month,0);
 				            		 guide.edited["checking"] = "";
 				            		 addTab(menuKey+"-checking","导游对账",html);
-									 console.log("2");
 				            		 validator = rule.check($('.check'));
 				            	 },function(){
 				            		 addTab(menuKey+"-checking","导游对账",html);
-									 console.log("3");
 				            		 guide.edited["checking"] = "";
 				            		 validator = rule.check($('.check'));
 				            	 });
                  	    	 }else{
 	                 	    	addTab(menuKey+"-checking","导游对账",html);
-								console.log("4");
 	                 	        validator = rule.check($('.check'));
                  	    	 }
+             	    		 
                  	    }else{
                  	    	addTab(menuKey+"-checking","导游对账",html);
-							console.log("5");
                  	    	validator = rule.check($('.guide-checking'));
-                 	    }
+                 	    	
+                 	    };
                  	    $("#"+checkTabId+ " .all").on("change",function(){
-							guide.checkingData = {
-								id : guideId,
-								page : page,
-								year : year,
-								month : month
-						    }
-            	    		guide.edited["checking"] = "checking";
+            	    		guide.edited["checking"] = "checking"; 
+							guide.oldCheckGuideId = guideId;
             	    	});
 						
 						// 设置表单验证
@@ -248,7 +223,7 @@ define(function(require, exports) {
 						});
 						//分页--尾页事件
 						$("#"+checkTabId+ " .pageMode a.last").click(function(){
-							guide.listGuideChecking(data.totalPage == 0 ? data.totalPage : data.totalPage-1,guideId,data.year,data.month);
+							guide.listGuideChecking(data.totalPage-1,guideId,data.year,data.month);
 						});
 						
 						//给全选绑定事件
@@ -298,7 +273,7 @@ define(function(require, exports) {
 				}
 			});
 		},
-		listGuideSettlement:function(guideId,year,start_month,end_month,isClose){
+		listGuideSettlement:function(guideId,year,start_month,end_month){
 			$.ajax({
 				url:""+APP_ROOT+"back/financialGuide.do?method=listGuideSettlement&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 				type:"POST",
@@ -315,7 +290,7 @@ define(function(require, exports) {
 						//addTab(menuKey+"-clearing","导游结算",html);
 						//判断页面是否存在 #tab-financial_guide-clearing-content  "tab-"+ menuKey+"-clearing"+"-content" 
                  	    if($("#tab-"+menuKey+"-clearing-content").length > 0) {
-                 	    	if(!!guide.edited["clearing"] && !!guide.edited["clearing"] !=""){
+                 	    	if(!!guide.edited["clearing"] && guide.edited["clearing"] != ""){
                  	    		addTab(menuKey+"-clearing","导游结算");
                  	    		showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
                  	    			 guide.validatorTable();
@@ -340,14 +315,9 @@ define(function(require, exports) {
                  	    	guide.validatorTable();
                  	    };
                  	   $("#"+clearTabId+" .all").on('change', 'input, select', function() {
-						    guide.clearingData = {
-								id : guideId,
-								year : year,
-								start_month : start_month,
-								end_month : end_month
-						    }
-                 		    guide.edited["clearing"] = "clearing";
-	    	    		    $(this).closest('tr').data('blanceStatus',true);
+                 		  guide.edited["clearing"] = "clear";
+						  guide.oldBlanceGuideId = guideId;
+	    	    		  $(this).closest('tr').data('blanceStatus',true);
 	    	    		});
 						
 						
@@ -542,9 +512,9 @@ define(function(require, exports) {
 						showMessageDialog($( "#confirm-dialog-message" ),data.message);
 						guide.edited["checking"] = "";
 						if(isClose == 1){
-							closeTab(menuKey + "-checking");
-							guide.listFinancialGuide(guide.listData.page,guide.listData.guideId,guide.listData.year,guide.listData.month);
-						} else{
+							closeTab(checkTabId);
+							guide.listFinancialGuide(guide.searchData.page,guide.searchData.guideId,guide.searchData.year,guide.searchData.month);
+						} else {
 							guide.listGuideChecking(page,guideId,year,month);
 						}
 					}
@@ -581,9 +551,9 @@ define(function(require, exports) {
                     	showMessageDialog($( "#confirm-dialog-message" ),data.message);
                     	guide.edited["clearing"] = "";
 						if(isClose == 1){
-							closeTab(menuKey + "-clearing");
-							guide.listFinancialGuide(guide.listData.page,guide.listData.guideId,guide.listData.year,guide.listData.month);
-						} else{
+							closeTab(clearTabId);
+							guide.listFinancialGuide(guide.searchData.page,guide.searchData.guideId,guide.searchData.year,guide.searchData.month);
+						} else {
 							guide.listGuideSettlement(guideId,year,start_month,end_month);
 						}
                     }
@@ -591,11 +561,11 @@ define(function(require, exports) {
         	})
 		},
 		save : function(saveType){
+			console.log(saveType);
 			if(saveType == "checking"){
-				console.log("save-check");
-				guide.saveCheckingData(guide.checkingData.page,guide.checkingData.id,guide.checkingData.year,guide.checkingData.month,1);
+				guide.saveCheckingData(0,guide.oldCheckGuideId,"","",1);
 			} else if(saveType == "clearing"){
-				guide.saveGuideSettlement(guide.clearingData.id,guide.clearingData.year,guide.clearingData.start_month,guide.clearingData.end_month,1);
+				guide.saveGuideSettlement(guide.oldBlanceGuideId,"","","",1);
 			}
 		},
 		clearEdit : function(clearType){

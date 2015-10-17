@@ -1,22 +1,22 @@
-<div class="search-area arrangeTransit">
+<div class="search-area arrangeTransit globalAdd">
 	 <div class="form-horizontal">
 	 	<div class="col-xs-12">
-		 	<div class="col-xs-3" style="padding-left:0px;">
+		 	<div class="col-xs-2" style="padding-left:0px;">
 				<label class="pull-left  text-right control-label no-padding-right">客户来源:</label>
 				<div class="col-xs-8">
-					<input type="text" name="partnerAgency" placeholder="全部组团社" class="col-sm-12 choosePartnerAgency" value="{{searchParam.partnerAgencyList.travelAgencyName}}" />
+					<input type="text" name="partnerAgency" placeholder="全部组团社" class="col-sm-12 choosePartnerAgency guideInputList" value="{{searchParam.partnerAgencyList.travelAgencyName}}" />
 					<input type="hidden" name="partnerAgencyId" value="{{searchParam.partnerAgencyList.id}}" />
 				</div> 
 			</div>
 			<div class="col-xs-3" style="padding-left:0px;">
-				<label class="col-xs-4 text-right control-label no-padding-right">线路:</label>
+				<label class="col-xs-3 text-right control-label no-padding-right">线路:</label>
 				<div class="col-xs-8">
-					<input type="text" name="lineProduct" placeholder="全部线路" class="col-sm-12 chooseLineProduct" value="{{searchParam.lineProductList.name}}" />
+					<input type="text" name="lineProduct" placeholder="全部线路" class="col-sm-12 chooseLineProduct guideInputList" value="{{searchParam.lineProductList.name}}" />
 					<input type="hidden" name="lineProductId" value="{{searchParam.lineProductList.id}}" />
 				</div>
 			</div>
-			<div class="col-xs-3">
-				<label class="col-xs-4 text-right control-label no-padding-right">出游时间:</label>
+			<div class="col-xs-3" style="margin-left: -40px">
+				<label class="col-xs-2 text-right control-label no-padding-right">出游时间:</label>
 				<div class="col-xs-8">
 					<div class="input-group">
 						<input class="col-xs-12 date-picker" name="startTime" value="{{searchParam.startTime}}" type="text" />
@@ -26,9 +26,8 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-xs-3" style="padding-left:0px;">
-				<label class="col-xs-4 text-right control-label no-padding-right">状态:</label>
-				
+			<div class="col-xs-2" style="padding-left:0px;margin-left: -80px">
+				<label class="col-xs-2 text-right control-label no-padding-right">状态:</label>
 				<div class="col-xs-8 btn-group btn-status" >
 					<button data-value="{{searchParam.status}}" data-toggle="dropdown" class=" btn-sm dropdown-toggle block-up" aria-expanded="false">
 						<span>
@@ -62,12 +61,12 @@
 			<div class="col-xs-3" style="padding-left:0px;">
 				<label class="pull-left text-right control-label no-padding-right">安排人:</label>
 				<div class="col-xs-8">
-					<input type="text" name="arrangeUser" placeholder="全部安排人" value="{{searchParam.arrangeUserList.name}}" class="col-xs-12 chooseArrangeUser" />
+					<input type="text" name="arrangeUser" placeholder="全部安排人" value="{{searchParam.arrangeUserList.name}}" class="col-xs-12 chooseArrangeUser guideInputList" />
 					<input type="hidden" name="arrangeUserId" value="{{searchParam.arrangeUserList.id}}" />
 				</div>
 			</div>
-			<div class="col-xs-3" style="padding-left:0;">
-				<label class="col-xs-4 text-right control-label no-padding-right">安排时间:</label>
+			<div class="col-xs-3" style="padding-left:0;margin-left:-105px;">
+				<label class="col-xs-2 text-right control-label no-padding-right">安排时间:</label>
 				<div class="col-xs-8">
 					<div class="input-group">
 						<input class="col-xs-5 date-picker" name="arrangeStartTime" placeholder="开始时间" value="{{searchParam.arrangeStartTime}}" type="text" />	
@@ -90,9 +89,8 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-xs-3">
+			<div class="col-xs-3" style="margin-left:-25px;">
 				<button class=" btn-sm  btn-touristGroupList-search search-btn">
-
 					<i class="ace-icon fa fa-search"></i>
 					搜索
 				</button>
