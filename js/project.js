@@ -1027,13 +1027,13 @@ function listMenu(menuTemplate){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/arrange/innerTransfer/innerTransfer.js",function(innerTransfer){ 
+					seajs.use("" + ASSETS_ROOT +"js/template/arrange/innerTransfer/innerTransfer.js",function(inner){ 
 						var searchParam = {
 								pageNo : "0",
 								type : "1",
 								first : "1",
 							}
-						innerTransfer.list(searchParam);
+						inner.list(searchParam);
 					});
 				});
 
