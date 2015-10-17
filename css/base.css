@@ -15,7 +15,12 @@
 .table th, .table td {
     text-align: center;
 }
-body{color:#000; font-family: "microsoft yahei"}
+body{
+	color:#000; 
+	font-family: "microsoft yahei"
+	min-width: 1366px;
+    overflow-x: auto;
+}
 a{cursor: pointer;}
 a:hover, a:focus{text-decoration: none;}
 .input-group-addon{cursor:pointer;}
