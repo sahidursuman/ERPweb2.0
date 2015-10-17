@@ -187,6 +187,11 @@
 							res = rules[i].errMsg;
 						}
 						break;
+					case 'positive-float':	// 正浮点型
+						if (!!data && !/^(\d*\.)?\d+$/.test( data )) {
+							res = rules[i].errMsg;
+						}
+						break;
 					case 'mobile-phone': // 手机号码
 						if (!!data && !/^1[34587]\d{9}$/.test( data )) {
 							res = rules[i].errMsg;

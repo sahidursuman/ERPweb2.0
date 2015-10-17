@@ -60,6 +60,7 @@ define(function(require, exports) {
 			});
 		},
 		viewMsg:function(id){
+
 			$.ajax({
 				url:""+APP_ROOT+"back/message.do?method=readMessage&token="+$.cookie("token")+"&menuKey=&operation=self",
 				type:"POST",
@@ -82,11 +83,25 @@ define(function(require, exports) {
 					    content: html,
 					    success:function(){
 					    	message.listMsg(message.msgData.pageNo);
+					    	// 修改header的显示
+		    		    	var $msgCounter = $("#msgCountSpan"), count = $msgCounter.text();
+		    		    	if (!!count && !isNaN(count) && count != '0')  {
+		    		    		count = count - 1;
+		    		    		var tip = count + "  条新消息";
+		    		    		if (count <= 0) {
+		    		    			count = 0;
+		    		    			tip = '当前没有未读消息';
+		    		    		}
+
+		    	    			$('#unReadCountStr').text(tip);
+		    		    		$msgCounter.text(count);
+		    		    	}
 					    }
 					});
 				}
 			});
 		}
 	}
+
 	exports.listMsg = message.listMsg;
 })
