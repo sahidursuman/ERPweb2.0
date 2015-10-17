@@ -160,14 +160,14 @@
 										<td> 
 											{{each room.priceList as price i}}
 											<div data-index="{{i+1}}" class="clearfix div-{{i+1}}" style="margin-top:2px">
-												<input name="marketPrice" type="text" class="col-sm-12" value="{{price.marketPrice}}" maxlength="7" />
+												<input name="marketPrice" type="text" class="col-sm-12" value="{{price.marketPrice}}" maxlength="9" />
 											</div>
 											{{/each}}
 										</td>
 										<td>
 											{{each room.priceList as price i}}
 											<div data-index="{{i+1}}" class="clearfix div-{{i+1}}" style="margin-top:2px">
-												<input name="contractPrice" type="text" class="col-sm-12" value="{{price.contractPrice}}" maxlength="7" />
+												<input name="contractPrice" type="text" class="col-sm-12" value="{{price.contractPrice}}" maxlength="9" />
 											</div>
 											{{/each}}
 										</td>

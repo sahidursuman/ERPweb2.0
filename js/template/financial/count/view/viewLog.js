@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":51,"md5":"0aa1b6f094d870e2b83e011420f925f6"}*/
+/*TMODJS:{"debug":true,"version":52,"md5":"0aa1b6f094d870e2b83e011420f925f6"}*/
 define(function(require) {
     return require("../../../template")("financial/count/view/viewLog", function($data, $filename) {
         try {

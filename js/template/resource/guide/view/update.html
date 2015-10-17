@@ -30,11 +30,11 @@
 			</div>
 			<label class="col-sm-2 control-label no-padding-right">身份证:</label>
 			<div class="col-sm-3">
-				<input type="text" name="idCardNumber" class="col-sm-12" value="{{guide.idCardNumber}}" maxlength="11" />  
+				<input type="text" name="idCardNumber" class="col-sm-12" value="{{guide.idCardNumber}}" maxlength="18" />  
 			</div>
 		</div>
 		<div class="form-group guideInterval">
-			<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>等级:</label>
+			<label class="col-sm-2 control-label no-padding-right">等级:</label>
 			<div class="col-sm-3">
 				<select name="guideLevel" class="col-sm-12">
 					<option value="1" {{if guide.guideLevel == 1}}selected="selected"{{/if}}>初级导游</option>
@@ -81,7 +81,7 @@
 		<div class="form-group guideInterval">
 			<label class="col-sm-2 control-label no-padding-right">简介:</label>
 			<div class="col-sm-8">
-				<textarea class="form-control" name="remark" class="col-sm-12">{{guide.remark}}</textarea>
+				<textarea class="form-control" name="remark" class="col-sm-12" maxlength="1000">{{guide.remark}}</textarea>
 			</div>
 		</div>
 		<div class="space-10"></div>

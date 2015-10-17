@@ -924,7 +924,7 @@ function listMenu(menuTemplate){
 					});
 				});
 				//绑定内转转出账务
-				$("#sidebar .nav-list .financial_innerTransfer_in").click(function(){
+				$("#sidebar .nav-list .arrange_inner_transfer").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
@@ -933,6 +933,7 @@ function listMenu(menuTemplate){
 						var year = date.getFullYear();
 						var month = ""//date.getMonth()+1
 						innerTransferIn.listInnerTransferIn(0,"",year,month);
+						modals["financial_innerTransfer_in"] = innerTransferIn;
 					});
 				});
 				//绑定内转利润账务
@@ -1022,24 +1023,20 @@ function listMenu(menuTemplate){
 				});
 
 
-				//绑定转客管理菜单功能
-				$("#sidebar .nav-list .arrange_inner_transfer").click(function(){
+				//绑定内转管理菜单功能
+				$("#sidebar .nav-list .arrange_inner_Transfer").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/arrange/innerTransfer/innerTransfer.js",function(innerTransfer){ 
+					seajs.use("" + ASSETS_ROOT +"js/template/arrange/innerTransfer/innerTransfer.js",function(inner){ 
 						var searchParam = {
 								pageNo : "0",
 								type : "1",
 								first : "1",
 							}
-						innerTransfer.list(searchParam);
+						inner.list(searchParam);
 					});
 				});
-
-
-
-
 
 
 				//绑定按团统计菜单功能
