@@ -78,8 +78,8 @@ var rule = {
 						$ele: $obj.find('input[name="adultCount"]'),   
 						rules: [
 							{
-				  			type:'int',
-				  			errMsg: '大人数量必须为整数'
+				  			type:'positive-float',
+				  			errMsg: '大人数量必须为正数'
 							},{
 					  			type:'null',
 					  			errMsg: '大人数量不能为空'
@@ -89,7 +89,7 @@ var rule = {
 							$ele: $obj.find('input[name="adultPrice"]'),   
 							rules: [
 								{
-					  			type:'float',
+					  			type:'positive-float',
 					  			errMsg: '大人单价不合法'  
 								},{
 						  			type:'null',
@@ -100,15 +100,15 @@ var rule = {
 							$ele: $obj.find('input[name="childCount"]'),   
 							rules: [
 								{
-					  			type:'int',
-					  			errMsg: '小孩数量必须为整数'
+					  			type:'positive-float',
+					  			errMsg: '小孩数量必须为正数'
 								}
 							]   
 				    },{//小孩
 						$ele: $obj.find('input[name="childPrice"]'),   
 						rules: [
 							{
-				  			type:'float',
+				  			type:'positive-float',
 				  			errMsg: '小孩单价不合法'
 							}
 						]
