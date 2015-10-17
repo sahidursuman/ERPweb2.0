@@ -78,8 +78,8 @@ define(function(require, exports) {
 				        }
 				    ]
 				},
-				{	//市场价
-					$ele: $obj.find('input[name="contractPrice"]'),
+				{	//餐标
+					$ele: $obj.find('input[name="price"]'),
 					rules: [
 				        {
 				        	type:'null',
