@@ -91,7 +91,7 @@ define(function(require, exports) {
 						inner.transferOutfindPager(searchParam);	
 					
 						function getVal (name){
-							var val = $("#" +tabId+" .innerTransfer_list").find("[name="+name+"]").val();
+							var val = $("#" +tabId+" .transferOut-content").find("[name="+name+"]").val();
 							return val;
 						}
 
@@ -369,7 +369,7 @@ define(function(require, exports) {
 
 						function buildSearchParam(){
 							searchParam.pageNo = getVal("pageNo");
-							searchParam.totalPage = getVal("totalPage");
+							searchParam.totalPage = getVal("totalPage2");
 							searchParam.type = 2;
 							searchParam.lineProductId = getVal("lineProductId");
 							searchParam.businessGroupId = getVal("businessGroupId");
@@ -396,34 +396,14 @@ define(function(require, exports) {
 			},
 
 			transferInfindPager:function(searchParam){
-					var classType = map.searchParam.type;
-				     $("#" +tabId+" .innerTransfer_list").find("[name=type]").val(classType);
-					function getVal (name){
-							var val = $("#" +tabId+" .innerTransfer_list").find("[name="+name+"]").val();
-							return val;
-					}
-					function buildSearchParam(){
-							searchParam.pageNo = getVal("pageNo");
-							searchParam.totalPage = getVal("totalPage");
-							searchParam.type = 2;
-							searchParam.lineProductId = getVal("lineProductId");
-							searchParam.businessGroupId = getVal("businessGroupId");
-							searchParam.creator = getVal("creator");
-							searchParam.startTime = getVal("startTime");
-							searchParam.endTime = getVal("endTime");
-							searchParam.status = getVal("status");
-							return searchParam;
-					 }
 
 					//分页--首页按钮事件
 						$("#" +tabId+" .transferIn-content .pageMode a.first").click(function(){
-							searchParam = buildSearchParam();
 							searchParam.pageNo = 0;
 							inner.listTransferIn(searchParam);
 						});
 						//分页--上一页事件
 						$("#" +tabId+" .transferIn-content .pageMode a.previous").click(function(){
-							searchParam = buildSearchParam();
 							var pageNo = parseInt(searchParam.pageNo);
 							var previous = pageNo - 1;
 							if(pageNo == 0){
@@ -434,7 +414,6 @@ define(function(require, exports) {
 						});   
 						//分页--下一页事件
 						$("#" +tabId+" .transferIn-content .pageMode a.next").click(function(){
-							searchParam = buildSearchParam();
 							var pageNo = parseInt(searchParam.pageNo);
 							var totalPage = parseInt(searchParam.totalPage);
 							var next =  pageNo + 1;
@@ -446,7 +425,6 @@ define(function(require, exports) {
 						});
 						//分页--尾页事件
 						$("#" +tabId+" .transferIn-content .pageMode a.last").click(function(){
-							searchParam = buildSearchParam();
 							var totalPage = parseInt(searchParam.totalPage);
 							var pageNo = 0;
 							if(totalPage==0){
@@ -479,19 +457,70 @@ define(function(require, exports) {
 							inner.deleteTransferIn(id);
 							
 						});
+
 						//提交修改数据
 						$("#" +tabId+" .transferIn-content .123").click(function(){
 							
 						});
 						//提交确认数据
 						$("#" +tabId+" .transferIn-content .123").click(function(){
+
+							var id = $(this).attr("data-entity-id");
+							inner.deleteTransferIn(id);
 							
-				});
+				       });
 
 			},
 
+		//确认操作
+		saveTransferIn:function(id){
+			var dialogObj = $( "#confirm-dialog-message" );
+			dialogObj.removeClass('hide').dialog({
+				modal: true,
+				title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
+				title_html: true,
+				draggable:false,
+				buttons: [ 
+					{
+						text: "否",
+						"class" : "btn btn-minier",
+						click: function() {
+							$( this ).dialog( "close" );
+						}
+					},
+					{
+						text: "是",
+						"class" : "btn btn-primary btn-minier",
+						click: function() {
+		
+								$.ajax({
+									url:""+APP_ROOT+"back/innerTransfer.do?method=save&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=save",
+									type:"POST",
+									data:"id="+id + "&isDelete=1",
+									dataType:"json",
+									beforeSend:function(){
+										globalLoadingLayer = layer.open({
+											type:3
+										});
+									},
+									success:function(data){
+										var result = showDialog(data);
+										layer.close(globalLoadingLayer);
+										inner.listTransferIn(searchParam);
+									 }
+								});
+							$( this ).dialog( "close" );
+						}
+					}
+				],
+				open:function(event,ui){
+					$(this).find("p").text("是否确认转入操作？");
+				}
+			});
+		},
 
 
+		//拒绝操作
 		deleteTransferIn:function(id){
 			var dialogObj = $( "#confirm-dialog-message" );
 			dialogObj.removeClass('hide').dialog({
@@ -525,7 +554,7 @@ define(function(require, exports) {
 									success:function(data){
 										var result = showDialog(data);
 										layer.close(globalLoadingLayer);
-										inner.list(searchParam);
+										inner.listTransferIn(searchParam);
 									 }
 								});
 							$( this ).dialog( "close" );
@@ -533,7 +562,7 @@ define(function(require, exports) {
 					}
 				],
 				open:function(event,ui){
-					$(this).find("p").text("是否撤销内转操作？");
+					$(this).find("p").text("是否拒绝转入操作？");
 				}
 			});
 		},
