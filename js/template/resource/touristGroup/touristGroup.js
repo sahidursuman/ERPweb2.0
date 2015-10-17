@@ -1126,7 +1126,7 @@ define(function(require, exports) {
 			$(obj).autocomplete({
 				minLength: 0,
 				change: function(event, ui) {
-					if (!!ui.item)  {
+					if (!ui.item)  {
 						$(this).val('').nextAll('input[name="fromPartnerAgencyId"]').val('');
 					}
 				},
