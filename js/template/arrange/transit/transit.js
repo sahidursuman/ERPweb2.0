@@ -708,7 +708,7 @@ define(function(require, exports) {
 			return obj.find("[name="+name+"]").val();
 		},
 		getArrangeTrId :function(thisObj){
-			var id = thisObj.parent().parent().parent().parent().parent().parent().attr("id");
+			var id = thisObj.closest('.tab-pane').attr("id");
 			return id;
 		},
 		//删除安排判断
