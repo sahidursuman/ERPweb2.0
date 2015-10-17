@@ -20,15 +20,32 @@ define(function(require, exports) {
 			endTime : "",
 			status : "",
 			first : "",
-		}
+		},
 	//分页查询的返回结果
-	var map = {
+    map = {
 			searchParam : "",
 			resultList : "",
 			total : "",
 			lineProduct : "",
 			user : "",
 			businessGroup : "",
+	},
+	innerTransfer = {
+	    id : "",//	内转ID		
+	    innerTransferFeeSet : "",	//内转的其他费用	array<object>	
+	    toBusinessGroupId :"",//	转给的部门ID		
+	    transAdultPrice	: "",//内转大人价		
+	    transChildPrice	: "", //内转小孩价		
+	    transNeedPayMoney :"",//	应付		需要计算
+	    transPayedMoney	 : "", //已付		填写
+	    transRemark : ""
+	},
+
+	innerTransferFeeSet= {
+		id : "",
+		count :"",
+		discribe : "",
+		price : ""
 	};
 
 	function url(method,operation){
@@ -91,7 +108,7 @@ define(function(require, exports) {
 						inner.transferOutfindPager(searchParam);	
 					
 						function getVal (name){
-							var val = $("#" +tabId+" .innerTransfer_list").find("[name="+name+"]").val();
+							var val = $("#" +tabId+" .innerTransfer_list ").find("[name="+name+"]").val();
 							return val;
 						}
 
@@ -114,6 +131,14 @@ define(function(require, exports) {
 							searchParam.pageNo = 0;
 							requestTotal = true;
 							inner.list(searchParam);
+						});
+
+						//导出操作 
+						$("#" +tabId +"  .innerTransfer_list .btn-transfer-export").click(function(){
+							searchParam.type=1; 
+							var exportUrl ="" + url("findExcel","view") + "&searchParam="+encodeURIComponent(JSON.stringify(searchParam));
+						    window.location.href=exportUrl;
+
 						});
 						
 						//切换我部转出
@@ -284,15 +309,191 @@ define(function(require, exports) {
 						data.businessGroup = JSON.parse(data.businessGroup);
 						var html = editTemplate(data);
 						addTab(menuKey+"-edit","修改内转信息",html);
-						
-						//新增其他费用按钮
-						$(".inner-edit-fee").find("button[name=addOhterFeeBtn]").click(function(){
-							var addTr = "<tr><td>其他费用</td><td><input type='text' name='discribe' value='' /></td><td><input type='text' name='count' value='' /></td><td><input type='text' name='price' value='' /></td><td><label nam='deleteLable'>删除</label></td></tr>"
-							$(".inner-edit-fee").find("tr[name=addDiv]").after(addTr);
+						//新增&&智能计算
+					    inner.innitAddFee();
+					    $obj=$("#tab-arrange_inner_Transfer-edit-content");
+
+					    //绑定删除分团转客信息
+						$obj.find(".btn-edittransfer-delete").off().on("click",function(){
+							var tr =$(this).parent().parent();
+							var id = tr.attr("data-entity-id");
+							inner.delTransferData(id,tr);
 						});
+
+					   
+					    $obj.find(".btn-saveTransoutInfo").click(function(){
+					    	inner.saveEditTranIn();
+
+					    })
+
 					}
 				});
 		},
+
+
+		saveEditTranIn:function(){
+
+
+			    var $obj=$("#tab-arrange_inner_Transfer-edit-content");
+
+				function getValParam (name){
+					var val = $("#tab-arrange_inner_Transfer-edit-content").find("[name="+name+"]").val();
+					return val;
+				}
+
+
+				var innerTransfer = {
+				    id : getValParam("id"),//	内转ID		
+				    innerTransferFeeSet : "",	//内转的其他费用	array<object>	
+				    toBusinessGroupId :$obj.find("select[name=businessGroup_id]").val(),//	转给的部门ID	  	
+				    transAdultPrice	: getValParam("transAdultPrice"),//内转大人价		
+				    transChildPrice	: getValParam("transChildPrice"), //内转小孩价		
+				    transNeedPayMoney :getValParam("transNeedPayMoney"),//	应付		需要计算
+				    transPayedMoney	 : getValParam("transPayedMoney"), //已付		填写
+				    transRemark : getValParam("transRemark")
+				}   
+
+				//获取新增费用项目
+				//添加费用JSON
+				var otherFeeJsonAdd = [];
+				var otherFeeJsonAddLength=$obj.find(".addTransferCost tr").length;
+				$obj.find(".addTransferCost tr").each(function(i){
+					var id=$(this).attr("data-entity-id");
+					var discribe = $(this).find("input[name=discribe]").val();
+					var count = $(this).find("input[name=count]").val();
+					var price = $(this).find("input[name=price]").val();
+					if(i>1){
+						var otherFeeJson = { 
+							"id":id,
+							"discribe":discribe,
+							"count":count,
+							"price" : price
+						}
+						otherFeeJsonAdd.push(otherFeeJson);
+					}
+				})
+
+				innerTransfer.innerTransferFeeSet=otherFeeJsonAdd;
+				var innerTransfer=JSON.stringify(innerTransfer);
+
+
+			    $.ajax({
+					url:""+APP_ROOT+"back/innerTransfer.do?method=update&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
+					data:"innerTransfer="+encodeURIComponent(innerTransfer),
+					datatype:"json",
+					beforeSend:function(){
+						globalLoadingLayer = layer.open({
+							type:3
+						});
+					},
+					success:function(data){
+						layer.close(globalLoadingLayer);
+						var result = showDialog(data);  
+						if(result){  
+							showMessageDialog($( "#confirm-dialog-message" ),data.message);
+							//if(isClose == 1){
+								//closeTab(menuKey+"-updateTransfer");
+								inner.list(searchParam);
+							//}
+							
+						}
+					}
+				});
+
+		},
+
+
+		innitAddFee:function(){  
+			var $obj=$("#tab-arrange_inner_Transfer-edit-content");
+			//给新增费用绑定事件
+			$obj.find(".btn-transfer-addCost").click(function(){
+				var html="<tr class=\"transferFee1SelectId\">"+
+				"<td><span name=\"type\" value=\"0\">其他费用</span></td>"+
+				"<td><input  name=\"discribe\" type=\"text\" class=\"col-sm-12  no-padding-right\" /></td>"+
+				"<td><input  name=\"count\" type=\"text\" class=\"col-sm-12  no-padding-right count\" /></td>"+
+				"<td><input  name=\"price\" type=\"text\" class=\"col-sm-12  no-padding-right price\" /></td>"+
+				"<td><a class=\"cursor btn-edittransfer-delete\">删除</a></td>"+
+				"</tr>";
+				$obj.find(".addTransferCost").append(html);
+			
+				
+				//绑定删除分团转客信息
+				$(".btn-edittransfer-delete").off().on("click",function(){
+					var tr =$(this).parent().parent();
+					var id = tr.attr("data-entity-id");
+					inner.delTransferData(id,tr);
+				});
+
+				//其他费用数量
+				$obj.find("input[name=count]").keyup(function(){
+					inner.PayMoneyF();
+				});
+				//其他费用单价
+				$obj.find("input[name=price]").keyup(function(){
+					inner.PayMoneyF();
+				});
+				$(document).ready(function(){
+					inner.PayMoneyF();
+				})
+				
+
+			});
+
+		},
+
+
+		//付款账务--应付/现付/已付的计算
+		PayMoneyF:function(){
+			var $objFee=$("#tab-arrange_inner_Transfer-edit-content");
+			var $obj=$(".addTransferCostTable"); 
+			var needPayMoney = 0;
+			var transNeedPayMoney = $objFee.find("input[name=transNeedPayMoney]");//应付
+			var transPayedMoney = $obj.find("input[name=transPayedMoney]"); //已付
+			var trList = $(".addTransferCostTable tbody.addTransferCost").find("tr");
+						
+			for(i=0;i<trList.length;i++){
+				var a =parseFloat(trList.eq(i).find(".count").val());
+				var b =parseFloat(trList.eq(i).find(".price").val());
+					if(isNaN(a)){
+						a = 0;
+					}
+					if(isNaN(b)){
+						b =0;
+					}
+				needPayMoney += a*b;
+			}
+
+			//应付
+			transNeedPayMoney.val(needPayMoney.toFixed(2));
+		},
+
+
+		//删除添加其他费用
+		delTransferData:function(id,tr){
+			if( id!=null && id!=""){
+				$.ajax({
+					url:""+APP_ROOT+"back/innerTransfer.do?method=deleteFee&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=delete",
+					type:"POST",
+					data:"id="+id,
+					dataType:"json",
+					beforeSend:function(){
+						globalLoadingLayer = layer.open({
+							type:3
+						});
+					},
+					success:function(data){
+						$(tr).remove();
+						layer.close(globalLoadingLayer);
+						inner.PayMoneyF();
+					}
+				});	
+			}else{
+				//移除空的其他费用
+				$(tr).remove();
+				inner.PayMoneyF();
+			}
+		},
+
 
 
 		//删除我部转出
@@ -343,7 +544,7 @@ define(function(require, exports) {
 		},	
 
 
-			//他部转入
+		//他部转入
 		listTransferIn:function(searchParam){
 				globalLoadingLayer = layer.open({
 					zIndex:1028,
@@ -492,18 +693,6 @@ define(function(require, exports) {
 							inner.deleteTransferIn(id);
 							
 						});
-
-						//提交修改数据
-						$("#" +tabId+" .transferIn-content .123").click(function(){
-							
-						});
-						//提交确认数据
-						$("#" +tabId+" .transferIn-content .123").click(function(){
-
-							var id = $(this).attr("data-entity-id");
-							inner.deleteTransferIn(id);
-							
-				       });
 
 			},
 
