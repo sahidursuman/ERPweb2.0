@@ -1,9 +1,9 @@
-<div class="row transferChecking">
+<div class="row innerTransferChecking">
     <div class="col-xs-12 border">
         <form class="form-horizontal" role="form" onsubmit="return false">
                 <div class="search-area editable editable-click" >
                     <div class="form-group"> 
-                        <label style="float: left;margin: 0px auto auto 15px" class="control-label pull-left"> 部门:{{transferPartnerAgencyName}}</label>
+                        <label style="float: left;margin: 0px auto auto 15px" class="control-label pull-left"> 部门:{{searchParam.fromBusinessGroupName}}</label>
                         
                         <label class="control-label col-sm-1" style="float:left;">账期:</label>
                             <select class="col-sm-1" name="year" style="margin-left:20px">
@@ -31,11 +31,13 @@
             </form>
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="form-group ">
-                <label class=" control-label pull-left" style="margin-left: 15px">总人数:{{sumPersonCount}}<label>
-                <label class=" control-label " style="margin-left:30px;">总应收:{{sumNeedPayMoney}}</label>
-                <label class=" control-label " style="margin-left:30px;">总已收:{{sumRealPayedMoney}}</label>
-                <label class=" control-label " style="margin-left:30px;">总未收:{{sumUnPayedMoney}}</label>
-                <label class=" control-label " style="margin-left:30px;">总实际未收:{{sumRealUnPayedMoney}}</label>
+                <label class=" control-label pull-left" style="margin-left: 15px">总人数:{{allPerson}}<label>
+                <label class=" control-label " style="margin-left:30px;">总应收:{{needIncomeMoney}}</label>
+                <label class=" control-label " style="margin-left:30px;">总已收:{{incomeMoney}}</label>
+                <label class=" control-label " style="margin-left:30px;">总未收:{{unIncomeMoney}}</label>
+                <label class=" control-label " style="margin-left:30px;">总实际未收:{{realUnIncomeMoney}}</label>
+                <label class=" control-label " style="margin-left:30px;">总返款:{{backMoney}}</label>
+
             </div>
         </form>
     </div>
@@ -82,31 +84,37 @@
             </tr>
             </thead>   
             <tbody>
-            {{each financialTransferList as checking index}}
-            <tr data-entity-id="{{checking.id}}" data-entity-isConfirmAccount="{{checking.isConfirmAccount}}" data-entity-realUnPayedMoney="{{checking.transRealUnPayedMoney}}" data-entity-remark="{{checking.transRemark}}">                
+            {{each financialInnerTransferInList as checking index}}
+            <tr data-entity-id="{{checking.id}}" data-entity-isComfirmAccount="{{checking.isComfirmAccount}}" data-entity-UnIncomeMoney="{{checking.checkUnIncomeMoney}}" data-entity-backMoney="{{checking.backMoney}}" data-entity-remark="{{checking.checkRemark}}">                
                 <td>{{index+1}}</td>
                 <td>{{checking.lineProductName}}</td>
                 <td name="startTime">{{checking.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
-                <td>{{checking.contact}}</td>
+                <td>{{checking.contactUserName}}</td>
                 <td>{{checking.adultCount}}大{{checking.childCount}}小<a href="#" class="seeGroup" style="margin-left:5px">展开</a></td>
-                <td>{{checking.operate}}</td>
-                <td>{{checking.operateTime | dateFormat: 'yyyy-MM-dd'}}</td>
-                <td>{{checking.needPayMoney}}</td>
+                <td>{{checking.receiveUserName}}</td>
+                <td>{{checking.receiveTime | dateFormat: 'yyyy-MM-dd'}}</td>
+                <td>{{checking.needIncomeMoney}}</td>
                 <td>
-                    {{each checking.detailList as detail}}
-                        {{detail.describe}}：{{detail.count}}*{{detail.unitPrice}}={{detail.count*detail.unitPrice}}<br> 
-                    {{/each}}  
+                   {{if checking.otherTransferFeeList.length>0}}
+                        {{each checking.otherTransferFeeList as detail}}
+                            {{detail.discribe}}：{{detail.count}}*{{detail.price}}={{detail.count*detail.price}}<br> 
+                        {{/each}} 
+                        {{else}}
+                        -
+                    {{/if}} 
                 </td>
-                <td>{{checking.realPayedMoney}}</td>
-                <td>{{checking.unPayedMoney}}</td>
-                <td><input type="text" maxlength="9" name="FinancialTransferRealUnPayedMoney" value="{{checking.transRealUnPayedMoney}}" style="text-align:center" {{if checking.isConfirmAccount == 1 && roleType != 1 }} disabled = "true" {{/if}}></td>
-                <td><input type="text" maxlength="1000"  name=FinancialTransferRemark" value="{{checking.transRemark}}" style="text-align:center" {{if checking.isConfirmAccount == 1 && roleType != 1 }} disabled = "true" {{/if}}></td>
+                <td>{{checking.incomeMoney}}</td>
+                <td>{{checking.unIncomeMoney}}</td>
+                <td><input type="text" maxlength="9" name="UnIncomeMoney" value="{{checking.checkUnIncomeMoney}}" style="text-align:center" {{if checking.isComfirmAccount == 1 && roleType != 1 }} disabled = "true" {{/if}}></td>
+                <td><input type="text" maxlength="9" name="backMoney" value="{{checking.backMoney}}" style="text-align:center" {{if checking.isComfirmAccount == 1 && roleType != 1 }} disabled = "true" {{/if}}></td>
+                <td><input type="text" maxlength="9" name="realUnIncomeMoney" value="{{checking.checkUnIncomeMoney-checking.backMoney}}" style="text-align:center" readonly="readonly"></td>
+                <td><input type="text" maxlength="1000"  name="checkRemark" value="{{checking.checkRemark}}" style="text-align:center" {{if checking.isComfirmAccount == 1 && roleType != 1 }} disabled = "true" {{/if}}></td>
                 <td>{{if checking.checkTime == null || checking.checkTime == ""}}-{{else}}{{checking.checkTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
-                <td>{{checking.checkUser}}</td>
+                <td>{{if checking.checkUserRealName == null || checking.checkUserRealName == ""}}-{{else}}{{checking.checkUserRealName}}{{/if}}</td>
                 <td>
                     <label class="pos-rel">
-                            <input type="checkbox" data-entity-checkStatus="{{checking.isConfirmAccount}}" class="ace transferFinancial" 
-                            {{if checking.isConfirmAccount == 1}}checked="checked"{{/if}} {{if checking.isConfirmAccount == 1 && roleType != 1 }} disabled = "true" {{/if}}  />
+                            <input type="checkbox" data-entity-checkStatus="{{checking.isComfirmAccount}}" class="ace innerTransferFinancial" 
+                            {{if checking.isComfirmAccount == 1}}checked="checked"{{/if}} {{if checking.isComfirmAccount == 1 && roleType != 1 }} disabled = "true" {{/if}}  />
                                 <span class="lbl"></span>
                     </label>
                 </td>
@@ -125,7 +133,7 @@
                                 </tr>
                             </thead>  
                             <tbody>
-                               {{each checking.touristGroupMemberList as visitor index}}
+                               {{each checking.memberList as visitor index}}
                                 <tr>
                                     <td>{{index+1}}</td>
                                     <td>{{visitor.name}}</td>
@@ -168,7 +176,7 @@
         </div>
         <div class="form-group pull-right col-sm-4" style="text-align: right;margin-top: 40px;padding-right: 40px">
                 <label class="pos-rel" style="margin-left:20px">
-                    <span class="lbl"><input type="checkbox" class="transfer-selectAll"/>全选</span>
+                    <span class="lbl"><input type="checkbox" class="innerTransferIn-selectAll"/>全选</span>
                 </label>
        </div>
        <div style="clear: both"></div>

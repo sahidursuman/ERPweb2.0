@@ -4,10 +4,10 @@
         <div class="form-group" >      
           <label class="control-label pull-left" style="margin-left: 15px">部门:</label>
             <div class="col-sm-2">
-                <select  class="col-xs-12" name="innerTransferInId">
+                <select  class="col-xs-12" name="fromBusinessGroupId">
                     <option value ="">全部</option>    
-                    {{each innerTransferInNameListNew as innerTransferIn index}}
-						<option value="{{innerTransferIn.id}}" {{if searchParam.innerTransferInId == innerTransferIn.id}}selected="selected"{{/if}}>{{innerTransferIn.name}}</option>
+                    {{each fromBusinessGroupList as innerTransferIn index}}
+						<option value="{{innerTransferIn.fromBusinessGroupId}}" {{if searchParam.fromBusinessGroupId == innerTransferIn.fromBusinessGroupId}}selected="selected"{{/if}}>{{innerTransferIn.fromBusinessGroupName}}</option>
 					{{/each}}
                 </select>        
              </div>    
@@ -34,26 +34,26 @@
                 <tr class="bg-blur">
                     <th>部门</th>
                     <th>总人数</th>
-                    <th>总账面应付</th>
-                    <th>总实际应付</th>
-                    <th>总实际已付</th>
-                    <th>总账面未付</th>
-                    <th>总实际未付</th>
+                    <th>总账面应收</th>
+                    <th>总实际应收</th>
+                    <th>总实际已收</th>
+                    <th>总账面未收</th>
+                    <th>总实际未收</th>
                     <th>对账进度</th>
                     <th>操作</th>
                 </tr>
                 </thead>
                 <tbody>
-                {{each financialinnerTransferInList as innerTransferIn}}
+                {{each financialInnerTransferInList as innerTransferIn}}
                 <tr>
-                    <td>{{innerTransferIn.innerTransferInName}}</td>
-                    <td>12</td>
-                    <td>{{innerTransferIn.sumNeedPayMoney}}</td>
-                    <td>{{innerTransferIn.sumRealNeedPayMoney}}</td>
-                    <td>{{innerTransferIn.sumRealPayedMoney}}</td>
-                    <td>{{innerTransferIn.sumUnPayedMoney}}</td>
+                    <td>{{innerTransferIn.fromBusinessGroupName}}</td>
+                    <td>{{innerTransferIn.allPerson}}</td>
+                    <td>{{innerTransferIn.realNeedIncomeMoney}}</td>
+                    <td>{{innerTransferIn.realIncomeMoney}}</td>
+                    <td>{{innerTransferIn.realIncomeMoney}}</td>
+                    <td>{{innerTransferIn.unIncomeMoney}}</td>
                     <td>
-                    	<span style="color:red">{{innerTransferIn.sumRealUnPayedMoney}}</span>
+                    	<span style="color:red">{{innerTransferIn.realUnIncomeMoney}}</span>
                     </td>
                    
                     <td >
@@ -67,16 +67,16 @@
                    
                     
                     <td>
-                        <a data-entity-id="{{innerTransferIn.innerTransferInId}}" data-entity-innerTransferInName="{{innerTransferIn.innerTransferInName}}" data-entity-year="{{searchParam.year}}" data-entity-month="{{searchParam.month}}" class="cursor btn-innerTransferIn-check " >
+                        <a data-entity-id="{{innerTransferIn.fromBusinessGroupId}}" data-entity-fromBusinessGroupName="{{innerTransferIn.fromBusinessGroupName}}" data-entity-year="{{searchParam.year}}" data-entity-month="{{searchParam.month}}" class="cursor btn-innerTransferIn-check " >
                             	对账
                         </a><a href="" class="cursor"> |</a>
-                        <a data-entity-id="{{innerTransferIn.innerTransferInId}}" data-entity-innerTransferInName="{{innerTransferIn.innerTransferInName}}" data-entity-year="{{searchParam.year}}"
+                        <a data-entity-id="{{innerTransferIn.fromBusinessGroupId}}" data-entity-fromBusinessGroupName="{{innerTransferIn.fromBusinessGroupName}}" data-entity-year="{{searchParam.year}}"
                                 {{if searchParam.month == ""}}
                                  	 data-entity-startMonth=1 data-entity-endMonth=12 
                                   {{else}}
                                  	 data-entity-startMonth="{{searchParam.month}}" data-entity-endMonth="{{searchParam.month}}" 
                                 {{/if}}
-                        		class="cursor btn-self-balance">
+                        		class="cursor btn-innerTransferIn-balance">
                            		 结算
                         </a>
                     </td>
