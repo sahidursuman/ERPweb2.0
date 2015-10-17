@@ -14,7 +14,12 @@ define(function(require, exports) {
     
     var count = {
         init: function() {
-            count.initCount();
+            var today = (new Date()).Format('yyyy-MM-dd'),
+                firstDay = today.split('-');
+    
+            firstDay[2] = '01';
+
+            count.initCount('','','','','', firstDay.join('-'), today);
         },
         initCount: function(tripNumber,lineProductId,lineProductName,guideId,guideName,startTime,endTime,status) {
             // init page
@@ -24,6 +29,7 @@ define(function(require, exports) {
                 data: {
                     "tripNumber":tripNumber,
                     "lineProductId":lineProductId,
+                    "lineProductName": lineProductName,
                     "guideId":guideId,
                     "guideName":guideName,
                     "startTime":startTime,
