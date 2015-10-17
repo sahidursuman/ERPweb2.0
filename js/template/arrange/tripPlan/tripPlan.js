@@ -456,12 +456,14 @@ define(function(require, exports) {
 		},
 
 		isMessageStatus:function(isSendMessageStatus,isCheckedStatus){
-			var $Obj=$("#tab-arrange_plan-update-content");
+			var $Obj=$(".newAddTripPlanMain ");
 			if (isSendMessageStatus==1) {
-				$Obj.find(" .checkbox input[name=executeTimeType]").attr("disabled","disabled");
+				$Obj.find(" .checkbox input[name=executeTimeType]").eq(0).attr("disabled","disabled");
+				$Obj.find(" .checkbox input[name=executeTimeType]").eq(1).attr("disabled","disabled");
 				$Obj.find(".checkbox input[name=executeTime]").attr("disabled","disabled");
 			} else{
-				$Obj.find(".checkbox input[name=executeTimeType]").removeAttr("disabled");
+				$Obj.find(".checkbox input[name=executeTimeType]").eq(0).removeAttr("disabled");
+				$Obj.find(".checkbox input[name=executeTimeType]").eq(1).removeAttr("disabled");
 				$Obj.find(".checkbox input[name=executeTime]").removeAttr("disabled");
 			}
 
@@ -474,10 +476,8 @@ define(function(require, exports) {
 
 			};
 			$Obj.find(".newAddTripTimer").removeClass("hide");
-
-
-
 		},
+
 		initUpdate : function(){
 			$('.updateTripPlan').on("change",function(){
 				tripPlan.edited["update"] = "update";
@@ -511,8 +511,6 @@ define(function(require, exports) {
 			tripPlan.setTripPlanPicker();
 
 			//游客短信及时发送显示隐藏
-
-
 			//$("#"+tab+" .checkbox ").unbind().click(function(){
 				//if ($("#"+tab+" .checkbox input[name=executeTimeType]:radio:checked").val()==1) {
 					//$(this).parent().parent().find(".newAddTripTimer").removeClass("hide");
@@ -1498,6 +1496,14 @@ define(function(require, exports) {
 				}
 				return objValue;
 			}
+			if ($('.newAddTripPlanMain').find("input[name=executeTimeType]")[0].checked) {
+				executeTimeType=0;
+			};
+
+			if ($('.newAddTripPlanMain').find("input[name=executeTimeType]")[1].checked) {
+				executeTimeType=1;
+			};
+
 			var planTouristCount = parseInt(getValue("planTouristCount")),
 			memberCount = parseInt($("#" + tab + " .tripPlanAllMemberCount").text());
 			if(planTouristCount < memberCount){
@@ -1515,7 +1521,10 @@ define(function(require, exports) {
 						"accompanyGuideMobile": getValue("accompanyGuideMobile"),
 						"planTouristCount": getValue("planTouristCount"),
 						"setPlacePosition": getValue("setPlacePosition"),
-						"setPlaceTime": getValue("setPlaceTime")
+						"setPlaceTime": getValue("setPlaceTime"),
+						"executeTimeType" :executeTimeType+"",
+						"executeTime" : getValue("executeTime")
+
 					},
 					"lineProductId": getValue("lineProductId"),
 					"driverId": getValue("driverId"),
@@ -1564,7 +1573,17 @@ define(function(require, exports) {
 				}
 				return objValue;
 			}
-			var executeTimeType=$("#"+tab+" .checkbox input[name=executeTimeType]:radio:checked").val();
+
+			if ($('.newAddTripPlanMain').find("input[name=executeTimeType]")[0].checked) {
+				executeTimeType=0;
+			};
+
+			if ($('.newAddTripPlanMain').find("input[name=executeTimeType]")[1].checked) {
+				executeTimeType=1;
+			};
+			
+			
+	
 			var planTouristCount = parseInt(getValue("planTouristCount")),
 				memberCount = parseInt($("#" + tab + " .tripPlanAllMemberCount").text());
 			if(planTouristCount < memberCount){

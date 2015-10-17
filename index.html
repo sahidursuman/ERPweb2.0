@@ -142,70 +142,7 @@
 			</div><!-- /.navbar-container -->
 		</div>
 
-		<!--修改个人信息-->
-		<div class='login-userData-form ' style="display: none">
-			<div class="userinfo-tabs">
-				<p class="pull-left alter color alter-user user-active">修改个人资料</p>
-				<p class="pull-left alter Default alter-pwd">修改密码 </p>
-			</div>
-			<div class="clearfix"></div>
-
-			<div class="userinfo-content">
-				<!--修改个人资料-->
-				<div id="alter-user">
-					<div class='update-login-User'>
-						<div class='input-group top-box'>
-							<label class="pull-left control-label label-font" style="margin-right:8px;">用户名</label>
-							<input class='' readonly='readonly' name='userName' placeholder='用户名' value='' type='text' />
-						</div>
-				
-						<div class='input-group top-box'>
-							<label class="pull-left control-label label-font"><span class="necessary">*</span>姓&nbsp;&nbsp;&nbsp;&nbsp;名 </label>
-							<input  name='realName' placeholder='用户真实名' value='' type='text' />
-				
-						</div>
-				
-						<div class='input-group top-box'>
-							<label class="pull-left control-label label-font"><span class="necessary">*</span>电&nbsp;&nbsp;&nbsp;&nbsp;话 </label>
-							<input  name='mobileNumber' placeholder='手机号码' value='' type='text' />
-				
-						</div>
-					</div>
-				</div>
-				<!--修改密码-->
-				<div id="alter-pwd" class="hidden">
-					<div class='input-group top-box col-xs-12'>
-						<label class="pull-left control-label label-font  col-xs-2" ><span class="necessary">*</span>旧密码</label>
-						<input class='col-xs-10'  name='oldPassword' placeholder='请输入旧密码' value='' type='password' />
-				
-					</div>
-					<div class='input-group top-box  col-xs-12'>
-						<label class="pull-left label-font col-xs-2"><span class="necessary">*</span> 新密码</label>
-						<input class='col-xs-10' name='newPassword' placeholder='请输入新密码' value='' type='password' />
-					</div>
-					<div class="input-group top-box  col-xs-12">
-						<label class="pull-left label-font  col-xs-2"><span class="necessary">*</span>确认密码</label>
-						<input class='col-xs-10' name='newPassword1' placeholder='再输一次' value='' type='password' />
-					</div>
-				</div>
-			</div>
-
-			<div class='col-xs-12'>
-				<div class='lighter red password-validate' style="font-size:12px;text-align: center;height:18px;padding-top:10px">
-				</div>
-			</div>
-			<form class='form-horizontal col-sm-12' role='form' style='margin-top:30px;' onsubmit='return false'>
-				<div class='form-group' style='text-align: center;'>
-				<button class='btn btn-xs  btn-danger btn-cancelUserInfo'>  
-					<i class='ace-icon btn-xs  fa fa-times'>&nbsp;&nbsp;取消</i>
-				</button>
-					<button class='btn btn-xs btn-primary btn-UserSaveInfo'>   
-					<i class='btn-xs ace-icon fa fa-check '>&nbsp;&nbsp;保存</i>
-
-					</button>
-				</div>
-			</form>
-		</div>
+		<div></div>
 <!--=======================================================================================-->
 		<div class="main-container" id="main-container">
 			<div id="sidebar" class="sidebar responsive sidebar-fixed">
@@ -335,7 +272,7 @@
 			$(function(){
 				UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;
 				UE.Editor.prototype.getActionUrl = function(action) {
-				    if (action == 'uploadimage') {
+				    if (action == 'uploadimage' || action == 'catchimage') {
 				        return ''+APP_ROOT+'base.do?method=uploadImage';
 				    } else {
 				        return this._bkGetActionUrl.call(this, action);

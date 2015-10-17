@@ -152,7 +152,15 @@
 
 
 												    <td>{{touristGroupList.lineProduct.name}}</td>    
-													<td>{{touristGroupList.hotelLevel}}</td>
+													<td>
+														{{if touristGroupList.hotelLevel == 1}}三星以下{{/if}}
+														{{if touristGroupList.hotelLevel == 2}}三星{{/if}}
+														{{if touristGroupList.hotelLevel == 3}}准四星{{/if}}
+														{{if touristGroupList.hotelLevel == 4}}四星{{/if}}
+														{{if touristGroupList.hotelLevel == 5}}准五星{{/if}}
+														{{if touristGroupList.hotelLevel == 6}}五星{{/if}}
+														{{if touristGroupList.hotelLevel == 7}}五星以上{{/if}}
+													</td>
 													<td>{{touristGroupList.includeSelfPay}}</td>    
 
 													<td>

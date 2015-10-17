@@ -2,8 +2,9 @@ define(function(require, exports) {
 	var menuKey = "resource_subsection",
 	    listMainTemplate = require("./view/listMain"),
 	    listTemplate = require("./view/list"),
-	    operationTemplate = require("./view/operation");
-	
+	    rule = require("./rule"),
+	    operationTemplate = require("./view/operation"),
+		validator;
 	
 	var subsection = {
 		searchData : {
@@ -214,6 +215,7 @@ define(function(require, exports) {
 										addTab(menuKey+"-operation","分段操作",html);
 
 										var tab = "tab-resource_subsection-operation-content";
+										validator = rule.checkdSaveSubsection($("#"+tab));
 										subsection.datePicker();
 										subsection.lineProductChoose(tab);
 										$("#"+tab+" .btn-operation-delete").on("click",function(){
@@ -249,7 +251,7 @@ define(function(require, exports) {
 										$("#"+tab+" .btn-operation-close").click(function(){
 											closeTab(menuKey+"-operation");
 										})
-										$("#"+tab+" .btn-operation-save").on("click",{"tab" : tab,"days" : data.ptGroup.lineProduct.days},subsection.operationSave);
+										$("#"+tab+" .btn-operation-save").on("click",{"tab" : tab,"days" : data.ptGroup.lineProduct.days,"validator" : validator},subsection.operationSave);
 									}
 								}
 							})
@@ -280,6 +282,7 @@ define(function(require, exports) {
 						parents.parent().find("input[name=customerType]").val("团体");
 					}
 					parents.parent().find("input[name=days]").val(ui.item.days);
+					validator = rule.updateCheckdSaveSubsection(validator);
 				}
 			}).unbind("click").click(function(){
 				var obj =this;
@@ -309,7 +312,9 @@ define(function(require, exports) {
 		},
 		operationSave :function(e){
 			var tab = e.data.tab,
-				days = e.data.days;
+				days = e.data.days,
+				validator = e.data.validator;
+			if(!validator.form()){return;}
 			function getValue(obj,name){
 				var value = $(obj).find("[name="+name+"]").val();
 				return value;

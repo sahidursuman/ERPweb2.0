@@ -1721,6 +1721,7 @@ define(function(require, exports) {
 	    							var thisParent = $(_this).parent().parent();
 									thisParent.find("input[name=selfPayItemId]").val(ui.item.id).trigger('change');
 									thisParent.find("input[name=contractPrice]").val(selfPayRebate.price);
+									thisParent.find("input[name=remark]").val(ui.item.remark);
 								}
 		                    }
 		                });
@@ -1934,7 +1935,7 @@ define(function(require, exports) {
 						if(restaurantId){
 							var standardId = scheduleList.eq(j).find("[name=typeId]").val();
 							if(!standardId){
-								showMessageDialog($( "#confirm-dialog-message" ), "请选择餐标名称！");
+								showMessageDialog($( "#confirm-dialog-message" ), "请选择第" + (i+1) + "天中【餐厅】的餐标！");
 								return false;
 							}
 							var restaurantJson = {
@@ -1956,7 +1957,7 @@ define(function(require, exports) {
 						if(hotelId){
 							var hotelRoomId = hotelList.eq(j).find("[name=hotelRoomId]").val();
 							if(!hotelRoomId){
-								showMessageDialog($( "#confirm-dialog-message" ), "请选择房型！");
+								showMessageDialog($( "#confirm-dialog-message" ), "请选择第" + (i+1) + "天【酒店】的房型！");
 								return false;
 							}
 							var hotelJson = {
@@ -1978,7 +1979,7 @@ define(function(require, exports) {
 						if(scenicId){
 							var itemId = scenicList.eq(j).find("[name=chargingId]").val();
 							if(!itemId){
-								showMessageDialog($( "#confirm-dialog-message" ), "请选择收费房型！");
+								showMessageDialog($( "#confirm-dialog-message" ), "请选择第" + (i+1) + "天【景区】的收费项目！");
 								return false;
 							}
 							var scenicJson= {
@@ -2001,7 +2002,7 @@ define(function(require, exports) {
 						if(shopId){
 							var policyId = shopList.eq(j).find("[name=shopPolicyId]").val();
 							if(!policyId){
-								showMessageDialog($( "#confirm-dialog-message" ), "请选择商品政策！");
+								showMessageDialog($( "#confirm-dialog-message" ), "请选择第" + (i+1) + "天【购物】的商品政策！");
 								return false;
 							}
 							var shopJson = {
@@ -2019,6 +2020,10 @@ define(function(require, exports) {
 				if(selfPayList.length > 0){
 					for(var j=0; j<selfPayList.length;j++){
 						var selfPayId = selfPayList.eq(j).find("[name=companyId]").val();
+						if(!selfPayId){
+							showMessageDialog($( "#confirm-dialog-message" ), "请选择第" + (i+1) + "天【自费】的公司名称！");
+							return false;
+						}
 						if(selfPayId){
 							var selfPayJson = {
 									selfPayId : selfPayId,
@@ -2037,6 +2042,10 @@ define(function(require, exports) {
 				if(ticketList.length > 0){
 					for(var j=0; j<ticketList.length;j++){
 						var ticketId = ticketList.eq(j).find("[name=tickeId]").val();
+						if(!ticketId){
+							showMessageDialog($( "#confirm-dialog-message" ), "请选择第" + (i+1) + "天【交通】的票务公司名称！");
+							return false;
+						}
 						if(ticketId){
 							ticketJson = {
 									ticketId : ticketId,
