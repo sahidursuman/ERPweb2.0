@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":63,"md5":"c85c2dc9ad14f683ed54bf8b4644b514"}*/
+/*TMODJS:{"debug":true,"version":64,"md5":"c85c2dc9ad14f683ed54bf8b4644b514"}*/
 define(function(require) {
     return require("../../../template")("arrange/arrangeTourist/view/addMergePlan", function($data, $filename) {
         try {

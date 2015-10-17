@@ -41,12 +41,8 @@
 									</label>
 								</td>
 								<td>{{touristGroup.partnerAgency.travelAgencyName}}</td>
-								{{if touristGroup.contactMember!=null}}
-								 <td>{{touristGroup.contactMember.name}}</td>
-								{{/if}}
-	                            {{if touristGroup.contactMember!=null}}
-								 <td>{{touristGroup.contactMember.mobileNumber}}</td>
-								{{/if}}
+								<td>{{if touristGroup.contactMember!=null}}{{touristGroup.contactMember.name}}{{/if}}</td>
+								<td>{{if touristGroup.contactMember!=null}}{{touristGroup.contactMember.mobileNumber}}{{/if}}</td>
 								<td>{{touristGroup.areaData}}</td>
 								<td>{{touristGroup.ageData}}</td>
 								<td>大人{{touristGroup.adultCount}}小孩{{touristGroup.childCount}}</td>

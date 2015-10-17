@@ -394,7 +394,7 @@ define(function(require, exports) {
 							errMsg: '联系人电话格式不正确'
 						}
 					]
-				},{//所属部门
+				}/*,{//所属部门
 					$ele: $checkdPartnerManagerObj.find('input[name="departmentName"]'),
 					rules: [
 						{
@@ -410,7 +410,7 @@ define(function(require, exports) {
 							errMsg: '所属职位不能为空'
 						}
 					]
-				}
+				}*/
 
 			]);
 			return validatorManager;

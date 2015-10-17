@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":445,"md5":"bbfd83278f29b61c04959a19f59c4736"}*/
+/*TMODJS:{"debug":true,"version":446,"md5":"bbfd83278f29b61c04959a19f59c4736"}*/
 define(function(require) {
     return require("../../../template")("resource/lineProduct/view/viewDetail", function($data, $filename) {
         try {
