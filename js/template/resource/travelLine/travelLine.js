@@ -1721,6 +1721,7 @@ define(function(require, exports) {
 	    							var thisParent = $(_this).parent().parent();
 									thisParent.find("input[name=selfPayItemId]").val(ui.item.id).trigger('change');
 									thisParent.find("input[name=contractPrice]").val(selfPayRebate.price);
+									thisParent.find("input[name=remark]").val(ui.item.remark);
 								}
 		                    }
 		                });
