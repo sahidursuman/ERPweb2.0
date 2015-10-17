@@ -504,7 +504,13 @@ define(function(require, exports) {
 			tripPlan.driverChoose();
 			tripPlan.guideChoose();
 			//tripPlan.addTripPlanDatepicker("startTime");
-			tripPlan.setPlanceTimeDateTimePicker();
+			
+	    	$("#"+tab+" input[name=setPlaceTime]").datetimepicker({
+				autoclose: true,
+				todayHighlight: true,
+				format: 'L',
+				language: 'zh-CN'
+			});
 
 
 			//发团计划定时
@@ -751,6 +757,7 @@ define(function(require, exports) {
 
 			tripPlan.setValue("BusCompanyName",data.busCompanyTemplate.busCompany.companyName || "");
 			tripPlan.setValue("busCompanyId",data.busCompanyTemplate.busCompany.id || "");
+			tripPlan.setValue("needBusBrand",data.busCompanyTemplate.bus.brand || "");
 			tripPlan.setValue("LicenseNumber",data.busCompanyTemplate.bus.licenseNumber || "");
 			tripPlan.setValue("busLicenseNumberId",data.busCompanyTemplate.bus.id || "");
 			tripPlan.setValue("seatCount",data.busCompanyTemplate.bus.seatCount);
