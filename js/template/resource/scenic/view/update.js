@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":88,"md5":"e558da95d44af780f22668386160acb4"}*/
+/*TMODJS:{"debug":true,"version":92,"md5":"e558da95d44af780f22668386160acb4"}*/
 define(function(require) {
     return require("../../../template")("resource/scenic/view/update", function($data, $filename) {
         try {

@@ -116,9 +116,10 @@ define(function(require, exports) {
 			    type: 1,
 			    title:"新增酒店",
 			    skin: 'layui-layer-rim', //加上边框
-			    area: ['1190px', '700px'], //宽高
+			    area: '1190px', //宽高
 			    zIndex:1028,
 			    content: html,
+				scrollbar: false,    // 推荐禁用浏览器外部滚动条
 			    success:function(){
 			    	var $obj = $(".addHotelContainer .hotelMainForm");
 			    	var validator = rule.check($('.addHotelContainer'));
@@ -161,7 +162,7 @@ define(function(require, exports) {
 			    	$obj.find(".btn-hotel-standard-add").click(function(){
 			    		var html = "<tr>" +
 			    				"<td><input name=\"type\" type=\"text\" class='col-sm-12'  maxlength=\"32\" /></td>" +
-			    				"<td class=\"time\"><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px;\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right; padding-top:3px;\"><button class=\"btn btn-success btn-sm btn-white add\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i></button></label></div></td>" +
+			    				"<td class=\"time\"><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px;\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right; padding-top:3px;\"><button class=\"btn btn-success btn-sm btn-white add addScenice\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i></button></label></div></td>" +
 			    				"<td><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input name=\"marketPrice\" class='col-sm-12 marketPrice' maxlength=\"9\" type=\"text\"/></div></td>" +
 			    				"<td><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input name=\"contractPrice\" class='col-sm-12 price' maxlength=\"9\" type=\"text\"/></div></td>" +
 			    				"<td><select name=\"containBreakfast\" class='no-padding foodsAll'><option value=\"0\">不含</option><option value=\"1\">包含</option></select></td>" +
@@ -174,6 +175,8 @@ define(function(require, exports) {
 			    				"<td style=\"width:70px\"><a data-entity-id=\"\" href=\"#\" class=\" btn-xs  btn-hotel-standard-delete\">删除</a></td>" +
 			    				"</tr>";
 			    		$obj.find(".hotelRoomStandardList tbody").append(html);
+						// 再调整对话框的高度
+						$(window).trigger('resize');
 			    		// 对酒店房型设置表单验证
 			    	    hotelRoomStandardList = rule.checkRoom($('.addHotelContainer .hotelRoomStandardList'));
 			    	    
@@ -280,10 +283,10 @@ define(function(require, exports) {
 			    			});
 			    			hotelRoomJsonAdd.push(hotelRoomJson);
 			    		});
-			    		if(hotelRoomJsonAdd.length == 0){
+			    		/* if(hotelRoomJsonAdd.length == 0){
 			    			showMessageDialog($( "#confirm-dialog-message" ),"酒店房间不能为空");
 			    			return
-			    		}
+			    		} */
 			    		hotelRoomJsonAdd = JSON.stringify(hotelRoomJsonAdd);
 			    		console.log(hotelRoomJsonAdd.length);
 			    		
@@ -335,9 +338,10 @@ define(function(require, exports) {
 						    type: 1,
 						    title:"编辑酒店信息",
 						    skin: 'layui-layer-rim', //加上边框
-						    area: ['1190px', '700px'], //宽高
+						    area:'1190px', //宽高
 						    zIndex:1028,
 						    content: html,
+							scrollbar: false,    // 推荐禁用浏览器外部滚动条
 						    success:function(){
 						    	var $obj = $(".updateHotelContainer .hotelMainForm");
 						    	var validator = rule.check($('.updateHotelContainer .hotelMainForm'));
@@ -434,7 +438,7 @@ define(function(require, exports) {
 						    	$obj.find(".btn-hotel-standard-add").click(function(){
 							    		var html = "<tr>" +
 							    				"<td><input name=\"type\" type=\"text\" class='col-sm-12'/></td>" +
-							    				"<td class=\"time\"><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:80px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:80px\"/><label class=\"timeArea\" style=\"float:right\"><button class=\"btn btn-success btn-sm btn-white add\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i></button></label></div></td>" +
+							    				"<td class=\"time\"><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right\"><button class=\"btn btn-success btn-sm btn-white add\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i></button></label></div></td>" +
 							    				"<td><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input name=\"marketPrice\" class='col-sm-12' maxlength=\"9\" type=\"text\"/></div></td>" +
 							    				"<td><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input name=\"contractPrice\" class='col-sm-12' maxlength=\"9\" type=\"text\"/></div></td>" +
 							    				"<td><select name=\"containBreakfast\" class='no-padding foodsAll\'><option value=\"0\">不含</option><option value=\"1\">包含</option></select></td>" +
@@ -447,6 +451,8 @@ define(function(require, exports) {
 							    				"<td style=\"width:70px\"><a data-entity-id=\"\" class=\"btn-hotel-standard-delete\">删除</a></td>" +
 							    				"</tr>";
 							    		$obj.find(".hotelRoomStandardList tbody").append(html);
+									// 再调整对话框的高度
+									$(window).trigger('resize');
 							    		roomValidator = rule.checkRoom($('.updateHotelContainer .hotelRoomStandardList'));
 							    		// 对酒店房型设置表单验证
 							    		console.log($('.updateHotelContainer .hotelRoomStandardList'));
@@ -743,8 +749,8 @@ define(function(require, exports) {
 			var td = obj.parent().parent().parent();
 			var index = td.find("div").length;
 			var timeLimitDiv = "<div data-index=\""+(index+1)+"\" data-entity-id=\"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right\"><button class=\"btn btn-danger btn-sm btn-white delete\"><i class=\"ace-icon fa fa-minus bigger-110 icon-only\"></i></button></label></div>";
-			var marketPriceInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"marketPrice\" type=\"text\" class='col-sm-12'/></div>";
-			var contractPriceInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"contractPrice\" type=\"text\" class='col-sm-12'/></div>";
+			var marketPriceInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-top:7px\"><input name=\"marketPrice\" type=\"text\" class='col-sm-12'/></div>";
+			var contractPriceInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-top:7px\"><input name=\"contractPrice\" type=\"text\" class='col-sm-12'/></div>";
 			td.append(timeLimitDiv);
 			td.next().append(marketPriceInput);
 			td.next().next().append(contractPriceInput);

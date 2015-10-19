@@ -115,9 +115,10 @@ define(function(require, exports) {
 			    type: 1,
 			    title:"新增景区信息",
 			    skin: 'layui-layer-rim', //加上边框
-			    area: ['1190px', '700px'], //宽高
+			    area: '1190px', //宽高
 			    zIndex:1028,
 			    content: html,
+				scrollbar: false,    // 推荐禁用浏览器外部滚动条
 			    success:function(){
 			    	var $obj = $(".addScenicContainer .scenicMainForm"),
 			    		$project = $(".addScenicContainer .scenicProjectForm");
@@ -161,12 +162,14 @@ define(function(require, exports) {
 			    	$project.find(".btn-scenic-standard-add").click(function(){
 			    		var html = "<tr>" +
 			    				"<td><input name=\"name\" class='col-sm-12' type=\"text\" maxlength=\"100\"/></td>" +
-			    				"<td class=\"time\"><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right;padding-top:3px;\"><button class=\"btn btn-success btn-sm btn-white add\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i></button></label></div></td>" +
+			    				"<td class=\"time\"><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:1px\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right;padding-top:3px;\"><button class=\"btn btn-success btn-sm btn-white add addScenice\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i></button></label></div></td>" +
 			    				"<td><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input name=\"contractPrice\" style='margin-top: 2px' class='col-sm-12' type=\"text\" maxlength=\"7\"/></div></td>" +
 			    				"<td><input name=\"remark\" class='col-sm-12' type=\"text\" maxlength=\"1000\"/></td>" +
 			    				"<td style=\"width:70px\"><a data-entity-id=\"\" class=\" btn-scenic-standard-delete\">删除</a></td>" +
 			    				"</tr>";
 			    		$project.find(".scenicItemStandardList tbody").append(html);
+						// 再调整对话框的高度
+						$(window).trigger('resize');
 			    		//对景区管理的项目列表校验
 			    		itemValidator = rule.checkItems($(".addScenicContainer .scenicItemStandardList"));
 			    		//给餐标列表删除按钮绑定事件
@@ -187,8 +190,8 @@ define(function(require, exports) {
 				    	$project.find(".scenicItemStandardList .timeArea button.add").unbind().click(function(){
 							var td = $(this).parent().parent().parent();
 							var index = td.find("div").length;
-							var timeLimitDiv = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:100px;margin-top: 5px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right;padding-top:3px;\"><button class=\"btn btn-danger btn-sm btn-white del\"><i class=\"ace-icon fa fa-minus bigger-110 icon-only\"></i></button></label></div>";
-							var contractPriceInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"contractPrice\" style='margin-top: 5px' class='col-sm-12' type=\"text\" maxlength=\"7\"/></div>";
+							var timeLimitDiv = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:1px\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:100px;\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right;padding-top:3px;\"><button class=\"btn btn-danger btn-sm btn-white del\" style='margin-top: -3px;'><i class=\"ace-icon fa fa-minus bigger-110 icon-only delSelf\"></i></button></label></div>";
+							var contractPriceInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:6px\"><input name=\"contractPrice\" class='col-sm-12' type=\"text\" maxlength=\"7\"/></div>";
 							td.next().append(contractPriceInput);
 							td.append(timeLimitDiv);
 							itemValidator = rule.checkItems($(".addScenicContainer .scenicItemStandardList"));
@@ -327,9 +330,10 @@ define(function(require, exports) {
 						    type: 1,
 						    title:"编辑景区信息",
 						    skin: 'layui-layer-rim', //加上边框
-						    area: ['1190px', '700px'], //宽高
+						    area:'1190px', //宽高
 						    zIndex:1028,
 						    content: html,
+							scrollbar: false,    // 推荐禁用浏览器外部滚动条
 						    success:function(){
 						    	var $obj = $(".updateScenicContainer .scenicMainForm"),
 					    			$project = $(".updateScenicContainer .scenicProjectForm");
@@ -445,12 +449,14 @@ define(function(require, exports) {
 						    	$project.find(".btn-scenic-standard-add").click(function(){
 						    		var html = "<tr>" +
 						    				"<td><input name=\"name\" class='col-sm-12' type=\"text\" maxlength=\"100\"/></td>" +
-						    				"<td class=\"time\"><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right\"><button class=\"btn btn-success btn-sm btn-white add\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i></button></label></div></td>" +
+						    				"<td class=\"time\"><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:1px\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right\"><button class=\"btn btn-success btn-sm btn-white add\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i></button></label></div></td>" +
 						    				"<td><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input name=\"contractPrice\" class='col-sm-12' type=\"text\" maxlength=\"7\"/></div></td>" +
 						    				"<td><input name=\"remark\"  class='col-sm-12' type=\"text\" maxlength=\"1000\"/></td>" +
 						    				"<td style=\"width:70px\"><a data-entity-id=\"\" class=\"btn-scenic-standard-delete\">删除</a></td>" +
 						    				"</tr>";
 						    		$project.find(".scenicItemStandardList tbody").append(html);
+									// 再调整对话框的高度
+									$(window).trigger('resize');
 						    		//项目列表表单验证
 						    		itemsValidator = rule.checkItems($(".updateScenicContainer .scenicItemStandardList"));
 							    		//给餐标列表删除按钮绑定事件
@@ -736,7 +742,7 @@ define(function(require, exports) {
     			td = obj.parent().parent().parent(), 
     			index = td.find("div").length,
 				timeLimitDiv = "<div data-index=\""+(index+1)+"\" data-entity-id=\"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right\"><button class=\"btn btn-danger btn-sm btn-white delete\"><i class=\"ace-icon fa fa-minus bigger-110 icon-only\"></i></button></label></div>",
-    			contractPriceInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"contractPrice\" class='col-sm-12' type=\"text\" maxlength=\"7\"/></div>";
+    			contractPriceInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-top:7px\"><input name=\"contractPrice\" class='col-sm-12' type=\"text\" maxlength=\"7\"/></div>";
 			td.append(timeLimitDiv);
 			td.next().append(contractPriceInput);
 			$project.find(".scenicItemStandardList .datepicker").datepicker({

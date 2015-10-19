@@ -12,12 +12,11 @@
 									<input type="hidden" name="status" value="{{touristGroupTransfer.touristGroup.status}}"/>
 								    <input type="hidden" name="touristGroupTransferId" value="{{touristGroupTransfer.id}}">
 								    <input type="hidden" name="touristGroupTransferId" value="{{touristGroupTransfer.partnerAgency.id}}">
-									
 									<div class="form-group col-sm-12" style=" margin-top:20px; ">
 										 <div class="search-area">
 										   <label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>同行地接：</label> 
 											  <div class="col-sm-2"> 
-												  <select name="transferPartnerAgencyId" class="col-xs-12" style="width: 220px">
+												  <select name="transferPartnerAgencyId" disabled="" class="col-xs-12" style="width: 220px">
 												  			
 												  </select>   
 										      </div>  
@@ -35,6 +34,23 @@
 											  <div class="col-sm-2">
 												 <input name="transPayedMoney"  value="{{touristGroupTransfer.touristGroup.transPayedMoney}}" type="text"  class="col-xs-12"/>
 											  </div>
+
+
+											{{if touristGroupTransfer.operateCurrentNeedPayMoney==1}}
+												<label>
+													<input  type="checkbox" class="ace buyInsurance-status" checked="checked" value="{{touristGroupTransfer.operateCurrentNeedPayMoney}}" name="operateCurrentNeedPayMoney" disabled="disabled">
+													<span class="lbl">
+													</span>
+												</label>
+												{{else}}
+
+												<label style="padding-left:0px;">
+													<input  type="checkbox" class="ace buyInsurance-status" checked="" value="{{touristGroupTransfer.operateCurrentNeedPayMoney}}" name="operateCurrentNeedPayMoney" disabled="disabled">
+													<span class="lbl">
+													</span>
+												</label>
+											{{/if}}
+											<label class="control-label no-padding-right">对方现收</label>
 											  
 											  <!-- <label class="col-sm-1 control-label no-padding-right pull-left">现付：</label>
 											  <div class="col-sm-2">
@@ -43,6 +59,11 @@
 										 </div>
 									</div>
 									<!-- 付款金额end -->
+
+
+
+
+
 									<div class="form-group col-sm-12">
 										<div class="search-area">
 											<label class="col-sm-1 control-label no-padding-right">转客时的备注:</label>

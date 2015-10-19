@@ -126,9 +126,10 @@ define(function(require, exports) {
 			    type: 1,
 			    title:"新增商家",
 			    skin: 'layui-layer-rim', //加上边框
-			    area: ['1190px', '700px'], //宽高
+			    area: '1190px', //宽高
 			    zIndex:1028,
 			    content: html,
+				scrollbar: false,    // 推荐禁用浏览器外部滚动条
 			    success:function(){
 			    	//对新增商家校验
 			    	var validator = rule.check($(".shopContainer .shopMainForm"));
@@ -170,6 +171,8 @@ define(function(require, exports) {
 			    		html += '<td style="width:70px"><a data-entity-id="" class=" btn-shop-standard-delete">删除</a></td>';
 			    		html += "</tr>";
 			    		$(".shopStandardList tbody").append(html);
+						// 再调整对话框的高度
+						$(window).trigger('resize');
 			    		//政策列表的校验
 			    		shopItem = rule.checkItems($(".shopContainer .shopPolicyForm"));
 			    		//给餐标列表删除按钮绑定事件
@@ -291,9 +294,10 @@ define(function(require, exports) {
 						    type: 1,
 						    title:"修改商家",
 						    skin: 'layui-layer-rim', //加上边框
-						    area: ['1190px', '700px'], //宽高
+						    area: '1190px', //宽高
 						    zIndex:1028,
 						    content: html,
+							scrollbar: false,    // 推荐禁用浏览器外部滚动条
 						    success:function(){
 						    	//初始化省数据
 						    	//shop.getProvinceList($(".shopMainForm select[name=provinceId]"));
@@ -444,6 +448,8 @@ define(function(require, exports) {
 						    		html += '<td style=\"width:70px\"><a data-entity-id=\"\" class=\"btn-shop-standard-delete\">删除</a></td>';
 						    		html += "</tr>";
 						    		$(".shopStandardList tbody").append(html);
+									// 再调整对话框的高度
+									$(window).trigger('resize');
 						    		addPolicyValidator = rule.checkShopItem($(""));
 						    		policayValidator = rule.checkItems($(".shopPolicyForm .shopStandardList"));
 
@@ -702,7 +708,7 @@ define(function(require, exports) {
 		modifyOriginalRecord:function(obj){
     		var td = obj.parent().parent().parent();
 			var index = td.find("div").length;
-			var timeLimitDiv = "<div data-index=\""+(index+1)+"\" data-entity-id=\"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right\"><button class=\"btn btn-danger btn-sm btn-white delete\"><i class=\"ace-icon fa fa-minus bigger-110 icon-only\"></i></button></label></div>";
+			var timeLimitDiv = "<div data-index=\""+(index+1)+"\" data-entity-id=\"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right\"><button class=\"btn btn-danger btn-sm btn-white delete\"><i class=\"ace-icon fa fa-minus bigger-110 icon-only delSelf\"></i></button></label></div>";
 			var guideRateInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"guideRate\" type=\"text\" maxlength=\"4\"/></div>";
 			var travelAgencyRateInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"travelAgencyRate\" type=\"text\" maxlength=\"4\"/></div>";
 			var customerRebateMoneyInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"customerRebateMoney\" type=\"text\" maxlength=\"9\"/></div>";
@@ -779,7 +785,7 @@ define(function(require, exports) {
 				 type: 1,
 			    title:"新增购物政策",
 			    skin: 'layui-layer-rim', //加上边框
-			    area: ['1190px', '80%'], //宽高
+			    area: ['1190px', '50%'], //宽高
 			    zIndex:1029,
 			    content: html,
 			    success:function(){
@@ -790,8 +796,9 @@ define(function(require, exports) {
 			    	'<input name="costMoneyStart" maxlength=\"9\" type=\"text\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label>'+
 			    	'<input name=\"costMoneyEnd\" maxlength=\"9\" type=\"text\" style=\"width:100px\"/><label class=\"priceArea\" style=\"float:right\">'+
 			    	'<button class=\"btn btn-success btn-sm btn-white add\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i>'+
-			    	'</button></label></div></td><td><div data-index="1" class="clearfix div-1" style="margin-bottom:3px"><input name="guideRate" maxlength=\"4\" type="text"/>'+
-			    	'</div></td><td><div data-index="1" class="clearfix div-1" style="margin-bottom:3px"><input name="travelAgencyRate" maxlength=\"4\" type="text"/>'+
+
+			    	'</button></label></div></td><td><div data-index="1" class="clearfix div-1" style="margin-bottom:7px"><input name="guideRate" maxlength=\"4\" type="text"/>'+
+			    	'</div></td><td><div data-index="1" class="clearfix div-1" style="margin-bottom:7px"><input name="travelAgencyRate" maxlength=\"4\" type="text"/>'+
 			    	'</div></td><td style=\"width:70px\"><a data-entity-id=\"\" class=\"cursor btn-shop-policy-delete\">'+
 			    	'删除</a></td></tr>';
 //			    	$(".policyForm .shopPolicyList tbody").append(policyHtml);
@@ -830,17 +837,31 @@ define(function(require, exports) {
 			    	});
 			    	// 提交数据，临时保存起来
 			    	$(".btn-submit-shop-policy").click(function(){
+			    		var $tr = $(".shopPolicyContainer").find(".shopPolicyTbody tr");
 			    		if( policyValidator != undefined){
 			    			if(!policyValidator.form()){return;}
 			    		}else{
 			    			showMessageDialog($( "#confirm-dialog-message" ),"政策不能为空");
 			    			return;
 			    		}
-			    		var result = shop.submitShopPolicy(obj);
-				    	if(result){
-				    		layer.close(policyLayer);
-				    		showMessageDialog($( "#confirm-dialog-message" ), "成功添加购物政策");
-				    	}
+			    		var timeRgith = 0; 
+			    		$tr.each(function(i){
+			    			var startTime = (new Date(($(this).find("input[name=startTime]").val()).replace("-", "/").replace("-", "/"))).getTime(),
+			    				endTime = (new Date(($(this).find("input[name=endTime]").val()).replace("-", "/").replace("-", "/"))).getTime(),
+			    				timeDiff = endTime - startTime;
+			    			if (timeDiff < 0) {
+			    				timeRgith = 1;
+			    			}
+			    		})
+			    		if(timeRgith == 0){
+				    		var result = shop.submitShopPolicy(obj);
+					    	if(result){
+					    		layer.close(policyLayer);
+					    		showMessageDialog($( "#confirm-dialog-message" ), "成功添加购物政策");
+					    	}
+					    }else{
+					    	showMessageDialog($( "#confirm-dialog-message" ), "截止时间应大于开始时间");
+					    }
 			    	});
 			    }
 			});
@@ -851,7 +872,7 @@ define(function(require, exports) {
 				 type: 1,
 			    title:"修改购物政策",
 			    skin: 'layui-layer-rim', //加上边框
-			    area: ['1190px', '80%'], //宽高
+			    area: ['1190px', '50%'], //宽高
 			    zIndex:1029,
 			    content: html,
 			    success:function(){
@@ -862,8 +883,8 @@ define(function(require, exports) {
 			    	'<input name="costMoneyStart" type=\"text\" maxlength=\"9\" class="col-sm-4"/><label class="col-sm-2 control-label center">&nbsp;至&nbsp;</label>'+
 			    	'<input name=\"costMoneyEnd\" type=\"text\" maxlength=\"9\" class="col-sm-4"/><label class=\"priceArea col-sm-2\">'+
 			    	'<button class=\"btn btn-success btn-sm btn-white add\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i>'+
-			    	'</button></label></div></td><td><div data-index="1" class="clearfix div-1" style="margin-bottom:3px"><input name="guideRate" maxlength=\"4\" type="text"/>'+
-			    	'</div></td><td><div data-index="1" class="clearfix div-1" style="margin-bottom:3px"><input name="travelAgencyRate" type="text" maxlength=\"4\"/>'+
+			    	'</button></label></div></td><td><div data-index="1" class="clearfix div-1" style="margin-bottom:7px"><input name="guideRate" class="col-sm-12" maxlength=\"4\" type="text"/>'+
+			    	'</div></td><td><div data-index="1" class="clearfix div-1" style="margin-bottom:7px"><input name="travelAgencyRate" type="text" class="col-sm-12" maxlength=\"4\"/>'+
 			    	'</div></td><td style=\"width:70px\"><button data-entity-id=\"\" class=\"btn btn-xs btn-danger btn-shop-policy-delete\">'+
 			    	'<i class=\"ace-icon fa fa-trash-o bigger-120\"></i></button></td></tr>';
 //			    	$(".policyForm .shopPolicyList tbody").append(policyHtml);
@@ -973,9 +994,9 @@ define(function(require, exports) {
 		addPriceArea:function(obj){
 			var td = obj.parent().parent().parent();
 			var index = td.find("div").length;
-			var priceAreaDiv = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-bottom:3px\"><input name=\"costMoneyStart\" maxlength=\"9\" type=\"text\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"costMoneyEnd\" type=\"text\" style=\"width:100px\" maxlength=\"9\"/><label class=\"priceArea\" style=\"float:right\"><button class=\"btn btn-danger btn-sm btn-white del\"><i class=\"ace-icon fa fa-minus bigger-110 icon-only\"></i></button></label></div>";
-			var guideRateInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-bottom:3px\"><input name=\"guideRate\" type=\"text\" maxlength=\"4\"/></div>";
-			var travelAgencyRateInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-bottom:3px\"><input name=\"travelAgencyRate\" type=\"text\" maxlength=\"4\"/></div>";
+			var priceAreaDiv = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-bottom:2px\"><input name=\"costMoneyStart\" maxlength=\"9\" type=\"text\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"costMoneyEnd\" type=\"text\" style=\"width:100px\" maxlength=\"9\"/><label class=\"priceArea\" style=\"float:right\"><button class=\"btn btn-danger btn-sm btn-white del\"><i class=\"ace-icon fa fa-minus bigger-110 icon-only delSelf\"></i></button></label></div>";
+			var guideRateInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-bottom:7px\"><input name=\"guideRate\" type=\"text\" maxlength=\"4\"/></div>";
+			var travelAgencyRateInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-bottom:7px\"><input name=\"travelAgencyRate\" type=\"text\" maxlength=\"4\"/></div>";
 			td.append(priceAreaDiv);
 			td.next().append(guideRateInput);
 			td.next().next().append(travelAgencyRateInput);
@@ -983,9 +1004,9 @@ define(function(require, exports) {
 		addPolicyPriceArea:function(obj){
 			var td = obj.parent().parent().parent();
 			var index = td.find("div").length;
-			var priceAreaDiv = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-bottom:3px\"><input name=\"costMoneyStart\" maxlength=\"9\" type=\"text\" class=\"col-sm-4\"/><label class=\"col-sm-2 control-label center\">&nbsp;至&nbsp;</label><input name=\"costMoneyEnd\" type=\"text\" maxlength=\"9\" class=\"col-sm-4\"/><label class=\"priceArea col-sm-2\"><button class=\"btn btn-danger btn-sm btn-white del\"><i class=\"ace-icon fa fa-minus bigger-110 icon-only\"></i></button></label></div>";
-			var guideRateInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-bottom:3px\"><input name=\"guideRate\" type=\"text\" maxlength=\"4\" class=\"col-sm-12\"/></div>";
-			var travelAgencyRateInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-bottom:3px\"><input name=\"travelAgencyRate\" maxlength=\"4\" class=\"col-sm-12\"  type=\"text\"/></div>";
+			var priceAreaDiv = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-bottom:2px\"><input name=\"costMoneyStart\" maxlength=\"9\" type=\"text\" class=\"col-sm-4\"/><label class=\"col-sm-2 control-label center\">&nbsp;至&nbsp;</label><input name=\"costMoneyEnd\" type=\"text\" maxlength=\"9\" class=\"col-sm-4\"/><label class=\"priceArea col-sm-2\"><button class=\"btn btn-danger btn-sm btn-white del\"><i class=\"ace-icon fa fa-minus bigger-110 icon-only delSelf\"></i></button></label></div>";
+			var guideRateInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-bottom:7px\"><input name=\"guideRate\" type=\"text\" maxlength=\"4\" class=\"col-sm-12\"/></div>";
+			var travelAgencyRateInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-bottom:7px\"><input name=\"travelAgencyRate\" maxlength=\"4\" class=\"col-sm-12\"  type=\"text\"/></div>";
 			td.append(priceAreaDiv);
 			td.next().append(guideRateInput);
 			td.next().next().append(travelAgencyRateInput);

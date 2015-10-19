@@ -11,7 +11,7 @@
 		this.init_event();
 		
 		// 设置对话框的最大高度
-		$('body').append('<style id="layer-style">.layui-layer-content { max-height:' + (window.screen.height * 0.8) + 'px; overflow-y: auto; }</style>');
+		$('body').append('<style id="layer-style">.layui-layer-page .layui-layer-content { max-height:' + (window.screen.availHeight - 350) + 'px; overflow-y: auto; }</style>');
 	};
 
 	/**

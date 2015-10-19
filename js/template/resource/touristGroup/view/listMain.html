@@ -10,12 +10,14 @@
 	 <div class="form-horizontal" style="margin-top:20px;">
 		<label class="pull-left text-right control-label no-padding-right">来源:</label>
 		<div class="col-sm-1">
-			<select name="partnerAgencyId" class="col-sm-12">
+			<!-- <select name="partnerAgencyId" class="col-sm-12">
 				<option value=''>来源</option>
 				{{each partnerAgencyList as partnerAgency}}
 				<option value="{{partnerAgency.id}}" {{if searchParam.partnerAgencyId == partnerAgency.id}}selected="selected"{{/if}} >{{partnerAgency.travelAgencyName}}</option>
 				{{/each}}
-			</select>
+			</select> -->
+			<input type="text" class="col-sm-12 choosePartnerAgency" placeholder="来源" name="" />
+			<input type="hidden" name="fromPartnerAgencyId" value="">
 		</div>
 		<label class="pull-left text-right control-label no-padding-right">线路:</label>
 		<div class="col-sm-1">
@@ -76,16 +78,22 @@
 		<div class="pull-left btn-group btn-status" style="margin-left: 20px">
 			<button data-value="{{searchParam.status}}" data-toggle="dropdown" class=" btn-sm dropdown-toggle block-up" aria-expanded="false">
 				<span>
-				   {{if searchParam.status == null}}
+				   {{if searchParam.status == null || searchParam.status == ""}}
 						全部
-					{{else if searchParam.status == 1}}
-						未分团
-					{{else if searchParam.status == 2}}
-						已分团
-					{{else if searchParam.status == 2}}
-						已转客
-					{{else}}
+					{{else if searchParam.status==0 }}
 						已发团
+					{{else if searchParam.status==1 }}
+						未分团
+					{{else if searchParam.status==2 }}
+						已分团
+					{{else if searchParam.status==3 }}
+						已转客
+					{{else if searchParam.status==4 }}
+						已取消
+					{{else if searchParam.status==5 }}
+						已拆分
+					{{else if searchParam.status==6 }}
+						已内转
 					{{/if}}
 				</span>
 				<i class="ace-icon fa fa-angle-down icon-on-right"></i>
@@ -106,6 +114,15 @@
 				<li>
 					<a data-value="3" href="javascript:void(0)">已转客</a>
 				</li>
+				<li>
+					<a data-value="4" href="javascript:void(0)">已取消</a>
+				</li>
+				<li>
+					<a data-value="5" href="javascript:void(0)">已拆分</a>
+				</li>
+				<li>
+					<a data-value="6" href="javascript:void(0)">已内转</a>
+				</li>
 			</ul>
 		</div>
 		<div class="pull-left" style="margin-left: 20px">
@@ -114,7 +131,6 @@
 				 搜索
 			 </button>
 		 </div>
-
 		 <div class="col-sm-1 pull-left" style="margin-left: 5px">
 			 <button class="btn btn-sm btn-success btn-touristGroup-add">   
 				 <i class="ace-icon fa fa-plus"></i>
@@ -124,7 +140,6 @@
 		<div style="clear: both;height: 0px;line-height: 0px;"></div>
 	</div>
 	<div style="clear: both;margin-top:20px;border-top:1px dotted #ccc;padding-top:15px;">
-
 	<div style="clear: both;height: 0px;line-height: 0px;"></div>
 </div>
 </div>
