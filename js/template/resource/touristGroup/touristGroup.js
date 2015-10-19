@@ -92,10 +92,56 @@ define(function(require, exports) {
 				        touristGroup.listTouristGroup(0,touristGroup.searchData.partnerAgencyId,touristGroup.searchData.lineProductId,touristGroup.searchData.startTime,touristGroup.searchData.userId,touristGroup.searchData.createTimeStart,touristGroup.searchData.createTimeEnd,touristGroup.searchData.customerType,touristGroup.searchData.status);
 				        //下拉数据初始化
 				        touristGroup.initList(data);
+
+				        //游客默认一周时间初始化 
+				        touristGroup.initTouristGrSearTime();
+
 					}
 				}
 			});
 		},
+
+
+	  //初始化安排时间
+	  initTouristGrSearTime:function(){
+	   		var $tourGrSearDtObj=$(".touristGroupSearchForm");
+			$tourGrSearDtObj.find("input[name=createTimeStart]").val(touristGroup.dateCalcuBefore(touristGroup.getCurrentDate(),3));
+			$tourGrSearDtObj.find("input[name=createTimeEnd]").val(touristGroup.dateCalcuAfter(touristGroup.getCurrentDate(),3));
+	   },
+
+
+	   //获取当前时间
+	   getCurrentDate:function() {
+		    var date = new Date(),
+		    seperator1 = "-",
+		    seperator2 = ":",
+		    month = date.getMonth() + 1,
+		    strDate = date.getDate();
+		    if (month >= 1 && month <= 9) {
+		        month = "0" + month;
+		    }
+		    if (strDate >= 0 && strDate <= 9) {
+		        strDate = "0" + strDate;
+		    }
+		    var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
+		            + " " ;
+		    return currentdate;
+       },
+
+		//当前日期后三天
+		dateCalcuAfter:function(dt, days){
+			dt = dt.split('-').join('/');//js不认2000-1-31,只认2000/1/31 
+			var t1 = new Date(new Date(dt).valueOf() +3*24*60*60*1000);// 日期加上指定的天数 
+			return t1.getFullYear() + "-" + (t1.getMonth()+1) + "-" + t1.getDate();
+		}, 
+
+		//当前日期前三天
+		dateCalcuBefore:function(dt, days){
+			dt = dt.split('-').join('/');//js不认2000-1-31,只认2000/1/31 
+			var t1 = new Date(new Date(dt).valueOf() -3*24*60*60*1000);// 日期加上指定的天数 
+			return t1.getFullYear() + "-" + (t1.getMonth()+1) + "-" + t1.getDate();
+		},
+
 
 	   //数据列表
 		listTouristGroup:function(page,partnerAgencyIdS,lineProductIdS,startTimeS,userIdS,createTimeStartS,createTimeEndS,customerTypeS,statusS){
@@ -230,9 +276,10 @@ define(function(require, exports) {
 				touristGroup.getPartnerAgencySearchList($(".touristGroupSearchForm select[name=partnerAgencyId]"),data.searchParam.fromPartnerAgencyId);
 				touristGroup.getCreatorUserList($(".touristGroupSearchForm select[name=userId]"),data.searchParam.creator);
 			}
-		
 			
 		},
+
+
 		arrangeTouristGroup:function(id){
 			$.ajax({
 				url:""+APP_ROOT+"back/touristGroup.do?method=findTouristGroupArrangeById&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
