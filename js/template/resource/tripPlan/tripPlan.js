@@ -336,12 +336,12 @@ define(function(require, exports) {
 			var validator = e.data.validator;
 			var _this = $(this),
 				tableContainer = _this.parents(".ui-sortable-handle").find(".table tbody"),
-				html = '<tr><td><input type="text" name="insuranceName" class="col-sm-12 chooseInsurance bind-change"/><input type="hidden" name="insuranceId"/></td>' +
-						'<td><input type="text" name="type" class="col-sm-12"/></td>' +
-						'<td><input type="text" name="price" class="col-sm-12"/></td>' +
-						'<td><input type="text" name="memberCount" class="col-sm-12"/></td>' +
+				html = '<tr><td><input type="text" maxlength="32" name="insuranceName" class="col-sm-12 chooseInsurance bind-change"/><input type="hidden" name="insuranceId"/></td>' +
+						'<td><input type="text" name="type" maxlength="32" class="col-sm-12"/></td>' +
+						'<td><input type="text" name="price" maxlength="6" class="col-sm-12"/></td>' +
+						'<td><input type="text" name="memberCount" class="col-sm-12" maxlength="3"/></td>' +
 						'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12"/></td>' +
-						'<td><input type="text" name="payedMoney" class="col-sm-12"/></td>' +
+						'<td><input type="text" name="payedMoney" class="col-sm-12" maxlength="9"/></td>' +
 						'<td><select name="payType" class="col-sm-12 no-padding"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>' +		
 						'<td><input name="remark" type="text" class="col-sm-12" maxlength="500"/></td>' +
 						'<td><a class="cursor btn-deleteTripPlanList" title="删除">删除</a></td></tr>';
@@ -403,13 +403,13 @@ define(function(require, exports) {
 			'<td><input type="text" name="mobileNumber" readonly="readonly" class="col-sm-12"/></td>' +
 			'<td><select name="type" class="col-sm-12 restauranType" style="width:80px;"><option value="早餐">早餐</option><option value="午餐">午餐</option><option value="晚餐">晚餐</option></select></td>' +
 			'<td><input type="text" name="price" value="" class="col-sm-12 typeNameChoose"/><input type="hidden" name="restaurantStandardId" value=""/></td>' +
-			'<td><input name="fee" readonly="readonly" type="text" class="col-sm-12" style="width: 60px;"/></td>' +
-			'<td><input name="memberCount" type="text" class="col-sm-12" style="width: 60px;"/></td>' +
-			'<td><input name="reduceMoney" type="text" class="col-sm-12" style="width: 60px;"/></td>' +
+			'<td><input name="fee" readonly="readonly" type="text" class="col-sm-12" style="width: 60px;" /></td>' +
+			'<td><input name="memberCount" type="text" class="col-sm-12" style="width: 60px;" maxlength="4"/></td>' +
+			'<td><input name="reduceMoney" type="text" class="col-sm-12" style="width: 60px;" maxlength="9"/></td>' +
 			'<td><input name="needPayMoney" readonly="readonly" type="text" class="col-sm-12" style="width: 60px;"/></td>' +
-			'<td><input name="payedMoney" type="text" class="col-sm-12" style="width: 60px;"/></td>' +
+			'<td><input name="payedMoney" type="text" class="col-sm-12" style="width: 60px;" maxlength="9"/></td>' +
 			'<td><select name="payType" class="col-sm-12 no-padding" style="width:55px;"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>' +
-			'<td><input name="guidePayMoney" type="text" class="col-sm-12" style="width: 60px;"/></td>' +
+			'<td><input name="guidePayMoney" type="text" class="col-sm-12" style="width: 60px;" maxlength="9"/></td>' +
 			'<td><input name="remark" type="text" class="col-sm-12"/></td>' +
 			//'<td><button class="btn btn-xs btn-success" title="发送订单"><i class="ace-icon fa fa-paper-plane-o bigger-120"></i></button></td></tr>';
 			'<td><a class="cursor btn-deleteTripPlanList" data-entity-name="restaurant" title="删除">删除</a></td>';
@@ -429,17 +429,17 @@ define(function(require, exports) {
 			tableContainer = _this.parents(".ui-sortable-handle").find(".table tbody"),
 			html = '<tr><td class="whichDaysContainer"></td>' +
 			'<td><select class="col-sm-12 no-padding tripPlanHotelStar" style="width: 80px;"><option value="1">三星以下</option><option value="2">三星</option><option value="3">准四星</option><option value="4">四星</option><option value="5">准五星</option><option value="6">五星</option><option value="7">五星以上</option></select></td>' +
-			'<td><input type="text" class="col-sm-12 chooseHotel" name="name"/><input type="hidden" name="hotelId"></td>' +
+			'<td><input type="text" class="col-sm-12 chooseHotel" name="name" /><input type="hidden" name="hotelId"></td>' +
 			'<td><input type="text" class="col-sm-12" readonly="readonly" name="managerName"/></td>' +
 			'<td><input type="text" class="col-sm-12" readonly="readonly" name="mobileNumber"/></td>' +
 			'<td><input type="text" class="col-sm-12 chooseHotelRoom" name="hotelRoom"/><input type="hidden" name="hotelRoomId"></td>' +
-			'<td><input type="text" class="col-sm-12" name="fee" style="width: 60px;"/></td>' +
-			'<td><input type="text" class="col-sm-12" name="memberCount" style="width: 60px;"/></td>' +
-			'<td><input type="text" class="col-sm-12" name="reduceMoney" style="width: 60px;"/></td>' +
+			'<td><input type="text" class="col-sm-12" name="fee" style="width: 60px;" maxlength="6"/></td>' +
+			'<td><input type="text" class="col-sm-12" name="memberCount" style="width: 60px;" maxlength="3"/></td>' +
+			'<td><input type="text" class="col-sm-12" name="reduceMoney" style="width: 60px;" maxlength="9"/></td>' +
 			'<td><input type="text" class="col-sm-12" name="needPayMoney" readonly="readonly" style="width: 60px;"/></td>' +
-			'<td><input type="text" class="col-sm-12" name="payedMoney" style="width: 60px;"/></td>' +
+			'<td><input type="text" class="col-sm-12" name="payedMoney" style="width: 60px;" maxlength="9"/></td>' +
 			'<td><select name="payType" class="col-sm-12 no-padding" style="width:55px;"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>' +
-			'<td><input type="text" class="col-sm-12" name="guidePayMoney" style="width: 60px;"/></td>' +
+			'<td><input type="text" class="col-sm-12" name="guidePayMoney" style="width: 60px;" maxlength="9"/></td>' +
 			'<td><input type="text" class="col-sm-12" name="remark" maxlength="500"/></td>' +
 			'<td><a class="cursor btn-deleteTripPlanList" title="删除">删除</a></td></tr>';
 
@@ -461,15 +461,15 @@ define(function(require, exports) {
 			'<td><input type="text" name="name" class="col-sm-12 chooseScenic"/><input type="hidden" name="scenicId"/></td>' +
 			'<td><input type="text" name="chargingProjects" class="col-sm-12"/><input type="hidden" name="chargingId"/></td>' +
 			'<td><select name="tourTime" class="col-sm-12 no-padding" style="width: 75px;"> <option value="全天">全天</option> <option value="上午">上午</option> <option value="下午">下午</option> </select> </td>' +
-			'<td><input type="text" name="tourDuration" class="col-sm-12" value="" style="width: 60px;"> </td>' +
-			'<td><input type="text" name="orderNumber" class="col-sm-12" value="" /></td>'+
-			'<td><input type="text" name="fee" class="col-sm-12" style="width: 60px;"/></td>' +
-			'<td><input type="text" name="memberCount" class="col-sm-12" style="width: 60px;"/></td>' +
-			'<td><input type="text" name="reduceMoney" class="col-sm-12" style="width: 60px;"/></td>' +
+			'<td><input type="text" name="tourDuration" class="col-sm-12" value="" style="width: 60px;" maxlength="2"> </td>' +
+			'<td><input type="text" name="orderNumber" class="col-sm-12" value="" maxlength="20"/></td>'+
+			'<td><input type="text" name="fee" class="col-sm-12" style="width: 60px;" maxlength="6"/></td>' +
+			'<td><input type="text" name="memberCount" class="col-sm-12" style="width: 60px;" maxlength="3"/></td>' +
+			'<td><input type="text" name="reduceMoney" class="col-sm-12" style="width: 60px;" maxlength="9"/></td>' +
 			'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12" style="width: 60px;"/></td>' +
-			'<td><input type="text" name="payedMoney" class="col-sm-12" style="width: 60px;"/></td>' +
+			'<td><input type="text" name="payedMoney" class="col-sm-12" style="width: 60px;" maxlength="9"/></td>' +
 			'<td><select name="payType" class="col-sm-12 no-padding" style="width:55px;"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>' +
-			'<td><input type="text" name="guidePayMoney" class="col-sm-12" style="width: 60px;"/></td>' +
+			'<td><input type="text" name="guidePayMoney" class="col-sm-12" style="width: 60px;" maxlength="9"/></td>' +
 			'<td><input type="text" name="remark" class="col-sm-12" maxlength="500"/></td>' +
 			'<td><a class="cursor btn-deleteTripPlanList" title="删除">删除</a></td></tr>';
 			tableContainer.append(html);
@@ -514,14 +514,14 @@ define(function(require, exports) {
 			'<td><input type="hidden" name="selfitemId" value="" /><input type="text" name="selfitem" class="col-sm-12 chooseSelfitem" value="" /></td>'+
 			'<td><input type="text" readonly="readonly" name="managerName" class="col-sm-12"/></td>' +
 			'<td><input type="text" readonly="readonly" name="mobileNumber" class="col-sm-12"/></td>' +
-			'<td><input type="text" name="oldPrice" class="col-sm-12"/></td>' +
-			'<td><input type="text" name="price" class="col-sm-12"/></td>' +
-			'<td><input type="text" name="memberCount" class="col-sm-12"/></td>' +
-			'<td><input type="text" name="reduceMoney" class="col-sm-12"/></td>' +
-			'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12"/></td>' +
-			'<td><input type="text" name="payedMoney" class="col-sm-12"/></td>' +
+			'<td><input type="text" name="oldPrice" class="col-sm-12" maxlength="6"/></td>' +
+			'<td><input type="text" name="price" class="col-sm-12" maxlength="6"/></td>' +
+			'<td><input type="text" name="memberCount" class="col-sm-12" maxlength="3"/></td>' +
+			'<td><input type="text" name="reduceMoney" class="col-sm-12" maxlength="9"/></td>' +
+			'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12" maxlength="9"/></td>' +
+			'<td><input type="text" name="payedMoney" class="col-sm-12" maxlength="9"/></td>' +
 			'<td><select name="payType" class="col-sm-12 no-padding" style="width:55px;"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>' +
-			'<td><input type="text" name="guidePayMoney" class="col-sm-12"/></td>' +
+			'<td><input type="text" name="guidePayMoney" class="col-sm-12" maxlength="9"/></td>' +
 			'<td><input type="text" name="remark" class="col-sm-12" maxlength="500"/></td>' +
 			'<td><a class="cursor btn-deleteTripPlanList" title="删除">删除</a></td></tr>';
 
@@ -541,18 +541,18 @@ define(function(require, exports) {
 			html = '<tr>' +
 			'<td><input type="text" name="name" class="col-sm-12 chooseTicket"/><input type="hidden" name="tickeId" /></td>' +
 			'<td><select name="type" class="col-sm-12 no-padding" style="width:70px;"> <option value="1" selected="selected">机票</option><option value="2">汽车票</option> <option value="3">火车票</option> <option value="4">轮船票</option> </select></td>' +
-			'<td><input type="text" name="startingCity" class="col-sm-12"/></td>' +
-			'<td><input type="text" name="arriveCity" class="col-sm-12"/></td>' +
-			'<td><input type="text" name="shift" class="col-sm-12"/></td>' +
+			'<td><input type="text" name="startingCity" class="col-sm-12" maxlength="32"/></td>' +
+			'<td><input type="text" name="arriveCity" class="col-sm-12" maxlength="32"/></td>' +
+			'<td><input type="text" name="shift" class="col-sm-12" maxlength="9"/></td>' +
 			'<td><input type="text" name="startTime" class="col-sm-13 col-xs-12 date-time-picker"/></td>' +
-			'<td><input type="text" name="seatLevel" class="col-sm-12"/></td>' +
-			'<td><input type="text" name="fee" class="col-sm-12"/></td>' +
-			'<td><input type="text" name="memberCount" class="col-sm-12"/></td>' +
-			'<td><input type="text" name="reduceMoney" class="col-sm-12"/></td>' +
+			'<td><input type="text" name="seatLevel" class="col-sm-12" maxlength="5"/></td>' +
+			'<td><input type="text" name="fee" class="col-sm-12" maxlength="6"/></td>' +
+			'<td><input type="text" name="memberCount" class="col-sm-12" maxlength="3"/></td>' +
+			'<td><input type="text" name="reduceMoney" class="col-sm-12" maxlength="9"/></td>' +
 			'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12"/></td>' +
-			'<td><input type="text" name="payedMoney" class="col-sm-12"/></td>' +
+			'<td><input type="text" name="payedMoney" class="col-sm-12" maxlength="9"/></td>' +
 			'<td><select name="payType" class="col-sm-12 no-padding" style="width:55px;"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>' +
-			'<td><input type="text" name="guidePayMoney" class="col-sm-12"/></td>' +
+			'<td><input type="text" name="guidePayMoney" class="col-sm-12" maxlength="9"/></td>' +
 			'<td><input type="text" name="remark" class="col-sm-12" maxlength="500"/></td>' +
 			'<td><a class="cursor btn-deleteTripPlanList" title="删除">删除</a></td></tr>';
 
@@ -571,16 +571,16 @@ define(function(require, exports) {
 			var _this = $(this),
 			tableContainer = _this.parents(".ui-sortable-handle").find(".table tbody"),
 			html = '<tr><td class="whichDaysContainer"></td>' +
-			'<td><input type="text" name="name" class="col-sm-12"/></td>' +
-			'<td><input type="text" name="managerName" class="col-sm-12"/></td>' +
-			'<td><input type="text" name="mobileNumber" class="col-sm-12"/></td>' +
-			'<td><input type="text" name="fee" class="col-sm-12"/></td>' +
-			'<td><input type="text" name="memberCount" class="col-sm-12"/></td>' +
-			'<td><input type="text" name="reduceMoney" class="col-sm-12"/></td>' +
+			'<td><input type="text" name="name" maxlength="32" class="col-sm-12"/></td>' +
+			'<td><input type="text" name="managerName" maxlength="32" class="col-sm-12"/></td>' +
+			'<td><input type="text" name="mobileNumber" class="col-sm-12" maxlength="11"/></td>' +
+			'<td><input type="text" name="fee" class="col-sm-12" maxlength="6"/></td>' +
+			'<td><input type="text" name="memberCount" class="col-sm-12" maxlength="3"/></td>' +
+			'<td><input type="text" name="reduceMoney" class="col-sm-12" maxlength="9"/></td>' +
 			'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12"/></td>' +
-			'<td><input type="text" name="payedMoney" class="col-sm-12"/></td>' +
+			'<td><input type="text" name="payedMoney" class="col-sm-12" maxlength="9"/></td>' +
 			'<td><select name="payType" class="col-sm-12 no-padding" style="width:55px;"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>' +
-			'<td><input type="text" name="guidePayMoney" class="col-sm-12"/></td>' +
+			'<td><input type="text" name="guidePayMoney" class="col-sm-12" maxlength="9"/></td>' +
 			'<td><input type="text" name="remark" class="col-sm-12" maxlength="500"/></td>' +
 			'<td><a class="cursor btn-deleteTripPlanList" title="删除">删除</a></td></tr>';
 
