@@ -71,9 +71,11 @@
 				<form class="form-horizontal" role="form" onsubmit="return false" style="margin-top:25px;">
 					<div class="form-group col-sm-12" style="text-align: center;">
 						<label class="control-label no-padding-right">同行地接：</label>
-						<select name="toPartnerAgency" style="width:270px;">
+						<!-- <select name="toPartnerAgency" style="width:270px;">
 							<option selected="selected" value="">未选择</option>
-						</select>
+						</select> -->
+						<input type="text" name="toPartnerAgency" value="" class="chooseToPartnerAgency" placeholder="选择同行地接" style="width:270px;" />
+						<input type="hidden" name="toPartnerAgencyId" value="" />
 					</div>
 					<div class="form-group col-sm-12" style="text-align: center;">
 						<button class="btn btn-sm btn-danger btn-cancelTransfer otherButton">
