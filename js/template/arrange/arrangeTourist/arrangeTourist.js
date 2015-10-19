@@ -633,10 +633,10 @@ define(function(require, exports) {
 			touristGroupMergeList:[]
 		},
 		//选择计划函数
-		choosePlan :function(event){
+		choosePlan :function(data){
 			var touristGroupIdJson = [],
-				choose_lineProductId = event.data.choose_lineProductId,
-				choose_startTime = event.data.choose_startTime;
+				choose_lineProductId = data.choose_lineProductId,
+				choose_startTime = data.choose_startTime;
 			$("#tab-"+menuKey+"-divide-content .divideTouristMain .all tbody tr").each(function(){
 				if($(this).find(".touristGroupCheckBox").is(":checked")){
 					var id = {
@@ -1181,7 +1181,6 @@ define(function(require, exports) {
 												"<td>"+addGroupIdJson[i].lineProductName+"</td>"+
 												"<td>"+addGroupIdJson[i].hotelLevel+"</td>"+
 												"<td>"+addGroupIdJson[i].includeSelfPay+"</td>"+ 
-
 												"<td>"+addGroupIdJson[i].travelAgencyName+"</td>"+
 												"<td>"+addGroupIdJson[i].contactMemberName+"</td>"+
 												"<td>"+addGroupIdJson[i].contactMemberMobileNumber+"</td>"+
@@ -1191,12 +1190,11 @@ define(function(require, exports) {
 												"<td>"+addGroupIdJson[i].remark+"</td>"+
 												"<td>"+
 												"<div class=\"hidden-sm hidden-xs btn-group\">"+
-												"<button data-entity-id=\""+addGroupIdJson[i].id+"\" class=\"btn btn-xs btn-success addTripPlanView\">"+
-													"<i class=\"ace-icon fa fa-search-plus bigger-120\"></i>"+
-												"</button>"+
-												"<button data-entity-id=\""+addGroupIdJson[i].id+"\" class=\"cursor addTripPlanDelete\">"+
+												"<a data-entity-id=\""+addGroupIdJson[i].id+"\" class=\"cursor addTripPlanView\">"+
+													"查看 <a class='cursor'> |</a>"+
+												"</a>"+ "<a data-entity-id=\""+addGroupIdJson[i].id+"\" class=\"cursor addTripPlanDelete\">"+
 													"删除"+
-												"</button>"+
+												"</a>"+
 												"</div>"+
 												"</td>"+
 											"</tr>";
