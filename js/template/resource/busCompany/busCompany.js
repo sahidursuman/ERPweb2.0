@@ -99,8 +99,6 @@ define(function(require, exports) {
 							busCompany.listBusCompany(data.totalPage == 0 ? 0 : data.totalPage-1,busCompany.searchData.companyName,busCompany.searchData.status);
 						});
 
-
-
 					}
 				}
 			});
@@ -239,7 +237,7 @@ define(function(require, exports) {
 					});
 					var $driverList = $(".addBusCompanyContainer .driverList");
 					$driverList.find(".btn-driver-add").click(function(){
-						var html = "<tr><td><input name=\"driverName\" type=\"text\" class=\"col-sm-12\" /></td><td><select name=\"gender\"><option value=\"0\">男</option><option value=\"1\">女</option></select></td><td><input name=\"mobileNumber\" type=\"text\" class=\"col-sm-12\" /></td><td><input name=\"driveYears\" type=\"text\" value=\"1\"/></td><td><input name=\"licenseId\" class=\"col-sm-12\" type=\"text\" /></td><td><select name=\"status\" class=\"col-sm-12\"><option value=\"1\">启用</option><option value=\"0\">停用</option></select></td><td><input name=\"remark\" type=\"text\" class=\"col-sm-12\" /></td><td style=\"width:70px\"><a data-entiy-id=\"\" class=\" btn-xs btn-driver-delete\">删除</a></td></tr>";
+						var html = "<tr><td><input name=\"driverName\" type=\"text\" class=\"col-sm-12\" /></td><td><select name=\"gender\"><option value=\"0\">男</option><option value=\"1\">女</option></select></td><td><input name=\"mobileNumber\" type=\"text\" class=\"col-sm-12\" /></td><td><input name=\"driveYears\" type=\"text\" value=\"1\"/></td><td><input name=\"licenseId\" class=\"col-sm-12\" type=\"text\" /></td><td width=\"8%\"><select name=\"status\" class=\"col-sm-12\"><option value=\"1\">启用</option><option value=\"0\">停用</option></select></td><td><input name=\"remark\" type=\"text\" class=\"col-sm-12\" /></td><td style=\"width:70px\"><a data-entiy-id=\"\" class=\" btn-xs btn-driver-delete\">删除</a></td></tr>";
 						$driverList.find("tbody").append(html);
 
 						$driverList.find(".btn-driver-delete").click(function(){
