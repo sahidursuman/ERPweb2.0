@@ -155,7 +155,7 @@ define(function(require, exports) {
 						var html = "<tr><td><input class=\"col-sm-12\" name=\"licenseNumber\" type=\"text\" maxlength=\"10\"/></td><td><input class=\"col-sm-12\" name=\"brand\" type=\"text\" maxlength=\"32\"/></td><td><input class=\"col-sm-12\" name=\"seatCount\" type=\"text\" value=\"1\"  maxlength=\"3\"/></td><td class=\"col-sm-1\"><div class=\"input-group col-sm-12\"><input name=\"buyTime\" type=\"text\" class=\"datepicker\" style='width: 130px' /><span class=\"input-group-addon\"><i class=\"fa fa-calendar\"></i></span></div></td><td><select name=\"isChartered\"><option value=\"1\">是</option><option value=\"0\" selected=\"selected\">否</option></select></td>" +								"<td class=\"time\">" +
 							"<div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input name=\"startTime\" type=\"text\" readonly=\"readonly\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" readonly=\"readonly\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea hide\" style=\"float:right\"><button class=\"btn  btn-sm btn-white add\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i></button></label></div>" +
 							"</td>" +
-							"<td><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input style=\"width:100px;\" name=\"contractPrice\" type=\"text\" readonly=\"readonly\"/><label>&nbsp;元</label></div></td>" +
+							"<td><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input style=\"width:100px;\" name=\"contractPrice\" maxlength=\"9\" type=\"text\" readonly=\"readonly\"/><label>&nbsp;元</label></div></td>" +
 							"<td><input name=\"remark\"  maxlength=\"1000\"  type=\"text\" class=\"col-sm-12\"/></td><td style=\"width:70px\"><a class=\"btn-xs btn-bus-delete\">删除</a></td></tr>";
 						$busList.find("tbody").append(html);
 
@@ -239,7 +239,7 @@ define(function(require, exports) {
 					});
 					var $driverList = $(".addBusCompanyContainer .driverList");
 					$driverList.find(".btn-driver-add").click(function(){
-						var html = "<tr><td><input name=\"driverName\" type=\"text\" class=\"col-sm-12\" /></td><td><select name=\"gender\"><option value=\"0\">男</option><option value=\"1\">女</option></select></td><td><input name=\"mobileNumber\" type=\"text\" class=\"col-sm-12\" /></td><td><input name=\"driveYears\" type=\"text\" value=\"1\"/></td><td><input name=\"licenseId\" class=\"col-sm-12\" type=\"text\" /></td><td><select name=\"status\" class=\"col-sm-12\"><option value=\"1\">启用</option><option value=\"0\">停用</option></select></td><td><input name=\"remark\" type=\"text\" class=\"col-sm-12\" /></td><td style=\"width:70px\"><a data-entiy-id=\"\" class=\" btn-xs btn-driver-delete\">删除</a></td></tr>";
+						var html = "<tr><td><input name=\"driverName\" type=\"text\" class=\"col-sm-12\" /></td><td><select name=\"gender\"><option value=\"0\">男</option><option value=\"1\">女</option></select></td><td><input name=\"mobileNumber\" type=\"text\" class=\"col-sm-12\" /></td><td><input name=\"driveYears\" type=\"text\" value=\"1\"/></td><td><input name=\"licenseId\" class=\"col-sm-12\" type=\"text\" /></td><td width=\"8%\"><select name=\"status\" class=\"col-sm-12\"><option value=\"1\">启用</option><option value=\"0\">停用</option></select></td><td><input name=\"remark\" type=\"text\" class=\"col-sm-12\" /></td><td style=\"width:70px\"><a data-entiy-id=\"\" class=\" btn-xs btn-driver-delete\">删除</a></td></tr>";
 						$driverList.find("tbody").append(html);
 
 						$driverList.find(".btn-driver-delete").click(function(){
@@ -631,7 +631,7 @@ define(function(require, exports) {
 									var td = $(this).parent().parent().parent();
 									var index = td.find("div").length;
 									var timeLimitDiv = "<div data-index=\""+(index+1)+"\" data-entity-id=\"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right\"><button class=\"btn  btn-sm btn-white delete\"><i class=\"fa fa-minus bigger-110 icon-only\"></i></button></label></div>";
-									var contractPriceInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-top:2px\"><input style=\"width:100px;\" name=\"contractPrice\" type=\"text\" class=\"\"/><label>&nbsp;元</label></div>";
+									var contractPriceInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-top:2px\"><input style=\"width:100px;\" name=\"contractPrice\" maxlength=\"9\" type=\"text\" class=\"\"/><label>&nbsp;元</label></div>";
 									td.next().append(contractPriceInput);
 									td.append(timeLimitDiv);
 									bindTimeAreaDelete();
@@ -647,13 +647,13 @@ define(function(require, exports) {
 								bindTimeAreaDelete();
 
 								$busList.find(".btn-bus-add").click(function(){
-									var html = "<tr><td><input  name=\"licenseNumber\" type=\"text\" class=\"col-sm-12\" /></td><td><input name=\"brand\" type=\"text\" class=\"col-sm-12\" /></td><td><input name=\"seatCount\" type=\"text\" class=\"col-sm-12\" value=\"1\"/></td><td class=\"col-sm-1\"><div class=\"input-group col-sm-12\"><input name=\"buyTime\" type=\"text\" class=\"datepicker\" style='width: 130px' /><span class=\"input-group-addon\"><i class=\"fa fa-calendar\"></i></span></div></td><td><select name=\"isChartered\"><option value=\"1\">是</option><option value=\"0\" selected=\"selected\">否</option></select></td>" +
+									var html = "<tr><td><input  name=\"licenseNumber\" type=\"text\" class=\"col-sm-12\" /></td><td><input name=\"brand\" maxlength=\"100\" type=\"text\" class=\"col-sm-12\" /></td><td><input maxlength=\"3\" name=\"seatCount\" type=\"text\" class=\"col-sm-12\" value=\"1\"/></td><td class=\"col-sm-1\"><div class=\"input-group col-sm-12\"><input name=\"buyTime\" type=\"text\" class=\"datepicker\" style='width: 130px' /><span class=\"input-group-addon\"><i class=\"fa fa-calendar\"></i></span></div></td><td><select name=\"isChartered\"><option value=\"1\">是</option><option value=\"0\" selected=\"selected\">否</option></select></td>" +
 										"<td class=\"time\">" +
 										"<div data-index=\"1\" data-entity-id=\"\" class=\"clearfix div-1\" style=\"margin-top:2px\">" +
 										"<input name=\"startTime\" type=\"text\" readonly=\"readonly\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" readonly=\"readonly\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea hide\" style=\"float:right\"><button class=\"btn  btn-sm btn-white add\"><i class=\"fa fa-sort-asc bigger-110 icon-only\"></i></button></label></div>" +
 										"</td>" +
 										"<td class=\"price\">" +
-										"<div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input style=\"width:100px;\" name=\"contractPrice\" type=\"text\" readonly=\"readonly\" /><label>&nbsp;元</label></div>" +
+										"<div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input style=\"width:100px;\" name=\"contractPrice\" maxlength=\"9\" type=\"text\" readonly=\"readonly\" /><label>&nbsp;元</label></div>" +
 										"</td>" +
 										"<td><input name=\"remark\" type=\"text\" class=\"col-sm-12\"/></td><td style=\"width:70px\"><a class=\" btn-bus-delete\">删除</a></td></tr>";
 									$busList.find("tbody").append(html);
@@ -696,7 +696,7 @@ define(function(require, exports) {
 								});
 
 								$driverList.find(".btn-driver-add").click(function(){
-									var html = "<tr><td><input name=\"driverName\" type=\"text\" class=\"col-sm-12\" /></td><td><select name=\"gender\" class=\"col-sm-12\"><option value=\"0\">男</option><option value=\"1\">女</option></select></td><td><input name=\"mobileNumber\" class=\"col-sm-12\" type=\"text\" /></td><td><input name=\"driveYears\" class=\"col-sm-12\" type=\"text\" value=\"1\"/></td><td><input name=\"licenseId\" type=\"text\" class=\"col-sm-12\" /></td><td><select name=\"status\" class=\"col-sm-12\"><option value=\"1\">启用</option><option value=\"0\">停用</option></select></td><td><input name=\"remark\" type=\"text\" class=\"col-sm-12\" /></td><td style=\"width:70px\"><a data-entiy-id=\"\" class=\" btn-driver-delete\">删除</a></td></tr>";
+									var html = "<tr><td><input name=\"driverName\" type=\"text\" class=\"col-sm-12\" /></td><td><select name=\"gender\" class=\"col-sm-12\"><option value=\"0\">男</option><option value=\"1\">女</option></select></td><td><input name=\"mobileNumber\" class=\"col-sm-12\" type=\"text\" /></td><td><input name=\"driveYears\" class=\"col-sm-12\" type=\"text\" value=\"1\"/></td><td><input name=\"licenseId\" type=\"text\" class=\"col-sm-12\" /></td><td width=\"8%\"><select name=\"status\" class=\"col-sm-12\"><option value=\"1\">启用</option><option value=\"0\">停用</option></select></td><td><input name=\"remark\" type=\"text\" class=\"col-sm-12\" /></td><td style=\"width:70px\"><a data-entiy-id=\"\" class=\" btn-driver-delete\">删除</a></td></tr>";
 									$(".driverList tbody").append(html);
 									$(".driverList .btn-driver-delete").click(function(){
 										var tr = $(this).parent().parent();

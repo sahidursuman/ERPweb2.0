@@ -104,8 +104,8 @@
 							<table class="table table-striped table-bordered table-hover busList" style="border: 1px solid #ccc">
 								<thead>
 									<tr>
-										<th class="table-border">车牌号</th>
-										<th class="table-border">车辆品牌</th>
+										<th class="table-border"><span class="necessary">*</span>车牌号</th>
+										<th class="table-border"><span class="necessary">*</span>车辆品牌</th>
 										<th class="table-border">座位数</th>
 										<th class="table-border"style="width:150px;">购买时间</th>
 										<th class="table-border" style="width: 70px">协议包车</th>
@@ -163,12 +163,12 @@
 												{{if bus.isChartered == 1}}
 													{{each bus.priceList as price i}}
 													<div data-index="{{i+1}}" class="clearfix div-{{i+1}}" style="margin-top:2px">
-														<input style="width:100px;" name="contractPrice" type="text" {{if bus.isChartered == 0}}readonly="readonly"{{/if}} value="{{price.contractPrice}}"/><label>&nbsp;元</label>
+														<input style="width:100px;" name="contractPrice" maxlength="9" type="text" {{if bus.isChartered == 0}}readonly="readonly"{{/if}} value="{{price.contractPrice}}"/><label>&nbsp;元</label>
 													</div>
 													{{/each}}
 												{{else}}
 													<div data-index="1" class="clearfix div-1" style="margin-top:2px">
-														<input style="width:100px;" name="contractPrice" type="text" readonly="readonly" value=""/><label>&nbsp;元</label>
+														<input style="width:100px;" name="contractPrice" maxlength="9" type="text" readonly="readonly" value=""/><label>&nbsp;元</label>
 													</div>
 												{{/if}}
 											</td>
@@ -215,7 +215,7 @@
 								<tbody>
 									{{each busCompany.driverList as driver}}
 										<tr data-entity-id="{{driver.id}}">
-											<td><input name="driverName" class="col-sm-12" type="text" value="{{driver.name}}"/></td>
+											<td><input name="driverName" class="col-sm-12" maxlength="32" type="text" value="{{driver.name}}"/></td>
 											<td>
 												<select name="gender">
 													<option {{if driver.gender == 0}}selected="selected"{{/if}} value="0">男</option>
@@ -225,13 +225,13 @@
 											<td><input name="mobileNumber" class="col-sm-12" type="text" value="{{driver.mobileNumber}}"/></td>
 											<td><input name="driveYears" type="text" value="{{driver.driveYears}}"/></td>
 											<td><input name="licenseId" class="col-sm-12" type="text" value="{{driver.licenseId}}"/></td>
-											<td>
+											<td width="8%">
 												<select name="status" class="col-sm-12">
 													<option {{if driver.status == 0}}selected="selected"{{/if}} value="1">启用</option>
 													<option {{if driver.status == 0}}selected="selected"{{/if}} value="0">停用</option>
 												</select>
 											</td>
-											<td><input name="remark" class="col-sm-12" type="text" value="{{driver.remark}}" /></td>
+											<td><input name="remark" class="col-sm-12" type="text" maxlength="1000" value="{{driver.remark}}" /></td>
 											<td style="width:70px">
 												<a class=" btn-driver-delete">删除</a>
 											</td>

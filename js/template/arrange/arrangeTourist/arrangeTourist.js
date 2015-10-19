@@ -633,10 +633,10 @@ define(function(require, exports) {
 			touristGroupMergeList:[]
 		},
 		//选择计划函数
-		choosePlan :function(event){
+		choosePlan :function(data){
 			var touristGroupIdJson = [],
-				choose_lineProductId = event.data.choose_lineProductId,
-				choose_startTime = event.data.choose_startTime;
+				choose_lineProductId = data.choose_lineProductId,
+				choose_startTime = data.choose_startTime;
 			$("#tab-"+menuKey+"-divide-content .divideTouristMain .all tbody tr").each(function(){
 				if($(this).find(".touristGroupCheckBox").is(":checked")){
 					var id = {

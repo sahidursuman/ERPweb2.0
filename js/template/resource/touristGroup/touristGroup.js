@@ -93,10 +93,93 @@ define(function(require, exports) {
 				        touristGroup.listTouristGroup(0,touristGroup.searchData.partnerAgencyId,touristGroup.searchData.lineProductId,touristGroup.searchData.startTime,touristGroup.searchData.userId,touristGroup.searchData.createTimeStart,touristGroup.searchData.createTimeEnd,touristGroup.searchData.customerType,touristGroup.searchData.status);
 				        //下拉数据初始化
 				        touristGroup.initList(data);
+						 //游客默认一周时间初始化 
+	 
+				        touristGroup.initTouristGrSearTime();
+ 
+
 					}
 				}
 			});
 		},
+		 //初始化安排时间
+	 
+	  initTouristGrSearTime:function(){
+	 
+	   		var $tourGrSearDtObj=$(".touristGroupSearchForm");
+ 
+			$tourGrSearDtObj.find("input[name=createTimeStart]").val(touristGroup.dateCalcuBefore(touristGroup.getCurrentDate(),3));
+	 
+			$tourGrSearDtObj.find("input[name=createTimeEnd]").val(touristGroup.dateCalcuAfter(touristGroup.getCurrentDate(),3));
+ 
+	   },
+	 
+
+	 
+
+	 
+	   //获取当前时间
+	 
+	   getCurrentDate:function() {
+	 
+		    var date = new Date(),
+	 
+		    seperator1 = "-",
+	 
+		    seperator2 = ":",
+	 
+		    month = date.getMonth() + 1,
+	 
+		    strDate = date.getDate();
+	 
+		    if (month >= 1 && month <= 9) {
+	 
+		        month = "0" + month;
+	 
+		    }
+	 
+		    if (strDate >= 0 && strDate <= 9) {
+	 
+		        strDate = "0" + strDate;
+	 
+		    }
+	 
+		    var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
+	 
+		            + " " ;
+	 
+		    return currentdate;
+	 
+       },
+	 
+
+	 
+		//当前日期后三天
+	 
+		dateCalcuAfter:function(dt, days){
+	 
+			dt = dt.split('-').join('/');//js不认2000-1-31,只认2000/1/31 
+	 
+			var t1 = new Date(new Date(dt).valueOf() +3*24*60*60*1000);// 日期加上指定的天数 
+	 
+			return t1.getFullYear() + "-" + (t1.getMonth()+1) + "-" + t1.getDate();
+	 
+		}, 
+	 
+
+	 
+		//当前日期前三天
+	 
+		dateCalcuBefore:function(dt, days){
+	 
+			dt = dt.split('-').join('/');//js不认2000-1-31,只认2000/1/31 
+	 
+			var t1 = new Date(new Date(dt).valueOf() -3*24*60*60*1000);// 日期加上指定的天数 
+	 
+			return t1.getFullYear() + "-" + (t1.getMonth()+1) + "-" + t1.getDate();
+	 
+		},
+	 
 
 	   //数据列表
 		listTouristGroup:function(page,partnerAgencyIdS,lineProductIdS,startTimeS,userIdS,createTimeStartS,createTimeEndS,customerTypeS,statusS){
@@ -691,6 +774,27 @@ define(function(require, exports) {
 				format: 'yyyy-mm-dd',
 				language: 'zh-CN'
 			});
+
+
+			//接待日期 时间控件
+			$("#"+tab+" .touristGroupMainFormRS input[name=arriveShiftTime]").datepicker({
+				autoclose: true,
+				todayHighlight: true,
+				format: 'yyyy-mm-dd',
+				language: 'zh-CN'
+			});
+
+
+			//接待日期 时间控件
+			$("#"+tab+" .touristGroupMainFormRS input[name=leaveShiftTime]").datepicker({
+				autoclose: true,
+				todayHighlight: true,
+				format: 'yyyy-mm-dd',
+				language: 'zh-CN'
+			});
+
+
+
 			
 			//选择联系人列表
 			touristGroup.getPartnerAgencyManagerList("updateTouristGroup");
@@ -1647,29 +1751,34 @@ define(function(require, exports) {
 			    		}else{
 					    	var dataArray = data.split(/\r?\n/);
 					    	if(dataArray.length > 0){
+					    		var memberInfo, memberInfoArray, name, mobileNumber, idCardNumber;
 					    		for(var i=0;i<dataArray.length;i++){
-					    			var memberInfo = dataArray[i];
-					    			var memberInfoArray = memberInfo.split(/\s+/);
-					    			console.log(memberInfoArray);
-					    			var name = "";
-					    			var mobileNumber = "";
-					    			var idCardNumber = "";
+					    			memberInfo = trim(dataArray[i]);
+					    			memberInfoArray = memberInfo.split(/\s+/);
+
+					    			name = "";
+					    			mobileNumber = "";
+					    			idCardNumber = "";
 					    			if(memberInfoArray.length == 1){
 					    				name = memberInfoArray[0];
 					    			}
 					    			else if(memberInfoArray.length == 2){
 					    				name = memberInfoArray[0];
-					    				if(/^(\d{15}$|^\d{18}$|^\d{17}(\d|X|x))$/.test(memberInfoArray[1])){
-					    					idCardNumber = memberInfoArray[1];
-					    				}
-					    				else{
-					    					mobileNumber = memberInfoArray[1];
-					    				}
+										numReg(memberInfoArray[1]);
 					    			}
 					    			else if(memberInfoArray.length == 3){
 					    				name = memberInfoArray[0];
-					    				mobileNumber = memberInfoArray[1];
-					    				idCardNumber = memberInfoArray[2];
+										numReg(memberInfoArray[1]);
+										numReg(memberInfoArray[2]);
+					    			}
+
+					    			function numReg(str) {
+					    				if(/^(\d{15}$|^\d{18}$|^\d{17}(\d|X|x))$/.test(str)){
+					    					idCardNumber = str;
+					    				}
+					    				else if(/^((13[0-9])|(14[0-9])|(15[0-9])|(16[0-9])|(17[0-9])|(18[0-9])|(19[0-9]))\d{8}$/.test(str)){
+					    					mobileNumber = str;
+					    				}
 					    			}
 					    			// 如果第一行数据为空，则删除第一行
 					    			
