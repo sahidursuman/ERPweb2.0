@@ -161,12 +161,12 @@
 											<td class="price">
 												{{if bus.isChartered == 1}}
 													{{each bus.priceList as price i}}
-													<div data-index="{{i+1}}" class="clearfix div-{{i+1}}" style="margin-top:2px">
+													<div data-index="{{i+1}}" class="clearfix div-{{i+1}}" style="margin-top:2px;margin-bottom:6px;">
 														<input style="width:100px;" name="contractPrice" maxlength="9" type="text" {{if bus.isChartered == 0}}readonly="readonly"{{/if}} value="{{price.contractPrice}}"/><label>&nbsp;元</label>
 													</div>
 													{{/each}}
 												{{else}}
-													<div data-index="1" class="clearfix div-1" style="margin-top:2px">
+													<div data-index="1" class="clearfix div-1" style="margin-top:4px;margin-bottom:7px;">
 														<input style="width:100px;" name="contractPrice" maxlength="9" type="text" readonly="readonly" value=""/><label>&nbsp;元</label>
 													</div>
 												{{/if}}

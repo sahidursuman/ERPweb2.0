@@ -81,7 +81,7 @@
 						{{touristGroup.createTime}}
 					</td>
 					<td>
-						{{if touristGroup.status==0 }}
+						{{ if touristGroup.status==0 }}
 							已发团
 						{{else if touristGroup.status==1 }}
 							未分团
@@ -89,6 +89,12 @@
 							已分团
 						{{else if touristGroup.status==3 }}
 							已转客
+						{{else if touristGroup.status==4 }}
+							已取消
+						{{else if touristGroup.status==5 }}
+							已拆分
+						{{else if touristGroup.status==6 }}
+							已内转
 						{{/if}}
 					</td>
 					<td>
