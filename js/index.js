@@ -9,6 +9,9 @@
 		this.checkLogin();
 		this.justifyTabPosition();
 		this.init_event();
+
+		// 设置对话框的最大高度
+		$('body').append('<style id="layer-style">.layui-layer-content { max-height:' + (window.screen.height * 0.8) + 'px; overflow-y: auto; }</style>');
 	};
 
 	/**
