@@ -1035,6 +1035,7 @@ function listMenu(menuTemplate){
 								first : "1",
 							}
 						inner.list(searchParam);
+						modals["arrange_inner_Transfer"] = inner;
 					});
 				});
 
@@ -1046,7 +1047,7 @@ function listMenu(menuTemplate){
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/financial/count/count.js",function(count){
 						count.init()
-
+						modals["financial_count"] = count;
 						// count.getlistCount(0,"","","","","","","","");
 					});
 				});
