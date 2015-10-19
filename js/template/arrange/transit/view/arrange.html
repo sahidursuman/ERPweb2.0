@@ -104,11 +104,11 @@
 													</td>
 													<td><input class="col-sm-12" name="driverMobileNumber" readonly="readonly" type="text" value="{{if outBus.driver != null}}{{outBus.driver.mobileNumber}}{{/if}}" /></td>
 													<td><input class="col-sm-12 datetimepicker" name="bususeTime" type="text" value="{{if outBus.useTime != null}}{{outBus.useTime}}{{/if}}" /></td>
-													<td><input class="col-sm-12" name="boardLocation" type="text"  value="{{outBus.boardLocation}}" /></td>
-													<td><input class="col-sm-12 price" name="busFee" type="text" value="{{outBus.fee}}" /><input type="hidden" class="count" value="1" /></td>
-													<td><input class="col-sm-12 discount" name="busReduceMoney" type="text" value="{{outBus.reduceMoney}}" /></td>
-													<td><input class="col-sm-12 needPay" readonly="readonly" name="busNeedPayMoney" type="text" value="{{outBus.needPayMoney}}" /></td>
-													<td><input class="col-sm-12" name="busPayedMoney" type="text" value="{{outBus.payedMoney}}" /></td>
+													<td><input class="col-sm-12" name="boardLocation" type="text"  maxlength="200"  value="{{outBus.boardLocation}}" /></td>
+													<td><input class="col-sm-12 price" name="busFee" type="text"  maxlength="9" value="{{outBus.fee}}" /><input type="hidden" class="count" value="1" /></td>
+													<td><input class="col-sm-12 discount" name="busReduceMoney"  maxlength="9" type="text" value="{{outBus.reduceMoney}}" /></td>
+													<td><input class="col-sm-12 needPay" readonly="readonly" name="busNeedPayMoney"  maxlength="9" type="text" value="{{outBus.needPayMoney}}" /></td>
+													<td><input class="col-sm-12" name="busPayedMoney" maxlength="9" type="text" value="{{outBus.payedMoney}}" /></td>
 													<td>
 														<select class="" name="busPayType">
                                                				<option value="0" {{if outBus.payType == 0}}selected="selected"{{/if}}>现付</option>
@@ -184,20 +184,20 @@
 														</select>
 													</td>
 													<td>
-														<input class="col-sm-12 chooseHotel bind-change" name="hotelName" value="{{outHotel.hotel.name}}" type="text" />
+														<input class="col-sm-12 chooseHotel bind-change" name="hotelName" maxlength="200" value="{{outHotel.hotel.name}}" type="text" />
 														<input type="hidden" name="hotelId" value="{{outHotel.hotel.id}}" />
 													</td>
-													<td><input class="col-sm-12" name="hotelManagerName" value="{{outHotel.hotel.managerName}}" readonly="readonly" type="text" /></td>
+													<td><input class="col-sm-12" name="hotelManagerName"  maxlength="100" value="{{outHotel.hotel.managerName}}" readonly="readonly" type="text" /></td>
 													<td><input class="col-sm-12" name="hotelMobileNumber" value="{{outHotel.hotel.mobileNumber}}" readonly="readonly" type="text" /></td>
 													<td>
 														<input class="col-sm-12 bind-change" name="hotelRoomType" value="{{outHotel.hotelRoom.type}}" type="text" />
 														<input type="hidden" name="hotelRoomTypeId" value="{{outHotel.hotelRoom.id}}" />
 													</td>
-													<td><input class="col-sm-12 price" name="hotelPrice" value="{{outHotel.price}}" type="text" /></td>
-													<td><input class="col-sm-12 count" name="hotelMemberCount" value="{{outHotel.memberCount}}" type="text" /></td>
-													<td><input class="col-sm-12 discount" name="hotelReduceMoney" value="{{outHotel.reduceMoney}}" type="text" /></td>
+													<td><input class="col-sm-12 price" name="hotelPrice"  maxlength="9" value="{{outHotel.price}}" type="text" /></td>
+													<td><input class="col-sm-12 count" name="hotelMemberCount"  maxlength="6" value="{{outHotel.memberCount}}" type="text" /></td>
+													<td><input class="col-sm-12 discount" name="hotelReduceMoney" maxlength="9" value="{{outHotel.reduceMoney}}" type="text" /></td>
 													<td><input class="col-sm-12 needPay" readonly="readonly" name="hotelNeedPayMoney" value="{{outHotel.needPayMoney}}" type="text" /></td>
-													<td><input class="col-sm-12" name="hotelPayedMoney" value="{{outHotel.payedMoney}}" type="text" /></td>
+													<td><input class="col-sm-12" name="hotelPayedMoney" maxlength="9" value="{{outHotel.payedMoney}}" type="text" /></td>
 													<td>
 														<select class="" name="hotelPayType">
                                                				<option value="0" {{if outHotel.payType == 0}}selected="selected"{{/if}}>现付</option>
@@ -207,7 +207,7 @@
                                                			</select>  
                                                		</td>
 													<!-- <input class="col-sm-12" name="hotelPayType" value="{{outHotel.payType}}" type="text" /></td> -->
-													<td><input class="col-sm-12" name="remark" type="text" value="{{outHotel.remark}}" /></td>
+													<td><input class="col-sm-12" name="remark" type="text" value="{{outHotel.remark}}"  maxlength="100"/></td>
 													<td>
 														<a class="cursor arrange-delete">
 															删除
@@ -283,11 +283,11 @@
 														</select> -->
 													<!-- <input class="col-sm-12" name="ticketSeatLevel" value="{{outTicket.seatLevel}}" type="text" /> -->
 													</td>
-													<td><input class="col-sm-12 price" name="ticketPrice" value="{{outTicket.price}}" type="text" /></td>
-													<td><input class="col-sm-12 count" name="ticketMemberCount" value="{{outTicket.memberCount}}" type="text" /></td>
-													<td><input class="col-sm-12 discount" name="ticketReduceMoney" value="{{outTicket.reduceMoney}}" type="text" /></td>
+													<td><input class="col-sm-12 price" name="ticketPrice"  maxlength="9" value="{{outTicket.price}}" type="text" /></td>
+													<td><input class="col-sm-12 count" name="ticketMemberCount"  maxlength="6" value="{{outTicket.memberCount}}" type="text" /></td>
+													<td><input class="col-sm-12 discount" name="ticketReduceMoney"  maxlength="9" value="{{outTicket.reduceMoney}}" type="text" /></td>
 													<td><input class="col-sm-12 needPay" readonly="readonly" name="ticketNeedPayMoney" value="{{outTicket.needPayMoney}}" type="text" /></td>
-													<td><input class="col-sm-12" name="ticketPayedMoney" value="{{outTicket.payedMoney}}" type="text" /></td>
+													<td><input class="col-sm-12" name="ticketPayedMoney"  maxlength="9" value="{{outTicket.payedMoney}}" type="text" /></td>
 													<td>
 														<select class="" name="ticketPayType">
                                                				<option value="0" {{if outTicket.payType == 0}}selected="selected"{{/if}}>现付</option>
@@ -366,10 +366,10 @@
 														<input class="col-sm-12 chooseStandard price" name="restaurantStandardId" type="text" value="{{outRestaurant.price}}" />
 														<input type="hidden" name="price" value="{{outRestaurant.price}}" />
 													</td>
-													<td><input class="col-sm-12 count" name="memberCount" type="text" value="{{outRestaurant.memberCount}}" /></td>
-													<td><input class="col-sm-12 discount" name="reduceMoney" type="text" value="{{outRestaurant.reduceMoney}}" /></td>
+													<td><input class="col-sm-12 count" name="memberCount"  maxlength="6" type="text" value="{{outRestaurant.memberCount}}" /></td>
+													<td><input class="col-sm-12 discount" name="reduceMoney"  maxlength="9" type="text" value="{{outRestaurant.reduceMoney}}" /></td>
 													<td><input class="col-sm-12 needPay" name="needPayMoney" readonly="readonly" type="text" value="{{outRestaurant.needPayMoney}}" /></td>
-													<td><input class="col-sm-12" name="payedMoney" type="text" value="{{outRestaurant.payedMoney}}" /></td>
+													<td><input class="col-sm-12" name="payedMoney" type="text"  maxlength="9" value="{{outRestaurant.payedMoney}}" /></td>
 													<td>
 														<select class="" name="payType">
                                                				<option value="0" {{if outRestaurant.payType == "0"}}selected="selected"{{/if}}>现付</option>
@@ -432,13 +432,13 @@
 														<input class="col-sm-12" name="name" type="text" value="{{outOther.name}}" />
 														<input type="hidden" name="serviceType" value="0" />
 													</td>
-													<td><input class="col-sm-12" name="managerName" type="text" value="{{outOther.managerName}}" /></td>
-													<td><input class="col-sm-12" name="mobileNumber" type="text" value="{{outOther.mobileNumber}}" /></td>
-													<td><input class="col-sm-12 price" name="price" type="text" value="{{outOther.price}}" /></td>
-													<td><input class="col-sm-12 count" name="memberCount" type="text" value="{{outOther.memberCount}}" /></td>
-													<td><input class="col-sm-12 discount" name="reduceMoney" type="text" value="{{outOther.reduceMoney}}" /></td>
-													<td><input class="col-sm-12 needPay" name="needPayMoney" readonly="readonly" type="text" value="{{outOther.needPayMoney}}" /></td>
-													<td><input class="col-sm-12" name="payedMoney" type="text" value="{{outOther.payedMoney}}" /></td>
+													<td><input class="col-sm-12" name="managerName"  maxlength="30" type="text" value="{{outOther.managerName}}" /></td>
+													<td><input class="col-sm-12" name="mobileNumber"  maxlength="11" type="text" value="{{outOther.mobileNumber}}" /></td>
+													<td><input class="col-sm-12 price" name="price"  maxlength="9" type="text" value="{{outOther.price}}" /></td>
+													<td><input class="col-sm-12 count" name="memberCount"  maxlength="6"  type="text" value="{{outOther.memberCount}}" /></td>
+													<td><input class="col-sm-12 discount" name="reduceMoney"   maxlength="9" type="text" value="{{outOther.reduceMoney}}" /></td>
+													<td><input class="col-sm-12 needPay" name="needPayMoney"  maxlength="9" readonly="readonly" type="text" value="{{outOther.needPayMoney}}" /></td>
+													<td><input class="col-sm-12" name="payedMoney"  maxlength="9" type="text" value="{{outOther.payedMoney}}" /></td>
 													<td>
 														<select class="" name="payType">
                                                				<option value="0" {{if outOther.payType == "0"}}selected="selected"{{/if}}>现付</option>
@@ -518,11 +518,11 @@
 													</td>
 													<td><input class="col-sm-12" name="driverMobileNumber" readonly="readonly" type="text" value="{{if outBus.driver != null}}{{outBus.driver.mobileNumber}}{{/if}}" /></td>
 													<td><input class="col-sm-12" name="bususeTime" type="text" value="{{if outBus.useTime != null}}{{outBus.useTime}}{{/if}}" /></td>
-													<td><input class="col-sm-12" name="boardLocation" type="text" value="{{outBus.boardLocation}}" /></td>
-													<td><input class="col-sm-12 price" name="busFee" type="text" value="{{outBus.fee}}" /><input type="hidden" class="count" value="1" /></td>
-													<td><input class="col-sm-12 discount" name="busReduceMoney" type="text" value="{{outBus.reduceMoney}}" /></td>
+													<td><input class="col-sm-12" name="boardLocation"  maxlength="200" type="text" value="{{outBus.boardLocation}}" /></td>
+													<td><input class="col-sm-12 price" name="busFee"  maxlength="9" type="text" value="{{outBus.fee}}" /><input type="hidden" class="count" value="1" /></td>
+													<td><input class="col-sm-12 discount" name="busReduceMoney"  maxlength="9" type="text" value="{{outBus.reduceMoney}}" /></td>
 													<td><input class="col-sm-12 needPay" readonly="readonly" name="busNeedPayMoney" type="text" value="{{outBus.needPayMoney}}" /></td>
-													<td><input class="col-sm-12" name="busPayedMoney" type="text" value="{{outBus.payedMoney}}" /></td>
+													<td><input class="col-sm-12" name="busPayedMoney"  maxlength="9" type="text" value="{{outBus.payedMoney}}" /></td>
 													<td>
 														<select class="" name="busPayType">
                                                				<option value="0" {{if outBus.payType == 0}}selected="selected"{{/if}}>现付</option>
@@ -532,7 +532,7 @@
                                                			</select>
 														<!-- <input class="col-sm-12" name="busPayType" type="text" value="{{outBus.payType}}" /> -->
 													</td>
-													<td><input class="col-sm-12" name="remark" type="text" value="{{outBus.remark}}" /></td>
+													<td><input class="col-sm-12" name="remark" type="text" value="{{outBus.remark}}"  maxlength="30" /></td>
 													<td>
 														<a class="cursor arrange-delete" title="删除">
 															删除
@@ -603,11 +603,11 @@
 													</td>
 													<td><input class="col-sm-12" name="driverMobileNumber" readonly="readonly" type="text" value="{{if outBus.driver != null}}{{outBus.driver.mobileNumber}}{{/if}}" /></td>
 													<td><input class="col-sm-12" name="bususeTime" type="text" value="{{if outBus.useTime != null}}{{outBus.useTime}}{{/if}}" /></td>
-													<td><input class="col-sm-12" name="boardLocation" type="text" value="{{outBus.boardLocation}}" /></td>
-													<td><input class="col-sm-12 price" name="busFee" type="text" value="{{outBus.fee}}" /><input type="hidden" class="count" value="1" /></td>
-													<td><input class="col-sm-12 discount" name="busReduceMoney" type="text" value="{{outBus.reduceMoney}}" /></td>
+													<td><input class="col-sm-12" name="boardLocation" type="text"  maxlength="200" value="{{outBus.boardLocation}}" /></td>
+													<td><input class="col-sm-12 price" name="busFee" type="text"  maxlength="9" value="{{outBus.fee}}" /><input type="hidden" class="count" value="1" /></td>
+													<td><input class="col-sm-12 discount" name="busReduceMoney"   maxlength="9" type="text" value="{{outBus.reduceMoney}}" /></td>
 													<td><input class="col-sm-12 needPay" readonly="readonly" name="busNeedPayMoney" type="text" value="{{outBus.needPayMoney}}" /></td>
-													<td><input class="col-sm-12" name="busPayedMoney" type="text" value="{{outBus.payedMoney}}" /></td>
+													<td><input class="col-sm-12" name="busPayedMoney"  maxlength="9" type="text" value="{{outBus.payedMoney}}" /></td>
 													<td>
 														<select class="" name="busPayType">
                                                				<option value="0" {{if outBus.payType == 0}}selected="selected"{{/if}}>现付</option>
@@ -692,11 +692,11 @@
 														<input class="col-sm-12 bind-change" name="hotelRoomType" value="{{outHotel.hotelRoom.type}}" type="text" />
 														<input type="hidden" name="hotelRoomTypeId" value="{{outHotel.hotelRoom.id}}" />
 													</td>
-													<td><input class="col-sm-12 price" name="hotelPrice" value="{{outHotel.price}}" type="text" /></td>
-													<td><input class="col-sm-12 count" name="hotelMemberCount" value="{{outHotel.memberCount}}" type="text" /></td>
-													<td><input class="col-sm-12 discount" name="hotelReduceMoney" value="{{outHotel.reduceMoney}}" type="text" /></td>
+													<td><input class="col-sm-12 price" name="hotelPrice"  maxlength="9" value="{{outHotel.price}}" type="text" /></td>
+													<td><input class="col-sm-12 count" name="hotelMemberCount"  maxlength="6" value="{{outHotel.memberCount}}" type="text" /></td>
+													<td><input class="col-sm-12 discount" name="hotelReduceMoney"  maxlength="9" value="{{outHotel.reduceMoney}}" type="text" /></td>
 													<td><input class="col-sm-12 needPay" readonly="readonly" name="hotelNeedPayMoney" value="{{outHotel.needPayMoney}}" type="text" /></td>
-													<td><input class="col-sm-12" name="hotelPayedMoney" value="{{outHotel.payedMoney}}" type="text" /></td>
+													<td><input class="col-sm-12" name="hotelPayedMoney"  maxlength="9" value="{{outHotel.payedMoney}}" type="text" /></td>
 													<td>
 														<select class="" name="hotelPayType">
                                                				<option value="0" {{if outHotel.payType == 0}}selected="selected"{{/if}}>现付</option>
@@ -761,7 +761,7 @@
 												<tr data-entity-id="{{outTicket.id}}">
 													<td>
 														<input type="hidden" name="serviceType" value="1" />
-														<input class="col-sm-12 chooseTicket bind-change" name="ticketName" value="{{outTicket.ticket.name}}" type="text" />
+														<input class="col-sm-12 chooseTicket bind-change" name="ticketName"  maxlength="30" value="{{outTicket.ticket.name}}" type="text" />
 														<input type="hidden" name="tickeId" value="{{outTicket.ticket.id}}" />
 													</td>
 													<td>
@@ -772,9 +772,9 @@
 															<option value="4" {{if outTicket.type == 4}}selected="selected"{{/if}}>轮船票</option>
 														</select>
 													</td>
-													<td><input class="col-sm-12" name="ticketStartCity" value="{{outTicket.startingCity}}" type="text" /></td>
-													<td><input class="col-sm-12" name="ticketArriveCity" value="{{outTicket.arriveCity}}" type="text" /></td>
-													<td><input class="col-sm-12" name="ticketStartTime" value="{{if outTicket.startTime != null}}{{outTicket.startTime}}{{/if}}" type="text" /></td>
+													<td><input class="col-sm-12" name="ticketStartCity"  maxlength="30" value="{{outTicket.startingCity}}" type="text" /></td>
+													<td><input class="col-sm-12" name="ticketArriveCity"  maxlength="30" value="{{outTicket.arriveCity}}" type="text" /></td>
+													<td><input class="col-sm-12" name="ticketStartTime"  maxlength="30" value="{{if outTicket.startTime != null}}{{outTicket.startTime}}{{/if}}" type="text" /></td>
 													<td><input class="col-sm-12" name="ticketShift" value="{{outTicket.shift}}" type="text" /></td>
 													<td><input class="col-sm-12" name="ticketSeatLevel" value="{{outTicket.seatLevel}}" type="text" />
 														<!-- <select class="" name="ticketSeatLevel" >
@@ -783,11 +783,11 @@
 														</select> -->
 													<!-- <input class="col-sm-12" name="ticketSeatLevel" value="{{outTicket.seatLevel}}" type="text" /> -->
 													</td>
-													<td><input class="col-sm-12 price" name="ticketPrice" value="{{outTicket.price}}" type="text" /></td>
-													<td><input class="col-sm-12 count" name="ticketMemberCount" value="{{outTicket.memberCount}}" type="text" /></td>
-													<td><input class="col-sm-12 discount" name="ticketReduceMoney" value="{{outTicket.reduceMoney}}" type="text" /></td>
+													<td><input class="col-sm-12 price" name="ticketPrice"  maxlength="9" value="{{outTicket.price}}" type="text" /></td>
+													<td><input class="col-sm-12 count" name="ticketMemberCount"  maxlength="6" value="{{outTicket.memberCount}}" type="text" /></td>
+													<td><input class="col-sm-12 discount" name="ticketReduceMoney"  maxlength="9" value="{{outTicket.reduceMoney}}" type="text" /></td>
 													<td><input class="col-sm-12 needPay" readonly="readonly" name="ticketNeedPayMoney" value="{{outTicket.needPayMoney}}" type="text" /></td>
-													<td><input class="col-sm-12" name="ticketPayedMoney" value="{{outTicket.payedMoney}}" type="text" /></td>
+													<td><input class="col-sm-12" name="ticketPayedMoney"  maxlength="9" value="{{outTicket.payedMoney}}" type="text" /></td>
 													<td>
 														<select class="" name="ticketPayType">
                                                				<option value="0" {{if outTicket.payType == 0}}selected="selected"{{/if}}>现付</option>
@@ -866,10 +866,10 @@
 														<input class="col-sm-12 pirce chooseStandard" name="restaurantStandardId" type="text" value="{{outRestaurant.price}}" />
 														<input type="hidden" name="price" value="{{outRestaurant.price}}" />
 													</td>
-													<td><input class="col-sm-12 count" name="memberCount" type="text" value="{{outRestaurant.memberCount}}" /></td>
-													<td><input class="col-sm-12 discount" name="reduceMoney" type="text" value="{{outRestaurant.reduceMoney}}" /></td>
-													<td><input class="col-sm-12 needPay" name="needPayMoney" readonly="readonly" type="text" value="{{outRestaurant.needPayMoney}}" /></td>
-													<td><input class="col-sm-12" name="payedMoney" type="text" value="{{outRestaurant.payedMoney}}" /></td>
+													<td><input class="col-sm-12 count" name="memberCount"  maxlength="6" type="text" value="{{outRestaurant.memberCount}}" /></td>
+													<td><input class="col-sm-12 discount" name="reduceMoney"  maxlength="9" type="text" value="{{outRestaurant.reduceMoney}}" /></td>
+													<td><input class="col-sm-12 needPay" name="needPayMoney"  maxlength="9" readonly="readonly" type="text" value="{{outRestaurant.needPayMoney}}" /></td>
+													<td><input class="col-sm-12" name="payedMoney" type="text"  maxlength="9" value="{{outRestaurant.payedMoney}}" /></td>
 													<td>
 														<select class="" name="payType">
                                                				<option value="0" {{if outRestaurant.payType == "0"}}selected="selected"{{/if}}>现付</option>
