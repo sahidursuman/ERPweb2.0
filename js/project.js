@@ -1128,14 +1128,12 @@ function listMenu(menuTemplate){
 
 						var $that = $(this),
 							max = $that.attr('maxlength'),
-							ctrlOldVal = $that.data('ctrlOldVal'),
 							val = $that.val();
 
 						if (chEnWordCount(val) > max)  {
-							$that.val(ctrlOldVal);
-						} else {
-							$that.data('ctrlOldVal', val);
-						}
+							val = cutStr(val, max);
+							$that.val(val);
+						} 
 
 						function chEnWordCount(str){
 							var count = 0;
@@ -1144,6 +1142,22 @@ function listMenu(menuTemplate){
 								count = str.replace(/[^\x00-\xff]/g,"**").length;
 							}
 							return count;
+						}
+
+						function cutStr(src, length) {
+							var res = '';
+
+							if (!!src || isNaN(length))  {
+								for (var len = src.length, i = (len -1), tmp; i < len; i --) {
+									tmp = src.substr(0, i+1);
+									if (chEnWordCount(tmp) <= length)  {
+										res = tmp;
+										break;
+									}
+								}
+							}
+
+							return res;
 						}
 					});
 			}
