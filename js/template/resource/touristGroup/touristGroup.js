@@ -68,7 +68,7 @@ define(function(require, exports) {
 							}
 							touristGroup.listTouristGroup(0,touristGroup.searchData.partnerAgencyId,touristGroup.searchData.lineProductId,touristGroup.searchData.startTime,touristGroup.searchData.userId,touristGroup.searchData.createTimeStart,touristGroup.searchData.createTimeEnd,touristGroup.searchData.customerType,touristGroup.searchData.status);
 							//下拉数据初始化
-							touristGroup.initList(data);
+							/*touristGroup.initList(data);*/
 						});
 						//筛选事件绑定
 						$(".touristGroupSearchForm .btn-touristGroupList-search").click(function(){
