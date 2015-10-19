@@ -1,8 +1,8 @@
 define(function(require, exports) {
 	//var rule = require("./rule"); 
-	var menuKey = "arrange_inner_Transfer";
+	var menuKey = "arrange_inner_Transfer",
 	listTemplate = require("./view/list"),
-	listTransferInTemplate=require("./view/listTransferIn");
+	listTransferInTemplate=require("./view/listTransferIn"),
 	viewTemplate=require("./view/view"),
 	editTemplate=require("./view/edit"),
 	tabId = "tab-" + menuKey + "-content";
@@ -19,7 +19,7 @@ define(function(require, exports) {
 			startTime : "",
 			endTime : "",
 			status : "",
-			first : "",
+			first : ""
 		},
 	//分页查询的返回结果
     map = {
@@ -28,7 +28,7 @@ define(function(require, exports) {
 			total : "",
 			lineProduct : "",
 			user : "",
-			businessGroup : "",
+			businessGroup : ""
 	},
 	innerTransfer = {
 	    id : "",//	内转ID		
