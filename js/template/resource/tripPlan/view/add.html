@@ -341,7 +341,6 @@
                                                         <th class="th-border">联系电话</th>
                                                         <th class="th-border">类型</th>
                                                         <th class="th-border">餐标</th>
-                                                        <th class="th-border">单价</th>
                                                         <th class="th-border">人数</th>
                                                         <th class="th-border">优惠</th>
                                                         <th class="th-border">应付</th>
@@ -362,7 +361,6 @@
                                                                 <td><input type="text" name="mobileNumber" readonly="readonly" value="{{if restaurant.restaurant != null}}{{restaurant.restaurant.mobileNumber}}{{/if}}" class="col-sm-12"/></td>
                                                                 <td><select name="type" class="col-sm-12 restauranType" style="width:80px;">{{if restaurant.restaurantStandard != null}}<option {{if restaurant.restaurantStandard.type == "早餐"}}selected="selected"{{/if}} value="早餐">早餐</option><option {{if restaurant.restaurantStandard.type == "午餐"}}selected="selected"{{/if}} value="午餐">午餐</option><option {{if restaurant.restaurantStandard.type == "晚餐"}}selected="selected"{{/if}} value="晚餐">晚餐</option>{{/if}}</select></td>
                                                                 <td><input type="text" name="price" value="{{if restaurant.restaurantStandard != null}}{{restaurant.restaurantStandard.price}}{{/if}}" class="col-sm-12 typeNameChoose"/><input type="hidden" name="restaurantStandardId" value="{{if restaurant.restaurantStandard != null}}{{restaurant.restaurantStandard.id}}{{/if}}"/></td>
-                                                                <td><input type="text" name="fee" readonly="readonly" value="{{restaurant.price}}" class="col-sm-12" style="width: 60px;"/></td>
                                                                 <td><input type="text" name="memberCount" value="{{restaurant.memberCount}}" class="col-sm-12" style="width: 60px;"/></td>
                                                                 <td><input type="text" name="reduceMoney" value="{{restaurant.reduceMoney}}" class="col-sm-12" style="width: 60px;"/></td>
                                                                 <td><input type="text" name="needPayMoney" readonly="readonly" value="{{restaurant.needPayMoney}}" class="col-sm-12" style="width: 60px;"/></td>

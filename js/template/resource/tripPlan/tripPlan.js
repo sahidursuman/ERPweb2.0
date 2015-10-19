@@ -403,7 +403,6 @@ define(function(require, exports) {
 			'<td><input type="text" name="mobileNumber" readonly="readonly" class="col-sm-12"/></td>' +
 			'<td><select name="type" class="col-sm-12 restauranType" style="width:80px;"><option value="早餐">早餐</option><option value="午餐">午餐</option><option value="晚餐">晚餐</option></select></td>' +
 			'<td><input type="text" name="price" value="" class="col-sm-12 typeNameChoose"/><input type="hidden" name="restaurantStandardId" value=""/></td>' +
-			'<td><input name="fee" readonly="readonly" type="text" class="col-sm-12" style="width: 60px;"/></td>' +
 			'<td><input name="memberCount" type="text" class="col-sm-12" style="width: 60px;"/></td>' +
 			'<td><input name="reduceMoney" type="text" class="col-sm-12" style="width: 60px;"/></td>' +
 			'<td><input name="needPayMoney" readonly="readonly" type="text" class="col-sm-12" style="width: 60px;"/></td>' +
@@ -1683,7 +1682,7 @@ define(function(require, exports) {
 							whichDay : tripPlan.getVal(restaurant.eq(i), "whichDay"),
 							restaurantId : tripPlan.getVal(restaurant.eq(i), "restaurantId"),
 							restaurantStandardId : tripPlan.getVal(restaurant.eq(i), "restaurantStandardId"),
-							price : tripPlan.getVal(restaurant.eq(i), "fee"),
+							price : tripPlan.getVal(restaurant.eq(i), "price"),
 							memberCount : tripPlan.getVal(restaurant.eq(i), "memberCount"),
 							reduceMoney : tripPlan.getVal(restaurant.eq(i), "reduceMoney"),
 							needPayMoney : tripPlan.getVal(restaurant.eq(i), "needPayMoney"),
