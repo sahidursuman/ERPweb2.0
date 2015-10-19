@@ -103,67 +103,77 @@ define(function(require, exports) {
 				dataType:'json',
 				success:function(data3){
 					layer.close(globalLoadingLayer);
-					map.resultList = JSON.parse(data3.resultList);
-					map.searchParam = data3.searchParam;
-					var html = listTemplate(map);
-					addTab(menuKey,"内转管理",html);
-					//时间控件
-					inner.initTimePicker();
-					//内部转出分页 
-					inner.transferOutfindPager(searchParam);	
-				
-					function getVal (name){
-						var val = $("#" +tabId+" .innerTransfer_list ").find("[name="+name+"]").val();
-						return val;
-					}
+					var result = showDialog(data3);
+					//如果正确则就执行
+					if(result){
+						map.resultList = JSON.parse(data3.resultList);
+						map.searchParam = data3.searchParam;
+						var html = listTemplate(map);
+						addTab(menuKey,"内转管理",html);
 
-					function buildSearchParam(){
-						searchParam.pageNo = getVal("pageNo");
-						searchParam.totalPage = getVal("totalPage");
-						searchParam.type = 1;
-						searchParam.lineProductId = getVal("lineProductId");
-						searchParam.businessGroupId = getVal("businessGroupId");
-						searchParam.creator = getVal("creator");
-						searchParam.startTime = getVal("startTime");
-						searchParam.endTime = getVal("endTime");
-						searchParam.status = getVal("status");
-						return searchParam;
-					}
+						//时间控件
+						inner.initTimePicker();
+
+						//内部转出分页 
+						inner.transferOutfindPager(searchParam);	
 					
-					//搜索事件
-					$("#" +tabId+" .innerTransfer_list .btn-transferOut-search").click(function(){
-						searchParam = buildSearchParam();
-						searchParam.pageNo = 0;
-						requestTotal = true;
-						inner.list(searchParam);
-					});
+						function getVal (name){
+							var val = $("#" +tabId+" .innerTransfer_list ").find("[name="+name+"]").val();
+							return val;
+						}
 
-					//时间默认一周初始化 
-					inner.initSouTimer();
+						function buildSearchParam(){
+							searchParam.pageNo = getVal("pageNo");
+							searchParam.totalPage = getVal("totalPage");
+							searchParam.type = 1;
+							searchParam.lineProductId = getVal("lineProductId");
+							searchParam.businessGroupId = getVal("businessGroupId");
+							searchParam.creator = getVal("creator");
+							searchParam.startTime = getVal("startTime");
+							searchParam.endTime = getVal("endTime");
+							searchParam.status = $("#" +tabId+" .innerTransfer_list .btn-status button").attr("data-value");
+							return searchParam;
+						}
+						//搜索栏状态button下拉事件
+						$("#" +tabId+" .innerTransfer_list .btn-status .dropdown-menu a").click(function(){
+							$(this).parent().parent().parent().find("button").attr("data-value",$(this).attr("data-value"));
+							$(this).parent().parent().parent().find("span").text($(this).text());
+							searchParam = buildSearchParam();
+							requestTotal = true;
+							inner.list(searchParam);
+						});
+						//搜索事件
+						$("#" +tabId+" .innerTransfer_list .btn-transferOut-search").click(function(){
+							searchParam = buildSearchParam();
+							searchParam.pageNo = 0;
+							requestTotal = true;
+							inner.list(searchParam);
+						});
+						//时间默认一周初始化 
+						inner.initSouTimer();
+						//导出操作 
+						$("#" +tabId +"  .innerTransfer_list .btn-transfer-export").click(function(){
+							searchParam.type=1; 
+							var exportUrl ="" + url("findExcel","view") + "&searchParam="+encodeURIComponent(JSON.stringify(searchParam));
+							window.location.href=exportUrl;
+						});
+						
+						//切换我部转出
+						$("#" +tabId+" .innerTransfer_list .transferOut").click(function(){
+							searchParam.pageNo = 0;
+							searchParam.type = 1;
+							requestTotal = true;
+							inner.listTransferIn(searchParam);
+						});
 
-					//导出操作 
-					$("#" +tabId +"  .innerTransfer_list .btn-transfer-export").click(function(){
-						searchParam.type=1; 
-						var exportUrl ="" + url("findExcel","view") + "&searchParam="+encodeURIComponent(JSON.stringify(searchParam));
-						window.location.href=exportUrl;
-
-					});
-					
-					//切换我部转出
-					$("#" +tabId+" .innerTransfer_list .transferOut").click(function(){
-						searchParam.pageNo = 0;
-						searchParam.type = 1;
-						requestTotal = true;
-						inner.listTransferIn(searchParam);
-					});
-
-					//切换他部转入
-					$("#" +tabId+" .innerTransfer_list .transferIn").click(function(){
-						searchParam.pageNo = 0;
-						searchParam.type = 2;
-						requestTotal = true;
-						inner.listTransferIn(searchParam);
-					});
+						//切换他部转入
+						$("#" +tabId+" .innerTransfer_list .transferIn").click(function(){
+							searchParam.pageNo = 0;
+							searchParam.type = 2;
+							requestTotal = true;
+							inner.listTransferIn(searchParam);
+						});
+					}
 				}
 			})
 		},
@@ -636,10 +646,14 @@ define(function(require, exports) {
 					data:"",
 					dataType:'json',
 					success:function(data1){
-						map.lineProduct = JSON.parse(data1.lineProduct);
-						map.user = JSON.parse(data1.user);
-						map.businessGroup = JSON.parse(data1.businessGroup);
-						requestMain = false;
+						var result = showDialog(data1);
+						//如果正确则就执行
+						if(result){
+							map.lineProduct = JSON.parse(data1.lineProduct);
+							map.user = JSON.parse(data1.user);
+							map.businessGroup = JSON.parse(data1.businessGroup);
+							requestMain = false;
+						}
 					}
 				});
 			}
@@ -771,66 +785,62 @@ define(function(require, exports) {
 							
 						});
 
-			//分页--首页按钮事件
-			$("#" +tabId+" .transferIn-content .pageMode a.first").click(function(){
-				searchParam.pageNo = 0;
-				inner.listTransferIn(searchParam);
-			});
-			//分页--上一页事件
-			$("#" +tabId+" .transferIn-content .pageMode a.previous").click(function(){
-				var pageNo = parseInt(searchParam.pageNo);
-				var previous = pageNo - 1;
-				if(pageNo == 0){
-					previous = 0;
-				}
-				searchParam.pageNo = previous;
-				inner.listTransferIn(searchParam);
-			});   
-			//分页--下一页事件
-			$("#" +tabId+" .transferIn-content .pageMode a.next").click(function(){
-				var pageNo = parseInt(searchParam.pageNo);
-				var totalPage = parseInt(searchParam.totalPage);
-				var next =  pageNo + 1;
-				if(pageNo == totalPage-1){
-					next = pageNo ;
-				}
-				searchParam.pageNo = next;
-				inner.listTransferIn(searchParam);
-			});
-			//分页--尾页事件
-			$("#" +tabId+" .transferIn-content .pageMode a.last").click(function(){
-				var totalPage = parseInt(searchParam.totalPage);
-				var pageNo = 0;
-				if(totalPage==0){
-					pageNo = 0;
-				}else{
-					pageNo = totalPage - 1; 
-				}
-				searchParam.pageNo = pageNo;
-				inner.listTransferIn(searchParam);
-			});
-			//查看
-			$("#" +tabId+" .transferIn-content .btn-transfer-view").click(function(){
-				var id = $(this).attr("data-entity-id");
-				inner.view(id);
-			});
-			//编辑
-			$("#" +tabId+" .transferIn-content .btn-transfer-edit").click(function(){
-				var id = $(this).attr("data-entity-id");
-				inner.edit(id);
-			});
-		
-			//确认
-			$("#" +tabId+" .transferIn-content .btn-transfer-save").click(function(){
-				var id = $(this).attr("data-entity-id");
-				inner.saveTransferIn(id);
-			});
-			//拒绝
-			$("#" +tabId+" .transferIn-content .btn-transfer-refuse").click(function(){
-				var id = $(this).attr("data-entity-id");
-				inner.deleteTransferIn(id);
-				
-			});
+						//分页--首页按钮事件
+						$("#" +tabId+" .transferIn-content .pageMode a.first").click(function(){
+							searchParam.pageNo = 0;
+							inner.listTransferIn(searchParam);
+						});
+						//分页--上一页事件
+						$("#" +tabId+" .transferIn-content .pageMode a.previous").click(function(){
+							var pageNo = parseInt(searchParam.pageNo);
+							var previous = pageNo - 1;
+							if(pageNo == 0){
+								previous = 0;
+							}
+							searchParam.pageNo = previous;
+							inner.listTransferIn(searchParam);
+						});   
+						//分页--下一页事件
+						$("#" +tabId+" .transferIn-content .pageMode a.next").click(function(){
+							var pageNo = parseInt(searchParam.pageNo);
+							var totalPage = parseInt(searchParam.totalPage);
+							var next =  pageNo + 1;
+							if(pageNo == totalPage-1){
+								next = pageNo ;
+							}
+							searchParam.pageNo = next;
+							inner.listTransferIn(searchParam);
+						});
+						//分页--尾页事件
+						$("#" +tabId+" .transferIn-content .pageMode a.last").click(function(){
+							var totalPage = parseInt(searchParam.totalPage);
+							var pageNo = 0;
+							if(totalPage==0){
+								pageNo = 0;
+							}else{
+								pageNo = totalPage - 1; 
+							}
+							searchParam.pageNo = pageNo;
+							inner.listTransferIn(searchParam);
+						});
+						
+						//编辑
+						$("#" +tabId+" .transferIn-content .btn-transfer-edit").click(function(){
+							var id = $(this).attr("data-entity-id");
+							inner.edit(id);
+						});
+					
+						//确认
+						$("#" +tabId+" .transferIn-content .btn-transfer-save").click(function(){
+							var id = $(this).attr("data-entity-id");
+							inner.saveTransferIn(id);
+						});
+						//拒绝
+						$("#" +tabId+" .transferIn-content .btn-transfer-refuse").click(function(){
+							var id = $(this).attr("data-entity-id");
+							inner.deleteTransferIn(id);
+							
+						});
 
 		},
 

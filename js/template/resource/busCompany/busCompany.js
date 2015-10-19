@@ -208,7 +208,7 @@ define(function(require, exports) {
 							var td = $(this).parent().parent().parent();
 							var index = td.find("div").length;
 							var timeLimitDiv = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right\"><button class=\"btn  btn-sm btn-white del\"><i class=\"fa fa-minus bigger-110 icon-only\"></i></button></label></div>";
-							var contractPriceInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input style=\"width:100px;\" name=\"contractPrice\" type=\"text\"/><label>&nbsp;元</label></div>";
+							var contractPriceInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:4px;margin-bottom:7px;\"><input style=\"width:100px;\" name=\"contractPrice\" type=\"text\"/><label>&nbsp;元</label></div>";
 							td.next().append(contractPriceInput);
 							td.append(timeLimitDiv);
 							$busList.find(".datepicker").datepicker({
@@ -629,7 +629,7 @@ define(function(require, exports) {
 									var td = $(this).parent().parent().parent();
 									var index = td.find("div").length;
 									var timeLimitDiv = "<div data-index=\""+(index+1)+"\" data-entity-id=\"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right\"><button class=\"btn  btn-sm btn-white delete\"><i class=\"fa fa-minus bigger-110 icon-only\"></i></button></label></div>";
-									var contractPriceInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-top:2px\"><input style=\"width:100px;\" name=\"contractPrice\" maxlength=\"9\" type=\"text\" class=\"\"/><label>&nbsp;元</label></div>";
+									var contractPriceInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-top:4px;margin-bottom:7px;\"><input style=\"width:100px;\" name=\"contractPrice\" maxlength=\"9\" type=\"text\" class=\"\"/><label>&nbsp;元</label></div>";
 									td.next().append(contractPriceInput);
 									td.append(timeLimitDiv);
 									bindTimeAreaDelete();
