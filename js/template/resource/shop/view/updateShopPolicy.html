@@ -31,7 +31,7 @@
 								<tbody>
 									{{each policyData as policy i}}
 										<tr class="timeArea" data-entity-id="{{policy.id}}">
-										<td data-index="{{i+1}}" class="clearfix div-{{i+1}}" style="margin-bottom:3px">
+										<td data-index="{{i+1}}" class="clearfix div-{{i+1}}" style="margin-bottom:2px">
 											<div>
 												<input name="startTime" type="text" class="datepicker col-sm-5" value="{{policy.startTime | dateFormat:'yyyy-MM-dd'}}"/>
 												<label class="priceArea col-sm-2 center">&nbsp;至&nbsp;</label>
@@ -40,7 +40,7 @@
 										</td>
 										<td> 
 											{{each policy.costMoneyList as cost j}}
-											<div data-index="{{j+1}}" class="clearfix div-{{j+1}} shopPolicyPriceList" style="margin-bottom:3px">
+											<div data-index="{{j+1}}" class="clearfix div-{{j+1}} shopPolicyPriceList" style="margin-bottom:2px">
 												<input name="costMoneyStart" type="text" class="col-sm-4" value="{{cost.costMoneyStart}}" data-entity-id="{{cost.id}}" maxlength="6"/>
 												<label class="col-sm-2 control-label center">&nbsp;至&nbsp;</label>
 												<input name="costMoneyEnd" type="text" class="col-sm-4" value="{{cost.costMoneyEnd}}" maxlength="9" />
@@ -54,14 +54,14 @@
 										</td>
 										<td>
 											{{each policy.costMoneyList as cost j}}
-											<div data-index="{{j+1}}" class="clearfix div-{{j+1}}" style="margin-bottom:3px">
+											<div data-index="{{j+1}}" class="clearfix div-{{j+1}}" style="margin-bottom:7px">
 												<input name="guideRate" class="col-sm-12" type="text" value="{{cost.guideRate*100 | toFixed}}"  maxlength="4"/>
 											</div>
 											{{/each}}  
 										</td>
 										<td>
 											{{each policy.costMoneyList as cost j}}
-											<div data-index="{{j+1}}" class="clearfix div-{{j+1}}" style="margin-bottom:3px">
+											<div data-index="{{j+1}}" class="clearfix div-{{j+1}}" style="margin-bottom:7px">
 												<input name="travelAgencyRate" class="col-sm-12" type="text" value="{{cost.travelAgencyRate*100 | toFixed}}"  maxlength="4"/>
 											</div>
 											{{/each}}
