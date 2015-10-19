@@ -10,12 +10,14 @@
 	 <div class="form-horizontal" style="margin-top:20px;">
 		<label class="pull-left text-right control-label no-padding-right">来源:</label>
 		<div class="col-sm-1">
-			<select name="partnerAgencyId" class="col-sm-12">
+			<!-- <select name="partnerAgencyId" class="col-sm-12">
 				<option value=''>来源</option>
 				{{each partnerAgencyList as partnerAgency}}
 				<option value="{{partnerAgency.id}}" {{if searchParam.partnerAgencyId == partnerAgency.id}}selected="selected"{{/if}} >{{partnerAgency.travelAgencyName}}</option>
 				{{/each}}
-			</select>
+			</select> -->
+			<input type="text" class="col-sm-12 choosePartnerAgency" placeholder="来源" name="" />
+			<input type="hidden" name="fromPartnerAgencyId" value="">
 		</div>
 		<label class="pull-left text-right control-label no-padding-right">线路:</label>
 		<div class="col-sm-1">
