@@ -58,21 +58,36 @@ define(function(require, exports) {
 	  	    	        	type: 'null', 
 	  	    	        	errMsg: '总社名称不能为空'
 	  	    	        }]
-			},{//座机号码                                   
+						},{//座机号码                                   
+
 		    	       	$ele: $container.find('input[name="telNumber"]'),  
+ 
 		    	    	rules: [
+ 
 	  	    	        {
+	 
 	  	    	        	type: 'phone-num', 
+	 
 	  	    	        	errMsg: '座机号码格式不正确'
+	 
 	  	    	        }]
+	 
 			},{//传真号码                                   
+	 
 		    	       	$ele: $container.find('input[name="faxNumber"]'),  
+	 
 		    	    	rules: [
+	 
 	  	    	        {
+	 
 	  	    	        	type: 'phone-num', 
+	 
 	  	    	        	errMsg: '传真号码格式不正确'
+	 
 	  	    	        }]
+	 
 			}
+			},
 		];
 
 		$container.find('.partnerList').find('tr').each(function() {
