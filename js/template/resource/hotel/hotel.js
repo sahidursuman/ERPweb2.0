@@ -279,10 +279,10 @@ define(function(require, exports) {
 			    			});
 			    			hotelRoomJsonAdd.push(hotelRoomJson);
 			    		});
-			    		if(hotelRoomJsonAdd.length == 0){
+			    		/* if(hotelRoomJsonAdd.length == 0){
 			    			showMessageDialog($( "#confirm-dialog-message" ),"酒店房间不能为空");
 			    			return
-			    		}
+			    		} */
 			    		hotelRoomJsonAdd = JSON.stringify(hotelRoomJsonAdd);
 			    		console.log(hotelRoomJsonAdd.length);
 			    		
