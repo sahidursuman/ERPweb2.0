@@ -163,12 +163,12 @@
 												{{if bus.isChartered == 1}}
 													{{each bus.priceList as price i}}
 													<div data-index="{{i+1}}" class="clearfix div-{{i+1}}" style="margin-top:2px">
-														<input style="width:100px;" name="contractPrice" type="text" {{if bus.isChartered == 0}}readonly="readonly"{{/if}} value="{{price.contractPrice}}"/><label>&nbsp;元</label>
+														<input style="width:100px;" name="contractPrice" maxlength="9" type="text" {{if bus.isChartered == 0}}readonly="readonly"{{/if}} value="{{price.contractPrice}}"/><label>&nbsp;元</label>
 													</div>
 													{{/each}}
 												{{else}}
 													<div data-index="1" class="clearfix div-1" style="margin-top:2px">
-														<input style="width:100px;" name="contractPrice" type="text" readonly="readonly" value=""/><label>&nbsp;元</label>
+														<input style="width:100px;" name="contractPrice" maxlength="9" type="text" readonly="readonly" value=""/><label>&nbsp;元</label>
 													</div>
 												{{/if}}
 											</td>
@@ -215,7 +215,7 @@
 								<tbody>
 									{{each busCompany.driverList as driver}}
 										<tr data-entity-id="{{driver.id}}">
-											<td><input name="driverName" class="col-sm-12" type="text" value="{{driver.name}}"/></td>
+											<td><input name="driverName" class="col-sm-12" maxlength="32" type="text" value="{{driver.name}}"/></td>
 											<td>
 												<select name="gender">
 													<option {{if driver.gender == 0}}selected="selected"{{/if}} value="0">男</option>
@@ -231,7 +231,7 @@
 													<option {{if driver.status == 0}}selected="selected"{{/if}} value="0">停用</option>
 												</select>
 											</td>
-											<td><input name="remark" class="col-sm-12" type="text" value="{{driver.remark}}" /></td>
+											<td><input name="remark" class="col-sm-12" type="text" maxlength="1000" value="{{driver.remark}}" /></td>
 											<td style="width:70px">
 												<a class=" btn-driver-delete">删除</a>
 											</td>

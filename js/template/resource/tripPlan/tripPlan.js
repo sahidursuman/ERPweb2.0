@@ -190,6 +190,20 @@ define(function(require, exports) {
 						
 						var html = viewTemplate(data);
 						addTab(menuKey+"-view","查看发团安排",html);
+						$(document).on("mouseenter",".whichDaysContainer",function(){
+							var whichDay = $(this).attr("whichDay"),
+								$this = $(this)
+								startTime = $("#tab-arrange_all-view-content").find("span[name=startTime_Choose]").text(),
+								date = new Date(startTime.replace("-", "/").replace("-", "/"));
+							var timer = date.getTime()+(whichDay-1)*24*60*60*1000;
+							date.setTime(timer);
+							//var datetime = date.getFullYear()+ "-"+ ((date.getMonth() + 1) > 10 ? (date.getMonth() + 1) : "0"+ (date.getMonth() + 1))+ "-"+ (date.getDate() < 10 ? "0" + date.getDate() : date.getDate());
+							var datetime = date.getFullYear()+ "-"+ (date.getMonth() + 1) + "-"+ (date.getDate() < 10 ? "0" + date.getDate() : date.getDate());
+							layer.tips(datetime, $this, {
+					    		tips: [1, '#3595CC'],
+					    		time: 1500
+							});
+						})
 						
 					}
 				}
@@ -205,7 +219,6 @@ define(function(require, exports) {
 					globalLoadingLayer = openLoadingLayer();
 				},
 				success:function(data){
-					console.log(data);
 					layer.close(globalLoadingLayer);
 					var result = showDialog(data);
 					if(result){
@@ -214,20 +227,15 @@ define(function(require, exports) {
 								$this = $(this)
 								startTime = $("#tripPlan_addPlan_content").find("span[name=startTime_Choose]").text(),
 								date = new Date(startTime.replace("-", "/").replace("-", "/"));
-							console.log(whichDay)
-							console.log(whichDay-1)
 							var timer = date.getTime()+(whichDay-1)*24*60*60*1000;
-							console.log(timer)
 							date.setTime(timer);
-							console.log(date)
 							//var datetime = date.getFullYear()+ "-"+ ((date.getMonth() + 1) > 10 ? (date.getMonth() + 1) : "0"+ (date.getMonth() + 1))+ "-"+ (date.getDate() < 10 ? "0" + date.getDate() : date.getDate());
 							var datetime = date.getFullYear()+ "-"+ (date.getMonth() + 1) + "-"+ (date.getDate() < 10 ? "0" + date.getDate() : date.getDate());
-							console.log(datetime)
 							layer.tips(datetime, $this, {
 					    		tips: [1, '#3595CC'],
 					    		time: 1500
 							});
-						})	
+						})
 						var tripPlanInfo = JSON.parse(data.tripPlan),
 							 insuranceList = JSON.parse(data.insuranceList),
 							 hotelList = JSON.parse(data.hotelList),
@@ -289,7 +297,7 @@ define(function(require, exports) {
 			});	
 			tripPlan.dateTimePicker();  
 			var validator = rule.listTripPlanCheckor($("#tripPlan_addPlan_content"));  
-			$("#tripPlan_addPlan_insurance .addInsurance").on("click", tripPlan.addInsurance);
+			$("#tripPlan_addPlan_insurance .addInsurance").on("click",{validator:validator}, tripPlan.addInsurance);
 			//$("#tripPlan_addPlan_guide .addGuide").on("click", tripPlan.addGuide);
 			//$("#tripPlan_addPlan_bus .addBus").on("click", tripPlan.addBus);
 			$("#tripPlan_addPlan_restaurant .addRestaurant").on("click",{validator:validator},tripPlan.addRestaurant);   
@@ -324,7 +332,8 @@ define(function(require, exports) {
 			tripPlan.setChooseDays();
 		},
 		//添加保险安排
-		addInsurance : function(){
+		addInsurance : function(e){
+			var validator = e.data.validator;
 			var _this = $(this),
 				tableContainer = _this.parents(".ui-sortable-handle").find(".table tbody"),
 				html = '<tr><td><input type="text" name="insuranceName" class="col-sm-12 chooseInsurance bind-change"/><input type="hidden" name="insuranceId"/></td>' +
@@ -340,6 +349,9 @@ define(function(require, exports) {
 			tripPlan.bindDeleteEvent();
 			tripPlan.bindInsuranceChoose();
 			tripPlan.calculatePrice();
+			validator = rule.update(validator);
+
+
 		},
 		//添加导游安排
 		addGuide : function(){
@@ -1102,7 +1114,6 @@ define(function(require, exports) {
 	                    success: function(data) {
 							var result = showDialog(data);
 							if(result){
-		                    	console.log(data.price);
 		                    	parents.find("input[name=fee]").val(data.price);
 							}
 	                    }
@@ -1403,7 +1414,6 @@ define(function(require, exports) {
 	                    dataType: "json",
 	                    data: "id="+ui.item.id,
 	                    success: function(data) {
-	                    	console.log(data);
 	                    	layer.close(globalLoadingLayer);
 							var result = showDialog(data);
 							if(result){
@@ -1428,7 +1438,6 @@ define(function(require, exports) {
 					url:""+APP_ROOT+"back/selfpay.do?method=findAll&token="+$.cookie("token")+"&menuKey=resource_selfpay&operation=view",
 					dataType:"json",
 					success:function(data){
-						console.log(data);
 						layer.close(globalLoadingLayer);
 						var result = showDialog(data);
 						if(result){
@@ -1469,7 +1478,6 @@ define(function(require, exports) {
 	                    dataType: "json",
 	                    data: "id="+ui.item.id+"&whichDay="+whichDay+"&startTime="+startTime,
 	                    success: function(data) {
-	                    	console.log(data);
 	                    	layer.close(globalLoadingLayer);
 							var result = showDialog(data);
 							if(result){
@@ -1488,7 +1496,6 @@ define(function(require, exports) {
 	                    dataType: "json",
 	                    data: "id="+id,
 	                    success: function(data) {
-	                    	console.log(data);
 	                    	layer.close(globalLoadingLayer);
 							var result = showDialog(data);
 							if(result){
@@ -1754,11 +1761,6 @@ define(function(require, exports) {
 							shopPolicyId :tripPlan.getVal(shop.eq(i), "shopPolicyId"),
 							remark : tripPlan.getVal(shop.eq(i), "remark")
 						}
-						console.log(shopJson.id);
-						console.log(shopJson.whichDay);
-						console.log(shopJson.shopId);
-						console.log(shopJson.shopPolicyId);
-						console.log(shopJson.remark);
 						tripPlanJson.shopArrangeList.push(shopJson);
 					}
 				}

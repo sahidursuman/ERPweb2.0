@@ -92,19 +92,20 @@
 
 		<div class="form-horizontal col-sm-12 checkbox">
 			<div class="pull-left  no-padding-right">
-				<label class="control-label no-padding-right">游客短信发送:</label>
+				<label class="control-label no-padding-right">确认发团后游客短信设置:</label>
 				立即发送
-				<label>
+				<label style="padding-left:0px;">
 					<input type="radio" class="ace checked" checked="checked" value="0" name="executeTimeType">
 					<span class="lbl">
 					</span>
 				</label>
+				&nbsp;&nbsp;&nbsp;&nbsp;
 				定时发送
-				<label>
+				<label  style="padding-left:0px;">
 					<input type="radio" class="ace checked"  value="1" name="executeTimeType">
 					<span class="lbl">
 					</span>
-				</label> 
+				</label>  
 			</div>
 			<div class="col-sm-2 addMergePlanTime hide">
 				<input class="form-control col-sm-4 datetimepicker" type="text" name="executeTime" value="" />
@@ -152,7 +153,15 @@
 
 
 												    <td>{{touristGroupList.lineProduct.name}}</td>    
-													<td>{{touristGroupList.hotelLevel}}</td>
+													<td>
+														{{if touristGroupList.hotelLevel == 1}}三星以下{{/if}}
+														{{if touristGroupList.hotelLevel == 2}}三星{{/if}}
+														{{if touristGroupList.hotelLevel == 3}}准四星{{/if}}
+														{{if touristGroupList.hotelLevel == 4}}四星{{/if}}
+														{{if touristGroupList.hotelLevel == 5}}准五星{{/if}}
+														{{if touristGroupList.hotelLevel == 6}}五星{{/if}}
+														{{if touristGroupList.hotelLevel == 7}}五星以上{{/if}}
+													</td>
 													<td>{{touristGroupList.includeSelfPay}}</td>    
 
 													<td>

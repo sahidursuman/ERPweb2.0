@@ -39,8 +39,8 @@
 									</div>
 									<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>车辆品牌：</label>
 									<div class="col-sm-2">
-										<input class="col-sm-12 chooseBusCompany bind-change" type="text" name="needBusBrand" id="" value="{{busCompant.companyName}}" />
-										<input type="hidden" name="busBrandId" value="{{busCompant.id}}" />
+										<input class="col-sm-12 chooseBusCompany bind-change" type="text" name="needBusBrand" id="" value="{{bus.brand}}" />
+										<input type="hidden" name="busBrandId" value="" />
 									</div>
 									<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>车牌号：</label>
 									<div class="col-sm-2">
@@ -96,15 +96,16 @@
 
 		<div class="form-horizontal col-sm-12 checkbox">
 			<div class="pull-left  no-padding-right">
-				<label class="control-label no-padding-right">游客短信发送:</label>
+				<label class="control-label no-padding-right">确认发团后游客短信设置:</label>
 				立即发送
-				<label>
+				<label style="padding-left:0px;">
 					<input type="radio" class="ace checked" checked="" value="0" name="executeTimeType">
 					<span class="lbl">
 					</span>
 				</label>
+				&nbsp;&nbsp;&nbsp;&nbsp;
 				定时发送
-				<label>
+				<label style="padding-left:0px;">
 					<input type="radio" class="ace checked"  checked=""  value="1" name="executeTimeType">
 					<span class="lbl">
 					</span>

@@ -1803,9 +1803,9 @@ define(function(require, exports) {
 						    		var html=
 					    			"<tr>"+
 					    			"<td><span name=\"type\" value=\"0\">其他费用</span></td>"+
-					    			"<td><input  name=\"discribe\" type=\"text\" class=\"col-sm-12  no-padding-right\" /></td>"+
-					    			"<td><input  name=\"count\" type=\"text\" class=\"col-sm-12  no-padding-right costCount\" /></td>"+
-					    			"<td><input  name=\"otherPrice\" type=\"text\" class=\"col-sm-12  no-padding-right costPrice\" /></td>"+
+					    			"<td><input  name=\"discribe\" type=\"text\" class=\"col-sm-12  no-padding-right\" maxlength=\"500\" /></td>"+
+					    			"<td><input  name=\"count\" type=\"text\" class=\"col-sm-12  no-padding-right costCount\" maxlength=\"10\" /></td>"+
+					    			"<td><input  name=\"otherPrice\" type=\"text\" class=\"col-sm-12  no-padding-right costPrice\" maxlength=\"10\" /></td>"+
 					    			"<td><a class=\"cursor addCost-delete\">删除</a></td>"+
 					    			"</tr>";
 						    		$(".innerEditFeeMainForm .innerEditFeeTbody").append(html);

@@ -84,7 +84,7 @@
 									</div>
 									<label class="col-sm-1 control-label no-padding-right">集合时间：</label>
 									<div class="col-sm-2">
-										<input class="form-control col-sm-12" type="text" name="setPlaceTime" value="{{tripPlan.setPlaceTime}}" />
+										<input class="form-control col-sm-12 dataTimePicker" type="text" name="setPlaceTime" value="{{tripPlan.setPlaceTime}}" />
 									</div>
 								</div>
 							</div>
@@ -97,21 +97,23 @@
 
 		<div class="form-horizontal col-sm-12 checkbox">
 			<div class="pull-left  no-padding-right">
-				<label class="control-label no-padding-right">游客短信发送:</label>
+				<label class="control-label no-padding-right">确认发团后游客短信设置:</label>
+				
 				定时发送
-				<label>
+				<label style="padding-left:0px;">
 					<input type="radio"  checked="checked" class="ace buyInsurance-status" disabled="" value="{{tripPlan.executeTimeType}}" name="executeTimeType">
 					<span class="lbl">
 					</span>
 				</label>
+                &nbsp;&nbsp;&nbsp;&nbsp;
 				立即发送
-				<label>
+				<label style="padding-left:0px;">  
 					<input type="radio" class="ace buyInsurance-status" disabled="" value="{{tripPlan.executeTimeType}}" name="executeTimeType">
 					<span class="lbl">
 					</span>
 				</label>
 			</div>
-			<div class="col-sm-2 newAddTripTimer hide">
+			<div class="col-sm-2 newAddTripTimer">
 				<input class="form-control col-sm-4 datetimepicker" disabled="" type="text" name="executeTime" value="{{tripPlan.executeTime}}" />
 			</div>
         </div>

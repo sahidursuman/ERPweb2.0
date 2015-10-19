@@ -14,7 +14,12 @@ define(function(require, exports) {
     
     var count = {
         init: function() {
-            count.initCount();
+            var today = (new Date()).Format('yyyy-MM-dd'),
+                firstDay = today.split('-');
+    
+            firstDay[2] = '01';
+
+            count.initCount('','','','','', firstDay.join('-'), today);
         },
         initCount: function(tripNumber,lineProductId,lineProductName,guideId,guideName,startTime,endTime,status) {
             // init page
@@ -24,6 +29,7 @@ define(function(require, exports) {
                 data: {
                     "tripNumber":tripNumber,
                     "lineProductId":lineProductId,
+                    "lineProductName": lineProductName,
                     "guideId":guideId,
                     "guideName":guideName,
                     "startTime":startTime,
@@ -1722,13 +1728,13 @@ define(function(require, exports) {
 					layer.close(globalLoadingLayer);
 					var result = showDialog(data);
 					if(result){
-						var outBusList = JSON.parse(data.outBusList);
-						data.outBusList = outBusList;
-						var outHotelList = JSON.parse(data.outHotelList);
-						data.outHotelList = outHotelList;
-						var outTicketList = JSON.parse(data.outTicketList);
-						data.outTicketList = outTicketList;
-						
+                        data.receiveGroup = JSON.parse(data.receiveGroup);
+                        data.isNeedArriveService = hasData(data.receiveGroup);
+                        data.bus = JSON.parse(data.bus);
+                        data.isNeedBus = (data.bus.length > 0)? 1 : 0;
+                        data.sendGroup = JSON.parse(data.sendGroup);
+                        data.isNeedLeaveService = hasData(data.sendGroup);
+
 						var html = outDetailTempLate(data);
 						var financialOutDetail = addTab(menuKey + "outDetail", "中转明细", html);
 						
@@ -1736,6 +1742,20 @@ define(function(require, exports) {
 							var id = $(this).attr('data-entity-id');
 							count.exportOutDetail(id);
 						});
+
+                        function hasData(src)  {
+                            var res = 0;
+
+                            if (!!src)  {
+                                if (!!src.outBusList && src.outBusList.length) {    res = 1; }
+                                else if (!!src.outHotelList && src.outHotelList.length) {    res = 1; }
+                                else if (!!src.outOtherList && src.outOtherList.length) {    res = 1; }
+                                else if (!!src.outRestaurantList && src.outRestaurantList.length) {    res = 1; } 
+                                else if (!!src.outTicketList && src.outTicketList.length) {    res = 1; } 
+                            }
+
+                            return res;
+                        }
 					}
 				}
 			});

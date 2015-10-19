@@ -1126,7 +1126,7 @@ define(function(require, exports) {
 			$(obj).autocomplete({
 				minLength: 0,
 				change: function(event, ui) {
-					if (!!ui.item)  {
+					if (!ui.item)  {
 						$(this).val('').nextAll('input[name="fromPartnerAgencyId"]').val('');
 					}
 				},
@@ -1646,29 +1646,34 @@ define(function(require, exports) {
 			    		}else{
 					    	var dataArray = data.split(/\r?\n/);
 					    	if(dataArray.length > 0){
+					    		var memberInfo, memberInfoArray, name, mobileNumber, idCardNumber;
 					    		for(var i=0;i<dataArray.length;i++){
-					    			var memberInfo = dataArray[i];
-					    			var memberInfoArray = memberInfo.split(/\s+/);
-					    			console.log(memberInfoArray);
-					    			var name = "";
-					    			var mobileNumber = "";
-					    			var idCardNumber = "";
+					    			memberInfo = trim(dataArray[i]);
+					    			memberInfoArray = memberInfo.split(/\s+/);
+
+					    			name = "";
+					    			mobileNumber = "";
+					    			idCardNumber = "";
 					    			if(memberInfoArray.length == 1){
 					    				name = memberInfoArray[0];
 					    			}
 					    			else if(memberInfoArray.length == 2){
 					    				name = memberInfoArray[0];
-					    				if(/^(\d{15}$|^\d{18}$|^\d{17}(\d|X|x))$/.test(memberInfoArray[1])){
-					    					idCardNumber = memberInfoArray[1];
-					    				}
-					    				else{
-					    					mobileNumber = memberInfoArray[1];
-					    				}
+										numReg(memberInfoArray[1]);
 					    			}
 					    			else if(memberInfoArray.length == 3){
 					    				name = memberInfoArray[0];
-					    				mobileNumber = memberInfoArray[1];
-					    				idCardNumber = memberInfoArray[2];
+										numReg(memberInfoArray[1]);
+										numReg(memberInfoArray[2]);
+					    			}
+
+					    			function numReg(str) {
+					    				if(/^(\d{15}$|^\d{18}$|^\d{17}(\d|X|x))$/.test(str)){
+					    					idCardNumber = str;
+					    				}
+					    				else if(/^((13[0-9])|(14[0-9])|(15[0-9])|(16[0-9])|(17[0-9])|(18[0-9])|(19[0-9]))\d{8}$/.test(str)){
+					    					mobileNumber = str;
+					    				}
 					    			}
 					    			// 如果第一行数据为空，则删除第一行
 					    			
