@@ -798,8 +798,8 @@ define(function(require, exports) {
 			    	'<input name="costMoneyStart" maxlength=\"9\" type=\"text\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label>'+
 			    	'<input name=\"costMoneyEnd\" maxlength=\"9\" type=\"text\" style=\"width:100px\"/><label class=\"priceArea\" style=\"float:right\">'+
 			    	'<button class=\"btn btn-success btn-sm btn-white add\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i>'+
-			    	'</button></label></div></td><td><div data-index="1" class="clearfix div-1" style="margin-bottom:3px"><input name="guideRate" maxlength=\"4\" type="text"/>'+
-			    	'</div></td><td><div data-index="1" class="clearfix div-1" style="margin-bottom:3px"><input name="travelAgencyRate" maxlength=\"4\" type="text"/>'+
+			    	'</button></label></div></td><td><div data-index="1" class="clearfix div-1" style="margin-bottom:3px"><input name="guideRate"  maxlength=\"4\" type="text"/>'+
+			    	'</div></td><td><div data-index="1" class="clearfix div-1" style="margin-bottom:3px"><input name="travelAgencyRate" maxlength=\"4\"  type="text"/>'+
 			    	'</div></td><td style=\"width:70px\"><button data-entity-id=\"\" class=\"btn btn-xs btn-danger btn-shop-policy-delete\">'+
 			    	'<i class=\"ace-icon fa fa-trash-o bigger-120\"></i></button></td></tr>';
 //			    	$(".policyForm .shopPolicyList tbody").append(policyHtml);
@@ -870,8 +870,8 @@ define(function(require, exports) {
 			    	'<input name="costMoneyStart" type=\"text\" maxlength=\"9\" class="col-sm-4"/><label class="col-sm-2 control-label center">&nbsp;至&nbsp;</label>'+
 			    	'<input name=\"costMoneyEnd\" type=\"text\" maxlength=\"9\" class="col-sm-4"/><label class=\"priceArea col-sm-2\">'+
 			    	'<button class=\"btn btn-success btn-sm btn-white add\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i>'+
-			    	'</button></label></div></td><td><div data-index="1" class="clearfix div-1" style="margin-bottom:3px"><input name="guideRate" maxlength=\"4\" type="text"/>'+
-			    	'</div></td><td><div data-index="1" class="clearfix div-1" style="margin-bottom:3px"><input name="travelAgencyRate" type="text" maxlength=\"4\"/>'+
+			    	'</button></label></div></td><td><div data-index="1" class="clearfix div-1" style="margin-bottom:3px"><input name="guideRate" class="col-sm-12" maxlength=\"4\" type="text"/>'+
+			    	'</div></td><td><div data-index="1" class="clearfix div-1" style="margin-bottom:3px"><input name="travelAgencyRate" type="text" class="col-sm-12" maxlength=\"4\"/>'+
 			    	'</div></td><td style=\"width:70px\"><button data-entity-id=\"\" class=\"btn btn-xs btn-danger btn-shop-policy-delete\">'+
 			    	'<i class=\"ace-icon fa fa-trash-o bigger-120\"></i></button></td></tr>';
 //			    	$(".policyForm .shopPolicyList tbody").append(policyHtml);
