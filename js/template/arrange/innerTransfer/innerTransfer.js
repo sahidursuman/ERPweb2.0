@@ -1,5 +1,5 @@
 define(function(require, exports) {
-	//var rule = require("./rule"); 
+	var rule = require("./rule"); 
 	var menuKey = "arrange_inner_Transfer",
 	listTemplate = require("./view/list"),
 	listTransferInTemplate=require("./view/listTransferIn"),
@@ -367,30 +367,39 @@ define(function(require, exports) {
 					layer.close(globalLoadingLayer);
 					data.innerTransfer = JSON.parse(data.innerTransfer);
 					data.businessGroup = JSON.parse(data.businessGroup);
-					var html = editTemplate(data);
+					var html = editTemplate(data),
+					validator;
 					if($("#tab-"+menuKey+"-edit-content").length > 0) {
 						addTab(menuKey+"-edit","修改内转信息");
 						if(!!inner.edited["edit"] && inner.edited["edit"] != ""){
 							addTab(menuKey+"-edit","修改内转信息");
+							rule.transferCheckor($(".inner-edit"));
 							showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
 								 inner.saveEditTranIn(0);
 								 inner.edited["edit"] = "";
 								 addTab(menuKey+"-edit","修改内转信息",html);
+								 validator=rule.transferCheckor($(".inner-edit"));
 							 },function(){
 								 addTab(menuKey+"-edit","修改内转信息",html);
 								 inner.edited["edit"] = "";
+								 validator=rule.transferCheckor($(".inner-edit"));
 							 });
 						 }else{
 							addTab(menuKey+"-edit","修改内转信息",html);
+							validator=rule.transferCheckor($(".inner-edit"));
 						 }
 					}else{
 						addTab(menuKey+"-edit","修改内转信息",html);
+						validator=rule.transferCheckor($(".inner-edit"));
 					}
 					$("#tab-"+menuKey+"-edit-content").on("change",function(){
 						inner.edited["edit"] = "edit"; 
 					})
 					//新增&&智能计算
-					inner.innitAddFee();
+					inner.innitAddFee(validator);
+
+					rule.update(validator);
+
 					$obj=$("#tab-arrange_inner_Transfer-edit-content");
 
 					//绑定删除分团转客信息
@@ -401,6 +410,8 @@ define(function(require, exports) {
 					});
 				   
 					$obj.find(".btn-saveTransoutInfo").click(function(){
+					    // 表单校验
+				        if (!validator.form()) { return; }
 						inner.saveEditTranIn(1);
 
 					})
@@ -420,7 +431,7 @@ define(function(require, exports) {
 			var $obj=$("#tab-arrange_inner_Transfer-edit-content");
 
 			function getValParam (name){
-				var val = $("#tab-arrange_inner_Transfer-edit-content").find("[name="+name+"]").val();
+				var val = $obj.find("[name="+name+"]").val();
 				return val;
 			}
 
@@ -488,20 +499,21 @@ define(function(require, exports) {
 		},
 
 
-		innitAddFee:function(){  
+		innitAddFee:function(validator){  
 			var $obj=$("#tab-arrange_inner_Transfer-edit-content");
 			//给新增费用绑定事件
 			$obj.find(".btn-transfer-addCost").click(function(){
 				var html="<tr class=\"transferFee1SelectId\">"+
 				"<td><span name=\"type\" value=\"0\">其他费用</span></td>"+
-				"<td><input  name=\"discribe\" type=\"text\" class=\"col-sm-12  no-padding-right\" /></td>"+
-				"<td><input  name=\"count\" type=\"text\" class=\"col-sm-12  no-padding-right count\" /></td>"+
-				"<td><input  name=\"price\" type=\"text\" class=\"col-sm-12  no-padding-right price\" /></td>"+
+				"<td><input  name=\"discribe\" type=\"text\" class=\"col-sm-10  no-padding-right\" /></td>"+
+				"<td><input  name=\"count\" type=\"text\" class=\"col-sm-10  no-padding-right count\" /></td>"+
+				"<td><span class=\"necessary  pull-left col-sm-2\"></span><input  name=\"price\" type=\"text\" class=\"col-sm-10  no-padding-right price\" /></td>"+
 				"<td><a class=\"cursor btn-edittransfer-delete\">删除</a></td>"+
 				"</tr>";
 				$obj.find(".addTransferCost").append(html);
-			
-				
+				//表单验证
+				rule.update(validator);
+
 				//绑定删除分团转客信息
 				$(".btn-edittransfer-delete").off().on("click",function(){
 					var tr =$(this).parent().parent();
@@ -914,7 +926,7 @@ define(function(require, exports) {
 						click: function() {
 		
 							$.ajax({
-								url:""+APP_ROOT+"back/innerTransfer.do?method=delete&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=delete",
+								url:""+APP_ROOT+"back/innerTransfer.do?method=refuse&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=delete",
 								type:"POST",
 								data:"id="+id + "&isDelete=1",
 								dataType:"json",
