@@ -534,9 +534,13 @@ input,select{
     margin-left: 8px;
 }
  .add{
-     margin-top: -3px;
+     /*margin-top: -3px;*/
     padding-top: 5px !important;
 }
+ .addScenice{
+     margin-top: -3px;
+     padding-top: 5px !important;
+ }
  .delete{
      margin-left: 3px;
      padding-top: 5px !important;
@@ -570,3 +574,6 @@ input,select{
 /*.table-hover tr th{*/
     /*background-color: ;*/
 /*}*/
+.delSelf{
+    line-height: 20px;
+}
