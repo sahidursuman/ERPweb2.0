@@ -7,7 +7,6 @@
 						<i class="fa fa-paper-plane fa-2"></i> 我部转出
 					</a>
 				</li>
-
 				<li>
 					<a data-toggle="tab" href="#transferIn" class="transferIn" aria-expanded="true" data-value="2">
 						<i class="fa fa-hourglass"></i> 他部转入
@@ -47,7 +46,7 @@
 									<div class="col-xs-2">
 										<div class="col-xs-12">
 											<div class="input-group">
-												<input class="col-xs-12 datetimepicker" name="startTime" placeholder="出游起始日期" value="{{startDay}}" type="text" />
+												<input class="col-xs-12 datepicker" name="startTime" placeholder="出游起始日期" value="{{startDay}}" type="text" />
 												<span class="input-group-addon">
 														<i class="fa fa-calendar"></i>
 													</span>
@@ -58,7 +57,7 @@
 									<div class="col-xs-2">
 										<div class="col-xs-12">
 											<div class="input-group">
-												<input class="col-xs-12 datetimepicker" name="endTime" placeholder="出游结束日期" value="" type="text" />
+												<input class="col-xs-12 datepicker" name="endTime" placeholder="出游结束日期" value="" type="text" />
 												<span class="input-group-addon">
 														<i class="fa fa-calendar"></i>
 													</span>
@@ -78,7 +77,6 @@
 											{{/each}}
 										</select>
 									</div>
-
 									<label class="control-label no-padding-right pull-left">联系人：</label>
 									<div class="col-sm-1">    
 										<select name="creator" class="col-xs-12">
@@ -90,8 +88,6 @@
 											{{/each}}
 										</select>
 									</div>
-
-
 									<label class="control-label no-padding-right pull-left">状态：</label>
 									<div class="col-sm-1">
 										<select name="status" class="col-xs-12">
@@ -101,8 +97,6 @@
 											<option value="2" {{if searchParam!=null}}{{if searchParam.status==2}}selected="selected" {{/if}}{{/if}}>已拒收</option>
 										</select>
 									</div>
-
-
 									<button class="btn-sm btn-transferOut-search search-btn">
 										<i class="ace-icon fa fa-search"></i> 搜索
 									</button>
@@ -138,7 +132,7 @@
 										   <td></td>
 										   <td></td>
 										{{/if}} {{if rs.touristGroup != null}}
-										<td>{{rs.touristGroup.startTime}}</td>
+										<td>{{rs.touristGroup.startTime | dateFormat: 'yyyy-MM-dd' }}</td>
 										<td>{{if rs.touristGroup.contactMember!=null}}{{rs.touristGroup.contactMember.name}}{{/if}}</td>
 										<td>{{rs.touristGroup.adultCount}}大{{rs.touristGroup.childCount}}小</td>
 										{{else}}
