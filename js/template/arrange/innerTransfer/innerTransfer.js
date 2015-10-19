@@ -662,9 +662,7 @@ define(function(require, exports) {
 		   })	    
 		},
 
-<<<<<<< HEAD
 		transferInfindPager:function(searchParam){
-=======
 					//分页--首页按钮事件
 						$("#" +tabId+" .transferIn-content .pageMode a.first").click(function(){
 							searchParam.pageNo = 0;
@@ -725,7 +723,6 @@ define(function(require, exports) {
 							inner.deleteTransferIn(id);
 							
 						});
->>>>>>> 27f1a3b480c6e5323a02e0708895423e7f449e30
 
 			//分页--首页按钮事件
 			$("#" +tabId+" .transferIn-content .pageMode a.first").click(function(){
