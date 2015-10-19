@@ -176,7 +176,7 @@ define(function(require,exports){
 					    var $checkId = $("#" +"tab-"+checkTabId+"-content");
 					    
 					    var validator;// #tab-financial_innerTransfer_in-checking-content
-					    				// #tab-financial_innerTransfer_in-checking-content
+					    				// #tab-financial_innerTransfer_in-checking-content  
 					    
 					   
 						//判断页面是否存在
@@ -596,6 +596,7 @@ define(function(require,exports){
 	    	},
 			save : function(saveType){
 				if(saveType == "checking"){
+					
 					InnerTransferIn.saveCheckingData(1)
 				} else if(saveType == "blance"){
 					InnerTransferIn.saveBlanceData(1);
