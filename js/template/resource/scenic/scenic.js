@@ -115,9 +115,10 @@ define(function(require, exports) {
 			    type: 1,
 			    title:"新增景区信息",
 			    skin: 'layui-layer-rim', //加上边框
-			    area: ['1190px', '700px'], //宽高
+			    area: '1190px', //宽高
 			    zIndex:1028,
 			    content: html,
+				scrollbar: false,    // 推荐禁用浏览器外部滚动条
 			    success:function(){
 			    	var $obj = $(".addScenicContainer .scenicMainForm"),
 			    		$project = $(".addScenicContainer .scenicProjectForm");
@@ -167,6 +168,8 @@ define(function(require, exports) {
 			    				"<td style=\"width:70px\"><a data-entity-id=\"\" class=\" btn-scenic-standard-delete\">删除</a></td>" +
 			    				"</tr>";
 			    		$project.find(".scenicItemStandardList tbody").append(html);
+						// 再调整对话框的高度
+						$(window).trigger('resize');
 			    		//对景区管理的项目列表校验
 			    		itemValidator = rule.checkItems($(".addScenicContainer .scenicItemStandardList"));
 			    		//给餐标列表删除按钮绑定事件
@@ -327,9 +330,10 @@ define(function(require, exports) {
 						    type: 1,
 						    title:"编辑景区信息",
 						    skin: 'layui-layer-rim', //加上边框
-						    area: ['1190px', '700px'], //宽高
+						    area:'1190px', //宽高
 						    zIndex:1028,
 						    content: html,
+							scrollbar: false,    // 推荐禁用浏览器外部滚动条
 						    success:function(){
 						    	var $obj = $(".updateScenicContainer .scenicMainForm"),
 					    			$project = $(".updateScenicContainer .scenicProjectForm");
@@ -451,6 +455,8 @@ define(function(require, exports) {
 						    				"<td style=\"width:70px\"><a data-entity-id=\"\" class=\"btn-scenic-standard-delete\">删除</a></td>" +
 						    				"</tr>";
 						    		$project.find(".scenicItemStandardList tbody").append(html);
+									// 再调整对话框的高度
+									$(window).trigger('resize');
 						    		//项目列表表单验证
 						    		itemsValidator = rule.checkItems($(".updateScenicContainer .scenicItemStandardList"));
 							    		//给餐标列表删除按钮绑定事件
