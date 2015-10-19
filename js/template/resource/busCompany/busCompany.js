@@ -6,8 +6,6 @@ define(function(require, exports) {
 		updateTemplate = require("./view/update"),
 		viewTemplate = require("./view/view"),
 		tabId = "tab-"+menuKey+"-content";
-
-
 	var busCompany = {
 		searchData : {
 			companyName : "",
@@ -111,7 +109,7 @@ define(function(require, exports) {
 				type: 1,
 				title:"新增车队",
 				skin: 'layui-layer-rim', //加上边框
-				area: ['70%', '700px'], //宽高
+				area: '70%', //宽高
 				zIndex:1028,
 				content: html,
 				success:function(){
@@ -158,7 +156,7 @@ define(function(require, exports) {
 							"<td><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input style=\"width:100px;\" name=\"contractPrice\" maxlength=\"9\" type=\"text\" readonly=\"readonly\"/><label>&nbsp;元</label></div></td>" +
 							"<td><input name=\"remark\"  maxlength=\"1000\"  type=\"text\" class=\"col-sm-12\"/></td><td style=\"width:70px\"><a class=\"btn-xs btn-bus-delete\">删除</a></td></tr>";
 						$busList.find("tbody").append(html);
-
+						$(window).trigger('resize');
 						$busList.find("select[name=isChartered]").change(function(){
 							var $parents = $(this).parent().parent();
 							if($(this).val() == 1){
@@ -209,8 +207,8 @@ define(function(require, exports) {
 						$busList.find(".timeArea button.add").unbind().click(function(){
 							var td = $(this).parent().parent().parent();
 							var index = td.find("div").length;
-							var timeLimitDiv = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right\"><button class=\"btn  btn-sm btn-white del\"><i class=\"fa fa-minus bigger-110 icon-only\"></i></button></label></div>";
-							var contractPriceInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:4px;margin-bottom:7px;\"><input style=\"width:100px;\" name=\"contractPrice\" type=\"text\"/><label>&nbsp;元</label></div>";
+							var timeLimitDiv = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px;\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right\"><button class=\"btn  btn-sm btn-white del\"><i class=\"fa fa-minus bigger-110 icon-only\"></i></button></label></div>";
+							var contractPriceInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:7px;\"><input style=\"width:100px;\" name=\"contractPrice\" type=\"text\"/><label>&nbsp;元</label></div>";
 							td.next().append(contractPriceInput);
 							td.append(timeLimitDiv);
 							$busList.find(".datepicker").datepicker({
@@ -432,7 +430,7 @@ define(function(require, exports) {
 							type: 1,
 							title:"修改车队",
 							skin: 'layui-layer-rim', //加上边框
-							area: ['70%', '750px'], //宽高
+							area: '70%', //宽高
 							zIndex:1028,
 							content: html,
 							success:function(){
@@ -631,7 +629,7 @@ define(function(require, exports) {
 									var td = $(this).parent().parent().parent();
 									var index = td.find("div").length;
 									var timeLimitDiv = "<div data-index=\""+(index+1)+"\" data-entity-id=\"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right\"><button class=\"btn  btn-sm btn-white delete\"><i class=\"fa fa-minus bigger-110 icon-only\"></i></button></label></div>";
-									var contractPriceInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-top:4px;margin-bottom:7px;\"><input style=\"width:100px;\" name=\"contractPrice\" maxlength=\"9\" type=\"text\" class=\"\"/><label>&nbsp;元</label></div>";
+									var contractPriceInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-top:7px;\"><input style=\"width:100px;\" name=\"contractPrice\" maxlength=\"9\" type=\"text\" class=\"\"/><label>&nbsp;元</label></div>";
 									td.next().append(contractPriceInput);
 									td.append(timeLimitDiv);
 									bindTimeAreaDelete();
@@ -650,7 +648,7 @@ define(function(require, exports) {
 									var html = "<tr><td><input  name=\"licenseNumber\" type=\"text\" class=\"col-sm-12\" /></td><td><input name=\"brand\" maxlength=\"100\" type=\"text\" class=\"col-sm-12\" /></td><td><input maxlength=\"3\" name=\"seatCount\" type=\"text\" class=\"col-sm-12\" value=\"1\"/></td><td class=\"col-sm-1\"><div class=\"input-group col-sm-12\"><input name=\"buyTime\" type=\"text\" class=\"datepicker\" style='width: 130px' /><span class=\"input-group-addon\"><i class=\"fa fa-calendar\"></i></span></div></td><td><select name=\"isChartered\"><option value=\"1\">是</option><option value=\"0\" selected=\"selected\">否</option></select></td>" +
 										"<td class=\"time\">" +
 										"<div data-index=\"1\" data-entity-id=\"\" class=\"clearfix div-1\" style=\"margin-top:2px\">" +
-										"<input name=\"startTime\" type=\"text\" readonly=\"readonly\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" readonly=\"readonly\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea hide\" style=\"float:right\"><button class=\"btn  btn-sm btn-white add\"><i class=\"fa fa-sort-asc bigger-110 icon-only\"></i></button></label></div>" +
+										"<input name=\"startTime\" type=\"text\" readonly=\"readonly\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" readonly=\"readonly\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea hide\" style=\"float:right\"><button class=\"btn  btn-sm btn-white add\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i></button></label></div>" +
 										"</td>" +
 										"<td class=\"price\">" +
 										"<div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input style=\"width:100px;\" name=\"contractPrice\" maxlength=\"9\" type=\"text\" readonly=\"readonly\" /><label>&nbsp;元</label></div>" +
@@ -673,7 +671,7 @@ define(function(require, exports) {
 										var td = $(this).parent().parent().parent();
 										var index = td.find("div").length;
 										var timeLimitDiv = "<div data-index=\""+(index+1)+"\" data-entity-id=\"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right\"><button class=\"btn  btn-sm btn-white delete\"><i class=\"fa fa-minus bigger-110 icon-only\"></i></button></label></div>";
-										var contractPriceInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-top:2px\"><input style=\" width: 100px;\" name=\"contractPrice\" type=\"text\" value=\"\"/><label>&nbsp;元</label></div>";
+										var contractPriceInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-top:7px\"><input style=\" width: 100px;\" name=\"contractPrice\" type=\"text\" value=\"\"/><label>&nbsp;元</label></div>";
 
 										td.next().append(contractPriceInput);
 										td.append(timeLimitDiv);
