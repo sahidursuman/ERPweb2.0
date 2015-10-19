@@ -78,7 +78,7 @@
                 <td><a href="javascript:void(0)" class="showPerson" data-entity-id = "{{turnProfit.touristGroupId}}">{{turnProfit.adultCount}}大{{turnProfit.childCount}}</a></td>
                 <td>{{turnProfit.partnerAgencyName}}</td>
                 <td><a href="javascript:void(0)" class="showIncomeDetail" data-entity-id = "{{turnProfit.touristGroupId}}">{{turnProfit.needInComeMoney}}</a></td>
-                <td>{{turnProfit.change}}</td>
+                <td>{{if turnProfit.change == ""}}无{{else}}{{turnProfit.change}}{{/if}}</td>
                 <td><a href="javascript:void(0)" class="showChangeNeedPayDetail"  data-entity-id = "{{turnProfit.touristGroupId}}">{{turnProfit.changeNeedPayMoney}}</a></td>
                 <td>{{turnProfit.transferPartnerAgencyName}}</td> 
                 <td>
