@@ -320,11 +320,18 @@ define(function(require, exports) {
 							inner.delTransferData(id,tr);
 						});
 
+						//内转管理关闭Tab
+						$obj.find(".btn-cancelTransfer").off().on("click",function(){
+							closeTab(menuKey+"-edit");
+
+						});
+
+
 					   
 					    $obj.find(".btn-saveTransoutInfo").click(function(){
 					    	inner.saveEditTranIn();
 
-					    })
+					    });
 
 					}
 				});
