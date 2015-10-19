@@ -610,7 +610,7 @@ function listMenu(menuTemplate){
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/partnerAgency/partnerAgency.js?version=",function(partnerAgency){
-						partnerAgency.listPartnerAgency(0,"","");
+						partnerAgency.listPartnerAgency(0,"",1);
 					});
 				});
 
@@ -620,7 +620,7 @@ function listMenu(menuTemplate){
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/lineProduct/lineProduct.js",function(lineProduct){
-						lineProduct.listLineProduct(0,"","");
+						lineProduct.listLineProduct(0,"",1);
 						modals["resource_lineProduct"] = lineProduct;
 					});
 					$("#main-container")[0].index = 0;
@@ -643,7 +643,7 @@ function listMenu(menuTemplate){
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/travelLine/travelLine.js",function(travelLine){
-						travelLine.listTravelLine(0,"","");
+						travelLine.listTravelLine(0,"",1);
 						modals["resource_travelLine"] = travelLine;
 					});
 				});
