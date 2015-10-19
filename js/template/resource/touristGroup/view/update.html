@@ -322,7 +322,13 @@
 										<div class="form-group">
 											<label class="col-sm-3 control-label no-padding-right">班次时间：</label>
 											<div class="col-sm-9">
-												<input name="arriveShiftTime" type="text" class="col-sm-8" value="{{if touristGroupDetail.isNeedArriveService==1}}{{if touristGroupDetail.outRemarkArrange != null}}{{touristGroupDetail.outRemarkArrange.arriveShiftTime}}{{/if}}{{/if}}" />
+
+												<div class="input-group">
+													<input type="text" value="{{if touristGroupDetail.isNeedArriveService==1}}{{if touristGroupDetail.outRemarkArrange != null}}{{touristGroupDetail.outRemarkArrange.arriveShiftTime}}{{/if}}{{/if}}" name="arriveShiftTime" class="col-sm-12 date-picker datepicker" />
+													<span class="input-group-addon">
+														<i class="fa fa-calendar"></i>
+													</span>
+												</div>
 											</div>
 										</div>
 									</div>
@@ -376,7 +382,13 @@
 										<div class="form-group">
 											<label class="col-sm-3 control-label no-padding-right">班次时间：</label>
 											<div class="col-sm-9">
-												<input name="leaveShiftTime" type="text" class="col-sm-8" value="{{if touristGroupDetail.isNeedLeaveService==1}}{{if touristGroupDetail.outRemarkArrange != null}}{{touristGroupDetail.outRemarkArrange.leaveShiftTime}}{{/if}}{{/if}}" />
+												<div class="input-group">
+													<input name="leaveShiftTime" type="text" class="col-sm-12  date-picker datepicker" value="{{if touristGroupDetail.isNeedLeaveService==1}}{{if touristGroupDetail.outRemarkArrange != null}}{{touristGroupDetail.outRemarkArrange.leaveShiftTime}}{{/if}}{{/if}}" />
+													<span class="input-group-addon">
+															<i class="fa fa-calendar"></i>
+													</span>
+
+												</div>
 											</div>
 										</div>
 									</div>

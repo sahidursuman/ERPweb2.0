@@ -344,7 +344,6 @@ define(function(require, exports) {
 						var id = tr.attr("data-entity-id");
 						inner.delTransferData(id,tr);
 					});
-
 				   
 					$obj.find(".btn-saveTransoutInfo").click(function(){
 						inner.saveEditTranIn(1);
@@ -356,7 +355,6 @@ define(function(require, exports) {
 							inner.edited["edit"] = "";
 						});
 					})
-
 				}
 			});
 		},

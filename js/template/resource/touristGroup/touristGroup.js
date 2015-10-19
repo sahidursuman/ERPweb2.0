@@ -690,6 +690,27 @@ define(function(require, exports) {
 				format: 'yyyy-mm-dd',
 				language: 'zh-CN'
 			});
+
+
+			//接待日期 时间控件
+			$("#"+tab+" .touristGroupMainFormRS input[name=arriveShiftTime]").datepicker({
+				autoclose: true,
+				todayHighlight: true,
+				format: 'yyyy-mm-dd',
+				language: 'zh-CN'
+			});
+
+
+			//接待日期 时间控件
+			$("#"+tab+" .touristGroupMainFormRS input[name=leaveShiftTime]").datepicker({
+				autoclose: true,
+				todayHighlight: true,
+				format: 'yyyy-mm-dd',
+				language: 'zh-CN'
+			});
+
+
+
 			
 			//选择联系人列表
 			touristGroup.getPartnerAgencyManagerList("updateTouristGroup");
