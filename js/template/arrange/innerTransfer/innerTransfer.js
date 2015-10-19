@@ -128,10 +128,17 @@ define(function(require, exports) {
 						searchParam.creator = getVal("creator");
 						searchParam.startTime = getVal("startTime");
 						searchParam.endTime = getVal("endTime");
-						searchParam.status = getVal("status");
+						searchParam.status = $("#" +tabId+" .innerTransfer_list .btn-status button").attr("data-value");
 						return searchParam;
 					}
-					
+					//搜索栏状态button下拉事件
+					$("#" +tabId+" .innerTransfer_list .btn-status .dropdown-menu a").click(function(){
+						$(this).parent().parent().parent().find("button").attr("data-value",$(this).attr("data-value"));
+						$(this).parent().parent().parent().find("span").text($(this).text());
+						searchParam = buildSearchParam();
+						requestTotal = true;
+						inner.list(searchParam);
+					});
 					//搜索事件
 					$("#" +tabId+" .innerTransfer_list .btn-transferOut-search").click(function(){
 						searchParam = buildSearchParam();
