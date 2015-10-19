@@ -224,7 +224,7 @@ table tr td{
 #tabList>li>a, #tabList>li>a:focus{line-height: 16px}
 #tabList>li.active>a, #tabList>li.active>a:hover, #tabList>li.active>a:focus{
     background: white;
-    margin-top: -1px!important;
+    margin-top: 0px!important;
 }
 .layui-layer-setwin .layui-layer-close1{width: 16px;height: 16px}
 .border-li-h{
@@ -534,9 +534,13 @@ input,select{
     margin-left: 8px;
 }
  .add{
-     margin-top: -3px;
+     /*margin-top: -3px;*/
     padding-top: 5px !important;
 }
+ .addScenice{
+     margin-top: -3px;
+     padding-top: 5px !important;
+ }
  .delete{
      margin-left: 3px;
      padding-top: 5px !important;
@@ -570,3 +574,6 @@ input,select{
 /*.table-hover tr th{*/
     /*background-color: ;*/
 /*}*/
+.delSelf{
+    line-height: 20px;
+}

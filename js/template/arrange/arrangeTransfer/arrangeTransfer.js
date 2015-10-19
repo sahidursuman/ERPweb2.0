@@ -796,6 +796,9 @@ define(function(require, exports) {
 			});
 			//查询所有同行地接
 			transfer.getPartnerAgencyList(data.touristGroupTransfer.partnerAgency.id);
+			//获取转态  
+			var statusVal=$obj.find("input[name=status]").val();
+			transfer.isEditStatus($obj,statusVal);
 			//给新增费用绑定事件
 			$obj.find(".btn-transfer-addCost").click(function(){
 				var html="<tr class=\"transferFee1SelectId\">"+
@@ -910,6 +913,18 @@ define(function(require, exports) {
 					}
 				})
 		},
+
+
+		//判定状态
+		isEditStatus:function($obj,statusVal){
+			if (statusVal==1) {//已确认
+				$obj.find("select[name=transferPartnerAgencyId]").attr("disabled","disabled");
+			} else{
+				$obj.find("select[name=transferPartnerAgencyId]").removeAttr("disabled","disabled");
+
+			};
+		},
+
 		//付款账务--应付/现付/已付的计算
 		PayMoneyF:function(){
 			var $obj=$(".updateTransfer"); 

@@ -2,45 +2,40 @@
 	<form class="form-horizontal policyForm" role="form" style="margin-top:10px" onsubmit="return false">
 		<div class="form-group guideInterval">
 			<div class="col-xs-12 col-sm-12 widget-container-col">
-				<div class="widget-box ui-sortable-handle">
-					<div class="widget-header">
-						<h5 class="widget-title">
+				<div class=" ui-sortable-handle">
+						<h5 class="">
 							<i class="ace-icon fa fa-shopping-cart"></i>
-							政策列表
-						</h5>
-						<div class="widget-toolbar no-border">
-							<a href="javascript:void(0)" class="btn-shop-policy-add">
+							<label class="middle title-size">政策列表</label>
+							<button class="btn btn-sm btn-success btn-shop-policy-add" style="margin-left: 20px;">
 								<i class="ace-icon fa fa-plus"></i>
-								新增 
-							</a>
-						</div>
-					</div>
-
+								新增
+							</button>
+						</h5>
 					<div class="widget-body">
 						<div class="widget-main no-padding">
-							<table class="table table-striped table-bordered table-hover shopPolicyList"> 
+							<table class="table table-striped table-bordered table-hover shopPolicyList">
 								<thead>
 									<tr>
-										<th style="width:240px;">时间范围</th>
-										<th style="width:300px;">消费金额(元)</th>
-										<th>导游返佣(%)</th>
-										<th>旅行社返佣(%)</th>
-										<th  style="width:80px;">操作</th>
+										<th class="th-border" style="width:240px;">时间范围</th>
+										<th class="th-border" style="width:300px;">消费金额(元)</th>
+										<th class="th-border">导游返佣(%)</th>
+										<th class="th-border">旅行社返佣(%)</th>
+										<th class="th-border"  style="width:80px;">操作</th>
 									</tr>
 								</thead>
 								<tbody>
 									{{each policyData as policy i}}
 										<tr class="timeArea" data-entity-id="{{policy.id}}">
-										<td data-index="{{i+1}}" class="clearfix div-{{i+1}}" style="margin-bottom:3px">
+										<td data-index="{{i+1}}" class="clearfix div-{{i+1}}" style="margin-bottom:2px">
 											<div>
 												<input name="startTime" type="text" class="datepicker col-sm-5" value="{{policy.startTime | dateFormat:'yyyy-MM-dd'}}"/>
 												<label class="priceArea col-sm-2 center">&nbsp;至&nbsp;</label>
 												<input name="endTime" type="text" class="datepicker col-sm-5" value="{{policy.endTime | dateFormat:'yyyy-MM-dd'}}"/>
 											</div>
 										</td>
-										<td> 
+										<td>
 											{{each policy.costMoneyList as cost j}}
-											<div data-index="{{j+1}}" class="clearfix div-{{j+1}} shopPolicyPriceList" style="margin-bottom:3px">
+											<div data-index="{{j+1}}" class="clearfix div-{{j+1}} shopPolicyPriceList" style="margin-bottom:2px">
 												<input name="costMoneyStart" type="text" class="col-sm-4" value="{{cost.costMoneyStart}}" data-entity-id="{{cost.id}}" maxlength="6"/>
 												<label class="col-sm-2 control-label center">&nbsp;至&nbsp;</label>
 												<input name="costMoneyEnd" type="text" class="col-sm-4" value="{{cost.costMoneyEnd}}" maxlength="9" />
@@ -54,23 +49,22 @@
 										</td>
 										<td>
 											{{each policy.costMoneyList as cost j}}
-											<div data-index="{{j+1}}" class="clearfix div-{{j+1}}" style="margin-bottom:3px">
+											<div data-index="{{j+1}}" class="clearfix div-{{j+1}}" style="margin-bottom:7px">
 												<input name="guideRate" class="col-sm-12" type="text" value="{{cost.guideRate*100 | toFixed}}"  maxlength="4"/>
 											</div>
-											{{/each}}  
+											{{/each}}
 										</td>
 										<td>
 											{{each policy.costMoneyList as cost j}}
-											<div data-index="{{j+1}}" class="clearfix div-{{j+1}}" style="margin-bottom:3px">
+											<div data-index="{{j+1}}" class="clearfix div-{{j+1}}" style="margin-bottom:7px">
 												<input name="travelAgencyRate" class="col-sm-12" type="text" value="{{cost.travelAgencyRate*100 | toFixed}}"  maxlength="4"/>
 											</div>
 											{{/each}}
 										</td>
 										<td style="width:70px">
-											<button data-entity-id="{{policy.id}}" class="btn btn-xs btn-danger btn-shop-policy-delete">
-												<i class="ace-icon fa fa-trash-o bigger-120"></i>
-											</button>
-											
+											<a data-entity-id="{{policy.id}}" class="cursor btn-shop-policy-delete">
+												删除
+											</a>
 										</td>
 										</tr>
 									{{/each}}

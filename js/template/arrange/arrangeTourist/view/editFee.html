@@ -120,7 +120,12 @@
 				</div>
 			</div>
 		</div>
-	</form>   
+	</form>  
+
+
+
+
+
 
 	<!--收客信息 start-->
 	<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
@@ -137,9 +142,30 @@
 					</div>
 				</div> 
 
+
+
+				<div class="form-group" style="margin-left:25%;">
+					    <label class="col-sm-1 control-label no-padding-right">应付：</label>
+						<div class="col-sm-2">
+							<span>{{touristGroup.transNeedPayAllMoney}}</span>
+						</div>
+
+						<label class="col-sm-1 control-label no-padding-right">已付：</label>
+						<div class="col-sm-2">
+							<span>{{touristGroup.transPayedMoney}}</span>
+						</div>
+
+						<label class="col-sm-1 control-label no-padding-right">现付：</label>
+						<div class="col-sm-2">
+                              <span>{{touristGroup.currentNeedPayMoney}}</span>				 
+                        </div>
+					
+				</div>
+
+
 				<div class="form-group">
 					<div class="col-sm-2"></div>
-					<div class="col-sm-8">  
+					<div class="col-sm-8">
 						<table class="table table-striped table-bordered table-hover addCostList"> 
 							<thead>
 								<tr>

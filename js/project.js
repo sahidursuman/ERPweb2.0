@@ -610,7 +610,7 @@ function listMenu(menuTemplate){
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/partnerAgency/partnerAgency.js?version=",function(partnerAgency){
-						partnerAgency.listPartnerAgency(0,"","");
+						partnerAgency.listPartnerAgency(0,"",1);
 					});
 				});
 
@@ -620,7 +620,7 @@ function listMenu(menuTemplate){
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/lineProduct/lineProduct.js",function(lineProduct){
-						lineProduct.listLineProduct(0,"","");
+						lineProduct.listLineProduct(0,"",1);
 						modals["resource_lineProduct"] = lineProduct;
 					});
 					$("#main-container")[0].index = 0;
@@ -643,7 +643,7 @@ function listMenu(menuTemplate){
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/travelLine/travelLine.js",function(travelLine){
-						travelLine.listTravelLine(0,"","");
+						travelLine.listTravelLine(0,"",1);
 						modals["resource_travelLine"] = travelLine;
 					});
 				});
@@ -924,7 +924,7 @@ function listMenu(menuTemplate){
 					});
 				});
 				//绑定内转转出账务
-				$("#sidebar .nav-list .arrange_inner_transfer").click(function(){
+				$("#sidebar .nav-list .financial_innerTransfer_in").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
@@ -934,6 +934,19 @@ function listMenu(menuTemplate){
 						var month = ""//date.getMonth()+1
 						innerTransferIn.listInnerTransferIn(0,"",year,month);
 						modals["financial_innerTransfer_in"] = innerTransferIn;
+					});
+				});
+				//绑定内转转出账务
+				$("#sidebar .nav-list .financial_innerTransfer_out").click(function(){
+					$("#sidebar .nav-list li").removeClass("active");
+					$(this).addClass("active");
+					$(this).parent().parent().addClass("active");
+					seajs.use("" + ASSETS_ROOT +"js/template/financial/innerTransferOut/innerTransferOut.js",function(innerTransferOut){
+						var date = new Date();
+						var year = date.getFullYear();
+						var month = ""//date.getMonth()+1
+						innerTransferOut.listInnerTransferOut(0,"",year,month);
+						modals["financial_innerTransfer_out"] = innerTransferOut;
 					});
 				});
 				//绑定内转利润账务
