@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":44,"md5":"fac75a95f2a422f89ac58b0981c460e0"}*/
+/*TMODJS:{"debug":true,"version":45,"md5":"fac75a95f2a422f89ac58b0981c460e0"}*/
 define(function(require) {
     return require("../../../template")("arrange/arrangeTourist/view/chooseMerge", function($data, $filename) {
         try {
