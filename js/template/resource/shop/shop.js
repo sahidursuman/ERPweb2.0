@@ -126,9 +126,10 @@ define(function(require, exports) {
 			    type: 1,
 			    title:"新增商家",
 			    skin: 'layui-layer-rim', //加上边框
-			    area: ['1190px', '700px'], //宽高
+			    area: '1190px', //宽高
 			    zIndex:1028,
 			    content: html,
+				scrollbar: false,    // 推荐禁用浏览器外部滚动条
 			    success:function(){
 			    	//对新增商家校验
 			    	var validator = rule.check($(".shopContainer .shopMainForm"));
@@ -170,6 +171,8 @@ define(function(require, exports) {
 			    		html += '<td style="width:70px"><a data-entity-id="" class=" btn-shop-standard-delete">删除</a></td>';
 			    		html += "</tr>";
 			    		$(".shopStandardList tbody").append(html);
+						// 再调整对话框的高度
+						$(window).trigger('resize');
 			    		//政策列表的校验
 			    		shopItem = rule.checkItems($(".shopContainer .shopPolicyForm"));
 			    		//给餐标列表删除按钮绑定事件
@@ -291,9 +294,10 @@ define(function(require, exports) {
 						    type: 1,
 						    title:"修改商家",
 						    skin: 'layui-layer-rim', //加上边框
-						    area: ['1190px', '700px'], //宽高
+						    area: '1190px', //宽高
 						    zIndex:1028,
 						    content: html,
+							scrollbar: false,    // 推荐禁用浏览器外部滚动条
 						    success:function(){
 						    	//初始化省数据
 						    	//shop.getProvinceList($(".shopMainForm select[name=provinceId]"));
@@ -444,6 +448,8 @@ define(function(require, exports) {
 						    		html += '<td style=\"width:70px\"><a data-entity-id=\"\" class=\"btn-shop-standard-delete\">删除</a></td>';
 						    		html += "</tr>";
 						    		$(".shopStandardList tbody").append(html);
+									// 再调整对话框的高度
+									$(window).trigger('resize');
 						    		addPolicyValidator = rule.checkShopItem($(""));
 						    		policayValidator = rule.checkItems($(".shopPolicyForm .shopStandardList"));
 
@@ -779,7 +785,7 @@ define(function(require, exports) {
 				 type: 1,
 			    title:"新增购物政策",
 			    skin: 'layui-layer-rim', //加上边框
-			    area: ['1190px', '80%'], //宽高
+			    area: ['1190px', '50%'], //宽高
 			    zIndex:1029,
 			    content: html,
 			    success:function(){
@@ -866,7 +872,7 @@ define(function(require, exports) {
 				 type: 1,
 			    title:"修改购物政策",
 			    skin: 'layui-layer-rim', //加上边框
-			    area: ['1190px', '80%'], //宽高
+			    area: ['1190px', '50%'], //宽高
 			    zIndex:1029,
 			    content: html,
 			    success:function(){

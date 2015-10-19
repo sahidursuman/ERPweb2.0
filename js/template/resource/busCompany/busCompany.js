@@ -6,8 +6,6 @@ define(function(require, exports) {
 		updateTemplate = require("./view/update"),
 		viewTemplate = require("./view/view"),
 		tabId = "tab-"+menuKey+"-content";
-
-
 	var busCompany = {
 		searchData : {
 			companyName : "",
@@ -111,7 +109,7 @@ define(function(require, exports) {
 				type: 1,
 				title:"新增车队",
 				skin: 'layui-layer-rim', //加上边框
-				area: ['70%', '700px'], //宽高
+				area: '70%', //宽高
 				zIndex:1028,
 				content: html,
 				success:function(){
@@ -158,7 +156,7 @@ define(function(require, exports) {
 							"<td><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input style=\"width:100px;\" name=\"contractPrice\" maxlength=\"9\" type=\"text\" readonly=\"readonly\"/><label>&nbsp;元</label></div></td>" +
 							"<td><input name=\"remark\"  maxlength=\"1000\"  type=\"text\" class=\"col-sm-12\"/></td><td style=\"width:70px\"><a class=\"btn-xs btn-bus-delete\">删除</a></td></tr>";
 						$busList.find("tbody").append(html);
-
+						$(window).trigger('resize');
 						$busList.find("select[name=isChartered]").change(function(){
 							var $parents = $(this).parent().parent();
 							if($(this).val() == 1){
@@ -432,7 +430,7 @@ define(function(require, exports) {
 							type: 1,
 							title:"修改车队",
 							skin: 'layui-layer-rim', //加上边框
-							area: ['70%', '750px'], //宽高
+							area: '70%', //宽高
 							zIndex:1028,
 							content: html,
 							success:function(){

@@ -116,9 +116,10 @@ define(function(require, exports) {
 			    type: 1,
 			    title:"新增酒店",
 			    skin: 'layui-layer-rim', //加上边框
-			    area: ['1190px', '700px'], //宽高
+			    area: '1190px', //宽高
 			    zIndex:1028,
 			    content: html,
+				scrollbar: false,    // 推荐禁用浏览器外部滚动条
 			    success:function(){
 			    	var $obj = $(".addHotelContainer .hotelMainForm");
 			    	var validator = rule.check($('.addHotelContainer'));
@@ -174,6 +175,8 @@ define(function(require, exports) {
 			    				"<td style=\"width:70px\"><a data-entity-id=\"\" href=\"#\" class=\" btn-xs  btn-hotel-standard-delete\">删除</a></td>" +
 			    				"</tr>";
 			    		$obj.find(".hotelRoomStandardList tbody").append(html);
+						// 再调整对话框的高度
+						$(window).trigger('resize');
 			    		// 对酒店房型设置表单验证
 			    	    hotelRoomStandardList = rule.checkRoom($('.addHotelContainer .hotelRoomStandardList'));
 			    	    
@@ -334,9 +337,10 @@ define(function(require, exports) {
 						    type: 1,
 						    title:"编辑酒店信息",
 						    skin: 'layui-layer-rim', //加上边框
-						    area: ['1190px', '700px'], //宽高
+						    area:'1190px', //宽高
 						    zIndex:1028,
 						    content: html,
+							scrollbar: false,    // 推荐禁用浏览器外部滚动条
 						    success:function(){
 						    	var $obj = $(".updateHotelContainer .hotelMainForm");
 						    	var validator = rule.check($('.updateHotelContainer .hotelMainForm'));
@@ -446,6 +450,8 @@ define(function(require, exports) {
 							    				"<td style=\"width:70px\"><a data-entity-id=\"\" class=\"btn-hotel-standard-delete\">删除</a></td>" +
 							    				"</tr>";
 							    		$obj.find(".hotelRoomStandardList tbody").append(html);
+									// 再调整对话框的高度
+									$(window).trigger('resize');
 							    		roomValidator = rule.checkRoom($('.updateHotelContainer .hotelRoomStandardList'));
 							    		// 对酒店房型设置表单验证
 							    		console.log($('.updateHotelContainer .hotelRoomStandardList'));
