@@ -103,7 +103,7 @@ define(function(require, exports) {
 			    type: 1,
 			    title:"新增票务公司",
 			    skin: 'layui-layer-rim', //加上边框
-			    area: ['800px', '430px'], //宽高
+			    area: ['800px', '360px'], //宽高
 			    zIndex:1028,
 			    content: html,
 			    success:function(){
@@ -191,7 +191,7 @@ define(function(require, exports) {
 						    type: 1,
 						    title:"编辑票务公司信息",
 						    skin: 'layui-layer-rim', //加上边框
-						    area: ['800px', '480px'], //宽高
+						    area: ['800px', '360px'], //宽高
 						    zIndex:1028,
 						    content: html,
 						    success:function(){
