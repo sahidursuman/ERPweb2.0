@@ -694,7 +694,7 @@ define(function(require, exports) {
 								});
 
 								$driverList.find(".btn-driver-add").click(function(){
-									var html = "<tr><td><input name=\"driverName\" type=\"text\" class=\"col-sm-12\" /></td><td><select name=\"gender\" class=\"col-sm-12\"><option value=\"0\">男</option><option value=\"1\">女</option></select></td><td><input name=\"mobileNumber\" class=\"col-sm-12\" type=\"text\" /></td><td><input name=\"driveYears\" class=\"col-sm-12\" type=\"text\" value=\"1\"/></td><td><input name=\"licenseId\" type=\"text\" class=\"col-sm-12\" /></td><td><select name=\"status\" class=\"col-sm-12\"><option value=\"1\">启用</option><option value=\"0\">停用</option></select></td><td><input name=\"remark\" type=\"text\" class=\"col-sm-12\" /></td><td style=\"width:70px\"><a data-entiy-id=\"\" class=\" btn-driver-delete\">删除</a></td></tr>";
+									var html = "<tr><td><input name=\"driverName\" type=\"text\" class=\"col-sm-12\" /></td><td><select name=\"gender\" class=\"col-sm-12\"><option value=\"0\">男</option><option value=\"1\">女</option></select></td><td><input name=\"mobileNumber\" class=\"col-sm-12\" type=\"text\" /></td><td><input name=\"driveYears\" class=\"col-sm-12\" type=\"text\" value=\"1\"/></td><td><input name=\"licenseId\" type=\"text\" class=\"col-sm-12\" /></td><td width=\"8%\"><select name=\"status\" class=\"col-sm-12\"><option value=\"1\">启用</option><option value=\"0\">停用</option></select></td><td><input name=\"remark\" type=\"text\" class=\"col-sm-12\" /></td><td style=\"width:70px\"><a data-entiy-id=\"\" class=\" btn-driver-delete\">删除</a></td></tr>";
 									$(".driverList tbody").append(html);
 									$(".driverList .btn-driver-delete").click(function(){
 										var tr = $(this).parent().parent();
