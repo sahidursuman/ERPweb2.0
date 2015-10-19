@@ -3,10 +3,10 @@
         <form class="form-horizontal" role="form" onsubmit="return false">
                 <div class="search-area editable editable-click" >
                     <div class="form-group"> 
-                        <label style="float: left;margin: 0px auto auto 15px" class="control-label pull-left"> 部门:{{searchParam.fromBusinessGroupName}}</label>
+                        <label style="float: left;margin: 0px auto auto 15px" class="control-label pull-left"> 部门:{{searchParam.toBusinessGroupNam}}</label>
                         
                         <label class="control-label col-sm-1" style="float:left;">账期:</label>
-                            <select class="col-sm-1" name="year" style="margin-left:20px">
+                            <select class="col-sm-1" name="year" style="margin-left:20px"> 
                                 {{each yearList as year index}}
                                     <option value="{{year.value}}" {{if searchParam.year == year.value}}selected="selected"{{/if}}>{{year.value}}</option>
                                 {{/each}}
@@ -36,8 +36,6 @@
                 <label class=" control-label " style="margin-left:30px;">总已付:{{payedMoney}}</label>
                 <label class=" control-label " style="margin-left:30px;">总未付:{{unPayedMoney}}</label>
                 <label class=" control-label " style="margin-left:30px;">总实际未付:{{realUnPayedMoney}}</label>
-                
-
             </div>
         </form>
     </div>
