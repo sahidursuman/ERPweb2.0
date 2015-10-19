@@ -1,7 +1,10 @@
 define(function(require,exports){
 	var menuKey = "financial_innerTransfer_in",
+		rule = require("./innerTransferInRule"),
 	    listTemplate = require("./view/list"),
 	    checkTemplate = require("./view/innerTransferInChecking"),
+	    settlementTemplate = require("./view/innerTransferInClearing"),
+	    recordTemplate = require("./view/innerTransferInRecord"),
 		tabId = "tab-"+menuKey+"-content",
 	    checkTabId = menuKey+"-checking",
 	    blanceTabId = menuKey+"-blance",
@@ -73,6 +76,8 @@ define(function(require,exports){
 			    		}
 						data.searchParam = InnerTransferIn.searchData;
 			    		data.yearList = yearList;
+
+
 						data.monthList = monthList;
 						var html = listTemplate(data);
 						addTab(menuKey,"内转转入",html);
@@ -136,7 +141,8 @@ define(function(require,exports){
 						    	"endMonth":$(this).attr("data-entity-endmonth"),
 
 		    				};
-		    				console.log(InnerTransferIn.searchBalanceData);
+		    				
+		    				InnerTransferIn.InnerTransferInBalance(0,InnerTransferIn.searchBalanceData.fromBusinessGroupId,InnerTransferIn.searchBalanceData.fromBusinessGroupName,InnerTransferIn.searchBalanceData.year,InnerTransferIn.searchBalanceData.startMonth,InnerTransferIn.searchBalanceData.endMonth);
                         });
 						}
 					}
@@ -162,6 +168,7 @@ define(function(require,exports){
 					    	"year":year,
 					    	"month":month
 					    };
+
 					    data.yearList = yearList;
 					    data.monthList = monthList;
 					    data.searchParam = InnerTransferIn.searchCheckData;
@@ -177,24 +184,24 @@ define(function(require,exports){
 							if(!!InnerTransferIn.edited["checking"] && InnerTransferIn.edited["checking"] != ""){
 								addTab(checkTabId,"内转转入对账");
 								showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
-									//validator = rule.check($('.innerTransferChecking'));
-									//if (!validator.form()) { return; }
+									validator = rule.check($('.innerTransferChecking'));
+									if (!validator.form()) { return; }
 									InnerTransferIn.saveCheckingData(0)
 									InnerTransferIn.edited["checking"] = "";
 									addTab(checkTabId,"内转转入对账",html);
-									//validator = rule.check($('.innerTransferChecking'));
+									validator = rule.check($('.innerTransferChecking'));
 								 },function(){
 									addTab(checkTabId,"内转转入对账",html);
 									InnerTransferIn.edited["checking"] = "";
-									//validator = rule.check($('.innerTransferChecking'));
+									validator = rule.check($('.innerTransferChecking'));
 								 });
 							}else{
 								addTab(checkTabId,"内转转入对账",html);
-								//validator = rule.check($('.innerTransferChecking'));
+								validator = rule.check($('.innerTransferChecking'));
 							}
 						}else{
 							addTab(checkTabId,"内转转入对账",html);
-							//validator = rule.check($('.innerTransferChecking .all'));
+							validator = rule.check($('.innerTransferChecking .all'));
 						}
 					    $("#" +"tab-"+checkTabId+"-content .all").on("change",function(){
 							oldCheckId = fromBusinessGroupId;
@@ -301,6 +308,7 @@ define(function(require,exports){
 	                    //确认对账事件
 	                    $checkId.find(".btn-transferFinancial-checking").click(function  () {
 	                    	// body...
+	                    	if (!validator.form()) { return; }
 	                    	InnerTransferIn.saveCheckingData(0)
 	                    });
 	                    //取消按钮事件
@@ -315,6 +323,141 @@ define(function(require,exports){
 					}
 				});
 			},
+			//结算处理
+			InnerTransferInBalance:function(pageNo,fromBusinessGroupId,fromBusinessGroupName,year,startMonth,endMonth){
+				$.ajax({
+					 url:""+APP_ROOT+"back/financialInnerTransferIn.do?method=listFinancialInnerTransferInSettlement&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
+					 type:"POST",
+	                 data:"pageNo="+pageNo+"&fromBusinessGroupId="+fromBusinessGroupId+"&year="+year+"&start_month="+startMonth+"&end_month="+endMonth+"&sortType=auto",
+					 dataType:"json",
+					 beforeSend:function(){
+						 globalLoadingLayer = openLoadingLayer();
+					 },
+					 success:function(data){
+						
+						layer.close(globalLoadingLayer);
+						var result = showDialog(data);
+						 if(result){
+						 	InnerTransferIn.searchBalanceData = {
+						    	"fromBusinessGroupId":fromBusinessGroupId,
+						        "fromBusinessGroupName":fromBusinessGroupName,
+						    	"year":year,
+						    	"startMonth":startMonth,
+						    	"endMonth":endMonth
+						    };
+
+						 	data.yearList = yearList;
+		                    data.monthList = monthList;
+		                    data.searchParam = InnerTransferIn.searchBalanceData;
+	                        var html = settlementTemplate(data);
+                            if($("#" +"tab-"+blanceTabId+"-content").length > 0)
+	             	    	{
+	             	    	 if(!!InnerTransferIn.edited["blance"] && InnerTransferIn.edited["blance"] != ""){
+	             	    		addTab(blanceTabId,"内转转入结算");
+			                    
+	             	    		showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
+	             	    			 InnerTransferIn.validatorTable()
+	             	    			 var saveBtn = $("#" +"tab-"+ blanceTabId+"-content"+" .btn-transferBlance-save")
+	             	    			 if (!$(saveBtn).data('validata').form()) { return; }
+	             	    			 InnerTransferIn.saveBlanceData(0);
+				            		 InnerTransferIn.edited["blance"] = "";
+				            		 addTab(blanceTabId,"内转转入结算",html);
+				            		 InnerTransferIn.validatorTable();
+				            	 },function(){
+				            		    addTab(blanceTabId,"内转转入结算",html);
+				            		    InnerTransferIn.edited["blance"] = "";
+				            		    InnerTransferIn.validatorTable();
+				            	 });
+	             	    	 }else{
+	                 	    	addTab(blanceTabId,"内转转入结算",html);
+	                 	    	InnerTransferIn.validatorTable();
+	             	    	 }
+	             	    }else{
+	             	    	addTab(blanceTabId,"内转转入结算",html);
+	             	    	InnerTransferIn.validatorTable();
+	             	    };
+	             	    var $settleId = $("#" +"tab-"+blanceTabId+"-content");
+	             	   	$settleId.find(".all").on('change', 'input, select', function() {
+	             		   	InnerTransferIn.edited["blance"] = "blance";
+	             		   //	InnerTransferIn.oldBlancePartnerAgencyId = fromBusinessGroupId;
+	    	    			$(this).closest('tr').data('blanceStatus',true);
+	    	    		});
+	    	    		//搜索事件
+	    	    		$settleId.find(".btn-blance-search").click(function(){
+
+	    	    			InnerTransferIn.searchBalanceData = {
+						    	"fromBusinessGroupId":fromBusinessGroupId,
+						        "fromBusinessGroupName":fromBusinessGroupName,
+						    	"year":$settleId.find("select[name=year]").val(),
+						    	"startMonth":$settleId.find("select[name=startMonth]").val(),
+						    	"endMonth":$settleId.find("select[name=endMonth]").val()
+						    };
+						    console.log(InnerTransferIn.searchBalanceData);
+						    InnerTransferIn.InnerTransferInBalance(0,InnerTransferIn.searchBalanceData.fromBusinessGroupId,InnerTransferIn.searchBalanceData.fromBusinessGroupName,InnerTransferIn.searchBalanceData.year,InnerTransferIn.searchBalanceData.startMonth,InnerTransferIn.searchBalanceData.endMonth);
+	    	    		});
+						//保存结算事件
+						$settleId.find(".btn-transferBlance-save").click(function(){
+							if (!$(this).data('validata').form()) { return; }
+							InnerTransferIn.saveBlanceData(0);
+						});
+						//对账明细按钮
+						$settleId.find(".btn-restaurantBlance-checkDetail").click(function(){
+							InnerTransferIn.searchCheckData = {
+						    	"fromBusinessGroupId":fromBusinessGroupId,
+						    	"fromBusinessGroupName":fromBusinessGroupName,
+						    	"year":$(this).attr("data-entity-year"),
+						    	"month":$(this).attr("data-entity-month")
+					    	};
+					    	
+		    				InnerTransferIn.InnerTransferInCheck(0,InnerTransferIn.searchCheckData.fromBusinessGroupId,InnerTransferIn.searchCheckData.fromBusinessGroupName,InnerTransferIn.searchCheckData.year,InnerTransferIn.searchCheckData.month)
+
+						});
+						//操作记录按钮事件
+						$settleId.find(".btn-transfer-record").click(function(){
+							$.ajax({
+                        		url:""+APP_ROOT+"back/financialInnerTransferIn.do?method=listFinancialInnerTransferInSettlementRecord&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
+                                type:"POST",
+                                data:"fromBusinessGroupId="+fromBusinessGroupId,
+                                dataType:"json",
+                                beforeSend:function(){
+                                    globalLoadingLayer = openLoadingLayer();
+                                },
+                                success:function(data){
+                                	layer.close(globalLoadingLayer);
+                                    var result = showDialog(data);
+                                	if(result){
+                                		if(data.financialInnerTransferInSettlementRecordList.length == 0){
+                                			showMessageDialog($( "#confirm-dialog-message" ),"暂时还没有操作记录");
+                                		}else{
+                                			var html =recordTemplate(data);
+            					    		var blanceRecordsTemplateLayer =layer.open({
+            					    			type: 1,
+            								    title:"操作记录",
+            								    skin: 'layui-layer-rim', //加上边框
+            								    area: ['60%', '70%'], //宽高
+            								    zIndex:1030,
+            								    content: html,
+            								    success: function(){}
+            					    		})
+                                		}
+        		                	}
+                                }
+                        	});
+						});
+
+						}
+					}
+				});
+			},
+			//给每个tr增加验证
+		    validatorTable:function(){
+		    	//获取table中的tr
+	            var $tr = $("#" +"tab-"+ blanceTabId+"-content"+" .all tbody tr");
+	            //给每个tr添加表单验证
+	            $tr.each(function(){
+	            	$(this).find('.btn-transferBlance-save').data('validata', rule.check($(this)));
+	            });	
+		    },
 			saveCheckingData : function(isClose){
 		    	var JsonStr = [],
 	                oldUnIncome,
@@ -396,25 +539,68 @@ define(function(require,exports){
 
 									InnerTransferIn.edited["checking"] = "";
 									if(isClose == 1){
-									closeTab(checkTabId);
-				    				InnerTransferIn.InnerTransferInCheck(0,InnerTransferIn.searchCheckData.fromBusinessGroupId,InnerTransferIn.searchCheckData.fromBusinessGroupName,InnerTransferIn.searchCheckData.year,InnerTransferIn.searchCheckData.month)
+										closeTab(checkTabId);
+										InnerTransferIn.listInnerTransferIn(0,InnerTransferIn.searchData.fromBusinessGroupId,InnerTransferIn.searchData.year,InnerTransferIn.searchData.month);									
 									} else {
-				    				InnerTransferIn.InnerTransferInCheck(0,InnerTransferIn.searchCheckData.fromBusinessGroupId,InnerTransferIn.searchCheckData.fromBusinessGroupName,InnerTransferIn.searchCheckData.year,InnerTransferIn.searchCheckData.month)
+				    					InnerTransferIn.InnerTransferInCheck(0,InnerTransferIn.searchCheckData.fromBusinessGroupId,InnerTransferIn.searchCheckData.fromBusinessGroupName,InnerTransferIn.searchCheckData.year,InnerTransferIn.searchCheckData.month)
 									}
 								}
 							}
 			     	   });
 			 	   }
 	    	},
+	    	saveBlanceData : function(isClose){
+	    		var $tr = $("#" +"tab-"+ blanceTabId+"-content"+" .all tbody tr");
+    		    var id; 
+        		var incomeMoney;
+        		var incomeType;
+        		var remark;
+
+	    		$tr.each(function(i){
+	          		if($(this).data('blanceStatus')){
+	          			id = $(this).attr("data-entity-id");
+	          			incomeMoney =  $tr.eq(i).find("input[name=blancerealIncomeMoney]").val();
+	          			incomeType =  $tr.eq(i).find("select[name=blancePayType]").val();
+	          			remark =  $tr.eq(i).find("input[name=blancerealRemark]").val();
+	          		}
+          		});
+          		console.log(incomeMoney);
+          		
+          		$.ajax({
+          			url:""+APP_ROOT+"back/financialInnerTransferIn.do?method=saveFinancialInnerTransferInSettlement&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
+	                type:"POST",
+	                data:"id="+id+"&incomeMoney="+incomeMoney+"&payType="+incomeType+"&remark="+remark,
+	                dataType:"json",
+	                beforeSend:function(){
+	                    globalLoadingLayer = openLoadingLayer();
+	                },
+	                success:function(data){
+	                	layer.close(globalLoadingLayer);
+	                    var result = showDialog(data);
+	                    if(result){
+	                    	showMessageDialog($( "#confirm-dialog-message" ),data.message);
+	                    	InnerTransferIn.edited["blance"] = "";
+							if(isClose == 1){
+								closeTab(clearTabId);
+								InnerTransferIn.listInnerTransferIn(0,InnerTransferIn.searchData.fromBusinessGroupId,InnerTransferIn.searchData.year,InnerTransferIn.searchData.month);
+							} else {
+						    	InnerTransferIn.InnerTransferInBalance(0,InnerTransferIn.searchBalanceData.fromBusinessGroupId,InnerTransferIn.searchBalanceData.fromBusinessGroupName,InnerTransferIn.searchBalanceData.year,InnerTransferIn.searchBalanceData.startMonth,InnerTransferIn.searchBalanceData.endMonth);
+							}
+	                    }
+	                }
+          		});
+
+
+	    	},
 			save : function(saveType){
 				if(saveType == "checking"){
-					InnerTransferIn.saveCheckingData(0)
+					InnerTransferIn.saveCheckingData(1)
 				} else if(saveType == "blance"){
-					BusCompany.saveBlanceData(BusCompany.searchBalanceData.pageNo,BusCompany.searchBalanceData.busCompanyId,BusCompany.searchBalanceData.companyName,BusCompany.searchBalanceData.year,BusCompany.searchBalanceData.startMonth,BusCompany.searchBalanceData.endMonth,1);
+					InnerTransferIn.saveBlanceData(1);
 				}
 			},
 			clearEdit : function(clearType){
-				BusCompany.edited[clearType] = "";
+				InnerTransferIn.edited[clearType] = "";
 			}
 	}
 	exports.isEdited = InnerTransferIn.isEdited;
