@@ -62,7 +62,7 @@ define(function(require, exports) {
 								createTimeStart : $(".touristGroupSearchForm input[name=createTimeStart]").val(),
 								createTimeEnd : $(".touristGroupSearchForm input[name=createTimeEnd]").val(),
 								customerType : $(".touristGroupSearchForm select[name=customerType]").find("option:selected").val(),
-								status : $(".touristGroupSearchForm select[name=status]").find("option:selected").val()
+								status : $(".touristGroupSearchForm button").attr("data-value")
 							}
 							touristGroup.getTouristStatisticData(0,touristGroup.searchData.partnerAgencyId,touristGroup.searchData.lineProductId,touristGroup.searchData.startTime,touristGroup.searchData.userId,touristGroup.searchData.createTimeStart,touristGroup.searchData.createTimeEnd,touristGroup.searchData.customerType,touristGroup.searchData.status);
 							//下拉数据初始化

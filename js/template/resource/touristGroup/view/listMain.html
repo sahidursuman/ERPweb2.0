@@ -76,13 +76,13 @@
 		<div class="col-sm-1 btn-group btn-status" style="margin-left: 20px">
 			<button data-value="{{searchParam.status}}" data-toggle="dropdown" class=" btn-sm dropdown-toggle block-up" aria-expanded="false">
 				<span>
-				   {{if searchParam.status == null}}
+				   {{if searchParam.status == null || searchParam.status == "" }}
 						全部
 					{{else if searchParam.status == 1}}
 						未分团
 					{{else if searchParam.status == 2}}
 						已分团
-					{{else if searchParam.status == 2}}
+					{{else if searchParam.status == 3}}
 						已转客
 					{{else}}
 						已发团
