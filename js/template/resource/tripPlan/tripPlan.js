@@ -1954,6 +1954,7 @@ define(function(require, exports) {
 					if(payType == 0){
 						parents.find("input[name=guidePayMoney]").val((price * num - reduceMoney)-payedMoney);
 					}
+					tripPlan.moneyTripPlan();
 				}
 			});			
 		},
