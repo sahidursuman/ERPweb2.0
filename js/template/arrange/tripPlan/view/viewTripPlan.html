@@ -1,88 +1,50 @@
 <div class="viewTripPlan">
 	<div class="col-xs-12 newAddTripPlanMain">
 		<form class="form-horizontal newAddTripPlanMainForm" role="form" style="margin-top:10px" onsubmit="return false">
-			<div class="form-group">
-				<div class="col-xs-12 col-sm-12 widget-container-col">
-					<div class=" ui-sortable-handle">
-							<h5 class="">
-								<span class="badge badge-primary">1</span>
-								<label class="middle title-size">基本信息</label>
-							</h5>
-						<div class="widget-body">
-							<div class="widget-main">
-								<div class="form-group">
-									<label class="col-sm-1 control-label no-padding-right">线路名称：</label>
-									<div class="col-sm-2">
-										<label class="control-label">{{lineProduct.name}}</label>
-									</div>
-									<label class="col-sm-1 control-label no-padding-right">出团日期：</label>
-									<div class="col-sm-2">
-										<label class="control-label">{{tripPlan.startTime | dateFormat: 'yyyy-MM-dd'}}</label>
-									</div>
-									<label class="col-sm-1 control-label no-padding-right">团队编号：</label>
-									<div class="col-sm-2">
-										<label class="control-label">{{tripPlan.tripNumber}}</label>
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-1 control-label no-padding-right"> <span class="necessary">*</span>计划人数：</label>
-									<div class="col-sm-2">
-										<label class="control-label">{{tripPlan.planTouristCount}}</label>
-									</div>
-									<label class="col-sm-1 control-label no-padding-right">车座数：</label>
-									<div class="col-sm-2">
-										<label class="control-label">{{bus.seatCount}}</label>
-									</div>
-									<label class="col-sm-1 control-label no-padding-right"> <span class="necessary">*</span>车辆品牌：</label>
-									<div class="col-sm-2">
-										<label class="control-label">{{bus.brand}}</label>
-									</div>
-									<label class="col-sm-1 control-label no-padding-right"> <span class="necessary">*</span>车牌号：</label>
-									<div class="col-sm-2">
-										<label class="control-label">{{bus.licenseNumber}}</label>
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-1 control-label no-padding-right"> <span class="necessary">*</span>导游：</label>
-									<div class="col-sm-2">
-										<label class="control-label">{{guide.realname}}</label>
-									</div>
-									<label class="col-sm-1 control-label no-padding-right">导游电话：</label>
-									<div class="col-sm-2">
-										<label class="control-label">{{guide.mobileNumber}}</label>
-									</div>
-									<label class="col-sm-1 control-label no-padding-right"> <span class="necessary">*</span>司机：</label>
-									<div class="col-sm-2">
-										<label class="control-label">{{driver.name}}</label>
-									</div>
-									<label class="col-sm-1 control-label no-padding-right">司机电话：</label>
-									<div class="col-sm-2">
-										<label class="control-label">{{driver.mobileNumber}}</label>
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-1 control-label no-padding-right">全陪：</label>
-									<div class="col-sm-2">
-										<label class="control-label">{{tripPlan.accompanyGuideName}}</label>
-									</div>							
-									<label class="col-sm-1 control-label no-padding-right">全陪电话：</label>
-									<div class="col-sm-2">
-										<label class="control-label">{{tripPlan.accompanyGuideMobile}}</label>
-									</div>
-									<label class="col-sm-1 control-label no-padding-right">集合地点：</label>
-									<div class="col-sm-2">
-										<label class="control-label">{{tripPlan.setPlacePosition}}</label>
-									</div>
-									<label class="col-sm-1 control-label no-padding-right">集合时间：</label>
-									<div class="col-sm-2">
-										<label class="control-label">{{tripPlan.setPlaceTime}}</label>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
+			<table class="whereQ whereTwo" style="width: 98%">
+				<tr>
+					<td colspan="8" class="HeadManage" style="text-align: left">基本信息</td>
+				</tr>
+				<tr>
+					<td class="style-myself">线路名称：</td>
+					<td style="text-align: left">{{lineProduct.name}}</td>
+					<td class="style-myself">出团日期：</td>
+					<td style="text-align: left">{{tripPlan.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
+					<td class="style-myself">团队编号：</td>
+					<td style="text-align: left" colspan="3">{{tripPlan.tripNumber}}</td>
+
+				</tr>
+				<tr>
+					<td class="style-myself">计划人数：</td>
+					<td style="text-align: left">{{tripPlan.planTouristCount}}</td>
+					<td class="style-myself">车座数：</td>
+					<td style="text-align: left">{{bus.seatCount}}</td>
+					<td class="style-myself">车辆品牌：</td>
+					<td style="text-align: left">{{bus.brand}}</td>
+					<td class="style-myself">车辆号：</td>
+					<td style="text-align: left">{{bus.licenseNumber}}</td>
+				</tr>
+				<tr>
+					<td class="style-myself">导游：</td>
+					<td style="text-align: left">{{guide.realname}}</td>
+					<td class="style-myself">导游电话：</td>
+					<td style="text-align: left">{{guide.mobileNumber}}</td>
+					<td class="style-myself">司机：</td>
+					<td style="text-align: left">{{driver.name}}</td>
+					<td class="style-myself">司机电话：</td>
+					<td style="text-align: left">{{driver.mobileNumber}}</td>
+				</tr>
+				<tr>
+					<td class="style-myself">全陪：</td>
+					<td style="text-align: left">{{tripPlan.accompanyGuideName}}</td>
+					<td class="style-myself">全陪电话：</td>
+					<td style="text-align: left">{{tripPlan.accompanyGuideMobile}}</td>
+					<td class="style-myself">集合地点：</td>
+					<td style="text-align: left">{{tripPlan.setPlacePosition}}</td>
+					<td class="style-myself">集合电话：</td>
+					<td style="text-align: left">{{tripPlan.setPlaceTime}}</td>
+				</tr>
+			</table>
 		</form>
 
 
