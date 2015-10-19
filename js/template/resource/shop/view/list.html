@@ -13,7 +13,7 @@
 					已启用
 				{{else}}
 					已停用
-				{{/if}}				
+				{{/if}}
 			</span>
 			<i class="ace-icon fa fa-angle-down icon-on-right"></i>
 		</button>
@@ -35,9 +35,9 @@
 		<i class="ace-icon fa fa-plus"></i>
 		新增商家
 	</button>
-	
+
 </div>
-<div class="row shopList">	
+<div class="row shopList">
 	<div class="col-xs-12">
 		<table class="table table-striped table-bordered table-hover">
 			<thead>
@@ -51,10 +51,10 @@
 					<th>操作</th>
 				</tr>
 			</thead>
-		
+
 			<tbody>
 				{{each shopList as shop}}
-					<tr class="shop-{{shop.id}}"> 
+					<tr class="shop-{{shop.id}}">
 						<td>{{shop.name}}</td>
 						<td>
 							{{if shop.province != null}}
@@ -97,7 +97,7 @@
 									<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
 										<i class="ace-icon fa fa-cog icon-only bigger-110"></i>
 									</button>
-			
+
 									<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
 										<li>
 											<a data-entity-id="{{shop.id}}" href="javascript:void(0)" class="tooltip-success btn-shop-view" data-rel="tooltip">
@@ -113,7 +113,7 @@
 												</span>
 											</a>
 										</li>
-			
+
 										<li>
 											<a data-entity-id="{{shop.id}}" href="javascript:void(0)" class="tooltip-error btn-shop-delete" data-rel="tooltip">
 												<span class="red">
@@ -126,7 +126,7 @@
 							</div>
 						</td>
 					</tr>
-				{{/each}} 
+				{{/each}}
 			</tbody>
 		</table>
 		<div class="row pageMode">
