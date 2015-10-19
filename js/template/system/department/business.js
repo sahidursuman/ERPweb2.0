@@ -722,7 +722,7 @@ define(function(require, exports) {
 							tr += "<td>" + tmp +"</td>";
 							tr += "<td>" +
 									"<div class=\"hidden-sm hidden-xs btn-group\"> " +
-									"<button data-entity-id=\"" + user.id + "\" class=\"btn btn-xs btn-danger btn-user-auth\" title=\"授权\"> <i class=\"ace-icon fa fa-key bigger-120\"></i> </button>" +
+									"<a data-entity-id=\"" + user.id + "\" class=\"cursor btn-user-auth\" title=\"授权\"> 授权 </a>" +
 									"</div>" +
 									"<div class=\"hidden-md hidden-lg\">" +
 									"<div class=\"inline pos-rel\"> " +
