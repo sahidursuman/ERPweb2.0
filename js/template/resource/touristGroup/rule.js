@@ -141,7 +141,7 @@ var rule = {
 						rules: [
 							{
 					  			type:'mobile-phone',
-					  			errMsg: '手机号码格式不正确'
+					  			errMsg: '手机号码或证件号码必填一项'
 							},{
 					  			type:'null',
 					  			errMsg: '手机号码不能为空'
@@ -191,7 +191,7 @@ var rule = {
 						rules: [
 							{
 				  			type:'id',
-				  			errMsg: '身份证号码的格式不正确'
+				  			errMsg: '手机号码或证件号码必填一项'
 							}
 						]
 				    });

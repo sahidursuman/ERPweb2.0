@@ -332,8 +332,7 @@ define(function(require, exports) {
 
 
 		saveEditTranIn:function(){
-
-
+			
 			    var $obj=$("#tab-arrange_inner_Transfer-edit-content");
 
 				function getValParam (name){
@@ -375,8 +374,6 @@ define(function(require, exports) {
 
 				innerTransfer.innerTransferFeeSet=otherFeeJsonAdd;
 				var innerTransfer=JSON.stringify(innerTransfer);
-
-
 			    $.ajax({
 					url:""+APP_ROOT+"back/innerTransfer.do?method=update&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
 					data:"innerTransfer="+encodeURIComponent(innerTransfer),
@@ -462,7 +459,6 @@ define(function(require, exports) {
 					}
 				needPayMoney += a*b;
 			}
-
 			//应付
 			transNeedPayMoney.val(needPayMoney.toFixed(2));
 		},
