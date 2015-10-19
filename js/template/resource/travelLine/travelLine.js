@@ -664,7 +664,7 @@ define(function(require, exports) {
 			for(var i=0;i<data.travelLine.days;i++){
 				var ue = init_editor("detailEditor-add-lineProduct-"+i+"");
 			}
-
+			travelLine.mousedownBlur();
 			//添加具体行程安排相应事件
 			$(".widgetSchedule .addRestaurant").bind("click", validator, travelLine.addRestaurant);//餐饮
 			$(".widgetSchedule .addResourceHotel").bind("click", validator, travelLine.addResourceHotel);//酒店
@@ -2306,6 +2306,11 @@ define(function(require, exports) {
 		},
 		clearEdit : function(clearType){
 			travelLine.edited[clearType] = "";
+		},
+		mousedownBlur :function(){
+			$("#tab-resource_travelLine-add-content .scheduleListContainer").mousedown(function() {
+				$(this).find(":focus").blur();
+			});
 		}
 	}
 	
