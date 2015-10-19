@@ -791,7 +791,7 @@ define(function(require, exports) {
 			    zIndex:1029,
 			    content: html,
 			    success:function(){
-			    	var policyValidator;
+			    	var policyValidator = rule.checkShopItem($(".policyForm .shopPolicyList"));;
 			    	var policyHtml = '<tr class="timeArea">'+
 			    	'<td data-index="1" class="clearfix div-1" style="margin-bottom:3px"><div><input name=\"startTime\" maxlength=\"100\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/>'+
 			    	'<label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/></div></td><td><div data-index="1" class="clearfix div-1" style="margin-bottom:3px">'+

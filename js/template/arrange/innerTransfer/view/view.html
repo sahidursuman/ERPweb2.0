@@ -34,6 +34,25 @@
 						<div class="col-sm-2">
 							<input name="transPayedMoney" value="{{innerTransfer.transPayedMoney}}" type="text" readonly="readonly" class="date-picker col-xs-12" />
 						</div>
+
+
+						{{if innerTransfer.touristGroup.operateCurrentNeedPayMoney==1}}
+							<label>
+								<input  type="checkbox" class="ace buyInsurance-status" checked="checked" value="{{innerTransfer.touristGroup.operateCurrentNeedPayMoney}}" name="operateCurrentNeedPayMoney" disabled="disabled">
+								<span class="lbl">
+								</span>
+							</label>
+							{{else}}
+
+							<label style="padding-left:0px;">
+								<input  type="checkbox" class="ace buyInsurance-status" checked="" value="{{innerTransfer.touristGroup.operateCurrentNeedPayMoney}}" name="operateCurrentNeedPayMoney" disabled="disabled">
+								<span class="lbl">
+								</span>
+							</label>
+						{{/if}}
+
+						<label class="control-label no-padding-right">对方现收</label>
+
 					</div>
 				</div>
 			</div>
@@ -204,14 +223,12 @@
 										<td>{{innerTransfer.touristGroup.adultCount}}</td>
 										<td>{{innerTransfer.touristGroup.adultPrice}}</td>
 									</tr>
-
 									<tr>
 										<td>结算价</td>
 										<td>小孩</td>
 										<td>{{innerTransfer.touristGroup.childCount}}</td>
 										<td>{{innerTransfer.touristGroup.childPrice}}</td>
 									</tr>
-
 									{{each innerTransfer.touristGroup.touristGroupFeeList as rs}}
 									<tr>
 										<td>{{if rs.type==0}}增加{{else}}减少{{/if}}</td>
