@@ -108,7 +108,7 @@ define(function(require, exports) {
 			    type: 1,
 			    title:"新增餐厅",
 			    skin: 'layui-layer-rim', //加上边框
-			    area: ['95%', '90%'], //宽高
+			    area: ['1190px', '600px'], //宽高
 			    zIndex:1028,
 			    content: html,
 			    success:function(){
@@ -344,14 +344,14 @@ define(function(require, exports) {
 						var restaurantInfo = JSON.parse(data.restaurant);
 						data.restaurant = restaurantInfo;
 						var html = updateTemplate(data);
-
 						var updateRestaurantLayer = layer.open({
 						    type: 1,
 						    title:"修改餐厅",
 						    skin: 'layui-layer-rim', //加上边框
-						    area: ['95%', '90%'], //宽高
+						    area: ['1190px', '600px'], //宽高
 						    zIndex:1028,
 						    content: html,
+							//scrollbar: false,    // 推荐禁用浏览器外部滚动条
 						    success:function(){
 						    	var $obj = $(".updateRestaurantContainer .restaurantMainForm");
 						    	var validator = rule.check($obj);
@@ -488,12 +488,15 @@ define(function(require, exports) {
 				    				"<td style=\"width:70px\"><a data-entity-id=\"\" class=\" btn-restaurant-standard-delete\">删除</a></td>" +
 				    				"</tr>";
 
+
 //						    		var selLength = $(".restaurantStandardList select[name=type]").length;
 //						    		if (selLength >= 3) {
 //										html = "";
 //									}
 
 						    		$obj.find(".restaurantStandardList tbody").append(html);
+									//// 再调整对话框的高度
+									//$(window).trigger('resize');
 						    		mealValidator = rule.checkMeal($(".updateRestaurantContainer .restaurantStandardList"));
 
 //						    		var selArr = $(".restaurantStandardList select[name=type]");
@@ -804,7 +807,7 @@ define(function(require, exports) {
 					    type: 1,
 					    title:"查看餐厅",
 					    skin: 'layui-layer-rim', //加上边框
-					    area: ['95%', '90%'], //宽高
+					    area: ['1190px','600px'], //宽高
 					    zIndex:1028,
 					    content: html,
 					    success:function(){
