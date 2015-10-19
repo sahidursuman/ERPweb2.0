@@ -297,7 +297,7 @@ define(function(require, exports) {
 		//我社转出编辑操作
 		editTransferOut:function(id){
 				$.ajax({  
-					url:url("edit","edit"),
+					url:url("edit","view"),
 					data:"id="+id,
 					dataType:'json',
 					before:function(){
