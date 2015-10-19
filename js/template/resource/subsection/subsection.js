@@ -313,7 +313,8 @@ define(function(require, exports) {
 		operationSave :function(e){
 			var tab = e.data.tab,
 				days = e.data.days,
-				validator = e.data.validator;
+				validator = e.data.validator,
+				isCheckNeedPayMoney = 0;
 			if(!validator.form()){return;}
 			function getValue(obj,name){
 				var value = $(obj).find("[name="+name+"]").val();
@@ -332,6 +333,7 @@ define(function(require, exports) {
 					NeedPayMoney = "0";
 				if($this.find("input[name=operateCurrentNeedPayMoney]").is(":checked")){
 					NeedPayMoney = "1";
+					isCheckNeedPayMoney = 1;
 				}
 				var subTourist ={
 					id : $this.attr("data-entity-id"),
@@ -351,6 +353,10 @@ define(function(require, exports) {
 				subTouristGroup.delSubTouristGroupIdList.push(idList);
 			})
 			subTouristGroup = JSON.stringify(subTouristGroup);
+			if(isCheckNeedPayMoney == 0){
+				showMessageDialog($( "#confirm-dialog-message" ),"请选择在哪一分段现收团款");
+				return;
+			}
 			$.ajax({
 				url:""+APP_ROOT+"back/innerTransferOperation.do?method=saveSubTgroup&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 				type:"POST",
