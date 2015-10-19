@@ -445,7 +445,7 @@ define(function(require, exports) {
 							    				"<td><input name=\"remark\" class='col-sm-12' type=\"text\"/></td>" +
 							    				"<td style=\"width:70px\"><a data-entity-id=\"\" class=\"btn-hotel-standard-delete\">删除</a></td>" +
 							    				"</tr>";
-							    		$obj.find(".hotelRoomStandardList tbody").append(html); 
+							    		$obj.find(".hotelRoomStandardList tbody").append(html);
 							    		roomValidator = rule.checkRoom($('.updateHotelContainer .hotelRoomStandardList'));
 							    		// 对酒店房型设置表单验证
 							    		console.log($('.updateHotelContainer .hotelRoomStandardList'));
