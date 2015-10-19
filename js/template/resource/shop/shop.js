@@ -830,17 +830,31 @@ define(function(require, exports) {
 			    	});
 			    	// 提交数据，临时保存起来
 			    	$(".btn-submit-shop-policy").click(function(){
+			    		var $tr = $(".shopPolicyContainer").find(".shopPolicyTbody tr");
 			    		if( policyValidator != undefined){
 			    			if(!policyValidator.form()){return;}
 			    		}else{
 			    			showMessageDialog($( "#confirm-dialog-message" ),"政策不能为空");
 			    			return;
 			    		}
-			    		var result = shop.submitShopPolicy(obj);
-				    	if(result){
-				    		layer.close(policyLayer);
-				    		showMessageDialog($( "#confirm-dialog-message" ), "成功添加购物政策");
-				    	}
+			    		var timeRgith = 0; 
+			    		$tr.each(function(i){
+			    			var startTime = (new Date(($(this).find("input[name=startTime]").val()).replace("-", "/").replace("-", "/"))).getTime(),
+			    				endTime = (new Date(($(this).find("input[name=endTime]").val()).replace("-", "/").replace("-", "/"))).getTime(),
+			    				timeDiff = endTime - startTime;
+			    			if (timeDiff < 0) {
+			    				timeRgith = 1;
+			    			}
+			    		})
+			    		if(timeRgith == 0){
+				    		var result = shop.submitShopPolicy(obj);
+					    	if(result){
+					    		layer.close(policyLayer);
+					    		showMessageDialog($( "#confirm-dialog-message" ), "成功添加购物政策");
+					    	}
+					    }else{
+					    	showMessageDialog($( "#confirm-dialog-message" ), "截止时间应大于开始时间");
+					    }
 			    	});
 			    }
 			});
