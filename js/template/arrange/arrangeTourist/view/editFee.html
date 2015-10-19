@@ -149,22 +149,21 @@
 									<th class="th-border">单价</th>
 								</tr>
 							</thead>   
-							<tbody>
+							<tbody>	
+									<tr>
+										<td>结算价</td>
+										<td>大人</td>
+										<td>{{touristGroup.adultCount}}</td>
+										<td>{{touristGroup.adultPrice}}</td>
+									</tr> 
 
 									<tr>
 										<td>结算价</td>
 										<td>小孩</td>
 										<td>{{touristGroup.childCount}}</td>
 										<td>{{touristGroup.childPrice}}</td>   
-									</tr>
+									</tr> 
 
-									
-									<tr>
-										<td>结算价</td>
-										<td>大人</td>
-										<td>{{touristGroup.adultCount}}</td>
-										<td>{{touristGroup.adultPrice}}</td>
-									</tr>  
 									{{each touristGroupFeeList as touristGroupFlist}}    	                                           
 											<tr>       
 												<td>    
