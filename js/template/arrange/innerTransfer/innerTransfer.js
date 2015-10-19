@@ -670,7 +670,7 @@ define(function(require, exports) {
 						//查看
 						$("#" +tabId+" .transferIn-content .btn-transfer-view").click(function(){
 							var id = $(this).attr("data-entity-id");
-							inner.view(id);
+							inner.viewTransferOut(id);
 						});
 						//编辑
 						$("#" +tabId+" .transferIn-content .btn-transfer-edit").click(function(){
