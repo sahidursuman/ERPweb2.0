@@ -297,7 +297,7 @@ define(function(require, exports) {
 		//我社转出编辑操作
 		editTransferOut:function(id){
 				$.ajax({  
-					url:url("edit","edit"),
+					url:url("edit","view"),
 					data:"id="+id,
 					dataType:'json',
 					before:function(){
@@ -670,7 +670,7 @@ define(function(require, exports) {
 						//查看
 						$("#" +tabId+" .transferIn-content .btn-transfer-view").click(function(){
 							var id = $(this).attr("data-entity-id");
-							inner.view(id);
+							inner.viewTransferOut(id);
 						});
 						//编辑
 						$("#" +tabId+" .transferIn-content .btn-transfer-edit").click(function(){
