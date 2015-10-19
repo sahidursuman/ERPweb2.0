@@ -99,6 +99,8 @@ define(function(require, exports) {
 							busCompany.listBusCompany(data.totalPage == 0 ? 0 : data.totalPage-1,busCompany.searchData.companyName,busCompany.searchData.status);
 						});
 
+
+
 					}
 				}
 			});
