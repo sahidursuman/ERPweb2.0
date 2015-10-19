@@ -99,9 +99,10 @@ define(function(require, exports) {
 			    type: 1,
 			    title:"新增自费项目",
 			    skin: 'layui-layer-rim', //加上边框
-			    area: ['1190px', '700px'], //宽高
+			    area: '1190px', //宽高
 			    zIndex:1028,
 			    content: html,
+				scrollbar: false,    // 推荐禁用浏览器外部滚动条
 			    success:function(){
 			    	var $obj = $(".add-selfpay-form .selfpayMainForm"),
 			    	    $price = $(".add-selfpay-form .priceList"),
@@ -153,6 +154,8 @@ define(function(require, exports) {
 							'<td><input name="remark" type="text" class="col-sm-12" style="min-width:100px;" maxlength="1000"/></div></td>'+
 							'<td style="width:70px"><a class=" btn-price-delete">删除</a></td></tr>';
 						$price.find("tbody").append(html);
+						// 再调整对话框的高度
+						$(window).trigger('resize');
 						priceItemValidator = rule.checkItems($(".add-selfpay-form .priceList"));
 						$price.find(".datepicker").datepicker({
 							autoclose: true,
@@ -312,9 +315,10 @@ define(function(require, exports) {
 						    type: 1,
 						    title:"编辑自费项目信息",
 						    skin: 'layui-layer-rim', //加上边框
-						    area: ['1190px', '700px'], //宽高
+						    area: '1190px', //宽高
 						    zIndex:1028,
 						    content: html,
+							scrollbar: false,    // 推荐禁用浏览器外部滚动条
 						    success:function(){
 						    	var $obj = $(".update-selfpay-form .selfpayMainForm"),
 						    		$price = $(".update-selfpay-form .priceList"),
@@ -424,7 +428,9 @@ define(function(require, exports) {
 									'<td><input name="remark" type="text" class="col-sm-12" style="min-width:100px;"/></div></td>'+
 									'<td style="width:70px"><a class="btn-price-delete">删除</a></td></tr>';
 
-									$price.find("tbody").append(html); 
+									$price.find("tbody").append(html);
+									// 再调整对话框的高度
+									$(window).trigger('resize');
 									//修改是的项目价格价格列表验证
 									priceItemValidator = rule.checkItems($(".update-selfpay-form .priceList"));
 									$price.find(".datepicker").datepicker({

@@ -87,7 +87,7 @@ define(function(require, exports) {
 	  	    	        }]
 	 
 			}
-			},
+			
 		];
 
 		$container.find('.partnerList').find('tr').each(function() {

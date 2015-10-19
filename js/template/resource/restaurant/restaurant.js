@@ -108,7 +108,7 @@ define(function(require, exports) {
 			    type: 1,
 			    title:"新增餐厅",
 			    skin: 'layui-layer-rim', //加上边框
-			    area: ['1190px', '600px'], //宽高
+			    area: '1190px', //宽高
 			    zIndex:1028,
 			    content: html,
 			    success:function(){
@@ -162,6 +162,7 @@ define(function(require, exports) {
 			    				"<td style=\"width:90px\"><a class=\"btn-restaurant-standard-delete\">删除</a></td>" +
 			    				"</tr>";
 			    		$obj.find(".restaurantStandardList tbody").append(html);
+						$(window).trigger('resize');
 			    		mealValidator = rule.checkMeal($(".restaurantMainForm .restaurantStandardList"));
 			    		//给餐标列表删除按钮绑定事件
 			    		$obj.find(".restaurantStandardList tbody .btn-restaurant-standard-delete").click(function(){
@@ -348,7 +349,7 @@ define(function(require, exports) {
 						    type: 1,
 						    title:"修改餐厅",
 						    skin: 'layui-layer-rim', //加上边框
-						    area: ['1190px', '600px'], //宽高
+						    area: '1190px', //宽高
 						    zIndex:1028,
 						    content: html,
 							//scrollbar: false,    // 推荐禁用浏览器外部滚动条
@@ -495,8 +496,8 @@ define(function(require, exports) {
 //									}
 
 						    		$obj.find(".restaurantStandardList tbody").append(html);
-									//// 再调整对话框的高度
-									//$(window).trigger('resize');
+									// 再调整对话框的高度
+									$(window).trigger('resize');
 						    		mealValidator = rule.checkMeal($(".updateRestaurantContainer .restaurantStandardList"));
 
 //						    		var selArr = $(".restaurantStandardList select[name=type]");
@@ -789,6 +790,10 @@ define(function(require, exports) {
 				}
 			});
 		},
+
+
+
+		//update ========
 		viewRestaurant:function(id){
 			$.ajax({
 				url:""+APP_ROOT+"back/restaurant.do?method=getRestaurantById&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
