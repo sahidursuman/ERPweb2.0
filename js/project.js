@@ -924,7 +924,7 @@ function listMenu(menuTemplate){
 					});
 				});
 				//绑定内转转出账务
-				$("#sidebar .nav-list .arrange_inner_transfer").click(function(){
+				$("#sidebar .nav-list .financial_innerTransfer_in").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
@@ -934,6 +934,19 @@ function listMenu(menuTemplate){
 						var month = ""//date.getMonth()+1
 						innerTransferIn.listInnerTransferIn(0,"",year,month);
 						modals["financial_innerTransfer_in"] = innerTransferIn;
+					});
+				});
+				//绑定内转转出账务
+				$("#sidebar .nav-list .financial_innerTransfer_out").click(function(){
+					$("#sidebar .nav-list li").removeClass("active");
+					$(this).addClass("active");
+					$(this).parent().parent().addClass("active");
+					seajs.use("" + ASSETS_ROOT +"js/template/financial/innerTransferOut/innerTransferOut.js",function(innerTransferOut){
+						var date = new Date();
+						var year = date.getFullYear();
+						var month = ""//date.getMonth()+1
+						innerTransferOut.listInnerTransferOut(0,"",year,month);
+						modals["financial_innerTransfer_out"] = innerTransferOut;
 					});
 				});
 				//绑定内转利润账务
@@ -1129,14 +1142,12 @@ function listMenu(menuTemplate){
 
 						var $that = $(this),
 							max = $that.attr('maxlength'),
-							ctrlOldVal = $that.data('ctrlOldVal'),
 							val = $that.val();
 
 						if (chEnWordCount(val) > max)  {
-							$that.val(ctrlOldVal);
-						} else {
-							$that.data('ctrlOldVal', val);
-						}
+							val = cutStr(val, max);
+							$that.val(val);
+						} 
 
 						function chEnWordCount(str){
 							var count = 0;
@@ -1145,6 +1156,22 @@ function listMenu(menuTemplate){
 								count = str.replace(/[^\x00-\xff]/g,"**").length;
 							}
 							return count;
+						}
+
+						function cutStr(src, length) {
+							var res = '';
+
+							if (!!src || isNaN(length))  {
+								for (var len = src.length, i = (len -1), tmp; i < len; i --) {
+									tmp = src.substr(0, i+1);
+									if (chEnWordCount(tmp) <= length)  {
+										res = tmp;
+										break;
+									}
+								}
+							}
+
+							return res;
 						}
 					});
 			}

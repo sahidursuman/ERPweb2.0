@@ -26,9 +26,6 @@ define(function(require, exports) {
 					globalLoadingLayer = openLoadingLayer();
 				},
 				success:function(data){
-					
-					console.info(data)
-					
 					layer.close(globalLoadingLayer);
 					var result = showDialog(data);
 					if(result){
@@ -201,7 +198,6 @@ define(function(require, exports) {
 							}
 				    		var data = {}
 				    		data.policyData = policyData;
-				    		console.log(data);
 				    		shop.updatePolicy(data,$policyInput);
 				    		//policyValidator = rule.checkShopItem($(".policyForm .shopPolicyList"));//dsf ，
 				    	});
@@ -231,7 +227,6 @@ define(function(require, exports) {
 			    		// 政策列表数据封装
 			    		var policyDataList = [];
 			    		$(".shopContainer .shopPolicyForm .shopStandardList tbody tr").each(function(i){
-			    			console.debug(decodeURIComponent($(this).find("input[name=policyInput]").val()));
 			    			var policyInputJson = "";
 			    			if($(this).find("input[name=policyInput]").val()){
 				    			policyInputJson = JSON.parse(decodeURIComponent($(this).find("input[name=policyInput]").val()));
@@ -250,7 +245,6 @@ define(function(require, exports) {
 			    			policyDataList.push(policyData);
 			    		});
 			    		var policyDataListJson = JSON.stringify(policyDataList);
-			    		console.debug(policyDataListJson);
 			    		$.ajax({
 							url:""+APP_ROOT+"back/shop.do?method=addShop&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=add",
 							type:"POST",
@@ -529,7 +523,6 @@ define(function(require, exports) {
 					    				}
 					    			}
 						    		var shopStandardData = JSON.stringify(shopStandardJsonAdd); 
-						    		console.log(shopStandardData)
 						    		$.ajax({
 										url:""+APP_ROOT+"back/shop.do?method=updateShop&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
 										type:"POST",														
@@ -781,7 +774,6 @@ define(function(require, exports) {
 			});
 		},
 		updatePolicy:function(data,obj){
-			console.log(data);
 			var html = policyTemplate(data);
 			var policyLayer = layer.open({
 				 type: 1,
@@ -800,8 +792,8 @@ define(function(require, exports) {
 			    	'<button class=\"btn btn-success btn-sm btn-white add\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i>'+
 			    	'</button></label></div></td><td><div data-index="1" class="clearfix div-1" style="margin-bottom:3px"><input name="guideRate" maxlength=\"4\" type="text"/>'+
 			    	'</div></td><td><div data-index="1" class="clearfix div-1" style="margin-bottom:3px"><input name="travelAgencyRate" maxlength=\"4\" type="text"/>'+
-			    	'</div></td><td style=\"width:70px\"><button data-entity-id=\"\" class=\"btn btn-xs btn-danger btn-shop-policy-delete\">'+
-			    	'<i class=\"ace-icon fa fa-trash-o bigger-120\"></i></button></td></tr>';
+			    	'</div></td><td style=\"width:70px\"><a data-entity-id=\"\" class=\"cursor btn-shop-policy-delete\">'+
+			    	'删除</a></td></tr>';
 //			    	$(".policyForm .shopPolicyList tbody").append(policyHtml);
 			    	
 			     	$(".policyForm .btn-shop-policy-add").click(function(){
@@ -1116,7 +1108,6 @@ define(function(require, exports) {
 				shopPolicyList.push(shopPolicy);
 			});
 			var timeAreaJson = JSON.stringify(shopPolicyList);
-			console.log(timeAreaJson);
 			policyInput.val(encodeURIComponent(timeAreaJson));
 			return true;
 		}

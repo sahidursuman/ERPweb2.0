@@ -9,7 +9,8 @@ define(function(require, exports) {
 		viewTemplate = require("./view/view"),
 		arrangeTemplate = require("./view/arrange"),
 		listMainTemplate = require("./view/listMain"),
-		addPartnerManagerTemplate = require("./view/addPartnerManager");
+		addPartnerManagerTemplate = require("./view/addPartnerManager"),
+		searchTravelLinelayer;
 	
 	var touristGroup = {
 		searchData : {
@@ -1646,7 +1647,6 @@ define(function(require, exports) {
 				},
 				success: function(data){
 					layer.close(globalLoadingLayer);
-					var searchTravelLinelayer;
 					var result =showDialog(data);
 					var dataD = data;
 					if(result){
@@ -1672,21 +1672,22 @@ define(function(require, exports) {
 							});
 						}
 						else{
+							console.log(html)
 							$("#layui-layer"+searchTravelLinelayer+"").find(".layui-layer-content").html(html);
 						}
 						//搜索按钮事件
-						$("#chooseLineProductId .btn-lineProduct-search").click(function(){
+						$("#chooseLineProductId .btn-lineProduct-search").off("click").click(function(){
 							var name = $("#chooseLineProductId input[name=lineProduct_name]").val();
 							touristGroup.searchLineFunction(false,0,name);
 						});
 						
 						//分页--首页按钮事件
-						$("#chooseLineProductId .pageMode a.first").click(function(){
+						$("#chooseLineProductId .pageMode a.first").off("click").click(function(){
 							var name = $("#chooseLineProductId input[name=lineProduct_name]").val();
 							touristGroup.searchLineFunction(false,0,name);
 						});
 						//分页--上一页事件
-						$("#chooseLineProductId .pageMode a.previous").click(function(){
+						$("#chooseLineProductId .pageMode a.previous").off("click").click(function(){
 							var name = $("#chooseLineProductId input[name=lineProduct_name]").val();
 							var previous = dataD.pageNo - 1;
 							if(data.pageNo == 0){
@@ -1695,7 +1696,7 @@ define(function(require, exports) {
 							touristGroup.searchLineFunction(false,previous,name);
 						});
 						//分页--下一页事件
-						$("#chooseLineProductId .pageMode a.next").click(function(){
+						$("#chooseLineProductId .pageMode a.next").off("click").click(function(){
 							var name = $("#chooseLineProductId input[name=lineProduct_name]").val();
 							var next =  dataD.pageNo + 1;
 							if(dataD.pageNo == dataD.totalPage-1){
@@ -1704,7 +1705,7 @@ define(function(require, exports) {
 							touristGroup.searchLineFunction(false,next,name);
 						});
 						//分页--尾页事件
-						$("#chooseLineProductId .pageMode a.last").click(function(){
+						$("#chooseLineProductId .pageMode a.last").off("click").click(function(){
 							var name = $("#chooseLineProductId input[name=lineProduct_name]").val();
 							if(dataD.totalPage < 1){return;}
 							touristGroup.searchLineFunction(false,dataD.totalPage-1,name);
@@ -1712,7 +1713,7 @@ define(function(require, exports) {
 						//搜索路线   提交事件绑定
 						var travelLineName="";
 						var travelLineId="";
-						$(".btn-submit-searchtravelLine").click(function(){
+						$(".btn-submit-searchtravelLine").off("click").click(function(){
 							var trSearchtravelLine =$(".search-travelLineList-table tbody tr");
 							for(var i=0;i<trSearchtravelLine.length;i++){
 								
