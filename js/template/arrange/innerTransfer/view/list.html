@@ -99,7 +99,7 @@
 									<div class="col-sm-1 btn-group btn-status">
 										<button data-value="{{searchParam.status}}" data-toggle="dropdown" class=" btn-sm dropdown-toggle block-up" aria-expanded="false">
 											<span>
-											   {{if searchParam.status == ""}}
+											   {{if searchParam.status == null || searchParam.status == ""}}
 													全部
 												{{else if searchParam.status == 1}}
 													已接收
