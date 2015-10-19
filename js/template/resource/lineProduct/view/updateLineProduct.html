@@ -128,7 +128,7 @@
 																	{{if clipboardMode == false}}<input type="hidden" name="templateId" value="{{guideTemplate.id}}">{{/if}}
 																</td>
 																<td><input class="col-xs-12" name="guideFee" type="text" value="{{guideTemplate.price}}"/></td>
-																<td><input class="col-xs-12" name="gender" type="text" readonly="readonly" value="{{if guideTemplate.guide.gender == 1}}男{{else}}女{{/if}}"/></td>
+																<td><input class="col-xs-12" name="gender" type="text" readonly="readonly" value="{{if guideTemplate.guide.gender == 0}}男{{else}}女{{/if}}"/></td>
 																<td><input class="col-xs-12" name="mobileNumber" type="text" readonly="readonly" value="{{guideTemplate.guide.mobileNumber}}"/></td>
 																<td><input class="col-xs-12" name="guideLevel" type="text" readonly="readonly" value="{{if guideTemplate.guide.guideLevel == 1}}初级导游证{{else if guideTemplate.guide.guideLevel == 2}}中级导游资格{{else if guideTemplate.guide.guideLevel == 3}}高级导游资格{{else}}特级导游资格{{/if}}"/></td>
 																<td><input class="col-xs-12" name="company" type="text" readonly="readonly" value="{{guideTemplate.guide.company}}"/></td>
@@ -163,7 +163,6 @@
 												<label class="middle " style="font-weight: bold!important;margin-top: 5px">保险安排</label>
 											</h5>
 										</div>
-					
 										<div class="widget-body">
 											<div class="widget-main updateInsuranceList">
 												<table class="table table-striped table-bordered table-hover">

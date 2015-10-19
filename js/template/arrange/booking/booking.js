@@ -403,10 +403,10 @@ define(function(require, exports) {
 			'<option value="2">三星</option><option value="3">准四星</option><option value="4">四星</option><option value="5">准五星</option><option value="6">五星</option><option value="7">五星以上</option></select></td>'+
 			'<td><input name="hotelName" value="" type="text" class="col-sm-12 chooseHotel bind-change"/><input name="hotelId" type="hidden" value="" /></td>'+
 			'<td><input name="hotelRoom" value="" type="text" class="col-sm-12 chooseHotelRoom bind-change"/><input name="hotelRoomId" type="hidden" value="" /></td>'+
-			'<td><input name="days" value="" type="text" class="col-sm-12" /></td>'+
-			'<td><input name="roomCount" value="" type="text" class="col-sm-12"/></td>'+
-			'<td><input name="costPrice" value="" type="text" class="col-sm-12" style="width: 55px"/><label class="col-sm-4 control-label" style="padding: 7px 0 0 0;width:25px;" >/天</label></td>'+
-			'<td><input name="salePrice" value="" type="text" class="col-sm-12"  style="width: 55px"/><label class="col-sm-4 control-label" style="padding: 7px 0 0 0;width:25px;" >/天</label></td>'+
+			'<td><input name="days" value="" type="text" class="col-sm-12" maxlength="5" /></td>'+
+			'<td><input name="roomCount" value="" type="text" class="col-sm-12" maxlength="5" /></td>'+
+			'<td><input name="costPrice" value="" type="text" class="col-sm-12" style="width: 55px" maxlength="9" /><label class="col-sm-4 control-label" style="padding: 7px 0 0 0;width:25px;" >/天</label></td>'+
+			'<td><input name="salePrice" value="" type="text" class="col-sm-12"  style="width: 55px"  maxlength="9" /><label class="col-sm-4 control-label" style="padding: 7px 0 0 0;width:25px;" >/天</label></td>'+
 			'<td><input name="sumCostMoney" readonly="readonly" value="" type="text" class="col-sm-12"/></td>'+
 			'<td><input name="sumNeedGetMoney" readonly="readonly" value="" type="text" class="col-sm-12"/></td>'+
 			'<td><a class="cursor btn-hotel-booking-delete">删除</a></td>'+
@@ -432,12 +432,12 @@ define(function(require, exports) {
 			'<td><div class="input-group"><input name="startTime" value="" type="text" class="datepicker"/><span class="input-group-addon"><i class="fa fa-calendar"></i></span></div></td>'+
 			'<td><input name="scenicName" value="" type="text"  class="col-sm-12 chooseScenic bind-change" /><input name="scenicId" value="" type="hidden" /></td>'+
 			'<td><input name="scenicItemName" value="" type="text"  class="col-sm-12 chooseScenicItem bind-change" /><input name="scenicItemId" value="" type="hidden" /></td>'+
-			'<td><input name="roomCount" value="" type="text" class="col-sm-12" /></td>'+
-			'<td><input name="costPrice" value="" type="text" class="col-sm-12"/></td>'+
-			'<td><input name="salePrice" value="" type="text" class="col-sm-12"/></td>'+
+			'<td><input name="roomCount" value="" type="text" class="col-sm-12"  maxlength="5" /></td>'+
+			'<td><input name="costPrice" value="" type="text" class="col-sm-12" maxlength="9" /></td>'+
+			'<td><input name="salePrice" value="" type="text" class="col-sm-12" maxlength="9" /></td>'+
 			'<td><input name="sumCostMoney" value="" readonly="readonly" type="text" class="col-sm-12"/></td>'+
 			'<td><input name="sumNeedGetMoney" value="" readonly="readonly" type="text" class="col-sm-12"/></td>'+
-			'<td><input name="orderNumber" value="" type="text" class="col-sm-12" /></td>'+
+			'<td><input name="orderNumber" value="" type="text" class="col-sm-12" maxlength="50" /></td>'+
 			'<td><a class="cursor btn-scenic-booking-delete">删除</a></td></tr>';
 			event.data.$this.find("tbody.scenicBookingList").append(html);
 			event.data.$this.find(".bookingScenicList .btn-scenic-booking-delete").off().on("click",{cateName : "scenic", _this : event.data.$this},booking.deleteList);
@@ -459,14 +459,14 @@ define(function(require, exports) {
 			var html = '<tr>'+
 				'<td><input name="ticketName" value="" type="text" class="col-sm-12 chooseTicket bind-change"/><input name="ticketId" value="" type="hidden" /></td>'+
 				'<td><select name="type"><option value="1">机票</option><option value="2">汽车票</option><option value="3">火车票</option><option value="4">轮船票</option></select></td>'+
-				'<td><input name="startCity" value="" type="text" class="col-sm-12"/></td>'+
-				'<td><input name="arriveCity" value="" type="text" class="col-sm-12"/></td>'+
-				'<td><input name="shift" value="" type="text" class="col-sm-12"/></td>'+
-				'<td><input name="seatLevel" value="" type="text" class="col-sm-12"/></td>'+
+				'<td><input name="startCity" value="" type="text" class="col-sm-12" maxlength="30" /></td>'+
+				'<td><input name="arriveCity" value="" type="text" class="col-sm-12" maxlength="30" /></td>'+
+				'<td><input name="shift" value="" type="text" class="col-sm-12" maxlength="30" /></td>'+
+				'<td><input name="seatLevel" value="" type="text" class="col-sm-12" maxlength="30" /></td>'+
 				'<td><div class="input-group"><input name="startTime" value="" type="text" class="datetimepicker"/><span class="input-group-addon"><i class="fa fa-clock-o"></i></span></div></td>'+
-				'<td><input name="roomCount" value="" type="text" class="col-sm-12"/></td>'+
-				'<td><input name="costPrice" value="" type="text" class="col-sm-12"/></td>'+
-				'<td><input name="salePrice" value="" type="text" class="col-sm-12"/></td>'+
+				'<td><input name="roomCount" value="" type="text" class="col-sm-12" maxlength="5" /></td>'+
+				'<td><input name="costPrice" value="" type="text" class="col-sm-12" maxlength="9" /></td>'+
+				'<td><input name="salePrice" value="" type="text" class="col-sm-12" maxlength="9" /></td>'+
 				'<td><input name="sumCostMoney" value="" readonly="readonly" type="text" class="col-sm-12"/></td>'+
 				'<td><input name="sumNeedGetMoney" value="" readonly="readonly" type="text" class="col-sm-12"/></td>'+
 				'<td><a class="cursor btn-ticket-booking-delete">删除</a></td></tr>';
@@ -491,9 +491,9 @@ define(function(require, exports) {
 			'<td><input name="needSeatCount" value="" type="text" class="col-sm-12 chooseSeatCount bind-change" /></td>'+
 			'<td><input name="needBusBrand" value="" type="text" class="col-sm-12 bind-change" /></td>'+
 			'<td><input name="busCompany" value="" type="text" class="col-sm-12 bind-change" /><input name="busCompanyId" value="" type="hidden" /></td>'+
-			'<td><input name="roomCount" value="" type="text" class="col-sm-12" /></td>'+
-			'<td><input name="costPrice" value="" type="text" class="col-sm-12"/></td>'+
-			'<td><input name="salePrice" value="" type="text" class="col-sm-12"/></td>'+
+			'<td><input name="roomCount" value="" type="text" class="col-sm-12" maxlength="5" /></td>'+
+			'<td><input name="costPrice" value="" type="text" class="col-sm-12" maxlength="9" /></td>'+
+			'<td><input name="salePrice" value="" type="text" class="col-sm-12" maxlength="9" /></td>'+
 			'<td><input name="sumCostMoney" value="" readonly="readonly" type="text" class="col-sm-12"/></td>'+
 			'<td><input name="sumNeedGetMoney" value="" readonly="readonly" type="text" class="col-sm-12"/></td>'+
 			'<td><a class="cursor btn-bus-booking-delete">删除</a></td></tr>';

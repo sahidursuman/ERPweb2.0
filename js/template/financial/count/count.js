@@ -10,9 +10,28 @@ define(function(require, exports) {
     var tripDetailTempLate = require("./view/tripDetail");
     var groupDetailTemplate = require("./view/groupDetail");
     var outDetailTempLate = require("./view/outDetail");
-    var uKey = menuKey + "checkBill";
+    var uKey = menuKey + "-checkBill";
     
     var count = {
+		searchData : {
+			page : "",
+			tripNumber : "",
+			lineProductId : "",
+			lineProductName : "",
+			guideId : "",
+			guideName : "",
+			startTime : "",
+			endTime : "",
+			status : ""
+		},
+		edited : {},
+		isEdited : function(editedType){
+			if(!!count.edited[editedType] && count.edited[editedType] != ""){
+				return true;
+			}
+			return false;
+		},
+		oldCheckBillId : 0,
         init: function() {
             var today = (new Date()).Format('yyyy-MM-dd'),
                 firstDay = today.split('-');
@@ -327,32 +346,59 @@ define(function(require, exports) {
                     var result = showDialog(data);
                     if(result){
                     	var tmp = {
-                    			"busCompanyArrange":JSON.parse(data.busCompanyArrange),
-                    			"tripPlan":JSON.parse(data.tripPlan),
-                    			"dayList":JSON.parse(data.dayList),
-                    			"user":JSON.parse(data.user),
-                    			"guideArrange":JSON.parse(data.guideArrange),
-                    			"insuranceArrange":JSON.parse(data.insuranceArrange),
-                    			"ticketArrangeList":JSON.parse(data.ticketArrangeList),
-                    			"WEB_IMG_URL_BIG":data.WEB_IMG_URL_BIG,
-                    			"WEB_IMG_URL_SMALL":data.WEB_IMG_URL_SMALL,
-                    			"touristGroup":data.touristGroup,
-                    			"financialTripPlanId":data.financialTripPlanId,
-                    			"arrangeIncomePaymentList":JSON.parse(data.arrangeIncomePaymentList),
-                                "remarkArrangeList": JSON.parse(data.remarkArrangeList)
+							"busCompanyArrange":JSON.parse(data.busCompanyArrange),
+							"tripPlan":JSON.parse(data.tripPlan),
+							"dayList":JSON.parse(data.dayList),
+							"user":JSON.parse(data.user),
+							"guideArrange":JSON.parse(data.guideArrange),
+							"insuranceArrange":JSON.parse(data.insuranceArrange),
+							"ticketArrangeList":JSON.parse(data.ticketArrangeList),
+							"WEB_IMG_URL_BIG":data.WEB_IMG_URL_BIG,
+							"WEB_IMG_URL_SMALL":data.WEB_IMG_URL_SMALL,
+							"touristGroup":data.touristGroup,
+							"financialTripPlanId":data.financialTripPlanId,
+							"arrangeIncomePaymentList":JSON.parse(data.arrangeIncomePaymentList),
+							"remarkArrangeList": JSON.parse(data.remarkArrangeList)
                         }
 
                         data = count.covertRemark(tmp);
                     	var html = updateTemplate(data);
-                    	
-            			var financialCountUpdate = addTab(uKey, guide == "guide"?"单团报账":"单团审核", html);
+                    	var title = (guide == "guide"?"单团报账":"单团审核");
+						
+						//判断页面是否存在 #tab-financial_guide-clearing-content  "tab-"+ menuKey+"-clearing"+"-content" 
+                 	    if($("#tab-"+uKey+"-content").length > 0) {
+                 	    	if(!!count.edited["checkBill"] && count.edited["checkBill"] != ""){
+                 	    		addTab(uKey,title);
+                 	    		showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
+				            		var id = $(this).attr('data-entity-id');
+									var financialTripPlanId = $(this).attr('data-entity-financial-id');
+									var userName = $(this).attr('data-entity-userName');
+									var roleType = $(this).attr('data-entity-roleType');
+									count.saveTripCount(id, financialTripPlanId, userName, roleType,0);
+				            		 count.edited["checkBill"] = "";
+				            		 addTab(uKey,title,html);
+				            	 },function(){
+				            		 addTab(uKey,title,html);
+				            		 count.edited["checkBill"] = "";
+				            	 });
+                 	    	 }else{
+	                 	    	addTab(uKey,title,html);
+                 	    	 }
+                 	    }else{
+                 	    	addTab(uKey,title,html);
+                 	    }
             			
+						$(".financial-count-update-update-tab").on("change",function(){
+							count.edited["checkBill"] = "checkBill";
+							count.oldCheckBillId = id;
+						});
+						console.log("init");
             			$('.countUpdate .btn-saveCount').off('click').on('click',function() {
             				var id = $(this).attr('data-entity-id');
             				var financialTripPlanId = $(this).attr('data-entity-financial-id');
             				var userName = $(this).attr('data-entity-userName');
             				var roleType = $(this).attr('data-entity-roleType');
-            				count.saveTripCount(id, financialTripPlanId, userName, roleType);
+            				count.saveTripCount(id, financialTripPlanId, userName, roleType,0);
             			});
             			
             			$('.countUpdate .btn-guide-account').off('click').on('click',function() {
@@ -975,7 +1021,7 @@ define(function(require, exports) {
             	}
             });
 		},
-		saveTripCount : function(id, financialTripPlanId, userName, roleType) {
+		saveTripCount : function(id, financialTripPlanId, userName, roleType,isClose) {
 			var saveJson = count.getSaveTripPlanJson();
 			if(roleType == "2") {
 				saveJson.log.info.message = "财务（" + userName + "）保存信息";
@@ -1001,7 +1047,13 @@ define(function(require, exports) {
                     var result = showDialog(data);
                     if(result){
                     	showMessageDialog($( "#confirm-dialog-message" ),data.message);
-                    	count.updateExamine(financialTripPlanId,"");
+						count.edited["checkBill"] = "";
+						if(isClose == 1){
+							closeTab(uKey);
+							count.getlistCount(count.searchData.pageNo,count.searchData.tripNumber,count.searchData.lineProductId,count.searchData.lineProductName,count.searchData.guideId,count.searchData.guideName,count.searchData.startTime,count.searchData.endTime,count.searchData.status);
+						}else{
+							count.updateExamine(financialTripPlanId,"");
+						}
                     }
                 }
         	});
@@ -1771,7 +1823,19 @@ define(function(require, exports) {
          		var url = ""+APP_ROOT+"back/export.do?method=exportOutDetail&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view"+"&tripPlanId="+id;
              	exportXLS(url)
              });
-	    }
+	    },
+		save : function(saveType){
+			console.log(saveType);
+			if(saveType == "checkBill"){
+				count.saveTripCount(0,count.oldCheckBillId,"","",1);
+			} 
+		},
+		clearEdit : function(clearType){
+			count.edited[clearType] = "";
+		}
     }
     exports.init = count.init;
+	exports.isEdited = count.isEdited;
+	exports.save = count.save;
+	exports.clearEdit = count.clearEdit;
 });

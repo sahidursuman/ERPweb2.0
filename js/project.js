@@ -1048,6 +1048,7 @@ function listMenu(menuTemplate){
 								first : "1",
 							}
 						inner.list(searchParam);
+						modals["arrange_inner_Transfer"] = inner;
 					});
 				});
 
@@ -1059,7 +1060,7 @@ function listMenu(menuTemplate){
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/financial/count/count.js",function(count){
 						count.init()
-
+						modals["financial_count"] = count;
 						// count.getlistCount(0,"","","","","","","","");
 					});
 				});
@@ -1141,14 +1142,12 @@ function listMenu(menuTemplate){
 
 						var $that = $(this),
 							max = $that.attr('maxlength'),
-							ctrlOldVal = $that.data('ctrlOldVal'),
 							val = $that.val();
 
 						if (chEnWordCount(val) > max)  {
-							$that.val(ctrlOldVal);
-						} else {
-							$that.data('ctrlOldVal', val);
-						}
+							val = cutStr(val, max);
+							$that.val(val);
+						} 
 
 						function chEnWordCount(str){
 							var count = 0;
@@ -1157,6 +1156,22 @@ function listMenu(menuTemplate){
 								count = str.replace(/[^\x00-\xff]/g,"**").length;
 							}
 							return count;
+						}
+
+						function cutStr(src, length) {
+							var res = '';
+
+							if (!!src || isNaN(length))  {
+								for (var len = src.length, i = (len -1), tmp; i < len; i --) {
+									tmp = src.substr(0, i+1);
+									if (chEnWordCount(tmp) <= length)  {
+										res = tmp;
+										break;
+									}
+								}
+							}
+
+							return res;
 						}
 					});
 			}

@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":31,"md5":"9e2c804bc45c36ee8d3b606cb0e17bce"}*/
+/*TMODJS:{"debug":true,"version":33,"md5":"9e2c804bc45c36ee8d3b606cb0e17bce"}*/
 define(function(require) {
     return require("../../../template")("financial/turnProfit/view/visitorGroup", function($data, $filename) {
         try {

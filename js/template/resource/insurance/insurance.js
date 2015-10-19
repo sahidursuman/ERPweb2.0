@@ -230,6 +230,23 @@ define(function(require, exports) {
 						    			$payPeriod.addClass("hide");
 						    		}
 						    	});
+								//级联选择城市列表
+								var provinceId = "";
+								if(data.insurance.provinceId != null){
+									provinceId = data.insurance.provinceId;
+									var cityId = "";
+									if(data.insurance.cityId != null){
+										cityId = data.insurance.cityId;
+
+										var districtId = "";
+										if(data.insurance.districtId != null){
+											districtId = data.insurance.districtId;
+										}
+										insurance.getDistrictList($obj.find("select[name=districtId]"),cityId,districtId);
+									}
+									insurance.getCityList($obj.find("select[name=cityId]"),provinceId,cityId);
+								}
+								insurance.getProvinceList($obj.find("select[name=provinceId]"),provinceId);
 						    /*	//初始化省数据
 						    	insurance.getProvinceList($(".insuranceMainForm select[name=provinceId]"));*/
 						    	
