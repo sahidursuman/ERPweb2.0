@@ -6,6 +6,7 @@ define(function(require, exports) {
         viewTemplate = require("./view/visitorGroup"),
         visitorGroupMainInfo = require("./view/visitorGroupMainInfo"),
         transitViewTemplate = require("../../arrange/transit/view/view"),
+        innerTransferInfoTemplate = require("./view/innerTransferInfo"),
         blanceTabId = menuKey+"-blance";
     var InnerTransferProfit  = {
         searchData :{
@@ -21,8 +22,8 @@ define(function(require, exports) {
         clickFlag : 0,
         listInnerTransferProfit:function(page,lineProductId,lineProductName,partnerAgencyId,PartnerAgencyName,toBusinessGroupId,ToBusinessGroupName,startTime,endTime){
             var name = PartnerAgencyName;
-            $.ajax({
-                url:""+APP_ROOT+"/back/profitInnerTransfer.do?method=listProfitInnerTransfer&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
+            $.ajax({//            back/profitInnerTransfer.do
+                url:""+APP_ROOT+"back/profitInnerTransfer.do?method=listProfitInnerTransfer&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
                 type:"GET",
                 data:"pageNo="+page+"&lineProductId="+lineProductId+"&partnerAgencyId="+partnerAgencyId+"&toBusinessGroupId="+toBusinessGroupId+"&startTime="+startTime+"&endTime="+endTime+"&sortType=auto",
                 dataType:"json",
@@ -201,7 +202,7 @@ define(function(require, exports) {
                             var visitorGroupId = $(this).attr("data-entity-id")
                             InnerTransferProfit.viewTransit(visitorGroupId);
                         });
-                        //查看轉客事件
+                        //查看内转明细事件
                         $tabId.find(".showTransNeedPayDeatil").click(function(){
                             var visitorGroupId = $(this).attr("data-entity-id")
                             InnerTransferProfit.viewTransfer(visitorGroupId);
@@ -324,7 +325,7 @@ define(function(require, exports) {
         viewTransfer:function(id){
             //var id = $(this).attr("data-entity-id");
             $.ajax({
-                url:""+APP_ROOT+"back/transfer.do?method=findMember&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
+                url:""+APP_ROOT+"back/innerTransfer.do?method=edit&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
                 type:"POST",
                 data:"id="+id+"",
                 dataType:"json",
@@ -338,15 +339,13 @@ define(function(require, exports) {
                     layer.close(globalLoadingLayer);
                     var result = showDialog(data);
                     if(result){
-
-                        data.lineProduct = JSON.parse(data.lineProduct);
-                        data.touristGroup =JSON.parse(data.touristGroup);
-                        data.toBusinessGroupNameAgency=JSON.parse(data.toBusinessGroupNameAgency);
-                        var html = arrangeTransferViewTemplate(data);
+                        data.innerTransfer = JSON.parse(data.innerTransfer);
+                        //var html = viewTemplate(data);
+                        var html = innerTransferInfoTemplate(data);
                         //addTab(menuKey+"-viewTransfer","查看我社转出",html);
                         layer.open({
                             type : 1,
-                            title : "转客明细",
+                            title : "内转明细",
                             skin : 'layui-layer-rim', // 加上边框
                             area : [ "60%", '50%' ], // 宽高
                             zIndex : 1028,
