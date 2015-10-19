@@ -547,7 +547,7 @@
                                                                 <td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12" value="{{scenic.needPayMoney}}" style="width: 60px;" /></td>
                                                                 <td><input type="text" name="payedMoney" class="col-sm-12" value="{{scenic.payedMoney}}" style="width: 60px;" /></td>
                                                                 <td>
-                                                                    <select name="" class="col-sm-12 no-padding" style="width: 55px;">
+                                                                    <select name="payType" class="col-sm-12 no-padding" style="width: 55px;">
                                                                         <option {{if scenic.payType == 0}}selected="selected"{{/if}} value="0">现付</option>
                                                                         <option {{if scenic.payType == 1}}selected="selected"{{/if}} value="1">签单</option>
                                                                         <option {{if scenic.payType == 2}}selected="selected"{{/if}} value="2">转账</option>
