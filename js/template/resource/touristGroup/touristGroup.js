@@ -52,11 +52,12 @@ define(function(require, exports) {
 						var html = listMainTemplate(data);
 						addTab(menuKey,"游客管理",html);
 						//搜索栏状态button下拉事件
+						var tab = "tab-resource_touristGroup-content";
 						$(".touristGroupSearchForm .btn-status .dropdown-menu a").click(function(){
 							$(this).parent().parent().parent().find("button").attr("data-value",$(this).attr("data-value"));
 							$(this).parent().parent().parent().find("span").text($(this).text());
 							touristGroup.searchData = {
-								partnerAgencyId : $(".touristGroupSearchForm select[name=partnerAgencyId]").find("option:selected").val(),
+								partnerAgencyId : $(".touristGroupSearchForm input[name=fromPartnerAgencyId]").val(),
 								lineProductId : $(".touristGroupSearchForm select[name=lineProductId]").find("option:selected").val(),
 								startTime : $(".touristGroupSearchForm input[name=startTime]").val(),
 								userId : $(".touristGroupSearchForm select[name=userId]").find("option:selected").val(),
@@ -65,14 +66,14 @@ define(function(require, exports) {
 								customerType : $(".touristGroupSearchForm select[name=customerType]").find("option:selected").val(),
 								status : $(".touristGroupSearchForm button").attr("data-value")
 							}
-							touristGroup.getTouristStatisticData(0,touristGroup.searchData.partnerAgencyId,touristGroup.searchData.lineProductId,touristGroup.searchData.startTime,touristGroup.searchData.userId,touristGroup.searchData.createTimeStart,touristGroup.searchData.createTimeEnd,touristGroup.searchData.customerType,touristGroup.searchData.status);
+							touristGroup.listTouristGroup(0,touristGroup.searchData.partnerAgencyId,touristGroup.searchData.lineProductId,touristGroup.searchData.startTime,touristGroup.searchData.userId,touristGroup.searchData.createTimeStart,touristGroup.searchData.createTimeEnd,touristGroup.searchData.customerType,touristGroup.searchData.status);
 							//下拉数据初始化
 							touristGroup.initList(data);
 						});
 						//筛选事件绑定
 						$(".touristGroupSearchForm .btn-touristGroupList-search").click(function(){
 							touristGroup.searchData = {
-								partnerAgencyId : $(".touristGroupSearchForm select[name=partnerAgencyId]").find("option:selected").val(),
+								partnerAgencyId : $(".touristGroupSearchForm input[name=fromPartnerAgencyId]").val(),
 								lineProductId : $(".touristGroupSearchForm select[name=lineProductId]").find("option:selected").val(),
 								startTime : $(".touristGroupSearchForm input[name=startTime]").val(),
 								userId : $(".touristGroupSearchForm select[name=userId]").find("option:selected").val(),
@@ -81,7 +82,7 @@ define(function(require, exports) {
 								customerType : $(".touristGroupSearchForm select[name=customerType]").find("option:selected").val(),
 								status : $(".touristGroupSearchForm select[name=status]").find("option:selected").val()
 							}
-							touristGroup.getTouristStatisticData(0,touristGroup.searchData.partnerAgencyId,touristGroup.searchData.lineProductId,touristGroup.searchData.startTime,touristGroup.searchData.userId,touristGroup.searchData.createTimeStart,touristGroup.searchData.createTimeEnd,touristGroup.searchData.customerType,touristGroup.searchData.status);
+							touristGroup.listTouristGroup(0,touristGroup.searchData.partnerAgencyId,touristGroup.searchData.lineProductId,touristGroup.searchData.startTime,touristGroup.searchData.userId,touristGroup.searchData.createTimeStart,touristGroup.searchData.createTimeEnd,touristGroup.searchData.customerType,touristGroup.searchData.status);
 							//下拉数据初始化
 							touristGroup.initList(data);
 						});
@@ -96,7 +97,7 @@ define(function(require, exports) {
 						 //游客默认一周时间初始化 
 	 
 				        touristGroup.initTouristGrSearTime();
- 
+ 						touristGroup.getPartnerAgencyList($("#"+tab+" .choosePartnerAgency"),"")
 
 					}
 				}
@@ -306,7 +307,7 @@ define(function(require, exports) {
 			//初始化路线    	
 			if(data.searchParam == '{}'){
 				touristGroup.getLineProductList($(".touristGroupSearchForm select[name=lineProductId]"));
-				touristGroup.getPartnerAgencyList($(".touristGroupSearchForm input[name=fromPartnerAgency]"));
+				//touristGroup.getPartnerAgencyList($(".touristGroupSearchForm input[name=fromPartnerAgency]"));
 				touristGroup.getCreatorUserList($(".touristGroupSearchForm select[name=userId]"));
 			}
 			else{
@@ -1463,6 +1464,7 @@ define(function(require, exports) {
 				if(i > 1){
 					var type = $(this).find("[name=addOrReduceSelect]").attr("value");
 					var describeInfo = $(this).find("input[name=describeInfo]").val();
+					var idAdd = $(this).attr("data-entity-id");
 					if (trim(describeInfo) == "") {
 						showMessageDialog($( "#confirm-dialog-message" ), "请输入费用说明");
 						return false;
@@ -1478,7 +1480,7 @@ define(function(require, exports) {
 						return false;
 					}				
 					var touristGroupFeeJson = {
-						id : id,
+						id : idAdd,
 						type : type,
 						describeInfo : describeInfo,
 						count : count,
@@ -1491,9 +1493,9 @@ define(function(require, exports) {
 			touristGroupFeeJsonDel = [];
 			var delFeeStr = $("#"+tab+" .touristGroupMainForm .addCostList .addCostTbody tr.deleted");
 			delFeeStr.each(function(i){
-				var id = delFeeStr.eq(i).attr("data-entity-id");
+				var idDel = delFeeStr.eq(i).attr("data-entity-id");
 				touristGroupFeeJson = {
-					id :id
+					id :idDel
 				};
 				touristGroupFeeJsonDel.push(touristGroupFeeJson);
 			})			
