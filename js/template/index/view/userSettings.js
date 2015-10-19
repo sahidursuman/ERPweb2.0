@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":13,"md5":"26996b7cea32480d5d82e328e29ca8cc"}*/
+/*TMODJS:{"debug":true,"version":10,"md5":"26996b7cea32480d5d82e328e29ca8cc"}*/
 define(function(require) {
     return require("../../template")("index/view/userSettings", function($data, $filename) {
         try {

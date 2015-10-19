@@ -3,14 +3,14 @@
 			<table class="table table-striped table-bordered table-hover all">
 				<thead>
 					<tr>
-						<th>选择</th>
-						<th>团号</th>
-						<th>线路名称</th>
-						<th>出团日期</th>
-						<th>人数</th>
-						<th>导游</th>
-						<th>车牌号</th>
-						<th>操作</th>
+						<th class="th-border">选择</th>
+						<th class="th-border">团号</th>
+						<th class="th-border">线路名称</th>
+						<th class="th-border">出团日期</th>
+						<th class="th-border">人数</th>
+						<th class="th-border">导游</th>
+						<th class="th-border">车牌号</th>
+						<th class="th-border">操作</th>
 					</tr>
 				</thead>
 					<tbody class="chooseTripPlanTbody">{{each tripPlanList as tripPlanList}}
@@ -28,12 +28,11 @@
 							<td>{{if tripPlanList.guide != null}}{{tripPlanList.guide.realname}}{{/if}}</td>
 							<td>{{if tripPlanList.bus != null}}{{tripPlanList.bus.licenseNumber}}{{/if}}</td>
 							<td>
-								<button data-entity-id="{{tripPlanList.id}}" class="btn btn-xs btn-info groupView">
-									<i class="ace-icon fa fa-search-plus"></i>
-								</button>
+								<a data-entity-id="{{tripPlanList.id}}" class="cursor groupView">
+									查看
+								</a>
 							</td>
 						</tr>{{/each}}
-				
 				</tbody>
 			</table>
 			<form class="form-horizontal" role="form" onsubmit="return false">
