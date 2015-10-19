@@ -375,19 +375,19 @@ define(function(require, exports) {
 						    	var provinceId = "";
 						    	if(data.selfpay.province != null){
 						    		provinceId = data.selfpay.province.id;
+									var cityId = "";
+									if(data.selfpay.city != null){
+										cityId = data.selfpay.city.id;
+										
+										var districtId = "";
+										if(data.selfpay.district != null){
+											districtId = data.selfpay.district.id;
+										}
+										selfpay.getDistrictList($obj.find("select[name=districtId]"),cityId,districtId);
+									}
+									selfpay.getCityList($obj.find("select[name=cityId]"),provinceId,cityId);
 						    	}
 						    	selfpay.getProvinceList($obj.find("select[name=provinceId]"),provinceId);
-						    	var cityId = "";
-						    	if(data.selfpay.city != null){
-						    		cityId = data.selfpay.city.id;
-						    		selfpay.getCityList($obj.find("select[name=cityId]"),provinceId,cityId);
-						    		
-						    		var districtId = "";
-						    		if(data.selfpay.district != null){
-						    			districtId = data.selfpay.district.id;
-						    			selfpay.getDistrictList($obj.find("select[name=districtId]"),cityId,districtId);
-						    		}
-						    	}
 						    	//修改价格列表
 								$price.find(".dateTimeArea button.add").off().on("click",function(){ 
 									selfpay.addDateArea($(this));

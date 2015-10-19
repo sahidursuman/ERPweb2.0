@@ -197,6 +197,23 @@ define(function(require, exports) {
 						    success:function(){
 						    	var $obj = $(".updateTicketContainer .ticketMainForm");
 						    	var validator = rule.check($(".updateTicketContainer .ticketMainForm"));
+								//级联选择城市列表
+								var provinceId = "";
+								if(data.ticket.provinceId != null){
+									provinceId = data.ticket.provinceId;
+									var cityId = "";
+									if(data.ticket.cityId != null){
+										cityId = data.ticket.cityId;
+
+										var districtId = "";
+										if(data.ticket.districtId != null){
+											districtId = data.ticket.districtId;
+										}
+										ticket.getDistrictList($obj.find("select[name=districtId]"),cityId,districtId);
+									}
+									ticket.getCityList($obj.find("select[name=cityId]"),provinceId,cityId);
+								}
+								ticket.getProvinceList($obj.find("select[name=provinceId]"),provinceId);
 						    	//给省份select绑定事件
 						    	$obj.find("select[name=provinceId]").change(function(){
 						    		var provinceId = $(this).val();
