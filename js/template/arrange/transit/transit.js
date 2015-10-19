@@ -561,10 +561,10 @@ define(function(require, exports) {
 			'<td><input class="col-sm-12 chooseDriver" name="driverName" type="text" value="" /><input type="hidden" name="driverId" /></td>'+
 			'<td><input class="col-sm-12" name="driverMobileNumber" readonly="readonly" type="text" value="" /></td>'+
 			'<td><input class="col-sm-12 datetimepicker" name="bususeTime" type="text" value="" /></td>'+
-			'<td><input class="col-sm-12" name="boardLocation" type="text" value="" /></td>'+
-			'<td><input class="col-sm-12 price" name="busFee" type="text" value="" /><input type="hidden" class="count" value="1" /></td>'+
+			'<td><input class="col-sm-12" name="boardLocation" type="text" value="" maxlength="200" /></td>'+
+			'<td><input class="col-sm-12 price" name="busFee" type="text" value="" maxlength="9" /><input type="hidden" class="count" value="1" /></td>'+
 			'<td><input class="col-sm-12 discount" name="busReduceMoney" type="text" value="" /></td>'+
-			'<td><input class="col-sm-12 needPay" readonly="readonly" name="busNeedPayMoney" type="text" value="" /></td>'+
+			'<td><input class="col-sm-12 needPay" readonly="readonly" name="busNeedPayMoney"  maxlength="9" type="text" value="" /></td>'+
 			'<td><input class="col-sm-12" name="busPayedMoney" type="text" value="" /></td>'+
 			'<td><select class="" name="busPayType" ><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>'+ 
 			'<td><input class="col-sm-12" name="remark" type="text" value="" /></td>'+ 
@@ -593,11 +593,11 @@ define(function(require, exports) {
 			'<td><input class="col-sm-12 chooseHotel" name="hotelName" value="" type="text" /><input type="hidden" name="hotelId" /></td>'+
 			'<td><input class="col-sm-12" name="hotelManagerName" value="" readonly="readonly" type="text" /></td>'+
 			'<td><input class="col-sm-12" name="hotelMobileNumber" value="" readonly="readonly" type="text" /></td>'+
-			'<td><input class="col-sm-12" name="hotelRoomType" value="" type="text" /><input type="hidden" name="hotelRoomTypeId" /></td>'+
-			'<td><input class="col-sm-12 price" name="hotelPrice" value="" type="text" /></td>'+
-			'<td><input class="col-sm-12 count" name="hotelMemberCount" value="" type="text" /></td>'+
-			'<td><input class="col-sm-12 discount" name="hotelReduceMoney" value="" type="text" /></td>'+
-			'<td><input class="col-sm-12 needPay" readonly="readonly" name="hotelNeedPayMoney" value="" type="text" /></td>'+
+			'<td><input class="col-sm-12" name="hotelRoomType" value=""  type="text" /><input type="hidden" name="hotelRoomTypeId" /></td>'+
+			'<td><input class="col-sm-12 price" name="hotelPrice" value="" maxlength="9" type="text" /></td>'+
+			'<td><input class="col-sm-12 count" name="hotelMemberCount"  maxlength="6" value="" type="text" /></td>'+
+			'<td><input class="col-sm-12 discount" name="hotelReduceMoney"  maxlength="9" value="" type="text" /></td>'+
+			'<td><input class="col-sm-12 needPay" readonly="readonly" name="hotelNeedPayMoney"   maxlength="9" value="" type="text" /></td>'+
 			'<td><input class="col-sm-12" name="hotelPayedMoney" value="" type="text" /></td>'+
 			'<td><select class="" name="hotelPayType" >'+
 			'<option value="0">现付</option>'+
@@ -621,16 +621,16 @@ define(function(require, exports) {
 			'<td><input type="hidden" name="serviceType" value="'+type+'" /><input class="col-sm-12 chooseTicket" name="ticketName" value="" type="text" /><input type="hidden" name="tickeId" /></td>'+
 			'<td><select class="" name="ticketType"><option value="1">机票</option>'+
 			'<option value="2">汽车票</option><option value="3">火车票</option><option value="4">轮船票</option></select></td>'+
-			'<td><input class="col-sm-12" name="ticketStartCity" value="" type="text" /></td>'+
-			'<td><input class="col-sm-12" name="ticketArriveCity" value="" type="text" /></td>'+
+			'<td><input class="col-sm-12" name="ticketStartCity" value="" maxlength="32"  type="text" /></td>'+
+			'<td><input class="col-sm-12" name="ticketArriveCity" value="" maxlength="32"  type="text" /></td>'+
 			'<td><input class="col-sm-12" name="ticketStartTime" value="" type="text" /></td>'+
-			'<td><input class="col-sm-12" name="ticketShift" value="" type="text" /></td>'+
-			'<td><input class="col-sm-12" name="ticketSeatLevel" value="" type="text" />'+
-			'<td><input class="col-sm-12 price" name="ticketPrice" value="" type="text" /></td>'+
-			'<td><input class="col-sm-12 count" name="ticketMemberCount" value="" type="text" /></td>'+
-			'<td><input class="col-sm-12 discount" name="ticketReduceMoney" value="" type="text" /></td>'+
-			'<td><input class="col-sm-12 needPay" readonly="readonly" name="ticketNeedPayMoney" value="" type="text" /></td>'+
-			'<td><input class="col-sm-12" name="ticketPayedMoney" value="" type="text" /></td>'+
+			'<td><input class="col-sm-12" name="ticketShift" value=""  maxlength="32"  type="text" /></td>'+
+			'<td><input class="col-sm-12" name="ticketSeatLevel"  maxlength="16"  value="" type="text" />'+
+			'<td><input class="col-sm-12 price" name="ticketPrice"  maxlength="9"  value="" type="text" /></td>'+
+			'<td><input class="col-sm-12 count" name="ticketMemberCount"  maxlength="6"  value="" type="text" /></td>'+
+			'<td><input class="col-sm-12 discount" name="ticketReduceMoney" value=""  maxlength="9"  type="text" /></td>'+
+			'<td><input class="col-sm-12 needPay" readonly="readonly" name="ticketNeedPayMoney"  maxlength="9"  value="" type="text" /></td>'+
+			'<td><input class="col-sm-12" name="ticketPayedMoney" value=""  maxlength="9"  type="text" /></td>'+
 			'<td><select class="" name="ticketPayType" >'+
 			'<option value="0">现付</option>'+
 			'<option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>'+
@@ -657,12 +657,12 @@ define(function(require, exports) {
 			'<td><input class="col-sm-12" name="mobileNumber" readonly="readonly" type="text" value="" /></td>'+
 			'<td><select name="standardType"><option value="早餐">早餐</option><option value="午餐">午餐</option><option value="晚餐">晚餐</option></select>'+
 			'</td><td><input class="col-sm-12 chooseStandard price" name="restaurantStandardId" type="text" value="" /><input type="hidden" name="price" value="" />'+
-			'</td><td><input class="col-sm-12 count" name="memberCount" type="text" value="" /></td>'+
-			'<td><input class="col-sm-12 discount" name="reduceMoney" type="text" value="" /></td>'+
-			'<td><input class="col-sm-12 needPay" name="needPayMoney" readonly="readonly" type="text" value="" /></td>'+
-			'<td><input class="col-sm-12" name="payedMoney" type="text" value="" /></td>'+
+			'</td><td><input class="col-sm-12 count" name="memberCount" maxlength="9" type="text" value="" /></td>'+
+			'<td><input class="col-sm-12 discount" name="reduceMoney" maxlength="9" type="text" value="" /></td>'+
+			'<td><input class="col-sm-12 needPay" name="needPayMoney" maxlength="9" readonly="readonly" type="text" value="" /></td>'+
+			'<td><input class="col-sm-12" name="payedMoney" maxlength="9"  type="text" value="" /></td>'+
 			'<td><select class="" name="payType"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>'+
-			'<td><input class="col-sm-12" name="remark" type="text" value="" /></td>'+
+			'<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="100" /></td>'+
 			'<td><a class="cursor arrange-delete" title="删除">删除</a></td>'+
 			'</tr>';
 			$("#"+id+" .restaurantList tbody").append(html);
@@ -681,14 +681,14 @@ define(function(require, exports) {
 			'<td><input class="col-sm-12" name="startTime" type="text" value="" /></td>'+
 			'<td><input class="col-sm-12" name="name" type="text" value="" /><input type="hidden" name="serviceType" value="'+type+'" /></td>'+
 			'<td><input class="col-sm-12" name="managerName" type="text" value="" /></td>'+
-			'<td><input class="col-sm-12" name="mobileNumber" type="text" value="" /></td>'+
-			'<td><input class="col-sm-12 price" name="price" type="text" value="" /></td>'+
-			'<td><input class="col-sm-12 count" name="memberCount" type="text" value="" /></td>'+
-			'<td><input class="col-sm-12 discount" name="reduceMoney" type="text" value="" /></td>'+
+			'<td><input class="col-sm-12" name="mobileNumber" type="text" maxlength="11" value="" /></td>'+
+			'<td><input class="col-sm-12 price" name="price" type="text" maxlength="9" value="" /></td>'+
+			'<td><input class="col-sm-12 count" name="memberCount" type="text" maxlength="9" value="" /></td>'+
+			'<td><input class="col-sm-12 discount" name="reduceMoney" type="text" maxlength="9" value="" /></td>'+
 			'<td><input class="col-sm-12 needPay" name="needPayMoney" readonly="readonly" type="text" value="" /></td>'+
-			'<td><input class="col-sm-12" name="payedMoney" type="text" value="" /></td>'+
+			'<td><input class="col-sm-12" name="payedMoney" type="text" maxlength="9" value="" /></td>'+
 			'<td><select class="" name="payType"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>'+
-			'<td><input class="col-sm-12" name="remark" type="text" value="" /></td>'+
+			'<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="100"/></td>'+
 			'<td><a class="cursor arrange-delete" title="删除">删除</a></td>'+
 			'</tr>';
 			$("#"+id+" .otherList tbody").append(html);
