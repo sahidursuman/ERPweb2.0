@@ -662,7 +662,70 @@ define(function(require, exports) {
 		   })	    
 		},
 
+<<<<<<< HEAD
 		transferInfindPager:function(searchParam){
+=======
+					//分页--首页按钮事件
+						$("#" +tabId+" .transferIn-content .pageMode a.first").click(function(){
+							searchParam.pageNo = 0;
+							inner.listTransferIn(searchParam);
+						});
+						//分页--上一页事件
+						$("#" +tabId+" .transferIn-content .pageMode a.previous").click(function(){
+							var pageNo = parseInt(searchParam.pageNo);
+							var previous = pageNo - 1;
+							if(pageNo == 0){
+								previous = 0;
+							}
+							searchParam.pageNo = previous;
+							inner.listTransferIn(searchParam);
+						});   
+						//分页--下一页事件
+						$("#" +tabId+" .transferIn-content .pageMode a.next").click(function(){
+							var pageNo = parseInt(searchParam.pageNo);
+							var totalPage = parseInt(searchParam.totalPage);
+							var next =  pageNo + 1;
+							if(pageNo == totalPage-1){
+								next = pageNo ;
+							}
+							searchParam.pageNo = next;
+							inner.listTransferIn(searchParam);
+						});
+						//分页--尾页事件
+						$("#" +tabId+" .transferIn-content .pageMode a.last").click(function(){
+							var totalPage = parseInt(searchParam.totalPage);
+							var pageNo = 0;
+							if(totalPage==0){
+								pageNo = 0;
+							}else{
+								pageNo = totalPage - 1; 
+							}
+							searchParam.pageNo = pageNo;
+							inner.listTransferIn(searchParam);
+						});
+						//查看
+						$("#" +tabId+" .transferIn-content .btn-transfer-view").click(function(){
+							var id = $(this).attr("data-entity-id");
+							inner.viewTransferOut(id);
+						});
+						//编辑
+						$("#" +tabId+" .transferIn-content .btn-transfer-edit").click(function(){
+							var id = $(this).attr("data-entity-id");
+							inner.edit(id);
+						});
+					
+						//确认
+						$("#" +tabId+" .transferIn-content .btn-transfer-save").click(function(){
+							var id = $(this).attr("data-entity-id");
+							inner.saveTransferIn(id);
+						});
+						//拒绝
+						$("#" +tabId+" .transferIn-content .btn-transfer-refuse").click(function(){
+							var id = $(this).attr("data-entity-id");
+							inner.deleteTransferIn(id);
+							
+						});
+>>>>>>> 27f1a3b480c6e5323a02e0708895423e7f449e30
 
 			//分页--首页按钮事件
 			$("#" +tabId+" .transferIn-content .pageMode a.first").click(function(){
