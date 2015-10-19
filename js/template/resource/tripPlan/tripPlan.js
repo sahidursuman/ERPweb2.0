@@ -21,7 +21,7 @@ define(function(require, exports) {
 			$.ajax({
 				url:""+APP_ROOT+"back/tripPlan.do?method=listTripPlan&token="+$.cookie("token")+"&menuKey=arrange_all&operation=view",
 				type:"POST",
-				data:"pageNo="+page+"&tripNumber="+encodeURIComponent(tripNumber)+"&startTime="+encodeURIComponent(startTime)+"&realname="+encodeURIComponent(realname)+"&licenseNumber="+encodeURIComponent(licenseNumber)+"&status="+encodeURIComponent(status)+"&sortType=auto",
+				data:"pageNo="+page+"&tripNumber="+encodeURIComponent(tripNumber)+"&startTime="+encodeURIComponent(startTime)+"&realname="+encodeURIComponent(realname)+"&licenseNumber="+encodeURIComponent(licenseNumber)+"&status="+encodeURIComponent(status)+"&sortType=auto&tripPlan=arrange",
 				dataType:"json",
 				beforeSend:function(){
 					globalLoadingLayer = layer.open({  
