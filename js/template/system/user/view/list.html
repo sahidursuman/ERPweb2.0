@@ -39,7 +39,8 @@
 					<th>账号</th>
 					<th>初始密码</th>
 					<th>联系电话</th>
-					<th>部门</th>
+					<th>业务部</th>
+					<th>子部门</th>
 					<th>审核角色</th>
 					<th>状态</th>
 					<th>操作</th>
@@ -52,7 +53,8 @@
 						<td>{{user.userName}}</td>
 						<td>{{defaultPassword}}</td>
 						<td>{{user.mobileNumber}}</td>
-						<td>{{user.group.name}}</td>
+						<td>{{if user.group != null}}{{user.group.businessGroup.name}}{{/if}}</td>
+						<td>{{if user.group != null}}{{user.group.name}}{{/if}}</td>
 						<td>{{if user.roleType == 1}}管理员{{/if}}{{if user.roleType == 2}}财务{{/if}}{{if user.roleType == 3}}计调{{/if}}</td>
 						<td>
 							{{if user.status == 0}}
