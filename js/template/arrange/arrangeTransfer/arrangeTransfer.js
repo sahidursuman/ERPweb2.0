@@ -4,12 +4,12 @@ define(function(require, exports) {
 	listMainTemplate = require("./view/listMain"),
 	listTemplate = require("./view/list"),
 	listTransInTemplate = require("./view/listTransIn"),
-	viewTransferInTemplate=require("./view/viewTransformIn");
-	editTransferInTemplate=require("./view/editTransformIn");
-	searchLineProTransferInTemplate=require("./view/searchLineProIn");
-	viewTemplate=require("./view/viewTransform");
-	updateTemplate=require("./view/updateTransfer");
-	tabId = "tab-" + menuKey + "-content";
+	viewTransferInTemplate=require("./view/viewTransformIn"),
+	editTransferInTemplate=require("./view/editTransformIn"),
+	searchLineProTransferInTemplate=require("./view/searchLineProIn"),
+	viewTemplate=require("./view/viewTransform"),
+	updateTemplate=require("./view/updateTransfer"),
+	tabId = "tab-" + menuKey + "-content",
 	checkTable="arrange_transfer-updateTransfer";   
 	var transfer = {
 		//我社转出搜索字段
@@ -59,6 +59,43 @@ define(function(require, exports) {
 				"ltMap":{"createTime":endTime},
 			};
 			pager = JSON.stringify(pager);
+
+			var map = {
+				totalPayed : "",
+				totalNeedPay : "",
+				totalAdultCount:"",
+				totalChildCount:"",
+				touristGroup1:"",
+				pager : "",
+				partnerAgency:"",
+				lineProduct1:"",
+				user1:"",
+				touristGroup2 : "",
+				lineProduct2 :"",
+				user2 :"",
+				lineProduct2 :"",
+			};
+
+			//查询统计数据
+			$.ajax({  
+				url:""+APP_ROOT+"back/transfer.do?method=findTotal&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
+				data:"pager="+encodeURIComponent(pager)+"&type="+type+"&partnerAgencyId="+partnerAgencyId+"&creator="+creator+"&status="+status+"&endTime="+endTime+"&startTime="+startTime,
+				dataType:'json',
+				beforeSend:function(){
+					globalLoadingLayer = layer.open({
+						zIndex:1028,
+						type:3
+					});
+				},
+				success:function(data){
+					map.totalNeedPay = data.totalNeedPay;
+					map.totalPayed = data.totalPayed;   
+				    map.totalAdultCount = data.totalAdultCount;
+					map.totalChildCount = data.totalChildCount;
+			    }
+		   });
+
+
 			
 			//查询所有下拉菜单数据
 			$.ajax({  
@@ -73,17 +110,17 @@ define(function(require, exports) {
 				},
 				success:function(data){
 					layer.close(globalLoadingLayer);
-					data.touristGroup1 = JSON.parse(data.touristGroup1);
-					data.pager = JSON.parse(data.pager);
-					data.partnerAgency = JSON.parse(data.partnerAgency);
-					data.lineProduct1=JSON.parse(data.lineProduct1);   
-					data.user1 = JSON.parse(data.user1);
+					map.touristGroup1 = JSON.parse(data.touristGroup1);
+					map.pager = JSON.parse(data.pager);
+					map.partnerAgency = JSON.parse(data.partnerAgency);
+					map.lineProduct1=JSON.parse(data.lineProduct1);   
+					map.user1 = JSON.parse(data.user1);
 
-					data.touristGroup2 = JSON.parse(data.touristGroup2);
-					data.lineProduct2=JSON.parse(data.lineProduct2);   
-					data.user2 = JSON.parse(data.user2);
+					map.touristGroup2 = JSON.parse(data.touristGroup2);
+					map.lineProduct2=JSON.parse(data.lineProduct2);   
+					map.user2 = JSON.parse(data.user2);
 					
-					var html = listMainTemplate(data);
+					var html = listMainTemplate(map);
 					addTab(menuKey,"转客管理",html);
 					var $transferOut=$("#transferOut");   
 					//调用默认时间是一周的函数
@@ -220,11 +257,11 @@ define(function(require, exports) {
 					data.pager = JSON.parse(data.pager);
 					var html=listTransInTemplate(data);
 					
-					$transferInObj=$("#transferIn");    
+					/*$transferInObj=$("#transferIn");    
 					$transferInObj.find(".totalAdultCount").text(data.totalAdultCount);
 					$transferInObj.find(".totalChildCount").text(data.totalChildCount);
 					$transferInObj.find(".totalNeedPay").text(data.totalNeedPay);  
-					$transferInObj.find(".totalPayed").text(data.totalPayed);  
+					$transferInObj.find(".totalPayed").text(data.totalPayed);  */
 					
 					//绑定数据模板
 					$(".transferTouristMain .transferInList").html(html);
@@ -804,8 +841,8 @@ define(function(require, exports) {
 				var html="<tr class=\"transferFee1SelectId\">"+
 				"<td><span name=\"type\" value=\"0\">其他费用</span></td>"+
 				"<td><input  name=\"discribe\" type=\"text\" class=\"col-sm-12  no-padding-right\" /></td>"+
-				"<td><input  name=\"count\" type=\"text\" class=\"col-sm-12  no-padding-right count\" /></td>"+
-				"<td><input  name=\"otherPrice\" type=\"text\" class=\"col-sm-12  no-padding-right price\" /></td>"+
+				"<td><input  name=\"count\" type=\"text\" maxlength=\"5\" class=\"col-sm-12  no-padding-right count\" /></td>"+
+				"<td><input  name=\"otherPrice\" type=\"text\" maxlength=\"11\" class=\"col-sm-12  no-padding-right price\" /></td>"+
 				"<td><a class=\"cursor btn-edittransfer-delete\">删除</a></td>"+
 				"</tr>";
 				$obj.find(".addTransferCost").append(html);

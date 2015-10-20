@@ -24,7 +24,7 @@ define(function(require, exports) {
 				success:function(data){
 					layer.close(globalLoadingLayer);
 					var result = showDialog(data);
-					if (result) {
+			 		if (result) {
 						var partnerAgencyList = data.partnerAgencyList;
 						partnerAgencyList = JSON.parse(partnerAgencyList);
 						data.partnerAgencyList = partnerAgencyList;
@@ -444,7 +444,7 @@ define(function(require, exports) {
 			$obj.append(html);
 
 			// 更新表单验证的事件绑定
-			//validator = rule.update(validator);
+			validator = rule.update(validator);
 
 			$obj.find(".btn-contact-delete:not(.needConfirm)").click(function(){
 				$(this).parent().parent().remove();
