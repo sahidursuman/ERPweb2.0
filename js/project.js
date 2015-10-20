@@ -906,7 +906,7 @@ function listMenu(menuTemplate){
 						var date = new Date();
 						var year = date.getFullYear();
 						var month = "";
-						Replace.listReplace(0,"",year,month);
+						Replace.listReplace(0,"","",year,month);
 						modals["financial_replace"] = Replace;
 					});
 				});
