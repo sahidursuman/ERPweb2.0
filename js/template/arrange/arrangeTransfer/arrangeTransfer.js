@@ -804,8 +804,8 @@ define(function(require, exports) {
 				var html="<tr class=\"transferFee1SelectId\">"+
 				"<td><span name=\"type\" value=\"0\">其他费用</span></td>"+
 				"<td><input  name=\"discribe\" type=\"text\" class=\"col-sm-12  no-padding-right\" /></td>"+
-				"<td><input  name=\"count\" type=\"text\" class=\"col-sm-12  no-padding-right count\" /></td>"+
-				"<td><input  name=\"otherPrice\" type=\"text\" class=\"col-sm-12  no-padding-right price\" /></td>"+
+				"<td><input  name=\"count\" type=\"text\" maxlength=\"5\" class=\"col-sm-12  no-padding-right count\" /></td>"+
+				"<td><input  name=\"otherPrice\" type=\"text\" maxlength=\"11\" class=\"col-sm-12  no-padding-right price\" /></td>"+
 				"<td><a class=\"cursor btn-edittransfer-delete\">删除</a></td>"+
 				"</tr>";
 				$obj.find(".addTransferCost").append(html);

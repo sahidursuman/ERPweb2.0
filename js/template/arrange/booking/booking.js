@@ -1384,8 +1384,15 @@ define(function(require, exports) {
 					//entDate = new Date(Date.parse(ent.replace(/-/g,"/")));//字符串转时间
 					//endDate = new Date(Date.parse(end.replace(/-/g,"/")));
 					days = Tr.eq(i).find("[name=days]").val() || 1; //Math.floor((endDate-entDate)/(24*3600*1000)) || 1;
+				
+				if(count*cost*days - 900000000 >0){
+					showMessageDialog($( "#confirm-dialog-message" ),"计算成本值过大，请确认数据是否有误");
+				}else if(count*sale*days - 900000000 >0){
+					showMessageDialog($( "#confirm-dialog-message" ),"计算应收值过大，请确认数据是否有误");
+				}else{
 				costS.val(count*cost*days);
 				saleS.val(count*sale*days);
+				}
 				$costS.push(costS.val());
 				$saleS.push(saleS.val());
 			})

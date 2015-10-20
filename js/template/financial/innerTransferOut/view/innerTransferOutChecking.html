@@ -3,7 +3,7 @@
         <form class="form-horizontal" role="form" onsubmit="return false">
                 <div class="search-area editable editable-click" >
                     <div class="form-group"> 
-                        <label style="float: left;margin: 0px auto auto 15px" class="control-label pull-left"> 部门:{{searchParam.toBusinessGroupNam}}</label>
+                        <label style="float: left;margin: 0px auto auto 15px" class="control-label pull-left"> 部门:{{searchParam.toBusinessGroupName}}</label>
                         
                         <label class="control-label col-sm-1" style="float:left;">账期:</label>
                             <select class="col-sm-1" name="year" style="margin-left:20px"> 
@@ -89,7 +89,9 @@
                 <td>{{checking.operationTime | dateFormat: 'yyyy-MM-dd'}}</td>
                 <td>{{checking.needPayMoney}}</td>
                 <td>
-                   {{if checking.otherTransferFeeList.length>0}}
+                    大人:{{checking.adultPrice}}*{{checking.adultCount}}={{checking.adultPrice*checking.adultCount}}<br>
+                    小孩:{{checking.childPrice}}*{{checking.childCount}}={{checking.childPrice*checking.childCount}}<br>
+                    {{if checking.otherTransferFeeList.length>0}}
                         {{each checking.otherTransferFeeList as detail}}
                             {{detail.discribe}}：{{detail.count}}*{{detail.price}}={{detail.count*detail.price}}<br> 
                         {{/each}} 
