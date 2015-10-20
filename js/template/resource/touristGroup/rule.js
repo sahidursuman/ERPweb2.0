@@ -141,10 +141,7 @@ var rule = {
 						rules: [
 							{
 					  			type:'mobile-phone',
-					  			errMsg: '手机号码或证件号码必填一项'
-							},{
-					  			type:'null',
-					  			errMsg: '手机号码不能为空'
+					  			errMsg: '手机号码格式不正确'
 							}
 						]
 			         },{//接待日期
@@ -176,7 +173,7 @@ var rule = {
 							rules: [  
 								{
 					  			type:'null',
-					  			errMsg: '地点不能为空'  
+					  			errMsg: '地点不能为空'
 								}
 							]
 				    }    
@@ -191,7 +188,7 @@ var rule = {
 						rules: [
 							{
 				  			type:'id',
-				  			errMsg: '手机号码或证件号码必填一项'
+				  			errMsg: '证件号码格式不正确'
 							}
 						]
 				    });
