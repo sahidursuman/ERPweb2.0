@@ -46,7 +46,7 @@
 									<div class="col-xs-2">
 										<div class="col-xs-12">
 											<div class="input-group">
-												<input class="col-xs-12 datepicker" name="startTime" placeholder="出游起始日期" value="{{startDay}}" type="text" />
+												<input class="col-xs-12 datepicker" name="startTime" placeholder="出游起始日期" value="{{searchParam.startTime}}" type="text" />
 												<span class="input-group-addon">
 														<i class="fa fa-calendar"></i>
 													</span>
@@ -57,7 +57,7 @@
 									<div class="col-xs-2">
 										<div class="col-xs-12">
 											<div class="input-group">
-												<input class="col-xs-12 datepicker" name="endTime" placeholder="出游结束日期" value="" type="text" />
+												<input class="col-xs-12 datepicker" name="endTime" placeholder="出游结束日期" value="{{searchParam.endTime}}" type="text" />
 												<span class="input-group-addon">
 														<i class="fa fa-calendar"></i>
 													</span>
@@ -182,9 +182,16 @@
 													查看
 												</a>
 							                    <a href="" class="cursor"> |</a>
-												<a data-entity-id="{{rs.id}}" class="cursor btn-TransferOut-edit">
-													编辑
-												</a>
+												{{if rs.status == 1}}
+													<a data-entity-id="{{rs.id}}" style="color:#bbb"  class="cursor">
+														编辑
+													</a>
+													{{else}}
+													<a data-entity-id="{{rs.id}}"  class="cursor btn-TransferOut-edit">
+														编辑
+													</a>
+												{{/if}}
+
 												<a href="" class="cursor"> |</a>
 												<a data-entity-id="{{rs.id}}" class="cursor btn-TransferOut-delete">
 													撤销
@@ -206,14 +213,23 @@
 															</span>
 															</a>
 														</li>
-
-														<li>
-															<a data-entity-id="{{rs.id}}" href="javascript:void(0)" class="tooltip-success btn-TransferOut-edit" data-rel="tooltip">
-																<span class="green">
-																<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-															</span>
-															</a>
-														</li>
+														{{if rs.status == 1}}
+															<li>
+																<a data-entity-id="{{rs.id}}" href="javascript:void(0)"  style="color:#bbb; "  class="tooltip-success" data-rel="tooltip">
+																	<span class="green">
+																	<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
+																</span>
+																</a>
+															</li>
+															{{else}}
+															<li>
+																<a data-entity-id="{{rs.id}}" href="javascript:void(0)"  class="tooltip-success btn-TransferOut-edit" data-rel="tooltip">
+																	<span class="green">
+																	<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
+																</span>
+																</a>
+															</li>
+														{{/if}}
 
 														<li>
 															<a data-entity-id="{{rs.id}}" href="javascript:void(0)" class="tooltip-error btn-TransferOut-delete" data-rel="tooltip">
