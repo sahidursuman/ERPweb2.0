@@ -114,7 +114,16 @@ define(function(require, exports) {
 						//时间控件
 						inner.initTimePicker();
 						//内部转出分页 
-						inner.transferOutfindPager(searchParam);	
+						inner.transferOutfindPager(searchParam);
+
+						//过滤搜索时间是否执行初始化操作
+						if (searchParam.startTime!=null&&searchParam.endTime!=null) {
+						} else{	
+							//时间默认一周初始化 
+						    inner.initSouTimer();
+						};	
+
+
 						function getVal (name){
 							var val = $("#" +tabId+" .innerTransfer_list ").find("[name="+name+"]").val();
 							return val;
@@ -147,8 +156,7 @@ define(function(require, exports) {
 							requestTotal = true;
 							inner.list(searchParam);
 						});
-						//时间默认一周初始化 
-						inner.initSouTimer();
+						
 						//导出操作 
 						$("#" +tabId +"  .innerTransfer_list .btn-transfer-export").click(function(){
 							searchParam.type=1; 
@@ -694,9 +702,13 @@ define(function(require, exports) {
 					//时间控件
 					inner.initTimePicker();
 
-
-					//时间默认一周初始化 
-					inner.initSinTimer();
+					//过滤搜索时间是否执行初始化操作
+					if (searchParam.startTime!=null&&searchParam.endTime!=null) {
+					} else{
+						//时间默认一周初始化 
+					    inner.initSinTimer();
+					};
+				
 
 
 					function getVal (name){
