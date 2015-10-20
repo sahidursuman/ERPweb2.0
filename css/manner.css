@@ -103,7 +103,7 @@ table tr th{
 }
 
 .model-scroll-left {
-    background: url('/images/left_a.jpg') center center no-repeat;
+    /*background: url('/images/left_a.jpg') center center no-repeat;*/
 }
 .model-scroll-left:hover {
     background: url('/images/left_b.jpg') center center no-repeat;
@@ -346,7 +346,7 @@ table tr td{
     padding: 7px 0px 7px 0px;
 }
 .whereQ .style-myself{
-    width: 87px;
+    width: 87px !important;
     border: 2px solid #5d5d5d;
     text-align: right;
 }
