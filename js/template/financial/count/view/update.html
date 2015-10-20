@@ -1,7 +1,7 @@
 <div class="col-sm-12 countUpdate">
-    <div class="col-xs-12 border">
+    <div class="col-xs-12 border borderNormal" style="height: 125px;margin-bottom: 30px">
         <form class="form-horizontal" role="form" onsubmit="return false">
-            <div class="search-area  editable editable-click" style="margin-top: 10px;cursor: default;">
+            <div class="search-area  editable editable-click" style="margin-top: 10px;cursor: default;height: 30px">
                 <div class="form-group">
                     <label class="col-sm-3" style="font-weight: bold;">线路：{{tripPlan.lineProduct.name}}</label>
                     <label class="col-sm-2" style="font-weight: bold;">类别：{{tripPlan.lineProduct.type}}</label>
@@ -12,7 +12,7 @@
         </form> 
  
         <form class="form-horizontal" role="form" onsubmit="return false">
-            <div class="search-area  editable editable-click" style="margin-top: 10px;cursor: default;">
+            <div class="search-area  editable editable-click" style="margin-top: 10px;cursor: default;height: 30px">
                 <div class="form-group">
                     <label class="col-sm-3" style="font-weight: bold;">团号：{{tripPlan.tripNumber}}</label>
                     <label class="col-sm-2" style="font-weight: bold;">出团日期：{{tripPlan.startTime | dateFormat:'yyyy-MM-dd'}}</label>
@@ -22,7 +22,7 @@
             </div> 
         </form>
         <form class="form-horizontal" role="form" onsubmit="return false">
-            <div class="search-area  editable editable-click" style="margin-top: 10px;border-bottom:0px;cursor: default;">
+            <div class="search-area  editable editable-click" style="margin-top: 10px;border-bottom:0px;cursor: default;height: 30px">
                 <div class="form-group">
                     <label class="col-sm-3" style="font-weight: bold;">导游：{{if tripPlan.guide != null}}{{tripPlan.guide.realname}}{{/if}}</label>
                     <label class="col-sm-2" style="font-weight: bold;">全陪：{{tripPlan.accompanyGuideName}}</label>
