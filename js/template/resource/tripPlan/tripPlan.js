@@ -324,6 +324,9 @@ define(function(require, exports) {
 			//添加提交事件
 			
 			$("#tripPlan_addPlan_content .btn-submit-tripPlan").on("click",function(){
+				 if (!validator.form()) { 
+				    return; 
+				 }
 				tripPlan.submitTripPlan(1);
 			});  
 			
