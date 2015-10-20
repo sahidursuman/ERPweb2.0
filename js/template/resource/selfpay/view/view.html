@@ -68,7 +68,7 @@
 			<td class="style-myself">社佣比例(%)</td>
 			<td>备注</td>
 		</tr>
-		{{each selfpay.shopPolicyList as shopPolicy}}
+		{{each selfpay.selfPayItemList as shopPolicy}}
 		<tr data-entity-id="{{shopPolicy.id}}">
 			<td>
 				{{shopPolicy.name}}
@@ -80,43 +80,42 @@
 				团体
 				{{/if}}
 			</td>
-			<td class="rangeTimeWidth" >
-				{{each shopPolicy.shopTimeAreaList as hopTimeArea i}}
+			<td class="rangeTimeWidth" > 
+				{{each shopPolicy.SelfPayRebateList as hopTimeArea i}}
 				<div>
 					{{hopTimeArea.startTime | dateFormat:'yyyy-MM-dd'}}至{{hopTimeArea.endTime | dateFormat:'yyyy-MM-dd'}}
 				</div>
 				{{/each}}
 			</td>
 			<td class="no-padding">
-				{{each shopPolicy.shopTimeAreaList as hopTimeArea i}}
+				{{each shopPolicy.SelfPayRebateList as hopTimeArea i}}
 
-				{{each hopTimeArea.shopCostRebateList as shopCostRebate}}
+				
 
-				{{shopCostRebate.costMoneyStart}}至{{shopCostRebate.costMoneyEnd}}<br>
+				{{hopTimeArea.price}}至{{hopTimeArea.marketPrice}}<br>
 
-				{{/each}}
-
+				
 				{{/each}}
 			</td>
 			<td class="no-padding">
-				{{each shopPolicy.shopTimeAreaList as hopTimeArea i}}
+				{{each shopPolicy.SelfPayRebateList as hopTimeArea i}}
 				<div class="col-sm-12{{if i != 0}} border-top{{/if}}" style="padding-bottom: 7px;">
-					{{each hopTimeArea.shopCostRebateList as shopCostRebate}}
+					
 					<label class="col-sm-12 control-label center">
-						{{shopCostRebate.guideRate*100 | toFixed}}
+						{{hopTimeArea.guideRate*100 | toFixed}}
 					</label>
-					{{/each}}
+					
 				</div>
 				{{/each}}
 			</td>
 			<td class="no-padding">
-				{{each shopPolicy.shopTimeAreaList as hopTimeArea i}}
+				{{each shopPolicy.SelfPayRebateList as hopTimeArea i}}
 				<div class="col-sm-12{{if i != 0}} border-top{{/if}}" style="padding-bottom: 7px;">
-					{{each hopTimeArea.shopCostRebateList as shopCostRebate}}
+				
 					<label class="col-sm-12 control-label center">
-						{{shopCostRebate.travelAgencyRate*100 | toFixed}}
+						{{hopTimeArea.travelAgencyRate*100 | toFixed}}
 					</label>
-					{{/each}}
+				
 				</div>
 				{{/each}}
 			</td>
