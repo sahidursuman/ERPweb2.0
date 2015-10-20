@@ -45,16 +45,16 @@ define(function(require, exports) {
 							}
 							subsection.searchData = {
 								lineProductId :  getValue("lineProductId"),
-								fromPartnerAgencyId :  getValue("partnerAgencyId"),
+								fromPartnerAgencyId :  getValue("fromPartnerAgencyId"),
 								creatorId :  getValue("creatorId"),
 								travelDate :  getValue("travelDate"),
 								operationStartDate :  getValue("operationStartDate"),
 								operationEndDate :  getValue("operationEndDate")
 							}
-						subsection.listSubsection(0,subsection.searchData.lineProductId,subsection.searchData.fromPartnerAgencyId,subsection.searchData.creatorId,subsection.searchData.travelDate,subsection.searchData.operationStartDate,subsection.searchData.operationEndDate,tab);
-						subsection.searchNumber(subsection.searchData.lineProductId,subsection.searchData.fromPartnerAgencyId,subsection.searchData.creatorId,subsection.searchData.travelDate,subsection.searchData.operationStartDate,subsection.searchData.operationEndDate,tab);
+							subsection.listSubsection(0,subsection.searchData.lineProductId,subsection.searchData.fromPartnerAgencyId,subsection.searchData.creatorId,subsection.searchData.travelDate,subsection.searchData.operationStartDate,subsection.searchData.operationEndDate,tab);
+							subsection.searchNumber(subsection.searchData.lineProductId,subsection.searchData.fromPartnerAgencyId,subsection.searchData.creatorId,subsection.searchData.travelDate,subsection.searchData.operationStartDate,subsection.searchData.operationEndDate,tab);
 						})
-						
+						subsection.getPartnerAgencyList($("#"+tab+" .choosePartnerAgency"),"");
 					}
 				}
 			})
@@ -425,7 +425,42 @@ define(function(require, exports) {
 				format: 'yyyy-mm-dd',
 				language: 'zh-CN'
 			})
-		}
+		},
+		getPartnerAgencyList:function(obj,partnerAId){
+			$(obj).autocomplete({
+				minLength: 0,
+				change: function(event, ui) {
+					if (!ui.item)  {
+						$(this).val('').nextAll('input[name="fromPartnerAgencyId"]').val('');
+					}
+				},
+				select: function(event, ui) {
+					$(this).blur().nextAll('input[name="fromPartnerAgencyId"]').val(ui.item.id);
+				}
+			})
+			.click(function(event) {
+				var $objC = $(this);
+				$.ajax({
+					url:""+APP_ROOT+"back/partnerAgency.do?method=findPartnerAnencyList&token="+$.cookie("token")+"&menuKey=resource_partnerAgency&operation=view",
+                    dataType: "json",
+                    data:"travelAgencyName="+$objC.val(),
+                    success: function(data) {
+                    	layer.close(globalLoadingLayer);
+						var result = showDialog(data);
+						if(result){
+							var partnerAgencyList = JSON.parse(data.partnerAgencyList);
+							if(partnerAgencyList != null && partnerAgencyList.length > 0){
+								for(var i=0;i<partnerAgencyList.length;i++){
+									partnerAgencyList[i].value = partnerAgencyList[i].travelAgencyName;
+								}
+							}
+							$objC.autocomplete('option','source', partnerAgencyList);
+							$objC.autocomplete('search', '');
+						}
+                    }
+                });
+			});
+		},
 	}
 	exports.listMainSubsection = subsection.listMainSubsection;
 });
