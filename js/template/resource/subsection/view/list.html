@@ -7,6 +7,7 @@
 				<th>线路产品</th>
 				<th>应用范围</th>               
 				<th>出游日期</th>
+				<th>天数</th>
 				<th>现收</th>
 				<th>联系人</th>
 				<th>人数</th>
@@ -31,6 +32,7 @@
 				</td>
 				<td>{{if subList.lineProduct.customerType == 0}}散客{{else}}团体{{/if}}</td>
 				<td>{{subList.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
+				<td>{{subList.lineProduct.days}}</td>
 				<td>{{subList.currentNeedPayMoney}}</td>
 				<td>{{subList.contactMember.name}}</td>
 				<td>{{subList.adultCount}}大{{subList.childCount}}小</td>
@@ -56,15 +58,51 @@
 			 		<td>{{subDetails.lineProductName}}</td>
 			 		<td>{{if subDetails.customerType == 0}}散客{{else}}团体{{/if}}</td>
 			 		<td>{{subDetails.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
+					<td>{{subDetails.days}}</td>
 			 		<td>{{if subDetails.operateCurrentNeedPayMoney == 0}}-{{else}}本段现收{{/if}}</td>
-			 		<td rowspan="{{subList.subTouristGroupDetails.length}}" colspan="6"></td>
+					<td colspan="4"></td>
+					<td>{{if subDetails.status == 1}}
+							未分团
+						{{else if subDetails.status == 2}}
+							已分团
+						{{else if subDetails.status == 3}}
+							已转客
+						{{else if subDetails.status == 2}}
+							已取消
+						{{else if subDetails.status == 3}}
+							已拆分
+						{{else if subDetails.status == 2}}
+							已内转
+						{{else}}
+							已发团
+						{{/if}}
+					</td>
+			 		<td rowspan="{{subList.subTouristGroupDetails.length}}"></td>
 			 	</tr> 
 			 	{{else}}
 			 	<tr class="tr_{{indexA}}" style="display: none;">
 			 		<td>{{subDetails.lineProductName}}</td>
 			 		<td>{{if subDetails.customerType == 0}}散客{{else}}团体{{/if}}</td>
 			 		<td>{{subDetails.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
+					<td>{{subDetails.days}}</td>
 			 		<td>{{if subDetails.operateCurrentNeedPayMoney == 0}}-{{else}}本段现收{{/if}}</td>
+					<td colspan="4"></td>
+					<td>{{if subDetails.status == 1}}
+							未分团
+						{{else if subDetails.status == 2}}
+							已分团
+						{{else if subDetails.status == 3}}
+							已转客
+						{{else if subDetails.status == 2}}
+							已取消
+						{{else if subDetails.status == 3}}
+							已拆分
+						{{else if subDetails.status == 2}}
+							已内转
+						{{else}}
+							已发团
+						{{/if}}
+					</td>
 			 	</tr> 
 			 	{{/if}}
 			 	{{/each}}
