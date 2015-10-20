@@ -355,6 +355,9 @@ define(function(require, exports) {
 				subTouristGroup.delSubTouristGroupIdList.push(idList);
 			})
 			subTouristGroup = JSON.stringify(subTouristGroup);
+			if ($("#"+tab+" .btn-operation-save").attr("data-entity-mark")) {
+				isCheckNeedPayMoney = 1;
+			}
 			if(isCheckNeedPayMoney == 0){
 				showMessageDialog($( "#confirm-dialog-message" ),"请选择在哪一分段现收团款");
 				return;
