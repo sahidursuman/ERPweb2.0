@@ -56,18 +56,9 @@
 						<a data-entity-id="{{result.id}}" class="cursor  btn-transfer-view">
 							查看
 						</a><a href="" class="cursor"> |</a>
-						{{if result.status ==1}}
-						<a data-entity-id="{{result.id}}" class="cursor" style="color:#bbb">
+						<a data-entity-id="{{result.id}}" class="cursor btn-transfer-edit">
 							编辑
-						</a>
-						{{else}}
-						<a data-entity-id="{{result.id}}" class="cursor  btn-transfer-edit" style="color:#bbb">
-							编辑
-						</a>
-						{{/if}}
-
-						<a href="" class="cursor"> |</a>
-
+						</a><a href="" class="cursor"> |</a>
 						<a data-entity-id="{{result.id}}" class="cursor btn-transfer-delete">
 							撤销
 						</a>
@@ -90,19 +81,11 @@
 								</li>
 								
 								<li>
-									{{if result.status==1}}
-										<a data-entity-id="{{result.id}}" href="javascript:void(0)" class="tooltip-success" style="color:#bbb" data-rel="tooltip">
-											<span class="green">
-												<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-											</span>
-										</a>
-										{{else}}
-										<a data-entity-id="{{result.id}}" href="javascript:void(0)" class="tooltip-success btn-transfer-edit" data-rel="tooltip">
-											<span class="green">
-												<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-											</span>
-										</a>
-									{{/if}}
+									<a data-entity-id="{{result.id}}" href="javascript:void(0)" class="tooltip-success btn-transfer-edit" data-rel="tooltip">
+										<span class="green">
+											<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
+										</span>
+									</a>
 								</li>
 	
 								<li>
