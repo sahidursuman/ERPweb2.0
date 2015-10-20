@@ -4,12 +4,12 @@ define(function(require, exports) {
 	listMainTemplate = require("./view/listMain"),
 	listTemplate = require("./view/list"),
 	listTransInTemplate = require("./view/listTransIn"),
-	viewTransferInTemplate=require("./view/viewTransformIn");
-	editTransferInTemplate=require("./view/editTransformIn");
-	searchLineProTransferInTemplate=require("./view/searchLineProIn");
-	viewTemplate=require("./view/viewTransform");
-	updateTemplate=require("./view/updateTransfer");
-	tabId = "tab-" + menuKey + "-content";
+	viewTransferInTemplate=require("./view/viewTransformIn"),
+	editTransferInTemplate=require("./view/editTransformIn"),
+	searchLineProTransferInTemplate=require("./view/searchLineProIn"),
+	viewTemplate=require("./view/viewTransform"),
+	updateTemplate=require("./view/updateTransfer"),
+	tabId = "tab-" + menuKey + "-content",
 	checkTable="arrange_transfer-updateTransfer";   
 	var transfer = {
 		//我社转出搜索字段
