@@ -46,7 +46,9 @@ define(function(require, exports) {
 						data.searchParam.partnerAgencyList = JSON.parse(data.searchParam.partnerAgencyList);
 						var html = listTemplate(data);
 						addTab(menuKey,"中转安排",html);
-						transit.initArrageTime();
+						if(data.searchParam.arrangeEndTime == "" && data.searchParam.arrangeStartTime == ""){
+							transit.initArrageTime();
+						}
 						transit.initList(data);
 					}
 				}
