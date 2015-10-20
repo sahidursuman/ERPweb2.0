@@ -123,7 +123,6 @@ define(function(require, exports) {
 						    inner.initSouTimer();
 						};	
 
-
 						function getVal (name){
 							var val = $("#" +tabId+" .innerTransfer_list ").find("[name="+name+"]").val();
 							return val;
