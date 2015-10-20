@@ -115,7 +115,6 @@ define(function(require, exports) {
 						inner.initTimePicker();
 						//内部转出分页 
 						inner.transferOutfindPager(searchParam);
-
 						function getVal (name){
 							var val = $("#" +tabId+" .innerTransfer_list ").find("[name="+name+"]").val();
 							return val;

@@ -18,18 +18,7 @@
 			<div class="tab-content" style="position: relative;top: -2px">
 				<!--我社转出start -1-->
 				<div id="transferOut" class="tab-pane fade active in clearfix" >
-					<div class="col-xs-12">
-						<div class="page-header">
-							<h1>
-						      <small class="transferOut-Header-Cost">
-									<i class="ace-icon fa fa-angle-double-right"></i>
-									<lable style="min-width:10%; display:inline-block;  ">人数合计：<span class="totalAdultCount">{{totalAdultCount}}</span>大<span class="totalChildCount">{{totalChildCount}}</span>小</lable>
-									<lable style="min-width:10%; display:inline-block;  ">应付款合计：<span class="totalNeedPay">{{totalNeedPay}} </span>元</lable>
-									<lable style="min-width:10%; display:inline-block;  ">已付款合计:<span class="totalPayed">{{totalPayed}}</span>元</lable>
-								</small>
-							</h1>
-						</div>
-					</div>
+				
 					<div class="form-group form-horizontal">
 						<div class="search-area">
 							<label class="pull-left control-label no-padding-right" style="margin-left: 20px!important;">同行地接：</label>
@@ -126,6 +115,19 @@
 
 								</div>
 
+								<div class="col-xs-12">
+									<div class="page-header">
+										<h1>
+									      <small class="transferOut-Header-Cost">
+												<i class="ace-icon fa fa-angle-double-right"></i>
+												<lable style="min-width:10%; display:inline-block;  ">人数合计：<span class="totalAdultCount">{{totalAdultCount}}</span>大<span class="totalChildCount">{{totalChildCount}}</span>小</lable>
+												<lable style="min-width:10%; display:inline-block;  ">应付款合计：<span class="totalNeedPay">{{totalNeedPay}} </span>元</lable>
+												<lable style="min-width:10%; display:inline-block;  ">已付款合计:<span class="totalPayed">{{totalPayed}}</span>元</lable>
+											</small>
+										</h1>
+									</div>
+								</div>
+
 							</div>
 						</div>
 					</div>
@@ -136,18 +138,6 @@
 				</div>
 				<!-- 同行转入搜索start2 -->
 				<div id="transferIn" class="tab-pane fade clearfix" >
-					<div class="col-xs-12">
-						<div class="page-header">
-							<h1>
-						      <small class="transferOut-Header-Cost">
-									<i class="ace-icon fa fa-angle-double-right"></i>
-									<lable style="min-width:10%; display:inline-block;  ">人数合计：<span class="totalAdultCount">{{totalAdultCount}}</span>大<span class="totalChildCount">{{totalChildCount}}</span>小</lable>
-									<lable style="min-width:10%; display:inline-block;  ">应付款合计：<span class="totalNeedPay">{{totalNeedPay}} </span>元</lable>
-									<lable style="min-width:10%; display:inline-block;  ">已付款合计:<span class="totalPayed">{{totalPayed}}</span>元</lable>
-								</small>
-							</h1>
-						</div>
-					</div>
 					<div class="form-group" style="margin-bottom:30px; ">
 						<div class="search-area">
 							<label class="pull-left control-label no-padding-right" style="margin-left: 20px!important;">同行线路产品：</label>
@@ -263,7 +253,22 @@
 						</div>
 						<!-- 同行转入搜索end -->
 						<!--分页&&数据List-->
-						<div class="col-xs-12 transferInList" ></div>
+						<div class="col-xs-12" >
+							<div class="col-xs-12">
+								<div class="page-header">
+									<h1>
+								      <small class="transferOut-Header-Cost">
+											<i class="ace-icon fa fa-angle-double-right"></i>
+											<lable style="min-width:10%; display:inline-block;  ">人数合计：<span class="totalAdultCount">{{totalAdultCount}}</span>大<span class="totalChildCount">{{totalChildCount}}</span>小</lable>
+											<lable style="min-width:10%; display:inline-block;  ">应付款合计：<span class="totalNeedPay">{{totalNeedPay}} </span>元</lable>
+											<lable style="min-width:10%; display:inline-block;  ">已付款合计:<span class="totalPayed">{{totalPayed}}</span>元</lable>
+										</small>
+									</h1>
+								</div>
+							</div>
+							<div class="col-xs-12 transferInList" >
+							</div>
+						</div>
 						<!--我社转出end -->
 					</div>
 				</div>
