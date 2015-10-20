@@ -1,9 +1,13 @@
 <div class="col-xs-12 updateBooking">
 	<form class="form-horizontal bookingMainForm" role="form" style="margin-top:10px" onsubmit="return false">
+	<h5 class="">
+				<span class="badge badge-primary">1</span>
+				<label class="middle title-size">代订信息</label>
+						</h5>
 		<table class="whereQ whereTwo" style="width: 98%">
-			<tr>
+			<!-- <tr>
 				<td colspan="8" class="HeadManage" style="text-align: left">代订信息</td>
-			</tr>
+			</tr> -->
 			<tr>
 				<td class="style-myself">同行客户：</td>
 				<td style="text-align: left">{{if bookingOrder.partnerAgency != null}}{{bookingOrder.partnerAgency.travelAgencyName}}{{/if}}</td>
