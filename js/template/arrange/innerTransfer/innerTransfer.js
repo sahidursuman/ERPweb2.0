@@ -222,6 +222,7 @@ define(function(require, exports) {
 				$obj.find(".pageMode a.first").click(function(){
 					searchParam = buildSearchParam();
 					searchParam.pageNo = 0;
+					if(searchParam.pageNo == 0 || searchParam.totalPage == 0)return;
 					inner.list(searchParam);
 				});
 				//分页--上一页事件
@@ -232,6 +233,7 @@ define(function(require, exports) {
 					if(pageNo == 0){
 						previous = 0;
 					}
+					if(pageNo == 0 || searchParam.totalPage == 0)return;
 					searchParam.pageNo = previous;
 					inner.list(searchParam);
 				});   
@@ -245,6 +247,7 @@ define(function(require, exports) {
 						next = pageNo ;
 					}
 					searchParam.pageNo = next;
+					if(pageNo == 0 || totalPage == 0)return;
 					inner.list(searchParam);
 				});
 				//分页--尾页事件
@@ -258,6 +261,7 @@ define(function(require, exports) {
 						pageNo = totalPage - 1; 
 					}
 					searchParam.pageNo = pageNo;
+					if(searchParam.pageNo == 0 || searchParam.totalPage == 0)return;
 					inner.list(searchParam);
 				});
 				//查看
@@ -654,11 +658,11 @@ define(function(require, exports) {
 					inner.initTimePicker();
 
 					//过滤搜索时间是否执行初始化操作
-					if (searchParam.startTime!=null&&searchParam.endTime!=null) {
+					/*if (searchParam.startTime!=null&&searchParam.endTime!=null) {
 					} else{
 						//时间默认一周初始化 
 					    inner.initSinTimer();
-					};
+					};*/
 				
 
 
@@ -700,6 +704,7 @@ define(function(require, exports) {
 			   //分页--首页按钮事件
 				$obj.find(".pageMode a.first").click(function(){
 					searchParam.pageNo = 0;
+					if(searchParam.pageNo == 0 || totalPage == 0)return;
 					inner.listTransferIn(searchParam);
 				});
 				//分页--上一页事件
@@ -709,6 +714,7 @@ define(function(require, exports) {
 					if(pageNo == 0){
 						previous = 0;
 					}
+					if(pageNo == 0 || totalPage == 0)return;
 					searchParam.pageNo = previous;
 					inner.listTransferIn(searchParam);
 				});   
@@ -720,6 +726,7 @@ define(function(require, exports) {
 					if(pageNo == totalPage-1){
 						next = pageNo ;
 					}
+					if(pageNo == 0 || totalPage == 0)return;
 					searchParam.pageNo = next;
 					inner.listTransferIn(searchParam);
 				});
@@ -732,6 +739,7 @@ define(function(require, exports) {
 					}else{
 						pageNo = totalPage - 1; 
 					}
+					if(pageNo == 0 || totalPage == 0)return;
 					searchParam.pageNo = pageNo;
 					inner.listTransferIn(searchParam);
 				});
@@ -753,47 +761,6 @@ define(function(require, exports) {
 					var id = $(this).attr("data-entity-id");
 					inner.deleteTransferIn(id);
 				});
-			
-
-				//分页--首页按钮事件
-				$obj.find(".pageMode a.first").click(function(){
-					searchParam.pageNo = 0;
-					inner.listTransferIn(searchParam);
-				});
-				//分页--上一页事件
-				$obj.find(".pageMode a.previous").click(function(){
-					var pageNo = parseInt(searchParam.pageNo);
-					var previous = pageNo - 1;
-					if(pageNo == 0){
-						previous = 0;
-					}
-					searchParam.pageNo = previous;
-					inner.listTransferIn(searchParam);
-				});   
-				//分页--下一页事件
-				$obj.find(".pageMode a.next").click(function(){
-					var pageNo = parseInt(searchParam.pageNo);
-					var totalPage = parseInt(searchParam.totalPage);
-					var next =  pageNo + 1;
-					if(pageNo == totalPage-1){
-						next = pageNo ;
-					}
-					searchParam.pageNo = next;
-					inner.listTransferIn(searchParam);
-				});
-				//分页--尾页事件
-				$obj.find(".pageMode a.last").click(function(){
-					var totalPage = parseInt(searchParam.totalPage);
-					var pageNo = 0;
-					if(totalPage==0){
-						pageNo = 0;
-					}else{
-						pageNo = totalPage - 1; 
-					}
-					searchParam.pageNo = pageNo;
-					inner.listTransferIn(searchParam);
-				});
-				
 			
 
 		},
