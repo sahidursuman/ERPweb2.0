@@ -1,6 +1,6 @@
 <div class="search-area touristGroupSearchForm clearfix globalAdd">
 
-	<div class="form-horizontal col-sm-12 clearfix" style="margin-bottom:20px;" > 
+	<div class="form-horizontal col-sm-12 clearfix" style="margin-bottom:20px;margin-left:-12px" >
 		<label class="control-label pull-left">人数合计：{{statistics.adultCount}}大{{statistics.childCount}}小</label>
 		<label class="control-label col-sm-2">应收款合计：{{statistics.needPay}}元</label>
 		<label class="control-label col-sm-2">已收款合计：{{statistics.payedMoney}}元</label>
@@ -75,7 +75,7 @@
 		</div>
 
 		<label class="pull-left text-right control-label no-padding-right">状态:</label>
-		<div class="col-sm-1 btn-group btn-status" style="margin-left: 20px">
+		<div class="pull-left btn-group btn-status" style="margin-left: 20px">
 			<button data-value="{{searchParam.status}}" data-toggle="dropdown" class=" btn-sm dropdown-toggle block-up" aria-expanded="false">
 				<span>
 				   {{if searchParam.status == null || searchParam.status == ""}}
@@ -125,14 +125,13 @@
 				</li>
 			</ul>
 		</div>
-		<div class="col-sm-1" style="width:100px;">
+		<div class="pull-left" style="margin-left: 20px">
 			 <button class=" btn-sm  btn-touristGroupList-search search-btn">
 				 <i class="ace-icon fa fa-search"></i>
 				 搜索
 			 </button>
 		 </div>
-
-		 <div class="col-sm-1 pull-left" style="width:25px;">      
+		 <div class="col-sm-1 pull-left" style="margin-left: 5px">
 			 <button class="btn btn-sm btn-success btn-touristGroup-add">   
 				 <i class="ace-icon fa fa-plus"></i>
 				 新增小组  
@@ -141,7 +140,6 @@
 		<div style="clear: both;height: 0px;line-height: 0px;"></div>
 	</div>
 	<div style="clear: both;margin-top:20px;border-top:1px dotted #ccc;padding-top:15px;">
-
 	<div style="clear: both;height: 0px;line-height: 0px;"></div>
 </div>
 </div>
