@@ -114,7 +114,7 @@
 						<td></td>
 						<td></td>
 						{{/if}} {{if rs.touristGroup != null}}
-						<td>{{rs.touristGroup.startTime}}</td>
+						<td>{{rs.touristGroup.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
 						<td>{{if rs.touristGroup.contactMember!=null}}{{rs.touristGroup.contactMember.name}}{{/if}}</td>
 						<td>{{rs.touristGroup.adultCount}}大{{rs.touristGroup.childCount}}小</td>
 						{{else}}
