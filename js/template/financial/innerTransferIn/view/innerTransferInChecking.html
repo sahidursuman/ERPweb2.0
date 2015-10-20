@@ -95,7 +95,9 @@
                 <td>{{checking.receiveTime | dateFormat: 'yyyy-MM-dd'}}</td>
                 <td>{{checking.needIncomeMoney}}</td>
                 <td>
-                   {{if checking.otherTransferFeeList.length>0}}
+                    大人:{{checking.adultPrice}}*{{checking.adultCount}}={{checking.adultPrice*checking.adultCount}}<br>
+                    小孩:{{checking.childPrice}}*{{checking.childCount}}={{checking.childPrice*checking.childCount}}<br>
+                    {{if checking.otherTransferFeeList.length>0}}
                         {{each checking.otherTransferFeeList as detail}}
                             {{detail.discribe}}：{{detail.count}}*{{detail.price}}={{detail.count*detail.price}}<br> 
                         {{/each}} 
