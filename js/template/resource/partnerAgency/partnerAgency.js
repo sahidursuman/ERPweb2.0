@@ -259,7 +259,7 @@ define(function(require, exports) {
 						    type: 1,
 						    title:"修改同行旅行社",
 						    skin: 'layui-layer-rim', //加上边框
-						    area: ['60%', '60%'], //宽高
+						    area: ['60%', '65%'], //宽高
 						    zIndex:1028,
 						    content: html,
 						    success:function(){
