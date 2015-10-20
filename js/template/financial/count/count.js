@@ -1791,7 +1791,6 @@ define(function(require, exports) {
 						var financialOutDetail = addTab(menuKey + "outDetail", "中转明细", html);
 						
 						$('.financialOutDetail .btn-download').click(function() {
-							var id = $(this).attr('data-entity-id');
 							count.exportOutDetail(id);
 						});
 
