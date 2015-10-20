@@ -374,8 +374,17 @@ define(function(require, exports) {
 
 
 		saveEditTranIn:function(isClose){
-		
 			var $obj=$("#tab-arrange_inner_Transfer-edit-content");
+			//对方是否现收
+			if ($obj.find('input[name=operCurrNeestatus]').is(":checked")==true) {
+				console.info(1);
+              var operCurrNeestatus=1;
+			} else{
+				console.info(2);
+			  var operCurrNeestatus=0;
+			};
+
+
 
 			function getValParam (name){
 				var val = $obj.find("[name="+name+"]").val();
@@ -418,7 +427,7 @@ define(function(require, exports) {
 			var innerTransfer=JSON.stringify(innerTransfer);
 			$.ajax({
 				url:""+APP_ROOT+"back/innerTransfer.do?method=update&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
-				data:"innerTransfer="+encodeURIComponent(innerTransfer),
+				data:"innerTransfer="+encodeURIComponent(innerTransfer)+"&isCurrent="+operCurrNeestatus,
 				datatype:"json",
 				beforeSend:function(){
 					globalLoadingLayer = layer.open({

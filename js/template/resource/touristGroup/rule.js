@@ -219,22 +219,6 @@ var rule = {
 	      	    	        	errMsg: '座机电话或联系人电话格式不正确'
 	      	    	        }
 	  	    	        ]
-	    	      },{//所属部门
-	  	    	    	$ele: $checkdPartnerManagerObj.find('input[name="departmentName"]'),  
-	  	    	    	rules: [
-	      	    	        {
-	      	    	        	type: 'null', 
-	      	    	        	errMsg: '所属部门不能为空'
-	      	    	        }
-	  	    	        ]
-	    	      },{//所属职位
-	  	    	    	$ele: $checkdPartnerManagerObj.find('input[name="dutyName"]'),  
-	  	    	    	rules: [
-	      	    	        {
-	      	    	        	type: 'null', 
-	      	    	        	errMsg: '所属职位不能为空'  
-	      	    	        }
-	  	    	        ]
 	    	      }
  
   	    	  ]);
