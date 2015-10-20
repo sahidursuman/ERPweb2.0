@@ -106,17 +106,15 @@ define(function(require, exports) {
 					var result = showDialog(data3);
 					//如果正确则就执行
 					if(result){
+
 						map.resultList = JSON.parse(data3.resultList);
 						map.searchParam = data3.searchParam;
 						var html = listTemplate(map);
 						addTab(menuKey,"内转管理",html);
-
 						//时间控件
 						inner.initTimePicker();
-
 						//内部转出分页 
 						inner.transferOutfindPager(searchParam);	
-					
 						function getVal (name){
 							var val = $("#" +tabId+" .innerTransfer_list ").find("[name="+name+"]").val();
 							return val;
@@ -250,11 +248,11 @@ define(function(require, exports) {
 		 * 
 		 */
 		transferOutfindPager:function(searchParam){
-
+			var $obj=$("#" +tabId+" .innerTransfer_list");
 			var classType = map.searchParam.type;
-			 $("#" +tabId+" .innerTransfer_list").find("[name=type]").val(classType);
+			 $obj.find("[name=type]").val(classType);
 			function getVal (name){
-					var val = $("#" +tabId+" .innerTransfer_list").find("[name="+name+"]").val();
+					var val = $obj.find("[name="+name+"]").val();
 					return val;
 			}
 			function buildSearchParam(){
@@ -271,13 +269,13 @@ define(function(require, exports) {
 			 }
 
 			//分页--首页按钮事件
-				$("#" +tabId+" .innerTransfer_list .pageMode a.first").click(function(){
+				$obj.find(".pageMode a.first").click(function(){
 					searchParam = buildSearchParam();
 					searchParam.pageNo = 0;
 					inner.list(searchParam);
 				});
 				//分页--上一页事件
-				$("#" +tabId+" .innerTransfer_list .pageMode a.previous").click(function(){
+				$obj.find(".pageMode a.previous").click(function(){
 					searchParam = buildSearchParam();
 					var pageNo = parseInt(searchParam.pageNo);
 					var previous = pageNo - 1;
@@ -288,7 +286,7 @@ define(function(require, exports) {
 					inner.list(searchParam);
 				});   
 				//分页--下一页事件
-				$("#" +tabId+" .innerTransfer_list .pageMode a.next").click(function(){
+				$obj.find(".pageMode a.next").click(function(){
 					searchParam = buildSearchParam();
 					var pageNo = parseInt(searchParam.pageNo);
 					var totalPage = parseInt(searchParam.totalPage);
@@ -300,7 +298,7 @@ define(function(require, exports) {
 					inner.list(searchParam);
 				});
 				//分页--尾页事件
-				$("#" +tabId+" .innerTransfer_list .pageMode a.last").click(function(){
+				$obj.find(".pageMode a.last").click(function(){
 					searchParam = buildSearchParam();
 					var totalPage = parseInt(searchParam.totalPage);
 					var pageNo = 0;
@@ -313,28 +311,20 @@ define(function(require, exports) {
 					inner.list(searchParam);
 				});
 				//查看
-				$("#" +tabId+" .innerTransfer_list .btn-TransferOut-view").click(function(){
+				$obj.find(".btn-TransferOut-view").click(function(){
 					var id = $(this).attr("data-entity-id");
 					inner.viewTransferOut(id);
 				});
 				//编辑
-				$("#" +tabId+" .innerTransfer_list .btn-TransferOut-edit").click(function(){
+				$obj.find(".btn-TransferOut-edit").click(function(){
 					var id = $(this).attr("data-entity-id");
 					inner.editTransferOut(id);
 				});
 				//撤销
-				$("#" +tabId+" .innerTransfer_list .btn-TransferOut-delete").click(function(){
+				$obj.find(".btn-TransferOut-delete").click(function(){
 					var id = $(this).attr("data-entity-id");
 					inner.deleteTransferOut(id);
 				});
-				
-				//提交修改数据
-				$("#" +tabId+" .innerTransfer_list .123").click(function(){
-					
-				});
-				//提交确认数据
-				$("#" +tabId+" .innerTransfer_list .123").click(function(){		
-			});
 		},
 
 		viewTransferOut:function(id){
@@ -736,13 +726,14 @@ define(function(require, exports) {
 		},
 
 		transferInfindPager:function(searchParam){
-					//分页--首页按钮事件
-						$("#" +tabId+" .transferIn-content .pageMode a.first").click(function(){
+						var $obj=$("#" +tabId+" .transferIn-content ");
+					   //分页--首页按钮事件
+						$obj.find(".pageMode a.first").click(function(){
 							searchParam.pageNo = 0;
 							inner.listTransferIn(searchParam);
 						});
 						//分页--上一页事件
-						$("#" +tabId+" .transferIn-content .pageMode a.previous").click(function(){
+						$obj.find(".pageMode a.previous").click(function(){
 							var pageNo = parseInt(searchParam.pageNo);
 							var previous = pageNo - 1;
 							if(pageNo == 0){
@@ -752,7 +743,7 @@ define(function(require, exports) {
 							inner.listTransferIn(searchParam);
 						});   
 						//分页--下一页事件
-						$("#" +tabId+" .transferIn-content .pageMode a.next").click(function(){
+						$obj.find(".pageMode a.next").click(function(){
 							var pageNo = parseInt(searchParam.pageNo);
 							var totalPage = parseInt(searchParam.totalPage);
 							var next =  pageNo + 1;
@@ -763,7 +754,7 @@ define(function(require, exports) {
 							inner.listTransferIn(searchParam);
 						});
 						//分页--尾页事件
-						$("#" +tabId+" .transferIn-content .pageMode a.last").click(function(){
+						$obj.find(".pageMode a.last").click(function(){
 							var totalPage = parseInt(searchParam.totalPage);
 							var pageNo = 0;
 							if(totalPage==0){
@@ -775,35 +766,35 @@ define(function(require, exports) {
 							inner.listTransferIn(searchParam);
 						});
 						//查看
-						$("#" +tabId+" .transferIn-content .btn-transfer-view").click(function(){
+						$obj.find(".btn-transfer-view").click(function(){
 							var id = $(this).attr("data-entity-id");
 							inner.viewTransferOut(id);
 						});
 						//编辑
-						$("#" +tabId+" .transferIn-content .btn-transfer-edit").click(function(){
+						$obj(".btn-transfer-edit").click(function(){
 							var id = $(this).attr("data-entity-id");
 							inner.edit(id);
 						});
 					
 						//确认
-						$("#" +tabId+" .transferIn-content .btn-transfer-save").click(function(){
+						$obj.find(".btn-transfer-save").click(function(){
 							var id = $(this).attr("data-entity-id");
 							inner.saveTransferIn(id);
 						});
 						//拒绝
-						$("#" +tabId+" .transferIn-content .btn-transfer-refuse").click(function(){
+						$obj.find(".btn-transfer-refuse").click(function(){
 							var id = $(this).attr("data-entity-id");
 							inner.deleteTransferIn(id);
 							
 						});
 
 						//分页--首页按钮事件
-						$("#" +tabId+" .transferIn-content .pageMode a.first").click(function(){
+						$obj.find(".pageMode a.first").click(function(){
 							searchParam.pageNo = 0;
 							inner.listTransferIn(searchParam);
 						});
 						//分页--上一页事件
-						$("#" +tabId+" .transferIn-content .pageMode a.previous").click(function(){
+						$obj.find(".pageMode a.previous").click(function(){
 							var pageNo = parseInt(searchParam.pageNo);
 							var previous = pageNo - 1;
 							if(pageNo == 0){
@@ -813,7 +804,7 @@ define(function(require, exports) {
 							inner.listTransferIn(searchParam);
 						});   
 						//分页--下一页事件
-						$("#" +tabId+" .transferIn-content .pageMode a.next").click(function(){
+						$obj.find(".pageMode a.next").click(function(){
 							var pageNo = parseInt(searchParam.pageNo);
 							var totalPage = parseInt(searchParam.totalPage);
 							var next =  pageNo + 1;
@@ -824,7 +815,7 @@ define(function(require, exports) {
 							inner.listTransferIn(searchParam);
 						});
 						//分页--尾页事件
-						$("#" +tabId+" .transferIn-content .pageMode a.last").click(function(){
+						$obj.find(".pageMode a.last").click(function(){
 							var totalPage = parseInt(searchParam.totalPage);
 							var pageNo = 0;
 							if(totalPage==0){
@@ -837,24 +828,28 @@ define(function(require, exports) {
 						});
 						
 						//编辑
-						$("#" +tabId+" .transferIn-content .btn-transfer-edit").click(function(){
+						$obj.find(".btn-transfer-edit").click(function(){
 							var id = $(this).attr("data-entity-id");
 							inner.edit(id);
 						});
 					
 						//确认
-						$("#" +tabId+" .transferIn-content .btn-transfer-save").click(function(){
+						$obj.find(".btn-transfer-save").click(function(){
 							var id = $(this).attr("data-entity-id");
 							inner.saveTransferIn(id);
 						});
 						//拒绝
-						$("#" +tabId+" .transferIn-content .btn-transfer-refuse").click(function(){
+						$obj.find(".btn-transfer-refuse").click(function(){
 							var id = $(this).attr("data-entity-id");
 							inner.deleteTransferIn(id);
 							
 						});
 
 		},
+
+
+
+
 
 		//确认操作
 		saveTransferIn:function(id){
