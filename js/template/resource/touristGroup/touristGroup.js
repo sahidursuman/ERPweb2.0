@@ -1391,21 +1391,30 @@ define(function(require, exports) {
 			form +="&hotelLevel="+expectLevel+"&includeSelfPay="+includeOwnExpense+"&remark="+touristRemarks+"&buyInsurance="+buyInsurance+"&isNeedArriveService="+isNeedArriveService+"&isNeedBus="+isNeedBus+"&isNeedLeaveService="+isNeedLeaveService;
 
 			var touristGroupMemberJsonAdd = [];
-			var touristNameStr = $("#"+tab+" .touristGroupMainFormMember .addTouristList tbody tr");
+			var touristNameStr = $("#"+tab+" .touristGroupMainFormMember .addTouristList tbody tr"), isValidate = true;
 			touristNameStr.each(function(i){
-				var name = touristNameStr.eq(i).find("input[name=name]").val();
-				var mobileNumber = touristNameStr.eq(i).find("input[name=mobileNumber]").val();
-				var idCardType = touristNameStr.eq(i).find("select[name=idCardType]").val();
-				var idCardNumber = touristNameStr.eq(i).find("input[name=idCardNumber]").val();
-				if(touristNameStr.eq(i).find("input[name=isContactUser]").is(":checked")==true){
-					var isContactUser = 1;
-					if(mobileNumber == ""){
-						showMessageDialog($( "#confirm-dialog-message" ), "请填写名单中联系人的手机号码！");
-					}
-				}
-				else{
+				var $that = $(this),
+					name = $that.find("input[name=name]").val(),
+					mobileNumber = $that.find("input[name=mobileNumber]").val(),
+					idCardType = $that.find("select[name=idCardType]").val(),
+					idCardNumber = $that.find("input[name=idCardNumber]").val(),
 					isContactUser = 0;
+
+				if(touristNameStr.eq(i).find("input[name=isContactUser]").is(":checked")==true){
+					isContactUser = 1;
 				}
+
+				if (isContactUser && mobileNumber == "")  {
+					showMessageDialog($( "#confirm-dialog-message" ), "请填写名单中联系人的手机号码！");
+					isValidate = false;
+				} else if (!mobileNumber && !idCardNumber) {
+					showMessageDialog($( "#confirm-dialog-message" ), "手机号码或证件号码必填一项！");
+					isValidate = false;
+				}
+				if (!isValidate)  {
+					$that.find("input[name=mobileNumber]").focus();
+				}
+
 				var touristGroupMemberJson = {
 					name : name,
 					mobileNumber : mobileNumber,
@@ -1415,6 +1424,9 @@ define(function(require, exports) {
 				};
 				touristGroupMemberJsonAdd.push(touristGroupMemberJson);
 			})
+
+			if (!isValidate)  return;
+
 			//打包接送时间地点
 			var outArrangeRemarkJson = [];
 			outArrangeRemarkJson = {
