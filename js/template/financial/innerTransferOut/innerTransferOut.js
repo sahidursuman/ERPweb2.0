@@ -568,7 +568,7 @@ define(function(require,exports){
 			save : function(saveType){
 				if(saveType == "checking"){
 					var $checkId = $("#" +"tab-"+checkTabId+"-content"), 
-					validator = rule.check($checkId。find('.innerTransferChecking'));
+					validator = rule.check($checkId.find('.innerTransferChecking'));
 					if(!validator.form()){return;}
 					InnerTransferOut.saveCheckingData(1)
 				} else if(saveType == "blance"){
