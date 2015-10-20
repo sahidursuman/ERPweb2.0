@@ -243,6 +243,8 @@ table tr td{
     font-size: 12px;
 
 }
+.widget-main{padding: 0!important;}
+.form-group{margin-bottom: 13px!important;}
 .color{
     color: #428bca;
 }
