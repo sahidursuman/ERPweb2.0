@@ -109,94 +109,12 @@ define(function(require, exports) {
 				        touristGroup.listTouristGroup(0,touristGroup.searchData.partnerAgencyId,touristGroup.searchData.lineProductId,touristGroup.searchData.startTime,touristGroup.searchData.userId,touristGroup.searchData.createTimeStart,touristGroup.searchData.createTimeEnd,touristGroup.searchData.customerType,touristGroup.searchData.status);
 				        //下拉数据初始化
 				        touristGroup.initList(data);
-						 //游客默认一周时间初始化 
-	 
-				        touristGroup.initTouristGrSearTime();
  						touristGroup.getPartnerAgencyList($("#"+tab+" .choosePartnerAgency"),"")
 
 					}
 				}
 			});
 		},
-		 //初始化安排时间
-	 
-	  initTouristGrSearTime:function(){
-	 
-	   		var $tourGrSearDtObj=$(".touristGroupSearchForm");
- 
-			$tourGrSearDtObj.find("input[name=createTimeStart]").val(touristGroup.dateCalcuBefore(touristGroup.getCurrentDate(),3));
-	 
-			$tourGrSearDtObj.find("input[name=createTimeEnd]").val(touristGroup.dateCalcuAfter(touristGroup.getCurrentDate(),3));
- 
-	   },
-	 
-
-	 
-
-	 
-	   //获取当前时间
-	 
-	   getCurrentDate:function() {
-	 
-		    var date = new Date(),
-	 
-		    seperator1 = "-",
-	 
-		    seperator2 = ":",
-	 
-		    month = date.getMonth() + 1,
-	 
-		    strDate = date.getDate();
-	 
-		    if (month >= 1 && month <= 9) {
-	 
-		        month = "0" + month;
-	 
-		    }
-	 
-		    if (strDate >= 0 && strDate <= 9) {
-	 
-		        strDate = "0" + strDate;
-	 
-		    }
-	 
-		    var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
-	 
-		            + " " ;
-	 
-		    return currentdate;
-	 
-       },
-	 
-
-	 
-		//当前日期后三天
-	 
-		dateCalcuAfter:function(dt, days){
-	 
-			dt = dt.split('-').join('/');//js不认2000-1-31,只认2000/1/31 
-	 
-			var t1 = new Date(new Date(dt).valueOf() +3*24*60*60*1000);// 日期加上指定的天数 
-	 
-			return t1.getFullYear() + "-" + (t1.getMonth()+1) + "-" + t1.getDate();
-	 
-		}, 
-	 
-
-	 
-		//当前日期前三天
-	 
-		dateCalcuBefore:function(dt, days){
-	 
-			dt = dt.split('-').join('/');//js不认2000-1-31,只认2000/1/31 
-	 
-			var t1 = new Date(new Date(dt).valueOf() -3*24*60*60*1000);// 日期加上指定的天数 
-	 
-			return t1.getFullYear() + "-" + (t1.getMonth()+1) + "-" + t1.getDate();
-	 
-		},
-	 
-
 	   //数据列表
 		listTouristGroup:function(page,partnerAgencyIdS,lineProductIdS,startTimeS,userIdS,createTimeStartS,createTimeEndS,customerTypeS,statusS){
 			touristGroup.searchData = {
@@ -541,6 +459,22 @@ define(function(require, exports) {
 				format: 'yyyy-mm-dd',
 				language: 'zh-CN'
 			});
+			//接待日期 时间控件
+			$("#"+tab+" .touristGroupMainFormRS input[name=arriveShiftTime]").datetimepicker({
+				autoclose: true,
+				todayHighlight: true,
+				format: 'L',
+				language: 'zh-CN'
+			});
+
+
+			//接待日期 时间控件
+			$("#"+tab+" .touristGroupMainFormRS input[name=leaveShiftTime]").datetimepicker({
+				autoclose: true,
+				todayHighlight: true,
+				format: 'L',
+				language: 'zh-CN'
+			});
 			//选择联系人列表
 			touristGroup.getPartnerAgencyManagerList("addTouristGroup");
 			//为该组团社添加新联系人
@@ -793,19 +727,19 @@ define(function(require, exports) {
 
 
 			//接待日期 时间控件
-			$("#"+tab+" .touristGroupMainFormRS input[name=arriveShiftTime]").datepicker({
+			$("#"+tab+" .touristGroupMainFormRS input[name=arriveShiftTime]").datetimepicker({
 				autoclose: true,
 				todayHighlight: true,
-				format: 'yyyy-mm-dd',
+				format: 'L',
 				language: 'zh-CN'
 			});
 
 
 			//接待日期 时间控件
-			$("#"+tab+" .touristGroupMainFormRS input[name=leaveShiftTime]").datepicker({
+			$("#"+tab+" .touristGroupMainFormRS input[name=leaveShiftTime]").datetimepicker({
 				autoclose: true,
 				todayHighlight: true,
-				format: 'yyyy-mm-dd',
+				format: 'L',
 				language: 'zh-CN'
 			});
 
@@ -1248,7 +1182,7 @@ define(function(require, exports) {
 			$.ajax({
 				url:""+APP_ROOT+"back/partnerAgency.do?method=findPartnerAnencyList&token="+$.cookie("token")+"&menuKey=resource_partnerAgency&operation=view",
                 dataType: "json",
-                data:"travelAgencyName="+$objC.val(),
+               // data:"travelAgencyName="+$objC.val(),
                 success:function(data){
                 	layer.close(globalLoadingLayer);
 						var result = showDialog(data);
@@ -1443,12 +1377,16 @@ define(function(require, exports) {
 			if (!isValidate)  return;
 
 			//打包接送时间地点
-			var outArrangeRemarkJson = [];
+			var outArrangeRemarkJson = [],$outArrange = $("#"+tab+" .touristGroupMainFormRS");
 			outArrangeRemarkJson = {
-				arriveTime : $("#"+tab+" .touristGroupMainFormRS").find("input[name=receptionTime]").val(),
-				arrivePosition : $("#"+tab+" .touristGroupMainFormRS").find("input[name=receptionAddress]").val(),
-				leaveTime : $("#"+tab+" .touristGroupMainFormRS").find("input[name=sendTime]").val(),
-				leavePosition : $("#"+tab+" .touristGroupMainFormRS").find("input[name=sendAddress]").val()
+				arriveTime : $outArrange.find("input[name=receptionTime]").val(),
+				arrivePosition : $outArrange.find("input[name=receptionAddress]").val(),
+				arriveShift : $outArrange.find("input[name=arriveShift]").val(),
+				arriveShiftTime : $outArrange.find("input[name=arriveShiftTime]").val(),
+				leaveTime : $outArrange.find("input[name=sendTime]").val(),
+				leavePosition : $outArrange.find("input[name=sendAddress]").val(),
+				leaveShift : $outArrange.find("input[name=leaveShift]").val(),
+				leaveShiftTime : $outArrange.find("input[name=leaveShiftTime]").val()
 			};
 			touristGroupFeeJsonAdd = JSON.stringify(touristGroupFeeJsonAdd);
 			touristGroupMemberJsonAdd = JSON.stringify(touristGroupMemberJsonAdd);
@@ -1602,12 +1540,16 @@ define(function(require, exports) {
 				touristGroupMemberJsonDel.push(touristGroupMemberJson);
 			})
 			//打包接送时间地点
-			var outArrangeRemarkJson = [];
+			var outArrangeRemarkJson = [],$outArrange = $("#"+tab+" .touristGroupMainFormRS");
 			outArrangeRemarkJson = {
-				arriveTime : $("#"+tab+" .touristGroupMainFormRS").find("input[name=receptionTime]").val(),
-				arrivePosition : $("#"+tab+" .touristGroupMainFormRS").find("input[name=receptionAddress]").val(),
-				leaveTime : $("#"+tab+" .touristGroupMainFormRS").find("input[name=sendTime]").val(),
-				leavePosition : $("#"+tab+" .touristGroupMainFormRS").find("input[name=sendAddress]").val()
+				arriveTime : $outArrange.find("input[name=receptionTime]").val(),
+				arrivePosition : $outArrange.find("input[name=receptionAddress]").val(),
+				arriveShift : $outArrange.find("input[name=arriveShift]").val(),
+				arriveShiftTime : $outArrange.find("input[name=arriveShiftTime]").val(),
+				leaveTime : $outArrange.find("input[name=sendTime]").val(),
+				leavePosition : $outArrange.find("input[name=sendAddress]").val(),
+				leaveShift : $outArrange.find("input[name=leaveShift]").val(),
+				leaveShiftTime : $outArrange.find("input[name=leaveShiftTime]").val()
 			};
 		    touristGroupFeeJsonAdd = JSON.stringify(touristGroupFeeJsonAdd);
 			touristGroupFeeJsonDel = JSON.stringify(touristGroupFeeJsonDel);
