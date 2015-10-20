@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":17,"md5":"77c699d3b79f02107694917999553b1b"}*/
+/*TMODJS:{"debug":true,"version":19,"md5":"77c699d3b79f02107694917999553b1b"}*/
 define(function(require) {
     return require("../../../template")("arrange/arrangeTransfer/view/searchLineProIn", function($data, $filename) {
         try {

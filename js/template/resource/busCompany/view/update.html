@@ -71,7 +71,7 @@
 					<div class="form-group guideInterval">
 						<label class="col-sm-2 control-label no-padding-right">详细地址:</label>
 						<div class="col-sm-6">
-							<input type="text" name="street" class="col-sm-12 addressMinute" placeholder="请输入街道地址" value="{{busCompany.street}}" maxlength="1000" />
+							<input type="text" name="street" class="col-sm-12 addressMinute" placeholder="请输入街道地址" value="{{busCompany.street}}" maxlength="100" />
 						</div>
 					</div>
 					<div class="form-group guideInterval">
@@ -120,7 +120,7 @@
 											<td><input  name="licenseNumber" type="text" class="col-sm-12" value="{{bus.licenseNumber}}" maxlength="10" /></td>
 											<td><input name="brand" type="text" class="col-sm-12" value="{{bus.brand}}" maxlength="32" /></td>
 											<td><input name="seatCount" class="col-sm-12" type="text" value="{{bus.seatCount}}"/></td>
-											<td class="col-sm-1"><div class="input-group col-sm-12"><input name="buyTime" type="text" class="date-picker datepicker" style="width: 130px" value="{{bus.buyTime | dateFormat:'yyyy-MM-dd'}}"/><span class="input-group-addon"><i class="fa fa-calendar"></i></span></div></td>
+											<td class="col-sm-1"><div class="input-group col-sm-12"><input name="buyTime" type="text" class="date-picker datepicker" style="width: 130px" {{if bus.buyTime == null || bus.buyTime == ""}} value="" {{else}} value="{{bus.buyTime | dateFormat:'yyyy-MM-dd'}}" {{/if}}/><span class="input-group-addon"><i class="fa fa-calendar"></i></span></div></td>
 											<td>
 												<select name="isChartered">
 													<option value="1" {{if bus.isChartered == 1}}selected="selected"{{/if}}>是</option>
@@ -171,7 +171,7 @@
 													</div>
 												{{/if}}
 											</td>
-											<td><input name="remark" class="col-sm-12" type="text" value="{{bus.remark}}"/></td>
+											<td><input name="remark" maxlength="1000" class="col-sm-12" type="text" value="{{bus.remark}}"/></td>
 											<td style="width:70px"><a class="btn-bus-delete">删除</a></td>
 										</tr>
 									{{/each}}
