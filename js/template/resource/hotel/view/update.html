@@ -139,7 +139,7 @@
 										<td><input name="type" type="text" class="col-sm-12" value="{{room.type}}" maxlength="32" /></td>
 										<td class="time">
 											{{each room.priceList as price i}}
-											<div data-index="{{i+1}}" data-entity-id="{{price.id}}" class="clearfix {{if i > 0}}appendDiv{{/if}} div-{{i+1}}" style="margin-top:2px">
+											<div data-index="{{i+1}}" data-entity-id="{{price.id}}" class="clearfix {{if i > 0}}appendDiv{{/if}} div-{{i+1}}" style="margin-top:1px">
 												<input name="startTime" type="text" class="datepicker" style="width:100px" value="{{price.startTime | dateFormat:'yyyy-MM-dd'}}"/><label>&nbsp;至&nbsp;</label><input name="endTime" type="text" class="datepicker" style="width:100px" value="{{price.endTime | dateFormat:'yyyy-MM-dd'}}"/>
 												{{if i == 0}}
 												<label class="timeArea" style="float:right;padding-top:3px;">
@@ -149,7 +149,7 @@
 												</label>
 												{{else}}
 												<label class="timeArea" style="float:right;padding-top:3px;">
-													<button class="btn btn-danger btn-sm btn-white delete">
+													<button class="btn btn-danger btn-sm btn-white delete" style="margin-top: -3px">
 														<i class="ace-icon fa fa-minus bigger-110 icon-only"></i>
 													</button>
 												</label>

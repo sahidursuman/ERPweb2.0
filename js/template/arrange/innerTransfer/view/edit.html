@@ -26,19 +26,19 @@
 					<div class="form-group">
 						<label class="col-sm-1 control-label no-padding-right">内转备注:</label>
 						<div class="col-sm-2">
-							<input value="{{innerTransfer.transRemark}}" type="text" name="transRemark" class="date-picker col-xs-12" />
+							<input value="{{innerTransfer.transRemark}}" type="text" name="transRemark" class="date-picker col-xs-12" maxlength="100" />
 						</div>
 					</div>
 
 					<div class="form-group">
 						<label class="col-sm-1 control-label no-padding-right">应付：</label>
 						<div class="col-sm-2">
-							<input name="transNeedPayMoney" value="{{innerTransfer.transNeedPayMoney}}" type="text" readonly="readonly" readonly="readonly" class="date-picker col-xs-12" />
+							<input name="transNeedPayMoney" value="{{innerTransfer.transNeedPayMoney}}" maxlength="9" type="text" readonly="readonly" readonly="readonly" class="date-picker col-xs-12" />
 						</div>
 
 						<label class="col-sm-1 control-label no-padding-right">已付：</label>
 						<div class="col-sm-2">
-							<input name="transPayedMoney" value="{{innerTransfer.transPayedMoney}}" type="text" class="date-picker col-xs-12" />
+							<input name="transPayedMoney" value="{{innerTransfer.transPayedMoney}}" maxlength="9" type="text" class="date-picker col-xs-12" />
 						</div>
 
 						
@@ -56,6 +56,7 @@
 								</span>
 							</label>
 						{{/if}}
+
 
 						<label class="control-label no-padding-right">对方现收</label>
 					</div>
@@ -95,7 +96,7 @@
 					<td>内转价</td>
 					<td>大人</td>
 					<td><input type="text" name="adultCount"  value="{{innerTransfer.transAdultCount}}" readonly="readonly" class="col-sm-10 count"/></td>
-					<td><span class="necessary pull-left col-sm-2">*</span><input type="text" name="transAdultPrice"  value="{{innerTransfer.transAdultPrice}}"  class="col-sm-10 price"/></td>
+					<td><span class="necessary pull-left col-sm-2">*</span><input type="text" name="transAdultPrice" maxlength="9"  value="{{innerTransfer.transAdultPrice}}"  class="col-sm-10 price"/></td>
 					<td></td>	
 				</tr>
 				
@@ -103,7 +104,7 @@
 					<td>内转价</td>      
 					<td>小孩</td>
 					<td><input type="text" name="transChildPrice" value="{{innerTransfer.transChildCount}}" readonly="readonly" class="col-sm-10 count"/></td>
-					<td><span class="necessary  pull-left col-sm-2"></span><input type="text" name="transChildPrice" value="{{innerTransfer.transChildPrice}}"  class="col-sm-10 price"/></td>	
+					<td><span class="necessary  pull-left col-sm-2"></span><input type="text" name="transChildPrice" maxlength="9" value="{{innerTransfer.transChildPrice}}"  class="col-sm-10 price"/></td>	
 					<td></td>
 				</tr>
 
@@ -113,8 +114,8 @@
 					<tr data-entity-id={{rs.id}}>
 						<td>其他费用</td>
 						<td>{{rs.discribe}}</td>
-						<td>{{rs.count}}</td>
-						<td>{{rs.price}}</td>
+						<td class="count">{{rs.count}}</td>
+						<td class="price">{{rs.price}}</td>
 						<td><a class="cursor btn-edittransfer-delete">删除</a></td>
 					</tr>
 				{{/each}}
@@ -246,7 +247,7 @@
 
 									{{each innerTransfer.touristGroup.touristGroupFeeList as rs}}
 									<tr>
-										<td>{{if rs.type==0}}增加{{else}}减少{{/if}}</td>
+										<td>其他费用</td>
 										<td>{{rs.describeInfo}}</td>
 										<td>{{rs.count}}</td>
 										<td>{{rs.price}}</td>

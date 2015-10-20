@@ -919,7 +919,7 @@ function listMenu(menuTemplate){
 					seajs.use("" + ASSETS_ROOT +"js/template/financial/transfer/transfer.js",function(transfer){
 						var date = new Date();
 						var year = date.getFullYear();
-						transfer.listTransfer(0,"",year,"");
+						transfer.listTransfer(0,"","",year,"");
 						modals["financial_transfer"] = transfer;
 					});
 				});

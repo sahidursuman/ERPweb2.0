@@ -42,9 +42,9 @@
 			<td class="style-myself">是否为联系人</td>
 
 		</tr>
-		{{each touristGroupDetail.touristGroupMemberList as touristGroup}}
+		{{each touristGroupDetail.touristGroupMemberList as touristGroup index}}
 		<tr  data-entity-id="touristGroup.id">
-			<td>{{id}}</td>
+			<td>{{index+1}}</td>
 			<td class="">{{touristGroup.name}}</td>
 			<td>
 				{{touristGroup.mobileNumber}}

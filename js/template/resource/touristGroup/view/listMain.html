@@ -1,11 +1,11 @@
 <div class="search-area touristGroupSearchForm clearfix globalAdd">
 
 	<div class="form-horizontal col-sm-12 clearfix" style="margin-bottom:20px;margin-left:-12px" >
-		<label class="control-label pull-left">人数合计：{{statistics.adultCount}}大{{statistics.childCount}}小</label>
-		<label class="control-label col-sm-2">应收款合计：{{statistics.needPay}}元</label>
-		<label class="control-label col-sm-2">已收款合计：{{statistics.payedMoney}}元</label>
-		<label class="control-label col-sm-2">现收款合计：{{statistics.currentNeedPay}}元</label>
-		<label class="control-label col-sm-2">未收款合计：{{statistics.unIncomeMoney}}元</label>
+		<label class="control-label pull-left" name="statistics-count">人数合计：{{statistics.adultCount}}大{{statistics.childCount}}小</label>
+		<label class="control-label col-sm-2" name="statistics-needPay">应收款合计：{{statistics.needPay}}元</label>
+		<label class="control-label col-sm-2" name="statistics-payed">已收款合计：{{statistics.payedMoney}}元</label>
+		<label class="control-label col-sm-2" name="statistics-currentNeedPay">现收款合计：{{statistics.currentNeedPay}}元</label>
+		<label class="control-label col-sm-2" name="statistics-unIncome">未收款合计：{{statistics.unIncomeMoney}}元</label>
 	</div>
 	 <div class="form-horizontal" style="margin-top:20px;">
 		<label class="pull-left text-right control-label no-padding-right">来源:</label>
@@ -88,8 +88,6 @@
 						已分团
 					{{else if searchParam.status==3 }}
 						已转客
-					{{else if searchParam.status==4 }}
-						已取消
 					{{else if searchParam.status==5 }}
 						已拆分
 					{{else if searchParam.status==6 }}
@@ -113,9 +111,6 @@
 				</li>
 				<li>
 					<a data-value="3" href="javascript:void(0)">已转客</a>
-				</li>
-				<li>
-					<a data-value="4" href="javascript:void(0)">已取消</a>
 				</li>
 				<li>
 					<a data-value="5" href="javascript:void(0)">已拆分</a>
