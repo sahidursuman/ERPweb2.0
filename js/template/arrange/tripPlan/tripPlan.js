@@ -643,56 +643,60 @@ define(function(require, exports) {
 				    			else{
 				    			}
 				    		}
-							$.ajax({
-				    			url:""+APP_ROOT+"back/lineProduct.do?method=findById&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view&sortType=auto",
-								data:"lineProductId="+id,
-								dataType:"json",
-								type:"POST",
-								beforeSend:function(){
-									//打开一个遮罩层
-									globalLoadingLayer = openLoadingLayer();
-								},
-								success: function(data) {
-									data.lineProduct = JSON.parse(data.lineProduct);
-									data.lineProductDays = JSON.parse(data.lineProductDays);
-									data.guide = JSON.parse(data.guide);
-									data.busCompanyTemplate = JSON.parse(data.busCompanyTemplate);
-			                    	layer.close(globalLoadingLayer);
-			                    	var result =showDialog(data);
-			                    	var dataD = data;
-									if(result){
-										layer.close(searchTravelLinelayer);
-										tripPlan.setTripPlanLineValue(data);
-										
-										var daysLength = data.lineProductDays.length;
-										var html = "";
-										for(i=0;i<daysLength;i++){
-											function hotelLevel(){
-												if(data.lineProductDays[i].hotelLevel == 1){
-													return "三星以下"
-												}else if(data.lineProductDays[i].hotelLevel == 2){
-													return "三星"
-												}else if(data.lineProductDays[i].hotelLevel == 3){
-													return "准四星"
-												}else if(data.lineProductDays[i].hotelLevel == 4){
-													return "四星"
-												}else if(data.lineProductDays[i].hotelLevel == 5){
-													return "准五星"
-												}else if(data.lineProductDays[i].hotelLevel == 6){
-													return "五星"
-												}else if(data.lineProductDays[i].hotelLevel == 7){
-													return "五星以上"
-												}else{
-													return "-"
+				    		if(!!id){
+								$.ajax({
+					    			url:""+APP_ROOT+"back/lineProduct.do?method=findById&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view&sortType=auto",
+									data:"lineProductId="+id,
+									dataType:"json",
+									type:"POST",
+									beforeSend:function(){
+										//打开一个遮罩层
+										globalLoadingLayer = openLoadingLayer();
+									},
+									success: function(data) {
+										data.lineProduct = JSON.parse(data.lineProduct);
+										data.lineProductDays = JSON.parse(data.lineProductDays);
+										data.guide = JSON.parse(data.guide);
+										data.busCompanyTemplate = JSON.parse(data.busCompanyTemplate);
+				                    	layer.close(globalLoadingLayer);
+				                    	var result =showDialog(data);
+				                    	var dataD = data;
+										if(result){
+											layer.close(searchTravelLinelayer);
+											tripPlan.setTripPlanLineValue(data);
+											
+											var daysLength = data.lineProductDays.length;
+											var html = "";
+											for(i=0;i<daysLength;i++){
+												function hotelLevel(){
+													if(data.lineProductDays[i].hotelLevel == 1){
+														return "三星以下"
+													}else if(data.lineProductDays[i].hotelLevel == 2){
+														return "三星"
+													}else if(data.lineProductDays[i].hotelLevel == 3){
+														return "准四星"
+													}else if(data.lineProductDays[i].hotelLevel == 4){
+														return "四星"
+													}else if(data.lineProductDays[i].hotelLevel == 5){
+														return "准五星"
+													}else if(data.lineProductDays[i].hotelLevel == 6){
+														return "五星"
+													}else if(data.lineProductDays[i].hotelLevel == 7){
+														return "五星以上"
+													}else{
+														return "-"
+													}
 												}
+												html +='<tr><td>第'+data.lineProductDays[i].whichDay+'天</td><td>'+data.lineProductDays[i].repastDetail+'</td><td>'+hotelLevel()+'</td><td class="col-xs-6">'+data.lineProductDays[0].title+'</td></tr>';
 											}
-											html +='<tr><td>第'+data.lineProductDays[i].whichDay+'天</td><td>'+data.lineProductDays[i].repastDetail+'</td><td>'+hotelLevel()+'</td><td class="col-xs-6">'+data.lineProductDays[0].title+'</td></tr>';
+											$(".newAddTripPlanMain table.days tbody").html(html);
+											$(".newAddTripPlanMain table.days tbody").html(html);
 										}
-										$(".newAddTripPlanMain table.days tbody").html(html);
-										$(".newAddTripPlanMain table.days tbody").html(html);
 									}
-								}
-				    		})
+					    		})
+					    	}else{
+					    		showMessageDialog($( "#confirm-dialog-message" ),"请选择线路产品");
+					    	}
 						})
 					}
 				}
