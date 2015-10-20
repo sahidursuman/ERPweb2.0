@@ -226,7 +226,7 @@ table tr td{
     background: white;
     margin-top: 0px!important;
 }
-.layui-layer-setwin .layui-layer-close1{width: 16px;height: 16px}
+.layui-layer-setwin .layui-layer-close1{width: 16px!important;height: 16px!important;}
 .border-li-h{
    cursor: pointer!important;
     background: #0d8f41;
