@@ -19,7 +19,7 @@
                     <label class="col-sm-2" style="font-weight: bold;">完团日期：{{tripPlan.endTime | dateFormat:'yyyy-MM-dd'}}</label>
                     <label class="col-sm-2" style="font-weight: bold;">团队人数：{{tripPlan.touristAdultCount}}大{{tripPlan.touristChildCount}}小</label>
                 </div>
-            </div> 
+            </div>
         </form>
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="search-area  editable editable-click" style="margin-top: 10px;border-bottom:0px;cursor: default;height: 30px">
@@ -95,7 +95,7 @@
 
     <div class="row" style="margin-bottom:15px;">
             {{if tripPlan.billStatus == '-1' && user.roleType > 0}}
-            <div class="col-md-2">  
+            <div style="float:left;">  
                 <button data-entity-id="{{tripPlan.id}}" data-entity-userName="{{user.userName}}" data-entity-roleType="{{user.roleType}}" data-entity-financial-id="{{financialTripPlanId}}" class="btn btn-xs btn-primary btn-transfter btn-saveCount" style="margin-right: 20px;">
                     <i class="ace-icon fa fa-save"></i>保存信息
                 </button>
@@ -104,8 +104,8 @@
                 </button>
             </div>
             {{/if}}
-            {{if tripPlan.billStatus > -1}} 
-            <div class="col-md-3">  
+            {{if tripPlan.billStatus > -1}}
+            <div style="float:left;">  
                 {{if user.roleType == 1 || (user.roleType == 2 && tripPlan.billStatus == 1) || (user.roleType == 3 && tripPlan.billStatus == 0)}}
                 <button data-entity-id="{{tripPlan.id}}" data-entity-userName="{{user.userName}}" data-entity-roleType="{{user.roleType}}" data-entity-financial-id="{{financialTripPlanId}}" class="btn btn-xs btn-primary btn-transfter btn-saveCount" style="margin-right: 20px;">
                     <i class="ace-icon fa fa-save"></i>保存信息
@@ -133,10 +133,10 @@
                 {{/if}}
             </div>   
           {{/if}}
-        <div class="col-md-1">
+        <div style="margin-top:5px;float:left;width:90px;text-align:center;">
             <a href="javascript:void(0);" class="btn-financialLog">操作记录</a>
         </div>
-        <div class="col-md-1">
+        <div style="margin-top:5px;float:left;width:90px;text-align:center;">
             <a href="javascript:void(0);" class="btn-tripPlanArrange">安排预算表</a>
         </div>
     </div>
