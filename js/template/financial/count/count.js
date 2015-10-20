@@ -38,7 +38,7 @@ define(function(require, exports) {
     
             firstDay[2] = '01';
 
-            count.initCount('','','','','', firstDay.join('-'), today);
+            count.initCount('','','','','','','');
         },
         initCount: function(tripNumber,lineProductId,lineProductName,guideId,guideName,startTime,endTime,status) {
             // init page
