@@ -26,13 +26,13 @@ define(function(require,exports){
 		    },
 		    searchCheckData:{
 		    	"toBusinessGroupId":"",
-		    	"data-entity-toBusinessGroupNam":"",
+		    	"tobusinessgroupName":"",
 		    	"year":"",
 		    	"month":""
 		    },
 		    searchBalanceData:{
 		    	"toBusinessGroupId":"",
-		        "data-entity-toBusinessGroupNam":"",
+		        "tobusinessgroupName":"",
 		    	"year":"",
 		    	"startMonth":"",
 		    	"endMonth":""
@@ -123,10 +123,11 @@ define(function(require,exports){
                         $tabId.find(".btn-innerTransferOut-check").click(function(){
                         	InnerTransferOut.searchCheckData = {
 						    	"toBusinessGroupId":$(this).attr("data-entity-id"),
-						    	"toBusinessGroupNam":$(this).attr("data-entity-data-entity-toBusinessGroupNam"),
+						    	"toBusinessGroupNam":$(this).attr("data-entity-tobusinessgroupname"),
 						    	"year":$(this).attr("data-entity-year"),
 						    	"month":$(this).attr("data-entity-month")
 		    				};
+		    				console.log(InnerTransferOut.searchCheckData);
 		    				InnerTransferOut.InnerTransferOutCheck(0,InnerTransferOut.searchCheckData.toBusinessGroupId,InnerTransferOut.searchCheckData.toBusinessGroupNam,InnerTransferOut.searchCheckData.year,InnerTransferOut.searchCheckData.month)
                         });
                         //结算事件
@@ -139,7 +140,6 @@ define(function(require,exports){
 						    	"endMonth":$(this).attr("data-entity-endmonth"),
 
 		    				};
-		    				console.log(InnerTransferOut.searchBalanceData);
 		    				InnerTransferOut.InnerTransferInBalance(0,InnerTransferOut.searchBalanceData.toBusinessGroupId,InnerTransferOut.searchBalanceData.toBusinessGroupNam,InnerTransferOut.searchBalanceData.year,InnerTransferOut.searchBalanceData.startMonth,InnerTransferOut.searchBalanceData.endMonth);
                         });
 						}
@@ -147,7 +147,7 @@ define(function(require,exports){
 				});
 			},
 			//对账处理
-			InnerTransferOutCheck:function(pageNo,toBusinessGroupId,toBusinessGroupNam,year,month){
+			InnerTransferOutCheck:function(pageNo,toBusinessGroupId,toBusinessGroupName,year,month){
 				$.ajax({
 					url:""+APP_ROOT+"back/financialInnerTransferOut.do?method=listFinancialInnerTransferOutChecking&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 					type:"POST",
@@ -163,11 +163,11 @@ define(function(require,exports){
 						
 						InnerTransferOut.searchCheckData = {
 					    	"toBusinessGroupId":toBusinessGroupId,
-					    	"toBusinessGroupNam":toBusinessGroupNam,
+					    	"toBusinessGroupName":toBusinessGroupName,
 					    	"year":year,
 					    	"month":month
 					    };
-					   
+					    console.log(InnerTransferOut.searchCheckData);
 					    data.yearList = yearList;
 					    data.monthList = monthList;
 					    data.searchParam = InnerTransferOut.searchCheckData;
@@ -241,12 +241,21 @@ define(function(require,exports){
 						$checkId.find(".btn-checking-search").click(function(){
 							InnerTransferOut.searchCheckData = {
 						    	"toBusinessGroupId":toBusinessGroupId,
-						    	"toBusinessGroupNam":toBusinessGroupNam,
+						    	"toBusinessGroupName":toBusinessGroupName,
 						    	"year":$checkId.find("select[name=year]").val(),
 						    	"month":$checkId.find("select[name=month]").val()
 					    	};
 		    				InnerTransferOut.InnerTransferOutCheck(0,InnerTransferOut.searchCheckData.toBusinessGroupId,InnerTransferOut.searchCheckData.toBusinessGroupNam,InnerTransferOut.searchCheckData.year,InnerTransferOut.searchCheckData.month)
 
+						});
+						//导出事件
+						$checkId.find(".btn-transferExport").click(function(){
+							var year=$checkId.find("select[name=year]").val();
+	                      	var month=$checkId.find("select[name=month]").val();
+	                      	checkLogin(function(){
+	                        	var url = ""+APP_ROOT+"back/export.do?method=exportInnerTransferOut&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view"+"&toBusinessGroupId="+toBusinessGroupId+"&toBusinessGroupName="+toBusinessGroupName+"&year="+year+"&month="+month+"&sortType=auto";
+	                        	exportXLS(url)
+	                        });
 						});
 						//全选事件
 						$checkId.find(" .innerTransferIn-selectAll").click(function(){
