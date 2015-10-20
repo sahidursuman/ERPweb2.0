@@ -24,7 +24,7 @@ define(function(require, exports) {
 				success:function(data){
 					layer.close(globalLoadingLayer);
 					var result = showDialog(data);
-					if (result) {
+			 		if (result) {
 						var partnerAgencyList = data.partnerAgencyList;
 						partnerAgencyList = JSON.parse(partnerAgencyList);
 						data.partnerAgencyList = partnerAgencyList;
