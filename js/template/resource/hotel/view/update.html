@@ -93,7 +93,7 @@
 					<div class="form-group guideInterval">
 						<label class="col-sm-2 control-label no-padding-right">酒店简介:</label>
 						<div class="col-sm-8">
-							<textarea class="form-control" name="remark" class="col-sm-12" >{{hotel.remark}}</textarea>
+							<textarea class="form-control" name="remark" maxlength="1000" class="col-sm-12" >{{hotel.remark}}</textarea>
 						</div>
 					</div>
 				</div>
@@ -193,7 +193,7 @@
 											<input name="broadband" class="col-sm-12" type="text" value="{{room.broadband}}" maxlength="100" />
 										</td>
 										<td>
-											<input name="areaSize" class="col-sm-12" type="text" value="{{room.areaSize}}" maxlength="5" />
+											<input name="areaSize" class="col-sm-12" type="text" value="{{room.areaSize}}" maxlength="3" />
 										</td>
 										<td>
 										 	<input name="guestNumber" class="col-sm-12" type="text" value="{{room.guestNumber}}" maxlength="4" />

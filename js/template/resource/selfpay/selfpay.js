@@ -709,6 +709,7 @@ define(function(require, exports) {
 					if(result){
 						var selfpayInfo = JSON.parse(data.selfpay);
 						data.selfpay = selfpayInfo;
+						console.log(data.selfpay);
 						var html = viewTemplate(data);
 						layer.open({
 						    type: 1,

@@ -50,14 +50,14 @@
 										<td>
 											{{each policy.costMoneyList as cost j}}
 											<div data-index="{{j+1}}" class="clearfix div-{{j+1}}" style="margin-bottom:7px">
-												<input name="guideRate" class="col-sm-12" type="text" value="{{cost.guideRate*100 | toFixed}}"  maxlength="4"/>
+												<input name="guideRate" class="col-sm-12" type="text" value="{{cost.guideRate*100 | toFixed}}"  maxlength="5"/>
 											</div>
 											{{/each}}
 										</td>
 										<td>
 											{{each policy.costMoneyList as cost j}}
 											<div data-index="{{j+1}}" class="clearfix div-{{j+1}}" style="margin-bottom:7px">
-												<input name="travelAgencyRate" class="col-sm-12" type="text" value="{{cost.travelAgencyRate*100 | toFixed}}"  maxlength="4"/>
+												<input name="travelAgencyRate" class="col-sm-12" type="text" value="{{cost.travelAgencyRate*100 | toFixed}}"  maxlength="5"/>
 											</div>
 											{{/each}}
 										</td>
