@@ -32,23 +32,38 @@ define(function(require, exports) {
 		},
 		//获取统计数据
 		getTouristStatisticData:function(page,partnerAgencyIdS,lineProductIdS,startTimeS,userIdS,createTimeStartS,createTimeEndS,customerTypeS,statusS){
-
+			var args = {
+				pageNo: page,
+				partnerAgencyId: partnerAgencyIdS,
+				lineProductIdSearch: lineProductIdS,
+				startTimeSearch: startTimeS,
+				userId: userIdS,
+				createTimeStart: createTimeStartS,
+				createTimeEnd: createTimeEndS,
+				statusSearch: statusS,
+				customerType: customerTypeS,
+				sortType: 'auto'
+			};
+			touristGroup.searchData = args;
 			$.ajax({
 				url:""+APP_ROOT+"back/touristGroup.do?method=getTouristStatisticData&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 				type:"POST",
-				data:"pageNo="+page+"&sortType=auto"+"&partnerAgencyId="+partnerAgencyIdS+"&lineProductIdSearch="+lineProductIdS+"&startTimeSearch="+startTimeS+"&userId="+userIdS+"&createTimeStart="+createTimeStartS+"&createTimeEnd="+createTimeEndS+"&statusSearch="+statusS+"&customerType="+customerTypeS,
+				data: args,
+				cache: false,
 				dataType:"json",
 				beforeSend:function(){
 					//打开一个遮罩层
 					globalLoadingLayer = openLoadingLayer();
 				},
 				success:function(data){
+					console.info(args);
 					//关闭遮罩
 					layer.close(globalLoadingLayer);
 					//根据返回值判断下一步操作，或者已出现错误
 					var result = showDialog(data);
 					//如果正确则就执行
 					if(result){
+						
 						var html = listMainTemplate(data);
 						addTab(menuKey,"游客管理",html);
 						//搜索栏状态button下拉事件
