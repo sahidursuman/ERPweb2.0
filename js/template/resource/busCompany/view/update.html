@@ -71,7 +71,7 @@
 					<div class="form-group guideInterval">
 						<label class="col-sm-2 control-label no-padding-right">详细地址:</label>
 						<div class="col-sm-6">
-							<input type="text" name="street" class="col-sm-12 addressMinute" placeholder="请输入街道地址" value="{{busCompany.street}}" maxlength="1000" />
+							<input type="text" name="street" class="col-sm-12 addressMinute" placeholder="请输入街道地址" value="{{busCompany.street}}" maxlength="100" />
 						</div>
 					</div>
 					<div class="form-group guideInterval">
@@ -171,7 +171,7 @@
 													</div>
 												{{/if}}
 											</td>
-											<td><input name="remark" class="col-sm-12" type="text" value="{{bus.remark}}"/></td>
+											<td><input name="remark" maxlength="1000" class="col-sm-12" type="text" value="{{bus.remark}}"/></td>
 											<td style="width:70px"><a class="btn-bus-delete">删除</a></td>
 										</tr>
 									{{/each}}
