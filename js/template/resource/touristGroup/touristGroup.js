@@ -821,7 +821,7 @@ define(function(require, exports) {
 				var html=/*"<tr>"+
 				"<td><select class=\"col-sm-12 addOrReduceSelect\"><option value=\"0\">增加费用</option><option value=\"1\">减少费用</option></select></td>"+
 				"<td><input type=\"text\" class=\"col-sm-12  no-padding-right\" /></td>"+
-				"<td><input type=\"text\" class=\"col-sm-12  no-padding-right costCount\" /></td>"+
+				"<td><input type=\"text\" class=\"col-sm-12  no-padding-right costCount\" /></td>"+partnerAgencyNameList
 				"<td><input type=\"text\" class=\"col-sm-12  no-padding-right costPrice\" /></td>"+
 				"<td><button class=\"btn btn-xs btn-danger addCost-delete\"><i class=\"ace-icon fa fa-trash-o bigger-120\"></i></button></td>"+
 				"</tr>"*/
@@ -1229,25 +1229,13 @@ define(function(require, exports) {
 			})
 		},
 		getPartnerAgencyList:function(obj,partnerAId){
-			$(obj).autocomplete({
-				minLength: 0,
-				change: function(event, ui) {
-					if (!ui.item)  {
-						$(this).val('').nextAll('input[name="fromPartnerAgencyId"]').val('');
-					}
-				},
-				select: function(event, ui) {
-					$(this).blur().nextAll('input[name="fromPartnerAgencyId"]').val(ui.item.id);
-				}
-			})
-			.click(function(event) {
-				var $objC = $(this);
-				$.ajax({
-					url:""+APP_ROOT+"back/partnerAgency.do?method=findPartnerAnencyList&token="+$.cookie("token")+"&menuKey=resource_partnerAgency&operation=view",
-                    dataType: "json",
-                    data:"travelAgencyName="+$objC.val(),
-                    success: function(data) {
-                    	layer.close(globalLoadingLayer);
+			var $objC = $(obj)
+			$.ajax({
+				url:""+APP_ROOT+"back/partnerAgency.do?method=findPartnerAnencyList&token="+$.cookie("token")+"&menuKey=resource_partnerAgency&operation=view",
+                dataType: "json",
+                data:"travelAgencyName="+$objC.val(),
+                success:function(data){
+                	layer.close(globalLoadingLayer);
 						var result = showDialog(data);
 						if(result){
 							var partnerAgencyList = JSON.parse(data.partnerAgencyList);
@@ -1255,13 +1243,32 @@ define(function(require, exports) {
 								for(var i=0;i<partnerAgencyList.length;i++){
 									partnerAgencyList[i].value = partnerAgencyList[i].travelAgencyName;
 								}
-							}
-							$objC.autocomplete('option','source', partnerAgencyList);
-							$objC.autocomplete('search', '');
+							};
+							$(obj).autocomplete({
+								
+								minLength: 0,
+								change: function(event, ui) {
+									if (!ui.item)  {
+										$(this).val('').nextAll('input[name="fromPartnerAgencyId"]').val('');
+									}
+								},
+								select: function(event, ui) {
+									var $tabId = $("#tab-resource_touristGroup-add-content");
+									$(this).blur().nextAll('input[name="fromPartnerAgencyId"]').val(ui.item.id);
+									$tabId.find("input[name=partnerAgencyNameList]").val("");
+
+								}
+							}).off("click").on("click",function(){
+								
+								$objC.autocomplete('option','source', partnerAgencyList);
+								$objC.autocomplete('search', '');
+
+							});
+							
 						}
-                    }
-                });
+                }
 			});
+			         
 		},
 		getPartnerAgencySearchList:function(obj,partnerAgencyId){
 			$.ajax({
