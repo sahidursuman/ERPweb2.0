@@ -125,7 +125,7 @@
 										</td>
 										<td>
 											{{each item.priceList as price i}}
-											<div data-index="{{i+1}}" class="clearfix div-{{i+1}}" style="margin-top:2px">
+											<div data-index="{{i+1}}" class="clearfix div-{{i+1}}" style="margin-top:{{if i==0}}2{{else}}7{{/if}}px">
 												<input name="contractPrice" type="text" value="{{price.contractPrice}}" maxlength="7"/>
 											</div>
 											{{/each}}
