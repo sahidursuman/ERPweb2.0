@@ -271,6 +271,7 @@ table tr td{
 #alter-pwd input{
     text-indent: 1em;
     margin-left: 10px;
+    line-height: 1em;
     width: 240px;
 }
 #alter-user {
@@ -578,4 +579,10 @@ input,select{
 /*}*/
 .delSelf{
     line-height: 20px;
+}
+.operationR{
+    margin-left:-310px;margin-top:5px;
+}
+.operationA{
+    margin-left:-240px;margin-top:5px;
 }

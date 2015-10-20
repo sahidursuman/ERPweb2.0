@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 /*TMODJS:{"debug":true,"version":193,"md5":"d6de28a38f7895c85ffcdb42280630d8"}*/
+=======
+/*TMODJS:{"debug":true,"version":200,"md5":"d6de28a38f7895c85ffcdb42280630d8"}*/
+>>>>>>> 744a5aa9082ae55eacebf7462c3fd21fea08a1da
 define(function(require) {
     return require("../../../template")("resource/subsection/view/listMain", function($data, $filename) {
         try {
