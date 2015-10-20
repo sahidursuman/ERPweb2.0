@@ -319,6 +319,8 @@ define(function(require, exports) {
 				$obj.find(".btn-TransferOut-edit").click(function(){
 					var id = $(this).attr("data-entity-id");
 					inner.editTransferOut(id);
+					//计算初始化
+			        inner.PayMoneyF();
 				});
 				//撤销
 				$obj.find(".btn-TransferOut-delete").click(function(){
@@ -369,25 +371,30 @@ define(function(require, exports) {
 								 inner.edited["edit"] = "";
 								 addTab(menuKey+"-edit","修改内转信息",html);
 								 validator=rule.transferCheckor($(".inner-edit"));
+					
 							 },function(){
 								 addTab(menuKey+"-edit","修改内转信息",html);
 								 inner.edited["edit"] = "";
 								 validator=rule.transferCheckor($(".inner-edit"));
+						
 							 });
 						 }else{
 							addTab(menuKey+"-edit","修改内转信息",html);
 							validator=rule.transferCheckor($(".inner-edit"));
+						
 						 }
 					}else{
 						addTab(menuKey+"-edit","修改内转信息",html);
 						validator=rule.transferCheckor($(".inner-edit"));
+				
 					}
 					$("#tab-"+menuKey+"-edit-content").on("change",function(){
 						inner.edited["edit"] = "edit"; 
+					
 					})
+
 					//新增&&智能计算
 					inner.innitAddFee(validator);
-
 					rule.update(validator);
 
 					$obj=$("#tab-arrange_inner_Transfer-edit-content");
@@ -726,124 +733,105 @@ define(function(require, exports) {
 		},
 
 		transferInfindPager:function(searchParam){
-						var $obj=$("#" +tabId+" .transferIn-content ");
-					   //分页--首页按钮事件
-						$obj.find(".pageMode a.first").click(function(){
-							searchParam.pageNo = 0;
-							inner.listTransferIn(searchParam);
-						});
-						//分页--上一页事件
-						$obj.find(".pageMode a.previous").click(function(){
-							var pageNo = parseInt(searchParam.pageNo);
-							var previous = pageNo - 1;
-							if(pageNo == 0){
-								previous = 0;
-							}
-							searchParam.pageNo = previous;
-							inner.listTransferIn(searchParam);
-						});   
-						//分页--下一页事件
-						$obj.find(".pageMode a.next").click(function(){
-							var pageNo = parseInt(searchParam.pageNo);
-							var totalPage = parseInt(searchParam.totalPage);
-							var next =  pageNo + 1;
-							if(pageNo == totalPage-1){
-								next = pageNo ;
-							}
-							searchParam.pageNo = next;
-							inner.listTransferIn(searchParam);
-						});
-						//分页--尾页事件
-						$obj.find(".pageMode a.last").click(function(){
-							var totalPage = parseInt(searchParam.totalPage);
-							var pageNo = 0;
-							if(totalPage==0){
-								pageNo = 0;
-							}else{
-								pageNo = totalPage - 1; 
-							}
-							searchParam.pageNo = pageNo;
-							inner.listTransferIn(searchParam);
-						});
-						//查看
-						$obj.find(".btn-transfer-view").click(function(){
-							var id = $(this).attr("data-entity-id");
-							inner.viewTransferOut(id);
-						});
-						//编辑
-						$obj(".btn-transfer-edit").click(function(){
-							var id = $(this).attr("data-entity-id");
-							inner.edit(id);
-						});
-					
-						//确认
-						$obj.find(".btn-transfer-save").click(function(){
-							var id = $(this).attr("data-entity-id");
-							inner.saveTransferIn(id);
-						});
-						//拒绝
-						$obj.find(".btn-transfer-refuse").click(function(){
-							var id = $(this).attr("data-entity-id");
-							inner.deleteTransferIn(id);
-							
-						});
+				var $obj=$("#" +tabId+" .transferIn-content ");
+			   //分页--首页按钮事件
+				$obj.find(".pageMode a.first").click(function(){
+					searchParam.pageNo = 0;
+					inner.listTransferIn(searchParam);
+				});
+				//分页--上一页事件
+				$obj.find(".pageMode a.previous").click(function(){
+					var pageNo = parseInt(searchParam.pageNo);
+					var previous = pageNo - 1;
+					if(pageNo == 0){
+						previous = 0;
+					}
+					searchParam.pageNo = previous;
+					inner.listTransferIn(searchParam);
+				});   
+				//分页--下一页事件
+				$obj.find(".pageMode a.next").click(function(){
+					var pageNo = parseInt(searchParam.pageNo);
+					var totalPage = parseInt(searchParam.totalPage);
+					var next =  pageNo + 1;
+					if(pageNo == totalPage-1){
+						next = pageNo ;
+					}
+					searchParam.pageNo = next;
+					inner.listTransferIn(searchParam);
+				});
+				//分页--尾页事件
+				$obj.find(".pageMode a.last").click(function(){
+					var totalPage = parseInt(searchParam.totalPage);
+					var pageNo = 0;
+					if(totalPage==0){
+						pageNo = 0;
+					}else{
+						pageNo = totalPage - 1; 
+					}
+					searchParam.pageNo = pageNo;
+					inner.listTransferIn(searchParam);
+				});
+				//查看
+				$obj.find(".btn-transfer-view").click(function(){
+					var id = $(this).attr("data-entity-id");
+					inner.viewTransferOut(id);
+				});
 
-						//分页--首页按钮事件
-						$obj.find(".pageMode a.first").click(function(){
-							searchParam.pageNo = 0;
-							inner.listTransferIn(searchParam);
-						});
-						//分页--上一页事件
-						$obj.find(".pageMode a.previous").click(function(){
-							var pageNo = parseInt(searchParam.pageNo);
-							var previous = pageNo - 1;
-							if(pageNo == 0){
-								previous = 0;
-							}
-							searchParam.pageNo = previous;
-							inner.listTransferIn(searchParam);
-						});   
-						//分页--下一页事件
-						$obj.find(".pageMode a.next").click(function(){
-							var pageNo = parseInt(searchParam.pageNo);
-							var totalPage = parseInt(searchParam.totalPage);
-							var next =  pageNo + 1;
-							if(pageNo == totalPage-1){
-								next = pageNo ;
-							}
-							searchParam.pageNo = next;
-							inner.listTransferIn(searchParam);
-						});
-						//分页--尾页事件
-						$obj.find(".pageMode a.last").click(function(){
-							var totalPage = parseInt(searchParam.totalPage);
-							var pageNo = 0;
-							if(totalPage==0){
-								pageNo = 0;
-							}else{
-								pageNo = totalPage - 1; 
-							}
-							searchParam.pageNo = pageNo;
-							inner.listTransferIn(searchParam);
-						});
-						
-						//编辑
-						$obj.find(".btn-transfer-edit").click(function(){
-							var id = $(this).attr("data-entity-id");
-							inner.edit(id);
-						});
-					
-						//确认
-						$obj.find(".btn-transfer-save").click(function(){
-							var id = $(this).attr("data-entity-id");
-							inner.saveTransferIn(id);
-						});
-						//拒绝
-						$obj.find(".btn-transfer-refuse").click(function(){
-							var id = $(this).attr("data-entity-id");
-							inner.deleteTransferIn(id);
-							
-						});
+
+				//确认
+				$obj.find(".btn-transfer-save").click(function(){
+					var id = $(this).attr("data-entity-id");
+					inner.saveTransferIn(id);
+				});
+
+				//拒绝
+				$obj.find(".btn-transfer-refuse").click(function(){
+					var id = $(this).attr("data-entity-id");
+					inner.deleteTransferIn(id);
+				});
+			
+
+				//分页--首页按钮事件
+				$obj.find(".pageMode a.first").click(function(){
+					searchParam.pageNo = 0;
+					inner.listTransferIn(searchParam);
+				});
+				//分页--上一页事件
+				$obj.find(".pageMode a.previous").click(function(){
+					var pageNo = parseInt(searchParam.pageNo);
+					var previous = pageNo - 1;
+					if(pageNo == 0){
+						previous = 0;
+					}
+					searchParam.pageNo = previous;
+					inner.listTransferIn(searchParam);
+				});   
+				//分页--下一页事件
+				$obj.find(".pageMode a.next").click(function(){
+					var pageNo = parseInt(searchParam.pageNo);
+					var totalPage = parseInt(searchParam.totalPage);
+					var next =  pageNo + 1;
+					if(pageNo == totalPage-1){
+						next = pageNo ;
+					}
+					searchParam.pageNo = next;
+					inner.listTransferIn(searchParam);
+				});
+				//分页--尾页事件
+				$obj.find(".pageMode a.last").click(function(){
+					var totalPage = parseInt(searchParam.totalPage);
+					var pageNo = 0;
+					if(totalPage==0){
+						pageNo = 0;
+					}else{
+						pageNo = totalPage - 1; 
+					}
+					searchParam.pageNo = pageNo;
+					inner.listTransferIn(searchParam);
+				});
+				
+			
 
 		},
 

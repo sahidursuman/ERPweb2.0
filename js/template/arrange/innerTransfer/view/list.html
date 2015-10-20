@@ -183,11 +183,11 @@
 												</a>
 							                    <a href="" class="cursor"> |</a>
 												{{if rs.status == 1}}
-													<a data-entity-id="{{rs.id}}" class="cursor btn-TransferOut-edit">
+													<a data-entity-id="{{rs.id}}" style="color:#bbb"  class="cursor">
 														编辑
 													</a>
 													{{else}}
-													<a data-entity-id="{{rs.id}}" disabled="disabled" class="cursor btn-TransferOut-edit">
+													<a data-entity-id="{{rs.id}}"  class="cursor btn-TransferOut-edit">
 														编辑
 													</a>
 												{{/if}}
@@ -215,7 +215,7 @@
 														</li>
 														{{if rs.status == 1}}
 															<li>
-																<a data-entity-id="{{rs.id}}" href="javascript:void(0)" disabled="disabled" class="tooltip-success btn-TransferOut-edit" data-rel="tooltip">
+																<a data-entity-id="{{rs.id}}" href="javascript:void(0)"  style="color:#bbb; "  class="tooltip-success" data-rel="tooltip">
 																	<span class="green">
 																	<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
 																</span>
