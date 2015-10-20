@@ -111,24 +111,8 @@ define(function(require, exports) {
 						transfer.listTransferIn(page,partnerAgencyId,startTime,partnerAgencyId,contactUserId,status,type);
 
 					});
-					//我社转出搜索栏状态button下拉事件
-					$("#transferOut .search-area .btn-status .dropdown-menu a").click(function(){
-						$(this).parent().parent().parent().find("button").attr("data-value",$(this).attr("data-value"));
-						$(this).parent().parent().parent().find("span").text($(this).text());
-						var startTime = $transferOut.find("input[name=createTime]").eq(0).val();
-					    var endTime = transfer.dateCalculation(startTime,6);
-						transfer.searData = {
-							//搜索字段
-							partnerAgencyId : $transferOut.find("select[name=transferPartnerAgencyId]").val(),
-							creator : $transferOut.find("select[name=creator]").val(),
-							startTime :$transferOut.find("input[name=createTime]").eq(0).val(),
-							endTime : $transferOut.find("input[name=createTime]").eq(1).val(),
-							status : $transferOut.find(".btn-status button").attr("data-value"),
-							type : $("#" +tabId+" #myTab li.active a").attr("data-value"),
-							page:$("#" +tabId+" #pagerH").val()
-						}
-						transfer.listTransfer(transfer.searData.page,transfer.searData.partnerAgencyId,transfer.searData.creator,transfer.searData.startTime,transfer.searData.endTime,transfer.searData.status,transfer.searData.type);
-					});
+					transfer.getLineProductList($("#" +tabId+" .chooseLineProductId"),"");
+					transfer.getPartnerAgencyList($("#" +tabId+" .choosePartnerAgency"),"");
 					//我社转出选项卡绑定事件
 					$("#"+tabId+" #myTab li a.transferOut").click(function(){
 						var type=$(this).attr("data-value");//2
@@ -146,7 +130,7 @@ define(function(require, exports) {
 					    var endTime = transfer.dateCalculation(startTime,6);
 						transfer.searchInData = {
 							//搜索字段
-							partnerAgencyId : $transferIn.find("select[name=transferPartnerAgencyId]").val(),
+							partnerAgencyId : $transferIn.find("input[name=transferPartnerAgencyId]").val(),
 							creator : $transferIn.find("select[name=creator]").val(),
 							startTime :$transferIn.find("input[name=createTime]").eq(0).val(),
 							endTime : $transferIn.find("input[name=createTime]").eq(1).val(),
@@ -160,9 +144,9 @@ define(function(require, exports) {
 					$transferIn.find(".btn-transferIn-search").click(function(){
 						transfer.searchInData = {
 							//搜索字段
-							lineProductId : $transferIn.find("select[name=lineProductId]").val(),
+							lineProductId : $transferIn.find("input[name=lineProductId]").val(),
 							startTime : $transferIn.find("input[name=createTime]").val(),
-							partnerAgencyId : $transferIn.find("select[name=transferPartnerAgencyId]").val(),
+							partnerAgencyId : $transferIn.find("input[name=transferPartnerAgencyId]").val(),
 							creator : $transferIn.find("select[name=creator]").val(),
 							status : $transferIn.find(".btn-status button").attr("data-value"),
 							type : $("#myTab li a.transferIn").attr("data-value")			
@@ -175,7 +159,7 @@ define(function(require, exports) {
 					$transferOut.find(".btn-transferOut-search").click(function(){
 						transfer.searData = {
 							//搜索字段
-							partnerAgencyId : $transferOut.find("select[name=transferPartnerAgencyId]").val(),
+							partnerAgencyId : $transferOut.find("input[name=transferPartnerAgencyId]").val(),
 							creator : $transferOut.find("select[name=creator]").val(),
 							startTime :$transferOut.find("input[name=createTime]").eq(0).val(),
 							endTime : $transferOut.find("input[name=createTime]").eq(1).val(),
@@ -404,7 +388,7 @@ define(function(require, exports) {
 			exportParam = {	
 					creator : $transferOut.find("select[name=creator]").val(),
 					status : $transferOut.find("select[name=status]").val(),
-					partnerAgencyId : $transferOut.find("select[name=transferPartnerAgencyId]").val(),
+					partnerAgencyId : $transferOut.find("input[name=transferPartnerAgencyId]").val(),
 					startTime :$transferOut.find("input[name=createTime]").eq(0).val(),
 					endTime : $transferOut.find("input[name=createTime]").eq(1).val(),
 			}
@@ -795,7 +779,7 @@ define(function(require, exports) {
 				transfer.edited["updateTransfer"] = "updateTransfer";
 			});
 			//查询所有同行地接
-			transfer.getPartnerAgencyList(data.touristGroupTransfer.partnerAgency.id);
+			transfer.getPartnerAgencyList($obj.find(".choosePartnerAgency"),data.touristGroupTransfer.partnerAgency.id);
 			//获取转态  
 			var statusVal=$obj.find("input[name=status]").val();
 			transfer.isEditStatus($obj,statusVal);
@@ -887,40 +871,83 @@ define(function(require, exports) {
 				language: 'zh-CN'
 			})
 		},
-		getPartnerAgencyList:function(id){
-			$.ajax({
-				url:""+APP_ROOT+"back/partnerAgency.do?method=findPartnerAgencyByOtherTravelAgency&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-				type:"POST",
-				dataType:"json",
-				beforeSend:function(){
-					globalLoadingLayer = layer.open({
-						type:3
-					});
-				},
-				success:function(data){
-					layer.close(globalLoadingLayer);
-					var html = "<option value=''>未选择</option>";
-					var partnerAgencyList = JSON.parse(data.partnerAgencyList);  
-					if(partnerAgencyList != null && partnerAgencyList.length > 0){ 
-						for(var i=0;i<partnerAgencyList.length;i++){
-							if(partnerAgencyList[i].id == id)
-								html += "<option value='"+partnerAgencyList[i].id+"' selected='selected'>"+partnerAgencyList[i].travelAgencyName+"</option>";
-							else
-								html += "<option value='"+partnerAgencyList[i].id+"'>"+partnerAgencyList[i].travelAgencyName+"</option>";
-							}
-						}
-						$(".updateTransfer select[name=transferPartnerAgencyId]").append(html);
+		getPartnerAgencyList:function(obj,partnerAId){
+			$(obj).autocomplete({
+				minLength: 0,
+				change: function(event, ui) {
+					if (!ui.item)  {
+						$(this).val('').nextAll('input[name="transferPartnerAgencyId"]').val('');
 					}
-				})
+				},
+				select: function(event, ui) {
+					$(this).blur().nextAll('input[name="transferPartnerAgencyId"]').val(ui.item.id);
+				}
+			})
+			.click(function(event) {
+				var $objC = $(this);
+				$.ajax({
+					url:""+APP_ROOT+"back/partnerAgency.do?method=findPartnerAnencyList&token="+$.cookie("token")+"&menuKey=resource_partnerAgency&operation=view",
+                    dataType: "json",
+                    data:"travelAgencyName="+$objC.val(),
+                    success: function(data) {
+                    	layer.close(globalLoadingLayer);
+						var result = showDialog(data);
+						if(result){
+							var partnerAgencyList = JSON.parse(data.partnerAgencyList);
+							if(partnerAgencyList != null && partnerAgencyList.length > 0){
+								for(var i=0;i<partnerAgencyList.length;i++){
+									partnerAgencyList[i].value = partnerAgencyList[i].travelAgencyName;
+								}
+							}
+							$objC.autocomplete('option','source', partnerAgencyList);
+							$objC.autocomplete('search', '');
+						}
+                    }
+                });
+			});
 		},
-
+		getLineProductList:function(obj,partnerAId){
+			$(obj).autocomplete({
+				minLength: 0,
+				change: function(event, ui) {
+					if (!ui.item)  {
+						$(this).val('').nextAll('input[name="lineProductId"]').val('');
+					}
+				},
+				select: function(event, ui) {
+					$(this).blur().nextAll('input[name="lineProductId"]').val(ui.item.id);
+				}
+			})
+			.click(function(event) {
+				var $objC = $(this);
+				$.ajax({
+					url:""+APP_ROOT+"back/transfer.do?method=findLineProduct&token="+$.cookie("token")+"&menuKey=resource_partnerAgency&operation=view",
+                    dataType: "json",
+                    data:"name="+$objC.val(),
+                    success: function(data) {
+                    	layer.close(globalLoadingLayer);
+						var result = showDialog(data);
+						if(result){
+							var lineProductList = JSON.parse(data.lineProductList);
+							if(lineProductList != null && lineProductList.length > 0){
+								for(var i=0;i<lineProductList.length;i++){
+									lineProductList[i].value = lineProductList[i].name;
+								}
+							}
+							$objC.autocomplete('option','source', lineProductList);
+							$objC.autocomplete('search', '');
+						} 
+                    }
+                });
+			});
+		},
 
 		//判定状态
 		isEditStatus:function($obj,statusVal){
 			if (statusVal==1) {//已确认
-				$obj.find("select[name=transferPartnerAgencyId]").attr("disabled","disabled");
+				$obj.find("input[name=transferPartnerAgencyId]").attr("disabled","disabled");
 			} else{
-				$obj.find("select[name=transferPartnerAgencyId]").removeAttr("disabled","disabled");
+				$obj.find("input[name=transferPartnerAgencyId]").removeAttr("disabled","disabled");
 
 			};
 		},
@@ -995,7 +1022,7 @@ define(function(require, exports) {
 			remark =$obj.find("input[name=remark]").val(),
 			status = 1,
 			//startTime = $obj.find(" input[name=createTime]").val(),
-			partnerAgencyId = $obj.find("select[name=transferPartnerAgencyId]").val(),
+			partnerAgencyId = $obj.find("input[name=transferPartnerAgencyId]").val(),
 			transPayedMoney = $obj.find("input[name=transPayedMoney]").val(),
 			transNeedPayAllMoney = $obj.find("input[name=transNeedPayAllMoney]").val(),
 			

@@ -34,7 +34,9 @@
 						<div class="search-area">
 							<label class="pull-left control-label no-padding-right" style="margin-left: 20px!important;">同行地接：</label>
 							<div class="col-sm-2">
-								<select name="transferPartnerAgencyId" class="col-xs-12" style="width: 220px">
+								<input type="text" class="col-sm-12 choosePartnerAgency" placeholder="来源" name="" />
+								<input type="hidden" name="transferPartnerAgencyId" value="">
+								<!-- <select name="transferPartnerAgencyId" class="col-xs-12" style="width: 220px">
 									<option value="">全部</option>
 									{{each partnerAgency as partner}}
 									{{if partner!=null}}
@@ -45,7 +47,7 @@
 									{{/if}}
 									{{/if}}
 									{{/each}}
-								</select>
+								</select> -->
 							</div>
 							<label class="control-label no-padding-right pull-left">转客人：</label>
 							<div class="col-sm-2">
@@ -150,8 +152,10 @@
 					<div class="form-group" style="margin-bottom:30px; ">
 						<div class="search-area">
 							<label class="pull-left control-label no-padding-right" style="margin-left: 20px!important;">同行线路产品：</label>
-							<div class="col-sm-1">
-								<select name="lineProductId" class="col-xs-12">
+							<div class="col-sm-2">
+								<input type="text" class="col-sm-12 chooseLineProductId" placeholder="来源" name="" />
+								<input type="hidden" name="lineProductId" value="">
+								<!-- <select name="lineProductId" class="col-xs-12">
 									<option value="">全部</option>
 									{{each lineProduct2 as lineProduct}}
 									{{if lineProduct!=null}}
@@ -163,7 +167,7 @@
 									{{/if}}
 
 									{{/each}}
-								</select>
+								</select> -->
 							</div>
 							<div class="form-group">
 								<div class="search-area">
@@ -210,7 +214,9 @@
 
 								<label class="control-label no-padding-right pull-left">同行地接：</label>
 								<div class="col-sm-1">
-									<select name="transferPartnerAgencyId" class="col-xs-12">
+									<input type="text" class="col-sm-12 choosePartnerAgency" placeholder="来源" name="" />
+									<input type="hidden" name="transferPartnerAgencyId" value="">
+									<!-- <select name="transferPartnerAgencyId" class="col-xs-12">
 										<option value="">全部</option>
 										{{each travelAgency as pa}}
 										{{if pa!=null}}
@@ -221,7 +227,7 @@
 										{{/if}}
 										{{/if}}
 										{{/each}}
-									</select>
+									</select> -->
 								</div>
 
 								<label class="control-label no-padding-right pull-left">状态：</label>
@@ -250,7 +256,7 @@
 										</li>
 									</ul>
 								</div>
-								<button class="btn-sm btn-transferIn-search pull-right search-btn">
+								<button class="btn-sm btn-transferIn-search search-btn">
 									<i class="ace-icon fa fa-search"></i>
 									搜索
 								</button>&nbsp;
