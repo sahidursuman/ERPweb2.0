@@ -116,14 +116,6 @@ define(function(require, exports) {
 						//内部转出分页 
 						inner.transferOutfindPager(searchParam);
 
-						//过滤搜索时间是否执行初始化操作
-						if (searchParam.startTime!=null&&searchParam.endTime!=null) {
-						} else{	
-							//时间默认一周初始化 
-						    inner.initSouTimer();
-						};	
-
-
 						function getVal (name){
 							var val = $("#" +tabId+" .innerTransfer_list ").find("[name="+name+"]").val();
 							return val;
@@ -183,55 +175,6 @@ define(function(require, exports) {
 				}
 			})
 		},
-
-
-		//我部转出 
-	   initSouTimer:function(){
-		   	var $obj1=$("#transferOut");
-		   	$obj1.find("input[name=startTime]").val(inner.dateCalculBefore(inner.getCurrentDate(),3));
-		   	$obj1.find("input[name=endTime]").val(inner.dateCalculAfter(inner.getCurrentDate(),3));
-	   },
-
-	   //他不转入
-	   initSinTimer:function(){
-     	var $obj2=$("#transferIn");
-	   	$obj2.find("input[name=startTime]").val(inner.dateCalculBefore(inner.getCurrentDate(),3));
-	   	$obj2.find("input[name=endTime]").val(inner.dateCalculAfter(inner.getCurrentDate(),3));
-	   },
-
-
-	   //获取当前时间
-	   getCurrentDate:function() {
-		    var date = new Date(),
-		    seperator1 = "-",
-		    seperator2 = ":",
-		    month = date.getMonth() + 1,
-		    strDate = date.getDate();
-		    if (month >= 1 && month <= 9) {
-		        month = "0" + month;
-		    }
-		    if (strDate >= 0 && strDate <= 9) {
-		        strDate = "0" + strDate;
-		    }
-		    var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
-		            + " " ;
-		    return currentdate;
-       },
-		//当前的前三天
-		dateCalculBefore:function(dt, days){
-			dt = dt.split('-').join('/');//js不认2000-1-31,只认2000/1/31 
-			var t1 = new Date(new Date(dt).valueOf() - days*24*60*60*1000);// 日期加上指定的天数 
-			return t1.getFullYear() + "-" + (t1.getMonth()+1) + "-" + t1.getDate();
-		}, 
-
-		//当前的后三天
-		dateCalculAfter:function(dt, days){
-			dt = dt.split('-').join('/');//js不认2000-1-31,只认2000/1/31 
-			var t1 = new Date(new Date(dt).valueOf() + days*24*60*60*1000);// 日期加上指定的天数 
-			return t1.getFullYear() + "-" + (t1.getMonth()+1) + "-" + t1.getDate();
-		}, 
-
-
 	   //时间初始化控件 
 	   initTimePicker:function(){
 			$(".innerTransfer_list input[name=startTime]").datepicker({
