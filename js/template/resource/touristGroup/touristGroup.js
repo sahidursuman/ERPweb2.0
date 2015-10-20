@@ -552,6 +552,22 @@ define(function(require, exports) {
 				format: 'yyyy-mm-dd',
 				language: 'zh-CN'
 			});
+			//接待日期 时间控件
+			$("#"+tab+" .touristGroupMainFormRS input[name=arriveShiftTime]").datetimepicker({
+				autoclose: true,
+				todayHighlight: true,
+				format: 'L',
+				language: 'zh-CN'
+			});
+
+
+			//接待日期 时间控件
+			$("#"+tab+" .touristGroupMainFormRS input[name=leaveShiftTime]").datetimepicker({
+				autoclose: true,
+				todayHighlight: true,
+				format: 'L',
+				language: 'zh-CN'
+			});
 			//选择联系人列表
 			touristGroup.getPartnerAgencyManagerList("addTouristGroup");
 			//为该组团社添加新联系人
@@ -804,19 +820,19 @@ define(function(require, exports) {
 
 
 			//接待日期 时间控件
-			$("#"+tab+" .touristGroupMainFormRS input[name=arriveShiftTime]").datepicker({
+			$("#"+tab+" .touristGroupMainFormRS input[name=arriveShiftTime]").datetimepicker({
 				autoclose: true,
 				todayHighlight: true,
-				format: 'yyyy-mm-dd',
+				format: 'L',
 				language: 'zh-CN'
 			});
 
 
 			//接待日期 时间控件
-			$("#"+tab+" .touristGroupMainFormRS input[name=leaveShiftTime]").datepicker({
+			$("#"+tab+" .touristGroupMainFormRS input[name=leaveShiftTime]").datetimepicker({
 				autoclose: true,
 				todayHighlight: true,
-				format: 'yyyy-mm-dd',
+				format: 'L',
 				language: 'zh-CN'
 			});
 
@@ -1434,12 +1450,16 @@ define(function(require, exports) {
 				touristGroupMemberJsonAdd.push(touristGroupMemberJson);
 			})
 			//打包接送时间地点
-			var outArrangeRemarkJson = [];
+			var outArrangeRemarkJson = [],$outArrange = $("#"+tab+" .touristGroupMainFormRS");
 			outArrangeRemarkJson = {
-				arriveTime : $("#"+tab+" .touristGroupMainFormRS").find("input[name=receptionTime]").val(),
-				arrivePosition : $("#"+tab+" .touristGroupMainFormRS").find("input[name=receptionAddress]").val(),
-				leaveTime : $("#"+tab+" .touristGroupMainFormRS").find("input[name=sendTime]").val(),
-				leavePosition : $("#"+tab+" .touristGroupMainFormRS").find("input[name=sendAddress]").val()
+				arriveTime : $outArrange.find("input[name=receptionTime]").val(),
+				arrivePosition : $outArrange.find("input[name=receptionAddress]").val(),
+				arriveShift : $outArrange.find("input[name=arriveShift]").val(),
+				arriveShiftTime : $outArrange.find("input[name=arriveShiftTime]").val(),
+				leaveTime : $outArrange.find("input[name=sendTime]").val(),
+				leavePosition : $outArrange.find("input[name=sendAddress]").val(),
+				leaveShift : $outArrange.find("input[name=leaveShift]").val(),
+				leaveShiftTime : $outArrange.find("input[name=leaveShiftTime]").val()
 			};
 			touristGroupFeeJsonAdd = JSON.stringify(touristGroupFeeJsonAdd);
 			touristGroupMemberJsonAdd = JSON.stringify(touristGroupMemberJsonAdd);
@@ -1593,12 +1613,16 @@ define(function(require, exports) {
 				touristGroupMemberJsonDel.push(touristGroupMemberJson);
 			})
 			//打包接送时间地点
-			var outArrangeRemarkJson = [];
+			var outArrangeRemarkJson = [],$outArrange = $("#"+tab+" .touristGroupMainFormRS");
 			outArrangeRemarkJson = {
-				arriveTime : $("#"+tab+" .touristGroupMainFormRS").find("input[name=receptionTime]").val(),
-				arrivePosition : $("#"+tab+" .touristGroupMainFormRS").find("input[name=receptionAddress]").val(),
-				leaveTime : $("#"+tab+" .touristGroupMainFormRS").find("input[name=sendTime]").val(),
-				leavePosition : $("#"+tab+" .touristGroupMainFormRS").find("input[name=sendAddress]").val()
+				arriveTime : $outArrange.find("input[name=receptionTime]").val(),
+				arrivePosition : $outArrange.find("input[name=receptionAddress]").val(),
+				arriveShift : $outArrange.find("input[name=arriveShift]").val(),
+				arriveShiftTime : $outArrange.find("input[name=arriveShiftTime]").val(),
+				leaveTime : $outArrange.find("input[name=sendTime]").val(),
+				leavePosition : $outArrange.find("input[name=sendAddress]").val(),
+				leaveShift : $outArrange.find("input[name=leaveShift]").val(),
+				leaveShiftTime : $outArrange.find("input[name=leaveShiftTime]").val()
 			};
 		    touristGroupFeeJsonAdd = JSON.stringify(touristGroupFeeJsonAdd);
 			touristGroupFeeJsonDel = JSON.stringify(touristGroupFeeJsonDel);
