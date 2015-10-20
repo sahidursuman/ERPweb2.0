@@ -80,7 +80,7 @@ define(function(require, exports) {
 								createTimeStart : $(".touristGroupSearchForm input[name=createTimeStart]").val(),
 								createTimeEnd : $(".touristGroupSearchForm input[name=createTimeEnd]").val(),
 								customerType : $(".touristGroupSearchForm select[name=customerType]").find("option:selected").val(),
-								status : $(".touristGroupSearchForm select[name=status]").find("option:selected").val()
+								status : $(".touristGroupSearchForm button").attr("data-value")
 							}
 							touristGroup.listTouristGroup(0,touristGroup.searchData.partnerAgencyId,touristGroup.searchData.lineProductId,touristGroup.searchData.startTime,touristGroup.searchData.userId,touristGroup.searchData.createTimeStart,touristGroup.searchData.createTimeEnd,touristGroup.searchData.customerType,touristGroup.searchData.status);
 							//下拉数据初始化
@@ -275,6 +275,32 @@ define(function(require, exports) {
 					}
 				},
 			});
+			$.ajax({
+				url:""+APP_ROOT+"back/touristGroup.do?method=getTouristStatisticData&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
+				type:"POST",
+				data:"pageNo="+page+"&sortType=auto"+"&partnerAgencyId="+partnerAgencyIdS+"&lineProductIdSearch="+lineProductIdS+"&startTimeSearch="+startTimeS+"&userId="+userIdS+"&createTimeStart="+createTimeStartS+"&createTimeEnd="+createTimeEndS+"&statusSearch="+statusS+"&customerType="+customerTypeS,
+				dataType:"json",
+				beforeSend:function(){
+					//打开一个遮罩层
+					globalLoadingLayer = openLoadingLayer();
+				},
+				success:function(data){
+					console.log(data);
+					//关闭遮罩
+					layer.close(globalLoadingLayer);
+					//根据返回值判断下一步操作，或者已出现错误
+					var result = showDialog(data);
+					//如果正确则就执行
+					if(result){
+						var tab = $("#tab-resource_touristGroup-content");
+						tab.find("[name=statistics-count]").text("人数合计："+data.statistics.adultCount+"大"+data.statistics.childCount+"小");
+						tab.find("[name=statistics-needPay]").text("应收款合计："+data.statistics.needPay+"元");
+						tab.find("[name=statistics-payed]").text("已收款合计："+data.statistics.payedMoney+"元");
+						tab.find("[name=statistics-currentNeedPay]").text("现收款合计："+data.statistics.currentNeedPay+"元");
+						tab.find("[name=statistics-unIncome]").text("未收款合计："+data.statistics.unIncomeMoney+"元");
+					}
+				}
+			})
 		},
 		//列表初始化
 		initList : function(data){
@@ -1245,7 +1271,6 @@ define(function(require, exports) {
 				$.ajax({
 					url:""+APP_ROOT+"back/partnerAgency.do?method=findPartnerAnencyList&token="+$.cookie("token")+"&menuKey=resource_partnerAgency&operation=view",
                     dataType: "json",
-                    data:"travelAgencyName="+$objC.val(),
                     success: function(data) {
                     	layer.close(globalLoadingLayer);
 						var result = showDialog(data);
