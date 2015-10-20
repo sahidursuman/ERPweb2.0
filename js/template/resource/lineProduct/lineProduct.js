@@ -270,6 +270,7 @@ define(function(require, exports) {
 		initUpdate : function(id,clipboardMode,data){
 			var tab = "tab-resource_lineProduct-update-content";
 			var validator = rule.lineProductCheckor($('.updateLineProductContainer'));
+			lineProduct.mousedownBlur();
 			$(".updateLineProductContainer").on("change",function(){
 				lineProduct.edited["update"] = "update";
 			});
@@ -2336,6 +2337,11 @@ define(function(require, exports) {
 		},
 		clearEdit : function(clearType){
 			lineProduct.edited[clearType] = "";
+		},
+		mousedownBlur :function(){
+			$("#tab-resource_lineProduct-update-content .updateLineProductDaysDetailContainer ").mousedown(function() {
+				$(this).find(":focus").blur();
+			});
 		}
 	}
 	exports.listLineProduct = lineProduct.listLineProduct;  
