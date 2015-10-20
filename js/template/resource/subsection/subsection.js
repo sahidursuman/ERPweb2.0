@@ -430,25 +430,13 @@ define(function(require, exports) {
 			})
 		},
 		getPartnerAgencyList:function(obj,partnerAId){
-			$(obj).autocomplete({
-				minLength: 0,
-				change: function(event, ui) {
-					if (!ui.item)  {
-						$(this).val('').nextAll('input[name="fromPartnerAgencyId"]').val('');
-					}
-				},
-				select: function(event, ui) {
-					$(this).blur().nextAll('input[name="fromPartnerAgencyId"]').val(ui.item.id);
-				}
-			})
-			.click(function(event) {
-				var $objC = $(this);
-				$.ajax({
-					url:""+APP_ROOT+"back/partnerAgency.do?method=findPartnerAnencyList&token="+$.cookie("token")+"&menuKey=resource_partnerAgency&operation=view",
-                    dataType: "json",
-                    data:"travelAgencyName="+$objC.val(),
-                    success: function(data) {
-                    	layer.close(globalLoadingLayer);
+			var $objC = $(obj)
+			$.ajax({
+				url:""+APP_ROOT+"back/partnerAgency.do?method=findPartnerAnencyList&token="+$.cookie("token")+"&menuKey=resource_partnerAgency&operation=view",
+                dataType: "json",
+                data:"travelAgencyName="+$objC.val(),
+                success:function(data){
+                	layer.close(globalLoadingLayer);
 						var result = showDialog(data);
 						if(result){
 							var partnerAgencyList = JSON.parse(data.partnerAgencyList);
@@ -456,12 +444,30 @@ define(function(require, exports) {
 								for(var i=0;i<partnerAgencyList.length;i++){
 									partnerAgencyList[i].value = partnerAgencyList[i].travelAgencyName;
 								}
-							}
-							$objC.autocomplete('option','source', partnerAgencyList);
-							$objC.autocomplete('search', '');
+							};
+							$(obj).autocomplete({
+								
+								minLength: 0,
+								change: function(event, ui) {
+									if (!ui.item)  {
+										$(this).val('').nextAll('input[name="fromPartnerAgencyId"]').val('');
+									}
+								},
+								select: function(event, ui) {
+									var $tabId = $("#tab-resource_touristGroup-add-content");
+									$(this).blur().nextAll('input[name="fromPartnerAgencyId"]').val(ui.item.id);
+									$tabId.find("input[name=fromPartnerAgencyId]").val("");
+
+								}
+							}).off("click").on("click",function(){
+								
+								$objC.autocomplete('option','source', partnerAgencyList);
+								$objC.autocomplete('search', '');
+
+							});
+							
 						}
-                    }
-                });
+                }
 			});
 		},
 	}
