@@ -261,6 +261,17 @@ define(function(require,exports){
 		    				InnerTransferIn.InnerTransferInCheck(0,InnerTransferIn.searchCheckData.fromBusinessGroupId,InnerTransferIn.searchCheckData.fromBusinessGroupName,InnerTransferIn.searchCheckData.year,InnerTransferIn.searchCheckData.month)
 
 						});
+						//导出事件
+						$checkId.find(".btn-transferExport").click(function(){
+
+							var year=$checkId.find("select[name=year]").val();
+	                      	var month=$checkId.find("select[name=month]").val();
+	                      	checkLogin(function(){
+	                        	var url = ""+APP_ROOT+"back/export.do?method=exportInnerTransferIn&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view"+"&fromBusinessGroupId="+fromBusinessGroupId+"&fromBusinessGroupName="+fromBusinessGroupName+"&year="+year+"&month="+month+"&sortType=auto";
+	                        	exportXLS(url)
+	                        });
+
+						});
 						//全选事件
 						$checkId.find(" .innerTransferIn-selectAll").click(function(){
 							var flag = this.checked;
