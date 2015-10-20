@@ -216,10 +216,10 @@ var rule = {
 	  	    	    	rules: [
 	      	    	        {
 	      	    	        	type: 'null', 
-	      	    	        	errMsg: '联系人电话不能为空'
+	      	    	        	errMsg: '座机电话或联系人电话格式不能为空'
 	      	    	        }, {
-	      	    	        	type: 'mobile-phone', 
-	      	    	        	errMsg: '联系人电话格式不正确'
+	      	    	        	type: 'phone-num', 
+	      	    	        	errMsg: '座机电话或联系人电话格式不正确'
 	      	    	        }
 	  	    	        ]
 	    	      },{//所属部门
