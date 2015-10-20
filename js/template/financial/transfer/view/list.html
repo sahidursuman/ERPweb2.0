@@ -3,12 +3,14 @@
         <div class="form-group" >      
           <label class="control-label pull-left" style="margin-left: 15px">同行地接:</label>
             <div class="col-sm-2">
-                <select  class="col-xs-12" name="hotelId" style="width:220px;">
+				<input type="text" class="col-sm-12 choosePartnerAgency" placeholder="来源" name="travelAgencyName" value="{{searchParam.travelAgencyName}}" />
+				<input type="hidden" name="fromPartnerAgencyId" value="{{searchParam.partnerAgencyId}}" >
+                <!-- <select  class="col-xs-12" name="hotelId" style="width:220px;">
                     <option value ="">全部</option>
                     {{each partnerAgencyListNew as partnerAgency index}}
 						<option value="{{partnerAgency.id}}" {{if searchParam.partnerAgencyId == partnerAgency.id}}selected="selected"{{/if}}>{{partnerAgency.travelAgencyName}}</option>
 					{{/each}} 
-                </select>        
+                </select>   -->      
              </div>    
            <label class="control-label pull-left" >账期:</label>
 			<div class="col-sm-2" >
@@ -32,16 +34,16 @@
         <div class="col-xs-12">
             <table class="table table-striped table-bordered table-hover">
                 <thead>
-                <tr>
-                    <th class="th-border">同行地接</th>
-                    <th class="th-border">总账面应付</th>
-                    <th class="th-border">总实际应付</th>
-                    <th class="th-border">总实际已付</th>
-                    <th class="th-border">总账面未付</th>
-                    <th class="th-border">总实际未付</th>
-                    <th class="th-border">对账进度</th>
-                    <th class="th-border">操作</th>
-                </tr>
+                    <tr class="bg-blur">
+                        <th >同行地接</th>
+                        <th >总账面应付</th>
+                        <th >总实际应付</th>
+                        <th >总实际已付</th>
+                        <th >总账面未付</th>
+                        <th >总实际未付</th>
+                        <th >对账进度</th>
+                        <th >操作</th>
+                    </tr>
                 </thead>
                 <tbody>
                 {{each financialTransferList as transfer}}

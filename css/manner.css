@@ -243,6 +243,8 @@ table tr td{
     font-size: 12px;
 
 }
+.widget-main{padding: 0!important;}
+.form-group{margin-bottom: 13px!important;}
 .color{
     color: #428bca;
 }
@@ -286,7 +288,7 @@ table tr td{
 
 /*/修改弹出页面的close样式/*/
 .layui-layer-setwin .layui-layer-close1{
-    width:14px;height:14px;cursor:pointer;
+    width:16px;height:16px;cursor:pointer;
     background-position:0;
 }
 .layui-layer-setwin .layui-layer-close1:hover{background-position:0;}
