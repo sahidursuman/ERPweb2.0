@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":49,"md5":"aa5098c7eba13afc6043bdda60df8b3d"}*/
+/*TMODJS:{"debug":true,"version":50,"md5":"aa5098c7eba13afc6043bdda60df8b3d"}*/
 define(function(require) {
     return require("../../../template")("financial/Scenic/view/list", function($data, $filename) {
         try {
