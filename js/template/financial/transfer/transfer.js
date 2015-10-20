@@ -22,6 +22,7 @@ define(function(require, exports) {
     	searchData:{
 			page : "",
 	        partnerAgencyId : "",
+			travelAgencyName : "",
 	        year : "",
 	        month : ""
         },
@@ -47,11 +48,11 @@ define(function(require, exports) {
 		},
 		oldCheckPartnerAgencyId:0,
         oldBlancePartnerAgencyId:0,
-        listTransfer:function(page,partnerAgencyId,year,month){
+        listTransfer:function(page,partnerAgencyId,travelAgencyName,year,month){
             $.ajax({
                 url:""+APP_ROOT+"back/financial/financialTransfer.do?method=listSumFcTransfer&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
                 type:"POST",
-                data:"pageNo="+page+"&partnerAgencyId="+partnerAgencyId+"&year="+year+"&month="+month+"&sortType=auto",
+                data:"pageNo="+page+"&partnerAgencyId="+partnerAgencyId+"&travelAgencyName="+travelAgencyName+"&year="+year+"&month="+month+"&sortType=auto",
                 dataType:"json",
                 beforeSend:function(){
                     globalLoadingLayer = openLoadingLayer();
@@ -63,6 +64,7 @@ define(function(require, exports) {
                     	Transfer.searchData={
 							page : page,
                     	    partnerAgencyId:partnerAgencyId,
+							travelAgencyName : travelAgencyName,
                     	    year:year,
                     	    month:month
                         },
@@ -74,16 +76,19 @@ define(function(require, exports) {
                         addTab(menuKey,"转客账务",html);
                       //搜索按钮事件
                         $("#" + tabId + " .btn-transfer-search").click(function(){
+							console.log($("#" + tabId + " input[name=travelAgencyName]").val());
                         	Transfer.searchData={
-                            	    partnerAgencyId:$("#" + tabId + " select[name=partnerAgencyId]").val(),
+                            	    partnerAgencyId:$("#" + tabId + " input[name=fromPartnerAgencyId]").val(),
+									travelAgencyName:$("#" + tabId + " input[name=travelAgencyName]").val(),
                             	    year:$("#" + tabId + "  select[name=year]").val(),
                             	    month:$("#" + tabId + " select[name=month]").val()
-                            },
-                            Transfer.listTransfer(0,Transfer.searchData.partnerAgencyId,Transfer.searchData.year,Transfer.searchData.month);
+                            };
+                            Transfer.listTransfer(0,Transfer.searchData.partnerAgencyId,Transfer.searchData.travelAgencyName,Transfer.searchData.year,Transfer.searchData.month);
                         });
+						Transfer.getPartnerAgencyList($("#"+tabId+" .choosePartnerAgency"),"");
                         //分页--首页按钮事件
                         $("#" + tabId + " .pageMode a.first").click(function(){
-                        	Transfer.listTransfer(0,Transfer.searchData.partnerAgencyId,Transfer.searchData.year,Transfer.searchData.month);
+                        	Transfer.listTransfer(0,Transfer.searchData.partnerAgencyId,Transfer.searchData.travelAgencyName,Transfer.searchData.year,Transfer.searchData.month);
                         });
                         //分页--上一页事件
                         $("#" + tabId + " .pageMode a.previous").click(function(){
@@ -91,7 +96,7 @@ define(function(require, exports) {
                             if(data.pageNo == 0){
                                 previous = 0;
                             }
-                            Transfer.listTransfer(previous,Transfer.searchData.partnerAgencyId,Transfer.searchData.year,Transfer.searchData.month);
+                            Transfer.listTransfer(previous,Transfer.searchData.partnerAgencyId,Transfer.searchData.travelAgencyName,Transfer.searchData.year,Transfer.searchData.month);
                         });
                         //分页--下一页事件
                         $("#" + tabId + " .pageMode a.next").click(function(){
@@ -103,7 +108,7 @@ define(function(require, exports) {
                         });
                         //分页--尾页事件
                         $("#" + tabId + " .pageMode a.last").click(function(){
-                        	 Transfer.listTransfer(data.totalPage == 0 ? data.totalPage:data.totalPage-1,Transfer.searchData.partnerAgencyId,Transfer.searchData.year,Transfer.searchData.month);
+                        	 Transfer.listTransfer(data.totalPage == 0 ? data.totalPage:data.totalPage-1,Transfer.searchData.partnerAgencyId,Transfer.searchData.travelAgencyName,Transfer.searchData.year,Transfer.searchData.month);
                         });
                         //给对账按钮绑定事件
                         $("#" + tabId + " .btn-transfer-check").click(function(){
@@ -508,7 +513,7 @@ define(function(require, exports) {
 							Transfer.edited["checking"] = "";
 							if(isClose == 1){
 								closeTab(checkTabId);
-								Transfer.listTransfer(Transfer.searchData.page,Transfer.searchData.partnerAgencyId,Transfer.searchData.year,Transfer.searchData.month);
+								Transfer.listTransfer(Transfer.searchData.page,Transfer.searchData.partnerAgencyId,Transfer.searchData.travelAgencyName,Transfer.searchData.year,Transfer.searchData.month);
 							} else {
 								Transfer.transferCheckList(0,Transfer.searchCheckData.partnerAgencyId,Transfer.searchCheckData.partnerAgencyName,Transfer.searchCheckData.year,Transfer.searchCheckData.month)
 							}
@@ -556,7 +561,7 @@ define(function(require, exports) {
                     	Transfer.edited["blance"] = "";
 						if(isClose == 1){
 							closeTab(blanceTabId);
-							Transfer.listTransfer(Transfer.searchData.page,Transfer.searchData.partnerAgencyId,Transfer.searchData.year,Transfer.searchData.month);
+							Transfer.listTransfer(Transfer.searchData.page,Transfer.searchData.partnerAgencyId,Transfer.searchData.travelAgencyName,Transfer.searchData.year,Transfer.searchData.month);
 						} else {
 							Transfer.transferBalanceList(0,Transfer.searchBalanceData.partnerAgencyId,Transfer.searchBalanceData.partnerAgencyName,Transfer.searchBalanceData.year,Transfer.searchBalanceData.startMonth,Transfer.searchBalanceData.endMonth);
 						}
@@ -565,6 +570,40 @@ define(function(require, exports) {
         	})
 	    	
 	    },
+		getPartnerAgencyList:function(obj,partnerAId){
+			$(obj).autocomplete({
+				minLength: 0,
+				change: function(event, ui) {
+					if (!ui.item)  {
+						$(this).val('').nextAll('input[name="fromPartnerAgencyId"]').val('');
+					}
+				},
+				select: function(event, ui) {
+					$(this).blur().nextAll('input[name="fromPartnerAgencyId"]').val(ui.item.id);
+				}
+			})
+			.click(function(event) {
+				var $objC = $(this);
+				$.ajax({
+					url:""+APP_ROOT+"back/partnerAgency.do?method=findPartnerAnencyList&token="+$.cookie("token")+"&menuKey=resource_partnerAgency&operation=view",
+                    dataType: "json",
+                    success: function(data) {
+                    	layer.close(globalLoadingLayer);
+						var result = showDialog(data);
+						if(result){
+							var partnerAgencyList = JSON.parse(data.partnerAgencyList);
+							if(partnerAgencyList != null && partnerAgencyList.length > 0){
+								for(var i=0;i<partnerAgencyList.length;i++){
+									partnerAgencyList[i].value = partnerAgencyList[i].travelAgencyName;
+								}
+							}
+							$objC.autocomplete('option','source', partnerAgencyList);
+							$objC.autocomplete('search', '');
+						}
+                    }
+                });
+			});
+		},
 		save : function(saveType){
 			console.log(saveType);
 			if(saveType == "checking"){
