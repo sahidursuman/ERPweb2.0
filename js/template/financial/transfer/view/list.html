@@ -3,12 +3,14 @@
         <div class="form-group" >      
           <label class="control-label pull-left" style="margin-left: 15px">同行地接:</label>
             <div class="col-sm-2">
-                <select  class="col-xs-12" name="hotelId" style="width:220px;">
+				<input type="text" class="col-sm-12 choosePartnerAgency" placeholder="来源" name="travelAgencyName" value="{{searchParam.travelAgencyName}}" />
+				<input type="hidden" name="fromPartnerAgencyId" value="{{searchParam.partnerAgencyId}}" >
+                <!-- <select  class="col-xs-12" name="hotelId" style="width:220px;">
                     <option value ="">全部</option>
                     {{each partnerAgencyListNew as partnerAgency index}}
 						<option value="{{partnerAgency.id}}" {{if searchParam.partnerAgencyId == partnerAgency.id}}selected="selected"{{/if}}>{{partnerAgency.travelAgencyName}}</option>
 					{{/each}} 
-                </select>        
+                </select>   -->      
              </div>    
            <label class="control-label pull-left" >账期:</label>
 			<div class="col-sm-2" >
