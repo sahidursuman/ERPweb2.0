@@ -537,7 +537,6 @@ define(function(require, exports) {
 										objParent.find("input[name=seatCount]").val(d.seatCount);
 										objParent.find("input[name=mobileNumber]").val(d.mobileNumber);
 										objParent.find("input[name=charteredPrice]").val(d.charteredPrice);
-										objParent.find("input[name=remark]").val(d.remark);
 									}
 								}
 							 });
@@ -553,7 +552,6 @@ define(function(require, exports) {
 								objParent.find("input[name=seatCount]").val("");
 								objParent.find("input[name=mobileNumber]").val("");
 								objParent.find("input[name=charteredPrice]").val("");
-								objParent.find("input[name=remark]").val("");
 							}
 						}
 					}).unbind("click").click(function(){
@@ -1017,7 +1015,6 @@ define(function(require, exports) {
 						var objParent = $(this).parent().parent();
 						objParent.find("input[name=pricePerPerson]").val("");
 						objParent.find("input[name=menuList]").val("");
-						objParent.find("input[name=remark]").val("");
 						objParent.find("input[name=typeId]").val("");
 					}
 				},select:function(event,ui){
@@ -1035,7 +1032,6 @@ define(function(require, exports) {
 								var restaurantStandard = JSON.parse(data.restaurantStandard);
 								
 								objParent.find("input[name=menuList]").val(restaurantStandard.menuList);
-								objParent.find("input[name=remark]").val(restaurantStandard.remark);
 							}
 	                    }
 					});
@@ -1150,7 +1146,6 @@ define(function(require, exports) {
 						objParent.find("input[name=hotelRoomId]").val("");
 						objParent.find("input[name=contractPrice]").val("");
 						objParent.find("input[name=containBreakfast]").val("");
-						objParent.find("input[name=remark]").val("");
 						objParent.find("input[name=hotelRoom]").val("");
 						objParent.find("input[name=mobileNumber]").val("");
 						objParent.find("input[name=payType]").val("");
@@ -1207,7 +1202,6 @@ define(function(require, exports) {
 
 								thisParent.find("input[name=contractPrice]").val(hotelRoom.contractPrice);
 								thisParent.find("input[name=containBreakfast]").val(hotelRoom.containBreakfast == "0" ? "不含" : "包含");
-								thisParent.find("input[name=remark]").val(hotelRoom.remark);
 							}
 	                    }
 					})
@@ -1219,7 +1213,6 @@ define(function(require, exports) {
 						objParent.find("input[name=hotelRoomId]").val("");
 						objParent.find("input[name=contractPrice]").val("");
 						objParent.find("input[name=containBreakfast]").val("");
-						objParent.find("input[name=remark]").val("");
 					}
 				}
 			}).unbind("click").click(function(){
@@ -1369,7 +1362,6 @@ define(function(require, exports) {
 								var scenicItem = JSON.parse(data.scenicItem);
 
 								thisParent.find("input[name=price]").val(scenicItem.contractPrice);
-								thisParent.find("input[name=remark]").val(scenicItem.remark);
 							}
 	                    }
 	                });
@@ -1380,7 +1372,6 @@ define(function(require, exports) {
 						var thisParent = $(this).parent().parent();
 						thisParent.find("input[name=chargingId]").val("");
 						thisParent.find("input[name=price]").val("");
-						thisParent.find("input[name=remark]").val("");
 					}
 				}
 			}).unbind("click").click(function(){
@@ -1556,7 +1547,6 @@ define(function(require, exports) {
 						thisParent.find("input[name=shopPolicyId]").val("");
 						thisParent.find("input[name=parkingRebateMoney]").val("");
 						thisParent.find("input[name=customerRebateMoney]").val("");
-						thisParent.find("input[name=remark]").val("");
 					}
 				}
 			}).unbind("click").click(function(){
@@ -1664,7 +1654,6 @@ define(function(require, exports) {
 						thisParent.find("input[name=mobileNumber]").val("");
 						thisParent.find("input[name=contractPrice]").val("");
 						thisParent.find("input[name=managerName]").val("");
-						thisParent.find("input[name=remark]").val("");
 
 						// 更新表单验证的配置
 						validator = rule.lineProductUpdate(validator);
@@ -1718,7 +1707,6 @@ define(function(require, exports) {
     							var thisParent = $(_this).parent().parent();
 								thisParent.find("input[name=selfPayItemId]").val(ui.item.id).trigger('change');
 								thisParent.find("input[name=contractPrice]").val(selfPayRebate.price);
-								thisParent.find("input[name=remark]").val(ui.item.remark);
 							}
 	                    }
 	                });
@@ -1732,7 +1720,6 @@ define(function(require, exports) {
 						thisParent.find("input[name=mobileNumber]").val("");
 						thisParent.find("input[name=contractPrice]").val("");
 						thisParent.find("input[name=managerName]").val("");
-						thisParent.find("input[name=remark]").val("");
 					}
 				}
 			}).unbind("click").click(function(){

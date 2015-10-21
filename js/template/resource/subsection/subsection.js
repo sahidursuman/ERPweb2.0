@@ -55,6 +55,7 @@ define(function(require, exports) {
 							subsection.searchNumber(subsection.searchData.lineProductId,subsection.searchData.fromPartnerAgencyId,subsection.searchData.creatorId,subsection.searchData.travelDate,subsection.searchData.operationStartDate,subsection.searchData.operationEndDate,tab);
 						})
 						subsection.getPartnerAgencyList($("#"+tab+" .choosePartnerAgency"),"");
+						subsection.getLineProductList($("#"+tab+" .chooseLineProduct"),"");
 					}
 				}
 			})
@@ -470,6 +471,39 @@ define(function(require, exports) {
                 }
 			});
 		},
+		getLineProductList:function(obj,partnerAId){
+			var $objC = $(obj);
+			$.ajax({
+				url:""+APP_ROOT+"back/transfer.do?method=findLineProduct&token="+$.cookie("token")+"&menuKey=resource_partnerAgency&operation=view",
+                dataType: "json",
+                success: function(data) {
+                	layer.close(globalLoadingLayer);
+					var result = showDialog(data);
+					if(result){
+						var lineProductList = JSON.parse(data.lineProductList);
+						if(lineProductList != null && lineProductList.length > 0){
+							for(var i=0;i<lineProductList.length;i++){
+								lineProductList[i].value = lineProductList[i].name;
+							}
+						}
+						$(obj).autocomplete({
+							minLength: 0,
+							change: function(event, ui) {
+								if (!ui.item)  {
+									$(this).val('').nextAll('input[name="lineProductId"]').val('');
+								}
+							},
+							select: function(event, ui) {
+								$(this).blur().nextAll('input[name="lineProductId"]').val(ui.item.id);
+							}
+						}).off("click").on("click",function(){
+							$objC.autocomplete('option','source', lineProductList);
+							$objC.autocomplete('search', '');
+						});
+					}
+				}
+			});
+		}
 	}
 	exports.listMainSubsection = subsection.listMainSubsection;
 });

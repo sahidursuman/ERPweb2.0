@@ -488,7 +488,8 @@ define(function(require,exports){
 				   newUnIncome = $tr.eq(i).find("input[name=UnIncomeMoney]").val(),
 				   newBack = $tr.eq(i).find("input[name=backMoney]").val(),
 				   newRemark = $tr.eq(i).find("input[name=checkRemark]").val(),
-				   realUnIncomeMoney = $tr.eq(i).find("input[name=realUnIncomeMoney]").val(); 
+				   realUnIncomeMoney = $tr.eq(i).find("input[name=realUnIncomeMoney]").val(),
+				   createTime =  $(this).attr("data-entity-createTime");
 				   
 				   if(flag){
 					   if($(this).attr("data-entity-isComfirmAccount") == 1){
@@ -499,6 +500,7 @@ define(function(require,exports){
 	    		 					   checkUnIncomeMoney:newUnIncome,
 	    		 					   backMoney:newBack,
 	    		 					   checkRemark:newRemark,
+	    		 					   createTime:createTime,
 	    		 					   realUnIncomeMoney:realUnIncomeMoney,
 	    		 					   isComfirmAccount:1
 			     			   }
@@ -510,6 +512,7 @@ define(function(require,exports){
 	    		 					   checkUnIncomeMoney:newUnIncome,
 	    		 					   backMoney:newBack,
 	    		 					   checkRemark:newRemark,
+	    		 					   createTime:createTime,
 	    		 					   realUnIncomeMoney:realUnIncomeMoney,
 	    		 					   isComfirmAccount:1
 			     			   }
@@ -521,6 +524,7 @@ define(function(require,exports){
 	    		 					   checkUnIncomeMoney:newUnIncome,
 	    		 					   backMoney:newBack,
 	    		 					   checkRemark:newRemark,
+	    		 					   createTime:createTime,
 	    		 					   realUnIncomeMoney:realUnIncomeMoney,
 	    		 					   isComfirmAccount:0
 			     			   }

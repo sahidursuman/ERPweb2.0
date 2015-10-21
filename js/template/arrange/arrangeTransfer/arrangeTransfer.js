@@ -149,7 +149,8 @@ define(function(require, exports) {
 
 					});
 					transfer.getLineProductList($("#" +tabId+" .chooseLineProductId"),"");
-					transfer.getPartnerAgencyList($("#" +tabId+" .choosePartnerAgency"),"");
+					transfer.getPartnerAgencyList($("#" +tabId+" #transferOut .choosePartnerAgency"),"");
+					transfer.getPartnerAgencyList($("#" +tabId+" #transferIn .choosePartnerAgency"),"");
 					//我社转出选项卡绑定事件
 					$("#"+tabId+" #myTab li a.transferOut").click(function(){
 						var type=$(this).attr("data-value");//2
@@ -971,38 +972,36 @@ define(function(require, exports) {
 			         
 		},
 		getLineProductList:function(obj,partnerAId){
-			$(obj).autocomplete({
-				minLength: 0,
-				change: function(event, ui) {
-					if (!ui.item)  {
-						$(this).val('').nextAll('input[name="lineProductId"]').val('');
-					}
-				},
-				select: function(event, ui) {
-					$(this).blur().nextAll('input[name="lineProductId"]').val(ui.item.id);
-				}
-			})
-			.click(function(event) {
-				var $objC = $(this);
-				$.ajax({
-					url:""+APP_ROOT+"back/transfer.do?method=findLineProduct&token="+$.cookie("token")+"&menuKey=resource_partnerAgency&operation=view",
-                    dataType: "json",
-                    data:"name="+$objC.val(),
-                    success: function(data) {
-                    	layer.close(globalLoadingLayer);
-						var result = showDialog(data);
-						if(result){
-							var lineProductList = JSON.parse(data.lineProductList);
-							if(lineProductList != null && lineProductList.length > 0){
-								for(var i=0;i<lineProductList.length;i++){
-									lineProductList[i].value = lineProductList[i].name;
-								}
+			var $objC = $(obj);
+			$.ajax({
+				url:""+APP_ROOT+"back/transfer.do?method=findLineProduct&token="+$.cookie("token")+"&menuKey=resource_partnerAgency&operation=view",
+                dataType: "json",
+                success: function(data) {
+                	layer.close(globalLoadingLayer);
+					var result = showDialog(data);
+					if(result){
+						var lineProductList = JSON.parse(data.lineProductList);
+						if(lineProductList != null && lineProductList.length > 0){
+							for(var i=0;i<lineProductList.length;i++){
+								lineProductList[i].value = lineProductList[i].name;
 							}
+						}
+						$(obj).autocomplete({
+							minLength: 0,
+							change: function(event, ui) {
+								if (!ui.item)  {
+									$(this).val('').nextAll('input[name="lineProductId"]').val('');
+								}
+							},
+							select: function(event, ui) {
+								$(this).blur().nextAll('input[name="lineProductId"]').val(ui.item.id);
+							}
+						}).off("click").on("click",function(){
 							$objC.autocomplete('option','source', lineProductList);
 							$objC.autocomplete('search', '');
-						} 
-                    }
-                });
+						});
+					}
+				}
 			});
 		},
 
@@ -1082,9 +1081,11 @@ define(function(require, exports) {
 		},
 		//编辑保存分团转客信息
 		saveTransfer:function($obj,isClose){ 
-			id = $obj.find("input[name=touristGroupTransferId]").val();
+			var id = $obj.find("input[name=touristGroupTransferId]").val(),
 			remark =$obj.find("input[name=remark]").val(),
 			status = 1,
+			isCurrent = 0,
+
 			//startTime = $obj.find(" input[name=createTime]").val(),
 			partnerAgencyId = $obj.find("input[name=transferPartnerAgencyId]").val(),
 			transPayedMoney = $obj.find("input[name=transPayedMoney]").val(),
@@ -1093,7 +1094,10 @@ define(function(require, exports) {
 			transAdultPrice = $obj.find("input[name=transAdultPrice]").val(),
 			transChildPrice = $obj.find("input[name=transChildPrice]").val(),
 			transRemark = $obj.find("input[name=transRemark]").val();
-
+			if ($obj.find("input[name=isCurrent]").is(":checked")==true) {
+				isCurrent=1;
+			}
+		
 			//获取新增费用项目
 			//添加费用JSON
 			var otherFeeJsonAdd = [];
@@ -1132,29 +1136,33 @@ define(function(require, exports) {
 				},			
 			}
 			var otherFee=JSON.stringify(otherFeeJsonAdd);
-			$.ajax({
-				url:""+APP_ROOT+"back/transfer.do?method=update&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
-				data:"id="+id+"&touristGroupTransfer="+JSON.stringify(saveDate.touristGroupTransfer)+"&transferFee="+JSON.stringify(saveDate.transferFee)+"&otherFee="+encodeURIComponent(otherFee),
-				datatype:"json",
-				beforeSend:function(){
-					globalLoadingLayer = layer.open({
-						type:3
-					});
-				},
-				success:function(data){
-					layer.close(globalLoadingLayer);
-					var result = showDialog(data);  
-					if(result){  
-						transfer.edited["updateTransfer"] = "";
-						showMessageDialog($( "#confirm-dialog-message" ),data.message);
-						if(isClose == 1){
-							closeTab(menuKey+"-updateTransfer");
-							transfer.getlistTransferSumData(0,"","","","","","",2);
+			if (isCurrent==1) {
+				$.ajax({
+					url:""+APP_ROOT+"back/transfer.do?method=update&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
+					data:"id="+id+"&touristGroupTransfer="+JSON.stringify(saveDate.touristGroupTransfer)+"&transferFee="+JSON.stringify(saveDate.transferFee)+"&otherFee="+encodeURIComponent(otherFee)+"&isCurrent="+isCurrent,
+					datatype:"json",
+					beforeSend:function(){
+						globalLoadingLayer = layer.open({
+							type:3
+						});
+					},
+					success:function(data){
+						layer.close(globalLoadingLayer);
+						var result = showDialog(data);  
+						if(result){  
+							transfer.edited["updateTransfer"] = "";
+							showMessageDialog($( "#confirm-dialog-message" ),data.message);
+							if(isClose == 1){
+								closeTab(menuKey+"-updateTransfer");
+								transfer.getlistTransferSumData(0,"","","","","","",2);
+							}
+							
 						}
-						
 					}
-				}
-			});
+				});
+			} else{
+				showMessageDialog($( "#confirm-dialog-message" ),"必须有一个游客小组指定现收!");
+			};
 		},
 		save : function(saveType){
 			if(saveType == "updateTransfer"){
