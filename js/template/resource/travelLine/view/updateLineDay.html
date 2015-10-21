@@ -10,9 +10,9 @@
 			<div class="widget-body">
 				<div class="widget-main">
 					<div class="form-group">
-						<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>行程日期:</label>
+						<label class="col-sm-2 control-label no-padding-right" style="margin-top:5px;"><span class="necessary">*</span>行程日期:</label>
 						<div class="col-sm-3">
-							<select name="whichDay" class="col-sm-12">
+							<select name="whichDay" class="col-sm-12" style="margin-top:5px;">
 								<option {{if lineDay.whichDay == 1}}selected="selected"{{/if}} value="1">第1天</option>
 								<option {{if lineDay.whichDay == 2}}selected="selected"{{/if}} value="2">第2天</option>
 								<option {{if lineDay.whichDay == 3}}selected="selected"{{/if}} value="3">第3天</option>
@@ -46,9 +46,9 @@
 								<option {{if lineDay.whichDay == 31}}selected="selected"{{/if}} value="31">第31天</option>
 							</select>
 						</div>
-						<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>酒店星级:</label>
+						<label class="col-sm-2 control-label no-padding-right" style="margin-top:5px;"><span class="necessary">*</span>酒店星级:</label>
 						<div class="col-sm-3">
-							<select name="hotelLevel" class="col-sm-12">
+							<select name="hotelLevel" class="col-sm-12" style="margin-top:5px;">
 								<option {{if lineDay.hotelLevel == 1}}selected="selected"{{/if}} value="1">三星以下</option>
 								<option {{if lineDay.hotelLevel == 2}}selected="selected"{{/if}} value="2">三星</option>
 								<option {{if lineDay.hotelLevel == 3}}selected="selected"{{/if}} value="3">准四星</option>
@@ -82,7 +82,7 @@
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>行程详情:</label>
 						<div class="clearfix"></div>
-						<script id="detailEditor-update-travelLine" type="text/plain" style="width: 100%"></script>
+						<script id="detailEditor-update-travelLine" type="text/plain" style="width:99%;margin-left:15px;"></script>
 					</div>
 				</div>
 			</div>
