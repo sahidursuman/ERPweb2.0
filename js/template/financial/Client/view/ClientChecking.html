@@ -91,14 +91,14 @@
 				<!-- 未收 -->
 				<td><label name="ClientCheck_notGet">{{rs.needPayAllMoney-rs.payedMoney-rs.currentNeedPayMoney}}</label></td>
 				<!--未收对账 -->
-				<td><input style="width: 100px" type="text" name="ClientCheck_checkUnIncomeMoney" value="{{rs.checkUnIncomeMoney}}" data-entity-id="{{rs.checkUnIncomeMoney}}" {{if rs.isConfirmAccount == 1 && role != 1 }} disabled = "true" {{/if}}/></td>
+				<td><input style="width: 100px" type="text" name="ClientCheck_checkUnIncomeMoney" value="{{rs.checkUnIncomeMoney}}" data-entity-id="{{rs.checkUnIncomeMoney}}" {{if rs.isConfirmAccount == 1 && role != 1 }} disabled = "true" {{/if}} maxlength="8" /></td>
 				<!-- 返款 -->
-				<td><input style="width: 100px" type="text" name="ClientCheck_backMoney" value="{{rs.backMoney}}" data-entity-id="{{rs.backMoney}}" {{if rs.isConfirmAccount == 1 && role != 1 }} disabled = "true" {{/if}} /></td>
+				<td><input style="width: 100px" type="text" name="ClientCheck_backMoney" value="{{rs.backMoney}}" data-entity-id="{{rs.backMoney}}" {{if rs.isConfirmAccount == 1 && role != 1 }} disabled = "true" {{/if}} maxlength="8" /></td>
 				<!-- 实际未收 -->
 				<td>{{if rs.isConfirmAccount == 1}}<label name="ClientCheck_actualNotGet">{{rs.realUnPayedMoney}}</label>{{else}}<label name="ClientCheck_actualNotGet">{{rs.checkUnIncomeMoney-rs.backMoney}}</label>{{/if}}
 				</td>
 				<!--说明 -->  
-				<td>{{if rs.isConfirmAccount == 1}}<input type="text" style="width: 100px" name="ClientCheck_remark" value="{{rs.checkRemark}}"  data-entity-id="{{rs.checkRemark}}" {{if rs.isConfirmAccount == 1 && role != 1 }} disabled = "true" {{/if}} />{{else}}<input style="width: 100px" type="text" name="ClientCheck_remark" value="" data-entity-id="" {{if rs.isConfirmAccount == 1 && role != 1 }} disabled = "true" {{/if}} />{{/if}}
+				<td>{{if rs.isConfirmAccount == 1}}<input type="text" style="width: 100px" name="ClientCheck_remark" value="{{rs.checkRemark}}"  data-entity-id="{{rs.checkRemark}}" {{if rs.isConfirmAccount == 1 && role != 1 }} disabled = "true" {{/if}} maxlength="200" />{{else}}<input style="width: 100px" type="text" name="ClientCheck_remark" value="" data-entity-id="" {{if rs.isConfirmAccount == 1 && role != 1 }} disabled = "true" {{/if}} maxlength="200" />{{/if}}
 				</td>
 				<td>{{if rs.checkTime != null}}{{rs.checkTime | dateFormat:'yyyy-MM-dd'}}{{else}}-{{/if}}</td>
 				<td>{{rs.checkUserRealName}}</td>
