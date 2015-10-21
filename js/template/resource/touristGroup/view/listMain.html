@@ -1,83 +1,73 @@
 <div class="search-area touristGroupSearchForm clearfix globalAdd">
-
-	<div class="form-horizontal col-sm-12 clearfix" style="margin-bottom:20px;margin-left:-12px" >
-		<label class="control-label pull-left" name="statistics-count">人数合计：{{statistics.adultCount}}大{{statistics.childCount}}小</label>
-		<label class="control-label col-sm-2" name="statistics-needPay">应收款合计：{{statistics.needPay}}元</label>
-		<label class="control-label col-sm-2" name="statistics-payed">已收款合计：{{statistics.payedMoney}}元</label>
-		<label class="control-label col-sm-2" name="statistics-currentNeedPay">现收款合计：{{statistics.currentNeedPay}}元</label>
-		<label class="control-label col-sm-2" name="statistics-unIncome">未收款合计：{{statistics.unIncomeMoney}}元</label>
-	</div>
-	 <div class="form-horizontal" style="margin-top:20px;">
-		<label class="pull-left text-right control-label no-padding-right">来源:</label>
-		<div class="col-sm-1">
-			<!-- <select name="partnerAgencyId" class="col-sm-12">
+    <div class="form-horizontal">
+        <label class="pull-left text-right control-label no-padding-right">来源:</label>
+        <div class="col-sm-1">
+            <!-- <select name="partnerAgencyId" class="col-sm-12">
 				<option value=''>来源</option>
 				{{each partnerAgencyList as partnerAgency}}
 				<option value="{{partnerAgency.id}}" {{if searchParam.partnerAgencyId == partnerAgency.id}}selected="selected"{{/if}} >{{partnerAgency.travelAgencyName}}</option>
 				{{/each}}
 			</select> -->
-			<input type="text" class="col-sm-12 choosePartnerAgency" placeholder="来源" name="" />
-			<input type="hidden" name="fromPartnerAgencyId" value="">
-		</div>
-		<label class="pull-left text-right control-label no-padding-right">线路:</label>
-		<div class="col-sm-1">
-			<select name="lineProductId" class="col-sm-12">
-				<option value=''>全部</option>
-				{{each lineProductList as lineProduct}}
-				<option value="{{lineProduct.partnerAgency}}" {{if searchParam.lineProductId == lineProduct.partnerAgency}}selected="selected"{{/if}} >{{lineProduct.name}}</option>
-				{{/each}}
-			</select>   
-		</div>
-		<label class="pull-left text-right control-label no-padding-right">出游时间:</label>
-		<div class="col-sm-1">
-			<div class="input-group">
-				<input class="col-xs-12 date-picker" name="startTime" value="{{searchParam.startTime}}" type="text" />	
-				<span class="input-group-addon">
+            <input type="text" class="col-sm-12 choosePartnerAgency" placeholder="来源" name="" />
+            <input type="hidden" name="fromPartnerAgencyId" value="">
+        </div>
+        <label class="pull-left text-right control-label no-padding-right">线路:</label>
+        <div class="col-sm-1">
+            <select name="lineProductId" class="col-sm-12">
+                <option value=''>全部</option>
+                {{each lineProductList as lineProduct}}
+                <option value="{{lineProduct.partnerAgency}}" {{if searchParam.lineProductId==l ineProduct.partnerAgency}}selected="selected" {{/if}}>{{lineProduct.name}}</option>
+                {{/each}}
+            </select>
+        </div>
+        <label class="pull-left text-right control-label no-padding-right">出游时间:</label>
+        <div class="col-sm-1">
+            <div class="input-group">
+                <input class="col-xs-12 date-picker" name="startTime" value="{{searchParam.startTime}}" type="text" />
+                <span class="input-group-addon">
 					<i class="fa fa-calendar"></i>
 				</span>
-			</div>
-		</div>
-		<label class="pull-left text-right control-label no-padding-right">录入人:</label>
-		<div class="col-sm-1">
-			<select name="userId" class="col-sm-12">
-				<option value=''>全部</option>
-				{{each userList as user}}
-				<option value="{{user.id}}" {{if searchParam.userId == user.id}}selected="selected"{{/if}} >{{user.realName}}</option>
-				{{/each}}
-			</select>
-		</div>
-		<label class="pull-left text-right control-label no-padding-right">录入日期:</label>
-		<div class="col-sm-1">
-			<div class="input-group col-sm-12">
-				<input class="col-sm-12 date-picker" name="createTimeStart" value="{{searchParam.createStartTime}}" type="text" />	
-				<span class="input-group-addon">
+            </div>
+        </div>
+        <label class="pull-left text-right control-label no-padding-right">录入人:</label>
+        <div class="col-sm-1">
+            <select name="userId" class="col-sm-12">
+                <option value=''>全部</option>
+                {{each userList as user}}
+                <option value="{{user.id}}" {{if searchParam.userId==u ser.id}}selected="selected" {{/if}}>{{user.realName}}</option>
+                {{/each}}
+            </select>
+        </div>
+        <label class="pull-left text-right control-label no-padding-right">录入日期:</label>
+        <div class="col-sm-1">
+            <div class="input-group col-sm-12">
+                <input class="col-sm-12 date-picker" name="createTimeStart" value="{{searchParam.createStartTime}}" type="text" />
+                <span class="input-group-addon">
 					<i class="fa fa-calendar"></i>
 				</span>
-			</div>
-		</div>
-		<label class="pull-left text-right control-label no-padding-right">--</label>
-		<div class="col-sm-1">
-			<div class="input-group col-sm-12">
-				<input class="col-sm-12 date-picker" name="createTimeEnd" value="{{searchParam.createEndTime}}" type="text" />	
-				<span class="input-group-addon">
+            </div>
+        </div>
+        <label class="pull-left text-right control-label no-padding-right">--</label>
+        <div class="col-sm-1">
+            <div class="input-group col-sm-12">
+                <input class="col-sm-12 date-picker" name="createTimeEnd" value="{{searchParam.createEndTime}}" type="text" />
+                <span class="input-group-addon">
 					<i class="fa fa-calendar"></i>
 				</span>
-			</div>
-		</div>
-
-		<label class="pull-left text-right control-label no-padding-right">针对客源:</label>
-		<div class="col-sm-1 ">
-			<select name="customerType" class="col-xs-12">   
-				<option value="">全部</option>   
-				<option value="0" {{if searchParam.customerType == 0}}selected="selected"{{/if}}>散客</option>
-				<option value="1" {{if searchParam.customerType == 1}}selected="selected"{{/if}}>团体</option>     
-			</select> 
-		</div>
-
-		<label class="pull-left text-right control-label no-padding-right">状态:</label>
-		<div class="pull-left btn-group btn-status" style="margin-left: 20px">
-			<button data-value="{{searchParam.status}}" data-toggle="dropdown" class=" btn-sm dropdown-toggle block-up" aria-expanded="false">
-				<span>
+            </div>
+        </div>
+        <label class="pull-left text-right control-label no-padding-right">针对客源:</label>
+        <div class="col-sm-1 ">
+            <select name="customerType" class="col-xs-12">
+                <option value="">全部</option>
+                <option value="0" {{if searchParam.customerType==0 }}selected="selected" {{/if}}>散客</option>
+                <option value="1" {{if searchParam.customerType==1 }}selected="selected" {{/if}}>团体</option>
+            </select>
+        </div>
+        <label class="pull-left text-right control-label no-padding-right">状态:</label>
+        <div class="pull-left btn-group btn-status" style="margin-left: 20px">
+            <button data-value="{{searchParam.status}}" data-toggle="dropdown" class=" btn-sm dropdown-toggle block-up" aria-expanded="false">
+                <span>
 				   {{if searchParam.status == null || searchParam.status == ""}}
 						全部
 					{{else if searchParam.status==0 }}
@@ -92,53 +82,54 @@
 						已分段
 					{{/if}}
 				</span>
-				<i class="ace-icon fa fa-angle-down icon-on-right"></i>
-			</button>
-			<ul class="dropdown-menu">
-				<li>
-					<a data-value="" href="javascript:void(0)">全部</a>
-				</li>
-				<li>
-					<a data-value="0" href="javascript:void(0)">已发团</a>
-				</li>
-				<li>
-					<a data-value="1" href="javascript:void(0)">未分团</a>
-				</li>
-				<li>
-					<a data-value="2" href="javascript:void(0)">已分团</a>
-				</li>
-				<li>
-					<a data-value="3" href="javascript:void(0)">已转客</a>
-				</li>
-				<li>
-					<a data-value="5" href="javascript:void(0)">已分段</a>
-				</li>
-				<li>
-					<a data-value="6" href="javascript:void(0)">已内转</a>
-				</li>
-			</ul>
-		</div>
-		<div class="pull-left" style="margin-left: 20px">
-			 <button class=" btn-sm  btn-touristGroupList-search search-btn">
-				 <i class="ace-icon fa fa-search"></i>
-				 搜索
-			 </button>
-		 </div>
-		 <div class="col-sm-1 pull-left" style="margin-left: 5px">
-			 <button class="btn btn-sm btn-success btn-touristGroup-add">   
-				 <i class="ace-icon fa fa-plus"></i>
-				 新增小组  
-			 </button>
-		 </div>
-		<div style="clear: both;height: 0px;line-height: 0px;"></div>
-	</div>
-	<div style="clear: both;margin-top:20px;border-top:1px dotted #ccc;padding-top:15px;">
-	<div style="clear: both;height: 0px;line-height: 0px;"></div>
+                <i class="ace-icon fa fa-angle-down icon-on-right"></i>
+            </button>
+            <ul class="dropdown-menu">
+                <li>
+                    <a data-value="" href="javascript:void(0)">全部</a>
+                </li>
+                <li>
+                    <a data-value="0" href="javascript:void(0)">已发团</a>
+                </li>
+                <li>
+                    <a data-value="1" href="javascript:void(0)">未分团</a>
+                </li>
+                <li>
+                    <a data-value="2" href="javascript:void(0)">已分团</a>
+                </li>
+                <li>
+                    <a data-value="3" href="javascript:void(0)">已转客</a>
+                </li>
+                <li>
+                    <a data-value="5" href="javascript:void(0)">已分段</a>
+                </li>
+                <li>
+                    <a data-value="6" href="javascript:void(0)">已内转</a>
+                </li>
+            </ul>
+        </div>
+        <div class="pull-left" style="margin-left: 20px">
+            <button class=" btn-sm  btn-touristGroupList-search search-btn">
+                <i class="ace-icon fa fa-search"></i> 搜索
+            </button>
+        </div>
+        <div class="col-sm-1 pull-left" style="margin-left: 5px">
+            <button class="btn btn-sm btn-success btn-touristGroup-add">
+                <i class="ace-icon fa fa-plus"></i> 新增小组
+            </button>
+        </div>
+        <div style="clear: both;height: 0px;line-height: 0px;"></div>
+    </div>
+    <div style="clear: both;margin-top:20px;border-top:1px dotted #ccc;padding-top:15px;">
+        <div style="clear: both;height: 0px;line-height: 0px;"></div>
+    </div>
+    <div class="form-horizontal">
+        <label class="control-label pull-left" name="statistics-count">人数合计：{{statistics.adultCount}}大{{statistics.childCount}}小</label>
+        <label class="control-label col-sm-2" name="statistics-needPay">应收款合计：{{statistics.needPay}}元</label>
+        <label class="control-label col-sm-2" name="statistics-payed">已收款合计：{{statistics.payedMoney}}元</label>
+        <label class="control-label col-sm-2" name="statistics-currentNeedPay">现收款合计：{{statistics.currentNeedPay}}元</label>
+        <label class="control-label col-sm-2" name="statistics-unIncome">未收款合计：{{statistics.unIncomeMoney}}元</label>
+    </div>
 </div>
+<div id="touristGroup-listMain" class="col-sm-12 clearfix">
 </div>
-
-<div  id="touristGroup-listMain" class="col-sm-12 clearfix">
-	
-
-</div>
-
