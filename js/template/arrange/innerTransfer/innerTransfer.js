@@ -378,24 +378,19 @@ define(function(require, exports) {
 
 
 		saveEditTranIn:function(isClose){
-			var $obj=$("#tab-arrange_inner_Transfer-edit-content");
+			var $obj=$("#tab-arrange_inner_Transfer-edit-content"),
+			isCurrent; 
 			//对方是否现收
-			if ($obj.find('input[name=operCurrNeestatus]').is(":checked")==true) {
-				console.info(1);
-              var operCurrNeestatus=1;
+			if ($obj.find('input[name=isCurrent]').is(":checked")==true) {
+              isCurrent=1;
 			} else{
-				console.info(2);
-			  var operCurrNeestatus=0;
+			  isCurrent=0;
 			};
-
-
 
 			function getValParam (name){
 				var val = $obj.find("[name="+name+"]").val();
 				return val;
 			}
-
-
 			var innerTransfer = {
 				id : getValParam("id"),//	内转ID		
 				innerTransferFeeSet : "",	//内转的其他费用	array<object>	
@@ -429,33 +424,38 @@ define(function(require, exports) {
 
 			innerTransfer.innerTransferFeeSet=otherFeeJsonAdd;
 			var innerTransfer=JSON.stringify(innerTransfer);
-			$.ajax({
-				url:""+APP_ROOT+"back/innerTransfer.do?method=update&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
-				data:"innerTransfer="+encodeURIComponent(innerTransfer)+"&isCurrent="+operCurrNeestatus,
-				datatype:"json",
-				beforeSend:function(){
-					globalLoadingLayer = layer.open({
-						type:3
-					});
-				},
-				success:function(data){
-					layer.close(globalLoadingLayer);
-					var result = showDialog(data);  
-					if(result){  
-						showMessageDialog($( "#confirm-dialog-message" ),data.message);
-						//if(isClose == 1){
-							//closeTab(menuKey+"-updateTransfer");
-							inner.edited["edit"] = "";
-							if(isClose == 1){
-								closeTab(menuKey+"-edit");
-								inner.list(searchParam);
-							}
-						//}
-						
-					}
-				}
-			});
 
+			if (isCurrent==1) {
+				$.ajax({
+					url:""+APP_ROOT+"back/innerTransfer.do?method=update&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
+					data:"innerTransfer="+encodeURIComponent(innerTransfer)+"&isCurrent="+isCurrent,
+					datatype:"json",
+					beforeSend:function(){
+						globalLoadingLayer = layer.open({
+							type:3
+						});
+					},
+					success:function(data){
+						layer.close(globalLoadingLayer);
+						var result = showDialog(data);  
+						if(result){  
+							showMessageDialog($( "#confirm-dialog-message" ),data.message);
+							//if(isClose == 1){
+								//closeTab(menuKey+"-updateTransfer");
+								inner.edited["edit"] = "";
+								if(isClose == 1){
+									closeTab(menuKey+"-edit");
+									inner.list(searchParam);
+								}
+							//}
+							
+						}
+					}
+				});
+
+			} else{
+				showMessageDialog($( "#confirm-dialog-message" ),"必须有一个游客小组指定现收!");
+			};
 		},
 
 
@@ -656,6 +656,19 @@ define(function(require, exports) {
 
 					//时间控件
 					inner.initTimePicker();
+
+
+
+
+					//搜索栏状态button下拉事件
+					/*$("#" +tabId+" .innerTransfer_list .btn-status .dropdown-menu a").click(function(){
+						$(this).parent().parent().parent().find("button").attr("data-value",$(this).attr("data-value"));
+						$(this).parent().parent().parent().find("span").text($(this).text());
+						searchParam = buildSearchParam();
+						requestTotal = true;
+						inner.listTransferIn(searchParam);  
+					});*/
+
 
 					//过滤搜索时间是否执行初始化操作
 					/*if (searchParam.startTime!=null&&searchParam.endTime!=null) {

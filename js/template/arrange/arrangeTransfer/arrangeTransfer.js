@@ -1081,9 +1081,11 @@ define(function(require, exports) {
 		},
 		//编辑保存分团转客信息
 		saveTransfer:function($obj,isClose){ 
-			id = $obj.find("input[name=touristGroupTransferId]").val();
+			var id = $obj.find("input[name=touristGroupTransferId]").val(),
 			remark =$obj.find("input[name=remark]").val(),
 			status = 1,
+			isCurrent = 0,
+
 			//startTime = $obj.find(" input[name=createTime]").val(),
 			partnerAgencyId = $obj.find("input[name=transferPartnerAgencyId]").val(),
 			transPayedMoney = $obj.find("input[name=transPayedMoney]").val(),
@@ -1092,7 +1094,10 @@ define(function(require, exports) {
 			transAdultPrice = $obj.find("input[name=transAdultPrice]").val(),
 			transChildPrice = $obj.find("input[name=transChildPrice]").val(),
 			transRemark = $obj.find("input[name=transRemark]").val();
-
+			if ($obj.find("input[name=isCurrent]").is(":checked")==true) {
+				isCurrent=1;
+			}
+		
 			//获取新增费用项目
 			//添加费用JSON
 			var otherFeeJsonAdd = [];
@@ -1131,29 +1136,33 @@ define(function(require, exports) {
 				},			
 			}
 			var otherFee=JSON.stringify(otherFeeJsonAdd);
-			$.ajax({
-				url:""+APP_ROOT+"back/transfer.do?method=update&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
-				data:"id="+id+"&touristGroupTransfer="+JSON.stringify(saveDate.touristGroupTransfer)+"&transferFee="+JSON.stringify(saveDate.transferFee)+"&otherFee="+encodeURIComponent(otherFee),
-				datatype:"json",
-				beforeSend:function(){
-					globalLoadingLayer = layer.open({
-						type:3
-					});
-				},
-				success:function(data){
-					layer.close(globalLoadingLayer);
-					var result = showDialog(data);  
-					if(result){  
-						transfer.edited["updateTransfer"] = "";
-						showMessageDialog($( "#confirm-dialog-message" ),data.message);
-						if(isClose == 1){
-							closeTab(menuKey+"-updateTransfer");
-							transfer.getlistTransferSumData(0,"","","","","","",2);
+			if (isCurrent==1) {
+				$.ajax({
+					url:""+APP_ROOT+"back/transfer.do?method=update&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
+					data:"id="+id+"&touristGroupTransfer="+JSON.stringify(saveDate.touristGroupTransfer)+"&transferFee="+JSON.stringify(saveDate.transferFee)+"&otherFee="+encodeURIComponent(otherFee)+"&isCurrent="+isCurrent,
+					datatype:"json",
+					beforeSend:function(){
+						globalLoadingLayer = layer.open({
+							type:3
+						});
+					},
+					success:function(data){
+						layer.close(globalLoadingLayer);
+						var result = showDialog(data);  
+						if(result){  
+							transfer.edited["updateTransfer"] = "";
+							showMessageDialog($( "#confirm-dialog-message" ),data.message);
+							if(isClose == 1){
+								closeTab(menuKey+"-updateTransfer");
+								transfer.getlistTransferSumData(0,"","","","","","",2);
+							}
+							
 						}
-						
 					}
-				}
-			});
+				});
+			} else{
+				showMessageDialog($( "#confirm-dialog-message" ),"必须有一个游客小组指定现收!");
+			};
 		},
 		save : function(saveType){
 			if(saveType == "updateTransfer"){
