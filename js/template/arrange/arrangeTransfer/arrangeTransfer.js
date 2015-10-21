@@ -931,40 +931,44 @@ define(function(require, exports) {
 				language: 'zh-CN'
 			})
 		},
+		
 		getPartnerAgencyList:function(obj,partnerAId){
-			$(obj).autocomplete({
-				minLength: 0,
-				change: function(event, ui) {
-					if (!ui.item)  {
-						$(this).val('').nextAll('input[name="transferPartnerAgencyId"]').val('');
-					}
-				},
-				select: function(event, ui) {
-					$(this).blur().nextAll('input[name="transferPartnerAgencyId"]').val(ui.item.id);
-				}
-			})
-			.click(function(event) {
-				var $objC = $(this);
-				$.ajax({
-					url:""+APP_ROOT+"back/partnerAgency.do?method=findPartnerAnencyList&token="+$.cookie("token")+"&menuKey=resource_partnerAgency&operation=view",
-                    dataType: "json",
-                    data:"travelAgencyName="+$objC.val(),
-                    success: function(data) {
-                    	layer.close(globalLoadingLayer);
-						var result = showDialog(data);
-						if(result){
-							var partnerAgencyList = JSON.parse(data.partnerAgencyList);
-							if(partnerAgencyList != null && partnerAgencyList.length > 0){
-								for(var i=0;i<partnerAgencyList.length;i++){
-									partnerAgencyList[i].value = partnerAgencyList[i].travelAgencyName;
-								}
+			var $objC = $(obj)
+			$.ajax({
+				url:""+APP_ROOT+"back/partnerAgency.do?method=findPartnerAnencyList&token="+$.cookie("token")+"&menuKey=resource_partnerAgency&operation=view",
+                dataType: "json",
+               // data:"travelAgencyName="+$objC.val(),
+                success:function(data){
+                	layer.close(globalLoadingLayer);
+					var result = showDialog(data);
+					if(result){
+						var partnerAgencyList = JSON.parse(data.partnerAgencyList);
+						if(partnerAgencyList != null && partnerAgencyList.length > 0){
+							for(var i=0;i<partnerAgencyList.length;i++){
+								partnerAgencyList[i].value = partnerAgencyList[i].travelAgencyName;
 							}
+						};
+						$(obj).autocomplete({
+							
+							minLength: 0,
+							change: function(event, ui) {
+								if (!ui.item)  {
+									$(this).val('').nextAll('input[name="transferPartnerAgencyId"]').val('');
+								}
+							},
+							select: function(event, ui) {
+								var $tabId = $("#tab-resource_touristGroup-add-content");
+								$(this).blur().nextAll('input[name="transferPartnerAgencyId"]').val(ui.item.id);
+								$tabId.find("input[name=partnerAgencyNameList]").val("");
+							}
+						}).off("click").on("click",function(){
 							$objC.autocomplete('option','source', partnerAgencyList);
 							$objC.autocomplete('search', '');
-						}
-                    }
-                });
+						});
+					}
+            	}
 			});
+			         
 		},
 		getLineProductList:function(obj,partnerAId){
 			$(obj).autocomplete({
