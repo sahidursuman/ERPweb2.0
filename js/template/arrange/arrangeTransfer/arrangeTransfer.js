@@ -225,6 +225,29 @@ define(function(require, exports) {
 				"pageNo":page,
 			};
 			pager = JSON.stringify(pager);
+
+
+			//查询统计数据
+			$.ajax({  
+				url:""+APP_ROOT+"back/transfer.do?method=findTotal&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
+				data:"pager="+encodeURIComponent(pager)+"&type="+type+"&fromTravelAgencyId="+partnerAgencyId+"&creator="+creator+"&status="+status+"&endTime="+endTime+"&startTime="+startTime+"&lineProductId="+lineProductId,
+				dataType:'json',
+				beforeSend:function(){
+					globalLoadingLayer = layer.open({
+						zIndex:1028,
+						type:3
+					});
+				},
+				success:function(data){
+					var $transferInObj=$("#transferIn-Header-Cost");
+					$transferInObj.find(".totalAdultCount").text(data.totalAdultCount);
+					$transferInObj.find(".totalChildCount").text(data.totalChildCount);
+					$transferInObj.find(".totalNeedPay").text(data.totalNeedPay);  
+					$transferInObj.find(".totalPayed").text(data.totalPayed);
+			    }
+		   });
+
+
 			$.ajax({
 				url:""+APP_ROOT+"back/transfer.do?method=findPager&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 				data:"pager="+encodeURIComponent(pager)+"&type="+type+"&fromTravelAgencyId="+partnerAgencyId+"&creator="+creator+"&status="+status+"&endTime="+endTime+"&startTime="+startTime+"&lineProductId="+lineProductId,
