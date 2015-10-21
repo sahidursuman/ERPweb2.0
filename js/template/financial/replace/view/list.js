@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":70,"md5":"79f87e8e6e55f7761b4882221036df6f"}*/
+/*TMODJS:{"debug":true,"version":72,"md5":"79f87e8e6e55f7761b4882221036df6f"}*/
 define(function(require) {
     return require("../../../template")("financial/replace/view/list", function($data, $filename) {
         try {

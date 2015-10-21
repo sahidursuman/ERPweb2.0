@@ -1,6 +1,6 @@
 define(function(require, exports) {
     var menuKey = "financial_turnProfit",
-     listTurnProfit = require("./view/list"),
+    listTurnProfit = require("./view/list"),
     tabId = "tab-"+menuKey+"-content",
     checkTabId = menuKey+"-checking",
     viewTemplate = require("./view/visitorGroup"),

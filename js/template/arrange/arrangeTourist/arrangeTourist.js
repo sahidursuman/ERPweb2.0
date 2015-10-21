@@ -1723,17 +1723,19 @@ define(function(require, exports) {
 
 								//转客费用提交按钮  
 								$(".editFeeMain .btn-updateFee").click(function(){
-									var form = $(".editFeeMain .editFeeMainForm").serialize();
-									var touristGroup = {
+									var $isCurrentObj=$(".editFeeMain "),
+										isCurrent,
+									    form = $(".editFeeMain .editFeeMainForm").serialize(),
+								        touristGroup = {
 											"id" : id,
 											"transRemark" : $(".editFeeMain input[name=remark]").val() || "无",
 											"transAdultPrice" : $(".editFeeMain input[name=adultTransferMoney]").val() || 0,
 											"transChildPrice" : $(".editFeeMain input[name=childTransferMoney]").val() || 0,
 											"transPayedMoney" : $(".editFeeMain input[name=payedMoney]").val() || 0,
 											"transNeedPayAllMoney":$(".editFeeMain input[name=needPayMoney]").val() || 0,
-									};
-									var otherFeeList = "[";
-									var otherFeeListLength = $(".editFeeMain .editFeeTbody tr:not(.deleted)").length;
+									    },
+									    otherFeeList = "[",
+									    otherFeeListLength = $(".editFeeMain .editFeeTbody tr:not(.deleted)").length;
 									 $(".editFeeMain .editFeeTbody tr:not(.deleted)").each(function(i){
 										var id = $(this).attr("data-entity-id");
 										var type = $(this).find("[name=type]").attr("value");
@@ -1758,6 +1760,13 @@ define(function(require, exports) {
 										}
 									})
 									otherFeeList += "]";
+
+									//是否现收状态 
+									if ($isCurrentObj.find('input[name=isCurrent]').is(":checked")) {
+										isCurrent=1
+									} else{
+										isCurrent=0;
+									};
 									
 									/*$(".editFeeMain .editFeeTbody tr:not(.deleted)").each(function(i){
 										if(i>1){
@@ -1778,36 +1787,42 @@ define(function(require, exports) {
 									})
 									touristGroup = JSON.stringify(touristGroup);
 									otherFeeListDel = JSON.stringify(otherFeeListDel);
-									$.ajax({
-										url:""+APP_ROOT+"back/transTourist.do?method=saveTransFee&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
-										data:"touristGroup="+encodeURIComponent(touristGroup)+"&otherFeeList="+encodeURIComponent(otherFeeList)+"&otherFeeListDel="+encodeURIComponent(otherFeeListDel),
-										type:"POST",
-										dataType:"json",
-										beforeSend:function(){
-											globalLoadingLayer = openLoadingLayer();
-										},
-										success:function(data){
-											layer.close(globalLoadingLayer);
-											var result = showDialog(data);
-								        	if(result){
-								        		showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-												layer.close(updateTouristGroupLayer);
-								        			if(data.success==1){
-								        				var transferTr = $(".transferTouristMain .transferTouristGroupTbody tr");
-								        				transferTr.each(function(i){
-								        					var id = transferTr.eq(i).attr("data-entity-id");
-								        					if(id == data.id){
-								        						transferTr.eq(i).find("td:last-child").html('<i class ="ace-icon fa fa-check"></i>已填写');
-								        						transferTr.eq(i).find("[name=label_payed]").html(data.transPayedMoney);
-								        						transferTr.eq(i).find("[name=label_needPay]").html(data.transNeedPayAllMoney);
-								        					}
-								        				})
-								        			}
-												//arrangeTourist.transferTourist(lineProductIdFee,startTimeFee);
-								        		})
-									    	}
-										}
-									})
+
+									if (isCurrent==1) {
+										$.ajax({
+											url:""+APP_ROOT+"back/transTourist.do?method=saveTransFee&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
+											data:"touristGroup="+encodeURIComponent(touristGroup)+"&otherFeeList="+encodeURIComponent(otherFeeList)+"&otherFeeListDel="+encodeURIComponent(otherFeeListDel)+"&isCurrent="+isCurrent,
+											type:"POST",
+											dataType:"json",
+											beforeSend:function(){
+												globalLoadingLayer = openLoadingLayer();
+											},
+											success:function(data){
+												layer.close(globalLoadingLayer);
+												var result = showDialog(data);
+									        	if(result){
+									        		showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+													layer.close(updateTouristGroupLayer);
+									        			if(data.success==1){
+									        				var transferTr = $(".transferTouristMain .transferTouristGroupTbody tr");
+									        				transferTr.each(function(i){
+									        					var id = transferTr.eq(i).attr("data-entity-id");
+									        					if(id == data.id){
+									        						transferTr.eq(i).find("td:last-child").html('<i class ="ace-icon fa fa-check"></i>已填写');
+									        						transferTr.eq(i).find("[name=label_payed]").html(data.transPayedMoney);
+									        						transferTr.eq(i).find("[name=label_needPay]").html(data.transNeedPayAllMoney);
+									        					}
+									        				})
+									        			}
+													//arrangeTourist.transferTourist(lineProductIdFee,startTimeFee);
+									        		})
+										    	}
+											}
+										})
+
+									} else{
+										showMessageDialog($( "#confirm-dialog-message" ),"必须有一个游客小组指定现收!");
+									};
 								});
 						    }//编辑费用信息end
 						})

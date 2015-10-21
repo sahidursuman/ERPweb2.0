@@ -44,19 +44,18 @@
 						
 						{{if innerTransfer.touristGroup.operateCurrentNeedPayMoney==1}}
 							<label>
-								<input  type="checkbox" class="ace" name="operCurrNeestatus" checked="checked" value="{{innerTransfer.touristGroup.operateCurrentNeedPayMoney}}" name="operateCurrentNeedPayMoney">
+								<input  type="checkbox" class="ace" checked="checked" value="{{innerTransfer.touristGroup.operateCurrentNeedPayMoney}}" name="isCurrent">
 								<span class="lbl">
 								</span>
 							</label>
 							{{else}}
 
-							<label style="padding-left:0px;">  
-								<input  type="checkbox" class="ace" checked="" name="operCurrNeestatus" value="{{innerTransfer.touristGroup.operateCurrentNeedPayMoney}}" name="operateCurrentNeedPayMoney">
+							<label style="padding-left:0px;">
+								<input  type="checkbox" class="ace" checked="" value="{{innerTransfer.touristGroup.operateCurrentNeedPayMoney}}" name="isCurrent">
 								<span class="lbl">
 								</span>
 							</label>
 						{{/if}}
-
 
 						<label class="control-label no-padding-right">对方现收</label>
 					</div>
@@ -160,9 +159,10 @@
 							</div>
 
 							<label class="col-sm-1 control-label no-padding-right">同行联系人:</label>
+						
 
 							<div class="col-sm-2">
-								<input value="{{if innerTransfer.touristGroup.partnerAgency != null}}{{innerTransfer.touristGroup.partnerAgency.managerName}}|{{innerTransfer.touristGroup.partnerAgency.phoneNumber}}{{/if}}" readonly="readonly" type="text" class="col-xs-12" />
+								<input value="{{if innerTransfer.touristGroup.partnerAgency != null}}{{innerTransfer.touristGroup.partnerAgency.partnerAgencyContactList[0].contactRealname}}|{{innerTransfer.touristGroup.partnerAgency.partnerAgencyContactList[0].contactMobileNumber}}{{/if}}" readonly="readonly" type="text" class="col-xs-12" />
 							</div>
 
 							<label class="col-sm-1 control-label no-padding-right">获得方式:</label>

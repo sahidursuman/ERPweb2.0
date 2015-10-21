@@ -466,6 +466,7 @@ define(function(require,exports){
 				   var oldPyamoney = $(this).attr("data-entity-realunpayedmoney"),
 				   oldRemark = $(this).attr("data-entity-remark"),
 				   newPayMoney = $tr.eq(i).find("input[name=realUnPayedMoney]").val(),
+				   createTime = $(this).attr("data-entity-createTime"),
 				   newRemark = $tr.eq(i).find("input[name=checkRemark]").val();
 				  
 				   if(flag){
@@ -476,6 +477,7 @@ define(function(require,exports){
 	    		 					   id:$(this).attr("data-entity-id"),
 	    		 					   realUnPayedMoney:newPayMoney,
 	    		 					   checkRemark:newRemark,
+	    		 					   createTime:createTime,
 	    		 					   isComfirmAccount:1
 			     			   }
 	    					   JsonStr.push(checkData)
@@ -485,6 +487,7 @@ define(function(require,exports){
 	    		 					   id:$(this).attr("data-entity-id"),
 	    		 					   realUnPayedMoney:newPayMoney,
 	    		 					   checkRemark:newRemark,
+	    		 					   createTime:createTime,
 	    		 					   isComfirmAccount:1
 			     			   }
 					   JsonStr.push(checkData)}
@@ -494,6 +497,7 @@ define(function(require,exports){
 	    		 					   id:$(this).attr("data-entity-id"),
 	    		 					   realUnPayedMoney:newPayMoney,
 	    		 					   checkRemark:newRemark,
+	    		 					   createTime:createTime,
 	    		 					   isComfirmAccount:0
 			     			   }
 		 				   JsonStr.push(checkData)
