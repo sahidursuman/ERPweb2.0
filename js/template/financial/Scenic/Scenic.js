@@ -519,7 +519,7 @@ define(function(require, exports) {
             					   id:$(this).attr("data-entity-id"),
             					   scenicId:scenicId,
             					   scenicName:scenicName,
-            					   startTime:$tr.eq(i).find("td[name=startTime]").text(),
+            					   consumeStartTime:$tr.eq(i).find("td[name=consumeStartTime]").text(),
             					   realUnPayedMoney:newUnPayedMoney,
             					   remark:newRemark,
             					   isConfirmAccount:1
@@ -531,7 +531,7 @@ define(function(require, exports) {
         					   id:$(this).attr("data-entity-id"),
         					   scenicId:scenicId,
         					   scenicName:scenicName,
-        					   startTime:$tr.eq(i).find("td[name=startTime]").text(),
+        					   consumeStartTime:$tr.eq(i).find("td[name=consumeStartTime]").text(),
         					   realUnPayedMoney:newUnPayedMoney,
         					   remark:newRemark,
         					   isConfirmAccount:1
@@ -544,7 +544,7 @@ define(function(require, exports) {
         					   id:$(this).attr("data-entity-id"),
         					   scenicId:scenicId,
         					   scenicName:scenicName,
-        					   startTime:$tr.eq(i).find("td[name=startTime]").text(),
+        					   consumeStartTime:$tr.eq(i).find("td[name=consumeStartTime]").text(),
         					   realUnPayedMoney:newUnPayedMoney,
         					   remark:newRemark,
         					   isConfirmAccount:0

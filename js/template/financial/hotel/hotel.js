@@ -518,7 +518,7 @@ define(function(require, exports) {
             					   id:$(this).attr("data-entity-id"),
             					   hotelId:hotelId,
             					   hotelName:hotelName,
-            					   startTime:$tr.eq(i).find("td[name=startTime]").text(),
+            					   consumeStartTime:$tr.eq(i).find("td[name=consumeStartTime]").text(),
             					   realUnPayedMoney:$tr.eq(i).find("input[name=FinancialHotelRealUnPayedMoney]").val(),
             					   remark:$tr.eq(i).find("input[name=FinancialHotelRemark]").val(),
             					   isConfirmAccount:1
@@ -530,7 +530,7 @@ define(function(require, exports) {
         					   id:$(this).attr("data-entity-id"),
         					   hotelId:hotelId,
         					   hotelName:hotelName,
-        					   startTime:$tr.eq(i).find("td[name=startTime]").text(),
+        					   consumeStartTime:$tr.eq(i).find("td[name=consumeStartTime]").text(),
         					   realUnPayedMoney:$tr.eq(i).find("input[name=FinancialHotelRealUnPayedMoney]").val(),
         					   remark:$tr.eq(i).find("input[name=FinancialHotelRemark]").val(),
         					   isConfirmAccount:1
@@ -543,7 +543,7 @@ define(function(require, exports) {
         					   id:$(this).attr("data-entity-id"),
         					   hotelId:hotelId,
         					   hotelName:hotelName,
-        					   startTime:$tr.eq(i).find("td[name=startTime]").text(),
+        					   consumeStartTime:$tr.eq(i).find("td[name=consumeStartTime]").text(),
         					   realUnPayedMoney:$tr.eq(i).find("input[name=FinancialHotelRealUnPayedMoney]").val(),
         					   remark:$tr.eq(i).find("input[name=FinancialHotelRemark]").val(),
         					   isConfirmAccount:0
