@@ -537,7 +537,6 @@ define(function(require, exports) {
 										objParent.find("input[name=seatCount]").val(d.seatCount);
 										objParent.find("input[name=mobileNumber]").val(d.mobileNumber);
 										objParent.find("input[name=charteredPrice]").val(d.charteredPrice);
-										objParent.find("input[name=remark]").val(d.remark);
 									}
 								}
 							 });
@@ -553,7 +552,6 @@ define(function(require, exports) {
 								objParent.find("input[name=seatCount]").val("");
 								objParent.find("input[name=mobileNumber]").val("");
 								objParent.find("input[name=charteredPrice]").val("");
-								objParent.find("input[name=remark]").val("");
 							}
 						}
 					}).unbind("click").click(function(){
