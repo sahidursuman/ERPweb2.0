@@ -219,7 +219,7 @@
 				window.forbiddenError = false;
 			});
 			
-			$(document).keyup(function(e){
+			$("input[name=password]").keyup(function(e){
 				if(e.which == 13 && !window.forbiddenError){
 					login();
 				}

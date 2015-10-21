@@ -1,16 +1,15 @@
 <div class="col-xs-12">
 	<div class="form-group form-horizontal">
-		<div class="page-header">
-			<h1>
-				<small class="transferIn-Header-Cost">
-					<i class="ace-icon fa fa-angle-double-right"></i>                    
-					<lable style="min-width:10%; display:inline-block;">人数合计 : <span class="adultCount">0</span>大<span class="childCount">0</span>小</lable>  
-				    <lable style="min-width:10%; display:inline-block;">应收款合计:<span class="transNeedPayMoney">0 </span>元</lable>    
-				    <lable style="min-width:10%; display:inline-block;">已收款合计:<span class="transPayedMoney">0</span>元</lable>          
-				</small>                
-			</h1>
-		</div>
-		
+	      <div class="page-header">
+		        <h1>
+					<small class="transferIn-Header-Cost">
+						<i class="ace-icon fa fa-angle-double-right"></i>                    
+						<lable style="min-width:10%; display:inline-block;">人数合计 : <span class="adultCount">{{total.adultCount}}</span>大<span class="childCount">{{total.childCount}}</span>小</lable>  
+					    <lable style="min-width:10%; display:inline-block;">应收款合计:<span class="transNeedPayMoney">{{total.transNeedPayMoney}}</span>元</lable>    
+					    <lable style="min-width:10%; display:inline-block;">已收款合计:<span class="transPayedMoney">{{total.transPayedMoney}}</span>元</lable>          
+					</small>                
+				</h1>
+		  </div>
 		<div class="search-area">
 			<label class="pull-left control-label no-padding-right">线路产品：</label>
 			<div class="col-sm-2">
@@ -70,16 +69,16 @@
 						</select>
 					</div>
 
-					<label class="control-label no-padding-right pull-left">状态：</label>
+					<!--<label class="control-label no-padding-right pull-left">状态：</label>
 					<div class="col-sm-1">
 						<select name="status" class="col-xs-12">
 							<option value=""  {{if searchParam.status==""}}selected="selected" {{/if}}>全部</option>
 							<option value="0" {{if searchParam.status==0}}selected="selected" {{/if}}>未确认</option>
 							<option value="1" {{if searchParam.status==1}}selected="selected" {{/if}}>已接收</option>
 						</select>
-					</div>
+					</div>-->
 
-					<!--<label class="control-label no-padding-right pull-left">状态：</label>
+					<label class="control-label no-padding-right pull-left">状态：</label>
 					<div class="col-sm-1 btn-group btn-status">
 						<button data-value="{{searchParam.status}}" data-toggle="dropdown" class=" btn-sm dropdown-toggle block-up" aria-expanded="false">
 							<span>
@@ -87,8 +86,6 @@
 									全部
 								{{else if searchParam.status == 1}}
 									已接收
-								{{else if searchParam.status == 2}}
-									已拒收
 								{{else}}
 									未确认
 								{{/if}}
@@ -109,7 +106,7 @@
 								<a data-value="2" href="javascript:void(0)">已拒收</a>
 							</li>
 						</ul>
-					</div>-->
+					</div>
 
 					<button class="btn-sm btn-transferIn-search search-btn">
 						<i class="ace-icon fa fa-search"></i> 搜索
