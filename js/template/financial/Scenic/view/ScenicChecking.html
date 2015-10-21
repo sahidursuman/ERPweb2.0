@@ -67,7 +67,7 @@
 	            <tr data-entity-id="{{rs.id}}" data-entity-isConfirmAccount="{{rs.isConfirmAccount}}" data-entity-realUnPayedMoney="{{rs.realUnPayedMoney}}" data-entity-remark="{{rs.remark}}">
 	                <td>{{index+1}}</td>
 	                <td>{{rs.tripNumber}},{{rs.lineProductName}}</td>
-	                <td name="startTime">{{rs.startTime | dateFormat: 'yyyy-MM-dd' }}</td>
+	                <td name="startTime">{{rs.consumeStartTime | dateFormat: 'yyyy-MM-dd' }}</td>
 	                <td>{{rs.scenicItemName}}</td>
 	                <td>{{rs.scenicItemOrderNumber}}</td>
 	                <td>{{rs.price}}</td>

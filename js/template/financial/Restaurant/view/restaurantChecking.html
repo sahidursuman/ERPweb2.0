@@ -67,7 +67,7 @@
 					    <tr data-entity-id="{{checking.id}}" data-entity-isConfirmAccount="{{checking.isConfirmAccount}}" data-entity-realUnPayedMoney="{{checking.realUnPayedMoney}}" data-entity-remark="{{checking.remark}}">
 				         <td>{{index+1}}</td>
 							<td>{{checking.tripNumber}}{{","}}{{checking.lineProductName}}{{","}}{{checking.guideName}}</td>
-							<td name="startTime">{{checking.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
+							<td name="startTime">{{checking.consumeStartTime | dateFormat: 'yyyy-MM-dd'}}</td>
 							<td>{{checking.restaurantStandardType}}</td>
 							<td>{{checking.price}}</td>
 							<td>{{checking.adultCount}}{{"大"}}{{checking.childCount}}{{"小"}}</td>
