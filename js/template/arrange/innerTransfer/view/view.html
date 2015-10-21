@@ -114,34 +114,31 @@
 	</form>
 </div>
 
+							<label class="col-sm-1 control-label no-padding-right">同行联系人:</label>
 
+							<div class="col-sm-2">
+								<input value="{{if innerTransfer.touristGroup.partnerAgency != null}}{{innerTransfer.touristGroup.partnerAgency.managerName}}|{{innerTransfer.touristGroup.partnerAgency.phoneNumber}}{{/if}}" readonly="readonly" type="text" class="col-xs-12" />
+							</div>
 
-<!-- 收客信息start -->
-<div class="form-group col-sm-12" style="margin-top:20px; ">
-	<div class="search-area">
-		<label class="col-sm-1 control-label no-padding-right">应收：</label>
-		<div class="col-sm-2">
-			<input name="needPayAllMoney" value="{{innerTransfer.touristGroup.needPayAllMoney}}" readonly="readonly" type="text" class="col-xs-12" />
+							<label class="col-sm-1 control-label no-padding-right">获得方式:</label>
+							<div class="col-sm-2">
+								<select name="getType" class="col-sm-12" disabled="disabled">
+									<option{{if innerTransfer.touristGroup.getType==1 }} selected="selected" {{/if}} value="1">旅行社系统</option>
+										<option{{if innerTransfer.touristGroup.getType==2 }} selected="selected" {{/if}} value="2">传真</option>
+											<option{{if innerTransfer.touristGroup.getType==3 }} selected="selected" {{/if}} value="3">短信</option>
+												<option{{if innerTransfer.touristGroup.getType==4 }} selected="selected" {{/if}} value="4">电话</option>
+													<option{{if innerTransfer.touristGroup.getType==5 }} selected="selected" {{/if}} value="5">QQ</option>
+								</select>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
 		</div>
-
-		<label class="col-sm-1 control-label no-padding-right">已收：</label>
-		<div class="col-sm-2">
-			<input name="payedMoney" value="{{innerTransfer.touristGroup.payedMoney}}" readonly="readonly" type="text" class="col-xs-12" />
-		</div>
-
-		<label class="col-sm-1 control-label no-padding-right">现收：</label>
-		<div class="col-sm-2">
-			<input name="currentNeedPayMoney" value="{{innerTransfer.touristGroup.currentNeedPayMoney}}" readonly="readonly" type="text" class="col-xs-12" />
-		</div>
-
-		<label class="col-sm-1 control-label no-padding-right">收客时的备注:</label>
-		<div class="col-sm-2">
-			<input name="remark" value="{{innerTransfer.touristGroup.remark}}" type="text" class="col-xs-12" readonly="readonly" />
-		</div>
-
-	</div>
+	</form>
 </div>
-
+<!-- 收客信息start -->
 <div class="col-xs-12">
 	<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
 		<div class="form-group">
@@ -191,6 +188,29 @@
 			</div>
 		</div>
 	</form>
+</div>
+<div class="form-group col-sm-12" style="margin-top:20px; ">
+	<div class="search-area">
+		<label class="pull-left control-label no-padding-right">应收：</label>
+		<div class="col-sm-2">
+			<input name="needPayAllMoney" value="{{innerTransfer.touristGroup.needPayAllMoney}}" readonly="readonly" type="text" class="col-xs-12" />
+		</div>
+		<label class="pull-left control-label no-padding-right">已收：</label>
+		<div class="col-sm-2">
+			<input name="payedMoney" value="{{innerTransfer.touristGroup.payedMoney}}" readonly="readonly" type="text" class="col-xs-12" />
+		</div>
+
+		<label class="pull-left control-label no-padding-right">现收：</label>
+		<div class="col-sm-2">
+			<input name="currentNeedPayMoney" value="{{innerTransfer.touristGroup.currentNeedPayMoney}}" readonly="readonly" type="text" class="col-xs-12" />
+		</div>
+
+		<label class="col-sm-1 control-label no-padding-right">收客时的备注:</label>
+		<div class="col-sm-2">
+			<input name="remark" value="{{innerTransfer.touristGroup.remark}}" type="text" class="col-xs-12" readonly="readonly" />
+		</div>
+
+	</div>
 </div>
 <!-- 收客信息end -->
 <div class="col-xs-12">
