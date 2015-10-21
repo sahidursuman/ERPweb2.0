@@ -2,59 +2,77 @@
 	<form class="form-horizontal" role="form" style="margin-top:10px">
 		<div class=" ui-sortable-handle">
 				<h5 class="">
-					<span class="badge badge-primary">1</span>
 					 <label class="middle title-size">我社转出主体信息</label>
 				</h5>
-			<div class="widget-body">
-				<div class="widget-main">
-					<div class="form-group">
-					  <label class="col-sm-1 control-label no-padding-right">同行地接：</label>
-					  <div class="col-sm-2">
-						 <input value="{{partnerAgency.travelAgencyName}}" type="text" readonly="readonly" class="date-picker col-xs-12"/>
-					  </div>
-					</div>
-					
-					<div class="form-group">
-						  <label class="col-sm-1 control-label no-padding-right">转客备注:</label>
-						  <div class="col-sm-2">
-							 <input  value="{{touristGroup.transRemark}}" type="text" readonly="readonly" class="date-picker col-xs-12"/>
-						  </div> 
-					</div> 
-					 
-					<div class="form-group">
-						  <label class="col-sm-1 control-label no-padding-right">应付：</label>
-						  <div class="col-sm-2">
-							 <input name="transNeedPayAllMoney"  value="{{touristGroup.transNeedPayAllMoney}}" type="text" readonly="readonly" readonly="readonly" class="date-picker col-xs-12"/>
-						  </div>
-						  
-						  <label class="col-sm-1 control-label no-padding-right">已付：</label>
-						  <div class="col-sm-2">
-							 <input name="transPayedMoney"  value="{{touristGroup.transPayedMoney}}" type="text" readonly="readonly" class="date-picker col-xs-12"/>
-						  </div>
+			<table class="whereQ whereTwo" style="width: 100%;margin-bottom: 28px">
+				<tr>
+					<td class="style-myself">同行地接：</td>
+					<td style="text-align: left;padding: 0px 0px 0px 10px">{{partnerAgency.travelAgencyName}}</td>
+					<td class="style-myself">转客备注：</td>
+					<td style="text-align: left;padding: 0px 0px 0px 10px">{{if touristGroup.contactMember!=null }}{{touristGroup.contactMember.name}}{{/if}}</td>
+					</tr>
+				<tr>
+					<td class="style-myself">应付：</td>
+					<td style="text-align: left;padding: 0px 0px 0px 10px">{{if lineProduct.name!=null}} {{lineProduct.name}}{{/if}}</td>
+					<td class="style-myself">已付：</td>
+					<td style="text-align: left;padding: 0px 0px 0px 10px" readonly="readonly"  class="date-picker" colspan="3">{{touristGroup.startTime  | dateFormat:'yyyy-MM-dd'}}
 
-
-			  			{{if touristGroup.operateCurrentNeedPayMoney==1}}
-							<label>
-								<input  type="checkbox" class="ace buyInsurance-status" checked="checked" value="{{touristGroup.operateCurrentNeedPayMoney}}" name="operateCurrentNeedPayMoney" disabled="disabled">
+						{{if touristGroup.operateCurrentNeedPayMoney==1}}
+						<label>
+							<input  type="checkbox" class="ace buyInsurance-status" checked="checked" value="{{touristGroup.operateCurrentNeedPayMoney}}" name="operateCurrentNeedPayMoney" disabled="disabled">
 								<span class="lbl">
 								</span>
-							</label>
-							{{else}}
+						</label>
+						{{else}}
 
-							<label style="padding-left:0px;">
-								<input  type="checkbox" class="ace buyInsurance-status" checked="" value="{{touristGroup.operateCurrentNeedPayMoney}}" name="operateCurrentNeedPayMoney" disabled="disabled">
+						<label style="padding-left:0px;">
+							<input  type="checkbox" class="ace buyInsurance-status" checked="" value="{{touristGroup.operateCurrentNeedPayMoney}}" name="operateCurrentNeedPayMoney" disabled="disabled">
 								<span class="lbl">
 								</span>
-							</label>
+						</label>
 						{{/if}}
 						<label class="control-label no-padding-right">对方现收</label>
-						
-					</div>
-				</div>
-			</div>
+
+					</td>
+				</tr>
+			</table>
 		</div>
 	</form>
 </div>
+
+<div class="col-xs-12">
+	<form class="form-horizontal hotelMainForm" role="form" style="margin-top:10px" onsubmit="return false">
+		<div class=" ui-sortable-handle">
+			<h5 class="">
+				<label class="middle title-size">线路产品信息</label>
+			</h5>
+			<table class="whereQ whereTwo" style="width: 100%;margin-bottom: 28px">
+				<tr>
+					<td class="style-myself">线路产品：</td>
+					<td style="text-align: left;padding: 0px 0px 0px 10px">{{if lineProduct.name!=null}} {{lineProduct.name}}{{/if}}</td>
+					<td class="style-myself">出游日期：</td>
+					<td style="text-align: left;padding: 0px 0px 0px 10px" colspan="3">{{touristGroup.startTime | dateFormat:'yyyy-MM-dd'}}</td>
+					</tr>
+				<tr>
+					<td class="style-myself">客户来源：</td>
+					<td style="text-align: left;padding: 0px 0px 0px 10px">{{touristGroup.partnerAgency.travelAgencyName}}</td>
+
+					<td class="style-myself">同行联系人：</td>
+					<td style="text-align: left;padding: 0px 0px 0px 10px">{{if touristGroup.partnerAgencyContact != null}}{{touristGroup.partnerAgencyContact.contactRealname}}|{{touristGroup.partnerAgencyContact.contactMobileNumber}}{{/if}}</td>
+					<td class="style-myself">获得方式：</td>
+					<td style="text-align: left;padding: 0px 0px 0px 10px"> <select name="getType" class="col-sm-12" disabled="disabled">
+						<option{{if touristGroup.getType == 1}} selected="selected"{{/if}} value="1">旅行社系统</option>
+						<option{{if touristGroup.getType == 2}} selected="selected"{{/if}} value="2">传真</option>
+						<option{{if touristGroup.getType == 3}} selected="selected"{{/if}} value="3">短信</option>
+						<option{{if touristGroup.getType == 4}} selected="selected"{{/if}} value="4">电话</option>
+						<option{{if touristGroup.getType == 5}} selected="selected"{{/if}} value="5">QQ</option>
+					</select></td>
+					</tr>
+			</table>
+		</div>
+	</form>
+</div>
+
 
 <div  class="col-xs-12">	
 	<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
@@ -112,66 +130,6 @@
 		</div>
 	</form>
 </div>
-
-
-    
-
-<div class="col-xs-12">    
-	<form class="form-horizontal hotelMainForm" role="form" style="margin-top:10px" onsubmit="return false">
-		<div class=" ui-sortable-handle">
-				<h5 class="">
-					<span class="badge badge-primary">3</span>
-					<label class="middle title-size">线路产品信息</label>
-				</h5>
-			<div class="widget-body">
-				<div class="widget-main clearfix">
-					<div class="form-group col-sm-12">
-						 <div class="search-area">  
-							  <label class="col-sm-1 control-label no-padding-right">线路产品: </label>
-							  <div class="col-sm-2">
-								 <input value="{{if lineProduct.name!=null}} {{lineProduct.name}}{{/if}}" type="text" readonly="readonly" class="date-picker col-xs-12"/>
-							  </div>
-							  
-							  <label class="col-sm-1 control-label no-padding-right">出游日期:</label>
-							  <div class="col-sm-2">
-								 <input  value="{{touristGroup.startTime | dateFormat:'yyyy-MM-dd'}}" name="tourGroupTime" type="text" readonly="readonly"  class="date-picker col-xs-12"/>
-							  </div>
-						 </div>  
-					</div>  
-
-
-					<div class="form-group col-sm-12">
-						 <div class="search-area">
-							  <label class="col-sm-1 control-label no-padding-right">客户来源: </label>
-							  <div class="col-sm-2">
-								 <input value="{{touristGroup.partnerAgency.travelAgencyName}}" type="text" readonly="readonly" class="col-xs-12"/>
-							  </div>
-							       
-							  <label class="col-sm-1 control-label no-padding-right">同行联系人:</label>
-							  
-							  <div class="col-sm-2">
-								 <input value="{{if touristGroup.partnerAgencyContact != null}}{{touristGroup.partnerAgencyContact.contactRealname}}|{{touristGroup.partnerAgencyContact.contactMobileNumber}}{{/if}}" readonly="readonly" type="text" class="col-xs-12"/>
-							  </div>
-					
-							  <label class="col-sm-1 control-label no-padding-right">获得方式:</label>
-							  <div class="col-sm-2">
-								 <select name="getType" class="col-sm-12" disabled="disabled">
-									<option{{if touristGroup.getType == 1}} selected="selected"{{/if}} value="1">旅行社系统</option>
-									<option{{if touristGroup.getType == 2}} selected="selected"{{/if}} value="2">传真</option>
-									<option{{if touristGroup.getType == 3}} selected="selected"{{/if}} value="3">短信</option>
-									<option{{if touristGroup.getType == 4}} selected="selected"{{/if}} value="4">电话</option>
-									<option{{if touristGroup.getType == 5}} selected="selected"{{/if}} value="5">QQ</option>
-								</select>
-							  </div>
-						 </div>
-					</div>
-					
-				</div>
-			</div>
-		</div>
-	</form>
-</div>  
-
 
 <!-- 收客信息start --> 
 <div class="form-group col-sm-12" style="margin-top:20px; ">      
