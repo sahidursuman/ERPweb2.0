@@ -128,7 +128,7 @@ define(function(require, exports) {
 								}
 							});
 						}
-						
+
 						//内部转出分页 
 						inner.transferOutfindPager(searchParam);
 						function getVal (name){
@@ -156,7 +156,6 @@ define(function(require, exports) {
 							$(this).parent().parent().parent().find("span").text($(this).text());
 							searchParam = buildSearchParam();
 							requestTotal = true;
-							console.info(searchParam.status+"===1");
 							inner.list(searchParam);
 						});
 						//搜索事件
@@ -164,7 +163,6 @@ define(function(require, exports) {
 							searchParam = buildSearchParam();
 							searchParam.pageNo = 0;
 							requestTotal = true;
-							console.info(searchParam.status+"===2");
 							inner.list(searchParam);
 						});
 						
@@ -177,22 +175,28 @@ define(function(require, exports) {
 						
 						//切换我部转出
 						$("#" +tabId+" .innerTransfer_list .inner-TransferOut").click(function(){
-							searchParam.pageNo = 0;
-							searchParam.type = 1;
-							requestTotal = true;
-							searchParam.first = "1";
-							console.info(searchParam.status+"===3");
-							inner.list(searchParam);
+							if ($(this).data('first') != true) {
+								searchParam.pageNo = 0;
+								searchParam.type = 1;
+								requestTotal = true;
+								searchParam.first = "1";
+								inner.list(searchParam);
+							}
+
+							$(this).data('first', true);
 						});
 
 						//切换他部转入
 						$("#" +tabId+" .innerTransfer_list .inner-TransferIn").click(function(){
-							searchParam.pageNo = 0;
-							searchParam.type = 2;
-							requestTotal = true;
-							searchParam.first = "1";
-							console.info(searchParam.status+"===4");
-							inner.listTransferIn(searchParam);
+							if ($(this).data('first') != true) {
+								searchParam.pageNo = 0;
+								searchParam.type = 2;
+								requestTotal = true;
+								searchParam.first = "1";
+								inner.listTransferIn(searchParam);
+							}
+
+							$(this).data('first', true);
 						});
 					}
 				}
@@ -656,6 +660,7 @@ define(function(require, exports) {
 				searchParam.first = "2";
 			}
 			var  map2 = {
+
 				searchParam : "",
 				resultList : "",
 				total : "",
@@ -664,25 +669,7 @@ define(function(require, exports) {
 				businessGroup : ""
 			};
 
-			if(requestMain){
-				//搜索头数据  
-				$.ajax({  
-					url:url("findListMain","view"),
-					data:"",
-					dataType:'json',
-					success:function(data1){
-						var result = showDialog(data1);
-						//如果正确则就执行
-						if(result){
-							map2.lineProduct = JSON.parse(data1.lineProduct);
-							map2.user = JSON.parse(data1.user);
-							map2.businessGroup = JSON.parse(data1.businessGroup);
-							requestMain = false;
-							searchParam.first = "2";
-						}
-					}
-				});
-			}
+		
 			//统计数据  
 			if(requestTotal){
 				$.ajax({  
@@ -690,16 +677,33 @@ define(function(require, exports) {
 					data:"searchParam="+encodeURIComponent(JSON.stringify(searchParam)),
 					dataType:'json',
 					success:function(data2){
-						total = data2.total;
+						map2.total = data2.total;
 						requestTotal = false;
-						var $transObj=$(".transferIn-Header-Cost");
+						/*var $transObj=$(".transferIn-Header-Cost");
 						$transObj.find(".adultCount").text(total.adultCount);
 						$transObj.find(".childCount").text(total.childCount);
 						$transObj.find(".transNeedPayMoney").text(total.transNeedPayMoney);
-						$transObj.find(".transPayedMoney").text(total.transPayedMoney);
+						$transObj.find(".transPayedMoney").text(total.transPayedMoney);*/
 					}
 				});
 			}
+
+			if(requestMain){
+				//搜索头数据  
+				$.ajax({  
+					url:url("findListMain","view"),
+					data:"",
+					dataType:'json',
+					success:function(data1){
+						map2.lineProduct = JSON.parse(data1.lineProduct);
+						map2.user = JSON.parse(data1.user);
+						map2.businessGroup = JSON.parse(data1.businessGroup);
+						//requestMain = false;
+						searchParam.first = "2";
+					}
+				});
+			};
+
 
 			//分页结果集
 			$.ajax({  
@@ -717,13 +721,13 @@ define(function(require, exports) {
 					inner.initTimePicker();
 
 					//搜索栏状态button下拉事件
-					/*$("#" +tabId+" .innerTransfer_list .btn-status .dropdown-menu a").click(function(){
+					$("#" +tabId+" .innerTransfer_list .btn-status .dropdown-menu a").click(function(){
 						$(this).parent().parent().parent().find("button").attr("data-value",$(this).attr("data-value"));
 						$(this).parent().parent().parent().find("span").text($(this).text());
 						searchParam = buildSearchParam();
 						requestTotal = true;
 						inner.listTransferIn(searchParam);  
-					});*/
+					});
 
 
 					//过滤搜索时间是否执行初始化操作
