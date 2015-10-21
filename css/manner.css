@@ -586,3 +586,8 @@ input,select{
 .operationA{
     margin-left:-240px;margin-top:5px;
 }
+/*查看发团计划*/
+.CheckPlan{
+    text-align: right !important;
+    padding:7px 6px 7px 0px !important;
+}
