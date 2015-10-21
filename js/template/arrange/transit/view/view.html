@@ -14,13 +14,13 @@
 				<td style="text-align: left;padding: 0px 0px 0px 10px" colspan="3">大人{{touristGroup.adultCount}}小孩{{touristGroup.childCount}}</td>
 			</tr>
 		</table>
-		<div class="form-group">
+		<div class="form-group" style="margin-left: 23px;margin-top: 10px">
 			{{if arriveTime != null}}<label class="pull-left control-label no-padding-right" style="text-align: left;">接团日期：{{arriveTime | dateFormat: 'yyyy-MM-dd'}}</label>{{/if}}
 			{{if arrivePosition != null && arrivePosition != ""}}<label class="col-sm-2 control-label no-padding-right" style="text-align: left;margin-left: 10px">接团地点：{{arrivePosition}}</label>{{/if}}
 			{{if arriveShift != null}}<label class="col-sm-2 control-label no-padding-right" style="text-align: left;">接团班次：{{if arriveShift != null}}{{arriveShift}}{{/if}}</label>{{/if}}
 			{{if arriveShiftTime != null}}<label class="col-sm-3 control-label no-padding-right" style="text-align: left;">接团班次时间：{{if arriveShiftTime != null}}{{arriveShiftTime}}{{/if}}</label>{{/if}}
 		</div>
-		<div class="form-group">
+		<div class="form-group" style="margin-left: 23px">
 			{{if leaveTime != null}}<label class="pull-left control-label no-padding-right" style="text-align: left;">送团日期：{{leaveTime | dateFormat: 'yyyy-MM-dd'}}</label>{{/if}}
 			{{if leavePosition != null && leavePosition != ""}}<label class="col-sm-2 control-label no-padding-right" style="text-align: left;margin-left: 10px">送团地点：{{leavePosition}}</label>{{/if}}
 			{{if leaveShift != null}}<label class="col-sm-2 control-label no-padding-right" style="text-align: left;">送团班次：{{if leaveShift != null}}{{leaveShift}}{{/if}}</label>{{/if}}

@@ -1,4 +1,4 @@
-<div class="row col-xs-12 innerTransfer_list">
+<div class="row col-xs-12 innerTransfer_list globalAdd">
 	<div class="col-xs-12">
 		<div class="tabbable">
 			<ul class="nav nav-tabs" id="myTab">
@@ -25,7 +25,7 @@
 									<lable style="min-width:10%; display:inline-block;">人数合计 : <span class="adultCount">0</span>大<span class="childCount">0</span>小</lable>  
 								    <lable style="min-width:10%; display:inline-block;">应收款合计:<span class="transNeedPayMoney">0 </span>元</lable>    
 								    <lable style="min-width:10%; display:inline-block;">已收款合计:<span class="transPayedMoney">0</span>元</lable>          
-								</small>                
+								</small>
 							</h1>
 						</div>
 					</div>
@@ -165,10 +165,11 @@
 										<td>{{rs.user.mobileNumber}}</td>
 										{{else}}
 										{{/if}}
-										
-										<td>{{if rs.status == 0}}<span style="color:#D2691E;">未确认</span>{{else if rs.status == 1}}<span style="color: green;">已接收</span>{{else if rs.status == 2}}<span style="color: red;">已拒收</span>{{else}}<span style="">未使用</span>{{/if}}</td>
+										<td>{{rs.transNeedPayMoney}}</td>
+										<td>{{rs.transPayedMoney}}</td>
+										<td width="60">{{if rs.status == 0}}<span style="color:#D2691E;">未确认</span>{{else if rs.status == 1}}<span style="color: green;">已接收</span>{{else if rs.status == 2}}<span style="color: red;">已拒收</span>{{else}}<span style="">未使用</span>{{/if}}</td>
 										<td>
-											<div class="hidden-sm hidden-xs btn-group">
+											<div class="hidden-sm hidden-xs btn-group" style="width:120px;">
 												<a data-entity-id="{{rs.id}}" class="cursor  btn-TransferOut-view">
 													查看
 												</a>

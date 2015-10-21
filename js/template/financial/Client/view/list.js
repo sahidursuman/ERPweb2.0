@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":237,"md5":"910e99d1db397bb971fecde5e5c399e6"}*/
+/*TMODJS:{"debug":true,"version":239,"md5":"910e99d1db397bb971fecde5e5c399e6"}*/
 define(function(require) {
     return require("../../../template")("financial/Client/view/list", function($data, $filename) {
         try {

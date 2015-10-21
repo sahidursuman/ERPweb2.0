@@ -63,7 +63,16 @@ define(function(require, exports) {
 					var result = showDialog(data);
 					//如果正确则就执行
 					if(result){
-						
+						touristGroup.searchData = {
+						    partnerAgencyId : partnerAgencyIdS,
+							lineProductId : lineProductIdS,
+							startTime : startTimeS,
+							userId : userIdS,
+							createTimeStart : createTimeStartS,
+							createTimeEnd : createTimeEndS,
+							customerType: customerTypeS,
+							status : statusS
+						};
 						var html = listMainTemplate(data);
 						addTab(menuKey,"游客管理",html);
 						//搜索栏状态button下拉事件
@@ -79,7 +88,7 @@ define(function(require, exports) {
 								createTimeStart : $(".touristGroupSearchForm input[name=createTimeStart]").val(),
 								createTimeEnd : $(".touristGroupSearchForm input[name=createTimeEnd]").val(),
 								customerType : $(".touristGroupSearchForm select[name=customerType]").find("option:selected").val(),
-								status : $(".touristGroupSearchForm button").attr("data-value")
+								status : $(".touristGroupSearchForm .btn-status button").attr("data-value")
 							}
 							touristGroup.listTouristGroup(0,touristGroup.searchData.partnerAgencyId,touristGroup.searchData.lineProductId,touristGroup.searchData.startTime,touristGroup.searchData.userId,touristGroup.searchData.createTimeStart,touristGroup.searchData.createTimeEnd,touristGroup.searchData.customerType,touristGroup.searchData.status);
 							//下拉数据初始化
@@ -95,7 +104,7 @@ define(function(require, exports) {
 								createTimeStart : $(".touristGroupSearchForm input[name=createTimeStart]").val(),
 								createTimeEnd : $(".touristGroupSearchForm input[name=createTimeEnd]").val(),
 								customerType : $(".touristGroupSearchForm select[name=customerType]").find("option:selected").val(),
-								status : $(".touristGroupSearchForm select[name=status]").find("option:selected").val()
+								status :  $(".touristGroupSearchForm .btn-status button").attr("data-value")
 							}
 							touristGroup.listTouristGroup(0,touristGroup.searchData.partnerAgencyId,touristGroup.searchData.lineProductId,touristGroup.searchData.startTime,touristGroup.searchData.userId,touristGroup.searchData.createTimeStart,touristGroup.searchData.createTimeEnd,touristGroup.searchData.customerType,touristGroup.searchData.status);
 							//下拉数据初始化

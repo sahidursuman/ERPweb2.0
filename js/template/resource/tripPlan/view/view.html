@@ -1,75 +1,47 @@
 <div class="container-fluid" style="overflow: hidden;">
-	<div class="row no-margin">
-	    <div class="col-sm-12">
-	        <div class="row show-grid font-size-12 ">
-	            <div class="col-sm-2 ">
-	                <span class="pull-left control-label align-right no-padding-right">线路：</span>
-	                <span class=" control-label">{{tripPlan.lineProduct.name}}</span>
-	            </div>
-	            <div class="col-sm-2 no-border-left">
-	                <span class="pull-left control-label align-right no-border-left">类别：</span>
-	                <span class="col-sm-8 control-label">{{tripPlan.lineProduct.type}}</span>
-	            </div>
-	            <div class="col-sm-2  no-border-left">
-	                <span class="pull-left control-label align-right no-padding">应用范围：</span>
-	                <span class="col-sm-8 control-label">{{if tripPlan.lineProduct.customerType == 0}}散客{{else}}团体{{/if}}</span>
-	            </div>
-	            <div class="col-sm-2  no-border-left">
-	                <span class="pull-left control-label align-right no-padding">天数：</span>
-	                <span class="col-sm-8 control-label">{{tripPlan.lineProduct.days}}</span>
-	            </div>
-	            <div class="col-sm-2 no-border-top">
-	                <span class="pull-left control-label align-right no-padding">团号：</span>
-	                <span class="col-sm-8 control-label">{{tripPlan.tripNumber}}</span>
-	            </div>
-	            <div class="col-sm-2   no-border-top no-border-left">
-	                <span class="pull-left control-label align-right no-padding">出团日期：</span>
-	                <span class="col-sm-8 control-label" name="startTime_Choose">{{tripPlan.startTime | dateFormat:'yyyy-MM-dd'}}</span>
-	            </div>
-				<div  style="margin-top: 25px">
-	            <div class="col-sm-2 no-border-top no-border-left">
-	                <span class="pull-left control-label align-right no-padding">完团日期：</span>
-	                <span class="col-sm-8 control-label">{{tripPlan.endTime | dateFormat:'yyyy-MM-dd'}}</span>
-	            </div>
-	            <div class="col-sm-2  no-border-top no-border-left">
-	                <span class="pull-left control-label align-right no-padding">团队人数：</span>
-	                <span class="col-sm-8 control-label">{{tripPlan.touristAdultCount}}大{{tripPlan.touristChildCount}}小</span>
-	            </div>
-	            <div class="col-sm-2  no-border-top">
-	                <span class="pull-left control-label align-right no-padding">导游：</span>
-	                <span class="col-sm-8 control-label">{{tripPlan.guide.realname}}</span>
-	            </div>
-	            <div class="col-sm-2   no-border-top no-border-left">
-	                <span class="pull-left control-label align-right no-padding">全陪：</span>
-	                <span class="col-sm-8 control-label">{{tripPlan.accompanyGuideName}}</span>
-	            </div>
-				</div>
-	        </div>
-	    </div>
-	</div>
+	<table class="whereQ whereTwo" style="width: 100%;margin-bottom: 28px">
+		<tr>
+			<td class="style-myself">线路：</td>
+			<td style="text-align: left;padding: 0px 0px 0px 10px">{{tripPlan.lineProduct.name}}</td>
+			<td class="style-myself">类别：</td>
+			<td style="text-align: left;padding: 0px 0px 0px 10px">{{tripPlan.lineProduct.type}}</td>
+			<td class="style-myself">应用范围：</td>
+			<td style="text-align: left;padding: 0px 0px 0px 10px">{{if tripPlan.lineProduct.customerType == 0}}散客{{else}}团体{{/if}}</td>
+			<td class="style-myself">天数：</td>
+			<td style="text-align: left;padding: 0px 0px 0px 10px">{{tripPlan.lineProduct.days}}</td>
+			<td class="style-myself">团号：</td>
+			<td style="text-align: left;padding: 0px 0px 0px 10px">{{tripPlan.tripNumber}}</td>
+		</tr>
+		<tr>
+			<td class="style-myself">出团日期：</td>
+			<td style="text-align: left;padding: 0px 0px 0px 10px">{{tripPlan.startTime | dateFormat:'yyyy-MM-dd'}}</td>
+			<td class="style-myself">完团日期：</td>
+			<td style="text-align: left;padding: 0px 0px 0px 10px">{{tripPlan.endTime | dateFormat:'yyyy-MM-dd'}}</td>
+			<td class="style-myself">团队人数：</td>
+			<td style="text-align: left;padding: 0px 0px 0px 10px">{{tripPlan.touristAdultCount}}大{{tripPlan.touristChildCount}}小</td>
+			<td class="style-myself">导游：</td>
+			<td style="text-align: left;padding: 0px 0px 0px 10px" >{{tripPlan.guide.realname}}</td>
+			<td class="style-myself">全陪：</td>
+			<td style="text-align: left;padding: 0px 0px 0px 10px">{{tripPlan.accompanyGuideName}}</td>
+		</tr>
+
+		<tr>
+			<td  class="style-myself">计划导付金额</td>
+			<td style="text-align: left;padding: 0px 0px 0px 10px" colspan="3">{{tripPlan.guideAllPayMoney}}</td>
+
+			<td class="style-myself">导游现收团款</td>
+			<td style="text-align: left;padding: 0px 0px 0px 10px" colspan="3">{{tripPlan.guideAllNowMoney}}</td>
+
+			<td class="style-myself">导游预支金额</td>
+			<td style="text-align: left;padding: 0px 0px 0px 10px" colspan="3">{{tripPlan.guideAllPreMoney}}</td>
+		</tr>
+	</table>
 </div>
 <div class="container-fluid" style="margin-top:10px ;">
-	<div class="row form-horizontal  no-margin " style=" border-bottom: 1px solid #ccc">
-		<div class="col-sm-2 ">
-			<label class="pull-left control-label no-padding"><strong>计划导付金额：</strong></label>
-			<label class="col-sm-6 control-label align-left no-padding-top"><strong>{{tripPlan.guideAllPayMoney}}</strong></label>
-		</div>
-		<div class="col-sm-2  no-border-left">
-			<label class="pull-left control-label no-padding"><strong>导游现收团款：</strong></label>
-			<label class="col-sm-6 control-label align-left no-padding-top"><strong>{{tripPlan.guideAllNowMoney}}</strong></label>
-		</div>
-		<div class="col-sm-2 no-border-left">
-			<label class="pull-left control-label no-padding align-right"><strong>导游预支金额：</strong></label>
-			<label class="col-sm-6 control-label align-left no-padding-top"><strong>{{tripPlan.guideAllPreMoney}}</strong></label>
-		</div>
-		<div class="col-sm-2  no-border-left">
-			<label class="pull-left control-label no-padding align-right"><strong>&nbsp;</strong></label>
-		</div>
-	</div>
+
 	<div class="row no-margin">
 		<div style="margin: 30px auto 10px auto">
 				<span  class="title-size">
-					<i class="ace-icon fa fa-bus"></i>
 					<strong>旅游车安排</strong>
 				</span>
 		</div>
@@ -106,7 +78,6 @@
 		<!-- 餐安排 -->
 		<div class="tipPlan-gap">
 				<span class="title-size">
-					<i class="ace-icon fa fa-cutlery"></i>
 					<strong>餐安排</strong>
 				</span>
 		</div>
@@ -145,7 +116,6 @@
 		<!-- 房安排 -->
 		<div class="tipPlan-gap ">
 				<span class="title-size">
-					<i class="ace-icon fa fa-hotel"></i>
 					<strong>房安排</strong>
 				</span>
 		</div>
@@ -184,7 +154,6 @@
 		<!-- 景点安排 -->
 		<div class="tipPlan-gap ">
 				<span class="title-size">
-					<i class="ace-icon fa fa-tree"></i>
 					<strong>景点安排</strong>
 				</span>
 		</div>
@@ -227,7 +196,6 @@
 		<!-- 购物安排 -->
 		<div class="tipPlan-gap ">
 				<span class="title-size">
-					<i class="ace-icon fa fa-shopping-cart"></i>
 					<strong>购物安排</strong>
 				</span>
 		</div>
@@ -258,8 +226,7 @@
 		<!-- 自费安排 -->
 		<div class="tipPlan-gap ">
 				<span class="title-size">
-					<i class="ace-icon fa fa-credit-card"></i>
-					<strong>自费安排</strong>
+ 					<strong>自费安排</strong>
 				</span>
 		</div>
 		<div class="col-sm-12 no-padding">
@@ -299,7 +266,6 @@
 		<!-- 票务安排 -->
 		<div class="tipPlan-gap ">
 				<span class="title-size">
-					<i class="ace-icon fa fa-car"></i>
 					<strong>票务安排</strong>
 				</span>
 		</div>
@@ -354,7 +320,6 @@
 		<!-- 其他安排 -->
 		<div class=" tipPlan-gap">
 				<span class="title-size">
-					<i class="ace-icon fa fa-smile-o"></i>
 					<strong>其他安排</strong>
 				</span>
 		</div>
