@@ -499,6 +499,13 @@ define(function(require, exports) {
 
 		innitAddFee:function(validator){  
 			var $obj=$("#tab-arrange_inner_Transfer-edit-content");
+			$obj.find("input[name=transChildPrice]").keyup(function(){
+				inner.PayMoneyF();
+			});
+			$obj.find("input[name=transAdultPrice]").keyup(function(){
+				console.log("keyup");
+				inner.PayMoneyF();
+			});
 			//给新增费用绑定事件
 			$obj.find(".btn-transfer-addCost").click(function(){
 				var html="<tr class=\"transferFee1SelectId\">"+
@@ -518,7 +525,6 @@ define(function(require, exports) {
 					var id = tr.attr("data-entity-id");
 					inner.delTransferData(id,tr);
 				});
-
 				//其他费用数量
 				$obj.find("input[name=count]").keyup(function(){
 					inner.PayMoneyF();
