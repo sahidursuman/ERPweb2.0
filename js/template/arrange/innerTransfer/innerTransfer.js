@@ -5,6 +5,7 @@ define(function(require, exports) {
 	listTransferInTemplate=require("./view/listTransferIn"),
 	viewTemplate=require("./view/view"),
 	editTemplate=require("./view/edit"),
+	innerTransferInTemplate = require("./view/innerTransferInView"),
 	tabId = "tab-" + menuKey + "-content";
 	var requestMain = true;//控制搜索头的访问次数
 	var requestTotal = true;//控制统计数据的访问次数
@@ -47,7 +48,7 @@ define(function(require, exports) {
 		discribe : "",
 		price : ""
 	};
-
+    
 	function url(method,operation){
 		return ""+APP_ROOT+"back/innerTransfer.do?&method="+method+"&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation="+operation;
 	};
@@ -60,6 +61,7 @@ define(function(require, exports) {
 			}
 			return false;
 		},
+		openFlag:0,
 		list:function(searchParam){
 			globalLoadingLayer = layer.open({
 				zIndex:1028,
@@ -267,6 +269,7 @@ define(function(require, exports) {
 				//查看
 				$obj.find(".btn-TransferOut-view").click(function(){
 					var id = $(this).attr("data-entity-id");
+					inner.openFlag = 2;
 					inner.viewTransferOut(id);
 				});
 				//编辑
@@ -295,7 +298,13 @@ define(function(require, exports) {
 					layer.close(globalLoadingLayer);
 					data.innerTransfer = JSON.parse(data.innerTransfer);
 					var html = viewTemplate(data);
-					addTab(menuKey+"-view","内转信息",html);
+					var innerTransferInHtml = innerTransferInTemplate(data);
+					if(inner.openFlag == 1){
+						addTab(menuKey+"-innerTransferInView","他部转入信息",innerTransferInHtml);
+					}if(inner.openFlag == 2){
+						addTab(menuKey+"-view","我部转出信息",html);
+					}
+					
 				}
 			});
 		},
@@ -759,6 +768,7 @@ define(function(require, exports) {
 				//查看
 				$obj.find(".btn-transfer-view").click(function(){
 					var id = $(this).attr("data-entity-id");
+					inner.openFlag = 1;
 					inner.viewTransferOut(id);
 				});
 
