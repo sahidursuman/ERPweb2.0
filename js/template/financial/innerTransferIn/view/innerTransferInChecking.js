@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":147,"md5":"0d018d9d6237b2cbd5170cfc5adf176c"}*/
+/*TMODJS:{"debug":true,"version":149,"md5":"0d018d9d6237b2cbd5170cfc5adf176c"}*/
 define(function(require) {
     return require("../../../template")("financial/innerTransferIn/view/innerTransferInChecking", function($data, $filename) {
         try {
