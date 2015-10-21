@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":189,"md5":"cae0c5485008bebca377cb2ac792d7f8"}*/
+/*TMODJS:{"debug":true,"version":190,"md5":"cae0c5485008bebca377cb2ac792d7f8"}*/
 define(function(require) {
     return require("../../../template")("resource/tripPlan/view/list", function($data, $filename) {
         try {
