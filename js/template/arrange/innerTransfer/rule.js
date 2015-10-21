@@ -29,9 +29,6 @@ define(function(require, exports) {
 	    	    	rules: [{
 	    	    	        	type: 'float', 
 	    	    	        	errMsg: '已付数据输入不合法'
-	    	    	        },{
-	    	    	        	type: 'null', 
-	    	    	        	errMsg: '已付数据输入不能为空'  
 	    	    	        }]
 	    	    },{//转客大人单价
 	    	    	$ele: $container.find('input[name=transAdultPrice]'),

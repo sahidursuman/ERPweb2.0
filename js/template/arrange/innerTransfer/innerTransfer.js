@@ -115,14 +115,6 @@ define(function(require, exports) {
 						inner.initTimePicker();
 						//内部转出分页 
 						inner.transferOutfindPager(searchParam);
-
-						//过滤搜索时间是否执行初始化操作
-						if (searchParam.startTime!=null&&searchParam.endTime!=null) {
-						} else{	
-							//时间默认一周初始化 
-						    inner.initSouTimer();
-						};	
-
 						function getVal (name){
 							var val = $("#" +tabId+" .innerTransfer_list ").find("[name="+name+"]").val();
 							return val;
@@ -182,55 +174,6 @@ define(function(require, exports) {
 				}
 			})
 		},
-
-
-		//我部转出 
-	   initSouTimer:function(){
-		   	var $obj1=$("#transferOut");
-		   	$obj1.find("input[name=startTime]").val(inner.dateCalculBefore(inner.getCurrentDate(),3));
-		   	$obj1.find("input[name=endTime]").val(inner.dateCalculAfter(inner.getCurrentDate(),3));
-	   },
-
-	   //他不转入
-	   initSinTimer:function(){
-     	var $obj2=$("#transferIn");
-	   	$obj2.find("input[name=startTime]").val(inner.dateCalculBefore(inner.getCurrentDate(),3));
-	   	$obj2.find("input[name=endTime]").val(inner.dateCalculAfter(inner.getCurrentDate(),3));
-	   },
-
-
-	   //获取当前时间
-	   getCurrentDate:function() {
-		    var date = new Date(),
-		    seperator1 = "-",
-		    seperator2 = ":",
-		    month = date.getMonth() + 1,
-		    strDate = date.getDate();
-		    if (month >= 1 && month <= 9) {
-		        month = "0" + month;
-		    }
-		    if (strDate >= 0 && strDate <= 9) {
-		        strDate = "0" + strDate;
-		    }
-		    var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
-		            + " " ;
-		    return currentdate;
-       },
-		//当前的前三天
-		dateCalculBefore:function(dt, days){
-			dt = dt.split('-').join('/');//js不认2000-1-31,只认2000/1/31 
-			var t1 = new Date(new Date(dt).valueOf() - days*24*60*60*1000);// 日期加上指定的天数 
-			return t1.getFullYear() + "-" + (t1.getMonth()+1) + "-" + t1.getDate();
-		}, 
-
-		//当前的后三天
-		dateCalculAfter:function(dt, days){
-			dt = dt.split('-').join('/');//js不认2000-1-31,只认2000/1/31 
-			var t1 = new Date(new Date(dt).valueOf() + days*24*60*60*1000);// 日期加上指定的天数 
-			return t1.getFullYear() + "-" + (t1.getMonth()+1) + "-" + t1.getDate();
-		}, 
-
-
 	   //时间初始化控件 
 	   initTimePicker:function(){
 			$(".innerTransfer_list input[name=startTime]").datepicker({
@@ -279,6 +222,7 @@ define(function(require, exports) {
 				$obj.find(".pageMode a.first").click(function(){
 					searchParam = buildSearchParam();
 					searchParam.pageNo = 0;
+					if(searchParam.pageNo == 0 || searchParam.totalPage == 0)return;
 					inner.list(searchParam);
 				});
 				//分页--上一页事件
@@ -289,6 +233,7 @@ define(function(require, exports) {
 					if(pageNo == 0){
 						previous = 0;
 					}
+					if(pageNo == 0 || searchParam.totalPage == 0)return;
 					searchParam.pageNo = previous;
 					inner.list(searchParam);
 				});   
@@ -302,6 +247,7 @@ define(function(require, exports) {
 						next = pageNo ;
 					}
 					searchParam.pageNo = next;
+					if(pageNo == 0 || totalPage == 0)return;
 					inner.list(searchParam);
 				});
 				//分页--尾页事件
@@ -315,6 +261,7 @@ define(function(require, exports) {
 						pageNo = totalPage - 1; 
 					}
 					searchParam.pageNo = pageNo;
+					if(searchParam.pageNo == 0 || searchParam.totalPage == 0)return;
 					inner.list(searchParam);
 				});
 				//查看
@@ -431,8 +378,17 @@ define(function(require, exports) {
 
 
 		saveEditTranIn:function(isClose){
-		
 			var $obj=$("#tab-arrange_inner_Transfer-edit-content");
+			//对方是否现收
+			if ($obj.find('input[name=operCurrNeestatus]').is(":checked")==true) {
+				console.info(1);
+              var operCurrNeestatus=1;
+			} else{
+				console.info(2);
+			  var operCurrNeestatus=0;
+			};
+
+
 
 			function getValParam (name){
 				var val = $obj.find("[name="+name+"]").val();
@@ -475,7 +431,7 @@ define(function(require, exports) {
 			var innerTransfer=JSON.stringify(innerTransfer);
 			$.ajax({
 				url:""+APP_ROOT+"back/innerTransfer.do?method=update&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
-				data:"innerTransfer="+encodeURIComponent(innerTransfer),
+				data:"innerTransfer="+encodeURIComponent(innerTransfer)+"&isCurrent="+operCurrNeestatus,
 				datatype:"json",
 				beforeSend:function(){
 					globalLoadingLayer = layer.open({
@@ -702,11 +658,11 @@ define(function(require, exports) {
 					inner.initTimePicker();
 
 					//过滤搜索时间是否执行初始化操作
-					if (searchParam.startTime!=null&&searchParam.endTime!=null) {
+					/*if (searchParam.startTime!=null&&searchParam.endTime!=null) {
 					} else{
 						//时间默认一周初始化 
 					    inner.initSinTimer();
-					};
+					};*/
 				
 
 
@@ -748,6 +704,7 @@ define(function(require, exports) {
 			   //分页--首页按钮事件
 				$obj.find(".pageMode a.first").click(function(){
 					searchParam.pageNo = 0;
+					if(searchParam.pageNo == 0 || totalPage == 0)return;
 					inner.listTransferIn(searchParam);
 				});
 				//分页--上一页事件
@@ -757,6 +714,7 @@ define(function(require, exports) {
 					if(pageNo == 0){
 						previous = 0;
 					}
+					if(pageNo == 0 || totalPage == 0)return;
 					searchParam.pageNo = previous;
 					inner.listTransferIn(searchParam);
 				});   
@@ -768,6 +726,7 @@ define(function(require, exports) {
 					if(pageNo == totalPage-1){
 						next = pageNo ;
 					}
+					if(pageNo == 0 || totalPage == 0)return;
 					searchParam.pageNo = next;
 					inner.listTransferIn(searchParam);
 				});
@@ -780,6 +739,7 @@ define(function(require, exports) {
 					}else{
 						pageNo = totalPage - 1; 
 					}
+					if(pageNo == 0 || totalPage == 0)return;
 					searchParam.pageNo = pageNo;
 					inner.listTransferIn(searchParam);
 				});
@@ -801,47 +761,6 @@ define(function(require, exports) {
 					var id = $(this).attr("data-entity-id");
 					inner.deleteTransferIn(id);
 				});
-			
-
-				//分页--首页按钮事件
-				$obj.find(".pageMode a.first").click(function(){
-					searchParam.pageNo = 0;
-					inner.listTransferIn(searchParam);
-				});
-				//分页--上一页事件
-				$obj.find(".pageMode a.previous").click(function(){
-					var pageNo = parseInt(searchParam.pageNo);
-					var previous = pageNo - 1;
-					if(pageNo == 0){
-						previous = 0;
-					}
-					searchParam.pageNo = previous;
-					inner.listTransferIn(searchParam);
-				});   
-				//分页--下一页事件
-				$obj.find(".pageMode a.next").click(function(){
-					var pageNo = parseInt(searchParam.pageNo);
-					var totalPage = parseInt(searchParam.totalPage);
-					var next =  pageNo + 1;
-					if(pageNo == totalPage-1){
-						next = pageNo ;
-					}
-					searchParam.pageNo = next;
-					inner.listTransferIn(searchParam);
-				});
-				//分页--尾页事件
-				$obj.find(".pageMode a.last").click(function(){
-					var totalPage = parseInt(searchParam.totalPage);
-					var pageNo = 0;
-					if(totalPage==0){
-						pageNo = 0;
-					}else{
-						pageNo = totalPage - 1; 
-					}
-					searchParam.pageNo = pageNo;
-					inner.listTransferIn(searchParam);
-				});
-				
 			
 
 		},

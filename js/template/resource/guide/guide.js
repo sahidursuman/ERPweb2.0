@@ -147,7 +147,7 @@ define(function(require, exports) {
 								if(result){
 									layer.close(addGuideLayer);
 									showMessageDialog($( "#confirm-dialog-message" ),data.message);
-									guide.listGuide(0,"","");
+									guide.listGuide(0,"",1);
 								}
 							}
 						});

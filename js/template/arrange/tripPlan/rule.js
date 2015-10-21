@@ -73,6 +73,14 @@ var rule = {
 	    	    	        	errMsg: '全陪电话格式不正确'
 	    	    	    }
 		    	        ]
+		         },{//定时发送
+		    	       	$ele: $checkdCreateTripPlanObj.find('input[name="executeTime"]'),  
+		    	    	rules: [
+	  	    	        {
+	    	    	        	type: 'null',
+	    	    	        	errMsg: '游客短信的定时发送不能为空'
+	    	    	    }
+		    	        ]
 		         }
 	    	  ]);
 		return validatorCreateTripPlan;

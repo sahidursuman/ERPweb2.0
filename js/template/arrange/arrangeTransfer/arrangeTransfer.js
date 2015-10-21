@@ -149,7 +149,8 @@ define(function(require, exports) {
 
 					});
 					transfer.getLineProductList($("#" +tabId+" .chooseLineProductId"),"");
-					transfer.getPartnerAgencyList($("#" +tabId+" .choosePartnerAgency"),"");
+					transfer.getPartnerAgencyList($("#" +tabId+" #transferOut .choosePartnerAgency"),"");
+					transfer.getPartnerAgencyList($("#" +tabId+" #transferIn .choosePartnerAgency"),"");
 					//我社转出选项卡绑定事件
 					$("#"+tabId+" #myTab li a.transferOut").click(function(){
 						var type=$(this).attr("data-value");//2
@@ -225,6 +226,29 @@ define(function(require, exports) {
 				"pageNo":page,
 			};
 			pager = JSON.stringify(pager);
+
+
+			//查询统计数据
+			$.ajax({  
+				url:""+APP_ROOT+"back/transfer.do?method=findTotal&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
+				data:"pager="+encodeURIComponent(pager)+"&type="+type+"&fromTravelAgencyId="+partnerAgencyId+"&creator="+creator+"&status="+status+"&endTime="+endTime+"&startTime="+startTime+"&lineProductId="+lineProductId,
+				dataType:'json',
+				beforeSend:function(){
+					globalLoadingLayer = layer.open({
+						zIndex:1028,
+						type:3
+					});
+				},
+				success:function(data){
+					var $transferInObj=$("#transferIn-Header-Cost");
+					$transferInObj.find(".totalAdultCount").text(data.totalAdultCount);
+					$transferInObj.find(".totalChildCount").text(data.totalChildCount);
+					$transferInObj.find(".totalNeedPay").text(data.totalNeedPay);  
+					$transferInObj.find(".totalPayed").text(data.totalPayed);
+			    }
+		   });
+
+
 			$.ajax({
 				url:""+APP_ROOT+"back/transfer.do?method=findPager&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 				data:"pager="+encodeURIComponent(pager)+"&type="+type+"&fromTravelAgencyId="+partnerAgencyId+"&creator="+creator+"&status="+status+"&endTime="+endTime+"&startTime="+startTime+"&lineProductId="+lineProductId,
@@ -908,74 +932,76 @@ define(function(require, exports) {
 				language: 'zh-CN'
 			})
 		},
+		
 		getPartnerAgencyList:function(obj,partnerAId){
-			$(obj).autocomplete({
-				minLength: 0,
-				change: function(event, ui) {
-					if (!ui.item)  {
-						$(this).val('').nextAll('input[name="transferPartnerAgencyId"]').val('');
-					}
-				},
-				select: function(event, ui) {
-					$(this).blur().nextAll('input[name="transferPartnerAgencyId"]').val(ui.item.id);
-				}
-			})
-			.click(function(event) {
-				var $objC = $(this);
-				$.ajax({
-					url:""+APP_ROOT+"back/partnerAgency.do?method=findPartnerAnencyList&token="+$.cookie("token")+"&menuKey=resource_partnerAgency&operation=view",
-                    dataType: "json",
-                    data:"travelAgencyName="+$objC.val(),
-                    success: function(data) {
-                    	layer.close(globalLoadingLayer);
-						var result = showDialog(data);
-						if(result){
-							var partnerAgencyList = JSON.parse(data.partnerAgencyList);
-							if(partnerAgencyList != null && partnerAgencyList.length > 0){
-								for(var i=0;i<partnerAgencyList.length;i++){
-									partnerAgencyList[i].value = partnerAgencyList[i].travelAgencyName;
-								}
+			var $objC = $(obj)
+			$.ajax({
+				url:""+APP_ROOT+"back/partnerAgency.do?method=findPartnerAnencyList&token="+$.cookie("token")+"&menuKey=resource_partnerAgency&operation=view",
+                dataType: "json",
+               // data:"travelAgencyName="+$objC.val(),
+                success:function(data){
+                	layer.close(globalLoadingLayer);
+					var result = showDialog(data);
+					if(result){
+						var partnerAgencyList = JSON.parse(data.partnerAgencyList);
+						if(partnerAgencyList != null && partnerAgencyList.length > 0){
+							for(var i=0;i<partnerAgencyList.length;i++){
+								partnerAgencyList[i].value = partnerAgencyList[i].travelAgencyName;
 							}
+						};
+						$(obj).autocomplete({
+							
+							minLength: 0,
+							change: function(event, ui) {
+								if (!ui.item)  {
+									$(this).val('').nextAll('input[name="transferPartnerAgencyId"]').val('');
+								}
+							},
+							select: function(event, ui) {
+								var $tabId = $("#tab-resource_touristGroup-add-content");
+								$(this).blur().nextAll('input[name="transferPartnerAgencyId"]').val(ui.item.id);
+								$tabId.find("input[name=partnerAgencyNameList]").val("");
+							}
+						}).off("click").on("click",function(){
 							$objC.autocomplete('option','source', partnerAgencyList);
 							$objC.autocomplete('search', '');
-						}
-                    }
-                });
+						});
+					}
+            	}
 			});
+			         
 		},
 		getLineProductList:function(obj,partnerAId){
-			$(obj).autocomplete({
-				minLength: 0,
-				change: function(event, ui) {
-					if (!ui.item)  {
-						$(this).val('').nextAll('input[name="lineProductId"]').val('');
-					}
-				},
-				select: function(event, ui) {
-					$(this).blur().nextAll('input[name="lineProductId"]').val(ui.item.id);
-				}
-			})
-			.click(function(event) {
-				var $objC = $(this);
-				$.ajax({
-					url:""+APP_ROOT+"back/transfer.do?method=findLineProduct&token="+$.cookie("token")+"&menuKey=resource_partnerAgency&operation=view",
-                    dataType: "json",
-                    data:"name="+$objC.val(),
-                    success: function(data) {
-                    	layer.close(globalLoadingLayer);
-						var result = showDialog(data);
-						if(result){
-							var lineProductList = JSON.parse(data.lineProductList);
-							if(lineProductList != null && lineProductList.length > 0){
-								for(var i=0;i<lineProductList.length;i++){
-									lineProductList[i].value = lineProductList[i].name;
-								}
+			var $objC = $(obj);
+			$.ajax({
+				url:""+APP_ROOT+"back/transfer.do?method=findLineProduct&token="+$.cookie("token")+"&menuKey=resource_partnerAgency&operation=view",
+                dataType: "json",
+                success: function(data) {
+                	layer.close(globalLoadingLayer);
+					var result = showDialog(data);
+					if(result){
+						var lineProductList = JSON.parse(data.lineProductList);
+						if(lineProductList != null && lineProductList.length > 0){
+							for(var i=0;i<lineProductList.length;i++){
+								lineProductList[i].value = lineProductList[i].name;
 							}
+						}
+						$(obj).autocomplete({
+							minLength: 0,
+							change: function(event, ui) {
+								if (!ui.item)  {
+									$(this).val('').nextAll('input[name="lineProductId"]').val('');
+								}
+							},
+							select: function(event, ui) {
+								$(this).blur().nextAll('input[name="lineProductId"]').val(ui.item.id);
+							}
+						}).off("click").on("click",function(){
 							$objC.autocomplete('option','source', lineProductList);
 							$objC.autocomplete('search', '');
-						} 
-                    }
-                });
+						});
+					}
+				}
 			});
 		},
 
