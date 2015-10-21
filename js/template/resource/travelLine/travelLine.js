@@ -182,7 +182,7 @@ define(function(require, exports) {
 					type:1,
 					title:"新增日程",
 					skin: 'layui-layer-rim', //加上边框
-					area: ['80%', '60%'], //宽高
+					area: ['80%', '75%'], //宽高
 					zIndex:1029,
 					content: lineDayHtml,
 					success:function(){
@@ -352,31 +352,31 @@ define(function(require, exports) {
 						//已修改提示
 			    		var validator = rule.traveLineCheckor($('.travelLineUpdateMainForm'));
 						if($(".tab-"+menuKey+"-update").length > 0) {
-							addTab(updateId,"修改线路");
+							addTab(updateId,title);
                  	    	if(!!travelLine.edited["update"] && travelLine.edited["update"] != ""){
                  	    		showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
                  	    			 validator = rule.traveLineCheckor($('.travelLineUpdateMainForm'));
 				            		 if (!validator.form()) { 
 				            			 return; 
 				            		 }
-				            		 travelLine.submitUpdateTraveLine(clipboardMode,0);
+				            		 travelLine.submitUpdateTraveLine(travelLine.updateClipboardMode,0);
 									 travelLine.edited["update"] = "";
-				            		 addTab(updateId,"修改线路",html);	
+				            		 addTab(updateId,title,html);	
 									 travelLine.initUpdate(clipboardMode);
 				            		 validator = rule.traveLineCheckor($('.travelLineUpdateMainForm'));
 				            	},function(){
-				            		addTab(updateId,"修改线路",html);
+				            		addTab(updateId,title,html);
 									travelLine.initUpdate(clipboardMode);
 									validator = rule.traveLineCheckor($('.travelLineUpdateMainForm'));									
 									travelLine.edited["update"] = "";
 				            	}); 							
                  	    	 }else{
-	                 	    	addTab(updateId,"修改线路",html);
+	                 	    	addTab(updateId,title,html);
 								travelLine.initUpdate(clipboardMode);
 	                 	        validator = rule.traveLineCheckor($('.travelLineUpdateMainForm'));
                  	    	 } 
                  	    }else{
-                 	    	addTab(updateId,"修改线路",html);
+                 	    	addTab(updateId,title,html);
 							travelLine.initUpdate(clipboardMode);
                  	    	validator = rule.traveLineCheckor($('.travelLineUpdateMainForm'));
                  	    }
@@ -385,6 +385,7 @@ define(function(require, exports) {
 			});
 		},
 		initUpdate : function(clipboardMode){
+			travelLine.updateClipboardMode = clipboardMode;
 			$('#tab-resource_travelLine-update-content').on("change",function(){
 				travelLine.edited["update"] = "update";
 			});
@@ -2267,7 +2268,7 @@ define(function(require, exports) {
 			travelLineJsonDel += "]";
 		
 			var url = ""+APP_ROOT+"back/travelLine.do?method=updateTravelLine&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update";
-			if(travelLine.clipboardMode){
+			if(travelLine.updateClipboardMode){
 				url = ""+APP_ROOT+"back/travelLine.do?method=saveTravelLine&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=add";
 			}
 			$.ajax({
