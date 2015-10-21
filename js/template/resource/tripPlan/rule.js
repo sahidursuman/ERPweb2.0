@@ -72,8 +72,8 @@ define(function(require, exports) {
 						$ele: $that.find('input[name="memberCount"]'),
 						rules: [
 							{
-								type: 'int',
-								errMsg: '必须为正整数'
+								type: 'positive-float',
+								errMsg: '必须为正数'
 							}
 						]
 					},{//已付  

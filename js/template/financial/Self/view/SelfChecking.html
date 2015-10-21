@@ -60,14 +60,14 @@
                            <th class="th-border">对账时间</th>
                            <th class="th-border">对账人</th>
                            <th class="th-border">对账</th>
-                        </tr>
+                        </tr>   
 					</thead>
 					<tbody>
 					    {{each financialSelfPayList as checking index}}
 						    <tr data-entity-id="{{checking.id}}" data-entity-isConfirmAccount="{{checking.isConfirmAccount}}" data-entity-realUnPayedMoney="{{checking.realUnPayedMoney}}" data-entity-remark="{{checking.remark}}">
 					         <td>{{index+1}}</td>
 								<td>{{checking.tripNumber}}{{","}}{{checking.lineProductName}}{{","}}{{checking.guideName}}</td>
-								<td name="startTime">{{checking.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
+								<td name="consumeStartTime">{{if checking.consumeStartTime == null || checking.consumeStartTime == ""}}-{{else}}{{checking.consumeStartTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
 								<td>{{checking.realCount}}</td>
 								<td>{{checking.marketPrice}}</td>
 								<td>{{checking.price}}</td>
