@@ -26,10 +26,15 @@ define(function(require, exports) {
     map = {
 		searchParam : "",
 		resultList : "",
-		total : "",
 		lineProduct : "",
 		user : "",
 		businessGroup : ""
+	},
+	total={
+		adultCount :"",
+		childCount : "",
+		transNeedPayMoney :"",
+		transPayedMoney : ""
 	},
 	innerTransfer = {
 	    id : "",//	内转ID		
@@ -83,21 +88,11 @@ define(function(require, exports) {
 						map.user = JSON.parse(data1.user);
 						map.businessGroup = JSON.parse(data1.businessGroup);
 						requestMain = false;
+						searchParam.first = "2";
 					}
 				});
 			}
-			//统计数据  
-			if(requestTotal){
-				$.ajax({  
-					url:url("findTotal","view"),
-					data:"searchParam="+encodeURIComponent(JSON.stringify(searchParam)),
-					dataType:'json',
-					success:function(data2){
-						map.total = data2.total;
-						requestTotal = false;
-					}
-				});
-			}
+
 			//分页结果集
 			$.ajax({  
 				url:url("findPager","view"),
@@ -115,6 +110,25 @@ define(function(require, exports) {
 						addTab(menuKey,"内转管理",html);
 						//时间控件
 						inner.initTimePicker();
+
+						//统计数据  
+						if(requestTotal){
+							$.ajax({  
+								url:url("findTotal","view"),
+								data:"searchParam="+encodeURIComponent(JSON.stringify(searchParam)),
+								dataType:'json',
+								success:function(data2){
+									total = data2.total;
+									requestTotal = false;
+									var $transObj=$(".transferOut-Header-Cost");
+									$transObj.find(".adultCount").text(total.adultCount);
+									$transObj.find(".childCount").text(total.childCount);
+									$transObj.find(".transNeedPayMoney").text(total.transNeedPayMoney);
+									$transObj.find(".transPayedMoney").text(total.transPayedMoney);
+								}
+							});
+						}
+						
 						//内部转出分页 
 						inner.transferOutfindPager(searchParam);
 						function getVal (name){
@@ -134,12 +148,15 @@ define(function(require, exports) {
 							searchParam.status = $("#" +tabId+" .innerTransfer_list .btn-status button").attr("data-value");
 							return searchParam;
 						}
+
+
 						//搜索栏状态button下拉事件
 						$("#" +tabId+" .innerTransfer_list .btn-status .dropdown-menu a").click(function(){
 							$(this).parent().parent().parent().find("button").attr("data-value",$(this).attr("data-value"));
 							$(this).parent().parent().parent().find("span").text($(this).text());
 							searchParam = buildSearchParam();
 							requestTotal = true;
+							console.info(searchParam.status+"===1");
 							inner.list(searchParam);
 						});
 						//搜索事件
@@ -147,6 +164,7 @@ define(function(require, exports) {
 							searchParam = buildSearchParam();
 							searchParam.pageNo = 0;
 							requestTotal = true;
+							console.info(searchParam.status+"===2");
 							inner.list(searchParam);
 						});
 						
@@ -158,23 +176,34 @@ define(function(require, exports) {
 						});
 						
 						//切换我部转出
-						$("#" +tabId+" .innerTransfer_list .transferOut").click(function(){
+						$("#" +tabId+" .innerTransfer_list .inner-TransferOut").click(function(){
 							searchParam.pageNo = 0;
 							searchParam.type = 1;
 							requestTotal = true;
-							inner.listTransferIn(searchParam);
+							searchParam.first = "1";
+							console.info(searchParam.status+"===3");
+							inner.list(searchParam);
 						});
 
 						//切换他部转入
-						$("#" +tabId+" .innerTransfer_list .transferIn").click(function(){
+						$("#" +tabId+" .innerTransfer_list .inner-TransferIn").click(function(){
 							searchParam.pageNo = 0;
 							searchParam.type = 2;
 							requestTotal = true;
+							searchParam.first = "1";
+							console.info(searchParam.status+"===4");
 							inner.listTransferIn(searchParam);
 						});
 					}
 				}
 			})
+		},
+
+
+
+
+		initTotal:function(){
+		
 		},
 	   //时间初始化控件 
 	   initTimePicker:function(){
@@ -620,6 +649,15 @@ define(function(require, exports) {
 				requestTotal = true;
 				searchParam.first = "2";
 			}
+			var  map2 = {
+				searchParam : "",
+				resultList : "",
+				total : "",
+				lineProduct : "",
+				user : "",
+				businessGroup : ""
+			};
+
 			if(requestMain){
 				//搜索头数据  
 				$.ajax({  
@@ -630,10 +668,11 @@ define(function(require, exports) {
 						var result = showDialog(data1);
 						//如果正确则就执行
 						if(result){
-							map.lineProduct = JSON.parse(data1.lineProduct);
-							map.user = JSON.parse(data1.user);
-							map.businessGroup = JSON.parse(data1.businessGroup);
+							map2.lineProduct = JSON.parse(data1.lineProduct);
+							map2.user = JSON.parse(data1.user);
+							map2.businessGroup = JSON.parse(data1.businessGroup);
 							requestMain = false;
+							searchParam.first = "2";
 						}
 					}
 				});
@@ -645,8 +684,13 @@ define(function(require, exports) {
 					data:"searchParam="+encodeURIComponent(JSON.stringify(searchParam)),
 					dataType:'json',
 					success:function(data2){
-						map.total = data2.total;
+						total = data2.total;
 						requestTotal = false;
+						var $transObj=$(".transferIn-Header-Cost");
+						$transObj.find(".adultCount").text(total.adultCount);
+						$transObj.find(".childCount").text(total.childCount);
+						$transObj.find(".transNeedPayMoney").text(total.transNeedPayMoney);
+						$transObj.find(".transPayedMoney").text(total.transPayedMoney);
 					}
 				});
 			}
@@ -658,16 +702,13 @@ define(function(require, exports) {
 				dataType:'json',
 				success:function(data3){
 					layer.close(globalLoadingLayer);
-					map.resultList = JSON.parse(data3.resultList);
-					map.searchParam = data3.searchParam;
-					var html = listTransferInTemplate(map);
-					$("#transferIn .transferIn-content").html(html);
+					map2.resultList = JSON.parse(data3.resultList);
+					map2.searchParam = data3.searchParam;
+					var html = listTransferInTemplate(map2);
+					$("#inner-TransferIn").find(".transferIn-content").html(html);
 
 					//时间控件
 					inner.initTimePicker();
-
-
-
 
 					//搜索栏状态button下拉事件
 					/*$("#" +tabId+" .innerTransfer_list .btn-status .dropdown-menu a").click(function(){
@@ -686,8 +727,6 @@ define(function(require, exports) {
 					    inner.initSinTimer();
 					};*/
 				
-
-
 					function getVal (name){
 					   var val = $("#" +tabId+" .transferIn-content").find("[name="+name+"]").val();
 							return val;
@@ -714,6 +753,13 @@ define(function(require, exports) {
 
 						inner.listTransferIn(searchParam=buildSearchParam());
 				   });
+
+					//导出操作 btn-transferIn-export
+					$("#" +tabId +"  .innerTransfer_list .btn-transferIn-export").click(function(){
+						searchParam.type=2; 
+						var exportUrl ="" + url("findExcel","view") + "&searchParam="+encodeURIComponent(JSON.stringify(searchParam));
+						window.location.href=exportUrl;
+					});
 
 				   inner.transferInfindPager(searchParam=buildSearchParam());
 
@@ -826,6 +872,9 @@ define(function(require, exports) {
 								success:function(data){
 									var result = showDialog(data);
 									layer.close(globalLoadingLayer);
+									searchParam.type=2;
+									searchParam.pageNo=0;
+									searchParam.status="";
 									inner.listTransferIn(searchParam);
 								 }
 							});
