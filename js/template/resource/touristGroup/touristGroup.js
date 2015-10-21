@@ -30,6 +30,7 @@ define(function(require, exports) {
 			}
 			return false;
 		},
+		cleanFlag:0,
 		//获取统计数据
 		getTouristStatisticData:function(page,partnerAgencyIdS,lineProductIdS,startTimeS,userIdS,createTimeStartS,createTimeEndS,customerTypeS,statusS){
 			var args = {
@@ -113,7 +114,9 @@ define(function(require, exports) {
 
 						//新增小组事件
 						$(".main-content .page-content .btn-touristGroup-add").click(function(){
+							touristGroup.cleanFlag = 1;
 							touristGroup.addTouristGroup();
+							
 						});
 				        touristGroup.listTouristGroup(0,touristGroup.searchData.partnerAgencyId,touristGroup.searchData.lineProductId,touristGroup.searchData.startTime,touristGroup.searchData.userId,touristGroup.searchData.createTimeStart,touristGroup.searchData.createTimeEnd,touristGroup.searchData.customerType,touristGroup.searchData.status);
 				        //下拉数据初始化
@@ -176,6 +179,7 @@ define(function(require, exports) {
 						//修改小组事件
 						$(".main-content .page-content .btn-touristGroup-edit").click(function(){
 							var id = $(this).attr("data-entity-id");
+							touristGroup.cleanFlag = 2;
 							touristGroup.updateTouristGroup(id);
 						});
 						//删除小组事件绑定
@@ -1211,10 +1215,18 @@ define(function(require, exports) {
 									}
 								},
 								select: function(event, ui) {
-									var $tabId = $("#tab-resource_touristGroup-add-content");
+									
 									$(this).blur().nextAll('input[name="fromPartnerAgencyId"]').val(ui.item.id);
-									$tabId.find("input[name=partnerAgencyNameList]").val("");
+									if(touristGroup.cleanFlag == 1){
+										var $tabId = $("#tab-resource_touristGroup-add-content");
+										$tabId.find("input[name=partnerAgencyNameList]").val("");
+									}
+									if(touristGroup.cleanFlag == 2){
+										var $tabId = $("#tab-resource_touristGroup-update-content");
+										$tabId.find("input[name=partnerAgencyNameList]").val("");
 
+									}
+								
 								}
 							}).off("click").on("click",function(){
 								
