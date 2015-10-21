@@ -149,7 +149,8 @@ define(function(require, exports) {
 
 					});
 					transfer.getLineProductList($("#" +tabId+" .chooseLineProductId"),"");
-					transfer.getPartnerAgencyList($("#" +tabId+" .choosePartnerAgency"),"");
+					transfer.getPartnerAgencyList($("#" +tabId+" #transferOut .choosePartnerAgency"),"");
+					transfer.getPartnerAgencyList($("#" +tabId+" #transferIn .choosePartnerAgency"),"");
 					//我社转出选项卡绑定事件
 					$("#"+tabId+" #myTab li a.transferOut").click(function(){
 						var type=$(this).attr("data-value");//2
@@ -971,38 +972,36 @@ define(function(require, exports) {
 			         
 		},
 		getLineProductList:function(obj,partnerAId){
-			$(obj).autocomplete({
-				minLength: 0,
-				change: function(event, ui) {
-					if (!ui.item)  {
-						$(this).val('').nextAll('input[name="lineProductId"]').val('');
-					}
-				},
-				select: function(event, ui) {
-					$(this).blur().nextAll('input[name="lineProductId"]').val(ui.item.id);
-				}
-			})
-			.click(function(event) {
-				var $objC = $(this);
-				$.ajax({
-					url:""+APP_ROOT+"back/transfer.do?method=findLineProduct&token="+$.cookie("token")+"&menuKey=resource_partnerAgency&operation=view",
-                    dataType: "json",
-                    data:"name="+$objC.val(),
-                    success: function(data) {
-                    	layer.close(globalLoadingLayer);
-						var result = showDialog(data);
-						if(result){
-							var lineProductList = JSON.parse(data.lineProductList);
-							if(lineProductList != null && lineProductList.length > 0){
-								for(var i=0;i<lineProductList.length;i++){
-									lineProductList[i].value = lineProductList[i].name;
-								}
+			var $objC = $(obj);
+			$.ajax({
+				url:""+APP_ROOT+"back/transfer.do?method=findLineProduct&token="+$.cookie("token")+"&menuKey=resource_partnerAgency&operation=view",
+                dataType: "json",
+                success: function(data) {
+                	layer.close(globalLoadingLayer);
+					var result = showDialog(data);
+					if(result){
+						var lineProductList = JSON.parse(data.lineProductList);
+						if(lineProductList != null && lineProductList.length > 0){
+							for(var i=0;i<lineProductList.length;i++){
+								lineProductList[i].value = lineProductList[i].name;
 							}
+						}
+						$(obj).autocomplete({
+							minLength: 0,
+							change: function(event, ui) {
+								if (!ui.item)  {
+									$(this).val('').nextAll('input[name="lineProductId"]').val('');
+								}
+							},
+							select: function(event, ui) {
+								$(this).blur().nextAll('input[name="lineProductId"]').val(ui.item.id);
+							}
+						}).off("click").on("click",function(){
 							$objC.autocomplete('option','source', lineProductList);
 							$objC.autocomplete('search', '');
-						} 
-                    }
-                });
+						});
+					}
+				}
 			});
 		},
 
