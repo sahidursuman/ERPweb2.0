@@ -135,8 +135,8 @@
                                                     	<tr>
                                                     		<td><input type="text" name="insuranceName" maxlength="32" value="{{if insurance.insurance != null}}{{insurance.insurance.name}}{{/if}}" class="col-sm-12 chooseInsurance bind-change"/><input type="hidden" name="insuranceId" value="{{if insurance.insurance != null}}{{insurance.insurance.id}}{{/if}}"/></td>
                                                     		<td><input type="text" name="type" value="{{insurance.type}}" maxlength="32" class="col-sm-12"/></td>
-                                                    		<td><input type="text" name="price" value="{{insurance.price}}" class="col-sm-12" maxlength="5"/></td>
-                                                    		<td><input type="text" name="memberCount" value="{{insurance.memberCount}}" class="col-sm-12" maxlength="3"/></td>
+                                                    		<td><input type="text" name="price" value="{{insurance.price}}" class="col-sm-12" maxlength="8"/></td>
+                                                    		<td><input type="text" name="memberCount" value="{{insurance.memberCount}}" class="col-sm-12" maxlength="8"/></td>
                                                     		<td><input type="text" name="needPayMoney" readonly="readonly" value="{{insurance.needPayMoney}}" class="col-sm-12" maxlength="9"/></td>
                                                     		<td><input type="text" name="payedMoney" value="{{insurance.payedMoney}}" class="col-sm-12" maxlength="9"/></td>
                                                     		<td>
@@ -361,7 +361,7 @@
                                                                 <td><input type="text" name="mobileNumber" readonly="readonly" value="{{if restaurant.restaurant != null}}{{restaurant.restaurant.mobileNumber}}{{/if}}" class="col-sm-12"/></td>
                                                                 <td><select name="type" class="col-sm-12 restauranType" maxlength="9" style="width:80px;">{{if restaurant.restaurantStandard != null}}<option {{if restaurant.restaurantStandard.type == "早餐"}}selected="selected"{{/if}} value="早餐">早餐</option><option {{if restaurant.restaurantStandard.type == "午餐"}}selected="selected"{{/if}} value="午餐">午餐</option><option {{if restaurant.restaurantStandard.type == "晚餐"}}selected="selected"{{/if}} value="晚餐">晚餐</option>{{/if}}</select></td>
                                                                 <td><input type="text" name="price" value="{{if restaurant.restaurantStandard != null}}{{restaurant.restaurantStandard.price}}{{/if}}" class="col-sm-12 typeNameChoose"/><input type="hidden" name="restaurantStandardId" value="{{if restaurant.restaurantStandard != null}}{{restaurant.restaurantStandard.id}}{{/if}}"/></td>
-                                                                <td><input type="text" name="memberCount" maxlength="4" value="{{restaurant.memberCount}}" class="col-sm-12" style="width: 60px;"/></td>
+                                                                <td><input type="text" name="memberCount" maxlength="8" value="{{restaurant.memberCount}}" class="col-sm-12" style="width: 60px;"/></td>
                                                                 <td><input type="text" name="reduceMoney" maxlength="9" value="{{restaurant.reduceMoney}}" class="col-sm-12" style="width: 60px;"/></td>
                                                                 <td><input type="text" name="needPayMoney" readonly="readonly" value="{{restaurant.needPayMoney}}" class="col-sm-12" style="width: 60px;"/></td>
                                                                 <td><input type="text" name="payedMoney" maxlength="9" value="{{restaurant.payedMoney}}" class="col-sm-12" style="width: 60px;"/></td>
@@ -453,9 +453,9 @@
                                                                 <td><input type="text" class="col-sm-12" name="managerName" readonly="readonly" value="{{if hotel.hotel !=null}}{{hotel.hotel.managerName}}{{/if}}" /></td>
                                                                 <td><input type="text" class="col-sm-12" name="mobileNumber" readonly="readonly" value="{{if hotel.hotel !=null}}{{hotel.hotel.mobileNumber}}{{/if}}" /></td>
                                                                 <td><input type="text" class="col-sm-12 chooseHotelRoom" name="hotelRoom" value="{{if hotel.hotelRoom !=null}}{{hotel.hotelRoom.type}}{{/if}}" /><input type="hidden" name="hotelRoomId" value="{{if hotel.hotelRoom !=null}}{{hotel.hotelRoom.id}}{{/if}}"></td>
-                                                                <td><input type="text" class="col-sm-12" name="fee" maxlength="6" value="{{hotel.price}}" style="width: 60px;" maxlength="9"/></td>
-                                                                <td><input type="text" class="col-sm-12" name="memberCount" maxlength="3" value="{{hotel.memberCount}}" style="width: 60px;" /></td>
-                                                                <td><input type="text" class="col-sm-12" name="reduceMoney" maxlength="6" value="{{hotel.reduceMoney}}" style="width: 60px;" /></td>
+                                                                <td><input type="text" class="col-sm-12" name="fee" maxlength="8" value="{{hotel.price}}" style="width: 60px;" maxlength="9"/></td>
+                                                                <td><input type="text" class="col-sm-12" name="memberCount" maxlength="8" value="{{hotel.memberCount}}" style="width: 60px;" /></td>
+                                                                <td><input type="text" class="col-sm-12" name="reduceMoney" maxlength="8" value="{{hotel.reduceMoney}}" style="width: 60px;" /></td>
                                                                 <td><input type="text" class="col-sm-12" name="needPayMoney" readonly="readonly" value="{{hotel.needPayMoney}}" style="width: 60px;" /></td>         
                                                                 <td><input type="text" class="col-sm-12" name="payedMoney" maxlength="9" value="{{hotel.payedMoney}}" style="width: 60px;" /></td>
                                                                 <td>
@@ -539,8 +539,8 @@
                                                                 	<input type="text" name="tourDuration" maxlength="2" class="col-sm-12" value="{{scenic.tourDuration}}" style="width: 60px;" />
                                                                 </td>
                                                                 <td><input type="text" name="orderNumber" maxlength="20" class="col-sm-12" value="{{scenic.orderNumber}}" /></td>
-                                                                <td><input type="text" name="fee" class="col-sm-12" maxlength="6" value="{{scenic.price}}" style="width: 60px;" /></td>
-                                                                <td><input type="text" name="memberCount" class="col-sm-12" maxlength="3" value="{{scenic.memberCount}}" style="width: 60px;" /></td>
+                                                                <td><input type="text" name="fee" class="col-sm-12" maxlength="8" value="{{scenic.price}}" style="width: 60px;" /></td>
+                                                                <td><input type="text" name="memberCount" class="col-sm-12" maxlength="8" value="{{scenic.memberCount}}" style="width: 60px;" /></td>
                                                                 <td><input type="text" name="reduceMoney" class="col-sm-12" maxlength="6" value="{{scenic.reduceMoney}}" style="width: 60px;" /></td>
                                                                 <td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12" value="{{scenic.needPayMoney}}" style="width: 60px;" /></td>
                                                                 <td><input type="text" name="payedMoney" class="col-sm-12" maxlength="9" value="{{scenic.payedMoney}}" style="width: 60px;" /></td>
@@ -671,9 +671,9 @@
                                                                 <td><input type="hidden" name="selfitemId" value="{{if selfPay.selfPayItem !=null}}{{selfPay.selfPayItem.id}}{{/if}}" /><input type="text" name="selfitem" class="col-sm-12 chooseSelfitem" value="{{if selfPay.selfPayItem !=null}}{{selfPay.selfPayItem.name}}{{/if}}" /></td>
                                                                 <td><input type="text" name="managerName" readonly="readonly" class="col-sm-12" value="{{if selfPay.selfPay != null}}{{selfPay.selfPay.managerName}}{{/if}}" /></td>
                                                                 <td><input type="text" name="mobileNumber" readonly="readonly" class="col-sm-12" value="{{if selfPay.selfPay != null}}{{selfPay.selfPay.mobileNumber}}{{/if}}" /></td>
-                                                                <td><input type="text" name="oldPrice" class="col-sm-12" maxlength="6" value="{{selfPay.marketPrice}}" style="width: 60px;" /></td>
-                                                                <td><input type="text" name="price" class="col-sm-12" maxlength="6" value="{{selfPay.price}}" style="width: 60px;" /></td>
-                                                                <td><input type="text" name="memberCount" class="col-sm-12" value="{{selfPay.memberCount}}" maxlength="3" style="width: 60px;" /></td>
+                                                                <td><input type="text" name="oldPrice" class="col-sm-12" maxlength="8" value="{{selfPay.marketPrice}}" style="width: 60px;" /></td>
+                                                                <td><input type="text" name="price" class="col-sm-12" maxlength="8" value="{{selfPay.price}}" style="width: 60px;" /></td>
+                                                                <td><input type="text" name="memberCount" class="col-sm-12" value="{{selfPay.memberCount}}" maxlength="8" style="width: 60px;" /></td>
                                                                 <td><input type="text" name="reduceMoney" class="col-sm-12" value="{{selfPay.reduceMoney}}" maxlength="9" style="width: 60px;" /></td>
                                                                 <td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12" value="{{selfPay.needPayMoney}}" style="width: 60px;" /></td>
                                                                 <td><input type="text" name="payedMoney" class="col-sm-12" value="{{selfPay.payedMoney}}" style="width: 60px;" maxlength="9"/></td>
