@@ -57,7 +57,7 @@ define(function(require, exports) {
 					globalLoadingLayer = openLoadingLayer();
 				},
 				success:function(data){
-					console.info(args);
+					
 					//关闭遮罩
 					layer.close(globalLoadingLayer);
 					//根据返回值判断下一步操作，或者已出现错误
@@ -74,6 +74,7 @@ define(function(require, exports) {
 							customerType: customerTypeS,
 							status : statusS
 						};
+						
 						var html = listMainTemplate(data);
 						addTab(menuKey,"游客管理",html);
 						//搜索栏状态button下拉事件
@@ -161,6 +162,7 @@ define(function(require, exports) {
 						touristGroupList = JSON.parse(touristGroupList);
 						//讲字符串改为对象
 						data.touristGroupList = touristGroupList;
+						console.log(data);
 						var html = listTemplate(data);
 						$("#touristGroup-listMain").html(html);
 						//touristGroup.initList(data);
