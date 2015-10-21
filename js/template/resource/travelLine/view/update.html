@@ -97,7 +97,9 @@
 										<td>{{line.repastDetail}}</td>
 										<td>{{line.restPosition}}</td>
 										<td>
-											{{if line.hotelLevel == 1}}
+											{{if line.hotelLevel == 0}}
+												未选择
+											{{else if line.hotelLevel == 1}}
 												三星以下
 											{{else if line.hotelLevel == 2}}
 												三星

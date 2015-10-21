@@ -49,6 +49,7 @@
 						<label class="col-sm-2 control-label no-padding-right" style="margin-top:5px;"><span class="necessary">*</span>酒店星级:</label>
 						<div class="col-sm-3">
 							<select name="hotelLevel" class="col-sm-12" style="margin-top:5px;">
+								<option {{if lineDay.hotelLevel == 0}}selected="selected"{{/if}} value="0">未选择</option>
 								<option {{if lineDay.hotelLevel == 1}}selected="selected"{{/if}} value="1">三星以下</option>
 								<option {{if lineDay.hotelLevel == 2}}selected="selected"{{/if}} value="2">三星</option>
 								<option {{if lineDay.hotelLevel == 3}}selected="selected"{{/if}} value="3">准四星</option>
