@@ -80,7 +80,7 @@
             <tr data-entity-id="{{shop.id}}" data-entity-isConfirmAccount="{{shop.isConfirmAccount}}" data-entity-startTime="{{shop.consumeStartTime}}">
                 <td>{{index+1}}</td>
                 <td class="cost-detail" style="color: rgb(102,159,199)"> {{shop.tripNumber}},{{shop.lineProductName}},{{shop.guideName}}</td>
-                <td>{{shop.consumeStartTime | dateFormat: 'yyyy-MM-dd'}}</td>
+                <td>{{if shop.consumeStartTime == null || shop.consumeStartTime == ""}}-{{else}}{{shop.consumeStartTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
                 <td>{{shop.adultCount}}大{{shop.childCount}}小</td>
                 <td><a href="#" class="seeGroup" style="margin-left:5px">展开</a></td>
                 <td>{{shop.consumeMoney}}</td>

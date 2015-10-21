@@ -492,7 +492,7 @@ define(function(require, exports) {
             					   id:$(this).attr("data-entity-id"),
             					   restaurantId:restaurantId,
             					   restaurantName:restaurantName,
-            					   startTime:$tr.eq(i).find("td[name=startTime]").text(),
+            					   consumeStartTime:$tr.eq(i).find("td[name=consumeStartTime]").text(),
             					   realUnPayedMoney:$tr.eq(i).find("input[name=FinancialRestaurantRealUnPayedMoney]").val(),
             					   remark:$tr.eq(i).find("input[name=FinancialRestaurantRemark]").val(),
             					   isConfirmAccount:1
@@ -504,7 +504,7 @@ define(function(require, exports) {
         					   id:$(this).attr("data-entity-id"),
         					   restaurantId:restaurantId,
         					   restaurantName:restaurantName,
-        					   startTime:$tr.eq(i).find("td[name=startTime]").text(),
+        					   consumeStartTime:$tr.eq(i).find("td[name=consumeStartTime]").text(),
         					   realUnPayedMoney:$tr.eq(i).find("input[name=FinancialRestaurantRealUnPayedMoney]").val(),
         					   remark:$tr.eq(i).find("input[name=FinancialRestaurantRemark]").val(),
         					   isConfirmAccount:1
@@ -517,7 +517,7 @@ define(function(require, exports) {
         					   id:$(this).attr("data-entity-id"),
         					   restaurantId:restaurantId,
         					   restaurantName:restaurantName,
-        					   startTime:$tr.eq(i).find("td[name=startTime]").text(),
+        					   consumeStartTime:$tr.eq(i).find("td[name=consumeStartTime]").text(),
         					   realUnPayedMoney:$tr.eq(i).find("input[name=FinancialRestaurantRealUnPayedMoney]").val(),
         					   remark:$tr.eq(i).find("input[name=FinancialRestaurantRemark]").val(),
         					   isConfirmAccount:0

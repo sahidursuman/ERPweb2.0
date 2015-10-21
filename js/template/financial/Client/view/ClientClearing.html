@@ -94,7 +94,7 @@
             <td>{{rs.checkUnIncomeMoney}}</td>
             <td>{{rs.backMoney}}</td>
             <td>{{rs.realUnPayedMoney}}</td> 
-            <td><input name="ClientClear_payMoney" value="" /></td>
+            <td><input name="ClientClear_payMoney" value="" maxlength="8" /></td>
             <td>
                 <label class="col-sm-1 control-label no-padding-right" >
                     <select name="ClientClear_payType">
@@ -105,7 +105,7 @@
                     </select>
                 </label>
             </td>
-            <td><input name="ClientClear_remark" value="{{rs.remark}}" /></td>
+            <td><input name="ClientClear_remark" value="{{rs.remark}}" maxlength="200" /></td>
             <td>
 				{{if rs.isConfirmAccount!=rs.isConfirmAccounts}}
 				<span style="color:#ff9900">{{rs.isConfirmAccount}}/{{rs.isConfirmAccounts}}</span>
