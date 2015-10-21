@@ -81,7 +81,7 @@
 					<th>创建人</th>
 					<th>创建时间</th>
 					<th>状态</th>
-					<th style="width:260px;">操作</th>
+					<th>操作</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -109,7 +109,7 @@
 						<td style="vertical-align:middle" {{if tripPlan.tripPlanDetails.length > 1}}rowspan="{{tripPlan.tripPlanDetails.length}}"{{/if}}>{{tripPlan.surplusSeat}}</td>
 						<td style="vertical-align:middle" {{if tripPlan.tripPlanDetails.length > 1}}rowspan="{{tripPlan.tripPlanDetails.length}}"{{/if}}>{{if tripPlan.user!=null}}{{tripPlan.user.realName}}{{/if}}</td>
 						<td style="vertical-align:middle" {{if tripPlan.tripPlanDetails.length > 1}}rowspan="{{tripPlan.tripPlanDetails.length}}"{{/if}}>{{tripPlan.createTime}}</td>
-						<td style="vertical-align:middle" {{if tripPlan.tripPlanDetails.length > 1}}rowspan="{{tripPlan.tripPlanDetails.length}}"{{/if}}>
+						<td style="vertical-align:middle;width:80px" {{if tripPlan.tripPlanDetails.length > 1}}rowspan="{{tripPlan.tripPlanDetails.length}}"{{/if}}>
 						    {{if tripPlan.status == -1}}
 							<i class="ace-icon fa fa-times red bigger-125"></i>
 								已取消
@@ -121,7 +121,7 @@
 								已发团
 							{{/if}}
 						</td>
-						<td style="vertical-align:middle" {{if tripPlan.tripPlanDetails.length > 1}}rowspan="{{tripPlan.tripPlanDetails.length}}"{{/if}}>
+						<td style="vertical-align:middle;width:240px;" {{if tripPlan.tripPlanDetails.length > 1}}rowspan="{{tripPlan.tripPlanDetails.length}}"{{/if}}>
 							<a data-entity-id="{{tripPlan.id}}" billStatus="{{tripPlan.billStatus}}" statusValue="{{tripPlan.status}}" title="确认发团" class="{{if tripPlan.status != -1}}btn-Plan-confirm{{/if}} cursor" {{if tripPlan.status == -1}} style="color:#bbb;"{{/if}}>
 							确认
 							</a><a href="" class="cursor"> |</a>
