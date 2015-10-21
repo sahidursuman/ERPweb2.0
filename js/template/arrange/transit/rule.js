@@ -70,7 +70,7 @@ define(function(require, exports) {
 						]
 					});
 
-					settings.push({
+					/*settings.push({
 						$ele: $that.find('input[name="busFee"]'),
 						rules: [
 							{
@@ -78,7 +78,7 @@ define(function(require, exports) {
 								errMsg: '数量不能为空'
 							}
 						]
-					});
+					});*/
 
 					settings.push({
 						$ele: $that.find('input[name="busReduceMoney"]'),
@@ -180,7 +180,7 @@ define(function(require, exports) {
 				var $that = $(this);
 
 				if ($that.find('input[name="tickeId"]').val())  {
-					settings.push({
+					/*settings.push({
 						$ele: $that.find('input[name="ticketStartCity"]'),
 						rules: [
 							{
@@ -198,7 +198,7 @@ define(function(require, exports) {
 								errMsg: '到达城市不能为空'
 							}
 						]
-					});
+					});*/
 
 					settings.push({
 						$ele: $that.find('input[name="ticketStartTime"]'),
@@ -231,7 +231,7 @@ define(function(require, exports) {
 						]
 					});
 
-					settings.push({
+					/*settings.push({
 						$ele: $that.find('input[name="ticketPrice"]'),
 						rules: [
 							{
@@ -243,7 +243,7 @@ define(function(require, exports) {
 								errMsg: '数据格式不正确'
 							}
 						]
-					});
+					});*/
 
 					settings.push({
 						$ele: $that.find('input[name="ticketMemberCount"]'),
@@ -269,7 +269,7 @@ define(function(require, exports) {
 						]
 					});
 
-					settings.push({
+					/*settings.push({
 						$ele: $that.find('input[name="ticketPayedMoney"]'),
 						rules: [
 							{
@@ -281,7 +281,7 @@ define(function(require, exports) {
 								errMsg: '数据格式不正确'
 							}
 						]
-					});
+					});*/
 				}
 			});
 

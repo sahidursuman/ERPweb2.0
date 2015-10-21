@@ -1,4 +1,4 @@
-<div class="row scenic ScenicChecking globalAdd">
+<div class="row scenic Scenicrs globalAdd">
     <div class="col-xs-12 border borderNormal">
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="search-area  editable editable-click" style="margin-top: 10px">
@@ -16,7 +16,7 @@
 									<option value="{{month.value}}" {{if searchParam.month == month.value}}selected="selected"{{/if}}>{{month.value}}月</option>
 								{{/each}}
 							</select>
-                        <button class="btn-height btn-sm search-btn btn-checking-search" >
+                        <button class="btn-height btn-sm search-btn btn-rs-search" >
                              <i class="ace-icon fa fa-search"></i>
                             搜索
                         </button>  
@@ -67,9 +67,9 @@
 	            <tr data-entity-id="{{rs.id}}" data-entity-isConfirmAccount="{{rs.isConfirmAccount}}" data-entity-realUnPayedMoney="{{rs.realUnPayedMoney}}" data-entity-remark="{{rs.remark}}">
 	                <td>{{index+1}}</td>
 	                <td>{{rs.tripNumber}},{{rs.lineProductName}}</td>
-	                <td name="startTime">{{rs.consumeStartTime | dateFormat: 'yyyy-MM-dd' }}</td>
+	                <td name="consumeStartTime">{{if rs.consumeStartTime == null || rs.consumeStartTime == ""}}-{{else}}{{rs.consumeStartTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
 	                <td>{{rs.scenicItemName}}</td>
-	                <td>{{rs.scenicItemOrderNumber}}</td>
+	                <td>{{if rs.scenicItemOrderNumber == null || rs.scenicItemOrderNumber == ""}}-{{else}}{{rs.scenicItemOrderNumber}}{{/if}}</td>
 	                <td>{{rs.price}}</td>
 	                <td>{{rs.realCount}}</td>
 	                <td>{{rs.reduceMoney}}</td>
@@ -129,7 +129,7 @@
                     <i class="ace-icon fa fa-times-circle"></i>
                     关闭
                 </button>
-                <button class="btn btn-xs btn-primary btn-scenicFinancial-checking" style="margin-left: 20px">
+                <button class="btn btn-xs btn-primary btn-scenicFinancial-rs" style="margin-left: 20px">
                     <i class="ace-icon fa fa-check-circle "></i>
                     确认
                 </button>

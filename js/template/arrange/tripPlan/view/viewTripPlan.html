@@ -1,48 +1,51 @@
 <div class="viewTripPlan">
 	<div class="col-xs-12 newAddTripPlanMain">
 		<form class="form-horizontal newAddTripPlanMainForm" role="form" style="margin-top:10px" onsubmit="return false">
-			<table class="whereQ whereTwo" style="width: 98%">
-				<tr>
+		<h5 class="">
+					<label class="middle title-size">基本信息</label>
+							</h5>
+			<table class="whereQ whereTwo" style="width: 100%">
+				<!-- <tr>
 					<td colspan="8" class="HeadManage" style="text-align: left">基本信息</td>
-				</tr>
+				</tr> -->
 				<tr>
-					<td class="style-myself">线路名称：</td>
-					<td style="text-align: left">{{lineProduct.name}}</td>
-					<td class="style-myself">出团日期：</td>
-					<td style="text-align: left">{{tripPlan.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
-					<td class="style-myself">团队编号：</td>
-					<td style="text-align: left" colspan="3">{{tripPlan.tripNumber}}</td>
+					<td class="style-myself CheckPlan">线路名称</td>
+					<td style="text-align: left;padding: 0px 0px 0px 10px">{{lineProduct.name}}</td>
+					<td class="style-myself CheckPlan">出团日期</td>
+					<td style="text-align: left;padding: 0px 0px 0px 10px">{{tripPlan.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
+					<td class="style-myself CheckPlan">团队编号</td>
+					<td style="text-align: left;padding: 0px 0px 0px 10px" colspan="3">{{tripPlan.tripNumber}}</td>
 
 				</tr>
 				<tr>
-					<td class="style-myself">计划人数：</td>
-					<td style="text-align: left">{{tripPlan.planTouristCount}}</td>
-					<td class="style-myself">车座数：</td>
-					<td style="text-align: left">{{bus.seatCount}}</td>
-					<td class="style-myself">车辆品牌：</td>
-					<td style="text-align: left">{{bus.brand}}</td>
-					<td class="style-myself">车辆号：</td>
-					<td style="text-align: left">{{bus.licenseNumber}}</td>
+					<td class="style-myself CheckPlan">计划人数</td>
+					<td style="text-align: left;padding: 0px 0px 0px 10px">{{tripPlan.planTouristCount}}</td>
+					<td class="style-myself CheckPlan">车座数</td>
+					<td style="text-align: left;padding: 0px 0px 0px 10px">{{bus.seatCount}}</td>
+					<td class="style-myself CheckPlan">车辆品牌</td>
+					<td style="text-align: left;padding: 0px 0px 0px 10px">{{bus.brand}}</td>
+					<td class="style-myself CheckPlan">车辆号</td>
+					<td style="text-align: left;padding: 0px 0px 0px 10px">{{bus.licenseNumber}}</td>
 				</tr>
 				<tr>
-					<td class="style-myself">导游：</td>
-					<td style="text-align: left">{{guide.realname}}</td>
-					<td class="style-myself">导游电话：</td>
-					<td style="text-align: left">{{guide.mobileNumber}}</td>
-					<td class="style-myself">司机：</td>
-					<td style="text-align: left">{{driver.name}}</td>
-					<td class="style-myself">司机电话：</td>
-					<td style="text-align: left">{{driver.mobileNumber}}</td>
+					<td class="style-myself CheckPlan">导游</td>
+					<td style="text-align: left;padding: 0px 0px 0px 10px">{{guide.realname}}</td>
+					<td class="style-myself CheckPlan">导游电话</td>
+					<td style="text-align: left;padding: 0px 0px 0px 10px">{{guide.mobileNumber}}</td>
+					<td class="style-myself CheckPlan">司机</td>
+					<td style="text-align: left;padding: 0px 0px 0px 10px">{{driver.name}}</td>
+					<td class="style-myself CheckPlan">司机电话</td>
+					<td style="text-align: left;padding: 0px 0px 0px 10px">{{driver.mobileNumber}}</td>
 				</tr>
-				<tr>
-					<td class="style-myself">全陪：</td>
-					<td style="text-align: left">{{tripPlan.accompanyGuideName}}</td>
-					<td class="style-myself">全陪电话：</td>
-					<td style="text-align: left">{{tripPlan.accompanyGuideMobile}}</td>
-					<td class="style-myself">集合地点：</td>
-					<td style="text-align: left">{{tripPlan.setPlacePosition}}</td>
-					<td class="style-myself">集合电话：</td>
-					<td style="text-align: left">{{tripPlan.setPlaceTime}}</td>
+				<tr> 
+					<td class="style-myself CheckPlan">全陪</td>
+					<td style="text-align: left;padding: 0px 0px 0px 10px">{{tripPlan.accompanyGuideName}}</td>
+					<td class="style-myself CheckPlan">全陪电话</td>
+					<td style="text-align: left;padding: 0px 0px 0px 10px">{{tripPlan.accompanyGuideMobile}}</td>
+					<td class="style-myself CheckPlan">集合地点</td>
+					<td style="text-align: left;padding: 0px 0px 0px 10px">{{tripPlan.setPlacePosition}}</td>
+					<td class="style-myself CheckPlan">集合电话</td>
+					<td style="text-align: left;padding: 0px 0px 0px 10px">{{tripPlan.setPlaceTime}}</td>
 				</tr>
 			</table>
 		</form>

@@ -75,7 +75,7 @@
 									{{checking.tripNumber}}{{","}}{{checking.arrangeRealname}}{{","}}{{checking.arrangeMobileNumber}}
 							  	{{/if}}
 							</td>
-							<td name="startTime">{{checking.consumeStartTime | dateFormat: 'yyyy-MM-dd'}}</td>
+							<td name="consumeStartTime">{{if checking.consumeStartTime == null || checking.consumeStartTime == ""}}-{{else}}{{checking.consumeStartTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
 							<td>
 								{{if checking.type == 1}}
 								  飞机票
