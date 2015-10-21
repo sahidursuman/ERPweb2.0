@@ -26,7 +26,9 @@
 						</div>
 						<label class="col-sm-2 control-label no-padding-right">酒店星级:</label>
 						<div class="col-sm-4"><label class="control-label">
-							{{if lineDay.hotelLevel == 1}}
+							{{if lineDay.hotelLevel == 0}}
+								未选择
+							{{else if lineDay.hotelLevel == 1}}
 								三星以下
 							{{else if lineDay.hotelLevel == 2}}
 								三星

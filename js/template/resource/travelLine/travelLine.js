@@ -198,7 +198,9 @@ define(function(require, exports) {
 							var hotelLevel = $(".travelLineDayForm select[name=hotelLevel]").val();
 							var whichDay = $(".travelLineDayForm select[name=whichDay]").val();
 							var level = "三星以下";
-							if (hotelLevel == 1) {
+							if (hotelLevel == 0) {
+								level = "未选择";
+							}else if (hotelLevel == 1) {
 								level = "三星以下";
 							}else if (hotelLevel == 2) {
 								level = "三星";
@@ -419,7 +421,9 @@ define(function(require, exports) {
 							var hotelLevel = $(".travelLineDayForm select[name=hotelLevel]").val();
 							var whichDay = $(".travelLineDayForm select[name=whichDay]").val();
 							var level = "三星以下";
-							if (hotelLevel == 1) {
+							if (hotelLevel == 0) {
+								level = "未选择";
+							}else if (hotelLevel == 1) {
 								level = "三星以下";
 							}else if (hotelLevel == 2) {
 								level = "三星";
@@ -580,7 +584,9 @@ define(function(require, exports) {
 			    		var hotelLevel = $(".updateTravelLineDayForm select[name=hotelLevel]").val();
 			    		var whichDay = $(".updateTravelLineDayForm select[name=whichDay]").val();
 			    		var level = "三星以下";
-			    		if (hotelLevel == 1) {
+			    		if (hotelLevel == 0) {
+			    			level = "未选择";
+			    		}else if (hotelLevel == 1) {
 			    			level = "三星以下";
 						}else if (hotelLevel == 2) {
 							level = "三星";
@@ -2166,7 +2172,9 @@ define(function(require, exports) {
 				var detail = lineDayListStr.eq(i).find("input[name=detail]").val();
 				var whichDay = lineDayListStr.eq(i).find("input[name=whichDay]").val();
 				var hotelLevel = 0;
-				if (level == "三星以下") {
+				if (level == "未选择") {
+					hotelLevel = 0;
+				}else if (level == "三星以下") {
 					hotelLevel = 1;
 				}else  if(level == "三星"){
 					hotelLevel = 2;
