@@ -264,13 +264,14 @@
 										<div class="form-group">
 											<label class="col-sm-3 control-label no-padding-right">班次：</label>
 											<div class="col-sm-9">
-												<label class="control-label">{{if touristGroupDetail.isNeedLeaveService==1}}{{if touristGroupDetail.outRemarkArrange != null}}{{touristGroupDetail.outRemarkArrange.arriveShift}}{{/if}}{{/if}}</label>
+												<label class="control-label">{{if touristGroupDetail.isNeedArriveService==1}}{{if touristGroupDetail.outRemarkArrange != null}}
+												{{touristGroupDetail.outRemarkArrange.arriveShift}}{{/if}}{{/if}}</label>
 											</div>
 										</div>
 										<div class="form-group">
 											<label class="col-sm-3 control-label no-padding-right">班次时间：</label>
 											<div class="col-sm-9">
-												<label class="control-label">{{if touristGroupDetail.isNeedLeaveService==1}}{{if touristGroupDetail.outRemarkArrange != null}}{{touristGroupDetail.outRemarkArrange.arriveShiftTime}}{{/if}}{{/if}}</label>
+												<label class="control-label">{{if touristGroupDetail.isNeedArriveService==1}}{{if touristGroupDetail.outRemarkArrange != null}}{{touristGroupDetail.outRemarkArrange.arriveShiftTime}}{{/if}}{{/if}}</label>
 											</div>
 										</div>
 									</div>

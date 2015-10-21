@@ -975,7 +975,7 @@ define(function(require, exports) {
 						var touristGroupInfo = JSON.parse(data.touristGroupDetail);
 						data.touristGroupDetail = touristGroupInfo;
 						var html = viewTemplate(data);
-
+ 						
 						addTab(menuKey+"-view","查看小组",html);
 						var tab = "tab-resource_touristGroup-view-content";
 						$(".btn-submit-addTouristGroup").click(function(){
