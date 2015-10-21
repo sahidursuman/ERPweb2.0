@@ -20,12 +20,12 @@ define(function(require, exports) {
             endTime : "",
         },
         clickFlag : 0,
-        listInnerTransferProfit:function(page,lineProductId,lineProductName,partnerAgencyId,PartnerAgencyName,toBusinessGroupId,ToBusinessGroupName,startTime,endTime){
-            var name = PartnerAgencyName;
-            $.ajax({//            back/profitInnerTransfer.do
-                url:""+APP_ROOT+"back/profitInnerTransfer.do?method=listProfitInnerTransfer&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-                type:"GET",
-                data:"pageNo="+page+"&lineProductId="+lineProductId+"&partnerAgencyId="+partnerAgencyId+"&toBusinessGroupId="+toBusinessGroupId+"&startTime="+startTime+"&endTime="+endTime+"&sortType=auto",
+        searchParam : function(){
+            //获取搜索框数据
+            $.ajax({
+                url:""+APP_ROOT+" /back/profitInnerTransfer.do?method=getConditionList&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
+                type:"POST",
+                data:"",
                 dataType:"json",
                 beforeSend:function(){
                     globalLoadingLayer = openLoadingLayer();
@@ -34,30 +34,6 @@ define(function(require, exports) {
                     layer.close(globalLoadingLayer);
                     var result = showDialog(data);
                     if(result){
-                        InnerTransferProfit.searchData = {
-                            lineProductId:lineProductId,
-                            lineProductName:lineProductName,
-                            partnerAgencyId:partnerAgencyId,
-                            partnerAgencyName:PartnerAgencyName,
-                            toBusinessGroupId:toBusinessGroupId,
-                            toBusinessGroupName:ToBusinessGroupName,
-                            startTime:startTime,
-                            endTime:endTime
-                        }
-                      
-                        data.searchParam = InnerTransferProfit.searchData;
-                        
-                        var html = listTurnProfit(data);
-                        addTab(menuKey,"内转利润",html);
-                        $("#" + tabId + " .date-picker").datepicker({
-                            autoclose: true,
-                            todayHighlight: true,
-                            format: 'yyyy-mm-dd',
-                            language: 'zh-CN'
-                        });
-                       
-                        //获取搜索框数据
-                        //1.获取数据
                         var $tabId = $("#"+tabId);
                         var lineProductNameList = data.lineProductNameList,
                             partnerAgencyNameList = data.partnerAgencyNameList,
@@ -84,7 +60,6 @@ define(function(require, exports) {
                                 toBusinessGroupNameList[i].value = toBusinessGroupNameList[i].toBusinessGroupName
                             }
                         }
-                       
                         //线路产品
                         lineProducts.autocomplete({
                             minLength:0,
@@ -139,18 +114,57 @@ define(function(require, exports) {
                             $(Obj).autocomplete("option","source",toBusinessGroupNameList);
                             $(Obj).autocomplete('search','');
                         });
-
+                    }
+                }
+            });
+        },
+        listInnerTransferProfit:function(page,lineProductId,lineProductName,partnerAgencyId,PartnerAgencyName,toBusinessGroupId,ToBusinessGroupName,startTime,endTime){
+            var name = PartnerAgencyName;
+            $.ajax({//            back/profitInnerTransfer.do
+                url:""+APP_ROOT+"back/profitInnerTransfer.do?method=listProfitInnerTransfer&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
+                type:"GET",
+                data:"pageNo="+page+"&lineProductId="+lineProductId+"&partnerAgencyId="+partnerAgencyId+"&toBusinessGroupId="+toBusinessGroupId+"&startTime="+startTime+"&endTime="+endTime+"&sortType=auto",
+                dataType:"json",
+                beforeSend:function(){
+                    globalLoadingLayer = openLoadingLayer();
+                },
+                success:function(data){
+                    layer.close(globalLoadingLayer);
+                    var result = showDialog(data);
+                    if(result){
+                        InnerTransferProfit.searchParam();
+                        InnerTransferProfit.searchData = {
+                            lineProductId:lineProductId,
+                            lineProductName:lineProductName,
+                            partnerAgencyId:partnerAgencyId,
+                            partnerAgencyName:PartnerAgencyName,
+                            toBusinessGroupId:toBusinessGroupId,
+                            toBusinessGroupName:ToBusinessGroupName,
+                            startTime:startTime,
+                            endTime:endTime
+                        }
+                      
+                        data.searchParam = InnerTransferProfit.searchData;
+                        var $tabId = $("#"+tabId);
+                        var html = listTurnProfit(data);
+                        addTab(menuKey,"内转利润",html);
+                        $("#" + tabId + " .date-picker").datepicker({
+                            autoclose: true,
+                            todayHighlight: true,
+                            format: 'yyyy-mm-dd',
+                            language: 'zh-CN'
+                        });
                         //搜索按钮事件
-                        $tabId.find(".btn-arrangeTourist-search").click(function(){
+                        $("#"+tabId).find(".btn-arrangeTourist-search").click(function(){
                             InnerTransferProfit.searchData = {
-                                lineProductId : $tabId.find("input[name=lineProductId]").val(),
-                                lineProductName : $tabId.find("input[name=lineProductName]").val(),
-                                partnerAgencyId : $tabId.find("input[name=partnerAgencyId]").val(),
-                                partnerAgencyName : $tabId.find("input[name=partnerAgencyName]").val(),
-                                toBusinessGroupId : $tabId.find("input[name=toBusinessGroupId]").val(),
-                                toBusinessGroupName : $tabId.find("input[name=toBusinessGroupName]").val(),
-                                startTime : $tabId.find("input[name=startTime]").val(),
-                                endTime : $tabId.find("input[name=endTime]").val(),
+                                lineProductId : $("#"+tabId).find("input[name=lineProductId]").val(),
+                                lineProductName : $("#"+tabId).find("input[name=lineProductName]").val(),
+                                partnerAgencyId : $("#"+tabId).find("input[name=partnerAgencyId]").val(),
+                                partnerAgencyName : $("#"+tabId).find("input[name=partnerAgencyName]").val(),
+                                toBusinessGroupId : $("#"+tabId).find("input[name=toBusinessGroupId]").val(),
+                                toBusinessGroupName : $("#"+tabId).find("input[name=toBusinessGroupName]").val(),
+                                startTime : $("#"+tabId).find("input[name=startTime]").val(),
+                                endTime : $("#"+tabId).find("input[name=endTime]").val(),
                             };
                             
                             InnerTransferProfit.listInnerTransferProfit(0,InnerTransferProfit.searchData.lineProductId,InnerTransferProfit.searchData.lineProductName,InnerTransferProfit.searchData.partnerAgencyId,InnerTransferProfit.searchData.partnerAgencyName,InnerTransferProfit.searchData.toBusinessGroupId,InnerTransferProfit.searchData.toBusinessGroupName,InnerTransferProfit.searchData.startTime,InnerTransferProfit.searchData.endTime)
