@@ -1,13 +1,15 @@
 define(function(require, exports) {
-	var rule = require("./rule");
-    var menuKey = "financial_Client";
-    var listTemplate = require("./view/list");
-    var ClientChecking = require("./view/ClientChecking");
-    var ClientClearing = require("./view/ClientClearing");
-    var recordTemplate = require("./view/record");
-    var ClientCheckTab = "financial_Client-checking";
-    var ClientClearTab = "financial_Client-clearing";
-    var Client = {
+	var rule = require("./rule"),
+        menuKey = "financial_Client",
+        listTemplate = require("./view/list"),
+        ClientChecking = require("./view/ClientChecking"),
+        ClientClearing = require("./view/ClientClearing"),
+        recordTemplate = require("./view/record"),
+        ClientCheckTab = "financial_Client-checking",
+        ClientClearTab = "financial_Client-clearing",
+        travelAgencyList,
+        partnerAgencyList,
+        Client = {
 		pager : {
 			"pageNo": "",
 			"pageSize":"",
@@ -16,6 +18,8 @@ define(function(require, exports) {
 				"fromPartnerAgencyId":"",
 				"travelId":""
 			},
+            "fromPartnerAgencyName" : "",
+            "travelName" : "",
 			year : "",
 			month : ""
 		},
@@ -40,15 +44,17 @@ define(function(require, exports) {
 		},
 		oldCheckClientId:0,
 		oldBlanceClientId:0,
-		listClient:function(pageNo,fromPartnerAgencyId,travelId,year,month){
+		listClient:function(pageNo,fromPartnerAgencyId,fromPartnerAgencyName,travelId,travelName,year,month){
         	Client.pager = {
 				"pageNo":pageNo,
 				"pageSize":10,
 				"sortType":"auto",
 				"eqMap":{
 					"fromPartnerAgencyId":fromPartnerAgencyId,
-					"travelId":travelId,
+					"travelId":travelId
 				},
+                "fromPartnerAgencyName" : fromPartnerAgencyName,
+                 "travelName" : travelName,
 				year : year,
 				month : month
         	};
@@ -56,7 +62,7 @@ define(function(require, exports) {
             $.ajax({
                 url:""+APP_ROOT+"back/financial/financialParAgency.do?method=findPager&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
                 type:"POST",
-                data:"pager="+encodeURIComponent(Client.pager)+"&year="+year+"&month="+month,
+                data:"pager="+encodeURIComponent(Client.pager)+"&fromPartnerAgencyName="+fromPartnerAgencyName+"&travelName="+travelName+"&year="+year+"&month="+month,
                 dataType:"json",
                 beforeSend:function(){
                     globalLoadingLayer = openLoadingLayer();
@@ -65,7 +71,8 @@ define(function(require, exports) {
                     layer.close(globalLoadingLayer);
                     var result = showDialog(data);
                     if(result){
-                    	
+                        partnerAgencyList = JSON.parse(data.partnerAgencySet);
+                    	travelAgencyList = JSON.parse(data.travelAgencySet);
                     	var totalPage = data.pager.totalPage;
                         data.partnerAgencySet = JSON.parse(data.partnerAgencySet);
                         data.travelAgencySet = JSON.parse(data.travelAgencySet);
@@ -79,30 +86,41 @@ define(function(require, exports) {
                             language: 'zh-CN'
                         });
   
-                        var travelId = $("select[name=listClient_travelAgencySet]").val();
-                        var fromPartnerAgencyId = $("select[name=listClient_partnerAgencySet]").val();
+                        var travelId = $("input[name=travelAgencyId]").val(),
+                            travelName = $("input[name=travelAgencyName]").val();
+                        var fromPartnerAgencyId = $("input[name=partnerAgencyId]").val(),
+                            fromPartnerAgencyName = $("input[name=partnerAgencyName]").val();
                         var pageNo = $("#listClient_pager_pagerNo").val();
                         //搜索按钮事件
                         $(".main-content .page-content .btn-arrangeTourist-search").click(function(){
-                            var travelId = $("select[name=listClient_travelAgencySet]").val();
-                            var fromPartnerAgencyId = $("select[name=listClient_partnerAgencySet]").val();
+                            var travelId = $("input[name=travelAgencyId]").val(),
+                                travelName = $("input[name=travelAgencyName]").val();
+                            var fromPartnerAgencyId = $("input[name=partnerAgencyId]").val(),
+                                fromPartnerAgencyName = $("input[name=partnerAgencyName]").val();
                             var pageNo = $("#listClient_pager_pagerNo").val();
                             var year = $(".listMain").find("[name=ClientCheck_searchYear]").val();
                             var month = $(".listMain").find("[name=ClientCheck_searchMonth]").val();
-                            Client.listClient(pageNo,fromPartnerAgencyId,travelId,year,month);
+                            Client.listClient(pageNo,fromPartnerAgencyId,fromPartnerAgencyName,travelId,travelName,year,month);
                         });
+                        var tab = "tab-" + menuKey + "-content";
+                        Client.getPartnerAgencyList($("#"+tab+" .choosePartnerAgency"),"");
+                        Client.getTravelAgencyList($("#"+tab+" .chooseTravelAgency"),"");
                         //分页--首页按钮事件
                         $(".main-content .page-content .pageMode a.first").click(function(){
-                        	var travelId = $("select[name=listClient_travelAgencySet]").val();
-                            var fromPartnerAgencyId = $("select[name=listClient_partnerAgencySet]").val();
+                        	var travelId = $("input[name=travelAgencyId]").val(),
+                                travelName = $("input[name=travelAgencyName]").val();
+                            var fromPartnerAgencyId = $("input[name=partnerAgencyId]").val(),
+                                fromPartnerAgencyName = $("input[name=partnerAgencyName]").val();
                             var year = $(".listMain").find("[name=ClientCheck_searchYear]").val();
                             var month = $(".listMain").find("[name=ClientCheck_searchMonth]").val();
-                            Client.listClient(0,fromPartnerAgencyId,travelId,year,month);
+                            Client.listClient(0,fromPartnerAgencyId,fromPartnerAgencyName,travelId,travelName,year,month);
                         });
                         //分页--上一页事件
                         $(".main-content .page-content .pageMode a.previous").click(function(){
-                        	var travelId = $("select[name=listClient_travelAgencySet]").val();
-                            var fromPartnerAgencyId = $("select[name=listClient_partnerAgencySet]").val();
+                        	var travelId = $("input[name=travelAgencyId]").val(),
+                                travelName = $("input[name=travelAgencyName]").val();
+                            var fromPartnerAgencyId = $("input[name=partnerAgencyId]").val(),
+                                fromPartnerAgencyName = $("input[name=partnerAgencyName]").val();
                             var pageNo = $("#listClient_pager_pagerNo").val();
                             if (pageNo-1 == 0 || pageNo == 0) {
                             	pageNo = 0;
@@ -111,12 +129,14 @@ define(function(require, exports) {
 							}
                             var year = $(".listMain").find("[name=ClientCheck_searchYear]").val();
                             var month = $(".listMain").find("[name=ClientCheck_searchMonth]").val();
-                            Client.listClient(pageNo,fromPartnerAgencyId,travelId,year,month);
+                            Client.listClient(pageNo,fromPartnerAgencyId,fromPartnerAgencyName,travelId,travelName,year,month);
                         });
                         //分页--下一页事件
                         $(".main-content .page-content .pageMode a.next").click(function(){
-                        	var travelId = $("select[name=listClient_travelAgencySet]").val();
-                            var fromPartnerAgencyId = $("select[name=listClient_partnerAgencySet]").val();
+                        	var travelId = $("input[name=travelAgencyId]").val(),
+                                travelName = $("input[name=travelAgencyName]").val();
+                            var fromPartnerAgencyId = $("input[name=partnerAgencyId]").val(),
+                                fromPartnerAgencyName = $("input[name=partnerAgencyName]").val();
                             var pageNo = $("#listClient_pager_pagerNo").val();
 							pageNo = parseInt(pageNo) + 1;
 							if (pageNo+1 >= totalPage) {
@@ -124,16 +144,18 @@ define(function(require, exports) {
 							}
 							 var year = $(".listMain").find("[name=ClientCheck_searchYear]").val();
                             var month = $(".listMain").find("[name=ClientCheck_searchMonth]").val();
-                            Client.listClient(pageNo,fromPartnerAgencyId,travelId,year,month);
+                            Client.listClient(pageNo,fromPartnerAgencyId,fromPartnerAgencyName,travelId,travelName,year,month);
                         });
                         //分页--尾页事件
                         $(".main-content .page-content .pageMode a.last").click(function(){
-                        	var travelId = $("select[name=listClient_travelAgencySet]").val();
-                            var fromPartnerAgencyId = $("select[name=listClient_partnerAgencySet]").val();
+                        	var travelId = $("input[name=travelAgencyId]").val(),
+                                travelName = $("input[name=travelAgencyName]").val();
+                            var fromPartnerAgencyId = $("input[name=partnerAgencyId]").val(),
+                                fromPartnerAgencyName = $("input[name=partnerAgencyName]").val();
                             var pageNo = totalPage;
                             var year = $(".listMain").find("[name=ClientCheck_searchYear]").val();
                             var month = $(".listMain").find("[name=ClientCheck_searchMonth]").val();
-                            Client.listClient(pageNo-1,fromPartnerAgencyId,travelId,year,month);
+                            Client.listClient(pageNo-1,fromPartnerAgencyId,fromPartnerAgencyName,travelId,travelName,year,month);
                         });
                         //给对账按钮绑定事件
                         $("#tab-"+menuKey+"-content  .btn-divide").click(function(){
@@ -551,7 +573,7 @@ define(function(require, exports) {
 						if(isClose == 1){
 							closeTab(ClientCheckTab);
 							Client.pager = JSON.parse(Client.pager);
-							Client.listClient(Client.pager.pageNo,Client.pager.eqMap.fromPartnerAgencyId,Client.pager.eqMap.travelId,Client.pager.year,Client.pager.month);
+							Client.listClient(Client.pager.pageNo,Client.pager.eqMap.fromPartnerAgencyId,Client.pager.fromPartnerAgencyName,Client.pager.eqMap.travelId,Client.pager.travelName,Client.pager.year,Client.pager.month);
 						} else {
 							Client.ClientCheck(Client.searchCheckData.pageNo,Client.searchCheckData.id,Client.searchCheckData.month,Client.searchCheckData.year);
 						}
@@ -599,8 +621,8 @@ define(function(require, exports) {
 							if(isClose == 1){
 								closeTab();
 								Client.pager = JSON.parse(Client.pager);
-								Client.listClient(Client.pager.pageNo,Client.pager.eqMap.fromPartnerAgencyId,Client.pager.eqMap.travelId,Client.pager.year,Client.pager.month);
-							} else {
+								Client.listClient(Client.pager.pageNo,Client.pager.eqMap.fromPartnerAgencyId,Client.pager.fromPartnerAgencyName,Client.pager.eqMap.travelId,Client.pager.travelName,Client.pager.year,Client.pager.month);
+                            } else {
 								Client.ClientClear(Client.searchBalanceData.id,Client.searchBalanceData.year,Client.searchBalanceData.startMonth,Client.searchBalanceData.endMonth);
 							}
 						}
@@ -608,6 +630,51 @@ define(function(require, exports) {
 				});
 			}
 		},
+        getPartnerAgencyList:function(obj,partnerAId){
+            var $objC = $(obj);
+            if(partnerAgencyList != null && partnerAgencyList.length > 0){
+                for(var i=0;i<partnerAgencyList.length;i++){
+                    partnerAgencyList[i].value = partnerAgencyList[i].travelAgencyName;
+                }
+            }
+            $(obj).autocomplete({
+                minLength: 0,
+                change: function(event, ui) {
+                    if (!ui.item)  {
+                        $(this).val('').nextAll('input[name="partnerAgencyId"]').val('');
+                    }
+                },
+                select: function(event, ui) {
+                    $(this).blur().nextAll('input[name="partnerAgencyId"]').val(ui.item.id);
+                }
+            }).off("click").on("click",function(){
+                $objC.autocomplete('option','source', partnerAgencyList);
+                $objC.autocomplete('search', '');
+            });        
+                     
+        },
+        getTravelAgencyList:function(obj,partnerAId){
+            var $objC = $(obj);
+            if(travelAgencyList != null && travelAgencyList.length > 0){
+                for(var i=0;i<travelAgencyList.length;i++){
+                    travelAgencyList[i].value = travelAgencyList[i].name;
+                }
+            }
+            $(obj).autocomplete({
+                minLength: 0,
+                change: function(event, ui) {
+                    if (!ui.item)  {
+                        $(this).val('').nextAll('input[name="travelAgencyId"]').val('');
+                    }
+                },
+                select: function(event, ui) {
+                    $(this).blur().nextAll('input[name="travelAgencyId"]').val(ui.item.id);
+                }
+            }).off("click").on("click",function(){
+                $objC.autocomplete('option','source', travelAgencyList);
+                $objC.autocomplete('search', '');
+            });        
+        },
 		save : function(saveType){
 			if(saveType == "checking"){
 				Client.saveCheckingData(Client.oldCheckClientId,1);
