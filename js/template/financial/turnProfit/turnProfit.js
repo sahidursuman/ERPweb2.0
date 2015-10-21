@@ -20,11 +20,12 @@ define(function(require, exports) {
 	        "endTime":""
 	    },
         clickFlag:0,
-        listTurnProfit:function(page,lineProductId,lineProductName,transferPartnerAgencyId,transferPartnerAgencyName,partnerAgencyId,partnerAgencyName,startTime,endTime){
+        searchParam : function(){
+        	//获取搜索框数据
             $.ajax({
-                url:""+APP_ROOT+"back/profitTransfer.do?method=listProfitTransfer&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
+                url:""+APP_ROOT+" /back/profitTransfer.do?method=searchParam&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
                 type:"POST",
-                data:"pageNo="+page+"&lineProductId="+lineProductId+"&transferPartnerAgencyId="+transferPartnerAgencyId+"&partnerAgencyId="+partnerAgencyId+"&startTime="+startTime+"&endTime="+endTime+"&sortType=auto",
+                data:"",
                 dataType:"json",
                 beforeSend:function(){
                     globalLoadingLayer = openLoadingLayer();
@@ -33,28 +34,7 @@ define(function(require, exports) {
                     layer.close(globalLoadingLayer);
                     var result = showDialog(data);
                     if(result){
-                        TurnProfit.searchBalanceData = {
-                            lineProductId:lineProductId,
-                            lineProductName:lineProductName,
-                            transferPartnerAgencyId:transferPartnerAgencyId,
-                            transferPartnerAgencyName:transferPartnerAgencyName,
-                            partnerAgencyId:partnerAgencyId,
-                            partnerAgencyName:partnerAgencyName,
-                            startTime:startTime,
-                            endTime:endTime
-                        }
-                        data.searchParam = TurnProfit.searchBalanceData;
-                        var html = listTurnProfit(data);
-                        addTab(menuKey,"转客利润",html);
-                        $("#" + tabId + " .date-picker").datepicker({
-                            autoclose: true,
-                            todayHighlight: true,
-                            format: 'yyyy-mm-dd',
-                            language: 'zh-CN'
-                        });
-                        //获取搜索框数据
-                        //1.获取数据
-                        var lineProductNameList = data.lineProductNameList,
+                    	var lineProductNameList = data.lineProductNameList,
                             partnerAgencyNameList = data.partnerAgencyNameList, 
                             partnerLocalAgencyNameList  = data.partnerLocalAgencyNameList;
 
@@ -79,7 +59,6 @@ define(function(require, exports) {
                                 partnerLocalAgencyNameList[i].value = partnerLocalAgencyNameList[i].partnerLocalAgencyName
                             }
                         }
-
                         //线路产品   
                         lineProducts.autocomplete({
                             minLength:0,
@@ -134,7 +113,43 @@ define(function(require, exports) {
                             $(Obj).autocomplete("option","source",partnerLocalAgencyNameList);
                             $(Obj).autocomplete('search','');
                         });
-
+                    }
+                }
+            });            
+		},
+        listTurnProfit:function(page,lineProductId,lineProductName,transferPartnerAgencyId,transferPartnerAgencyName,partnerAgencyId,partnerAgencyName,startTime,endTime){
+            $.ajax({
+                url:""+APP_ROOT+"back/profitTransfer.do?method=listProfitTransfer&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
+                type:"POST",
+                data:"pageNo="+page+"&lineProductId="+lineProductId+"&transferPartnerAgencyId="+transferPartnerAgencyId+"&partnerAgencyId="+partnerAgencyId+"&startTime="+startTime+"&endTime="+endTime+"&sortType=auto",
+                dataType:"json",
+                beforeSend:function(){
+                    globalLoadingLayer = openLoadingLayer();
+                },
+                success:function(data){
+                    layer.close(globalLoadingLayer);
+                    var result = showDialog(data);
+                    if(result){
+                    	TurnProfit.searchParam();//初始化搜索栏列表数据
+                        TurnProfit.searchBalanceData = {
+                            lineProductId:lineProductId,
+                            lineProductName:lineProductName,
+                            transferPartnerAgencyId:transferPartnerAgencyId,
+                            transferPartnerAgencyName:transferPartnerAgencyName,
+                            partnerAgencyId:partnerAgencyId,
+                            partnerAgencyName:partnerAgencyName,
+                            startTime:startTime,
+                            endTime:endTime
+                        }
+                        data.searchParam = TurnProfit.searchBalanceData;
+                        var html = listTurnProfit(data);
+                        addTab(menuKey,"转客利润",html);
+                        $("#" + tabId + " .date-picker").datepicker({
+                            autoclose: true,
+                            todayHighlight: true,
+                            format: 'yyyy-mm-dd',
+                            language: 'zh-CN'
+                        });
                         //搜索按钮事件
                         $("#" + tabId + " .btn-arrangeTourist-search").click(function(){
                             //var name = $(".main-content .page-content input[name=ticket_name]").val();
