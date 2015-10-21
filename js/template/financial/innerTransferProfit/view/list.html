@@ -80,7 +80,7 @@
                 <td><a href="javascript:void(0)" class="showIncomeDetail" data-entity-id = "{{innerTransferList.touristGroupId}}">{{innerTransferList.needInComMoney}}</a></td>
                 <td>{{innerTransferList.change}}</td>
                 <td><a href="javascript:void(0)" class="showChangeNeedPayDetail"  data-entity-id = "{{innerTransferList.touristGroupId}}">{{innerTransferList.changeNeedPayMoney}}</a></td>
-                <td>{{innerTransferList.toBusinessGroupName}}</td> 
+                <td>{{if innerTransferList.toBusinessGroupName == null || innerTransferList.toBusinessGroupName == ""}}无{{else}}{{innerTransferList.toBusinessGroupName}}{{/if}}</td> 
                 <td>
                     <a href="javascript:void(0)" class="showTransNeedPayDeatil" data-entity-id = "{{innerTransferList.InnerTransferId}}">{{innerTransferList.transNeedPayAllMoney}}</a>
                 </td>
