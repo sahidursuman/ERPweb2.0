@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":83,"md5":"c0a061681ce3d68b4166b595c89a19c6"}*/
+/*TMODJS:{"debug":true,"version":84,"md5":"c0a061681ce3d68b4166b595c89a19c6"}*/
 define(function(require) {
     return require("../../../template")("system/user/view/update", function($data, $filename) {
         try {
