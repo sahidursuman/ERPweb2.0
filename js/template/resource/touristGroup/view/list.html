@@ -78,7 +78,7 @@
 					<td>
 						{{touristGroup.createTime}}
 					</td>
-					<td>
+					<td width="60">
 						{{ if touristGroup.status==0 }}
 							已发团
 						{{else if touristGroup.status==1 }}
@@ -96,7 +96,7 @@
 						{{/if}}
 					</td>
 					<td>
-						<div class="hidden-sm hidden-xs btn-group">
+						<div class="hidden-sm hidden-xs btn-group" style="width:120px;">
 							<a data-entity-id="{{touristGroup.id}}" class=" btn-touristGroup-view cursor">
 								查看
 							</a><a href="" class="cursor"> |</a>

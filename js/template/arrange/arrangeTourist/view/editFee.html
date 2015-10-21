@@ -21,7 +21,16 @@
 						<div class="col-sm-2">
 							<input value="{{if touristGroup != null}}{{touristGroup.transPayedMoney}}{{/if}}" type="text" name="payedMoney" class="col-sm-12" />
 						</div>
-					</div>
+
+						<label>
+							<input  type="checkbox" class="ace" checked="checked" value="1" name="isCurrent">
+							<span class="lbl">
+							</span>
+						</label>
+						<label class="control-label no-padding-right">对方现收</label>
+
+				</div>
+
 				<div class="form-group">
 					<div class="col-sm-2"></div>
 					<div class="col-sm-8">
@@ -126,7 +135,7 @@
 
 
 
-	<!--收客信息 start-->
+	<!--收客信息 start--> 
 	<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
 		<div class=" ui-sortable-handle">
 				<h5 class="title">
