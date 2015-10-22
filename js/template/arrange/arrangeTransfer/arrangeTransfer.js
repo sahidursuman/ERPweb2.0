@@ -138,11 +138,6 @@ define(function(require, exports) {
 					//同行转入选项卡绑定事件
 					$("#"+tabId+" #myTab li a.transferIn").click(function(){
 						var type=$(this).attr("data-value");//1	
-						//var startTime=data.startDay;
-						//调用默认时间是一周的函数
-						//var endTime = transfer.dateCalculation(startTime,6);
-						//$transferIn.find("input[name=endTime]").val(endTime);
-						
 						transfer.listTransferIn(page,partnerAgencyId,startTime,partnerAgencyId,contactUserId,status,type);
 
 					});
@@ -152,18 +147,12 @@ define(function(require, exports) {
 					//我社转出选项卡绑定事件
 					$("#"+tabId+" #myTab li a.transferOut").click(function(){
 						var type=$(this).attr("data-value");//2
-						//var startTime=data.startDay;
-						//调用默认时间是一周的函数
-						//var endTime = transfer.dateCalculation(startTime,6);
-						//$transferOut.find("input[name=createTime]").eq(1).val(endTime);
 						transfer.listTransfer(page,partnerAgencyId,creator,startTime,endTime,status,type);
 					});
 					//我社转出搜索栏状态button下拉事件
 					$("#transferOut .btn-status .dropdown-menu a").click(function(){
 						$(this).parent().parent().parent().find("button").attr("data-value",$(this).attr("data-value"));
 						$(this).parent().parent().parent().find("span").text($(this).text());
-						//var startTime = $transferOut.find("input[name=createTime]").eq(0).val();
-					    //var endTime = transfer.dateCalculation(startTime,6);
 						transfer.searchInData = {
 							//搜索字段
 							partnerAgencyId : $transferOut.find("input[name=transferPartnerAgencyId]").val(),
@@ -174,6 +163,7 @@ define(function(require, exports) {
 							type : $("#" +tabId+" #myTab li.active a").attr("data-value"),
 							page:$("#" +tabId+" #pagerH").val()
 						}
+						transfer.initTransOutTal(transfer.searchInData.page,transfer.searchInData.partnerAgencyId,transfer.searchInData.creator,transfer.searchInData.startTime,transfer.searchInData.endTime,transfer.searchInData.status,transfer.searchInData.type);
 						transfer.listTransfer(transfer.searchInData.page,transfer.searchInData.partnerAgencyId,transfer.searchInData.creator,transfer.searchInData.startTime,transfer.searchInData.endTime,transfer.searchInData.status,transfer.searchInData.type);
 					});
 					//同行转入搜索条件按钮绑定事件
@@ -224,11 +214,40 @@ define(function(require, exports) {
 							page:$("#" +tabId+" #pagerH").val()
 						}
 						//刷新人数合计、应付款合计和已付款合计
+						transfer.initTransOutTal(page,transfer.searData.partnerAgencyId,transfer.searData.creator,transfer.searData.startTime,transfer.searData.endTime,transfer.searData.status,transfer.searData.type);	
 						transfer.listTransfer(page,transfer.searData.partnerAgencyId,transfer.searData.creator,transfer.searData.startTime,transfer.searData.endTime,transfer.searData.status,transfer.searData.type);
-					});				 
+					});	
+					transfer.initTransOutTal(page,partnerAgencyId,creator,startTime,endTime,status,type);			 
 					transfer.listTransfer(page,partnerAgencyId,creator,startTime,endTime,status,type);
 				}
 			});
+		},
+
+		initTransOutTal:function(page,partnerAgencyId,creator,startTime,endTime,status,type){
+			var pager = {
+					"pageNo":page,
+			};
+			pager = JSON.stringify(pager);
+			//查询统计数据
+			$.ajax({  
+				url:""+APP_ROOT+"back/transfer.do?method=findTotal&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
+				data:"pager="+encodeURIComponent(pager)+"&type="+type+"&partnerAgencyId="+partnerAgencyId+"&creator="+creator+"&status="+status+"&endTime="+endTime+"&startTime="+startTime,
+				dataType:'json',
+				beforeSend:function(){
+					globalLoadingLayer = layer.open({
+						zIndex:1028,
+						type:3
+					});
+				},
+				success:function(data){
+					layer.close(globalLoadingLayer);
+					$transferInObj=$(".transferOut-Header-Cost");    
+					$transferInObj.find(".totalAdultCount").text(data.totalAdultCount);
+					$transferInObj.find(".totalChildCount").text(data.totalChildCount);
+					$transferInObj.find(".totalNeedPay").text(data.totalNeedPay);  
+					$transferInObj.find(".totalPayed").text(data.totalPayed);
+			    }
+		   });
 		},
 		//默认时间是一周的计算
 		dateCalculation:function(dt, days){
@@ -258,6 +277,7 @@ define(function(require, exports) {
 					});
 				},
 				success:function(data){
+					layer.close(globalLoadingLayer);
 					var $transferInObj=$("#transferIn-Header-Cost");
 					$transferInObj.find(".totalAdultCount").text(data.totalAdultCount);
 					$transferInObj.find(".totalChildCount").text(data.totalChildCount);
@@ -404,11 +424,11 @@ define(function(require, exports) {
 				success:function(data){
 					layer.close(globalLoadingLayer);
 					data.pager = JSON.parse(data.pager);
-					$transferOutObj=$("#transferOut");    
+					/*$transferOutObj=$("#transferOut");    
 					$transferOutObj.find(".totalAdultCount").text(data.totalAdultCount);
 					$transferOutObj.find(".totalChildCount").text(data.totalChildCount);
 					$transferOutObj.find(".totalNeedPay").text(data.totalNeedPay);
-					$transferOutObj.find(".totalPayed").text(data.totalPayed);
+					$transferOutObj.find(".totalPayed").text(data.totalPayed);*/
 					
 					if(type==2){
 						//我社转出模板数据
