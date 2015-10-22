@@ -555,7 +555,7 @@ define(function(require, exports) {
             $.ajax({
                 url:""+APP_ROOT+"back/partnerAgency.do?method=findPartnerAnencyList&token="+$.cookie("token")+"&menuKey=resource_partnerAgency&operation=view",
                 dataType: "json",
-                data:"travelAgencyName="+$objC.val(),
+                data:"",
                 success:function(data){
                     layer.close(globalLoadingLayer);
                         var result = showDialog(data);

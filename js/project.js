@@ -438,6 +438,7 @@ function login(){
 					"<i class='ace-icon fa fa-times'></i> 取消 </button> <button class='btn btn-primary btn-UserSaveInfo'> <i class='ace-icon fa fa-check'></i> 修改 </button></div></form></div>",
 					success:function(){
 						var $loginObj=$(".login-userData-form");
+						$loginObj.find('[name="oldPassword"]').focus();
 						//修改用户密码
 						$loginObj.find(".btn-UserSaveInfo").click(function(){
 							var newPassword=$loginObj.find("input[name='newPassword']").val();

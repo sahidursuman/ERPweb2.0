@@ -123,10 +123,6 @@ define(function(require, exports) {
 					var html = listMainTemplate(map);
 					addTab(menuKey,"转客管理",html);
 					var $transferOut=$("#transferOut");   
-					//调用默认时间是一周的函数
-					var startTime=data.startDay;
-					var endTime = transfer.dateCalculation(startTime,6);
-					$transferOut.find("input[name=createTime]").eq(1).val(endTime);
 
 					$("#" +tabId+" .transferTouristMain .date-picker").datepicker({
 						autoclose: true,

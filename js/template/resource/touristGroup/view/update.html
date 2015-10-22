@@ -27,7 +27,7 @@
 							{{if touristGroupDetail.status == 1}}
 								<div class="input-group">
 									<input type="text" name="startTime" value="{{touristGroupDetail.startTime | dateFormat: 'yyyy-MM-dd'}}" class="col-sm-12 date-picker datepicker" />
-									<span class="input-group-addon" style="left: -30px">
+									<span class="input-group-addon" style="left: -40px">
 										<i class="fa fa-calendar"></i>
 									</span>
 								</div>
@@ -55,7 +55,7 @@
 							<div class="input-group">
 								<input class="choosePartnerManager col-sm-12 bind-change" value="{{if touristGroupDetail.partnerAgencyContact != null}}{{touristGroupDetail.partnerAgencyContact.contactRealname}} -[{{touristGroupDetail.partnerAgencyContact.contactMobileNumber}}]{{/if}}" name="partnerAgencyNameList" type="text" />
 								<input type="hidden" name="partnerAgencyContactId" value="{{if touristGroupDetail.partnerAgencyContact != null}}{{touristGroupDetail.partnerAgencyContact.id}}{{/if}}" />
-								<span class="input-group-addon addPartnerManager" style="cursor:pointer;left: -30px" title="为组团社新添加联系人">
+								<span class="input-group-addon addPartnerManager" style="cursor:pointer;left: -40px" title="为组团社新添加联系人">
 									<i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
 								</span>
 							</div>
@@ -184,6 +184,7 @@
 								<label class="col-sm-1 control-label no-padding-right">住宿标准：</label>
 								<div class="col-sm-3">
 									<select name="level" class="col-sm-12">
+										<option{{if touristGroupDetail.hotelLevel == 0}} selected="selected"{{/if}} value="0">未选择</option>
 										<option{{if touristGroupDetail.hotelLevel == 1}} selected="selected"{{/if}} value="1">三星以下</option>
 										<option{{if touristGroupDetail.hotelLevel == 2}} selected="selected"{{/if}} value="2">三星</option>
 										<option{{if touristGroupDetail.hotelLevel == 3}} selected="selected"{{/if}} value="3">准四星</option>

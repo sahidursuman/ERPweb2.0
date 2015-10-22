@@ -1559,7 +1559,7 @@ define(function(require, exports) {
 						    type: 1,
 						    title:"查看发团计划",
 						    skin: 'layui-layer-rim', //加上边框
-						    area: ['60%', '50%'], //宽高
+						    area: ['85%', '80%'], //宽高
 						    zIndex:1028,
 						    content: html,
 						    success:function(){

@@ -145,7 +145,7 @@ define(function(require, exports) {
                         }
                       
                         data.searchParam = InnerTransferProfit.searchData;
-                        var $tabId = $("#"+tabId);
+                        
                         var html = listTurnProfit(data);
                         addTab(menuKey,"内转利润",html);
                         $("#" + tabId + " .date-picker").datepicker({
@@ -155,7 +155,8 @@ define(function(require, exports) {
                             language: 'zh-CN'
                         });
                         //搜索按钮事件
-                        $("#"+tabId).find(".btn-arrangeTourist-search").click(function(){
+                        var $tabId = $("#"+tabId);
+                        $tabId.find(".btn-arrangeTourist-search").click(function(){
                             InnerTransferProfit.searchData = {
                                 lineProductId : $("#"+tabId).find("input[name=lineProductId]").val(),
                                 lineProductName : $("#"+tabId).find("input[name=lineProductName]").val(),
@@ -200,6 +201,7 @@ define(function(require, exports) {
                         });
                         //查看遊客人數事件
                         $tabId.find(".showPerson").click(function(){
+                            console.log("123");
                             var visitorGroupId = $(this).attr("data-entity-id")
                             InnerTransferProfit.clickFlag = 1;
                             InnerTransferProfit.viewTouristGroup(visitorGroupId);

@@ -91,6 +91,7 @@
 											{{/each}}
 										</select>
 									</div>
+
 									<label class="control-label no-padding-right pull-left">状态：</label>
 									<div class="col-sm-1 btn-group btn-status">
 										<button data-value="{{searchParam.status}}" data-toggle="dropdown" class=" btn-sm dropdown-toggle block-up" aria-expanded="false">
@@ -122,6 +123,7 @@
 											</li>
 										</ul>
 									</div>
+
 									<button class="btn-sm btn-transferOut-search search-btn">
 										<i class="ace-icon fa fa-search"></i> 搜索
 									</button>
@@ -143,8 +145,8 @@
 										<th>转客人</th>
 										<th>转客时间</th>
 										<th>联系电话</th>
-										<th>对方状态</th>
-										<th>操作</th>
+										<th width="80">对方状态</th>
+										<th width="150">操作</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -163,8 +165,6 @@
 										<td>{{rs.user.mobileNumber}}</td>
 										{{else}}
 										{{/if}}
-										<td>{{rs.transNeedPayMoney}}</td>
-										<td>{{rs.transPayedMoney}}</td>
 										<td width="60">{{if rs.status == 0}}<span style="color:#D2691E;">未确认</span>{{else if rs.status == 1}}<span style="color: green;">已接收</span>{{else if rs.status == 2}}<span style="color: red;">已拒收</span>{{else}}<span style="">未使用</span>{{/if}}</td>
 										<td>
 											<div class="hidden-sm hidden-xs btn-group" style="width:120px;">
@@ -265,7 +265,7 @@
 
 				<!--他部转入start-->
 				<div id="inner-TransferIn" class="tab-pane fade clearfix">
-					<div class="col-sm-12 transferIn-content">  	
+					<div class="col-sm-12 transferIn-content">
 					</div>
 				</div>
 				<!--他部转入end-->

@@ -30,6 +30,7 @@ define(function(require, exports) {
 			}
 			return false;
 		},
+		cleanFlag:0,
 		//获取统计数据
 		getTouristStatisticData:function(page,partnerAgencyIdS,lineProductIdS,startTimeS,userIdS,createTimeStartS,createTimeEndS,customerTypeS,statusS){
 			var args = {
@@ -56,7 +57,7 @@ define(function(require, exports) {
 					globalLoadingLayer = openLoadingLayer();
 				},
 				success:function(data){
-					console.info(args);
+					
 					//关闭遮罩
 					layer.close(globalLoadingLayer);
 					//根据返回值判断下一步操作，或者已出现错误
@@ -73,6 +74,7 @@ define(function(require, exports) {
 							customerType: customerTypeS,
 							status : statusS
 						};
+						
 						var html = listMainTemplate(data);
 						addTab(menuKey,"游客管理",html);
 						//搜索栏状态button下拉事件
@@ -113,7 +115,9 @@ define(function(require, exports) {
 
 						//新增小组事件
 						$(".main-content .page-content .btn-touristGroup-add").click(function(){
+							touristGroup.cleanFlag = 1;
 							touristGroup.addTouristGroup();
+							
 						});
 				        touristGroup.listTouristGroup(0,touristGroup.searchData.partnerAgencyId,touristGroup.searchData.lineProductId,touristGroup.searchData.startTime,touristGroup.searchData.userId,touristGroup.searchData.createTimeStart,touristGroup.searchData.createTimeEnd,touristGroup.searchData.customerType,touristGroup.searchData.status);
 				        //下拉数据初始化
@@ -158,6 +162,7 @@ define(function(require, exports) {
 						touristGroupList = JSON.parse(touristGroupList);
 						//讲字符串改为对象
 						data.touristGroupList = touristGroupList;
+						console.log(data);
 						var html = listTemplate(data);
 						$("#touristGroup-listMain").html(html);
 						//touristGroup.initList(data);
@@ -176,6 +181,7 @@ define(function(require, exports) {
 						//修改小组事件
 						$(".main-content .page-content .btn-touristGroup-edit").click(function(){
 							var id = $(this).attr("data-entity-id");
+							touristGroup.cleanFlag = 2;
 							touristGroup.updateTouristGroup(id);
 						});
 						//删除小组事件绑定
@@ -621,6 +627,12 @@ define(function(require, exports) {
 					});
 				});
 			}
+
+			$('#' + tab).find('.addTouristTbody').on('change', 'select', function(event) {
+				event.preventDefault();
+				validator = rule.updateTouristGroupCheckor(validator);
+				$(this).closest('tr').find('[name="idCardNumber"]').trigger('focusout');
+			});
 			//游客名单 批量添加成员按钮绑定事件
 			$("#"+tab+" .touristGroupMainFormMember .btn-add-tourist-more").click(touristGroup.batchAddTouristGroupMember);
 			//中转接待状态事件绑定
@@ -668,7 +680,6 @@ define(function(require, exports) {
 						var html = updateTemplate(data);	
 						//已修改提示
 						var tab = "tab-resource_touristGroup-update-content";
-			    		var validator=rule.checktouristGroup($(".updateTouristGroup"));  
 						if($(".tab-"+menuKey+"-update").length > 0) {
 							addTab(menuKey+"-update","编辑小组");	
                  	    	if(!!touristGroup.edited["update"] && touristGroup.edited["update"] != ""){
@@ -681,31 +692,27 @@ define(function(require, exports) {
 									 touristGroup.edited["update"] = "";
 				            		 addTab(menuKey+"-update","编辑小组",html);	
 									 touristGroup.initUpdate(id,data);
-				            		 validator = rule.checktouristGroup($('.updateTouristGroup'));
 				            	},function(){
 				            		addTab(menuKey+"-update","编辑小组",html);	
 									touristGroup.initUpdate(id,data);
-									validator = rule.checktouristGroup($('.updateTouristGroup'));									
 									touristGroup.edited["update"] = "";
 				            	}); 							
                  	    	 }else{
 	                 	    	addTab(menuKey+"-update","编辑小组",html);	
 								touristGroup.initUpdate(id,data);
-	                 	        validator = rule.checktouristGroup($('.updateTouristGroup'));
                  	    	 } 
                  	    }else{
                  	    	addTab(menuKey+"-update","编辑小组",html);	
 							touristGroup.initUpdate(id,data);
-                 	    	validator = rule.checktouristGroup($("#"+tab+""));
                  	    }
 					}
 				}
 			});
 		},
 		initUpdate : function(id,data){
-			var validator=rule.checktouristGroup($(".updateTouristGroup"));  
 			var tab = "tab-resource_touristGroup-update-content";
 			var updateTouristGroup = id;
+			var validator=rule.checktouristGroup($('#'+tab).find(".updateTouristGroup"));  
 			$('.updateTouristGroup').on("change",function(){
 				touristGroup.edited["update"] = "update";
 			});	
@@ -884,6 +891,13 @@ define(function(require, exports) {
 				})
 			}
 			
+			// 切换选项，调整表单验证规则
+			$('#'+tab).find('.addTouristTbody').on('change', 'select', function(event) {
+				event.preventDefault();
+				validator = rule.updateTouristGroupCheckor(validator);
+				$(this).closest('tr').find('[name="idCardNumber"]').trigger('focusout');
+			});
+
 			//游客名单成员列表删除
 			$("#"+tab+" .addTouristList .btnDeleteTourist").click(function(){
 				var tr =$(this).parent().parent();
@@ -969,7 +983,7 @@ define(function(require, exports) {
 						var touristGroupInfo = JSON.parse(data.touristGroupDetail);
 						data.touristGroupDetail = touristGroupInfo;
 						var html = viewTemplate(data);
-
+ 						
 						addTab(menuKey+"-view","查看小组",html);
 						var tab = "tab-resource_touristGroup-view-content";
 						$(".btn-submit-addTouristGroup").click(function(){
@@ -1211,10 +1225,18 @@ define(function(require, exports) {
 									}
 								},
 								select: function(event, ui) {
-									var $tabId = $("#tab-resource_touristGroup-add-content");
+									
 									$(this).blur().nextAll('input[name="fromPartnerAgencyId"]').val(ui.item.id);
-									$tabId.find("input[name=partnerAgencyNameList]").val("");
+									if(touristGroup.cleanFlag == 1){
+										var $tabId = $("#tab-resource_touristGroup-add-content");
+										$tabId.find("input[name=partnerAgencyNameList]").val("");
+									}
+									if(touristGroup.cleanFlag == 2){
+										var $tabId = $("#tab-resource_touristGroup-update-content");
+										$tabId.find("input[name=partnerAgencyNameList]").val("");
 
+									}
+								
 								}
 							}).off("click").on("click",function(){
 								

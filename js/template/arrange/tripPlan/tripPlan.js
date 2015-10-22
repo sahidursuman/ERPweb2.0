@@ -375,6 +375,13 @@ define(function(require, exports) {
 						addTab(menuKey+"-view","查看发团计划",html);
 						var tab = "tab-arrange_plan-view-content";
 				    	tripPlan.MenberNumber("addTripPlanTouristTbody");
+				    	//判定是否选中
+				    	if (data.tripPlan.executeTimeType==0) {
+				    		$(".newAddTripPlanMain").find('input[name=executeTimeType]').eq(0).attr("checked","checked");
+				    	} else{
+				    		$(".newAddTripPlanMain").find('input[name=executeTimeType]').eq(1).attr("checked","checked");
+				    	};
+				    
 				    	//查看计划中 查看游客小组
 				    	$("#" + tab + " .viewTripPlan .viewTripPlanView").on("click",function(){
 				    		var id = $(this).attr("data-entity-id");
@@ -688,7 +695,7 @@ define(function(require, exports) {
 														return "-"
 													}
 												}
-												html +='<tr><td>第'+data.lineProductDays[i].whichDay+'天</td><td>'+data.lineProductDays[i].repastDetail+'</td><td>'+hotelLevel()+'</td><td class="col-xs-6">'+data.lineProductDays[0].title+'</td></tr>';
+												html +='<tr><td>第'+data.lineProductDays[i].whichDay+'天</td><td>'+data.lineProductDays[i].repastDetail+'</td><td>'+hotelLevel()+'</td><td class="col-xs-6">'+data.lineProductDays[i].title+'</td></tr>';
 											}
 											$(".newAddTripPlanMain table.days tbody").html(html);
 											$(".newAddTripPlanMain table.days tbody").html(html);
