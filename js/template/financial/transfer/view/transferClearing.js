@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":47,"md5":"041988dce8da0712954b64168ffc0296"}*/
+/*TMODJS:{"debug":true,"version":49,"md5":"041988dce8da0712954b64168ffc0296"}*/
 define(function(require) {
     return require("../../../template")("financial/transfer/view/transferClearing", function($data, $filename) {
         try {
