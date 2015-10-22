@@ -319,8 +319,7 @@ define(function(require, exports) {
 						validator=rule.transferCheckor($(".inner-edit"));
 					}
 					$("#tab-"+menuKey+"-edit-content").on("change",function(){
-						innerTransfer.edited["edit"] = "edit"; 
-					
+						innerTransfer.edited["edit"] = "edit"; 					
 					})
 					//新增&&智能计算
 					//inner.innitAddFee(validator);
@@ -436,7 +435,7 @@ define(function(require, exports) {
 			var val = $obj.find("[name="+name+"]").val();
 			return val;
 		}
-		var innerTransfer = {
+		var innerTransferJson = {
 			id : getValParam("id"),//	内转ID		
 			innerTransferFeeSet : "",	//内转的其他费用	array<object>	
 			toBusinessGroupId :$obj.find("select[name=businessGroup_id]").val(),//	转给的部门ID	  	
@@ -466,11 +465,11 @@ define(function(require, exports) {
 				otherFeeJsonAdd.push(otherFeeJson);
 			}
 		})
-		innerTransfer.innerTransferFeeSet=otherFeeJsonAdd;
-		var innerTransfer=JSON.stringify(innerTransfer);
+		innerTransferJson.innerTransferFeeSet=otherFeeJsonAdd;
+		var innerTransferJson=JSON.stringify(innerTransferJson);
 		$.ajax({
 			url:""+APP_ROOT+"back/innerTransfer.do?method=update&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
-			data:"innerTransfer="+encodeURIComponent(innerTransfer),
+			data:"innerTransfer="+encodeURIComponent(innerTransferJson),
 			datatype:"json",
 			beforeSend:function(){
 				globalLoadingLayer = layer.open({
@@ -482,14 +481,14 @@ define(function(require, exports) {
 				var result = showDialog(data);  
 				if(result){  
 					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-						/*innerTransfer.edited["edit"] = "";
-						if(isClose == 1){*/
+						innerTransfer.edited["edit"] = "";
+						if(isClose == 1){
 							closeTab(menuKey+"-edit");
 							var divId = "inner-TransferOut",
 								type = "1";
 							innerTransfer.getSearchParam(divId,type);
 							innerTransfer.innerList(divId,type);
-						/*}*/
+						}
 					});
 				}
 			}
