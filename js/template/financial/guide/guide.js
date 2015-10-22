@@ -455,9 +455,13 @@ define(function(require, exports) {
 	    },
 	    //保存对账数据
 	    saveCheckingData:function(page,guideId,year,month,isClose){
-           var JsonStr = [],$tr = $("#"+checkTabId+" .all tbody tr");
-           var count = 0;
-    	   $tr.each(function(i){
+	    	if(!guide.edited["checking"] || guide.edited["checking"] != "checking"){
+                showMessageDialog($( "#confirm-dialog-message" ),"当前未进行任何操作！");
+                return;
+            }
+            var JsonStr = [],$tr = $("#"+checkTabId+" .all tbody tr");
+            var count = 0;
+    	    $tr.each(function(i){
     		   var checkStatus = $(this).find("input[name='isConfirmAccount']").attr("data-entity-checkStatus");
     		   var startTime = $(this).attr("data-entity-startTime");
     		   var flag = $(this).find("input[name='isConfirmAccount']").is(":checked");
