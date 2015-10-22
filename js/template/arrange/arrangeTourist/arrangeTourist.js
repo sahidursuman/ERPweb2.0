@@ -1060,7 +1060,7 @@ define(function(require, exports) {
 				arrangeTourist.edited["mergeAddTripPlan"] = "mergeAddTripPlan";
 			});	
 			//小组总人数计算
-			arrangeTourist.tripPlanAllMemberCount("tripPlanAllMemberCount",tab,"addTripPlanTouristTbody");
+			arrangeTourist.tripPlanAllMemberCount("tripPlanAllMemberCount",tab,"mergeTripPlanTouristTbody");
 			//生成计划验证  
 			var validator = rule.checkdCreateTripPlan($(".addMergePlan"));        
 			
