@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":31,"md5":"3064449eb50e410561a29d92dae346ec"}*/
+/*TMODJS:{"debug":true,"version":32,"md5":"3064449eb50e410561a29d92dae346ec"}*/
 define(function(require) {
     return require("../../../template")("arrange/arrangeTourist/view/viewPlan", function($data, $filename) {
         try {

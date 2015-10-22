@@ -20,19 +20,7 @@
                 {{each touristGroupList as touristGroup index}}
                 <tr>
                 	<td>{{index+1}}</td>
-                	<td>
-                	{{if touristGroup.getType == 1}}
-                	旅行社系统
-                	{{else if touristGroup.getType == 2}}
-                	传真
-                	{{else if touristGroup.getType == 3}}
-                	短信
-                	{{else if touristGroup.getType == 4}}
-                	电话
-                	{{else if touristGroup.getType == 5}}
-                	QQ
-                	{{/if}}
-                	</td>
+                	<td>{{if touristGroup.partnerAgency}}{{touristGroup.partnerAgency.travelAgencyName}}{{/if}}</td>
                 	<td>{{if touristGroup.touristGroupMember != null}}{{touristGroup.touristGroupMember.name}}{{/if}}</td>
                 	<td>{{if touristGroup.touristGroupMember != null}}{{touristGroup.touristGroupMember.mobileNumber}}{{/if}}</td>
                 	<td>{{touristGroup.adultCount}}大{{touristGroup.childCount}}小</td>
