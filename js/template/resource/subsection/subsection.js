@@ -225,7 +225,14 @@ define(function(require, exports) {
 										$("#"+tab+" .btn-operation-close").click(function(){
 											closeTab(menuKey+"-operation");
 										})
-										$("#"+tab+" .btn-operation-save").on("click",{"tab" : tab,"days" : data.ptGroup.lineProduct.days,"validator" : validator},subsection.operationSave);
+										$("#"+tab+" .btn-operation-save").on("click",
+											{
+												"tab" : tab,
+												"days" : data.ptGroup.lineProduct.days,
+												"validator" : validator,
+												"currentNeedPayMoney": data.ptGroup.currentNeedPayMoney
+											},
+											subsection.operationSave);
 									}
 								}
 							})
@@ -359,7 +366,7 @@ define(function(require, exports) {
 			if ($("#"+tab+" .btn-operation-save").attr("data-entity-mark")) {
 				isCheckNeedPayMoney = 1;
 			}
-			if(isCheckNeedPayMoney == 0){
+			if(isCheckNeedPayMoney == 0 && e.data.currentNeedPayMoney > 0){
 				showMessageDialog($( "#confirm-dialog-message" ),"请选择在哪一分段现收团款");
 				return;
 			}
