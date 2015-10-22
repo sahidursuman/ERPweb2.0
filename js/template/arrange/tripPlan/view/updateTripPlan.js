@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-/*TMODJS:{"debug":true,"version":138,"md5":"02e449c39b975b590789cb1bc091f2bd"}*/
-=======
 /*TMODJS:{"debug":true,"version":140,"md5":"9004f88d2ac3d9c19523a12a80d8d60c"}*/
->>>>>>> 80c28647232871f8581a308edca9eb18b273034e
 define(function(require) {
     return require("../../../template")("arrange/tripPlan/view/updateTripPlan", function($data, $filename) {
         try {
