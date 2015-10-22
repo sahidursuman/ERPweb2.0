@@ -362,7 +362,7 @@ define(function(require, exports) {
 						    area:'1024px', //宽高
 						    zIndex:1028,
 						    content: html,
-							scrollbar: false,    // 推荐禁用浏览器外部滚动条
+							scrollbar: false,   // 推荐禁用浏览器外部滚动条
 						});
 					}
 				}
