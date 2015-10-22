@@ -207,7 +207,7 @@ define(function(require, exports) {
 						    type: 1,
 						    title:"编辑保险信息",
 						    skin: 'layui-layer-rim', //加上边框
-						    area: ['900px', '400px'], //宽高
+						    area: ['800px', '400px'], //宽高
 						    zIndex:1028,
 						    content: html,
 						    success:function(){
@@ -394,7 +394,7 @@ define(function(require, exports) {
 						    type: 1,
 						    title:"查看保险详情",
 						    skin: 'layui-layer-rim', //加上边框
-						    area: ['1024px', '500px'], //宽高
+						    area: ['1024px', 'auto'], //宽高
 						    zIndex:1028,
 						    content: html,
 						    success:function(){

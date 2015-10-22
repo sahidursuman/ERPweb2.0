@@ -1132,7 +1132,7 @@ define(function(require, exports) {
 			//添加行程安排酒店
 			var hotelDetails = '<div class="timeline-item clearfix resourceHotelList" index='+travelLine.routeIndex+'><div class="timeline-info" style="color:#1fade0 "><i class="ace-icon fa fa-circle" ></i><span >酒店</span></div>'+
 			'<div class="widget-box transparent" style="margin-top: 20px"><div class="widget-body"><div class=""><table class="table table-striped table-bordered table-hover">'+
-			'<thead><tr><th class="th-border">酒店星级</th><th class="th-border">酒店名称</th><th  class="th-border">房型</th><th class="th-border">价格</th><th  class="th-border">早餐</th><th  class="th-border">电话</th><th  class="th-border">备注</th><th style="width: 60px;">操作</th></tr></thead>'+
+			'<thead><tr><th class="th-border">酒店星级</th><th class="th-border">酒店名称</th><th  class="th-border">房型</th><th class="th-border">价格</th><th  class="th-border">含餐</th><th  class="th-border">电话</th><th  class="th-border">备注</th><th style="width: 60px;">操作</th></tr></thead>'+
 			'<tbody><tr>'+
 			'<td><select class="col-xs-12 resourceHotelStar"><option selected="selected" value="1">三星以下</option><option value="2">三星</option><option value="3">准四星</option><option value="4">四星</option><option value="5">准五星</option><option value="6">五星</option><option value="7">五星以上</option></select></td>'+
 			'<td><input type="text" class="col-xs-12 chooseHotelName bind-change" name="hotelNmae"/><input type="hidden" name="hotelId"/></td>'+
@@ -1629,7 +1629,7 @@ define(function(require, exports) {
 			'<td><input type="text" class="col-xs-12 chooseCompanyName bind-change"/><input type="hidden" name="companyId"/></td>'+
 			'<td><input type="text" class="col-xs-12 chooseItemName bind-change"/><input type="hidden" name="selfPayItemId"/></td>'+
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
-			'<td><input type="text" class="col-xs-12" readonly="readonly" name="contractPrice"/></td>'+
+			'<td><input type="text" class="col-xs-12" readonly="readonly" name="contractPrice"/><input type="hidden" class="col-xs-12" readonly="readonly" name="marketPrice"/></td>'+
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="managerName"/></td>'+
 			'<td><input type="text" class="col-xs-12" name="remark" maxLength="500" /></td>'+
 			'<td><a data-entity-id="27" class=" btn-restaurant-delete deleteResourceSelfPayList cursor"> 删除 </a></td></tr></tbody></table></div></div></div></div>';
@@ -1728,6 +1728,7 @@ define(function(require, exports) {
 	    							var thisParent = $(_this).parent().parent();
 									thisParent.find("input[name=selfPayItemId]").val(ui.item.id).trigger('change');
 									thisParent.find("input[name=contractPrice]").val(selfPayRebate.price);
+									thisParent.find("input[name=marketPrice]").val(selfPayRebate.marketPrice);
 									thisParent.find("input[name=remark]").val(ui.item.remark);
 								}
 		                    }
@@ -1739,6 +1740,7 @@ define(function(require, exports) {
 							var thisParent = $(this).parent().parent();
 							thisParent.find("input[name=itemId]").val("");
 							thisParent.find("input[name=contractPrice]").val("");
+							thisParent.find("input[name=marketPrice]").val("");
 						}
 					}
 				}).unbind("click").click(function(){
@@ -2035,6 +2037,7 @@ define(function(require, exports) {
 							var selfPayJson = {
 									selfPayId : selfPayId,
 									price : selfPayList.eq(j).find("[name=contractPrice]").val(),
+									marketPrice : selfPayList.eq(j).find("[name=marketPrice]").val(),
 									remark : selfPayList.eq(j).find("[name=remark]").val(),
 									selfPayItemId : selfPayList.eq(j).find("[name=selfPayItemId]").val(),   
 									orderIndex : selfPayList.eq(j).attr("index")

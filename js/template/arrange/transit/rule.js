@@ -148,7 +148,7 @@ define(function(require, exports) {
 								errMsg: '数量不能为空'
 							},
 							{
-								type: 'int',
+								type: 'positive-float',
 								errMsg: '数据格式不正确'
 							}
 						]

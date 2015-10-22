@@ -1054,6 +1054,7 @@ define(function(require, exports) {
 			}
 		},
 		initMergeAdd : function(){
+			console.log("init");
 			var tab = "tab-arrange_tourist-mergeAddTripPlan-content";
 			$('.addMergePlan').on("change",function(){
 				arrangeTourist.edited["mergeAddTripPlan"] = "mergeAddTripPlan";
@@ -1064,6 +1065,7 @@ define(function(require, exports) {
 			var validator = rule.checkdCreateTripPlan($(".addMergePlan"));        
 			
 			//小组序号自动
+			arrangeTourist.MenberNumber("mergeTripPlanTouristTbody");
 			arrangeTourist.MenberNumber("addTripPlanTouristTbody");
 			//出游日期控件
 			arrangeTourist.datePicker();
@@ -1141,6 +1143,7 @@ define(function(require, exports) {
 			})
 		},
 		MenberNumber :function(className){
+			console.log("sotr");
 			$("."+className+" tr").each(function(i){
 					$(this).children().eq(0).text(i+1);
 			})
@@ -1196,52 +1199,50 @@ define(function(require, exports) {
 								$(".addTouristGroupList .addGroupView").click(arrangeTourist.viewTouristGroup);
 								//提交按钮事件绑定
 								$(".addTouristGroupList .btn-submit-addtravelLine").click(function(){
-									var addGroupIdJson = "[";
-									var addGListLength = $(".addTouristGroupList .all tbody tr").find("input:checked").length;
+									var addGroupIdJson = [];
 									$(".addTouristGroupList .all tbody tr").find("input:checked").each(function(i){
-											var id = $(this).parent().parent().parent().attr("data-entity-id");
-											//-----------------------------
-											var lineProductName=$(this).parent().parent().parent().find("td[name=lineProductName]").text();
-											var hotelLevel=$(this).parent().parent().parent().find("td[name=hotelLevel]").text();
-											var includeSelfPay=$(this).parent().parent().parent().find("td[name=includeSelfPay]").text();
-											//----------------------------------
-											var travelAgencyName = $(this).parent().parent().parent().find("td[name=travelAgencyName]").text();
-											var contactMemberName = $(this).parent().parent().parent().find("td[name=contactMemberName]").text();
-											var contactMemberMobileNumber = $(this).parent().parent().parent().find("td[name=contactMemberMobileNumber]").text();
-											var areaData = $(this).parent().parent().parent().find("td[name=areaData]").text();
-											var ageData = $(this).parent().parent().parent().find("td[name=ageData]").text();
-											var peopleCount = $(this).parent().parent().parent().find("td[name=peopleCount]").text();
-											var remark = $(this).parent().parent().parent().find("td[name=remark]").text();
-											if(i==addGListLength-1){
-												addGroupIdJson += "{\"id\":\""+id+"\",\"lineProductName\":\""+lineProductName+"\",\"hotelLevel\":\""+hotelLevel+"\",\"includeSelfPay\":\""+includeSelfPay+"\",\"travelAgencyName\":\""+travelAgencyName+"\",\"contactMemberName\":\""+contactMemberName+"\",\"contactMemberMobileNumber\":\""+contactMemberMobileNumber+"\",\"areaData\":\""+areaData+"\",\"ageData\":\""+ageData+"\",\"peopleCount\":\""+peopleCount+"\",\"remark\":\""+remark+"\"}"
+										var parents = $(this).parent().parent().parent(),
+											groupJson = {
+												id : parents.attr("data-entity-id"),
+												creatorName : $.text(parents.find("td[name=creatorName]")),
+												lineProductName : $.text(parents.find("td[name=lineProductName]")),
+												travelAgencyName : $.text(parents.find("td[name=travelAgencyName]")),
+												contactMemberName : $.text(parents.find("td[name=contactMemberName]")),
+												contactMemberMobileNumber : $.text(parents.find("td[name=contactMemberMobileNumber]")),
+												areaData : $.text(parents.find("td[name=areaData]")),
+												ageData : $.text(parents.find("td[name=ageData]")),
+												peopleCount : $.text(parents.find("td[name=peopleCount]")),
+												currentNeedPayMoney : $.text(parents.find("td[name=currentNeedPayMoney]")),
+												hotelLevel : $.text(parents.find("td[name=hotelLevel]")),
+												includeSelfPay : $.text(parents.find("td[name=includeSelfPay]")),
+												remark : $.text(parents.find("td[name=remark]")),
 											}
-											else{
-												addGroupIdJson += "{\"id\":\""+id+"\",\"lineProductName\":\""+lineProductName+"\",\"hotelLevel\":\""+hotelLevel+"\",\"includeSelfPay\":\""+includeSelfPay+"\",\"travelAgencyName\":\""+travelAgencyName+"\",\"contactMemberName\":\""+contactMemberName+"\",\"contactMemberMobileNumber\":\""+contactMemberMobileNumber+"\",\"areaData\":\""+areaData+"\",\"ageData\":\""+ageData+"\",\"peopleCount\":\""+peopleCount+"\",\"remark\":\""+remark+"\"},"
-											}
+										addGroupIdJson.push(groupJson);
 									});
-									addGroupIdJson += "]";
-									addGroupIdJson = JSON.parse(addGroupIdJson);
 									for(var i in addGroupIdJson){
 										//addGroupIdJson[i];
 										if(i<addGroupIdJson.length){
 										var html=
 											"<tr data-entity-id=\""+addGroupIdJson[i].id+"\">"+
 												"<td></td>"+
+												"<td>"+addGroupIdJson[i].creatorName+"</td>"+
 												"<td>"+addGroupIdJson[i].lineProductName+"</td>"+
-												"<td>"+addGroupIdJson[i].hotelLevel+"</td>"+
-												"<td>"+addGroupIdJson[i].includeSelfPay+"</td>"+ 
 												"<td>"+addGroupIdJson[i].travelAgencyName+"</td>"+
 												"<td>"+addGroupIdJson[i].contactMemberName+"</td>"+
 												"<td>"+addGroupIdJson[i].contactMemberMobileNumber+"</td>"+
 												"<td>"+addGroupIdJson[i].areaData+"</td>"+
 												"<td>"+addGroupIdJson[i].ageData+"</td>"+
 												"<td class=\"tripPlanTrMemberCount\">"+addGroupIdJson[i].peopleCount+"</td>"+
+												"<td>"+addGroupIdJson[i].currentNeedPayMoney+"</td>"+
+												"<td>"+addGroupIdJson[i].hotelLevel+"</td>"+
+												"<td>"+addGroupIdJson[i].includeSelfPay+"</td>"+
 												"<td>"+addGroupIdJson[i].remark+"</td>"+
 												"<td>"+
 												"<div class=\"hidden-sm hidden-xs btn-group\">"+
-												"<a data-entity-id=\""+addGroupIdJson[i].id+"\" class=\"cursor addTripPlanView\">"+
-													"查看 <a class='cursor'> |</a>"+
-												"</a>"+ "<a data-entity-id=\""+addGroupIdJson[i].id+"\" class=\"cursor addTripPlanDelete\">"+
+												"<a data-entity-id=\""+addGroupIdJson[i].id+"\" class=\"cursor touristGroupView\">"+
+													"查看"+
+												"</a>"+"<a class='cursor'> |</a>"+
+												"<a data-entity-id=\""+addGroupIdJson[i].id+"\" class=\"cursor touristGroupDelete\">"+
 													"删除"+
 												"</a>"+
 												"</div>"+

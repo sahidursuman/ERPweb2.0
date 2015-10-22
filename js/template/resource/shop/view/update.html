@@ -125,7 +125,9 @@
 											<td><button data-entity-id="" class="btn btn-xs btn-success btn-shop-rate-add"><i class="ace-icon fa fa-recorder bigger-240"></i>添加政策</button><input hidden-index="{{i+1}}" type="hidden" name="policyInput" value="" /></td>
 											<td><input name="remark" class="col-sm-12" value="{{shopPolicy.remark}}" type="text" maxlength="1000"/></td>
 											<td style="width:70px">
-												<button data-entiy-id="{{shopPolicy.id}}" class="btn btn-xs btn-danger btn-shop-standard-delete"><i class="ace-icon fa fa-trash-o bigger-120"></i></button>
+												<a data-entiy-id="{{shopPolicy.id}}" class="cursor btn-shop-standard-delete">
+												删除
+												</a>
 											</td>
 										</tr>
 									{{/each}}

@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":294,"md5":"2f7a66fe555d67598463740cf5aa21a5"}*/
+/*TMODJS:{"debug":true,"version":296,"md5":"2f7a66fe555d67598463740cf5aa21a5"}*/
 define(function(require) {
     return require("../../../template")("arrange/innerTransfer/view/edit", function($data, $filename) {
         try {

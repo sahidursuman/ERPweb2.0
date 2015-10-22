@@ -64,6 +64,11 @@ label{
 .margin-top{
     margin-top: 20px;
 }
+.margin-topTicket{
+    height: 24px;
+    margin-top: 20px;
+    padding-top: 0px !important;
+}
 table tr td{
     border: 1px solid #ececec !important;
 }
@@ -311,7 +316,7 @@ table tr td{
 
 .ui-spinner .btn{
     border: 1px solid #d5d5d5 !important;
-    height: 13px !important;
+    height: 12px !important;
 }
 .fa-sort-desc{
     margin-top: -2px !important;
@@ -392,7 +397,9 @@ table tr td{
     text-align: center;
 }
 .style-myselfOne{
-    width: 105px !important;
+    width: 115px !important;
+    border: 2px solid #5d5d5d;
+    text-align: right;
 }
 /*restaurant时间宽度*/
 .whereTwo .rangeTime{
@@ -590,4 +597,18 @@ input,select{
 .CheckPlan{
     text-align: right !important;
     padding:7px 6px 7px 0px !important;
+}
+
+.departButton {
+    height: 24px;
+    line-height: 10px;
+    padding-top: 3px;
+}
+
+
+/**
+ * public style
+ */
+.align-left {
+    text-align: left;
 }

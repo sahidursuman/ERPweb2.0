@@ -123,10 +123,6 @@ define(function(require, exports) {
 					var html = listMainTemplate(map);
 					addTab(menuKey,"转客管理",html);
 					var $transferOut=$("#transferOut");   
-					//调用默认时间是一周的函数
-					var startTime=data.startDay;
-					var endTime = transfer.dateCalculation(startTime,6);
-					$transferOut.find("input[name=createTime]").eq(1).val(endTime);
 
 					$("#" +tabId+" .transferTouristMain .date-picker").datepicker({
 						autoclose: true,
@@ -140,10 +136,10 @@ define(function(require, exports) {
 					//同行转入选项卡绑定事件
 					$("#"+tabId+" #myTab li a.transferIn").click(function(){
 						var type=$(this).attr("data-value");//1	
-						var startTime=data.startDay;
+						//var startTime=data.startDay;
 						//调用默认时间是一周的函数
-						var endTime = transfer.dateCalculation(startTime,6);
-						$transferIn.find("input[name=endTime]").val(endTime);
+						//var endTime = transfer.dateCalculation(startTime,6);
+						//$transferIn.find("input[name=endTime]").val(endTime);
 						
 						transfer.listTransferIn(page,partnerAgencyId,startTime,partnerAgencyId,contactUserId,status,type);
 
@@ -154,10 +150,10 @@ define(function(require, exports) {
 					//我社转出选项卡绑定事件
 					$("#"+tabId+" #myTab li a.transferOut").click(function(){
 						var type=$(this).attr("data-value");//2
-						var startTime=data.startDay;
+						//var startTime=data.startDay;
 						//调用默认时间是一周的函数
-						var endTime = transfer.dateCalculation(startTime,6);
-						$transferOut.find("input[name=createTime]").eq(1).val(endTime);
+						//var endTime = transfer.dateCalculation(startTime,6);
+						//$transferOut.find("input[name=createTime]").eq(1).val(endTime);
 						transfer.listTransfer(page,partnerAgencyId,creator,startTime,endTime,status,type);
 					});
 					//我社转出搜索栏状态button下拉事件

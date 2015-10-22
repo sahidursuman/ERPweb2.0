@@ -1,4 +1,4 @@
-<div class="col-xs-12 operationMainForm">
+<div class="col-xs-12 operationMainForm globalAdd">
 	<div class="form-group clearfix" style="padding-bottom:15px;">
 		<input type="hidden" name="touristGroupId" value="{{ptGroup.id}}" />
 		<input type="hidden" name="touristGroupStartTime" value="{{ptGroup.startTime | dateFormat: 'yyyy-MM-dd'}}" />
@@ -9,7 +9,6 @@
 		<label class="control-label col-xs-2">天数：{{ptGroup.lineProduct.days}}天</label>
 		<label class="control-label col-xs-2">出游日期: {{ptGroup.startTime | dateFormat: 'yyyy-MM-dd'}}</label>
 		<label class="control-label col-xs-2">人数合计: {{ptGroup.adultCount}}大{{ptGroup.childCount}}小</label> 
-
 		<label class="control-label col-xs-2">来源: {{ptGroup.partnerAgency.travelAgencyName}}</label>
 		<label class="control-label col-xs-2">联系人: {{ptGroup.contactMember.name}}</label> 
 		<label class="control-label col-xs-2">联系电话: {{ptGroup.contactMember.mobileNumber}}</label>
@@ -41,18 +40,7 @@
 					<td><input type="text" name="days" class="col-sm-10" readonly="readonly" value="{{subList.lineProduct.days}}" /><span class="col-sm-2" style="line-height: 30px">天</span></td>
 					<td><input class="{{if subList.status == 1}}datepicker{{/if}} col-sm-12" name="startTime" type="text" {{if subList.status != 1}}readonly="readonly"{{/if}} value="{{subList.startTime | dateFormat: 'yyyy-MM-dd'}}" /></td>
 					<td>
-						{{if mark == 0}}
-							{{if subList.status == 1}}
-								<input type="radio" name="operateCurrentNeedPayMoney" {{if subList.operateCurrentNeedPayMoney == 1}}checked="checked"{{/if}} />
-							{{else}}
-								-
-							{{/if}}
-						{{else if mark == 1 && subList.operateCurrentNeedPayMoney == 1}}
-							本段现收
-						{{else}}
-							-
-						{{/if}}
-						<input type="hidden" name="operateCurrentNeedPayMoney" value="{{subList.operateCurrentNeedPayMoney}}" />
+						<input type="radio" name="operateCurrentNeedPayMoney" {{if subList.operateCurrentNeedPayMoney == 1}}checked="checked"{{/if}} />
 					</td>
 					<td>
 					{{if subList.status == 0}}
@@ -83,7 +71,7 @@
 		</table>
 	</div>
 	<div class="form-group" style="text-align: center;">
-		<button class="btn btn-sm btn-danger btn-operation-close"> <i class="ace-icon fa fa-times"></i> 取消 </button> 
-		<button class="btn btn-sm btn-success btn-operation-save" {{if mark == 1}}data-entity-mark="1"{{/if}}> <i class="ace-icon fa fa-check"></i> 保存 </button> 
+		<button class="btn btn-sm btn-danger btn-operation-close otherButton"> <i class="ace-icon fa fa-times"></i> 取消 </button> 
+		<button class="btn btn-sm btn-success btn-operation-save otherButton" {{if mark == 1}}data-entity-mark="1"{{/if}}> <i class="ace-icon fa fa-check"></i> 保存 </button> 
 	</div>
 </div>

@@ -38,6 +38,7 @@ define(function(require, exports) {
 						$(".main-content .page-content .shopList .btn-shop-view").click(function(){
 							var id = $(this).attr("data-entity-id");
 							shop.viewShop(id);
+
 						});
 						
 						$(".main-content .page-content .shopList .btn-shop-edit").click(function(){
@@ -59,6 +60,8 @@ define(function(require, exports) {
 						$(".main-content .page-content .guideList .btn-shop-view").click(function(){
 							var id = $(this).attr("data-entity-id");
 							shop.viewShop(this,id);
+							// 再调整对话框的高度
+							$(window).trigger('resize');
 						});
 						
 						//搜索栏状态button下拉事件
@@ -624,9 +627,10 @@ define(function(require, exports) {
 						    type: 1,
 						    title:"查看商家信息",
 						    skin: 'layui-layer-rim', //加上边框
-						    area: ['1024px', '600px'], //宽高
+						    area: '1024px', //宽高
 						    zIndex:1028,
 						    content: html,
+							scrollbar: false,    // 推荐禁用浏览器外部滚动条
 						    success:function(){
 						
 						    }
@@ -885,8 +889,8 @@ define(function(require, exports) {
 			    	'<button class=\"btn btn-success btn-sm btn-white add\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i>'+
 			    	'</button></label></div></td><td><div data-index="1" class="clearfix div-1" style="margin-bottom:7px"><input name="guideRate" class="col-sm-12" maxlength=\"5\" type="text"/>'+
 			    	'</div></td><td><div data-index="1" class="clearfix div-1" style="margin-bottom:7px"><input name="travelAgencyRate" type="text" class="col-sm-12" maxlength=\"5\"/>'+
-			    	'</div></td><td style=\"width:70px\"><button data-entity-id=\"\" class=\"btn btn-xs btn-danger btn-shop-policy-delete\">'+
-			    	'<i class=\"ace-icon fa fa-trash-o bigger-120\"></i></button></td></tr>';
+			    	'</div></td><td style=\"width:70px\"><a data-entity-id=\"\" class=\"cursor btn-shop-policy-delete\">'+
+			    	'删除</a></td></tr>';
 //			    	$(".policyForm .shopPolicyList tbody").append(policyHtml);
 			    	function deletePolic(){
 			    		var dialogObj = $( "#confirm-dialog-message" ), obj = $(this), id=obj.attr("data-entity-id");
