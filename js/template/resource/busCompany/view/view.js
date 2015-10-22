@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":186,"md5":"fe5c3296ced7d99bc3442068d7226b45"}*/
+/*TMODJS:{"debug":true,"version":189,"md5":"fe5c3296ced7d99bc3442068d7226b45"}*/
 define(function(require) {
     return require("../../../template")("resource/busCompany/view/view", function($data, $filename) {
         try {
