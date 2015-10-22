@@ -78,6 +78,32 @@
 			<div class="form-group">
 				<div class="col-xs-12 col-sm-12 widget-container-col">
 					<div class=" ui-sortable-handle">
+						<h5 class="">
+							<label class="title-size middle">线路</label>
+						</h5>
+						<table class="whereQ whereTwo" style="width: 100%">
+							<!-- <tr>
+                                <td colspan="8" class="HeadManage" style="text-align: left">基本信息</td>
+                            </tr> -->
+							<tr>
+								<td class="style-myself CheckPlan">类别</td>
+								<td style="text-align: left;padding: 0px 0px 0px 10px">{{lineProduct.type}}</td>
+								<td class="style-myself CheckPlan">应用范围</td>
+								<td style="text-align: left;padding: 0px 0px 0px 10px">{{if lineProduct.customerType == 0}}散客{{else if lineProduct.customerType == 1}}团体{{/if}}</td>
+								<td class="style-myself CheckPlan">天数</td>
+								<td style="text-align: left;padding: 0px 0px 0px 10px">{{lineProduct.days}}</td>
+							</tr>
+
+						</table>
+					</div>
+				</div>
+			</div>
+		</form>
+
+		<form class="form-horizontal" role="form" onsubmit="return false">
+			<div class="form-group">
+				<div class="col-xs-12 col-sm-12 widget-container-col">
+					<div class=" ui-sortable-handle">
 							<h5 class="">
 								<span class="badge badge-primary">2</span>
 								<label class="middle title-size">游客名单</label>
@@ -153,40 +179,7 @@
 				</div>
 			</div>
 		</form>
-		<form class="form-horizontal" role="form" onsubmit="return false">
-			<div class="form-group">
-				<div class="col-xs-12 col-sm-12 widget-container-col">
-					<div class=" ui-sortable-handle">
-							<h5 class="">
-								<span class="badge badge-primary">3</span>
-								<label class="title-size middle">线路</label>
-							</h5>
-						<div class="widget-body">
-							<div class="widget-main">
-								<div class="form-group">
-									<div class="col-xs-12">
-										<div class="form-group">
-											<label class="col-sm-1 control-label no-padding-right">类别：</label>
-											<div class="col-sm-2">
-												<label class="control-label">{{lineProduct.type}}</label>
-											</div>
-											<label class="col-sm-1 control-label no-padding-right">应用范围：</label>
-											<div class="col-sm-2">
-												<label class="control-label">{{if lineProduct.customerType == 0}}散客{{else if lineProduct.customerType == 1}}团体{{/if}}</label>
-											</div>
-											<label class="col-sm-1 control-label no-padding-right">天数：</label>
-											<div class="col-sm-2">
-												<label class="control-label">{{lineProduct.days}}</label>
-											</div>				
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</form>
+
 		<form class="form-horizontal" role="form" onsubmit="return false">
 			<div class="form-group">
 				<div class="col-xs-12 col-sm-12 widget-container-col">
