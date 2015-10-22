@@ -1599,7 +1599,7 @@ define(function(require, exports) {
 			'<td><input type="text" class="col-xs-12 chooseCompanyName bind-change"/><input type="hidden" name="companyId"/></td>'+
 			'<td><input type="text" class="col-xs-12 chooseItemName bind-change"/><input type="hidden" name="selfPayItemId"/></td>'+
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
-			'<td><input type="text" class="col-xs-12" readonly="readonly" name="contractPrice"/></td>'+
+			'<td><input type="text" class="col-xs-12" readonly="readonly" name="contractPrice"/><input type="hidden" class="col-xs-12" readonly="readonly" name="marketPrice"/></td>'+
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="managerName"/></td>'+
 			'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
 			'<td><a class="cursor btn-restaurant-delete deleteResourceSelfPayList deleteAllother"> 删除</a></td></tr></tbody></table></div></div></div></div>';
@@ -1653,6 +1653,7 @@ define(function(require, exports) {
 						thisParent.find("input[name=companyId]").val("");
 						thisParent.find("input[name=mobileNumber]").val("");
 						thisParent.find("input[name=contractPrice]").val("");
+						thisParent.find("input[name=marketPrice]").val("");
 						thisParent.find("input[name=managerName]").val("");
 
 						// 更新表单验证的配置
@@ -1707,6 +1708,7 @@ define(function(require, exports) {
     							var thisParent = $(_this).parent().parent();
 								thisParent.find("input[name=selfPayItemId]").val(ui.item.id).trigger('change');
 								thisParent.find("input[name=contractPrice]").val(selfPayRebate.price);
+								thisParent.find("input[name=marketPrice]").val(selfPayRebate.marketPrice);
 							}
 	                    }
 	                });
@@ -2024,6 +2026,7 @@ define(function(require, exports) {
 								selfPayItemId :selfPayList.eq(j).find("[name=selfPayItemId]").val(),
 								selfPayId : selfPayId,
 								price : selfPayList.eq(j).find("[name=contractPrice]").val(),
+								marketPrice : selfPayList.eq(j).find("[name=marketPrice]").val(),
 								remark : selfPayList.eq(j).find("[name=remark]").val(),
 								orderIndex : selfPayList.eq(j).attr("data-entity-index")
 							}
