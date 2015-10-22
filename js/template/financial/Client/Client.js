@@ -475,6 +475,10 @@ define(function(require, exports) {
        	    })
         },
 		saveCheckingData : function(id,isClose){
+            if(!Client.edited["checking"] || Client.edited["checking"] != "checking"){
+                showMessageDialog($( "#confirm-dialog-message" ),"当前未进行任何操作！");
+                return;
+            }
 			var validator = rule.check($('.clientCheckingMain'))
 			// 表单校验
 			if (!validator.form()) { return; }
