@@ -1169,10 +1169,9 @@ define(function(require, exports) {
 				type:"POST",
 				dataType:"json",
 				success:function(data){
-					var html ="<option value=''>全部</option>"; //"<option value=''>全部</option>";
+					var html ="<option value=''>全部</option>";
 					var lineProductList = data.data;
 
-					console.log(lineProductList.length);
 					if(lineProductList != null && lineProductList.length > 0){ 
 						for(var i=0;i<lineProductList.length;i++){
 							if (lineProductId != null && lineProductList[i].id == lineProductId) {
