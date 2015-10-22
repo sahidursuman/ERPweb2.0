@@ -74,11 +74,12 @@
                 <td>{{innerTransferList.lineProductName}}</td>
                 <!--给日期转码-->
                 <td>{{innerTransferList.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
-                <td>{{innerTransferList.contact}}</td>
-                <td><a href="javascript:void(0)" class="showPerson" data-entity-id = "{{innerTransferList.touristGroupId}}">{{innerTransferList.adultCount}}大{{innerTransferList.childCount}}</a></td>
-                <td>{{innerTransferList.partnerAgencyName}}</td>
-                <td><a href="javascript:void(0)" class="showIncomeDetail" data-entity-id = "{{innerTransferList.touristGroupId}}">{{innerTransferList.needInComMoney}}</a></td>
-                <td>{{innerTransferList.change}}</td>
+                <td>{{if innerTransferList.contact == null || innerTransferList.contact ==""}}无{{else}}{{innerTransferList.contact}}{{/if}}</td>
+                <td><a href="javascript:void(0)" class="showPerson" data-entity-id = "{{innerTransferList.touristGroupId}}">
+                {{innerTransferList.adultCount}}大{{innerTransferList.childCount}}</a></td>
+                <td>{{if innerTransferList.partnerAgencyName == null || innerTransferList.partnerAgencyName == ""}}无{{else}}{{innerTransferList.partnerAgencyName}}{{/if}}</td>
+                <td><a href="javascript:void(0)" class="showIncomeDetail" data-entity-id = "{{innerTransferList.touristGroupId}}">{{innerTransferList.needInComeMoney}}</a></td>
+                <td>{{if innerTransferList.change == null || innerTransferList.change == ""}}无{{else}}{{innerTransferList.change}}{{/if}}</td> 
                 <td><a href="javascript:void(0)" class="showChangeNeedPayDetail"  data-entity-id = "{{innerTransferList.touristGroupId}}">{{innerTransferList.changeNeedPayMoney}}</a></td>
                 <td>{{if innerTransferList.toBusinessGroupName == null || innerTransferList.toBusinessGroupName == ""}}无{{else}}{{innerTransferList.toBusinessGroupName}}{{/if}}</td> 
                 <td>
