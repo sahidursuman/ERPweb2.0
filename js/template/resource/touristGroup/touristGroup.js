@@ -246,7 +246,7 @@ define(function(require, exports) {
 			}
 			else{
 				touristGroup.getLineProductList($(".touristGroupSearchForm select[name=lineProductId]"),data.searchParam.lineProductId);
-				touristGroup.getPartnerAgencySearchList($(".touristGroupSearchForm select[name=partnerAgencyId]"),data.searchParam.fromPartnerAgencyId);
+				//touristGroup.getPartnerAgencySearchList($(".touristGroupSearchForm select[name=partnerAgencyId]"),data.searchParam.fromPartnerAgencyId);
 				touristGroup.getCreatorUserList($(".touristGroupSearchForm select[name=userId]"),data.searchParam.creator);
 			}
 		
@@ -1165,12 +1165,12 @@ define(function(require, exports) {
 		},
 		getLineProductList:function(obj,lineProductId){
 			$.ajax({
-				url:""+APP_ROOT+"back/lineProduct.do?method=findAllLineProductOnlyIdAndName&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
+				url:""+APP_ROOT+"back/lineProduct.do?method=findLineProductInTouristGroup&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 				type:"POST",
 				dataType:"json",
 				success:function(data){
 					var html ="<option value=''>全部</option>"; //"<option value=''>全部</option>";
-					var lineProductList = JSON.parse(data.lineProductList);
+					var lineProductList = data.data;
 
 					console.log(lineProductList.length);
 					if(lineProductList != null && lineProductList.length > 0){ 
@@ -1189,7 +1189,7 @@ define(function(require, exports) {
 		getPartnerAgencyList:function(obj,partnerAId){
 			var $objC = $(obj)
 			$.ajax({
-				url:""+APP_ROOT+"back/partnerAgency.do?method=findPartnerAnencyList&token="+$.cookie("token")+"&menuKey=resource_partnerAgency&operation=view",
+				url:""+APP_ROOT+"back/partnerAgency.do?method=getPartnerAgency&token="+$.cookie("token")+"&menuKey=resource_partnerAgency&operation=view",
                 dataType: "json",
                // data:"travelAgencyName="+$objC.val(),
                 success:function(data){
