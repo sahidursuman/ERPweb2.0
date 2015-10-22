@@ -302,19 +302,23 @@ define(function(require, exports) {
 				            		 guide.saveGuideSettlement(guideId,year,start_month,end_month,0);
 				            		 guide.edited["clearing"] = "";
 				            		 addTab(menuKey+"-clearing","导游结算",html);
+				            		 guide.initClear(guideId,year,start_month,end_month,data);
 				            		 guide.validatorTable();
 				            	 },function(){
 				            		 addTab(menuKey+"-clearing","导游结算",html);
+				            		 guide.initClear(guideId,year,start_month,end_month,data);
 				            		 guide.edited["clearing"] = "";
 				            		 guide.validatorTable();
 				            	 });
                  	    	 }else{
 	                 	    	addTab(menuKey+"-clearing","导游结算",html);
+	                 	    	guide.initClear(guideId,year,start_month,end_month,data);
 	                 	    	guide.validatorTable();
                  	    	 }
              	    		 
                  	    }else{
                  	    	addTab(menuKey+"-clearing","导游结算",html);
+                 	    	guide.initClear(guideId,year,start_month,end_month,data);
                  	    	guide.validatorTable();
                  	    }
 					}
