@@ -889,8 +889,8 @@ define(function(require, exports) {
 			    	'<button class=\"btn btn-success btn-sm btn-white add\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i>'+
 			    	'</button></label></div></td><td><div data-index="1" class="clearfix div-1" style="margin-bottom:7px"><input name="guideRate" class="col-sm-12" maxlength=\"5\" type="text"/>'+
 			    	'</div></td><td><div data-index="1" class="clearfix div-1" style="margin-bottom:7px"><input name="travelAgencyRate" type="text" class="col-sm-12" maxlength=\"5\"/>'+
-			    	'</div></td><td style=\"width:70px\"><button data-entity-id=\"\" class=\"btn btn-xs btn-danger btn-shop-policy-delete\">'+
-			    	'<i class=\"ace-icon fa fa-trash-o bigger-120\"></i></button></td></tr>';
+			    	'</div></td><td style=\"width:70px\"><a data-entity-id=\"\" class=\"cursor btn-shop-policy-delete\">'+
+			    	'删除</a></td></tr>';
 //			    	$(".policyForm .shopPolicyList tbody").append(policyHtml);
 			    	function deletePolic(){
 			    		var dialogObj = $( "#confirm-dialog-message" ), obj = $(this), id=obj.attr("data-entity-id");

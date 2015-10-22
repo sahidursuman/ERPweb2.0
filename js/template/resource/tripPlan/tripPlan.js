@@ -463,7 +463,7 @@ define(function(require, exports) {
 			'<td><input type="text" name="name" class="col-sm-12 chooseScenic"/><input type="hidden" name="scenicId"/></td>' +
 			'<td><input type="text" name="chargingProjects" class="col-sm-12"/><input type="hidden" name="chargingId"/></td>' +
 			'<td><select name="tourTime" class="col-sm-12 no-padding" style="width: 75px;"> <option value="全天">全天</option> <option value="上午">上午</option> <option value="下午">下午</option> </select> </td>' +
-			'<td><input type="text" name="tourDuration" class="col-sm-12" value="" style="width: 60px;" maxlength="2"> </td>' +
+			'<td><input type="text" name="tourDuration" class="col-sm-12" value="" style="width: 60px;" maxlength="3"> </td>' +
 			'<td><input type="text" name="orderNumber" class="col-sm-12" value="" maxlength="20"/></td>'+
 			'<td><input type="text" name="fee" class="col-sm-12" style="width: 60px;" maxlength="6"/></td>' +
 			'<td><input type="text" name="memberCount" class="col-sm-12" style="width: 60px;" maxlength="3"/></td>' +
@@ -547,7 +547,7 @@ define(function(require, exports) {
 			'<td><input type="text" name="arriveCity" class="col-sm-12" maxlength="32"/></td>' +
 			'<td><input type="text" name="shift" class="col-sm-12" maxlength="9"/></td>' +
 			'<td><input type="text" name="startTime" class="col-sm-13 col-xs-12 date-time-picker"/></td>' +
-			'<td><input type="text" name="seatLevel" class="col-sm-12" maxlength="5"/></td>' +
+			'<td><input type="text" name="seatLevel" class="col-sm-12" maxlength="4"/></td>' +
 			'<td><input type="text" name="fee" class="col-sm-12" maxlength="6"/></td>' +
 			'<td><input type="text" name="memberCount" class="col-sm-12" maxlength="3"/></td>' +
 			'<td><input type="text" name="reduceMoney" class="col-sm-12" maxlength="9"/></td>' +
