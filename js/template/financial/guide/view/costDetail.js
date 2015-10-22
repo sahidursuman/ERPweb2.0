@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":241,"md5":"bd8d5569ae20732bf76aea93479ad576"}*/
+/*TMODJS:{"debug":true,"version":243,"md5":"bd8d5569ae20732bf76aea93479ad576"}*/
 define(function(require) {
     return require("../../../template")("financial/guide/view/costDetail", function($data, $filename) {
         try {

@@ -438,7 +438,7 @@ define(function(require, exports) {
                             var checkData = {
                                 id:$(this).attr("data-entity-id"),
                                 partnerAgencyId:partnerAgencyId,
-                                travelAgencyName:travelAgencyName,
+                                partnerAgencyName:travelAgencyName,
                                 createTime:$(this).attr("data-entity-createTime"),
                                 realUnIncomeMoney:$tr.eq(i).find("input[name=FinancialBookingRealUnPayedMoney]").val(),
                                 remark:$tr.eq(i).find("input[name=FinancialbookingRemark]").val(),
@@ -450,7 +450,7 @@ define(function(require, exports) {
                         var checkData = {
                             id:$(this).attr("data-entity-id"),
                             partnerAgencyId:partnerAgencyId,
-                            travelAgencyName:travelAgencyName,
+                            partnerAgencyName:travelAgencyName,
                             createTime:$(this).attr("data-entity-createTime"),
                             realUnIncomeMoney:$tr.eq(i).find("input[name=FinancialBookingRealUnPayedMoney]").val(),
                             remark:$tr.eq(i).find("input[name=FinancialbookingRemark]").val(),
@@ -463,7 +463,7 @@ define(function(require, exports) {
                         var checkData = {
                             id:$(this).attr("data-entity-id"),
                             partnerAgencyId:partnerAgencyId,
-                            travelAgencyName:travelAgencyName,
+                            partnerAgencyName:travelAgencyName,
                             createTime:$(this).attr("data-entity-createTime"),
                             realUnIncomeMoney:$tr.eq(i).find("input[name=FinancialBookingRealUnPayedMoney]").val(),
                             remark:$tr.eq(i).find("input[name=FinancialbookingRemark]").val(),

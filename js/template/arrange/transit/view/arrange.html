@@ -2,13 +2,13 @@
 	<form class="form-horizontal formOneList" role="form" onsubmit="return false" style="margin-left: 10px">
 		<div class="form-group">
 			<input type="hidden" name="touristGroup" value="{{touristGroup.id}}"/>
-			<label class="col-sm-1 control-label no-padding-right" style="text-align: left;">线路产品：{{touristGroup.lineProduct.name}}</label>
+			<label class="col-sm-2 control-label no-padding-right" style="text-align: left;">线路产品：{{touristGroup.lineProduct.name}}</label>
 			<input type="hidden" name="lineProductId" value="{{touristGroup.lineProduct.id}}" />
-			<label class="col-sm-2 control-label no-padding-right " >小组联系人：{{touristGroup.contactMember.name}}</label>
+			<label class="col-sm-2 control-label no-padding-right "  style="text-align: left;">小组联系人：{{touristGroup.contactMember.name}}</label>
 			<input type="hidden" name="contactMemberId" value="{{touristGroup.contactMember.id}}" />
-			<label class="col-sm-2 control-label no-padding-right">联系电话：{{touristGroup.contactMember.mobileNumber}}</label>
-			<label class="col-sm-2 control-label no-padding-right">出游日期：{{if touristGroup.startTime != null}}{{touristGroup.startTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</label>
-			<label class="col-sm-3 control-label no-padding-right">人数合计：大人{{touristGroup.adultCount}}小孩{{touristGroup.childCount}}</label>
+			<label class="col-sm-2 control-label no-padding-right" style="text-align: left;">联系电话：{{touristGroup.contactMember.mobileNumber}}</label>
+			<label class="col-sm-2 control-label no-padding-right" style="text-align: left;">出游日期：{{if touristGroup.startTime != null}}{{touristGroup.startTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</label>
+			<label class="col-sm-1 control-label no-padding-right" style="text-align: left;">人数合计：大人{{touristGroup.adultCount}}小孩{{touristGroup.childCount}}</label>
 		</div>
 		<div class="form-group">
 			{{if arriveTime != null}}<label class="col-sm-2 control-label no-padding-right" style="text-align: left;">接团日期：{{arriveTime | dateFormat: 'yyyy-MM-dd'}}</label>{{/if}}
