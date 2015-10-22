@@ -1054,6 +1054,7 @@ define(function(require, exports) {
 			}
 		},
 		initMergeAdd : function(){
+			console.log("init");
 			var tab = "tab-arrange_tourist-mergeAddTripPlan-content";
 			$('.addMergePlan').on("change",function(){
 				arrangeTourist.edited["mergeAddTripPlan"] = "mergeAddTripPlan";
@@ -1064,6 +1065,7 @@ define(function(require, exports) {
 			var validator = rule.checkdCreateTripPlan($(".addMergePlan"));        
 			
 			//小组序号自动
+			arrangeTourist.MenberNumber("mergeTripPlanTouristTbody");
 			arrangeTourist.MenberNumber("addTripPlanTouristTbody");
 			//出游日期控件
 			arrangeTourist.datePicker();
@@ -1141,6 +1143,7 @@ define(function(require, exports) {
 			})
 		},
 		MenberNumber :function(className){
+			console.log("sotr");
 			$("."+className+" tr").each(function(i){
 					$(this).children().eq(0).text(i+1);
 			})
