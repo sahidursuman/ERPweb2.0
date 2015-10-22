@@ -1016,6 +1016,7 @@ define(function(require, exports) {
             		var result = showDialog(data);
             		if(result){
             			showMessageDialog($( "#confirm-dialog-message" ),data.message);
+                        count.edited["checkBill"] = "";
             			count.updateExamine(financialTripPlanId,"");
             		}
             	}
