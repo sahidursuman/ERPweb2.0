@@ -99,24 +99,24 @@
 			</td>
 			<td class="no-padding">
 				{{each shopPolicy.SelfPayRebateList as hopTimeArea i}}
-				<div class="col-sm-12{{if i != 0}} border-top{{/if}}" style="padding-bottom: 7px;">
+				<!-- <div class="col-sm-12{{if i != 0}} border-top{{/if}}" > -->
 					
 					<label class="col-sm-12 control-label center">
 						{{hopTimeArea.guideRate*100 | toFixed}}
 					</label>
 					
-				</div>
+				<!-- </div> -->
 				{{/each}}
 			</td>
 			<td class="no-padding">
 				{{each shopPolicy.SelfPayRebateList as hopTimeArea i}}
-				<div class="col-sm-12{{if i != 0}} border-top{{/if}}" style="padding-bottom: 7px;">
+				<!-- <div class="col-sm-12{{if i != 0}} border-top{{/if}}" > -->
 				
 					<label class="col-sm-12 control-label center">
-						{{hopTimeArea.travelAgencyRate*100 | toFixed}}
+						{{hopTimeArea.travelAgencyRate*100 | toFixed}} 
 					</label>
 				
-				</div>
+				<!-- </div> -->
 				{{/each}}
 			</td>
 			<td class="remarkWidth">{{shopPolicy.remark}}</td>

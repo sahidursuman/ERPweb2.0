@@ -1383,7 +1383,7 @@ define(function(require, exports) {
 				if(touristNameStr.eq(i).find("input[name=isContactUser]").is(":checked")==true){
 					isContactUser = 1;
 				}
-
+				
 				if (isContactUser && mobileNumber == "")  {
 					showMessageDialog($( "#confirm-dialog-message" ), "请填写名单中联系人的手机号码！");
 					isValidate = false;

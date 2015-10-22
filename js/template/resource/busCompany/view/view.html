@@ -79,7 +79,7 @@
 				{{else}}
 				是
 				{{/if}}</td>
-			<td class="styleOne-self">{{each bus.priceList as price}}
+			<td class="styleOne-self" style="width: 140px">{{each bus.priceList as price}}
 				<div>
 					{{if bus.isChartered == 0}}
 					-
@@ -97,7 +97,7 @@
 					{{/if}}
 				</div>
 				{{/each}}</td>
-			<td class="styleOne-self">{{bus.remark}}</td>
+			<td class="styleOne-self" style="width: 210px">{{bus.remark}}</td>
 		</tr>
 		{{/each}}
 	</table>

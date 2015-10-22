@@ -592,6 +592,12 @@ input,select{
     padding:7px 6px 7px 0px !important;
 }
 
+.departButton {
+    height: 24px;
+    line-height: 10px;
+    padding-top: 3px;
+}
+
 
 /**
  * public style
