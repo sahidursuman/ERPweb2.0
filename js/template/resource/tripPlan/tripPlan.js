@@ -547,7 +547,7 @@ define(function(require, exports) {
 			'<td><input type="text" name="arriveCity" class="col-sm-12" maxlength="32"/></td>' +
 			'<td><input type="text" name="shift" class="col-sm-12" maxlength="9"/></td>' +
 			'<td><input type="text" name="startTime" class="col-sm-13 col-xs-12 date-time-picker"/></td>' +
-			'<td><input type="text" name="seatLevel" class="col-sm-12" maxlength="4"/></td>' +
+			'<td><input type="text" name="seatLevel" class="col-sm-12" maxlength="32"/></td>' +
 			'<td><input type="text" name="fee" class="col-sm-12" maxlength="6"/></td>' +
 			'<td><input type="text" name="memberCount" class="col-sm-12" maxlength="3"/></td>' +
 			'<td><input type="text" name="reduceMoney" class="col-sm-12" maxlength="9"/></td>' +
