@@ -359,7 +359,7 @@ define(function(require, exports) {
 						    type: 1,
 						    title:"查看票务公司",
 						    skin: 'layui-layer-rim', //加上边框
-						    area:'1024px', //宽高
+						    area:'800px', //宽高
 						    zIndex:1028,
 						    content: html,
 							scrollbar: false,   // 推荐禁用浏览器外部滚动条

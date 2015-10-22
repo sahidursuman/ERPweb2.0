@@ -1,5 +1,5 @@
 define(function(require, exports) {
-	var rule = require("./rule");
+    var rule = require("./rule");
     var menuKey = "financial_replace";
     var listTemplate = require("./view/list");
     var billImagesTemplate = require("./view/billImages");
@@ -12,47 +12,47 @@ define(function(require, exports) {
     yearList=[],
     monthList = []
     for(var i=2013;i<=new Date().getFullYear();i++){
-    	var yeardata={"value":i}
-    	yearList.push(yeardata)
+        var yeardata={"value":i}
+        yearList.push(yeardata)
     };
     for(var j = 1;j<=12;j++){
-    	var monthData = {"value":j}
-    	monthList.push(monthData);
+        var monthData = {"value":j}
+        monthList.push(monthData);
     }
 
     var Replace = {
-		searchData:{
-			page : "",
-			partnerAgencyId : "",
+        searchData:{
+            page : "",
+            partnerAgencyId : "",
             travelAgencyName : "",
-			year : "",
-			month : ""
-		},
-		searchCheckData:{
-			"partnerAgencyId":"",
-			"partnerAgencyName":"",
-			"year":"",
-			"month":""
-		},
-		searchBalanceData:{
-			"partnerAgencyId":"",
-			"partnerAgencyName":"",
-			"year":"",
-			"startMonth":"",
-			"endMonth":""
-		},	
-		edited : {},
-		isEdited : function(editedType){
-			if(!!Replace.edited[editedType] && Replace.edited[editedType] != ""){
-				return true;
-			}
-			return false;
-		},
-		oldCheckPartnerAgencyId:0,
-		oldBlancePartnerAgencyId:0,
-		//代订账务列表 back/financial/financialInsurance.do
+            year : "",
+            month : ""
+        },
+        searchCheckData:{
+            "partnerAgencyId":"",
+            "travelAgencyName":"",
+            "year":"",
+            "month":""
+        },
+        searchBalanceData:{
+            "partnerAgencyId":"",
+            "travelAgencyName":"",
+            "year":"",
+            "startMonth":"",
+            "endMonth":""
+        },  
+        edited : {},
+        isEdited : function(editedType){
+            if(!!Replace.edited[editedType] && Replace.edited[editedType] != ""){
+                return true;
+            }
+            return false;
+        },
+        oldCheckPartnerAgencyId:0,
+        oldBlancePartnerAgencyId:0,
+        //代订账务列表 back/financial/financialInsurance.do
         listReplace:function(page,partnerAgencyId,travelAgencyName,year,month){
-        	
+            
             $.ajax({
                 url:""+APP_ROOT+"back/financial/financialBookingOrder.do?method=listSumFcBookingOrder&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
                 type:"POST",
@@ -65,15 +65,15 @@ define(function(require, exports) {
                     layer.close(globalLoadingLayer);
                     var result = showDialog(data);
                     if(result){
-                    	Replace.searchData={
-							page : page,
-                    		partnerAgencyId:partnerAgencyId,
+                        Replace.searchData={
+                            page : page,
+                            partnerAgencyId:partnerAgencyId,
                             travelAgencyName : travelAgencyName,
-                    		year:year,
-                    		month:month
-                    	}
-                        data.partnerAgencyNameListNew = JSON.parse(data.partnerAgencyNameListNew);
-                    	data.yearList = yearList;
+                            year:year,
+                            month:month
+                        }
+                        data.travelAgencyNameListNew = JSON.parse(data.partnerAgencyNameListNew);
+                        data.yearList = yearList;
                         data.monthList = monthList;
                         data.searchParam = Replace.searchData;
                         var html = listTemplate(data);
@@ -81,13 +81,13 @@ define(function(require, exports) {
                         //搜索按钮事件
                         $("#"+tabId+ " .btn-financialbooking-search").click(function(){
                             console.log($("#" + tabId + " input[name=partnerAgencyId]").val());
-                        	Replace.searchData = {
-                                	partnerAgencyId:$("#" + tabId + " input[name=partnerAgencyId]").val(),
+                            Replace.searchData = {
+                                    partnerAgencyId:$("#" + tabId + " input[name=partnerAgencyId]").val(),
                                     travelAgencyName : $("#" + tabId + " input[name=travelAgencyName]").val(),
-                                	year:$("#" + tabId + " select[name=year]").val(),
-                                	month:$("#" + tabId + " select[name=month]").val(),
+                                    year:$("#" + tabId + " select[name=year]").val(),
+                                    month:$("#" + tabId + " select[name=month]").val(),
                             }
-                        	Replace.listReplace(0,Replace.searchData.partnerAgencyId,Replace.searchData.travelAgencyName,Replace.searchData.year, Replace.searchData.month);
+                            Replace.listReplace(0,Replace.searchData.partnerAgencyId,Replace.searchData.travelAgencyName,Replace.searchData.year, Replace.searchData.month);
                         });
                         Replace.getPartnerAgencyList($("#"+tabId+" .choosePartnerAgency"),"");
 
@@ -119,10 +119,11 @@ define(function(require, exports) {
                         $("#"+tabId+" .btn-financialbooking-check").click(function(){
                             Replace.searchCheckData={
                                 partnerAgencyId:$(this).attr("data-entity-id"),
-                                partnerAgencyName:$(this).attr("data-entity-partnerAgencyName"),
+                                travelAgencyName:$(this).attr("data-entity-partneragencyname"),
                                 year:$(this).attr("data-entity-year"),
                                 month:$(this).attr("data-entity-month")
                             }
+                            console.log(Replace.searchCheckData);
                             Replace.replaceCheckList(0,Replace.searchCheckData.partnerAgencyId,Replace.searchCheckData.travelAgencyName,Replace.searchCheckData.year,Replace.searchCheckData.month);
                         });
 
@@ -132,18 +133,18 @@ define(function(require, exports) {
                             Replace.searchBalanceData={
                                 "partnerAgencyId":$(this).attr("data-entity-id"),                              
                                 "year":$(this).attr("data-entity-year"),
-                                "partnerAgencyName":$(this).attr("data-entity-partnerAgencyName"),
+                                "travelAgencyName":$(this).attr("data-entity-partneragencyname"),
                                 "startMonth":$(this).attr("data-entity-startMonth"),
                                 "endMonth":$(this).attr("data-entity-endMonth")
                             }
-                            Replace.replaceBalanceList(0,Replace.searchBalanceData.partnerAgencyId,Replace.searchBalanceData.partnerAgencyName,Replace.searchBalanceData.year,Replace.searchBalanceData.startMonth,Replace.searchBalanceData.endMonth)
+                            Replace.replaceBalanceList(0,Replace.searchBalanceData.partnerAgencyId,Replace.searchBalanceData.travelAgencyName,Replace.searchBalanceData.year,Replace.searchBalanceData.startMonth,Replace.searchBalanceData.endMonth)
                         });
                     }
                 }
             });
         },
         //代订对账处理
-        replaceCheckList:function(pageNo,partnerAgencyId,partnerAgencyName,year,month){
+        replaceCheckList:function(pageNo,partnerAgencyId,travelAgencyName,year,month){
             $.ajax({
                 url:""+APP_ROOT+"back/financial/financialBookingOrder.do?method=listFcBookingOrder&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
                 type:"POST",
@@ -153,83 +154,83 @@ define(function(require, exports) {
                     globalLoadingLayer = openLoadingLayer();
                 },
                 success:function(data){
-                	//表单验证
-                	var $obj = $(".bookingChecking .form-horizontal");
-                	
+                    //表单验证
+                    var $obj = $(".bookingChecking .form-horizontal");
+                    
                     layer.close(globalLoadingLayer);
                     var result = showDialog(data);
                     if(result){
                         //data.financialReplaceList = JSON.parse(data.financialReplaceList);
                         Replace.searchCheckData={
                             partnerAgencyId:partnerAgencyId,
-                            partnerAgencyName:partnerAgencyName,
+                            travelAgencyName:travelAgencyName,
                             year:year,
                             month:month
                         }
-                        console.log(data);
+                        console.log(Replace.searchCheckData);
                         data.yearList = yearList
                         data.monthList = monthList
-                        data.partnerAgencyName = partnerAgencyName
+                        data.travelAgencyName = travelAgencyName
                         data.searchParam = Replace.searchCheckData
                         var html = replaceChecking(data);
                         var validator;
-                	    //addTab(checkTabId,"代订对账",html);
-                	   if($("#" +"tab-"+checkTabId+"-content").length > 0)
-               	      {
-               	    	
-               	    	 if(!!Replace.edited["checking"] && Replace.edited["checking"] != ""){
-               	    		addTab(checkTabId,"代订对账");
-               	    		showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
-               	    			 validator = rule.check($('.bookingChecking'));
-				            		 if (!validator.form()) { return; }
-				            		 Replace.saveCheckingData(partnerAgencyId,partnerAgencyName,0);
-				            		 Replace.edited["checking"] = "";
-				            		 addTab(checkTabId,"代订对账",html);
-				            		 validator = rule.check($('.bookingChecking'));
-				            	 },function(){
-				            		 addTab(checkTabId,"代订对账",html);
-				            		 Replace.edited["checking"] = "";
-				            		 validator = rule.check($('.bookingChecking'));
-				            	 });
-               	    	 }else{
-	                 	    	addTab(checkTabId,"代订对账",html);
-	                 	        validator = rule.check($('.bookingChecking'));
-               	    	 }
-        	    		 
-               	    }else{
-               	    	addTab(checkTabId,"代订对账",html);
-               	    	validator = rule.check($('.bookingChecking'));
-               	    };
-           	    	$("#" +"tab-"+checkTabId+"-content .all").on("change",function(){
-           	    		Replace.edited["checking"] = "checking"; 
-						oldCheckPartnerAgencyId = partnerAgencyId;
-           	    	});   
+                        //addTab(checkTabId,"代订对账",html);
+                       if($("#" +"tab-"+checkTabId+"-content").length > 0)
+                      {
+                        
+                         if(!!Replace.edited["checking"] && Replace.edited["checking"] != ""){
+                            addTab(checkTabId,"代订对账");
+                            showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
+                                 validator = rule.check($('.bookingChecking'));
+                                     if (!validator.form()) { return; }
+                                     Replace.saveCheckingData(partnerAgencyId,travelAgencyName,0);
+                                     Replace.edited["checking"] = "";
+                                     addTab(checkTabId,"代订对账",html);
+                                     validator = rule.check($('.bookingChecking'));
+                                 },function(){
+                                     addTab(checkTabId,"代订对账",html);
+                                     Replace.edited["checking"] = "";
+                                     validator = rule.check($('.bookingChecking'));
+                                 });
+                         }else{
+                                addTab(checkTabId,"代订对账",html);
+                                validator = rule.check($('.bookingChecking'));
+                         }
+                         
+                    }else{
+                        addTab(checkTabId,"代订对账",html);
+                        validator = rule.check($('.bookingChecking'));
+                    };
+                    $("#" +"tab-"+checkTabId+"-content .all").on("change",function(){
+                        Replace.edited["checking"] = "checking"; 
+                        oldCheckPartnerAgencyId = partnerAgencyId;
+                    });   
                         
                     }
                     //给搜索按钮绑定事件
                     $("#" +"tab-"+ checkTabId+"-content"+" .btn-bookingcheck-search").click(function(){
                         Replace.searchCheckData={
                             partnerAgencyId:partnerAgencyId,
-                            partnerAgencyName:partnerAgencyName,
+                            travelAgencyName:travelAgencyName,
                             year:$("#" +"tab-"+ checkTabId+"-content"+" select[name=year]").val(),
                             month:$("#" +"tab-"+ checkTabId+"-content"+" select[name=month]").val(),
                         }
-                        Replace.replaceCheckList(0,Replace.searchCheckData.partnerAgencyId,Replace.searchCheckData.partnerAgencyName,Replace.searchCheckData.year,Replace.searchCheckData.month)
+                        Replace.replaceCheckList(0,Replace.searchCheckData.partnerAgencyId,Replace.searchCheckData.travelAgencyName,Replace.searchCheckData.year,Replace.searchCheckData.month)
                     });
 
                     //代订账务导出事件btn-replaceExport
                     $("#" +"tab-"+ checkTabId+"-content"+" .btn-replaceExport").click(function(){
-	                	 var year=$("#" +"tab-"+ checkTabId+"-content"+"  select[name=year]").val();
-                      	 var month=$("#" +"tab-"+ checkTabId+"-content"+" select[name=month]").val();
-                      	checkLogin(function(){
-                        	var url = ""+APP_ROOT+"back/export.do?method=bookingOrder&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view"+"&partnerAgencyId="+partnerAgencyId+"&partnerAgencyName="+partnerAgencyName+"&year="+year+"&month="+month+"&sortType=auto";
-                        	exportXLS(url)
+                         var year=$("#" +"tab-"+ checkTabId+"-content"+"  select[name=year]").val();
+                         var month=$("#" +"tab-"+ checkTabId+"-content"+" select[name=month]").val();
+                        checkLogin(function(){
+                            var url = ""+APP_ROOT+"back/export.do?method=bookingOrder&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view"+"&partnerAgencyId="+partnerAgencyId+"&travelAgencyName="+travelAgencyName+"&year="+year+"&month="+month+"&sortType=auto";
+                            exportXLS(url)
                         });
-	                 });
+                     });
 
                     //分页--首页按钮事件
                     $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.first").click(function(){
-                        Replace.replaceCheckList(0,Replace.searchCheckData.partnerAgencyId,Replace.searchCheckData.partnerAgencyName,Replace.searchCheckData.year,Replace.searchCheckData.month)
+                        Replace.replaceCheckList(0,Replace.searchCheckData.partnerAgencyId,Replace.searchCheckData.travelAgencyName,Replace.searchCheckData.year,Replace.searchCheckData.month)
                     });
                     //分页--上一页事件
                     $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.previous").click(function(){
@@ -237,7 +238,7 @@ define(function(require, exports) {
                         if(data.pageNo == 0){
                             previous = 0;
                         }
-                        Replace.replaceCheckList(previous,Replace.searchCheckData.partnerAgencyId,Replace.searchCheckData.partnerAgencyName,Replace.searchCheckData.year,Replace.searchCheckData.month)
+                        Replace.replaceCheckList(previous,Replace.searchCheckData.partnerAgencyId,Replace.searchCheckData.travelAgencyName,Replace.searchCheckData.year,Replace.searchCheckData.month)
                     });
                     //分页--下一页事件
                     $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.next").click(function(){
@@ -245,11 +246,11 @@ define(function(require, exports) {
                         if(data.pageNo == data.totalPage-1){
                             next = data.pageNo ;
                         }
-                        Replace.replaceCheckList(next,Replace.searchCheckData.partnerAgencyId,Replace.searchCheckData.partnerAgencyName,Replace.searchCheckData.year,Replace.searchCheckData.month)
+                        Replace.replaceCheckList(next,Replace.searchCheckData.partnerAgencyId,Replace.searchCheckData.travelAgencyName,Replace.searchCheckData.year,Replace.searchCheckData.month)
                     });
                     //分页--尾页事件
                     $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.last").click(function(){
-                        Replace.replaceCheckList(data.totalPage == 0 ? data.totalPage : data.totalPage-1,Replace.searchCheckData.partnerAgencyId,Replace.searchCheckData.partnerAgencyName,Replace.searchCheckData.year,Replace.searchCheckData.month)
+                        Replace.replaceCheckList(data.totalPage == 0 ? data.totalPage : data.totalPage-1,Replace.searchCheckData.partnerAgencyId,Replace.searchCheckData.travelAgencyName,Replace.searchCheckData.year,Replace.searchCheckData.month)
                     });
                     //给全选绑定事件
                     $("#" +"tab-"+ checkTabId+"-content"+" .selectAll").click(function(){
@@ -269,32 +270,32 @@ define(function(require, exports) {
                         });
                     });
                     //给复选框绑定事件
-	                 $("#" +"tab-"+ checkTabId+"-content"+" .bookingFinancial").click(function(){
-	                	 var flag = true
-	                	 $("#" +"tab-"+ checkTabId+"-content"+" .bookingFinancial").each(function(){
-	                		 if(!$(this).prop("checked")){
-		                			flag = false;
-		                		} 
-	                	 })
-	                	 $("#" +"tab-"+ checkTabId+"-content"+" .selectAll").prop("checked",flag)
-	                 });
+                     $("#" +"tab-"+ checkTabId+"-content"+" .bookingFinancial").click(function(){
+                         var flag = true
+                         $("#" +"tab-"+ checkTabId+"-content"+" .bookingFinancial").each(function(){
+                             if(!$(this).prop("checked")){
+                                    flag = false;
+                                } 
+                         })
+                         $("#" +"tab-"+ checkTabId+"-content"+" .selectAll").prop("checked",flag)
+                     });
                     //给确认对账按钮绑定事件
                     $("#" +"tab-"+ checkTabId+"-content"+" .btn-bookingFinancial-checking").click(function(){
-                    	 if (!validator.form()) { return; }
-	            		 Replace.saveCheckingData(partnerAgencyId,partnerAgencyName,0);
+                         if (!validator.form()) { return; }
+                         Replace.saveCheckingData(partnerAgencyId,travelAgencyName,0);
                     })
                     //取消按钮事件
                     $("#" +"tab-"+ checkTabId+"-content"+" .btn-bookingFinancial-close").click(function(){
                         showConfirmDialog($( "#confirm-dialog-message" ), "确定关闭本选项卡?",function(){
                             closeTab(checkTabId);
-							Replace.edited["checking"] = "";
+                            Replace.edited["checking"] = "";
                         });
                     });
                 }
             });
         },
         //代订帐务结算处理
-       replaceBalanceList:function(pageNo,partnerAgencyId,partnerAgencyName,year,startMonth,endMonth){
+       replaceBalanceList:function(pageNo,partnerAgencyId,travelAgencyName,year,startMonth,endMonth){
             $.ajax({
                 url:""+APP_ROOT+"back/financial/financialBookingOrder.do?method=listFcBookingOrderSettlement&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
                 type:"POST",
@@ -309,67 +310,67 @@ define(function(require, exports) {
                     if(result){
                         data.yearList = yearList
                         data.monthList = monthList
-                        data.partnerAgencyName = partnerAgencyName
+                        data.travelAgencyName = travelAgencyName
                         var html = replaceClearing(data);
-	                    if($("#" +"tab-"+blanceTabId+"-content").length > 0)
-	             	    {
-	             	    	 if(!!Replace.edited["blance"] && Replace.edited["blance"] != ""){
-	             	    		addTab(blanceTabId,"代订结算");
-			                    //给每个tr添加表单验证
-	             	    		showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
-	             	    			 Replace.validatorTable()
-	             	    			 var saveBtn = $("#" +"tab-"+ blanceTabId+"-content"+" .btn-bookingBlance-save")
-	             	    			 if (!$(saveBtn).data('validata').form()) { return; }
-	             	    			 Replace.saveBlanceData(Replace.oldBlancePartnerAgencyId,partnerAgencyName,0);
-				            		 Replace.edited["blance"] = "";
-				            		 addTab(blanceTabId,"代订结算",html);
-				            		 Replace.validatorTable();
-				            	 },function(){
-									addTab(blanceTabId,"代订结算",html);
-									Replace.edited["blance"] = "";
-									Replace.validatorTable();
-				            	 });
-	             	    	 }else{
-	                 	    	addTab(blanceTabId,"代订结算",html);
-	                 	    	Replace.validatorTable();
-	             	    	 }
-	         	    		 
-	             	    }else{
-	             	    	addTab(blanceTabId,"代订结算",html);
-	             	    	Replace.validatorTable();
-	             	    };
-	             	   $("#" +"tab-"+blanceTabId+"-content .all").on('change', 'input, select', function() {
-	             		    Replace.edited["blance"] = "blance";
-	             		    Replace.oldBlancePartnerAgencyId = partnerAgencyId;
-	    	    			$(this).closest('tr').data('blanceStatus',true);
-	    	    		});
+                        if($("#" +"tab-"+blanceTabId+"-content").length > 0)
+                        {
+                             if(!!Replace.edited["blance"] && Replace.edited["blance"] != ""){
+                                addTab(blanceTabId,"代订结算");
+                                //给每个tr添加表单验证
+                                showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
+                                     Replace.validatorTable()
+                                     var saveBtn = $("#" +"tab-"+ blanceTabId+"-content"+" .btn-bookingBlance-save")
+                                     if (!$(saveBtn).data('validata').form()) { return; }
+                                     Replace.saveBlanceData(Replace.oldBlancePartnerAgencyId,travelAgencyName,0);
+                                     Replace.edited["blance"] = "";
+                                     addTab(blanceTabId,"代订结算",html);
+                                     Replace.validatorTable();
+                                 },function(){
+                                    addTab(blanceTabId,"代订结算",html);
+                                    Replace.edited["blance"] = "";
+                                    Replace.validatorTable();
+                                 });
+                             }else{
+                                addTab(blanceTabId,"代订结算",html);
+                                Replace.validatorTable();
+                             }
+                             
+                        }else{
+                            addTab(blanceTabId,"代订结算",html);
+                            Replace.validatorTable();
+                        };
+                       $("#" +"tab-"+blanceTabId+"-content .all").on('change', 'input, select', function() {
+                            Replace.edited["blance"] = "blance";
+                            Replace.oldBlancePartnerAgencyId = partnerAgencyId;
+                            $(this).closest('tr').data('blanceStatus',true);
+                        });
  
                         
                         //搜索按钮事件
                         $("#" +"tab-"+ blanceTabId + "-content"+" .btn-blance-search").click(function(){
                             Replace.searchBalanceData={
                                 partnerAgencyId:partnerAgencyId,
-                                partnerAgencyName:partnerAgencyName,
+                                travelAgencyName:travelAgencyName,
                                 year:$("#" +"tab-"+ blanceTabId + "-content"+"  select[name=year]").val(),
                                 startMonth:$("#" +"tab-"+ blanceTabId + "-content"+" select[name=startMonth]").val(),
                                 endMonth:$("#" +"tab-"+ blanceTabId + "-content"+" select[name=endMonth]").val(),
                             }
-                            Replace.replaceBalanceList(0,Replace.searchBalanceData.partnerAgencyId,Replace.searchBalanceData.partnerAgencyName,Replace.searchBalanceData.year,Replace.searchBalanceData.startMonth,Replace.searchBalanceData.endMonth);
+                            Replace.replaceBalanceList(0,Replace.searchBalanceData.partnerAgencyId,Replace.searchBalanceData.travelAgencyName,Replace.searchBalanceData.year,Replace.searchBalanceData.startMonth,Replace.searchBalanceData.endMonth);
                         });
                         //保存按钮事件
                         $("#" +"tab-"+ blanceTabId+"-content"+" .btn-bookingBlance-save").click(function(){
-                        	if (!$(this).data('validata').form()) { return; }
-        	    			 Replace.saveBlanceData(Replace.oldBlancePartnerAgencyId,partnerAgencyName,0);
+                            if (!$(this).data('validata').form()) { return; }
+                             Replace.saveBlanceData(Replace.oldBlancePartnerAgencyId,travelAgencyName,0);
                         });
                         //对账明细按钮事件
                         $("#" +"tab-"+ blanceTabId+"-content"+" .btn-bookingBlance-checkDetail").click(function(){
                             Replace.searchCheckData={
                                partnerAgencyId:partnerAgencyId,
-                                partnerAgencyName:partnerAgencyName,
+                                travelAgencyName:travelAgencyName,
                                 year:$(this).attr("data-entity-year"),
                                 month:$(this).attr("data-entity-month"),
                             }
-                            Replace.replaceCheckList(0,Replace.searchCheckData.partnerAgencyId,Replace.searchCheckData.partnerAgencyName,Replace.searchCheckData.year,Replace.searchCheckData.month)
+                            Replace.replaceCheckList(0,Replace.searchCheckData.partnerAgencyId,Replace.searchCheckData.travelAgencyName,Replace.searchCheckData.year,Replace.searchCheckData.month)
                         });
                         //给操作记录按钮绑定事件
                         $("#" +"tab-"+ blanceTabId+"-content"+" .btn-bookingBlance-Records").click(function(){
@@ -408,15 +409,15 @@ define(function(require, exports) {
             });
         },
       //给每个tr增加验证
-	    validatorTable:function(){
-	    	var $tr = $("#" +"tab-"+ blanceTabId + "-content"+" .all tbody tr")
+        validatorTable:function(){
+            var $tr = $("#" +"tab-"+ blanceTabId + "-content"+" .all tbody tr")
             //给每个tr添加表单验证
             $tr.each(function(){
-            	$(this).find('.btn-bookingBlance-save').data('validata', rule.check($(this)));
+                $(this).find('.btn-bookingBlance-save').data('validata', rule.check($(this)));
             });
-	    },
+        },
         //对账数据处理
-        saveCheckingData:function(partnerAgencyId,partnerAgencyName,isClose){
+        saveCheckingData:function(partnerAgencyId,travelAgencyName,isClose){
             var JsonStr = [],
                 oldrealUnIncomeMoney,
                 newrealUnIncomeMoney,
@@ -437,7 +438,7 @@ define(function(require, exports) {
                             var checkData = {
                                 id:$(this).attr("data-entity-id"),
                                 partnerAgencyId:partnerAgencyId,
-                                partnerAgencyName:partnerAgencyName,
+                                travelAgencyName:travelAgencyName,
                                 createTime:$(this).attr("data-entity-createTime"),
                                 realUnIncomeMoney:$tr.eq(i).find("input[name=FinancialBookingRealUnPayedMoney]").val(),
                                 remark:$tr.eq(i).find("input[name=FinancialbookingRemark]").val(),
@@ -449,7 +450,7 @@ define(function(require, exports) {
                         var checkData = {
                             id:$(this).attr("data-entity-id"),
                             partnerAgencyId:partnerAgencyId,
-                            partnerAgencyName:partnerAgencyName,
+                            travelAgencyName:travelAgencyName,
                             createTime:$(this).attr("data-entity-createTime"),
                             realUnIncomeMoney:$tr.eq(i).find("input[name=FinancialBookingRealUnPayedMoney]").val(),
                             remark:$tr.eq(i).find("input[name=FinancialbookingRemark]").val(),
@@ -462,7 +463,7 @@ define(function(require, exports) {
                         var checkData = {
                             id:$(this).attr("data-entity-id"),
                             partnerAgencyId:partnerAgencyId,
-                            partnerAgencyName:partnerAgencyName,
+                            travelAgencyName:travelAgencyName,
                             createTime:$(this).attr("data-entity-createTime"),
                             realUnIncomeMoney:$tr.eq(i).find("input[name=FinancialBookingRealUnPayedMoney]").val(),
                             remark:$tr.eq(i).find("input[name=FinancialbookingRemark]").val(),
@@ -473,11 +474,11 @@ define(function(require, exports) {
                 }
             });
             //判断用户是否操作
-        	   if(JsonStr.length == 0){
-        		   showMessageDialog($( "#confirm-dialog-message" ),"您当前未进行任何操作");
-        		   return
-        	   }else{
-        		   JsonStr = JSON.stringify(JsonStr);
+               if(JsonStr.length == 0){
+                   showMessageDialog($( "#confirm-dialog-message" ),"您当前未进行任何操作");
+                   return
+               }else{
+                   JsonStr = JSON.stringify(JsonStr);
                    $.ajax({
                        url:""+APP_ROOT+"back/financial/financialBookingOrder.do?method=accountChecking&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
                        type:"POST",
@@ -492,41 +493,41 @@ define(function(require, exports) {
                            if(result){
                                showMessageDialog($( "#confirm-dialog-message" ),data.message);
                                Replace.edited["checking"] = "";
-							   if(isClose == 1){
-								   closeTab(checkTabId);
-								   Replace.listReplace(Replace.searchData.page,Replace.searchData.partnerAgencyId,Replace.searchData.travelAgencyName,Replace.searchData.year,Replace.searchData.month);
-							   } else {
-								   Replace.replaceCheckList(0,Replace.searchCheckData.partnerAgencyId,Replace.searchCheckData.partnerAgencyName,Replace.searchCheckData.year,Replace.searchCheckData.month);                          
-							   }
+                               if(isClose == 1){
+                                   closeTab(checkTabId);
+                                   Replace.listReplace(Replace.searchData.page,Replace.searchData.partnerAgencyId,Replace.searchData.travelAgencyName,Replace.searchData.year,Replace.searchData.month);
+                               } else {
+                                   Replace.replaceCheckList(0,Replace.searchCheckData.partnerAgencyId,Replace.searchCheckData.travelAgencyName,Replace.searchCheckData.year,Replace.searchCheckData.month);                          
+                               }
                             }
                        }
                    });
-        	   }
+               }
         },
-        saveBlanceData:function(partnerAgencyId,partnerAgencyName,isClose){
-          	var DataArr = [],
-    			JsonData,
-          	$tr = $("#" +"tab-"+ blanceTabId+"-content"+" .all tbody tr");
-          	$tr.each(function(i){
-          		if($(this).data('blanceStatus')){
-          			var blanceData = {
-						id:$(this).attr("data-entity-id"),
-						partnerAgencyId:partnerAgencyId,
-						year:$(this).attr("data-entity-year"),
-						month:$(this).attr("data-entity-month"),
-						realNeedIncomeMoney:$tr.eq(i).find("td[name=blancerealNeedIncomeMoney]").text(),
-						realIncomeMoney:$tr.eq(i).find("td[name=blancerealIncomeMoney]").text(),
-						unIncomeMoney:$tr.eq(i).find("td[name=blanceununIncomeMoney]").text(),
-						realUnIncomeMoney:$tr.eq(i).find("td[name=blancerealrealUnIncomeMoney]").text(),
-						incomeType:$tr.eq(i).find("select[name=blancePayType]").val(),
-						incomeMoney:$tr.eq(i).find("input[name=blancerealIncomeMoney]").val(),
-						remark:$tr.eq(i).find("input[name=blancerealRemark]").val()
-					}
-          			 DataArr.push(blanceData)
-          		}
-          	})
-          	JsonData = JSON.stringify(DataArr)
-          	$.ajax({
+        saveBlanceData:function(partnerAgencyId,travelAgencyName,isClose){
+            var DataArr = [],
+                JsonData,
+            $tr = $("#" +"tab-"+ blanceTabId+"-content"+" .all tbody tr");
+            $tr.each(function(i){
+                if($(this).data('blanceStatus')){
+                    var blanceData = {
+                        id:$(this).attr("data-entity-id"),
+                        partnerAgencyId:partnerAgencyId,
+                        year:$(this).attr("data-entity-year"),
+                        month:$(this).attr("data-entity-month"),
+                        realNeedIncomeMoney:$tr.eq(i).find("td[name=blancerealNeedIncomeMoney]").text(),
+                        realIncomeMoney:$tr.eq(i).find("td[name=blancerealIncomeMoney]").text(),
+                        unIncomeMoney:$tr.eq(i).find("td[name=blanceununIncomeMoney]").text(),
+                        realUnIncomeMoney:$tr.eq(i).find("td[name=blancerealrealUnIncomeMoney]").text(),
+                        incomeType:$tr.eq(i).find("select[name=blancePayType]").val(),
+                        incomeMoney:$tr.eq(i).find("input[name=blancerealIncomeMoney]").val(),
+                        remark:$tr.eq(i).find("input[name=blancerealRemark]").val()
+                    }
+                     DataArr.push(blanceData)
+                }
+            })
+            JsonData = JSON.stringify(DataArr)
+            $.ajax({
                 url:""+APP_ROOT+"back/financial/financialBookingOrder.do?method=saveFcBookingOrderSettlement&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
                 type:"POST",
                 data:"fcBookingOrderSettlementStr="+JsonData,
@@ -540,12 +541,12 @@ define(function(require, exports) {
                     if(result){
                         showMessageDialog($( "#confirm-dialog-message" ),data.message);
                         Replace.edited["blance"] = "";
-						if(isClose == 1){
-							closeTab(blanceTabId);
-							Replace.listReplace(Replace.searchData.page,Replace.searchData.partnerAgencyId,Replace.searchData.travelAgencyName,Replace.searchData.year,Replace.searchData.month);
-						} else {
-							Replace.replaceBalanceList(0,Replace.searchBalanceData.partnerAgencyId,Replace.searchBalanceData.partnerAgencyName,Replace.searchBalanceData.year,Replace.searchBalanceData.startMonth,Replace.searchBalanceData.endMonth);
-						}
+                        if(isClose == 1){
+                            closeTab(blanceTabId);
+                            Replace.listReplace(Replace.searchData.page,Replace.searchData.partnerAgencyId,Replace.searchData.travelAgencyName,Replace.searchData.year,Replace.searchData.month);
+                        } else {
+                            Replace.replaceBalanceList(0,Replace.searchBalanceData.partnerAgencyId,Replace.searchBalanceData.travelAgencyName,Replace.searchBalanceData.year,Replace.searchBalanceData.startMonth,Replace.searchBalanceData.endMonth);
+                        }
                     }
                 }
             })
@@ -555,7 +556,7 @@ define(function(require, exports) {
             $.ajax({
                 url:""+APP_ROOT+"back/partnerAgency.do?method=findPartnerAnencyList&token="+$.cookie("token")+"&menuKey=resource_partnerAgency&operation=view",
                 dataType: "json",
-                data:"",
+                data:"travelAgencyName="+$objC.val(),
                 success:function(data){
                     layer.close(globalLoadingLayer);
                         var result = showDialog(data);
@@ -592,20 +593,20 @@ define(function(require, exports) {
             });
                      
         },
-		save : function(saveType){
-			console.log(saveType);
-			if(saveType == "checking"){
-				Replace.saveCheckingData(Replace.oldCheckPartnerAgencyId,"",1);
-			} else if(saveType == "blance"){
-				Replace.saveBlanceData(Replace.oldBlancePartnerAgencyId,"",1);
-			}
-		},
-		clearEdit : function(clearType){
-			Replace.edited[clearType] = "";
-		}
+        save : function(saveType){
+            console.log(saveType);
+            if(saveType == "checking"){
+                Replace.saveCheckingData(Replace.oldCheckPartnerAgencyId,"",1);
+            } else if(saveType == "blance"){
+                Replace.saveBlanceData(Replace.oldBlancePartnerAgencyId,"",1);
+            }
+        },
+        clearEdit : function(clearType){
+            Replace.edited[clearType] = "";
+        }
     }
     exports.listReplace = Replace.listReplace;
-	exports.isEdited = Replace.isEdited;
-	exports.save = Replace.save;
-	exports.clearEdit = Replace.clearEdit;
+    exports.isEdited = Replace.isEdited;
+    exports.save = Replace.save;
+    exports.clearEdit = Replace.clearEdit;
 });
