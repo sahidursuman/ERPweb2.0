@@ -136,11 +136,6 @@ define(function(require, exports) {
 					//同行转入选项卡绑定事件
 					$("#"+tabId+" #myTab li a.transferIn").click(function(){
 						var type=$(this).attr("data-value");//1	
-						//var startTime=data.startDay;
-						//调用默认时间是一周的函数
-						//var endTime = transfer.dateCalculation(startTime,6);
-						//$transferIn.find("input[name=endTime]").val(endTime);
-						
 						transfer.listTransferIn(page,partnerAgencyId,startTime,partnerAgencyId,contactUserId,status,type);
 
 					});
@@ -150,18 +145,12 @@ define(function(require, exports) {
 					//我社转出选项卡绑定事件
 					$("#"+tabId+" #myTab li a.transferOut").click(function(){
 						var type=$(this).attr("data-value");//2
-						//var startTime=data.startDay;
-						//调用默认时间是一周的函数
-						//var endTime = transfer.dateCalculation(startTime,6);
-						//$transferOut.find("input[name=createTime]").eq(1).val(endTime);
 						transfer.listTransfer(page,partnerAgencyId,creator,startTime,endTime,status,type);
 					});
 					//我社转出搜索栏状态button下拉事件
 					$("#transferOut .btn-status .dropdown-menu a").click(function(){
 						$(this).parent().parent().parent().find("button").attr("data-value",$(this).attr("data-value"));
 						$(this).parent().parent().parent().find("span").text($(this).text());
-						//var startTime = $transferOut.find("input[name=createTime]").eq(0).val();
-					    //var endTime = transfer.dateCalculation(startTime,6);
 						transfer.searchInData = {
 							//搜索字段
 							partnerAgencyId : $transferOut.find("input[name=transferPartnerAgencyId]").val(),
