@@ -417,8 +417,6 @@ define(function(require, exports) {
 						var isSendMessageStatus=data.tripPlan.isSendTouristMessage;
 						//判断  立即发送  定时发送
 						var isCheckedStatus=data.tripPlan.executeTimeType;
-
-
 						//已修改提示
 			    		var validator =rule.checkdCreateTripPlan($(".updateTripPlan"));
 						if($(".tab-"+menuKey+"-update").length > 0) {

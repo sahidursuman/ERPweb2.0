@@ -16,12 +16,15 @@
 										 <div class="search-area">
 										   <label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>同行地接：</label> 
 											  <div class="col-sm-2"> 
-												<input type="text" class="col-sm-12 choosePartnerAgency" placeholder="来源" name="" value="{{touristGroupTransfer.partnerAgency.travelAgencyName}}" />
+												<input type="text" class="col-sm-12 {{if touristGroupTransfer.status!=1}}choosePartnerAgency{{/if}} " style="{{if touristGroupTransfer.status==1}}color:#bbb;{{/if}} " placeholder="来源" name="" value="{{touristGroupTransfer.partnerAgency.travelAgencyName}}" />
 												<input type="hidden" name="transferPartnerAgencyId" value="{{touristGroupTransfer.partnerAgency.id}}" />
 												  <!-- <select name="transferPartnerAgencyId" disabled="" class="col-xs-12" style="width: 220px">
 												  			
 												  </select>  -->  
-										      </div>  
+										      </div> 
+
+
+
 										 </div>   
 									 </div>
 									<!-- 付款金额start -->    
@@ -38,19 +41,13 @@
 											  </div>
 
 
-											{{if touristGroupTransfer.operateCurrentNeedPayMoney==1}}
-												<label>
-													<input  type="checkbox" class="ace" checked="checked" value="{{touristGroupTransfer.operateCurrentNeedPayMoney}}" name="isCurrent" readonly="readonly">
-													<span class="lbl">
-													</span>
-												</label>
-												{{else}}
-												<label style="padding-left:0px;">
-													<input  type="checkbox" class="ace" name="isCurrent" checked="" value="{{touristGroupTransfer.operateCurrentNeedPayMoney}}" name="operateCurrentNeedPayMoney">
-													<span class="lbl">
-													</span>
-												</label>
-											{{/if}}
+											<label>
+												<input  type="checkbox" class="ace" checked="{{if touristGroupTransfer.operateCurrentNeedPayMoney==1}}checked{{/if}}" disabled="disabled" value="{{touristGroupTransfer.operateCurrentNeedPayMoney}}" name="isCurrent" />
+												<span class="lbl">
+												</span>
+											</label>
+
+
 											<label class="control-label no-padding-right">对方现收</label>
 											  <!-- <label class="col-sm-1 control-label no-padding-right pull-left">现付：</label>
 											  <div class="col-sm-2">
