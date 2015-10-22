@@ -38,6 +38,7 @@ define(function(require, exports) {
 						$(".main-content .page-content .shopList .btn-shop-view").click(function(){
 							var id = $(this).attr("data-entity-id");
 							shop.viewShop(id);
+
 						});
 						
 						$(".main-content .page-content .shopList .btn-shop-edit").click(function(){
@@ -59,6 +60,8 @@ define(function(require, exports) {
 						$(".main-content .page-content .guideList .btn-shop-view").click(function(){
 							var id = $(this).attr("data-entity-id");
 							shop.viewShop(this,id);
+							// 再调整对话框的高度
+							$(window).trigger('resize');
 						});
 						
 						//搜索栏状态button下拉事件
@@ -624,9 +627,10 @@ define(function(require, exports) {
 						    type: 1,
 						    title:"查看商家信息",
 						    skin: 'layui-layer-rim', //加上边框
-						    area: ['1024px', '600px'], //宽高
+						    area: '1024px', //宽高
 						    zIndex:1028,
 						    content: html,
+							scrollbar: false,    // 推荐禁用浏览器外部滚动条
 						    success:function(){
 						
 						    }
