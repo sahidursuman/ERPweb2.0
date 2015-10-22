@@ -55,21 +55,21 @@
 				<label class="control-label no-padding-right">确认发团后游客短信设置:</label>
 				立即发送
 				<label style="padding-left:0px;">
-					<input type="radio"  checked="checked" class="ace buyInsurance-status" disabled="" value="{{tripPlan.executeTimeType}}" name="executeTimeType">
+					<input type="radio"  checked="" class="ace buyInsurance-status" readonly="readonly" value="{{tripPlan.executeTimeType}}" name="executeTimeType">
 					<span class="lbl">
 					</span>
 				</label>
 				&nbsp;&nbsp;&nbsp;&nbsp;
 				定时发送
 				<label style="padding-left:0px;">
-					<input type="radio" class="ace buyInsurance-status" disabled="" value="{{tripPlan.executeTimeType}}" name="executeTimeType">
+					<input type="radio" class="ace buyInsurance-status"  readonly="readonly" value="{{tripPlan.executeTimeType}}" name="executeTimeType">
 					<span class="lbl">
 					</span>
 				</label>
 				
 			</div>
 			<div class="col-sm-2 newAddTripTimer">
-				<input class="form-control col-sm-4 datetimepicker" disabled="" type="text" name="executeTime" value="{{tripPlan.executeTime}}" />
+				<input class="form-control col-sm-4 datetimepicker" readonly="readonly" type="text" name="executeTime" value="{{tripPlan.executeTime}}" />
 			</div>
         </div>
 
