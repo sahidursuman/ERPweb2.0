@@ -19,7 +19,7 @@
 		<tr data-entity-id="{{list.id}}">
 			<td>{{list.lineProduct.name}}</td>
 			<td>{{list.lineProduct.days}}天</td>
-			<td>{{list.touristGroup.startTime}}</td>
+			<td>{{list.touristGroup.startTime | dateFormat:'yyyy-MM-dd'}}</td>
 			<td>{{if list.touristGroup.contactMember != null}}{{list.touristGroup.contactMember.name}}{{/if}}</td>
 			<td>{{list.touristGroup.adultCount}}大{{list.touristGroup.childCount}}小</td>
 			<td>{{list.fromBusinessGroup.name}}</td>
