@@ -522,16 +522,22 @@ define(function(require, exports) {
 			//发团计划定时
 			tripPlan.setTripPlanPicker();
 
-			//游客短信及时发送显示隐藏
-			//$("#"+tab+" .checkbox ").unbind().click(function(){
-				//if ($("#"+tab+" .checkbox input[name=executeTimeType]:radio:checked").val()==1) {
-					//$(this).parent().parent().find(".newAddTripTimer").removeClass("hide");
+		
+		 	$("#"+tab+" .checkbox").on('click', 'input[type="radio"]', function(event) {
+		 		var $that = $(this), 
+		 			$time = $that.closest(".checkbox").find('input[name=executeTime]');
 
-				//} else{
-					//$(this).parent().parent().find(".newAddTripTimer").addClass("hide");
-				//};
+		 		if ($that.hasClass('execTimeRTypeSt')) {
+		 			// 立即发送
+		 			$time.data('time', $time.val()).val("").prop('disabled', true);
+		 		} else if ($that.hasClass('execTimeClTypeSt'))  {
+		 			//定时发送
+		 			$time.val($time.data('time')).prop('disabled', false);
+		 		}
+		 	});
 
-			//})
+
+
 
 			//新增游客小组
 			$("#" + tab + " .updateTripPlan .newAddTouristGroup").on("click",function(){
