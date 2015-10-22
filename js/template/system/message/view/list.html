@@ -1,8 +1,14 @@
 <div class="row" id="messageList">
 	<div class="col-xs-12">
-	<table id="simple-table" class="table table-striped table-bordered table-hover">
+	<table id="simple-table" class="table table-striped table-bordered table-hover table-fixed">
+		<colgroup>
+			<col style="width:60%">
+			<col style="width:100px">
+			<col style="width:180px">
+			<col style="width:100px">
+		</colgroup>
 		<thead>
-			<tr>
+			<tr class="bg-blur">
 				<th>消息主体</th>
 				<th>是否已读</th>
 				<th>
@@ -14,8 +20,8 @@
 		</thead>
 		<tbody>
 		{{each msgList as msg}}
-			<tr>
-				<td>{{msg.content | interceptStr}}</td>
+			<tr data-id="{{msg.id}}">
+				<td class="align-left">{{msg.content}}</td>
 				<td>
 					{{if msg.isRead == 1}}
 						<span style="color: green"><b>已读</b></span>
@@ -28,29 +34,7 @@
 					{{msg.createTime | dateFormat : 'yyyy-MM-dd hh:mm:ss'}}
 				</td>
 				<td>
-					<div class="hidden-sm hidden-xs btn-group">
-						<button class="btn btn-xs btn-success btn-msg-view" title="查看"  data-entity-id="{{msg.id}}">
-							<i class="ace-icon fa fa-search-plus bigger-120"></i>
-						</button>
-					</div>
-
-					<div class="hidden-md hidden-lg">
-						<div class="inline pos-rel">
-							<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
-								<i class="ace-icon fa fa-cog icon-only bigger-120"></i>
-							</button>
-
-							<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-								<li>
-									<a href="#" class="tooltip-error btn-msg-view" data-rel="tooltip" title="查看"  data-entity-id="{{msg.id}}">
-										<span class="green">
-											<i class="ace-icon fa fa-search-plus bigger-120"></i>
-										</span>
-									</a>
-								</li>
-							</ul>
-						</div>
-					</div>
+					<a href="javascript:void(0);" class="btn-msg-view">查看</a>
 				</td>
 			</tr>
 			{{/each}}
