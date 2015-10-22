@@ -10,7 +10,8 @@ define(function(require, exports) {
 	viewTemplate=require("./view/viewTransform"),
 	updateTemplate=require("./view/updateTransfer"),
 	tabId = "tab-" + menuKey + "-content",
-	checkTable="arrange_transfer-updateTransfer";   
+	checkTable="arrange_transfer-updateTransfer",
+	map;
 	var transfer = {
 		//我社转出搜索字段
 		searData:{
@@ -60,7 +61,7 @@ define(function(require, exports) {
 			};
 			pager = JSON.stringify(pager);
 
-			var map = {
+			map = {
 				totalPayed : "",
 				totalNeedPay : "",
 				totalAdultCount:"",
@@ -113,6 +114,7 @@ define(function(require, exports) {
 					map.touristGroup1 = JSON.parse(data.touristGroup1);
 					map.pager = JSON.parse(data.pager);
 					map.partnerAgency = JSON.parse(data.partnerAgency);
+					map.partnerAgency2 = JSON.parse(data.partnerAgency2);
 					map.lineProduct1=JSON.parse(data.lineProduct1);   
 					map.user1 = JSON.parse(data.user1);
 
@@ -141,7 +143,7 @@ define(function(require, exports) {
 					});
 					transfer.getLineProductList($("#" +tabId+" .chooseLineProductId"),"");
 					transfer.getPartnerAgencyList($("#" +tabId+" #transferOut .choosePartnerAgency"),"");
-					transfer.getPartnerAgencyList($("#" +tabId+" #transferIn .choosePartnerAgency"),"");
+					transfer.getPartnerAgencyListIn($("#" +tabId+" #transferIn .choosePartnerAgency"),"");
 					//我社转出选项卡绑定事件
 					$("#"+tabId+" #myTab li a.transferOut").click(function(){
 						var type=$(this).attr("data-value");//2
@@ -979,7 +981,7 @@ define(function(require, exports) {
                 	layer.close(globalLoadingLayer);
 					var result = showDialog(data);
 					if(result){
-						var partnerAgencyList = JSON.parse(data.partnerAgencyList);
+						var partnerAgencyList = map.partnerAgency;
 						if(partnerAgencyList != null && partnerAgencyList.length > 0){
 							for(var i=0;i<partnerAgencyList.length;i++){
 								partnerAgencyList[i].value = partnerAgencyList[i].travelAgencyName;
@@ -1007,6 +1009,32 @@ define(function(require, exports) {
 			});
 			         
 		},
+		getPartnerAgencyListIn:function(obj,partnerAId){
+			var $objC = $(obj)
+			var partnerAgencyList = map.partnerAgency2;
+			if(partnerAgencyList != null && partnerAgencyList.length > 0){
+				for(var i=0;i<partnerAgencyList.length;i++){
+					partnerAgencyList[i].value = partnerAgencyList[i].travelAgencyName;
+				}
+			};
+			$(obj).autocomplete({
+				
+				minLength: 0,
+				change: function(event, ui) {
+					if (!ui.item)  {
+						$(this).val('').nextAll('input[name="transferPartnerAgencyId"]').val('');
+					}
+				},
+				select: function(event, ui) {
+					var $tabId = $("#tab-resource_touristGroup-add-content");
+					$(this).blur().nextAll('input[name="transferPartnerAgencyId"]').val(ui.item.id);
+					$tabId.find("input[name=partnerAgencyNameList]").val("");
+				}
+			}).off("click").on("click",function(){
+				$objC.autocomplete('option','source', partnerAgencyList);
+				$objC.autocomplete('search', '');
+			});
+		},
 		getLineProductList:function(obj,partnerAId){
 			var $objC = $(obj);
 			$.ajax({
@@ -1016,7 +1044,7 @@ define(function(require, exports) {
                 	layer.close(globalLoadingLayer);
 					var result = showDialog(data);
 					if(result){
-						var lineProductList = JSON.parse(data.lineProductList);
+						var lineProductList = map.lineProduct2;
 						if(lineProductList != null && lineProductList.length > 0){
 							for(var i=0;i<lineProductList.length;i++){
 								lineProductList[i].value = lineProductList[i].name;
