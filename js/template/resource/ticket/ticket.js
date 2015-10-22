@@ -357,7 +357,7 @@ define(function(require, exports) {
 						    type: 1,
 						    title:"查看票务公司",
 						    skin: 'layui-layer-rim', //加上边框
-						    area: ['1024px', '500px'], //宽高
+						    area: ['1024px', '360px'], //宽高
 						    zIndex:1028,
 						    content: html
 						});
