@@ -198,7 +198,7 @@
 						}
 						break;
 					case 'landline':	// 固定电话
-						if (!!data && !/^0[1-9]\d{1,2}-?\d{7,8}$/.test(data)) {
+						if (!!data && !/^0[1-9]\d{1,2}-?\d{7,8}(-\d+)?$/.test(data)) {
 							res = rules[i].errMsg;
 						}
 						break;
