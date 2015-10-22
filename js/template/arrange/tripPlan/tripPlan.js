@@ -374,6 +374,13 @@ define(function(require, exports) {
 						addTab(menuKey+"-view","查看发团计划",html);
 						var tab = "tab-arrange_plan-view-content";
 				    	tripPlan.MenberNumber("addTripPlanTouristTbody");
+				    	//判定是否选中
+				    	if (data.tripPlan.executeTimeType==0) {
+				    		$(".newAddTripPlanMain").find('input[name=executeTimeType]').eq(0).attr("checked","checked");
+				    	} else{
+				    		$(".newAddTripPlanMain").find('input[name=executeTimeType]').eq(1).attr("checked","checked");
+				    	};
+				    
 				    	//查看计划中 查看游客小组
 				    	$("#" + tab + " .viewTripPlan .viewTripPlanView").on("click",function(){
 				    		var id = $(this).attr("data-entity-id");
