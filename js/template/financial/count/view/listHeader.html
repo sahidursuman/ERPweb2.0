@@ -1,13 +1,12 @@
-<div class="row financialCount globalAdd" >
+<div class="row financialCount  globalAdd" >
+	<div class="border form-group col-sm-12 ">
     <div class="search-area  Company">
-        <div class="form-group">
+        <div class="form-group " style="border-bottom:1px dashed #ececec;padding-bottom: 10px ">
         	<div class="col-xs-2">
-        	   
 	            <input type="text" value="{{searchParam.tripNumber}}" name ="chooseTripNumber" class="col-xs-12 clearBlur" placeholder="全部团号" />	            
 	            <input type="hidden" value="{{searchParam.tripNumber}}" name="tripNumber" />
             </div>
-            
-            <div class="col-xs-1"> 
+            <div class="col-xs-1">
 	            <input type="text" value="{{searchParam.lineProductName}}" name="chooseLineProductName" class="col-xs-12 clearBlur" placeholder="全部线路产品" />
 	            <input type="hidden" value="{{searchParam.lineProductId}}" name="lineProductId" />
 			</div>
@@ -56,8 +55,7 @@
        	</div>
     </div>
 
-    <div class="col-md-12">
-        <div class="clearfix">
+        <div class="clearfix ">
             <div class="pull-left" style="margin-right: 18px;">
                 收入: {{financialTripPlan.getAllMoney}}
             </div>
@@ -77,6 +75,7 @@
                 团数：{{financialTripPlan.tripNumber}}
             </div>
         </div>
-        <div class="counterList"></div>
-    </div>
+
+	</div>
+	<div class="counterList"></div>
 </div>

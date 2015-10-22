@@ -521,8 +521,6 @@ define(function(require, exports) {
 
 			//发团计划定时
 			tripPlan.setTripPlanPicker();
-
-		
 		 	$("#"+tab+" .checkbox").on('click', 'input[type="radio"]', function(event) {
 		 		var $that = $(this), 
 		 			$time = $that.closest(".checkbox").find('input[name=executeTime]');
@@ -535,9 +533,7 @@ define(function(require, exports) {
 		 			$time.val($time.data('time')).prop('disabled', false);
 		 		}
 		 	});
-
-
-
+		 	
 
 			//新增游客小组
 			$("#" + tab + " .updateTripPlan .newAddTouristGroup").on("click",function(){
