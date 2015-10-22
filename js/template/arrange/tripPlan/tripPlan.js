@@ -418,8 +418,6 @@ define(function(require, exports) {
 						var isSendMessageStatus=data.tripPlan.isSendTouristMessage;
 						//判断  立即发送  定时发送
 						var isCheckedStatus=data.tripPlan.executeTimeType;
-
-
 						//已修改提示
 			    		var validator =rule.checkdCreateTripPlan($(".updateTripPlan"));
 						if($(".tab-"+menuKey+"-update").length > 0) {
@@ -1590,7 +1588,11 @@ define(function(require, exports) {
 			}
 		},
 		submitUpdateTripPlan : function(isClose){
-			var tab = "tab-arrange_plan-update-content";
+			var tab = "tab-arrange_plan-update-content",
+			    executeTimeType=0,
+			    executeTime;
+
+
 			function getValue(name){
 				var thisObj = $("#" + tab + " .updateTripPlan").find("[name="+name+"]"), objValue;
 				if(thisObj.attr("type") == "checkbox"){
@@ -1603,10 +1605,12 @@ define(function(require, exports) {
 
 			if ($('.newAddTripPlanMain').find("input[name=executeTimeType]")[0].checked) {
 				executeTimeType=0;
+				executeTime="";
 			};
 
 			if ($('.newAddTripPlanMain').find("input[name=executeTimeType]")[1].checked) {
 				executeTimeType=1;
+				executeTime=getValue("executeTime");
 			};
 			
 			
@@ -1635,7 +1639,7 @@ define(function(require, exports) {
 						"setPlacePosition": getValue("setPlacePosition"),
 						"setPlaceTime": getValue("setPlaceTime"),
 						"executeTimeType" : executeTimeType+"",
-						 executeTime :getValue("executeTime")  
+						 executeTime : executeTime  
 
 
 					},
