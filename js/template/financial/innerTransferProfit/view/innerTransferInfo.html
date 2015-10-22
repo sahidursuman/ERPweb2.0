@@ -5,57 +5,44 @@
 					<span class="badge badge-primary">1</span>
 					 <label class="middle title-size">内转信息</label>
 				</h5>
-			<div class="widget-body">
-				<div class="widget-main">
-					<div class="form-group">
-						<label class="col-sm-1 control-label no-padding-right">来源部门：</label>
-						<div class="col-sm-2">
-							<input value="{{innerTransfer.fromBusinessGroup.name}}" type="text" readonly="readonly" class="date-picker col-xs-12" />
-						</div>
-						<label class="col-sm-1 control-label no-padding-right">接收部门：</label>
-						<div class="col-sm-2">
-							<input value="{{innerTransfer.toBusinessGroup.name}}" type="text" readonly="readonly" class="date-picker col-xs-12" />
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="col-sm-1 control-label no-padding-right">内转备注:</label>
-						<div class="col-sm-2">
-							<input value="{{innerTransfer.transRemark}}" type="text" readonly="readonly" class="date-picker col-xs-12" />
-						</div>
-					</div>
+			<table class="whereQ whereTwo" style="width: 100%">
 
-					<div class="form-group">
-						<label class="col-sm-1 control-label no-padding-right">应付：</label>
-						<div class="col-sm-2"> 
-							<input name="transNeedPayMoney" value="{{innerTransfer.transNeedPayMoney}}" type="text" readonly="readonly" readonly="readonly" class="date-picker col-xs-12" />
-						</div>
-
-						<label class="col-sm-1 control-label no-padding-right">已付：</label>
-						<div class="col-sm-2">
-							<input name="transPayedMoney" value="{{innerTransfer.transPayedMoney}}" type="text" readonly="readonly" class="date-picker col-xs-12" />
-						</div>
-
-
+				<tr>
+					<td class="style-myself CheckPlan">来源部门</td>
+					<td style="text-align: left;padding: 0px 0px 0px 10px">{{innerTransfer.fromBusinessGroup.name}}</td>
+					<td class="style-myself CheckPlan">接收部门</td>
+					<td style="text-align: left;padding: 0px 0px 0px 10px">{{innerTransfer.toBusinessGroup.name}}</td>
+				</tr>
+				<tr>
+					<td class="style-myself CheckPlan">内转备注</td>
+					<td style="text-align: left;padding: 0px 0px 0px 10px" colspan="3">{{innerTransfer.transRemark}}</td>
+				</tr>
+				<tr>
+					<td class="style-myself CheckPlan">应付</td>
+					<td style="text-align: left;padding: 0px 0px 0px 10px">{{innerTransfer.transNeedPayMoney}}</td>
+					<td class="style-myself CheckPlan">已付</td>
+					<td style="text-align: left;padding: 0px 0px 0px 10px">{{innerTransfer.transPayedMoney}}
+					<!--<td>-->
 						{{if innerTransfer.touristGroup.operateCurrentNeedPayMoney==1}}
-							<label>
-								<input  type="checkbox" class="ace buyInsurance-status" checked="checked" value="{{innerTransfer.touristGroup.operateCurrentNeedPayMoney}}" name="operateCurrentNeedPayMoney" disabled="disabled">
+						<label style="margin-left: 50px">
+							<input  type="checkbox" class="ace buyInsurance-status" checked="checked" value="{{innerTransfer.touristGroup.operateCurrentNeedPayMoney}}" name="operateCurrentNeedPayMoney" disabled="disabled">
 								<span class="lbl">
 								</span>
-							</label>
-							{{else}}
+						</label>
+						{{else}}
 
-							<label style="padding-left:0px;">
-								<input  type="checkbox" class="ace buyInsurance-status" checked="" value="{{innerTransfer.touristGroup.operateCurrentNeedPayMoney}}" name="operateCurrentNeedPayMoney" disabled="disabled">
+						<label style="padding-left:0px;">
+							<input  type="checkbox" class="ace buyInsurance-status" checked="" value="{{innerTransfer.touristGroup.operateCurrentNeedPayMoney}}" name="operateCurrentNeedPayMoney" disabled="disabled">
 								<span class="lbl">
 								</span>
-							</label>
+						</label>
 						{{/if}}
 
 						<label class="control-label no-padding-right">对方现收</label>
-
-					</div>
-				</div>
-			</div>
+					<!--</td>-->
+				</td>
+				</tr>
+			</table>
 		</div>
 	</form>
 </div>
