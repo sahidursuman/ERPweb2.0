@@ -310,7 +310,7 @@ define(function(require, exports) {
 								$(obj).autocomplete('option','source', lineProductList);
 								$(obj).autocomplete('search', '');
 							}else{
-								layer.tips('没有同行客户信息', obj, {
+								layer.tips('没有线路信息', obj, {
 								    tips: [1, '#3595CC'],
 								    time: 2000
 								});
