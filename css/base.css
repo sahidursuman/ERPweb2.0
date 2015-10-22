@@ -70,7 +70,7 @@ textarea:focus, input[type=text]:focus, input[type=password]:focus, input[type=d
 .ui-spinner .btn i.fa-sort-asc{line-height:17px;}
 .ui-spinner .btn i.fa-sort-desc{line-height:17px;}
 .fuckIcon{position: absolute;margin-top: -20px;}
-.ui-spinner .ui-spinner-down{bottom:1px;right:5px;}
+.ui-spinner .ui-spinner-down{bottom:2px;right:5px;}
 .input-group-addon{background:none;padding:0;border:0;position:relative;left:-20px;}
 .widget-body .table thead:first-child tr{color:#707070;font-weight:400;background:#F2F2F2;background-image:-webkit-linear-gradient(top,#f8f8f8 0,#ececec 100%);background-image:-o-linear-gradient(top,#f8f8f8 0,#ececec 100%);background-image:linear-gradient(to bottom,#f8f8f8 0,#ececec 100%);background-repeat:repeat-x;filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff8f8f8', endColorstr='#ffececec', GradientType=0)}
 .ui-dialog-titlebar-close{display: none}

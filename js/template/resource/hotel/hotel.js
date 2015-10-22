@@ -43,6 +43,8 @@ define(function(require, exports) {
 						$("#" + tabId + " .hotelList .btn-hotel-view").click(function(){
 							var id = $(this).attr("data-entity-id");
 							hotel.viewHotel(id);
+							// 再调整对话框的高度
+							$(window).trigger('resize');
 						});
 						
 						$("#" + tabId + " .btn-hotel-add").click(function(){
@@ -665,9 +667,10 @@ define(function(require, exports) {
 						    type: 1,
 						    title:"查看酒店信息",
 						    skin: 'layui-layer-rim', //加上边框
-						    area: ['1024px', '600px'], //宽高
+						    area: '1024px', //宽高
 						    zIndex:1028,
 						    content: html,
+							scrollbar: false,    // 推荐禁用浏览器外部滚动条
 						    success:function(){
 						    }
 						    });
