@@ -66,14 +66,11 @@
 					<span class="lbl">
 					</span>
 				</label>
-				
 			</div>
 			<div class="col-sm-2 newAddTripTimer">
 				<input class="form-control col-sm-4 datetimepicker" readonly="readonly" type="text" name="executeTime" value="{{tripPlan.executeTime}}" />
 			</div>
         </div>
-
-
 		<form class="form-horizontal" role="form" onsubmit="return false">
 			<div class="form-group">
 				<div class="col-xs-12 col-sm-12 widget-container-col">
@@ -105,7 +102,6 @@
 				<div class="col-xs-12 col-sm-12 widget-container-col">
 					<div class=" ui-sortable-handle">
 							<h5 class="">
-								<span class="badge badge-primary">2</span>
 								<label class="middle title-size">游客名单</label>
 							</h5>
 						<div class="widget-body">
@@ -179,13 +175,44 @@
 				</div>
 			</div>
 		</form>
-
 		<form class="form-horizontal" role="form" onsubmit="return false">
 			<div class="form-group">
 				<div class="col-xs-12 col-sm-12 widget-container-col">
 					<div class=" ui-sortable-handle">
 							<h5 class="">
-								<span class="badge badge-primary">4</span>
+								<label class="title-size middle">线路</label>
+							</h5>
+						<div class="widget-body">
+							<div class="widget-main">
+								<div class="form-group">
+									<div class="col-xs-12">
+										<div class="form-group">
+											<label class="col-sm-1 control-label no-padding-right">类别：</label>
+											<div class="col-sm-2">
+												<label class="control-label">{{lineProduct.type}}</label>
+											</div>
+											<label class="col-sm-1 control-label no-padding-right">应用范围：</label>
+											<div class="col-sm-2">
+												<label class="control-label">{{if lineProduct.customerType == 0}}散客{{else if lineProduct.customerType == 1}}团体{{/if}}</label>
+											</div>
+											<label class="col-sm-1 control-label no-padding-right">天数：</label>
+											<div class="col-sm-2">
+												<label class="control-label">{{lineProduct.days}}</label>
+											</div>				
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+		<form class="form-horizontal" role="form" onsubmit="return false">
+			<div class="form-group">
+				<div class="col-xs-12 col-sm-12 widget-container-col">
+					<div class=" ui-sortable-handle">
+							<h5 class="">
 								<label class="middle title-size">日程</label>
 							</h5>
 						<div class="widget-body">
