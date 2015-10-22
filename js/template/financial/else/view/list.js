@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":27,"md5":"990fa679405a83e7f7a20a00fa1f841b"}*/
+/*TMODJS:{"debug":true,"version":28,"md5":"990fa679405a83e7f7a20a00fa1f841b"}*/
 define(function(require) {
     return require("../../../template")("financial/else/view/list", function($data, $filename) {
         try {

@@ -47,6 +47,8 @@ define(function(require, exports) {
 						$("#"+tabId+" .scenicList .btn-scenic-view").click(function(){
 							var id = $(this).attr("data-entity-id");
 							scenic.viewScenic(id);
+							// 再调整对话框的高度
+							$(window).trigger('resize');
 						});
 						
 						$("#"+tabId+" .scenicList .btn-scenic-edit").click(function(){
@@ -659,9 +661,10 @@ define(function(require, exports) {
 						    type: 1,
 						    title:"查看景区公司",
 						    skin: 'layui-layer-rim', //加上边框
-						    area: ['1024px', '600px'], //宽高
+						    area: '1024px', //宽高
 						    zIndex:1028,
-						    content: html
+						    content: html,
+							scrollbar: false   // 推荐禁用浏览器外部滚动条
 						});
 					}
 				}
