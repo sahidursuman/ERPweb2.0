@@ -256,11 +256,15 @@
                                 <input type="hidden" name="guideRateMoney" value="{{arrange.guideRateMoney}}" />
                             </td>
                             {{if index == 0 }}
-                            <td rowspan="{{shopArrangeList.shopArrangePolicy.length}}" class="sumCustomerRebateMoney">{{if arrange.customerRebateMoney
-                                < 1}}{{arrange.shop.customerRebateMoney}}{{else}}{{arrange.customerRebateMoney}}{{/if}}</td>{{/if}} {{if index == 0 }}
-                                    <td rowspan="{{shopArrangeList.shopArrangePolicy.length}}" class="sumParkingRebateMoney">{{if arrange.parkingRebateMoney
-                                        < 1}}{{arrange.shop.parkingRebateMoney}}{{else}}{{arrange.parkingRebateMoney}}{{/if}}</td>{{/if}}
-                                            <td>{{arrange.billRemark}}</td>
+                                <td rowspan="{{shopArrangeList.shopArrangePolicy.length}}" class="sumCustomerRebateMoney">
+                                    <input type="hidden" name="customerRebateMoney{{arrange.whichDay}}_{{arrange.shopId}}" value="{{if arrange.customerRebateMoney < 1}}{{arrange.shop.customerRebateMoney}}{{else}}{{arrange.customerRebateMoney}}{{/if}}" style="width:90px;" old="{{if arrange.customerRebateMoney < 1}}{{arrange.shop.customerRebateMoney}}{{else}}{{arrange.customerRebateMoney}}{{/if}}" maxlength="11"/><input type="hidden" name="touristAdultCount{{arrange.whichDay}}_{{arrange.shopId}}" value="{{tripPlan.touristAdultCount}}" />
+                                    <span class="sumCustomerRebateMoney{{arrange.whichDay}}_{{arrange.shopId}} sumCustomerRebateMoney"></span>
+                                </td>
+                                <td rowspan="{{shopArrangeList.shopArrangePolicy.length}}" class="sumParkingRebateMoney">
+                                    {{if arrange.parkingRebateMoney < 1}}{{arrange.shop.parkingRebateMoney}}{{else}}{{arrange.parkingRebateMoney}}{{/if}}
+                                </td>
+                            {{/if}}
+                            <td>{{arrange.billRemark}}</td>
                         </tr>
                         {{/if}} {{/each}} {{/each}} {{/if}} {{/each}}
                     </tbody>
