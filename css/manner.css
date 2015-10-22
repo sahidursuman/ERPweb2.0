@@ -19,7 +19,7 @@ input{
     font-size:12px;
 }
 .nav-tabs>li>a{
-    padding: 7px 12px 8px;
+    padding:7px 12px 6px;
 
 }
 
@@ -100,17 +100,17 @@ table tr th{
 .btn-com{
     z-index:99;
     width:30px;
-    height:38px;
+    height:29px;
     position: absolute;
     left:0;
-    top:0;
+    top:5px;
     cursor : pointer;
 }
 
 .model-scroll-left {
-    /*background: url('/images/left_a.jpg') center center no-repeat;*/
+    background: url('/images/left_a.jpg') center center no-repeat;
 }
-.model-scroll-left:hover {
+.model-scroll-left:hover{
     background: url('/images/left_b.jpg') center center no-repeat;
 }
 
@@ -226,7 +226,7 @@ table tr td{
 .main-content {
     margin-top: 77px;
 }
-#tabList>li>a, #tabList>li>a:focus{line-height: 16px}
+#tabList>li>a, #tabList>li>a:focus{line-height: 17px}
 #tabList>li.active>a, #tabList>li.active>a:hover, #tabList>li.active>a:focus{
     background: white;
     margin-top: 0px!important;
