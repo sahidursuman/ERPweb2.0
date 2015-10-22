@@ -687,7 +687,7 @@ define(function(require, exports) {
 														return "-"
 													}
 												}
-												html +='<tr><td>第'+data.lineProductDays[i].whichDay+'天</td><td>'+data.lineProductDays[i].repastDetail+'</td><td>'+hotelLevel()+'</td><td class="col-xs-6">'+data.lineProductDays[0].title+'</td></tr>';
+												html +='<tr><td>第'+data.lineProductDays[i].whichDay+'天</td><td>'+data.lineProductDays[i].repastDetail+'</td><td>'+hotelLevel()+'</td><td class="col-xs-6">'+data.lineProductDays[i].title+'</td></tr>';
 											}
 											$(".newAddTripPlanMain table.days tbody").html(html);
 											$(".newAddTripPlanMain table.days tbody").html(html);
