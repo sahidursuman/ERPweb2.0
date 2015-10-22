@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":63,"md5":"1ff99dd0230c25acf24b1e24d729b5b8"}*/
+/*TMODJS:{"debug":true,"version":66,"md5":"1ff99dd0230c25acf24b1e24d729b5b8"}*/
 define(function(require) {
     return require("../../../template")("financial/Self/view/SelfClearing", function($data, $filename) {
         try {

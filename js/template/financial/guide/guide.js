@@ -131,147 +131,150 @@ define(function(require, exports) {
 				            		 guide.saveCheckingData(page,guideId,year,month,0);
 				            		 guide.edited["checking"] = "";
 				            		 addTab(menuKey+"-checking","导游对账",html);
+				            		 guide.initCheck(page,guideId,year,month,data);
 				            		 validator = rule.check($('.check'));
 				            	 },function(){
 				            		 addTab(menuKey+"-checking","导游对账",html);
+				            		 guide.initCheck(page,guideId,year,month,data);
 				            		 guide.edited["checking"] = "";
 				            		 validator = rule.check($('.check'));
 				            	 });
                  	    	 }else{
 	                 	    	addTab(menuKey+"-checking","导游对账",html);
+	                 	    	guide.initCheck(page,guideId,year,month,data);
 	                 	        validator = rule.check($('.check'));
                  	    	 }
              	    		 
                  	    }else{
                  	    	addTab(menuKey+"-checking","导游对账",html);
+                 	    	guide.initCheck(page,guideId,year,month,data);
                  	    	validator = rule.check($('.guide-checking'));
                  	    	
                  	    };
-                 	    $("#"+checkTabId+ " .all").on("change",function(){
-            	    		guide.edited["checking"] = "checking"; 
-							guide.oldCheckGuideId = guideId;
-            	    	});
-						
-						// 设置表单验证
-				    	//var validator = rule.check($('.check'));
-						
-						$("#"+checkTabId+ " select[name=year]").val(data.year);
-						$("#"+checkTabId+ " select[name=month]").val(data.month);
-
-						//详细费用明细
-                        $("#"+checkTabId+ " .check .cost-detail").click(function(){
-                            var id = $(this).attr("data-entity-id");
-                            $.ajax({
- 	                		   url:""+APP_ROOT+"back/financialGuide.do?method=listFinancialTripInfo&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
- 	                           type:"POST",
- 	                           data:"id="+id,
- 	                           dataType:"json",
- 	                           beforeSend:function(){
- 									globalLoadingLayer = openLoadingLayer();
- 								},
- 								success:function(data){
- 									layer.close(globalLoadingLayer);
- 									var result = showDialog(data);
- 									if(result){
- 										data.financialGuide = JSON.parse(data.financialGuide);
- 										var html = costDetail(data);
- 										addTab(menuKey+"-costDetail","费用明细",html);
- 										//查看图片事件
- 										$("#tab-"+menuKey+"-costDetail-content .costDetailImg").click(function(){
- 											 var WEB_IMG_URL_BIG = $("#tab-"+menuKey+"-costDetail-content").find("input[name=WEB_IMG_URL_BIG]").val();//大图
- 						                	 var WEB_IMG_URL_SMALL = $("#tab-"+menuKey+"-costDetail-content").find("input[name=WEB_IMG_URL_SMALL]").val();//小图
- 						                	guide.viewImage(this,WEB_IMG_URL_BIG,WEB_IMG_URL_SMALL);
- 										});
- 									}
- 								}
- 	                	   });
-                        });
-						//搜索按钮事件
-						$("#"+checkTabId+ " .btn-guideChecking-search").click(function(){
-							var year = $("#"+checkTabId+ " select[name=year]").val();
-							var month = $("#"+checkTabId+ " select[name=month]").val();
-							guide.listGuideChecking(0,guideId,year,month);
-						});
-						//导出事件btn-guideExport
-						$("#"+checkTabId+ " .btn-guideExport").click(function(){
-							var year = $("#"+checkTabId+ " select[name=year]").val();
-							var month = $("#"+checkTabId+ " select[name=month]").val();
-							 checkLogin(function(){
-	 	                        	var url = ""+APP_ROOT+"back/export.do?method=guide&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view"+"&guideId="+guideId+"&guideName="+data.guideName+"&year="+year+"&month="+month+"&sortType=auto";
-	 	                        	exportXLS(url)
-	 	                     });
-		                 });
-						//分页--首页按钮事件
-						$("#"+checkTabId+ " .pageMode a.first").click(function(){
-							guide.listGuideChecking(0,guideId,data.year,data.month);
-						});
-						//分页--上一页事件
-						$("#"+checkTabId+ " .pageMode a.previous").click(function(){
-							var previous = data.pageNo - 1;
-							if(data.pageNo == 0){
-								previous = 0;
-							}
-							guide.listGuideChecking(previous,guideId,data.year,data.month);
-						});
-						//分页--下一页事件
-						$("#"+checkTabId+ " .pageMode a.next").click(function(){
-							var next =  data.pageNo + 1;
-							if(data.pageNo == data.totalPage-1){
-								next = data.pageNo ;
-							}
-							guide.listGuideChecking(next,guideId,data.year,data.month);
-						});
-						//分页--尾页事件
-						$("#"+checkTabId+ " .pageMode a.last").click(function(){
-							guide.listGuideChecking(data.totalPage-1,guideId,data.year,data.month);
-						});
-						
-						//给全选绑定事件
-		                $("#"+checkTabId+ " input[type='checkbox'].selectAll").click(function(){
-		                	if(!$(this).prop("checked")){
-		                		$("#"+checkTabId+ " input[name='isConfirmAccount']").each(function(){
-		                			if($(this).attr("data-entity-checkStatus")==0){
-		                				$(this).prop("checked",false);
-				                	}else{
-				                		$(this).prop("checked",true);
-				                	}
-		                		});
-		                	}else{
-		                		$("#"+checkTabId+ " input[name='isConfirmAccount']").prop("checked",true);
-		                	}
-		                });
-		                //给复选框绑定事件
-		                $("#"+checkTabId+ " input[name='isConfirmAccount']").click(function(){
-		                	var flag = true;
-		                	$("#"+checkTabId+ " input[name='isConfirmAccount']").each(function(){
-		                		if(!$(this).prop("checked")){
-		                			flag = false;
-		                		}
-		                	});
-		                	$("#"+checkTabId+ " input[type='checkbox'].selectAll").prop("checked",flag);
-		                });
-		                //关闭按钮事件
-			            $("#"+checkTabId+ " .btn-guide-close").click(function(){
-			            	 showConfirmDialog($( "#confirm-dialog-message" ), "确定关闭本选项卡?",function(){
-			            		 closeTab(menuKey+"-checking");
-								 guide.edited["checking"] = "";
-			            	 });
-			            });
-		                
-		                //已对账的实际退补款不可修改
-		                //$("#"+checkTabId+ " input[name='isConfirmAccount']:checked").parent().siblings().find("input[name='realBackGuideMoney']").prop("disabled",true);
-		                
-						//给对账按钮绑定事件
-						$("#"+checkTabId+ " .btn-confirm-guide-checking").click(function(){
-							 if (!validator.form()) { 
-		            			 return; 
-		            		 }
-		            		 guide.saveCheckingData(page,guideId,year,month,0);
-						});
-
 					}
 				}
 			});
+		},
+		initCheck : function(page,guideId,year,month,data){
+			console.log("init");
+			$("#"+checkTabId+ " .all").on("change",function(){
+	    		guide.edited["checking"] = "checking"; 
+				guide.oldCheckGuideId = guideId;
+	    	});
+			$("#"+checkTabId+ " select[name=year]").val(data.year);
+			$("#"+checkTabId+ " select[name=month]").val(data.month);
+
+			//详细费用明细
+            $("#"+checkTabId+ " .check .cost-detail").click(function(){
+                var id = $(this).attr("data-entity-id");
+                $.ajax({
+            		   url:""+APP_ROOT+"back/financialGuide.do?method=listFinancialTripInfo&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
+                       type:"POST",
+                       data:"id="+id,
+                       dataType:"json",
+                       beforeSend:function(){
+							globalLoadingLayer = openLoadingLayer();
+						},
+						success:function(data){
+							layer.close(globalLoadingLayer);
+							var result = showDialog(data);
+							if(result){
+								data.financialGuide = JSON.parse(data.financialGuide);
+								var html = costDetail(data);
+								addTab(menuKey+"-costDetail","费用明细",html);
+								//查看图片事件
+								$("#tab-"+menuKey+"-costDetail-content .costDetailImg").click(function(){
+									 var WEB_IMG_URL_BIG = $("#tab-"+menuKey+"-costDetail-content").find("input[name=WEB_IMG_URL_BIG]").val();//大图
+				                	 var WEB_IMG_URL_SMALL = $("#tab-"+menuKey+"-costDetail-content").find("input[name=WEB_IMG_URL_SMALL]").val();//小图
+				                	guide.viewImage(this,WEB_IMG_URL_BIG,WEB_IMG_URL_SMALL);
+								});
+							}
+						}
+            	   });
+            });
+			//搜索按钮事件
+			$("#"+checkTabId+ " .btn-guideChecking-search").click(function(){
+				var year = $("#"+checkTabId+ " select[name=year]").val();
+				var month = $("#"+checkTabId+ " select[name=month]").val();
+				guide.listGuideChecking(0,guideId,year,month);
+			});
+			//导出事件btn-guideExport
+			$("#"+checkTabId+ " .btn-guideExport").click(function(){
+				var year = $("#"+checkTabId+ " select[name=year]").val();
+				var month = $("#"+checkTabId+ " select[name=month]").val();
+				 checkLogin(function(){
+                        	var url = ""+APP_ROOT+"back/export.do?method=guide&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view"+"&guideId="+guideId+"&guideName="+data.guideName+"&year="+year+"&month="+month+"&sortType=auto";
+                        	exportXLS(url)
+                     });
+             });
+			//分页--首页按钮事件
+			$("#"+checkTabId+ " .pageMode a.first").click(function(){
+				guide.listGuideChecking(0,guideId,data.year,data.month);
+			});
+			//分页--上一页事件
+			$("#"+checkTabId+ " .pageMode a.previous").click(function(){
+				var previous = data.pageNo - 1;
+				if(data.pageNo == 0){
+					previous = 0;
+				}
+				guide.listGuideChecking(previous,guideId,data.year,data.month);
+			});
+			//分页--下一页事件
+			$("#"+checkTabId+ " .pageMode a.next").click(function(){
+				var next =  data.pageNo + 1;
+				if(data.pageNo == data.totalPage-1){
+					next = data.pageNo ;
+				}
+				guide.listGuideChecking(next,guideId,data.year,data.month);
+			});
+			//分页--尾页事件
+			$("#"+checkTabId+ " .pageMode a.last").click(function(){
+				guide.listGuideChecking(data.totalPage-1,guideId,data.year,data.month);
+			});
+			
+			//给全选绑定事件
+            $("#"+checkTabId+ " input[type='checkbox'].selectAll").click(function(){
+            	if(!$(this).prop("checked")){
+            		$("#"+checkTabId+ " input[name='isConfirmAccount']").each(function(){
+            			if($(this).attr("data-entity-checkStatus")==0){
+            				$(this).prop("checked",false);
+	                	}else{
+	                		$(this).prop("checked",true);
+	                	}
+            		});
+            	}else{
+            		$("#"+checkTabId+ " input[name='isConfirmAccount']").prop("checked",true);
+            	}
+            });
+            //给复选框绑定事件
+            $("#"+checkTabId+ " input[name='isConfirmAccount']").click(function(){
+            	var flag = true;
+            	$("#"+checkTabId+ " input[name='isConfirmAccount']").each(function(){
+            		if(!$(this).prop("checked")){
+            			flag = false;
+            		}
+            	});
+            	$("#"+checkTabId+ " input[type='checkbox'].selectAll").prop("checked",flag);
+            });
+            //关闭按钮事件
+            $("#"+checkTabId+ " .btn-guide-close").click(function(){
+            	 showConfirmDialog($( "#confirm-dialog-message" ), "确定关闭本选项卡?",function(){
+            		 closeTab(menuKey+"-checking");
+					 guide.edited["checking"] = "";
+            	 });
+            });
+            
+            //已对账的实际退补款不可修改
+            //$("#"+checkTabId+ " input[name='isConfirmAccount']:checked").parent().siblings().find("input[name='realBackGuideMoney']").prop("disabled",true);
+            
+			//给对账按钮绑定事件
+			$("#"+checkTabId+ " .btn-confirm-guide-checking").click(function(){
+				 if (!validator.form()) { 
+        			 return; 
+        		 }
+        		 guide.saveCheckingData(page,guideId,year,month,0);
+			});
+
 		},
 		listGuideSettlement:function(guideId,year,start_month,end_month){
 			$.ajax({
@@ -299,89 +302,94 @@ define(function(require, exports) {
 				            		 guide.saveGuideSettlement(guideId,year,start_month,end_month,0);
 				            		 guide.edited["clearing"] = "";
 				            		 addTab(menuKey+"-clearing","导游结算",html);
+				            		 guide.initClear(guideId,year,start_month,end_month,data);
 				            		 guide.validatorTable();
 				            	 },function(){
 				            		 addTab(menuKey+"-clearing","导游结算",html);
+				            		 guide.initClear(guideId,year,start_month,end_month,data);
 				            		 guide.edited["clearing"] = "";
 				            		 guide.validatorTable();
 				            	 });
                  	    	 }else{
 	                 	    	addTab(menuKey+"-clearing","导游结算",html);
+	                 	    	guide.initClear(guideId,year,start_month,end_month,data);
 	                 	    	guide.validatorTable();
                  	    	 }
              	    		 
                  	    }else{
                  	    	addTab(menuKey+"-clearing","导游结算",html);
+                 	    	guide.initClear(guideId,year,start_month,end_month,data);
                  	    	guide.validatorTable();
-                 	    };
-                 	   $("#"+clearTabId+" .all").on('change', 'input, select', function() {
-                 		  guide.edited["clearing"] = "clear";
-						  guide.oldBlanceGuideId = guideId;
-	    	    		  $(this).closest('tr').data('blanceStatus',true);
-	    	    		});
-						
-						
-						$("#"+clearTabId+ " select[name=year]").val(year);
-						$("#"+clearTabId+ " select[name=start_month]").val(start_month);
-						$("#"+clearTabId+ " select[name=end_month]").val(end_month);
-						
-						//搜索按钮事件
-						$("#"+clearTabId+ " .btn-guideSettlement-search").click(function(){
-							var year = $("#"+clearTabId+ " select[name=year]").val();
-							var start_month = $("#"+clearTabId+ " select[name=start_month]").val();
-							var end_month = $("#"+clearTabId+ " select[name=end_month]").val();
-							guide.listGuideSettlement(guideId,year,start_month,end_month);
-						});
-						
-						//对账明细按钮事件
-                        $("#"+clearTabId+ " .btn-guide-checkDetail").click(function(){
-                        	var year = $(this).attr("data-entity-year");
-                        	var month = $(this).attr("data-entity-month");
-                        	guide.listGuideChecking(0,guideId,year,month);
-                        });
-						
-						//给操作记录按钮绑定事件
-                        $("#"+clearTabId+ " .btn-guide-records").click(function(){
-                        	$.ajax({
-                        		url:""+APP_ROOT+"back/financialGuide.do?method=listFinancialGuideSettlementRecord&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-                                type:"POST",
-                                data:"guideId="+guideId,
-                                dataType:"json",
-                                beforeSend:function(){
-                                    globalLoadingLayer = openLoadingLayer();
-                                },
-                                success:function(data){
-                                	layer.close(globalLoadingLayer);
-                                    var result = showDialog(data);
-                                	if(result){
-                                		if(data.financialGuideSettlementRecordList.length == 0){
-                                			showMessageDialog($( "#confirm-dialog-message" ),"暂时还没有操作记录");
-                                		}else{
-                                			var html =guideRecords(data);
-            					    		var blanceRecordsTemplateLayer =layer.open({
-            					    			type: 1,
-            								    title:"操作记录",
-            								    skin: 'layui-layer-rim', //加上边框
-            								    area: ['60%', '70%'], //宽高
-            								    zIndex:1030,
-            								    content: html,
-            								    success: function(){}
-            					    		})
-                                		}
-        		                	}
-                                }
-                        	});
-                        });
-		                
-						//保存按钮事件
-                        $("#"+clearTabId+" .btn-settlement-save").click(function(){
-                        	 if (!$(this).data('validata').form()) { return; };
-		            		 guide.saveGuideSettlement(guideId,year,start_month,end_month,0);
-                        });
-
+                 	    }
 					}
 				}
 			});
+		},
+		initClear : function(guideId,year,start_month,end_month,data){
+			$("#"+clearTabId+" .all").on('change', 'input, select', function() {
+     		  guide.edited["clearing"] = "clear";
+			  guide.oldBlanceGuideId = guideId;
+    		  $(this).closest('tr').data('blanceStatus',true);
+    		});
+			
+			
+			$("#"+clearTabId+ " select[name=year]").val(year);
+			$("#"+clearTabId+ " select[name=start_month]").val(start_month);
+			$("#"+clearTabId+ " select[name=end_month]").val(end_month);
+			
+			//搜索按钮事件
+			$("#"+clearTabId+ " .btn-guideSettlement-search").click(function(){
+				var year = $("#"+clearTabId+ " select[name=year]").val();
+				var start_month = $("#"+clearTabId+ " select[name=start_month]").val();
+				var end_month = $("#"+clearTabId+ " select[name=end_month]").val();
+				guide.listGuideSettlement(guideId,year,start_month,end_month);
+			});
+			
+			//对账明细按钮事件
+            $("#"+clearTabId+ " .btn-guide-checkDetail").click(function(){
+            	var year = $(this).attr("data-entity-year");
+            	var month = $(this).attr("data-entity-month");
+            	guide.listGuideChecking(0,guideId,year,month);
+            });
+			
+			//给操作记录按钮绑定事件
+            $("#"+clearTabId+ " .btn-guide-records").click(function(){
+            	$.ajax({
+            		url:""+APP_ROOT+"back/financialGuide.do?method=listFinancialGuideSettlementRecord&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
+                    type:"POST",
+                    data:"guideId="+guideId,
+                    dataType:"json",
+                    beforeSend:function(){
+                        globalLoadingLayer = openLoadingLayer();
+                    },
+                    success:function(data){
+                    	layer.close(globalLoadingLayer);
+                        var result = showDialog(data);
+                    	if(result){
+                    		if(data.financialGuideSettlementRecordList.length == 0){
+                    			showMessageDialog($( "#confirm-dialog-message" ),"暂时还没有操作记录");
+                    		}else{
+                    			var html =guideRecords(data);
+					    		var blanceRecordsTemplateLayer =layer.open({
+					    			type: 1,
+								    title:"操作记录",
+								    skin: 'layui-layer-rim', //加上边框
+								    area: ['60%', '70%'], //宽高
+								    zIndex:1030,
+								    content: html,
+								    success: function(){}
+					    		})
+                    		}
+	                	}
+                    }
+            	});
+            });
+            
+			//保存按钮事件
+            $("#"+clearTabId+" .btn-settlement-save").click(function(){
+            	 if (!$(this).data('validata').form()) { return; };
+        		 guide.saveGuideSettlement(guideId,year,start_month,end_month,0);
+            });
 		},
 		//给每个tr增加验证
 	    validatorTable:function(){

@@ -151,7 +151,7 @@
 											<tbody class="addTripPlanTouristTbody">{{each addTripPlan.touristGroupList as touristGroupList}}
 												<tr data-entity-id="{{touristGroupList.id}}">
 													<td></td>
-													<td>外联销售</td>
+													<td>{{touristGroupList.creatorName}}</td>
 												    <td>{{touristGroupList.lineProduct.name}}</td>
 													<td>
 														{{if touristGroupList.partnerAgency != null}}
@@ -171,7 +171,7 @@
 													<td>{{touristGroupList.areaData}}</td>
 													<td>{{touristGroupList.ageData}}</td>
 													<td class="tripPlanTrMemberCount">{{touristGroupList.adultCount + touristGroupList.childCount}}</td>
-												    <td>现收团款</td>
+												    <td>{{touristGroupList.currentNeedPayMoney}}</td>
 													<td>
 														{{if touristGroupList.hotelLevel == 1}}三星以下{{/if}}
 														{{if touristGroupList.hotelLevel == 2}}三星{{/if}}

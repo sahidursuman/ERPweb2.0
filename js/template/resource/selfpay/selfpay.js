@@ -715,9 +715,10 @@ define(function(require, exports) {
 						    type: 1,
 						    title:"查看自费项目",
 						    skin: 'layui-layer-rim', //加上边框
-						    area: ['1024px', '60%'], //宽高
+						    area: '1024px', //宽高
 						    zIndex:1028,
 						    content: html,
+							scrollbar: false,    // 推荐禁用浏览器外部滚动条
 						    success:function(){
 						    	//绑定账期模式选择事件
 					    		if(data.selfpay.payType == 1){
