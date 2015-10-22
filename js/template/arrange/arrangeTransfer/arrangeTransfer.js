@@ -159,18 +159,18 @@ define(function(require, exports) {
 						transfer.listTransfer(page,partnerAgencyId,creator,startTime,endTime,status,type);
 					});
 					//我社转出搜索栏状态button下拉事件
-					$("#transferIn .search-area .btn-status .dropdown-menu a").click(function(){
+					$("#transferOut .btn-status .dropdown-menu a").click(function(){
 						$(this).parent().parent().parent().find("button").attr("data-value",$(this).attr("data-value"));
 						$(this).parent().parent().parent().find("span").text($(this).text());
-						var startTime = $transferOut.find("input[name=createTime]").eq(0).val();
-					    var endTime = transfer.dateCalculation(startTime,6);
+						//var startTime = $transferOut.find("input[name=createTime]").eq(0).val();
+					    //var endTime = transfer.dateCalculation(startTime,6);
 						transfer.searchInData = {
 							//搜索字段
-							partnerAgencyId : $transferIn.find("input[name=transferPartnerAgencyId]").val(),
-							creator : $transferIn.find("select[name=creator]").val(),
-							startTime :$transferIn.find("input[name=createTime]").eq(0).val(),
-							endTime : $transferIn.find("input[name=createTime]").eq(1).val(),
-							status : $transferIn.find(".btn-status button").attr("data-value"),
+							partnerAgencyId : $transferOut.find("input[name=transferPartnerAgencyId]").val(),
+							creator : $transferOut.find("select[name=creator]").val(),
+							startTime : $transferOut.find("input[name=createTime]").eq(0).val(),
+							endTime : $transferOut.find("input[name=createTime]").eq(1).val(),
+							status : $transferOut.find(".btn-status button").attr("data-value"),
 							type : $("#" +tabId+" #myTab li.active a").attr("data-value"),
 							page:$("#" +tabId+" #pagerH").val()
 						}
@@ -190,6 +190,26 @@ define(function(require, exports) {
 						//刷新人数合计、应付款合计和已付款合计
 						transfer.listTransferIn(page,transfer.searchInData.lineProductId,transfer.searchInData.startTime,transfer.searchInData.partnerAgencyId,transfer.searchInData.creator,transfer.searchInData.status,transfer.searchInData.type);
 					});
+
+
+
+					//我社转出搜索栏状态button下拉事件
+					$("#transferIn .btn-status .dropdown-menu a").click(function(){
+						$(this).parent().parent().parent().find("button").attr("data-value",$(this).attr("data-value"));
+						$(this).parent().parent().parent().find("span").text($(this).text());
+						transfer.searchInData = {
+							//搜索字段
+							partnerAgencyId : $transferIn.find("input[name=lineProductId]").val(),
+							creator : $transferIn.find("select[name=creator]").val(),
+							startTime : $transferIn.find("input[name=createTime]").eq(0).val(),
+							endTime : $transferIn.find("input[name=createTime]").eq(1).val(),
+							status : $transferIn.find(".btn-status button").attr("data-value"),
+							type : $("#" +tabId+" #myTab li.active a").attr("data-value"),
+							page:$("#" +tabId+" #pagerH").val()
+						}
+						transfer.listTransferIn(page,transfer.searchInData.lineProductId,transfer.searchInData.startTime,transfer.searchInData.partnerAgencyId,transfer.searchInData.creator,transfer.searchInData.status,transfer.searchInData.type);
+					});
+
 
 					//给我社转出搜索按钮绑定事件
 					$transferOut.find(".btn-transferOut-search").click(function(){
