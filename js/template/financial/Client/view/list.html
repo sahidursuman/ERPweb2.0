@@ -2,8 +2,8 @@
     <div class="form-group guideMainForm">
         <label class=" control-label " style="float: left;margin-top:5px">总社：</label>
         <div class="col-sm-2">
-        	<input type="text" class="col-sm-12 chooseTravelAgency" placeholder="来源" name="travelAgencyName" value="{{travelName}}" />
-			<input type="hidden" name="travelAgencyId" value="{{pager.eqMap.travelId}}" />
+        	<input type="text" class="col-sm-12 chooseTravelAgency" placeholder="来源" name="travelAgencyName" value="{{searchParam.travelName}}" />
+			<input type="hidden" name="travelAgencyId" value="{{searchParam.travelId}}" />
             <!-- <select name="listClient_travelAgencySet" class="col-xs-12">
                 <option value="">全部</option>
                 {{each travelAgencySet as set}}
@@ -13,8 +13,8 @@
         </div>
         <label class=" control-label " style="float: left;margin:5px auto auto 10px">客户：</label>
         <div class="col-sm-2">
-        	<input type="text" class="col-sm-12 choosePartnerAgency" placeholder="来源" name="partnerAgencyName" value="{{fromPartnerAgencyName}}" />
-			<input type="hidden" name="partnerAgencyId" value="{{pager.eqMap.fromPartnerAgencyId}}" />
+        	<input type="text" class="col-sm-12 choosePartnerAgency" placeholder="来源" name="partnerAgencyName" value="{{searchParam.fromPartnerAgencyName}}" />
+			<input type="hidden" name="partnerAgencyId" value="{{searchParam.fromPartnerAgencyId}}" />
             <!-- <select name="listClient_partnerAgencySet" class="col-xs-12">
                 <option value="">全部</option>
                 {{each partnerAgencySet as set}}
@@ -22,7 +22,7 @@
                 {{/each}}
             </select> -->
         </div>
-        <input type="hidden" id="listClient_pager_pagerNo" value="{{pager.pageNo}}" />
+        <input type="hidden" id="listClient_pager_pagerNo" value="{{searchParam.pageNo}}" />
         <label class=" control-label no-padding-right pull-left" style="margin-left: 15px">账期：</label>
         <select class="col-sm-1" name="ClientCheck_searchYear">
             <option value="2015" {{if year==2015}}selected="selected" {{/if}}>2015</option>
