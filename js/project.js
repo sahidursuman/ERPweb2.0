@@ -1042,7 +1042,7 @@ function listMenu(menuTemplate){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/arrange/innerTransfer/innerTransfer.js",function(inner){ 
+					/*seajs.use("" + ASSETS_ROOT +"js/template/arrange/innerTransfer/innerTransfer.js",function(inner){ 
 						var searchParam = {
 								pageNo : "0",
 								type : "1",
@@ -1050,6 +1050,10 @@ function listMenu(menuTemplate){
 							}
 						inner.list(searchParam);
 						modals["arrange_inner_Transfer"] = inner;
+					});*/
+					seajs.use("" + ASSETS_ROOT +"js/template/arrange/innerTransfer/innerTransfer.js",function(innerTransfer){ 
+						innerTransfer.innerTransfer();
+						modals["arrange_inner_Transfer"] = innerTransfer;
 					});
 				});
 
