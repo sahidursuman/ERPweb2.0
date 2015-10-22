@@ -16,7 +16,7 @@
             <select name="lineProductId" class="col-sm-12">
                 <option value=''>全部</option>
                 {{each lineProductList as lineProduct}}
-                <option value="{{lineProduct.partnerAgency}}" {{if searchParam.lineProductId==l ineProduct.partnerAgency}}selected="selected" {{/if}}>{{lineProduct.name}}</option>
+                <option value="{{lineProduct.partnerAgency}}" {{if searchParam.lineProductId == lineProduct.partnerAgency}}selected="selected" {{/if}}>{{lineProduct.name}}</option>
                 {{/each}}
             </select>
         </div>
@@ -34,7 +34,7 @@
             <select name="userId" class="col-sm-12">
                 <option value=''>全部</option>
                 {{each userList as user}}
-                <option value="{{user.id}}" {{if searchParam.userId==u ser.id}}selected="selected" {{/if}}>{{user.realName}}</option>
+                <option value="{{user.id}}" {{if searchParam.userId== user.id}}selected="selected" {{/if}}>{{user.realName}}</option>
                 {{/each}}
             </select>
         </div>
@@ -102,9 +102,6 @@
                 </li>
                 <li>
                     <a data-value="5" href="javascript:void(0)">已分段</a>
-                </li>
-                <li>
-                    <a data-value="6" href="javascript:void(0)">已内转</a>
                 </li>
             </ul>
         </div>
