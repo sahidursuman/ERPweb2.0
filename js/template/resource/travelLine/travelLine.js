@@ -92,6 +92,7 @@ define(function(require, exports) {
 			$("#"+tabId+"  .btn-line-scan").click(function(){
 				var id = $(this).attr("data-entiy-id");
 				travelLine.scanDetail(id);
+
 			});
 			
 			//搜索栏状态button下拉事件
@@ -287,9 +288,10 @@ define(function(require, exports) {
 										type: 1,
 										title:"日程安排",
 										skin: 'layui-layer-rim', //加上边框
-										area: ['65%', '60%'], //宽高
+										area: '900px', //宽高
 										zIndex:1030,
 										content: lineDayhtml,
+										scrollbar: false,    // 推荐禁用浏览器外部滚动条
 										success:function(){
 //											$(".travelLineDayForm .detailEditor").ace_wysiwyg({
 //									    		toolbar:
