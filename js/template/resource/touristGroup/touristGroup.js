@@ -627,6 +627,12 @@ define(function(require, exports) {
 					});
 				});
 			}
+
+			$('#' + tab).find('.addTouristTbody').on('change', 'select', function(event) {
+				event.preventDefault();
+				validator = rule.updateTouristGroupCheckor(validator);
+				$(this).closest('tr').find('[name="idCardNumber"]').trigger('focusout');
+			});
 			//游客名单 批量添加成员按钮绑定事件
 			$("#"+tab+" .touristGroupMainFormMember .btn-add-tourist-more").click(touristGroup.batchAddTouristGroupMember);
 			//中转接待状态事件绑定
@@ -674,7 +680,6 @@ define(function(require, exports) {
 						var html = updateTemplate(data);	
 						//已修改提示
 						var tab = "tab-resource_touristGroup-update-content";
-			    		var validator=rule.checktouristGroup($(".updateTouristGroup"));  
 						if($(".tab-"+menuKey+"-update").length > 0) {
 							addTab(menuKey+"-update","编辑小组");	
                  	    	if(!!touristGroup.edited["update"] && touristGroup.edited["update"] != ""){
@@ -687,31 +692,27 @@ define(function(require, exports) {
 									 touristGroup.edited["update"] = "";
 				            		 addTab(menuKey+"-update","编辑小组",html);	
 									 touristGroup.initUpdate(id,data);
-				            		 validator = rule.checktouristGroup($('.updateTouristGroup'));
 				            	},function(){
 				            		addTab(menuKey+"-update","编辑小组",html);	
 									touristGroup.initUpdate(id,data);
-									validator = rule.checktouristGroup($('.updateTouristGroup'));									
 									touristGroup.edited["update"] = "";
 				            	}); 							
                  	    	 }else{
 	                 	    	addTab(menuKey+"-update","编辑小组",html);	
 								touristGroup.initUpdate(id,data);
-	                 	        validator = rule.checktouristGroup($('.updateTouristGroup'));
                  	    	 } 
                  	    }else{
                  	    	addTab(menuKey+"-update","编辑小组",html);	
 							touristGroup.initUpdate(id,data);
-                 	    	validator = rule.checktouristGroup($("#"+tab+""));
                  	    }
 					}
 				}
 			});
 		},
 		initUpdate : function(id,data){
-			var validator=rule.checktouristGroup($(".updateTouristGroup"));  
 			var tab = "tab-resource_touristGroup-update-content";
 			var updateTouristGroup = id;
+			var validator=rule.checktouristGroup($('#'+tab).find(".updateTouristGroup"));  
 			$('.updateTouristGroup').on("change",function(){
 				touristGroup.edited["update"] = "update";
 			});	
@@ -890,6 +891,13 @@ define(function(require, exports) {
 				})
 			}
 			
+			// 切换选项，调整表单验证规则
+			$('#'+tab).find('.addTouristTbody').on('change', 'select', function(event) {
+				event.preventDefault();
+				validator = rule.updateTouristGroupCheckor(validator);
+				$(this).closest('tr').find('[name="idCardNumber"]').trigger('focusout');
+			});
+
 			//游客名单成员列表删除
 			$("#"+tab+" .addTouristList .btnDeleteTourist").click(function(){
 				var tr =$(this).parent().parent();
