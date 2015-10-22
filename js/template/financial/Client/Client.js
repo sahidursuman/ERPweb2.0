@@ -10,14 +10,12 @@ define(function(require, exports) {
         travelAgencyList,
         partnerAgencyList,
         Client = {
-		pager : {
+		searchParam  : {
 			"pageNo": "",
 			"pageSize":"",
 			"sortType":"",
-			"eqMap":{
-				"fromPartnerAgencyId":"",
-				"travelId":""
-			},
+			"fromPartnerAgencyId":"",
+			"travelId":"",
             "fromPartnerAgencyName" : "",
             "travelName" : "",
 			year : "",
@@ -45,24 +43,22 @@ define(function(require, exports) {
 		oldCheckClientId:0,
 		oldBlanceClientId:0,
 		listClient:function(pageNo,fromPartnerAgencyId,fromPartnerAgencyName,travelId,travelName,year,month){
-        	Client.pager = {
+        	Client.searchParam = {
 				"pageNo":pageNo,
 				"pageSize":10,
 				"sortType":"auto",
-				"eqMap":{
-					"fromPartnerAgencyId":fromPartnerAgencyId,
-					"travelId":travelId
-				},
+				"fromPartnerAgencyId":fromPartnerAgencyId,
+				"travelId":travelId,
                 "fromPartnerAgencyName" : fromPartnerAgencyName,
                  "travelName" : travelName,
 				year : year,
 				month : month
         	};
-        	Client.pager = JSON.stringify(Client.pager);
+        	Client.searchParam = JSON.stringify(Client.searchParam);
             $.ajax({
                 url:""+APP_ROOT+"back/financial/financialParAgency.do?method=findPager&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
                 type:"POST",
-                data:"pager="+encodeURIComponent(Client.pager)+"&fromPartnerAgencyName="+fromPartnerAgencyName+"&travelName="+travelName+"&year="+year+"&month="+month,
+                data:"searchParam="+encodeURIComponent(Client.searchParam)+"",
                 dataType:"json",
                 beforeSend:function(){
                     globalLoadingLayer = openLoadingLayer();
@@ -573,7 +569,7 @@ define(function(require, exports) {
 						if(isClose == 1){
 							closeTab(ClientCheckTab);
 							Client.pager = JSON.parse(Client.pager);
-							Client.listClient(Client.pager.pageNo,Client.pager.eqMap.fromPartnerAgencyId,Client.pager.fromPartnerAgencyName,Client.pager.eqMap.travelId,Client.pager.travelName,Client.pager.year,Client.pager.month);
+							Client.listClient(Client.searchParam.pageNo,Client.searchParam.fromPartnerAgencyId,Client.searchParam.fromPartnerAgencyName,Client.searchParam.travelId,Client.searchParam.travelName,Client.searchParam.year,Client.searchParam.month);
 						} else {
 							Client.ClientCheck(Client.searchCheckData.pageNo,Client.searchCheckData.id,Client.searchCheckData.month,Client.searchCheckData.year);
 						}
@@ -621,7 +617,7 @@ define(function(require, exports) {
 							if(isClose == 1){
 								closeTab();
 								Client.pager = JSON.parse(Client.pager);
-								Client.listClient(Client.pager.pageNo,Client.pager.eqMap.fromPartnerAgencyId,Client.pager.fromPartnerAgencyName,Client.pager.eqMap.travelId,Client.pager.travelName,Client.pager.year,Client.pager.month);
+								Client.listClient(Client.searchParam.pageNo,Client.searchParam.fromPartnerAgencyId,Client.searchParam.fromPartnerAgencyName,Client.searchParam.travelId,Client.searchParam.travelName,Client.searchParam.year,Client.searchParam.month);
                             } else {
 								Client.ClientClear(Client.searchBalanceData.id,Client.searchBalanceData.year,Client.searchBalanceData.startMonth,Client.searchBalanceData.endMonth);
 							}

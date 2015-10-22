@@ -130,7 +130,7 @@
 						<div class="widget-main">
 							<div class="form-group">
 								<label class="col-sm-1 control-label no-padding-right">住宿标准：</label>
-								<div class="col-sm-3">
+								<div class="col-sm-9">
 									<label class="control-label">
 										{{if touristGroupDetail.hotelLevel == 0}}   
 											未选择
@@ -151,14 +151,16 @@
 										{{/if}}
 									</label>
 								</div>
+							</div>
+							<div class="form-group">
 								<label class="col-sm-1 control-label no-padding-right">包含自费：</label>
-								<div class="col-sm-1">
+								<div class="col-sm-9">
 									<label class="control-label" style="text-align: left">{{touristGroupDetail.includeSelfPay}}</label>
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-sm-2 control-label no-padding-right">备注：</label>
-								<div class="col-sm-8">
+								<label class="col-sm-1 control-label no-padding-right">备注：</label>
+								<div class="col-sm-9">
 									<label class="control-label" style="text-align: left">{{touristGroupDetail.remark}}</label>
 								</div>
 							</div>
