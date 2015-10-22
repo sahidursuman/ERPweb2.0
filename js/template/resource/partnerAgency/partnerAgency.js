@@ -114,17 +114,18 @@ define(function(require, exports) {
 			    type: 1,
 			    title:"新增同行旅行社",
 			    skin: 'layui-layer-rim', //加上边框
-			    area: ['65%', '60%'], //宽高
+			    area: '1190px', //宽高
 			    zIndex:1028,
 			    content: html,
-			    success:function(){
 
+			    success:function(){
+                  //vnb vcnvbn
 			    	var $obj = $(".addPartnerAgencyContainer .form-horizontal");
 			    	// 设置表单验证
 			    	var validator = rule.partnerAgencyCheckor($('.partnerAgencyMainForm'));
 
-			    	var $obj = $(".addPartnerAgencyContainer .partnerAgencyMainForm");
-			    	partnerAgency.getProvinceList($obj.find("select[name=provinceId]"));
+			    	var $obj = $(".addPartnerAgencyContainer .partnerAgencyMainForm"); 
+			    	partnerAgency.getProvinceList($obj.find("select[name=provinceId]")); 
 			    	$obj.find("select[name=provinceId]").change(function(){
 						var provinceId = $(this).val();
 						if(provinceId != ""){
@@ -138,12 +139,12 @@ define(function(require, exports) {
 			    	$obj.find("select[name=cityId]").change(function(){
 						var cityId = $(this).val();
 						if(cityId != ""){
-							partnerAgency.getDistrictList($obj.find("select[name=districtId]"),cityId);
+							partnerAgency.getDistrictList($obj.find("select[name=districtId]"),cityId); 
 						}
 						else{
 							$obj.find("select[name=districtId]").html("<option value=''>未选择</option>");
 						}
-					});
+					}); 
 
 
 			    	// 新加总社信息下拉列表
@@ -155,6 +156,9 @@ define(function(require, exports) {
 			    	$tbody = $(".addPartnerAgencyContainer .contactList tbody");
 			    	$(".addPartnerAgencyContainer .contactList .btn-contact-add").click(function(){
 			    		partnerAgency.addContact($tbody,validator);
+
+						// 再调整对话框的高度
+						$(window).trigger('resize');
 			    	});
 
 			    	partnerAgency.addContact($tbody,validator);
@@ -259,9 +263,10 @@ define(function(require, exports) {
 						    type: 1,
 						    title:"修改同行旅行社",
 						    skin: 'layui-layer-rim', //加上边框
-						    area: ['60%', '65%'], //宽高
+						    area: '1190px', //宽高
 						    zIndex:1028,
 						    content: html,
+							scrollbar: false,    // 推荐禁用浏览器外部滚动条
 						    success:function(){
 						    	var validator=rule.partnerAgencyCheckor($(".partnerAgencyMainForm"));
 						    	$obj = $(".updatePartnerAgencyContainer .partnerAgencyMainForm");
@@ -315,6 +320,9 @@ define(function(require, exports) {
 						    	$tbody = $(".updatePartnerAgencyContainer .contactList tbody");
 						    	$(".updatePartnerAgencyContainer .contactList .btn-contact-add").click(function(){
 						    		partnerAgency.addContact($tbody,validator);
+
+									// 再调整对话框的高度
+									$(window).trigger('resize');
 						    	});
 
 						    	partnerAgency.bindRemoveContact();
