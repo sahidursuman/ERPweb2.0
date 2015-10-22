@@ -316,7 +316,7 @@ table tr td{
 
 .ui-spinner .btn{
     border: 1px solid #d5d5d5 !important;
-    height: 13px !important;
+    height: 12px !important;
 }
 .fa-sort-desc{
     margin-top: -2px !important;
@@ -397,7 +397,9 @@ table tr td{
     text-align: center;
 }
 .style-myselfOne{
-    width: 105px !important;
+    width: 115px !important;
+    border: 2px solid #5d5d5d;
+    text-align: right;
 }
 /*restaurant时间宽度*/
 .whereTwo .rangeTime{
