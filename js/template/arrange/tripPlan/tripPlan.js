@@ -1,17 +1,18 @@
 define(function(require, exports) {
-	var rule=require("./rule");
-	var menuKey = "arrange_plan";
-	var listTemplate = require("./view/list");
-	var viewTripPlanTemplate = require("./view/viewTripPlan");
-	var addTripPlanTemplate=require("./view/addTripPlan");
-	var updateTemplate = require("./view/updateTripPlan");
-	var searchTemplate = require("./view/searchList");
-	var addGroupTemplate = require("./view/addGroup");
-	var viewGroupTemplate = require("./view/viewGroup");
-	var checkTable="arrange_plan-add";
-	var addTripPlanLayer;
+	var rule=require("./rule"),
+		menuKey = "arrange_plan",
+		listTemplate = require("./view/list"),
+		viewTripPlanTemplate = require("./view/viewTripPlan"),
+		addTripPlanTemplate=require("./view/addTripPlan"),
+		updateTemplate = require("./view/updateTripPlan"),
+		searchTemplate = require("./view/searchList"),
+		addGroupTemplate = require("./view/addGroup"),
+		viewGroupTemplate = require("./view/viewGroup"),
+		checkTable="arrange_plan-add",
+		addTripPlanLayer,
+		executeTimeType,
 	
-	var tripPlan = {
+		tripPlan = {
 		searchData : {
 			words : "",
 			startTime : "",
@@ -374,6 +375,13 @@ define(function(require, exports) {
 						addTab(menuKey+"-view","查看发团计划",html);
 						var tab = "tab-arrange_plan-view-content";
 				    	tripPlan.MenberNumber("addTripPlanTouristTbody");
+				    	//判定是否选中
+				    	if (data.tripPlan.executeTimeType==0) {
+				    		$(".newAddTripPlanMain").find('input[name=executeTimeType]').eq(0).attr("checked","checked");
+				    	} else{
+				    		$(".newAddTripPlanMain").find('input[name=executeTimeType]').eq(1).attr("checked","checked");
+				    	};
+				    
 				    	//查看计划中 查看游客小组
 				    	$("#" + tab + " .viewTripPlan .viewTripPlanView").on("click",function(){
 				    		var id = $(this).attr("data-entity-id");
@@ -410,8 +418,6 @@ define(function(require, exports) {
 						var isSendMessageStatus=data.tripPlan.isSendTouristMessage;
 						//判断  立即发送  定时发送
 						var isCheckedStatus=data.tripPlan.executeTimeType;
-
-
 						//已修改提示
 			    		var validator =rule.checkdCreateTripPlan($(".updateTripPlan"));
 						if($(".tab-"+menuKey+"-update").length > 0) {
@@ -687,7 +693,7 @@ define(function(require, exports) {
 														return "-"
 													}
 												}
-												html +='<tr><td>第'+data.lineProductDays[i].whichDay+'天</td><td>'+data.lineProductDays[i].repastDetail+'</td><td>'+hotelLevel()+'</td><td class="col-xs-6">'+data.lineProductDays[0].title+'</td></tr>';
+												html +='<tr><td>第'+data.lineProductDays[i].whichDay+'天</td><td>'+data.lineProductDays[i].repastDetail+'</td><td>'+hotelLevel()+'</td><td class="col-xs-6">'+data.lineProductDays[i].title+'</td></tr>';
 											}
 											$(".newAddTripPlanMain table.days tbody").html(html);
 											$(".newAddTripPlanMain table.days tbody").html(html);
@@ -984,12 +990,13 @@ define(function(require, exports) {
 		addTouristGroup :function(lineProductId,startTime,tBody,tab){
 			//添加游客小组 （多选）			
 			var excludeIdJson = [];
-			$(".newAddTripPlan ."+tBody+" tr").each(function(i){
+			$("#"+tab+" ."+tBody+" tr").each(function(i){
 				var id = {
 						id : $(this).attr("data-entity-id")
 					};
 				excludeIdJson.push(id);
 			})
+			console.log($("#"+tab+" .newAddTripPlan ."+tBody+" tr"));
 			excludeIdJson = JSON.stringify(excludeIdJson);
 			if(lineProductId.length > 0 && startTime.length > 0){
 				$.ajax({
@@ -1036,38 +1043,43 @@ define(function(require, exports) {
 							    	})
 							    	//提交按钮事件绑定
 									$(".addTouristGroupListToPlan .btn-submit-addtravelLine").click(function(){
-										var addGroupIdJson = "[";
-										var addGListLength = $(".addTouristGroupListToPlan .all tbody tr").find("input:checked").length;
+										var addGroupIdJson = [];
 										$(".addTouristGroupListToPlan .all tbody tr").find("input:checked").each(function(i){
-												var id = $(this).parent().parent().parent().attr("data-entity-id");
-												var travelAgencyName = $(this).parent().parent().parent().find("td[name=travelAgencyName]").text();
-												var contactMemberName = $(this).parent().parent().parent().find("td[name=contactMemberName]").text();
-												var contactMemberMobileNumber = $(this).parent().parent().parent().find("td[name=contactMemberMobileNumber]").text();
-												var areaData = $(this).parent().parent().parent().find("td[name=areaData]").text();
-												var ageData = $(this).parent().parent().parent().find("td[name=ageData]").text();
-												var peopleCount = $(this).parent().parent().parent().find("td[name=peopleCount]").text();
-												var remark = $(this).parent().parent().parent().find("td[name=remark]").text();
-												if(i==addGListLength-1){
-													addGroupIdJson += "{\"id\":\""+id+"\",\"travelAgencyName\":\""+travelAgencyName+"\",\"contactMemberName\":\""+contactMemberName+"\",\"contactMemberMobileNumber\":\""+contactMemberMobileNumber+"\",\"areaData\":\""+areaData+"\",\"ageData\":\""+ageData+"\",\"peopleCount\":\""+peopleCount+"\",\"remark\":\""+remark+"\"}"
+											var parents = $(this).parent().parent().parent(),
+												groupJson = {
+													id : parents.attr("data-entity-id"),
+													creatorName : $.text(parents.find("td[name=creatorName]")),
+													lineProductName : $.text(parents.find("td[name=lineProductName]")),
+													travelAgencyName : $.text(parents.find("td[name=travelAgencyName]")),
+													contactMemberName : $.text(parents.find("td[name=contactMemberName]")),
+													contactMemberMobileNumber : $.text(parents.find("td[name=contactMemberMobileNumber]")),
+													areaData : $.text(parents.find("td[name=areaData]")),
+													ageData : $.text(parents.find("td[name=ageData]")),
+													peopleCount : $.text(parents.find("td[name=peopleCount]")),
+													currentNeedPayMoney : $.text(parents.find("td[name=currentNeedPayMoney]")),
+													hotelLevel : $.text(parents.find("td[name=hotelLevel]")),
+													includeSelfPay : $.text(parents.find("td[name=includeSelfPay]")),
+													remark : $.text(parents.find("td[name=remark]")),
 												}
-												else{
-													addGroupIdJson += "{\"id\":\""+id+"\",\"travelAgencyName\":\""+travelAgencyName+"\",\"contactMemberName\":\""+contactMemberName+"\",\"contactMemberMobileNumber\":\""+contactMemberMobileNumber+"\",\"areaData\":\""+areaData+"\",\"ageData\":\""+ageData+"\",\"peopleCount\":\""+peopleCount+"\",\"remark\":\""+remark+"\"},"
-												}
+											addGroupIdJson.push(groupJson);
 										});
-										addGroupIdJson += "]";
-										addGroupIdJson = JSON.parse(addGroupIdJson);
 										for(var i in addGroupIdJson){
 											//addGroupIdJson[i];
 											if(i<addGroupIdJson.length){
-											var html=
+												var html=
 												"<tr data-entity-id=\""+addGroupIdJson[i].id+"\">"+
 													"<td></td>"+
+													"<td>"+addGroupIdJson[i].creatorName+"</td>"+
+													"<td>"+addGroupIdJson[i].lineProductName+"</td>"+
 													"<td>"+addGroupIdJson[i].travelAgencyName+"</td>"+
 													"<td>"+addGroupIdJson[i].contactMemberName+"</td>"+
 													"<td>"+addGroupIdJson[i].contactMemberMobileNumber+"</td>"+
 													"<td>"+addGroupIdJson[i].areaData+"</td>"+
 													"<td>"+addGroupIdJson[i].ageData+"</td>"+
 													"<td class=\"tripPlanTrMemberCount\">"+addGroupIdJson[i].peopleCount+"</td>"+
+													"<td>"+addGroupIdJson[i].currentNeedPayMoney+"</td>"+
+													"<td>"+addGroupIdJson[i].hotelLevel+"</td>"+
+													"<td>"+addGroupIdJson[i].includeSelfPay+"</td>"+
 													"<td>"+addGroupIdJson[i].remark+"</td>"+
 													"<td>"+
 													"<div class=\"hidden-sm hidden-xs btn-group\">"+
@@ -1082,6 +1094,19 @@ define(function(require, exports) {
 												"</tr>";
 											// 
 									    		$("#"+tab+" ."+tBody+"").append(html);
+									    		//查看旅游小组成员
+										    	$("#"+tab+" ."+tBody+" .touristGroupView").off().on("click",function(){
+										    		var id = $(this).attr("data-entity-id");
+										    		console.log(id)
+										    		tripPlan.viewTouristGroup(id);
+										    	})
+										    	//删除小组
+										    	$("#"+tab+" ."+tBody+" .touristGroupDelete").off().on("click",function(){
+										    		var obj = $(this);
+										    		var id = obj.attr("data-entity-id");
+										    		var tripPlanId = $(".newAddTripPlan input[name=tripPlanId]").val();
+										    		 tripPlan.deleteTouristGroup(obj,id,tripPlanId,tab,tBody);
+										    	})
 											}
 										}
 										layer.close(addGroupTemplateLayer);
@@ -1091,18 +1116,7 @@ define(function(require, exports) {
 										$(".newAddTripPlan .groupView").click(viewGroup);
 										$(".newAddTripPlan .addTripPlanView").click(addPlanViewGroup);
 										$("")*/
-										//查看旅游小组成员
-								    	$(".newAddTripPlan ."+tBody+" .touristGroupView").off().on("click",function(){
-								    		var id = $(this).attr("data-entity-id");
-								    		tripPlan.viewTouristGroup(id);
-								    	})
-								    	//删除小组
-								    	$(".newAddTripPlan ."+tBody+" .touristGroupDelete").off().on("click",function(){
-								    		var obj = $(this);
-								    		var id = obj.attr("data-entity-id");
-								    		var tripPlanId = $(".newAddTripPlan input[name=tripPlanId]").val();
-								    		 tripPlan.deleteTouristGroup(obj,id,tripPlanId,tab,tBody);
-								    	})
+										
 								    	//小组总人数计算
 				    					tripPlan.tripPlanAllMemberCount("tripPlanAllMemberCount",tab,tBody);
 							    	})
@@ -1574,7 +1588,11 @@ define(function(require, exports) {
 			}
 		},
 		submitUpdateTripPlan : function(isClose){
-			var tab = "tab-arrange_plan-update-content";
+			var tab = "tab-arrange_plan-update-content",
+			    executeTimeType=0,
+			    executeTime;
+
+
 			function getValue(name){
 				var thisObj = $("#" + tab + " .updateTripPlan").find("[name="+name+"]"), objValue;
 				if(thisObj.attr("type") == "checkbox"){
@@ -1587,10 +1605,12 @@ define(function(require, exports) {
 
 			if ($('.newAddTripPlanMain').find("input[name=executeTimeType]")[0].checked) {
 				executeTimeType=0;
+				executeTime="";
 			};
 
 			if ($('.newAddTripPlanMain').find("input[name=executeTimeType]")[1].checked) {
 				executeTimeType=1;
+				executeTime=getValue("executeTime");
 			};
 			
 			
@@ -1619,7 +1639,7 @@ define(function(require, exports) {
 						"setPlacePosition": getValue("setPlacePosition"),
 						"setPlaceTime": getValue("setPlaceTime"),
 						"executeTimeType" : executeTimeType+"",
-						 executeTime :getValue("executeTime")  
+						 executeTime : executeTime  
 
 
 					},

@@ -588,7 +588,7 @@ define(function(require, exports) {
 			'<td><select class="" name="ticketType"><option value="1">机票</option>'+
 			'<option value="2">汽车票</option><option value="3">火车票</option><option value="4">轮船票</option></select></td>'+
 			'<td><input class="col-sm-12" name="ticketStartCity" value="" maxlength="20"  type="text" /></td>'+
-			'<td><input class="col-sm-12" name="ticketArriveCity" value="" maxlength="0"  type="text" /></td>'+
+			'<td><input class="col-sm-12" name="ticketArriveCity" value="" maxlength="20"  type="text" /></td>'+
 			'<td><input class="col-sm-12" name="ticketStartTime" value="" type="text" /></td>'+
 			'<td><input class="col-sm-12" name="ticketShift" value=""  maxlength="20"  type="text" /></td>'+
 			'<td><input class="col-sm-12" name="ticketSeatLevel"  maxlength="20"  value="" type="text" />'+

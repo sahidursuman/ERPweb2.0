@@ -27,7 +27,7 @@ define(function(require, exports) {
 						
 						// 查看消息内容
 						$("#messageList .btn-msg-view").click(function(){
-							var id = $(this).attr("data-entity-id");
+							var id = $(this).closest('tr').data('id');
 							message.viewMsg(id);
 						});
 						
@@ -78,7 +78,7 @@ define(function(require, exports) {
 					    type: 1,
 					    title:"查看信息",
 					    skin: 'layui-layer-rim', //加上边框
-					    area: ['600px', '480px'], //宽高
+					    area: '600px', //宽高
 					    zIndex:1028,
 					    content: html,
 					    success:function(){

@@ -64,6 +64,11 @@ label{
 .margin-top{
     margin-top: 20px;
 }
+.margin-topTicket{
+    height: 24px;
+    margin-top: 20px;
+    padding-top: 0px !important;
+}
 table tr td{
     border: 1px solid #ececec !important;
 }
@@ -590,4 +595,18 @@ input,select{
 .CheckPlan{
     text-align: right !important;
     padding:7px 6px 7px 0px !important;
+}
+
+.departButton {
+    height: 24px;
+    line-height: 10px;
+    padding-top: 3px;
+}
+
+
+/**
+ * public style
+ */
+.align-left {
+    text-align: left;
 }

@@ -143,7 +143,7 @@ define(function(require, exports) {
 			$.ajax({
 				url:""+APP_ROOT+"back/touristGroup.do?method=listTouristGroup&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 				type:"POST",
-				data:"pageNo="+page+"&sortType=auto"+"&partnerAgencyId="+partnerAgencyIdS+"&lineProductIdSearch="+lineProductIdS+"&startTimeSearch="+startTimeS+"&userId="+userIdS+"&createTimeStart="+createTimeStartS+"&createTimeEnd="+createTimeEndS+"&statusSearch="+statusS+"&customerType="+customerTypeS,
+				data:"pageNo="+page+"&sortType=startTime"+"&partnerAgencyId="+partnerAgencyIdS+"&lineProductIdSearch="+lineProductIdS+"&startTimeSearch="+startTimeS+"&userId="+userIdS+"&createTimeStart="+createTimeStartS+"&createTimeEnd="+createTimeEndS+"&statusSearch="+statusS+"&customerType="+customerTypeS,
 				dataType:"json",
 				beforeSend:function(){
 					//打开一个遮罩层
@@ -627,6 +627,12 @@ define(function(require, exports) {
 					});
 				});
 			}
+
+			$('#' + tab).find('.addTouristTbody').on('change', 'select', function(event) {
+				event.preventDefault();
+				validator = rule.updateTouristGroupCheckor(validator);
+				$(this).closest('tr').find('[name="idCardNumber"]').trigger('focusout');
+			});
 			//游客名单 批量添加成员按钮绑定事件
 			$("#"+tab+" .touristGroupMainFormMember .btn-add-tourist-more").click(touristGroup.batchAddTouristGroupMember);
 			//中转接待状态事件绑定
@@ -674,7 +680,6 @@ define(function(require, exports) {
 						var html = updateTemplate(data);	
 						//已修改提示
 						var tab = "tab-resource_touristGroup-update-content";
-			    		var validator=rule.checktouristGroup($(".updateTouristGroup"));  
 						if($(".tab-"+menuKey+"-update").length > 0) {
 							addTab(menuKey+"-update","编辑小组");	
                  	    	if(!!touristGroup.edited["update"] && touristGroup.edited["update"] != ""){
@@ -687,31 +692,27 @@ define(function(require, exports) {
 									 touristGroup.edited["update"] = "";
 				            		 addTab(menuKey+"-update","编辑小组",html);	
 									 touristGroup.initUpdate(id,data);
-				            		 validator = rule.checktouristGroup($('.updateTouristGroup'));
 				            	},function(){
 				            		addTab(menuKey+"-update","编辑小组",html);	
 									touristGroup.initUpdate(id,data);
-									validator = rule.checktouristGroup($('.updateTouristGroup'));									
 									touristGroup.edited["update"] = "";
 				            	}); 							
                  	    	 }else{
 	                 	    	addTab(menuKey+"-update","编辑小组",html);	
 								touristGroup.initUpdate(id,data);
-	                 	        validator = rule.checktouristGroup($('.updateTouristGroup'));
                  	    	 } 
                  	    }else{
                  	    	addTab(menuKey+"-update","编辑小组",html);	
 							touristGroup.initUpdate(id,data);
-                 	    	validator = rule.checktouristGroup($("#"+tab+""));
                  	    }
 					}
 				}
 			});
 		},
 		initUpdate : function(id,data){
-			var validator=rule.checktouristGroup($(".updateTouristGroup"));  
 			var tab = "tab-resource_touristGroup-update-content";
 			var updateTouristGroup = id;
+			var validator=rule.checktouristGroup($('#'+tab).find(".updateTouristGroup"));  
 			$('.updateTouristGroup').on("change",function(){
 				touristGroup.edited["update"] = "update";
 			});	
@@ -890,6 +891,13 @@ define(function(require, exports) {
 				})
 			}
 			
+			// 切换选项，调整表单验证规则
+			$('#'+tab).find('.addTouristTbody').on('change', 'select', function(event) {
+				event.preventDefault();
+				validator = rule.updateTouristGroupCheckor(validator);
+				$(this).closest('tr').find('[name="idCardNumber"]').trigger('focusout');
+			});
+
 			//游客名单成员列表删除
 			$("#"+tab+" .addTouristList .btnDeleteTourist").click(function(){
 				var tr =$(this).parent().parent();
@@ -1375,7 +1383,7 @@ define(function(require, exports) {
 				if(touristNameStr.eq(i).find("input[name=isContactUser]").is(":checked")==true){
 					isContactUser = 1;
 				}
-
+				
 				if (isContactUser && mobileNumber == "")  {
 					showMessageDialog($( "#confirm-dialog-message" ), "请填写名单中联系人的手机号码！");
 					isValidate = false;
