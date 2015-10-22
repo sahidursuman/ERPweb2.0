@@ -1567,6 +1567,10 @@ define(function(require, exports) {
 				})
 						
 				var saveTripPlan = JSON.stringify(saveTripP);
+				if (saveTripP.touristGroupId.length == 0) {
+					showMessageDialog($( "#confirm-dialog-message" ),"请添加游客小组！")
+					return;
+				}
 				$.ajax({
 					url:""+APP_ROOT+"back/tripPlan.do?method=addTripPlan&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 					data:"saveTripPlan="+encodeURIComponent(saveTripPlan),
@@ -1659,6 +1663,10 @@ define(function(require, exports) {
 				})
 						
 				var saveTripPlan = JSON.stringify(saveTripP);
+				if (saveTripP.touristGroupId.length == 0) {
+					showMessageDialog($( "#confirm-dialog-message" ),"请添加游客小组！");
+					return;
+				}
 				$.ajax({
 					url:""+APP_ROOT+"back/tripPlan.do?method=updateTripPlan&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 					data:"saveTripPlan="+encodeURIComponent(saveTripPlan)+"",

@@ -75,15 +75,6 @@ define(function(require, exports) {
 			innerTransfer.innerList(divId,type);
 			innerTransfer.findTotal(divId);
 		})
-		$("#inner-TransferIn .dropdown-menu a").click(function(){
-			$(this).closest('div').find("button").attr("data-value",$(this).attr("data-value"));
-			$(this).closest('div').find("span").text($(this).text());
-			var divId = "inner-TransferIn",
-				type = "2";
-			innerTransfer.getSearchParam(divId,type);
-			innerTransfer.innerList(divId,type);
-			innerTransfer.findTotal(divId);
-		})
 	};
 	innerTransfer.getListPage = function(event){
 		var divId = event.data.divId,
