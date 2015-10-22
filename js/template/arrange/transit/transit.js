@@ -1485,4 +1485,6 @@ define(function(require, exports) {
 	exports.isEdited = transit.isEdited;
 	exports.save = transit.save;
 	exports.clearEdit = transit.clearEdit;
+	// 中转安排，用于其他模块调用
+	exports.updateTransit = transit.updateTransit;
 })

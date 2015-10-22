@@ -1354,3 +1354,12 @@ var _statusText = {
 	    return fmt;
 	}
 })(jQuery);
+
+var Tools = {};
+
+Tools.updateTransit = function(id)  {
+	seajs.use("" + ASSETS_ROOT +"js/template/arrange/transit/transit.js",function(module){
+		module.updateTransit(id);
+		modals["arrange_transit"] = transit;
+	});
+}
