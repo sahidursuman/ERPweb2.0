@@ -392,7 +392,7 @@ define(function(require, exports) {
 						    type: 1,
 						    title:"系统人员信息",
 						    skin: 'layui-layer-rim', //加上边框
-						    area: ['650px', '400px'], //宽高
+						    area: ['700px', '400px'], //宽高
 						    zIndex:1028,
 						    content: html
 						});

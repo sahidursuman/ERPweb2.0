@@ -1,7 +1,11 @@
 <div class="search-area globalAdd">
 	<input name="user_realname" class="col-xs-2 input-default-height guideInputList" value="{{searchParam.inputName}}" placeholder="账号、姓名"/>&nbsp;
-	<div class="btn-group btn-status">
-		<button data-value="{{searchParam.status}}" data-toggle="dropdown" class="btn btn-sm btn-primary dropdown-toggle" aria-expanded="false">
+	<button class=" btn-sm  search-btn " style="margin-left:-8px">
+		<i class="ace-icon fa fa-search"></i>
+		搜索
+	</button>
+	<div class="btn-group btn-status"style="margin-left: 15px">
+		<button data-value="{{searchParam.status}}" data-toggle="dropdown" class=" btn-sm block-up dropdown-toggle" aria-expanded="false">
 			<span>
 				{{if searchParam.status == 1}}
 					已启用
@@ -20,11 +24,7 @@
 			</li>
 		</ul>
 	</div>
-	<button class="btn btn-sm btn-primary btn-user-search">
-		<i class="ace-icon fa fa-search"></i>
-		搜索
-	</button>
-	<button class="btn btn-sm btn-success btn-user-add" style="margin-left:20px;">
+	<button class="btn btn-sm btn-success btn-user-add" style="margin-left:15px;">
 		<i class="ace-icon fa fa-plus"></i>
 		新增人员
 	</button>
@@ -74,7 +74,6 @@
 									查看
 								</a>
 							</div>
-
 							<div class="hidden-md hidden-lg">
 								<div class="inline pos-rel">
 									<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
@@ -88,7 +87,6 @@
 												</span>
 											</a>
 										</li>
-
 										<li>
 											<a data-entity-id="{{user.id}}" href="javascript:void(0)" class="tooltip-success btn-user-edit" data-rel="tooltip">
 												<span class="green">
