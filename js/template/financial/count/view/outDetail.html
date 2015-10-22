@@ -1,36 +1,29 @@
-<div class="col-sm-13 financialOutDetail">
-    <div>
-        <button data-entity-id="{{tripPlanId}}" class="btn btn-xs btn-success btn-transfter btn-download" style="margin: 0px 20px 20px 0px;width:110px;height:35px;float: right;">
+<div class="financialOutDetail">
+    <div class="col-md-12">
+        <button data-entity-id="{{tripPlanId}}" class="btn btn-xs btn-success btn-transfter btn-download pull-right">
             <i class="ace-icon fa fa-file-excel-o"></i>导出电子表格
         </button>
     </div>
     <div class="col-xs-12">
         <div class="tabbable">
             <ul class="nav nav-tabs" id="finacial-count-view-tab">
-                {{if isNeedArriveService == 1}}
                 <li class="active" style="width:125px;">
                     <a aria-expanded="true" data-toggle="tab" href="#receptionList-financial-count" style="text-align:center;">
                         &nbsp;接团&nbsp;
                     </a>
                 </li>
-                {{/if}}
-                {{if isNeedBus == 1}}
-                <li {{if isNeedArriveService == 0}}class="active"{{/if}} style="width:125px;">                  
+                <li style="width:125px;">                  
                 <a aria-expanded="false" data-toggle="tab" href="#carList-financial-count" style="text-align:center;">
                         &nbsp;小车&nbsp;
                     </a>
                 </li>
-                {{/if}}
-                {{if isNeedLeaveService == 1}}
-                <li {{if isNeedArriveService == 0 && isNeedBus == 0}}class="active"{{/if}} style="width:125px;">                
+                <li style="width:125px;">                
                     <a aria-expanded="false" data-toggle="tab" href="#sendList-financial-count" style="text-align:center;">
                         &nbsp;送团&nbsp;
                     </a>  
                 </li>
-                {{/if}}
             </ul>
             <div class="tab-content" style="position:relative;top: -2px">
-                {{if isNeedArriveService == 1}}
                 <div id="receptionList-financial-count" class="tab-pane fade active in">
                     <div class="form-group busList">
                         <div class="col-xs-12 col-sm-12 widget-container-col">
@@ -307,9 +300,7 @@
                     </div>
                     <div style="clear:both;height:0px;line-height:0px;"></div>
                 </div>
-                {{/if}}
-                {{if isNeedBus == 1}}
-                <div id="carList-financial-count" class="tab-pane fade {{if isNeedArriveService == 0}}active in{{/if}}">
+                <div id="carList-financial-count" class="tab-pane fade">
                     <div class="form-group busList">
                         <div class="col-xs-12 col-sm-12 widget-container-col">
                             <div class=" ui-sortable-handle">
@@ -363,9 +354,7 @@
                     </div>
                     <div style="clear:both;height:0px;line-height:0px;"></div>
                 </div>
-                {{/if}}
-                {{if isNeedLeaveService == 1}}
-                <div id="sendList-financial-count" class="tab-pane fade {{if isNeedArriveService == 0 && isNeedBus == 0}}active in{{/if}}">
+                <div id="sendList-financial-count" class="tab-pane fade">
                     <div class="form-group busList">
                         <div class="col-xs-12 col-sm-12 widget-container-col">
                             <div class=" ui-sortable-handle">
@@ -641,7 +630,6 @@
                     </div>
                     <div style="clear:both;height:0px;line-height:0px;"></div>
                 </div>
-                {{/if}}
             </div>
         </div>
     </div>
