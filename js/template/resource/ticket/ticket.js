@@ -35,6 +35,8 @@ define(function(require, exports) {
 						$("#"+tabId+" .ticketList .btn-ticket-view").click(function(){
 							var id = $(this).attr("data-entity-id");
 							ticket.viewTicket(id);
+							// 再调整对话框的高度
+							$(window).trigger('resize');
 						});
 						$("#"+tabId+" .ticketList .btn-ticket-edit").click(function(){
 							var id = $(this).attr("data-entity-id");
@@ -357,9 +359,10 @@ define(function(require, exports) {
 						    type: 1,
 						    title:"查看票务公司",
 						    skin: 'layui-layer-rim', //加上边框
-						    area: ['1024px', '500px'], //宽高
+						    area:'800px', //宽高
 						    zIndex:1028,
-						    content: html
+						    content: html,
+							scrollbar: false,   // 推荐禁用浏览器外部滚动条
 						});
 					}
 				}

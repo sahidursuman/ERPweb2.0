@@ -1,376 +1,311 @@
 define(function(require, exports) {
-	var rule = require("./rule"); 
-	var menuKey = "arrange_inner_Transfer",
-	listTemplate = require("./view/list"),
-	listTransferInTemplate=require("./view/listTransferIn"),
-	viewTemplate=require("./view/view"),
-	editTemplate=require("./view/edit"),
-	innerTransferInTemplate = require("./view/innerTransferInView"),
-	tabId = "tab-" + menuKey + "-content";
-	var requestMain = true;//控制搜索头的访问次数
-	var requestTotal = true;//控制统计数据的访问次数
-	//搜索字段
-	var searchParam = {
-		pageNo : "",
-		type : "",
-		touristGroupId : "",
-		lineProductId : "",
-		businessGroupId : "",
-		creator : "",
-		startTime : "",
-		endTime : "",
-		status : "",
-		first : ""
-	},
-	//分页查询的返回结果
-    map = {
-		searchParam : "",
-		resultList : "",
-		lineProduct : "",
-		user : "",
-		businessGroup : ""
-	},
-	total={
-		adultCount :"",
-		childCount : "",
-		transNeedPayMoney :"",
-		transPayedMoney : ""
-	},
-	innerTransfer = {
-	    id : "",//	内转ID		
-	    innerTransferFeeSet : "",	//内转的其他费用	array<object>	
-	    toBusinessGroupId :"",//	转给的部门ID		
-	    transAdultPrice	: "",//内转大人价		
-	    transChildPrice	: "", //内转小孩价		
-	    transNeedPayMoney :"",//	应付		需要计算
-	    transPayedMoney	 : "", //已付		填写
-	    transRemark : ""
-	},
+	var rule = require("./rule"),
+		menuKey = "arrange_inner_Transfer",
+		listMainTemplate = require("./view/listMain"),
+		outListTemplate = require("./view/outList"),
+		inListTemplate = require("./view/inList"),
+		viewTemplate=require("./view/view"),
+		editTemplate=require("./view/edit");
 
-	innerTransferFeeSet= {
-		id : "",
-		count :"",
-		discribe : "",
-		price : ""
+
+	var innerTransfer = {
+		$searchParam : {
+			pageNo : "",
+			type : "",
+			touristGroupId : "",
+			lineProductId : "",
+			businessGroupId : "",
+			creator : "",
+			startTime : "",
+			endTime : "",
+			status : "",
+			first : ""
+		},
+		allData : {},
+		edited : {}
 	};
-    
-	function url(method,operation){
+
+	innerTransfer.initModule = function(){
+		innerTransfer.innerTransferList();
+	};
+	innerTransfer.url = function(method,operation){
 		return ""+APP_ROOT+"back/innerTransfer.do?&method="+method+"&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation="+operation;
 	};
+	innerTransfer.innerTransferList = function(){
+		//请求下拉框数据
+		innerTransfer.ListMainHead();
+		var html = listMainTemplate(innerTransfer.allData);
+		addTab(menuKey,"内转管理",html);
 
-	var inner = {
-		edited : {},
-		isEdited : function(editedType){
-			if(!!inner.edited[editedType] && inner.edited[editedType] != ""){
-				return true;
-			}
-			return false;
-		},
-		openFlag:0,
-		list:function(searchParam){
-			globalLoadingLayer = layer.open({
-				zIndex:1028,
-				type:3
-			});
-			if(searchParam.first=="1"){
-				requestMain = true;
-				requestTotal = true;
-				searchParam.first = "2";
-			}
-			if(requestMain){
-				//搜索头数据  
-				$.ajax({  
-					url:url("findListMain","view"),
-					data:"",
-					dataType:'json',
-					success:function(data1){
-						map.lineProduct = JSON.parse(data1.lineProduct);
-						map.user = JSON.parse(data1.user);
-						map.businessGroup = JSON.parse(data1.businessGroup);
-						requestMain = false;
-						searchParam.first = "2";
-					}
-				});
-			}
-
-			//分页结果集
-			$.ajax({  
-				url:url("findPager","view"),
-				data:"searchParam="+encodeURIComponent(JSON.stringify(searchParam)),
-				dataType:'json',
-				success:function(data3){
-					layer.close(globalLoadingLayer);
-					var result = showDialog(data3);
-					//如果正确则就执行
-					if(result){
-
-						map.resultList = JSON.parse(data3.resultList);
-						map.searchParam = data3.searchParam;
-						var html = listTemplate(map);
-						addTab(menuKey,"内转管理",html);
-						//时间控件
-						inner.initTimePicker();
-
-						//统计数据  
-						if(requestTotal){
-							$.ajax({  
-								url:url("findTotal","view"),
-								data:"searchParam="+encodeURIComponent(JSON.stringify(searchParam)),
-								dataType:'json',
-								success:function(data2){
-									total = data2.total;
-									requestTotal = false;
-									var $transObj=$(".transferOut-Header-Cost");
-									$transObj.find(".adultCount").text(total.adultCount);
-									$transObj.find(".childCount").text(total.childCount);
-									$transObj.find(".transNeedPayMoney").text(total.transNeedPayMoney);
-									$transObj.find(".transPayedMoney").text(total.transPayedMoney);
-								}
-							});
-						}
-
-						//内部转出分页 
-						inner.transferOutfindPager(searchParam);
-						function getVal (name){
-							var val = $("#" +tabId+" .innerTransfer_list ").find("[name="+name+"]").val();
-							return val;
-						}
-
-						function buildSearchParam(){
-							searchParam.pageNo = getVal("pageNo");
-							searchParam.totalPage = getVal("totalPage");
-							searchParam.type = 1;
-							searchParam.lineProductId = getVal("lineProductId");
-							searchParam.businessGroupId = getVal("businessGroupId");
-							searchParam.creator = getVal("creator");
-							searchParam.startTime = getVal("startTime");
-							searchParam.endTime = getVal("endTime");
-							searchParam.status = $("#" +tabId+" .innerTransfer_list .btn-status button").attr("data-value");
-							return searchParam;
-						}
-
-
-						//搜索栏状态button下拉事件
-						$("#" +tabId+" .innerTransfer_list .btn-status .dropdown-menu a").click(function(){
-							$(this).parent().parent().parent().find("button").attr("data-value",$(this).attr("data-value"));
-							$(this).parent().parent().parent().find("span").text($(this).text());
-							searchParam = buildSearchParam();
-							requestTotal = true;
-							inner.list(searchParam);
-						});
-						//搜索事件
-						$("#" +tabId+" .innerTransfer_list .btn-transferOut-search").click(function(){
-							searchParam = buildSearchParam();
-							searchParam.pageNo = 0;
-							requestTotal = true;
-							inner.list(searchParam);
-						});
-						
-						//导出操作 
-						$("#" +tabId +"  .innerTransfer_list .btn-transfer-export").click(function(){
-							searchParam.type=1; 
-							var exportUrl ="" + url("findExcel","view") + "&searchParam="+encodeURIComponent(JSON.stringify(searchParam));
-							window.location.href=exportUrl;
-						});
-						
-						//切换我部转出
-						$("#" +tabId+" .innerTransfer_list .inner-TransferOut").click(function(){
-							if ($(this).data('first') != true) {
-								searchParam.pageNo = 0;
-								searchParam.type = 1;
-								requestTotal = true;
-								searchParam.first = "1";
-								inner.list(searchParam);
-							}
-
-							$(this).data('first', true);
-						});
-
-						//切换他部转入
-						$("#" +tabId+" .innerTransfer_list .inner-TransferIn").click(function(){
-							if ($(this).data('first') != true) {
-								searchParam.pageNo = 0;
-								searchParam.type = 2;
-								requestTotal = true;
-								searchParam.first = "1";
-								inner.listTransferIn(searchParam);
-							}
-
-							$(this).data('first', true);
-						});
-					}
+		var tab = "tab-arrange_inner_Transfer-content";
+		//搜索 type:1 转出   type:2 转入
+		$("#inner-TransferOut .btn-transferOut-search").off("click").on("click",{divId:"inner-TransferOut",btn:"btn-transferOut-search",type:"1"},innerTransfer.getListPage);
+		$("#inner-TransferIn .btn-transferIn-search").off("click").on("click",{divId:"inner-TransferIn",btn:"btn-transferIn-search",type:"2"},innerTransfer.getListPage);
+		//初始化列表
+		$("#inner-TransferOut .btn-transferOut-search").trigger('click');
+		$("#inner-TransferIn .btn-transferIn-search").trigger('click');
+		//线路产品autocomplete
+		innerTransfer.chooseLineProduct("inner-TransferIn");
+		//部门autocomplete
+		innerTransfer.chooseBusinessGroup("inner-TransferOut","1");
+		innerTransfer.chooseBusinessGroup("inner-TransferIn","2");
+		//转客人autocomplete
+		innerTransfer.chooseCreator("inner-TransferOut","1");
+		innerTransfer.chooseCreator("inner-TransferIn","2");
+		//时间控件
+		innerTransfer.datePicker(tab);
+		//导出
+		$("#inner-TransferIn .btn-transfer-export").click(function(){
+			innerTransfer.$searchParam.type=2; 
+			var exportUrl ="" + innerTransfer.url("findExcel","view") + "&searchParam="+encodeURIComponent(JSON.stringify(innerTransfer.$searchParam));
+			window.location.href=exportUrl;
+		});
+		//导出操作 
+		$("#inner-TransferOut .btn-transfer-export").click(function(){
+			innerTransfer.$searchParam.type=1; 
+			var exportUrl ="" + innerTransfer.url("findExcel","view") + "&searchParam="+encodeURIComponent(JSON.stringify(innerTransfer.$searchParam));
+			window.location.href=exportUrl;
+		});
+		$("#inner-TransferOut .dropdown-menu a").click(function(){
+			$(this).closest('div').find("button").attr("data-value",$(this).attr("data-value"));
+			$(this).closest('div').find("span").text($(this).text());
+			var divId = "inner-TransferOut",
+				type = "1";
+			innerTransfer.getSearchParam(divId,type);
+			innerTransfer.innerList(divId,type);
+			innerTransfer.findTotal(divId);
+		})
+		$("#inner-TransferIn .dropdown-menu a").click(function(){
+			$(this).closest('div').find("button").attr("data-value",$(this).attr("data-value"));
+			$(this).closest('div').find("span").text($(this).text());
+			var divId = "inner-TransferIn",
+				type = "2";
+			innerTransfer.getSearchParam(divId,type);
+			innerTransfer.innerList(divId,type);
+			innerTransfer.findTotal(divId);
+		})
+	};
+	innerTransfer.getListPage = function(event){
+		var divId = event.data.divId,
+			btn = event.data.btn,
+			type = event.data.type;
+		innerTransfer.getSearchParam(divId,type);
+		innerTransfer.innerList(divId,type)
+		innerTransfer.findTotal(divId);
+	};
+	innerTransfer.getSearchParam = function(divId,type){
+		getValue = function(name){
+			var value = $("#"+divId).find("[name="+name+"]").val()
+			return value;
+		}
+		innerTransfer.$searchParam = {
+			pageNo : 0,
+			type : type,
+			lineProductId : getValue("lineProductId"),
+			businessGroupId : getValue("businessGroupId"),
+			creator : getValue("creatorId"),
+			startTime : getValue("startTime"),
+			endTime : getValue("endTime"),
+			status : $("#"+divId).find(".btn-status button").attr("data-value")
+		}
+	};
+	innerTransfer.ListMainHead = function(){
+		$.ajax({
+			url: innerTransfer.url("findListMain","view"),
+			type: 'POST',
+			dataType: 'JSON',
+			beforeSend:function(){
+				globalLoadingLayer = openLoadingLayer();
+			},
+			success:function(data){
+				layer.close(globalLoadingLayer);
+				var result = showDialog(data);
+				if(result){
+					innerTransfer.allData.fromBusinessGroup = JSON.parse(data.fromBusinessGroup)
+					innerTransfer.allData.fromUser = JSON.parse(data.fromUser)
+					innerTransfer.allData.lineProduct = JSON.parse(data.lineProduct)
+					innerTransfer.allData.toBusinessGroup = JSON.parse(data.toBusinessGroup)
+					innerTransfer.allData.toUser = JSON.parse(data.toUser)
 				}
-			})
-		},
-
-
-
-
-		initTotal:function(){
-		
-		},
-	   //时间初始化控件 
-	   initTimePicker:function(){
-			$(".innerTransfer_list input[name=startTime]").datepicker({
-				autoclose: true,
-				todayHighlight: true,
-				format: 'yyyy-mm-dd',
-				language: 'zh-CN'
-			});
-
-			$(".innerTransfer_list input[name=endTime]").datepicker({
-				autoclose: true,
-				todayHighlight: true,
-				format: 'yyyy-mm-dd',
-				language: 'zh-CN'
-			});
-		},
-
-		/**
-		 * @param  {[searchParam]}
-		 * @return {[type]}
-		 * 我部转出
-		 * 
-		 */
-		transferOutfindPager:function(searchParam){
-			var $obj=$("#" +tabId+" .innerTransfer_list");
-			var classType = map.searchParam.type;
-			 $obj.find("[name=type]").val(classType);
-			function getVal (name){
-					var val = $obj.find("[name="+name+"]").val();
-					return val;
 			}
-			function buildSearchParam(){
-					searchParam.pageNo = getVal("pageNo");
-					searchParam.totalPage = getVal("totalPage");
-					searchParam.type = 1;
-					searchParam.lineProductId = getVal("lineProductId");
-					searchParam.businessGroupId = getVal("businessGroupId");
-					searchParam.creator = getVal("creator");
-					searchParam.startTime = getVal("startTime");
-					searchParam.endTime = getVal("endTime");
-					searchParam.status = getVal("status");
-					return searchParam;
-			 }
-
-			//分页--首页按钮事件
-				$obj.find(".pageMode a.first").click(function(){
-					searchParam = buildSearchParam();
-					searchParam.pageNo = 0;
-					if(searchParam.pageNo == 0 || searchParam.totalPage == 0)return;
-					inner.list(searchParam);
-				});
-				//分页--上一页事件
-				$obj.find(".pageMode a.previous").click(function(){
-					searchParam = buildSearchParam();
-					var pageNo = parseInt(searchParam.pageNo);
-					var previous = pageNo - 1;
-					if(pageNo == 0){
-						previous = 0;
-					}
-					if(pageNo == 0 || searchParam.totalPage == 0)return;
-					searchParam.pageNo = previous;
-					inner.list(searchParam);
-				});   
-				//分页--下一页事件
-				$obj.find(".pageMode a.next").click(function(){
-					searchParam = buildSearchParam();
-					var pageNo = parseInt(searchParam.pageNo);
-					var totalPage = parseInt(searchParam.totalPage);
-					var next =  pageNo + 1;
-					if(pageNo == totalPage-1){
-						next = pageNo ;
-					}
-					searchParam.pageNo = next;
-					if(pageNo == 0 || totalPage == 0)return;
-					inner.list(searchParam);
-				});
-				//分页--尾页事件
-				$obj.find(".pageMode a.last").click(function(){
-					searchParam = buildSearchParam();
-					var totalPage = parseInt(searchParam.totalPage);
-					var pageNo = 0;
-					if(totalPage==0){
-						pageNo = 0;
+		});
+	};
+	innerTransfer.findTotal = function(divId){
+		$.ajax({
+			url: innerTransfer.url("findTotal","view"),
+			type: 'POST',
+			dataType: 'JSON',
+			data: "searchParam="+encodeURIComponent(JSON.stringify(innerTransfer.$searchParam)),
+			beforeSend:function(){
+				globalLoadingLayer = openLoadingLayer();
+			},
+			success:function(data){
+				layer.close(globalLoadingLayer);
+				var result = showDialog(data);
+				if(result){
+					$("#"+divId).find(".peopleCount").text("人数合计 : "+data.total.adultCount+"大"+data.total.childCount+"小");
+					$("#"+divId).find(".needPayMoney").text("应付款合计:"+data.total.transNeedPayMoney+"元");
+					$("#"+divId).find(".payedMoney").text("已付款合计:"+data.total.transPayedMoney+"元");
+				}
+			}
+		});
+	};
+	innerTransfer.innerList = function(divId,type){
+		$.ajax({
+			url: innerTransfer.url("findPager","view"),
+			type: 'POST',
+			dataType: 'json',
+			data: "searchParam="+encodeURIComponent(JSON.stringify(innerTransfer.$searchParam)),
+			beforeSend:function(){
+				globalLoadingLayer = openLoadingLayer();
+			},
+			success:function(data){
+				layer.close(globalLoadingLayer);
+				data.resultList = JSON.parse(data.resultList);
+				var result = showDialog(data);
+				if(result){
+					var html;
+					if (type == 1) {
+						html = outListTemplate(data);
 					}else{
-						pageNo = totalPage - 1; 
+						html = inListTemplate(data);
 					}
-					searchParam.pageNo = pageNo;
-					if(searchParam.pageNo == 0 || searchParam.totalPage == 0)return;
-					inner.list(searchParam);
-				});
-				//查看
-				$obj.find(".btn-TransferOut-view").click(function(){
-					var id = $(this).attr("data-entity-id");
-					inner.openFlag = 2;
-					inner.viewTransferOut(id);
-				});
-				//编辑
-				$obj.find(".btn-TransferOut-edit").click(function(){
-					var id = $(this).attr("data-entity-id");
-					inner.editTransferOut(id);
-					//计算初始化
-			        inner.PayMoneyF();
-				});
-				//撤销
-				$obj.find(".btn-TransferOut-delete").click(function(){
-					var id = $(this).attr("data-entity-id");
-					inner.deleteTransferOut(id);
-				});
-		},
+					$("#"+divId+" .innerList").html(html);
 
-		viewTransferOut:function(id){
-			$.ajax({  
-				url:url("edit","view"),
-				data:"id="+id,
-				dataType:'json',
-				before:function(){
-					globalLoadingLayer = layer.open();
-				},
-				success:function(data){
-					layer.close(globalLoadingLayer);
-					data.innerTransfer = JSON.parse(data.innerTransfer);
-					var html = viewTemplate(data);
-					var innerTransferInHtml = innerTransferInTemplate(data);
-					if(inner.openFlag == 1){
-						addTab(menuKey+"-innerTransferInView","他部转入信息",innerTransferInHtml);
-					}if(inner.openFlag == 2){
-						addTab(menuKey+"-view","我部转出信息",html);
-					}
-					
+					//我部转出小组操作
+					$("#"+divId+" .btn-TransferOut-edit").click(function(){
+						var parents = $(this).closest('tr');
+							id = parents.attr("data-entity-id");
+						innerTransfer.editTransferOut(id);
+					});
+					$("#"+divId+" .btn-TransferOut-view").click(function(){
+						var parents = $(this).closest('tr');
+							id = parents.attr("data-entity-id");
+						innerTransfer.viewTransferOut(id,type);
+					});
+					$("#"+divId+" .btn-TransferOut-delete").click(function(){
+						var parents = $(this).closest('tr');
+							id = parents.attr("data-entity-id");
+						innerTransfer.deleteTransferOut(id);
+					});
+					//他部转入小组操作
+					$("#"+divId+" .btn-TransferIn-save").click(function(){
+						var parents = $(this).closest('tr');
+							id = parents.attr("data-entity-id");
+						innerTransfer.saveTransferIn(id);
+					});
+					$("#"+divId+" .btn-TransferIn-view").click(function(){
+						var parents = $(this).closest('tr');
+							id = parents.attr("data-entity-id");
+						innerTransfer.viewTransferOut(id,type);
+					});
+					$("#"+divId+" .btn-TransferIn-refuse").click(function(){
+						var parents = $(this).closest('tr');
+							id = parents.attr("data-entity-id");
+						innerTransfer.deleteTransferIn(id);
+					});
+
+					//分页
+					//分页--首页按钮事件
+					$("#"+divId+" .pageMode a.first").click(function(){
+						innerTransfer.getSearchParam(divId,type);
+						innerTransfer.$searchParam.pageNo = 0;
+						if(data.searchParam.pageNo == 0 || data.searchParam.totalPage == 0)return;
+						innerTransfer.innerList(divId,type);
+					});
+					//分页--上一页事件
+					$("#"+divId+" .pageMode a.previous").click(function(){
+						innerTransfer.getSearchParam(divId,type);
+						var pageNo = parseInt(data.searchParam.pageNo);
+						var previous = pageNo - 1;
+						if(pageNo == 0){
+							previous = 0;
+						}
+						if(data.searchParam.pageNo == 0 || data.searchParam.totalPage == 0)return;
+						innerTransfer.$searchParam.pageNo = previous;
+						innerTransfer.innerList(divId,type);
+					});   
+					//分页--下一页事件
+					$("#"+divId+" .pageMode a.next").click(function(){
+						innerTransfer.getSearchParam(divId,type);
+						var pageNo = parseInt(data.searchParam.pageNo);
+						var totalPage = parseInt(data.searchParam.totalPage);
+						var next =  pageNo + 1;
+						if(pageNo == totalPage-1){
+							next = pageNo ;
+						}
+						innerTransfer.$searchParam.pageNo = next;
+						if(pageNo == totalPage-1 || totalPage == 0)return;
+						innerTransfer.innerList(divId,type);
+					});
+					//分页--尾页事件
+					$("#"+divId+" .pageMode a.last").click(function(){
+						innerTransfer.getSearchParam(divId,type);
+						var totalPage = parseInt(data.searchParam.totalPage);
+						var pageNo = 0;
+						if(totalPage==0){
+							pageNo = 0;
+						}else{
+							pageNo = totalPage - 1; 
+						}
+						innerTransfer.$searchParam.pageNo = pageNo;
+						if(data.searchParam.pageNo == totalPage-1 || data.searchParam.totalPage == 0)return;
+						innerTransfer.innerList(divId,type);
+					});
 				}
-			});
-		},
-
-		//我社转出编辑操作
-		editTransferOut:function(id){
-			$.ajax({  
-				url:url("edit","view"),
-				data:"id="+id,
-				dataType:'json',
-				before:function(){
-					globalLoadingLayer = layer.open();
-				},
-				success:function(data){
-					layer.close(globalLoadingLayer);
-					data.innerTransfer = JSON.parse(data.innerTransfer);
-					data.businessGroup = JSON.parse(data.businessGroup);
-					var html = editTemplate(data),
-					validator;
+			}
+		})
+	};
+	innerTransfer.viewTransferOut = function(id,type){
+		$.ajax({  
+			url:innerTransfer.url("edit","view"),
+			data:"id="+id,
+			dataType:'json',
+			before:function(){
+				globalLoadingLayer = layer.open();
+			},
+			success:function(data){
+				layer.close(globalLoadingLayer);
+				data.innerTransfer = JSON.parse(data.innerTransfer);
+				var html = viewTemplate(data);
+				if(type == 1){
+					addTab(menuKey+"-outView","我部转出小组信息",html);
+				}else{
+					addTab(menuKey+"-inView","他部转入小组信息",html);
+				}
+				
+			}
+		});
+	};
+	innerTransfer.editTransferOut = function(id){
+		$.ajax({
+			url:innerTransfer.url("edit","view"),
+			data:"id="+id,
+			dataType:'json',
+			before:function(){
+				globalLoadingLayer = layer.open();
+			},
+			success:function(data){
+				layer.close(globalLoadingLayer);
+				data.innerTransfer = JSON.parse(data.innerTransfer);
+				data.businessGroup = JSON.parse(data.businessGroup);
+				var result = showDialog(data);
+				if (result) {
+					var html = editTemplate(data),validator;
 					if($("#tab-"+menuKey+"-edit-content").length > 0) {
 						addTab(menuKey+"-edit","修改内转信息");
-						if(!!inner.edited["edit"] && inner.edited["edit"] != ""){
+						if(!!innerTransfer.edited["edit"] && innerTransfer.edited["edit"] != ""){
 							addTab(menuKey+"-edit","修改内转信息");
 							rule.transferCheckor($(".inner-edit"));
 							showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
-								 inner.saveEditTranIn(0);
-								 inner.edited["edit"] = "";
+								 innerTransfer.saveEditTranIn(0);
+								 innerTransfer.edited["edit"] = "";
 								 addTab(menuKey+"-edit","修改内转信息",html);
 								 validator=rule.transferCheckor($(".inner-edit"));
 					
 							 },function(){
 								 addTab(menuKey+"-edit","修改内转信息",html);
-								 inner.edited["edit"] = "";
+								 innerTransfer.edited["edit"] = "";
 								 validator=rule.transferCheckor($(".inner-edit"));
 						
 							 });
@@ -382,15 +317,13 @@ define(function(require, exports) {
 					}else{
 						addTab(menuKey+"-edit","修改内转信息",html);
 						validator=rule.transferCheckor($(".inner-edit"));
-				
 					}
 					$("#tab-"+menuKey+"-edit-content").on("change",function(){
-						inner.edited["edit"] = "edit"; 
-					
+						innerTransfer.edited["edit"] = "edit"; 					
 					})
-
 					//新增&&智能计算
-					inner.innitAddFee(validator);
+					//inner.innitAddFee(validator);
+					innerTransfer.innitAddFee(validator);
 					rule.update(validator);
 
 					$obj=$("#tab-arrange_inner_Transfer-edit-content");
@@ -399,565 +332,449 @@ define(function(require, exports) {
 					$obj.find(".btn-edittransfer-delete").off().on("click",function(){
 						var tr =$(this).parent().parent();
 						var id = tr.attr("data-entity-id");
-						inner.delTransferData(id,tr);
+						innerTransfer.delTransferData(id,tr);
 					});
 				   
 					$obj.find(".btn-saveTransoutInfo").click(function(){
 					    // 表单校验
 				        if (!validator.form()) { return; }
-						inner.saveEditTranIn(1);
+						innerTransfer.saveEditTranIn(1);
 
 					})
 					$obj.find(".btn-cancelTransfer").click(function(){
 						showConfirmDialog($( "#confirm-dialog-message" ), "确定关闭本选项卡?",function(){
 							closeTab(menuKey + "-edit");
-							inner.edited["edit"] = "";
+							innerTransfer.edited["edit"] = "";
 						});
 					})
 				}
-			});
-		},
-
-
-		saveEditTranIn:function(isClose){
-			var $obj=$("#tab-arrange_inner_Transfer-edit-content"),
-			isCurrent; 
-			//对方是否现收
-			if ($obj.find('input[name=isCurrent]').is(":checked")==true) {
-              isCurrent=1;
-			} else{
-			  isCurrent=0;
-			};
-
-			function getValParam (name){
-				var val = $obj.find("[name="+name+"]").val();
-				return val;
 			}
-			var innerTransfer = {
-				id : getValParam("id"),//	内转ID		
-				innerTransferFeeSet : "",	//内转的其他费用	array<object>	
-				toBusinessGroupId :$obj.find("select[name=businessGroup_id]").val(),//	转给的部门ID	  	
-				transAdultPrice	: getValParam("transAdultPrice"),//内转大人价		
-				transChildPrice	: getValParam("transChildPrice"), //内转小孩价		
-				transNeedPayMoney :getValParam("transNeedPayMoney"),//	应付		需要计算
-				transPayedMoney	 : getValParam("transPayedMoney"), //已付		填写
-				transRemark : getValParam("transRemark")
-			}   
+		});
+	};
+	innerTransfer.innitAddFee = function(validator){  
+		var $obj=$("#tab-arrange_inner_Transfer-edit-content");
+		$obj.find("input[name=transChildPrice],input[name=transAdultPrice],input[name=count],input[name=price]").keyup(function(){
+			innerTransfer.PayMoneyF();
+		});
+		//给新增费用绑定事件
+		$obj.find(".btn-transfer-addCost").click(function(){
+			var html="<tr class=\"transferFee1SelectId\">"+
+			"<td><span name=\"type\" value=\"0\">其他费用</span></td>"+
+			"<td><input  name=\"discribe\" type=\"text\" class=\"col-sm-10  no-padding-right\"  maxlength=\"100\" /></td>"+
+			"<td><input  name=\"count\" type=\"text\" class=\"col-sm-10  no-padding-right count\" maxlength=\"6\" /></td>"+
+			"<td><span class=\"necessary  pull-left col-sm-2\"></span><input  name=\"price\" type=\"text\" class=\"col-sm-10  no-padding-right price\" maxlength=\"9\" /></td>"+
+			"<td><a class=\"cursor btn-edittransfer-delete\">删除</a></td>"+
+			"</tr>";
+			$obj.find(".addTransferCost").append(html);
+			//表单验证
+			rule.update(validator);
 
-			//获取新增费用项目
-			//添加费用JSON
-			var otherFeeJsonAdd = [];
-			var otherFeeJsonAddLength=$obj.find(".addTransferCost tr").length;
-			$obj.find(".addTransferCost tr").each(function(i){
-				var id=$(this).attr("data-entity-id");
-				var discribe = $(this).find("input[name=discribe]").val();
-				var count = $(this).find("input[name=count]").val();
-				var price = $(this).find("input[name=price]").val();
-				if(i>1){
-					var otherFeeJson = { 
-						"id":id,
-						"discribe":discribe,
-						"count":count,
-						"price" : price
-					}
-					otherFeeJsonAdd.push(otherFeeJson);
-				}
+			//绑定删除分团转客信息
+			$(".btn-edittransfer-delete").off().on("click",function(){
+				var tr =$(this).closest('tr');
+				var id = tr.attr("data-entity-id");
+				innerTransfer.delTransferData(id,tr);
+			});
+			$obj.find("input[name=transChildPrice],input[name=transAdultPrice],input[name=count],input[name=price]").keyup(function(){
+				innerTransfer.PayMoneyF();
+			});
+			$(document).ready(function(){
+				innerTransfer.PayMoneyF();
 			})
-
-			innerTransfer.innerTransferFeeSet=otherFeeJsonAdd;
-			var innerTransfer=JSON.stringify(innerTransfer);
-
-			if (isCurrent==1) {
-				$.ajax({
-					url:""+APP_ROOT+"back/innerTransfer.do?method=update&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
-					data:"innerTransfer="+encodeURIComponent(innerTransfer)+"&isCurrent="+isCurrent,
-					datatype:"json",
-					beforeSend:function(){
-						globalLoadingLayer = layer.open({
-							type:3
-						});
-					},
-					success:function(data){
-						layer.close(globalLoadingLayer);
-						var result = showDialog(data);  
-						if(result){  
-							showMessageDialog($( "#confirm-dialog-message" ),data.message);
-							//if(isClose == 1){
-								//closeTab(menuKey+"-updateTransfer");
-								inner.edited["edit"] = "";
-								if(isClose == 1){
-									closeTab(menuKey+"-edit");
-									inner.list(searchParam);
-								}
-							//}
-							
-						}
-					}
-				});
-
-			} else{
-				showMessageDialog($( "#confirm-dialog-message" ),"必须有一个游客小组指定现收!");
-			};
-		},
-
-
-		innitAddFee:function(validator){  
-			var $obj=$("#tab-arrange_inner_Transfer-edit-content");
-			$obj.find("input[name=transChildPrice]").keyup(function(){
-				inner.PayMoneyF();
-			});
-			$obj.find("input[name=transAdultPrice]").keyup(function(){
-				console.log("keyup");
-				inner.PayMoneyF();
-			});
-			//给新增费用绑定事件
-			$obj.find(".btn-transfer-addCost").click(function(){
-				var html="<tr class=\"transferFee1SelectId\">"+
-				"<td><span name=\"type\" value=\"0\">其他费用</span></td>"+
-				"<td><input  name=\"discribe\" type=\"text\" class=\"col-sm-10  no-padding-right\" /></td>"+
-				"<td><input  name=\"count\" type=\"text\" class=\"col-sm-10  no-padding-right count\" /></td>"+
-				"<td><span class=\"necessary  pull-left col-sm-2\"></span><input  name=\"price\" type=\"text\" class=\"col-sm-10  no-padding-right price\" /></td>"+
-				"<td><a class=\"cursor btn-edittransfer-delete\">删除</a></td>"+
-				"</tr>";
-				$obj.find(".addTransferCost").append(html);
-				//表单验证
-				rule.update(validator);
-
-				//绑定删除分团转客信息
-				$(".btn-edittransfer-delete").off().on("click",function(){
-					var tr =$(this).parent().parent();
-					var id = tr.attr("data-entity-id");
-					inner.delTransferData(id,tr);
-				});
-				//其他费用数量
-				$obj.find("input[name=count]").keyup(function(){
-					inner.PayMoneyF();
-				});
-				//其他费用单价
-				$obj.find("input[name=price]").keyup(function(){
-					inner.PayMoneyF();
-				});
-				$(document).ready(function(){
-					inner.PayMoneyF();
-				})
-				
-
-			});
-
-		},
-
-
-		//付款账务--应付/现付/已付的计算
-		PayMoneyF:function(){
-			var $objFee=$("#tab-arrange_inner_Transfer-edit-content");
-			var $obj=$(".addTransferCostTable"); 
-			var needPayMoney = 0;
-			var transNeedPayMoney = $objFee.find("input[name=transNeedPayMoney]");//应付
-			var transPayedMoney = $obj.find("input[name=transPayedMoney]"); //已付
-			var trList = $(".addTransferCostTable tbody.addTransferCost").find("tr");
-						
-			for(i=0;i<trList.length;i++){
-				var a =parseFloat(trList.eq(i).find(".count").val());
-				var b =parseFloat(trList.eq(i).find(".price").val());
-					if(isNaN(a)){
-						a = 0;
-					}
-					if(isNaN(b)){
-						b =0;
-					}
-				needPayMoney += a*b;
-			}
-			//应付
-			transNeedPayMoney.val(needPayMoney.toFixed(2));
-		},
-
-
-		//删除添加其他费用
-		delTransferData:function(id,tr){
-			if( id!=null && id!=""){
-				$.ajax({
-					url:""+APP_ROOT+"back/innerTransfer.do?method=deleteFee&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=delete",
-					type:"POST",
-					data:"id="+id,
-					dataType:"json",
-					beforeSend:function(){
-						globalLoadingLayer = layer.open({
-							type:3
-						});
-					},
-					success:function(data){
-						$(tr).remove();
-						layer.close(globalLoadingLayer);
-						inner.PayMoneyF();
-					}
-				});	
-			}else{
-				//移除空的其他费用
-				$(tr).remove();
-				inner.PayMoneyF();
-			}
-		},
-
-
-
-		//删除我部转出
-		deleteTransferOut:function(id){
-			var dialogObj = $( "#confirm-dialog-message" );
-			dialogObj.removeClass('hide').dialog({
-				modal: true,
-				title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-				title_html: true,
-				draggable:false,
-				buttons: [ 
-					{
-						text: "否",
-						"class" : "btn btn-minier",
-						click: function() {
-							$( this ).dialog( "close" );
-						}
-					},
-					{
-						text: "是",
-						"class" : "btn btn-primary btn-minier",
-						click: function() {
-		
-								$.ajax({
-									url:""+APP_ROOT+"back/innerTransfer.do?method=delete&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=delete",
-									type:"POST",
-									data:"id="+id + "&isDelete=1",
-									dataType:"json",
-									beforeSend:function(){
-										globalLoadingLayer = layer.open({
-											type:3
-										});
-									},
-									success:function(data){
-										var result = showDialog(data);
-										layer.close(globalLoadingLayer);
-										inner.list(searchParam);
-									 }
-								});
-							$( this ).dialog( "close" );
-						}
-					}
-				],
-				open:function(event,ui){
-					$(this).find("p").text("是否撤销内转操作？");
+		});
+	};
+	innerTransfer.PayMoneyF = function(){
+		var $objFee=$("#tab-arrange_inner_Transfer-edit-content");
+		var $obj=$(".addTransferCostTable"); 
+		var needPayMoney = 0;
+		var transNeedPayMoney = $objFee.find("input[name=transNeedPayMoney]");//应付
+		var transPayedMoney = $obj.find("input[name=transPayedMoney]"); //已付
+		var trList = $(".addTransferCostTable tbody.addTransferCost").find("tr");
+					
+		for(i=0;i<trList.length;i++){
+			var a =parseFloat(trList.eq(i).find(".count").val());
+			var b =parseFloat(trList.eq(i).find(".price").val());
+				if(isNaN(a)){
+					a = 0;
 				}
-			});
-		},	
-
-
-		//他部转入
-		listTransferIn:function(searchParam){
-			globalLoadingLayer = layer.open({
-				zIndex:1028,
-				type:3
-			});
-			if(searchParam.first=="1"){
-				requestMain = true;
-				requestTotal = true;
-				searchParam.first = "2";
-			}
-			var  map2 = {
-
-				searchParam : "",
-				resultList : "",
-				total : "",
-				lineProduct : "",
-				user : "",
-				businessGroup : ""
-			};
-
-		
-			//统计数据  
-			if(requestTotal){
-				$.ajax({  
-					url:url("findTotal","view"),
-					data:"searchParam="+encodeURIComponent(JSON.stringify(searchParam)),
-					dataType:'json',
-					success:function(data2){
-						map2.total = data2.total;
-						requestTotal = false;
-						/*var $transObj=$(".transferIn-Header-Cost");
-						$transObj.find(".adultCount").text(total.adultCount);
-						$transObj.find(".childCount").text(total.childCount);
-						$transObj.find(".transNeedPayMoney").text(total.transNeedPayMoney);
-						$transObj.find(".transPayedMoney").text(total.transPayedMoney);*/
-					}
-				});
-			}
-
-			if(requestMain){
-				//搜索头数据  
-				$.ajax({  
-					url:url("findListMain","view"),
-					data:"",
-					dataType:'json',
-					success:function(data1){
-						map2.lineProduct = JSON.parse(data1.lineProduct);
-						map2.user = JSON.parse(data1.user);
-						map2.businessGroup = JSON.parse(data1.businessGroup);
-						//requestMain = false;
-						searchParam.first = "2";
-					}
-				});
-			};
-
-
-			//分页结果集
-			$.ajax({  
-				url:url("findPager","view"),
-				data:"searchParam="+encodeURIComponent(JSON.stringify(searchParam)),
-				dataType:'json',
-				success:function(data3){
+				if(isNaN(b)){
+					b =0;
+				}
+			needPayMoney += a*b;
+		}
+		//应付
+		transNeedPayMoney.val(needPayMoney.toFixed(2));
+	};
+	innerTransfer.delTransferData = function(id,tr){
+		if( id!=null && id!=""){
+			$.ajax({
+				url:innerTransfer.url("deleteFee","delete"),
+				type:"POST",
+				data:"id="+id,
+				dataType:"json",
+				beforeSend:function(){
+					globalLoadingLayer = layer.open({
+						type:3
+					});
+				},
+				success:function(data){
+					$(tr).remove();
 					layer.close(globalLoadingLayer);
-					map2.resultList = JSON.parse(data3.resultList);
-					map2.searchParam = data3.searchParam;
-					var html = listTransferInTemplate(map2);
-					$("#inner-TransferIn").find(".transferIn-content").html(html);
-
-					//时间控件
-					inner.initTimePicker();
-
-					//搜索栏状态button下拉事件
-					$("#" +tabId+" .innerTransfer_list .btn-status .dropdown-menu a").click(function(){
-						$(this).parent().parent().parent().find("button").attr("data-value",$(this).attr("data-value"));
-						$(this).parent().parent().parent().find("span").text($(this).text());
-						searchParam = buildSearchParam();
-						requestTotal = true;
-						inner.listTransferIn(searchParam);  
-					});
-
-
-					//过滤搜索时间是否执行初始化操作
-					/*if (searchParam.startTime!=null&&searchParam.endTime!=null) {
-					} else{
-						//时间默认一周初始化 
-					    inner.initSinTimer();
-					};*/
-				
-					function getVal (name){
-					   var val = $("#" +tabId+" .transferIn-content").find("[name="+name+"]").val();
-							return val;
-					}
-
-					function buildSearchParam(){
-						searchParam.pageNo = getVal("pageNo");
-						searchParam.totalPage = getVal("totalPage2");
-						searchParam.type = 2;
-						searchParam.lineProductId = getVal("lineProductId");
-						searchParam.businessGroupId = getVal("businessGroupId");
-						searchParam.creator = getVal("creator");
-						searchParam.startTime = getVal("startTime");
-						searchParam.endTime = getVal("endTime");
-						searchParam.status = getVal("status");
-						return searchParam;
-					}
-
-					//搜索事件
-					$("#" +tabId+" .btn-transferIn-search").click(function(){
-						searchParam = buildSearchParam();
-						searchParam.pageNo = 0;
-						requestTotal = true;
-
-						inner.listTransferIn(searchParam=buildSearchParam());
-				   });
-
-					//导出操作 btn-transferIn-export
-					$("#" +tabId +"  .innerTransfer_list .btn-transferIn-export").click(function(){
-						searchParam.type=2; 
-						var exportUrl ="" + url("findExcel","view") + "&searchParam="+encodeURIComponent(JSON.stringify(searchParam));
-						window.location.href=exportUrl;
-					});
-
-				   inner.transferInfindPager(searchParam=buildSearchParam());
-
+					innerTransfer.PayMoneyF();
 				}
-		   })	    
-		},
-
-		transferInfindPager:function(searchParam){
-				var $obj=$("#" +tabId+" .transferIn-content ");
-			   //分页--首页按钮事件
-				$obj.find(".pageMode a.first").click(function(){
-					searchParam.pageNo = 0;
-					if(searchParam.pageNo == 0 || totalPage == 0)return;
-					inner.listTransferIn(searchParam);
-				});
-				//分页--上一页事件
-				$obj.find(".pageMode a.previous").click(function(){
-					var pageNo = parseInt(searchParam.pageNo);
-					var previous = pageNo - 1;
-					if(pageNo == 0){
-						previous = 0;
-					}
-					if(pageNo == 0 || totalPage == 0)return;
-					searchParam.pageNo = previous;
-					inner.listTransferIn(searchParam);
-				});   
-				//分页--下一页事件
-				$obj.find(".pageMode a.next").click(function(){
-					var pageNo = parseInt(searchParam.pageNo);
-					var totalPage = parseInt(searchParam.totalPage);
-					var next =  pageNo + 1;
-					if(pageNo == totalPage-1){
-						next = pageNo ;
-					}
-					if(pageNo == 0 || totalPage == 0)return;
-					searchParam.pageNo = next;
-					inner.listTransferIn(searchParam);
-				});
-				//分页--尾页事件
-				$obj.find(".pageMode a.last").click(function(){
-					var totalPage = parseInt(searchParam.totalPage);
-					var pageNo = 0;
-					if(totalPage==0){
-						pageNo = 0;
-					}else{
-						pageNo = totalPage - 1; 
-					}
-					if(pageNo == 0 || totalPage == 0)return;
-					searchParam.pageNo = pageNo;
-					inner.listTransferIn(searchParam);
-				});
-				//查看
-				$obj.find(".btn-transfer-view").click(function(){
-					var id = $(this).attr("data-entity-id");
-					inner.openFlag = 1;
-					inner.viewTransferOut(id);
-				});
-
-
-				//确认
-				$obj.find(".btn-transfer-save").click(function(){
-					var id = $(this).attr("data-entity-id");
-					inner.saveTransferIn(id);
-				});
-
-				//拒绝
-				$obj.find(".btn-transfer-refuse").click(function(){
-					var id = $(this).attr("data-entity-id");
-					inner.deleteTransferIn(id);
-				});
-			
-
-		},
-
-
-
-
-
-		//确认操作
-		saveTransferIn:function(id){
-			var dialogObj = $( "#confirm-dialog-message" );
-			dialogObj.removeClass('hide').dialog({
-				modal: true,
-				title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-				title_html: true,
-				draggable:false,
-				buttons: [ 
-					{
-						text: "否",
-						"class" : "btn btn-minier",
-						click: function() {
-							$( this ).dialog( "close" );
-						}
-					},
-					{
-						text: "是",
-						"class" : "btn btn-primary btn-minier",
-						click: function() {
-		
-							$.ajax({
-								url:""+APP_ROOT+"back/innerTransfer.do?method=save&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=add",
-								type:"POST",
-								data:"id="+id + "&isDelete=1",
-								dataType:"json",
-								beforeSend:function(){
-									globalLoadingLayer = layer.open({
-										type:3
-									});
-								},
-								success:function(data){
-									var result = showDialog(data);
-									layer.close(globalLoadingLayer);
-									searchParam.type=2;
-									searchParam.pageNo=0;
-									searchParam.status="";
-									inner.listTransferIn(searchParam);
-								 }
-							});
-							$( this ).dialog( "close" );
-						}
-					}
-				],
-				open:function(event,ui){
-					$(this).find("p").text("是否确认转入操作？");
-				}
-			});
-		},
-
-
-		//拒绝操作
-		deleteTransferIn:function(id){
-			var dialogObj = $( "#confirm-dialog-message" );
-			dialogObj.removeClass('hide').dialog({
-				modal: true,
-				title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-				title_html: true,
-				draggable:false,
-				buttons: [ 
-					{
-						text: "否",
-						"class" : "btn btn-minier",
-						click: function() {
-							$( this ).dialog( "close" );
-						}
-					},
-					{
-						text: "是",
-						"class" : "btn btn-primary btn-minier",
-						click: function() {
-		
-							$.ajax({
-								url:""+APP_ROOT+"back/innerTransfer.do?method=refuse&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=delete",
-								type:"POST",
-								data:"id="+id + "&isDelete=1",
-								dataType:"json",
-								beforeSend:function(){
-									globalLoadingLayer = layer.open({
-										type:3
-									});
-								},
-								success:function(data){
-									var result = showDialog(data);
-									layer.close(globalLoadingLayer);
-									inner.listTransferIn(searchParam);
-								 }
-							});
-							$( this ).dialog( "close" );
-						}
-					}
-				],
-				open:function(event,ui){
-					$(this).find("p").text("是否拒绝转入操作？");
-				}
-			});
-		},
-		save : function(saveType){
-			console.log(saveType);
-			if(saveType == "edit"){
-				inner.saveEditTranIn(1);
-			} 
-		},
-		clearEdit : function(clearType){
-			inner.edited[clearType] = "";
-		}		
+			});	
+		}else{
+			//移除空的其他费用
+			$(tr).remove();
+			innerTransfer.PayMoneyF();
+		}
 	}
+	innerTransfer.saveEditTranIn = function(isClose){
+		var $obj=$("#tab-arrange_inner_Transfer-edit-content")
+		function getValParam (name){
+			var val = $obj.find("[name="+name+"]").val();
+			return val;
+		}
+		var innerTransferJson = {
+			id : getValParam("id"),//	内转ID		
+			innerTransferFeeSet : "",	//内转的其他费用	array<object>	
+			toBusinessGroupId :$obj.find("select[name=businessGroup_id]").val(),//	转给的部门ID	  	
+			transAdultPrice	: getValParam("transAdultPrice"),//内转大人价		
+			transChildPrice	: getValParam("transChildPrice"), //内转小孩价		
+			transNeedPayMoney :getValParam("transNeedPayMoney"),//	应付		需要计算
+			transPayedMoney	 : getValParam("transPayedMoney"), //已付		填写
+			transRemark : getValParam("transRemark")
+		}   
+
+		//获取新增费用项目
+		//添加费用JSON
+		var otherFeeJsonAdd = [];
+		var otherFeeJsonAddLength=$obj.find(".addTransferCost tr").length;
+		$obj.find(".addTransferCost tr").each(function(i){
+			var id=$(this).attr("data-entity-id");
+			var discribe = "\""+$(this).find("input[name=discribe]").val()+"\"";
+			var count = $(this).find("input[name=count]").val();
+			var price = $(this).find("input[name=price]").val();
+			if(i>1){
+				var otherFeeJson = { 
+					"id":id,
+					"discribe":discribe,
+					"count":count,
+					"price" : price
+				}
+				otherFeeJsonAdd.push(otherFeeJson);
+			}
+		})
+		innerTransferJson.innerTransferFeeSet=otherFeeJsonAdd;
+		var innerTransferJson=JSON.stringify(innerTransferJson);
+		$.ajax({
+			url:""+APP_ROOT+"back/innerTransfer.do?method=update&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
+			data:"innerTransfer="+encodeURIComponent(innerTransferJson),
+			datatype:"json",
+			beforeSend:function(){
+				globalLoadingLayer = layer.open({
+					type:3
+				});
+			},
+			success:function(data){
+				layer.close(globalLoadingLayer);
+				var result = showDialog(data);  
+				if(result){  
+					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+						innerTransfer.edited["edit"] = "";
+						if(isClose == 1){
+							closeTab(menuKey+"-edit");
+							var divId = "inner-TransferOut",
+								type = "1";
+							innerTransfer.getSearchParam(divId,type);
+							innerTransfer.innerList(divId,type);
+						}
+					});
+				}
+			}
+		});
+	}
+	innerTransfer.deleteTransferOut = function(id){
+		var dialogObj = $( "#confirm-dialog-message" );
+		dialogObj.removeClass('hide').dialog({
+			modal: true,
+			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
+			title_html: true,
+			draggable:false,
+			buttons: [ 
+				{
+					text: "否",
+					"class" : "btn btn-minier",
+					click: function() {
+						$( this ).dialog( "close" );
+					}
+				},
+				{
+					text: "是",
+					"class" : "btn btn-primary btn-minier",
+					click: function() {
+							$.ajax({
+								url:innerTransfer.url("delete","delete"),
+								type:"POST",
+								data:"id="+id + "&isDelete=1",
+								dataType:"json",
+								beforeSend:function(){
+									globalLoadingLayer = layer.open({
+										type:3
+									});
+								},
+								success:function(data){
+									layer.close(globalLoadingLayer);
+									var result = showDialog(data);
+									if (result) {
+										var divId = "inner-TransferOut",
+											type = "1";
+										innerTransfer.getSearchParam(divId,type);
+										innerTransfer.innerList(divId,type);
+									}
+								 }
+							});
+						$( this ).dialog( "close" );
+					}
+				}
+			],
+			open:function(event,ui){
+				$(this).find("p").text("是否撤销内转操作？");
+			}
+		});
+	};
+	innerTransfer.saveTransferIn = function(id){
+		var dialogObj = $( "#confirm-dialog-message" );
+		dialogObj.removeClass('hide').dialog({
+			modal: true,
+			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
+			title_html: true,
+			draggable:false,
+			buttons: [ 
+				{
+					text: "否",
+					"class" : "btn btn-minier",
+					click: function() {
+						$( this ).dialog( "close" );
+					}
+				},
+				{
+					text: "是",
+					"class" : "btn btn-primary btn-minier",
+					click: function() {
 	
-	exports.list = inner.list; 
-	exports.isEdited = inner.isEdited; 
-	exports.save = inner.save; 
-	exports.clearEdit = inner.clearEdit; 
+						$.ajax({
+							url:innerTransfer.url("save","add"),
+							type:"POST",
+							data:"id="+id + "&isDelete=1",
+							dataType:"json",
+							beforeSend:function(){
+								globalLoadingLayer = layer.open({
+									type:3
+								});
+							},
+							success:function(data){
+								layer.close(globalLoadingLayer);
+								var result = showDialog(data);
+								if (result) {
+									var divId = "inner-TransferIn",
+										type = "2";
+									innerTransfer.getSearchParam(divId,type);
+									innerTransfer.innerList(divId,type);
+								}
+							 }
+						});
+						$( this ).dialog( "close" );
+					}
+				}
+			],
+			open:function(event,ui){
+				$(this).find("p").text("是否确认转入操作？");
+			}
+		});
+	};
+	innerTransfer.deleteTransferIn = function(id){
+		var dialogObj = $( "#confirm-dialog-message" );
+		dialogObj.removeClass('hide').dialog({
+			modal: true,
+			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
+			title_html: true,
+			draggable:false,
+			buttons: [ 
+				{
+					text: "否",
+					"class" : "btn btn-minier",
+					click: function() {
+						$( this ).dialog( "close" );
+					}
+				},
+				{
+					text: "是",
+					"class" : "btn btn-primary btn-minier",
+					click: function() {
+						$.ajax({
+							url:innerTransfer.url("refuse","delete"),
+							type:"POST",
+							data:"id="+id + "&isDelete=1",
+							dataType:"json",
+							beforeSend:function(){
+								globalLoadingLayer = layer.open({
+									type:3
+								});
+							},
+							success:function(data){
+								layer.close(globalLoadingLayer);
+								var result = showDialog(data);
+								if (result) {
+									var divId = "inner-TransferIn",
+										type = "2";
+									innerTransfer.getSearchParam(divId,type);
+									innerTransfer.innerList(divId,type);
+								}
+							 }
+						});
+						$( this ).dialog( "close" );
+					}
+				}
+			],
+			open:function(event,ui){
+				$(this).find("p").text("是否拒绝转入操作？");
+			}
+		});
+	};
+	innerTransfer.chooseLineProduct = function(divId){
+		var chooseLineProduct = $("#"+divId).find(".T-lineProductChoose");
+		chooseLineProduct.autocomplete({
+			minLength:0,
+			change :function(event, ui){
+				if(ui.item == null){
+					$(this).val("");
+					var parents = $(this).parent();
+					parents.find("input[name=lineProductId]").val("");
+				}
+			},
+			select :function(event, ui){
+				var _this = this, parents = $(_this).parent();
+				parents.find("input[name=lineProductId]").val(ui.item.id).trigger('change');
+			}
+		}).unbind("click").click(function(){
+			var obj = this,
+				list = innerTransfer.allData.lineProduct;
+			if(list && list.length > 0){
+				for(var i=0; i < list.length; i++){
+					list[i].value = list[i].name;
+				}
+				$(obj).autocomplete('option','source', list);
+				$(obj).autocomplete('search', '');
+			}else{
+				layer.tips('没有内容', obj, {
+				    tips: [1, '#3595CC'],
+				    time: 2000
+				});
+			}
+		})
+	};
+	innerTransfer.chooseBusinessGroup = function(divId,type){
+		var chooseBusinessGroup = $("#"+divId).find(".T-businessGroupChoose");
+		chooseBusinessGroup.autocomplete({
+			minLength:0,
+			change :function(event, ui){
+				if(ui.item == null){
+					$(this).val("");
+					var parents = $(this).parent();
+					parents.find("input[name=businessGroupId]").val("");
+				}
+			},
+			select :function(event, ui){
+				var _this = this, parents = $(_this).parent();
+				parents.find("input[name=businessGroupId]").val(ui.item.id).trigger('change');
+			}
+		}).unbind("click").click(function(){
+			var businessData;
+			if (type == 1) {
+				businessData = innerTransfer.allData.fromBusinessGroup;
+			}else{
+				businessData = innerTransfer.allData.toBusinessGroup;
+			}
+			var obj = this,
+				list = businessData;
+			if(list && list.length > 0){
+				for(var i=0; i < list.length; i++){
+					list[i].value = list[i].name;
+				}
+				$(obj).autocomplete('option','source', list);
+				$(obj).autocomplete('search', '');
+			}else{
+				layer.tips('没有内容', obj, {
+				    tips: [1, '#3595CC'],
+				    time: 2000
+				});
+			}
+		})
+	};
+	innerTransfer.chooseCreator = function(divId,type){
+		var chooseCreator = $("#"+divId).find(".T-creatorChoose");
+		chooseCreator.autocomplete({
+			minLength:0,
+			change :function(event, ui){
+				if(ui.item == null){
+					$(this).val("");
+					var parents = $(this).parent();
+					parents.find("input[name=creatorId]").val("");
+				}
+			},
+			select :function(event, ui){
+				var _this = this, parents = $(_this).parent();
+				parents.find("input[name=creatorId]").val(ui.item.id).trigger('change');
+			}
+		}).unbind("click").click(function(){
+			var creatorData;
+			if (type == 1) {
+				creatorData = innerTransfer.allData.fromUser;
+			}else{
+				creatorData = innerTransfer.allData.toUser;
+			}
+			var obj = this,
+				list = creatorData;
+			if(list && list.length > 0){
+				for(var i=0; i < list.length; i++){
+					list[i].value = list[i].realName;
+				}
+				$(obj).autocomplete('option','source', list);
+				$(obj).autocomplete('search', '');
+			}else{
+				layer.tips('没有内容', obj, {
+				    tips: [1, '#3595CC'],
+				    time: 2000
+				});
+			}
+		})
+	};
+	innerTransfer.datePicker = function(tab){
+		$("#"+tab+" .datepicker").datepicker({
+			autoclose: true,
+			todayHighlight: true,
+			format: 'yyyy-mm-dd',
+			language: 'zh-CN'
+		})
+	}
+	innerTransfer.isEdited = function(editedType){
+		if(!!innerTransfer.edited[editedType] && innerTransfer.edited[editedType] != ""){
+			return true;
+		}
+		return false;
+	}
+	innerTransfer.clearEdit = function(clearType){
+		innerTransfer.edited[clearType] = "";
+	}
+	innerTransfer.save = function(saveType){
+		if(saveType == "edit"){
+			innerTransfer.saveEditTranIn(1);
+		} 
+	}
+
+	exports.innerTransfer = innerTransfer.initModule;
+	exports.isEdited = innerTransfer.isEdited; 
+	exports.save = innerTransfer.save; 
+	exports.clearEdit = innerTransfer.clearEdit; 
 });
