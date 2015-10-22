@@ -10,7 +10,8 @@ define(function(require, exports) {
 	viewTemplate=require("./view/viewTransform"),
 	updateTemplate=require("./view/updateTransfer"),
 	tabId = "tab-" + menuKey + "-content",
-	checkTable="arrange_transfer-updateTransfer";   
+	checkTable="arrange_transfer-updateTransfer",
+	map;
 	var transfer = {
 		//我社转出搜索字段
 		searData:{
@@ -60,7 +61,7 @@ define(function(require, exports) {
 			};
 			pager = JSON.stringify(pager);
 
-			var map = {
+			map = {
 				totalPayed : "",
 				totalNeedPay : "",
 				totalAdultCount:"",
@@ -939,7 +940,7 @@ define(function(require, exports) {
                 	layer.close(globalLoadingLayer);
 					var result = showDialog(data);
 					if(result){
-						var partnerAgencyList = JSON.parse(data.partnerAgencyList);
+						var partnerAgencyList = map.partnerAgency;
 						if(partnerAgencyList != null && partnerAgencyList.length > 0){
 							for(var i=0;i<partnerAgencyList.length;i++){
 								partnerAgencyList[i].value = partnerAgencyList[i].travelAgencyName;
