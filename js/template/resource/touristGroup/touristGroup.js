@@ -1438,6 +1438,11 @@ define(function(require, exports) {
 							closeTab(menuKey+"-add");
 							touristGroup.listTouristGroup(0,"","","","","","","","");
 							touristGroup.edited["add"] = "";
+
+							// 判断中转
+							if (isNeedArriveService || isNeedBus || isNeedLeaveService) {
+								Tools.updateTransit(data.touristGroupId);
+							}
 						});
 					}
 				}
