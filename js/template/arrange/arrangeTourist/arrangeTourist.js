@@ -59,7 +59,7 @@ define(function(require, exports) {
 						}
 						arrangeTourist.listArrangeTourist(0,"","");  
 
-						//给搜索按钮绑定事件
+						//给搜索按钮绑定事件area
 						$("#"+tabId+" .arrangeTouristMain .btn-arrangeTourist-search").click(function(){
 							arrangeTourist.searchData = {
 									lineProductId : $("#tab-"+menuKey+"-content .arrangeTouristMain select[name=lineProductId]").val(),
@@ -1601,7 +1601,7 @@ define(function(require, exports) {
 						    type: 1,
 						    title:"编辑费用信息",
 						    skin: 'layui-layer-rim', //加上边框
-						    area: ['60%', '75%'], //宽高
+						    area: ['60%'], //宽高
 						    zIndex:1028,
 						    content: html,
 						    success:function(){  
