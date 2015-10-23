@@ -316,70 +316,37 @@ define(function(require, exports) {
 						data.companyName = companyName
 						data.monthList = monthList
 						var html = Clearing(data);
-						//addTab(blanceTabId,"车队结算",html);
-						//var validator = rule.check($('.busCompanyCleaning'));
-					   /* //获取table中的tr
-						var $tr = $("#" +"tab-"+ blanceTabId + "-content"+" .all tbody tr")
-						//给每个tr添加表单验证
-						$tr.each(function(){
-							$(this).find('.btn-busCompanyBlance-save').data('validata', rule.check($(this)));
-						});*/
-						//var validator = rule.check($('.busCompanyCleaning'));
-					  //判断页面是否存在
-						if($("#" +"tab-"+blanceTabId+"-content").length > 0)
-						{
-							
-							 if(!!BusCompany.edited["blance"] && BusCompany.edited["blance"] != ""){
+
+						if($("#" +"tab-"+blanceTabId+"-content").length > 0) {
+							if(!!BusCompany.edited["blance"] && BusCompany.edited["blance"] != ""){
 								addTab(blanceTabId,"车队结算");
-								
 								//给每个tr添加表单验证
 								showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
 									var $tr = $("#" +"tab-"+ blanceTabId + "-content"+" .all tbody tr")
-									$tr.each(function(){
-										$(this).find('.btn-busCompanyBlance-save').data('validata', rule.check($(this)));
-									});
-									 
-									 var saveBtn = $("#" +"tab-"+ blanceTabId+"-content"+" .btn-busCompanyBlance-save");
-									 if (!$(saveBtn).data('validata').form()) { return; }
-									 BusCompany.saveBlanceData(saveBtn,BusCompany.oldBlanceBusId,companyName,0)
-									 BusCompany.edited["blance"] = "";
-									 addTab(blanceTabId,"车队结算",html);
-									 BusCompany.initClear(pageNo,busCompanyId,companyName,year,startMonth,endMonth,data);
-									 var $tr = $("#" +"tab-"+ blanceTabId + "-content"+" .all tbody tr")
-										//给每个tr添加表单验证
-										$tr.each(function(){
-											$(this).find('.btn-busCompanyBlance-save').data('validata', rule.check($(this)));
-										});
-								 },function(){
+									BusCompany.validatorTable();
+									var saveBtn = $("#" +"tab-"+ blanceTabId+"-content"+" .btn-busCompanyBlance-save");
+									if (!$(saveBtn).data('validata').form()) { return; }
+									BusCompany.saveBlanceData(saveBtn,BusCompany.oldBlanceBusId,companyName,0)
+									BusCompany.edited["blance"] = "";
+									addTab(blanceTabId,"车队结算",html);
+									BusCompany.initClear(pageNo,busCompanyId,companyName,year,startMonth,endMonth,data);
+									BusCompany.validatorTable();
+								},function(){
 									 addTab(blanceTabId,"车队结算",html);
 									 BusCompany.initClear(pageNo,busCompanyId,companyName,year,startMonth,endMonth,data);
 									 BusCompany.edited["blance"] = "";
-									 var $tr = $("#" +"tab-"+ blanceTabId + "-content"+" .all tbody tr")
-										//给每个tr添加表单验证
-										$tr.each(function(){
-											$(this).find('.btn-busCompanyBlance-save').data('validata', rule.check($(this)));
-										});
-									
-								 });
-							 }else{
+									 BusCompany.validatorTable();
+								});
+							}else{
 								addTab(blanceTabId,"车队结算",html);
 								BusCompany.initClear(pageNo,busCompanyId,companyName,year,startMonth,endMonth,data);
-								var $tr = $("#" +"tab-"+ blanceTabId + "-content"+" .all tbody tr")
-								//给每个tr添加表单验证
-								$tr.each(function(){
-									$(this).find('.btn-busCompanyBlance-save').data('validata', rule.check($(this)));
-								});
-							 }
-							 
+								BusCompany.validatorTable();
+							}
 						}else{
 							addTab(blanceTabId,"车队结算",html);
 							BusCompany.initClear(pageNo,busCompanyId,companyName,year,startMonth,endMonth,data);
-							var $tr = $("#" +"tab-"+ blanceTabId + "-content"+" .all tbody tr")
-							//给每个tr添加表单验证
-							$tr.each(function(){
-								$(this).find('.btn-busCompanyBlance-save').data('validata', rule.check($(this)));
-							});
-						};
+							BusCompany.validatorTable();
+						}
 					}
 				}
 		   });
@@ -406,8 +373,7 @@ define(function(require, exports) {
 			});
 		   //保存按钮事件
 			$("#" +"tab-"+ blanceTabId+"-content"+" .btn-busCompanyBlance-save").click(function(){
-				BusCompany.validatorTable();
-				var saveBtn = $("#" +"tab-"+ blanceTabId+"-content"+" .btn-busCompanyBlance-save");
+				if (!$(this).data('validata').form()) { return; };
 				BusCompany.saveBlanceData(saveBtn,BusCompany.oldBlanceBusId,companyName,0);
 			});
 			//对账明细按钮事件
@@ -457,12 +423,12 @@ define(function(require, exports) {
 		},
 		//给每个tr增加验证
 	    validatorTable:function(){
-	    	//获取table中的tr
- 	    	var $tr = $("#" +"tab-"+ blanceTabId + "-content"+" .all tbody tr")
-            //给每个tr添加表单验证
-            $tr.each(function(){
-            	$(this).find('.btn-ticketBlance-save').data('validata', rule.check($(this)));
-            });
+		   var $tr = $("#tab-"+blanceTabId+ "-content .all tbody tr");
+           //给每个tr添加表单验证
+           $tr.each(function(){
+           	console.log(rule.check($(this)));
+               $(this).find('.btn-busCompanyBlance-save').data('validata', rule.check($(this)));
+           });	
 	    },
 		//保存对账数据
 		saveCheckingData:function(busCompanyId,companyName,isClose){
