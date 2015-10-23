@@ -246,7 +246,9 @@ table tr td{
     height: 30px;
     line-height: 30px;
     font-size: 12px;
-
+}
+.marginLeft-30{
+    margin-left: 25px!important;
 }
 .widget-main{padding: 0!important;}
 .form-group{margin-bottom: 13px!important;}
