@@ -23,6 +23,22 @@ input{
 
 }
 
+/**
+ * 设置自定义popover的样式
+ */
+#desc-tooltip-containter  .popover-content {
+    max-width: 260px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+/**
+ * 重写翻页插件的样式
+ */
+.laypageskin_molv a{
+    background-color:#ddd;
+}
+
 label{
     font-size: 12px;
 }
