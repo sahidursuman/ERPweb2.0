@@ -204,8 +204,8 @@ define(function(require, exports) {
                         
                       //保存按钮事件
                         $("#" +"tab-"+ blanceTabId+"-content"+" .btn-scenicBlance-save").click(function(){
-                        	 var saveBtn = $("#" +"tab-"+ blanceTabId+"-content"+" .btn-scenicBlance-save")
-        	    			 if (!$(saveBtn).data('validata').form()) { return; }
+                        	
+        	    			 if (!$(this).data('validata').form()) { return; }
         	    			 Scenic.saveBlanceData(Scenic.oldBlanceScenicId,scenicName,0);
                         });
                         //对账明细按钮事件
@@ -331,7 +331,7 @@ define(function(require, exports) {
                 	    		Scenic.edited["checking"] = "checking"; 
 								Scenic.oldCheckScenicId = scenicId;
                 	    	});
-	                 }          
+                        }          
 		                 //给搜索按钮绑定事件
 		                 $("#" +"tab-"+ checkTabId+"-content"+" .btn-checking-search").click(function(){
 	                         Scenic.searchCheckData={
@@ -406,7 +406,7 @@ define(function(require, exports) {
 			                	 $("#" +"tab-"+ checkTabId+"-content"+" .scenicSelectAll").prop("checked",flag)
 			                 });
 		                 //给确认对账按钮绑定事件
-			                 $("#" +"tab-"+ checkTabId+"-content"+" .btn-scenicFinancial-checking").click(function(){
+			                 $("#" +"tab-"+ checkTabId+"-content"+" .btn-scenicFinancial-rs").click(function(){
 			                	 Scenic.saveCheckingData(scenicId,scenicName,0);
 		                    })
 		                 //给查看单据绑定事件

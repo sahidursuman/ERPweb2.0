@@ -63,6 +63,9 @@ define(function(require, exports) {
 						$("#tab-"+menuKey+"-content .search-area .btn-status .dropdown-menu a").click(function(){
 							$(this).parent().parent().parent().find("button").attr("data-value",$(this).attr("data-value"));
 							$(this).parent().parent().parent().find("span").text($(this).text());
+							var realname = $("#tab-"+menuKey+"-content  input[name=user_realname]").val();
+							var status = $("#tab-"+menuKey+"-content  .btn-status").find("button").attr("data-value");
+							user.listUser(0,realname,status);
 						});
 						//搜索按钮事件
 						$("#tab-"+menuKey+"-content  .btn-user-search").click(function(){

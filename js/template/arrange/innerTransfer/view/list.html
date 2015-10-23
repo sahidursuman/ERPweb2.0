@@ -59,7 +59,7 @@
 									<div class="col-xs-2">
 										<div class="col-xs-12">
 											<div class="input-group">
-												<input class="col-xs-12 datepicker" name="startTime" placeholder="出游起始日期" value="{{searchParam.startTime}}" type="text" />
+												<input class="col-xs-12 datepicker" name="startTime" placeholder="转客起始日期" value="{{searchParam.startTime}}" type="text" />
 												<span class="input-group-addon">
 														<i class="fa fa-calendar"></i>
 													</span>
@@ -70,7 +70,7 @@
 									<div class="col-xs-2">
 										<div class="col-xs-12">
 											<div class="input-group">
-												<input class="col-xs-12 datepicker" name="endTime" placeholder="出游结束日期" value="{{searchParam.endTime}}" type="text" />
+												<input class="col-xs-12 datepicker" name="endTime" placeholder="转客结束日期" value="{{searchParam.endTime}}" type="text" />
 												<span class="input-group-addon">
 														<i class="fa fa-calendar"></i>
 													</span>
@@ -161,7 +161,7 @@
 										<td>{{rs.transPayedMoney}}</td>
 										{{if rs.user!=null}}
 										<td>{{rs.user.realName}}</td>
-										<td>{{rs.touristGroup.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
+										<td>{{rs.touristGroup.startTime}}</td>
 										<td>{{rs.user.mobileNumber}}</td>
 										{{else}}
 										{{/if}}

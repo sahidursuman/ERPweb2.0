@@ -34,7 +34,7 @@
 				<td>{{subList.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
 				<td>{{subList.lineProduct.days}}</td>
 				<td>{{subList.currentNeedPayMoney}}</td>
-				<td>{{subList.contactMember.name}}</td>
+				<td>{{if subList.contactMember!=null}}{{subList.contactMember.name}}{{/if}}</td>
 				<td>{{subList.adultCount}}大{{subList.childCount}}小</td>
 				<td>{{if subList.subOperatorUser != null}}{{subList.subOperatorUser.realName}}{{else}}-{{/if}}</td>
 				<td>{{if subList.subOperateTime != null}}{{subList.subOperateTime}}{{else}}-{{/if}}</td>
