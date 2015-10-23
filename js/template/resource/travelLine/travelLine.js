@@ -569,7 +569,7 @@ define(function(require, exports) {
 				type:1,
     			title:"修改日程",
     			skin: 'layui-layer-rim', //加上边框
- 			    area: ['80%', '70%'], //宽高
+ 			    area: '80%', //宽高
  			    zIndex:1029,
 			    content: lineDayHtml,
 			    success:function(){

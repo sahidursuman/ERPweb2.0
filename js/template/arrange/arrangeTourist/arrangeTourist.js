@@ -1601,7 +1601,7 @@ define(function(require, exports) {
 						    type: 1,
 						    title:"编辑费用信息",
 						    skin: 'layui-layer-rim', //加上边框
-						    area: ['60%', '75%'], //宽高
+						    area: '60%', //宽高
 						    zIndex:1028,
 						    content: html,
 						    success:function(){  
