@@ -600,6 +600,7 @@ define(function(require, exports) {
 							    area: ['70%', '75%'], //宽高
 							    zIndex:1029,
 							    content: html,
+							    scrollbar: false,    // 推荐禁用浏览器外部滚动条
 							    success: function(data) {
 							    }
 						    });
