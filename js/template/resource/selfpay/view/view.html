@@ -29,12 +29,8 @@
 		<tr>
 			<td class="style-myselfOne">人数返佣(元/人)：</td>
 			<td class="styleOne-self">{{selfpay.customerRebateMoney}}</td>
-			<td class="style-myselfOne">停车返佣(辆/人)：</td>
-			<td class="styleOne-self">{{selfpay.parkingRebateMoney}}	</td>
-		</tr>
-		<tr>
 			<td class="style-myself">商家所在省市：</td>
-			<td class="styleOne-self" colspan="3">{{if selfpay.province != null}}
+			<td class="styleOne-self">{{if selfpay.province != null}}
 				{{selfpay.province.name}}
 				{{/if}}
 				{{if selfpay.city != null}}
@@ -42,7 +38,8 @@
 				{{/if}}
 				{{if selfpay.district != null}}
 				-{{selfpay.district.name}}
-				{{/if}}</td>
+				{{/if}}
+			</td>
 		</tr>
 		<tr>
 			<td class="style-myself">详细地址：</td>
