@@ -35,7 +35,6 @@ define(function(require, exports) {
 						addTab(menuKey,"中转分段",html);
 
 						var tab = "tab-resource_subsection-content";
-						subsection.listSubsection(0,subsection.searchData.lineProductId,subsection.searchData.fromPartnerAgencyId,subsection.searchData.creatorId,subsection.searchData.travelDate,subsection.searchData.operationStartDate,subsection.searchData.operationEndDate,tab);
 						subsection.searchNumber(subsection.searchData.lineProductId,subsection.searchData.fromPartnerAgencyId,subsection.searchData.creatorId,subsection.searchData.travelDate,subsection.searchData.operationStartDate,subsection.searchData.operationEndDate,tab);
 						subsection.datePicker();
 						$("#"+tab+" .btn-subsection-search").on("click",function(){
@@ -56,6 +55,7 @@ define(function(require, exports) {
 						})
 						subsection.getPartnerAgencyList($("#"+tab+" .choosePartnerAgency"),"");
 						subsection.getLineProductList($("#"+tab+" .chooseLineProduct"),"");
+						$("#"+tab+" .btn-subsection-search").trigger('click');
 					}
 				}
 			})
