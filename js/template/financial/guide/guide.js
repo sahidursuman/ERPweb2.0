@@ -129,7 +129,6 @@ define(function(require, exports) {
 				            			 return; 
 				            		 }
 				            		 guide.saveCheckingData(page,guideId,year,month,0);
-				            		 guide.edited["checking"] = "";
 				            		 addTab(menuKey+"-checking","导游对账",html);
 				            		 guide.initCheck(page,guideId,year,month,data);
 				            		 validator = rule.check($('.check'));

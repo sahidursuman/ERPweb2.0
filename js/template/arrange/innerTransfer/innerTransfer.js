@@ -135,9 +135,15 @@ define(function(require, exports) {
 				layer.close(globalLoadingLayer);
 				var result = showDialog(data);
 				if(result){
-					$("#"+divId).find(".peopleCount").text("人数合计 : "+data.total.adultCount+"大"+data.total.childCount+"小");
-					$("#"+divId).find(".needPayMoney").text("应付款合计:"+data.total.transNeedPayMoney+"元");
-					$("#"+divId).find(".payedMoney").text("已付款合计:"+data.total.transPayedMoney+"元");
+					if(divId == "inner-TransferIn"){
+						$("#"+divId).find(".peopleCount").text("人数合计 : "+data.total.adultCount+"大"+data.total.childCount+"小");
+						$("#"+divId).find(".needPayMoney").text("应收款合计:"+data.total.transNeedPayMoney+"元");
+						$("#"+divId).find(".payedMoney").text("已收款合计:"+data.total.transPayedMoney+"元");
+					} else {
+						$("#"+divId).find(".peopleCount").text("人数合计 : "+data.total.adultCount+"大"+data.total.childCount+"小");
+						$("#"+divId).find(".needPayMoney").text("应付款合计:"+data.total.transNeedPayMoney+"元");
+						$("#"+divId).find(".payedMoney").text("已付款合计:"+data.total.transPayedMoney+"元");
+					}
 				}
 			}
 		});
