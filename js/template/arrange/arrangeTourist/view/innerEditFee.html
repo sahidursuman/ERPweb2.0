@@ -148,15 +148,27 @@
 				<div class="form-group">
 					<label class="col-sm-2 control-label no-padding-right">应收:</label>
 					<div class="col-sm-2">
-						{{touristGroup.needPayAllMoney}}
+						{{ if touristGroup.parentTouristGroup == null}}
+							{{touristGroup.needPayAllMoney}}
+						{{else}}
+							{{touristGroup.parentTouristGroup.needPayAllMoney}}
+						{{/if}}
 					</div>
 					<label class="col-sm-1 control-label no-padding-right">已收:</label>
 					<div class="col-sm-2">
-						{{touristGroup.payedMoney}}
+						{{ if touristGroup.parentTouristGroup == null}}
+							{{touristGroup.payedMoney}}
+						{{else}}
+							{{touristGroup.parentTouristGroup.payedMoney}}
+						{{/if}}
 					</div>
 					<label class="col-sm-1 control-label no-padding-right">现收:</label>
 					<div class="col-sm-2">
-						{{touristGroup.payedMoney}}
+						{{ if touristGroup.parentTouristGroup == null}}
+							{{touristGroup.currentNeedPayMoney}}
+						{{else}}
+							{{touristGroup.parentTouristGroup.currentNeedPayMoney}}
+						{{/if}}
 					</div>
 				</div>
 				<div class="form-group">
