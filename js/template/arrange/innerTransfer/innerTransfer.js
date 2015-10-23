@@ -274,6 +274,7 @@ define(function(require, exports) {
 			success:function(data){
 				layer.close(globalLoadingLayer);
 				data.innerTransfer = JSON.parse(data.innerTransfer);
+				
 				var html = viewTemplate(data);
 				var outViewTemplate = innerTransferOut(data);
 				if(type == 1){

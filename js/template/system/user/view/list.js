@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":116,"md5":"709dacdf4bd319ba5333493dd31a7926"}*/
+/*TMODJS:{"debug":true,"version":119,"md5":"709dacdf4bd319ba5333493dd31a7926"}*/
 define(function(require) {
     return require("../../../template")("system/user/view/list", function($data, $filename) {
         try {
