@@ -270,6 +270,7 @@ table tr td{
 .top-box{
     margin-top: 10px;
 }
+.dropdown-menu{left: -25px;min-width: 70px}
 #alter-pwd {
     color: #393939;
 }
