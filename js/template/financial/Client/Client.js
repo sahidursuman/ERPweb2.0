@@ -73,6 +73,7 @@ define(function(require, exports) {
                         data.partnerAgencySet = JSON.parse(data.partnerAgencySet);
                         data.travelAgencySet = JSON.parse(data.travelAgencySet);
                         data.month = month;
+                        console.log(travelAgencyList);
                         var html = listTemplate(data);
                         addTab(menuKey,"客户账务",html);
                         $("#tab-"+menuKey+"-content .guideMainForm .date-picker").datepicker({
@@ -656,12 +657,19 @@ define(function(require, exports) {
                      
         },
         getTravelAgencyList:function(obj,partnerAId){
-            var $objC = $(obj);
+            var $objC = $(obj), travelAgency = [];
             if(travelAgencyList != null && travelAgencyList.length > 0){
                 for(var i=0;i<travelAgencyList.length;i++){
-                    travelAgencyList[i].value = travelAgencyList[i].name;
+                    if(!!travelAgencyList[i]){
+                        travelAgency.push({
+                            id: travelAgencyList[i].id,
+                            value: travelAgencyList[i].name
+                        })
+                    }                    
                 }
             }
+
+            window.roger= travelAgency;
             $(obj).autocomplete({
                 minLength: 0,
                 change: function(event, ui) {
@@ -673,7 +681,7 @@ define(function(require, exports) {
                     $(this).blur().nextAll('input[name="travelAgencyId"]').val(ui.item.id);
                 }
             }).off("click").on("click",function(){
-                $objC.autocomplete('option','source', travelAgencyList);
+                $objC.autocomplete('option','source', travelAgency);
                 $objC.autocomplete('search', '');
             });        
         },
