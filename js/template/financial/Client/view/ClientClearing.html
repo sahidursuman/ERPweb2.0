@@ -85,7 +85,7 @@
         </thead>
         <tbody>
         {{each financialPartnerAgencySettlementList as rs}}
-        <tr>
+        <tr data-entity-id="{{rs.id}}">
             <td>{{rs.year}}年{{rs.month}}月</td>
             <td>{{rs.needPayMoney}}</td>
             <td>{{rs.realNeedPayMoney}}</td>
