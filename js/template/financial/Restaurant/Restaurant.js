@@ -191,7 +191,7 @@ define(function(require, exports) {
 						}
 						$("#" +"tab-"+checkTabId+"-content .all").on("change",function(){
 							Restaurant.edited["checking"] = "checking";
-							oldCheckRestaurantId = restaurantId;
+							Restaurant.oldCheckRestaurantId = restaurantId;
 						});
 	                   //给搜索按钮绑定事件
 		                 $("#" +"tab-"+ checkTabId+"-content"+" .btn-checking-search").click(function(){
@@ -268,7 +268,7 @@ define(function(require, exports) {
 		                 //给确认对账按钮绑定事件
 			                 $("#" +"tab-"+ checkTabId+"-content"+" .btn-restaurantFinancial-checking").click(function(){
 			                	 if (!validator.form()) { return; }
-			            		 Restaurant.saveCheckingData(Restaurant.oldCheckRestaurantId,restaurantName,0)
+			            		 Restaurant.saveCheckingData(restaurantId,restaurantName,0)
 			                 })
 		                 //给查看单据绑定事件
 		                 $("#" +"tab-"+ checkTabId+"-content"+" .restaurantImg").click(function(){

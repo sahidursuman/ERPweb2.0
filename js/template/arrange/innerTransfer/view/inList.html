@@ -19,14 +19,14 @@
 		<tr data-entity-id="{{list.id}}">
 			<td>{{list.lineProduct.name}}</td>
 			<td>{{list.lineProduct.days}}天</td>
-			<td>{{list.touristGroup.startTime}}</td>
+			<td>{{list.touristGroup.startTime | dateFormat:'yyyy-MM-dd'}}</td>
 			<td>{{if list.touristGroup.contactMember != null}}{{list.touristGroup.contactMember.name}}{{/if}}</td>
 			<td>{{list.touristGroup.adultCount}}大{{list.touristGroup.childCount}}小</td>
 			<td>{{list.fromBusinessGroup.name}}</td>
 			<td>{{list.user.realName}}</td>
 			<td>{{list.user.mobileNumber}}</td>
-			<td>{{list.touristGroup.transNeedPayMoney}}</td>
-			<td>{{list.touristGroup.transPayedMoney}}</td>
+			<td>{{list.transNeedPayMoney}}</td>
+			<td>{{list.transPayedMoney}}</td>
 			<td>{{if list.status == 0}}未确认{{else if list.status == 1}}已确认{{/if}}</td>
 			<td>
 				<div class="hidden-sm hidden-xs btn-group" style="width:120px;">

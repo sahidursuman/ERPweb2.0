@@ -190,7 +190,7 @@ define(function(require, exports) {
 						
 						var html = viewTemplate(data);
 						addTab(menuKey+"-view","查看发团安排",html);
-						$(document).on("mouseenter",".whichDaysContainer",function(){
+						$(document).on("mouseenter",".viewWhichDaysContainer",function(){
 							var whichDay = $(this).attr("whichDay"),
 								$this = $(this)
 								startTime = $("#tab-arrange_all-view-content").find("span[name=startTime_Choose]").text(),

@@ -111,10 +111,11 @@ define(function(require, exports) {
 				},
 				success:function(data){
 					layer.close(globalLoadingLayer);
+
 					map.touristGroup1 = JSON.parse(data.touristGroup1);
 					map.pager = JSON.parse(data.pager);
+					console.log(data);
 					map.partnerAgency = JSON.parse(data.partnerAgency);
-					map.partnerAgency2 = JSON.parse(data.partnerAgency2);
 					map.lineProduct1=JSON.parse(data.lineProduct1);   
 					map.user1 = JSON.parse(data.user1);
 

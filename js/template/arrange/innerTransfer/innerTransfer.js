@@ -5,6 +5,7 @@ define(function(require, exports) {
 		outListTemplate = require("./view/outList"),
 		inListTemplate = require("./view/inList"),
 		viewTemplate=require("./view/view"),
+		innerTransferOut = require("./view/innerTransferOutView"),
 		editTemplate=require("./view/edit");
 
 
@@ -75,15 +76,6 @@ define(function(require, exports) {
 			innerTransfer.innerList(divId,type);
 			innerTransfer.findTotal(divId);
 		})
-		$("#inner-TransferIn .dropdown-menu a").click(function(){
-			$(this).closest('div').find("button").attr("data-value",$(this).attr("data-value"));
-			$(this).closest('div').find("span").text($(this).text());
-			var divId = "inner-TransferIn",
-				type = "2";
-			innerTransfer.getSearchParam(divId,type);
-			innerTransfer.innerList(divId,type);
-			innerTransfer.findTotal(divId);
-		})
 	};
 	innerTransfer.getListPage = function(event){
 		var divId = event.data.divId,
@@ -143,9 +135,15 @@ define(function(require, exports) {
 				layer.close(globalLoadingLayer);
 				var result = showDialog(data);
 				if(result){
-					$("#"+divId).find(".peopleCount").text("人数合计 : "+data.total.adultCount+"大"+data.total.childCount+"小");
-					$("#"+divId).find(".needPayMoney").text("应付款合计:"+data.total.transNeedPayMoney+"元");
-					$("#"+divId).find(".payedMoney").text("已付款合计:"+data.total.transPayedMoney+"元");
+					if(divId == "inner-TransferIn"){
+						$("#"+divId).find(".peopleCount").text("人数合计 : "+data.total.adultCount+"大"+data.total.childCount+"小");
+						$("#"+divId).find(".needPayMoney").text("应收款合计:"+data.total.transNeedPayMoney+"元");
+						$("#"+divId).find(".payedMoney").text("已收款合计:"+data.total.transPayedMoney+"元");
+					} else {
+						$("#"+divId).find(".peopleCount").text("人数合计 : "+data.total.adultCount+"大"+data.total.childCount+"小");
+						$("#"+divId).find(".needPayMoney").text("应付款合计:"+data.total.transNeedPayMoney+"元");
+						$("#"+divId).find(".payedMoney").text("已付款合计:"+data.total.transPayedMoney+"元");
+					}
 				}
 			}
 		});
@@ -268,10 +266,11 @@ define(function(require, exports) {
 				layer.close(globalLoadingLayer);
 				data.innerTransfer = JSON.parse(data.innerTransfer);
 				var html = viewTemplate(data);
+				var outViewTemplate = innerTransferOut(data);
 				if(type == 1){
 					addTab(menuKey+"-outView","我部转出小组信息",html);
 				}else{
-					addTab(menuKey+"-inView","他部转入小组信息",html);
+					addTab(menuKey+"-inView","他部转入小组信息",outViewTemplate);
 				}
 				
 			}
