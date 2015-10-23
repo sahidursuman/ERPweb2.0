@@ -5,6 +5,7 @@ define(function(require, exports) {
 		outListTemplate = require("./view/outList"),
 		inListTemplate = require("./view/inList"),
 		viewTemplate=require("./view/view"),
+		innerTransferOut = require("./view/innerTransferOutView"),
 		editTemplate=require("./view/edit");
 
 
@@ -259,10 +260,11 @@ define(function(require, exports) {
 				layer.close(globalLoadingLayer);
 				data.innerTransfer = JSON.parse(data.innerTransfer);
 				var html = viewTemplate(data);
+				var outViewTemplate = innerTransferOut(data);
 				if(type == 1){
 					addTab(menuKey+"-outView","我部转出小组信息",html);
 				}else{
-					addTab(menuKey+"-inView","他部转入小组信息",html);
+					addTab(menuKey+"-inView","他部转入小组信息",outViewTemplate);
 				}
 				
 			}
