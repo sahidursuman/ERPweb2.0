@@ -1,7 +1,7 @@
 <div class="row globalAdd">
     <div class="search-area shopMain">
-        <div class="form-group"> <label class="pull-left" style="margin-left: 15px">购物店：</label>
-            <div class="col-sm-2">
+        <div class="form-group">
+            <label class="pull-left" style="margin-left: 15px;margin-top: 3px">购物店：</label>
                 <select name="shopId" class="col-xs-12" style="width: 220px">
                     <option value="">全部</option>
                     {{each shopInfoList as shopInfo}}
@@ -9,16 +9,13 @@
                     {{/each}}
   
                 </select>
-            </div>
-            <label class=" control-label pull-left" style="margin-left: 15px">
-                	账期：
-            </label>
+                <label class=" control-label pull-left marginLeft-30" style="margin-top: 3px">账期：</label>
                 <select name="year" class="col-sm-1">
                     {{each yearList as year}}
                     <option value="{{year}}">{{year}}</option>
                     {{/each}}
                 </select>
-                <select name="month" style="margin-left: 20px" class="col-sm-1">
+                <select name="month"  class="col-sm-1 marginLeft-30">
                     <option value="">全部</option>
                     <option value="1">1月</option>
                     <option value="2">2月</option>
@@ -33,7 +30,7 @@
                     <option value="11">11月</option>
                     <option value="12">12月</option>
                 </select>
-            <button class=" btn-sm search-btn btn-shop-search btn-height" >
+            <button class=" btn-sm search-btn btn-shop-search marginLeft-30" >
                 <i class="ace-icon fa fa-search"></i>
                 搜索
             </button>

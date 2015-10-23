@@ -4,13 +4,13 @@
             <div class="search-area  editable editable-click" style="margin-top: 10px">
                 <div class="form-group"> <label style="float: left;margin: 5px auto auto 15px" class=" control-label "> 导游：{{searchParam.guideName}}</label>
                     <label class="col-sm-1 control-label no-padding-right">账期：</label>
-                    <select name="year" class="col-sm-1">
+                    <select name="year" >
 					    {{each yearList as year}}
 						<option value="{{year}}">{{year}}</option>
 						{{/each}} 
 					</select>
-                    <label class="col-sm-1 control-label no-padding-right">起始月：</label>
-                    <select class="col-sm-1" name="start_month">
+                    <label class=" control-label no-padding-right marginLeft-30">起始月：</label>
+                    <select  name="start_month">
                         <option value="1">1月</option>
                         <option value="2">2月</option>
                         <option value="3">3月</option>
@@ -24,8 +24,8 @@
                         <option value="11">11月</option>
                         <option value="12">12月</option>
                     </select>
-                    <label class="col-sm-1 control-label no-padding-right">结束月：</label>
-                    <select style="margin-left: 20px" class="col-sm-1" name="end_month">
+                    <label class=" control-label no-padding-right marginLeft-30">结束月：</label>
+                    <select   name="end_month">
                         <option value="1">1月</option>
                         <option value="2">2月</option>
                         <option value="3">3月</option>
@@ -39,7 +39,7 @@
                         <option value="11">11月</option>
                         <option value="12">12月</option>
                     </select>
-                    <button class=" btn-sm btn-guideSettlement-search search-btn btn-height" >
+                    <button class=" btn-sm btn-guideSettlement-search search-btn btn-height marginLeft-30" >
                         <i class="ace-icon fa fa-search"></i>
                         搜索
                     </button>
@@ -49,7 +49,7 @@
         </form>
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="form-group col-sm-9" style="padding-bottom: 0">
-                <label class="col-sm-2" style="margin-left: 10px">总账面退补：{{searchParam.sumBackGuideMoney}}</label>
+                <label class="col-sm-2" style="margin-left: -7px">总账面退补：{{searchParam.sumBackGuideMoney}}</label>
                 <label class="col-sm-2 ">总实际退补：{{searchParam.sumRealBackGuideMoney}}</label>
                 <label class="col-sm-2 ">总已结账：{{searchParam.sumAlreadyColseAccountMoney}}</label>
                 <label class="col-sm-2 ">总未结账：{{searchParam.sumUnCloseAccountMoney}}</label>

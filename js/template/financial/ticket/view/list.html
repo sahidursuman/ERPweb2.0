@@ -1,31 +1,29 @@
 <div class="row FinancialTicket globalAdd" >
-    <div class="form-horizontal search-area">    
-        <div class="form-group" >      
-          <label class="control-label pull-left" style="margin-left: 15px">票务商家:</label>
-            <div class="col-sm-2">
-                <select  class="col-xs-12" name="ticketId" style="width: 220px">
-                    <option value ="">全部</option>
-                    {{each companyNameListNew as ticket index}}
-						<option value="{{ticket.id}}" {{if searchParam.ticketId == ticket.id}}selected="selected"{{/if}}>{{ticket.name}}</option>
-					{{/each}}
-                </select>        
-             </div>       
-           <label class="control-label pull-left" >账期:</label>
-			<div class="col-sm-2" >
-				<select class="col-sm-5" name="year" >
+    <div class="form-horizontal search-area">
+        <div class="form-group" >
+          <label class="control-label pull-left" style="margin-left: 15px">票务商家：</label>
+              <select  class="col-xs-12" name="ticketId" style="width: 220px">
+                  <option value ="">全部</option>
+                  {{each companyNameListNew as ticket index}}
+                  <option value="{{ticket.id}}" {{if searchParam.ticketId == ticket.id}}selected="selected"{{/if}}>{{ticket.name}}</option>
+                  {{/each}}
+              </select>
+           <label class="control-label pull-left  marginLeft-30" >账期：</label>
+			<!--<div class="col-sm-2" >-->
+				<select class="col-sm-1" name="year" >
 					{{each yearList as year index}}
 						<option value="{{year.value}}" {{if searchParam.year == year.value}}selected="selected"{{/if}}>{{year.value}}</option>
 					{{/each}}
 				</select>
-				
-				<select class="col-sm-5" name="month" style = "margin-left:20px;">
+
+				<select class="marginLeft-30 col-sm-1" name="month">
 				    <option value ="">全部</option>
 					{{each monthList as month index}}
 						<option value="{{month.value}}" {{if searchParam.month == month.value}}selected="selected"{{/if}}>{{month.value}}月</option>
 					{{/each}}
 				</select>
-			</div> 
-            <button class=" btn-sm search-btn btn-ticket-search"> <i class="ace-icon fa fa-search"></i> 搜索 </button> </div>
+			<!--</div>-->
+            <button class=" btn-sm search-btn marginLeft-30 btn-ticket-search "> <i class="ace-icon fa fa-search"></i> 搜索 </button> </div>
     </div>
     <div class="row ticketList">
         <div class="col-xs-12">
@@ -68,9 +66,9 @@
                         </a><a href="" class="cursor"> |</a>
                         <a data-entity-id="{{ticket.ticketId}}" data-entity-companyName="{{ticket.companyName}}" data-entity-year="{{searchParam.year}}"
                                 {{if searchParam.month == ""}}
-                                 	 data-entity-startMonth=1 data-entity-endMonth=12 
+                                 	 data-entity-startMonth=1 data-entity-endMonth=12
                                   {{else}}
-                                 	 data-entity-startMonth="{{searchParam.month}}" data-entity-endMonth="{{searchParam.month}}" 
+                                 	 data-entity-startMonth="{{searchParam.month}}" data-entity-endMonth="{{searchParam.month}}"
                                 {{/if}}
                         		class="cursor btn-ticket-balance">
                            		 结算
