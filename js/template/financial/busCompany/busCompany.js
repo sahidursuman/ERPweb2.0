@@ -374,7 +374,7 @@ define(function(require, exports) {
 		   //保存按钮事件
 			$("#" +"tab-"+ blanceTabId+"-content"+" .btn-busCompanyBlance-save").click(function(){
 				if (!$(this).data('validata').form()) { return; };
-				BusCompany.saveBlanceData(saveBtn,BusCompany.oldBlanceBusId,companyName,0);
+				BusCompany.saveBlanceData(busCompanyId,companyName,0);
 			});
 			//对账明细按钮事件
 			$("#" +"tab-"+ blanceTabId+"-content"+" .btn-restaurantBlance-checkDetail").click(function(){
@@ -524,7 +524,7 @@ define(function(require, exports) {
 		    }
 		},
 	    //保存结算数据
-	    saveBlanceData:function(saveBtn,busCompanyId,companyName,isClose){
+	    saveBlanceData:function(busCompanyId,companyName,isClose){
 			//console.log($obj+"-------");
 			var DataArr = [],
 			JsonData,
