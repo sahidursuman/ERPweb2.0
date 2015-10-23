@@ -3,14 +3,14 @@
             <form class="form-horizontal" role="form" onsubmit="return false">
                 <div class="search-area  editable editable-click" style="margin-top: 10px">
                     <div class="form-group"> <label style="float: left;margin: 5px auto auto 15px" class=" control-label "> 导游：{{guideName}}</label>
-                        <label class="col-sm-1 control-label no-padding-right">账期：</label>
-                        <select class="col-sm-1" name="year">
+                        <label class="control-label no-padding-right">账期：</label>
+                        <select  name="year">
                             {{each yearList as year}}
 							<option value="{{year}}">{{year}}</option>
 							{{/each}} 
                         </select>
-                        <label class="col-sm-1 control-label no-padding-right"></label>
-                        <select class="col-sm-1" name="month">
+                        <label class="col-sm-1 control-label no-padding-right "></label>
+                        <select  name="month" class="marginLeft-30">
                             <option value="">全部</option>
                             <option value="1">1月</option>
                             <option value="2">2月</option>
@@ -26,11 +26,11 @@
                             <option value="12">12月</option>
                         </select>
 
-                        <button class=" btn-sm  btn-guideChecking-search search-btn btn-height" style="margin-left: 60px">
+                        <button class=" btn-sm  btn-guideChecking-search search-btn btn-height marginLeft-30">
                             <i class="ace-icon fa fa-search"></i>
                             	搜索
                         </button>
-                        <button type="button" class="btn btn-sm btn-primary btn-success btn-guideExport" style="margin-left: 20px">
+                        <button type="button" class="btn btn-sm btn-primary btn-success btn-guideExport marginLeft-30" >
 							<span>导出报表</span>
 							<i class="ace-icon fa fa-arrow-right icon-on-right"></i>
 						</button>
@@ -40,12 +40,12 @@
             <form class="form-horizontal" role="form" onsubmit="return false">
                 <div class="form-group col-sm-10">
                     <label class=" control-label pull-left" style="margin-left: 5px">总预支款：{{sumGuidePreMoney}}</label>
-                    <label class=" control-label " style="margin-left:30px;">总团队收入：{{sumGuideIncomeMoney}}</label>
-                    <label class=" control-label " style="margin-left:30px;">总导游现付：{{sumGuideNowPayedMoney}}</label>
-                    <label class=" control-label " style="margin-left:30px;">总导服费：{{sumGuideFee}}</label>
-                    <label class=" control-label " style="margin-left:30px;">总导游返佣：{{sumGuideRebateMoney}}</label>
-                    <label class=" control-label " style="margin-left:30px;">总退补款：{{sumBackGuideMoney}}</label>
-                    <label class=" control-label " style="margin-left:30px;">总实际退补：{{sumRealBackGuideMoney}}</label>
+                    <label class=" control-label marginLeft-30">总团队收入：{{sumGuideIncomeMoney}}</label>
+                    <label class=" control-label marginLeft-30">总导游现付：{{sumGuideNowPayedMoney}}</label>
+                    <label class=" control-label marginLeft-30">总导服费：{{sumGuideFee}}</label>
+                    <label class=" control-label marginLeft-30">总导游返佣：{{sumGuideRebateMoney}}</label>
+                    <label class=" control-label marginLeft-30">总退补款：{{sumBackGuideMoney}}</label>
+                    <label class=" control-label marginLeft-30">总实际退补：{{sumRealBackGuideMoney}}</label>
                 </div>
             </form>
         </div>

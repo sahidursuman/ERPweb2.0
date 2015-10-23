@@ -246,7 +246,9 @@ table tr td{
     height: 30px;
     line-height: 30px;
     font-size: 12px;
-
+}
+.marginLeft-30{
+    margin-left: 25px!important;
 }
 .widget-main{padding: 0!important;}
 .form-group{margin-bottom: 13px!important;}
@@ -270,20 +272,23 @@ table tr td{
 .top-box{
     margin-top: 10px;
 }
+.dropdown-menu{left: -25px;min-width: 70px}
 #alter-pwd {
     color: #393939;
 }
 #alter-pwd input{
-    text-indent: 1em;
+    text-indent: 0.5em;
     margin-left: 10px;
-    line-height: 1em;
+    line-height: 1.5em;
     width: 240px;
+    font-size: 12px;
 }
 #alter-user {
     color: #393939;
 }
 #alter-user input{
-    text-indent: 1em;
+    font-size: 12px;
+    text-indent:0.5em;
     margin-left: 10px;
     width: 240px;
 }
