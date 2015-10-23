@@ -274,16 +274,18 @@ table tr td{
     color: #393939;
 }
 #alter-pwd input{
-    text-indent: 1em;
+    text-indent: 0.5em;
     margin-left: 10px;
-    line-height: 1em;
+    line-height: 1.5em;
     width: 240px;
+    font-size: 12px;
 }
 #alter-user {
     color: #393939;
 }
 #alter-user input{
-    text-indent: 1em;
+    font-size: 12px;
+    text-indent:0.5em;
     margin-left: 10px;
     width: 240px;
 }
