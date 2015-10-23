@@ -612,3 +612,12 @@ input,select{
 .align-left {
     text-align: left;
 }
+
+/*发团管理 input框css*/
+
+.guideInputListMiddle{
+    width: 160px !important;
+}
+.layui-layer-content{
+    padding-bottom: 10px;
+}
