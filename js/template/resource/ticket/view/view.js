@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":77,"md5":"4a1447a8941acc44d976a54e391335e0"}*/
+/*TMODJS:{"debug":true,"version":83,"md5":"293b77ecc9427ec544ff5e93688686c1"}*/
 define(function(require) {
     return require("../../../template")("resource/ticket/view/view", function($data, $filename) {
         try {
@@ -17,7 +17,7 @@ define(function(require) {
             $line = 36, null != ticket.district && ($out += " -", $line = 37, $out += $escape(ticket.district.name), 
             $out += " ", $line = 38), $out += '</td> </tr> <tr> <td class="style-myself">详细地址：</td> <td class="styleOne-self" colspan="3">', 
             $line = 42, $out += $escape(ticket.street), $out += '</td> </tr> <tr> <td class="style-myself">商家简介：</td> <td class="styleOne-self" colspan="3">', 
-            $line = 46, $out += $escape(ticket.remark), $out += '</td> </tr> </table> <div class="space-10"></div> </form> ', 
+            $line = 46, $out += $escape(ticket.remark), $out += "</td> </tr> </table> </form> ", 
             new String($out);
         } catch (e) {
             throw {
@@ -25,7 +25,7 @@ define(function(require) {
                 name: "Render Error",
                 message: e.message,
                 line: $line,
-                source: '\r\n	<form class="form-horizontal ticketMainForm" role="form" style="margin-top:10px" onsubmit="return false">\r\n		<table class="whereQ" style="width: 96%">\r\n\r\n			<tr>\r\n				<td class="style-myself">票务公司名称：</td>\r\n				<td class="styleOne-self">{{ticket.name}}</td>\r\n				<td class="style-myself">是否启用：</td>\r\n				<td class="styleOne-self">{{if ticket.status == 0}}\r\n					已停用\r\n					{{else}}\r\n					已启用\r\n					{{/if}}</td>\r\n			</tr>\r\n			<tr>\r\n				<td class="style-myself">联系人：</td>\r\n				<td class="styleOne-self">{{ticket.managerName}}</td>\r\n				<td class="style-myself">联系电话：</td>\r\n				<td class="styleOne-self">{{ticket.mobileNumber}}</td>\r\n			</tr>\r\n			<tr>\r\n				<td class="style-myself">座机号码：</td>\r\n				<td class="styleOne-self">{{ticket.telNumber}}</td>\r\n				<td class="style-myself">传真号码：</td>\r\n				<td class="styleOne-self">{{ticket.faxNumber}}</td>\r\n			</tr>\r\n\r\n			<tr>\r\n				<td class="style-myself style-myselfOne">票务公司所在省市：</td>\r\n				<td class="styleOne-self" colspan="3">{{if ticket.province != null}}\r\n					{{ticket.province.name}}\r\n					{{/if}}\r\n					{{if ticket.city != null}}\r\n					-{{ticket.city.name}}\r\n					{{/if}}\r\n					{{if ticket.district != null}}\r\n					-{{ticket.district.name}}\r\n					{{/if}}</td>\r\n			</tr>\r\n			<tr>\r\n				<td class="style-myself">详细地址：</td>\r\n				<td class="styleOne-self" colspan="3">{{ticket.street}}</td>\r\n			</tr>\r\n			<tr>\r\n				<td class="style-myself">商家简介：</td>\r\n				<td class="styleOne-self" colspan="3">{{ticket.remark}}</td>\r\n			</tr>\r\n		</table>\r\n\r\n		<div class="space-10"></div>\r\n	</form>\r\n\r\n'.split(/\n/)[$line - 1].replace(/^\s+/, "")
+                source: '\r\n	<form class="form-horizontal ticketMainForm" role="form" style="margin-top:10px" onsubmit="return false">\r\n		<table class="whereQ" style="width: 96%">\r\n\r\n			<tr>\r\n				<td class="style-myself">票务公司名称：</td>\r\n				<td class="styleOne-self">{{ticket.name}}</td>\r\n				<td class="style-myself">是否启用：</td>\r\n				<td class="styleOne-self">{{if ticket.status == 0}}\r\n					已停用\r\n					{{else}}\r\n					已启用\r\n					{{/if}}</td>\r\n			</tr>\r\n			<tr>\r\n				<td class="style-myself">联系人：</td>\r\n				<td class="styleOne-self">{{ticket.managerName}}</td>\r\n				<td class="style-myself">联系电话：</td>\r\n				<td class="styleOne-self">{{ticket.mobileNumber}}</td>\r\n			</tr>\r\n			<tr>\r\n				<td class="style-myself">座机号码：</td>\r\n				<td class="styleOne-self">{{ticket.telNumber}}</td>\r\n				<td class="style-myself">传真号码：</td>\r\n				<td class="styleOne-self">{{ticket.faxNumber}}</td>\r\n			</tr>\r\n\r\n			<tr>\r\n				<td class="style-myself style-myselfOne">票务公司所在省市：</td>\r\n				<td class="styleOne-self" colspan="3">{{if ticket.province != null}}\r\n					{{ticket.province.name}}\r\n					{{/if}}\r\n					{{if ticket.city != null}}\r\n					-{{ticket.city.name}}\r\n					{{/if}}\r\n					{{if ticket.district != null}}\r\n					-{{ticket.district.name}}\r\n					{{/if}}</td>\r\n			</tr>\r\n			<tr>\r\n				<td class="style-myself">详细地址：</td>\r\n				<td class="styleOne-self" colspan="3">{{ticket.street}}</td>\r\n			</tr>\r\n			<tr>\r\n				<td class="style-myself">商家简介：</td>\r\n				<td class="styleOne-self" colspan="3">{{ticket.remark}}</td>\r\n			</tr>\r\n		</table>\r\n	</form>\r\n\r\n'.split(/\n/)[$line - 1].replace(/^\s+/, "")
             };
         }
     });
