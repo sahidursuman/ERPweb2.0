@@ -73,7 +73,6 @@ define(function(require, exports) {
                         data.partnerAgencySet = JSON.parse(data.partnerAgencySet);
                         data.travelAgencySet = JSON.parse(data.travelAgencySet);
                         data.month = month;
-                        console.log(travelAgencyList);
                         var html = listTemplate(data);
                         addTab(menuKey,"客户账务",html);
                         $("#tab-"+menuKey+"-content .guideMainForm .date-picker").datepicker({
@@ -385,32 +384,35 @@ define(function(require, exports) {
                  	    	 if(!!Client.edited["clearing"] && Client.edited["clearing"] != ""){
     		                    //给每个tr添加表单验证
                  	    		showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
-                 	    			 validator = rule.check($('.ClientClearMain'));
-                 	    			 if (!validator.form()) { return; }
+                 	    			var saveBtn = $("#tab-financial_Client-clearing-content").find('[name=ClientClear_saveButton]');
+                                    if (!$(saveBtn).data('validata').form()) { return; }
                  	    			 Client.saveBlanceData(Client.oldBlanceClientId,0);
     			            		 Client.edited["clearing"] = "";
     			            		 addTab(ClientClearTab,"客户结算",html);
-    			            		 validator = rule.check($('.ClientClearMain'));
+    			            		 Client.validatorTable();
     			            	 },function(){
     			            		    addTab(ClientClearTab,"客户结算",html);
     			            		    Client.edited["clearing"] = "";
-    			            		    validator = rule.check($('.ClientClearMain'))
+    			            		    Client.validatorTable();
     			            	 });
                  	    	 }else{
                      	    	addTab(ClientClearTab,"客户结算",html);
-                     	    	validator = rule.check($('.ClientClearMain'))
+                     	    	Client.validatorTable();
                  	    	 }
              	    		 
                  	    }else{
                  	    	addTab(ClientClearTab,"客户结算",html);
                  	    	validator = rule.check($('.ClientClearMain'))
+                            Client.validatorTable();
                  	    }
                         
                         var pid = data.pid;
                         $("#" +"tab-"+ClientClearTab+"-content .all").on('change', 'input, select', function() {
                  		   Client.edited["clearing"] = "clearing";
+                            $(this).closest('tr').data('blanceStatus',true);
                  		    Client.oldBlanceClientId = id;
 	    	    		});
+                        
                         var $balcneId = $("#tab-financial_Client-clearing-content");
                         //搜索事件
                         $balcneId.find("[name=searchButton]").click(function(){
@@ -468,19 +470,25 @@ define(function(require, exports) {
                         	})
                         });
                         //保存结算事件
-                        $balcneId.find("[name=ClientClear_saveButton]").click(function(){
-                        	Client.saveBlanceData(Client.oldBlanceClientId,0);
+                        $balcneId.find(".ClientClearMain").find("[name=ClientClear_saveButton]").click(function(){
+                            if (!$(this).data('validata').form()) { return; }
+                        	Client.saveBlanceData(Client.oldBlanceClientId,0, $(this));
                         });	
                     }
                 }
        	    })
         },
+        //给每个tr增加验证
+        validatorTable:function(){
+            //获取table中的tr
+            var $tr = $("#tab-financial_Client-clearing-content .all tbody tr")
+            //给每个tr添加表单验证
+            $tr.each(function(){
+                $(this).find('[name=ClientClear_saveButton]').data('validata', rule.check($(this)));
+            });
+        },
 		saveCheckingData : function(id,isClose){
-            if(!Client.edited["checking"] || Client.edited["checking"] != "checking"){
-                showMessageDialog($( "#confirm-dialog-message" ),"当前未进行任何操作！");
-                return;
-            }
-			var validator = rule.check($('.clientCheckingMain'))
+			
 			// 表单校验
 			if (!validator.form()) { return; }
 			 
@@ -584,54 +592,53 @@ define(function(require, exports) {
 				}
 			});
 		},
-		saveBlanceData : function(isClose){
-			var validator = rule.check($('.ClientClearMain'));
-			// 表单校验
-			if (!validator.form()) { return; }
+		saveBlanceData : function(isClose, $obj){
+            var $tr = $("#tab-financial_Client-clearing-content .all tbody tr"),
+            DataArr = [],
+            id,
+            payMoney,
+            payType,
+            remark,
+            JsonData;
+
+            if (!!$obj)  {
+                $tr= $obj.closest('tr');
+            }
+            $tr.each(function(i){
+                if($(this).data('blanceStatus')){
+                   //获取数据
+                     id = $(this).attr("data-entity-id");
+                     payMoney = $tr.eq(i).find("[name='ClientClear_payMoney']").val();//收款金额
+                     payType = $tr.eq(i).find("[name='ClientClear_payType']").val();//收款方式
+                     remark = $tr.eq(i).find("[name='ClientClear_remark']").val();//备注
+                }
+			});
+            console.log(id);
 			
-			var $this = $(".ClientClearMain").find("[name=ClientClear_saveButton]").parent().parent();
-			function getVal(name){
-				var rs = $this.find("[name="+name+"]").val();
-				if (rs == "") {
-					rs = 0;
-				}
-				return rs;
-			}
-			//获取数据
-			var id = $(".ClientClearMain").find("[name=ClientClear_saveButton]").attr("data-entity-id");
-			var payMoney = getVal("ClientClear_payMoney");//收款金额
-			var payType = getVal("ClientClear_payType");//收款方式
-			var remark = getVal("ClientClear_remark");//备注
-			console.log(payMoney);
-			if(payMoney == null || payMoney == ""){
-				showMessageDialog($( "#confirm-dialog-message" ),"请输入收款金额");
-				return
-			}else{
-				$.ajax({
-					url:""+APP_ROOT+"back/financial/financialParAgency.do?method=saveSettlement&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=save",
-					type:"POST",
-					data:"id="+id+"&payMoney="+payMoney+"&payType="+payType+"&remark="+remark,
-					dataType:"json",
-					beforeSend:function(){
-						globalLoadingLayer = openLoadingLayer();
-					},
-					success:function(data){
-						layer.close(globalLoadingLayer);
-						var result = showDialog(data);
-						if(result){
-							showMessageDialog($( "#confirm-dialog-message" ),data.message);
-							Client.edited["clearing"] = "";
-							if(isClose == 1){
-								closeTab();
-								Client.pager = JSON.parse(Client.pager);
-								Client.listClient(Client.searchParam.pageNo,Client.searchParam.fromPartnerAgencyId,Client.searchParam.fromPartnerAgencyName,Client.searchParam.travelId,Client.searchParam.travelName,Client.searchParam.year,Client.searchParam.month);
+                $.ajax({
+                    url:""+APP_ROOT+"back/financial/financialParAgency.do?method=saveSettlement&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=save",
+                    type:"POST",
+                    data:"id="+id+"&payMoney="+payMoney+"&payType="+payType+"&remark="+remark,
+                    dataType:"json",
+                    beforeSend:function(){
+                        globalLoadingLayer = openLoadingLayer();
+                    },
+                    success:function(data){
+                        layer.close(globalLoadingLayer);
+                        var result = showDialog(data);
+                        if(result){
+                            showMessageDialog($( "#confirm-dialog-message" ),data.message);
+                            Client.edited["clearing"] = "";
+                            if(isClose == 1){
+                                closeTab();
+                                Client.pager = JSON.parse(Client.pager);
+                                Client.listClient(Client.searchParam.pageNo,Client.searchParam.fromPartnerAgencyId,Client.searchParam.fromPartnerAgencyName,Client.searchParam.travelId,Client.searchParam.travelName,Client.searchParam.year,Client.searchParam.month);
                             } else {
-								Client.ClientClear(Client.searchBalanceData.id,Client.searchBalanceData.year,Client.searchBalanceData.startMonth,Client.searchBalanceData.endMonth);
-							}
-						}
-					}
-				});
-			}
+                                Client.ClientClear(Client.searchBalanceData.id,Client.searchBalanceData.year,Client.searchBalanceData.startMonth,Client.searchBalanceData.endMonth);
+                            }
+                        }
+                    }
+                });
 		},
         getPartnerAgencyList:function(obj,partnerAId){
             var $objC = $(obj);
@@ -657,19 +664,12 @@ define(function(require, exports) {
                      
         },
         getTravelAgencyList:function(obj,partnerAId){
-            var $objC = $(obj), travelAgency = [];
+            var $objC = $(obj);
             if(travelAgencyList != null && travelAgencyList.length > 0){
                 for(var i=0;i<travelAgencyList.length;i++){
-                    if(!!travelAgencyList[i]){
-                        travelAgency.push({
-                            id: travelAgencyList[i].id,
-                            value: travelAgencyList[i].name
-                        })
-                    }                    
+                    travelAgencyList[i].value = travelAgencyList[i].name;
                 }
             }
-
-            window.roger= travelAgency;
             $(obj).autocomplete({
                 minLength: 0,
                 change: function(event, ui) {
@@ -681,7 +681,7 @@ define(function(require, exports) {
                     $(this).blur().nextAll('input[name="travelAgencyId"]').val(ui.item.id);
                 }
             }).off("click").on("click",function(){
-                $objC.autocomplete('option','source', travelAgency);
+                $objC.autocomplete('option','source', travelAgencyList);
                 $objC.autocomplete('search', '');
             });        
         },
