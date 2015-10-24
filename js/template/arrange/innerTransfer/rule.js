@@ -13,6 +13,7 @@ define(function(require, exports) {
 	rule.transferCheckor = function($container) {
 		this.$container = $container;
 		var settings = this.getTransferSettings($container);
+
 		return $container.formValidate(settings);
 	};
 
@@ -25,13 +26,13 @@ define(function(require, exports) {
 	rule.getTransferSettings = function($container) {
 		var settings = [  // 固定验证的初始化
 			   {	//已付
-	    	    	$ele: $container.find('input[name=transPayedMoney]'),
+	    	    	$ele: $container.find('input[name="transPayedMoney"]'),
 	    	    	rules: [{
 	    	    	        	type: 'float', 
 	    	    	        	errMsg: '已付数据输入不合法'
 	    	    	        }]
 	    	    },{//转客大人单价
-	    	    	$ele: $container.find('input[name=transAdultPrice]'),
+	    	    	$ele: $container.find('input[name="transAdultPrice"]'),
 	    	    	rules:[
 	    	    	       {
 	    	    	    	   type:'float',
@@ -42,7 +43,7 @@ define(function(require, exports) {
 	    	    	       }  
 	    	    	      ]
 	    	    },{//转客小孩单价
-                     $ele: $container.find('input[name=transChildPrice]'),	    	    	
+                     $ele: $container.find('input[name="transChildPrice"]'),	    	    	
     	    	     rules:[{
     	    	    	   type:'float',
     	    	    	   errMsg:'小孩内转单价输入不合法'       

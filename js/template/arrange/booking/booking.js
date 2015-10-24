@@ -15,6 +15,7 @@ define(function(require, exports) {
 			endTime : "",
 		},
 		edited : {},
+		autocompleteDate : {},
 		isEdited : function(editedType){
 			if(!!booking.edited[editedType] && booking.edited[editedType] != ""){
 				return true;
@@ -39,6 +40,7 @@ define(function(require, exports) {
 						var html = listTemplate(data);
 						addTab(menuKey,"项目代订",html);
 						booking.initList(data);
+						booking.getQueryTerms();
 					}
 				}
 			})
@@ -50,8 +52,8 @@ define(function(require, exports) {
 			$("#tab-"+menuKey+"-content .bookingListMain .btn-booking-search").click(function(){
 				booking.searchData = {
 						orderNumber : $("#tab-"+menuKey+"-content .bookingListMain input[name=orderNumber]").val(),
-						partnerAgency : $("#tab-"+menuKey+"-content .bookingListMain input[name=partnerAgency]").val(),
-						operateUser : $("#tab-"+menuKey+"-content .bookingListMain input[name=operateUser]").val(),
+						partnerAgency : $("#tab-"+menuKey+"-content .bookingListMain input[name=partnerAgencyId]").val(),
+						operateUser : $("#tab-"+menuKey+"-content .bookingListMain input[name=operateUserId]").val(),
 						startTime : $("#tab-"+menuKey+"-content .bookingListMain input[name=startTime]").val(),
 						endTime : $("#tab-"+menuKey+"-content .bookingListMain input[name=endTime]").val()
 				}
@@ -108,6 +110,10 @@ define(function(require, exports) {
 				var id = $(this).attr("data-entity-id");
 				booking.exportBooking(id);
 			});
+			//autocomplete
+			booking.orderNumberChoose($("#tab-"+menuKey+"-content"));
+			booking.partnerAgencyChoose($("#tab-"+menuKey+"-content"));
+			booking.operateUserChoose($("#tab-"+menuKey+"-content"));
 		},
 		addBooking :function(){
 			var html = addTemplate();
@@ -1037,6 +1043,21 @@ define(function(require, exports) {
 				}
 			})
 		},
+		getQueryTerms :function(){
+			$.ajax({
+				url:""+APP_ROOT+"back/bookingOrder.do?method=getQueryTerms&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
+				dateType:"json",
+				type:"POST",
+				success:function(data){
+					var result = showDialog(data);
+					if(result){
+						booking.autocompleteDate.operationUserList = data.operationUserList;
+						booking.autocompleteDate.orderNumberList = data.orderNumberList;
+						booking.autocompleteDate.partnerAgencyList = data.partnerAgencyList;
+					}
+				}
+			})
+		},
 		busCompanyChoose :function(className){
 			var chooseBusCompany = className.find("input[name=busCompany]");
 			chooseBusCompany.autocomplete({
@@ -1089,6 +1110,104 @@ define(function(require, exports) {
 					});
 				}
 			})  
+		},
+		//搜索订单代号查询
+		orderNumberChoose :function(className){
+			var orderNumberChoose = className.find(".orderNumberChoose");
+			orderNumberChoose.autocomplete({
+				minLength:0,
+				change :function(event, ui){
+					if(ui.item == null){
+						var $this = $(this),parents = $(this).parent().parent();
+						$this.val("");
+					}
+				},
+				select :function(event, ui){
+					var $this = $(this),parents = $(this).parent().parent();
+				}
+			}).unbind("click").click(function(){
+				var orderNumberListJson = [],obj = this,
+					orderNumberList = booking.autocompleteDate.orderNumberList;
+				if(orderNumberList && orderNumberList.length > 0){
+					for(var i=0; i < orderNumberList.length; i++){
+						var orderNumber = {
+							value : orderNumberList[i]
+						}
+						orderNumberListJson.push(orderNumber);
+					}
+					$(obj).autocomplete('option','source', orderNumberList);
+					$(obj).autocomplete('search', '');
+				}else{
+					layer.tips('没有内容', obj, {
+					    tips: [1, '#3595CC'],
+					    time: 2000
+					});
+				}
+			})
+		},
+		//搜索客户查询
+		partnerAgencyChoose :function(className){
+			var partnerAgencyChoose = className.find(".partnerAgencyChoose");
+			partnerAgencyChoose.autocomplete({
+				minLength:0,
+				change :function(event, ui){
+					if(ui.item == null){
+						var $this = $(this),parents = $(this).parent();
+						$this.val("");
+						parents.find('input[name=partnerAgencyId]').val("");
+					}
+				},
+				select :function(event, ui){
+					var $this = $(this),parents = $(this).parent();
+					parents.find('input[name=partnerAgencyId]').val(ui.item.id);
+				}
+			}).unbind("click").click(function(){
+				var obj = this,partnerAgencyList = booking.autocompleteDate.partnerAgencyList;
+				if(partnerAgencyList && partnerAgencyList.length > 0){
+					for(var i=0; i < partnerAgencyList.length; i++){
+							partnerAgencyList[i].value = partnerAgencyList[i].travelAgencyName
+						}
+					$(obj).autocomplete('option','source', partnerAgencyList);
+					$(obj).autocomplete('search', '');
+				}else{
+					layer.tips('没有内容', obj, {
+					    tips: [1, '#3595CC'],
+					    time: 2000
+					});
+				}
+			})
+		},
+		//搜索操作人查询
+		operateUserChoose :function(className){
+			var operateUserChoose = className.find(".operateUserChoose");
+			operateUserChoose.autocomplete({
+				minLength:0,
+				change :function(event, ui){
+					if(ui.item == null){
+						var $this = $(this),parents = $(this).parent();
+						$this.val("");
+						parents.find('input[name=operateUserId]').val("");
+					}
+				},
+				select :function(event, ui){
+					var $this = $(this),parents = $(this).parent();
+					parents.find('input[name=operateUserId]').val(ui.item.id);
+				}
+			}).unbind("click").click(function(){
+				var obj = this,operationUserList = booking.autocompleteDate.operationUserList;
+				if(operationUserList && operationUserList.length > 0){
+					for(var i=0; i < operationUserList.length; i++){
+							operationUserList[i].value = operationUserList[i].realName
+						}
+					$(obj).autocomplete('option','source', operationUserList);
+					$(obj).autocomplete('search', '');
+				}else{
+					layer.tips('没有内容', obj, {
+					    tips: [1, '#3595CC'],
+					    time: 2000
+					});
+				}
+			})
 		},
 		submitBooking :function(operation,isClose){
 			//表单代订信息验证

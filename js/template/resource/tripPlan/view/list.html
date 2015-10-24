@@ -1,19 +1,19 @@
 <div class="search-area globalAdd">
-	<div class="form-horizontal search-tripPlanContainer">
+	<div class="row form-horizontal search-tripPlanContainer">
 		<div class="col-xs-2">
-			<input type="text" name="tripNumber" class="col-xs-12 guideInputList" placeholder="团号" value="{{searchParam.tripNumber}}" />
+			<input type="text" name="tripNumber" class="col-xs-12" placeholder="团号" value="{{searchParam.tripNumber}}" />
+		</div>
+		<div class="col-xs-1">
+			<input type="text" name="startTime" class="col-xs-12 date-picker" placeholder="出团日期" value="{{searchParam.startTime}}" />
+		</div>
+		<div class="col-xs-1">
+			<input type="text" name="realname" class="col-xs-12" placeholder="导游" value="{{searchParam.realname}}" />
+		</div>
+		<div class="col-xs-1">
+			<input type="text" name="licenseNumber" class="col-xs-12" placeholder="车牌号" value="{{searchParam.licenseNumber}}" />
 		</div>
 		<div class="col-xs-2">
-			<input type="text" name="startTime" class="col-xs-12 date-picker guideInputList" placeholder="出团日期" value="{{searchParam.startTime}}" />
-		</div>
-		<div class="col-xs-2">
-			<input type="text" name="realname" class="col-xs-12 guideInputList" placeholder="导游" value="{{searchParam.realname}}" />
-		</div>
-		<div class="col-xs-2">
-			<input type="text" name="licenseNumber" class="col-xs-12 guideInputList" placeholder="车牌号" value="{{searchParam.licenseNumber}}" />
-		</div>
-		<div class="col-xs-2">
-			<button class=" btn-sm  btn-tripPlan-search search-btn"style="margin-left:-30px;">
+			<button class=" btn-sm  btn-tripPlan-search search-btn"">
 				<i class="ace-icon fa fa-search"></i> 搜索
 			</button>
 			<div class="btn-group btn-status" style="margin-left: 20px;">

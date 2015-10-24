@@ -69,6 +69,7 @@ define(function(require, exports) {
 				touristGroup1:"",
 				pager : "",
 				partnerAgency:"",
+				travelAgency:"",
 				lineProduct1:"",
 				user1:"",
 				touristGroup2 : "",
@@ -116,12 +117,15 @@ define(function(require, exports) {
 					map.pager = JSON.parse(data.pager);
 					console.log(data);
 					map.partnerAgency = JSON.parse(data.partnerAgency);
+					map.partnerAgency2 = JSON.parse(data.partnerAgency2);
 					map.lineProduct1=JSON.parse(data.lineProduct1);   
 					map.user1 = JSON.parse(data.user1);
 
 					map.touristGroup2 = JSON.parse(data.touristGroup2);
-					map.lineProduct2=JSON.parse(data.lineProduct2);   
+					map.lineProduct2=JSON.parse(data.lineProduct2); 
+					map.travelAgency=JSON.parse(data.travelAgency);
 					map.user2 = JSON.parse(data.user2);
+
 					
 					var html = listMainTemplate(map);
 					addTab(menuKey,"转客管理",html);
@@ -144,7 +148,7 @@ define(function(require, exports) {
 					});
 					transfer.getLineProductList($("#" +tabId+" .chooseLineProductId"),"");
 					transfer.getPartnerAgencyList($("#" +tabId+" #transferOut .choosePartnerAgency"),"");
-					transfer.getPartnerAgencyListIn($("#" +tabId+" #transferIn .choosePartnerAgency"),"");
+					transfer.getPartnerAgencyListIn($("#" +tabId+" #transferIn .chooseTravelAgency"),"");
 					//我社转出选项卡绑定事件
 					$("#"+tabId+" #myTab li a.transferOut").click(function(){
 						var type=$(this).attr("data-value");//2
@@ -176,10 +180,11 @@ define(function(require, exports) {
 							partnerAgencyId : $transferIn.find("input[name=transferPartnerAgencyId]").val(),
 							creator : $transferIn.find("select[name=creator]").val(),
 							status : $transferIn.find(".btn-status button").attr("data-value"),
-							type : $("#myTab li a.transferIn").attr("data-value")			
+							type : $("#myTab li a.transferIn").attr("data-value"),
+							managerId : $transferIn.find('input[name=travelAgencyId]').val()			
 						}
 						//刷新人数合计、应付款合计和已付款合计
-						transfer.listTransferIn(page,transfer.searchInData.lineProductId,transfer.searchInData.startTime,transfer.searchInData.partnerAgencyId,transfer.searchInData.creator,transfer.searchInData.status,transfer.searchInData.type);
+						transfer.listTransferIn(page,transfer.searchInData.lineProductId,transfer.searchInData.startTime,transfer.searchInData.partnerAgencyId,transfer.searchInData.creator,transfer.searchInData.status,transfer.searchInData.type,transfer.searchInData.managerId);
 					});
 
 
@@ -196,9 +201,10 @@ define(function(require, exports) {
 							endTime : $transferIn.find("input[name=createTime]").eq(1).val(),
 							status : $transferIn.find(".btn-status button").attr("data-value"),
 							type : $("#" +tabId+" #myTab li.active a").attr("data-value"),
+							managerId : $transferIn.find('input[name=travelAgencyId]').val(),
 							page:$("#" +tabId+" #pagerH").val()
 						}
-						transfer.listTransferIn(page,transfer.searchInData.lineProductId,transfer.searchInData.startTime,transfer.searchInData.partnerAgencyId,transfer.searchInData.creator,transfer.searchInData.status,transfer.searchInData.type);
+						transfer.listTransferIn(page,transfer.searchInData.lineProductId,transfer.searchInData.startTime,transfer.searchInData.partnerAgencyId,transfer.searchInData.creator,transfer.searchInData.status,transfer.searchInData.type,transfer.searchInData.managerId);
 					});
 
 
@@ -257,7 +263,7 @@ define(function(require, exports) {
 			return t1.getFullYear() + "-" + (t1.getMonth()+1) + "-" + t1.getDate();
 		}, 
 		//同行转入参数
-		listTransferIn:function(page,lineProductId,startTime,partnerAgencyId,creator,status,type){
+		listTransferIn:function(page,lineProductId,startTime,partnerAgencyId,creator,status,type,managerId){
 			var $transferIn=$("#transferIn");
 			var endTime = $transferIn.find("input[name=endTime]").val();
 			var pager = {  
@@ -269,7 +275,7 @@ define(function(require, exports) {
 			//查询统计数据
 			$.ajax({  
 				url:""+APP_ROOT+"back/transfer.do?method=findTotal&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-				data:"pager="+encodeURIComponent(pager)+"&type="+type+"&fromTravelAgencyId="+partnerAgencyId+"&creator="+creator+"&status="+status+"&endTime="+endTime+"&startTime="+startTime+"&lineProductId="+lineProductId,
+				data:"pager="+encodeURIComponent(pager)+"&type="+type+"&fromTravelAgencyId="+partnerAgencyId+"&creator="+creator+"&status="+status+"&endTime="+endTime+"&startTime="+startTime+"&lineProductId="+lineProductId+"&managerId="+managerId,
 				dataType:'json',
 				beforeSend:function(){
 					globalLoadingLayer = layer.open({
@@ -290,7 +296,7 @@ define(function(require, exports) {
 
 			$.ajax({
 				url:""+APP_ROOT+"back/transfer.do?method=findPager&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-				data:"pager="+encodeURIComponent(pager)+"&type="+type+"&fromTravelAgencyId="+partnerAgencyId+"&creator="+creator+"&status="+status+"&endTime="+endTime+"&startTime="+startTime+"&lineProductId="+lineProductId,
+				data:"pager="+encodeURIComponent(pager)+"&type="+type+"&fromTravelAgencyId="+partnerAgencyId+"&creator="+creator+"&status="+status+"&endTime="+endTime+"&startTime="+startTime+"&lineProductId="+lineProductId+"&managerId="+managerId,
 				dataType:'json',
 				type:"POST",
 				beforeSend:function(){
@@ -325,7 +331,7 @@ define(function(require, exports) {
 					
 					//分页--首页按钮事件
 					$("#" +tabId+" .pageMode a.first").click(function(){
-						transfer.listTransferIn(0,lineProductId,startTime,partnerAgencyId,creator,status,type);
+						transfer.listTransferIn(0,lineProductId,startTime,partnerAgencyId,creator,status,type,managerId);
 					});
 					
 					//分页--上一页事件
@@ -334,7 +340,7 @@ define(function(require, exports) {
 						if(data.pager.pageNo == 0){
 							previous = 0;
 						}
-						transfer.listTransferIn(previous,lineProductId,startTime,partnerAgencyId,creator,status,type);
+						transfer.listTransferIn(previous,lineProductId,startTime,partnerAgencyId,creator,status,type,managerId);
 					});   
 					
 					//分页--下一页事件
@@ -344,12 +350,12 @@ define(function(require, exports) {
 						if(data.pager.pageNo == data.pager.totalPage-1){
 							next = data.pager.pageNo ;
 						}
-						transfer.listTransferIn(next,lineProductId,startTime,partnerAgencyId,creator,status,type);
+						transfer.listTransferIn(next,lineProductId,startTime,partnerAgencyId,creator,status,type,managerId);
 					});
 					
 					//分页--尾页事件
 					$("#" +tabId+"  .pageMode a.last").click(function(){
-						transfer.listTransferIn(data.pager.totalPage== 0 ? data.pager.totalPage : data.pager.totalPage-1,lineProductId,startTime,partnerAgencyId,creator,status,type);
+						transfer.listTransferIn(data.pager.totalPage== 0 ? data.pager.totalPage : data.pager.totalPage-1,lineProductId,startTime,partnerAgencyId,creator,status,type,managerId);
 					});
 				}
 			});
@@ -997,9 +1003,8 @@ define(function(require, exports) {
 								}
 							},
 							select: function(event, ui) {
-								var $tabId = $("#tab-resource_touristGroup-add-content");
 								$(this).blur().nextAll('input[name="transferPartnerAgencyId"]').val(ui.item.id);
-								$tabId.find("input[name=partnerAgencyNameList]").val("");
+								$(tabId).find("input[name=partnerAgencyNameList]").val("");
 							}
 						}).off("click").on("click",function(){
 							$objC.autocomplete('option','source', partnerAgencyList);
@@ -1011,11 +1016,11 @@ define(function(require, exports) {
 			         
 		},
 		getPartnerAgencyListIn:function(obj,partnerAId){
-			var $objC = $(obj)
-			var partnerAgencyList = map.partnerAgency2;
+			var $objC = $(obj);
+			var partnerAgencyList = map.travelAgency;
 			if(partnerAgencyList != null && partnerAgencyList.length > 0){
 				for(var i=0;i<partnerAgencyList.length;i++){
-					partnerAgencyList[i].value = partnerAgencyList[i].travelAgencyName;
+					partnerAgencyList[i].value = partnerAgencyList[i].name;
 				}
 			};
 			$(obj).autocomplete({
@@ -1023,19 +1028,19 @@ define(function(require, exports) {
 				minLength: 0,
 				change: function(event, ui) {
 					if (!ui.item)  {
-						$(this).val('').nextAll('input[name="transferPartnerAgencyId"]').val('');
+						$(this).val('').nextAll('input[name="travelAgencyId"]').val('');
 					}
 				},
 				select: function(event, ui) {
-					var $tabId = $("#tab-resource_touristGroup-add-content");
-					$(this).blur().nextAll('input[name="transferPartnerAgencyId"]').val(ui.item.id);
-					$tabId.find("input[name=partnerAgencyNameList]").val("");
+					$(this).blur().nextAll('input[name="travelAgencyId"]').val(ui.item.id);
+					$(tabId).find("input[name=travelAgency]").val("");
 				}
 			}).off("click").on("click",function(){
 				$objC.autocomplete('option','source', partnerAgencyList);
 				$objC.autocomplete('search', '');
 			});
 		},
+
 		getLineProductList:function(obj,partnerAId){
 			var $objC = $(obj);
 			$.ajax({

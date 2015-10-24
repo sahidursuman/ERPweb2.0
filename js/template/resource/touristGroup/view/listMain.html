@@ -8,11 +8,11 @@
 				<option value="{{partnerAgency.id}}" {{if searchParam.partnerAgencyId == partnerAgency.id}}selected="selected"{{/if}} >{{partnerAgency.travelAgencyName}}</option>
 				{{/each}}
 			</select> -->
-            <input type="text" class="col-sm-12 choosePartnerAgency" placeholder="来源" name=""   value="{{searchParam.partnerName}}" />
+            <input type="text" class="col-sm-12 choosePartnerAgency marginLeft-Right7" placeholder="来源" name=""   value="{{searchParam.partnerName}}" />
             <input type="hidden" name="fromPartnerAgencyId" value="{{searchParam.fromPartnerAgencyId}}">
         </div>
         <label class="pull-left text-right control-label no-padding-right">线路:</label>
-        <div class="col-sm-1">
+        <div class="col-sm-1 marginLeft-Right7">
             <select name="lineProductId" class="col-sm-12">
                 <option value=''>全部</option>
                 {{each lineProductList as lineProduct}}
@@ -21,7 +21,7 @@
             </select>
         </div>
         <label class="pull-left text-right control-label no-padding-right">出游时间:</label>
-        <div class="col-sm-1">
+        <div class="col-sm-1 marginLeft-Right7">
             <div class="input-group">
                 <input class="col-xs-12 date-picker" name="startTime" value="{{searchParam.startTime}}" type="text" />
                 <span class="input-group-addon">
@@ -30,7 +30,7 @@
             </div>
         </div>
         <label class="pull-left text-right control-label no-padding-right">录入人:</label>
-        <div class="col-sm-1">
+        <div class="col-sm-1 marginLeft-Right7">
             <select name="userId" class="col-sm-12">
                 <option value=''>全部</option>
                 {{each userList as user}}
@@ -39,7 +39,7 @@
             </select>
         </div>
         <label class="pull-left text-right control-label no-padding-right">录入日期:</label>
-        <div class="col-sm-1">
+        <div class="col-sm-1 marginLeft-Right7">
             <div class="input-group col-sm-12">
                 <input class="col-sm-12 date-picker" name="createTimeStart" value="{{searchParam.createStartTime}}" type="text" />
                 <span class="input-group-addon">
@@ -57,7 +57,7 @@
             </div>
         </div>
         <label class="pull-left text-right control-label no-padding-right">针对客源:</label>
-        <div class="col-sm-1 ">
+        <div class="col-sm-1 marginLeft-Right7">
             <select name="customerType" class="col-xs-12">
                 <option value="">全部</option>
                 <option value="0" {{if searchParam.customerType==0 }}selected="selected" {{/if}}>散客</option>
@@ -65,7 +65,7 @@
             </select>
         </div>
         <label class="pull-left text-right control-label no-padding-right">状态:</label>
-        <div class="pull-left btn-group btn-status" style="margin-left: 20px">
+        <div class="pull-left btn-group btn-status " style="margin-left: 7px">
             <button data-value="{{searchParam.status}}" data-toggle="dropdown" class=" btn-sm dropdown-toggle block-up" aria-expanded="false">
                 <span>
 				   {{if searchParam.status == null || searchParam.status == ""}}

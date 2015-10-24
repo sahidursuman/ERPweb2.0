@@ -76,6 +76,15 @@ define(function(require, exports) {
 			innerTransfer.innerList(divId,type);
 			innerTransfer.findTotal(divId);
 		})
+		$("#inner-TransferIn .dropdown-menu a").click(function(){
+			$(this).closest('div').find("button").attr("data-value",$(this).attr("data-value"));
+			$(this).closest('div').find("span").text($(this).text());
+			var divId = "inner-TransferIn",
+				type = "2";
+			innerTransfer.getSearchParam(divId,type);
+			innerTransfer.innerList(divId,type);
+			innerTransfer.findTotal(divId);
+		})
 	};
 	innerTransfer.getListPage = function(event){
 		var divId = event.data.divId,
@@ -265,6 +274,7 @@ define(function(require, exports) {
 			success:function(data){
 				layer.close(globalLoadingLayer);
 				data.innerTransfer = JSON.parse(data.innerTransfer);
+				
 				var html = viewTemplate(data);
 				var outViewTemplate = innerTransferOut(data);
 				if(type == 1){
@@ -290,32 +300,36 @@ define(function(require, exports) {
 				data.businessGroup = JSON.parse(data.businessGroup);
 				var result = showDialog(data);
 				if (result) {
-					var html = editTemplate(data),validator;
+					var html = editTemplate(data),validator,
+					$editObj=$("#tab-arrange_inner_Transfer-edit-content");
+
 					if($("#tab-"+menuKey+"-edit-content").length > 0) {
 						addTab(menuKey+"-edit","修改内转信息");
 						if(!!innerTransfer.edited["edit"] && innerTransfer.edited["edit"] != ""){
 							addTab(menuKey+"-edit","修改内转信息");
-							rule.transferCheckor($(".inner-edit"));
+							rule.transferCheckor($editObj);
 							showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
 								 innerTransfer.saveEditTranIn(0);
 								 innerTransfer.edited["edit"] = "";
 								 addTab(menuKey+"-edit","修改内转信息",html);
-								 validator=rule.transferCheckor($(".inner-edit"));
+								 validator=rule.transferCheckor($editObj);
 					
 							 },function(){
 								 addTab(menuKey+"-edit","修改内转信息",html);
 								 innerTransfer.edited["edit"] = "";
-								 validator=rule.transferCheckor($(".inner-edit"));
+								 validator=rule.transferCheckor($editObj);
 						
 							 });
 						 }else{
 							addTab(menuKey+"-edit","修改内转信息",html);
-							validator=rule.transferCheckor($(".inner-edit"));
+							validator=rule.transferCheckor($editObj);
 						
 						 }
 					}else{
 						addTab(menuKey+"-edit","修改内转信息",html);
-						validator=rule.transferCheckor($(".inner-edit"));
+
+						$editObj=$("#tab-arrange_inner_Transfer-edit-content");
+						validator=rule.transferCheckor($editObj);
 					}
 					$("#tab-"+menuKey+"-edit-content").on("change",function(){
 						innerTransfer.edited["edit"] = "edit"; 					
@@ -323,24 +337,23 @@ define(function(require, exports) {
 					//新增&&智能计算
 					//inner.innitAddFee(validator);
 					innerTransfer.innitAddFee(validator);
-					rule.update(validator);
-
-					$obj=$("#tab-arrange_inner_Transfer-edit-content");
+					
+					$editObj=$("#tab-arrange_inner_Transfer-edit-content");				
 
 					//绑定删除分团转客信息
-					$obj.find(".btn-edittransfer-delete").off().on("click",function(){
+					$editObj.find(".btn-edittransfer-delete").off().on("click",function(){
 						var tr =$(this).parent().parent();
 						var id = tr.attr("data-entity-id");
 						innerTransfer.delTransferData(id,tr);
 					});
 				   
-					$obj.find(".btn-saveTransoutInfo").click(function(){
+					$editObj.find(".btn-saveTransoutInfo").click(function(){
 					    // 表单校验
 				        if (!validator.form()) { return; }
 						innerTransfer.saveEditTranIn(1);
 
 					})
-					$obj.find(".btn-cancelTransfer").click(function(){
+					$editObj.find(".btn-cancelTransfer").click(function(){
 						showConfirmDialog($( "#confirm-dialog-message" ), "确定关闭本选项卡?",function(){
 							closeTab(menuKey + "-edit");
 							innerTransfer.edited["edit"] = "";

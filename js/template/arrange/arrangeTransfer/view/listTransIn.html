@@ -20,7 +20,7 @@
 		<tr data-entity-id="{{result.id}}">
 			<td>{{if result.lineProduct != null}}{{result.lineProduct.name}}{{/if}}</td>
 			<td>{{if result.lineProduct != null}}{{result.lineProduct.days}}{{/if}}</td>
-			<td>{{result.createTime}}</td>
+			<td>{{result.startTime | dateFormat:'yyyy-MM-dd'}}</td>
 			<td>{{if result.touristGroup!=null}}{{if result.touristGroup.contactMember!=null}}{{result.touristGroup.contactMember.name}}{{/if}}{{/if}}</td>
 
 			<td>{{if result.touristGroup!=null}}{{result.touristGroup.adultCount}}{{/if}}大{{if result.touristGroup!=null}}{{result.touristGroup.childCount}}{{/if}}小</td>

@@ -123,7 +123,7 @@ define(function(require, exports) {
             $.ajax({//            back/profitInnerTransfer.do
                 url:""+APP_ROOT+"back/profitInnerTransfer.do?method=listProfitInnerTransfer&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
                 type:"GET",
-                data:"pageNo="+page+"&lineProductId="+lineProductId+"&partnerAgencyId="+partnerAgencyId+"&toBusinessGroupId="+toBusinessGroupId+"&startTime="+startTime+"&endTime="+endTime+"&sortType=auto",
+                data:"pageNo="+page+"&lineProductId="+lineProductId+"&fromPartnerAgencyId="+partnerAgencyId+"&toBusinessGroupId="+toBusinessGroupId+"&startTime="+startTime+"&endTime="+endTime+"&sortType=auto",
                 dataType:"json",
                 beforeSend:function(){
                     globalLoadingLayer = openLoadingLayer();
