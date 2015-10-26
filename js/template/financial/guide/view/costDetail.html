@@ -107,7 +107,7 @@
                             <td>{{arrangeIncomePayment.price}}</td>
                             <td>{{arrangeIncomePayment.count}}</td>
                             <td>{{arrangeIncomePayment.needIncomeMoney}}</td>
-                            <td><a class="costDetailImg" url="{{arrangeIncomePayment.billImage}}" href="#">查看</a></td>
+                            <td><a {{if arrangeIncomePayment.billImage != null && arrangeIncomePayment.billImage !=""}}class="costDetailImg" url="{{arrangeIncomePayment.billImage}}" href="#"{{/if}}><span {{if arrangeIncomePayment.billImage == null || arrangeIncomePayment.billImage ==""}}style="color:#bbb"{{/if}}>查看</span></a></td>
                         </tr>
 						{{/each}}
                         </tbody>
@@ -143,7 +143,7 @@
                             <td>{{shopArrange.consumeMoney}}</td>
                             <td>{{shopArrange.travelAgencyRate}}</td>
                             <td>{{shopArrange.guideRate}}</td>
-                            <td><a class="costDetailImg" url="{{shopArrange.billImage}}" href="#">查看</a></td>
+                            <td><a {{if shopArrange.billImage != null && shopArrange.billImage !=""}}class="costDetailImg" url="{{shopArrange.billImage}}" href="#"{{/if}}><span {{if shopArrange.billImage == null || shopArrange.billImage ==""}}style="color:#bbb"{{/if}}>查看</span></a></td>
                         </tr>
 						{{/each}}
                         </tbody>
@@ -186,7 +186,7 @@
                             <td>{{selfPayArrange.needPayMoney}}</td>
                             <td>{{selfPayArrange.payedMoney}}</td>
                             <td>{{selfPayArrange.guidePayMoney}}</td>
-                            <td><a class="costDetailImg" url="{{selfPayArrange.billImage}}" href="#">查看</a></td>
+                            <td><a {{if selfPayArrange.billImage != null && selfPayArrange.billImage !=""}}class="costDetailImg" url="{{selfPayArrange.billImage}}" href="#"{{/if}}><span {{if selfPayArrange.billImage == null || selfPayArrange.billImage ==""}}style="color:#bbb"{{/if}}>查看</span></a></td>
                         </tr>
                         {{/each}}
                         </tbody>
@@ -225,7 +225,7 @@
                             <td>{{busCompanyArrange.needPayMoney}}</td>
                             <td>{{busCompanyArrange.payedMoney}}</td>
                             <td>{{busCompanyArrange.guidePayMoney}}</td>
-                            <td><a class="costDetailImg" url="{{busCompanyArrange.billImage}}" href="#">查看</a></td>
+                            <td><a {{if busCompanyArrange.billImage != null && busCompanyArrange.billImage !=""}}class="costDetailImg" url="{{busCompanyArrange.billImage}}" href="#"{{/if}}><span {{if busCompanyArrange.billImage == null || busCompanyArrange.billImage ==""}}style="color:#bbb"{{/if}}>查看</span></a></td>
                         </tr>
 						{{/each}}
                         </tbody>
@@ -266,7 +266,7 @@
                             <td>{{restaurantArrange.needPayMoney}}</td>
                             <td>{{restaurantArrange.payedMoney}}</td>
                             <td>{{restaurantArrange.guidePayMoney}}</td>
-                            <td><a class="costDetailImg" url="{{restaurantArrange.billImage}}" href="#">查看</a></td>
+                            <td><a {{if restaurantArrange.billImage != null && restaurantArrange.billImage !=""}}class="costDetailImg" url="{{restaurantArrange.billImage}}" href="#"{{/if}}><span {{if restaurantArrange.billImage == null || restaurantArrange.billImage ==""}}style="color:#bbb"{{/if}}>查看</span></a></td>
                         </tr>
                         {{/each}}
                         </tbody>
@@ -306,7 +306,7 @@
                             <td>{{hotelArrange.needPayMoney}}</td>
                             <td>{{hotelArrange.payedMoney}}</td>
                             <td>{{hotelArrange.guidePayMoney}}</td>
-                            <td><a class="costDetailImg" url="{{hotelArrange.billImage}}" href="#">查看</a></td>
+                            <td><a {{if hotelArrange.billImage != null && hotelArrange.billImage !=""}}class="costDetailImg" url="{{hotelArrange.billImage}}" href="#"{{/if}}><span {{if hotelArrange.billImage == null || hotelArrange.billImage ==""}}style="color:#bbb"{{/if}}>查看</span></a></td>
                         </tr>
                         {{/each}}
                         </tbody>
@@ -349,7 +349,7 @@
                             <td>{{scenicArrange.needPayMoney}}</td>
                             <td>{{scenicArrange.payedMoney}}</td>
                             <td>{{scenicArrange.guidePayMoney}}</td>
-                            <td><a class="costDetailImg" url="{{scenicArrange.billImage}}" href="#">查看</a></td>
+                            <td><a {{if scenicArrange.billImage != null && scenicArrange.billImage !=""}}class="costDetailImg" url="{{scenicArrange.billImage}}" href="#"{{/if}}><span {{if scenicArrange.billImage == null || scenicArrange.billImage ==""}}style="color:#bbb"{{/if}}>查看</span></a></td>
                         </tr>
                         {{/each}}
                         </tbody>
@@ -402,7 +402,7 @@
                             <td>{{ticketArrange.needPayMoney}}</td>
                             <td>{{ticketArrange.payedMoney}}</td>
                             <td>{{ticketArrange.guidePayMoney}}</td>
-                            <td><a class="costDetailImg" url="{{ticketArrange.billImage}}" href="#">查看</a></td>
+                            <td><a {{if ticketArrange.billImage != null && ticketArrange.billImage !=""}}class="costDetailImg" url="{{ticketArrange.billImage}}" href="#"{{/if}}><span {{if ticketArrange.billImage == null || ticketArrange.billImage ==""}}style="color:#bbb"{{/if}}>查看</span></a></td>
                         </tr>
                         {{/each}}
                         </tbody>
@@ -439,7 +439,7 @@
                             <td>{{otherArrange.needPayMoney}}</td>
                             <td>{{otherArrange.payedMoney}}</td>
                             <td>{{otherArrange.guidePayMoney}}</td>
-                            <td><a class="costDetailImg" url="{{otherArrange.billImage}}" href="#">查看</a></td>
+                            <td><a {{if otherArrange.billImage != null && otherArrange.billImage !=""}}class="costDetailImg" url="{{otherArrange.billImage}}" href="#"{{/if}}><span {{if otherArrange.billImage == null || otherArrange.billImage ==""}}style="color:#bbb"{{/if}}>查看</span></a></td>
                         </tr>
                         {{/each}}
                         </tbody>

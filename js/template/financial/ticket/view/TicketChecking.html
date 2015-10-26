@@ -98,7 +98,7 @@
 							    {{"导付:"}}{{checking.guidePayedMoney}}
 							</td> 
 							<td>{{checking.unPayedMoney}}</td>
-							<td><a href="#" class="ticketImg" url="{{checking.billImages}}">查看</a></td>
+							<td><a {{if checking.billImages != null && checking.billImages !=""}}href="#" class="ticketImg" url="{{checking.billImages}}"{{/if}}><span {{if checking.billImages == null || checking.billImages ==""}}style="color:#bbb"{{/if}}>查看</span></a></td>
 							<td><input type="text" name="FinancialticketRealUnPayedMoney" value="{{checking.realUnPayedMoney}}" style="text-align:center" {{if checking.isConfirmAccount == 1 && roleType != 1 }} disabled = "true" {{/if}}></td>
 	                        <td><input type="text" name="FinancialticketRemark" value="{{checking.remark}}" style="text-align:center" {{if checking.isConfirmAccount == 1 && roleType != 1 }} disabled = "true" {{/if}}></td>
 							<td>{{if checking.checkTime == null || checking.checkTime == ""}}-{{else}}{{checking.checkTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
