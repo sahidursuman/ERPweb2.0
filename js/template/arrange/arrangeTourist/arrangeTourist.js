@@ -59,7 +59,7 @@ define(function(require, exports) {
 						}
 						arrangeTourist.listArrangeTourist(0,"","");  
 
-						//给搜索按钮绑定事件
+						//给搜索按钮绑定事件area
 						$("#"+tabId+" .arrangeTouristMain .btn-arrangeTourist-search").click(function(){
 							arrangeTourist.searchData = {
 									lineProductId : $("#tab-"+menuKey+"-content .arrangeTouristMain select[name=lineProductId]").val(),
