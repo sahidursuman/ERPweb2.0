@@ -113,6 +113,24 @@
 		}, function() {
 			$(this).find('.dropdown-menu').hide();
 		});
+
+		// 绑定菜单的事件
+		$("#sidebar").on('click', 'li[data-target]', function(event) {
+			event.preventDefault();
+			var $that = $(this), target = $that.data('target');
+
+			if (!!target && !!modalScripts[target])  {
+				// remove active style
+				$that.closest('.nav-list').find('li').removeClass('active');
+				// add active style
+				$that.addClass("active").closest('.open').addClass('active');
+
+				seajs.use("" + ASSETS_ROOT + modalScripts[target],function(module){
+					// module.listGuide(0,"",1);
+					module.init();
+				});
+			}
+		});
 	};
 
 	

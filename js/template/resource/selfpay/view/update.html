@@ -140,7 +140,7 @@
 												<input name="startTime" value="{{rebateList.startTime | dateFormat: 'yyyy-MM-dd'}}" type="text" class="datepicker col-sm-4">
 												<label class="col-sm-2 control-label center">&nbsp;至&nbsp;</label>
 												<input name="endTime" value="{{rebateList.endTime | dateFormat: 'yyyy-MM-dd'}}" type="text" class="datepicker col-sm-4">
-												<label class="priceArea col-sm-2" style="padding-top:3px;">
+												<label class="priceArea col-sm-2" style="padding-top:0px;">
 													<button class="btn btn-success btn-sm btn-white add">
 														<i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
 													</button>
@@ -151,7 +151,7 @@
 												<input name="startTime" value="{{rebateList.startTime | dateFormat: 'yyyy-MM-dd'}}" type="text" class="datepicker col-sm-4">
 												<label class="col-sm-2 control-label center">&nbsp;至&nbsp;</label>
 												<input name="endTime" value="{{rebateList.endTime | dateFormat: 'yyyy-MM-dd'}}" type="text" class="datepicker col-sm-4">
-												<label class="priceArea col-sm-2" style="padding-top:3px;">
+												<label class="priceArea col-sm-2" style="padding-top:0px;">
 													<button class="btn btn-success btn-sm btn-white del">
 														<i class="ace-icon fa fa-minus bigger-110 icon-only" style="line-height: 14px"></i>
 													</button>
@@ -190,7 +190,7 @@
 											<div class="col-sm-12 no-padding">
 												<input name="travelAgencyRate" value="{{rebateList.travelAgencyRate*100 | toFixed}}" class="col-sm-12" type="text" maxlength="5">
 											</div>{{else}}
-											<div class="col-sm-12 no-padding" style="padding-top:2px!important;">
+											<div class="col-sm-12 no-padding" style="padding-top:8px!important;">
 												<input name="travelAgencyRate" value="{{rebateList.travelAgencyRate*100 | toFixed}}" class="col-sm-12" type="text" maxlength="5">
 											</div>{{/if}}{{/each}}
 										</td>
