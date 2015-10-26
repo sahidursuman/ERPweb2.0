@@ -45,9 +45,10 @@
 				+ '.feild-error-tip {position:absolute;  color: #d25b47; cursor:pointer;}'
 				+ '.input-error {    padding-right: 20px; border-color: #d25b47 !important; }'
 				+ '.input-success {    padding-right: 4px;}'
-				+ ' .feild-error-tip + .tooltip > .tooltip-inner, .tooltip-error { background-color: #d25b47;}  .feild-error-tip + .tooltip > .tooltip-arrow{border-top-color: #d25b47;}'
+				+ ' #form-validation-tip-area > .tooltip > .tooltip-inner { background-color: #d25b47;}   #form-validation-tip-area > .tooltip > .tooltip-arrow{border-top-color: #d25b47;}'
 				+ '.feild-relative { position: relative !important; }'
-				+ '</style>');     
+				+ '</style>')
+			.append('<div id="form-validation-tip-area"></div>');     
 		}
 	};
 
@@ -198,7 +199,7 @@
 						}
 						break;
 					case 'landline':	// 固定电话
-						if (!!data && !/^0[1-9]\d{1,2}-?\d{7,8}(-\d+)?$/.test(data)) {
+						if (!!data && !/^0[1-9]\d{1,2}-?\d{7,8}$/.test(data)) {
 							res = rules[i].errMsg;
 						}
 						break;
@@ -250,13 +251,14 @@
 		if (msg)  {
 			// get error message
 			$label = $feild.addClass('input-error').removeClass('input-success').next();
+			console.info(msg)
 			if ($label.hasClass('feild-label'))  {
 				// label is exist
-				$label.tooltip({content: msg});
+				$label.data('original-title', '').prop('title', msg).tooltip('fixTitle');
 			} else {
 				// append error tip
 				var $parent = $feild.parent().addClass('feild-relative'),
-					$errorLabel = $(errorLabel).attr('title', msg).tooltip({ tooltipClass: "tooltip-error" }).insertAfter($feild),
+					$errorLabel = $(errorLabel).attr('title', msg).tooltip({ container: "#form-validation-tip-area"}).insertAfter($feild),
 					top = $feild.position().top + ($feild.outerHeight() - $errorLabel.height()) / 2,
 					right = $parent.outerWidth() - $feild.position().left - $feild.outerWidth() + 5;
 
