@@ -87,8 +87,7 @@
 							    {{"导付:"}}{{checking.guidePayedMoney}}
 							</td>   
 							<td>{{checking.unPayedMoney}}</td>
-							<td><a href="#" {{if checking.billImages != null && checking.billImages !=""}} class="busCompanyImg"  url="{{checking.billImages}}" {{/if}}>
-              <span {{if checking.billImages == null || checking.billImages ==""}}style="color:#bbb"{{/if}}>查看</span></a></td>
+							<td>{{if checking.billImages != null && checking.billImages !=""}}<a href="#" class="busCompanyImg" url="{{checking.billImages}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
 							<td><input type="text" name="FinancialbusCompanyRealUnPayedMoney" value="{{checking.realUnPayedMoney}}" style="text-align:center" {{if checking.isConfirmAccount == 1 && roleType != 1 }} disabled = "true" {{/if}}></td>
 	                        <td><input type="text" name="FinancialbusCompanyRemark" value="{{checking.remark}}" style="text-align:center" {{if checking.isConfirmAccount == 1 && roleType != 1 }} disabled = "true" {{/if}}></td>
 							<td>{{if checking.checkTime == null || checking.checkTime == ""}}-{{else}}{{checking.checkTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td> 

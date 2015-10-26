@@ -26,7 +26,7 @@
                         <option value="12">12月</option>
                     </select>
  
-                    <button class="btn-height btn-sm search-btn btn-shopChecking-search" >
+                    <button class="btn-height btn-sm search-btn btn-shopshop-search" >
                         <i class="ace-icon fa fa-search"></i>
                        	 搜索
                     </button>
@@ -88,7 +88,7 @@
                 <td>{{shop.guideRebateMoney}}</td>
                 <td>{{shop.sumCustomerRebateMoney}}</td>
                 <td>{{shop.sumParkingRebateMoney}}</td>
-                <td><a {{if shop.billImages != null && shop.billImages !=""}}href="#" class="shopImg" url="{{shop.billImages}}"{{/if}}><span {{if shop.billImages == null || shop.billImages ==""}}style="color:#bbb"{{/if}}>查看</span></a></td>
+                <td>{{if shop.billImages != null && shop.billImages !=""}}<a href="#" class="shopImg" url="{{shop.billImages}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
                 <td>{{shop.rebateMoney}}</td>
                 <td class="col-sm-1">
 	               	{{if shop.isConfirmAccount == 0}}
