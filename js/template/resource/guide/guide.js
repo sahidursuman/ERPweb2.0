@@ -40,12 +40,11 @@ define(function(require, exports) {
 	 * @return {[type]}          [description]
 	 */
 	GuideResource.listGuide = function(page,realname,status){
-		if (GuideResource.$tab) {
+		if (GuideResource.$searchArea && arguments.length === 1) {
 			// 初始化页面后，可以获取页面的参数
 			realname = GuideResource.$searchArea.find("input[name=guide_realname]").val(),
-			status = GuideResource.$searchArea.find('.T-Select-Status').find("button").data('value')
+			status = GuideResource.$searchArea.find('.T-select-status').find("button").data('value')
 		}
-
 		// 修正页码
 		page = page || 0;
 
@@ -61,6 +60,9 @@ define(function(require, exports) {
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
+					GuideResource.searchData =  {
+						pageNo: page
+					};
 					var guideList = data.guideList;
 					guideList = JSON.parse(guideList);
 					data.guideList = guideList;
@@ -74,7 +76,7 @@ define(function(require, exports) {
 
 					// 绑定翻页组件
 					laypage({
-					    cont: GuideResource.$tab.find('.T-Pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+					    cont: GuideResource.$tab.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
 					    pages: data.totalPage, //总页数
 					    curr: (page + 1),
 					    jump: function(obj, first) {
@@ -94,7 +96,7 @@ define(function(require, exports) {
 	 */
 	GuideResource.init_event = function() {
 		//搜索栏状态button下拉事件
-		GuideResource.$tab.find('.T-Select-Status').on('click', 'a', function(event) {
+		GuideResource.$tab.find('.T-select-status').on('click', 'a', function(event) {
 			event.preventDefault();
 			/* Act on the event */
 			var $that = $(this);
@@ -106,44 +108,44 @@ define(function(require, exports) {
 		});
 
 		//搜索按钮事件
-		GuideResource.$tab.find('.T-Guide-Search').on('click', function(event) {
+		GuideResource.$tab.find('.T-guide-search').on('click', function(event) {
 			event.preventDefault();
 			/* Act on the event */
 			GuideResource.listGuide(0);
 		});
 
 		// 回车搜索
-		GuideResource.$tab.find('.T-Guide-Name').keyup(function(e){
+		GuideResource.$tab.find('.T-guide-name').keyup(function(e){
 			if(e.which == 13 && !window.forbiddenError){
 				GuideResource.listGuide(0);
 			}
 		});
 
 		// 添加导游
-		GuideResource.$tab.find('.T-Add-Guide').on('click', function(event) {
+		GuideResource.$tab.find('.T-add-guide').on('click', function(event) {
 			event.preventDefault();
 			/* Act on the event */
 			GuideResource.addGuide(0);
 		});
 
 		// 报表内的操作
-		GuideResource.$tab.find('.guideList').on('click', '.T-Action', function(event) {
+		GuideResource.$tab.find('.T-guide-list').on('click', '.T-action', function(event) {
 			event.preventDefault();
 			var $that = $(this), id = $that.closest('tr').data('id');
 
-			if ($that.hasClass('T-View'))  {
+			if ($that.hasClass('T-view'))  {
 				// 查看导游信息
 				GuideResource.viewGuide(id);
-			} else if ($that.hasClass('T-Edit'))  {
+			} else if ($that.hasClass('T-edit'))  {
 				// 编辑导游信息
 				GuideResource.updateGuide(id);
-			} else if ($that.hasClass('T-Delete'))  {
+			} else if ($that.hasClass('T-delete'))  {
 				// 删除导游
 				GuideResource.deleteGuide(id);
 			}
 		});
 
-		Tools.descToolTip($(".T-Ctrl-Tip"));
+		Tools.descToolTip($(".T-ctrl-tip"));
 	}
 	/**
 	 * 添加导游
@@ -154,44 +156,41 @@ define(function(require, exports) {
 		    type: 1,
 		    title:"新增导游",
 		    skin: 'layui-layer-rim', //加上边框
-		    area: ['630px', '360px'], //宽高
+		    area: '630px', //宽高
 		    zIndex:1028,
 		    content: html,
+		    scrollbar: false,
 		    success:function(){
-		    	var $obj = $(".addGuideContainer .guideMainForm");
+		    	var $container = $(".T-guide-container");
 		    	// 设置表单验证
-		    	var validator = rule.check($('.addGuideContainer'));
+		    	var validator = rule.check($container);
 		    	
-		    	$obj.find("input[name=joinTime]").datepicker({
+		    	$container.find("input[name=joinTime]").datepicker({
 					autoclose: true,
 					todayHighlight: true,
 					format: 'yyyy-mm-dd',
 					language: 'zh-CN'
 				});
-		    	$obj.find(".btn-submit-guide").click(function(){
+		    	$container.find(".T-add-guide-submit").click(function(){
 		    		// 表单校验
 		    		if (!validator.form()) { return; }
 					var status = 0;
-					if($obj.find(".guide-status").is(":checked") == true){
+					if($container.find(".T-guide-status").is(":checked") == true){
 						status = 1;
 					}
-					var form = $obj.serialize()+"&status="+status+"";
+					var form = $container.children('.T-form').serialize()+"&status="+status+"";
 					
 					$.ajax({
 						url:""+APP_ROOT+"back/guide.do?method=addGuide&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=add",
 						type:"POST",
 						data:form,
 						dataType:"json",
-						beforeSend:function(){
-							globalLoadingLayer = openLoadingLayer();
-						},
 						success:function(data){
-							layer.close(globalLoadingLayer);
 							var result = showDialog(data);
 							if(result){
 								layer.close(addGuideLayer);
 								showMessageDialog($( "#confirm-dialog-message" ),data.message);
-								GuideResource.listGuide(0,"",1);
+								GuideResource.listGuide(0);
 							}
 						}
 					});
@@ -206,7 +205,7 @@ define(function(require, exports) {
 	 * @param  {int} pageNo 当前页码
 	 * @return {[type]}        [description]
 	 */
-	GuideResource.updateGuide = function(id,pageNo){
+	GuideResource.updateGuide = function(id){
 		$.ajax({
 			url:""+APP_ROOT+"back/guide.do?method=getGuideById&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 			type:"POST",
@@ -222,42 +221,39 @@ define(function(require, exports) {
 					    type: 1,
 					    title:"修改导游",
 					    skin: 'layui-layer-rim', //加上边框
-					    area: ['630px', '360px'], //宽高
+					    area: '630px', //宽高
 					    zIndex:1028,
 					    content: html,
+					    scrollbar: false,
 					    success:function(){
-					    	var $obj = $(".updateGuideContainer .guideMainForm");
+					    	var $container = $(".T-guide-container");
 					    	// 设置表单验证
-					    	var validator = rule.check($('.updateGuideContainer'));
-					    	$obj.find("input[name=joinTime]").datepicker({
+					    	var validator = rule.check($container);
+					    	$container.find("input[name=joinTime]").datepicker({
 								autoclose: true,
 								todayHighlight: true,
 								format: 'yyyy-mm-dd',
 								language: 'zh-CN'
 							});
-					    	$obj.find(".btn-submit-guide").click(function(){
+					    	$container.find(".T-update-guide").click(function(){
 					    		// 表单校验
 					    		if (!validator.form()) { return; }
 								var status = 0;
-								if($obj.find(".guide-status").is(":checked") == true){
+								if($container.find(".T-guide-status").is(":checked") == true){
 									status = 1;
 								}
-								var form = "id="+id+"&"+$obj.serialize()+"&status="+status+"";
+								var form = "id="+id+"&"+$container.children('.T-form').serialize()+"&status="+status+"";
 								$.ajax({
 									url:""+APP_ROOT+"back/guide.do?method=updateGuide&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
 									type:"POST",
 									data:form,
 									dataType:"json",
-									beforeSend:function(){
-										globalLoadingLayer = openLoadingLayer();
-									},
 									success:function(data){
-										layer.close(globalLoadingLayer);
 										var result = showDialog(data);
 										if(result){
 											layer.close(addGuide);
 											showMessageDialog($( "#confirm-dialog-message" ),data.message);
-											GuideResource.listGuide(pageNo,GuideResource.searchData.realname,GuideResource.searchData.status);
+											GuideResource.listGuide(GuideResource.searchData.pageNo);
 										}
 									}
 								});
@@ -276,7 +272,7 @@ define(function(require, exports) {
 	 * @param  {int} pageNo 当前页码
 	 * @return {[type]}        [description]
 	 */
-	GuideResource.deleteGuide = function(obj,id,pageNo){
+	GuideResource.deleteGuide = function(id){
 		var dialogObj = $( "#confirm-dialog-message" );
 		dialogObj.removeClass('hide').dialog({
 			modal: true,
@@ -308,9 +304,8 @@ define(function(require, exports) {
 								layer.close(globalLoadingLayer);
 								var result = showDialog(data);
 								if(result){
-									$("#"+tabId+" .guideList .guide-"+id+"").fadeOut(function(){
-										console.info(GuideResource.searchData.realname);
-										GuideResource.listGuide(pageNo,GuideResource.searchData.realname,GuideResource.searchData.status);
+									GuideResource.$tab.find(".guide-"+id).fadeOut(function(){
+										GuideResource.listGuide(GuideResource.searchData.pageNo);
 									});
 								}
 							}
