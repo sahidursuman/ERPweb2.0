@@ -636,6 +636,9 @@ input,select{
 .timeStart{
     margin-left: -40px;
 }
+.timeStartMore{
+    margin-left: -65px
+}
 .guideMarginLeft{
     margin-left: -104px;
 }
