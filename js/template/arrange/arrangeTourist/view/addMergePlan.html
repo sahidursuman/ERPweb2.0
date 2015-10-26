@@ -148,12 +148,12 @@
 													<th class="th-border">现收团款</th>
 													<th class="th-border">住宿标准 </th>
 													<th class="th-border">自费包含</th>
-													<th class="th-border" width="380">备注</th>
+													<th class="th-border">备注</th>
 													<th class="th-border" width="100">操作</th>
 												</tr>
 											</thead>
 											<tbody class="mergeTripPlanTouristTbody">{{each addTripPlan.touristGroupList as touristGroupList}}
-												<tr data-entity-id="{{touristGroupList.id}}">
+												<tr data-entity-id="{{touristGroupList.id}}" data-entity-pid="{{touristGroupList.pid}}">
 												    <td></td> 
 												    <td>{{touristGroupList.creatorName}}</td>
 												    <td>{{touristGroupList.lineProduct.name}}</td>
