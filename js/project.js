@@ -552,6 +552,13 @@ function trim(str){
 	return str.replace(/(^\s*)|(\s*$)/g, "");
 }
 
+/**
+ * 定义模块绑定关系
+ */
+var modalScripts = {
+	'resource_guide': "js/template/resource/guide/guide.js",
+};
+
 function listMenu(menuTemplate){
 	$.ajax({
 		url:""+APP_ROOT+"back/user.do?method=listMenu&token="+$.cookie("token")+"&operation=self",
@@ -566,15 +573,15 @@ function listMenu(menuTemplate){
 				var html = template("menu-template",data);
 				$("#sidebar .nav-list").html(html);
 
-				//绑定导游菜单功能//
-				$("#sidebar .nav-list .resource_guide").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/resource/guide/guide.js",function(guide){
-						guide.listGuide(0,"",1);
-					});
-				});
+				// //绑定导游菜单功能//
+				// $("#sidebar .nav-list .resource_guide").click(function(){
+				// 	$("#sidebar .nav-list li").removeClass("active");
+				// 	$(this).addClass("active");
+				// 	$(this).parent().parent().addClass("active");
+				// 	seajs.use("" + ASSETS_ROOT +"js/template/resource/guide/guide.js",function(guide){
+				// 		guide.listGuide(0,"",1);
+				// 	});
+				// });
 
 				//绑定车队菜单功能
 				$("#sidebar .nav-list .resource_busCompany").click(function(){
@@ -1297,7 +1304,8 @@ var _statusText = {
 			cache: false,
 			showLoading: true,
 			removeLoading: true,
-			showError: true
+			showError: true,
+			dataType: 'json'
 		}, opt);
 		$.extend(opt, opt,
 			{
@@ -1324,10 +1332,20 @@ var _statusText = {
 						showMessageDialog($( "#confirm-dialog-message" ), '服务器开小差了，请您稍后再试', closeGlobalLayer);
 					}
 				},
+				beforeSend:function(){
+					if (opt.showLoading)  {
+						globalLoadingLayer = openLoadingLayer();
+					}
+				},
 				success: function (data, textStatus) {
 					//若要移除loading,则移除
 
 					fn.success(data, textStatus);
+				},
+				complete: function()  {
+					if (opt.removeLoading) {
+						layer.close(globalLoadingLayer);
+					}
 				}
 			});
 		return _ajax(opt);
@@ -1357,10 +1375,78 @@ var _statusText = {
 	        if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
 	    return fmt;
 	}
+
+	/**
+	 * 重写laypage
+	 * @param  {[object]} options [自定义选项]
+	 * @return {[type]}         [description]
+	 */
+	var _laypage = laypage;
+	laypage = function(options)  {
+		// 合并配置
+		options = $.extend({}, 
+			{
+			    skip: true, //是否开启跳页
+			    skin: '#51b0c2',
+			    groups: 3, //连续显示分页数
+			}, options);
+
+		_laypage(options);
+	};
+
+	$('body').append('<div id="desc-tooltip-containter"></div>');
+	$('#desc-tooltip-containter').hover(function() {
+		$(this).data('focus-in', true);
+	}, function() {
+		$(this).data('focus-in', false).html('');
+	});
 })(jQuery);
 
-var Tools = {};
+var Tools = {
+	$descContainer: $('#desc-tooltip-containter')
+};
 
+/**
+ * 自定义简介的提示
+ * @param  {object} $elements 需要绑定提示的DOM
+ * @return {[type]}           [description]
+ */
+Tools.descToolTip = function($elements) {
+	if (!!$elements)  {
+		$elements.each(function() {
+			var $that = $(this), content = $that.prop('title');
+
+			// 内容过长，才提示
+			$that.prop('title', '');
+			if ($that.width() < $that.children().width())  {
+				// 绑定提示
+				$that.popover({
+					trigger: 'click',
+					container: '#desc-tooltip-containter',
+					content: content
+				})
+				// 处理显示与隐藏提示
+				.hover(function() {
+					// 进入时，触发提示
+					$(this).popover('show');
+				}, function() {
+					// 设置超时，通过判断来确定提示
+					setTimeout(function() {
+						if (Tools.$descContainer.data('focus-in') != true)  {
+							$that.popover('hide');
+						}
+					}, 100);
+				});
+			}
+		});
+	}
+}
+
+/**
+ * 编辑中转安排——
+ * @param  {string} id 游客小组的ID
+ * @return {[type]}    [description]
+ */
 Tools.updateTransit = function(id)  {
 	seajs.use("" + ASSETS_ROOT +"js/template/arrange/transit/transit.js",function(module){
 		module.updateTransit(id);

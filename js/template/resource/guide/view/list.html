@@ -1,10 +1,10 @@
 <div class="search-area guideAdd">
-	<input name="guide_realname" class="col-xs-2 input-default-height guideInputList" value="{{searchParam.realname}}"  placeholder="请输入导游姓名或手机号"/>&nbsp;
-	<button class=" btn-sm  btn-guide-search pull-left search-btn " style="border-radius: 0;background: #51b0c2;border:2px solid #51b0c2!important;color: white">
+	<input name="guide_realname" class="col-xs-2 input-default-height T-guide-name guideInputList" value="{{searchParam.realname}}"  placeholder="请输入导游姓名或手机号"/>&nbsp;
+	<button class=" btn-sm  T-guide-search pull-left search-btn " style="border-radius: 0;background: #51b0c2;border:2px solid #51b0c2!important;color: white">
 		<i class="ace-icon fa fa-search"></i>
 		搜索
 	</button>
-	<div class="btn-group btn-status" style="margin-left: 20px;">
+	<div class="btn-group T-select-status" style="margin-left: 20px;">
 		<button data-value="{{searchParam.status}}" data-toggle="dropdown" class=" btn-sm  dropdown-toggle block-up" style="background: #ffffff!important; border: 1px solid #83bbd6!important;" aria-expanded="false">
 			<span>
 				{{if searchParam.status == ""}}
@@ -30,7 +30,7 @@
 		</ul>
 	</div>
 
-	<button class="btn btn-sm btn-success btn-guide-add" style="margin-left: 20px">
+	<button class="btn btn-sm btn-success T-add-guide" style="margin-left: 20px">
 		<i class="ace-icon fa fa-plus"></i>
 		新增导游
 	</button>
@@ -61,9 +61,9 @@
 				</tr>
 			</thead>
 		
-			<tbody>
+			<tbody class="T-guide-list">
 				{{each guideList as guide}}
-					<tr class="guide-{{guide.id}}">
+					<tr class="guide-{{guide.id}}" data-id="{{guide.id}}" >
 						<td>{{guide.realname}}</td>
 						<td>
 							{{if guide.gender == 0}}
@@ -85,7 +85,7 @@
 							{{/if}}
 						</td>
 						<td>{{guide.guideCardNumber}}</td>
-						<td><span style="height: 35px">{{guide.remark}}</span></td>
+						<td class="T-ctrl-tip" title="{{guide.remark}}"><span style="height: 35px">{{guide.remark}}</span></td>
 						<td>
 							{{if guide.status == 0}}
 							<i class="ace-icon fa fa-times red bigger-125"></i>
@@ -97,13 +97,13 @@
 						</td>
 						<td>
 							<div class="hidden-sm hidden-xs btn-group">
-								<a data-entity-id="{{guide.id}}" class="btn-guide-view cursor"     >
+								<a class="T-action T-view cursor"     >
 									查看
 								</a><a href="" class="cursor"> |</a>
-								<a data-entity-id="{{guide.id}}" class="btn-guide-edit cursor"     >
+								<a class="T-action T-edit cursor"     >
 									编辑
 								</a><a href="" class="cursor"> |</a>
-								<a data-entity-id="{{guide.id}}" class=" btn-guide-delete cursor"  >
+								<a class="T-action T-delete cursor"  >
 									删除
 								</a>
 							</div>
@@ -146,25 +146,10 @@
 		</table>
 		<div class="row pageMode">
 			<div class="col-xs-6">
-				<div class="dataTables_info" id="dynamic-table_info" role="status" aria-live="polite">共计 {{recordSize}} 条记录</div>
+				<small>共计 {{recordSize}} 条记录</small>
 			</div>
 			<div class="col-xs-6">
-				<div class="dataTables_paginate paging_simple_numbers" id="dynamic-table_paginate">
-					<ul class="pagination">
-						<li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="first" href="javascript:void(0)">首页</a></li>
-						<li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="previous"href="javascript:void(0)">上一页</a></li>
-						<li class="paginate_button" aria-controls="dynamic-table" tabindex="0">
-							<a href="javascript:void(0)">
-								{{if totalPage == 0}}
-									0/0
-								{{else}}
-									{{pageNo+1}}/{{totalPage}}
-								{{/if}}
-							</a>
-						</li>
-						<li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="next"  href="javascript:void(0)">下一页</a></li>
-						<li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="last" href="javascript:void(0)">尾页</a></li>
-					</ul>
+				<div class="dataTables_paginate paging_simple_numbers T-pagenation">
 				</div>
 			</div>
 		</div>
