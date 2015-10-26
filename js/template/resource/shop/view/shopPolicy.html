@@ -36,9 +36,9 @@
 										<td>
 											{{each policy.costMoneyList as cost j}}
 											<div data-index="{{j+1}}" class="clearfix div-{{j+1}}" style="margin-bottom:3px">
-												<input name="costMoneyStart" type="text" style="width:100px" value="{{cost.costMoneyStart}}" maxlength="6" />
+												<input name="costMoneyStart" type="text" style="width:100px" value="{{cost.costMoneyStart}}" maxlength="9" />
 												<label>至</label>
-												<input name="costMoneyEnd" type="text" style="width:100px" value="{{cost.costMoneyEnd}}" maxlength="6" />
+												<input name="costMoneyEnd" type="text" style="width:100px" value="{{cost.costMoneyEnd}}" maxlength="9" />
 												<label class="priceArea" style="float:right">
 													<button data-entity-id="{{cost.id}}" class="btn btn-success btn-sm btn-white {{if j == 0}}add{{else}}del{{/if}}">
 														<i class="ace-icon fa {{if j == 0}}fa-plus{{else}}fa-minus{{/if}} bigger-110 icon-only"></i>
