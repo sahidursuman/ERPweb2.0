@@ -883,7 +883,7 @@ define(function(require, exports) {
 			$(restauranTyp).off("change").on("change", function(){
 				var parents = $(this).parent().parent();
 				parents.find("input[name=typeName]").val("");
-				parents.find("input[name=restaurantStandardId]").val("");
+				//parents.find("input[name=restaurantStandardId]").val("");
 				parents.find("input[name=fee]").val("");
 			});
 			var restaurantChoose = $("#tripPlan_addPlan_restaurant .table-tripPlan-container .chooseRestaurant");
@@ -897,7 +897,7 @@ define(function(require, exports) {
 						parents.find("input[name=managerName]").val("");
 						parents.find("input[name=mobileNumber]").val("");
 						parents.find("input[name=typeName]").val("");
-						parents.find("input[name=restaurantStandardId]").val("");
+						//parents.find("input[name=restaurantStandardId]").val("");
 					}
 				},
 				select:function(event,ui){
@@ -916,7 +916,7 @@ define(function(require, exports) {
 								parents.find("input[name=mobileNumber]").val(restaurant.mobileNumber);
 								parents.find("input[name=managerName]").val(restaurant.managerName);
 								parents.find("input[name=typeName]").val("");
-								parents.find("input[name=restaurantStandardId]").val(""); 
+								//parents.find("input[name=restaurantStandardId]").val(""); 
 							}
 	                    }
 					});
@@ -947,9 +947,9 @@ define(function(require, exports) {
 				minLength:0,
 				change:function(event,ui){
 					if(ui.item == null){
-						$(this).val("");
+						//$(this).val("");
 						var objParent = $(this).parent().parent();
-						objParent.find("input[name=restaurantStandardId]").val("");
+						//objParent.find("input[name=restaurantStandardId]").val("");
 						objParent.find("input[name=fee]").val("");
 					}
 				},
