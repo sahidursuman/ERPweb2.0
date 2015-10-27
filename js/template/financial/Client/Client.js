@@ -9,6 +9,7 @@ define(function(require, exports) {
         ClientClearTab = "financial_Client-clearing",
         travelAgencyList,
         partnerAgencyList,
+        validator,
         Client = {
 		searchParam  : {
 			"pageNo": "",
@@ -191,7 +192,7 @@ define(function(require, exports) {
                  },
                  success:function(data){
                 	 //表单验证
-                	 var validator = rule.check($('.clientCheckingMain'));
+                	 validator = rule.check($('.clientCheckingMain'));
                 	 
                      layer.close(globalLoadingLayer);
                      var result = showDialog(data);
