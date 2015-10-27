@@ -342,7 +342,7 @@ define(function(require, exports) {
 				html = '<tr><td><input type="text" maxlength="32" name="insuranceName" class="col-sm-12 chooseInsurance bind-change"/><input type="hidden" name="insuranceId"/></td>' +
 						'<td><input type="text" name="type" maxlength="32" class="col-sm-12"/></td>' +
 						'<td><input type="text" name="price" maxlength="6" class="col-sm-12"/></td>' +
-						'<td><input type="text" name="memberCount" class="col-sm-12" maxlength="3"/></td>' +
+						'<td><input type="text" name="memberCount" class="col-sm-12" maxlength="8"/></td>' +
 						'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12"/></td>' +
 						'<td><input type="text" name="payedMoney" class="col-sm-12" maxlength="9"/></td>' +
 						'<td><select name="payType" class="col-sm-12 no-padding"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>' +		
@@ -406,7 +406,7 @@ define(function(require, exports) {
 			'<td><input type="text" name="mobileNumber" readonly="readonly" class="col-sm-12"/></td>' +
 			'<td><select name="type" class="col-sm-12 restauranType" style="width:80px;"><option value="早餐">早餐</option><option value="午餐">午餐</option><option value="晚餐">晚餐</option></select></td>' +
 			'<td><input type="text" name="price" value="" class="col-sm-12 typeNameChoose"/><input type="hidden" name="restaurantStandardId" value=""/></td>' +
-			'<td><input name="memberCount" type="text" class="col-sm-12" style="width: 60px;" maxlength="4"/></td>' +
+			'<td><input name="memberCount" type="text" class="col-sm-12" style="width: 60px;" maxlength="8"/></td>' +
 			'<td><input name="reduceMoney" type="text" class="col-sm-12" style="width: 60px;" maxlength="9"/></td>' +
 			'<td><input name="needPayMoney" readonly="readonly" type="text" class="col-sm-12" style="width: 60px;"/></td>' +
 			'<td><input name="payedMoney" type="text" class="col-sm-12" style="width: 60px;" maxlength="9"/></td>' +
@@ -436,7 +436,7 @@ define(function(require, exports) {
 			'<td><input type="text" class="col-sm-12" readonly="readonly" name="mobileNumber"/></td>' +
 			'<td><input type="text" class="col-sm-12 chooseHotelRoom" name="hotelRoom"/><input type="hidden" name="hotelRoomId"></td>' +
 			'<td><input type="text" class="col-sm-12" name="fee" style="width: 60px;" maxlength="6"/></td>' +
-			'<td><input type="text" class="col-sm-12" name="memberCount" style="width: 60px;" maxlength="3"/></td>' +
+			'<td><input type="text" class="col-sm-12" name="memberCount" style="width: 60px;" maxlength="8"/></td>' +
 			'<td><input type="text" class="col-sm-12" name="reduceMoney" style="width: 60px;" maxlength="9"/></td>' +
 			'<td><input type="text" class="col-sm-12" name="needPayMoney" readonly="readonly" style="width: 60px;"/></td>' +
 			'<td><input type="text" class="col-sm-12" name="payedMoney" style="width: 60px;" maxlength="9"/></td>' +
@@ -466,7 +466,7 @@ define(function(require, exports) {
 			'<td><input type="text" name="tourDuration" class="col-sm-12" value="" style="width: 60px;" maxlength="3"> </td>' +
 			'<td><input type="text" name="orderNumber" class="col-sm-12" value="" maxlength="20"/></td>'+
 			'<td><input type="text" name="fee" class="col-sm-12" style="width: 60px;" maxlength="6"/></td>' +
-			'<td><input type="text" name="memberCount" class="col-sm-12" style="width: 60px;" maxlength="3"/></td>' +
+			'<td><input type="text" name="memberCount" class="col-sm-12" style="width: 60px;" maxlength="8"/></td>' +
 			'<td><input type="text" name="reduceMoney" class="col-sm-12" style="width: 60px;" maxlength="9"/></td>' +
 			'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12" style="width: 60px;"/></td>' +
 			'<td><input type="text" name="payedMoney" class="col-sm-12" style="width: 60px;" maxlength="9"/></td>' +
@@ -518,7 +518,7 @@ define(function(require, exports) {
 			'<td><input type="text" readonly="readonly" name="mobileNumber" class="col-sm-12"/></td>' +
 			'<td><input type="text" name="oldPrice" class="col-sm-12" maxlength="6"/></td>' +
 			'<td><input type="text" name="price" class="col-sm-12" maxlength="6"/></td>' +
-			'<td><input type="text" name="memberCount" class="col-sm-12" maxlength="3"/></td>' +
+			'<td><input type="text" name="memberCount" class="col-sm-12" maxlength="8"/></td>' +
 			'<td><input type="text" name="reduceMoney" class="col-sm-12" maxlength="9"/></td>' +
 			'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12" maxlength="9"/></td>' +
 			'<td><input type="text" name="payedMoney" class="col-sm-12" maxlength="9"/></td>' +
@@ -549,7 +549,7 @@ define(function(require, exports) {
 			'<td><input type="text" name="startTime" class="col-sm-13 col-xs-12 date-time-picker"/></td>' +
 			'<td><input type="text" name="seatLevel" class="col-sm-12" maxlength="32"/></td>' +
 			'<td><input type="text" name="fee" class="col-sm-12" maxlength="6"/></td>' +
-			'<td><input type="text" name="memberCount" class="col-sm-12" maxlength="3"/></td>' +
+			'<td><input type="text" name="memberCount" class="col-sm-12" maxlength="8"/></td>' +
 			'<td><input type="text" name="reduceMoney" class="col-sm-12" maxlength="9"/></td>' +
 			'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12"/></td>' +
 			'<td><input type="text" name="payedMoney" class="col-sm-12" maxlength="9"/></td>' +
@@ -577,7 +577,7 @@ define(function(require, exports) {
 			'<td><input type="text" name="managerName" maxlength="32" class="col-sm-12"/></td>' +
 			'<td><input type="text" name="mobileNumber" class="col-sm-12" maxlength="11"/></td>' +
 			'<td><input type="text" name="fee" class="col-sm-12" maxlength="6"/></td>' +
-			'<td><input type="text" name="memberCount" class="col-sm-12" maxlength="3"/></td>' +
+			'<td><input type="text" name="memberCount" class="col-sm-12" maxlength="8"/></td>' +
 			'<td><input type="text" name="reduceMoney" class="col-sm-12" maxlength="9"/></td>' +
 			'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12"/></td>' +
 			'<td><input type="text" name="payedMoney" class="col-sm-12" maxlength="9"/></td>' +
