@@ -2136,22 +2136,23 @@ define(function(require, exports) {
 						 arrangeTourist.saveAddTripPlan("tab-arrange_tourist-chooseMerge-content","mergeTripPlan",2,"arrange_tourist-chooseMerge","updateTripPlanTouristTbody",validator,0);
 						 arrangeTourist.edited["chooseMerge"] = "";
 						 addTab(menuKey+"-chooseMerge","并团-修改计划",html);
-						 arrangeTourist.initUpdate();
+						 arrangeTourist.initUpdate(data);
 					},function(){
 						addTab(menuKey+"-chooseMerge","并团-修改计划",html);
-						arrangeTourist.initUpdate();								
+						arrangeTourist.initUpdate(data);								
 						arrangeTourist.edited["chooseMerge"] = "";
 					}); 							
 				 }else{
 					addTab(menuKey+"-chooseMerge","并团-修改计划",html);
-					arrangeTourist.initUpdate();
+					arrangeTourist.initUpdate(data);
 				 } 
 			}else{
 				addTab(menuKey+"-chooseMerge","并团-修改计划",html);
-				arrangeTourist.initUpdate();
+				arrangeTourist.initUpdate(data);
 			}	
 		},
-		initUpdate : function(){
+		initUpdate : function(data){
+
 			$('.mergeTripPlan').on("change",function(){
 				arrangeTourist.edited["chooseMerge"] = "chooseMerge";
 			});	
@@ -2162,21 +2163,36 @@ define(function(require, exports) {
 			//修改发团计划
 			var validator = rule.checkdCreateTripPlan($(".mergeTripPlan"));   
 	
-
-			//短信发送  定时控件
+			var isCheckedStatus=data.tripPlan.executeTimeType,  //选中状态
+			isSendMessageStatus=data.tripPlan.isSendTouristMessage,   //短信是否发送
+			$checkedObj=$(".addTripPlanMain ");
+			//短信发送  定时控件 
 			arrangeTourist.setTripPlanPicker();
-
 
 			//游客短信及时发送显示隐藏
 			$("#"+tab+" .checkbox").unbind().click(function(){
+				var $that=$(this);
 				if ($("#"+tab+" .checkbox input[name=executeTimeType]:radio:checked").val()==1) {
-					$(this).parent().parent().find(".addMergePlanTime").removeClass("hide");
+					$that.parent().parent().find(".addMergePlanTime").removeClass("hide");
 				} else{
-					$(this).parent().parent().find(".addMergePlanTime").addClass("hide");
+					$that.parent().parent().find(".addMergePlanTime").addClass("hide");
 				};
 
-			})  
-
+			});
+			if (isSendMessageStatus==1) {
+				$checkedObj.find(" .checkbox input[name=executeTimeType]").eq(0).attr("disabled","disabled");
+				$checkedObj.find(" .checkbox input[name=executeTimeType]").eq(1).attr("disabled","disabled");
+				$checkedObj.find(".checkbox input[name=executeTime]").attr("disabled","disabled");
+			} else{
+				$checkedObj.find(".checkbox input[name=executeTimeType]").eq(0).removeAttr("disabled");
+				$checkedObj.find(".checkbox input[name=executeTimeType]").eq(1).removeAttr("disabled");
+				$checkedObj.find(".checkbox input[name=executeTime]").removeAttr("disabled");
+			}
+			if (isCheckedStatus==0) {//立即发送
+				$checkedObj.find("input[name=executeTimeType]").eq(0).attr("checked","checked");
+			} else{//定时发送
+				$checkedObj.find("input[name=executeTimeType]").eq(1).attr("checked","checked");
+			};
 
 
 			//查看旅游小组成员
