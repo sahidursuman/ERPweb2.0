@@ -405,7 +405,7 @@ define(function(require, exports) {
 			'<td><input type="text" name="managerName" readonly="readonly" class="col-sm-12"/></td>' +
 			'<td><input type="text" name="mobileNumber" readonly="readonly" class="col-sm-12"/></td>' +
 			'<td><select name="type" class="col-sm-12 restauranType" style="width:80px;"><option value="早餐">早餐</option><option value="午餐">午餐</option><option value="晚餐">晚餐</option></select></td>' +
-			'<td><input type="text" name="price" value="" class="col-sm-12 typeNameChoose"/><input type="hidden" name="restaurantStandardId" value=""/></td>' +
+			'<td><input type="text" name="price" value="" class="col-sm-12 typeNameChoose"/><input type="hidden" name="restaurantStandardId" value="0"/></td>' +
 			'<td><input name="memberCount" type="text" class="col-sm-12" style="width: 60px;" maxlength="4"/></td>' +
 			'<td><input name="reduceMoney" type="text" class="col-sm-12" style="width: 60px;" maxlength="9"/></td>' +
 			'<td><input name="needPayMoney" readonly="readonly" type="text" class="col-sm-12" style="width: 60px;"/></td>' +
@@ -883,8 +883,8 @@ define(function(require, exports) {
 			$(restauranTyp).off("change").on("change", function(){
 				var parents = $(this).parent().parent();
 				parents.find("input[name=typeName]").val("");
-				parents.find("input[name=restaurantStandardId]").val("");
-				parents.find("input[name=fee]").val("");
+				//parents.find("input[name=restaurantStandardId]").val("");
+				parents.find("input[name=price]").val("");
 			});
 			var restaurantChoose = $("#tripPlan_addPlan_restaurant .table-tripPlan-container .chooseRestaurant");
 			restaurantChoose.autocomplete({
@@ -896,8 +896,8 @@ define(function(require, exports) {
 						parents.find("input[name=restaurantId]").val("");
 						parents.find("input[name=managerName]").val("");
 						parents.find("input[name=mobileNumber]").val("");
-						parents.find("input[name=typeName]").val("");
-						parents.find("input[name=restaurantStandardId]").val("");
+						parents.find("input[name=price]").val("");
+						//parents.find("input[name=restaurantStandardId]").val("");
 					}
 				},
 				select:function(event,ui){
@@ -915,8 +915,8 @@ define(function(require, exports) {
 								var restaurant = JSON.parse(data.restaurant);
 								parents.find("input[name=mobileNumber]").val(restaurant.mobileNumber);
 								parents.find("input[name=managerName]").val(restaurant.managerName);
-								parents.find("input[name=typeName]").val("");
-								parents.find("input[name=restaurantStandardId]").val(""); 
+								parents.find("input[name=price]").val("");
+								//parents.find("input[name=restaurantStandardId]").val(""); 
 							}
 	                    }
 					});
@@ -947,10 +947,9 @@ define(function(require, exports) {
 				minLength:0,
 				change:function(event,ui){
 					if(ui.item == null){
-						$(this).val("");
 						var objParent = $(this).parent().parent();
-						objParent.find("input[name=restaurantStandardId]").val("");
-						objParent.find("input[name=fee]").val("");
+						//objParent.find("input[name=restaurantStandardId]").val("");
+						//objParent.find("input[name=fee]").val("");
 					}
 				},
 				select:function(event,ui){
@@ -972,7 +971,7 @@ define(function(require, exports) {
 	                });*/
 					var standardId = ui.item.id;
 					var _this = $(this);
-					$(this).parent().parent().find("input[name=restaurantStandardId]").val(ui.item.id);
+					//$(this).parent().parent().find("input[name=restaurantStandardId]").val(ui.item.id);
 					$(this).parent().parent().find("input[name=fee]").val(ui.item.price);
 					/*$.ajax({
 						url:""+APP_ROOT+"back/restaurant.do?method=findStandardDetailById&token="+$.cookie("token")+"&menuKey=resource_restaurant&operation=view",
@@ -1692,7 +1691,8 @@ define(function(require, exports) {
 							payedMoney : tripPlan.getVal(restaurant.eq(i), "payedMoney"),
 							payType : tripPlan.getVal(restaurant.eq(i), "payType"),
 							guidePayMoney : tripPlan.getVal(restaurant.eq(i), "guidePayMoney"),
-							remark : tripPlan.getVal(restaurant.eq(i), "remark")
+							remark : tripPlan.getVal(restaurant.eq(i), "remark"),
+							type : restaurant.eq(i).find("[name=type]").val()
 						}
 						tripPlanJson.restaurantArrangeList.push(restaurantJson);
 						guideAllPayMoney += tripPlan.checkParamIsDouble(restaurantJson.guidePayMoney);
