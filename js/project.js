@@ -558,6 +558,7 @@ function trim(str){
 var modalScripts = {
 	'resource_guide': "js/template/resource/guide/guide.js",
 	'resource_hotel': "js/template/resource/hotel/hotel.js",
+	'resource_insurance': "js/template/resource/insurance/insurance.js",
 };
 
 function listMenu(menuTemplate){
@@ -667,14 +668,14 @@ function listMenu(menuTemplate){
 					});
 				});
 				//绑定保险菜单功能
-				$("#sidebar .nav-list .resource_insurance").click(function(){
+				/*$("#sidebar .nav-list .resource_insurance").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/insurance/insurance.js",function(insurance){
 						insurance.listInsurance(0,"",1);
 					});
-				});
+				});*/
 				//绑定自费项目菜单功能
 				$("#sidebar .nav-list .resource_selfpay").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
