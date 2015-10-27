@@ -9,6 +9,7 @@ define(function(require, exports) {
         ClientClearTab = "financial_Client-clearing",
         travelAgencyList,
         partnerAgencyList,
+        validator,
         Client = {
 		searchParam  : {
 			"pageNo": "",
@@ -191,7 +192,7 @@ define(function(require, exports) {
                  },
                  success:function(data){
                 	 //表单验证
-                	 var validator = rule.check($('.clientCheckingMain'));
+                	 validator = rule.check($('.clientCheckingMain'));
                 	 
                      layer.close(globalLoadingLayer);
                      var result = showDialog(data);
@@ -347,6 +348,8 @@ define(function(require, exports) {
                          
                          //确认对账按钮事件
                          $checkId.find("[name=ClientCheck_checkButton]").click(function(){ 
+                            validator = rule.check($('.clientCheckingMain'));
+                            if (!validator.form()) { return; }
                         	Client.saveCheckingData(id,0);
                          });
                      }
@@ -488,9 +491,6 @@ define(function(require, exports) {
             });
         },
 		saveCheckingData : function(id,isClose){
-			
-			// 表单校验
-			if (!validator.form()) { return; }
 			 
 			//保存对账时提交的数据
 			var $this = $(".clientCheckingMain");

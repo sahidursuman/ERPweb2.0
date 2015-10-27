@@ -107,8 +107,8 @@
 						<h5 >
 							<span class="badge badge-primary">2</span>
 							<label class="title-size middle">房间列表</label>
-							<a href="javascript:void(0)" class="btn-hotel-standard-add">
-								<button class="btn btn-sm btn-success btn-busCompany-add " style="margin-left: 20px;">
+							<a href="javascript:void(0)" class="T-btn-hotel-standard-add">
+								<button class="btn btn-sm btn-success" style="margin-left: 20px;">
 									<i class="ace-icon fa fa-plus"></i>
 									新增
 								</button>
@@ -133,23 +133,23 @@
 									<th class="table-border" width="55">操作</th>
 								</tr>
 								</thead>
-								<tbody>
+								<tbody class="T-roomListTbody">
 									{{each hotel.hotelRoomList as room}}
 									<tr data-entity-id="{{room.id}}">
 										<td><input name="type" type="text" class="col-sm-12" value="{{room.type}}" maxlength="32" /></td>
-										<td class="time">
+										<td class="T-time">
 											{{each room.priceList as price i}}
 											<div data-index="{{i+1}}" data-entity-id="{{price.id}}" class="clearfix {{if i > 0}}appendDiv{{/if}} div-{{i+1}}" style="margin-top:1px">
 												<input name="startTime" type="text" class="datepicker" style="width:100px" value="{{price.startTime | dateFormat:'yyyy-MM-dd'}}"/><label>&nbsp;至&nbsp;</label><input name="endTime" type="text" class="datepicker" style="width:100px" value="{{price.endTime | dateFormat:'yyyy-MM-dd'}}"/>
 												{{if i == 0}}
-												<label class="timeArea" style="float:right;padding-top:3px;">
-													<button class="btn btn-success btn-sm btn-white add">
+												<label class="timeArea" style="float:right;padding-top:0px;">
+													<button class="btn btn-success btn-sm btn-white T-add">
 														<i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
 													</button>
 												</label>
 												{{else}}
 												<label class="timeArea" style="float:right;padding-top:3px;">
-													<button class="btn btn-danger btn-sm btn-white delete" style="margin-top: -3px">
+													<button class="btn btn-danger btn-sm btn-white T-del" style="margin-top: -3px">
 														<i class="ace-icon fa fa-minus bigger-110 icon-only"></i>
 													</button>
 												</label>
@@ -159,14 +159,14 @@
 										</td>
 										<td> 
 											{{each room.priceList as price i}}
-											<div data-index="{{i+1}}" class="clearfix div-{{i+1}}" style="margin-top:{{if i==0}}1{{else}}7{{/if}}px">
+											<div data-index="{{i+1}}" class="clearfix marketPrice-{{i+1}}" style="margin-top:{{if i==0}}1{{else}}7{{/if}}px">
 												<input name="marketPrice" type="text" class="col-sm-12" value="{{price.marketPrice}}" maxlength="9" />
 											</div>
 											{{/each}}
 										</td>
 										<td>
 											{{each room.priceList as price i}}
-											<div data-index="{{i+1}}" class="clearfix div-{{i+1}}" style="margin-top:{{if i==0}}1{{else}}7{{/if}}px">
+											<div data-index="{{i+1}}" class="clearfix contractPrice-{{i+1}}" style="margin-top:{{if i==0}}1{{else}}7{{/if}}px">
 												<input name="contractPrice" type="text" class="col-sm-12" value="{{price.contractPrice}}" maxlength="9" />
 											</div>
 											{{/each}}
@@ -202,7 +202,7 @@
 											<input name="remark" class="col-sm-12" type="text" value="{{room.remark}}" maxlength="1000" />
 										</td>
 										<td style="width:70px">
-											<a data-entity-id="" href="#" class=" btn-xs  btn-hotel-standard-delete">删除</a>
+											<a data-entity-id="" href="#" class=" btn-xs  T-btn-hotel-standard-delete">删除</a>
 										</td>
 									</tr>	  
 									{{/each}} 
@@ -214,7 +214,7 @@
 			</div>
 		</div>
 		<div class="space-10"></div>
-		<button class="btn btn-block btn-primary btn-submit-hotel guideSubmit">
+		<button class="btn btn-block btn-primary T-btn-submit-hotel">
 			<i class="ace-icon fa fa-check"></i>
 			提交信息
 		</button>

@@ -1,4 +1,4 @@
-<div class="col-xs-12 addHotelContainer globalAdd">
+<div class="col-xs-12 T-addHotelContainer globalAdd">
 	<form class="form-horizontal hotelMainForm formOneList " role="form" style="margin-top:10px" onsubmit="return false">
 		<div class=" ui-sortable-handle" style="margin-top: 20px">
 			<div class="">
@@ -68,7 +68,7 @@
 						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>是否启用:</label>
 						<div class="col-sm-3 checkbox" style="margin-left:-10px;margin-top: -6px">
 							<label>
-								<input checked="checked" type="checkbox" class="ace hotel-status" value="1" name="status">
+								<input checked="checked" type="checkbox" class="ace T-hotel-status" value="1" name="status">
 								<span class="lbl">
 									启用
 								</span>
@@ -101,7 +101,7 @@
 			</div> 
 		</div>
 	</form>
-	<form class="form-horizontal hotelMainForm" role="form" style="margin-top:10px" onsubmit="return false">
+	<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
 		<div class="form-group">
 			<div class="col-xs-12 col-sm-12 widget-container-col">
 				<div class=" ui-sortable-handle">
@@ -109,8 +109,8 @@
 						<h5 class="">
 							<span class="badge badge-primary">2</span>
 							<a class="middle navInformation">房间列表</a>
-							<a href="javascript:void(0)" class="btn-hotel-standard-add">
-								<button class="btn btn-sm btn-success btn-busCompany-add " style="margin-left: 20px;">
+							<a href="javascript:void(0)" class="T-btn-hotel-standard-add">
+								<button class="btn btn-sm btn-success" style="margin-left: 20px;">
 									<i class="ace-icon fa fa-plus"></i>
 									新增
 								</button>
@@ -137,7 +137,7 @@
 										<th class="table-border" width="55">操作</th>
 									</tr>
 								</thead>
-								<tbody>
+								<tbody class="T-roomListTbody">
 								</tbody>
 							</table>
 						</div>
@@ -146,7 +146,7 @@
 			</div>
 		</div>
 		<div class="space-10"></div>
-		<button class="btn btn-block btn-primary btn-submit-hotel guideSubmit">
+		<button class="btn btn-block btn-primary T-btn-submit-hotel">
 			<i class="ace-icon fa fa-check"></i>
 			提交信息
 		</button>
