@@ -557,6 +557,7 @@ function trim(str){
  */
 var modalScripts = {
 	'resource_guide': "js/template/resource/guide/guide.js",
+	'resource_shop': 'js/template/resource/shop/shop.js'
 };
 
 function listMenu(menuTemplate){
@@ -634,15 +635,15 @@ function listMenu(menuTemplate){
 					$("#main-container")[0].index = 0;
 				});
 
-				//绑定商家管理功能
-				$("#sidebar .nav-list .resource_shop").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/resource/shop/shop.js",function(shop){
-						shop.listShop(0,"",1);
-					});
-				});
+				// //绑定商家管理功能
+				// $("#sidebar .nav-list .resource_shop").click(function(){
+				// 	$("#sidebar .nav-list li").removeClass("active");
+				// 	$(this).addClass("active");
+				// 	$(this).parent().parent().addClass("active");
+				// 	seajs.use("" + ASSETS_ROOT +"js/template/resource/shop/shop.js",function(shop){
+				// 		shop.listShop(0,"",1);
+				// 	});
+				// });
 
 
 				//绑定线路模板菜单功能
