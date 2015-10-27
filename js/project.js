@@ -557,7 +557,9 @@ function trim(str){
  */
 var modalScripts = {
 	'resource_guide': "js/template/resource/guide/guide.js",
+	'resource_ticket': "js/template/resource/ticket/ticket.js"
 };
+
 
 function listMenu(menuTemplate){
 	$.ajax({
@@ -683,15 +685,15 @@ function listMenu(menuTemplate){
 						selfpay.listSelfPay(0,"",1);
 					});
 				});
-				//绑定交通票务菜单功能
-				$("#sidebar .nav-list .resource_ticket").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/resource/ticket/ticket.js",function(ticket){
-						ticket.listTicket(0,"",1);
-					});
-				});
+				////绑定交通票务菜单功能
+				//$("#sidebar .nav-list .resource_ticket").click(function(){
+				//	$("#sidebar .nav-list li").removeClass("active");
+				//	$(this).addClass("active");
+				//	$(this).parent().parent().addClass("active");
+				//	seajs.use("" + ASSETS_ROOT +"js/template/resource/ticket/ticket.js",function(ticket){
+				//		ticket.TicketResource.initModule(0,"",1);
+				//	});
+				//});
 				//绑定游客管理菜单功能
 				/*$("#sidebar .nav-list .resource_touristGroup").click(function(){
 				 $("#sidebar .nav-list li").removeClass("active");
@@ -1384,11 +1386,11 @@ var _statusText = {
 	var _laypage = laypage;
 	laypage = function(options)  {
 		// 合并配置
-		options = $.extend({}, 
+		options = $.extend({},
 			{
 			    skip: true, //是否开启跳页
 			    skin: '#51b0c2',
-			    groups: 3, //连续显示分页数
+			    groups: 3 //连续显示分页数
 			}, options);
 
 		_laypage(options);
