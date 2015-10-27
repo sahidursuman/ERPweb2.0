@@ -34,13 +34,13 @@ define(function(require, exports) {
 			type:"POST",
 			data:{
 				pageNo : page,
-				name : encodeURIComponent(name),
+				name : name,
 				status : status,
 				sortType : "auto"
 			},
-			dataType:"json",
 			success:function(data){
 				data.hotelList = JSON.parse(data.hotelList);
+				//data.searchParam.name = decodeURI(data.searchParam.name);
 				var result = showDialog(data);
 				if(result){
 					var html = listTemplate(data);
@@ -94,14 +94,14 @@ define(function(require, exports) {
 			event.preventDefault();
 			var $this = $(this), id = $this.closest('tr').data('entity-id');
 			if ($this.hasClass('T-view')){
-				// 查看导游信息
+				// 查看酒店信息
 				hotel.viewHotel(id);
 			} else if ($this.hasClass('T-edit')){
-				// 编辑导游信息
+				// 编辑酒店信息
 				hotel.updateHotel(id);
 			} else if ($this.hasClass('T-delete')){
 				var $this = $(this);
-				// 删除导游
+				// 删除酒店
 				hotel.deleteHotel(id,$this);
 			}
 		});
@@ -111,7 +111,6 @@ define(function(require, exports) {
 			url : hotel.url("getHotelById","view"),
 			type : "POST",
 			data : "id="+id+"",
-			dataType : "json",
 			success : function(data){
 				var result = showDialog(data);
 				if(result){
@@ -137,7 +136,6 @@ define(function(require, exports) {
 			url:hotel.url("getHotelById","view"),
 			type:"POST",
 			data:"id="+id+"",
-			dataType:"json",
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
@@ -224,7 +222,6 @@ define(function(require, exports) {
 							url:hotel.url("deleteHotel","delete"),
 							type:"POST",
 							data:"id="+id+"",
-							dataType:"json",
 							success:function(data){
 								var result = showDialog(data);
 								if(result){
@@ -307,6 +304,7 @@ define(function(require, exports) {
 	    	hotel.addTimeArea($this,$tbody);
 	    })
 	};
+	//删除房间列表
 	hotel.delRoomList = function(id,$this){
 		if(!!id){
 			var tr = $this.closest('tr');
@@ -349,26 +347,28 @@ define(function(require, exports) {
 		});
 	};
 	hotel.delTimeArea = function($this){
-		var div = $this.closest('div'),
-			divIndex = div.data("index"),
-			entityId = div.data("entity-id");
+		var $timeArea = $this.closest('div'),
+			divIndex = $timeArea.data("index"),
+			entityId = $timeArea.data("entity-id");
 		if (entityId != null && entityId != "") {
-			div.addClass("delete");
-			div.fadeOut(function(){
+			$timeArea.addClass("delete");
+			$timeArea.fadeOut(function(){
 				$(this).hide();
 			});
 		}else{
-			div.fadeOut(function(){
+			$timeArea.fadeOut(function(){
 				$(this).remove();
 			});
 		}
-		div.closest('tr').find(".marketPrice-"+divIndex+"").fadeOut(function(){
-			$(this).remove();
-		});
-		div.closest('tr').find(".contractPrice-"+divIndex+"").fadeOut(function(){
+		$timeArea.closest('tr').find(".marketPrice-"+divIndex+" ,.contractPrice-"+divIndex+"").fadeOut(function(){
 			$(this).remove();
 		});
 	};
+	/**
+	 * 保存酒店
+	 * @param  {[type]} $container [容器]
+	 * @param  {[type]} type       [type：1 新增   type：2 修改]
+	 */
 	hotel.saveHotel = function($container,type){
 		// 表单校验
 		if (type == 1) {
@@ -388,10 +388,9 @@ define(function(require, exports) {
 				if(!ruleData.UtimeAreavalidator.form() || !ruleData.UmarketPricevalidator.form() || !ruleData.Upricevalidator.form()){return}
 			}
 		}
-		
-
+		//数据组装
 		var status = 0,
-			hotelRoomJsonAdd = [],hotelRoomJsonDel = [],
+			hotelRoomJsonAdd = [],hotelRoomJsonDel = [],//新增和删除的房间列表数组
 			hotelRoomJsonAddTr = $container.find(".T-roomListTbody tr:not(.delete)"),
 			hotelRoomJsonDelTr = $container.find(".T-roomListTbody tr.delete"),
 			hotelRoomJson = {};
@@ -413,7 +412,7 @@ define(function(require, exports) {
 					areaSize : hotel.getValue($this ,"areaSize"),
 					guestNumber : hotel.getValue($this ,"guestNumber"),
 					remark : hotel.getValue($this ,"remark"),
-					priceJsonAddList : [],
+					priceJsonAddList : [],//时间区间新增和删除的数组
 					priceJsonDelList : []
 				};
 			priceJsonAddTr.each(function(){
@@ -459,7 +458,6 @@ define(function(require, exports) {
 			url:hotel.url(method,operation),
 			type:"POST",
 			data:form+"&hotelRoomJsonAdd="+encodeURIComponent(hotelRoomJsonAdd)+"&hotelRoomJsonDel="+encodeURIComponent(hotelRoomJsonDel),
-			dataType:"json",
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
