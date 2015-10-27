@@ -121,13 +121,13 @@ define(function(require, exports) {
 			var $that = $(this), id = $that.closest('tr').data('entity-id');
 
 			if ($that.hasClass('T-view'))  {
-				// 查看导游信息
+				// 查看保险公司信息
 				insurance.viewInsurance(id);
 			} else if ($that.hasClass('T-edit'))  {
-				// 编辑导游信息
+				// 编辑保险公司信息
 				insurance.updateInsurance(id);
 			} else if ($that.hasClass('T-delete'))  {
-				// 删除导游
+				// 删除保险公司
 				insurance.deleteInsurance(id,$that);
 			}
 		});
