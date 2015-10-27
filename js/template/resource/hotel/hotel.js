@@ -1,812 +1,492 @@
+/**
+ * 资源——酒店管理模块
+ *
+ * 添加、编辑、查看、删除酒店信息
+ * 显示导游列表
+ */
 define(function(require, exports) {
 	var menuKey = "resource_hotel",
 	 	rule = require("./hotelRule"),
 		listTemplate = require("./view/list"),
 		addTemplate = require("./view/add"),
 		updateTemplate = require("./view/update"),
-		viewTemplate = require("./view/view"),
-		tabId = "tab-"+menuKey+"-content";
+		viewTemplate = require("./view/view");
 	
 	var hotel = {
-		searchData : {
-			name : "",
-			status : ""
-		},
-		listHotel:function(page,name,status){
-			hotel.searchData.name = name;
-			hotel.searchData.status = status;
-			$.ajax({
-				url:""+APP_ROOT+"back/hotel.do?method=listHotel&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-				type:"POST",
-				data:"pageNo="+page+"&name="+encodeURIComponent(name)+"&status="+status+"&sortType=auto",
-				dataType:"json",
-				beforeSend:function(){
-					//打开一个遮罩层
-					globalLoadingLayer = openLoadingLayer();
-				},
-				success:function(data){
-					//关闭遮罩
-					layer.close(globalLoadingLayer);
-					//根据返回值判断下一步操作，或者已出现错误 
-					var result = showDialog(data);
-					//如果正确则就执行
-					if(result){
-						//返回一个json字符串 的数据
-						var hotelList = data.hotelList;
-						//实例化对象
-						hotelList = JSON.parse(hotelList);
-						//讲字符串改为对象
-						data.hotelList = hotelList;
-						var html = listTemplate(data);
-						addTab(menuKey,"酒店管理",html);
-						
-						$("#" + tabId + " .hotelList .btn-hotel-view").click(function(){
-							var id = $(this).attr("data-entity-id");
-							hotel.viewHotel(id);
-							// 再调整对话框的高度
-							$(window).trigger('resize');
-						});
-						
-						$("#" + tabId + " .btn-hotel-add").click(function(){
-							hotel.addHotel();
-						});
-						$("#" + tabId + " .hotelList .btn-hotel-edit").click(function(){
-							var id = $(this).attr("data-entity-id");
-							hotel.updateHotel(id,data.pageNo);
-						});
-						
-						$("#" + tabId + " .hotelList .btn-hotel-delete").click(function(){
-							var id = $(this).attr("data-entity-id");
-							hotel.deleteHotel(id,data.pageNo);
-						});
-						//搜索栏状态button下拉事件
-						$("#" + tabId + " .search-area .btn-status .dropdown-menu a").click(function(){
-							$(this).parent().parent().parent().find("button").attr("data-value",$(this).attr("data-value"));
-							$(this).parent().parent().parent().find("span").text($(this).text());
-							hotel.searchData={
-								name : $("#"+tabId+" .search-area input[name=hotel_name]").val(),
-								status : $("#"+tabId+" .search-area .btn-status").find("button").attr("data-value")
-						}	
-							hotel.listHotel(0,hotel.searchData.name,hotel.searchData.status);
-						});
-						//搜索按钮事件
-						$("#" + tabId + " .btn-hotel-search").click(function(){
-							hotel.searchData ={
-								name : $("#" + tabId + " input[name=hotel_name]").val(),
-								status : $("#" + tabId + " .btn-status").find("button").attr("data-value")
-							}
-							hotel.listHotel(0,hotel.searchData.name,hotel.searchData.status);
-						});
-						//分页--首页按钮事件
-						$("#" + tabId + " .pageMode a.first").click(function(){
-							hotel.listHotel(0,hotel.searchData.name,hotel.searchData.status);
-						});
-						//分页--上一页事件
-						$("#" + tabId + " .pageMode a.previous").click(function(){
-							var previous = data.pageNo - 1;
-							if(data.pageNo == 0){
-								previous = 0;
-							}
-							hotel.listHotel(previous,hotel.searchData.name,hotel.searchData.status);
-						});
-						//分页--下一页事件
-						$("#" + tabId + " .pageMode a.next").click(function(){
-							var next =  data.pageNo + 1;
-							if(data.pageNo == data.totalPage-1){
-								next = data.pageNo ;
-							}
-							hotel.listHotel(next,hotel.searchData.name,hotel.searchData.status);
-						});
-						//分页--尾页事件
-						$("#" + tabId + " .pageMode a.last").click(function(){
-							hotel.listHotel(data.totalPage == 0 ? data.totalPage : data.totalPage-1,hotel.searchData.name,hotel.searchData.status);
-						});
-						
-						
-						
-					}
+		$tab : false,
+		$searchArea : false,
+		$addLayer : "",
+		$updateLayer : ""
+	};
+	var ruleData = {};
+	hotel.initModule = function(){
+		hotel.listHotel(0,"",1);
+	};
+
+	hotel.listHotel = function(page,name,status){
+		if (hotel.$searchArea && arguments.length === 1) {
+			// 初始化页面后，可以获取页面的参数
+			name = hotel.$searchArea.find("input[name=hotel_name]").val(),
+			status = hotel.$searchArea.find('.T-select-status').find("button").data('value')
+		}
+		$.ajax({
+			url:hotel.url("listHotel","view"),
+			type:"POST",
+			data:{
+				pageNo : page,
+				name : encodeURIComponent(name),
+				status : status,
+				sortType : "auto"
+			},
+			dataType:"json",
+			success:function(data){
+				data.hotelList = JSON.parse(data.hotelList);
+				var result = showDialog(data);
+				if(result){
+					var html = listTemplate(data);
+					addTab(menuKey,"酒店管理",html);
+
+					hotel.$tab = $("#tab-resource_hotel-content");
+					hotel.$searchArea = hotel.$tab.find(".T-search-area");
+					hotel.init_event();
+
+					// 绑定翻页组件
+					laypage({
+					    cont: hotel.$tab.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+					    pages: data.totalPage, //总页数
+					    curr: (page + 1),
+					    jump: function(obj, first) {
+					    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+					    		hotel.listHotel(obj.curr -1);
+					    	}
+					    }
+					});
 				}
-			});
-		},
-		addHotel:function(){
-			var html = addTemplate();
-			var hotelRoomStandardList;
-			var timeAreavalidator;
-			var marketPricevalidator;
-			var pricevalidator;
-			var addHotelLayer = layer.open({
-			    type: 1,
-			    title:"新增酒店",
-			    skin: 'layui-layer-rim', //加上边框
-			    area: '1190px', //宽高
-			    zIndex:1028,
-			    content: html,
-				scrollbar: false,    // 推荐禁用浏览器外部滚动条
-			    success:function(){
-			    	var $obj = $(".addHotelContainer .hotelMainForm");
-			    	var validator = rule.check($('.addHotelContainer'));
-			    	var roomTd;
-			    	//绑定账期模式选择事件
-			    	$obj.find("select[name=payType]").change(function(){
-			    		if($(this).val() == 1){
-			    			$(this).parent().parent().find(".payPeriod").removeClass("hide");
-			    		}
-			    		else{
-			    			$(this).parent().parent().find(".payPeriod").addClass("hide");
-			    		}
-			    	});
-			    	
-			    	//初始化省数据
-			    	hotel.getProvinceList($obj.find("select[name=provinceId]"));
-			    	
-			    	//给省份select绑定事件
-			    	$obj.find("select[name=provinceId]").change(function(){
-			    		var provinceId = $(this).val();
-			    		if(provinceId!=''){
-				    		hotel.getCityList($obj.find("select[name=cityId]"),provinceId);
-			    		}else{
-			    			$obj.find("select[name=cityId]").html("<option value=''>未选择</option>");
-			    		}
-			    		$obj.find("select[name=districtId]").html("<option value=''>未选择</option>");
-			    	});
-			    	
-			    	//给城市select绑定事件
-			    	$obj.find("select[name=cityId]").change(function(){
-			    		var cityId = $(this).val();
-			       		if(cityId!=''){
-				    		hotel.getDistrictList($obj.find("select[name=districtId]"),cityId);
-			    		}else{
-			    			$obj.find("select[name=districtId]").html("<option value=''>未选择</option>");
-			    		}
-			    	});
-			    	
-			    	//给房间列表新增按钮绑定事件
-			    	$obj.find(".btn-hotel-standard-add").click(function(){
-			    		var html = "<tr>" +
-			    				"<td><input name=\"type\" type=\"text\" class='col-sm-12'  maxlength=\"32\" /></td>" +
-			    				"<td class=\"time\"><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:1px;\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right; padding-top:3px;\"><button class=\"btn btn-success btn-sm btn-white add addScenice\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i></button></label></div></td>" +
-			    				"<td><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:1px\"><input name=\"marketPrice\" class='col-sm-12 marketPrice' maxlength=\"9\" type=\"text\"/></div></td>" +
-			    				"<td><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:1px\"><input name=\"contractPrice\" class='col-sm-12 price' maxlength=\"9\" type=\"text\"/></div></td>" +
-			    				"<td><select name=\"containBreakfast\" class='no-padding foodsAll'><option value=\"0\">不含</option><option value=\"1\">包含</option></select></td>" +
-			    				"<td><select name=\"containLunch\" class='no-padding foodsAll'><option value=\"0\">不含</option><option value=\"1\">包含</option></select></td>" +
-			    				"<td><select name=\"containDinner\" class='no-padding foodsAll'><option value=\"0\">不含</option><option value=\"1\">包含</option></select></td>" +
-			    				"<td><input name=\"broadband\" class='col-sm-12' type=\"text\"  maxlength=\"100\" /></td>" + 
-			    				"<td><input name=\"areaSize\" class='col-sm-12' type=\"text\"  maxlength=\"3\" /></td>" +
-			    				"<td><input name=\"guestNumber\" class='col-sm-12' type=\"text\"  maxlength=\"4\" /></td>" +
-			    				"<td><input name=\"remark\" class='col-sm-12' type=\"text\"  maxlength=\"1000\" /></td>" +
-			    				"<td style=\"width:70px\"><a data-entity-id=\"\" href=\"#\" class=\" btn-xs  btn-hotel-standard-delete\">删除</a></td>" +
-			    				"</tr>";
-			    		$obj.find(".hotelRoomStandardList tbody").append(html);
-						// 再调整对话框的高度
-						$(window).trigger('resize');
-			    		// 对酒店房型设置表单验证
-			    	    hotelRoomStandardList = rule.checkRoom($('.addHotelContainer .hotelRoomStandardList'));
-			    	    
-			    		//给餐标列表删除按钮绑定事件
-			    		$obj.find(".hotelRoomStandardList tbody .btn-hotel-standard-delete").click(function(){
-				    		$(this).parent().parent().fadeOut(function(){
-				    			$(this).remove();
-				    		});
-				    	});
-				    	$obj.find(".hotelRoomStandardList .datepicker").datepicker({
-							autoclose: true,
-							todayHighlight: true,
-							format: 'yyyy-mm-dd',
-							language: 'zh-CN'
-						});
-
-				    	// button按钮动态添加时限区间 
-				    	
-				    	$obj.find(".hotelRoomStandardList .timeArea button.add").unbind().click(function(){
-							var td = $(this).parent().parent().parent();
-							roomTd = td;
-							var index = td.find("div").length;
-							var timeLimitDiv = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:1px\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right; padding-top:3px;\">" + "<button class='btn btn-danger btn-sm btn-white del' style='margin-top: -3px;'><i class='ace-icon fa fa-minus bigger-110 icon-only'></i></button>"
-								"</label></div>";
-							var marketPriceInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:6px\"><input name=\"marketPrice\" type=\"text\" class='col-sm-12 marketPrice' maxlength=\"9\"/></div>";
-							var contractPriceInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:6px\"><input name=\"contractPrice\" type=\"text\" class='col-sm-12 price' maxlength=\"9\"/></div>";
-							td.next().append(marketPriceInput);
-							td.next().next().append(contractPriceInput);
-							td.append(timeLimitDiv);
-							timeAreavalidator = rule.checkTimeArea(td);
-							marketPricevalidator = rule.checkTimeArea(td.next());
-							pricevalidator = rule.checkTimeArea(td.next().next());
-							$obj.find(".hotelRoomStandardList .datepicker").datepicker({
-								autoclose: true,
-								todayHighlight: true,
-								format: 'yyyy-mm-dd',
-								language: 'zh-CN'
+			}
+		})
+	};
+	hotel.init_event = function(){
+		//搜索栏状态button下拉事件
+		hotel.$tab.find('.T-select-status').on('click', 'a', function(event) {
+			event.preventDefault();
+			var $this = $(this);
+			// 设置选择状态的效果
+			$this.closest('ul').prev().data('value', $this.data('value')).children('span').text($this.text());
+			hotel.listHotel(0);
+		});
+		//搜索栏焦点回车事件
+		hotel.$tab.find("input[name=hotel_name]").keyup(function(event){
+			if(event.which == 13 && !window.forbiddenError){
+				hotel.listHotel(0);
+			}
+		});
+		//搜索按钮事件绑定
+		hotel.$tab.find(".T-btn-hotel-search").on("click",function(){
+			hotel.listHotel(0);
+		});
+		//新增酒店事件绑定
+		hotel.$searchArea.find(".T-btn-hotel-add").on("click",function(event){
+			event.preventDefault();
+			hotel.addHotel();
+		});
+		// 报表内的操作
+		hotel.$tab.find('.T-hotelList').on('click', '.T-action', function(event) {
+			event.preventDefault();
+			var $this = $(this), id = $this.closest('tr').data('entity-id');
+			if ($this.hasClass('T-view')){
+				// 查看导游信息
+				hotel.viewHotel(id);
+			} else if ($this.hasClass('T-edit')){
+				// 编辑导游信息
+				hotel.updateHotel(id);
+			} else if ($this.hasClass('T-delete')){
+				var $this = $(this);
+				// 删除导游
+				hotel.deleteHotel(id,$this);
+			}
+		});
+	};
+	hotel.viewHotel = function(id){
+		$.ajax({
+			url : hotel.url("getHotelById","view"),
+			type : "POST",
+			data : "id="+id+"",
+			dataType : "json",
+			success : function(data){
+				var result = showDialog(data);
+				if(result){
+					data.hotel = JSON.parse(data.hotel);
+					var html = viewTemplate(data);
+					var updateHotel = layer.open({
+					    type: 1,
+					    title:"查看酒店信息",
+					    skin: 'layui-layer-rim', //加上边框
+					    area: '1190px', //宽高
+					    zIndex:1028,
+					    content: html,
+						scrollbar: false,    // 推荐禁用浏览器外部滚动条
+					    success:function(){
+					    }
+				    });
+				}
+			}
+		});
+	};
+	hotel.updateHotel = function(id){
+		$.ajax({
+			url:hotel.url("getHotelById","view"),
+			type:"POST",
+			data:"id="+id+"",
+			dataType:"json",
+			success:function(data){
+				var result = showDialog(data);
+				if(result){
+					data.hotel = JSON.parse(data.hotel);
+					if(data.hotel.province != null )var provinceId = data.hotel.province.id;
+					if(data.hotel.city != null )var cityId = data.hotel.city.id;
+					if(data.hotel.district != null ) var districtId = data.hotel.district.id;
+					var	html = updateTemplate(data);
+					$updateLayer = layer.open({
+					    type: 1,
+					    title:"编辑酒店信息",
+					    skin: 'layui-layer-rim', //加上边框
+					    area:'1190px', //宽高
+					    zIndex:1028,
+					    content: html,
+						scrollbar: false,    // 推荐禁用浏览器外部滚动条
+					    success:function(data){
+					    	$container = $(".updateHotelContainer"),$tbody = $container.find(".T-roomListTbody");
+					    	ruleData.Uvalidator = rule.check($container);
+					    	ruleData.UhotelRoomStandardList = rule.checkRoom($tbody);
+							ruleData.UtimeAreavalidator = rule.checkTimeArea($tbody);
+							/**/
+							console.log(data)
+							//初始化地区
+							KingServices.provinceCity($container,provinceId,cityId,districtId);
+							//新增房间列表
+							$container.find(".T-btn-hotel-standard-add").click(function(){
+								hotel.addRoomList($container);
+							})
+							//提交事件绑定
+							$container.find(".T-btn-submit-hotel").on("click",function(){
+								hotel.saveHotel($container);
 							});
-							$obj.find(".hotelRoomStandardList .timeArea .del").click(function(){
-								var div = $(this).parent().parent();
-								var divIndex = div.attr("data-index");
-								div.fadeOut(function(){
-									$(this).remove();
-								});
-								div.parent().next().find(".div-"+divIndex+"").fadeOut(function(){
-									$(this).remove();
-								});
-								div.parent().next().next().find(".div-"+divIndex+"").fadeOut(function(){
-									$(this).remove();
-								});
+							//删除房间列表
+							$tbody.find(".T-btn-hotel-standard-delete").on("click",function(){
+								var $this = $(this);
+									id = $this.closest('tr').data("entity-id");
+								hotel.delRoomList(id,$this);
+								ruleData.UroomTd = $tbody.find('tr');
 							});
-						});
-
-			    	});
-
-			    	//给提交按钮绑定事件
-			    	$obj.find(".btn-submit-hotel").click(function(){
-			    		// 表单校验
-			    		if(!validator.form()) { return; }
-			    		if(!hotelRoomStandardList.form()){return;}
-			    		if(roomTd != undefined){
-			    			if(!timeAreavalidator.form()){return;}
-			    			if(!marketPricevalidator.form()){return;}
-			    			if(!pricevalidator.form()){return;}
-			    		}
-			    		
-			    		/*if($('.addHotelContainer .hotelRoomStandardList')){
-			    			
-			    		}*/
-			    		//判断
-			    		/*if(){}
-			    		*/
-			    		var status = 0;
-						if($obj.find(".hotel-status").is(":checked") == true){
-							status = 1;
-						}
-			    		var form = $obj.eq(0).serialize()+"&status="+status+"";
-
-			    		var hotelRoomJsonAdd = [];
-			    		var hotelRoomJsonAddTr = $obj.find(".hotelRoomStandardList tbody tr");
-			    		hotelRoomJsonAddTr.each(function(i){
-			    			var hotelRoomJson = {
-		    					type : hotelRoomJsonAddTr.eq(i).find("input[name=type]").val(),
-		    					containBreakfast : hotelRoomJsonAddTr.eq(i).find("select[name=containBreakfast]").val(),
-		    					containLunch : hotelRoomJsonAddTr.eq(i).find("select[name=containLunch]").val(),
-		    					containDinner : hotelRoomJsonAddTr.eq(i).find("select[name=containDinner]").val(),
-		    					broadband : hotelRoomJsonAddTr.eq(i).find("input[name=broadband]").val(),
-		    					areaSize : hotelRoomJsonAddTr.eq(i).find("input[name=areaSize]").val(),
-		    					guestNumber : hotelRoomJsonAddTr.eq(i).find("input[name=guestNumber]").val(),
-		    					remark : hotelRoomJsonAddTr.eq(i).find("input[name=remark]").val(),
-		    					priceJsonAddList : []
-			    			};
-			    			var priceJsonAddTr = hotelRoomJsonAddTr.eq(i).find("td.time div");
-			    			priceJsonAddTr.each(function(j){
-			    				var divIndex = priceJsonAddTr.eq(j).attr("data-index");
-			    				var priceJsonAdd = {
-		    						divIndex : divIndex,
-		    						startTime : priceJsonAddTr.eq(j).find("input[name=startTime]").val(),
-		    						endTime : priceJsonAddTr.eq(j).find("input[name=endTime]").val(),
-		    						marketPrice : priceJsonAddTr.eq(j).parent().next().find(".div-" + divIndex + "").find("input[name=marketPrice]").val(),
-		    						contractPrice : priceJsonAddTr.eq(j).parent().next().next().find(".div-" + divIndex + "").find("input[name=contractPrice]").val()
-			    				}
-			    				hotelRoomJson.priceJsonAddList.push(priceJsonAdd);
-			    			});
-			    			hotelRoomJsonAdd.push(hotelRoomJson);
-			    		});
-			    		/* if(hotelRoomJsonAdd.length == 0){
-			    			showMessageDialog($( "#confirm-dialog-message" ),"酒店房间不能为空");
-			    			return
-			    		} */
-			    		hotelRoomJsonAdd = JSON.stringify(hotelRoomJsonAdd);
-			    		console.log(hotelRoomJsonAdd.length);
-			    		
-			    		$.ajax({
-							url:""+APP_ROOT+"back/hotel.do?method=addHotel&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=add",
+							//新增时间区间
+							$tbody.find(".T-add").off("click").on("click",function(){
+								var $this = $(this);
+								hotel.addTimeArea($this,$tbody);
+								ruleData.UtimeAreavalidator = rule.checkTimeArea($tbody);
+							})
+							//删除时间区间
+							$tbody.find(".T-del").on("click",function(){
+								var $this = $(this);
+								hotel.delTimeArea($this);
+								ruleData.UtimeAreatd = $tbody.find('tr');
+							});
+					    	//提交事件绑定
+					    	$container.find(".T-btn-submit-hotel").off("click").on("click",function(){
+					    		hotel.saveHotel($container,2);
+					    	});
+					    }
+					})
+				}
+			}
+		})
+	};
+	hotel.deleteHotel = function(id,$this){
+		var dialogObj = $( "#confirm-dialog-message" );
+		dialogObj.removeClass('hide').dialog({
+			modal: true,
+			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
+			title_html: true,
+			draggable:false,
+			buttons: [
+				{
+					text: "取消",
+					"class" : "btn btn-minier",
+					click: function() {
+						$( this ).dialog( "close" );
+					}
+				},
+				{
+					text: "确定",
+					"class" : "btn btn-primary btn-minier",
+					click: function() {
+						$( this ).dialog( "close" );
+						$.ajax({
+							url:hotel.url("deleteHotel","delete"),
 							type:"POST",
-							data:form+"&hotelRoomJsonAdd="+encodeURIComponent(hotelRoomJsonAdd)+"",
+							data:"id="+id+"",
 							dataType:"json",
-							beforeSend:function(){
-								globalLoadingLayer = openLoadingLayer();
-							},
 							success:function(data){
-								layer.close(globalLoadingLayer);
 								var result = showDialog(data);
 								if(result){
-									layer.close(addHotelLayer);
-									showMessageDialog($( "#confirm-dialog-message" ),data.message);
-									hotel.listHotel(0,"","");
-								}
-							}
-						});
-			    	});
-
-			    	$obj.find(".btn-hotel-standard-add").click();
-			    }
-			});
-		},
-		updateHotel:function(id,pageNo){
-			var timeAreavalidator;
-			var marketPricevalidator;
-			var pricevalidator;
-			var roomTd;
-			$.ajax({
-				url:""+APP_ROOT+"back/hotel.do?method=getHotelById&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-				type:"POST",
-				data:"id="+id+"",
-				dataType:"json",
-				beforeSend:function(){
-					globalLoadingLayer = openLoadingLayer();
-				},
-				success:function(data){
-					 layer.close(globalLoadingLayer);
-					var result = showDialog(data);
-					if(result){
-						var hotelInfo = JSON.parse(data.hotel);
-						data.hotel = hotelInfo;
-						var html = updateTemplate(data);
-						var updateHotel = layer.open({
-						    type: 1,
-						    title:"编辑酒店信息",
-						    skin: 'layui-layer-rim', //加上边框
-						    area:'1190px', //宽高
-						    zIndex:1028,
-						    content: html,
-							scrollbar: false,    // 推荐禁用浏览器外部滚动条
-						    success:function(){
-						    	var $obj = $(".updateHotelContainer .hotelMainForm");
-						    	var validator = rule.check($('.updateHotelContainer .hotelMainForm'));
-						    	var roomValidator = rule.checkRoom($('.updateHotelContainer .hotelRoomStandardList'));
-						    	//绑定账期模式选择事件
-						    	var $_payType = $obj.find("select[name=payType] option");
-						    	$_payType.each(function(){
-						    		if($(this).val()==1){
-						    			$(this).parent().parent().find(".payPeriod").removeClass("hide");
-						    		}
-						    	});
-						    	//绑定账期模式选择事件
-						    	$obj.find("select[name=payType]").change(function(){
-						    		if($(this).val() == 1){
-						    			$(this).parent().parent().find(".payPeriod").removeClass("hide");
-						    		}
-						    		else{
-						    			$(this).parent().parent().find(".payPeriod").addClass("hide");
-						    		}
-						    	});
-						    /*	//初始化省数据
-						    	hotel.getProvinceList($(".hotelMainForm select[name=provinceId]"));*/
-
-						    	//给省份select绑定事件
-						    	$obj.find("select[name=provinceId]").change(function(){
-						    		var provinceId = $(this).val();
-						    		if(provinceId!=''){
-							    		hotel.getCityList($obj.find("select[name=cityId]"),provinceId);
-						    		}else{
-						    			$obj.find("select[name=cityId]").html("<option value=''>未选择</option>");
-						    		}
-						    		$obj.find("select[name=districtId]").html("<option value=''>未选择</option>");
-						    	});
-
-						    	//给城市select绑定事件
-						    	$obj.find("select[name=cityId]").change(function(){
-						    		var cityId = $(this).val();
-						       		if(cityId!=''){
-							    		hotel.getDistrictList($obj.find("select[name=districtId]"),cityId);
-						    		}else{
-						    			$obj.find("select[name=districtId]").html("<option value=''>未选择</option>");
-						    		}
-						    	});
-
-						    	//级联选择城市列表
-						    	var provinceId = "";
-						    	if(data.hotel.province != null){
-						    		provinceId = data.hotel.province.id;
-						    		var cityId = "";
-							    	if(data.hotel.city != null){
-							    		cityId = data.hotel.city.id;
-
-							    		var districtId = "";
-							    		if(data.hotel.district != null){
-							    			districtId = data.hotel.district.id;
-							    		}
-							    		hotel.getDistrictList($obj.find("select[name=districtId]"),cityId,districtId);
-							    	}
-							    	hotel.getCityList($obj.find("select[name=cityId]"),provinceId,cityId);
-						    	}
-						    	hotel.getProvinceList($obj.find("select[name=provinceId]"),provinceId);
-
-
-
-						    	// 修改时修改原来的standard，
-						    	$obj.find(".hotelRoomStandardList .timeArea button.add").click(function(){
-						    		hotel.modifyOriginalRecord($(this));
-						    		roomValidator = rule.checkRoom($('.updateHotelContainer .hotelRoomStandardList'));
-						    	});
-
-						    	// 修改时删除原来的standard，
-						    	$obj.find(".hotelRoomStandardList .timeArea button.delete").click(function(){
-						    		hotel.deleteOriginalRecord($(this));
-								});
-
-						    	$obj.find(".hotelRoomStandardList .btn-hotel-standard-delete").click(function(){
-						    		var tr = $(this).parent().parent();
-						    		var standardId = tr.attr("data-entity-id");
-						    		if(standardId != null && standardId != ""){
-						    			tr.addClass("deleted");
-										$(this).parent().parent().fadeOut(function(){
-											$(this).hide();
-										});
-						    		}
-								});
-
-						    	$obj.find(".hotelRoomStandardList .datepicker").datepicker({
-									autoclose: true,
-									todayHighlight: true,
-									format: 'yyyy-mm-dd',
-									language: 'zh-CN'
-								});
-						    	//给房间列表新增按钮绑定事件 <span class="necessary">*</span>
-						    	$obj.find(".btn-hotel-standard-add").click(function(){
-							    		var html = "<tr>" +
-							    				"<td><input name=\"type\" type=\"text\" class='col-sm-12' maxlength=\"32\"/></td>" +
-							    				"<td class=\"time\"><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right\"><button class=\"btn btn-success btn-sm btn-white add\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i></button></label></div></td>" +
-							    				"<td><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input name=\"marketPrice\" class='col-sm-12' maxlength=\"9\" type=\"text\"/></div></td>" +
-							    				"<td><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input name=\"contractPrice\" class='col-sm-12' maxlength=\"9\" type=\"text\"/></div></td>" +
-							    				"<td><select name=\"containBreakfast\" class='no-padding foodsAll\'><option value=\"0\">不含</option><option value=\"1\">包含</option></select></td>" +
-							    				"<td><select name=\"containLunch\" class='cno-padding foodsAll'><option value=\"0\">不含</option><option value=\"1\">包含</option></select></td>" +
-							    				"<td><select name=\"containDinner\" class='no-padding foodsAll'><option value=\"0\">不含</option><option value=\"1\">包含</option></select></td>" +
-							    				"<td><input name=\"broadband\" class='col-sm-12' type=\"text\" maxlength=\"32\"/></td>" +
-							    				"<td><input name=\"areaSize\" class='col-sm-12' type=\"text\" maxlength=\"3\"/></td>" +
-							    				"<td><input name=\"guestNumber\" class='col-sm-12' type=\"text\" maxlength=\"4\"/></td>" +
-							    				"<td><input name=\"remark\" class='col-sm-12' type=\"text\" maxlength=\"1000\"/></td>" +
-							    				"<td style=\"width:70px\"><a data-entity-id=\"\" class=\"btn-hotel-standard-delete\">删除</a></td>" +
-							    				"</tr>";
-							    		$obj.find(".hotelRoomStandardList tbody").append(html);
-									// 再调整对话框的高度
-									$(window).trigger('resize');
-							    		roomValidator = rule.checkRoom($('.updateHotelContainer .hotelRoomStandardList'));
-							    		// 对酒店房型设置表单验证
-							    		console.log($('.updateHotelContainer .hotelRoomStandardList'));
-							    		
-							    		//给餐标列表删除按钮绑定事件
-							    		$obj.find(".hotelRoomStandardList tbody .btn-hotel-standard-delete").click(function(){
-								    		var tr = $(this).parent().parent(); 
-								    		var hotelStandardId = tr.attr("data-entity-id");
-								    		if (!(hotelStandardId != null && hotelStandardId != "")) {
-									    		$(this).parent().parent().fadeOut(function(){
-									    			$(this).remove();
-									    		});
-								    		}
-								    	});
-
-							    		$obj.find(".hotelRoomStandardList .datepicker").datepicker({
-											autoclose: true,
-											todayHighlight: true,
-											format: 'yyyy-mm-dd',
-											language: 'zh-CN'
-										});
-
-								    	// button按钮动态修改包车时限区间
-							    		$obj.find(".hotelRoomStandardList .timeArea button.add").unbind().click(function(){
-							    			hotel.modifyOriginalRecord($(this));
-							    			roomValidator = rule.checkRoom($('.updateHotelContainer .hotelRoomStandardList'));
-										});
-
-							    	});
-
-						    	//删除餐标
-						    	//给餐标列表删除按钮绑定事件
-						    	$obj.find(".hotelRoomStandardList tbody .btn-hotel-standard-delete").click(function(){
-						    		var tr = $(this).parent().parent();
-						    		var hotelStandardId = tr.attr("data-entity-id");
-						    		console.debug(hotelStandardId);
-						    		if (hotelStandardId != null && hotelStandardId != "") {
-						    			tr.addClass("deleted");
-						    			tr.fadeOut(function(){
-							    			$(this).hide();
-							    		});
-						    		}
-						    	});
-
-
-						    	//提交表单
-						    	$obj.find(".btn-submit-hotel").click(function(){
-						    		// 表单校验
-						    		console.log( );
-						    		if(!validator.form()) { return; }
-						    		if(!roomValidator.form()){return;}
-						    		var status = 0;
-									if($obj.find(".hotel-status").is(":checked") == true){
-										status = 1;
-									}
-						    		var form = $obj.eq(0).serialize()+"&status="+status+"";
-
-
-						    		console.log(form);
-
-						    		var hotelRoomJsonAdd = [];
-						    		var hotelRoomJsonAddTr = $obj.find(".hotelRoomStandardList tbody tr:not(.deleted)");
-						    		hotelRoomJsonAddTr.each(function(i){
-						    			var hotelRoomJson = {
-					    					id : hotelRoomJsonAddTr.eq(i).attr("data-entity-id"),
-					    					type : hotelRoomJsonAddTr.eq(i).find("input[name=type]").val(),
-					    					containBreakfast : hotelRoomJsonAddTr.eq(i).find("select[name=containBreakfast]").val(),
-					    					containLunch : hotelRoomJsonAddTr.eq(i).find("select[name=containLunch]").val(),
-					    					containDinner : hotelRoomJsonAddTr.eq(i).find("select[name=containDinner]").val(),
-					    					broadband : hotelRoomJsonAddTr.eq(i).find("input[name=broadband]").val(),
-					    					areaSize : hotelRoomJsonAddTr.eq(i).find("input[name=areaSize]").val(),
-					    					guestNumber : hotelRoomJsonAddTr.eq(i).find("input[name=guestNumber]").val(),
-					    					remark : hotelRoomJsonAddTr.eq(i).find("input[name=remark]").val(),
-					    					priceJsonAddList : [],
-					    					priceJsonDelList : []
-						    			};
-						    			var priceJsonAddTr = hotelRoomJsonAddTr.eq(i).find("td.time div:not(.deleted)");
-						    			priceJsonAddTr.each(function(j){
-						    				var divIndex = priceJsonAddTr.eq(j).attr("data-index");
-						    				var priceJsonAdd = {
-					    						id : priceJsonAddTr.eq(j).attr("data-entity-id"),
-					    						divIndex : divIndex,
-					    						startTime : priceJsonAddTr.eq(j).find("input[name=startTime]").val(),
-					    						endTime : priceJsonAddTr.eq(j).find("input[name=endTime]").val(),
-					    						marketPrice : priceJsonAddTr.eq(j).parent().next().find(".div-"+divIndex+"").find("input[name=marketPrice]").val(),
-					    						contractPrice : priceJsonAddTr.eq(j).parent().next().next().find(".div-"+divIndex+"").find("input[name=contractPrice]").val()
-						    				};
-						    				hotelRoomJson.priceJsonAddList.push(priceJsonAdd);
-						    			});
-						    			var priceJsonDelTr = hotelRoomJsonAddTr.eq(i).find("td.time div.deleted");
-						    			priceJsonDelTr.each(function(j){
-						    				var priceJsonDel = {
-					    						id : priceJsonDelTr.eq(j).attr("data-entity-id")
-						    				};
-						    				hotelRoomJson.priceJsonDelList.push(priceJsonDel);
-						    			});
-						    			hotelRoomJsonAdd.push(hotelRoomJson);
-						    		});
-
-						    		//删除餐标
-						    		var hotelRoomJsonDel = [];
-						    		var hotelRoomJsonDelTr = $obj.find(".hotelRoomStandardList tbody tr.deleted");
-						    		hotelRoomJsonDelTr.each(function(i){
-						    			var hotelRoomJson = {
-						    				id : hotelRoomJsonDelTr.eq(i).attr("data-entity-id")
-						    			};
-						    			hotelRoomJsonDel.push(hotelRoomJson);
-						    		});
-						    		hotelRoomJsonAdd = JSON.stringify(hotelRoomJsonAdd);
-						    		console.log(hotelRoomJsonAdd);
-						    		console.log("-----------------------------");
-						    		hotelRoomJsonDel = JSON.stringify(hotelRoomJsonDel);
-						    		console.log(hotelRoomJsonDel);
-						    		$.ajax({
-										url:""+APP_ROOT+"back/hotel.do?method=updateHotel&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
-										type:"POST",
-										data:form+"&hotelRoomJsonAdd="+encodeURIComponent(hotelRoomJsonAdd)+"&hotelRoomJsonDel="+encodeURIComponent(hotelRoomJsonDel),
-										dataType:"json",
-										beforeSend:function(){
-											globalLoadingLayer = openLoadingLayer();
-										},
-										success:function(data){
-											layer.close(globalLoadingLayer);
-											var result = showDialog(data);
-											if(result){
-												layer.close(updateHotel);
-												showMessageDialog($( "#confirm-dialog-message" ),data.message);
-
-												hotel.listHotel(0,hotel.searchData.name,hotel.searchData.status);
-
-												hotel.listHotel(pageNo,hotel.searchData.name,hotel.searchData.status);
-
-											}
-										}
+									$this.closest('tr').fadeOut(function() {
+										$(this).remove();
+										hotel.listHotel(0);
 									});
-						    	});
-						    }
+								}
+							}
 						});
 					}
 				}
-			});
-		},
-		deleteHotel:function(id,pageNo){
-			var dialogObj = $( "#confirm-dialog-message" );
-			dialogObj.removeClass('hide').dialog({
-				modal: true,
-				title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-				title_html: true,
-				draggable:false,
-				buttons: [
-					{
-						text: "取消",
-						"class" : "btn btn-minier",
-						click: function() {
-							$( this ).dialog( "close" );
-						}
-					},
-					{
-						text: "确定",
-						"class" : "btn btn-primary btn-minier",
-						click: function() {
-							$( this ).dialog( "close" );
-							$.ajax({
-								url:""+APP_ROOT+"back/hotel.do?method=deleteHotel&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=delete",
-								type:"POST",
-								data:"id="+id+"",
-								dataType:"json",
-								beforeSend:function(){
-									globalLoadingLayer = openLoadingLayer();
-								},
-								success:function(data){
-									layer.close(globalLoadingLayer);
-									var result = showDialog(data);
-									if(result){
-										$(".main-content .page-content .hotelList .hotel-"+id+"").fadeOut(function(){
-
-											hotel.listHotel(0,hotel.searchData.name,hotel.searchData.status);
-
-											hotel.listHotel(pageNo,hotel.searchData.name,hotel.searchData.status);
-
-										});
-									}
-								}
-							});
-						}
-					}
-				],
-				open:function(event,ui){
-					$(this).find("p").text("你确定要删除该条记录？");
-				}
-			});
-		},
-		viewHotel:function(id){
-			$.ajax({
-				url:""+APP_ROOT+"back/hotel.do?method=getHotelById&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-				type:"POST",
-				data:"id="+id+"",
-				dataType:"json",
-				beforeSend:function(){
-					globalLoadingLayer = openLoadingLayer();
-				},
-				success:function(data){
-					 layer.close(globalLoadingLayer);
-					var result = showDialog(data);
-					if(result){
-						var hotelInfo = JSON.parse(data.hotel);
-						data.hotel = hotelInfo;
-						var html = viewTemplate(data);
-						var updateHotel = layer.open({
-						    type: 1,
-						    title:"查看酒店信息",
-						    skin: 'layui-layer-rim', //加上边框
-						    area: '1024px', //宽高
-						    zIndex:1028,
-						    content: html,
-							scrollbar: false,    // 推荐禁用浏览器外部滚动条
-						    success:function(){
-						    }
-						    });
-						}
-					}
-				});
-		},
-		getProvinceList:function(obj,provinceId){
-			$.ajax({
-				url:""+APP_ROOT+"/base.do?method=getProvince",
-				type:"POST",
-				dataType:"json",
-				success:function(data){
-					var html = "<option value=''>未选择</option>";
-					var provinceList = data.provinceList;
-					if(provinceList != null && provinceList.length > 0){
-						for(var i=0;i<provinceList.length;i++){
-							if (provinceId != null && provinceList[i].id == provinceId) {
-								html += "<option selected=\"selected\" value='"+provinceList[i].id+"'>"+provinceList[i].name+"</option>";
-							} else {
-								html += "<option value='"+provinceList[i].id+"'>"+provinceList[i].name+"</option>";
-							}
-						}
-					}
-					$(obj).html(html);
-				}
-			});
-		},
-		getCityList:function(obj,provinceId,cityId){
-			if(provinceId != ""){
-				$.ajax({
-					url:""+APP_ROOT+"/base.do?method=getCity",
-					type:"POST",
-					data:"provinceId="+provinceId+"",
-					dataType:"json",
-					success:function(data){
-						var html = "<option value=''>未选择</option>";
-						var cityList = JSON.parse(data.cityList);
-						if(cityList != null && cityList.length > 0){
-							for(var i=0;i<cityList.length;i++){
-								if (cityId != null && cityId == cityList[i].id) {
-									html += "<option selected=\"selected\" value='"+cityList[i].id+"'>"+cityList[i].name+"</option>";
-								} else {
-									html += "<option value='"+cityList[i].id+"'>"+cityList[i].name+"</option>";
-								}
-							}
-						}
-						$(obj).html(html);
-					}
-				});
+			],
+			open:function(event,ui){
+				$(this).find("p").text("你确定要删除该酒店？");
 			}
-		},
-		getDistrictList:function(obj,cityId,districtId){
-			if(cityId != ""){
-				$.ajax({
-					url:""+APP_ROOT+"/base.do?method=getDistrict",
-					type:"POST",
-					data:"cityId="+cityId+"",
-					dataType:"json",
-					success:function(data){
-						var html = "<option value=''>未选择</option>";
-						var districtList = JSON.parse(data.districtList);
-						if(districtList != null && districtList.length > 0){
-							for(var i=0;i<districtList.length;i++){
-								if (districtId != null && districtId == districtList[i].id) {
-									html += "<option selected=\"selected\" value='"+districtList[i].id+"'>"+districtList[i].name+"</option>";
-								} else {
-									html += "<option value='"+districtList[i].id+"'>"+districtList[i].name+"</option>";
-								}
-
-							}
-						}
-						$(obj).html(html);
-					}
-				});
-			}
-		},
-		modifyOriginalRecord:function(obj){
-			var td = obj.parent().parent().parent();
-			var index = td.find("div").length;
-			var timeLimitDiv = "<div data-index=\""+(index+1)+"\" data-entity-id=\"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:1px\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right\"><button class=\"btn btn-danger btn-sm btn-white delete\"><i class=\"ace-icon fa fa-minus bigger-110 icon-only\"></i></button></label></div>";
-			var marketPriceInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-top:6px\"><input name=\"marketPrice\" type=\"text\" class='col-sm-12' maxlength=\"9\"/></div>";
-			var contractPriceInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-top:6px\"><input name=\"contractPrice\" type=\"text\" class='col-sm-12' maxlength=\"9\"/></div>";
-			td.append(timeLimitDiv);
-			td.next().append(marketPriceInput);
-			td.next().next().append(contractPriceInput);
-			$(".hotelRoomStandardList .datepicker").datepicker({
-				autoclose: true,
-				todayHighlight: true,
-				format: 'yyyy-mm-dd',
-				language: 'zh-CN'
+		});
+	};
+	hotel.addHotel = function(){
+		var html = addTemplate();
+		hotel.$addLayer = layer.open({
+		    type: 1,
+		    title:"新增酒店",
+		    skin: 'layui-layer-rim', //加上边框
+		    area: '1190px', //宽高
+		    zIndex:1028,
+		    content: html,
+		    scrollbar: false,
+		    success:function(){
+		    	var $container = $(".T-addHotelContainer");
+		    	// 设置表单验证
+		    	ruleData.validator = rule.check($container);
+		    	//初始化地区
+		    	KingServices.provinceCity($container);
+		    	//新增房间列表
+		    	$container.find(".T-btn-hotel-standard-add").click(function(){
+		    		hotel.addRoomList($container);
+		    	})
+		    	//提交事件绑定
+		    	$container.find(".T-btn-submit-hotel").on("click",function(){
+		    		hotel.saveHotel($container,1);
+		    	});
+		    }
+		})
+	};
+	hotel.addRoomList = function($container){
+		var $tbody = $container.find(".T-roomListTbody"),
+			html = '<tr>' +
+			'<td><input name="type" type="text" class="col-sm-12"  maxlength="32" /></td>' +
+			'<td class="T-time"><div data-index="1" class="clearfix div-1" style="margin-top:1px;"><input name="startTime" type="text" class="datepicker" style="width:100px"/><label>&nbsp;至&nbsp;</label><input name="endTime" type="text" class="datepicker" style="width:100px"/><label class="timeArea" style="float:right; padding-top:0px;"><button class="btn btn-success btn-sm btn-white T-add"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button></label></div></td>' +
+			'<td><div data-index="1" class="clearfix marketPrice-1" style="margin-top:1px"><input name="marketPrice" class="col-sm-12 marketPrice" maxlength="9" type="text"/></div></td>' +
+			'<td><div data-index="1" class="clearfix contractPrice-1" style="margin-top:1px"><input name="contractPrice" class="col-sm-12 price" maxlength="9" type="text"/></div></td>' +
+			'<td><select name="containBreakfast" class="no-padding foodsAll"><option value="0">不含</option><option value="1">包含</option></select></td>' +
+			'<td><select name="containLunch" class="no-padding foodsAll"><option value="0">不含</option><option value="1">包含</option></select></td>' +
+			'<td><select name="containDinner" class="no-padding foodsAll"><option value="0">不含</option><option value="1">包含</option></select></td>' +
+			'<td><input name="broadband" class="col-sm-12" type="text"  maxlength="100" /></td>' + 
+			'<td><input name="areaSize" class="col-sm-12" type="text"  maxlength="3" /></td>' +
+			'<td><input name="guestNumber" class="col-sm-12" type="text"  maxlength="4" /></td>' +
+			'<td><input name="remark" class="col-sm-12" type="text"  maxlength="1000" /></td>' +
+			'<td style="width:70px"><a data-entity-id="" href="#" class=" btn-xs  T-btn-hotel-standard-delete">删除</a></td>' +
+			'</tr>';
+		$tbody.append(html);
+		hotel.datepicker($tbody);
+		ruleData.roomTd = $tbody.find('tr');
+		ruleData.UroomTd = $tbody.find('tr');
+		// 再调整对话框的高度
+		$(window).trigger('resize');
+		// 对酒店房型设置表单验证
+	    ruleData.hotelRoomStandardList = rule.checkRoom($tbody);
+	    ruleData.UhotelRoomStandardList = rule.checkRoom($tbody);
+	    //删除房间列表
+	    $tbody.find(".T-btn-hotel-standard-delete").on("click",function(){
+	    	var $this = $(this);
+	    		id = $this.closest('tr').data("entity-id");
+	    	hotel.delRoomList(id,$this);
+	    });
+	    //新增时间区间
+	    $tbody.find(".T-add").off("click").on("click",function(){
+	    	var $this = $(this);
+	    	hotel.addTimeArea($this,$tbody);
+	    })
+	};
+	hotel.delRoomList = function(id,$this){
+		if(!!id){
+			var tr = $this.closest('tr');
+			tr.addClass('delete');
+			tr.fadeOut(function(){
+				$(this).hide();
 			});
-			$(".hotelRoomStandardList .timeArea button.delete").click(function(){
-				var div = $(this).parent().parent();
-				var entityId = div.attr("data-entity-id");
-				var divIndex = div.attr("data-index");
-				if (entityId != null && entityId != "") {
-					div.addClass("deleted");
-					div.fadeOut(function(){
-						$(this).hide();
-					});
-				}else{
-					div.fadeOut(function(){
-						$(this).remove();
-					});
-				}
-				div.parent().next().find(".div-"+divIndex+"").fadeOut(function(){
-					$(this).remove();
-				});
-				div.parent().next().next().find(".div-"+divIndex+"").fadeOut(function(){
-					$(this).remove();
-				});
-			});
-			
-		},
-		deleteOriginalRecord:function(obj){
-			var div = obj.parent().parent();
-			var entityId = div.attr("data-entity-id");
-			var divIndex = div.attr("data-index");
-			if (entityId != null && entityId != "") {
-				div.addClass("deleted");
-				div.fadeOut(function(){
-					$(this).hide();
-				});
-			}else{
-				div.fadeOut(function(){
-					$(this).remove();
-				});
-			}
-			div.parent().next().find(".div-"+divIndex+"").fadeOut(function(){
+		}else{
+			$this.closest('tr').fadeOut(function(){
 				$(this).remove();
+				ruleData.roomTd = $tbody.find('tr');
 			});
-			div.parent().next().next().find(".div-"+divIndex+"").fadeOut(function(){
+		}
+	};
+	hotel.addTimeArea = function($this,$tbody){
+		var td = $this.closest('td'),
+    		index = td.find("div").length,
+    		timeLimitDiv = '<div data-index="'+(index+1)+'" class="clearfix appendDiv div-'+(index+1)+'" style="margin-top:1px"><input name="startTime" type="text" class="datepicker" style="width:100px"/><label>&nbsp;至&nbsp;</label><input name="endTime" type="text" class="datepicker" style="width:100px"/><label class="timeArea" style="float:right; padding-top:3px;">' + 
+			'<button class="btn btn-danger btn-sm btn-white T-del" style="margin-top: -3px;"><i class="ace-icon fa fa-minus bigger-110 icon-only"></i></button>'+
+			'</label></div>',
+			marketPriceInput = '<div data-index="'+(index+1)+'" class="clearfix appendDiv marketPrice-'+(index+1)+'" style="margin-top:6px"><input name="marketPrice" type="text" class="col-sm-12 marketPrice" maxlength="9"/></div>',
+			contractPriceInput = '<div data-index="'+(index+1)+'" class="clearfix appendDiv contractPrice-'+(index+1)+'" style="margin-top:6px"><input name="contractPrice" type="text" class="col-sm-12 price" maxlength="9"/></div>';
+    	ruleData.timeAreaTd = td;
+    	ruleData.UtimeAreaTd = td;
+    	td.append(timeLimitDiv);
+    	td.next().append(marketPriceInput);
+    	td.next().next().append(contractPriceInput);
+    	//添加前端校验
+		ruleData.timeAreavalidator = rule.checkTimeArea(td);
+		ruleData.marketPricevalidator = rule.checkTimeArea(td.next());
+		ruleData.pricevalidator = rule.checkTimeArea(td.next().next());
+		ruleData.UtimeAreavalidator = rule.checkTimeArea(td);
+		ruleData.UmarketPricevalidator = rule.checkTimeArea(td.next());
+		ruleData.Upricevalidator = rule.checkTimeArea(td.next().next());
+		hotel.datepicker($tbody);
+		//删除时间区间
+		$tbody.find(".T-del").click(function(){
+			var $this = $(this);
+			hotel.delTimeArea($this);
+		});
+	};
+	hotel.delTimeArea = function($this){
+		var div = $this.closest('div'),
+			divIndex = div.data("index"),
+			entityId = div.data("entity-id");
+		if (entityId != null && entityId != "") {
+			div.addClass("delete");
+			div.fadeOut(function(){
+				$(this).hide();
+			});
+		}else{
+			div.fadeOut(function(){
 				$(this).remove();
 			});
 		}
+		div.closest('tr').find(".marketPrice-"+divIndex+"").fadeOut(function(){
+			$(this).remove();
+		});
+		div.closest('tr').find(".contractPrice-"+divIndex+"").fadeOut(function(){
+			$(this).remove();
+		});
+	};
+	hotel.saveHotel = function($container,type){
+		// 表单校验
+		if (type == 1) {
+			if (!ruleData.validator.form()) {return}
+			if(!!ruleData.roomTd) {
+				if (!ruleData.hotelRoomStandardList.form()) {return}
+			}
+			if(!!ruleData.timeAreaTd){
+				if(!ruleData.timeAreavalidator.form() || !ruleData.marketPricevalidator.form() || !ruleData.pricevalidator.form()){return}
+			}
+		}else if(type == 2){
+			if (!ruleData.Uvalidator.form()) {return}
+			if(!!ruleData.UroomTd) {
+				if (!ruleData.UhotelRoomStandardList.form()) {return}
+			}
+			if(!!ruleData.UtimeAreaTd){
+				if(!ruleData.UtimeAreavalidator.form() || !ruleData.UmarketPricevalidator.form() || !ruleData.Upricevalidator.form()){return}
+			}
+		}
+		
+
+		var status = 0,
+			hotelRoomJsonAdd = [],hotelRoomJsonDel = [],
+			hotelRoomJsonAddTr = $container.find(".T-roomListTbody tr:not(.delete)"),
+			hotelRoomJsonDelTr = $container.find(".T-roomListTbody tr.delete"),
+			hotelRoomJson = {};
+		if($container.find(".T-hotel-status").prop("checked")){
+			status = 1;
+		}
+		var form = $container.find(".hotelMainForm").serialize()+"&status="+status;
+		hotelRoomJsonAddTr.each(function(){
+			var $this = $(this),
+				priceJsonAddTr = $this.find(".T-time div:not(.delete)"),
+				priceJsonDelTr = $this.find(".T-time div.delete"),
+				hotelRoomJson = {
+					id : $this.data("entity-id"),
+					type : hotel.getValue($this ,"type"),
+					containBreakfast : hotel.getValue($this ,"containBreakfast"),
+					containLunch : hotel.getValue($this ,"containLunch"),
+					containDinner : hotel.getValue($this ,"containDinner"),
+					broadband : hotel.getValue($this ,"broadband"),
+					areaSize : hotel.getValue($this ,"areaSize"),
+					guestNumber : hotel.getValue($this ,"guestNumber"),
+					remark : hotel.getValue($this ,"remark"),
+					priceJsonAddList : [],
+					priceJsonDelList : []
+				};
+			priceJsonAddTr.each(function(){
+				var $that = $(this),
+					divIndex = $that.data("index"),
+					priceJsonAdd = {
+						id : $that.data("entity-id"),
+						divIndex : divIndex,
+						startTime : $that.find("input[name=startTime]").val(),
+						endTime : $that.find("input[name=endTime]").val(),
+						marketPrice : $that.closest('tr').find(".marketPrice-" + divIndex + " input[name=marketPrice]").val(),
+						contractPrice : $that.closest('tr').find(".contractPrice-" + divIndex + " input[name=contractPrice]").val()
+					}
+				hotelRoomJson.priceJsonAddList.push(priceJsonAdd);
+			});
+			priceJsonDelTr.each(function(){
+				var $the = $(this),
+					priceJsonDel = {
+					id : $the.data("entity-id")
+				};
+				hotelRoomJson.priceJsonDelList.push(priceJsonDel);
+			});
+			hotelRoomJsonAdd.push(hotelRoomJson);
+		})
+		hotelRoomJsonDelTr.each(function(){
+			var $thi = $(this),
+				hotelRoomJson = {
+				id : $thi.data("entity-id")
+			};
+			hotelRoomJsonDel.push(hotelRoomJson);
+		});
+		hotelRoomJsonAdd = JSON.stringify(hotelRoomJsonAdd);
+		hotelRoomJsonDel = JSON.stringify(hotelRoomJsonDel);
+		var method = "",operation = "";
+		if (type == 1) {
+			method = "addHotel";
+			operation = "add";
+		}else if(type == 2){
+			method = "updateHotel";
+			operation = "update";
+		}
+		$.ajax({
+			url:hotel.url(method,operation),
+			type:"POST",
+			data:form+"&hotelRoomJsonAdd="+encodeURIComponent(hotelRoomJsonAdd)+"&hotelRoomJsonDel="+encodeURIComponent(hotelRoomJsonDel),
+			dataType:"json",
+			success:function(data){
+				var result = showDialog(data);
+				if(result){
+					layer.close(hotel.$addLayer);
+					layer.close(hotel.$updateLayer);
+					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+						hotel.listHotel(0);
+					});
+				}
+			}
+		});
+	};
+	hotel.datepicker = function($obj){
+		$obj.find(".datepicker").datepicker({
+			autoclose: true,
+			todayHighlight: true,
+			format: 'yyyy-mm-dd',
+			language: 'zh-CN'
+		})
+	};
+	hotel.getValue = function($obj,name){
+		var value = $obj.find("[name="+name+"]").val();
+		return value;
+	};
+	hotel.url = function(method,operation){
+		var url = ''+APP_ROOT+'back/hotel.do?method='+method+'&token='+$.cookie('token')+'&menuKey='+menuKey+'&operation='+operation+'';
+		return url;
 	}
-	exports.listHotel = hotel.listHotel;
+	exports.init = hotel.initModule;
 });
