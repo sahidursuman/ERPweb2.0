@@ -1165,7 +1165,7 @@ define(function(require, exports) {
 		},
 		getLineProductList:function(obj,lineProductId){
 			$.ajax({
-				url:""+APP_ROOT+"back/lineProduct.do?method=findLineProductInTouristGroup&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
+				url:""+APP_ROOT+"back/touristGroup.do?method=getTourCreator&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 				type:"POST",
 				dataType:"json",
 				success:function(data){
