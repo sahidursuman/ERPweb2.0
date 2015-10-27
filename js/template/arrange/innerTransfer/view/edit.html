@@ -174,26 +174,26 @@
 					<!-- 收客信息start -->
 					<div class="form-group col-sm-12">
 						<div class="search-area">
-							<label class="col-sm-1 control-label no-padding-right">应收：</label>
-							<div class="col-sm-2">
+							<label class="col-sm-1 control-label no-padding-right" style="width:84px">应收：</label>
+							<div class="col-sm-1">
 								<input name="needPayAllMoney" value="{{innerTransfer.touristGroup.needPayAllMoney}}" readonly="readonly" type="text" class="col-xs-12" />
 							</div>
 
 							<label class="col-sm-1 control-label no-padding-right">已收：</label>
-							<div class="col-sm-2">
+							<div class="col-sm-1">
 								<input name="payedMoney" value="{{innerTransfer.touristGroup.payedMoney}}" readonly="readonly" type="text" class="col-xs-12" />
 							</div>
 
 							<label class="col-sm-1 control-label no-padding-right">现收：</label>
-							<div class="col-sm-2">
+							<div class="col-sm-1">
 								<input name="currentNeedPayMoney" value="{{innerTransfer.touristGroup.currentNeedPayMoney}}" readonly="readonly" type="text" class="col-xs-12" />
 							</div>
-
-							<label class="col-sm-1 control-label no-padding-right">收客时的备注:</label>
-							<div class="col-sm-2">
-								<input name="remark" value="{{innerTransfer.touristGroup.remark}}" type="text" class="col-xs-12" readonly="readonly" />
-							</div>
-
+						</div>
+					</div>
+					<div class="form-group col-sm-12">
+						<label class="pull-left control-label no-padding-right">收客时的备注：</label>
+						<div class="col-sm-5">
+							<input name="remark" value="{{innerTransfer.touristGroup.remark}}" type="text" class="col-xs-12" readonly="readonly" />
 						</div>
 					</div>
 					<div class="widget-body">
