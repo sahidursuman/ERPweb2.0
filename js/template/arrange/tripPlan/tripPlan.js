@@ -377,9 +377,9 @@ define(function(require, exports) {
 				    	tripPlan.MenberNumber("addTripPlanTouristTbody");
 				    	//判定是否选中
 				    	if (data.tripPlan.executeTimeType==0) {
-				    		$(".newAddTripPlanMain").find('input[name=executeTimeType]').eq(0).attr("checked","checked");
+				    		$(".newAddTripPlanMain").find('.executeTimeType1').removeClass('hide');
 				    	} else{
-				    		$(".newAddTripPlanMain").find('input[name=executeTimeType]').eq(1).attr("checked","checked");
+				    		$(".newAddTripPlanMain").find('.executeTimeType2').removeClass('hide');
 				    	};
 				    
 				    	//查看计划中 查看游客小组

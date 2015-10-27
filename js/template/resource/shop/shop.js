@@ -632,7 +632,11 @@ define(function(require, exports) {
 						    content: html,
 							scrollbar: false,    // 推荐禁用浏览器外部滚动条
 						    success:function(){
-						
+								$(".timeArea").each(function(i) {
+									var priceAreaHeight = $(".price" + i).height();
+									$(this).height(priceAreaHeight);
+									$(this).css("line-height",priceAreaHeight + "px")
+								});
 						    }
 						});
 					}
@@ -797,8 +801,8 @@ define(function(require, exports) {
 			    	var policyHtml = '<tr class="timeArea">'+
 			    	'<td data-index="1" class="clearfix div-1" style="margin-bottom:3px"><div><input name=\"startTime\" maxlength=\"100\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/>'+
 			    	'<label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/></div></td><td><div data-index="1" class="clearfix div-1" style="margin-bottom:3px">'+
-			    	'<input name="costMoneyStart" maxlength=\"6\" type=\"text\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label>'+
-			    	'<input name=\"costMoneyEnd\" maxlength=\"6\" type=\"text\" style=\"width:100px\"/><label class=\"priceArea\" style=\"float:right\">'+
+			    	'<input name="costMoneyStart" maxlength=\"9\" type=\"text\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label>'+
+			    	'<input name=\"costMoneyEnd\" maxlength=\"9\" type=\"text\" style=\"width:100px\"/><label class=\"priceArea\" style=\"float:right\">'+
 			    	'<button class=\"btn btn-success btn-sm btn-white add\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i>'+
 
 			    	'</button></label></div></td><td><div data-index="1" class="clearfix div-1" style="margin-bottom:7px"><input name="guideRate" maxlength=\"5\" type="text"/>'+
@@ -884,8 +888,8 @@ define(function(require, exports) {
 			    	var policyHtml = '<tr class="timeArea">'+
 			    	'<td data-index="1" class="clearfix div-1" style="margin-bottom:3px"><div><input name=\"startTime\" maxlength=\"100\" type=\"text\" class=\"datepicker col-sm-5\"/>'+
 			    	'<label class="col-sm-2 control-label center">&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker col-sm-5\"/></div></td><td><div data-index="1" class="clearfix div-1" style="margin-bottom:3px">'+
-			    	'<input name="costMoneyStart" type=\"text\" maxlength=\"6\" class="col-sm-4"/><label class="col-sm-2 control-label center">&nbsp;至&nbsp;</label>'+
-			    	'<input name=\"costMoneyEnd\" type=\"text\" maxlength=\"6\" class="col-sm-4"/><label class=\"priceArea col-sm-2\">'+
+			    	'<input name="costMoneyStart" type=\"text\" maxlength=\"9\" class="col-sm-4"/><label class="col-sm-2 control-label center">&nbsp;至&nbsp;</label>'+
+			    	'<input name=\"costMoneyEnd\" type=\"text\" maxlength=\"9\" class="col-sm-4"/><label class=\"priceArea col-sm-2\">'+
 			    	'<button class=\"btn btn-success btn-sm btn-white add\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i>'+
 			    	'</button></label></div></td><td><div data-index="1" class="clearfix div-1" style="margin-bottom:7px"><input name="guideRate" class="col-sm-12" maxlength=\"5\" type="text"/>'+
 			    	'</div></td><td><div data-index="1" class="clearfix div-1" style="margin-bottom:7px"><input name="travelAgencyRate" type="text" class="col-sm-12" maxlength=\"5\"/>'+

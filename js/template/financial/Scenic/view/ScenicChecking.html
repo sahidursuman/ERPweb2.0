@@ -76,7 +76,7 @@
 	                <td>{{rs.needPayMoney}}</td>
 	                <td>社付{{rs.travelAgencyPayedMoney}},导付{{rs.guidePayedMoney}}</td>
 					<td>{{rs.unPayedMoney}}</td>
-	                <td style="color: #0092ef;"><a class="scenicLookBillsImg" url="{{rs.billImages}}" href="#">查看</a></td>
+	                <td style="color: #0092ef;">{{if rs.billImages != null && rs.billImages !=""}}<a href="#" class="scenicLookBillsImg" url="{{rs.billImages}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
 	                <td><input type="text" maxlength="10" name="FinancialScenicRealUnPayedMoney" class="col-sm-12" value="{{rs.realUnPayedMoney}}" {{if rs.isConfirmAccount == 1 && roleType != 1 }} disabled = "true" {{/if}}></td>
 	                <td><input type="text" maxlength="1000" name="FinancialScenicRemark" class="col-sm-12" value="{{rs.remark}}"></td>
 					<td>{{if rs.checkTime == null || rs.checkTime == ""}}-{{else}}{{rs.checkTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
