@@ -347,6 +347,8 @@ define(function(require, exports) {
                          
                          //确认对账按钮事件
                          $checkId.find("[name=ClientCheck_checkButton]").click(function(){ 
+                            validator = rule.check($('.clientCheckingMain'));
+                            if (!validator.form()) { return; }
                         	Client.saveCheckingData(id,0);
                          });
                      }
@@ -488,9 +490,6 @@ define(function(require, exports) {
             });
         },
 		saveCheckingData : function(id,isClose){
-			
-			// 表单校验
-			if (!validator.form()) { return; }
 			 
 			//保存对账时提交的数据
 			var $this = $(".clientCheckingMain");
