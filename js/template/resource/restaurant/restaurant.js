@@ -31,7 +31,7 @@ define(function(require, exports) {
             type: "POST",
             data: {
                 pageNo: page,
-                name: encodeURIComponent(name),
+                name: name,
                 status: status,
                 sortType: 'auto'
             },
