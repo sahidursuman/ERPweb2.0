@@ -578,7 +578,20 @@ function trim(str){
  */
 var modalScripts = {
 	'resource_guide': "js/template/resource/guide/guide.js",
+	'resource_restaurant': "js/template/resource/restaurant/restaurant.js",
 	'resource_hotel': "js/template/resource/hotel/hotel.js",
+	'resource_shop': 'js/template/resource/shop/shop.js',
+	'resource_insurance': "js/template/resource/insurance/insurance.js",
+	'resource_scenic' : "js/template/resource/scenic/scenic.js",
+	'business_analyst_saleProduct' : "js/template/businessAnalyst/saleProduct/saleProduct.js",
+	'resource_busCompany':"js/template/resource/busCompany/busCompany.js",
+	//-------------------------------------------业务分析模块---------------------------------------------------
+	'business_analyst_saleProduct' : "js/template/businessAnalyst/saleProduct/saleProduct.js",//产品销量
+	'business_analyst_sourDstribution' : "js/template/businessAnalyst/sourDstribution/sourDstribution.js", //客源分布
+	'business_analyst_customerVolume' : "js/template/businessAnalyst/customerVolume/customerVolume.js", //客户客量
+	'business_analyst_employeePerfor' : "js/template/businessAnalyst/employeePerfor/employeePerfor.js", //员工业绩 
+	'business_analyst_tourguidePerfor' : "js/template/businessAnalyst/tourguidePerfor/tourguidePerfor.js" //导游业绩
+	//---------------------------------------------------------------------------------------------------------------
 };
 
 function listMenu(menuTemplate){
@@ -606,24 +619,24 @@ function listMenu(menuTemplate){
 				// });
 
 				//绑定车队菜单功能
-				$("#sidebar .nav-list .resource_busCompany").click(function(){
+				/*$("#sidebar .nav-list .resource_busCompany").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/busCompany/busCompany.js",function(busCompany){
 						busCompany.listBusCompany(0,"",1);
 					});
-				});
+				});*/
 
-				//绑定餐厅菜单功能
-				$("#sidebar .nav-list .resource_restaurant").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/resource/restaurant/restaurant.js",function(restaurant){
-						restaurant.listRestaurant(0,"",1);
-					});
-				});
+				// //绑定餐厅菜单功能
+				// $("#sidebar .nav-list .resource_restaurant").click(function(){
+				// 	$("#sidebar .nav-list li").removeClass("active");
+				// 	$(this).addClass("active");
+				// 	$(this).parent().parent().addClass("active");
+				// 	seajs.use("" + ASSETS_ROOT +"js/template/resource/restaurant/restaurant.js",function(restaurant){
+				// 		restaurant.listRestaurant(0,"",1);
+				// 	});
+				// });
 				//绑定酒店菜单功能
 				/*$("#sidebar .nav-list .resource_hotel").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
@@ -656,15 +669,15 @@ function listMenu(menuTemplate){
 					$("#main-container")[0].index = 0;
 				});
 
-				//绑定商家管理功能
-				$("#sidebar .nav-list .resource_shop").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/resource/shop/shop.js",function(shop){
-						shop.listShop(0,"",1);
-					});
-				});
+				// //绑定商家管理功能
+				// $("#sidebar .nav-list .resource_shop").click(function(){
+				// 	$("#sidebar .nav-list li").removeClass("active");
+				// 	$(this).addClass("active");
+				// 	$(this).parent().parent().addClass("active");
+				// 	seajs.use("" + ASSETS_ROOT +"js/template/resource/shop/shop.js",function(shop){
+				// 		shop.listShop(0,"",1);
+				// 	});
+				// });
 
 
 				//绑定线路模板菜单功能
@@ -688,14 +701,14 @@ function listMenu(menuTemplate){
 					});
 				});
 				//绑定保险菜单功能
-				$("#sidebar .nav-list .resource_insurance").click(function(){
+				/*$("#sidebar .nav-list .resource_insurance").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/insurance/insurance.js",function(insurance){
 						insurance.listInsurance(0,"",1);
 					});
-				});
+				});*/
 				//绑定自费项目菜单功能
 				$("#sidebar .nav-list .resource_selfpay").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
@@ -743,7 +756,7 @@ function listMenu(menuTemplate){
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/tripPlan/tripPlan.js",function(tripPlan){
-						tripPlan.listTripPlan(0,"","","","","");
+						tripPlan.listTripPlan(0,"","","","","","","","");
 						modals["arrange_all"] = tripPlan;
 					});
 				});
@@ -1038,7 +1051,7 @@ function listMenu(menuTemplate){
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/arrange/tripPlan/tripPlan.js",function(tripPlan){
-						tripPlan.listTripPlan(0,"","","","","","");
+						tripPlan.listTripPlan(0,"","","","","","","","","","");
 						modals["arrange_plan"] = tripPlan;
 					});
 				});
@@ -1049,7 +1062,7 @@ function listMenu(menuTemplate){
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/arrange/booking/booking.js",function(booking){
-						booking.listbooking(0,"","","","","");
+						booking.listbooking(0,"","","","","","","","");
 						modals["arrange_booking"] = booking;
 					});
 				});

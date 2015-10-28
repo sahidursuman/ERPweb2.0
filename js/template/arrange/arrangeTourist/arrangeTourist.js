@@ -2353,37 +2353,33 @@ define(function(require, exports) {
 				var obj = this;
 				var seatCount = $(this).parent().parent().find("input[name=seatCount]").val();
 				var busBrand = $(this).parent().parent().find("input[name=needBusBrand]").val();
-				if(busBrand){
-					$.ajax({
-						url:""+APP_ROOT+"back/busCompany.do?method=getLicenseNumbers&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-						data:"seatCount="+seatCount+"&brand="+busBrand+"",
-						dateType:"json",
-						type:"POST",
-						success:function(data){
-							var result = showDialog(data);
-							if(result){
-								var licenseList = JSON.parse(data.busList);
-								if(licenseList && licenseList.length > 0){
-									for(var i=0; i < licenseList.length; i++){
-										licenseList[i].value = licenseList[i].licenseNumber;
-									}
-									$(obj).autocomplete('option','source', licenseList);
-									$(obj).autocomplete('search', '');
-								}else{
-									layer.tips('没有内容', obj, {
-									    tips: [1, '#3595CC'],
-									    time: 2000
-									});
+				$.ajax({
+					url:""+APP_ROOT+"back/busCompany.do?method=getLicenseNumbers&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
+					data: {
+						seatCount: seatCount,
+						brand: busBrand
+					},
+					dateType:"json",
+					type:"POST",
+					success:function(data){
+						var result = showDialog(data);
+						if(result){
+							var licenseList = JSON.parse(data.busList);
+							if(licenseList && licenseList.length > 0){
+								for(var i=0; i < licenseList.length; i++){
+									licenseList[i].value = licenseList[i].licenseNumber;
 								}
+								$(obj).autocomplete('option','source', licenseList);
+								$(obj).autocomplete('search', '');
+							}else{
+								layer.tips('没有内容', obj, {
+								    tips: [1, '#3595CC'],
+								    time: 2000
+								});
 							}
 						}
-					})
-				}else{
-					layer.tips('请选择车辆品牌', obj, {
-					    tips: [1, '#3595CC'],
-					    time: 2000
-					});
-				}
+					}
+				})
 			})
 		},
 		driverChoose : function(){

@@ -3,15 +3,16 @@
 	  <div class="form-group">
 		<div class="search-area">
 			<div class="col-xs-2">
-				<input type="text" name="orderNumber" class="col-xs-12 guideInputList orderNumberChoose" placeholder="代订单号{{if searchParam.echoPartnerAgency.length == 0}}123123{{/if}}" value="{{searchParam.orderNumber}}" />
+				<input type="text" name="orderNumber" class="col-xs-12 guideInputList T-orderNumberChoose" placeholder="代订单号" value="{{searchParam.orderNumber}}" />
+				<input type="hidden" name="orderNumberId" value="{{searchParam.id}}" />
+				</div>
+			<div class="col-xs-1">
+				<input type="text" name="partnerAgency" class="col-xs-12 T-partnerAgencyChoose" placeholder="客户" value="{{if searchParam.partnerAgency != null}}{{searchParam.partnerAgency}}{{/if}}" />
+				<input type="hidden" name="partnerAgencyChooseId" value="{{searchParam.partnerAgencyId}}" />
 			</div>
 			<div class="col-xs-1">
-				<input type="text" name="partnerAgency" class="col-xs-12 partnerAgencyChoose" placeholder="客户" value="{{if searchParam.echoPartnerAgency != null}}{{searchParam.echoPartnerAgency.travelAgencyName}}{{/if}}" />
-				<input type="hidden" name="partnerAgencyId" value="{{searchParam.echoPartnerAgency.id}}" />
-			</div>
-			<div class="col-xs-1">
-				<input type="text" name="operateUser" class="col-xs-12 operateUserChoose" placeholder="操作人" value="{{if searchParam.echoOperateUser != null}}{{searchParam.echoOperateUser.realName}}{{/if}}" />
-				<input type="hidden" name="operateUserId" value="{{searchParam.echoOperateUser.id}}" />
+				<input type="text" name="operateUser" class="col-xs-12 operateUserChoose" placeholder="操作人" value="{{if searchParam.operateUser != null}}{{searchParam.operateUser.realName}}{{/if}}" />
+				<input type="hidden" name="operateUserId" value="{{searchParam.operateUserId}}" />
 			</div>
 			<div class="col-xs-3">
 				<div class="col-xs-6">

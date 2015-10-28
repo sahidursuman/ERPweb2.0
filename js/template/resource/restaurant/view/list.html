@@ -1,12 +1,11 @@
-<div class="search-area globalAdd">
+<div class="search-area globalAdd T-search-area">
 	<input name="restaurant_name" class="col-xs-2 input-default-height guideInputList" value="{{searchParam.name}}" placeholder="请输入餐厅名称关键词"/>&nbsp;
-	<button class=" btn-sm  btn-restaurant-search  pull-left search-btn">
+	<button class=" btn-sm pull-left search-btn T-search">
 		<i class="ace-icon fa fa-search"></i>
 		搜索
 	</button>
-	<div class="btn-group btn-status" style="margin-left: 20px">
-		<button data-value="{{searchParam.status}}" data-toggle="dropdown" class=" btn-sm  dropdown-toggle block-up"
-				style="background: #ffffff!important; border: 1px solid #83bbd6!important;" aria-expanded="false">
+	<div class="btn-group btn-status T-status" style="margin-left: 20px">
+		<button data-value="{{searchParam.status}}" data-toggle="dropdown" class=" btn-sm  dropdown-toggle block-up" style="background: #ffffff!important; border: 1px solid #83bbd6!important;" aria-expanded="false">
 			<span>
 				{{if searchParam.status == ""}}
 					全部
@@ -15,22 +14,13 @@
 				{{else}}
 					已停用
 				{{/if}}
-
-
 			</span>
 			<i class="ace-icon fa fa-angle-down icon-on-right"></i>
 		</button>
 		<ul class="dropdown-menu">
-
-		<li>
-				<a data-value="" href="javascript:void(0)">全部</a>
-			</li>
-			<li>
-				<a data-value="1" href="javascript:void(0)">已启用</a>
-			</li>
-			<li>
-				<a data-value="0" href="javascript:void(0)">已停用</a>
-			</li>
+			<li><a data-value="" href="javascript:void(0)">全部</a></li>
+			<li><a data-value="1" href="javascript:void(0)">已启用</a></li>
+			<li><a data-value="0" href="javascript:void(0)">已停用</a></li>
 		</ul>
 	</div>
 
@@ -61,9 +51,9 @@
 				</tr>
 			</thead>
 
-			<tbody>
+			<tbody class="T-list">
 				{{each restaurantList as restaurant}}
-					<tr class="restaurant-{{restaurant.id}}">
+					<tr class="restaurant-{{restaurant.id}}" data-id="{{restaurant.id}}">
 						<td>{{restaurant.name}}</td>
 						<td>{{restaurant.mobileNumber}}</td>
 						<td>{{restaurant.managerName}}</td>
@@ -79,7 +69,6 @@
 							{{/if}}
 						</td>
 						<td>
-
 							{{if restaurant.status == 0}}
 							<i class="ace-icon fa fa-times red bigger-125"></i>
 								已停用
@@ -102,39 +91,6 @@
 									删除
 								</a>
 							</div>
-
-							<div class="hidden-md hidden-lg">
-								<div class="inline pos-rel">
-									<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
-										<i class="ace-icon fa fa-cog icon-only bigger-110"></i>
-									</button>
-
-									<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-										<li>
-											<a data-entity-id="{{restaurant.id}}" href="javascript:void(0)" class="tooltip-success btn-restaurant-view" data-rel="tooltip">
-												<span class="green">
-													<i class="ace-icon fa fa-search-plus bigger-120"></i>
-												</span>
-											</a>
-										</li>
-										<li>
-											<a data-entity-id="{{restaurant.id}}" href="javascript:void(0)" class="tooltip-success btn-restaurant-edit" data-rel="tooltip">
-												<span class="green">
-													<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-												</span>
-											</a>
-										</li>
-
-										<li>
-											<a data-entity-id="{{restaurant.id}}" href="javascript:void(0)" class="tooltip-error btn-restaurant-delete" data-rel="tooltip">
-												<span class="red">
-													<i class="ace-icon fa fa-trash-o bigger-120"></i>
-												</span>
-											</a>
-										</li>
-									</ul>
-								</div>
-							</div>
 						</td>
 					</tr>
 				{{/each}}
@@ -142,25 +98,10 @@
 		</table>
 		<div class="row pageMode">
 			<div class="col-xs-6">
-				<div class="dataTables_info" id="dynamic-table_info" role="status" aria-live="polite">共计 {{recordSize}} 条记录</div>
+				<small>共计 {{recordSize}} 条记录</small>
 			</div>
 			<div class="col-xs-6">
-				<div class="dataTables_paginate paging_simple_numbers" id="dynamic-table_paginate">
-					<ul class="pagination">
-						<li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="first" href="javascript:void(0)">首页</a></li>
-						<li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="previous"href="javascript:void(0)">上一页</a></li>
-						<li class="paginate_button" aria-controls="dynamic-table" tabindex="0">
-							<a href="javascript:void(0)">
-								{{if totalPage == 0}}
-									0/0
-								{{else}}
-									{{pageNo+1}}/{{totalPage}}
-								{{/if}}
-							</a>
-						</li>
-						<li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="next"  href="javascript:void(0)">下一页</a></li>
-						<li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="last" href="javascript:void(0)">尾页</a></li>
-					</ul>
+				<div class="dataTables_paginate paging_simple_numbers T-pagenation">
 				</div>
 			</div>
 		</div>

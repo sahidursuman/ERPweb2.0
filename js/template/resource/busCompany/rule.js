@@ -44,7 +44,7 @@ define(function(require, exports) {
 				]
 			},			
 			{
-				$ele: $container.find('.busCompanyMainForm').find('input[name="mobileNumber"]'),
+				$ele: $container.find('input[name="mobileNumber"]'),
 				rules: [
 					{
 						type: 'null',
@@ -146,7 +146,7 @@ define(function(require, exports) {
 			}
 		];
 
-		$container.find('.busList').find('tr').each(function() {
+		$container.find('.T-busList').find('tr').each(function() {
 			var $that = $(this);
 
 			if ($that.find('select[name="isChartered"]').val() === '1')  {

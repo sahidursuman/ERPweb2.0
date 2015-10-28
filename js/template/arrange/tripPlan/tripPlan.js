@@ -14,11 +14,15 @@ define(function(require, exports) {
 	
 		tripPlan = {
 		searchData : {
+			tripId:"",
 			tripNumber : "",
 			startTime : "",
+			guideId:"",
 			realname : "",
+			busId:"",
 			licenseNumber : "",
 			creator : "",
+			creatorName:"",
 			status : ""
 		},
 		edited : {},
@@ -29,19 +33,23 @@ define(function(require, exports) {
 			}
 			return false;
 		},
-		listTripPlan:function(page,tripNumber,startTime,realname,licenseNumber,creator,status){
+		listTripPlan:function(page,tripId,tripNumber,startTime,guideId,realname,busId,licenseNumber,creator,creatorName,status){
 			tripPlan.searchData = {
+				tripId:tripId,
 				tripNumber : tripNumber,
 				startTime : startTime,
+				guideId:guideId,
 				realname : realname,
+				busId:busId,
 				licenseNumber : licenseNumber,
 				creator : creator,
+				creatorName:creatorName,
 				status : status
 			},
 			$.ajax({
 				url:""+APP_ROOT+"back/tripPlan.do?method=listTripPlan&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 				type:"POST",
-				data:"pageNo="+page+"&tripNumber="+tripNumber+"&startTime="+startTime+"&guideName="+realname+"&busLicenseNumber="+licenseNumber+"&creatorName="+creator+"&status="+status+"&sortType=auto",
+				data:"pageNo="+page+"&tripId="+tripId+"&tripNumber="+tripNumber+"&startTime="+startTime+"&guideId="+guideId+"&guideName="+realname+"&busId="+busId+"&busLicenseNumber="+licenseNumber+"&creator="+creator+"&creatorName="+creatorName+"&status="+status+"&sortType=auto",
 				dataType:"json",
 				beforeSend:function(){
 					globalLoadingLayer = openLoadingLayer();
@@ -73,33 +81,41 @@ define(function(require, exports) {
 				$(this).parent().parent().parent().find("button").attr("data-value",$(this).attr("data-value"));
 				$(this).parent().parent().parent().find("span").text($(this).text());
 				tripPlan.searchData = {
+					tripId : $("#tab-"+menuKey+"-content .tripPlanMain input[name=tripChoosePlanId]").val(),
 					tripNumber : $("#tab-"+menuKey+"-content .tripPlanMain input[name=tripNumber]").val(),
 					startTime : $("#tab-"+menuKey+"-content .tripPlanMain input[name=startTime]").val(),
+					guideId : $("#tab-"+menuKey+"-content .tripPlanMain input[name=guideChooseId]").val(),
 					realname : $("#tab-"+menuKey+"-content .tripPlanMain input[name=realname]").val(),
+					busId : $("#tab-"+menuKey+"-content .tripPlanMain input[name=busChooseId]").val(),
 					licenseNumber : $("#tab-"+menuKey+"-content .tripPlanMain input[name=licenseNumber]").val(),
-					creator : $("#tab-"+menuKey+"-content .tripPlanMain input[name=creator]").val(),
+					creator : $("#tab-"+menuKey+"-content .tripPlanMain input[name=creatorChooseId]").val(),
+					creatorName : $("#tab-"+menuKey+"-content .tripPlanMain input[name=creator]").val(),
 					status : $("#tab-"+menuKey+"-content .btn-status").find("button").attr("data-value")
 				}
-				tripPlan.listTripPlan(0,tripPlan.searchData.tripNumber,tripPlan.searchData.startTime,tripPlan.searchData.realname,tripPlan.searchData.licenseNumber,tripPlan.searchData.creator,tripPlan.searchData.status);
+				tripPlan.listTripPlan(0,tripPlan.searchData.tripId,tripPlan.searchData.tripNumber,tripPlan.searchData.startTime,tripPlan.searchData.guideId,tripPlan.searchData.realname,tripPlan.searchData.busId,tripPlan.searchData.licenseNumber,tripPlan.searchData.creator,tripPlan.searchData.creatorName,tripPlan.searchData.status);
 			});
 			
 			//给搜索按钮绑定事件
 			$("#tab-"+menuKey+"-content .tripPlanMain .btn-tripPlan-search").click(function(){
 				tripPlan.searchData = {
+					tripId : $("#tab-"+menuKey+"-content .tripPlanMain input[name=tripChoosePlanId]").val(),
 					tripNumber : $("#tab-"+menuKey+"-content .tripPlanMain input[name=tripNumber]").val(),
-						startTime : $("#tab-"+menuKey+"-content .tripPlanMain input[name=startTime]").val(),
-						realname : $("#tab-"+menuKey+"-content .tripPlanMain input[name=realname]").val(),
-						licenseNumber : $("#tab-"+menuKey+"-content .tripPlanMain input[name=licenseNumber]").val(),
-						creator : $("#tab-"+menuKey+"-content .tripPlanMain input[name=creator]").val(),
-						status : $("#tab-"+menuKey+"-content .btn-status").find("button").attr("data-value")
+					startTime : $("#tab-"+menuKey+"-content .tripPlanMain input[name=startTime]").val(),
+					guideId : $("#tab-"+menuKey+"-content .tripPlanMain input[name=guideChooseId]").val(),
+					realname : $("#tab-"+menuKey+"-content .tripPlanMain input[name=realname]").val(),
+					busId : $("#tab-"+menuKey+"-content .tripPlanMain input[name=busChooseId]").val(),
+					licenseNumber : $("#tab-"+menuKey+"-content .tripPlanMain input[name=licenseNumber]").val(),
+					creator : $("#tab-"+menuKey+"-content .tripPlanMain input[name=creatorChooseId]").val(),
+					creatorName : $("#tab-"+menuKey+"-content .tripPlanMain input[name=creator]").val(),
+					status : $("#tab-"+menuKey+"-content .btn-status").find("button").attr("data-value")
 				}
-				tripPlan.listTripPlan(0,tripPlan.searchData.tripNumber,tripPlan.searchData.startTime,tripPlan.searchData.realname,tripPlan.searchData.licenseNumber,tripPlan.searchData.creator,tripPlan.searchData.status);
+				tripPlan.listTripPlan(0,tripPlan.searchData.tripId,tripPlan.searchData.tripNumber,tripPlan.searchData.startTime,tripPlan.searchData.guideId,tripPlan.searchData.realname,tripPlan.searchData.busId,tripPlan.searchData.licenseNumber,tripPlan.searchData.creator,tripPlan.searchData.creatorName,tripPlan.searchData.status);
 			});
 			
 			//分页--首页按钮事件
 			$("#tab-"+menuKey+"-content .pageMode a.first").click(function(){
 				if(data.pageNo == 0 || data.totalPage == 0)return;
-				tripPlan.listTripPlan(0,tripPlan.searchData.tripNumber,tripPlan.searchData.startTime,tripPlan.searchData.realname,tripPlan.searchData.licenseNumber,tripPlan.searchData.creator,tripPlan.searchData.status);
+				tripPlan.listTripPlan(0,tripPlan.searchData.tripId,tripPlan.searchData.tripNumber,tripPlan.searchData.startTime,tripPlan.searchData.guideId,tripPlan.searchData.realname,tripPlan.searchData.busId,tripPlan.searchData.licenseNumber,tripPlan.searchData.creator,tripPlan.searchData.creatorName,tripPlan.searchData.status);
 			});
 			//分页--上一页事件
 			$("#tab-"+menuKey+"-content  .pageMode a.previous").click(function(){
@@ -108,7 +124,7 @@ define(function(require, exports) {
 				if(data.pageNo == 0){
 					previous = 0;
 				}
-				tripPlan.listTripPlan(previous,tripPlan.searchData.tripNumber,tripPlan.searchData.startTime,tripPlan.searchData.realname,tripPlan.searchData.licenseNumber,tripPlan.searchData.creator,tripPlan.searchData.status);
+				tripPlan.listTripPlan(previous,tripPlan.searchData.tripId,tripPlan.searchData.tripNumber,tripPlan.searchData.startTime,tripPlan.searchData.guideId,tripPlan.searchData.realname,tripPlan.searchData.busId,tripPlan.searchData.licenseNumber,tripPlan.searchData.creator,tripPlan.searchData.creatorName,tripPlan.searchData.status);
 			});
 			//分页--下一页事件
 			$("#tab-"+menuKey+"-content .pageMode a.next").click(function(){
@@ -117,12 +133,12 @@ define(function(require, exports) {
 				if(data.pageNo == data.totalPage-1){
 					next = data.pageNo ;
 				}
-				tripPlan.listTripPlan(next,tripPlan.searchData.tripNumber,tripPlan.searchData.startTime,tripPlan.searchData.realname,tripPlan.searchData.licenseNumber,tripPlan.searchData.creator,tripPlan.searchData.status);
+				tripPlan.listTripPlan(next,tripPlan.searchData.tripId,tripPlan.searchData.tripNumber,tripPlan.searchData.startTime,tripPlan.searchData.guideId,tripPlan.searchData.realname,tripPlan.searchData.busId,tripPlan.searchData.licenseNumber,tripPlan.searchData.creator,tripPlan.searchData.creatorName,tripPlan.searchData.status);
 			});
 			//分页--尾页事件
 			$("#tab-"+menuKey+"-content  .pageMode a.last").click(function(){
 				if(data.pageNo == data.totalPage-1 || data.totalPage == 0)return;
-				tripPlan.listTripPlan(data.totalPage-1,tripPlan.searchData.tripNumber,tripPlan.searchData.startTime,tripPlan.searchData.realname,tripPlan.searchData.licenseNumber,tripPlan.searchData.creator,tripPlan.searchData.status);
+				tripPlan.listTripPlan(data.totalPage-1,tripPlan.searchData.tripId,tripPlan.searchData.tripNumber,tripPlan.searchData.startTime,tripPlan.searchData.guideId,tripPlan.searchData.realname,tripPlan.searchData.busId,tripPlan.searchData.licenseNumber,tripPlan.searchData.creator,tripPlan.searchData.creatorName,tripPlan.searchData.status);
 			});
 			
 			//新增发团计划
@@ -1565,37 +1581,33 @@ define(function(require, exports) {
 				var obj = this;
 				var seatCount = $(this).parent().parent().find(".chooseSeatCount").val();
 				var busBrand = $(this).parent().parent().find("input[name=needBusBrand]").val();
-				if(busBrand){
-					$.ajax({
-						url:""+APP_ROOT+"back/busCompany.do?method=getLicenseNumbers&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-						data:"seatCount="+seatCount+"&brand="+busBrand+"",
-						dateType:"json",
-						type:"POST",
-						success:function(data){
-							var result = showDialog(data);
-							if(result){
-								var licenseList = JSON.parse(data.busList);
-								if(licenseList && licenseList.length > 0){
-									for(var i=0; i < licenseList.length; i++){
-										licenseList[i].value = licenseList[i].licenseNumber;
-									}
-									$(obj).autocomplete('option','source', licenseList);
-									$(obj).autocomplete('search', '');
-								}else{
-									layer.tips('没有内容', obj, {
-									    tips: [1, '#3595CC'],
-									    time: 2000
-									});
+				$.ajax({
+					url:""+APP_ROOT+"back/busCompany.do?method=getLicenseNumbers&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
+					data: {
+						seatCount: seatCount,
+						brand: busBrand
+					},
+					dateType:"json",
+					type:"POST",
+					success:function(data){
+						var result = showDialog(data);
+						if(result){
+							var licenseList = JSON.parse(data.busList);
+							if(licenseList && licenseList.length > 0){
+								for(var i=0; i < licenseList.length; i++){
+									licenseList[i].value = licenseList[i].licenseNumber;
 								}
+								$(obj).autocomplete('option','source', licenseList);
+								$(obj).autocomplete('search', '');
+							}else{
+								layer.tips('没有内容', obj, {
+								    tips: [1, '#3595CC'],
+								    time: 2000
+								});
 							}
 						}
-					})
-				}else{
-					layer.tips('请选择车辆品牌', obj, {
-					    tips: [1, '#3595CC'],
-					    time: 2000
-					});
-				}
+					}
+				})
 			})
 		},
 		driverChoose : function(){
