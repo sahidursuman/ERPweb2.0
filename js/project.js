@@ -557,7 +557,14 @@ function trim(str){
  */
 var modalScripts = {
 	'resource_guide': "js/template/resource/guide/guide.js",
-	'resource_ticket': "js/template/resource/ticket/ticket.js"
+	'resource_ticket': "js/template/resource/ticket/ticket.js",
+	'resource_restaurant': "js/template/resource/restaurant/restaurant.js",
+	'resource_hotel': "js/template/resource/hotel/hotel.js",
+	'resource_shop': 'js/template/resource/shop/shop.js',
+	'resource_insurance': "js/template/resource/insurance/insurance.js",
+	'resource_scenic' : "js/template/resource/scenic/scenic.js",
+	'business_analyst_saleProduct' : "js/template/businessAnalyst/saleProduct/saleProduct.js",
+	'resource_busCompany':"js/template/resource/busCompany/busCompany.js",
 };
 
 
@@ -586,33 +593,33 @@ function listMenu(menuTemplate){
 				// });
 
 				//绑定车队菜单功能
-				$("#sidebar .nav-list .resource_busCompany").click(function(){
+				/*$("#sidebar .nav-list .resource_busCompany").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/busCompany/busCompany.js",function(busCompany){
 						busCompany.listBusCompany(0,"",1);
 					});
-				});
+				});*/
 
-				//绑定餐厅菜单功能
-				$("#sidebar .nav-list .resource_restaurant").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/resource/restaurant/restaurant.js",function(restaurant){
-						restaurant.listRestaurant(0,"",1);
-					});
-				});
+				// //绑定餐厅菜单功能
+				// $("#sidebar .nav-list .resource_restaurant").click(function(){
+				// 	$("#sidebar .nav-list li").removeClass("active");
+				// 	$(this).addClass("active");
+				// 	$(this).parent().parent().addClass("active");
+				// 	seajs.use("" + ASSETS_ROOT +"js/template/resource/restaurant/restaurant.js",function(restaurant){
+				// 		restaurant.listRestaurant(0,"",1);
+				// 	});
+				// });
 				//绑定酒店菜单功能
-				$("#sidebar .nav-list .resource_hotel").click(function(){
+				/*$("#sidebar .nav-list .resource_hotel").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/hotel/hotel.js",function(hotel){
-						hotel.listHotel(0,"",1);
+						hotel.init();
 					});
-				});
+				});*/
 
 				//绑定同行菜单功能
 				$("#sidebar .nav-list .resource_partnerAgency").click(function(){
@@ -636,15 +643,15 @@ function listMenu(menuTemplate){
 					$("#main-container")[0].index = 0;
 				});
 
-				//绑定商家管理功能
-				$("#sidebar .nav-list .resource_shop").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/resource/shop/shop.js",function(shop){
-						shop.listShop(0,"",1);
-					});
-				});
+				// //绑定商家管理功能
+				// $("#sidebar .nav-list .resource_shop").click(function(){
+				// 	$("#sidebar .nav-list li").removeClass("active");
+				// 	$(this).addClass("active");
+				// 	$(this).parent().parent().addClass("active");
+				// 	seajs.use("" + ASSETS_ROOT +"js/template/resource/shop/shop.js",function(shop){
+				// 		shop.listShop(0,"",1);
+				// 	});
+				// });
 
 
 				//绑定线路模板菜单功能
@@ -668,14 +675,14 @@ function listMenu(menuTemplate){
 					});
 				});
 				//绑定保险菜单功能
-				$("#sidebar .nav-list .resource_insurance").click(function(){
+				/*$("#sidebar .nav-list .resource_insurance").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/insurance/insurance.js",function(insurance){
 						insurance.listInsurance(0,"",1);
 					});
-				});
+				});*/
 				//绑定自费项目菜单功能
 				$("#sidebar .nav-list .resource_selfpay").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
@@ -723,7 +730,7 @@ function listMenu(menuTemplate){
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/tripPlan/tripPlan.js",function(tripPlan){
-						tripPlan.listTripPlan(0,"","","","","");
+						tripPlan.listTripPlan(0,"","","","","","","","");
 						modals["arrange_all"] = tripPlan;
 					});
 				});
@@ -1018,7 +1025,7 @@ function listMenu(menuTemplate){
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/arrange/tripPlan/tripPlan.js",function(tripPlan){
-						tripPlan.listTripPlan(0,"","","","","","");
+						tripPlan.listTripPlan(0,"","","","","","","","","","");
 						modals["arrange_plan"] = tripPlan;
 					});
 				});
@@ -1029,7 +1036,7 @@ function listMenu(menuTemplate){
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/arrange/booking/booking.js",function(booking){
-						booking.listbooking(0,"","","","","");
+						booking.listbooking(0,"","","","","","","","");
 						modals["arrange_booking"] = booking;
 					});
 				});
@@ -1455,3 +1462,118 @@ Tools.updateTransit = function(id)  {
 		modals["arrange_transit"] = transit;
 	});
 }
+
+/**
+ * 用于定义公共请求或者与数据相关的公共组件处理
+ * @type {Object}
+ */
+var KingServices = {};
+
+/**
+ * 设置省下拉框
+ * @param  {[type]} obj [description]
+ * @param  {[type]} pid [description]
+ * @return {[type]}     [description]
+ */
+
+
+//省市区 start
+KingServices.provinceCity = function($container,provinceIdU,cityIdU,districtIdU){
+	//初始化地区数据
+	KingServices.getProvinceList($container.find("select[name=provinceId]"),provinceIdU);
+	KingServices.getCityList($container.find("select[name=cityId]"),provinceIdU,cityIdU);
+	KingServices.getDistrictList($container.find("select[name=districtId]"),cityIdU,districtIdU);
+	//给省份select绑定事件
+	$container.find("select[name=provinceId]").change(function(){
+		var provinceId = $(this).val();
+		if(provinceId!=''){
+    		KingServices.getCityList($container.find("select[name=cityId]"),provinceId);
+		}else{
+			$container.find("select[name=cityId]").html("<option value=''>未选择</option>");
+		}
+		$container.find("select[name=districtId]").html("<option value=''>未选择</option>");
+	});
+	//给城市select绑定事件
+	$container.find("select[name=cityId]").change(function(){
+		var cityId = $(this).val();
+   		if(cityId!=''){
+    		KingServices.getDistrictList($container.find("select[name=districtId]"),cityId);
+		}else{
+			$container.find("select[name=districtId]").html("<option value=''>未选择</option>");
+		}
+	});
+};
+KingServices.getProvinceList = function(obj,provinceId){
+	$.ajax({
+		url:""+APP_ROOT+"/base.do?method=getProvince",
+		type:"POST",
+		dataType:"json",
+		showLoading: false,
+		success:function(data){
+			var html = "<option value=''>未选择</option>";
+			var provinceList = data.provinceList;
+			if(provinceList != null && provinceList.length > 0){
+				for(var i=0;i<provinceList.length;i++){
+					if (provinceId != null && provinceList[i].id == provinceId) {
+						html += "<option selected=\"selected\" value='"+provinceList[i].id+"'>"+provinceList[i].name+"</option>";
+					} else {
+						html += "<option value='"+provinceList[i].id+"'>"+provinceList[i].name+"</option>";
+					}
+				}
+			}
+			$(obj).html(html);
+		}
+	});
+};
+KingServices.getCityList = function(obj,provinceId,cityId){
+	if(provinceId != ""){
+		$.ajax({
+			url:""+APP_ROOT+"/base.do?method=getCity",
+			type:"POST",
+			data:"provinceId="+provinceId+"",
+			dataType:"json",
+			showLoading: false,
+			success:function(data){
+				var html = "<option value=''>未选择</option>";
+				var cityList = JSON.parse(data.cityList);
+				if(cityList != null && cityList.length > 0){
+					for(var i=0;i<cityList.length;i++){
+						if (cityId != null && cityId == cityList[i].id) {
+							html += "<option selected=\"selected\" value='"+cityList[i].id+"'>"+cityList[i].name+"</option>";
+						} else {
+							html += "<option value='"+cityList[i].id+"'>"+cityList[i].name+"</option>";
+						}
+					}
+				}
+				$(obj).html(html);
+			}
+		});
+	}
+};
+KingServices.getDistrictList = function(obj,cityId,districtId){
+	if(cityId != ""){
+		$.ajax({
+			url:""+APP_ROOT+"/base.do?method=getDistrict",
+			type:"POST",
+			data:"cityId="+cityId+"",
+			dataType:"json",
+			showLoading: false,
+			success:function(data){
+				var html = "<option value=''>未选择</option>";
+				var districtList = JSON.parse(data.districtList);
+				if(districtList != null && districtList.length > 0){
+					for(var i=0;i<districtList.length;i++){
+						if (districtId != null && districtId == districtList[i].id) {
+							html += "<option selected=\"selected\" value='"+districtList[i].id+"'>"+districtList[i].name+"</option>";
+						} else {
+							html += "<option value='"+districtList[i].id+"'>"+districtList[i].name+"</option>";
+						}
+
+					}
+				}
+				$(obj).html(html);
+			}
+		});
+	}
+};
+//省市区 end

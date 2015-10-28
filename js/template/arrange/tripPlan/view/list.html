@@ -3,7 +3,8 @@
 	  <div class="form-group">
 		<div class="search-area">
 			<div class="col-xs-2">
-				<input type="text" name="word" class="col-xs-12 guideInputList" placeholder="团号" value="{{searchParam.words}}" />
+				<input type="text" name="tripNumber" class="col-xs-12 tripChoosePlan guideInputList" placeholder="团号" value="{{searchParam.tripNumber}}" />
+				<input type="hidden" name="tripChoosePlanId" value="{{searchParam.tripId}}" />
 			</div>
 
 			<div class="col-xs-2 timeStart">
@@ -17,13 +18,16 @@
 				</div>
 			</div>
 			<div class="col-xs-1 guideMarginLeft">
-				<input type="text" name="realname" class="col-xs-12" placeholder="导游" value="{{searchParam.realname}}" />
+				<input type="text" name="realname" class="col-xs-12 T-guideChoose" placeholder="导游" value="{{searchParam.guideName}}" />
+				<input type="hidden" name="guideChooseId" value="{{searchParam.guideId}}" />
 			</div>
 			<div class="col-xs-1">
-				<input type="text" name="licenseNumber" class="col-xs-12" placeholder="车牌号" value="{{searchParam.licenseNumber}}" />
+				<input type="text" name="licenseNumber" class="col-xs-12 T-busChoose" placeholder="车牌号" value="{{searchParam.busLicenseNumber}}" />
+				<input type="hidden" name="busChooseId" value="{{searchParam.busId}}" />
 			</div>
 			<div class="col-xs-1">
-				<input type="text" name="creator" class="col-xs-12" placeholder="创建人" value="{{searchParam.creator}}" />
+				<input type="text" name="creator" class="col-xs-12 T-creatorChoose" placeholder="创建人" value="{{searchParam.creatorName}}" />
+				<input type="hidden" name="creatorChooseId" value="{{searchParam.creator}}" />
 			</div>
 			<div class="col-xs-2">
 				<div class="btn-group btn-status">
