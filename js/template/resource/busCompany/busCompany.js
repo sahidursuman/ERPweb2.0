@@ -11,7 +11,7 @@ define(function(require,exports){
 		addTemplate = require("./view/add"),
 		updateTemplate = require("./view/update"),
 		viewTemplate = require("./view/view"),
-		validator = "",
+		//validator = "",
 		tabId = "tab-"+menuKey+"-content";
 	/**
 	 * 车队管理资源
@@ -35,9 +35,7 @@ define(function(require,exports){
 	 * 车队管理的列表
 	 */
 	BusCompany.listBusCompany = function(pageNo,busCompanyName,status){
-		/**
-		 * 判断传入的参数的个数
-		 */
+		//判断传入的参数的个数
 		if(BusCompany.$searchArea && arguments.length === 1){
 			busCompanyName = BusCompany.$searchArea.find("input[name=busCompany_companyName]").val();
 			status = BusCompany.$searchArea.find(".T-select-status").find("button").data("value");
@@ -56,7 +54,6 @@ define(function(require,exports){
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
-					console.log(data);
 					BusCompany.searchData = {
 						pageNo:pageNo
 					};
@@ -138,7 +135,7 @@ define(function(require,exports){
 			title:'新增车队',
 			skin:'layui-layer-rim',
 			area:'70%',
-			zInedx:1028,
+			zIndex:1028,
 			content:html,
 			scrollbar: false,
 			success:function(){
