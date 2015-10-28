@@ -146,16 +146,7 @@ define(function(require,exports){
 				var provinceId = $provinceObj.val();
 				//表单验证
 				validator = rule.busComCheckor($('.T-addBusCompanyContainer'));
-				//绑定省份数据
-				BusCompany.getProvinceList($provinceObj);
-				//省份的选择
-				$provinceObj.on('change',function(){
-					BusCompany.areaSelect($mainObj,$provinceObj,1);
-				});
-				//市区的选择
-				$cityObj.on('change',function(){
-					BusCompany.areaSelect($mainObj,$cityObj,2);
-				});
+				KingServices.provinceCity($obj);
 				//新增车辆事件
 				var $busList = $obj.find(".T-busListForm .T-busList");
 				var $addBtn = $busList.find(".T-busCompany-add"); 
@@ -242,12 +233,6 @@ define(function(require,exports){
 			url:""+APP_ROOT+"back/busCompany.do?method=getBusCompanyById&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 				type:"POST",
 				data:"id="+$id+"",
-				dataType:"json",
-				beforeSend:function(){
-					globalLoadingLayer = layer.open({
-						type:3
-					});
-				},
 				success:function(data){
 					layer.close(globalLoadingLayer);
 					var result = showDialog(data);
@@ -270,30 +255,11 @@ define(function(require,exports){
 								var $province = $obj.find("select[name=provinceId]");
 								var $city = $obj.find("select[name=cityId]");
 								validator = rule.busComCheckor($('.T-updateBusCompanyContainer'));
-								//省市区的选择
-								var provinceId = "";
-								if(data.busCompany.provinceId != null){
-									provinceId = data.busCompany.provinceId;
-									var cityId = "";
-									if(data.busCompany.cityId != null){
-										cityId = data.busCompany.cityId;
-										var districtId = "";
-										if(data.busCompany.districtId != null){
-											districtId = data.busCompany.districtId;
-										}
-										BusCompany.getDistricList($obj.find("select[name=districtId]"),cityId,districtId);
-									}
-									BusCompany.getCityList($obj.find("select[name=cityId]"),provinceId,cityId);
-								}
-								BusCompany.getProvinceList($obj.find("select[name=provinceId]"),provinceId);
-								//绑定选择事件
-								$province.on('change',function(){
-									BusCompany.areaSelect($updateObj,$province,1);
-								});
-								//市区的选择
-								$city.on('change',function(){
-									BusCompany.areaSelect($updateObj,$city,2);
-								});
+								//省市区事件
+								if(data.busCompany.provinceId != null )var provinceId = data.busCompany.provinceId;
+								if(data.busCompany.cityId != null )var cityId = data.busCompany.cityId;
+								if(data.busCompany.districtId != null ) var districtId = data.busCompany.districtId;
+								KingServices.provinceCity($obj,provinceId,cityId,districtId);
 								//格式化车辆列表的座位数
 								$busList.find("input[name=seatCount]").spinner({
 									min:1,
@@ -489,12 +455,6 @@ define(function(require,exports){
 			url:url,
 			type:"POST",
 			data:data,
-			dataType:"json",
-			beforeSend:function(){
-				globalLoadingLayer = layer.open({
-					type:3
-				});
-			},
 			success:function(data){
 				layer.close(globalLoadingLayer);
 				var result = showDialog(data);
@@ -695,12 +655,6 @@ define(function(require,exports){
 			url:""+APP_ROOT+"back/busCompany.do?method=getBusCompanyById&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 			type:"POST",
 			data:"id="+$id+"",
-			dataType:"json",
-			beforeSend:function(){
-				globalLoadingLayer = layer.open({
-					type:3
-				});
-			},
 			success:function(data){
 				layer.close(globalLoadingLayer);
 				var result = showDialog(data);
@@ -749,12 +703,6 @@ define(function(require,exports){
 							url:""+APP_ROOT+"back/busCompany.do?method=deleteBusCompany&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=delete",
 							type:"POST",
 							data:"id="+$id+"",
-							dataType:"json",
-							beforeSend:function(){
-								globalLoadingLayer = layer.open({
-									type:3
-								});
-							},
 							success:function(data){
 								layer.close(globalLoadingLayer);
 								var result = showDialog(data);
@@ -772,102 +720,6 @@ define(function(require,exports){
 				$(this).find("p").text("你确定要删除该条记录？");
 			}
 		});
-	};
-	//省市区列表的select事件
-	BusCompany.areaSelect = function($container,$obj,flag){
-		//通过flag判断传入的$obj是省份选择还是市区的选择
-		if(flag == 1){
-			var provinceId = $($obj).val();
-			var $cityObj = $container.find("select[name=cityId]");
-			if(provinceId != ""){
-				//执行市区的选择事件
-				BusCompany.getCityList($cityObj,provinceId);
-			}else{
-				$container.find("select[name=cityId]").html("<option value=''>未选择</option>");
-			}
-			$container.find("select[name=districtId]").html("<option value=''>未选择</option>");
-		};
-		if(flag == 2){
-			var cityId = $($obj).val();
-			var $districtObj = $container.find("select[name=districtId]");
-			if(cityId != ""){
-				//执行地区的选择事件
-				BusCompany.getDistricList($districtObj,cityId);
-			}else{
-				$container.find("select[name=districtId]").html("<option value=''>未选择</option>");
-			}
-		}
-	};
-	//获取省列表
-	BusCompany.getProvinceList = function($obj,provinceId){
-		$.ajax({
-				url:""+APP_ROOT+"/base.do?method=getProvince",
-				type:"POST",
-				dataType:"json",
-				success:function(data){
-					var html = "<option value=''>未选择</option>";
-					var provinceList = data.provinceList;
-					if(provinceList != null && provinceList.length > 0){
-						for(var i=0;i<provinceList.length;i++){
-							if (provinceId != null && provinceList[i].id == provinceId) {
-								html += "<option selected=\"selected\" value='"+provinceList[i].id+"'>"+provinceList[i].name+"</option>";
-							} else {
-								html += "<option value='"+provinceList[i].id+"'>"+provinceList[i].name+"</option>";
-							}
-						}
-					}
-					$($obj).html(html);
-				}
-			});
-	};
-	BusCompany.getCityList = function(obj,provinceId,cityId){
-		if(provinceId != ""){
-				$.ajax({
-					url:""+APP_ROOT+"/base.do?method=getCity",
-					type:"POST",
-					data:"provinceId="+provinceId+"",
-					dataType:"json",
-					success:function(data){
-						var html = "<option value=''>未选择</option>";
-						var cityList = JSON.parse(data.cityList);
-						if(cityList != null && cityList.length > 0){
-							for(var i=0;i<cityList.length;i++){
-								if (cityId != null && cityId == cityList[i].id) {
-									html += "<option selected=\"selected\" value='"+cityList[i].id+"'>"+cityList[i].name+"</option>";
-								} else {
-									html += "<option value='"+cityList[i].id+"'>"+cityList[i].name+"</option>";
-								}
-							}
-						}
-						$(obj).html(html);
-					}
-				});
-			}
-	};
-	BusCompany.getDistricList = function(obj,cityId,districtId){
-		if(cityId != ""){
-				$.ajax({
-					url:""+APP_ROOT+"/base.do?method=getDistrict",
-					type:"POST",
-					data:"cityId="+cityId+"",
-					dataType:"json",
-					success:function(data){
-						var html = "<option value=''>未选择</option>";
-						var districtList = JSON.parse(data.districtList);
-						if(districtList != null && districtList.length > 0){
-							for(var i=0;i<districtList.length;i++){
-								if (districtId != null && districtId == districtList[i].id) {
-									html += "<option selected=\"selected\" value='"+districtList[i].id+"'>"+districtList[i].name+"</option>";
-								} else {
-									html += "<option value='"+districtList[i].id+"'>"+districtList[i].name+"</option>";
-								}
-
-							}
-						}
-						$(obj).html(html);
-					}
-				});
-		}
 	};
 	exports.init = BusCompany.initModule;
 });
