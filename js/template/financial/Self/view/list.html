@@ -62,7 +62,7 @@
                     <td>
                         <a data-entity-id="{{selfPay.selfPayId}}" data-entity-selfPayName="{{selfPay.selfPayName}}" data-entity-year="{{searchParam.year}}" data-entity-month="{{searchParam.month}}" class="cursor btn-selfPay-check R-right" data-right="1260002">
                             	对账
-                        </a><a href="" class="cursor"> |</a>
+                        </a>
                         <a data-entity-id="{{selfPay.selfPayId}}" data-entity-selfPayName="{{selfPay.selfPayName}}" data-entity-year="{{searchParam.year}}"
                                 {{if searchParam.month == ""}}
                                  	 data-entity-startMonth=1 data-entity-endMonth=12 
@@ -70,6 +70,7 @@
                                  	 data-entity-startMonth="{{searchParam.month}}" data-entity-endMonth="{{searchParam.month}}" 
                                 {{/if}}
                         		class="cursor R-right btn-self-balance" data-right="1260003">
+                                <label class="padding-right20"> |</label>
                            		 结算
                         </a>
                     </td>
