@@ -121,6 +121,8 @@ function addTab(tabId,tabName,html){
 	else{
 		$("#tabContent").append("<div id=\"tab-"+tabId+"-content\" class=\"tab-pane tab-pane-menu active\"></div>");
 	}
+
+	html = filterUnAuth(html);
 	$("#tab-"+tabId+"-content").html(html);
 }
 function closeTab(tabId){
@@ -157,6 +159,25 @@ function closeTab(tabId){
 	}
 	$("#tabList").css("marginLeft",marginLeft);
 }
+
+//权限过滤
+function filterUnAuth(obj) {
+	if (!obj || !IndexData.userInfo || !IndexData.userInfo.listUserFunctionShip) return '';
+
+	var functionList = IndexData.userInfo.listUserFunctionShip;
+	var $obj = $(obj);
+	$obj.find(".R-right").each(function(){
+		var right = $(this).data("right");
+		if(right){
+			var index = functionList.indexOf(right);
+			if(index < 0){
+				$(this).remove();
+			}
+		}
+	});
+	return $obj;
+}
+
 function openLoadingLayer(){
 	var globalLoadingLayer = layer.open({
 		zIndex:1028,
@@ -566,6 +587,13 @@ var modalScripts = {
 	'resource_scenic' : "js/template/resource/scenic/scenic.js",
 	'business_analyst_saleProduct' : "js/template/businessAnalyst/saleProduct/saleProduct.js",
 	'resource_busCompany':"js/template/resource/busCompany/busCompany.js",
+	//-------------------------------------------业务分析模块---------------------------------------------------
+	'business_analyst_saleProduct' : "js/template/businessAnalyst/saleProduct/saleProduct.js",//产品销量
+	'business_analyst_sourDstribution' : "js/template/businessAnalyst/sourDstribution/sourDstribution.js", //客源分布
+	'business_analyst_customerVolume' : "js/template/businessAnalyst/customerVolume/customerVolume.js", //客户客量
+	'business_analyst_employeePerfor' : "js/template/businessAnalyst/employeePerfor/employeePerfor.js", //员工业绩 
+	'business_analyst_tourguidePerfor' : "js/template/businessAnalyst/tourguidePerfor/tourguidePerfor.js" //导游业绩
+	//---------------------------------------------------------------------------------------------------------------
 };
 
 
