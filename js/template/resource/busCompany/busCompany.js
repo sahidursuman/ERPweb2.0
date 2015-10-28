@@ -11,7 +11,7 @@ define(function(require,exports){
 		addTemplate = require("./view/add"),
 		updateTemplate = require("./view/update"),
 		viewTemplate = require("./view/view"),
-		//validator = "",
+		validator = "",
 		tabId = "tab-"+menuKey+"-content";
 	/**
 	 * 车队管理资源
@@ -65,7 +65,6 @@ define(function(require,exports){
 					//对车队的公共参数设置
 					BusCompany.$tab = $("#"+tabId);
 					BusCompany.$searchArea = BusCompany.$tab.find(".search-area");
-
 					//list页面内事件函数
 					BusCompany.initEvent();
 					//分页控件
