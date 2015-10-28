@@ -458,53 +458,59 @@ define(function(require, exports) {
                 showMessageDialog($( "#confirm-dialog-message" ),"当前未进行任何操作！");
                 return;
             }
-            var JsonStr = [],$tr = $("#"+checkTabId+" .all tbody tr");
-            var count = 0;
+            var JsonStr = [],$tr = $("#"+checkTabId+" .all tbody tr"),
+            oldRealBack,
+            newRealBack,
+            oldRemark,
+            newRemark;
     	    $tr.each(function(i){
-    		   var checkStatus = $(this).find("input[name='isConfirmAccount']").attr("data-entity-checkStatus");
-    		   var startTime = $(this).attr("data-entity-startTime");
-    		   var flag = $(this).find("input[name='isConfirmAccount']").is(":checked");
-    		   var $realBack = $(this).find("input[name='realBackGuideMoney']");
-    		   var $billRemark = $(this).find("input[name='billRemark']");
+    		    var checkStatus = $(this).attr("data-entity-isConfirmAccount");
+    		    var flag = $(this).find("input[name='isConfirmAccount']").is(":checked");
+    		    newRealBack = $(this).find("input[name='realBackGuideMoney']").val();
+    		    oldRealBack = $(this).attr("data-entity-realBackGuideMoney");
+    		    newRemark = $(this).find("input[name='billRemark']").val();
+    		    oldRemark = $(this).attr("data-entity-billRemark");
     		   if(flag){
     			   if(checkStatus == 1){
-    				   if($realBack.val() != $realBack.attr("data-entity-value") 
-    						   || $billRemark.val() != $billRemark.attr("data-entity-value"))
-    				   {
-    					   count++;
-    				   }
+    				   //判断是否被修改
+    				   if(oldRemark != newRemark || oldRealBack != newRealBack){
+    				   	   var checkData = {
+    				   	   	   id:$(this).attr("data-entity-id"),
+	    					   guideId:guideId,
+	    					   realBackGuideMoney:newRealBack,
+	    					   billRemark:newRemark,
+	    					   isConfirmAccount:1
+    				   	   }
+    				   	   JsonStr.push(checkData);
+    				    }
+						
 			      }else{
-			    	  count++;
-			      }
-    			   
-    			  var checkData = {
-    					   id:$(this).attr("data-entity-id"),
+			      	var checkData = {
+				   	   	id:$(this).attr("data-entity-id"),
     					   guideId:guideId,
-    					   startTime:startTime,
-    					   realBackGuideMoney:$realBack.val(),
-    					   billRemark:$billRemark.val(),
+    					   realBackGuideMoney:newRealBack,
+    					   billRemark:newRemark,
     					   isConfirmAccount:1
-    			  }
-    			  JsonStr.push(checkData);
+				   	   }
+				   	   JsonStr.push(checkData);
+			      }
     		   }else{
     			   if(checkStatus == 1){
 					   var checkData = {
-        					   id:$(this).attr("data-entity-id"),
-        					   guideId:guideId,
-        					   startTime:startTime,
-        					   realBackGuideMoney:$realBack.attr("data-entity-value"),
-        					   billRemark:$billRemark.attr("data-entity-value"),
-        					   isConfirmAccount:0
+    					   id:$(this).attr("data-entity-id"),
+    					   guideId:guideId,
+    					   realBackGuideMoney:newRealBack,
+    					   billRemark:newRemark,
+    					   isConfirmAccount:0
         			   }
         			   JsonStr.push(checkData);
-					   count++;
     			   }
     		   }
 		    });
     	   
-    	   if(count == 0){
+    	   if(JsonStr.length == 0){
     		   showMessageDialog($( "#confirm-dialog-message" ),"您当前未进行任何操作");
-    		   return
+    		   return;
     	   }
     	   JsonStr = JSON.stringify(JsonStr);
     	   $.ajax({
