@@ -144,7 +144,7 @@
 					<div class="form-group" style="margin-bottom:30px; ">
 						<div class="search-area">
 							<label class="pull-left control-label no-padding-right" style="margin-left: 20px!important;">同行线路产品：</label>
-							<div class="col-sm-2">
+							<div class="col-sm-2 marginLeft-Right7">
 								<input type="text" class="col-sm-12 chooseLineProductId" placeholder="来源" name="" />
 								<input type="hidden" name="lineProductId" value="">
 								<!-- <select name="lineProductId" class="col-xs-12">
@@ -163,8 +163,8 @@
 							</div>
 							<div class="form-group">
 								<div class="search-area">
-									<div class="col-xs-2">
-										<div class="col-xs-12">
+									<div class="col-xs-2 marginLeft-Right7">
+										<div class="col-xs-9">
 											<div class="input-group">
 												<input class="col-xs-12 date-picker" name="createTime" placeholder="出游起始日期" value="{{startDay}}" type="text" />	
 												<span class="input-group-addon">
@@ -174,8 +174,8 @@
 										</div>
 									</div>
 
-									<div class="col-xs-2">
-										<div class="col-xs-12">
+									<div class="col-xs-2 btn-Plan-add">
+										<div class="col-xs-9">
 											<div class="input-group">
 												<input class="col-xs-12 date-picker" name="endTime" placeholder="出游结束日期" value="" type="text" />
 													<span class="input-group-addon">
@@ -204,10 +204,11 @@
 								<!-- 									  </select>  -->
 								<!-- 							      </div> -->
 
-								<label class="control-label no-padding-right pull-left">同行地接：</label>
-								<div class="col-sm-1">
-									<input type="text" class="col-sm-12 chooseTravelAgency" placeholder="来源" name="" />
-									<input type="hidden" name="travelAgencyId" value="">
+                            
+								<label class="control-label no-padding-right pull-left timeStartMore">同行地接：</label>
+								<div class="col-sm-1 marginLeft-Right7">
+									<input type="text" class="col-sm-12 chooseTravelAgency" placeholder="来源" name="" /> 
+									<input type="hidden" name="travelAgencyId" value="">  
 									<!-- <select name="transferPartnerAgencyId" class="col-xs-12">
 										<option value="">全部</option>
 										{{each travelAgency as pa}}
@@ -221,9 +222,11 @@
 										{{/each}}
 									</select> -->
 								</div>
+                                
 
-								<label class="control-label no-padding-right pull-left">状态：</label>
-								<div class="btn-group btn-status" style="margin-left: 20px">
+
+								<label class="control-label no-padding-right pull-left" style="margin-left: 20px">状态：</label>
+								<div class="btn-group btn-status" style="margin-left: 7px" >
 									<button data-value="{{status}}" data-toggle="dropdown" class=" btn-sm dropdown-toggle block-up" aria-expanded="false">
 									<span>
 									   {{if status == null}}
@@ -241,14 +244,14 @@
 											<a data-value="" href="javascript:void(0)">全部</a>
 										</li>
 										<li>
-											<a data-value="0" href="javascript:void(0)">未确认</a>
+											<a data-value="0" href="javascript:void(0)">未确认</a> 
 										</li>
 										<li>
 											<a data-value="1" href="javascript:void(0)">已接收</a>
 										</li>
 									</ul>
 								</div>
-								<button class="btn-sm btn-transferIn-search search-btn">
+								<button class="btn-sm btn-transferIn-search search-btn" style="margin-left:20px">
 									<i class="ace-icon fa fa-search"></i>
 									搜索
 								</button>&nbsp;

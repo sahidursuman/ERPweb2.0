@@ -53,22 +53,13 @@
 		<div class="form-horizontal col-sm-12 checkbox">
 			<div class="pull-left  no-padding-right">
 				<label class="control-label no-padding-right">确认发团后游客短信设置:</label>
-				立即发送
-				<label style="padding-left:0px;">
-					<input type="radio"  checked="" class="ace buyInsurance-status" readonly="readonly" value="{{tripPlan.executeTimeType}}" name="executeTimeType">
-					<span class="lbl">
-					</span>
+				<label style="padding-left:0px;" class="executeTimeType1 hide">
+					立即发送
 				</label>
 				&nbsp;&nbsp;&nbsp;&nbsp;
-				定时发送
-				<label style="padding-left:0px;">
-					<input type="radio" class="ace buyInsurance-status"  readonly="readonly" value="{{tripPlan.executeTimeType}}" name="executeTimeType">
-					<span class="lbl">
-					</span>
+				
+				<label style="padding-left:0px;" class="executeTimeType2 hide">定时发送于{{tripPlan.executeTime}}发出
 				</label>
-			</div>
-			<div class="col-sm-2 newAddTripTimer">
-				<input class="form-control col-sm-4 datetimepicker" readonly="readonly" type="text" name="executeTime" value="{{tripPlan.executeTime}}" />
 			</div>
         </div>
 		<form class="form-horizontal" role="form" onsubmit="return false">

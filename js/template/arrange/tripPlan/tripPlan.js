@@ -14,33 +14,42 @@ define(function(require, exports) {
 	
 		tripPlan = {
 		searchData : {
-			words : "",
+			tripId:"",
+			tripNumber : "",
 			startTime : "",
+			guideId:"",
 			realname : "",
+			busId:"",
 			licenseNumber : "",
 			creator : "",
+			creatorName:"",
 			status : ""
 		},
 		edited : {},
+		autocompleteDate : {},
 		isEdited : function(editedType){
 			if(!!tripPlan.edited[editedType] && tripPlan.edited[editedType] != ""){
 				return true;
 			}
 			return false;
 		},
-		listTripPlan:function(page,words,startTime,realname,licenseNumber,creator,status){
+		listTripPlan:function(page,tripId,tripNumber,startTime,guideId,realname,busId,licenseNumber,creator,creatorName,status){
 			tripPlan.searchData = {
-				words : words,
+				tripId:tripId,
+				tripNumber : tripNumber,
 				startTime : startTime,
+				guideId:guideId,
 				realname : realname,
+				busId:busId,
 				licenseNumber : licenseNumber,
 				creator : creator,
+				creatorName:creatorName,
 				status : status
 			},
 			$.ajax({
 				url:""+APP_ROOT+"back/tripPlan.do?method=listTripPlan&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 				type:"POST",
-				data:"pageNo="+page+"&words="+words+"&startTime="+startTime+"&realname="+realname+"&licenseNumber="+licenseNumber+"&creator="+creator+"&status="+status+"&sortType=auto",
+				data:"pageNo="+page+"&tripId="+tripId+"&tripNumber="+tripNumber+"&startTime="+startTime+"&guideId="+guideId+"&guideName="+realname+"&busId="+busId+"&busLicenseNumber="+licenseNumber+"&creator="+creator+"&creatorName="+creatorName+"&status="+status+"&sortType=auto",
 				dataType:"json",
 				beforeSend:function(){
 					globalLoadingLayer = openLoadingLayer();
@@ -53,6 +62,7 @@ define(function(require, exports) {
 						var html = listTemplate(data);
 						addTab(menuKey,"发团计划",html);
 						tripPlan.initList(data);
+						tripPlan.getQueryTerms();
 					}
 				}
 			});
@@ -71,33 +81,41 @@ define(function(require, exports) {
 				$(this).parent().parent().parent().find("button").attr("data-value",$(this).attr("data-value"));
 				$(this).parent().parent().parent().find("span").text($(this).text());
 				tripPlan.searchData = {
-					words : $("#tab-"+menuKey+"-content .tripPlanMain input[name=word]").val(),
+					tripId : $("#tab-"+menuKey+"-content .tripPlanMain input[name=tripChoosePlanId]").val(),
+					tripNumber : $("#tab-"+menuKey+"-content .tripPlanMain input[name=tripNumber]").val(),
 					startTime : $("#tab-"+menuKey+"-content .tripPlanMain input[name=startTime]").val(),
+					guideId : $("#tab-"+menuKey+"-content .tripPlanMain input[name=guideChooseId]").val(),
 					realname : $("#tab-"+menuKey+"-content .tripPlanMain input[name=realname]").val(),
+					busId : $("#tab-"+menuKey+"-content .tripPlanMain input[name=busChooseId]").val(),
 					licenseNumber : $("#tab-"+menuKey+"-content .tripPlanMain input[name=licenseNumber]").val(),
-					creator : $("#tab-"+menuKey+"-content .tripPlanMain input[name=creator]").val(),
+					creator : $("#tab-"+menuKey+"-content .tripPlanMain input[name=creatorChooseId]").val(),
+					creatorName : $("#tab-"+menuKey+"-content .tripPlanMain input[name=creator]").val(),
 					status : $("#tab-"+menuKey+"-content .btn-status").find("button").attr("data-value")
 				}
-				tripPlan.listTripPlan(0,tripPlan.searchData.words,tripPlan.searchData.startTime,tripPlan.searchData.realname,tripPlan.searchData.licenseNumber,tripPlan.searchData.creator,tripPlan.searchData.status);
+				tripPlan.listTripPlan(0,tripPlan.searchData.tripId,tripPlan.searchData.tripNumber,tripPlan.searchData.startTime,tripPlan.searchData.guideId,tripPlan.searchData.realname,tripPlan.searchData.busId,tripPlan.searchData.licenseNumber,tripPlan.searchData.creator,tripPlan.searchData.creatorName,tripPlan.searchData.status);
 			});
 			
 			//给搜索按钮绑定事件
 			$("#tab-"+menuKey+"-content .tripPlanMain .btn-tripPlan-search").click(function(){
 				tripPlan.searchData = {
-						words : $("#tab-"+menuKey+"-content .tripPlanMain input[name=word]").val(),
-						startTime : $("#tab-"+menuKey+"-content .tripPlanMain input[name=startTime]").val(),
-						realname : $("#tab-"+menuKey+"-content .tripPlanMain input[name=realname]").val(),
-						licenseNumber : $("#tab-"+menuKey+"-content .tripPlanMain input[name=licenseNumber]").val(),
-						creator : $("#tab-"+menuKey+"-content .tripPlanMain input[name=creator]").val(),
-						status : $("#tab-"+menuKey+"-content .btn-status").find("button").attr("data-value")
+					tripId : $("#tab-"+menuKey+"-content .tripPlanMain input[name=tripChoosePlanId]").val(),
+					tripNumber : $("#tab-"+menuKey+"-content .tripPlanMain input[name=tripNumber]").val(),
+					startTime : $("#tab-"+menuKey+"-content .tripPlanMain input[name=startTime]").val(),
+					guideId : $("#tab-"+menuKey+"-content .tripPlanMain input[name=guideChooseId]").val(),
+					realname : $("#tab-"+menuKey+"-content .tripPlanMain input[name=realname]").val(),
+					busId : $("#tab-"+menuKey+"-content .tripPlanMain input[name=busChooseId]").val(),
+					licenseNumber : $("#tab-"+menuKey+"-content .tripPlanMain input[name=licenseNumber]").val(),
+					creator : $("#tab-"+menuKey+"-content .tripPlanMain input[name=creatorChooseId]").val(),
+					creatorName : $("#tab-"+menuKey+"-content .tripPlanMain input[name=creator]").val(),
+					status : $("#tab-"+menuKey+"-content .btn-status").find("button").attr("data-value")
 				}
-				tripPlan.listTripPlan(0,tripPlan.searchData.words,tripPlan.searchData.startTime,tripPlan.searchData.realname,tripPlan.searchData.licenseNumber,tripPlan.searchData.creator,tripPlan.searchData.status);
+				tripPlan.listTripPlan(0,tripPlan.searchData.tripId,tripPlan.searchData.tripNumber,tripPlan.searchData.startTime,tripPlan.searchData.guideId,tripPlan.searchData.realname,tripPlan.searchData.busId,tripPlan.searchData.licenseNumber,tripPlan.searchData.creator,tripPlan.searchData.creatorName,tripPlan.searchData.status);
 			});
 			
 			//分页--首页按钮事件
 			$("#tab-"+menuKey+"-content .pageMode a.first").click(function(){
 				if(data.pageNo == 0 || data.totalPage == 0)return;
-				tripPlan.listTripPlan(0,tripPlan.searchData.words,tripPlan.searchData.startTime,tripPlan.searchData.realname,tripPlan.searchData.licenseNumber,tripPlan.searchData.creator,tripPlan.searchData.status);
+				tripPlan.listTripPlan(0,tripPlan.searchData.tripId,tripPlan.searchData.tripNumber,tripPlan.searchData.startTime,tripPlan.searchData.guideId,tripPlan.searchData.realname,tripPlan.searchData.busId,tripPlan.searchData.licenseNumber,tripPlan.searchData.creator,tripPlan.searchData.creatorName,tripPlan.searchData.status);
 			});
 			//分页--上一页事件
 			$("#tab-"+menuKey+"-content  .pageMode a.previous").click(function(){
@@ -106,7 +124,7 @@ define(function(require, exports) {
 				if(data.pageNo == 0){
 					previous = 0;
 				}
-				tripPlan.listTripPlan(previous,tripPlan.searchData.words,tripPlan.searchData.startTime,tripPlan.searchData.realname,tripPlan.searchData.licenseNumber,tripPlan.searchData.creator,tripPlan.searchData.status);
+				tripPlan.listTripPlan(previous,tripPlan.searchData.tripId,tripPlan.searchData.tripNumber,tripPlan.searchData.startTime,tripPlan.searchData.guideId,tripPlan.searchData.realname,tripPlan.searchData.busId,tripPlan.searchData.licenseNumber,tripPlan.searchData.creator,tripPlan.searchData.creatorName,tripPlan.searchData.status);
 			});
 			//分页--下一页事件
 			$("#tab-"+menuKey+"-content .pageMode a.next").click(function(){
@@ -115,12 +133,12 @@ define(function(require, exports) {
 				if(data.pageNo == data.totalPage-1){
 					next = data.pageNo ;
 				}
-				tripPlan.listTripPlan(next,tripPlan.searchData.words,tripPlan.searchData.startTime,tripPlan.searchData.realname,tripPlan.searchData.licenseNumber,tripPlan.searchData.creator,tripPlan.searchData.status);
+				tripPlan.listTripPlan(next,tripPlan.searchData.tripId,tripPlan.searchData.tripNumber,tripPlan.searchData.startTime,tripPlan.searchData.guideId,tripPlan.searchData.realname,tripPlan.searchData.busId,tripPlan.searchData.licenseNumber,tripPlan.searchData.creator,tripPlan.searchData.creatorName,tripPlan.searchData.status);
 			});
 			//分页--尾页事件
 			$("#tab-"+menuKey+"-content  .pageMode a.last").click(function(){
 				if(data.pageNo == data.totalPage-1 || data.totalPage == 0)return;
-				tripPlan.listTripPlan(data.totalPage-1,tripPlan.searchData.words,tripPlan.searchData.startTime,tripPlan.searchData.realname,tripPlan.searchData.licenseNumber,tripPlan.searchData.creator,tripPlan.searchData.status);
+				tripPlan.listTripPlan(data.totalPage-1,tripPlan.searchData.tripId,tripPlan.searchData.tripNumber,tripPlan.searchData.startTime,tripPlan.searchData.guideId,tripPlan.searchData.realname,tripPlan.searchData.busId,tripPlan.searchData.licenseNumber,tripPlan.searchData.creator,tripPlan.searchData.creatorName,tripPlan.searchData.status);
 			});
 			
 			//新增发团计划
@@ -133,6 +151,11 @@ define(function(require, exports) {
 				var id = $(this).parent().parent().attr("data-entity-id");
 				tripPlan.viewTripPlan(id);
 			});
+			//autocomplete
+			tripPlan.tripNumberListChoose($("#tab-"+menuKey+"-content"));
+			tripPlan.guideListChoose($("#tab-"+menuKey+"-content"));
+			tripPlan.busListChoose($("#tab-"+menuKey+"-content"));
+			tripPlan.creatorListChoose($("#tab-"+menuKey+"-content"));
 			
 			//取消发团计划信息 
 			$(".tripPlanMain .btn-Plan-cancel").click(function(){
@@ -377,9 +400,9 @@ define(function(require, exports) {
 				    	tripPlan.MenberNumber("addTripPlanTouristTbody");
 				    	//判定是否选中
 				    	if (data.tripPlan.executeTimeType==0) {
-				    		$(".newAddTripPlanMain").find('input[name=executeTimeType]').eq(0).attr("checked","checked");
+				    		$(".newAddTripPlanMain").find('.executeTimeType1').removeClass('hide');
 				    	} else{
-				    		$(".newAddTripPlanMain").find('input[name=executeTimeType]').eq(1).attr("checked","checked");
+				    		$(".newAddTripPlanMain").find('.executeTimeType2').removeClass('hide');
 				    	};
 				    
 				    	//查看计划中 查看游客小组
@@ -742,7 +765,7 @@ define(function(require, exports) {
 					if(result){
 						showMessageDialog($( "#confirm-dialog-message" ),data.message);
 						// 确认发团成功后，刷新列表
-						tripPlan.listTripPlan(0,tripPlan.searchData.words,tripPlan.searchData.startTime,tripPlan.searchData.realname,tripPlan.searchData.licenseNumber,tripPlan.searchData.creator,tripPlan.searchData.status);
+						tripPlan.listTripPlan(0,tripPlan.searchData.tripNumber,tripPlan.searchData.startTime,tripPlan.searchData.realname,tripPlan.searchData.licenseNumber,tripPlan.searchData.creator,tripPlan.searchData.status);
 					}
 				}
 			})
@@ -833,8 +856,6 @@ define(function(require, exports) {
 							var result = showDialog(data);
 							if(result){
 								var busList = JSON.parse(data.busList);
-								
-								
 								if(busList != null && busList.length){
 									for(var i=0;i<busList.length;i++){
 										busList[i].value = busList[i].licenseNumber;
@@ -842,7 +863,6 @@ define(function(require, exports) {
 								}
 								$(objBus).autocomplete('option','source', busList);
 								$(objBus).autocomplete('search', '');
-								
 							}
 	                    }
 	                 });
@@ -873,7 +893,6 @@ define(function(require, exports) {
 				},
 				select:function(event,ui){
 					$(this).blur();
-					
 					$(this).parent().parent().parent().find("input[name=busCompanyId]").val(ui.item.id).trigger('change');
 					$(this).parent().parent().parent().find("input[name=LicenseNumber]").val("");
 					$(this).parent().parent().parent().find("input[name=busLicenseNumberId]").val("");
@@ -961,6 +980,124 @@ define(function(require, exports) {
                 });
 			});
 		},
+
+        //团号模糊查询
+		tripNumberListChoose:function($obj){
+		var tripNumberListChoose = $obj.find(".tripChoosePlan");
+			tripNumberListChoose.autocomplete({
+				minLength:0,
+				change:function(event,ui){
+					if(ui.item == null){
+						$(this).parent().parent().find("input[name=tripChoosePlanId]").val("");
+					}
+				},
+				select:function(event,ui){
+					$(this).blur();
+					var obj = this;
+					$(obj).parent().parent().find("input[name=tripChoosePlanId]").val(ui.item.id).trigger('change');
+				}
+			}).click(function(){
+				var obj = this;
+				var listObj = tripPlan.autocompleteDate.tripNumberList;
+				if(listObj !=null && listObj.length>0){
+					for(var i=0;i<listObj.length;i++){
+						listObj[i].value = listObj[i].tripNumber;
+					}
+				}
+				$(obj).autocomplete('option','source', listObj);
+				$(obj).autocomplete('search', '');
+			})
+		},
+			//导游模糊查询
+			guideListChoose:function($obj){
+			var guideListChoose = $obj.find(".T-guideChoose");
+				guideListChoose.autocomplete({
+					minLength:0,
+					change:function(event,ui){
+						if(ui.item == null){
+							$(this).parent().parent().find("input[name=guideChooseId]").val("");
+						}
+					},
+					select:function(event,ui){
+                    $(this).blur();
+						var obj = this;
+						$(obj).parent().parent().find("input[name=guideChooseId]").val(ui.item.id).trigger('change');
+					}
+
+				}).click(function(){
+					var obj = this;
+					var listGuideObj = tripPlan.autocompleteDate.guideList;
+					console.info(listGuideObj);
+					if(listGuideObj !=null && listGuideObj.length>0){
+						for(var i=0;i<listGuideObj.length;i++){
+							listGuideObj[i].value = listGuideObj[i].realname;
+						}
+					}
+					$(obj).autocomplete('option','source',listGuideObj);
+					$(obj).autocomplete('search', '');
+				});
+			},
+
+		//	车牌号模糊查询
+			busListChoose:function($obj){
+				var busListChoose = $obj.find(".T-busChoose");
+				busListChoose.autocomplete({
+					minLength:0,
+					change:function(event,ui){
+						if(ui.item == null){
+							$(this).parent().parent().find("input[name=busChooseId]").val("");
+						}
+					},
+					select:function(event,ui){
+						$(this).blur();
+						var obj = this;
+						$(obj).parent().parent().find("input[name=busChooseId]").val(ui.item.id).trigger('change');
+					}
+
+				}).click(function(){
+					var obj = this;
+					var listBusObj = tripPlan.autocompleteDate.busList;
+					console.info(listBusObj);
+					if(listBusObj !=null && listBusObj.length>0){
+						for(var i=0;i<listBusObj.length;i++){
+							listBusObj[i].value = listBusObj[i].licenseNumber;
+						}
+					}
+					$(obj).autocomplete('option','source',listBusObj);
+					$(obj).autocomplete('search', '');
+				});
+			},
+        //创建人模糊查询
+			creatorListChoose:function($obj){
+				var creatorListChoose = $obj.find(".T-creatorChoose");
+				creatorListChoose.autocomplete({
+					minLength:0,
+					change:function(event,ui){
+						if(ui.item == null){
+							$(this).parent().parent().find("input[name=creatorChooseId]").val("");
+						}
+					},
+					select:function(event,ui){
+						$(this).blur();
+						var obj = this;
+						$(obj).parent().parent().find("input[name=creatorChooseId]").val(ui.item.id).trigger('change');
+					}
+
+				}).click(function(){
+					var obj = this;
+					var listCreatorObj = tripPlan.autocompleteDate.creatorList;
+					console.info(listCreatorObj);
+					if(listCreatorObj !=null && listCreatorObj.length>0){
+						for(var i=0;i<listCreatorObj.length;i++){
+							listCreatorObj[i].value = listCreatorObj[i].realName;
+						}
+					}
+					$(obj).autocomplete('option','source',listCreatorObj);
+					$(obj).autocomplete('search', '');
+				});
+			},
+
+
 		addTripPlanDatepicker :function(name){
 			$(".newAddTripPlan input[name="+name+"]").datepicker({
 				autoclose: true,
@@ -1403,6 +1540,22 @@ define(function(require, exports) {
 					    tips: [1, '#3595CC'],
 					    time: 2000
 					});
+				}
+			})
+		},
+		getQueryTerms :function(){
+			$.ajax({
+				url:""+APP_ROOT+"back/tripPlan.do?method=getQueryTermsForPlan&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
+				dateType:"json",
+				type:"POST",
+				success:function(data){
+					var result = showDialog(data);
+					if(result){
+						tripPlan.autocompleteDate.tripNumberList = data.tripNumberList;
+						tripPlan.autocompleteDate.guideList = data.guideList	;
+						tripPlan.autocompleteDate.creatorList = data.creatorList;
+						tripPlan.autocompleteDate.busList = data.busList;
+					}
 				}
 			})
 		},
