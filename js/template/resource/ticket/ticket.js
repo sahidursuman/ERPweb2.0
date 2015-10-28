@@ -43,11 +43,7 @@ define(function(require, exports) {
 			type:"POST",
 			data:"pageNo="+page+"&name="+encodeURIComponent(realname)+"&status="+status+"&sortType=auto",
 			dataType:"json",
-			beforeSend:function(){
-				globalLoadingLayer = openLoadingLayer();
-			},
 			success:function(data){
-				layer.close(globalLoadingLayer);
 				var result = showDialog(data);
 				if(result){
 					var ticketList = data.ticketList;
@@ -153,17 +149,11 @@ define(function(require, exports) {
 						status = 1;
 					}
 					var form = $container.children('.T-ticketMainForm').serialize() + "&status=" + status + "";
-
 					$.ajax({
 						url:""+APP_ROOT+"back/ticket.do?method=addTicket&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=add",
 						type:"POST",
 						data:form,
-						dataType:"json",
-						beforeSend:function(){
-							globalLoadingLayer = openLoadingLayer();
-						},
 						success:function(data){
-							layer.close(globalLoadingLayer);
 							var result = showDialog(data);
 							if(result){
 								layer.close(addTicketLayer);
@@ -187,12 +177,7 @@ define(function(require, exports) {
 			url:""+APP_ROOT+"back/ticket.do?method=getTicketById&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 			type:"POST",
 			data:"id="+id+"",
-			dataType:"json",
-			beforeSend:function(){
-				globalLoadingLayer = openLoadingLayer();
-			},
 			success:function(data){
-				layer.close(globalLoadingLayer);
 				var result = showDialog(data);
 				if(result){
 					var ticketInfo = JSON.parse(data.ticket);
@@ -209,12 +194,6 @@ define(function(require, exports) {
 							var $container = $(".T-updateTicketContainer");
 							// 设置表单验证
 							var validator = rule.check($container);
-							$container.find("input[name=joinTime]").datepicker({
-								autoclose: true,
-								todayHighlight: true,
-								format: 'yyyy-mm-dd',
-								language: 'zh-CN'
-							});
 							$container.find(".T-ticket-Submit").click(function() {
 								// 表单校验
 								if (!validator.form()) {
@@ -229,12 +208,7 @@ define(function(require, exports) {
 									url:""+APP_ROOT+"back/ticket.do?method=updateTicket&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
 									type:"POST",
 									data:form,
-									dataType:"json",
-									beforeSend:function(){
-										globalLoadingLayer = openLoadingLayer();
-									},
 									success:function(data){
-										layer.close(updateTicket);
 										var result = showDialog(data);
 										if(result){
 											layer.close(updateTicket);
@@ -285,12 +259,7 @@ define(function(require, exports) {
 							url:""+APP_ROOT+"back/ticket.do?method=deleteTicket&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=delete",
 							type:"POST",
 							data:"id="+id+"",
-							dataType:"json",
-							beforeSend:function(){
-								globalLoadingLayer = openLoadingLayer();
-							},
 							success:function(data){
-								layer.close(globalLoadingLayer);
 								var result = showDialog(data);
 								if(result){
 									$("#"+tabId+" .ticketList .ticket-"+id+"").fadeOut(function(){
@@ -318,11 +287,7 @@ define(function(require, exports) {
 			type:"POST",
 			data:"id="+id+"",
 			dataType:"json",
-			beforeSend:function(){
-				globalLoadingLayer = openLoadingLayer();
-			},
 			success:function(data){
-				layer.close(globalLoadingLayer);
 				var result = showDialog(data);
 				if(result){
 					var ticketInfo = JSON.parse(data.ticket);
