@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 // var APP_ROOT = "http://localhost:8080/huochaitou/";
 var APP_ROOT = "/huochaitou/";
 var ASSETS_ROOT = '/';
