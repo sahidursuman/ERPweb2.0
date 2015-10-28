@@ -52,7 +52,7 @@ define(function(require,exports){
 			dataType: 'json',
 			data: {
 				    pageNo: page,
-				    name: encodeURIComponent(name),
+				    name: name,
 				    status: status,
 				    sortType: 'auto'
 				 },
@@ -76,7 +76,6 @@ define(function(require,exports){
 	                ScenicResource.$searchArea = ScenicResource.$tab.find('.T-search-area'); //搜索模块区域
 	                //绑定页面事件
 	                ScenicResource.init_event();
-
 	                //绑定翻页组件
 	                laypage({
 	                	cont: ScenicResource.$tab.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
@@ -162,35 +161,12 @@ define(function(require,exports){
 			scrollbar: false,    // 推荐禁用浏览器外部滚动条
 		    success:function(){
 		    		var $container=$(".T-addScenicContainer"),
-		    		    $obj = $(".T-addScenicContainer .T-scenicMainForm"),
+		    		    $mainFormObj = $(".T-addScenicContainer .T-scenicMainForm"),
 			    		$project = $(".T-addScenicContainer .T-scenicProjectForm");
 			    	    validator = rule.check($container);
 			    	var itemValidator;
-			    	//初始化省数据
-			    	ScenicResource.getProvinceList($obj.find("select[name=provinceId]"));
-			    	
-			    	//给省份select绑定事件
-			    	$obj.find("select[name=provinceId]").change(function(){
-			    		var provinceId = $(this).val();
-			    		if(provinceId!=''){
-				    		ScenicResource.getCityList($obj.find("select[name=cityId]"),provinceId);
-			    		}else{
-				    		$obj.find("select[name=cityId]").html("<option value=''>未选择</option>");
-			    		}
-			    		$obj.find("select[name=districtId]").html("<option value=''>未选择</option>");
-			    	});
-			    	
-			    	//给城市select绑定事件
-			    	$obj.find("select[name=cityId]").change(function(){
-			    		var cityId = $(this).val();
-			       		if(cityId!=''){
-				    		ScenicResource.getDistrictList($obj.find("select[name=districtId]"),cityId);
-			    		}else{
-				    		$obj.find("select[name=districtId]").html("<option value=''>未选择</option>");
-			    		}
-			    	});
-
-
+			    	//初始化地区
+		    	    KingServices.provinceCity($container);
 			    	//给项目列表新增按钮绑定事件
 			    	var $scenicItemObj=$project.find(".T-scenicItemStandardList");
 			    	$project.find(".T-btn-scenic-add").click(function(){
@@ -252,7 +228,7 @@ define(function(require,exports){
 				//提交按钮绑定事件
 				$project.find('.T-submit-scenic').click(function(event) {
 					/* Act on the event */
-					ScenicResource.addScenicSubmit($obj,$project,addScenicLayer,validator,itemValidator);
+					ScenicResource.addScenicSubmit($mainFormObj,$project,addScenicLayer,validator,itemValidator);
 				});
 		    }
 		})
@@ -265,16 +241,16 @@ define(function(require,exports){
 				type:"POST",
 				data:"id="+id+"",
 				dataType:"json",
-				beforeSend:function(){
-					globalLoadingLayer = openLoadingLayer();
-				},
 				success:function(data){
-					layer.close(globalLoadingLayer);
 					var result=showDialog(data);
 					if (result) {
 						var scenicInfo = JSON.parse(data.scenic);
 						data.scenic = scenicInfo;
-						var html = updateTemplate(data),
+						var html = updateTemplate(data);
+						if(data.scenic.province != null )var provinceId =data.scenic.province.id;
+					    if(data.scenic.city != null )var cityId = data.scenic.city.id;
+					    if(data.scenic.district != null ) var districtId = data.scenic.district.id;
+
 						updateScenicLayer=layer.open({
 							type: 1,
 						    title:"编辑景区信息",
@@ -285,67 +261,12 @@ define(function(require,exports){
 							scrollbar: false,    // 推荐禁用浏览器外部滚动条
 						    success:function(){
 						    	var $container=$(".T-updateScenicContainer"),
-					    		    $obj = $(".T-updateScenicContainer .T-scenicMainForm"),
+					    		    $mainFormObj = $(".T-updateScenicContainer .T-scenicMainForm"),
 			    		            $project = $(".T-updateScenicContainer .T-scenicProjectForm");
 				    		 	var validator = rule.check($container);
 						    	var itemsValidator;
-								//级联选择城市列表
-								var provinceId = "";
-								if(data.scenic.provinceId != null){
-									provinceId = data.scenic.provinceId;
-									var cityId = "";
-									if(data.scenic.cityId != null){
-										cityId = data.scenic.cityId;
-										var districtId = "";
-										if(data.scenic.districtId != null){
-											districtId = data.scenic.districtId;
-										}
-										ScenicResource.getDistrictList($obj.find("select[name=districtId]"),cityId,districtId);
-									}
-									ScenicResource.getCityList($obj.find("select[name=cityId]"),provinceId,cityId);
-								}
-								//初始化省数据
-								ScenicResource.getProvinceList($obj.find("select[name=provinceId]"),provinceId);
-						    	
-						    	//给省份select绑定事件
-						    	$obj.find("select[name=provinceId]").change(function(){
-						    		var provinceId = $(this).val();
-						    		if(provinceId!=''){
-							    		ScenicResource.getCityList($obj.find("select[name=cityId]"),provinceId);
-						    		}else{
-							    		$obj.find("select[name=cityId]").html("<option value=''>未选择</option>");
-						    		}
-						    		$obj.find("select[name=districtId]").html("<option value=''>未选择</option>");
-						    	});
-						    	
-						    	//给城市select绑定事件
-						    	$obj.find("select[name=cityId]").change(function(){
-						    		var cityId = $(this).val();
-						       		if(cityId!=''){
-							    		ScenicResource.getDistrictList($obj.find("select[name=districtId]"),cityId);
-						    		}else{
-							    		$obj.find("select[name=districtId]").html("<option value=''>未选择</option>");
-						    		}
-						    	});
-						    	
-						    	//级联选择城市列表
-						    	var provinceId = "";
-						    	if(data.scenic.provinceId != null){
-						    		provinceId = data.scenic.provinceId;
-						    	}
-						    	ScenicResource.getProvinceList($obj.find("select[name=provinceId]"),provinceId);
-						    	var cityId = "";
-						    	if(data.scenic.cityId != null){
-						    		cityId = data.scenic.cityId;
-						    		ScenicResource.getCityList($obj.find("select[name=cityId]"),provinceId,cityId);
-						    		
-						    		var districtId = "";
-						    		if(data.scenic.districtId != null){
-						    			districtId = data.scenic.districtId;
-						    			ScenicResource.getDistrictList($obj.find("select[name=districtId]"),cityId,districtId);
-						    		}
-						    	}
-						    	
+						    	//初始化地区
+							    KingServices.provinceCity($container,provinceId,cityId,districtId);						    	
 						    	var $scenicItemObj=$project.find(".T-scenicItemStandardList");
 						    	//修改时修改原来的standard，
 						    	$scenicItemObj.find(".timeArea button.T-add").click(function(){
@@ -419,7 +340,7 @@ define(function(require,exports){
 						    	$scenicItemObj.find("tbody .T-scenic-standard-delete").click(function(){
 						    		var tr = $(this).parent().parent();
 						    		var scenicStandardId = tr.attr("data-entity-id");
-						    		console.debug(scenicStandardId);
+						    		//console.debug(scenicStandardId);
 						    		if (scenicStandardId != null && scenicStandardId != "") {
 						    			tr.addClass("deleted");
 						    			tr.fadeOut(function(){
@@ -429,7 +350,7 @@ define(function(require,exports){
 						    	});
 						    	//编辑后的保存操作
 						    	$project.find(".T-submit-updateScenic").click(function(){
-						    		ScenicResource.updateSaveScenic($obj,$project,updateScenicLayer,$scenicItemObj,validator,itemsValidator);
+						    		ScenicResource.updateSaveScenic($mainFormObj,$project,updateScenicLayer,$scenicItemObj,validator,itemsValidator);
 						    	})
 					
 						    }
@@ -441,7 +362,7 @@ define(function(require,exports){
 	};
 
 	//提交新增景区信息
-	ScenicResource.addScenicSubmit=function($obj,$project,addScenicLayer,validator,itemValidator){
+	ScenicResource.addScenicSubmit=function($mainFormObj,$project,addScenicLayer,validator,itemValidator){
 		//表单验证
 		if(!validator.form()){return;}
 		if(itemValidator !=undefined){
@@ -449,10 +370,10 @@ define(function(require,exports){
 		}
 		//是否启用
 		var status = 0;
-		if($obj.find(".T-scenic-status").is(":checked") == true){
+		if($mainFormObj.find(".T-scenic-status").is(":checked") == true){
 			status = 1;
 		}
-		var form = $obj.eq(0).serialize()+"&status="+status+"";
+		var form = $mainFormObj.eq(0).serialize()+"&status="+status+"";
 		var scenicItemJsonAdd = [];
 		var scenicItemJsonAddTr = $project.find(".T-scenicItemStandardList tbody tr");
 		scenicItemJsonAddTr.each(function(i){
@@ -476,8 +397,7 @@ define(function(require,exports){
 		});
 
 	    scenicItemJsonAdd = JSON.stringify(scenicItemJsonAdd);
-		console.log("---------");
-		console.log(scenicItemJsonAdd);
+		//console.log(scenicItemJsonAdd);
 		$.ajax({
 			url:""+APP_ROOT+"back/scenic.do?method=addScenic&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=add",
 			type:"POST",
@@ -500,18 +420,18 @@ define(function(require,exports){
 
 
 	//编辑后的保存操作
-	ScenicResource.updateSaveScenic=function($obj,$project,updateScenicLayer,$scenicItemObj,validator,itemsValidator){
+	ScenicResource.updateSaveScenic=function($mainFormObj,$project,updateScenicLayer,$scenicItemObj,validator,itemsValidator){
 		if(!validator.form()){return}
 		if(itemsValidator !=undefined){
 			if(!itemsValidator.form()){return}
 		}
 				    		
 			var status = 0;
-			if($obj.find(".T-scenic-status").is(":checked") == true){
+			if($mainFormObj.find(".T-scenic-status").is(":checked") == true){
 				status = 1;
 			}		
-			var form = $obj.eq(0).serialize()+"&status="+status+"";
-			console.log(form + "-------------------");
+			var form = $mainFormObj.eq(0).serialize()+"&status="+status+"";
+			//console.log(form + "-------------------");
 			var scenicItemJsonAdd = [];
 			var scenicItemJsonAddTr = $scenicItemObj.find("tbody tr:not(.deleted)");
 			scenicItemJsonAddTr.each(function(i){
@@ -561,9 +481,9 @@ define(function(require,exports){
 				}
 			});
 			scenicItemJsonAdd = JSON.stringify(scenicItemJsonAdd);
-			console.log(scenicItemJsonAdd);
+			//console.log(scenicItemJsonAdd);
 			scenicItemJsonDel = JSON.stringify(scenicItemJsonDel);
-			console.log(scenicItemJsonDel);
+			//console.log(scenicItemJsonDel);
 			$.ajax({
 				url:""+APP_ROOT+"back/scenic.do?method=updateScenic&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
 				type:"POST",
@@ -573,7 +493,7 @@ define(function(require,exports){
 					globalLoadingLayer = openLoadingLayer();
 				},
 				success:function(data){
-					console.log(data);
+					//console.log(data);
 					layer.close(globalLoadingLayer);
 					var result = showDialog(data);
 					if(result){
@@ -592,12 +512,8 @@ define(function(require,exports){
 			type: 'POST',
 			dataType: "json",
 			data: "id="+id+"",
-			beforeSend:function(){
-				globalLoadingLayer=openLoadingLayer();
-			},
 			success:function(data){
-				layer.close(globalLoadingLayer);
-				console.info(data);
+				//console.info(data);
 				//对象实例化
 				var scenic=JSON.parse(data.scenic);
 				data.scenic=scenic;
@@ -662,79 +578,6 @@ define(function(require,exports){
 					$(this).find("p").text("你确定要删除该条记录？");
 			}
 		});
-	};
-	//初始化省份
-	ScenicResource.getProvinceList=function(obj,provinceId){
-		$.ajax({
-			url:""+APP_ROOT+"/base.do?method=getProvince",
-			type:"POST",
-			dataType:"json",
-			success:function(data){
-				var html = "<option value=''>未选择</option>";
-				var provinceList = data.provinceList;
-				if(provinceList != null && provinceList.length > 0){
-					for(var i=0;i<provinceList.length;i++){
-						if (provinceId != null && provinceList[i].id == provinceId) {
-							html += "<option selected=\"selected\" value='"+provinceList[i].id+"'>"+provinceList[i].name+"</option>";
-						} else {
-							html += "<option value='"+provinceList[i].id+"'>"+provinceList[i].name+"</option>";
-						}
-					}
-				}
-				$(obj).html(html);
-			}
-		});
-	},
-	//初始化城市
-	ScenicResource.getCityList=function(obj,provinceId,cityId){
-		if(provinceId != ""){
-			$.ajax({
-				url:""+APP_ROOT+"/base.do?method=getCity",
-				type:"POST",
-				data:"provinceId="+provinceId+"",
-				dataType:"json",
-				success:function(data){
-					var html = "<option value=''>未选择</option>";
-					var cityList = JSON.parse(data.cityList);
-					if(cityList != null && cityList.length > 0){
-						for(var i=0;i<cityList.length;i++){
-							if (cityId != null && cityId == cityList[i].id) {
-								html += "<option selected=\"selected\" value='"+cityList[i].id+"'>"+cityList[i].name+"</option>";
-							} else {
-								html += "<option value='"+cityList[i].id+"'>"+cityList[i].name+"</option>";
-							}
-						}
-					}
-					$(obj).html(html);
-				}
-			});
-		}
-	};
-	//初始化区
-	ScenicResource.getDistrictList=function(obj,cityId,districtId){
-		if(cityId != ""){
-			$.ajax({
-				url:""+APP_ROOT+"/base.do?method=getDistrict",
-				type:"POST",
-				data:"cityId="+cityId+"",
-				dataType:"json",
-				success:function(data){
-					var html = "<option value=''>未选择</option>";
-					var districtList = JSON.parse(data.districtList);
-					if(districtList != null && districtList.length > 0){
-						for(var i=0;i<districtList.length;i++){
-							if (districtId != null && districtId == districtList[i].id) {
-								html += "<option selected=\"selected\" value='"+districtList[i].id+"'>"+districtList[i].name+"</option>";
-							} else {
-								html += "<option value='"+districtList[i].id+"'>"+districtList[i].name+"</option>";
-							}
-							
-						}
-					}
-					$(obj).html(html);
-				}
-			});
-		}
 	};
 	//添加时间区间
 	ScenicResource.modifyOriginalRecord=function(obj,$scenicItemObj){
