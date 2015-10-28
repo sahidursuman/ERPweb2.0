@@ -254,7 +254,7 @@ define(function(require, exports) {
 	                        });
 	                     
 						//给对账按钮绑定事件 
-						$("#"+checkTabId+ " .btn-confirm-shop-checking").click(function(){
+						$("#"+checkTabId+ " .btn-confirm-shop-rs").click(function(){
 							// 表单校验
 							if (!validator.form()) { 
 								return;
@@ -438,47 +438,59 @@ define(function(require, exports) {
 	    },
 		saveCheckingData : function(page,shopId,year,month,isClose){
 			console.log("test");
-			var JsonStr = [],$tr = $("#"+checkTabId+" .all tbody tr");
-            var count = 0;
+			var JsonStr = [],$tr = $("#"+checkTabId+" .all tbody tr"),
+            oldRealRebateMoney,
+            newRealRebateMoney,
+            oldRemark,
+            newRemark;
      	    $tr.each(function(i){
-     		   var checkStatus = $tr.eq(i).find("input[name='isConfirmAccount']").attr("data-entity-checkStatus");
-     		   var consumeStartTime = $tr.eq(i).attr("data-entity-startTime");
-     		   var flag = $tr.eq(i).find("input[name='isConfirmAccount']").is(":checked");
-     		   var $realRebateMoney = $tr.eq(i).find("input[name='realRebateMoney']");
-     		   var $billRemark = $tr.eq(i).find("input[name='billRemark']");
+     		   var checkStatus = $(this).attr("data-entity-isConfirmAccount");
+     		   var consumeStartTime = $(this).attr("data-entity-startTime");
+     		   var flag = $(this).find("input[name='isConfirmAccount']").is(":checked");
+     		   newRealRebateMoney = $(this).find("input[name='realRebateMoney']").val();
+     		   newRemark = $(this).find("input[name='billRemark']").val();
+     		   oldRemark = $(this).attr("data-entity-billRemark");
+     		   oldRealRebateMoney = $(this).attr("data-entity-rebateMoney");
      		   if(flag){
      			  if(checkStatus == 1){
-     				  if($realRebateMoney.val() != $realRebateMoney.attr("data-entity-value") || $billRemark.val() != $billRemark.attr("data-entity-value"))  {
-	 					   count++;
-	 				  }
+     				  //判断是否修改对账
+     				  if(oldRealRebateMoney != newRealRebateMoney || oldRemark != newRemark){
+     				  	var checkData = {
+ 				  		   id:$(this).attr("data-entity-id"),
+	 					   shopId:shopId,
+	 					   consumeStartTime:consumeStartTime,
+	 					   realRebateMoney:newRealRebateMoney,
+	 					   billRemark:newRemark,
+	 					   isConfirmAccount:1
+     				  	}
+     				  	JsonStr.push(checkData);
+     				  }
  			      }else{
- 			    	  count++;
+ 			      		var checkData = {
+ 				  		   id:$(this).attr("data-entity-id"),
+	 					   shopId:shopId,
+	 					   consumeStartTime:consumeStartTime,
+	 					   realRebateMoney:newRealRebateMoney,
+	 					   billRemark:newRemark,
+	 					   isConfirmAccount:1
+     				  	}
+     				  	JsonStr.push(checkData);
  			      }
-     			  var checkData = {
- 					   id:$(this).attr("data-entity-id"),
- 					   shopId:shopId,
- 					   consumeStartTime:consumeStartTime,
- 					   realRebateMoney:$realRebateMoney.val(),
- 					   billRemark:$billRemark.val(),
- 					   isConfirmAccount:1
-     			   }
-     			   JsonStr.push(checkData);
      		   }else{
      			   if(checkStatus == 1){
  					   var checkData = {
-     					   id:$(this).attr("data-entity-id"),
-     					   shopId:shopId,
-     					   consumeStartTime:consumeStartTime,
-     					   realRebateMoney:$realRebateMoney.val(),
-     					   billRemark:$billRemark.attr("data-entity-value"),
-     					   isConfirmAccount:0
-         			   }
+ 				  		   id:$(this).attr("data-entity-id"),
+	 					   shopId:shopId,
+	 					   consumeStartTime:consumeStartTime,
+	 					   realRebateMoney:newRealRebateMoney,
+	 					   billRemark:newRemark,
+	 					   isConfirmAccount:0
+     				  	}
          			   JsonStr.push(checkData);
- 					   count++;
      			   }
      		   }
 		   });
-     	   if(count == 0){
+     	   if(JsonStr.length == 0){
      		   showMessageDialog($( "#confirm-dialog-message" ),"您当前未进行任何操作");
      		   return;
      	   }
