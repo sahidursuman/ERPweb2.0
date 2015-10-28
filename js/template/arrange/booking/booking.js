@@ -8,8 +8,11 @@ define(function(require, exports) {
 		addPartnerManagerTemplate = require("./view/addPartnerManager");
 	var booking ={
 		searchData :{
+			id:"",
 			orderNumber : "",
+			partnerAgencyId:"",
 			partnerAgency : "",
+			operateUserId:"",
 			operateUser : "",
 			startTime : "",
 			endTime : "",
@@ -22,11 +25,22 @@ define(function(require, exports) {
 			}
 			return false;
 		},
-		listbooking :function(page,orderNumber,partnerAgency,operateUser,startTime,endTime){
+		listbooking :function(page,id,orderNumber,partnerAgencyId,partnerAgency,operateUserId,operateUser,startTime,endTime){
+			booking.searchData = {
+				id:id,
+				orderNumber : orderNumber,
+				partnerAgencyId:partnerAgencyId,
+				partnerAgency : partnerAgency,
+				operateUserId:operateUserId,
+				operateUser : operateUser,
+				startTime : startTime,
+				endTime : endTime,
+				status : status
+			},
 			$.ajax({
 				url:""+APP_ROOT+"back/bookingOrder.do?method=listBookingOrder&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 				type:"POST",
-				data:"pageNo="+page+"&orderNumber="+booking.searchData.orderNumber+"&partnerAgency="+booking.searchData.partnerAgency+"&operateUser="+booking.searchData.operateUser+"&endTime="+booking.searchData.endTime+"&startTime="+booking.searchData.startTime+"&sortType=auto",
+				data:"pageNo="+page+"&id="+booking.searchData.id+"&orderNumber="+booking.searchData.orderNumber+"&partnerAgencyId="+booking.searchData.partnerAgencyId+"&partnerAgency="+booking.searchData.partnerAgency+"&operateUserId="+booking.searchData.operateUserId+"&operateUser="+booking.searchData.operateUser+"&endTime="+booking.searchData.endTime+"&startTime="+booking.searchData.startTime+"&sortType=auto",
 				dataType:"json",
 				beforeSend:function(){
 					globalLoadingLayer = openLoadingLayer();
@@ -51,19 +65,22 @@ define(function(require, exports) {
 			//给搜索按钮绑定事件
 			$("#tab-"+menuKey+"-content .bookingListMain .btn-booking-search").click(function(){
 				booking.searchData = {
+					    id : $("#tab-"+menuKey+"-content .bookingListMain input[name=orderNumberId]").val(),
 						orderNumber : $("#tab-"+menuKey+"-content .bookingListMain input[name=orderNumber]").val(),
-						partnerAgency : $("#tab-"+menuKey+"-content .bookingListMain input[name=partnerAgencyId]").val(),
-						operateUser : $("#tab-"+menuKey+"-content .bookingListMain input[name=operateUserId]").val(),
+					    partnerAgencyId : $("#tab-"+menuKey+"-content .bookingListMain input[name=partnerAgencyChooseId]").val(),
+						partnerAgency : $("#tab-"+menuKey+"-content .bookingListMain input[name=partnerAgency]").val(),
+					    operateUserId : $("#tab-"+menuKey+"-content .bookingListMain input[name=operateUserId]").val(),
+						operateUser : $("#tab-"+menuKey+"-content .bookingListMain input[name=operateUser]").val(),
 						startTime : $("#tab-"+menuKey+"-content .bookingListMain input[name=startTime]").val(),
 						endTime : $("#tab-"+menuKey+"-content .bookingListMain input[name=endTime]").val()
 				}
-				booking.listbooking(0,booking.searchData.orderNumber,booking.searchData.partnerAgency,booking.searchData.operateUser,booking.searchData.startTime,booking.searchData.endTime);
+				booking.listbooking(0,booking.searchData.id,booking.searchData.orderNumber,booking.searchData.partnerAgencyId,booking.searchData.partnerAgency,booking.searchData.operateUserId,booking.searchData.operateUser,booking.searchData.startTime,booking.searchData.endTime);
 			});
 			
 			//分页--首页按钮事件
 			$("#tab-"+menuKey+"-content .pageMode a.first").click(function(){
 				if(data.pageNo == 0 || data.totalPage == 0)return;
-				booking.listbooking(0,booking.searchData.orderNumber,booking.searchData.partnerAgency,booking.searchData.operateUser,booking.searchData.startTime,booking.searchData.endTime);
+				booking.listbooking(0,booking.searchData.id,booking.searchData.orderNumber,booking.searchData.partnerAgencyId,booking.searchData.partnerAgency,booking.searchData.operateUserId,booking.searchData.operateUser,booking.searchData.startTime,booking.searchData.endTime);
 			});
 			//分页--上一页事件
 			$("#tab-"+menuKey+"-content  .pageMode a.previous").click(function(){
@@ -72,7 +89,7 @@ define(function(require, exports) {
 				if(data.pageNo == 0){
 					previous = 0;
 				}
-				booking.listbooking(previous,booking.searchData.orderNumber,booking.searchData.partnerAgency,booking.searchData.operateUser,booking.searchData.startTime,booking.searchData.endTime);
+				booking.listbooking(previous,booking.searchData.id,booking.searchData.orderNumber,booking.searchData.partnerAgencyId,booking.searchData.partnerAgency,booking.searchData.operateUserId,booking.searchData.operateUser,booking.searchData.startTime,booking.searchData.endTime);
 			});
 			//分页--下一页事件
 			$("#tab-"+menuKey+"-content .pageMode a.next").click(function(){
@@ -81,12 +98,12 @@ define(function(require, exports) {
 				if(data.pageNo == data.totalPage-1){
 					next = data.pageNo ;
 				}
-				booking.listbooking(next,booking.searchData.orderNumber,booking.searchData.partnerAgency,booking.searchData.operateUser,booking.searchData.startTime,booking.searchData.endTime);
+				booking.listbooking(next,booking.searchData.id,booking.searchData.orderNumber,booking.searchData.partnerAgencyId,booking.searchData.partnerAgency,booking.searchData.operateUserId,booking.searchData.operateUser,booking.searchData.startTime,booking.searchData.endTime);
 			});
 			//分页--尾页事件
 			$("#tab-"+menuKey+"-content  .pageMode a.last").click(function(){
 				if(data.pageNo == data.totalPage-1 || data.totalPage == 0)return;
-				booking.listbooking(data.totalPage-1,booking.searchData.orderNumber,booking.searchData.partnerAgency,booking.searchData.operateUser,booking.searchData.startTime,booking.searchData.endTime);
+				booking.listbooking(data.totalPage-1,booking.searchData.id,booking.searchData.orderNumber,booking.searchData.partnerAgencyId,booking.searchData.partnerAgency,booking.searchData.operateUserId,booking.searchData.operateUser,booking.searchData.startTime,booking.searchData.endTime);
 			});
 			//新增项目代订
 			$("#tab-"+menuKey+"-content .btn-Booking-add").click(booking.addBooking);
@@ -654,6 +671,7 @@ define(function(require, exports) {
 				})
 			})
 		},
+
 		hotelChooseList :function(className){
 			var hotelChoose = className.find(".chooseHotel");
 			var $hotelStar = className.find(".hotelStar");
@@ -1051,9 +1069,11 @@ define(function(require, exports) {
 				success:function(data){
 					var result = showDialog(data);
 					if(result){
-						booking.autocompleteDate.operationUserList = data.operationUserList;
 						booking.autocompleteDate.orderNumberList = data.orderNumberList;
 						booking.autocompleteDate.partnerAgencyList = data.partnerAgencyList;
+						booking.autocompleteDate.operationUserList = data.operationUserList;
+
+
 					}
 				}
 			})
@@ -1111,29 +1131,30 @@ define(function(require, exports) {
 				}
 			})  
 		},
-		//搜索订单代号查询
+		//搜索订单代号模糊查询
 		orderNumberChoose :function(className){
-			var orderNumberChoose = className.find(".orderNumberChoose");
+			var orderNumberChoose = className.find(".T-orderNumberChoose");
 			orderNumberChoose.autocomplete({
 				minLength:0,
 				change :function(event, ui){
 					if(ui.item == null){
-						var $this = $(this),parents = $(this).parent().parent();
-						$this.val("");
+						//var $this = $(this),parents = $(this).parent().parent();
+						$(this).parent().parent().find("input[name=orderNumberId]").val("");
+
 					}
 				},
 				select :function(event, ui){
-					var $this = $(this),parents = $(this).parent().parent();
+					$(this).blur();
+					var obj = this;
+					$(obj).parent().parent().find("input[name=orderNumberId]").val(ui.item.id).trigger('change');
+
 				}
 			}).unbind("click").click(function(){
-				var orderNumberListJson = [],obj = this,
+				var obj = this,
 					orderNumberList = booking.autocompleteDate.orderNumberList;
 				if(orderNumberList && orderNumberList.length > 0){
 					for(var i=0; i < orderNumberList.length; i++){
-						var orderNumber = {
-							value : orderNumberList[i]
-						}
-						orderNumberListJson.push(orderNumber);
+						orderNumberList[i].value = orderNumberList[i].orderNumber;
 					}
 					$(obj).autocomplete('option','source', orderNumberList);
 					$(obj).autocomplete('search', '');
@@ -1145,21 +1166,21 @@ define(function(require, exports) {
 				}
 			})
 		},
-		//搜索客户查询
+		//搜索客户模糊查询
 		partnerAgencyChoose :function(className){
-			var partnerAgencyChoose = className.find(".partnerAgencyChoose");
+			var partnerAgencyChoose = className.find(".T-partnerAgencyChoose");
 			partnerAgencyChoose.autocomplete({
 				minLength:0,
 				change :function(event, ui){
 					if(ui.item == null){
-						var $this = $(this),parents = $(this).parent();
-						$this.val("");
-						parents.find('input[name=partnerAgencyId]').val("");
+						$(this).parent().parent().find("input[name=partnerAgencyChooseId]").val("");
 					}
 				},
-				select :function(event, ui){
-					var $this = $(this),parents = $(this).parent();
-					parents.find('input[name=partnerAgencyId]').val(ui.item.id);
+				select :function(event,ui){
+					$(this).blur();
+					var obj = this;
+					$(obj).parent().parent().find("input[name=partnerAgencyChooseId]").val(ui.item.id).trigger('change');
+
 				}
 			}).unbind("click").click(function(){
 				var obj = this,partnerAgencyList = booking.autocompleteDate.partnerAgencyList;
@@ -1184,14 +1205,19 @@ define(function(require, exports) {
 				minLength:0,
 				change :function(event, ui){
 					if(ui.item == null){
-						var $this = $(this),parents = $(this).parent();
-						$this.val("");
-						parents.find('input[name=operateUserId]').val("");
+						//var $this = $(this),parents = $(this).parent();
+						//$this.val("");
+						//parents.find('input[name=operateUserId]').val("");
+						$(this).parent().parent().find("input[name=operateUserId]").val("");
+
 					}
 				},
 				select :function(event, ui){
-					var $this = $(this),parents = $(this).parent();
-					parents.find('input[name=operateUserId]').val(ui.item.id);
+					//var $this = $(this),parents = $(this).parent();
+					//parents.find('input[name=operateUserId]').val(ui.item.id);
+					$(this).blur();
+					var obj = this;
+					$(obj).parent().parent().find("input[name=operateUserId]").val(ui.item.id).trigger('change');
 				}
 			}).unbind("click").click(function(){
 				var obj = this,operationUserList = booking.autocompleteDate.operationUserList;

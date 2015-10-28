@@ -39,6 +39,12 @@ input{
     background-color:#ddd;
 }
 
+.laypage_skip {
+    padding: 0 !important;
+    padding-left: 5px !important;
+    line-height: 1em !important;
+}
+
 label{
     font-size: 12px;
 }
@@ -652,6 +658,9 @@ input,select{
 .timeStart{
     margin-left: -40px;
 }
+.timeStartMore{
+    margin-left: -65px
+}
 .guideMarginLeft{
     margin-left: -104px;
 }
@@ -663,4 +672,9 @@ input,select{
 }
 .marginLeft-Right7{
     margin-left: -7px;
+}
+
+/*线路模板查看*/
+.lineTemplate .table{
+    border-width:1px !important;
 }
