@@ -218,7 +218,7 @@ define(function(require, exports) {
 					    	}
 
 					    	//级联选择城市列表//
-					    	var provinceId = "";
+					    	var provinceId, cityId, districtId;
 					    	if(data.shop.province != null){
 					    		provinceId = data.shop.province.id;
 					    		var cityId = "";
@@ -228,11 +228,10 @@ define(function(require, exports) {
 						    		if(data.shop.district != null){
 						    			districtId = data.shop.district.id;
 						    		}
-						    		shop.getDistrictList($(".shopMainForm select[name=districtId]"),cityId,districtId);
 						    	}
-						    	shop.getCityList($(".shopMainForm select[name=cityId]"),provinceId,cityId);
 					    	}
-					    	shop.getProvinceList($(".shopMainForm select[name=provinceId]"),provinceId);
+
+					    	KingServices.provinceCity(shop.$formContainer.find('.T-distict'), provinceId, cityId, districtId);
 					    }
 					});
 				}
@@ -351,32 +350,13 @@ define(function(require, exports) {
     	
     	if (type === 1)  {
     		policyListValidator = rule.checkItems(shop.$formContainer.find(".T-shopPolicyForm"));
+    	} else {
+    		// 添加时，初始化省市区
+    		KingServices.provinceCity($mainForm.find('.T-distict'));
     	}
+
+    	// 初始化表单验证
     	mainValidator = rule.check($mainForm);
-    	//初始化省数据
-    	shop.getProvinceList($mainForm.find("select[name=provinceId]"));
-    	
-    	//给省份select绑定事件
-    	$mainForm.find("select[name=provinceId]").change(function(){
-    		var provinceId = $(this).val();
-    		if(provinceId != ""){
-    			shop.getCityList($mainForm.find("select[name=cityId]"),provinceId);
-    		}
-    		else{
-    			$mainForm.find("select[name=cityId]").html("<option value=''>未选择</option>");
-    		}
-    		$mainForm.find("select[name=districtId]").html("<option value=''>未选择</option>");
-    	});
-    	//给城市select绑定事件
-    	$mainForm.find("select[name=cityId]").change(function(){
-    		var cityId = $(this).val();
-    		if(cityId != ""){
-    			shop.getDistrictList($mainForm.find("select[name=districtId]"),cityId);
-    		}
-    		else{
-    			$mainForm.find("select[name=districtId]").html("<option value=''>未选择</option>");
-    		}
-    	});
     	
     	// 表格中的事件处理
     	shop.$formContainer.find('.T-shop-standard-list').on('click', '.T-action', function(event) {
