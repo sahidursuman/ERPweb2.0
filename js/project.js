@@ -561,6 +561,8 @@ var modalScripts = {
 	'resource_hotel': "js/template/resource/hotel/hotel.js",
 	'resource_shop': 'js/template/resource/shop/shop.js',
 	'resource_insurance': "js/template/resource/insurance/insurance.js",
+	'resource_scenic' : "js/template/resource/scenic/scenic.js",
+	'business_analyst_saleProduct' : "js/template/businessAnalyst/saleProduct/saleProduct.js"
 };
 
 function listMenu(menuTemplate){
