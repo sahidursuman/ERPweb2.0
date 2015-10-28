@@ -557,6 +557,7 @@ function trim(str){
  */
 var modalScripts = {
 	'resource_guide': "js/template/resource/guide/guide.js",
+	'resource_restaurant': "js/template/resource/restaurant/restaurant.js",
 	'resource_hotel': "js/template/resource/hotel/hotel.js",
 	'resource_insurance': "js/template/resource/insurance/insurance.js",
 };
@@ -595,15 +596,15 @@ function listMenu(menuTemplate){
 					});
 				});
 
-				//绑定餐厅菜单功能
-				$("#sidebar .nav-list .resource_restaurant").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/resource/restaurant/restaurant.js",function(restaurant){
-						restaurant.listRestaurant(0,"",1);
-					});
-				});
+				// //绑定餐厅菜单功能
+				// $("#sidebar .nav-list .resource_restaurant").click(function(){
+				// 	$("#sidebar .nav-list li").removeClass("active");
+				// 	$(this).addClass("active");
+				// 	$(this).parent().parent().addClass("active");
+				// 	seajs.use("" + ASSETS_ROOT +"js/template/resource/restaurant/restaurant.js",function(restaurant){
+				// 		restaurant.listRestaurant(0,"",1);
+				// 	});
+				// });
 				//绑定酒店菜单功能
 				/*$("#sidebar .nav-list .resource_hotel").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
