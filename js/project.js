@@ -121,6 +121,8 @@ function addTab(tabId,tabName,html){
 	else{
 		$("#tabContent").append("<div id=\"tab-"+tabId+"-content\" class=\"tab-pane tab-pane-menu active\"></div>");
 	}
+
+	html = filterUnAuth(html);
 	$("#tab-"+tabId+"-content").html(html);
 }
 function closeTab(tabId){
@@ -157,6 +159,25 @@ function closeTab(tabId){
 	}
 	$("#tabList").css("marginLeft",marginLeft);
 }
+
+//权限过滤
+function filterUnAuth(obj) {
+	if (!obj || !IndexData.userInfo || !IndexData.userInfo.listUserFunctionShip) return '';
+
+	var functionList = IndexData.userInfo.listUserFunctionShip;
+	var $obj = $(obj);
+	$obj.find(".R-right").each(function(){
+		var right = $(this).data("right");
+		if(right){
+			var index = functionList.indexOf(right);
+			if(index < 0){
+				$(this).remove();
+			}
+		}
+	});
+	return $obj;
+}
+
 function openLoadingLayer(){
 	var globalLoadingLayer = layer.open({
 		zIndex:1028,
