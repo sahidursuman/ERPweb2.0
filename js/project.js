@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // var APP_ROOT = "http://localhost:8080/huochaitou/";
 var APP_ROOT = "/huochaitou/";
 var ASSETS_ROOT = '/';
@@ -555,6 +556,7 @@ function trim(str){
 /**
  * 定义模块绑定关系
  */
+
 var modalScripts = {
 	'resource_guide': "js/template/resource/guide/guide.js",
 	'resource_ticket': "js/template/resource/ticket/ticket.js",
