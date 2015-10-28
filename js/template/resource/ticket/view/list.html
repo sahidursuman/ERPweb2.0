@@ -31,7 +31,7 @@
 		</ul>
 	</div>
 
-	<button class="btn btn-sm btn-success btn-ticket-add" style="margin-left: 20px">
+	<button class="btn btn-sm btn-success btn-ticket-add R-right" data-right="1070002" style="margin-left: 20px">
 		<i class="ace-icon fa fa-plus"></i>
 		新增票务
 	</button>
@@ -91,11 +91,13 @@
 							<div class="hidden-sm hidden-xs btn-group">
 								<a data-entity-id="{{ticket.id}}" class="btn-ticket-view cursor ">
 									查看
-								</a><a href="" class="cursor"> |</a>
-								<a data-entity-id="{{ticket.id}}" class="btn-ticket-edit cursor ">
+								</a>
+								<a data-entity-id="{{ticket.id}}" class="btn-ticket-edit cursor R-right" data-right="1070003">
+									<label class="padding-right20">|</label>
 									编辑
-								</a><a href="" class="cursor"> |</a>
-								<a data-entity-id="{{ticket.id}}" class="btn-ticket-delete cursor">
+								</a>
+								<a data-entity-id="{{ticket.id}}" class="btn-ticket-delete cursor R-right" data-right="1070004">
+									<label class="padding-right20">|</label>
 									删除
 								</a>
 							</div>

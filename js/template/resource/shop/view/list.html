@@ -31,7 +31,7 @@
 		</ul>
 	</div>
 
-	<button class="btn btn-sm btn-success btn-shop-add" style="margin-left: 20px;">
+	<button class="btn btn-sm btn-success btn-shop-add R-right" data-right="1050002" style="margin-left: 20px;">
 		<i class="ace-icon fa fa-plus"></i>
 		新增商家
 	</button>
@@ -91,13 +91,15 @@
 						</td>
 						<td>
 							<div class="hidden-sm hidden-xs btn-group">
-								<a data-entity-id="{{shop.id}}" class="btn-shop-view cursor ">
+								<a data-entity-id="{{shop.id}}" class="btn-shop-view cursor">
 									查看
-								</a><a href="" class="cursor"> |</a>
-								<a data-entity-id="{{shop.id}}" class="btn-shop-edit cursor ">
+								</a>
+								<a data-entity-id="{{shop.id}}" class="btn-shop-edit cursor R-right" data-right="1050003">
+									<label class="padding-right20">|</label>
 									编辑
-								</a><a href="" class="cursor"> |</a>
-								<a data-entity-id="{{shop.id}}" class="btn-shop-delete cursor ">
+								</a>
+								<a data-entity-id="{{shop.id}}" class="btn-shop-delete cursor R-right" data-right="1050004">
+									<label class="padding-right20">|</label>
 									删除
 								</a>
 							</div>
