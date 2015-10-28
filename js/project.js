@@ -562,7 +562,13 @@ var modalScripts = {
 	'resource_shop': 'js/template/resource/shop/shop.js',
 	'resource_insurance': "js/template/resource/insurance/insurance.js",
 	'resource_scenic' : "js/template/resource/scenic/scenic.js",
-	'business_analyst_saleProduct' : "js/template/businessAnalyst/saleProduct/saleProduct.js"
+	//-------------------------------------------业务分析模块---------------------------------------------------
+	'business_analyst_saleProduct' : "js/template/businessAnalyst/saleProduct/saleProduct.js",//产品销量
+	'business_analyst_sourDstribution' : "js/template/businessAnalyst/sourDstribution/sourDstribution.js", //客源分布
+	'business_analyst_customerVolume' : "js/template/businessAnalyst/customerVolume/customerVolume.js", //客户客量
+	'business_analyst_employeePerfor' : "js/template/businessAnalyst/employeePerfor/employeePerfor.js", //员工业绩 
+	'business_analyst_tourguidePerfor' : "js/template/businessAnalyst/tourguidePerfor/tourguidePerfor.js" //导游业绩
+	//---------------------------------------------------------------------------------------------------------------
 };
 
 function listMenu(menuTemplate){
@@ -663,14 +669,14 @@ function listMenu(menuTemplate){
 				});
 
 				//绑定景区菜单功能
-				$("#sidebar .nav-list .resource_scenic").click(function(){
+				/*$("#sidebar .nav-list .resource_scenic").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/scenic/scenic.js",function(scenic){
 						scenic.listScenic(0,"",1);
 					});
-				});
+				});*/
 				//绑定保险菜单功能
 				/*$("#sidebar .nav-list .resource_insurance").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
