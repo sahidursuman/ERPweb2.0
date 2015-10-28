@@ -499,7 +499,7 @@ define(function(require, exports) {
 			$("#"+tab+" .touristGroupMainForm .btn-touristGroup-addCost2").click(function(){
 				var html = "<tr>"+
 					"<td><span name=\"addOrReduceSelect\" value=\"0\">其他费用</span></td>"+
-					"<td><input  name=\"describeInfo\" type=\"text\" class=\"col-sm-12  no-padding-right\" /></td>"+
+					"<td><input  name=\"describeInfo\" type=\"text\" class=\"  no-padding-right\" /></td>"+
 					"<td><input  name=\"count\" type=\"text\" class=\"col-sm-11  no-padding-right costCount\" style=\"float:right;\" /></td>"+
 					"<td><input  name=\"price\" type=\"text\" class=\"col-sm-11  no-padding-right costPrice\" style=\"float:right;\" /></td>"+
 					"<td><a class=\"cursor addCost-delete\">删除</a></td>"+
@@ -778,7 +778,7 @@ define(function(require, exports) {
 				"</tr>"*/
 				"<tr>"+
 				"<td><span name=\"addOrReduceSelect\" value=\"0\">其他费用</span></td>"+
-				"<td><input  name=\"describeInfo\" type=\"text\" class=\"col-sm-12  no-padding-right\" /></td>"+
+				"<td><input  name=\"describeInfo\" type=\"text\" class=\"  no-padding-right\" /></td>"+
 				"<td><input  name=\"count\" type=\"text\" class=\"col-sm-11  no-padding-right costCount\" style=\"float:right;\" /></td>"+
 				"<td><input  name=\"price\" type=\"text\" class=\"col-sm-11  no-padding-right costPrice\" style=\"float:right;\" /></td>"+
 				"<td><a class=\"cursor addCost-delete\">删除</a></td>"+
