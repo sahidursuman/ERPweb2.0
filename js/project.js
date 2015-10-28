@@ -121,6 +121,8 @@ function addTab(tabId,tabName,html){
 	else{
 		$("#tabContent").append("<div id=\"tab-"+tabId+"-content\" class=\"tab-pane tab-pane-menu active\"></div>");
 	}
+
+	html = filterUnAuth(html);
 	$("#tab-"+tabId+"-content").html(html);
 }
 function closeTab(tabId){
@@ -157,6 +159,25 @@ function closeTab(tabId){
 	}
 	$("#tabList").css("marginLeft",marginLeft);
 }
+
+//权限过滤
+function filterUnAuth(obj) {
+	if (!obj || !IndexData.userInfo || !IndexData.userInfo.listUserFunctionShip) return '';
+
+	var functionList = IndexData.userInfo.listUserFunctionShip;
+	var $obj = $(obj);
+	$obj.find(".R-right").each(function(){
+		var right = $(this).data("right");
+		if(right){
+			var index = functionList.indexOf(right);
+			if(index < 0){
+				$(this).remove();
+			}
+		}
+	});
+	return $obj;
+}
+
 function openLoadingLayer(){
 	var globalLoadingLayer = layer.open({
 		zIndex:1028,
@@ -562,13 +583,8 @@ var modalScripts = {
 	'resource_shop': 'js/template/resource/shop/shop.js',
 	'resource_insurance': "js/template/resource/insurance/insurance.js",
 	'resource_scenic' : "js/template/resource/scenic/scenic.js",
-	//-------------------------------------------业务分析模块---------------------------------------------------
-	'business_analyst_saleProduct' : "js/template/businessAnalyst/saleProduct/saleProduct.js",//产品销量
-	'business_analyst_sourDstribution' : "js/template/businessAnalyst/sourDstribution/sourDstribution.js", //客源分布
-	'business_analyst_customerVolume' : "js/template/businessAnalyst/customerVolume/customerVolume.js", //客户客量
-	'business_analyst_employeePerfor' : "js/template/businessAnalyst/employeePerfor/employeePerfor.js", //员工业绩 
-	'business_analyst_tourguidePerfor' : "js/template/businessAnalyst/tourguidePerfor/tourguidePerfor.js" //导游业绩
-	//---------------------------------------------------------------------------------------------------------------
+	'business_analyst_saleProduct' : "js/template/businessAnalyst/saleProduct/saleProduct.js",
+	'resource_busCompany':"js/template/resource/busCompany/busCompany.js",
 };
 
 function listMenu(menuTemplate){
@@ -596,14 +612,14 @@ function listMenu(menuTemplate){
 				// });
 
 				//绑定车队菜单功能
-				$("#sidebar .nav-list .resource_busCompany").click(function(){
+				/*$("#sidebar .nav-list .resource_busCompany").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/busCompany/busCompany.js",function(busCompany){
 						busCompany.listBusCompany(0,"",1);
 					});
-				});
+				});*/
 
 				// //绑定餐厅菜单功能
 				// $("#sidebar .nav-list .resource_restaurant").click(function(){
@@ -669,14 +685,14 @@ function listMenu(menuTemplate){
 				});
 
 				//绑定景区菜单功能
-				/*$("#sidebar .nav-list .resource_scenic").click(function(){
+				$("#sidebar .nav-list .resource_scenic").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/scenic/scenic.js",function(scenic){
 						scenic.listScenic(0,"",1);
 					});
-				});*/
+				});
 				//绑定保险菜单功能
 				/*$("#sidebar .nav-list .resource_insurance").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
