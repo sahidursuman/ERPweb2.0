@@ -557,6 +557,7 @@ function trim(str){
  */
 var modalScripts = {
 	'resource_guide': "js/template/resource/guide/guide.js",
+	'resource_busCompany':"js/template/resource/busCompany/busCompany.js"
 };
 
 function listMenu(menuTemplate){
@@ -583,7 +584,7 @@ function listMenu(menuTemplate){
 				// 	});
 				// });
 
-				//绑定车队菜单功能
+				/*//绑定车队菜单功能
 				$("#sidebar .nav-list .resource_busCompany").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
@@ -591,7 +592,7 @@ function listMenu(menuTemplate){
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/busCompany/busCompany.js",function(busCompany){
 						busCompany.listBusCompany(0,"",1);
 					});
-				});
+				});*/
 
 				//绑定餐厅菜单功能
 				$("#sidebar .nav-list .resource_restaurant").click(function(){
