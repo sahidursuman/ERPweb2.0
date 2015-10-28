@@ -1130,7 +1130,7 @@ function listMenu(menuTemplate){
 						collectDetail.listCollectDetail();
 					});
 				});
-				//绑定中转安排菜单功能
+				//绑定中转分段菜单功能
 				$("#sidebar .nav-list .resource_subsection").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
