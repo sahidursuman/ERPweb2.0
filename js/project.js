@@ -557,7 +557,10 @@ function trim(str){
  */
 var modalScripts = {
 	'resource_guide': "js/template/resource/guide/guide.js",
+	'resource_restaurant': "js/template/resource/restaurant/restaurant.js",
 	'resource_hotel': "js/template/resource/hotel/hotel.js",
+	'resource_shop': 'js/template/resource/shop/shop.js',
+	'resource_insurance': "js/template/resource/insurance/insurance.js",
 };
 
 function listMenu(menuTemplate){
@@ -594,15 +597,15 @@ function listMenu(menuTemplate){
 					});
 				});
 
-				//绑定餐厅菜单功能
-				$("#sidebar .nav-list .resource_restaurant").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/resource/restaurant/restaurant.js",function(restaurant){
-						restaurant.listRestaurant(0,"",1);
-					});
-				});
+				// //绑定餐厅菜单功能
+				// $("#sidebar .nav-list .resource_restaurant").click(function(){
+				// 	$("#sidebar .nav-list li").removeClass("active");
+				// 	$(this).addClass("active");
+				// 	$(this).parent().parent().addClass("active");
+				// 	seajs.use("" + ASSETS_ROOT +"js/template/resource/restaurant/restaurant.js",function(restaurant){
+				// 		restaurant.listRestaurant(0,"",1);
+				// 	});
+				// });
 				//绑定酒店菜单功能
 				/*$("#sidebar .nav-list .resource_hotel").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
@@ -635,15 +638,15 @@ function listMenu(menuTemplate){
 					$("#main-container")[0].index = 0;
 				});
 
-				//绑定商家管理功能
-				$("#sidebar .nav-list .resource_shop").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/resource/shop/shop.js",function(shop){
-						shop.listShop(0,"",1);
-					});
-				});
+				// //绑定商家管理功能
+				// $("#sidebar .nav-list .resource_shop").click(function(){
+				// 	$("#sidebar .nav-list li").removeClass("active");
+				// 	$(this).addClass("active");
+				// 	$(this).parent().parent().addClass("active");
+				// 	seajs.use("" + ASSETS_ROOT +"js/template/resource/shop/shop.js",function(shop){
+				// 		shop.listShop(0,"",1);
+				// 	});
+				// });
 
 
 				//绑定线路模板菜单功能
@@ -667,14 +670,14 @@ function listMenu(menuTemplate){
 					});
 				});
 				//绑定保险菜单功能
-				$("#sidebar .nav-list .resource_insurance").click(function(){
+				/*$("#sidebar .nav-list .resource_insurance").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/insurance/insurance.js",function(insurance){
 						insurance.listInsurance(0,"",1);
 					});
-				});
+				});*/
 				//绑定自费项目菜单功能
 				$("#sidebar .nav-list .resource_selfpay").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
