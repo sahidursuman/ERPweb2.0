@@ -1,4 +1,4 @@
-<div class="col-xs-12 addRestaurantContainer globalAdd">
+<div class="col-xs-12 globalAdd T-add-container">
 	<form class="form-horizontal restaurantMainForm formOneList" role="form" style="margin-top:10px" onsubmit="return false">
 		<div class=" ui-sortable-handle">
 				<h5 class="widget-title">
@@ -45,13 +45,13 @@
 					<div class="form-group guideInterval">
 						<label class="col-sm-2 control-label no-padding-right">餐厅所在省市:</label>
 						<div class="col-sm-8">
-							<select name="provinceId" style="margin-right:3px">
+							<select class="col-sm-2" name="provinceId" style="margin-right:3px">
 								<option selected="selected" value="">未选择</option>
 							</select>
-							<select name="cityId"  style="margin-right:3px">
+							<select class="col-sm-2" name="cityId"  style="margin-right:3px">
 								<option selected="selected" value="">未选择</option>
 							</select>
-							<select name="districtId" >
+							<select class="col-sm-2" name="districtId" >
 								<option selected="selected" value="">未选择</option>
 							</select>
 						</div>
@@ -90,7 +90,7 @@
 							<span class="badge badge-primary">2</span>
 							<label class="middle title-size">餐标列表</label>
 							<a href="javascript:void(0)" class="btn-restaurant-standard-add">
-								<button class="btn btn-sm btn-success btn-restaurant-add" style="margin-left: 20px">
+								<button class="btn btn-sm btn-success T-standard-add" style="margin-left: 20px">
 								<i class="ace-icon fa fa-plus"></i>
 								新增
 								</button>
@@ -119,7 +119,7 @@
 			</div>
 		</div>
 		<div class="space-10"></div>
-		<button class="btn btn-block btn-primary btn-submit-restaurant guideSubmit">
+		<button class="btn btn-block btn-primary T-saveAdd">
 			<i class="ace-icon fa fa-check"></i>
 			提交信息
 		</button>
