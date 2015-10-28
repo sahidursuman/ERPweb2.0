@@ -1,10 +1,10 @@
-<div class="search-area globalAdd">
-	<input name="ticket_name" class="col-xs-2 input-default-height guideInputList" value="{{searchParam.name}}" placeholder="请输入票务公司名称关键词"/>&nbsp;
-	<button class=" btn-sm  btn-ticket-search pull-left search-btn">
+<div class="search-area T-ticketList">
+	<input name="ticket_name" class="col-xs-2 input-default-height T-ticket-name guideInputList" value="{{searchParam.name}}" placeholder="请输入票务公司名称关键词"/>&nbsp;
+	<button class=" btn-sm  T-ticket-search pull-left search-btn">
 		<i class="ace-icon fa fa-search"></i>
 		搜索
 	</button>
-	<div class="btn-group btn-status" style="margin-left: 20px;">
+	<div class="btn-group T-select-ticket marginLeft-30">
 		<button data-value="{{searchParam.status}}" data-toggle="dropdown" class=" btn-sm  dropdown-toggle   block-up" aria-expanded="false">
 			<span>
 				{{if searchParam.status == ""}}
@@ -24,14 +24,12 @@
 			<li>
 				<a data-value="1" href="javascript:void(0)">已启用</a>
 			</li>
-
 			<li>
 				<a data-value="0" href="javascript:void(0)">已停用</a>
 			</li>
 		</ul>
 	</div>
-
-	<button class="btn btn-sm btn-success btn-ticket-add" style="margin-left: 20px">
+	<button class="btn btn-sm btn-success T-ticket-add marginLeft-30" >
 		<i class="ace-icon fa fa-plus"></i>
 		新增票务
 	</button>
@@ -60,14 +58,15 @@
 				</tr>
 			</thead>
 		
-			<tbody>
+			<tbody class="T-ticket-list">
 				{{each ticketList as ticket}}
-					<tr class="ticket-{{ticket.id}}">
+					<tr data-id="{{ticket.id}}">
 						<td>{{ticket.name}}</td>
 						<td>{{ticket.managerName}}</td>
 						<td>{{ticket.mobileNumber}}</td>
 						<td>{{ticket.telNumber}}</td>
-						<td>
+						<td class="T-ctrl-tip " title="{{ticket.remark}}">
+							<span style="height: 35px">
 							{{if ticket.province!=null}}
 								{{ticket.province.name}}
 							{{/if}}
@@ -77,6 +76,7 @@
 							{{if ticket.district!=null}}
 								-{{ticket.district.name}}
 							{{/if}}
+							</span>
 						</td>
 						<td>
 							{{if ticket.status == 0}}
@@ -89,13 +89,13 @@
 						</td>
 						<td>
 							<div class="hidden-sm hidden-xs btn-group">
-								<a data-entity-id="{{ticket.id}}" class="btn-ticket-view cursor ">
+								<a data-entity-id="{{ticket.id}}" class="T-ticket-view cursor T-action">
 									查看
 								</a><a href="" class="cursor"> |</a>
-								<a data-entity-id="{{ticket.id}}" class="btn-ticket-edit cursor ">
+								<a data-entity-id="{{ticket.id}}" class="T-ticket-edit cursor T-action">
 									编辑
 								</a><a href="" class="cursor"> |</a>
-								<a data-entity-id="{{ticket.id}}" class="btn-ticket-delete cursor">
+								<a data-entity-id="{{ticket.id}}" class="T-ticket-delete cursor T-action">
 									删除
 								</a>
 							</div>
@@ -137,25 +137,10 @@
 		</table>
 		<div class="row pageMode">
 			<div class="col-xs-6">
-				<div class="dataTables_info" id="dynamic-table_info" role="status" aria-live="polite">共计 {{recordSize}} 条记录</div>
+				<small>共计 {{recordSize}} 条记录</small>
 			</div>
 			<div class="col-xs-6">
-				<div class="dataTables_paginate paging_simple_numbers" id="dynamic-table_paginate">
-					<ul class="pagination">
-						<li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="first" href="javascript:void(0)">首页</a></li>
-						<li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="previous"href="javascript:void(0)">上一页</a></li>
-						<li class="paginate_button" aria-controls="dynamic-table" tabindex="0">
-							<a href="javascript:void(0)">
-								{{if totalPage == 0}}
-									0/0
-								{{else}}
-									{{pageNo+1}}/{{totalPage}}
-								{{/if}}
-							</a>
-						</li>
-						<li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="next"  href="javascript:void(0)">下一页</a></li>
-						<li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="last" href="javascript:void(0)">尾页</a></li>
-					</ul>
+				<div class="dataTables_paginate paging_simple_numbers T-pagenation">
 				</div>
 			</div>
 		</div>
