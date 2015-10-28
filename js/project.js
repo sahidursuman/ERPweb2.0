@@ -561,6 +561,8 @@ var modalScripts = {
 	'resource_hotel': "js/template/resource/hotel/hotel.js",
 	'resource_shop': 'js/template/resource/shop/shop.js',
 	'resource_insurance': "js/template/resource/insurance/insurance.js",
+	'resource_scenic' : "js/template/resource/scenic/scenic.js",
+	'business_analyst_saleProduct' : "js/template/businessAnalyst/saleProduct/saleProduct.js"
 	'resource_busCompany':"js/template/resource/busCompany/busCompany.js",
 };
 
@@ -588,8 +590,8 @@ function listMenu(menuTemplate){
 				// 	});
 				// });
 
-				/*//绑定车队菜单功能
-				$("#sidebar .nav-list .resource_busCompany").click(function(){
+				//绑定车队菜单功能
+				/*$("#sidebar .nav-list .resource_busCompany").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
