@@ -77,7 +77,7 @@
             </thead>
             <tbody>
             {{each shopList as shop index}}
-            <tr data-entity-id="{{shop.id}}" data-entity-isConfirmAccount="{{shop.isConfirmAccount}}" data-entity-startTime="{{shop.consumeStartTime}}">
+            <tr data-entity-id="{{shop.id}}" data-entity-isConfirmAccount="{{shop.isConfirmAccount}}" data-entity-startTime="{{shop.consumeStartTime}}" data-entity-rebateMoney="{{shop.rebateMoney}}" data-entity-billRemark="{{shop.billRemark}}">
                 <td>{{index+1}}</td>
                 <td class="cost-detail" style="color: rgb(102,159,199)"> {{shop.tripNumber}},{{shop.lineProductName}},{{shop.guideName}}</td>
                 <td>{{if shop.consumeStartTime == null || shop.consumeStartTime == ""}}-{{else}}{{shop.consumeStartTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
