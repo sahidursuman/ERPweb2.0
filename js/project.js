@@ -556,7 +556,10 @@ function trim(str){
  * 定义模块绑定关系
  */
 var modalScripts = {
-	'resource_guide': "js/template/resource/guide/guide.js",
+	'resource_guide' : "js/template/resource/guide/guide.js",
+	'resource_scenic' : "js/template/resource/scenic/scenic.js",
+	'business_analyst' : "js/template/businessAnalyst/saleProduct/saleProduct.js"
+
 };
 
 function listMenu(menuTemplate){
@@ -657,14 +660,14 @@ function listMenu(menuTemplate){
 				});
 
 				//绑定景区菜单功能
-				$("#sidebar .nav-list .resource_scenic").click(function(){
+				/*$("#sidebar .nav-list .resource_scenic").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/scenic/scenic.js",function(scenic){
 						scenic.listScenic(0,"",1);
 					});
-				});
+				});*/
 				//绑定保险菜单功能
 				$("#sidebar .nav-list .resource_insurance").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
