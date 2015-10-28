@@ -558,7 +558,7 @@ function trim(str){
 var modalScripts = {
 	'resource_guide' : "js/template/resource/guide/guide.js",
 	'resource_scenic' : "js/template/resource/scenic/scenic.js",
-	'business_analyst' : "js/template/businessAnalyst/saleProduct/saleProduct.js"
+	'business_analyst_saleProduct' : "js/template/businessAnalyst/saleProduct/saleProduct.js"
 
 };
 
