@@ -151,16 +151,19 @@
 						{{/if}}
 					</td>
 					<td style="vertical-align:middle;width:200px" {{if tripPlan.tripPlanDetails.length > 1}}rowspan="{{tripPlan.tripPlanDetails.length}}"{{/if}}>
-						<a data-entiy-id="{{tripPlan.id}}" class="cursor btn-tripPlan-send" title="通知">
+						<a data-entiy-id="{{tripPlan.id}}" class="cursor btn-tripPlan-send R-right" data-right="1140010" title="通知">
 							通知
-						</a><a href="" class="cursor"> |</a>
+							<label style="padding-left:10px;">|</label>
+						</a>
 						<a data-entiy-id="{{tripPlan.id}}" class="cursor btn-tripPlan-view" title="查看">
 							查看
-						</a><a href="" class="cursor"> |</a>
-						<a data-entiy-id="{{tripPlan.id}}" billStatus="{{tripPlan.billStatus}}" class="cursor btn-tripPlan-plan" title="安排">
+						</a>
+						<a data-entiy-id="{{tripPlan.id}}" billStatus="{{tripPlan.billStatus}}" class="cursor btn-tripPlan-plan R-right" data-right="1140007" title="安排">
+							<label class="padding-right20">|</label>
 							安排
-						</a><a href="" class="cursor"> |</a>
-                        <a data-entity-id="{{tripPlan.id}}" title="导出安排" class="cursor btn-tripPlan-export">
+						</a>
+                        <a data-entity-id="{{tripPlan.id}}" title="导出安排" class="cursor btn-tripPlan-export R-right" data-right="1140008">
+							<label class="padding-right20">|</label>
 							导出
 						</a>
 					</td>

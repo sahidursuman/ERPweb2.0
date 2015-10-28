@@ -88,6 +88,7 @@ define(function(require, exports) {
 					var result = showDialog(data);
 					if(result){
 						var html = listTemplate(data);
+						html = filterUnAuth(html);
 						$("#"+tabId+" .arrangeTouristMain .arrangeTouristList").html(html);
 						$("#"+tabId+" .arrangeTouristMain .date-picker").datepicker({
 							autoclose: true,
