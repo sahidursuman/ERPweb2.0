@@ -562,7 +562,7 @@ var modalScripts = {
 	'resource_shop': 'js/template/resource/shop/shop.js',
 	'resource_insurance': "js/template/resource/insurance/insurance.js",
 	'resource_scenic' : "js/template/resource/scenic/scenic.js",
-	'business_analyst_saleProduct' : "js/template/businessAnalyst/saleProduct/saleProduct.js"
+	'business_analyst_saleProduct' : "js/template/businessAnalyst/saleProduct/saleProduct.js",
 	'resource_busCompany':"js/template/resource/busCompany/busCompany.js",
 };
 
