@@ -4,24 +4,32 @@ define(function(require, exports) {
 	var listTemplate = require("./view/list");
 	var addTemplate = require("./view/add");
 	var viewTemplate = require("./view/view");
-	
-
 	var tabId = "tab-"+menuKey+"-content";
 	
 	var tripPlan = {
-		searchData : {},
+		searchData : {
+			tripId:"",
+			tripNumber : "",
+			startTime : "",
+			guideId:"",
+			realname : "",
+			busId:"",
+			licenseNumber : "",
+			status : ""
+		},
 		edited : {},
+		autocompleteDate : {},
 		isEdited : function(editedType){
 			if(!!tripPlan.edited[editedType] && tripPlan.edited[editedType] != ""){
 				return true;
 			}
 			return false;
 		},
-		listTripPlan : function(page, tripNumber, startTime, realname, licenseNumber,status){
+		listTripPlan : function(page,tripId,tripNumber,startTime,guideId,realname,busId,licenseNumber,status){
 			$.ajax({
 				url:""+APP_ROOT+"back/tripPlan.do?method=listTripPlan&token="+$.cookie("token")+"&menuKey=arrange_all&operation=view",
 				type:"POST",
-				data:"pageNo="+page+"&tripNumber="+encodeURIComponent(tripNumber)+"&startTime="+encodeURIComponent(startTime)+"&realname="+encodeURIComponent(realname)+"&licenseNumber="+encodeURIComponent(licenseNumber)+"&status="+encodeURIComponent(status)+"&sortType=auto&tripPlan=arrange",
+				data:"pageNo="+page+"&tripId="+encodeURIComponent(tripId)+"&tripNumber="+encodeURIComponent(tripNumber)+"&startTime="+encodeURIComponent(startTime)+"&guideId="+encodeURIComponent(guideId)+"&guideName="+encodeURIComponent(realname)+"&busId="+encodeURIComponent(busId)+"&busLicenseNumber="+encodeURIComponent(licenseNumber)+"&status="+encodeURIComponent(status)+"&sortType=auto&tripPlan=arrange",
 				dataType:"json",
 				beforeSend:function(){
 					globalLoadingLayer = layer.open({  
@@ -37,6 +45,7 @@ define(function(require, exports) {
 						var html = listTemplate(data);
 						addTab(menuKey,"发团安排管理",html);
 						tripPlan.initList(data);
+						tripPlan.getQueryTerms();
 					}	
 				}
 			});
@@ -44,9 +53,12 @@ define(function(require, exports) {
 		initList : function(data){
 			var search = $("#"+tabId+" .search-tripPlanContainer");
 			tripPlan.searchData = {
+				tripId : search.find("input[name=tripChooseId]").val(),
 				tripNumber : search.find("input[name=tripNumber]").val(),
 				startTime : search.find("input[name=startTime]").val(),
+				guideId: search.find("input[name=guideChooseId]").val(),
 				realname : search.find("input[name=realname]").val(),
+				busId : search.find("input[name=busChooseId]").val(),
 				licenseNumber : search.find("input[name=licenseNumber]").val(),
 				status : search.find("[name=status]").attr("data-value")
 			}
@@ -56,13 +68,16 @@ define(function(require, exports) {
 				$(this).parent().parent().parent().find("span").text($(this).text());
 				
 				tripPlan.searchData = {
+					tripId : search.find("input[name=tripChooseId]").val(),
 					tripNumber : search.find("input[name=tripNumber]").val(),
 					startTime : search.find("input[name=startTime]").val(),
+					guideId: search.find("input[name=guideChooseId]").val(),
 					realname : search.find("input[name=realname]").val(),
+					busId : search.find("input[name=busChooseId]").val(),
 					licenseNumber : search.find("input[name=licenseNumber]").val(),
 					status : search.find("[name=status]").attr("data-value")
 				}
-				tripPlan.listTripPlan(0, tripPlan.searchData.tripNumber, tripPlan.searchData.startTime, tripPlan.searchData.realname, tripPlan.searchData.licenseNumber,tripPlan.searchData.status);
+				tripPlan.listTripPlan(0,tripPlan.searchData.tripId, tripPlan.searchData.tripNumber, tripPlan.searchData.startTime,tripPlan.searchData.guideId, tripPlan.searchData.realname,tripPlan.searchData.busId, tripPlan.searchData.licenseNumber,tripPlan.searchData.status);
 			});
 			//搜索
 			$("#"+tabId+" .btn-tripPlan-search").on("click", function(){
@@ -73,12 +88,12 @@ define(function(require, exports) {
 					licenseNumber : search.find("input[name=licenseNumber]").val(),
 					status : search.find("[name=status]").attr("data-value")
 				}
-				tripPlan.listTripPlan(0, tripPlan.searchData.tripNumber, tripPlan.searchData.startTime, tripPlan.searchData.realname, tripPlan.searchData.licenseNumber,tripPlan.searchData.status);
+				tripPlan.listTripPlan(0, tripPlan.searchData.tripId, tripPlan.searchData.tripNumber, tripPlan.searchData.startTime,tripPlan.searchData.guideId, tripPlan.searchData.realname,tripPlan.searchData.busId, tripPlan.searchData.licenseNumber,tripPlan.searchData.status);
 			});
 			//分页--首页按钮事件
 			$("#"+tabId+" .pageMode a.first").click(function(){
 				if(data.pageNo == 0 || data.totalPage == 0)return;
-				tripPlan.listTripPlan(0, tripPlan.searchData.tripNumber, tripPlan.searchData.startTime, tripPlan.searchData.realname, tripPlan.searchData.licenseNumber,tripPlan.searchData.status);
+				tripPlan.listTripPlan(0,tripPlan.searchData.tripId, tripPlan.searchData.tripNumber, tripPlan.searchData.startTime,tripPlan.searchData.guideId, tripPlan.searchData.realname,tripPlan.searchData.busId, tripPlan.searchData.licenseNumber,tripPlan.searchData.status);
 			});
 			
 			//分页--上一页事件
@@ -89,7 +104,7 @@ define(function(require, exports) {
 					previous = 0;
 					return false;
 				}
-				tripPlan.listTripPlan(previous, tripPlan.searchData.tripNumber, tripPlan.searchData.startTime, tripPlan.searchData.realname, tripPlan.searchData.licenseNumber,tripPlan.searchData.status);
+				tripPlan.listTripPlan(previous,tripPlan.searchData.tripId, tripPlan.searchData.tripNumber, tripPlan.searchData.startTime,tripPlan.searchData.guideId, tripPlan.searchData.realname,tripPlan.searchData.busId, tripPlan.searchData.licenseNumber,tripPlan.searchData.status);
 			});
 			
 			//分页--下一页事件
@@ -101,22 +116,28 @@ define(function(require, exports) {
 				if(data.pageNo == data.totalPage-1){
 					next = data.pageNo;
 				}
-				tripPlan.listTripPlan(next, tripPlan.searchData.tripNumber, tripPlan.searchData.startTime, tripPlan.searchData.realname, tripPlan.searchData.licenseNumber,tripPlan.searchData.status);
+				tripPlan.listTripPlan(next,tripPlan.searchData.tripId, tripPlan.searchData.tripNumber, tripPlan.searchData.startTime,tripPlan.searchData.guideId, tripPlan.searchData.realname,tripPlan.searchData.busId, tripPlan.searchData.licenseNumber,tripPlan.searchData.status);
 			});
 
 			//分页--尾页事件
 			$("#"+tabId+" .pageMode a.last").click(function(){
 				if(data.pageNo == data.totalPage-1 || data.totalPage == 0)return;
-				tripPlan.listTripPlan(data.totalPage-1, tripPlan.searchData.tripNumber, tripPlan.searchData.startTime, tripPlan.searchData.realname, tripPlan.searchData.licenseNumber,tripPlan.searchData.status);
+				tripPlan.listTripPlan(data.totalPage-1,tripPlan.searchData.tripId, tripPlan.searchData.tripNumber, tripPlan.searchData.startTime,tripPlan.searchData.guideId, tripPlan.searchData.realname,tripPlan.searchData.busId, tripPlan.searchData.licenseNumber,tripPlan.searchData.status);
 			});
-			
+
+			//autocomplete
+			tripPlan.tripNumberListChoose($("#tab-"+menuKey+"-content"));
+            tripPlan.guideListChoose($("#tab-"+menuKey+"-content"));
+			tripPlan.busListChoose($("#tab-"+menuKey+"-content"));
+
+
 			$("#"+tabId+" .date-picker").datepicker({
 				autoclose: true,
 				todayHighlight: true,
 				format: 'yyyy-mm-dd',
 				language: 'zh-CN'
 			});
-			
+
 			$("#" +tabId+ " .tripPlanViewList .btn-tripPlan-view").on("click", tripPlan.viewTripPlan)
 			$("#"+tabId+" .tripPlanViewList .btn-tripPlan-plan").on("click", function(){
 				var billStatus = $(this).attr("billStatus");
@@ -342,7 +363,7 @@ define(function(require, exports) {
 				html = '<tr><td><input type="text" maxlength="32" name="insuranceName" class="col-sm-12 chooseInsurance bind-change"/><input type="hidden" name="insuranceId"/></td>' +
 						'<td><input type="text" name="type" maxlength="32" class="col-sm-12"/></td>' +
 						'<td><input type="text" name="price" maxlength="6" class="col-sm-12"/></td>' +
-						'<td><input type="text" name="memberCount" class="col-sm-12" maxlength="3"/></td>' +
+						'<td><input type="text" name="memberCount" class="col-sm-12" maxlength="8"/></td>' +
 						'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12"/></td>' +
 						'<td><input type="text" name="payedMoney" class="col-sm-12" maxlength="9"/></td>' +
 						'<td><select name="payType" class="col-sm-12 no-padding"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>' +		
@@ -406,7 +427,7 @@ define(function(require, exports) {
 			'<td><input type="text" name="mobileNumber" readonly="readonly" class="col-sm-12"/></td>' +
 			'<td><select name="type" class="col-sm-12 restauranType" style="width:80px;"><option value="早餐">早餐</option><option value="午餐">午餐</option><option value="晚餐">晚餐</option></select></td>' +
 			'<td><input type="text" name="price" value="" class="col-sm-12 typeNameChoose"/><input type="hidden" name="restaurantStandardId" value=""/></td>' +
-			'<td><input name="memberCount" type="text" class="col-sm-12" style="width: 60px;" maxlength="4"/></td>' +
+			'<td><input name="memberCount" type="text" class="col-sm-12" style="width: 60px;" maxlength="8"/></td>' +
 			'<td><input name="reduceMoney" type="text" class="col-sm-12" style="width: 60px;" maxlength="9"/></td>' +
 			'<td><input name="needPayMoney" readonly="readonly" type="text" class="col-sm-12" style="width: 60px;"/></td>' +
 			'<td><input name="payedMoney" type="text" class="col-sm-12" style="width: 60px;" maxlength="9"/></td>' +
@@ -436,7 +457,7 @@ define(function(require, exports) {
 			'<td><input type="text" class="col-sm-12" readonly="readonly" name="mobileNumber"/></td>' +
 			'<td><input type="text" class="col-sm-12 chooseHotelRoom" name="hotelRoom"/><input type="hidden" name="hotelRoomId"></td>' +
 			'<td><input type="text" class="col-sm-12" name="fee" style="width: 60px;" maxlength="6"/></td>' +
-			'<td><input type="text" class="col-sm-12" name="memberCount" style="width: 60px;" maxlength="3"/></td>' +
+			'<td><input type="text" class="col-sm-12" name="memberCount" style="width: 60px;" maxlength="6"/></td>' +
 			'<td><input type="text" class="col-sm-12" name="reduceMoney" style="width: 60px;" maxlength="9"/></td>' +
 			'<td><input type="text" class="col-sm-12" name="needPayMoney" readonly="readonly" style="width: 60px;"/></td>' +
 			'<td><input type="text" class="col-sm-12" name="payedMoney" style="width: 60px;" maxlength="9"/></td>' +
@@ -466,7 +487,7 @@ define(function(require, exports) {
 			'<td><input type="text" name="tourDuration" class="col-sm-12" value="" style="width: 60px;" maxlength="3"> </td>' +
 			'<td><input type="text" name="orderNumber" class="col-sm-12" value="" maxlength="20"/></td>'+
 			'<td><input type="text" name="fee" class="col-sm-12" style="width: 60px;" maxlength="6"/></td>' +
-			'<td><input type="text" name="memberCount" class="col-sm-12" style="width: 60px;" maxlength="3"/></td>' +
+			'<td><input type="text" name="memberCount" class="col-sm-12" style="width: 60px;" maxlength="8"/></td>' +
 			'<td><input type="text" name="reduceMoney" class="col-sm-12" style="width: 60px;" maxlength="9"/></td>' +
 			'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12" style="width: 60px;"/></td>' +
 			'<td><input type="text" name="payedMoney" class="col-sm-12" style="width: 60px;" maxlength="9"/></td>' +
@@ -518,7 +539,7 @@ define(function(require, exports) {
 			'<td><input type="text" readonly="readonly" name="mobileNumber" class="col-sm-12"/></td>' +
 			'<td><input type="text" name="oldPrice" class="col-sm-12" maxlength="6"/></td>' +
 			'<td><input type="text" name="price" class="col-sm-12" maxlength="6"/></td>' +
-			'<td><input type="text" name="memberCount" class="col-sm-12" maxlength="3"/></td>' +
+			'<td><input type="text" name="memberCount" class="col-sm-12" maxlength="8"/></td>' +
 			'<td><input type="text" name="reduceMoney" class="col-sm-12" maxlength="9"/></td>' +
 			'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12" maxlength="9"/></td>' +
 			'<td><input type="text" name="payedMoney" class="col-sm-12" maxlength="9"/></td>' +
@@ -549,7 +570,7 @@ define(function(require, exports) {
 			'<td><input type="text" name="startTime" class="col-sm-13 col-xs-12 date-time-picker"/></td>' +
 			'<td><input type="text" name="seatLevel" class="col-sm-12" maxlength="32"/></td>' +
 			'<td><input type="text" name="fee" class="col-sm-12" maxlength="6"/></td>' +
-			'<td><input type="text" name="memberCount" class="col-sm-12" maxlength="3"/></td>' +
+			'<td><input type="text" name="memberCount" class="col-sm-12" maxlength="8"/></td>' +
 			'<td><input type="text" name="reduceMoney" class="col-sm-12" maxlength="9"/></td>' +
 			'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12"/></td>' +
 			'<td><input type="text" name="payedMoney" class="col-sm-12" maxlength="9"/></td>' +
@@ -577,7 +598,7 @@ define(function(require, exports) {
 			'<td><input type="text" name="managerName" maxlength="32" class="col-sm-12"/></td>' +
 			'<td><input type="text" name="mobileNumber" class="col-sm-12" maxlength="11"/></td>' +
 			'<td><input type="text" name="fee" class="col-sm-12" maxlength="6"/></td>' +
-			'<td><input type="text" name="memberCount" class="col-sm-12" maxlength="3"/></td>' +
+			'<td><input type="text" name="memberCount" class="col-sm-12" maxlength="8"/></td>' +
 			'<td><input type="text" name="reduceMoney" class="col-sm-12" maxlength="9"/></td>' +
 			'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12"/></td>' +
 			'<td><input type="text" name="payedMoney" class="col-sm-12" maxlength="9"/></td>' +
@@ -755,6 +776,96 @@ define(function(require, exports) {
                 });
 			});
 		},
+
+
+		//团号模糊查询
+		tripNumberListChoose:function($obj){
+			var tripNumberListChoose = $obj.find(".T-tripChoose");
+			tripNumberListChoose.autocomplete({
+				minLength:0,
+				change:function(event,ui){
+					if(ui.item == null){
+						$(this).parent().parent().find("input[name=tripChooseId]").val("");
+					}
+				},
+				select:function(event,ui){
+					$(this).blur();
+					var obj = this;
+					$(obj).parent().parent().find("input[name=tripChooseId]").val(ui.item.id).trigger('change');
+				}
+			}).click(function(){
+				var obj = this;
+				var listObj = tripPlan.autocompleteDate.tripNumberList;
+				if(listObj !=null && listObj.length>0){
+					for(var i=0;i<listObj.length;i++){
+						listObj[i].value = listObj[i].tripNumber;
+					}
+				}
+				$(obj).autocomplete('option','source', listObj);
+				$(obj).autocomplete('search', '');
+			})
+		},
+
+		//导游模糊查询
+		guideListChoose:function($obj){
+			var guideListChoose = $obj.find(".T-guideChoose");
+			guideListChoose.autocomplete({
+				minLength:0,
+				change:function(event,ui){
+					if(ui.item == null){
+						$(this).parent().parent().find("input[name=guideChooseId]").val("");
+					}
+				},
+				select:function(event,ui){
+					$(this).blur();
+					var obj = this;
+					$(obj).parent().parent().find("input[name=guideChooseId]").val(ui.item.id).trigger('change');
+				}
+
+			}).click(function(){
+				var obj = this;
+				var listGuideObj = tripPlan.autocompleteDate.guideList;
+				console.info(listGuideObj);
+				if(listGuideObj !=null && listGuideObj.length>0){
+					for(var i=0;i<listGuideObj.length;i++){
+						listGuideObj[i].value = listGuideObj[i].realname;
+					}
+				}
+				$(obj).autocomplete('option','source',listGuideObj);
+				$(obj).autocomplete('search', '');
+			});
+		},
+
+		//	车牌号模糊查询
+		busListChoose:function($obj){
+			var busListChoose = $obj.find(".T-busChoose");
+			busListChoose.autocomplete({
+				minLength:0,
+				change:function(event,ui){
+					if(ui.item == null){
+						$(this).parent().parent().find("input[name=busChooseId]").val("");
+					}
+				},
+				select:function(event,ui){
+					$(this).blur();
+					var obj = this;
+					$(obj).parent().parent().find("input[name=busChooseId]").val(ui.item.id).trigger('change');
+				}
+
+			}).click(function(){
+				var obj = this;
+				var listBusObj = tripPlan.autocompleteDate.busList;
+				console.info(listBusObj);
+				if(listBusObj !=null && listBusObj.length>0){
+					for(var i=0;i<listBusObj.length;i++){
+						listBusObj[i].value = listBusObj[i].licenseNumber;
+					}
+				}
+				$(obj).autocomplete('option','source',listBusObj);
+				$(obj).autocomplete('search', '');
+			});
+		},
+
 		bindBusCompanyChoose : function(){
 			var busCompanyChoose = $("#tripPlan_addPlan_bus .table-tripPlan-container .chooseBusCompany");
 			busCompanyChoose.autocomplete({
@@ -883,7 +994,7 @@ define(function(require, exports) {
 			$(restauranTyp).off("change").on("change", function(){
 				var parents = $(this).parent().parent();
 				parents.find("input[name=typeName]").val("");
-				parents.find("input[name=restaurantStandardId]").val("");
+				//parents.find("input[name=restaurantStandardId]").val("");
 				parents.find("input[name=fee]").val("");
 			});
 			var restaurantChoose = $("#tripPlan_addPlan_restaurant .table-tripPlan-container .chooseRestaurant");
@@ -897,7 +1008,7 @@ define(function(require, exports) {
 						parents.find("input[name=managerName]").val("");
 						parents.find("input[name=mobileNumber]").val("");
 						parents.find("input[name=typeName]").val("");
-						parents.find("input[name=restaurantStandardId]").val("");
+						//parents.find("input[name=restaurantStandardId]").val("");
 					}
 				},
 				select:function(event,ui){
@@ -916,7 +1027,7 @@ define(function(require, exports) {
 								parents.find("input[name=mobileNumber]").val(restaurant.mobileNumber);
 								parents.find("input[name=managerName]").val(restaurant.managerName);
 								parents.find("input[name=typeName]").val("");
-								parents.find("input[name=restaurantStandardId]").val(""); 
+								//parents.find("input[name=restaurantStandardId]").val(""); 
 							}
 	                    }
 					});
@@ -947,9 +1058,9 @@ define(function(require, exports) {
 				minLength:0,
 				change:function(event,ui){
 					if(ui.item == null){
-						$(this).val("");
+						//$(this).val("");
 						var objParent = $(this).parent().parent();
-						objParent.find("input[name=restaurantStandardId]").val("");
+						//objParent.find("input[name=restaurantStandardId]").val("");
 						objParent.find("input[name=fee]").val("");
 					}
 				},
@@ -1427,9 +1538,9 @@ define(function(require, exports) {
 								thisParent.find("input[name=selfitemId]").val("");
 								thisParent.find("input[name=selfitem]").val("");
 								//thisParent.find("input[name=fee]").val(selfPayJson.prize);
-								
-								
-								
+
+
+
 							}
 	                    }
 	                });
@@ -1520,6 +1631,25 @@ define(function(require, exports) {
 				
 			})
 		},
+
+		getQueryTerms :function(){
+			$.ajax({
+				url:""+APP_ROOT+"back/tripPlan.do?method=getQueryTermsForArrange&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
+				dateType:"json",
+				type:"POST",
+				success:function(data){
+					var result = showDialog(data);
+					if(result){
+						tripPlan.autocompleteDate.tripNumberList = data.tripNumberList;
+						tripPlan.autocompleteDate.guideList = data.guideList	;
+						tripPlan.autocompleteDate.busList = data.busList;
+					}
+				}
+			})
+		},
+
+
+
 		bindTicketChoose : function(){
 			var ticketChoose = $("#tripPlan_addPlan_ticket .table-tripPlan-container .chooseTicket");
 			ticketChoose.autocomplete({

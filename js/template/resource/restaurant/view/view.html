@@ -51,7 +51,7 @@
 		</table>
 	</form>
 	<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
-		<table class="whereQ whereTwo">
+		<table class="whereQ whereTwo" style="width:1140px;">
 			<tr>
 				<td colspan="8" class="HeadManage" style="text-align: left">餐标列表</td>
 			</tr>
@@ -63,7 +63,7 @@
 			</tr>
 			{{each restaurant.restaurantStandardList as restaurantStandard}}
 			<tr>
-				<td class="">{{if restaurantStandard.type == '早餐'}}
+				<td>{{if restaurantStandard.type == '早餐'}}
 					早餐
 					{{else if restaurantStandard.type == '午餐'}}
 					午餐
@@ -71,8 +71,8 @@
 					晚餐
 					{{/if}}</td>
 				<td>{{restaurantStandard.price}}</td>
-				<td class="rangeTime">{{restaurantStandard.menuList}}</td>
-				<td class="">{{restaurantStandard.remark}}</td>
+				<td style="padding:10px;">{{restaurantStandard.menuList}}</td>
+				<td style="padding:10px;">{{restaurantStandard.remark}}</td>
 			</tr>
 			{{/each}}
 		</table> 

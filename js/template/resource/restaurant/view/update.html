@@ -1,4 +1,4 @@
-<div class="col-xs-12 updateRestaurantContainer globalAdd">
+<div class="col-xs-12 globalAdd T-update-container">
 	<form class="form-horizontal restaurantMainForm formOneList" role="form" style="margin-top:10px" onsubmit="return false">
 	
 		<input name="id" type="hidden" value="{{restaurant.id}}"/>
@@ -50,13 +50,13 @@
 					<div class="form-group guideInterval">
 						<label class="col-sm-2 control-label no-padding-right">餐厅所在省市:</label>
 						<div class="col-sm-8">
-							<select name="provinceId" style="margin-right:3px">
+							<select class="col-sm-2" name="provinceId" style="margin-right:3px">
 								<option selected="selected" value="">未选择</option>
 							</select>
-							<select name="cityId"  style="margin-right:3px">
+							<select class="col-sm-2" name="cityId"  style="margin-right:3px">
 								<option selected="selected" value="">未选择</option>
 							</select>
-							<select name="districtId" >
+							<select class="col-sm-2" name="districtId" >
 								<option selected="selected" value="">未选择</option>
 							</select>
 						</div>
@@ -95,7 +95,7 @@
 							<label class="middle title-size navInformation">餐标列表</label>
 
 							<a href="javascript:void(0)" class="btn-restaurant-standard-add">
-								<button class="btn btn-sm btn-success btn-restaurant-add" style="margin-left: 20px">
+								<button class="btn btn-sm btn-success T-standard-add" style="margin-left: 20px">
 								<i class="ace-icon fa fa-plus"></i>
 								新增
 								</button>
@@ -115,7 +115,7 @@
 								</thead>
 								<tbody>
 									{{each restaurant.restaurantStandardList as restaurantStandard}}
-										<tr data-entity-id="{{restaurantStandard.id}}">
+										<tr data-id="{{restaurantStandard.id}}">
 											<td>
 												<select name="type">
 													<option {{if restaurantStandard.type == '早餐'}} selected="selected" {{/if}} value="早餐">早餐</option>
@@ -134,7 +134,7 @@
 												<input name="remark" value="{{restaurantStandard.remark}}" maxlength="1000" class="col-sm-12" type="text">
 											</td>
 											<td style="width:90px">
-												<a data-entiy-id="{{restaurantStandard.id}}" class="btn-restaurant-standard-delete">删除</a>
+												<a class="T-standard-delete">删除</a>
 											</td>
 										</tr>
 									{{/each}}
@@ -146,7 +146,7 @@
 			</div>
 		</div>
 		<div class="space-10"></div>
-		<button class="btn btn-block btn-primary btn-submit-restaurant guideSubmit">
+		<button class="btn btn-block btn-primary T-saveUpdate">
 			<i class="ace-icon fa fa-check"></i>
 			提交信息
 		</button>

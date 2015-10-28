@@ -1067,7 +1067,7 @@ define(function(require, exports) {
 													var restaurantStandard = JSON.parse(data.restaurantStandard);
 													
 													objParent.find("input[name=menuList]").val(restaurantStandard.menuList);
-													objParent.find("input[name=remark]").val(restaurantStandard.remark);
+													
 												}
 						                    }
 										});
@@ -1731,7 +1731,7 @@ define(function(require, exports) {
 									thisParent.find("input[name=selfPayItemId]").val(ui.item.id).trigger('change');
 									thisParent.find("input[name=contractPrice]").val(selfPayRebate.price);
 									thisParent.find("input[name=marketPrice]").val(selfPayRebate.marketPrice);
-									thisParent.find("input[name=remark]").val(ui.item.remark);
+									//thisParent.find("input[name=remark]").val(ui.item.remark);
 								}
 		                    }
 		                });
