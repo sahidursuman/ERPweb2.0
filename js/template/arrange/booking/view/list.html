@@ -37,7 +37,7 @@
 					<i class="ace-icon fa fa-search"></i>
 					搜索
 				</button>
-				<button class="btn btn-sm btn-success btn-Booking-add" style="margin-left: 20px"> <i class="ace-icon fa fa-plus"></i> 新增项目代订</button>
+				<button class="btn btn-sm btn-success btn-Booking-add R-right" data-right="1170002" style="margin-left: 20px"> <i class="ace-icon fa fa-plus"></i> 新增项目代订</button>
 			</div>
 			<div style="clear:both;height:0px;line-height:0px;">
 
@@ -105,11 +105,13 @@
 
 						<a data-entity-id="{{booking.id}}" title="查看计划" class=" cursor btn-Booking-view">
 							查看
-						</a><a href="" class="cursor"> |</a>
-					    <a data-entity-id="{{booking.id}}" title="编辑计划" class=" cursor {{if booking.isConfirmAccount != 1}}btn-Booking-edit{{/if}}" {{if booking.isConfirmAccount == 1}} style="color: #bbb" {{/if}}>
+						</a>
+					    <a data-entity-id="{{booking.id}}" title="编辑计划" class=" cursor {{if booking.isConfirmAccount != 1}}btn-Booking-edit{{/if}} R-right" data-right="1170003" {{if booking.isConfirmAccount == 1}} style="color: #bbb" {{/if}}>
+							<label class="padding-right20">|</label>
 							编辑
-						</a><a href="" class="cursor"> |</a>
-						<a data-entity-id="{{booking.id}}" title="取消计划" class=" cursor {{if booking.isConfirmAccount != 1}}btn-Booking-cancel{{/if}}" {{if booking.isConfirmAccount == 1}} style="color: #bbb" {{/if}}>
+						</a>
+						<a data-entity-id="{{booking.id}}" title="取消计划" class=" cursor {{if booking.isConfirmAccount != 1}}btn-Booking-cancel{{/if}} R-right" data-right="1170004" {{if booking.isConfirmAccount == 1}} style="color: #bbb" {{/if}}>
+							<label class="padding-right20">|</label>
 							取消
 						</a>
 

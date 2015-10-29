@@ -12,7 +12,7 @@ define(function(require, exports) {
 	    addTemplate = require("./view/add"),
 	    updateTemplate = require("./view/update"),
 	    viewTemplate = require("./view/view"),
-	    tabId = "tab-"+menuKey+"-content"
+	    tabId = "tab-"+menuKey+"-content";
 	
 	/**
 	 * 定义导游资源对象
@@ -21,7 +21,7 @@ define(function(require, exports) {
 	var GuideResource = {
 		searchData: false,	
 		$tab: false,	
-		$searchArea: false,	
+		$searchArea: false
 	};
 
 	/**

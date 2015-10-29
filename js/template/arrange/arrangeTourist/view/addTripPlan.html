@@ -34,7 +34,7 @@
 									<div class="col-sm-2">
 										<input class="col-sm-12 bind-change" type="text" name="seatCount" id="" value="{{if addTripPlan.bus != null}}{{addTripPlan.bus.seatCount}}{{/if}}" />
 									</div>
-									<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>车辆品牌：</label>
+									<label class="col-sm-1 control-label no-padding-right">车辆品牌：</label>
 									<div class="col-sm-2">
 										<input class="col-sm-12 chooseBusCompany bind-change" type="text" name="needBusBrand" id="" value="{{if addTripPlan.bus != null}}{{addTripPlan.bus.brand}}{{/if}}" />
 										<input type="hidden" name="busBrandId" value="{{if addTripPlan.brand != null}}{{addTripPlan.brand.id}}{{/if}}" />
@@ -111,8 +111,6 @@
 				<input class="form-control col-sm-4 datetimepicker" type="text" name="executeTime" value="" />
 			</div>
         </div>
-
-        
 		<form class="form-horizontal" role="form" onsubmit="return false">
 			<div class="form-group">
 				<div class="col-xs-12 col-sm-12 widget-container-col">
