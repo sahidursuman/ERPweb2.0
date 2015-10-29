@@ -135,7 +135,7 @@ define(function(require, exports) {
 	/**
 	 * 新增保险公司
 	 */
-	insurance.addInsurance = function(){
+	insurance.addInsurance = function(fn){
 		var html = addTemplate();
 		insurance.$addLayer = layer.open({
 		    type: 1,
@@ -153,7 +153,7 @@ define(function(require, exports) {
 		    	KingServices.provinceCity($container);
 		    	//提交事件
 		    	$container.find(".T-btn-submit-insurance").on("click",function(){
-		    		insurance.saveInsurance($container,1);
+		    		insurance.saveInsurance($container,1,fn);
 		    	});
 		    }
 		})
@@ -273,7 +273,7 @@ define(function(require, exports) {
 	 * @param  {[type]} type       [type:1 新增  type:2 修改]
 	 * @return {[type]}            [description]
 	 */
-	insurance.saveInsurance = function($container,type){
+	insurance.saveInsurance = function($container,type,fn){
 		var method = "",operation = "",status = 0;
 		if (type == 1) {
 			method = "addInsurance";operation = "add";
@@ -285,7 +285,8 @@ define(function(require, exports) {
 		if($container.find(".T-insurance-status").prop("checked")){
 			status = 1;
 		}
-		var form = $container.find(".insuranceMainForm").serialize()+"&status="+status+"";
+		var form = $container.find(".insuranceMainForm").serialize()+"&status="+status+"",
+			formData = $container.find(".insuranceMainForm").serializeJson();
 		
 		$.ajax({
 			url:insurance.url(method,operation),
@@ -294,9 +295,15 @@ define(function(require, exports) {
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
+					data.insurance = JSON.parse(data.insurance);
+					formData.id = data.insurance.id;
 					if (type == 1) {layer.close(insurance.$addLayer)}else if(type == 2){layer.close(insurance.$updateLayer)}
 					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-						insurance.insuranceList(0,"","");
+						if (typeof fn === "function") {
+							fn(formData);
+						}else{
+							insurance.insuranceList(0,"","");
+						}
 					});
 				}
 			}
@@ -314,4 +321,5 @@ define(function(require, exports) {
 	};
 
 	exports.init = insurance.initModule;
+	exports.addInsurance = insurance.addInsurance;
 });

@@ -164,7 +164,7 @@ define(function(require, exports) {
 	/**
 	 * add shop 
 	 */
-	shop.addShop = function(){
+	shop.addShop = function(fn){
 		var html = addTemplate();
 		shopFormLayer = layer.open({
 		    type: 1,
@@ -174,7 +174,9 @@ define(function(require, exports) {
 		    zIndex:1028,
 		    content: html,
 			scrollbar: false,    // 推荐禁用浏览器外部滚动条
-		    success:shop.init_form_event
+		    success:function(){
+		    	shop.init_form_event("",fn);
+		    }
 		});
 	}
 
@@ -340,7 +342,7 @@ define(function(require, exports) {
 	 * @param  {int} type 0: 添加，1：修改
 	 * @return {[type]}      [description]
 	 */
-	shop.init_form_event = function(type){
+	shop.init_form_event = function(type,fn){
     	shop.$formContainer = $('.T-shop-dialog-container');
 
     	var $mainForm = shop.$formContainer.find('.T-shopMainForm'),	
@@ -395,6 +397,7 @@ define(function(require, exports) {
     		// 是否启用
     		var status = shop.$formContainer.find('.T-shop-status').prop('checked')? 1: 0,
     			form = shop.$formContainer.find(".T-shopMainForm").serialize()+"&status="+status+"",
+    			formData = shop.$formContainer.find(".T-shopMainForm").serializeJson(),
 	    		url = APP_ROOT+"back/shop.do?method=addShop&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=add",
 	    		// 政策列表数据封装
 	    		policyDataList = [];
@@ -432,11 +435,17 @@ define(function(require, exports) {
 				success:function(data){
 					var result = showDialog(data);
 					if(result){
+						data.shop = JSON.parse(data.shop);
+						formData.id = data.shop.id;
 						showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
 							if (type === 1) {
 								shop.listShop(shop.currentPage);
 							} else {
-								shop.listShop(0,"","");
+								if (typeof fn === "function") {
+									fn(formData);
+								}else{
+									shop.listShop(0,"","");
+								}
 							}
 
 							layer.close(shopFormLayer);
@@ -757,4 +766,5 @@ define(function(require, exports) {
 		return policyHtml.replace('$index', index);
 	}
 	exports.init = shop.initModule;
+	exports.addShop = shop.addShop;
 });
