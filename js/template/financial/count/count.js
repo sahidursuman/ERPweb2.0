@@ -15,6 +15,7 @@ define(function(require, exports) {
     var count = {
 		searchData : {
 			page : "",
+			id:"",
 			tripNumber : "",
 			lineProductId : "",
 			lineProductName : "",
@@ -25,6 +26,7 @@ define(function(require, exports) {
 			status : ""
 		},
 		edited : {},
+		autocompleteDate : {},
 		isEdited : function(editedType){
 			if(!!count.edited[editedType] && count.edited[editedType] != ""){
 				return true;
@@ -40,12 +42,13 @@ define(function(require, exports) {
 
             count.initCount('','','','','','','');
         },
-        initCount: function(tripNumber,lineProductId,lineProductName,guideId,guideName,startTime,endTime,status) {
+        initCount: function(id,tripNumber,lineProductId,lineProductName,guideId,guideName,startTime,endTime,status) {
             // init page
             $.ajax({
                 url: ""+APP_ROOT+"back/financialTripPlan.do?method=findFinancialListPageCount&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
                 type: 'get',
                 data: {
+					"id":id,
                     "tripNumber":tripNumber,
                     "lineProductId":lineProductId,
                     "lineProductName": lineProductName,
@@ -64,15 +67,17 @@ define(function(require, exports) {
                     var result = showDialog(data);
                     if(result){
                         addTab(menuKey, "按团统计", listHeaderTemplate(data));
+						//count.getQueryTerms();
 
                         // 按照搜索条件，初始化报表
-                        count.getlistCount(0, tripNumber,lineProductId,lineProductName,guideId,guideName,startTime,endTime,status);
+                        count.getlistCount(0,id, tripNumber,lineProductId,lineProductName,guideId,guideName,startTime,endTime,status);
                         // bind event
                         $('.btn-arrangeTourist-search').on('click', function(event) {
                             event.preventDefault();
                             /* Act on the event */
                             // 按照搜索条件，初始化报表
-                            var tripNumber = $('.financialCount .search-area').find('input[name=tripNumber]').val();
+							var id = $('.financialCount .search-area').find('input[name=tripNumber]').val();
+                            var tripNumber = $('.financialCount .search-area').find('input[name=chooseTripNumber]').val();
                             var lineProductId = $('.financialCount .search-area').find('input[name=lineProductId]').val();
                             var guideId = $('.financialCount .search-area').find('input[name=guideId]').val();
                             var endTime = $('.financialCount .search-area').find('input[name=entTime]').val();
@@ -80,7 +85,7 @@ define(function(require, exports) {
                             var status = $('.financialCount .search-area .btn-status').find('button').attr('data-value');
                             var lineProductName = $('.financialCount .search-area').find('input[name=chooseLineProductName]').val();
                             var guideName = $('.financialCount .search-area').find('input[name=chooseGuideRealName]').val();
-                            count.initCount(tripNumber,lineProductId,lineProductName,guideId,guideName,startTime,endTime,status);
+                            count.initCount(id,tripNumber,lineProductId,lineProductName,guideId,guideName,startTime,endTime,status);
                         });
                     }
                 }
@@ -89,12 +94,13 @@ define(function(require, exports) {
             
             // trigger base
         },
-        getlistCount:function(page,tripNumber,lineProductId,lineProductName,guideId,guideName,startTime,endTime,status){
+        getlistCount:function(page,id,tripNumber,lineProductId,lineProductName,guideId,guideName,startTime,endTime,status){
            $.ajax({
                 url:""+APP_ROOT+"back/financialTripPlan.do?method=listFinancialTripPlan&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
                 type:"POST",
                 data:{
                 	"pageNo":page,
+					"id":id,
                 	"tripNumber":tripNumber,
                 	"lineProductId":lineProductId,
                 	"lineProductName":lineProductName,
@@ -122,7 +128,7 @@ define(function(require, exports) {
                         $(".main-content .financialCount .clearBlur").blur(function(){
                         	var a = $(this).next().val();
                         	if(!isNaN(a)) {
-                        		$(this).val("");
+                        		//$(this).val("");
                         		$(this).next().val("");
                         	}
                         });
@@ -157,6 +163,9 @@ define(function(require, exports) {
                         $(".main-content .page-content .pageMode a.last").click(function(){
                             count.search(data.totalPage-1);
                         });
+
+
+
 
                         //给web报账绑定事件
                         $(".financialCount .btn-guide-account").click(function(){
@@ -201,20 +210,23 @@ define(function(require, exports) {
 //                        });
                        
                         count.buildDatePicker();
-                        count.bindTripChoose();
+                        //count.bindTripChoose();
+						count.bindTripChoose($("#tab-"+menuKey+"-content"));
                         count.bindLineProductChoose();
                         count.bindGuideRealNameChoose();
                     }
                 }
             });
         },
-        bindTripChoose : function(){
-        	var tripPlan = $(".financialCount input[name=chooseTripNumber]");
-        	tripPlan.autocomplete({
+
+        //团号模糊
+		bindTripChoose : function(){
+			var tripPlan = $(".financialCount input[name=chooseTripNumber]");
+			tripPlan.autocomplete({
 				minLength:0,
 				change:function(event,ui){
 					if(ui.item == null){
-						$(this).val("").nextAll('input[name="tripNumber"]').val('');
+						$(this).nextAll('input[name="tripNumber"]').val('');
 					}
 				},
 				select:function(event,ui){
@@ -225,8 +237,8 @@ define(function(require, exports) {
 				var obj = this;
 				$.ajax({
 					url:""+APP_ROOT+"back/tripPlan.do?method=findTripByTripNumber&token="+$.cookie("token")+"&menuKey=arrange_plan&operation=self",
-                    dataType: "json",
-                    success: function(data) {
+					dataType: "json",
+					success: function(data) {
 						var result = showDialog(data);
 						if(result){
 							var tripPlanList = JSON.parse(data.tripPlanList);
@@ -238,22 +250,23 @@ define(function(require, exports) {
 							$(obj).autocomplete('option','source', tripPlanList);
 							$(obj).autocomplete('search', '');
 						}
-                    }
-                });
+					}
+				});
 			});
-        },
+		},
+        //线路产品
         bindLineProductChoose : function(){
         	var lineProduct = $(".financialCount input[name=chooseLineProductName]");
         	lineProduct.autocomplete({
 				minLength:0,
 				change:function(event,ui){
 					if(ui.item == null){
-						$(this).next().val("");
+						$(this).nextAll('input[name="lineProductId"]').val('');
 					}
 				},
 				select:function(event,ui){
 					$(this).blur();
-					$(this).next().val(ui.item.id);
+					$(this).next().val(ui.item.lineProductId);
 				}
 			}).off("click").on("click", function(){
 				var obj = this;
@@ -276,18 +289,20 @@ define(function(require, exports) {
                 });
 			});
         },
+
+        //导游
         bindGuideRealNameChoose : function(){
         	var guideRealName = $(".financialCount input[name=chooseGuideRealName]");
         	guideRealName.autocomplete({
 				minLength:0,
 				change:function(event,ui){
 					if(ui.item == null){
-						$(this).next().val("");
+						$(this).nextAll('input[name="guideId"]').val('');
 					}
 				},
 				select:function(event,ui){
 					$(this).blur();
-					$(this).next().val(ui.item.id);
+					$(this).next().val(ui.item.guideId);
 				}
 			}).off("click").on("click", function(){
 				var obj = this;
@@ -311,7 +326,8 @@ define(function(require, exports) {
 			});
         },
         search : function(pageNo) {
-        	var tripNumber = $('.financialCount .search-area').find('input[name=tripNumber]').val();
+			var id = $('.financialCount .search-area').find('input[name=tripNumber]').val();
+        	var tripNumber = $('.financialCount .search-area').find('input[name=chooseTripNumber]').val();
         	var lineProductId = $('.financialCount .search-area').find('input[name=lineProductId]').val();
         	var guideId = $('.financialCount .search-area').find('input[name=guideId]').val();
         	var endTime = $('.financialCount .search-area').find('input[name=entTime]').val();
@@ -319,7 +335,7 @@ define(function(require, exports) {
         	var status = $('.financialCount .search-area .btn-status').find('button').attr('data-value');
         	var lineProductName = $('.financialCount .search-area').find('input[name=chooseLineProductName]').val();
         	var guideName = $('.financialCount .search-area').find('input[name=chooseGuideRealName]').val();
-        	count.getlistCount(pageNo,tripNumber,lineProductId,lineProductName,guideId,guideName,startTime,endTime,status);
+        	count.getlistCount(pageNo,id,tripNumber,lineProductId,lineProductName,guideId,guideName,startTime,endTime,status);
         },
         buildDatePicker : function() {
         	$('.financialCount .search-area').find('.date-picker').datepicker({
@@ -1051,7 +1067,7 @@ define(function(require, exports) {
 						count.edited["checkBill"] = "";
 						if(isClose == 1){
 							closeTab(uKey);
-							count.getlistCount(count.searchData.pageNo,count.searchData.tripNumber,count.searchData.lineProductId,count.searchData.lineProductName,count.searchData.guideId,count.searchData.guideName,count.searchData.startTime,count.searchData.endTime,count.searchData.status);
+							count.getlistCount(count.searchData.pageNo,count.searchData.id,count.searchData.tripNumber,count.searchData.lineProductId,count.searchData.lineProductName,count.searchData.guideId,count.searchData.guideName,count.searchData.startTime,count.searchData.endTime,count.searchData.status);
 						}else{
 							count.updateExamine(financialTripPlanId,"");
 						}
@@ -1832,7 +1848,24 @@ define(function(require, exports) {
 		},
 		clearEdit : function(clearType){
 			count.edited[clearType] = "";
-		}
+		},
+
+		//getQueryTerms :function(){
+		//	$.ajax({
+		//		url:""+APP_ROOT+"back/financialTripPlan.do?method=getQueryTerms&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
+		//		dateType:"json",
+		//		type:"POST",
+		//		success:function(data){
+		//			var result = showDialog(data);
+		//			if(result){
+		//				count.autocompleteDate.guideList = data.guideList;
+		//				count.autocompleteDate.lineProductList = data.lineProductList	;
+		//				count.autocompleteDate.tripList = data.tripList;
+		//			}
+		//		}
+		//	})
+		//},
+
     }
     exports.init = count.init;
 	exports.isEdited = count.isEdited;
