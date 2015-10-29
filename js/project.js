@@ -1443,6 +1443,30 @@ var Tools = {
 };
 
 /**
+ * 表单 转 JSON
+ * @param  {[type]} $ [description]
+ * @return {[type]}   [description]
+ */
+(function($){  
+    $.fn.serializeJson=function(){  
+        var serializeObj={};  
+        var array=this.serializeArray();  
+        var str=this.serialize();  
+        $(array).each(function(){  
+            if(serializeObj[this.name]){  
+                if($.isArray(serializeObj[this.name])){  
+                    serializeObj[this.name].push(this.value);  
+                }else{  
+                    serializeObj[this.name]=[serializeObj[this.name],this.value];  
+                }  
+            }else{  
+                serializeObj[this.name]=this.value;   
+            }  
+        });  
+        return serializeObj;  
+    };  
+})(jQuery); 
+/**
  * 自定义简介的提示
  * @param  {object} $elements 需要绑定提示的DOM
  * @return {[type]}           [description]
@@ -1487,6 +1511,18 @@ Tools.updateTransit = function(id)  {
 	seajs.use("" + ASSETS_ROOT +"js/template/arrange/transit/transit.js",function(module){
 		module.updateTransit(id);
 		modals["arrange_transit"] = transit;
+	});
+}
+//保险公司  新增
+Tools.addInsurance = function(fn){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_insurance,function(module){
+		module.addInsurance(fn);
+	});
+}
+//餐厅  新增
+Tools.addRestaurant = function(fn){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_restaurant,function(module){
+		module.addRestaurant(fn);
 	});
 }
 

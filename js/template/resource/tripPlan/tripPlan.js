@@ -354,6 +354,28 @@ define(function(require, exports) {
 			tripPlan.bindMoneyTripPlan();
 			tripPlan.moneyTripPlan();
 			tripPlan.setChooseDays();
+
+			//添加资源 
+			$("#tripPlan_addPlan_insurance .T-addInsuranceResource").off('click').on("click",{function : Tools.addInsurance , name : "insuranceName" , id : "insuranceId"}, tripPlan.addResourceFunction);
+			$("#tripPlan_addPlan_restaurant .T-addRestaurantResource").off('click').on("click",{function : Tools.addRestaurant, name : "restaurantName" , id : "restaurantId" , managerName : "managerName" , mobileNumber : "mobileNumber"}, tripPlan.addResourceFunction);
+			
+		},
+		//添加资源函数
+		addResourceFunction : function(e){
+			var $this = $(this),
+				$parents = $(this).closest('tr'),
+				name = e.data.name,
+				id = e.data.id,
+				managerName = e.data.managerName,
+				mobileNumber = e.data.mobileNumber,
+				$function = e.data.function,
+				fn = function (data){
+					if (!!data.name && !!name) {$parents.find('input[name='+name+']').val(data.name);}
+					if (!!data.id && !!id) {$parents.find('input[name='+id+']').val(data.id);}
+					if (!!data.managerName && !!managerName) {$parents.find('input[name='+managerName+']').val(data.managerName);}
+					if (!!data.mobileNumber && !!mobileNumber) {$parents.find('input[name='+mobileNumber+']').val(data.mobileNumber);}
+				}
+			$function(fn);
 		},
 		//添加保险安排
 		addInsurance : function(e){
@@ -422,7 +444,7 @@ define(function(require, exports) {
 			var _this = $(this),
 			tableContainer = _this.parents(".ui-sortable-handle").find(".table tbody"),
 			html = '<tr><td class="whichDaysContainer"></td>' +
-			'<td><input type="text" name="restaurantName" class="col-sm-12 chooseRestaurant"/><input type="hidden" name="restaurantId"></td>' +
+			'<td><div class="col-sm-12"><input type="text" name="restaurantName" class="col-sm-12 chooseRestaurant"/><input type="hidden" name="restaurantId"><span class="addResourceBtn T-addRestaurantResource" title="添加餐厅"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>' +
 			'<td><input type="text" name="managerName" readonly="readonly" class="col-sm-12"/></td>' +
 			'<td><input type="text" name="mobileNumber" readonly="readonly" class="col-sm-12"/></td>' +
 			'<td><select name="type" class="col-sm-12 restauranType" style="width:80px;"><option value="早餐">早餐</option><option value="午餐">午餐</option><option value="晚餐">晚餐</option></select></td>' +
@@ -992,7 +1014,7 @@ define(function(require, exports) {
 		bindRestaurantChoose : function(){
 			var restauranTyp = $("#tripPlan_addPlan_restaurant .table-tripPlan-container .restauranType");
 			$(restauranTyp).off("change").on("change", function(){
-				var parents = $(this).parent().parent();
+				var parents = $(this).closest('tr');
 				parents.find("input[name=typeName]").val("");
 				//parents.find("input[name=restaurantStandardId]").val("");
 				parents.find("input[name=price]").val("");
@@ -1003,16 +1025,15 @@ define(function(require, exports) {
 				change:function(event,ui){
 					if(ui.item == null){
 						$(this).val("");
-						var parents = $(this).parent().parent();
+						var parents = $(this).closest('tr');
 						parents.find("input[name=restaurantId]").val("");
 						parents.find("input[name=managerName]").val("");
 						parents.find("input[name=mobileNumber]").val("");
 						parents.find("input[name=price]").val("");
-						//parents.find("input[name=restaurantStandardId]").val("");
 					}
 				},
 				select:function(event,ui){
-					var _this = this, parents = $(_this).parent().parent();
+					var _this = this, parents = $(_this).closest('tr');
 					parents.find("input[name=restaurantId]").val(ui.item.id).trigger('change');
 					
 					$.ajax({
@@ -1027,7 +1048,6 @@ define(function(require, exports) {
 								parents.find("input[name=mobileNumber]").val(restaurant.mobileNumber);
 								parents.find("input[name=managerName]").val(restaurant.managerName);
 								parents.find("input[name=price]").val("");
-								//parents.find("input[name=restaurantStandardId]").val(""); 
 							}
 	                    }
 					});

@@ -678,3 +678,11 @@ input,select{
 .lineTemplate .table{
     border-width:1px !important;
 }
+
+/*安排中添加资源按钮样式*/
+.addResourceBtn{
+    top: 3px;
+    right: -2px;
+    cursor: pointer;
+    position: absolute;
+}

@@ -133,7 +133,15 @@
                                                     	{{each insuranceList as insurance index}}
                                                         {{if insurance != "[]" || insurance != null}}
                                                     	<tr>
-                                                    		<td><input type="text" name="insuranceName" maxlength="32" value="{{if insurance.insurance != null}}{{insurance.insurance.name}}{{/if}}" class="col-sm-12 chooseInsurance bind-change"/><input type="hidden" name="insuranceId" value="{{if insurance.insurance != null}}{{insurance.insurance.id}}{{/if}}"/></td>
+                                                    		<td>
+                                                                <div class="col-sm-12">
+                                                                    <input type="text" name="insuranceName" maxlength="32" value="{{if insurance.insurance != null}}{{insurance.insurance.name}}{{/if}}" class="col-sm-12 chooseInsurance bind-change"/>
+                                                                    <input type="hidden" name="insuranceId" value="{{if insurance.insurance != null}}{{insurance.insurance.id}}{{/if}}"/>
+                                                                    <span class="addResourceBtn T-addInsuranceResource" title="添加保险公司">
+                                                                        <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+                                                                    </span>
+                                                                </div>
+                                                            </td>
                                                     		<td><input type="text" name="type" value="{{insurance.type}}" maxlength="32" class="col-sm-12"/></td>
                                                     		<td><input type="text" name="price" value="{{insurance.price}}" class="col-sm-12" maxlength="8"/></td>
                                                     		<td><input type="text" name="memberCount" value="{{insurance.memberCount}}" class="col-sm-12" maxlength="8"/></td>
@@ -155,7 +163,15 @@
                                                     	{{/each}}
                                                     	{{if insuranceList.length == 0}}
                                                     	<tr>
-                                                    		<td><input type="text" name="insuranceName" maxlength="32" value="" class="col-sm-12 chooseInsurance"/><input type="hidden" name="insuranceId" value=""/></td>
+                                                    		<td>
+                                                                <div class="col-sm-12">
+                                                                    <input type="text" name="insuranceName" maxlength="32" value="" class="col-sm-12 chooseInsurance"/>
+                                                                    <input type="hidden" name="insuranceId" value=""/>
+                                                                    <span class="addResourceBtn T-addInsuranceResource" title="添加保险公司">
+                                                                        <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+                                                                    </span>
+                                                                </div>
+                                                            </td>
                                                     		<td><input type="text" name="type" value="" class="col-sm-12" maxlength="32"/></td>
                                                     		<td><input type="text" name="price" value="" class="col-sm-12" maxlength="9"/></td>
                                                     		<td><input type="text" name="memberCount" value="" class="col-sm-12" maxlength="8"/></td>
@@ -353,10 +369,18 @@
                                                     </thead>
                                                     <tbody>
                                                         {{each restaurantList as restaurant}}
-                                                        {{if restaurant != "[]" || restaurant != null}}
+                                                            {{if restaurant != "[]" || restaurant != null}}
                                                             <tr>
                                                                 <td class="whichDaysContainer" value="{{restaurant.whichDay}}"></td>
-                                                                <td><input type="text" name="restaurantName" maxlength="32" value="{{if restaurant.restaurant != null}}{{restaurant.restaurant.name}}{{/if}}" class="col-sm-12 chooseRestaurant"/><input type="hidden" name="restaurantId" value="{{if restaurant.restaurant != null}}{{restaurant.restaurant.id}}{{/if}}"/></td>
+                                                                <td>
+                                                                    <div class="col-sm-12">
+                                                                        <input type="text" name="restaurantName" maxlength="32" value="{{if restaurant.restaurant != null}}{{restaurant.restaurant.name}}{{/if}}" class="col-sm-12 chooseRestaurant"/>
+                                                                        <input type="hidden" name="restaurantId" value="{{if restaurant.restaurant != null}}{{restaurant.restaurant.id}}{{/if}}"/>
+                                                                        <span class="addResourceBtn T-addRestaurantResource" title="添加餐厅">
+                                                                            <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+                                                                        </span>
+                                                                    </div>
+                                                                </td>
                                                                 <td><input type="text" name="managerName" readonly="readonly" value="{{if restaurant.restaurant != null}}{{restaurant.restaurant.managerName}}{{/if}}" class="col-sm-12"/></td>
                                                                 <td><input type="text" name="mobileNumber" readonly="readonly" value="{{if restaurant.restaurant != null}}{{restaurant.restaurant.mobileNumber}}{{/if}}" class="col-sm-12"/></td>
                                                                 <td>
