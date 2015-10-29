@@ -133,7 +133,7 @@ define(function(require, exports) {
 						    type: 1,
 						    title:"编辑权限",
 						    skin: 'layui-layer-rim', //加上边框
-						    area: ['1280px', '750px'], //宽高
+						    area: ['1080px', '750px'], //宽高
 						    zIndex:1028,
 						    content: html,
 						    success:function(){
@@ -143,9 +143,7 @@ define(function(require, exports) {
 						    	for(var i = 0 ;i < authList.length; i ++){
 						    		var menuId = authList[i].menuId;
 						    		$(".T-submenu-id"+menuId).prop("checked",true);
-
 						    		var index = $(".T-submenu-check").index($(".T-submenu-id"+menuId));
-
 						    		var authType = authList[i].authAreaType;
 						    		$(".T-function-area"+authType).eq(index).prop("checked",true);
 						    	}
@@ -156,21 +154,8 @@ define(function(require, exports) {
 						    		$(".T-function-id"+functionId).prop("checked",true);
 						    	}
 						    	//主菜单是否勾选
-						    	$('.T-menu-check').each(function(i){
-						    		var isAll = false;
-						    		$table = $(this).closest('table');
-						    		$table.find(".T-submenu").each(function(){
-						    			var ischeck = $(this).find(".T-submenu-check").is(':checked');
-						    			if(ischeck){
-							    			isAll = true;
-							    		} else{
-							    			isAll = false;
-							    			return;
-							    		}
-						    		});
-						    		if(isAll){
-						    			$('.T-menu-check').eq(i).prop("checked",true);
-						    		}
+						    	$('.T-menu-check').each(function(){
+						    		user.checkMenu(this);
 						    	});
 
 						    	//主菜单事件 
@@ -179,8 +164,20 @@ define(function(require, exports) {
 						    		var ischeck = $(this).is(":checked");
 						    		if(ischeck){
 						    			table.find('.T-submenu-check').prop("checked",true);
-						    			table.find('.T-function-area1').prop("checked",true);
+						    			// table.find('.T-function-area1').prop("checked",true);
 						    			table.find('.T-function').prop("checked",true);
+						    			table.find('.T-submenu').each(function(){
+						    				var ischeck = false;
+						    				$(this).find("input[type=radio]").each(function(){
+						    					if($(this).is(":checked")){
+						    						ischeck = true;
+						    						return false;
+						    					}
+						    				});
+						    				if(!ischeck){
+						    					$(this).find('.T-function-area1').prop("checked",true);
+						    				}
+						    			});
 						    		}else{
 						    			table.find('input').prop("checked",false);
 						    		}
@@ -192,6 +189,7 @@ define(function(require, exports) {
 						    		if($(this).is(":checked")){
 						    			tr.find("input[type=checkbox]").prop("checked",true);
 						    			tr.find("input[type=radio]").eq(0).prop("checked",true);
+						    			user.checkMenu(this);
 						    		} else{
 						    			tr.find("input[type=checkbox]").prop("checked",false);
 						    			tr.find("input[type=radio]").prop("checked",false);
@@ -201,24 +199,58 @@ define(function(require, exports) {
 
 						    	//项选择事件
 						    	$(".T-submenu .T-function").on("click",function(){
-						    		console.log("check");
-						    		$(this).closest('tr').find('.T-submenu-check').prop("checked",true);
-						    		$(this).closest('tr').find('input[type=radio]').eq(0).prop("checked",true);
+						    		var tr = $(this).closest('tr');
+						    		tr.find('.T-submenu-check').prop("checked",true);
+						    		var ischeck = false;
+				    				tr.find("input[type=radio]").each(function(){
+				    					if($(this).is(":checked")){
+				    						ischeck = true;
+				    						return false;
+				    					}
+				    				});
+				    				if(!ischeck){
+				    					tr.find('.T-function-area1').prop("checked",true);
+				    				}
+						    		user.checkMenu(this);
 						    	});
 						    	$(".T-submenu input[type=radio]").on("click",function(){
 						    		$(this).closest('tr').find('.T-submenu-check').prop("checked",true);
+						    		user.checkMenu(this);
 						    	});
 
-						    	//列全选
-						    	$(".T-selectAll a").on("click",function(){
+						    	//权限范围列全选
+						    	$(".T-selectAll").on("click",function(){
 						    		var index = $(this).parent().index();
 						    		var $this = $(this).closest('table').find(".T-submenu");
 						    		$this.find("input[type=radio]").prop("checked",false);
 						    		$this.each(function(){
 						    			$(this).find(".T-function-area"+index).prop("checked",true);
-						    			$(this).closest('tr').find('.T-submenu-check').prop("checked",true);
+						    			$(this).find('.T-submenu-check').prop("checked",true);
 						    		});
+						    		$(this).closest('table').find(".T-menu-check").prop("checked",true);
 						    	});	
+
+						    	//功能权限全选
+						    	$(".T-selectAll-function").on("click",function(){
+						    		var index = $(this).parent().index();
+						    		var $this = $(this).closest('table').find(".T-function");
+						    		var isAll = false;
+						    		$this.each(function(){
+						    			if($(this).is(":checked")){
+						    				isAll = true;
+						    			} else{
+						    				isAll = false;
+						    				return false;
+						    			}
+						    		});
+						    		if(isAll){
+						    			$this.prop("checked",false);
+						    		} else{
+						    			$(this).closest('table').find(".T-menu-check").prop("checked",true);
+						    			$(this).closest('table').find(".T-submenu-check").prop("checked",true);
+						    			$this.prop("checked",true);
+						    		}
+						    	});
 
 						    	$("#userSetAuth .userMainForm .btn-submit-group").click(function(){
 						    		var authUpdateJson = [];
@@ -269,6 +301,22 @@ define(function(require, exports) {
 					}
 				}
 			});
+		},
+		//主菜单勾选与否
+		checkMenu : function(obj){
+			$obj = $(obj);
+			var isAll = false;
+			$obj.closest('table').find(".T-submenu-check").each(function(){
+				if($(this).is(":checked")){
+					isAll = true;
+				} else {
+					isAll = false;
+					return false;
+				}
+			});
+			if(isAll){
+				$obj.closest('table').find(".T-menu-check").prop("checked",true);
+			}
 		},
 
 		updateUser:function(id){

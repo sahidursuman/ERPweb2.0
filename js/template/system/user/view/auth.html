@@ -29,13 +29,15 @@
 							</tr>
 							{{each menu.childMenuList as submenu index}}
 								{{if index == 0}}
-									<tr data-id="{{menu.id}}" class="T-selectAll">
+									<tr data-id="{{menu.id}}">
 										<td></td>
-										<td><a href="javascript:;">全选</a></td>
-										<td><a href="javascript:;">全选</a></td>
-										<td><a href="javascript:;">全选</a></td>
-										<td><a href="javascript:;">全选</a></td>
-										<td></td>
+										<td><a class="T-selectAll" href="javascript:;">全选</a></td>
+										<td><a class="T-selectAll" href="javascript:;">全选</a></td>
+										<td><a class="T-selectAll" href="javascript:;">全选</a></td>
+										<td><a class="T-selectAll" href="javascript:;">全选</a></td>
+										<td style="text-align:left;padding-left:20px;">
+											<a class="T-selectAll-function" href="javascript:;">全选</a>
+										</td>
 									</tr>
 								{{/if}}
 								<tr class="T-submenu" data-id="{{submenu.id}}">
