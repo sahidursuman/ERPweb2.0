@@ -65,7 +65,7 @@
                     <td>
                         <a data-entity-id="{{innerTransferIn.fromBusinessGroupId}}" data-entity-fromBusinessGroupName="{{innerTransferIn.fromBusinessGroupName}}" data-entity-year="{{searchParam.year}}" data-entity-month="{{searchParam.month}}" class="cursor btn-innerTransferIn-check " >
                             	对账
-                        </a><a href="" class="cursor"> |</a>
+                        </a>
                         <a data-entity-id="{{innerTransferIn.fromBusinessGroupId}}" data-entity-fromBusinessGroupName="{{innerTransferIn.fromBusinessGroupName}}" data-entity-year="{{searchParam.year}}"
                                 {{if searchParam.month == ""}}
                                  	 data-entity-startMonth=1 data-entity-endMonth=12 
@@ -73,6 +73,7 @@
                                  	 data-entity-startMonth="{{searchParam.month}}" data-entity-endMonth="{{searchParam.month}}" 
                                 {{/if}}
                         		class="cursor btn-innerTransferIn-balance">
+                                <label class="padding-right20"> |</label>
                            		 结算
                         </a>
                     </td>
