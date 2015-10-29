@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":207,"md5":"6e866046545299a0d2e18b1f68fd1f55"}*/
+/*TMODJS:{"debug":true,"version":208,"md5":"6e866046545299a0d2e18b1f68fd1f55"}*/
 define(function(require) {
     return require("../../../template")("financial/shop/view/shopChecking", function($data, $filename) {
         try {
