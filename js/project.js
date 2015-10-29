@@ -535,7 +535,7 @@ function logout(){
 				click: function() {
 					$( this ).dialog( "close" );
 					$.ajax({
-						url:""+APP_ROOT+"back/user.do?method=logOut&token="+$.cookie("token")+"&operation=self",
+						url:""+APP_ROOT+"base.do?method=logOut&token="+$.cookie("token"),
 						type:"POST",
 						dataType:"json",
 						beforeSend:function(){
