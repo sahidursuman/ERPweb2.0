@@ -4,7 +4,6 @@
 	</div>
 	<form class="form-horizontal userMainForm" role="form" style="margin-top:10px" onsubmit="return false">
 		<input type="hidden" value="{{user.id}}" id="userId" />
-		
 		<div style="margin:10px 0px 20px 0px;display: none;"><button id="btn_groul_all">全选</button><button id="btn_groul_no" style="margin-left:10px;">全不选</button><button id="btn_groul_bak" style="margin-left:10px;">反选</button></div>
 		<table class="table table-striped table-bordered table-hover" style="font-size:15px;">
 			{{each listMenu as menu menuIndex}}
@@ -13,8 +12,8 @@
 						<table class="table table-striped table-bordered table-hover">
 							{{if menuIndex == 0}}
 								<thead>
-									<th>功能模块</th>
-									<th colspan="5">权限</th>
+									<th class="th-border">功能模块</th>
+									<th class="th-border" colspan="5">权限</th>
 								</thead>
 							{{/if}}
 							<tr>
