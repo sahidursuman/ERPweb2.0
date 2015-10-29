@@ -66,7 +66,10 @@
 					搜索
 				</button>
 			</div>
-			<button class="btn btn-sm btn-success btn-Plan-add"> <i class="ace-icon fa fa-plus"></i> 新增发团计划</button>
+			<button class="btn btn-sm btn-success btn-Plan-add R-right" data-right="1140002"> 
+				<i class="ace-icon fa fa-plus"></i> 
+				新增发团计划
+			</button>
 			<div style="clear:both;height:0px;line-height:0px;"></div>
 		</div>
 		</div>
@@ -126,19 +129,25 @@
 							{{/if}}
 						</td>
 						<td style="vertical-align:middle;width:240px;" {{if tripPlan.tripPlanDetails.length > 1}}rowspan="{{tripPlan.tripPlanDetails.length}}"{{/if}}>
-							<a data-entity-id="{{tripPlan.id}}" billStatus="{{tripPlan.billStatus}}" statusValue="{{tripPlan.status}}" title="确认发团" class="{{if tripPlan.status != -1}}btn-Plan-confirm{{/if}} cursor" {{if tripPlan.status == -1}} style="color:#bbb;"{{/if}}>
-							确认
-							</a><a href="" class="cursor"> |</a>
+							<a data-entity-id="{{tripPlan.id}}" billStatus="{{tripPlan.billStatus}}" statusValue="{{tripPlan.status}}" title="确认发团" class="{{if tripPlan.status != -1}}btn-Plan-confirm{{/if}} cursor R-right" data-right="1140006" {{if tripPlan.status == -1}} style="color:#bbb;"{{/if}}>
+								确认
+								<label style="padding-left:10px;">|</label>
+							</a>
 							<a data-entity-id="{{tripPlan.id}}" title="查看计划" class="btn-Plan-view cursor">
 								查看
-							</a><a href="" class="cursor"> |</a>
-						    <a data-entity-id="{{tripPlan.id}}" billStatus="{{tripPlan.billStatus}}" title="编辑计划" class="{{if tripPlan.status != -1}}btn-Plan-edit{{/if}} cursor" {{if tripPlan.status == -1}} style="color:#bbb;"{{/if}}>
-							编辑
-							</a><a href="" class="cursor"> |</a>
-							<a data-entity-id="{{tripPlan.id}}" title="导出计划" class="btn-Plan-export cursor">
+							</a>
+						    <a data-entity-id="{{tripPlan.id}}" billStatus="{{tripPlan.billStatus}}" title="编辑计划" class="{{if tripPlan.status != -1}}btn-Plan-edit{{/if}} cursor R-right" data-right="1140003" {{if tripPlan.status == -1}} style="color:#bbb;"{{/if}}>
+								<label class="padding-right20">|</label>
+								编辑
+							</a>
+							<a data-entity-id="{{tripPlan.id}}" title="导出计划" class="btn-Plan-export cursor R-right" data-right="1140008">
+								<label class="padding-right20">|</label>
 								导出
-							</a><a href="" class="cursor"> |</a>
-							<a data-entity-id="{{tripPlan.id}}" billStatus="{{tripPlan.billStatus}}" title="取消计划" class="{{if tripPlan.status != -1}}btn-Plan-cancel{{/if}} cursor" {{if tripPlan.status == -1}} style="color:#bbb;"{{/if}}>取消</a>
+							</a>
+							<a data-entity-id="{{tripPlan.id}}" billStatus="{{tripPlan.billStatus}}" title="取消计划" class="{{if tripPlan.status != -1}}btn-Plan-cancel{{/if}} cursor R-right" data-right="1140004" {{if tripPlan.status == -1}} style="color:#bbb;"{{/if}}>
+								<label class="padding-right20">|</label>
+								取消
+							</a>
 						</td>
 					</tr>
 

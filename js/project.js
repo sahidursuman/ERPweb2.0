@@ -584,6 +584,7 @@ var modalScripts = {
 	'resource_hotel': "js/template/resource/hotel/hotel.js",
 	'resource_shop': 'js/template/resource/shop/shop.js',
 	'resource_insurance': "js/template/resource/insurance/insurance.js",
+	'resource_selfpay': "js/template/resource/selfpay/selfpay.js",
 	'resource_scenic' : "js/template/resource/scenic/scenic.js",
 	'business_analyst_saleProduct' : "js/template/businessAnalyst/saleProduct/saleProduct.js",
 	'resource_busCompany':"js/template/resource/busCompany/busCompany.js",
@@ -713,7 +714,7 @@ function listMenu(menuTemplate){
 					});
 				});*/
 				//绑定自费项目菜单功能
-				$("#sidebar .nav-list .resource_selfpay").click(function(){
+				/*$("#sidebar .nav-list .resource_selfpay").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
@@ -730,6 +731,7 @@ function listMenu(menuTemplate){
 				//		ticket.TicketResource.initModule(0,"",1);
 				//	});
 				//});
+
 				//绑定游客管理菜单功能
 				/*$("#sidebar .nav-list .resource_touristGroup").click(function(){
 				 $("#sidebar .nav-list li").removeClass("active");
@@ -1510,8 +1512,8 @@ var KingServices = {};
 KingServices.provinceCity = function($container,provinceIdU,cityIdU,districtIdU){
 	//初始化地区数据
 	KingServices.getProvinceList($container.find("select[name=provinceId]"),provinceIdU);
-	KingServices.getCityList($container.find("select[name=cityId]"),provinceIdU,cityIdU);
-	KingServices.getDistrictList($container.find("select[name=districtId]"),cityIdU,districtIdU);
+	if (!!cityIdU) {KingServices.getCityList($container.find("select[name=cityId]"),provinceIdU,cityIdU);} 
+	if (!!districtIdU) {KingServices.getDistrictList($container.find("select[name=districtId]"),cityIdU,districtIdU);} 
 	//给省份select绑定事件
 	$container.find("select[name=provinceId]").change(function(){
 		var provinceId = $(this).val();
@@ -1533,26 +1535,38 @@ KingServices.provinceCity = function($container,provinceIdU,cityIdU,districtIdU)
 	});
 };
 KingServices.getProvinceList = function(obj,provinceId){
-	$.ajax({
-		url:""+APP_ROOT+"/base.do?method=getProvince",
-		type:"POST",
-		dataType:"json",
-		showLoading: false,
-		success:function(data){
-			var html = "<option value=''>未选择</option>";
-			var provinceList = data.provinceList;
-			if(provinceList != null && provinceList.length > 0){
-				for(var i=0;i<provinceList.length;i++){
-					if (provinceId != null && provinceList[i].id == provinceId) {
-						html += "<option selected=\"selected\" value='"+provinceList[i].id+"'>"+provinceList[i].name+"</option>";
-					} else {
-						html += "<option value='"+provinceList[i].id+"'>"+provinceList[i].name+"</option>";
+	if (!!KingServices.provinceData) {
+		var html = "<option value=''>未选择</option>";
+		for(var i=0;i<KingServices.provinceData.length;i++){
+			if (provinceId != null && KingServices.provinceData[i].id == provinceId) {
+				html += "<option selected=\"selected\" value='"+KingServices.provinceData[i].id+"'>"+KingServices.provinceData[i].name+"</option>";
+			} else {
+				html += "<option value='"+KingServices.provinceData[i].id+"'>"+KingServices.provinceData[i].name+"</option>";
+			}
+		}
+		$(obj).html(html);
+	}else{
+		$.ajax({
+			url:""+APP_ROOT+"/base.do?method=getProvince",
+			type:"POST",
+			dataType:"json",
+			showLoading: false,
+			success:function(data){
+				var html = "<option value=''>未选择</option>";
+				KingServices.provinceData = data.provinceList;
+				if(KingServices.provinceData != null && KingServices.provinceData.length > 0){
+					for(var i=0;i<KingServices.provinceData.length;i++){
+						if (provinceId != null && KingServices.provinceData[i].id == provinceId) {
+							html += "<option selected=\"selected\" value='"+KingServices.provinceData[i].id+"'>"+KingServices.provinceData[i].name+"</option>";
+						} else {
+							html += "<option value='"+KingServices.provinceData[i].id+"'>"+KingServices.provinceData[i].name+"</option>";
+						}
 					}
 				}
+				$(obj).html(html);
 			}
-			$(obj).html(html);
-		}
-	});
+		});
+	}
 };
 KingServices.getCityList = function(obj,provinceId,cityId){
 	if(provinceId != ""){

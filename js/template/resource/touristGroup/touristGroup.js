@@ -150,6 +150,7 @@ define(function(require, exports) {
 						data.touristGroupList = touristGroupList;
 						console.log(data);
 						var html = listTemplate(data);
+						html = filterUnAuth(html);
 						$("#touristGroup-listMain").html(html);
 						//touristGroup.initList(data);
 
