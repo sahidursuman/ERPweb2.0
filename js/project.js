@@ -1529,6 +1529,36 @@ Tools.addRestaurant = function(fn){
 		module.addRestaurant(fn);
 	});
 }
+//酒店  新增
+Tools.addHotel = function(fn){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_hotel,function(module){
+		module.addHotel(fn);
+	});
+}
+//景区  新增
+Tools.addScenic = function(fn){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_scenic,function(module){
+		module.addScenic(fn);
+	});
+}
+//购物  新增
+Tools.addShop = function(fn){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_shop,function(module){
+		module.addShop(fn);
+	});
+}
+//自费商家  新增
+Tools.addSelfPay = function(fn){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_selfpay,function(module){
+		module.addSelfPay(fn);
+	});
+}
+//票务  新增
+Tools.addTicket = function(fn){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_ticket,function(module){
+		module.addTicket(fn);
+	});
+}
 
 /**
  * 用于定义公共请求或者与数据相关的公共组件处理

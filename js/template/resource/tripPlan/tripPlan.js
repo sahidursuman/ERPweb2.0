@@ -355,10 +355,18 @@ define(function(require, exports) {
 			tripPlan.moneyTripPlan();
 			tripPlan.setChooseDays();
 
-			//添加资源 
+			//添加资源
+			tripPlan.addResource();
+		},
+		//添加资源 
+		addResource : function(){
 			$("#tripPlan_addPlan_insurance .T-addInsuranceResource").off('click').on("click",{function : Tools.addInsurance , name : "insuranceName" , id : "insuranceId"}, tripPlan.addResourceFunction);
 			$("#tripPlan_addPlan_restaurant .T-addRestaurantResource").off('click').on("click",{function : Tools.addRestaurant, name : "restaurantName" , id : "restaurantId" , managerName : "managerName" , mobileNumber : "mobileNumber"}, tripPlan.addResourceFunction);
-			
+			$("#tripPlan_addPlan_hotel .T-addHotelResource").off('click').on("click",{function : Tools.addHotel, name : "name" , id : "hotelId" , managerName : "managerName" , mobileNumber : "mobileNumber"}, tripPlan.addResourceFunction);
+			$("#tripPlan_addPlan_scenic .T-addScenicResource").off('click').on("click",{function : Tools.addScenic, name : "name" , id : "scenicId"}, tripPlan.addResourceFunction);
+			$("#tripPlan_addPlan_shop .T-addShopResource").off('click').on("click",{function : Tools.addShop, name : "name" , id : "shopId" , managerName : "managerName" , mobileNumber : "mobileNumber"}, tripPlan.addResourceFunction);
+			$("#tripPlan_addPlan_selfPay .T-addSelfPayResource").off('click').on("click",{function : Tools.addSelfPay, name : "name" , id : "selfPayId" , managerName : "managerName" , mobileNumber : "mobileNumber"}, tripPlan.addResourceFunction);
+			$("#tripPlan_addPlan_ticket .T-addTicketResource").off('click').on("click",{function : Tools.addTicket, name : "name" , id : "tickeId"}, tripPlan.addResourceFunction);
 		},
 		//添加资源函数
 		addResourceFunction : function(e){
@@ -382,7 +390,7 @@ define(function(require, exports) {
 			var validator = e.data.validator;
 			var _this = $(this),
 				tableContainer = _this.parents(".ui-sortable-handle").find(".table tbody"),
-				html = '<tr><td><input type="text" maxlength="32" name="insuranceName" class="col-sm-12 chooseInsurance bind-change"/><input type="hidden" name="insuranceId"/></td>' +
+				html = '<tr><td><div class="col-sm-12"><input type="text" maxlength="32" name="insuranceName" class="col-sm-12 chooseInsurance bind-change"/><input type="hidden" name="insuranceId"/><span class="addResourceBtn T-addInsuranceResource" title="添加保险公司"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>' +
 						'<td><input type="text" name="type" maxlength="32" class="col-sm-12"/></td>' +
 						'<td><input type="text" name="price" maxlength="6" class="col-sm-12"/></td>' +
 						'<td><input type="text" name="memberCount" class="col-sm-12" maxlength="8"/></td>' +
@@ -396,6 +404,7 @@ define(function(require, exports) {
 			tripPlan.bindInsuranceChoose();
 			tripPlan.calculatePrice();
 			validator = rule.update(validator);
+			tripPlan.addResource();
 
 
 		},
@@ -464,6 +473,7 @@ define(function(require, exports) {
 			tripPlan.bindMoneyTripPlan();
 			tripPlan.setChooseDays("tripPlan_addPlan_restaurant");
 			tripPlan.calculatePrice();
+			tripPlan.addResource();
 			
 			// 更新表单验证的事件绑定  
 			validator = rule.update(validator); 
@@ -474,7 +484,7 @@ define(function(require, exports) {
 			tableContainer = _this.parents(".ui-sortable-handle").find(".table tbody"),
 			html = '<tr><td class="whichDaysContainer"></td>' +
 			'<td><select class="col-sm-12 no-padding tripPlanHotelStar" style="width: 80px;"><option value="1">三星以下</option><option value="2">三星</option><option value="3">准四星</option><option value="4">四星</option><option value="5">准五星</option><option value="6">五星</option><option value="7">五星以上</option></select></td>' +
-			'<td><input type="text" class="col-sm-12 chooseHotel" name="name" /><input type="hidden" name="hotelId"></td>' +
+			'<td><div class="col-sm-12"><input type="text" class="col-sm-12 chooseHotel" name="name" /><input type="hidden" name="hotelId"><span class="addResourceBtn T-addHotelResource" title="添加酒店"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>' +
 			'<td><input type="text" class="col-sm-12" readonly="readonly" name="managerName"/></td>' +
 			'<td><input type="text" class="col-sm-12" readonly="readonly" name="mobileNumber"/></td>' +
 			'<td><input type="text" class="col-sm-12 chooseHotelRoom" name="hotelRoom"/><input type="hidden" name="hotelRoomId"></td>' +
@@ -495,6 +505,7 @@ define(function(require, exports) {
 			tripPlan.bindMoneyTripPlan();
 			tripPlan.setChooseDays("tripPlan_addPlan_hotel");
 			tripPlan.calculatePrice();
+			tripPlan.addResource();
 			// 更新表单验证的事件绑定  
 			validator = rule.update(validator); 
 		},
@@ -503,7 +514,7 @@ define(function(require, exports) {
 			var _this = $(this),
 			tableContainer = _this.parents(".ui-sortable-handle").find(".table tbody"),
 			html = '<tr><td class="whichDaysContainer"></td>' +
-			'<td><input type="text" name="name" class="col-sm-12 chooseScenic"/><input type="hidden" name="scenicId"/></td>' +
+			'<td><div class="col-sm-12"><input type="text" name="name" class="col-sm-12 chooseScenic"/><input type="hidden" name="scenicId"/><span class="addResourceBtn T-addScenicResource" title="添加景区"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>' +
 			'<td><input type="text" name="chargingProjects" class="col-sm-12"/><input type="hidden" name="chargingId"/></td>' +
 			'<td><select name="tourTime" class="col-sm-12 no-padding" style="width: 75px;"> <option value="全天">全天</option> <option value="上午">上午</option> <option value="下午">下午</option> </select> </td>' +
 			'<td><input type="text" name="tourDuration" class="col-sm-12" value="" style="width: 60px;" maxlength="3"> </td>' +
@@ -523,6 +534,7 @@ define(function(require, exports) {
 			tripPlan.bindMoneyTripPlan();
 			tripPlan.setChooseDays("tripPlan_addPlan_scenic");
 			tripPlan.calculatePrice();
+			tripPlan.addResource();
 			// 更新表单验证的事件绑定
 			validator = rule.update(validator);       
 		},
@@ -530,7 +542,7 @@ define(function(require, exports) {
 			var _this = $(this),
 			tableContainer = _this.parents(".ui-sortable-handle").find(".table tbody"),
 			html = '<tr><td class="whichDaysContainer" value=""></td>'+
-                '<td><input type="hidden" name="id" value="" /><input type="text" name="name" class="col-sm-12 chooseShop" value="" /><input type="hidden" name="shopId" value="" /></td>'+
+                '<td><div class="col-sm-12"><input type="hidden" name="id" value="" /><input type="text" name="name" class="col-sm-12 chooseShop" value="" /><input type="hidden" name="shopId" value="" /><span class="addResourceBtn T-addShopResource" title="添加购物店"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
                 '<td><input type="text" name="managerName" readonly="readonly" class="col-sm-12" value="" /></td>'+
                 '<td><input type="text" name="mobileNumber" readonly="readonly" class="col-sm-12" value="" /></td>'+
                 '<td><input type="text" name="goodsPolicy" class="col-sm-12" value="" /><input type="hidden" name="shopPolicyId" value=""/></td>'+
@@ -541,6 +553,7 @@ define(function(require, exports) {
 			tripPlan.bindDeleteEvent();
 			tripPlan.bindShopChoose();
 			tripPlan.setChooseDays("tripPlan_addPlan_shop");
+			tripPlan.addResource();
 		},
 		dateTimePicker :function(){
 			$(".date-time-picker").datetimepicker({
@@ -555,7 +568,7 @@ define(function(require, exports) {
 			var _this = $(this),
 			tableContainer = _this.parents(".ui-sortable-handle").find(".table tbody"),
 			html = '<tr><td class="whichDaysContainer"></td>' +
-			'<td><input type="text" name="name" class="col-sm-12 chooseSelfPay"/><input type="hidden" name="selfPayId" /></td>' +
+			'<td><div class="col-sm-12"><input type="text" name="name" class="col-sm-12 chooseSelfPay"/><input type="hidden" name="selfPayId" /><span class="addResourceBtn T-addSelfPayResource" title="添加自费商家"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>' +
 			'<td><input type="hidden" name="selfitemId" value="" /><input type="text" name="selfitem" class="col-sm-12 chooseSelfitem" value="" /></td>'+
 			'<td><input type="text" readonly="readonly" name="managerName" class="col-sm-12"/></td>' +
 			'<td><input type="text" readonly="readonly" name="mobileNumber" class="col-sm-12"/></td>' +
@@ -576,6 +589,7 @@ define(function(require, exports) {
 			tripPlan.bindMoneyTripPlan();
 			tripPlan.setChooseDays("tripPlan_addPlan_selfPay");
 			tripPlan.calculatePrice();
+			tripPlan.addResource();
 			// 更新表单验证的事件绑定
 			validator = rule.update(validator);     
 		},
@@ -584,7 +598,7 @@ define(function(require, exports) {
 			var _this = $(this),
 			tableContainer = _this.parents(".ui-sortable-handle").find(".table tbody"),
 			html = '<tr>' +
-			'<td><input type="text" name="name" class="col-sm-12 chooseTicket"/><input type="hidden" name="tickeId" /></td>' +
+			'<td><div class="col-sm-12"><input type="text" name="name" class="col-sm-12 chooseTicket"/><input type="hidden" name="tickeId" /><span class="addResourceBtn T-addTicketResource" title="添加票务"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>' +
 			'<td><select name="type" class="col-sm-12 no-padding" style="width:70px;"> <option value="1" selected="selected">机票</option><option value="2">汽车票</option> <option value="3">火车票</option> <option value="4">轮船票</option> </select></td>' +
 			'<td><input type="text" name="startingCity" class="col-sm-12" maxlength="32"/></td>' +
 			'<td><input type="text" name="arriveCity" class="col-sm-12" maxlength="32"/></td>' +
@@ -608,6 +622,7 @@ define(function(require, exports) {
 			tripPlan.setChooseDays("tripPlan_addPlan_ticket");
 			tripPlan.calculatePrice();
 			tripPlan.dateTimePicker();
+			tripPlan.addResource();
 			// 更新表单验证的事件绑定
 			validator = rule.update(validator);      
 		},
@@ -722,7 +737,7 @@ define(function(require, exports) {
 				select:function(event,ui){
 					$(this).blur();
 					var obj = this,
-					    o = $(obj).parent().parent();					
+					    o = $(obj).closest('tr');					
 					tripPlan.setVal(o, "insuranceId", ui.item.id);
 				}
 			}).off("click").on("click", function(){
@@ -756,7 +771,7 @@ define(function(require, exports) {
 				change : function(event,ui){
 					if(ui.item == null){
 						$(this).val("");
-						$(this).parent().parent().find(".mobileNumber").val("")
+						$(this).closest('tr').find(".mobileNumber").val("")
 					}
 				},
 				select:function(event,ui){
@@ -771,7 +786,7 @@ define(function(require, exports) {
 							var result = showDialog(data);
 							if(result){
 								var guide = JSON.parse(data.guide);
-								$(obj).parent().parent().find("input[name=mobileNumber]").val(guide.mobileNumber);
+								$(obj).closest('tr').find("input[name=mobileNumber]").val(guide.mobileNumber);
 							}
 	                    }
 	                });
@@ -835,13 +850,13 @@ define(function(require, exports) {
 				minLength:0,
 				change:function(event,ui){
 					if(ui.item == null){
-						$(this).parent().parent().find("input[name=guideChooseId]").val("");
+						$(this).closest('tr').find("input[name=guideChooseId]").val("");
 					}
 				},
 				select:function(event,ui){
 					$(this).blur();
 					var obj = this;
-					$(obj).parent().parent().find("input[name=guideChooseId]").val(ui.item.id).trigger('change');
+					$(obj).closest('tr').find("input[name=guideChooseId]").val(ui.item.id).trigger('change');
 				}
 
 			}).click(function(){
@@ -865,13 +880,13 @@ define(function(require, exports) {
 				minLength:0,
 				change:function(event,ui){
 					if(ui.item == null){
-						$(this).parent().parent().find("input[name=busChooseId]").val("");
+						$(this).closest('tr').find("input[name=busChooseId]").val("");
 					}
 				},
 				select:function(event,ui){
 					$(this).blur();
 					var obj = this;
-					$(obj).parent().parent().find("input[name=busChooseId]").val(ui.item.id).trigger('change');
+					$(obj).closest('tr').find("input[name=busChooseId]").val(ui.item.id).trigger('change');
 				}
 
 			}).click(function(){
@@ -895,7 +910,7 @@ define(function(require, exports) {
 				change:function(event,ui){
 					if(ui.item == null){
 						$(this).val("");
-						var parents = $(this).parent().parent();
+						var parents = $(this).closest('tr');
 						parents.find("input[name=busCompanyId]").val("");
 						parents.find("input[name=licenseNumber]").val("");
 						parents.find("input[name=licenseNumberId]").val("");
@@ -907,7 +922,7 @@ define(function(require, exports) {
 				select:function(event,ui){
 					
 					var _this = this,
-						parents = $(_this).parent().parent();
+						parents = $(_this).closest('tr');
 					parents.find("input[name=busCompanyId]").val(ui.item.id).trigger('change');
 					
 					parents.find("input[name=licenseNumber]").val("");
@@ -925,7 +940,7 @@ define(function(require, exports) {
 						change:function(event,ui){
 							if(ui.item == null){
 								$(this).val("");
-								var parents = $(this).parent().parent();
+								var parents = $(this).closest('tr');
 								parents.find("input[name=licenseNumberId]").val("");
 								parents.find("input[name=brand]").val("");
 								parents.find("input[name=mobileNumber]").val("");
@@ -942,7 +957,7 @@ define(function(require, exports) {
 		                    	layer.close(globalLoadingLayer);
 								var result = showDialog(data);
 								if(result){
-									var d = JSON.parse(data.bus), objParent = $(cThis).parent().parent();
+									var d = JSON.parse(data.bus), objParent = $(cThis).closest('tr');
 									//objParent.find("input[name=seatPrice]").val(d.seatPrice);
 									//objParent.find("input[name=seatCount]").val(d.seatCount);
 									objParent.find("input[name=mobileNumber]").val(d.mobileNumber);
@@ -954,7 +969,7 @@ define(function(require, exports) {
 						}
 					}).off("click").on("click", function(){
 						var cThis = this;
-						var needSeatCount = $(cThis).parent().parent().find("input[name=needSeatCount]").val();
+						var needSeatCount = $(cThis).closest('tr').find("input[name=needSeatCount]").val();
 						$.ajax({
 							url:""+APP_ROOT+"back/busCompany.do?method=findBusListBySeat&token="+$.cookie("token")+"&menuKey=resource_busCompany&operation=view",
 		                    dataType: "json",
@@ -981,7 +996,7 @@ define(function(require, exports) {
 					
 				}
 			}).off("click").on("click", function(){
-				var obj = this, par = $(obj).parent().parent(),
+				var obj = this, par = $(obj).closest('tr'),
 				    needSeatCount = par.find("input[name=needSeatCount]").val();
 				if(needSeatCount==""){
 					layer.tips('请输入座位数。', obj, {
@@ -1078,7 +1093,7 @@ define(function(require, exports) {
 				minLength:0,
 				change:function(event,ui){
 					if(ui.item == null){
-						var objParent = $(this).parent().parent();
+						var objParent = $(this).closest('tr');
 						//objParent.find("input[name=restaurantStandardId]").val("");
 						//objParent.find("input[name=fee]").val("");
 					}
@@ -1103,7 +1118,7 @@ define(function(require, exports) {
 					var standardId = ui.item.id;
 					var _this = $(this);
 					//$(this).parent().parent().find("input[name=restaurantStandardId]").val(ui.item.id);
-					$(this).parent().parent().find("input[name=fee]").val(ui.item.price);
+					$(this).closest('tr').find("input[name=fee]").val(ui.item.price);
 					/*$.ajax({
 						url:""+APP_ROOT+"back/restaurant.do?method=findStandardDetailById&token="+$.cookie("token")+"&menuKey=resource_restaurant&operation=view",
 	                    dataType: "json",
@@ -1119,7 +1134,7 @@ define(function(require, exports) {
 	                });*/
 				}
 			}).off("click").on("click", function(){
-				var _this = this, parents = $(_this).parent().parent();
+				var _this = this, parents = $(_this).closest('tr');
 				var id = parents.find("input[name=restaurantId]").val();
 				var type = parents.find('select[name=type]').val();
 				$.ajax({
@@ -1152,7 +1167,7 @@ define(function(require, exports) {
 			var hotelChoose = $("#tripPlan_addPlan_hotel .table-tripPlan-container .chooseHotel");
 			var $hotelStar = $("#tripPlan_addPlan_hotel .table-tripPlan-container .tripPlanHotelStar");
 			$hotelStar.off().on("change", function(){
-				var parentObj = $(this).parent().parent();
+				var parentObj = $(this).closest('tr');
 				parentObj.find("input[name=name]").val("");
 				parentObj.find("input[name=hotelId]").val("");
 				parentObj.find("input[name=hotelRoom]").val("");
@@ -1166,7 +1181,7 @@ define(function(require, exports) {
 				change:function(event,ui){
 					if(ui.item == null){
 						$(this).val("");
-						var parents = $(this).parent().parent();
+						var parents = $(this).closest('tr');
 						parents.find("input[name=hotelId]").val("");
 						parents.find("input[name=hotelRoom]").val("");
 						parents.find("input[name=hotelRoomId]").val("");
@@ -1175,7 +1190,7 @@ define(function(require, exports) {
 					}
 				},
 				select:function(event,ui){
-					var _this = this, parents = $(_this).parent().parent();
+					var _this = this, parents = $(_this).closest('tr');
 					parents.find("input[name=hotelId]").val(ui.item.id).trigger('change');
 					
 					$.ajax({
@@ -1195,7 +1210,7 @@ define(function(require, exports) {
 				}
 			}).off("click").on("click", function(){
 				var hotelStarValue = $hotelStar.val(),
-				hotelStarValue = $(this).parent().parent().find('.tripPlanHotelStar').val();
+				hotelStarValue = $(this).closest('tr').find('.tripPlanHotelStar').val();
 			    obj = this;
 				$.ajax({
 					url:""+APP_ROOT+"back/hotel.do?method=findHotelListByLevel&token="+$.cookie("token")+"&menuKey=resource_hotel&operation=view",
@@ -1230,12 +1245,12 @@ define(function(require, exports) {
 				change:function(event,ui){
 					if(ui.item == null){
 						$(this).val("");
-						var objParent = $(this).parent().parent();
+						var objParent = $(this).closest('tr');
 						objParent.find("input[name=hotelRoomId]").val("");
 					}
 				},
 				select:function(event,ui){
-					var parents = $(this).parent().parent(),
+					var parents = $(this).closest('tr'),
 						whichDay = parents.find("select[name=whichDay]").val(),
 						enterTime = $("#tripPlan_addPlan_content").find("[name=startTime_Choose]").text();
 					parents.find("input[name=hotelRoomId]").val(ui.item.id).trigger('change');
@@ -1253,7 +1268,7 @@ define(function(require, exports) {
 				}
 			}).off("click").on("click", function(){
 				var _this = this,
-					parents = $(_this).parent().parent(),
+					parents = $(_this).closest('tr'),
 					id = parents.find("input[name=hotelId]").val();
 				$.ajax({
 					url:""+APP_ROOT+"back/hotel.do?method=findTypeByHotelId&token="+$.cookie("token")+"&menuKey=resource_hotel&operation=view",
@@ -1288,7 +1303,7 @@ define(function(require, exports) {
 				change:function(event,ui){
 					if(ui.item == null){
 						$(this).val("");
-						var objParent = $(this).parent().parent();
+						var objParent = $(this).closest('tr');
 						objParent.find("input[name=scenicId]").val("");
 						objParent.find("input[name=chargingProjects]").val("");
 						objParent.find("input[name=chargingId]").val("");
@@ -1296,7 +1311,7 @@ define(function(require, exports) {
 					}
 				},
 				select : function(event,ui){
-					var obj = this,objParent = $(obj).parent().parent();
+					var obj = this,objParent = $(obj).closest('tr');
 
 					objParent.find("input[name=scenicId]").val(ui.item.id).trigger('change');
 					objParent.find("input[name=chargingProjects]").val("");
@@ -1331,12 +1346,12 @@ define(function(require, exports) {
                 });
 			});
 			
-			var objParent = $(scenicChoose).parent().parent();
+			var objParent = $(scenicChoose).closest('tr');
 			this.chooseChargingProjects = objParent.find("[name=chargingProjects]").autocomplete({
 				minLength:0,
 				select:function(event, nameUi){
 					var nameUiId = nameUi.item.id, _this = this,
-						thisParent = $(_this).parent().parent(),
+						thisParent = $(_this).closest('tr'),
 						startTime = $("#tripPlan_addPlan_content").find("[name=startTime_Choose]").text(),
 						whichDay = thisParent.find("select[name=whichDay]").val();
 					thisParent.find("input[name=chargingId]").val(nameUiId).trigger('change');
@@ -1357,14 +1372,14 @@ define(function(require, exports) {
 				change:function(event, ui){
 					if(ui.item == null){
 						$(this).val("");
-						var thisParent = $(this).parent().parent();
+						var thisParent = $(this).closest('tr');
 						thisParent.find("input[name=chargingId]").val("");
 						thisParent.find("input[name=fee]").val("");
 					}
 				}
 			}).off("click").on("click", function(){
 				var _this = this;
-				var id = $(_this).parent().parent().find("input[name=scenicId]").val();
+				var id = $(_this).closest('tr').find("input[name=scenicId]").val();
 				$.ajax({
 					url:""+APP_ROOT+"back/scenic.do?method=findItemByScenicId&token="+$.cookie("token")+"&menuKey=resource_scenic&operation=view",
                     dataType: "json",
@@ -1397,7 +1412,7 @@ define(function(require, exports) {
 				minLength:0,
 				select:function(event, ui){
 					var _this = this,
-				    objParent = $(_this).parent().parent();
+				    objParent = $(_this).closest('tr');
 					objParent.find("input[name=shopId]").val(ui.item.id).trigger('change');
 					objParent.find("input[name=goodsPolicy]").val("");
 					objParent.find("input[name=shopPolicyId]").val("");
@@ -1423,7 +1438,7 @@ define(function(require, exports) {
 				change:function(event, ui){
 					if(ui.item == null){
 						$(this).val("");
-						var thisParent = $(this).parent().parent();
+						var thisParent = $(this).closest('tr');
 						thisParent.find("input[name=shopId]").val("");
 						thisParent.find("input[name=managerName]").val("");
 						thisParent.find("input[name=mobileNumber]").val("");
@@ -1460,12 +1475,12 @@ define(function(require, exports) {
                 });
 			});
 			
-			var objParent = $(shopChoose).parent().parent();
+			var objParent = $(shopChoose).closest('tr');
 			this.chooseGoodsPolicy = objParent.find("[name=goodsPolicy]").autocomplete({
 				minLength:0,
 				select:function(event, nameUi){
 					var nameUiId = nameUi.item.id, obj = this;
-					var thisParent = $(obj).parent().parent();
+					var thisParent = $(obj).closest('tr');
 					thisParent.find("input[name=shopPolicyId]").val(nameUiId).trigger('change');
 					/*$.ajax({
 						url:""+APP_ROOT+"back/shop.do?method=findRebateDetail&token="+$.cookie("token")+"&menuKey=resource_shop&operation=view",
@@ -1487,7 +1502,7 @@ define(function(require, exports) {
 				change : function(event,nameUi){
 					if(nameUi.item == null){ 
 						$(this).val("");
-						var thisParent = $(this).parent().parent();
+						var thisParent = $(this).closest('tr');
 						thisParent.find("input[name=shopPolicyId]").val("");
 						thisParent.find("input[name=guideRate]").val("");
 						thisParent.find("input[name=travelAgencyRate]").val("");
@@ -1495,7 +1510,7 @@ define(function(require, exports) {
 				}
 			}).off("click").on("click", function(){
 				var shopObj = this;
-				var id = $(shopObj).parent().parent().find("input[name=shopId]").val();
+				var id = $(shopObj).closest('tr').find("input[name=shopId]").val();
 				$.ajax({
 					url:""+APP_ROOT+"back/shop.do?method=findPolicyByShopId&token="+$.cookie("token")+"&menuKey=resource_shop&operation=view",
                     dataType: "json",
@@ -1530,7 +1545,7 @@ define(function(require, exports) {
 				change:function(event, ui){
 					if(ui.item == null){
 						$(this).val("");
-						var thisParent = $(this).parent().parent();
+						var thisParent = $(this).closest('tr');
 						thisParent.find("input[name=selfPayId]").val("");
 						thisParent.find("input[name=managerName]").val("");
 						thisParent.find("input[name=mobileNumber]").val("");
@@ -1550,7 +1565,7 @@ define(function(require, exports) {
 							var result = showDialog(data);
 							if(result){
 								var selfPay = JSON.parse(data.selfPay) || {};
-								var thisParent = $(_this).parent().parent();
+								var thisParent = $(_this).closest('tr');
 								thisParent.find("input[name=selfPayId]").val(ui.item.id).trigger('change');
 								thisParent.find("input[name=managerName]").val(selfPay.managerName);
 								thisParent.find("input[name=mobileNumber]").val(selfPay.mobileNumber);
@@ -1596,12 +1611,12 @@ define(function(require, exports) {
 				change:function(event, ui){
 					if(ui.item == null){
 						$(this).val("");
-						var thisParent = $(this).parent().parent();
+						var thisParent = $(this).closest('tr');
 						thisParent.find("input[name=selfitemId]").val("");
 					}
 				},
 				select:function(event, ui){
-					var thisParent = $(this).parent().parent(),
+					var thisParent = $(this).closest('tr'),
 						startTime = $("#tripPlan_addPlan_content").find("[name=startTime_Choose]").text(),
 						whichDay = thisParent.find("select[name=whichDay]").val();
 					thisParent.find("input[name=selfitemId]").val(ui.item.id).trigger('change');
@@ -1621,7 +1636,7 @@ define(function(require, exports) {
 				}
 			}).off("click").on("click",function(){
 				var $objItem = $(this);
-				var id = $(this).parent().parent().find("input[name=selfPayId]").val();
+				var id = $(this).closest('tr').find("input[name=selfPayId]").val();
 				if(id){
 					$.ajax({
 						url:""+APP_ROOT+"back/selfpay.do?method=findSelfPayItemBySelfPayId&token="+$.cookie("token")+"&menuKey=resource_selfpay&operation=view",
@@ -1675,13 +1690,13 @@ define(function(require, exports) {
 				minLength:0,
 				select:function(event, ui){
 					var _this = this;
-					var thisParent = $(_this).parent().parent();
+					var thisParent = $(_this).closest('tr');
 					thisParent.find("input[name=tickeId]").val(ui.item.id);
 				},
 				change : function(event, ui){
 					if(ui.item == null){
 						$(this).val("");
-						var thisParent = $(this).parent().parent();
+						var thisParent = $(this).closest('tr');
 						thisParent.find("input[name=tickeId]").val(ui.item.id).trigger('change');
 					}
 				}

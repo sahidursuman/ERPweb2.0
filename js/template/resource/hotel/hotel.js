@@ -240,7 +240,7 @@ define(function(require, exports) {
 			}
 		});
 	};
-	hotel.addHotel = function(){
+	hotel.addHotel = function(fn){
 		var html = addTemplate();
 		hotel.$addLayer = layer.open({
 		    type: 1,
@@ -262,7 +262,7 @@ define(function(require, exports) {
 		    	})
 		    	//提交事件绑定
 		    	$container.find(".T-btn-submit-hotel").on("click",function(){
-		    		hotel.saveHotel($container,1);
+		    		hotel.saveHotel($container,1,fn);
 		    	});
 		    }
 		})
@@ -369,7 +369,7 @@ define(function(require, exports) {
 	 * @param  {[type]} $container [容器]
 	 * @param  {[type]} type       [type：1 新增   type：2 修改]
 	 */
-	hotel.saveHotel = function($container,type){
+	hotel.saveHotel = function($container,type,fn){
 		// 表单校验
 		if (type == 1) {
 			if (!ruleData.validator.form()) {return}
@@ -397,7 +397,8 @@ define(function(require, exports) {
 		if($container.find(".T-hotel-status").prop("checked")){
 			status = 1;
 		}
-		var form = $container.find(".hotelMainForm").serialize()+"&status="+status;
+		var form = $container.find(".hotelMainForm").serialize()+"&status="+status,
+			formData = $container.find(".hotelMainForm").serializeJson();
 		hotelRoomJsonAddTr.each(function(){
 			var $this = $(this),
 				priceJsonAddTr = $this.find(".T-time div:not(.delete)"),
@@ -463,8 +464,14 @@ define(function(require, exports) {
 				if(result){
 					layer.close(hotel.$addLayer);
 					layer.close(hotel.$updateLayer);
+					data.hotel = JSON.parse(data.hotel);
+					formData.id = data.hotel.id;
 					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-						hotel.listHotel(0);
+						if (typeof fn === "function") {
+							fn(formData);
+						}else{
+							hotel.listHotel(0);
+						}
 					});
 				}
 			}
@@ -487,4 +494,5 @@ define(function(require, exports) {
 		return url;
 	}
 	exports.init = hotel.initModule;
+	exports.addHotel = hotel.addHotel;
 });

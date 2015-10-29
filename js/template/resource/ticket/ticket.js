@@ -125,7 +125,7 @@ define(function(require, exports) {
 		});
 		Tools.descToolTip($(".T-ctrl-tip"));
 	};
-	TicketResource.addTicket=function(){
+	TicketResource.addTicket=function(fn){
 		var html = addTemplate();
 		var addTicketLayer = layer.open({
 			type: 1,
@@ -148,7 +148,8 @@ define(function(require, exports) {
 					if ($container.find(".T-ticket-start").is(":checked") == true) {
 						status = 1;
 					}
-					var form = $container.children('.T-ticketMainForm').serialize() + "&status=" + status + "";
+					var form = $container.children('.T-ticketMainForm').serialize() + "&status=" + status + "",
+						formData = $container.children('.T-ticketMainForm').serializeJson();
 					$.ajax({
 						url:""+APP_ROOT+"back/ticket.do?method=addTicket&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=add",
 						type:"POST",
@@ -156,9 +157,16 @@ define(function(require, exports) {
 						success:function(data){
 							var result = showDialog(data);
 							if(result){
+								data.ticket = JSON.parse(data.ticket);
+								formData.id = data.ticket.id;
 								layer.close(addTicketLayer);
-								showMessageDialog($( "#confirm-dialog-message" ),data.message);
-								TicketResource.listTicket(0,"","");
+								showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+									if (typeof fn === "function") {
+										fn(formData);
+									}else{
+										TicketResource.listTicket(0,"","");
+									}
+								});
 							}
 						}
 					});
@@ -307,5 +315,5 @@ define(function(require, exports) {
 		});
 	}
 	exports.init = TicketResource.initModule;
-
+	exports.addTicket = TicketResource.addTicket;
 });
