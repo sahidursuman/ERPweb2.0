@@ -177,6 +177,7 @@ define(function(require, exports) {
 					}else{
 						html = inListTemplate(data);
 					}
+					html = filterUnAuth(html);
 					$("#"+divId+" .innerList").html(html);
 
 					//我部转出小组操作
