@@ -439,7 +439,8 @@ define(function(require, exports) {
 					
 					if(type==2){
 						//我社转出模板数据
-						var html = listTemplate(data);	
+						var html = listTemplate(data);
+						html = filterUnAuth(html);	
 						
 						$("#" +tabId+" .transferTouristMain .transferList").html(html);
 						//绑定查看分转客信息

@@ -58,17 +58,17 @@
 	                    {{/if}}
                     </td>
                     <td>
-                        <a data-entity-id="{{insurance.insuranceId}}" data-entity-insuranceCompanyName="{{insurance.insuranceCompanyName}}" data-entity-year="{{searchParam.year}}" data-entity-month="{{searchParam.month}}" class="cursor btn-insurance-check" >
+                        <a data-entity-id="{{insurance.insuranceId}}" data-entity-insuranceCompanyName="{{insurance.insuranceCompanyName}}" data-entity-year="{{searchParam.year}}" data-entity-month="{{searchParam.month}}" class="cursor R-rigth btn-insurance-check" data-rigth="1270002">
                             	 对账
-                        </a><a href="" class="cursor"> |</a>
+                        </a>
                         <a data-entity-id="{{insurance.insuranceId}}" data-entity-insuranceCompanyName="{{insurance.insuranceCompanyName}}" data-entity-year="{{searchParam.year}}"
                                 {{if searchParam.month == ""}}
                                  	 data-entity-startMonth=1 data-entity-endMonth=12 
                                   {{else}}
                                  	 data-entity-startMonth="{{searchParam.month}}" data-entity-endMonth="{{searchParam.month}}" 
                                 {{/if}}
-                        		class="cursor btn-insurance-balance">
-
+                        		class="cursor R-rigth btn-insurance-balance" data-rigth="1270003">
+                                <label class="padding-right20"> |</label>
                            		 结算
                         </a>
                     </td>

@@ -11,9 +11,9 @@
     background: #359fb2!important;
 }
 input{
-    vertical-align: middle!important;
-    font-size: 12px!important;
-    border: 1px solid #e2e2e2!important;
+    vertical-align: middle !important;
+    font-size: 12px !important;
+    border: 1px solid #e2e2e2  !important;
 }
 .btn-success{
     font-size:12px;
@@ -21,6 +21,9 @@ input{
 .nav-tabs>li>a{
     padding:7px 12px 6px;
 
+}
+.padding-right20{
+    padding-right:5px
 }
 
 /**

@@ -61,7 +61,7 @@
 	                    {{/if}}
                     </td>
                     <td>
-                        <a data-entity-id="{{hotel.hotelId}}" data-entity-hotelName="{{hotel.hotelName}}" data-entity-year="{{searchParam.year}}" data-entity-month="{{searchParam.month}}" class="cursor  btn-financialHotel-check " >
+                        <a data-entity-id="{{hotel.hotelId}}" data-entity-hotelName="{{hotel.hotelName}}" data-entity-year="{{searchParam.year}}" data-entity-month="{{searchParam.month}}" class="cursor  btn-financialHotel-check R-right" data-right="1220002">
                             	对账
                         </a><a href="" class="cursor"> |</a>
                         <a data-entity-id="{{hotel.hotelId}}" data-entity-hotelName="{{hotel.hotelName}}" data-entity-year="{{searchParam.year}}"
@@ -70,7 +70,8 @@
                                   {{else}}
                                  	 data-entity-startMonth="{{searchParam.month}}" data-entity-endMonth="{{searchParam.month}}" 
                                 {{/if}}
-                        		class="cursor btn-financialHotel-balance">
+                        		class="cursor R-right btn-financialHotel-balance" data-right="1220003">
+                                <label class="padding-right20"> |</label>
                            		 结算
                         </a>
                     </td>

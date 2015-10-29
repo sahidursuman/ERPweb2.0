@@ -133,7 +133,7 @@ define(function(require, exports) {
 						    type: 1,
 						    title:"编辑权限",
 						    skin: 'layui-layer-rim', //加上边框
-						    area: ['1280px', '750px'], //宽高
+						    area: ['1280px', '770px'], //宽高
 						    zIndex:1028,
 						    content: html,
 						    success:function(){
