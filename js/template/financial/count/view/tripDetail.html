@@ -502,7 +502,7 @@
                             {{if index == 0}}
                             <td rowspan="{{arrangeList.restaurantArrangeList.length}}">第{{arrange.whichDay}}天</td>{{/if}} {{if index == 0}}
                             <td rowspan="{{arrangeList.restaurantArrangeList.length}}">{{if arrange.restaurant != null}}{{arrange.restaurant.name}}{{/if}}</td>{{/if}}
-                            <td>{{if arrange.restaurantStandard != null}}{{arrange.restaurantStandard.type}}{{/if}}</td>
+                            <td>{{arrange.restaurantStandard.type}}</td>
                             <td>{{arrange.price}}
                                 <input type="hidden" name="price" value="{{arrange.price}}" />
                             </td>
