@@ -96,7 +96,7 @@ define(function(require, exports) {
         //添加餐厅
         restaurant.$tab.find('.T-add').on('click', function(event) {
             event.preventDefault();
-            restaurant.addRestaurant(0);
+            restaurant.addRestaurant();
         });
 
         // 报表内的操作
@@ -146,7 +146,7 @@ define(function(require, exports) {
     };
 
     // 添加餐厅
-    restaurant.addRestaurant = function() {
+    restaurant.addRestaurant = function(fn) {
         var html = addTemplate();
         restaurant.$addLayer = layer.open({
             type: 1,
@@ -167,7 +167,7 @@ define(function(require, exports) {
 
                 //给提交按钮绑定事件 mealValidator validator
                 $container.find(".T-saveAdd").click(function() {
-                    restaurant.savaData("add");
+                    restaurant.savaData("add",fn);
                 });
             }
         });
@@ -234,7 +234,7 @@ define(function(require, exports) {
         },function(){},"放弃","删除");
     };
 
-    restaurant.savaData = function(option){
+    restaurant.savaData = function(option,fn){
     	var $container = $(".T-" + option + "-container");
     	var validator = rule.check($container);
     	if (!validator.form()) { return; }
@@ -245,7 +245,8 @@ define(function(require, exports) {
         if ($container.find(".restaurant-status").is(":checked") == true) {
             status = 1;
         }
-        var form = $container.find('form').serialize() + "&status=" + status + "";
+        var form = $container.find('form').serialize() + "&status=" + status + "",
+            formData = $container.find('form').serializeJson();
 
         var $this = $(this),
             restaurantStandardJsonAdd = [];
@@ -297,13 +298,21 @@ define(function(require, exports) {
             success: function(data) {
                 var result = showDialog(data);
                 if (result) {
+                    console.log(formData)
+                    data.restaurant = JSON.parse(data.restaurant);
+                    formData.id = data.restaurant.id;
                 	if(option == "add") {
                 		layer.close(restaurant.$addLayer);
                 	} else if(option == "update"){
                 		layer.close(restaurant.$updateLayer);
                 	}
-                    showMessageDialog($("#confirm-dialog-message"), data.message);
-                    restaurant.listRestaurant(page);
+                    showMessageDialog($("#confirm-dialog-message"), data.message,function(){
+                        if (typeof fn === "function") {
+                            fn(formData);
+                        }else{
+                            restaurant.listRestaurant(page);
+                        }
+                    });
                 }
             }
         });
@@ -355,4 +364,5 @@ define(function(require, exports) {
 	};
 
     exports.init = restaurant.initModule;
+    exports.addRestaurant = restaurant.addRestaurant;
 });

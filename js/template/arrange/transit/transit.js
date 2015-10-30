@@ -45,9 +45,6 @@ define(function(require, exports) {
 					//如果正确则就执行
 					if(result){
 						data.outRemarkArrangeList = JSON.parse(data.outRemarkArrangeList);
-						//data.searchParam.arrangeUserList = JSON.parse(data.searchParam.arrangeUserList);
-						//data.searchParam.lineProductList = JSON.parse(data.searchParam.lineProductList);
-						//data.searchParam.partnerAgencyList = JSON.parse(data.searchParam.partnerAgencyList);
 						var html = listTemplate(data);
 						addTab(menuKey,"中转安排",html);
 						transit.initList(data);
