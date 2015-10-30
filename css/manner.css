@@ -694,3 +694,13 @@ input,select{
     cursor: pointer;
     position: absolute;
 }
+
+/*项目代订导出按钮*/
+
+.T-bookingBtn{
+    height: 24px;
+    line-height: 9px;
+    position: absolute;
+    right: 30px;
+    top: 0px;
+}
