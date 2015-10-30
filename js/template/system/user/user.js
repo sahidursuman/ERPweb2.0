@@ -39,7 +39,7 @@ define(function(require, exports) {
 						
 						$("#tab-"+menuKey+"-content .userList .btn-user-auth").click(function(){
 							var id = $(this).attr("data-entity-id");
-							user.updateAuth(id);
+							user.updateAuth(id,false);
 						});
 						
 						$("#tab-"+menuKey+"-content .btn-user-add").click(function(){
@@ -110,7 +110,7 @@ define(function(require, exports) {
 				}
 			});
 		},
-		updateAuth : function(id) {
+		updateAuth : function(id,isNew) {//isNew是否是新增人员
 			$.ajax({
 				url:""+APP_ROOT+"back/user.do?method=findUserFunctionShip&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view&groupId="+id,
 				type:"POST",
@@ -139,14 +139,19 @@ define(function(require, exports) {
 						    success:function(){
 						    	//初始化选择
 						    	//权限范围
-						    	var authList = data.userAuthList;
-						    	for(var i = 0 ;i < authList.length; i ++){
-						    		var menuId = authList[i].menuId;
-						    		$(".T-submenu-id"+menuId).prop("checked",true);
-						    		var index = $(".T-submenu-check").index($(".T-submenu-id"+menuId));
-						    		var authType = authList[i].authAreaType;
-						    		$(".T-function-area"+authType).eq(index).prop("checked",true);
+						    	if(isNew){
+						    		$("input").prop("checked",true);
+						    	} else {
+						    		var authList = data.userAuthList;
+							    	for(var i = 0 ;i < authList.length; i ++){
+							    		var menuId = authList[i].menuId;
+							    		$(".T-submenu-id"+menuId).prop("checked",true);
+							    		var index = $(".T-submenu-check").index($(".T-submenu-id"+menuId));
+							    		var authType = authList[i].authAreaType;
+							    		$(".T-function-area"+authType).eq(index).prop("checked",true);
+							    	}
 						    	}
+						    	
 						    	//功能listUserFunctionShip
 						    	var functionList = data.listUserFunctionShip;
 						    	for(var i = 0 ;i < functionList.length; i ++){
@@ -167,16 +172,7 @@ define(function(require, exports) {
 						    			// table.find('.T-function-area1').prop("checked",true);
 						    			table.find('.T-function').prop("checked",true);
 						    			table.find('.T-submenu').each(function(){
-						    				var ischeck = false;
-						    				$(this).find("input[type=radio]").each(function(){
-						    					if($(this).is(":checked")){
-						    						ischeck = true;
-						    						return false;
-						    					}
-						    				});
-						    				if(!ischeck){
-						    					$(this).find('.T-function-area1').prop("checked",true);
-						    				}
+						    				user.checkAuth(this);
 						    			});
 						    		}else{
 						    			table.find('input').prop("checked",false);
@@ -188,7 +184,7 @@ define(function(require, exports) {
 						    		var tr = $(this).closest('tr');
 						    		if($(this).is(":checked")){
 						    			tr.find("input[type=checkbox]").prop("checked",true);
-						    			tr.find("input[type=radio]").eq(0).prop("checked",true);
+						    			tr.find(".T-function-area4").prop("checked",true);
 						    			user.checkMenu(this);
 						    		} else{
 						    			tr.find("input[type=checkbox]").prop("checked",false);
@@ -201,16 +197,9 @@ define(function(require, exports) {
 						    	$(".T-submenu .T-function").on("click",function(){
 						    		var tr = $(this).closest('tr');
 						    		tr.find('.T-submenu-check').prop("checked",true);
-						    		var ischeck = false;
-				    				tr.find("input[type=radio]").each(function(){
-				    					if($(this).is(":checked")){
-				    						ischeck = true;
-				    						return false;
-				    					}
-				    				});
-				    				if(!ischeck){
-				    					tr.find('.T-function-area1').prop("checked",true);
-				    				}
+						    		if($(this).is(":checked")){
+						    			user.checkAuth(tr);
+						    		}
 						    		user.checkMenu(this);
 						    	});
 						    	$(".T-submenu input[type=radio]").on("click",function(){
@@ -234,6 +223,10 @@ define(function(require, exports) {
 						    	$(".T-selectAll-function").on("click",function(){
 						    		var index = $(this).parent().index();
 						    		var $this = $(this).closest('table').find(".T-function");
+						    		var submenu = $(this).closest('table').find(".T-submenu");
+						    		submenu.each(function(){
+						    			user.checkAuth(this);
+						    		})
 						    		var isAll = false;
 						    		$this.each(function(){
 						    			if($(this).is(":checked")){
@@ -316,6 +309,20 @@ define(function(require, exports) {
 			});
 			if(isAll){
 				$obj.closest('table').find(".T-menu-check").prop("checked",true);
+			}
+		},
+		//权限是否使用默认勾选
+		checkAuth : function(obj){
+			var ischeck = false;
+			$(obj).find("input[type=radio]").each(function(){
+				if($(this).is(":checked")){
+					ischeck = true;
+					return false;
+				}
+			});
+			if(!ischeck){
+				console.log("no-check");
+				$(obj).find('.T-function-area4').prop("checked",true);
 			}
 		},
 
@@ -465,7 +472,7 @@ define(function(require, exports) {
 												//showMessageDialog($("#confirm-dialog-message"),data.message);
 												user.listUser(0, "", 1);
 												//弹出设置权限页面
-												user.updateAuth(data.userId);
+												user.updateAuth(data.userId,true);
 											}
 										}
 									});
