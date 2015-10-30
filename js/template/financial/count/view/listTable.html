@@ -62,10 +62,12 @@
                 {{if financialTripPlan.tripPlan.oPCheckUser != null}}{{financialTripPlan.tripPlan.oPCheckUser.realName}}{{/if}}
             {{/if}}
         </td>
-        <td style="vertical-align:middle" {{if financialTripPlan.tripPlan.tripPlanDetails.length > 1}}rowspan="{{financialTripPlan.tripPlan.tripPlanDetails.length}}"{{/if}}>
+           <td style="vertical-align:middle" {{if financialTripPlan.tripPlan.tripPlanDetails.length > 1}}rowspan="{{financialTripPlan.tripPlan.tripPlanDetails.length}}"{{/if}}>
+                    {{if financialTripPlan.tripPlan.billStatus == -1}}
+            {{else}}
             <a data-entity-billStatus="{{financialTripPlan.tripPlan.billStatus}}" data-entity-id="{{financialTripPlan.id}}" class="cursor btn-count-update">
                 审核
-            </a><a href="" class="cursor"> |</a>
+            </a><a href="" class="cursor"> |</a>{{/if}}
             <a data-entity-id="{{financialTripPlan.id}}" class=" btn-count-examine cursor">
                 明细
             </a><a href="" class="cursor"> |</a>

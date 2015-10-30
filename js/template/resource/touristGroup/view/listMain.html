@@ -8,17 +8,20 @@
 				<option value="{{partnerAgency.id}}" {{if searchParam.partnerAgencyId == partnerAgency.id}}selected="selected"{{/if}} >{{partnerAgency.travelAgencyName}}</option>
 				{{/each}}
 			</select> -->
-            <input type="text" class="col-sm-12 choosePartnerAgency marginLeft-Right7" placeholder="来源" name=""   value="{{searchParam.partnerName}}" />
+            <input type="text" class="col-sm-12 choosePartnerAgency marginLeft-Right7" placeholder="来源" name="fromPartnerAgencyName"   value="{{searchParam.fromPartnerAgencyName}}" />
             <input type="hidden" name="fromPartnerAgencyId" value="{{searchParam.fromPartnerAgencyId}}">
         </div>
         <label class="pull-left text-right control-label no-padding-right">线路:</label>
         <div class="col-sm-1 marginLeft-Right7">
-            <select name="lineProductId" class="col-sm-12">
-                <option value=''>全部</option>
-                {{each lineProductList as lineProduct}}
-                <option value="{{lineProduct.partnerAgency}}" {{if searchParam.lineProductId == lineProduct.partnerAgency}}selected="selected" {{/if}}>{{lineProduct.name}}</option>
-                {{/each}}
-            </select>
+            <!--<select name="lineProductId" class="col-sm-12">-->
+                <!--<option value=''>全部</option>-->
+                <!--{{each lineProductList as lineProduct}}-->
+                <!--<option value="{{lineProduct.partnerAgency}}" {{if searchParam.lineProductId == lineProduct.partnerAgency}}selected="selected" {{/if}}>{{lineProduct.name}}</option>-->
+                <!--{{/each}}-->
+            <!--</select>-->
+
+            <input type="text" class="col-sm-12 chooseLineProduct" placeholder="线路产品" name="lineProductName" value="{{searchParam.lineProductName}}" />
+            <input type="hidden" name="lineProductId" value="{{searchParam.lineProductId}}">
         </div>
         <label class="pull-left text-right control-label no-padding-right">出游时间:</label>
         <div class="col-sm-1 marginLeft-Right7">
@@ -31,12 +34,14 @@
         </div>
         <label class="pull-left text-right control-label no-padding-right">录入人:</label>
         <div class="col-sm-1 marginLeft-Right7">
-            <select name="userId" class="col-sm-12">
-                <option value=''>全部</option>
-                {{each userList as user}}
-                <option value="{{user.id}}" {{if searchParam.userId== user.id}}selected="selected" {{/if}}>{{user.realName}}</option>
-                {{/each}}
-            </select>
+            <!--<select name="userId" class="col-sm-12">-->
+                <!--<option value=''>全部</option>-->
+                <!--{{each userList as user}}-->
+                <!--<option value="{{user.id}}" {{if searchParam.userId== user.id}}selected="selected" {{/if}}>{{user.realName}}</option>-->
+                <!--{{/each}}-->
+            <!--</select>-->
+            <input type="text" class="col-xs-12 creatorUserChoose" placeholder="录入人" name="creatorName" value="{{searchParam.creatorName}}"/>
+            <input type="hidden" name="creatorId" value="{{searchParam.creatorId}}" />
         </div>
         <label class="pull-left text-right control-label no-padding-right">录入日期:</label>
         <div class="col-sm-1 marginLeft-Right7">
@@ -111,7 +116,7 @@
             </button>
         </div>
         <div class="col-sm-1 pull-left" style="margin-left: 5px">
-            <button class="btn btn-sm btn-success btn-touristGroup-add">
+            <button class="btn btn-sm btn-success btn-touristGroup-add R-right" data-right="1120002">
                 <i class="ace-icon fa fa-plus"></i> 新增小组
             </button>
         </div>
@@ -122,10 +127,10 @@
     </div>
     <div class="form-horizontal">
         <label class="control-label pull-left" name="statistics-count">人数合计：{{statistics.adultCount}}大{{statistics.childCount}}小</label>
-        <label class="control-label col-sm-2" name="statistics-needPay">应收款合计：{{statistics.needPay}}元</label>
-        <label class="control-label col-sm-2" name="statistics-payed">已收款合计：{{statistics.payedMoney}}元</label>
-        <label class="control-label col-sm-2" name="statistics-currentNeedPay">现收款合计：{{statistics.currentNeedPay}}元</label>
-        <label class="control-label col-sm-2" name="statistics-unIncome">未收款合计：{{statistics.unIncomeMoney}}元</label>
+        <label class="control-label col-sm-2" name="statistics-needPay">应收款合计：{{statistics.needPay | toFixed}}元</label>
+        <label class="control-label col-sm-2" name="statistics-payed">已收款合计：{{statistics.payedMoney | toFixed}}元</label>
+        <label class="control-label col-sm-2" name="statistics-currentNeedPay">现收款合计：{{statistics.currentNeedPay | toFixed}}元</label>
+        <label class="control-label col-sm-2" name="statistics-unIncome">未收款合计：{{statistics.unIncomeMoney | toFixed}}元</label>
     </div>
 </div>
 <div id="touristGroup-listMain" class="col-sm-12 clearfix">

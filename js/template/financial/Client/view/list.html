@@ -12,7 +12,7 @@
             <option value="2015" {{if year==2015}}selected="selected" {{/if}}>2015</option>
             <option value="2014" {{if year==2014}}selected="selected" {{/if}}>2014</option>
         </select>
-        <select class="col-sm-1 marginLeft-30" name="ClientCheck_searchMonth " >
+        <select class="col-sm-1 marginLeft-30" name="ClientCheck_searchMonth">
             <option value="">全部</option>
             <option value="1" {{if month==1}}selected="selected" {{/if}}>1</option>
             <option value="2" {{if month==2}}selected="selected" {{/if}}>2</option>
@@ -67,12 +67,13 @@
                             <span style="color:green">{{rs.isConfirmAccount}}/{{rs.isConfirmAccounts}}</span> {{/if}}
                         </td>
                         <td>
-                            <a data-entity-id="{{rs.id}}" class="cursor btn-divide">
-						对账
-					</a><a href="" class="cursor"> |</a>
-                            <a data-entity-id="{{rs.id}}" class="btn-guide-view cursor    btn-transfter">
-						结算
-					</a>
+                            <a data-entity-id="{{rs.id}}" class="cursor R-right btn-divide" data-right="1280002">
+						      对账
+					       </a>
+                            <a data-entity-id="{{rs.id}}" class="btn-guide-view cursor R-right   btn-transfter" data-right="1280003">
+                            <label class="padding-right20"> |</label>
+        						结算
+        					</a>
                         </td>
                     </tr>
                     {{/each}}

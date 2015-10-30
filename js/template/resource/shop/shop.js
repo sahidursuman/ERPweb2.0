@@ -164,7 +164,7 @@ define(function(require, exports) {
 	/**
 	 * add shop 
 	 */
-	shop.addShop = function(){
+	shop.addShop = function(fn){
 		var html = addTemplate();
 		shopFormLayer = layer.open({
 		    type: 1,
@@ -174,7 +174,9 @@ define(function(require, exports) {
 		    zIndex:1028,
 		    content: html,
 			scrollbar: false,    // 推荐禁用浏览器外部滚动条
-		    success:shop.init_form_event
+		    success:function(){
+		    	shop.init_form_event("",fn);
+		    }
 		});
 	}
 
@@ -218,7 +220,7 @@ define(function(require, exports) {
 					    	}
 
 					    	//级联选择城市列表//
-					    	var provinceId = "";
+					    	var provinceId, cityId, districtId;
 					    	if(data.shop.province != null){
 					    		provinceId = data.shop.province.id;
 					    		var cityId = "";
@@ -228,11 +230,10 @@ define(function(require, exports) {
 						    		if(data.shop.district != null){
 						    			districtId = data.shop.district.id;
 						    		}
-						    		shop.getDistrictList($(".shopMainForm select[name=districtId]"),cityId,districtId);
 						    	}
-						    	shop.getCityList($(".shopMainForm select[name=cityId]"),provinceId,cityId);
 					    	}
-					    	shop.getProvinceList($(".shopMainForm select[name=provinceId]"),provinceId);
+
+					    	KingServices.provinceCity(shop.$formContainer.find('.T-distict'), provinceId, cityId, districtId);
 					    }
 					});
 				}
@@ -341,7 +342,7 @@ define(function(require, exports) {
 	 * @param  {int} type 0: 添加，1：修改
 	 * @return {[type]}      [description]
 	 */
-	shop.init_form_event = function(type){
+	shop.init_form_event = function(type,fn){
     	shop.$formContainer = $('.T-shop-dialog-container');
 
     	var $mainForm = shop.$formContainer.find('.T-shopMainForm'),	
@@ -351,32 +352,13 @@ define(function(require, exports) {
     	
     	if (type === 1)  {
     		policyListValidator = rule.checkItems(shop.$formContainer.find(".T-shopPolicyForm"));
+    	} else {
+    		// 添加时，初始化省市区
+    		KingServices.provinceCity($mainForm.find('.T-distict'));
     	}
+
+    	// 初始化表单验证
     	mainValidator = rule.check($mainForm);
-    	//初始化省数据
-    	shop.getProvinceList($mainForm.find("select[name=provinceId]"));
-    	
-    	//给省份select绑定事件
-    	$mainForm.find("select[name=provinceId]").change(function(){
-    		var provinceId = $(this).val();
-    		if(provinceId != ""){
-    			shop.getCityList($mainForm.find("select[name=cityId]"),provinceId);
-    		}
-    		else{
-    			$mainForm.find("select[name=cityId]").html("<option value=''>未选择</option>");
-    		}
-    		$mainForm.find("select[name=districtId]").html("<option value=''>未选择</option>");
-    	});
-    	//给城市select绑定事件
-    	$mainForm.find("select[name=cityId]").change(function(){
-    		var cityId = $(this).val();
-    		if(cityId != ""){
-    			shop.getDistrictList($mainForm.find("select[name=districtId]"),cityId);
-    		}
-    		else{
-    			$mainForm.find("select[name=districtId]").html("<option value=''>未选择</option>");
-    		}
-    	});
     	
     	// 表格中的事件处理
     	shop.$formContainer.find('.T-shop-standard-list').on('click', '.T-action', function(event) {
@@ -415,6 +397,7 @@ define(function(require, exports) {
     		// 是否启用
     		var status = shop.$formContainer.find('.T-shop-status').prop('checked')? 1: 0,
     			form = shop.$formContainer.find(".T-shopMainForm").serialize()+"&status="+status+"",
+    			formData = shop.$formContainer.find(".T-shopMainForm").serializeJson(),
 	    		url = APP_ROOT+"back/shop.do?method=addShop&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=add",
 	    		// 政策列表数据封装
 	    		policyDataList = [];
@@ -452,11 +435,17 @@ define(function(require, exports) {
 				success:function(data){
 					var result = showDialog(data);
 					if(result){
+						data.shop = JSON.parse(data.shop);
+						formData.id = data.shop.id;
 						showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
 							if (type === 1) {
 								shop.listShop(shop.currentPage);
 							} else {
-								shop.listShop(0,"","");
+								if (typeof fn === "function") {
+									fn(formData);
+								}else{
+									shop.listShop(0,"","");
+								}
 							}
 
 							layer.close(shopFormLayer);
@@ -486,77 +475,6 @@ define(function(require, exports) {
 			format: 'yyyy-mm-dd',
 			language: 'zh-CN'
 		});
-	};
-
-	shop.getProvinceList = function(obj,provinceId){
-		$.ajax({
-			url:""+APP_ROOT+"/base.do?method=getProvince",
-			type:"POST",
-			dataType:"json",
-			success:function(data){
-				var html = "<option value=''>未选择</option>";
-				var provinceList = data.provinceList;
-				if(provinceList != null && provinceList.length > 0){
-					for(var i=0;i<provinceList.length;i++){
-						if (provinceId != null && provinceList[i].id == provinceId) {
-							html += "<option selected=\"selected\" value='"+provinceList[i].id+"'>"+provinceList[i].name+"</option>";
-						} else {
-							html += "<option value='"+provinceList[i].id+"'>"+provinceList[i].name+"</option>";
-						}
-					}
-				}
-				$(obj).html(html);
-			}
-		});
-	};		
-	shop.getCityList = function(obj,provinceId,cityId){
-		if(provinceId != ""){
-			$.ajax({
-				url:""+APP_ROOT+"/base.do?method=getCity",
-				type:"POST",
-				data:"provinceId="+provinceId+"",
-				dataType:"json",
-				success:function(data){
-					var html = "<option value=''>未选择</option>";
-					var cityList = JSON.parse(data.cityList);
-					if(cityList != null && cityList.length > 0){
-						for(var i=0;i<cityList.length;i++){
-							if (cityId != null && cityId == cityList[i].id) {
-								html += "<option selected=\"selected\" value='"+cityList[i].id+"'>"+cityList[i].name+"</option>";
-							} else {
-								html += "<option value='"+cityList[i].id+"'>"+cityList[i].name+"</option>";
-							}
-						}
-					}
-					$(obj).html(html);
-				}
-			});
-		}
-	};
-	shop.getDistrictList = function(obj,cityId,districtId){
-		if(cityId != ""){
-			$.ajax({
-				url:""+APP_ROOT+"/base.do?method=getDistrict",
-				type:"POST",
-				data:"cityId="+cityId+"",
-				dataType:"json",
-				success:function(data){
-					var html = "<option value=''>未选择</option>";
-					var districtList = JSON.parse(data.districtList);
-					if(districtList != null && districtList.length > 0){
-						for(var i=0;i<districtList.length;i++){
-							if (districtId != null && districtId == districtList[i].id) {
-								html += "<option selected=\"selected\" value='"+districtList[i].id+"'>"+districtList[i].name+"</option>";
-							} else {
-								html += "<option value='"+districtList[i].id+"'>"+districtList[i].name+"</option>";
-							}
-							
-						}
-					}
-					$(obj).html(html);
-				}
-			});
-		}
 	};
 
 	/**
@@ -848,4 +766,5 @@ define(function(require, exports) {
 		return policyHtml.replace('$index', index);
 	}
 	exports.init = shop.initModule;
+	exports.addShop = shop.addShop;
 });

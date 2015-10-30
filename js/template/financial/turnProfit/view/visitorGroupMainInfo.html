@@ -75,7 +75,31 @@
 			<td>
 				<label class="control-label">{{touristGroupDetail.adultPrice}}</label>
 			</td>
-
 		</tr>
+		<tr>
+			<td>
+				结算价
+			</td>
+			<td>
+				小孩
+			</td>
+			<td>
+				<label class="control-label">{{touristGroupDetail.childCount}}</label>
+			</td>
+			<td>
+				<label class="control-label">{{touristGroupDetail.childPrice}}</label>
+			</td>
+		</tr>
+		<!-- 其他费用 -->
+		  {{each touristGroupDetail.touristGroupTransferFeeSet as transferFee}}
+		    {{if transferFee!=null}}
+		      <tr>   
+		            <td>其他费用</td>  
+		            <td>{{transferFee.discribe}}</td>
+		            <td>{{transferFee.count}}</td>  
+		            <td>{{transferFee.otherPrice}}</td>
+		      </tr>
+		      {{/if}}  
+		  {{/each}} 
 	</table>
 	</form>

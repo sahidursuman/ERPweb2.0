@@ -53,17 +53,19 @@
 	                    {{/if}}
                     </td>
                     <td>
-                        <a data-entity-id="{{booking.partnerAgencyId}}" data-entity-partnerAgencyName="{{booking.partnerAgencyName}}" data-entity-year="{{searchParam.year}}" data-entity-month="{{searchParam.month}}" class="cursor btn-financialbooking-check " >
+                        <a data-entity-id="{{booking.partnerAgencyId}}" data-entity-partnerAgencyName="{{booking.partnerAgencyName}}" data-entity-year="{{searchParam.year}}" data-entity-month="{{searchParam.month}}" class="cursor btn-financialbooking-check R-right" data-right="1290002">
 
                             	对账
-                        </a><a href="" class="cursor"> |</a>
+                            
+                        </a>
                         <a data-entity-id="{{booking.partnerAgencyId}}" data-entity-partnerAgencyName="{{booking.partnerAgencyName}}" data-entity-year="{{searchParam.year}}"
                                 {{if searchParam.month == ""}}
                                  	 data-entity-startMonth=1 data-entity-endMonth=12 
                                   {{else}}
                                  	 data-entity-startMonth="{{searchParam.month}}" data-entity-endMonth="{{searchParam.month}}" 
                                 {{/if}}
-                        		class="cursor btn-financialbooking-balance">
+                        		class="cursor btn-financialbooking-balance R-right" data-right="1290003">
+                                <label class="padding-right20"> |</label>
                            		 结算
                         </a>
                     </td>

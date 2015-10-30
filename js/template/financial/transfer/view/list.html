@@ -56,16 +56,17 @@
 	                    {{/if}}
                     </td>
                     <td>
-                        <a data-entity-id="{{transfer.partnerAgencyId}}" data-entity-partnerAgencyName="{{transfer.partnerAgencyName}}" data-entity-year="{{searchParam.year}}" data-entity-month="{{searchParam.month}}" class="cursor btn-transfer-check " >
+                        <a data-entity-id="{{transfer.partnerAgencyId}}" data-entity-partnerAgencyName="{{transfer.partnerAgencyName}}" data-entity-year="{{searchParam.year}}" data-entity-month="{{searchParam.month}}" class="cursor  btn-transfer-check R-right" data-right="1300002">
                             	对账
-                        </a><a href="" class="cursor"> |</a>
+                        </a>
                         <a data-entity-id="{{transfer.partnerAgencyId}}" data-entity-partnerAgencyName="{{transfer.partnerAgencyName}}" data-entity-year="{{searchParam.year}}"
                                 {{if searchParam.month == ""}}
                                  	 data-entity-startMonth=1 data-entity-endMonth=12 
                                   {{else}}
                                  	 data-entity-startMonth="{{searchParam.month}}" data-entity-endMonth="{{searchParam.month}}" 
                                 {{/if}}
-                        		class="cursor btn-transfer-balance">
+                        		class="cursor R-right btn-transfer-balance" data-right="1300003">
+                                <label class="padding-right20"> |</label>
                            		 结算
                         </a>
                     </td>

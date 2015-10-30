@@ -11,11 +11,15 @@ define(function(require, exports) {
 		listMainTemplate = require("./view/listMain"),
 		addPartnerManagerTemplate = require("./view/addPartnerManager"),
 		searchTravelLinelayer;
-	
+
 	var touristGroup = {
 		searchData : {
-		    partnerAgencyId : "",
+			lineProductName: "",
 			lineProductId : "",
+			fromPartnerAgency:"",
+			fromPartnerAgencyId:"",
+			creator:"",
+			creatorName:"",
 			startTime : "",
 			userId : "",
 			createTimeStart : "",
@@ -24,6 +28,7 @@ define(function(require, exports) {
 			status : ""
 		},
 		edited : {},
+		autocompleteDate : {},
 		isEdited : function(editedType){
 			if(!!touristGroup.edited[editedType] && touristGroup.edited[editedType] != ""){
 				return true;
@@ -32,13 +37,17 @@ define(function(require, exports) {
 		},
 		cleanFlag:0,
 		//获取统计数据
-		getTouristStatisticData:function(page,partnerAgencyIdS,lineProductIdS,startTimeS,userIdS,createTimeStartS,createTimeEndS,customerTypeS,statusS){
+		getTouristStatisticData:function(page,lineProduct,lineProductId,fromPartnerAgencyName,fromPartnerAgencyId,creatorId,creatorName,startTimeS,createTimeStartS,createTimeEndS,customerTypeS,statusS){
 			var args = {
 				pageNo: page,
-				partnerAgencyId: partnerAgencyIdS,
-				lineProductIdSearch: lineProductIdS,
+				lineProductName: lineProduct,
+				lineProductId: lineProductId,
+				fromPartnerAgencyName:fromPartnerAgencyName,
+				fromPartnerAgencyId:fromPartnerAgencyId,
+				creatorName:creatorName,
+				creatorId:creatorId,
 				startTimeSearch: startTimeS,
-				userId: userIdS,
+				//userId: userIdS,
 				createTimeStart: createTimeStartS,
 				createTimeEnd: createTimeEndS,
 				statusSearch: statusS,
@@ -57,7 +66,7 @@ define(function(require, exports) {
 					globalLoadingLayer = openLoadingLayer();
 				},
 				success:function(data){
-					
+
 					//关闭遮罩
 					layer.close(globalLoadingLayer);
 					//根据返回值判断下一步操作，或者已出现错误
@@ -65,18 +74,25 @@ define(function(require, exports) {
 					//如果正确则就执行
 					if(result){
 						touristGroup.searchData = {
-						    partnerAgencyId : partnerAgencyIdS,
-							lineProductId : lineProductIdS,
-							startTime : startTimeS,
-							userId : userIdS,
-							createTimeStart : createTimeStartS,
-							createTimeEnd : createTimeEndS,
+							lineProductName: lineProduct,
+							lineProductId: lineProductId,
+							fromPartnerAgencyName:fromPartnerAgencyName,
+							fromPartnerAgencyId:fromPartnerAgencyId,
+							creatorName:creatorName,
+							creatorId:creatorId,
+							startTimeSearch: startTimeS,
+							//userId: userIdS,
+							createTimeStart: createTimeStartS,
+							createTimeEnd: createTimeEndS,
+							statusSearch: statusS,
 							customerType: customerTypeS,
 							status : statusS
 						};
-						
+
 						var html = listMainTemplate(data);
 						addTab(menuKey,"游客管理",html);
+						touristGroup.getQueryTerms();
+
 						//搜索栏状态button下拉事件
 						var tab = "tab-resource_touristGroup-content";
 						$(".touristGroupSearchForm .btn-status .dropdown-menu a").click(function(){
@@ -87,49 +103,60 @@ define(function(require, exports) {
 						//筛选事件绑定
 						$(".touristGroupSearchForm .btn-touristGroupList-search").click(function(){
 							touristGroup.searchData = {
-								partnerAgencyId : $(".touristGroupSearchForm input[name=fromPartnerAgencyId]").val(),
-								lineProductId : $(".touristGroupSearchForm select[name=lineProductId]").find("option:selected").val(),
+								fromPartnerAgencyName : $(".touristGroupSearchForm input[name=fromPartnerAgencyName]").val(),
+								fromPartnerAgencyId : $(".touristGroupSearchForm input[name=fromPartnerAgencyId]").val(),
+								lineProductName : $(".touristGroupSearchForm input[name=lineProductName]").val(),
+								lineProductId : $(".touristGroupSearchForm input[name=lineProductId]").val(),
 								startTime : $(".touristGroupSearchForm input[name=startTime]").val(),
-								userId : $(".touristGroupSearchForm select[name=userId]").find("option:selected").val(),
+								creatorName : $(".touristGroupSearchForm input[name=creatorName]").val(),
+								creatorId : $(".touristGroupSearchForm input[name=creatorId]").val(),
+								//userId : $(".touristGroupSearchForm select[name=userId]").find("option:selected").val(),
 								createTimeStart : $(".touristGroupSearchForm input[name=createTimeStart]").val(),
 								createTimeEnd : $(".touristGroupSearchForm input[name=createTimeEnd]").val(),
 								customerType : $(".touristGroupSearchForm select[name=customerType]").find("option:selected").val(),
 								status :  $(".touristGroupSearchForm .btn-status button").attr("data-value")
 							}
-							touristGroup.getTouristStatisticData(0,touristGroup.searchData.partnerAgencyId,touristGroup.searchData.lineProductId,touristGroup.searchData.startTime,touristGroup.searchData.userId,touristGroup.searchData.createTimeStart,touristGroup.searchData.createTimeEnd,touristGroup.searchData.customerType,touristGroup.searchData.status);
-						});
+							touristGroup.getTouristStatisticData(0,touristGroup.searchData.lineProductName,touristGroup.searchData.lineProductId,touristGroup.searchData.fromPartnerAgencyName,touristGroup.searchData.fromPartnerAgencyId,touristGroup.searchData.creatorId,touristGroup.searchData.creatorName,touristGroup.searchData.startTime,touristGroup.searchData.createTimeStart,touristGroup.searchData.createTimeEnd,touristGroup.searchData.customerType,touristGroup.searchData.status);
+							});
 
 						//新增小组事件
 						$(".main-content .page-content .btn-touristGroup-add").click(function(){
 							touristGroup.cleanFlag = 1;
 							touristGroup.addTouristGroup();
-							
-						});
-				        touristGroup.listTouristGroup(0,touristGroup.searchData.partnerAgencyId,touristGroup.searchData.lineProductId,touristGroup.searchData.startTime,touristGroup.searchData.userId,touristGroup.searchData.createTimeStart,touristGroup.searchData.createTimeEnd,touristGroup.searchData.customerType,touristGroup.searchData.status);
-				        //下拉数据初始化
-				        touristGroup.initList(data);
- 						touristGroup.getPartnerAgencyList($("#"+tab+" .choosePartnerAgency"),"")
 
+						});
+						touristGroup.listTouristGroup(0,touristGroup.searchData.lineProductName,touristGroup.searchData.lineProductId,touristGroup.searchData.fromPartnerAgencyName,touristGroup.searchData.fromPartnerAgencyId,touristGroup.searchData.creatorId,touristGroup.searchData.creatorName,touristGroup.searchData.startTimeSearch,touristGroup.searchData.createTimeStart,touristGroup.searchData.createTimeEnd,touristGroup.searchData.customerType,touristGroup.searchData.status);
+						//下拉数据初始化
+						touristGroup.initList(data);
+						//touristGroup.getPartnerAgencyList($("#"+tab+" .choosePartnerAgency"),"")
+						touristGroup.getPartnerAgencyList($("#tab-"+menuKey+"-content"));
+						touristGroup.getPartnerAgencySearchList($("#tab-"+menuKey+"-content"));
+						touristGroup.getCreatorUserList($("#tab-"+menuKey+"-content"));
 					}
 				}
 			});
 		},
-	   //数据列表
-		listTouristGroup:function(page,partnerAgencyIdS,lineProductIdS,startTimeS,userIdS,createTimeStartS,createTimeEndS,customerTypeS,statusS){
+		//数据列表
+		listTouristGroup:function(page,lineProduct,lineProductId,fromPartnerAgencyName,fromPartnerAgencyId,creatorId,creatorName,startTimeS,createTimeStartS,createTimeEndS,customerTypeS,statusS){
 			touristGroup.searchData = {
-				partnerAgencyId : partnerAgencyIdS,
-				lineProductId : lineProductIdS,
-				startTime : startTimeS,
-				userId : userIdS,
-				createTimeStart : createTimeStartS,
-				createTimeEnd : createTimeEndS,
-				customerType:customerTypeS,
+				lineProductName: lineProduct,
+				lineProductId: lineProductId,
+				fromPartnerAgencyName:fromPartnerAgencyName,
+				fromPartnerAgencyId:fromPartnerAgencyId,
+				creatorName:creatorName,
+				creatorId:creatorId,
+				startTimeSearch: startTimeS,
+				//userId: userIdS,
+				createTimeStart: createTimeStartS,
+				createTimeEnd: createTimeEndS,
+				statusSearch: statusS,
+				customerType: customerTypeS,
 				status : statusS
 			};
 			$.ajax({
 				url:""+APP_ROOT+"back/touristGroup.do?method=listTouristGroup&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 				type:"POST",
-				data:"pageNo="+page+"&sortType=startTime"+"&partnerAgencyId="+partnerAgencyIdS+"&lineProductIdSearch="+lineProductIdS+"&startTimeSearch="+startTimeS+"&userId="+userIdS+"&createTimeStart="+createTimeStartS+"&createTimeEnd="+createTimeEndS+"&statusSearch="+statusS+"&customerType="+customerTypeS,
+				data:"pageNo="+page+"&sortType=startTime"+"&lineProductName="+lineProduct+"&lineProductId="+lineProductId+"&fromPartnerAgencyName="+fromPartnerAgencyName+"&fromPartnerAgencyId="+fromPartnerAgencyId+"&startTimeSearch="+startTimeS+"&creatorName="+creatorName+"&creatorId="+creatorId+"&createTimeStart="+createTimeStartS+"&createTimeEnd="+createTimeEndS+"&statusSearch="+statusS+"&customerType="+customerTypeS,
 				dataType:"json",
 				beforeSend:function(){
 					//打开一个遮罩层
@@ -163,7 +190,7 @@ define(function(require, exports) {
 							var id = $(this).attr("data-entity-id");
 							touristGroup.viewTouristGroup(id);
 						});
-						
+
 						//修改小组事件
 						$(".main-content .page-content .btn-touristGroup-edit").click(function(){
 							var id = $(this).attr("data-entity-id");
@@ -178,16 +205,16 @@ define(function(require, exports) {
 						//分页--首页按钮事件
 						$(".touristGroupList .pageMode a.first").click(function(){
 							if(data.pageNo == 0 || data.totalPage == 0)return;
-							touristGroup.listTouristGroup(0,touristGroup.searchData.partnerAgencyId,touristGroup.searchData.lineProductId,touristGroup.searchData.startTime,touristGroup.searchData.userId,touristGroup.searchData.createTimeStart,touristGroup.searchData.createTimeEnd,touristGroup.searchData.customerType,touristGroup.searchData.status);
+							touristGroup.listTouristGroup(0,touristGroup.searchData.lineProductName,touristGroup.searchData.lineProductId,touristGroup.searchData.fromPartnerAgencyName,touristGroup.searchData.fromPartnerAgencyId,touristGroup.searchData.creatorId,touristGroup.searchData.creatorName,touristGroup.searchData.startTime,touristGroup.searchData.createTimeStart,touristGroup.searchData.createTimeEnd,touristGroup.searchData.customerType,touristGroup.searchData.status);
 						});
 						//分页--上一页事件
-						$(".touristGroupList .pageMode a.previous").click(function(){	
+						$(".touristGroupList .pageMode a.previous").click(function(){
 							if(data.pageNo == 0 || data.totalPage == 0)return;
 							var previous = data.pageNo - 1;
 							if(data.pageNo == 0){
 								previous = 0;
 							}
-							touristGroup.listTouristGroup(previous,touristGroup.searchData.partnerAgencyId,touristGroup.searchData.lineProductId,touristGroup.searchData.startTime,touristGroup.searchData.userId,touristGroup.searchData.createTimeStart,touristGroup.searchData.createTimeEnd,touristGroup.searchData.customerType,touristGroup.searchData.status);
+							touristGroup.listTouristGroup(previous,touristGroup.searchData.lineProductName,touristGroup.searchData.lineProductId,touristGroup.searchData.fromPartnerAgencyName,touristGroup.searchData.fromPartnerAgencyId,touristGroup.searchData.creatorId,touristGroup.searchData.creatorName,touristGroup.searchData.startTime,touristGroup.searchData.createTimeStart,touristGroup.searchData.createTimeEnd,touristGroup.searchData.customerType,touristGroup.searchData.status);
 						});
 						//分页--下一页事件
 						$(".touristGroupList .pageMode a.next").click(function(){
@@ -196,12 +223,12 @@ define(function(require, exports) {
 							if(data.pageNo == data.totalPage-1){
 								next = data.pageNo ;
 							}
-							touristGroup.listTouristGroup(next,touristGroup.searchData.partnerAgencyId,touristGroup.searchData.lineProductId,touristGroup.searchData.startTime,touristGroup.searchData.userId,touristGroup.searchData.createTimeStart,touristGroup.searchData.createTimeEnd,touristGroup.searchData.customerType,touristGroup.searchData.status);
+							touristGroup.listTouristGroup(next,touristGroup.searchData.lineProductName,touristGroup.searchData.lineProductId,touristGroup.searchData.fromPartnerAgencyName,touristGroup.searchData.fromPartnerAgencyId,touristGroup.searchData.creatorId,touristGroup.searchData.creatorName,touristGroup.searchData.startTime,touristGroup.searchData.createTimeStart,touristGroup.searchData.createTimeEnd,touristGroup.searchData.customerType,touristGroup.searchData.status);
 						});
 						//分页--尾页事件
 						$(".touristGroupList .pageMode a.last").click(function(){
 							if(data.pageNo == data.totalPage-1 || data.totalPage == 0)return;
-							touristGroup.listTouristGroup(data.totalPage-1,touristGroup.searchData.partnerAgencyId,touristGroup.searchData.lineProductId,touristGroup.searchData.startTime,touristGroup.searchData.userId,touristGroup.searchData.createTimeStart,touristGroup.searchData.createTimeEnd,touristGroup.searchData.customerType,touristGroup.searchData.status);
+							touristGroup.listTouristGroup(data.totalPage-1,touristGroup.searchData.lineProductName,touristGroup.searchData.lineProductId,touristGroup.searchData.fromPartnerAgencyName,touristGroup.searchData.fromPartnerAgencyId,touristGroup.searchData.creatorId,touristGroup.searchData.creatorName,touristGroup.searchData.startTime,touristGroup.searchData.createTimeStart,touristGroup.searchData.createTimeEnd,touristGroup.searchData.customerType,touristGroup.searchData.status);
 						});
 
 
@@ -249,8 +276,8 @@ define(function(require, exports) {
 				//touristGroup.getPartnerAgencySearchList($(".touristGroupSearchForm select[name=partnerAgencyId]"),data.searchParam.fromPartnerAgencyId);
 				touristGroup.getCreatorUserList($(".touristGroupSearchForm select[name=userId]"),data.searchParam.creator);
 			}
-		
-			
+
+
 		},
 		arrangeTouristGroup:function(id){
 			$.ajax({
@@ -271,118 +298,118 @@ define(function(require, exports) {
 					data.sendGroup.outHotelList = JSON.parse(data.sendGroup.outHotelList);
 					data.sendGroup.outTicketList = JSON.parse(data.sendGroup.outTicketList);
 					data.touristGroup = JSON.parse(data.touristGroup);
-		        	layer.close(globalLoadingLayer);
-		        	var result = showDialog(data);
-		        	if(result){
+					layer.close(globalLoadingLayer);
+					var result = showDialog(data);
+					if(result){
 						var html =arrangeTemplate(data);
-			    		var arrangeLayer =layer.open({
-			    			type: 1,
-						    title:"小组安排",
-						    skin: 'layui-layer-rim', //加上边框
-						    area: ['95%', '90%'], //宽高
-						    zIndex:1030,
-						    content: html,
-						    success: function(data) {
-						    	//接待-------------------------开始---------------------------------------------------------	
-						    	$("#receptionList .btn-bus-add").click(function(){
-						    		var thisObj = $(this);
-						    		var id = touristGroup.getArrangeTrId(thisObj);
-						    		touristGroup.addOutBusList(id,0);
-						    	})
-						    	$("#receptionList .btn-hotel-add").click(function(){
-						    		var thisObj = $(this);
-						    		var id = touristGroup.getArrangeTrId(thisObj);
-						    		touristGroup.addOutHotel(id,0);
-						    	})
-						    	$("#receptionList .btn-ticket-add").click(function(){
-						    		var thisObj = $(this);
-						    		var id = touristGroup.getArrangeTrId(thisObj);
-						    		touristGroup.addTicketList(id,0);
-						    	})
-						    	//小车--------------------------开始--------------------------------------------------------	
-						    	$("#carList .btn-bus-add").click(function(){
-						    		var thisObj = $(this);
-						    		var id = touristGroup.getArrangeTrId(thisObj);
-						    		touristGroup.addOutBusList(id,2);
-						    	})
-						    	//送团--------------------------开始--------------------------------------------------------	
-						    	$("#sendList .btn-bus-add").click(function(){
-						    		var thisObj = $(this);
-						    		var id = touristGroup.getArrangeTrId(thisObj);
-						    		touristGroup.addOutBusList(id,1);
-						    	})
-						    	$("#sendList .btn-hotel-add").click(function(){
-						    		var thisObj = $(this);
-						    		var id = touristGroup.getArrangeTrId(thisObj);
-						    		touristGroup.addOutHotel(id,1);
-						    	})
-						    	$("#sendList .btn-ticket-add").click(function(){
-						    		var thisObj = $(this);
-						    		var id = touristGroup.getArrangeTrId(thisObj);
-						    		touristGroup.addTicketList(id,1);
-						    	})
-						    	
-						    	//删除安排事件绑定
-						    	$(".arrangeTouristMain .busList .arrange-delete").click(function(){
-						    		var thisObj = $(this);
-						    		touristGroup.delArrangeJudge (thisObj,"bus");
-						    	})
-						    	$(".arrangeTouristMain .hotelList .arrange-delete").click(function(){
-						    		var thisObj = $(this);
-						    		touristGroup.delArrangeJudge (thisObj,"hotel");
-						    	})
-						    	$(".arrangeTouristMain .ticketList .arrange-delete").click(function(){
-						    		var thisObj = $(this);
-						    		touristGroup.delArrangeJudge (thisObj,"ticket");
-						    	})
-						    	
-						    	//车辆信息 联动
-						    	touristGroup.bindBusCompanyChoose();
-						    	//酒店信息 联动
-						    	touristGroup.bindHotelChoose();
-						    	//票务信息 联动
-						    	touristGroup.bindTicketChoose();
-						    	//日期插件绑定
-						    	touristGroup.outArrangeDatepicker("receptionList","bususeTime");
-						    	touristGroup.outArrangeDatepicker("receptionList","hotelCheckInTime");
-						    	touristGroup.outArrangeDatepicker("receptionList","ticketStartTime");
-						    	touristGroup.outArrangeDatepicker("carList","bususeTime");
-						    	touristGroup.outArrangeDatepicker("sendList","bususeTime");
-						    	touristGroup.outArrangeDatepicker("sendList","hotelCheckInTime");
-						    	touristGroup.outArrangeDatepicker("sendList","ticketStartTime");
-						    	//提交安排事件绑定
-						    	$(".arrangeTouristMain .btn-updateArrange").click(function(){
-						    		var touristGroupArrange = {
-						    				touristGroup : {},
-						    				outBusList : [],
-						    				outHotelList : [],
-						    				outTicketList : []
-						    		};
-						    		//小组ID
-						    		touristGroupArrange.touristGroup = {
-						    				id : touristGroup.getArrangeValue("touristGroup")
-						    		};
-						    		//接送车安排 JSON
-						    		var receptionOutBusTr = $(".arrangeTouristMain #receptionList .busList tbody tr");
-						    		touristGroup.outBusJson(receptionOutBusTr,touristGroupArrange.outBusList);
-						    		var carOutBusTr = $(".arrangeTouristMain #carList .busList tbody tr");
-						    		touristGroup.outBusJson(carOutBusTr,touristGroupArrange.outBusList);
-						    		var sendOutBusTr = $(".arrangeTouristMain #sendList .busList tbody tr");
-						    		touristGroup.outBusJson(sendOutBusTr,touristGroupArrange.outBusList);
-						    		//酒店安排 JSON
-						    		var receptionOutHotelTr = $(".arrangeTouristMain #receptionList .hotelList tbody tr");
-						    		touristGroup.outHotelJson(receptionOutHotelTr,touristGroupArrange.outHotelList);
-						    		var sendOutHotelTr = $(".arrangeTouristMain #sendList .hotelList tbody tr");
-						    		touristGroup.outHotelJson(sendOutHotelTr,touristGroupArrange.outHotelList);
-						    		//票务安排 JSON
-						    		var receptionOutTicketTr = $(".arrangeTouristMain #receptionList .ticketList tbody tr");
-						    		touristGroup.outTicketJson(receptionOutTicketTr,touristGroupArrange.outTicketList);
-						    		var sendOutTicketTr = $(".arrangeTouristMain #sendList .ticketList tbody tr");
-						    		touristGroup.outTicketJson(sendOutTicketTr,touristGroupArrange.outTicketList);
-						    		
-						    		touristGroupArrange = JSON.stringify(touristGroupArrange);
-						    		$.ajax({
-						    			url:""+APP_ROOT+"back/touristGroup.do?method=saveTouristGroupArrange&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
+						var arrangeLayer =layer.open({
+							type: 1,
+							title:"小组安排",
+							skin: 'layui-layer-rim', //加上边框
+							area: ['95%', '90%'], //宽高
+							zIndex:1030,
+							content: html,
+							success: function(data) {
+								//接待-------------------------开始---------------------------------------------------------
+								$("#receptionList .btn-bus-add").click(function(){
+									var thisObj = $(this);
+									var id = touristGroup.getArrangeTrId(thisObj);
+									touristGroup.addOutBusList(id,0);
+								})
+								$("#receptionList .btn-hotel-add").click(function(){
+									var thisObj = $(this);
+									var id = touristGroup.getArrangeTrId(thisObj);
+									touristGroup.addOutHotel(id,0);
+								})
+								$("#receptionList .btn-ticket-add").click(function(){
+									var thisObj = $(this);
+									var id = touristGroup.getArrangeTrId(thisObj);
+									touristGroup.addTicketList(id,0);
+								})
+								//小车--------------------------开始--------------------------------------------------------
+								$("#carList .btn-bus-add").click(function(){
+									var thisObj = $(this);
+									var id = touristGroup.getArrangeTrId(thisObj);
+									touristGroup.addOutBusList(id,2);
+								})
+								//送团--------------------------开始--------------------------------------------------------
+								$("#sendList .btn-bus-add").click(function(){
+									var thisObj = $(this);
+									var id = touristGroup.getArrangeTrId(thisObj);
+									touristGroup.addOutBusList(id,1);
+								})
+								$("#sendList .btn-hotel-add").click(function(){
+									var thisObj = $(this);
+									var id = touristGroup.getArrangeTrId(thisObj);
+									touristGroup.addOutHotel(id,1);
+								})
+								$("#sendList .btn-ticket-add").click(function(){
+									var thisObj = $(this);
+									var id = touristGroup.getArrangeTrId(thisObj);
+									touristGroup.addTicketList(id,1);
+								})
+
+								//删除安排事件绑定
+								$(".arrangeTouristMain .busList .arrange-delete").click(function(){
+									var thisObj = $(this);
+									touristGroup.delArrangeJudge (thisObj,"bus");
+								})
+								$(".arrangeTouristMain .hotelList .arrange-delete").click(function(){
+									var thisObj = $(this);
+									touristGroup.delArrangeJudge (thisObj,"hotel");
+								})
+								$(".arrangeTouristMain .ticketList .arrange-delete").click(function(){
+									var thisObj = $(this);
+									touristGroup.delArrangeJudge (thisObj,"ticket");
+								})
+
+								//车辆信息 联动
+								touristGroup.bindBusCompanyChoose();
+								//酒店信息 联动
+								touristGroup.bindHotelChoose();
+								//票务信息 联动
+								touristGroup.bindTicketChoose();
+								//日期插件绑定
+								touristGroup.outArrangeDatepicker("receptionList","bususeTime");
+								touristGroup.outArrangeDatepicker("receptionList","hotelCheckInTime");
+								touristGroup.outArrangeDatepicker("receptionList","ticketStartTime");
+								touristGroup.outArrangeDatepicker("carList","bususeTime");
+								touristGroup.outArrangeDatepicker("sendList","bususeTime");
+								touristGroup.outArrangeDatepicker("sendList","hotelCheckInTime");
+								touristGroup.outArrangeDatepicker("sendList","ticketStartTime");
+								//提交安排事件绑定
+								$(".arrangeTouristMain .btn-updateArrange").click(function(){
+									var touristGroupArrange = {
+										touristGroup : {},
+										outBusList : [],
+										outHotelList : [],
+										outTicketList : []
+									};
+									//小组ID
+									touristGroupArrange.touristGroup = {
+										id : touristGroup.getArrangeValue("touristGroup")
+									};
+									//接送车安排 JSON
+									var receptionOutBusTr = $(".arrangeTouristMain #receptionList .busList tbody tr");
+									touristGroup.outBusJson(receptionOutBusTr,touristGroupArrange.outBusList);
+									var carOutBusTr = $(".arrangeTouristMain #carList .busList tbody tr");
+									touristGroup.outBusJson(carOutBusTr,touristGroupArrange.outBusList);
+									var sendOutBusTr = $(".arrangeTouristMain #sendList .busList tbody tr");
+									touristGroup.outBusJson(sendOutBusTr,touristGroupArrange.outBusList);
+									//酒店安排 JSON
+									var receptionOutHotelTr = $(".arrangeTouristMain #receptionList .hotelList tbody tr");
+									touristGroup.outHotelJson(receptionOutHotelTr,touristGroupArrange.outHotelList);
+									var sendOutHotelTr = $(".arrangeTouristMain #sendList .hotelList tbody tr");
+									touristGroup.outHotelJson(sendOutHotelTr,touristGroupArrange.outHotelList);
+									//票务安排 JSON
+									var receptionOutTicketTr = $(".arrangeTouristMain #receptionList .ticketList tbody tr");
+									touristGroup.outTicketJson(receptionOutTicketTr,touristGroupArrange.outTicketList);
+									var sendOutTicketTr = $(".arrangeTouristMain #sendList .ticketList tbody tr");
+									touristGroup.outTicketJson(sendOutTicketTr,touristGroupArrange.outTicketList);
+
+									touristGroupArrange = JSON.stringify(touristGroupArrange);
+									$.ajax({
+										url:""+APP_ROOT+"back/touristGroup.do?method=saveTouristGroupArrange&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
 										type:"POST",
 										dataType:"json",
 										data:"touristGroupArrange="+encodeURIComponent(touristGroupArrange),
@@ -396,15 +423,15 @@ define(function(require, exports) {
 											if(result){
 												layer.close(arrangeLayer);
 												showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-													touristGroup.listTouristGroup(0,"","","","","","","","");
+													touristGroup.listTouristGroup(0,"","","","","","","","","","","");
 												});
 											}
 										}
-						    		})
-						    	})
-						    }
-			    		})
-		        	}
+									})
+								})
+							}
+						})
+					}
 				}
 			})
 		},
@@ -412,24 +439,24 @@ define(function(require, exports) {
 			var html = addTemplate();
 			//已填写提示
 			var tab = "tab-resource_touristGroup-add-content";
-			var validator=rule.checktouristGroup($(".addTouristGroup"));  
+			var validator=rule.checktouristGroup($(".addTouristGroup"));
 			if($(".tab-"+menuKey+"-add").length > 0) {
 				addTab(menuKey+"-add","添加游客");
 				if(!!touristGroup.edited["add"] && touristGroup.edited["add"] == "add"){
 					showConfirmMsg($( "#confirm-dialog-message" ), "未保存的数据，是否放弃?",function(){
-						console.log("继续编辑");			
+						console.log("继续编辑");
 					},function(){
 						addTab(menuKey+"-add","添加游客",html);
 						touristGroup.initAdd();
 						touristGroup.edited["add"] = "";
-					},"放弃","继续编辑"); 							
-				 }else{
-					addTab(menuKey+"-add","添加游客",html);	
-                    touristGroup.initAdd();					
-				 } 
+					},"放弃","继续编辑");
+				}else{
+					addTab(menuKey+"-add","添加游客",html);
+					touristGroup.initAdd();
+				}
 			}else{
-				addTab(menuKey+"-add","添加游客",html);	
-                touristGroup.initAdd();				
+				addTab(menuKey+"-add","添加游客",html);
+				touristGroup.initAdd();
 			}
 		},
 		initAdd : function(){
@@ -438,7 +465,7 @@ define(function(require, exports) {
 			var tab = "tab-resource_touristGroup-add-content";
 			$('.addTouristGroup').on("change",function(){
 				touristGroup.edited["add"] = "add";
-			});	
+			});
 			//出游日期 时间控件
 			$("#"+tab+" .touristGroupMainForm input[name=startTime]").datepicker({
 				autoclose: true,
@@ -585,23 +612,23 @@ define(function(require, exports) {
 					MenberNumber();
 				});
 			});
-			
+
 			//游客名单 添加成员按钮绑定事件
 			$("#"+tab+" .touristGroupMainFormMember .btn-add-tourist").click(addT);
 			function addT(){
 				var html=
-					"<tr>"+
-					"<td>"+"</td>"+
-					"<td><input name=\"name\" type=\"text\" class=\"col-sm-12  no-padding-right\" /></td>"+
-					"<td><input name=\"mobileNumber\" type=\"text\" class=\"col-sm-12  no-padding-right\" /></td>"+
-					"<td><select name=\"idCardType\" value=\"idCardTypeId\"><option value=\"0\" selected=\"selected\">身份证</option><option value=\"1\">护照</option><option value=\"2\">其它</option></select></td>"+
-					"<td><input name=\"idCardNumber\" type=\"text\" class=\"col-sm-12  no-padding-right\" /></td>"+
-					"<td><div class=\"checkbox\"><label><input type=\"checkbox\" class=\"ace \" value=\"1\" name=\"isContactUser\"><span class=\"lbl\"></span></label></div></td>"+
-					"<td><a class=\"cursor btnDeleteTourist\">删除</a></td>"+
-					"</tr>"
-				;
+						"<tr>"+
+						"<td>"+"</td>"+
+						"<td><input name=\"name\" type=\"text\" class=\"col-sm-12  no-padding-right\" /></td>"+
+						"<td><input name=\"mobileNumber\" type=\"text\" class=\"col-sm-12  no-padding-right\" /></td>"+
+						"<td><select name=\"idCardType\" value=\"idCardTypeId\"><option value=\"0\" selected=\"selected\">身份证</option><option value=\"1\">护照</option><option value=\"2\">其它</option></select></td>"+
+						"<td><input name=\"idCardNumber\" type=\"text\" class=\"col-sm-12  no-padding-right\" /></td>"+
+						"<td><div class=\"checkbox\"><label><input type=\"checkbox\" class=\"ace \" value=\"1\" name=\"isContactUser\"><span class=\"lbl\"></span></label></div></td>"+
+						"<td><a class=\"cursor btnDeleteTourist\">删除</a></td>"+
+						"</tr>"
+					;
 				$("#"+tab+" .addTouristList .addTouristTbody").append(html);
-				
+
 				//游客名单成员验证 
 				validator = rule.updateTouristGroupCheckor(validator);
 				MenberNumber();
@@ -640,7 +667,7 @@ define(function(require, exports) {
 			$("#"+tab+" .touristGroupMainForm .btn-travelLine-search").click(function(){
 				touristGroup.searchLineFunction(true,0,"");
 			});
-			
+
 			//初始化 组社团数据
 			touristGroup.getPartnerAgencyList($("#"+tab+" .choosePartnerAgencyDiv input[name='fromPartnerAgency']"));
 			//添加小组页面提交按钮事件绑定
@@ -663,34 +690,34 @@ define(function(require, exports) {
 					if(result){
 						var touristGroupInfo = JSON.parse(data.touristGroupDetail);
 						data.touristGroupDetail = touristGroupInfo;
-						var html = updateTemplate(data);	
+						var html = updateTemplate(data);
 						//已修改提示
 						var tab = "tab-resource_touristGroup-update-content";
 						if($(".tab-"+menuKey+"-update").length > 0) {
-							addTab(menuKey+"-update","编辑小组");	
-                 	    	if(!!touristGroup.edited["update"] && touristGroup.edited["update"] != ""){
-                 	    		showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
-                 	    			 validator = rule.checktouristGroup($('.updateTouristGroup'));
-				            		 if (!validator.form()) { 
-				            			 return; 
-				            		 }
-				            		 touristGroup.submitUpdateTouristGroup($(".updateTouristGroup .btn-submit-addTouristGroup").attr("data-entity-id"),0);
-									 touristGroup.edited["update"] = "";
-				            		 addTab(menuKey+"-update","编辑小组",html);	
-									 touristGroup.initUpdate(id,data);
-				            	},function(){
-				            		addTab(menuKey+"-update","编辑小组",html);	
+							addTab(menuKey+"-update","编辑小组");
+							if(!!touristGroup.edited["update"] && touristGroup.edited["update"] != ""){
+								showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
+									validator = rule.checktouristGroup($('.updateTouristGroup'));
+									if (!validator.form()) {
+										return;
+									}
+									touristGroup.submitUpdateTouristGroup($(".updateTouristGroup .btn-submit-addTouristGroup").attr("data-entity-id"),0);
+									touristGroup.edited["update"] = "";
+									addTab(menuKey+"-update","编辑小组",html);
+									touristGroup.initUpdate(id,data);
+								},function(){
+									addTab(menuKey+"-update","编辑小组",html);
 									touristGroup.initUpdate(id,data);
 									touristGroup.edited["update"] = "";
-				            	}); 							
-                 	    	 }else{
-	                 	    	addTab(menuKey+"-update","编辑小组",html);	
+								});
+							}else{
+								addTab(menuKey+"-update","编辑小组",html);
 								touristGroup.initUpdate(id,data);
-                 	    	 } 
-                 	    }else{
-                 	    	addTab(menuKey+"-update","编辑小组",html);	
+							}
+						}else{
+							addTab(menuKey+"-update","编辑小组",html);
 							touristGroup.initUpdate(id,data);
-                 	    }
+						}
 					}
 				}
 			});
@@ -698,10 +725,10 @@ define(function(require, exports) {
 		initUpdate : function(id,data){
 			var tab = "tab-resource_touristGroup-update-content";
 			var updateTouristGroup = id;
-			var validator=rule.checktouristGroup($('#'+tab).find(".updateTouristGroup"));  
+			var validator=rule.checktouristGroup($('#'+tab).find(".updateTouristGroup"));
 			$('.updateTouristGroup').on("change",function(){
 				touristGroup.edited["update"] = "update";
-			});	
+			});
 			// 已发团(0)、已分团(2)、已转客(3)、已取消(4)、已拆分(5),不能修改。未分团(1)才能修改
 			if(data.touristGroupDetail.status == 1){
 				//出游日期 时间控件
@@ -747,7 +774,7 @@ define(function(require, exports) {
 
 
 
-			
+
 			//选择联系人列表
 			touristGroup.getPartnerAgencyManagerList("updateTouristGroup");
 			//为该组团社添加新联系人
@@ -770,29 +797,29 @@ define(function(require, exports) {
 			//给新增费用项绑定事件
 			$("#"+tab+" .touristGroupMainForm .btn-touristGroup-addCost2").click(function(){
 				var html=/*"<tr>"+
-				"<td><select class=\"col-sm-12 addOrReduceSelect\"><option value=\"0\">增加费用</option><option value=\"1\">减少费用</option></select></td>"+
-				"<td><input type=\"text\" class=\"col-sm-12  no-padding-right\" /></td>"+
-				"<td><input type=\"text\" class=\"col-sm-12  no-padding-right costCount\" /></td>"+partnerAgencyNameList
-				"<td><input type=\"text\" class=\"col-sm-12  no-padding-right costPrice\" /></td>"+
-				"<td><button class=\"btn btn-xs btn-danger addCost-delete\"><i class=\"ace-icon fa fa-trash-o bigger-120\"></i></button></td>"+
-				"</tr>"*/
-				"<tr>"+
-				"<td><span name=\"addOrReduceSelect\" value=\"0\">其他费用</span></td>"+
-				"<td><input  name=\"describeInfo\" type=\"text\" class=\"col-sm-12  no-padding-right\" /></td>"+
-				"<td><input  name=\"count\" type=\"text\" class=\"col-sm-11  no-padding-right costCount\" style=\"float:right;\" /></td>"+
-				"<td><input  name=\"price\" type=\"text\" class=\"col-sm-11  no-padding-right costPrice\" style=\"float:right;\" /></td>"+
-				"<td><a class=\"cursor addCost-delete\">删除</a></td>"+
-				"</tr>";
+				 "<td><select class=\"col-sm-12 addOrReduceSelect\"><option value=\"0\">增加费用</option><option value=\"1\">减少费用</option></select></td>"+
+				 "<td><input type=\"text\" class=\"col-sm-12  no-padding-right\" /></td>"+
+				 "<td><input type=\"text\" class=\"col-sm-12  no-padding-right costCount\" /></td>"+partnerAgencyNameList
+				 "<td><input type=\"text\" class=\"col-sm-12  no-padding-right costPrice\" /></td>"+
+				 "<td><button class=\"btn btn-xs btn-danger addCost-delete\"><i class=\"ace-icon fa fa-trash-o bigger-120\"></i></button></td>"+
+				 "</tr>"*/
+					"<tr>"+
+					"<td><span name=\"addOrReduceSelect\" value=\"0\">其他费用</span></td>"+
+					"<td><input  name=\"describeInfo\" type=\"text\" class=\"col-sm-12  no-padding-right\" /></td>"+
+					"<td><input  name=\"count\" type=\"text\" class=\"col-sm-11  no-padding-right costCount\" style=\"float:right;\" /></td>"+
+					"<td><input  name=\"price\" type=\"text\" class=\"col-sm-11  no-padding-right costPrice\" style=\"float:right;\" /></td>"+
+					"<td><a class=\"cursor addCost-delete\">删除</a></td>"+
+					"</tr>";
 				$("#"+tab+" .addCostList .addCostTbody").append(html);
-				
-				validator = rule.updateTouristGroupCheckor(validator);    
-				   
+
+				validator = rule.updateTouristGroupCheckor(validator);
+
 				//给费用清单列表删除按钮绑定事件
 				$("#"+tab+" .addCostList .addCost-delete").click(function(){
 					var tr =$(this).parent().parent();
 					var costListTrId = tr.attr("data-entity-id");
 
-					
+
 					if(!(costListTrId!=null && costListTrId!="")){
 						$(this).parent().parent().fadeOut(function(){
 							$(this).remove();
@@ -853,7 +880,7 @@ define(function(require, exports) {
 					touristGroup.PayMoneyF(tab);
 				})
 			});
-			validator = rule.updateTouristGroupCheckor(validator); 
+			validator = rule.updateTouristGroupCheckor(validator);
 			//新增费用项目  算应收
 			$("#"+tab+" .touristGroupMainForm input[name=payedMoney]").keyup(function(){
 				touristGroup.PayMoneyF(tab);
@@ -876,7 +903,7 @@ define(function(require, exports) {
 					}
 				})
 			}
-			
+
 			// 切换选项，调整表单验证规则
 			$('#'+tab).find('.addTouristTbody').on('change', 'select', function(event) {
 				event.preventDefault();
@@ -899,18 +926,18 @@ define(function(require, exports) {
 			$("#"+tab+" .touristGroupMainFormMember .btn-add-tourist").click(addT);
 			function addT(){
 				var html=
-					"<tr>"+
-					"<td>"+"</td>"+
-					"<td><input name=\"name\" type=\"text\" class=\"col-sm-12  no-padding-right\" /></td>"+
-					"<td><input name=\"mobileNumber\" type=\"text\" class=\"col-sm-12  no-padding-right\" /></td>"+
-					"<td><select name=\"idCardType\" value=\"idCardTypeId\"><option value=\"0\" selected=\"selected\">身份证</option><option value=\"1\">护照</option><option value=\"2\">其它</option></select></td>"+
-					"<td><input name=\"idCardNumber\" type=\"text\" class=\"col-sm-12  no-padding-right\" /></td>"+
-					"<td><div class=\"checkbox\"><label><input type=\"checkbox\" class=\"ace \" value=\"1\" name=\"isContactUser\"><span class=\"lbl\"></span></label></div></td>"+
-					"<td><a class=\"cursor btnDeleteTourist\">删除</a></td>"+
-					"</tr>"
-				;
+						"<tr>"+
+						"<td>"+"</td>"+
+						"<td><input name=\"name\" type=\"text\" class=\"col-sm-12  no-padding-right\" /></td>"+
+						"<td><input name=\"mobileNumber\" type=\"text\" class=\"col-sm-12  no-padding-right\" /></td>"+
+						"<td><select name=\"idCardType\" value=\"idCardTypeId\"><option value=\"0\" selected=\"selected\">身份证</option><option value=\"1\">护照</option><option value=\"2\">其它</option></select></td>"+
+						"<td><input name=\"idCardNumber\" type=\"text\" class=\"col-sm-12  no-padding-right\" /></td>"+
+						"<td><div class=\"checkbox\"><label><input type=\"checkbox\" class=\"ace \" value=\"1\" name=\"isContactUser\"><span class=\"lbl\"></span></label></div></td>"+
+						"<td><a class=\"cursor btnDeleteTourist\">删除</a></td>"+
+						"</tr>"
+					;
 				$("#"+tab+" .addTouristList .addTouristTbody").append(html);
-				
+
 				//游客名单成员验证 
 				validator = rule.updateTouristGroupCheckor(validator);
 				MenberNumber();
@@ -929,7 +956,7 @@ define(function(require, exports) {
 				if($(".touristGroupMainFormRS input[name=touristReception]")[0].checked== true){
 					$(this).parent().parent().parent().find(".reception-div").removeClass("hide");
 					//中转接待状态  
-					validator = rule.updateTouristGroupCheckor(validator); 
+					validator = rule.updateTouristGroupCheckor(validator);
 				}
 				else{
 					$(this).parent().parent().parent().find(".reception-div").addClass("hide");
@@ -969,7 +996,7 @@ define(function(require, exports) {
 						var touristGroupInfo = JSON.parse(data.touristGroupDetail);
 						data.touristGroupDetail = touristGroupInfo;
 						var html = viewTemplate(data);
- 						
+
 						addTab(menuKey+"-view","查看小组",html);
 						var tab = "tab-resource_touristGroup-view-content";
 						$(".btn-submit-addTouristGroup").click(function(){
@@ -1009,7 +1036,7 @@ define(function(require, exports) {
 				title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
 				title_html: true,
 				draggable:false,
-				buttons: [ 
+				buttons: [
 					{
 						text: "取消",
 						"class" : "btn btn-minier",
@@ -1035,7 +1062,7 @@ define(function(require, exports) {
 									var result = showDialog(data);
 									if(result){
 										$(".main-content .page-content .touristGroup-"+id+"").fadeOut(function(){
-											touristGroup.listTouristGroup(0,touristGroup.searchData.partnerAgencyId,touristGroup.searchData.lineProductId,touristGroup.searchData.startTime,touristGroup.searchData.userId,touristGroup.searchData.createTimeStart,touristGroup.searchData.createTimeEnd,touristGroup.searchData.customerType,touristGroup.searchData.status);
+											touristGroup.listTouristGroup(0,touristGroup.searchData.lineProductName,touristGroup.searchData.lineProductId,touristGroup.searchData.fromPartnerAgencyName,touristGroup.searchData.fromPartnerAgencyId,touristGroup.searchData.creatorId,touristGroup.searchData.creatorName,touristGroup.searchData.startTime,touristGroup.searchData.createTimeStart,touristGroup.searchData.createTimeEnd,touristGroup.searchData.customerType,touristGroup.searchData.status);
 										});
 									}
 								}
@@ -1070,13 +1097,13 @@ define(function(require, exports) {
 				if(partnerAgencyId){
 					$.ajax({
 						url:""+APP_ROOT+"back/partnerAgency.do?method=getContactListByPartnerAgencyId&token="+$.cookie("token")+"&menuKey=resource_partnerAgency&operation=view",
-		                dataType: "json",
-		                data:"partnerAgencyId="+partnerAgencyId,
-		                beforSend:function(){
-		                	globalLoadingLayer = openLoadingLayer()
-		                },
-		                success: function(data) {
-		                	layer.close(globalLoadingLayer);
+						dataType: "json",
+						data:"partnerAgencyId="+partnerAgencyId,
+						beforSend:function(){
+							globalLoadingLayer = openLoadingLayer()
+						},
+						success: function(data) {
+							layer.close(globalLoadingLayer);
 							var result = showDialog(data);
 							if(result){
 								var contactList = JSON.parse(data.partnerAgencyContactList);
@@ -1090,17 +1117,17 @@ define(function(require, exports) {
 									$(objM).autocomplete('search', '');
 								}else{
 									layer.tips('该组团社没有联系人，请添加！', objM, {
-									    tips: [1, '#3595CC'],
-									    time: 2000
+										tips: [1, '#3595CC'],
+										time: 2000
 									});
 								}
 							}
-		                }
-		             });
+						}
+					});
 				}else{
 					layer.tips('请选择组团社', objM, {
-					    tips: [1, '#3595CC'],
-					    time: 2000
+						tips: [1, '#3595CC'],
+						time: 2000
 					});
 				}
 			})
@@ -1112,34 +1139,34 @@ define(function(require, exports) {
 				if(PartnerId){
 					var html = addPartnerManagerTemplate();
 					var addPartnerManagerLayer = layer.open({
-					    type: 1,
-					    title:"新增同行联系人",
-					    skin: 'layui-layer-rim', //加上边框
-					    area: ['35%', '40%'], //宽高
-					    zIndex:1028,
-					    content: html,
-					    success:function(){
-					    	//新增组团社联系人 
-					    	var validator=rule.checkdPartnerManager($(".addPartnerManager"));
-					    	$(".addPartnerManager .btn-submit-addPartnerManager").click(function(){
-					    		
-					    		// 表单校验
-					    		if (!validator.form()) { return; }
-					    		
-					    		var partnerAgencyId = PartnerId,
-					    		contactRealname = $(".addPartnerManager").find("input[name=managerName]").val(),
-					    		contactMobileNumber = $(".addPartnerManager").find("input[name=managerMobile]").val();
-					    		departmentName = $(".addPartnerManager").find("input[name=departmentName]").val();
-					    		dutyName = $(".addPartnerManager").find("input[name=dutyName]").val();
-					    		
-					    		$.ajax({
-					    			url:""+APP_ROOT+"back/partnerAgency.do?method=saveContact&token="+$.cookie("token")+"&menuKey=resource_partnerAgency&operation=view",
+						type: 1,
+						title:"新增同行联系人",
+						skin: 'layui-layer-rim', //加上边框
+						area: ['35%', '40%'], //宽高
+						zIndex:1028,
+						content: html,
+						success:function(){
+							//新增组团社联系人
+							var validator=rule.checkdPartnerManager($(".addPartnerManager"));
+							$(".addPartnerManager .btn-submit-addPartnerManager").click(function(){
+
+								// 表单校验
+								if (!validator.form()) { return; }
+
+								var partnerAgencyId = PartnerId,
+									contactRealname = $(".addPartnerManager").find("input[name=managerName]").val(),
+									contactMobileNumber = $(".addPartnerManager").find("input[name=managerMobile]").val();
+								departmentName = $(".addPartnerManager").find("input[name=departmentName]").val();
+								dutyName = $(".addPartnerManager").find("input[name=dutyName]").val();
+
+								$.ajax({
+									url:""+APP_ROOT+"back/partnerAgency.do?method=saveContact&token="+$.cookie("token")+"&menuKey=resource_partnerAgency&operation=view",
 									data:"partnerAgencyId="+partnerAgencyId+"&contactRealname="+contactRealname+"&contactMobileNumber="+contactMobileNumber+"&departmentName="+departmentName+"&dutyName="+dutyName+"",
-					    			dataType:"json",
-					    			type:"POST",
-					    			beforSend:function(){
+									dataType:"json",
+									type:"POST",
+									beforSend:function(){
 										globalLoadingLayer = openLoadingLayer();
-					    			},
+									},
 									success:function(data){
 										console.log(data);
 										layer.close(globalLoadingLayer);
@@ -1151,14 +1178,14 @@ define(function(require, exports) {
 											$("."+className+"").find("input[name=partnerAgencyContactId]").val(contact.id);
 										}
 									}
-					    		})
-					    	})
-					    }
+								})
+							})
+						}
 					})
 				}else{
 					layer.tips('新建联系人请先选择组团社', obj, {
-					    tips: [1, '#3595CC'],
-					    time: 2000
+						tips: [1, '#3595CC'],
+						time: 2000
 					});
 				}
 			})
@@ -1172,7 +1199,7 @@ define(function(require, exports) {
 					var html ="<option value=''>全部</option>";
 					var lineProductList = data.data;
 
-					if(lineProductList != null && lineProductList.length > 0){ 
+					if(lineProductList != null && lineProductList.length > 0){
 						for(var i=0;i<lineProductList.length;i++){
 							if (lineProductId != null && lineProductList[i].id == lineProductId) {
 								html += "<option selected=\"selected\" value='"+lineProductList[i].id+"'>"+lineProductList[i].name+"</option>";
@@ -1185,98 +1212,107 @@ define(function(require, exports) {
 				}
 			})
 		},
-		getPartnerAgencyList:function(obj,partnerAId){
-			var $objC = $(obj)
-			$.ajax({
-				url:""+APP_ROOT+"back/partnerAgency.do?method=getPartnerAgency&token="+$.cookie("token")+"&menuKey=resource_partnerAgency&operation=view",
-                dataType: "json",
-               // data:"travelAgencyName="+$objC.val(),
-                success:function(data){
-                	layer.close(globalLoadingLayer);
-						var result = showDialog(data);
-						if(result){
-							var partnerAgencyList = JSON.parse(data.partnerAgencyList);
-							if(partnerAgencyList != null && partnerAgencyList.length > 0){
-								for(var i=0;i<partnerAgencyList.length;i++){
-									partnerAgencyList[i].value = partnerAgencyList[i].travelAgencyName;
-								}
-							};
-							$(obj).autocomplete({
-								
-								minLength: 0,
-								change: function(event, ui) {
-									if (!ui.item)  {
-										$(this).val('').nextAll('input[name="fromPartnerAgencyId"]').val('');
-									}
-								},
-								select: function(event, ui) {
-									
-									$(this).blur().nextAll('input[name="fromPartnerAgencyId"]').val(ui.item.id);
-									if(touristGroup.cleanFlag == 1){
-										var $tabId = $("#tab-resource_touristGroup-add-content");
-										$tabId.find("input[name=partnerAgencyNameList]").val("");
-									}
-									if(touristGroup.cleanFlag == 2){
-										var $tabId = $("#tab-resource_touristGroup-update-content");
-										$tabId.find("input[name=partnerAgencyNameList]").val("");
 
-									}
-								
-								}
-							}).off("click").on("click",function(){
-								
-								$objC.autocomplete('option','source', partnerAgencyList);
-								$objC.autocomplete('search', '');
+		//来源模糊查询
+		getPartnerAgencyList:function($obj){
+			var getPartnerAgencyList = $obj.find(".choosePartnerAgency");
+			getPartnerAgencyList.autocomplete({
+							minLength: 0,
+							change: function(event, ui) {
+								if (ui.item == null)  {
+									//$(this).nextAll('input[name="fromPartnerAgencyId"]').val('');
+									$(this).parent().parent().find("input[name=fromPartnerAgencyId]").val("");
 
-							});
-							
-						}
-                }
-			});
-			         
-		},
-		getPartnerAgencySearchList:function(obj,partnerAgencyId){
-			$.ajax({
-				url:""+APP_ROOT+"back/touristGroup.do?method=getPartnerAgency&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-				type:"POST",
-				dataType:"json",
-				success:function(data){
-					var html ="<option value=''>全部</option>"; //"<option value=''>全部</option>";
-					var partnerAgencyList = data.data;
-					if(partnerAgencyList != null && partnerAgencyList.length > 0){ 
-						for(var i=0;i<partnerAgencyList.length;i++){
-							
-							if (partnerAgencyId != null && partnerAgencyList[i].id == partnerAgencyId) {
-								html += "<option selected=\"selected\" value='"+partnerAgencyList[i].id+"'>"+partnerAgencyList[i].name+"</option>";
-							} else {
-								html += "<option  value='"+partnerAgencyList[i].id+"'>"+partnerAgencyList[i].name+"</option>";
+								}
+							},
+							select: function(event, ui) {
+
+								//$(this).blur().nextAll('input[name="fromPartnerAgencyId"]').val(ui.item.id);
+								$(this).blur();
+								var obj = this;
+								$(obj).parent().parent().find("input[name=fromPartnerAgencyId]").val(ui.item.id).trigger('change');
+								if(touristGroup.cleanFlag == 1){
+									var $tabId = $("#tab-resource_touristGroup-add-content");
+									$tabId.find("input[name=partnerAgencyNameList]").val("");
+								}
+								if(touristGroup.cleanFlag == 2){
+									var $tabId = $("#tab-resource_touristGroup-update-content");
+									$tabId.find("input[name=partnerAgencyNameList]").val("");
+
+								}
 							}
-						}
-						$(obj).html(html);
+						}).click(function(){
+							var obj = this;
+							var fromParObj = touristGroup.autocompleteDate.fromPartnerAgencyList;
+							if(fromParObj !=null && fromParObj.length>0){
+								for(var i=0;i<fromParObj.length;i++){
+									fromParObj[i].value = fromParObj[i].travelAgencyName;
+								}
+							}
+							$(obj).autocomplete('option','source', fromParObj);
+							$(obj).autocomplete('search', '');
+						})
+		},
+
+		//线路模糊
+		getPartnerAgencySearchList:function($obj){
+			var getPartnerAgencySearchList = $obj.find(".chooseLineProduct");
+			getPartnerAgencySearchList.autocomplete({
+				minLength: 0,
+				change: function(event, ui) {
+					if (ui.item == null)  {
+						//$(this).nextAll('input[name="fromPartnerAgencyId"]').val('');
+						$(this).parent().parent().find("input[name=lineProductId]").val("");
+
+					}
+				},
+				select: function(event, ui) {
+					//$(this).blur().nextAll('input[name="fromPartnerAgencyId"]').val(ui.item.id);
+					$(this).blur();
+					var obj = this;
+					$(obj).parent().parent().find("input[name=lineProductId]").val(ui.item.id).trigger('change');
+				}
+			}).click(function(){
+				var obj = this;
+				var lineParObj = touristGroup.autocompleteDate.lineProductList;
+				if(lineParObj !=null && lineParObj.length>0){
+					for(var i=0;i<lineParObj.length;i++){
+						lineParObj[i].value = lineParObj[i].name;
 					}
 				}
+				$(obj).autocomplete('option','source', lineParObj);
+				$(obj).autocomplete('search', '');
 			})
 		},
-		getCreatorUserList:function(obj,userId){
-			$.ajax({
-				url:""+APP_ROOT+"back/touristGroup.do?method=getTourCreator&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-				type:"POST",
-				dataType:"json",
-				success:function(data){
-					var html ="<option value=''>全部</option>"; //"<option value=''>全部</option>";
-					var creatorUserList = data.data;
-					if(creatorUserList != null && creatorUserList.length > 0){ 
-						for(var i=0;i<creatorUserList.length;i++){
-							
-							if (userId != null && creatorUserList[i].id == userId) {
-								html += "<option selected=\"selected\" value='"+creatorUserList[i].id+"'>"+creatorUserList[i].name+"</option>";
-							} else {
-								html += "<option  value='"+creatorUserList[i].id+"'>"+creatorUserList[i].name+"</option>";
-							}
-						}
-						$(obj).html(html);
+		//录入人模糊
+		getCreatorUserList:function($obj,userId){
+			var getCreatorUserList = $obj.find(".creatorUserChoose");
+			getCreatorUserList.autocomplete({
+				minLength: 0,
+				change: function(event, ui) {
+					if (ui.item == null)  {
+						//$(this).nextAll('input[name="fromPartnerAgencyId"]').val('');
+						$(this).parent().parent().find("input[name=creatorId]").val("");
+
+					}
+				},
+				select: function(event, ui) {
+
+					//$(this).blur().nextAll('input[name="fromPartnerAgencyId"]').val(ui.item.id);
+					$(this).blur();
+					var obj = this;
+					$(obj).parent().parent().find("input[name=creatorId]").val(ui.item.id).trigger('change');
+				}
+			}).click(function(){
+				var obj = this;
+				var creatorObj = touristGroup.autocompleteDate.creatorList;
+				if(creatorObj !=null && creatorObj.length>0){
+					for(var i=0;i<creatorObj.length;i++){
+						creatorObj[i].value = creatorObj[i].realName;
 					}
 				}
+				$(obj).autocomplete('option','source', creatorObj);
+				$(obj).autocomplete('search', '');
 			})
 		},
 		submitAddTouristGroup : function(){
@@ -1294,8 +1330,8 @@ define(function(require, exports) {
 				buyInsuranceS = 0;
 			}
 			var form = $("#"+tab+" .touristGroupMainForm").serialize();//+"&status="+status+"";
-			function trim(str){ 
-				 return str.replace(/(^\s*)|(\s*$)/g, ""); 
+			function trim(str){
+				return str.replace(/(^\s*)|(\s*$)/g, "");
 			}
 			var touristGroupFeeJsonAdd = [];
 			var addCostStr = $("#"+tab+" .touristGroupMainForm .addCostList .addCostTbody tr");
@@ -1323,16 +1359,16 @@ define(function(require, exports) {
 						describeInfo : describeInfo,
 						count : count,
 						price : price
-					};	
+					};
 					touristGroupFeeJsonAdd.push(touristGroupFeeJson);
-				}				
+				}
 			});
-			
+
 			//游客名单  酒店星级、自费包含、备注
 			var expectLevel = $("#"+tab+" .touristGroupMainFormMember").find("select[name=level]").find("option:selected").val()
 			var includeOwnExpense = $("#"+tab+" .touristGroupMainFormMember").find("input[name=includeOwnExpense]").val();
 			var touristRemarks = $("#"+tab+" .touristGroupMainFormMember").find("input[name=touristRemarks]").val();
-			
+
 			//接团、小车、送团
 			if($("#"+tab+" .touristGroupMainFormRS").find("input[name=touristReception]").is(":checked")==true){
 				var isNeedArriveService = 1;
@@ -1368,7 +1404,7 @@ define(function(require, exports) {
 				if(touristNameStr.eq(i).find("input[name=isContactUser]").is(":checked")==true){
 					isContactUser = 1;
 				}
-				
+
 				if (isContactUser && mobileNumber == "")  {
 					showMessageDialog($( "#confirm-dialog-message" ), "请填写名单中联系人的手机号码！");
 					isValidate = false;
@@ -1448,8 +1484,8 @@ define(function(require, exports) {
 				buyInsuranceS = 0;
 			}
 			var form = $("#"+tab+" .touristGroupMainForm").serialize();//+"&status="+status+"";
-			function trim(str){ 
-				 return str.replace(/(^\s*)|(\s*$)/g, ""); 
+			function trim(str){
+				return str.replace(/(^\s*)|(\s*$)/g, "");
 			}
 			var touristGroupFeeJsonAdd = [];
 			var addCostStr = $("#"+tab+" .touristGroupMainForm .addCostList .addCostTbody tr:not(.deleted)");
@@ -1471,16 +1507,16 @@ define(function(require, exports) {
 					if (trim(price) == "") {
 						showMessageDialog($( "#confirm-dialog-message" ), "请输入自费单价");
 						return false;
-					}				
+					}
 					var touristGroupFeeJson = {
 						id : idAdd,
 						type : type,
 						describeInfo : describeInfo,
 						count : count,
 						price : price
-					};					
-					touristGroupFeeJsonAdd.push(touristGroupFeeJson);	
-				}			
+					};
+					touristGroupFeeJsonAdd.push(touristGroupFeeJson);
+				}
 			});
 			//删除费用JSON
 			touristGroupFeeJsonDel = [];
@@ -1491,13 +1527,13 @@ define(function(require, exports) {
 					id :idDel
 				};
 				touristGroupFeeJsonDel.push(touristGroupFeeJson);
-			})			
-			
+			})
+
 			//游客名单  酒店星级、自费包含、备注
 			var expectLevel = $("#"+tab+" .touristGroupMainFormMember").find("select[name=level]").find("option:selected").val()
 			var includeOwnExpense = $("#"+tab+" .touristGroupMainFormMember").find("input[name=includeOwnExpense]").val();
 			var touristRemarks = $("#"+tab+" .touristGroupMainFormMember").find("input[name=touristRemarks]").val();
-			
+
 			//接团、小车、送团
 			if($("#"+tab+" .touristGroupMainFormRS").find("input[name=touristReception]").is(":checked")==true){
 				var isNeedArriveService = 1;
@@ -1537,7 +1573,7 @@ define(function(require, exports) {
 				else{
 					isContactUser = 0;
 				}
-				
+
 				var touristGroupMemberJson = {
 					id : id,
 					name : name,
@@ -1548,11 +1584,11 @@ define(function(require, exports) {
 				};
 				touristGroupMemberJsonAdd.push(touristGroupMemberJson);
 			})
-			
+
 			//删除小组JSON
 			var touristGroupMemberJsonDel = [];
 			var addMemberStr = $("#"+tab+" .touristGroupMainFormMember .addTouristList tbody tr.deleted");
-			
+
 			addMemberStr.each(function(i){
 				var id = addMemberStr.eq(i).attr("data-entity-id");
 				touristGroupMemberJson = {
@@ -1572,7 +1608,7 @@ define(function(require, exports) {
 				leaveShift : $outArrange.find("input[name=leaveShift]").val(),
 				leaveShiftTime : $outArrange.find("input[name=leaveShiftTime]").val()
 			};
-		    touristGroupFeeJsonAdd = JSON.stringify(touristGroupFeeJsonAdd);
+			touristGroupFeeJsonAdd = JSON.stringify(touristGroupFeeJsonAdd);
 			touristGroupFeeJsonDel = JSON.stringify(touristGroupFeeJsonDel);
 			touristGroupMemberJsonDel = JSON.stringify(touristGroupMemberJsonDel);
 			touristGroupMemberJsonAdd = JSON.stringify(touristGroupMemberJsonAdd);
@@ -1593,7 +1629,7 @@ define(function(require, exports) {
 							touristGroup.edited["update"] = "";
 							if(isClose == 1){
 								closeTab(menuKey+"-update");
-								touristGroup.listTouristGroup(0,touristGroup.searchData.partnerAgencyId,touristGroup.searchData.lineProductId,touristGroup.searchData.startTime,touristGroup.searchData.userId,touristGroup.searchData.createTimeStart,touristGroup.searchData.createTimeEnd,touristGroup.searchData.customerType,touristGroup.searchData.status);
+								touristGroup.listTouristGroup(0,touristGroup.searchData.fromPartnerAgencyName,touristGroup.searchData.fromPartnerAgencyId,touristGroup.searchData.lineProductName,touristGroup.searchData.lineProductId,touristGroup.searchData.startTime,touristGroup.searchData.creatorName,touristGroup.searchData.creatorId,touristGroup.searchData.createTimeStart,touristGroup.searchData.createTimeEnd,touristGroup.searchData.customerType,touristGroup.searchData.status);
 							}
 						});
 					}
@@ -1605,8 +1641,8 @@ define(function(require, exports) {
 			var needPayMoney = 0;
 			var needPayAllM = $("#"+tab+" .form-group input[name=needPayAllMoney]");
 			var payedM = $("#"+tab+" .form-group input[name=payedMoney]");
-			var currentNeedPayM = $("#"+tab+" .form-group input[name=currentNeedPayMoney]"); 
-			var unIncomeMoney = $("#"+tab+" .form-group input[name=unIncomeMoney]"); 
+			var currentNeedPayM = $("#"+tab+" .form-group input[name=currentNeedPayMoney]");
+			var unIncomeMoney = $("#"+tab+" .form-group input[name=unIncomeMoney]");
 			var assC_tr = $("#"+tab+" .touristGroupMainForm .addCostList tbody").find("tr:not(.deleted)");
 			needPayMoney=0;
 			for(i=0;i<assC_tr.length;i++){
@@ -1622,7 +1658,7 @@ define(function(require, exports) {
 			}//应收-已收-现收=未收
 			needPayMoney = needPayMoney.toFixed(2);
 			needPayAllM.val(needPayMoney);
-			
+
 			var payedMN =parseFloat(payedM.val()),
 				cnPMn = parseFloat(currentNeedPayM.val()),
 				unIMn = 0;
@@ -1650,8 +1686,8 @@ define(function(require, exports) {
 					var dataD = data;
 					if(result){
 						var lineProductInfo = JSON.parse(data.lineProductList);
-						data.lineProductList = lineProductInfo;								
-						
+						data.lineProductList = lineProductInfo;
+
 						if(lineProductInfo != null && lineProductInfo.length > 0){
 							for(var i=0;i<lineProductInfo.length;i++){
 								lineProductInfo[i].value = lineProductInfo[i].name;
@@ -1679,7 +1715,7 @@ define(function(require, exports) {
 							var name = $("#chooseLineProductId input[name=lineProduct_name]").val();
 							touristGroup.searchLineFunction(false,0,name);
 						});
-						
+
 						//分页--首页按钮事件
 						$("#chooseLineProductId .pageMode a.first").off("click").click(function(){
 							var name = $("#chooseLineProductId input[name=lineProduct_name]").val();
@@ -1715,7 +1751,7 @@ define(function(require, exports) {
 						$(".btn-submit-searchtravelLine").off("click").click(function(){
 							var trSearchtravelLine =$(".search-travelLineList-table tbody tr");
 							for(var i=0;i<trSearchtravelLine.length;i++){
-								
+
 								if(trSearchtravelLine.eq(i).find("input[name=choice-TravelLine]").is(":checked")==true){
 									travelLineName =trSearchtravelLine.eq(i).find("td[name=travelLine-select]").text();
 									travelLineId =trSearchtravelLine.eq(i).find("td[name=travelLine-select]").attr("data-travelLine-Id");
@@ -1725,7 +1761,7 @@ define(function(require, exports) {
 								else{
 								}
 							}
-							
+
 							$("input[name=lineProductIdName]").val(travelLineName).trigger('change');
 							$("input[name=lineProductId]").val(travelLineId);
 						});
@@ -1736,90 +1772,90 @@ define(function(require, exports) {
 		batchAddTouristGroupMember:function(){
 			var html = '<div class="col-xs-12 batchAddTouristGroupMemberContainer" style="margin-top:10px"><div><div class="red">批量添加格式为：游客姓名 手机号码  证件号(用空格隔开，一行一条)</div><div>举例：<br/>张三 &nbsp;&nbsp;&nbsp;&nbsp;138****8888&nbsp;&nbsp;&nbsp;&nbsp; 510***19891002****<br/>李四 &nbsp;&nbsp;&nbsp;&nbsp;137****7777&nbsp;&nbsp;&nbsp;&nbsp; 510***19881003****</div><div class="space-10"></div><div><textarea class="form-control" name="batchTouristGroupMember" style="height:200px"></textarea></div><div class="space-10"></div><button class="btn btn-block btn-primary btn-submit-batchTouristGroupMember"> <i class="ace-icon fa fa-check"></i>提交信息 </button></div></div>';
 			var batchAddTouristGroupMemberLayer = layer.open({
-			    type: 1,
-			    title:"批量添加游客",
-			    skin: 'layui-layer-rim', //加上边框
-			    area: ['600px', '470px'], //宽高
-			    zIndex:1028,
-			    content: html,
-			    success:function(){
-			    	$(".batchAddTouristGroupMemberContainer .btn-submit-batchTouristGroupMember").click(function(){
-			    		var data = trim($(".batchAddTouristGroupMemberContainer textarea[name=batchTouristGroupMember]").val());
-			    		if (data == "") {
-			    			showMessageDialog($( "#confirm-dialog-message" ),"请输入要添加的数据");
-			    		}else{
-					    	var dataArray = data.split(/\r?\n/);
-					    	if(dataArray.length > 0){
-					    		var memberInfo, memberInfoArray, name, mobileNumber, idCardNumber;
-					    		for(var i=0;i<dataArray.length;i++){
-					    			memberInfo = trim(dataArray[i]);
-					    			memberInfoArray = memberInfo.split(/\s+/);
+				type: 1,
+				title:"批量添加游客",
+				skin: 'layui-layer-rim', //加上边框
+				area: ['600px', '470px'], //宽高
+				zIndex:1028,
+				content: html,
+				success:function(){
+					$(".batchAddTouristGroupMemberContainer .btn-submit-batchTouristGroupMember").click(function(){
+						var data = trim($(".batchAddTouristGroupMemberContainer textarea[name=batchTouristGroupMember]").val());
+						if (data == "") {
+							showMessageDialog($( "#confirm-dialog-message" ),"请输入要添加的数据");
+						}else{
+							var dataArray = data.split(/\r?\n/);
+							if(dataArray.length > 0){
+								var memberInfo, memberInfoArray, name, mobileNumber, idCardNumber;
+								for(var i=0;i<dataArray.length;i++){
+									memberInfo = trim(dataArray[i]);
+									memberInfoArray = memberInfo.split(/\s+/);
 
-					    			name = "";
-					    			mobileNumber = "";
-					    			idCardNumber = "";
-					    			if(memberInfoArray.length == 1){
-					    				name = memberInfoArray[0];
-					    			}
-					    			else if(memberInfoArray.length == 2){
-					    				name = memberInfoArray[0];
+									name = "";
+									mobileNumber = "";
+									idCardNumber = "";
+									if(memberInfoArray.length == 1){
+										name = memberInfoArray[0];
+									}
+									else if(memberInfoArray.length == 2){
+										name = memberInfoArray[0];
 										numReg(memberInfoArray[1]);
-					    			}
-					    			else if(memberInfoArray.length == 3){
-					    				name = memberInfoArray[0];
+									}
+									else if(memberInfoArray.length == 3){
+										name = memberInfoArray[0];
 										numReg(memberInfoArray[1]);
 										numReg(memberInfoArray[2]);
-					    			}
+									}
 
-					    			function numReg(str) {
-					    				if(/^(\d{15}$|^\d{18}$|^\d{17}(\d|X|x))$/.test(str)){
-					    					idCardNumber = str;
-					    				}
-					    				else if(/^((13[0-9])|(14[0-9])|(15[0-9])|(16[0-9])|(17[0-9])|(18[0-9])|(19[0-9]))\d{8}$/.test(str)){
-					    					mobileNumber = str;
-					    				}
-					    			}
-					    			// 如果第一行数据为空，则删除第一行
-					    			
-					    			var html=
-						    			"<tr>"+
-						    			"<td>"+"</td>"+
-						    			"<td><input name=\"name\" type=\"text\" class=\"col-sm-12  no-padding-right\" value=\""+name+"\"/></td>"+
-						    			"<td><input name=\"mobileNumber\" type=\"text\" class=\"col-sm-12  no-padding-right\"  value=\""+mobileNumber+"\"/></td>"+
-						    			"<td><select name=\"idCardType\"><option value=\"0\" selected=\"selected\">身份证</option>><option value=\"1\">护照</option><option value=\"2\">其它</option></select></td>"+
-						    			"<td><input name=\"idCardNumber\" type=\"text\" class=\"col-sm-12  no-padding-right\" value=\""+idCardNumber+"\" /></td>"+
-						    			"<td><div class=\"checkbox\"><label><input type=\"checkbox\" class=\"ace \" value=\"1\" name=\"isContactUser\"><span class=\"lbl\"></span></label></div></td>"+
-						    			"<td><a class=\"cursor btnDeleteTourist\">删除</i></a></td>"+
-						    			"</tr>";
-						    		$(".addTouristList .addTouristTbody").append(html);
-						    		$(".addTouristList tr:not(.deleted)").each(function(i){
+									function numReg(str) {
+										if(/^(\d{15}$|^\d{18}$|^\d{17}(\d|X|x))$/.test(str)){
+											idCardNumber = str;
+										}
+										else if(/^((13[0-9])|(14[0-9])|(15[0-9])|(16[0-9])|(17[0-9])|(18[0-9])|(19[0-9]))\d{8}$/.test(str)){
+											mobileNumber = str;
+										}
+									}
+									// 如果第一行数据为空，则删除第一行
+
+									var html=
+										"<tr>"+
+										"<td>"+"</td>"+
+										"<td><input name=\"name\" type=\"text\" class=\"col-sm-12  no-padding-right\" value=\""+name+"\"/></td>"+
+										"<td><input name=\"mobileNumber\" type=\"text\" class=\"col-sm-12  no-padding-right\"  value=\""+mobileNumber+"\"/></td>"+
+										"<td><select name=\"idCardType\"><option value=\"0\" selected=\"selected\">身份证</option>><option value=\"1\">护照</option><option value=\"2\">其它</option></select></td>"+
+										"<td><input name=\"idCardNumber\" type=\"text\" class=\"col-sm-12  no-padding-right\" value=\""+idCardNumber+"\" /></td>"+
+										"<td><div class=\"checkbox\"><label><input type=\"checkbox\" class=\"ace \" value=\"1\" name=\"isContactUser\"><span class=\"lbl\"></span></label></div></td>"+
+										"<td><a class=\"cursor btnDeleteTourist\">删除</i></a></td>"+
+										"</tr>";
+									$(".addTouristList .addTouristTbody").append(html);
+									$(".addTouristList tr:not(.deleted)").each(function(i){
 										if(i>0){
 											$(this).children().eq(0).text(i);
 										}
 									})
 									//游客名单删除按钮绑定事件
-						    		$(".addTouristList .btnDeleteTourist").click(function(){
-						    			var tr = $(this).parent().parent();
-						    			var touristListTrId = tr.attr("data-entity-id");
-						    			if(!(touristListTrId!=null && touristListTrId!="")){
-						    				$(this).parent().parent().fadeOut(function(){
-						    					$(this).remove();
-						    				})
-						    			}
-						    			else{
-						    				$(this).parent().parent().fadeOut(function(){
-								    			$(this).remove();
-								    			MenberNumber();
-								    		});
-						    			}
-							    	});
-						    		layer.close(batchAddTouristGroupMemberLayer);
-					    		}
-					    	}
-			    		}
-			    	});
-			    	
-			    }
+									$(".addTouristList .btnDeleteTourist").click(function(){
+										var tr = $(this).parent().parent();
+										var touristListTrId = tr.attr("data-entity-id");
+										if(!(touristListTrId!=null && touristListTrId!="")){
+											$(this).parent().parent().fadeOut(function(){
+												$(this).remove();
+											})
+										}
+										else{
+											$(this).parent().parent().fadeOut(function(){
+												$(this).remove();
+												MenberNumber();
+											});
+										}
+									});
+									layer.close(batchAddTouristGroupMemberLayer);
+								}
+							}
+						}
+					});
+
+				}
 			});
 		},
 		bindTicketChoose : function(){
@@ -1856,8 +1892,8 @@ define(function(require, exports) {
 								$(obj).autocomplete('search', '');
 							}else{
 								layer.tips('没有内容。', obj, {
-								    tips: [1, '#3595CC'],
-								    time: 2000
+									tips: [1, '#3595CC'],
+									time: 2000
 								});
 							}
 						}
@@ -1876,8 +1912,8 @@ define(function(require, exports) {
 		//接送车辆JSON组装
 		outBusJson :function(obj,json){
 			for(var i = 0; i<obj.length; i++){
-    			var busJson = {//touristGroup.getArrangeTrValue(outBusTr.eq(i),""),
-    				id : obj.eq(i).attr("data-entity-id"),
+				var busJson = {//touristGroup.getArrangeTrValue(outBusTr.eq(i),""),
+					id : obj.eq(i).attr("data-entity-id"),
 					serviceType : touristGroup.getArrangeTrValue(obj.eq(i),"serviceType"),
 					busCompanyId : touristGroup.getArrangeTrValue(obj.eq(i),"busCompanyId"),
 					busId : touristGroup.getArrangeTrValue(obj.eq(i),"busLicenseNumberId"),
@@ -1890,146 +1926,146 @@ define(function(require, exports) {
 					payedMoney : touristGroup.getArrangeTrValue(obj.eq(i),"busPayedMoney"),
 					payType : touristGroup.getArrangeTrValue(obj.eq(i),"busPayType")
 				}
-    			if(busJson.busCompanyId != "" && busJson.busCompanyId.length>0){
-    				json.push(busJson);
-    			}
-    		}
+				if(busJson.busCompanyId != "" && busJson.busCompanyId.length>0){
+					json.push(busJson);
+				}
+			}
 		},
 		//酒店安排JSON组装
 		outHotelJson :function(obj,json){
 			for(var i = 0; i<obj.length; i++){
 				var hotelJson ={
-	    				id : obj.eq(i).attr("data-entity-id"),
-						serviceType : touristGroup.getArrangeTrValue(obj.eq(i),"serviceType"),
-						checkInTime : touristGroup.getArrangeTrValue(obj.eq(i),"hotelCheckInTime"),
-						hotelLevel : touristGroup.getArrangeTrValue(obj.eq(i),"hotelLevel"),
-						hotelId : touristGroup.getArrangeTrValue(obj.eq(i),"hotelId"),
-						hotelRoomId : touristGroup.getArrangeTrValue(obj.eq(i),"hotelRoomTypeId"),
-						price : touristGroup.getArrangeTrValue(obj.eq(i),"hotelPrice"),
-						memberCount : touristGroup.getArrangeTrValue(obj.eq(i),"hotelMemberCount"),
-						reduceMoney : touristGroup.getArrangeTrValue(obj.eq(i),"hotelReduceMoney"),
-						needPayMoney : touristGroup.getArrangeTrValue(obj.eq(i),"hotelNeedPayMoney"),
-						payedMoney : touristGroup.getArrangeTrValue(obj.eq(i),"hotelPayedMoney"),
-						payType : touristGroup.getArrangeTrValue(obj.eq(i),"hotelPayType")
+					id : obj.eq(i).attr("data-entity-id"),
+					serviceType : touristGroup.getArrangeTrValue(obj.eq(i),"serviceType"),
+					checkInTime : touristGroup.getArrangeTrValue(obj.eq(i),"hotelCheckInTime"),
+					hotelLevel : touristGroup.getArrangeTrValue(obj.eq(i),"hotelLevel"),
+					hotelId : touristGroup.getArrangeTrValue(obj.eq(i),"hotelId"),
+					hotelRoomId : touristGroup.getArrangeTrValue(obj.eq(i),"hotelRoomTypeId"),
+					price : touristGroup.getArrangeTrValue(obj.eq(i),"hotelPrice"),
+					memberCount : touristGroup.getArrangeTrValue(obj.eq(i),"hotelMemberCount"),
+					reduceMoney : touristGroup.getArrangeTrValue(obj.eq(i),"hotelReduceMoney"),
+					needPayMoney : touristGroup.getArrangeTrValue(obj.eq(i),"hotelNeedPayMoney"),
+					payedMoney : touristGroup.getArrangeTrValue(obj.eq(i),"hotelPayedMoney"),
+					payType : touristGroup.getArrangeTrValue(obj.eq(i),"hotelPayType")
 				}
 				if(hotelJson.hotelId != "" && hotelJson.hotelId.length>0){
-    				json.push(hotelJson);
-    			}
+					json.push(hotelJson);
+				}
 			}
 		},
 		//票务安排JSON组装
 		outTicketJson :function(obj,json){
 			for(var i = 0; i<obj.length; i++){
 				var ticketJson ={
-	    				id : obj.eq(i).attr("data-entity-id"),
-						serviceType : touristGroup.getArrangeTrValue(obj.eq(i),"serviceType"),
-						ticketId : touristGroup.getArrangeTrValue(obj.eq(i),"tickeId"),
-						type : touristGroup.getArrangeTrValue(obj.eq(i),"ticketType"),
-						startingCity : touristGroup.getArrangeTrValue(obj.eq(i),"ticketStartCity"),
-						arriveCity : touristGroup.getArrangeTrValue(obj.eq(i),"ticketArriveCity"),
-						startTime : touristGroup.getArrangeTrValue(obj.eq(i),"ticketStartTime"),
-						shift : touristGroup.getArrangeTrValue(obj.eq(i),"ticketShift"),
-						seatLevel : touristGroup.getArrangeTrValue(obj.eq(i),"ticketSeatLevel"),
-						price : touristGroup.getArrangeTrValue(obj.eq(i),"ticketPrice"),
-						memberCount : touristGroup.getArrangeTrValue(obj.eq(i),"ticketMemberCount"),
-						reduceMoney : touristGroup.getArrangeTrValue(obj.eq(i),"ticketReduceMoney"),
-						needPayMoney : touristGroup.getArrangeTrValue(obj.eq(i),"ticketNeedPayMoney"),
-						payedMoney : touristGroup.getArrangeTrValue(obj.eq(i),"ticketPayedMoney"),
-						payType : touristGroup.getArrangeTrValue(obj.eq(i),"ticketPayType")
+					id : obj.eq(i).attr("data-entity-id"),
+					serviceType : touristGroup.getArrangeTrValue(obj.eq(i),"serviceType"),
+					ticketId : touristGroup.getArrangeTrValue(obj.eq(i),"tickeId"),
+					type : touristGroup.getArrangeTrValue(obj.eq(i),"ticketType"),
+					startingCity : touristGroup.getArrangeTrValue(obj.eq(i),"ticketStartCity"),
+					arriveCity : touristGroup.getArrangeTrValue(obj.eq(i),"ticketArriveCity"),
+					startTime : touristGroup.getArrangeTrValue(obj.eq(i),"ticketStartTime"),
+					shift : touristGroup.getArrangeTrValue(obj.eq(i),"ticketShift"),
+					seatLevel : touristGroup.getArrangeTrValue(obj.eq(i),"ticketSeatLevel"),
+					price : touristGroup.getArrangeTrValue(obj.eq(i),"ticketPrice"),
+					memberCount : touristGroup.getArrangeTrValue(obj.eq(i),"ticketMemberCount"),
+					reduceMoney : touristGroup.getArrangeTrValue(obj.eq(i),"ticketReduceMoney"),
+					needPayMoney : touristGroup.getArrangeTrValue(obj.eq(i),"ticketNeedPayMoney"),
+					payedMoney : touristGroup.getArrangeTrValue(obj.eq(i),"ticketPayedMoney"),
+					payType : touristGroup.getArrangeTrValue(obj.eq(i),"ticketPayType")
 				}
 				if(ticketJson.ticketId != "" && ticketJson.ticketId.length>0){
-    				json.push(ticketJson);
-    			}
+					json.push(ticketJson);
+				}
 			}
 		},
 		//新增团外安排接送车辆
 		addOutBusList :function(id,type){
 			var html = '<tr>'+
-			'<td><input type="hidden" name="serviceType" value="'+type+'" /><input class="col-sm-12 chooseBusCompany" name="busCompanyName" type="text" value="" /><input type="hidden" name="busCompanyId" /></td>'+
-			'<td><input class="col-sm-12 chooseBusLicenseNumber" name="busLicenseNumber" type="text" value="" /><input type="hidden" name="busLicenseNumberId" /></td>'+
-			'<td><input class="col-sm-12" name="busbrand" readonly="readonly" type="text" value="" /></td>'+
-			'<td><input class="col-sm-12 chooseDriver" name="driverName" type="text" value="" /><input type="hidden" name="driverId" /></td>'+
-			'<td><input class="col-sm-12" name="driverMobileNumber" readonly="readonly" type="text" value="" /></td>'+
-			'<td><input class="col-sm-12" name="bususeTime" type="text" value="" /></td>'+
-			'<td><input class="col-sm-12" name="boardLocation" type="text" value="" /></td>'+
-			'<td><input class="col-sm-12" name="busFee" type="text" value="" /></td>'+
-			'<td><input class="col-sm-12" name="busReduceMoney" type="text" value="" /></td>'+
-			'<td><input class="col-sm-12" name="busNeedPayMoney" type="text" value="" /></td>'+
-			'<td><input class="col-sm-12" name="busPayedMoney" type="text" value="" /></td>'+
-			'<td><select class="" name="busPayType" ><option value="0">现付</option><option value="1">账期</option></select></td>'+
-			'<td><a class="cursor arrange-delete" title="删除">删除</a></td>'+
-			'</tr>';
+				'<td><input type="hidden" name="serviceType" value="'+type+'" /><input class="col-sm-12 chooseBusCompany" name="busCompanyName" type="text" value="" /><input type="hidden" name="busCompanyId" /></td>'+
+				'<td><input class="col-sm-12 chooseBusLicenseNumber" name="busLicenseNumber" type="text" value="" /><input type="hidden" name="busLicenseNumberId" /></td>'+
+				'<td><input class="col-sm-12" name="busbrand" readonly="readonly" type="text" value="" /></td>'+
+				'<td><input class="col-sm-12 chooseDriver" name="driverName" type="text" value="" /><input type="hidden" name="driverId" /></td>'+
+				'<td><input class="col-sm-12" name="driverMobileNumber" readonly="readonly" type="text" value="" /></td>'+
+				'<td><input class="col-sm-12" name="bususeTime" type="text" value="" /></td>'+
+				'<td><input class="col-sm-12" name="boardLocation" type="text" value="" /></td>'+
+				'<td><input class="col-sm-12" name="busFee" type="text" value="" /></td>'+
+				'<td><input class="col-sm-12" name="busReduceMoney" type="text" value="" /></td>'+
+				'<td><input class="col-sm-12" name="busNeedPayMoney" type="text" value="" /></td>'+
+				'<td><input class="col-sm-12" name="busPayedMoney" type="text" value="" /></td>'+
+				'<td><select class="" name="busPayType" ><option value="0">现付</option><option value="1">账期</option></select></td>'+
+				'<td><a class="cursor arrange-delete" title="删除">删除</a></td>'+
+				'</tr>';
 			$("#"+id+" .busList tbody").append(html);
-	    	$(".arrangeTouristMain .busList .arrange-delete").click(function(){
-	    		var thisObj = $(this);
-	    		touristGroup.delArrangeJudge (thisObj,"bus");
-	    	})
-    		touristGroup.bindBusCompanyChoose();
-	    	touristGroup.outArrangeDatepicker("carList","bususeTime");
-	    	touristGroup.outArrangeDatepicker("sendList","bususeTime");
-	    	touristGroup.outArrangeDatepicker("receptionList","bususeTime");
+			$(".arrangeTouristMain .busList .arrange-delete").click(function(){
+				var thisObj = $(this);
+				touristGroup.delArrangeJudge (thisObj,"bus");
+			})
+			touristGroup.bindBusCompanyChoose();
+			touristGroup.outArrangeDatepicker("carList","bususeTime");
+			touristGroup.outArrangeDatepicker("sendList","bususeTime");
+			touristGroup.outArrangeDatepicker("receptionList","bususeTime");
 		},
 		//新增团外安排酒店
 		addOutHotel :function(id,type){
 			var html ='<tr>'+
-			'<td><input type="hidden" name="serviceType" value="'+type+'" />'+
-			'<input class="col-sm-12" name="hotelCheckInTime" value="" type="text" /></td>'+
-			'<td><select class="tripPlanHotelStar" name="hotelLevel"><option value="1">三星以下</option>'+
-			'<option value="2">三星</option><option value="3">准四星</option>'+
-			'<option value="4">四星</option><option value="5">准五星</option>'+
-			'<option value="6">五星</option><option value="7">五星以上</option></select></td>'+
-			'<td><input class="col-sm-12 chooseHotel" name="hotelName" value="" type="text" /><input type="hidden" name="hotelId" /></td>'+
-			'<td><input class="col-sm-12" name="hotelManagerName" value="" readonly="readonly" type="text" /></td>'+
-			'<td><input class="col-sm-12" name="hotelMobileNumber" value="" readonly="readonly" type="text" /></td>'+
-			'<td><input class="col-sm-12" name="hotelRoomType" value="" type="text" /><input type="hidden" name="hotelRoomTypeId" /></td>'+
-			'<td><input class="col-sm-12" name="hotelPrice" value="" type="text" /></td>'+
-			'<td><input class="col-sm-12" name="hotelMemberCount" value="" type="text" /></td>'+
-			'<td><input class="col-sm-12" name="hotelReduceMoney" value="" type="text" /></td>'+
-			'<td><input class="col-sm-12" name="hotelNeedPayMoney" value="" type="text" /></td>'+
-			'<td><input class="col-sm-12" name="hotelPayedMoney" value="" type="text" /></td>'+
-			'<td><select class="" name="hotelPayType" >'+
-			'<option value="0">现付</option>'+
-			'<option value="1">账期</option></select></td>'+
-			'<td><a class="cursor arrange-delete">删除</a></td>'+
-			'</tr>';
+				'<td><input type="hidden" name="serviceType" value="'+type+'" />'+
+				'<input class="col-sm-12" name="hotelCheckInTime" value="" type="text" /></td>'+
+				'<td><select class="tripPlanHotelStar" name="hotelLevel"><option value="1">三星以下</option>'+
+				'<option value="2">三星</option><option value="3">准四星</option>'+
+				'<option value="4">四星</option><option value="5">准五星</option>'+
+				'<option value="6">五星</option><option value="7">五星以上</option></select></td>'+
+				'<td><input class="col-sm-12 chooseHotel" name="hotelName" value="" type="text" /><input type="hidden" name="hotelId" /></td>'+
+				'<td><input class="col-sm-12" name="hotelManagerName" value="" readonly="readonly" type="text" /></td>'+
+				'<td><input class="col-sm-12" name="hotelMobileNumber" value="" readonly="readonly" type="text" /></td>'+
+				'<td><input class="col-sm-12" name="hotelRoomType" value="" type="text" /><input type="hidden" name="hotelRoomTypeId" /></td>'+
+				'<td><input class="col-sm-12" name="hotelPrice" value="" type="text" /></td>'+
+				'<td><input class="col-sm-12" name="hotelMemberCount" value="" type="text" /></td>'+
+				'<td><input class="col-sm-12" name="hotelReduceMoney" value="" type="text" /></td>'+
+				'<td><input class="col-sm-12" name="hotelNeedPayMoney" value="" type="text" /></td>'+
+				'<td><input class="col-sm-12" name="hotelPayedMoney" value="" type="text" /></td>'+
+				'<td><select class="" name="hotelPayType" >'+
+				'<option value="0">现付</option>'+
+				'<option value="1">账期</option></select></td>'+
+				'<td><a class="cursor arrange-delete">删除</a></td>'+
+				'</tr>';
 			$("#"+id+" .hotelList tbody").append(html);
-	    	$(".arrangeTouristMain .hotelList .arrange-delete").click(function(){
-	    		var thisObj = $(this);
-	    		touristGroup.delArrangeJudge (thisObj,"hotel");
-	    	})
-	    	touristGroup.bindHotelChoose();
-	    	touristGroup.outArrangeDatepicker("receptionList","hotelCheckInTime");
-	    	touristGroup.outArrangeDatepicker("sendList","hotelCheckInTime");
+			$(".arrangeTouristMain .hotelList .arrange-delete").click(function(){
+				var thisObj = $(this);
+				touristGroup.delArrangeJudge (thisObj,"hotel");
+			})
+			touristGroup.bindHotelChoose();
+			touristGroup.outArrangeDatepicker("receptionList","hotelCheckInTime");
+			touristGroup.outArrangeDatepicker("sendList","hotelCheckInTime");
 		},
 		//新增团外安排票务
 		addTicketList :function(id,type){
 			var html ='<tr>'+
-			'<td><input type="hidden" name="serviceType" value="'+type+'" /><input class="col-sm-12 chooseTicket" name="ticketName" value="" type="text" /><input type="hidden" name="tickeId" /></td>'+
-			'<td><select class="" name="ticketType"><option value="1">机票</option>'+
-			'<option value="2">汽车票</option><option value="3">火车票</option></select></td>'+
-			'<td><input class="col-sm-12" name="ticketStartCity" value="" type="text" /></td>'+
-			'<td><input class="col-sm-12" name="ticketArriveCity" value="" type="text" /></td>'+
-			'<td><input class="col-sm-12" name="ticketStartTime" value="" type="text" /></td>'+
-			'<td><input class="col-sm-12" name="ticketShift" value="" type="text" /></td>'+
-			'<td><input class="col-sm-12" name="ticketSeatLevel" value="{{outTicket.seatLevel}}" type="text" />'+
-			'<td><input class="col-sm-12" name="ticketPrice" value="" type="text" /></td>'+
-			'<td><input class="col-sm-12" name="ticketMemberCount" value="" type="text" /></td>'+
-			'<td><input class="col-sm-12" name="ticketReduceMoney" value="" type="text" /></td>'+
-			'<td><input class="col-sm-12" name="ticketNeedPayMoney" value="" type="text" /></td>'+
-			'<td><input class="col-sm-12" name="ticketPayedMoney" value="" type="text" /></td>'+
-			'<td><select class="" name="ticketPayType" >'+
-			'<option value="0">现付</option>'+
-			'<option value="1">账期</option></select></td>'+
-			'<td><a class="cursor arrange-delete">删除</a></td>'+
-			'</tr>';
+				'<td><input type="hidden" name="serviceType" value="'+type+'" /><input class="col-sm-12 chooseTicket" name="ticketName" value="" type="text" /><input type="hidden" name="tickeId" /></td>'+
+				'<td><select class="" name="ticketType"><option value="1">机票</option>'+
+				'<option value="2">汽车票</option><option value="3">火车票</option></select></td>'+
+				'<td><input class="col-sm-12" name="ticketStartCity" value="" type="text" /></td>'+
+				'<td><input class="col-sm-12" name="ticketArriveCity" value="" type="text" /></td>'+
+				'<td><input class="col-sm-12" name="ticketStartTime" value="" type="text" /></td>'+
+				'<td><input class="col-sm-12" name="ticketShift" value="" type="text" /></td>'+
+				'<td><input class="col-sm-12" name="ticketSeatLevel" value="{{outTicket.seatLevel}}" type="text" />'+
+				'<td><input class="col-sm-12" name="ticketPrice" value="" type="text" /></td>'+
+				'<td><input class="col-sm-12" name="ticketMemberCount" value="" type="text" /></td>'+
+				'<td><input class="col-sm-12" name="ticketReduceMoney" value="" type="text" /></td>'+
+				'<td><input class="col-sm-12" name="ticketNeedPayMoney" value="" type="text" /></td>'+
+				'<td><input class="col-sm-12" name="ticketPayedMoney" value="" type="text" /></td>'+
+				'<td><select class="" name="ticketPayType" >'+
+				'<option value="0">现付</option>'+
+				'<option value="1">账期</option></select></td>'+
+				'<td><a class="cursor arrange-delete">删除</a></td>'+
+				'</tr>';
 			$("#"+id+" .ticketList tbody").append(html);
-	    	$(".arrangeTouristMain .ticketList .arrange-delete").click(function(){
-	    		var thisObj = $(this);
-	    		touristGroup.delArrangeJudge (thisObj,"ticket");
-	    	})
-	    	touristGroup.bindTicketChoose();
-	    	touristGroup.outArrangeDatepicker("receptionList","ticketStartTime");
-	    	touristGroup.outArrangeDatepicker("sendList","ticketStartTime");
+			$(".arrangeTouristMain .ticketList .arrange-delete").click(function(){
+				var thisObj = $(this);
+				touristGroup.delArrangeJudge (thisObj,"ticket");
+			})
+			touristGroup.bindTicketChoose();
+			touristGroup.outArrangeDatepicker("receptionList","ticketStartTime");
+			touristGroup.outArrangeDatepicker("sendList","ticketStartTime");
 		},
 		getArrangeValue :function(name){
 			var val = $(".arrangeTouristMain [name="+name+"]").val();
@@ -2043,17 +2079,17 @@ define(function(require, exports) {
 			return id;
 		},
 		//删除安排判断
-    	delArrangeJudge :function(thisObj,type){
-    		var id = thisObj.parent().parent().attr("data-entity-id");
-    		if(id == null || id.length == 0){
-    			thisObj.parent().parent().fadeOut(function(){
-    				thisObj.parent().parent().remove();
-    			});
-    		}
-    		else{
-        		touristGroup.delArrangeTr(thisObj,id,type);
-    		}
-			
+		delArrangeJudge :function(thisObj,type){
+			var id = thisObj.parent().parent().attr("data-entity-id");
+			if(id == null || id.length == 0){
+				thisObj.parent().parent().fadeOut(function(){
+					thisObj.parent().parent().remove();
+				});
+			}
+			else{
+				touristGroup.delArrangeTr(thisObj,id,type);
+			}
+
 		},
 		//删除安排事件 (及时删除）
 		delArrangeTr :function(thisObj,id,type){
@@ -2063,7 +2099,7 @@ define(function(require, exports) {
 				title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
 				title_html: true,
 				draggable:false,
-				buttons: [ 
+				buttons: [
 					{
 						text: "取消",
 						"class" : "btn btn-minier",
@@ -2090,8 +2126,8 @@ define(function(require, exports) {
 									if(result){
 										showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
 											thisObj.parent().parent().fadeOut(function(){
-							    				thisObj.parent().parent().remove();
-							    			});
+												thisObj.parent().parent().remove();
+											});
 										});
 									}
 								}
@@ -2113,18 +2149,18 @@ define(function(require, exports) {
 					var $obj = $(this);
 					$.ajax({
 						url:""+APP_ROOT+"back/busCompany.do?method=findBusDetailById&token="+$.cookie("token")+"&menuKey=resource_busCompany&operation=view",
-	                    dataType: "json",
-	                    data:"id="+ui.item.id,
-	                    success: function(data) {
-	                    	layer.close(globalLoadingLayer);
+						dataType: "json",
+						data:"id="+ui.item.id,
+						success: function(data) {
+							layer.close(globalLoadingLayer);
 							var result = showDialog(data);
 							if(result){
 								var d = JSON.parse(data.bus), objParent = $obj.parent().parent();
 								objParent.find("input[name=busLicenseNumberId]").val(ui.item.id).trigger('change');
 								objParent.find("input[name=busbrand]").val(d.brand);
 							}
-	                    }
-	                 });
+						}
+					});
 				},
 				change:function(event,ui){
 					if(ui.item == null){
@@ -2141,10 +2177,10 @@ define(function(require, exports) {
 				if(busCompanyId){
 					$.ajax({
 						url:""+APP_ROOT+"back/busCompany.do?method=findBusListBySeat&token="+$.cookie("token")+"&menuKey=resource_busCompany&operation=view",
-	                    dataType: "json",
-	                    data:"id="+busCompanyId+"&seatCount="+0,
-	                    success: function(data) {
-	                    	layer.close(globalLoadingLayer);
+						dataType: "json",
+						data:"id="+busCompanyId+"&seatCount="+0,
+						success: function(data) {
+							layer.close(globalLoadingLayer);
 							var result = showDialog(data);
 							if(result){
 								var busList = JSON.parse(data.busList);
@@ -2156,15 +2192,15 @@ define(function(require, exports) {
 								$(objBus).autocomplete('option','source', busList);
 								$(objBus).autocomplete('search', '');
 							}
-	                    }
-	                 });
+						}
+					});
 				}else{
 					layer.tips('请选择车队', objBus, {
-					    tips: [1, '#3595CC'],
-					    time: 2000
+						tips: [1, '#3595CC'],
+						time: 2000
 					});
 				}
-				
+
 			})
 			//车队-车牌-司机
 			var busCompanyChoose = $(".arrangeTouristMain .chooseBusCompany");
@@ -2186,7 +2222,7 @@ define(function(require, exports) {
 				select:function(event,ui){
 					var _this = this, parent = $(_this).parent().parent()
 					$(this).blur();
-					
+
 					parent.find("input[name=busCompanyId]").val(ui.item.id).trigger('change');
 					parent.find("input[name=busLicenseNumber]").val("");
 					parent.find("input[name=busLicenseNumberId]").val("");
@@ -2194,20 +2230,20 @@ define(function(require, exports) {
 					parent.find("input[name=driverName]").val("");
 					parent.find("input[name=driverId]").val("");
 					parent.find("input[name=driverMobileNumber]").val("");
-					
+
 					var obj = this;
 					/*if(chooseBusLicenseNumber){
-						$(".addTripPlanMain .chooseBusLicenseNumber").autocomplete( "destroy");
-					}*/
+					 $(".addTripPlanMain .chooseBusLicenseNumber").autocomplete( "destroy");
+					 }*/
 				}
 			}).click(function(){
 				var objC = this;
 				$.ajax({
 					url:""+APP_ROOT+"back/busCompany.do?method=findBusCompanyBySeat&token="+$.cookie("token")+"&menuKey=resource_busCompany&operation=view",
-                    dataType: "json",
-                    data:"seatCount="+0,
-                    success: function(data) {
-                    	layer.close(globalLoadingLayer);
+					dataType: "json",
+					data:"seatCount="+0,
+					success: function(data) {
+						layer.close(globalLoadingLayer);
 						var result = showDialog(data);
 						if(result){
 							var busCompanyList = JSON.parse(data.busCompanyList);
@@ -2219,8 +2255,8 @@ define(function(require, exports) {
 							$(objC).autocomplete('option','source', busCompanyList);
 							$(objC).autocomplete('search', '');
 						}
-                    }
-                });
+					}
+				});
 			})
 			//选择司机
 			var chooseDriver = $(".arrangeTouristMain .chooseDriver");
@@ -2230,18 +2266,18 @@ define(function(require, exports) {
 					var $obj = $(this);
 					$.ajax({
 						url:""+APP_ROOT+"back/tripPlan.do?method=getDriverById&token="+$.cookie("token")+"&menuKey=resource_busCompany&operation=view",
-	                    dataType: "json",
-	                    data:"id="+ui.item.id,
-	                    success: function(data) {
-	                    	layer.close(globalLoadingLayer);
+						dataType: "json",
+						data:"id="+ui.item.id,
+						success: function(data) {
+							layer.close(globalLoadingLayer);
 							var result = showDialog(data);
 							if(result){
 								var d = JSON.parse(data.driverNumber), objParent = $obj.parent().parent();
 								objParent.find("input[name=driverId]").val(d.id).trigger('change');
 								objParent.find("input[name=driverMobileNumber]").val(d.mobileNumber);
 							}
-	                    }
-	                 });
+						}
+					});
 				},
 				change:function(event,ui){
 					if(ui.item == null){
@@ -2257,10 +2293,10 @@ define(function(require, exports) {
 				if(busCompanyId){
 					$.ajax({
 						url:""+APP_ROOT+"back/tripPlan.do?method=getDriverBybusCompany&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-		                dataType: "json",
-		                data:"id="+busCompanyId,
-		                success: function(data) {
-		                	layer.close(globalLoadingLayer);
+						dataType: "json",
+						data:"id="+busCompanyId,
+						success: function(data) {
+							layer.close(globalLoadingLayer);
 							var result = showDialog(data);
 							if(result){
 								var driverList = JSON.parse(data.driverList);
@@ -2272,12 +2308,12 @@ define(function(require, exports) {
 								$(objBus).autocomplete('option','source', driverList);
 								$(objBus).autocomplete('search', '');
 							}
-		                }
-		             });
+						}
+					});
 				}else{
 					layer.tips('请选择车队', objBus, {
-					    tips: [1, '#3595CC'],
-					    time: 2000
+						tips: [1, '#3595CC'],
+						time: 2000
 					});
 				}
 			})
@@ -2295,7 +2331,7 @@ define(function(require, exports) {
 				parentObj.find("input[name=hotelManagerName]").val("");
 				parentObj.find("input[name=hotelPrice]").val("");
 			});
-			
+
 			hotelChoose.autocomplete({
 				minLength:0,
 				change:function(event,ui){
@@ -2313,25 +2349,25 @@ define(function(require, exports) {
 				select:function(event,ui){
 					var _this = this, parents = $(_this).parent().parent();
 					parents.find("input[name=hotelId]").val(ui.item.id).trigger('change');
-					
+
 					$.ajax({
 						url:""+APP_ROOT+"back/hotel.do?method=getHotelById&token="+$.cookie("token")+"&menuKey=resource_hotel&operation=view",
-	                    dataType: "json",
-	                    data:"id=" + ui.item.id,
-	                    success: function(data) {
-	                    	layer.close(globalLoadingLayer);
+						dataType: "json",
+						data:"id=" + ui.item.id,
+						success: function(data) {
+							layer.close(globalLoadingLayer);
 							var result = showDialog(data);
 							if(result){
 								var hotel = JSON.parse(data.hotel);
 								parents.find("input[name=hotelMobileNumber]").val(hotel.mobileNumber);
 								parents.find("input[name=hotelManagerName]").val(hotel.managerName);
 							}
-	                    }
+						}
 					});
 					if(this.chooseHotelRoom){
 						parents.find("[name=hotelRoomType]").autocomplete( "destroy");
 					}
-					
+
 					this.chooseHotelRoom = parents.find("[name=hotelRoomType]").autocomplete({
 						minLength:0,
 						change:function(event,ui){
@@ -2347,22 +2383,22 @@ define(function(require, exports) {
 							$thisRoom.find("input[name=hotelRoomTypeId]").val(ui.item.id);
 							$.ajax({
 								url:""+APP_ROOT+"back/hotel.do?method=findRoomDetailById&token="+$.cookie("token")+"&menuKey=resource_hotel&operation=view",
-			                    dataType: "json",
-			                    data:"id=" + ui.item.id,
-			                    success: function(data) {
-			                    	var hotelRoom = JSON.parse(data.hotelRoom);
-			                    	$thisRoom.find("input[name=hotelPrice]").val(hotelRoom.contractPrice);
-			                    }
+								dataType: "json",
+								data:"id=" + ui.item.id,
+								success: function(data) {
+									var hotelRoom = JSON.parse(data.hotelRoom);
+									$thisRoom.find("input[name=hotelPrice]").val(hotelRoom.contractPrice);
+								}
 							})
 						}
 					}).off("click").on("click", function(){
 						var _this = this;
 						$.ajax({
 							url:""+APP_ROOT+"back/hotel.do?method=findTypeByHotelId&token="+$.cookie("token")+"&menuKey=resource_hotel&operation=view",
-		                    dataType: "json",
-		                    data:"id=" + ui.item.id,
-		                    success: function(data) {
-		                    	layer.close(globalLoadingLayer);
+							dataType: "json",
+							data:"id=" + ui.item.id,
+							success: function(data) {
+								layer.close(globalLoadingLayer);
 								var result = showDialog(data);
 								if(result){
 									var hotelRommList = JSON.parse(data.hotelRommList);
@@ -2374,25 +2410,25 @@ define(function(require, exports) {
 										$(_this).autocomplete('search', '');
 									}else{
 										layer.tips('没有房型可供选择，请选择其他星级', objhotelRoom, {
-										    tips: [1, '#3595CC'],
-										    time: 2000
+											tips: [1, '#3595CC'],
+											time: 2000
 										});
 									}
 								}
-		                    }
-		                });
+							}
+						});
 					});
 				}
 			}).off("click").on("click", function(){
 				var hotelStarValue = $hotelStar.val(),
-				hotelStarValue = $(this).parent().parent().find('.tripPlanHotelStar').val();
-			    obj = this;
+					hotelStarValue = $(this).parent().parent().find('.tripPlanHotelStar').val();
+				obj = this;
 				$.ajax({
 					url:""+APP_ROOT+"back/hotel.do?method=findHotelListByLevel&token="+$.cookie("token")+"&menuKey=resource_hotel&operation=view",
-	                dataType: "json",
-	                data:"level=" + hotelStarValue,
-	                success: function(data) {
-	                	layer.close(globalLoadingLayer);
+					dataType: "json",
+					data:"level=" + hotelStarValue,
+					success: function(data) {
+						layer.close(globalLoadingLayer);
 						var result = showDialog(data);
 						if(result){
 							var hotelList = JSON.parse(data.hotelList);
@@ -2404,13 +2440,13 @@ define(function(require, exports) {
 								$(obj).autocomplete('search', '');
 							}else{
 								layer.tips('没有酒店可供选择', obj, {
-								    tips: [1, '#3595CC'],
-								    time: 2000
+									tips: [1, '#3595CC'],
+									time: 2000
 								});
 							}
 						}
-	                }
-	            });
+					}
+				});
 			});
 		},
 		save : function(saveType){
@@ -2420,13 +2456,30 @@ define(function(require, exports) {
 			} else if(saveType == "update"){
 				var id = $(".updateTouristGroup .btn-submit-addTouristGroup").attr("data-entity-id");
 				console.log(id);
-				var validator=rule.checktouristGroup($(".updateTouristGroup"));  
+				var validator=rule.checktouristGroup($(".updateTouristGroup"));
 				touristGroup.submitUpdateTouristGroup(id,1);
 			}
 		},
 		clearEdit : function(clearType){
 			touristGroup.edited[clearType] = "";
-		}
+		},
+
+		getQueryTerms :function(){
+			$.ajax({
+				url:""+APP_ROOT+"/back/touristGroup.do?method=getQueryTermsForTouristGroup&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
+				dateType:"json",
+				type:"POST",
+				success:function(data){
+					var result = showDialog(data);
+					if(result){
+						touristGroup.autocompleteDate.lineProductList = data.lineProductList;
+						touristGroup.autocompleteDate.fromPartnerAgencyList = data.fromPartnerAgencyList	;
+						touristGroup.autocompleteDate.creatorList = data.creatorList;
+					}
+				}
+			})
+		},
+
 	}
 	exports.getTouristStatisticData = touristGroup.getTouristStatisticData;
 	exports.isEdited = touristGroup.isEdited;

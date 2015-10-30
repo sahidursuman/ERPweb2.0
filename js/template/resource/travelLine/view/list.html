@@ -31,7 +31,7 @@
 			</li>
 		</ul>
 	</div>
-	<button class="btn btn-sm btn-success btn-travelLine-add" style="margin-left: 20px">
+	<button class="btn btn-sm btn-success btn-travelLine-add R-right" data-right="1100002" style="margin-left: 20px">
 		<i class="ace-icon fa fa-plus"></i>
 		新增线路
 	</button>
@@ -45,6 +45,7 @@
 					<th>行程天数</th>
 					<th>创建时间</th>
 					<th>新建线路产品</th>
+					<th>是否启用</th>
 					<th>操作</th>
 				</tr>
 			</thead>
@@ -57,24 +58,35 @@
 						<td>{{travelLine.days}}天</td>
 						<td>{{travelLine.createTime}}</td>
 						<td>
-							<button data-entiy-id="{{travelLine.id}}" class="btn btn-xs btn-success btn-lineProduct-add">
+							<button data-entiy-id="{{travelLine.id}}" class="btn btn-xs btn-success btn-lineProduct-add R-right" data-right="1110002">
 								新建线路产品
 							</button>
 						</td>
 						<td>
-							<a data-entiy-id="{{travelLine.id}}" class=" btn-line-pre-scan cursor" >
+							{{if travelLine.status == 1}}
+								已启用
+							{{else if travelLine.status == 0}}
+								已停用
+							{{/if}}
+						</td>
+						<td>
+							<a data-entiy-id="{{travelLine.id}}" class=" btn-line-pre-scan cursor">
 								预览
-							</a><a href="" class="cursor"> |</a>
+							</a>
 							<a data-entiy-id="{{travelLine.id}}" class=" btn-line-scan cursor" >
+								<label class="padding-right20">|</label>
 								查看
-							</a><a href="" class="cursor"> |</a>
-							<a data-entiy-id="{{travelLine.id}}" class="btn-line-edit cursor ">
+							</a>
+							<a data-entiy-id="{{travelLine.id}}" class="btn-line-edit cursor R-right" data-right="1100003">
+								<label class="padding-right20">|</label>
 								编辑
-							</a><a href="" class="cursor"> |</a>
-							<a data-entiy-id="{{travelLine.id}}" class=" btn-line-clipboard cursor ">
+							</a>
+							<a data-entiy-id="{{travelLine.id}}" class=" btn-line-clipboard cursor R-right" data-right="1100005">
+								<label class="padding-right20">|</label>
 								复制
-							</a><a href="" class="cursor"> |</a>
-							<a data-entiy-id="{{travelLine.id}}" class=" btn-line-delete cursor ">
+							</a>
+							<a data-entiy-id="{{travelLine.id}}" class=" btn-line-delete cursor R-right" data-right="1100004">
+								<label class="padding-right20">|</label>
 								删除
 							</a>
 						</td>

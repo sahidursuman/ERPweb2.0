@@ -149,7 +149,7 @@ define(function(require,exports){
 	};
 
 	//添加景区管理
-	ScenicResource.addScenic=function(){
+	ScenicResource.addScenic=function(fn){
 		var html = addTemplate(),
 		    addScenicLayer = layer.open({
 	 		type: 1,
@@ -228,7 +228,7 @@ define(function(require,exports){
 				//提交按钮绑定事件
 				$project.find('.T-submit-scenic').click(function(event) {
 					/* Act on the event */
-					ScenicResource.addScenicSubmit($mainFormObj,$project,addScenicLayer,validator,itemValidator);
+					ScenicResource.addScenicSubmit($mainFormObj,$project,addScenicLayer,validator,itemValidator,fn);
 				});
 		    }
 		})
@@ -362,7 +362,7 @@ define(function(require,exports){
 	};
 
 	//提交新增景区信息
-	ScenicResource.addScenicSubmit=function($mainFormObj,$project,addScenicLayer,validator,itemValidator){
+	ScenicResource.addScenicSubmit=function($mainFormObj,$project,addScenicLayer,validator,itemValidator,fn){
 		//表单验证
 		if(!validator.form()){return;}
 		if(itemValidator !=undefined){
@@ -373,7 +373,8 @@ define(function(require,exports){
 		if($mainFormObj.find(".T-scenic-status").is(":checked") == true){
 			status = 1;
 		}
-		var form = $mainFormObj.eq(0).serialize()+"&status="+status+"";
+		var form = $mainFormObj.eq(0).serialize()+"&status="+status+"",
+			formData = $mainFormObj.eq(0).serializeJson();
 		var scenicItemJsonAdd = [];
 		var scenicItemJsonAddTr = $project.find(".T-scenicItemStandardList tbody tr");
 		scenicItemJsonAddTr.each(function(i){
@@ -410,9 +411,16 @@ define(function(require,exports){
 				layer.close(globalLoadingLayer);
 				var result = showDialog(data);
 				if(result){
+					data.scenic = JSON.parse(data.scenic);
+					formData.id = data.scenic.id;
 					layer.close(addScenicLayer);
-					showMessageDialog($( "#confirm-dialog-message" ),data.message);
-					ScenicResource.listScenic(0);
+					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+						if (typeof fn === "function") {
+							fn(formData);
+						}else{
+							ScenicResource.listScenic(0);
+						}
+					});
 			    }
 		    }
         });
@@ -631,5 +639,6 @@ define(function(require,exports){
 			});
 	};
 	exports.init=ScenicResource.initModule;
+	exports.addScenic = ScenicResource.addScenic;
 
 });

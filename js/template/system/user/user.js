@@ -110,206 +110,215 @@ define(function(require, exports) {
 				}
 			});
 		},
-		updateAuth:function(id) {
+		updateAuth : function(id) {
 			$.ajax({
-				url:""+APP_ROOT+"back/user.do?method=findMenuAll&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view&groupId="+id,
+				url:""+APP_ROOT+"back/user.do?method=findUserFunctionShip&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view&groupId="+id,
 				type:"POST",
-				data:"userId="+id+"",
-				dataType:"json",
-				beforeSend:function(){
-					globalLoadingLayer = openLoadingLayer();
+				data:{
+					userId : id + ""
 				},
 				success:function(data){
-					layer.close(globalLoadingLayer);
 					var result = showDialog(data);
 					if(result){
-						var mens = JSON.parse(data.menuList);
-						data.menuList = mens;
-						var MenuAuths = JSON.parse(data.userAuthList);
-						data.userAuthList = MenuAuths;
-						var tmpGroupId = JSON.parse(data.user);
-						data.user = tmpGroupId;
+						var listMenu = JSON.parse(data.listMenu);
+						data.listMenu = listMenu;
+						var userAuthList = JSON.parse(data.userAuthList);
+						data.userAuthList = userAuthList;
+						var functionList = JSON.parse(data.listUserFunctionShip);
+						data.listUserFunctionShip = functionList;
+						var userData = JSON.parse(data.user);
+						data.user = userData;
 						var html = authTemplate(data);
 						var updateAuth = layer.open({
 						    type: 1,
 						    title:"编辑权限",
 						    skin: 'layui-layer-rim', //加上边框
-						    area: ['1000px', '750px'], //宽高
+						    area: ['1080px', '750px'], //宽高
 						    zIndex:1028,
 						    content: html,
 						    success:function(){
-						    
-						    	for(var i=0; i < data.userAuthList.length; i ++) {
-						    		var myAuth = data.userAuthList[i];
-						    		var id = myAuth.menuId;
-						    		var a = myAuth.addAuth==1?true:false;
-						    		var e = myAuth.updateAuth?true:false;
-						    		var d = myAuth.deleteAuth?true:false;
-						    		var authType = myAuth.authAreaType;
-						    		
-						    		$('.userMainForm .checkibox'+id).find("input[value='auTy" + authType + "']").attr("checked","checked");
-						    		
-						    		$('.userMainForm .checkibox'+id).find("input[value='" + id + "|s']").attr("checked","checked");
-						    		if(a) {
-						    			$('.userMainForm .checkibox'+id).find("input[value='" + id + "|a']").attr("checked","checked");
-						    		}
-									if(e) {
-										$('.userMainForm .checkibox'+id).find("input[value='" + id + "|e']").attr("checked","checked");
-									}
-									if(d) {
-										$('.userMainForm .checkibox'+id).find("input[value='" + id + "|d']").attr("checked","checked");
-									}
+						    	//初始化选择
+						    	//权限范围
+						    	var authList = data.userAuthList;
+						    	for(var i = 0 ;i < authList.length; i ++){
+						    		var menuId = authList[i].menuId;
+						    		$(".T-submenu-id"+menuId).prop("checked",true);
+						    		var index = $(".T-submenu-check").index($(".T-submenu-id"+menuId));
+						    		var authType = authList[i].authAreaType;
+						    		$(".T-function-area"+authType).eq(index).prop("checked",true);
 						    	}
-						    	
-						    	for(var i=0; i < data.menuList.length; i ++) {
-						    		var menu = data.menuList[i];
-						    		if(menu.pid == 0) {
-						    			var menuId = menu.id;
-						    			var trs = $('.userMainForm .pmodule'+menuId);
-						    			
-						    			var flag = false;
-						    			for(var j=0; j < trs.length; j ++) {
-						    				var tr = trs[j];
-						    				var s = $(tr).find('td').eq(0).find('input[type=checkbox]').is(':checked');
-						    				var a = $(tr).find('td').eq(1).find('input[type=checkbox]').is(':checked');
-						    				var e = $(tr).find('td').eq(2).find('input[type=checkbox]').is(':checked');
-						    				var d = $(tr).find('td').eq(3).find('input[type=checkbox]').is(':checked');
-						    				var auty = $(tr).find('input[type=radio]').is(':checked');
-						    				if(s&&a&&e&&d&&auty) {
-						    					flag = true;
-						    				} 
-						    				else {
-						    					flag = false;
-						    					break;						    					
-						    				}
-						    				
-						    			}
-						    			if(flag || flag == "true") {
-						    				var pmodules = $("#userSetAuth .pmodule");
-						    				for(var j=0; j < pmodules.length; j ++) {
-						    					var pmodule = pmodules[j];
-						    					var val = $(pmodule).val();
-						    					if(val == menuId) {
-						    						$(pmodule).prop("checked",true);
-						    					}
-						    				}
-						    			}
-						    		}
+						    	//功能listUserFunctionShip
+						    	var functionList = data.listUserFunctionShip;
+						    	for(var i = 0 ;i < functionList.length; i ++){
+						    		var functionId = functionList[i].functionId;
+						    		$(".T-function-id"+functionId).prop("checked",true);
 						    	}
-						    	
-						    	//总选框
-						    	$("#userSetAuth .userMainForm .pmodule").click(function() {
-						    		var id = $(this).val();
-						    		var trs = $('#userSetAuth .pmodule' + id);
-						    		
-						    		for(var i=0; i< trs.length; i ++) {
-						    			var tr = trs[i];
-						    			
-						    			if($(this).is(":checked")){	
-						    				
-						    				$(tr).find("input[type='checkbox']").prop("checked",true);
-							    			$(tr).find("input[type='radio']").eq(0).prop("checked",true);
-							    			
-						    			}else {
-					                        $(tr).find("input[type='checkbox']").prop("checked",false);
-							    			$(tr).find("input[type='radio']").prop("checked",false);	
-						    			}
-						    		}
+						    	//主菜单是否勾选
+						    	$('.T-menu-check').each(function(){
+						    		user.checkMenu(this);
+						    	});
 
-						    	})
-						    	
-						    	//复选框的单选和反选  
-						    	$("#userSetAuth .userMainForm .smodule").click(function(){
-						    		if($(this).is(":checked")){	
-						    			//复选框
-						    			$(this).parent().parent().find("input[type='checkbox']").prop("checked",true);
-						    			//单选框
-						    			if(!$(this).parent().parent().find("input[type='radio']").val()) {
-						    				var radio = $(this).parent().parent().find("input[type='radio']")[0];
-						    				$(radio).prop("checked",true);
-						    			}
-						    		}else {	
-						     			$(this).parent().parent().find("input[type='checkbox']").prop("checked",false);
-						    			$(this).parent().parent().find("input[type='radio']").prop("checked",false);
+						    	//主菜单事件 
+						    	$(".T-menu-check").on("click",function(){
+						    		var table = $(this).closest('table');
+						    		var ischeck = $(this).is(":checked");
+						    		if(ischeck){
+						    			table.find('.T-submenu-check').prop("checked",true);
+						    			// table.find('.T-function-area1').prop("checked",true);
+						    			table.find('.T-function').prop("checked",true);
+						    			table.find('.T-submenu').each(function(){
+						    				var ischeck = false;
+						    				$(this).find("input[type=radio]").each(function(){
+						    					if($(this).is(":checked")){
+						    						ischeck = true;
+						    						return false;
+						    					}
+						    				});
+						    				if(!ischeck){
+						    					$(this).find('.T-function-area1').prop("checked",true);
+						    				}
+						    			});
+						    		}else{
+						    			table.find('input').prop("checked",false);
 						    		}
-								});
-						    	
-						    	//列全选
-						    	$("#userSetAuth .sAll").click(function() {
-						    		var td = $(this).attr("td");
-						    		var id = $(this).attr("data-id");
-						    		$("#userSetAuth").find(".pmodule" + id).each(function() {
-						    			$($(this).find('td')[td]).find('input').prop("checked",true);
-						    			$($(this).find('td')[0]).find('input').prop("checked",true);
+						    	});
+
+						    	//子菜单事件
+						    	$(".T-submenu-check").on("click",function(){
+						    		var tr = $(this).closest('tr');
+						    		if($(this).is(":checked")){
+						    			tr.find("input[type=checkbox]").prop("checked",true);
+						    			tr.find("input[type=radio]").eq(0).prop("checked",true);
+						    			user.checkMenu(this);
+						    		} else{
+						    			tr.find("input[type=checkbox]").prop("checked",false);
+						    			tr.find("input[type=radio]").prop("checked",false);
+						    			$(this).closest('table').find(".T-menu-check").prop("checked",false);
+						    		}
+						    	});
+
+						    	//项选择事件
+						    	$(".T-submenu .T-function").on("click",function(){
+						    		var tr = $(this).closest('tr');
+						    		tr.find('.T-submenu-check').prop("checked",true);
+						    		var ischeck = false;
+				    				tr.find("input[type=radio]").each(function(){
+				    					if($(this).is(":checked")){
+				    						ischeck = true;
+				    						return false;
+				    					}
+				    				});
+				    				if(!ischeck){
+				    					tr.find('.T-function-area1').prop("checked",true);
+				    				}
+						    		user.checkMenu(this);
+						    	});
+						    	$(".T-submenu input[type=radio]").on("click",function(){
+						    		$(this).closest('tr').find('.T-submenu-check').prop("checked",true);
+						    		user.checkMenu(this);
+						    	});
+
+						    	//权限范围列全选
+						    	$(".T-selectAll").on("click",function(){
+						    		var index = $(this).parent().index();
+						    		var $this = $(this).closest('table').find(".T-submenu");
+						    		$this.find("input[type=radio]").prop("checked",false);
+						    		$this.each(function(){
+						    			$(this).find(".T-function-area"+index).prop("checked",true);
+						    			$(this).find('.T-submenu-check').prop("checked",true);
 						    		});
-						    	});
-						    	
-						    	$("#userSetAuth .authId").find('input[type=checkbox]').change(function() {
-						    		if($(this).is(":checked")){	
-						    			var parent = $(this).parent().parent();
-						    			$(parent).find('td').eq(0).find('input').prop("checked",true);
-							    		if(!$(parent).find('input[type=radio]:checked').val()) {
-							    			$(parent).find('td').eq(4).find('input').prop("checked",true);
-							    		}
+						    		$(this).closest('table').find(".T-menu-check").prop("checked",true);
+						    	});	
+
+						    	//功能权限全选
+						    	$(".T-selectAll-function").on("click",function(){
+						    		var index = $(this).parent().index();
+						    		var $this = $(this).closest('table').find(".T-function");
+						    		var isAll = false;
+						    		$this.each(function(){
+						    			if($(this).is(":checked")){
+						    				isAll = true;
+						    			} else{
+						    				isAll = false;
+						    				return false;
+						    			}
+						    		});
+						    		if(isAll){
+						    			$this.prop("checked",false);
+						    		} else{
+						    			$(this).closest('table').find(".T-menu-check").prop("checked",true);
+						    			$(this).closest('table').find(".T-submenu-check").prop("checked",true);
+						    			$this.prop("checked",true);
 						    		}
 						    	});
-						    	
-								$("#userSetAuth .userMainForm .btn-submit-group").click(function(){
-									//组装json
-									var authIds = $('#userSetAuth .userMainForm .authId');
-									var json = "[";
-									for(var i=0; i < authIds.length; i ++) {
-										var j = "";
-										if(i > 0) {
-											j += ",";
-										}
-										var authId = $(authIds[i]).attr("data-id");
-										
-										var tmp = $('.checkibox'+authId).find('input[name=auTy' + authId + ']:checked').val();
-										var auTy = tmp=="auTy4"?"4":tmp=="auTy3"?"3":tmp=="auTy2"?"2":"1";
-										var s = $('.checkibox'+authId).find('input[value="' + authId + '|s"]').is(':checked')?1:0;
-										var a = $('.checkibox'+authId).find('input[value="' + authId + '|a"]').is(':checked')?1:0;
-										var e = $('.checkibox'+authId).find('input[value="' + authId + '|e"]').is(':checked')?1:0;
-										var d = $('.checkibox'+authId).find('input[value="' + authId + '|d"]').is(':checked')?1:0;
-										j += "{";
-										j += "\"menuId\":\"" + authId + "\"";
-										j += ",\"auTy\":\"" + auTy + "\"";
-										j += ",\"s\":\"" + s + "\"";
-										j += ",\"a\":\"" + a + "\"";
-										j += ",\"e\":\"" + e + "\"";
-										j += ",\"d\":\"" + d + "\"";
-										j += "}";
-										
-										json += j;
-									}
-									json += "]";
-									json = "menuAuth="+json
-									var userId = $('#userSetAuth .userMainForm #userId').val();
-									$.ajax({
-										url:""+APP_ROOT+"back/user.do?method=updateUserAuth&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update&userId="+userId+"",
+
+						    	$("#userSetAuth .userMainForm .btn-submit-group").click(function(){
+						    		var authUpdateJson = [];
+						    		$(".T-submenu input[type=radio]").each(function(){
+						    			var ischeck = $(this).is(":checked");
+						    			if(ischeck){
+						    				var authJson = {
+						    					menuId : $(this) .closest('tr').data("id") + "",
+						    					authType : $(this).val()
+						    				};
+						    				authUpdateJson.push(authJson);
+						    			}
+						    		});
+						    		authUpdateJson = JSON.stringify(authUpdateJson);
+
+						    		var functionShipJson = [];
+						    		$(".T-function").each(function(){
+						    			if($(this).is(":checked")){
+						    				var functionJson = {
+						    					functionId : $(this).val()
+						    				};
+						    				functionShipJson.push(functionJson);
+						    			}
+						    		});
+						    		functionShipJson = JSON.stringify(functionShipJson);
+
+						    		$.ajax({
+										url:""+APP_ROOT+"back/user.do?method=updateUserFunctionShip&token="+$.cookie("token")+"",
 										type:"POST",
-										data:json,
-										dataType:"json",
-										beforeSend:function(){
-											globalLoadingLayer = openLoadingLayer();
+										data:{
+											listMenuAuth : authUpdateJson,
+											listUserFunctionShip : functionShipJson,
+											userId : data.user.id + ""
 										},
 										success:function(data){
-											layer.close(globalLoadingLayer);
 											var result = showDialog(data);
 											if(result){
 												layer.close(updateAuth);
 												showMessageDialog($("#confirm-dialog-message"),data.message);
+												console.log(!!user.listUser);
 												user.listUser(0, "", 1);
 											}
 										}
 									});
-								});
+						    	});
 						    }
 						});
 					}
 				}
 			});
 		},
+		//主菜单勾选与否
+		checkMenu : function(obj){
+			$obj = $(obj);
+			var isAll = false;
+			$obj.closest('table').find(".T-submenu-check").each(function(){
+				if($(this).is(":checked")){
+					isAll = true;
+				} else {
+					isAll = false;
+					return false;
+				}
+			});
+			if(isAll){
+				$obj.closest('table').find(".T-menu-check").prop("checked",true);
+			}
+		},
+
 		updateUser:function(id){
 			$.ajax({
 				url:""+APP_ROOT+"back/user.do?method=getUserById&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
