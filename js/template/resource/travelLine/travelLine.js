@@ -573,7 +573,7 @@ define(function(require, exports) {
  			    zIndex:1029,
 			    content: lineDayHtml,
 			    success:function(){
-			    	$(".updateTravelLineDayForm select[name=whichDay]").attr("disabled","disabled");
+			    	// $(".updateTravelLineDayForm select[name=whichDay]").attr("disabled","disabled");
 			    	
 			    	var ue = init_editor("detailEditor-update-travelLine",{zIndex:99999999});
 			    	ue.ready(function(){

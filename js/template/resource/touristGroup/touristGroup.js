@@ -255,6 +255,7 @@ define(function(require, exports) {
 				if(data.pageNo == data.totalPage-1 || data.totalPage == 0)return;
 				touristGroup.listTouristGroup(data.totalPage-1,touristGroup.searchData.lineProductName,touristGroup.searchData.lineProductId,touristGroup.searchData.fromPartnerAgencyName,touristGroup.searchData.fromPartnerAgencyId,touristGroup.searchData.creatorId,touristGroup.searchData.creatorName,touristGroup.searchData.startTime,touristGroup.searchData.createTimeStart,touristGroup.searchData.createTimeEnd,touristGroup.searchData.customerType,touristGroup.searchData.status);
 			});
+
 		},
 		arrangeTouristGroup:function(id){
 			$.ajax({
@@ -1102,7 +1103,7 @@ define(function(require, exports) {
 						}
 					});
 				}else{
-					layer.tips('请选择组团社', objM, {
+					layer.tips('请选择客户来源', objM, {
 						tips: [1, '#3595CC'],
 						time: 2000
 					});
@@ -1160,36 +1161,13 @@ define(function(require, exports) {
 						}
 					})
 				}else{
-					layer.tips('新建联系人请先选择组团社', obj, {
+					layer.tips('新建联系人请先选择客户来源', obj, {
 						tips: [1, '#3595CC'],
 						time: 2000
 					});
 				}
 			})
 		},
-		getLineProductList:function(obj,lineProductId){
-			$.ajax({
-				url:""+APP_ROOT+"back/touristGroup.do?method=getTourCreator&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-				type:"POST",
-				dataType:"json",
-				success:function(data){
-					var html ="<option value=''>全部</option>";
-					var lineProductList = data.data;
-
-					if(lineProductList != null && lineProductList.length > 0){
-						for(var i=0;i<lineProductList.length;i++){
-							if (lineProductId != null && lineProductList[i].id == lineProductId) {
-								html += "<option selected=\"selected\" value='"+lineProductList[i].id+"'>"+lineProductList[i].name+"</option>";
-							} else {
-								html += "<option  value='"+lineProductList[i].id+"'>"+lineProductList[i].name+"</option>";
-							}
-						}
-						$(obj).html(html);
-					}
-				}
-			})
-		},
-
 		//来源模糊查询
 		getPartnerAgencyList:function($obj){
 			console.log("getPartnerAgencyList");
