@@ -1779,7 +1779,6 @@ define(function(require, exports) {
                     			"arrangeIncomePaymentList":JSON.parse(data.arrangeIncomePaymentList),
                                 "remarkArrangeList": JSON.parse(data.remarkArrangeList)
                     	}
-
                     	data = count.covertRemark(tmp);
 		    			var html = tripDetailTempLate(data);
 		    			var financialTripDetail = addTab(menuKey + "tripDetail", "单团明细", html);
