@@ -2229,16 +2229,17 @@ define(function(require, exports) {
 			});
 		},
 		submitUpdateTraveLine : function(clipboardMode,isClose){
+			var $updateObj=$("#tab-resource_travelLine-update-content");
 			var validator = rule.traveLineCheckor($('.travelLineUpdateMainForm'));
 			if ( !validator.form() )  return;
 			var status = 0;
-			if($(".travelLineUpdateMainForm .travelLine-status").is(":checked") == true){
+			if($updateObj.find(".travelLineUpdateMainForm .travelLine-status").is(":checked") == true){
 				status = 1;
 			}
-			var form = $(".travelLineUpdateMainForm").serialize()+"&status="+status+"";
+			var form = $updateObj.find(".travelLineUpdateMainForm").serialize()+"&status="+status+"";
 			var travelLineJsonAdd = "[";
-			var lineDayListLength = $(".travelLineDayList .lineDayList tbody tr:not(.deleted)").length;
-			$(".travelLineDayList .lineDayList tbody tr:not(.deleted)").each(function(i){
+			var lineDayListLength = $updateObj.find(".travelLineDayList .lineDayList tbody tr:not(.deleted)").length;
+			$updateObj.find(".travelLineDayList .lineDayList tbody tr:not(.deleted)").each(function(i){
 				var lineDayJson = "";
 				var id = $(this).find(" .btn-line-day-delete").attr("data-entiy-id");
 				var repastDetail = $(this).find("td")[1].innerHTML;
@@ -2266,8 +2267,8 @@ define(function(require, exports) {
 			travelLineJsonAdd += "]";
 		
 			var travelLineJsonDel = "[";
-			var travelLineListLength = $(".travelLineDayList .lineDayList tbody tr.deleted").length;
-			$(".travelLineDayList .lineDayList tbody tr.deleted").each(function(i){
+			var travelLineListLength = $updateObj.find(".travelLineDayList .lineDayList tbody tr.deleted").length;
+			$updateObj.find(".travelLineDayList .lineDayList tbody tr.deleted").each(function(i){
 				var travelLineDayJson = "";
 				var id = $(this).find(".btn-line-day-delete").attr("data-entiy-id");
 				if(i == (travelLineListLength-1)){
