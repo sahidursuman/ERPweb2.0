@@ -410,6 +410,26 @@ define(function(require, exports) {
 			$("#"+tab+" .arrangeTouristMain .btn-updateArrange").click(function(){
 				transit.submitUpdateTransit(id,1);
 			})
+			//添加资源
+			transit.addResource(tab);
+		},
+		//添加资源 
+		addResource : function(tab){
+			$("#"+tab+" .T-addBusCompanyResource").off('click').on("click",{function : KingServices.addBusCompany}, KingServices.addResourceFunction);
+			$("#"+tab+" .T-addHotelResource").off('click').on("click",{function : KingServices.addHotel , name : "hotelName" , id : "hotelId" , managerName : "hotelManagerName" , mobileNumber : "hotelMobileNumber"}, KingServices.addResourceFunction);
+			$("#"+tab+" .T-addTicketResource").off('click').on("click",{function : KingServices.addTicket , name : "ticketName" , id : "tickeId"}, KingServices.addResourceFunction);
+			$("#"+tab+" .T-addRestaurantResource").off('click').on("click",{function : KingServices.addRestaurant , name : "restaurant" , id : "restaurantId" , managerName : "manager" , mobileNumber : "mobileNumber"}, KingServices.addResourceFunction);
+			
+			$("#"+tab).find(".T-addBusResource,.T-addDriverResource").off('click').on("click",{
+				function : KingServices.addBusDriver,
+				licenseNumberId : "busLicenseNumberId",
+				licenseNumber : "LicenseNumber",
+				busbrand : "busbrand",
+				seatCount : "seatCount",
+				driverName : "driverName",
+				driverId : "driverId",
+				driverMobileNumber : "driverMobileNumber"
+			}, KingServices.addBusDriverFunction);
 		},
 		//接送车辆JSON组装
 		outBusJson :function(obj,json){
@@ -531,27 +551,32 @@ define(function(require, exports) {
 		},
 		//新增团外安排接送车辆
 		addOutBusList :function(id,type,tab){
-			var html = '<tr>'+
-				'<td><input type="hidden" name="serviceType" value="'+type+'" /><input class="col-sm-12 chooseBusCompany" name="busCompanyName" type="text" value="" /><input type="hidden" name="busCompanyId" /></td>'+
-				'<td><input class="col-sm-12 chooseBusLicenseNumber" name="busLicenseNumber" type="text" value="" /><input type="hidden" name="busLicenseNumberId" /></td>'+
-				'<td><input class="col-sm-12" name="busbrand" readonly="readonly" type="text" value="" /></td>'+
-				'<td><input class="col-sm-12 chooseDriver" name="driverName" type="text" value="" /><input type="hidden" name="driverId" /></td>'+
-				'<td><input class="col-sm-12" name="driverMobileNumber" readonly="readonly" type="text" value="" /></td>'+
-				'<td><input class="col-sm-12 datetimepicker" name="bususeTime" type="text" value="" /></td>'+
-				'<td><input class="col-sm-12" name="boardLocation" type="text" value="" maxlength="20" /></td>'+
-				'<td><input class="col-sm-12 price" name="busFee" type="text" value="" maxlength="9" /><input type="hidden" class="count" value="1" /></td>'+
-				'<td><input class="col-sm-12 discount" name="busReduceMoney" type="text" value="" maxlength="9" /></td>'+
-				'<td><input class="col-sm-12 needPay" readonly="readonly" name="busNeedPayMoney" type="text" value="" /></td>'+
-				'<td><input class="col-sm-12" name="busPayedMoney" type="text" value="" maxlength="9" /></td>'+
-				'<td><select class="" name="busPayType" ><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>'+
-				'<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" /></td>'+
-				'<td><a class="cursor arrange-delete" title="删除">删除</a></td>'+
-				'</tr>';
+			var html = '<tr data-entity-id="">'+
+			'<td><input type="text" class="col-sm-12 chooseSeatCount" name="seatCount" value="" /></td>'+
+			'<td><input class="col-sm-12 chooseBusBrand" name="busbrand" type="text" value="" /></td>'+
+			'<td><div class="col-sm-12"><input class="col-sm-12 chooseBusLicenseNumber bind-change" name="busLicenseNumber" type="text" value="" /><input type="hidden" name="busLicenseNumberId" value="" /><span class="addResourceBtn T-addBusResource" title="添加车辆"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
+			'<td><div class="col-sm-12"><input type="hidden" name="serviceType" value="0" />'+
+			'<input class="col-sm-12 bind-change" name="busCompanyName" readonly="readonly" type="text" value="" />'+
+			'<input type="hidden" name="busCompanyId" value="" /><span class="addResourceBtn T-addBusCompanyResource" title="添加车队"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
+			'<td><div class="col-sm-12"><input class="col-sm-12 chooseDriver bind-change" name="driverName" type="text" value="" /><input type="hidden" name="driverId" value="" /><span class="addResourceBtn T-addDriverResource" title="添加司机"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
+			'<td><input class="col-sm-12" name="driverMobileNumber" readonly="readonly" type="text" value="" /></td>'+
+			'<td><input class="col-sm-12 datetimepicker" name="bususeTime" type="text" value="" /></td>'+
+			'<td><input class="col-sm-12" name="boardLocation" type="text"  maxlength="20"  value="" /></td>'+
+			'<td><input class="col-sm-12 price" name="busFee" type="text"  maxlength="9" value="" /><input type="hidden" class="count" value="1" /></td>'+
+			'<td><input class="col-sm-12 discount" name="busReduceMoney"  maxlength="9" type="text" value="" /></td>'+
+			'<td><input class="col-sm-12 needPay" readonly="readonly" name="busNeedPayMoney"  maxlength="9" type="text" value="" /></td>'+
+			'<td><input class="col-sm-12" name="busPayedMoney" maxlength="9" type="text" value="" /></td>'+
+			'<td><select class="" name="busPayType"><option value="0" {{if outBus.payType == 0}}selected="selected"{{/if}}>现付</option>'+
+			'<option value="1" {{if outBus.payType == 1}}selected="selected"{{/if}}>签单</option><option value="2" {{if outBus.payType == 2}}selected="selected"{{/if}}>转账</option><option value="3" {{if outBus.payType == 3}}selected="selected"{{/if}}>网付</option></select></td>'+
+			'<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" /></td>'+
+			'<td><a class="cursor arrange-delete" title="删除">删除</a></td>'+
+			'</tr>';
 			$("#"+id+" .busList tbody").append(html);
 			$("#"+tab+" .arrangeTouristMain .busList .arrange-delete").click(function(){
 				var thisObj = $(this);
 				transit.delArrangeJudge (thisObj,"bus");
 			})
+			transit.addResource(tab);
 			transit.bindBusCompanyChoose(tab);
 			transit.outArrangeDateTimepicker("carList","bususeTime",tab);
 			transit.outArrangeDateTimepicker("sendList","bususeTime",tab);
@@ -567,7 +592,8 @@ define(function(require, exports) {
 				'<option value="2">三星</option><option value="3">准四星</option>'+
 				'<option value="4">四星</option><option value="5">准五星</option>'+
 				'<option value="6">五星</option><option value="7">五星以上</option></select></td>'+
-				'<td><input class="col-sm-12 chooseHotel" name="hotelName" value="" type="text" /><input type="hidden" name="hotelId" /></td>'+
+				'<td><div class="col-sm-12"><input class="col-sm-12 chooseHotel" name="hotelName" value="" type="text" /><input type="hidden" name="hotelId" />'+
+				'<span class="addResourceBtn T-addHotelResource" title="添加酒店"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
 				'<td><input class="col-sm-12" name="hotelManagerName" value="" readonly="readonly" type="text" /></td>'+
 				'<td><input class="col-sm-12" name="hotelMobileNumber" value="" readonly="readonly" type="text" /></td>'+
 				'<td><input class="col-sm-12" name="hotelRoomType" value=""  type="text" /><input type="hidden" name="hotelRoomTypeId" /></td>'+
@@ -587,6 +613,7 @@ define(function(require, exports) {
 				var thisObj = $(this);
 				transit.delArrangeJudge (thisObj,"hotel");
 			})
+			transit.addResource(tab);
 			transit.bindHotelChoose(tab);
 			transit.outArrangeDatepicker("receptionList","hotelCheckInTime",tab);
 			transit.outArrangeDatepicker("sendList","hotelCheckInTime",tab);
@@ -595,7 +622,8 @@ define(function(require, exports) {
 		//新增团外安排票务
 		addTicketList :function(id,type,tab){
 			var html ='<tr>'+
-				'<td><input type="hidden" name="serviceType" value="'+type+'" /><input class="col-sm-12 chooseTicket" name="ticketName" value="" type="text" /><input type="hidden" name="tickeId" /></td>'+
+				'<td><div class="col-sm-12"><input type="hidden" name="serviceType" value="'+type+'" /><input class="col-sm-12 chooseTicket" name="ticketName" value="" type="text" /><input type="hidden" name="tickeId" />'+
+				'<span class="addResourceBtn T-addTicketResource" title="添加票务"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
 				'<td><select class="" name="ticketType"><option value="1">机票</option>'+
 				'<option value="2">汽车票</option><option value="3">火车票</option><option value="4">轮船票</option></select></td>'+
 				'<td><input class="col-sm-12" name="ticketStartCity" value="" maxlength="20"  type="text" /></td>'+
@@ -619,6 +647,7 @@ define(function(require, exports) {
 				var thisObj = $(this);
 				transit.delArrangeJudge (thisObj,"ticket");
 			})
+			transit.addResource(tab);
 			transit.bindTicketChoose(tab);
 			transit.outArrangeDateTimepicker("receptionList","ticketStartTime",tab);
 			transit.outArrangeDateTimepicker("sendList","ticketStartTime",tab);
@@ -628,8 +657,9 @@ define(function(require, exports) {
 		addRestaurantList :function(id,type,tab){
 			var html = '<tr data-entity-id="">'+
 				'<td><input class="col-sm-12" name="startTime" type="text" value="" /></td>'+
-				'<td><input type="hidden" name="serviceType" value="'+type+'" /><input class="col-sm-12 bind-change chooseRestaurant" name="restaurant" type="text" value="" />'+
-				'<input type="hidden" name="restaurantId" value="" /></td>'+
+				'<td><div class="col-sm-12"><input type="hidden" name="serviceType" value="'+type+'" /><input class="col-sm-12 bind-change chooseRestaurant" name="restaurant" type="text" value="" />'+
+				'<input type="hidden" name="restaurantId" value="" />'+
+				'<span class="addResourceBtn T-addRestaurantResource" title="添加餐厅"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
 				'<td><input class="col-sm-12" name="manager" readonly="readonly" type="text" value="" /></td>'+
 				'<td><input class="col-sm-12" name="mobileNumber" readonly="readonly" type="text" value="" /></td>'+
 				'<td><select name="standardType"><option value="早餐">早餐</option><option value="午餐">午餐</option><option value="晚餐">晚餐</option></select>'+
@@ -648,6 +678,7 @@ define(function(require, exports) {
 				var thisObj = $(this);
 				transit.delArrangeJudge (thisObj,"restaurant");
 			})
+			transit.addResource(tab);
 			transit.outArrangeDatepicker("receptionList","startTime",tab);
 			transit.outArrangeDatepicker("sendList","startTime",tab);
 			$("#"+tab+" .count,#"+tab+" .price,#"+tab+" .discount").blur(transit.calculation);
@@ -752,7 +783,7 @@ define(function(require, exports) {
 		},
 		bindBusCompanyChoose : function(tab){
 			//选择车辆
-			var chooseBusLicenseNumber = $("#"+tab+" .arrangeTouristMain .chooseBusLicenseNumber");
+			/*var chooseBusLicenseNumber = $("#"+tab+" .arrangeTouristMain .chooseBusLicenseNumber");
 			chooseBusLicenseNumber.autocomplete({
 				minLength:0,
 				select:function(event,ui){
@@ -765,7 +796,7 @@ define(function(require, exports) {
 							layer.close(globalLoadingLayer);
 							var result = showDialog(data);
 							if(result){
-								var d = JSON.parse(data.bus), objParent = $obj.parent().parent();
+								var d = JSON.parse(data.bus), objParent = $obj.closest('tr');
 								objParent.find("input[name=busLicenseNumberId]").val(ui.item.id).trigger('change');
 								objParent.find("input[name=busbrand]").val(d.brand);
 							}
@@ -775,7 +806,7 @@ define(function(require, exports) {
 				change:function(event,ui){
 					if(ui.item == null){
 						$(this).val("");
-						var objParent = $(this).parent().parent();
+						var objParent = $(this).closest('tr');
 						objParent.find("input[name=busLicenseNumberId]").val("");
 						objParent.find("input[name=licenseNumber]").val("");
 						objParent.find("input[name=seatCount]").val("");
@@ -783,7 +814,7 @@ define(function(require, exports) {
 				}
 			}).unbind("click").click(function(){
 				var objBus = this;
-				var busCompanyId = $(objBus).parent().parent().find("input[name=busCompanyId]").val();
+				var busCompanyId = $(objBus).closest('tr').find("input[name=busCompanyId]").val();
 				if(busCompanyId){
 					$.ajax({
 						url:""+APP_ROOT+"back/busCompany.do?method=findBusListBySeat&token="+$.cookie("token")+"&menuKey=resource_busCompany&operation=view",
@@ -819,7 +850,7 @@ define(function(require, exports) {
 				change:function(event,ui){
 					if(ui.item == null){
 						$(this).val("");
-						var $obj = $(this).parent().parent();
+						var $obj = $(this).closest('tr');
 						$obj.find("input[name=busCompanyId]").val("");
 						$obj.find("input[name=busLicenseNumber]").val("");
 						$obj.find("input[name=busLicenseNumberId]").val("");
@@ -830,7 +861,7 @@ define(function(require, exports) {
 					}
 				},
 				select:function(event,ui){
-					var _this = this, parent = $(_this).parent().parent()
+					var _this = this, parent = $(_this).closest('tr')
 					$(this).blur();
 					var validator = rule.setTranistCheckor($(".arrangeTouristMain"));
 					parent.find("input[name=busCompanyId]").val(ui.item.id).trigger('change');
@@ -845,7 +876,7 @@ define(function(require, exports) {
 					var obj = this;
 					/*if(chooseBusLicenseNumber){
 					 $(".addTripPlanMain .chooseBusLicenseNumber").autocomplete( "destroy");
-					 }*/
+					 }
 				}
 			}).click(function(){
 				var objC = this;
@@ -883,7 +914,7 @@ define(function(require, exports) {
 							layer.close(globalLoadingLayer);
 							var result = showDialog(data);
 							if(result){
-								var d = JSON.parse(data.driverNumber), objParent = $obj.parent().parent();
+								var d = JSON.parse(data.driverNumber), objParent = $obj.closest('tr');
 								objParent.find("input[name=driverId]").val(d.id).trigger('change');
 								objParent.find("input[name=driverMobileNumber]").val(d.mobileNumber);
 							}
@@ -893,14 +924,14 @@ define(function(require, exports) {
 				change:function(event,ui){
 					if(ui.item == null){
 						$(this).val("");
-						var objParent = $(this).parent().parent();
+						var objParent = $(this).closest('tr');
 						objParent.find("input[name=driverId]").val("");
 						objParent.find("input[name=DmobileNumber]").val("");
 					}
 				}
 			}).unbind("click").click(function(){
 				var objBus = this;
-				var busCompanyId = $(objBus).parent().parent().find("input[name=busCompanyId]").val();
+				var busCompanyId = $(objBus).closest('tr').find("input[name=busCompanyId]").val();
 				if(busCompanyId){
 					$.ajax({
 						url:""+APP_ROOT+"back/tripPlan.do?method=getDriverBybusCompany&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
@@ -927,13 +958,13 @@ define(function(require, exports) {
 						time: 2000
 					});
 				}
-			})
+			})*/
 		},
 		bindHotelChoose : function(tab){
 			var hotelChoose = $("#"+tab+" .arrangeTouristMain .chooseHotel");
 			var $hotelStar = $("#"+tab+" .arrangeTouristMain .tripPlanHotelStar");
 			$hotelStar.off().on("change", function(){
-				var parentObj = $(this).parent().parent();
+				var parentObj = $(this).closest('tr');
 				parentObj.find("input[name=hotelName]").val("");
 				parentObj.find("input[name=hotelId]").val("");
 				parentObj.find("input[name=hotelRoomType]").val("");
@@ -948,7 +979,7 @@ define(function(require, exports) {
 				change:function(event,ui){
 					if(ui.item == null){
 						$(this).val("");
-						var parents = $(this).parent().parent();
+						var parents = $(this).closest('tr');
 						parents.find("input[name=hotelId]").val("");
 						parents.find("input[name=hotelRoomType]").val("");
 						parents.find("input[name=hotelRoomTypeId]").val("");
@@ -958,7 +989,7 @@ define(function(require, exports) {
 					}
 				},
 				select:function(event,ui){
-					var _this = this, parents = $(_this).parent().parent();
+					var _this = this, parents = $(_this).closest('tr');
 					parents.find("input[name=hotelId]").val(ui.item.id).trigger('change');
 					var validator = rule.setTranistCheckor($(".arrangeTouristMain"));
 					rule.updateTranistCheckor(validator);
@@ -985,13 +1016,13 @@ define(function(require, exports) {
 						change:function(event,ui){
 							if(ui.item == null){
 								$(this).val("");
-								var objParent = $(this).parent().parent();
+								var objParent = $(this).closest('tr');
 								objParent.find("input[name=hotelRoomTypeId]").val("");
 								objParent.find("input[name=hotelPrice]").val("");
 							}
 						},
 						select:function(event,ui){
-							var $thisRoom =$(this).parent().parent();
+							var $thisRoom =$(this).closest('tr');
 							$thisRoom.find("input[name=hotelRoomTypeId]").val(ui.item.id).trigger('change');
 							$.ajax({
 								url:""+APP_ROOT+"back/hotel.do?method=findRoomDetailById&token="+$.cookie("token")+"&menuKey=resource_hotel&operation=view",
@@ -1033,7 +1064,7 @@ define(function(require, exports) {
 				}
 			}).off("click").on("click", function(){
 				var hotelStarValue = $hotelStar.val(),
-					hotelStarValue = $(this).parent().parent().find('.tripPlanHotelStar').val();
+					hotelStarValue = $(this).closest('tr').find('.tripPlanHotelStar').val();
 				obj = this;
 				$.ajax({
 					url:""+APP_ROOT+"back/hotel.do?method=findHotelListByLevel&token="+$.cookie("token")+"&menuKey=resource_hotel&operation=view",
@@ -1067,7 +1098,7 @@ define(function(require, exports) {
 				minLength:0,
 				select:function(event, ui){
 					var _this = this;
-					var thisParent = $(_this).parent().parent();
+					var thisParent = $(_this).closest('tr');
 					thisParent.find("input[name=tickeId]").val(ui.item.id).trigger('change');
 					var validator = rule.setTranistCheckor($(".arrangeTouristMain"));
 					rule.updateTranistCheckor(validator);
@@ -1075,7 +1106,7 @@ define(function(require, exports) {
 				change : function(event, ui){
 					if(ui.item == null){
 						$(this).val("");
-						var thisParent = $(this).parent().parent();
+						var thisParent = $(this).closest('tr');
 						thisParent.find("input[name=tickeId]").val("").trigger('change');
 					}
 				}
@@ -1112,14 +1143,14 @@ define(function(require, exports) {
 				standardChoose = $("#"+tab+" .arrangeTouristMain .chooseStandard"),
 				standardType = $("#"+tab+" .arrangeTouristMain select[name=standardType]");
 			$(standardType).off("change").on("change", function(){
-				var parents = $(this).parent().parent();
+				var parents = $(this).closest('tr');
 				parents.find("input[name=restaurantStandardId]").val("");
 				parents.find("input[name=price]").val("");
 			});
 			restaurantChoose.autocomplete({
 				minLength:0,
 				select:function(event, ui){
-					var _this = this, parents = $(_this).parent().parent();
+					var _this = this, parents = $(_this).closest('tr');
 					parents.find("input[name=restaurantId]").val(ui.item.id);
 					$.ajax({
 						url:""+APP_ROOT+"back/restaurant.do?method=findRestaurantById&token="+$.cookie("token")+"&menuKey=resource_restaurant&operation=view",
@@ -1141,7 +1172,7 @@ define(function(require, exports) {
 				change : function(event, ui){
 					if(ui.item == null){
 						$(this).val("");
-						var parents = $(this).parent().parent();
+						var parents = $(this).closest('tr');
 						parents.find("input[name=restaurantId]").val("");
 						parents.find("input[name=manager]").val("");
 						parents.find("input[name=mobileNumber]").val("");
@@ -1175,20 +1206,20 @@ define(function(require, exports) {
 				select:function(event, ui){
 					var standardId = ui.item.id;
 					var _this = $(this);
-					$(this).parent().parent().find("input[name=price]").val(ui.item.price);
-					$(this).parent().parent().find("input[name=price]").focus();
-					$(this).parent().parent().find("input[name=price]").blur();
+					$(this).closest('tr').find("input[name=price]").val(ui.item.price);
+					$(this).closest('tr').find("input[name=price]").focus();
+					$(this).closest('tr').find("input[name=price]").blur();
 					$("#"+tab+" .count,#"+tab+" .price,#"+tab+" .discount").blur(transit.calculation);
 				},
 				change : function(event, ui){
 					if(ui.item == null){
 						$(this).val("");
-						var objParent = $(this).parent().parent();
+						var objParent = $(this).closest('tr');
 						objParent.find("input[name=price]").val("");
 					}
 				}
 			}).off("click").on("click", function(){
-				var obj = this, parents = $(obj).parent().parent();
+				var obj = this, parents = $(obj).closest('tr');
 				var id = parents.find("input[name=restaurantId]").val();
 				var type = parents.find('select[name=standardType]').val();
 				if(id && id.length > 0){

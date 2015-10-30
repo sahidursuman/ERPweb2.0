@@ -1506,59 +1506,6 @@ Tools.descToolTip = function($elements) {
 	}
 }
 
-/**
- * 编辑中转安排——
- * @param  {string} id 游客小组的ID
- * @return {[type]}    [description]
- */
-Tools.updateTransit = function(id)  {
-	seajs.use("" + ASSETS_ROOT +"js/template/arrange/transit/transit.js",function(module){
-		module.updateTransit(id);
-		modals["arrange_transit"] = transit;
-	});
-}
-//保险公司  新增
-Tools.addInsurance = function(fn){
-	seajs.use("" + ASSETS_ROOT + modalScripts.resource_insurance,function(module){
-		module.addInsurance(fn);
-	});
-}
-//餐厅  新增
-Tools.addRestaurant = function(fn){
-	seajs.use("" + ASSETS_ROOT + modalScripts.resource_restaurant,function(module){
-		module.addRestaurant(fn);
-	});
-}
-//酒店  新增
-Tools.addHotel = function(fn){
-	seajs.use("" + ASSETS_ROOT + modalScripts.resource_hotel,function(module){
-		module.addHotel(fn);
-	});
-}
-//景区  新增
-Tools.addScenic = function(fn){
-	seajs.use("" + ASSETS_ROOT + modalScripts.resource_scenic,function(module){
-		module.addScenic(fn);
-	});
-}
-//购物  新增
-Tools.addShop = function(fn){
-	seajs.use("" + ASSETS_ROOT + modalScripts.resource_shop,function(module){
-		module.addShop(fn);
-	});
-}
-//自费商家  新增
-Tools.addSelfPay = function(fn){
-	seajs.use("" + ASSETS_ROOT + modalScripts.resource_selfpay,function(module){
-		module.addSelfPay(fn);
-	});
-}
-//票务  新增
-Tools.addTicket = function(fn){
-	seajs.use("" + ASSETS_ROOT + modalScripts.resource_ticket,function(module){
-		module.addTicket(fn);
-	});
-}
 
 /**
  * 用于定义公共请求或者与数据相关的公共组件处理
@@ -1573,7 +1520,118 @@ var KingServices = {};
  * @return {[type]}     [description]
  */
 
+/**
+ * 编辑中转安排——
+ * @param  {string} id 游客小组的ID
+ * @return {[type]}    [description]
+ */
+KingServices.updateTransit = function(id)  {
+	seajs.use("" + ASSETS_ROOT +"js/template/arrange/transit/transit.js",function(module){
+		module.updateTransit(id);
+		modals["arrange_transit"] = transit;
+	});
+}
+//保险公司  新增
+KingServices.addInsurance = function(fn){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_insurance,function(module){
+		module.addInsurance(fn);
+	});
+}
+//餐厅  新增
+KingServices.addRestaurant = function(fn){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_restaurant,function(module){
+		module.addRestaurant(fn);
+	});
+}
+//酒店  新增
+KingServices.addHotel = function(fn){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_hotel,function(module){
+		module.addHotel(fn);
+	});
+}
+//景区  新增
+KingServices.addScenic = function(fn){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_scenic,function(module){
+		module.addScenic(fn);
+	});
+}
+//购物  新增
+KingServices.addShop = function(fn){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_shop,function(module){
+		module.addShop(fn);
+	});
+}
+//自费商家  新增
+KingServices.addSelfPay = function(fn){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_selfpay,function(module){
+		module.addSelfPay(fn);
+	});
+}
+//票务  新增
+KingServices.addTicket = function(fn){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_ticket,function(module){
+		module.addTicket(fn);
+	});
+}
+//导游  新增
+KingServices.addGuide = function(fn){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_guide,function(module){
+		module.addGuide(fn);
+	});
+}
+//车队 新增
+KingServices.addBusCompany = function(fn){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_busCompany,function(module){
+		module.addBusCompany(fn);
+	});
+}
+//车队 新增 车和司机
+KingServices.addBusDriver = function(fn,$busCompany,$busCompanyId){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_busCompany,function(module){
+		module.addBusDriver(fn,$busCompany,$busCompanyId);
+	});
+}
 
+
+//添加资源函数
+KingServices.addResourceFunction = function(e){
+	var $this = $(this),
+		$parents = $(this).closest('tr'),
+		name = e.data.name,
+		id = e.data.id,
+		managerName = e.data.managerName,
+		mobileNumber = e.data.mobileNumber,
+		$function = e.data.function,
+		fn = function (data){
+			if (!!data.name && !!name) {$parents.find('input[name='+name+']').val(data.name);}
+			if (!!data.id && !!id) {$parents.find('input[name='+id+']').val(data.id);}
+			if (!!data.managerName && !!managerName) {$parents.find('input[name='+managerName+']').val(data.managerName);}
+			if (!!data.mobileNumber && !!mobileNumber) {$parents.find('input[name='+mobileNumber+']').val(data.mobileNumber);}
+		}
+	$function(fn);
+}
+//添加车、司机函数
+KingServices.addBusDriverFunction = function(e){
+	var $this = $(this),
+		$parents = $(this).closest('tr'),
+		$busCompany = $parents.find('[name=busCompanyName]').val(),
+		$busCompanyId = $parents.find('[name=busCompanyId]').val(),
+		licenseNumberId = e.data.licenseNumberId,
+		licenseNumber = e.data.licenseNumber,
+		busbrand = e.data.busbrand,
+		seatCount = e.data.seatCount,
+		driverName = e.data.driverName,
+		driverId = e.data.driverId,
+		driverMobileNumber = e.data.driverMobileNumber,
+		$function = e.data.function,
+		fn = function (data){
+			if (!!data.name && !!name) {$parents.find('input[name='+name+']').val(data.name);}
+			if (!!data.id && !!id) {$parents.find('input[name='+id+']').val(data.id);}
+			if (!!data.managerName && !!managerName) {$parents.find('input[name='+managerName+']').val(data.managerName);}
+			if (!!data.mobileNumber && !!mobileNumber) {$parents.find('input[name='+mobileNumber+']').val(data.mobileNumber);}
+		}
+	$function(fn,$busCompany,$busCompanyId);
+}
 //省市区 start
 KingServices.provinceCity = function($container,provinceIdU,cityIdU,districtIdU){
 	//初始化地区数据
