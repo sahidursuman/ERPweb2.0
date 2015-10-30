@@ -1629,6 +1629,27 @@ KingServices.updateTransit = function(id)  {
 		modals["arrange_transit"] = transit;
 	});
 }
+
+//导游  新增
+KingServices.addGuide = function(fn){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_guide,function(module){
+		module.addGuide(fn);
+	});
+}
+//车队 新增
+KingServices.addBusCompany = function(fn){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_busCompany,function(module){
+		module.addBusCompany(fn);
+	});
+}
+//车队 新增 车和司机
+KingServices.addBusDriver = function(fn,$busCompany,$busCompanyId){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_busCompany,function(module){
+		module.addBusDriver(fn,$busCompany,$busCompanyId);
+	});
+}
+
+
 //保险公司  新增
 KingServices.addInsurance = function(fn){
 	seajs.use("" + ASSETS_ROOT + modalScripts.resource_insurance,function(module){
@@ -1671,6 +1692,7 @@ KingServices.addTicket = function(fn){
 		module.addTicket(fn);
 	});
 }
+
 
 //添加资源函数
 KingServices.addResourceFunction = function(e){
