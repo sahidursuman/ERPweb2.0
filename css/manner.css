@@ -509,6 +509,9 @@ input,select{
 .widget-mainFrist{
     margin-left: -100px;
 }
+.addTouristGroup .formOneList{
+    margin-left: 70px;
+}
 .formOneList input{
     width: 220px;
     height: 24px !important;
@@ -526,7 +529,9 @@ input,select{
 .widget-container-col input{
     padding: 0px 0px 0px 10px;
 }
-
+.btn-travelLine-search{
+    margin-left: -4px;
+}
 .globalAdd button{
     height: 24px;
     font-size: 12px;
