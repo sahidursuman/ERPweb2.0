@@ -275,7 +275,7 @@ define(function(require, exports) {
 	/**
 	 * 新建自费项目
 	 */
-	selfpay.addSelfpay = function(){
+	selfpay.addSelfpay = function(fn){
 		var html = addTemplate();
 		selfpay.$addLayer = layer.open({
 		    type: 1,
@@ -301,7 +301,7 @@ define(function(require, exports) {
 		    	$container.off("click").on('click', '.T-btn-submit-selfpay', function(event) {
 		    		event.preventDefault();
 		    		/* Act on the event */
-		    		selfpay.saveSelfpay($container,1);
+		    		selfpay.saveSelfpay($container,1,fn);
 		    	});
 		    }
 		})
@@ -484,7 +484,7 @@ define(function(require, exports) {
 	 * @param  {[type]} type       [type:1 新增   type:2 修改]
 	 * @return {[type]}            [description]
 	 */
-	selfpay.saveSelfpay = function($container,type){
+	selfpay.saveSelfpay = function($container,type,fn){
 		var operation = "",method = "",jsonName = "";
 		if (type == 1) {
 			method = "addSelfPay";
@@ -504,6 +504,7 @@ define(function(require, exports) {
 			status = 1;
 		}
 		var form = $container.find(".T-selfpayMainForm").serialize()+"&status="+status+"&id="+id+"",
+			formData = $container.find(".T-selfpayMainForm").serializeJson(),
 			selfPayJson = [],
 			selfList = $container.find(".T-selfpayList-Tbody tr");
 			selfListLength = selfList.length;
@@ -554,10 +555,16 @@ define(function(require, exports) {
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
+					data.selfPay = JSON.parse(data.selfPay);
+					formData.id = data.selfPay.id; 
 					if(type == 1){layer.close(selfpay.$addLayer);}
 					else if(type == 2){layer.close(selfpay.$updateLayer);}
 					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-						selfpay.selfpayList(0);
+						if (typeof fn === "function") {
+							fn(formData);
+						}else{
+							selfpay.selfpayList(0);
+						}
 					});
 				}
 			}
@@ -587,4 +594,5 @@ define(function(require, exports) {
 	};
 		
 	exports.init = selfpay.initModule;
+	exports.addSelfPay = selfpay.addSelfpay;
 });

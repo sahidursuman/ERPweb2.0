@@ -15,6 +15,7 @@ define(function(require, exports) {
     var count = {
 		searchData : {
 			page : "",
+			id:"",
 			tripNumber : "",
 			lineProductId : "",
 			lineProductName : "",
@@ -25,6 +26,7 @@ define(function(require, exports) {
 			status : ""
 		},
 		edited : {},
+		autocompleteDate : {},
 		isEdited : function(editedType){
 			if(!!count.edited[editedType] && count.edited[editedType] != ""){
 				return true;
@@ -40,12 +42,13 @@ define(function(require, exports) {
 
             count.initCount('','','','','','','');
         },
-        initCount: function(tripNumber,lineProductId,lineProductName,guideId,guideName,startTime,endTime,status) {
+        initCount: function(id,tripNumber,lineProductId,lineProductName,guideId,guideName,startTime,endTime,status) {
             // init page
             $.ajax({
                 url: ""+APP_ROOT+"back/financialTripPlan.do?method=findFinancialListPageCount&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
                 type: 'get',
                 data: {
+					"id":id,
                     "tripNumber":tripNumber,
                     "lineProductId":lineProductId,
                     "lineProductName": lineProductName,
@@ -64,15 +67,17 @@ define(function(require, exports) {
                     var result = showDialog(data);
                     if(result){
                         addTab(menuKey, "按团统计", listHeaderTemplate(data));
+						//count.getQueryTerms();
 
                         // 按照搜索条件，初始化报表
-                        count.getlistCount(0, tripNumber,lineProductId,lineProductName,guideId,guideName,startTime,endTime,status);
+                        count.getlistCount(0,id, tripNumber,lineProductId,lineProductName,guideId,guideName,startTime,endTime,status);
                         // bind event
                         $('.btn-arrangeTourist-search').on('click', function(event) {
                             event.preventDefault();
                             /* Act on the event */
                             // 按照搜索条件，初始化报表
-                            var tripNumber = $('.financialCount .search-area').find('input[name=tripNumber]').val();
+							var id = $('.financialCount .search-area').find('input[name=tripNumber]').val();
+                            var tripNumber = $('.financialCount .search-area').find('input[name=chooseTripNumber]').val();
                             var lineProductId = $('.financialCount .search-area').find('input[name=lineProductId]').val();
                             var guideId = $('.financialCount .search-area').find('input[name=guideId]').val();
                             var endTime = $('.financialCount .search-area').find('input[name=entTime]').val();
@@ -80,7 +85,7 @@ define(function(require, exports) {
                             var status = $('.financialCount .search-area .btn-status').find('button').attr('data-value');
                             var lineProductName = $('.financialCount .search-area').find('input[name=chooseLineProductName]').val();
                             var guideName = $('.financialCount .search-area').find('input[name=chooseGuideRealName]').val();
-                            count.initCount(tripNumber,lineProductId,lineProductName,guideId,guideName,startTime,endTime,status);
+                            count.initCount(id,tripNumber,lineProductId,lineProductName,guideId,guideName,startTime,endTime,status);
                         });
                     }
                 }
@@ -89,12 +94,13 @@ define(function(require, exports) {
             
             // trigger base
         },
-        getlistCount:function(page,tripNumber,lineProductId,lineProductName,guideId,guideName,startTime,endTime,status){
+        getlistCount:function(page,id,tripNumber,lineProductId,lineProductName,guideId,guideName,startTime,endTime,status){
            $.ajax({
                 url:""+APP_ROOT+"back/financialTripPlan.do?method=listFinancialTripPlan&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
                 type:"POST",
                 data:{
                 	"pageNo":page,
+					"id":id,
                 	"tripNumber":tripNumber,
                 	"lineProductId":lineProductId,
                 	"lineProductName":lineProductName,
@@ -122,7 +128,7 @@ define(function(require, exports) {
                         $(".main-content .financialCount .clearBlur").blur(function(){
                         	var a = $(this).next().val();
                         	if(!isNaN(a)) {
-                        		$(this).val("");
+                        		//$(this).val("");
                         		$(this).next().val("");
                         	}
                         });
@@ -157,6 +163,9 @@ define(function(require, exports) {
                         $(".main-content .page-content .pageMode a.last").click(function(){
                             count.search(data.totalPage-1);
                         });
+
+
+
 
                         //给web报账绑定事件
                         $(".financialCount .btn-guide-account").click(function(){
@@ -201,20 +210,23 @@ define(function(require, exports) {
 //                        });
                        
                         count.buildDatePicker();
-                        count.bindTripChoose();
+                        //count.bindTripChoose();
+						count.bindTripChoose($("#tab-"+menuKey+"-content"));
                         count.bindLineProductChoose();
                         count.bindGuideRealNameChoose();
                     }
                 }
             });
         },
-        bindTripChoose : function(){
-        	var tripPlan = $(".financialCount input[name=chooseTripNumber]");
-        	tripPlan.autocomplete({
+
+        //团号模糊
+		bindTripChoose : function(){
+			var tripPlan = $(".financialCount input[name=chooseTripNumber]");
+			tripPlan.autocomplete({
 				minLength:0,
 				change:function(event,ui){
 					if(ui.item == null){
-						$(this).val("").nextAll('input[name="tripNumber"]').val('');
+						$(this).nextAll('input[name="tripNumber"]').val('');
 					}
 				},
 				select:function(event,ui){
@@ -225,8 +237,8 @@ define(function(require, exports) {
 				var obj = this;
 				$.ajax({
 					url:""+APP_ROOT+"back/tripPlan.do?method=findTripByTripNumber&token="+$.cookie("token")+"&menuKey=arrange_plan&operation=self",
-                    dataType: "json",
-                    success: function(data) {
+					dataType: "json",
+					success: function(data) {
 						var result = showDialog(data);
 						if(result){
 							var tripPlanList = JSON.parse(data.tripPlanList);
@@ -238,22 +250,23 @@ define(function(require, exports) {
 							$(obj).autocomplete('option','source', tripPlanList);
 							$(obj).autocomplete('search', '');
 						}
-                    }
-                });
+					}
+				});
 			});
-        },
+		},
+        //线路产品
         bindLineProductChoose : function(){
         	var lineProduct = $(".financialCount input[name=chooseLineProductName]");
         	lineProduct.autocomplete({
 				minLength:0,
 				change:function(event,ui){
 					if(ui.item == null){
-						$(this).next().val("");
+						$(this).nextAll('input[name="lineProductId"]').val('');
 					}
 				},
 				select:function(event,ui){
 					$(this).blur();
-					$(this).next().val(ui.item.id);
+					$(this).next().val(ui.item.lineProductId);
 				}
 			}).off("click").on("click", function(){
 				var obj = this;
@@ -276,18 +289,20 @@ define(function(require, exports) {
                 });
 			});
         },
+
+        //导游
         bindGuideRealNameChoose : function(){
         	var guideRealName = $(".financialCount input[name=chooseGuideRealName]");
         	guideRealName.autocomplete({
 				minLength:0,
 				change:function(event,ui){
 					if(ui.item == null){
-						$(this).next().val("");
+						$(this).nextAll('input[name="guideId"]').val('');
 					}
 				},
 				select:function(event,ui){
 					$(this).blur();
-					$(this).next().val(ui.item.id);
+					$(this).next().val(ui.item.guideId);
 				}
 			}).off("click").on("click", function(){
 				var obj = this;
@@ -311,7 +326,8 @@ define(function(require, exports) {
 			});
         },
         search : function(pageNo) {
-        	var tripNumber = $('.financialCount .search-area').find('input[name=tripNumber]').val();
+			var id = $('.financialCount .search-area').find('input[name=tripNumber]').val();
+        	var tripNumber = $('.financialCount .search-area').find('input[name=chooseTripNumber]').val();
         	var lineProductId = $('.financialCount .search-area').find('input[name=lineProductId]').val();
         	var guideId = $('.financialCount .search-area').find('input[name=guideId]').val();
         	var endTime = $('.financialCount .search-area').find('input[name=entTime]').val();
@@ -319,7 +335,7 @@ define(function(require, exports) {
         	var status = $('.financialCount .search-area .btn-status').find('button').attr('data-value');
         	var lineProductName = $('.financialCount .search-area').find('input[name=chooseLineProductName]').val();
         	var guideName = $('.financialCount .search-area').find('input[name=chooseGuideRealName]').val();
-        	count.getlistCount(pageNo,tripNumber,lineProductId,lineProductName,guideId,guideName,startTime,endTime,status);
+        	count.getlistCount(pageNo,id,tripNumber,lineProductId,lineProductName,guideId,guideName,startTime,endTime,status);
         },
         buildDatePicker : function() {
         	$('.financialCount .search-area').find('.date-picker').datepicker({
@@ -387,7 +403,19 @@ define(function(require, exports) {
                  	    }else{
                  	    	addTab(uKey,title,html);
                  	    }
-            			
+            			$(document).on("mouseenter",".countWhichDaysContainer",function(){
+                            var whichDay = $(this).find("select").val(),
+                                $this = $(this)
+                                startTime = $("#tab-financial_count-checkBill-content").find("span[name=startTime_Choose]").text(),
+                                date = new Date(startTime.replace("-", "/").replace("-", "/"));
+                            var timer = date.getTime()+(whichDay-1)*24*60*60*1000;
+                            date.setTime(timer);
+                            var datetime = date.getFullYear()+ "-"+ (date.getMonth() + 1) + "-"+ (date.getDate() < 10 ? "0" + date.getDate() : date.getDate());
+                            layer.tips(datetime, $this, {
+                                tips: [1, '#3595CC'],
+                                time: 1500
+                            });
+                        });
 						$(".financial-count-update-update-tab").on("change",function(){
 							count.edited["checkBill"] = "checkBill";
 							count.oldCheckBillId = id;
@@ -400,7 +428,46 @@ define(function(require, exports) {
             				var roleType = $(this).attr('data-entity-roleType');
             				count.saveTripCount(id, financialTripPlanId, userName, roleType,0);
             			});
-            			
+                        //新增按钮事件
+                        console.log(data);
+                        $('.countUpdate .T-addOtherIn').on('click',function() {
+                            var $divObj = $(this).closest('div').parent();  
+                            var $body = $divObj.find(".table tbody");
+                            var html = '<tr>'+
+                                        '<td class="countWhichDaysContainer"></td>'+
+                                        '<td><input type="text" name="title"/></td>'+
+                                        '<td><input type="text" maxlength="9" name="price" value=0 /></td>'+
+                                        '<td><input type="text" maxlength="6" name="count" value=0 /></td>'+
+                                        '<td><input type="text" maxlength="9" readOnly="readOnly" name="needPayMoney"/></td>'+
+                                        '<td><span style="color:#bbb">查看</span></td>'+
+                                        '<td><input type="text" name="billRemark" maxlength="1000"/><a href="javascript:void(0)" class="T-del" style="margin-left:15px;">删除</a></td>'+
+                                        '</tr>';
+                            $body.append(html);
+                            count.autoSum($body);
+                            count.removeData($body);
+                            count.setChooseDays("financial-count-update-other-incoming");
+                        });
+            			$('.countUpdate .T-addOtherOut').on('click',function() {
+                            var $divObj = $(this).closest('div').parent();  
+                            var $body = $divObj.find(".table tbody");
+                            var html = '<tr>'+
+                                        '<td class="countWhichDaysContainer"></td>'+
+                                        '<td><input type="text" name="name" maxlength="32"/></td>'+
+                                        '<td><input type="text" maxlength="9" name="realPrice" value=0 /></td>'+
+                                        '<td><input type="text" maxlength="6" name="realCount" value=0 /></td>'+
+                                        '<td><input type="text" maxlength="9" name="reduceMoney" value=0 /></td>'+
+                                        '<td><input type="text" maxlength="9" readOnly="readOnly" name="needPayMoney"/></td>'+
+                                        '<td>-</td>'+
+                                        '<td><input type="text" maxlength="9" name="realGuidePayMoney" value=0 /></td>'+
+                                        '<td><span style="color:#bbb">查看</span></td>'+
+                                        '<td>-</td>'+
+                                        '<td><input type="text" name="billRemark"/><a href="javascript:void(0)" class="T-del" style="margin-left:15px;">删除</a></td>'+
+                                        '</tr>';
+                            $body.append(html);
+                            count.autoOutSum($body);
+                            count.removeData($body);
+                            count.setChooseDays("financial-count-update-otherpay");
+                        });
             			$('.countUpdate .btn-guide-account').off('click').on('click',function() {
             				//访问报账函数
             				var id = $(this).attr('data-entity-id');
@@ -621,6 +688,98 @@ define(function(require, exports) {
                 }
             });
 		},
+        //自动计算
+        autoSum:function($obj){
+                var $price = $($obj).find('input[name="price"]');
+                var $count = $($obj).find('input[name="count"]');
+                $price.on('change',function(){
+                    var tr = $(this).closest("tr");
+                    var count = tr.find('input[name="count"]').val();
+                    var price = $(this).val();
+                    var needPayMoney = tr.find('input[name="needPayMoney"]');
+                    var sum = price*count;
+                    needPayMoney.val(sum);
+                });
+                $count.on('change',function(){
+                    var tr = $(this).closest("tr");
+                    var price = tr.find('input[name="price"]').val();
+                    var count = $(this).val();
+                    var needPayMoney = tr.find('input[name="needPayMoney"]');
+                    var sum = price*count;
+                    needPayMoney.val(sum);
+                });
+        },
+        autoOutSum:function($obj){
+            var $price = $($obj).find('input[name="realPrice"]');
+            var $count = $($obj).find('input[name="realCount"]');
+            var $reduceMoney = $($obj).find('input[name="reduceMoney"]');
+                $price.on('change',function(){
+                    var tr = $(this).closest("tr");
+                    var count = tr.find('input[name="realCount"]').val();
+                    var price = $(this).val();
+                    var reduceMoney = tr.find('input[name="reduceMoney"]').val();
+                    var needPayMoney = tr.find('input[name="needPayMoney"]');
+                    var sum = price*count-reduceMoney;
+                    needPayMoney.val(sum);
+                });
+                $count.on('change',function(){
+                    var tr = $(this).closest('tr');
+                    var count = $(this).val();
+                    var price = tr.find('input[name="realPrice"]').val();
+                    var reduceMoney = tr.find('input[name="reduceMoney"]').val();
+                    var needPayMoney = tr.find('input[name="needPayMoney"]')
+                    var sum = price*count-reduceMoney;
+                    needPayMoney.val(sum);
+                });
+                $reduceMoney.on('change',function(){
+                    var tr = $(this).closest('tr');
+                    var count = tr.find('input[name="realCount"]').val();
+                    var price = tr.find('input[name="realPrice"]').val();
+                    var reduceMoney = $(this).val();
+                    var needPayMoney = tr.find('input[name="needPayMoney"]')
+                    var sum = price*count-reduceMoney;
+                    needPayMoney.val(sum);
+                });
+        },
+        //删除事件
+        removeData:function($obj){
+            var delBtn = $($obj).find(".T-del");
+            delBtn.on('click',function(){
+                var tr = $(this).closest("tr");
+                tr.fadeOut(function(){
+                    $(this).remove();
+                });
+            });
+            
+        },
+        setChooseDays : function(id){
+            var days = $(".countUpdate .T-ProductDays").text();
+
+            if(parseInt(days) < 1)return;
+            if(id){
+                var tr = $("#"+id+" .table tbody tr");
+                var selectText = '<select class="col-sm-12" name="whichDay">';
+                for(var i = 0; i < parseInt(days); i++){
+                    selectText += '<option value="'+(i+1)+'">第'+(i+1)+'天</option>';
+                }
+                selectText += '</select>';
+                tr.eq(tr.length-1).find(".countWhichDaysContainer").html(selectText);
+            }else{
+                $("td.whichDaysContainer").each(function(index){
+                    var val = $(this).attr("value");
+                    var selectText = '<select class="col-sm-12" name="whichDay">';
+                    for(var i = 0; i < parseInt(days); i++){
+                        if(val == (i+1)){
+                            selectText += '<option value="'+(i+1)+'" selected="selected">第'+(i+1)+'天</option>';
+                        }else{
+                            selectText += '<option value="'+(i+1)+'">第'+(i+1)+'天</option>';
+                        }
+                    }
+                    selectText += '</select>';
+                    $(this).html(selectText);
+                });
+            }
+        },
 		getShopRate : function(obj,formClass) {
 			 $.ajax({
 	                url:""+APP_ROOT+"back/shop.do?method=findShopCostRebateBy&token="+$.cookie("token")+"&menuKey=resource_shop&operation=self",
@@ -661,7 +820,7 @@ define(function(require, exports) {
 	                }
 			 });
 		},
-		getSaveTripPlanJson : function() {
+		getSaveTripPlanJson : function(id) {
 			var saveJson = {
 					"financialTripPlan":{},
 					"shopArrangeList":[],
@@ -763,10 +922,9 @@ define(function(require, exports) {
 					saveJson.log.selfPayLog.push(log);
 				}
 			});
-			
 			//其他收入
 			$('.countUpdate').find('#otherIn').find('tr').each(function() {
-				if($(this).attr('otherInId')) {
+				/*if($(this).attr('otherInId')) {
 					var otherIn = {
 							"id":count.changeTwoDecimalToString($(this).attr('otherInId')),
 							"title":$(this).find('input[name=title]').val(),
@@ -784,10 +942,30 @@ define(function(require, exports) {
 							"nc":otherIn.count
 					}
 					saveJson.log.otherInLog.push(log);
-				}
+				}*/
+                if($(this).attr('otherInId')){
+                    var otherIn = {
+                    "id":$(this).attr('otherInId'),
+                    "title":$(this).find('input[name="title"]').val(),
+                    "price":$(this).find('input[name="price"]').val(),
+                    "count":$(this).find('input[name="count"]').val(),
+                    "billRemark":$(this).find('input[name="billRemark"]').val()
+                    
+                    }
+                saveJson.otherInList.push(otherIn);
+                }else{
+                    var otherIn = {
+                    "tripPlanId":id,
+                    "whichDay":$(this).find('select[name="whichDay"]').val(),
+                    "title":$(this).find('input[name="title"]').val(),
+                    "price":$(this).find('input[name="price"]').val(),
+                    "count":$(this).find('input[name="count"]').val(),
+                    "billRemark":$(this).find('input[name="billRemark"]').val(),
+                    }
+                saveJson.otherInList.push(otherIn);
+                }
+                
 			});
-			
-			
 			//车费
 			$('.countUpdate').find('#bus').find('tr').each(function() {
 				if($(this).attr('busCompanyArrangeId')) {
@@ -911,23 +1089,27 @@ define(function(require, exports) {
 
 			//其他
 			$('.countUpdate').find('#other').find('tr').each(function() {
-				if($(this).attr('otherArrangeId')) {
-					var otherArrange ={
-							"id":count.changeTwoDecimalToString($(this).attr('otherArrangeId')),
-							"realCount":count.changeTwoDecimalToString($(this).find('input[name=realCount]').val()),
-							"needPayMoney":count.changeTwoDecimalToString($(this).find('.needPayMoney').text()),
-							"realGuidePayMoney":count.changeTwoDecimalToString($(this).find('input[name=realGuidePayMoney]').val())
-					}
-					saveJson.otherArrangeList.push(otherArrange);
-					var log = {
-							"aid":otherArrange.id,
-							"oc":count.changeTwoDecimalToString(parseFloat($(this).find('input[name=realCount]').attr('old'))),
-							"nc":otherArrange.realCount,
-							"ogm":count.changeTwoDecimalToString(parseFloat($(this).find('input[name=realGuidePayMoney]').attr('old'))),
-							"ngm":otherArrange.realGuidePayMoney
-					}
-					saveJson.log.otherLog.push(log);
-				}
+                if($(this).attr('otherArrangeId')){
+                    var otherArrange = {
+                        "id":$(this).attr('otherArrangeId'),
+                        "price":$(this).find('input[name="realPrice"]').val(),
+                        "count":$(this).find('input[name="realCount"]').val(),
+                        "reduceMoney":$(this).find('input[name="reduceMoney"]').val(),
+                        "realGuidePayMoney":$(this).find('input[name="realGuidePayMoney"]').val(),
+                        "billRemark":$(this).find('input[name="billRemark"]').val()
+                    }
+                    saveJson.otherArrangeList.push(otherArrange);
+                }else{var otherArrange = {
+                        "whichDay":$(this).find('select[name="whichDay"]').val(),
+                        "title":$(this).find('input[name="name"]').val(),
+                        "price":$(this).find('input[name="realPrice"]').val(),
+                        "count":$(this).find('input[name="realCount"]').val(),
+                        "reduceMoney":$(this).find('input[name="reduceMoney"]').val(),
+                        "realGuidePayMoney":$(this).find('input[name="realGuidePayMoney"]').val(),
+                        "billRemark":$(this).find('input[name="billRemark"]').val()
+                    }
+                    saveJson.otherArrangeList.push(otherArrange);
+                }
 			});
 			return saveJson;
 		},
@@ -1023,7 +1205,8 @@ define(function(require, exports) {
             });
 		},
 		saveTripCount : function(id, financialTripPlanId, userName, roleType,isClose) {
-			var saveJson = count.getSaveTripPlanJson();
+			var saveJson = count.getSaveTripPlanJson(financialTripPlanId);
+            console.log(saveJson);
 			if(roleType == "2") {
 				saveJson.log.info.message = "财务（" + userName + "）保存信息";
 			} else if(roleType == "3") {
@@ -1051,7 +1234,7 @@ define(function(require, exports) {
 						count.edited["checkBill"] = "";
 						if(isClose == 1){
 							closeTab(uKey);
-							count.getlistCount(count.searchData.pageNo,count.searchData.tripNumber,count.searchData.lineProductId,count.searchData.lineProductName,count.searchData.guideId,count.searchData.guideName,count.searchData.startTime,count.searchData.endTime,count.searchData.status);
+							count.getlistCount(count.searchData.pageNo,count.searchData.id,count.searchData.tripNumber,count.searchData.lineProductId,count.searchData.lineProductName,count.searchData.guideId,count.searchData.guideName,count.searchData.startTime,count.searchData.endTime,count.searchData.status);
 						}else{
 							count.updateExamine(financialTripPlanId,"");
 						}
@@ -1303,6 +1486,7 @@ define(function(require, exports) {
 			$(parent).find('.needPayMoney').text(needPayMoney);
 			
 			count.bindOtherInSum(obj,formClass);
+
 		},
 		bindOtherInSum : function(obj,formClass) {
 			count.bindMainTable(formClass);
@@ -1355,7 +1539,7 @@ define(function(require, exports) {
 			var payedMoney = $(parent).find('input[name=payedMoney]').val();
 			var realGuidePayMoney = $(parent).find('input[name=realGuidePayMoney]').val();
 			var guidePayMoney = $(parent).find('input[name=guidePayMoney]').val();
-			var price = $(parent).find('input[name=price]').val();
+			var price = $(parent).find('input[name=realPrice]').val();
 			var realCount = $(parent).find('input[name=realCount]').val();
 			var reduceMoney = $(parent).find('input[name=reduceMoney]').val();
 			
@@ -1832,7 +2016,24 @@ define(function(require, exports) {
 		},
 		clearEdit : function(clearType){
 			count.edited[clearType] = "";
-		}
+		},
+
+		//getQueryTerms :function(){
+		//	$.ajax({
+		//		url:""+APP_ROOT+"back/financialTripPlan.do?method=getQueryTerms&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
+		//		dateType:"json",
+		//		type:"POST",
+		//		success:function(data){
+		//			var result = showDialog(data);
+		//			if(result){
+		//				count.autocompleteDate.guideList = data.guideList;
+		//				count.autocompleteDate.lineProductList = data.lineProductList	;
+		//				count.autocompleteDate.tripList = data.tripList;
+		//			}
+		//		}
+		//	})
+		//},
+
     }
     exports.init = count.init;
 	exports.isEdited = count.isEdited;

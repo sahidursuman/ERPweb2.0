@@ -535,7 +535,7 @@ function logout(){
 				click: function() {
 					$( this ).dialog( "close" );
 					$.ajax({
-						url:""+APP_ROOT+"back/user.do?method=logOut&token="+$.cookie("token")+"&operation=self",
+						url:""+APP_ROOT+"base.do?method=logOut&token="+$.cookie("token"),
 						type:"POST",
 						dataType:"json",
 						beforeSend:function(){
@@ -795,7 +795,7 @@ function listMenu(menuTemplate){
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/arrange/transit/transit.js",function(transit){
-						transit.listTransit(0,"","","","","","","","","");
+						transit.listTransit(0,"","","","","","","","","","","","");
 						modals["arrange_transit"] = transit;
 					});
 				});
@@ -1165,7 +1165,7 @@ function listMenu(menuTemplate){
 						collectDetail.listCollectDetail();
 					});
 				});
-				//绑定中转安排菜单功能
+				//绑定中转分段菜单功能
 				$("#sidebar .nav-list .resource_subsection").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
@@ -1448,6 +1448,30 @@ var Tools = {
 };
 
 /**
+ * 表单 转 JSON
+ * @param  {[type]} $ [description]
+ * @return {[type]}   [description]
+ */
+(function($){  
+    $.fn.serializeJson=function(){  
+        var serializeObj={};  
+        var array=this.serializeArray();  
+        var str=this.serialize();  
+        $(array).each(function(){  
+            if(serializeObj[this.name]){  
+                if($.isArray(serializeObj[this.name])){  
+                    serializeObj[this.name].push(this.value);  
+                }else{  
+                    serializeObj[this.name]=[serializeObj[this.name],this.value];  
+                }  
+            }else{  
+                serializeObj[this.name]=this.value;   
+            }  
+        });  
+        return serializeObj;  
+    };  
+})(jQuery); 
+/**
  * 自定义简介的提示
  * @param  {object} $elements 需要绑定提示的DOM
  * @return {[type]}           [description]
@@ -1492,6 +1516,48 @@ Tools.updateTransit = function(id)  {
 	seajs.use("" + ASSETS_ROOT +"js/template/arrange/transit/transit.js",function(module){
 		module.updateTransit(id);
 		modals["arrange_transit"] = transit;
+	});
+}
+//保险公司  新增
+Tools.addInsurance = function(fn){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_insurance,function(module){
+		module.addInsurance(fn);
+	});
+}
+//餐厅  新增
+Tools.addRestaurant = function(fn){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_restaurant,function(module){
+		module.addRestaurant(fn);
+	});
+}
+//酒店  新增
+Tools.addHotel = function(fn){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_hotel,function(module){
+		module.addHotel(fn);
+	});
+}
+//景区  新增
+Tools.addScenic = function(fn){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_scenic,function(module){
+		module.addScenic(fn);
+	});
+}
+//购物  新增
+Tools.addShop = function(fn){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_shop,function(module){
+		module.addShop(fn);
+	});
+}
+//自费商家  新增
+Tools.addSelfPay = function(fn){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_selfpay,function(module){
+		module.addSelfPay(fn);
+	});
+}
+//票务  新增
+Tools.addTicket = function(fn){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_ticket,function(module){
+		module.addTicket(fn);
 	});
 }
 
