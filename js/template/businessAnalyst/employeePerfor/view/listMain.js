@@ -1,0 +1,20 @@
+/*TMODJS:{"debug":true,"version":47,"md5":"38b33ea0f6f186a6721e186df1cff4de"}*/
+define(function(require) {
+    return require("../../../template")("businessAnalyst/employeePerfor/view/listMain", function($data, $filename) {
+        try {
+            var $utils = this, $line = ($utils.$helpers, 0), $escape = $utils.$escape, searchParam = $data.searchParam, $out = "";
+            return $out += '<div class="T-employeePerfor-Container"> <div class="row form-horizontal T-search-area search-area" style="padding-left:5px; "> <label class="pull-left text-right control-label no-padding-right">开始日期:</label> <div class="col-xs-1"> <input type="text" name="startTime" class="col-xs-12 datepicker" placeholder="开始日期" value="', 
+            $line = 5, $out += $escape(searchParam.startTime), $out += '" /> </div> <label class="pull-left text-right control-label no-padding-right">结束日期:</label> <div class="col-xs-1"> <input type="text" name="endTime" class="col-xs-12 datepicker" placeholder="结束日期" value="', 
+            $line = 10, $out += $escape(searchParam.endTime), $out += '" /> </div> <div class="col-xs-2" style="margin-left: 20px;"> <div class="btn-group T-select-employeerDept" style="pull-left"> <button data-value="1" data-toggle="dropdown" class="btn-sm dropdown-toggle block-up" aria-expanded="false"> <span> 员工 </span> <i class="ace-icon fa fa-angle-down icon-on-right"></i> </button> <ul class="dropdown-menu"> <li> <a data-value="1" href="javascript:void(0)">员工</a> </li> <li> <a data-value="2" href="javascript:void(0)">部门</a> </li> </ul> </div> <button class=" btn-sm T-employeePerfor-search search-btn" style="margin-left:25px;"> <i class="ace-icon fa fa-search"></i> 搜索 </button> </div> </div> <div class="row"> <div class="col-xs-12 T-employeePerfor-list"> </div> <div> <div class="row"> <div class="col-xs-12 T-deptPerfor-list"> </div> <div> </div> ', 
+            new String($out);
+        } catch (e) {
+            throw {
+                filename: $filename,
+                name: "Render Error",
+                message: e.message,
+                line: $line,
+                source: '<div class="T-employeePerfor-Container">\r\n	<div class="row form-horizontal T-search-area search-area" style="padding-left:5px; ">\r\n        <label class="pull-left text-right control-label no-padding-right">开始日期:</label>\r\n		<div class="col-xs-1">\r\n			<input type="text" name="startTime" class="col-xs-12 datepicker" placeholder="开始日期" value="{{searchParam.startTime}}" />\r\n		</div>\r\n	\r\n        <label class="pull-left text-right control-label no-padding-right">结束日期:</label>\r\n		<div class="col-xs-1">\r\n			<input type="text" name="endTime" class="col-xs-12 datepicker" placeholder="结束日期" value="{{searchParam.endTime}}" />\r\n		</div>\r\n\r\n	    <div class="col-xs-2" style="margin-left: 20px;">\r\n			<div class="btn-group T-select-employeerDept" style="pull-left">\r\n				<button data-value="1" data-toggle="dropdown" class="btn-sm  dropdown-toggle block-up" aria-expanded="false">\r\n					<span>\r\n						员工			\r\n					</span>\r\n					<i class="ace-icon fa fa-angle-down icon-on-right"></i>\r\n				</button>\r\n				<ul class="dropdown-menu">\r\n					<li>\r\n						<a data-value="1" href="javascript:void(0)">员工</a>\r\n					</li>\r\n\r\n					<li>\r\n						<a data-value="2" href="javascript:void(0)">部门</a>\r\n					</li>\r\n				</ul>\r\n			</div>\r\n\r\n			<button class=" btn-sm  T-employeePerfor-search search-btn" style="margin-left:25px;">\r\n				<i class="ace-icon fa fa-search"></i> 搜索\r\n			</button>\r\n		</div>\r\n	</div>\r\n\r\n	<div class="row">	\r\n		<div class="col-xs-12 T-employeePerfor-list">\r\n\r\n		</div>\r\n	<div>\r\n\r\n	<div class="row">	\r\n		<div class="col-xs-12 T-deptPerfor-list">\r\n\r\n		</div>\r\n	<div>\r\n\r\n</div>\r\n'.split(/\n/)[$line - 1].replace(/^\s+/, "")
+            };
+        }
+    });
+});

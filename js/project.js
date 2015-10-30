@@ -1746,10 +1746,12 @@ KingServices.addResourceFunction = function(e){
 KingServices.addBusDriverFunction = function(e){
 	var $this = $(this),
 		$parents = $(this).closest('tr'),
-		$busCompany = $parents.find('[name=busCompanyName]').val(),
-		$busCompanyId = $parents.find('[name=busCompanyId]').val(),
-		licenseNumberId = e.data.licenseNumberId,
-		licenseNumber = e.data.licenseNumber,
+		$busCompany = $parents.find('[name=busCompanyName]').val() || "",
+		$busCompanyId = $parents.find('[name=busCompanyId]').val() || "",
+		busCompanyName = e.data.busCompanyName,
+		busCompanyId = e.data.busCompanyId,
+		licenseNumberId = e.data.busLicenseNumberId,
+		licenseNumber = e.data.busLicenseNumber,
 		busbrand = e.data.busbrand,
 		seatCount = e.data.seatCount,
 		driverName = e.data.driverName,
@@ -1757,10 +1759,16 @@ KingServices.addBusDriverFunction = function(e){
 		driverMobileNumber = e.data.driverMobileNumber,
 		$function = e.data.function,
 		fn = function (data){
-			if (!!data.name && !!name) {$parents.find('input[name='+name+']').val(data.name);}
-			if (!!data.id && !!id) {$parents.find('input[name='+id+']').val(data.id);}
-			if (!!data.managerName && !!managerName) {$parents.find('input[name='+managerName+']').val(data.managerName);}
-			if (!!data.mobileNumber && !!mobileNumber) {$parents.find('input[name='+mobileNumber+']').val(data.mobileNumber);}
+			console.log(data);
+			if (!!data.busCompanyData.name && !!busCompanyName) {$parents.find('input[name='+busCompanyName+']').val(data.busCompanyData.name);}
+			if (!!data.busCompanyData.id && !!busCompanyId) {$parents.find('input[name='+busCompanyId+']').val(data.busCompanyData.id);}
+			if (!!data.busData.id && !!licenseNumberId) {$parents.find('input[name='+licenseNumberId+']').val(data.busData.id);}
+			if (!!data.busData.licenseNumber && !!licenseNumber) {$parents.find('input[name='+licenseNumber+']').val(data.busData.licenseNumber);}
+			if (!!data.busData.brand && !!busbrand) {$parents.find('input[name='+busbrand+']').val(data.busData.brand);}
+			if (!!data.busData.seatCount && !!seatCount) {$parents.find('input[name='+seatCount+']').val(data.busData.seatCount);}
+			if (!!data.driverData.name && !!driverName) {$parents.find('input[name='+driverName+']').val(data.driverData.name);}
+			if (!!data.driverData.id && !!driverId) {$parents.find('input[name='+driverId+']').val(data.driverData.id);}
+			if (!!data.driverData.mobileNumber && !!driverMobileNumber) {$parents.find('input[name='+driverMobileNumber+']').val(data.driverData.mobileNumber);}
 		}
 	$function(fn,$busCompany,$busCompanyId);
 }

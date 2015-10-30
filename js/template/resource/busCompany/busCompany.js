@@ -751,33 +751,75 @@ define(function(require,exports){
 					var BusCompanyId = getValue("busCompanyId"),
 						bus = {
 							brand : getValue("brand"),
-							licenseNumber : getValue("busLicenseNumber"),
+							licenseNumber : getValue("licenseNumber"),
 							seatCount : getValue("seatCount")
 						},
 						driver = {
-							name : getValue("driver"),
+							name : getValue("driverName"),
 							mobileNumber : getValue("mobileNumber"),
-							licenseId : getValue("licenseId"),
-							driveYears : getValue("driveYears")
+							licenseId : getValue("driverLicenseId"),
+							driveYears : getValue("driveYear")
 						};
+					var formData = {
+						busCompanyData : {
+							name : getValue('busCompanyName'),
+							id : getValue('busCompanyId')
+						},
+						busData : {
+							brand : bus.brand,
+							licenseNumber : bus.licenseNumber,
+							seatCount : bus.seatCount
+						},
+						driverData : {
+							name : driver.name,
+							mobileNumber : driver.mobileNumber,
+							licenseId : driver.licenseId,
+							driveYears : driver.driveYears
+						}
+					}
 					bus = JSON.stringify(bus);
 					driver = JSON.stringify(driver);
-					$.ajax({
-						url: ""+APP_ROOT+"back/busCompany.do?method=addBusAndDriver&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
-						type: "POST",
-						data: "busCompanyId="+BusCompanyId+"&bus="+encodeURIComponent(bus)+"&driver="+encodeURIComponent(driver),
-						success: function(data){
-							var result = showDialog(data);
-							if(result){
-								layer.close(addBusDriverLayer);
-								showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-									if (typeof fn === "function") {
-										fn(formData);
-									}
-								})
-							}
+					if (formData.busCompanyData.id.length == 0) {
+						layer.tips('请选择车队', $container.find('[name=busCompanyName]'), {
+							tips: [1, '#3595CC'],
+							time: 2000
+						});
+					}else if(formData.busData.licenseNumber == "" && formData.busData.brand == "" && formData.busData.seatCount == "" && formData.driverData.name == "" && formData.driverData.mobileNumber == "" && formData.driverData.licenseId == "" && formData.driverData.driveYears == ""){
+						showMessageDialog($( "#confirm-dialog-message" ),"车辆和司机至少添加一个。");
+					}else{
+						if(formData.busData.brand != "" || formData.busData.licenseNumber != "" || formData.busData.seatCount != ""){
+							var validatorBus = rule.busComCheckor($container.find('.busTable'));
+							if (!validatorBus.form()) return;
 						}
-					})
+						if(formData.driverData.name != "" || formData.driverData.mobileNumber != "" || formData.driverData.licenseId != "" || formData.driverData.driveYears != ""){
+							var validatorDriver = rule.busComCheckor($container.find('.driverTable'));
+							if (!validatorDriver.form()) return;
+						}
+						if(formData.busData.licenseNumber == ""){
+							bus = "";
+						}
+						if(formData.driverData.name == ""){
+							driver = "";
+						}
+						$.ajax({
+							url: ""+APP_ROOT+"back/busCompany.do?method=addBusAndDriver&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
+							type: "POST",
+							data: "busCompanyId="+BusCompanyId+"&bus="+encodeURIComponent(bus)+"&driver="+encodeURIComponent(driver),
+							success: function(data){
+								var result = showDialog(data);
+								if(result){
+									layer.close(addBusDriverLayer);
+									showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+										if (typeof fn === "function") {
+											formData.busData.id = data.busId;
+											formData.driverData.id = data.driverId;
+											fn(formData);
+										}
+									})
+								}
+							}
+						})
+					}
 				});
 				function getValue(name){
 					var value = $container.find('[name='+name+']').val();
