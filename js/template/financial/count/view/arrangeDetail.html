@@ -169,8 +169,16 @@
                     {{each hotelList as hotelArrange}}
                     {{if hotelArrange != null && hotelArrange.id > 0}}
                         <tr>
-                        <td>第{{hotelArrange.whichDay}}天</td>
-                        <td>{{hotelArrange.hotel.level}}</td>
+                        <td>第{{hotelArrange.whichDay}}天</td>  
+                        <td>
+                        {{if hotelArrange.hotel.level == 1}}三星以下
+                        {{else if hotelArrange.hotel.level == 2}}三星
+                        {{else if  hotelArrange.hotel.level == 3}}准四星
+                        {{else if  hotelArrange.hotel.level == 4}}四星
+                        {{else if  hotelArrange.hotel.level == 5}}准五星
+                        {{else if  hotelArrange.hotel.level == 6}}五星
+                        {{else if  hotelArrange.hotel.level == 7}}五星以上
+                        {{/if}}</td>
                         <td>{{hotelArrange.hotel.name}}</td>
                         <td>{{hotelArrange.hotel.mobileNumber}}</td>
                         <td>
