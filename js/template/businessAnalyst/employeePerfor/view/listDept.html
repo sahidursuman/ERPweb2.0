@@ -1,0 +1,35 @@
+<table class="table table-striped table-bordered table-hover table-fixed">
+	<colgroup>
+		<col style="width:10%;"></col>
+		<col style="width:10%;"></col>
+		<col style="width:10%;"></col>
+		<col style="width:20%;"></col>
+		<col style="width:20%;"></col>
+		<col style="width:15%;"></col>
+		<col style="width:15%;"></col>
+	</colgroup>
+	<thead>
+		<tr class="bg-blur">
+			<th class="col-sm-1">部门</th>
+			<th class="col-sm-2">收客量</th>
+			<th class="col-sm-1">发团量</th>
+			<th class="col-sm-1">发客量</th>
+			<th class="col-sm-1">外转客量</th>
+			<th class="col-sm-1">内转客量</th>
+			<th class="col-sm-2">代订单量</th>
+		</tr>
+	</thead>
+	<tbody>
+		{{each result as deptL}}
+		   <tr>
+	   		    <td>{{deptL.name}}</td>
+	   			<td>{{deptL.getCount}}</td>
+	   			<td>{{deptL.tripPlanCount}}</td>
+	   			<td>{{deptL.tripPlanMemberCount}}</td>
+	   			<td>{{deptL.transCount}}</td>
+	   			<td>{{deptL.innerCount}}</td>
+	   			<td>{{deptL.orderCount}}</td>		
+		   	</tr>
+		{{/each}}
+	</tbody>
+</table>

@@ -2,127 +2,137 @@
  * 员工部门的查询&&列表的显示
  */
 define(function(require, exports) {
-		var menuKey = "business_analyst_employeePerfor",
-	        listTemplate = require("./view/list"),
-	        tabId="tab-"+menuKey+"-content";//tab-business_analyst_employeePerfor-content
-	    /**
-		 * 定义产品销量管理对象
-		 * @type {Object}
-		 */
-		var employeePerforObj={
-			searchData:false,
-			$searchArea:false,
-			$tab:false,
-			allData:{
-				startTime:"",
-				endTime:"",
-				employeeDeptId:""
-			}
-		};
+	var menuKey = "business_analyst_employeePerfor",
+        listMainTemplate = require("./view/listMain"),
+        listDeptTemplate=require("./view/listDept"),
+        listEmployTemplate=require("./view/listEmploy"),
+        tabId="tab-"+menuKey+"-content";
+    /**
+	 * 定义产品销量管理对象
+	 * @type {Object}
+	 */
+	var employeePerforObj={
+		searchData:false,
+		$searchArea:false,
+		$tab:false,
+		$searchParam:{
+			startTime:"",
+			endTime:"",
+			type:""
+		}
+	};
 
-		/**
-		 * 员工业绩页面初始化的方法
-		 * @return {[type]} [description]
-		 */
-		employeePerforObj.initModule=function(){
-			employeePerforObj.listemployeePerfor("","","");
-		};
+	/**
+	 * 员工业绩页面初始化的方法
+	 * @return {[type]} [description]
+	 */
+	employeePerforObj.initModule=function(){
+		employeePerforObj.listemployeePerfor();
+	};
 
-		//产品销量页面list
-		employeePerforObj.listemployeePerfor=function(startTime,endTime,status){
-		   if (employeePerforObj.$searchArea && arguments.length===1) {
-		   		//初始化页面后可以获取页面参数
-		   		employeePerforObj.allData.startTime=employeePerforObj.$tab.find("input[name=startTime]").val();
-		   		employeePerforObj.allData.endTime=employeePerforObj.$tab.find('input[name=endTime]').val();
-		   		employeePerforObj.allData.employeeDeptId =employeePerforObj.$tab.find('button').data('value');
-		   };
+	//产品销量页面list
+	employeePerforObj.listemployeePerfor=function(){
 
+	    var html=listMainTemplate();
+		addTab(menuKey,"员工业绩",html);
+		employeePerforObj.initJQueryDateObj();
+		//初始化页面绑定事件
+		employeePerforObj.init_event();
+		employeePerforObj.first = true;
+    };
 
-		//产品销量列表查询
-		/*$.ajax({
-			url:""+APP_ROOT+"back/guide.do?method=listGuide&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-			type:"POST",
-			data: {
-				pageNo: page,
-				startTime: employeePerforObj.allData.startTime,
-				endTime: employeePerforObj.allData.endTime,
-				status : employeePerforObj.allData.status
-				sortType: 'auto'
-			},
-			success:function(data){
+	/**
+	 * 初始化JQuery对象&&页面控件
+	 * @return {[type]} [description]
+	 */
+	employeePerforObj.initJQueryDateObj=function(){
+		  //初始化Jquery对象
+		  employeePerforObj.$tab=$('#' + tabId);//最大区域模块
+		  employeePerforObj.$searchArea=employeePerforObj.$tab.find('.T-search-area');//搜索模块区域
+		  //初始化页面控件
+		  employeePerforObj.datepicker(employeePerforObj.$tab);
+	};
 
-			}
-		});*/
  
-		   var html=listTemplate();
-	       addTab(menuKey,"员工业绩",html);
+    /**
+     * 初始化页面绑定事件
+     * @return {[type]} [description]
+     */
+    employeePerforObj.init_event=function(){
+	  
 
-	       //初始化JQuery对象
-	       employeePerforObj.$tab=$('#' + tabId);//最大区域模块
-	       employeePerforObj.$searchArea=employeePerforObj.$tab.find('.T-search-area');//搜索模块区域
+    	//搜索按钮绑定事件
+    	employeePerforObj.$tab.find('.T-employeePerfor-search').on('click', function(event) {
+    		event.preventDefault();
+    		//初始化页面后可以获取页面参数
+		   	var startTime=employeePerforObj.$tab.find("input[name=startTime]").val(),
+		   	    endTime=employeePerforObj.$tab.find('input[name=endTime]').val(),
+		   	    type =employeePerforObj.$tab.find('button').attr('data-value');//1
+	   		employeePerforObj.getListEmpDept(startTime,endTime,type);
 
-	       //初始化页面控件
-	       employeePerforObj.datepicker(employeePerforObj.$tab);
-         
-	       //初始化页面绑定事件
-	       employeePerforObj.init_event();
-	       	// 绑定翻页组件
-			/*laypage({
-			    cont: GuideResource.$tab.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
-			    pages: data.totalPage, //总页数
-			    curr: (page + 1),
-			    jump: function(obj, first) {
-			    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-			    		GuideResource.listGuide(obj.curr -1);
-			    	}
-			    }
-			});*/
+    	}); 	
+    	//trigger事件
+    	employeePerforObj.$tab.find('.T-employeePerfor-search').trigger('click');
 
+    	//员工部门之间选项切换
+		employeePerforObj.$tab.find('.T-select-employeerDept').on('click', 'a', function(event) {
+			event.preventDefault();
+			/* Act on the event */
+			var $that=$(this);
+			$that.closest('ul').prev().attr('data-value', $that.data('value')).children('span').text($that.text());
+			$that.closest('ul').prev().attr('data-value');
+			if ($that.closest('ul').prev().attr('data-value')==1) {
+				employeePerforObj.$tab.find('.T-deptPerfor-list').addClass('hide');
+				employeePerforObj.$tab.find('.T-employeePerfor-list').removeClass('hide');
+				employeePerforObj.getListEmpDept("","",1);
+			} else{
+				employeePerforObj.$tab.find('.T-deptPerfor-list').removeClass('hide');
+				employeePerforObj.$tab.find('.T-employeePerfor-list').addClass('hide');
+				employeePerforObj.getListEmpDept("","",2);
 
-		};
- 
-	    //初始化页面绑定事件
-	    employeePerforObj.init_event=function(){
-	    	//搜索按钮绑定事件
-	    	employeePerforObj.$tab.find('.T-employeePerfor-search').on('click', function(event) {
-	    		event.preventDefault();
-	    		/* Act on the event */
-	    		//产品销量列表查询
-	    		employeePerforObj.listemployeePerfor(0);
-	    		alert("click Search....... ");
-	    	});
+			};
+			
+		});
+    };
 
-	    	//员工部门之间选项切换
-			employeePerforObj.$tab.find('.T-select-employeerDept').on('click', 'a', function(event) {
-				event.preventDefault();
-				/* Act on the event */
-				var $that=$(this);
-				$that.closest('ul').prev().data('value', $that.data('value')).children('span').text($that.text());
-			});
-	    };
+    employeePerforObj.getListEmpDept=function(startTime,endTime,type){
+    		employeePerforObj.$searchParam.startTime=startTime;
+    		employeePerforObj.$searchParam.endTime=endTime;
+    		employeePerforObj.$searchParam.type=type;
+	
+	    	if (type==1) {
+	    		$.ajax({
+					url : employeePerforObj.url("findTotal","view"),
+					type : "POST",
+					data : "searchParam="+encodeURIComponent(JSON.stringify(employeePerforObj.$searchParam)),
+					success : function(data){
+						var result = showDialog(data);
+						if(result){
+						   var html=listEmployTemplate(data);
+						   employeePerforObj.$tab.find('.T-employeePerfor-list').html(html);
+						}
+					}
+				});
 
-	    /**
-	     * 产品销量统计查询
-	     * @return {[type]} [description]
-	     */
-	    employeePerforObj.listSaleProTotal=function(){
-	    	alert("click listSaleProTotal....... ");
-	    	//产品销量统计查询	
-			/*$.ajax({
-				url:""+APP_ROOT+"back/guide.do?method=listGuide&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-				type:"POST",
-				data: {
-					pageNo: page,
-					startTime: employeePerforObj.allData.startTime,
-					endTime: employeePerforObj.allData.endTime,
-					status : employeePerforObj.allData.status
-					sortType: 'auto'
-			    },
-				success:function(data){
+	    	}
+	    	if(type==2){
+	    		$.ajax({
+					url : employeePerforObj.url("findTotalByBusinessGroup","view"),
+					type : "POST",
+					data : "searchParam="+encodeURIComponent(JSON.stringify(employeePerforObj.$searchParam)),
+					success : function(data){
+						var result = showDialog(data);
+						if(result){
+						   var html=listDeptTemplate(data);
+						   employeePerforObj.$tab.find('.T-deptPerfor-list').html(html);
+						   
+						}
+					}
 
-				}
-			});*/
-	    };
+				});
+	    	};
+    };
+
 
 	//时间控件初始化
 	employeePerforObj.datepicker = function($obj){
@@ -133,14 +143,10 @@ define(function(require, exports) {
 			language: 'zh-CN'
 		})
 	};
-	//获取控件中的值
-	employeePerforObj.getValue = function($obj,name){
-		var value = $obj.find("[name="+ name +"]").val();
-		    return value;
-	};
+
 	//ajax中的url
 	employeePerforObj.url = function(method,operation){
-		var url = ''+APP_ROOT+'back/hotel.do?method='+method+'&token='+$.cookie('token')+'&menuKey='+menuKey+'&operation='+operation+'';
+		var url = ''+APP_ROOT+'back/performanceOfUser.do?method='+method+'&token='+$.cookie('token')+'&menuKey='+menuKey+'&operation='+operation+'';
 		return url;
 	}
 
