@@ -61,7 +61,8 @@ function addTab(tabId,tabName,html){
 			
 			$tabList.find('.active').data('prev-tab', $current_li);
 		}, 50);
-
+	
+		Tools.justifyTab();
 	}
 	$("#tabContent .tab-pane-menu").removeClass("active");
 	if($("#tab-"+tabId+"-content").length > 0){
@@ -1627,9 +1628,11 @@ Tools.justifyTab = function() {
 			tab_len = $last.position().left + $last.width();
 
 		if (viewWidth > tab_len) {
+			// 当内容长度小于视口长度时
 			$tabList.css('margin-left', leftBarWidth + 'px');
-		} else if ((viewWidth - leftMargin) > tab_len) {
-			$tabList.css('margin-left', (viewWidth - tab_len + leftBarWidth) + 'px');
+		} else if ((tab_len + leftMargin) < viewWidth) { 
+			// 内容大于视口长度，且内容右边出现空白
+			$tabList.css('margin-left', (viewWidth - tab_len ) + 'px');
 		}
 	}
 
