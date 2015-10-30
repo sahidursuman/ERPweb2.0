@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":127,"md5":"ff3703255d8dc9789b86aaefcc5d57f4"}*/
+/*TMODJS:{"debug":true,"version":128,"md5":"ff3703255d8dc9789b86aaefcc5d57f4"}*/
 define(function(require) {
     return require("../../../template")("arrange/arrangeTransfer/view/listTransIn", function($data, $filename) {
         try {

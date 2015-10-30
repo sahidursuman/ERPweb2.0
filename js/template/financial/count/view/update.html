@@ -6,7 +6,8 @@
                     <label class="col-sm-3" style="font-weight: bold;">线路：{{tripPlan.lineProduct.name}}</label>
                     <label class="col-sm-2" style="font-weight: bold;">类别：{{tripPlan.lineProduct.type}}</label>
                     <label class="col-sm-2" style="font-weight: bold;">应用范围：{{if tripPlan.lineProduct.customerType == 1}}团体{{else if tripPlan.lineProduct.customerType == 0}}散客{{/if}}</label>
-                    <label class="col-sm-2" style="font-weight: bold;">天数：{{tripPlan.lineProduct.days}}</label>
+                    <label class="col-sm-3" style="font-weight: bold;">天数：<span class="T-ProductDays" style="font-weight: bold;">{{tripPlan.lineProduct.days}}</span></label>
+                    
                 </div>
             </div>
         </form> 
@@ -15,7 +16,7 @@
             <div class="search-area  editable editable-click" style="margin-top: 10px;cursor: default;height: 30px">
                 <div class="form-group">
                     <label class="col-sm-3" style="font-weight: bold;">团号：{{tripPlan.tripNumber}}</label>
-                    <label class="col-sm-2" style="font-weight: bold;">出团日期：{{tripPlan.startTime | dateFormat:'yyyy-MM-dd'}}</label>
+                    <label class="col-sm-3" style="font-weight: bold;">出团日期:<span style="font-weight: bold;" name="startTime_Choose">{{tripPlan.startTime | dateFormat:'yyyy-MM-dd'}}</span></label>
                     <label class="col-sm-2" style="font-weight: bold;">完团日期：{{tripPlan.endTime | dateFormat:'yyyy-MM-dd'}}</label>
                     <label class="col-sm-2" style="font-weight: bold;">团队人数：{{tripPlan.touristAdultCount}}大{{tripPlan.touristChildCount}}小</label>
                 </div>
@@ -27,7 +28,7 @@
                     <label class="col-sm-3" style="font-weight: bold;">导游：{{if tripPlan.guide != null}}{{tripPlan.guide.realname}}{{/if}}</label>
                     <label class="col-sm-2" style="font-weight: bold;">全陪：{{tripPlan.accompanyGuideName}}</label>
                     <label class="col-sm-2" style="font-weight: bold;"></label>
-                    <label class="col-sm-2" style="font-weight: bold;"></label>
+                    <label class="col-sm-2" style="font-weight: bold;"></label> 
                 </div>
             </div>
         </form>
@@ -179,7 +180,7 @@
             </li>
             {{/if}}
         </ul>
-        <div class="tab-content financial-count-update-update-tab" style="position: relative;top: -2px">
+        <div class="tab-content financial-count-update-update-tab">
             <!-- 团款 -->
             <div id="financial-count-update-money" class="tab-pane fade active in">
                 <table class="table table-striped table-bordered table-hover">
@@ -214,28 +215,28 @@
                 <table class="table table-striped table-bordered table-hover">
                     <thead>
                     <tr>
-                        <th class="th-border" colspan="6">打单</th>
-                        <th class="th-border" colspan="2">社佣</th>
-                        <th class="th-border" colspan="2">导佣</th>
-                        <th class="th-border" colspan="2">人数返佣</th>
-                        <th class="th-border" colspan="2">停车返佣</th>
-                        <th class="th-border" rowspan="2">导游报账备注</th>
+                        <th colspan="6">打单</th>
+                        <th colspan="2">社佣</th>
+                        <th colspan="2">导佣</th>
+                        <th colspan="2">人数返佣</th>
+                        <th colspan="2">停车返佣</th>
+                        <th rowspan="2">导游报账备注</th>
                     </tr>
                     <tr>
-                      <th class="th-border">时间</th>
-                      <th class="th-border">购物店</th>
-                      <th class="th-border">商品</th>
-                      <th class="th-border">金额</th>
-                      <th class="th-border">单据</th>
-                      <th class="th-border">总金额</th>
-                      <th class="th-border">比例%</th>
-                      <th class="th-border">返佣</th>
-                      <th class="th-border">比例%</th>
-                      <th class="th-border">返佣</th>
-                      <th class="th-border">元/人</th>
-                      <th class="th-border">返佣</th>
-                      <th class="th-border">元/车</th>
-                      <th class="th-border">返佣</th>
+                      <th>时间</th>
+                      <th>购物店</th>
+                      <th>商品</th>
+                      <th>金额</th>
+                      <th>单据</th>
+                      <th>总金额</th>
+                      <th>比例%</th>
+                      <th>返佣</th>
+                      <th>比例%</th>
+                      <th>返佣</th>
+                      <th>元/人</th>
+                      <th>返佣</th>
+                      <th>元/车</th>
+                      <th>返佣</th>
                     </tr></thead>
                     <tbody id="shopping"> 
                     {{each dayList as day}}
@@ -284,31 +285,31 @@
                 <table class="table table-striped table-bordered table-hover">
                     <thead>
                     <tr>
-                        <th class="th-border" colspan="12">消费</th>
-                        <th class="th-border" colspan="2">社佣</th>
-                        <th class="th-border" colspan="2">导佣</th>
-                        <th class="th-border" colspan="2">人数返佣</th>
-                        <th class="th-border" rowspan="2">导游报账备注</th>
+                        <th colspan="12">消费</th>
+                        <th colspan="2">社佣</th>
+                        <th colspan="2">导佣</th>
+                        <th colspan="2">人数返佣</th>
+                        <th rowspan="2">导游报账备注</th>
                     </tr>
                     <tr>
-                      <th class="th-border">时间</th>
-                      <th class="th-border">自费商家</th>
-                      <th class="th-border">项目</th>
-                      <th class="th-border">单价</th>
-                      <th class="th-border">底价</th>
-                      <th class="th-border">数量</th>
-                      <th class="th-border">优惠</th>
-                      <th class="th-border">应付</th>
-                      <th class="th-border">已付</th>
-                      <th class="th-border">导付</th>
-                      <th class="th-border">现收</th>
-                      <th class="th-border">单据</th>
-                      <th class="th-border">比例%</th>
-                      <th class="th-border">返佣</th>
-                      <th class="th-border">比例%</th>
-                      <th class="th-border">返佣</th>
-                      <th class="th-border">元/人</th>
-                      <th class="th-border">返佣</th>
+                      <th>时间</th>
+                      <th>自费商家</th>
+                      <th>项目</th>
+                      <th>单价</th>
+                      <th>底价</th>
+                      <th>数量</th>
+                      <th>优惠</th>
+                      <th>应付</th>
+                      <th>已付</th>
+                      <th>导付</th>
+                      <th>现收</th>
+                      <th>单据</th>
+                      <th>比例%</th>
+                      <th>返佣</th>
+                      <th>比例%</th>
+                      <th>返佣</th>
+                      <th>元/人</th>
+                      <th>返佣</th>
                     </tr></thead>
                     <tbody id="selfPay">
                     {{each dayList as day}}
@@ -369,30 +370,41 @@
             </div>
 
             <!-- 其他收入 -->
-            <div id="financial-count-update-other-incoming" class="tab-pane fade">
+            <div id="financial-count-update-other-incoming" class="tab-pane fade T-income">
+                <div class="ui-sortable-handle widget-container-col">
+                    <h5 class="title-size">
+                        <i class="ace-icon fa fa-medkit"></i> 其他收入
+                        <a href="javascript:void(0)" class="T-addOtherIn">
+                            <button class="btn btn-sm btn-success T-add" style="margin-left: 20px">
+                                <i class="ace-icon fa fa-plus"></i>
+                                新增
+                            </button>
+                        </a>
+                    </h5>
+                </div>
                 <table class="table table-striped table-bordered table-hover">
                     <thead>
                     <tr>
-                        <th class="th-border">时间</th>
-                        <th class="th-border">项目</th>
-                        <th class="th-border">单价</th>
-                        <th class="th-border">数量</th>
-                        <th class="th-border">金额</th>
-                        <th class="th-border">单据</th>
-                        <th class="th-border">导游报账备注</th>
+                        <th>时间</th>
+                        <th>项目</th>
+                        <th>单价</th>
+                        <th>数量</th>
+                        <th>金额</th>
+                        <th>单据</th>
+                        <th>导游报账备注</th>
                     </tr>
                     </thead>
                     <tbody id="otherIn">
                     {{each arrangeIncomePaymentList as otherInCome}}
                     {{if otherInCome != null}}
                     <tr otherInId="{{otherInCome.id}}" otherIn="{{otherInCome.id}}">
-                        <td>第{{otherInCome.whichDay}}天</td>
+                        <td whichDay="{{otherInCome.whichDay}}">第{{otherInCome.whichDay}}天</td>
                         <td><input style="width:90px;" type="text" name="title" reset="true" value="{{otherInCome.title}}" old="{{otherInCome.title}}" maxlength="100"/></td>
                         <td><input style="width:90px;" type="text" name="price" value="{{otherInCome.price}}" old="{{otherInCome.price}}" maxlength="11"/></td>
                         <td><input style="width:90px;" type="text" name="count" value="{{otherInCome.count}}" old="{{otherInCome.count}}" maxlength="11"/></td>
                         <td><span class="needPayMoney"></span></td>
                         <td><a href="javascript:void(0);" url="{{otherInCome.billImage}}" class="btn-view">查看</a></td>
-                        <td>{{otherInCome.remark}}</td>
+                        <td><input type="text" value="{{otherInCome.billRemark}}" name="billRemark"/></td>
                     </tr>
                     {{/if}}
                     {{/each}}
@@ -468,18 +480,18 @@
                 <table class="table table-striped table-bordered table-hover">
                     <thead>
                         <tr>
-                            <th class="th-border">时间</th>
-                            <th class="th-border">餐厅</th>
-                            <th class="th-border">类型</th>
-                            <th class="th-border">餐标</th>
-                            <th class="th-border">人数</th>
-                            <th class="th-border">优惠</th>
-                            <th class="th-border">应付</th>
-                            <th class="th-border">已付</th>
-                            <th class="th-border">导付</th>
-                            <th class="th-border">单据</th>
-                            <th class="th-border">差额</th>
-                            <th class="th-border">导游报账备注</th>
+                            <th>时间</th>
+                            <th>餐厅</th>
+                            <th>类型</th>
+                            <th>餐标</th>
+                            <th>人数</th>
+                            <th>优惠</th>
+                            <th>应付</th>
+                            <th>已付</th>
+                            <th>导付</th>
+                            <th>单据</th>
+                            <th>差额</th>
+                            <th>导游报账备注</th>
                         </tr>
                     </thead>
                     <tbody id="restaurant"> 
@@ -529,18 +541,18 @@
                 <table class="table table-striped table-bordered table-hover">
                     <thead>
                     <tr>
-                        <th class="th-border">时间</th>
-                        <th class="th-border">酒店</th>
-                        <th class="th-border">房型</th>
-                        <th class="th-border">单价</th>
-                        <th class="th-border">间数</th>
-                        <th class="th-border">优惠</th>
-                        <th class="th-border">应付</th>
-                        <th class="th-border">已付</th>
-                        <th class="th-border">导付</th>
-                        <th class="th-border">单据</th>
-                        <th class="th-border">差额</th>
-                        <th class="th-border">导游报账备注</th>
+                        <th>时间</th>
+                        <th>酒店</th>
+                        <th>房型</th>
+                        <th>单价</th>
+                        <th>间数</th>
+                        <th>优惠</th>
+                        <th>应付</th>
+                        <th>已付</th>
+                        <th>导付</th>
+                        <th>单据</th>
+                        <th>差额</th>
+                        <th>导游报账备注</th>
                     </tr> 
                     </thead>
                     <tbody id="hotelArrange">
@@ -590,18 +602,18 @@
                 <table class="table table-striped table-bordered table-hover">
                     <thead>
                     <tr>
-                        <th class="th-border">时间</th>
-                        <th class="th-border">景区</th>
-                        <th class="th-border">收费项目</th>
-                        <th class="th-border">单价</th>
-                        <th class="th-border">数量</th>
-                        <th class="th-border">优惠</th>
-                        <th class="th-border">应付</th>
-                        <th class="th-border">已付</th>
-                        <th class="th-border">导付</th>
-                        <th class="th-border">单据</th>
-                        <th class="th-border">差额</th>
-                        <th class="th-border">导游报账备注</th>
+                        <th>时间</th>
+                        <th>景区</th>
+                        <th>收费项目</th>
+                        <th>单价</th>
+                        <th>数量</th>
+                        <th>优惠</th>
+                        <th>应付</th>
+                        <th>已付</th>
+                        <th>导付</th>
+                        <th>单据</th>
+                        <th>差额</th>
+                        <th>导游报账备注</th>
                     </tr>
                     </thead>
                     <tbody id="scenic">
@@ -651,21 +663,21 @@
                 <table class="table table-striped table-bordered table-hover">
                     <thead>
                     <tr>
-                        <th class="th-border">票务商家</th>
-                        <th class="th-border">类型</th>
-                        <th class="th-border">日期</th>
-                        <th class="th-border">出发地</th>
-                        <th class="th-border">目的地</th>
-                        <th class="th-border">座席</th>
-                        <th class="th-border">单价</th>
-                        <th class="th-border">数量</th>
-                        <th class="th-border">优惠</th>
-                        <th class="th-border">应付</th>
-                        <th class="th-border">已付</th>
-                        <th class="th-border">导付</th>
-                        <th class="th-border">单据</th>
-                        <th class="th-border">差额</th>
-                        <th class="th-border">导游报账备注</th>
+                        <th>票务商家</th>
+                        <th>类型</th>
+                        <th>日期</th>
+                        <th>出发地</th>
+                        <th>目的地</th>
+                        <th>座席</th>
+                        <th>单价</th>
+                        <th>数量</th>
+                        <th>优惠</th>
+                        <th>应付</th>
+                        <th>已付</th>
+                        <th>导付</th>
+                        <th>单据</th>
+                        <th>差额</th>
+                        <th>导游报账备注</th>
                     </tr>
                     </thead>
                     <tbody id="ticket">
@@ -709,23 +721,34 @@
 
             <!-- 其他支出 -->
             <div id="financial-count-update-otherpay" class="tab-pane fade">
+                <div class="ui-sortable-handle widget-container-col">
+                    <h5 class="title-size">
+                        <i class="ace-icon fa fa-medkit"></i> 其他支出
+                        <a href="javascript:void(0)" class="T-addOtherOut">
+                            <button class="btn btn-sm btn-success T-add" style="margin-left: 20px">
+                                <i class="ace-icon fa fa-plus"></i>
+                                新增
+                            </button>
+                        </a>
+                    </h5>
+                </div>
                 <table class="table table-striped table-bordered table-hover">
                     <thead>
                     <tr>
-                        <th class="th-border">时间</th>
-                        <th class="th-border">项目</th>
-                        <th class="th-border">单价</th>
-                        <th class="th-border">数量</th>
-                        <th class="th-border">优惠</th>
-                        <th class="th-border">应付</th>
-                        <th class="th-border">已付</th>
-                        <th class="th-border">导付</th>
-                        <th class="th-border">单据</th>
-                        <th class="th-border">差额</th>
-                        <th class="th-border">导游报账备注</th>
+                        <th>时间</th>
+                        <th>项目</th>
+                        <th>单价</th>
+                        <th>数量</th>
+                        <th>优惠</th>
+                        <th>应付</th>
+                        <th>已付</th>
+                        <th>导付</th>
+                        <th>单据</th>
+                        <th>差额</th>
+                        <th>导游报账备注</th> 
                     </tr>
                     </thead>
-                    <tbody id="other">
+                    <tbody id="other"> 
                     {{each dayList as day}}
                     {{if day.otherArrange != null}}
                     {{each day.otherArrange as arrange index}}
@@ -733,9 +756,9 @@
                     <tr otherArrangeId="{{arrange.id}}">
                         <td>第{{arrange.whichDay}}天</td>
                         <td>{{arrange.name}}</td>
-                        <td>{{arrange.price}}<input type="hidden" name="price" value="{{arrange.price}}" /></td>
+                        <td><input type="text" name="realPrice" value="{{arrange.price}}" /></td>
                         <td><input style="width:90px;" type="text" name="realCount" value="{{arrange.realCount}}" old="{{arrange.realCount}}" maxlength="5"/></td>
-                        <td>{{arrange.reduceMoney}}<input type="hidden" name="reduceMoney" value="{{arrange.reduceMoney}}" /></td>
+                        <td><input type="text" name="reduceMoney" value="{{arrange.reduceMoney}}" /></td>
                         <td><span class="needPayMoney">{{arrange.needPayMoney}}</span></td>
                         <td>{{arrange.payedMoney}}</td>
                         <td>
@@ -744,7 +767,7 @@
                             <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" /></td>
                         <td><a href="javascript:void(0);" url="{{arrange.billImage}}" class="btn-view">查看</a></td>
                         <td><span class="difference"></span></td>
-                        <td>{{arrange.billRemark}}</td>
+                        <td><input value="{{arrange.billRemark}}" name="billRemark" maxlength="1000" /></td>
                     </tr>
                     {{/if}}
                     {{/each}}

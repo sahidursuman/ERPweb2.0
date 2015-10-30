@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":180,"md5":"cd1212ae186455e1eeac330f4c185114"}*/
+/*TMODJS:{"debug":true,"version":181,"md5":"cd1212ae186455e1eeac330f4c185114"}*/
 define(function(require) {
     return require("../../../template")("resource/shop/view/update", function($data, $filename) {
         try {

@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":361,"md5":"7f9578cf2aef7ae01b51723639b2aeaa"}*/
+/*TMODJS:{"debug":true,"version":363,"md5":"7f9578cf2aef7ae01b51723639b2aeaa"}*/
 define(function(require) {
     return require("../../../template")("financial/count/view/arrangeDetail", function($data, $filename) {
         try {
