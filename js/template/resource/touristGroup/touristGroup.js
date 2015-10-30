@@ -195,7 +195,6 @@ define(function(require, exports) {
 
 						touristGroup.getPartnerAgencyList($("#tab-"+menuKey+"-content .choosePartnerAgency"));
 						touristGroup.getPartnerAgencySearchList($("#tab-"+menuKey+"-content"));
-						touristGroup.getLineProductList($(".touristGroupSearchForm select[name=lineProductId]"),data.searchParam.lineProductId);
 						touristGroup.getCreatorUserList($("#tab-"+menuKey+"-content"),data.searchParam.creator);
 						
 						touristGroup.initList(data);
