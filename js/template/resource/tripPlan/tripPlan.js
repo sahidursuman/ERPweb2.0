@@ -360,30 +360,13 @@ define(function(require, exports) {
 		},
 		//添加资源 
 		addResource : function(){
-			$("#tripPlan_addPlan_insurance .T-addInsuranceResource").off('click').on("click",{function : Tools.addInsurance , name : "insuranceName" , id : "insuranceId"}, tripPlan.addResourceFunction);
-			$("#tripPlan_addPlan_restaurant .T-addRestaurantResource").off('click').on("click",{function : Tools.addRestaurant, name : "restaurantName" , id : "restaurantId" , managerName : "managerName" , mobileNumber : "mobileNumber"}, tripPlan.addResourceFunction);
-			$("#tripPlan_addPlan_hotel .T-addHotelResource").off('click').on("click",{function : Tools.addHotel, name : "name" , id : "hotelId" , managerName : "managerName" , mobileNumber : "mobileNumber"}, tripPlan.addResourceFunction);
-			$("#tripPlan_addPlan_scenic .T-addScenicResource").off('click').on("click",{function : Tools.addScenic, name : "name" , id : "scenicId"}, tripPlan.addResourceFunction);
-			$("#tripPlan_addPlan_shop .T-addShopResource").off('click').on("click",{function : Tools.addShop, name : "name" , id : "shopId" , managerName : "managerName" , mobileNumber : "mobileNumber"}, tripPlan.addResourceFunction);
-			$("#tripPlan_addPlan_selfPay .T-addSelfPayResource").off('click').on("click",{function : Tools.addSelfPay, name : "name" , id : "selfPayId" , managerName : "managerName" , mobileNumber : "mobileNumber"}, tripPlan.addResourceFunction);
-			$("#tripPlan_addPlan_ticket .T-addTicketResource").off('click').on("click",{function : Tools.addTicket, name : "name" , id : "tickeId"}, tripPlan.addResourceFunction);
-		},
-		//添加资源函数
-		addResourceFunction : function(e){
-			var $this = $(this),
-				$parents = $(this).closest('tr'),
-				name = e.data.name,
-				id = e.data.id,
-				managerName = e.data.managerName,
-				mobileNumber = e.data.mobileNumber,
-				$function = e.data.function,
-				fn = function (data){
-					if (!!data.name && !!name) {$parents.find('input[name='+name+']').val(data.name);}
-					if (!!data.id && !!id) {$parents.find('input[name='+id+']').val(data.id);}
-					if (!!data.managerName && !!managerName) {$parents.find('input[name='+managerName+']').val(data.managerName);}
-					if (!!data.mobileNumber && !!mobileNumber) {$parents.find('input[name='+mobileNumber+']').val(data.mobileNumber);}
-				}
-			$function(fn);
+			$("#tripPlan_addPlan_insurance .T-addInsuranceResource").off('click').on("click",{function : KingServices.addInsurance , name : "insuranceName" , id : "insuranceId"}, KingServices.addResourceFunction);
+			$("#tripPlan_addPlan_restaurant .T-addRestaurantResource").off('click').on("click",{function : KingServices.addRestaurant, name : "restaurantName" , id : "restaurantId" , managerName : "managerName" , mobileNumber : "mobileNumber"}, KingServices.addResourceFunction);
+			$("#tripPlan_addPlan_hotel .T-addHotelResource").off('click').on("click",{function : KingServices.addHotel, name : "name" , id : "hotelId" , managerName : "managerName" , mobileNumber : "mobileNumber"}, KingServices.addResourceFunction);
+			$("#tripPlan_addPlan_scenic .T-addScenicResource").off('click').on("click",{function : KingServices.addScenic, name : "name" , id : "scenicId"}, KingServices.addResourceFunction);
+			$("#tripPlan_addPlan_shop .T-addShopResource").off('click').on("click",{function : KingServices.addShop, name : "name" , id : "shopId" , managerName : "managerName" , mobileNumber : "mobileNumber"}, KingServices.addResourceFunction);
+			$("#tripPlan_addPlan_selfPay .T-addSelfPayResource").off('click').on("click",{function : KingServices.addSelfPay, name : "name" , id : "selfPayId" , managerName : "managerName" , mobileNumber : "mobileNumber"}, KingServices.addResourceFunction);
+			$("#tripPlan_addPlan_ticket .T-addTicketResource").off('click').on("click",{function : KingServices.addTicket, name : "name" , id : "tickeId"}, KingServices.addResourceFunction);
 		},
 		//添加保险安排
 		addInsurance : function(e){
