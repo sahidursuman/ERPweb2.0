@@ -521,7 +521,7 @@
                     <tr restaurantArrangeId="{{arrange.id}}" restaurantId="{{if arrange.restaurant != null}}{{arrange.restaurant.id}}{{/if}}" restaurantStandardId="{{if arrange.restaurantStandard != null}}{{arrange.restaurantStandard.id}}{{/if}}">
                         {{if index == 0}}<td rowspan="{{arrangeList.restaurantArrangeList.length}}">第{{arrange.whichDay}}天</td>{{/if}}
                         {{if index == 0}}<td rowspan="{{arrangeList.restaurantArrangeList.length}}">{{if arrange.restaurant != null}}{{arrange.restaurant.name}}{{/if}}</td>{{/if}}
-                        <td>{{if arrange.restaurantStandard != null}}{{arrange.restaurantStandard.type}}{{/if}}</td>
+                        <td>{{arrange.type}}</td> 
                         <td>{{arrange.price}}<input type="hidden" name="price" value="{{arrange.price}}" /></td>
                         <td><input style="width:90px;" type="text" name="realCount" value="{{arrange.realCount}}" old="{{arrange.realCount}}" maxlength="5"/></td>
                         <td>{{arrange.reduceMoney}}<input type="hidden" name="reduceMoney" value="{{arrange.reduceMoney}}" /></td>
