@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":48,"md5":"f6c27a10ce471b42b0371185e85a2586"}*/
+/*TMODJS:{"debug":true,"version":42,"md5":"f6c27a10ce471b42b0371185e85a2586"}*/
 define(function(require) {
     return require("../../../template")("financial/totalProfit/view/list", function($data, $filename) {
         try {

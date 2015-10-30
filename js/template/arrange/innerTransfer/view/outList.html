@@ -26,15 +26,15 @@
 			<td>{{if list.status == 0}}<span style="color:#D2691E;">未确认</span>{{else if list.status == 1}}<span style="color: green;">已确认</span>{{else if list.status == 2}}<span style="color: red;">已拒收</span>{{/if}}</td>
 			<td>
 				<div class="hidden-sm hidden-xs btn-group" style="width:120px;">
-					<a class="cursor {{if list.status != 1}}btn-TransferOut-edit{{/if}}" {{if list.status == 1}}style="color:#bbb"{{/if}}>
-						编辑</a>
-
-	                <a href="" class="cursor"> |</a>
+					<a class="cursor {{if list.status != 1}}btn-TransferOut-edit{{/if}} R-right" data-right="1340002" {{if list.status == 1}}style="color:#bbb"{{/if}}>
+						编辑
+						<label style="padding-left:10px;">|</label>
+					</a>
 					<a class="cursor  btn-TransferOut-view">
 						查看
 					</a>
-					<a href="" class="cursor"> |</a>
-					<a class="cursor {{if list.status != 1}}btn-TransferOut-delete{{/if}}" {{if list.status == 1}}style="color:#bbb"{{/if}}>
+					<a class="cursor {{if list.status != 1}}btn-TransferOut-delete{{/if}} R-right" data-right="1340003" {{if list.status == 1}}style="color:#bbb"{{/if}}>
+						<label class="padding-right20">|</label>
 						撤销
 					</a>
 				</div>  
