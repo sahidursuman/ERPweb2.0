@@ -199,7 +199,10 @@ define(function(require, exports) {
                             var $container = $(".T-update-container");
 
                             //初始化地区
-							KingServices.provinceCity($container,data.restaurant.province.id,data.restaurant.city.id,data.restaurant.district.id);
+                            if(data.restaurant.province != null){var provinceId = data.restaurant.province.id};
+                            if(data.restaurant.city != null){var cityId = data.restaurant.city.id};
+                            if(data.restaurant.district != null){var districtId = data.restaurant.district.id};
+							KingServices.provinceCity($container,cityId,districtId);
                             restaurant.initStandard($container);
 
                             //给提交按钮绑定事件 mealValidator validator
