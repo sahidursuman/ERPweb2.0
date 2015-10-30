@@ -1412,7 +1412,7 @@ define(function(require, exports) {
 
 							// 判断中转
 							if (isNeedArriveService || isNeedBus || isNeedLeaveService) {
-								Tools.updateTransit(data.touristGroupId);
+								KingServices.updateTransit(data.touristGroupId);
 							}
 						});
 					}

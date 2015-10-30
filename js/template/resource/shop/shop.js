@@ -435,13 +435,13 @@ define(function(require, exports) {
 				success:function(data){
 					var result = showDialog(data);
 					if(result){
-						data.shop = JSON.parse(data.shop);
-						formData.id = data.shop.id;
 						showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
 							if (type === 1) {
 								shop.listShop(shop.currentPage);
 							} else {
 								if (typeof fn === "function") {
+									data.shop = JSON.parse(data.shop);
+									formData.id = data.shop.id;
 									fn(formData);
 								}else{
 									shop.listShop(0,"","");

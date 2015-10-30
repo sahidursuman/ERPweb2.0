@@ -150,7 +150,7 @@ define(function(require, exports) {
 	/**
 	 * 添加导游
 	 */
-	GuideResource.addGuide = function(){
+	GuideResource.addGuide = function(fn){
 		var html = addTemplate();
 		var addGuideLayer = layer.open({
 		    type: 1,
@@ -178,7 +178,8 @@ define(function(require, exports) {
 					if($container.find(".T-guide-status").is(":checked") == true){
 						status = 1;
 					}
-					var form = $container.children('.T-form').serialize()+"&status="+status+"";
+					var form = $container.children('.T-form').serialize()+"&status="+status+"",
+						formData = $container.children('.T-form').serializeJson();
 					
 					$.ajax({
 						url:""+APP_ROOT+"back/guide.do?method=addGuide&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=add",
@@ -189,8 +190,15 @@ define(function(require, exports) {
 							var result = showDialog(data);
 							if(result){
 								layer.close(addGuideLayer);
-								showMessageDialog($( "#confirm-dialog-message" ),data.message);
-								GuideResource.listGuide(0);
+								showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+									if (typeof fn === "function") {
+										data.guide = JSON.parse(data.guide);
+										formData.id = data.guide.id;
+										fn(formData);
+									}else{
+										GuideResource.listGuide(0);
+									}
+								});
 							}
 						}
 					});

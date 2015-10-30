@@ -157,11 +157,11 @@ define(function(require, exports) {
 						success:function(data){
 							var result = showDialog(data);
 							if(result){
-								data.ticket = JSON.parse(data.ticket);
-								formData.id = data.ticket.id;
 								layer.close(addTicketLayer);
 								showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
 									if (typeof fn === "function") {
+										data.ticket = JSON.parse(data.ticket);
+										formData.id = data.ticket.id;
 										fn(formData);
 									}else{
 										TicketResource.listTicket(0,"","");
