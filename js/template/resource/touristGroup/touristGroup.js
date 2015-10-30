@@ -267,12 +267,12 @@ define(function(require, exports) {
 			});
 			//初始化路线    	
 			if(data.searchParam == '{}'){
-				touristGroup.getLineProductList($(".touristGroupSearchForm select[name=lineProductId]"));
+				//touristGroup.getLineProductList($(".touristGroupSearchForm select[name=lineProductId]"));
 				//touristGroup.getPartnerAgencyList($(".touristGroupSearchForm input[name=fromPartnerAgency]"));
 				touristGroup.getCreatorUserList($(".touristGroupSearchForm select[name=userId]"));
 			}
 			else{
-				touristGroup.getLineProductList($(".touristGroupSearchForm select[name=lineProductId]"),data.searchParam.lineProductId);
+				//touristGroup.getLineProductList($(".touristGroupSearchForm select[name=lineProductId]"),data.searchParam.lineProductId);
 				//touristGroup.getPartnerAgencySearchList($(".touristGroupSearchForm select[name=partnerAgencyId]"),data.searchParam.fromPartnerAgencyId);
 				touristGroup.getCreatorUserList($(".touristGroupSearchForm select[name=userId]"),data.searchParam.creator);
 			}
@@ -1190,29 +1190,6 @@ define(function(require, exports) {
 				}
 			})
 		},
-		getLineProductList:function(obj,lineProductId){
-			$.ajax({
-				url:""+APP_ROOT+"back/touristGroup.do?method=getTourCreator&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-				type:"POST",
-				dataType:"json",
-				success:function(data){
-					var html ="<option value=''>全部</option>";
-					var lineProductList = data.data;
-
-					if(lineProductList != null && lineProductList.length > 0){
-						for(var i=0;i<lineProductList.length;i++){
-							if (lineProductId != null && lineProductList[i].id == lineProductId) {
-								html += "<option selected=\"selected\" value='"+lineProductList[i].id+"'>"+lineProductList[i].name+"</option>";
-							} else {
-								html += "<option  value='"+lineProductList[i].id+"'>"+lineProductList[i].name+"</option>";
-							}
-						}
-						$(obj).html(html);
-					}
-				}
-			})
-		},
-
 		//来源模糊查询
 		getPartnerAgencyList:function($obj){
 			var getPartnerAgencyList = $obj.find(".choosePartnerAgency");
