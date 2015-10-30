@@ -295,11 +295,11 @@ define(function(require, exports) {
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
-					data.insurance = JSON.parse(data.insurance);
-					formData.id = data.insurance.id;
 					if (type == 1) {layer.close(insurance.$addLayer)}else if(type == 2){layer.close(insurance.$updateLayer)}
 					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
 						if (typeof fn === "function") {
+							data.insurance = JSON.parse(data.insurance);
+							formData.id = data.insurance.id;
 							fn(formData);
 						}else{
 							insurance.insuranceList(0,"","");

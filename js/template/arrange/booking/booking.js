@@ -123,7 +123,7 @@ define(function(require, exports) {
 				booking.deleteBooking(id);
 			});
 			//导出项目代订 
-			$("#tab-"+menuKey+"-content .btn-Booking-export").click(function(){
+			$(".btn-Booking-export").click(function(){
 				var id = $(this).attr("data-entity-id");
 				booking.exportBooking(id);
 			});
@@ -347,7 +347,26 @@ define(function(require, exports) {
 					}
 				}
 			})
+
+   //      //导出查看项目代订按钮事件
+			// $(".updateBooking .btn-bookingB-export").click(function(){
+			// 	var id = $(".updateBooking");
+			// 	booking.exportBooking(id);
+			// });
+
 		},
+
+
+
+//导出发团计划
+		// exportTripPlan:function(id){
+		// 	checkLogin(function(){
+		// 		var url = ""+APP_ROOT+"back/export.do?method=exportTripPlan&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view&tripPlanId="+id+"";
+		// 		exportXLS(url);
+		// 	});
+		// },
+
+
 		exportBooking :function(id){
 			var url = ""+APP_ROOT+"back/export.do?method=exportBookingOrder&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view"+"&id="+id;
 			exportXLS(url);
