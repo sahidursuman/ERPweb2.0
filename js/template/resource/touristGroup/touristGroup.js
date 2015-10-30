@@ -626,7 +626,9 @@ define(function(require, exports) {
 			//游客名单 批量添加成员按钮绑定事件
 			$("#"+tab+" .touristGroupMainFormMember .btn-add-tourist-more").click(touristGroup.batchAddTouristGroupMember);
 			//中转接待状态事件绑定
-			$("#"+tab+" .checkbox").click(function(){
+			$("#"+tab+" input[type=checkbox]").click(function(){
+				console.log(!!$("#"+tab+" .touristGroupMainFormRS input[name=touristReception]")[0]);
+				console.log(!!$("#"+tab+" .touristGroupMainFormRS input[name=touristReception]")[0].checked);
 				if($("#"+tab+" .touristGroupMainFormRS input[name=touristReception]")[0].checked== true){
 					$(this).parent().parent().parent().find(".reception-div").removeClass("hide");
 				}
@@ -1284,34 +1286,40 @@ define(function(require, exports) {
 			}
 			var touristGroupFeeJsonAdd = [];
 			var addCostStr = $("#"+tab+" .touristGroupMainForm .addCostList .addCostTbody tr");
+			var isReturn = false;
 			addCostStr.each(function(i){
 				if(i > 1){
 					var type = addCostStr.eq(i).find("[name=addOrReduceSelect]").attr("value");
-					var describeInfo = addCostStr.eq(i).find("input[name=describeInfo]").val();
-					if (trim(describeInfo) == "") {
-						showMessageDialog($( "#confirm-dialog-message" ), "请输入费用说明");
-						return false;
+					var describeInfo = trim(addCostStr.eq(i).find("input[name=describeInfo]").val());
+					var count = trim(addCostStr.eq(i).find("input[name=count]").val());
+					var price = trim(addCostStr.eq(i).find("input[name=price]").val());
+					if((describeInfo != "") || (count  != "") || (price != "")){
+						if (count == "") {
+							showMessageDialog($( "#confirm-dialog-message" ), "请输入自费数量");
+							isReturn = true;
+							return false;
+						}
+						if (describeInfo == "") {
+							showMessageDialog($( "#confirm-dialog-message" ), "请输入费用说明");
+							isReturn = true;
+							return false;
+						}
+						if (price == "") {
+							showMessageDialog($( "#confirm-dialog-message" ), "请输入自费单价");
+							isReturn = true;
+							return false;
+						}
+						var touristGroupFeeJson = {
+							type : type,
+							describeInfo : describeInfo,
+							count : count,
+							price : price
+						};
+						touristGroupFeeJsonAdd.push(touristGroupFeeJson);
 					}
-					var count = addCostStr.eq(i).find("input[name=count]").val();
-					console.log("count" + count);
-					if (trim(count) == "") {
-						showMessageDialog($( "#confirm-dialog-message" ), "请输入自费数量");
-						return false;
-					}
-					var price = addCostStr.eq(i).find("input[name=price]").val();
-					if (trim(price) == "") {
-						showMessageDialog($( "#confirm-dialog-message" ), "请输入自费单价");
-						return false;
-					}
-					var touristGroupFeeJson = {
-						type : type,
-						describeInfo : describeInfo,
-						count : count,
-						price : price
-					};
-					touristGroupFeeJsonAdd.push(touristGroupFeeJson);
 				}
 			});
+			if(isReturn){return;}
 
 			//游客名单  酒店星级、自费包含、备注
 			var expectLevel = $("#"+tab+" .touristGroupMainFormMember").find("select[name=level]").find("option:selected").val()
@@ -1438,35 +1446,40 @@ define(function(require, exports) {
 			}
 			var touristGroupFeeJsonAdd = [];
 			var addCostStr = $("#"+tab+" .touristGroupMainForm .addCostList .addCostTbody tr:not(.deleted)");
+			var isReturn = false;
 			addCostStr.each(function(i){
 				if(i > 1){
-					var type = $(this).find("[name=addOrReduceSelect]").attr("value");
-					var describeInfo = $(this).find("input[name=describeInfo]").val();
-					var idAdd = $(this).attr("data-entity-id");
-					if (trim(describeInfo) == "") {
-						showMessageDialog($( "#confirm-dialog-message" ), "请输入费用说明");
-						return false;
+					var type = addCostStr.eq(i).find("[name=addOrReduceSelect]").attr("value");
+					var describeInfo = trim(addCostStr.eq(i).find("input[name=describeInfo]").val());
+					var count = trim(addCostStr.eq(i).find("input[name=count]").val());
+					var price = trim(addCostStr.eq(i).find("input[name=price]").val());
+					if((describeInfo != "") || (count  != "") || (price != "")){
+						if (count == "") {
+							showMessageDialog($( "#confirm-dialog-message" ), "请输入自费数量");
+							isReturn = true;
+							return false;
+						}
+						if (describeInfo == "") {
+							showMessageDialog($( "#confirm-dialog-message" ), "请输入费用说明");
+							isReturn = true;
+							return false;
+						}
+						if (price == "") {
+							showMessageDialog($( "#confirm-dialog-message" ), "请输入自费单价");
+							isReturn = true;
+							return false;
+						}
+						var touristGroupFeeJson = {
+							type : type,
+							describeInfo : describeInfo,
+							count : count,
+							price : price
+						};
+						touristGroupFeeJsonAdd.push(touristGroupFeeJson);
 					}
-					var count = $(this).find("input[name=count]").val();
-					if (trim(count) == "") {
-						showMessageDialog($( "#confirm-dialog-message" ), "请输入自费数量");
-						return false;
-					}
-					var price = $(this).find("input[name=price]").val();
-					if (trim(price) == "") {
-						showMessageDialog($( "#confirm-dialog-message" ), "请输入自费单价");
-						return false;
-					}
-					var touristGroupFeeJson = {
-						id : idAdd,
-						type : type,
-						describeInfo : describeInfo,
-						count : count,
-						price : price
-					};
-					touristGroupFeeJsonAdd.push(touristGroupFeeJson);
 				}
 			});
+			if(isReturn){return;}
 			//删除费用JSON
 			touristGroupFeeJsonDel = [];
 			var delFeeStr = $("#"+tab+" .touristGroupMainForm .addCostList .addCostTbody tr.deleted");
