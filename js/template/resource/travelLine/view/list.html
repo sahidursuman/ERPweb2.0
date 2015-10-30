@@ -45,6 +45,7 @@
 					<th>行程天数</th>
 					<th>创建时间</th>
 					<th>新建线路产品</th>
+					<th>是否启用</th>
 					<th>操作</th>
 				</tr>
 			</thead>
@@ -60,6 +61,13 @@
 							<button data-entiy-id="{{travelLine.id}}" class="btn btn-xs btn-success btn-lineProduct-add R-right" data-right="1110002">
 								新建线路产品
 							</button>
+						</td>
+						<td>
+							{{if travelLine.status == 1}}
+								已启用
+							{{else if travelLine.status == 0}}
+								已停用
+							{{/if}}
 						</td>
 						<td>
 							<a data-entiy-id="{{travelLine.id}}" class=" btn-line-pre-scan cursor">
