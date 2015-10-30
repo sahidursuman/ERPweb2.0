@@ -122,11 +122,7 @@ define(function(require, exports) {
 				var id = $(this).attr("data-entity-id");
 				booking.deleteBooking(id);
 			});
-			//导出项目代订 
-			$(".btn-Booking-export").click(function(){
-				var id = $(this).attr("data-entity-id");
-				booking.exportBooking(id);
-			});
+			
 			//autocomplete
 			booking.orderNumberChoose($("#tab-"+menuKey+"-content"));
 			booking.partnerAgencyChoose($("#tab-"+menuKey+"-content"));
@@ -344,6 +340,11 @@ define(function(require, exports) {
 					if(result){
 					var html = viewTemplate(data);
 					addTab(menuKey+"-view","查看项目代订",html);
+					//导出查看项目代订按钮事件
+				$(".updateBooking .T-bookingBtn").click(function(){
+				    //svar id = $(".updateBooking");
+				    booking.exportBooking(id);
+		 		});
 					}
 				}
 			})
