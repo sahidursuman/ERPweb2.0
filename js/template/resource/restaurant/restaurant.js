@@ -202,7 +202,7 @@ define(function(require, exports) {
                             if(data.restaurant.province != null){var provinceId = data.restaurant.province.id};
                             if(data.restaurant.city != null){var cityId = data.restaurant.city.id};
                             if(data.restaurant.district != null){var districtId = data.restaurant.district.id};
-							KingServices.provinceCity($container,cityId,districtId);
+							KingServices.provinceCity($container,provinceId,cityId,districtId);
                             restaurant.initStandard($container);
 
                             //给提交按钮绑定事件 mealValidator validator
