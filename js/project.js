@@ -593,8 +593,9 @@ var modalScripts = {
 	'business_analyst_sourDstribution' : "js/template/businessAnalyst/sourDstribution/sourDstribution.js", //客源分布
 	'business_analyst_customerVolume' : "js/template/businessAnalyst/customerVolume/customerVolume.js", //客户客量
 	'business_analyst_employeePerfor' : "js/template/businessAnalyst/employeePerfor/employeePerfor.js", //员工业绩 
-	'business_analyst_tourguidePerfor' : "js/template/businessAnalyst/tourguidePerfor/tourguidePerfor.js" //导游业绩
+	'business_analyst_tourguidePerfor' : "js/template/businessAnalyst/tourguidePerfor/tourguidePerfor.js", //导游业绩
 	//---------------------------------------------------------------------------------------------------------------
+	'financial_innerTransfer_profit': "js/template/financial/innerTransferProfit/innerTransferProfit.js"
 };
 
 
@@ -997,18 +998,18 @@ function listMenu(menuTemplate){
 						modals["financial_innerTransfer_out"] = innerTransferOut;
 					});
 				});
-				//绑定内转利润账务
-				$("#sidebar .nav-list .financial_innerTransfer_profit").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/financial/innerTransferProfit/innerTransferProfit.js",function(innerTransferProfit){
-						/*var date = new Date();
-						 var year = date.getFullYear();
-						 var month = ""//date.getMonth()+1
-						 */						innerTransferProfit.listInnerTransferProfit(0,"","","","","","","","");
-					});
-				});
+				// //绑定内转利润账务
+				// $("#sidebar .nav-list .financial_innerTransfer_profit").click(function(){
+				// 	$("#sidebar .nav-list li").removeClass("active");
+				// 	$(this).addClass("active");
+				// 	$(this).parent().parent().addClass("active");
+				// 	seajs.use("" + ASSETS_ROOT +"js/template/financial/innerTransferProfit/innerTransferProfit.js",function(innerTransferProfit){
+				// 		/*var date = new Date();
+				// 		 var year = date.getFullYear();
+				// 		 var month = ""//date.getMonth()+1
+				// 		 */						innerTransferProfit.listInnerTransferProfit(0,"","","","","","","","");
+				// 	});
+				// });
 				//绑定购物菜单功能
 				$("#sidebar .nav-list .financial_shop").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
