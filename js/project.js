@@ -507,7 +507,7 @@ function logout(){
 				click: function() {
 					$( this ).dialog( "close" );
 					$.ajax({
-						url:""+APP_ROOT+"back/user.do?method=logOut&token="+$.cookie("token")+"&operation=self",
+						url:""+APP_ROOT+"base.do?method=logOut&token="+$.cookie("token"),
 						type:"POST",
 						dataType:"json",
 						beforeSend:function(){
@@ -565,8 +565,9 @@ var modalScripts = {
 	'business_analyst_sourDstribution' : "js/template/businessAnalyst/sourDstribution/sourDstribution.js", //客源分布
 	'business_analyst_customerVolume' : "js/template/businessAnalyst/customerVolume/customerVolume.js", //客户客量
 	'business_analyst_employeePerfor' : "js/template/businessAnalyst/employeePerfor/employeePerfor.js", //员工业绩 
-	'business_analyst_tourguidePerfor' : "js/template/businessAnalyst/tourguidePerfor/tourguidePerfor.js" //导游业绩
+	'business_analyst_tourguidePerfor' : "js/template/businessAnalyst/tourguidePerfor/tourguidePerfor.js", //导游业绩
 	//---------------------------------------------------------------------------------------------------------------
+	'financial_innerTransfer_profit': "js/template/financial/innerTransferProfit/innerTransferProfit.js"
 };
 
 
@@ -668,14 +669,14 @@ function listMenu(menuTemplate){
 				});
 
 				//绑定景区菜单功能
-				$("#sidebar .nav-list .resource_scenic").click(function(){
+				/*$("#sidebar .nav-list .resource_scenic").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/scenic/scenic.js",function(scenic){
 						scenic.listScenic(0,"",1);
 					});
-				});
+				});*/
 				//绑定保险菜单功能
 				/*$("#sidebar .nav-list .resource_insurance").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
@@ -969,18 +970,18 @@ function listMenu(menuTemplate){
 						modals["financial_innerTransfer_out"] = innerTransferOut;
 					});
 				});
-				//绑定内转利润账务
-				$("#sidebar .nav-list .financial_innerTransfer_profit").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/financial/innerTransferProfit/innerTransferProfit.js",function(innerTransferProfit){
-						/*var date = new Date();
-						 var year = date.getFullYear();
-						 var month = ""//date.getMonth()+1
-						 */						innerTransferProfit.listInnerTransferProfit(0,"","","","","","","","");
-					});
-				});
+				// //绑定内转利润账务
+				// $("#sidebar .nav-list .financial_innerTransfer_profit").click(function(){
+				// 	$("#sidebar .nav-list li").removeClass("active");
+				// 	$(this).addClass("active");
+				// 	$(this).parent().parent().addClass("active");
+				// 	seajs.use("" + ASSETS_ROOT +"js/template/financial/innerTransferProfit/innerTransferProfit.js",function(innerTransferProfit){
+				// 		/*var date = new Date();
+				// 		 var year = date.getFullYear();
+				// 		 var month = ""//date.getMonth()+1
+				// 		 */						innerTransferProfit.listInnerTransferProfit(0,"","","","","","","","");
+				// 	});
+				// });
 				//绑定购物菜单功能
 				$("#sidebar .nav-list .financial_shop").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
@@ -1605,62 +1606,6 @@ Tools.justifyTab = function() {
 };
 
 /**
- * 编辑中转安排——
- * @param  {string} id 游客小组的ID
- * @return {[type]}    [description]
- */
-Tools.updateTransit = function(id)  {
-	seajs.use("" + ASSETS_ROOT +"js/template/arrange/transit/transit.js",function(module){
-		module.updateTransit(id);
-		modals["arrange_transit"] = transit;
-	});
-}
-//保险公司  新增
-Tools.addInsurance = function(fn){
-	seajs.use("" + ASSETS_ROOT + modalScripts.resource_insurance,function(module){
-		module.addInsurance(fn);
-	});
-}
-//餐厅  新增
-Tools.addRestaurant = function(fn){
-	seajs.use("" + ASSETS_ROOT + modalScripts.resource_restaurant,function(module){
-		module.addRestaurant(fn);
-	});
-}
-//酒店  新增
-Tools.addHotel = function(fn){
-	seajs.use("" + ASSETS_ROOT + modalScripts.resource_hotel,function(module){
-		module.addHotel(fn);
-	});
-}
-//景区  新增
-Tools.addScenic = function(fn){
-	seajs.use("" + ASSETS_ROOT + modalScripts.resource_scenic,function(module){
-		module.addScenic(fn);
-	});
-}
-//购物  新增
-Tools.addShop = function(fn){
-	seajs.use("" + ASSETS_ROOT + modalScripts.resource_shop,function(module){
-		module.addShop(fn);
-	});
-}
-//自费商家  新增
-Tools.addSelfPay = function(fn){
-	seajs.use("" + ASSETS_ROOT + modalScripts.resource_selfpay,function(module){
-		module.addSelfPay(fn);
-	});
-}
-//票务  新增
-Tools.addTicket = function(fn){
-	seajs.use("" + ASSETS_ROOT + modalScripts.resource_ticket,function(module){
-		module.addTicket(fn);
-	});
-}
-
-
-
-/**
  * 用于定义公共请求或者与数据相关的公共组件处理
  * @type {Object}
  */
@@ -1673,7 +1618,99 @@ var KingServices = {};
  * @return {[type]}     [description]
  */
 
+/**
+ * 编辑中转安排——
+ * @param  {string} id 游客小组的ID
+ * @return {[type]}    [description]
+ */
+KingServices.updateTransit = function(id)  {
+	seajs.use("" + ASSETS_ROOT +"js/template/arrange/transit/transit.js",function(module){
+		module.updateTransit(id);
+		modals["arrange_transit"] = transit;
+	});
+}
+//保险公司  新增
+KingServices.addInsurance = function(fn){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_insurance,function(module){
+		module.addInsurance(fn);
+	});
+}
+//餐厅  新增
+KingServices.addRestaurant = function(fn){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_restaurant,function(module){
+		module.addRestaurant(fn);
+	});
+}
+//酒店  新增
+KingServices.addHotel = function(fn){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_hotel,function(module){
+		module.addHotel(fn);
+	});
+}
+//景区  新增
+KingServices.addScenic = function(fn){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_scenic,function(module){
+		module.addScenic(fn);
+	});
+}
+//购物  新增
+KingServices.addShop = function(fn){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_shop,function(module){
+		module.addShop(fn);
+	});
+}
+//自费商家  新增
+KingServices.addSelfPay = function(fn){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_selfpay,function(module){
+		module.addSelfPay(fn);
+	});
+}
+//票务  新增
+KingServices.addTicket = function(fn){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_ticket,function(module){
+		module.addTicket(fn);
+	});
+}
 
+//添加资源函数
+KingServices.addResourceFunction = function(e){
+	var $this = $(this),
+		$parents = $(this).closest('tr'),
+		name = e.data.name,
+		id = e.data.id,
+		managerName = e.data.managerName,
+		mobileNumber = e.data.mobileNumber,
+		$function = e.data.function,
+		fn = function (data){
+			if (!!data.name && !!name) {$parents.find('input[name='+name+']').val(data.name);}
+			if (!!data.id && !!id) {$parents.find('input[name='+id+']').val(data.id);}
+			if (!!data.managerName && !!managerName) {$parents.find('input[name='+managerName+']').val(data.managerName);}
+			if (!!data.mobileNumber && !!mobileNumber) {$parents.find('input[name='+mobileNumber+']').val(data.mobileNumber);}
+		}
+	$function(fn);
+}
+//添加车、司机函数
+KingServices.addBusDriverFunction = function(e){
+	var $this = $(this),
+		$parents = $(this).closest('tr'),
+		$busCompany = $parents.find('[name=busCompanyName]').val(),
+		$busCompanyId = $parents.find('[name=busCompanyId]').val(),
+		licenseNumberId = e.data.licenseNumberId,
+		licenseNumber = e.data.licenseNumber,
+		busbrand = e.data.busbrand,
+		seatCount = e.data.seatCount,
+		driverName = e.data.driverName,
+		driverId = e.data.driverId,
+		driverMobileNumber = e.data.driverMobileNumber,
+		$function = e.data.function,
+		fn = function (data){
+			if (!!data.name && !!name) {$parents.find('input[name='+name+']').val(data.name);}
+			if (!!data.id && !!id) {$parents.find('input[name='+id+']').val(data.id);}
+			if (!!data.managerName && !!managerName) {$parents.find('input[name='+managerName+']').val(data.managerName);}
+			if (!!data.mobileNumber && !!mobileNumber) {$parents.find('input[name='+mobileNumber+']').val(data.mobileNumber);}
+		}
+	$function(fn,$busCompany,$busCompanyId);
+}
 //省市区 start
 KingServices.provinceCity = function($container,provinceIdU,cityIdU,districtIdU){
 	//初始化地区数据

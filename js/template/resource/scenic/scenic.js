@@ -411,11 +411,11 @@ define(function(require,exports){
 				layer.close(globalLoadingLayer);
 				var result = showDialog(data);
 				if(result){
-					data.scenic = JSON.parse(data.scenic);
-					formData.id = data.scenic.id;
 					layer.close(addScenicLayer);
 					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
 						if (typeof fn === "function") {
+							data.scenic = JSON.parse(data.scenic);
+							formData.id = data.scenic.id;
 							fn(formData);
 						}else{
 							ScenicResource.listScenic(0);

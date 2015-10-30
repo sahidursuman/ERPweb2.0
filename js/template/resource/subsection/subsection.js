@@ -105,6 +105,7 @@ define(function(require, exports) {
 					var result = showDialog(data);
 					if(result){
 						var html = listTemplate(data);
+						html = filterUnAuth(html);
 						$("#"+tab+" .subsectionList").html(html);
 						show(tab);
 						hid(tab);

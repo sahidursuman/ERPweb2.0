@@ -12,30 +12,38 @@
 				<td style="text-align: left;padding: 0px 0px 0px 10px">{{travelLine.name}}</td>
 				<td class="style-myself">行程天数：</td>
 				<td style="text-align: left;padding: 0px 0px 0px 10px">{{travelLine.days}}天</td>
+				<td class="style-myself">是否启用</td>
+				<td style="text-align: left;padding: 0px 0px 0px 10px">
+					{{if travelLine.status == 1}}
+						已启用
+					{{else if travelLine.status == 0}}
+						已停用
+					{{/if}}
+				</td>
 			</tr>
 			<tr>
 				<td class="style-myself">费用包含：</td>
-				<td style="text-align: left;padding: 0px 0px 0px 10px" colspan="3">{{travelLine.includeFee}}</td>
+				<td style="text-align: left;padding: 0px 0px 0px 10px" colspan="5">{{travelLine.includeFee}}</td>
 				</tr>
 
 			<tr>
 				<td class="style-myself">费用不包含：</td>
-				<td style="text-align: left;padding: 0px 0px 0px 10px" colspan="3">{{travelLine.excludeFee}}</td>
+				<td style="text-align: left;padding: 0px 0px 0px 10px" colspan="5">{{travelLine.excludeFee}}</td>
 			</tr>
 
 			<tr>
 				<td class="style-myself">行程特色：</td>
-				<td style="text-align: left;padding: 0px 0px 0px 10px" colspan="3">{{travelLine.lineFeature}}</td>
+				<td style="text-align: left;padding: 0px 0px 0px 10px" colspan="5">{{travelLine.lineFeature}}</td>
 			</tr>
 
 			<tr>
 				<td class="style-myself">行程须知：</td>
-				<td style="text-align: left;padding: 0px 0px 0px 10px" colspan="3">{{travelLine.lineNotice}}</td>
+				<td style="text-align: left;padding: 0px 0px 0px 10px" colspan="5">{{travelLine.lineNotice}}</td>
 			</tr>
 
 			<tr>
 				<td class="style-myself">行程备注：</td>
-				<td style="text-align: left;padding: 0px 0px 0px 10px" colspan="3">{{travelLine.remark}}</td>
+				<td style="text-align: left;padding: 0px 0px 0px 10px" colspan="5">{{travelLine.remark}}</td>
 			</tr>
 		</table>
 	</form>
