@@ -157,11 +157,11 @@ define(function(require, exports) {
 						success:function(data){
 							var result = showDialog(data);
 							if(result){
-								data.ticket = JSON.parse(data.ticket);
-								formData.id = data.ticket.id;
 								layer.close(addTicketLayer);
 								showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
 									if (typeof fn === "function") {
+										data.ticket = JSON.parse(data.ticket);
+										formData.id = data.ticket.id;
 										fn(formData);
 									}else{
 										TicketResource.listTicket(0,"","");
@@ -221,9 +221,7 @@ define(function(require, exports) {
 										if(result){
 											layer.close(updateTicket);
 											showMessageDialog($( "#confirm-dialog-message" ),data.message);
-											TicketResource.listTicket(pageNo,ticket.searchData.realname,ticket.searchData.status);
-										}else{
-											TicketResource.listTicket(0,ticket.searchData.realname,ticket.searchData.status);
+											TicketResource.listTicket(0,"","");
 										}
 									}
 								});
@@ -271,7 +269,7 @@ define(function(require, exports) {
 								var result = showDialog(data);
 								if(result){
 									$("#"+tabId+" .ticketList .ticket-"+id+"").fadeOut(function(){
-										ticket.listTicket(pageNo,ticket.searchData.name,ticket.searchData.status);
+										TicketResource.listTicket(0,"","");
 									});
 								}
 							}
