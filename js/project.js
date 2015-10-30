@@ -12,9 +12,11 @@ var modals = {};
 var $tabList = $('#tabList'), $tabContent = $("#tabContent");
 
 function addTab(tabId,tabName,html){
+	var $current_li = $tabList.find('.active');
+
 	$("#tabList li").removeClass("active");
 	if($("#tabList li.tab-"+tabId+"").length > 0){
-		$("#tabList li.tab-"+tabId+"").addClass("active");
+		$("#tabList li.tab-"+tabId+"").addClass("active").data('prev-tab',$current_li);
 		setTimeout(function() {
 			Tools.justifyTab();
 		}, 50);
@@ -39,32 +41,27 @@ function addTab(tabId,tabName,html){
 						showConfirmMsg($( "#confirm-dialog-message" ), "未保存的数据，是否放弃?",function(){
 							console.log("留在当前页");
 						},function(){
-							closeTab();
+							closeTab(tabId);
 							modal.clearEdit(str[1]);
 						},"放弃","留在此页");
 					} else{
 						console.log(str[1]);
 						showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已修改的数据?",function(){
 							modal.save(str[1]);
-							closeTab();
+							closeTab(tabId);
 						}, function(){
-							closeTab();
+							closeTab(tabId);
 							modal.clearEdit(str[1]);
 						});
 					}
 				} else {
-					closeTab();
-				}
-
-				function closeTab() {
-					var index = $that.parent().parent().index();
-					listwidth -= parseInt($("#tabList li").eq(index).css("width"));
-					$that.parent().parent().remove();
-					$("#tab-"+tabId+"-content").remove();
-					Tools.justifyTab();
+					closeTab(tabId);
 				}
 			});
+			
+			$tabList.find('.active').data('prev-tab', $current_li);
 		}, 50);
+
 	}
 	$("#tabContent .tab-pane-menu").removeClass("active");
 	if($("#tab-"+tabId+"-content").length > 0){
@@ -78,11 +75,31 @@ function addTab(tabId,tabName,html){
 	$("#tab-"+tabId+"-content").html(html);
 }
 function closeTab(tabId){
-	var _this = $("#tabList .tab-"+tabId+" .tab-close");
-	var index = _this.parent().parent().index();
-	listwidth -= parseInt($("#tabList li").eq(index).css("width"));
-	_this.parent().parent().remove();
+	var $li = $tabList.find('.tab-' + tabId),
+		$prev = false;
+
+	// 查找下一个li
+	if ($li.hasClass('active')) {
+		$prev = $li.data('prev-tab');
+	}
+
+	if ($tabList.find('.active').length === 0 || (!!$prev && $prev.parent().length === 0))  {
+		var index = $li.index();
+
+		if (index === 0 && $li.next().length()) {
+			$prev = $li.next();
+		} else {
+			$prev = $li.prev();
+		}
+	}
+
+	if ($prev) {  // 激活
+		$prev.children('a').trigger('click');
+	}
+
+	$li.remove();
 	$("#tab-"+tabId+"-content").remove();
+
 	Tools.justifyTab();
 }
 
@@ -1568,7 +1585,7 @@ Tools.closeTab = function(tab_id) {
 	index = index === 0? 0: (index-1);
 
 	if (index >= 0) {
-		$tabList.children('li').trigger('click');
+		$tabList.children('li').children('a').trigger('click');
 	}
 
 	Tools.justifyTab();
@@ -1587,9 +1604,11 @@ Tools.justifyTab = function() {
 	// 参考左边
 	viewWidth = viewWidth - rightBarWidth;
 
-	var $active_li = $tabList.find('.active'),
+	var $active_li = $tabList.find('.active');
+	if (!$active_li.length) return;
+
 		// 必须距离左边的距离
-		li_left = $active_li.position().left,
+	var	li_left = $active_li.position().left,
 		li_right = li_left + $active_li.outerWidth(),
 		// need_left = right_point - viewWidth;
 		leftMargin = parseInt($tabList.css('marginLeft'));
@@ -1602,7 +1621,19 @@ Tools.justifyTab = function() {
 	} else if (li_right > (leftBarWidth + viewWidth - leftMargin)) {
 		// 右隐
 		$tabList.css('margin-left', (viewWidth - li_right) + 'px');
+	} else {
+		// 右侧缺口
+		var $last = $tabList.children('li').last(),
+			tab_len = $last.position().left + $last.width();
+
+		if (viewWidth > tab_len) {
+			$tabList.css('margin-left', leftBarWidth + 'px');
+		} else if ((viewWidth - leftMargin) > tab_len) {
+			$tabList.css('margin-left', (viewWidth - tab_len + leftBarWidth) + 'px');
+		}
 	}
+
+	// 
 };
 
 /**
