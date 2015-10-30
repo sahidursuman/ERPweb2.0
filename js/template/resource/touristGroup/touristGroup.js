@@ -1125,7 +1125,7 @@ define(function(require, exports) {
 						}
 					});
 				}else{
-					layer.tips('请选择组团社', objM, {
+					layer.tips('请选择客户来源', objM, {
 						tips: [1, '#3595CC'],
 						time: 2000
 					});
@@ -1183,7 +1183,7 @@ define(function(require, exports) {
 						}
 					})
 				}else{
-					layer.tips('新建联系人请先选择组团社', obj, {
+					layer.tips('新建联系人请先选择客户来源', obj, {
 						tips: [1, '#3595CC'],
 						time: 2000
 					});
