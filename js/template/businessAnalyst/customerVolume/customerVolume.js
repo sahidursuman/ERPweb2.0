@@ -1,123 +1,142 @@
 /**
- * 客源分布的查询&&列表的显示
+ * 客户客量的查询&&列表的显示
  */
 define(function(require, exports) {
-		var menuKey = "business_analyst_sourDstribution",
+		var menuKey = "business_analyst_customerVol",
 	        listTemplate = require("./view/list"),
 	        tabId="tab-"+menuKey+"-content";
 	    /**
 		 * 客源分布管理对象
 		 * @type {Object}
 		 */
-		var sourDstributionObj={
+		var customerVolObj={
 			searchData:false,
 			$searchArea:false,
 			$tab:false,
-			allData:{}
+			$searchParam:{
+				startTime:"",
+				endTime:"",
+				customerId:"",
+				customerName:"",
+				pageNo:0
+			},
+			autocompleteDate:{}
 		};
 
 		/**
-		 * 产品销量面初始化的方法
+		 *  客户客量面初始化的方法
 		 * @return {[type]} [description]
 		 */
-		sourDstributionObj.initModule=function(){
-			sourDstributionObj.listSaleProduct(0,"","","");
+		customerVolObj.initModule=function(){
+			customerVolObj.listCusVo(0,"","","","");
 		};
 
-		//产品销量页面list
-		sourDstributionObj.listSaleProduct=function(page,startTime,endTime,status){
-		   if (sourDstributionObj.$searchArea && arguments.length===1) {
+		// 客户客量页面list
+		customerVolObj.listCusVo=function(page,startTime,endTime,customerId,customerName){
+		   if (customerVolObj.$searchArea && arguments.length===1) {
 		   		//初始化页面后可以获取页面参数
-		   		sourDstributionObj.allData.startTime=sourDstributionObj.getValue(sourDstributionObj.$tab, startTime);
-		   		sourDstributionObj.allData.endTime=sourDstributionObj.getValue(sourDstributionObj.$tab, endTime);
-		   		sourDstributionObj.allData.status =sourDstributionObj.$tab.find('input[name=status]').find("option:selected").val();
+		   		startTime=customerVolObj.$searchArea.find('input[name=startTime]').val();
+		   		endTime=customerVolObj.$searchArea.find('input[name=endTime]').val();
+		   		customerId =customerVolObj.$searchArea.find('input[name=customerId]').val();
+		   		customerName =customerVolObj.$searchArea.find('input[name=customerName]').val();
 		   };
 
+		page:0 || page;
 
-		//产品销量列表查询
-		/*$.ajax({
-			url:""+APP_ROOT+"back/guide.do?method=listGuide&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-			type:"POST",
-			data: {
-				pageNo: page,
-				startTime: sourDstributionObj.allData.startTime,
-				endTime: sourDstributionObj.allData.endTime,
-				status : sourDstributionObj.allData.status
-				sortType: 'auto'
-			},
-			success:function(data){
-
-			}
-		});*/
-
-		   var html=listTemplate();
-	       addTab(menuKey,"客源分布",html);
-
-	       //初始化JQuery对象
-	       sourDstributionObj.$tab=$("#" + tabId);//最大区域模块
-	       sourDstributionObj.$searchArea=sourDstributionObj.$tab.find('.T-search-area');//搜索模块区域
-
-	       //初始化页面控件
-	       sourDstributionObj.datepicker(sourDstributionObj.$tab);
-
-	       //初始化页面绑定事件
-	       sourDstributionObj.init_event();
-
-	       	// 绑定翻页组件
-			/*laypage({
-			    cont: GuideResource.$tab.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
-			    pages: data.totalPage, //总页数
-			    curr: (page + 1),
-			    jump: function(obj, first) {
-			    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-			    		GuideResource.listGuide(obj.curr -1);
-			    	}
-			    }
-			});*/
-
-
+		//封装查询参数
+		customerVolObj.$searchParam={
+			startTime:startTime,
+			endTime:endTime,
+			customerId:customerId,
+			customerName:customerName,
+			pageNo:page
 		};
 
+		// 客户客量列表查询
+		$.ajax({
+			url : customerVolObj.url("findPager","view"),
+			type:"POST",
+			data : "searchParam="+encodeURIComponent(JSON.stringify(customerVolObj.$searchParam)),
+			success:function(data){
+						
+			  var html=listTemplate(data);
+		       addTab(menuKey,"客户客量",html);
+
+		       //初始化JQuery对象
+		       customerVolObj.$tab=$("#" + tabId);//最大区域模块
+		       customerVolObj.$searchArea=customerVolObj.$tab.find('.T-search-area');//搜索模块区域
+
+		       //初始化客户数据Autocomplate
+		       customerVolObj.autocompleteDate.getCusList=data.resultList;
+
+		       //初始化页面控件
+		       customerVolObj.datepicker(customerVolObj.$tab);
+
+		       //初始化页面绑定事件
+		       customerVolObj.init_event();
+
+		       	// 绑定翻页组件
+				laypage({
+				    cont: customerVolObj.$tab.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+				    pages: data.totalPage, //总页数
+				    curr: (page + 1),
+				    jump: function(obj, first) {
+				    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+				    		customerVolObj.listCusVo(obj.curr -1);
+				    	}
+				    }
+				});
+			}
+		});
+
+	};
+
 	    //初始化页面绑定事件
-	    sourDstributionObj.init_event=function(){
+	    customerVolObj.init_event=function(){
 	    	//搜索按钮绑定事件
-	    	sourDstributionObj.$tab.find('.T-saleProduct-search').on('click', function(event) {
+	    	customerVolObj.$tab.find('.T-saleProduct-search').on('click', function(event) {
 	    		event.preventDefault();
 	    		/* Act on the event */
-	    		//产品销量列表查询
-	    		//sourDstributionObj.listSaleProduct(0);
-	    		alert("click Search....... ");
-	    		//产品销量统计查询
-	    		sourDstributionObj.listSaleProTotal();
+	    		// 客户客量统计查询
+	    		customerVolObj.listCusVo(0);
 	    	
 	    	});
+
+	    	//客户autocomplate数据
+	    	customerVolObj.getCusList(customerVolObj.$tab);
+	    	
 	    };
 
-	    /**
-	     * 产品销量统计查询
-	     * @return {[type]} [description]
-	     */
-	    sourDstributionObj.listSaleProTotal=function(){
-	    	alert("click listSaleProTotal....... ");
-	    	//产品销量统计查询	
-			/*$.ajax({
-				url:""+APP_ROOT+"back/guide.do?method=listGuide&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-				type:"POST",
-				data: {
-					pageNo: page,
-					startTime: sourDstributionObj.allData.startTime,
-					endTime: sourDstributionObj.allData.endTime,
-					status : sourDstributionObj.allData.status
-					sortType: 'auto'
-			    },
-				success:function(data){
-
+    //客户客量的Autocomplete
+    customerVolObj.getCusList=function($obj){
+		var getCusList = $obj.find(".T-customerVo-linPro");
+		getCusList.autocomplete({
+			minLength:0,
+			change:function(event,ui){
+				if(ui.item == null){
+					$(this).parent().parent().find("input[name=customerId]").val("");
 				}
-			});*/
-	    };
+			},
+			select:function(event,ui){
+				$(this).blur();
+				var obj = this;
+				$(obj).parent().parent().find("input[name=customerId]").val(ui.item.id).trigger('change');
+			}
+		}).click(function(){
+			var obj = this;
+			var listObj = customerVolObj.autocompleteDate.getCusList;
+			if(listObj !=null && listObj.length>0){
+				for(var i=0;i<listObj.length;i++){
+					listObj[i].value = listObj[i].name;
+				}
+			}
+			$(obj).autocomplete('option','source', listObj);
+			$(obj).autocomplete('search', '');
+		})
+	};
 
 	//时间控件初始化
-	sourDstributionObj.datepicker = function($obj){
+	customerVolObj.datepicker = function($obj){
 		$obj.find(".datepicker").datepicker({
 			autoclose: true,
 			todayHighlight: true,
@@ -125,17 +144,13 @@ define(function(require, exports) {
 			language: 'zh-CN'
 		})
 	};
-	//获取控件中的值
-	sourDstributionObj.getValue = function($obj,name){
-		var value = $obj.find("[name="+name+"]").val();
-		return value;
-	};
+
 	//ajax中的url
-	sourDstributionObj.url = function(method,operation){
-		var url = ''+APP_ROOT+'back/hotel.do?method='+method+'&token='+$.cookie('token')+'&menuKey='+menuKey+'&operation='+operation+'';
+	customerVolObj.url = function(method,operation){
+		var url = ''+APP_ROOT+' /back/numberOfPartnerAgency.do?method='+method+'&token='+$.cookie('token')+'&menuKey='+menuKey+'&operation='+operation+'';
 		return url;
 	}
 
-	exports.init = sourDstributionObj.initModule;
+	exports.init = customerVolObj.initModule;
 
 });

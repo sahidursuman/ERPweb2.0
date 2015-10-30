@@ -13,55 +13,61 @@ define(function(require, exports) {
 			searchData:false,
 			$searchArea:false,
 			$tab:false,
-			allData:{}
+			autocompleteDate:{}
 		};
 
 		/**
-		 * 产品销量面初始化的方法
+		 * 客源分布面初始化的方法
 		 * @return {[type]} [description]
 		 */
 		sourDstributionObj.initModule=function(){
-			sourDstributionObj.listSaleProduct(0,"","","");
+			sourDstributionObj.listSourDstri("","","","");
 		};
 
-		//产品销量页面list
-		sourDstributionObj.listSaleProduct=function(page,startTime,endTime,status){
+		//客源分布页面list
+		sourDstributionObj.listSourDstri=function(startDate,endDate,lineProductId,lineProductName){
 		   if (sourDstributionObj.$searchArea && arguments.length===1) {
 		   		//初始化页面后可以获取页面参数
-		   		sourDstributionObj.allData.startTime=sourDstributionObj.getValue(sourDstributionObj.$tab, startTime);
-		   		sourDstributionObj.allData.endTime=sourDstributionObj.getValue(sourDstributionObj.$tab, endTime);
-		   		sourDstributionObj.allData.status =sourDstributionObj.$tab.find('input[name=status]').find("option:selected").val();
+		   		startDate=sourDstributionObj.$searchArea.find('input[name=startDate]').val();
+		   		endDate=sourDstributionObj.$searchArea.find('input[name=endDate]').val();
+		   		lineProductId =sourDstributionObj.$searchArea.find('input[name=lineProductId]').val();
+		   		lineProductName =sourDstributionObj.$searchArea.find('input[name=lineProductName]').val();
 		   };
 
 
-		//产品销量列表查询
-		/*$.ajax({
-			url:""+APP_ROOT+"back/guide.do?method=listGuide&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-			type:"POST",
-			data: {
-				pageNo: page,
-				startTime: sourDstributionObj.allData.startTime,
-				endTime: sourDstributionObj.allData.endTime,
-				status : sourDstributionObj.allData.status
-				sortType: 'auto'
-			},
-			success:function(data){
+		   //客源分布列表查询
+			$.ajax({
+				url : sourDstributionObj.url("listGroupMemberDistribution","view"),
+				type:"POST",
+				data:{
+					startDate:startDate,
+					endDate:endDate,
+					lineProductId:lineProductId,
+					lineProductName:lineProductName,
+					sortType: 'tourist'
 
-			}
-		});*/
+				},
+				success:function(data){
+							
+				   var html=listTemplate(data);
+			       addTab(menuKey,"客源分布",html);
 
-		   var html=listTemplate();
-	       addTab(menuKey,"产品销量",html);
+			       //缓存autocompalet数据
+			       sourDstributionObj.autocompleteDate.lineProList=data.lineProductList;
+			       //初始化JQuery对象
+			       sourDstributionObj.$tab=$("#" + tabId);//最大区域模块
+			       sourDstributionObj.$searchArea=sourDstributionObj.$tab.find('.T-search-area');//搜索模块区域
 
-	       //初始化JQuery对象
-	       sourDstributionObj.$tab=$("#" + tabId);//最大区域模块
-	       sourDstributionObj.$searchArea=sourDstributionObj.$tab.find('.T-search-area');//搜索模块区域
+			       //初始化页面控件
+			       sourDstributionObj.datepicker(sourDstributionObj.$tab);
 
-	       //初始化页面控件
-	       sourDstributionObj.datepicker(sourDstributionObj.$tab);
+			       //初始化页面绑定事件
+			       sourDstributionObj.init_event();
+				}
+			});
 
-	       //初始化页面绑定事件
-	       sourDstributionObj.init_event();
+
+
 
 	       	// 绑定翻页组件
 			/*laypage({
@@ -78,43 +84,53 @@ define(function(require, exports) {
 
 		};
 
+
+
+
+
 	    //初始化页面绑定事件
 	    sourDstributionObj.init_event=function(){
 	    	//搜索按钮绑定事件
 	    	sourDstributionObj.$tab.find('.T-saleProduct-search').on('click', function(event) {
 	    		event.preventDefault();
 	    		/* Act on the event */
-	    		//产品销量列表查询
-	    		//sourDstributionObj.listSaleProduct(0);
-	    		alert("click Search....... ");
-	    		//产品销量统计查询
-	    		sourDstributionObj.listSaleProTotal();
+	    		//客源分布统计查询
+	    		sourDstributionObj.listSourDstri(0);
 	    	
 	    	});
+
+	    	//下拉数据----线路产品
+	    	sourDstributionObj.lineProChooseList(sourDstributionObj.$tab);
 	    };
 
-	    /**
-	     * 产品销量统计查询
-	     * @return {[type]} [description]
-	     */
-	    sourDstributionObj.listSaleProTotal=function(){
-	    	alert("click listSaleProTotal....... ");
-	    	//产品销量统计查询	
-			/*$.ajax({
-				url:""+APP_ROOT+"back/guide.do?method=listGuide&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-				type:"POST",
-				data: {
-					pageNo: page,
-					startTime: sourDstributionObj.allData.startTime,
-					endTime: sourDstributionObj.allData.endTime,
-					status : sourDstributionObj.allData.status
-					sortType: 'auto'
-			    },
-				success:function(data){
-
+	//客源分布的Autocomplete
+    sourDstributionObj.lineProChooseList=function($obj){
+		var lineProChooseList = $obj.find(".T-sourDstri-linPro");
+		lineProChooseList.autocomplete({
+			minLength:0,
+			change:function(event,ui){
+				if(ui.item == null){
+					$(this).parent().find("input[name=lineProductId]").val("");
 				}
-			});*/
-	    };
+			},
+			select:function(event,ui){
+				$(this).blur();
+				var obj = this;
+
+				$(obj).parent().find("input[name=lineProductId]").val(ui.item.lineProductId).trigger('change');
+			}
+		}).click(function(){
+			var obj = this;
+			var listObj = sourDstributionObj.autocompleteDate.lineProList;
+			if(listObj !=null && listObj.length>0){
+				for(var i=0;i<listObj.length;i++){
+					listObj[i].value = listObj[i].lineProductName;
+				}
+			}
+			$(obj).autocomplete('option','source', listObj);
+			$(obj).autocomplete('search', '');
+		})
+	};
 
 	//时间控件初始化
 	sourDstributionObj.datepicker = function($obj){
@@ -132,7 +148,7 @@ define(function(require, exports) {
 	};
 	//ajax中的url
 	sourDstributionObj.url = function(method,operation){
-		var url = ''+APP_ROOT+'back/hotel.do?method='+method+'&token='+$.cookie('token')+'&menuKey='+menuKey+'&operation='+operation+'';
+		var url = ''+APP_ROOT+' back/groupMemberDistribution.do?method='+method+'&token='+$.cookie('token')+'&menuKey='+menuKey+'&operation='+operation+'';
 		return url;
 	}
 
