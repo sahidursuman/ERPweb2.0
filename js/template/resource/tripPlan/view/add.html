@@ -133,7 +133,15 @@
                                                     	{{each insuranceList as insurance index}}
                                                         {{if insurance != "[]" || insurance != null}}
                                                     	<tr>
-                                                    		<td><input type="text" name="insuranceName" maxlength="32" value="{{if insurance.insurance != null}}{{insurance.insurance.name}}{{/if}}" class="col-sm-12 chooseInsurance bind-change"/><input type="hidden" name="insuranceId" value="{{if insurance.insurance != null}}{{insurance.insurance.id}}{{/if}}"/></td>
+                                                    		<td>
+                                                                <div class="col-sm-12">
+                                                                    <input type="text" name="insuranceName" maxlength="32" value="{{if insurance.insurance != null}}{{insurance.insurance.name}}{{/if}}" class="col-sm-12 chooseInsurance bind-change"/>
+                                                                    <input type="hidden" name="insuranceId" value="{{if insurance.insurance != null}}{{insurance.insurance.id}}{{/if}}"/>
+                                                                    <span class="addResourceBtn T-addInsuranceResource" title="添加保险公司">
+                                                                        <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+                                                                    </span>
+                                                                </div>
+                                                            </td>
                                                     		<td><input type="text" name="type" value="{{insurance.type}}" maxlength="32" class="col-sm-12"/></td>
                                                     		<td><input type="text" name="price" value="{{insurance.price}}" class="col-sm-12" maxlength="8"/></td>
                                                     		<td><input type="text" name="memberCount" value="{{insurance.memberCount}}" class="col-sm-12" maxlength="8"/></td>
@@ -155,7 +163,15 @@
                                                     	{{/each}}
                                                     	{{if insuranceList.length == 0}}
                                                     	<tr>
-                                                    		<td><input type="text" name="insuranceName" maxlength="32" value="" class="col-sm-12 chooseInsurance"/><input type="hidden" name="insuranceId" value=""/></td>
+                                                    		<td>
+                                                                <div class="col-sm-12">
+                                                                    <input type="text" name="insuranceName" maxlength="32" value="" class="col-sm-12 chooseInsurance"/>
+                                                                    <input type="hidden" name="insuranceId" value=""/>
+                                                                    <span class="addResourceBtn T-addInsuranceResource" title="添加保险公司">
+                                                                        <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+                                                                    </span>
+                                                                </div>
+                                                            </td>
                                                     		<td><input type="text" name="type" value="" class="col-sm-12" maxlength="32"/></td>
                                                     		<td><input type="text" name="price" value="" class="col-sm-12" maxlength="9"/></td>
                                                     		<td><input type="text" name="memberCount" value="" class="col-sm-12" maxlength="8"/></td>
@@ -353,10 +369,18 @@
                                                     </thead>
                                                     <tbody>
                                                         {{each restaurantList as restaurant}}
-                                                        {{if restaurant != "[]" || restaurant != null}}
+                                                            {{if restaurant != "[]" || restaurant != null}}
                                                             <tr>
                                                                 <td class="whichDaysContainer" value="{{restaurant.whichDay}}"></td>
-                                                                <td><input type="text" name="restaurantName" maxlength="32" value="{{if restaurant.restaurant != null}}{{restaurant.restaurant.name}}{{/if}}" class="col-sm-12 chooseRestaurant"/><input type="hidden" name="restaurantId" value="{{if restaurant.restaurant != null}}{{restaurant.restaurant.id}}{{/if}}"/></td>
+                                                                <td>
+                                                                    <div class="col-sm-12">
+                                                                        <input type="text" name="restaurantName" maxlength="32" value="{{if restaurant.restaurant != null}}{{restaurant.restaurant.name}}{{/if}}" class="col-sm-12 chooseRestaurant"/>
+                                                                        <input type="hidden" name="restaurantId" value="{{if restaurant.restaurant != null}}{{restaurant.restaurant.id}}{{/if}}"/>
+                                                                        <span class="addResourceBtn T-addRestaurantResource" title="添加餐厅">
+                                                                            <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+                                                                        </span>
+                                                                    </div>
+                                                                </td>
                                                                 <td><input type="text" name="managerName" readonly="readonly" value="{{if restaurant.restaurant != null}}{{restaurant.restaurant.managerName}}{{/if}}" class="col-sm-12"/></td>
                                                                 <td><input type="text" name="mobileNumber" readonly="readonly" value="{{if restaurant.restaurant != null}}{{restaurant.restaurant.mobileNumber}}{{/if}}" class="col-sm-12"/></td>
                                                                 <td>
@@ -461,7 +485,15 @@
                                                                     </select>
                                                                     <input type="hidden" name="id" value="{{hotel.id}}" />
                                                                 </td>
-                                                                <td><input type="text" class="col-sm-12 chooseHotel" name="name" value="{{if hotel.hotel !=null}}{{hotel.hotel.name}}{{/if}}" /><input type="hidden" name="hotelId" value="{{if hotel.hotel !=null}}{{hotel.hotel.id}}{{/if}}"></td>
+                                                                <td>
+                                                                    <div class="col-sm-12">
+                                                                        <input type="text" class="col-sm-12 chooseHotel" name="name" value="{{if hotel.hotel !=null}}{{hotel.hotel.name}}{{/if}}" />
+                                                                        <input type="hidden" name="hotelId" value="{{if hotel.hotel !=null}}{{hotel.hotel.id}}{{/if}}">
+                                                                        <span class="addResourceBtn T-addHotelResource" title="添加酒店">
+                                                                            <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+                                                                        </span>
+                                                                    </div>
+                                                                </td>
                                                                 <td><input type="text" class="col-sm-12" name="managerName" readonly="readonly" value="{{if hotel.hotel !=null}}{{hotel.hotel.managerName}}{{/if}}" /></td>
                                                                 <td><input type="text" class="col-sm-12" name="mobileNumber" readonly="readonly" value="{{if hotel.hotel !=null}}{{hotel.hotel.mobileNumber}}{{/if}}" /></td>
                                                                 <td><input type="text" class="col-sm-12 chooseHotelRoom" name="hotelRoom" value="{{if hotel.hotelRoom !=null}}{{hotel.hotelRoom.type}}{{/if}}" /><input type="hidden" name="hotelRoomId" value="{{if hotel.hotelRoom !=null}}{{hotel.hotelRoom.id}}{{/if}}"></td>
@@ -538,7 +570,16 @@
                                                         {{if scenic != "[]" || scenic != null}}
                                                             <tr>
                                                                 <td class="whichDaysContainer" value="{{scenic.whichDay}}"></td>
-                                                                <td><input type="hidden" name="id" value="{{scenic.id}}" /><input type="text" name="name" class="col-sm-12 chooseScenic" value="{{if scenic.scenic !=null}}{{scenic.scenic.name}}{{/if}}" /><input type="hidden" name="scenicId" value="{{if scenic.scenic !=null}}{{scenic.scenic.id}}{{/if}}"/></td>
+                                                                <td>   
+                                                                    <div class="col-sm-12">
+                                                                        <input type="hidden" name="id" value="{{scenic.id}}" />
+                                                                        <input type="text" name="name" class="col-sm-12 chooseScenic" value="{{if scenic.scenic !=null}}{{scenic.scenic.name}}{{/if}}" />
+                                                                        <input type="hidden" name="scenicId" value="{{if scenic.scenic !=null}}{{scenic.scenic.id}}{{/if}}"/>
+                                                                        <span class="addResourceBtn T-addScenicResource" title="添加景区">
+                                                                            <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+                                                                        </span>
+                                                                    </div>
+                                                                </td>
                                                                 <td><input type="text" name="chargingProjects" class="col-sm-12" value="{{if scenic.scenicItem !=null}}{{scenic.scenicItem.name}}{{/if}}" /><input type="hidden" name="chargingId" value="{{if scenic.scenicItem !=null}}{{scenic.scenicItem.id}}{{/if}}"/></td>
                                                                 <td>
                                                                 	<select name="tourTime" class="col-sm-12 no-padding" style="width: 75px;">
@@ -616,7 +657,16 @@
                                                         {{if shop != "[]" || shop != null}}
                                                             <tr>
                                                                 <td class="whichDaysContainer" value="{{shop.whichDay}}"></td>
-                                                                <td><input type="hidden" name="id" value="{{shop.id}}" /><input type="text" name="name" class="col-sm-12 chooseShop" value="{{if shop.shop != null}}{{shop.shop.name}}{{/if}}" /><input type="hidden" name="shopId" value="{{if shop.shop != null}}{{shop.shop.id}}{{/if}}" /></td>
+                                                                <td>
+                                                                    <div class="col-sm-12">
+                                                                        <input type="hidden" name="id" value="{{shop.id}}" />
+                                                                        <input type="text" name="name" class="col-sm-12 chooseShop" value="{{if shop.shop != null}}{{shop.shop.name}}{{/if}}" />
+                                                                        <input type="hidden" name="shopId" value="{{if shop.shop != null}}{{shop.shop.id}}{{/if}}" />
+                                                                        <span class="addResourceBtn T-addShopResource" title="添加购物店">
+                                                                            <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+                                                                        </span>
+                                                                    </div>
+                                                                </td>
                                                                 <td><input type="text" name="managerName" readonly="readonly" class="col-sm-12" value="{{if shop.shop != null}}{{shop.shop.managerName}}{{/if}}" /></td>
                                                                 <td><input type="text" name="mobileNumber" readonly="readonly" class="col-sm-12" value="{{if shop.shop != null}}{{shop.shop.mobileNumber}}{{/if}}" /></td>
                                                                 <td><input type="text" name="goodsPolicy" class="col-sm-12" value="{{if shop.shopPolicy != null}}{{shop.shopPolicy.name}}{{/if}}" /><input type="hidden" name="shopPolicyId" value="{{if shop.shopPolicy != null}}{{shop.shopPolicy.id}}{{/if}}"/></td>
@@ -679,7 +729,16 @@
                                                         {{if selfPay != "[]" || selfPay != null}}
                                                             <tr>
                                                                 <td class="whichDaysContainer" value="{{selfPay.whichDay}}"></td>
-                                                                <td><input type="hidden" name="id" value="{{selfPay.id}}" /><input type="text" name="name" class="col-sm-12 chooseSelfPay" value="{{if selfPay.selfPay != null}}{{selfPay.selfPay.name}}{{/if}}" /><input type="hidden" name="selfPayId" value="{{if selfPay.selfPay != null}}{{selfPay.selfPay.id}}{{/if}}" /></td>
+                                                                <td>
+                                                                    <div class="col-sm-12">
+                                                                        <input type="hidden" name="id" value="{{selfPay.id}}" />
+                                                                        <input type="text" name="name" class="col-sm-12 chooseSelfPay" value="{{if selfPay.selfPay != null}}{{selfPay.selfPay.name}}{{/if}}" />
+                                                                        <input type="hidden" name="selfPayId" value="{{if selfPay.selfPay != null}}{{selfPay.selfPay.id}}{{/if}}" />
+                                                                        <span class="addResourceBtn T-addSelfPayResource" title="添加自费商家">
+                                                                            <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+                                                                        </span>
+                                                                    </div>
+                                                                </td>
                                                                 <td><input type="hidden" name="selfitemId" value="{{if selfPay.selfPayItem !=null}}{{selfPay.selfPayItem.id}}{{/if}}" /><input type="text" name="selfitem" class="col-sm-12 chooseSelfitem" value="{{if selfPay.selfPayItem !=null}}{{selfPay.selfPayItem.name}}{{/if}}" /></td>
                                                                 <td><input type="text" name="managerName" readonly="readonly" class="col-sm-12" value="{{if selfPay.selfPay != null}}{{selfPay.selfPay.managerName}}{{/if}}" /></td>
                                                                 <td><input type="text" name="mobileNumber" readonly="readonly" class="col-sm-12" value="{{if selfPay.selfPay != null}}{{selfPay.selfPay.mobileNumber}}{{/if}}" /></td>
@@ -757,7 +816,16 @@
                                                         {{each ticketList as ticket}}
                                                         {{if ticket != "[]" || ticket != null}}
                                                             <tr>
-                                                                <td><input type="hidden" name="id" value="{{ticket.id}}" /><input type="text" name="name" class="col-sm-12 chooseTicket" value="{{if ticket.ticket != null}}{{ticket.ticket.name}}{{/if}}" /><input type="hidden" name="tickeId" value="{{if ticket.ticket != null}}{{ticket.ticket.id}}{{/if}}"></td>
+                                                                <td>
+                                                                    <div class="col-sm-12">
+                                                                        <input type="hidden" name="id" value="{{ticket.id}}" />
+                                                                        <input type="text" name="name" class="col-sm-12 chooseTicket" value="{{if ticket.ticket != null}}{{ticket.ticket.name}}{{/if}}" />
+                                                                        <input type="hidden" name="tickeId" value="{{if ticket.ticket != null}}{{ticket.ticket.id}}{{/if}}">
+                                                                        <span class="addResourceBtn T-addTicketResource" title="添加票务">
+                                                                            <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+                                                                        </span>
+                                                                    </div>
+                                                                </td>
                                                                 <td>
                                                                 	<select name="type" class="col-sm-12 no-padding" style="width:70px;">
                                                                 		<option {{if ticket.type == "1"}}selected="selected"{{/if}} value="1">机票</option>

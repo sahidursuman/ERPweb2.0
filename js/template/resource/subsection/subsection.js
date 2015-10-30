@@ -8,13 +8,18 @@ define(function(require, exports) {
 	
 	var subsection = {
 		searchData : {
+			lineProduct:"",
 			lineProductId : "",
+			fromPartnerAgency:"",
 			fromPartnerAgencyId : "",
+			creator:"",
 			creatorId : "",
 			travelDate : "",
 			operationStartDate : "",
 			operationEndDate : ""
 		},
+
+		autocompleteDate : {},
 		listMainSubsection :function(){
 			$.ajax({
 				url:""+APP_ROOT+"back/innerTransferOperation.do?method=getSearchCondition&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
@@ -33,9 +38,10 @@ define(function(require, exports) {
 					if(result){
 						var html = listMainTemplate(data);
 						addTab(menuKey,"中转分段",html);
+						subsection.getQueryTerms();
 
 						var tab = "tab-resource_subsection-content";
-						subsection.searchNumber(subsection.searchData.lineProductId,subsection.searchData.fromPartnerAgencyId,subsection.searchData.creatorId,subsection.searchData.travelDate,subsection.searchData.operationStartDate,subsection.searchData.operationEndDate,tab);
+						subsection.searchNumber(subsection.searchData.lineProduct,subsection.searchData.lineProductId,subsection.searchData.fromPartnerAgency,subsection.searchData.fromPartnerAgencyId,subsection.searchData.creator,subsection.searchData.creatorId,subsection.searchData.travelDate,subsection.searchData.operationStartDate,subsection.searchData.operationEndDate,tab);
 						subsection.datePicker();
 						$("#"+tab+" .btn-subsection-search").on("click",function(){
 							function getValue(name){
@@ -43,28 +49,32 @@ define(function(require, exports) {
 								return value;
 							}
 							subsection.searchData = {
+								lineProduct :  getValue("lineProductChoose"),
 								lineProductId :  getValue("lineProductId"),
+								fromPartnerAgency :  getValue("fromPartnerAgency"),
 								fromPartnerAgencyId :  getValue("fromPartnerAgencyId"),
+								creator :  getValue("creator"),
 								creatorId :  getValue("creatorId"),
 								travelDate :  getValue("travelDate"),
 								operationStartDate :  getValue("operationStartDate"),
 								operationEndDate :  getValue("operationEndDate")
 							}
-							subsection.listSubsection(0,subsection.searchData.lineProductId,subsection.searchData.fromPartnerAgencyId,subsection.searchData.creatorId,subsection.searchData.travelDate,subsection.searchData.operationStartDate,subsection.searchData.operationEndDate,tab);
-							subsection.searchNumber(subsection.searchData.lineProductId,subsection.searchData.fromPartnerAgencyId,subsection.searchData.creatorId,subsection.searchData.travelDate,subsection.searchData.operationStartDate,subsection.searchData.operationEndDate,tab);
+							subsection.listSubsection(0,subsection.searchData.lineProduct,subsection.searchData.lineProductId,subsection.searchData.fromPartnerAgency,subsection.searchData.fromPartnerAgencyId,subsection.searchData.creator,subsection.searchData.creatorId,subsection.searchData.travelDate,subsection.searchData.operationStartDate,subsection.searchData.operationEndDate,tab);
+							subsection.searchNumber(subsection.searchData.lineProduct,subsection.searchData.lineProductId,subsection.searchData.fromPartnerAgency,subsection.searchData.fromPartnerAgencyId,subsection.searchData.creator,subsection.searchData.creatorId,subsection.searchData.travelDate,subsection.searchData.operationStartDate,subsection.searchData.operationEndDate,tab);
 						})
-						subsection.getPartnerAgencyList($("#"+tab+" .choosePartnerAgency"),"");
-						subsection.getLineProductList($("#"+tab+" .chooseLineProduct"),"");
+						//subsection.getPartnerAgencyList($("#"+tab+" .choosePartnerAgency"),"");
+						//subsection.getLineProductList($("#"+tab+" .chooseLineProduct"),"");
+						//subsection.($("#"+tab+" .creatorUserChoose"),"");
 						$("#"+tab+" .btn-subsection-search").trigger('click');
 					}
 				}
 			})
 		},
-		searchNumber :function(lineProductId,fromPartnerAgencyId,creatorId,travelDate,operationStartDate,operationEndDate,tab){
+		searchNumber :function(lineProduct,lineProductId,fromPartnerAgency,fromPartnerAgencyId,creator,creatorId,travelDate,operationStartDate,operationEndDate,tab){
 			$.ajax({
 				url:""+APP_ROOT+"back/innerTransferOperation.do?method=getTransitSubCount&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 				type:"POST",
-				data:"lineProductId="+lineProductId+"&fromPartnerAgencyId="+fromPartnerAgencyId+"&creatorId="+creatorId+"&travelDate="+travelDate+"&operationStartDate="+operationStartDate+"&operationEndDate="+operationEndDate+"",
+				data:"lineProductId="+lineProductId+"&lineProduct="+lineProduct+"&fromPartnerAgencyId="+fromPartnerAgencyId+"&fromPartnerAgency="+fromPartnerAgency+"&creatorId="+creatorId+"&creator="+creator+"&travelDate="+travelDate+"&operationStartDate="+operationStartDate+"&operationEndDate="+operationEndDate+"",
 				dataType:"json",
 				beforeSend:function(){
 					globalLoadingLayer = openLoadingLayer();
@@ -79,11 +89,11 @@ define(function(require, exports) {
 				}
 			})
 		},
-		listSubsection :function(page,lineProductId,fromPartnerAgencyId,creatorId,travelDate,operationStartDate,operationEndDate,tab){
+		listSubsection :function(page,lineProduct,lineProductId,fromPartnerAgency,fromPartnerAgencyId,creator,creatorId,travelDate,operationStartDate,operationEndDate,tab){
 			$.ajax({
 				url:""+APP_ROOT+"back/innerTransferOperation.do?method=listTransitSubTgroup&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 				type:"POST",
-				data:"pageNo="+page+"&lineProductId="+lineProductId+"&fromPartnerAgencyId="+fromPartnerAgencyId+"&creatorId="+creatorId+"&travelDate="+travelDate+"&operationStartDate="+operationStartDate+"&operationEndDate="+operationEndDate+"",
+				data:"pageNo="+page+"&lineProductId="+lineProductId+"&lineProduct="+lineProduct+"&fromPartnerAgencyId="+fromPartnerAgencyId+"&fromPartnerAgency="+fromPartnerAgency+"&creatorId="+creatorId+"&creator="+creator+"&travelDate="+travelDate+"&operationStartDate="+operationStartDate+"&operationEndDate="+operationEndDate+"",
 				dataType:"json",
 				beforeSend:function(){
 					//打开一个遮罩层
@@ -158,7 +168,7 @@ define(function(require, exports) {
 													layer.close(globalLoadingLayer);
 													var result = showDialog(data);
 													if(result){
-														subsection.listSubsection(0,subsection.searchData.lineProductId,subsection.searchData.fromPartnerAgencyId,subsection.searchData.creatorId,subsection.searchData.travelDate,subsection.searchData.operationStartDate,subsection.searchData.operationEndDate,tab);
+														subsection.listSubsection(0,subsection.searchData.lineProduct,subsection.searchData.lineProductId,subsection.searchData.fromPartnerAgency,subsection.searchData.fromPartnerAgencyId,subsection.searchData.creator,subsection.searchData.creatorId,subsection.searchData.travelDate,subsection.searchData.operationStartDate,subsection.searchData.operationEndDate,tab);
 													}
 												}
 											})
@@ -241,7 +251,7 @@ define(function(require, exports) {
 						//分页--首页按钮事件
 						$("#"+tab+" .pageMode a.first").click(function(){
 							if(data.pageNo == 0 || data.totalPage == 0)return;
-							subsection.listSubsection(0,subsection.searchData.lineProductId,subsection.searchData.fromPartnerAgencyId,subsection.searchData.creatorId,subsection.searchData.travelDate,subsection.searchData.operationStartDate,subsection.searchData.operationEndDate,tab);
+							subsection.listSubsection(0,subsection.searchData.lineProduct,subsection.searchData.lineProductId,subsection.searchData.fromPartnerAgency,subsection.searchData.fromPartnerAgencyId,subsection.searchData.creator,subsection.searchData.creatorId,subsection.searchData.travelDate,subsection.searchData.operationStartDate,subsection.searchData.operationEndDate,tab);
 						});
 						//分页--上一页事件
 						$("#"+tab+" .pageMode a.previous").click(function(){	
@@ -250,7 +260,7 @@ define(function(require, exports) {
 							if(data.pageNo == 0){
 								previous = 0;
 							}
-							subsection.listSubsection(previous,subsection.searchData.lineProductId,subsection.searchData.fromPartnerAgencyId,subsection.searchData.creatorId,subsection.searchData.travelDate,subsection.searchData.operationStartDate,subsection.searchData.operationEndDate,tab);
+							subsection.listSubsection(previous,subsection.searchData.lineProduct,subsection.searchData.lineProductId,subsection.searchData.fromPartnerAgency,subsection.searchData.fromPartnerAgencyId,subsection.searchData.creator,subsection.searchData.creatorId,subsection.searchData.travelDate,subsection.searchData.operationStartDate,subsection.searchData.operationEndDate,tab);
 						});
 						//分页--下一页事件
 						$("#"+tab+" .pageMode a.next").click(function(){
@@ -260,13 +270,18 @@ define(function(require, exports) {
 							if(data.pageNo == data.totalPage-1){
 								next = data.pageNo ;
 							}
-							subsection.listSubsection(next,subsection.searchData.lineProductId,subsection.searchData.fromPartnerAgencyId,subsection.searchData.creatorId,subsection.searchData.travelDate,subsection.searchData.operationStartDate,subsection.searchData.operationEndDate,tab);
+							subsection.listSubsection(next,subsection.searchData.lineProduct,subsection.searchData.lineProductId,subsection.searchData.fromPartnerAgency,subsection.searchData.fromPartnerAgencyId,subsection.searchData.creator,subsection.searchData.creatorId,subsection.searchData.travelDate,subsection.searchData.operationStartDate,subsection.searchData.operationEndDate,tab);
 						});
 						//分页--尾页事件
 						$("#"+tab+" .pageMode a.last").click(function(){
 							if(data.pageNo == data.totalPage-1 || data.totalPage == 0)return;
-							subsection.listSubsection(data.totalPage-1,subsection.searchData.lineProductId,subsection.searchData.fromPartnerAgencyId,subsection.searchData.creatorId,subsection.searchData.travelDate,subsection.searchData.operationStartDate,subsection.searchData.operationEndDate,tab);
+							subsection.listSubsection(data.totalPage-1,subsection.searchData.lineProduct,subsection.searchData.lineProductId,subsection.searchData.fromPartnerAgency,subsection.searchData.fromPartnerAgencyId,subsection.searchData.creator,subsection.searchData.creatorId,subsection.searchData.travelDate,subsection.searchData.operationStartDate,subsection.searchData.operationEndDate,tab);
 						});
+
+						//autocomplete
+						subsection.getPartnerAgencyList($("#tab-"+menuKey+"-content"));
+						subsection.getLineProductList($("#tab-"+menuKey+"-content"));
+						subsection.getCreatorList($("#tab-"+menuKey+"-content"));
 					}
 				}
 			})
@@ -277,23 +292,30 @@ define(function(require, exports) {
 				minLength:0,
 				change :function(event,ui){
 					if(ui.item == null){
-						$(this).val("");
-						var parents = $(this).parent();
-						parents.parent().find("input[name=days]").val("");
-						parents.parent().find("input[name=customerType]").val("");
-						parents.find("input[name=lineProductId]").val("");
+
+							$(this).parent().parent().find("input[name=lineProductId]").val("");
+						//$(this).val("");
+						//var parents = $(this).parent();
+						//parents.parent().find("input[name=days]").val("");
+						//parents.parent().find("input[name=customerType]").val("");
+						//parents.find("input[name=lineProductId]").val("");
+
 					}
 				},
 				select :function(event,ui){
-					var parents = $(this).parent();
-					parents.find("input[name=lineProductId]").val(ui.item.id);
-					if(ui.item.customerType == 0){
-						parents.parent().find("input[name=customerType]").val("散客");
-					}else{
-						parents.parent().find("input[name=customerType]").val("团体");
-					}
-					parents.parent().find("input[name=days]").val(ui.item.days);
-					validator = rule.updateCheckdSaveSubsection(validator);
+					//var parents = $(this).parent();
+					//parents.find("input[name=lineProductId]").val(ui.item.id).trigger('change');
+					//if(ui.item.customerType == 0){
+					//	parents.parent().find("input[name=customerType]").val("散客");
+					//}else{
+					//	parents.parent().find("input[name=customerType]").val("团体");
+					//}
+					//parents.parent().find("input[name=days]").val(ui.item.days);
+					//validator = rule.updateCheckdSaveSubsection(validator);
+
+					$(this).blur();
+					var obj = this;
+					$(obj).parent().parent().find("input[name=lineProductId]").val(ui.item.id).trigger('change');
 				}
 			}).unbind("click").click(function(){
 				var obj =this;
@@ -321,6 +343,7 @@ define(function(require, exports) {
 				})
 			})
 		},
+
 		operationSave :function(e){
 			var tab = e.data.tab,
 				days = e.data.days,
@@ -438,80 +461,115 @@ define(function(require, exports) {
 				language: 'zh-CN'
 			})
 		},
-		getPartnerAgencyList:function(obj,partnerAId){
-			var $objC = $(obj)
-			$.ajax({
-				url:""+APP_ROOT+"back/partnerAgency.do?method=findPartnerAnencyList&token="+$.cookie("token")+"&menuKey=resource_partnerAgency&operation=view",
-                dataType: "json",
-                data:"travelAgencyName="+$objC.val(),
-                success:function(data){
-                	layer.close(globalLoadingLayer);
-						var result = showDialog(data);
-						if(result){
-							var partnerAgencyList = JSON.parse(data.partnerAgencyList);
-							if(partnerAgencyList != null && partnerAgencyList.length > 0){
-								for(var i=0;i<partnerAgencyList.length;i++){
-									partnerAgencyList[i].value = partnerAgencyList[i].travelAgencyName;
-								}
-							};
-							$(obj).autocomplete({
-								
+
+		//来源
+		getPartnerAgencyList:function($obj){
+			var getPartnerAgencyList = $obj.find(".choosePartnerAgency");
+			getPartnerAgencyList.autocomplete({
 								minLength: 0,
 								change: function(event, ui) {
-									if (!ui.item)  {
-										$(this).val('').nextAll('input[name="fromPartnerAgencyId"]').val('');
+									if(ui.item == null){
+										//$(this).nextAll('input[name="fromPartnerAgencyId"]').val('');
+										$(this).parent().parent().find("input[name=fromPartnerAgencyId]").val("");
 									}
 								},
 								select: function(event, ui) {
-									var $tabId = $("#tab-resource_touristGroup-add-content");
-									$(this).blur().nextAll('input[name="fromPartnerAgencyId"]').val(ui.item.id);
-									$tabId.find("input[name=fromPartnerAgencyId]").val("");
-
+									$(this).blur();
+									var obj = this;
+									$(obj).parent().parent().find("input[name=fromPartnerAgencyId]").val(ui.item.id).trigger('change');
 								}
-							}).off("click").on("click",function(){
-								
-								$objC.autocomplete('option','source', partnerAgencyList);
-								$objC.autocomplete('search', '');
-
-							});
-							
-						}
-                }
+							}).click(function(){
+							var obj = this;
+							var fromGuideObj = subsection.autocompleteDate.fromPartnerAgencyList;
+							console.info(fromGuideObj);
+							if(fromGuideObj !=null && fromGuideObj.length>0){
+								for(var i=0;i<fromGuideObj.length;i++){
+									fromGuideObj[i].value = fromGuideObj[i].travelAgencyName;
+								}
+							}
+							$(obj).autocomplete('option','source',fromGuideObj);
+							$(obj).autocomplete('search', '');
 			});
 		},
-		getLineProductList:function(obj,partnerAId){
-			var $objC = $(obj);
-			$.ajax({
-				url:""+APP_ROOT+"back/transfer.do?method=findLineProduct&token="+$.cookie("token")+"&menuKey=resource_partnerAgency&operation=view",
-                dataType: "json",
-                success: function(data) {
-                	layer.close(globalLoadingLayer);
-					var result = showDialog(data);
-					if(result){
-						var lineProductList = JSON.parse(data.lineProductList);
-						if(lineProductList != null && lineProductList.length > 0){
-							for(var i=0;i<lineProductList.length;i++){
-								lineProductList[i].value = lineProductList[i].name;
-							}
-						}
-						$(obj).autocomplete({
+
+		//线路产品模糊查询
+		getLineProductList:function($obj){
+			var getPartnerAgencyList = $obj.find(".chooseLineProduct");
+			getPartnerAgencyList.autocomplete({
 							minLength: 0,
 							change: function(event, ui) {
-								if (!ui.item)  {
-									$(this).val('').nextAll('input[name="lineProductId"]').val('');
+								if (ui.item == null)  {
+									//$(this).nextAll('input[name="lineProductId"]').val('');
+									$(this).parent().parent().find("input[name=lineProductId]").val("");
 								}
 							},
 							select: function(event, ui) {
-								$(this).blur().nextAll('input[name="lineProductId"]').val(ui.item.id);
+								$(this).blur();
+								var obj = this;
+								$(obj).parent().parent().find("input[name=lineProductId]").val(ui.item.id).trigger('change');
+								//nextAll('input[name="lineProductId"]').val(ui.item.id);
 							}
-						}).off("click").on("click",function(){
-							$objC.autocomplete('option','source', lineProductList);
-							$objC.autocomplete('search', '');
-						});
+						}).click(function(){
+						var obj = this;
+						var lineProductObj = subsection.autocompleteDate.lineProductList;
+						console.info(lineProductObj);
+						if(lineProductObj !=null && lineProductObj.length>0){
+							for(var i=0;i<lineProductObj.length;i++){
+								lineProductObj[i].value = lineProductObj[i].name;
+							}
+						}
+						$(obj).autocomplete('option','source',lineProductObj);
+						$(obj).autocomplete('search', '');
+					});
+		},
+
+        //操作人模糊查询
+		getCreatorList:function($obj){
+			var getCreatorList = $obj.find(".creatorUserChoose");
+			getCreatorList.autocomplete({
+				minLength: 0,
+				change: function(event, ui) {
+					if (ui.item == null)  {
+						//$(this).nextAll('input[name="lineProductId"]').val('');
+						$(this).parent().parent().find("input[name=creatorId]").val("");
+					}
+				},
+				select: function(event, ui) {
+					$(this).blur();
+					var obj = this;
+					$(obj).parent().parent().find("input[name=creatorId]").val(ui.item.id).trigger('change');
+					//nextAll('input[name="lineProductId"]').val(ui.item.id);
+				}
+			}).click(function(){
+				var obj = this;
+				var creatorObj = subsection.autocompleteDate.creatorList;
+				console.info(creatorObj);
+				if(creatorObj !=null && creatorObj.length>0){
+					for(var i=0;i<creatorObj.length;i++){
+						creatorObj[i].value = creatorObj[i].realName;
 					}
 				}
+				$(obj).autocomplete('option','source',creatorObj);
+				$(obj).autocomplete('search', '');
 			});
-		}
+		},
+
+
+		getQueryTerms :function(){
+			$.ajax({
+				url:""+APP_ROOT+"back/innerTransferOperation.do?method=getSearchCondition&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
+				dateType:"json",
+				type:"POST",
+				success:function(data){
+					var result = showDialog(data);
+					if(result){
+						subsection.autocompleteDate.creatorList = data.creatorList;
+						subsection.autocompleteDate.fromPartnerAgencyList = data.fromPartnerAgencyList;
+						subsection.autocompleteDate.lineProductList = data.lineProductList;
+					}
+				}
+			})
+		},
 	}
 	exports.listMainSubsection = subsection.listMainSubsection;
 });
