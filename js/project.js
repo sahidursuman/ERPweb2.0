@@ -9,36 +9,14 @@ imgUrl  = "http://7xlw2q.com2.z0.glb.qiniucdn.com/"; //测试
 var listwidth = parseInt($("#tabList li").eq(0).css("width"));//ul总宽度，初始化数据为“工作台”tab宽度
 // window.UEDITOR_HOME_URL = APP_ROOT + 'app/components/ueditor/';
 var modals = {};
+var $tabList = $('#tabList'), $tabContent = $("#tabContent");
 
 function addTab(tabId,tabName,html){
 	$("#tabList li").removeClass("active");
 	if($("#tabList li.tab-"+tabId+"").length > 0){
 		$("#tabList li.tab-"+tabId+"").addClass("active");
 		setTimeout(function() {
-			var maxwidth = parseInt($(".breadcrumbs-fixed").css("width"))-70;//可视区域宽度
-			if(listwidth > maxwidth){//只有当ul宽度大于可视区宽度时需要处理
-				var index = $("#tabList li.tab-"+tabId+"").index();
-				var widthleft = 0,maxleft = 0,minleft = 0;
-				//widthleft为ul在当前元素左侧的宽度，maxleft绝对值为当前元素在可视区显示时ul可向左平移的最小宽度，minleft为最大
-				for(var i = 0; i <= index; i++){
-					if(i < index){
-						widthleft += parseInt($("#tabList li").eq(i).css("width"));
-					}
-					if(i == index){
-						minleft = -(widthleft - 35);
-						widthleft += parseInt($("#tabList li").eq(i).css("width"));
-						maxleft = -(widthleft - (maxwidth + 35));
-					}
-				}
-				marginLeft = parseInt($("#tabList").css("marginLeft"));
-				//只有当marginLeft取值在minleft~maxleft时，当前tab才在可视区域内
-				if(marginLeft > maxleft){
-					$("#tabList").css("marginLeft",maxleft);
-				}
-				if(marginLeft < minleft){
-					$("#tabList").css("marginLeft",minleft);
-				}
-			}
+			Tools.justifyTab();
 		}, 50);
 		$("#tabList li.tab-"+tabId+"").find("span").text(tabName);
 
@@ -83,33 +61,7 @@ function addTab(tabId,tabName,html){
 					listwidth -= parseInt($("#tabList li").eq(index).css("width"));
 					$that.parent().parent().remove();
 					$("#tab-"+tabId+"-content").remove();
-					if($("#tabList li.active").length == 0){
-						var preTab = $("#tabList li").get(index-1);
-						$(preTab).addClass("active");
-						var preTabId = $(preTab).find("a").attr("href");
-						$(""+preTabId+"").addClass("active");
-					}
-					var marginLeft = parseInt($("#tabList").css("marginLeft"));
-					var maxwidth = parseInt($(".breadcrumbs-fixed").css("width")) - 70;
-					if(listwidth > maxwidth){
-						var widthleft = 0;
-						for(var i = 0;i < $("#tabList").find("li.active").index();i++){
-							widthleft += parseInt($("#tabList li").eq(i).css("width"))
-						}
-						if((listwidth + marginLeft - 35) < maxwidth){//左侧有隐藏部分并且当前可视区未填满
-							marginLeft = -(listwidth - (maxwidth + 35));
-							if(marginLeft < -(widthleft - 35)){//active项在左侧隐藏
-								marginLeft = -(widthleft - 35);
-								console.log("1");
-							}
-						} else if(marginLeft < -(widthleft - 35)){//active项在左侧隐藏
-							marginLeft = -(widthleft - 35);
-							console.log("2");
-						}
-					} else {
-						marginLeft = 35;
-					}
-					$("#tabList").css("marginLeft",marginLeft);
+					Tools.justifyTab();
 				}
 			});
 		}, 50);
@@ -131,33 +83,7 @@ function closeTab(tabId){
 	listwidth -= parseInt($("#tabList li").eq(index).css("width"));
 	_this.parent().parent().remove();
 	$("#tab-"+tabId+"-content").remove();
-	if($("#tabList li.active").length == 0){
-		var preTab = $("#tabList li").get(index-1);
-		$(preTab).addClass("active");
-		var preTabId = $(preTab).find("a").attr("href");
-		$(""+preTabId+"").addClass("active");
-	}
-	var marginLeft = parseInt($("#tabList").css("marginLeft"));
-	var maxwidth = parseInt($(".breadcrumbs-fixed").css("width")) - 70;
-	if(listwidth > maxwidth){
-		var widthleft = 0;
-		for(var i = 0;i < $("#tabList").find("li.active").index();i++){
-			widthleft += parseInt($("#tabList li").eq(i).css("width"))
-		}
-		if((listwidth + marginLeft - 35) < maxwidth){//左侧有隐藏部分并且当前可视区未填满
-			marginLeft = -(listwidth - (maxwidth + 35));
-			if(marginLeft < -(widthleft - 35)){//active项在左侧隐藏
-				marginLeft = -(widthleft - 35);
-				console.log("1");
-			}
-		} else if(marginLeft < -(widthleft - 35)){//active项在左侧隐藏
-			marginLeft = -(widthleft - 35);
-			console.log("2");
-		}
-	} else {
-		marginLeft = 35;
-	}
-	$("#tabList").css("marginLeft",marginLeft);
+	Tools.justifyTab();
 }
 
 //权限过滤
@@ -306,6 +232,52 @@ function showConfirmMsg(dialogObj,message,confirmFn ,cancelFn,btnStr1,btnStr2){
 	dialogObj.removeClass('hide').dialog({
 		modal: true,
 		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
+		title_html: true,
+		draggable:false,
+		buttons: buttons,
+		open:function(event,ui){
+			$(this).find("p").text(message);
+		}
+	});
+}
+
+function showSaveConfirmDialog($dialog, message, yes_fn, no_fn, cacel_fn)  {
+	var buttons = [
+			{
+				text: '是',
+				class: "btn btn-minier",
+				click: function() {
+					$( this ).dialog( "close" );
+					if(typeof yes_fn === "function"){
+						yes_fn();
+					}
+				}
+			}, 
+			{
+				text: '否',
+				class: "btn btn-primary btn-minier",
+				click: function() {
+					$( this ).dialog( "close" );
+					if(typeof no_fn === "function"){
+						no_fn();
+					}
+				}
+			},
+			{
+				text: '取消',
+				class: "btn btn-default btn-minier",
+				click: function() {
+					$( this ).dialog( "close" );
+					if(typeof cacel_fn === "function"){
+						cacel_fn();
+					}
+				}
+			}
+		]
+
+	dialogObj.removeClass('hide').dialog({
+		modal: true,
+		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i>保存修改？</h4></div>",
 		title_html: true,
 		draggable:false,
 		buttons: buttons,
@@ -1506,6 +1478,132 @@ Tools.descToolTip = function($elements) {
 	}
 }
 
+Tools.addTab = function(tab_id, tab_name, html)  {
+	$tabList.children('li').removeClass("active");
+
+	var $tab = $tabList.find('.tab-' + tab_id), 
+		$content = $('tab-'+ tabId +'-content'),
+		canUpdateTabContent = true;
+
+	// tab已经打开了
+	if ($tab.length > 0)  {
+		// show tab
+		$tab.addClass('active');
+
+		// 页面已经编辑
+		if ($content.data('isEdited'))  {
+			showSaveConfirmDialog($( "#confirm-dialog-message" ), "内容已经被修改，是否保存?",
+								function(){	// 保存
+									$content.trigger('switch.tab.save', html);
+								},
+								function(){  // 不保存
+									updateTabContent();
+								},
+								// 取消
+								false);
+			// 此时不能添加内容
+			canUpdateTabContent = false;
+		}
+	} 
+
+	if (canUpdateTabContent) {
+		// 更新页面
+		updateTabContent();
+	}
+
+
+	function updateTabContent()  {
+		$tabContent.find(".tab-pane-menu").removeClass("active");
+		if($content.length > 0){
+			$content.addClass("active");
+			$tab.find('span').text('tab_name');
+		}
+		else{
+			var $tab_li = $("<li class=\"tab-"+tab_id+" active\"><a data-toggle=\"tab\" href=\"#tab-"+tab_id+"-content\" aria-expanded=\"true\"><span>"+tab_name+"</span><i class=\"ace-icon fa fa-close tab-close\"></i></a></li>");
+
+			$tabList.append($tab_li);
+			$tabContent.append("<div id='tab-"+tab_id+"-content' class='tab-pane tab-pane-menu active'></div>");
+			// bind close event
+			
+			$tab_li.on('click', '.tab-close', function(event) {
+				event.preventDefault();
+				var $content = $('#' + tab_id + '-content');
+
+				// 页面已经编辑
+				if ($content.data('isEdited'))  {
+					showSaveConfirmDialog($( "#confirm-dialog-message" ), "内容已经被修改，是否保存?",
+										function(){	// 保存
+											$content.trigger('close.tab.save', html);
+										},
+										function(){  // 不保存
+											Tools.closeTab(tab_id);
+										},
+										// 取消
+										false);
+					// 此时不能添加内容
+					canUpdateTabContent = false;
+				}
+			});
+
+			Tools.justifyTab();
+		}
+
+		$("#tab-"+tab_id+"-content").html(filterUnAuth(html));
+	}
+};
+
+/**
+ * 关闭tab
+ * @param  {string} tab_id tab标签的id
+ * @return {[type]}        [description]
+ */		
+Tools.closeTab = function(tab_id) {
+	var $tab_li = $tabList.find('.tab' + tab_id),
+		index = $tab_li.index();
+
+	$tabContent.find('#tab' + tab_id + '-content').remove();
+	$tab_li.remove();
+
+	index = index === 0? 0: (index-1);
+
+	if (index >= 0) {
+		$tabList.children('li').trigger('click');
+	}
+
+	Tools.justifyTab();
+};
+
+/**
+ * 调整tab的位置
+ * @return {[type]} [description]
+ */
+Tools.justifyTab = function() {
+	var viewWidth = $('.breadcrumbs-fixed').width(),
+		leftBarWidth = $('#tab_left_scroll').width(),
+		rightBarWidth = $('#tab_right_scroll').width(),
+		tabWidth = $tabList.width();
+
+	// 参考左边
+	viewWidth = viewWidth - rightBarWidth;
+
+	var $active_li = $tabList.find('.active'),
+		// 必须距离左边的距离
+		li_left = $active_li.position().left,
+		li_right = li_left + $active_li.outerWidth(),
+		// need_left = right_point - viewWidth;
+		leftMargin = parseInt($tabList.css('marginLeft'));
+
+	if (li_left < (-leftMargin - leftBarWidth)) {
+		// 左隐
+		$tabList.css({
+			'margin-left': (leftBarWidth -li_left + 'px')
+		});
+	} else if (li_right > (leftBarWidth + viewWidth - leftMargin)) {
+		// 右隐
+		$tabList.css('margin-left', (viewWidth - li_right) + 'px');
+	}
+};
+
 /**
  * 编辑中转安排——
  * @param  {string} id 游客小组的ID
@@ -1559,6 +1657,8 @@ Tools.addTicket = function(fn){
 		module.addTicket(fn);
 	});
 }
+
+
 
 /**
  * 用于定义公共请求或者与数据相关的公共组件处理
