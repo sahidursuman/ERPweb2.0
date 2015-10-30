@@ -555,12 +555,12 @@ define(function(require, exports) {
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
-					data.selfPay = JSON.parse(data.selfPay);
-					formData.id = data.selfPay.id; 
 					if(type == 1){layer.close(selfpay.$addLayer);}
 					else if(type == 2){layer.close(selfpay.$updateLayer);}
 					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
 						if (typeof fn === "function") {
+							data.selfPay = JSON.parse(data.selfPay);
+							formData.id = data.selfPay.id; 
 							fn(formData);
 						}else{
 							selfpay.selfpayList(0);

@@ -299,8 +299,6 @@ define(function(require, exports) {
                 var result = showDialog(data);
                 if (result) {
                     console.log(formData)
-                    data.restaurant = JSON.parse(data.restaurant);
-                    formData.id = data.restaurant.id;
                 	if(option == "add") {
                 		layer.close(restaurant.$addLayer);
                 	} else if(option == "update"){
@@ -308,6 +306,8 @@ define(function(require, exports) {
                 	}
                     showMessageDialog($("#confirm-dialog-message"), data.message,function(){
                         if (typeof fn === "function") {
+                            data.restaurant = JSON.parse(data.restaurant);
+                            formData.id = data.restaurant.id;
                             fn(formData);
                         }else{
                             restaurant.listRestaurant(page);
