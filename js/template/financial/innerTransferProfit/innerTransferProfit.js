@@ -104,7 +104,7 @@ define(function(require, exports) {
                 innerProfit.viewTransit(id);
             } else if ($that.hasClass('T-showTransPay')) {
                 // 查看内转明细
-                innerProfit.deleteRestaurant(id);
+                innerProfit.viewTransfer(this);
             }
         });
     };
@@ -187,7 +187,8 @@ define(function(require, exports) {
     };
 
     //查看我社转出分团转客信息
-    innerProfit.viewTransfer = function(id){
+    innerProfit.viewTransfer = function(obj){
+        var id = $(obj).data("inner-id");
         $.ajax({
             url:innerProfit.url("innerTransfer","edit"),
             type:"POST",

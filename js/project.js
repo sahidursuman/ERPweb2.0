@@ -1731,15 +1731,16 @@ KingServices.addTicket = function(fn){
 //添加资源函数
 KingServices.addResourceFunction = function(e){
 	var $this = $(this),
-		$parents = $(this).closest('tr'),
+		$parents = $(this).closest(e.data.type),
 		name = e.data.name,
 		id = e.data.id,
 		managerName = e.data.managerName,
 		mobileNumber = e.data.mobileNumber,
 		$function = e.data.function,
 		fn = function (data){
-			if (!!data.name && !!name) {$parents.find('input[name='+name+']').val(data.name);}
-			if (!!data.id && !!id) {$parents.find('input[name='+id+']').val(data.id);}
+			console.log(data);
+			if (!!data.name && !!name) {$parents.find('input[name='+name+']').val(data.name).trigger('change');}
+			if (!!data.id && !!id) {$parents.find('input[name='+id+']').val(data.id).trigger('change');}
 			if (!!data.managerName && !!managerName) {$parents.find('input[name='+managerName+']').val(data.managerName);}
 			if (!!data.mobileNumber && !!mobileNumber) {$parents.find('input[name='+mobileNumber+']').val(data.mobileNumber);}
 		}
@@ -1748,7 +1749,7 @@ KingServices.addResourceFunction = function(e){
 //添加车、司机函数
 KingServices.addBusDriverFunction = function(e){
 	var $this = $(this),
-		$parents = $(this).closest('tr'),
+		$parents = $(this).closest(e.data.type),
 		$busCompany = $parents.find('[name=busCompanyName]').val() || "",
 		$busCompanyId = $parents.find('[name=busCompanyId]').val() || "",
 		busCompanyName = e.data.busCompanyName,
@@ -1765,12 +1766,12 @@ KingServices.addBusDriverFunction = function(e){
 			console.log(data);
 			if (!!data.busCompanyData.name && !!busCompanyName) {$parents.find('input[name='+busCompanyName+']').val(data.busCompanyData.name);}
 			if (!!data.busCompanyData.id && !!busCompanyId) {$parents.find('input[name='+busCompanyId+']').val(data.busCompanyData.id);}
-			if (!!data.busData.id && !!licenseNumberId) {$parents.find('input[name='+licenseNumberId+']').val(data.busData.id);}
+			if (!!data.busData.id && !!licenseNumberId) {$parents.find('input[name='+licenseNumberId+']').val(data.busData.id).trigger('change');}
 			if (!!data.busData.licenseNumber && !!licenseNumber) {$parents.find('input[name='+licenseNumber+']').val(data.busData.licenseNumber);}
 			if (!!data.busData.brand && !!busbrand) {$parents.find('input[name='+busbrand+']').val(data.busData.brand);}
-			if (!!data.busData.seatCount && !!seatCount) {$parents.find('input[name='+seatCount+']').val(data.busData.seatCount);}
+			if (!!data.busData.seatCount && !!seatCount) {$parents.find('input[name='+seatCount+']').val(data.busData.seatCount).trigger('change');}
 			if (!!data.driverData.name && !!driverName) {$parents.find('input[name='+driverName+']').val(data.driverData.name);}
-			if (!!data.driverData.id && !!driverId) {$parents.find('input[name='+driverId+']').val(data.driverData.id);}
+			if (!!data.driverData.id && !!driverId) {$parents.find('input[name='+driverId+']').val(data.driverData.id).trigger('change');}
 			if (!!data.driverData.mobileNumber && !!driverMobileNumber) {$parents.find('input[name='+driverMobileNumber+']').val(data.driverData.mobileNumber);}
 		}
 	$function(fn,$busCompany,$busCompanyId);
