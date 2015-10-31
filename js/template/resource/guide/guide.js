@@ -125,7 +125,7 @@ define(function(require, exports) {
 		GuideResource.$tab.find('.T-add-guide').on('click', function(event) {
 			event.preventDefault();
 			/* Act on the event */
-			GuideResource.addGuide(0);
+			GuideResource.addGuide();
 		});
 
 		// 报表内的操作
@@ -194,6 +194,7 @@ define(function(require, exports) {
 									if (typeof fn === "function") {
 										data.guide = JSON.parse(data.guide);
 										formData.id = data.guide.id;
+										formData.name = formData.realname;
 										fn(formData);
 									}else{
 										GuideResource.listGuide(0);
@@ -363,4 +364,5 @@ define(function(require, exports) {
 	}
 
 	exports.init = GuideResource.initModule;
+	exports.addGuide = GuideResource.addGuide;
 });

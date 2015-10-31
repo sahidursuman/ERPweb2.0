@@ -559,6 +559,26 @@ define(function(require, exports) {
 			$("#"+tab+" .btn-saveTripPlan").click(function(){
 				arrangeTourist.saveAddTripPlan(tab,"addTripPlanMain",1,"","addTripPlanTouristTbody",validator,1);
 			})			
+			arrangeTourist.addResource(tab);
+		},
+		//添加资源
+		addResource : function(tab){
+			$container = $("#"+tab);
+			$container.find('.T-addGuideResource').on('click' , {function : KingServices.addGuide ,type : ".widget-main" ,  name : "AddTPchooseGuide" , id : "AddTPchooseGuideId" , mobileNumber : "GmobileNumber"} , KingServices.addResourceFunction);
+			$container.find(".T-addBusCompanyResource").off('click').on("click",{function : KingServices.addBusCompany}, KingServices.addResourceFunction);
+			$container.find(".T-addBusResource,.T-addDriverResource").off('click').on("click",{
+				function : KingServices.addBusDriver,
+				busCompanyName : "busCompany",
+				busCompanyId : "busCompanyId",
+				busLicenseNumberId : "busLicenseNumberId",
+				busLicenseNumber : "LicenseNumber",
+				busbrand : "needBusBrand",
+				seatCount : "seatCount",
+				driverName : "driverName",
+				driverId : "driverId",
+				driverMobileNumber : "DmobileNumber",
+				type : ".widget-main"
+			}, KingServices.addBusDriverFunction);
 		},
 		tripPlanAllMemberCount :function(className,tab,tbody){
 			var tr = $("#"+tab+" ."+tbody+"").find("tr"),
@@ -1123,6 +1143,8 @@ define(function(require, exports) {
 			$("#"+tab+" .addMergePlan .btn-saveTripPlan").click(function(){
 				arrangeTourist.saveAddTripPlan(tab,"addMergePlan",0,"arrange_tourist-mergeAddTripPlan","mergeTripPlanTouristTbody",validator,1);
 			})
+			//新增资源
+			arrangeTourist.addResource(tab);
 		},
 		viewTouristGroup :function(){
 			var id = $(this).attr("data-entity-id");
@@ -2220,27 +2242,37 @@ define(function(require, exports) {
 			$("#"+tab+" .mergeTripPlan .btn-saveTripPlan").click(function(){
 				arrangeTourist.saveAddTripPlan(tab,"mergeTripPlan",2,"arrange_tourist-chooseMerge","updateTripPlanTouristTbody",validator,1);
 			})
+			//新增资源
+			arrangeTourist.addResource(tab);
 		},
 		seatCountChoose : function(){
-			var chooseSeatCount = $(".widget-main").find("input[name=seatCount]");
+			var chooseSeatCount = $(".widget-main").find(".chooseSeatCount");
 			chooseSeatCount.autocomplete({
 				minLength:0,
 				change :function(event, ui){
 					if(ui.item == null){
-						var $this = $(this),parents = $(this).parent().parent();
+						var $this = $(this),parents = $(this).closest('.widget-main');
 						$this.val("");
 						parents.find("input[name=needBusBrand]").val("");
 						parents.find("input[name=LicenseNumber]").val("");
-						parents.next().find("input[name=driverName]").val("");
-						parents.next().find("input[name=DmobileNumber]").val("");
+						parents.find("input[name=busLicenseNumberId]").val("");
+						parents.find("input[name=busCompany]").val("");
+						parents.find("input[name=busCompanyId]").val("");
+						parents.find("input[name=driverName]").val("");
+						parents.find("input[name=driverId]").val("");
+						parents.find("input[name=DmobileNumber]").val("");
 					}
 				},
 				select :function(event, ui){
-					var $this = $(this),parents = $(this).parent().parent();
+					var $this = $(this),parents = $(this).closest('.widget-main');
 					parents.find("input[name=needBusBrand]").val("");
 					parents.find("input[name=LicenseNumber]").val("");
-					parents.next().find("input[name=driverName]").val("");
-					parents.next().find("input[name=DmobileNumber]").val("");
+					parents.find("input[name=busLicenseNumberId]").val("");
+					parents.find("input[name=busCompany]").val("");
+					parents.find("input[name=busCompanyId]").val("");
+					parents.find("input[name=driverName]").val("");
+					parents.find("input[name=driverId]").val("");
+					parents.find("input[name=DmobileNumber]").val("");
 				}
 			}).unbind("click").click(function(){
 				var obj = this;
@@ -2273,28 +2305,36 @@ define(function(require, exports) {
 			})
 		},
 		brandChoose :function(){
-			var chooseBrand = $(".widget-main").find("input[name=needBusBrand]");
+			var chooseBrand = $(".widget-main").find(".chooseBusBrand");
 			chooseBrand.autocomplete({
 				minLength:0,
 				change :function(event, ui){
 					if(ui.item == null){
-						var $this = $(this),parents = $(this).parent().parent();
+						var $this = $(this),parents = $(this).closest('.widget-main');
 						$this.val("");
 						parents.find("input[name=LicenseNumber]").val("");
-						parents.next().find("input[name=driverName]").val("");
-						parents.next().find("input[name=DmobileNumber]").val("");
+						parents.find("input[name=busLicenseNumberId]").val("");
+						parents.find("input[name=busCompany]").val("");
+						parents.find("input[name=busCompanyId]").val("");
+						parents.find("input[name=driverName]").val("");
+						parents.find("input[name=driverId]").val("");
+						parents.find("input[name=DmobileNumber]").val("");
 					}
 				},
 				select :function(event, ui){
-					var $this = $(this),parents = $(this).parent().parent();
+					var $this = $(this),parents = $(this).closest('.widget-main');
 					parents.find("input[name=LicenseNumber]").val("");
-					parents.next().find("input[name=driverName]").val("");
-					parents.next().find("input[name=DmobileNumber]").val("");
+					parents.find("input[name=busLicenseNumberId]").val("");
+					parents.find("input[name=busCompany]").val("");
+					parents.find("input[name=busCompanyId]").val("");
+					parents.find("input[name=driverName]").val("");
+					parents.find("input[name=driverId]").val("");
+					parents.find("input[name=DmobileNumber]").val("");
 				}
 			}).unbind("click").click(function(){
 				var obj = this;
-				var seatCount = $(this).parent().parent().find("input[name=seatCount]").val();
-				if(seatCount){
+				var seatCount = $(this).closest('.widget-main').find("input[name=seatCount]").val();
+				if(!!seatCount){
 					$.ajax({
 						url:""+APP_ROOT+"back/bookingOrder.do?method=getBusBrandList&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 						data:"seatCount="+seatCount+"",
@@ -2337,49 +2377,63 @@ define(function(require, exports) {
 				minLength:0,
 				change :function(event, ui){
 					if(ui.item == null){
-						var $this = $(this),parents = $(this).parent().parent();
+						var $this = $(this),parents = $(this).closest('.widget-main');
 						$this.val("");
-						parents.next().find("input[name=driverName]").val("");
-						parents.next().find("input[name=DmobileNumber]").val("");
+						parents.find("input[name=busLicenseNumberId]").val("");
+						parents.find("input[name=busCompany]").val("");
+						parents.find("input[name=busCompanyId]").val("");
+						parents.find("input[name=driverName]").val("");
+						parents.find("input[name=driverId]").val("");
+						parents.find("input[name=DmobileNumber]").val("");
 					}
 				},
 				select :function(event, ui){
-					var $this = $(this),parents = $(this).parent().parent();
-					parents.next().find("input[name=driverName]").val("");
-					parents.next().find("input[name=DmobileNumber]").val("");
-					$(this).parent().find("input[name=busLicenseNumberId]").val(ui.item.id).trigger('change');
+					var $this = $(this),parents = $(this).closest('.widget-main');
+						parents.find("input[name=busLicenseNumberId]").val(ui.item.id).trigger('change');
+						parents.find("input[name=busCompany]").val(ui.item.busCompanyName);
+						parents.find("input[name=busCompanyId]").val(ui.item.busCompanyId);
+						parents.find("input[name=driverName]").val("");
+						parents.find("input[name=driverId]").val("");
+						parents.find("input[name=DmobileNumber]").val("");
 				}
 			}).unbind("click").click(function(){
 				var obj = this;
-				var seatCount = $(this).parent().parent().find("input[name=seatCount]").val();
-				var busBrand = $(this).parent().parent().find("input[name=needBusBrand]").val();
-				$.ajax({
-					url:""+APP_ROOT+"back/busCompany.do?method=getLicenseNumbers&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-					data: {
-						seatCount: seatCount,
-						brand: busBrand
-					},
-					dateType:"json",
-					type:"POST",
-					success:function(data){
-						var result = showDialog(data);
-						if(result){
-							var licenseList = JSON.parse(data.busList);
-							if(licenseList && licenseList.length > 0){
-								for(var i=0; i < licenseList.length; i++){
-									licenseList[i].value = licenseList[i].licenseNumber;
+				var seatCount = $(this).closest('.widget-main').find("input[name=seatCount]").val();
+				var busBrand = $(this).closest('.widget-main').find("input[name=needBusBrand]").val();
+				if (!!seatCount) {
+					$.ajax({
+						url:""+APP_ROOT+"back/busCompany.do?method=getLicenseNumbers&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
+						data: {
+							seatCount: seatCount,
+							brand: busBrand
+						},
+						dateType:"json",
+						type:"POST",
+						success:function(data){
+							var result = showDialog(data);
+							if(result){
+								var licenseList = JSON.parse(data.busList);
+								if(licenseList && licenseList.length > 0){
+									for(var i=0; i < licenseList.length; i++){
+										licenseList[i].value = licenseList[i].licenseNumber;
+									}
+									$(obj).autocomplete('option','source', licenseList);
+									$(obj).autocomplete('search', '');
+								}else{
+									layer.tips('没有内容', obj, {
+									    tips: [1, '#3595CC'],
+									    time: 2000
+									});
 								}
-								$(obj).autocomplete('option','source', licenseList);
-								$(obj).autocomplete('search', '');
-							}else{
-								layer.tips('没有内容', obj, {
-								    tips: [1, '#3595CC'],
-								    time: 2000
-								});
 							}
 						}
-					}
-				})
+					})
+				}else{
+					layer.tips('请选择车座数', obj, {
+					    tips: [1, '#3595CC'],
+					    time: 2000
+					});
+				}
 			})
 		},
 		driverChoose : function(){
@@ -2388,18 +2442,20 @@ define(function(require, exports) {
 				minLength:0,
 				change :function(event, ui){
 					if(ui.item == null){
-						var $this = $(this),parents = $(this).parent().parent();
+						var $this = $(this),parents = $(this).closest('.widget-main');
 						$this.val("");
+						parents.find("input[name=driverId]").val("");
+						parents.find("input[name=DmobileNumber]").val("");
 					}
 				},
 				select :function(event, ui){
-					var $this = $(this),parents = $(this).parent().parent();
-					$(this).parent().parent().find("input[name=driverId]").val(ui.item.id).trigger('change');
-					$(this).parent().parent().find("input[name=DmobileNumber]").val(ui.item.mobileNumber);
+					var $this = $(this),parents = $(this).closest('.widget-main');
+					parents.find("input[name=driverId]").val(ui.item.id).trigger('change');
+					parents.find("input[name=DmobileNumber]").val(ui.item.mobileNumber);
 				}
 			}).unbind("click").click(function(){
 				var obj = this;
-				var busLicenseNumberId = $(this).parent().parent().parent().find("input[name=busLicenseNumberId]").val();
+				var busLicenseNumberId = $(this).closest('.widget-main').find("input[name=busLicenseNumberId]").val();
 				if(busLicenseNumberId){
 					$.ajax({
 						url:""+APP_ROOT+"back/busCompany.do?method=getDrivers&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",

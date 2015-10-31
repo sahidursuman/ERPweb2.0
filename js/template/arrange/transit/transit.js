@@ -416,9 +416,9 @@ define(function(require, exports) {
 		//添加资源 
 		addResource : function(tab){
 			$("#"+tab+" .T-addBusCompanyResource").off('click').on("click",{function : KingServices.addBusCompany}, KingServices.addResourceFunction);
-			$("#"+tab+" .T-addHotelResource").off('click').on("click",{function : KingServices.addHotel , name : "hotelName" , id : "hotelId" , managerName : "hotelManagerName" , mobileNumber : "hotelMobileNumber"}, KingServices.addResourceFunction);
-			$("#"+tab+" .T-addTicketResource").off('click').on("click",{function : KingServices.addTicket , name : "ticketName" , id : "tickeId"}, KingServices.addResourceFunction);
-			$("#"+tab+" .T-addRestaurantResource").off('click').on("click",{function : KingServices.addRestaurant , name : "restaurant" , id : "restaurantId" , managerName : "manager" , mobileNumber : "mobileNumber"}, KingServices.addResourceFunction);
+			$("#"+tab+" .T-addHotelResource").off('click').on("click",{function : KingServices.addHotel , type : "tr" , name : "hotelName" , id : "hotelId" , managerName : "hotelManagerName" , mobileNumber : "hotelMobileNumber"}, KingServices.addResourceFunction);
+			$("#"+tab+" .T-addTicketResource").off('click').on("click",{function : KingServices.addTicket , type : "tr" , name : "ticketName" , id : "tickeId"}, KingServices.addResourceFunction);
+			$("#"+tab+" .T-addRestaurantResource").off('click').on("click",{function : KingServices.addRestaurant , type : "tr" , name : "restaurant" , id : "restaurantId" , managerName : "manager" , mobileNumber : "mobileNumber"}, KingServices.addResourceFunction);
 			
 			$("#"+tab).find(".T-addBusResource,.T-addDriverResource").off('click').on("click",{
 				function : KingServices.addBusDriver,
@@ -430,7 +430,8 @@ define(function(require, exports) {
 				seatCount : "seatCount",
 				driverName : "driverName",
 				driverId : "driverId",
-				driverMobileNumber : "driverMobileNumber"
+				driverMobileNumber : "driverMobileNumber",
+				type : "tr"
 			}, KingServices.addBusDriverFunction);
 		},
 		//接送车辆JSON组装
