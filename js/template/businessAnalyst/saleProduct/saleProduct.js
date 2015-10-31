@@ -49,7 +49,6 @@ define(function(require, exports) {
 
 				},
 				success:function(data){
-					 console.info(data);
 					 var html=listTemplate(data);
 				       addTab(menuKey,"产品销量",html);
 
