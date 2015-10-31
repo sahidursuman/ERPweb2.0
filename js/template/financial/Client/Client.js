@@ -302,9 +302,16 @@ define(function(require, exports) {
                          });
                          //给全选按钮绑定事件
                          $checkId.find("input[name=ClientCheck_checkAllBox]").click(function(){
-                        	 $(".clientCheckingMain .checkingTbody tr").each(function(i){
-                        		 $(this).attr("checked","true");
-                        	 });
+                            if($(this).is(":checked")){
+                                $(".clientCheckingMain .checkingTbody tr input[type=checkbox]").each(function(i){
+                                    $(this).prop("checked",true);
+                                });
+                            } else{
+                                $(".clientCheckingMain .checkingTbody tr input[type=checkbox]").each(function(i){
+                                    $(this).prop("checked",false);                                
+                                });
+                            }
+                        	 
                          });
                          
                          //展开游客小组
