@@ -131,6 +131,13 @@
 				});
 			}
 		});
+
+		// tab位置校验
+		$tabList.on('click', 'li', function(event) {
+			event.preventDefault();
+			$(this).data('prev-tab', $tabList.find('.active'));
+			Tools.justifyTab();
+		});
 	};
 
 	

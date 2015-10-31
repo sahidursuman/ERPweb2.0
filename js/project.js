@@ -9,36 +9,16 @@ imgUrl  = "http://7xlw2q.com2.z0.glb.qiniucdn.com/"; //测试
 var listwidth = parseInt($("#tabList li").eq(0).css("width"));//ul总宽度，初始化数据为“工作台”tab宽度
 // window.UEDITOR_HOME_URL = APP_ROOT + 'app/components/ueditor/';
 var modals = {};
+var $tabList = $('#tabList'), $tabContent = $("#tabContent");
 
 function addTab(tabId,tabName,html){
+	var $current_li = $tabList.find('.active');
+
 	$("#tabList li").removeClass("active");
 	if($("#tabList li.tab-"+tabId+"").length > 0){
-		$("#tabList li.tab-"+tabId+"").addClass("active");
+		$("#tabList li.tab-"+tabId+"").addClass("active").data('prev-tab',$current_li);
 		setTimeout(function() {
-			var maxwidth = parseInt($(".breadcrumbs-fixed").css("width"))-70;//可视区域宽度
-			if(listwidth > maxwidth){//只有当ul宽度大于可视区宽度时需要处理
-				var index = $("#tabList li.tab-"+tabId+"").index();
-				var widthleft = 0,maxleft = 0,minleft = 0;
-				//widthleft为ul在当前元素左侧的宽度，maxleft绝对值为当前元素在可视区显示时ul可向左平移的最小宽度，minleft为最大
-				for(var i = 0; i <= index; i++){
-					if(i < index){
-						widthleft += parseInt($("#tabList li").eq(i).css("width"));
-					}
-					if(i == index){
-						minleft = -(widthleft - 35);
-						widthleft += parseInt($("#tabList li").eq(i).css("width"));
-						maxleft = -(widthleft - (maxwidth + 35));
-					}
-				}
-				marginLeft = parseInt($("#tabList").css("marginLeft"));
-				//只有当marginLeft取值在minleft~maxleft时，当前tab才在可视区域内
-				if(marginLeft > maxleft){
-					$("#tabList").css("marginLeft",maxleft);
-				}
-				if(marginLeft < minleft){
-					$("#tabList").css("marginLeft",minleft);
-				}
-			}
+			Tools.justifyTab();
 		}, 50);
 		$("#tabList li.tab-"+tabId+"").find("span").text(tabName);
 
@@ -61,58 +41,28 @@ function addTab(tabId,tabName,html){
 						showConfirmMsg($( "#confirm-dialog-message" ), "未保存的数据，是否放弃?",function(){
 							console.log("留在当前页");
 						},function(){
-							closeTab();
+							closeTab(tabId);
 							modal.clearEdit(str[1]);
 						},"放弃","留在此页");
 					} else{
 						console.log(str[1]);
 						showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已修改的数据?",function(){
 							modal.save(str[1]);
-							closeTab();
+							closeTab(tabId);
 						}, function(){
-							closeTab();
+							closeTab(tabId);
 							modal.clearEdit(str[1]);
 						});
 					}
 				} else {
-					closeTab();
-				}
-
-				function closeTab() {
-					var index = $that.parent().parent().index();
-					listwidth -= parseInt($("#tabList li").eq(index).css("width"));
-					$that.parent().parent().remove();
-					$("#tab-"+tabId+"-content").remove();
-					if($("#tabList li.active").length == 0){
-						var preTab = $("#tabList li").get(index-1);
-						$(preTab).addClass("active");
-						var preTabId = $(preTab).find("a").attr("href");
-						$(""+preTabId+"").addClass("active");
-					}
-					var marginLeft = parseInt($("#tabList").css("marginLeft"));
-					var maxwidth = parseInt($(".breadcrumbs-fixed").css("width")) - 70;
-					if(listwidth > maxwidth){
-						var widthleft = 0;
-						for(var i = 0;i < $("#tabList").find("li.active").index();i++){
-							widthleft += parseInt($("#tabList li").eq(i).css("width"))
-						}
-						if((listwidth + marginLeft - 35) < maxwidth){//左侧有隐藏部分并且当前可视区未填满
-							marginLeft = -(listwidth - (maxwidth + 35));
-							if(marginLeft < -(widthleft - 35)){//active项在左侧隐藏
-								marginLeft = -(widthleft - 35);
-								console.log("1");
-							}
-						} else if(marginLeft < -(widthleft - 35)){//active项在左侧隐藏
-							marginLeft = -(widthleft - 35);
-							console.log("2");
-						}
-					} else {
-						marginLeft = 35;
-					}
-					$("#tabList").css("marginLeft",marginLeft);
+					closeTab(tabId);
 				}
 			});
+			
+			$tabList.find('.active').data('prev-tab', $current_li);
 		}, 50);
+	
+		Tools.justifyTab();
 	}
 	$("#tabContent .tab-pane-menu").removeClass("active");
 	if($("#tab-"+tabId+"-content").length > 0){
@@ -126,38 +76,32 @@ function addTab(tabId,tabName,html){
 	$("#tab-"+tabId+"-content").html(html);
 }
 function closeTab(tabId){
-	var _this = $("#tabList .tab-"+tabId+" .tab-close");
-	var index = _this.parent().parent().index();
-	listwidth -= parseInt($("#tabList li").eq(index).css("width"));
-	_this.parent().parent().remove();
+	var $li = $tabList.find('.tab-' + tabId),
+		$prev = false;
+
+	// 查找下一个li
+	if ($li.hasClass('active')) {
+		$prev = $li.data('prev-tab');
+	}
+
+	if ($tabList.find('.active').length === 0 || (!!$prev && $prev.parent().length === 0))  {
+		var index = $li.index();
+
+		if (index === 0 && $li.next().length()) {
+			$prev = $li.next();
+		} else {
+			$prev = $li.prev();
+		}
+	}
+
+	if ($prev) {  // 激活
+		$prev.children('a').trigger('click');
+	}
+
+	$li.remove();
 	$("#tab-"+tabId+"-content").remove();
-	if($("#tabList li.active").length == 0){
-		var preTab = $("#tabList li").get(index-1);
-		$(preTab).addClass("active");
-		var preTabId = $(preTab).find("a").attr("href");
-		$(""+preTabId+"").addClass("active");
-	}
-	var marginLeft = parseInt($("#tabList").css("marginLeft"));
-	var maxwidth = parseInt($(".breadcrumbs-fixed").css("width")) - 70;
-	if(listwidth > maxwidth){
-		var widthleft = 0;
-		for(var i = 0;i < $("#tabList").find("li.active").index();i++){
-			widthleft += parseInt($("#tabList li").eq(i).css("width"))
-		}
-		if((listwidth + marginLeft - 35) < maxwidth){//左侧有隐藏部分并且当前可视区未填满
-			marginLeft = -(listwidth - (maxwidth + 35));
-			if(marginLeft < -(widthleft - 35)){//active项在左侧隐藏
-				marginLeft = -(widthleft - 35);
-				console.log("1");
-			}
-		} else if(marginLeft < -(widthleft - 35)){//active项在左侧隐藏
-			marginLeft = -(widthleft - 35);
-			console.log("2");
-		}
-	} else {
-		marginLeft = 35;
-	}
-	$("#tabList").css("marginLeft",marginLeft);
+
+	Tools.justifyTab();
 }
 
 //权限过滤
@@ -306,6 +250,52 @@ function showConfirmMsg(dialogObj,message,confirmFn ,cancelFn,btnStr1,btnStr2){
 	dialogObj.removeClass('hide').dialog({
 		modal: true,
 		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
+		title_html: true,
+		draggable:false,
+		buttons: buttons,
+		open:function(event,ui){
+			$(this).find("p").text(message);
+		}
+	});
+}
+
+function showSaveConfirmDialog($dialog, message, yes_fn, no_fn, cacel_fn)  {
+	var buttons = [
+			{
+				text: '是',
+				class: "btn btn-minier",
+				click: function() {
+					$( this ).dialog( "close" );
+					if(typeof yes_fn === "function"){
+						yes_fn();
+					}
+				}
+			}, 
+			{
+				text: '否',
+				class: "btn btn-primary btn-minier",
+				click: function() {
+					$( this ).dialog( "close" );
+					if(typeof no_fn === "function"){
+						no_fn();
+					}
+				}
+			},
+			{
+				text: '取消',
+				class: "btn btn-default btn-minier",
+				click: function() {
+					$( this ).dialog( "close" );
+					if(typeof cacel_fn === "function"){
+						cacel_fn();
+					}
+				}
+			}
+		]
+
+	dialogObj.removeClass('hide').dialog({
+		modal: true,
+		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i>保存修改？</h4></div>",
 		title_html: true,
 		draggable:false,
 		buttons: buttons,
@@ -1507,6 +1497,147 @@ Tools.descToolTip = function($elements) {
 	}
 }
 
+Tools.addTab = function(tab_id, tab_name, html)  {
+	$tabList.children('li').removeClass("active");
+
+	var $tab = $tabList.find('.tab-' + tab_id), 
+		$content = $('tab-'+ tabId +'-content'),
+		canUpdateTabContent = true;
+
+	// tab已经打开了
+	if ($tab.length > 0)  {
+		// show tab
+		$tab.addClass('active');
+
+		// 页面已经编辑
+		if ($content.data('isEdited'))  {
+			showSaveConfirmDialog($( "#confirm-dialog-message" ), "内容已经被修改，是否保存?",
+								function(){	// 保存
+									$content.trigger('switch.tab.save', html);
+								},
+								function(){  // 不保存
+									updateTabContent();
+								},
+								// 取消
+								false);
+			// 此时不能添加内容
+			canUpdateTabContent = false;
+		}
+	} 
+
+	if (canUpdateTabContent) {
+		// 更新页面
+		updateTabContent();
+	}
+
+
+	function updateTabContent()  {
+		$tabContent.find(".tab-pane-menu").removeClass("active");
+		if($content.length > 0){
+			$content.addClass("active");
+			$tab.find('span').text('tab_name');
+		}
+		else{
+			var $tab_li = $("<li class=\"tab-"+tab_id+" active\"><a data-toggle=\"tab\" href=\"#tab-"+tab_id+"-content\" aria-expanded=\"true\"><span>"+tab_name+"</span><i class=\"ace-icon fa fa-close tab-close\"></i></a></li>");
+
+			$tabList.append($tab_li);
+			$tabContent.append("<div id='tab-"+tab_id+"-content' class='tab-pane tab-pane-menu active'></div>");
+			// bind close event
+			
+			$tab_li.on('click', '.tab-close', function(event) {
+				event.preventDefault();
+				var $content = $('#' + tab_id + '-content');
+
+				// 页面已经编辑
+				if ($content.data('isEdited'))  {
+					showSaveConfirmDialog($( "#confirm-dialog-message" ), "内容已经被修改，是否保存?",
+										function(){	// 保存
+											$content.trigger('close.tab.save', html);
+										},
+										function(){  // 不保存
+											Tools.closeTab(tab_id);
+										},
+										// 取消
+										false);
+					// 此时不能添加内容
+					canUpdateTabContent = false;
+				}
+			});
+
+			Tools.justifyTab();
+		}
+
+		$("#tab-"+tab_id+"-content").html(filterUnAuth(html));
+	}
+};
+
+/**
+ * 关闭tab
+ * @param  {string} tab_id tab标签的id
+ * @return {[type]}        [description]
+ */		
+Tools.closeTab = function(tab_id) {
+	var $tab_li = $tabList.find('.tab' + tab_id),
+		index = $tab_li.index();
+
+	$tabContent.find('#tab' + tab_id + '-content').remove();
+	$tab_li.remove();
+
+	index = index === 0? 0: (index-1);
+
+	if (index >= 0) {
+		$tabList.children('li').children('a').trigger('click');
+	}
+
+	Tools.justifyTab();
+};
+
+/**
+ * 调整tab的位置
+ * @return {[type]} [description]
+ */
+Tools.justifyTab = function() {
+	var viewWidth = $('.breadcrumbs-fixed').width(),
+		leftBarWidth = $('#tab_left_scroll').width(),
+		rightBarWidth = $('#tab_right_scroll').width(),
+		tabWidth = $tabList.width();
+
+	// 参考左边
+	viewWidth = viewWidth - rightBarWidth;
+
+	var $active_li = $tabList.find('.active');
+	if (!$active_li.length) return;
+
+		// 必须距离左边的距离
+	var	li_left = $active_li.position().left,
+		li_right = li_left + $active_li.outerWidth(),
+		// need_left = right_point - viewWidth;
+		leftMargin = parseInt($tabList.css('marginLeft'));
+
+	if (li_left < (-leftMargin - leftBarWidth)) {
+		// 左隐
+		$tabList.css({
+			'margin-left': (leftBarWidth -li_left + 'px')
+		});
+	} else if (li_right > (leftBarWidth + viewWidth - leftMargin)) {
+		// 右隐
+		$tabList.css('margin-left', (viewWidth - li_right) + 'px');
+	} else {
+		// 右侧缺口
+		var $last = $tabList.children('li').last(),
+			tab_len = $last.position().left + $last.width();
+
+		if (viewWidth > tab_len) {
+			// 当内容长度小于视口长度时
+			$tabList.css('margin-left', leftBarWidth + 'px');
+		} else if ((tab_len + leftMargin) < viewWidth) { 
+			// 内容大于视口长度，且内容右边出现空白
+			$tabList.css('margin-left', (viewWidth - tab_len ) + 'px');
+		}
+	}
+
+	// 
+};
 
 /**
  * 用于定义公共请求或者与数据相关的公共组件处理
@@ -1532,6 +1663,27 @@ KingServices.updateTransit = function(id)  {
 		modals["arrange_transit"] = transit;
 	});
 }
+
+//导游  新增
+KingServices.addGuide = function(fn){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_guide,function(module){
+		module.addGuide(fn);
+	});
+}
+//车队 新增
+KingServices.addBusCompany = function(fn){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_busCompany,function(module){
+		module.addBusCompany(fn);
+	});
+}
+//车队 新增 车和司机
+KingServices.addBusDriver = function(fn,$busCompany,$busCompanyId){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_busCompany,function(module){
+		module.addBusDriver(fn,$busCompany,$busCompanyId);
+	});
+}
+
+
 //保险公司  新增
 KingServices.addInsurance = function(fn){
 	seajs.use("" + ASSETS_ROOT + modalScripts.resource_insurance,function(module){
@@ -1574,24 +1726,6 @@ KingServices.addTicket = function(fn){
 		module.addTicket(fn);
 	});
 }
-//导游  新增
-KingServices.addGuide = function(fn){
-	seajs.use("" + ASSETS_ROOT + modalScripts.resource_guide,function(module){
-		module.addGuide(fn);
-	});
-}
-//车队 新增
-KingServices.addBusCompany = function(fn){
-	seajs.use("" + ASSETS_ROOT + modalScripts.resource_busCompany,function(module){
-		module.addBusCompany(fn);
-	});
-}
-//车队 新增 车和司机
-KingServices.addBusDriver = function(fn,$busCompany,$busCompanyId){
-	seajs.use("" + ASSETS_ROOT + modalScripts.resource_busCompany,function(module){
-		module.addBusDriver(fn,$busCompany,$busCompanyId);
-	});
-}
 
 
 //添加资源函数
@@ -1615,10 +1749,12 @@ KingServices.addResourceFunction = function(e){
 KingServices.addBusDriverFunction = function(e){
 	var $this = $(this),
 		$parents = $(this).closest('tr'),
-		$busCompany = $parents.find('[name=busCompanyName]').val(),
-		$busCompanyId = $parents.find('[name=busCompanyId]').val(),
-		licenseNumberId = e.data.licenseNumberId,
-		licenseNumber = e.data.licenseNumber,
+		$busCompany = $parents.find('[name=busCompanyName]').val() || "",
+		$busCompanyId = $parents.find('[name=busCompanyId]').val() || "",
+		busCompanyName = e.data.busCompanyName,
+		busCompanyId = e.data.busCompanyId,
+		licenseNumberId = e.data.busLicenseNumberId,
+		licenseNumber = e.data.busLicenseNumber,
 		busbrand = e.data.busbrand,
 		seatCount = e.data.seatCount,
 		driverName = e.data.driverName,
@@ -1626,10 +1762,16 @@ KingServices.addBusDriverFunction = function(e){
 		driverMobileNumber = e.data.driverMobileNumber,
 		$function = e.data.function,
 		fn = function (data){
-			if (!!data.name && !!name) {$parents.find('input[name='+name+']').val(data.name);}
-			if (!!data.id && !!id) {$parents.find('input[name='+id+']').val(data.id);}
-			if (!!data.managerName && !!managerName) {$parents.find('input[name='+managerName+']').val(data.managerName);}
-			if (!!data.mobileNumber && !!mobileNumber) {$parents.find('input[name='+mobileNumber+']').val(data.mobileNumber);}
+			console.log(data);
+			if (!!data.busCompanyData.name && !!busCompanyName) {$parents.find('input[name='+busCompanyName+']').val(data.busCompanyData.name);}
+			if (!!data.busCompanyData.id && !!busCompanyId) {$parents.find('input[name='+busCompanyId+']').val(data.busCompanyData.id);}
+			if (!!data.busData.id && !!licenseNumberId) {$parents.find('input[name='+licenseNumberId+']').val(data.busData.id);}
+			if (!!data.busData.licenseNumber && !!licenseNumber) {$parents.find('input[name='+licenseNumber+']').val(data.busData.licenseNumber);}
+			if (!!data.busData.brand && !!busbrand) {$parents.find('input[name='+busbrand+']').val(data.busData.brand);}
+			if (!!data.busData.seatCount && !!seatCount) {$parents.find('input[name='+seatCount+']').val(data.busData.seatCount);}
+			if (!!data.driverData.name && !!driverName) {$parents.find('input[name='+driverName+']').val(data.driverData.name);}
+			if (!!data.driverData.id && !!driverId) {$parents.find('input[name='+driverId+']').val(data.driverData.id);}
+			if (!!data.driverData.mobileNumber && !!driverMobileNumber) {$parents.find('input[name='+driverMobileNumber+']').val(data.driverData.mobileNumber);}
 		}
 	$function(fn,$busCompany,$busCompanyId);
 }

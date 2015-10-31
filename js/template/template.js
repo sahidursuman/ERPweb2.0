@@ -78,7 +78,7 @@
     }, define(function() {
         return template;
     }), template.helper("dateFormat", function(date, fmt) {
-        date = new Date(date);
+        date = date.split("-").join("/"), date = new Date(date);
         var o = {
             "M+": date.getMonth() + 1,
             "d+": date.getDate(),
