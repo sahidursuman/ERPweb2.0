@@ -83,7 +83,7 @@
                             <td><a href="javascript:void(0)" class="T-option T-showChangePay">{{innerTransferList.changeNeedPayMoney}}</a></td>
                             <td>{{if innerTransferList.toBusinessGroupName == null || innerTransferList.toBusinessGroupName == ""}}无{{else}}{{innerTransferList.toBusinessGroupName}}{{/if}}</td> 
                             <td>
-                                <a href="javascript:void(0)" class="T-option T-showTransPay">{{innerTransferList.transNeedPayAllMoney}}</a>
+                                <a href="javascript:void(0)" class="T-option T-showTransPay" data-inner-id = "{{innerTransferList.InnerTransferId}}">{{innerTransferList.transNeedPayAllMoney}}</a>
                             </td>
                             <td>
                                 <span style="color: red">{{innerTransferList.grossProfit}}</span>
