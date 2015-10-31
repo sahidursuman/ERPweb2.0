@@ -4,6 +4,7 @@
 define(function(require, exports) {
 		var menuKey = "business_analyst_customerVol",
 	        listTemplate = require("./view/list"),
+	        customerDelTemplate = require("./view/customerDetail"),
 	        tabId="tab-"+menuKey+"-content";
 	    /**
 		 * 客源分布管理对象
@@ -89,6 +90,7 @@ define(function(require, exports) {
 			}
 		});
 
+
 	};
 
 	    //初始化页面绑定事件
@@ -104,8 +106,37 @@ define(function(require, exports) {
 
 	    	//客户autocomplate数据
 	    	customerVolObj.getCusList(customerVolObj.$tab);
-	    	
-	    };
+
+
+	    	//客户客量明细Detail
+	    	customerVolObj.$tab.find('.T-customerVo-Detail').on('click',function(event) {
+	    		event.preventDefault();
+	    		/* Act on the event */
+    				var $that=$(this),
+    		            id=$that.data('value');
+    		        customerVolObj.getCusDetail(id);
+
+	    	}); 	
+	};
+
+
+
+    //查询客户明细
+    customerVolObj.getCusDetail=function(id) {
+    	// body...
+    	//查询客户明细列
+		$.ajax({
+			url : customerVolObj.url("findTourist","view"),
+			type:"POST",
+			data : "id="+id,
+			success:function(data){
+	            var html=customerDelTemplate(data);
+	                customerVolObj.$tab.find('.T-customerDetail-list').html(html);
+			}
+		});
+    };
+	
+
 
     //客户客量的Autocomplete
     customerVolObj.getCusList=function($obj){

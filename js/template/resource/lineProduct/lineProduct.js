@@ -507,79 +507,7 @@ define(function(require, exports) {
 					$(this).parent().parent().find("input[name=mobileNumber]").val("");
 					
 					// 更新表单验证的配置
-					validator = rule.lineProductUpdate(validator);
-
-					var obj = this, mobileNumber = "";
-					
-					if(chooseBusLicenseNumber){
-						$(".updateBusCompanyList .chooseBusLicenseNumber").autocomplete( "destroy");
-					}
-					
-					//给车辆绑定autocomplete事件
-					chooseBusLicenseNumber = $(".updateBusCompanyList .chooseBusLicenseNumber").autocomplete({
-						minLength:0,
-						select:function(event,ui){
-							
-							//获得busId，到后台查询bus相应信息
-							//var mobileNumber = data.mobileNumber;
-							//$(obj).parent().parent().find("input[name=mobileNumber]").val(mobileNumber);
-							$.ajax({
-								url:""+APP_ROOT+"back/busCompany.do?method=findBusDetailById&token="+$.cookie("token")+"&menuKey=resource_busCompany&operation=view",
-								dataType: "json",
-								data:"id="+ui.item.id,
-								success: function(data) {
-									layer.close(globalLoadingLayer);
-									var result = showDialog(data);
-									if(result){
-										var d = JSON.parse(data.bus), objParent = $(obj).parent().parent();
-										objParent.find("input[name=busLicenseNumberId]").val(ui.item.id).trigger('change');
-										objParent.find("input[name=seatPrice]").val(d.seatPrice);
-										objParent.find("input[name=seatCount]").val(d.seatCount);
-										objParent.find("input[name=mobileNumber]").val(d.mobileNumber);
-										objParent.find("input[name=charteredPrice]").val(d.charteredPrice);
-									}
-								}
-							 });
-							
-						},
-						change:function(event,ui){
-							if(ui.item == null){
-								$(this).val("");
-								var objParent = $(this).parent().parent();
-								objParent.find("input[name=busLicenseNumberId]").val("");
-								objParent.find("input[name=licenseNumber]").val("");
-								objParent.find("input[name=seatPrice]").val("");
-								objParent.find("input[name=seatCount]").val("");
-								objParent.find("input[name=mobileNumber]").val("");
-								objParent.find("input[name=charteredPrice]").val("");
-							}
-						}
-					}).unbind("click").click(function(){
-						var objBus = this;
-						var busCompanyId = ui.item.id;
-						var needSeatCount = $(obj).parent().parent().find("input[name=needSeatCount]").val();
-						$.ajax({
-							url:""+APP_ROOT+"back/busCompany.do?method=findBusListBySeat&token="+$.cookie("token")+"&menuKey=resource_busCompany&operation=view",
-							dataType: "json",
-							data:"id="+busCompanyId+"&seatCount="+needSeatCount,
-							success: function(data) {
-								layer.close(globalLoadingLayer);
-								var result = showDialog(data);
-								if(result){
-									var busList = JSON.parse(data.busList);
-									if(busList != null && busList.length){
-										for(var i=0;i<busList.length;i++){
-											busList[i].value = busList[i].licenseNumber;
-										}
-									}
-									
-									
-									$(objBus).autocomplete('option','source', busList);
-									$(objBus).autocomplete('search', '');
-								}
-							}
-						 });
-					});					
+					validator = rule.lineProductUpdate(validator);	
 				}
 			}).click(function(){
 				var obj = this;
@@ -605,6 +533,72 @@ define(function(require, exports) {
 					}
 				});
 			});
+
+			//给车辆绑定autocomplete事件
+			$(".updateBusCompanyList .chooseBusLicenseNumber").autocomplete({
+				minLength:0,
+				select:function(event,ui){
+					
+					//获得busId，到后台查询bus相应信息
+					//var mobileNumber = data.mobileNumber;
+					//$(obj).parent().parent().find("input[name=mobileNumber]").val(mobileNumber);
+					$.ajax({
+						url:""+APP_ROOT+"back/busCompany.do?method=findBusDetailById&token="+$.cookie("token")+"&menuKey=resource_busCompany&operation=view",
+						dataType: "json",
+						data:"id="+ui.item.id,
+						success: function(data) {
+							layer.close(globalLoadingLayer);
+							var result = showDialog(data);
+							if(result){
+								var d = JSON.parse(data.bus), objParent = $(this).parent().parent();
+								objParent.find("input[name=busLicenseNumberId]").val(ui.item.id).trigger('change');
+								objParent.find("input[name=seatPrice]").val(d.seatPrice);
+								objParent.find("input[name=seatCount]").val(d.seatCount);
+								objParent.find("input[name=mobileNumber]").val(d.mobileNumber);
+								objParent.find("input[name=charteredPrice]").val(d.charteredPrice);
+							}
+						}
+					 });
+					
+				},
+				change:function(event,ui){
+					if(ui.item == null){
+						$(this).val("");
+						var objParent = $(this).parent().parent();
+						objParent.find("input[name=busLicenseNumberId]").val("");
+						objParent.find("input[name=licenseNumber]").val("");
+						objParent.find("input[name=seatPrice]").val("");
+						objParent.find("input[name=seatCount]").val("");
+						objParent.find("input[name=mobileNumber]").val("");
+						objParent.find("input[name=charteredPrice]").val("");
+					}
+				}
+			}).unbind("click").click(function(){
+				var objBus = this;
+				var busCompanyId = $(this).parent().parent().find('input[name=busCompanyId]').val();
+				var needSeatCount = $(this).parent().parent().find("input[name=needSeatCount]").val();
+				if(busCompanyId){
+					$.ajax({
+						url:""+APP_ROOT+"back/busCompany.do?method=findBusListBySeat&token="+$.cookie("token")+"&menuKey=resource_busCompany&operation=view",
+						dataType: "json",
+						data:"id="+busCompanyId+"&seatCount="+needSeatCount,
+						success: function(data) {
+							layer.close(globalLoadingLayer);
+							var result = showDialog(data);
+							if(result){
+								var busList = JSON.parse(data.busList);
+								if(busList != null && busList.length){
+									for(var i=0;i<busList.length;i++){
+										busList[i].value = busList[i].licenseNumber;
+									}
+								}
+								$(objBus).autocomplete('option','source', busList);
+								$(objBus).autocomplete('search', '');
+							}
+						}
+					});
+				}
+			});		
 		},
 		deleteLineProductDaysArrange : function(){
 			var dialogObj = $( "#confirm-dialog-message" ), obj = this;

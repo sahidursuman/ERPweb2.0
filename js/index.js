@@ -135,7 +135,7 @@
 		// tab位置校验
 		$tabList.on('click', 'li', function(event) {
 			event.preventDefault();
-			console.info('click');
+			$(this).data('prev-tab', $tabList.find('.active'));
 			Tools.justifyTab();
 		});
 	};
