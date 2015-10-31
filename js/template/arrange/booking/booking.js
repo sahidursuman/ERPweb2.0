@@ -409,7 +409,7 @@ define(function(require, exports) {
 											$parent.fadeOut(function(){
 												$parent.remove();
 											})
-											booking.listbooking(0,"","","","","");
+											booking.listbooking(0,"","","","","","","","");
 										});
 									}
 								}
@@ -421,22 +421,6 @@ define(function(require, exports) {
 					$(this).find("p").text("你确定要删除该项目代订？");
 				}
 			});
-			$.ajax({
-				url:""+APP_ROOT+"back/bookingOrder.do?method=deleteBookingOrderByIdAndCateName&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=delete",
-				type:"POST",
-				data:"id="+id+"&cateName=order"+"",
-				dataType:"json",
-				beforeSend:function(){
-					globalLoadingLayer = openLoadingLayer();
-				},
-				success:function(data){
-					layer.close(globalLoadingLayer);
-					var result = showDialog(data);
-					if(result){
-						
-					}
-				}
-			})
 		},
 		addHotelList :function(event){
 			var html = '<tr>'+
@@ -1399,13 +1383,13 @@ define(function(require, exports) {
 								booking.edited["add"] = "";
 								if(isClose == 1){
 									closeTab("arrange_booking-"+operation);
-									booking.listbooking(0,"","","","","");
+									booking.listbooking(0,"","","","","","","","");
 								}
 							} else if(operation == "update"){
 								booking.edited["update"] = "";
 								if(isClose == 1){
 									closeTab("arrange_booking-"+operation);
-									booking.listbooking(0,"","","","","");
+									booking.listbooking(0,"","","","","","","","");
 								}
 							}
 							
