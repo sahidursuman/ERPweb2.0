@@ -1171,7 +1171,6 @@ define(function(require, exports) {
 		},
 		//来源模糊查询
 		getPartnerAgencyList:function($obj){
-			console.log("getPartnerAgencyList");
 			$obj.autocomplete({
 				minLength: 0,
 				change: function(event, ui) {
