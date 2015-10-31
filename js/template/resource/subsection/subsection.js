@@ -292,30 +292,25 @@ define(function(require, exports) {
 				minLength:0,
 				change :function(event,ui){
 					if(ui.item == null){
-
-							$(this).parent().parent().find("input[name=lineProductId]").val("");
-						//$(this).val("");
-						//var parents = $(this).parent();
-						//parents.parent().find("input[name=days]").val("");
-						//parents.parent().find("input[name=customerType]").val("");
-						//parents.find("input[name=lineProductId]").val("");
-
+						var $this = $(this),$parents = $this.closest('tr');
+						$this.val("");
+						$parents.find("input[name=lineProductId]").val("");
+						$parents.find("input[name=days]").val("");
+						$parents.find("input[name=customerType]").val("");
 					}
 				},
 				select :function(event,ui){
-					//var parents = $(this).parent();
-					//parents.find("input[name=lineProductId]").val(ui.item.id).trigger('change');
-					//if(ui.item.customerType == 0){
-					//	parents.parent().find("input[name=customerType]").val("散客");
-					//}else{
-					//	parents.parent().find("input[name=customerType]").val("团体");
-					//}
-					//parents.parent().find("input[name=days]").val(ui.item.days);
-					//validator = rule.updateCheckdSaveSubsection(validator);
-
-					$(this).blur();
-					var obj = this;
-					$(obj).parent().parent().find("input[name=lineProductId]").val(ui.item.id).trigger('change');
+					var $this = $(this),$parents = $this.closest('tr');
+					$this.val(ui.item.name);
+					$parents.find("input[name=lineProductId]").val(ui.item.id).trigger('change');
+					if(ui.item.customerType == 0){
+						$parents.find("input[name=customerType]").val("散客");
+					}else{
+						$parents.find("input[name=customerType]").val("团体");
+					}
+					$parents.find("input[name=days]").val(ui.item.days);
+					validator = rule.updateCheckdSaveSubsection(validator);
+					return false;
 				}
 			}).unbind("click").click(function(){
 				var obj =this;
@@ -328,7 +323,7 @@ define(function(require, exports) {
 							var lineProductList = data.lineProductList;
 							if(lineProductList && lineProductList.length > 0){
 								for(var i=0; i < lineProductList.length; i++){
-									lineProductList[i].value = lineProductList[i].name;
+									lineProductList[i].value = "("+lineProductList[i].days+"天)"+lineProductList[i].name;
 								}
 								$(obj).autocomplete('option','source', lineProductList);
 								$(obj).autocomplete('search', '');
