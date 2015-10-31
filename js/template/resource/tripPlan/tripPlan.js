@@ -46,6 +46,17 @@ define(function(require, exports) {
 						addTab(menuKey,"发团安排管理",html);
 						tripPlan.initList(data);
 						tripPlan.getQueryTerms();
+						// 绑定翻页组件
+						laypage({
+						    cont: $('#' + tabId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+						    pages: data.totalPage, //总页数
+						    curr: (page + 1),
+						    jump: function(obj, first) {
+						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+						    		tripPlan.listTripPlan(obj.curr -1,tripPlan.searchData.tripId, tripPlan.searchData.tripNumber, tripPlan.searchData.startTime,tripPlan.searchData.guideId, tripPlan.searchData.realname,tripPlan.searchData.busId, tripPlan.searchData.licenseNumber,tripPlan.searchData.status);
+								}
+						    }
+						});
 					}	
 				}
 			});
@@ -89,40 +100,6 @@ define(function(require, exports) {
 					status : search.find("[name=status]").attr("data-value")
 				}
 				tripPlan.listTripPlan(0, tripPlan.searchData.tripId, tripPlan.searchData.tripNumber, tripPlan.searchData.startTime,tripPlan.searchData.guideId, tripPlan.searchData.realname,tripPlan.searchData.busId, tripPlan.searchData.licenseNumber,tripPlan.searchData.status);
-			});
-			//分页--首页按钮事件
-			$("#"+tabId+" .pageMode a.first").click(function(){
-				if(data.pageNo == 0 || data.totalPage == 0)return;
-				tripPlan.listTripPlan(0,tripPlan.searchData.tripId, tripPlan.searchData.tripNumber, tripPlan.searchData.startTime,tripPlan.searchData.guideId, tripPlan.searchData.realname,tripPlan.searchData.busId, tripPlan.searchData.licenseNumber,tripPlan.searchData.status);
-			});
-			
-			//分页--上一页事件
-			$("#"+tabId+" .pageMode a.previous").click(function(){
-				if(data.totalPage == 0)return;
-				var previous = data.pageNo - 1;
-				if(data.pageNo == 0){
-					previous = 0;
-					return false;
-				}
-				tripPlan.listTripPlan(previous,tripPlan.searchData.tripId, tripPlan.searchData.tripNumber, tripPlan.searchData.startTime,tripPlan.searchData.guideId, tripPlan.searchData.realname,tripPlan.searchData.busId, tripPlan.searchData.licenseNumber,tripPlan.searchData.status);
-			});
-			
-			//分页--下一页事件
-			$("#"+tabId+" .pageMode a.next").click(function(){
-				if(data.pageNo+1 == data.totalPage || data.totalPage == 0)return;
-				var nam = $("#"+tabId+" input[name=lineProduct_nam]").val();
-				var status = $("#"+tabId+" .btn-status").find("button").attr("data-value");
-				var next =  data.pageNo + 1;
-				if(data.pageNo == data.totalPage-1){
-					next = data.pageNo;
-				}
-				tripPlan.listTripPlan(next,tripPlan.searchData.tripId, tripPlan.searchData.tripNumber, tripPlan.searchData.startTime,tripPlan.searchData.guideId, tripPlan.searchData.realname,tripPlan.searchData.busId, tripPlan.searchData.licenseNumber,tripPlan.searchData.status);
-			});
-
-			//分页--尾页事件
-			$("#"+tabId+" .pageMode a.last").click(function(){
-				if(data.pageNo == data.totalPage-1 || data.totalPage == 0)return;
-				tripPlan.listTripPlan(data.totalPage-1,tripPlan.searchData.tripId, tripPlan.searchData.tripNumber, tripPlan.searchData.startTime,tripPlan.searchData.guideId, tripPlan.searchData.realname,tripPlan.searchData.busId, tripPlan.searchData.licenseNumber,tripPlan.searchData.status);
 			});
 
 			//autocomplete

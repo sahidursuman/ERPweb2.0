@@ -4,6 +4,7 @@ define(function(require, exports) {
 	    listTemplate = require("./view/list"),
 	    rule = require("./rule"),
 	    operationTemplate = require("./view/operation"),
+	    tabId = "tab-"+menuKey+"-content",
 		validator;
 	
 	var subsection = {
@@ -248,36 +249,17 @@ define(function(require, exports) {
 								}
 							})
 						});
-						//分页--首页按钮事件
-						$("#"+tab+" .pageMode a.first").click(function(){
-							if(data.pageNo == 0 || data.totalPage == 0)return;
-							subsection.listSubsection(0,subsection.searchData.lineProduct,subsection.searchData.lineProductId,subsection.searchData.fromPartnerAgency,subsection.searchData.fromPartnerAgencyId,subsection.searchData.creator,subsection.searchData.creatorId,subsection.searchData.travelDate,subsection.searchData.operationStartDate,subsection.searchData.operationEndDate,tab);
+						// 绑定翻页组件
+						laypage({
+						    cont: $('#' + tabId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+						    pages: data.totalPage, //总页数
+						    curr: (page + 1),
+						    jump: function(obj, first) {
+						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+						    		subsection.listSubsection(obj.curr -1,subsection.searchData.lineProduct,subsection.searchData.lineProductId,subsection.searchData.fromPartnerAgency,subsection.searchData.fromPartnerAgencyId,subsection.searchData.creator,subsection.searchData.creatorId,subsection.searchData.travelDate,subsection.searchData.operationStartDate,subsection.searchData.operationEndDate,tab);
+						    	}
+						    }
 						});
-						//分页--上一页事件
-						$("#"+tab+" .pageMode a.previous").click(function(){	
-							if(data.pageNo == 0 || data.totalPage == 0)return;
-							var previous = data.pageNo - 1;
-							if(data.pageNo == 0){
-								previous = 0;
-							}
-							subsection.listSubsection(previous,subsection.searchData.lineProduct,subsection.searchData.lineProductId,subsection.searchData.fromPartnerAgency,subsection.searchData.fromPartnerAgencyId,subsection.searchData.creator,subsection.searchData.creatorId,subsection.searchData.travelDate,subsection.searchData.operationStartDate,subsection.searchData.operationEndDate,tab);
-						});
-						//分页--下一页事件
-						$("#"+tab+" .pageMode a.next").click(function(){
-							console.log("next");
-							if(data.pageNo+1 == data.totalPage || data.totalPage == 0)return;
-							var next =  data.pageNo + 1;
-							if(data.pageNo == data.totalPage-1){
-								next = data.pageNo ;
-							}
-							subsection.listSubsection(next,subsection.searchData.lineProduct,subsection.searchData.lineProductId,subsection.searchData.fromPartnerAgency,subsection.searchData.fromPartnerAgencyId,subsection.searchData.creator,subsection.searchData.creatorId,subsection.searchData.travelDate,subsection.searchData.operationStartDate,subsection.searchData.operationEndDate,tab);
-						});
-						//分页--尾页事件
-						$("#"+tab+" .pageMode a.last").click(function(){
-							if(data.pageNo == data.totalPage-1 || data.totalPage == 0)return;
-							subsection.listSubsection(data.totalPage-1,subsection.searchData.lineProduct,subsection.searchData.lineProductId,subsection.searchData.fromPartnerAgency,subsection.searchData.fromPartnerAgencyId,subsection.searchData.creator,subsection.searchData.creatorId,subsection.searchData.travelDate,subsection.searchData.operationStartDate,subsection.searchData.operationEndDate,tab);
-						});
-
 						//autocomplete
 						subsection.getPartnerAgencyList($("#tab-"+menuKey+"-content"));
 						subsection.getLineProductList($("#tab-"+menuKey+"-content"));
