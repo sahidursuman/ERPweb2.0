@@ -461,29 +461,29 @@ define(function(require, exports) {
 		getPartnerAgencyList:function($obj){
 			var getPartnerAgencyList = $obj.find(".choosePartnerAgency");
 			getPartnerAgencyList.autocomplete({
-								minLength: 0,
-								change: function(event, ui) {
-									if(ui.item == null){
-										//$(this).nextAll('input[name="fromPartnerAgencyId"]').val('');
-										$(this).parent().parent().find("input[name=fromPartnerAgencyId]").val("");
-									}
-								},
-								select: function(event, ui) {
-									$(this).blur();
-									var obj = this;
-									$(obj).parent().parent().find("input[name=fromPartnerAgencyId]").val(ui.item.id).trigger('change');
-								}
-							}).click(function(){
-							var obj = this;
-							var fromGuideObj = subsection.autocompleteDate.fromPartnerAgencyList;
-							console.info(fromGuideObj);
-							if(fromGuideObj !=null && fromGuideObj.length>0){
-								for(var i=0;i<fromGuideObj.length;i++){
-									fromGuideObj[i].value = fromGuideObj[i].travelAgencyName;
-								}
-							}
-							$(obj).autocomplete('option','source',fromGuideObj);
-							$(obj).autocomplete('search', '');
+				minLength: 0,
+				change: function(event, ui) {
+					if(ui.item == null){
+						//$(this).nextAll('input[name="fromPartnerAgencyId"]').val('');
+						$(this).parent().parent().find("input[name=fromPartnerAgencyId]").val("");
+					}
+				},
+				select: function(event, ui) {
+					$(this).blur();
+					var obj = this;
+					$(obj).parent().parent().find("input[name=fromPartnerAgencyId]").val(ui.item.id).trigger('change');
+				}
+			}).click(function(){
+			var obj = this;
+			var fromGuideObj = subsection.autocompleteDate.fromPartnerAgencyList;
+			console.info(fromGuideObj);
+			if(fromGuideObj !=null && fromGuideObj.length>0){
+				for(var i=0;i<fromGuideObj.length;i++){
+					fromGuideObj[i].value = fromGuideObj[i].travelAgencyName;
+				}
+			}
+				$(obj).autocomplete('option','source',fromGuideObj);
+				$(obj).autocomplete('search', '');
 			});
 		},
 
@@ -491,31 +491,31 @@ define(function(require, exports) {
 		getLineProductList:function($obj){
 			var getPartnerAgencyList = $obj.find(".chooseLineProduct");
 			getPartnerAgencyList.autocomplete({
-							minLength: 0,
-							change: function(event, ui) {
-								if (ui.item == null)  {
-									//$(this).nextAll('input[name="lineProductId"]').val('');
-									$(this).parent().parent().find("input[name=lineProductId]").val("");
-								}
-							},
-							select: function(event, ui) {
-								$(this).blur();
-								var obj = this;
-								$(obj).parent().parent().find("input[name=lineProductId]").val(ui.item.id).trigger('change');
-								//nextAll('input[name="lineProductId"]').val(ui.item.id);
-							}
-						}).click(function(){
-						var obj = this;
-						var lineProductObj = subsection.autocompleteDate.lineProductList;
-						console.info(lineProductObj);
-						if(lineProductObj !=null && lineProductObj.length>0){
-							for(var i=0;i<lineProductObj.length;i++){
-								lineProductObj[i].value = lineProductObj[i].name;
-							}
-						}
-						$(obj).autocomplete('option','source',lineProductObj);
-						$(obj).autocomplete('search', '');
-					});
+				minLength: 0,
+				change: function(event, ui) {
+					if (ui.item == null)  {
+						//$(this).nextAll('input[name="lineProductId"]').val('');
+						$(this).parent().parent().find("input[name=lineProductId]").val("");
+					}
+				},
+				select: function(event, ui) {
+					$(this).blur();
+					var obj = this;
+					$(obj).parent().parent().find("input[name=lineProductId]").val(ui.item.id).trigger('change');
+					//nextAll('input[name="lineProductId"]').val(ui.item.id);
+				}
+			}).click(function(){
+			var obj = this;
+			var lineProductObj = subsection.autocompleteDate.lineProductList;
+			console.info(lineProductObj);
+			if(lineProductObj !=null && lineProductObj.length>0){
+				for(var i=0;i<lineProductObj.length;i++){
+					lineProductObj[i].value = lineProductObj[i].name;
+				}
+			}
+				$(obj).autocomplete('option','source',lineProductObj);
+				$(obj).autocomplete('search', '');
+			});
 		},
 
         //操作人模糊查询
