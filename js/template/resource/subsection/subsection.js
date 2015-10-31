@@ -293,12 +293,12 @@ define(function(require, exports) {
 				change :function(event,ui){
 					if(ui.item == null){
 
-							$(this).parent().parent().find("input[name=lineProductId]").val("");
+						$(this).parent().parent().find("input[name=lineProductId]").val("");
 						//$(this).val("");
-						//var parents = $(this).parent();
-						//parents.parent().find("input[name=days]").val("");
-						//parents.parent().find("input[name=customerType]").val("");
-						//parents.find("input[name=lineProductId]").val("");
+						var parents = $(this).parent();
+						parents.parent().find("input[name=days]").val("");
+						parents.parent().find("input[name=customerType]").val("");
+						parents.find("input[name=lineProductId]").val("");
 
 					}
 				},
@@ -315,7 +315,14 @@ define(function(require, exports) {
 
 					$(this).blur();
 					var obj = this;
+					var parents = $(this).parent();
 					$(obj).parent().parent().find("input[name=lineProductId]").val(ui.item.id).trigger('change');
+					if(ui.item.customerType == 0){
+						parents.parent().find("input[name=customerType]").val("散客");
+					}else{
+						parents.parent().find("input[name=customerType]").val("团体");
+					}
+					parents.parent().find("input[name=days]").val(ui.item.days);
 				}
 			}).unbind("click").click(function(){
 				var obj =this;
