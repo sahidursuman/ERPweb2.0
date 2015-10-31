@@ -328,34 +328,17 @@ define(function(require, exports) {
 					$transferInObj.find(".btn-transferIn-delete").click(transfer.deleteTransferIn);
 					//绑定同行收入接受事件  
 					//$transferInObj.find(".btn-transferIn-accept").click(transfer.acceptTransferIn);
-					
-					//分页--首页按钮事件
-					$("#" +tabId+" .pageMode a.first").click(function(){
-						transfer.listTransferIn(0,lineProductId,startTime,partnerAgencyId,creator,status,type,managerId);
-					});
-					
-					//分页--上一页事件
-					$("#" +tabId+"  .pageMode a.previous").click(function(){
-						var previous = data.pager.pageNo - 1;
-						if(data.pager.pageNo == 0){
-							previous = 0;
-						}
-						transfer.listTransferIn(previous,lineProductId,startTime,partnerAgencyId,creator,status,type,managerId);
-					});   
-					
-					//分页--下一页事件
-					$("#" +tabId+" .pageMode a.next").click(function(){
-						
-						var next =  data.pager.pageNo + 1;
-						if(data.pager.pageNo == data.pager.totalPage-1){
-							next = data.pager.pageNo ;
-						}
-						transfer.listTransferIn(next,lineProductId,startTime,partnerAgencyId,creator,status,type,managerId);
-					});
-					
-					//分页--尾页事件
-					$("#" +tabId+"  .pageMode a.last").click(function(){
-						transfer.listTransferIn(data.pager.totalPage== 0 ? data.pager.totalPage : data.pager.totalPage-1,lineProductId,startTime,partnerAgencyId,creator,status,type,managerId);
+
+					// 绑定翻页组件
+					laypage({
+					    cont: $('#transferIn').find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+					    pages: data.totalPage, //总页数
+					    curr: (page + 1),
+					    jump: function(obj, first) {
+					    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+					    		transfer.listTransferIn(obj.curr -1,lineProductId,startTime,partnerAgencyId,creator,status,type,managerId);
+							}
+					    }
 					});
 				}
 			});
@@ -451,33 +434,18 @@ define(function(require, exports) {
 						$("#transferOut .btn-transfer-edit").click(transfer.updateTransfer);
 						//导出分团转客信息
 						$("#transferOut .btn-transfer-export").unbind().click(transfer.exportTransfer);
-						//分页--首页按钮事件
-						$("#" +tabId+" .pageMode a.first").click(function(){
-							transfer.listTransfer(0,partnerAgencyId,creator,startTime,endTime,status,type);
-						});
-						
-						//分页--上一页事件
-						$("#" +tabId+"  .pageMode a.previous").click(function(){
-							var previous = data.pager.pageNo - 1;
-							if(data.pager.pageNo == 0){
-								previous = 0;
-							}
-							transfer.listTransfer(previous,partnerAgencyId,creator,startTime,endTime,status,type);
-						});            
-						//分页--下一页事件
-						$("#" +tabId+" .pageMode a.next").click(function(){
 							
-							var next =  data.pager.pageNo + 1;
-							if(data.pager.pageNo == data.pager.totalPage-1){
-								next = data.pager.pageNo ;
-							}
-							transfer.listTransfer(next,partnerAgencyId,creator,startTime,endTime,status,type);
+						// 绑定翻页组件
+						laypage({
+						    cont: $('#' + tabId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+						    pages: data.totalPage, //总页数
+						    curr: (page + 1),
+						    jump: function(obj, first) {
+						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+						    		transfer.listTransfer(obj.curr -1,partnerAgencyId,creator,startTime,endTime,status,type);
+								}
+						    }
 						});
-						
-						//分页--尾页事件
-						$("#" +tabId+"  .pageMode a.last").click(function(){
-							transfer.listTransfer(data.pager.totalPage== 0 ? data.pager.totalPage : data.pager.totalPage-1,partnerAgencyId,creator,startTime,endTime,status,type);
-						});	
 						
 					}else{
 						//同行转入模板数据

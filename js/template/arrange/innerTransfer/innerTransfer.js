@@ -6,7 +6,8 @@ define(function(require, exports) {
 		inListTemplate = require("./view/inList"),
 		viewTemplate=require("./view/view"),
 		innerTransferOut = require("./view/innerTransferOutView"),
-		editTemplate=require("./view/edit");
+		editTemplate=require("./view/edit"),
+		tabId = "tab-"+menuKey+"-content";
 
 
 	var innerTransfer = {
@@ -213,52 +214,16 @@ define(function(require, exports) {
 						innerTransfer.deleteTransferIn(id);
 					});
 
-					//分页
-					//分页--首页按钮事件
-					$("#"+divId+" .pageMode a.first").click(function(){
-						innerTransfer.getSearchParam(divId,type);
-						innerTransfer.$searchParam.pageNo = 0;
-						if(data.searchParam.pageNo == 0 || data.searchParam.totalPage == 0)return;
-						innerTransfer.innerList(divId,type);
-					});
-					//分页--上一页事件
-					$("#"+divId+" .pageMode a.previous").click(function(){
-						innerTransfer.getSearchParam(divId,type);
-						var pageNo = parseInt(data.searchParam.pageNo);
-						var previous = pageNo - 1;
-						if(pageNo == 0){
-							previous = 0;
-						}
-						if(data.searchParam.pageNo == 0 || data.searchParam.totalPage == 0)return;
-						innerTransfer.$searchParam.pageNo = previous;
-						innerTransfer.innerList(divId,type);
-					});   
-					//分页--下一页事件
-					$("#"+divId+" .pageMode a.next").click(function(){
-						innerTransfer.getSearchParam(divId,type);
-						var pageNo = parseInt(data.searchParam.pageNo);
-						var totalPage = parseInt(data.searchParam.totalPage);
-						var next =  pageNo + 1;
-						if(pageNo == totalPage-1){
-							next = pageNo ;
-						}
-						innerTransfer.$searchParam.pageNo = next;
-						if(pageNo == totalPage-1 || totalPage == 0)return;
-						innerTransfer.innerList(divId,type);
-					});
-					//分页--尾页事件
-					$("#"+divId+" .pageMode a.last").click(function(){
-						innerTransfer.getSearchParam(divId,type);
-						var totalPage = parseInt(data.searchParam.totalPage);
-						var pageNo = 0;
-						if(totalPage==0){
-							pageNo = 0;
-						}else{
-							pageNo = totalPage - 1; 
-						}
-						innerTransfer.$searchParam.pageNo = pageNo;
-						if(data.searchParam.pageNo == totalPage-1 || data.searchParam.totalPage == 0)return;
-						innerTransfer.innerList(divId,type);
+					// 绑定翻页组件
+					laypage({
+					    cont: $('#' + tabId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+					    pages: data.totalPage, //总页数
+					    curr: (page + 1),
+					    jump: function(obj, first) {
+					    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+					    		innerTransfer.innerList(divId,type);
+					    	}
+					    }
 					});
 				}
 			}

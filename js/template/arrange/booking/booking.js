@@ -5,7 +5,8 @@ define(function(require, exports) {
 		updateTemplate = require("./view/update"),
 		viewTemplate = require("./view/view"),
 		listTemplate = require("./view/list"),
-		addPartnerManagerTemplate = require("./view/addPartnerManager");
+		addPartnerManagerTemplate = require("./view/addPartnerManager"),
+		tabId = "tab-"+menuKey+"-content";
 	var booking ={
 		searchData :{
 			id:"",
@@ -55,6 +56,17 @@ define(function(require, exports) {
 						addTab(menuKey,"项目代订",html);
 						booking.initList(data);
 						booking.getQueryTerms();
+						// 绑定翻页组件
+						laypage({
+						    cont: $('#' + tabId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+						    pages: data.totalPage, //总页数
+						    curr: (page + 1),
+						    jump: function(obj, first) {
+						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+						    		booking.listbooking(obj.curr -1,booking.searchData.id,booking.searchData.orderNumber,booking.searchData.partnerAgencyId,booking.searchData.partnerAgency,booking.searchData.operateUserId,booking.searchData.operateUser,booking.searchData.startTime,booking.searchData.endTime);
+								}
+						    }
+						});
 					}
 				}
 			})
@@ -77,34 +89,6 @@ define(function(require, exports) {
 				booking.listbooking(0,booking.searchData.id,booking.searchData.orderNumber,booking.searchData.partnerAgencyId,booking.searchData.partnerAgency,booking.searchData.operateUserId,booking.searchData.operateUser,booking.searchData.startTime,booking.searchData.endTime);
 			});
 			
-			//分页--首页按钮事件
-			$("#tab-"+menuKey+"-content .pageMode a.first").click(function(){
-				if(data.pageNo == 0 || data.totalPage == 0)return;
-				booking.listbooking(0,booking.searchData.id,booking.searchData.orderNumber,booking.searchData.partnerAgencyId,booking.searchData.partnerAgency,booking.searchData.operateUserId,booking.searchData.operateUser,booking.searchData.startTime,booking.searchData.endTime);
-			});
-			//分页--上一页事件
-			$("#tab-"+menuKey+"-content  .pageMode a.previous").click(function(){
-				if(data.totalPage == 0)return;
-				var previous = data.pageNo - 1;
-				if(data.pageNo == 0){
-					previous = 0;
-				}
-				booking.listbooking(previous,booking.searchData.id,booking.searchData.orderNumber,booking.searchData.partnerAgencyId,booking.searchData.partnerAgency,booking.searchData.operateUserId,booking.searchData.operateUser,booking.searchData.startTime,booking.searchData.endTime);
-			});
-			//分页--下一页事件
-			$("#tab-"+menuKey+"-content .pageMode a.next").click(function(){
-				if(data.pageNo+1 == data.totalPage || data.totalPage == 0)return;
-				var next =  data.pageNo + 1;
-				if(data.pageNo == data.totalPage-1){
-					next = data.pageNo ;
-				}
-				booking.listbooking(next,booking.searchData.id,booking.searchData.orderNumber,booking.searchData.partnerAgencyId,booking.searchData.partnerAgency,booking.searchData.operateUserId,booking.searchData.operateUser,booking.searchData.startTime,booking.searchData.endTime);
-			});
-			//分页--尾页事件
-			$("#tab-"+menuKey+"-content  .pageMode a.last").click(function(){
-				if(data.pageNo == data.totalPage-1 || data.totalPage == 0)return;
-				booking.listbooking(data.totalPage-1,booking.searchData.id,booking.searchData.orderNumber,booking.searchData.partnerAgencyId,booking.searchData.partnerAgency,booking.searchData.operateUserId,booking.searchData.operateUser,booking.searchData.startTime,booking.searchData.endTime);
-			});
 			//新增项目代订
 			$("#tab-"+menuKey+"-content .btn-Booking-add").click(booking.addBooking);
 			//修改项目代订
