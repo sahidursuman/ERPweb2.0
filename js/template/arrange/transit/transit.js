@@ -4,6 +4,7 @@ define(function(require, exports) {
 		listTemplate = require("./view/list"),
 		arrangeTemplate = require("./view/arrange"),
 		viewTemplate = require("./view/view");
+		tabId = "tab-"+menuKey+"-content";
 	var transit ={
 		searchData : {
 			fromPartnerAgencyName:"",
@@ -49,6 +50,17 @@ define(function(require, exports) {
 						addTab(menuKey,"中转安排",html);
 						transit.initList(data);
 						transit.getQueryTerms();
+						// 绑定翻页组件
+						laypage({
+						    cont: $('#' + tabId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+						    pages: data.totalPage, //总页数
+						    curr: (page + 1),
+						    jump: function(obj, first) {
+						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+						    		transit.listTransit(obj.curr -1,transit.searchData.fromPartnerAgencyName,transit.searchData.fromPartnerAgencyId,transit.searchData.lineProductId,transit.searchData.lineProductName,transit.searchData.startTime,transit.searchData.arrangeUserId,transit.searchData.arrangeUserName,transit.searchData.arrangeStartTime,transit.searchData.arrangeEndTime,transit.searchData.status,transit.searchData.shuttleType,transit.searchData.shuttleTime);
+						    	}
+						    }
+						});		
 					}
 				}
 			});
@@ -126,34 +138,6 @@ define(function(require, exports) {
 				}
 				transit.listTransit(0,transit.searchData.fromPartnerAgencyName,transit.searchData.fromPartnerAgencyId,transit.searchData.lineProductId,transit.searchData.lineProductName,transit.searchData.startTime,transit.searchData.arrangeUserId,transit.searchData.arrangeUserName,transit.searchData.arrangeStartTime,transit.searchData.arrangeEndTime,transit.searchData.status,transit.searchData.shuttleType,transit.searchData.shuttleTime)
 			})
-			//分页--首页按钮事件
-			$("#"+tab+" .pageMode a.first").click(function(){
-				if(data.pageNo == 0 || data.totalPage == 0)return;
-				transit.listTransit(0,transit.searchData.fromPartnerAgencyName,transit.searchData.fromPartnerAgencyId,transit.searchData.lineProductId,transit.searchData.lineProductName,transit.searchData.startTime,transit.searchData.arrangeUserId,transit.searchData.arrangeUserName,transit.searchData.arrangeStartTime,transit.searchData.arrangeEndTime,transit.searchData.status,transit.searchData.shuttleType,transit.searchData.shuttleTime);
-			});
-			//分页--上一页事件
-			$("#"+tab+" .pageMode a.previous").click(function(){
-				if(data.totalPage == 0)return;
-				var previous = data.pageNo - 1;
-				if(data.pageNo == 0){
-					previous = 0;
-				}
-				transit.listTransit(previous,transit.searchData.fromPartnerAgencyName,transit.searchData.fromPartnerAgencyId,transit.searchData.lineProductId,transit.searchData.lineProductName,transit.searchData.startTime,transit.searchData.arrangeUserId,transit.searchData.arrangeUserName,transit.searchData.arrangeStartTime,transit.searchData.arrangeEndTime,transit.searchData.status,transit.searchData.shuttleType,transit.searchData.shuttleTime);
-			});
-			//分页--下一页事件
-			$("#"+tab+" .pageMode a.next").click(function(){
-				if(data.pageNo+1 == data.totalPage || data.totalPage == 0)return;
-				var next =  data.pageNo + 1;
-				if(data.pageNo == data.totalPage-1){
-					next = data.pageNo ;
-				}
-				transit.listTransit(next,transit.searchData.fromPartnerAgencyName,transit.searchData.fromPartnerAgencyId,transit.searchData.lineProductId,transit.searchData.lineProductName,transit.searchData.startTime,transit.searchData.arrangeUserId,transit.searchData.arrangeUserName,transit.searchData.arrangeStartTime,transit.searchData.arrangeEndTime,transit.searchData.status,transit.searchData.shuttleType,transit.searchData.shuttleTime);
-			});
-			//分页--尾页事件
-			$("#"+tab+" .pageMode a.last").click(function(){
-				if(data.pageNo == data.totalPage-1 || data.totalPage == 0)return;
-				transit.listTransit(data.totalPage-1,transit.searchData.fromPartnerAgencyName,transit.searchData.fromPartnerAgencyId,transit.searchData.lineProductId,transit.searchData.lineProductName,transit.searchData.startTime,transit.searchData.arrangeUserId,transit.searchData.arrangeUserName,transit.searchData.arrangeStartTime,transit.searchData.arrangeEndTime,transit.searchData.status,transit.searchData.shuttleType,transit.searchData.shuttleTime);
-			});
 		},
 		viewTransit :function(id){
 			$.ajax({
