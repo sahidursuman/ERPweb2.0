@@ -292,37 +292,25 @@ define(function(require, exports) {
 				minLength:0,
 				change :function(event,ui){
 					if(ui.item == null){
-
-						$(this).parent().parent().find("input[name=lineProductId]").val("");
-						//$(this).val("");
-						var parents = $(this).parent();
-						parents.parent().find("input[name=days]").val("");
-						parents.parent().find("input[name=customerType]").val("");
-						parents.find("input[name=lineProductId]").val("");
-
+						var $this = $(this),$parents = $this.closest('tr');
+						$this.val("");
+						$parents.find("input[name=lineProductId]").val("");
+						$parents.find("input[name=days]").val("");
+						$parents.find("input[name=customerType]").val("");
 					}
 				},
 				select :function(event,ui){
-					//var parents = $(this).parent();
-					//parents.find("input[name=lineProductId]").val(ui.item.id).trigger('change');
-					//if(ui.item.customerType == 0){
-					//	parents.parent().find("input[name=customerType]").val("散客");
-					//}else{
-					//	parents.parent().find("input[name=customerType]").val("团体");
-					//}
-					//parents.parent().find("input[name=days]").val(ui.item.days);
-					//validator = rule.updateCheckdSaveSubsection(validator);
-
-					$(this).blur();
-					var obj = this;
-					var parents = $(this).parent();
-					$(obj).parent().parent().find("input[name=lineProductId]").val(ui.item.id).trigger('change');
+					var $this = $(this),$parents = $this.closest('tr');
+					$this.val(ui.item.name);
+					$parents.find("input[name=lineProductId]").val(ui.item.id).trigger('change');
 					if(ui.item.customerType == 0){
-						parents.parent().find("input[name=customerType]").val("散客");
+						$parents.find("input[name=customerType]").val("散客");
 					}else{
-						parents.parent().find("input[name=customerType]").val("团体");
+						$parents.find("input[name=customerType]").val("团体");
 					}
-					parents.parent().find("input[name=days]").val(ui.item.days);
+					$parents.find("input[name=days]").val(ui.item.days);
+					validator = rule.updateCheckdSaveSubsection(validator);
+					return false;
 				}
 			}).unbind("click").click(function(){
 				var obj =this;
@@ -335,7 +323,7 @@ define(function(require, exports) {
 							var lineProductList = data.lineProductList;
 							if(lineProductList && lineProductList.length > 0){
 								for(var i=0; i < lineProductList.length; i++){
-									lineProductList[i].value = lineProductList[i].name;
+									lineProductList[i].value = "("+lineProductList[i].days+"天)"+lineProductList[i].name;
 								}
 								$(obj).autocomplete('option','source', lineProductList);
 								$(obj).autocomplete('search', '');
@@ -473,29 +461,29 @@ define(function(require, exports) {
 		getPartnerAgencyList:function($obj){
 			var getPartnerAgencyList = $obj.find(".choosePartnerAgency");
 			getPartnerAgencyList.autocomplete({
-								minLength: 0,
-								change: function(event, ui) {
-									if(ui.item == null){
-										//$(this).nextAll('input[name="fromPartnerAgencyId"]').val('');
-										$(this).parent().parent().find("input[name=fromPartnerAgencyId]").val("");
-									}
-								},
-								select: function(event, ui) {
-									$(this).blur();
-									var obj = this;
-									$(obj).parent().parent().find("input[name=fromPartnerAgencyId]").val(ui.item.id).trigger('change');
-								}
-							}).click(function(){
-							var obj = this;
-							var fromGuideObj = subsection.autocompleteDate.fromPartnerAgencyList;
-							console.info(fromGuideObj);
-							if(fromGuideObj !=null && fromGuideObj.length>0){
-								for(var i=0;i<fromGuideObj.length;i++){
-									fromGuideObj[i].value = fromGuideObj[i].travelAgencyName;
-								}
-							}
-							$(obj).autocomplete('option','source',fromGuideObj);
-							$(obj).autocomplete('search', '');
+				minLength: 0,
+				change: function(event, ui) {
+					if(ui.item == null){
+						//$(this).nextAll('input[name="fromPartnerAgencyId"]').val('');
+						$(this).parent().parent().find("input[name=fromPartnerAgencyId]").val("");
+					}
+				},
+				select: function(event, ui) {
+					$(this).blur();
+					var obj = this;
+					$(obj).parent().parent().find("input[name=fromPartnerAgencyId]").val(ui.item.id).trigger('change');
+				}
+			}).click(function(){
+			var obj = this;
+			var fromGuideObj = subsection.autocompleteDate.fromPartnerAgencyList;
+			console.info(fromGuideObj);
+			if(fromGuideObj !=null && fromGuideObj.length>0){
+				for(var i=0;i<fromGuideObj.length;i++){
+					fromGuideObj[i].value = fromGuideObj[i].travelAgencyName;
+				}
+			}
+				$(obj).autocomplete('option','source',fromGuideObj);
+				$(obj).autocomplete('search', '');
 			});
 		},
 
@@ -503,31 +491,31 @@ define(function(require, exports) {
 		getLineProductList:function($obj){
 			var getPartnerAgencyList = $obj.find(".chooseLineProduct");
 			getPartnerAgencyList.autocomplete({
-							minLength: 0,
-							change: function(event, ui) {
-								if (ui.item == null)  {
-									//$(this).nextAll('input[name="lineProductId"]').val('');
-									$(this).parent().parent().find("input[name=lineProductId]").val("");
-								}
-							},
-							select: function(event, ui) {
-								$(this).blur();
-								var obj = this;
-								$(obj).parent().parent().find("input[name=lineProductId]").val(ui.item.id).trigger('change');
-								//nextAll('input[name="lineProductId"]').val(ui.item.id);
-							}
-						}).click(function(){
-						var obj = this;
-						var lineProductObj = subsection.autocompleteDate.lineProductList;
-						console.info(lineProductObj);
-						if(lineProductObj !=null && lineProductObj.length>0){
-							for(var i=0;i<lineProductObj.length;i++){
-								lineProductObj[i].value = lineProductObj[i].name;
-							}
-						}
-						$(obj).autocomplete('option','source',lineProductObj);
-						$(obj).autocomplete('search', '');
-					});
+				minLength: 0,
+				change: function(event, ui) {
+					if (ui.item == null)  {
+						//$(this).nextAll('input[name="lineProductId"]').val('');
+						$(this).parent().parent().find("input[name=lineProductId]").val("");
+					}
+				},
+				select: function(event, ui) {
+					$(this).blur();
+					var obj = this;
+					$(obj).parent().parent().find("input[name=lineProductId]").val(ui.item.id).trigger('change');
+					//nextAll('input[name="lineProductId"]').val(ui.item.id);
+				}
+			}).click(function(){
+			var obj = this;
+			var lineProductObj = subsection.autocompleteDate.lineProductList;
+			console.info(lineProductObj);
+			if(lineProductObj !=null && lineProductObj.length>0){
+				for(var i=0;i<lineProductObj.length;i++){
+					lineProductObj[i].value = lineProductObj[i].name;
+				}
+			}
+				$(obj).autocomplete('option','source',lineProductObj);
+				$(obj).autocomplete('search', '');
+			});
 		},
 
         //操作人模糊查询

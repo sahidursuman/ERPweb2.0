@@ -360,13 +360,13 @@ define(function(require, exports) {
 		},
 		//添加资源 
 		addResource : function(){
-			$("#tripPlan_addPlan_insurance .T-addInsuranceResource").off('click').on("click",{function : KingServices.addInsurance , name : "insuranceName" , id : "insuranceId"}, KingServices.addResourceFunction);
-			$("#tripPlan_addPlan_restaurant .T-addRestaurantResource").off('click').on("click",{function : KingServices.addRestaurant, name : "restaurantName" , id : "restaurantId" , managerName : "managerName" , mobileNumber : "mobileNumber"}, KingServices.addResourceFunction);
-			$("#tripPlan_addPlan_hotel .T-addHotelResource").off('click').on("click",{function : KingServices.addHotel, name : "name" , id : "hotelId" , managerName : "managerName" , mobileNumber : "mobileNumber"}, KingServices.addResourceFunction);
-			$("#tripPlan_addPlan_scenic .T-addScenicResource").off('click').on("click",{function : KingServices.addScenic, name : "name" , id : "scenicId"}, KingServices.addResourceFunction);
-			$("#tripPlan_addPlan_shop .T-addShopResource").off('click').on("click",{function : KingServices.addShop, name : "name" , id : "shopId" , managerName : "managerName" , mobileNumber : "mobileNumber"}, KingServices.addResourceFunction);
-			$("#tripPlan_addPlan_selfPay .T-addSelfPayResource").off('click').on("click",{function : KingServices.addSelfPay, name : "name" , id : "selfPayId" , managerName : "managerName" , mobileNumber : "mobileNumber"}, KingServices.addResourceFunction);
-			$("#tripPlan_addPlan_ticket .T-addTicketResource").off('click').on("click",{function : KingServices.addTicket, name : "name" , id : "tickeId"}, KingServices.addResourceFunction);
+			$("#tripPlan_addPlan_insurance .T-addInsuranceResource").off('click').on("click",{function : KingServices.addInsurance , type : "tr" , name : "insuranceName" , id : "insuranceId"}, KingServices.addResourceFunction);
+			$("#tripPlan_addPlan_restaurant .T-addRestaurantResource").off('click').on("click",{function : KingServices.addRestaurant, type : "tr" , name : "restaurantName" , id : "restaurantId" , managerName : "managerName" , mobileNumber : "mobileNumber"}, KingServices.addResourceFunction);
+			$("#tripPlan_addPlan_hotel .T-addHotelResource").off('click').on("click",{function : KingServices.addHotel, type : "tr" , name : "name" , id : "hotelId" , managerName : "managerName" , mobileNumber : "mobileNumber"}, KingServices.addResourceFunction);
+			$("#tripPlan_addPlan_scenic .T-addScenicResource").off('click').on("click",{function : KingServices.addScenic, type : "tr" , name : "name" , id : "scenicId"}, KingServices.addResourceFunction);
+			$("#tripPlan_addPlan_shop .T-addShopResource").off('click').on("click",{function : KingServices.addShop, type : "tr" , name : "name" , id : "shopId" , managerName : "managerName" , mobileNumber : "mobileNumber"}, KingServices.addResourceFunction);
+			$("#tripPlan_addPlan_selfPay .T-addSelfPayResource").off('click').on("click",{function : KingServices.addSelfPay, type : "tr" , name : "name" , id : "selfPayId" , managerName : "managerName" , mobileNumber : "mobileNumber"}, KingServices.addResourceFunction);
+			$("#tripPlan_addPlan_ticket .T-addTicketResource").off('click').on("click",{function : KingServices.addTicket, type : "tr" , name : "name" , id : "tickeId"}, KingServices.addResourceFunction);
 		},
 		//添加保险安排
 		addInsurance : function(e){
