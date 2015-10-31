@@ -10,21 +10,21 @@
 			<div class="widget-body">
 				<div class="widget-main">
 					<div class="form-group">
-						<label class="col-sm-2 control-label no-padding-right">线路产品名称:</label>
+						<label class="col-sm-1 control-label no-padding-right">线路产品名称:</label>
 						<div class="col-sm-3">
 							<label class="control-label">{{viewLineProduct.lineProduct.name}}</label>
 						</div>
-						<label class="col-sm-2 control-label no-padding-right">线路天数:</label>
+						<label class="col-sm-1 control-label no-padding-right">线路天数:</label>
 						<div class="col-sm-3">
 							<label class="control-label">{{viewLineProduct.lineProduct.days}}</label>
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-sm-2 control-label no-padding-right">线路类型:</label>
+						<label class="col-sm-1 control-label no-padding-right">线路类型:</label>
 						<div class="col-sm-3">
 							<label class="control-label">{{viewLineProduct.lineProduct.type}}</label>
 						</div>
-						<label class="col-sm-2 control-label no-padding-right">针对客源:</label>
+						<label class="col-sm-1 control-label no-padding-right">针对客源:</label>
 						<div class="col-sm-3">
 							<label class="control-label">
 								{{if viewLineProduct.lineProduct.customerType == 1}}
@@ -36,7 +36,7 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-sm-2 control-label no-padding-right">是否启用:</label>
+						<label class="col-sm-1 control-label no-padding-right">是否启用:</label>
 						<div class="col-sm-8">
 							<label class="control-label">
 								{{if viewLineProduct.lineProduct.status == 1}}
@@ -48,9 +48,11 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-sm-2 control-label no-padding-right">线路产品备注:</label>
+						<label class="col-sm-1 control-label no-padding-right">线路产品备注:</label>
 						<div class="col-sm-8"> 
-							<label class="control-label">{{viewLineProduct.lineProduct.remark}}</label>
+							<label class="control-label" style="text-align:left;">	
+								{{viewLineProduct.lineProduct.remark}}
+							</label>
 						</div>
 					</div>
 				</div>
