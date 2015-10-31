@@ -189,7 +189,9 @@ define(function(require, exports) {
 	    	booking.hotelChooseList($add);
 	    	booking.hotelRoomChooseList($add);
 	    	//景区联动
-	    	booking.scenicItemChooseList($add);
+	    	$(".chooseScenicItem").on("click",function(){
+	    		booking.scenicItemChooseList(this);
+	    	});
 	    	booking.scenicChooseList($add);
 	    	//票务下拉
 	    	booking.ticketChoostList($add);
@@ -305,7 +307,9 @@ define(function(require, exports) {
 			booking.hotelChooseList($obj);
 			booking.hotelRoomChooseList($obj);
 			//景区联动
-			booking.scenicItemChooseList($obj);
+			$(".chooseScenicItem").on("click",function(){
+	    		booking.scenicItemChooseList(this);
+	    	});
 			booking.scenicChooseList($obj);
 			//票务下拉
 			booking.ticketChoostList($obj);
@@ -409,7 +413,7 @@ define(function(require, exports) {
 											$parent.fadeOut(function(){
 												$parent.remove();
 											})
-											booking.listbooking(0,"","","","","");
+											booking.listbooking(0,"","","","","","","","");
 										});
 									}
 								}
@@ -487,7 +491,9 @@ define(function(require, exports) {
 			//时间控件
 	    	booking.datepicker($container);
 	    	//景区联动
-	    	booking.scenicItemChooseList(event.data.$this);
+	    	$(".chooseScenicItem").on("click",function(){
+	    		booking.scenicItemChooseList(this);
+	    	});
 	    	booking.scenicChooseList(event.data.$this);
 	    	
 	    	//景区贷订
@@ -645,6 +651,8 @@ define(function(require, exports) {
 						$(this).val("");
 						var parents = $(this).parent().parent();
 						parents.find("[name=partnerAgencyId]").val("");
+						parents.find("input[name=contactRealname]").val("");
+						parents.find("input[name=contactMobileNumber]").val("");
 					}
 				},
 				select :function(event,ui){
@@ -658,8 +666,8 @@ define(function(require, exports) {
 		                success: function(data) {
 							var result = showDialog(data);
 							if(result){
-								parents.find("input[name=contactRealname]").val();
-								parents.find("input[name=contactMobileNumber]").val();
+								parents.find("input[name=contactRealname]").val("");
+								parents.find("input[name=contactMobileNumber]").val("");
 							}
 		                }
 					})
@@ -717,6 +725,8 @@ define(function(require, exports) {
 				select:function(event,ui){
 					var _this = this, parents = $(_this).parent().parent();
 					parents.find("input[name=hotelId]").val(ui.item.id).trigger('change');
+					parents.find("input[name=hotelRoom]").val("");
+					parents.find("input[name=hotelRoomId]").val("");
 				}
 			}).off("click").on("click", function(){
 				var hotelStarValue = $hotelStar.val(),
@@ -821,14 +831,15 @@ define(function(require, exports) {
 						thisParent.find("input[name=scenicId]").val("");
 						thisParent.find("input[name=scenicItemName]").val("");
 						thisParent.find("input[name=scenicItemId]").val("");
+						thisParent.find("input[name=costPrice]").val("");
 					}
 				},
 				select :function(event, ui){
-					console.log(ui);
 					var _this = this, parents = $(_this).parent().parent();
 					parents.find("input[name=scenicId]").val(ui.item.id).trigger('change');
 					parents.find("input[name=scenicItemName]").val("");
 					parents.find("input[name=scenicItemId]").val("");
+					parents.find("input[name=costPrice]").val("");
 				}
 			}).unbind("click").click(function(){
 				var obj = this;
@@ -857,9 +868,16 @@ define(function(require, exports) {
                 });
 			})
 		},
-		scenicItemChooseList :function(className){
-			var chooseScenicItem = className.find(".chooseScenicItem");
-			chooseScenicItem.autocomplete({
+		scenicItemChooseList :function(obj){
+			var obj = $(obj);
+			var thisParent = obj.parent().parent();
+			var startTime = thisParent.find("[name=startTime]").val();
+			console.log(startTime);
+			if(startTime == ""){
+				showMessageDialog($( "#confirm-dialog-message" ),"请选择日期！");
+				return false;
+			}
+			obj.autocomplete({
 				minLength:0,
 				change :function(event, ui){
 					if(ui.item == null){
@@ -889,7 +907,6 @@ define(function(require, exports) {
 				var _this = $(this);
 				var scenicId = _this.parent().parent().find("input[name=scenicId]").val();
 				var enterTime = _this.parent().parent().find("input[name=enterTime]").val();
-				console.log(scenicId);
 				if(scenicId){
 					$.ajax({
 						url:""+APP_ROOT+"back/scenic.do?method=findItemByScenicId&token="+$.cookie("token")+"&menuKey=resource_scenic&operation=view",
@@ -1399,13 +1416,13 @@ define(function(require, exports) {
 								booking.edited["add"] = "";
 								if(isClose == 1){
 									closeTab("arrange_booking-"+operation);
-									booking.listbooking(0,"","","","","");
+									booking.listbooking(0,"","","","","","","","");
 								}
 							} else if(operation == "update"){
 								booking.edited["update"] = "";
 								if(isClose == 1){
 									closeTab("arrange_booking-"+operation);
-									booking.listbooking(0,"","","","","");
+									booking.listbooking(0,"","","","","","","","");
 								}
 							}
 							
