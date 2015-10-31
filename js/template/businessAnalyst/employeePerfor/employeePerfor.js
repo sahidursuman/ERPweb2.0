@@ -149,7 +149,7 @@ define(function(require, exports) {
 		var url = ''+APP_ROOT+'back/performanceOfUser.do?method='+method+'&token='+$.cookie('token')+'&menuKey='+menuKey+'&operation='+operation+'';
 		return url;
 	}
-
+ 
 	exports.init = employeePerforObj.initModule;
 
 });
