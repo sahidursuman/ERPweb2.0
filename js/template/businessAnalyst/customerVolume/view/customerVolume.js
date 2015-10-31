@@ -17,7 +17,7 @@ define(function(require, exports) {
 			$searchParam:{
 				startTime:"",
 				endTime:"",
-				id:"",
+				customerId:"",
 				customerName:"",
 				pageNo:0
 			},
@@ -48,7 +48,7 @@ define(function(require, exports) {
 		customerVolObj.$searchParam={
 			startTime:startTime,
 			endTime:endTime,
-			id:customerId,
+			customerId:customerId,
 			customerName:customerName,
 			pageNo:page
 		};
@@ -136,6 +136,7 @@ define(function(require, exports) {
 		});
     };
 	
+
 
     //客户客量的Autocomplete
     customerVolObj.getCusList=function($obj){
