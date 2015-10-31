@@ -2029,7 +2029,7 @@ define(function(require, exports) {
 							$("#main-container")[0].index = 0;
 							if(isClose == 1){
 								closeTab(menuKey + "-update");
-								tripPlan.listTripPlan(0,"","","","","");
+								tripPlan.listTripPlan(0,"","","","","","","","");
 							}
 						});
 					}
@@ -2132,7 +2132,7 @@ define(function(require, exports) {
 					var result = showDialog(data);
 					if(result){
 						showMessageDialog($("#confirm-dialog-message"),data.message, function(){
-							tripPlan.listTripPlan(0,"","","","");
+							tripPlan.listTripPlan(0,"","","","","","","");
 						});
 					}
 				}
