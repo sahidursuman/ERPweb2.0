@@ -704,3 +704,7 @@ input,select{
     right: 14px;
     top: 0px;
 }
+.layui-layer-page .layui-layer-content{
+    max-height: 550px !important;
+    overflow-y: auto;
+}
