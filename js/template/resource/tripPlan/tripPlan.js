@@ -1054,7 +1054,7 @@ define(function(require, exports) {
 				change:function(event,ui){
 					if(ui.item == null){
 						var objParent = $(this).closest('tr');
-						//objParent.find("input[name=restaurantStandardId]").val("");
+						objParent.find("input[name=restaurantStandardId]").val(0);
 						//objParent.find("input[name=fee]").val("");
 					}
 				},

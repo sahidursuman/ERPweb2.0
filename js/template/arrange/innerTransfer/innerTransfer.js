@@ -74,7 +74,7 @@ define(function(require, exports) {
 			var divId = "inner-TransferOut",
 				type = "1";
 			innerTransfer.getSearchParam(divId,type);
-			innerTransfer.innerList(divId,type);
+			innerTransfer.innerList(divId,type,0);
 			innerTransfer.findTotal(divId);
 		})
 		$("#inner-TransferIn .dropdown-menu a").click(function(){
@@ -83,7 +83,7 @@ define(function(require, exports) {
 			var divId = "inner-TransferIn",
 				type = "2";
 			innerTransfer.getSearchParam(divId,type);
-			innerTransfer.innerList(divId,type);
+			innerTransfer.innerList(divId,type,0);
 			innerTransfer.findTotal(divId);
 		})
 	};
@@ -92,7 +92,7 @@ define(function(require, exports) {
 			btn = event.data.btn,
 			type = event.data.type;
 		innerTransfer.getSearchParam(divId,type);
-		innerTransfer.innerList(divId,type)
+		innerTransfer.innerList(divId,type,0)
 		innerTransfer.findTotal(divId);
 	};
 	innerTransfer.getSearchParam = function(divId,type){
@@ -158,7 +158,7 @@ define(function(require, exports) {
 			}
 		});
 	};
-	innerTransfer.innerList = function(divId,type){
+	innerTransfer.innerList = function(divId,type,page){
 		$.ajax({
 			url: innerTransfer.url("findPager","view"),
 			type: 'POST',
@@ -213,15 +213,17 @@ define(function(require, exports) {
 							id = parents.attr("data-entity-id");
 						innerTransfer.deleteTransferIn(id);
 					});
+					
+					page=0||page;
 
 					// 绑定翻页组件
 					laypage({
 					    cont: $('#' + tabId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
-					    pages: data.totalPage, //总页数
+					    pageNo: data.searchParam.totalPage, //总页数
 					    curr: (page + 1),
 					    jump: function(obj, first) {
 					    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-					    		innerTransfer.innerList(divId,type);
+					    		innerTransfer.innerList(obj.curr -1);
 					    	}
 					    }
 					});
@@ -465,7 +467,7 @@ define(function(require, exports) {
 							var divId = "inner-TransferOut",
 								type = "1";
 							innerTransfer.getSearchParam(divId,type);
-							innerTransfer.innerList(divId,type);
+							innerTransfer.innerList(divId,type,0);
 						}
 					});
 				}
@@ -508,7 +510,7 @@ define(function(require, exports) {
 										var divId = "inner-TransferOut",
 											type = "1";
 										innerTransfer.getSearchParam(divId,type);
-										innerTransfer.innerList(divId,type);
+										innerTransfer.innerList(divId,type,0);
 									}
 								 }
 							});
@@ -558,7 +560,7 @@ define(function(require, exports) {
 									var divId = "inner-TransferIn",
 										type = "2";
 									innerTransfer.getSearchParam(divId,type);
-									innerTransfer.innerList(divId,type);
+									innerTransfer.innerList(divId,type,0);
 								}
 							 }
 						});
@@ -607,7 +609,7 @@ define(function(require, exports) {
 									var divId = "inner-TransferIn",
 										type = "2";
 									innerTransfer.getSearchParam(divId,type);
-									innerTransfer.innerList(divId,type);
+									innerTransfer.innerList(divId,type,0);
 								}
 							 }
 						});
