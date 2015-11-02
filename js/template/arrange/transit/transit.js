@@ -823,7 +823,7 @@ define(function(require, exports) {
 								$(obj).autocomplete('option','source', seatCountListJson);
 								$(obj).autocomplete('search', '');
 							}else{
-								layer.tips('没有内容', obj, {
+								layer.tips('无数据', obj, {
 								    tips: [1, '#3595CC'],
 								    time: 2000
 								});
@@ -883,7 +883,7 @@ define(function(require, exports) {
 									$(obj).autocomplete('option','source', busBrandListJson);
 									$(obj).autocomplete('search', '');
 								}else{
-									layer.tips('没有内容', obj, {
+									layer.tips('无数据', obj, {
 									    tips: [1, '#3595CC'],
 									    time: 2000
 									});
@@ -947,7 +947,7 @@ define(function(require, exports) {
 									$(obj).autocomplete('option','source', licenseList);
 									$(obj).autocomplete('search', '');
 								}else{
-									layer.tips('没有内容', obj, {
+									layer.tips('无数据', obj, {
 									    tips: [1, '#3595CC'],
 									    time: 2000
 									});
@@ -999,7 +999,7 @@ define(function(require, exports) {
 									$(obj).autocomplete('option','source', driverList);
 									$(obj).autocomplete('search', '');
 								}else{
-									layer.tips('没有内容', obj, {
+									layer.tips('无数据', obj, {
 									    tips: [1, '#3595CC'],
 									    time: 2000
 									});
@@ -1537,7 +1537,7 @@ define(function(require, exports) {
 					$(objM).autocomplete('option','source', lineObj);
 					$(objM).autocomplete('search', '');
 				}else{
-					layer.tips('没有组团社', objM, {
+					layer.tips('无数据', objM, {
 						tips: [1, '#3595CC'],
 						time: 2000
 					});
@@ -1621,7 +1621,7 @@ define(function(require, exports) {
 					$(objM).autocomplete('option','source', arrangeObj);
 					$(objM).autocomplete('search', '');
 				}else{
-					layer.tips('没有组团社', objM, {
+					layer.tips('无数据', objM, {
 						tips: [1, '#3595CC'],
 						time: 2000
 					});
