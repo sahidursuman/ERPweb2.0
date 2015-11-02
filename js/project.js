@@ -1540,7 +1540,7 @@ Tools.addTab = function(tab_id, tab_name, html)  {
 		updateTabContent();
 	}
 
-
+	return canUpdateTabContent;
 	function updateTabContent()  {
 		$tabContent.find(".tab-pane-menu").removeClass("active");
 		if($content.length > 0){

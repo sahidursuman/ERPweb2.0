@@ -19,6 +19,8 @@ define(function(require, exports) {
 	// 声明全局变量
 	ResLineProduct.$tab = false;
 	ResLineProduct.updateLineProductIndex = 0;
+	// 临时存放数据
+	ResLineProduct.tmpData = {};
 	/**
 	 * 初始化首页模块
 	 * @return {[type]} [description]
@@ -211,54 +213,71 @@ define(function(require, exports) {
 							title = "复制线路产品";
 							tab_id = menuKey + '-copy';
 						}
-						data.viewLineProduct.editorName = tab_id + '-ueditor';
 
+						ResLineProduct.tmpData.productId = id;
+						ResLineProduct.tmpData.type = clipboardMode;
+
+						data.viewLineProduct.editorName = tab_id + '-ueditor';
 						var html = updateLineProductTemplate(data.viewLineProduct);
 						// 初始化页面
-						Tools.addTab(tab_id, title, html);
-						var $tab = $('#tab-'+ tab_id + '-content');
-						// 初始化页面容器
-						if (clipboardMode) {
-							ResLineProduct.$copyTab = $tab;
-						} else {
-							ResLineProduct.$editTab = $tab;
+						if (Tools.addTab(tab_id, title, html)) {
+							ResLineProduct.init_updata_tab(tab_id);							
 						}
-						// 绑定页面事件
-						ResLineProduct.init_CRU_event(id, $tab);
 
-						// 初始化数据
-						if(!clipboardMode) {
-							$tab.find('.T-btn-submit').data('id', id);
-						}
-						// 以下待修改
-						ResLineProduct.mousedownBlur();
 
-						var updateList =$tab.find(".T-dailyArrangeList");
-						if(updateList.length > 0){
-							for(var k=0; k<updateList.length; k++){
-								var updateDays = updateList.eq(k).find(".T-timeline-detail-container");
-								if( updateDays.find(".T-timeline-item").length > 0){
-									var arr = [], daysList = updateDays.find(".T-timeline-item");
-									for(var i=0; i<daysList.length; i++){
-										arr.push(daysList[i].outerHTML);
-									}
-									arr.sort(function(a,b){
-										a = parseInt(/data-entity-index=\"(\d+)/.exec(a)[1], 10);
-										b = parseInt(/data-entity-index=\"(\d+)/.exec(b)[1], 10);
-										return a-b;
-									});
-									
-									updateDays.html(arr.join(""));
-								}
-							}
-							var daysDetailList = $tab.find(".T-timeline-item");
-							ResLineProduct.updateLineProductIndex = parseInt(daysDetailList.eq(daysDetailList.length-1).attr("data-entity-index")) + 1;
-						}
 					}
 				}
 			});
 		}
 	};
+
+	/**
+	 * 初始化tab方法.主要便于编辑或者回调调用
+	 * @return {[type]} [description]
+	 */
+	ResLineProduct.init_updata_tab = function (tab_id) {
+		var id = ResLineProduct.tmpData.productId,
+			clipboardMode = ResLineProduct.tmpData.type,
+			$tab = $('#tab-'+ tab_id + '-content');
+
+		// 初始化页面容器
+		if (clipboardMode) {
+			ResLineProduct.$copyTab = $tab;
+		} else {
+			ResLineProduct.$editTab = $tab;
+		}
+		// 绑定页面事件
+		ResLineProduct.init_CRU_event(id, $tab);
+
+		// 初始化数据
+		if(!clipboardMode) {
+			$tab.find('.T-btn-submit').data('id', id);
+		}
+		// 以下待修改
+		ResLineProduct.mousedownBlur();
+
+		var updateList =$tab.find(".T-dailyArrangeList");
+		if(updateList.length > 0){
+			for(var k=0; k<updateList.length; k++){
+				var updateDays = updateList.eq(k).find(".T-timeline-detail-container");
+				if( updateDays.find(".T-timeline-item").length > 0){
+					var arr = [], daysList = updateDays.find(".T-timeline-item");
+					for(var i=0; i<daysList.length; i++){
+						arr.push(daysList[i].outerHTML);
+					}
+					arr.sort(function(a,b){
+						a = parseInt(/data-entity-index=\"(\d+)/.exec(a)[1], 10);
+						b = parseInt(/data-entity-index=\"(\d+)/.exec(b)[1], 10);
+						return a-b;
+					});
+					
+					updateDays.html(arr.join(""));
+				}
+			}
+			var daysDetailList = $tab.find(".T-timeline-item");
+			ResLineProduct.updateLineProductIndex = parseInt(daysDetailList.eq(daysDetailList.length-1).attr("data-entity-index")) + 1;
+		}
+	}
 
 	/**
 	 * 初始化添加、编辑、复制的事件绑定
@@ -1826,6 +1845,8 @@ define(function(require, exports) {
 						if (!!tabArgs && tabArgs.length === 3) {
 							// 切换tab，就不做数据更新
 							Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
+
+							ResLineProduct.init_updata_tab(tabArgs[0]);
 						} else {
 							ResLineProduct.getProductList(ResLineProduct.pageNo);	
 							Tools.closeTab(Tools.getTabKey($tab.prop('id')));						
