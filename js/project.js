@@ -183,7 +183,7 @@ function showMessageDialog(dialogObj,message, fn){
 		buttons: [
 			{
 				text: "确定",
-				"class" : "btn btn-primary btn-minier",
+				"class" : "btn btn-primary btn-minier btn-heightMall",
 				click: function() {
 					$( this ).dialog( "close" );
 					if(fn){
@@ -203,7 +203,7 @@ function showConfirmMsg(dialogObj,message,confirmFn ,cancelFn,btnStr1,btnStr2){
 		buttons = [
 			{
 				text: btnStr1,
-				"class" : "btn btn-minier",
+				"class" : "btn btn-minier btn-heightMall",
 				click: function() {
 					$( this ).dialog( "close" );
 					if(typeof cancelFn === "function"){
@@ -213,7 +213,7 @@ function showConfirmMsg(dialogObj,message,confirmFn ,cancelFn,btnStr1,btnStr2){
 			},
 			{
 				text: btnStr2,
-				"class" : "btn btn-primary btn-minier",
+				"class" : "btn btn-primary btn-minier btn-heightMall",
 				click: function() {
 					$( this ).dialog( "close" );
 					if(typeof confirmFn === "function"){
@@ -226,7 +226,7 @@ function showConfirmMsg(dialogObj,message,confirmFn ,cancelFn,btnStr1,btnStr2){
 		buttons = [
 			{
 				text: "放弃",
-				"class" : "btn btn-minier",
+				"class" : "btn btn-minier btn-heightMall",
 				click: function() {
 					$( this ).dialog( "close" );
 					if(typeof cancelFn === "function"){
@@ -236,7 +236,7 @@ function showConfirmMsg(dialogObj,message,confirmFn ,cancelFn,btnStr1,btnStr2){
 			},
 			{
 				text: "保存",
-				"class" : "btn btn-primary btn-minier",
+				"class" : "btn btn-primary btn-minier btn-heightMall",
 				click: function() {
 					$( this ).dialog( "close" );
 					if(typeof confirmFn === "function"){
@@ -262,7 +262,7 @@ function showSaveConfirmDialog($dialog, message, yes_fn, no_fn, cacel_fn)  {
 	var buttons = [
 			{
 				text: '是',
-				class: "btn btn-primary btn-minier",
+				class: "btn btn-primary btn-minier btn-heightMall",
 				click: function() {
 					$( this ).dialog( "close" );
 					if(typeof yes_fn === "function"){
@@ -272,7 +272,7 @@ function showSaveConfirmDialog($dialog, message, yes_fn, no_fn, cacel_fn)  {
 			}, 
 			{
 				text: '否',
-				class: "btn btn-minier",
+				class: "btn btn-minier btn-heightMall",
 				click: function() {
 					$( this ).dialog( "close" );
 					if(typeof no_fn === "function"){
@@ -282,7 +282,7 @@ function showSaveConfirmDialog($dialog, message, yes_fn, no_fn, cacel_fn)  {
 			},
 			{
 				text: '取消',
-				class: "btn btn-default btn-minier",
+				class: "btn btn-default btn-minier btn-heightMall",
 				click: function() {
 					$( this ).dialog( "close" );
 					if(typeof cacel_fn === "function"){
@@ -312,14 +312,14 @@ function showConfirmDialog(dialogObj,message, fn){
 		buttons: [
 			{
 				text: "取消",
-				"class" : "btn btn-minier",
+				"class" : "btn btn-minier btn-heightMall",
 				click: function() {
 					$( this ).dialog( "close" );
 				}
 			},
 			{
 				text: "确定",
-				"class" : "btn btn-primary btn-minier",
+				"class" : "btn btn-primary btn-minier btn-heightMall",
 				click: function() {
 					$( this ).dialog( "close" );
 					if(fn){
@@ -342,7 +342,7 @@ function showLogoutDialog(dialogObj,message){
 		buttons: [
 			{
 				text: "重新登录",
-				"class" : "btn btn-primary btn-minier",
+				"class" : "btn btn-primary btn-minier btn-heightMall",
 				click: function() {
 					window.location.href = "login.html";
 				}
@@ -383,7 +383,7 @@ function showAutoLoginDialog(dialogObj,message){
 		buttons: [
 			{
 				text: "自动登录",
-				"class" : "btn btn-primary btn-minier",
+				"class" : "btn btn-primary btn-minier btn-heightMall",
 				click: function() {
 					$( this ).dialog( "close" );
 					$.ajax({
@@ -513,14 +513,14 @@ function logout(){
 		buttons: [
 			{
 				text: "取消",
-				"class" : "btn btn-minier",
+				"class" : "btn btn-minier btn-heightMall",
 				click: function() {
 					$( this ).dialog( "close" );
 				}
 			},
 			{
 				text: "确定",
-				"class" : "btn btn-primary btn-minier",
+				"class" : "btn btn-primary btn-minier btn-heightMall",
 				click: function() {
 					$( this ).dialog( "close" );
 					$.ajax({
