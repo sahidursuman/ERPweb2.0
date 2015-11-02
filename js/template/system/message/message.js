@@ -30,30 +30,17 @@ define(function(require, exports) {
 							var id = $(this).closest('tr').data('id');
 							message.viewMsg(id);
 						});
-						
-						//分页--首页按钮事件
-						$("#messageList .pageMode a.first").click(function(){
-							message.listMsg(0);
-						});
-						//分页--上一页事件
-						$("#messageList .pageMode a.previous").click(function(){
-							var previous = data.pageNo - 1;
-							if(data.pageNo == 0){
-								previous = 0;
-							}
-							message.listMsg(previous);
-						});
-						//分页--下一页事件
-						$("#messageList .pageMode a.next").click(function(){
-							var next =  data.pageNo + 1;
-							if(data.pageNo == data.totalPage-1){
-								next = data.pageNo ;
-							}
-							message.listMsg(next);
-						});
-						//分页--尾页事件
-						$("#messageList .pageMode a.last").click(function(){
-							message.listMsg(data.totalPage == 0 ? 0 : data.totalPage-1);
+
+						// 绑定翻页组件
+						laypage({
+						    cont: $('#' + tabId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+						    pages: data.totalPage, //总页数
+						    curr: (page + 1),
+						    jump: function(obj, first) {
+						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+						    		message.listMsg(obj.curr -1);
+								}
+						    }
 						});
 					}
 				}
