@@ -364,10 +364,10 @@ define(function(require, exports) {
 			 * 绑定基础安排
 			 */
 			// 导游
-			ResLineProduct.bindGuideChosen($tab.find('.T-guide-name'));
-			ResLineProduct.bindInsuranceChosen($tab.find('.T-insurance-name'));
-			ResLineProduct.bindBusCompanyChosen($tab.find('.T-buscompany-name'));
-			ResLineProduct.bindBusDetailChosen($tab.find('.T-licenseNumber'));
+			ResLineProduct.bindGuideChosen($tab.find('.T-guide-name'), validator);
+			ResLineProduct.bindInsuranceChosen($tab.find('.T-insurance-name'), validator);
+			ResLineProduct.bindBusCompanyChosen($tab.find('.T-buscompany-name'), validator);
+			ResLineProduct.bindBusDetailChosen($tab.find('.T-licenseNumber'), validator);
 
 			$tab.find('.T-btn-submit').on('click', function(event) {
 				event.preventDefault();
@@ -381,7 +381,7 @@ define(function(require, exports) {
 	 * @param  {[type]} $input [description]
 	 * @return {[type]}        [description]
 	 */
-	ResLineProduct.bindGuideChosen = function($input) {
+	ResLineProduct.bindGuideChosen = function($input, validator) {
 		if (!$input || !$input.length) {
 			console.error('绑定导游的autocomplete，主体Dom为空!');
 			return;
@@ -467,7 +467,7 @@ define(function(require, exports) {
 	 * @param  {object} $input 绑定的Dom
 	 * @return {[type]}        [description]
 	 */
-	ResLineProduct.bindInsuranceChosen = function($input) {
+	ResLineProduct.bindInsuranceChosen = function($input, validator) {
 		if (!$input || !$input.length) {
 			console.error('绑定保险的autocomplete，主体Dom为空!');
 			return;
@@ -535,7 +535,7 @@ define(function(require, exports) {
 	 * @param  {[type]} $input [description]
 	 * @return {[type]}        [description]
 	 */
-	ResLineProduct.bindBusCompanyChosen = function($input) {
+	ResLineProduct.bindBusCompanyChosen = function($input, validator) {
 		if (!$input || !$input.length) {
 			console.error('绑定车队的autocomplete，主体Dom为空!');
 			return;
@@ -598,7 +598,7 @@ define(function(require, exports) {
 	 * @param  {object} $input 绑定的Dom
 	 * @return {[type]}        [description]
 	 */
-	ResLineProduct.bindBusDetailChosen = function($input) {
+	ResLineProduct.bindBusDetailChosen = function($input, validator) {
 		if (!$input || !$input.length) {
 			console.error('绑定保险的autocomplete，主体Dom为空!');
 			return;
