@@ -30,3 +30,6 @@ template.helper("interceptStr",function(data){
 template.helper("toFixed", function(data) {
     return (data).toFixed(2);
 });
+template.helper("stringify", function(data) {
+    return JSON.stringify(data);
+});
