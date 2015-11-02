@@ -1333,7 +1333,8 @@ define(function(require, exports) {
 				change:function(event,ui){
 					if(ui.item == null){
 						$(this).val("");
-						$(this).parent().parent().find("input[name=mobileNumber]").val("");
+						$(this).closest('.widget-main').find("input[name=GmobileNumber]").val("");
+						$(this).closest('.widget-main').find("input[name=AddTPchooseGuideId]").val("");
 					}
 				},
 				select:function(event,ui){
@@ -1348,8 +1349,8 @@ define(function(require, exports) {
 							var result = showDialog(data);
 							if(result){
 								var guide = JSON.parse(data.guide);
-								$(obj).parent().parent().find("input[name=AddTPchooseGuideId]").val(guide.id).trigger('change');
-								$(obj).parent().parent().find("input[name=GmobileNumber]").val(guide.mobileNumber);
+								$(obj).closest('.widget-main').find("input[name=AddTPchooseGuideId]").val(guide.id).trigger('change');
+								$(obj).closest('.widget-main').find("input[name=GmobileNumber]").val(guide.mobileNumber);
 							}
 	                    }
 	                });
@@ -1376,7 +1377,7 @@ define(function(require, exports) {
                 });
 			});
 		},
-		busChoose : function(){
+		/*busChoose : function(){
 		//给车辆绑定autocomplete事件
 			chooseBusLicenseNumber = $(".addTripPlanMain .chooseBusLicenseNumber").autocomplete({
 				minLength:0,
@@ -1558,7 +1559,7 @@ define(function(require, exports) {
                     }
                 });
 			})
-		},
+		},*/
 		//查看计划    arrangeTourist.viewTripPlan(id);
 		viewTripPlan:function(id){
 			$.ajax({
