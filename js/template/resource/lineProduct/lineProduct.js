@@ -406,7 +406,7 @@ define(function(require, exports) {
 				var $that = $(this).blur();
 				
 				$.ajax({
-					url: KingServices('guide', 'getGuideById'),
+					url: KingServices.build_url('guide', 'getGuideById'),
 					data:"id="+ui.item.id,
 					success: function(data) {
 						var result = showDialog(data);
@@ -443,7 +443,7 @@ define(function(require, exports) {
 		}).click(function(){
 			var obj = this;
 			$.ajax({
-				url: KingServices('guide', 'findAll'),
+				url: KingServices.build_url('guide', 'findAll'),
 				dataType: "json",
 				success: function(data) {
 					var result = showDialog(data);
@@ -491,7 +491,7 @@ define(function(require, exports) {
 			select:function(event,ui){
 				var $that = $(this).blur();
 				$.ajax({
-					url: KingServices('insurance', 'getInsuranceById'),
+					url: KingServices.build_url('insurance', 'getInsuranceById'),
 					data:"id="+ui.item.id,
 					success: function(data) {
 						var result = showDialog(data);
@@ -512,7 +512,7 @@ define(function(require, exports) {
 		}).click(function(){
 			var obj = this;
 			$.ajax({
-				url: KingServices('insurance', 'findAll'),
+				url: KingServices.build_url('insurance', 'findAll'),
 				success: function(data) {
 					var result = showDialog(data);
 					if(result){
@@ -574,7 +574,7 @@ define(function(require, exports) {
 			console.log(obj)
 			var needSeatCount = $(obj).parent().parent().find("input[name=needSeatCount]").val();
 			$.ajax({
-				url: KingServices('busCompany', 'findBusCompanyBySeat'),
+				url: KingServices.build_url('busCompany', 'findBusCompanyBySeat'),
 				data:"seatCount="+needSeatCount,
 				success: function(data) {
 					var result = showDialog(data);
@@ -609,7 +609,7 @@ define(function(require, exports) {
 			select:function(event,ui){
 				var $that = $(this);
 				$.ajax({
-					url: KingServices('busCompany', 'findBusDetailById'),
+					url: KingServices.build_url('busCompany', 'findBusDetailById'),
 					data:"id="+ui.item.id,
 					success: function(data) {
 						var result = showDialog(data);
@@ -642,7 +642,7 @@ define(function(require, exports) {
 			var needSeatCount = $(this).parent().parent().find("input[name=needSeatCount]").val();
 			if(busCompanyId){
 				$.ajax({
-					url: KingServices('busCompany', 'findBusListBySeat'),
+					url: KingServices.build_url('busCompany', 'findBusListBySeat'),
 					data:"id="+busCompanyId+"&seatCount="+needSeatCount,
 					success: function(data) {
 						var result = showDialog(data);
@@ -1480,7 +1480,7 @@ define(function(require, exports) {
 			var obj = this;
 			var chooseCompanyNameId=$(obj).parent().parent().find("input[name='companyId']").val();
 			$.ajax({
-				url: KingServices('selfpay', 'findSelfPayItemBySelfPayId'),
+				url: KingServices.build_url('selfpay', 'findSelfPayItemBySelfPayId'),
 				data:"id="+chooseCompanyNameId,
 				success:function(data){
 					var result = showDialog(data);
@@ -1534,7 +1534,7 @@ define(function(require, exports) {
 			select:function(event, ui){
 				var $tr = $(this).closest('tr');
 				$.ajax({
-                    url: KingServices('ticket', 'findTicketById'),
+                    url: KingServices.build_url('ticket', 'findTicketById'),
                     data: "id="+ui.item.id,
                     success: function(data) {
 						var result = showDialog(data);
@@ -1569,7 +1569,7 @@ define(function(require, exports) {
 		}).unbind("click").click(function(){
 			var obj = this;
 			$.ajax({
-				url: KingServices('ticket', 'findAll'),
+				url: KingServices.build_url('ticket', 'findAll'),
 				success:function(data){
 					var result = showDialog(data);
 					if(result){
@@ -1948,7 +1948,7 @@ define(function(require, exports) {
 		busJsonAdd = JSON.stringify(busJsonAdd);
 		driverJsonAdd = JSON.stringify(driverJsonAdd);
 		$.ajax({
-			url: KingServices('lineProduct', 'addLineProduct'),
+			url: KingServices.build_url('lineProduct', 'addLineProduct'),
 			type:"POST",
 			data:form+"&busJsonAdd="+encodeURIComponent(busJsonAdd)+"&driverJsonAdd="+encodeURIComponent(driverJsonAdd)+"",
 			success:function(data){
