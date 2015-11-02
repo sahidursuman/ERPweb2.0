@@ -5,7 +5,8 @@ define(function(require, exports) {
 		 addTemplate = require("./view/add"),
 		 updateTemplate = require("./view/update"),
 		 viewTemplate = require( "./view/view"),
-		 authTemplate = require("./view/auth");
+		 authTemplate = require("./view/auth"),
+		 tabId = "tab-"+menuKey+"-content";
 	
 	var user = {
 		listUser:function(page,realname,status){
@@ -73,39 +74,17 @@ define(function(require, exports) {
 							var status = $("#tab-"+menuKey+"-content  .btn-status").find("button").attr("data-value");
 							user.listUser(0,realname,status);
 						});
-						//分页--首页按钮事件
-						$("#tab-"+menuKey+"-content .pageMode a.first").click(function(){
-							var realname = $("#tab-"+menuKey+"-content  input[name=user_realname]").val();
-							var status = $("#tab-"+menuKey+"-content  .btn-status").find("button").attr("data-value");
-							user.listUser(0,realname,status);
+						// 绑定翻页组件
+						laypage({
+						    cont: $('#' + tabId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+						    pages: data.totalPage, //总页数
+						    curr: (page + 1),
+						    jump: function(obj, first) {
+						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+						    		user.listUser(obj.curr -1,realname,status);
+								}
+						    }
 						});
-						//分页--上一页事件
-						$("#tab-"+menuKey+"-content  .pageMode a.previous").click(function(){
-							var realname = $("#tab-"+menuKey+"-content  input[name=user_realname]").val();
-							var status = $("#tab-"+menuKey+"-content  .btn-status").find("button").attr("data-value");
-							var previous = data.pageNo - 1;
-							if(data.pageNo == 0){
-								previous = 0;
-							}
-							user.listUser(previous,realname,status);
-						});
-						//分页--下一页事件
-						$("#tab-"+menuKey+"-content .pageMode a.next").click(function(){
-							var realname = $("#tab-"+menuKey+"-content input[name=user_realname]").val();
-							var status = $("#tab-"+menuKey+"-content  .btn-status").find("button").attr("data-value");
-							var next =  data.pageNo + 1;
-							if(data.pageNo == data.totalPage-1){
-								next = data.pageNo ;
-							}
-							user.listUser(next,realname,status);
-						});
-						//分页--尾页事件
-						$("#tab-"+menuKey+"-content  .pageMode a.last").click(function(){
-							var realname = $("#tab-"+menuKey+"-content input[name=user_realname]").val();
-							var status = $("#tab-"+menuKey+"-content  .btn-status").find("button").attr("data-value");
-							user.listUser(data.totalPage-1,realname,status);
-						});
-						
 					}
 				}
 			});
