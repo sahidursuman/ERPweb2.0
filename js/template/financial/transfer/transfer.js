@@ -86,30 +86,18 @@ define(function(require, exports) {
                             Transfer.listTransfer(0,Transfer.searchData.partnerAgencyId,Transfer.searchData.travelAgencyName,Transfer.searchData.year,Transfer.searchData.month);
                         });
 						Transfer.getPartnerAgencyList($("#"+tabId+" .choosePartnerAgency"),"");
-                        //分页--首页按钮事件
-                        $("#" + tabId + " .pageMode a.first").click(function(){
-                        	Transfer.listTransfer(0,Transfer.searchData.partnerAgencyId,Transfer.searchData.travelAgencyName,Transfer.searchData.year,Transfer.searchData.month);
-                        });
-                        //分页--上一页事件
-                        $("#" + tabId + " .pageMode a.previous").click(function(){
-                            var previous = data.pageNo - 1;
-                            if(data.pageNo == 0){
-                                previous = 0;
-                            }
-                            Transfer.listTransfer(previous,Transfer.searchData.partnerAgencyId,Transfer.searchData.travelAgencyName,Transfer.searchData.year,Transfer.searchData.month);
-                        });
-                        //分页--下一页事件
-                        $("#" + tabId + " .pageMode a.next").click(function(){
-                            var next =  data.pageNo + 1;
-                            if(data.pageNo == data.totalPage-1){
-                                next = data.pageNo ;
-                            }
-                            Transfer.listTransfer(next,Transfer.searchData.partnerAgencyId,Transfer.searchData.year,Transfer.searchData.month);
-                        });
-                        //分页--尾页事件
-                        $("#" + tabId + " .pageMode a.last").click(function(){
-                        	 Transfer.listTransfer(data.totalPage == 0 ? data.totalPage:data.totalPage-1,Transfer.searchData.partnerAgencyId,Transfer.searchData.travelAgencyName,Transfer.searchData.year,Transfer.searchData.month);
-                        });
+
+                        // 绑定翻页组件
+						laypage({
+						    cont: $('#' + tabId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+						    pages: data.totalPage, //总页数
+						    curr: (page + 1),
+						    jump: function(obj, first) {
+						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+						    		Transfer.listTransfer(obj.curr -1,Transfer.searchData.partnerAgencyId,Transfer.searchData.travelAgencyName,Transfer.searchData.year,Transfer.searchData.month);
+                        		}
+						    }
+						});
                         //给对账按钮绑定事件
                         $("#" + tabId + " .btn-transfer-check").click(function(){
                         	Transfer.searchCheckData={
@@ -238,30 +226,18 @@ define(function(require, exports) {
 		                         	exportXLS(url)
 		                         });
 			                 });
-		                    //分页--首页按钮事件
-			                 $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.first").click(function(){
-			                	 Transfer.transferCheckList(0,Transfer.searchCheckData.partnerAgencyId,Transfer.searchCheckData.partnerAgencyName,Transfer.searchCheckData.year,Transfer.searchCheckData.month)
-			                 });
-							//分页--上一页事件
-			                 $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.previous").click(function(){
-								var previous = data.pageNo - 1;
-								if(data.pageNo == 0){
-									previous = 0;
-								}
-								Transfer.transferCheckList(previous,Transfer.searchCheckData.partnerAgencyId,Transfer.searchCheckData.partnerAgencyName,Transfer.searchCheckData.year,Transfer.searchCheckData.month)
-			                 });
-							//分页--下一页事件
-			                 $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.next").click(function(){
-								var next =  data.pageNo + 1;
-								if(data.pageNo == data.totalPage-1){
-									next = data.pageNo ;
-								}
-								Transfer.transferCheckList(next,Transfer.searchCheckData.partnerAgencyId,Transfer.searchCheckData.partnerAgencyName,Transfer.searchCheckData.year,Transfer.searchCheckData.month)
-			                 });
-							//分页--尾页事件
-			                 $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.last").click(function(){
-			                	Transfer.transferCheckList(data.totalPage == 0 ? data.totalPage : data.totalPage-1,Transfer.searchCheckData.partnerAgencyId,Transfer.searchCheckData.partnerAgencyName,Transfer.searchCheckData.year,Transfer.searchCheckData.month)
-			                 });
+		                    
+			                 // 绑定翻页组件
+							laypage({
+							    cont: $("#tab-"+ checkTabId+"-content").find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+							    pages: data.totalPage, //总页数
+							    curr: (pageNo + 1),
+							    jump: function(obj, first) {
+							    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+							    		Transfer.transferCheckList(obj.curr -1,Transfer.searchCheckData.partnerAgencyId,Transfer.searchCheckData.partnerAgencyName,Transfer.searchCheckData.year,Transfer.searchCheckData.month)
+			                 		}
+							    }
+							});
 				             //给全选绑定事件
 				                 $("#" +"tab-"+ checkTabId+"-content"+" .transfer-selectAll").click(function(){
 				                	 var flag = this.checked;

@@ -91,29 +91,16 @@ define(function(require, exports) {
                         });
                         Replace.getPartnerAgencyList($("#"+tabId+" .choosePartnerAgency"),"");
 
-                        //分页--首页按钮事件
-                        $("#"+tabId+" .pageMode a.first").click(function(){
-                            Replace.listReplace(0,Replace.searchData.partnerAgencyId,Replace.searchData.travelAgencyName,Replace.searchData.year,Replace.searchData.month);
-                        });
-                        //分页--上一页事件
-                        $("#"+tabId+" .pageMode a.previous").click(function(){
-                            var previous = data.pageNo - 1;
-                            if(data.pageNo == 0){
-                                previous = 0;
+                        // 绑定翻页组件
+                        laypage({
+                            cont: $('#' + tabId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+                            pages: data.totalPage, //总页数
+                            curr: (page + 1),
+                            jump: function(obj, first) {
+                                if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+                                    Replace.listReplace(obj.curr -1,Replace.searchData.partnerAgencyId,Replace.searchData.travelAgencyName,Replace.searchData.year,Replace.searchData.month);
+                                }
                             }
-                            Replace.listReplace(previous,Replace.searchData.partnerAgencyId,Replace.searchData.travelAgencyName,Replace.searchData.year,Replace.searchData.month);
-                        });
-                        //分页--下一页事件
-                        $("#"+tabId+" .pageMode a.next").click(function(){
-                            var next =  data.pageNo + 1;
-                            if(data.pageNo == data.totalPage-1){
-                                next = data.pageNo ;
-                            }
-                            Replace.listReplace(next,Replace.searchData.partnerAgencyId,Replace.searchData.travelAgencyName,Replace.searchData.year,Replace.searchData.month);
-                        });
-                        //分页--尾页事件
-                        $("#"+tabId+" .pageMode a.last").click(function(){
-                            Replace.listReplace(data.totalPage == 0 ? data.totalPage:data.totalPage-1,Replace.searchData.partnerAgencyId,Replace.searchData.travelAgencyName,Replace.searchData.year,Replace.searchData.month);
                         });
                         //给对账按钮绑定事件
                         $("#"+tabId+" .btn-financialbooking-check").click(function(){
@@ -228,29 +215,16 @@ define(function(require, exports) {
                         });
                      });
 
-                    //分页--首页按钮事件
-                    $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.first").click(function(){
-                        Replace.replaceCheckList(0,Replace.searchCheckData.partnerAgencyId,Replace.searchCheckData.travelAgencyName,Replace.searchCheckData.year,Replace.searchCheckData.month)
-                    });
-                    //分页--上一页事件
-                    $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.previous").click(function(){
-                        var previous = data.pageNo - 1;
-                        if(data.pageNo == 0){
-                            previous = 0;
+                    // 绑定翻页组件
+                    laypage({
+                        cont: $("#tab-"+ checkTabId+"-content").find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+                        pages: data.totalPage, //总页数
+                        curr: (pageNo + 1),
+                        jump: function(obj, first) {
+                            if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+                                Replace.replaceCheckList(obj.curr -1,Replace.searchCheckData.partnerAgencyId,Replace.searchCheckData.travelAgencyName,Replace.searchCheckData.year,Replace.searchCheckData.month)
+                            }
                         }
-                        Replace.replaceCheckList(previous,Replace.searchCheckData.partnerAgencyId,Replace.searchCheckData.travelAgencyName,Replace.searchCheckData.year,Replace.searchCheckData.month)
-                    });
-                    //分页--下一页事件
-                    $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.next").click(function(){
-                        var next =  data.pageNo + 1;
-                        if(data.pageNo == data.totalPage-1){
-                            next = data.pageNo ;
-                        }
-                        Replace.replaceCheckList(next,Replace.searchCheckData.partnerAgencyId,Replace.searchCheckData.travelAgencyName,Replace.searchCheckData.year,Replace.searchCheckData.month)
-                    });
-                    //分页--尾页事件
-                    $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.last").click(function(){
-                        Replace.replaceCheckList(data.totalPage == 0 ? data.totalPage : data.totalPage-1,Replace.searchCheckData.partnerAgencyId,Replace.searchCheckData.travelAgencyName,Replace.searchCheckData.year,Replace.searchCheckData.month)
                     });
                     //给全选绑定事件
                     $("#" +"tab-"+ checkTabId+"-content"+" .selectAll").click(function(){

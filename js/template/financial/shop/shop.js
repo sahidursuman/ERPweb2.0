@@ -65,25 +65,16 @@ define(function(require, exports) {
 						$("#"+tabId+ " .pageMode a.first").click(function(){
 							shop.listFinancialShop(0,shopId,data.year,data.month);
 						});
-						//分页--上一页事件
-						$("#"+tabId+ " .pageMode a.previous").click(function(){
-							var previous = data.pageNo - 1;
-							if(data.pageNo == 0){
-								previous = 0;
-							}
-							shop.listFinancialShop(previous,shopId,data.year,data.month);
-						});
-						//分页--下一页事件
-						$("#"+tabId+ " .pageMode a.next").click(function(){
-							var next =  data.pageNo + 1;
-							if(data.pageNo == data.totalPage-1){
-								next = data.pageNo ;
-							}
-							shop.listFinancialShop(next,shopId,data.year,data.month);
-						});
-						//分页--尾页事件
-						$("#"+tabId+ " .pageMode a.last").click(function(){
-							shop.listFinancialShop(data.totalPage-1,shopId,data.year,data.month);
+						// 绑定翻页组件
+						laypage({
+						    cont: $('#' + tabId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+						    pages: data.totalPage, //总页数
+						    curr: (page + 1),
+						    jump: function(obj, first) {
+						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+						    		shop.listFinancialShop(obj.curr -1,shopId,data.year,data.month);
+						    	}
+						    }
 						});
 						//给对账按钮绑定事件
 						$("#"+tabId+" .btn-divide").click(function(){
@@ -169,29 +160,16 @@ define(function(require, exports) {
 	                         	exportXLS(url)
 	                         });
 						});
-						//分页--首页按钮事件
-						$("#"+checkTabId+ " .pageMode a.first").click(function(){
-							shop.listShopChecking(0,shopId,data.year,data.month);
-						});
-						//分页--上一页事件
-						$("#"+checkTabId+ " .pageMode a.previous").click(function(){
-							var previous = data.pageNo - 1;
-							if(data.pageNo == 0){
-								previous = 0;
-							}
-							shop.listShopChecking(previous,shopId,data.year,data.month);
-						});
-						//分页--下一页事件
-						$("#"+checkTabId+ " .pageMode a.next").click(function(){
-							var next =  data.pageNo + 1;
-							if(data.pageNo == data.totalPage-1){
-								next = data.pageNo ;
-							}
-							shop.listShopChecking(next,shopId,data.year,data.month);
-						});
-						//分页--尾页事件
-						$("#"+checkTabId+ " .pageMode a.last").click(function(){
-							shop.listShopChecking(data.totalPage-1,shopId,data.year,data.month);
+						// 绑定翻页组件
+						laypage({
+						    cont: $('#' + checkTabId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+						    pages: data.totalPage, //总页数
+						    curr: (page + 1),
+						    jump: function(obj, first) {
+						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+						    		shop.listShopChecking(obj.curr -1,shopId,data.year,data.month);
+						    	}
+						    }
 						});
 						
 						//给全选绑定事件

@@ -85,30 +85,18 @@ define(function(require, exports) {
                             }
                             Restaurant.listRestaurant(0,Restaurant.searchData.restaurantId,Restaurant.searchData.year,Restaurant.searchData.month);
                         });
-                      //分页--首页按钮事件
-						$("#" + tabId + " .pageMode a.first").click(function(){
-							Restaurant.listRestaurant(0,Restaurant.searchData.restaurantId,Restaurant.searchData.year,Restaurant.searchData.month);
+                        // 绑定翻页组件
+						laypage({
+						    cont: $('#' + tabId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+						    pages: data.totalPage, //总页数
+						    curr: (page + 1),
+						    jump: function(obj, first) {
+						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+						    		Restaurant.listRestaurant(obj.curr -1,Restaurant.searchData.restaurantId,Restaurant.searchData.year,Restaurant.searchData.month);
+								}
+						    }
 						});
-						//分页--上一页事件
-						$("#" + tabId + " .pageMode a.previous").click(function(){
-							var previous = data.pageNo - 1;
-							if(data.pageNo == 0){
-								previous = 0;
-							}
-							Restaurant.listRestaurant(previous,Restaurant.searchData.restaurantId,Restaurant.searchData.year,Restaurant.searchData.month);
-						});
-						//分页--下一页事件
-						$("#" + tabId + " .pageMode a.next").click(function(){
-							var next =  data.pageNo + 1;
-							if(data.pageNo == data.totalPage-1){
-								next = data.pageNo ;
-							}
-							Restaurant.listRestaurant(next,Restaurant.searchData.restaurantId,Restaurant.searchData.year,Restaurant.searchData.month);
-						});
-						//分页--尾页事件
-						$("#" + tabId + " .pageMode a.last").click(function(){
-							Restaurant.listRestaurant(data.totalPage == 0 ? data.totalPage : data.totalPage-1,Restaurant.searchData.restaurantId,Restaurant.searchData.year,Restaurant.searchData.month);
-						});
+                      
                         //给对账按钮绑定事件
 						$("#" + tabId + " .btn-divide").click(function(){
 							Restaurant.searchCheckData={
@@ -214,30 +202,18 @@ define(function(require, exports) {
 	                        });
 	                       
 			             });
-	                    //分页--首页按钮事件
-		                 $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.first").click(function(){
-		                	 Restaurant.restaurantCheckList(0,Restaurant.searchCheckData.restaurantId,Restaurant.searchCheckData.restaurantName,Restaurant.searchCheckData.year,Restaurant.searchCheckData.month)
-		                 });
-						//分页--上一页事件
-		                 $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.previous").click(function(){
-							var previous = data.pageNo - 1;
-							if(data.pageNo == 0){
-								previous = 0;
-							}
-							Restaurant.restaurantCheckList(previous,Restaurant.searchCheckData.restaurantId,Restaurant.searchCheckData.restaurantName,Restaurant.searchCheckData.year,Restaurant.searchCheckData.month)
-		                 });
-						//分页--下一页事件
-		                 $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.next").click(function(){
-							var next =  data.pageNo + 1;
-							if(data.pageNo == data.totalPage-1){
-								next = data.pageNo ;
-							}
-							Restaurant.restaurantCheckList(next,Restaurant.searchCheckData.restaurantId,Restaurant.searchCheckData.restaurantName,Restaurant.searchCheckData.year,Restaurant.searchCheckData.month)
-		                 });
-						//分页--尾页事件
-		                 $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.last").click(function(){
-		                	Restaurant.restaurantCheckList(data.totalPage == 0 ? data.totalPage : data.totalPage-1,Restaurant.searchCheckData.restaurantId,Restaurant.searchCheckData.restaurantName,Restaurant.searchCheckData.year,Restaurant.searchCheckData.month)
-		                 });
+			             // 绑定翻页组件
+						laypage({
+						    cont: $("#tab-"+checkTabId+"-content").find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+						    pages: data.totalPage, //总页数
+						    curr: (page + 1),
+						    jump: function(obj, first) {
+						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+						    		Restaurant.restaurantCheckList(obj.curr -1,Restaurant.searchCheckData.restaurantId,Restaurant.searchCheckData.restaurantName,Restaurant.searchCheckData.year,Restaurant.searchCheckData.month)
+		                		}
+						    }
+						});
+	                   
 			             //给全选绑定事件
 			                 $("#" +"tab-"+ checkTabId+"-content"+" .selectAll").click(function(){
 			                	 var flag = this.checked;
