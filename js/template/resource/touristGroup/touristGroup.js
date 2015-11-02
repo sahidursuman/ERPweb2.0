@@ -416,6 +416,8 @@ define(function(require, exports) {
 			}else{
 				addTab(menuKey+"-add","添加游客",html);
 				touristGroup.initAdd();
+				touristGroup.getPartnerAgencyBigList();
+
 			}
 		},
 		initAdd : function(){
@@ -631,6 +633,7 @@ define(function(require, exports) {
 
 			//初始化 组社团数据
 			touristGroup.getPartnerAgencyList($("#"+tab+" .choosePartnerAgency"));
+			touristGroup.getPartnerAgencyBigList($("#"+tab+" .choosePartnerAgency"));
 			//添加小组页面提交按钮事件绑定
 			$("#"+tab+" .touristGroupMainFormRS .btn-submit-addTouristGroup").click(function(){
 				touristGroup.submitAddTouristGroup();
@@ -935,6 +938,7 @@ define(function(require, exports) {
 			});
 			//初始化 组社团数据
 			touristGroup.getPartnerAgencyList($("#"+tab+" .choosePartnerAgencyDiv input[name=fromPartnerAgency]"),data.touristGroupDetail.fromPartnerAgencyId);
+			 // touristGroup.getPartnerAgencyBigList($("#"+tab+" .choosePartnerAgencyDiv input[name=fromPartnerAgency]"),data.touristGroupDetail.fromPartnerAgencyId);
 			//update点击提交按钮事件
 			$("#"+tab+" .touristGroupMainFormRS .btn-submit-addTouristGroup").click(function(){
 				touristGroup.submitUpdateTouristGroup(id,1);
@@ -1151,41 +1155,41 @@ define(function(require, exports) {
 			})
 		},
 		//来源模糊查询
-		// getPartnerAgencyList:function($obj){
-		// 	$obj.autocomplete({
-		// 		minLength: 0,
-		// 		change: function(event, ui) {
-		// 			if (ui.item == null)  {
-		// 				$(this).parent().find("input[name=fromPartnerAgencyId]").val("");
-		// 			}
-		// 		},
-		// 		select: function(event, ui) {
-		// 			$(this).blur();
-		// 			var obj = this;
-		// 			$(obj).parent().find("input[name=fromPartnerAgencyId]").val(ui.item.id).trigger('change');
-		// 			if(touristGroup.cleanFlag == 1){
-		// 				var $tabId = $("#tab-resource_touristGroup-add-content");
-		// 				$tabId.find("input[name=partnerAgencyNameList]").val("");
-		// 			}
-		// 			if(touristGroup.cleanFlag == 2){
-		// 				var $tabId = $("#tab-resource_touristGroup-update-content");
-		// 				$tabId.find("input[name=partnerAgencyNameList]").val("");
-		// 			}
-		// 		}
-		// 	}).click(function(){
-		// 		var obj = this;
-		// 		var fromParObj = touristGroup.autocompleteDate.fromPartnerAgencyList;
-		// 		if(fromParObj !=null && fromParObj.length>0){
-		// 			for(var i=0;i<fromParObj.length;i++){
-		// 				fromParObj[i].value = fromParObj[i].travelAgencyName;
-		// 			}
-		// 		}
-		// 		$(obj).autocomplete('option','source', fromParObj);
-		// 		$(obj).autocomplete('search', '');
-		// 	})
-		// },
+		getPartnerAgencyList:function($obj){
+			$obj.autocomplete({
+				minLength: 0,
+				change: function(event, ui) {
+					if (ui.item == null)  {
+						$(this).parent().find("input[name=fromPartnerAgencyId]").val("");
+					}
+				},
+				select: function(event, ui) {
+					$(this).blur();
+					var obj = this;
+					$(obj).parent().find("input[name=fromPartnerAgencyId]").val(ui.item.id).trigger('change');
+					if(touristGroup.cleanFlag == 1){
+						var $tabId = $("#tab-resource_touristGroup-add-content");
+						$tabId.find("input[name=partnerAgencyNameList]").val("");
+					}
+					if(touristGroup.cleanFlag == 2){
+						var $tabId = $("#tab-resource_touristGroup-update-content");
+						$tabId.find("input[name=partnerAgencyNameList]").val("");
+					}
+				}
+			}).click(function(){
+				var obj = this;
+				var fromParObj = touristGroup.autocompleteDate.fromPartnerAgencyList;
+				if(fromParObj !=null && fromParObj.length>0){
+					for(var i=0;i<fromParObj.length;i++){
+						fromParObj[i].value = fromParObj[i].travelAgencyName;
+					}
+				}
+				$(obj).autocomplete('option','source', fromParObj);
+				$(obj).autocomplete('search', '');
+			})
+		},
 
-      getPartnerAgencyList:function(obj,partnerAId){
+      getPartnerAgencyBigList:function(obj,partnerAId){
 			var $objC = $(obj)
 			$.ajax({
 				url:""+APP_ROOT+"back/partnerAgency.do?method=getPartnerAgency&token="+$.cookie("token")+"&menuKey=resource_partnerAgency&operation=view",
