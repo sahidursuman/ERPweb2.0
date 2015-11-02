@@ -510,7 +510,10 @@ input,select{
     margin-left: -100px;
 }
 .addTouristGroup .formOneList{
-    margin-left: 70px;
+    margin-left: 20px;
+}
+.updateTouristGroup .formOneList{
+    margin-left: -53px !important;
 }
 .formOneList input{
     width: 220px;
@@ -554,6 +557,7 @@ input,select{
 .globalAdd .guideInterval{
     margin-bottom: 10px !important;
 }
+
 .globalAdd .editFeeMainForm input{
      padding: 0px 0px 0px 10px;
 }
@@ -717,4 +721,17 @@ input,select{
 
 .linepRemark{
     text-align: left !important;
+}
+
+/*游客管理编辑、添加*/
+.btn-touristGroup-addCost2{
+    margin-left: 20px;
+    margin-top: 12px;
+}
+.margin-top30{
+    margin-top: 30px;
+    margin-left: 8px !important;
+}
+.margin-top15{
+    margin-top: 25px;
 }
