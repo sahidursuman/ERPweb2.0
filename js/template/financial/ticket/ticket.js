@@ -83,30 +83,18 @@ define(function(require, exports) {
 	                            }
 	                            Ticket.listTicket(0,Ticket.searchData.ticketId,Ticket.searchData.year,Ticket.searchData.month);
 	                      });
-	                        //分页--首页按钮事件
-	                        $("#" + tabId + " .pageMode a.first").click(function(){
-	                        	Ticket.listTicket(0,Ticket.searchData.ticketId,Ticket.searchData.year,Ticket.searchData.month);
-	                        });
-	                        //分页--上一页事件
-	                        $("#" + tabId + " .pageMode a.previous").click(function(){
-	                            var previous = data.pageNo - 1;
-	                            if(data.pageNo == 0){
-	                                previous = 0;
-	                            }
-	                            Ticket.listTicket(previous,Ticket.searchData.ticketId,Ticket.searchData.year,Ticket.searchData.month);
-	                        });
-	                        //分页--下一页事件
-	                        $("#" + tabId + " .pageMode a.next").click(function(){
-	                            var next =  data.pageNo + 1;
-	                            if(data.pageNo == data.totalPage-1){
-	                                next = data.pageNo ;
-	                            }
-	                            Ticket.listTicket(next,Ticket.searchData.ticketId,Ticket.searchData.year,Ticket.searchData.month);
-	                        });
-	                        //分页--尾页事件
-	                        $("#" + tabId + " .pageMode a.last").click(function(){
-	                        	 Ticket.listTicket(data.totalPage == 0 ? data.totalPage:data.totalPage-1,Ticket.searchData.ticketId,Ticket.searchData.year,Ticket.searchData.month);
-	                        });
+						 // 绑定翻页组件
+						laypage({
+						    cont: $('#' + tabId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+						    pages: data.totalPage, //总页数
+						    curr: (pageNo + 1),
+						    jump: function(obj, first) {
+						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+						    		Ticket.listTicket(obj.curr -1,Ticket.searchData.ticketId,Ticket.searchData.year,Ticket.searchData.month);
+	                        	}
+						    }
+						});
+	                     
 	                        //给对账按钮绑定事件
 	                        $("#" + tabId + "  .btn-ticket-check").click(function(){
 	                        	Ticket.searchCheckData={
@@ -196,6 +184,18 @@ define(function(require, exports) {
                 	    	Ticket.initCheck(pageNo,ticketId,companyName,year,month,data);
                 	    	validator = rule.check($('.ticketChecking'));
                 	    }
+
+                	    // 绑定翻页组件
+						laypage({
+						    cont: $("#tab-"+checkTabId+"-content").find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+						    pages: data.totalPage, //总页数
+						    curr: (pageNo + 1),
+						    jump: function(obj, first) {
+						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+						    		Ticket.ticketCheckList(obj.curr -1,Ticket.searchCheckData.ticketId,Ticket.searchCheckData.companyName,Ticket.searchCheckData.year,Ticket.searchCheckData.month)
+             					}
+						    }
+						});
 	                }      
 	             }
 	    	 });
@@ -226,30 +226,7 @@ define(function(require, exports) {
                  	exportXLS(url)
                  });
              });
-            //分页--首页按钮事件
-             $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.first").click(function(){
-            	 Ticket.ticketCheckList(0,Ticket.searchCheckData.ticketId,Ticket.searchCheckData.companyName,Ticket.searchCheckData.year,Ticket.searchCheckData.month)
-             });
-			//分页--上一页事件
-             $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.previous").click(function(){
-				var previous = data.pageNo - 1;
-				if(data.pageNo == 0){
-					previous = 0;
-				}
-				Ticket.ticketCheckList(previous,Ticket.searchCheckData.ticketId,Ticket.searchCheckData.companyName,Ticket.searchCheckData.year,Ticket.searchCheckData.month)
-             });
-			//分页--下一页事件
-             $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.next").click(function(){
-				var next =  data.pageNo + 1;
-				if(data.pageNo == data.totalPage-1){
-					next = data.pageNo ;
-				}
-				Ticket.ticketCheckList(next,Ticket.searchCheckData.ticketId,Ticket.searchCheckData.companyName,Ticket.searchCheckData.year,Ticket.searchCheckData.month)
-             });
-			//分页--尾页事件
-             $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.last").click(function(){
-            	Ticket.ticketCheckList(data.totalPage == 0 ? data.totalPage : data.totalPage-1,Ticket.searchCheckData.ticketId,Ticket.searchCheckData.companyName,Ticket.searchCheckData.year,Ticket.searchCheckData.month)
-             });
+            
              //给全选绑定事件
                  $("#" +"tab-"+ checkTabId+"-content"+" .ticket-selectAll").click(function(){
                 	 var flag = this.checked;
