@@ -115,8 +115,12 @@ define(function(require, exports) {
     				var $that=$(this),
     		            id=$that.data('value');
     		        customerVolObj.getCusDetail(id);
+	    	});
 
-	    	}); 	
+
+	    	//获取客户可量明细的first
+	    	customerVolObj.$tab.find('.T-customerVo-Detail').first().trigger('click');
+	    	
 	};
 
 
