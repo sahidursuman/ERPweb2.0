@@ -249,6 +249,7 @@ define(function(require, exports) {
 						data.sendGroup.outOtherList = JSON.parse(data.sendGroup.outOtherList);
 						data.touristGroup = JSON.parse(data.touristGroup);
 						var html =arrangeTemplate(data);
+						html  = filterUnAuth(html);
 						//已修改提示
 						var tab = "tab-arrange_transit-update-content";
 						var validator = rule.setTranistCheckor($(".arrangeTouristMain"));
@@ -380,14 +381,14 @@ define(function(require, exports) {
 			//餐厅信息 联动
 			transit.bindRestaurantChoose(tab);
 			//日期插件绑定
-			transit.outArrangeDateTimepicker("receptionList","bususeTime",tab);
+			transit.outArrangeDatepicker("receptionList","bususeTime",tab);
 			transit.outArrangeDatepicker("receptionList","hotelCheckInTime",tab);
-			transit.outArrangeDateTimepicker("receptionList","ticketStartTime",tab);
+			transit.outArrangeDatepicker("receptionList","ticketStartTime",tab);
 			transit.outArrangeDatepicker("receptionList","startTime",tab);
-			transit.outArrangeDateTimepicker("carList","bususeTime",tab);
-			transit.outArrangeDateTimepicker("sendList","bususeTime",tab);
+			transit.outArrangeDatepicker("carList","bususeTime",tab);
+			transit.outArrangeDatepicker("sendList","bususeTime",tab);
 			transit.outArrangeDatepicker("sendList","hotelCheckInTime",tab);
-			transit.outArrangeDateTimepicker("sendList","ticketStartTime",tab);
+			transit.outArrangeDatepicker("sendList","ticketStartTime",tab);
 			transit.outArrangeDatepicker("sendList","startTime",tab);
 
 			//提交安排事件绑定
@@ -541,11 +542,11 @@ define(function(require, exports) {
 			var html = '<tr data-entity-id="">'+
 			'<td><input type="text" class="col-sm-12 chooseSeatCount" name="seatCount" value="" /></td>'+
 			'<td><input class="col-sm-12 chooseBusBrand" name="busbrand" type="text" value="" /></td>'+
-			'<td><div class="col-sm-12"><input class="col-sm-12 chooseBusLicenseNumber bind-change" name="busLicenseNumber" type="text" value="" /><input type="hidden" name="busLicenseNumberId" value="" /><span class="addResourceBtn T-addBusResource" title="添加车辆"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
+			'<td><div class="col-sm-12"><input class="col-sm-12 chooseBusLicenseNumber bind-change" name="busLicenseNumber" type="text" value="" /><input type="hidden" name="busLicenseNumberId" value="" /><span class="addResourceBtn T-addBusResource R-right" data-right="1020002" title="添加车辆"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
 			'<td><div class="col-sm-12"><input type="hidden" name="serviceType" value="0" />'+
 			'<input class="col-sm-12 bind-change" name="busCompanyName" readonly="readonly" type="text" value="" />'+
-			'<input type="hidden" name="busCompanyId" value="" /><span class="addResourceBtn T-addBusCompanyResource" title="添加车队"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
-			'<td><div class="col-sm-12"><input class="col-sm-12 chooseDriver bind-change" name="driverName" type="text" value="" /><input type="hidden" name="driverId" value="" /><span class="addResourceBtn T-addDriverResource" title="添加司机"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
+			'<input type="hidden" name="busCompanyId" value="" /><span class="addResourceBtn T-addBusCompanyResource R-right" data-right="1020002" title="添加车队"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
+			'<td><div class="col-sm-12"><input class="col-sm-12 chooseDriver bind-change" name="driverName" type="text" value="" /><input type="hidden" name="driverId" value="" /><span class="addResourceBtn T-addDriverResource R-right" data-right="1020002" title="添加司机"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
 			'<td><input class="col-sm-12" name="driverMobileNumber" readonly="readonly" type="text" value="" /></td>'+
 			'<td><input class="col-sm-12 datetimepicker" name="bususeTime" type="text" value="" /></td>'+
 			'<td><input class="col-sm-12" name="boardLocation" type="text"  maxlength="20"  value="" /></td>'+
@@ -558,6 +559,7 @@ define(function(require, exports) {
 			'<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" /></td>'+
 			'<td><a class="cursor arrange-delete" title="删除">删除</a></td>'+
 			'</tr>';
+			html  = filterUnAuth(html);//权限过滤
 			$("#"+id+" .busList tbody").append(html);
 			$("#"+tab+" .arrangeTouristMain .busList .arrange-delete").click(function(){
 				var thisObj = $(this);
@@ -565,9 +567,9 @@ define(function(require, exports) {
 			})
 			transit.addResource(tab);
 			transit.bindBusCompanyChoose(tab);
-			transit.outArrangeDateTimepicker("carList","bususeTime",tab);
-			transit.outArrangeDateTimepicker("sendList","bususeTime",tab);
-			transit.outArrangeDateTimepicker("receptionList","bususeTime",tab);
+			transit.outArrangeDatepicker("carList","bususeTime",tab);
+			transit.outArrangeDatepicker("sendList","bususeTime",tab);
+			transit.outArrangeDatepicker("receptionList","bususeTime",tab);
 			$("#"+tab+" .count,#"+tab+" .price,#"+tab+" .discount").blur(transit.calculation);
 		},
 		//新增团外安排酒店
@@ -580,7 +582,7 @@ define(function(require, exports) {
 				'<option value="4">四星</option><option value="5">准五星</option>'+
 				'<option value="6">五星</option><option value="7">五星以上</option></select></td>'+
 				'<td><div class="col-sm-12"><input class="col-sm-12 chooseHotel" name="hotelName" value="" type="text" /><input type="hidden" name="hotelId" />'+
-				'<span class="addResourceBtn T-addHotelResource" title="添加酒店"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
+				'<span class="addResourceBtn T-addHotelResource R-right" data-right="1040002" title="添加酒店"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
 				'<td><input class="col-sm-12" name="hotelManagerName" value="" readonly="readonly" type="text" /></td>'+
 				'<td><input class="col-sm-12" name="hotelMobileNumber" value="" readonly="readonly" type="text" /></td>'+
 				'<td><input class="col-sm-12" name="hotelRoomType" value=""  type="text" /><input type="hidden" name="hotelRoomTypeId" /></td>'+
@@ -595,6 +597,7 @@ define(function(require, exports) {
 				'<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" /></td>'+
 				'<td><a class="cursor arrange-delete" title="删除">删除</a></td>'+
 				'</tr>';
+			html  = filterUnAuth(html);
 			$("#"+id+" .hotelList tbody").append(html);
 			$("#"+tab+" .arrangeTouristMain .hotelList .arrange-delete").click(function(){
 				var thisObj = $(this);
@@ -610,7 +613,7 @@ define(function(require, exports) {
 		addTicketList :function(id,type,tab){
 			var html ='<tr>'+
 				'<td><div class="col-sm-12"><input type="hidden" name="serviceType" value="'+type+'" /><input class="col-sm-12 chooseTicket" name="ticketName" value="" type="text" /><input type="hidden" name="tickeId" />'+
-				'<span class="addResourceBtn T-addTicketResource" title="添加票务"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
+				'<span class="addResourceBtn T-addTicketResource R-right" data-right="1070002" title="添加票务"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
 				'<td><select class="" name="ticketType"><option value="1">机票</option>'+
 				'<option value="2">汽车票</option><option value="3">火车票</option><option value="4">轮船票</option></select></td>'+
 				'<td><input class="col-sm-12" name="ticketStartCity" value="" maxlength="20"  type="text" /></td>'+
@@ -629,6 +632,7 @@ define(function(require, exports) {
 				'<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" /></td>'+
 				'<td><a class="cursor arrange-delete" title="删除">删除</a></td>'+
 				'</tr>';
+			html  = filterUnAuth(html);
 			$("#"+id+" .ticketList tbody").append(html);
 			$("#"+tab+" .arrangeTouristMain .ticketList .arrange-delete").click(function(){
 				var thisObj = $(this);
@@ -636,8 +640,8 @@ define(function(require, exports) {
 			})
 			transit.addResource(tab);
 			transit.bindTicketChoose(tab);
-			transit.outArrangeDateTimepicker("receptionList","ticketStartTime",tab);
-			transit.outArrangeDateTimepicker("sendList","ticketStartTime",tab);
+			transit.outArrangeDatepicker("receptionList","ticketStartTime",tab);
+			transit.outArrangeDatepicker("sendList","ticketStartTime",tab);
 			$("#"+tab+" .count,#"+tab+" .price,#"+tab+" .discount").blur(transit.calculation);
 		},
 		//新增餐厅安排
@@ -646,7 +650,7 @@ define(function(require, exports) {
 				'<td><input class="col-sm-12" name="startTime" type="text" value="" /></td>'+
 				'<td><div class="col-sm-12"><input type="hidden" name="serviceType" value="'+type+'" /><input class="col-sm-12 bind-change chooseRestaurant" name="restaurant" type="text" value="" />'+
 				'<input type="hidden" name="restaurantId" value="" />'+
-				'<span class="addResourceBtn T-addRestaurantResource" title="添加餐厅"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
+				'<span class="addResourceBtn T-addRestaurantResource R-right" data-right="1030002" title="添加餐厅"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
 				'<td><input class="col-sm-12" name="manager" readonly="readonly" type="text" value="" /></td>'+
 				'<td><input class="col-sm-12" name="mobileNumber" readonly="readonly" type="text" value="" /></td>'+
 				'<td><select name="standardType"><option value="早餐">早餐</option><option value="午餐">午餐</option><option value="晚餐">晚餐</option></select>'+
@@ -659,6 +663,7 @@ define(function(require, exports) {
 				'<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" /></td>'+
 				'<td><a class="cursor arrange-delete" title="删除">删除</a></td>'+
 				'</tr>';
+			html  = filterUnAuth(html);
 			$("#"+id+" .restaurantList tbody").append(html);
 			transit.bindRestaurantChoose(tab);
 			$("#"+tab+" .arrangeTouristMain .restaurantList .arrange-delete").click(function(){
