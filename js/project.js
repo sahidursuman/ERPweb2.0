@@ -342,7 +342,7 @@ function showLogoutDialog(dialogObj,message){
 		buttons: [
 			{
 				text: "重新登录",
-				"class" : "btn btn-primary btn-minier btn-heightMall",
+				"class" : "btn btn-primary btn-minier btn-height",
 				click: function() {
 					window.location.href = "login.html";
 				}
@@ -383,7 +383,7 @@ function showAutoLoginDialog(dialogObj,message){
 		buttons: [
 			{
 				text: "自动登录",
-				"class" : "btn btn-primary btn-minier btn-heightMall",
+				"class" : "btn btn-primary btn-minier btn-height",
 				click: function() {
 					$( this ).dialog( "close" );
 					$.ajax({
