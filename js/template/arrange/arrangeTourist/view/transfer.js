@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":147,"md5":"c86df42bafb16ab47c71aef3013a48aa"}*/
+/*TMODJS:{"debug":true,"version":148,"md5":"c86df42bafb16ab47c71aef3013a48aa"}*/
 define(function(require) {
     return require("../../../template")("arrange/arrangeTourist/view/transfer", function($data, $filename) {
         try {
