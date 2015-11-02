@@ -137,6 +137,7 @@ define(function(require, exports) {
 			scrollbar: false,
 			success:function(){
 				var $container = $(".T-addTicketContainer");
+				KingServices.provinceCity($container);
 				// 设置表单验证
 				var validator = rule.check($container);
 				$container.find(".T-TicketSubmit").click(function() {
