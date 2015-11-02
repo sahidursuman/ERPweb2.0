@@ -72,32 +72,16 @@ define(function(require, exports) {
                         	ReplaceProfit.listReplaceProfit(0,ReplaceProfit.searchData.partnerAgencyId,ReplaceProfit.searchData.partnerAgencyName,ReplaceProfit.searchData.hotelId,ReplaceProfit.searchData.hotelName,ReplaceProfit.searchData.scenicId,ReplaceProfit.searchData.scenicName,ReplaceProfit.searchData.type,ReplaceProfit.searchData.needSeatCount,ReplaceProfit.searchData.startTime,ReplaceProfit.searchData.endTime);
                         });
 
-                        //分页--首页按钮事件
-                        $("#" + tabId + " .pageMode a.first").click(function(){
-                        	ReplaceProfit.listReplaceProfit(0,ReplaceProfit.searchData.partnerAgencyId,ReplaceProfit.searchData.partnerAgencyName,ReplaceProfit.searchData.hotelId,ReplaceProfit.searchData.hotelName,ReplaceProfit.searchData.scenicId,ReplaceProfit.searchData.scenicName,ReplaceProfit.searchData.type,ReplaceProfit.searchData.needSeatCount,ReplaceProfit.searchData.startTime,ReplaceProfit.searchData.endTime);
-                        });
-                        //分页--上一页事件
-                        $("#" + tabId + " .pageMode a.previous").click(function(){
-                            var previous = data.pageNo - 1;
-                            if(data.pageNo == 0){
-                                previous = 0;
+                        // 绑定翻页组件
+                        laypage({
+                            cont: $('#' + tabId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+                            pages: data.totalPage, //总页数
+                            curr: (page + 1),
+                            jump: function(obj, first) {
+                                if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+                                    ReplaceProfit.listReplaceProfit(obj.curr -1,ReplaceProfit.searchData.partnerAgencyId,ReplaceProfit.searchData.partnerAgencyName,ReplaceProfit.searchData.hotelId,ReplaceProfit.searchData.hotelName,ReplaceProfit.searchData.scenicId,ReplaceProfit.searchData.scenicName,ReplaceProfit.searchData.type,ReplaceProfit.searchData.needSeatCount,ReplaceProfit.searchData.startTime,ReplaceProfit.searchData.endTime);
+                                }
                             }
-                            ReplaceProfit.listReplaceProfit(previous,ReplaceProfit.searchData.partnerAgencyId,ReplaceProfit.searchData.partnerAgencyName,ReplaceProfit.searchData.hotelId,ReplaceProfit.searchData.hotelName,ReplaceProfit.searchData.scenicId,ReplaceProfit.searchData.scenicName,ReplaceProfit.searchData.type,ReplaceProfit.searchData.needSeatCount,ReplaceProfit.searchData.startTime,ReplaceProfit.searchData.endTime);
-                        });
-                        //分页--下一页事件
-                        $("#" + tabId + " .pageMode a.next").click(function(){
-                            var name = $(".main-content .page-content input[name=ticket_name]").val();
-                            var status = $(".main-content .page-content .btn-status").find("button").attr("data-value");
-                            var next =  data.pageNo + 1;
-                            if(data.pageNo == data.totalPage-1){
-                                next = data.pageNo ;
-                            }
-                            ReplaceProfit.listReplaceProfit(next,ReplaceProfit.searchData.partnerAgencyId,ReplaceProfit.searchData.partnerAgencyName,ReplaceProfit.searchData.hotelId,ReplaceProfit.searchData.hotelName,ReplaceProfit.searchData.scenicId,ReplaceProfit.searchData.scenicName,ReplaceProfit.searchData.type,ReplaceProfit.searchData.needSeatCount,ReplaceProfit.searchData.startTime,ReplaceProfit.searchData.endTime);
-
-                        });
-                        //分页--尾页事件
-                        $("#" + tabId + " .pageMode a.last").click(function(){
-                            ReplaceProfit.listReplaceProfit(data.totalPage == 0 ? data.totalPage : data.totalPage-1,ReplaceProfit.searchData.partnerAgencyId,ReplaceProfit.searchData.partnerAgencyName,ReplaceProfit.searchData.hotelId,ReplaceProfit.searchData.hotelName,ReplaceProfit.searchData.scenicId,ReplaceProfit.searchData.scenicName,ReplaceProfit.searchData.type,ReplaceProfit.searchData.needSeatCount,ReplaceProfit.searchData.startTime,ReplaceProfit.searchData.endTime);
                         });
                     }
                 }
