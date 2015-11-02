@@ -368,20 +368,22 @@ define(function(require, exports) {
 		},
 		//浮动查看自选餐厅
 		viewOptionalRestaurant :function($objInput){
-			var $this = $objInput,$parents = $this.closest('tr'),/*$value = $parents.find('[name=optional]').val(),*/$title = [],$value = $objInput.data("propover");
-			if (!!$value) {
-				if (!!$value && typeof $value === "string") {
-					$value = JSON.parse($value);
+			$objInput.each(function(){
+				var $this = $(this),$parents = $this.closest('tr'),/*$value = $parents.find('[name=optional]').val(),*/$title = [],$value = $this.data("propover");
+				if (!!$value) {
+					if (!!$value && typeof $value === "string") {
+						$value = JSON.parse($value);
+					}
+					var html = '<table class="table table-striped table-hover"><thead><tr><th class="th-border">餐厅名称</th><th class="th-border">联系人</th><th class="th-border">联系电话</th></tr><tbody>';
+					for (var i = 0; i < $value.length; i++) {
+						html += '<tr><td>'+$value[i].name+'</td><td>'+$value[i].managerName+'</td><td>'+$value[i].mobileNumber+'</td></tr>'
+					};
+					html += '</tbody></table>';
+					$this.data("html",html)
+					Tools.descToolTip($this,2);
+					$this.data('bs.popover').options.content = html;
 				}
-				var html = '<table class="table table-striped table-hover"><thead><tr><th class="th-border">餐厅名称</th><th class="th-border">联系人</th><th class="th-border">联系电话</th></tr><tbody>';
-				for (var i = 0; i < $value.length; i++) {
-					html += '<tr><td>'+$value[i].name+'</td><td>'+$value[i].managerName+'</td><td>'+$value[i].mobileNumber+'</td></tr>'
-				};
-				html += '</tbody></table>';
-				$this.data("html",html)
-				Tools.descToolTip($this,2);
-				$this.data('bs.popover').options.content = html;
-			}
+			})
 		},
 		//添加资源 
 		addResource : function(){
@@ -1858,11 +1860,15 @@ define(function(require, exports) {
 			}
 			//餐安排
 			var restaurant = $("#tripPlan_addPlan_restaurant tbody tr"),
-				isChoose = "0";
+				isChoose = "0",restaurantChooseArrangeListJson;
 			if(restaurant.length > 0){
 				for(var i=0; i<restaurant.length; i++){
 					if (!!restaurant.eq(i).find('[name=restaurantName]').data('propover')) {
 						isChoose = "1";
+						restaurantChooseArrangeListJson = restaurant.eq(i).find('[name=restaurantName]').data('propover')
+						if(typeof restaurant.eq(i).find('[name=restaurantName]').data('propover') === 'string'){
+							restaurantChooseArrangeListJson = JSON.parse(restaurant.eq(i).find('[name=restaurantName]').data('propover'))
+						}
 					}
 					if(tripPlan.getVal(restaurant.eq(i), "restaurantId")){
 						var restaurantJson = {
@@ -1880,7 +1886,7 @@ define(function(require, exports) {
 							remark : tripPlan.getVal(restaurant.eq(i), "remark"),
 							type : restaurant.eq(i).find("[name=type]").val(),
 							isChoose : isChoose,
-							restaurantChooseArrangeListJson : JSON.parse(restaurant.eq(i).find('[name=restaurantName]').data('propover'))
+							restaurantChooseArrangeListJson : restaurantChooseArrangeListJson
 						}
 						tripPlanJson.restaurantArrangeList.push(restaurantJson);
 						guideAllPayMoney += tripPlan.checkParamIsDouble(restaurantJson.guidePayMoney);
@@ -2353,7 +2359,7 @@ define(function(require, exports) {
 		        		$tr.each(function(){
 		        			var $this = $(this),$id = $this.data("entity-id")+"" || "";
 		        				json = {
-		        				id : $id,
+		        				id : $id+"",
 		        				restaurantId : $this.data("entity-restaurantid")+"",
 		        				name : getValue($this,"name"),
 		        				managerName : getValue($this,"managerName"),
