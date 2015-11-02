@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":408,"md5":"d8a410b0ba32f682637b402ac9398266"}*/
+/*TMODJS:{"debug":true,"version":409,"md5":"d8a410b0ba32f682637b402ac9398266"}*/
 define(function(require) {
     return require("../../../template")("financial/Restaurant/view/restaurantChecking", function($data, $filename) {
         try {

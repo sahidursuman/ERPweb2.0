@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":192,"md5":"e3f61defcc695478fae7d0e884e6991b"}*/
+/*TMODJS:{"debug":true,"version":194,"md5":"e3f61defcc695478fae7d0e884e6991b"}*/
 define(function(require) {
     return require("../../../template")("financial/guide/view/guideChecking", function($data, $filename) {
         try {
