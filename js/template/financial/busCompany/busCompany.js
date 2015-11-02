@@ -87,31 +87,18 @@ define(function(require, exports) {
 							BusCompany.listBusCompany(0,BusCompany.searchData.busCompanyId,BusCompany.searchData.year,BusCompany.searchData.month);
 						});
 						
+						// 绑定翻页组件
+						laypage({
+						    cont: $('#' + tabId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+						    pages: data.totalPage, //总页数
+						    curr: (page + 1),
+						    jump: function(obj, first) {
+						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+						    		BusCompany.listBusCompany(obj.curr -1,BusCompany.searchData.busCompanyId,BusCompany.searchData.year,BusCompany.searchData.month);
+								}
+						    }
+						});
 						
-						//分页--首页按钮事件
-						$("#" + tabId + " .pageMode a.first").click(function(){
-							BusCompany.listBusCompany(0,BusCompany.searchData.busCompanyId,BusCompany.searchData.year,BusCompany.searchData.month);
-						});
-						//分页--上一页事件
-						$("#" + tabId + " .pageMode a.previous").click(function(){
-							var previous = data.pageNo - 1;
-							if(data.pageNo == 0){
-								previous = 0;
-							}
-							BusCompany.listBusCompany(previous,BusCompany.searchData.busCompanyId,BusCompany.searchData.year,BusCompany.searchData.month);
-						});
-						//分页--下一页事件
-						$("#" + tabId + " .pageMode a.next").click(function(){
-							var next =  data.pageNo + 1;
-							if(data.pageNo == data.totalPage-1){
-								next = data.pageNo ;
-							}
-							BusCompany.listBusCompany(next,BusCompany.searchData.busCompanyId,BusCompany.searchData.year,BusCompany.searchData.month);
-						});
-						//分页--尾页事件
-						$("#" + tabId + " .pageMode a.last").click(function(){
-							 BusCompany.listBusCompany(data.totalPage == 0 ? data.totalPage:data.totalPage-1,BusCompany.searchData.busCompanyId,BusCompany.searchData.year,BusCompany.searchData.month);
-						});
 						//给对账按钮绑定事件
 						$("#" + tabId + " .btn-busCompany-check").click(function(){
 							BusCompany.searchCheckData={
@@ -194,6 +181,18 @@ define(function(require, exports) {
 							BusCompany.initCheck(pageNo,busCompanyId,companyName,year,month,data);
 							validator = rule.check($('.busCompanyChecking .all'));
 						}
+
+						// 绑定翻页组件
+						laypage({
+						    cont: $("#tab-"+checkTabId+"-content").find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+						    pages: data.totalPage, //总页数
+						    curr: (pageNo + 1),
+						    jump: function(obj, first) {
+						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+						    		BusCompany.busCompanyCheck(obj.curr -1,BusCompany.searchCheckData.busCompanyId,BusCompany.searchCheckData.companyName,BusCompany.searchCheckData.year,BusCompany.searchCheckData.month)
+								}
+						    }
+						});
 				    }          
 						 
 			    }
@@ -223,30 +222,7 @@ define(function(require, exports) {
 						exportXLS(url)
 					});
 			 });
-			//分页--首页按钮事件
-			 $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.first").click(function(){
-				 BusCompany.busCompanyCheck(0,BusCompany.searchCheckData.busCompanyId,BusCompany.searchCheckData.companyName,BusCompany.searchCheckData.year,BusCompany.searchCheckData.month)
-			 });
-			//分页--上一页事件
-			 $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.previous").click(function(){
-				var previous = data.pageNo - 1;
-				if(data.pageNo == 0){
-					previous = 0;
-				}
-				BusCompany.busCompanyCheck(previous,BusCompany.searchCheckData.busCompanyId,BusCompany.searchCheckData.companyName,BusCompany.searchCheckData.year,BusCompany.searchCheckData.month)
-			 });
-			//分页--下一页事件
-			 $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.next").click(function(){
-				var next =  data.pageNo + 1;
-				if(data.pageNo == data.totalPage-1){
-					next = data.pageNo ;
-				}
-				BusCompany.busCompanyCheck(next,BusCompany.searchCheckData.busCompanyId,BusCompany.searchCheckData.companyName,BusCompany.searchCheckData.year,BusCompany.searchCheckData.month)
-			 });
-			//分页--尾页事件
-			 $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.last").click(function(){
-				BusCompany.busCompanyCheck(data.totalPage == 0 ? data.totalPage : data.totalPage-1,BusCompany.searchCheckData.busCompanyId,BusCompany.searchCheckData.companyName,BusCompany.searchCheckData.year,BusCompany.searchCheckData.month)
-			 });
+			
 			 //给全选绑定事件
 				 $("#" +"tab-"+ checkTabId+"-content"+" .busCompany-selectAll").click(function(){
 					 var flag = this.checked;
