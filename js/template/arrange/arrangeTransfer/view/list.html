@@ -108,22 +108,10 @@
 </table>	
 <div class="row pageMode">
 	<div class="col-xs-6">
-		<input type="hidden" name="pageNo" value="{{pager.pageNo}}" id="pagerH" />
-		<div class="dataTables_info" id="dynamic-table_info" role="status" aria-live="polite">共计{{pager.totalCount}}条记录</div>
+		<small>共计{{pager.totalCount}}条记录</small>
 	</div>
 	<div class="col-xs-6">
-		<div class="dataTables_paginate paging_simple_numbers" id="dynamic-table_paginate">
-			<ul class="pagination">
-				<li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="first" href="javascript:void(0)">首页</a></li>
-				<li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="previous"href="javascript:void(0)">上一页</a></li>
-				<li class="paginate_button" aria-controls="dynamic-table" tabindex="0">
-					<a href="javascript:void(0)">
-					{{pager.pageNo+1}}/{{pager.totalPage}}
-					</a>
-				</li>
-				<li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="next"  href="javascript:void(0)">下一页</a></li>
-				<li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="last" href="javascript:void(0)">尾页</a></li>
-			</ul>
+		<div class="dataTables_paginate paging_simple_numbers T-pagenation">
 		</div>
 	</div>
 </div>

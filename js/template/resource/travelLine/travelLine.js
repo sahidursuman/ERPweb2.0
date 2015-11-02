@@ -573,7 +573,7 @@ define(function(require, exports) {
  			    zIndex:1029,
 			    content: lineDayHtml,
 			    success:function(){
-			    	$(".updateTravelLineDayForm select[name=whichDay]").attr("disabled","disabled");
+			    	// $(".updateTravelLineDayForm select[name=whichDay]").attr("disabled","disabled");
 			    	
 			    	var ue = init_editor("detailEditor-update-travelLine",{zIndex:99999999});
 			    	ue.ready(function(){
@@ -2157,17 +2157,18 @@ define(function(require, exports) {
     		});
 		},
 		submitAddTravelLine : function(){
-			var validator = rule.traveLineCheckor($('.travelLineMainForm'));
+			var $travelLiAddObj=$("#tab-resource_travelLine-addLine-content");
+			var validator = rule.traveLineCheckor($travelLiAddObj.find('.travelLineMainForm'));
 			// 表单验证
 			if (!validator.form())  return;
 
 			var status = 0;
-			if($(".travelLineMainForm .travelLine-status").is(":checked") == true){
+			if($travelLiAddObj.find(".travelLineMainForm .travelLine-status").is(":checked") == true){
 				status = 1;
 			}
-			var form = $(".travelLineMainForm").serialize()+"&status="+status+"";
+			var form = $travelLiAddObj.find(".travelLineMainForm").serialize()+"&status="+status+"";
 			var travelLineJsonAdd = [];
-			var lineDayListStr = $(".travelLineDayList .lineDayList tbody tr");
+			var lineDayListStr = $travelLiAddObj.find(".travelLineDayList .lineDayList tbody tr");
 			lineDayListStr.each(function(i){
 				var repastDetail = lineDayListStr.eq(i).find("td")[1].innerHTML;
 				var restPosition = lineDayListStr.eq(i).find("td")[2].innerHTML;
@@ -2229,16 +2230,17 @@ define(function(require, exports) {
 			});
 		},
 		submitUpdateTraveLine : function(clipboardMode,isClose){
+			var $updateObj=$("#tab-resource_travelLine-update-content");
 			var validator = rule.traveLineCheckor($('.travelLineUpdateMainForm'));
 			if ( !validator.form() )  return;
 			var status = 0;
-			if($(".travelLineUpdateMainForm .travelLine-status").is(":checked") == true){
+			if($updateObj.find(".travelLineUpdateMainForm .travelLine-status").is(":checked") == true){
 				status = 1;
 			}
-			var form = $(".travelLineUpdateMainForm").serialize()+"&status="+status+"";
+			var form = $updateObj.find(".travelLineUpdateMainForm").serialize()+"&status="+status+"";
 			var travelLineJsonAdd = "[";
-			var lineDayListLength = $(".travelLineDayList .lineDayList tbody tr:not(.deleted)").length;
-			$(".travelLineDayList .lineDayList tbody tr:not(.deleted)").each(function(i){
+			var lineDayListLength = $updateObj.find(".travelLineDayList .lineDayList tbody tr:not(.deleted)").length;
+			$updateObj.find(".travelLineDayList .lineDayList tbody tr:not(.deleted)").each(function(i){
 				var lineDayJson = "";
 				var id = $(this).find(" .btn-line-day-delete").attr("data-entiy-id");
 				var repastDetail = $(this).find("td")[1].innerHTML;
@@ -2266,8 +2268,8 @@ define(function(require, exports) {
 			travelLineJsonAdd += "]";
 		
 			var travelLineJsonDel = "[";
-			var travelLineListLength = $(".travelLineDayList .lineDayList tbody tr.deleted").length;
-			$(".travelLineDayList .lineDayList tbody tr.deleted").each(function(i){
+			var travelLineListLength = $updateObj.find(".travelLineDayList .lineDayList tbody tr.deleted").length;
+			$updateObj.find(".travelLineDayList .lineDayList tbody tr.deleted").each(function(i){
 				var travelLineDayJson = "";
 				var id = $(this).find(".btn-line-day-delete").attr("data-entiy-id");
 				if(i == (travelLineListLength-1)){

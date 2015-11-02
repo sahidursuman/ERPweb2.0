@@ -23,36 +23,56 @@
 									<div class="col-sm-2">
 										<input class="col-sm-12 datepicker" type="text" name="startTime" id="" value="" />
 									</div>
+									<label class="col-sm-1 control-label no-padding-right"> <span class="necessary">*</span>计划人数：</label>
+									<div class="col-sm-2">
+										<input class="col-sm-12" type="text" name="planTouristCount" id="" value=""  maxlength="6"/>
+									</div>
 									<label class="col-sm-1 control-label no-padding-right">团队编号：</label>
 									<div class="col-sm-2">
 										<input class="col-sm-12" readonly="readonly" type="text" name="" id="" value="" placeholder="系统自动生成" />
 									</div>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-1 control-label no-padding-right"> <span class="necessary">*</span>计划人数：</label>
-									<div class="col-sm-2">
-										<input class="col-sm-12" type="text" name="planTouristCount" id="" value=""  maxlength="6"/>
-									</div>
 									<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>车座数：</label>
 									<div class="col-sm-2">
 										<input class="col-sm-12 chooseSeatCount bind-change" type="text" name="seatCount" id="" value="" />
 									</div>
 									<label class="col-sm-1 control-label no-padding-right">车辆品牌：</label>
 									<div class="col-sm-2">
-										<input class="col-sm-12 chooseBusCompany bind-change" type="text" name="needBusBrand" id="" value="" />
+										<input class="col-sm-12 chooseBusBrand bind-change" type="text" name="needBusBrand" id="" value="" />
 										<input type="hidden" name="busBrandId" value="" />
 									</div> 
 									<label class="col-sm-1 control-label no-padding-right"> <span class="necessary">*</span>车牌号：</label>
 									<div class="col-sm-2">
-										<input class="col-sm-12 chooseBusLicenseNumber bind-change" type="text" name="LicenseNumber" id="" value="" />
-										<input type="hidden" name="busLicenseNumberId" value="" />
+										<div class="col-sm-12 no-padding">
+											<input class="col-sm-12 chooseBusLicenseNumber bind-change" type="text" name="LicenseNumber" id="" value="" />
+											<input type="hidden" name="busLicenseNumberId" value="" />
+											<span class="addResourceBtnTripPlan T-addBusResource" title="添加车辆">
+                                                <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+                                            </span>
+                                        </div>
+									</div>
+									<label class="col-sm-1 control-label no-padding-right">所属车队：</label>
+									<div class="col-sm-2">
+										<div class="col-sm-12 no-padding">
+											<input class="col-sm-12 bind-change" type="text" name="busCompany" readonly="readonly" id="" value="" />
+											<input type="hidden" name="busCompanyId" value="" />
+											<span class="addResourceBtnTripPlan T-addBusCompanyResource" title="添加车队">
+                                                <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+                                            </span>
+                                        </div>
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-1 control-label no-padding-right"> <span class="necessary">*</span>导游：</label>
 									<div class="col-sm-2">
-										<input class="col-sm-12 AddTPchooseGuide bind-change" type="text" name="AddTPchooseGuide" id="" value="" />
-										<input type="hidden" name="AddTPchooseGuideId" value="" />
+										<div class="col-sm-12 no-padding">
+											<input class="col-sm-12 AddTPchooseGuide bind-change" type="text" name="AddTPchooseGuide" id="" value="" />
+											<input type="hidden" name="AddTPchooseGuideId" value="" />
+											<span class="addResourceBtnTripPlan T-addGuideResource" title="添加导游">
+                                                <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+                                            </span>
+                                        </div>
 									</div>
 									<label class="col-sm-1 control-label no-padding-right">导游电话：</label>
 									<div class="col-sm-2">
@@ -60,8 +80,13 @@
 									</div>
 									<label class="col-sm-1 control-label no-padding-right"> <span class="necessary">*</span>司机：</label>
 									<div class="col-sm-2">
-										<input class="col-sm-12 chooseDriver bind-change" type="text" name="driverName" id="" value="" />
-										<input type="hidden" name="driverId" value="" />
+										<div class="col-sm-12 no-padding">
+											<input class="col-sm-12 chooseDriver bind-change" type="text" name="driverName" id="" value="" />
+											<input type="hidden" name="driverId" value="" />
+											<span class="addResourceBtnTripPlan T-addDriverResource" title="添加司机">
+                                                <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+                                            </span>
+                                        </div>
 									</div>
 									<label class="col-sm-1 control-label no-padding-right">司机电话：</label>
 									<div class="col-sm-2">

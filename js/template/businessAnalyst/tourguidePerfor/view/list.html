@@ -2,25 +2,22 @@
 	<div class="row form-horizontal T-search-area search-area" style="padding-left:5px; ">
         <label class="pull-left text-right control-label no-padding-right">开始日期:</label>
 		<div class="col-xs-1">
-			<input type="text" name="startTime" class="col-xs-12 datepicker" placeholder="开始日期" value="" />
+			<input type="text" name="startTime" class="col-xs-12 datepicker" placeholder="开始日期" value="{{searchParam.startTime}}" />
 		</div>
-	
         <label class="pull-left text-right control-label no-padding-right">结束日期:</label>
 		<div class="col-xs-1">
-			<input type="text" name="endTime" class="col-xs-12 datepicker" placeholder="结束日期" value="" />
+			<input type="text" name="endTime" class="col-xs-12 datepicker" placeholder="结束日期" value="{{searchParam.endTime}}" />
 		</div>
 
         <label class="pull-left text-right control-label no-padding-right">导游:</label>
-        <div class="col-sm-1 marginLeft-Right7">
-            <select name="status" class="col-sm-12 T-salePro-Application">
-                <option value=''>全部</option>
-                <option value="">AAAAA</option>
-            </select>
-        </div>
+    	<div class="col-xs-2">
+			<input type="text" name="guideName"  class="col-xs-12 T-Choose-tourgSet" placeholder="导游" value="{{searchParam.guideName}}" />
+			<input type="hidden" name="guidChooseId"  value="" />
+		</div>
 
 
         <div class="col-xs-2">
-			<button class=" btn-sm  T-saleProduct-search search-btn">
+			<button class=" btn-sm  T-tourguidPer-search search-btn">
 				<i class="ace-icon fa fa-search"></i> 搜索
 			</button>
 		</div>
@@ -56,14 +53,27 @@
 						<th class="col-sm-2">人均自费</th>
 					</tr>
 				</thead>
-				<tbody class="T-scenic-list">
-
+				<tbody class="T-tourguidPer-list">
+					{{each sumListPerformance as sumL}}
+						<tr>			
+			                <td>{{sumL.guideName}}</td>
+							<td>{{sumL.mobileNumber}}</td>
+							<td>{{sumL.tourCount}}</td>
+							<td>{{sumL.tourNumber}}</td>
+							<td>{{sumL.sumShopMoney}}</td>
+							<td>{{sumL.aveTeamShop}}</td>
+							<td>{{sumL.avePeoShop}}</td>
+							<td>{{sumL.sumSelfPayMoney}}</td>
+							<td>{{sumL.aveSelfPayMoney}}</td>
+							<td>{{sumL.aveSelfPay}}</td>
+						</tr>
+					{{/each}}
 				</tbody>
 			</table>
 
 			<div class="row pageMode">
 				<div class="col-xs-6">
-					<small>共计XXX条记录</small>
+					<small>共计{{searchParam.pageSize}}条记录</small>
 				</div>
 				<div class="col-xs-6">
 					<div class="dataTables_paginate paging_simple_numbers T-pagenation">

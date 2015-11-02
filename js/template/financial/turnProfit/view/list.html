@@ -74,10 +74,10 @@
                                 <!--给日期转码-->
                                 <td>{{turnProfit.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
                                 <td>{{turnProfit.contact}}</td>
-                                <td><a href="javascript:void(0)" class="T-option T-showTourist">{{turnProfit.adultCount}}大{{turnProfit.childCount}}</a></td>
+                                <td><a href="javascript:void(0)" class="T-option T-showTourist">{{turnProfit.adultCount}}大{{turnProfit.childCount}}小</a></td>
                                 <td>{{turnProfit.partnerAgencyName}}</td>
                                 <td><a href="javascript:void(0)" class="T-option T-showIncomeDetail">{{turnProfit.needInComeMoney}}</a></td>
-                                <td>{{if turnProfit.change == ""}}无{{else}}{{turnProfit.change}}{{/if}}</td>
+                                <td>{{if turnProfit.change == ""}}空{{else}}{{turnProfit.change}}{{/if}}</td>
                                 <td><a href="javascript:void(0)" class="T-option T-showChangePay">{{turnProfit.changeNeedPayMoney}}</a></td>
                                 <td>{{turnProfit.transferPartnerAgencyName}}</td> 
                                 <td>

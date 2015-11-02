@@ -144,7 +144,7 @@ define(function(require, exports) {
 					if(data.hotel.city != null )var cityId = data.hotel.city.id;
 					if(data.hotel.district != null ) var districtId = data.hotel.district.id;
 					var	html = updateTemplate(data);
-					$updateLayer = layer.open({
+					hotel.$updateLayer = layer.open({
 					    type: 1,
 					    title:"编辑酒店信息",
 					    skin: 'layui-layer-rim', //加上边框
@@ -464,10 +464,10 @@ define(function(require, exports) {
 				if(result){
 					layer.close(hotel.$addLayer);
 					layer.close(hotel.$updateLayer);
-					data.hotel = JSON.parse(data.hotel);
-					formData.id = data.hotel.id;
 					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
 						if (typeof fn === "function") {
+							data.hotel = JSON.parse(data.hotel);
+							formData.id = data.hotel.id;
 							fn(formData);
 						}else{
 							hotel.listHotel(0);

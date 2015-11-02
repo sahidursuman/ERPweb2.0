@@ -12,7 +12,7 @@
 			<th>应收</th>
 			<th>已收</th>
 			<th>我方状态</th>
-			<th>操作</th>
+			<th width="140">操作</th>
 		</tr>
 	</thead>
 	<tbody>{{each resultList as list}}
@@ -29,7 +29,7 @@
 			<td>{{list.transPayedMoney}}</td>
 			<td>{{if list.status == 0}}<span style="color:#D2691E;">未确认</span>{{else if list.status == 1}}<span style="color: green;">已确认</span>{{/if}}</td>
 			<td>
-				<div class="hidden-sm hidden-xs btn-group" style="width:120px;">
+				<div class="hidden-sm hidden-xs btn-group">
 					<a class="cursor  {{if list.status != 1}}btn-TransferIn-save{{/if}} R-right" data-right="1340004" {{if list.status == 1}}style="color:#bbb"{{/if}}>
 						确认
 						<label style="padding-left:10px;">|</label>
@@ -50,25 +50,10 @@
 </table>
 <div class="row pageMode">
 	<div class="col-xs-6">
-		<div class="dataTables_info" id="dynamic-table_info" role="status" aria-live="polite">共计 {{searchParam.totalCount}} 条记录</div>
+		<small>共计{{searchParam.totalCount}}条记录</small>
 	</div>
 	<div class="col-xs-6">
-		<div class="dataTables_paginate paging_simple_numbers" id="dynamic-table_paginate">
-			<ul class="pagination">
-				<li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="first" href="javascript:void(0)">首页</a></li>
-				<li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="previous"href="javascript:void(0)">上一页</a></li>
-				<li class="paginate_button" aria-controls="dynamic-table" tabindex="0">
-					<a href="javascript:void(0)">
-						{{if searchParam.totalPage == 0}}
-							0/0
-						{{else}}
-							{{searchParam.pageNo+1}}/{{searchParam.totalPage}}
-						{{/if}}
-					</a>
-				</li>
-				<li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="next"  href="javascript:void(0)">下一页</a></li>
-				<li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a class="last" href="javascript:void(0)">尾页</a></li>
-			</ul>
+		<div class="dataTables_paginate paging_simple_numbers T-pagenation">
 		</div>
 	</div>
 </div>

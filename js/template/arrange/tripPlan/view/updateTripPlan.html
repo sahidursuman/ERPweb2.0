@@ -24,6 +24,10 @@
 									<div class="col-sm-2">
 										<input class="col-sm-12" type="text" name="startTime" readonly="readonly" id="" value="{{tripPlan.startTime | dateFormat: 'yyyy-MM-dd'}}" />
 									</div>
+									<label class="col-sm-1 control-label no-padding-right"> <span class="necessary">*</span>计划人数：</label>
+									<div class="col-sm-2">
+										<input class="col-sm-12" type="text" name="planTouristCount" id="" value="{{tripPlan.planTouristCount}}" maxlength="6"/>
+									</div>
 									<label class="col-sm-1 control-label no-padding-right">团队编号：</label>
 									<div class="col-sm-2">
 										<input class="col-sm-12" readonly="readonly" type="text" name="" id="" value="{{tripPlan.tripNumber}}" placeholder="系统自动生成" />
@@ -31,30 +35,46 @@
 								</div>
 								
 								<div class="form-group">
-									<label class="col-sm-1 control-label no-padding-right"> <span class="necessary">*</span>计划人数：</label>
-									<div class="col-sm-2">
-										<input class="col-sm-12" type="text" name="planTouristCount" id="" value="{{tripPlan.planTouristCount}}" maxlength="6"/>
-									</div>
 									<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>车座数：</label>
 									<div class="col-sm-2">
 										<input class="col-sm-12 chooseSeatCount bind-change" type="text" name="seatCount" id="" value="{{bus.seatCount}}" />
 									</div>
 									<label class="col-sm-1 control-label no-padding-right">车辆品牌：</label>
 									<div class="col-sm-2">
-										<input class="col-sm-12 chooseBusCompany bind-change" type="text" name="needBusBrand" id="" value="{{bus.brand}}" />
+										<input class="col-sm-12 chooseBusBrand bind-change" type="text" name="needBusBrand" id="" value="{{bus.brand}}" />
 										<input type="hidden" name="busBrandId" value="" />
 									</div>
 									<label class="col-sm-1 control-label no-padding-right"> <span class="necessary">*</span>车牌号：</label>
 									<div class="col-sm-2">
-										<input class="col-sm-12 chooseBusLicenseNumber bind-change" type="text" name="LicenseNumber" id="" value="{{bus.licenseNumber}}" />
-										<input type="hidden" name="busLicenseNumberId" value="{{bus.id}}" />
+										<div class="col-sm-12 no-padding">
+											<input class="col-sm-12 chooseBusLicenseNumber bind-change" type="text" name="LicenseNumber" id="" value="{{bus.licenseNumber}}" />
+											<input type="hidden" name="busLicenseNumberId" value="{{bus.id}}" />
+											<span class="addResourceBtnTripPlan T-addBusResource" title="添加车辆">
+                                                <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+                                            </span>
+                                        </div>
+									</div>
+									<label class="col-sm-1 control-label no-padding-right">所属车队：</label>
+									<div class="col-sm-2">
+										<div class="col-sm-12 no-padding">
+											<input class="col-sm-12 bind-change" type="text" name="busCompany" readonly="readonly" id="" value="{{busCompant.companyName}}" />
+											<input type="hidden" name="busCompanyId" value="{{busCompant.id}}" />
+											<span class="addResourceBtnTripPlan T-addBusCompanyResource" title="添加车队">
+                                                <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+                                            </span>
+                                        </div>
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-1 control-label no-padding-right"> <span class="necessary">*</span>导游：</label>
 									<div class="col-sm-2">
-										<input class="col-sm-12 AddTPchooseGuide bind-change" type="text" name="AddTPchooseGuide" id="" value="{{guide.realname}}" />
-										<input type="hidden" name="AddTPchooseGuideId" value="{{guide.id}}" />
+										<div class="col-sm-12 no-padding">
+											<input class="col-sm-12 AddTPchooseGuide bind-change" type="text" name="AddTPchooseGuide" id="" value="{{guide.realname}}" />
+											<input type="hidden" name="AddTPchooseGuideId" value="{{guide.id}}" />
+											<span class="addResourceBtnTripPlan T-addGuideResource" title="添加导游">
+                                                <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+                                            </span>
+                                        </div>
 									</div>
 									<label class="col-sm-1 control-label no-padding-right">导游电话：</label>
 									<div class="col-sm-2">
@@ -62,8 +82,13 @@
 									</div>
 									<label class="col-sm-1 control-label no-padding-right"> <span class="necessary">*</span>司机：</label>
 									<div class="col-sm-2">
-										<input class="col-sm-12 chooseDriver bind-change" type="text" name="driverName" id="" value="{{driver.name}}" />
-										<input type="hidden" name="driverId" value="{{driver.id}}" />
+										<div class="col-sm-12 no-padding">
+											<input class="col-sm-12 chooseDriver bind-change" type="text" name="driverName" id="" value="{{driver.name}}" />
+											<input type="hidden" name="driverId" value="{{driver.id}}" />
+											<span class="addResourceBtnTripPlan T-addDriverResource" title="添加司机">
+                                                <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+                                            </span>
+                                        </div>
 									</div>
 									<label class="col-sm-1 control-label no-padding-right">司机电话：</label>
 									<div class="col-sm-2">
@@ -166,7 +191,9 @@
 													<td>{{touristGroup.ageData}}</td>
 													<td class="tripPlanTrMemberCount">{{touristGroup.adultCount + touristGroup.childCount}}</td>
 													<td>{{touristGroup.currentNeedPayMoney}}</td>
-													<td>{{if touristGroup.hotelLevel==1}}
+													<td>{{if touristGroup.hotelLevel==0}}
+													   未选择 
+													   {{else if touristGroup.hotelLevel==1}}
 													   三星以下
 													   {{else if touristGroup.hotelLevel==2 }}
 													   三星
@@ -180,7 +207,7 @@
 													   五星
 													   {{else if touristGroup.hotelLevel==7 }}
 													   五星以上
-													   {{/if}} 
+													   {{/if}}											
 													</td>
 													<td>{{touristGroup.includeSelfPay}}</td>
 													<td>{{touristGroup.remark}}</td>
