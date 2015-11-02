@@ -381,14 +381,14 @@ define(function(require, exports) {
 			//餐厅信息 联动
 			transit.bindRestaurantChoose(tab);
 			//日期插件绑定
-			transit.outArrangeDatepicker("receptionList","bususeTime",tab);
+			transit.outArrangeDateTimepicker("receptionList","bususeTime",tab);
 			transit.outArrangeDatepicker("receptionList","hotelCheckInTime",tab);
-			transit.outArrangeDatepicker("receptionList","ticketStartTime",tab);
+			transit.outArrangeDateTimepicker("receptionList","ticketStartTime",tab);
 			transit.outArrangeDatepicker("receptionList","startTime",tab);
-			transit.outArrangeDatepicker("carList","bususeTime",tab);
-			transit.outArrangeDatepicker("sendList","bususeTime",tab);
+			transit.outArrangeDateTimepicker("carList","bususeTime",tab);
+			transit.outArrangeDateTimepicker("sendList","bususeTime",tab);
 			transit.outArrangeDatepicker("sendList","hotelCheckInTime",tab);
-			transit.outArrangeDatepicker("sendList","ticketStartTime",tab);
+			transit.outArrangeDateTimepicker("sendList","ticketStartTime",tab);
 			transit.outArrangeDatepicker("sendList","startTime",tab);
 
 			//提交安排事件绑定
@@ -567,9 +567,9 @@ define(function(require, exports) {
 			})
 			transit.addResource(tab);
 			transit.bindBusCompanyChoose(tab);
-			transit.outArrangeDatepicker("carList","bususeTime",tab);
-			transit.outArrangeDatepicker("sendList","bususeTime",tab);
-			transit.outArrangeDatepicker("receptionList","bususeTime",tab);
+			transit.outArrangeDateTimepicker("carList","bususeTime",tab);
+			transit.outArrangeDateTimepicker("sendList","bususeTime",tab);
+			transit.outArrangeDateTimepicker("receptionList","bususeTime",tab);
 			$("#"+tab+" .count,#"+tab+" .price,#"+tab+" .discount").blur(transit.calculation);
 		},
 		//新增团外安排酒店
@@ -640,8 +640,8 @@ define(function(require, exports) {
 			})
 			transit.addResource(tab);
 			transit.bindTicketChoose(tab);
-			transit.outArrangeDatepicker("receptionList","ticketStartTime",tab);
-			transit.outArrangeDatepicker("sendList","ticketStartTime",tab);
+			transit.outArrangeDateTimepicker("receptionList","ticketStartTime",tab);
+			transit.outArrangeDateTimepicker("sendList","ticketStartTime",tab);
 			$("#"+tab+" .count,#"+tab+" .price,#"+tab+" .discount").blur(transit.calculation);
 		},
 		//新增餐厅安排
