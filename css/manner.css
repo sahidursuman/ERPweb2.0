@@ -713,3 +713,8 @@ input,select{
     max-height: 550px !important;
     overflow-y: auto;
 }
+/*线路产品*/
+
+.linepRemark{
+    text-align: left !important;
+}
