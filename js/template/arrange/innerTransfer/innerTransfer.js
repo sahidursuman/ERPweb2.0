@@ -223,7 +223,7 @@ define(function(require, exports) {
 					    curr: (page + 1),
 					    jump: function(obj, first) {
 					    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-					    		innerTransfer.innerList(obj.curr -1);
+					    		innerTransfer.innerList(divId,type,obj.curr -1);
 					    	}
 					    }
 					});
