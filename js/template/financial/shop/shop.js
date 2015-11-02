@@ -160,10 +160,6 @@ define(function(require, exports) {
 	                         	exportXLS(url)
 	                         });
 						});
-						//分页--首页按钮事件
-						$("#"+checkTabId+ " .pageMode a.first").click(function(){
-							shop.listShopChecking(0,shopId,data.year,data.month);
-						});
 						// 绑定翻页组件
 						laypage({
 						    cont: $('#' + checkTabId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
