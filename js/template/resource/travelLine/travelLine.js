@@ -2157,17 +2157,18 @@ define(function(require, exports) {
     		});
 		},
 		submitAddTravelLine : function(){
-			var validator = rule.traveLineCheckor($('.travelLineMainForm'));
+			var $travelLiAddObj=$("#tab-resource_travelLine-addLine-content");
+			var validator = rule.traveLineCheckor($travelLiAddObj.find('.travelLineMainForm'));
 			// 表单验证
 			if (!validator.form())  return;
 
 			var status = 0;
-			if($(".travelLineMainForm .travelLine-status").is(":checked") == true){
+			if($travelLiAddObj.find(".travelLineMainForm .travelLine-status").is(":checked") == true){
 				status = 1;
 			}
-			var form = $(".travelLineMainForm").serialize()+"&status="+status+"";
+			var form = $travelLiAddObj.find(".travelLineMainForm").serialize()+"&status="+status+"";
 			var travelLineJsonAdd = [];
-			var lineDayListStr = $(".travelLineDayList .lineDayList tbody tr");
+			var lineDayListStr = $travelLiAddObj.find(".travelLineDayList .lineDayList tbody tr");
 			lineDayListStr.each(function(i){
 				var repastDetail = lineDayListStr.eq(i).find("td")[1].innerHTML;
 				var restPosition = lineDayListStr.eq(i).find("td")[2].innerHTML;
