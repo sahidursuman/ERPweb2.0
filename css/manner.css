@@ -303,7 +303,7 @@ table tr td{
     color: #393939;
 }
 #alter-pwd input{
-    text-indent: 1em;
+    text-indent: 0.5em;
     margin-left: 10px;
     line-height: 1em;
     width: 240px;
