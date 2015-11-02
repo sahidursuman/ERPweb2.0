@@ -249,7 +249,7 @@
                         </tr>
                     </thead>
                     <tbody id="shopping">
-                        {{each dayList as day}} {{if day.shopArrange != null }} {{each day.shopArrange as shopArrangeList}} {{each shopArrangeList.shopArrangePolicy as arrange index}} {{if arrange != null}}
+                        {{each dayList as day}} {{if day.shopArrange != null}} {{each day.shopArrange as shopArrangeList}} {{each shopArrangeList.shopArrangePolicy as arrange index}} {{if arrange != null}}
                         <tr shopArrangeId="{{arrange.id}}" shopId="{{arrange.whichDay}}_{{arrange.shopId}}">
                             {{if index==0}}
                             <td rowspan="{{shopArrangeList.shopArrangePolicy.length}}">第{{arrange.whichDay}}天</td>{{/if}} {{if index==0}}
@@ -471,7 +471,7 @@
                             <td>{{busCompany.reduceMoney}}
                                 <input type="hidden" name="reduceMoney" value="{{busCompany.reduceMoney}}" />
                             </td>
-                            <td><span class="BusneedPayMoney">{{busCompany.needPayMoney}}</span></td>
+                            <td><span class="needPayMoney">{{busCompany.needPayMoney}}</span></td>
                             <td>{{busCompany.payedMoney}}</td>
                             <td>
                                 {{if tripPlan.billStatus
@@ -515,12 +515,12 @@
                             <th class="th-border">导游报账备注</th>
                     </thead>
                     <tbody id="restaurant">
-                        {{each dayList as day}} {{if day.restaurantArrange != null || day.restaurantArrange.length !=0}} {{each day.restaurantArrange as arrangeList}} {{each arrangeList.restaurantArrangeList as arrange index}} {{if arrange != null}}
+                        {{each dayList as day}} {{if day.restaurantArrange != null}} {{each day.restaurantArrange as arrangeList}} {{each arrangeList.restaurantArrangeList as arrange index}} {{if arrange != null}}
                         <tr restaurantArrangeId="{{arrange.id}}" restaurantId="{{if arrange.restaurant != null}}{{arrange.restaurant.id}}{{/if}}" restaurantStandardId="{{if arrange.restaurantStandard != null}}{{arrange.restaurantStandard.id}}{{/if}}">
                             {{if index == 0}}
                             <td rowspan="{{arrangeList.restaurantArrangeList.length}}">第{{arrange.whichDay}}天</td>{{/if}} {{if index == 0}}
                             <td rowspan="{{arrangeList.restaurantArrangeList.length}}">{{if arrange.restaurant != null}}{{arrange.restaurant.name}}{{/if}}</td>{{/if}}
-                            <td>{{arrange.type}}</td>
+                            <td>{{if arrange.restaurantStandard != null}}{{arrange.restaurantStandard.type}}{{/if}}</td>
                             <td>{{arrange.price}}
                                 <input type="hidden" name="price" value="{{arrange.price}}" />
                             </td>
@@ -530,7 +530,7 @@
                             <td>{{arrange.reduceMoney}}
                                 <input type="hidden" name="reduceMoney" value="{{arrange.reduceMoney}}" />
                             </td>
-                            <td><span class="restneedPayMoney">{{arrange.needPayMoney}}</span></td>
+                            <td><span class="needPayMoney">{{arrange.needPayMoney}}</span></td>
                             <td>{{arrange.payedMoney}}</td>
                             <td>
                                 {{if tripPlan.billStatus
@@ -590,7 +590,7 @@
                             <td>{{arrange.reduceMoney}}
                                 <input type="hidden" name="reduceMoney" value="{{arrange.reduceMoney}}" />
                             </td>
-                            <td><span class="hotelneedPayMoney">{{arrange.needPayMoney}}</span></td>
+                            <td><span class="needPayMoney">{{arrange.needPayMoney}}</span></td>
                             <td>{{arrange.payedMoney}}</td>
                             <td>
                                 {{if tripPlan.billStatus
@@ -650,7 +650,7 @@
                             <td>{{arrange.reduceMoney}}
                                 <input type="hidden" name="reduceMoney" value="{{arrange.reduceMoney}}" />
                             </td>
-                            <td><span class="scenicneedPayMoney">{{arrange.needPayMoney}}</span></td>
+                            <td><span class="needPayMoney">{{arrange.needPayMoney}}</span></td>
                             <td>{{arrange.payedMoney}}</td>
                             <td>
                                 {{if tripPlan.billStatus
@@ -716,7 +716,7 @@
                             <td>{{arrange.reduceMoney}}
                                 <input type="hidden" name="reduceMoney" value="{{arrange.reduceMoney}}" />
                             </td>
-                            <td><span class="ticketneedPayMoney">{{arrange.needPayMoney}}</span></td>
+                            <td><span class="needPayMoney">{{arrange.needPayMoney}}</span></td>
                             <td>{{arrange.payedMoney}}</td>
                             <td>
                                 {{if tripPlan.billStatus

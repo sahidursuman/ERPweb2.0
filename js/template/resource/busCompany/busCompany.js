@@ -11,6 +11,7 @@ define(function(require,exports){
 		addTemplate = require("./view/add"),
 		updateTemplate = require("./view/update"),
 		viewTemplate = require("./view/view"),
+		addBusDriverTemplate = require("./view/addBusDriver"),
 		validator = "",
 		tabId = "tab-"+menuKey+"-content";
 	/**
@@ -47,7 +48,7 @@ define(function(require,exports){
 			type:"POST",
 			data:{
 				pageNo:pageNo,
-				companyName:encodeURIComponent(busCompanyName),
+				companyName:busCompanyName,
 				status:status,
 				sortType:"auto"
 			},
@@ -107,7 +108,7 @@ define(function(require,exports){
 		//新增车队事件
 		BusCompany.$tab.find(".T-busCompany-add").on('click',function(event){
 			event.preventDefault();
-			BusCompany.addBusCompany(0);
+			BusCompany.addBusCompany();
 		});
 		// 报表内的事件
 		BusCompany.$tab.find('.T-busCompany-list').on('click', '.T-action', function(event) {
@@ -127,7 +128,7 @@ define(function(require,exports){
 		});
 	};
 	//新增车队
-	BusCompany.addBusCompany = function(){
+	BusCompany.addBusCompany = function(fn){
 		var html = addTemplate();
 		var addBusCompanyLayer = layer.open({
 			type:1,
@@ -171,7 +172,8 @@ define(function(require,exports){
 						status = 1;
 					};
 					console.log(status);
-					var form = $mainObj.serialize()+"&status="+status+"";
+					var form = $mainObj.serialize()+"&status="+status+"",
+						formData = $mainObj.serializeJson();
 					//车辆数据的组装
 					var busJsonAdd = [];
 					var busJsonAddTr = $busList.find("tbody tr");
@@ -221,7 +223,7 @@ define(function(require,exports){
 					driverJsonAdd = JSON.stringify(driverJsonAdd);
 					var url = ""+APP_ROOT+"back/busCompany.do?method=addBusCompany&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=add";
 					var data = form+"&busJsonAdd="+encodeURIComponent(busJsonAdd)+"&driverJsonAdd="+encodeURIComponent(driverJsonAdd)+"";
-					BusCompany.saveBusCompany(url,data,addBusCompanyLayer);
+					BusCompany.saveBusCompany(url,data,addBusCompanyLayer,fn,formData);
 				});
 
 			}
@@ -450,7 +452,7 @@ define(function(require,exports){
 		});
 	};
 	//保存函数
-	BusCompany.saveBusCompany = function(url,data,$obj){
+	BusCompany.saveBusCompany = function(url,data,$obj,fn,formData){
 		$.ajax({
 			url:url,
 			type:"POST",
@@ -460,8 +462,15 @@ define(function(require,exports){
 				var result = showDialog(data);
 				if(result){
 					layer.close($obj);
-					showMessageDialog($( "#confirm-dialog-message" ),data.message);
-					BusCompany.listBusCompany(0);
+					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+						if (typeof fn === "function") {
+							data.busCompany = JSON.parse(data.busCompany);
+							formData.id = data.busCompany.id;
+							fn(formData);
+						}else{
+							BusCompany.listBusCompany(0);
+						}
+					});
 				}
 			}
 		});
@@ -721,5 +730,147 @@ define(function(require,exports){
 			}
 		});
 	};
+	//添加司机和车辆
+	BusCompany.addBusDriver = function(fn,$busCompany,$busCompanyId){
+		var html = addBusDriverTemplate();
+		var addBusDriverLayer = layer.open({
+			type:1,
+			title:'新增车辆和司机',
+			skin:'layui-layer-rim',
+			area:'650px',
+			zIndex:1028,
+			content:html,
+			scrollbar: false,
+			success:function(){
+				var $container = $(".T-addBusDriverContainer");
+
+				$container.find('[name=busCompanyName]').val($busCompany);
+				$container.find('[name=busCompanyId]').val($busCompanyId);
+				BusCompany.chooseBusCompany($container);
+				$container.find(".T-submit-busDriver").on('click', function() {
+					var BusCompanyId = getValue("busCompanyId"),
+						bus = {
+							brand : getValue("brand"),
+							licenseNumber : getValue("licenseNumber"),
+							seatCount : getValue("seatCount")
+						},
+						driver = {
+							name : getValue("driverName"),
+							mobileNumber : getValue("mobileNumber"),
+							licenseId : getValue("driverLicenseId"),
+							driveYears : getValue("driveYear")
+						};
+					var formData = {
+						busCompanyData : {
+							name : getValue('busCompanyName'),
+							id : getValue('busCompanyId')
+						},
+						busData : {
+							brand : bus.brand,
+							licenseNumber : bus.licenseNumber,
+							seatCount : bus.seatCount
+						},
+						driverData : {
+							name : driver.name,
+							mobileNumber : driver.mobileNumber,
+							licenseId : driver.licenseId,
+							driveYears : driver.driveYears
+						}
+					}
+					bus = JSON.stringify(bus);
+					driver = JSON.stringify(driver);
+					if (formData.busCompanyData.id.length == 0) {
+						layer.tips('请选择车队', $container.find('[name=busCompanyName]'), {
+							tips: [1, '#3595CC'],
+							time: 2000
+						});
+					}else if(formData.busData.licenseNumber == "" && formData.busData.brand == "" && formData.busData.seatCount == "" && formData.driverData.name == "" && formData.driverData.mobileNumber == "" && formData.driverData.licenseId == "" && formData.driverData.driveYears == ""){
+						showMessageDialog($( "#confirm-dialog-message" ),"车辆和司机至少添加一个。");
+					}else{
+						if(formData.busData.brand != "" || formData.busData.licenseNumber != "" || formData.busData.seatCount != ""){
+							var validatorBus = rule.busComCheckor($container.find('.busTable'));
+							if (!validatorBus.form()) return;
+						}
+						if(formData.driverData.name != "" || formData.driverData.mobileNumber != "" || formData.driverData.licenseId != "" || formData.driverData.driveYears != ""){
+							var validatorDriver = rule.busComCheckor($container.find('.driverTable'));
+							if (!validatorDriver.form()) return;
+						}
+						if(formData.busData.licenseNumber == ""){
+							bus = "";
+						}
+						if(formData.driverData.name == ""){
+							driver = "";
+						}
+						$.ajax({
+							url: ""+APP_ROOT+"back/busCompany.do?method=addBusAndDriver&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
+							type: "POST",
+							data: "busCompanyId="+BusCompanyId+"&bus="+encodeURIComponent(bus)+"&driver="+encodeURIComponent(driver),
+							success: function(data){
+								var result = showDialog(data);
+								if(result){
+									layer.close(addBusDriverLayer);
+									showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+										if (typeof fn === "function") {
+											formData.busData.id = data.busId;
+											formData.driverData.id = data.driverId;
+											fn(formData);
+										}
+									})
+								}
+							}
+						})
+					}
+				});
+				function getValue(name){
+					var value = $container.find('[name='+name+']').val();
+					return value;
+				};
+
+
+				
+			}
+		})
+	};
+	//车队 autocomplete
+	BusCompany.chooseBusCompany = function($container){
+		var busCompanyChoose = $container.find('.T-chooseBusCompany');
+		busCompanyChoose.autocomplete({
+			minLength:0,
+			change:function(event,ui){
+				if (ui.item == null) {
+					var $this = $(this),$parents = $this.closest('div');
+					$this.val("");
+					$parents.find('[name=busCompanyId]').val("");
+
+				}
+			},
+			select:function(event,ui){
+				var $this = $(this),$parents = $this.closest('div');
+				$parents.find('[name=busCompanyId]').val(ui.item.id);
+			}
+		}).on('click', function() {
+			var objC = this;
+			$.ajax({
+				url:""+APP_ROOT+"back/busCompany.do?method=findAllBusCompany&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
+				dataType: "json",
+				success: function(data) {
+					var result = showDialog(data);
+					if(result){
+						var busCompanyList = JSON.parse(data.busCompanyList);
+						if(busCompanyList != null && busCompanyList.length > 0){
+							for(var i=0;i<busCompanyList.length;i++){
+								busCompanyList[i].value = busCompanyList[i].companyName;
+							}
+						}
+						$(objC).autocomplete('option','source', busCompanyList);
+						$(objC).autocomplete('search', '');
+					}
+				}
+			});
+		});
+	};
+
 	exports.init = BusCompany.initModule;
+	exports.addBusCompany = BusCompany.addBusCompany;
+	exports.addBusDriver = BusCompany.addBusDriver;
 });

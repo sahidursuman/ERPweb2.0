@@ -9,6 +9,7 @@ define(function(require, exports) {
 		addGroupTemplate = require("./view/addGroup"),
 		viewGroupTemplate = require("./view/viewGroup"),
 		checkTable="arrange_plan-add",
+		tabId = "tab-"+menuKey+"-content",
 		addTripPlanLayer,
 		executeTimeType,
 	
@@ -63,6 +64,17 @@ define(function(require, exports) {
 						addTab(menuKey,"发团计划",html);
 						tripPlan.initList(data);
 						tripPlan.getQueryTerms();
+						// 绑定翻页组件
+						laypage({
+						    cont: $('#' + tabId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+						    pages: data.totalPage, //总页数
+						    curr: (page + 1),
+						    jump: function(obj, first) {
+						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+						    		tripPlan.listTripPlan(obj.curr -1,tripPlan.searchData.tripId,tripPlan.searchData.tripNumber,tripPlan.searchData.startTime,tripPlan.searchData.guideId,tripPlan.searchData.realname,tripPlan.searchData.busId,tripPlan.searchData.licenseNumber,tripPlan.searchData.creator,tripPlan.searchData.creatorName,tripPlan.searchData.status);
+								}
+						    }
+						});
 					}
 				}
 			});
@@ -111,36 +123,6 @@ define(function(require, exports) {
 				}
 				tripPlan.listTripPlan(0,tripPlan.searchData.tripId,tripPlan.searchData.tripNumber,tripPlan.searchData.startTime,tripPlan.searchData.guideId,tripPlan.searchData.realname,tripPlan.searchData.busId,tripPlan.searchData.licenseNumber,tripPlan.searchData.creator,tripPlan.searchData.creatorName,tripPlan.searchData.status);
 			});
-			
-			//分页--首页按钮事件
-			$("#tab-"+menuKey+"-content .pageMode a.first").click(function(){
-				if(data.pageNo == 0 || data.totalPage == 0)return;
-				tripPlan.listTripPlan(0,tripPlan.searchData.tripId,tripPlan.searchData.tripNumber,tripPlan.searchData.startTime,tripPlan.searchData.guideId,tripPlan.searchData.realname,tripPlan.searchData.busId,tripPlan.searchData.licenseNumber,tripPlan.searchData.creator,tripPlan.searchData.creatorName,tripPlan.searchData.status);
-			});
-			//分页--上一页事件
-			$("#tab-"+menuKey+"-content  .pageMode a.previous").click(function(){
-				if(data.totalPage == 0)return;
-				var previous = data.pageNo - 1;
-				if(data.pageNo == 0){
-					previous = 0;
-				}
-				tripPlan.listTripPlan(previous,tripPlan.searchData.tripId,tripPlan.searchData.tripNumber,tripPlan.searchData.startTime,tripPlan.searchData.guideId,tripPlan.searchData.realname,tripPlan.searchData.busId,tripPlan.searchData.licenseNumber,tripPlan.searchData.creator,tripPlan.searchData.creatorName,tripPlan.searchData.status);
-			});
-			//分页--下一页事件
-			$("#tab-"+menuKey+"-content .pageMode a.next").click(function(){
-				if(data.pageNo+1 == data.totalPage || data.totalPage == 0)return;
-				var next =  data.pageNo + 1;
-				if(data.pageNo == data.totalPage-1){
-					next = data.pageNo ;
-				}
-				tripPlan.listTripPlan(next,tripPlan.searchData.tripId,tripPlan.searchData.tripNumber,tripPlan.searchData.startTime,tripPlan.searchData.guideId,tripPlan.searchData.realname,tripPlan.searchData.busId,tripPlan.searchData.licenseNumber,tripPlan.searchData.creator,tripPlan.searchData.creatorName,tripPlan.searchData.status);
-			});
-			//分页--尾页事件
-			$("#tab-"+menuKey+"-content  .pageMode a.last").click(function(){
-				if(data.pageNo == data.totalPage-1 || data.totalPage == 0)return;
-				tripPlan.listTripPlan(data.totalPage-1,tripPlan.searchData.tripId,tripPlan.searchData.tripNumber,tripPlan.searchData.startTime,tripPlan.searchData.guideId,tripPlan.searchData.realname,tripPlan.searchData.busId,tripPlan.searchData.licenseNumber,tripPlan.searchData.creator,tripPlan.searchData.creatorName,tripPlan.searchData.status);
-			});
-			
 			//新增发团计划
 			$(".tripPlanMain .btn-Plan-add").click(function(){
 				tripPlan.addTripPlan();
@@ -372,6 +354,27 @@ define(function(require, exports) {
 			$("#" + tab + " .newAddTripPlan .btn-saveTripPlan").click(function(){
 				tripPlan.submitAddTripPlan();
 			});
+			//添加资源
+			tripPlan.addResource(tab);
+		},
+		//添加资源
+		addResource : function(tab){
+			$container = $("#"+tab);
+			$container.find('.T-addGuideResource').on('click' , {function : KingServices.addGuide ,type : ".widget-main" ,  name : "AddTPchooseGuide" , id : "AddTPchooseGuideId" , mobileNumber : "GmobileNumber"} , KingServices.addResourceFunction);
+			$container.find(".T-addBusCompanyResource").off('click').on("click",{function : KingServices.addBusCompany}, KingServices.addResourceFunction);
+			$container.find(".T-addBusResource,.T-addDriverResource").off('click').on("click",{
+				function : KingServices.addBusDriver,
+				busCompanyName : "busCompany",
+				busCompanyId : "busCompanyId",
+				busLicenseNumberId : "busLicenseNumberId",
+				busLicenseNumber : "LicenseNumber",
+				busbrand : "needBusBrand",
+				seatCount : "seatCount",
+				driverName : "driverName",
+				driverId : "driverId",
+				driverMobileNumber : "DmobileNumber",
+				type : ".widget-main"
+			}, KingServices.addBusDriverFunction);
 		},
 		//查看计划
 		viewTripPlan:function(id){
@@ -586,6 +589,8 @@ define(function(require, exports) {
 			$("#" + tab + " .updateTripPlan .btn-updateTripPlan").click(function(){
 				tripPlan.submitUpdateTripPlan(1);
 			});
+			//添加资源
+			tripPlan.addResource(tab);
 		},
 		//搜索关键词初始化
 		lineSearchData : {
@@ -936,8 +941,8 @@ define(function(require, exports) {
 				change:function(event,ui){
 					if(ui.item == null){
 						$(this).val("");
-						$(this).parent().parent().find("input[name=AddTPchooseGuideId]").val("");
-						$(this).parent().parent().find("input[name=mobileNumber]").val("");
+						$(this).closest('.widget-main').find("input[name=AddTPchooseGuideId]").val("");
+						$(this).closest('.widget-main').find("input[name=GmobileNumber]").val("");
 					}
 				},
 				select:function(event,ui){
@@ -952,8 +957,8 @@ define(function(require, exports) {
 							var result = showDialog(data);
 							if(result){
 								var guide = JSON.parse(data.guide);
-								$(obj).parent().parent().find("input[name=AddTPchooseGuideId]").val(guide.id).trigger('change');
-								$(obj).parent().parent().find("input[name=GmobileNumber]").val(guide.mobileNumber);
+								$(obj).closest('.widget-main').find("input[name=AddTPchooseGuideId]").val(guide.id).trigger('change');
+								$(obj).closest('.widget-main').find("input[name=GmobileNumber]").val(guide.mobileNumber);
 							}
 	                    }
 	                });
@@ -1439,20 +1444,28 @@ define(function(require, exports) {
 				minLength:0,
 				change :function(event, ui){
 					if(ui.item == null){
-						var $this = $(this),parents = $(this).parent().parent();
+						var $this = $(this),parents = $(this).closest('.widget-main');
 						$this.val("");
 						parents.find("input[name=needBusBrand]").val("");
 						parents.find("input[name=LicenseNumber]").val("");
-						parents.next().find("input[name=driverName]").val("");
-						parents.next().find("input[name=DmobileNumber]").val("");
+						parents.find("input[name=busLicenseNumberId]").val("");
+						parents.find("input[name=busCompany]").val("");
+						parents.find("input[name=busCompanyId]").val("");
+						parents.find("input[name=driverName]").val("");
+						parents.find("input[name=driverId]").val("");
+						parents.find("input[name=DmobileNumber]").val("");
 					}
 				},
 				select :function(event, ui){
-					var $this = $(this),parents = $(this).parent().parent();
+					var $this = $(this),parents = $(this).closest('.widget-main');
 					parents.find("input[name=needBusBrand]").val("");
 					parents.find("input[name=LicenseNumber]").val("");
-					parents.next().find("input[name=driverName]").val("");
-					parents.next().find("input[name=DmobileNumber]").val("");
+					parents.find("input[name=busLicenseNumberId]").val("");
+					parents.find("input[name=busCompany]").val("");
+					parents.find("input[name=busCompanyId]").val("");
+					parents.find("input[name=driverName]").val("");
+					parents.find("input[name=driverId]").val("");
+					parents.find("input[name=DmobileNumber]").val("");
 				}
 			}).unbind("click").click(function(){
 				var obj = this;
@@ -1485,27 +1498,35 @@ define(function(require, exports) {
 			})
 		},
 		brandChoose :function(){
-			var chooseBrand = $(".widget-main").find("input[name=needBusBrand]");
+			var chooseBrand = $(".widget-main").find(".chooseBusBrand");
 			chooseBrand.autocomplete({
 				minLength:0,
 				change :function(event, ui){
 					if(ui.item == null){
-						var $this = $(this),parents = $(this).parent().parent();
+						var $this = $(this),parents = $(this).closest('.widget-main');
 						$this.val("");
 						parents.find("input[name=LicenseNumber]").val("");
-						parents.next().find("input[name=driverName]").val("");
-						parents.next().find("input[name=DmobileNumber]").val("");
+						parents.find("input[name=busLicenseNumberId]").val("");
+						parents.find("input[name=busCompany]").val("");
+						parents.find("input[name=busCompanyId]").val("");
+						parents.find("input[name=driverName]").val("");
+						parents.find("input[name=driverId]").val("");
+						parents.find("input[name=DmobileNumber]").val("");
 					}
 				},
 				select :function(event, ui){
-					var $this = $(this),parents = $(this).parent().parent();
+					var $this = $(this),parents = $(this).closest('.widget-main');
 					parents.find("input[name=LicenseNumber]").val("");
-					parents.next().find("input[name=driverName]").val("");
-					parents.next().find("input[name=DmobileNumber]").val("");
+					parents.find("input[name=busLicenseNumberId]").val("");
+					parents.find("input[name=busCompany]").val("");
+					parents.find("input[name=busCompanyId]").val("");
+					parents.find("input[name=driverName]").val("");
+					parents.find("input[name=driverId]").val("");
+					parents.find("input[name=DmobileNumber]").val("");
 				}
 			}).unbind("click").click(function(){
 				var obj = this;
-				var seatCount = $(this).parent().parent().find(".chooseSeatCount").val();
+				var seatCount = $(this).closest('.widget-main').find(".chooseSeatCount").val();
 				if(seatCount){
 					$.ajax({
 						url:""+APP_ROOT+"back/bookingOrder.do?method=getBusBrandList&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
@@ -1560,75 +1581,90 @@ define(function(require, exports) {
 			})
 		},
 		licenseNumberChoose :function(){
-			var chooseLicense = $(".widget-main").find("input[name=LicenseNumber]");
+			var chooseLicense = $(".widget-main").find(".chooseBusLicenseNumber");
 			chooseLicense.autocomplete({
 				minLength:0,
 				change :function(event, ui){
 					if(ui.item == null){
-						var $this = $(this),parents = $(this).parent().parent();
+						var $this = $(this),parents = $(this).closest('.widget-main');
 						$this.val("");
-						parents.next().find("input[name=driverName]").val("");
-						parents.next().find("input[name=DmobileNumber]").val("");
+						parents.find("input[name=busLicenseNumberId]").val("");
+						parents.find("input[name=busCompany]").val("");
+						parents.find("input[name=busCompanyId]").val("");
+						parents.find("input[name=driverName]").val("");
+						parents.find("input[name=driverId]").val("");
+						parents.find("input[name=DmobileNumber]").val("");
 					}
 				},
 				select :function(event, ui){
-					var $this = $(this),parents = $(this).parent().parent();
-					parents.next().find("input[name=driverName]").val("");
-					parents.next().find("input[name=DmobileNumber]").val("");
-					$(this).parent().find("input[name=busLicenseNumberId]").val(ui.item.id).trigger('change');
+					var $this = $(this),parents = $(this).closest('.widget-main');
+						parents.find("input[name=busLicenseNumberId]").val(ui.item.id).trigger('change');
+						parents.find("input[name=busCompany]").val(ui.item.busCompanyName);
+						parents.find("input[name=busCompanyId]").val(ui.item.busCompanyId);
+						parents.find("input[name=driverName]").val("");
+						parents.find("input[name=driverId]").val("");
+						parents.find("input[name=DmobileNumber]").val("");
 				}
 			}).unbind("click").click(function(){
 				var obj = this;
-				var seatCount = $(this).parent().parent().find(".chooseSeatCount").val();
-				var busBrand = $(this).parent().parent().find("input[name=needBusBrand]").val();
-				$.ajax({
-					url:""+APP_ROOT+"back/busCompany.do?method=getLicenseNumbers&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-					data: {
-						seatCount: seatCount,
-						brand: busBrand
-					},
-					dateType:"json",
-					type:"POST",
-					success:function(data){
-						var result = showDialog(data);
-						if(result){
-							var licenseList = JSON.parse(data.busList);
-							if(licenseList && licenseList.length > 0){
-								for(var i=0; i < licenseList.length; i++){
-									licenseList[i].value = licenseList[i].licenseNumber;
+				var seatCount = $(this).closest('.widget-main').find(".chooseSeatCount").val();
+				var busBrand = $(this).closest('.widget-main').find("input[name=needBusBrand]").val();
+				if (!!seatCount) {
+					$.ajax({
+						url:""+APP_ROOT+"back/busCompany.do?method=getLicenseNumbers&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
+						data: {
+							seatCount: seatCount,
+							brand: busBrand
+						},
+						dateType:"json",
+						type:"POST",
+						success:function(data){
+							var result = showDialog(data);
+							if(result){
+								var licenseList = JSON.parse(data.busList);
+								if(licenseList && licenseList.length > 0){
+									for(var i=0; i < licenseList.length; i++){
+										licenseList[i].value = licenseList[i].licenseNumber;
+									}
+									$(obj).autocomplete('option','source', licenseList);
+									$(obj).autocomplete('search', '');
+								}else{
+									layer.tips('没有内容', obj, {
+									    tips: [1, '#3595CC'],
+									    time: 2000
+									});
 								}
-								$(obj).autocomplete('option','source', licenseList);
-								$(obj).autocomplete('search', '');
-							}else{
-								layer.tips('没有内容', obj, {
-								    tips: [1, '#3595CC'],
-								    time: 2000
-								});
 							}
 						}
-					}
-				})
+					})
+				}else{
+					layer.tips('请选择车座数', obj, {
+					    tips: [1, '#3595CC'],
+					    time: 2000
+					});
+				}
 			})
 		},
 		driverChoose : function(){
-			var chooseDriver = $(".widget-main").find("input[name=driverName]");
+			var chooseDriver = $(".widget-main").find(".chooseDriver");
 			chooseDriver.autocomplete({
 				minLength:0,
 				change :function(event, ui){
 					if(ui.item == null){
-						var $this = $(this),parents = $(this).parent().parent();
+						var $this = $(this),parents = $(this).closest('.widget-main');
 						$this.val("");
+						parents.find("input[name=driverId]").val("");
+						parents.find("input[name=DmobileNumber]").val("");
 					}
 				},
 				select :function(event, ui){
-					var $this = $(this),parents = $(this).parent().parent();
-					$(this).parent().parent().find("input[name=driverId]").val(ui.item.id).trigger('change');
-					$(this).parent().parent().find("input[name=DmobileNumber]").val(ui.item.mobileNumber);
-					$(this).nextAll('[name="driverId"]').val(ui.item.id);
+					var $this = $(this),parents = $(this).closest('.widget-main');
+					parents.find("input[name=driverId]").val(ui.item.id).trigger('change');
+					parents.find("input[name=DmobileNumber]").val(ui.item.mobileNumber);
 				}
 			}).unbind("click").click(function(){
 				var obj = this;
-				var busLicenseNumberId = $(this).parent().parent().parent().find("input[name=busLicenseNumberId]").val();
+				var busLicenseNumberId = $(this).closest('.widget-main').find("input[name=busLicenseNumberId]").val();
 				if(busLicenseNumberId){
 					$.ajax({
 						url:""+APP_ROOT+"back/busCompany.do?method=getDrivers&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",

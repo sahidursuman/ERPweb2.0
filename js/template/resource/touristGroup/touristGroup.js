@@ -10,6 +10,7 @@ define(function(require, exports) {
 		arrangeTemplate = require("./view/arrange"),
 		listMainTemplate = require("./view/listMain"),
 		addPartnerManagerTemplate = require("./view/addPartnerManager"),
+		tabId = "tab-"+menuKey+"-content",
 		searchTravelLinelayer;
 
 	var touristGroup = {
@@ -62,43 +63,63 @@ define(function(require, exports) {
 				cache: false,
 				dataType:"json",
 				beforeSend:function(){
-					//打开一个遮罩层
 					globalLoadingLayer = openLoadingLayer();
 				},
 				success:function(data){
-
-					//关闭遮罩
 					layer.close(globalLoadingLayer);
-					//根据返回值判断下一步操作，或者已出现错误
 					var result = showDialog(data);
-					//如果正确则就执行
 					if(result){
-						touristGroup.searchData = {
-							lineProductName: lineProduct,
-							lineProductId: lineProductId,
-							fromPartnerAgencyName:fromPartnerAgencyName,
-							fromPartnerAgencyId:fromPartnerAgencyId,
-							creatorName:creatorName,
-							creatorId:creatorId,
-							startTimeSearch: startTimeS,
-							//userId: userIdS,
-							createTimeStart: createTimeStartS,
-							createTimeEnd: createTimeEndS,
-							statusSearch: statusS,
-							customerType: customerTypeS,
-							status : statusS
-						};
-
-						var html = listMainTemplate(data);
-						addTab(menuKey,"游客管理",html);
+						var html1 = listMainTemplate(data);
+						addTab(menuKey,"游客管理",html1);
 						touristGroup.getQueryTerms();
+
+						//出游日期 时间控件（筛选搜索）
+						$("#main-container input[name=startTime]").datepicker({
+							autoclose: true,
+							todayHighlight: true,
+							format: 'yyyy-mm-dd',
+							language: 'zh-CN'
+						});
+						//录入时间 时间控件（筛选搜索）
+						$("#main-container input[name=creatTime]").datepicker({
+							autoclose: true,
+							todayHighlight: true,
+							format: 'yyyy-mm-dd',
+							language: 'zh-CN'
+						});
+						$("#main-container input[name=createTimeStart]").datepicker({
+							autoclose: true,
+							todayHighlight: true,
+							format: 'yyyy-mm-dd',
+							language: 'zh-CN'
+						});
+						$("#main-container input[name=createTimeEnd]").datepicker({
+							autoclose: true,
+							todayHighlight: true,
+							format: 'yyyy-mm-dd',
+							language: 'zh-CN'
+						});
 
 						//搜索栏状态button下拉事件
 						var tab = "tab-resource_touristGroup-content";
 						$(".touristGroupSearchForm .btn-status .dropdown-menu a").click(function(){
 							$(this).parent().parent().parent().find("button").attr("data-value",$(this).attr("data-value"));
 							$(this).parent().parent().parent().find("span").text($(this).text());
-							$(".touristGroupSearchForm .btn-touristGroupList-search").trigger('click');
+							touristGroup.searchData = {
+								fromPartnerAgencyName : $(".touristGroupSearchForm input[name=fromPartnerAgencyName]").val(),
+								fromPartnerAgencyId : $(".touristGroupSearchForm input[name=fromPartnerAgencyId]").val(),
+								lineProductName : $(".touristGroupSearchForm input[name=lineProductName]").val(),
+								lineProductId : $(".touristGroupSearchForm input[name=lineProductId]").val(),
+								startTime : $(".touristGroupSearchForm input[name=startTime]").val(),
+								creatorName : $(".touristGroupSearchForm input[name=creatorName]").val(),
+								creatorId : $(".touristGroupSearchForm input[name=creatorId]").val(),
+								//userId : $(".touristGroupSearchForm select[name=userId]").find("option:selected").val(),
+								createTimeStart : $(".touristGroupSearchForm input[name=createTimeStart]").val(),
+								createTimeEnd : $(".touristGroupSearchForm input[name=createTimeEnd]").val(),
+								customerType : $(".touristGroupSearchForm select[name=customerType]").find("option:selected").val(),
+								status :  $(".touristGroupSearchForm .btn-status button").attr("data-value")
+							}
+							touristGroup.getTouristStatisticData(0,touristGroup.searchData.lineProductName,touristGroup.searchData.lineProductId,touristGroup.searchData.fromPartnerAgencyName,touristGroup.searchData.fromPartnerAgencyId,touristGroup.searchData.creatorId,touristGroup.searchData.creatorName,touristGroup.searchData.startTime,touristGroup.searchData.createTimeStart,touristGroup.searchData.createTimeEnd,touristGroup.searchData.customerType,touristGroup.searchData.status);
 						});
 						//筛选事件绑定
 						$(".touristGroupSearchForm .btn-touristGroupList-search").click(function(){
@@ -117,21 +138,14 @@ define(function(require, exports) {
 								status :  $(".touristGroupSearchForm .btn-status button").attr("data-value")
 							}
 							touristGroup.getTouristStatisticData(0,touristGroup.searchData.lineProductName,touristGroup.searchData.lineProductId,touristGroup.searchData.fromPartnerAgencyName,touristGroup.searchData.fromPartnerAgencyId,touristGroup.searchData.creatorId,touristGroup.searchData.creatorName,touristGroup.searchData.startTime,touristGroup.searchData.createTimeStart,touristGroup.searchData.createTimeEnd,touristGroup.searchData.customerType,touristGroup.searchData.status);
-							});
+						});
 
 						//新增小组事件
 						$(".main-content .page-content .btn-touristGroup-add").click(function(){
 							touristGroup.cleanFlag = 1;
 							touristGroup.addTouristGroup();
-
 						});
-						touristGroup.listTouristGroup(0,touristGroup.searchData.lineProductName,touristGroup.searchData.lineProductId,touristGroup.searchData.fromPartnerAgencyName,touristGroup.searchData.fromPartnerAgencyId,touristGroup.searchData.creatorId,touristGroup.searchData.creatorName,touristGroup.searchData.startTimeSearch,touristGroup.searchData.createTimeStart,touristGroup.searchData.createTimeEnd,touristGroup.searchData.customerType,touristGroup.searchData.status);
-						//下拉数据初始化
-						touristGroup.initList(data);
-						//touristGroup.getPartnerAgencyList($("#"+tab+" .choosePartnerAgency"),"")
-						touristGroup.getPartnerAgencyList($("#tab-"+menuKey+"-content"));
-						touristGroup.getPartnerAgencySearchList($("#tab-"+menuKey+"-content"));
-						touristGroup.getCreatorUserList($("#tab-"+menuKey+"-content"));
+						touristGroup.listTouristGroup(page,lineProduct,lineProductId,fromPartnerAgencyName,fromPartnerAgencyId,creatorId,creatorName,startTimeS,createTimeStartS,createTimeEndS,customerTypeS,statusS);
 					}
 				}
 			});
@@ -175,109 +189,53 @@ define(function(require, exports) {
 						touristGroupList = JSON.parse(touristGroupList);
 						//讲字符串改为对象
 						data.touristGroupList = touristGroupList;
-						console.log(data);
 						var html = listTemplate(data);
 						$("#touristGroup-listMain").html(html);
-						//touristGroup.initList(data);
 
-						//安排小组事件
-						$(".touristGroupList .btn-touristGroup-arrange").click(function(){
-							var id = $(this).attr("data-entity-id");
-							touristGroup.arrangeTouristGroup(id);
+						touristGroup.getPartnerAgencyList($("#tab-"+menuKey+"-content .choosePartnerAgency"));
+						touristGroup.getPartnerAgencySearchList($("#tab-"+menuKey+"-content"));
+						touristGroup.getCreatorUserList($("#tab-"+menuKey+"-content"),data.searchParam.creator);
+						
+						touristGroup.initList(data);
+						// 绑定翻页组件
+						laypage({
+						    cont: $('#' + tabId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+						    pages: data.totalPage, //总页数
+						    curr: (page + 1),
+						    jump: function(obj, first) {
+						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+						    		touristGroup.listTouristGroup(obj.curr -1,touristGroup.searchData.lineProductName,touristGroup.searchData.lineProductId,touristGroup.searchData.fromPartnerAgencyName,touristGroup.searchData.fromPartnerAgencyId,touristGroup.searchData.creatorId,touristGroup.searchData.creatorName,touristGroup.searchData.startTime,touristGroup.searchData.createTimeStart,touristGroup.searchData.createTimeEnd,touristGroup.searchData.customerType,touristGroup.searchData.status);
+						    	}
+						    }
 						});
-						//查看小组事件
-						$(".touristGroupList .btn-touristGroup-view").click(function(){
-							var id = $(this).attr("data-entity-id");
-							touristGroup.viewTouristGroup(id);
-						});
-
-						//修改小组事件
-						$(".main-content .page-content .btn-touristGroup-edit").click(function(){
-							var id = $(this).attr("data-entity-id");
-							touristGroup.cleanFlag = 2;
-							touristGroup.updateTouristGroup(id);
-						});
-						//删除小组事件绑定
-						$(".main-content .page-content .btn-touristGroup-delete").click(function(){
-							var id = $(this).attr("data-entity-id");
-							touristGroup.deleteTouristGroup(id);
-						});
-						//分页--首页按钮事件
-						$(".touristGroupList .pageMode a.first").click(function(){
-							if(data.pageNo == 0 || data.totalPage == 0)return;
-							touristGroup.listTouristGroup(0,touristGroup.searchData.lineProductName,touristGroup.searchData.lineProductId,touristGroup.searchData.fromPartnerAgencyName,touristGroup.searchData.fromPartnerAgencyId,touristGroup.searchData.creatorId,touristGroup.searchData.creatorName,touristGroup.searchData.startTime,touristGroup.searchData.createTimeStart,touristGroup.searchData.createTimeEnd,touristGroup.searchData.customerType,touristGroup.searchData.status);
-						});
-						//分页--上一页事件
-						$(".touristGroupList .pageMode a.previous").click(function(){
-							if(data.pageNo == 0 || data.totalPage == 0)return;
-							var previous = data.pageNo - 1;
-							if(data.pageNo == 0){
-								previous = 0;
-							}
-							touristGroup.listTouristGroup(previous,touristGroup.searchData.lineProductName,touristGroup.searchData.lineProductId,touristGroup.searchData.fromPartnerAgencyName,touristGroup.searchData.fromPartnerAgencyId,touristGroup.searchData.creatorId,touristGroup.searchData.creatorName,touristGroup.searchData.startTime,touristGroup.searchData.createTimeStart,touristGroup.searchData.createTimeEnd,touristGroup.searchData.customerType,touristGroup.searchData.status);
-						});
-						//分页--下一页事件
-						$(".touristGroupList .pageMode a.next").click(function(){
-							if(data.pageNo+1 == data.totalPage || data.totalPage == 0)return;
-							var next =  data.pageNo + 1;
-							if(data.pageNo == data.totalPage-1){
-								next = data.pageNo ;
-							}
-							touristGroup.listTouristGroup(next,touristGroup.searchData.lineProductName,touristGroup.searchData.lineProductId,touristGroup.searchData.fromPartnerAgencyName,touristGroup.searchData.fromPartnerAgencyId,touristGroup.searchData.creatorId,touristGroup.searchData.creatorName,touristGroup.searchData.startTime,touristGroup.searchData.createTimeStart,touristGroup.searchData.createTimeEnd,touristGroup.searchData.customerType,touristGroup.searchData.status);
-						});
-						//分页--尾页事件
-						$(".touristGroupList .pageMode a.last").click(function(){
-							if(data.pageNo == data.totalPage-1 || data.totalPage == 0)return;
-							touristGroup.listTouristGroup(data.totalPage-1,touristGroup.searchData.lineProductName,touristGroup.searchData.lineProductId,touristGroup.searchData.fromPartnerAgencyName,touristGroup.searchData.fromPartnerAgencyId,touristGroup.searchData.creatorId,touristGroup.searchData.creatorName,touristGroup.searchData.startTime,touristGroup.searchData.createTimeStart,touristGroup.searchData.createTimeEnd,touristGroup.searchData.customerType,touristGroup.searchData.status);
-						});
-
-
-
 					}
 				},
 			});
 		},
 		//列表初始化
 		initList : function(data){
-			//出游日期 时间控件（筛选搜索）
-			$("#main-container input[name=startTime]").datepicker({
-				autoclose: true,
-				todayHighlight: true,
-				format: 'yyyy-mm-dd',
-				language: 'zh-CN'
+			//安排小组事件
+			$(".touristGroupList .btn-touristGroup-arrange").click(function(){
+				var id = $(this).attr("data-entity-id");
+				touristGroup.arrangeTouristGroup(id);
 			});
-			//录入时间 时间控件（筛选搜索）
-			$("#main-container input[name=creatTime]").datepicker({
-				autoclose: true,
-				todayHighlight: true,
-				format: 'yyyy-mm-dd',
-				language: 'zh-CN'
+			//查看小组事件
+			$(".touristGroupList .btn-touristGroup-view").click(function(){
+				var id = $(this).attr("data-entity-id");
+				touristGroup.viewTouristGroup(id);
 			});
-			$("#main-container input[name=createTimeStart]").datepicker({
-				autoclose: true,
-				todayHighlight: true,
-				format: 'yyyy-mm-dd',
-				language: 'zh-CN'
-			});
-			$("#main-container input[name=createTimeEnd]").datepicker({
-				autoclose: true,
-				todayHighlight: true,
-				format: 'yyyy-mm-dd',
-				language: 'zh-CN'
-			});
-			//初始化路线    	
-			if(data.searchParam == '{}'){
-				touristGroup.getLineProductList($(".touristGroupSearchForm select[name=lineProductId]"));
-				//touristGroup.getPartnerAgencyList($(".touristGroupSearchForm input[name=fromPartnerAgency]"));
-				touristGroup.getCreatorUserList($(".touristGroupSearchForm select[name=userId]"));
-			}
-			else{
-				touristGroup.getLineProductList($(".touristGroupSearchForm select[name=lineProductId]"),data.searchParam.lineProductId);
-				//touristGroup.getPartnerAgencySearchList($(".touristGroupSearchForm select[name=partnerAgencyId]"),data.searchParam.fromPartnerAgencyId);
-				touristGroup.getCreatorUserList($(".touristGroupSearchForm select[name=userId]"),data.searchParam.creator);
-			}
 
-
+			//修改小组事件
+			$(".main-content .page-content .btn-touristGroup-edit").click(function(){
+				var id = $(this).attr("data-entity-id");
+				touristGroup.cleanFlag = 2;
+				touristGroup.updateTouristGroup(id);
+			});
+			//删除小组事件绑定
+			$(".main-content .page-content .btn-touristGroup-delete").click(function(){
+				var id = $(this).attr("data-entity-id");
+				touristGroup.deleteTouristGroup(id);
+			});
 		},
 		arrangeTouristGroup:function(id){
 			$.ajax({
@@ -423,7 +381,7 @@ define(function(require, exports) {
 											if(result){
 												layer.close(arrangeLayer);
 												showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-													touristGroup.listTouristGroup(0,"","","","","","","","","","","");
+													touristGroup.getTouristStatisticData(0,"","","","","","","","","","","");
 												});
 											}
 										}
@@ -444,7 +402,6 @@ define(function(require, exports) {
 				addTab(menuKey+"-add","添加游客");
 				if(!!touristGroup.edited["add"] && touristGroup.edited["add"] == "add"){
 					showConfirmMsg($( "#confirm-dialog-message" ), "未保存的数据，是否放弃?",function(){
-						console.log("继续编辑");
 					},function(){
 						addTab(menuKey+"-add","添加游客",html);
 						touristGroup.initAdd();
@@ -649,7 +606,9 @@ define(function(require, exports) {
 			//游客名单 批量添加成员按钮绑定事件
 			$("#"+tab+" .touristGroupMainFormMember .btn-add-tourist-more").click(touristGroup.batchAddTouristGroupMember);
 			//中转接待状态事件绑定
-			$("#"+tab+" .checkbox").click(function(){
+			$("#"+tab+" input[type=checkbox]").click(function(){
+				//console.log(!!$("#"+tab+" .touristGroupMainFormRS input[name=touristReception]")[0]);
+				//console.log(!!$("#"+tab+" .touristGroupMainFormRS input[name=touristReception]")[0].checked);
 				if($("#"+tab+" .touristGroupMainFormRS input[name=touristReception]")[0].checked== true){
 					$(this).parent().parent().parent().find(".reception-div").removeClass("hide");
 				}
@@ -669,7 +628,7 @@ define(function(require, exports) {
 			});
 
 			//初始化 组社团数据
-			touristGroup.getPartnerAgencyList($("#"+tab+" .choosePartnerAgencyDiv input[name='fromPartnerAgency']"));
+			touristGroup.getPartnerAgencyList($("#"+tab+" .choosePartnerAgency"));
 			//添加小组页面提交按钮事件绑定
 			$("#"+tab+" .touristGroupMainFormRS .btn-submit-addTouristGroup").click(function(){
 				touristGroup.submitAddTouristGroup();
@@ -1062,7 +1021,7 @@ define(function(require, exports) {
 									var result = showDialog(data);
 									if(result){
 										$(".main-content .page-content .touristGroup-"+id+"").fadeOut(function(){
-											touristGroup.listTouristGroup(0,touristGroup.searchData.lineProductName,touristGroup.searchData.lineProductId,touristGroup.searchData.fromPartnerAgencyName,touristGroup.searchData.fromPartnerAgencyId,touristGroup.searchData.creatorId,touristGroup.searchData.creatorName,touristGroup.searchData.startTime,touristGroup.searchData.createTimeStart,touristGroup.searchData.createTimeEnd,touristGroup.searchData.customerType,touristGroup.searchData.status);
+											touristGroup.getTouristStatisticData(0,touristGroup.searchData.lineProductName,touristGroup.searchData.lineProductId,touristGroup.searchData.fromPartnerAgencyName,touristGroup.searchData.fromPartnerAgencyId,touristGroup.searchData.creatorId,touristGroup.searchData.creatorName,touristGroup.searchData.startTime,touristGroup.searchData.createTimeStart,touristGroup.searchData.createTimeEnd,touristGroup.searchData.customerType,touristGroup.searchData.status);
 										});
 									}
 								}
@@ -1125,7 +1084,7 @@ define(function(require, exports) {
 						}
 					});
 				}else{
-					layer.tips('请选择组团社', objM, {
+					layer.tips('请选择客户来源', objM, {
 						tips: [1, '#3595CC'],
 						time: 2000
 					});
@@ -1168,7 +1127,6 @@ define(function(require, exports) {
 										globalLoadingLayer = openLoadingLayer();
 									},
 									success:function(data){
-										console.log(data);
 										layer.close(globalLoadingLayer);
 										var result = showDialog(data);
 										if(result){
@@ -1183,75 +1141,46 @@ define(function(require, exports) {
 						}
 					})
 				}else{
-					layer.tips('新建联系人请先选择组团社', obj, {
+					layer.tips('新建联系人请先选择客户来源', obj, {
 						tips: [1, '#3595CC'],
 						time: 2000
 					});
 				}
 			})
 		},
-		getLineProductList:function(obj,lineProductId){
-			$.ajax({
-				url:""+APP_ROOT+"back/touristGroup.do?method=getTourCreator&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-				type:"POST",
-				dataType:"json",
-				success:function(data){
-					var html ="<option value=''>全部</option>";
-					var lineProductList = data.data;
-
-					if(lineProductList != null && lineProductList.length > 0){
-						for(var i=0;i<lineProductList.length;i++){
-							if (lineProductId != null && lineProductList[i].id == lineProductId) {
-								html += "<option selected=\"selected\" value='"+lineProductList[i].id+"'>"+lineProductList[i].name+"</option>";
-							} else {
-								html += "<option  value='"+lineProductList[i].id+"'>"+lineProductList[i].name+"</option>";
-							}
-						}
-						$(obj).html(html);
-					}
-				}
-			})
-		},
-
 		//来源模糊查询
 		getPartnerAgencyList:function($obj){
-			var getPartnerAgencyList = $obj.find(".choosePartnerAgency");
-			getPartnerAgencyList.autocomplete({
-							minLength: 0,
-							change: function(event, ui) {
-								if (ui.item == null)  {
-									//$(this).nextAll('input[name="fromPartnerAgencyId"]').val('');
-									$(this).parent().parent().find("input[name=fromPartnerAgencyId]").val("");
-
-								}
-							},
-							select: function(event, ui) {
-
-								//$(this).blur().nextAll('input[name="fromPartnerAgencyId"]').val(ui.item.id);
-								$(this).blur();
-								var obj = this;
-								$(obj).parent().parent().find("input[name=fromPartnerAgencyId]").val(ui.item.id).trigger('change');
-								if(touristGroup.cleanFlag == 1){
-									var $tabId = $("#tab-resource_touristGroup-add-content");
-									$tabId.find("input[name=partnerAgencyNameList]").val("");
-								}
-								if(touristGroup.cleanFlag == 2){
-									var $tabId = $("#tab-resource_touristGroup-update-content");
-									$tabId.find("input[name=partnerAgencyNameList]").val("");
-
-								}
-							}
-						}).click(function(){
-							var obj = this;
-							var fromParObj = touristGroup.autocompleteDate.fromPartnerAgencyList;
-							if(fromParObj !=null && fromParObj.length>0){
-								for(var i=0;i<fromParObj.length;i++){
-									fromParObj[i].value = fromParObj[i].travelAgencyName;
-								}
-							}
-							$(obj).autocomplete('option','source', fromParObj);
-							$(obj).autocomplete('search', '');
-						})
+			$obj.autocomplete({
+				minLength: 0,
+				change: function(event, ui) {
+					if (ui.item == null)  {
+						$(this).parent().find("input[name=fromPartnerAgencyId]").val("");
+					}
+				},
+				select: function(event, ui) {
+					$(this).blur();
+					var obj = this;
+					$(obj).parent().find("input[name=fromPartnerAgencyId]").val(ui.item.id).trigger('change');
+					if(touristGroup.cleanFlag == 1){
+						var $tabId = $("#tab-resource_touristGroup-add-content");
+						$tabId.find("input[name=partnerAgencyNameList]").val("");
+					}
+					if(touristGroup.cleanFlag == 2){
+						var $tabId = $("#tab-resource_touristGroup-update-content");
+						$tabId.find("input[name=partnerAgencyNameList]").val("");
+					}
+				}
+			}).click(function(){
+				var obj = this;
+				var fromParObj = touristGroup.autocompleteDate.fromPartnerAgencyList;
+				if(fromParObj !=null && fromParObj.length>0){
+					for(var i=0;i<fromParObj.length;i++){
+						fromParObj[i].value = fromParObj[i].travelAgencyName;
+					}
+				}
+				$(obj).autocomplete('option','source', fromParObj);
+				$(obj).autocomplete('search', '');
+			})
 		},
 
 		//线路模糊
@@ -1335,34 +1264,40 @@ define(function(require, exports) {
 			}
 			var touristGroupFeeJsonAdd = [];
 			var addCostStr = $("#"+tab+" .touristGroupMainForm .addCostList .addCostTbody tr");
+			var isReturn = false;
 			addCostStr.each(function(i){
 				if(i > 1){
 					var type = addCostStr.eq(i).find("[name=addOrReduceSelect]").attr("value");
-					var describeInfo = addCostStr.eq(i).find("input[name=describeInfo]").val();
-					if (trim(describeInfo) == "") {
-						showMessageDialog($( "#confirm-dialog-message" ), "请输入费用说明");
-						return false;
+					var describeInfo = trim(addCostStr.eq(i).find("input[name=describeInfo]").val());
+					var count = trim(addCostStr.eq(i).find("input[name=count]").val());
+					var price = trim(addCostStr.eq(i).find("input[name=price]").val());
+					if((describeInfo != "") || (count  != "") || (price != "")){
+						if (count == "") {
+							showMessageDialog($( "#confirm-dialog-message" ), "请输入自费数量");
+							isReturn = true;
+							return false;
+						}
+						if (describeInfo == "") {
+							showMessageDialog($( "#confirm-dialog-message" ), "请输入费用说明");
+							isReturn = true;
+							return false;
+						}
+						if (price == "") {
+							showMessageDialog($( "#confirm-dialog-message" ), "请输入自费单价");
+							isReturn = true;
+							return false;
+						}
+						var touristGroupFeeJson = {
+							type : type,
+							describeInfo : describeInfo,
+							count : count,
+							price : price
+						};
+						touristGroupFeeJsonAdd.push(touristGroupFeeJson);
 					}
-					var count = addCostStr.eq(i).find("input[name=count]").val();
-					console.log("count" + count);
-					if (trim(count) == "") {
-						showMessageDialog($( "#confirm-dialog-message" ), "请输入自费数量");
-						return false;
-					}
-					var price = addCostStr.eq(i).find("input[name=price]").val();
-					if (trim(price) == "") {
-						showMessageDialog($( "#confirm-dialog-message" ), "请输入自费单价");
-						return false;
-					}
-					var touristGroupFeeJson = {
-						type : type,
-						describeInfo : describeInfo,
-						count : count,
-						price : price
-					};
-					touristGroupFeeJsonAdd.push(touristGroupFeeJson);
 				}
 			});
+			if(isReturn){return;}
 
 			//游客名单  酒店星级、自费包含、备注
 			var expectLevel = $("#"+tab+" .touristGroupMainFormMember").find("select[name=level]").find("option:selected").val()
@@ -1457,12 +1392,12 @@ define(function(require, exports) {
 					if(result){
 						showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
 							closeTab(menuKey+"-add");
-							touristGroup.listTouristGroup(0,"","","","","","","","");
+							touristGroup.getTouristStatisticData(0,"","","","","","","","");
 							touristGroup.edited["add"] = "";
 
 							// 判断中转
 							if (isNeedArriveService || isNeedBus || isNeedLeaveService) {
-								Tools.updateTransit(data.touristGroupId);
+								KingServices.updateTransit(data.touristGroupId);
 							}
 						});
 					}
@@ -1489,35 +1424,40 @@ define(function(require, exports) {
 			}
 			var touristGroupFeeJsonAdd = [];
 			var addCostStr = $("#"+tab+" .touristGroupMainForm .addCostList .addCostTbody tr:not(.deleted)");
+			var isReturn = false;
 			addCostStr.each(function(i){
 				if(i > 1){
-					var type = $(this).find("[name=addOrReduceSelect]").attr("value");
-					var describeInfo = $(this).find("input[name=describeInfo]").val();
-					var idAdd = $(this).attr("data-entity-id");
-					if (trim(describeInfo) == "") {
-						showMessageDialog($( "#confirm-dialog-message" ), "请输入费用说明");
-						return false;
+					var type = addCostStr.eq(i).find("[name=addOrReduceSelect]").attr("value");
+					var describeInfo = trim(addCostStr.eq(i).find("input[name=describeInfo]").val());
+					var count = trim(addCostStr.eq(i).find("input[name=count]").val());
+					var price = trim(addCostStr.eq(i).find("input[name=price]").val());
+					if((describeInfo != "") || (count  != "") || (price != "")){
+						if (count == "") {
+							showMessageDialog($( "#confirm-dialog-message" ), "请输入自费数量");
+							isReturn = true;
+							return false;
+						}
+						if (describeInfo == "") {
+							showMessageDialog($( "#confirm-dialog-message" ), "请输入费用说明");
+							isReturn = true;
+							return false;
+						}
+						if (price == "") {
+							showMessageDialog($( "#confirm-dialog-message" ), "请输入自费单价");
+							isReturn = true;
+							return false;
+						}
+						var touristGroupFeeJson = {
+							type : type,
+							describeInfo : describeInfo,
+							count : count,
+							price : price
+						};
+						touristGroupFeeJsonAdd.push(touristGroupFeeJson);
 					}
-					var count = $(this).find("input[name=count]").val();
-					if (trim(count) == "") {
-						showMessageDialog($( "#confirm-dialog-message" ), "请输入自费数量");
-						return false;
-					}
-					var price = $(this).find("input[name=price]").val();
-					if (trim(price) == "") {
-						showMessageDialog($( "#confirm-dialog-message" ), "请输入自费单价");
-						return false;
-					}
-					var touristGroupFeeJson = {
-						id : idAdd,
-						type : type,
-						describeInfo : describeInfo,
-						count : count,
-						price : price
-					};
-					touristGroupFeeJsonAdd.push(touristGroupFeeJson);
 				}
 			});
+			if(isReturn){return;}
 			//删除费用JSON
 			touristGroupFeeJsonDel = [];
 			var delFeeStr = $("#"+tab+" .touristGroupMainForm .addCostList .addCostTbody tr.deleted");
@@ -1629,7 +1569,7 @@ define(function(require, exports) {
 							touristGroup.edited["update"] = "";
 							if(isClose == 1){
 								closeTab(menuKey+"-update");
-								touristGroup.listTouristGroup(0,touristGroup.searchData.fromPartnerAgencyName,touristGroup.searchData.fromPartnerAgencyId,touristGroup.searchData.lineProductName,touristGroup.searchData.lineProductId,touristGroup.searchData.startTime,touristGroup.searchData.creatorName,touristGroup.searchData.creatorId,touristGroup.searchData.createTimeStart,touristGroup.searchData.createTimeEnd,touristGroup.searchData.customerType,touristGroup.searchData.status);
+								touristGroup.getTouristStatisticData(0,touristGroup.searchData.fromPartnerAgencyName,touristGroup.searchData.fromPartnerAgencyId,touristGroup.searchData.lineProductName,touristGroup.searchData.lineProductId,touristGroup.searchData.startTime,touristGroup.searchData.creatorName,touristGroup.searchData.creatorId,touristGroup.searchData.createTimeStart,touristGroup.searchData.createTimeEnd,touristGroup.searchData.customerType,touristGroup.searchData.status);
 							}
 						});
 					}
@@ -1707,7 +1647,6 @@ define(function(require, exports) {
 							});
 						}
 						else{
-							console.log(html)
 							$("#layui-layer"+searchTravelLinelayer+"").find(".layui-layer-content").html(html);
 						}
 						//搜索按钮事件
@@ -2451,11 +2390,10 @@ define(function(require, exports) {
 		},
 		save : function(saveType){
 			if(saveType == "add"){
-				console.log("saveadd");
 				touristGroup.submitAddTouristGroup();
 			} else if(saveType == "update"){
 				var id = $(".updateTouristGroup .btn-submit-addTouristGroup").attr("data-entity-id");
-				console.log(id);
+				//console.log(id);
 				var validator=rule.checktouristGroup($(".updateTouristGroup"));
 				touristGroup.submitUpdateTouristGroup(id,1);
 			}
@@ -2473,7 +2411,7 @@ define(function(require, exports) {
 					var result = showDialog(data);
 					if(result){
 						touristGroup.autocompleteDate.lineProductList = data.lineProductList;
-						touristGroup.autocompleteDate.fromPartnerAgencyList = data.fromPartnerAgencyList	;
+						touristGroup.autocompleteDate.fromPartnerAgencyList = data.fromPartnerAgencyList;
 						touristGroup.autocompleteDate.creatorList = data.creatorList;
 					}
 				}

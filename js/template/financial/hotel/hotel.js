@@ -83,30 +83,18 @@ define(function(require, exports) {
                             Hotel.listHotel(0,Hotel.searchData.hotelId,Hotel.searchData.year,Hotel.searchData.month);
                         });
 
-                        //分页--首页按钮事件
-                        $("#" + tabId + " .pageMode a.first").click(function(){
-                        	Hotel.listHotel(0,Hotel.searchData.hotelId,Hotel.searchData.year,Hotel.searchData.month);
-                        });
-                        //分页--上一页事件
-                        $("#" + tabId + " .pageMode a.previous").click(function(){
-                            var previous = data.pageNo - 1;
-                            if(data.pageNo == 0){
-                                previous = 0;
-                            }
-                            Hotel.listHotel(previous,Hotel.searchData.hotelId,Hotel.searchData.year,Hotel.searchData.month);
-                        });
-                        //分页--下一页事件
-                        $("#" + tabId + " .pageMode a.next").click(function(){
-                            var next =  data.pageNo + 1;
-                            if(data.pageNo == data.totalPage-1){
-                                next = data.pageNo ;
-                            }
-                            Hotel.listHotel(next,Hotel.searchData.hotelId,Hotel.searchData.year,Hotel.searchData.month);
-                        });
-                        //分页--尾页事件
-                        $("#" + tabId + " .pageMode a.last").click(function(){
-                        	 Hotel.listHotel(data.totalPage == 0 ? data.totalPage:data.totalPage-1,Hotel.searchData.hotelId,Hotel.searchData.year,Hotel.searchData.month);
-                        });
+                        // 绑定翻页组件
+						laypage({
+						    cont: $('#' + tabId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+						    pages: data.totalPage, //总页数
+						    curr: (page + 1),
+						    jump: function(obj, first) {
+						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+						    		Hotel.listHotel(obj.curr -1,Hotel.searchData.hotelId,Hotel.searchData.year,Hotel.searchData.month);
+                        		}
+						    }
+						});
+
                         //给对账按钮绑定事件
                         $("#" + tabId + "  .btn-financialHotel-check").click(function(){
                         	Hotel.searchCheckData={
@@ -216,30 +204,19 @@ define(function(require, exports) {
 	 	                        	exportXLS(url)
 	 	                        });
 		                 });
-	                    //分页--首页按钮事件
-		                 $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.first").click(function(){
-		                	 Hotel.hotelCheckList(0,Hotel.searchCheckData.hotelId,Hotel.searchCheckData.hotelName,Hotel.searchCheckData.year,Hotel.searchCheckData.month)
-		                 });
-						//分页--上一页事件
-		                 $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.previous").click(function(){
-							var previous = data.pageNo - 1;
-							if(data.pageNo == 0){
-								previous = 0;
-							}
-							Hotel.hotelCheckList(previous,Hotel.searchCheckData.hotelId,Hotel.searchCheckData.hotelName,Hotel.searchCheckData.year,Hotel.searchCheckData.month)
-		                 });
-						//分页--下一页事件
-		                 $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.next").click(function(){
-							var next =  data.pageNo + 1;
-							if(data.pageNo == data.totalPage-1){
-								next = data.pageNo ;
-							}
-							Hotel.hotelCheckList(next,Hotel.searchCheckData.hotelId,Hotel.searchCheckData.hotelName,Hotel.searchCheckData.year,Hotel.searchCheckData.month)
-		                 });
-						//分页--尾页事件
-		                 $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.last").click(function(){
-		                	Hotel.hotelCheckList(data.totalPage == 0 ? data.totalPage : data.totalPage-1,Hotel.searchCheckData.hotelId,Hotel.searchCheckData.hotelName,Hotel.searchCheckData.year,Hotel.searchCheckData.month)
-		                 });
+
+		                 // 绑定翻页组件
+						laypage({
+						    cont: $("#tab-"+ checkTabId+"-content").find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+						    pages: data.totalPage, //总页数
+						    curr: (page + 1),
+						    jump: function(obj, first) {
+						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+						    		Hotel.hotelCheckList(obj.curr -1,Hotel.searchCheckData.hotelId,Hotel.searchCheckData.hotelName,Hotel.searchCheckData.year,Hotel.searchCheckData.month)
+		                 		}
+						    }
+						});
+	                    
 			             //给全选绑定事件
 			                 $("#" +"tab-"+ checkTabId+"-content"+" .hotel-selectAll").click(function(){
 			                	 var flag = this.checked;

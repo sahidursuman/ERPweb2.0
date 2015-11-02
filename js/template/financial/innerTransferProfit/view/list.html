@@ -76,14 +76,14 @@
                             <td>{{innerTransferList.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
                             <td>{{if innerTransferList.contact == null || innerTransferList.contact ==""}}无{{else}}{{innerTransferList.contact}}{{/if}}</td>
                             <td><a href="javascript:void(0)" class="T-option T-showTourist">
-                            {{innerTransferList.adultCount}}大{{innerTransferList.childCount}}</a></td>
+                            {{innerTransferList.adultCount}}大{{innerTransferList.childCount}}小</a></td>
                             <td>{{if innerTransferList.partnerAgencyName == null || innerTransferList.partnerAgencyName == ""}}无{{else}}{{innerTransferList.partnerAgencyName}}{{/if}}</td>
                             <td><a href="javascript:void(0)" class="T-option T-showIncomeDetail">{{innerTransferList.needInComeMoney}}</a></td>
                             <td>{{if innerTransferList.change == null || innerTransferList.change == ""}}无{{else}}{{innerTransferList.change}}{{/if}}</td> 
                             <td><a href="javascript:void(0)" class="T-option T-showChangePay">{{innerTransferList.changeNeedPayMoney}}</a></td>
                             <td>{{if innerTransferList.toBusinessGroupName == null || innerTransferList.toBusinessGroupName == ""}}无{{else}}{{innerTransferList.toBusinessGroupName}}{{/if}}</td> 
                             <td>
-                                <a href="javascript:void(0)" class="T-option T-showTransPay">{{innerTransferList.transNeedPayAllMoney}}</a>
+                                <a href="javascript:void(0)" class="T-option T-showTransPay" data-inner-id = "{{innerTransferList.InnerTransferId}}">{{innerTransferList.transNeedPayAllMoney}}</a>
                             </td>
                             <td>
                                 <span style="color: red">{{innerTransferList.grossProfit}}</span>

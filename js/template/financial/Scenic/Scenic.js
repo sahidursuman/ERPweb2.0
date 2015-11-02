@@ -83,30 +83,18 @@ define(function(require, exports) {
                              Scenic.listScenic(0,Scenic.searchData.scenicId,Scenic.searchData.year,Scenic.searchData.month);
                          });
 
-                       //分页--首页按钮事件
- 						$("#" + tabId + " .pageMode a.first").click(function(){
- 							Scenic.listScenic(0,Scenic.searchData.scenicId,Scenic.searchData.year,Scenic.searchData.month);
- 						});
- 						//分页--上一页事件
- 						$("#" + tabId + " .pageMode a.previous").click(function(){
- 							var previous = data.pageNo - 1;
- 							if(data.pageNo == 0){
- 								previous = 0;
- 							}
- 							Scenic.listScenic(previous,Scenic.searchData.scenicId,Scenic.searchData.year,Scenic.searchData.month);
- 						});
- 						//分页--下一页事件
- 						$("#" + tabId + " .pageMode a.next").click(function(){
- 							var next =  data.pageNo + 1;
- 							if(data.pageNo == data.totalPage-1){
- 								next = data.pageNo ;
- 							}
- 							Scenic.listScenic(next,Scenic.searchData.scenicId,Scenic.searchData.year,Scenic.searchData.month);
- 						});
- 						//分页--尾页事件
- 						$("#" + tabId + " .pageMode a.last").click(function(){
- 							Scenic.listScenic(data.totalPage == 0 ? data.totalPage : data.totalPage-1,Scenic.searchData.scenicId,Scenic.searchData.year,Scenic.searchData.month);
- 						});
+                         // 绑定翻页组件
+                        laypage({
+                            cont: $('#' + tabId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+                            pages: data.totalPage, //总页数
+                            curr: (pageNo + 1),
+                            jump: function(obj, first) {
+                                if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+                                    Scenic.listScenic(obj.curr -1,Scenic.searchData.scenicId,Scenic.searchData.year,Scenic.searchData.month);
+                                }
+                            }
+                        });
+
                          //给对账按钮绑定事件
                          $("#" + tabId + " .btn-scenic-Check").click(function(){
                         	 Scenic.searchCheckData={
@@ -354,30 +342,18 @@ define(function(require, exports) {
 	                         });
 	   	                 
 	                        });
-	                    //分页--首页按钮事件
-		                 $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.first").click(function(){
-		                	 Scenic.ScenicChecking(0,Scenic.searchCheckData.scenicId,Scenic.searchCheckData.scenicName,Scenic.searchCheckData.year,Scenic.searchCheckData.month)
-		                 });
-						//分页--上一页事件
-		                 $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.previous").click(function(){
-							var previous = data.pageNo - 1;
-							if(data.pageNo == 0){
-								previous = 0;
-							}
-							Scenic.ScenicChecking(previous,Scenic.searchCheckData.scenicId,Scenic.searchCheckData.scenicName,Scenic.searchCheckData.year,Scenic.searchCheckData.month)
-		                 });
-						//分页--下一页事件
-		                 $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.next").click(function(){
-							var next =  data.pageNo + 1;
-							if(data.pageNo == data.totalPage-1){
-								next = data.pageNo ;
-							}
-							Scenic.ScenicChecking(next,Scenic.searchCheckData.scenicId,Scenic.searchCheckData.scenicName,Scenic.searchCheckData.year,Scenic.searchCheckData.month)
-		                 });
-						//分页--尾页事件
-		                 $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.last").click(function(){
-		                	Scenic.ScenicChecking(data.totalPage == 0 ? data.totalPage : data.totalPage-1,Scenic.searchCheckData.scenicId,Scenic.searchCheckData.scenicName,Scenic.searchCheckData.year,Scenic.searchCheckData.month)
-		                 });
+                         // 绑定翻页组件
+                        laypage({
+                            cont: $("#tab-"+ checkTabId+"-content").find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+                            pages: data.totalPage, //总页数
+                            curr: (pageNo + 1),
+                            jump: function(obj, first) {
+                                if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+                                    Scenic.ScenicChecking(obj.curr -1,Scenic.searchCheckData.scenicId,Scenic.searchCheckData.scenicName,Scenic.searchCheckData.year,Scenic.searchCheckData.month)
+                                }
+                            }
+                        });
+	                   
 			             //给全选绑定事件
 			                 $("#" +"tab-"+ checkTabId+"-content"+" .scenicSelectAll").click(function(){
 			                	 var flag = this.checked;

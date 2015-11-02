@@ -70,15 +70,8 @@
 		$.ajax({
 			url:""+APP_ROOT+"base.do?method=checkLogin",
 			type:"GET",
-			dataType:"json",
-			beforeSend:function(){
-				globalLoadingLayer = layer.open({
-					type:3
-				});
-			},
 			success:function(data){
 				IndexData.userInfo = data;
-				layer.close(globalLoadingLayer);
 				if(data.success == 0){
 					window.location.href = "login.html";
 				}
@@ -130,6 +123,13 @@
 					module.init();
 				});
 			}
+		});
+
+		// tab位置校验
+		$tabList.on('click', 'li', function(event) {
+			event.preventDefault();
+			$(this).data('prev-tab', $tabList.find('.active'));
+			Tools.justifyTab();
 		});
 	};
 

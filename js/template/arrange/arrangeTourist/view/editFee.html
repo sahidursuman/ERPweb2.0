@@ -8,8 +8,8 @@
 			<div class="widget-body" >
 				<div class="form-group">
 					<label class="col-sm-2 control-label no-padding-right">备注：</label>
-					<div class="col-sm-8">    
-						<input name="remark" value="{{if touristGroup != null}}{{touristGroup.remark}}{{/if}}" class="col-sm-12  no-padding-right" type="text" maxlength="500">  
+					<div class="col-sm-8">
+						<input name="remark" value="{{if touristGroup != null}}{{if touristGroup.transferFeeStatus==1}}{{touristGroup.remark}}{{/if}}{{/if}}" class="col-sm-12  no-padding-right" type="text" maxlength="500">  
 					</div>
 				</div>
 				<div class="form-group">
@@ -60,7 +60,7 @@
 										<input name="adultCount" value="{{if touristGroup != null}}{{touristGroup.adultCount}}{{/if}}" readonly="readonly" type="text" class="col-sm-12  no-padding-right costCount" />
 									</td>
 									<td>
-										<input name="adultTransferMoney" value="{{if touristGroup != null}}{{touristGroup.transAdultPrice}}{{/if}}" type="text" class="col-sm-12  no-padding-right  costPrice" />
+										<input name="adultTransferMoney" value="{{if touristGroup != null}}{{if touristGroup.transferFeeStatus==1}}{{touristGroup.transAdultPrice}}{{/if}}{{/if}}" type="text" class="col-sm-12  no-padding-right  costPrice" />
 									</td>
 									<td></td>
 								</tr>
@@ -75,7 +75,7 @@
 										<input name="childCount" value="{{if touristGroup != null}}{{touristGroup.childCount}}{{/if}}" readonly="readonly" type="text" class="col-sm-12  no-padding-right costCount" />
 									</td>
 									<td>
-										<input name="childTransferMoney" value="{{if touristGroup != null}}{{touristGroup.transChildPrice}}{{/if}}" type="text" class="col-sm-12  no-padding-right costPrice" />
+										<input name="childTransferMoney" value="{{if touristGroup != null}}{{if touristGroup.transferFeeStatus==1}}{{touristGroup.transChildPrice}}{{/if}}{{/if}}" type="text" class="col-sm-12  no-padding-right costPrice" />
 									</td>
 									<td></td>
 								</tr>  

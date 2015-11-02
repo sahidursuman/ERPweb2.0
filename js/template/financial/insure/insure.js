@@ -82,30 +82,19 @@ define(function(require, exports) {
                             }
                             Insure.listInsure(0,Insure.searchData.insuranceId,Insure.searchData.year,Insure.searchData.month);
                         });
-                      //分页--首页按钮事件
-						$("#" + tabId + " .pageMode a.first").click(function(){
-							Insure.listInsure(0,Insure.searchData.insuranceId,Insure.searchData.year,Insure.searchData.month);
+
+                        // 绑定翻页组件
+						laypage({
+						    cont: $('#' + tabId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+						    pages: data.totalPage, //总页数
+						    curr: (pageNo + 1),
+						    jump: function(obj, first) {
+						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+						    		Insure.listInsure(obj.curr -1,Insure.searchData.insuranceId,Insure.searchData.year,Insure.searchData.month);
+								}
+						    }
 						});
-						//分页--上一页事件
-						$("#" + tabId + " .pageMode a.previous").click(function(){
-							var previous = data.pageNo - 1;
-							if(data.pageNo == 0){
-								previous = 0;
-							}
-							Insure.listInsure(previous,Insure.searchData.insuranceId,Insure.searchData.year,Insure.searchData.month);
-						});
-						//分页--下一页事件
-						$("#" + tabId + " .pageMode a.next").click(function(){
-							var next =  data.pageNo + 1;
-							if(data.pageNo == data.totalPage-1){
-								next = data.pageNo ;
-							}
-							Insure.listInsure(next,Insure.searchData.insuranceId,Insure.searchData.year,Insure.searchData.month);
-						});
-						//分页--尾页事件
-						$("#" + tabId + " .pageMode a.last").click(function(){
-							Insure.listInsure(data.totalPage == 0 ? data.totalPage : data.totalPage-1,Insure.searchData.insuranceId,Insure.searchData.year,Insure.searchData.month);
-						});
+                      
 						//给对账按钮绑定事件
 						$("#tab-"+menuKey+"-content  .btn-insurance-check").click(function(){
 							Insure.searchCheckData={
@@ -215,30 +204,19 @@ define(function(require, exports) {
 	                        	exportXLS(url)
 	                        });
 	                 });
-                    //分页--首页按钮事件
-	                 $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.first").click(function(){
-	                	 Insure.insuranceCheckList(0,Insure.searchCheckData.insuranceId,Insure.searchCheckData.insuranceCompanyName,Insure.searchCheckData.year,Insure.searchCheckData.month)
-	                 });
-					//分页--上一页事件
-	                 $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.previous").click(function(){
-						var previous = data.pageNo - 1;
-						if(data.pageNo == 0){
-							previous = 0;
-						}
-						Insure.insuranceCheckList(previous,Insure.searchCheckData.insuranceId,Insure.searchCheckData.insuranceCompanyName,Insure.searchCheckData.year,Insure.searchCheckData.month)
-	                 });
-					//分页--下一页事件
-	                 $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.next").click(function(){
-						var next =  data.pageNo + 1;
-						if(data.pageNo == data.totalPage-1){
-							next = data.pageNo ;
-						}
-						Insure.insuranceCheckList(next,Insure.searchCheckData.insuranceId,Insure.searchCheckData.insuranceCompanyName,Insure.searchCheckData.year,Insure.searchCheckData.month)
-	                 });
-					//分页--尾页事件
-	                 $("#" +"tab-"+ checkTabId+"-content"+" .pageMode a.last").click(function(){
-	                	Insure.insuranceCheckList(data.totalPage == 0 ? data.totalPage : data.totalPage-1,Insure.searchCheckData.insuranceId,Insure.searchCheckData.insuranceCompanyName,Insure.searchCheckData.year,Insure.searchCheckData.month)
-	                 });
+
+	                 // 绑定翻页组件
+					laypage({
+					    cont: $("#tab-"+ checkTabId+"-content").find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+					    pages: data.totalPage, //总页数
+					    curr: (page + 1),
+					    jump: function(obj, first) {
+					    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+					    		Insure.insuranceCheckList(obj.curr -1,Insure.searchCheckData.insuranceId,Insure.searchCheckData.insuranceCompanyName,Insure.searchCheckData.year,Insure.searchCheckData.month)
+	                 		}
+					    }
+					});
+                   
 		             //给全选绑定事件
 		                 $("#" +"tab-"+ checkTabId+"-content"+" .selectAll").click(function(){
 		                	 var flag = this.checked;

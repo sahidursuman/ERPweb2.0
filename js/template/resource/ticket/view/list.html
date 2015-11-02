@@ -29,7 +29,7 @@
 			</li>
 		</ul>
 	</div>
-	<button class="btn btn-sm btn-success btn-ticket-add R-right" data-right="1070002" style="margin-left: 20px">
+	<button class="btn btn-sm btn-success T-ticket-add R-right" data-right="1070002" style="margin-left: 20px">
 		<i class="ace-icon fa fa-plus"></i>
 		新增票务
 	</button>
@@ -59,7 +59,7 @@
 			</thead>
 			<tbody class="T-ticket-list">
 				{{each ticketList as ticket}}
-					<tr data-id="{{ticket.id}}">
+					<tr data-id="{{ticket.id}}" class="ticket-{{ticket.id}}">
 						<td>{{ticket.name}}</td>
 						<td>{{ticket.managerName}}</td>
 						<td>{{ticket.mobileNumber}}</td>
@@ -88,14 +88,14 @@
 						</td>
 						<td>
 							<div class="hidden-sm hidden-xs btn-group">
-								<a data-entity-id="{{ticket.id}}" class="T-ticket-view cursor T-action">
+								<a class="T-ticket-view cursor T-action">
 									查看
 								</a>
-								<a data-entity-id="{{ticket.id}}" class="btn-ticket-edit cursor R-right" data-right="1070003">
+								<a class="T-ticket-edit cursor T-action R-right" data-right="1070003">
 									<label class="padding-right20">|</label>
 									编辑
 								</a>
-								<a data-entity-id="{{ticket.id}}" class="btn-ticket-delete cursor R-right" data-right="1070004">
+								<a class="T-ticket-delete cursor T-action R-right" data-right="1070004">
 									<label class="padding-right20">|</label>
 									删除
 								</a>

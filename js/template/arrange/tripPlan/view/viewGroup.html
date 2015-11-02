@@ -21,7 +21,12 @@
 								<tbody>{{each memberList as memberList}}
 								<tr  data-travelLine-Id="{{memberList.id}}">
 									<td>{{memberList.name}}</td>
-									<td>身份证</td>
+									<td>
+										{{if memberList.idCardType==0}}身份证
+										{{else if memberList.idCardType==1}}护照
+										{{else}}其他
+										{{/if}}
+									</td>
 									<td>{{memberList.idCardNumber}}</td>
 									<td>{{memberList.mobileNumber}}</td>
 									<td>

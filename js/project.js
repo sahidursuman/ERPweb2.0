@@ -9,39 +9,18 @@ imgUrl  = "http://7xlw2q.com2.z0.glb.qiniucdn.com/"; //测试
 var listwidth = parseInt($("#tabList li").eq(0).css("width"));//ul总宽度，初始化数据为“工作台”tab宽度
 // window.UEDITOR_HOME_URL = APP_ROOT + 'app/components/ueditor/';
 var modals = {};
+var $tabList = $('#tabList'), $tabContent = $("#tabContent");
 
 function addTab(tabId,tabName,html){
-	$("#tabList li").removeClass("active");
-	if($("#tabList li.tab-"+tabId+"").length > 0){
-		$("#tabList li.tab-"+tabId+"").addClass("active");
-		setTimeout(function() {
-			var maxwidth = parseInt($(".breadcrumbs-fixed").css("width"))-70;//可视区域宽度
-			if(listwidth > maxwidth){//只有当ul宽度大于可视区宽度时需要处理
-				var index = $("#tabList li.tab-"+tabId+"").index();
-				var widthleft = 0,maxleft = 0,minleft = 0;
-				//widthleft为ul在当前元素左侧的宽度，maxleft绝对值为当前元素在可视区显示时ul可向左平移的最小宽度，minleft为最大
-				for(var i = 0; i <= index; i++){
-					if(i < index){
-						widthleft += parseInt($("#tabList li").eq(i).css("width"));
-					}
-					if(i == index){
-						minleft = -(widthleft - 35);
-						widthleft += parseInt($("#tabList li").eq(i).css("width"));
-						maxleft = -(widthleft - (maxwidth + 35));
-					}
-				}
-				marginLeft = parseInt($("#tabList").css("marginLeft"));
-				//只有当marginLeft取值在minleft~maxleft时，当前tab才在可视区域内
-				if(marginLeft > maxleft){
-					$("#tabList").css("marginLeft",maxleft);
-				}
-				if(marginLeft < minleft){
-					$("#tabList").css("marginLeft",minleft);
-				}
-			}
-		}, 50);
-		$("#tabList li.tab-"+tabId+"").find("span").text(tabName);
+	var $current_li = $tabList.find('.active'),
+		$next_li = $tabList.find('.tab-'+tabId);
 
+	$tabList.children("li").removeClass("active");
+	if ($next_li.length) {
+		$next_li.data('prev-tab',$current_li).children('a').trigger('click').children('span').text(tabName);
+		setTimeout(function() {
+			Tools.justifyTab();
+		}, 50);
 	}
 	else{
 		$("#tabList").append("<li class=\"tab-"+tabId+" active\"><a data-toggle=\"tab\" href=\"#tab-"+tabId+"-content\" aria-expanded=\"true\"><span>"+tabName+"</span><i class=\"ace-icon fa fa-close tab-close\"></i></a></li>");
@@ -61,58 +40,28 @@ function addTab(tabId,tabName,html){
 						showConfirmMsg($( "#confirm-dialog-message" ), "未保存的数据，是否放弃?",function(){
 							console.log("留在当前页");
 						},function(){
-							closeTab();
+							closeTab(tabId);
 							modal.clearEdit(str[1]);
 						},"放弃","留在此页");
 					} else{
 						console.log(str[1]);
 						showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已修改的数据?",function(){
 							modal.save(str[1]);
-							closeTab();
+							closeTab(tabId);
 						}, function(){
-							closeTab();
+							closeTab(tabId);
 							modal.clearEdit(str[1]);
 						});
 					}
 				} else {
-					closeTab();
-				}
-
-				function closeTab() {
-					var index = $that.parent().parent().index();
-					listwidth -= parseInt($("#tabList li").eq(index).css("width"));
-					$that.parent().parent().remove();
-					$("#tab-"+tabId+"-content").remove();
-					if($("#tabList li.active").length == 0){
-						var preTab = $("#tabList li").get(index-1);
-						$(preTab).addClass("active");
-						var preTabId = $(preTab).find("a").attr("href");
-						$(""+preTabId+"").addClass("active");
-					}
-					var marginLeft = parseInt($("#tabList").css("marginLeft"));
-					var maxwidth = parseInt($(".breadcrumbs-fixed").css("width")) - 70;
-					if(listwidth > maxwidth){
-						var widthleft = 0;
-						for(var i = 0;i < $("#tabList").find("li.active").index();i++){
-							widthleft += parseInt($("#tabList li").eq(i).css("width"))
-						}
-						if((listwidth + marginLeft - 35) < maxwidth){//左侧有隐藏部分并且当前可视区未填满
-							marginLeft = -(listwidth - (maxwidth + 35));
-							if(marginLeft < -(widthleft - 35)){//active项在左侧隐藏
-								marginLeft = -(widthleft - 35);
-								console.log("1");
-							}
-						} else if(marginLeft < -(widthleft - 35)){//active项在左侧隐藏
-							marginLeft = -(widthleft - 35);
-							console.log("2");
-						}
-					} else {
-						marginLeft = 35;
-					}
-					$("#tabList").css("marginLeft",marginLeft);
+					closeTab(tabId);
 				}
 			});
+			
+			$tabList.find('.active').data('prev-tab', $current_li);
+			Tools.justifyTab();
 		}, 50);
+	
 	}
 	$("#tabContent .tab-pane-menu").removeClass("active");
 	if($("#tab-"+tabId+"-content").length > 0){
@@ -126,38 +75,32 @@ function addTab(tabId,tabName,html){
 	$("#tab-"+tabId+"-content").html(html);
 }
 function closeTab(tabId){
-	var _this = $("#tabList .tab-"+tabId+" .tab-close");
-	var index = _this.parent().parent().index();
-	listwidth -= parseInt($("#tabList li").eq(index).css("width"));
-	_this.parent().parent().remove();
+	var $li = $tabList.find('.tab-' + tabId),
+		$prev = false;
+
+	// 查找下一个li
+	if ($li.hasClass('active')) {
+		$prev = $li.data('prev-tab');
+	}
+
+	if ($tabList.find('.active').length === 0 || (!!$prev && $prev.parent().length === 0))  {
+		var index = $li.index();
+
+		if (index === 0 && $li.next().length()) {
+			$prev = $li.next();
+		} else {
+			$prev = $li.prev();
+		}
+	}
+
+	if ($prev) {  // 激活
+		$prev.children('a').trigger('click');
+	}
+
+	$li.remove();
 	$("#tab-"+tabId+"-content").remove();
-	if($("#tabList li.active").length == 0){
-		var preTab = $("#tabList li").get(index-1);
-		$(preTab).addClass("active");
-		var preTabId = $(preTab).find("a").attr("href");
-		$(""+preTabId+"").addClass("active");
-	}
-	var marginLeft = parseInt($("#tabList").css("marginLeft"));
-	var maxwidth = parseInt($(".breadcrumbs-fixed").css("width")) - 70;
-	if(listwidth > maxwidth){
-		var widthleft = 0;
-		for(var i = 0;i < $("#tabList").find("li.active").index();i++){
-			widthleft += parseInt($("#tabList li").eq(i).css("width"))
-		}
-		if((listwidth + marginLeft - 35) < maxwidth){//左侧有隐藏部分并且当前可视区未填满
-			marginLeft = -(listwidth - (maxwidth + 35));
-			if(marginLeft < -(widthleft - 35)){//active项在左侧隐藏
-				marginLeft = -(widthleft - 35);
-				console.log("1");
-			}
-		} else if(marginLeft < -(widthleft - 35)){//active项在左侧隐藏
-			marginLeft = -(widthleft - 35);
-			console.log("2");
-		}
-	} else {
-		marginLeft = 35;
-	}
-	$("#tabList").css("marginLeft",marginLeft);
+
+	Tools.justifyTab();
 }
 
 //权限过滤
@@ -314,6 +257,52 @@ function showConfirmMsg(dialogObj,message,confirmFn ,cancelFn,btnStr1,btnStr2){
 		}
 	});
 }
+
+function showSaveConfirmDialog($dialog, message, yes_fn, no_fn, cacel_fn)  {
+	var buttons = [
+			{
+				text: '是',
+				class: "btn btn-primary btn-minier",
+				click: function() {
+					$( this ).dialog( "close" );
+					if(typeof yes_fn === "function"){
+						yes_fn();
+					}
+				}
+			}, 
+			{
+				text: '否',
+				class: "btn btn-minier",
+				click: function() {
+					$( this ).dialog( "close" );
+					if(typeof no_fn === "function"){
+						no_fn();
+					}
+				}
+			},
+			{
+				text: '取消',
+				class: "btn btn-default btn-minier",
+				click: function() {
+					$( this ).dialog( "close" );
+					if(typeof cacel_fn === "function"){
+						cacel_fn();
+					}
+				}
+			}
+		]
+
+	$dialog.removeClass('hide').dialog({
+		modal: true,
+		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i>保存修改？</h4></div>",
+		title_html: true,
+		draggable:false,
+		buttons: buttons,
+		open:function(event,ui){
+			$(this).find("p").text(message);
+		}
+	});
+}
 function showConfirmDialog(dialogObj,message, fn){
 	dialogObj.removeClass('hide').dialog({
 		modal: true,
@@ -374,9 +363,9 @@ function checkLogin(fn){
 	$.ajax({
 		url:""+APP_ROOT+"base.do?method=autoLogin&token="+$.cookie("token")+"&operation=self",
 		type:"POST",
-		dataType:"json",
 		success:function(data){
-			if(data.success == 1){
+			console.info(fn)
+			if(data.success == 1 && typeof fn === 'function'){
 				fn();
 			}
 			else{
@@ -588,6 +577,7 @@ var modalScripts = {
 	'resource_scenic' : "js/template/resource/scenic/scenic.js",
 	'business_analyst_saleProduct' : "js/template/businessAnalyst/saleProduct/saleProduct.js",
 	'resource_busCompany':"js/template/resource/busCompany/busCompany.js",
+	'resource_lineProduct': 'js/template/resource/lineProduct/lineProduct.js',
 	//-------------------------------------------业务分析模块---------------------------------------------------
 	'business_analyst_saleProduct' : "js/template/businessAnalyst/saleProduct/saleProduct.js",//产品销量
 	'business_analyst_sourDstribution' : "js/template/businessAnalyst/sourDstribution/sourDstribution.js", //客源分布
@@ -595,7 +585,8 @@ var modalScripts = {
 	'business_analyst_employeePerfor' : "js/template/businessAnalyst/employeePerfor/employeePerfor.js", //员工业绩 
 	'business_analyst_tourguidePerfor' : "js/template/businessAnalyst/tourguidePerfor/tourguidePerfor.js", //导游业绩
 	//---------------------------------------------------------------------------------------------------------------
-	'financial_innerTransfer_profit': "js/template/financial/innerTransferProfit/innerTransferProfit.js"
+	'financial_innerTransfer_profit': "js/template/financial/innerTransferProfit/innerTransferProfit.js",
+	'financial_turnProfit': "js/template/financial/turnProfit/turnProfit.js"
 };
 
 
@@ -662,17 +653,17 @@ function listMenu(menuTemplate){
 					});
 				});
 
-				//绑定线路产品菜单功能
-				$("#sidebar .nav-list .resource_lineProduct").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/resource/lineProduct/lineProduct.js",function(lineProduct){
-						lineProduct.listLineProduct(0,"",1);
-						modals["resource_lineProduct"] = lineProduct;
-					});
-					$("#main-container")[0].index = 0;
-				});
+				// //绑定线路产品菜单功能
+				// $("#sidebar .nav-list .resource_lineProduct").click(function(){
+				// 	$("#sidebar .nav-list li").removeClass("active");
+				// 	$(this).addClass("active");
+				// 	$(this).parent().parent().addClass("active");
+				// 	seajs.use("" + ASSETS_ROOT +"js/template/resource/lineProduct/lineProduct.js",function(lineProduct){
+				// 		lineProduct.listLineProduct(0,"",1);
+				// 		modals["resource_lineProduct"] = lineProduct;
+				// 	});
+				// 	$("#main-container")[0].index = 0;
+				// });
 
 				// //绑定商家管理功能
 				// $("#sidebar .nav-list .resource_shop").click(function(){
@@ -750,7 +741,7 @@ function listMenu(menuTemplate){
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/touristGroup/touristGroup.js",function(touristGroup){
-						touristGroup.getTouristStatisticData(0,"","","","","","","","");
+						touristGroup.getTouristStatisticData(0,"","","","","","","","","","","");
 						modals["resource_touristGroup"] = touristGroup;
 					});
 				});
@@ -1118,24 +1109,24 @@ function listMenu(menuTemplate){
 					});
 				});
 
-				//绑定转客利润菜单功能
-				$("#sidebar .nav-list .financial_turnProfit").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/financial/turnProfit/turnProfit.js",function(TurnProfit){
-						/*var tu = new Date()
-						 var vYear = tu.getFullYear()
-						 var vMon = tu.getMonth() + 1
-						 var vDay = tu.getDate()
-						 var startTime = vYear+"-"+vMon+"-"+vDay;
-						 var tmp = new Date(startTime);
-						 tmp = tmp-7*24*60*60*1000;
-						 tmp = new Date(tmp);
-						 var endTime = tmp.getFullYear()+"-"+(tmp.getMonth()+1)+"-"+tmp.getDate();*/
-						TurnProfit.listTurnProfit(0,"","","","","","","","");
-					});
-				});
+				// //绑定转客利润菜单功能
+				// $("#sidebar .nav-list .financial_turnProfit").click(function(){
+				// 	$("#sidebar .nav-list li").removeClass("active");
+				// 	$(this).addClass("active");
+				// 	$(this).parent().parent().addClass("active");
+				// 	seajs.use("" + ASSETS_ROOT +"js/template/financial/turnProfit/turnProfit.js",function(TurnProfit){
+				// 		var tu = new Date()
+				// 		 var vYear = tu.getFullYear()
+				// 		 var vMon = tu.getMonth() + 1
+				// 		 var vDay = tu.getDate()
+				// 		 var startTime = vYear+"-"+vMon+"-"+vDay;
+				// 		 var tmp = new Date(startTime);
+				// 		 tmp = tmp-7*24*60*60*1000;
+				// 		 tmp = new Date(tmp);
+				// 		 var endTime = tmp.getFullYear()+"-"+(tmp.getMonth()+1)+"-"+tmp.getDate();
+				// 		TurnProfit.listTurnProfit(0,"","","","","","","","");
+				// 	});
+				// });
 
 
 				//绑定代订利润功能
@@ -1476,24 +1467,26 @@ var Tools = {
  * @param  {object} $elements 需要绑定提示的DOM
  * @return {[type]}           [description]
  */
-Tools.descToolTip = function($elements) {
+Tools.descToolTip = function($elements,type) {
 	if (!!$elements)  {
 		$elements.each(function() {
-			var $that = $(this), content = $that.prop('title');
+			var $that = $(this), content = $that.prop('title'),html = $that.data("html");
 
 			// 内容过长，才提示
 			$that.prop('title', '');
-			if ($that.width() < $that.children().width())  {
+			if ($that.width() < $that.children().width() && type == 1)  {
 				// 绑定提示
 				$that.popover({
 					trigger: 'click',
 					container: '#desc-tooltip-containter',
-					content: content
+					content: content,
 				})
 				// 处理显示与隐藏提示
 				.hover(function() {
 					// 进入时，触发提示
-					$(this).popover('show');
+					setTimeout(function() {
+						$that.popover('show');
+					},200)
 				}, function() {
 					// 设置超时，通过判断来确定提示
 					setTimeout(function() {
@@ -1502,65 +1495,265 @@ Tools.descToolTip = function($elements) {
 						}
 					}, 100);
 				});
+			}else if (type == 2) {
+				// 绑定提示
+				$that.popover({
+					trigger: 'manual',
+					container: '#desc-tooltip-containter',
+					content: html,
+					html : true
+				})
+				// 处理显示与隐藏提示
+				.hover(function() {
+					// 进入时，触发提示
+					$that.popover('show');
+				}, function() {
+					// 设置超时，通过判断来确定提示
+					if (Tools.$descContainer.data('focus-in') != true)  {
+						$that.popover('hide');
+					}
+				});
 			}
 		});
 	}
 }
 
 /**
- * 编辑中转安排——
- * @param  {string} id 游客小组的ID
+ * 添加Tab——新增、更新内容。
+ * 在编辑页面，监听isEdited状态。若编辑过（未保存），询问用户是否保存。用户确认后，触发'switch.tab.save'事件。切换页面的功能由事件回调控制。
+ * 								 也可以选择【否】，即不保存。或者选择【取消】，什么都不做
+ * @param {string} tab_id   Tab key id
+ * @param {string} tab_name Tab的标题
+ * @param {[type]} html     [description]
+ */
+function addTab(tabId,tabName,html){
+	var $current_li = $tabList.find('.active'),
+		$next_li = $tabList.find('.tab-'+tabId);
+
+	$tabList.children("li").removeClass("active");
+	if ($next_li.length) {
+		$next_li.data('prev-tab',$current_li).children('a').trigger('click').children('span').text(tabName);
+		setTimeout(function() {
+			Tools.justifyTab();
+		}, 50);
+	}
+	else{
+		$("#tabList").append("<li class=\"tab-"+tabId+" active\"><a data-toggle=\"tab\" href=\"#tab-"+tabId+"-content\" aria-expanded=\"true\"><span>"+tabName+"</span><i class=\"ace-icon fa fa-close tab-close\"></i></a></li>");
+		setTimeout(function() {
+			listwidth += parseInt($("#tabList li.tab-"+tabId+"").css("width"));
+			var maxwidth = parseInt($(".breadcrumbs-fixed").css("width"))-70;
+			if(listwidth > maxwidth){
+				var maxleft = -(listwidth - (maxwidth + 35));//ul可向左平移的最大宽度，maxleft取负值,35为左侧移动符号宽度
+				$("#tabList").css("marginLeft",maxleft);
+			}
+			$("#tabList .tab-"+tabId+" .tab-close").click(function(){
+				$that = $(this);
+				var str = tabId.split("-");
+				var modal = modals[str[0]];
+				if(str.length > 1 && str[1] != "view" && !!modal && !!modal.isEdited && modal.isEdited(str[1])){//非列表、查看,且有修改
+					if(str[1] == "add"){
+						showConfirmMsg($( "#confirm-dialog-message" ), "未保存的数据，是否放弃?",function(){
+							console.log("留在当前页");
+						},function(){
+							closeTab(tabId);
+							modal.clearEdit(str[1]);
+						},"放弃","留在此页");
+					} else{
+						console.log(str[1]);
+						showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已修改的数据?",function(){
+							modal.save(str[1]);
+							closeTab(tabId);
+						}, function(){
+							closeTab(tabId);
+							modal.clearEdit(str[1]);
+						});
+					}
+				} else {
+					closeTab(tabId);
+				}
+			});
+			
+			$tabList.find('.active').data('prev-tab', $current_li);
+			Tools.justifyTab();
+		}, 50);
+	
+	}
+	$("#tabContent .tab-pane-menu").removeClass("active");
+	if($("#tab-"+tabId+"-content").length > 0){
+		$("#tab-"+tabId+"-content").addClass("active");
+	}
+	else{
+		$("#tabContent").append("<div id=\"tab-"+tabId+"-content\" class=\"tab-pane tab-pane-menu active\"></div>");
+	}
+
+	html = filterUnAuth(html);
+	$("#tab-"+tabId+"-content").html(html);
+}
+Tools.addTab = function(tab_id, tab_name, html)  {
+	$tabList.children('li').removeClass("active");
+
+	var $tab = $tabList.find('.tab-' + tab_id), 
+		$content = $('#tab-'+ tab_id +'-content'),
+		canUpdateTabContent = true;
+
+	// tab已经打开了
+	if ($tab.length > 0)  {
+		// show tab
+		$tab.data('prev-tab',$current_li).children('a').trigger('click').children('span').text(tab_name);
+
+		// 页面已经编辑
+		if ($content.data('isEdited'))  {
+			showSaveConfirmDialog($( "#confirm-dialog-message" ), "内容已经被修改，是否保存?",
+								function(){	// 保存
+									$content.trigger('switch.tab.save', [tab_id, tab_name, html]);
+								},
+								function(){  // 不保存
+									updateTabContent();
+									$content.data('isEdited', false);
+								},
+								// 取消
+								false);
+			// 此时不能添加内容
+			canUpdateTabContent = false;
+		} else {
+			setTimeout(function() {
+				Tools.justifyTab();
+			}, 50);
+		}
+	} 
+
+	if (canUpdateTabContent) {
+		// 更新页面
+		updateTabContent();
+	}
+
+	return canUpdateTabContent;
+	function updateTabContent()  {
+		$tabContent.find(".tab-pane-menu").removeClass("active");
+		if($content.length > 0){
+			$content.addClass("active");
+			$tab.find('span').text(tab_name);
+		}
+		else{
+			var $tab_li = $("<li class=\"tab-"+tab_id+" active\"><a data-toggle=\"tab\" href=\"#tab-"+tab_id+"-content\" aria-expanded=\"true\"><span>"+tab_name+"</span><i class=\"ace-icon fa fa-close tab-close T-close\"></i></a></li>");
+
+			$tabList.append($tab_li);
+			$tabContent.append("<div id='tab-"+tab_id+"-content' class='tab-pane tab-pane-menu active'></div>");
+			// bind close event
+			
+			$tab_li.on('click', '.T-close', function(event) {
+				event.preventDefault();
+				var $content = $('#' + tab_id + '-content');
+
+				// 页面已经编辑
+				if ($content.data('isEdited'))  {
+					showSaveConfirmDialog($( "#confirm-dialog-message" ), "内容已经被修改，是否保存?",
+										function(){	// 保存
+											$content.trigger('close.tab.save');
+										},
+										function(){  // 不保存
+											Tools.closeTab(tab_id);
+										},
+										// 取消
+										false);
+					// 此时不能添加内容
+					canUpdateTabContent = false;
+				} else {
+					Tools.closeTab(tab_id);
+				}
+			});
+
+			Tools.justifyTab();
+		}
+
+		$("#tab-"+tab_id+"-content").html(filterUnAuth(html));
+	}
+};
+
+/**
+ * 关闭tab
+ * @param  {string} tab_id tab标签的id
+ * @return {[type]}        [description]
+ */		
+Tools.closeTab = function(tab_id) {
+	var $tab_li = $tabList.find('.tab-' + tab_id),
+		index = $tab_li.index();
+
+	$tabContent.find('#tab-' + tab_id + '-content').remove();
+	$tab_li.remove();
+
+	index = index === 0? 0: (index-1);
+
+	if (index >= 0) {
+		$tabList.children('li').children('a').trigger('click');
+	}
+
+	Tools.justifyTab();
+};
+
+/**
+ * 调整tab的位置
+ * @return {[type]} [description]
+ */
+Tools.justifyTab = function() {
+	var viewWidth = $('.breadcrumbs-fixed').width(),
+		leftBarWidth = $('#tab_left_scroll').width(),
+		rightBarWidth = $('#tab_right_scroll').width(),
+		tabWidth = $tabList.width();
+
+	// 参考左边
+	viewWidth = viewWidth - rightBarWidth;
+
+	var $active_li = $tabList.find('.active');
+	if (!$active_li.length) return;
+
+		// 必须距离左边的距离
+	var	li_left = $active_li.position().left,
+		li_right = li_left + $active_li.outerWidth(),
+		// need_left = right_point - viewWidth;
+		leftMargin = parseInt($tabList.css('marginLeft'));
+
+	if (li_left < (-leftMargin - leftBarWidth)) {
+		// 左隐
+		$tabList.css({
+			'margin-left': (leftBarWidth -li_left + 'px')
+		});
+	} else if (li_right > (leftBarWidth + viewWidth - leftMargin)) {
+		// 右隐
+		$tabList.css('margin-left', (viewWidth - li_right) + 'px');
+	} else {
+		// 右侧缺口
+		var $last = $tabList.children('li').last(),
+			tab_len = $last.position().left + $last.width();
+
+		if (viewWidth > tab_len) {
+			// 当内容长度小于视口长度时
+			$tabList.css('margin-left', leftBarWidth + 'px');
+		} else if ((tab_len + leftMargin) < viewWidth) { 
+			// 内容大于视口长度，且内容右边出现空白
+			$tabList.css('margin-left', (viewWidth - tab_len ) + 'px');
+		}
+	}
+};
+
+/**
+ * 通过tab id获取tab key
+ * @param  {string} id tab ID
  * @return {[type]}    [description]
  */
-Tools.updateTransit = function(id)  {
-	seajs.use("" + ASSETS_ROOT +"js/template/arrange/transit/transit.js",function(module){
-		module.updateTransit(id);
-		modals["arrange_transit"] = transit;
-	});
-}
-//保险公司  新增
-Tools.addInsurance = function(fn){
-	seajs.use("" + ASSETS_ROOT + modalScripts.resource_insurance,function(module){
-		module.addInsurance(fn);
-	});
-}
-//餐厅  新增
-Tools.addRestaurant = function(fn){
-	seajs.use("" + ASSETS_ROOT + modalScripts.resource_restaurant,function(module){
-		module.addRestaurant(fn);
-	});
-}
-//酒店  新增
-Tools.addHotel = function(fn){
-	seajs.use("" + ASSETS_ROOT + modalScripts.resource_hotel,function(module){
-		module.addHotel(fn);
-	});
-}
-//景区  新增
-Tools.addScenic = function(fn){
-	seajs.use("" + ASSETS_ROOT + modalScripts.resource_scenic,function(module){
-		module.addScenic(fn);
-	});
-}
-//购物  新增
-Tools.addShop = function(fn){
-	seajs.use("" + ASSETS_ROOT + modalScripts.resource_shop,function(module){
-		module.addShop(fn);
-	});
-}
-//自费商家  新增
-Tools.addSelfPay = function(fn){
-	seajs.use("" + ASSETS_ROOT + modalScripts.resource_selfpay,function(module){
-		module.addSelfPay(fn);
-	});
-}
-//票务  新增
-Tools.addTicket = function(fn){
-	seajs.use("" + ASSETS_ROOT + modalScripts.resource_ticket,function(module){
-		module.addTicket(fn);
-	});
-}
+Tools.getTabKey = function(id) {
+	var res = '';
+	if (!!id) {
+		var res = id.split('-');
 
+		res.shift();
+		res.pop();
+
+		res = res.join('-');
+	}
+
+	return res;
+};
 /**
  * 用于定义公共请求或者与数据相关的公共组件处理
  * @type {Object}
@@ -1568,13 +1761,144 @@ Tools.addTicket = function(fn){
 var KingServices = {};
 
 /**
+ * 构建请求的URL
+ * @param  {[type]} path   [description]
+ * @param  {[type]} method [description]
+ * @return {[type]}        [description]
+ */
+KingServices.build_url = function(path,method){
+    return APP_ROOT+'back/'+path +'.do?method='+method+'&token='+$.cookie('token')+'';
+};
+/**
+ * 编辑中转安排——
+ * @param  {string} id 游客小组的ID
+ * @return {[type]}    [description]
+ */
+KingServices.updateTransit = function(id)  {
+	seajs.use("" + ASSETS_ROOT +"js/template/arrange/transit/transit.js",function(module){
+		module.updateTransit(id);
+		modals["arrange_transit"] = transit;
+	});
+}
+
+//导游  新增
+KingServices.addGuide = function(fn){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_guide,function(module){
+		module.addGuide(fn);
+	});
+}
+//车队 新增
+KingServices.addBusCompany = function(fn){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_busCompany,function(module){
+		module.addBusCompany(fn);
+	});
+}
+//车队 新增 车和司机
+KingServices.addBusDriver = function(fn,$busCompany,$busCompanyId){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_busCompany,function(module){
+		module.addBusDriver(fn,$busCompany,$busCompanyId);
+	});
+}
+
+
+//保险公司  新增
+KingServices.addInsurance = function(fn){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_insurance,function(module){
+		module.addInsurance(fn);
+	});
+}
+//餐厅  新增
+KingServices.addRestaurant = function(fn){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_restaurant,function(module){
+		module.addRestaurant(fn);
+	});
+}
+//酒店  新增
+KingServices.addHotel = function(fn){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_hotel,function(module){
+		module.addHotel(fn);
+	});
+}
+//景区  新增
+KingServices.addScenic = function(fn){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_scenic,function(module){
+		module.addScenic(fn);
+	});
+}
+//购物  新增
+KingServices.addShop = function(fn){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_shop,function(module){
+		module.addShop(fn);
+	});
+}
+//自费商家  新增
+KingServices.addSelfPay = function(fn){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_selfpay,function(module){
+		module.addSelfPay(fn);
+	});
+}
+//票务  新增
+KingServices.addTicket = function(fn){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_ticket,function(module){
+		module.addTicket(fn);
+	});
+}
+
+
+//添加资源函数
+KingServices.addResourceFunction = function(e){
+	var $this = $(this),
+		$parents = $(this).closest(e.data.type),
+		name = e.data.name,
+		id = e.data.id,
+		managerName = e.data.managerName,
+		mobileNumber = e.data.mobileNumber,
+		$function = e.data.function,
+		fn = function (data){
+			console.log(data);
+			if (!!data.name && !!name) {$parents.find('input[name='+name+']').val(data.name).trigger('change');}
+			if (!!data.id && !!id) {$parents.find('input[name='+id+']').val(data.id).trigger('change');}
+			if (!!data.managerName && !!managerName) {$parents.find('input[name='+managerName+']').val(data.managerName);}
+			if (!!data.mobileNumber && !!mobileNumber) {$parents.find('input[name='+mobileNumber+']').val(data.mobileNumber);}
+		}
+	$function(fn);
+}
+//添加车、司机函数
+KingServices.addBusDriverFunction = function(e){
+	var $this = $(this),
+		$parents = $(this).closest(e.data.type),
+		$busCompany = $parents.find('[name=busCompanyName]').val() || "",
+		$busCompanyId = $parents.find('[name=busCompanyId]').val() || "",
+		busCompanyName = e.data.busCompanyName,
+		busCompanyId = e.data.busCompanyId,
+		licenseNumberId = e.data.busLicenseNumberId,
+		licenseNumber = e.data.busLicenseNumber,
+		busbrand = e.data.busbrand,
+		seatCount = e.data.seatCount,
+		driverName = e.data.driverName,
+		driverId = e.data.driverId,
+		driverMobileNumber = e.data.driverMobileNumber,
+		$function = e.data.function,
+		fn = function (data){
+			console.log(data);
+			if (!!data.busCompanyData.name && !!busCompanyName) {$parents.find('input[name='+busCompanyName+']').val(data.busCompanyData.name);}
+			if (!!data.busCompanyData.id && !!busCompanyId) {$parents.find('input[name='+busCompanyId+']').val(data.busCompanyData.id);}
+			if (!!data.busData.id && !!licenseNumberId) {$parents.find('input[name='+licenseNumberId+']').val(data.busData.id).trigger('change');}
+			if (!!data.busData.licenseNumber && !!licenseNumber) {$parents.find('input[name='+licenseNumber+']').val(data.busData.licenseNumber);}
+			if (!!data.busData.brand && !!busbrand) {$parents.find('input[name='+busbrand+']').val(data.busData.brand);}
+			if (!!data.busData.seatCount && !!seatCount) {$parents.find('input[name='+seatCount+']').val(data.busData.seatCount).trigger('change');}
+			if (!!data.driverData.name && !!driverName) {$parents.find('input[name='+driverName+']').val(data.driverData.name);}
+			if (!!data.driverData.id && !!driverId) {$parents.find('input[name='+driverId+']').val(data.driverData.id).trigger('change');}
+			if (!!data.driverData.mobileNumber && !!driverMobileNumber) {$parents.find('input[name='+driverMobileNumber+']').val(data.driverData.mobileNumber);}
+		}
+	$function(fn,$busCompany,$busCompanyId);
+}
+/**
  * 设置省下拉框
  * @param  {[type]} obj [description]
  * @param  {[type]} pid [description]
  * @return {[type]}     [description]
  */
-
-
 //省市区 start
 KingServices.provinceCity = function($container,provinceIdU,cityIdU,districtIdU){
 	//初始化地区数据
