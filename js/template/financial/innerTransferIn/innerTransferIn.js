@@ -93,34 +93,18 @@ define(function(require,exports){
 		    			}
 			    		InnerTransferIn.listInnerTransferIn(0,InnerTransferIn.searchData.fromBusinessGroupId,InnerTransferIn.searchData.year,InnerTransferIn.searchData.month);
 						});
-						//分页--首页按钮事件
-                        $tabId.find(".first").click(function(){
-
-			    		InnerTransferIn.listInnerTransferIn(0,InnerTransferIn.searchData.fromBusinessGroupId,InnerTransferIn.searchData.year,InnerTransferIn.searchData.month);
-
-                        });
-                        //分页--上一页事件
-                        $tabId.find(".previous").click(function(){
-                            var previous = data.pageNo - 1;
-                            if(data.pageNo == 0){
-                                previous = 0;
-                            }
-			    		InnerTransferIn.listInnerTransferIn(previous,InnerTransferIn.searchData.fromBusinessGroupId,InnerTransferIn.searchData.year,InnerTransferIn.searchData.month);
-
-                        });
-                        //分页--下一页事件
-                        $tabId.find(".next").click(function(){
-                            var next =  data.pageNo + 1;
-                            if(data.pageNo == data.totalPage-1){
-                                next = data.pageNo ;
-                            }
-			    		InnerTransferIn.listInnerTransferIn(next,InnerTransferIn.searchData.fromBusinessGroupId,InnerTransferIn.searchData.year,InnerTransferIn.searchData.month);
-                        });
-                        //分页--尾页事件
-                        $tabId.find(".last").click(function(){
-			    		InnerTransferIn.listInnerTransferIn(data.totalPage == 0 ? data.totalPage : data.totalPage-1,InnerTransferIn.searchData.fromBusinessGroupId,InnerTransferIn.searchData.year,InnerTransferIn.searchData.month);
-
-                        });
+						
+                        // 绑定翻页组件
+						laypage({
+						    cont: $('#' + tabId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+						    pages: data.totalPage, //总页数
+						    curr: (pageNo + 1),
+						    jump: function(obj, first) {
+						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+						    		InnerTransferIn.listInnerTransferIn(obj.curr -1,InnerTransferIn.searchData.fromBusinessGroupId,InnerTransferIn.searchData.year,InnerTransferIn.searchData.month);
+								}
+						    }
+						});
                         //对账事件
                         $tabId.find(".btn-innerTransferIn-check").click(function(){
                         	InnerTransferIn.searchCheckData = {
@@ -222,34 +206,18 @@ define(function(require,exports){
 							var realUnIncome = unIncome - backMoney;
 							$(this).parent().next().find("input[name=realUnIncomeMoney]").val(realUnIncome);
 						});
-						//分页--首页按钮事件
-                        $checkId.find(".first").click(function(){
-
-		    				InnerTransferIn.InnerTransferInCheck(0,InnerTransferIn.searchCheckData.fromBusinessGroupId,InnerTransferIn.searchCheckData.fromBusinessGroupName,InnerTransferIn.searchCheckData.year,InnerTransferIn.searchCheckData.month)
-
-                        });
-                        //分页--上一页事件
-                        $checkId.find(".previous").click(function(){
-                            var previous = data.pageNo - 1;
-                            if(data.pageNo == 0){
-                                previous = 0;
-                            }
-		    				InnerTransferIn.InnerTransferInCheck(previous,InnerTransferIn.searchCheckData.fromBusinessGroupId,InnerTransferIn.searchCheckData.fromBusinessGroupName,InnerTransferIn.searchCheckData.year,InnerTransferIn.searchCheckData.month)
-
-                        });
-                        //分页--下一页事件
-                        $checkId.find(".next").click(function(){
-                            var next =  data.pageNo + 1;
-                            if(data.pageNo == data.totalPage-1){
-                                next = data.pageNo ;
-                            }
-		    				InnerTransferIn.InnerTransferInCheck(next,InnerTransferIn.searchCheckData.fromBusinessGroupId,InnerTransferIn.searchCheckData.fromBusinessGroupName,InnerTransferIn.searchCheckData.year,InnerTransferIn.searchCheckData.month)
-                        });
-                        //分页--尾页事件
-                        $checkId.find(".last").click(function(){
-		    				InnerTransferIn.InnerTransferInCheck(data.totalPage == 0 ? data.totalPage : data.totalPage-1,InnerTransferIn.searchCheckData.fromBusinessGroupId,InnerTransferIn.searchCheckData.fromBusinessGroupName,InnerTransferIn.searchCheckData.year,InnerTransferIn.searchCheckData.month)
-
-                        });
+						
+                        // 绑定翻页组件
+						laypage({
+						    cont: $checkId.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+						    pages: data.totalPage, //总页数
+						    curr: (pageNo + 1),
+						    jump: function(obj, first) {
+						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+						    		InnerTransferIn.InnerTransferInCheck(obj.curr -1,InnerTransferIn.searchCheckData.fromBusinessGroupId,InnerTransferIn.searchCheckData.fromBusinessGroupName,InnerTransferIn.searchCheckData.year,InnerTransferIn.searchCheckData.month)
+								}
+						    }
+						});
 						//搜索事件
 						$checkId.find(".btn-checking-search").click(function(){
 							InnerTransferIn.searchCheckData = {
