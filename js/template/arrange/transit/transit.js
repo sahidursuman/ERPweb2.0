@@ -1621,10 +1621,10 @@ define(function(require, exports) {
 					$(objM).autocomplete('option','source', arrangeObj);
 					$(objM).autocomplete('search', '');
 				}else{
-					layer.tips('无数据', objM, {
+					/*layer.tips('无数据', objM, {
 						tips: [1, '#3595CC'],
 						time: 2000
-					});
+					});*/
 				}
 
 			})
