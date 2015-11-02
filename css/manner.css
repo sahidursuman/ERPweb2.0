@@ -10,6 +10,7 @@
 .search-btn:hover{
     background: #359fb2!important;
 }
+.btn-minier, .btn-group-minier>.btn{width: 65px;height: 35px;border-radius: 3px}
 input{
     vertical-align: middle !important;
     font-size: 12px !important;
