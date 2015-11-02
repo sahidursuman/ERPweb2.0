@@ -48,7 +48,7 @@ define(function(require,exports){
 			type:"POST",
 			data:{
 				pageNo:pageNo,
-				companyName:encodeURIComponent(busCompanyName),
+				companyName:busCompanyName,
 				status:status,
 				sortType:"auto"
 			},
