@@ -543,7 +543,7 @@ define(function(require, exports) {
 			'<td><input type="text" class="col-sm-12 chooseSeatCount" name="seatCount" value="" /></td>'+
 			'<td><input class="col-sm-12 chooseBusBrand" name="busbrand" type="text" value="" /></td>'+
 			'<td><div class="col-sm-12"><input class="col-sm-12 chooseBusLicenseNumber bind-change" name="busLicenseNumber" type="text" value="" /><input type="hidden" name="busLicenseNumberId" value="" /><span class="addResourceBtn T-addBusResource R-right" data-right="1020002" title="添加车辆"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
-			'<td><div class="col-sm-12"><input type="hidden" name="serviceType" value="0" />'+
+			'<td><div class="col-sm-12"><input type="hidden" name="serviceType" value="'+type+'" />'+
 			'<input class="col-sm-12 bind-change" name="busCompanyName" readonly="readonly" type="text" value="" />'+
 			'<input type="hidden" name="busCompanyId" value="" /><span class="addResourceBtn T-addBusCompanyResource R-right" data-right="1020002" title="添加车队"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
 			'<td><div class="col-sm-12"><input class="col-sm-12 chooseDriver bind-change" name="driverName" type="text" value="" /><input type="hidden" name="driverId" value="" /><span class="addResourceBtn T-addDriverResource R-right" data-right="1020002" title="添加司机"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
