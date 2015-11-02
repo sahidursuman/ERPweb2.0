@@ -16,7 +16,7 @@ function addTab(tabId,tabName,html){
 
 	$("#tabList li").removeClass("active");
 	if($("#tabList li.tab-"+tabId+"").length > 0){
-		$("#tabList li.tab-"+tabId+"").addClass("active").data('prev-tab',$current_li);
+		$("#tabList li.tab-"+tabId+"").data('prev-tab',$current_li).trigger('click');
 		setTimeout(function() {
 			Tools.justifyTab();
 		}, 50);
@@ -263,7 +263,7 @@ function showSaveConfirmDialog($dialog, message, yes_fn, no_fn, cacel_fn)  {
 	var buttons = [
 			{
 				text: '是',
-				class: "btn btn-minier",
+				class: "btn btn-primary btn-minier",
 				click: function() {
 					$( this ).dialog( "close" );
 					if(typeof yes_fn === "function"){
@@ -273,7 +273,7 @@ function showSaveConfirmDialog($dialog, message, yes_fn, no_fn, cacel_fn)  {
 			}, 
 			{
 				text: '否',
-				class: "btn btn-primary btn-minier",
+				class: "btn btn-minier",
 				click: function() {
 					$( this ).dialog( "close" );
 					if(typeof no_fn === "function"){
@@ -293,7 +293,7 @@ function showSaveConfirmDialog($dialog, message, yes_fn, no_fn, cacel_fn)  {
 			}
 		]
 
-	dialogObj.removeClass('hide').dialog({
+	$dialog.removeClass('hide').dialog({
 		modal: true,
 		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i>保存修改？</h4></div>",
 		title_html: true,
@@ -364,9 +364,9 @@ function checkLogin(fn){
 	$.ajax({
 		url:""+APP_ROOT+"base.do?method=autoLogin&token="+$.cookie("token")+"&operation=self",
 		type:"POST",
-		dataType:"json",
 		success:function(data){
-			if(data.success == 1){
+			console.info(fn)
+			if(data.success == 1 && typeof fn === 'function'){
 				fn();
 			}
 			else{
@@ -578,6 +578,7 @@ var modalScripts = {
 	'resource_scenic' : "js/template/resource/scenic/scenic.js",
 	'business_analyst_saleProduct' : "js/template/businessAnalyst/saleProduct/saleProduct.js",
 	'resource_busCompany':"js/template/resource/busCompany/busCompany.js",
+	'resource_lineProduct': 'js/template/resource/lineProduct/lineProduct.js',
 	//-------------------------------------------业务分析模块---------------------------------------------------
 	'business_analyst_saleProduct' : "js/template/businessAnalyst/saleProduct/saleProduct.js",//产品销量
 	'business_analyst_sourDstribution' : "js/template/businessAnalyst/sourDstribution/sourDstribution.js", //客源分布
@@ -652,17 +653,17 @@ function listMenu(menuTemplate){
 					});
 				});
 
-				//绑定线路产品菜单功能
-				$("#sidebar .nav-list .resource_lineProduct").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/resource/lineProduct/lineProduct.js",function(lineProduct){
-						lineProduct.listLineProduct(0,"",1);
-						modals["resource_lineProduct"] = lineProduct;
-					});
-					$("#main-container")[0].index = 0;
-				});
+				// //绑定线路产品菜单功能
+				// $("#sidebar .nav-list .resource_lineProduct").click(function(){
+				// 	$("#sidebar .nav-list li").removeClass("active");
+				// 	$(this).addClass("active");
+				// 	$(this).parent().parent().addClass("active");
+				// 	seajs.use("" + ASSETS_ROOT +"js/template/resource/lineProduct/lineProduct.js",function(lineProduct){
+				// 		lineProduct.listLineProduct(0,"",1);
+				// 		modals["resource_lineProduct"] = lineProduct;
+				// 	});
+				// 	$("#main-container")[0].index = 0;
+				// });
 
 				// //绑定商家管理功能
 				// $("#sidebar .nav-list .resource_shop").click(function(){
@@ -1497,26 +1498,35 @@ Tools.descToolTip = function($elements) {
 	}
 }
 
+/**
+ * 添加Tab——新增、更新内容。
+ * 在编辑页面，监听isEdited状态。若编辑过（未保存），询问用户是否保存。用户确认后，触发'switch.tab.save'事件。切换页面的功能由事件回调控制。
+ * 								 也可以选择【否】，即不保存。或者选择【取消】，什么都不做
+ * @param {string} tab_id   Tab key id
+ * @param {string} tab_name Tab的标题
+ * @param {[type]} html     [description]
+ */
 Tools.addTab = function(tab_id, tab_name, html)  {
 	$tabList.children('li').removeClass("active");
 
 	var $tab = $tabList.find('.tab-' + tab_id), 
-		$content = $('tab-'+ tabId +'-content'),
+		$content = $('#tab-'+ tab_id +'-content'),
 		canUpdateTabContent = true;
 
 	// tab已经打开了
 	if ($tab.length > 0)  {
 		// show tab
-		$tab.addClass('active');
+		$tab.children('a').trigger('click');
 
 		// 页面已经编辑
 		if ($content.data('isEdited'))  {
 			showSaveConfirmDialog($( "#confirm-dialog-message" ), "内容已经被修改，是否保存?",
 								function(){	// 保存
-									$content.trigger('switch.tab.save', html);
+									$content.trigger('switch.tab.save', [tab_id, tab_name, html]);
 								},
 								function(){  // 不保存
 									updateTabContent();
+									$content.data('isEdited', false);
 								},
 								// 取消
 								false);
@@ -1530,21 +1540,21 @@ Tools.addTab = function(tab_id, tab_name, html)  {
 		updateTabContent();
 	}
 
-
+	return canUpdateTabContent;
 	function updateTabContent()  {
 		$tabContent.find(".tab-pane-menu").removeClass("active");
 		if($content.length > 0){
 			$content.addClass("active");
-			$tab.find('span').text('tab_name');
+			$tab.find('span').text(tab_name);
 		}
 		else{
-			var $tab_li = $("<li class=\"tab-"+tab_id+" active\"><a data-toggle=\"tab\" href=\"#tab-"+tab_id+"-content\" aria-expanded=\"true\"><span>"+tab_name+"</span><i class=\"ace-icon fa fa-close tab-close\"></i></a></li>");
+			var $tab_li = $("<li class=\"tab-"+tab_id+" active\"><a data-toggle=\"tab\" href=\"#tab-"+tab_id+"-content\" aria-expanded=\"true\"><span>"+tab_name+"</span><i class=\"ace-icon fa fa-close tab-close T-close\"></i></a></li>");
 
 			$tabList.append($tab_li);
 			$tabContent.append("<div id='tab-"+tab_id+"-content' class='tab-pane tab-pane-menu active'></div>");
 			// bind close event
 			
-			$tab_li.on('click', '.tab-close', function(event) {
+			$tab_li.on('click', '.T-close', function(event) {
 				event.preventDefault();
 				var $content = $('#' + tab_id + '-content');
 
@@ -1552,7 +1562,7 @@ Tools.addTab = function(tab_id, tab_name, html)  {
 				if ($content.data('isEdited'))  {
 					showSaveConfirmDialog($( "#confirm-dialog-message" ), "内容已经被修改，是否保存?",
 										function(){	// 保存
-											$content.trigger('close.tab.save', html);
+											$content.trigger('close.tab.save');
 										},
 										function(){  // 不保存
 											Tools.closeTab(tab_id);
@@ -1561,6 +1571,8 @@ Tools.addTab = function(tab_id, tab_name, html)  {
 										false);
 					// 此时不能添加内容
 					canUpdateTabContent = false;
+				} else {
+					Tools.closeTab(tab_id);
 				}
 			});
 
@@ -1577,10 +1589,10 @@ Tools.addTab = function(tab_id, tab_name, html)  {
  * @return {[type]}        [description]
  */		
 Tools.closeTab = function(tab_id) {
-	var $tab_li = $tabList.find('.tab' + tab_id),
+	var $tab_li = $tabList.find('.tab-' + tab_id),
 		index = $tab_li.index();
 
-	$tabContent.find('#tab' + tab_id + '-content').remove();
+	$tabContent.find('#tab-' + tab_id + '-content').remove();
 	$tab_li.remove();
 
 	index = index === 0? 0: (index-1);
@@ -1635,10 +1647,26 @@ Tools.justifyTab = function() {
 			$tabList.css('margin-left', (viewWidth - tab_len ) + 'px');
 		}
 	}
-
-	// 
 };
 
+/**
+ * 通过tab id获取tab key
+ * @param  {string} id tab ID
+ * @return {[type]}    [description]
+ */
+Tools.getTabKey = function(id) {
+	var res = '';
+	if (!!id) {
+		var res = id.split('-');
+
+		res.shift();
+		res.pop();
+
+		res = res.join('-');
+	}
+
+	return res;
+};
 /**
  * 用于定义公共请求或者与数据相关的公共组件处理
  * @type {Object}
@@ -1646,12 +1674,14 @@ Tools.justifyTab = function() {
 var KingServices = {};
 
 /**
- * 设置省下拉框
- * @param  {[type]} obj [description]
- * @param  {[type]} pid [description]
- * @return {[type]}     [description]
+ * 构建请求的URL
+ * @param  {[type]} path   [description]
+ * @param  {[type]} method [description]
+ * @return {[type]}        [description]
  */
-
+KingServices.build_url = function(path,method){
+    return APP_ROOT+'back/'+path +'.do?method='+method+'&token='+$.cookie('token')+'';
+};
 /**
  * 编辑中转安排——
  * @param  {string} id 游客小组的ID
@@ -1776,6 +1806,12 @@ KingServices.addBusDriverFunction = function(e){
 		}
 	$function(fn,$busCompany,$busCompanyId);
 }
+/**
+ * 设置省下拉框
+ * @param  {[type]} obj [description]
+ * @param  {[type]} pid [description]
+ * @return {[type]}     [description]
+ */
 //省市区 start
 KingServices.provinceCity = function($container,provinceIdU,cityIdU,districtIdU){
 	//初始化地区数据
