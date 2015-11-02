@@ -123,7 +123,6 @@ define(function(require, exports) {
 						});
 						//筛选事件绑定
 						$(".touristGroupSearchForm .btn-touristGroupList-search").click(function(){
-							console.log("search");
 							touristGroup.searchData = {
 								fromPartnerAgencyName : $(".touristGroupSearchForm input[name=fromPartnerAgencyName]").val(),
 								fromPartnerAgencyId : $(".touristGroupSearchForm input[name=fromPartnerAgencyId]").val(),
@@ -153,7 +152,6 @@ define(function(require, exports) {
 		},
 		//数据列表
 		listTouristGroup:function(page,lineProduct,lineProductId,fromPartnerAgencyName,fromPartnerAgencyId,creatorId,creatorName,startTimeS,createTimeStartS,createTimeEndS,customerTypeS,statusS){
-			console.log("list");
 			touristGroup.searchData = {
 				lineProductName: lineProduct,
 				lineProductId: lineProductId,
@@ -404,7 +402,6 @@ define(function(require, exports) {
 				addTab(menuKey+"-add","添加游客");
 				if(!!touristGroup.edited["add"] && touristGroup.edited["add"] == "add"){
 					showConfirmMsg($( "#confirm-dialog-message" ), "未保存的数据，是否放弃?",function(){
-						console.log("继续编辑");
 					},function(){
 						addTab(menuKey+"-add","添加游客",html);
 						touristGroup.initAdd();
@@ -610,8 +607,8 @@ define(function(require, exports) {
 			$("#"+tab+" .touristGroupMainFormMember .btn-add-tourist-more").click(touristGroup.batchAddTouristGroupMember);
 			//中转接待状态事件绑定
 			$("#"+tab+" input[type=checkbox]").click(function(){
-				console.log(!!$("#"+tab+" .touristGroupMainFormRS input[name=touristReception]")[0]);
-				console.log(!!$("#"+tab+" .touristGroupMainFormRS input[name=touristReception]")[0].checked);
+				//console.log(!!$("#"+tab+" .touristGroupMainFormRS input[name=touristReception]")[0]);
+				//console.log(!!$("#"+tab+" .touristGroupMainFormRS input[name=touristReception]")[0].checked);
 				if($("#"+tab+" .touristGroupMainFormRS input[name=touristReception]")[0].checked== true){
 					$(this).parent().parent().parent().find(".reception-div").removeClass("hide");
 				}
@@ -1130,7 +1127,6 @@ define(function(require, exports) {
 										globalLoadingLayer = openLoadingLayer();
 									},
 									success:function(data){
-										console.log(data);
 										layer.close(globalLoadingLayer);
 										var result = showDialog(data);
 										if(result){
@@ -1651,7 +1647,6 @@ define(function(require, exports) {
 							});
 						}
 						else{
-							console.log(html)
 							$("#layui-layer"+searchTravelLinelayer+"").find(".layui-layer-content").html(html);
 						}
 						//搜索按钮事件
@@ -2395,11 +2390,10 @@ define(function(require, exports) {
 		},
 		save : function(saveType){
 			if(saveType == "add"){
-				console.log("saveadd");
 				touristGroup.submitAddTouristGroup();
 			} else if(saveType == "update"){
 				var id = $(".updateTouristGroup .btn-submit-addTouristGroup").attr("data-entity-id");
-				console.log(id);
+				//console.log(id);
 				var validator=rule.checktouristGroup($(".updateTouristGroup"));
 				touristGroup.submitUpdateTouristGroup(id,1);
 			}
