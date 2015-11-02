@@ -1,0 +1,44 @@
+<table class="table table-striped  table-hover">
+	<thead>
+		<tr>
+			<th class="th-border">餐厅</th>
+			<th class="th-border">用餐类型</th>
+			<th class="th-border">餐标</th>
+			<th class="th-border">菜单</th>
+			<th class="th-border">操作</th>
+		</tr>
+	</thead>
+	<tbody>{{each restaurantList as restaurant}}
+		<tr data-entity-id="{{restaurant.id}}" data-entity-name="{{restaurant.name}}" data-entity-managerName= "{{restaurant.managerName}}" data-entity-mobileNumber="{{restaurant.mobileNumber}}">
+			<td rowspan="{{restaurant.restaurantStandardList.length}}" style="vertical-align:middle">{{restaurant.name}}</td>
+			{{if restaurant.restaurantStandardList.length == 0}}<td></td><td></td><td></td>{{/if}}
+			{{each restaurant.restaurantStandardList as standard index}}
+			{{if index == 0}}
+			<td>{{standard.type}}</td>
+			<td>{{standard.price}}<input type="hidden" name="restaurantStandardId" value="{{standard.id}}" /></td>
+			<td>{{standard.menuList}}</td>
+			{{/if}}
+			{{/each}}
+			<td rowspan="{{restaurant.restaurantStandardList.length}}" style="vertical-align:middle"><a class="T-add">添加</a></td>
+		</tr>
+		{{each restaurant.restaurantStandardList as standard index}}
+		{{if index > 0}}
+		<tr>
+			<td>{{standard.type}}</td>
+			<td>{{standard.price}}<input type="hidden" name="restaurantStandardId" value="{{standard.id}}" /></td>
+			<td>{{standard.menuList}}</td>
+		</tr>
+		{{/if}}
+		{{/each}}
+		{{/each}}
+	</tbody>
+</table>
+<div class="row pageMode">
+	<div class="col-xs-6">
+		<small>共计 {{recordSize}} 条记录</small>
+	</div>
+	<div class="col-xs-6">
+		<div class="dataTables_paginate paging_simple_numbers T-pagenation">
+		</div>
+	</div>
+</div>
