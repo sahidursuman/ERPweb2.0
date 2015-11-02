@@ -46,6 +46,17 @@ define(function(require, exports) {
 						addTab(menuKey,"发团安排管理",html);
 						tripPlan.initList(data);
 						tripPlan.getQueryTerms();
+						// 绑定翻页组件
+						laypage({
+						    cont: $('#' + tabId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+						    pages: data.totalPage, //总页数
+						    curr: (page + 1),
+						    jump: function(obj, first) {
+						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+						    		tripPlan.listTripPlan(obj.curr -1,tripPlan.searchData.tripId, tripPlan.searchData.tripNumber, tripPlan.searchData.startTime,tripPlan.searchData.guideId, tripPlan.searchData.realname,tripPlan.searchData.busId, tripPlan.searchData.licenseNumber,tripPlan.searchData.status);
+								}
+						    }
+						});
 					}	
 				}
 			});
@@ -89,40 +100,6 @@ define(function(require, exports) {
 					status : search.find("[name=status]").attr("data-value")
 				}
 				tripPlan.listTripPlan(0, tripPlan.searchData.tripId, tripPlan.searchData.tripNumber, tripPlan.searchData.startTime,tripPlan.searchData.guideId, tripPlan.searchData.realname,tripPlan.searchData.busId, tripPlan.searchData.licenseNumber,tripPlan.searchData.status);
-			});
-			//分页--首页按钮事件
-			$("#"+tabId+" .pageMode a.first").click(function(){
-				if(data.pageNo == 0 || data.totalPage == 0)return;
-				tripPlan.listTripPlan(0,tripPlan.searchData.tripId, tripPlan.searchData.tripNumber, tripPlan.searchData.startTime,tripPlan.searchData.guideId, tripPlan.searchData.realname,tripPlan.searchData.busId, tripPlan.searchData.licenseNumber,tripPlan.searchData.status);
-			});
-			
-			//分页--上一页事件
-			$("#"+tabId+" .pageMode a.previous").click(function(){
-				if(data.totalPage == 0)return;
-				var previous = data.pageNo - 1;
-				if(data.pageNo == 0){
-					previous = 0;
-					return false;
-				}
-				tripPlan.listTripPlan(previous,tripPlan.searchData.tripId, tripPlan.searchData.tripNumber, tripPlan.searchData.startTime,tripPlan.searchData.guideId, tripPlan.searchData.realname,tripPlan.searchData.busId, tripPlan.searchData.licenseNumber,tripPlan.searchData.status);
-			});
-			
-			//分页--下一页事件
-			$("#"+tabId+" .pageMode a.next").click(function(){
-				if(data.pageNo+1 == data.totalPage || data.totalPage == 0)return;
-				var nam = $("#"+tabId+" input[name=lineProduct_nam]").val();
-				var status = $("#"+tabId+" .btn-status").find("button").attr("data-value");
-				var next =  data.pageNo + 1;
-				if(data.pageNo == data.totalPage-1){
-					next = data.pageNo;
-				}
-				tripPlan.listTripPlan(next,tripPlan.searchData.tripId, tripPlan.searchData.tripNumber, tripPlan.searchData.startTime,tripPlan.searchData.guideId, tripPlan.searchData.realname,tripPlan.searchData.busId, tripPlan.searchData.licenseNumber,tripPlan.searchData.status);
-			});
-
-			//分页--尾页事件
-			$("#"+tabId+" .pageMode a.last").click(function(){
-				if(data.pageNo == data.totalPage-1 || data.totalPage == 0)return;
-				tripPlan.listTripPlan(data.totalPage-1,tripPlan.searchData.tripId, tripPlan.searchData.tripNumber, tripPlan.searchData.startTime,tripPlan.searchData.guideId, tripPlan.searchData.realname,tripPlan.searchData.busId, tripPlan.searchData.licenseNumber,tripPlan.searchData.status);
 			});
 
 			//autocomplete
@@ -360,13 +337,13 @@ define(function(require, exports) {
 		},
 		//添加资源 
 		addResource : function(){
-			$("#tripPlan_addPlan_insurance .T-addInsuranceResource").off('click').on("click",{function : KingServices.addInsurance , name : "insuranceName" , id : "insuranceId"}, KingServices.addResourceFunction);
-			$("#tripPlan_addPlan_restaurant .T-addRestaurantResource").off('click').on("click",{function : KingServices.addRestaurant, name : "restaurantName" , id : "restaurantId" , managerName : "managerName" , mobileNumber : "mobileNumber"}, KingServices.addResourceFunction);
-			$("#tripPlan_addPlan_hotel .T-addHotelResource").off('click').on("click",{function : KingServices.addHotel, name : "name" , id : "hotelId" , managerName : "managerName" , mobileNumber : "mobileNumber"}, KingServices.addResourceFunction);
-			$("#tripPlan_addPlan_scenic .T-addScenicResource").off('click').on("click",{function : KingServices.addScenic, name : "name" , id : "scenicId"}, KingServices.addResourceFunction);
-			$("#tripPlan_addPlan_shop .T-addShopResource").off('click').on("click",{function : KingServices.addShop, name : "name" , id : "shopId" , managerName : "managerName" , mobileNumber : "mobileNumber"}, KingServices.addResourceFunction);
-			$("#tripPlan_addPlan_selfPay .T-addSelfPayResource").off('click').on("click",{function : KingServices.addSelfPay, name : "name" , id : "selfPayId" , managerName : "managerName" , mobileNumber : "mobileNumber"}, KingServices.addResourceFunction);
-			$("#tripPlan_addPlan_ticket .T-addTicketResource").off('click').on("click",{function : KingServices.addTicket, name : "name" , id : "tickeId"}, KingServices.addResourceFunction);
+			$("#tripPlan_addPlan_insurance .T-addInsuranceResource").off('click').on("click",{function : KingServices.addInsurance , type : "tr" , name : "insuranceName" , id : "insuranceId"}, KingServices.addResourceFunction);
+			$("#tripPlan_addPlan_restaurant .T-addRestaurantResource").off('click').on("click",{function : KingServices.addRestaurant, type : "tr" , name : "restaurantName" , id : "restaurantId" , managerName : "managerName" , mobileNumber : "mobileNumber"}, KingServices.addResourceFunction);
+			$("#tripPlan_addPlan_hotel .T-addHotelResource").off('click').on("click",{function : KingServices.addHotel, type : "tr" , name : "name" , id : "hotelId" , managerName : "managerName" , mobileNumber : "mobileNumber"}, KingServices.addResourceFunction);
+			$("#tripPlan_addPlan_scenic .T-addScenicResource").off('click').on("click",{function : KingServices.addScenic, type : "tr" , name : "name" , id : "scenicId"}, KingServices.addResourceFunction);
+			$("#tripPlan_addPlan_shop .T-addShopResource").off('click').on("click",{function : KingServices.addShop, type : "tr" , name : "name" , id : "shopId" , managerName : "managerName" , mobileNumber : "mobileNumber"}, KingServices.addResourceFunction);
+			$("#tripPlan_addPlan_selfPay .T-addSelfPayResource").off('click').on("click",{function : KingServices.addSelfPay, type : "tr" , name : "name" , id : "selfPayId" , managerName : "managerName" , mobileNumber : "mobileNumber"}, KingServices.addResourceFunction);
+			$("#tripPlan_addPlan_ticket .T-addTicketResource").off('click').on("click",{function : KingServices.addTicket, type : "tr" , name : "name" , id : "tickeId"}, KingServices.addResourceFunction);
 		},
 		//添加保险安排
 		addInsurance : function(e){
@@ -1077,7 +1054,7 @@ define(function(require, exports) {
 				change:function(event,ui){
 					if(ui.item == null){
 						var objParent = $(this).closest('tr');
-						//objParent.find("input[name=restaurantStandardId]").val("");
+						objParent.find("input[name=restaurantStandardId]").val(0);
 						//objParent.find("input[name=fee]").val("");
 					}
 				},
@@ -2029,7 +2006,7 @@ define(function(require, exports) {
 							$("#main-container")[0].index = 0;
 							if(isClose == 1){
 								closeTab(menuKey + "-update");
-								tripPlan.listTripPlan(0,"","","","","");
+								tripPlan.listTripPlan(0,"","","","","","","","");
 							}
 						});
 					}
@@ -2132,7 +2109,7 @@ define(function(require, exports) {
 					var result = showDialog(data);
 					if(result){
 						showMessageDialog($("#confirm-dialog-message"),data.message, function(){
-							tripPlan.listTripPlan(0,"","","","");
+							tripPlan.listTripPlan(0,"","","","","","","");
 						});
 					}
 				}

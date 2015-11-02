@@ -76,32 +76,16 @@ define(function(require, exports) {
 							partnerAgency.listPartnerAgency(0,partnerAgency.searchData.travelAgencyName,partnerAgency.searchData.status);
 						});
 
-						//分页--首页按钮事件
-						$("#"+tabId+" .pageMode a.first").click(function(){
-							partnerAgency.listPartnerAgency(0,partnerAgency.searchData.travelAgencyName,partnerAgency.searchData.status);
-						});
-
-						//分页--上一页事件
-						$("#"+tabId+" .pageMode a.previous").click(function(){
-							var previous = data.pageNo - 1;
-							if(data.pageNo == 0){
-								previous = 0;
-							}
-							partnerAgency.listPartnerAgency(previous,partnerAgency.searchData.travelAgencyName,partnerAgency.searchData.status);
-						});
-
-						//分页--下一页事件
-						$("#"+tabId+" .pageMode a.next").click(function(){
-							var next =  data.pageNo + 1;
-							if(data.pageNo == data.totalPage-1){
-								next = data.pageNo;
-							}
-							partnerAgency.listPartnerAgency(next,partnerAgency.searchData.travelAgencyName,partnerAgency.searchData.status);
-						});
-
-						//分页--尾页事件
-						$("#"+tabId+" .pageMode a.last").click(function(){
-							partnerAgency.listPartnerAgency(data.totalPage == 0 ? 0: data.totalPage - 1,partnerAgency.searchData.travelAgencyName,partnerAgency.searchData.status);
+						// 绑定翻页组件
+						laypage({
+						    cont: $('#' + tabId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+						    pages: data.totalPage, //总页数
+						    curr: (page + 1),
+						    jump: function(obj, first) {
+						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+						    		partnerAgency.listPartnerAgency(obj.curr -1,partnerAgency.searchData.travelAgencyName,partnerAgency.searchData.status);
+						    	}
+						    }
 						});
 					}
 				}

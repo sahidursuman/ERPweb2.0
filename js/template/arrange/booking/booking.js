@@ -5,7 +5,8 @@ define(function(require, exports) {
 		updateTemplate = require("./view/update"),
 		viewTemplate = require("./view/view"),
 		listTemplate = require("./view/list"),
-		addPartnerManagerTemplate = require("./view/addPartnerManager");
+		addPartnerManagerTemplate = require("./view/addPartnerManager"),
+		tabId = "tab-"+menuKey+"-content";
 	var booking ={
 		searchData :{
 			id:"",
@@ -55,6 +56,17 @@ define(function(require, exports) {
 						addTab(menuKey,"项目代订",html);
 						booking.initList(data);
 						booking.getQueryTerms();
+						// 绑定翻页组件
+						laypage({
+						    cont: $('#' + tabId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+						    pages: data.totalPage, //总页数
+						    curr: (page + 1),
+						    jump: function(obj, first) {
+						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+						    		booking.listbooking(obj.curr -1,booking.searchData.id,booking.searchData.orderNumber,booking.searchData.partnerAgencyId,booking.searchData.partnerAgency,booking.searchData.operateUserId,booking.searchData.operateUser,booking.searchData.startTime,booking.searchData.endTime);
+								}
+						    }
+						});
 					}
 				}
 			})
@@ -77,34 +89,6 @@ define(function(require, exports) {
 				booking.listbooking(0,booking.searchData.id,booking.searchData.orderNumber,booking.searchData.partnerAgencyId,booking.searchData.partnerAgency,booking.searchData.operateUserId,booking.searchData.operateUser,booking.searchData.startTime,booking.searchData.endTime);
 			});
 			
-			//分页--首页按钮事件
-			$("#tab-"+menuKey+"-content .pageMode a.first").click(function(){
-				if(data.pageNo == 0 || data.totalPage == 0)return;
-				booking.listbooking(0,booking.searchData.id,booking.searchData.orderNumber,booking.searchData.partnerAgencyId,booking.searchData.partnerAgency,booking.searchData.operateUserId,booking.searchData.operateUser,booking.searchData.startTime,booking.searchData.endTime);
-			});
-			//分页--上一页事件
-			$("#tab-"+menuKey+"-content  .pageMode a.previous").click(function(){
-				if(data.totalPage == 0)return;
-				var previous = data.pageNo - 1;
-				if(data.pageNo == 0){
-					previous = 0;
-				}
-				booking.listbooking(previous,booking.searchData.id,booking.searchData.orderNumber,booking.searchData.partnerAgencyId,booking.searchData.partnerAgency,booking.searchData.operateUserId,booking.searchData.operateUser,booking.searchData.startTime,booking.searchData.endTime);
-			});
-			//分页--下一页事件
-			$("#tab-"+menuKey+"-content .pageMode a.next").click(function(){
-				if(data.pageNo+1 == data.totalPage || data.totalPage == 0)return;
-				var next =  data.pageNo + 1;
-				if(data.pageNo == data.totalPage-1){
-					next = data.pageNo ;
-				}
-				booking.listbooking(next,booking.searchData.id,booking.searchData.orderNumber,booking.searchData.partnerAgencyId,booking.searchData.partnerAgency,booking.searchData.operateUserId,booking.searchData.operateUser,booking.searchData.startTime,booking.searchData.endTime);
-			});
-			//分页--尾页事件
-			$("#tab-"+menuKey+"-content  .pageMode a.last").click(function(){
-				if(data.pageNo == data.totalPage-1 || data.totalPage == 0)return;
-				booking.listbooking(data.totalPage-1,booking.searchData.id,booking.searchData.orderNumber,booking.searchData.partnerAgencyId,booking.searchData.partnerAgency,booking.searchData.operateUserId,booking.searchData.operateUser,booking.searchData.startTime,booking.searchData.endTime);
-			});
 			//新增项目代订
 			$("#tab-"+menuKey+"-content .btn-Booking-add").click(booking.addBooking);
 			//修改项目代订
@@ -189,7 +173,9 @@ define(function(require, exports) {
 	    	booking.hotelChooseList($add);
 	    	booking.hotelRoomChooseList($add);
 	    	//景区联动
-	    	booking.scenicItemChooseList($add);
+	    	$(".chooseScenicItem").on("click",function(){
+	    		booking.scenicItemChooseList(this);
+	    	});
 	    	booking.scenicChooseList($add);
 	    	//票务下拉
 	    	booking.ticketChoostList($add);
@@ -305,7 +291,9 @@ define(function(require, exports) {
 			booking.hotelChooseList($obj);
 			booking.hotelRoomChooseList($obj);
 			//景区联动
-			booking.scenicItemChooseList($obj);
+			$(".chooseScenicItem").on("click",function(){
+	    		booking.scenicItemChooseList(this);
+	    	});
 			booking.scenicChooseList($obj);
 			//票务下拉
 			booking.ticketChoostList($obj);
@@ -409,7 +397,7 @@ define(function(require, exports) {
 											$parent.fadeOut(function(){
 												$parent.remove();
 											})
-											booking.listbooking(0,"","","","","");
+											booking.listbooking(0,"","","","","","","","");
 										});
 									}
 								}
@@ -421,22 +409,6 @@ define(function(require, exports) {
 					$(this).find("p").text("你确定要删除该项目代订？");
 				}
 			});
-			$.ajax({
-				url:""+APP_ROOT+"back/bookingOrder.do?method=deleteBookingOrderByIdAndCateName&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=delete",
-				type:"POST",
-				data:"id="+id+"&cateName=order"+"",
-				dataType:"json",
-				beforeSend:function(){
-					globalLoadingLayer = openLoadingLayer();
-				},
-				success:function(data){
-					layer.close(globalLoadingLayer);
-					var result = showDialog(data);
-					if(result){
-						
-					}
-				}
-			})
 		},
 		addHotelList :function(event){
 			var html = '<tr>'+
@@ -487,7 +459,9 @@ define(function(require, exports) {
 			//时间控件
 	    	booking.datepicker($container);
 	    	//景区联动
-	    	booking.scenicItemChooseList(event.data.$this);
+	    	$(".chooseScenicItem").on("click",function(){
+	    		booking.scenicItemChooseList(this);
+	    	});
 	    	booking.scenicChooseList(event.data.$this);
 	    	
 	    	//景区贷订
@@ -645,6 +619,8 @@ define(function(require, exports) {
 						$(this).val("");
 						var parents = $(this).parent().parent();
 						parents.find("[name=partnerAgencyId]").val("");
+						parents.find("input[name=contactRealname]").val("");
+						parents.find("input[name=contactMobileNumber]").val("");
 					}
 				},
 				select :function(event,ui){
@@ -658,8 +634,8 @@ define(function(require, exports) {
 		                success: function(data) {
 							var result = showDialog(data);
 							if(result){
-								parents.find("input[name=contactRealname]").val();
-								parents.find("input[name=contactMobileNumber]").val();
+								parents.find("input[name=contactRealname]").val("");
+								parents.find("input[name=contactMobileNumber]").val("");
 							}
 		                }
 					})
@@ -717,6 +693,8 @@ define(function(require, exports) {
 				select:function(event,ui){
 					var _this = this, parents = $(_this).parent().parent();
 					parents.find("input[name=hotelId]").val(ui.item.id).trigger('change');
+					parents.find("input[name=hotelRoom]").val("");
+					parents.find("input[name=hotelRoomId]").val("");
 				}
 			}).off("click").on("click", function(){
 				var hotelStarValue = $hotelStar.val(),
@@ -821,14 +799,15 @@ define(function(require, exports) {
 						thisParent.find("input[name=scenicId]").val("");
 						thisParent.find("input[name=scenicItemName]").val("");
 						thisParent.find("input[name=scenicItemId]").val("");
+						thisParent.find("input[name=costPrice]").val("");
 					}
 				},
 				select :function(event, ui){
-					console.log(ui);
 					var _this = this, parents = $(_this).parent().parent();
 					parents.find("input[name=scenicId]").val(ui.item.id).trigger('change');
 					parents.find("input[name=scenicItemName]").val("");
 					parents.find("input[name=scenicItemId]").val("");
+					parents.find("input[name=costPrice]").val("");
 				}
 			}).unbind("click").click(function(){
 				var obj = this;
@@ -857,9 +836,16 @@ define(function(require, exports) {
                 });
 			})
 		},
-		scenicItemChooseList :function(className){
-			var chooseScenicItem = className.find(".chooseScenicItem");
-			chooseScenicItem.autocomplete({
+		scenicItemChooseList :function(obj){
+			var obj = $(obj);
+			var thisParent = obj.parent().parent();
+			var startTime = thisParent.find("[name=startTime]").val();
+			console.log(startTime);
+			if(startTime == ""){
+				showMessageDialog($( "#confirm-dialog-message" ),"请选择日期！");
+				return false;
+			}
+			obj.autocomplete({
 				minLength:0,
 				change :function(event, ui){
 					if(ui.item == null){
@@ -889,7 +875,6 @@ define(function(require, exports) {
 				var _this = $(this);
 				var scenicId = _this.parent().parent().find("input[name=scenicId]").val();
 				var enterTime = _this.parent().parent().find("input[name=enterTime]").val();
-				console.log(scenicId);
 				if(scenicId){
 					$.ajax({
 						url:""+APP_ROOT+"back/scenic.do?method=findItemByScenicId&token="+$.cookie("token")+"&menuKey=resource_scenic&operation=view",
@@ -1399,13 +1384,13 @@ define(function(require, exports) {
 								booking.edited["add"] = "";
 								if(isClose == 1){
 									closeTab("arrange_booking-"+operation);
-									booking.listbooking(0,"","","","","");
+									booking.listbooking(0,"","","","","","","","");
 								}
 							} else if(operation == "update"){
 								booking.edited["update"] = "";
 								if(isClose == 1){
 									closeTab("arrange_booking-"+operation);
-									booking.listbooking(0,"","","","","");
+									booking.listbooking(0,"","","","","","","","");
 								}
 							}
 							

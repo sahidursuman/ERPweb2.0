@@ -4,6 +4,7 @@ define(function(require, exports) {
 	    listTemplate = require("./view/list"),
 	    rule = require("./rule"),
 	    operationTemplate = require("./view/operation"),
+	    tabId = "tab-"+menuKey+"-content",
 		validator;
 	
 	var subsection = {
@@ -248,36 +249,17 @@ define(function(require, exports) {
 								}
 							})
 						});
-						//分页--首页按钮事件
-						$("#"+tab+" .pageMode a.first").click(function(){
-							if(data.pageNo == 0 || data.totalPage == 0)return;
-							subsection.listSubsection(0,subsection.searchData.lineProduct,subsection.searchData.lineProductId,subsection.searchData.fromPartnerAgency,subsection.searchData.fromPartnerAgencyId,subsection.searchData.creator,subsection.searchData.creatorId,subsection.searchData.travelDate,subsection.searchData.operationStartDate,subsection.searchData.operationEndDate,tab);
+						// 绑定翻页组件
+						laypage({
+						    cont: $('#' + tabId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+						    pages: data.totalPage, //总页数
+						    curr: (page + 1),
+						    jump: function(obj, first) {
+						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+						    		subsection.listSubsection(obj.curr -1,subsection.searchData.lineProduct,subsection.searchData.lineProductId,subsection.searchData.fromPartnerAgency,subsection.searchData.fromPartnerAgencyId,subsection.searchData.creator,subsection.searchData.creatorId,subsection.searchData.travelDate,subsection.searchData.operationStartDate,subsection.searchData.operationEndDate,tab);
+						    	}
+						    }
 						});
-						//分页--上一页事件
-						$("#"+tab+" .pageMode a.previous").click(function(){	
-							if(data.pageNo == 0 || data.totalPage == 0)return;
-							var previous = data.pageNo - 1;
-							if(data.pageNo == 0){
-								previous = 0;
-							}
-							subsection.listSubsection(previous,subsection.searchData.lineProduct,subsection.searchData.lineProductId,subsection.searchData.fromPartnerAgency,subsection.searchData.fromPartnerAgencyId,subsection.searchData.creator,subsection.searchData.creatorId,subsection.searchData.travelDate,subsection.searchData.operationStartDate,subsection.searchData.operationEndDate,tab);
-						});
-						//分页--下一页事件
-						$("#"+tab+" .pageMode a.next").click(function(){
-							console.log("next");
-							if(data.pageNo+1 == data.totalPage || data.totalPage == 0)return;
-							var next =  data.pageNo + 1;
-							if(data.pageNo == data.totalPage-1){
-								next = data.pageNo ;
-							}
-							subsection.listSubsection(next,subsection.searchData.lineProduct,subsection.searchData.lineProductId,subsection.searchData.fromPartnerAgency,subsection.searchData.fromPartnerAgencyId,subsection.searchData.creator,subsection.searchData.creatorId,subsection.searchData.travelDate,subsection.searchData.operationStartDate,subsection.searchData.operationEndDate,tab);
-						});
-						//分页--尾页事件
-						$("#"+tab+" .pageMode a.last").click(function(){
-							if(data.pageNo == data.totalPage-1 || data.totalPage == 0)return;
-							subsection.listSubsection(data.totalPage-1,subsection.searchData.lineProduct,subsection.searchData.lineProductId,subsection.searchData.fromPartnerAgency,subsection.searchData.fromPartnerAgencyId,subsection.searchData.creator,subsection.searchData.creatorId,subsection.searchData.travelDate,subsection.searchData.operationStartDate,subsection.searchData.operationEndDate,tab);
-						});
-
 						//autocomplete
 						subsection.getPartnerAgencyList($("#tab-"+menuKey+"-content"));
 						subsection.getLineProductList($("#tab-"+menuKey+"-content"));
@@ -292,30 +274,25 @@ define(function(require, exports) {
 				minLength:0,
 				change :function(event,ui){
 					if(ui.item == null){
-
-							$(this).parent().parent().find("input[name=lineProductId]").val("");
-						//$(this).val("");
-						//var parents = $(this).parent();
-						//parents.parent().find("input[name=days]").val("");
-						//parents.parent().find("input[name=customerType]").val("");
-						//parents.find("input[name=lineProductId]").val("");
-
+						var $this = $(this),$parents = $this.closest('tr');
+						$this.val("");
+						$parents.find("input[name=lineProductId]").val("");
+						$parents.find("input[name=days]").val("");
+						$parents.find("input[name=customerType]").val("");
 					}
 				},
 				select :function(event,ui){
-					//var parents = $(this).parent();
-					//parents.find("input[name=lineProductId]").val(ui.item.id).trigger('change');
-					//if(ui.item.customerType == 0){
-					//	parents.parent().find("input[name=customerType]").val("散客");
-					//}else{
-					//	parents.parent().find("input[name=customerType]").val("团体");
-					//}
-					//parents.parent().find("input[name=days]").val(ui.item.days);
-					//validator = rule.updateCheckdSaveSubsection(validator);
-
-					$(this).blur();
-					var obj = this;
-					$(obj).parent().parent().find("input[name=lineProductId]").val(ui.item.id).trigger('change');
+					var $this = $(this),$parents = $this.closest('tr');
+					$this.val(ui.item.name);
+					$parents.find("input[name=lineProductId]").val(ui.item.id).trigger('change');
+					if(ui.item.customerType == 0){
+						$parents.find("input[name=customerType]").val("散客");
+					}else{
+						$parents.find("input[name=customerType]").val("团体");
+					}
+					$parents.find("input[name=days]").val(ui.item.days);
+					validator = rule.updateCheckdSaveSubsection(validator);
+					return false;
 				}
 			}).unbind("click").click(function(){
 				var obj =this;
@@ -328,7 +305,7 @@ define(function(require, exports) {
 							var lineProductList = data.lineProductList;
 							if(lineProductList && lineProductList.length > 0){
 								for(var i=0; i < lineProductList.length; i++){
-									lineProductList[i].value = lineProductList[i].name;
+									lineProductList[i].value = "("+lineProductList[i].days+"天)"+lineProductList[i].name;
 								}
 								$(obj).autocomplete('option','source', lineProductList);
 								$(obj).autocomplete('search', '');
@@ -466,29 +443,29 @@ define(function(require, exports) {
 		getPartnerAgencyList:function($obj){
 			var getPartnerAgencyList = $obj.find(".choosePartnerAgency");
 			getPartnerAgencyList.autocomplete({
-								minLength: 0,
-								change: function(event, ui) {
-									if(ui.item == null){
-										//$(this).nextAll('input[name="fromPartnerAgencyId"]').val('');
-										$(this).parent().parent().find("input[name=fromPartnerAgencyId]").val("");
-									}
-								},
-								select: function(event, ui) {
-									$(this).blur();
-									var obj = this;
-									$(obj).parent().parent().find("input[name=fromPartnerAgencyId]").val(ui.item.id).trigger('change');
-								}
-							}).click(function(){
-							var obj = this;
-							var fromGuideObj = subsection.autocompleteDate.fromPartnerAgencyList;
-							console.info(fromGuideObj);
-							if(fromGuideObj !=null && fromGuideObj.length>0){
-								for(var i=0;i<fromGuideObj.length;i++){
-									fromGuideObj[i].value = fromGuideObj[i].travelAgencyName;
-								}
-							}
-							$(obj).autocomplete('option','source',fromGuideObj);
-							$(obj).autocomplete('search', '');
+				minLength: 0,
+				change: function(event, ui) {
+					if(ui.item == null){
+						//$(this).nextAll('input[name="fromPartnerAgencyId"]').val('');
+						$(this).parent().parent().find("input[name=fromPartnerAgencyId]").val("");
+					}
+				},
+				select: function(event, ui) {
+					$(this).blur();
+					var obj = this;
+					$(obj).parent().parent().find("input[name=fromPartnerAgencyId]").val(ui.item.id).trigger('change');
+				}
+			}).click(function(){
+			var obj = this;
+			var fromGuideObj = subsection.autocompleteDate.fromPartnerAgencyList;
+			console.info(fromGuideObj);
+			if(fromGuideObj !=null && fromGuideObj.length>0){
+				for(var i=0;i<fromGuideObj.length;i++){
+					fromGuideObj[i].value = fromGuideObj[i].travelAgencyName;
+				}
+			}
+				$(obj).autocomplete('option','source',fromGuideObj);
+				$(obj).autocomplete('search', '');
 			});
 		},
 
@@ -496,31 +473,31 @@ define(function(require, exports) {
 		getLineProductList:function($obj){
 			var getPartnerAgencyList = $obj.find(".chooseLineProduct");
 			getPartnerAgencyList.autocomplete({
-							minLength: 0,
-							change: function(event, ui) {
-								if (ui.item == null)  {
-									//$(this).nextAll('input[name="lineProductId"]').val('');
-									$(this).parent().parent().find("input[name=lineProductId]").val("");
-								}
-							},
-							select: function(event, ui) {
-								$(this).blur();
-								var obj = this;
-								$(obj).parent().parent().find("input[name=lineProductId]").val(ui.item.id).trigger('change');
-								//nextAll('input[name="lineProductId"]').val(ui.item.id);
-							}
-						}).click(function(){
-						var obj = this;
-						var lineProductObj = subsection.autocompleteDate.lineProductList;
-						console.info(lineProductObj);
-						if(lineProductObj !=null && lineProductObj.length>0){
-							for(var i=0;i<lineProductObj.length;i++){
-								lineProductObj[i].value = lineProductObj[i].name;
-							}
-						}
-						$(obj).autocomplete('option','source',lineProductObj);
-						$(obj).autocomplete('search', '');
-					});
+				minLength: 0,
+				change: function(event, ui) {
+					if (ui.item == null)  {
+						//$(this).nextAll('input[name="lineProductId"]').val('');
+						$(this).parent().parent().find("input[name=lineProductId]").val("");
+					}
+				},
+				select: function(event, ui) {
+					$(this).blur();
+					var obj = this;
+					$(obj).parent().parent().find("input[name=lineProductId]").val(ui.item.id).trigger('change');
+					//nextAll('input[name="lineProductId"]').val(ui.item.id);
+				}
+			}).click(function(){
+			var obj = this;
+			var lineProductObj = subsection.autocompleteDate.lineProductList;
+			console.info(lineProductObj);
+			if(lineProductObj !=null && lineProductObj.length>0){
+				for(var i=0;i<lineProductObj.length;i++){
+					lineProductObj[i].value = lineProductObj[i].name;
+				}
+			}
+				$(obj).autocomplete('option','source',lineProductObj);
+				$(obj).autocomplete('search', '');
+			});
 		},
 
         //操作人模糊查询

@@ -14,7 +14,7 @@
 		<label class="pull-left text-right control-label no-padding-right">应用范围:</label>
         <div class="col-sm-1 marginLeft-Right7">
             <select name="customerType" class="col-xs-12">
-                <option value="">全部</option>
+                <option value=""  {{if searchParam.customerType=="" }}selected="selected"{{/if}}>全部</option>
                 <option value="0" {{if searchParam.customerType==0 }}selected="selected" {{/if}}>散客</option>
                 <option value="1" {{if searchParam.customerType==1 }}selected="selected" {{/if}}>团体</option>
             </select>
