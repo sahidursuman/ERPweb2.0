@@ -99,5 +99,7 @@
         return data.substring(0, 39) + "...";
     }), template.helper("toFixed", function(data) {
         return data.toFixed(2);
+    }), template.helper("stringify", function(data) {
+        return JSON.stringify(data);
     });
 }();

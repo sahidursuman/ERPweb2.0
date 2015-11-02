@@ -12,16 +12,15 @@ var modals = {};
 var $tabList = $('#tabList'), $tabContent = $("#tabContent");
 
 function addTab(tabId,tabName,html){
-	var $current_li = $tabList.find('.active');
+	var $current_li = $tabList.find('.active'),
+		$next_li = $tabList.find('.tab-'+tabId);
 
-	$("#tabList li").removeClass("active");
-	if($("#tabList li.tab-"+tabId+"").length > 0){
-		$("#tabList li.tab-"+tabId+"").data('prev-tab',$current_li).trigger('click');
+	$tabList.children("li").removeClass("active");
+	if ($next_li.length) {
+		$next_li.data('prev-tab',$current_li).children('a').trigger('click').children('span').text(tabName);
 		setTimeout(function() {
 			Tools.justifyTab();
 		}, 50);
-		$("#tabList li.tab-"+tabId+"").find("span").text(tabName);
-
 	}
 	else{
 		$("#tabList").append("<li class=\"tab-"+tabId+" active\"><a data-toggle=\"tab\" href=\"#tab-"+tabId+"-content\" aria-expanded=\"true\"><span>"+tabName+"</span><i class=\"ace-icon fa fa-close tab-close\"></i></a></li>");
@@ -60,9 +59,9 @@ function addTab(tabId,tabName,html){
 			});
 			
 			$tabList.find('.active').data('prev-tab', $current_li);
+			Tools.justifyTab();
 		}, 50);
 	
-		Tools.justifyTab();
 	}
 	$("#tabContent .tab-pane-menu").removeClass("active");
 	if($("#tab-"+tabId+"-content").length > 0){
@@ -586,7 +585,8 @@ var modalScripts = {
 	'business_analyst_employeePerfor' : "js/template/businessAnalyst/employeePerfor/employeePerfor.js", //员工业绩 
 	'business_analyst_tourguidePerfor' : "js/template/businessAnalyst/tourguidePerfor/tourguidePerfor.js", //导游业绩
 	//---------------------------------------------------------------------------------------------------------------
-	'financial_innerTransfer_profit': "js/template/financial/innerTransferProfit/innerTransferProfit.js"
+	'financial_innerTransfer_profit': "js/template/financial/innerTransferProfit/innerTransferProfit.js",
+	'financial_turnProfit': "js/template/financial/turnProfit/turnProfit.js"
 };
 
 
@@ -741,7 +741,7 @@ function listMenu(menuTemplate){
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/touristGroup/touristGroup.js",function(touristGroup){
-						touristGroup.getTouristStatisticData(0,"","","","","","","","");
+						touristGroup.getTouristStatisticData(0,"","","","","","","","","","","");
 						modals["resource_touristGroup"] = touristGroup;
 					});
 				});
@@ -1109,24 +1109,24 @@ function listMenu(menuTemplate){
 					});
 				});
 
-				//绑定转客利润菜单功能
-				$("#sidebar .nav-list .financial_turnProfit").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/financial/turnProfit/turnProfit.js",function(TurnProfit){
-						/*var tu = new Date()
-						 var vYear = tu.getFullYear()
-						 var vMon = tu.getMonth() + 1
-						 var vDay = tu.getDate()
-						 var startTime = vYear+"-"+vMon+"-"+vDay;
-						 var tmp = new Date(startTime);
-						 tmp = tmp-7*24*60*60*1000;
-						 tmp = new Date(tmp);
-						 var endTime = tmp.getFullYear()+"-"+(tmp.getMonth()+1)+"-"+tmp.getDate();*/
-						TurnProfit.listTurnProfit(0,"","","","","","","","");
-					});
-				});
+				// //绑定转客利润菜单功能
+				// $("#sidebar .nav-list .financial_turnProfit").click(function(){
+				// 	$("#sidebar .nav-list li").removeClass("active");
+				// 	$(this).addClass("active");
+				// 	$(this).parent().parent().addClass("active");
+				// 	seajs.use("" + ASSETS_ROOT +"js/template/financial/turnProfit/turnProfit.js",function(TurnProfit){
+				// 		var tu = new Date()
+				// 		 var vYear = tu.getFullYear()
+				// 		 var vMon = tu.getMonth() + 1
+				// 		 var vDay = tu.getDate()
+				// 		 var startTime = vYear+"-"+vMon+"-"+vDay;
+				// 		 var tmp = new Date(startTime);
+				// 		 tmp = tmp-7*24*60*60*1000;
+				// 		 tmp = new Date(tmp);
+				// 		 var endTime = tmp.getFullYear()+"-"+(tmp.getMonth()+1)+"-"+tmp.getDate();
+				// 		TurnProfit.listTurnProfit(0,"","","","","","","","");
+				// 	});
+				// });
 
 
 				//绑定代订利润功能
@@ -1467,24 +1467,26 @@ var Tools = {
  * @param  {object} $elements 需要绑定提示的DOM
  * @return {[type]}           [description]
  */
-Tools.descToolTip = function($elements) {
+Tools.descToolTip = function($elements,type) {
 	if (!!$elements)  {
 		$elements.each(function() {
-			var $that = $(this), content = $that.prop('title');
+			var $that = $(this), content = $that.prop('title'),html = $that.data("html");
 
 			// 内容过长，才提示
 			$that.prop('title', '');
-			if ($that.width() < $that.children().width())  {
+			if ($that.width() < $that.children().width() && type == 1)  {
 				// 绑定提示
 				$that.popover({
 					trigger: 'click',
 					container: '#desc-tooltip-containter',
-					content: content
+					content: content,
 				})
 				// 处理显示与隐藏提示
 				.hover(function() {
 					// 进入时，触发提示
-					$(this).popover('show');
+					setTimeout(function() {
+						$that.popover('show');
+					},200)
 				}, function() {
 					// 设置超时，通过判断来确定提示
 					setTimeout(function() {
@@ -1492,6 +1494,24 @@ Tools.descToolTip = function($elements) {
 							$that.popover('hide');
 						}
 					}, 100);
+				});
+			}else if (type == 2) {
+				// 绑定提示
+				$that.popover({
+					trigger: 'manual',
+					container: '#desc-tooltip-containter',
+					content: html,
+					html : true
+				})
+				// 处理显示与隐藏提示
+				.hover(function() {
+					// 进入时，触发提示
+					$that.popover('show');
+				}, function() {
+					// 设置超时，通过判断来确定提示
+					if (Tools.$descContainer.data('focus-in') != true)  {
+						$that.popover('hide');
+					}
 				});
 			}
 		});
@@ -1506,6 +1526,69 @@ Tools.descToolTip = function($elements) {
  * @param {string} tab_name Tab的标题
  * @param {[type]} html     [description]
  */
+function addTab(tabId,tabName,html){
+	var $current_li = $tabList.find('.active'),
+		$next_li = $tabList.find('.tab-'+tabId);
+
+	$tabList.children("li").removeClass("active");
+	if ($next_li.length) {
+		$next_li.data('prev-tab',$current_li).children('a').trigger('click').children('span').text(tabName);
+		setTimeout(function() {
+			Tools.justifyTab();
+		}, 50);
+	}
+	else{
+		$("#tabList").append("<li class=\"tab-"+tabId+" active\"><a data-toggle=\"tab\" href=\"#tab-"+tabId+"-content\" aria-expanded=\"true\"><span>"+tabName+"</span><i class=\"ace-icon fa fa-close tab-close\"></i></a></li>");
+		setTimeout(function() {
+			listwidth += parseInt($("#tabList li.tab-"+tabId+"").css("width"));
+			var maxwidth = parseInt($(".breadcrumbs-fixed").css("width"))-70;
+			if(listwidth > maxwidth){
+				var maxleft = -(listwidth - (maxwidth + 35));//ul可向左平移的最大宽度，maxleft取负值,35为左侧移动符号宽度
+				$("#tabList").css("marginLeft",maxleft);
+			}
+			$("#tabList .tab-"+tabId+" .tab-close").click(function(){
+				$that = $(this);
+				var str = tabId.split("-");
+				var modal = modals[str[0]];
+				if(str.length > 1 && str[1] != "view" && !!modal && !!modal.isEdited && modal.isEdited(str[1])){//非列表、查看,且有修改
+					if(str[1] == "add"){
+						showConfirmMsg($( "#confirm-dialog-message" ), "未保存的数据，是否放弃?",function(){
+							console.log("留在当前页");
+						},function(){
+							closeTab(tabId);
+							modal.clearEdit(str[1]);
+						},"放弃","留在此页");
+					} else{
+						console.log(str[1]);
+						showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已修改的数据?",function(){
+							modal.save(str[1]);
+							closeTab(tabId);
+						}, function(){
+							closeTab(tabId);
+							modal.clearEdit(str[1]);
+						});
+					}
+				} else {
+					closeTab(tabId);
+				}
+			});
+			
+			$tabList.find('.active').data('prev-tab', $current_li);
+			Tools.justifyTab();
+		}, 50);
+	
+	}
+	$("#tabContent .tab-pane-menu").removeClass("active");
+	if($("#tab-"+tabId+"-content").length > 0){
+		$("#tab-"+tabId+"-content").addClass("active");
+	}
+	else{
+		$("#tabContent").append("<div id=\"tab-"+tabId+"-content\" class=\"tab-pane tab-pane-menu active\"></div>");
+	}
+
+	html = filterUnAuth(html);
+	$("#tab-"+tabId+"-content").html(html);
+}
 Tools.addTab = function(tab_id, tab_name, html)  {
 	$tabList.children('li').removeClass("active");
 
@@ -1516,7 +1599,7 @@ Tools.addTab = function(tab_id, tab_name, html)  {
 	// tab已经打开了
 	if ($tab.length > 0)  {
 		// show tab
-		$tab.children('a').trigger('click');
+		$tab.data('prev-tab',$current_li).children('a').trigger('click').children('span').text(tab_name);
 
 		// 页面已经编辑
 		if ($content.data('isEdited'))  {
@@ -1532,6 +1615,10 @@ Tools.addTab = function(tab_id, tab_name, html)  {
 								false);
 			// 此时不能添加内容
 			canUpdateTabContent = false;
+		} else {
+			setTimeout(function() {
+				Tools.justifyTab();
+			}, 50);
 		}
 	} 
 

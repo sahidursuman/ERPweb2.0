@@ -69,8 +69,8 @@ define(function(require, exports) {
 					layer.close(globalLoadingLayer);
 					var result = showDialog(data);
 					if(result){
-						var html1 = listMainTemplate(data);
-						addTab(menuKey,"游客管理",html1);
+						var html = listMainTemplate(data);
+						addTab(menuKey,"游客管理",html);
 						touristGroup.getQueryTerms();
 
 						//出游日期 时间控件（筛选搜索）
@@ -190,6 +190,7 @@ define(function(require, exports) {
 						//讲字符串改为对象
 						data.touristGroupList = touristGroupList;
 						var html = listTemplate(data);
+						html = filterUnAuth(html);
 						$("#touristGroup-listMain").html(html);
 
 						touristGroup.getPartnerAgencyList($("#tab-"+menuKey+"-content .choosePartnerAgency"));
