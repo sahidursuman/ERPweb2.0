@@ -1526,80 +1526,18 @@ Tools.descToolTip = function($elements,type) {
  * @param {string} tab_name Tab的标题
  * @param {[type]} html     [description]
  */
-function addTab(tabId,tabName,html){
-	var $current_li = $tabList.find('.active'),
-		$next_li = $tabList.find('.tab-'+tabId);
-
-	$tabList.children("li").removeClass("active");
-	if ($next_li.length) {
-		$next_li.data('prev-tab',$current_li).children('a').trigger('click').children('span').text(tabName);
-		setTimeout(function() {
-			Tools.justifyTab();
-		}, 50);
-	}
-	else{
-		$("#tabList").append("<li class=\"tab-"+tabId+" active\"><a data-toggle=\"tab\" href=\"#tab-"+tabId+"-content\" aria-expanded=\"true\"><span>"+tabName+"</span><i class=\"ace-icon fa fa-close tab-close\"></i></a></li>");
-		setTimeout(function() {
-			listwidth += parseInt($("#tabList li.tab-"+tabId+"").css("width"));
-			var maxwidth = parseInt($(".breadcrumbs-fixed").css("width"))-70;
-			if(listwidth > maxwidth){
-				var maxleft = -(listwidth - (maxwidth + 35));//ul可向左平移的最大宽度，maxleft取负值,35为左侧移动符号宽度
-				$("#tabList").css("marginLeft",maxleft);
-			}
-			$("#tabList .tab-"+tabId+" .tab-close").click(function(){
-				$that = $(this);
-				var str = tabId.split("-");
-				var modal = modals[str[0]];
-				if(str.length > 1 && str[1] != "view" && !!modal && !!modal.isEdited && modal.isEdited(str[1])){//非列表、查看,且有修改
-					if(str[1] == "add"){
-						showConfirmMsg($( "#confirm-dialog-message" ), "未保存的数据，是否放弃?",function(){
-							console.log("留在当前页");
-						},function(){
-							closeTab(tabId);
-							modal.clearEdit(str[1]);
-						},"放弃","留在此页");
-					} else{
-						console.log(str[1]);
-						showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已修改的数据?",function(){
-							modal.save(str[1]);
-							closeTab(tabId);
-						}, function(){
-							closeTab(tabId);
-							modal.clearEdit(str[1]);
-						});
-					}
-				} else {
-					closeTab(tabId);
-				}
-			});
-			
-			$tabList.find('.active').data('prev-tab', $current_li);
-			Tools.justifyTab();
-		}, 50);
-	
-	}
-	$("#tabContent .tab-pane-menu").removeClass("active");
-	if($("#tab-"+tabId+"-content").length > 0){
-		$("#tab-"+tabId+"-content").addClass("active");
-	}
-	else{
-		$("#tabContent").append("<div id=\"tab-"+tabId+"-content\" class=\"tab-pane tab-pane-menu active\"></div>");
-	}
-
-	html = filterUnAuth(html);
-	$("#tab-"+tabId+"-content").html(html);
-}
 Tools.addTab = function(tab_id, tab_name, html)  {
 	$tabList.children('li').removeClass("active");
 
-	var $tab = $tabList.find('.tab-' + tab_id), 
+	var $current_li = $tabList.find('.active'),
+		$next_li = $tabList.find('.tab-'+tab_id);
 		$content = $('#tab-'+ tab_id +'-content'),
 		canUpdateTabContent = true;
 
 	// tab已经打开了
-	if ($tab.length > 0)  {
+	if ($next_li.length)  {
 		// show tab
-		$tab.data('prev-tab',$current_li).children('a').trigger('click').children('span').text(tab_name);
+		$next_li.data('prev-tab',$current_li).children('a').trigger('click').children('span').text(tab_name);
 
 		// 页面已经编辑
 		if ($content.data('isEdited'))  {
@@ -1630,9 +1568,9 @@ Tools.addTab = function(tab_id, tab_name, html)  {
 	return canUpdateTabContent;
 	function updateTabContent()  {
 		$tabContent.find(".tab-pane-menu").removeClass("active");
-		if($content.length > 0){
+		if($content.length){
 			$content.addClass("active");
-			$tab.find('span').text(tab_name);
+			$next_li.find('span').text(tab_name);
 		}
 		else{
 			var $tab_li = $("<li class=\"tab-"+tab_id+" active\"><a data-toggle=\"tab\" href=\"#tab-"+tab_id+"-content\" aria-expanded=\"true\"><span>"+tab_name+"</span><i class=\"ace-icon fa fa-close tab-close T-close\"></i></a></li>");
