@@ -941,8 +941,8 @@ define(function(require, exports) {
 				change:function(event,ui){
 					if(ui.item == null){
 						$(this).val("");
-						$(this).parent().parent().find("input[name=AddTPchooseGuideId]").val("");
-						$(this).parent().parent().find("input[name=mobileNumber]").val("");
+						$(this).closest('.widget-main').find("input[name=AddTPchooseGuideId]").val("");
+						$(this).closest('.widget-main').find("input[name=GmobileNumber]").val("");
 					}
 				},
 				select:function(event,ui){
@@ -957,8 +957,8 @@ define(function(require, exports) {
 							var result = showDialog(data);
 							if(result){
 								var guide = JSON.parse(data.guide);
-								$(obj).parent().parent().find("input[name=AddTPchooseGuideId]").val(guide.id).trigger('change');
-								$(obj).parent().parent().find("input[name=GmobileNumber]").val(guide.mobileNumber);
+								$(obj).closest('.widget-main').find("input[name=AddTPchooseGuideId]").val(guide.id).trigger('change');
+								$(obj).closest('.widget-main').find("input[name=GmobileNumber]").val(guide.mobileNumber);
 							}
 	                    }
 	                });
