@@ -595,7 +595,8 @@ var modalScripts = {
 	'business_analyst_employeePerfor' : "js/template/businessAnalyst/employeePerfor/employeePerfor.js", //员工业绩 
 	'business_analyst_tourguidePerfor' : "js/template/businessAnalyst/tourguidePerfor/tourguidePerfor.js", //导游业绩
 	//---------------------------------------------------------------------------------------------------------------
-	'financial_innerTransfer_profit': "js/template/financial/innerTransferProfit/innerTransferProfit.js"
+	'financial_innerTransfer_profit': "js/template/financial/innerTransferProfit/innerTransferProfit.js",
+	'financial_turnProfit': "js/template/financial/turnProfit/turnProfit.js"
 };
 
 
@@ -750,7 +751,7 @@ function listMenu(menuTemplate){
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/touristGroup/touristGroup.js",function(touristGroup){
-						touristGroup.getTouristStatisticData(0,"","","","","","","","");
+						touristGroup.getTouristStatisticData(0,"","","","","","","","","","","");
 						modals["resource_touristGroup"] = touristGroup;
 					});
 				});
@@ -1118,24 +1119,24 @@ function listMenu(menuTemplate){
 					});
 				});
 
-				//绑定转客利润菜单功能
-				$("#sidebar .nav-list .financial_turnProfit").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/financial/turnProfit/turnProfit.js",function(TurnProfit){
-						/*var tu = new Date()
-						 var vYear = tu.getFullYear()
-						 var vMon = tu.getMonth() + 1
-						 var vDay = tu.getDate()
-						 var startTime = vYear+"-"+vMon+"-"+vDay;
-						 var tmp = new Date(startTime);
-						 tmp = tmp-7*24*60*60*1000;
-						 tmp = new Date(tmp);
-						 var endTime = tmp.getFullYear()+"-"+(tmp.getMonth()+1)+"-"+tmp.getDate();*/
-						TurnProfit.listTurnProfit(0,"","","","","","","","");
-					});
-				});
+				// //绑定转客利润菜单功能
+				// $("#sidebar .nav-list .financial_turnProfit").click(function(){
+				// 	$("#sidebar .nav-list li").removeClass("active");
+				// 	$(this).addClass("active");
+				// 	$(this).parent().parent().addClass("active");
+				// 	seajs.use("" + ASSETS_ROOT +"js/template/financial/turnProfit/turnProfit.js",function(TurnProfit){
+				// 		var tu = new Date()
+				// 		 var vYear = tu.getFullYear()
+				// 		 var vMon = tu.getMonth() + 1
+				// 		 var vDay = tu.getDate()
+				// 		 var startTime = vYear+"-"+vMon+"-"+vDay;
+				// 		 var tmp = new Date(startTime);
+				// 		 tmp = tmp-7*24*60*60*1000;
+				// 		 tmp = new Date(tmp);
+				// 		 var endTime = tmp.getFullYear()+"-"+(tmp.getMonth()+1)+"-"+tmp.getDate();
+				// 		TurnProfit.listTurnProfit(0,"","","","","","","","");
+				// 	});
+				// });
 
 
 				//绑定代订利润功能
