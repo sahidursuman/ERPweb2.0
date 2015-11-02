@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":323,"md5":"8a33263e156e834fc4b45fa0b0e96dfd"}*/
+/*TMODJS:{"debug":true,"version":325,"md5":"8a33263e156e834fc4b45fa0b0e96dfd"}*/
 define(function(require) {
     return require("../../../template")("financial/Client/view/ClientChecking", function($data, $filename) {
         try {

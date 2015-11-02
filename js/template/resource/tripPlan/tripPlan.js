@@ -1,10 +1,12 @@
 define(function(require, exports) {
-	var rule=require("./rule");
-	var menuKey = "arrange_all";
-	var listTemplate = require("./view/list");
-	var addTemplate = require("./view/add");
-	var viewTemplate = require("./view/view");
-	var tabId = "tab-"+menuKey+"-content";
+	var rule=require("./rule"),
+		menuKey = "arrange_all",
+		listTemplate = require("./view/list"),
+		addTemplate = require("./view/add"),
+		viewTemplate = require("./view/view"),
+		addOptionalTemplate = require("./view/addOptional"),
+		optionalListTemplate = require("./view/optionalList"),
+		tabId = "tab-"+menuKey+"-content";
 	
 	var tripPlan = {
 		searchData : {
@@ -334,6 +336,31 @@ define(function(require, exports) {
 
 			//添加资源
 			tripPlan.addResource();
+
+			//浮动查看自选餐厅
+			//Tools.viewOptionalRestaurant($("#tripPlan_addPlan_restaurant .chooseRestaurant"));
+			tripPlan.viewOptionalRestaurant($("#tripPlan_addPlan_restaurant .chooseRestaurant"));
+			//组装JSON 浮动显示
+			
+		},
+		//浮动查看自选餐厅
+		viewOptionalRestaurant :function($objInput){
+			$objInput.each(function(){
+				var $this = $(this),$parents = $this.closest('tr'),/*$value = $parents.find('[name=optional]').val(),*/$title = [],$value = $this.data("propover");
+				if (!!$value) {
+					if (!!$value && typeof $value === "string") {
+						$value = JSON.parse($value);
+					}
+					var html = '<table class="table table-striped table-hover"><thead><tr><th class="th-border">餐厅名称</th><th class="th-border">联系人</th><th class="th-border">联系电话</th></tr><tbody>';
+					for (var i = 0; i < $value.length; i++) {
+						html += '<tr><td>'+$value[i].name+'</td><td>'+$value[i].managerName+'</td><td>'+$value[i].mobileNumber+'</td></tr>'
+					};
+					html += '</tbody></table>';
+					$this.data("html",html)
+					Tools.descToolTip($this,2);
+					$this.data('bs.popover').options.content = html;
+				}
+			})
 		},
 		//添加资源 
 		addResource : function(){
@@ -413,7 +440,7 @@ define(function(require, exports) {
 			var _this = $(this),
 			tableContainer = _this.parents(".ui-sortable-handle").find(".table tbody"),
 			html = '<tr><td class="whichDaysContainer"></td>' +
-			'<td><div class="col-sm-12"><input type="text" name="restaurantName" class="col-sm-12 chooseRestaurant"/><input type="hidden" name="restaurantId"><span class="addResourceBtn T-addRestaurantResource" title="添加餐厅"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>' +
+			'<td><div class="col-sm-12"><input type="text" name="restaurantName" class="col-sm-12 chooseRestaurant"/><input type="hidden" name="restaurantId"><input type="hidden" name="optional" value="" /><span class="addResourceBtn T-addRestaurantResource" title="添加餐厅"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>' +
 			'<td><input type="text" name="managerName" readonly="readonly" class="col-sm-12"/></td>' +
 			'<td><input type="text" name="mobileNumber" readonly="readonly" class="col-sm-12"/></td>' +
 			'<td><select name="type" class="col-sm-12 restauranType" style="width:80px;"><option value="早餐">早餐</option><option value="午餐">午餐</option><option value="晚餐">晚餐</option></select></td>' +
@@ -822,7 +849,6 @@ define(function(require, exports) {
 			}).click(function(){
 				var obj = this;
 				var listGuideObj = tripPlan.autocompleteDate.guideList;
-				console.info(listGuideObj);
 				if(listGuideObj !=null && listGuideObj.length>0){
 					for(var i=0;i<listGuideObj.length;i++){
 						listGuideObj[i].value = listGuideObj[i].realname;
@@ -852,7 +878,6 @@ define(function(require, exports) {
 			}).click(function(){
 				var obj = this;
 				var listBusObj = tripPlan.autocompleteDate.busList;
-				console.info(listBusObj);
 				if(listBusObj !=null && listBusObj.length>0){
 					for(var i=0;i<listBusObj.length;i++){
 						listBusObj[i].value = listBusObj[i].licenseNumber;
@@ -1009,23 +1034,32 @@ define(function(require, exports) {
 				},
 				select:function(event,ui){
 					var _this = this, parents = $(_this).closest('tr');
-					parents.find("input[name=restaurantId]").val(ui.item.id).trigger('change');
-					
-					$.ajax({
-						url:""+APP_ROOT+"back/restaurant.do?method=findRestaurantById&token="+$.cookie("token")+"&menuKey=resource_restaurant&operation=view",
-	                    dataType: "json",
-	                    data:"id="+ui.item.id,
-	                    success: function(data) {
-	                    	layer.close(globalLoadingLayer);
-							var result = showDialog(data);
-							if(result){
-								var restaurant = JSON.parse(data.restaurant);
-								parents.find("input[name=mobileNumber]").val(restaurant.mobileNumber);
-								parents.find("input[name=managerName]").val(restaurant.managerName);
-								parents.find("input[name=price]").val("");
-							}
-	                    }
-					});
+					if (ui.item.id == -1) {
+						tripPlan.addOptional($(this));
+						parents.find("input[name=restaurantId]").val(ui.item.id).trigger('change');
+						parents.find("input[name=mobileNumber]").val(ui.item.mobileNumber);
+						parents.find("input[name=managerName]").val(ui.item.managerName);
+						parents.find("input[name=price]").val("");
+					}else{
+						parents.find("input[name=restaurantId]").val(ui.item.id).trigger('change');
+						
+						$.ajax({
+							url:""+APP_ROOT+"back/restaurant.do?method=findRestaurantById&token="+$.cookie("token")+"&menuKey=resource_restaurant&operation=view",
+		                    dataType: "json",
+		                    data:"id="+ui.item.id,
+		                    success: function(data){
+		                    	layer.close(globalLoadingLayer);
+								var result = showDialog(data);
+								if(result){
+									var restaurant = JSON.parse(data.restaurant);
+									parents.find("input[name=mobileNumber]").val(restaurant.mobileNumber);
+									parents.find("input[name=managerName]").val(restaurant.managerName);
+									parents.find("input[name=price]").val("");
+									parents.find("input[name=optional]").val("");
+								}
+		                    }
+						});
+					}
 				}
 			}).off("click").on("click", function(){
 				var obj = this;
@@ -1036,7 +1070,9 @@ define(function(require, exports) {
                     	layer.close(globalLoadingLayer);
 						var result = showDialog(data);
 						if(result){
-							var restaurantList = JSON.parse(data.restaurantList);
+							var restaurantList = JSON.parse(data.restaurantList),
+								optional = {id : -1 , name : "-导游任选-",mobileNumber : "-",managerName : "-"};
+							restaurantList.unshift(optional);
 							if(restaurantList && restaurantList.length > 0){
 								for(var i=0; i < restaurantList.length; i++){
 									restaurantList[i].value = restaurantList[i].name;
@@ -1164,6 +1200,8 @@ define(function(require, exports) {
 								var hotel = JSON.parse(data.hotel);
 								parents.find("input[name=mobileNumber]").val(hotel.mobileNumber);
 								parents.find("input[name=managerName]").val(hotel.managerName);
+								parents.find("input[name=hotelRoom]").val("");
+								parents.find("input[name=hotelRoomId]").val("");
 							}
 	                    }
 					});
@@ -1800,9 +1838,17 @@ define(function(require, exports) {
 				}
 			}
 			//餐安排
-			var restaurant = $("#tripPlan_addPlan_restaurant tbody tr");
+			var restaurant = $("#tripPlan_addPlan_restaurant tbody tr"),
+				isChoose = "0",restaurantChooseArrangeListJson;
 			if(restaurant.length > 0){
 				for(var i=0; i<restaurant.length; i++){
+					if (!!restaurant.eq(i).find('[name=restaurantName]').data('propover')) {
+						isChoose = "1";
+						restaurantChooseArrangeListJson = restaurant.eq(i).find('[name=restaurantName]').data('propover')
+						if(typeof restaurant.eq(i).find('[name=restaurantName]').data('propover') === 'string'){
+							restaurantChooseArrangeListJson = JSON.parse(restaurant.eq(i).find('[name=restaurantName]').data('propover'))
+						}
+					}
 					if(tripPlan.getVal(restaurant.eq(i), "restaurantId")){
 						var restaurantJson = {
 							id : tripPlan.getVal(restaurant.eq(i), "id"),
@@ -1817,7 +1863,9 @@ define(function(require, exports) {
 							payType : tripPlan.getVal(restaurant.eq(i), "payType"),
 							guidePayMoney : tripPlan.getVal(restaurant.eq(i), "guidePayMoney"),
 							remark : tripPlan.getVal(restaurant.eq(i), "remark"),
-							type : restaurant.eq(i).find("[name=type]").val()
+							type : restaurant.eq(i).find("[name=type]").val(),
+							isChoose : isChoose,
+							restaurantChooseArrangeListJson : restaurantChooseArrangeListJson
 						}
 						tripPlanJson.restaurantArrangeList.push(restaurantJson);
 						guideAllPayMoney += tripPlan.checkParamIsDouble(restaurantJson.guidePayMoney);
@@ -2114,6 +2162,201 @@ define(function(require, exports) {
 					}
 				}
 			});
+		},
+		//添加自选餐厅
+		addOptional :function($objInput){
+			var html = addOptionalTemplate(),$inputJson = $objInput.data("propover");
+			if (!!$inputJson && typeof $inputJson === "string") {
+				$inputJson = JSON.parse($inputJson);
+			}
+			var addOptionalLayer = layer.open({
+	            type: 1,
+	            title: "餐厅自选模式",
+	            skin: 'layui-layer-rim', //加上边框
+	            area: '1190px', //宽高
+	            zIndex: 1028,
+	            content: html,
+	            scrollbar: false,
+	            success: function(data) {
+	                var $container = $(".T-optional-container"),
+	                	$list = $container.find('.T-addOptionalList'),
+	                	$tbody = $container.find('.T-alreadyAddOptionalTbody'),
+	                	optionalArray = [];
+
+	                if (!!$inputJson && $inputJson.length != 0) {
+	                	for (var i = 0; i < $inputJson.length; i++) {
+	                		var html = '<tr data-entity-id="'+$inputJson[i].id+'" data-entity-restaurantid="'+$inputJson[i].restaurantId+'">'+
+							'<td class="name">'+$inputJson[i].name+'</td>'+
+							'<td class="managerName">'+$inputJson[i].managerName+'</td>'+
+							'<td class="mobileNumber">'+$inputJson[i].mobileNumber+'</td>'+
+							'<td><a class="T-del">删除</a></td>'+
+							'</tr>';
+							$tbody.append(html);
+							optionalArray.push($inputJson[i].restaurantId)
+	                	}
+	                }
+	                //初始化list列表
+	                listOptional(0);
+	                
+	                //给提交按钮绑定事件
+	                $container.find(".T-btn-saveOptional").on('click' , saveOptional);
+	                //给取消按钮绑定事件
+	                $container.find(".T-btn-cancelOptional").click(function() {
+	                    layer.close(addOptionalLayer);
+	                });
+	                function listOptional(page){
+						$.ajax({
+				        	url: ""+APP_ROOT+"back/restaurant.do?method=getRestaurantListByChooseMode&token="+$.cookie("token")+"&menuKey=resource_restaurant"+"&operation=view",
+				        	type: "POST",
+				        	data: "pageNo="+page,
+				        	success: function(data){
+				        		var result = showDialog(data);
+				        		if (result) {
+				        			data.restaurantList = JSON.parse(data.restaurantList);
+									var html = optionalListTemplate(data);
+									$list.html(html);
+
+									// 绑定翻页组件
+									laypage({
+									    cont: $container.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+									    pages: data.totalPage, //总页数
+									    curr: (page + 1),
+									    jump: function(obj, first) {
+									    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+									    		listOptional(obj.curr -1);
+									    	}
+									    }
+									});	
+
+									//添加自选
+									$container.find(".T-add").off('click').on('click', addOptional);
+									//删除自选
+									$container.find(".T-del").off('click').on('click', delOptional);
+				        		}
+				        	}
+				        })
+		        	}
+		        	//添加自选函数
+		        	function addOptional(){
+		        		var $this = $(this),$parent = $this.closest('tr'),
+							$id = $parent.data("entity-id"),
+							$name = $parent.data("entity-name"),
+							$managerName = $parent.data("entity-managername"),
+							$mobileNumber = $parent.data("entity-mobilenumber");
+						var html = '<tr data-entity-id="" data-entity-restaurantid="'+$id+'">'+
+							'<td class="name">'+$name+'</td>'+
+							'<td class="managerName">'+$managerName+'</td>'+
+							'<td class="mobileNumber">'+$mobileNumber+'</td>'+
+							'<td><a class="T-del">删除</a></td>'+
+							'</tr>';
+						if (optionalArray.length >= 5) {
+							showMessageDialog($("#confirm-dialog-message"),"最多只能添加5个自选餐厅");
+							return;
+						}else{
+							if (optionalArray.length == 0) {
+								$tbody.append(html);
+								optionalArray.push($id);
+							}else{
+								for (var i = 0,$length = optionalArray.length; i < $length; i++) {
+				        			if (optionalArray[i] == $id) {
+				        				showMessageDialog($("#confirm-dialog-message"),"该餐厅已经添加");
+				        				return;
+				        			}
+				        		}
+		        				$tbody.append(html);
+								optionalArray.push($id);
+			        		}
+						}
+						//删除自选
+						$container.find(".T-del").off('click').on('click', delOptional);
+		        	};
+		        	//删除自选函数
+		        	function delOptional(){
+		        		var $this = $(this),$parent = $this.closest('tr'),
+		        			$restaurantid = $parent.data("entity-restaurantid"),
+		        			$id = $parent.data("entity-id")+"";
+		        		for (var i = 0,$length = optionalArray.length; i < $length; i++) {
+		        			if (optionalArray[i] == $restaurantid) {
+	        					var a = i;
+		        				if (!!$id) {
+		        					var dialogObj = $( "#confirm-dialog-message" );
+									dialogObj.removeClass('hide').dialog({
+										modal: true,
+										title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
+										title_html: true,
+										draggable:false,
+										buttons: [ 
+											{
+												text: "取消",
+												"class" : "btn btn-minier",
+												click: function() {
+													$( this ).dialog( "close" );
+												}
+											},
+											{
+												text: "确定",
+												"class" : "btn btn-primary btn-minier",
+												click: function() {
+													$( this ).dialog( "close" );
+							        				$.ajax({
+											        	url: ""+APP_ROOT+"back/restaurant.do?method=deleteChooseRestaurant&token="+$.cookie("token")+"&menuKey=resource_restaurant"+"&operation=view",
+											        	type: "POST",
+											        	data: "id="+$id,
+											        	success: function(data){
+											        		var result = showDialog(data);
+											        		if (result) {
+											        			showMessageDialog($("#confirm-dialog-message"),data.message,function(){
+											        				optionalArray.splice([a],1);
+												        			$parent.remove();
+												        			saveOptional(1);
+											        			})
+												        	}
+												        }
+												    })
+												}
+											}
+										],
+										open:function(event,ui){
+											$(this).find("p").text("你确定要删除该条记录？");
+										}
+									});	
+		        				}else{
+		        					optionalArray.splice([a],1);
+				        			$parent.remove();
+						        }
+		        			} 
+		        		}
+		        	};
+		        	//保存函数
+		        	function saveOptional(type){
+		        		var $tr = $tbody.find('tr'),
+		        			optionalJson = [];
+		        		function getValue($obj,className){
+		        			var value = $obj.find('.'+className).text();
+		        			return value;
+		        		}
+		        		$tr.each(function(){
+		        			var $this = $(this),$id = $this.data("entity-id")+"" || "";
+		        				json = {
+		        				id : $id+"",
+		        				restaurantId : $this.data("entity-restaurantid")+"",
+		        				name : getValue($this,"name"),
+		        				managerName : getValue($this,"managerName"),
+		        				mobileNumber : getValue($this,"mobileNumber")
+		        				}
+		        			optionalJson.push(json);
+		        		})
+		        		optionalJson = JSON.stringify(optionalJson);
+		        		//$objInput.closest('tr').find("[name=optional]").val(encodeURIComponent(optionalJson))
+		        		$objInput.data("propover" , optionalJson);
+		        		if (type == 1) {}else{
+		        			layer.close(addOptionalLayer);
+		        		}
+						tripPlan.viewOptionalRestaurant($objInput);
+						//Tools.descToolTip($("#tripPlan_addPlan_restaurant .chooseRestaurant"),2);
+		        	};
+	            }
+        	});
 		},
 		save : function(saveType){
 			if(saveType == "update"){

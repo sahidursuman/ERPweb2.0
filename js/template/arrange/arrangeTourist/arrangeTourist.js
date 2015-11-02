@@ -1102,6 +1102,7 @@ define(function(require, exports) {
 			$("#"+tab+" .checkbox").unbind().click(function(){
 				if ($("#"+tab+" .checkbox input[name=executeTimeType]:radio:checked").val()==1) {
 					$(this).parent().parent().find(".addMergePlanTime").removeClass("hide");
+					$(this).parent().parent().find(".addMergePlanTime").find('input[name=executeTime]').val('');
 				} else{
 					$(this).parent().parent().find(".addMergePlanTime").addClass("hide");
 				};
