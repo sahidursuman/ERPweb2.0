@@ -12,16 +12,15 @@ var modals = {};
 var $tabList = $('#tabList'), $tabContent = $("#tabContent");
 
 function addTab(tabId,tabName,html){
-	var $current_li = $tabList.find('.active');
+	var $current_li = $tabList.find('.active'),
+		$next_li = $tabList.find('.tab-'+tabId);
 
-	$("#tabList li").removeClass("active");
-	if($("#tabList li.tab-"+tabId+"").length > 0){
-		$("#tabList li.tab-"+tabId+"").data('prev-tab',$current_li).trigger('click');
+	$tabList.children("li").removeClass("active");
+	if ($next_li.length) {
+		$next_li.data('prev-tab',$current_li).children('a').trigger('click').children('span').text(tabName);
 		setTimeout(function() {
 			Tools.justifyTab();
 		}, 50);
-		$("#tabList li.tab-"+tabId+"").find("span").text(tabName);
-
 	}
 	else{
 		$("#tabList").append("<li class=\"tab-"+tabId+" active\"><a data-toggle=\"tab\" href=\"#tab-"+tabId+"-content\" aria-expanded=\"true\"><span>"+tabName+"</span><i class=\"ace-icon fa fa-close tab-close\"></i></a></li>");
@@ -60,9 +59,9 @@ function addTab(tabId,tabName,html){
 			});
 			
 			$tabList.find('.active').data('prev-tab', $current_li);
+			Tools.justifyTab();
 		}, 50);
 	
-		Tools.justifyTab();
 	}
 	$("#tabContent .tab-pane-menu").removeClass("active");
 	if($("#tab-"+tabId+"-content").length > 0){
@@ -1507,6 +1506,69 @@ Tools.descToolTip = function($elements) {
  * @param {string} tab_name Tab的标题
  * @param {[type]} html     [description]
  */
+function addTab(tabId,tabName,html){
+	var $current_li = $tabList.find('.active'),
+		$next_li = $tabList.find('.tab-'+tabId);
+
+	$tabList.children("li").removeClass("active");
+	if ($next_li.length) {
+		$next_li.data('prev-tab',$current_li).children('a').trigger('click').children('span').text(tabName);
+		setTimeout(function() {
+			Tools.justifyTab();
+		}, 50);
+	}
+	else{
+		$("#tabList").append("<li class=\"tab-"+tabId+" active\"><a data-toggle=\"tab\" href=\"#tab-"+tabId+"-content\" aria-expanded=\"true\"><span>"+tabName+"</span><i class=\"ace-icon fa fa-close tab-close\"></i></a></li>");
+		setTimeout(function() {
+			listwidth += parseInt($("#tabList li.tab-"+tabId+"").css("width"));
+			var maxwidth = parseInt($(".breadcrumbs-fixed").css("width"))-70;
+			if(listwidth > maxwidth){
+				var maxleft = -(listwidth - (maxwidth + 35));//ul可向左平移的最大宽度，maxleft取负值,35为左侧移动符号宽度
+				$("#tabList").css("marginLeft",maxleft);
+			}
+			$("#tabList .tab-"+tabId+" .tab-close").click(function(){
+				$that = $(this);
+				var str = tabId.split("-");
+				var modal = modals[str[0]];
+				if(str.length > 1 && str[1] != "view" && !!modal && !!modal.isEdited && modal.isEdited(str[1])){//非列表、查看,且有修改
+					if(str[1] == "add"){
+						showConfirmMsg($( "#confirm-dialog-message" ), "未保存的数据，是否放弃?",function(){
+							console.log("留在当前页");
+						},function(){
+							closeTab(tabId);
+							modal.clearEdit(str[1]);
+						},"放弃","留在此页");
+					} else{
+						console.log(str[1]);
+						showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已修改的数据?",function(){
+							modal.save(str[1]);
+							closeTab(tabId);
+						}, function(){
+							closeTab(tabId);
+							modal.clearEdit(str[1]);
+						});
+					}
+				} else {
+					closeTab(tabId);
+				}
+			});
+			
+			$tabList.find('.active').data('prev-tab', $current_li);
+			Tools.justifyTab();
+		}, 50);
+	
+	}
+	$("#tabContent .tab-pane-menu").removeClass("active");
+	if($("#tab-"+tabId+"-content").length > 0){
+		$("#tab-"+tabId+"-content").addClass("active");
+	}
+	else{
+		$("#tabContent").append("<div id=\"tab-"+tabId+"-content\" class=\"tab-pane tab-pane-menu active\"></div>");
+	}
+
+	html = filterUnAuth(html);
+	$("#tab-"+tabId+"-content").html(html);
+}
 Tools.addTab = function(tab_id, tab_name, html)  {
 	$tabList.children('li').removeClass("active");
 
@@ -1517,7 +1579,7 @@ Tools.addTab = function(tab_id, tab_name, html)  {
 	// tab已经打开了
 	if ($tab.length > 0)  {
 		// show tab
-		$tab.children('a').trigger('click');
+		$tab.data('prev-tab',$current_li).children('a').trigger('click').children('span').text(tab_name);
 
 		// 页面已经编辑
 		if ($content.data('isEdited'))  {
@@ -1533,6 +1595,10 @@ Tools.addTab = function(tab_id, tab_name, html)  {
 								false);
 			// 此时不能添加内容
 			canUpdateTabContent = false;
+		} else {
+			setTimeout(function() {
+				Tools.justifyTab();
+			}, 50);
 		}
 	} 
 
