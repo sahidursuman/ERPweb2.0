@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":421,"md5":"eb6754d56469be566ac2eebf6342891d"}*/
+/*TMODJS:{"debug":true,"version":423,"md5":"eb6754d56469be566ac2eebf6342891d"}*/
 define(function(require) {
     return require("../../../template")("resource/subsection/view/list", function($data, $filename) {
         try {

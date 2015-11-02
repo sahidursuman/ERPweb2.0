@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":259,"md5":"f767d7e68d295899a678b7932c401c71"}*/
+/*TMODJS:{"debug":true,"version":260,"md5":"f767d7e68d295899a678b7932c401c71"}*/
 define(function(require) {
     return require("../../../template")("arrange/arrangeTourist/view/editFee", function($data, $filename) {
         try {
