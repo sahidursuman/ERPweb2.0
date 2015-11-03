@@ -179,7 +179,13 @@ define(function(require, exports) {
 	                 	    }else{
 	                 	    	addTab(checkTabId,"酒店对账",html);
 	                 	    	validator = rule.check($('.hotelChecking'));
-	                 	    };
+	                 	    }
+	                 	    //取消对账权限过滤
+	                 	    var checkList = data.financialHotelList;
+		                    var checkTr = $(".T-checkList tr");
+		                    var rightCode = $(".T-checkList").data("right");
+		                    checkDisabled(checkList,checkTr,rightCode);
+	                    
 	                 	   $("#" +"tab-"+checkTabId+"-content .all").on("change",function(){
                 	    		Hotel.edited["checking"] = "checking"; 
 								Hotel.oldCheckHotelId = hotelId;
@@ -209,7 +215,7 @@ define(function(require, exports) {
 						laypage({
 						    cont: $("#tab-"+ checkTabId+"-content").find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
 						    pages: data.totalPage, //总页数
-						    curr: (page + 1),
+						    curr: (pageNo + 1),
 						    jump: function(obj, first) {
 						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
 						    		Hotel.hotelCheckList(obj.curr -1,Hotel.searchCheckData.hotelId,Hotel.searchCheckData.hotelName,Hotel.searchCheckData.year,Hotel.searchCheckData.month)
