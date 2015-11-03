@@ -29,6 +29,20 @@ define(function(require, exports) {
 			return false;
 		},
 		listTransit :function(page,fromPartnerAgencyName,fromPartnerAgencyId,lineProductId,lineProductName,startTime,arrangeUserId,arrangeUserName,arrangeStartTime,arrangeEndTime,status,shuttleType,shuttleTime){
+			transit.searchData = {
+				fromPartnerAgencyName:fromPartnerAgencyName,
+				fromPartnerAgencyId : fromPartnerAgencyId,
+				lineProductName:lineProductName,
+				lineProductId : lineProductId,
+				startTime : startTime,
+				arrangeUserName:arrangeUserName,
+				arrangeUserId : arrangeUserId,
+				arrangeStartTime : arrangeStartTime,
+				arrangeEndTime : arrangeEndTime,
+				status : status,
+				shuttleType : shuttleType,
+				shuttleTime : shuttleTime
+			};
 			$.ajax({
 				url:""+APP_ROOT+"back/touristGroup.do?method=listTransitArrange&token="+$.cookie("token")+"&menuKey=resource_touristGroup"+"&operation=view",
 				type:"POST",
@@ -254,7 +268,8 @@ define(function(require, exports) {
 						var tab = "tab-arrange_transit-update-content";
 						var validator = rule.setTranistCheckor($(".arrangeTouristMain"));
 						if($(".tab-"+menuKey+"-update").length > 0) {
-							if(!!transit.edited["update"]){
+							addTab(menuKey+"-update","编辑中转安排");
+							if(!!transit.edited["update"] && transit.edited["update"] == "update"){
 								showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
 									validator = rule.setTranistCheckor($(".arrangeTouristMain"));
 									if (!validator.form()) {
@@ -263,22 +278,24 @@ define(function(require, exports) {
 									transit.submitUpdateTransit($(".arrangeTouristMain .btn-updateArrange").attr("data-entity-id"),0);
 									transit.edited["update"] = "";
 									addTab(menuKey+"-update","编辑中转安排",html);
+									transit.initUpdate(id,data);
 									validator = rule.setTranistCheckor($(".arrangeTouristMain"));
 								},function(){
-									addTab(menuKey+"-update","编辑中转安排",html);;
+									addTab(menuKey+"-update","编辑中转安排",html);
+									transit.initUpdate(id,data);
 									validator = rule.setTranistCheckor($(".arrangeTouristMain"));
 									transit.edited["update"] = "";
 								});
 							}else{
 								addTab(menuKey+"-update","编辑中转安排",html);
+								transit.initUpdate(id,data);
 								validator = rule.setTranistCheckor($(".arrangeTouristMain"));
 							}
 						}else{
 							addTab(menuKey+"-update","编辑中转安排",html);
+							transit.initUpdate(id,data);
 							validator = rule.setTranistCheckor($(".arrangeTouristMain"));
 						}
-
-						transit.initUpdate(id,data);
 					}
 				}
 			})
