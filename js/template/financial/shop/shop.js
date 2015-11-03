@@ -108,6 +108,7 @@ define(function(require, exports) {
 					layer.close(globalLoadingLayer);
 					var result = showDialog(data);
 					if(result){
+						var checkList = data.shopList;
 						var html = shopCheckingTemplate(data);
 						var validator;
                  	    //判断页面是否存在
@@ -137,7 +138,13 @@ define(function(require, exports) {
                  	    	addTab(menuKey+"-checking","购物对账",html);
                  	    	validator = rule.check($('.shop-checking'));
                  	    	
-                 	    };
+                 	    }
+
+                 	    //取消对账权限过滤
+                        var checkTr = $(".T-checkList tr");
+                        var rightCode = $(".T-checkList").data("right");
+                        checkDisabled(checkList,checkTr,rightCode);
+
                  	   $("#"+checkTabId+ " .all").on("change",function(){
             	    		shop.edited["checking"] = "checking"; 
 							shop.oldCheckShopId = shopId;

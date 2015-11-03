@@ -75,7 +75,7 @@
               <th class="th-border">对账</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody class="T-checkList" data-right="1310005">
             {{each shopList as shop index}}
             <tr data-entity-id="{{shop.id}}" data-entity-isConfirmAccount="{{shop.isConfirmAccount}}" data-entity-startTime="{{shop.consumeStartTime}}" data-entity-rebateMoney="{{shop.rebateMoney}}" data-entity-billRemark="{{shop.billRemark}}">
                 <td>{{index+1}}</td>
@@ -94,11 +94,11 @@
 	               	{{if shop.isConfirmAccount == 0}}
 	                   <input data-entity-value="{{shop.rebateMoney}}"  maxlength="9" type="text" name="realRebateMoney" value="{{shop.rebateMoney}}" class="col-sm-12" />
                    {{else}}
-                   	   <input data-entity-value="{{shop.realRebateMoney}}"  maxlength="1000" type="text" name="realRebateMoney" value="{{shop.realRebateMoney}}" class="col-sm-12" {{if shop.isConfirmAccount == 1 && roleType != 1 }} disabled = "true" {{/if}}/>
+                   	   <input data-entity-value="{{shop.realRebateMoney}}"  maxlength="1000" type="text" name="realRebateMoney" value="{{shop.realRebateMoney}}" class="col-sm-12"/>
                    {{/if}}
 				</td>
                 <td>
-                    <input data-entity-value="{{shop.billRemark}}" type="text" name="billRemark" value="{{shop.billRemark}}" class="col-sm-12" {{if shop.isConfirmAccount == 1 && roleType != 1 }} disabled = "true" {{/if}}/>
+                    <input data-entity-value="{{shop.billRemark}}" type="text" name="billRemark" value="{{shop.billRemark}}" class="col-sm-12"/>
                 </td>
                 <td>
                 {{if shop.checkTime != null}}
@@ -107,7 +107,7 @@
                 </td>
                 <td>{{shop.checkUserRealName}}</td>
                 <td>
-                    <input type="checkbox" class="ace" name="isConfirmAccount" data-entity-checkStatus="{{shop.isConfirmAccount}}" {{if shop.isConfirmAccount == 1}}checked="checked"{{/if}} {{if shop.isConfirmAccount == 1 && roleType != 1 }} disabled = "true" {{/if}} />
+                    <input type="checkbox" class="ace" name="isConfirmAccount" data-entity-checkStatus="{{shop.isConfirmAccount}}" {{if shop.isConfirmAccount == 1}}checked="checked"{{/if}} />
                     <span class="lbl"></span>
                 </td>
             </tr>
