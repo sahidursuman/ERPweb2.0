@@ -720,18 +720,6 @@ define(function(require, exports) {
 							tr += "<td>" + user.mobileNumber +"</td>";
 							var tmp = user.status==1?"已启用":"已停用";
 							tr += "<td>" + tmp +"</td>";
-							tr += "<td>" +
-									"<div class=\"hidden-sm hidden-xs btn-group\"> " +
-									"<a data-entity-id=\"" + user.id + "\" class=\"cursor btn-user-auth\" title=\"授权\"> 授权 </a>" +
-									"</div>" +
-									"<div class=\"hidden-md hidden-lg\">" +
-									"<div class=\"inline pos-rel\"> " +
-									"<button class=\"btn btn-minier btn-primary dropdown-toggle\" data-toggle=\"dropdown\" data-position=\"auto\"> <i class=\"ace-icon fa fa-cog icon-only bigger-110\"></i> </button> " +
-									"<ul class=\"dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close\">" +
-									"<li> <a data-entity-id=\"" + user.id + "\" href=\"javascript:void(0)\" class=\"tooltip-error btn-user-auth\" data-rel=\"tooltip\"> <span class=\"red\"> <i class=\"ace-icon fa fa-search-plus bigger-120\"></i> </span> </a> </li>" +
-									"</ul></div></div></td>" +
-									"</td>";
-							tr += "</tr>";
 							$('#content').append(tr);
 						}
 						$("#content .btn-user-auth").off("click").on("click",function(e) {

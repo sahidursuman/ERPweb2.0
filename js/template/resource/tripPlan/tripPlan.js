@@ -1695,7 +1695,7 @@ define(function(require, exports) {
 					if(ui.item == null){
 						$(this).val("");
 						var thisParent = $(this).closest('tr');
-						thisParent.find("input[name=tickeId]").val(ui.item.id).trigger('change');
+						thisParent.find("input[name=tickeId]").val("").trigger('change');
 					}
 				}
 			}).off("click").on("click", function(){
