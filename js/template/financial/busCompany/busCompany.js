@@ -182,6 +182,12 @@ define(function(require, exports) {
 							validator = rule.check($('.busCompanyChecking .all'));
 						}
 
+						//取消对账权限过滤
+                 	    var checkList = data.financialBusCompanyList;
+	                    var checkTr = $(".T-checkList tr");
+	                    var rightCode = $(".T-checkList").data("right");
+	                    checkDisabled(checkList,checkTr,rightCode);
+	                    
 						// 绑定翻页组件
 						laypage({
 						    cont: $("#tab-"+checkTabId+"-content").find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,

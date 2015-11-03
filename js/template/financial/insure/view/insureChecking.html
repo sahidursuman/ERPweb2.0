@@ -60,7 +60,7 @@
                            <th class="th-border">对账</th>
                         </tr>  
 					</thead>   
-					<tbody>
+					<tbody class="T-checkList" data-right="1270005">
 					    {{each financialInsuranceList as checking index}}
 					    <tr data-entity-id="{{checking.id}}" data-entity-isConfirmAccount="{{checking.isConfirmAccount}}" data-entity-realUnPayedMoney="{{checking.realUnPayedMoney}}" data-entity-remark="{{checking.remark}}">
 				         <td>{{index+1}}</td>
@@ -77,14 +77,14 @@
 							</td> 
 							<td>{{checking.unPayedMoney}}</td>
 							<td>{{if checking.billImages != null && checking.billImages !=""}}<a href="#" class="insuanceImg" url="{{checking.billImages}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
-							<td><input type="text" name="FinancialinsuanceRealUnPayedMoney" value="{{checking.realUnPayedMoney}}" style="text-align:center" {{if checking.isConfirmAccount == 1 && roleType != 1 }} disabled = "true" {{/if}}></td>
-	                        <td><input type="text" name="FinancialinsuanceRemark" value="{{checking.remark}}" style="text-align:center" {{if checking.isConfirmAccount == 1 && roleType != 1 }} disabled = "true" {{/if}}></td>
+							<td><input type="text" name="FinancialinsuanceRealUnPayedMoney" value="{{checking.realUnPayedMoney}}" style="text-align:center" /></td>
+	                        <td><input type="text" name="FinancialinsuanceRemark" value="{{checking.remark}}" style="text-align:center" /></td>
 							<td>{{if checking.checkTime == null || checking.checkTime == ""}}-{{else}}{{checking.checkTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
 	                        <td>{{checking.checkUserRealName}}</td>
 							<td>
 							   <label class="pos-rel">
 							   		<input type="checkbox" data-entity-checkStatus="{{checking.isConfirmAccount}}" class="ace insuanceFinancial" 
-							   		{{if checking.isConfirmAccount == 1}}checked="checked"{{/if}} {{if checking.isConfirmAccount == 1 && roleType != 1 }} disabled = "true" {{/if}}   />
+							   		{{if checking.isConfirmAccount == 1}}checked="checked"{{/if}} />
 							   		<span class="lbl"></span>
 							   </label>
 							</td>

@@ -147,6 +147,7 @@ define(function(require, exports) {
                     layer.close(globalLoadingLayer);
                     var result = showDialog(data);
                     if(result){
+                    	var checkList = data.financialBookingOrderList;
                         //data.financialReplaceList = JSON.parse(data.financialReplaceList);
                         Replace.searchCheckData={
                             partnerAgencyId:partnerAgencyId,
@@ -187,7 +188,12 @@ define(function(require, exports) {
                     }else{
                         addTab(checkTabId,"代订对账",html);
                         validator = rule.check($('.bookingChecking'));
-                    };
+                    }
+                    //取消对账权限过滤
+                    var checkTr = $(".T-checkList tr");
+                    var rightCode = $(".T-checkList").data("right");
+                    checkDisabled(checkList,checkTr,rightCode);
+
                     $("#" +"tab-"+checkTabId+"-content .all").on("change",function(){
                         Replace.edited["checking"] = "checking"; 
                         oldCheckPartnerAgencyId = partnerAgencyId;

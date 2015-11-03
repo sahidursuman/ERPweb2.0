@@ -171,7 +171,14 @@ define(function(require, exports) {
                  	    }else{
                  	    	addTab(blanceTabId,"景区结算",html);
                  	    	Scenic.validatorTable();
-                 	    };
+                 	    }
+
+                        //取消对账权限过滤
+                        var checkList = data.financialScenicList;
+                        var checkTr = $(".T-checkList tr");
+                        var rightCode = $(".T-checkList").data("right");
+                        checkDisabled(checkList,checkTr,rightCode);
+                        
                  	   $("#" +"tab-"+blanceTabId+"-content .all").on('change', 'input, select', function() {
                  		   Scenic.edited["blance"] = "blance";
                  		    Scenic.oldBlanceScenicId = scenicId;
