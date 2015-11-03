@@ -701,8 +701,12 @@ define(function(require, exports) {
                                     $(this).val(0);
                                 }
                                 vl = $(this).val();
-                                $(this).val(count.changeTwoDecimal(parseFloat(vl)));
-                                count.bindOtherInSum(this,"countReimbursement");
+                               
+                                if($(this).prop("name") != 'title' && $(this).prop("name") != 'billRemark'){
+                                    $(this).val(count.changeTwoDecimal(parseFloat(vl)));
+                                    count.bindOtherInSum(this,"countReimbursement");
+                                }
+                                
                         });
                         $('#T-otherIn').on('click', '.T-del', function() {
                             var tr = $(this).closest("tr");
@@ -773,11 +777,10 @@ define(function(require, exports) {
                                 }
                                 vl = $(this).val();
                                 console.log($(this).prop("name"));
-                                if($(this).prop("name") != 'name' || $(this).prop("name") != "billRemark"){
+                                if($(this).prop("name") != 'name' && $(this).prop("name") != 'billRemark'){
                                     $(this).val(count.changeTwoDecimal(parseFloat(vl)));
+                                    count.bindOther(this,"countReimbursement");
                                 }
-                               
-                                count.bindOther(this,"countReimbursement");
                             });
                             count.setChooseDays("financial-count-update-otherpay");
                         });
@@ -854,8 +857,11 @@ define(function(require, exports) {
                                     $(this).val(0);
                                 }
                                 vl = $(this).val();
-                                $(this).val(count.changeTwoDecimal(parseFloat(vl)));
-                                count.bindOtherIn(this,"countReimbursement");
+                                
+                                if($(this).prop('name') != "title" && $(this).prop('name') != "billRemark"){
+                                    $(this).val(count.changeTwoDecimal(parseFloat(vl)));
+                                    count.bindOtherIn(this,"countReimbursement");
+                                }
                             }
                         });
                         //车费
@@ -915,8 +921,10 @@ define(function(require, exports) {
                                 $(this).val(0);
                             }
                             vl = $(this).val();
-                            $(this).val(count.changeTwoDecimal(parseFloat(vl)));
-                            count.bindOther(this,"countReimbursement");
+                            if($(this).prop('name') != "billRemark"){
+                             $(this).val(count.changeTwoDecimal(parseFloat(vl)));
+                             count.bindOther(this,"countReimbursement");
+                            }
                         });
                         $('.countReimbursement .btn-saveCount').off('click').on('click',function() {
                             var id = $(this).attr('data-entity-id');
@@ -2018,7 +2026,7 @@ define(function(require, exports) {
 			var needPayMoney = parseFloat(price)*parseFloat(realCount);
 			needPayMoney = count.changeTwoDecimal(needPayMoney);
 			$(parent).find('.needPayMoney').text(needPayMoney);
-            $(parent).find('input[name="needPayMoney"]').val(needPayMoney);
+            $(parent).find('input[name="realneedPayMoney"]').val(needPayMoney);
 			count.bindOtherInSum(obj,formClass);
 
 		},
