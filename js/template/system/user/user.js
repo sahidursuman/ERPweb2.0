@@ -203,7 +203,6 @@ define(function(require, exports) {
 						    						return false;
 						    					}
 						    				});
-						    				console.log(ischeck);
 						    				if(!ischeck){
 						    					$(this).find(".T-function-area4").prop("checked",true);
 						    				}
