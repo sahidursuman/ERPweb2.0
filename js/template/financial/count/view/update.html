@@ -110,27 +110,27 @@
             {{/if}}
             {{if tripPlan.billStatus > -1}}
             <div style="float:left;">  
-                {{if user.roleType == 1 || (user.roleType == 2 && tripPlan.billStatus == 1) || (user.roleType == 3 && tripPlan.billStatus == 0)}}
+                {{if (tripPlan.billStatus == 1) || (tripPlan.billStatus == 0)}}
                 <button data-entity-id="{{tripPlan.id}}" data-entity-userName="{{user.userName}}" data-entity-roleType="{{user.roleType}}" data-entity-financial-id="{{financialTripPlanId}}" class="btn btn-xs btn-primary btn-transfter btn-saveCount" style="margin-right: 20px;">
                     <i class="ace-icon fa fa-save"></i>保存信息
                 </button>
                 {{/if}}
-                {{if (user.roleType == 2 && tripPlan.billStatus == 1) || (user.roleType == 3 && tripPlan.billStatus == 0)}}
+                {{if (tripPlan.billStatus == 1) || (tripPlan.billStatus == 0)}}
                 <button data-entity-billStatus="{{tripPlan.billStatus}}" data-entity-userName="{{user.userName}}" data-entity-roleType="{{user.roleType}}" data-entity-id="{{tripPlan.id}}" data-entity-financial-id="{{financialTripPlanId}}" class="btn btn-xs btn-success btn-transfter btn-accountCheck" style="margin-right: 20px;">
                     <i class="ace-icon fa fa-check-circle"></i>审核通过
                 </button>
                 {{/if}} 
-                {{if user.roleType == 2 && tripPlan.billStatus == 1}}
+                {{if tripPlan.billStatus == 1}}
                 <button data-entity-billStatus="{{tripPlan.billStatus}}" data-entity-id="{{tripPlan.id}}" data-entity-financial-id="{{financialTripPlanId}}" class="btn btn-xs btn-danger btn-transfter btn-rebackOP" style="margin-right: 20px;">
                     <i class="ace-icon fa fa-mail-reply"></i>退回计调
                 </button>
                 {{/if}}
-                {{if user.roleType == 1 && tripPlan.billStatus == 2}}
+                {{if tripPlan.billStatus == 2}}
                 <button data-entity-billStatus="{{tripPlan.billStatus}}" data-entity-id="{{tripPlan.id}}" class="btn btn-xs btn-danger btn-transfter btn-rebackFinancial" style="margin-right: 20px;display: none;">
                     <i class="ace-icon fa fa-mail-reply"></i>退回财务(暂时不做这个功能)
                 </button>
                 {{/if}}
-                {{if user.roleType == 3 && tripPlan.billStatus == 0}}
+                {{if tripPlan.billStatus == 0}}
                 <button data-entity-billStatus="{{tripPlan.billStatus}}" data-entity-id="{{tripPlan.id}}" data-entity-financial-id="{{financialTripPlanId}}" class="btn btn-xs btn-danger btn-transfter btn-rebackGuide" style="margin-right: 20px;">
                     <i class="ace-icon fa fa-mail-reply"></i>退回导游
                 </button>
