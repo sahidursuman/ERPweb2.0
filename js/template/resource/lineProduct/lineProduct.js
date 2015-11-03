@@ -223,8 +223,13 @@ define(function(require, exports) {
 						if (Tools.addTab(tab_id, title, html)) {
 							ResLineProduct.init_updata_tab(tab_id);							
 						}
-
-
+						// 绑定autocomplete
+						var $tab = $('#tab-'+ tab_id + '-content'),$dayListArea = $tab.find('.T-timeline-container');
+						ResLineProduct.bindRestaurantEvent($dayListArea.find('.T-choose-restaurantName'), $dayListArea.find('.T-choose-restaurantStandardsName'));
+						ResLineProduct.bindHotelEvent($dayListArea.find('.T-choose-hotelName'), $dayListArea.find('.T-choose-hotelRoom'), $dayListArea.find('.T-choose-hotelStarLevel'));
+						ResLineProduct.bindScenicEvent($dayListArea.find('.T-choose-scenicName'));
+						ResLineProduct.bindScenicEvent($dayListArea.find('.T-choose-shopVendorName'));
+						ResLineProduct.bindScenicEvent($dayListArea.find('.T-choose-ticketCompanyName'));
 					}
 				}
 			});
@@ -340,14 +345,6 @@ define(function(require, exports) {
 			})
 			.on('click', '.T-delete', ResLineProduct.deleteLineProductDaysArrange);
 
-			// 绑定autocomplete
-			var $dayListArea = $tab.find('.T-timeline-container');
-			ResLineProduct.bindRestaurantEvent($dayListArea.find('.T-choose-restaurantName'), $dayListArea.find('.T-choose-restaurantStandardsName'));
-			ResLineProduct.bindHotelEvent($dayListArea.find('.T-choose-hotelName'), $dayListArea.find('.T-choose-hotelRoom'), $dayListArea.find('.T-choose-hotelStarLevel'));
-			ResLineProduct.bindScenicEvent($dayListArea.find('.T-choose-scenicName'));
-			ResLineProduct.bindScenicEvent($dayListArea.find('.T-choose-shopVendorName'));
-			ResLineProduct.bindScenicEvent($dayListArea.find('.T-choose-ticketCompanyName'));
-			
 			// 绑定安排的拖动事件				
 			$tab.find('.T-timeline-container').sortable({
 				containment: 'parent',
@@ -798,6 +795,7 @@ define(function(require, exports) {
 					$tr.find("input[name=payType]").val("");
 					$tr.find("input[name=menuList]").val("");
 					$tr.find("input[name=pricePerPerson]").val("");
+					$tr.find("input[name=price]").val("");
 				}
 
 				// 更新表单验证的配置
@@ -809,6 +807,7 @@ define(function(require, exports) {
 				$tr.find("input[name=typeName]").val("");
 				$tr.find("input[name=menuList]").val("");
 				$tr.find("input[name=pricePerPerson]").val("");
+				$tr.find("input[name=price]").val("");
 				
 				$.ajax({
 					url: KingServices.build_url('restaurant', 'findRestaurantById'),
