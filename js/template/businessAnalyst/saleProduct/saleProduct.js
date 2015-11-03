@@ -69,7 +69,7 @@ define(function(require, exports) {
 						    curr: (page + 1),
 						    jump: function(obj, first) {
 						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-						    		SaleProductObj.listSaleProduct(obj.curr -1);
+						    		SaleProductObj.listSaleProduct(obj.curr -1,startDate,endDate,customerType);
 						    	}
 						    }
 						});

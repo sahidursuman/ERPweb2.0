@@ -50,6 +50,7 @@ define(function(require, exports) {
 			endTime:endTime,
 			id:customerId,
 			customerName:customerName,
+			name:customerName,
 			pageNo:page
 		};
 

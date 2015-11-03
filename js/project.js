@@ -103,6 +103,17 @@ function closeTab(tabId){
 	Tools.justifyTab();
 }
 
+//判断是否有权限
+function isAuth(rightCode){
+	var functionList = IndexData.userInfo.listUserFunctionShip;
+	if(rightCode){
+		var index = functionList.indexOf(rightCode);
+		if(index < 0){
+			return false;
+		}
+	}
+	return true;
+}
 //权限过滤
 function filterUnAuth(obj) {
 	if (!obj || !IndexData.userInfo || !IndexData.userInfo.listUserFunctionShip) return '';
@@ -111,14 +122,23 @@ function filterUnAuth(obj) {
 	var $obj = $(obj);
 	$obj.find(".R-right").each(function(){
 		var right = $(this).data("right");
-		if(right){
-			var index = functionList.indexOf(right);
-			if(index < 0){
-				$(this).remove();
-			}
+		var auth = isAuth(right);
+		if(!auth){
+			$(this).remove();
 		}
 	});
 	return $obj;
+}
+
+//财务对账行处理
+function checkDisabled(checkList,checkTr,rightCode){
+	var auth = isAuth(rightCode);
+    for(var i = 0;i < checkList.length; i++){
+        if(checkList[i].isConfirmAccount == 1 && !auth){
+            checkTr.eq(i).find('input[type=text]').prop("disabled",true);
+            checkTr.eq(i).find('input[type=checkbox]').prop("disabled",true);
+        }
+    }
 }
 
 function openLoadingLayer(){

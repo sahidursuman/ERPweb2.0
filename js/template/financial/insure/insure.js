@@ -178,7 +178,14 @@ define(function(require, exports) {
                 	    	addTab(checkTabId,"保险对账",html);
                 	    	validator = rule.check($('.insuranceChecking'));
                 	    	
-                	    };
+                	    }
+
+                	    //取消对账权限过滤
+                 	    var checkList = data.financialInsuranceList;
+	                    var checkTr = $(".T-checkList tr");
+	                    var rightCode = $(".T-checkList").data("right");
+	                    checkDisabled(checkList,checkTr,rightCode);
+	                    
                 	    $("#" +"tab-"+checkTabId+"-content .all").on("change",function(){
             	    		Insure.edited["checking"] = "checking"; 
 							Insure.oldCheckInsuranceId = insuranceId;

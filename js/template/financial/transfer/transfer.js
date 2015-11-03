@@ -183,7 +183,14 @@ define(function(require, exports) {
 	                 	    }else{
 	                 	    	addTab(checkTabId,"转客对账",html);
 	                 	    	validator = rule.check($('.transferChecking'));
-	                 	    };
+	                 	    }
+
+	                 	    //取消对账权限过滤
+	                 	    var checkList = data.financialTransferList;
+		                    var checkTr = $(".T-checkList tr");
+		                    var rightCode = $(".T-checkList").data("right");
+		                    checkDisabled(checkList,checkTr,rightCode);
+
 	             	    	$("#" +"tab-"+checkTabId+"-content .all").on("change",function(){
 	             	    		Transfer.edited["checking"] = "checking"; 
 								Transfer.oldCheckPartnerAgencyId = partnerAgencyId;
