@@ -38,7 +38,7 @@ define(function(require, exports) {
 		//list Main
 		listArrangeTouristMain:function(){
 			$.ajax({
-				url:""+APP_ROOT+"back/lineProduct.do?method=findLineProductList&token="+$.cookie("token")+"&menuKey=resource_lineProduct&operation=view",
+				url:""+APP_ROOT+"back/touristGroup.do?method=getLineProductList&token="+$.cookie("token")+"&menuKey=resource_lineProduct&operation=view",
 				type:"POST",
 				data:"sortType=auto",
 				dataType:"json",
