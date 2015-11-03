@@ -72,6 +72,9 @@ define(function(require, exports) {
 				       //autocomplete数据
 				       tourguidPerObj.guideChooseList(tourguidPerObj.$tab);
 
+				       console.info("================"+data.totalPage);
+
+
 			       	// 绑定翻页组件
 					laypage({
 					    cont: tourguidPerObj.$tab.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,

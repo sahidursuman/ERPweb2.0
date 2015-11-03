@@ -94,7 +94,7 @@
 											<input name="count" value="{{transferList.count}}" type="text" class="col-sm-12  no-padding-right costCount" />
 										</td>
 										<td>
-											<input name="otherPrice" value="{{transferList.price}}" type="text" class="col-sm-12  no-padding-right costPrice" />
+											<input name="otherPrice" value="{{if touristGroup.transferFeeStatus==1}}{{transferList.price}}{{/if}}" type="text" class="col-sm-12  no-padding-right costPrice" />
 										</td>
 										<td><a class="  addCost-delete cursor">删除</a></td>
 									</tr>
