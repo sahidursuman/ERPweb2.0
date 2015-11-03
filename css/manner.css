@@ -10,6 +10,15 @@
 .search-btn:hover{
     background: #359fb2!important;
 }
+/*下拉列表横向滚动调样式调整*/
+.ui-widget-content{
+    white-space: nowrap!important;
+    overflow: auto!important;
+    height: auto!important;
+}
+/*.ui-autocomplete .ui-menu-item{
+    overflow: none!important;
+}*/
 .btn-minier,.btn-group-minier>.btn{width: 65px;height: 35px!important;border-radius: 3px}
 input{
     vertical-align: middle !important;
