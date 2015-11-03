@@ -72,32 +72,12 @@ define(function(require, exports) {
 						var html = listMainTemplate(data);
 						addTab(menuKey,"游客管理",html);
 						touristGroup.getQueryTerms();
-
-						//出游日期 时间控件（筛选搜索）
-						$("#main-container input[name=startTime]").datepicker({
-							autoclose: true,
-							todayHighlight: true,
-							format: 'yyyy-mm-dd',
-							language: 'zh-CN'
-						});
-						//录入时间 时间控件（筛选搜索）
-						$("#main-container input[name=creatTime]").datepicker({
-							autoclose: true,
-							todayHighlight: true,
-							format: 'yyyy-mm-dd',
-							language: 'zh-CN'
-						});
-						$("#main-container input[name=createTimeStart]").datepicker({
-							autoclose: true,
-							todayHighlight: true,
-							format: 'yyyy-mm-dd',
-							language: 'zh-CN'
-						});
-						$("#main-container input[name=createTimeEnd]").datepicker({
-							autoclose: true,
-							todayHighlight: true,
-							format: 'yyyy-mm-dd',
-							language: 'zh-CN'
+						
+						$('#'+tabId).find('.datepicker').datepicker({
+								autoclose: true,
+								todayHighlight: true,
+								format: 'yyyy-mm-dd',
+								language: 'zh-CN'
 						});
 
 						//搜索栏状态button下拉事件
