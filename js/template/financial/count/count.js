@@ -2297,9 +2297,26 @@ define(function(require, exports) {
 							calculation : data.calculation
 						};
 		    			var html = arrangeDetailTempLate(data);
-                        console.log(data);
 		    			var financialArrangeDetail = addTab(menuKey + "detail", "安排预算", html);
-					}
+                        var tabid = $("#tab-financial_countdetail-content");
+                        var tripCost = tabid.find('.tripCost');
+                        var guideArrangePrice = tabid.find('.tripCost-guideArrangePrice').text()==""?0:parseFloat(tabid.find('.tripCost-guideArrangePrice').text());
+                        var insuranceArrangeNeedPayMoney = tabid.find('.tripCost-insuranceArrangeNeedPayMoney').text()==""?0:parseFloat(tabid.find('.tripCost-insuranceArrangeNeedPayMoney').text());
+                        var busCompanyNeedPayMoney = tabid.find('.tripCost-busCompanyNeedPayMoney').text()==""?0:parseFloat(tabid.find('.tripCost-busCompanyNeedPayMoney').text());
+                        var restaurantArrangeNeedPayMoney = tabid.find('.tripCost-restaurantArrangeNeedPayMoney').text()==""?0:parseFloat(tabid.find('.tripCost-restaurantArrangeNeedPayMoney').text());
+                        var hotelArrangeNeedPayMoney = tabid.find('.tripCost-hotelArrangeNeedPayMoney').text()==""?0:parseFloat(tabid.find('.tripCost-hotelArrangeNeedPayMoney').text());
+                        var scenicArrangeNeedPayMoney = tabid.find('.tripCost-scenicArrangeNeedPayMoney').text()==""?0:parseFloat(tabid.find('.tripCost-scenicArrangeNeedPayMoney').text());
+                        var ticketArrangeNeedPayMoney = tabid.find('.tripCost-ticketArrangeNeedPayMoney').text()==""?0:parseFloat(tabid.find('.tripCost-ticketArrangeNeedPayMoney').text());
+                        var otherArrangeNeedPayMoney = tabid.find('.tripCost-otherArrangeNeedPayMoney').text()==""?0:parseFloat(tabid.find('.tripCost-otherArrangeNeedPayMoney').text());
+                        var sum = guideArrangePrice+insuranceArrangeNeedPayMoney+busCompanyNeedPayMoney+restaurantArrangeNeedPayMoney+hotelArrangeNeedPayMoney+scenicArrangeNeedPayMoney+ticketArrangeNeedPayMoney+otherArrangeNeedPayMoney
+                        tripCost.text(sum);
+                        //其他
+                        var other = tabid.find(".tripOther");
+                        var guideArrangeManageFee = tabid.find(".tripOther-guideArrangeManageFee")==""?0:parseFloat(tabid.find(".tripOther-guideArrangeManageFee").text());
+                        var guideAllPreMoney = tabid.find(".tripOther-guideAllPreMoney")==""?0:parseFloat(tabid.find(".tripOther-guideAllPreMoney").text());
+                        var otherSum = guideArrangeManageFee+guideAllPreMoney;
+                        other.text(otherSum);
+					}   
 				}
 	    	});
 	    },
