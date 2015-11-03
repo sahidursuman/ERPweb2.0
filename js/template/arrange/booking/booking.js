@@ -1096,7 +1096,7 @@ define(function(require, exports) {
 				},
 				select :function(event, ui){
 					var $this = $(this);
-					$this.parent().find("input[name=busCompanyId]").val(ui.item.busCompanyId).trigger('change');
+					$this.parent().find("input[name=busCompanyId]").val(ui.item.id).trigger('change');
 				}
 			}).unbind("click").click(function(){
 				var obj = this;
