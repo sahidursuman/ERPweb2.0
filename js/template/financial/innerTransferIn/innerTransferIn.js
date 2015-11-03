@@ -143,6 +143,7 @@ define(function(require,exports){
 					},
 					success:function(data){
 						layer.close(globalLoadingLayer);
+						var checkList = data.financialInnerTransferInList;
 						var result = showDialog(data);
 						if(result){
 						
@@ -187,6 +188,12 @@ define(function(require,exports){
 							addTab(checkTabId,"内转转入对账",html);
 							validator = rule.check($('.innerTransferChecking .all'));
 						}
+
+						//取消对账权限过滤
+                        var checkTr = $(".T-checkList tr");
+                        var rightCode = $(".T-checkList").data("right");
+                        checkDisabled(checkList,checkTr,rightCode);
+
 					    $("#" +"tab-"+checkTabId+"-content .all").on("change",function(){
 							oldCheckId = fromBusinessGroupId;
 							InnerTransferIn.edited["checking"] = "checking";  
