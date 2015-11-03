@@ -944,7 +944,10 @@ define(function(require, exports) {
                             var id = $(this).attr('data-entity-id');
                             count.viewGroupDetail(id);
                         });
-                        
+                        $('.countReimbursement .btn-viewTripTransit').off('click').on('click',function() {
+                            var id = $(this).attr('data-entity-id');
+                            count.ViewOutDetail(id);
+                        });
                         //安排明细表
                         $('.countReimbursement .btn-tripPlanArrange').off('click').on('click',function() {
                             var id = $(this).attr('data-entity-id');
