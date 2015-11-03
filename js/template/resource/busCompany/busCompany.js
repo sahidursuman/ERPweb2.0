@@ -176,10 +176,20 @@ define(function(require,exports){
 						formData = $mainObj.serializeJson();
 					//车辆数据的组装
 					var busJsonAdd = [];
-					var busJsonAddTr = $busList.find("tbody tr");
+					var busJsonAddTr = $busList.find("tbody tr"),
+					    isBuyTime = true;
+		        	function getDate(strDate){
+		        		return new Date(strDate.replace(/-/g, "/"));
+		        	}
 					busJsonAddTr.each(function(i){
 						var buyTime = busJsonAddTr.eq(i).find("input[name=buyTime]").val();
 						var isChartered = busJsonAddTr.eq(i).find("select[name=isChartered]").val();
+			
+						if(buyTime && !(new Date() > getDate(buyTime))){
+							showMessageDialog($( "#confirm-dialog-message" ), "第"+(i+1)+"个车辆，购买时间不能大于当前时间");
+							isBuyTime = false;
+							return false;
+						}
 						var busJson = {
 							licenseNumber : busJsonAddTr.eq(i).find("input[name=licenseNumber]").val(),
 							brand : busJsonAddTr.eq(i).find("input[name=brand]").val(),
@@ -204,6 +214,10 @@ define(function(require,exports){
 						}
 						busJsonAdd.push(busJson);
 					});
+					
+					if(!isBuyTime){
+						return false;
+					}
 					//司机数据的组装
 					var driverJsonAdd = [];
 					var driverJsonAddTr = $driverList.find("tbody tr");
