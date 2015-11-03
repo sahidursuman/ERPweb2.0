@@ -102,6 +102,9 @@ function closeTab(tabId){
 
 //判断是否有权限
 function isAuth(rightCode){
+	if (!IndexData.userInfo || !IndexData.userInfo.listUserFunctionShip){
+		return false;
+	}
 	var functionList = IndexData.userInfo.listUserFunctionShip;
 	if(rightCode){
 		var index = functionList.indexOf(rightCode);
@@ -113,9 +116,9 @@ function isAuth(rightCode){
 }
 //权限过滤
 function filterUnAuth(obj) {
-	if (!obj || !IndexData.userInfo || !IndexData.userInfo.listUserFunctionShip) return '';
-
-	var functionList = IndexData.userInfo.listUserFunctionShip;
+	if(!obj){
+		return "";
+	}
 	var $obj = $(obj);
 	$obj.find(".R-right").each(function(){
 		var right = $(this).data("right");

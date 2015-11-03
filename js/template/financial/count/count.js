@@ -119,7 +119,10 @@ define(function(require, exports) {
                     	
         				var tripPlanList = JSON.parse(data.tripPlanList);
         				data.tripPlanList = tripPlanList;
-                        $('.counterList').html(listTableTemplate(data))
+                        var html = listTableTemplate(data);
+
+                        html = count.authFilter(html,data.tripPlanList);
+                        $('.counterList').html(html);
                         
                       //搜索按钮事件
                         $(".main-content .financialCount .clearBlur").blur(function(){
@@ -403,7 +406,6 @@ define(function(require, exports) {
 							count.edited["checkBill"] = "checkBill";
 							count.oldCheckBillId = id;
 						});
-						console.log("init");
             			$('.countUpdate .btn-saveCount').off('click').on('click',function() {
             				var id = $(this).attr('data-entity-id');
             				var financialTripPlanId = $(this).attr('data-entity-financial-id');
@@ -952,10 +954,12 @@ define(function(require, exports) {
                             var id = $(this).attr('data-entity-id');
                             count.viewGroupDetail(id);
                         });
+                        //中转明细
                         $('.countReimbursement .btn-viewTripTransit').off('click').on('click',function() {
                             var id = $(this).attr('data-entity-id');
                             count.ViewOutDetail(id);
                         });
+
                         //安排明细表
                         $('.countReimbursement .btn-tripPlanArrange').off('click').on('click',function() {
                             var id = $(this).attr('data-entity-id');
@@ -2587,6 +2591,33 @@ define(function(require, exports) {
              	exportXLS(url)
              });
 	    },
+        authFilter : function(obj,tripPlanList){
+            var $obj = $(obj);
+            //报账过滤
+            $obj.find(".R-right").each(function(){
+                var right = $(this).data("right");
+                var auth = isAuth(right);
+                if(!auth){
+                    $(this).remove();
+                }   
+            });
+            //审核过滤
+            $obj.find(".T-audit").each(function(i){
+                var right,status = tripPlanList[i].tripPlan.billStatus;
+                if(status == 0 || status == 2){//财务审核
+                    right = "1190002"; 
+                } else if(status == 1){//计调审核
+                    right = "1190003";
+                } else{
+                    right = "无";
+                }
+                var auth = isAuth(right);
+                if(!auth){
+                    $(this).remove();
+                }
+            });
+            return $obj;
+        },
 		save : function(saveType){
 			console.log(saveType);
 			if(saveType == "checkBill"){

@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":272,"md5":"5ad774ba7e41c1264d0271a361118332"}*/
+/*TMODJS:{"debug":true,"version":273,"md5":"5ad774ba7e41c1264d0271a361118332"}*/
 define(function(require) {
     return require("../../../template")("financial/count/view/tripDetail", function($data, $filename) {
         try {
