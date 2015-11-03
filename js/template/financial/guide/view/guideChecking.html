@@ -70,7 +70,7 @@
                            <th class="th-border">对账</th>
                         </tr>
 					</thead>
-					<tbody>
+					<tbody class="T-checkList" data-right="1200005">
 					{{each guideList as guide}}
 						<tr data-entity-id="{{guide.id}}" data-entity-isConfirmAccount="{{guide.isConfirmAccount}}" data-entity-startTime="{{guide.startTime}}" data-entity-realBackGuideMoney="{{guide.realBackGuideMoney}}" data-entity-billRemark="{{guide.billRemark}}">
 							<td>
@@ -87,15 +87,15 @@
 							<td>{{guide.guideSelfpayRebateMoney}}</td>  
 							<td>{{guide.backGuideMoney}}</td>
 							<td class="col-sm-1">
-								<input data-entity-value="{{guide.realBackGuideMoney}}"  maxlength="9" type="text" name="realBackGuideMoney" value="{{guide.realBackGuideMoney}}" class="col-sm-12"  {{if guide.isConfirmAccount == 1 && roleType != 1 }} disabled = "true" {{/if}}/>
+								<input data-entity-value="{{guide.realBackGuideMoney}}"  maxlength="9" type="text" name="realBackGuideMoney" value="{{guide.realBackGuideMoney}}" class="col-sm-12" />
 							</td>
 							<td>
-								<input data-entity-value="{{guide.billRemark}}" maxlength="1000" type="text" name="billRemark" value="{{guide.billRemark}}" class="col-sm-12" {{if guide.isConfirmAccount == 1 && roleType != 1 }} disabled = "true" {{/if}}/>
+								<input data-entity-value="{{guide.billRemark}}" maxlength="1000" type="text" name="billRemark" value="{{guide.billRemark}}" class="col-sm-12" />
 							</td>
 							<td>{{guide.checkTime}}</td>
 							<td>{{guide.checkUserRealName}}</td>
 							<td>
-								<input type="checkbox" class="ace"  name="isConfirmAccount" data-entity-checkStatus="{{guide.isConfirmAccount}}" {{if guide.isConfirmAccount == 1}}checked="checked"{{/if}} {{if guide.isConfirmAccount == 1 && roleType != 1 }} disabled = "true" {{/if}}/>
+								<input type="checkbox" class="ace"  name="isConfirmAccount" data-entity-checkStatus="{{guide.isConfirmAccount}}" {{if guide.isConfirmAccount == 1}}checked="checked"{{/if}} />
 								<span class="lbl"></span>
 							</td>
 						</tr>

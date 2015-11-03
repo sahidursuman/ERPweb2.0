@@ -62,7 +62,7 @@
 			  <th class="th-border"> 对账</th>
             </tr>
             </thead>   
-            <tbody>
+            <tbody class="T-checkList" data-right="1250005">
             {{each financialScenicList as rs index}}
 	            <tr data-entity-id="{{rs.id}}" data-entity-isConfirmAccount="{{rs.isConfirmAccount}}" data-entity-realUnPayedMoney="{{rs.realUnPayedMoney}}" data-entity-remark="{{rs.remark}}">
 	                <td>{{index+1}}</td>
@@ -77,14 +77,14 @@
 	                <td>社付{{rs.travelAgencyPayedMoney}},导付{{rs.guidePayedMoney}}</td>
 					<td>{{rs.unPayedMoney}}</td>
 	                <td style="color: #0092ef;">{{if rs.billImages != null && rs.billImages !=""}}<a href="#" class="scenicLookBillsImg" url="{{rs.billImages}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
-	                <td><input type="text" maxlength="10" name="FinancialScenicRealUnPayedMoney" class="col-sm-12" value="{{rs.realUnPayedMoney}}" {{if rs.isConfirmAccount == 1 && roleType != 1 }} disabled = "true" {{/if}}></td>
+	                <td><input type="text" maxlength="10" name="FinancialScenicRealUnPayedMoney" class="col-sm-12" value="{{rs.realUnPayedMoney}}" /></td>
 	                <td><input type="text" maxlength="1000" name="FinancialScenicRemark" class="col-sm-12" value="{{rs.remark}}"></td>
 					<td>{{if rs.checkTime == null || rs.checkTime == ""}}-{{else}}{{rs.checkTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
 					<td>{{rs.checkUserRealName}}</td>
 	                <td>
 	                    <label class="pos-rel">
 						   		<input type="checkbox" data-entity-checkStatus="{{rs.isConfirmAccount}}" class="ace scenicFinancial" 
-						   		{{if rs.isConfirmAccount == 1}}checked="checked"{{/if}} {{if rs.isConfirmAccount == 1 && roleType != 1 }} disabled = "true" {{/if}}/>
+						   		{{if rs.isConfirmAccount == 1}}checked="checked"{{/if}} />
 						   		<span class="lbl"></span>
 						</label>
 					</td>
