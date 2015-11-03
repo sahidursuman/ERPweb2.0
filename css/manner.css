@@ -741,11 +741,42 @@ input,select{
     min-width: 55px;
     border-radius: 3px;
 }
-/*.btn-heightAging{
-    height: 25px !important;
-    width: 65px;
-     border-radius: 3px;
-}*/
+
+/*中转安排list样式*/
+
+.transit-source{
+    padding-left:0px;width: 245px;
+}
+.transit-source div{
+    width: 180px;
+}
+.transit-Line{
+padding-left:0px;width: 245px;
+}
+.transit-startTime{
+width: 280px;
+}
+.transit-startTime div{
+    width: 180px;
+}
+.transitState{
+padding-left:0px;width: 170px;
+}
+.transit-arrange{
+padding-left:0px;width: 250px;left: 10px;
+}
+.transit-arrange div{
+    width: 195px;
+}
+.transit-arrangeTime{
+padding-left:0;width: 360px;left: -35px;
+}
+.transit-arrangeTime div{
+    width: 260px;
+}
+
+
+
 
 
 /*媒体查询*/
