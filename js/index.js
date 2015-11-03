@@ -128,9 +128,9 @@
 		// tab位置校验
 		$tabList.on('click', 'li', function(event) {
 			event.preventDefault();
-			var $that = $(this);
-			if ($that.hasClass('acitve')) {
-				$that.data('prev-tab', $tabList.find('.active'));
+			var $that = $(this), $prev = $tabList.find('.active');
+			if ($that.index() != $prev.index()) {  // 通过序号，避免双击将自己设置为前有一个
+				$that.data('prev-tab', $prev);
 			}
 			Tools.justifyTab();
 		});
