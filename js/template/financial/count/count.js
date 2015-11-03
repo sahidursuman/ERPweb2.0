@@ -403,7 +403,6 @@ define(function(require, exports) {
 							count.edited["checkBill"] = "checkBill";
 							count.oldCheckBillId = id;
 						});
-						console.log("init");
             			$('.countUpdate .btn-saveCount').off('click').on('click',function() {
             				var id = $(this).attr('data-entity-id');
             				var financialTripPlanId = $(this).attr('data-entity-financial-id');
@@ -945,6 +944,11 @@ define(function(require, exports) {
                         $('.countReimbursement .btn-viewGroupDetail').off('click').on('click',function() {
                             var id = $(this).attr('data-entity-id');
                             count.viewGroupDetail(id);
+                        });
+                        //中转明细
+                        $('.countReimbursement .btn-viewTripTransit').off('click').on('click',function() {
+                            var id = $(this).attr('data-entity-id');
+                            count.ViewOutDetail(id);
                         });
                         
                         //安排明细表
