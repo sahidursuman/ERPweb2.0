@@ -30,9 +30,16 @@
 								{{if index == 0}}
 									<tr data-id="{{menu.id}}">
 										<td></td>
-										<td><a class="T-selectAll" href="javascript:;">全选</a></td>
-										<td><a class="T-selectAll" href="javascript:;">全选</a></td>
-										<td><a class="T-selectAll" href="javascript:;">全选</a></td>
+										{{if menu.id == 63}}<!-- 财务全选按钮屏蔽 -->
+											<td><a class="T-selectAll" href="javascript:;"></a></td>
+											<td><a class="T-selectAll" href="javascript:;"></a></td>
+											<td><a class="T-selectAll" href="javascript:;"></a></td>
+										{{else}}
+											<td><a class="T-selectAll" href="javascript:;">全选</a></td>
+											<td><a class="T-selectAll" href="javascript:;">全选</a></td>
+											<td><a class="T-selectAll" href="javascript:;">全选</a></td>
+										{{/if}}
+										
 										<td><a class="T-selectAll" href="javascript:;">全选</a></td>
 										<td style="text-align:left;padding-left:20px;">
 											<a class="T-selectAll-function" href="javascript:;">全选</a>
@@ -42,18 +49,18 @@
 								<tr class="T-submenu" data-id="{{submenu.id}}">
 									<td><input type="checkbox" class="ace T-submenu-check T-submenu-id{{submenu.id}}"/><span class="lbl"></span>{{submenu.name}}</td>
 									{{if menu.id == 63}}
-										{{if submenu.id == 80}}
+										{{if submenu.id == 80}}<!-- 财务按团统计 -->
 											<td width="80"><input type="radio" class="ace T-function-area1" value="1" name="{{submenu.id}}"><span class="lbl"></span>个人</td>
 											<td width="80"><input type="radio" class="ace T-function-area2" value="2" name="{{submenu.id}}"><span class="lbl"></span>子部门</td>
 											<td width="90"><input type="radio" class="ace T-function-area3" value="3" name="{{submenu.id}}"><span class="lbl"></span>业务部门</td>
-										{{else}}
+										{{else}}<!-- 财务权限范围屏蔽 -->
 											<td width="80">-</td>
 											<td width="80">-</td>
 											<td width="90">-</td>
 										{{/if}}
 										<td width="80"><input type="radio" class="ace T-function-area4" value="4" name="{{submenu.id}}"><span class="lbl"></span>公司</td>
 									{{else}}
-										{{if submenu.id == 95}}
+										{{if submenu.id == 95}}<!-- 内转管理权限范围屏蔽 -->
 											<td width="80">-</td>
 											<td width="80">-</td>
 										{{else}}
