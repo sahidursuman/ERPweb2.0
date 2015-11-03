@@ -1722,7 +1722,7 @@ define(function(require, exports) {
 							transit.edited["update"] = "";
 							if(isClose ==1){
 								closeTab(menuKey+"-update");
-								transit.listTransit(0,"","","","","","","","","");
+								transit.listTransit(0,"","","","","","","","","","","","");
 							}
 						});
 					}
