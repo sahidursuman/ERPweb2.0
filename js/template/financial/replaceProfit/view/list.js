@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":195,"md5":"e827ad227c22e167600f54f088b3b6af"}*/
+/*TMODJS:{"debug":true,"version":197,"md5":"c2f2a2cc511f557e8798d2980067679b"}*/
 define(function(require) {
     return require("../../../template")("financial/replaceProfit/view/list", function($data, $filename) {
         try {

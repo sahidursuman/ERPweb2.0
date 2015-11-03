@@ -165,6 +165,7 @@ define(function(require, exports) {
 							month : month
 						};
                          data.pager = JSON.parse(data.pager);
+                         var checkList = data.pager.resultList;
                          var html = ClientChecking(data);				 
 						
 						 if($("#" +"tab-"+ClientCheckTab+"-content").length > 0) {
@@ -192,6 +193,12 @@ define(function(require, exports) {
                  	    	addTab(ClientCheckTab,"客户对账",html);
                  	    	validator = rule.check($('.clientCheckingMain'));
                  	    }
+
+                        //取消对账权限过滤
+                        var checkTr = $(".T-checkList tr");
+                        var rightCode = $(".T-checkList").data("right");
+                        checkDisabled(checkList,checkTr,rightCode);
+                        
                          var $checkId = $("#tab-financial_Client-checking-content");
                          
 						 $("#" +"tab-"+ClientCheckTab+"-content .all").on('change', function() {

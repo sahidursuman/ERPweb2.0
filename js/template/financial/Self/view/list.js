@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":98,"md5":"ee627f118791872d491b8c4dc2fdbcd1"}*/
+/*TMODJS:{"debug":true,"version":99,"md5":"641157e5158c4abdf43148c61287c8be"}*/
 define(function(require) {
     return require("../../../template")("financial/Self/view/list", function($data, $filename) {
         try {

@@ -137,7 +137,13 @@ define(function(require, exports) {
                  	    	guide.initCheck(page,guideId,year,month,data);
                  	    	validator = rule.check($('.guide-checking'));
                  	    	
-                 	    };
+                 	    }
+                 	    //取消对账权限过滤
+                 	    var checkList = data.guideList;
+	                    var checkTr = $(".T-checkList tr");
+	                    var rightCode = $(".T-checkList").data("right");
+	                    checkDisabled(checkList,checkTr,rightCode);
+		                    
                  	    // 绑定翻页组件
 						laypage({
 						    cont: $('#' + checkTabId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,

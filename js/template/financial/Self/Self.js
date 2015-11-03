@@ -179,7 +179,14 @@ define(function(require, exports) {
                	    }else{
                	    	addTab(checkTabId,"自费对账",html);
                	    	validator = rule.check($('.selfPayChecking'));
-               	    };
+               	    }
+
+               	    //取消对账权限过滤
+             	    var checkList = data.financialSelfPayList;
+                    var checkTr = $(".T-checkList tr");
+                    var rightCode = $(".T-checkList").data("right");
+                    checkDisabled(checkList,checkTr,rightCode);
+	                    
            	    	$("#" +"tab-"+checkTabId+"-content .all").on("change",function(){
            	    		Self.edited["checking"] = "checking";
 						Self.oldCheckSelfPayId = selfPayId;

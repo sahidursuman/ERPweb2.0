@@ -61,7 +61,7 @@
                  <th class="th-border">对账</th>
             </tr>
             </thead>   
-            <tbody>
+            <tbody class="T-checkList" data-right="1300005">
             {{each financialTransferList as checking index}}
             <tr data-entity-id="{{checking.id}}" data-entity-isConfirmAccount="{{checking.isConfirmAccount}}" data-entity-realUnPayedMoney="{{checking.transRealUnPayedMoney}}" data-entity-remark="{{checking.transRemark}}">                
                 <td>{{index+1}}</td>
@@ -79,14 +79,14 @@
                 </td>
                 <td>{{checking.realPayedMoney}}</td>
                 <td>{{checking.unPayedMoney}}</td>
-                <td><input type="text" maxlength="9" name="FinancialTransferRealUnPayedMoney" value="{{checking.transRealUnPayedMoney}}" style="text-align:center" {{if checking.isConfirmAccount == 1 && roleType != 1 }} disabled = "true" {{/if}}></td>
-	            <td><input type="text" maxlength="1000"  name="FinancialTransferRemark" value="{{checking.transRemark}}" style="text-align:center" {{if checking.isConfirmAccount == 1 && roleType != 1 }} disabled = "true" {{/if}}></td>
+                <td><input type="text" maxlength="9" name="FinancialTransferRealUnPayedMoney" value="{{checking.transRealUnPayedMoney}}" style="text-align:center"></td>
+	            <td><input type="text" maxlength="1000"  name="FinancialTransferRemark" value="{{checking.transRemark}}" style="text-align:center"></td>
 				<td>{{if checking.checkTime == null || checking.checkTime == ""}}-{{else}}{{checking.checkTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
 	            <td>{{checking.checkUser}}</td>
 				<td>
 					<label class="pos-rel">
 							<input type="checkbox" data-entity-checkStatus="{{checking.isConfirmAccount}}" class="ace transferFinancial" 
-							{{if checking.isConfirmAccount == 1}}checked="checked"{{/if}} {{if checking.isConfirmAccount == 1 && roleType != 1 }} disabled = "true" {{/if}}  />
+							{{if checking.isConfirmAccount == 1}}checked="checked"{{/if}} />
 								<span class="lbl"></span>
 					</label>
 				</td>
