@@ -494,14 +494,13 @@ define(function(require, exports) {
 					url: KingServices.build_url('insurance', 'getInsuranceById'),
 					data:"id="+ui.item.id,
 					success: function(data) {
-						var result = showDialog(data);
+						var result = showDialog(data),$tr = $that.closest('tr');
 						if(result){
 							var insurance = JSON.parse(data.insurance), $tr = $that.closest('tr');
-							console.log(insurance);
-							$that.find("input[name=insuranceId]").val(insurance.id).trigger('change');
-							$that.find("input[name=telNumber]").val(insurance.telNumber);
-							$that.find("input[name=managerName]").val(insurance.managerName);
-							$that.find("input[name=mobileNumber]").val(insurance.telNumber);
+							$tr.find("input[name=insuranceId]").val(insurance.id).trigger('change');
+							$tr.find("input[name=telNumber]").val(insurance.telNumber);
+							$tr.find("input[name=managerName]").val(insurance.managerName);
+							$tr.find("input[name=mobileNumber]").val(insurance.telNumber);
 
 							// 更新表单验证的配置
 							validator = rule.lineProductUpdate(validator);

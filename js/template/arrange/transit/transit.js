@@ -29,6 +29,20 @@ define(function(require, exports) {
 			return false;
 		},
 		listTransit :function(page,fromPartnerAgencyName,fromPartnerAgencyId,lineProductId,lineProductName,startTime,arrangeUserId,arrangeUserName,arrangeStartTime,arrangeEndTime,status,shuttleType,shuttleTime){
+			transit.searchData = {
+				fromPartnerAgencyName:fromPartnerAgencyName,
+				fromPartnerAgencyId : fromPartnerAgencyId,
+				lineProductName:lineProductName,
+				lineProductId : lineProductId,
+				startTime : startTime,
+				arrangeUserName:arrangeUserName,
+				arrangeUserId : arrangeUserId,
+				arrangeStartTime : arrangeStartTime,
+				arrangeEndTime : arrangeEndTime,
+				status : status,
+				shuttleType : shuttleType,
+				shuttleTime : shuttleTime
+			};
 			$.ajax({
 				url:""+APP_ROOT+"back/touristGroup.do?method=listTransitArrange&token="+$.cookie("token")+"&menuKey=resource_touristGroup"+"&operation=view",
 				type:"POST",
