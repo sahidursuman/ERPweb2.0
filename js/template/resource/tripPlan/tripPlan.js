@@ -1041,6 +1041,8 @@ define(function(require, exports) {
 						parents.find("input[name=managerName]").val(ui.item.managerName);
 						parents.find("input[name=price]").val("");
 					}else{
+						$(_this).data('bs.popover').options.content = "";
+						$(_this).data("propover" , "");
 						parents.find("input[name=restaurantId]").val(ui.item.id).trigger('change');
 						
 						$.ajax({
@@ -1200,6 +1202,8 @@ define(function(require, exports) {
 								var hotel = JSON.parse(data.hotel);
 								parents.find("input[name=mobileNumber]").val(hotel.mobileNumber);
 								parents.find("input[name=managerName]").val(hotel.managerName);
+								parents.find("input[name=hotelRoom]").val("");
+								parents.find("input[name=hotelRoomId]").val("");
 							}
 	                    }
 					});
@@ -1693,7 +1697,7 @@ define(function(require, exports) {
 					if(ui.item == null){
 						$(this).val("");
 						var thisParent = $(this).closest('tr');
-						thisParent.find("input[name=tickeId]").val(ui.item.id).trigger('change');
+						thisParent.find("input[name=tickeId]").val("").trigger('change');
 					}
 				}
 			}).off("click").on("click", function(){

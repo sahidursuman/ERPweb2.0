@@ -56,11 +56,11 @@
 						<a data-entity-id="{{result.id}}" class="cursor  btn-transfer-view">
 							查看
 						</a>
-						<a data-entity-id="{{result.id}}" class="cursor btn-transfer-edit R-right" data-right="1180003">
+						<a data-entity-id="{{result.id}}" class="cursor {{if result.status != 1}}btn-transfer-edit{{/if}} R-right" {{if result.status == 1}}style="color:#bbb;"{{/if}} data-right="1180003">
 							<label class="padding-right20">|</label>
 							编辑
 						</a>
-						<a data-entity-id="{{result.id}}" class="cursor btn-transfer-delete R-right" data-right="1180004">
+						<a data-entity-id="{{result.id}}" class="cursor {{if result.status != 1}}btn-transfer-delete{{/if}} R-right" {{if result.status == 1}}style="color:#bbb;"{{/if}} data-right="1180004">
 							<label class="padding-right20">|</label>
 							撤销
 						</a>

@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":44,"md5":"31b67a8e67b09b9d7402db7902564061"}*/
+/*TMODJS:{"debug":true,"version":46,"md5":"2d1ce3dbefd2c2d543df5c63061ac49d"}*/
 define(function(require) {
     return require("../../../template")("businessAnalyst/customerVolume/view/customerDetail", function($data, $filename) {
         try {

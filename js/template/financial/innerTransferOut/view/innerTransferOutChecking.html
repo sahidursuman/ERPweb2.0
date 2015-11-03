@@ -77,7 +77,7 @@
 
             </tr>
             </thead>   
-            <tbody>
+            <tbody class="T-checkList" data-right="1370005">
             {{each financialInnerTransferOutList as checking index}}
             <tr data-entity-id="{{checking.id}}" data-entity-createTime="{{checking.createTime}}" data-entity-isComfirmAccount="{{checking.isComfirmAccount}}" data-entity-realUnPayedMoney="{{checking.realUnPayedMoney}}"  data-entity-remark="{{checking.checkRemark}}">                
                 <td>{{index+1}}</td>
@@ -101,15 +101,15 @@
                 </td>
                 <td>{{checking.payedMoney}}</td>
                 <td>{{checking.unPayedMoney}}</td>
-                <td><input type="text" maxlength="9" name="realUnPayedMoney" value="{{checking.realUnPayedMoney}}" style="text-align:center" {{if checking.isComfirmAccount == 1 && roleType != 1 }} disabled = "true" {{/if}}></td>
-                <td><input type="text" maxlength="1000"  name="checkRemark" value="{{checking.checkRemark}}" style="text-align:center" {{if checking.isComfirmAccount == 1 && roleType != 1 }} disabled = "true" {{/if}}></td>
+                <td><input type="text" maxlength="9" name="realUnPayedMoney" value="{{checking.realUnPayedMoney}}" style="text-align:center"></td>
+                <td><input type="text" maxlength="1000"  name="checkRemark" value="{{checking.checkRemark}}" style="text-align:center"></td>
                 <td>{{if checking.checkTime == null || checking.checkTime == ""}}-{{else}}{{checking.checkTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
                 <td>{{if checking.checkUserRealName == null || checking.checkUserRealName == ""}}-{{else}}{{checking.checkUserRealName}}{{/if}}</td>
                 <td>
                     <label class="pos-rel">
-                            <input type="checkbox" data-entity-checkStatus="{{checking.isComfirmAccount}}" class="ace innerTransferFinancial" 
-                            {{if checking.isComfirmAccount == 1}}checked="checked"{{/if}} {{if checking.isComfirmAccount == 1 && roleType != 1 }} disabled = "true" {{/if}}  />
-                                <span class="lbl"></span>
+                        <input type="checkbox" data-entity-checkStatus="{{checking.isComfirmAccount}}" class="ace innerTransferFinancial" 
+                        {{if checking.isComfirmAccount == 1}}checked="checked"{{/if}}/>
+                        <span class="lbl"></span>
                     </label>
                 </td>
             </tr>

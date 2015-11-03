@@ -186,6 +186,13 @@ define(function(require,exports){
 							addTab(checkTabId,"内转转出对账",html);
 							validator = rule.check($('.innerTransferChecking .all'));
 						}
+
+						//取消对账权限过滤
+						var checkList = data.financialInnerTransferOutList;
+                        var checkTr = $(".T-checkList tr");
+                        var rightCode = $(".T-checkList").data("right");
+                        checkDisabled(checkList,checkTr,rightCode);
+
 					    $("#" +"tab-"+checkTabId+"-content .all").on("change",function(){
 							oldCheckId = toBusinessGroupId;
 							InnerTransferOut.edited["checking"] = "checking";  

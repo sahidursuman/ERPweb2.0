@@ -67,11 +67,8 @@ define(function(require, exports) {
 				       tourguidPerObj.datepicker(tourguidPerObj.$tab);
 				       //初始化页面绑定事件
 				       tourguidPerObj.init_event();
-
-
 				       //autocomplete数据
 				       tourguidPerObj.guideChooseList(tourguidPerObj.$tab);
-
 			       	// 绑定翻页组件
 					laypage({
 					    cont: tourguidPerObj.$tab.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,

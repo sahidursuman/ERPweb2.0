@@ -15,8 +15,8 @@
         <div class="col-sm-1 marginLeft-Right7">
             <select name="customerType" class="col-xs-12">
                 <option value=""  {{if searchParam.customerType=="" }}selected="selected"{{/if}}>全部</option>
-                <option value="0" {{if searchParam.customerType==0 }}selected="selected" {{/if}}>散客</option>
-                <option value="1" {{if searchParam.customerType==1 }}selected="selected" {{/if}}>团体</option>
+                <option value="0" {{if searchParam.customerType=="0" }}selected="selected" {{/if}}>散客</option>
+                <option value="1" {{if searchParam.customerType=="1" }}selected="selected" {{/if}}>团体</option>
             </select>
         </div>
 
@@ -30,8 +30,8 @@
 
 	<div class="col-xs-12 saleProduct-toTal" style="padding-bottom: 15px; margin-top:15px;">
 		<div class="saleProduct-toTal-Cost">
-			<label style="min-width:10%; display:inline-block;" class="peopleCount">游客合计 : {{searchParam.sumTourist}}元</label>
-		    <label style="min-width:10%; display:inline-block;" class="needPayMoney">发团合计:{{searchParam.sumTouristStart}}元</label>
+			<label style="min-width:10%; display:inline-block;" class="peopleCount">游客合计 : {{searchParam.sumTourist}}人</label>
+		    <label style="min-width:10%; display:inline-block;" class="needPayMoney">发团合计:{{searchParam.sumTouristStart}}人</label>
 		    <label style="min-width:10%; display:inline-block;" class="payedMoney">外转合计:{{searchParam.sumOuterTransfer}}元</label>
 		    <label style="min-width:10%; display:inline-block;" class="pMoney">内转合计:{{searchParam.sumInnerTransfer}}元</label>
 		</div>

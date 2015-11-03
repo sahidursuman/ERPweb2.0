@@ -177,6 +177,13 @@ define(function(require, exports) {
 							validator = rule.check($('.restChecking'));
 							
 						}
+
+						//取消对账权限过滤
+                 	    var checkList = data.financialRestaurantList;
+	                    var checkTr = $(".T-checkList tr");
+	                    var rightCode = $(".T-checkList").data("right");
+	                    checkDisabled(checkList,checkTr,rightCode);
+		                    
 						$("#" +"tab-"+checkTabId+"-content .all").on("change",function(){
 							Restaurant.edited["checking"] = "checking";
 							Restaurant.oldCheckRestaurantId = restaurantId;

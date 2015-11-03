@@ -125,9 +125,10 @@ define(function(require, exports) {
 							    	for(var i = 0 ;i < authList.length; i ++){
 							    		var menuId = authList[i].menuId;
 							    		$(".T-submenu-id"+menuId).prop("checked",true);
-							    		var index = $(".T-submenu-check").index($(".T-submenu-id"+menuId));
+							    		var subCheck = $(".T-submenu-check");
+							    		var index = subCheck.index($(".T-submenu-id"+menuId));
 							    		var authType = authList[i].authAreaType;
-							    		$(".T-function-area"+authType).eq(index).prop("checked",true);
+							    		subCheck.eq(index).closest('tr').find(".T-function-area"+authType).prop("checked",true);
 							    	}
 						    	}
 						    	
@@ -190,9 +191,22 @@ define(function(require, exports) {
 						    	$(".T-selectAll").on("click",function(){
 						    		var index = $(this).parent().index();
 						    		var $this = $(this).closest('table').find(".T-submenu");
-						    		$this.find("input[type=radio]").prop("checked",false);
 						    		$this.each(function(){
-						    			$(this).find(".T-function-area"+index).prop("checked",true);
+						    			var functionArea = $(this).find(".T-function-area"+index);
+						    			if(functionArea.length > 0){
+						    				functionArea.prop("checked",true);
+						    			} else{//有权限范围屏蔽的行
+						    				var ischeck = false;
+						    				$(this).find('input[type=radio]').each(function(){
+						    					if($(this).is(":checked")){
+						    						ischeck = true;
+						    						return false;
+						    					}
+						    				});
+						    				if(!ischeck){
+						    					$(this).find(".T-function-area4").prop("checked",true);
+						    				}
+						    			}
 						    			$(this).find('.T-submenu-check').prop("checked",true);
 						    		});
 						    		$(this).closest('table').find(".T-menu-check").prop("checked",true);

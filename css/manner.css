@@ -10,6 +10,7 @@
 .search-btn:hover{
     background: #359fb2!important;
 }
+/*.btn-minier, .btn-group-minier>.btn{width: 65px;height: 35px;border-radius: 3px}*/
 input{
     vertical-align: middle !important;
     font-size: 12px !important;
@@ -266,7 +267,7 @@ table tr td{
 }
 .alter{
     cursor: pointer;
-    width: 250px;
+    width:50%;
     text-align: center;
     height: 30px;
     line-height: 30px;
@@ -304,9 +305,8 @@ table tr td{
 #alter-pwd input{
     text-indent: 0.5em;
     margin-left: 10px;
-    line-height: 1.5em;
+    line-height: 1em;
     width: 240px;
-    font-size: 12px;
 }
 #alter-user {
     color: #393939;
@@ -333,11 +333,7 @@ table tr td{
     filter:alpha(opacity=10);
     -moz-opacity:0.1;
     -khtml-opacity: 0.1;
-    opacity: 0.1;}
-.layui-layer-title{
-    border-bottom:0;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
+    opacity: 0.1;
 }
 .layui-layer-title{
     height: 40px;
@@ -510,7 +506,10 @@ input,select{
     margin-left: -100px;
 }
 .addTouristGroup .formOneList{
-    margin-left: 70px;
+    margin-left: 20px;
+}
+.updateTouristGroup .formOneList{
+    margin-left: -53px !important;
 }
 .formOneList input{
     width: 220px;
@@ -554,6 +553,7 @@ input,select{
 .globalAdd .guideInterval{
     margin-bottom: 10px !important;
 }
+
 .globalAdd .editFeeMainForm input{
      padding: 0px 0px 0px 10px;
 }
@@ -713,3 +713,33 @@ input,select{
     max-height: 550px !important;
     overflow-y: auto;
 }
+/*线路产品*/
+
+.linepRemark{
+    text-align: left !important;
+}
+
+/*游客管理编辑、添加*/
+.btn-touristGroup-addCost2{
+    margin-left: 20px;
+    margin-top: 12px;
+}
+.margin-top30{
+    margin-top: 30px;
+    margin-left: 8px !important;
+}
+.margin-top15{
+    margin-top: 25px;
+}
+
+/*关闭操作页面时的button键*/
+.btn-heightMall{
+    height: 25px !important;
+    min-width: 55px;
+    border-radius: 3px;
+}
+/*.btn-heightAging{
+    height: 25px !important;
+    width: 65px;
+     border-radius: 3px;
+}*/
