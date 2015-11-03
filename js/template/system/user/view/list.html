@@ -24,7 +24,7 @@
 			</li>
 		</ul>
 	</div>
-	<button class="btn btn-sm btn-success btn-user-add" style="margin-left:15px;">
+	<button class="btn btn-sm btn-success btn-user-add R-right" data-right='1420001' style="margin-left:15px;">
 		<i class="ace-icon fa fa-plus"></i>
 		新增人员
 	</button>
@@ -62,14 +62,16 @@
 						</td>
 						<td>
 							<div class="hidden-sm hidden-xs btn-group">
-								<a data-entity-id="{{user.id}}" class="cursor btn-user-auth" title="授权">
-									授权
-								</a><a href="" class="cursor"> |</a>
-								<a data-entity-id="{{user.id}}" class="cursor btn-user-edit" title="修改">
-									修改
-								</a><a href="" class="cursor"> |</a>
-								<a data-entity-id="{{user.id}}" class="cursor btn-user-view" title="查看">
+							<a data-entity-id="{{user.id}}" class="cursor btn-user-view" title="查看">
 									查看
+								</a>
+								<a data-entity-id="{{user.id}}" class="cursor btn-user-auth R-rigth" data-right='1420003' title="授权">
+								<label class="padding-right20">|</label>
+									授权
+								</a>
+								<a data-entity-id="{{user.id}}" class="cursor btn-user-edit R-right" data-right='1420002' title="修改">
+								<label class="padding-right20">|</label>
+									修改
 								</a>
 							</div>
 							<div class="hidden-md hidden-lg">

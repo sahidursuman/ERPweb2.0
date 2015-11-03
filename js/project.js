@@ -25,12 +25,6 @@ function addTab(tabId,tabName,html){
 	else{
 		$("#tabList").append("<li class=\"tab-"+tabId+" active\"><a data-toggle=\"tab\" href=\"#tab-"+tabId+"-content\" aria-expanded=\"true\"><span>"+tabName+"</span><i class=\"ace-icon fa fa-close tab-close\"></i></a></li>");
 		setTimeout(function() {
-			listwidth += parseInt($("#tabList li.tab-"+tabId+"").css("width"));
-			var maxwidth = parseInt($(".breadcrumbs-fixed").css("width"))-70;
-			if(listwidth > maxwidth){
-				var maxleft = -(listwidth - (maxwidth + 35));//ul可向左平移的最大宽度，maxleft取负值,35为左侧移动符号宽度
-				$("#tabList").css("marginLeft",maxleft);
-			}
 			$("#tabList .tab-"+tabId+" .tab-close").click(function(){
 				$that = $(this);
 				var str = tabId.split("-");
@@ -76,33 +70,47 @@ function addTab(tabId,tabName,html){
 }
 function closeTab(tabId){
 	var $li = $tabList.find('.tab-' + tabId),
+		index = $li.index(),
 		$prev = false;
 
 	// 查找下一个li
 	if ($li.hasClass('active')) {
 		$prev = $li.data('prev-tab');
-	}
 
-	if ($tabList.find('.active').length === 0 || (!!$prev && $prev.parent().length === 0))  {
-		var index = $li.index();
-
-		if (index === 0 && $li.next().length()) {
-			$prev = $li.next();
-		} else {
-			$prev = $li.prev();
+		if (!$prev || !$prev.parent().length) {		// 没有前一个, 或者前一个被删除：通过父元素是否存在来判断
+			if ($tabList.children('li').length > 1) {
+				if (!!index) {
+					index = index - 1;
+				} 
+				
+				$prev = $tabList.children('li').eq(index);
+			}
 		}
-	}
+	} 
 
-	if ($prev) {  // 激活
-		$prev.children('a').trigger('click');
-	}
-
+	// 关闭当前tab
 	$li.remove();
 	$("#tab-"+tabId+"-content").remove();
+
+	// 激活新的页面
+	if ($prev) {  
+		$prev.children('a').trigger('click');
+	}
 
 	Tools.justifyTab();
 }
 
+//判断是否有权限
+function isAuth(rightCode){
+	var functionList = IndexData.userInfo.listUserFunctionShip;
+	if(rightCode){
+		var index = functionList.indexOf(rightCode);
+		if(index < 0){
+			return false;
+		}
+	}
+	return true;
+}
 //权限过滤
 function filterUnAuth(obj) {
 	if (!obj || !IndexData.userInfo || !IndexData.userInfo.listUserFunctionShip) return '';
@@ -111,14 +119,23 @@ function filterUnAuth(obj) {
 	var $obj = $(obj);
 	$obj.find(".R-right").each(function(){
 		var right = $(this).data("right");
-		if(right){
-			var index = functionList.indexOf(right);
-			if(index < 0){
-				$(this).remove();
-			}
+		var auth = isAuth(right);
+		if(!auth){
+			$(this).remove();
 		}
 	});
 	return $obj;
+}
+
+//财务对账行处理
+function checkDisabled(checkList,checkTr,rightCode){
+	var auth = isAuth(rightCode);
+    for(var i = 0;i < checkList.length; i++){
+        if(checkList[i].isConfirmAccount == 1 && !auth){
+            checkTr.eq(i).find('input[type=text]').prop("disabled",true);
+            checkTr.eq(i).find('input[type=checkbox]').prop("disabled",true);
+        }
+    }
 }
 
 function openLoadingLayer(){
@@ -753,7 +770,9 @@ function listMenu(menuTemplate){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
+					console.info('click.....');
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/tripPlan/tripPlan.js",function(tripPlan){
+						console.info('listTripPlan......');
 						tripPlan.listTripPlan(0,"","","","","","","","");
 						modals["arrange_all"] = tripPlan;
 					});
