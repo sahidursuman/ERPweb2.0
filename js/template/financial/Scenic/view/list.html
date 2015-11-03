@@ -58,7 +58,8 @@
                     <td>  
                         <a data-entity-id="{{rs.scenicId}}" data-entity-scenicName="{{rs.scenicName}}" data-entity-year="{{searchParam.year}}" data-entity-month="{{searchParam.month}}" class="cursor R-right btn-scenic-Check" data-right="1250002">
                             	对账
-                        </a><a href="" class="cursor"> |</a>
+                        </a>
+                        <label class="cursor R-right" data-right="1250002"><a class="R-right" data-right="1250003"> |</a></label>
                         <a data-entity-id="{{rs.scenicId}}" data-entity-scenicName="{{rs.scenicName}}" data-entity-year="{{searchParam.year}}"
                                 {{if searchParam.month == ""}}
                                  	 data-entity-startMonth=1 data-entity-endMonth=12 
@@ -66,7 +67,6 @@
                                  	 data-entity-startMonth="{{searchParam.month}}" data-entity-endMonth="{{searchParam.month}}" 
                                 {{/if}}
                         		class="cursor R-right btn-scenic-balance" data-right="1250003">
-                                <label class="padding-right20"> |</label>
                            		 结算
                         </a>
                     </td>
