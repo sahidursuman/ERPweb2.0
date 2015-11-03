@@ -480,7 +480,7 @@ define(function(require, exports) {
 				'<td><input name="arriveCity" value="" type="text" class="col-sm-12" maxlength="30" /></td>'+
 				'<td><input name="shift" value="" type="text" class="col-sm-12" maxlength="30" /></td>'+
 				'<td><input name="seatLevel" value="" type="text" class="col-sm-12" maxlength="30" /></td>'+
-				'<td><div class="input-group"><input name="startTime" value="" type="text" class="datetimepicker"/><span class="input-group-addon"><i class="fa fa-clock-o"></i></span></div></td>'+
+				'<td><div class="input-group" style="min-width: 165px;"><input name="startTime" value="" type="text" class="datetimepicker col-sm-12"/><span class="input-group-addon"><i class="fa fa-clock-o"></i></span></div></td>'+
 				'<td><input name="roomCount" value="" type="text" class="col-sm-12" maxlength="5" /></td>'+
 				'<td><input name="costPrice" value="" type="text" class="col-sm-12" maxlength="9" /></td>'+
 				'<td><input name="salePrice" value="" type="text" class="col-sm-12" maxlength="9" /></td>'+

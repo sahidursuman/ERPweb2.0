@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":277,"md5":"7d4450f0f9f31e2625d6d4e2174451ed"}*/
+/*TMODJS:{"debug":true,"version":279,"md5":"c67c45b3884af87424fa9278b306f587"}*/
 define(function(require) {
     return require("../../../template")("system/user/view/auth", function($data, $filename) {
         try {
