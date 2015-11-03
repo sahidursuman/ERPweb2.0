@@ -61,12 +61,11 @@
 	                      <span style="color:green"> {{innerTransferOut.checkedCount}}{{"/"}}{{innerTransferOut.allCount}}</span>
 	                    {{/if}}
                     </td>
-                   
-                    
                     <td>
                         <a data-entity-id="{{innerTransferOut.toBusinessGroupId}}" data-entity-toBusinessGroupName="{{innerTransferOut.toBusinessGroupName}}" data-entity-year="{{searchParam.year}}" data-entity-month="{{searchParam.month}}" class="cursor btn-innerTransferOut-check R-right" data-right="1370001">
                             	对账
                         </a>
+                        <label class="cursor R-right" data-right="1370001"><a class="R-right" data-right="1370002"> |</a></label>
                         <a data-entity-id="{{innerTransferOut.toBusinessGroupId}}" data-entity-toBusinessGroupName="{{innerTransferOut.toBusinessGroupName}}" data-entity-year="{{searchParam.year}}"
                                 {{if searchParam.month == ""}}
                                  	 data-entity-startMonth=1 data-entity-endMonth=12 
@@ -74,7 +73,6 @@
                                  	 data-entity-startMonth="{{searchParam.month}}" data-entity-endMonth="{{searchParam.month}}" 
                                 {{/if}}
                         		class="cursor btn-innerTransferOut-balance R-right" data-right="1370002">
-                                <label class="padding-right20"> |</label>
                            		 结算
                         </a>
                     </td>

@@ -54,10 +54,9 @@
                     </td>
                     <td>
                         <a data-entity-id="{{booking.partnerAgencyId}}" data-entity-partnerAgencyName="{{booking.partnerAgencyName}}" data-entity-year="{{searchParam.year}}" data-entity-month="{{searchParam.month}}" class="cursor btn-financialbooking-check R-right" data-right="1290002">
-
                             	对账
-                            
                         </a>
+                        <label class="cursor R-right" data-right="1290002"> <a class="R-right" data-right="1290003"> |</a></label>
                         <a data-entity-id="{{booking.partnerAgencyId}}" data-entity-partnerAgencyName="{{booking.partnerAgencyName}}" data-entity-year="{{searchParam.year}}"
                                 {{if searchParam.month == ""}}
                                  	 data-entity-startMonth=1 data-entity-endMonth=12 
@@ -65,7 +64,6 @@
                                  	 data-entity-startMonth="{{searchParam.month}}" data-entity-endMonth="{{searchParam.month}}" 
                                 {{/if}}
                         		class="cursor btn-financialbooking-balance R-right" data-right="1290003">
-                                <label class="padding-right20"> |</label>
                            		 结算
                         </a>
                     </td>
