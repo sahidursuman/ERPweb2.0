@@ -1041,6 +1041,8 @@ define(function(require, exports) {
 						parents.find("input[name=managerName]").val(ui.item.managerName);
 						parents.find("input[name=price]").val("");
 					}else{
+						$(_this).data('bs.popover').options.content = "";
+						$(_this).data("propover" , "");
 						parents.find("input[name=restaurantId]").val(ui.item.id).trigger('change');
 						
 						$.ajax({
