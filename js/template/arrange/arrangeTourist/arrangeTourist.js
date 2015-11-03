@@ -49,7 +49,7 @@ define(function(require, exports) {
 					layer.close(globalLoadingLayer);
 					var result = showDialog(data);
 					if(result){
-						data.lineProductList = JSON.parse(data.lineProductList);
+						//data.lineProductList = JSON.parse(data.lineProductList);
 						var html = listMainTemplate(data);
 						addTab(menuKey,"分团转客",html);
 						
