@@ -920,7 +920,7 @@ define(function(require, exports) {
                             var userName = $(this).attr('data-entity-userName');
                             var roleType = $(this).attr('data-entity-roleType');
                             count.saveTripCount(id, financialTripPlanId, userName, roleType,0,2);
-                        });/*
+                        });
                         $('.countReimbursement .btn-guide-account').off('click').on('click',function() {
                             //访问报账函数
                             var id = $(this).attr('data-entity-id');
@@ -928,7 +928,7 @@ define(function(require, exports) {
                             var roleType = $(this).attr('data-entity-roleType');
                             var userName = $(this).attr('data-entity-userName');
                             count.webGuideAccount(id, financialTripPlanId, userName, roleType);
-                        });*/
+                        });
                         //操作记录
                         $('.countReimbursement .btn-financialLog').off('click').on('click',function() {
                             var id = $(this).attr('data-entity-id');
