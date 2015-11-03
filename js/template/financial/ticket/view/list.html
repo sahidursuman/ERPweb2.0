@@ -64,6 +64,7 @@
                         <a data-entity-id="{{ticket.ticketId}}" data-entity-companyName="{{ticket.companyName}}" data-entity-year="{{searchParam.year}}" data-entity-month="{{searchParam.month}}" class="cursor btn-ticket-check R-right" data-right="1210002">
                             	 对账
                         </a>
+                        <label class="cursor R-right" data-right="1210002"><a class="R-right" data-right="1210003"></a> |</label>
                         <a data-entity-id="{{ticket.ticketId}}" data-entity-companyName="{{ticket.companyName}}" data-entity-year="{{searchParam.year}}"
                                 {{if searchParam.month == ""}}
                                  	 data-entity-startMonth=1 data-entity-endMonth=12
@@ -71,7 +72,6 @@
                                  	 data-entity-startMonth="{{searchParam.month}}" data-entity-endMonth="{{searchParam.month}}"
                                 {{/if}}
                         		class="cursor R-right btn-ticket-balance" data-right="1210003">
-                                <label class="padding-right20"> |</label>
                            		 结算
                         </a>
                     </td>
