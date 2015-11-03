@@ -1474,6 +1474,7 @@ define(function(require, exports) {
 			var isReturn = false;
 			addCostStr.each(function(i){
 				if(i > 1){
+					var id = addCostStr.eq(i).data("entity-id");
 					var type = addCostStr.eq(i).find("[name=addOrReduceSelect]").attr("value");
 					var describeInfo = trim(addCostStr.eq(i).find("input[name=describeInfo]").val());
 					var count = trim(addCostStr.eq(i).find("input[name=count]").val());
@@ -1495,6 +1496,7 @@ define(function(require, exports) {
 							return false;
 						}
 						var touristGroupFeeJson = {
+							id : id,
 							type : type,
 							describeInfo : describeInfo,
 							count : count,

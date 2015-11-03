@@ -37,14 +37,15 @@ define(function(require, exports) {
 					var result = showDialog(data);
 					//如果正确则就执行
 					if(result){
+						subsection.autocompleteDate.creatorList = data.creatorList;
+						subsection.autocompleteDate.fromPartnerAgencyList = data.fromPartnerAgencyList;
+						subsection.autocompleteDate.lineProductList = data.lineProductList;
 						var html = listMainTemplate(data);
 						addTab(menuKey,"中转分段",html);
-						subsection.getQueryTerms();
 
 						var tab = "tab-resource_subsection-content";
-						subsection.searchNumber(subsection.searchData.lineProduct,subsection.searchData.lineProductId,subsection.searchData.fromPartnerAgency,subsection.searchData.fromPartnerAgencyId,subsection.searchData.creator,subsection.searchData.creatorId,subsection.searchData.travelDate,subsection.searchData.operationStartDate,subsection.searchData.operationEndDate,tab);
 						subsection.datePicker();
-						$("#"+tab+" .btn-subsection-search").on("click",function(){
+						$("#"+tab+" .btn-subsection-search").off('click').on("click",function(){
 							function getValue(name){
 								var value = $("#"+tab+" .subsectionSearchForm [name="+name+"]").val();
 								return value;
@@ -529,23 +530,6 @@ define(function(require, exports) {
 				$(obj).autocomplete('option','source',creatorObj);
 				$(obj).autocomplete('search', '');
 			});
-		},
-
-
-		getQueryTerms :function(){
-			$.ajax({
-				url:""+APP_ROOT+"back/innerTransferOperation.do?method=getSearchCondition&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-				dateType:"json",
-				type:"POST",
-				success:function(data){
-					var result = showDialog(data);
-					if(result){
-						subsection.autocompleteDate.creatorList = data.creatorList;
-						subsection.autocompleteDate.fromPartnerAgencyList = data.fromPartnerAgencyList;
-						subsection.autocompleteDate.lineProductList = data.lineProductList;
-					}
-				}
-			})
 		},
 	}
 	exports.listMainSubsection = subsection.listMainSubsection;
