@@ -95,7 +95,7 @@
 				{{each tripPlanList as tripPlan}}
 					<tr data-entity-id="{{tripPlan.id}}">
 						<td style="vertical-align:middle" {{if tripPlan.tripPlanDetails.length > 1}}rowspan="{{tripPlan.tripPlanDetails.length}}"{{/if}}>{{tripPlan.tripNumber}}</td>
-						{{if tripPlan.tripPlanDetails.length == 0}}
+						{{if tripPlan.tripPlanDetails.length  < 2}}
 							<td>{{if tripPlan.startTime != null}}{{tripPlan.startTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
 							<td>{{if tripPlan.endTime != null}}{{tripPlan.endTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
 							<td>{{tripPlan.lineProduct.name}}</td>
