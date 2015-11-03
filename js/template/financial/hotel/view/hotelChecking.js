@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":153,"md5":"2656856c66edbc69470637796fd5df72"}*/
+/*TMODJS:{"debug":true,"version":155,"md5":"c8d42798775a53f909e9c1418963ec52"}*/
 define(function(require) {
     return require("../../../template")("financial/hotel/view/hotelChecking", function($data, $filename) {
         try {
