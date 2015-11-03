@@ -10,7 +10,7 @@
 .search-btn:hover{
     background: #359fb2!important;
 }
-/*.btn-minier, .btn-group-minier>.btn{width: 65px;height: 35px;border-radius: 3px}*/
+.btn-minier,.btn-group-minier>.btn{width: 65px;height: 35px!important;border-radius: 3px}
 input{
     vertical-align: middle !important;
     font-size: 12px !important;
@@ -737,7 +737,7 @@ input,select{
 
 /*关闭操作页面时的button键*/
 .btn-heightMall{
-    height: 25px !important;
+    /*height: 25px;*/
     min-width: 55px;
     border-radius: 3px;
 }
