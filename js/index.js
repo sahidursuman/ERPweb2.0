@@ -137,5 +137,10 @@
 	// 初始哈
 	jQuery(document).ready(function($) {
 		IndexFun.init();
+		
+		//判断浏览器宽度 如果小于 1367px 那么菜单栏不展开
+		if ($(window).width() < 1367) {
+			$(document).find("#sidebar-collapse").trigger('click')
+		}
 	});
 }(window.jQuery);
