@@ -261,7 +261,7 @@ table tr td{
 .main-content {
     margin-top: 77px;
 }
-#tabList>li>a, #tabList>li>a:focus{line-height: 17px}
+#tabList>li>a, #tabList>li>a:focus{line-height: 18px}
 #tabList>li.active>a, #tabList>li.active>a:hover, #tabList>li.active>a:focus{
     background: white;
     margin-top: 0px!important;
