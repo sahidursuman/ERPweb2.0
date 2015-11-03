@@ -772,7 +772,11 @@ define(function(require, exports) {
                                     $(this).val(0);
                                 }
                                 vl = $(this).val();
-                                $(this).val(count.changeTwoDecimal(parseFloat(vl)));
+                                console.log($(this).prop("name"));
+                                if($(this).prop("name") != 'name' || $(this).prop("name") != "billRemark"){
+                                    $(this).val(count.changeTwoDecimal(parseFloat(vl)));
+                                }
+                               
                                 count.bindOther(this,"countReimbursement");
                             });
                             count.setChooseDays("financial-count-update-otherpay");
@@ -927,13 +931,7 @@ define(function(require, exports) {
                             var financialTripPlanId = $(this).attr('data-entity-financial-id');
                             var roleType = $(this).attr('data-entity-roleType');
                             var userName = $(this).attr('data-entity-userName');
-                            count.webGuideAccount(id, financialTripPlanId, userName, roleType);
-                        });
-                        //操作记录
-                        $('.countReimbursement .btn-financialLog').off('click').on('click',function() {
-                            var id = $(this).attr('data-entity-id');
-                            id = $('.countUpdate .financial-tripPlanId').val();
-                            count.viewLog(id);
+                            count.saveTripCount(id, financialTripPlanId, userName, roleType,0,3);
                         });
                         //单据图片
                         $('.countReimbursement .btn-view').off('click').on('click',function() {
@@ -1088,7 +1086,7 @@ define(function(require, exports) {
                     "id":$(this).attr('otherInId'),
                     "title":$(this).find('input[name="title"]').val(),
                     "price":$(this).find('input[name="price"]').val(),
-                    "count":$(this).find('input[name="count"]').val(),
+                    "realCount":$(this).find('input[name="count"]').val(),
                     "billRemark":$(this).find('input[name="billRemark"]').val()
                     }
                 saveJson.otherInList.push(otherIn);
@@ -1098,7 +1096,7 @@ define(function(require, exports) {
                     "whichDay":$(this).find('select[name="whichDay"]').val(),
                     "title":$(this).find('input[name="title"]').val(),
                     "price":$(this).find('input[name="price"]').val(),
-                    "count":$(this).find('input[name="count"]').val(),
+                    "realCount":$(this).find('input[name="count"]').val(),
                     "billRemark":$(this).find('input[name="billRemark"]').val(),
                     }
                 saveJson.otherInList.push(otherIn);
@@ -1120,12 +1118,23 @@ define(function(require, exports) {
             //餐费
             $('.countReimbursement').find('#T-restaurant').find('tr').each(function() {
                 if($(this).attr('restaurantArrangeId')) {
+                    if($(this).attr('isChoose') == 1){
+                        var restaurantArrange = {
+                            "id":count.changeTwoDecimalToString($(this).attr('restaurantArrangeId')),
+                            "restaurantId":$(this).find('select[name="restaurant"]').val(),
+                            "realCount":count.changeTwoDecimalToString($(this).find('input[name=realCount]').val()),
+                            "billRemark":$(this).find('input[name="billRemark"]').val(),
+                            "realGuidePayMoney":count.changeTwoDecimalToString($(this).find('input[name=realGuidePayMoney]').val())
+                        }
+                    }else{
                     var restaurantArrange = {
                             "id":count.changeTwoDecimalToString($(this).attr('restaurantArrangeId')),
+                            "restaurantId":$(this).attr('restaurantid'),
                             "realCount":count.changeTwoDecimalToString($(this).find('input[name=realCount]').val()),
                             "billRemark":$(this).find('input[name="billRemark"]').val(),
                             "realGuidePayMoney":count.changeTwoDecimalToString($(this).find('input[name=realGuidePayMoney]').val())
                     }
+                }
                     saveJson.restaurantArrangeList.push(restaurantArrange);
                 }
             });
@@ -1174,7 +1183,7 @@ define(function(require, exports) {
                     var otherArrange = {
                         "id":$(this).attr('otherArrangeId'),
                         "price":$(this).find('input[name="realPrice"]').val(),
-                        "count":$(this).find('input[name="realCount"]').val(),
+                        "realCount":$(this).find('input[name="realCount"]').val(),
                         "reduceMoney":$(this).find('input[name="reduceMoney"]').val(),
                         "realGuidePayMoney":$(this).find('input[name="realGuidePayMoney"]').val(),
                         "billRemark":$(this).find('input[name="billRemark"]').val()
@@ -1185,7 +1194,7 @@ define(function(require, exports) {
                         "whichDay":$(this).find('select[name="whichDay"]').val(),
                         "title":$(this).find('input[name="name"]').val(),
                         "price":$(this).find('input[name="realPrice"]').val(),
-                        "count":$(this).find('input[name="realCount"]').val(),
+                        "realCount":$(this).find('input[name="realCount"]').val(),
                         "reduceMoney":$(this).find('input[name="reduceMoney"]').val(),
                         "realGuidePayMoney":$(this).find('input[name="realGuidePayMoney"]').val(),
                         "billRemark":$(this).find('input[name="billRemark"]').val()
@@ -1597,24 +1606,11 @@ define(function(require, exports) {
         	});
 		},
 		webGuideAccount : function(id, financialTripPlanId, roleType) {
-			var saveJson = count.getSaveTripPlanJson();
-			if(roleType == "2") {
-				saveJson.log.info.message = "财务（" + userName + "）保存信息";
-			} else if(roleType == "3") {
-				saveJson.log.info.message = "计调（" + userName + "）保存信息";
-			} else if(roleType == "1") {
-				saveJson.log.info.message = "管理员（" + userName + "）保存信息";
-			}
-			
-			saveJson = JSON.stringify(saveJson);
 			$.ajax({
             	url:""+APP_ROOT+"back/financialTripPlan.do?method=webGuideAccount&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
             	type:"POST",
-            	data:"id="+id+"&saveJson="+encodeURIComponent(saveJson),
+            	data:"id="+id,
             	dataType:"json",
-            	beforeSend:function(){
-            		globalLoadingLayer = openLoadingLayer();
-            	},
             	success:function(data){
             		layer.close(globalLoadingLayer);
             		var result = showDialog(data);
@@ -1661,13 +1657,13 @@ define(function(require, exports) {
 		saveTripCount : function(id, financialTripPlanId, userName, roleType,isClose,typeFlag) {
             console.log(financialTripPlanId);
             var saveJson;
-            if(typeFlag == 2){
+            if(typeFlag == 2 || typeFlag == 3){
                 saveJson = count.saveCountReimbursement(financialTripPlanId);
             }else{
                 saveJson = count.getSaveTripPlanJson(financialTripPlanId);
             };
             console.log(saveJson);
-            if(typeFlag !=2){
+            if(typeFlag !=2 && typeFlag !=3){
 			    if(roleType == "2") {
 				saveJson.log.info.message = "财务（" + userName + "）保存信息";
     			} else if(roleType == "3") {
@@ -1678,8 +1674,7 @@ define(function(require, exports) {
     			saveJson.log.type = "1";
 			}
 			saveJson = JSON.stringify(saveJson);
-			console.log(saveJson);
-            if(typeFlag == 2){
+            if(typeFlag == 2 || typeFlag == 3){
                 $.ajax({
                 url:""+APP_ROOT+"back/financialTripPlan.do?method=webGuideAccountUpdate&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
                 type:"POST",
@@ -1692,6 +1687,9 @@ define(function(require, exports) {
                     layer.close(globalLoadingLayer);
                     var result = showDialog(data);
                     if(result){
+                        if(typeFlag == 3){
+                            count.webGuideAccount(id);
+                        };
                         showMessageDialog($( "#confirm-dialog-message" ),data.message);
                         count.edited["checkBill"] = "";
                         if(isClose == 1){
