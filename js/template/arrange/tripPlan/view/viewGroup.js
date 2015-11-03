@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":176,"md5":"47613e080ba9d9e3cd511af38df3a120"}*/
+/*TMODJS:{"debug":true,"version":181,"md5":"36684ee0bf2f7a45090d96aefdbd40eb"}*/
 define(function(require) {
     return require("../../../template")("arrange/tripPlan/view/viewGroup", function($data, $filename) {
         try {
@@ -12,9 +12,10 @@ define(function(require) {
                 $line = 27) : ($out += "其他 ", $line = 28), $out += " </td> <td>", $line = 30, $out += $escape(memberList.idCardNumber), 
                 $out += "</td> <td>", $line = 31, $out += $escape(memberList.mobileNumber), $out += "</td> <td> ", 
                 $line = 33, 1 == memberList.isContactUser ? ($out += " 是 ", $line = 35) : 0 == memberList.isContactUser && ($out += " 否 ", 
-                $line = 37), $out += " </td> <td>", $line = 39, $out += $escape(memberList.area), 
-                $out += "</td> <td>", $line = 40, $out += $escape(memberList.age), $out += "</td> </tr>", 
-                $line = 41;
+                $line = 37), $out += " </td> <td>", $line = 39, 0 == memberList.idCardType ? ($line = 39, 
+                $out += $escape(memberList.area), $line = 39) : ($out += "-", $line = 39), $out += "</td> <td>", 
+                $line = 40, 0 == memberList.idCardType ? ($line = 40, $out += $escape(memberList.age), 
+                $line = 40) : ($out += "-", $line = 40), $out += "</td> </tr>", $line = 41;
             }), $out += " </tbody> </table> </div> </div> </div> </div> </div> </form> </div>", 
             new String($out);
         } catch (e) {
@@ -23,7 +24,7 @@ define(function(require) {
                 name: "Render Error",
                 message: e.message,
                 line: $line,
-                source: '<div class="col-xs-12 viewGroupMain">\r\n	<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">\r\n		<div class="form-group">\r\n			<div class="col-xs-12 col-sm-12 widget-container-col">\r\n				<div class=" ui-sortable-handle">\r\n					<div class="widget-body">\r\n						<div class="widget-main">\r\n							<table class="table table-striped table-bordered table-hover">\r\n								<thead>\r\n									<tr>\r\n										<th class="th-border">姓名</th>\r\n										<th class="th-border">证件类型</th>\r\n										<th class="th-border">证件号</th>\r\n										<th class="th-border">手机号</th>\r\n										<th class="th-border">是否为联系人</th>\r\n										<th class="th-border">客源地</th>\r\n										<th class="th-border">年龄</th>\r\n									</tr>\r\n								</thead>\r\n\r\n								<tbody>{{each memberList as memberList}}\r\n								<tr  data-travelLine-Id="{{memberList.id}}">\r\n									<td>{{memberList.name}}</td>\r\n									<td>\r\n										{{if memberList.idCardType==0}}身份证\r\n										{{else if memberList.idCardType==1}}护照\r\n										{{else}}其他\r\n										{{/if}}\r\n									</td>\r\n									<td>{{memberList.idCardNumber}}</td>\r\n									<td>{{memberList.mobileNumber}}</td>\r\n									<td>\r\n										{{if memberList.isContactUser == 1}}\r\n											是\r\n										{{else if memberList.isContactUser == 0}}\r\n											 否\r\n										{{/if}}\r\n									</td>\r\n									<td>{{memberList.area}}</td>\r\n									<td>{{memberList.age}}</td>\r\n								</tr>{{/each}}\r\n								</tbody>\r\n							</table>\r\n						</div>\r\n					</div>\r\n				</div>\r\n			</div>\r\n		</div>\r\n	</form>\r\n</div>'.split(/\n/)[$line - 1].replace(/^\s+/, "")
+                source: '<div class="col-xs-12 viewGroupMain">\r\n	<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">\r\n		<div class="form-group">\r\n			<div class="col-xs-12 col-sm-12 widget-container-col">\r\n				<div class=" ui-sortable-handle">\r\n					<div class="widget-body">\r\n						<div class="widget-main">\r\n							<table class="table table-striped table-bordered table-hover">\r\n								<thead>\r\n									<tr>\r\n										<th class="th-border">姓名</th>\r\n										<th class="th-border">证件类型</th>\r\n										<th class="th-border">证件号</th>\r\n										<th class="th-border">手机号</th>\r\n										<th class="th-border">是否为联系人</th>\r\n										<th class="th-border">客源地</th>\r\n										<th class="th-border">年龄</th>\r\n									</tr>\r\n								</thead>\r\n\r\n								<tbody>{{each memberList as memberList}}\r\n								<tr  data-travelLine-Id="{{memberList.id}}">\r\n									<td>{{memberList.name}}</td>\r\n									<td>\r\n										{{if memberList.idCardType==0}}身份证\r\n										{{else if memberList.idCardType==1}}护照\r\n										{{else}}其他\r\n										{{/if}}\r\n									</td>\r\n									<td>{{memberList.idCardNumber}}</td>\r\n									<td>{{memberList.mobileNumber}}</td>\r\n									<td>\r\n										{{if memberList.isContactUser == 1}}\r\n											是\r\n										{{else if memberList.isContactUser == 0}}\r\n											 否\r\n										{{/if}}\r\n									</td>\r\n									<td>{{if memberList.idCardType==0}}{{memberList.area}}{{else}}-{{/if}}</td>\r\n									<td>{{if memberList.idCardType==0}}{{memberList.age}}{{else}}-{{/if}}</td>\r\n								</tr>{{/each}}\r\n								</tbody>\r\n							</table>\r\n						</div>\r\n					</div>\r\n				</div>\r\n			</div>\r\n		</div>\r\n	</form>\r\n</div>'.split(/\n/)[$line - 1].replace(/^\s+/, "")
             };
         }
     });
