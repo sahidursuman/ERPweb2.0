@@ -735,6 +735,11 @@ input,select{
 /*关闭操作页面时的button键*/
 .btn-heightMall{
     height: 25px !important;
-    width: 55px;
+    min-width: 55px;
     border-radius: 3px;
 }
+/*.btn-heightAging{
+    height: 25px !important;
+    width: 65px;
+     border-radius: 3px;
+}*/

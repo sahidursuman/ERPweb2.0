@@ -135,7 +135,7 @@ function closeGlobalLayer() {
 	}
 }
 
-function init_editor(ue_key,options)  {
+function init_editor(ue_key,options, height)  {
 	var ue = globelEditorInstants[ue_key];
 
 	if (ue) {
@@ -152,7 +152,8 @@ function init_editor(ue_key,options)  {
 
 	ue = UE.getEditor(ue_key,options);
 	ue.ready(function(){
-		ue.setHeight(400);
+		ue.setHeight(height || 400);
+		$(window).trigger('resize');
 	});
 	globelEditorInstants[ue_key] = ue;
 
@@ -342,7 +343,7 @@ function showLogoutDialog(dialogObj,message){
 		buttons: [
 			{
 				text: "重新登录",
-				"class" : "btn btn-primary btn-minier btn-heightMall",
+				"class" : "btn btn-primary btn-minier btn-height",
 				click: function() {
 					window.location.href = "login.html";
 				}
@@ -383,7 +384,7 @@ function showAutoLoginDialog(dialogObj,message){
 		buttons: [
 			{
 				text: "自动登录",
-				"class" : "btn btn-primary btn-minier btn-heightMall",
+				"class" : "btn btn-primary btn-minier btn-height",
 				click: function() {
 					$( this ).dialog( "close" );
 					$.ajax({
