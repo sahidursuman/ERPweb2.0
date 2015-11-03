@@ -36,8 +36,8 @@
 											 否
 										{{/if}}
 									</td>
-									<td>{{memberList.area}}</td>
-									<td>{{memberList.age}}</td>
+									<td>{{if memberList.idCardType==0}}{{memberList.area}}{{else}}-{{/if}}</td>
+									<td>{{if memberList.idCardType==0}}{{memberList.age}}{{else}}-{{/if}}</td>
 								</tr>{{/each}}
 								</tbody>
 							</table>

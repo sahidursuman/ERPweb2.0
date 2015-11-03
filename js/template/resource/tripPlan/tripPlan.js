@@ -377,7 +377,7 @@ define(function(require, exports) {
 			var validator = e.data.validator;
 			var _this = $(this),
 				tableContainer = _this.parents(".ui-sortable-handle").find(".table tbody"),
-				html = '<tr><td><div class="col-sm-12"><input type="text" maxlength="32" name="insuranceName" class="col-sm-12 chooseInsurance bind-change"/><input type="hidden" name="insuranceId"/><span class="addResourceBtn T-addInsuranceResource" title="添加保险公司"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>' +
+				html = '<tr><td><div class="col-sm-12"><input type="text" maxlength="32" name="insuranceName" class="col-sm-12 chooseInsurance bind-change"/><input type="hidden" name="insuranceId"/><span class="addResourceBtn T-addInsuranceResource R-right" data-right="1080002" title="添加保险公司"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>' +
 						'<td><input type="text" name="type" maxlength="32" class="col-sm-12"/></td>' +
 						'<td><input type="text" name="price" maxlength="6" class="col-sm-12"/></td>' +
 						'<td><input type="text" name="memberCount" class="col-sm-12" maxlength="8"/></td>' +
@@ -386,7 +386,7 @@ define(function(require, exports) {
 						'<td><select name="payType" class="col-sm-12 no-padding"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>' +		
 						'<td><input name="remark" type="text" class="col-sm-12" maxlength="500"/></td>' +
 						'<td><a class="cursor btn-deleteTripPlanList" title="删除">删除</a></td></tr>';
-			tableContainer.append(html);
+			tableContainer.append(filterUnAuth(html));
 			tripPlan.bindDeleteEvent();
 			tripPlan.bindInsuranceChoose();
 			tripPlan.calculatePrice();
@@ -440,7 +440,7 @@ define(function(require, exports) {
 			var _this = $(this),
 			tableContainer = _this.parents(".ui-sortable-handle").find(".table tbody"),
 			html = '<tr><td class="whichDaysContainer"></td>' +
-			'<td><div class="col-sm-12"><input type="text" name="restaurantName" class="col-sm-12 chooseRestaurant"/><input type="hidden" name="restaurantId"><input type="hidden" name="optional" value="" /><span class="addResourceBtn T-addRestaurantResource" title="添加餐厅"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>' +
+			'<td><div class="col-sm-12"><input type="text" name="restaurantName" class="col-sm-12 chooseRestaurant"/><input type="hidden" name="restaurantId"><input type="hidden" name="optional" value="" /><span class="addResourceBtn T-addRestaurantResource R-right" data-right="1030002" title="添加餐厅"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>' +
 			'<td><input type="text" name="managerName" readonly="readonly" class="col-sm-12"/></td>' +
 			'<td><input type="text" name="mobileNumber" readonly="readonly" class="col-sm-12"/></td>' +
 			'<td><select name="type" class="col-sm-12 restauranType" style="width:80px;"><option value="早餐">早餐</option><option value="午餐">午餐</option><option value="晚餐">晚餐</option></select></td>' +
@@ -454,7 +454,7 @@ define(function(require, exports) {
 			'<td><input name="remark" type="text" class="col-sm-12"/></td>' +
 			//'<td><button class="btn btn-xs btn-success" title="发送订单"><i class="ace-icon fa fa-paper-plane-o bigger-120"></i></button></td></tr>';
 			'<td><a class="cursor btn-deleteTripPlanList" data-entity-name="restaurant" title="删除">删除</a></td>';
-			tableContainer.append(html);
+			tableContainer.append(filterUnAuth(html));
 			tripPlan.bindDeleteEvent();
 			tripPlan.bindRestaurantChoose();
 			tripPlan.bindMoneyTripPlan();
@@ -471,7 +471,7 @@ define(function(require, exports) {
 			tableContainer = _this.parents(".ui-sortable-handle").find(".table tbody"),
 			html = '<tr><td class="whichDaysContainer"></td>' +
 			'<td><select class="col-sm-12 no-padding tripPlanHotelStar" style="width: 80px;"><option value="1">三星以下</option><option value="2">三星</option><option value="3">准四星</option><option value="4">四星</option><option value="5">准五星</option><option value="6">五星</option><option value="7">五星以上</option></select></td>' +
-			'<td><div class="col-sm-12"><input type="text" class="col-sm-12 chooseHotel" name="name" /><input type="hidden" name="hotelId"><span class="addResourceBtn T-addHotelResource" title="添加酒店"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>' +
+			'<td><div class="col-sm-12"><input type="text" class="col-sm-12 chooseHotel" name="name" /><input type="hidden" name="hotelId"><span class="addResourceBtn T-addHotelResource R-right" data-right="1040002" title="添加酒店"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>' +
 			'<td><input type="text" class="col-sm-12" readonly="readonly" name="managerName"/></td>' +
 			'<td><input type="text" class="col-sm-12" readonly="readonly" name="mobileNumber"/></td>' +
 			'<td><input type="text" class="col-sm-12 chooseHotelRoom" name="hotelRoom"/><input type="hidden" name="hotelRoomId"></td>' +
@@ -485,7 +485,7 @@ define(function(require, exports) {
 			'<td><input type="text" class="col-sm-12" name="remark" maxlength="500"/></td>' +
 			'<td><a class="cursor btn-deleteTripPlanList" title="删除">删除</a></td></tr>';
 
-			tableContainer.append(html);
+			tableContainer.append(filterUnAuth(html));
 			tripPlan.bindDeleteEvent();
 			tripPlan.bindHotelChoose();
 			tripPlan.bindHotelRoomeChoose();
@@ -501,7 +501,7 @@ define(function(require, exports) {
 			var _this = $(this),
 			tableContainer = _this.parents(".ui-sortable-handle").find(".table tbody"),
 			html = '<tr><td class="whichDaysContainer"></td>' +
-			'<td><div class="col-sm-12"><input type="text" name="name" class="col-sm-12 chooseScenic"/><input type="hidden" name="scenicId"/><span class="addResourceBtn T-addScenicResource" title="添加景区"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>' +
+			'<td><div class="col-sm-12"><input type="text" name="name" class="col-sm-12 chooseScenic"/><input type="hidden" name="scenicId"/><span class="addResourceBtn T-addScenicResource R-right" data-right="1060002" title="添加景区"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>' +
 			'<td><input type="text" name="chargingProjects" class="col-sm-12"/><input type="hidden" name="chargingId"/></td>' +
 			'<td><select name="tourTime" class="col-sm-12 no-padding" style="width: 75px;"> <option value="全天">全天</option> <option value="上午">上午</option> <option value="下午">下午</option> </select> </td>' +
 			'<td><input type="text" name="tourDuration" class="col-sm-12" value="" style="width: 60px;" maxlength="3"> </td>' +
@@ -515,7 +515,7 @@ define(function(require, exports) {
 			'<td><input type="text" name="guidePayMoney" class="col-sm-12" style="width: 60px;" maxlength="9"/></td>' +
 			'<td><input type="text" name="remark" class="col-sm-12" maxlength="500"/></td>' +
 			'<td><a class="cursor btn-deleteTripPlanList" title="删除">删除</a></td></tr>';
-			tableContainer.append(html);
+			tableContainer.append(filterUnAuth(html));
 			tripPlan.bindDeleteEvent(); 
 			tripPlan.bindScenicChoose();
 			tripPlan.bindMoneyTripPlan();
@@ -529,14 +529,14 @@ define(function(require, exports) {
 			var _this = $(this),
 			tableContainer = _this.parents(".ui-sortable-handle").find(".table tbody"),
 			html = '<tr><td class="whichDaysContainer" value=""></td>'+
-                '<td><div class="col-sm-12"><input type="hidden" name="id" value="" /><input type="text" name="name" class="col-sm-12 chooseShop" value="" /><input type="hidden" name="shopId" value="" /><span class="addResourceBtn T-addShopResource" title="添加购物店"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
+                '<td><div class="col-sm-12"><input type="hidden" name="id" value="" /><input type="text" name="name" class="col-sm-12 chooseShop" value="" /><input type="hidden" name="shopId" value="" /><span class="addResourceBtn T-addShopResource R-right" data-right="1050002" title="添加购物店"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
                 '<td><input type="text" name="managerName" readonly="readonly" class="col-sm-12" value="" /></td>'+
                 '<td><input type="text" name="mobileNumber" readonly="readonly" class="col-sm-12" value="" /></td>'+
                 '<td><input type="text" name="goodsPolicy" class="col-sm-12" value="" /><input type="hidden" name="shopPolicyId" value=""/></td>'+
                 '<td><input type="text" name="remark" class="col-sm-12" value="" maxlength="500" /></td>'+
                 '<td><a class="cursor btn-deleteTripPlanList" data-entiy-id="" data-entity-name="shop" title="删除">删除</a></td></tr>';
 
-			tableContainer.append(html);
+			tableContainer.append(filterUnAuth(html));
 			tripPlan.bindDeleteEvent();
 			tripPlan.bindShopChoose();
 			tripPlan.setChooseDays("tripPlan_addPlan_shop");
@@ -555,7 +555,7 @@ define(function(require, exports) {
 			var _this = $(this),
 			tableContainer = _this.parents(".ui-sortable-handle").find(".table tbody"),
 			html = '<tr><td class="whichDaysContainer"></td>' +
-			'<td><div class="col-sm-12"><input type="text" name="name" class="col-sm-12 chooseSelfPay"/><input type="hidden" name="selfPayId" /><span class="addResourceBtn T-addSelfPayResource" title="添加自费商家"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>' +
+			'<td><div class="col-sm-12"><input type="text" name="name" class="col-sm-12 chooseSelfPay"/><input type="hidden" name="selfPayId" /><span class="addResourceBtn T-addSelfPayResource R-right" data-right="1090002" title="添加自费商家"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>' +
 			'<td><input type="hidden" name="selfitemId" value="" /><input type="text" name="selfitem" class="col-sm-12 chooseSelfitem" value="" /></td>'+
 			'<td><input type="text" readonly="readonly" name="managerName" class="col-sm-12"/></td>' +
 			'<td><input type="text" readonly="readonly" name="mobileNumber" class="col-sm-12"/></td>' +
@@ -570,7 +570,7 @@ define(function(require, exports) {
 			'<td><input type="text" name="remark" class="col-sm-12" maxlength="500"/></td>' +
 			'<td><a class="cursor btn-deleteTripPlanList" title="删除">删除</a></td></tr>';
 
-			tableContainer.append(html);
+			tableContainer.append(filterUnAuth(html));
 			tripPlan.bindDeleteEvent();
 			tripPlan.bindSelfPayChoose();
 			tripPlan.bindMoneyTripPlan();
@@ -585,7 +585,7 @@ define(function(require, exports) {
 			var _this = $(this),
 			tableContainer = _this.parents(".ui-sortable-handle").find(".table tbody"),
 			html = '<tr>' +
-			'<td><div class="col-sm-12"><input type="text" name="name" class="col-sm-12 chooseTicket"/><input type="hidden" name="tickeId" /><span class="addResourceBtn T-addTicketResource" title="添加票务"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>' +
+			'<td><div class="col-sm-12"><input type="text" name="name" class="col-sm-12 chooseTicket"/><input type="hidden" name="tickeId" /><span class="addResourceBtn T-addTicketResource R-right" data-right="1070002" title="添加票务"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>' +
 			'<td><select name="type" class="col-sm-12 no-padding" style="width:70px;"> <option value="1" selected="selected">机票</option><option value="2">汽车票</option> <option value="3">火车票</option> <option value="4">轮船票</option> </select></td>' +
 			'<td><input type="text" name="startingCity" class="col-sm-12" maxlength="32"/></td>' +
 			'<td><input type="text" name="arriveCity" class="col-sm-12" maxlength="32"/></td>' +
@@ -602,7 +602,7 @@ define(function(require, exports) {
 			'<td><input type="text" name="remark" class="col-sm-12" maxlength="500"/></td>' +
 			'<td><a class="cursor btn-deleteTripPlanList" title="删除">删除</a></td></tr>';
 
-			tableContainer.append(html);
+			tableContainer.append(filterUnAuth(html));
 			tripPlan.bindDeleteEvent();
 			tripPlan.bindTicketChoose();
 			tripPlan.bindMoneyTripPlan();
@@ -1041,7 +1041,9 @@ define(function(require, exports) {
 						parents.find("input[name=managerName]").val(ui.item.managerName);
 						parents.find("input[name=price]").val("");
 					}else{
-						$(_this).data('bs.popover').options.content = "";
+						if($(_this).data('bs.popover')){
+							$(_this).data('bs.popover').options.content = "";
+						}
 						$(_this).data("propover" , "");
 						parents.find("input[name=restaurantId]").val(ui.item.id).trigger('change');
 						

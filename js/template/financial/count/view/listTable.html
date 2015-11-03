@@ -63,15 +63,15 @@
             {{/if}}
         </td>
            <td style="vertical-align:middle" {{if financialTripPlan.tripPlan.tripPlanDetails.length > 1}}rowspan="{{financialTripPlan.tripPlan.tripPlanDetails.length}}"{{/if}}>
-                    {{if financialTripPlan.tripPlan.billStatus == -1}}
-            {{else}}
-            <a data-entity-billStatus="{{financialTripPlan.tripPlan.billStatus}}" data-entity-id="{{financialTripPlan.id}}" class="cursor btn-count-update">
+            <a data-entity-id="{{financialTripPlan.id}}" class="cursor btn-count-update T-audit">
                 审核
-            </a><a href="" class="cursor"> |</a>{{/if}}
+                <label style="padding-left:10px;">|</label>
+            </a>
             <a data-entity-id="{{financialTripPlan.id}}" class=" btn-count-examine cursor">
                 明细
-            </a><a href="" class="cursor"> |</a>
-            <a data-entity-billStatus="{{financialTripPlan.tripPlan.billStatus}}" data-entity-id="{{financialTripPlan.id}}" class="cursor btn-guide-account" >
+            </a>
+            <a data-entity-billStatus="{{financialTripPlan.tripPlan.billStatus}}" data-entity-id="{{financialTripPlan.id}}" class="cursor btn-guide-account R-right" data-right="1190004">
+                <label class="padding-right20">|</label>
                 报账
             </a>
         </td>
