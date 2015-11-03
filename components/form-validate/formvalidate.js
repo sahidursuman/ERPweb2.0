@@ -152,6 +152,9 @@
 			for (var i = 0, canNull, res; i < len; i ++)  {
 				res = false;
 				canNull = true;  //暂无意义
+
+				// 清理
+				data = data.trim();
 				/**
 				 * 规则分为两类：是否为空，数据类型
 				 * @param  {[string]} rules[i].type 规则类型
@@ -199,7 +202,7 @@
 						}
 						break;
 					case 'landline':	// 固定电话
-						if (!!data && !/^0[1-9]\d{1,2}-?\d{7,8}$/.test(data)) {
+						if (!!data && !/^0[1-9]\d{1,2}-?\d{7,8}(-\d+)?$/.test(data)) {
 							res = rules[i].errMsg;
 						}
 						break;
@@ -251,7 +254,6 @@
 		if (msg)  {
 			// get error message
 			$label = $feild.addClass('input-error').removeClass('input-success').next();
-			console.info(msg)
 			if ($label.hasClass('feild-label'))  {
 				// label is exist
 				$label.data('original-title', '').prop('title', msg).tooltip('fixTitle');

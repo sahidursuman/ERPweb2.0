@@ -5,7 +5,8 @@ define(function(require, exports) {
 		 addTemplate = require("./view/add"),
 		 updateTemplate = require("./view/update"),
 		 viewTemplate = require( "./view/view"),
-		 authTemplate = require("./view/auth");
+		 authTemplate = require("./view/auth"),
+		 tabId = "tab-"+menuKey+"-content";
 	
 	var user = {
 		listUser:function(page,realname,status){
@@ -73,39 +74,17 @@ define(function(require, exports) {
 							var status = $("#tab-"+menuKey+"-content  .btn-status").find("button").attr("data-value");
 							user.listUser(0,realname,status);
 						});
-						//分页--首页按钮事件
-						$("#tab-"+menuKey+"-content .pageMode a.first").click(function(){
-							var realname = $("#tab-"+menuKey+"-content  input[name=user_realname]").val();
-							var status = $("#tab-"+menuKey+"-content  .btn-status").find("button").attr("data-value");
-							user.listUser(0,realname,status);
+						// 绑定翻页组件
+						laypage({
+						    cont: $('#' + tabId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+						    pages: data.totalPage, //总页数
+						    curr: (page + 1),
+						    jump: function(obj, first) {
+						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+						    		user.listUser(obj.curr -1,realname,status);
+								}
+						    }
 						});
-						//分页--上一页事件
-						$("#tab-"+menuKey+"-content  .pageMode a.previous").click(function(){
-							var realname = $("#tab-"+menuKey+"-content  input[name=user_realname]").val();
-							var status = $("#tab-"+menuKey+"-content  .btn-status").find("button").attr("data-value");
-							var previous = data.pageNo - 1;
-							if(data.pageNo == 0){
-								previous = 0;
-							}
-							user.listUser(previous,realname,status);
-						});
-						//分页--下一页事件
-						$("#tab-"+menuKey+"-content .pageMode a.next").click(function(){
-							var realname = $("#tab-"+menuKey+"-content input[name=user_realname]").val();
-							var status = $("#tab-"+menuKey+"-content  .btn-status").find("button").attr("data-value");
-							var next =  data.pageNo + 1;
-							if(data.pageNo == data.totalPage-1){
-								next = data.pageNo ;
-							}
-							user.listUser(next,realname,status);
-						});
-						//分页--尾页事件
-						$("#tab-"+menuKey+"-content  .pageMode a.last").click(function(){
-							var realname = $("#tab-"+menuKey+"-content input[name=user_realname]").val();
-							var status = $("#tab-"+menuKey+"-content  .btn-status").find("button").attr("data-value");
-							user.listUser(data.totalPage-1,realname,status);
-						});
-						
 					}
 				}
 			});
@@ -146,9 +125,10 @@ define(function(require, exports) {
 							    	for(var i = 0 ;i < authList.length; i ++){
 							    		var menuId = authList[i].menuId;
 							    		$(".T-submenu-id"+menuId).prop("checked",true);
-							    		var index = $(".T-submenu-check").index($(".T-submenu-id"+menuId));
+							    		var subCheck = $(".T-submenu-check");
+							    		var index = subCheck.index($(".T-submenu-id"+menuId));
 							    		var authType = authList[i].authAreaType;
-							    		$(".T-function-area"+authType).eq(index).prop("checked",true);
+							    		subCheck.eq(index).closest('tr').find(".T-function-area"+authType).prop("checked",true);
 							    	}
 						    	}
 						    	
@@ -211,9 +191,22 @@ define(function(require, exports) {
 						    	$(".T-selectAll").on("click",function(){
 						    		var index = $(this).parent().index();
 						    		var $this = $(this).closest('table').find(".T-submenu");
-						    		$this.find("input[type=radio]").prop("checked",false);
 						    		$this.each(function(){
-						    			$(this).find(".T-function-area"+index).prop("checked",true);
+						    			var functionArea = $(this).find(".T-function-area"+index);
+						    			if(functionArea.length > 0){
+						    				functionArea.prop("checked",true);
+						    			} else{//有权限范围屏蔽的行
+						    				var ischeck = false;
+						    				$(this).find('input[type=radio]').each(function(){
+						    					if($(this).is(":checked")){
+						    						ischeck = true;
+						    						return false;
+						    					}
+						    				});
+						    				if(!ischeck){
+						    					$(this).find(".T-function-area4").prop("checked",true);
+						    				}
+						    			}
 						    			$(this).find('.T-submenu-check').prop("checked",true);
 						    		});
 						    		$(this).closest('table').find(".T-menu-check").prop("checked",true);

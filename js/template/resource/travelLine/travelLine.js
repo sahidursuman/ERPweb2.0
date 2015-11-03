@@ -14,6 +14,9 @@ define(function(require, exports) {
 	var lookID = menuKey+"-look";
 	var updateId = menuKey+"-update";
 
+	var scheduleDialogWidth = '950px',
+		EDITOR_HEIGHT = 200;
+
 	var travelLine = {
 		pageData:{
 			pageNo:0
@@ -183,13 +186,13 @@ define(function(require, exports) {
 					type:1,
 					title:"新增日程",
 					skin: 'layui-layer-rim', //加上边框
-					area: ['80%', '75%'], //宽高
+					area: scheduleDialogWidth, //宽高
 					zIndex:1029,
 					content: lineDayHtml,
 					success:function(){
 						var dayCheckor = rule.travelLineDayCheckor($('.travelLineDayForm'));
 
-						var ue = init_editor("detailEditor-add-travelLine",{zIndex:99999999});
+						var ue = init_editor("detailEditor-add-travelLine",{zIndex:99999999}, EDITOR_HEIGHT);
 
 						$(".travelLineDayForm .btn-submit-line-day").click(function(){
 							// 数据校验
@@ -288,7 +291,7 @@ define(function(require, exports) {
 										type: 1,
 										title:"日程安排",
 										skin: 'layui-layer-rim', //加上边框
-										area: '900px', //宽高
+										area: scheduleDialogWidth, //宽高
 										zIndex:1030,
 										content: lineDayhtml,
 										scrollbar: false,    // 推荐禁用浏览器外部滚动条
@@ -404,14 +407,14 @@ define(function(require, exports) {
 					type:1,
 					title:"新增日程",
 					skin: 'layui-layer-rim', //加上边框
-					area: ['50%', '40%'], //宽高
+					area: scheduleDialogWidth, //宽高
 					zIndex:1029,
 					content: lineDayHtml,
 					success:function(){
 						// 绑定表单验证
 						var dayCheckor = rule.travelLineDayCheckor($('.travelLineDayForm'));
 						// 初始化UEditor
-						var ue = init_editor("detailEditor-add-travelLine",{zIndex:99999999});
+						var ue = init_editor("detailEditor-add-travelLine",{zIndex:99999999}, EDITOR_HEIGHT);
 
 						$(".travelLineDayForm .btn-submit-line-day").click(function(){
 							if( !dayCheckor.form() )  return;
@@ -569,13 +572,13 @@ define(function(require, exports) {
 				type:1,
     			title:"修改日程",
     			skin: 'layui-layer-rim', //加上边框
- 			    area: '80%', //宽高
+ 			    area: scheduleDialogWidth, //宽高
  			    zIndex:1029,
 			    content: lineDayHtml,
 			    success:function(){
 			    	// $(".updateTravelLineDayForm select[name=whichDay]").attr("disabled","disabled");
 			    	
-			    	var ue = init_editor("detailEditor-update-travelLine",{zIndex:99999999});
+			    	var ue = init_editor("detailEditor-update-travelLine",{zIndex:99999999}, EDITOR_HEIGHT);
 			    	ue.ready(function(){
 			    		ue.setContent(detail);
 			    	});

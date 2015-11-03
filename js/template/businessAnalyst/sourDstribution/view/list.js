@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":579,"md5":"32038245d9b003362567f9e266c2ffe4"}*/
+/*TMODJS:{"debug":true,"version":583,"md5":"32038245d9b003362567f9e266c2ffe4"}*/
 define(function(require) {
     return require("../../../template")("businessAnalyst/sourDstribution/view/list", function($data, $filename) {
         try {

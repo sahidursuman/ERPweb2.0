@@ -107,7 +107,7 @@
                                             <h5 class="title-size">
                                                 <i class="ace-icon fa fa-medkit"></i> 保险安排
                                                 <a href="javascript:void(0)" class="addInsurance">
-                                                    <button class="btn btn-sm btn-success " style="margin-left: 20px">
+                                                    <button class="btn btn-sm btn-success" style="margin-left: 20px">
                                                         <i class="ace-icon fa fa-plus"></i>
                                                         新增
                                                     </button>
@@ -137,7 +137,7 @@
                                                                 <div class="col-sm-12">
                                                                     <input type="text" name="insuranceName" maxlength="32" value="{{if insurance.insurance != null}}{{insurance.insurance.name}}{{/if}}" class="col-sm-12 chooseInsurance bind-change"/>
                                                                     <input type="hidden" name="insuranceId" value="{{if insurance.insurance != null}}{{insurance.insurance.id}}{{/if}}"/>
-                                                                    <span class="addResourceBtn T-addInsuranceResource" title="添加保险公司">
+                                                                    <span class="addResourceBtn T-addInsuranceResource R-right" data-right="1080002" title="添加保险公司">
                                                                         <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
                                                                     </span>
                                                                 </div>
@@ -374,15 +374,16 @@
                                                                 <td class="whichDaysContainer" value="{{restaurant.whichDay}}"></td>
                                                                 <td>
                                                                     <div class="col-sm-12">
-                                                                        <input type="text" name="restaurantName" maxlength="32" value="{{if restaurant.restaurant != null}}{{restaurant.restaurant.name}}{{/if}}" class="col-sm-12 chooseRestaurant"/>
-                                                                        <input type="hidden" name="restaurantId" value="{{if restaurant.restaurant != null}}{{restaurant.restaurant.id}}{{/if}}"/>
-                                                                        <span class="addResourceBtn T-addRestaurantResource" title="添加餐厅">
+                                                                        <input type="text" name="restaurantName" maxlength="32" value="{{if restaurant.restaurantId == -1}}-导游任选-{{else}}{{if restaurant.restaurant != null}}{{restaurant.restaurant.name}}{{/if}}{{/if}}" class="col-sm-12 chooseRestaurant" data-propover="{{restaurant.restaurantChooseArrangeList | stringify}}"/>
+                                                                        <input type="hidden" name="restaurantId" value="{{restaurant.restaurantId}}"/>
+                                                                        <input type="hidden" name="optional" value="" />
+                                                                        <span class="addResourceBtn T-addRestaurantResource R-right" data-right="1030002" title="添加餐厅">
                                                                             <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
                                                                         </span>
                                                                     </div>
                                                                 </td>
-                                                                <td><input type="text" name="managerName" readonly="readonly" value="{{if restaurant.restaurant != null}}{{restaurant.restaurant.managerName}}{{/if}}" class="col-sm-12"/></td>
-                                                                <td><input type="text" name="mobileNumber" readonly="readonly" value="{{if restaurant.restaurant != null}}{{restaurant.restaurant.mobileNumber}}{{/if}}" class="col-sm-12"/></td>
+                                                                <td><input type="text" name="managerName" readonly="readonly" value="{{if restaurant.restaurantId == -1}}-{{else}}{{if restaurant.restaurant != null}}{{restaurant.restaurant.managerName}}{{/if}}{{/if}}" class="col-sm-12"/></td>
+                                                                <td><input type="text" name="mobileNumber" readonly="readonly" value="{{if restaurant.restaurantId == -1}}-{{else}}{{if restaurant.restaurant != null}}{{restaurant.restaurant.mobileNumber}}{{/if}}{{/if}}" class="col-sm-12"/></td>
                                                                 <td>
 																<select name="type" class="col-sm-12 restauranType" maxlength="9" style="width:80px;">
 																{{if restaurant.restaurantStandard == null}}
@@ -489,7 +490,7 @@
                                                                     <div class="col-sm-12">
                                                                         <input type="text" class="col-sm-12 chooseHotel" name="name" value="{{if hotel.hotel !=null}}{{hotel.hotel.name}}{{/if}}" />
                                                                         <input type="hidden" name="hotelId" value="{{if hotel.hotel !=null}}{{hotel.hotel.id}}{{/if}}">
-                                                                        <span class="addResourceBtn T-addHotelResource" title="添加酒店">
+                                                                        <span class="addResourceBtn T-addHotelResource R-right" data-right="1040002" title="添加酒店">
                                                                             <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
                                                                         </span>
                                                                     </div>
@@ -575,7 +576,7 @@
                                                                         <input type="hidden" name="id" value="{{scenic.id}}" />
                                                                         <input type="text" name="name" class="col-sm-12 chooseScenic" value="{{if scenic.scenic !=null}}{{scenic.scenic.name}}{{/if}}" />
                                                                         <input type="hidden" name="scenicId" value="{{if scenic.scenic !=null}}{{scenic.scenic.id}}{{/if}}"/>
-                                                                        <span class="addResourceBtn T-addScenicResource" title="添加景区">
+                                                                        <span class="addResourceBtn T-addScenicResource R-right" data-right="1060002" title="添加景区">
                                                                             <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
                                                                         </span>
                                                                     </div>
@@ -662,7 +663,7 @@
                                                                         <input type="hidden" name="id" value="{{shop.id}}" />
                                                                         <input type="text" name="name" class="col-sm-12 chooseShop" value="{{if shop.shop != null}}{{shop.shop.name}}{{/if}}" />
                                                                         <input type="hidden" name="shopId" value="{{if shop.shop != null}}{{shop.shop.id}}{{/if}}" />
-                                                                        <span class="addResourceBtn T-addShopResource" title="添加购物店">
+                                                                        <span class="addResourceBtn T-addShopResource R-right" data-right="1050002" title="添加购物店">
                                                                             <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
                                                                         </span>
                                                                     </div>
@@ -734,7 +735,7 @@
                                                                         <input type="hidden" name="id" value="{{selfPay.id}}" />
                                                                         <input type="text" name="name" class="col-sm-12 chooseSelfPay" value="{{if selfPay.selfPay != null}}{{selfPay.selfPay.name}}{{/if}}" />
                                                                         <input type="hidden" name="selfPayId" value="{{if selfPay.selfPay != null}}{{selfPay.selfPay.id}}{{/if}}" />
-                                                                        <span class="addResourceBtn T-addSelfPayResource" title="添加自费商家">
+                                                                        <span class="addResourceBtn T-addSelfPayResource R-right" data-right="1090002" title="添加自费商家">
                                                                             <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
                                                                         </span>
                                                                     </div>
@@ -821,7 +822,7 @@
                                                                         <input type="hidden" name="id" value="{{ticket.id}}" />
                                                                         <input type="text" name="name" class="col-sm-12 chooseTicket" value="{{if ticket.ticket != null}}{{ticket.ticket.name}}{{/if}}" />
                                                                         <input type="hidden" name="tickeId" value="{{if ticket.ticket != null}}{{ticket.ticket.id}}{{/if}}">
-                                                                        <span class="addResourceBtn T-addTicketResource" title="添加票务">
+                                                                        <span class="addResourceBtn T-addTicketResource R-right" data-right="1070002" title="添加票务">
                                                                             <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
                                                                         </span>
                                                                     </div>

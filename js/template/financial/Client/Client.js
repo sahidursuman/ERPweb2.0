@@ -7,6 +7,7 @@ define(function(require, exports) {
         recordTemplate = require("./view/record"),
         ClientCheckTab = "financial_Client-checking",
         ClientClearTab = "financial_Client-clearing",
+        tabId = "tab-"+menuKey+"-content",
         travelAgencyList,
         partnerAgencyList,
         validator,
@@ -102,57 +103,17 @@ define(function(require, exports) {
                         var tab = "tab-" + menuKey + "-content";
                         Client.getPartnerAgencyList($("#"+tab+" .choosePartnerAgency"),"");
                         Client.getTravelAgencyList($("#"+tab+" .chooseTravelAgency"),"");
-                        //分页--首页按钮事件
-                        $tabId.find(".first").click(function(){
-                        	var travelId = $("input[name=travelAgencyId]").val(),
-                                travelName = $("input[name=travelAgencyName]").val();
-                            var fromPartnerAgencyId = $("input[name=partnerAgencyId]").val(),
-                                fromPartnerAgencyName = $("input[name=partnerAgencyName]").val();
-                            var year = $(".listMain").find("[name=ClientCheck_searchYear]").val();
-                            var month = $(".listMain").find("[name=ClientCheck_searchMonth]").val();
-                            Client.listClient(0,fromPartnerAgencyId,fromPartnerAgencyName,travelId,travelName,year,month);
-                        });
-                        //分页--上一页事件
-                        $tabId.find(".previous").click(function(){
-                        	var travelId = $("input[name=travelAgencyId]").val(),
-                                travelName = $("input[name=travelAgencyName]").val();
-                            var fromPartnerAgencyId = $("input[name=partnerAgencyId]").val(),
-                                fromPartnerAgencyName = $("input[name=partnerAgencyName]").val();
-                            var pageNo = $("#listClient_pager_pagerNo").val();
-                            if (pageNo-1 == 0 || pageNo == 0) {
-                            	pageNo = 0;
-							}else {
-								pageNo = pageNo - 1;
-							}
-                            var year = $(".listMain").find("[name=ClientCheck_searchYear]").val();
-                            var month = $(".listMain").find("[name=ClientCheck_searchMonth]").val();
-                            Client.listClient(pageNo,fromPartnerAgencyId,fromPartnerAgencyName,travelId,travelName,year,month);
-                        });
-                        //分页--下一页事件
-                        $tabId.find(".next").click(function(){
-                        	var travelId = $("input[name=travelAgencyId]").val(),
-                                travelName = $("input[name=travelAgencyName]").val();
-                            var fromPartnerAgencyId = $("input[name=partnerAgencyId]").val(),
-                                fromPartnerAgencyName = $("input[name=partnerAgencyName]").val();
-                            var pageNo = $("#listClient_pager_pagerNo").val();
-							pageNo = parseInt(pageNo) + 1;
-							if (pageNo+1 >= totalPage) {
-								pageNo = totalPage - 1;
-							}
-							 var year = $(".listMain").find("[name=ClientCheck_searchYear]").val();
-                            var month = $(".listMain").find("[name=ClientCheck_searchMonth]").val();
-                            Client.listClient(pageNo,fromPartnerAgencyId,fromPartnerAgencyName,travelId,travelName,year,month);
-                        });
-                        //分页--尾页事件
-                        $tabId.find(".last").click(function(){
-                        	var travelId = $("input[name=travelAgencyId]").val(),
-                                travelName = $("input[name=travelAgencyName]").val();
-                            var fromPartnerAgencyId = $("input[name=partnerAgencyId]").val(),
-                                fromPartnerAgencyName = $("input[name=partnerAgencyName]").val();
-                            var pageNo = totalPage;
-                            var year = $(".listMain").find("[name=ClientCheck_searchYear]").val();
-                            var month = $(".listMain").find("[name=ClientCheck_searchMonth]").val();
-                            Client.listClient(pageNo-1,fromPartnerAgencyId,fromPartnerAgencyName,travelId,travelName,year,month);
+                  
+                        // 绑定翻页组件
+                        laypage({
+                            cont: $('#' + tabId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+                            pages: data.pager.totalPage, //总页数
+                            curr: (data.pager.pageNo + 1),
+                            jump: function(obj, first) {
+                                if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+                                    Client.listClient(obj.curr -1,fromPartnerAgencyId,fromPartnerAgencyName,travelId,travelName,year,month);
+                                }
+                            }
                         });
                         //给对账按钮绑定事件
                         $tabId.find(".btn-divide").click(function(){
@@ -265,41 +226,18 @@ define(function(require, exports) {
  	                        	exportXLS(url)
  	                        });
                          });
-                         //分页--首页按钮事件
-                         $checkId.find(".first").click(function(){
-                        	 var year = $(".clientCheckingMain").find("[name=ClientCheck_searchYear]").val();
-                        	 var month = $(".clientCheckingMain").find("[name=ClientCheck_searchMonth]").val();
-                        	 Client.ClientCheck(0,id,month,year);
-                         });
-                         //分页--上一页事件
-                         $checkId.find(".previous").click(function(){
-                        	 var year = $(".clientCheckingMain").find("[name=ClientCheck_searchYear]").val();
-                        	 var month = $(".clientCheckingMain").find("[name=ClientCheck_searchMonth]").val();
-                             if (pageNo <=1) {
-                             	pageNo = 0;
- 							}else {
- 								pageNo = parseInt(pageNo) - 1;
- 							}
-                             Client.ClientCheck(pageNo,id,month,year);
-                         });
-                         //分页--下一页事件
-                         $checkId.find(".next").click(function(){
-                        	 var year = $(".clientCheckingMain").find("[name=ClientCheck_searchYear]").val();
-                        	 var month = $(".clientCheckingMain").find("[name=ClientCheck_searchMonth]").val();
- 							 if (parseInt(pageNo)+1 >= data.pager.totalPage) {
- 							 	 pageNo = data.pager.totalPage - 1;
- 							 }else {
- 								 pageNo = parseInt(pageNo) + 1;
-							 }
- 							 //alert(pageNo+"====="+id+"====="+year+"====="+month)
- 							 Client.ClientCheck(pageNo,id,month,year);
-                         });
-                         //分页--尾页事件
-                         $checkId.find(".last").click(function(){
-                        	 var year = $(".clientCheckingMain").find("[name=ClientCheck_searchYear]").val();
-                        	 var month = $(".clientCheckingMain").find("[name=ClientCheck_searchMonth]").val();
-                             Client.ClientCheck(data.pager.totalPage-1,id,month,year);
-                         });
+                         
+                         // 绑定翻页组件
+                        laypage({
+                            cont: $checkId.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+                            pages: data.pager.totalPage, //总页数
+                            curr: (data.pager.pageNo + 1),
+                            jump: function(obj, first) {
+                                if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+                                    Client.ClientCheck(obj.curr -1,id,month,year);
+                                }
+                            }
+                        });
                          //给全选按钮绑定事件
                          $checkId.find("input[name=ClientCheck_checkAllBox]").click(function(){
                             if($(this).is(":checked")){
