@@ -433,9 +433,16 @@
                     {{each day.restaurantArrange as arrangeList}}
                     {{each arrangeList.restaurantArrangeList as arrange index}}
                     {{if arrange != null}}
-                    <tr restaurantArrangeId="{{arrange.id}}" restaurantId="{{if arrange.restaurant != null}}{{arrange.restaurant.id}}{{/if}}" restaurantStandardId="{{if arrange.restaurantStandard != null}}{{arrange.restaurantStandard.id}}{{/if}}">
+                    <tr restaurantArrangeId="{{arrange.id}}" isChoose="{{arrange.isChoose}}" restaurantId="{{if arrange.restaurant != null}}{{arrange.restaurant.id}}{{/if}}" restaurantStandardId="{{if arrange.restaurantStandard != null}}{{arrange.restaurantStandard.id}}{{/if}}">
                         {{if index == 0}}<td rowspan="{{arrangeList.restaurantArrangeList.length}}" class="countWhichDaysContainer">第{{arrange.whichDay}}天</td>{{/if}}
-                        {{if index == 0}}<td rowspan="{{arrangeList.restaurantArrangeList.length}}">{{if arrange.restaurant != null}}{{arrange.restaurant.name}}{{/if}}</td>{{/if}}
+                        {{if index == 0}}{{if arrange.isChoose != 1}}<td rowspan="{{arrangeList.restaurantArrangeList.length}}">{{if arrange.restaurant != null}}{{arrange.restaurant.name}}{{/if}}</td>{{else}}<td>
+                            <select name="restaurant">
+                                {{each arrange.restaurantChooseArrangeList as restaurant index}}
+                                    <option style="width:150px;" value = "{{restaurant.id}}" 
+                                   {{if arrange.restaurant != null}}{{if arrange.restaurant.id == restaurant.id}}selected="selected"{{/if}}{{/if}}>{{restaurant.name}}</option>
+                                {{/each}}
+                            </select>  
+                        </td>{{/if}}{{/if}}  
                         <td>{{arrange.type}}</td> 
                         <td>{{arrange.price}}<input type="hidden" name="realPrice" value="{{arrange.price}}" /></td>
                         <td><input style="width:90px;" type="text" name="realCount" value="{{arrange.realCount}}" old="{{arrange.realCount}}" maxlength="5"/></td>
