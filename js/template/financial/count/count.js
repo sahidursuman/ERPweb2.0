@@ -665,8 +665,9 @@ define(function(require, exports) {
                         console.log(data);
                         var html = Reimbursement(data);
                         addTab(menuKey+"-Reimbursement","单团报账",html);
-
+                        var ReimbursementId = menuKey+"-Reimbursement"
                         $(document).on("mouseenter",".countWhichDaysContainer",function(){
+                            console.log($(this));
                             var whichDay = $(this).val(),
                                 $this = $(this)
                                 startTime = $("#tab-financial_count-Reimbursement-content").find("span[name=startTime_Choose]").text(),
