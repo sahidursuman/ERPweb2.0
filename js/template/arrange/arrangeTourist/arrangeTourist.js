@@ -28,6 +28,8 @@ define(function(require, exports) {
 			lineProductId : "",
 			startTime : ""
 		},
+		lineProListData : {
+		},
 		edited : {},
 		isEdited : function(editedType){
 			if(!!arrangeTourist.edited[editedType] && arrangeTourist.edited[editedType] != ""){
@@ -38,7 +40,7 @@ define(function(require, exports) {
 		//list Main
 		listArrangeTouristMain:function(){
 			$.ajax({
-				url:""+APP_ROOT+"back/lineProduct.do?method=findLineProductList&token="+$.cookie("token")+"&menuKey=resource_lineProduct&operation=view",
+				url:""+APP_ROOT+"back/touristGroup.do?method=getLineProductList&token="+$.cookie("token")+"&menuKey=resource_lineProduct&operation=view",
 				type:"POST",
 				data:"sortType=auto",
 				dataType:"json",
@@ -49,10 +51,13 @@ define(function(require, exports) {
 					layer.close(globalLoadingLayer);
 					var result = showDialog(data);
 					if(result){
-						data.lineProductList = JSON.parse(data.lineProductList);
+						//data.lineProductList = JSON.parse(data.lineProductList);
 						var html = listMainTemplate(data);
 						addTab(menuKey,"分团转客",html);
-						
+						//缓存autocomplate数据
+						arrangeTourist.lineProListData=data.lineProductList;
+						arrangeTourist.getlineProductList($('#'+tabId));
+
 						arrangeTourist.touristGroupMergeData = {
 								touristGroupMergeList : []
 						}
@@ -61,7 +66,7 @@ define(function(require, exports) {
 						//给搜索按钮绑定事件area
 						$("#"+tabId+" .arrangeTouristMain .btn-arrangeTourist-search").click(function(){
 							arrangeTourist.searchData = {
-									lineProductId : $("#tab-"+menuKey+"-content .arrangeTouristMain select[name=lineProductId]").val(),
+									lineProductId : $("#tab-"+menuKey+"-content .arrangeTouristMain input[name=lineProductId]").val(),
 									startTime : $("#tab-"+menuKey+"-content .arrangeTouristMain input[name=startTime]").val()
 							}
 							arrangeTourist.listArrangeTourist(0,arrangeTourist.searchData.lineProductId,arrangeTourist.searchData.startTime);
@@ -73,6 +78,35 @@ define(function(require, exports) {
 				}
 			});
 		},
+
+		//获取线路产品Autocomplete
+	    getlineProductList:function($obj){
+			var getlineProductList = $obj.find(".T-Choose-linProList");
+			getlineProductList.autocomplete({
+				minLength:0,
+				change:function(event,ui){
+					if(ui.item == null){
+						$(this).parent().parent().find("input[name=lineProductId]").val("");
+					}
+				},
+				select:function(event,ui){
+					$(this).blur();
+					var obj = this;
+					$(obj).parent().parent().find("input[name=lineProductId]").val(ui.item.id).trigger('change');
+				}
+			}).click(function(){
+				var obj = this;
+				var listObj =arrangeTourist.lineProListData;
+				if(listObj !=null && listObj.length>0){
+					for(var i=0;i<listObj.length;i++){
+						listObj[i].value = listObj[i].name;
+					}
+				}
+				$(obj).autocomplete('option','source', listObj);
+				$(obj).autocomplete('search', '');
+			})
+		},
+
 		//list页面
 		listArrangeTourist:function(page,lineProductId,startTime){
 			$.ajax({
