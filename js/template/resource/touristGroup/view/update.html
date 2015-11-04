@@ -83,7 +83,7 @@
 						</div>
 						<label class="col-sm-1 control-label no-padding-right">现收:</label>
 						<div class="col-sm-2">
-							<input value="{{touristGroupDetail.currentNeedPayMoney}}" type="text" name="currentNeedPayMoney" class="col-sm-12" />
+							<input value="{{touristGroupDetail.currentNeedPayMoney}}" {{if touristGroupDetail.isReceived == 1}}disabled="disabled"{{/if}} type="text" name="currentNeedPayMoney" class="col-sm-12" />
 						</div>
 					</div>
 					<div class="form-group guideInterval">
