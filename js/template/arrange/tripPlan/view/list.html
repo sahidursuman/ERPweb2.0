@@ -138,7 +138,7 @@
 							<a data-entity-id="{{tripPlan.id}}" title="查看计划" class="btn-Plan-view cursor">
 								查看
 							</a>
-						    <a data-entity-id="{{tripPlan.id}}" billStatus="{{tripPlan.billStatus}}" title="编辑计划" class="{{if tripPlan.status != -1 && tripPlan.status != 2}}btn-Plan-edit{{/if}} cursor R-right" data-right="1140003" {{if tripPlan.status == -1 || tripPlan.status == 2}} style="color:#bbb;"{{/if}}>
+						    <a data-entity-id="{{tripPlan.id}}" billStatus="{{tripPlan.billStatus}}" title="编辑计划" class="{{if tripPlan.status != -1}}btn-Plan-edit{{/if}} cursor R-right" data-right="1140003" {{if tripPlan.status == -1}} style="color:#bbb;"{{/if}}>
 								<label class="padding-right20">|</label>
 								编辑
 							</a>
@@ -146,7 +146,7 @@
 								<label class="padding-right20">|</label>
 								导出
 							</a>
-							<a data-entity-id="{{tripPlan.id}}" billStatus="{{tripPlan.billStatus}}" title="取消计划" class="{{if tripPlan.status != -1 && tripPlan.status != 2}}btn-Plan-cancel{{/if}} cursor R-right" data-right="1140004" {{if tripPlan.status == -1 || tripPlan.status == 2}} style="color:#bbb;"{{/if}}>
+							<a data-entity-id="{{tripPlan.id}}" billStatus="{{tripPlan.billStatus}}" title="取消计划" class="{{if tripPlan.status != -1}}btn-Plan-cancel{{/if}} cursor R-right" data-right="1140004" {{if tripPlan.status == -1}} style="color:#bbb;"{{/if}}>
 								<label class="padding-right20">|</label>
 								取消
 							</a>
