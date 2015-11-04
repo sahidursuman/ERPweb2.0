@@ -12,7 +12,7 @@
                 <option value='1' {{if searchParam.type == 1}}selected="selected"{{/if}}>组团社</option>
                 <option value='2' {{if searchParam.type == 2}}selected="selected"{{/if}}>业务部</option>
             </select>
-            <input type="text" class="col-sm-8 choosePartnerAgency marginLeft-Right7 T-PorB" placeholder="来源" name="fromPartnerAgencyName" style="float: right;{{if searchParam.type == 2}}display: none{{/if}}" value="{{searchParam.fromPartnerAgencyName}}" />
+            <input type="text" class="col-sm-8 choosePartnerAgency marginLeft-Right7 T-PorB" placeholder="来源" name="fromPartnerAgencyName" style="float: right;{{if searchParam.type == 2}}display: none{{/if}}" value="{{if searchParam.fromPartnerAgencyName==''}}全部{{else}}{{searchParam.fromPartnerAgencyName}}{{/if}}" />
             <input type="text" class="col-sm-8 chooseBussinessGroup marginLeft-Right7 T-PorB" placeholder="来源" name="fromBussinessGroupName" style="float: right;{{if searchParam.type == 1 || searchParam.type == null}}display: none;{{/if}}" value="{{searchParam.fromBussinessGroupName}}" />
             <input type="hidden" name="fromPartnerAgencyId" value="{{searchParam.fromPartnerAgencyId}}">
             <input type="hidden" name="fromBussinessGroupId" value="{{searchParam.fromBussinessGroupId}}" />
