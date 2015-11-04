@@ -1637,7 +1637,7 @@ define(function(require, exports) {
 				if(arrangeObj !=null && arrangeObj.length>0) {
 					if(arrangeObj != null && arrangeObj.length){
 						for (var i = 0; i < arrangeObj.length; i++) {
-							arrangeObj[i].value = arrangeObj[i].name;
+							arrangeObj[i].value = arrangeObj[i].realName;
 						}
 					}
 					$(objM).autocomplete('option','source', arrangeObj);
