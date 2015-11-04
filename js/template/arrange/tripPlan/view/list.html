@@ -7,17 +7,17 @@
 				<input type="hidden" name="tripChoosePlanId" value="{{searchParam.tripId}}" />
 			</div>
 
-			<div class="col-xs-2 timeStart" style="margin:0 20px;">
+			<div class="col-xs-2 timeStart" style="margin:0 15px;">
 				<div class="col-xs-8">
 					<div class="input-group">
-						<input class="col-xs-12 date-picker" name="startTime" placeholder="出团日期" value="{{searchParam.startTime}}" type="text"  />
+						<input class="col-xs-12 date-picker triplanStartTime" name="startTime" placeholder="出团日期" value="{{searchParam.startTime}}" type="text"  />
 						<span class="input-group-addon">
 							<i class="fa fa-calendar"></i>
 						</span>
 					</div> 
 				</div>
 			</div>
-			<div class="col-xs-1 guideMarginLeft">
+			<div class="col-xs-1">
 				<input type="text" name="realname" class="col-xs-12 T-guideChoose" placeholder="导游" value="{{searchParam.guideName}}" />
 				<input type="hidden" name="guideChooseId" value="{{searchParam.guideId}}" />
 			</div>
@@ -31,7 +31,7 @@
 			</div>
 			<div class="col-sm-2" style="width:250px;">
 				<div class="btn-group btn-status">
-					<button data-value="{{searchParam.status}}" data-toggle="dropdown" class="btn-sm  dropdown-toggle block-up" aria-expanded="false">
+					<button data-value="{{searchParam.status}}" data-toggle="dropdown" class="btn-sm  dropdown-toggle block-up T-creatorChoose" aria-expanded="false">
 						<span>
 							{{if searchParam.status == "-1"}}
 								已取消
@@ -61,12 +61,12 @@
 					</ul>
 				</div>
 
-				<button class=" btn-sm  btn-tripPlan-search search-btn" style="margin-left: 20px; width:75px;">
+				<button class=" btn-sm  btn-tripPlan-search search-btn triplan-searchBtn" style="margin-left: -40px; width:75px;">
 					<i class="ace-icon fa fa-search"></i>
 					搜索
 				</button>
 			</div>
-			<button class="btn btn-sm btn-success btn-Plan-add R-right pull-left" style="width:120px; margin-left:-45px;" data-right="1140002"> 
+			<button class="btn btn-sm btn-success btn-Plan-add R-right pull-left newSearchBtn" style="width:120px; margin-left:-155px;" data-right="1140002"> 
 			<i class="ace-icon fa fa-plus"></i> 
 			新增发团计划
 		   </button>
@@ -122,20 +122,23 @@
 							{{else if tripPlan.status == 0}}
 							<i class="ace-icon fa fa-question yellow bigger-130" ></i>
 								待确认
-							{{else tripPlan.status == 1}}
+							{{else if tripPlan.status == 1}}
 							<i class="ace-icon fa fa-check green bigger-130"></i>
 								已发团
+							{{else if tripPlan.status == 2}}
+							<i class="ace-icon fa fa-clock-o red bigger-130"></i>
+								已过期
 							{{/if}}
 						</td>
 						<td style="vertical-align:middle;width:240px;" {{if tripPlan.tripPlanDetails.length > 1}}rowspan="{{tripPlan.tripPlanDetails.length}}"{{/if}}>
-							<a data-entity-id="{{tripPlan.id}}" billStatus="{{tripPlan.billStatus}}" statusValue="{{tripPlan.status}}" title="确认发团" class="{{if tripPlan.status != -1}}btn-Plan-confirm{{/if}} cursor R-right" data-right="1140006" {{if tripPlan.status == -1}} style="color:#bbb;"{{/if}}>
+							<a data-entity-id="{{tripPlan.id}}" billStatus="{{tripPlan.billStatus}}" statusValue="{{tripPlan.status}}" title="确认发团" class="{{if tripPlan.status != -1 && tripPlan.status != 2}}btn-Plan-confirm{{/if}} cursor R-right" data-right="1140006" {{if tripPlan.status == -1 || tripPlan.status == 2}} style="color:#bbb;"{{/if}}>
 								确认
 								<label style="padding-left:10px;">|</label>
 							</a>
 							<a data-entity-id="{{tripPlan.id}}" title="查看计划" class="btn-Plan-view cursor">
 								查看
 							</a>
-						    <a data-entity-id="{{tripPlan.id}}" billStatus="{{tripPlan.billStatus}}" title="编辑计划" class="{{if tripPlan.status != -1}}btn-Plan-edit{{/if}} cursor R-right" data-right="1140003" {{if tripPlan.status == -1}} style="color:#bbb;"{{/if}}>
+						    <a data-entity-id="{{tripPlan.id}}" billStatus="{{tripPlan.billStatus}}" title="编辑计划" class="{{if tripPlan.status != -1 && tripPlan.status != 2}}btn-Plan-edit{{/if}} cursor R-right" data-right="1140003" {{if tripPlan.status == -1 || tripPlan.status == 2}} style="color:#bbb;"{{/if}}>
 								<label class="padding-right20">|</label>
 								编辑
 							</a>
@@ -143,7 +146,7 @@
 								<label class="padding-right20">|</label>
 								导出
 							</a>
-							<a data-entity-id="{{tripPlan.id}}" billStatus="{{tripPlan.billStatus}}" title="取消计划" class="{{if tripPlan.status != -1}}btn-Plan-cancel{{/if}} cursor R-right" data-right="1140004" {{if tripPlan.status == -1}} style="color:#bbb;"{{/if}}>
+							<a data-entity-id="{{tripPlan.id}}" billStatus="{{tripPlan.billStatus}}" title="取消计划" class="{{if tripPlan.status != -1 && tripPlan.status != 2}}btn-Plan-cancel{{/if}} cursor R-right" data-right="1140004" {{if tripPlan.status == -1 || tripPlan.status == 2}} style="color:#bbb;"{{/if}}>
 								<label class="padding-right20">|</label>
 								取消
 							</a>

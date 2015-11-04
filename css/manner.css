@@ -15,6 +15,7 @@
     white-space: nowrap!important;
     overflow: auto!important;
     height: auto!important;
+    z-index: 9999;
 }
 .btn-minier,.btn-group-minier>.btn{width: 65px;height: 35px!important;border-radius: 3px}
 input{
@@ -642,7 +643,15 @@ input,select{
     text-align: right !important;
     padding:7px 6px 7px 0px !important;
 }
-
+.T-guideChoose{
+    margin-left: -117px;
+}
+.T-busChoose{
+    margin-left: -117px;
+}
+.T-creatorChoose{
+    margin-left: -117px;
+}
 .departButton {
     height: 24px;
     line-height: 10px;
@@ -780,8 +789,13 @@ padding-left:0;width: 360px;left: -35px;
 .transit-arrangeTime div{
     width: 260px;
 }
-
-
+/*中转分段显示不完整*/
+.ui-autocomplete{width:200px;}
+.ui-autocomplete .ui-state-focus{width:inherit;}
+/*table 宽度*/
+.tableWidthImp{
+    width: 97% !important;
+}
 
 
 
@@ -790,11 +804,78 @@ padding-left:0;width: 360px;left: -35px;
 @media screen and (max-width:1500px){
 
 
+/*中转分段 list*/
+.arrangeTouristInput input{
+          width: 185px;
+}
+.addResourceBtnTripPlan{
+        right: 8px;
+}
+.choosePartnerAgency{
+    width: 110px
+}
+.chooseLineProduct{
+    width: 110px;
+}
+.subsectionStartTime{
+    width: 100px;
+}
+.creatorUserChoose{
+    width: 110px;
+}
+.innerTr-export{
+    margin-left: 20px;
+}
 
+/*内转管理*/
+.T-businessGroupChoose{
+    width: 110px;
+}
+
+.subsectionWords{
+    margin-left: 35px;
+}
+
+/*发团计划*/
+.triPlanInput input{
+          width: 185px;
+}
+.triplanName{
+    width: 115px !important;
+}
+.planSearchBtn{
+    position: absolute;
+}
+.triplanStartTime{
+  width: 100px;  
+}
+.T-guideChoose{
+    margin-left: -60px;
+}
+.T-busChoose{
+    margin-left: -60px;
+}
+.T-creatorChoose{
+    margin-left: -60px;
+}
+.triplan-searchBtn{
+    margin-left: 20px !important;
+}
+.newSearchBtn{
+    margin-left: -110px !important;
+}
 }
 
 /*媒体查询 1366*/
 @media screen and (max-width:1366px){
 
- 
+ .arrangeTouristInput input{
+          width: 175px;
+}
+ .triPlanInput input{
+          width: 175px;
+}
+.addResourceBtnTripPlan{
+        right: 0px;
+}
 }

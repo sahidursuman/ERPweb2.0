@@ -632,7 +632,6 @@ define(function(require, exports) {
                             "remarkArrangeList": JSON.parse(data.remarkArrangeList)
                         };
                         data = count.covertRemark(tmp);
-                        console.log(data);
                         var html = Reimbursement(data);
                         addTab(menuKey+"-Reimbursement","单团报账",html);
                         var ReimbursementId = menuKey+"-Reimbursement"
@@ -749,7 +748,6 @@ define(function(require, exports) {
                                     $(this).val(0);
                                 }
                                 vl = $(this).val();
-                                console.log($(this).prop("name"));
                                 if($(this).prop("name") != 'name' && $(this).prop("name") != 'billRemark'){
                                     $(this).val(count.changeTwoDecimal(parseFloat(vl)));
                                     count.bindOther(this,"countReimbursement");
@@ -1566,7 +1564,10 @@ define(function(require, exports) {
                     		count.search(0);
                     		closeTab(uKey);
                     	} else {
-                    		count.updateExamine(financialTripPlanId,"");
+                    		$(".T-closebtn").remove();
+                            if(billStatus==0 || billStatus==1){
+                                $(".btn-saveCount").remove();
+                            }
                     	}
                     }
                 }
@@ -1617,19 +1618,22 @@ define(function(require, exports) {
             			showMessageDialog($( "#confirm-dialog-message" ),data.message);
                         count.edited["checkBill"] = "";
             			count.updateExamine(financialTripPlanId,"");
+                        $(".T-closebtn").remove();
+                        if(billStatus==0){
+                            $(".btn-saveCount").remove();
+                        }
             		}
             	}
             });
 		},
 		saveTripCount : function(id, financialTripPlanId, userName, roleType,isClose,typeFlag) {
-            console.log(financialTripPlanId);
+
             var saveJson;
             if(typeFlag == 2 || typeFlag == 3){
                 saveJson = count.saveCountReimbursement(financialTripPlanId);
             }else{
                 saveJson = count.getSaveTripPlanJson(financialTripPlanId);
-            };
-            console.log(saveJson);
+            }
             if(typeFlag !=2 && typeFlag !=3){
 			    if(roleType == "2") {
 				saveJson.log.info.message = "财务（" + userName + "）保存信息";
@@ -2156,10 +2160,7 @@ define(function(require, exports) {
 	    		showMessageDialog($( "#confirm-dialog-message" ), "没有回传单据", function(){});
 	    		return;
 	    	}
-	    	var html = billImageTempLate(data);
-	    	
-	    	console.log(html);
-	    	
+	    	var html = billImageTempLate(data);    	
 	    	
 			layer.open({
 				type : 1,
@@ -2318,7 +2319,6 @@ define(function(require, exports) {
                                 "remarkArrangeList": JSON.parse(data.remarkArrangeList)
                     	}
                     	data = count.covertRemark(tmp);
-                        console.log(data);
 		    			var html = tripDetailTempLate(data);
 		    			var financialTripDetail = addTab(menuKey + "tripDetail", "单团明细", html);
 		    			
@@ -2547,7 +2547,6 @@ define(function(require, exports) {
              });
 	    },
 		save : function(saveType){
-			console.log(saveType);
 			if(saveType == "checkBill"){
 				count.saveTripCount(0,count.oldCheckBillId,"","",1);
 			} 

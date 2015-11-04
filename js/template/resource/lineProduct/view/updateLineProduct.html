@@ -535,7 +535,7 @@
                                                                                                             <input type="text" class="col-xs-12" name="remark" value="" />
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <a data-entity-id="{{hotelList.hotel.id}}" data-entity-name="hotelTemplate" class="cursor btn-restaurant-delete T-delete">
+                                                                                                            <a data-entity-id="{{hotelList.id}}" data-entity-name="hotelTemplate" class="cursor btn-restaurant-delete T-delete">
 																												删除
 																											</a>
                                                                                                         </td>
@@ -689,7 +689,7 @@
                                                                                                             <input type="hidden" name="templateId" value="{{selfPayList.id}}" />{{/if}}
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input type="text" class="chooseItemName bind-change" value="{{selfPayList.selfPayItem.name}}" />
+                                                                                                            <input type="text" class="chooseItemName bind-change" name="selfPayItemName" value="{{selfPayList.selfPayItem.name}}" />
                                                                                                             <input type="hidden" name="selfPayItemId" value="{{selfPayList.selfPayItem.id}}" />
                                                                                                         </td>
                                                                                                         <td>

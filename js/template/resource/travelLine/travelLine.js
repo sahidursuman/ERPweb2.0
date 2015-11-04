@@ -169,15 +169,16 @@ define(function(require, exports) {
 			}
 		},
 		initAdd : function(){
-			$('#tab-resource_travelLine-addLine-content').on("change",function(){
+			var $addTrLinObj=$('#tab-resource_travelLine-addLine-content');
+			$addTrLinObj.on("change",function(){
 				travelLine.edited["addLine"] = "addLine";
 			});	
-			$(".travelLineDayList .btn-submit-travelLine").unbind().click(function(){
+			$addTrLinObj.find(".travelLineDayList .btn-submit-travelLine").unbind().click(function(){
 				travelLine.submitAddTravelLine();
 			});
 
 			// 以弹出框的形式添加线路下行程信息
-			$(".travelLineDayList .btn-line-day-add").click(function(){
+			$addTrLinObj.find(".travelLineDayList .btn-line-day-add").click(function(){
 				function trim(str){
 					return str.replace(/(^\s*)|(\s*$)/g, "");
 				}
@@ -392,16 +393,17 @@ define(function(require, exports) {
 			});
 		},
 		initUpdate : function(clipboardMode){
+			var $travelLupObj=$('#tab-resource_travelLine-update-content');
 			travelLine.updateClipboardMode = clipboardMode;
-			$('#tab-resource_travelLine-update-content').on("change",function(){
+			$travelLupObj.on("change",function(){
 				travelLine.edited["update"] = "update";
 			});
 			// 初始化并绑定表单验证
-			var validator = rule.traveLineCheckor($('.travelLineUpdateMainForm'));
+			var validator = rule.traveLineCheckor($travelLupObj.find('.travelLineUpdateMainForm'));
 
 			travelLine.updateClipboardMode = clipboardMode;
 			// 添加行程安排
-			$(".travelLineDayList .btn-line-day-add").click(function(){
+			$travelLupObj.find(".travelLineDayList .btn-line-day-add").click(function(){
 				var lineDayHtml = addLineDayTemplate();
 				var addTravelLineDayLayer = layer.open({
 					type:1,
@@ -479,17 +481,17 @@ define(function(require, exports) {
 			});
 			
 			// 删除日期行程
-			$(".travelLineDayList .lineDayList .btn-line-day-delete").click(function(){
+			$travelLupObj.find(".travelLineDayList .lineDayList .btn-line-day-delete").click(function(){
 				travelLine.deleteDayDialog($(this));
 			});
 			
 			// 修改日期行程
-			$(".travelLineDayList .lineDayList .btn-line-day-edit").unbind().click(function(){
+			$travelLupObj.find(".travelLineDayList .lineDayList .btn-line-day-edit").unbind().click(function(){
 				travelLine.bindEditButton($(this));
 			});
 			
 			// 2.序列化form表单，并通过Ajax实现保存操作
-			$(".travelLineDayList .btn-submit-travelLine").unbind().click(function(){
+			$travelLupObj.find(".travelLineDayList .btn-submit-travelLine").unbind().click(function(){
 				travelLine.submitUpdateTraveLine(clipboardMode,1);
 			});
 		},

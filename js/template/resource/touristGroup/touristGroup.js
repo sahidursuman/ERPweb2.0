@@ -17,6 +17,8 @@ define(function(require, exports) {
 		searchData : {
 			lineProductName: "",
 			lineProductId : "",
+			fromBussinessGroupName: "",
+			fromBussinessGroupId: "",
 			fromPartnerAgency:"",
 			fromPartnerAgencyId:"",
 			creator:"",
@@ -38,11 +40,13 @@ define(function(require, exports) {
 		},
 		cleanFlag:0,
 		//获取统计数据
-		getTouristStatisticData:function(page,lineProduct,lineProductId,fromPartnerAgencyName,fromPartnerAgencyId,creatorId,creatorName,startTimeS,createTimeStartS,createTimeEndS,customerTypeS,statusS){
+		getTouristStatisticData:function(page,BussinessGroupName,BussinessGroupId,lineProduct,lineProductId,fromPartnerAgencyName,fromPartnerAgencyId,creatorId,creatorName,startTimeS,createTimeStartS,createTimeEndS,customerTypeS,statusS){
 			var args = {
 				pageNo: page,
 				lineProductName: lineProduct,
 				lineProductId: lineProductId,
+				fromBussinessGroupName: BussinessGroupName,
+				fromBussinessGroupId: BussinessGroupId,
 				fromPartnerAgencyName:fromPartnerAgencyName,
 				fromPartnerAgencyId:fromPartnerAgencyId,
 				creatorName:creatorName,
@@ -88,6 +92,8 @@ define(function(require, exports) {
 							touristGroup.searchData = {
 								fromPartnerAgencyName : $(".touristGroupSearchForm input[name=fromPartnerAgencyName]").val(),
 								fromPartnerAgencyId : $(".touristGroupSearchForm input[name=fromPartnerAgencyId]").val(),
+								fromBussinessGroupName : $(".touristGroupSearchForm input[name=fromBussinessGroupName]").val(),
+								fromBussinessGroupId : $(".touristGroupSearchForm input[name=fromBussinessGroupId]").val(),
 								lineProductName : $(".touristGroupSearchForm input[name=lineProductName]").val(),
 								lineProductId : $(".touristGroupSearchForm input[name=lineProductId]").val(),
 								startTime : $(".touristGroupSearchForm input[name=startTime]").val(),
@@ -99,13 +105,15 @@ define(function(require, exports) {
 								customerType : $(".touristGroupSearchForm select[name=customerType]").find("option:selected").val(),
 								status :  $(".touristGroupSearchForm .btn-status button").attr("data-value")
 							}
-							touristGroup.getTouristStatisticData(0,touristGroup.searchData.lineProductName,touristGroup.searchData.lineProductId,touristGroup.searchData.fromPartnerAgencyName,touristGroup.searchData.fromPartnerAgencyId,touristGroup.searchData.creatorId,touristGroup.searchData.creatorName,touristGroup.searchData.startTime,touristGroup.searchData.createTimeStart,touristGroup.searchData.createTimeEnd,touristGroup.searchData.customerType,touristGroup.searchData.status);
+							touristGroup.getTouristStatisticData(0,touristGroup.searchData.fromBussinessGroupName,touristGroup.searchData.fromBussinessGroupId,touristGroup.searchData.lineProductName,touristGroup.searchData.lineProductId,touristGroup.searchData.fromPartnerAgencyName,touristGroup.searchData.fromPartnerAgencyId,touristGroup.searchData.creatorId,touristGroup.searchData.creatorName,touristGroup.searchData.startTime,touristGroup.searchData.createTimeStart,touristGroup.searchData.createTimeEnd,touristGroup.searchData.customerType,touristGroup.searchData.status);
 						});
 						//筛选事件绑定
 						$(".touristGroupSearchForm .btn-touristGroupList-search").click(function(){
 							touristGroup.searchData = {
 								fromPartnerAgencyName : $(".touristGroupSearchForm input[name=fromPartnerAgencyName]").val(),
 								fromPartnerAgencyId : $(".touristGroupSearchForm input[name=fromPartnerAgencyId]").val(),
+								fromBussinessGroupName : $(".touristGroupSearchForm input[name=fromBussinessGroupName]").val(),
+								fromBussinessGroupId : $(".touristGroupSearchForm input[name=fromBussinessGroupId]").val(),
 								lineProductName : $(".touristGroupSearchForm input[name=lineProductName]").val(),
 								lineProductId : $(".touristGroupSearchForm input[name=lineProductId]").val(),
 								startTime : $(".touristGroupSearchForm input[name=startTime]").val(),
@@ -117,7 +125,24 @@ define(function(require, exports) {
 								customerType : $(".touristGroupSearchForm select[name=customerType]").find("option:selected").val(),
 								status :  $(".touristGroupSearchForm .btn-status button").attr("data-value")
 							}
-							touristGroup.getTouristStatisticData(0,touristGroup.searchData.lineProductName,touristGroup.searchData.lineProductId,touristGroup.searchData.fromPartnerAgencyName,touristGroup.searchData.fromPartnerAgencyId,touristGroup.searchData.creatorId,touristGroup.searchData.creatorName,touristGroup.searchData.startTime,touristGroup.searchData.createTimeStart,touristGroup.searchData.createTimeEnd,touristGroup.searchData.customerType,touristGroup.searchData.status);
+							touristGroup.getTouristStatisticData(0,touristGroup.searchData.fromBussinessGroupName,touristGroup.searchData.fromBussinessGroupId,touristGroup.searchData.lineProductName,touristGroup.searchData.lineProductId,touristGroup.searchData.fromPartnerAgencyName,touristGroup.searchData.fromPartnerAgencyId,touristGroup.searchData.creatorId,touristGroup.searchData.creatorName,touristGroup.searchData.startTime,touristGroup.searchData.createTimeStart,touristGroup.searchData.createTimeEnd,touristGroup.searchData.customerType,touristGroup.searchData.status);
+						});
+
+						//选择组团社与业务部筛选
+						$('#'+tabId).find(".choosePorB").change(function() {
+							var $this = $(this), $parents = $this.closest('div');
+								$value = $this.val();
+							if ($value == 1) {
+								$parents.find('.chooseBussinessGroup').hide();
+								$parents.find('.choosePartnerAgency').show();
+							}else if ($value == 2) {
+								$parents.find('.choosePartnerAgency').hide();
+								$parents.find('.chooseBussinessGroup').show();
+							}
+							$parents.find('.chooseBussinessGroup').val("")
+							$parents.find('.choosePartnerAgency').val("")
+							$parents.find('[name=fromPartnerAgencyId]').val("")
+							$parents.find('[name=fromBussinessGroupId]').val("")
 						});
 
 						//新增小组事件
@@ -125,16 +150,18 @@ define(function(require, exports) {
 							touristGroup.cleanFlag = 1;
 							touristGroup.addTouristGroup();
 						});
-						touristGroup.listTouristGroup(page,lineProduct,lineProductId,fromPartnerAgencyName,fromPartnerAgencyId,creatorId,creatorName,startTimeS,createTimeStartS,createTimeEndS,customerTypeS,statusS);
+						touristGroup.listTouristGroup(page,BussinessGroupName,BussinessGroupId,lineProduct,lineProductId,fromPartnerAgencyName,fromPartnerAgencyId,creatorId,creatorName,startTimeS,createTimeStartS,createTimeEndS,customerTypeS,statusS);
 					}
 				}
 			});
 		},
 		//数据列表
-		listTouristGroup:function(page,lineProduct,lineProductId,fromPartnerAgencyName,fromPartnerAgencyId,creatorId,creatorName,startTimeS,createTimeStartS,createTimeEndS,customerTypeS,statusS){
+		listTouristGroup:function(page,BussinessGroupName,BussinessGroupId,lineProduct,lineProductId,fromPartnerAgencyName,fromPartnerAgencyId,creatorId,creatorName,startTimeS,createTimeStartS,createTimeEndS,customerTypeS,statusS){
 			touristGroup.searchData = {
 				lineProductName: lineProduct,
 				lineProductId: lineProductId,
+				fromBussinessGroupName: BussinessGroupName,
+				fromBussinessGroupId: BussinessGroupId,
 				fromPartnerAgencyName:fromPartnerAgencyName,
 				fromPartnerAgencyId:fromPartnerAgencyId,
 				creatorName:creatorName,
@@ -150,7 +177,7 @@ define(function(require, exports) {
 			$.ajax({
 				url:""+APP_ROOT+"back/touristGroup.do?method=listTouristGroup&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 				type:"POST",
-				data:"pageNo="+page+"&sortType=startTime"+"&lineProductName="+lineProduct+"&lineProductId="+lineProductId+"&fromPartnerAgencyName="+fromPartnerAgencyName+"&fromPartnerAgencyId="+fromPartnerAgencyId+"&startTimeSearch="+startTimeS+"&creatorName="+creatorName+"&creatorId="+creatorId+"&createTimeStart="+createTimeStartS+"&createTimeEnd="+createTimeEndS+"&statusSearch="+statusS+"&customerType="+customerTypeS,
+				data:"pageNo="+page+"&sortType=startTime"+"&fromBussinessGroupName="+BussinessGroupName+"&fromBussinessGroupId="+BussinessGroupId+"&lineProductName="+lineProduct+"&lineProductId="+lineProductId+"&fromPartnerAgencyName="+fromPartnerAgencyName+"&fromPartnerAgencyId="+fromPartnerAgencyId+"&startTimeSearch="+startTimeS+"&creatorName="+creatorName+"&creatorId="+creatorId+"&createTimeStart="+createTimeStartS+"&createTimeEnd="+createTimeEndS+"&statusSearch="+statusS+"&customerType="+customerTypeS,
 				dataType:"json",
 				beforeSend:function(){
 					//打开一个遮罩层
@@ -174,6 +201,7 @@ define(function(require, exports) {
 						$("#touristGroup-listMain").html(html);
 
 						touristGroup.getPartnerAgencyList($("#tab-"+menuKey+"-content .choosePartnerAgency"));
+						touristGroup.getBussinessGroup($("#tab-"+menuKey+"-content .chooseBussinessGroup"));
 						touristGroup.getPartnerAgencySearchList($("#tab-"+menuKey+"-content"));
 						touristGroup.getCreatorUserList($("#tab-"+menuKey+"-content"),data.searchParam.creator);
 						
@@ -948,7 +976,7 @@ define(function(require, exports) {
 							layer.close(viewTouristGroup);
 						})
 						function MenberNumber(){
-							$(".addTouristList tr").each(function(i){
+							$('#'+tab).find('.addTouristList tr').each(function(i){
 								if(i>0){
 									$(this).children().eq(0).text(i);
 								}
@@ -1168,7 +1196,31 @@ define(function(require, exports) {
 				$(obj).autocomplete('search', '');
 			})
 		},
-
+		getBussinessGroup :function($obj){
+			$obj.autocomplete({
+				minLength: 0,
+				change: function(event, ui) {
+					if (ui.item == null)  {
+						$(this).parent().find("input[name=fromBussinessGroupId]").val("");
+					}
+				},
+				select: function(event, ui) {
+					$(this).blur();
+					var obj = this;
+					$(obj).parent().find("input[name=fromBussinessGroupId]").val(ui.item.id).trigger('change');
+				}
+			}).click(function(){
+				var obj = this;
+				var fromParObj = touristGroup.autocompleteDate.fromBusinessGroupList;
+				if(fromParObj !=null && fromParObj.length>0){
+					for(var i=0;i<fromParObj.length;i++){
+						fromParObj[i].value = fromParObj[i].businessGroupName;
+					}
+				}
+				$(obj).autocomplete('option','source', fromParObj);
+				$(obj).autocomplete('search', '');
+			})
+		},
       getPartnerAgencyBigList:function(obj,partnerAId){
 			var $objC = $(obj)
 			$.ajax({
@@ -2460,6 +2512,7 @@ define(function(require, exports) {
 					var result = showDialog(data);
 					if(result){
 						touristGroup.autocompleteDate.lineProductList = data.lineProductList;
+						touristGroup.autocompleteDate.fromBusinessGroupList = data.fromBusinessGroupList;
 						touristGroup.autocompleteDate.fromPartnerAgencyList = data.fromPartnerAgencyList;
 						touristGroup.autocompleteDate.creatorList = data.creatorList;
 					}
