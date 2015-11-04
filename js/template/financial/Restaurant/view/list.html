@@ -58,13 +58,11 @@
 	                      <span style="color:green"> {{rest.checkedCount}}{{"/"}}{{rest.allCount}}</span>
 	                    {{/if}}
                     </td>
-                   
-                    
                     <td>
                         <a data-entity-id="{{rest.restaurantId}}" data-entity-restaurantName="{{rest.restaurantName}}" data-entity-year="{{searchParam.year}}" data-entity-month="{{searchParam.month}}" class="cursor btn-divide R-right" data-right="1240002">
                             	对账
                         </a>
-                        <label class="cursor R-right" data-right="1240002"><a class="R-right" data-right="1240003"></a> |</label>
+                        <label class="cursor R-right" data-right="1240002"><a class="R-right" data-right="1240003"> |</a></label>
                         <a data-entity-id="{{rest.restaurantId}}" data-entity-restaurantName="{{rest.restaurantName}}" data-entity-year="{{searchParam.year}}"
                                 {{if searchParam.month == ""}}
                                  	 data-entity-startMonth=1 data-entity-endMonth=12 

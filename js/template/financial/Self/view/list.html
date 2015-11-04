@@ -48,7 +48,6 @@
                     <td>
                     	<span style="color:red">{{selfPay.sumRealUnPayedMoney}}</span>
                     </td>
-                   
                     <td >
 	                    {{if selfPay.allCount != selfPay.checkedCount}}
 	                      <span style="color:#ff9900"> {{selfPay.checkedCount}}{{"/"}}{{selfPay.allCount}}</span>
@@ -57,13 +56,11 @@
 	                      <span style="color:green"> {{selfPay.checkedCount}}{{"/"}}{{selfPay.allCount}}</span>
 	                    {{/if}}
                     </td>
-                   
-                    
                     <td>
                         <a data-entity-id="{{selfPay.selfPayId}}" data-entity-selfPayName="{{selfPay.selfPayName}}" data-entity-year="{{searchParam.year}}" data-entity-month="{{searchParam.month}}" class="cursor btn-selfPay-check R-right" data-right="1260002">
                             	对账
                         </a>
-                        <label class="cursor R-right" data-right="1260002"><a class="R-right" data-right="1260003"></a> |</label>
+                        <label class="cursor R-right" data-right="1260002"><a class="R-right" data-right="1260003"> |</a></label>
                         <a data-entity-id="{{selfPay.selfPayId}}" data-entity-selfPayName="{{selfPay.selfPayName}}" data-entity-year="{{searchParam.year}}"
                                 {{if searchParam.month == ""}}
                                  	 data-entity-startMonth=1 data-entity-endMonth=12 
