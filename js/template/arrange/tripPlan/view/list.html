@@ -7,17 +7,17 @@
 				<input type="hidden" name="tripChoosePlanId" value="{{searchParam.tripId}}" />
 			</div>
 
-			<div class="col-xs-2 timeStart" style="margin:0 20px;">
+			<div class="col-xs-2 timeStart" style="margin:0 15px;">
 				<div class="col-xs-8">
 					<div class="input-group">
-						<input class="col-xs-12 date-picker" name="startTime" placeholder="出团日期" value="{{searchParam.startTime}}" type="text"  />
+						<input class="col-xs-12 date-picker triplanStartTime" name="startTime" placeholder="出团日期" value="{{searchParam.startTime}}" type="text"  />
 						<span class="input-group-addon">
 							<i class="fa fa-calendar"></i>
 						</span>
 					</div> 
 				</div>
 			</div>
-			<div class="col-xs-1 guideMarginLeft">
+			<div class="col-xs-1">
 				<input type="text" name="realname" class="col-xs-12 T-guideChoose" placeholder="导游" value="{{searchParam.guideName}}" />
 				<input type="hidden" name="guideChooseId" value="{{searchParam.guideId}}" />
 			</div>
@@ -31,7 +31,7 @@
 			</div>
 			<div class="col-sm-2" style="width:250px;">
 				<div class="btn-group btn-status">
-					<button data-value="{{searchParam.status}}" data-toggle="dropdown" class="btn-sm  dropdown-toggle block-up" aria-expanded="false">
+					<button data-value="{{searchParam.status}}" data-toggle="dropdown" class="btn-sm  dropdown-toggle block-up T-creatorChoose" aria-expanded="false">
 						<span>
 							{{if searchParam.status == "-1"}}
 								已取消
@@ -61,12 +61,12 @@
 					</ul>
 				</div>
 
-				<button class=" btn-sm  btn-tripPlan-search search-btn" style="margin-left: 20px; width:75px;">
+				<button class=" btn-sm  btn-tripPlan-search search-btn triplan-searchBtn" style="margin-left: -40px; width:75px;">
 					<i class="ace-icon fa fa-search"></i>
 					搜索
 				</button>
 			</div>
-			<button class="btn btn-sm btn-success btn-Plan-add R-right pull-left" style="width:120px; margin-left:-45px;" data-right="1140002"> 
+			<button class="btn btn-sm btn-success btn-Plan-add R-right pull-left newSearchBtn" style="width:120px; margin-left:-155px;" data-right="1140002"> 
 			<i class="ace-icon fa fa-plus"></i> 
 			新增发团计划
 		   </button>
