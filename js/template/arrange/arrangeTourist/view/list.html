@@ -1,7 +1,7 @@
 <table class="table table-striped table-bordered table-hover globalAdd">
 	<thead>
 		<tr class="bg-blur">
-			<th>并团选择</th>
+			<th class="R-right" data-right="1130004">并团选择</th>
 			<th>线路产品</th>
 			<th>类别</th>
 			<th>应用范围</th>
@@ -18,7 +18,7 @@
 	<tbody>
 		{{each arrangeTouristGroupList as arrangeTourist}}
 			<tr data-entity-id="{{arrangeTourist.lineProductId}}" data-entity-startTime="{{arrangeTourist.startTime}}" data-entity-days="{{arrangeTourist.days}}" data-entity-name="{{arrangeTourist.name}}" data-entity-type="{{arrangeTourist.type}}" data-entity-memberCount="{{arrangeTourist.sumNoOperationAdultCount+arrangeTourist.sumNoOperationChildCount}}" class="tr-{{arrangeTourist.lineProductId}}-{{arrangeTourist.startTime}}">
-				<td>
+				<td class="R-right" data-right="1130004">
 					<label class="pos-rel"> <input type="checkbox" class="ace touristGroupMergeCheckBox"> <span class="lbl"></span> </label>
 				</td>
 				<td>{{arrangeTourist.name}}</td>
