@@ -59,6 +59,7 @@
                         <a data-entity-id="{{transfer.partnerAgencyId}}" data-entity-partnerAgencyName="{{transfer.partnerAgencyName}}" data-entity-year="{{searchParam.year}}" data-entity-month="{{searchParam.month}}" class="cursor  btn-transfer-check R-right" data-right="1300002">
                             	对账
                         </a>
+                        <label class="cursor R-right" data-right="1300002"><a class="R-right" data-right="1300003"></a> |</label>
                         <a data-entity-id="{{transfer.partnerAgencyId}}" data-entity-partnerAgencyName="{{transfer.partnerAgencyName}}" data-entity-year="{{searchParam.year}}"
                                 {{if searchParam.month == ""}}
                                  	 data-entity-startMonth=1 data-entity-endMonth=12 
@@ -66,7 +67,6 @@
                                  	 data-entity-startMonth="{{searchParam.month}}" data-entity-endMonth="{{searchParam.month}}" 
                                 {{/if}}
                         		class="cursor R-right btn-transfer-balance" data-right="1300003">
-                                <label class="padding-right20"> |</label>
                            		 结算
                         </a>
                     </td>

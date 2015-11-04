@@ -40,7 +40,7 @@ define(function(require, exports) {
 		//list Main
 		listArrangeTouristMain:function(){
 			$.ajax({
-				url:""+APP_ROOT+"back/lineProduct.do?method=findLineProductList&token="+$.cookie("token")+"&menuKey=resource_lineProduct&operation=view",
+				url:""+APP_ROOT+"back/touristGroup.do?method=getLineProductList&token="+$.cookie("token")+"&menuKey=resource_lineProduct&operation=view",
 				type:"POST",
 				data:"sortType=auto",
 				dataType:"json",
@@ -51,7 +51,7 @@ define(function(require, exports) {
 					layer.close(globalLoadingLayer);
 					var result = showDialog(data);
 					if(result){
-						data.lineProductList = JSON.parse(data.lineProductList);
+						//data.lineProductList = JSON.parse(data.lineProductList);
 						var html = listMainTemplate(data);
 						addTab(menuKey,"分团转客",html);
 						//缓存autocomplate数据
