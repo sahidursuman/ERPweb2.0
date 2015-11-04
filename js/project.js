@@ -181,7 +181,7 @@ function init_editor(ue_key,options, height)  {
 }
 
 function showDialog(data){
-	if(data.success == 0){
+	if(data.success == 1 || data.success == 0){	// 增加状态1的支持
 		showMessageDialog($( "#confirm-dialog-message" ),data.message);
 		return false;
 	}
