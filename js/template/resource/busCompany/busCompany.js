@@ -134,7 +134,7 @@ define(function(require,exports){
 			type:1,
 			title:'新增车队',
 			skin:'layui-layer-rim',
-			area:'70%',
+			area:'1190px',
 			zIndex:1028,
 			content:html,
 			scrollbar: false,
@@ -260,7 +260,7 @@ define(function(require,exports){
 							type: 1,
 							title:"修改车队",
 							skin: 'layui-layer-rim', //加上边框
-							area: '70%', //宽高
+							area: '1190px', //宽高
 							zIndex:1028,
 							content: html,
 							success:function(){
