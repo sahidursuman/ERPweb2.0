@@ -105,7 +105,8 @@ define(function(require, exports) {
 						data.userAuthList = userAuthList;
 						var functionList = JSON.parse(data.listUserFunctionShip);
 						data.listUserFunctionShip = functionList;
-						var userData = JSON.parse(data.user);
+						var userData = JSON.parse(data.user),
+							username = userData.userName;
 						data.user = userData;
 						var html = authTemplate(data);
 						var updateAuth = layer.open({
@@ -282,9 +283,13 @@ define(function(require, exports) {
 											var result = showDialog(data);
 											if(result){
 												layer.close(updateAuth);
-												showMessageDialog($("#confirm-dialog-message"),data.message);
-												console.log(!!user.listUser);
-												user.listUser(0, "", 1);
+												showMessageDialog($("#confirm-dialog-message"),data.message, function() {
+													// console.log(!!user.listUser);
+													user.listUser(0, "", 1);	
+													if (IndexData.userInfo.userName === username) {
+														user.updateLoginInfo();
+													}
+												});
 											}
 										}
 									});
@@ -326,6 +331,15 @@ define(function(require, exports) {
 			}
 		},
 
+		updateLoginInfo: function() {
+			$.ajax({
+				url:""+APP_ROOT+"base.do?method=checkLogin",
+				type:"GET",
+				success:function(data){
+					IndexData.userInfo = data;
+				}
+			});
+		},
 		updateUser:function(id){
 			$.ajax({
 				url:""+APP_ROOT+"back/user.do?method=getUserById&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
