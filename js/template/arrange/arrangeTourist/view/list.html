@@ -15,7 +15,7 @@
 			<th>操作</th>
 		</tr>
 	</thead>
-	<tbody class="T-arrangeList">
+	<tbody>
 		{{each arrangeTouristGroupList as arrangeTourist}}
 			<tr data-entity-id="{{arrangeTourist.lineProductId}}" data-entity-startTime="{{arrangeTourist.startTime}}" data-entity-days="{{arrangeTourist.days}}" data-entity-name="{{arrangeTourist.name}}" data-entity-type="{{arrangeTourist.type}}" data-entity-memberCount="{{arrangeTourist.sumNoOperationAdultCount+arrangeTourist.sumNoOperationChildCount}}" class="tr-{{arrangeTourist.lineProductId}}-{{arrangeTourist.startTime}}">
 				<td>
