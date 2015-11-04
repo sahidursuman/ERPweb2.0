@@ -69,7 +69,7 @@
             <td><label>车费：<span class="tripCost-busCompanyNeedPayMoney"></span></label></td>
             <td><label>导游管理费：<span class="tripOther-guideArrangeManageFee">{{guideArrange.manageFee}}</span></label></td>
             <td><label>车费：<span class="tripTransitCost-busCompanyNeedPayMoney">{{touristGroup.outBusMoney}}</span></label></td>
-            <td><label>餐食费用：<span class="tripTransitCost-ticketArrangeNeedPayMoney">{{touristGroup.outRestaurantMoney}}</span></label></td>
+            <td><label>餐食费用：<span class="tripTransitCost-outRestaurantMoney">{{touristGroup.outRestaurantMoney}}</span></label></td>
 
         </tr>
         <tr> 
@@ -80,7 +80,7 @@
             <td><label>景区费用：<span class="tripCost-scenicArrangeNeedPayMoney"></span></label></td>
             <td><label>导游预支金额：<span class="tripOther-guideAllPreMoney">{{tripPlan.guideAllPreMoney}}</span></label></td>
             <td><label>房费：<span class="tripTransitCost-hotelArrangeNeedPayMoney">{{touristGroup.outHotelMoney}}</span></label></td>
-            <td><label>其他费用：<span class="tripTransitCost-ticketArrangeNeedPayMoney">{{touristGroup.outOtherMoney}}</span></label></td>
+            <td><label>其他费用：<span class="tripTransitCost-outOtherMoney">{{touristGroup.outOtherMoney}}</span></label></td>
         </tr>
         <tr>
             <td></td>
@@ -89,7 +89,7 @@
             <td><label>其他费用：<span class="tripCost-otherArrangeNeedPayMoney"></span></label></td>
             <td><label style="display: none;">地接费用：<span class="tripCost-groundArrangeNeedPayMoney"></span></label></td>
             <td></td>
-            <td><label>票务费用{{isOp}}：<span class="tripTransitCost-ticketArrangeNeedPayMoney">{{touristGroup.outTicketMoney}}</span></label></td>
+            <td><label>票务费用{{isOp}}：<span class="tripTransitCost-outTicketMoney">{{touristGroup.outTicketMoney}}</span></label></td>
             <td></td>
         </tr>
         </tbody>
