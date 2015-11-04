@@ -426,17 +426,17 @@
                         </td>{{/if}}{{/if}}  
                         <td>{{arrange.type}}</td> 
                         <td>{{arrange.price}}<input type="hidden" name="realPrice" value="{{arrange.price}}" /></td>
-                        <td><input style="width:90px;" type="text" name="realCount" {{if billUpdateTime != null}}value="{{arrange.realCount}}" 
+                        <td><input style="width:90px;" type="text" name="realCount" {{if arrange.billUpdateTime != null}}value="{{arrange.realCount}}" 
                         {{else}}value="{{arrange.memberCount}}"{{/if}}old="{{arrange.realCount}}" maxlength="5"/></td>
                         <td>{{arrange.reduceMoney}}<input type="hidden" name="reduceMoney" value="{{arrange.reduceMoney}}" /></td>
                         <td><span class="restneedPayMoney">{{arrange.needPayMoney}}</span></td>
                         <td>{{arrange.payedMoney}}</td>
                         <td>
-                            <input style="width:90px;" type="text" name="realGuidePayMoney" {{if billUpdateTime != null}}value="{{arrange.realGuidePayMoney}}"{{else}}value="{{arrange.guidePayMoney}}" {{/if}}old="{{arrange.realGuidePayMoney}}" maxlength="11"/>
+                            <input style="width:90px;" type="text" name="realGuidePayMoney" {{if arrange.billUpdateTime != null}}value="{{arrange.realGuidePayMoney}}"{{else}}value="{{arrange.guidePayMoney}}" {{/if}}old="{{arrange.realGuidePayMoney}}" maxlength="11"/>
                             <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" />
                             <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" /></td>
                         <td><a href="javascript:void(0);" url="{{arrange.billImage}}" class="btn-view">查看</a></td>
-                        <td><span class="difference"></span></td>
+                        <td><span class="difference"></span></td> 
                         <td><input value="{{arrange.billRemark}}" name="billRemark" type="text" maxlength="1000" /></td>
                     </tr>
                     {{/if}}
