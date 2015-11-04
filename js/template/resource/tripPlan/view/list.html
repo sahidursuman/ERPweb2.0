@@ -152,6 +152,9 @@
 						{{else if tripPlan.status == -1}}
 						<i class="ace-icon fa fa-times red bigger-125"></i>
 						已取消
+						{{else if tripPlan.status == 2}}
+						<i class="ace-icon fa fa-clock-o red bigger-125"></i>
+						已过期
 						{{/if}}
 					</td>
 					<td style="vertical-align:middle;width:200px" {{if tripPlan.tripPlanDetails.length > 1}}rowspan="{{tripPlan.tripPlanDetails.length}}"{{/if}}>
