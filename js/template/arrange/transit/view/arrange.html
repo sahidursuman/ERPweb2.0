@@ -536,7 +536,7 @@
 											<tbody>{{each bus as outBus}}
 												{{if outBus.id != null && outBus.busCompany != null && outBus.bus != null && outBus.driver != null}}
 												<tr data-entity-id="{{outBus.id}}">
-													<td><input type="text" class="col-sm-12 chooseSeatCount" name="seatCount" value="" /></td>
+													<td><input type="text" class="col-sm-12 chooseSeatCount" name="seatCount" value="{{if outBus.bus != null}}{{outBus.bus.seatCount}}{{/if}}" /></td>
 													<td><input class="col-sm-12 chooseBusBrand" name="busbrand" type="text" value="{{if outBus.bus != null}}{{outBus.bus.brand}}{{/if}}" /></td>
 													<td>
 														<div class="col-sm-12">
@@ -639,7 +639,7 @@
 											<tbody>{{each sendGroup.outBusList as outBus}}
 												{{if outBus.id != null && outBus.busCompany != null && outBus.bus != null && outBus.driver != null}}
 												<tr data-entity-id="{{outBus.id}}">
-													<td><input type="text" class="col-sm-12 chooseSeatCount" name="seatCount" value="" /></td>
+													<td><input type="text" class="col-sm-12 chooseSeatCount" name="seatCount" value="{{if outBus.bus != null}}{{outBus.bus.seatCount}}{{/if}}" /></td>
 													<td><input class="col-sm-12 chooseBusBrand" name="busbrand" type="text" value="{{if outBus.bus != null}}{{outBus.bus.brand}}{{/if}}" /></td>
 													<td>
 														<div class="col-sm-12">
