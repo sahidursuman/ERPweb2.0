@@ -976,7 +976,7 @@ define(function(require, exports) {
 							layer.close(viewTouristGroup);
 						})
 						function MenberNumber(){
-							$(".addTouristList tr").each(function(i){
+							$('#'+tab).find('.addTouristList tr').each(function(i){
 								if(i>0){
 									$(this).children().eq(0).text(i);
 								}

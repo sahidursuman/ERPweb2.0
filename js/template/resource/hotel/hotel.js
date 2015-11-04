@@ -164,7 +164,10 @@ define(function(require, exports) {
 							//新增房间列表
 							$container.find(".T-btn-hotel-standard-add").click(function(){
 								hotel.addRoomList($container);
-							})
+							});
+							//时间控件
+							hotel.datepicker($tbody);
+
 							//提交事件绑定
 							$container.find(".T-btn-submit-hotel").on("click",function(){
 								hotel.saveHotel($container);
