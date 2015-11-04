@@ -459,7 +459,7 @@
 											<tbody>{{each receiveGroup.outOtherList as outOther}}
 											{{if outOther != null && outOther.name != null}}
 												<tr data-entity-id="{{outOther.id}}">
-													<td><input class="col-sm-12" name="startTime" type="text" value="{{outOther.startTime}}" /></td>
+													<td><input class="col-sm-12" name="startTime" type="text" value="{{outOther.startTime | dateFormat: 'yyyy-MM-dd'}}" /></td>
 													<td>
 														<input class="col-sm-12" name="name" type="text" value="{{outOther.name}}" maxlength="30" />
 														<input type="hidden" name="serviceType" value="0" />
@@ -1010,7 +1010,7 @@
 											<tbody>{{each sendGroup.outOtherList as outOther}}
 											{{if outOther != null && outOther.name != null}}
 												<tr data-entity-id="{{outOther.id}}">
-													<td><input class="col-sm-12" name="startTime" type="text" value="{{outOther.startTime}}" /></td>
+													<td><input class="col-sm-12" name="startTime" type="text" value="{{outOther.startTime | dateFormat: 'yyyy-MM-dd'}}" /></td>
 													<td>
 														<input class="col-sm-12" name="name" type="text" value="{{outOther.name}}" maxlength="30" />
 														<input type="hidden" name="serviceType" value="1" />

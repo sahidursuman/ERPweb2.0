@@ -122,20 +122,23 @@
 							{{else if tripPlan.status == 0}}
 							<i class="ace-icon fa fa-question yellow bigger-130" ></i>
 								待确认
-							{{else tripPlan.status == 1}}
+							{{else if tripPlan.status == 1}}
 							<i class="ace-icon fa fa-check green bigger-130"></i>
 								已发团
+							{{else if tripPlan.status == 2}}
+							<i class="ace-icon fa fa-clock-o red bigger-130"></i>
+								已过期
 							{{/if}}
 						</td>
 						<td style="vertical-align:middle;width:240px;" {{if tripPlan.tripPlanDetails.length > 1}}rowspan="{{tripPlan.tripPlanDetails.length}}"{{/if}}>
-							<a data-entity-id="{{tripPlan.id}}" billStatus="{{tripPlan.billStatus}}" statusValue="{{tripPlan.status}}" title="确认发团" class="{{if tripPlan.status != -1}}btn-Plan-confirm{{/if}} cursor R-right" data-right="1140006" {{if tripPlan.status == -1}} style="color:#bbb;"{{/if}}>
+							<a data-entity-id="{{tripPlan.id}}" billStatus="{{tripPlan.billStatus}}" statusValue="{{tripPlan.status}}" title="确认发团" class="{{if tripPlan.status != -1 && tripPlan.status != 2}}btn-Plan-confirm{{/if}} cursor R-right" data-right="1140006" {{if tripPlan.status == -1 || tripPlan.status == 2}} style="color:#bbb;"{{/if}}>
 								确认
 								<label style="padding-left:10px;">|</label>
 							</a>
 							<a data-entity-id="{{tripPlan.id}}" title="查看计划" class="btn-Plan-view cursor">
 								查看
 							</a>
-						    <a data-entity-id="{{tripPlan.id}}" billStatus="{{tripPlan.billStatus}}" title="编辑计划" class="{{if tripPlan.status != -1}}btn-Plan-edit{{/if}} cursor R-right" data-right="1140003" {{if tripPlan.status == -1}} style="color:#bbb;"{{/if}}>
+						    <a data-entity-id="{{tripPlan.id}}" billStatus="{{tripPlan.billStatus}}" title="编辑计划" class="{{if tripPlan.status != -1 && tripPlan.status != 2}}btn-Plan-edit{{/if}} cursor R-right" data-right="1140003" {{if tripPlan.status == -1 || tripPlan.status == 2}} style="color:#bbb;"{{/if}}>
 								<label class="padding-right20">|</label>
 								编辑
 							</a>
@@ -143,7 +146,7 @@
 								<label class="padding-right20">|</label>
 								导出
 							</a>
-							<a data-entity-id="{{tripPlan.id}}" billStatus="{{tripPlan.billStatus}}" title="取消计划" class="{{if tripPlan.status != -1}}btn-Plan-cancel{{/if}} cursor R-right" data-right="1140004" {{if tripPlan.status == -1}} style="color:#bbb;"{{/if}}>
+							<a data-entity-id="{{tripPlan.id}}" billStatus="{{tripPlan.billStatus}}" title="取消计划" class="{{if tripPlan.status != -1 && tripPlan.status != 2}}btn-Plan-cancel{{/if}} cursor R-right" data-right="1140004" {{if tripPlan.status == -1 || tripPlan.status == 2}} style="color:#bbb;"{{/if}}>
 								<label class="padding-right20">|</label>
 								取消
 							</a>

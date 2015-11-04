@@ -15,6 +15,7 @@
     white-space: nowrap!important;
     overflow: auto!important;
     height: auto!important;
+    z-index: 9999;
 }
 .btn-minier,.btn-group-minier>.btn{width: 65px;height: 35px!important;border-radius: 3px}
 input{
@@ -788,7 +789,9 @@ padding-left:0;width: 360px;left: -35px;
 .transit-arrangeTime div{
     width: 260px;
 }
-
+/*中转分段显示不完整*/
+.ui-autocomplete{width:200px;}
+.ui-autocomplete .ui-state-focus{width:inherit;}
 /*table 宽度*/
 .tableWidthImp{
     width: 97% !important;
