@@ -376,6 +376,12 @@ define(function(require, exports) {
                         }
 
                         data = count.covertRemark(tmp);
+                        if(isAuth("1190002")){
+                            data.isOp = true;
+                        }
+                        if(isAuth("1190003")){
+                            data.isFinance = true;
+                        }
                     	var html = updateTemplate(data);
                     	var title = (guide == "guide"?"单团报账":"单团审核");
 						
@@ -1664,13 +1670,13 @@ define(function(require, exports) {
             		if(result){
             			showMessageDialog($( "#confirm-dialog-message" ),data.message);
                         count.edited["checkBill"] = "";
-            			count.updateExamine(financialTripPlanId,"");
+                        count.updateExamine(financialTripPlanId,"");
             		}
             	}
             });
 		},
 		saveTripCount : function(id, financialTripPlanId, userName, roleType,isClose,typeFlag) {
-            console.log(financialTripPlanId);
+            console.log("saveTripCount");
             var saveJson;
             if(typeFlag == 2 || typeFlag == 3){
                 saveJson = count.saveCountReimbursement(financialTripPlanId);
@@ -1707,6 +1713,7 @@ define(function(require, exports) {
                         };
                         showMessageDialog($( "#confirm-dialog-message" ),data.message);
                         count.edited["checkBill"] = "";
+                        console.log("success");
                         if(isClose == 1){
                             closeTab(uKey);
                             count.getlistCount(count.searchData.pageNo,count.searchData.id,count.searchData.tripNumber,count.searchData.lineProductId,count.searchData.lineProductName,count.searchData.guideId,count.searchData.guideName,count.searchData.startTime,count.searchData.endTime,count.searchData.status);
@@ -2604,9 +2611,9 @@ define(function(require, exports) {
             //审核过滤
             $obj.find(".T-audit").each(function(i){
                 var right,status = tripPlanList[i].tripPlan.billStatus;
-                if(status == 0 || status == 2){//财务审核
+                if(status == 0){//计调可审
                     right = "1190002"; 
-                } else if(status == 1){//计调审核
+                } else if(status == 1 || status == 2){//财务可审
                     right = "1190003";
                 } else{
                     right = "无";
