@@ -228,8 +228,9 @@ define(function(require, exports) {
 						ResLineProduct.bindRestaurantEvent($dayListArea.find('.T-choose-restaurantName'), $dayListArea.find('.T-choose-restaurantStandardsName'));
 						ResLineProduct.bindHotelEvent($dayListArea.find('.T-choose-hotelName'), $dayListArea.find('.T-choose-hotelRoom'), $dayListArea.find('.T-choose-hotelStarLevel'));
 						ResLineProduct.bindScenicEvent($dayListArea.find('.T-choose-scenicName'));
-						ResLineProduct.bindScenicEvent($dayListArea.find('.T-choose-shopVendorName'));
-						ResLineProduct.bindScenicEvent($dayListArea.find('.T-choose-ticketCompanyName'));
+						ResLineProduct.bindShopEvent($dayListArea.find('.T-choose-shopVendorName'));
+						ResLineProduct.bindSelfPay($dayListArea.find('.T-choose-ticketCompanyName'));
+						ResLineProduct.bindTicketEvent($dayListArea.find('.chooseTicketName'));
 					}
 				}
 			});
@@ -679,9 +680,9 @@ define(function(require, exports) {
 						"class" : "btn btn-primary btn-minier",
 						click: function() {
 							$( this ).dialog( "close" );
-							var id = $obj.data("entity-id"), objParents = $obj.parents(".updateLineProductDaysDetail"), 
+							var id = $obj.data("entity-id"), objParents = $obj.closest('.T-timeline-item'), 
 							    name = $obj.data("entity-name"),
-							    templateJsonDel = {name:name, id:id};
+							    templateJsonDel = {name:name, id:id + ""};
 							
 							$.ajax({
 								url: KingServices.build_url('lineProduct', 'deleteLineProductArrangeTemplate'),
@@ -690,8 +691,9 @@ define(function(require, exports) {
 								success:function(data){
 									layer.close(globalLoadingLayer);
 									var result = showDialog(data);
-									if(result){										
-										objParents.remove();
+									if(result){	
+										var index = objParents.index();									
+										$(".T-timeline-item").eq(index).remove();
 									}
 								}
 							});
@@ -796,6 +798,7 @@ define(function(require, exports) {
 					$tr.find("input[name=menuList]").val("");
 					$tr.find("input[name=pricePerPerson]").val("");
 					$tr.find("input[name=price]").val("");
+					$tr.find("input[name=typeId]").val("");
 				}
 
 				// 更新表单验证的配置
@@ -808,6 +811,7 @@ define(function(require, exports) {
 				$tr.find("input[name=menuList]").val("");
 				$tr.find("input[name=pricePerPerson]").val("");
 				$tr.find("input[name=price]").val("");
+				$tr.find("input[name=typeId]").val("");
 				
 				$.ajax({
 					url: KingServices.build_url('restaurant', 'findRestaurantById'),
@@ -943,7 +947,8 @@ define(function(require, exports) {
 				var $tr = $(this).closest('tr'), hotelDataId = ui.item.id;
 
 				$tr.find("input[name=hotelId]").val(hotelDataId).trigger('change');	
-				$tr.find("input[name=hotelRoom]").val("");					
+				$tr.find("input[name=hotelRoom]").val("");
+				$tr.find("input[name=hotelRoomId]").val("");					
 				$tr.find("input[name=contractPrice]").val("");
 				$tr.find("input[name=containBreakfast]").val("");
 				
@@ -1097,6 +1102,8 @@ define(function(require, exports) {
 				    objParent = $(obj).parent().parent(),
 				    scenicNameId = ui.item.id;
 				objParent.find("input[name=scenicId]").val(scenicNameId).trigger('change');
+				objParent.find("input[name=chargingProjects]").val("");
+				objParent.find("input[name=chargingId]").val("");
 				// 更新表单验证的配置
 				validator = rule.lineProductUpdate(validator);
 				
@@ -1257,6 +1264,8 @@ define(function(require, exports) {
 							$tr.find("input[name=mobileNumber]").val(shop.mobileNumber);
 							$tr.find("input[name=customerRebateMoney]").val(shop.customerRebateMoney);
 							$tr.find("input[name=parkingRebateMoney]").val(shop.parkingRebateMoney);
+							$tr.find("input[name=goodsPolicy]").val("");
+							$tr.find("input[name=shopPolicyId]").val("");
 						}
                     }
                 });
@@ -1365,7 +1374,7 @@ define(function(require, exports) {
 		'<thead><tr><th class="th-border">公司名称</th><th class="th-border">项目名称</th><th class="th-border">联系电话</th><th class="th-border">价格</th><th class="th-border">负责人</th><th class="th-border">备注</th><th class="th-border" style="width: 60px;">操作</th></tr></thead>'+
 		'<tbody><tr>'+
 		'<td><input type="text" class="col-xs-12 chooseCompanyName bind-change"/><input type="hidden" name="companyId"/></td>'+
-		'<td><input type="text" class="col-xs-12 chooseItemName bind-change"/><input type="hidden" name="selfPayItemId"/></td>'+
+		'<td><input type="text" class="col-xs-12 chooseItemName bind-change" name="selfPayItemName"/><input type="hidden" name="selfPayItemId"/></td>'+
 		'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
 		'<td><input type="text" class="col-xs-12" readonly="readonly" name="contractPrice"/><input type="hidden" class="col-xs-12" readonly="readonly" name="marketPrice"/></td>'+
 		'<td><input type="text" class="col-xs-12" readonly="readonly" name="managerName"/></td>'+
@@ -1395,6 +1404,8 @@ define(function(require, exports) {
 							$tr.find("input[name=companyId]").val(ui.item.id).trigger('change');
 							$tr.find("input[name=mobileNumber]").val(selfpay.mobileNumber);
 							$tr.find("input[name=managerName]").val(selfpay.managerName);
+							$tr.find("input[name=selfPayItemName]").val("");
+							$tr.find("input[name=selfPayItemId]").val("");
 
 							// 更新表单验证的配置
 							validator = rule.lineProductUpdate(validator);
@@ -1413,6 +1424,8 @@ define(function(require, exports) {
 					$tr.find("input[name=contractPrice]").val("");
 					$tr.find("input[name=marketPrice]").val("");
 					$tr.find("input[name=managerName]").val("");
+					$tr.find("input[name=selfPayItemName]").val("");
+					$tr.find("input[name=selfPayItemId]").val("");
 
 					// 更新表单验证的配置
 					validator = rule.lineProductUpdate(validator);

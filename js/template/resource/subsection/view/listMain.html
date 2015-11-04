@@ -6,21 +6,21 @@
 			<input type="hidden" name="fromPartnerAgencyId" value="{{}}">
 
 		</div>
-		<label class="pull-left text-right control-label no-padding-right">线路:</label>
+		<label class="pull-left text-right control-label no-padding-right subsectionWords">线路:</label>
 		<div class="col-sm-1">
 			<input type="text" class="col-sm-12 chooseLineProduct" placeholder="线路产品" name="lineProductChoose" value="{{}}" />
 			<input type="hidden" name="lineProductId" value="{{}}">
 		</div>
-		<label class="pull-left text-right control-label no-padding-right">出游时间:</label>
+		<label class="pull-left text-right control-label no-padding-right subsectionWords">出游时间:</label>
 		<div class="col-sm-1">
 			<div class="input-group">
-				<input class="col-xs-12 datepicker" name="travelDate" value="" type="text" />	
+				<input class="col-xs-12 datepicker subsectionStartTime" name="travelDate" value="" type="text" />	
 				<span class="input-group-addon">
 					<i class="fa fa-calendar"></i>
 				</span>
 			</div>
 		</div>  
-		<label class="pull-left text-right control-label no-padding-right">操作人:</label>
+		<label class="pull-left text-right control-label no-padding-right subsectionWords">操作人:</label>
 		<div class="col-sm-1">
 			<input type="text" class="col-xs-12 creatorUserChoose" placeholder="操作人" name="creator" value="{{}}"/>
 			<input type="hidden" name="creatorId" value="{{}}" />
@@ -31,25 +31,25 @@
 				<!--{{/each}}-->
 			<!--</select>-->
 		</div>
-		<label class="pull-left text-right control-label no-padding-right">操作日期:</label>
+		<label class="pull-left text-right control-label no-padding-right subsectionWords">操作日期:</label>
 		<div class="col-sm-1">
 			<div class="input-group col-sm-12">
-				<input class="col-sm-12 datepicker" name="operationStartDate" value="" type="text" />	
+				<input class="col-sm-12 datepicker subsectionStartTime" name="operationStartDate" value="" type="text" />	
 				<span class="input-group-addon">
 					<i class="fa fa-calendar"></i>
 				</span>
 			</div>
 		</div>
-		<label class="pull-left text-right control-label no-padding-right">--</label>
+		<label class="pull-left text-right control-label no-padding-right" style="margin-left: 15px;">--</label>
 		<div class="col-sm-1">
 			<div class="input-group col-sm-12">
-				<input class="col-sm-12 datepicker" name="operationEndDate" value="" type="text" />	
+				<input class="col-sm-12 datepicker subsectionStartTime" name="operationEndDate" value="" type="text" />	
 				<span class="input-group-addon">
 					<i class="fa fa-calendar"></i>
 				</span>
 			</div>
 		</div>
-		<div class="col-sm-1" style="width:100px;">
+		<div class="col-sm-1" style="width:100px;margin-left: 20px;">
 			<button class=" btn-sm  btn-subsection-search search-btn">
 				<i class="ace-icon fa fa-search"></i>
 				 搜索

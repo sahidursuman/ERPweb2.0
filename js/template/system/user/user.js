@@ -175,9 +175,16 @@ define(function(require, exports) {
 
 						    	//项选择事件
 						    	$(".T-submenu .T-function").on("click",function(){
-						    		var tr = $(this).closest('tr');
+						    		var $this = $(this);
+						    		var tr = $this.closest('tr');
+						    		var index = tr.find(".T-function").index($this);
+						    		if(index == 0 && $this.data("descript") == "对账" && !$this.is(":checked")){//取消“对账”权限
+						    			tr.find(".T-function").eq(2).prop("checked",false);
+						    		} else if(index == 2 && $this.data("descript") == "取消对账" && $this.is(":checked")){//勾选“取消对账”权限
+						    			tr.find(".T-function").eq(0).prop("checked",true);
+						    		}
 						    		tr.find('.T-submenu-check').prop("checked",true);
-						    		if($(this).is(":checked")){
+						    		if($this.is(":checked")){
 						    			user.checkAuth(tr);
 						    		}
 						    		user.checkMenu(this);

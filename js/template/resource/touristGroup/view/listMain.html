@@ -1,15 +1,21 @@
 <div class="search-area touristGroupSearchForm clearfix globalAdd">
     <div class="form-horizontal" >
-        <label class="pull-left text-right control-label no-padding-right">来源:</label>
-        <div class="col-sm-1">
+        <!-- <label class="pull-left text-right control-label no-padding-right">来源:</label> -->
+        <div class="col-sm-2">
             <!-- <select name="partnerAgencyId" class="col-sm-12">
 				<option value=''>来源</option>
 				{{each partnerAgencyList as partnerAgency}}
 				<option value="{{partnerAgency.id}}" {{if searchParam.partnerAgencyId == partnerAgency.id}}selected="selected"{{/if}} >{{partnerAgency.travelAgencyName}}</option>
 				{{/each}}
 			</select> -->
-            <input type="text" class="col-sm-12 choosePartnerAgency marginLeft-Right7" placeholder="来源" name="fromPartnerAgencyName"   value="{{searchParam.fromPartnerAgencyName}}" />
+            <select class="choosePorB col-sm-3">
+                <option value='1' {{if searchParam.type == 1}}selected="selected"{{/if}}>组团社</option>
+                <option value='2' {{if searchParam.type == 2}}selected="selected"{{/if}}>业务部</option>
+            </select>
+            <input type="text" class="col-sm-8 choosePartnerAgency marginLeft-Right7 T-PorB" placeholder="来源" name="fromPartnerAgencyName" style="float: right;{{if searchParam.type == 2}}display: none{{/if}}" value="{{searchParam.fromPartnerAgencyName}}" />
+            <input type="text" class="col-sm-8 chooseBussinessGroup marginLeft-Right7 T-PorB" placeholder="来源" name="fromBussinessGroupName" style="float: right;{{if searchParam.type == 1 || searchParam.type == null}}display: none;{{/if}}" value="{{searchParam.fromBussinessGroupName}}" />
             <input type="hidden" name="fromPartnerAgencyId" value="{{searchParam.fromPartnerAgencyId}}">
+            <input type="hidden" name="fromBussinessGroupId" value="{{searchParam.fromBussinessGroupId}}" />
         </div>
         <label class="pull-left text-right control-label no-padding-right">线路:</label>
         <div class="col-sm-1 marginLeft-Right7">

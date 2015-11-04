@@ -203,12 +203,7 @@
                         {{if index==0}}<td rowspan="{{shopArrangeList.shopArrangePolicy.length}}">{{arrange.shop.name}}</td>{{/if}}
                         <td>{{arrange.shopPolicy.name}}</td>
                         <td><input policyId="{{if arrange.shopPolicy != null}}{{arrange.shopPolicy.id}}{{/if}}" name="consumeMoney" style="width:90px;" type="text" value="{{arrange.consumeMoney}}" old="{{arrange.consumeMoney}}" maxlength="11" /></td>
-                        <td>{{if arrange.billImage != null &&　arrange.billImage != ""}}
-                                <a href="javascript:void(0);" url="{{arrange.billImage}}" class="btn-view">查看</a>
-                            {{else}}
-                                <span style="color:#bbb;">查看</span>
-                            {{/if}}
-                        </td>
+                        <td><a href="javascript:void(0);" url="{{arrange.billImage}}" class="btn-view">查看</a></td>
                         {{if index == 0 }}<td rowspan="{{shopArrangeList.shopArrangePolicy.length}}"><span class="sumMoney{{arrange.whichDay}}_{{arrange.shopId}}"></span></td>{{/if}}
                         <td><input name="travelAgencyRate" style="width:90px;" type="text" value="{{arrange.travelAgencyRate*100}}" old="{{arrange.travelAgencyRate}}" maxlength="5"/></td>
                         <td><span>{{arrange.travelAgencyRateMoney}}</span><input type="hidden" name="travelAgencyRateMoney" value="{{arrange.travelAgencyRateMoney}}" /></td>
@@ -282,12 +277,7 @@
                                 <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" />
                                 </td>
                             <td>{{arrange.realGetMoney}}</td>
-                            <td>{{if arrange.billImage != null &&　arrange.billImage != ""}}
-                                    <a href="javascript:void(0);" url="{{arrange.billImage}}" class="btn-view">查看</a>
-                                {{else}}
-                                    <span style="color:#bbb;">查看</span>
-                                {{/if}}
-                            </td>
+                            <td><a href="javascript:void(0);" url="{{arrange.billImage}}" class="btn-view">查看</a></td>
                             <td>
                                 <input style="width:90px;" type="text" name="travelAgencyRate" value="{{arrange.travelAgencyRate*100 | parseInt}}" old="{{arrange.travelAgencyRate}}" maxlength="5"/></td>
                             <td>
@@ -347,12 +337,7 @@
                         <td><input style="width:90px;" type="text" name="price" value="{{otherInCome.price}}" old="{{otherInCome.price}}" maxlength="11"/></td>
                         <td><input style="width:90px;" type="text" name="count" value="{{otherInCome.count}}" old="{{otherInCome.count}}" maxlength="11"/></td>
                         <td><span class="needPayMoney">{{otherInCome.needPayMoney}}</span><input type="hidden" name="realneedPayMoney" value="{{otherInCome.needPayMoney}}" /></td>
-                        <td>{{if otherInCome.billImage != null &&　otherInCome.billImage != ""}}
-                                <a href="javascript:void(0);" url="{{otherInCome.billImage}}" class="btn-view">查看</a>
-                            {{else}}
-                                <span style="color:#bbb;">查看</span>
-                            {{/if}}
-                        </td>
+                        <td><a href="javascript:void(0);" url="{{otherInCome.billImage}}" class="btn-view">查看</a></td>
                         <td><input type="text" value="{{otherInCome.billRemark}}" name="billRemark"/></td>
                     </tr>
                     {{/if}}
@@ -394,12 +379,7 @@
                             <input style="width:90px;" type="text" name="realGuidePayMoney" value="{{busCompany.realGuidePayMoney}}" old="{{busCompany.realGuidePayMoney}}" maxlength="11"/>
                             <input type="hidden" name="payedMoney" value="{{busCompany.payedMoney}}" />
                             <input type="hidden" name="guidePayMoney" value="{{busCompany.guidePayMoney}}" /></td>
-                        <td>{{if busCompany.billImage != null &&　busCompany.billImage != ""}}
-                                <a href="javascript:void(0);" url="{{busCompany.billImage}}" class="btn-view">查看</a>
-                            {{else}}
-                                <span style="color:#bbb;">查看</span>
-                            {{/if}}
-                        </td>
+                        <td><a href="javascript:void(0);" url="{{busCompany.billImage}}" class="btn-view">查看</a></td>
                         <td><span class="difference"></span></td>
                         <td><input value="{{busCompany.billRemark}}" type="text" name="billRemark" /></td>
                     </tr>
@@ -438,8 +418,8 @@
                         {{if index == 0}}{{if arrange.isChoose != 1}}<td rowspan="{{arrangeList.restaurantArrangeList.length}}">{{if arrange.restaurant != null}}{{arrange.restaurant.name}}{{/if}}</td>{{else}}<td>
                             <select name="restaurant">
                                 {{each arrange.restaurantChooseArrangeList as restaurant index}}
-                                    <option style="width:150px;" value = "{{restaurant.id}}" 
-                                   {{if arrange.restaurant != null}}{{if arrange.restaurant.id == restaurant.id}}selected="selected"{{/if}}{{/if}}>{{restaurant.name}}</option>
+                                    <option style="width:150px;" value = "{{restaurant.restaurantId}}" 
+                                   {{if arrange.restaurant != null}}{{if arrange.restaurant.id == restaurant.restaurantId}}selected="selected"{{/if}}{{/if}}>{{restaurant.name}}</option>
                                 {{/each}}
                             </select>  
                         </td>{{/if}}{{/if}}  
@@ -453,12 +433,7 @@
                             <input style="width:90px;" type="text" name="realGuidePayMoney" value="{{arrange.realGuidePayMoney}}" old="{{arrange.realGuidePayMoney}}" maxlength="11"/>
                             <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" />
                             <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" /></td>
-                        <td>{{if arrange.billImage != null &&　arrange.billImage != ""}}
-                                <a href="javascript:void(0);" url="{{arrange.billImage}}" class="btn-view">查看</a>
-                            {{else}}
-                                <span style="color:#bbb;">查看</span>
-                            {{/if}}
-                        </td>
+                        <td><a href="javascript:void(0);" url="{{arrange.billImage}}" class="btn-view">查看</a></td>
                         <td><span class="difference"></span></td>
                         <td><input value="{{arrange.billRemark}}" name="billRemark" type="text" maxlength="1000" /></td>
                     </tr>
@@ -509,12 +484,7 @@
                             <input style="width:90px;" type="text" name="realGuidePayMoney" value="{{arrange.realGuidePayMoney}}" oid="{{arrange.realGuidePayMoney}}" maxlength="11"/>
                             <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" />
                             <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" /></td>
-                        <td>{{if arrange.billImage != null &&　arrange.billImage != ""}}
-                                <a href="javascript:void(0);" url="{{arrange.billImage}}" class="btn-view">查看</a>
-                            {{else}}
-                                <span style="color:#bbb;">查看</span>
-                            {{/if}}
-                        </td>
+                        <td><a href="javascript:void(0);" url="{{arrange.billImage}}" class="btn-view">查看</a></td>
                         <td><span class="difference"></span></td>
                         <td><input value="{{arrange.billRemark}}"  type="text" name="billRemark" maxlength="1000" /></td>
                     </tr>
@@ -565,12 +535,7 @@
                             <input style="width:90px;" type="text" name="realGuidePayMoney" value="{{arrange.realGuidePayMoney}}" old="{{arrange.realGuidePayMoney}}" maxlength="11"/>
                             <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" />
                             <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" /></td>
-                        <td>{{if arrange.billImage != null &&　arrange.billImage != ""}}
-                                <a href="javascript:void(0);" url="{{arrange.billImage}}" class="btn-view">查看</a>
-                            {{else}}
-                                <span style="color:#bbb;">查看</span>
-                            {{/if}}
-                        </td>
+                        <td><a href="javascript:void(0);" url="{{arrange.billImage}}" class="btn-view">查看</a></td>
                         <td><span class="difference"></span></td>
                         <td><input value="{{arrange.billRemark}}"  type="text" name="billRemark" maxlength="1000" /></td>
                     </tr>
@@ -624,12 +589,7 @@
                             <input style="width:90px;" type="text" name="realGuidePayMoney" value="{{arrange.realGuidePayMoney}}" old="{{arrange.realGuidePayMoney}}" maxlength="11"/>
                             <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" />
                             <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" /></td>
-                        <td>{{if arrange.billImage != null &&　arrange.billImage != ""}}
-                                <a href="javascript:void(0);" url="{{arrange.billImage}}" class="btn-view">查看</a>
-                            {{else}}
-                                <span style="color:#bbb;">查看</span>
-                            {{/if}}
-                        </td>
+                        <td><a href="javascript:void(0);" url="{{arrange.billImage}}" class="btn-view">查看</a></td>
                         <td><span class="difference"></span></td>
                         <td><input value="{{arrange.billRemark}}"  type="text" name="billRemark" maxlength="1000" /></td>
                     </tr>
@@ -685,12 +645,7 @@
                             <input type="text" name="realGuidePayMoney" value="{{arrange.realGuidePayMoney}}" old="{{arrange.realGuidePayMoney}}" maxlength="11"/>
                             <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" />
                             <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" /></td>
-                        <td>{{if arrange.billImage != null &&　arrange.billImage != ""}}
-                                <a href="javascript:void(0);" url="{{arrange.billImage}}" class="btn-view">查看</a>
-                            {{else}}
-                                <span style="color:#bbb;">查看</span>
-                            {{/if}}
-                        </td>
+                        <td><a href="javascript:void(0);" url="{{arrange.billImage}}" class="btn-view">查看</a></td>
                         <td><span class="difference"></span></td>
                         <td><input value="{{arrange.billRemark}}" name="billRemark" maxlength="1000" /></td>
                     </tr>

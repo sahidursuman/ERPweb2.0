@@ -116,10 +116,10 @@
                     <button data-entity-id="{{tripPlan.id}}" data-entity-userName="{{user.userName}}" data-entity-roleType="{{user.roleType}}" data-entity-financial-id="{{financialTripPlanId}}" class="btn btn-xs btn-primary btn-transfter btn-saveCount" style="margin-right: 20px;">
                         <i class="ace-icon fa fa-save"></i>保存信息
                     </button>
-                    <button data-entity-billStatus="{{tripPlan.billStatus}}" data-entity-userName="{{user.userName}}" data-entity-roleType="{{user.roleType}}" data-entity-id="{{tripPlan.id}}" data-entity-financial-id="{{financialTripPlanId}}" class="btn btn-xs btn-success btn-transfter btn-accountCheck" style="margin-right: 20px;">
+                    <button data-entity-billStatus="{{tripPlan.billStatus}}" data-entity-userName="{{user.userName}}" data-entity-roleType="{{user.roleType}}" data-entity-id="{{tripPlan.id}}" data-entity-financial-id="{{financialTripPlanId}}" class="btn btn-xs btn-success btn-transfter btn-accountCheck T-closebtn" style="margin-right: 20px;">
                         <i class="ace-icon fa fa-check-circle"></i>审核通过
                     </button>
-                     <button data-entity-billStatus="{{tripPlan.billStatus}}" data-entity-id="{{tripPlan.id}}" data-entity-financial-id="{{financialTripPlanId}}" class="btn btn-xs btn-danger btn-transfter btn-rebackGuide" style="margin-right: 20px;">
+                     <button data-entity-billStatus="{{tripPlan.billStatus}}" data-entity-id="{{tripPlan.id}}" data-entity-financial-id="{{financialTripPlanId}}" class="btn btn-xs btn-danger btn-transfter btn-rebackGuide T-closebtn" style="margin-right: 20px;">
                         <i class="ace-icon fa fa-mail-reply"></i>退回导游
                     </button>
                 </div>
@@ -128,10 +128,10 @@
                     <button data-entity-id="{{tripPlan.id}}" data-entity-userName="{{user.userName}}" data-entity-roleType="{{user.roleType}}" data-entity-financial-id="{{financialTripPlanId}}" class="btn btn-xs btn-primary btn-transfter btn-saveCount" style="margin-right: 20px;">
                         <i class="ace-icon fa fa-save"></i>保存信息
                     </button>
-                    <button data-entity-billStatus="{{tripPlan.billStatus}}" data-entity-userName="{{user.userName}}" data-entity-roleType="{{user.roleType}}" data-entity-id="{{tripPlan.id}}" data-entity-financial-id="{{financialTripPlanId}}" class="btn btn-xs btn-success btn-transfter btn-accountCheck" style="margin-right: 20px;">
+                    <button data-entity-billStatus="{{tripPlan.billStatus}}" data-entity-userName="{{user.userName}}" data-entity-roleType="{{user.roleType}}" data-entity-id="{{tripPlan.id}}" data-entity-financial-id="{{financialTripPlanId}}" class="btn btn-xs btn-success btn-transfter btn-accountCheck T-closebtn" style="margin-right: 20px;">
                         <i class="ace-icon fa fa-check-circle"></i>审核通过
                     </button>
-                    <button data-entity-billStatus="{{tripPlan.billStatus}}" data-entity-id="{{tripPlan.id}}" data-entity-financial-id="{{financialTripPlanId}}" class="btn btn-xs btn-danger btn-transfter btn-rebackOP" style="margin-right: 20px;">
+                    <button data-entity-billStatus="{{tripPlan.billStatus}}" data-entity-id="{{tripPlan.id}}" data-entity-financial-id="{{financialTripPlanId}}" class="btn btn-xs btn-danger btn-transfter btn-rebackOP T-closebtn" style="margin-right: 20px;">
                         <i class="ace-icon fa fa-mail-reply"></i>退回计调
                     </button>
                 </div>
@@ -355,7 +355,8 @@
                                 <span class="travelAgencyRebateMoney">{{arrange.travelAgencyRebateMoney}}</span>
                                 <input type="hidden" name="travelAgencyRebateMoney" value="{{arrange.travelAgencyRebateMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} /></td>
                             <td>
-                                <input style="width:90px;" type="text" name="guideRate" value="{{arrange.guideRate*100 | parseInt}}" old="{{arrange.guideRate}}" maxlength="5"/></td>
+                                <input style="width:90px;" type="text" name="guideRate" value="{{arrange.guideRate*100 | parseInt}}" old="{{arrange.guideRate}}" maxlength="5"/>
+                            </td>
                             <td>
                                 <span class="guideRebateMoney">{{arrange.guideRebateMoney}}</span>
                                 <input type="hidden" name="guideRebateMoney" value="{{arrange.guideRebateMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} /></td>
