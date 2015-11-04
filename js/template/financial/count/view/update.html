@@ -338,12 +338,12 @@
                             <td>{{if arrange.selfPayItem != null }}{{arrange.selfPayItem.name}}{{/if}}</td>
                             <td>{{arrange.marketPrice}}<input type="hidden" name="marketPrice" value="{{arrange.marketPrice}}"/></td>
                             <td>{{arrange.price}}<input type="hidden" name="price" value="{{arrange.price}}" /></td>
-                            <td><input style="width:90px;" type="text" name="realCount" value="{{arrange.realCount}}" old="{{arrange.realCount}}" maxlength="5"/><input type="hidden" name="memberCount" value="{{arrange.memberCount}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} /></td>
+                            <td><input style="width:90px;" type="text" name="realCount" {{if arrange.billUpdateTime != null}}value="{{arrange.realCount}}"{{else}}value="{{arrange.memberCount}}"{{/if}}old="{{arrange.realCount}}" maxlength="5"/><input type="hidden" name="memberCount" value="{{arrange.memberCount}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} /></td>
                             <td>{{arrange.reduceMoney}}<input type="hidden" name="reduceMoney" value="{{arrange.reduceMoney}}"/></td>
                             <td><span class="needPayMoney" >{{arrange.needPayMoney}}</span></td>
                             <td>{{arrange.payedMoney}}</td>
                             <td>
-                                <input style="width:90px;" type="text" name="realGuidePayMoney" value="{{arrange.realGuidePayMoney}}" old="{{arrange.realGuidePayMoney}}" maxlength="11" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} />
+                                <input style="width:90px;" type="text" name="realGuidePayMoney" {{if arrange.billUpdateTime!=null}}value="{{arrange.realGuidePayMoney}}"{{else}}value="{{arrange.guidePayMoney}}" {{/if}} old="{{arrange.realGuidePayMoney}}" maxlength="11" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} />
                                 <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} />
                                 <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} />
                                 </td>
@@ -465,7 +465,7 @@
                         <td><span class="BusneedPayMoney">{{busCompany.needPayMoney}}</span></td>
                         <td>{{busCompany.payedMoney}}</td>
                         <td>
-                            <input style="width:90px;" type="text" name="realGuidePayMoney" value="{{busCompany.realGuidePayMoney}}" old="{{busCompany.realGuidePayMoney}}" maxlength="11" {{if busCompany.isConfirmAccount == 1}} readOnly="readOnly" {{/if}}/>
+                            <input style="width:90px;" type="text" name="realGuidePayMoney" {{if busCompany.billUpdateTime != null}}value="{{busCompany.realGuidePayMoney}}"{{else}}value="{{guidePayMoney}}" {{/if}} old="{{busCompany.realGuidePayMoney}}" maxlength="11" {{if busCompany.isConfirmAccount == 1}} readOnly="readOnly" {{/if}}/>
                             <input type="hidden" name="payedMoney" value="{{busCompany.payedMoney}}" {{if busCompany.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
                             <input type="hidden" name="guidePayMoney" value="{{busCompany.guidePayMoney}}" /></td>
                         <td><a href="javascript:void(0);" url="{{busCompany.billImage}}" class="btn-view">查看</a></td>
@@ -520,13 +520,14 @@
                         {{if index == 0}}<td rowspan="{{arrangeList.restaurantArrangeList.length}}">{{if arrange.restaurant != null}}{{arrange.restaurant.name}}{{/if}}</td>{{/if}}
                         <td>{{arrange.type}}</td> 
                         <td>{{arrange.price}}<input type="hidden" name="price" value="{{arrange.price}}" /></td>
-                        <td><input style="width:90px;" type="text" name="realCount" value="{{arrange.realCount}}" old="{{arrange.realCount}}" maxlength="5"
+                        <td><input style="width:90px;" type="text" name="realCount" {{if arrange.billUpdateTime != null}}value="{{arrange.realCount}}" 
+                        {{else}}value="{{arrange.memberCount}}"{{/if}} old="{{arrange.realCount}}" maxlength="5"
                         {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
                         <td>{{arrange.reduceMoney}}<input type="hidden" name="reduceMoney" value="{{arrange.reduceMoney}}" /></td>
                         <td><span class="restneedPayMoney">{{arrange.needPayMoney}}</span></td>
                         <td>{{arrange.payedMoney}}</td>
                         <td>
-                            <input style="width:90px;" type="text" name="realGuidePayMoney" value="{{arrange.realGuidePayMoney}}" old="{{arrange.realGuidePayMoney}}" maxlength="11" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
+                            <input style="width:90px;" type="text" name="realGuidePayMoney" {{if arrange.billUpdateTime != null}}value="{{arrange.realGuidePayMoney}}"{{else}}value="{{arrange.guidePayMoney}}" {{/if}} old="{{arrange.realGuidePayMoney}}" maxlength="11" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
                             <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" />
                             <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" /></td>
                         <td><a href="javascript:void(0);" url="{{arrange.billImage}}" class="btn-view">查看</a></td>
@@ -584,13 +585,13 @@
                         {{if index == 0}}<td rowspan="{{arrangeList.hotelArrangeList.length}}">{{if arrange.hotel != null}}{{arrange.hotel.name}}{{/if}}</td>{{/if}}
                         <td>{{if arrange.hotelRoom != null}}{{arrange.hotelRoom.type}}{{/if}}</td>
                         <td>{{arrange.price}}<input type="hidden" name="price" value="{{arrange.price}}" /></td>
-                        <td><input style="width:90px;" type="text" name="realCount" {{if arrange.billUpdateTime !=null}}value="{{arrange.realCount}}" {{else}}value="arrange.memberCount"{{/if}}oid="{{arrange.realCount}}" maxlength="5" 
+                        <td><input style="width:90px;" type="text" name="realCount" {{if arrange.billUpdateTime !=null}}value="{{arrange.realCount}}" {{else}}value="{{arrange.memberCount}}"{{/if}}oid="{{arrange.realCount}}" maxlength="5" 
                         {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
                         <td>{{arrange.reduceMoney}}<input type="hidden" name="reduceMoney" value="{{arrange.reduceMoney}}" /></td>
                         <td><span class="hotelneedPayMoney">{{arrange.needPayMoney}}</span></td>
                         <td>{{arrange.payedMoney}}</td>
                         <td>
-                            <input style="width:90px;" type="text" name="realGuidePayMoney" value="{{arrange.realGuidePayMoney}}" oid="{{arrange.realGuidePayMoney}}" maxlength="11" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
+                            <input style="width:90px;" type="text" name="realGuidePayMoney" {{if arrange.billUpdateTime != null }} value="{{arrange.realGuidePayMoney}}"{{else}}value="{{arrange.guidePayMoney}}" {{/if}} oid="{{arrange.realGuidePayMoney}}" maxlength="11" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
                             <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" />
                             <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" /></td>
                         <td><a href="javascript:void(0);" url="{{arrange.billImage}}" class="btn-view">查看</a></td>
@@ -648,13 +649,13 @@
                         {{if index == 0}}<td rowspan="{{arrangeList.scenicArrangeList.length}}">{{if arrange.scenic != null}}{{arrange.scenic.name}}{{/if}}</td>{{/if}}
                         <td>{{if arrange.scenicItem != null}}{{arrange.scenicItem.name}}{{/if}}</td>
                         <td>{{arrange.price}}<input type="hidden" name="price" value="{{arrange.price}}" /></td>
-                        <td><input style="width:90px;" type="text" name="realCount" {{if arrange.billUpdateTime !=null}}value="{{arrange.realCount}}" {{else}}value="arrange.memberCount"{{/if}} old="{{arrange.realCount}}" maxlength="5"
+                        <td><input style="width:90px;" type="text" name="realCount" {{if arrange.billUpdateTime !=null}}value="{{arrange.realCount}}" {{else}}value="{{arrange.memberCount}}"{{/if}} old="{{arrange.realCount}}" maxlength="5"
                         {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
                         <td>{{arrange.reduceMoney}}<input type="hidden" name="reduceMoney" value="{{arrange.reduceMoney}}" /></td>
                         <td><span class="scenicneedPayMoney">{{arrange.needPayMoney}}</span></td>
                         <td>{{arrange.payedMoney}}</td>
                         <td>
-                            <input style="width:90px;" type="text" name="realGuidePayMoney" value="{{arrange.realGuidePayMoney}}" old="{{arrange.realGuidePayMoney}}" maxlength="11" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
+                            <input style="width:90px;" type="text" name="realGuidePayMoney" {{if arrange.billUpdateTime != null}} value="{{arrange.realGuidePayMoney}}"{{else}}value="{{arrange.guidePayMoney}}" {{/if}} old="{{arrange.realGuidePayMoney}}" maxlength="11" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
                             <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" />
                             <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" /></td>
                         <td><a href="javascript:void(0);" url="{{arrange.billImage}}" class="btn-view">查看</a></td>
@@ -715,13 +716,13 @@
                     {{if index == 0}}<td rowspan="{{ticketArrange.ticketArrangeList.length}}">{{arrange.arriveCity}}</td>{{/if}}
                     <td>{{arrange.seatLevel}}</td>
                         <td><span>{{arrange.price}}</span><input type="hidden" name="price" value="{{arrange.price}}" /></td>
-                        <td><input style="width:90px;" name="realCount" type="text" {{if arrange.billUpdateTime !=null}}value="{{arrange.realCount}}" {{else}}value="arrange.memberCount"{{/if}} old="{{arrange.realCount}}" maxlength="5" 
+                        <td><input style="width:90px;" name="realCount" type="text" {{if arrange.billUpdateTime !=null}}value="{{arrange.realCount}}" {{else}}value="{{arrange.memberCount}}"{{/if}} old="{{arrange.realCount}}" maxlength="5" 
                         {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
                         <td>{{arrange.reduceMoney}}<input type="hidden" name="reduceMoney" value="{{arrange.reduceMoney}}" /></td>
                         <td><span class="ticketneedPayMoney">{{arrange.needPayMoney}}</span></td>
                         <td>{{arrange.payedMoney}}</td>
                         <td>
-                            <input style="width:90px;" type="text" name="realGuidePayMoney" value="{{arrange.realGuidePayMoney}}" old="{{arrange.realGuidePayMoney}}" maxlength="11" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
+                            <input style="width:90px;" type="text" name="realGuidePayMoney" {{if arrange.billUpdateTime != null}}value="{{arrange.realGuidePayMoney}}" {{else}}value="{{arrange.guidePayMoney}}"{{/if}} old="{{arrange.realGuidePayMoney}}" maxlength="11" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
                             <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" />
                             <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" /></td>
                         <td><a href="javascript:void(0);" url="{{arrange.billImage}}" class="btn-view">查看</a></td>
@@ -773,13 +774,13 @@
                         <td>第{{arrange.whichDay}}天</td>
                         <td>{{arrange.name}}</td>
                         <td><input type="text" name="realPrice" value="{{arrange.price}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
-                        <td><input style="width:90px;" type="text" name="realCount" value="{{arrange.realCount}}" old="{{arrange.realCount}}" maxlength="5" 
+                        <td><input style="width:90px;" type="text" name="realCount" {{if arrange.billUpdateTime}}value="{{arrange.realCount}}"{{else}}value="{{arrange.memberCount}}" {{/if}} old="{{arrange.realCount}}" old="{{arrange.realCount}}" maxlength="5" 
                         {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
                         <td><input type="text" name="reduceMoney" value="{{arrange.reduceMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
                         <td><span class="needPayMoney">{{arrange.needPayMoney}}</span></td>
                         <td>{{arrange.payedMoney}}</td>
                         <td>
-                            <input style="width:90px;" type="text" name="realGuidePayMoney" value="{{arrange.realGuidePayMoney}}" old="{{arrange.realGuidePayMoney}}" maxlength="11" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
+                            <input style="width:90px;" type="text" name="realGuidePayMoney" {{if arrange.billUpdateTime != null}}value="{{arrange.realGuidePayMoney}}" {{else}}value="{{arrange.guidePayMoney}}"{{/if}} old="{{arrange.realGuidePayMoney}}" maxlength="11" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
                             <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" />
                             <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" /></td>
                         <td><a href="javascript:void(0);" url="{{arrange.billImage}}" class="btn-view">查看</a></td>
@@ -826,7 +827,7 @@
                      </tr>
                     </tbody>
                 </table>
-
+  
                 {{if tripPlan.billStatus > -1}}
                 <div style="width:60%;"><div> 
                     <label style="margin:5px 0px 0px 0px;">财务审核批注：</label>
