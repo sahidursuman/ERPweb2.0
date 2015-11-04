@@ -260,7 +260,7 @@ define(function(require, exports) {
 												var dataD = data;
 												if(result){
 													showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-														tripPlan.listTripPlan(0,"","","","","","");
+														tripPlan.listTripPlan(0,"","","","","","","","","","");
 													});
 												}
 											}
@@ -1419,7 +1419,7 @@ define(function(require, exports) {
 									var result = showDialog(data);
 									if(result){
 										showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-											tripPlan.listTripPlan(0,"","","","","","");
+											tripPlan.listTripPlan(0,"","","","","","","","","","");
 										})
 									}
 								}
@@ -1869,7 +1869,7 @@ define(function(require, exports) {
 								tripPlan.edited["update"] = "";
 								if(isClose == 1){
 									closeTab(menuKey+"-update");
-									tripPlan.listTripPlan(0,"","","","","","");
+									tripPlan.listTripPlan(0,"","","","","","","","","","");
 								}
 							});
 						}

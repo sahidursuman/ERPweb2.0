@@ -13,6 +13,7 @@ define(function(require, exports) {
 		var customerVolObj={
 			searchData:false,
 			$searchArea:false,
+			first:true,
 			$tab:false,
 			$searchParam:{
 				startTime:"",
@@ -68,9 +69,12 @@ define(function(require, exports) {
 		       customerVolObj.$tab=$("#" + tabId);//最大区域模块
 		       customerVolObj.$searchArea=customerVolObj.$tab.find('.T-search-area');//搜索模块区域
 
-		       //初始化客户数据Autocomplate
-		       customerVolObj.autocompleteDate.getCusList=data.resultList;
-
+		       //初始化客户数据Autocomplate缓存一次
+		       if (customerVolObj.first) {
+		       	 customerVolObj.autocompleteDate.getCusList=data.resultList;
+		       	 customerVolObj.first=false;
+		       };
+		      
 		       //初始化页面控件
 		       customerVolObj.datepicker(customerVolObj.$tab);
 

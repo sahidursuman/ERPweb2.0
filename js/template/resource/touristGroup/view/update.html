@@ -55,7 +55,7 @@
 							<div class="input-group">
 								<input class="choosePartnerManager col-sm-12 bind-change" value="{{if touristGroupDetail.partnerAgencyContact != null}}{{touristGroupDetail.partnerAgencyContact.contactRealname}} -[{{touristGroupDetail.partnerAgencyContact.contactMobileNumber}}]{{/if}}" name="partnerAgencyNameList" type="text" />
 								<input type="hidden" name="partnerAgencyContactId" value="{{if touristGroupDetail.partnerAgencyContact != null}}{{touristGroupDetail.partnerAgencyContact.id}}{{/if}}" />
-								<span class="input-group-addon addPartnerManager" style="cursor:pointer;left: -50px" title="为客户来源添加联系人">
+								<span class="input-group-addon addPartnerManager" style="cursor:pointer;" title="为客户来源添加联系人">
 									<i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
 								</span>
 							</div>
@@ -83,7 +83,7 @@
 						</div>
 						<label class="col-sm-1 control-label no-padding-right">现收:</label>
 						<div class="col-sm-2">
-							<input value="{{touristGroupDetail.currentNeedPayMoney}}" type="text" name="currentNeedPayMoney" class="col-sm-12" />
+							<input value="{{touristGroupDetail.currentNeedPayMoney}}" {{if touristGroupDetail.isReceived == 1}}disabled="disabled"{{/if}} type="text" name="currentNeedPayMoney" class="col-sm-12" />
 						</div>
 					</div>
 					<div class="form-group guideInterval">
