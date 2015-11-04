@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":191,"md5":"8c4a3276ec0936544480e77537577280"}*/
+/*TMODJS:{"debug":true,"version":189,"md5":"8c4a3276ec0936544480e77537577280"}*/
 define(function(require) {
     return require("../../../template")("financial/insure/view/list", function($data, $filename) {
         try {
