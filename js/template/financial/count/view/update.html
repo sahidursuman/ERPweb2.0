@@ -98,18 +98,8 @@
     <input type="hidden" value="{{WEB_IMG_URL_SMALL}}" name="WEB_IMG_URL_SMALL" />
 
     <div class="row" style="margin-bottom:15px;">
-        <!-- 报账 -->
-        {{if tripPlan.billStatus == '-1'}}
-            <div style="float:left;">  
-                <button data-entity-id="{{tripPlan.id}}" data-entity-userName="{{user.userName}}" data-entity-roleType="{{user.roleType}}" data-entity-financial-id="{{financialTripPlanId}}" class="btn btn-xs btn-primary btn-transfter btn-saveCount" style="margin-right: 20px;">
-                    <i class="ace-icon fa fa-save"></i>保存信息
-                </button>
-                <button data-entity-id="{{tripPlan.id}}" data-entity-userName="{{user.userName}}" data-entity-roleType="{{user.roleType}}" data-entity-financial-id="{{financialTripPlanId}}" class="btn btn-xs btn-success btn-transfter btn-guide-account" style="margin-right: 20px;">
-                    <i class="ace-icon fa fa-check-circle"></i>报账完成
-                </button>
-            </div>
+            
         <!-- 审核 -->
-        {{else}}
             <!-- 计调可审 -->
             {{if isOp && tripPlan.billStatus == 0}}
                 <div style="float:left;">
@@ -123,7 +113,8 @@
                         <i class="ace-icon fa fa-mail-reply"></i>退回导游
                     </button>
                 </div>
-            {{else if isFinance && tripPlan.billStatus == 1 }}
+                {{/if}}
+               {{if isFinance && tripPlan.billStatus == 1 }}
                 <div style="float:left;">
                     <button data-entity-id="{{tripPlan.id}}" data-entity-userName="{{user.userName}}" data-entity-roleType="{{user.roleType}}" data-entity-financial-id="{{financialTripPlanId}}" class="btn btn-xs btn-primary btn-transfter btn-saveCount" style="margin-right: 20px;">
                         <i class="ace-icon fa fa-save"></i>保存信息
@@ -135,14 +126,14 @@
                         <i class="ace-icon fa fa-mail-reply"></i>退回计调
                     </button>
                 </div>
-            {{else if isFinance && tripPlan.billStatus == 2}}
-                <div style="float:left;">
+                {{/if}}
+                {{if isFinance && tripPlan.billStatus == 2}}
+                <div style="float:left;"> 
                     <button data-entity-id="{{tripPlan.id}}" data-entity-userName="{{user.userName}}" data-entity-roleType="{{user.roleType}}" data-entity-financial-id="{{financialTripPlanId}}" class="btn btn-xs btn-primary btn-transfter btn-saveCount" style="margin-right: 20px;">
                         <i class="ace-icon fa fa-save"></i>保存信息
                     </button>
                 </div>
-            {{/if}}           
-        {{/if}}
+               {{/if}}
         <div style="margin-top:5px;float:left;width:90px;text-align:center;">
             <a href="javascript:void(0);" class="btn-financialLog">操作记录</a>
         </div>
