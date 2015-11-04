@@ -122,7 +122,21 @@ define(function(require, exports) {
 					var result = showDialog(data);
 					if(result){
 						var html = listTemplate(data);
+
 						html = filterUnAuth(html);
+						//无权限时移除“并团操作”列
+						function test(html){
+							var $obj = $(html);
+							if(!isAuth("1130004")){
+								$obj.find(".T-arrangeList .touristGroupMergeCheckBox").each(function(i){
+									$(this).closest('td').remove();
+								});
+							}
+							//移除表头
+							$obj.find(".T-arrangeList").closest('table').find('th').eq(0).remove();
+							return html;
+						}
+						html = test(html);
 						$("#"+tabId+" .arrangeTouristMain .arrangeTouristList").html(html);
 						$("#"+tabId+" .arrangeTouristMain .date-picker").datepicker({
 							autoclose: true,
