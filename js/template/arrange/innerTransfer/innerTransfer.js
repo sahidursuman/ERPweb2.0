@@ -165,6 +165,7 @@ define(function(require, exports) {
 		});
 	};
 	innerTransfer.innerList = function(divId,type,page){
+		innerTransfer.$searchParam.pageNo=page;
 		$.ajax({
 			url: innerTransfer.url("findPager","view"),
 			type: 'POST',
@@ -224,8 +225,8 @@ define(function(require, exports) {
 
 					// 绑定翻页组件
 					laypage({
-					    cont: $('#' + tabId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
-					    pageNo: data.searchParam.totalPage, //总页数
+					    cont: $('#' + divId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+					    pages: data.searchParam.totalPage, //总页数
 					    curr: (page + 1),
 					    jump: function(obj, first) {
 					    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
