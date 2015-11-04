@@ -16,8 +16,11 @@ define(function(require, exports) {
 			type : "",
 			touristGroupId : "",
 			lineProductId : "",
+			lineProductName :"",
 			businessGroupId : "",
+			businessGroupName : "",
 			creator : "",
+			creatorName :"",
 			startTime : "",
 			endTime : "",
 			status : "",
@@ -104,8 +107,11 @@ define(function(require, exports) {
 			pageNo : 0,
 			type : type,
 			lineProductId : getValue("lineProductId"),
+			lineProductName :getValue("lineProductName"),
 			businessGroupId : getValue("businessGroupId"),
+			businessGroupName : getValue("businessGroupName"),
 			creator : getValue("creatorId"),
+			creatorName:getValue("creatorName"),
 			startTime : getValue("startTime"),
 			endTime : getValue("endTime"),
 			status : $("#"+divId).find(".btn-status button").attr("data-value")
@@ -628,7 +634,7 @@ define(function(require, exports) {
 			minLength:0,
 			change :function(event, ui){
 				if(ui.item == null){
-					$(this).val("");
+					//$(this).val("");
 					var parents = $(this).parent();
 					parents.find("input[name=lineProductId]").val("");
 				}
@@ -660,7 +666,7 @@ define(function(require, exports) {
 			minLength:0,
 			change :function(event, ui){
 				if(ui.item == null){
-					$(this).val("");
+					//$(this).val("");
 					var parents = $(this).parent();
 					parents.find("input[name=businessGroupId]").val("");
 				}
@@ -698,7 +704,7 @@ define(function(require, exports) {
 			minLength:0,
 			change :function(event, ui){
 				if(ui.item == null){
-					$(this).val("");
+					//$(this).val("");
 					var parents = $(this).parent();
 					parents.find("input[name=creatorId]").val("");
 				}
