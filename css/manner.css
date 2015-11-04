@@ -643,7 +643,15 @@ input,select{
     text-align: right !important;
     padding:7px 6px 7px 0px !important;
 }
-
+.T-guideChoose{
+    margin-left: -117px;
+}
+.T-busChoose{
+    margin-left: -117px;
+}
+.T-creatorChoose{
+    margin-left: -117px;
+}
 .departButton {
     height: 24px;
     line-height: 10px;
@@ -795,6 +803,8 @@ padding-left:0;width: 360px;left: -35px;
 
 @media screen and (max-width:1500px){
 
+
+/*中转分段 list*/
 .arrangeTouristInput input{
           width: 185px;
 }
@@ -813,17 +823,56 @@ padding-left:0;width: 360px;left: -35px;
 .creatorUserChoose{
     width: 110px;
 }
+.innerTr-export{
+    margin-left: 20px;
+}
+
+/*内转管理*/
+.T-businessGroupChoose{
+    width: 110px;
+}
 
 .subsectionWords{
     margin-left: 35px;
 }
 
+/*发团计划*/
+.triPlanInput input{
+          width: 185px;
+}
+.triplanName{
+    width: 115px !important;
+}
+.planSearchBtn{
+    position: absolute;
+}
+.triplanStartTime{
+  width: 100px;  
+}
+.T-guideChoose{
+    margin-left: -60px;
+}
+.T-busChoose{
+    margin-left: -60px;
+}
+.T-creatorChoose{
+    margin-left: -60px;
+}
+.triplan-searchBtn{
+    margin-left: 20px !important;
+}
+.newSearchBtn{
+    margin-left: -110px !important;
+}
 }
 
 /*媒体查询 1366*/
 @media screen and (max-width:1366px){
 
  .arrangeTouristInput input{
+          width: 175px;
+}
+ .triPlanInput input{
           width: 175px;
 }
 .addResourceBtnTripPlan{
