@@ -347,10 +347,10 @@ define(function(require, exports) {
 		viewOptionalRestaurant :function($objInput){
 			$objInput.each(function(){
 				var $this = $(this),$parents = $this.closest('tr'),/*$value = $parents.find('[name=optional]').val(),*/$title = [],$value = $this.data("propover");
-				if (!!$value) {
-					if (!!$value && typeof $value === "string") {
-						$value = JSON.parse($value);
-					}
+				if (!!$value && typeof $value === "string") {
+					$value = JSON.parse($value);
+				}
+				if ($value.length > 0) {
 					var html = '<table class="table table-striped table-hover"><thead><tr><th class="th-border">餐厅名称</th><th class="th-border">联系人</th><th class="th-border">联系电话</th></tr><tbody>';
 					for (var i = 0; i < $value.length; i++) {
 						html += '<tr><td>'+$value[i].name+'</td><td>'+$value[i].managerName+'</td><td>'+$value[i].mobileNumber+'</td></tr>'
@@ -1842,15 +1842,17 @@ define(function(require, exports) {
 				}
 			}
 			//餐安排
-			var restaurant = $("#tripPlan_addPlan_restaurant tbody tr"),
-				isChoose = "0",restaurantChooseArrangeListJson;
+			var restaurant = $("#tripPlan_addPlan_restaurant tbody tr");
 			if(restaurant.length > 0){
 				for(var i=0; i<restaurant.length; i++){
+					var isChoose = "0",restaurantChooseArrangeListJson;
 					if (!!restaurant.eq(i).find('[name=restaurantName]').data('propover')) {
-						isChoose = "1";
 						restaurantChooseArrangeListJson = restaurant.eq(i).find('[name=restaurantName]').data('propover')
 						if(typeof restaurant.eq(i).find('[name=restaurantName]').data('propover') === 'string'){
 							restaurantChooseArrangeListJson = JSON.parse(restaurant.eq(i).find('[name=restaurantName]').data('propover'))
+						}
+						if (restaurantChooseArrangeListJson.length > 0) {
+							isChoose = "1";
 						}
 					}
 					if(tripPlan.getVal(restaurant.eq(i), "restaurantId")){

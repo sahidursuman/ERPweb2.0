@@ -1884,7 +1884,7 @@ define(function(require, exports) {
 									        				transferTr.each(function(i){
 									        					var id = transferTr.eq(i).attr("data-entity-id");
 									        					if(id == data.id){
-									        						transferTr.eq(i).find("td:last-child").html('<i class ="ace-icon fa fa-check"></i>已填写');
+									        						transferTr.eq(i).find("td.transferFeeStatus").html('<i class ="ace-icon fa fa-check green"></i>已填写');
 									        						transferTr.eq(i).find("[name=label_payed]").html(data.transPayedMoney);
 									        						transferTr.eq(i).find("[name=label_needPay]").html(data.transNeedPayAllMoney);
 									        					}
@@ -2068,7 +2068,7 @@ define(function(require, exports) {
 									        				transferTr.each(function(i){
 									        					var id = transferTr.eq(i).attr("data-entity-id");
 									        					if(id == data.touristGroupId){
-									        						transferTr.eq(i).find("td.transferFeeStatus").html('<i class ="ace-icon fa fa-check"></i>已填写');
+									        						transferTr.eq(i).find("td.transferFeeStatus").html('<i class ="ace-icon fa fa-check green"></i>已填写');
 									        						transferTr.eq(i).find("[name=label_payed]").html(data.transPayedMoney);
 									        						transferTr.eq(i).find("[name=label_needPay]").html(data.transNeedPayAllMoney);
 									        					}
