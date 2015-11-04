@@ -112,7 +112,7 @@ define(function(require, exports) {
     //查看游客小组、收客团款明细
     innerProfit.viewTouristGroup = function(id){
         $.ajax({
-            url:innerProfit.url("touristGroup","viewTouristGroupDetails"),
+            url:innerProfit.url("touristGroup","findTouristGroupDetailAtInnerProfit"),
             type:"POST",
             data:{
                 id : id + ""

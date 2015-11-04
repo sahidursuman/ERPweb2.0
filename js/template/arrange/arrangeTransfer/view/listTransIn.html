@@ -44,7 +44,7 @@
 				 	{{/if}}
 				{{/if}}
 			</td>
-
+  
 
 			<td>
 			   {{result.fromNumber}}
@@ -63,7 +63,7 @@
 						<label class="padding-right20">|</label>
 						确认
 					</a>
-					<a data-entity-id="{{result.id}}" class="cursor {{if result.status!=2}}btn-transferIn-delete{{/if}} R-right" style="{{if result.status==2}} color:#bbb; {{/if}}"  data-right="1180008">
+					<a data-entity-id="{{result.id}}" class="cursor {{if result.status!=1 || result.status!=2}}btn-transferIn-delete{{/if}} R-right" style="{{if result.status==1 || result.status==2}} color:#bbb; {{/if}}"  data-right="1180008">
 						<label class="padding-right20">|</label>
 						拒绝
 					</a>

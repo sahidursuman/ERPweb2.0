@@ -119,18 +119,18 @@
                         {{/if}}
                     </td>
                     <td style="vertical-align:middle" {{if financialTripPlan.tripPlan.tripPlanDetails.length > 1}}rowspan="{{financialTripPlan.tripPlan.tripPlanDetails.length}}"{{/if}}>
-                        <a data-entity-billStatus="{{financialTripPlan.tripPlan.billStatus}}" data-entity-id="{{financialTripPlan.id}}" class="cursor btn-count-update R-right R-left" data-left="1190003" data-right="1190002">
-                               审核
+                       <a data-entity-billStatus="{{financialTripPlan.tripPlan.billStatus}}" data-entity-id="{{financialTripPlan.id}}" class="cursor btn-count-update R-right R-left" data-left="1190003" data-right="1190002">
+                              审核
+                       </a>
+                       <a data-entity-id="{{financialTripPlan.id}}" class=" btn-count-examine cursor R-right" data-right="1190001">
+                       <label class="padding-right20"> |</label>
+                              明细
                         </a>
-                        <a data-entity-id="{{financialTripPlan.id}}" class=" btn-count-examine cursor R-right" data-right="1190001">
+                        <a data-entity-billStatus="{{financialTripPlan.tripPlan.billStatus}}" data-entity-id="{{financialTripPlan.id}}" class="cursor R-right btn-guide-account" data-right="1190004">
                         <label class="padding-right20"> |</label>
-                               明细
-                         </a>
-                         <a data-entity-billStatus="{{financialTripPlan.tripPlan.billStatus}}" data-entity-id="{{financialTripPlan.id}}" class="cursor R-right btn-guide-account" data-right="1190004">
-                         <label class="padding-right20"> |</label>
-                               报账
-                        </a>
-                    </td>
+                              报账
+                       </a>
+                   </td> 
                     </tr>
                     {{if financialTripPlan.tripPlan.tripPlanDetails.length > 1}}
                     {{each financialTripPlan.tripPlan.tripPlanDetails as tripPlanDetails index}}
