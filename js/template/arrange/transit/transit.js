@@ -1255,60 +1255,7 @@ define(function(require, exports) {
 							}
 						}
 					});
-					if(this.chooseHotelRoom){
-						parents.find("[name=hotelRoomType]").autocomplete( "destroy");
-					}
-
-					this.chooseHotelRoom = parents.find("[name=hotelRoomType]").autocomplete({
-						minLength:0,
-						change:function(event,ui){
-							if(ui.item == null){
-								$(this).val("");
-								var objParent = $(this).closest('tr');
-								objParent.find("input[name=hotelRoomTypeId]").val("");
-								objParent.find("input[name=hotelPrice]").val("");
-							}
-						},
-						select:function(event,ui){
-							var $thisRoom =$(this).closest('tr');
-							$thisRoom.find("input[name=hotelRoomTypeId]").val(ui.item.id).trigger('change');
-							$.ajax({
-								url:""+APP_ROOT+"back/hotel.do?method=findRoomDetailById&token="+$.cookie("token")+"&menuKey=resource_hotel&operation=view",
-								dataType: "json",
-								data:"id=" + ui.item.id,
-								success: function(data) {
-									var hotelRoom = JSON.parse(data.hotelRoom);
-									$thisRoom.find("input[name=hotelPrice]").val(hotelRoom.contractPrice);
-								}
-							})
-						}
-					}).off("click").on("click", function(){
-						var _this = this;
-						$.ajax({
-							url:""+APP_ROOT+"back/hotel.do?method=findTypeByHotelId&token="+$.cookie("token")+"&menuKey=resource_hotel&operation=view",
-							dataType: "json",
-							data:"id=" + ui.item.id,
-							success: function(data) {
-								layer.close(globalLoadingLayer);
-								var result = showDialog(data);
-								if(result){
-									var hotelRommList = JSON.parse(data.hotelRommList);
-									if(hotelRommList && hotelRommList.length > 0){
-										for(var i=0; i < hotelRommList.length; i++){
-											hotelRommList[i].value = hotelRommList[i].type;
-										}
-										$(_this).autocomplete('option','source', hotelRommList);
-										$(_this).autocomplete('search', '');
-									}else{
-										layer.tips('没有房型可供选择，请选择其他星级', objhotelRoom, {
-											tips: [1, '#3595CC'],
-											time: 2000
-										});
-									}
-								}
-							}
-						});
-					});
+					
 				}
 			}).off("click").on("click", function(){
 				var hotelStarValue = $hotelStar.val(),
@@ -1339,6 +1286,64 @@ define(function(require, exports) {
 					}
 				});
 			});
+			$("#"+tab+" .arrangeTouristMain").find("[name=hotelRoomType]").autocomplete({
+					minLength:0,
+					change:function(event,ui){
+						if(ui.item == null){
+							$(this).val("");
+							var objParent = $(this).closest('tr');
+							objParent.find("input[name=hotelRoomTypeId]").val("");
+							objParent.find("input[name=hotelPrice]").val("");
+						}
+					},
+					select:function(event,ui){
+						var $thisRoom =$(this).closest('tr');
+						$thisRoom.find("input[name=hotelRoomTypeId]").val(ui.item.id).trigger('change');
+						$.ajax({
+							url:""+APP_ROOT+"back/hotel.do?method=findRoomDetailById&token="+$.cookie("token")+"&menuKey=resource_hotel&operation=view",
+							dataType: "json",
+							data:"id=" + ui.item.id,
+							success: function(data) {
+								var hotelRoom = JSON.parse(data.hotelRoom);
+								$thisRoom.find("input[name=hotelPrice]").val(hotelRoom.contractPrice);
+							}
+						})
+					}
+				}).off("click").on("click", function(){
+					var _this = $(this), $parents = _this.closest('tr'),
+					id = $parents.find('input[name=hotelId]').val();
+					if (!!id) {
+						$.ajax({
+							url:""+APP_ROOT+"back/hotel.do?method=findTypeByHotelId&token="+$.cookie("token")+"&menuKey=resource_hotel&operation=view",
+							dataType: "json",
+							data:"id=" + id,
+							success: function(data) {
+								layer.close(globalLoadingLayer);
+								var result = showDialog(data);
+								if(result){
+									var hotelRommList = JSON.parse(data.hotelRommList);
+									if(hotelRommList && hotelRommList.length > 0){
+										for(var i=0; i < hotelRommList.length; i++){
+											hotelRommList[i].value = hotelRommList[i].type;
+										}
+										$(_this).autocomplete('option','source', hotelRommList);
+										$(_this).autocomplete('search', '');
+									}else{
+										layer.tips('没有房型可供选择', _this, {
+											tips: [1, '#3595CC'],
+											time: 2000
+										});
+									}
+								}
+							}
+						});
+					}else{
+						layer.tips('请选择酒店', _this, {
+							tips: [1, '#3595CC'],
+							time: 2000
+						});
+					}
+				});
 		},
 		bindTicketChoose : function(tab){
 			var ticketChoose = $("#"+tab+" .arrangeTouristMain .chooseTicket");
