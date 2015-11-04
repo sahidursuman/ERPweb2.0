@@ -53,7 +53,7 @@ define(function(require, exports) {
 					if(result){
 						//data.lineProductList = JSON.parse(data.lineProductList);
 						var html = listMainTemplate(data);
-						addTab(menuKey,"分团转客",html);
+						addTab(menuKey,"分并转团",html);
 						//缓存autocomplate数据
 						arrangeTourist.lineProListData=data.lineProductList;
 						arrangeTourist.getlineProductList($('#'+tabId));
