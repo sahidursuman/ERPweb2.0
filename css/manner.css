@@ -792,12 +792,38 @@ padding-left:0;width: 360px;left: -35px;
 
 @media screen and (max-width:1500px){
 
+.arrangeTouristInput input{
+          width: 185px;
+}
+.addResourceBtnTripPlan{
+        right: 8px;
+}
+.choosePartnerAgency{
+    width: 110px
+}
+.chooseLineProduct{
+    width: 110px;
+}
+.subsectionStartTime{
+    width: 100px;
+}
+.creatorUserChoose{
+    width: 110px;
+}
 
+.subsectionWords{
+    margin-left: 35px;
+}
 
 }
 
 /*媒体查询 1366*/
 @media screen and (max-width:1366px){
 
- 
+ .arrangeTouristInput input{
+          width: 175px;
+}
+.addResourceBtnTripPlan{
+        right: 0px;
+}
 }
