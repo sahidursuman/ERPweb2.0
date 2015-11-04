@@ -73,7 +73,7 @@
 									<td>
 										{{each submenu.menuFunctionShipList as func}}
 											<div class="pull-left" style="width:100px;margin-left:10px;text-align:left;">
-												<input type="checkbox" class="ace T-function T-function-id{{func.id}}" value="{{func.id}}" /><span class="lbl"></span>
+												<input type="checkbox" data-descript="{{func.functionName}}" class="ace T-function T-function-id{{func.id}}" value="{{func.id}}" /><span class="lbl"></span>
 												{{func.functionName}}
 											</div>
 										{{/each}}
