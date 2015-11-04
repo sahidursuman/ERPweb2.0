@@ -350,7 +350,7 @@ define(function(require, exports) {
 				if (!!$value && typeof $value === "string") {
 					$value = JSON.parse($value);
 				}
-				if ($value.length > 0) {
+				if (!!$value && $value.length > 0) {
 					var html = '<table class="table table-striped table-hover"><thead><tr><th class="th-border">餐厅名称</th><th class="th-border">联系人</th><th class="th-border">联系电话</th></tr><tbody>';
 					for (var i = 0; i < $value.length; i++) {
 						html += '<tr><td>'+$value[i].name+'</td><td>'+$value[i].managerName+'</td><td>'+$value[i].mobileNumber+'</td></tr>'
