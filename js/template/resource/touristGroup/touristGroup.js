@@ -2527,7 +2527,7 @@ define(function(require, exports) {
 				success:function(data){
 					var result = showDialog(data);
 					if(result){
-						var optional = {id : "" , travelAgencyName : "--全部--"};
+						var optional = {id : "" , travelAgencyName : "全部"};
 						touristGroup.autocompleteDate.lineProductList = data.lineProductList;
 						touristGroup.autocompleteDate.fromBusinessGroupList = data.fromBusinessGroupList;
 						touristGroup.autocompleteDate.fromPartnerAgencyList = data.fromPartnerAgencyList;
