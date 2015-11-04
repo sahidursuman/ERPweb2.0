@@ -349,7 +349,8 @@
                                 <span class="travelAgencyRebateMoney">{{arrange.travelAgencyRebateMoney}}</span>
                                 <input type="hidden" name="travelAgencyRebateMoney" value="{{arrange.travelAgencyRebateMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} /></td>
                             <td>
-                                <input style="width:90px;" type="text" name="guideRate" value="{{arrange.guideRate*100 | parseInt}}" old="{{arrange.guideRate}}" maxlength="5"/></td>
+                                <input style="width:90px;" type="text" name="guideRate" value="{{arrange.guideRate*100 | parseInt}}" old="{{arrange.guideRate}}" maxlength="5"/>
+                            </td>
                             <td>
                                 <span class="guideRebateMoney">{{arrange.guideRebateMoney}}</span>
                                 <input type="hidden" name="guideRebateMoney" value="{{arrange.guideRebateMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} /></td>
