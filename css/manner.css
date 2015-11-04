@@ -785,8 +785,16 @@ padding-left:0;width: 360px;left: -35px;
 
 
 
-/*媒体查询*/
+/*媒体查询 1500*/
 
 @media screen and (max-width:1500px){
 
+
+
+}
+
+/*媒体查询 1366*/
+@media screen and (max-width:1366px){
+
+ 
 }
