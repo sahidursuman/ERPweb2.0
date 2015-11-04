@@ -1,4 +1,4 @@
-<div class="newAddTripPlan clearfix">
+<div class="newAddTripPlan clearfix triPlanInput">
 	<div class="col-xs-12 newAddTripPlanMain globalAdd">
 		<form class="form-horizontal newAddTripPlanMainForm formOneList" role="form" style="margin-top:10px" onsubmit="return false">
 			<div class="form-group">
@@ -13,9 +13,9 @@
 								<div class="form-group">
 									<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>线路名称：</label>
 									<div class="col-sm-2 search-banner">
-										<input class="col-sm-8" readonly="readonly" style="width: 155px" type="text" name="name" id="" value="" />
+										<input class="col-sm-8 triplanName" readonly="readonly" style="width: 155px" type="text" name="name" id="" value="" />
 										<input type="hidden" name="lineProductId" value="" />
-										<button class=" btn btn-sm btn-primary btn-Plan-search">
+										<button class=" btn btn-sm btn-primary btn-Plan-search planSearchBtn">
 											<i class="ace-icon fa fa-search "></i>搜索
 										</button>
 									</div>
