@@ -1972,7 +1972,10 @@ define(function(require, exports) {
 			var travelAgencyRate = $(parent).find('input[name=travelAgencyRate]').val();
 			var guideRate = $(parent).find('input[name=guideRate]').val();
             //计算应付
-            
+            var needPayMoney = $(parent).find(".needPayMoney");
+            var reduceMoney = $(parent).find('input[name="reduceMoney"]').val();
+            var needSum = (parseFloat(realCount)-parseFloat(memberCount)) * (parseFloat(marketPrice)-parseFloat(price))-parseFloat(reduceMoney);
+            needPayMoney.text(needSum);
 			//导游佣金= (实际数量-计划数量)*(单价-低价)*社佣比例
 			var guideRebateMoney = (parseFloat(realCount)-parseFloat(memberCount)) * (parseFloat(marketPrice)-parseFloat(price)) * parseFloat(guideRate)/100;
 			guideRebateMoney = count.changeTwoDecimal(guideRebateMoney);
