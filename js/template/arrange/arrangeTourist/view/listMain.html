@@ -3,7 +3,7 @@
 		<div class="search-area">
 			<form class="form-horizontal" role="form" onsubmit="return false">
 				<div class="form-group" style="max-width: 1100px;">
-					<label class="pull-left control-label no-padding-right" style="margin-left: 20px">线路产品：</label>
+					<!--<label class="pull-left control-label no-padding-right" style="margin-left: 20px">线路产品：</label>
 					<div class="col-sm-3 marginLeft-Right7">
 						<select name="lineProductId" class="col-xs-10">
 							<option></option>
@@ -11,8 +11,13 @@
 								<option value="{{lineProduct.id}}">{{lineProduct.name}}</option>
 							{{/each}}
 						</select>
-					</div>
+					</div>-->
 
+			        <label class="pull-left text-right control-label no-padding-right">线路产品:</label>
+			        <div class="col-xs-3">
+						<input type="text" name="lineProductName" class="col-xs-12 T-Choose-linProList" placeholder="请选择或输入线路产品" value="" />
+						<input type="hidden" name="lineProductId" value="" />
+					</div>
 				
 					<label class="pull-left control-label no-padding-right">出游日期：</label>
 					<div class="col-sm-2 marginLeft-Right7">
