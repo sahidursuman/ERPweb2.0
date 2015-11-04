@@ -31,7 +31,7 @@ th .necessary{font-weight:100}
 .nav-tabs .tab-close{width: 16px;height: 16px;cursor: pointer;line-height: 16px;margin-left:15px}
 .nav-tabs .tab-close:hover{background: #b74635;border-radius:16px;color:#fff}
 .widget-body .wysiwyg-editor{border-width: 1px;}
-.ui-autocomplete {max-height: 200px;overflow-y: auto;overflow-x: hidden; z-index:9999;}
+.ui-autocomplete {max-height: 200px;overflow-y: auto;overflow-x: hidden; /*z-index:9999;*/}
 .ui-autocomplete .ui-menu-item{height: 16px;overflow: hidden;}
 .timeline-item{margin-bottom: 0;}
 .ui-dialog, .ui-jqdialog{z-index:99040!important;}
