@@ -50,7 +50,7 @@ define(function(require, exports) {
 			$.ajax({
 				url:""+APP_ROOT+"back/tripPlan.do?method=listTripPlan&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 				type:"POST",
-				data:"pageNo="+page+"&tripId="+tripId+"&tripNumber="+tripNumber+"&startTime="+startTime+"&guideId="+guideId+"&guideName="+realname+"&busId="+busId+"&busLicenseNumber="+licenseNumber+"&creator="+creator+"&creatorName="+creatorName+"&status="+status+"&sortType=auto",
+				data:"queryType=0&pageNo="+page+"&tripId="+tripId+"&tripNumber="+tripNumber+"&startTime="+startTime+"&guideId="+guideId+"&guideName="+realname+"&busId="+busId+"&busLicenseNumber="+licenseNumber+"&creator="+creator+"&creatorName="+creatorName+"&status="+status+"&sortType=auto",
 				dataType:"json",
 				beforeSend:function(){
 					globalLoadingLayer = openLoadingLayer();

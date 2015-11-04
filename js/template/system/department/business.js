@@ -9,6 +9,10 @@ define(function(require, exports) {
 		addGroupTemplate = require("./view/addGroup"),
 		updateGroupTemplate = require("./view/updateGroup"),
 		department = require("./view/department");
+	var rightCode = {
+			business : "1410003",
+	    	group : "1410004"
+	    }
 	var business = {
 		listBusiness:function(page,keywork){
 			business.departmentList();
@@ -631,7 +635,8 @@ define(function(require, exports) {
 	                        	 for(var i = 0; i < data.tree.length; i ++) {
 	                        		 if(i>0) tmp += ",";
 	                        		 var tree = data.tree[i];
-	                        		 tmp += '"business'+tree.id+'":{"text":"<span>' + tree.name + '</span><i data-entity-id=\'' + tree.id + '\' type=\'1\' title=\'编辑\' style=\'float: right;font-size:16px;\' class=\'ace-icon fa fa-edit treeIcon\'></i>","name":"' + tree.name + '","type":"folder","id":"' + tree.id + '","myType":"business"}';
+	                        		 var treeIcon = '<i data-entity-id=\'' + tree.id + '\' type=\'1\' title=\'编辑\' style=\'float: right;font-size:16px;\' class=\'ace-icon fa fa-edit treeIcon\'></i>';
+	                        		 tmp += '"business'+tree.id+'":{"text":"<span>' + tree.name + '</span>'+ (isAuth(rightCode.business) ? treeIcon : "") + '","name":"' + tree.name + '","type":"folder","id":"' + tree.id + '","myType":"business"}';
 	                        	 }
 	                        	 tmp = "{"+tmp+"}";
 	                        	 tmp = JSON.parse(tmp);
@@ -654,7 +659,8 @@ define(function(require, exports) {
 	                        	 for(var i = 0; i < data.tree.length; i ++) {
 	                        		 if(i>0) tmp += ",";
 	                        		 var tree = data.tree[i];
-	                        		 tmp += '"group'+tree.id+'":{"text":"<span>' + tree.name + '</span><i business-id=\'' + tree.businessGroupId + '\' data-entity-id=\'' + tree.id + '\' type=\'2\' title=\'编辑\' style=\'float: right;font-size:16px;\' class=\'ace-icon fa fa-edit treeIcon\'></i>","name":"' + tree.name + '","type":"item","id":"' + tree.id + '","myType":"group","pid":"' + pid + '"}';
+	                        		 var treeIcon = '<i business-id=\'' + tree.businessGroupId + '\' data-entity-id=\'' + tree.id + '\' type=\'2\' title=\'编辑\' style=\'float: right;font-size:16px;\' class=\'ace-icon fa fa-edit treeIcon\'></i>'
+	                        		 tmp += '"group'+tree.id+'":{"text":"<span>' + tree.name + '</span>'+(isAuth(rightCode.group) ? treeIcon : "")+'","name":"' + tree.name + '","type":"item","id":"' + tree.id + '","myType":"group","pid":"' + pid + '"}';
 	                        	 }
 	                        	 tmp = "{"+tmp+"}";
 	                        	 tmp = JSON.parse(tmp);

@@ -119,7 +119,10 @@ define(function(require, exports) {
                     	
         				var tripPlanList = JSON.parse(data.tripPlanList);
         				data.tripPlanList = tripPlanList;
-                        $('.counterList').html(listTableTemplate(data))
+                        var html = listTableTemplate(data);
+
+                        html = count.authFilter(html,data.tripPlanList);
+                        $('.counterList').html(html);
                         
                       //搜索按钮事件
                         $(".main-content .financialCount .clearBlur").blur(function(){
@@ -373,6 +376,12 @@ define(function(require, exports) {
                         }
 
                         data = count.covertRemark(tmp);
+                        if(isAuth("1190002")){
+                            data.isOp = true;
+                        }
+                        if(isAuth("1190003")){
+                            data.isFinance = true;
+                        }
                     	var html = updateTemplate(data);
                     	var title = (guide == "guide"?"单团报账":"单团审核");
 						
@@ -403,7 +412,6 @@ define(function(require, exports) {
 							count.edited["checkBill"] = "checkBill";
 							count.oldCheckBillId = id;
 						});
-						console.log("init");
             			$('.countUpdate .btn-saveCount').off('click').on('click',function() {
             				var id = $(this).attr('data-entity-id');
             				var financialTripPlanId = $(this).attr('data-entity-financial-id');
@@ -663,9 +671,8 @@ define(function(require, exports) {
                         console.log(data);
                         var html = Reimbursement(data);
                         addTab(menuKey+"-Reimbursement","单团报账",html);
-                        var ReimbursementId = menuKey+"-Reimbursement"
+
                         $(document).on("mouseenter",".countWhichDaysContainer",function(){
-                            console.log($(this));
                             var whichDay = $(this).val(),
                                 $this = $(this)
                                 startTime = $("#tab-financial_count-Reimbursement-content").find("span[name=startTime_Choose]").text(),
@@ -953,10 +960,12 @@ define(function(require, exports) {
                             var id = $(this).attr('data-entity-id');
                             count.viewGroupDetail(id);
                         });
+                        //中转明细
                         $('.countReimbursement .btn-viewTripTransit').off('click').on('click',function() {
                             var id = $(this).attr('data-entity-id');
                             count.ViewOutDetail(id);
                         });
+
                         //安排明细表
                         $('.countReimbursement .btn-tripPlanArrange').off('click').on('click',function() {
                             var id = $(this).attr('data-entity-id');
@@ -1399,7 +1408,25 @@ define(function(require, exports) {
 			});
 			//其他收入
 			$('.countUpdate').find('#otherIn').find('tr').each(function() {
-				
+				/*if($(this).attr('otherInId')) {
+					var otherIn = {
+							"id":count.changeTwoDecimalToString($(this).attr('otherInId')),
+							"title":$(this).find('input[name=title]').val(),
+							"price":count.changeTwoDecimalToString($(this).find('input[name=price]').val()),
+							"count":count.changeTwoDecimalToString($(this).find('input[name=count]').val())
+					}
+					saveJson.otherInList.push(otherIn);
+					var log = {
+							"aid":otherIn.id,
+							"ot":$(this).find('input[name=title]').attr('old'),
+							"nt":otherIn.title,
+							"op":count.changeTwoDecimalToString(parseFloat($(this).find('input[name=price]').attr('old'))),
+							"np":otherIn.price,
+							"oc":count.changeTwoDecimalToString(parseFloat($(this).find('input[name=count]').attr('old'))),
+							"nc":otherIn.count
+					}
+					saveJson.log.otherInLog.push(log);
+				}*/
                 if($(this).attr('otherInId')){
                     var otherIn = {
                     "id":$(this).attr('otherInId'),
@@ -1643,13 +1670,13 @@ define(function(require, exports) {
             		if(result){
             			showMessageDialog($( "#confirm-dialog-message" ),data.message);
                         count.edited["checkBill"] = "";
-            			count.updateExamine(financialTripPlanId,"");
+                        count.updateExamine(financialTripPlanId,"");
             		}
             	}
             });
 		},
 		saveTripCount : function(id, financialTripPlanId, userName, roleType,isClose,typeFlag) {
-            console.log(financialTripPlanId);
+            console.log("saveTripCount");
             var saveJson;
             if(typeFlag == 2 || typeFlag == 3){
                 saveJson = count.saveCountReimbursement(financialTripPlanId);
@@ -1686,6 +1713,7 @@ define(function(require, exports) {
                         };
                         showMessageDialog($( "#confirm-dialog-message" ),data.message);
                         count.edited["checkBill"] = "";
+                        console.log("success");
                         if(isClose == 1){
                             closeTab(uKey);
                             count.getlistCount(count.searchData.pageNo,count.searchData.id,count.searchData.tripNumber,count.searchData.lineProductId,count.searchData.lineProductName,count.searchData.guideId,count.searchData.guideName,count.searchData.startTime,count.searchData.endTime,count.searchData.status);
@@ -2570,6 +2598,33 @@ define(function(require, exports) {
              	exportXLS(url)
              });
 	    },
+        authFilter : function(obj,tripPlanList){
+            var $obj = $(obj);
+            //报账过滤
+            $obj.find(".R-right").each(function(){
+                var right = $(this).data("right");
+                var auth = isAuth(right);
+                if(!auth){
+                    $(this).remove();
+                }   
+            });
+            //审核过滤
+            $obj.find(".T-audit").each(function(i){
+                var right,status = tripPlanList[i].tripPlan.billStatus;
+                if(status == 0){//计调可审
+                    right = "1190002"; 
+                } else if(status == 1 || status == 2){//财务可审
+                    right = "1190003";
+                } else{
+                    right = "无";
+                }
+                var auth = isAuth(right);
+                if(!auth){
+                    $(this).remove();
+                }
+            });
+            return $obj;
+        },
 		save : function(saveType){
 			console.log(saveType);
 			if(saveType == "checkBill"){

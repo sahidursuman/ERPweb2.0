@@ -117,7 +117,7 @@ function isAuth(rightCode){
 //权限过滤
 function filterUnAuth(obj) {
 	if(!obj){
-		return "";
+		return;
 	}
 	var $obj = $(obj);
 	$obj.find(".R-right").each(function(){
