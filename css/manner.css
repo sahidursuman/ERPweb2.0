@@ -781,7 +781,9 @@ padding-left:0;width: 360px;left: -35px;
 .transit-arrangeTime div{
     width: 260px;
 }
-
+/*中转分段显示不完整*/
+.ui-autocomplete{width:200px;}
+.ui-autocomplete .ui-state-focus{width:inherit;}
 /*table 宽度*/
 .tableWidthImp{
     width: 97% !important;
