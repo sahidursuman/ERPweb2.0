@@ -840,27 +840,27 @@ define(function(require, exports) {
 				minLength:0,
 				change:function(event,ui){
 					if(ui.item == null){
-						$(this).val("");
-						$(this).parent().parent().find("input[name=busCompanyId]").val("");
-						$(this).parent().parent().find("input[name=licenseNumber]").val("");
-						$(this).parent().parent().find("input[name=seatPrice]").val("");
-						$(this).parent().parent().find("input[name=seatCount]").val("");
-						$(this).parent().parent().find("input[name=charteredPrice]").val("");
-						$(this).parent().parent().find("input[name=mobileNumber]").val("");
+						var $tr = $(this).val("").closest('tr');
+						$tr.find("input[name=busCompanyId]").val("");
+						$tr.find("input[name=licenseNumber]").val("");
+						$tr.find("input[name=seatPrice]").val("");
+						$tr.find("input[name=seatCount]").val("");
+						$tr.find("input[name=charteredPrice]").val("");
+						$tr.find("input[name=mobileNumber]").val("");
 					}
 
 					// 更新表单验证的配置
 					validator = rule.lineProductUpdate(validator);
 				},
 				select:function(event,ui){
-					$(this).blur();
+					var $tr = $(this).blur().closest('tr');
 					
-					$(this).parent().parent().find("input[name=busCompanyId]").val(ui.item.id).trigger('change');
-					$(this).parent().parent().find("input[name=licenseNumber]").val("");
-					$(this).parent().parent().find("input[name=seatPrice]").val("");
-					$(this).parent().parent().find("input[name=seatCount]").val("");
-					$(this).parent().parent().find("input[name=charteredPrice]").val("");
-					$(this).parent().parent().find("input[name=mobileNumber]").val("");
+					$tr.find("input[name=busCompanyId]").val(ui.item.id).trigger('change');
+					$tr.find("input[name=licenseNumber]").val("");
+					$tr.find("input[name=seatPrice]").val("");
+					$tr.find("input[name=seatCount]").val("");
+					$tr.find("input[name=charteredPrice]").val("");
+					$tr.find("input[name=mobileNumber]").val("");
 					
 					// 更新表单验证的配置
 					validator = rule.lineProductUpdate(validator);
