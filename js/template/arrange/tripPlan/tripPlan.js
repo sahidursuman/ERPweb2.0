@@ -1772,7 +1772,7 @@ define(function(require, exports) {
 							showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
 								closeTab(menuKey+"-add");
 								tripPlan.edited["add"] = "";
-								tripPlan.listTripPlan(0,"","","","","","");
+								tripPlan.listTripPlan(0,"","","","","","","","","","");;
 							});
 						}
 					}
