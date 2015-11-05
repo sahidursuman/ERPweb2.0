@@ -726,6 +726,7 @@ define(function(require, exports) {
 					$.ajax({
 						url:""+APP_ROOT+"back/guide.do?method=getGuideById&token="+$.cookie("token")+"&menuKey=resource_guide&operation=view",
 						dataType: "json",
+						showLoading: false,
 						data:"id="+ui.item.id,
 						success: function(data) {
 							layer.close(globalLoadingLayer);
@@ -766,6 +767,7 @@ define(function(require, exports) {
 				$.ajax({
 					url:""+APP_ROOT+"back/guide.do?method=findAll&token="+$.cookie("token")+"&menuKey=resource_guide&operation=view",
 					dataType: "json",
+					showLoading: false,
 					success: function(data) {
 						layer.close(globalLoadingLayer);
 						var result = showDialog(data);
@@ -806,6 +808,7 @@ define(function(require, exports) {
 					$.ajax({
 						url:""+APP_ROOT+"back/insurance.do?method=getInsuranceById&token="+$.cookie("token")+"&menuKey=resource_insurance&operation=view",
 						dataType: "json",
+                        showLoading: false,
 						data:"id="+ui.item.id,
 						success: function(data) {
 							layer.close(globalLoadingLayer);
@@ -828,6 +831,7 @@ define(function(require, exports) {
 				$.ajax({
 					url:""+APP_ROOT+"back/insurance.do?method=findAll&token="+$.cookie("token")+"&menuKey=resource_insurance&operation=view",
 					dataType: "json",
+					showLoading: false,
 					success: function(data) {
 						layer.close(globalLoadingLayer);
 						var result = showDialog(data);
@@ -892,6 +896,7 @@ define(function(require, exports) {
 							$.ajax({
 								url:""+APP_ROOT+"back/busCompany.do?method=findBusDetailById&token="+$.cookie("token")+"&menuKey=resource_busCompany&operation=view",
 								dataType: "json",
+								showLoading: false,
 								data:"id="+ui.item.id,
 								success: function(data) {
 									layer.close(globalLoadingLayer);
@@ -927,6 +932,7 @@ define(function(require, exports) {
 						$.ajax({
 							url:""+APP_ROOT+"back/busCompany.do?method=findBusListBySeat&token="+$.cookie("token")+"&menuKey=resource_busCompany&operation=view",
 							dataType: "json",
+							showLoading: false,
 							data:"id="+busCompanyId+"&seatCount="+needSeatCount,
 							success: function(data) {
 								layer.close(globalLoadingLayer);
@@ -953,6 +959,7 @@ define(function(require, exports) {
 				$.ajax({
 					url:""+APP_ROOT+"back/busCompany.do?method=findBusCompanyBySeat&token="+$.cookie("token")+"&menuKey=resource_busCompany&operation=view",
 					dataType: "json",
+					showLoading: false,
 					data:"seatCount="+needSeatCount,
 					success: function(data) {
 						layer.close(globalLoadingLayer);
