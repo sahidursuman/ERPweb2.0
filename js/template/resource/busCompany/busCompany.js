@@ -162,7 +162,6 @@ define(function(require,exports){
 					BusCompany.addDriverList($driverList);
 					validator = rule.update(validator);
 				});
-				
 				//提交数据事件
 				var $submitBtn = $obj.find(".T-submit-busCompany");
 				$submitBtn.on('click',function(){
@@ -172,6 +171,7 @@ define(function(require,exports){
 					if(checkStatus == true){
 						status = 1;
 					};
+					console.log(status);
 					var form = $mainObj.serialize()+"&status="+status+"",
 						formData = $mainObj.serializeJson();
 					//车辆数据的组装
@@ -315,26 +315,8 @@ define(function(require,exports){
 								//动态添加包车时限区间
 								var $addTimeArea = $busList.find('.timeArea .T-add');
 								$addTimeArea.unbind().on('click',function(){
-									var $td = $(this).closest('td'), isVal = false;
-									$td.children('div').each(function(index){
-										var $s = $(this).find('input[name=startTime]');
-										var $e = $(this).find('input[name=endTime]');
-										if(!$s.val()){
-											$s.focus();
-											isVal = false;
-											return false;
-										}else if(!$e.val()){
-											$e.focus();
-											isVal = false;
-											return false;
-										}else{
-											isVal = true;
-										}
-									});
-									if(isVal){
-										BusCompany.addTimeArea($(this),2);
-										validator = rule.update(validator);
-									}
+									BusCompany.addTimeArea($(this),2);
+									validator = rule.update(validator);
 								});
 								//删除原有包车区间
 								$busList.find(".T-del").on('click',function(){
@@ -507,6 +489,9 @@ define(function(require,exports){
 			}
 		});
 	};
+	//删除包车区间
+	BusCompany.deletedTimeArea = function($obj,typeFlag){
+	};
 	//新增车辆函数
 	BusCompany.addBusList = function($obj,typeFlag){
 		var html = "<tr><td><input class=\"col-sm-12\" name=\"licenseNumber\" type=\"text\" maxlength=\"10\"/></td><td><input class=\"col-sm-12\" name=\"brand\" type=\"text\" maxlength=\"32\"/></td><td><input class=\"col-sm-10\" name=\"seatCount\" type=\"text\" value=\"1\"  maxlength=\"3\"/></td><td class=\"col-sm-1\"><div class=\"input-group col-sm-12\"><input name=\"buyTime\" type=\"text\" class=\"datepicker\" style='width: 130px' /><span class=\"input-group-addon\"><i class=\"fa fa-calendar\"></i></span></div></td><td><select name=\"isChartered\"><option value=\"1\">是</option><option value=\"0\" selected=\"selected\">否</option></select></td>" +								"<td class=\"time\">" +
@@ -553,45 +538,7 @@ define(function(require,exports){
 			BusCompany.addTimeArea($(this),typeFlag);
 			validator = rule.update(validator);
 		});
-		//删除动态包车区间
-		/*var $tr = $obj.find('tbody tr');
-		var $delBtn = $(this).find(".time .timeArea .T-del");
-			$delBtn.unbind().on('click',function(){
-				alert('123');
-				BusCompany.deletedTimeArea($(this),typeFlag);
-			});*/
-		/*$tr.each(function(){
-			var $delBtn = $(this).find(".time .timeArea .T-del");
-			$delBtn.unbind().on('click',function(){
-				alert('123');
-				BusCompany.deletedTimeArea($(this),typeFlag);
-			});
-		});*/
-		/*$obj.off("click").on("click",".T-del",function(){
-			BusCompany.deletedTimeArea($(this),typeFlag);
-		})*/
 		
-	};
-	BusCompany.datepicker = function(obj, min, max, show){
-		if(min){
-			min = min.split('-');
-			min = new Date(min[0], min[1] - 1, min[2] - (-1));
-		}
-		if(max){
-			max = max.split('-');
-			max = new Date(max[0], max[1] - 1, max[2] - (-1));
-		}
-		obj.datepicker({
-			autoclose: true,
-			todayHighlight: true,
-			format: 'yyyy-mm-dd',
-			language: 'zh-CN',
-			startDate : min || null,
-			endDate : max || null
-		});
-		if(show){
-			obj.datepicker('show');
-		}
 	};
 	//动态增加班车时限
 	BusCompany.addTimeArea = function($obj,typeFlag){
@@ -602,22 +549,14 @@ define(function(require,exports){
 		var contractPriceInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:7px\"><input style=\"width:100px;\" name=\"contractPrice\" type=\"text\" maxlength=\"9\"/><label>&nbsp;元</label></div>";
 		$td.next().append(contractPriceInput);
 		$td.append(timeLimitDiv);
-		BusCompany.datepicker($td.find(".datepicker"));
-		$td.find('input[name=startTime]').off('click').on('click', function(){
-			var $parent = $(this).parent().prev().find('input[name=endTime]');
-			var endDate = $(this).parent().find('input[name=endTime]');
-			$(this).datepicker('remove');
-			BusCompany.datepicker($(this), $parent.val(), endDate.val(), true);
-		});
-		$td.find('input[name=endTime]').off('click').on('click', function(){
-			var startDate = $(this).parent().find('input[name=startTime]');
-			var $parent = $(this).parent().prev().find('input[name=endTime]');
-			$(this).datepicker('remove');
-			console.log(startDate.val()||$parent.val());
-			BusCompany.datepicker($(this), startDate.val()||$parent.val(), null, true);
+		$td.find(".datepicker").datepicker({
+			autoclose: true,
+			todayHighlight: true,
+			format: 'yyyy-mm-dd',
+			language: 'zh-CN'
 		});
 		//删除包车时限
-		$td.find(".T-del").off("click").on('click',function(typeFlag){
+		$td.find(".T-del").on('click',function(typeFlag){
 			BusCompany.deletedTimeArea($(this),typeFlag);
 		});
 	};
@@ -631,7 +570,12 @@ define(function(require,exports){
 				$parents.find("input[name=endTime]").removeAttr("readonly");
 				$parents.find("input[name=contractPrice]").removeAttr("readonly");
 				$parents.find(".timeArea").removeClass("hide");
-				BusCompany.datepicker($parents.find("input[name=startTime],input[name=endTime]"));
+				$parents.find("input[name=startTime],input[name=endTime]").datepicker({
+					autoclose: true,
+					todayHighlight: true,
+					format: 'yyyy-mm-dd',
+					language: 'zh-CN'
+				});
 			validator = rule.update(validator);
 			}else{
 				if($typeFlag == 1){
@@ -662,7 +606,6 @@ define(function(require,exports){
 	//删除包车区间
 	BusCompany.deletedTimeArea = function($obj,typeFlag){
 			var div = $($obj).closest('div');
-			var $td = $obj.closest('td');
 			var entityId = div.attr("data-entity-id");
 			var divIndex = div.attr("data-index");
 			//通过typeF来判断是新增车队页面还是修改车队页面1--新增；2--修改
@@ -670,9 +613,9 @@ define(function(require,exports){
 				div.fadeOut(function(){
 					$(this).remove();
 				});
-				$td.find(".div-"+divIndex+"").fadeOut(function(){
-					$(this).remove();
-				});
+				div.parent().next().find(".div-"+divIndex+"").fadeOut(function(){
+				$(this).remove();
+			});	
 			}else if(typeFlag.which == 2){
 				
 				if (entityId != null && entityId != "") {
@@ -686,7 +629,7 @@ define(function(require,exports){
 					});
 				}
 			}
-			$td.find(".div-"+divIndex+"").fadeOut(function(){
+			div.parent().next().find(".div-"+divIndex+"").fadeOut(function(){
 				$(this).remove();
 			});
 	}
