@@ -53,12 +53,13 @@ define(function(require, exports) {
 						data.travelLineList = travelLineList;
 						var html = listTemplate(data);
 						addTab(menuKey,"线路模板管理",html);
-						travelLine.initList(data);
+						travelLine.initList(data,page);
 					}
 				}
 			});
 		},
-		initList : function(data){
+		initList : function(data,page){
+			var page=0||page; 
 			//新增线路产品button按钮事件
 			$("#"+tabId+"  .btn-lineProduct-add").click(function(){
 				var id = $(this).attr("data-entiy-id");
@@ -118,34 +119,19 @@ define(function(require, exports) {
 				}
 				travelLine.listTravelLine(0,travelLine.searchData.name,travelLine.searchData.status);
 			});
-			
-			//分页--首页按钮事件
-			$("#"+tabId+"  .pageMode a.first").click(function(){
-				travelLine.listTravelLine(0,travelLine.searchData.name,travelLine.searchData.status);
-			});
-			
-			//分页--上一页事件
-			$("#"+tabId+"  .pageMode a.previous").click(function(){
-				var previous = data.pageNo - 1;
-				if(data.pageNo == 0){
-					previous = 0;
-				}
-				travelLine.listTravelLine(previous,travelLine.searchData.name,travelLine.searchData.status);
-			});
-			
-			//分页--下一页事件
-			$("#"+tabId+"  .pageMode a.next").click(function(){
-				var next =  data.pageNo + 1;
-				if(data.pageNo == data.totalPage-1){
-					next = data.pageNo ;
-				}
-				travelLine.listTravelLine(next,travelLine.searchData.name,travelLine.searchData.status);
-			});
-			
-			//分页--尾页事件
-			$("#"+tabId+"  .pageMode a.last").click(function(){
-				travelLine.listTravelLine(data.totalPage-1,travelLine.searchData.name,travelLine.searchData.status);
-			});
+
+			// 绑定翻页组件
+			laypage({
+			    cont: $('#'+tabId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+			    pages: data.totalPage, //总页数
+			    curr: (page + 1),
+			    jump: function(obj, first) {
+			    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+			    		travelLine.listTravelLine(obj.curr -1,travelLine.searchData.name,travelLine.searchData.status);
+			    	}
+			    }
+			});	
+
 		},
 		addTravelLine:function(){
 			var html = addTemplate();
