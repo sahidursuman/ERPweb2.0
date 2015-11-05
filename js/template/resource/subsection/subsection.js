@@ -300,6 +300,7 @@ define(function(require, exports) {
 				$.ajax({
 					url:""+APP_ROOT+"back/innerTransferOperation.do?method=getLineProductList&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 	                dataType: "json",
+	                showLoading: false,
 	                success: function(data) {
 						var result = showDialog(data);
 						if(result){
