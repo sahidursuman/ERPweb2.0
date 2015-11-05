@@ -793,7 +793,7 @@ padding-left:0;width: 360px;left: -35px;
     width: 260px;
 }
 /*中转分段显示不完整*/
-.ui-autocomplete .ui-state-focus{width:1000px;!important;}
+/*.ui-autocomplete .ui-state-focus{width:1000px;!important;}*/
 /*table 宽度*/
 .tableWidthImp{
     width: 97% !important;
