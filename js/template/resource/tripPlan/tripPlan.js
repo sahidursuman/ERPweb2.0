@@ -1870,10 +1870,10 @@ define(function(require, exports) {
 						if(typeof restaurant.eq(i).find('[name=restaurantName]').data('propover') === 'string'){
 							restaurantChooseArrangeListJson = JSON.parse(restaurant.eq(i).find('[name=restaurantName]').data('propover'))
 						}
-						if (restaurantChooseArrangeListJson.length > 0) {
-							isChoose = "1";
-						}
 					}
+					if(!!tripPlan.getVal(restaurant.eq(i), "restaurantId") && tripPlan.getVal(restaurant.eq(i), "restaurantId") == -1){{
+						isChoose = "1";
+					}}
 					if(tripPlan.getVal(restaurant.eq(i), "restaurantId")){
 						var restaurantJson = {
 							id : tripPlan.getVal(restaurant.eq(i), "id"),
@@ -2350,6 +2350,7 @@ define(function(require, exports) {
 		        				}else{
 		        					optionalArray.splice([a],1);
 				        			$parent.remove();
+				        			saveOptional(1); 
 						        }
 		        			} 
 		        		}
