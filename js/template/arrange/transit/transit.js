@@ -278,32 +278,32 @@ define(function(require, exports) {
 									transit.submitUpdateTransit($(".arrangeTouristMain .btn-updateArrange").attr("data-entity-id"),0);
 									transit.edited["update"] = "";
 									addTab(menuKey+"-update","编辑中转安排",html);
-									transit.initUpdate(id,data);
 									validator = rule.setTranistCheckor($(".arrangeTouristMain"));
+									transit.initUpdate(id,data,validator);
 								},function(){
 									addTab(menuKey+"-update","编辑中转安排",html);
-									transit.initUpdate(id,data);
 									validator = rule.setTranistCheckor($(".arrangeTouristMain"));
+									transit.initUpdate(id,data,validator);
 									transit.edited["update"] = "";
 								});
 							}else{
 								addTab(menuKey+"-update","编辑中转安排",html);
-								transit.initUpdate(id,data);
+								transit.initUpdate(id,data,validator);
 								validator = rule.setTranistCheckor($(".arrangeTouristMain"));
 							}
 						}else{
 							addTab(menuKey+"-update","编辑中转安排",html);
-							transit.initUpdate(id,data);
 							validator = rule.setTranistCheckor($(".arrangeTouristMain"));
+							transit.initUpdate(id,data,validator);
 						}
 					}
 				}
 			})
 		},
-		initUpdate : function(id,data){
+		initUpdate : function(id,data,validator){
 			var tab = "tab-arrange_transit-update-content";
 			// 设置表单验证
-			var validator = rule.setTranistCheckor($(".arrangeTouristMain"));
+			//var validator = rule.setTranistCheckor($(".arrangeTouristMain"));
 			$('.arrangeTouristMain').on("change",function(){
 				transit.edited["update"] = "update";
 			});
@@ -312,59 +312,59 @@ define(function(require, exports) {
 			$("#"+tab+" #receptionList .btn-bus-add").click(function(){
 				var thisObj = $(this);
 				var id = transit.getArrangeTrId(thisObj);
-				transit.addOutBusList(id,0,tab);
+				transit.addOutBusList(id,0,tab,validator);
 			})
 			$("#"+tab+" #receptionList .btn-hotel-add").click(function(){
 				var thisObj = $(this);
 				var id = transit.getArrangeTrId(thisObj);
-				transit.addOutHotel(id,0,tab);
+				transit.addOutHotel(id,0,tab,validator);
 			})
 			$("#"+tab+" #receptionList .btn-ticket-add").click(function(){
 				var thisObj = $(this);
 				var id = transit.getArrangeTrId(thisObj);
-				transit.addTicketList(id,0,tab);
+				transit.addTicketList(id,0,tab,validator);
 			})
 			$("#"+tab+" #receptionList .btn-restaurant-add").click(function(){
 				var thisObj = $(this);
 				var id = transit.getArrangeTrId(thisObj);
-				transit.addRestaurantList(id,0,tab);
+				transit.addRestaurantList(id,0,tab,validator);
 			})
 			$("#"+tab+" #receptionList .btn-other-add").click(function(){
 				var thisObj = $(this);
 				var id = transit.getArrangeTrId(thisObj);
-				transit.addOtherList(id,0,tab);
+				transit.addOtherList(id,0,tab,validator);
 			})
 			//小车--------------------------开始--------------------------------------------------------	
 			$("#"+tab+" #carList .btn-bus-add").click(function(){
 				var thisObj = $(this);
 				var id = transit.getArrangeTrId(thisObj);
-				transit.addOutBusList(id,2,tab);
+				transit.addOutBusList(id,2,tab,validator);
 			})
 			//送团--------------------------开始--------------------------------------------------------	
 			$("#"+tab+" #sendList .btn-bus-add").click(function(){
 				var thisObj = $(this);
 				var id = transit.getArrangeTrId(thisObj);
-				transit.addOutBusList(id,1,tab);
+				transit.addOutBusList(id,1,tab,validator);
 			})
 			$("#"+tab+" #sendList .btn-hotel-add").click(function(){
 				var thisObj = $(this);
 				var id = transit.getArrangeTrId(thisObj);
-				transit.addOutHotel(id,1,tab);
+				transit.addOutHotel(id,1,tab,validator);
 			})
 			$("#"+tab+" #sendList .btn-ticket-add").click(function(){
 				var thisObj = $(this);
 				var id = transit.getArrangeTrId(thisObj);
-				transit.addTicketList(id,1,tab);
+				transit.addTicketList(id,1,tab,validator);
 			})
 			$("#"+tab+" #sendList .btn-restaurant-add").click(function(){
 				var thisObj = $(this);
 				var id = transit.getArrangeTrId(thisObj);
-				transit.addRestaurantList(id,1,tab);
+				transit.addRestaurantList(id,1,tab,validator);
 			})
 			$("#"+tab+" #sendList .btn-other-add").click(function(){
 				var thisObj = $(this);
 				var id = transit.getArrangeTrId(thisObj);
-				transit.addOtherList(id,1,tab);
+				transit.addOtherList(id,1,tab,validator);
 			})
 
 			//删除安排事件绑定
@@ -555,7 +555,7 @@ define(function(require, exports) {
 			}
 		},
 		//新增团外安排接送车辆
-		addOutBusList :function(id,type,tab){
+		addOutBusList :function(id,type,tab,validator){
 			var html = '<tr data-entity-id="">'+
 			'<td><input type="text" class="col-sm-12 chooseSeatCount" name="seatCount" value="" /></td>'+
 			'<td><input class="col-sm-12 chooseBusBrand" name="busbrand" type="text" value="" /></td>'+
@@ -578,6 +578,9 @@ define(function(require, exports) {
 			'</tr>';
 			html  = filterUnAuth(html);//权限过滤
 			$("#"+id+" .busList tbody").append(html);
+			//表单验证
+			//var validator = rule.setTranistCheckor($('#'+id));
+			rule.update(validator);
 			$("#"+tab+" .arrangeTouristMain .busList .arrange-delete").click(function(){
 				var thisObj = $(this);
 				transit.delArrangeJudge (thisObj,"bus");
@@ -590,7 +593,7 @@ define(function(require, exports) {
 			$("#"+tab+" .count,#"+tab+" .price,#"+tab+" .discount").blur(transit.calculation);
 		},
 		//新增团外安排酒店
-		addOutHotel :function(id,type,tab){
+		addOutHotel :function(id,type,tab,validator){
 			var html ='<tr>'+
 				'<td><input type="hidden" name="serviceType" value="'+type+'" />'+
 				'<input class="col-sm-12" name="hotelCheckInTime" value="" type="text" /></td>'+
@@ -616,6 +619,8 @@ define(function(require, exports) {
 				'</tr>';
 			html  = filterUnAuth(html);
 			$("#"+id+" .hotelList tbody").append(html);
+			//表单验证
+			rule.update(validator);
 			$("#"+tab+" .arrangeTouristMain .hotelList .arrange-delete").click(function(){
 				var thisObj = $(this);
 				transit.delArrangeJudge (thisObj,"hotel");
@@ -627,7 +632,7 @@ define(function(require, exports) {
 			$("#"+tab+" .count,#"+tab+" .price,#"+tab+" .discount").blur(transit.calculation);
 		},
 		//新增团外安排票务
-		addTicketList :function(id,type,tab){
+		addTicketList :function(id,type,tab,validator){
 			var html ='<tr>'+
 				'<td><div class="col-sm-12"><input type="hidden" name="serviceType" value="'+type+'" /><input class="col-sm-12 chooseTicket" name="ticketName" value="" type="text" /><input type="hidden" name="tickeId" />'+
 				'<span class="addResourceBtn T-addTicketResource R-right" data-right="1070002" title="添加票务"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
@@ -651,6 +656,8 @@ define(function(require, exports) {
 				'</tr>';
 			html  = filterUnAuth(html);
 			$("#"+id+" .ticketList tbody").append(html);
+			//表单验证
+			rule.update(validator);
 			$("#"+tab+" .arrangeTouristMain .ticketList .arrange-delete").click(function(){
 				var thisObj = $(this);
 				transit.delArrangeJudge (thisObj,"ticket");
@@ -662,7 +669,7 @@ define(function(require, exports) {
 			$("#"+tab+" .count,#"+tab+" .price,#"+tab+" .discount").blur(transit.calculation);
 		},
 		//新增餐厅安排
-		addRestaurantList :function(id,type,tab){
+		addRestaurantList :function(id,type,tab,validator){
 			var html = '<tr data-entity-id="">'+
 				'<td><input class="col-sm-12" name="startTime" type="text" value="" /></td>'+
 				'<td><div class="col-sm-12"><input type="hidden" name="serviceType" value="'+type+'" /><input class="col-sm-12 bind-change chooseRestaurant" name="restaurant" type="text" value="" />'+
@@ -682,6 +689,8 @@ define(function(require, exports) {
 				'</tr>';
 			html  = filterUnAuth(html);
 			$("#"+id+" .restaurantList tbody").append(html);
+			//表单验证
+			rule.update(validator);
 			transit.bindRestaurantChoose(tab);
 			$("#"+tab+" .arrangeTouristMain .restaurantList .arrange-delete").click(function(){
 				var thisObj = $(this);
@@ -693,7 +702,7 @@ define(function(require, exports) {
 			$("#"+tab+" .count,#"+tab+" .price,#"+tab+" .discount").blur(transit.calculation);
 		},
 		//新增其他安排
-		addOtherList :function(id,type,tab){
+		addOtherList :function(id,type,tab,validator){
 			var html = '<tr data-entity-id="">'+
 				'<td><input class="col-sm-12" name="startTime" type="text" value="" /></td>'+
 				'<td><input class="col-sm-12" name="name" type="text" value="" maxlength="30" /><input type="hidden" name="serviceType" value="'+type+'" /></td>'+
@@ -709,6 +718,8 @@ define(function(require, exports) {
 				'<td><a class="cursor arrange-delete" title="删除">删除</a></td>'+
 				'</tr>';
 			$("#"+id+" .otherList tbody").append(html);
+			//表单验证
+			rule.update(validator);
 			$("#"+tab+" .arrangeTouristMain .otherList .arrange-delete").click(function(){
 				var thisObj = $(this);
 				transit.delArrangeJudge (thisObj,"other");
