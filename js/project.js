@@ -1438,11 +1438,16 @@ var _statusText = {
 	 */
 	var _laypage = laypage;
 	laypage = function(options)  {
+		var last = options.last || false;
+		if (!last) {
+			last = options.pages || false;
+		}
 		// 合并配置
 		options = $.extend({},
 			{
 			    skip: true, //是否开启跳页
 			    skin: '#51b0c2',
+			    last: last,
 			    groups: 3 //连续显示分页数
 			}, options);
 
