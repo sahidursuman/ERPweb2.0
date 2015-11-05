@@ -1662,14 +1662,8 @@ define(function(require, exports) {
             if(typeFlag == 2 || typeFlag == 3){
                 $.ajax({
                 url:""+APP_ROOT+"back/financialTripPlan.do?method=webGuideAccountUpdate&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
-                type:"POST",
                 data:"saveJson="+encodeURIComponent(saveJson),
-                dataType:"json",
-                beforeSend:function(){
-                    globalLoadingLayer = openLoadingLayer();
-                },
                 success:function(data){
-                    layer.close(globalLoadingLayer);
                     var result = showDialog(data);
                     if(result){
                         if(typeFlag == 3){
@@ -1681,6 +1675,7 @@ define(function(require, exports) {
                             closeTab(uKey);
                             count.getlistCount(count.searchData.pageNo,count.searchData.id,count.searchData.tripNumber,count.searchData.lineProductId,count.searchData.lineProductName,count.searchData.guideId,count.searchData.guideName,count.searchData.startTime,count.searchData.endTime,count.searchData.status);
                         }else{
+                            $('#tab-financial_count-Reimbursement-content').find('.btn-guide-account').addClass('hidden');
                             count.Reimbursement(financialTripPlanId,"guide");
                         }
                     }
