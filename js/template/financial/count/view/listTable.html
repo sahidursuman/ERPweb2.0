@@ -63,12 +63,12 @@
             {{/if}}
         </td>
            <td style="vertical-align:middle" {{if financialTripPlan.tripPlan.tripPlanDetails.length > 1}}rowspan="{{financialTripPlan.tripPlan.tripPlanDetails.length}}"{{/if}}>
-           
+            {{if financialTripPlan.guideFinancialExamine != 1}}
             <a data-entity-id="{{financialTripPlan.id}}" class="cursor btn-count-update T-audit">
                 审核
                 <label style="padding-left:10px;">|</label>
             </a>
-
+            {{/if}}
             <a data-entity-id="{{financialTripPlan.id}}" class=" btn-count-examine cursor">
                 明细
             </a>
