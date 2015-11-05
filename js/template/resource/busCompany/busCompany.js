@@ -100,7 +100,7 @@ define(function(require,exports){
 		});
 		//回车搜索事件
 		BusCompany.$tab.find(".T-busCompanyInputList").keyup(function(event){
-			console.log(event);
+			event.preventDefault();
 			if(event.which == 13 && !window.forbiddenError){
 				BusCompany.listBusCompany(0);
 			}

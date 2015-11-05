@@ -10,6 +10,8 @@ var listwidth = parseInt($("#tabList li").eq(0).css("width"));//ul总宽度，�
 // window.UEDITOR_HOME_URL = APP_ROOT + 'app/components/ueditor/';
 var modals = {};
 var $tabList = $('#tabList'), $tabContent = $("#tabContent");
+var SWITCH_TAB_SAVE = 'switch.tab.save',
+	CLOSE_TAB_SAVE = 'close.tab.save';
 
 function addTab(tabId,tabName,html){
 	var $current_li = $tabList.find('.active'),
@@ -1572,7 +1574,7 @@ Tools.addTab = function(tab_id, tab_name, html)  {
 		if ($content.data('isEdited'))  {
 			showSaveConfirmDialog($( "#confirm-dialog-message" ), "内容已经被修改，是否保存?",
 								function(){	// 保存
-									$content.trigger('switch.tab.save', [tab_id, tab_name, html]);
+									$content.trigger(SWITCH_TAB_SAVE, [tab_id, tab_name, html]);
 								},
 								function(){  // 不保存
 									updateTabContent();
@@ -1610,13 +1612,13 @@ Tools.addTab = function(tab_id, tab_name, html)  {
 			
 			$tab_li.on('click', '.T-close', function(event) {
 				event.preventDefault();
-				var $content = $('#' + tab_id + '-content');
+				var $content = $('#tab-' + tab_id + '-content');
 
 				// 页面已经编辑
 				if ($content.data('isEdited'))  {
 					showSaveConfirmDialog($( "#confirm-dialog-message" ), "内容已经被修改，是否保存?",
 										function(){	// 保存
-											$content.trigger('close.tab.save');
+											$content.trigger(CLOSE_TAB_SAVE);
 										},
 										function(){  // 不保存
 											Tools.closeTab(tab_id);

@@ -1,5 +1,5 @@
 <div class="col-xs-12 updateTouristGroup globalAdd">
-	<form class="form-horizontal touristGroupMainForm updateTouristGroupMainForm" role="form" style="margin-top:10px" onsubmit="return false">
+	<form class="form-horizontal touristGroupMainForm updateTouristGroupMainForm updateTouristInput" role="form" style="margin-top:10px" onsubmit="return false">
 		<div class=" ui-sortable-handle">
 			<h5 class="">
 				<span class="badge badge-primary">1</span>
@@ -11,9 +11,9 @@
 						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>线路产品:</label>
 						<div class="col-sm-2">
 							{{if touristGroupDetail.status == 1}}
-							<input type="text"  style="width: 155px" value="{{if touristGroupDetail.lineProduct != null}}{{touristGroupDetail.lineProduct.name}}{{/if}}" name="lineProductIdName" class="col-sm-8 bind-change" readonly="readonly" />
+							<input type="text"  value="{{if touristGroupDetail.lineProduct != null}}{{touristGroupDetail.lineProduct.name}}{{/if}}" name="lineProductIdName" class="col-sm-8 bind-change product-width" readonly="readonly" />
 							<input type="hidden" value="{{touristGroupDetail.lineProductId}}" name="lineProductId" />
-							<button class="col-sm-4 btn btn-sm btn-primary btn-travelLine-search" style="padding-bottom:5px;width: 62px">
+							<button class="col-sm-4 btn btn-sm btn-primary btn-travelLine-search travelLine-search" style="padding-bottom:5px;width: 62px">
 								<i class="ace-icon fa fa-search "></i>搜索
 							</button>
 							{{else}}
@@ -27,7 +27,7 @@
 							{{if touristGroupDetail.status == 1}}
 							<div class="input-group">
 								<input type="text" name="startTime" value="{{touristGroupDetail.startTime | dateFormat: 'yyyy-MM-dd'}}" class="col-sm-12 date-picker datepicker" />
-									<span class="input-group-addon" style="left: -40px">
+									<span class="input-group-addon icon-tourist">
 										<i class="fa fa-calendar"></i>
 									</span>
 							</div>
@@ -63,7 +63,7 @@
 						</div>
 						<label class="col-sm-1 control-label no-padding-right">获得方式:</label>
 						<div class="col-sm-2">
-							<select name="getType" class="col-sm-12" style="width: 220px">
+							<select name="getType" class="col-sm-12 getPay-type">
 								<option{{if touristGroupDetail.getType == 1}} selected="selected"{{/if}} value="1">旅行社系统</option>
 								<option{{if touristGroupDetail.getType == 2}} selected="selected"{{/if}} value="2">传真</option>
 								<option{{if touristGroupDetail.getType == 3}} selected="selected"{{/if}} value="3">短信</option>
