@@ -110,44 +110,44 @@
     <div class="tabbable">
         <ul class="nav nav-tabs">
             <li class="active col-sm-1 no-padding align-center">
-                <a data-toggle="tab" href="#financial-count-update-money" aria-expanded="true">团款</a>
+                <a data-toggle="tab" href="#financial-count-reimbursement-money" aria-expanded="true">团款</a>
             </li>
             <li class="col-sm-1 no-padding align-center">
-                <a data-toggle="tab" href="#financial-count-update-shop" aria-expanded="true">购物</a>
+                <a data-toggle="tab" href="#financial-count-reimbursement-shop" aria-expanded="true">购物</a>
             </li>
             <li class="col-sm-1 no-padding align-center">
-                <a data-toggle="tab" href="#financial-count-update-selfpay" aria-expanded="true">自费</a>
+                <a data-toggle="tab" href="#financial-count-reimbursement-selfpay" aria-expanded="true">自费</a>
             </li>
             <li class="col-sm-1 no-padding align-center">
-                <a data-toggle="tab" href="#financial-count-update-other-incoming" aria-expanded="true">其他收入</a>
+                <a data-toggle="tab" href="#financial-count-reimbursement-other-incoming" aria-expanded="true">其他收入</a>
             </li>
             <li class="col-sm-1 no-padding align-center">
-                <a data-toggle="tab" href="#financial-count-update-buspay" aria-expanded="true">车费</a>
+                <a data-toggle="tab" href="#financial-count-reimbursement-buspay" aria-expanded="true">车费</a>
             </li>
             <li class="col-sm-1 no-padding align-center">
-                <a data-toggle="tab" href="#financial-count-update-restaurantpay" aria-expanded="true">餐费</a>
+                <a data-toggle="tab" href="#financial-count-reimbursement-restaurantpay" aria-expanded="true">餐费</a>
             </li>
             <li class="col-sm-1 no-padding align-center">
-                <a data-toggle="tab" href="#financial-count-update-hotelpay" aria-expanded="true">房费</a>
+                <a data-toggle="tab" href="#financial-count-reimbursement-hotelpay" aria-expanded="true">房费</a>
             </li>
             <li class="col-sm-1 no-padding align-center">
-                <a data-toggle="tab" href="#financial-count-update-scenicpay" aria-expanded="true">景区</a>
+                <a data-toggle="tab" href="#financial-count-reimbursement-scenicpay" aria-expanded="true">景区</a>
             </li>
             <li class="col-sm-1 no-padding align-center">
-                <a data-toggle="tab" href="#financial-count-update-ticketpay" aria-expanded="true">票务</a>
+                <a data-toggle="tab" href="#financial-count-reimbursement-ticketpay" aria-expanded="true">票务</a>
             </li>
             <li class="col-sm-1 no-padding align-center">
-                <a data-toggle="tab" href="#financial-count-update-otherpay" aria-expanded="true">其他支出</a>
+                <a data-toggle="tab" href="#financial-count-reimbursement-otherpay" aria-expanded="true">其他支出</a>
             </li>
             {{if touristGroup != null}}
             <li class="col-sm-1 no-padding align-center">
-                <a data-toggle="tab" href="#financial-count-update-outarrangepay" aria-expanded="true">中转</a>
+                <a data-toggle="tab" href="#financial-count-reimbursement-outarrangepay" aria-expanded="true">中转</a>
             </li>
             {{/if}}
         </ul>
-        <div class="tab-content financial-count-update-update-tab">
+        <div class="tab-content financial-count-reimbursement-reimbursement-tab">
             <!-- 团款 -->
-            <div id="financial-count-update-money" class="tab-pane fade active in">
+            <div id="financial-count-reimbursement-money" class="tab-pane fade active in">
                 <table class="table table-striped table-bordered table-hover">
                     <tbody>
                     <tr>
@@ -165,7 +165,7 @@
                 </table>
             </div>
             <!-- 购物 -->
-            <div id="financial-count-update-shop" class="tab-pane fade">
+            <div id="financial-count-reimbursement-shop" class="tab-pane fade">
                 <table class="table table-striped table-bordered table-hover">
                     <thead>
                     <tr>
@@ -203,7 +203,12 @@
                         {{if index==0}}<td rowspan="{{shopArrangeList.shopArrangePolicy.length}}">{{arrange.shop.name}}</td>{{/if}}
                         <td>{{arrange.shopPolicy.name}}</td>
                         <td><input policyId="{{if arrange.shopPolicy != null}}{{arrange.shopPolicy.id}}{{/if}}" name="consumeMoney" style="width:90px;" type="text" value="{{arrange.consumeMoney}}" old="{{arrange.consumeMoney}}" maxlength="11" /></td>
-                        <td><a href="javascript:void(0);" url="{{arrange.billImage}}" class="btn-view">查看</a></td>
+                        <td>{{if arrange.billImage != null && arrange.billImage != ""}}
+                                <a href="javascript:void(0);" url="{{arrange.billImage}}" class="btn-view">查看</a>
+                            {{else}}
+                                <span style="color:#bbb;">查看</span>
+                            {{/if}}
+                        </td>
                         {{if index == 0 }}<td rowspan="{{shopArrangeList.shopArrangePolicy.length}}"><span class="sumMoney{{arrange.whichDay}}_{{arrange.shopId}}"></span></td>{{/if}}
                         <td><input name="travelAgencyRate" style="width:90px;" type="text" value="{{arrange.travelAgencyRate*100}}" old="{{arrange.travelAgencyRate}}" maxlength="5"/></td>
                         <td><span>{{arrange.travelAgencyRateMoney}}</span><input type="hidden" name="travelAgencyRateMoney" value="{{arrange.travelAgencyRateMoney}}" /></td>
@@ -225,7 +230,7 @@
             </div>
 
             <!-- 自费 -->
-            <div id="financial-count-update-selfpay" class="tab-pane fade">
+            <div id="financial-count-reimbursement-selfpay" class="tab-pane fade">
                 <table class="table table-striped table-bordered table-hover">
                     <thead>
                     <tr>
@@ -277,7 +282,12 @@
                                 <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" />
                                 </td>
                             <td><input type="text" name="realGetMoney" value="{{arrange.realGetMoney}}" ></td>
-                            <td><a href="javascript:void(0);" url="{{arrange.billImage}}" class="btn-view">查看</a></td>
+                            <td>{{if arrange.billImage != null && arrange.billImage != ""}}
+                                    <a href="javascript:void(0);" url="{{arrange.billImage}}" class="btn-view">查看</a>
+                                {{else}}
+                                    <span style="color:#bbb;">查看</span>
+                                {{/if}}
+                            </td>
                             <td>
                                 <input style="width:90px;" type="text" name="travelAgencyRate" value="{{arrange.travelAgencyRate*100 | parseInt}}" old="{{arrange.travelAgencyRate}}" maxlength="5"/></td>
                             <td>
@@ -304,7 +314,7 @@
             </div>
 
             <!-- 其他收入 -->
-            <div id="financial-count-update-other-incoming" class="tab-pane fade T-income">
+            <div id="financial-count-reimbursement-other-incoming" class="tab-pane fade T-income">
                 <div class="ui-sortable-handle widget-container-col">
                     <h5 class="title-size">
                         <i class="ace-icon fa fa-medkit"></i> 其他收入
@@ -337,8 +347,13 @@
                         <td><input style="width:90px;" type="text" name="price" value="{{otherInCome.price}}" old="{{otherInCome.price}}" maxlength="11"/></td>
                         <td><input style="width:90px;" type="text" name="count" value="{{otherInCome.count}}" old="{{otherInCome.count}}" maxlength="11"/></td>
                         <td><span class="needPayMoney">{{otherInCome.needPayMoney}}</span><input type="hidden" name="realneedPayMoney" value="{{otherInCome.needPayMoney}}" /></td>
-                        <td><a href="javascript:void(0);" url="{{otherInCome.billImage}}" class="btn-view">查看</a></td>
-                        <td><input type="text" value="{{otherInCome.billRemark}}" name="billRemark"/></td>
+                        <td>{{if otherInCome.billImage != null && otherInCome.billImage != ""}}
+                                <a href="javascript:void(0);" url="{{otherInCome.billImage}}" class="btn-view">查看</a>
+                            {{else}}
+                                <span style="color:#bbb;">查看</span>
+                            {{/if}}
+                        </td>
+                        <td><input type="text" value="{{otherInCome.remark}}" name="billRemark"/></td>
                     </tr>
                     {{/if}}
                     {{/each}}
@@ -347,7 +362,7 @@
             </div>
 
             <!-- 车费 -->
-            <div id="financial-count-update-buspay" class="tab-pane fade">
+            <div id="financial-count-reimbursement-buspay" class="tab-pane fade">
                 <table class="table table-striped table-bordered table-hover">
                     <thead>
                     <tr>
@@ -379,7 +394,12 @@
                             <input style="width:90px;" type="text" name="realGuidePayMoney" {{if busCompany.billUpdateTime !=null}}value="{{busCompany.realGuidePayMoney}}"{{else}}value="{{busCompany.guidePayMoney}}" {{/if}}old="{{busCompany.realGuidePayMoney}}" maxlength="11"/>
                             <input type="hidden" name="payedMoney" value="{{busCompany.payedMoney}}" />
                             <input type="hidden" name="guidePayMoney" value="{{busCompany.guidePayMoney}}" /></td>
-                        <td><a href="javascript:void(0);" url="{{busCompany.billImage}}" class="btn-view">查看</a></td>
+                        <td>{{if busCompany.billImage != null && busCompany.billImage != ""}}
+                                <a href="javascript:void(0);" url="{{busCompany.billImage}}" class="btn-view">查看</a>
+                            {{else}}
+                                <span style="color:#bbb;">查看</span>
+                            {{/if}}
+                        </td>
                         <td><span class="difference"></span></td>
                         <td><input value="{{busCompany.billRemark}}" type="text" name="billRemark" /></td>
                     </tr>
@@ -389,7 +409,7 @@
                 </table>
             </div>
             <!-- 餐费 -->
-            <div id="financial-count-update-restaurantpay" class="tab-pane fade">
+            <div id="financial-count-reimbursement-restaurantpay" class="tab-pane fade">
                 <table class="table table-striped table-bordered table-hover">
                     <thead>
                         <tr>
@@ -435,7 +455,12 @@
                             <input style="width:90px;" type="text" name="realGuidePayMoney" {{if arrange.billUpdateTime != null}}value="{{arrange.realGuidePayMoney}}"{{else}}value="{{arrange.guidePayMoney}}" {{/if}}old="{{arrange.realGuidePayMoney}}" maxlength="11"/>
                             <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" />
                             <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" /></td>
-                        <td><a href="javascript:void(0);" url="{{arrange.billImage}}" class="btn-view">查看</a></td>
+                        <td>{{if arrange.billImage != null && arrange.billImage != ""}}
+                                <a href="javascript:void(0);" url="{{arrange.billImage}}" class="btn-view">查看</a>
+                            {{else}}
+                                <span style="color:#bbb;">查看</span>
+                            {{/if}}
+                        </td>
                         <td><span class="difference"></span></td> 
                         <td><input value="{{arrange.billRemark}}" name="billRemark" type="text" maxlength="1000" /></td>
                     </tr>
@@ -449,7 +474,7 @@
             </div>
 
             <!-- 房费 -->
-            <div id="financial-count-update-hotelpay" class="tab-pane fade">
+            <div id="financial-count-reimbursement-hotelpay" class="tab-pane fade">
                 <table class="table table-striped table-bordered table-hover">
                     <thead>
                     <tr>
@@ -486,7 +511,12 @@
                             <input style="width:90px;" type="text" name="realGuidePayMoney"{{if arrange.billUpdateTime != null }} value="{{arrange.realGuidePayMoney}}"{{else}}value="{{arrange.guidePayMoney}}" {{/if}}oid="{{arrange.realGuidePayMoney}}" maxlength="11"/>
                             <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" />
                             <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" /></td>
-                        <td><a href="javascript:void(0);" url="{{arrange.billImage}}" class="btn-view">查看</a></td>
+                        <td>{{if arrange.billImage != null && arrange.billImage != ""}}
+                                <a href="javascript:void(0);" url="{{arrange.billImage}}" class="btn-view">查看</a>
+                            {{else}}
+                                <span style="color:#bbb;">查看</span>
+                            {{/if}}
+                        </td>
                         <td><span class="difference"></span></td>
                         <td><input value="{{arrange.billRemark}}"  type="text" name="billRemark" maxlength="1000" /></td>
                     </tr>
@@ -500,7 +530,7 @@
             </div>
 
             <!-- 景区 -->
-            <div id="financial-count-update-scenicpay" class="tab-pane fade">
+            <div id="financial-count-reimbursement-scenicpay" class="tab-pane fade">
                 <table class="table table-striped table-bordered table-hover">
                     <thead>
                     <tr>
@@ -537,7 +567,12 @@
                             <input style="width:90px;" type="text" name="realGuidePayMoney"{{if arrange.billUpdateTime != null}} value="{{arrange.realGuidePayMoney}}"{{else}}value={{arrange.guidePayMoney}} {{/if}}old="{{arrange.realGuidePayMoney}}" maxlength="11"/>
                             <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" />
                             <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" /></td>
-                        <td><a href="javascript:void(0);" url="{{arrange.billImage}}" class="btn-view">查看</a></td>
+                        <td>{{if arrange.billImage != null && arrange.billImage != ""}}
+                                <a href="javascript:void(0);" url="{{arrange.billImage}}" class="btn-view">查看</a>
+                            {{else}}
+                                <span style="color:#bbb;">查看</span>
+                            {{/if}}
+                        </td>
                         <td><span class="difference"></span></td>
                         <td><input value="{{arrange.billRemark}}"  type="text" name="billRemark" maxlength="1000" /></td>
                     </tr>
@@ -551,7 +586,7 @@
             </div>
 
             <!-- 票务 -->
-            <div id="financial-count-update-ticketpay" class="tab-pane fade">
+            <div id="financial-count-reimbursement-ticketpay" class="tab-pane fade">
                 <table class="table table-striped table-bordered table-hover">
                     <thead>
                     <tr>
@@ -591,7 +626,12 @@
                             <input style="width:90px;" type="text" name="realGuidePayMoney" {{if arrange.billUpdateTime != null}}value="{{arrange.realGuidePayMoney}}" {{else}}value="{{arrange.guidePayMoney}}"{{/if}}old="{{arrange.realGuidePayMoney}}" maxlength="11"/>
                             <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" />
                             <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" /></td>
-                        <td><a href="javascript:void(0);" url="{{arrange.billImage}}" class="btn-view">查看</a></td>
+                        <td>{{if arrange.billImage != null && arrange.billImage != ""}}
+                                <a href="javascript:void(0);" url="{{arrange.billImage}}" class="btn-view">查看</a>
+                            {{else}}
+                                <span style="color:#bbb;">查看</span>
+                            {{/if}}
+                        </td>
                         <td><span class="difference"></span></td>
                         <td><input value="{{arrange.billRemark}}"  type="text" name="billRemark" maxlength="1000" /></td>
                     </tr>
@@ -602,7 +642,7 @@
             </div>
 
             <!-- 其他支出 -->
-            <div id="financial-count-update-otherpay" class="tab-pane fade">
+            <div id="financial-count-reimbursement-otherpay" class="tab-pane fade">
                 <div class="ui-sortable-handle widget-container-col">
                     <h5 class="title-size">
                         <i class="ace-icon fa fa-medkit"></i> 其他支出
@@ -647,7 +687,12 @@
                             <input type="text" name="realGuidePayMoney" {{if arrange.billUpdateTime != null}}value="{{arrange.realGuidePayMoney}}" {{else}}value="{{arrange.guidePayMoney}}"{{/if}} old="{{arrange.realGuidePayMoney}}" maxlength="11"/>
                             <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" />
                             <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" /></td>
-                        <td><a href="javascript:void(0);" url="{{arrange.billImage}}" class="btn-view">查看</a></td>
+                        <td>{{if arrange.billImage != null && arrange.billImage != ""}}
+                                <a href="javascript:void(0);" url="{{arrange.billImage}}" class="btn-view">查看</a>
+                            {{else}}
+                                <span style="color:#bbb;">查看</span>
+                            {{/if}}
+                        </td>
                         <td><span class="difference"></span></td>
                         <td><input value="{{arrange.billRemark}}" name="billRemark" maxlength="1000" /></td>
                     </tr>
@@ -661,7 +706,7 @@
 
             {{if touristGroup != null}}
             <!-- 中转 -->
-            <div id="financial-count-update-outarrangepay" class="tab-pane fade">
+            <div id="financial-count-reimbursement-outarrangepay" class="tab-pane fade">
                 <table class="table table-striped table-bordered table-hover">
                     <thead>
                     <tr>

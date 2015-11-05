@@ -9,11 +9,13 @@
 				{{/each}}
 			</select> -->
             <select class="choosePorB col-sm-3">
+                <option value='0' {{if searchParam.type == 0}}selected="selected"{{/if}}>全部</option>
                 <option value='1' {{if searchParam.type == 1}}selected="selected"{{/if}}>组团社</option>
                 <option value='2' {{if searchParam.type == 2}}selected="selected"{{/if}}>业务部</option>
             </select>
-            <input type="text" class="col-sm-8 choosePartnerAgency marginLeft-Right7 T-PorB" placeholder="来源" name="fromPartnerAgencyName" style="float: right;{{if searchParam.type == 2}}display: none{{/if}}" value="{{if searchParam.fromPartnerAgencyName==''}}全部{{else}}{{searchParam.fromPartnerAgencyName}}{{/if}}" />
-            <input type="text" class="col-sm-8 chooseBussinessGroup marginLeft-Right7 T-PorB" placeholder="来源" name="fromBussinessGroupName" style="float: right;{{if searchParam.type == 1 || searchParam.type == null}}display: none;{{/if}}" value="{{searchParam.fromBussinessGroupName}}" />
+            <input type="text" class="col-sm-8 choosePAB marginLeft-Right7" placeholder="全部来源" style="float: right;{{if searchParam.type != 0}}display: none{{/if}}" readonly="readonly" />
+            <input type="text" class="col-sm-8 choosePartnerAgency marginLeft-Right7 T-PorB" placeholder="来源" name="fromPartnerAgencyName" style="float: right;{{if searchParam.type != 1 || searchParam.type == null}}display: none{{/if}}" value="{{if searchParam.fromPartnerAgencyName==''}}全部{{else}}{{searchParam.fromPartnerAgencyName}}{{/if}}" />
+            <input type="text" class="col-sm-8 chooseBussinessGroup marginLeft-Right7 T-PorB" placeholder="来源" name="fromBussinessGroupName" style="float: right;{{if searchParam.type != 2 || searchParam.type == null}}display: none;{{/if}}" value="{{if searchParam.fromBussinessGroupName == ""}}全部{{else}}{{searchParam.fromBussinessGroupName}}{{/if}}" />
             <input type="hidden" name="fromPartnerAgencyId" value="{{searchParam.fromPartnerAgencyId}}">
             <input type="hidden" name="fromBussinessGroupId" value="{{searchParam.fromBussinessGroupId}}" />
         </div>
@@ -52,7 +54,7 @@
         <label class="pull-left text-right control-label no-padding-right">录入日期:</label>
         <div class="col-sm-1 marginLeft-Right7">
             <div class="input-group col-sm-12">
-                <input class="col-sm-12 datepicker" name="createTimeStart" value="{{if searchParam.createTimeStart!=''}}{{searchParam.createTimeStart  | dateFormat: 'yyyy-MM-dd'}}{{else}}{{/if}}" type="text" />
+                <input class="col-sm-12 datepicker" name="createTimeStart" value="{{if !!searchParam.createTimeStart}}{{searchParam.createTimeStart  | dateFormat: 'yyyy-MM-dd'}}{{else}}{{/if}}" type="text" />
                 <span class="input-group-addon">
 					<i class="fa fa-calendar"></i>
 				</span>
@@ -61,7 +63,7 @@
         <label class="pull-left text-right control-label no-padding-right">--</label>
         <div class="col-sm-1">
             <div class="input-group col-sm-12">
-                <input class="col-sm-12 datepicker" name="createTimeEnd" value="{{if searchParam.createTimeStart!=''}}{{searchParam.createTimeEnd | dateFormat: 'yyyy-MM-dd'}}{{else}}{{/if}}"type="text" />
+                <input class="col-sm-12 datepicker" name="createTimeEnd" value="{{if !!searchParam.createTimeEnd}}{{searchParam.createTimeEnd | dateFormat: 'yyyy-MM-dd'}}{{else}}{{/if}}"type="text" />
                 <span class="input-group-addon">
 					<i class="fa fa-calendar"></i>
 				</span>
