@@ -2100,45 +2100,47 @@ define(function(require, exports) {
 			table.each(function(){
 				var _this = $(this);
 				_this.find("input[name=price], input[name=fee]").on("change", function(){
-					plusPrice(this);
+					tripPlan.plusPrice(this);
+				});
+				_this.find("input[name=price], input[name=fee]").on("blur", function(){
+					tripPlan.plusPrice(this);
 				});
 				_this.find("input[name=memberCount], input[name=memberCount], input[name=needRoomCount]").on("change", function(){
-					plusPrice(this);
+					tripPlan.plusPrice(this);
 				});
 				_this.find("input[name=reduceMoney]").on("change", function(){
-					plusPrice(this);
+					tripPlan.plusPrice(this);
 				});
 				_this.find("input[name=payedMoney]").on("change", function(){
-					plusPrice(this);
+					tripPlan.plusPrice(this);
 				});
 				_this.find("select[name=payType]").on("change", function(){
 					if($(this).val()!=0){
 						$(this).parent().parent().find("input[name=guidePayMoney]").val("");
 					}else{
-						plusPrice(this);
+						tripPlan.plusPrice(this);
 					}
 				});
-				
-				function plusPrice(obj){
-					var parents = $(obj).parent().parent();
-					var payType = parents.find("select[name=payType]").val(),
-						payedMoney = parents.find("input[name=payedMoney]").val(),
-						payedMoney = isNaN(payedMoney) ? 0 : payedMoney;
-					price = parseFloat(parents.find("input[name=price], input[name=fee]").val());
-					price = isNaN(price) ? 0 : price;
-					num = parseFloat(parents.find("input[name=memberCount], input[name=memberCount], input[name=needRoomCount]").val());
-					num = isNaN(num) ? 0 : num;
-					reduceMoney = parseFloat(parents.find("input[name=reduceMoney]").val());
-					reduceMoney = isNaN(reduceMoney) ? 0 : reduceMoney;
-
-					parents.find("input[name=needPayMoney]").val(price * num - reduceMoney);
-					
-					if(payType == 0){
-						parents.find("input[name=guidePayMoney]").val((price * num - reduceMoney)-payedMoney);
-					}
-					tripPlan.moneyTripPlan();
-				}
 			});			
+		},
+		plusPrice :function(obj){
+			var parents = $(obj).parent().parent();
+			var payType = parents.find("select[name=payType]").val(),
+				payedMoney = parents.find("input[name=payedMoney]").val(),
+				payedMoney = isNaN(payedMoney) ? 0 : payedMoney;
+			price = parseFloat(parents.find("input[name=price], input[name=fee]").val());
+			price = isNaN(price) ? 0 : price;
+			num = parseFloat(parents.find("input[name=memberCount], input[name=memberCount], input[name=needRoomCount]").val());
+			num = isNaN(num) ? 0 : num;
+			reduceMoney = parseFloat(parents.find("input[name=reduceMoney]").val());
+			reduceMoney = isNaN(reduceMoney) ? 0 : reduceMoney;
+
+			parents.find("input[name=needPayMoney]").val(price * num - reduceMoney);
+			
+			if(payType == 0){
+				parents.find("input[name=guidePayMoney]").val((price * num - reduceMoney)-payedMoney);
+			}
+			tripPlan.moneyTripPlan();
 		},
 		exportTripPlanArrange:function(){
 			var id = $(this).attr("data-entity-id");
