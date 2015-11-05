@@ -59,11 +59,11 @@
 					<a data-entity-id="{{result.id}}" class="cursor btn-transferIn-view">
 						查看
 					</a>
-					<a data-entity-id="{{result.id}}" class="cursor {{if result.status!=1}}btn-transferIn-edit{{/if}} R-right"  style="{{if result.status==1}} color:#bbb; {{/if}}" data-right="1180007">
+					<a data-entity-id="{{result.id}}" class="cursor {{if result.status!=1 && result.status!=2}}btn-transferIn-edit{{/if}}  R-right"  style="{{if result.status==1 || result.status!=2}} color:#bbb; {{/if}}" data-right="1180007">
 						<label class="padding-right20">|</label>
 						确认
 					</a>
-					<a data-entity-id="{{result.id}}" class="cursor {{if result.status!=1 || result.status!=2}}btn-transferIn-delete{{/if}} R-right" style="{{if result.status==1 || result.status==2}} color:#bbb; {{/if}}"  data-right="1180008">
+					<a data-entity-id="{{result.id}}" class="cursor {{if result.status!=1 && result.status!=2}}btn-transferIn-delete{{/if}} R-right" style="{{if result.status==1 || result.status==2}} color:#bbb; {{/if}}"  data-right="1180008">
 						<label class="padding-right20">|</label>
 						拒绝
 					</a>
