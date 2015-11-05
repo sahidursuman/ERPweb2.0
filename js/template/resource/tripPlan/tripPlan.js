@@ -2331,6 +2331,7 @@ define(function(require, exports) {
 		        				}else{
 		        					optionalArray.splice([a],1);
 				        			$parent.remove();
+				        			saveOptional(1);
 						        }
 		        			} 
 		        		}
