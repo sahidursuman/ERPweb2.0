@@ -2242,6 +2242,7 @@ define(function(require, exports) {
 				        			data.restaurantList = JSON.parse(data.restaurantList);
 									var html = optionalListTemplate(data);
 									$list.html(html);
+									$(window).trigger("resize");
 
 									// 绑定翻页组件
 									laypage({
