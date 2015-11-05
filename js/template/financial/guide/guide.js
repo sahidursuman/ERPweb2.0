@@ -47,7 +47,7 @@ define(function(require, exports) {
 							month : month
 						};
 						var html = listTemplate(data);
-						addTab(menuKey,"导游帐务",html);
+						addTab(menuKey,"导游账务",html);
 						
 						$("#"+tabId+ " select[name=guideId]").val(data.guideId);
 						$("#"+tabId+ " select[name=year]").val(data.year);

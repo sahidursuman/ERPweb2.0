@@ -2015,7 +2015,7 @@ define(function(require, exports) {
 			count.bindMainTable(formClass,typeFlag);
 		},
 		bindBus : function(obj,formClass) {
-			//count.calNeedPayMoney(obj,"Bus");
+			count.calNeedPayMoney(obj,"Bus");
 			count.bindBusSum(obj,formClass);
 		},
 		bindBusSum : function(obj,formClass) {

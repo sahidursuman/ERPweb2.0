@@ -1312,10 +1312,10 @@ define(function(require, exports) {
 												"<td>"+addGroupIdJson[i].remark+"</td>"+
 												"<td>"+
 												"<div class=\"hidden-sm hidden-xs btn-group\">"+
-												"<a data-entity-id=\""+addGroupIdJson[i].id+"\" class=\"cursor touristGroupView\">"+
+												"<a data-entity-id=\""+addGroupIdJson[i].id+"\" class=\"cursor addTripPlanView\">"+
 													"查看"+
 												"</a>"+"<a class='cursor'> |</a>"+
-												"<a data-entity-id=\""+addGroupIdJson[i].id+"\" class=\"cursor touristGroupDelete\">"+
+												"<a data-entity-id=\""+addGroupIdJson[i].id+"\" class=\"cursor addTripPlanDelete\">"+
 													"删除"+
 												"</a>"+
 												"</div>"+
