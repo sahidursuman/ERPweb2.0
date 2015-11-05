@@ -281,7 +281,7 @@
                                 <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" />
                                 <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" />
                                 </td>
-                            <td>{{arrange.realGetMoney}}</td>
+                            <td><input type="text" name="realGetMoney" value="{{arrange.realGetMoney}}" ></td>
                             <td>{{if arrange.billImage != null && arrange.billImage != ""}}
                                     <a href="javascript:void(0);" url="{{arrange.billImage}}" class="btn-view">查看</a>
                                 {{else}}
