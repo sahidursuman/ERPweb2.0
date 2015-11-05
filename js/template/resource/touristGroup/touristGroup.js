@@ -605,7 +605,7 @@ define(function(require, exports) {
 						"<tr>"+
 						"<td>"+"</td>"+
 						"<td><input name=\"name\" type=\"text\" class=\"col-sm-12  no-padding-right\" /></td>"+
-						"<td><input name=\"mobileNumber\" type=\"text\" class=\"col-sm-12  no-padding-right\" /></td>"+
+						"<td><input name=\"mobileNumber\" type=\"text\" class=\"col-sm-12  no-padding-right\"  maxlength=\"11\"  /></td>"+
 						"<td><select name=\"idCardType\" value=\"idCardTypeId\"><option value=\"0\" selected=\"selected\">身份证</option><option value=\"1\">护照</option><option value=\"2\">其它</option></select></td>"+
 						"<td><input name=\"idCardNumber\" type=\"text\" class=\"col-sm-12  no-padding-right\" /></td>"+
 						"<td><div class=\"checkbox\"><label><input type=\"checkbox\" class=\"ace \" value=\"1\" name=\"isContactUser\"><span class=\"lbl\"></span></label></div></td>"+
