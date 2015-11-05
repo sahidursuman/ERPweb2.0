@@ -1766,41 +1766,26 @@ define(function(require, exports) {
 						else{
 							$("#layui-layer"+searchTravelLinelayer+"").find(".layui-layer-content").html(html);
 						}
+
+						var $searchPanel = $('#chooseLineProductId');
 						//搜索按钮事件
 						$("#chooseLineProductId .btn-lineProduct-search").off("click").click(function(){
 							var name = $("#chooseLineProductId input[name=lineProduct_name]").val();
 							touristGroup.searchLineFunction(false,0,name);
 						});
 
-						//分页--首页按钮事件
-						$("#chooseLineProductId .pageMode a.first").off("click").click(function(){
-							var name = $("#chooseLineProductId input[name=lineProduct_name]").val();
-							touristGroup.searchLineFunction(false,0,name);
-						});
-						//分页--上一页事件
-						$("#chooseLineProductId .pageMode a.previous").off("click").click(function(){
-							var name = $("#chooseLineProductId input[name=lineProduct_name]").val();
-							var previous = dataD.pageNo - 1;
-							if(data.pageNo == 0){
-								previous = 0;
-							}
-							touristGroup.searchLineFunction(false,previous,name);
-						});
-						//分页--下一页事件
-						$("#chooseLineProductId .pageMode a.next").off("click").click(function(){
-							var name = $("#chooseLineProductId input[name=lineProduct_name]").val();
-							var next =  dataD.pageNo + 1;
-							if(dataD.pageNo == dataD.totalPage-1){
-								next = dataD.pageNo ;
-							}
-							touristGroup.searchLineFunction(false,next,name);
-						});
-						//分页--尾页事件
-						$("#chooseLineProductId .pageMode a.last").off("click").click(function(){
-							var name = $("#chooseLineProductId input[name=lineProduct_name]").val();
-							if(dataD.totalPage < 1){return;}
-							touristGroup.searchLineFunction(false,dataD.totalPage-1,name);
-						});
+						// 绑定翻页组件
+						laypage({
+						    cont: $searchPanel.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+						    pages: data.totalPage, //总页数
+						    curr: (data.pageNo + 1),
+						    jump: function(obj, first) {
+						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+									touristGroup.searchLineFunction(false, obj.curr -1,$searchPanel.find('input[name=lineProduct_name]').val());
+						    	}
+						    }
+						});	
+
 						//搜索路线   提交事件绑定
 						var travelLineName="";
 						var travelLineId="";
