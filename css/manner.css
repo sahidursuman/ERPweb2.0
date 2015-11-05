@@ -825,9 +825,15 @@ padding-left:0;width: 360px;left: -35px;
     width: 340px;
     position:absolute;right:380px;
 }
-
-
-
+.getPay-type{
+    width: 220px;
+}
+.product-width{
+   width:155px;
+}
+.icon-tourist{
+    margin-left: -40px;
+}
 
 
 
@@ -963,6 +969,23 @@ padding-left:0;width: 360px;left: -35px;
 }
 .trans-PayedMoney{
     width: 280px;
+}
+
+/*游客管理*/
+.updateTouristInput input{
+    width: 180px;
+}
+.getPay-type{
+    width: 180px;
+}
+.product-width{
+    width: 125px !important;
+}
+.travelLine-search{
+    position: absolute;
+}
+.icon-tourist{
+    margin-left: -20px !important;
 }
 }
 
