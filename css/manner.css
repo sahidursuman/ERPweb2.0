@@ -798,7 +798,15 @@ padding-left:0;width: 360px;left: -35px;
 .tableWidthImp{
     width: 97% !important;
 }
+/*项目代订 input*/
 
+.orderNumInput{
+    width: 220px;
+}
+.partnerAgencyInput{
+    width: 120px;
+    margin-left: -10px;
+}
 /*新建线路产品-分割线样式*/
 .line-separated{
     height: 23px;width: 90%;border-bottom:  1px solid #428bca;
@@ -806,10 +814,15 @@ padding-left:0;width: 360px;left: -35px;
 .line-separatedT{
    height: 15px;width: 92%;border-bottom:  1px solid #428bca;
 }
+.add-managerMore{
+    cursor:pointer;left:-38px;
+}
+
+
+
 /*媒体查询 1500*/
 
 @media screen and (max-width:1500px){
-
 
 /*中转分段 list*/
 .arrangeTouristInput input{
@@ -859,12 +872,7 @@ padding-left:0;width: 360px;left: -35px;
 .Choose-spacing{
     margin-left: -60px;
 }
-.Choose-spacing{
-    margin-left: -60px;
-}
-.Choose-spacing{
-    margin-left: -60px;
-}
+
 .triplan-searchBtn{
     margin-left: 20px !important;
 }
@@ -878,6 +886,27 @@ padding-left:0;width: 360px;left: -35px;
 .line-separatedT{
    height: 15px;width: 90%;border-bottom:  1px solid #428bca;
 }
+.orderNumInput{
+    width: 175px;
+}
+.partnerAgencyInput{
+    width: 120px;
+    margin-left: -10px;
+}
+.Choose-spacingNormal{
+    margin-left: 50px;
+}
+.search-spacing{
+    width: 240px;
+    margin-left: 15px !important;
+}
+.bookingInput input{
+    width: 180px;
+}
+.add-managerMore{
+    cursor:pointer;left:-20px;
+}
+
 }
 
 /*媒体查询 1366*/
