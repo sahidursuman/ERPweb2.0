@@ -796,7 +796,7 @@ define(function(require, exports) {
 			tripPlan.setValue("lineProductId",data.lineProduct.id);
 			tripPlan.setValue("startTime",data.lineProduct.startTime);
 
-			tripPlan.setValue("BusCompanyName",data.busCompanyTemplate.busCompany.companyName || "");
+			tripPlan.setValue("busCompany",data.busCompanyTemplate.busCompany.companyName || "");
 			tripPlan.setValue("busCompanyId",data.busCompanyTemplate.busCompany.id || "");
 			tripPlan.setValue("needBusBrand",data.busCompanyTemplate.bus.brand || "");
 			tripPlan.setValue("LicenseNumber",data.busCompanyTemplate.bus.licenseNumber || "");
