@@ -53,13 +53,14 @@ define(function(require, exports) {
 						data.travelLineList = travelLineList;
 						var html = listTemplate(data);
 						addTab(menuKey,"线路模板管理",html);
-						travelLine.initList(data,page);
+						travelLine.initList(data);
 					}
 				}
 			});
 		},
-		initList : function(data,page){
-			var page=0||page; 
+		initList : function(data){
+			console.info(data);
+			var $tab = $('#' + tabId);
 			//新增线路产品button按钮事件
 			$("#"+tabId+"  .btn-lineProduct-add").click(function(){
 				var id = $(this).attr("data-entiy-id");
@@ -122,16 +123,19 @@ define(function(require, exports) {
 
 			// 绑定翻页组件
 			laypage({
-			    cont: $('#'+tabId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+			    cont: $tab.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
 			    pages: data.totalPage, //总页数
-			    curr: (page + 1),
+			    curr: (data.pageNo + 1),
 			    jump: function(obj, first) {
 			    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+			    		travelLine.searchData = {
+			    			name : $tab.find("input[name=travelLine_name]").val(),
+			    			status : $tab.find(".btn-status").find("button").attr("data-value")
+			    		}
 			    		travelLine.listTravelLine(obj.curr -1,travelLine.searchData.name,travelLine.searchData.status);
 			    	}
 			    }
 			});	
-
 		},
 		addTravelLine:function(){
 			var html = addTemplate();
