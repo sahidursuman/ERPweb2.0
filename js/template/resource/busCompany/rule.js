@@ -87,7 +87,7 @@ define(function(require, exports) {
 					}
 				]
 			},
-			{
+			/*{
 				$ele: $container.find('input[name="brand"]'),
 				rules: [
 					{
@@ -95,7 +95,7 @@ define(function(require, exports) {
 						errMsg: '车辆品牌不能为空'
 					}
 				]
-			},
+			},*/ 
 			{
 				$ele: $container.find('input[name="seatCount"]'),
 				rules: [
