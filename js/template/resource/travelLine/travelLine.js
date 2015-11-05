@@ -7,7 +7,8 @@ define(function(require, exports) {
 	var scanDetailTemplate = require("./view/scanDetail");
 	var viewLineDayTemplate = require("./view/viewDetail");
 	var updateTemplate = require("./view/update");
-	var updateLineDayTemplate = require("./view/updateLineDay");
+	var updateLineDayTemplate = require("./view/updateLineDay");//addLineDayTemplate
+	var editLineDayTemplate = require("./view/editLineDay");
 	var addLineProductTemplate = require("./view/addLineProduct");
 	var tabId = "tab-"+menuKey+"-content";
 	var addLineId = menuKey+"-addLine";
@@ -239,11 +240,11 @@ define(function(require, exports) {
 								"<input type=\"hidden\" name=\"hotelLevel\" value=\""+hotelLevel+"\"/>" +
 								"<input type=\"hidden\" name=\"roadScenic\" value=\""+roadScenic+"\"/>" +
 								"<input type=\"hidden\" name=\"detail\" value=\""+detail+"\"/></td></tr>";
-							$(".travelLineDayList .lineDayList tbody").append(lineDayHtml);
-							$(".travelLineDayList .lineDayList .btn-line-day-edit").unbind().click(function(){
+							$addTrLinObj.find(".travelLineDayList .lineDayList tbody").append(lineDayHtml);
+							$addTrLinObj.find(".travelLineDayList .lineDayList .btn-line-day-edit").unbind().click(function(){
 								travelLine.bindEditButton($(this));
 							});
-							$(".travelLineDayList .lineDayList .btn-line-day-delete").click(function(){
+							$addTrLinObj.find(".travelLineDayList .lineDayList .btn-line-day-delete").click(function(){
 								travelLine.deleteDayDialog($(this));
 							});
 							layer.close(addTravelLineDayLayer);
@@ -404,7 +405,7 @@ define(function(require, exports) {
 			travelLine.updateClipboardMode = clipboardMode;
 			// 添加行程安排
 			$travelLupObj.find(".travelLineDayList .btn-line-day-add").click(function(){
-				var lineDayHtml = addLineDayTemplate();
+				var lineDayHtml = editLineDayTemplate();
 				var addTravelLineDayLayer = layer.open({
 					type:1,
 					title:"新增日程",
@@ -414,19 +415,19 @@ define(function(require, exports) {
 					content: lineDayHtml,
 					success:function(){
 						// 绑定表单验证
-						var dayCheckor = rule.travelLineDayCheckor($('.travelLineDayForm'));
+						var dayCheckor = rule.travelLineDayCheckor($('.editLineDayForm'));
 						// 初始化UEditor
 						var ue = init_editor("detailEditor-add-travelLine",{zIndex:99999999}, EDITOR_HEIGHT);
 
-						$(".travelLineDayForm .btn-submit-line-day").click(function(){
+						$(".editLineDayForm .btn-submit-line-day").click(function(){
 							if( !dayCheckor.form() )  return;
 
 							function trim(str){ 
 								 return str.replace(/(^\s*)|(\s*$)/g, ""); 
 							}
-							var repastDetail = $(".travelLineDayForm input[name=repastDetail]").val();
-							var hotelLevel = $(".travelLineDayForm select[name=hotelLevel]").val();
-							var whichDay = $(".travelLineDayForm select[name=whichDay]").val();
+							var repastDetail = $(".editLineDayForm input[name=repastDetail]").val();
+							var hotelLevel = $(".editLineDayForm select[name=hotelLevel]").val();
+							var whichDay = $(".editLineDayForm select[name=whichDay]").val();
 							var level = "三星以下";
 							if (hotelLevel == 0) {
 								level = "未选择";
@@ -445,13 +446,13 @@ define(function(require, exports) {
 							}else if(hotelLevel == 7){
 								level = "五星以上";
 							}
-							var title = $(".travelLineDayForm input[name=title]").val();
+							var title = $(".editLineDayForm input[name=title]").val();
 							if(trim(title) == ""){
 								showMessageDialog($( "#confirm-dialog-message" ), "请输入行程标题");
 								return false;
 							}
-							var restPosition = $(".travelLineDayForm input[name=restPosition]").val();
-							var roadScenic = $(".travelLineDayForm input[name=roadScenic]").val();
+							var restPosition = $(".editLineDayForm input[name=restPosition]").val();
+							var roadScenic = $(".editLineDayForm input[name=roadScenic]").val();
 							var detail = encodeURIComponent(ue.getContent());
 							if(trim(detail) == ""){
 								showMessageDialog($( "#confirm-dialog-message" ), "请输入行程详情");
@@ -464,12 +465,12 @@ define(function(require, exports) {
 									"<input type=\"hidden\" name=\"hotelLevel\" value=\""+hotelLevel+"\"/>" +
 									"<input type=\"hidden\" name=\"roadScenic\" value=\""+roadScenic+"\"/>" +
 									"<input type=\"hidden\" name=\"detail\" value=\""+detail+"\"/></td></tr>";
-							$(".travelLineDayList .lineDayList tbody").append(lineDayHtml);
-							$(".travelLineDayList .lineDayList .btn-line-day-edit").unbind().click(function(){
+							$travelLupObj.find(".travelLineDayList .lineDayList tbody").append(lineDayHtml);
+							$travelLupObj.find(".travelLineDayList .lineDayList .btn-line-day-edit").unbind().click(function(){
 								travelLine.bindEditButton($(this));
 							});
 							
-							$(".travelLineDayList .lineDayList .btn-line-day-delete").click(function(){
+							$travelLupObj.find(".travelLineDayList .lineDayList .btn-line-day-delete").click(function(){
 								travelLine.deleteDayDialog($(this));
 							});
 							
