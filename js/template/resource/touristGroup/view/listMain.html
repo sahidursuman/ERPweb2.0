@@ -54,7 +54,7 @@
         <label class="pull-left text-right control-label no-padding-right">录入日期:</label>
         <div class="col-sm-1 marginLeft-Right7">
             <div class="input-group col-sm-12">
-                <input class="col-sm-12 datepicker" name="createTimeStart" value="{{if searchParam.createTimeStart!=''}}{{searchParam.createTimeStart  | dateFormat: 'yyyy-MM-dd'}}{{else}}{{/if}}" type="text" />
+                <input class="col-sm-12 datepicker" name="createTimeStart" value="{{if !!searchParam.createTimeStart}}{{searchParam.createTimeStart  | dateFormat: 'yyyy-MM-dd'}}{{else}}{{/if}}" type="text" />
                 <span class="input-group-addon">
 					<i class="fa fa-calendar"></i>
 				</span>
@@ -63,7 +63,7 @@
         <label class="pull-left text-right control-label no-padding-right">--</label>
         <div class="col-sm-1">
             <div class="input-group col-sm-12">
-                <input class="col-sm-12 datepicker" name="createTimeEnd" value="{{if searchParam.createTimeStart!=''}}{{searchParam.createTimeEnd | dateFormat: 'yyyy-MM-dd'}}{{else}}{{/if}}"type="text" />
+                <input class="col-sm-12 datepicker" name="createTimeEnd" value="{{if !!searchParam.createTimeEnd}}{{searchParam.createTimeEnd | dateFormat: 'yyyy-MM-dd'}}{{else}}{{/if}}"type="text" />
                 <span class="input-group-addon">
 					<i class="fa fa-calendar"></i>
 				</span>
