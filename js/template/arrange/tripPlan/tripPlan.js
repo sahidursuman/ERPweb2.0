@@ -951,6 +951,7 @@ define(function(require, exports) {
 					$.ajax({
 						url:""+APP_ROOT+"back/guide.do?method=getGuideById&token="+$.cookie("token")+"&menuKey=resource_guide&operation=view",
 	                    dataType: "json",
+	                    showLoading:false,
 	                    data:"id="+ui.item.id,
 	                    success: function(data) {
 	                    	layer.close(globalLoadingLayer);
@@ -968,6 +969,7 @@ define(function(require, exports) {
 				$.ajax({
 					url:""+APP_ROOT+"back/guide.do?method=findAll&token="+$.cookie("token")+"&menuKey=resource_guide&operation=view",
                     dataType: "json",
+                    showLoading:false,
                     success: function(data) {
                     	layer.close(globalLoadingLayer);
 						var result = showDialog(data);
@@ -1472,6 +1474,7 @@ define(function(require, exports) {
 				$.ajax({
 					url:""+APP_ROOT+"back/bookingOrder.do?method=getSeatCountList&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 					dataType:"json",
+					showLoading: false,
 					success:function(data){
 						var result = showDialog(data);
 						if(result){
@@ -1532,6 +1535,7 @@ define(function(require, exports) {
 						url:""+APP_ROOT+"back/bookingOrder.do?method=getBusBrandList&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 						data:"seatCount="+seatCount+"",
 						dateType:"json",
+						showLoading:false,
 						type:"POST",
 						success:function(data){
 							var result = showDialog(data);
@@ -1568,6 +1572,7 @@ define(function(require, exports) {
 			$.ajax({
 				url:""+APP_ROOT+"back/tripPlan.do?method=getQueryTermsForPlan&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 				dateType:"json",
+				showLoading:false,
 				type:"POST",
 				success:function(data){
 					var result = showDialog(data);
@@ -1617,6 +1622,7 @@ define(function(require, exports) {
 							brand: busBrand
 						},
 						dateType:"json",
+						showLoading:false,
 						type:"POST",
 						success:function(data){
 							var result = showDialog(data);
@@ -1670,6 +1676,7 @@ define(function(require, exports) {
 						url:""+APP_ROOT+"back/busCompany.do?method=getDrivers&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 						data:"busId="+busLicenseNumberId+"",
 						dateType:"json",
+						showLoading:false,
 						type:"POST",
 						success:function(data){
 							var result = showDialog(data);

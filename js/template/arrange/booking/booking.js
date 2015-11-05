@@ -703,6 +703,7 @@ define(function(require, exports) {
 				$.ajax({
 					url:""+APP_ROOT+"back/hotel.do?method=findHotelListByLevel&token="+$.cookie("token")+"&menuKey=resource_hotel&operation=view",
 	                dataType: "json",
+	                showLoading: false,
 	                data:"level=" + hotelStarValue,
 	                success: function(data) {
 						var result = showDialog(data);
@@ -743,6 +744,7 @@ define(function(require, exports) {
 					$.ajax({
 						url:""+APP_ROOT+"back/hotel.do?method=getHotelRoomPrice&token="+$.cookie("token")+"&menuKey=resource_hotel&operation=view",
 	                    dataType: "json",
+	                    showLoading:false,
 	                    data: "id="+ui.item.id+"&enterTime="+enterTime,
 	                    success: function(data) {
 	                    	console.log(data);
@@ -760,6 +762,7 @@ define(function(require, exports) {
 					$.ajax({
 						url:""+APP_ROOT+"back/hotel.do?method=findTypeByHotelId&token="+$.cookie("token")+"&menuKey=resource_hotel&operation=view",
 	                    dataType: "json",
+	                    showLoading: false,
 	                    data:"id=" + id,
 	                    success: function(data) {
 							var result = showDialog(data);
@@ -814,6 +817,7 @@ define(function(require, exports) {
 				$.ajax({
 					url:""+APP_ROOT+"back/scenic.do?method=findAll&token="+$.cookie("token")+"&menuKey=resource_scenic&operation=view",
                     dataType: "json",
+                    showLoading: false,
                     success: function(data) {
 						var result = showDialog(data);
 						if(result){
@@ -862,6 +866,7 @@ define(function(require, exports) {
 					$.ajax({
 						url:""+APP_ROOT+"back/scenic.do?method=getScenicItemPrice&token="+$.cookie("token")+"&menuKey=resource_scenic&operation=view",
 	                    dataType: "json",
+	                    showLoading: false,
 	                    data: "id="+nameUiId+"&startTime="+startTime,
 	                    success: function(data) {
 	                    	var result = showDialog(data);
@@ -879,6 +884,7 @@ define(function(require, exports) {
 					$.ajax({
 						url:""+APP_ROOT+"back/scenic.do?method=findItemByScenicId&token="+$.cookie("token")+"&menuKey=resource_scenic&operation=view",
 	                    dataType: "json",
+	                    showLoading: false,
 	                    data: "id="+scenicId,
 	                    success: function(data) {
 	                    	console.log(data);
@@ -918,6 +924,7 @@ define(function(require, exports) {
 					$.ajax({
 						url:""+APP_ROOT+"back/ticket.do?method=findTicketById&token="+$.cookie("token")+"&menuKey=resource_ticket&operation=view",
 	                    dataType: "json",
+	                    showLoading: false,
 	                    data: "id="+ui.item.id,
 	                    success: function(data) {
 							var result = showDialog(data);
@@ -941,6 +948,7 @@ define(function(require, exports) {
 				$.ajax({
 					url:""+APP_ROOT+"back/ticket.do?method=findAll&token="+$.cookie("token")+"&menuKey=resource_ticket&operation=view",
 					dataType:"json",
+					showLoading: false,
 					success:function(data){
 						console.log(data);
 						var result = showDialog(data);
@@ -985,6 +993,7 @@ define(function(require, exports) {
 				$.ajax({
 					url:""+APP_ROOT+"back/bookingOrder.do?method=getSeatCountList&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 					dataType:"json",
+					showLoading: false,
 					success:function(data){
 						var result = showDialog(data);
 						if(result){
@@ -1034,6 +1043,7 @@ define(function(require, exports) {
 						url:""+APP_ROOT+"back/bookingOrder.do?method=getBusBrandList&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 						data:"seatCount="+seatCount+"",
 						dateType:"json",
+						showLoading: false,
 						type:"POST",
 						success:function(data){
 							var result = showDialog(data);
@@ -1107,6 +1117,7 @@ define(function(require, exports) {
 						url:""+APP_ROOT+"back/bookingOrder.do?method=getBusCompanyList&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 						data:"seatCount="+seatCount+"&brand="+brand+"",
 						dateType:"json",
+						showLoading:false,
 						type:"POST",
 						success:function(data){
 							console.log(data);

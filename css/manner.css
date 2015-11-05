@@ -639,6 +639,9 @@ input,select{
     text-align: right !important;
     padding:7px 6px 7px 0px !important;
 }
+.triplan-dropdown-menu{
+    margin-left: -93px !important;
+}
 /* .T-guideChoose{
     margin-left: -117px;
 }
@@ -906,7 +909,9 @@ padding-left:0;width: 360px;left: -35px;
 .add-managerMore{
     cursor:pointer;left:-20px;
 }
-
+.triplan-dropdown-menu{
+    margin-left: -35px !important;
+}
 }
 
 /*媒体查询 1366*/
