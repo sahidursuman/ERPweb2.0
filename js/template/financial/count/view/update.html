@@ -823,7 +823,12 @@
                             <input style="width:90px;" type="text" name="realGuidePayMoney" {{if arrange.billUpdateTime != null}}value="{{arrange.realGuidePayMoney}}" {{else}}value="{{arrange.guidePayMoney}}"{{/if}} old="{{arrange.realGuidePayMoney}}" maxlength="11" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
                             <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" />
                             <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" /></td>
-                        <td><a href="javascript:void(0);" url="{{arrange.billImage}}" class="btn-view">查看</a></td>
+                        <td>{{if arrange.billImage != null && arrange.billImage != ""}}
+                                <a href="javascript:void(0);" url="{{arrange.billImage}}" class="btn-view">查看</a>
+                            {{else}}
+                                <span style="color:#bbb;">查看</span>
+                            {{/if}}
+                        </td>
                         <td><span class="difference"></span></td>
                         <td>{{arrange.billRemark}}</td>
                         {{if tripPlan.billStatus == 2}}<td>{{if arrange.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}</td>{{/if}}
