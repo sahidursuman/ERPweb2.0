@@ -243,46 +243,6 @@ define(function(require,exports){
 			}
 		});
 	};
-	BusCompany.timeCompare = function(time1, time2){
-		return time1 > time2 ? [time2, time1] : [time1, time2];
-	};
-	BusCompany.checkDate = function(){
-		var $trList = $('.T-updateBusCompanyContainer .busList tbody > tr');
-		if($trList.length > 0){
-			$trList.each(function(index){
-				var $eachTime = $(this).find('td.time > div'), timeArea = [];
-				if($eachTime.length > 0){
-					$(this).find('td.time > div').each(function(i){
-						var startTime = $(this).find('input[name=startTime]').val();
-						var endTime = $(this).find('input[name=endTime]').val();
-						var tiemPeriod = BusCompany.timeCompare(startTime, endTime);
-						if(timeArea.length > 0){
-							for(var k = 0; k < timeArea.length; k++){
-								if((tiemPeriod[0] < timeArea[k][0] && tiemPeriod[1] < timeArea[k][0]) || (tiemPeriod[0] > timeArea[k][1] && tiemPeriod[1] > timeArea[k][1])){
-									if(k >= timeArea.length-1){
-										timeArea[k+1] = tiemPeriod;
-										break;
-									}
-								}else{
-									return false;
-								}
-							}
-						}else{
-							timeArea[0] = tiemPeriod;
-						}
-
-						if(i >= $(this).find('td.time > div').length - 1){
-							return true;
-						}
-					});
-				}else{
-					return true;
-				}
-			});
-		}else{
-			return true;
-		}
-	};
 	//修改车队
 	BusCompany.updatebusCompany = function($id){
 		$.ajax({
@@ -430,7 +390,6 @@ define(function(require,exports){
 								});
 								$obj.find(".T-submit-busCompany").click(function(){
 									if (!validator.form()) return;
-									if(!BusCompany.checkDate()) return;
 									var status = 0;
 									if($obj.find(".busCompany-status").is(":checked") == true){
 										status = 1;
