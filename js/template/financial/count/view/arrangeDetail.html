@@ -117,9 +117,13 @@
                         {{if restaurantArrange != null && restaurantArrange.id > 0}}
                         <tr>
                         <td>第{{restaurantArrange.whichDay}}天</td>
-                        <td>{{restaurantArrange.restaurant.name}}</td>
-                        <td>{{restaurantArrange.restaurant.mobileNumber}}</td>
                         <td>
+                        {{if restaurantArrange.isChoose == 1}}自选{{else}}{{if restaurantArrange.restaurant != null}}{{restaurantArrange.restaurant.name}}{{/if}}{{/if}}</td>
+                        <td>{{if restaurantArrange.isChoose == 1}}-{{else}}{{restaurantArrange.restaurant.mobileNumber}}{{/if}}</td>
+                        <td>
+                        {{if restaurantArrange.isChoose == 1}}
+                        -
+                        {{else}}
                         {{if restaurantArrange.restaurant.province != null}}
                             {{restaurantArrange.restaurant.province.name}}
                         {{/if}}
@@ -130,6 +134,7 @@
                             {{restaurantArrange.restaurant.district.name}}
                         {{/if}}
                         {{restaurantArrange.restaurant.street}}
+                        {{/if}}
                         </td>
                         <td>{{restaurantArrange.type}}</td>
                         <td>{{restaurantArrange.price}}</td>
