@@ -176,7 +176,7 @@ define(function(require, exports) {
 						type : 1,
 						title : "中转明细",
 						skin : 'layui-layer-rim', // 加上边框
-						area : [ "90%", '80%' ], // 宽高
+						area : [ "70%", '65%' ], // 宽高
 						zIndex : 1028,
 						content : html,
 						scrollbar: false
