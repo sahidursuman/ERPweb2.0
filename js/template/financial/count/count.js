@@ -161,16 +161,18 @@ define(function(require, exports) {
                         
                         //给审核按钮绑定事件
                         $(".financialCount .btn-count-update").click(function(){
-                        	var id = $(this).attr('data-entity-id');
-                        	var billStatus = $(this).attr('data-entity-billStatus');
-                        	if(billStatus == -1 || billStatus == "-1") {
-                        		showMessageDialog($( "#confirm-dialog-message" ), "导游未报账，不能做审核操作", function(){});
-                        	} else if(billStatus == 2 || billStatus == "2") {
-                        		//是否需要做财务报账后，提示只有管理员能修改数据
-                        		count.updateExamine(id,"");
-                        	} else {
-                        		count.updateExamine(id,"");
-                        	}
+                            var $that = $(this),
+                                id = $that.data('entity-id'),
+                                billStatus = $that.data('entity-billStatus'),
+                                guideFinancialExamine = $that.data('guideFinancialExamine');
+
+                            if (billStatus == -1) {   // 未报账
+                                showMessageDialog($( "#confirm-dialog-message" ), "导游未报账，不能做审核操作");
+                            } else if (guideFinancialExamine == 1) {   // 导游账务已对账
+                        		showMessageDialog('该团导游账务已对账，不能修改！')
+                            } else {
+                                count.updateExamine(id,"");
+                            }
                         });
 
                         //给明细按钮绑定事件
