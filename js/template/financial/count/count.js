@@ -207,6 +207,7 @@ define(function(require, exports) {
 				$.ajax({
 					url:""+APP_ROOT+"back/tripPlan.do?method=findTripByTripNumber&token="+$.cookie("token")+"&menuKey=arrange_plan&operation=self",
 					dataType: "json",
+                    showLoading: false,
 					success: function(data) {
 						var result = showDialog(data);
 						if(result){
@@ -242,6 +243,7 @@ define(function(require, exports) {
 				$.ajax({
 					url:""+APP_ROOT+"back/lineProduct.do?method=findAllLineProductOnlyIdAndName&token="+$.cookie("token")+"&menuKey=resource_lineProduct&operation=self",
                     dataType: "json",
+                    showLoading:false,
                     success: function(data) {
 						var result = showDialog(data);
 						if(result){
@@ -278,6 +280,7 @@ define(function(require, exports) {
 				$.ajax({
 					url:""+APP_ROOT+"back/guide.do?method=findAll&token="+$.cookie("token")+"&menuKey=resource_guide&operation=self",
                     dataType: "json",
+                    showLoading:false,
                     success: function(data) {
 						var result = showDialog(data);
 						if(result){
