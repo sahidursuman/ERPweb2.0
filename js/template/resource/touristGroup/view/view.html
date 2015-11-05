@@ -22,7 +22,7 @@
 					<tr>
 						<td class="style-myself">客户来源：</td>
 						<td style="text-align: left;padding: 0px 0px 0px 10px">{{if touristGroupDetail.partnerAgency != null}}{{touristGroupDetail.partnerAgency.travelAgencyName}}{{/if}}</td>
-						<td class="style-myself">同行联系人：</td>
+						<td class="style-myself">{{if touristGroupDetail.isInnerTransferConfirm == 1}}部门联系人{{else}}同行联系人{{/if}}：</td>
 						<td style="text-align: left;padding: 0px 0px 0px 10px">{{if touristGroupDetail.partnerAgencyContact != null}}{{touristGroupDetail.partnerAgencyContact.contactRealname}} -[{{touristGroupDetail.partnerAgencyContact.contactMobileNumber}}]{{/if}}</td>
 						<td class="style-myself">获得方式：</td>
 						<td style="text-align: left;padding: 0px 0px 0px 10px"colspan="3">{{if touristGroupDetail.getType == 1}}
