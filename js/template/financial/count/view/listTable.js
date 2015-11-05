@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 /*TMODJS:{"debug":true,"version":116,"md5":"08a27131a5b5c03f24580295b21accdb"}*/
+=======
+/*TMODJS:{"debug":true,"version":116,"md5":"62548c809f1815fa69e8bd719ffe56a0"}*/
+>>>>>>> aee80c46f32b7f5b83de0aa43c05917f3d1bbd2c
 define(function(require) {
     return require("../../../template")("financial/count/view/listTable", function($data, $filename) {
         try {
