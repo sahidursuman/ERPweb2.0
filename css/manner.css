@@ -821,7 +821,19 @@ padding-left:0;width: 360px;left: -35px;
     cursor:pointer;left:-38px;
 }
 
-
+.transfer-status{
+    width: 340px;
+    position:absolute;right:380px;
+}
+.getPay-type{
+    width: 220px;
+}
+.product-width{
+   width:155px;
+}
+.icon-tourist{
+    margin-left: -40px;
+}
 
 /*媒体查询 1500*/
 
@@ -912,6 +924,52 @@ padding-left:0;width: 360px;left: -35px;
 .triplan-dropdown-menu{
     margin-left: -35px !important;
 }
+
+/*转客管理*/
+.width-self160{
+    width: 160px;
+}
+.width-self220{
+    width: 220px;
+}
+.transfer-status{
+    width: 340px;
+    position:absolute;
+    right: 180px;
+}
+.transfer-startWidth{
+    width: 140px;margin-left: 1px;
+}
+.transfer-startWidth input{
+    width: 110px;
+
+}
+.timeStartMore{
+    margin-left: 20px;
+}
+.choose-TravelAgency{
+    width: 110px;
+}
+.trans-PayedMoney{
+    width: 280px;
+}
+
+/*游客管理*/
+.updateTouristInput input{
+    width: 180px;
+}
+.getPay-type{
+    width: 180px;
+}
+.product-width{
+    width: 125px !important;
+}
+.travelLine-search{
+    position: absolute;
+}
+.icon-tourist{
+    margin-left: -20px !important;
+}
 }
 
 /*媒体查询 1366*/
@@ -931,5 +989,12 @@ padding-left:0;width: 360px;left: -35px;
 }
 .line-separatedT{
    height: 15px;width: 88%;border-bottom:  1px solid #428bca;margin-top: 2px;
+}.transfer-status{
+    width: 340px;
+    position:absolute;
+    right: 70px;
+}
+.trans-NeedPayAllMoney{
+    width: 220px;
 }
 }
