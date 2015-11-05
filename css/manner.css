@@ -696,8 +696,8 @@ input,select{
 .guideMarginLeft{
     margin-left: -104px;
 }
-.btn-Plan-add{
-    margin-left: -170px;
+.transfer-startWidth{
+    margin-left: -100px;
 }
 .MiddleMarginLeft{
     margin-left: -190px;
@@ -755,10 +755,10 @@ input,select{
 .margin-top15{
     margin-top: 25px;
 }
-
+s
 /*关闭操作页面时的button键*/
 .btn-heightMall{
-    /*height: 25px;*/
+    height: 25px !important;
     min-width: 55px;
     border-radius: 3px;
 }
@@ -829,12 +829,14 @@ padding-left:0;width: 360px;left: -35px;
     width: 220px;
 }
 .product-width{
-   width:155px;
+   width:155px !important;
 }
 .icon-tourist{
     margin-left: -40px;
 }
-
+.status-transfer{
+    margin-left: 25px;
+}
 /*媒体查询 1500*/
 
 @media screen and (max-width:1500px){
@@ -969,6 +971,9 @@ padding-left:0;width: 360px;left: -35px;
 }
 .icon-tourist{
     margin-left: -20px !important;
+}
+.status-transfer{
+    margin-left: 65px;
 }
 }
 
