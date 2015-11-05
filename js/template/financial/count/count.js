@@ -1064,6 +1064,7 @@ define(function(require, exports) {
                             "travelAgencyRebateMoney":count.changeTwoDecimalToString($(this).find('input[name=travelAgencyRebateMoney]').val()),
                             "guideRate":count.changeTwoDecimalToString(parseFloat($(this).find('input[name=guideRate]').val())/100),
                             "billRemark":$(this).find('input[name="billRemark"]').val(),
+                            "realGetMoney":$(this).find('input[name="realGetMoney"]').val(),
                             "guideRebateMoney":count.changeTwoDecimalToString($(this).find('input[name=guideRebateMoney]').val())
                     }
                     saveJson.selfPayArrangeList.push(selfPayArrange);

@@ -252,10 +252,6 @@ table tr td{
     top:0!important;
     left: 20px!important;
 }
-.btn-height{
-    height: 24px!important;
-    margin-left: 20px!important;
-}
 .main-content {
     margin-top: 77px;
 }
@@ -387,7 +383,7 @@ table tr td{
     padding: 7px 0px 7px 0px;
 }
 .whereQ .style-myself{
-    width: 87px !important;
+    width: 90px !important;
     border: 2px solid #5d5d5d;
     text-align: right;
 }
@@ -797,8 +793,7 @@ padding-left:0;width: 360px;left: -35px;
     width: 260px;
 }
 /*中转分段显示不完整*/
-.ui-autocomplete{width:200px;}
-.ui-autocomplete .ui-state-focus{width:inherit;}
+.ui-autocomplete .ui-state-focus{width:1000px;!important;}
 /*table 宽度*/
 .tableWidthImp{
     width: 97% !important;
