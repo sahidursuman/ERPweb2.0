@@ -836,6 +836,7 @@ define(function(require, exports) {
 				$.ajax({
 					url:""+APP_ROOT+"back/bookingOrder.do?method=getSeatCountList&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 					dataType:"json",
+					showLoading: false,
 					success:function(data){
 						var result = showDialog(data);
 						if(result){
@@ -895,6 +896,7 @@ define(function(require, exports) {
 						url:""+APP_ROOT+"back/bookingOrder.do?method=getBusBrandList&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 						data:"seatCount="+seatCount+"",
 						dateType:"json",
+						showLoading:false,
 						type:"POST",
 						success:function(data){
 							var result = showDialog(data);
@@ -963,6 +965,7 @@ define(function(require, exports) {
 							brand: busBrand
 						},
 						dateType:"json",
+						showLoading:false,
 						type:"POST",
 						success:function(data){
 							var result = showDialog(data);
@@ -1015,6 +1018,7 @@ define(function(require, exports) {
 						url:""+APP_ROOT+"back/busCompany.do?method=getDrivers&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 						data:"busId="+busLicenseNumberId+"",
 						dateType:"json",
+						showLoading:false,
 						type:"POST",
 						success:function(data){
 							var result = showDialog(data);
@@ -1255,6 +1259,7 @@ define(function(require, exports) {
 					$.ajax({
 						url:""+APP_ROOT+"back/hotel.do?method=getHotelById&token="+$.cookie("token")+"&menuKey=resource_hotel&operation=view",
 						dataType: "json",
+						showLoading:false,
 						data:"id=" + ui.item.id,
 						success: function(data) {
 							layer.close(globalLoadingLayer);
@@ -1275,6 +1280,7 @@ define(function(require, exports) {
 				$.ajax({
 					url:""+APP_ROOT+"back/hotel.do?method=findHotelListByLevel&token="+$.cookie("token")+"&menuKey=resource_hotel&operation=view",
 					dataType: "json",
+					showLoading:false,
 					data:"level=" + hotelStarValue,
 					success: function(data) {
 						layer.close(globalLoadingLayer);
@@ -1313,6 +1319,7 @@ define(function(require, exports) {
 						$.ajax({
 							url:""+APP_ROOT+"back/hotel.do?method=findRoomDetailById&token="+$.cookie("token")+"&menuKey=resource_hotel&operation=view",
 							dataType: "json",
+							showLoading:false,
 							data:"id=" + ui.item.id,
 							success: function(data) {
 								var hotelRoom = JSON.parse(data.hotelRoom);
@@ -1327,6 +1334,7 @@ define(function(require, exports) {
 						$.ajax({
 							url:""+APP_ROOT+"back/hotel.do?method=findTypeByHotelId&token="+$.cookie("token")+"&menuKey=resource_hotel&operation=view",
 							dataType: "json",
+							showLoading:false,
 							data:"id=" + id,
 							success: function(data) {
 								layer.close(globalLoadingLayer);
@@ -1379,6 +1387,7 @@ define(function(require, exports) {
 				$.ajax({
 					url:""+APP_ROOT+"back/ticket.do?method=findAll&token="+$.cookie("token")+"&menuKey=resource_ticket&operation=view",
 					dataType:"json",
+					showLoading:false,
 					success:function(data){
 						layer.close(globalLoadingLayer);
 						var result = showDialog(data);
@@ -1419,6 +1428,7 @@ define(function(require, exports) {
 					$.ajax({
 						url:""+APP_ROOT+"back/restaurant.do?method=findRestaurantById&token="+$.cookie("token")+"&menuKey=resource_restaurant&operation=view",
 						dataType: "json",
+						showLoading:false,
 						data:"id="+ui.item.id,
 						success: function(data) {
 							layer.close(globalLoadingLayer);
@@ -1449,6 +1459,7 @@ define(function(require, exports) {
 				$.ajax({
 					url:""+APP_ROOT+"back/restaurant.do?method=findAll&token="+$.cookie("token")+"&menuKey=resource_restaurant&operation=view",
 					dataType:"json",
+					showLoading:false,
 					success: function(data) {
 						layer.close(globalLoadingLayer);
 						var result = showDialog(data);
@@ -1490,6 +1501,7 @@ define(function(require, exports) {
 					$.ajax({
 						url:""+APP_ROOT+"back/restaurant.do?method=getRestaurantStandardByType&token="+$.cookie("token")+"&menuKey=resource_restaurant&operation=view",
 						dataType:"json",
+						showLoading:false,
 						data:"restaurantId=" + id + "&type=" + type,
 						success: function(data) {
 							layer.close(globalLoadingLayer);
