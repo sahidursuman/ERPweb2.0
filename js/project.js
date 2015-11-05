@@ -607,7 +607,8 @@ var modalScripts = {
 	'business_analyst_tourguidePerfor' : "js/template/businessAnalyst/tourguidePerfor/tourguidePerfor.js", //导游业绩
 	//---------------------------------------------------------------------------------------------------------------
 	'financial_innerTransfer_profit': "js/template/financial/innerTransferProfit/innerTransferProfit.js",
-	'financial_turnProfit': "js/template/financial/turnProfit/turnProfit.js"
+	'financial_turnProfit': "js/template/financial/turnProfit/turnProfit.js",
+	'financial_totalProfit': "js/template/financial/totalProfit/totalProfit.js"
 };
 
 
@@ -1162,14 +1163,14 @@ function listMenu(menuTemplate){
 					});
 				});
 				//绑定总利润菜单功能
-				$("#sidebar .nav-list .financial_totalProfit").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/financial/totalProfit/totalProfit.js",function(totalProfit){
-						totalProfit.listTotalProfit();
-					});
-				});
+				// $("#sidebar .nav-list .financial_totalProfit").click(function(){
+				// 	$("#sidebar .nav-list li").removeClass("active");
+				// 	$(this).addClass("active");
+				// 	$(this).parent().parent().addClass("active");
+				// 	seajs.use("" + ASSETS_ROOT +"js/template/financial/totalProfit/totalProfit.js",function(totalProfit){
+				// 		totalProfit.listTotalProfit();
+				// 	});
+				// });
 				//绑定収支明细菜单功能
 				$("#sidebar .nav-list .financial_collectDetail").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
