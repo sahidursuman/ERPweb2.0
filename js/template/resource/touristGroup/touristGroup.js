@@ -21,10 +21,9 @@ define(function(require, exports) {
 			fromBussinessGroupId: "",
 			fromPartnerAgency:"",
 			fromPartnerAgencyId:"",
-			creator:"",
+			creatorId:"",
 			creatorName:"",
 			startTime : "",
-			userId : "",
 			createTimeStart : "",
 			createTimeEnd : "",
 			customerType:"",
@@ -98,12 +97,12 @@ define(function(require, exports) {
 								fromPartnerAgencyId = $(".touristGroupSearchForm input[name=fromPartnerAgencyId]").val();
 							} 
 							touristGroup.searchData = {
-								fromPartnerAgencyName : fromPartnerAgencyName,
-								fromPartnerAgencyId : fromPartnerAgencyId,
-								fromBussinessGroupName : $(".touristGroupSearchForm input[name=fromBussinessGroupName]").val(),
-								fromBussinessGroupId : $(".touristGroupSearchForm input[name=fromBussinessGroupId]").val(),
 								lineProductName : $(".touristGroupSearchForm input[name=lineProductName]").val(),
 								lineProductId : $(".touristGroupSearchForm input[name=lineProductId]").val(),
+								fromBussinessGroupName : $(".touristGroupSearchForm input[name=fromBussinessGroupName]").val(),
+								fromBussinessGroupId : $(".touristGroupSearchForm input[name=fromBussinessGroupId]").val(),
+								fromPartnerAgencyName : fromPartnerAgencyName,
+								fromPartnerAgencyId : fromPartnerAgencyId,
 								startTime : $(".touristGroupSearchForm input[name=startTime]").val(),
 								creatorName : $(".touristGroupSearchForm input[name=creatorName]").val(),
 								creatorId : $(".touristGroupSearchForm input[name=creatorId]").val(),
@@ -126,12 +125,12 @@ define(function(require, exports) {
 								fromPartnerAgencyId = $(".touristGroupSearchForm input[name=fromPartnerAgencyId]").val();
 							} 
 							touristGroup.searchData = {
-								fromPartnerAgencyName : fromPartnerAgencyName,
-								fromPartnerAgencyId : fromPartnerAgencyId,
-								fromBussinessGroupName : $(".touristGroupSearchForm input[name=fromBussinessGroupName]").val(),
-								fromBussinessGroupId : $(".touristGroupSearchForm input[name=fromBussinessGroupId]").val(),
 								lineProductName : $(".touristGroupSearchForm input[name=lineProductName]").val(),
 								lineProductId : $(".touristGroupSearchForm input[name=lineProductId]").val(),
+								fromBussinessGroupName : $(".touristGroupSearchForm input[name=fromBussinessGroupName]").val(),
+								fromBussinessGroupId : $(".touristGroupSearchForm input[name=fromBussinessGroupId]").val(),
+								fromPartnerAgencyName : fromPartnerAgencyName,
+								fromPartnerAgencyId : fromPartnerAgencyId,
 								startTime : $(".touristGroupSearchForm input[name=startTime]").val(),
 								creatorName : $(".touristGroupSearchForm input[name=creatorName]").val(),
 								creatorId : $(".touristGroupSearchForm input[name=creatorId]").val(),
@@ -182,7 +181,7 @@ define(function(require, exports) {
 				fromPartnerAgencyId:fromPartnerAgencyId,
 				creatorName:creatorName,
 				creatorId:creatorId,
-				startTimeSearch: startTimeS,
+				startTime: startTimeS,
 				//userId: userIdS,
 				createTimeStart: createTimeStartS,
 				createTimeEnd: createTimeEndS,
@@ -230,7 +229,7 @@ define(function(require, exports) {
 						    curr: (page + 1),
 						    jump: function(obj, first) {
 						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-						    		touristGroup.listTouristGroup(obj.curr -1,touristGroup.searchData.lineProductName,touristGroup.searchData.lineProductId,touristGroup.searchData.fromPartnerAgencyName,touristGroup.searchData.fromPartnerAgencyId,touristGroup.searchData.creatorId,touristGroup.searchData.creatorName,touristGroup.searchData.startTime,touristGroup.searchData.createTimeStart,touristGroup.searchData.createTimeEnd,touristGroup.searchData.customerType,touristGroup.searchData.status);
+						    		touristGroup.listTouristGroup(obj.curr -1,touristGroup.searchData.fromBussinessGroupName,touristGroup.searchData.fromBussinessGroupId,touristGroup.searchData.lineProductName,touristGroup.searchData.lineProductId,touristGroup.searchData.fromPartnerAgencyName,touristGroup.searchData.fromPartnerAgencyId,touristGroup.searchData.creatorId,touristGroup.searchData.creatorName,touristGroup.searchData.startTime,touristGroup.searchData.createTimeStart,touristGroup.searchData.createTimeEnd,touristGroup.searchData.customerType,touristGroup.searchData.status);
 						    	}
 						    }
 						});
@@ -407,7 +406,7 @@ define(function(require, exports) {
 											if(result){
 												layer.close(arrangeLayer);
 												showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-													touristGroup.getTouristStatisticData(0,"","","","","","","","","","","");
+													touristGroup.getTouristStatisticData(0,"","","","","","","","","","","","","");
 												});
 											}
 										}
@@ -1051,7 +1050,7 @@ define(function(require, exports) {
 									var result = showDialog(data);
 									if(result){
 										$(".main-content .page-content .touristGroup-"+id+"").fadeOut(function(){
-											touristGroup.getTouristStatisticData(0,touristGroup.searchData.lineProductName,touristGroup.searchData.lineProductId,touristGroup.searchData.fromPartnerAgencyName,touristGroup.searchData.fromPartnerAgencyId,touristGroup.searchData.creatorId,touristGroup.searchData.creatorName,touristGroup.searchData.startTime,touristGroup.searchData.createTimeStart,touristGroup.searchData.createTimeEnd,touristGroup.searchData.customerType,touristGroup.searchData.status);
+											touristGroup.getTouristStatisticData(0,touristGroup.searchData.fromBussinessGroupName,touristGroup.searchData.fromBussinessGroupId,touristGroup.searchData.lineProductName,touristGroup.searchData.lineProductId,touristGroup.searchData.fromPartnerAgencyName,touristGroup.searchData.fromPartnerAgencyId,touristGroup.searchData.creatorId,touristGroup.searchData.creatorName,touristGroup.searchData.startTime,touristGroup.searchData.createTimeStart,touristGroup.searchData.createTimeEnd,touristGroup.searchData.customerType,touristGroup.searchData.status);
 										});
 									}
 								}
@@ -1507,7 +1506,7 @@ define(function(require, exports) {
 					if(result){
 						showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
 							closeTab(menuKey+"-add");
-							touristGroup.getTouristStatisticData(0,"","","","","","","","");
+							touristGroup.getTouristStatisticData(0,"","","","","","","","","","","","","");
 							touristGroup.edited["add"] = "";
 
 							// 判断中转
@@ -1686,7 +1685,7 @@ define(function(require, exports) {
 							touristGroup.edited["update"] = "";
 							if(isClose == 1){
 								closeTab(menuKey+"-update");
-								touristGroup.getTouristStatisticData(0,touristGroup.searchData.fromPartnerAgencyName,touristGroup.searchData.fromPartnerAgencyId,touristGroup.searchData.lineProductName,touristGroup.searchData.lineProductId,touristGroup.searchData.startTime,touristGroup.searchData.creatorName,touristGroup.searchData.creatorId,touristGroup.searchData.createTimeStart,touristGroup.searchData.createTimeEnd,touristGroup.searchData.customerType,touristGroup.searchData.status);
+								touristGroup.getTouristStatisticData(0,touristGroup.searchData.fromBussinessGroupName,touristGroup.searchData.fromBussinessGroupId,touristGroup.searchData.lineProductName,touristGroup.searchData.lineProductId,touristGroup.searchData.fromPartnerAgencyName,touristGroup.searchData.fromPartnerAgencyId,touristGroup.searchData.creatorId,touristGroup.searchData.creatorName,touristGroup.searchData.startTime,touristGroup.searchData.createTimeStart,touristGroup.searchData.createTimeEnd,touristGroup.searchData.customerType,touristGroup.searchData.status);
 							}
 						});
 					}
