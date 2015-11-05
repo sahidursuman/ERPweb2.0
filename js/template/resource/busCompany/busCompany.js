@@ -100,7 +100,7 @@ define(function(require,exports){
 		});
 		//回车搜索事件
 		BusCompany.$tab.find(".T-busCompanyInputList").keyup(function(event){
-			console.log(event);
+			event.preventDefault();
 			if(event.which == 13 && !window.forbiddenError){
 				BusCompany.listBusCompany(0);
 			}
@@ -315,26 +315,8 @@ define(function(require,exports){
 								//动态添加包车时限区间
 								var $addTimeArea = $busList.find('.timeArea .T-add');
 								$addTimeArea.unbind().on('click',function(){
-									var $td = $(this).closest('td'), isVal = false;
-									$td.children('div').each(function(index){
-										var $s = $(this).find('input[name=startTime]');
-										var $e = $(this).find('input[name=endTime]');
-										if(!$s.val()){
-											$s.focus();
-											isVal = false;
-											return false;
-										}else if(!$e.val()){
-											$e.focus();
-											isVal = false;
-											return false;
-										}else{
-											isVal = true;
-										}
-									});
-									if(isVal){
-										BusCompany.addTimeArea($(this),2);
-										validator = rule.update(validator);
-									}
+									BusCompany.addTimeArea($(this),2);
+									validator = rule.update(validator);
 								});
 								//删除原有包车区间
 								$busList.find(".T-del").on('click',function(){
@@ -558,27 +540,6 @@ define(function(require,exports){
 		});
 		
 	};
-	BusCompany.datepicker = function(obj, min, max, show){
-		if(min){
-			min = min.split('-');
-			min = new Date(min[0], min[1] - 1, min[2] - (-1));
-		}
-		if(max){
-			max = max.split('-');
-			max = new Date(max[0], max[1] - 1, max[2] - (-1));
-		}
-		obj.datepicker({
-			autoclose: true,
-			todayHighlight: true,
-			format: 'yyyy-mm-dd',
-			language: 'zh-CN',
-			startDate : min || null,
-			endDate : max || null
-		});
-		if(show){
-			obj.datepicker('show');
-		}
-	};
 	//动态增加班车时限
 	BusCompany.addTimeArea = function($obj,typeFlag){
 		var $td = $obj.closest('td');
@@ -588,19 +549,11 @@ define(function(require,exports){
 		var contractPriceInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:7px\"><input style=\"width:100px;\" name=\"contractPrice\" type=\"text\" maxlength=\"9\"/><label>&nbsp;元</label></div>";
 		$td.next().append(contractPriceInput);
 		$td.append(timeLimitDiv);
-		BusCompany.datepicker($td.find(".datepicker"));
-		$td.find('input[name=startTime]').off('click').on('click', function(){
-			var $parent = $(this).parent().prev().find('input[name=endTime]');
-			var endDate = $(this).parent().find('input[name=endTime]');
-			$(this).datepicker('remove');
-			BusCompany.datepicker($(this), $parent.val(), endDate.val(), true);
-		});
-		$td.find('input[name=endTime]').off('click').on('click', function(){
-			var startDate = $(this).parent().find('input[name=startTime]');
-			var $parent = $(this).parent().prev().find('input[name=endTime]');
-			$(this).datepicker('remove');
-			console.log(startDate.val()||$parent.val());
-			BusCompany.datepicker($(this), startDate.val()||$parent.val(), null, true);
+		$td.find(".datepicker").datepicker({
+			autoclose: true,
+			todayHighlight: true,
+			format: 'yyyy-mm-dd',
+			language: 'zh-CN'
 		});
 		//删除包车时限
 		$td.find(".T-del").on('click',function(typeFlag){
@@ -617,7 +570,12 @@ define(function(require,exports){
 				$parents.find("input[name=endTime]").removeAttr("readonly");
 				$parents.find("input[name=contractPrice]").removeAttr("readonly");
 				$parents.find(".timeArea").removeClass("hide");
-				BusCompany.datepicker($parents.find("input[name=startTime],input[name=endTime]"));
+				$parents.find("input[name=startTime],input[name=endTime]").datepicker({
+					autoclose: true,
+					todayHighlight: true,
+					format: 'yyyy-mm-dd',
+					language: 'zh-CN'
+				});
 			validator = rule.update(validator);
 			}else{
 				if($typeFlag == 1){
