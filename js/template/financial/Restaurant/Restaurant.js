@@ -336,8 +336,7 @@ define(function(require, exports) {
                         });
                        //保存按钮事件
                         $("#" +"tab-"+ blanceTabId+"-content"+" .btn-restaurantBlance-save").click(function(){
-                        	 var saveBtn = $("#" +"tab-"+ blanceTabId+"-content"+" .btn-restaurantBlance-save")
-         	    			 if (!$(saveBtn).data('validata').form()) { return; }
+         	    			 if (!$(this).data('validata').form()) { return; }
          	    			 Restaurant.saveBlanceData(Restaurant.oldBlanceRestaurantId,restaurantName,0)
                         });
                         //对账明细按钮事件
