@@ -162,9 +162,9 @@ define(function(require, exports) {
                         //给审核按钮绑定事件
                         $(".financialCount .btn-count-update").click(function(){
                             var $that = $(this),
-                                id = $that.data('entity-id'),
-                                billStatus = $that.data('entity-billStatus'),
-                                guideFinancialExamine = $that.data('guideFinancialExamine');
+                                id = $that.attr('data-entity-id'),
+                                billStatus = $that.attr('data-entity-billStatus'),
+                                guideFinancialExamine = $that.attr('data-guideFinancialExamine');
 
                             if (billStatus == -1) {   // 未报账
                                 showMessageDialog($( "#confirm-dialog-message" ), "导游未报账，不能做审核操作");
