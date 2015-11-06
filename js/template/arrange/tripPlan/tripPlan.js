@@ -770,7 +770,7 @@ define(function(require, exports) {
 					if(result){
 						showMessageDialog($( "#confirm-dialog-message" ),data.message);
 						// 确认发团成功后，刷新列表
-						tripPlan.listTripPlan(0,tripPlan.searchData.tripNumber,tripPlan.searchData.startTime,tripPlan.searchData.realname,tripPlan.searchData.licenseNumber,tripPlan.searchData.creator,tripPlan.searchData.status);
+						tripPlan.listTripPlan(0,tripPlan.searchData.tripId,tripPlan.searchData.tripNumber,tripPlan.searchData.startTime,tripPlan.searchData.guideId,tripPlan.searchData.realname,tripPlan.searchData.busId,tripPlan.searchData.licenseNumber,tripPlan.searchData.creator,tripPlan.searchData.creatorName,tripPlan.searchData.status);
 					}
 				}
 			})
