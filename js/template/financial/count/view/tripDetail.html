@@ -333,7 +333,8 @@
                                 <input type="hidden" name="price" value="{{arrange.price}}" />
                             </td>
                             <td>{{if tripPlan.billStatus
-                                < 0}}{{arrange.memberCount}}{{else}}{{arrange.realCount}}{{/if}}<input type="hidden" name="realCount" value="{{if tripPlan.billStatus < 0}}{{arrange.memberCount}}{{else}}{{arrange.realCount}}{{/if}}" />
+                                == -1}}{{arrange.memberCount}}{{else}}{{if arrange.billUpdateTime !=null}}{{arrange.realCount}}{{else}}{{arrange.memberCount}}{{/if}}{{/if}}<input type="hidden" name="realCount" value="{{if tripPlan.billStatus
+                                == -1}}{{arrange.memberCount}}{{else}}{{if arrange.billUpdateTime !=null}}{{arrange.realCount}}{{else}}{{arrange.memberCount}}{{/if}}{{/if}}" />
                                 <input type="hidden" name="memberCount" value="{{arrange.memberCount}}" />
                             </td>
                             <td>{{arrange.reduceMoney}}
@@ -343,7 +344,8 @@
                             <td>{{arrange.payedMoney}}</td>
                             <td>
                                 {{if tripPlan.billStatus
-                                < 0}}{{arrange.guidePayMoney}}{{else}}{{arrange.realGuidePayMoney}}{{/if}} <input style="display: none;" type="text" name="realGuidePayMoney" value="{{arrange.realGuidePayMoney}}" />
+                                < 0}}{{arrange.guidePayMoney}}{{else}}{{if arrange.billUpdateTime !=null}}{{arrange.realGuidePayMoney}}{{else}}{{arrange.guidePayMoney}}{{/if}}{{/if}} <input style="display: none;" type="text" name="realGuidePayMoney" value="{{if tripPlan.billStatus
+                                < 0}}{{arrange.guidePayMoney}}{{else}}{{if arrange.billUpdateTime !=null}}{{arrange.realGuidePayMoney}}{{else}}{{arrange.guidePayMoney}}{{/if}}{{/if}}" />
                                 <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" />
                                 <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" />
                             </td>
@@ -475,7 +477,8 @@
                             <td>{{busCompany.payedMoney}}</td>
                             <td>
                                 {{if tripPlan.billStatus
-                                < 0}}{{busCompany.guidePayMoney}}{{else}}{{busCompany.realGuidePayMoney}}{{/if}} <input style="display: none;" type="text" name="realGuidePayMoney" value="{{busCompany.realGuidePayMoney}}" />
+                                < 0}}{{busCompany.guidePayMoney}}{{else}}{{if busCompany.billUpdateTime !=null}}{{busCompany.realGuidePayMoney}}{{else}}{{busCompany.guidePayMoney}}{{/if}}{{/if}} <input style="display: none;" type="text" name="realGuidePayMoney" value="{{if tripPlan.billStatus
+                                < 0}}{{busCompany.guidePayMoney}}{{else}}{{if busCompany.billUpdateTime !=null}}{{busCompany.realGuidePayMoney}}{{else}}{{busCompany.guidePayMoney}}{{/if}}{{/if}}" />
                                 <input type="hidden" name="payedMoney" value="{{busCompany.payedMoney}}" />
                                 <input type="hidden" name="guidePayMoney" value="{{busCompany.guidePayMoney}}" />
                             </td>
@@ -530,7 +533,8 @@
                                 <input type="hidden" name="realPrice" value="{{arrange.price}}" />
                             </td>
                             <td>{{if tripPlan.billStatus
-                                < 0}}{{arrange.memberCount}}{{else}}{{arrange.realCount}}{{/if}}<input style="display: none;" type="text" name="realCount" value="{{if tripPlan.billStatus < 0}}{{arrange.memberCount}}{{else}}{{arrange.realCount}}{{/if}}" />
+                                < 0}}{{arrange.memberCount}}{{else}}{{if arrange.billUpdateTime !=null}}{{arrange.realCount}}{{else}}{{arrange.memberCount}}{{/if}}{{/if}}<input style="display: none;" type="text" name="realCount" value="{{if tripPlan.billStatus
+                                < 0}}{{arrange.memberCount}}{{else}}{{if arrange.billUpdateTime !=null}}{{arrange.realCount}}{{else}}{{arrange.memberCount}}{{/if}}{{/if}}" />
                             </td>
                             <td>{{arrange.reduceMoney}}
                                 <input type="hidden" name="reduceMoney" value="{{arrange.reduceMoney}}" />
@@ -539,7 +543,8 @@
                             <td>{{arrange.payedMoney}}</td>
                             <td>
                                 {{if tripPlan.billStatus
-                                < 0}}{{arrange.guidePayMoney}}{{else}}{{arrange.realGuidePayMoney}}{{/if}} <input style="display: none;" type="text" name="realGuidePayMoney" value="{{arrange.realGuidePayMoney}}" />
+                                < 0}}{{arrange.guidePayMoney}}{{else}}{{if arrange.billUpdateTime !=null}}{{arrange.realGuidePayMoney}}{{else}}{{arrange.guidePayMoney}}{{/if}}{{/if}} <input style="display: none;" type="text" name="realGuidePayMoney" value="{{if tripPlan.billStatus
+                                < 0}}{{arrange.guidePayMoney}}{{else}}{{if arrange.billUpdateTime !=null}}{{arrange.realGuidePayMoney}}{{else}}{{arrange.guidePayMoney}}{{/if}}{{/if}}" />
                                 <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" />
                                 <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" />
                             </td>
@@ -595,7 +600,8 @@
                                 <input type="hidden" name="realPrice" value="{{arrange.price}}" />
                             </td>
                             <td>{{if tripPlan.billStatus
-                                < 0}}{{arrange.memberCount}}{{else}}{{arrange.realCount}}{{/if}}<input style="display: none;" type="text" name="realCount" value="{{if tripPlan.billStatus < 0}}{{arrange.memberCount}}{{else}}{{arrange.realCount}}{{/if}}" />
+                                < 0}}{{arrange.memberCount}}{{else}}{{if arrange.billUpdateTime !=null}}{{arrange.realCount}}{{else}}{{arrange.memberCount}}{{/if}}{{/if}}<input style="display: none;" type="text" name="realCount" value="{{if tripPlan.billStatus
+                                < 0}}{{arrange.memberCount}}{{else}}{{if arrange.billUpdateTime !=null}}{{arrange.realCount}}{{else}}{{arrange.memberCount}}{{/if}}{{/if}}" />
                             </td>
                             <td>{{arrange.reduceMoney}}
                                 <input type="hidden" name="reduceMoney" value="{{arrange.reduceMoney}}" />
@@ -604,7 +610,8 @@
                             <td>{{arrange.payedMoney}}</td>
                             <td>
                                 {{if tripPlan.billStatus
-                                < 0}}{{arrange.guidePayMoney}}{{else}}{{arrange.realGuidePayMoney}}{{/if}} <input style="display: none;" type="text" name="realGuidePayMoney" value="{{arrange.realGuidePayMoney}}" />
+                                < 0}}{{arrange.guidePayMoney}}{{else}}{{if arrange.billUpdateTime !=null}}{{arrange.realGuidePayMoney}}{{else}}{{arrange.guidePayMoney}}{{/if}}{{/if}} <input style="display: none;" type="text" name="realGuidePayMoney" value="{{if tripPlan.billStatus
+                                < 0}}{{arrange.guidePayMoney}}{{else}}{{if arrange.billUpdateTime !=null}}{{arrange.realGuidePayMoney}}{{else}}{{arrange.guidePayMoney}}{{/if}}{{/if}}" />
                                 <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" />
                                 <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" />
                             </td>
@@ -660,7 +667,8 @@
                                 <input type="hidden" name="realPrice" value="{{arrange.price}}" />
                             </td>
                             <td>{{if tripPlan.billStatus
-                                < 0}}{{arrange.memberCount}}{{else}}{{arrange.realCount}}{{/if}}<input style="display: none;" type="text" name="realCount" value="{{if tripPlan.billStatus < 0}}{{arrange.memberCount}}{{else}}{{arrange.realCount}}{{/if}}" />
+                                < 0}}{{arrange.memberCount}}{{else}}{{if arrange.billUpdateTime !=null}}{{arrange.realCount}}{{else}}{{arrange.memberCount}}{{/if}}{{/if}}<input style="display: none;" type="text" name="realCount" value="{{if tripPlan.billStatus
+                                < 0}}{{arrange.memberCount}}{{else}}{{if arrange.billUpdateTime !=null}}{{arrange.realCount}}{{else}}{{arrange.memberCount}}{{/if}}{{/if}}" />
                             </td>
                             <td>{{arrange.reduceMoney}}
                                 <input type="hidden" name="reduceMoney" value="{{arrange.reduceMoney}}" />
@@ -669,7 +677,8 @@
                             <td>{{arrange.payedMoney}}</td>
                             <td>
                                 {{if tripPlan.billStatus
-                                < 0}}{{arrange.guidePayMoney}}{{else}}{{arrange.realGuidePayMoney}}{{/if}} <input style="display: none;" type="text" name="realGuidePayMoney" value="{{arrange.realGuidePayMoney}}" />
+                                < 0}}{{arrange.guidePayMoney}}{{else}}{{if arrange.billUpdateTime !=null}}{{arrange.realGuidePayMoney}}{{else}}{{arrange.guidePayMoney}}{{/if}}{{/if}} <input style="display: none;" type="text" name="realGuidePayMoney" value="{{if tripPlan.billStatus
+                                < 0}}{{arrange.guidePayMoney}}{{else}}{{if arrange.billUpdateTime !=null}}{{arrange.realGuidePayMoney}}{{else}}{{arrange.guidePayMoney}}{{/if}}{{/if}}" />
                                 <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" />
                                 <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" />
                             </td>
@@ -731,7 +740,8 @@
                                 <input type="hidden" name="realPrice" value="{{arrange.price}}" />
                             </td>
                             <td>{{if tripPlan.billStatus
-                                < 0}}{{arrange.memberCount}}{{else}}{{arrange.realCount}}{{/if}}<input style="display: none;" name="realCount" type="text" value="{{if tripPlan.billStatus < 0}}{{arrange.memberCount}}{{else}}{{arrange.realCount}}{{/if}}" />
+                                < 0}}{{arrange.memberCount}}{{else}}{{if arrange.billUpdateTime !=null}}{{arrange.realCount}}{{else}}{{arrange.memberCount}}{{/if}}{{/if}}<input style="display: none;" name="realCount" type="text" value="{{if tripPlan.billStatus
+                                < 0}}{{arrange.memberCount}}{{else}}{{if arrange.billUpdateTime !=null}}{{arrange.realCount}}{{else}}{{arrange.memberCount}}{{/if}}{{/if}}" />
                             </td>
                             <td>{{arrange.reduceMoney}}
                                 <input type="hidden" name="reduceMoney" value="{{arrange.reduceMoney}}" />
@@ -740,7 +750,8 @@
                             <td>{{arrange.payedMoney}}</td>
                             <td>
                                 {{if tripPlan.billStatus
-                                < 0}}{{arrange.guidePayMoney}}{{else}}{{arrange.realGuidePayMoney}}{{/if}} <input style="display: none;" type="text" name="realGuidePayMoney" value="{{arrange.realGuidePayMoney}}" />
+                                < 0}}{{arrange.guidePayMoney}}{{else}}{{if arrange.billUpdateTime !=null}}{{arrange.realGuidePayMoney}}{{else}}{{arrange.guidePayMoney}}{{/if}}{{/if}} <input style="display: none;" type="text" name="realGuidePayMoney" value="{{if tripPlan.billStatus
+                                < 0}}{{arrange.guidePayMoney}}{{else}}{{if arrange.billUpdateTime !=null}}{{arrange.realGuidePayMoney}}{{else}}{{arrange.guidePayMoney}}{{/if}}{{/if}}" />
                                 <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" />
                                 <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" />
                             </td>
@@ -793,7 +804,8 @@
                                 <input type="hidden" name="realPrice" value="{{arrange.price}}" />
                             </td>
                             <td>{{if tripPlan.billStatus
-                                < 0}}{{arrange.memberCount}}{{else}}{{arrange.realCount}}{{/if}}<input style="display: none;" type="text" name="realCount" value="{{if tripPlan.billStatus < 0}}{{arrange.memberCount}}{{else}}{{arrange.realCount}}{{/if}}" />
+                                < 0}}{{arrange.memberCount}}{{else}}{{if arrange.billUpdateTime !=null}}{{arrange.realCount}}{{else}}{{arrange.memberCount}}{{/if}}{{/if}}<input style="display: none;" type="text" name="realCount" value="{{if tripPlan.billStatus
+                                < 0}}{{arrange.memberCount}}{{else}}{{if arrange.billUpdateTime !=null}}{{arrange.realCount}}{{else}}{{arrange.memberCount}}{{/if}}{{/if}}" />
                             </td>
                             <td>{{arrange.reduceMoney}}
                                 <input type="hidden" name="reduceMoney" value="{{arrange.reduceMoney}}" />
@@ -801,8 +813,9 @@
                             <td><span class="needPayMoney">{{arrange.needPayMoney}}</span></td>
                             <td>{{arrange.payedMoney}}</td>
                             <td>
-                                {{if tripPlan.billStatus 
-                                < 0}}{{arrange.guidePayMoney}}{{else}}{{arrange.realGuidePayMoney}}{{/if}} <input style="display: none;" type="text" name="realGuidePayMoney" value="{{arrange.realGuidePayMoney}}" />
+                                {{if tripPlan.billStatus
+                                < 0}}{{arrange.guidePayMoney}}{{else}}{{if arrange.billUpdateTime !=null}}{{arrange.realGuidePayMoney}}{{else}}{{arrange.guidePayMoney}}{{/if}}{{/if}} <input style="display: none;" type="text" name="realGuidePayMoney" value="{{if tripPlan.billStatus
+                                < 0}}{{arrange.guidePayMoney}}{{else}}{{if arrange.billUpdateTime !=null}}{{arrange.realGuidePayMoney}}{{else}}{{arrange.guidePayMoney}}{{/if}}{{/if}}" />
                                 <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" />
                                 <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" />
                             </td>
