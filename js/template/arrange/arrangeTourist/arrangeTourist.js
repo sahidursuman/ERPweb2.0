@@ -797,7 +797,7 @@ define(function(require, exports) {
 						    success:function(){
 						    	//chooseTripPlanTbody
 						    	//saveTouristGroupToTripPlan 方法名
-						    	$(".groupView").click(function(){
+						    	$(".chooseTripPlanMain .groupView").click(function(){
 						    		var id = $(this).attr("data-entity-id");
 						    		arrangeTourist.viewTripPlan(id);
 						    	})

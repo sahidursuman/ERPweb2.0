@@ -240,7 +240,7 @@ define(function(require, exports) {
 						html = filterUnAuth(html);
 						$("#touristGroup-listMain").html(html);
 
-						touristGroup.getPartnerAgencyList($("#tab-"+menuKey+"-content .choosePartnerAgency"));
+						touristGroup.getPartnerAgenListMain($("#tab-"+menuKey+"-content .choosePartnerAgency"));
 						touristGroup.getBussinessGroup($("#tab-"+menuKey+"-content .chooseBussinessGroup"));
 						touristGroup.getPartnerAgencySearchList($("#tab-"+menuKey+"-content"));
 						touristGroup.getCreatorUserList($("#tab-"+menuKey+"-content"),data.searchParam.creator);
@@ -465,6 +465,8 @@ define(function(require, exports) {
 				addTab(menuKey+"-add","添加游客",html);
 				touristGroup.initAdd();
 				touristGroup.getPartnerAgencyBigList();
+				//touristGroup.getPartnerAgencyList($('#'+tab+" .choosePartnerAgency"));
+
 
 			}
 		},
@@ -1203,7 +1205,7 @@ define(function(require, exports) {
 			})
 		},
 		//来源模糊查询
-		getPartnerAgencyList:function($obj){
+		getPartnerAgenListMain:function($obj){
 			$obj.autocomplete({
 				minLength: 0,
 				change: function(event, ui) {
@@ -1227,6 +1229,7 @@ define(function(require, exports) {
 			}).click(function(){
 				var obj = this;
 				var fromParObj = touristGroup.autocompleteDate.fromPartnerAgencyList;
+
 				if(fromParObj !=null && fromParObj.length>0){
 					for(var i=0;i<fromParObj.length;i++){
 						fromParObj[i].value = fromParObj[i].travelAgencyName;
@@ -1236,32 +1239,128 @@ define(function(require, exports) {
 				$(obj).autocomplete('search', '');
 			})
 		},
-		getBussinessGroup :function($obj){
+
+
+		getPartnerAgencyList:function($obj){
 			$obj.autocomplete({
-				minLength: 0,
-				change: function(event, ui) {
-					if (ui.item == null)  {
-						$(this).parent().find("input[name=fromBussinessGroupId]").val("");
+					minLength: 0,
+					change: function(event, ui) {
+						if (ui.item == null)  {
+							$(this).parent().find("input[name=fromPartnerAgencyId]").val("");
+						}
+					},
+					select: function(event, ui) {  
+						$(this).blur();
+						var obj = this;
+						$(obj).parent().find("input[name=fromPartnerAgencyId]").val(ui.item.id).trigger('change');
+						if(touristGroup.cleanFlag == 1){
+							var $tabId = $("#tab-resource_touristGroup-add-content");
+							$tabId.find("input[name=partnerAgencyNameList]").val("");
+						}
+						if(touristGroup.cleanFlag == 2){
+							var $tabId = $("#tab-resource_touristGroup-update-content");
+							$tabId.find("input[name=partnerAgencyNameList]").val("");
+						}
 					}
-				},
-				select: function(event, ui) {
-					$(this).blur();
-					var obj = this;
-					$(obj).parent().find("input[name=fromBussinessGroupId]").val(ui.item.id).trigger('change');
-				}
-			}).click(function(){
-				var obj = this;
-				var fromParObj = touristGroup.autocompleteDate.fromBusinessGroupList;
-				if(fromParObj !=null && fromParObj.length>0){
-					for(var i=0;i<fromParObj.length;i++){
-						fromParObj[i].value = fromParObj[i].businessGroupName;
-					}
-				}
-				$(obj).autocomplete('option','source', fromParObj);
-				$(obj).autocomplete('search', '');
-			})
+				}).on('click',function(){
+					$.ajax({
+							url:""+APP_ROOT+"/back/touristGroup.do?method=getPartnerAgency&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
+							dateType:"json",
+							type:"POST",
+							success:function(data){
+								var result = showDialog(data);
+								if(result){
+									var fromParObj= data.data;
+									var obj = this; 
+									if(fromParObj !=null && fromParObj.length>0){
+										for(var i=0;i<fromParObj.length;i++){
+											fromParObj[i].value = fromParObj[i].name;
+										}
+									}
+									$obj.autocomplete('option','source', fromParObj);
+									$obj.autocomplete('search', '');
+								}
+							}
+					    });
+				})
 		},
-      getPartnerAgencyBigList:function(obj,partnerAId){
+
+		//新增编辑
+		/*getPartnerAgencyList :function($obj){
+			$.ajax({
+				url:""+APP_ROOT+"/back/touristGroup.do?method=getPartnerAgency&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
+				dateType:"json",
+				type:"POST",
+				success:function(data){
+					var result = showDialog(data);
+					if(result){
+						var fromParObj= data;
+						$obj.autocomplete({
+							minLength: 0,
+							change: function(event, ui) {
+								if (ui.item == null)  {
+									$(this).parent().find("input[name=fromPartnerAgencyId]").val("");
+								}
+							},
+							select: function(event, ui) {  
+								$(this).blur();
+								var obj = this;
+								$(obj).parent().find("input[name=fromPartnerAgencyId]").val(ui.item.id).trigger('change');
+								if(touristGroup.cleanFlag == 1){
+									var $tabId = $("#tab-resource_touristGroup-add-content");
+									$tabId.find("input[name=partnerAgencyNameList]").val("");
+								}
+								if(touristGroup.cleanFlag == 2){
+									var $tabId = $("#tab-resource_touristGroup-update-content");
+									$tabId.find("input[name=partnerAgencyNameList]").val("");
+								}
+							}
+						}).click(function(){
+
+							var obj = this;   
+							if(fromParObj !=null && fromParObj.data.length>0){
+								for(var i=0;i<fromParObj.data.length;i++){
+									fromParObj.data[i].value = fromParObj.data[i].name;
+								}
+							}
+							$(obj).autocomplete('option','source', fromParObj.data);
+							$(obj).autocomplete('search', '');
+						})
+
+					}
+			    }
+			})
+        },*/
+
+
+
+
+	getBussinessGroup :function($obj){
+		$obj.autocomplete({
+			minLength: 0,
+			change: function(event, ui) {
+				if (ui.item == null)  {
+					$(this).parent().find("input[name=fromBussinessGroupId]").val("");
+				}
+			},
+			select: function(event, ui) {
+				$(this).blur();
+				var obj = this;
+				$(obj).parent().find("input[name=fromBussinessGroupId]").val(ui.item.id).trigger('change');
+			}
+		}).click(function(){
+			var obj = this;
+			var fromParObj = touristGroup.autocompleteDate.fromBusinessGroupList;
+			if(fromParObj !=null && fromParObj.length>0){
+				for(var i=0;i<fromParObj.length;i++){
+					fromParObj[i].value = fromParObj[i].businessGroupName;
+				}
+			}
+			$(obj).autocomplete('option','source', fromParObj);
+			$(obj).autocomplete('search', '');
+		})
+	},
+    getPartnerAgencyBigList:function(obj,partnerAId){
 			var $objC = $(obj)
 			$.ajax({
 				url:""+APP_ROOT+"back/partnerAgency.do?method=getPartnerAgency&token="+$.cookie("token")+"&menuKey=resource_partnerAgency&operation=view",
