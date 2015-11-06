@@ -121,7 +121,7 @@ define(function(require, exports) {
 			$("#"+tabId+" .tripPlanViewList .btn-tripPlan-plan").on("click", function(){
 				var billStatus = $(this).attr("billStatus");
 				var id = $(this).attr("data-entiy-id");
-				if(billStatus != -1){
+				if(billStatus == 1 || billStatus == 2){
 					var dialogObj = $( "#confirm-dialog-message" );
 					dialogObj.removeClass('hide').dialog({
 						modal: true,
@@ -141,7 +141,28 @@ define(function(require, exports) {
 							$(this).find("p").text("该团已审核，无法编辑");
 						}
 					});
-				}else{
+				}else if(billStatus == 0){
+					var dialogObj = $( "#confirm-dialog-message" );
+					dialogObj.removeClass('hide').dialog({
+						modal: true,
+						title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
+						title_html: true,
+						draggable:false,
+						buttons: [ 
+							{
+								text: "确定",
+								"class" : "btn btn-primary btn-minier",
+								click: function() {
+									$( this ).dialog( "close" );
+								}
+							}
+						],
+						open:function(event,ui){
+							$(this).find("p").text("该团导游已报账，无法编辑");
+						}
+					});
+				}
+				else{
 					tripPlan.addTripPlan(id);
 				}
 			});
@@ -2242,6 +2263,7 @@ define(function(require, exports) {
 				        			data.restaurantList = JSON.parse(data.restaurantList);
 									var html = optionalListTemplate(data);
 									$list.html(html);
+									$(window).trigger("resize");
 
 									// 绑定翻页组件
 									laypage({

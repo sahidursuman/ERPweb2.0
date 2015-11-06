@@ -17,7 +17,7 @@
     height: auto!important;
     z-index: 9999;
 }
-.btn-minier,.btn-group-minier>.btn{width: 65px;height: 35px!important;border-radius: 3px}
+
 input{
     vertical-align: middle !important;
     font-size: 12px !important;
@@ -696,8 +696,8 @@ input,select{
 .guideMarginLeft{
     margin-left: -104px;
 }
-.btn-Plan-add{
-    margin-left: -170px;
+.transfer-startWidth{
+    margin-left: -100px;
 }
 .MiddleMarginLeft{
     margin-left: -190px;
@@ -755,10 +755,10 @@ input,select{
 .margin-top15{
     margin-top: 25px;
 }
-
+s
 /*关闭操作页面时的button键*/
-.btn-heightMall{
-    /*height: 25px;*/
+.ui-dialog-buttonset .btn-heightMall{
+    height: 25px !important;
     min-width: 55px;
     border-radius: 3px;
 }
@@ -821,8 +821,22 @@ padding-left:0;width: 360px;left: -35px;
     cursor:pointer;left:-38px;
 }
 
-
-
+.transfer-status{
+    width: 340px;
+    position:absolute;right:380px;
+}
+.getPay-type{
+    width: 220px;
+}
+.product-width{
+   width:155px !important;
+}
+.icon-tourist{
+    margin-left: -40px;
+}
+.status-transfer{
+    margin-left: 25px;
+}
 /*媒体查询 1500*/
 
 @media screen and (max-width:1500px){
@@ -912,6 +926,55 @@ padding-left:0;width: 360px;left: -35px;
 .triplan-dropdown-menu{
     margin-left: -35px !important;
 }
+
+/*转客管理*/
+.width-self160{
+    width: 160px;
+}
+.width-self220{
+    width: 220px;
+}
+.transfer-status{
+    width: 340px;
+    position:absolute;
+    right: 180px;
+}
+.transfer-startWidth{
+    width: 140px;margin-left: 1px;
+}
+.transfer-startWidth input{
+    width: 110px;
+
+}
+.timeStartMore{
+    margin-left: 20px;
+}
+.choose-TravelAgency{
+    width: 110px;
+}
+.trans-PayedMoney{
+    width: 280px;
+}
+
+/*游客管理*/
+.updateTouristInput input{
+    width: 180px;
+}
+.getPay-type{
+    width: 180px;
+}
+.product-width{
+    width: 125px !important;
+}
+.travelLine-search{
+    position: absolute;
+}
+.icon-tourist{
+    margin-left: -20px !important;
+}
+.status-transfer{
+    margin-left: 65px;
+}
 }
 
 /*媒体查询 1366*/
@@ -931,5 +994,12 @@ padding-left:0;width: 360px;left: -35px;
 }
 .line-separatedT{
    height: 15px;width: 88%;border-bottom:  1px solid #428bca;margin-top: 2px;
+}.transfer-status{
+    width: 340px;
+    position:absolute;
+    right: 70px;
+}
+.trans-NeedPayAllMoney{
+    width: 220px;
 }
 }
