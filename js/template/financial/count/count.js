@@ -162,9 +162,9 @@ define(function(require, exports) {
                         //给审核按钮绑定事件
                         $(".financialCount .btn-count-update").click(function(){
                             var $that = $(this),
-                                id = $that.data('entity-id'),
-                                billStatus = $that.data('entity-billStatus'),
-                                guideFinancialExamine = $that.data('guideFinancialExamine');
+                                id = $that.attr('data-entity-id'),
+                                billStatus = $that.attr('data-entity-billStatus'),
+                                guideFinancialExamine = $that.attr('data-guideFinancialExamine');
 
                             if (billStatus == -1) {   // 未报账
                                 showMessageDialog($( "#confirm-dialog-message" ), "导游未报账，不能做审核操作");
@@ -1663,14 +1663,8 @@ define(function(require, exports) {
             if(typeFlag == 2 || typeFlag == 3){
                 $.ajax({
                 url:""+APP_ROOT+"back/financialTripPlan.do?method=webGuideAccountUpdate&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
-                type:"POST",
                 data:"saveJson="+encodeURIComponent(saveJson),
-                dataType:"json",
-                beforeSend:function(){
-                    globalLoadingLayer = openLoadingLayer();
-                },
                 success:function(data){
-                    layer.close(globalLoadingLayer);
                     var result = showDialog(data);
                     if(result){
                         if(typeFlag == 3){
@@ -1682,6 +1676,7 @@ define(function(require, exports) {
                             closeTab(uKey);
                             count.getlistCount(count.searchData.pageNo,count.searchData.id,count.searchData.tripNumber,count.searchData.lineProductId,count.searchData.lineProductName,count.searchData.guideId,count.searchData.guideName,count.searchData.startTime,count.searchData.endTime,count.searchData.status);
                         }else{
+                            $('#tab-financial_count-Reimbursement-content').find('.btn-guide-account').addClass('hidden');
                             count.Reimbursement(financialTripPlanId,"guide");
                         }
                     }

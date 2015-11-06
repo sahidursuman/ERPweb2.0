@@ -302,12 +302,12 @@ define(function(require, exports) {
 				$tab.data('isEdited', true);
 			})
 			// 监听保存，并切换tab
-			.on('switch.tab.save', function(event, tab_id, title, html) {
+			.on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
 				event.preventDefault();
 				ResLineProduct.saveProductData($tab, validator, [tab_id, title, html]);
 			})
 			// 保存后关闭
-			.on('close.tab.save', function(event) {
+			.on(CLOSE_TAB_SAVE, function(event) {
 				event.preventDefault();
 				ResLineProduct.saveProductData($tab, validator);
 			});

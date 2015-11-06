@@ -17,7 +17,7 @@
     height: auto!important;
     z-index: 9999;
 }
-.btn-minier,.btn-group-minier>.btn{width: 65px;height: 35px!important;border-radius: 3px}
+
 input{
     vertical-align: middle !important;
     font-size: 12px !important;
@@ -696,8 +696,8 @@ input,select{
 .guideMarginLeft{
     margin-left: -104px;
 }
-.btn-Plan-add{
-    margin-left: -170px;
+.transfer-startWidth{
+    margin-left: -100px;
 }
 .MiddleMarginLeft{
     margin-left: -190px;
@@ -755,10 +755,10 @@ input,select{
 .margin-top15{
     margin-top: 25px;
 }
-
+s
 /*关闭操作页面时的button键*/
-.btn-heightMall{
-    /*height: 25px;*/
+.ui-dialog-buttonset .btn-heightMall{
+    height: 25px !important;
     min-width: 55px;
     border-radius: 3px;
 }
@@ -829,12 +829,18 @@ padding-left:0;width: 360px;left: -35px;
     width: 220px;
 }
 .product-width{
-   width:155px;
+   width:155px !important;
 }
 .icon-tourist{
     margin-left: -40px;
 }
+.status-transfer{
+    margin-left: 25px;
+}
 
+.transfer-startLeft{
+    margin-left: 90px;
+}
 /*媒体查询 1500*/
 
 @media screen and (max-width:1500px){
@@ -969,6 +975,19 @@ padding-left:0;width: 360px;left: -35px;
 }
 .icon-tourist{
     margin-left: -20px !important;
+}
+.status-transfer{
+    margin-left: 65px;
+}
+.transfer-startLeft{
+    margin-left: 0px;
+}
+.transfer-startWidthT{
+    width: 140px;margin-left: 1px;  
+}
+.transfer-startWidthT input{
+    width: 110px;
+
 }
 }
 

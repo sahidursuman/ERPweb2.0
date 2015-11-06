@@ -174,7 +174,7 @@ define(function(require, exports) {
                  	    }
 
                         //取消对账权限过滤
-                        var checkList = data.financialScenicList;
+                        var checkList = data.fcScenicSettlementList;
                         var checkTr = $(".T-checkList tr");
                         var rightCode = $(".T-checkList").data("right");
                         checkDisabled(checkList,checkTr,rightCode);
