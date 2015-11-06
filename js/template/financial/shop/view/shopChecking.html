@@ -26,7 +26,7 @@
                         <option value="12">12月</option>
                     </select>
  
-                    <button class="btn-height btn-sm search-btn btn-shopChecking-search" >
+                    <button class="marginLeft-30 btn-sm search-btn btn-shopChecking-search" >
                         <i class="ace-icon fa fa-search"></i>
                        	 搜索
                     </button>
@@ -56,30 +56,30 @@
     <table class="table table-striped table-bordered table-hover all" style="margin-top: 30px">
             <thead>
             <tr>
-              <th class="th-border"> 序号</th>
-              <th class="th-border"> 团信息</th>
-              <th class="th-border"> 进店日期</th>
-              <th class="th-border"> 人数</th>
-              <th class="th-border"> 商品</th>
-              <th class="th-border"> 购物金额</th>
-              <th class="th-border"> 社佣</th>
-              <th class="th-border"> 导佣</th>
-              <th class="th-border"> 人数返佣</th>
-              <th class="th-border"> 停车返佣</th>
-              <th class="th-border"> 单据</th>
-              <th class="th-border"> 账面返佣</th>
-              <th class="th-border">  <span class="necessary">*</span>实际返佣</th>
-              <th class="th-border"> 说明</th>
-              <th class="th-border"> 对账时间</th>
-              <th class="th-border"> 对账人 </th>
-              <th class="th-border">对账</th>
+              <th class="th-border" style="min-width:50px"> 序号</th>
+              <th class="th-border" style="min-width:80px"> 团信息</th>
+              <th class="th-border" style="min-width:70px"> 进店日期</th>
+              <th class="th-border" style="min-width:40px"> 人数</th>
+              <th class="th-border" style="min-width:50px"> 商品</th>
+              <th class="th-border" style="min-width:70px"> 购物金额</th>
+              <th class="th-border" style="min-width:50px"> 社佣</th>
+              <th class="th-border" style="min-width:50px"> 导佣</th>
+              <th class="th-border" style="min-width:70px"> 人数返佣</th>
+              <th class="th-border" style="min-width:70px"> 停车返佣</th>
+              <th class="th-border" style="min-width:50px"> 单据</th>
+              <th class="th-border" style="min-width:70px"> 账面返佣</th>
+              <th class="th-border" style="min-width:50px">  <span class="necessary">*</span>实际返佣</th>
+              <th class="th-border" style="min-width:80px"> 说明</th>
+              <th class="th-border" style="min-width:60px"> 对账时间</th>
+              <th class="th-border" style="min-width:60px"> 对账人 </th>
+              <th class="th-border" style="min-width:50px">对账</th>
             </tr>
             </thead>
             <tbody class="T-checkList" data-right="1310005">
             {{each shopList as shop index}}
             <tr data-entity-id="{{shop.id}}" data-entity-isConfirmAccount="{{shop.isConfirmAccount}}" data-entity-startTime="{{shop.consumeStartTime}}" data-entity-rebateMoney="{{shop.rebateMoney}}" data-entity-billRemark="{{shop.billRemark}}">
                 <td>{{index+1}}</td>
-                <td class="cost-detail" style="color: rgb(102,159,199)"> {{shop.tripNumber}},{{shop.lineProductName}},{{shop.guideName}}</td>
+                <td class="cost-detail" style="color: rgb(102,159,199);min-width:70px"> {{shop.tripNumber}},{{shop.lineProductName}},{{shop.guideName}}</td>
                 <td>{{if shop.consumeStartTime == null || shop.consumeStartTime == ""}}-{{else}}{{shop.consumeStartTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
                 <td>{{shop.adultCount}}大{{shop.childCount}}小</td>
                 <td><a href="#" class="seeGroup" style="margin-left:5px">展开</a></td>
