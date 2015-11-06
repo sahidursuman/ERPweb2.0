@@ -1,9 +1,11 @@
 define(function(require, exports) {
 	var rule = {
 		check:function($obj){
+			console.info($obj);
+
 			var validator = $obj.formValidate([
 	    	    {	//未收对账
-	    	    	$ele: $obj.find('input[name=ClientCheck_checkUnIncomeMoney]'),
+	    	    	$ele: $obj.find('input[name=unIncomeMoney]'),
 	    	    	rules: [
 	    	    	        {
 	    	    	        	type: 'null', 
@@ -18,7 +20,7 @@ define(function(require, exports) {
 	    	    
 	    	    {
 	    	    	//返款
-	    	    	$ele: $obj.find('input[name=ClientCheck_backMoney]'),	
+	    	    	$ele: $obj.find('input[name=backMoney]'),
 	    	    	rules:[
 	    	    	       {
 	    	    	    	   type:'null',

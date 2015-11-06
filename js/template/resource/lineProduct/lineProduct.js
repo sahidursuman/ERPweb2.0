@@ -49,6 +49,7 @@ define(function(require, exports) {
 		$.ajax({
 			url: KingServices.build_url('lineProduct', 'listLineProduct'),
 			type:"POST",
+			showLoading:false,
 			data: {
 				pageNo: page,
 				name: name,
@@ -152,6 +153,7 @@ define(function(require, exports) {
 	    		url: KingServices.build_url('lineProduct', 'getLineProductById'),
 				type:"POST",
 				data:"id=" + id,
+				showLoading:false,
 				success:function(data){
 					var result = showDialog(data);
 					if(result){
@@ -189,6 +191,7 @@ define(function(require, exports) {
 			$.ajax({
 	    		url: KingServices.build_url('lineProduct', 'getLineProductById'),
 				type:"POST",
+				showLoading: false,
 				data:"id=" + id,
 				success:function(data){
 					var result = showDialog(data);
@@ -406,6 +409,7 @@ define(function(require, exports) {
 				$.ajax({
 					url: KingServices.build_url('guide', 'getGuideById'),
 					data:"id="+ui.item.id,
+					showLoading:false,
 					success: function(data) {
 						var result = showDialog(data);
 						if(result){
@@ -443,6 +447,7 @@ define(function(require, exports) {
 			$.ajax({
 				url: KingServices.build_url('guide', 'findAll'),
 				dataType: "json",
+				showLoading:false,
 				success: function(data) {
 					var result = showDialog(data);
 					if(result){
@@ -491,6 +496,7 @@ define(function(require, exports) {
 				$.ajax({
 					url: KingServices.build_url('insurance', 'getInsuranceById'),
 					data:"id="+ui.item.id,
+					showLoading:false,
 					success: function(data) {
 						var result = showDialog(data),$tr = $that.closest('tr');
 						if(result){
@@ -510,6 +516,7 @@ define(function(require, exports) {
 			var obj = this;
 			$.ajax({
 				url: KingServices.build_url('insurance', 'findAll'),
+				showLoading:false,
 				success: function(data) {
 					var result = showDialog(data);
 					if(result){
@@ -573,6 +580,7 @@ define(function(require, exports) {
 			$.ajax({
 				url: KingServices.build_url('busCompany', 'findBusCompanyBySeat'),
 				data:"seatCount="+needSeatCount,
+				showLoading:false,
 				success: function(data) {
 					var result = showDialog(data);
 					if(result){
@@ -608,6 +616,7 @@ define(function(require, exports) {
 				$.ajax({
 					url: KingServices.build_url('busCompany', 'findBusDetailById'),
 					data:"id="+ui.item.id,
+					showLoading:false,
 					success: function(data) {
 						var result = showDialog(data);
 						if(result){
@@ -641,6 +650,7 @@ define(function(require, exports) {
 				$.ajax({
 					url: KingServices.build_url('busCompany', 'findBusListBySeat'),
 					data:"id="+busCompanyId+"&seatCount="+needSeatCount,
+					showLoading:false,
 					success: function(data) {
 						var result = showDialog(data);
 						if(result){
@@ -687,6 +697,7 @@ define(function(require, exports) {
 							$.ajax({
 								url: KingServices.build_url('lineProduct', 'deleteLineProductArrangeTemplate'),
 								type:"POST",
+								showLoading:false,
 								data:"templateJsonDel="+encodeURIComponent(JSON.stringify(templateJsonDel)),
 								success:function(data){
 									layer.close(globalLoadingLayer);
@@ -732,6 +743,7 @@ define(function(require, exports) {
 							$.ajax({							
 								url: KingServices.build_url('lineProduct', 'deleteLineProduct'),
 								type:"POST",
+								showLoading:false,
 								data:"id="+id+"",
 								success:function(data){
 									var result = showDialog(data);
@@ -816,6 +828,7 @@ define(function(require, exports) {
 				$.ajax({
 					url: KingServices.build_url('restaurant', 'findRestaurantById'),
                     data:"id="+restaurantNameId,
+                    showLoading:false,
                     success: function(data) {
 						var result = showDialog(data);
 						if(result){
@@ -833,6 +846,7 @@ define(function(require, exports) {
 			var obj = this;
 			$.ajax({
 				url: KingServices.build_url('restaurant', 'findAll'),
+				showLoading:false,
                 success: function(data) {
 					var result = showDialog(data);
 					if(result){
@@ -866,6 +880,7 @@ define(function(require, exports) {
 				$.ajax({
 					url: KingServices.build_url('restaurant', 'findStandardDetailById'),
                     data:"id="+ui.item.id,
+                    showLoading:false,
                     success: function(data) {
 						var result = showDialog(data);
 						if(result){
@@ -883,6 +898,7 @@ define(function(require, exports) {
 			$.ajax({
                 url: KingServices.build_url('restaurant', 'getRestaurantStandardByType'),
                 data:"restaurantId="+restaurantNameId+"&type="+eatType,
+                showLoading:false,
                 success: function(data) {
 					var result = showDialog(data);
 					if(result){
@@ -955,6 +971,7 @@ define(function(require, exports) {
 				$.ajax({
                     url: KingServices.build_url('hotel', 'getHotelById'),
                     data:"id=" + hotelDataId,
+                    showLoading:false,
                     success: function(data) {
 						var result = showDialog(data);
 						if(result){
@@ -990,6 +1007,7 @@ define(function(require, exports) {
 			$.ajax({
                 url: KingServices.build_url('hotel', 'findHotelListByLevel'),
                 data:"level=" + hotelStarValue,
+                showLoading:false,
                 success: function(data) {
 					var result = showDialog(data);
 					if(result){
@@ -1020,6 +1038,7 @@ define(function(require, exports) {
 				$.ajax({
 					url: KingServices.build_url('hotel', 'findRoomDetailById'),
                     data:"id=" + ui.item.id,
+                    showLoading:false,
                     success: function(data) {
 						var result = showDialog(data);
 						if(result){
@@ -1052,6 +1071,7 @@ define(function(require, exports) {
 			$.ajax({
                 url: KingServices.build_url('hotel', 'findTypeByHotelId'),
                 data:"id=" + hotelDataId,
+                showLoading:false,
                 success: function(data) {
 					var result = showDialog(data);
 					if(result){
@@ -1110,6 +1130,7 @@ define(function(require, exports) {
 				$.ajax({
                     url: KingServices.build_url('scenic', 'getScenicById'),
                     data: "id="+scenicNameId,
+                    showLoading:false,
                     success: function(data) {
 						var result = showDialog(data);
 						if(result){
@@ -1135,6 +1156,7 @@ define(function(require, exports) {
 			var obj = this;
 			$.ajax({
                 url: KingServices.build_url('scenic', 'findAll'),
+                showLoading:false,
                 success: function(data) {
 					var result = showDialog(data);
 					if(result){
@@ -1167,6 +1189,7 @@ define(function(require, exports) {
 				$.ajax({
                     url: KingServices.build_url('scenic', 'findItemDetailById'),
                     data: "id="+nameUiId,
+                    showLoading:false,
                     success: function(data) {
 						var result = showDialog(data);
 						if(result){
@@ -1199,6 +1222,7 @@ define(function(require, exports) {
 			$.ajax({
                 url: KingServices.build_url('scenic', 'findItemByScenicId'),
                 data: "id="+scenicNameId,
+                showLoading:false,
                 success: function(data) {
 					var result = showDialog(data);
 					if(result){
@@ -1257,6 +1281,7 @@ define(function(require, exports) {
 				$.ajax({
                     url: KingServices.build_url('shop', 'getShopById'),
                     data: "id="+vendorNameId,
+                    showLoading:false,
                     success: function(data) {
 						var result = showDialog(data);
 						if(result){
@@ -1291,6 +1316,7 @@ define(function(require, exports) {
 			var obj = this;
 			$.ajax({
                 url: KingServices.build_url('shop', 'findAll'),
+                showLoading:false,
                 success: function(data) {
 					var result = showDialog(data);
 					if(result){
@@ -1342,6 +1368,7 @@ define(function(require, exports) {
 			$.ajax({
                 url: KingServices.build_url('shop', 'findPolicyByShopId'),
                 data: "id="+vendorNameId,
+                showLoading:false,
                 success: function(data) {
 					var result = showDialog(data);
 					if(result){
@@ -1396,6 +1423,7 @@ define(function(require, exports) {
 				$.ajax({
                     url: KingServices.build_url('selfpay', 'getSelfPayById'),
                     data: "id="+ui.item.id,
+                    showLoading:false,
                     success: function(data) {
 						var result = showDialog(data);
 						if(result){
@@ -1435,6 +1463,7 @@ define(function(require, exports) {
 			var obj = this;
 			$.ajax({
 				url: KingServices.build_url('selfpay', 'findAll'),
+				showLoading:false,
 				success:function(data){
 					var result = showDialog(data);
 					if(result){
@@ -1466,6 +1495,7 @@ define(function(require, exports) {
 				$.ajax({
                     url: KingServices.build_url('selfpay', 'findSelfPayRebateByItemId'),
                     data: "id="+ui.item.id,
+                    showLoading:false,
                     success: function(data) {
 						var result = showDialog(data);
 						if(result){
@@ -1493,6 +1523,7 @@ define(function(require, exports) {
 			$.ajax({
 				url: KingServices.build_url('selfpay', 'findSelfPayItemBySelfPayId'),
 				data:"id="+chooseCompanyNameId,
+				showLoading:false,
 				success:function(data){
 					var result = showDialog(data);
 					if(result){
@@ -1547,6 +1578,7 @@ define(function(require, exports) {
 				$.ajax({
                     url: KingServices.build_url('ticket', 'findTicketById'),
                     data: "id="+ui.item.id,
+                    showLoading:false,
                     success: function(data) {
 						var result = showDialog(data);
 						if(result){
@@ -1581,6 +1613,7 @@ define(function(require, exports) {
 			var obj = this;
 			$.ajax({
 				url: KingServices.build_url('ticket', 'findAll'),
+				showLoading:false,
 				success:function(data){
 					var result = showDialog(data);
 					if(result){
@@ -1843,6 +1876,7 @@ define(function(require, exports) {
 			url:url,
 			type:"POST",
 			data:submitData,
+			showLoading:false,
 			dataType:"json",
 			beforeSend:function(){
 				globalLoadingLayer = openLoadingLayer();
@@ -1961,6 +1995,7 @@ define(function(require, exports) {
 		$.ajax({
 			url: KingServices.build_url('lineProduct', 'addLineProduct'),
 			type:"POST",
+			showLoading:false,
 			data:form+"&busJsonAdd="+encodeURIComponent(busJsonAdd)+"&driverJsonAdd="+encodeURIComponent(driverJsonAdd)+"",
 			success:function(data){
 				var result = showDialog(data);

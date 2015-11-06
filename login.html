@@ -189,24 +189,27 @@
 		<script type="text/javascript">
 		$(function() {
 			var globalLayer;
-			$.ajax({
-				url:""+APP_ROOT+"base.do?method=checkLogin",
-				type:"GET",
-				dataType:"json",
-				beforeSend:function(){
-					globalLayer = layer.open({
-						type:3
-					});
-				},
-				success:function(data){
-					if(data.success == 1){
-						window.location.href = "index.html";
+			var cookie = $.cookie('token');
+			if(cookie){
+				$.ajax({
+					url:""+APP_ROOT+"base.do?method=checkLogin",
+					type:"GET",
+					dataType:"json",
+					beforeSend:function(){
+						globalLayer = layer.open({
+							type:3
+						});
+					},
+					success:function(data){
+						if(data.success == 1){
+							window.location.href = "index.html";
+						}
+						else{
+							layer.close(globalLayer);
+						}
 					}
-					else{
-						layer.close(globalLayer);
-					}
-				}
-			});
+				});
+			}
 			/* if($("input[name=password]").focus()){
 				$("input[name=password],input[name=userName]").keyup(function(e){
 					if(e.which == 13){

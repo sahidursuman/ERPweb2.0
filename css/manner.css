@@ -1,3 +1,9 @@
+/*分辨率*/
+.page-content{
+    min-height: 768px!important;
+    width:1700px!important;
+    margin: auto;
+}
 .search-btn{
     border-radius: 0;
     background: #51b0c2;
@@ -755,9 +761,9 @@ input,select{
 .margin-top15{
     margin-top: 25px;
 }
-s
+
 /*关闭操作页面时的button键*/
-.ui-dialog-buttonset .btn-heightMall{
+.ui-dialog .ui-dialog-buttonpane button.btn-heightMall{
     height: 25px !important;
     min-width: 55px;
     border-radius: 3px;
@@ -841,6 +847,12 @@ padding-left:0;width: 360px;left: -35px;
 .transfer-startLeft{
     margin-left: 90px;
 }
+.btn-touristStatus{
+    margin-left: 7px;
+}
+.Touristsearch-btn{
+  margin-left: 20px;
+}
 /*媒体查询 1500*/
 
 @media screen and (max-width:1500px){
@@ -852,26 +864,20 @@ padding-left:0;width: 360px;left: -35px;
 .addResourceBtnTripPlan{
         right: 8px;
 }
-.choosePartnerAgency{
+.width110{
     width: 110px
 }
-.chooseLineProduct{
-    width: 110px;
-}
+
 .subsectionStartTime{
     width: 100px;
 }
-.creatorUserChoose{
-    width: 110px;
-}
+
 .innerTr-export{
     margin-left: 20px;
 }
 
 /*内转管理*/
-.T-businessGroupChoose{
-    width: 110px;
-}
+
 
 .subsectionWords{
     margin-left: 35px;
@@ -951,9 +957,9 @@ padding-left:0;width: 360px;left: -35px;
 
 }
 .timeStartMore{
-    margin-left: 20px;
+    margin-left: 20px !important;
 }
-.choose-TravelAgency{
+.width110{
     width: 110px;
 }
 .trans-PayedMoney{
@@ -989,6 +995,45 @@ padding-left:0;width: 360px;left: -35px;
     width: 110px;
 
 }
+.tourist-newline{
+    width: 600px;
+    height: 60px;
+    margin-left: 10px;
+    padding-top: 40px;
+}
+.rangeTime{
+    width: 175px;
+}
+.btn-touristStatus{
+    margin-left: 33px;
+}
+.Touristsearch-btn{
+  margin-left: 30px;
+}
+.tourist-partnerAid{
+    width: 230px;
+}
+.tourist-partnerAid select{
+    width: 63px;
+}
+.lineRoad-tourist{
+    margin-left: 30px;
+}
+.tourist-LineProduct{
+    width: 110px;
+}
+.margin-left60{
+    margin-left: 60px;
+}
+.tourist-userChoose{
+    width:70px;
+}
+.margin-left33{
+    margin-left: 33px;
+}
+.marginLeftTourist-30{
+    margin-left: 30px;
+}
 }
 
 /*媒体查询 1366*/
@@ -1015,5 +1060,8 @@ padding-left:0;width: 360px;left: -35px;
 }
 .trans-NeedPayAllMoney{
     width: 220px;
+}
+.marginLeftTourist-30{
+    margin-left: 40px;
 }
 }
