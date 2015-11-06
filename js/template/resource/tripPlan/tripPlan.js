@@ -1139,10 +1139,10 @@ define(function(require, exports) {
 							}
 	                    }
 	                });*/
-					// var standardId = ui.item.id;
-					var $tr = $(this).closest('tr');
-					$tr.find("input[name=restaurantStandardId]").val(ui.item.id);
-					$tr.find("input[name=fee]").val(ui.item.price);
+					var standardId = ui.item.id;
+					var _this = $(this);
+					//$(this).parent().parent().find("input[name=restaurantStandardId]").val(ui.item.id);
+					$(this).closest('tr').find("input[name=fee]").val(ui.item.price);
 					/*$.ajax({
 						url:""+APP_ROOT+"back/restaurant.do?method=findStandardDetailById&token="+$.cookie("token")+"&menuKey=resource_restaurant&operation=view",
 	                    dataType: "json",
