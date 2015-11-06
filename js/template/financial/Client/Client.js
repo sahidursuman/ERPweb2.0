@@ -196,7 +196,9 @@ define(function(require, exports) {
                 });
             } else{
                 checkboxList.each(function(i){
-                    $(this).prop("checked",false);                                
+                	if(!$(this).prop("disabled")){
+                		$(this).prop("checked",false);
+                	}                                
                 });
             } 
         });
