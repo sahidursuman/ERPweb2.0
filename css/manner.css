@@ -837,6 +837,10 @@ padding-left:0;width: 360px;left: -35px;
 .status-transfer{
     margin-left: 25px;
 }
+
+.transfer-startLeft{
+    margin-left: 90px;
+}
 /*媒体查询 1500*/
 
 @media screen and (max-width:1500px){
@@ -974,6 +978,16 @@ padding-left:0;width: 360px;left: -35px;
 }
 .status-transfer{
     margin-left: 65px;
+}
+.transfer-startLeft{
+    margin-left: 0px;
+}
+.transfer-startWidthT{
+    width: 140px;margin-left: 1px;  
+}
+.transfer-startWidthT input{
+    width: 110px;
+
 }
 }
 
