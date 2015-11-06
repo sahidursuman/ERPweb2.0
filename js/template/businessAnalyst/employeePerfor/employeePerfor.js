@@ -18,7 +18,8 @@ define(function(require, exports) {
 		$searchParam:{
 			startTime:"",
 			endTime:"",
-			type:""
+			type:"",
+			pageNo:""
 		}
 	};
 
@@ -68,7 +69,7 @@ define(function(require, exports) {
 		   	var startTime=employeePerforObj.$tab.find("input[name=startTime]").val(),
 		   	    endTime=employeePerforObj.$tab.find('input[name=endTime]').val(),
 		   	    type =employeePerforObj.$tab.find('button').attr('data-value');//1
-	   		employeePerforObj.getListEmpDept(startTime,endTime,type);
+	   		employeePerforObj.getListEmpDept(startTime,endTime,type,0);
 
     	}); 	
     	//trigger事件
@@ -84,21 +85,22 @@ define(function(require, exports) {
 			if ($that.closest('ul').prev().attr('data-value')==1) {
 				employeePerforObj.$tab.find('.T-deptPerfor-list').addClass('hide');
 				employeePerforObj.$tab.find('.T-employeePerfor-list').removeClass('hide');
-				employeePerforObj.getListEmpDept("","",1);
+				employeePerforObj.getListEmpDept("","",1,0);
 			} else{
 				employeePerforObj.$tab.find('.T-deptPerfor-list').removeClass('hide');
 				employeePerforObj.$tab.find('.T-employeePerfor-list').addClass('hide');
-				employeePerforObj.getListEmpDept("","",2);
+				employeePerforObj.getListEmpDept("","",2,0);
 
 			};
 			
 		});
     };
 
-    employeePerforObj.getListEmpDept=function(startTime,endTime,type){
+    employeePerforObj.getListEmpDept=function(startTime,endTime,type,page){
     		employeePerforObj.$searchParam.startTime=startTime;
     		employeePerforObj.$searchParam.endTime=endTime;
     		employeePerforObj.$searchParam.type=type;
+    		employeePerforObj.$searchParam.pageNo=page;
 	
 	    	if (type==1) {
 	    		$.ajax({
@@ -110,6 +112,17 @@ define(function(require, exports) {
 						if(result){
 						   var html=listEmployTemplate(data);
 						   employeePerforObj.$tab.find('.T-employeePerfor-list').html(html);
+						   // 绑定翻页组件
+							laypage({
+							    cont: employeePerforObj.$tab.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+							    pages: data.searchParam.totalPage, //总页数 
+							    curr: (page + 1),
+							    jump: function(obj, first) {
+							    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+							    		employeePerforObj.getListEmpDept(startTime,endTime,1,obj.curr -1);
+							    	}
+							    }
+							});
 						}
 					}
 				});
@@ -125,6 +138,19 @@ define(function(require, exports) {
 						if(result){
 						   var html=listDeptTemplate(data);
 						   employeePerforObj.$tab.find('.T-deptPerfor-list').html(html);
+						   console.info('=========='+data.searchParam.totalPage+"**********"+employeePerforObj.$tab.find('.T-listDept-pagenation'));
+
+						   // 绑定翻页组件
+							laypage({
+							    cont: employeePerforObj.$tab.find('.T-listDept-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+							    pages: data.searchParam.totalPage, //总页数 
+							    curr: (page + 1),
+							    jump: function(obj, first) {
+							    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+							    		employeePerforObj.getListEmpDept(startTime,endTime,2,obj.curr -1);
+							    	}
+							    }
+							});
 						   
 						}
 					}
