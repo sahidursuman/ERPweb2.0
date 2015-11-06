@@ -683,7 +683,7 @@ define(function(require, exports) {
 
 			//初始化 组社团数据
 			touristGroup.getPartnerAgencyList($("#"+tab+" .choosePartnerAgency"));
-			touristGroup.getPartnerAgencyBigList($("#"+tab+" .choosePartnerAgency"));
+			//touristGroup.getPartnerAgencyBigList($("#"+tab+" .choosePartnerAgency"));
 			//添加小组页面提交按钮事件绑定
 			$("#"+tab+" .touristGroupMainFormRS .btn-submit-addTouristGroup").click(function(){
 				touristGroup.submitAddTouristGroup();
@@ -1264,17 +1264,18 @@ define(function(require, exports) {
 					}
 				}).on('click',function(){
 					$.ajax({
-							url:""+APP_ROOT+"/back/touristGroup.do?method=getPartnerAgency&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
+							url:""+APP_ROOT+"/back/partnerAgency.do?method=getPartnerAgency&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 							dateType:"json",
 							type:"POST",
 							success:function(data){
 								var result = showDialog(data);
 								if(result){
-									var fromParObj= data.data;
+									console.info(data.partnerAgencyList);
+									var fromParObj= JSON.parse(data.partnerAgencyList);
 									var obj = this; 
 									if(fromParObj !=null && fromParObj.length>0){
 										for(var i=0;i<fromParObj.length;i++){
-											fromParObj[i].value = fromParObj[i].name;
+											fromParObj[i].value = fromParObj[i].travelAgencyName;
 										}
 									}
 									$obj.autocomplete('option','source', fromParObj);

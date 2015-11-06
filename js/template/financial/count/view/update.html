@@ -475,7 +475,7 @@
                         <td>{{if busCompany.busCompany != null}}{{busCompany.busCompany.companyName}}{{/if}}</td>
                         <td>{{if busCompany.bus != null}}{{busCompany.bus.licenseNumber}}{{/if}}</td>
                         <td>{{if busCompany.bus != null}}{{busCompany.bus.seatCount}}{{/if}}</td>
-                        <td>{{busCompany.price}}<input type="hidden" name="price" value="{{busCompany.price}}" /><input type="hidden" name="realCount" value="1" /></td>
+                        <td>{{busCompany.price}}<input type="hidden" name="price" value="{{busCompany.price}}" /><input type="hidden" name="realPrice" value="{{busCompany.price}}" /><input type="hidden" name="realCount" value="1" /></td>
                         <td>{{busCompany.reduceMoney}}<input type="hidden" name="reduceMoney" value="{{busCompany.reduceMoney}}" /></td>
                         <td><span class="BusneedPayMoney">{{busCompany.needPayMoney}}</span></td>
                         <td>{{busCompany.payedMoney}}</td>
