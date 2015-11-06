@@ -1,9 +1,13 @@
 /*分辨率*/
-.page-content{
+/*@media screen and (max-width:1366px){
+    .page-content{
     min-height: 768px!important;
     width:1700px!important;
     margin: auto;
 }
+
+}*/
+
 .search-btn{
     border-radius: 0;
     background: #51b0c2;
