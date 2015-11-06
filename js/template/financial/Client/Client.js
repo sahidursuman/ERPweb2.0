@@ -10,646 +10,540 @@ define(function(require, exports) {
         tabId = "tab-"+menuKey+"-content",
         travelAgencyList,
         partnerAgencyList,
-        validator,
-        Client = {
-		searchParam  : {
-			"pageNo": "",
-			"pageSize":"",
-			"sortType":"",
-			"fromPartnerAgencyId":"",
-			"travelId":"",
-            "fromPartnerAgencyName" : "",
-            "travelName" : "",
-			year : "",
-			month : ""
-		},
-		searchCheckData:{
-        	pageNo : "",
-        	id : "",
-        	year : "",
-        	month : ""
-        },
-        searchBalanceData:{
-        	id : "",
-        	year : "",
-        	startMonth : "",
-			endMonth : ""
-        }, 
-		edited : {},
-		isEdited : function(editedType){
-			if(!!Client.edited[editedType] && Client.edited[editedType] != ""){
-				return true;
-			}
-			return false;
-		},
-		oldCheckClientId:0,
-		oldBlanceClientId:0,
-		listClient:function(pageNo,fromPartnerAgencyId,fromPartnerAgencyName,travelId,travelName,year,month){
-        	Client.searchParam = {
-				"pageNo":pageNo,
-				"pageSize":10,
-				"sortType":"auto",
-				"fromPartnerAgencyId":fromPartnerAgencyId,
-				"travelId":travelId,
-                "fromPartnerAgencyName" : fromPartnerAgencyName,
-                 "travelName" : travelName,
-				year : year,
-				month : month
-        	};
-        	Client.searchParam = JSON.stringify(Client.searchParam);
-            $.ajax({
-                url:""+APP_ROOT+"back/financial/financialParAgency.do?method=findPager&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-                type:"POST",
-                data:"searchParam="+encodeURIComponent(Client.searchParam)+"",
-                dataType:"json",
-                beforeSend:function(){
-                    globalLoadingLayer = openLoadingLayer();
-                },
-                success:function(data){
-                    layer.close(globalLoadingLayer);
-                    var result = showDialog(data);
-                    if(result){
-                        partnerAgencyList = JSON.parse(data.partnerAgencySet);
-                    	travelAgencyList = JSON.parse(data.travelAgencySet);
-                    	var totalPage = data.pager.totalPage;
-                        data.partnerAgencySet = JSON.parse(data.partnerAgencySet);
-                        data.travelAgencySet = JSON.parse(data.travelAgencySet);
-                        data.month = month;
-                        var html = listTemplate(data);
-                        addTab(menuKey,"客户账务",html);
-                        $("#tab-"+menuKey+"-content .guideMainForm .date-picker").datepicker({
-                            autoclose: true,
-                            todayHighlight: true,
-                            format: 'yyyy-mm-dd',
-                            language: 'zh-CN'
-                        });
-                        var $tabId = $("#tab-financial_Client-content");
-                        var travelId = $("input[name=travelAgencyId]").val(),
-                            travelName = $("input[name=travelAgencyName]").val();
-                        var fromPartnerAgencyId = $("input[name=partnerAgencyId]").val(),
-                            fromPartnerAgencyName = $("input[name=partnerAgencyName]").val();
-                        var pageNo = $("#listClient_pager_pagerNo").val();
-                        //搜索按钮事件
-                        $tabId.find(".btn-arrangeTourist-search").click(function(){
-                            var travelId = $("input[name=travelAgencyId]").val(),
-                                travelName = $("input[name=travelAgencyName]").val();
-                            var fromPartnerAgencyId = $("input[name=partnerAgencyId]").val(),
-                                fromPartnerAgencyName = $("input[name=partnerAgencyName]").val();
-                            var pageNo = $("#listClient_pager_pagerNo").val();
-                            var year = $(".listMain").find("[name=ClientCheck_searchYear]").val();
-                            var month = $(".listMain").find("[name=ClientCheck_searchMonth]").val();
-                            Client.listClient(pageNo,fromPartnerAgencyId,fromPartnerAgencyName,travelId,travelName,year,month);
-                        });
-                        var tab = "tab-" + menuKey + "-content";
-                        Client.getPartnerAgencyList($("#"+tab+" .choosePartnerAgency"),"");
-                        Client.getTravelAgencyList($("#"+tab+" .chooseTravelAgency"),"");
-                  
-                        // 绑定翻页组件
-                        laypage({
-                            cont: $('#' + tabId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
-                            pages: data.pager.totalPage, //总页数
-                            curr: (data.pager.pageNo + 1),
-                            jump: function(obj, first) {
-                                if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-                                    Client.listClient(obj.curr -1,fromPartnerAgencyId,fromPartnerAgencyName,travelId,travelName,year,month);
-                                }
-                            }
-                        });
-                        //给对账按钮绑定事件
-                        $tabId.find(".btn-divide").click(function(){
-                        	var id = $(this).attr('data-entity-id');
-                        	var pageNo = $("#listClient_pager_pagerNo").val();
-                        	Client.ClientCheck(pageNo,id,"","");
-                        
-                        });
-                        //给结算按钮绑定事件
-                        $tabId.find(".btn-transfter").click(function(){
-                        	var id = $(this).attr('data-entity-id');
-                        	Client.ClientClear(id,"2015","","");
-                        });
-                    }
-                }
-            });  
-        },
-        ClientCheck:function(pageNo,id,month,year){
-        	var travelAgencyId  = id;
-        	var pager = {
-				"pageNo":pageNo,
-				"sortType":"auto",
-				"eqMap":{
-					"fromPartnerAgencyId":id,
-					"month":month,
-					"year":year
-				},
-        	};
-        	pager = JSON.stringify(pager);
-        	 $.ajax({
-                 url:""+APP_ROOT+"back/financial/financialParAgency.do?method=findCheckPager&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-                 type:"POST",
-                 data:"pager="+encodeURIComponent(pager),
-                 dataType:"json",
-                 beforeSend:function(){
-                     globalLoadingLayer = openLoadingLayer();
-                 },
-                 success:function(data){
-                	 //表单验证
-                	 validator = rule.check($('.clientCheckingMain'));
-                	 
-                     layer.close(globalLoadingLayer);
-                     var result = showDialog(data);
-                     if(result){
-						 Client.searchCheckData = {
-							pageNo : pageNo,
-							id : id,
-							year : year,
-							month : month
-						};
-                         data.pager = JSON.parse(data.pager);
-                         var checkList = data.pager.resultList;
-                         var html = ClientChecking(data);				 
-						
-						 if($("#" +"tab-"+ClientCheckTab+"-content").length > 0) {
-							 addTab(ClientCheckTab,"客户对账");
-                 	    	 if(!!Client.edited["checking"] && Client.edited["checking"] != ""){
-    		                    //给每个tr添加表单验证
-                 	    		showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
-                 	    			validator = rule.check($('.clientCheckingMain'));
-                 	    			 if (!validator.form()) { return; }
-                 	    			 Client.saveCheckingData(Client.oldCheckClientId,0);
-    			            		 Client.edited["checking"] = "";
-    			            		 addTab(ClientCheckTab,"客户对账",html);
-    			            		 validator = rule.check($('.clientCheckingMain'));
-    			            	 },function(){
-									addTab(ClientCheckTab,"客户对账",html);
-									Client.edited["checking"] = "";
-									validator = rule.check($('.clientCheckingMain'));
-    			            	 });
-                 	    	 }else{
-                     	    	addTab(ClientCheckTab,"客户对账",html);
-                     	    	validator = rule.check($('.clientCheckingMain'));
-                 	    	 }
-             	    		 
-                 	    }else{
-                 	    	addTab(ClientCheckTab,"客户对账",html);
-                 	    	validator = rule.check($('.clientCheckingMain'));
-                 	    }
+        validator;
+    
+    var Client = {
+		searchData: false,
+        $tab: false,
+        $searchArea: false,
+        $checkSearchArea: false,
+        $clearSearchArea : false,
+        partnerAgencyList : false,
+        travelAgencyList : false,
+        edited : {},
+        oldBlanceClientId : false,
+        oldCheckClientId : false
+	};
 
-                        //取消对账权限过滤
-                        var checkTr = $(".T-checkList tr");
-                        var rightCode = $(".T-checkList").data("right");
-                        checkDisabled(checkList,checkTr,rightCode);
-                        
-                         var $checkId = $("#tab-financial_Client-checking-content");
-                         
-						 $("#" +"tab-"+ClientCheckTab+"-content .all").on('change', function() {
-                 		    Client.edited["checking"] = "checking";
-                 		    Client.oldCheckClientId = id;
-	    	    		});
-                         //关闭页面事件
-                         $checkId.find(".clientCheckingMain .btn-close-tab").click(function(){
-                        	 closeTab(ClientCheckTab);
-							 Client.edited["checking"] = "";
-                         })
-                         //获取页面数据
-                         var pageNo = $("#ClientCheck_pager_pagerNo").val();
-                         var id = $(".clientCheckingMain").find("[name=ClientCheck_pager_pagerNo]").val();
-                         //搜索
-                         $checkId.find("[name=ClientCheck_searchButton]").click(function(){
-							Client.searchCheckData = {
-								pageNo : pageNo,
-								id : id,
-								year : $(".clientCheckingMain").find("[name=ClientCheck_searchYear]").val(),
-								month : $(".clientCheckingMain").find("[name=ClientCheck_searchMonth]").val()
-							};
-                             Client.ClientCheck(0,Client.searchCheckData.id,Client.searchCheckData.month,Client.searchCheckData.year);
-                         })
-                         //导出报表事件 btn-clientExport
-                         $checkId.find(".clientCheckingMain .btn-clientExport").click(function(){
-                        	 var year = $(".clientCheckingMain").find("[name=ClientCheck_searchYear]").val();
-                        	 var month = $(".clientCheckingMain").find("[name=ClientCheck_searchMonth]").val();
-                        	 var pid = $(".clientCheckingMain").find("[name=ClientCheck_fromPartnerAgencyId]").val();
-                        	 checkLogin(function(){
- 	                        	var url = ""+APP_ROOT+"back/export.do?method=partnerAgency&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view"+"&fromPartnerAgencyId="+pid+"&year="+year+"&month="+month+"&sortType=auto";
- 	                        	exportXLS(url)
- 	                        });
-                         });
-                         
-                         // 绑定翻页组件
-                        laypage({
-                            cont: $checkId.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
-                            pages: data.pager.totalPage, //总页数
-                            curr: (data.pager.pageNo + 1),
-                            jump: function(obj, first) {
-                                if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-                                    Client.ClientCheck(obj.curr -1,id,month,year);
-                                }
-                            }
-                        });
-                         //给全选按钮绑定事件
-                         $checkId.find("input[name=ClientCheck_checkAllBox]").click(function(){
-                            if($(this).is(":checked")){
-                                $(".clientCheckingMain .checkingTbody tr input[type=checkbox]").each(function(i){
-                                    $(this).prop("checked",true);
-                                });
-                            } else{
-                                $(".clientCheckingMain .checkingTbody tr input[type=checkbox]").each(function(i){
-                                    $(this).prop("checked",false);                                
-                                });
-                            }
-                        	 
-                         });
-                         
-                         //展开游客小组
-                         $checkId.find(".clientCheckingMain .btn-show-group").click(function(){
+    Client.initModule = function() {
+        Client.listClient(0,"","","","","","");
+    };	
 
- 	                    	var tr = $(this).parent().parent().next();
- 	                    	if($(this).text()=="展开"){
- 	                    		$(this).text("收起");
- 	                    	}else{$(this).text("展开");}
- 	                     	if(tr.hasClass("hide")){
- 									$(this).find("i").removeClass("fa-chevron-up");
- 									$(this).find("i").addClass("fa-chevron-down");
- 									tr.removeClass("hide");
- 								}
- 								else{
- 									$(this).find("i").removeClass("fa-chevron-down");
- 									$(this).find("i").addClass("fa-chevron-up");
- 									tr.addClass("hide");
- 								}
-                         });
-                         //全选择框事件
-                         $checkId.find("[name=ClientCheck_checkAllBox]").click(function(){
-                        	 var clientCheckingTr = $(".clientCheckingMain .checkingTbody").find("[name=eachTr]");
-                        	 clientCheckingTr.each(function(i){
-                        		 $(this).find("[name=ClientCheck_checkBox]").attr("checked","true");
-                        	 });
-                         });
-                         //未收对账和返款内容变更后，计算并变更实际未收的值
-                         $checkId.find("[name=ClientCheck_checkUnIncomeMoney]").keyup(function(){
-                        	 var checkUnIncomeMoney = $(this).val();
-                        	 var backMoney = $(this).parent().next().find("[name=ClientCheck_backMoney]").val();
-                        	 var rs = checkUnIncomeMoney - backMoney;
-                        	 $(this).parent().next().next().find("[name=ClientCheck_actualNotGet]").text(rs);
-                         });
-                         $checkId.find("[name=ClientCheck_backMoney]").keyup(function(){
-                        	 var checkUnIncomeMoney = $(this).parent().prev().find("[name=ClientCheck_checkUnIncomeMoney]").val();
-                        	 var backMoney = $(this).val();
-                        	 var rs = checkUnIncomeMoney - backMoney;
-                        	 $(this).parent().next().find("[name=ClientCheck_actualNotGet]").text(rs);
-                         });
-                         
-                         //确认对账按钮事件
-                         $checkId.find("[name=ClientCheck_checkButton]").click(function(){ 
-                            validator = rule.check($('.clientCheckingMain'));
-                            if (!validator.form()) { return; }
-                        	Client.saveCheckingData(id,0);
-                         });
-                     }
-                 }
-        	 })
-        },
-        ClientClear:function(id,year,startMonth,endMonth){
-        	$.ajax({
-                url:""+APP_ROOT+"back/financial/financialParAgency.do?method=findSettlement&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-                type:"POST",
-                data:"id="+id+"&year="+year+"&startMonth="+startMonth+"&endMonth="+endMonth,
-                dataType:"json",
-                beforeSend:function(){
-                    globalLoadingLayer = openLoadingLayer();
-                },
-                success:function(data){
-                	
-                    layer.close(globalLoadingLayer);
-                    var result = showDialog(data);
-                    if(result){
-						Client.searchBalanceData = {
-							id : id,
-							year : year,
-							startMonth : startMonth,
-							endMonth : endMonth
-						};
-                        data.financialPartnerAgencySettlementList = JSON.parse(data.financialPartnerAgencySettlementList);
-                        var html = ClientClearing(data);
-                        
-                        //设置表单验证
-                        var validator = rule.check($('.ClientClearMain'));
-						
-						if($("#" +"tab-"+ClientClearTab+"-content").length > 0) {
-							 addTab(ClientClearTab,"客户结算");
-                 	    	 if(!!Client.edited["clearing"] && Client.edited["clearing"] != ""){
-    		                    //给每个tr添加表单验证
-                 	    		showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
-                 	    			var saveBtn = $("#tab-financial_Client-clearing-content").find('[name=ClientClear_saveButton]');
-                                    if (!$(saveBtn).data('validata').form()) { return; }
-                 	    			 Client.saveBlanceData(Client.oldBlanceClientId,0);
-    			            		 Client.edited["clearing"] = "";
-    			            		 addTab(ClientClearTab,"客户结算",html);
-    			            		 Client.validatorTable();
-    			            	 },function(){
-    			            		    addTab(ClientClearTab,"客户结算",html);
-    			            		    Client.edited["clearing"] = "";
-    			            		    Client.validatorTable();
-    			            	 });
-                 	    	 }else{
-                     	    	addTab(ClientClearTab,"客户结算",html);
-                     	    	Client.validatorTable();
-                 	    	 }
-             	    		 
-                 	    }else{
-                 	    	addTab(ClientClearTab,"客户结算",html);
-                 	    	validator = rule.check($('.ClientClearMain'))
-                            Client.validatorTable();
-                 	    }
-                        
-                        var pid = data.pid;
-                        $("#" +"tab-"+ClientClearTab+"-content .all").on('change', 'input, select', function() {
-                 		   Client.edited["clearing"] = "clearing";
-                            $(this).closest('tr').data('blanceStatus',true);
-                 		    Client.oldBlanceClientId = id;
-	    	    		});
-                        
-                        var $balcneId = $("#tab-financial_Client-clearing-content");
-                        //搜索事件
-                        $balcneId.find("[name=searchButton]").click(function(){
-                        	function getVal(name){
-                        		var rs = $(".ClientClearMain").find("[name="+name+"]").val();
-                        		return rs;
-                        	}
-							Client.searchBalanceData = {
-								id : id,
-								year : getVal("ClientClear_year"),
-								startMonth : getVal("ClientClear_startMonth"),
-								endMonth : getVal("ClientClear_endMonth")
-							};
-                        	Client.ClientClear(Client.searchBalanceData.id,Client.searchBalanceData.year,Client.searchBalanceData.startMonth,Client.searchBalanceData.endMonth);
-                        });
-                        //明细按钮事件
-                        $balcneId.find("[name=ClientClear_findCheckButton]").click(function(){
-                        	var id = $(this).attr("data-entity-id");
-                        	var year = $(this).attr("data-entity-year");
-                        	var month = $(this).attr("data-entity-month");
-                        	Client.ClientCheck(0,id,month,year);
-                        });
-                        //操作记录事件
-                        $balcneId.find("[name=ClientClear_recordButton]").click(function(){
-                        	var sid = $(".ClientClearMain").find("[name=ClientClear_saveButton]").attr("data-entity-id");
-                        	$.ajax({
-                                url:""+APP_ROOT+"back/financial/financialParAgency.do?method=findSettlementRecord&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-                                type:"POST",
-                                data:"id="+sid,
-                                dataType:"json",
-                                beforeSend:function(){
-                                    globalLoadingLayer = openLoadingLayer();
-                                },
-                                success:function(data){
-                                    layer.close(globalLoadingLayer);
-                                    data.records = JSON.parse(data.records);
-                                    var result = showDialog(data);
-                                    if(result){
-                                        var html= recordTemplate(data);
-                                    	var recordButtonLayer = layer.open({
-                						    type: 1,
-                						    title:"查看操作记录",
-                						    skin: 'layui-layer-rim', //加上边框
-                						    area: ['95%', '90%'], //宽高
-                						    zIndex:1028,
-                						    content: html,
-                						    success:function(){
-                						    	
-                						    }
-                                    	})
-                                    }
-                                    
-                                    
-                                }
-                        	})
-                        });
-                        //保存结算事件
-                        $balcneId.find(".ClientClearMain").find("[name=ClientClear_saveButton]").click(function(){
-                            if (!$(this).data('validata').form()) { return; }
-                        	Client.saveBlanceData(Client.oldBlanceClientId,0, $(this));
-                        });	
-                    }
-                }
-       	    })
-        },
-        //给每个tr增加验证
-        validatorTable:function(){
-            //获取table中的tr
-            var $tr = $("#tab-financial_Client-clearing-content .all tbody tr")
-            //给每个tr添加表单验证
-            $tr.each(function(){
-                $(this).find('[name=ClientClear_saveButton]').data('validata', rule.check($(this)));
-            });
-        },
-		saveCheckingData : function(id,isClose){
-			 
-			//保存对账时提交的数据
-			var $this = $(".clientCheckingMain");
-			var checkRecordList = [];
-			function getValue(className,name){
-				var result = className.find("[name="+name+"]").val();
-				if (result == "") {//所有空字符串变成0
-					result = 0;
-				}
-				return result;
-			}
-			function getOldVal(className,name){
-				var result = className.find("[name="+name+"]").attr("data-entity-id");
-				if (result == "") {//所有空字符串变成0
-					result = 0;
-				}
-				return result;
-			}
-			var clientCheckingTr = $(".clientCheckingMain .checkingTbody").find("[name=eachTr]");
-			clientCheckingTr.each(function(i){
-				var isCheck = $(this).find("[name=ClientCheck_checkBox]").is(':checked');
-				var bool = 0;//判断数据是否发生变更
-				var isCheckvar = $(this).find("[name=ClientCheck_checkBox]").attr("data-entity-id");
-				if (isCheck) {
-					var touristGroupId = $(this).attr("data-entity-id");
-					var checkUnIncomeMoney = getValue($(this),"ClientCheck_checkUnIncomeMoney");
-					var unPayMoney = getValue($(this),"ClientCheck_notGet");
-					var backMoney = getValue($(this),"ClientCheck_backMoney");
-					var remark = getValue($(this),"ClientCheck_remark");
-					var oldcheckUnIncomeMoney = getOldVal($(this),"ClientCheck_checkUnIncomeMoney")
-					var oldbackMoney = getOldVal($(this),"ClientCheck_backMoney");
-					var oldremark = getOldVal($(this),"ClientCheck_remark");
-					if (checkUnIncomeMoney==oldcheckUnIncomeMoney) {
-						bool = bool+1;
-					}
-					if (backMoney==oldbackMoney) {
-						bool = bool+1;
-					}
-					if (remark==oldremark) {
-						bool = bool+1;
-					}
-					if (bool!=3) {
-						var checkRecord = {
-							"touristGroupId":touristGroupId,
-							"checkUnIncomeMoney":checkUnIncomeMoney,//未收对账
-							"unPayMoney":unPayMoney,//未收
-							"backMoney":backMoney,//返款
-							"remark":remark,//说明
-							"idDelete":1,
-						 };
-						checkRecordList.push(checkRecord);
-					}
-					if (isCheckvar==0&&bool==3) {
-						var checkRecord = {
-							"touristGroupId":touristGroupId,
-							"checkUnIncomeMoney":checkUnIncomeMoney,//未收对账
-							"unPayMoney":unPayMoney,//未收
-							"backMoney":backMoney,//返款
-							"remark":remark,//说明
-							"idDelete":1,
-						};
-						checkRecordList.push(checkRecord);
-					}
-				}else {
-				var checkRecord = {
-					"touristGroupId":$(this).attr("data-entity-id"),
-					"checkUnIncomeMoney":getValue($this,"ClientCheck_checkUnIncomeMoney"),//未收对账
-					"unPayMoney":getValue($this,"ClientCheck_notGet"),//未收
-					"backMoney":getValue($this,"ClientCheck_backMoney"),//返款
-					"remark":getValue($this,"ClientCheck_remark"),//说明
-					"idDelete":0,
-				};
-				checkRecordList.push(checkRecord);
-				}
-			})
-			checkRecordList = JSON.stringify(checkRecordList);
-			$.ajax({
-				url:""+APP_ROOT+"back/financial/financialParAgency.do?method=saveCheck&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=save",
-				type:"POST",
-				data:"checkRecordList="+encodeURIComponent(checkRecordList),
-				dataType:"json",
-				beforeSend:function(){
-					globalLoadingLayer = openLoadingLayer();
-				},
-				success:function(t){
-					layer.close(globalLoadingLayer);
-					var result = showDialog(t);
-					if(result){
-						showMessageDialog($( "#confirm-dialog-message" ),t.message);
-						Client.edited["checking"] = "";
-						if(isClose == 1){
-							closeTab(ClientCheckTab);
-							Client.pager = JSON.parse(Client.pager);
-							Client.listClient(Client.searchParam.pageNo,Client.searchParam.fromPartnerAgencyId,Client.searchParam.fromPartnerAgencyName,Client.searchParam.travelId,Client.searchParam.travelName,Client.searchParam.year,Client.searchParam.month);
-						} else {
-							Client.ClientCheck(Client.searchCheckData.pageNo,Client.searchCheckData.id,Client.searchCheckData.month,Client.searchCheckData.year);
-						}
-					}
-				}
-			});
-		},
-		saveBlanceData : function(isClose, $obj){
-            var $tr = $("#tab-financial_Client-clearing-content .all tbody tr"),
-            DataArr = [],
-            id,
-            payMoney,
-            payType,
-            remark,
-            JsonData;
+    Client.listClient = function(page,fromPartnerAgencyId,fromPartnerAgencyName,travelId,travelName,year,month){
+        if (Client.$searchArea && arguments.length === 1) {
+            // 初始化页面后，可以获取页面的参数
+            fromPartnerAgencyId = Client.$searchArea.find("input[name=fromPartnerAgencyId]").val(),
+            fromPartnerAgencyName = Client.$searchArea.find("input[name=fromPartnerAgencyName]").val(),
+            travelId = Client.$searchArea.find("input[name=travelId]").val(),
+            travelName = Client.$searchArea.find("input[name=travelName]").val(),
+            year = Client.$searchArea.find("select[name=year]").val(),
+            month = Client.$searchArea.find("select[name=month]").val()
+        }
+        // 修正页码
+        page = page || 0;
+        //重置搜索条件
+        Client.searchData = {
+            pageNo : page,
+            fromPartnerAgencyId : fromPartnerAgencyId,
+            fromPartnerAgencyName : fromPartnerAgencyName,
+            travelId : travelId,
+            travelName : travelName,
+            year : year,
+            month : month,
+            sortType: 'auto'
+        };
+        $.ajax({
+            url:KingServices.build_url("financial/financialParAgency","findPager"),
+            type: "POST",
+            data: Client.searchData,
+            success: function(data) {
+                var result = showDialog(data);
+                if (result) {
+                    Client.partnerAgencyList = JSON.parse(data.partnerAgencySet);
+                    Client.travelAgencyList = JSON.parse(data.travelAgencySet);
+                    var html = listTemplate(data);
+                    addTab(menuKey,"客户账务",html);
 
-            if (!!$obj)  {
-                $tr= $obj.closest('tr');
-            }
-            $tr.each(function(i){
-                if($(this).data('blanceStatus')){
-                   //获取数据
-                     id = $(this).attr("data-entity-id");
-                     payMoney = $tr.eq(i).find("[name='ClientClear_payMoney']").val();//收款金额
-                     payType = $tr.eq(i).find("[name='ClientClear_payType']").val();//收款方式
-                     remark = $tr.eq(i).find("[name='ClientClear_remark']").val();//备注
-                }
-			});
-            console.log(id);
-			
-                $.ajax({
-                    url:""+APP_ROOT+"back/financial/financialParAgency.do?method=saveSettlement&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=save",
-                    type:"POST",
-                    data:"id="+id+"&payMoney="+payMoney+"&payType="+payType+"&remark="+remark,
-                    dataType:"json",
-                    beforeSend:function(){
-                        globalLoadingLayer = openLoadingLayer();
-                    },
-                    success:function(data){
-                        layer.close(globalLoadingLayer);
-                        var result = showDialog(data);
-                        if(result){
-                            showMessageDialog($( "#confirm-dialog-message" ),data.message);
-                            Client.edited["clearing"] = "";
-                            if(isClose == 1){
-                                closeTab();
-                                Client.pager = JSON.parse(Client.pager);
-                                Client.listClient(Client.searchParam.pageNo,Client.searchParam.fromPartnerAgencyId,Client.searchParam.fromPartnerAgencyName,Client.searchParam.travelId,Client.searchParam.travelName,Client.searchParam.year,Client.searchParam.month);
-                            } else {
-                                Client.ClientClear(Client.searchBalanceData.id,Client.searchBalanceData.year,Client.searchBalanceData.startMonth,Client.searchBalanceData.endMonth);
+                    Client.initList();
+                    // 绑定翻页组件
+                    laypage({
+                        cont: Client.$tab.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+                        pages: data.searchParam.totalPage, //总页数
+                        curr: (page + 1),
+                        jump: function(obj, first) {
+                            if (!first) { // 避免死循环，第一次进入，不调用页面方法
+                                Client.listClient(obj.curr - 1);
                             }
                         }
+                    });
+                }
+            }
+        });
+    };
+
+    Client.initList = function(){
+        // 初始化jQuery 对象
+        Client.$tab = $('#' + tabId);
+        Client.$searchArea = Client.$tab.find('.T-search-area');
+
+        Client.getPartnerAgencyList(Client.$tab.find('.choosePartnerAgency'));
+        Client.getTravelAgencyList(Client.$tab.find('.chooseTravelAgency'));
+
+        //搜索按钮事件
+        Client.$tab.find('.T-search').on('click', function(event) {
+            event.preventDefault();
+            Client.listClient(0);
+        });
+
+        // 报表内的操作
+        Client.$tab.find('.T-list').on('click', '.T-option', function(event) {
+            event.preventDefault();
+            var $that = $(this),id = $that.closest('tr').data('id');
+
+            if ($that.hasClass('T-check')) {
+                // 对账
+                Client.ClientCheck(0,id,"","");
+            } else if ($that.hasClass('T-clear')) {
+                // 结算
+                Client.ClientClear(id,"","","");
+            }
+        });
+    };
+
+    Client.ClientCheck = function(page,id,year,month){
+        if (Client.$checkSearchArea && arguments.length === 2) {
+            year = Client.$checkSearchArea.find("select[name=year]").val(),
+            month = Client.$checkSearchArea.find("select[name=month]").val()
+        }
+        // 修正页码
+        page = page || 0;
+        $.ajax({
+            url:KingServices.build_url("financial/financialParAgency","findCheckPager"),
+            type:"POST",
+            data:{
+                pageNo : page,
+                id : id + "",
+                year : year,
+                month : month,
+                sortType : "auto"
+            },
+            success:function(data){
+                var result = showDialog(data);
+                if(result){
+                    data.result = JSON.parse(data.result);
+                    data.id = id;
+                    var html = ClientChecking(data);
+                    
+                    
+                    var validator;
+                    // 初始化页面
+                    if (Tools.addTab(menuKey + "-checking", "客户对账", html)) {
+                        Client.initCheck(page,id); 
+                        validator = rule.check($('.clientCheckingMain'));                       
                     }
+                    //取消对账权限过滤
+                    var $checktab = $("#tab-" + ClientCheckTab + "-content");
+                    var checkTr = $checktab.find(".T-checkTr");
+                    var rightCode = $checktab.find(".T-checkList").data("right");
+                    checkDisabled(data.result,checkTr,rightCode);
+
+                    //绑定翻页组件
+                    laypage({
+                        cont: $('#tab-' + ClientCheckTab + "-content .T-pagenation"),
+                        pages: data.searchParam.totalPage,
+                        curr: (page + 1),
+                        jump: function(obj, first) {
+                            if (!first) { 
+                                Client.ClientCheck(obj.curr -1,id);
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    };
+
+    Client.initCheck = function(page,id){
+        // 初始化jQuery 对象 
+        var $checktab = $("#tab-" + ClientCheckTab + "-content");
+        Client.$checkSearchArea = $checktab.find('.T-search-area');
+
+        Client.init_check_event(id, $checktab);
+
+        //搜索按钮事件
+        $checktab.find('.T-search').on('click', function(event) {
+            event.preventDefault();
+            Client.ClientCheck(0,id);
+        });
+
+        //导出报表事件 btn-clientExport
+        $checktab.find(".T-clientExport").click(function(){
+            var year = $checktab.find("[name=year]").val();
+            var month = $checktab.find("[name=month]").val();
+            var pid = id;
+            checkLogin(function(){
+                var url = KingServices.build_url("export","partnerAgency") + "&fromPartnerAgencyId="+pid+"&year="+year+"&month="+month+"&sortType=auto";
+                exportXLS(url)
+            });
+        });
+
+        //给全选按钮绑定事件
+        $checktab.find(".T-checkAll").click(function(){
+            var checkboxList = $checktab.find(".T-checkList tr input[type=checkbox]");
+            if($(this).is(":checked")){
+                checkboxList.each(function(i){
+                    $(this).prop("checked",true);
                 });
-		},
-        getPartnerAgencyList:function(obj,partnerAId){
-            var $objC = $(obj);
-            if(partnerAgencyList != null && partnerAgencyList.length > 0){
-                for(var i=0;i<partnerAgencyList.length;i++){
-                    partnerAgencyList[i].value = partnerAgencyList[i].travelAgencyName;
+            } else{
+                checkboxList.each(function(i){
+                    $(this).prop("checked",false);                                
+                });
+            } 
+        });
+
+        //关闭页面事件
+        $checktab.find(".T-closeTab").click(function(){
+            closeTab(ClientCheckTab);
+        });
+        //确认对账按钮事件
+        $checktab.find(".T-saveCheck").click(function(){ 
+            validator = rule.check($('.clientCheckingMain'));
+            if (!validator.form()) { return; }
+            Client.saveCheckingData(page,id);
+         });
+
+        //展开游客小组
+        $checktab.find(".T-groupList").hide();
+        $checktab.find(".T-showGroup").click(function(){
+            var tr = $(this).closest('tr').next();
+            if($(this).text()=="展开"){
+                $(this).text("收起");
+            }else{$(this).text("展开");}
+            tr.toggle();
+        });
+
+        //未收对账和返款内容变更后，计算并变更实际未收的值
+        $checktab.find("[name=unIncomeMoney]").keyup(function(){
+            var checkUnIncomeMoney = $(this).val();
+            var backMoney = $(this).parent().next().find("[name=backMoney]").val();
+            var rs = checkUnIncomeMoney - backMoney;
+            $(this).parent().next().next().find("[name=actualNotGet]").text(rs);
+        });
+        $checktab.find("[name=backMoney]").keyup(function(){
+            var checkUnIncomeMoney = $(this).parent().prev().find("[name=unIncomeMoney]").val();
+            var backMoney = $(this).val();
+            var rs = checkUnIncomeMoney - backMoney;
+            $(this).parent().next().find("[name=actualNotGet]").text(rs);
+        });
+    };
+
+    Client.ClientClear = function(id,year,startMonth,endMonth){        
+        if (Client.$clearSearchArea && arguments.length === 1) {
+            year = Client.$clearSearchArea.find("select[name=year]").val(),
+            startMonth = Client.$clearSearchArea.find("select[name=startMonth]").val(),
+            endMonth = Client.$clearSearchArea.find("select[name=endMonth]").val()
+        }
+        $.ajax({
+            url:KingServices.build_url("financial/financialParAgency","findSettlement"),
+            type:"POST",
+            data:{
+                id : id + "",
+                year : year,
+                startMonth : startMonth,
+                endMonth : endMonth
+            },
+            success:function(data){
+                var result = showDialog(data);
+                if(result){
+                    data.financialPartnerAgencySettlementList = JSON.parse(data.financialPartnerAgencySettlementList);
+                    data.id = id;
+                    var html = ClientClearing(data);
+                        
+                    //设置表单验证
+                    var validator = rule.check($('.ClientClearMain'));
+                        
+                    // 初始化页面
+                    if (Tools.addTab(menuKey + "-clearing", "客户结算", html)) {
+                        Client.initClear(id);                         
+                    }
+                    validator = rule.check($('.ClientClearMain'));
                 }
             }
-            $(obj).autocomplete({
-                minLength: 0,
-                change: function(event, ui) {
-                    if (!ui.item)  {
-                        $(this).val('').nextAll('input[name="partnerAgencyId"]').val('');
-                    }
+        })
+    };
+
+    Client.initClear = function(id){
+        // 初始化jQuery 对象 
+        var $cleartab = $("#tab-" + ClientClearTab + "-content");
+        Client.$clearSearchArea = $cleartab.find('.T-search-area');
+
+        Client.init_clear_event(id, $cleartab);
+
+        //搜索事件
+        $cleartab.find(".T-search").click(function(){
+            Client.ClientClear(id);
+        });
+
+        //保存结算事件
+        $cleartab.find(".T-saveClear").click(function(){
+            if (!rule.check($cleartab).form()) { return; }
+            Client.saveBlanceData($(this),id);
+        });
+        //明细按钮事件
+        $cleartab.find(".T-detail").click(function(){
+            var id = $(this).data("id");
+            var year = $(this).data("year");
+            var month = $(this).data("month");
+            Client.ClientCheck(0,id,month,year);
+        });
+
+        //操作记录事件
+        $cleartab.find("[name=ClientClear_recordButton]").click(function(){
+            var id = $(".T-saveClear").closest('tr').data("id");
+            $.ajax({
+                url:KingServices.build_url("financial/financialParAgency","findSettlementRecord"),
+                type:"POST",
+                data:{
+                    id : id + ""
                 },
-                select: function(event, ui) {
-                    $(this).blur().nextAll('input[name="partnerAgencyId"]').val(ui.item.id);
+                success:function(data){
+                    data.records = JSON.parse(data.records);
+                    var result = showDialog(data);
+                    if(result){
+                        var html= recordTemplate(data);
+                        var recordButtonLayer = layer.open({
+                            type: 1,
+                            title:"查看操作记录",
+                            skin: 'layui-layer-rim', 
+                            area: '900px', 
+                            zIndex:1028,
+                            content: html,
+                            scrollbar: false
+                        });
+                    }
                 }
-            }).off("click").on("click",function(){
-                $objC.autocomplete('option','source', partnerAgencyList);
-                $objC.autocomplete('search', '');
-            });        
-                     
-        },
-        getTravelAgencyList:function(obj,partnerAId){
-            var $objC = $(obj);
-            if(travelAgencyList != null && travelAgencyList.length > 0){
-                for(var i=0;i<travelAgencyList.length;i++){
-                    travelAgencyList[i].value = travelAgencyList[i].name;
+            })
+        });
+    };
+
+    Client.saveCheckingData = function(page,id,tab_id, title, html){
+        var $checktab = $("#tab-" + ClientCheckTab + "-content");
+        if(!$checktab.data('isEdited')){
+            showMessageDialog($( "#confirm-dialog-message" ),"您未进行任何操作！");
+            return false;
+        }
+        //保存对账时提交的数据
+        var $this = $checktab.find(".T-checkList"),argumentsLen = arguments.length;
+        var checkRecordList = [];
+        function getValue(className,name){
+            var result = className.find("[name="+name+"]").val();
+            if (result == "") {//所有空字符串变成0
+                result = 0;
+            }
+            return result;
+        } 
+        var clientCheckingTr = $this.find(".T-checkTr");
+        clientCheckingTr.each(function(){
+            var touristGroupId = $(this).data("id");
+            var checkUnIncomeMoney = getValue($(this),"unIncomeMoney");
+            var unPayMoney = getValue($(this),"notGet");
+            var backMoney = getValue($(this),"backMoney");
+            var remark = getValue($(this),"remark");
+            var idDelete = "";
+            if ($(this).find(".T-checkbox").is(':checked')) {
+                idDelete = 1;
+            } else {
+                idDelete = 0; 
+            }
+            var checkRecord = {
+                touristGroupId : touristGroupId,
+                checkUnIncomeMoney : checkUnIncomeMoney,//未收对账
+                unPayMoney : unPayMoney,//未收
+                backMoney : backMoney,//返款
+                remark : remark,//说明
+                idDelete : idDelete
+            };
+            checkRecordList.push(checkRecord);
+        });
+        checkRecordList = JSON.stringify(checkRecordList);
+        $.ajax({
+            url:KingServices.build_url("financial/financialParAgency","saveCheck"),
+            type:"POST",
+            data:{
+                checkRecordList : checkRecordList
+            },
+            success:function(data){
+                var result = showDialog(data);
+                if(result){
+                    showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+                        if(argumentsLen == 0){
+                            Tools.closeTab("financial_Client-checking");
+                             Client.listClient(Client.searchData.pageNo,Client.searchData.fromPartnerAgencyId,Client.searchData.fromPartnerAgencyName,Client.searchData.travelId,Client.searchData.travelName,Client.searchData.year,Client.searchData.month);
+                        } else if(argumentsLen == 2){
+                            $checktab.data('isEdited',false);
+                             Client.ClientCheck(page,$checktab.find(".T-data-id").data("id"),"","");
+                        } else {
+                            $checktab.data('isEdited',false);
+                            Tools.addTab(tab_id, title, html);
+                            Client.initCheck($checktab.find(".T-data-id").data("id"));
+                        }
+                    });
                 }
             }
-            $(obj).autocomplete({
-                minLength: 0,
-                change: function(event, ui) {
-                    if (!ui.item)  {
-                        $(this).val('').nextAll('input[name="travelAgencyId"]').val('');
-                    }
-                },
-                select: function(event, ui) {
-                    $(this).blur().nextAll('input[name="travelAgencyId"]').val(ui.item.id);
+        });
+    };
+
+    Client.saveBlanceData = function($obj,id,tab_id, title, html){
+        var $cleartab = $("#tab-" + ClientClearTab + "-content");
+        if(!$cleartab.data('isEdited')){
+            showMessageDialog($( "#confirm-dialog-message" ),"您未进行任何操作！");
+            return false;
+        }
+        var $tr,argumentsLen = arguments.length;
+        if (!!$obj)  {
+            $tr= $obj.closest('tr');
+        } else{
+            $tr = $cleartab.find(".T-clearList tr");
+        }
+
+        var clearJsonList = [];
+        $tr.each(function(i){
+            //获取数据
+            var clearJson = {
+                id : $(this).data("id") + "",
+                payMoney : $tr.eq(i).find("[name='payMoney']").val(),
+                payType : $tr.eq(i).find("[name='payType']").val() + "",
+                remark : $tr.eq(i).find("[name='remark']").val()
+            };
+            clearJsonList.push(clearJson);
+		});
+        clearJsonList = JSON.stringify(clearJsonList);
+        $.ajax({
+            url:KingServices.build_url("financial/financialParAgency","saveSettlement"),
+            type:"POST",
+            data:{
+                clearJsonList : clearJsonList
+            },
+            success:function(data){
+                var result = showDialog(data);
+                if(result){
+                    showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+                        if(argumentsLen === 0){
+                            Tools.closeTab("financial_Client-clearing");
+                            Client.listClient(Client.searchData.pageNo,Client.searchData.fromPartnerAgencyId,Client.searchData.fromPartnerAgencyName,Client.searchData.travelId,Client.searchData.travelName,Client.searchData.year,Client.searchData.month);
+                        }else if(argumentsLen === 2){
+                            $cleartab.data('isEdited',false);
+                            Client.ClientClear($cleartab.find(".T-data-id").data("id"),"","","");
+                        } else {
+                            $cleartab.data('isEdited',false);
+                            Tools.addTab(tab_id, title, html);
+                            Client.initClear($cleartab.find(".T-data-id").data("id"));
+                        }
+                    });
+                    
                 }
-            }).off("click").on("click",function(){
-                $objC.autocomplete('option','source', travelAgencyList);
-                $objC.autocomplete('search', '');
-            });        
-        },
-		save : function(saveType){
-			if(saveType == "checking"){
-				Client.saveCheckingData(Client.oldCheckClientId,1);
-			} else if(saveType == "clearing"){
-				Client.saveBlanceData(Client.oldBlanceClientId,1);
-			}
-		},
-		clearEdit : function(clearType){
-			Client.edited[clearType] = "";
-		}
-    }
-    exports.listClient = Client.listClient;
-	exports.isEdited = Client.isEdited;
-	exports.save = Client.save;
-	exports.clearEdit = Client.clearEdit;
+            }
+        });
+	};
+
+    //给每个tr增加验证
+    Client.validatorTable = function(){
+        var validator;
+        var $tr = $("#tab-financial_Client-checking-content .T-checkList tr");
+        $tr.each(function(){
+            validator = rule.check($(this));
+        });
+        return validator;
+    };
+
+    Client.getPartnerAgencyList = function(obj){
+        var $obj = $(obj);
+        if(Client.partnerAgencyList != null && Client.partnerAgencyList.length > 0){
+            for(var i=0;i<Client.partnerAgencyList.length;i++){
+                Client.partnerAgencyList[i].value = Client.partnerAgencyList[i].travelAgencyName;
+            }
+        }
+        $obj.autocomplete({
+            minLength: 0,
+            source : Client.partnerAgencyList,
+            change: function(event, ui) {
+                if (!ui.item)  {
+                    $(this).nextAll('input[name="partnerAgencyId"]').val('');
+                }
+            },
+            select: function(event, ui) {
+                $(this).blur().nextAll('input[name="partnerAgencyId"]').val(ui.item.id);
+            }
+        }).on("click",function(){
+            $obj.autocomplete('search', '');
+        });                    
+    };
+    Client.getTravelAgencyList = function(obj){
+        var $obj = $(obj);
+        if(Client.travelAgencyList != null && Client.travelAgencyList.length > 0){
+            for(var i=0;i<Client.travelAgencyList.length;i++){
+                Client.travelAgencyList[i].value = Client.travelAgencyList[i].name;
+            }
+        }
+        $obj.autocomplete({
+            minLength: 0,
+            source : Client.travelAgencyList,
+            change: function(event, ui) {
+                if (!ui.item)  {
+                    $(this).nextAll('input[name="travelId"]').val('');
+                }
+            },
+            select: function(event, ui) {
+                $(this).blur().nextAll('input[name="travelId"]').val(ui.item.id);
+            }
+        }).on("click",function(){
+            $obj.autocomplete('search', '');
+        });        
+    };
+
+    Client.init_check_event = function(id, $tab) {
+        if (!!$tab && $tab.length === 1) {
+            var validator = rule.check($tab);
+
+            // 监听修改
+            $tab.find(".T-checkList").on('change', function(event) {
+                event.preventDefault();
+                $tab.data('isEdited', true);
+            })
+            // 监听保存，并切换tab
+            .on('switch.tab.save', function(event, tab_id, title, html) {
+                event.preventDefault();
+                Client.saveCheckingData(0,Client.oldBlanceClientId,tab_id, title, html);
+            })
+            // 保存后关闭
+            .on('close.tab.save', function(event) {
+                event.preventDefault();
+                Client.saveCheckingData();
+            });
+        }
+    };
+
+    Client.init_clear_event = function(id, $tab) {
+        if (!!$tab && $tab.length === 1) {
+            var validator = rule.check($tab);
+
+            // 监听修改
+            $tab.find(".T-clearList").on('change', function(event) {
+                event.preventDefault();
+                $tab.data('isEdited', true);
+            })
+            // 监听保存，并切换tab
+            .on('switch.tab.save', function(event, tab_id, title, html) {
+                event.preventDefault();
+                Client.saveBlanceData("",Client.oldBlanceClientId,tab_id, title, html);
+            })
+            // 保存后关闭
+            .on('close.tab.save', function(event) {
+                event.preventDefault();
+                Client.saveBlanceData();
+            });
+        }
+    };
+
+    exports.init = Client.initModule;
 });

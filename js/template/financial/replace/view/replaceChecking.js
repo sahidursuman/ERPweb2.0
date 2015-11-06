@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":228,"md5":"27cb172e1f659a8c8fc059732e15e882"}*/
+/*TMODJS:{"debug":true,"version":229,"md5":"27cb172e1f659a8c8fc059732e15e882"}*/
 define(function(require) {
     return require("../../../template")("financial/replace/view/replaceChecking", function($data, $filename) {
         try {
