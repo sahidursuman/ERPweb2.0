@@ -3,7 +3,7 @@
 	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta charset="utf-8" />
-		<title>登录 -- 火柴头管理系统 </title>
+		<title>登录 -- 火柴头业务操作平台</title>
 		<style>
 			*{
 				padding: 0;
@@ -31,7 +31,7 @@
 			.img-box h4{
 				font-size: 24px;
 				color: #f59942;
-				margin-left: 20px;
+				margin-left: 30px;
 				font-family: "microsoft yahei";
 			}
 			.img-box .manage{
@@ -132,15 +132,14 @@
 			<div class=" max-content" >
 				<div class="  img-box">
 					<div class="manage col-sm-12">
-						<h4>管 理 系 统</h4>
+						<h4>业务操作平台</h4>
 						<p>© 景触科技</p>
 					</div>
-
 				</div>
 				<div class=" img-bg-user">
 					<div class="font-weight">
 						<img src="components/ace-admin/assets/css/images/icon.png">
-						<span> 欢迎使用火柴头后台管理系统</span>
+						<span> 欢迎使用火柴头业务操作平台</span>
 						<div class="inp-user">
 							<p > <i class=" fa fa-user"></i><input type="text" name="userName" value="" placeholder="用户名"></p>
 						</div>
@@ -190,24 +189,27 @@
 		<script type="text/javascript">
 		$(function() {
 			var globalLayer;
-			$.ajax({
-				url:""+APP_ROOT+"base.do?method=checkLogin",
-				type:"GET",
-				dataType:"json",
-				beforeSend:function(){
-					globalLayer = layer.open({
-						type:3
-					});
-				},
-				success:function(data){
-					if(data.success == 1){
-						window.location.href = "index.html";
+			var cookie = $.cookie('token');
+			if(cookie){
+				$.ajax({
+					url:""+APP_ROOT+"base.do?method=checkLogin",
+					type:"GET",
+					dataType:"json",
+					beforeSend:function(){
+						globalLayer = layer.open({
+							type:3
+						});
+					},
+					success:function(data){
+						if(data.success == 1){
+							window.location.href = "index.html";
+						}
+						else{
+							layer.close(globalLayer);
+						}
 					}
-					else{
-						layer.close(globalLayer);
-					}
-				}
-			});
+				});
+			}
 			/* if($("input[name=password]").focus()){
 				$("input[name=password],input[name=userName]").keyup(function(e){
 					if(e.which == 13){

@@ -109,8 +109,6 @@ define(function(require, exports) {
 						var html = listTemplate(data);
 						html = filterUnAuth(html);
 						$("#"+tab+" .subsectionList").html(html);
-						show(tab);
-						hid(tab);
 						function show(tab){
 							$("#"+tab+" .lineProductArea button.show").unbind().click(function(){
 								var $this = $(this),
@@ -137,6 +135,8 @@ define(function(require, exports) {
 								show(tab);
 							})
 						}
+						show(tab);
+						hid(tab);
 						$("#"+tab+" .subsectionList .btn-subsection-revoke").click(function(){
 							var id = $(this).attr("data-entity-id");
 							var dialogObj = $( "#confirm-dialog-message" );
@@ -300,6 +300,7 @@ define(function(require, exports) {
 				$.ajax({
 					url:""+APP_ROOT+"back/innerTransferOperation.do?method=getLineProductList&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 	                dataType: "json",
+	                showLoading: false,
 	                success: function(data) {
 						var result = showDialog(data);
 						if(result){

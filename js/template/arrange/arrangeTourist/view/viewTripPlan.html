@@ -30,11 +30,11 @@
 								</label>
 							</td>
 							<td>{{tripPlanList.tripNumber}}</td>
-							<td>{{tripPlanList.startTime}}</td>
+							<td>{{tripPlanList.startTime | dateFormat : 'yyyy-MM-dd'}}</td>
 							<td>大人{{tripPlanList.touristAdultCount}}小孩{{tripPlanList.touristChildCount}}</td>
 							<td>{{if tripPlanList.guide != null}}{{tripPlanList.guide.realname}}{{/if}}</td>
 							<td>{{if tripPlanList.bus != null}}{{tripPlanList.bus.licenseNumber}}{{/if}}</td>
-							<td></td>
+							<td>{{if tripPlanList.status == 0}}待确认{{else if tripPlanList.status == 1}}已发团{{else if tripPlanList.status == -1}}已取消{{/if}}</td>
 							<td>
 								<a class="groupView cursor"  data-entity-id="{{tripPlanList.id}}">
 									查看

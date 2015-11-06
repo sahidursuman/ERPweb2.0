@@ -70,10 +70,10 @@ define(function(require, exports) {
 		       customerVolObj.$searchArea=customerVolObj.$tab.find('.T-search-area');//搜索模块区域
 
 		       //初始化客户数据Autocomplate缓存一次
-		       if (customerVolObj.first) {
+		       //if (customerVolObj.first) {
 		       	 customerVolObj.autocompleteDate.getCusList=data.resultList;
-		       	 customerVolObj.first=false;
-		       };
+		       	 //customerVolObj.first=false;
+		       //};
 		      
 		       //初始化页面控件
 		       customerVolObj.datepicker(customerVolObj.$tab);
@@ -84,7 +84,7 @@ define(function(require, exports) {
 		       	// 绑定翻页组件
 				laypage({
 				    cont: customerVolObj.$tab.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
-				    pages: data.totalPage, //总页数
+				    pages: data.searchParam.totalPage, //总页数 
 				    curr: (page + 1),
 				    jump: function(obj, first) {
 				    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
@@ -119,7 +119,7 @@ define(function(require, exports) {
 	    		/* Act on the event */
     				var $that=$(this),
     		            id=$that.data('value');
-    		        customerVolObj.getCusDetail(id);
+    		        customerVolObj.getCusDetail(id,0);
 	    	});
 
 
@@ -131,16 +131,27 @@ define(function(require, exports) {
 
 
     //查询客户明细
-    customerVolObj.getCusDetail=function(id) {
+    customerVolObj.getCusDetail=function(id,page) {
     	// body...
     	//查询客户明细列
 		$.ajax({
 			url : customerVolObj.url("findTourist","view"),
 			type:"POST",
-			data : "id="+id,
+			data : "id="+id+"&pageNo="+page,
 			success:function(data){
 	            var html=customerDelTemplate(data);
 	                customerVolObj.$tab.find('.T-customerDetail-list').html(html);
+	                // 绑定翻页组件
+					laypage({
+					    cont: customerVolObj.$tab.find('.T-Detail-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+					    pages: data.searchParam.totalPage, //总页数
+					    curr: (page + 1),
+					    jump: function(obj, first) {
+					    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+					    		customerVolObj.getCusDetail(id,obj.curr -1);
+					    	}
+					    }
+					});
 			}
 		});
     };

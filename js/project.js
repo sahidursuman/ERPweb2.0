@@ -10,6 +10,8 @@ var listwidth = parseInt($("#tabList li").eq(0).css("width"));//ul总宽度，�
 // window.UEDITOR_HOME_URL = APP_ROOT + 'app/components/ueditor/';
 var modals = {};
 var $tabList = $('#tabList'), $tabContent = $("#tabContent");
+var SWITCH_TAB_SAVE = 'switch.tab.save',
+	CLOSE_TAB_SAVE = 'close.tab.save';
 
 function addTab(tabId,tabName,html){
 	var $current_li = $tabList.find('.active'),
@@ -363,7 +365,7 @@ function showLogoutDialog(dialogObj,message){
 		buttons: [
 			{
 				text: "重新登录",
-				"class" : "btn btn-primary btn-minier btn-height",
+				"class" : "btn btn-primary btn-minier btn-heightMall",
 				click: function() {
 					window.location.href = "login.html";
 				}
@@ -404,7 +406,7 @@ function showAutoLoginDialog(dialogObj,message){
 		buttons: [
 			{
 				text: "自动登录",
-				"class" : "btn btn-primary btn-minier btn-height",
+				"class" : "btn btn-primary btn-minier btn-heightMall",
 				click: function() {
 					$( this ).dialog( "close" );
 					$.ajax({
@@ -764,7 +766,7 @@ function listMenu(menuTemplate){
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/touristGroup/touristGroup.js",function(touristGroup){
-						touristGroup.getTouristStatisticData(0,"","","","","","","","","","","");
+						touristGroup.getTouristStatisticData(0,"0","","","","","","","","","","","","","");
 						modals["resource_touristGroup"] = touristGroup;
 					});
 				});
@@ -1573,7 +1575,7 @@ Tools.addTab = function(tab_id, tab_name, html)  {
 		if ($content.data('isEdited'))  {
 			showSaveConfirmDialog($( "#confirm-dialog-message" ), "内容已经被修改，是否保存?",
 								function(){	// 保存
-									$content.trigger('switch.tab.save', [tab_id, tab_name, html]);
+									$content.trigger(SWITCH_TAB_SAVE, [tab_id, tab_name, html]);
 								},
 								function(){  // 不保存
 									updateTabContent();
@@ -1617,7 +1619,7 @@ Tools.addTab = function(tab_id, tab_name, html)  {
 				if ($content.data('isEdited'))  {
 					showSaveConfirmDialog($( "#confirm-dialog-message" ), "内容已经被修改，是否保存?",
 										function(){	// 保存
-											$content.trigger('close.tab.save');
+											$content.trigger(CLOSE_TAB_SAVE);
 										},
 										function(){  // 不保存
 											Tools.closeTab(tab_id);

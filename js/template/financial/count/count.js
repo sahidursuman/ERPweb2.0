@@ -161,16 +161,18 @@ define(function(require, exports) {
                         
                         //给审核按钮绑定事件
                         $(".financialCount .btn-count-update").click(function(){
-                        	var id = $(this).attr('data-entity-id');
-                        	var billStatus = $(this).attr('data-entity-billStatus');
-                        	if(billStatus == -1 || billStatus == "-1") {
-                        		showMessageDialog($( "#confirm-dialog-message" ), "导游未报账，不能做审核操作", function(){});
-                        	} else if(billStatus == 2 || billStatus == "2") {
-                        		//是否需要做财务报账后，提示只有管理员能修改数据
-                        		count.updateExamine(id,"");
-                        	} else {
-                        		count.updateExamine(id,"");
-                        	}
+                            var $that = $(this),
+                                id = $that.attr('data-entity-id'),
+                                billStatus = $that.attr('data-entity-billStatus'),
+                                guideFinancialExamine = $that.attr('data-guideFinancialExamine');
+
+                            if (billStatus == -1) {   // 未报账
+                                showMessageDialog($( "#confirm-dialog-message" ), "导游未报账，不能做审核操作");
+                            } else if (guideFinancialExamine == 1) {   // 导游账务已对账
+                        		showMessageDialog('该团导游账务已对账，不能修改！')
+                            } else {
+                                count.updateExamine(id,"");
+                            }
                         });
 
                         //给明细按钮绑定事件
@@ -207,6 +209,7 @@ define(function(require, exports) {
 				$.ajax({
 					url:""+APP_ROOT+"back/tripPlan.do?method=findTripByTripNumber&token="+$.cookie("token")+"&menuKey=arrange_plan&operation=self",
 					dataType: "json",
+                    showLoading: false,
 					success: function(data) {
 						var result = showDialog(data);
 						if(result){
@@ -242,6 +245,7 @@ define(function(require, exports) {
 				$.ajax({
 					url:""+APP_ROOT+"back/lineProduct.do?method=findAllLineProductOnlyIdAndName&token="+$.cookie("token")+"&menuKey=resource_lineProduct&operation=self",
                     dataType: "json",
+                    showLoading:false,
                     success: function(data) {
 						var result = showDialog(data);
 						if(result){
@@ -278,6 +282,7 @@ define(function(require, exports) {
 				$.ajax({
 					url:""+APP_ROOT+"back/guide.do?method=findAll&token="+$.cookie("token")+"&menuKey=resource_guide&operation=self",
                     dataType: "json",
+                    showLoading:false,
                     success: function(data) {
 						var result = showDialog(data);
 						if(result){
@@ -643,10 +648,10 @@ define(function(require, exports) {
                         var html = Reimbursement(data);
                         addTab(menuKey+"-Reimbursement","单团报账",html);
                         var ReimbursementId = menuKey+"-Reimbursement"
-                        $(document).on("mouseenter",".countWhichDaysContainer",function(){
-                            console.log($(this));
-                            var whichDay = $(this).val(),
-                                $this = $(this)
+                        /*$(document).on("mouseenter",".countWhichDaysContainer",function(){
+                            var whichDay
+                                whichDay = $(this).attr("whichDay");
+                                var $this = $(this),
                                 startTime = $("#tab-financial_count-Reimbursement-content").find("span[name=startTime_Choose]").text(),
                                 date = new Date(startTime.replace("-", "/").replace("-", "/"));
                             var timer = date.getTime()+(whichDay-1)*24*60*60*1000;
@@ -656,7 +661,7 @@ define(function(require, exports) {
                                 tips: [1, '#3595CC'],
                                 time: 1500
                             });
-                        });
+                        });*/
                          //新增按钮事件
                         var $tabId = $("#tab-financial_count-Reimbursement-content");
                         $tabId.find('.countReimbursement .T-addOtherIn').on('click',function() {
@@ -673,7 +678,8 @@ define(function(require, exports) {
                                         '</tr>';
                             $body.append(html);
                             count.autoSum($body);
-                            count.setChooseDays("financial-count-update-other-incoming");
+                            count.setChooseDays("financial-count-reimbursement-other-incoming");
+                            
                         });
                         $("#T-otherIn").off('blur').on('blur','input[type=text]',function(){
                             var vl = $(this).val();
@@ -761,7 +767,7 @@ define(function(require, exports) {
                                     count.bindOther(this,"countReimbursement");
                                 }
                             });
-                            count.setChooseDays("financial-count-update-otherpay");
+                            count.setChooseDays("financial-count-reimbursement-otherpay");
                         });
                         //购物
                         $('.countReimbursement #T-shopping').find('input[type=text]').off('blur').on('blur',function() {
@@ -1208,11 +1214,11 @@ define(function(require, exports) {
             });
         },
         setChooseDays : function(id){
+            
             var days = $(".countReimbursement .T-ProductDays").text();
-
             if(parseInt(days) < 1)return;
             if(id){
-                var tr = $("#"+id+" .table tbody tr");
+                var tr = $("#"+id+" tbody tr");
                 var selectText = '<select class="col-sm-12" name="whichDay">';
                 for(var i = 0; i < parseInt(days); i++){
                     selectText += '<option value="'+(i+1)+'">第'+(i+1)+'天</option>';
@@ -1657,14 +1663,8 @@ define(function(require, exports) {
             if(typeFlag == 2 || typeFlag == 3){
                 $.ajax({
                 url:""+APP_ROOT+"back/financialTripPlan.do?method=webGuideAccountUpdate&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
-                type:"POST",
                 data:"saveJson="+encodeURIComponent(saveJson),
-                dataType:"json",
-                beforeSend:function(){
-                    globalLoadingLayer = openLoadingLayer();
-                },
                 success:function(data){
-                    layer.close(globalLoadingLayer);
                     var result = showDialog(data);
                     if(result){
                         if(typeFlag == 3){
@@ -1676,6 +1676,7 @@ define(function(require, exports) {
                             closeTab(uKey);
                             count.getlistCount(count.searchData.pageNo,count.searchData.id,count.searchData.tripNumber,count.searchData.lineProductId,count.searchData.lineProductName,count.searchData.guideId,count.searchData.guideName,count.searchData.startTime,count.searchData.endTime,count.searchData.status);
                         }else{
+                            $('#tab-financial_count-Reimbursement-content').find('.btn-guide-account').addClass('hidden');
                             count.Reimbursement(financialTripPlanId,"guide");
                         }
                     }
@@ -1975,7 +1976,7 @@ define(function(require, exports) {
             //计算应付
             var needPayMoney = $(parent).find(".needPayMoney");
             var reduceMoney = $(parent).find('input[name="reduceMoney"]').val();
-            var needSum = (parseFloat(realCount)-parseFloat(memberCount)) * (parseFloat(marketPrice)-parseFloat(price))-parseFloat(reduceMoney);
+            var needSum = parseFloat(realCount) * parseFloat(price)-parseFloat(reduceMoney);
             needPayMoney.text(needSum);
 			//导游佣金= (实际数量-计划数量)*(单价-低价)*社佣比例
 			var guideRebateMoney = (parseFloat(realCount)-parseFloat(memberCount)) * (parseFloat(marketPrice)-parseFloat(price)) * parseFloat(guideRate)/100;
@@ -2012,7 +2013,7 @@ define(function(require, exports) {
 			count.bindMainTable(formClass,typeFlag);
 		},
 		bindBus : function(obj,formClass) {
-			//count.calNeedPayMoney(obj,"Bus");
+			count.calNeedPayMoney(obj,"Bus");
 			count.bindBusSum(obj,formClass);
 		},
 		bindBusSum : function(obj,formClass) {
