@@ -109,8 +109,6 @@ define(function(require, exports) {
 						var html = listTemplate(data);
 						html = filterUnAuth(html);
 						$("#"+tab+" .subsectionList").html(html);
-						show(tab);
-						hid(tab);
 						function show(tab){
 							$("#"+tab+" .lineProductArea button.show").unbind().click(function(){
 								var $this = $(this),
@@ -137,6 +135,8 @@ define(function(require, exports) {
 								show(tab);
 							})
 						}
+						show(tab);
+						hid(tab);
 						$("#"+tab+" .subsectionList .btn-subsection-revoke").click(function(){
 							var id = $(this).attr("data-entity-id");
 							var dialogObj = $( "#confirm-dialog-message" );
