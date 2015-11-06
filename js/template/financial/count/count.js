@@ -648,10 +648,10 @@ define(function(require, exports) {
                         var html = Reimbursement(data);
                         addTab(menuKey+"-Reimbursement","单团报账",html);
                         var ReimbursementId = menuKey+"-Reimbursement"
-                        $(document).on("mouseenter",".countWhichDaysContainer",function(){
-                            console.log($(this));
-                            var whichDay = $(this).val(),
-                                $this = $(this)
+                        /*$(document).on("mouseenter",".countWhichDaysContainer",function(){
+                            var whichDay
+                                whichDay = $(this).attr("whichDay");
+                                var $this = $(this),
                                 startTime = $("#tab-financial_count-Reimbursement-content").find("span[name=startTime_Choose]").text(),
                                 date = new Date(startTime.replace("-", "/").replace("-", "/"));
                             var timer = date.getTime()+(whichDay-1)*24*60*60*1000;
@@ -661,7 +661,7 @@ define(function(require, exports) {
                                 tips: [1, '#3595CC'],
                                 time: 1500
                             });
-                        });
+                        });*/
                          //新增按钮事件
                         var $tabId = $("#tab-financial_count-Reimbursement-content");
                         $tabId.find('.countReimbursement .T-addOtherIn').on('click',function() {
@@ -678,7 +678,8 @@ define(function(require, exports) {
                                         '</tr>';
                             $body.append(html);
                             count.autoSum($body);
-                            count.setChooseDays("financial-count-update-other-incoming");
+                            count.setChooseDays("financial-count-reimbursement-other-incoming");
+                            
                         });
                         $("#T-otherIn").off('blur').on('blur','input[type=text]',function(){
                             var vl = $(this).val();
@@ -766,7 +767,7 @@ define(function(require, exports) {
                                     count.bindOther(this,"countReimbursement");
                                 }
                             });
-                            count.setChooseDays("financial-count-update-otherpay");
+                            count.setChooseDays("financial-count-reimbursement-otherpay");
                         });
                         //购物
                         $('.countReimbursement #T-shopping').find('input[type=text]').off('blur').on('blur',function() {
@@ -1213,11 +1214,11 @@ define(function(require, exports) {
             });
         },
         setChooseDays : function(id){
+            
             var days = $(".countReimbursement .T-ProductDays").text();
-
             if(parseInt(days) < 1)return;
             if(id){
-                var tr = $("#"+id+" .table tbody tr");
+                var tr = $("#"+id+" tbody tr");
                 var selectText = '<select class="col-sm-12" name="whichDay">';
                 for(var i = 0; i < parseInt(days); i++){
                     selectText += '<option value="'+(i+1)+'">第'+(i+1)+'天</option>';

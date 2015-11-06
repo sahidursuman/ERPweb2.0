@@ -145,7 +145,7 @@
             </li>
             {{/if}}
         </ul>
-        <div class="tab-content financial-count-reimbursement-reimbursement-tab">
+        <div class="tab-content financial-count-reimbursement-reimbursement-tab"> 
             <!-- 团款 -->
             <div id="financial-count-reimbursement-money" class="tab-pane fade active in">
                 <table class="table table-striped table-bordered table-hover">
@@ -199,7 +199,7 @@
                     {{each shopArrangeList.shopArrangePolicy as arrange index}}
                     {{if arrange != null}}
                     <tr shopArrangeId="{{arrange.id}}" shopId="{{arrange.whichDay}}_{{arrange.shopId}}">
-                        {{if index==0}}<td rowspan="{{shopArrangeList.shopArrangePolicy.length}}">第{{arrange.whichDay}}天</td>{{/if}}
+                        {{if index==0}}<td rowspan="{{shopArrangeList.shopArrangePolicy.length}}" whichDay="{{arrange.whichDay}}">第{{arrange.whichDay}}天</td>{{/if}}
                         {{if index==0}}<td rowspan="{{shopArrangeList.shopArrangePolicy.length}}">{{arrange.shop.name}}</td>{{/if}}
                         <td>{{arrange.shopPolicy.name}}</td>
                         <td><input policyId="{{if arrange.shopPolicy != null}}{{arrange.shopPolicy.id}}{{/if}}" name="consumeMoney" style="width:90px;" type="text" value="{{arrange.consumeMoney}}" old="{{arrange.consumeMoney}}" maxlength="11" /></td>
@@ -268,7 +268,7 @@
                     {{if arrange != null}}
                     <tr selfPayArrangeId="{{arrange.id}}" selfPayId="{{arrange.selfPayId}}">
                             {{if index == 0 }}<td rowspan="{{arrangeList.selfPayArrangeList.length}}" class="countWhichDaysContainer">第{{arrange.whichDay}}天</td>{{/if}}
-                            {{if index == 0 }}<td rowspan="{{arrangeList.selfPayArrangeList.length}}">{{arrange.selfPay.name}}</td>{{/if}}
+                            {{if index == 0 }}<td rowspan="{{arrangeList.selfPayArrangeList.length}}" whichDay="{{arrange.whichDay}}">{{arrange.selfPay.name}}</td>{{/if}}
                             <td>{{if arrange.selfPayItem != null }}{{arrange.selfPayItem.name}}{{/if}}</td>
                             <td>{{arrange.marketPrice}}<input type="hidden" name="marketPrice" value="{{arrange.marketPrice}}" /></td>
                             <td>{{arrange.price}}<input type="hidden" name="realPrice" value="{{arrange.price}}" /><input type="hidden" name="price" value="{{arrange.price}}" /></td>
@@ -434,7 +434,7 @@
                     {{each arrangeList.restaurantArrangeList as arrange index}}
                     {{if arrange != null}}
                     <tr restaurantArrangeId="{{arrange.id}}" isChoose="{{arrange.isChoose}}" restaurantId="{{if arrange.restaurant != null}}{{arrange.restaurant.id}}{{/if}}" restaurantStandardId="{{if arrange.restaurantStandard != null}}{{arrange.restaurantStandard.id}}{{/if}}">
-                        {{if index == 0}}<td rowspan="{{arrangeList.restaurantArrangeList.length}}" class="countWhichDaysContainer">第{{arrange.whichDay}}天</td>{{/if}}
+                        {{if index == 0}}<td rowspan="{{arrangeList.restaurantArrangeList.length}}" class="countWhichDaysContainer" whichDay="{{arrange.whichDay}}">第{{arrange.whichDay}}天</td>{{/if}}
                         {{if index == 0}}{{if arrange.isChoose != 1}}<td rowspan="{{arrangeList.restaurantArrangeList.length}}">{{if arrange.restaurant != null}}{{arrange.restaurant.name}}{{/if}}</td>{{else}}<td>
                             <select name="restaurant">
                                 <option value = -1>请选择</option>
@@ -499,7 +499,7 @@
                     {{each arrangeList.hotelArrangeList as arrange index}}
                     {{if arrange != null}}
                     <tr hotelArrangeId="{{arrange.id}}" hotelId="{{if arrange.hotel != null}}{{arrange.hotel.id}}{{/if}}" restaurantStandardId="{{if arrange.hotelRoom != null}}{{arrange.hotelRoom.id}}{{/if}}">
-                        {{if index == 0}}<td rowspan="{{arrangeList.hotelArrangeList.length}}" class="countWhichDaysContainer">第{{arrange.whichDay}}天</td>{{/if}}
+                        {{if index == 0}}<td rowspan="{{arrangeList.hotelArrangeList.length}}" class="countWhichDaysContainer" whichDay="{{arrange.whichDay}}">第{{arrange.whichDay}}天</td>{{/if}}
                         {{if index == 0}}<td rowspan="{{arrangeList.hotelArrangeList.length}}">{{if arrange.hotel != null}}{{arrange.hotel.name}}{{/if}}</td>{{/if}}
                         <td>{{if arrange.hotelRoom != null}}{{arrange.hotelRoom.type}}{{/if}}</td>
                         <td>{{arrange.price}}<input type="hidden" name="realPrice" value="{{arrange.price}}" /><input type="hidden" name="price" value="{{arrange.price}}" /></td>
@@ -555,7 +555,7 @@
                     {{each arrangeList.scenicArrangeList as arrange index}}
                     {{if arrange != null}}
                     <tr scenicArrangeId="{{arrange.id}}" scenicId="{{arrange.scenicId}}" scenicItemId="{{arrange.hotelRoomId}}">
-                        {{if index == 0}}<td rowspan="{{arrangeList.scenicArrangeList.length}}" class="countWhichDaysContainer">第{{arrange.whichDay}}天</td>{{/if}}
+                        {{if index == 0}}<td rowspan="{{arrangeList.scenicArrangeList.length}}" class="countWhichDaysContainer" whichDay="{{arrange.whichDay}}">第{{arrange.whichDay}}天</td>{{/if}}
                         {{if index == 0}}<td rowspan="{{arrangeList.scenicArrangeList.length}}">{{if arrange.scenic != null}}{{arrange.scenic.name}}{{/if}}</td>{{/if}}
                         <td>{{if arrange.scenicItem != null}}{{arrange.scenicItem.name}}{{/if}}</td>
                         <td>{{arrange.price}}<input type="hidden" name="realPrice" value="{{arrange.price}}" /><input type="hidden" name="price" value="{{arrange.price}}" /></td>
@@ -676,7 +676,7 @@
                     {{each day.otherArrange as arrange index}}
                     {{if arrange != null}}
                     <tr otherArrangeId="{{arrange.id}}">
-                        <td class="countWhichDaysContainer">第{{arrange.whichDay}}天</td>
+                        <td class="countWhichDaysContainer" whichDay="{{arrange.whichDay}}">第{{arrange.whichDay}}天</td>
                         <td>{{arrange.name}}</td>
                         <td><input type="text" name="realPrice" value="{{arrange.price}}" /></td>
                         <td><input style="width:90px;" type="text" name="realCount" {{if arrange.billUpdateTime}}value="{{arrange.realCount}}"{{else}}value="{{arrange.memberCount}}" {{/if}} old="{{arrange.realCount}}" maxlength="5"/></td>

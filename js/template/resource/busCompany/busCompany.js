@@ -556,7 +556,7 @@ define(function(require,exports){
 			language: 'zh-CN'
 		});
 		//删除包车时限
-		$td.find(".T-del").on('click',function(typeFlag){
+		$td.find(".T-del").off('click').on('click',function(typeFlag){
 			BusCompany.deletedTimeArea($(this),typeFlag);
 		});
 	};
@@ -606,16 +606,18 @@ define(function(require,exports){
 	//删除包车区间
 	BusCompany.deletedTimeArea = function($obj,typeFlag){
 			var div = $($obj).closest('div');
+			var $td = $($obj).closest('td');
 			var entityId = div.attr("data-entity-id");
 			var divIndex = div.attr("data-index");
 			//通过typeF来判断是新增车队页面还是修改车队页面1--新增；2--修改
 			if(typeFlag.which == 1){
+				$td.next().find(".div-"+divIndex+"").fadeOut(function(){
+					$(this).remove();
+				});
 				div.fadeOut(function(){
 					$(this).remove();
 				});
-				div.parent().next().find(".div-"+divIndex+"").fadeOut(function(){
-				$(this).remove();
-			});	
+				
 			}else if(typeFlag.which == 2){
 				
 				if (entityId != null && entityId != "") {
