@@ -174,7 +174,7 @@ define(function(require, exports) {
 			$.ajax({
     			url:""+APP_ROOT+"back/tripPlan.do?method=findArrangeTripPlanById&token="+$.cookie("token")+"&menuKey=arrange_all&operation=view",
 				type:"GET",
-				data:"id="+id,
+				data:"id="+id+"&type=view",
 				dataType:"json",
 				beforeSend:function(){
 					globalLoadingLayer = openLoadingLayer();
