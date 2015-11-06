@@ -299,6 +299,7 @@ define(function(require,exports){
 									if($(this).val() == 1){
 										BusCompany.bindTime($charParent ,"startTime");
 										BusCompany.bindTime($charParent ,"endTime");
+										BusCompany.addTimeEvents($charParent.find('td'))
 									}
 								});
 								var $isChartered = $obj.find("select[name=isChartered]").val();
@@ -322,10 +323,12 @@ define(function(require,exports){
 										if(!$s.val()){
 											$s.focus();
 											isVal = false;
+											$s.datepicker('hide');
 											return false;
 										}else if(!$e.val()){
 											$e.focus();
 											isVal = false;
+											$s.datepicker('hide');
 											return false;
 										}else{
 											isVal = true;
@@ -565,7 +568,7 @@ define(function(require,exports){
 		}
 		if(max){
 			max = max.split('-');
-			max = new Date(max[0], max[1] - 1, max[2] - (-1));
+			max = new Date(max[0], max[1] - 1, max[2] - 1);
 		}
 		obj.datepicker({
 			autoclose: true,
@@ -589,24 +592,28 @@ define(function(require,exports){
 		$td.next().append(contractPriceInput);
 		$td.append(timeLimitDiv);
 		BusCompany.datepicker($td.find(".datepicker"));
-		$td.find('input[name=startTime]').off('click').on('click', function(){
-			var $parent = $(this).parent().prev().find('input[name=endTime]');
-			var endDate = $(this).parent().find('input[name=endTime]');
-			$(this).datepicker('remove');
-			BusCompany.datepicker($(this), $parent.val(), endDate.val(), true);
-		});
-		$td.find('input[name=endTime]').off('click').on('click', function(){
-			var startDate = $(this).parent().find('input[name=startTime]');
-			var $parent = $(this).parent().prev().find('input[name=endTime]');
-			$(this).datepicker('remove');
-			console.log(startDate.val()||$parent.val());
-			BusCompany.datepicker($(this), startDate.val()||$parent.val(), null, true);
-		});
+		BusCompany.addTimeEvents($td);
 		//删除包车时限
 		$td.find(".T-del").on('click',function(typeFlag){
 			BusCompany.deletedTimeArea($(this),typeFlag);
 		});
 	};
+	BusCompany.addTimeEvents = function(obj){
+		obj.find('input[name=startTime]').off('click').on('click', function(){
+			var $parent = $(this).parent().prev().find('input[name=endTime]');
+			var endDate = $(this).parent().find('input[name=endTime]');
+			$(this).datepicker('remove');
+			BusCompany.datepicker($(this), $parent.val(), endDate.val(), true);
+		});
+		obj.find('input[name=endTime]').off('click').on('click', function(){
+			var startDate = $(this).parent().find('input[name=startTime]');
+			var $parent = $(this).parent().prev().find('input[name=endTime]');
+			var nextStartTime = $(this).parent().next().find('input[name=startTime]');
+			var nextEndTime = $(this).parent().next().find('input[name=endTime]');
+			$(this).datepicker('remove');
+			BusCompany.datepicker($(this), startDate.val()||$parent.val(), nextStartTime.val() || nextEndTime.val() || null, true);
+		});
+	}
 	//协议包车选择
 	BusCompany.isCharter = function($obj,$typeFlag){
 		var $parents = $($obj).closest("tr");
@@ -618,6 +625,7 @@ define(function(require,exports){
 				$parents.find("input[name=contractPrice]").removeAttr("readonly");
 				$parents.find(".timeArea").removeClass("hide");
 				BusCompany.datepicker($parents.find("input[name=startTime],input[name=endTime]"));
+				BusCompany.addTimeEvents($parents);
 			validator = rule.update(validator);
 			}else{
 				if($typeFlag == 1){
@@ -626,11 +634,11 @@ define(function(require,exports){
 					$parents.find("input[name=contractPrice]").attr("readonly","readonly");
 					$parents.find(".timeArea").addClass("hide");
 					$parents.find(".appendDiv").remove();
-					$parents.find("input[name=endTime]").datepicker("remove");
-					$parents.find("input[name=startTime]").datepicker("remove");
+					$parents.find("input[name=endTime]").datepicker("remove").off();
+					$parents.find("input[name=startTime]").datepicker("remove").off();
 				}else{
-					$parents.find("input[name=startTime]").attr("readonly","readonly");
-					$parents.find("input[name=endTime]").attr("readonly","readonly");
+					$parents.find("input[name=startTime]").attr("readonly","readonly").off();
+					$parents.find("input[name=endTime]").attr("readonly","readonly").off();
 					$parents.find("input[name=contractPrice]").attr("readonly","readonly");
 					$parents.find(".timeArea").addClass("hide");
 					$parents.find(".T-appendDiv").each(function(){
