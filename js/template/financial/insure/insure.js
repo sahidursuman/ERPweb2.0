@@ -374,8 +374,8 @@ define(function(require, exports) {
                    //保存按钮事件
                     $("#" +"tab-"+ blanceTabId+"-content"+" .btn-hotelBlance-save").click(function(){
                     	var saveBtn = $("#" +"tab-"+ blanceTabId+"-content"+" .btn-hotelBlance-save")
-    	    			 if (!$(saveBtn).data('validata').form()) { return; }
-    	    			 Insure.saveBlanceData(saveBtn,Insure.oldBlanceInsuranceId,insuranceCompanyName,0);
+    	    			 if (!$(this).data('validata').form()) { return; }
+    	    			 Insure.saveBlanceData($(this),Insure.oldBlanceInsuranceId,insuranceCompanyName,0);
                     	/*// 表单校验
                     	if (!$(this).data('validata').form()) { return; }
                     	var tr = $(this).parent().parent(),

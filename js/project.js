@@ -610,7 +610,8 @@ var modalScripts = {
 	//---------------------------------------------------------------------------------------------------------------
 	'financial_innerTransfer_profit': "js/template/financial/innerTransferProfit/innerTransferProfit.js",
 	'financial_turnProfit': "js/template/financial/turnProfit/turnProfit.js",
-	'financial_totalProfit': "js/template/financial/totalProfit/totalProfit.js"
+	'financial_totalProfit': "js/template/financial/totalProfit/totalProfit.js",
+	'financial_Client': "js/template/financial/Client/Client.js"
 };
 
 
@@ -952,16 +953,16 @@ function listMenu(menuTemplate){
 					});
 				});
 
-				//绑定客户账务菜单功能
-				$("#sidebar .nav-list .financial_Client").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/financial/Client/Client.js",function(Client){
-						Client.listClient(0,"","","","","","");
-						modals["financial_Client"] = Client;
-					});
-				});
+				// //绑定客户账务菜单功能
+				// $("#sidebar .nav-list .financial_Client").click(function(){
+				// 	$("#sidebar .nav-list li").removeClass("active");
+				// 	$(this).addClass("active");
+				// 	$(this).parent().parent().addClass("active");
+				// 	seajs.use("" + ASSETS_ROOT +"js/template/financial/Client/Client.js",function(Client){
+				// 		Client.listClient(0,"","","","","","");
+				// 		modals["financial_Client"] = Client;
+				// 	});
+				// });
 
 				//绑定系代订账务菜单功能
 				$("#sidebar .nav-list .financial_replace").click(function(){

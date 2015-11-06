@@ -1,33 +1,33 @@
 <div class="row listMain">
-    <div class="form-group guideMainForm">
+    <div class="form-group T-search-area">
         <label class=" control-label pull-left" >总社：</label>
-        <input type="text" class="col-xs-12  chooseTravelAgency" style="width: 220px" placeholder="来源" name="travelAgencyName" value="{{searchParam.travelName}}" />
-        <input type="hidden" name="travelAgencyId" value="{{searchParam.travelId}}" />
+        <input type="text" class="col-xs-12  chooseTravelAgency" style="width: 220px" placeholder="来源" name="travelName" value="{{searchParam.travelName}}" />
+        <input type="hidden" name="travelId" value="{{searchParam.travelId}}" />
         <label class=" control-label pull-left marginLeft-30" style="margin-top:3px">客户：</label>
-        <input type="text" class="col-xs-12 choosePartnerAgency" style="width: 220px" placeholder="来源" name="partnerAgencyName" value="{{searchParam.fromPartnerAgencyName}}" />
+        <input type="text" class="col-xs-12 choosePartnerAgency" style="width: 220px" placeholder="来源" name="fromPartnerAgencyName" value="{{searchParam.fromPartnerAgencyName}}" />
         <input type="hidden" name="partnerAgencyId" value="{{searchParam.fromPartnerAgencyId}}" />
         <input type="hidden" id="listClient_pager_pagerNo" value="{{searchParam.pageNo}}" />
         <label class=" control-label no-padding-right pull-left marginLeft-30" style="margin-top:3px">账期：</label>
-        <select class="col-sm-1" name="ClientCheck_searchYear">
-            <option value="2015" {{if year==2015}}selected="selected" {{/if}}>2015</option>
-            <option value="2014" {{if year==2014}}selected="selected" {{/if}}>2014</option>
+        <select class="col-sm-1" name="year">
+            <option value="2015" {{if searchParam.year==2015}}selected="selected" {{/if}}>2015</option>
+            <option value="2014" {{if searchParam.year==2014}}selected="selected" {{/if}}>2014</option>
         </select>
-        <select class="col-sm-1 marginLeft-30" name="ClientCheck_searchMonth">
+        <select class="col-sm-1 marginLeft-30" name="month">
             <option value="">全部</option>
-            <option value="1" {{if month==1}}selected="selected" {{/if}}>1</option>
-            <option value="2" {{if month==2}}selected="selected" {{/if}}>2</option>
-            <option value="3" {{if month==3}}selected="selected" {{/if}}>3</option>
-            <option value="4" {{if month==4}}selected="selected" {{/if}}>4</option>
-            <option value="5" {{if month==5}}selected="selected" {{/if}}>5</option>
-            <option value="6" {{if month==6}}selected="selected" {{/if}}>6</option>
-            <option value="7" {{if month==7}}selected="selected" {{/if}}>7</option>
-            <option value="8" {{if month==8}}selected="selected" {{/if}}>8</option>
-            <option value="9" {{if month==9}}selected="selected" {{/if}}>9</option>
-            <option value="10" {{if month==10}}selected="selected" {{/if}}>10</option>
-            <option value="11" {{if month==11}}selected="selected" {{/if}}>11</option>
-            <option value="12" {{if month==12}}selected="selected" {{/if}}>12</option>
+            <option value="1" {{if searchParam.month==1}}selected="selected" {{/if}}>1</option>
+            <option value="2" {{if searchParam.month==2}}selected="selected" {{/if}}>2</option>
+            <option value="3" {{if searchParam.month==3}}selected="selected" {{/if}}>3</option>
+            <option value="4" {{if searchParam.month==4}}selected="selected" {{/if}}>4</option>
+            <option value="5" {{if searchParam.month==5}}selected="selected" {{/if}}>5</option>
+            <option value="6" {{if searchParam.month==6}}selected="selected" {{/if}}>6</option>
+            <option value="7" {{if searchParam.month==7}}selected="selected" {{/if}}>7</option>
+            <option value="8" {{if searchParam. month==8}}selected="selected" {{/if}}>8</option>
+            <option value="9" {{if searchParam.month==9}}selected="selected" {{/if}}>9</option>
+            <option value="10" {{if searchParam.month==10}}selected="selected" {{/if}}>10</option>
+            <option value="11" {{if searchParam.month==11}}selected="selected" {{/if}}>11</option>
+            <option value="12" {{if searchParam.month==12}}selected="selected" {{/if}}>12</option>
         </select>
-        <button class=" btn-sm  btn-arrangeTourist-search search-btn marginLeft-30">
+        <button class=" btn-sm T-search search-btn marginLeft-30">
             <i class="ace-icon fa fa-search"></i> 搜索
         </button>
     </div>
@@ -49,9 +49,9 @@
                         <th>操作</th>
                     </tr>
                 </thead>
-                <tbody>
-                    {{each pager.resultList as rs}}
-                    <tr>
+                <tbody class="T-list">
+                    {{each result as rs}}
+                    <tr data-id="{{rs.id}}">
                         <td>{{rs.name}}</td>
                         <td>{{rs.travelAgencyName}}</td>
                         <td>{{rs.adutCount}}大{{rs.childCount}}小</td>
@@ -67,11 +67,11 @@
                             <span style="color:green">{{rs.isConfirmAccount}}/{{rs.isConfirmAccounts}}</span> {{/if}}
                         </td>
                         <td>
-                            <a data-entity-id="{{rs.id}}" class="cursor R-right btn-divide" data-right="1280002">
+                            <a class="cursor R-right btn-divide T-option T-check" data-right="1280002">
 						      对账
 					       </a>
                            <label class="cursor R-right" data-right="1280002"><a class="R-right" data-right="1280003"> |</a></label>
-                            <a data-entity-id="{{rs.id}}" class="btn-guide-view cursor R-right   btn-transfter" data-right="1280003">
+                            <a class="btn-guide-view cursor R-right btn-transfter T-option T-clear" data-right="1280003">
         						结算
         					</a>
                         </td>
@@ -81,7 +81,7 @@
             </table>
             <div class="row pageMode">
                 <div class="col-xs-6">
-                    <small>共计 {{pager.totalCount}} 条记录</small>
+                    <small>共计 {{searchParam.totalCount}} 条记录</small>
                 </div>
                 <div class="col-xs-6">
                     <div class="dataTables_paginate paging_simple_numbers T-pagenation">

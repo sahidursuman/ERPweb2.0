@@ -169,7 +169,7 @@ define(function(require, exports) {
                             if (billStatus == -1) {   // 未报账
                                 showMessageDialog($( "#confirm-dialog-message" ), "导游未报账，不能做审核操作");
                             } else if (guideFinancialExamine == 1) {   // 导游账务已对账
-                        		showMessageDialog('该团导游账务已对账，不能修改！')
+                        		showMessageDialog($( "#confirm-dialog-message" ), '该团导游账务已对账，不能修改！');
                             } else {
                                 count.updateExamine(id,"");
                             }
