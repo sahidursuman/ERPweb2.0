@@ -340,7 +340,7 @@
                         <td>{{selfPayArrange.marketPrice}}</td>
                         <td>{{selfPayArrange.price}}</td>
                         <td>{{selfPayArrange.memberCount}}</td>
-                        <td>{{(selfPayArrange.marketPrice-selfPayArrange.price)*selfPayArrange.memberCount}}</td>
+                        <td>{{selfPayArrange.price*selfPayArrange.memberCount-selfPayArrange.reduceMoney}}</td>
                         <td>{{selfPayArrange.guidePayMoney}}</td>
                         <td>{{if selfPayArrange.payType == 0}}
                             现付
