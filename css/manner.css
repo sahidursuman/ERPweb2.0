@@ -755,9 +755,9 @@ input,select{
 .margin-top15{
     margin-top: 25px;
 }
-s
+
 /*关闭操作页面时的button键*/
-.ui-dialog-buttonset .btn-heightMall{
+.ui-dialog .ui-dialog-buttonpane button.btn-heightMall{
     height: 25px !important;
     min-width: 55px;
     border-radius: 3px;
