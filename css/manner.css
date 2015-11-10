@@ -761,7 +761,7 @@ input,select{
 }
 /*关闭操作页面时的button键*/
 .ui-dialog .ui-dialog-buttonpane button.btn-heightMall{
-    height: 25px !important;
+    height: 27px !important;
     min-width: 55px;
     border-radius: 3px;
 }
@@ -820,6 +820,9 @@ padding-left:0;width: 360px;left: -35px;
 .line-separatedT{
    height: 15px;width: 92%;border-bottom:  1px solid #428bca;
 }
+.line-separatedS{
+   height: 15px;width: 93%;border-bottom:  1px solid #428bca;
+}
 .add-managerMore{
     cursor:pointer;left:-38px;
 }
@@ -850,6 +853,22 @@ padding-left:0;width: 360px;left: -35px;
 .Touristsearch-btn{
   margin-left: 20px;
 }
+
+
+/*媒体查询*/
+@media screen and (max-width:1703px){
+  .line-separated{
+    height: 23px;width: 88%;border-bottom:  1px solid #428bca;
+} 
+.line-separatedT{
+   height: 15px;width: 90%;border-bottom:  1px solid #428bca;
+} 
+.line-separatedS{
+ height: 15px;width: 92%;border-bottom:  1px solid #428bca;
+}
+}
+
+
 /*媒体查询 1500*/
 
 @media screen and (max-width:1500px){
@@ -905,10 +924,13 @@ padding-left:0;width: 360px;left: -35px;
 }
 
 .line-separated{
-    height: 23px;width: 88%;border-bottom:  1px solid #428bca;
+    height: 23px;width: 86%;border-bottom:  1px solid #428bca;
 }
 .line-separatedT{
-   height: 15px;width: 90%;border-bottom:  1px solid #428bca;
+   height: 15px;width: 88%;border-bottom:  1px solid #428bca;
+}
+.line-separatedS{
+ height: 15px;width: 91%;border-bottom:  1px solid #428bca;
 }
 .orderNumInput{
     width: 175px;
@@ -1059,7 +1081,11 @@ width: 840px;
 }
 .line-separatedT{
    height: 15px;width: 88%;border-bottom:  1px solid #428bca;margin-top: 2px;
-}.transfer-status{
+}
+.line-separatedS{
+ height: 15px;width: 90%;border-bottom:  1px solid #428bca;
+}
+.transfer-status{
     width: 340px;
     position:absolute;
     right: 70px;
