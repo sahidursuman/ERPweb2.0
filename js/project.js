@@ -577,7 +577,7 @@ function logout(){
 
 function viewAllMsg(){
 	seajs.use("" + ASSETS_ROOT +"js/template/system/message/message.js",function(message){
-		message.listMsg(0,0);
+		message.init();
 	});
 }
 
@@ -611,7 +611,9 @@ var modalScripts = {
 	'financial_innerTransfer_profit': "js/template/financial/innerTransferProfit/innerTransferProfit.js",
 	'financial_turnProfit': "js/template/financial/turnProfit/turnProfit.js",
 	'financial_totalProfit': "js/template/financial/totalProfit/totalProfit.js",
-	'financial_Client': "js/template/financial/Client/Client.js"
+	'financial_Client': "js/template/financial/Client/Client.js",
+	//---------------------------------------------------------------------------------------------------------------
+	'public_message':"js/template/system/message/message.js"
 };
 
 
