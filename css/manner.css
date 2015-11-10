@@ -32,6 +32,7 @@ input{
     vertical-align: middle !important;
     font-size: 12px !important;
     border: 1px solid #e2e2e2  !important;
+    text-indent:0.5em
 }
 .btn-success{
     font-size:12px;
