@@ -2285,6 +2285,8 @@ define(function(require, exports) {
 			})
 			//新增资源
 			arrangeTourist.addResource(tab);
+			//集合时间   时间控件
+			arrangeTourist.dateTimePicker();
 		},
 		seatCountChoose : function(){
 			var chooseSeatCount = $(".widget-main").find(".chooseSeatCount");
