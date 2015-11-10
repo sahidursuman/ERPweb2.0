@@ -1,12 +1,12 @@
 <div class="col-xs-12 updateTouristGroup globalAdd">
-	<form class="form-horizontal touristGroupMainForm updateTouristGroupMainForm updateTouristInput" role="form" style="margin-top:10px" onsubmit="return false">
+	<form class="form-horizontal touristGroupMainForm updateTouristGroupMainForm " role="form" style="margin-top:10px" onsubmit="return false">
 		<div class=" ui-sortable-handle">
 			<h5 class="">
 				<span class="badge badge-primary">1</span>
 				<label class="middle title-size">修改小组信息</label>
 			</h5>
 			<div class="widget-body">
-				<div class="widget-main formOneList">
+				<div class="widget-main formOneList updateTouristInput">
 					<div class="form-group guideInterval">
 						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>线路产品:</label>
 						<div class="col-sm-2">
@@ -21,7 +21,7 @@
 							<input type="hidden" value="{{touristGroupDetail.lineProductId}}" name="lineProductId" />
 							{{/if}}
 						</div>
-						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>出游日期:</label>
+						<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>出游日期:</label>
 						<div class="col-sm-2">
 							<!-- <input type="text" name="startTime" class="col-sm-12" /> -->
 							{{if touristGroupDetail.status == 1}}
@@ -35,7 +35,7 @@
 							<input type="text" name="startTime" value="{{touristGroupDetail.startTime | dateFormat: 'yyyy-MM-dd'}}" class="col-sm-12" readonly="readonly" />
 							{{/if}}
 						</div>
-						<label class="col-sm-1 control-label no-padding-right">是否购买保险:</label>
+						<label class="col-sm-2 control-label no-padding-right">是否购买保险:</label>
 						<div class="col-sm-2 checkbox buyInsurance">
 							<label>
 								<input{{if touristGroupDetail.buyInsurance==1}} checked="checked"{{/if}} value="1" type="checkbox" class="ace buyInsurance-status" name="buyInsurance">
@@ -50,7 +50,7 @@
 							<input type="text" name="fromPartnerAgency" class="col-sm-12" placeholder="请输入客户来源" value="{{if touristGroupDetail.partnerAgency != null}}{{touristGroupDetail.partnerAgency.travelAgencyName}}{{/if}}">
 							<input type="hidden" value="{{if touristGroupDetail.partnerAgency != null}}{{touristGroupDetail.partnerAgency.id}}{{/if}}" name="fromPartnerAgencyId">
 						</div>
-						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>同行联系人:</label>
+						<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>同行联系人:</label>
 						<div class="col-sm-2">
 							<div class="input-group">
 								<input class="choosePartnerManager col-sm-12 bind-change" value="{{if touristGroupDetail.partnerAgencyContact != null}}{{touristGroupDetail.partnerAgencyContact.contactRealname}} -[{{touristGroupDetail.partnerAgencyContact.contactMobileNumber}}]{{/if}}" name="partnerAgencyNameList" type="text" />
@@ -61,7 +61,7 @@
 							</div>
 							<!-- <input readonly="readonly" value="{{touristGroupDetail.partnerAgency.managerName}}" class="chooseGuide col-sm-12" name="partnerAgencyName" type="text" /> -->
 						</div>
-						<label class="col-sm-1 control-label no-padding-right">获得方式:</label>
+						<label class="col-sm-2 control-label no-padding-right">获得方式:</label>
 						<div class="col-sm-2">
 							<select name="getType" class="col-sm-12 getPay-type">
 								<option{{if touristGroupDetail.getType == 1}} selected="selected"{{/if}} value="1">旅行社系统</option>
@@ -77,11 +77,11 @@
 						<div class="col-sm-2">
 							<input value="{{touristGroupDetail.needPayAllMoney}}" readonly="readonly" type="text" name="needPayAllMoney" class="col-sm-12" />
 						</div>
-						<label class="col-sm-1 control-label no-padding-right">已收:</label>
+						<label class="col-sm-2 control-label no-padding-right">已收:</label>
 						<div class="col-sm-2">
 							<input value="{{touristGroupDetail.payedMoney}}" type="text" name="payedMoney" class="col-sm-12" />
 						</div>
-						<label class="col-sm-1 control-label no-padding-right">现收:</label>
+						<label class="col-sm-2 control-label no-padding-right">现收:</label>
 						<div class="col-sm-2">
 							<input value="{{touristGroupDetail.currentNeedPayMoney}}" {{if touristGroupDetail.isReceived == 1}}readonly="readonly"{{/if}} type="text" name="currentNeedPayMoney" class="col-sm-12" />
 						</div>
@@ -102,7 +102,7 @@
 					</div>
 				</div>
 				<div class="form-group margin-top30">
-					<div class="col-sm-8">
+					<div class="col-sm-12">
 						<table class="table table-striped table-bordered table-hover addCostList margin-top">
 							<thead>
 							<tr>
@@ -218,7 +218,7 @@
 									</button>
 								</div>
 								<div class="form-group">
-									<div class="col-sm-8">
+									<div class="col-sm-12">
 										<table class="table table-striped table-bordered table-hover addTouristList margin-top">
 											<thead>
 											<tr>
@@ -291,7 +291,7 @@
 									<div class="clo-sm-1 checkbox">
 										<label>
 											<input type="checkbox" class="ace reception-check" {{if touristGroupDetail.isNeedArriveService==1}}checked="checked"{{/if}} value="0" name="touristReception">
-											<span class="lbl">
+											<span class="lbl margin-topF5">
 
 											</span>
 										</label>
@@ -335,11 +335,11 @@
 									</div>
 								</div>
 								<div class="col-sm-3">
-									<label class="col-sm-2 control-label no-padding-right">小车：</label>
+									<label class="col-sm-3 control-label no-padding-right">小车：</label>
 									<div class="clo-sm-1 checkbox">
 										<label>
 											<input type="checkbox" {{if touristGroupDetail.isNeedBus==1}}checked="checked"{{/if}} class="ace smallCar" value="0" name="smallCar">
-											<span class="lbl">
+											<span class="lbl margin-topF5">
 
 											</span>
 										</label>
@@ -351,7 +351,7 @@
 									<div class="clo-sm-1 checkbox">
 										<label>
 											<input type="checkbox" {{if touristGroupDetail.isNeedLeaveService==1}}checked="checked"{{/if}} class="ace send-check" value="0" name="touristSend">
-											<span class="lbl">
+											<span class="lbl margin-topF5">
 
 											</span>
 										</label>

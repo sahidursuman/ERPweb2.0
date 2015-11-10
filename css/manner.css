@@ -523,9 +523,9 @@ input,select{
 .addTouristGroup .formOneList{
     margin-left: 20px;
 }
-.updateTouristGroup .formOneList{
+/*.updateTouristGroup .formOneList{
     margin-left: -53px !important;
-}
+}*/
 .formOneList input{
     width: 220px;
     height: 24px !important;
@@ -652,18 +652,6 @@ input,select{
 .triplan-dropdown-menu{
     margin-left: -93px !important;
 }
-/* .T-guideChoose{
-    margin-left: -117px;
-}
-.T-busChoose{
-    margin-left: -117px;
-}
-.T-creatorChoose{
-    margin-left: -117px;
-} */
-/*.marginLeft-117{
-    margin-left: -117px;
-}*/
 
 .Choose-spacing{
     margin-left: -117px;
@@ -764,6 +752,9 @@ input,select{
 }
 .margin-top15{
     margin-top: 25px;
+}
+.margin-topF5{
+    margin-top: -5px !important;
 }
 
 /*关闭操作页面时的button键*/
