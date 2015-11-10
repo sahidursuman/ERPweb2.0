@@ -820,6 +820,9 @@ padding-left:0;width: 360px;left: -35px;
 .line-separatedT{
    height: 15px;width: 92%;border-bottom:  1px solid #428bca;
 }
+.line-separatedS{
+   height: 15px;width: 93%;border-bottom:  1px solid #428bca;
+}
 .add-managerMore{
     cursor:pointer;left:-38px;
 }
@@ -860,6 +863,9 @@ padding-left:0;width: 360px;left: -35px;
 .line-separatedT{
    height: 15px;width: 90%;border-bottom:  1px solid #428bca;
 } 
+.line-separatedS{
+ height: 15px;width: 92%;border-bottom:  1px solid #428bca;
+}
 }
 
 
@@ -922,6 +928,9 @@ padding-left:0;width: 360px;left: -35px;
 }
 .line-separatedT{
    height: 15px;width: 88%;border-bottom:  1px solid #428bca;
+}
+.line-separatedS{
+ height: 15px;width: 91%;border-bottom:  1px solid #428bca;
 }
 .orderNumInput{
     width: 175px;
@@ -1072,7 +1081,11 @@ width: 840px;
 }
 .line-separatedT{
    height: 15px;width: 88%;border-bottom:  1px solid #428bca;margin-top: 2px;
-}.transfer-status{
+}
+.line-separatedS{
+ height: 15px;width: 90%;border-bottom:  1px solid #428bca;
+}
+.transfer-status{
     width: 340px;
     position:absolute;
     right: 70px;
