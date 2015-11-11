@@ -817,7 +817,7 @@
                         <td><input type="text" name="realPrice" value="{{arrange.price}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
                         <td><input style="width:90px;" type="text" name="realCount" {{if arrange.billUpdateTime}}value="{{arrange.realCount}}"{{else}}value=0 {{/if}} old="{{arrange.realCount}}" old="{{arrange.realCount}}" maxlength="5" 
                         {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
-                        <td><input type="text" name="reduceMoney" value="{{arrange.reduceMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
+                        <td><input type="text" name="reduceMoney" value="{{arrange.reduceMoney}}" readOnly="readOnly"/></td>
                         <td><span class="needPayMoney">{{arrange.needPayMoney}}</span></td>
                         <td>{{arrange.payedMoney}}</td>
                         <td>

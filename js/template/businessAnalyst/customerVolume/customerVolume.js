@@ -13,7 +13,6 @@ define(function(require, exports) {
 		var customerVolObj={
 			searchData:false,
 			$searchArea:false,
-			first:true,
 			$tab:false,
 			$searchParam:{
 				startTime:"",
@@ -68,12 +67,6 @@ define(function(require, exports) {
 		       //初始化JQuery对象
 		       customerVolObj.$tab=$("#" + tabId);//最大区域模块
 		       customerVolObj.$searchArea=customerVolObj.$tab.find('.T-search-area');//搜索模块区域
-
-		       //初始化客户数据Autocomplate缓存一次
-		       //if (customerVolObj.first) {
-		       	 customerVolObj.autocompleteDate.getCusList=data.resultList;
-		       	 //customerVolObj.first=false;
-		       //};
 		      
 		       //初始化页面控件
 		       customerVolObj.datepicker(customerVolObj.$tab);
@@ -110,7 +103,7 @@ define(function(require, exports) {
 	    	});
 
 	    	//客户autocomplate数据
-	    	customerVolObj.getCusList(customerVolObj.$tab);
+	    	customerVolObj.getCusList(customerVolObj.$tab.find(".T-customerVo-linPro"));
 
 
 	    	//客户客量明细Detail
@@ -158,32 +151,41 @@ define(function(require, exports) {
 	
 
     //客户客量的Autocomplete
-    customerVolObj.getCusList=function($obj){
-		var getCusList = $obj.find(".T-customerVo-linPro");
-		getCusList.autocomplete({
-			minLength:0,
-			change:function(event,ui){
+	customerVolObj.getCusList=function($obj){
+		$obj.autocomplete({
+				minLength: 0,
+				change:function(event,ui){
 				if(ui.item == null){
 					$(this).parent().parent().find("input[name=customerId]").val("");
+				  }
+			    },
+				select: function(event, ui) {  
+					$(this).blur();
+					var obj = this;
+					$(obj).parent().parent().find("input[name=customerId]").val(ui.item.id).trigger('change');
 				}
-			},
-			select:function(event,ui){
-				$(this).blur();
-				var obj = this;
-				$(obj).parent().parent().find("input[name=customerId]").val(ui.item.id).trigger('change');
-			}
-		}).click(function(){
-			var obj = this;
-			var listObj = customerVolObj.autocompleteDate.getCusList;
-			if(listObj !=null && listObj.length>0){
-				for(var i=0;i<listObj.length;i++){
-					listObj[i].value = listObj[i].name;
-				}
-			}
-			$(obj).autocomplete('option','source', listObj);
-			$(obj).autocomplete('search', '');
+			}).on('click',function(){
+				$.ajax({
+						url : customerVolObj.url("findPartnerAgency","view"),
+						type:"POST",
+						data : "",
+						success:function(data){
+							var result = showDialog(data);
+							if(result){
+								var listObj = data.resultList;
+								if(listObj !=null && listObj.length>0){
+									for(var i=0;i<listObj.length;i++){
+										listObj[i].value = listObj[i].travelAgencyName;
+									}
+								}
+								$obj.autocomplete('option','source', listObj);
+								$obj.autocomplete('search', '');
+							}
+						}
+				});
 		})
-	};
+	},
+
 
 	//时间控件初始化
 	customerVolObj.datepicker = function($obj){

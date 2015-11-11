@@ -1537,7 +1537,7 @@ define(function(require, exports) {
                         "id":$(this).attr('otherArrangeId'),
                         "price":$(this).find('input[name="realPrice"]').val(),
                         "count":$(this).find('input[name="realCount"]').val(),
-                        "reduceMoney":$(this).find('input[name="reduceMoney"]').val(),
+                       
                         "realGuidePayMoney":$(this).find('input[name="realGuidePayMoney"]').val(),
                         "billRemark":$(this).find('input[name="billRemark"]').val()
                     }
@@ -1547,7 +1547,7 @@ define(function(require, exports) {
                         "title":$(this).find('input[name="name"]').val(),
                         "price":$(this).find('input[name="realPrice"]').val(),
                         "count":$(this).find('input[name="realCount"]').val(),
-                        "reduceMoney":$(this).find('input[name="reduceMoney"]').val(),
+                        
                         "realGuidePayMoney":$(this).find('input[name="realGuidePayMoney"]').val(),
                         "billRemark":$(this).find('input[name="billRemark"]').val()
                     }

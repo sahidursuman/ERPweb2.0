@@ -32,6 +32,7 @@ input{
     vertical-align: middle !important;
     font-size: 12px !important;
     border: 1px solid #e2e2e2  !important;
+    text-indent:0.5em
 }
 .btn-success{
     font-size:12px;
@@ -523,9 +524,9 @@ input,select{
 .addTouristGroup .formOneList{
     margin-left: 20px;
 }
-.updateTouristGroup .formOneList{
+/*.updateTouristGroup .formOneList{
     margin-left: -53px !important;
-}
+}*/
 .formOneList input{
     width: 220px;
     height: 24px !important;
@@ -652,18 +653,6 @@ input,select{
 .triplan-dropdown-menu{
     margin-left: -93px !important;
 }
-/* .T-guideChoose{
-    margin-left: -117px;
-}
-.T-busChoose{
-    margin-left: -117px;
-}
-.T-creatorChoose{
-    margin-left: -117px;
-} */
-/*.marginLeft-117{
-    margin-left: -117px;
-}*/
 
 .Choose-spacing{
     margin-left: -117px;
@@ -765,10 +754,15 @@ input,select{
 .margin-top15{
     margin-top: 25px;
 }
-
+.margin-topF5{
+    margin-top: -5px !important;
+}
+.margin-leftF40{
+    left: -40px;
+}
 /*关闭操作页面时的button键*/
 .ui-dialog .ui-dialog-buttonpane button.btn-heightMall{
-    height: 25px !important;
+    height: 27px !important;
     min-width: 55px;
     border-radius: 3px;
 }
@@ -827,6 +821,9 @@ padding-left:0;width: 360px;left: -35px;
 .line-separatedT{
    height: 15px;width: 92%;border-bottom:  1px solid #428bca;
 }
+.line-separatedS{
+   height: 15px;width: 93%;border-bottom:  1px solid #428bca;
+}
 .add-managerMore{
     cursor:pointer;left:-38px;
 }
@@ -857,6 +854,22 @@ padding-left:0;width: 360px;left: -35px;
 .Touristsearch-btn{
   margin-left: 20px;
 }
+
+
+/*媒体查询*/
+@media screen and (max-width:1703px){
+  .line-separated{
+    height: 23px;width: 88%;border-bottom:  1px solid #428bca;
+} 
+.line-separatedT{
+   height: 15px;width: 90%;border-bottom:  1px solid #428bca;
+} 
+.line-separatedS{
+ height: 15px;width: 92%;border-bottom:  1px solid #428bca;
+}
+}
+
+
 /*媒体查询 1500*/
 
 @media screen and (max-width:1500px){
@@ -912,10 +925,13 @@ padding-left:0;width: 360px;left: -35px;
 }
 
 .line-separated{
-    height: 23px;width: 88%;border-bottom:  1px solid #428bca;
+    height: 23px;width: 86%;border-bottom:  1px solid #428bca;
 }
 .line-separatedT{
-   height: 15px;width: 90%;border-bottom:  1px solid #428bca;
+   height: 15px;width: 88%;border-bottom:  1px solid #428bca;
+}
+.line-separatedS{
+ height: 15px;width: 91%;border-bottom:  1px solid #428bca;
 }
 .orderNumInput{
     width: 175px;
@@ -999,11 +1015,20 @@ padding-left:0;width: 360px;left: -35px;
     width: 110px;
 
 }
+.margin-leftF40{
+    left: -25px;
+}
 .tourist-newline{
     width: 600px;
     height: 60px;
     margin-left: 10px;
     padding-top: 40px;
+}
+.tourist-informationWidth{
+    width: 900px;
+}
+.tourist-contenWidth{
+width: 840px;
 }
 .rangeTime{
     width: 175px;
@@ -1057,7 +1082,11 @@ padding-left:0;width: 360px;left: -35px;
 }
 .line-separatedT{
    height: 15px;width: 88%;border-bottom:  1px solid #428bca;margin-top: 2px;
-}.transfer-status{
+}
+.line-separatedS{
+ height: 15px;width: 90%;border-bottom:  1px solid #428bca;
+}
+.transfer-status{
     width: 340px;
     position:absolute;
     right: 70px;
