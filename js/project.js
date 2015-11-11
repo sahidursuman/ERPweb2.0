@@ -577,7 +577,7 @@ function logout(){
 
 function viewAllMsg(){
 	seajs.use("" + ASSETS_ROOT +"js/template/system/message/message.js",function(message){
-		message.listMsg(0,0);
+		message.init();
 	});
 }
 
@@ -612,7 +612,11 @@ var modalScripts = {
 	'financial_innerTransfer_profit': "js/template/financial/innerTransferProfit/innerTransferProfit.js",
 	'financial_turnProfit': "js/template/financial/turnProfit/turnProfit.js",
 	'financial_totalProfit': "js/template/financial/totalProfit/totalProfit.js",
-	'financial_Client': "js/template/financial/Client/Client.js"
+	'financial_Client': "js/template/financial/Client/Client.js",
+	//---------------------------------------------------------------------------------------------------------------
+	'public_message':"js/template/system/message/message.js",
+	'system_information':"js/template/system/information/information.js",
+	'system_user':"js/template/system/user/user.js"
 };
 
 
@@ -834,14 +838,14 @@ function listMenu(menuTemplate){
 				});
 
 				//绑定系统人员管理菜单功能
-				$("#sidebar .nav-list .system_user").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/system/user/user.js",function(user){
-						user.listUser(0,"",1);
-					});
-				});
+				// $("#sidebar .nav-list .system_user").click(function(){
+				// 	$("#sidebar .nav-list li").removeClass("active");
+				// 	$(this).addClass("active");
+				// 	$(this).parent().parent().addClass("active");
+				// 	seajs.use("" + ASSETS_ROOT +"js/template/system/user/user.js",function(user){
+				// 		user.listUser(0,"",1);
+				// 	});
+				// });
 
 				//绑定系统部门管理菜单功能
 				$("#sidebar .nav-list .system_department").click(function(){
@@ -889,15 +893,15 @@ function listMenu(menuTemplate){
 						modals["financial_rummery"]  = hotel;
 					});
 				});
-				//绑定系统信息菜单功能
-				$("#sidebar .nav-list .system_information").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/system/information/information.js",function(information){
-						information.listInformation();
-					});
-				});
+				// //绑定系统信息菜单功能
+				// $("#sidebar .nav-list .system_information").click(function(){
+				// 	$("#sidebar .nav-list li").removeClass("active");
+				// 	$(this).addClass("active");
+				// 	$(this).parent().parent().addClass("active");
+				// 	seajs.use("" + ASSETS_ROOT +"js/template/system/information/information.js",function(information){
+				// 		information.listInformation();
+				// 	});
+				// });
 				//绑定系餐厅账务菜单功能
 				$("#sidebar .nav-list .financial_restaurant").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
