@@ -601,6 +601,7 @@ var modalScripts = {
 	'business_analyst_saleProduct' : "js/template/businessAnalyst/saleProduct/saleProduct.js",
 	'resource_busCompany':"js/template/resource/busCompany/busCompany.js",
 	'resource_lineProduct': 'js/template/resource/lineProduct/lineProduct.js',
+	'resource_partnerAgency':'js/template/resource/partnerAgency/partnerAgency.js',
 	//-------------------------------------------业务分析模块---------------------------------------------------
 	'business_analyst_saleProduct' : "js/template/businessAnalyst/saleProduct/saleProduct.js",//产品销量
 	'business_analyst_sourDstribution' : "js/template/businessAnalyst/sourDstribution/sourDstribution.js", //客源分布
@@ -674,14 +675,14 @@ function listMenu(menuTemplate){
 				});*/
 
 				//绑定同行菜单功能
-				$("#sidebar .nav-list .resource_partnerAgency").click(function(){
+			/*	$("#sidebar .nav-list .resource_partnerAgency").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
 					seajs.use("" + ASSETS_ROOT +"js/template/resource/partnerAgency/partnerAgency.js?version=",function(partnerAgency){
 						partnerAgency.listPartnerAgency(0,"",1);
 					});
-				});
+				});*/
 
 				// //绑定线路产品菜单功能
 				// $("#sidebar .nav-list .resource_lineProduct").click(function(){
