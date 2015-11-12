@@ -1,10 +1,10 @@
-<div class="search-area globalAdd">
+<div class="search-area globalAdd T-search-area">
 	<input name="user_realname" class="col-xs-2 input-default-height guideInputList" value="{{searchParam.inputName}}" placeholder="账号、姓名"/>&nbsp;
-	<button class=" btn-sm  search-btn btn-user-search" style="margin-left:-8px">
+	<button class=" btn-sm  search-btn T-search" style="margin-left:-8px">
 		<i class="ace-icon fa fa-search"></i>
 		搜索
 	</button>
-	<div class="btn-group btn-status"style="margin-left: 15px">
+	<div class="btn-group T-status"style="margin-left: 15px">
 		<button data-value="{{searchParam.status}}" data-toggle="dropdown" class=" btn-sm block-up dropdown-toggle" aria-expanded="false">
 			<span>
 				{{if searchParam.status == 1}}
@@ -24,7 +24,7 @@
 			</li>
 		</ul>
 	</div>
-	<button class="btn btn-sm btn-success btn-user-add R-right" data-right='1420001' style="margin-left:15px;">
+	<button class="btn btn-sm btn-success T-add R-right" data-right='1420001' style="margin-left:15px;">
 		<i class="ace-icon fa fa-plus"></i>
 		新增人员
 	</button>
@@ -44,9 +44,9 @@
 					<th>操作</th>
 				</tr>
 			</thead>
-			<tbody>
+			<tbody class="T-list">
 				{{each userList as user}}
-					<tr class="user-{{user.id}}">
+					<tr data-id="{{user.id}}">
 						<td>{{user.realName}}</td>
 						<td>{{user.userName}}</td>
 						<td>{{defaultPassword}}</td>
@@ -62,47 +62,17 @@
 						</td>
 						<td>
 							<div class="hidden-sm hidden-xs btn-group">
-							<a data-entity-id="{{user.id}}" class="cursor btn-user-view" title="查看">
+							<a class="cursor T-option T-view" title="查看">
 									查看
 								</a>
-								<a data-entity-id="{{user.id}}" class="cursor btn-user-auth R-right" data-right='1420003' title="授权">
-								<label class="padding-right20">|</label>
+								<a class="cursor T-option T-auth R-right" data-right='1420003' title="授权">
+									<label class="padding-right20">|</label>
 									授权
 								</a>
-								<a data-entity-id="{{user.id}}" class="cursor btn-user-edit R-right" data-right='1420002' title="修改">
-								<label class="padding-right20">|</label>
+								<a class="cursor T-option T-update R-right" data-right='1420002' title="修改">
+									<label class="padding-right20">|</label>
 									修改
 								</a>
-							</div>
-							<div class="hidden-md hidden-lg">
-								<div class="inline pos-rel">
-									<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
-										<i class="ace-icon fa fa-cog icon-only bigger-110"></i>
-									</button>
-									<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-										<li>
-											<a data-entity-id="{{user.id}}" href="javascript:void(0)" class="tooltip-error btn-user-auth" data-rel="tooltip">
-												<span class="red">
-													<i class="ace-icon fa fa-search-plus bigger-120"></i>
-												</span>
-											</a>
-										</li>
-										<li>
-											<a data-entity-id="{{user.id}}" href="javascript:void(0)" class="tooltip-success btn-user-edit" data-rel="tooltip">
-												<span class="green">
-													<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-												</span>
-											</a>
-										</li>
-										<li>
-											<a data-entity-id="{{user.id}}" href="javascript:void(0)" class="tooltip-error btn-user-view" data-rel="tooltip">
-												<span class="red">
-													<i class="ace-icon fa fa-search-plus bigger-120"></i>
-												</span>
-											</a>
-										</li>
-									</ul>
-								</div>
 							</div>
 						</td>
 					</tr>

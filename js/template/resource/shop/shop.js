@@ -476,7 +476,93 @@ define(function(require, exports) {
 			language: 'zh-CN'
 		});
 	};
-
+	shop.compare = function(str1, str2){
+		return str1 > str2 ? [str2, str1] : [str1, str2];
+	};
+	/**
+	 * 验证政策列表事件范围
+	 */
+	shop.checkTimeAndPriceArea = function(){
+		var $tr = $('.shopPolicyContainer .T-policyForm .T-list').find('tr.timeArea'),
+			timeArea = [],
+			boolTime = false;
+		if($tr.length > 0){
+			for(var i = 0; i < $tr.length; i++){
+				var sTime = $tr.eq(i).find('input[name=startTime]').val();
+				var eTime = $tr.eq(i).find('input[name=endTime]').val();
+				var pTime = shop.compare(sTime, eTime);
+				var isRepeat = false;
+				if(sTime == eTime){
+					boolTime = false;
+					return false;
+				}else if(timeArea.length > 0){
+					for(var j = 0; j < timeArea.length; j++){
+						if((pTime[0] < timeArea[j][0] && pTime[1] < timeArea[j][0]) ||
+						   (pTime[0] > timeArea[j][1] && pTime[1] > timeArea[j][1])){
+							isRepeat= false;
+						}else{
+							isRepeat = true;
+							return false;
+						}
+					}
+					if(!isRepeat){
+						timeArea[timeArea.length] = pTime;
+						boolTime = true;
+					}else{
+						boolTime = false;
+					}
+				}else{
+					timeArea[0] = pTime;
+					boolTime = true;
+				}
+			}
+		}else{
+			boolTime = true;
+		}
+		return boolTime;
+	};
+	shop.checkMoneyScope = function(){
+		var $tr = $('.shopPolicyContainer .T-policyForm .T-list').find('tr.timeArea');
+		if($tr.length > 0){
+			for(var i = 0; i < $tr.length; i++){
+				var $divList = $tr.eq(i).find('td').eq(1).children('div');
+				var numberArea = [];
+				var boolNumber = false;
+				for(var j = 0; j < $divList.length; j++){
+					var costMoneyStart = $divList.eq(j).find('input[name=costMoneyStart]').val();
+					var costMoneyEnd = $divList.eq(j).find('input[name=costMoneyEnd]').val();
+					var pMoney = shop.compare(costMoneyStart, costMoneyEnd);
+					var isRepeat = false;
+					if(costMoneyStart == costMoneyEnd){
+						boolNumber = false;
+						return false;
+					}else if(numberArea.length > 0){
+						for(var k = 0; k < numberArea.length; k++){
+							if((pMoney[0] < numberArea[k][0] && pMoney[1] < numberArea[k][0]) ||
+							   (pMoney[0] > numberArea[k][1] && pMoney[1] > numberArea[k][1])){
+								isRepeat= false;
+							}else{
+								isRepeat = true;
+								return false;
+							}
+						}
+						if(!isRepeat){
+							numberArea[numberArea.length] = pMoney;
+							boolNumber = true;
+						}else{
+							boolNumber = false;
+						}
+					}else{
+						boolNumber = true;
+						numberArea[0] = pMoney;
+					}
+				}
+			}
+		}else{
+			boolNumber = true;
+		}
+		return boolNumber;
+	}
 	/**
 	 * 编辑购物政策
 	 * @param  {object} data 已经保存过的政策
@@ -534,6 +620,14 @@ define(function(require, exports) {
 		    			if(!modiPolicyValidator.form()){return;}
 		    		}else{
 		    			showMessageDialog($( "#confirm-dialog-message" ),"政策不能为空");
+		    			return;
+		    		}
+		    		if(!shop.checkTimeAndPriceArea()){
+		    			showMessageDialog($( "#confirm-dialog-message" ),"时间范围不能重复");
+		    			return;
+		    		}
+		    		if(!shop.checkMoneyScope()){
+		    			showMessageDialog($( "#confirm-dialog-message" ),"消费金额范围同一段时间内不能重复");
 		    			return;
 		    		}
 		    		var result = shop.submitShopPolicy(obj);
