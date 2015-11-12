@@ -630,6 +630,7 @@ define(function(require, exports) {
 							    content: html,
 							    scrollbar: false,    // 推荐禁用浏览器外部滚动条
 							    success: function(data) {
+							    	
 							    }
 						    });
 						}
@@ -644,31 +645,19 @@ define(function(require, exports) {
 							}
 							tripPlan.searchLineProduct(false,0,tripPlan.lineSearchData.name);
 						});
-				    	//分页--首页按钮事件
-						$("#newTripPlanLineProduct .pageMode a.first").click(function(){
-							tripPlan.searchLineProduct(false,0,tripPlan.lineSearchData.name);
-						});
-						//分页--上一页事件
-						$("#newTripPlanLineProduct .pageMode a.previous").click(function(){
-							var previous = dataD.pageNo - 1;
-							if(data.pageNo == 0){
-								previous = 0;
-							}
-							tripPlan.searchLineProduct(false,previous,tripPlan.lineSearchData.name);
-						});
-						//分页--下一页事件
-						$("#newTripPlanLineProduct .pageMode a.next").click(function(){
-							var next =  dataD.pageNo + 1;
-							if(dataD.pageNo == dataD.totalPage-1){
-								next = dataD.pageNo ;
-							}
-							tripPlan.searchLineProduct(false,next,tripPlan.lineSearchData.name);
-						});
-						//分页--尾页事件
-						$("#newTripPlanLineProduct .pageMode a.last").click(function(){
-							if(dataD.totalPage < 1){return;}
-							tripPlan.searchLineProduct(false,dataD.totalPage-1,tripPlan.lineSearchData.name);
-						});
+						// 初始化jQuery 对象
+								tripPlan.$tab = $('#' + tabId);
+					    		// 绑定翻页组件
+						laypage({
+						    cont:$('.tripPlanSearchLine').find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+						    pages: data.totalPage, //总页数
+						    curr: (page + 1),
+						    jump: function(obj, first) {
+						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+						    		tripPlan.listTripPlan(obj.curr -1);
+						    	}
+						    }
+						});	
 						//提交线路获取线路相关信息
 						$(".tripPlanSearchLine .btn-submit-searchtravelLine").click(function(){
 							var id = "";
