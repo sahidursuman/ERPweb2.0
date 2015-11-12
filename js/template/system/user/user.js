@@ -44,7 +44,7 @@ define(function(require, exports) {
 					userList = JSON.parse(userList);
 					data.userList = userList;
 					var html = listTemplate(data);
-					addTab(menuKey,"人员管理",html);
+					Tools.addTab(menuKey,"人员管理",html);
 
 					user.initList();
 
@@ -186,7 +186,7 @@ define(function(require, exports) {
 					    type: 1,
 					    title:"系统人员信息",
 					    skin: 'layui-layer-rim', 
-					    area: ['700px', '400px'], 
+					    area: '700px', 
 					    zIndex:1028,
 					    content: html,
 					    scrollbar: false
