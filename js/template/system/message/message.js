@@ -23,7 +23,7 @@ define(function(require, exports) {
 				var result = showDialog(data);
 				if (result) {
 					var html = listTemplate(data);
-					addTab(menuKey+"-message","消息列表",html);
+					Tools.addTab(menuKey,"消息列表",html);
 					//查看消息内容
 					$(".T-message-list .T-view").click(function(){
 						var id = $(this).closest('tr').data('id');
@@ -62,6 +62,7 @@ define(function(require, exports) {
 				    area: '600px', 
 				    zIndex:1028,
 				    content: html,
+				    scrollbar: false,
 				    success:function(){
 				    	message.listMsg(message.msgData.pageNo);
 				    	// 修改header的显示
