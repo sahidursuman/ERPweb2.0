@@ -42,13 +42,16 @@ define(function(require, exports) {
 		var html = listMainTemplate(innerTransfer.allData);
 		addTab(menuKey,"内转管理",html);
 
-		var tab = "tab-arrange_inner_Transfer-content";
+		var tab = "tab-"+menuKey+"-content",
+			$innerTrsfOutObj=$('#inner-TransferOut');
+			$innerTrsfInObj=$('#inner-TransferIn');
 		//搜索 type:1 转出   type:2 转入
-		$("#inner-TransferOut .btn-transferOut-search").off("click").on("click",{divId:"inner-TransferOut",btn:"btn-transferOut-search",type:"1"},innerTransfer.getListPage);
-		$("#inner-TransferIn .btn-transferIn-search").off("click").on("click",{divId:"inner-TransferIn",btn:"btn-transferIn-search",type:"2"},innerTransfer.getListPage);
+		$innerTrsfOutObj.find(".btn-transferOut-search").off("click").on("click",{divId:"inner-TransferOut",btn:"btn-transferOut-search",type:"1"},innerTransfer.getListPage);
+		$innerTrsfInObj.find(".btn-transferIn-search").off("click").on("click",{divId:"inner-TransferIn",btn:"btn-transferIn-search",type:"2"},innerTransfer.getListPage);
 		//初始化列表
-		$("#inner-TransferOut .btn-transferOut-search").trigger('click');
-		$("#inner-TransferIn .btn-transferIn-search").trigger('click');
+		$innerTrsfOutObj.find(".btn-transferOut-search").trigger('click');
+		$innerTrsfInObj.find(".btn-transferIn-search").trigger('click');
+
 		//线路产品autocomplete
 		innerTransfer.chooseLineProduct("inner-TransferIn");
 		//部门autocomplete
@@ -60,18 +63,18 @@ define(function(require, exports) {
 		//时间控件
 		innerTransfer.datePicker(tab);
 		//导出
-		$("#inner-TransferIn .btn-transfer-export").click(function(){
+		$innerTrsfInObj.find(".btn-transfer-export").click(function(){
 			innerTransfer.$searchParam.type=2; 
 			var exportUrl ="" + innerTransfer.url("findExcel","view") + "&searchParam="+encodeURIComponent(JSON.stringify(innerTransfer.$searchParam));
 			window.location.href=exportUrl;
 		});
 		//导出操作 
-		$("#inner-TransferOut .btn-transfer-export").click(function(){
+		$innerTrsfOutObj.find(".btn-transfer-export").click(function(){
 			innerTransfer.$searchParam.type=1; 
 			var exportUrl ="" + innerTransfer.url("findExcel","view") + "&searchParam="+encodeURIComponent(JSON.stringify(innerTransfer.$searchParam));
 			window.location.href=exportUrl;
 		});
-		$("#inner-TransferOut .dropdown-menu a").click(function(){
+		$innerTrsfOutObj.find(".dropdown-menu a").click(function(){
 			$(this).closest('div').find("button").attr("data-value",$(this).attr("data-value"));
 			$(this).closest('div').find("span").text($(this).text());
 			var divId = "inner-TransferOut",
@@ -80,7 +83,7 @@ define(function(require, exports) {
 			innerTransfer.innerList(divId,type,0);
 			innerTransfer.findTotal(divId);
 		})
-		$("#inner-TransferIn .dropdown-menu a").click(function(){
+		$innerTrsfInObj.find(".dropdown-menu a").click(function(){
 			$(this).closest('div').find("button").attr("data-value",$(this).attr("data-value"));
 			$(this).closest('div').find("span").text($(this).text());
 			var divId = "inner-TransferIn",
@@ -122,11 +125,7 @@ define(function(require, exports) {
 			url: innerTransfer.url("findListMain","view"),
 			type: 'POST',
 			dataType: 'JSON',
-			beforeSend:function(){
-				globalLoadingLayer = openLoadingLayer();
-			},
 			success:function(data){
-				layer.close(globalLoadingLayer);
 				var result = showDialog(data);
 				if(result){
 					innerTransfer.allData.fromBusinessGroup = JSON.parse(data.fromBusinessGroup)
@@ -144,11 +143,7 @@ define(function(require, exports) {
 			type: 'POST',
 			dataType: 'JSON',
 			data: "searchParam="+encodeURIComponent(JSON.stringify(innerTransfer.$searchParam)),
-			beforeSend:function(){
-				globalLoadingLayer = openLoadingLayer();
-			},
 			success:function(data){
-				layer.close(globalLoadingLayer);
 				var result = showDialog(data);
 				if(result){
 					if(divId == "inner-TransferIn"){
@@ -171,11 +166,7 @@ define(function(require, exports) {
 			type: 'POST',
 			dataType: 'json',
 			data: "searchParam="+encodeURIComponent(JSON.stringify(innerTransfer.$searchParam)),
-			beforeSend:function(){
-				globalLoadingLayer = openLoadingLayer();
-			},
 			success:function(data){
-				layer.close(globalLoadingLayer);
 				data.resultList = JSON.parse(data.resultList);
 				var result = showDialog(data);
 				if(result){
@@ -188,41 +179,10 @@ define(function(require, exports) {
 					html = filterUnAuth(html);
 					$("#"+divId+" .innerList").html(html);
 
-					//我部转出小组操作
-					$("#"+divId+" .btn-TransferOut-edit").click(function(){
-						var parents = $(this).closest('tr');
-							id = parents.attr("data-entity-id");
-						innerTransfer.editTransferOut(id);
-					});
-					$("#"+divId+" .btn-TransferOut-view").click(function(){
-						var parents = $(this).closest('tr');
-							id = parents.attr("data-entity-id");
-						innerTransfer.viewTransferOut(id,type);
-					});
-					$("#"+divId+" .btn-TransferOut-delete").click(function(){
-						var parents = $(this).closest('tr');
-							id = parents.attr("data-entity-id");
-						innerTransfer.deleteTransferOut(id);
-					});
-					//他部转入小组操作
-					$("#"+divId+" .btn-TransferIn-save").click(function(){
-						var parents = $(this).closest('tr');
-							id = parents.attr("data-entity-id");
-						innerTransfer.saveTransferIn(id);
-					});
-					$("#"+divId+" .btn-TransferIn-view").click(function(){
-						var parents = $(this).closest('tr');
-							id = parents.attr("data-entity-id");
-						innerTransfer.viewTransferOut(id,type);
-					});
-					$("#"+divId+" .btn-TransferIn-refuse").click(function(){
-						var parents = $(this).closest('tr');
-							id = parents.attr("data-entity-id");
-						innerTransfer.deleteTransferIn(id);
-					});
-					
-					page=0||page;
+					//我部转出&&他部转入报表操作
+					innerTransfer.init_event(divId,type);
 
+					page=0||page;
 					// 绑定翻页组件
 					laypage({
 					    cont: $('#' + divId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
@@ -238,16 +198,54 @@ define(function(require, exports) {
 			}
 		})
 	};
+
+	/**
+	 * [init_event 我部转出&&他部转入报表操作]
+	 * @param  {[type]} divId [转入转出ID标识]
+	 * @return {[type]}       [description]
+	 */
+	innerTransfer.init_event=function(divId,type){
+		//我部转出报表操作
+	    $("#"+divId).find('.T-transferOut-list').off().on('click', '.T-action', function(event) {
+	    	event.preventDefault();
+	    	/* Act on the event */
+	    	var $that=$(this),id=$that.closest('tr').data('value');
+	    	if ($that.hasClass('T-TransferOut-edit')) {
+	    		//编辑我社转出
+	    		innerTransfer.editTransferOut(id);
+	    	}else if($that.hasClass('T-TransferOut-view')){
+	    		//查看
+	    		innerTransfer.viewTransferOut(id,type);
+	    	}else if($that.hasClass('T-TransferOut-delete')){
+	    		//撤销
+	    		innerTransfer.deleteTransferOut(id);
+	    	};
+	    });
+
+	    //他部转入
+	    $("#"+divId).find('.T-transferIn-list').off().on('click', '.T-action', function(event) {
+	    	event.preventDefault();
+	    	/* Act on the event */
+	    	var $that=$(this),id=$that.closest('tr').data('value');
+	    	if ($that.hasClass('T-TransferIn-save')) {
+	    		//确认
+	    		innerTransfer.saveTransferIn(id);
+	    	}else if($that.hasClass('T-TransferIn-view')){
+	    		//查看
+	    		innerTransfer.viewTransferOut(id,type);
+	    	}else if($that.hasClass('T-TransferIn-refuse')){
+	    		//拒绝
+	    		innerTransfer.deleteTransferIn(id);
+	    	};
+	    });
+
+	};
 	innerTransfer.viewTransferOut = function(id,type){
 		$.ajax({  
 			url:innerTransfer.url("edit","view"),
 			data:"id="+id,
 			dataType:'json',
-			before:function(){
-				globalLoadingLayer = layer.open();
-			},
 			success:function(data){
-				layer.close(globalLoadingLayer);
 				data.innerTransfer = JSON.parse(data.innerTransfer);
 				
 				var html = viewTemplate(data);
@@ -266,11 +264,7 @@ define(function(require, exports) {
 			url:innerTransfer.url("edit","view"),
 			data:"id="+id,
 			dataType:'json',
-			before:function(){
-				globalLoadingLayer = layer.open();
-			},
 			success:function(data){
-				layer.close(globalLoadingLayer);
 				data.innerTransfer = JSON.parse(data.innerTransfer);
 				data.businessGroup = JSON.parse(data.businessGroup);
 				var result = showDialog(data);
@@ -310,25 +304,23 @@ define(function(require, exports) {
 						innerTransfer.edited["edit"] = "edit"; 					
 					})
 					//新增&&智能计算
-					//inner.innitAddFee(validator);
 					innerTransfer.innitAddFee(validator);
 					
 					$editObj=$("#tab-arrange_inner_Transfer-edit-content");				
 
 					//绑定删除分团转客信息
-					$editObj.find(".btn-edittransfer-delete").off().on("click",function(){
-						var tr =$(this).parent().parent();
-						var id = tr.attr("data-entity-id");
-						innerTransfer.delTransferData(id,tr);
+					$editObj.find(".T-edittransfer-delete").off().on("click",function(){
+						var $that=$(this),$tr=$that.closest('tr'),id = $tr.attr("data-entity-id");
+						innerTransfer.delTransferData(id,$tr);
 					});
 				   
-					$editObj.find(".btn-saveTransoutInfo").click(function(){
+					$editObj.find(".T-saveTransoutInfo").click(function(){
 					    // 表单校验
 				        if (!validator.form()) { return; }
 						innerTransfer.saveEditTranIn(1);
 
 					})
-					$editObj.find(".btn-cancelTransfer").click(function(){
+					$editObj.find(".T-cancelTransfer").click(function(){
 						showConfirmDialog($( "#confirm-dialog-message" ), "确定关闭本选项卡?",function(){
 							closeTab(menuKey + "-edit");
 							innerTransfer.edited["edit"] = "";
@@ -344,23 +336,22 @@ define(function(require, exports) {
 			innerTransfer.PayMoneyF();
 		});
 		//给新增费用绑定事件
-		$obj.find(".btn-transfer-addCost").click(function(){
+		$obj.find(".T-transfer-addCost").click(function(){
 			var html="<tr class=\"transferFee1SelectId\">"+
 			"<td><span name=\"type\" value=\"0\">其他费用</span></td>"+
 			"<td><input  name=\"discribe\" type=\"text\" class=\"col-sm-10  no-padding-right\"  maxlength=\"100\" /></td>"+
 			"<td><input  name=\"count\" type=\"text\" class=\"col-sm-10  no-padding-right count\" maxlength=\"6\" /></td>"+
 			"<td><span class=\"necessary  pull-left col-sm-2\"></span><input  name=\"price\" type=\"text\" class=\"col-sm-10  no-padding-right price\" maxlength=\"9\" /></td>"+
-			"<td><a class=\"cursor btn-edittransfer-delete\">删除</a></td>"+
+			"<td><a class=\"cursor T-edittransfer-delete\">删除</a></td>"+
 			"</tr>";
 			$obj.find(".addTransferCost").append(html);
 			//表单验证
 			rule.update(validator);
 
 			//绑定删除分团转客信息
-			$(".btn-edittransfer-delete").off().on("click",function(){
-				var tr =$(this).closest('tr');
-				var id = tr.attr("data-entity-id");
-				innerTransfer.delTransferData(id,tr);
+			$(".T-edittransfer-delete").off().on("click",function(){
+				var $tr =$(this).closest('tr'),id = $tr.attr("data-entity-id");
+				innerTransfer.delTransferData(id,$tr);
 			});
 			$obj.find("input[name=transChildPrice],input[name=transAdultPrice],input[name=count],input[name=price]").keyup(function(){
 				innerTransfer.PayMoneyF();
@@ -370,6 +361,9 @@ define(function(require, exports) {
 			})
 		});
 	};
+	/**
+	 * [PayMoneyF 支付账务的计算]
+	 */
 	innerTransfer.PayMoneyF = function(){
 		var $objFee=$("#tab-arrange_inner_Transfer-edit-content");
 		var $obj=$(".addTransferCostTable"); 
@@ -392,27 +386,28 @@ define(function(require, exports) {
 		//应付
 		transNeedPayMoney.val(needPayMoney.toFixed(2));
 	};
-	innerTransfer.delTransferData = function(id,tr){
+
+	/**
+	 * [delTransferData 根据Id判定是物理删除&&及时删除]
+	 * @param  {[type]} id  [description]
+	 * @param  {[type]} $tr [description]
+	 * @return {[type]}     [description]
+	 */
+	innerTransfer.delTransferData = function(id,$tr){
 		if( id!=null && id!=""){
 			$.ajax({
 				url:innerTransfer.url("deleteFee","delete"),
 				type:"POST",
 				data:"id="+id,
 				dataType:"json",
-				beforeSend:function(){
-					globalLoadingLayer = layer.open({
-						type:3
-					});
-				},
 				success:function(data){
-					$(tr).remove();
-					layer.close(globalLoadingLayer);
+					$tr.remove();
 					innerTransfer.PayMoneyF();
 				}
 			});	
 		}else{
 			//移除空的其他费用
-			$(tr).remove();
+			$tr.remove();
 			innerTransfer.PayMoneyF();
 		}
 	}
@@ -458,13 +453,7 @@ define(function(require, exports) {
 			url:""+APP_ROOT+"back/innerTransfer.do?method=update&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
 			data:"innerTransfer="+encodeURIComponent(innerTransferJson),
 			datatype:"json",
-			beforeSend:function(){
-				globalLoadingLayer = layer.open({
-					type:3
-				});
-			},
 			success:function(data){
-				layer.close(globalLoadingLayer);
 				var result = showDialog(data);  
 				if(result){  
 					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
@@ -505,13 +494,7 @@ define(function(require, exports) {
 								type:"POST",
 								data:"id="+id + "&isDelete=1",
 								dataType:"json",
-								beforeSend:function(){
-									globalLoadingLayer = layer.open({
-										type:3
-									});
-								},
 								success:function(data){
-									layer.close(globalLoadingLayer);
 									var result = showDialog(data);
 									if (result) {
 										var divId = "inner-TransferOut",
@@ -555,13 +538,7 @@ define(function(require, exports) {
 							type:"POST",
 							data:"id="+id + "&isDelete=1",
 							dataType:"json",
-							beforeSend:function(){
-								globalLoadingLayer = layer.open({
-									type:3
-								});
-							},
 							success:function(data){
-								layer.close(globalLoadingLayer);
 								var result = showDialog(data);
 								if (result) {
 									var divId = "inner-TransferIn",
@@ -604,13 +581,7 @@ define(function(require, exports) {
 							type:"POST",
 							data:"id="+id + "&isDelete=1",
 							dataType:"json",
-							beforeSend:function(){
-								globalLoadingLayer = layer.open({
-									type:3
-								});
-							},
 							success:function(data){
-								layer.close(globalLoadingLayer);
 								var result = showDialog(data);
 								if (result) {
 									var divId = "inner-TransferIn",

@@ -611,7 +611,10 @@ var modalScripts = {
 	'financial_innerTransfer_profit': "js/template/financial/innerTransferProfit/innerTransferProfit.js",
 	'financial_turnProfit': "js/template/financial/turnProfit/turnProfit.js",
 	'financial_totalProfit': "js/template/financial/totalProfit/totalProfit.js",
-	'financial_Client': "js/template/financial/Client/Client.js"
+	'financial_Client': "js/template/financial/Client/Client.js",
+	//--------------------------------------------------------------------------------------------------------------
+	'arrange_transfer':"js/template/arrange/arrangeTransfer/arrangeTransfer.js" , //转客管理
+	'arrage_orderManage':"js/template/arrange/orderManage/orderManage.js"   //订单管理
 };
 
 
@@ -1092,7 +1095,7 @@ function listMenu(menuTemplate){
 				});
 
 				//绑定转客管理菜单功能
-				$("#sidebar .nav-list .arrange_transfer").click(function(){
+				/*$("#sidebar .nav-list .arrange_transfer").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
@@ -1100,7 +1103,7 @@ function listMenu(menuTemplate){
 						transfer.getlistTransferSumData(0,"","","","","","",2);
 						modals["arrange_transfer"] = transfer;
 					});
-				});
+				});*/
 
 
 				//绑定内转管理菜单功能
