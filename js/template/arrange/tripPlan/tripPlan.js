@@ -350,8 +350,7 @@ define(function(require, exports) {
 											}
 											html +='<tr><td>第'+data.lineProductDays[i].whichDay+'天</td><td>'+data.lineProductDays[i].repastDetail+'</td><td>'+hotelLevel()+'</td><td class="col-xs-6">'+data.lineProductDays[i].title+'</td></tr>';
 										}
-										$(".newAddTripPlanMain table.days tbody").html(html);
-										$(".newAddTripPlanMain table.days tbody").html(html);
+										$(".T-plan-container .T-days").html(html);
 									}
 								}
 				    		})
