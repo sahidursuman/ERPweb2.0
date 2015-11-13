@@ -66,7 +66,7 @@ textarea:focus, input[type=text]:focus, input[type=password]:focus, input[type=d
 	border:1px solid #B5B5B5!important;
 	/*border-right:1px solid #B5B5B5!important ;*/
 	/*border-left: 1px solid #B5B5B5!important;*/
-	color:#b5b5b5!important;height:14px;line-height:10px;}
+	color:#b5b5b5!important;height:14px;line-height:7px;}
 .ui-spinner .btn i.fa-sort-asc{line-height:17px;}
 .ui-spinner .btn i.fa-sort-desc{line-height:17px;}
 .fuckIcon{position: absolute;margin-top: -20px;}
