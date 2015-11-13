@@ -1,94 +1,88 @@
 define(function(require, exports) {
 	var menuKey = "public_message",
-	tabId = "tab-"+menuKey+"-content";
-	listTemplate = require("./view/list");
-	viewTemplate = require("./view/view");
+		tabId = "tab-"+menuKey+"-content";
+		listTemplate = require("./view/list");
+		viewTemplate = require("./view/view");
 	
-	var message = {
-		msgData : {
-			pageNo : 0
-		},	
-		listMsg : function(page){
-			$.ajax({
-				url:""+APP_ROOT+"back/message.do?method=listMessage&token="+$.cookie("token")+"&menuKey=&operation=self",
-				type:"POST",
-				data:"pageNo="+page+"&sortType=auto",
-				dataType:"json",
-				beforeSend:function(){
-					globalLoadingLayer = openLoadingLayer();
-				},
-				success:function(data){
-					layer.close(globalLoadingLayer);
-					pageNo = data.pageNo;
-					var result = showDialog(data);
-					if (result) {
-						var html = listTemplate(data);
-						addTab(menuKey+"-message","消息列表",html);
-						
-						// 查看消息内容
-						$("#messageList .btn-msg-view").click(function(){
-							var id = $(this).closest('tr').data('id');
-							message.viewMsg(id);
-						});
+	var message = {};	
 
-						// 绑定翻页组件
-						laypage({
-						    cont: $('#' + tabId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
-						    pages: data.totalPage, //总页数
-						    curr: (page + 1),
-						    jump: function(obj, first) {
-						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-						    		message.listMsg(obj.curr -1);
-								}
-						    }
-						});
-					}
-				}
-			});
-		},
-		viewMsg:function(id){
+	message.initModule = function() {
+		message.listMsg(0);
+	};
 
-			$.ajax({
-				url:""+APP_ROOT+"back/message.do?method=readMessage&token="+$.cookie("token")+"&menuKey=&operation=self",
-				type:"POST",
-				data:"id="+id,
-				dataType:"json",
-				beforeSend:function(){
-					globalLoadingLayer = layer.open({
-						type:3
+	message.listMsg = function(page){
+		page = page || 0;
+		$.ajax({
+			url:KingServices.build_url("message","listMessage"),
+			type:"POST",
+			data:{
+				pageNo : page,
+				sortType : "auto"
+			},
+			success:function(data){
+				var result = showDialog(data);
+				if (result) {
+					var html = listTemplate(data);
+					Tools.addTab(menuKey,"消息列表",html);
+					//查看消息内容
+					$(".T-message-list .T-view").click(function(){
+						var id = $(this).closest('tr').data('id');
+						message.viewMsg(id);
 					});
-				},
-				success:function(data){
-					layer.close(globalLoadingLayer);
-					var html = viewTemplate(data);
-					layer.open({
-					    type: 1,
-					    title:"查看信息",
-					    skin: 'layui-layer-rim', //加上边框
-					    area: '600px', //宽高
-					    zIndex:1028,
-					    content: html,
-					    success:function(){
-					    	message.listMsg(message.msgData.pageNo);
-					    	// 修改header的显示
-		    		    	var $msgCounter = $("#msgCountSpan"), count = $msgCounter.text();
-		    		    	if (!!count && !isNaN(count) && count != '0')  {
-		    		    		count = count - 1;
-		    		    		var tip = count + "  条新消息";
-		    		    		if (count <= 0) {
-		    		    			count = 0;
-		    		    			tip = '当前没有未读消息';
-		    		    		}
 
-		    	    			$('#unReadCountStr').text(tip);
-		    		    		$msgCounter.text(count);
-		    		    	}
+					// 绑定翻页组件
+					laypage({
+					    cont: $('#' + tabId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+					    pages: data.totalPage, //总页数
+					    curr: (page + 1),
+					    jump: function(obj, first) {
+					    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+					    		message.listMsg(obj.curr -1);
+							}
 					    }
 					});
 				}
-			});
-		}
-	}
+			}
+		});
+	};
 
-	exports.listMsg = message.listMsg;
+	message.viewMsg = function(id){
+		$.ajax({
+			url:KingServices.build_url("message","readMessage"),
+			type:"POST",
+			data:{
+				id : id + ""
+			},
+			success:function(data){
+				var html = viewTemplate(data);
+				layer.open({
+				    type: 1,
+				    title:"查看信息",
+				    skin: 'layui-layer-rim',
+				    area: '600px', 
+				    zIndex:1028,
+				    content: html,
+				    scrollbar: false,
+				    success:function(){
+				    	message.listMsg(message.msgData.pageNo);
+				    	// 修改header的显示
+	    		    	var $msgCounter = $("#msgCountSpan"), count = $msgCounter.text();
+	    		    	if (!!count && !isNaN(count) && count != '0')  {
+	    		    		count = count - 1;
+	    		    		var tip = count + " 条新消息";
+	    		    		if (count <= 0) {
+	    		    			count = 0;
+	    		    			tip = '当前没有未读消息';
+	    		    		}
+
+	    	    			$('#unReadCountStr').text(tip);
+	    		    		$msgCounter.text(count);
+	    		    	}
+				    }
+				});
+			}
+		});
+	};
+
+	exports.init = message.initModule;
 })
