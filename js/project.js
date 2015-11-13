@@ -602,6 +602,8 @@ var modalScripts = {
 	'resource_busCompany':"js/template/resource/busCompany/busCompany.js",
 	'resource_lineProduct': 'js/template/resource/lineProduct/lineProduct.js',
 	'resource_partnerAgency':'js/template/resource/partnerAgency/partnerAgency.js',
+	//-------------------------------------------发团管理---------------------------------------------------
+	'arrange_plan':"js/template/arrange/tripPlan/tripPlan.js",
 	//-------------------------------------------业务分析模块---------------------------------------------------
 	'business_analyst_saleProduct' : "js/template/businessAnalyst/saleProduct/saleProduct.js",//产品销量
 	'business_analyst_sourDstribution' : "js/template/businessAnalyst/sourDstribution/sourDstribution.js", //客源分布
@@ -1076,15 +1078,15 @@ function listMenu(menuTemplate){
 				 });*/
 
 				//绑定发团计划菜单功能
-				$("#sidebar .nav-list .arrange_plan").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/arrange/tripPlan/tripPlan.js",function(tripPlan){
-						tripPlan.listTripPlan(0,"","","","","","","","","","");
-						modals["arrange_plan"] = tripPlan;
-					});
-				});
+				// $("#sidebar .nav-list .arrange_plan").click(function(){
+				// 	$("#sidebar .nav-list li").removeClass("active");
+				// 	$(this).addClass("active");
+				// 	$(this).parent().parent().addClass("active");
+				// 	seajs.use("" + ASSETS_ROOT +"js/template/arrange/tripPlan/tripPlan.js",function(tripPlan){
+				// 		tripPlan.listTripPlan(0,"","","","","","","","","","");
+				// 		modals["arrange_plan"] = tripPlan;
+				// 	});
+				// });
 
 				//绑定项目代订菜单功能
 				$("#sidebar .nav-list .arrange_booking").click(function(){
