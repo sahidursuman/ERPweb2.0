@@ -59,7 +59,6 @@ define(function(require, exports) {
 	    	$.ajax({
 	    		url: KingServices.build_url('transfer', 'findListInfo'),
 	    		type: 'POST',
-	    		dataType: 'JSON',
 	    		success:function(data){
 					var result = showDialog(data);
 					if(result){
@@ -324,7 +323,6 @@ define(function(require, exports) {
 	    	$.ajax({
 	    		url:KingServices.build_url("transfer","findTotal"),
 	    		type: 'POST',
-	    		dataType: 'JSON',
 	    		data: "searchParam="+encodeURIComponent(JSON.stringify(transfer.$searchParam)),
 	    		success:function(data){
 	    			var result = showDialog(data);
@@ -357,7 +355,6 @@ define(function(require, exports) {
 	    	$.ajax({
 	    		url: KingServices.build_url('transfer', 'findPager'),
 	    		type: 'POST',
-	    		dataType: 'JSON',
 	    		data: "searchParam="+encodeURIComponent(JSON.stringify(transfer.$searchParam)),
 	    		success:function(data){
 	    			var result = showDialog(data);
@@ -440,7 +437,6 @@ define(function(require, exports) {
 			$.ajax({
 				url:KingServices.build_url("transfer","findMember"),
 	    		type: 'POST',
-	    		dataType: 'JSON',
 				data:"id="+id+"",
 				success:function(data){	
 					var result = showDialog(data);
@@ -483,7 +479,6 @@ define(function(require, exports) {
 								url:KingServices.build_url("transfer","delete"),
 								type:"POST",
 								data:"id="+id + "&isDelete=0",
-								dataType:"json",
 								success:function(data){
 									 var result = showDialog(data);
 									 var type="1",
@@ -511,7 +506,6 @@ define(function(require, exports) {
 			$.ajax({
 				url: KingServices.build_url('transfer', 'edit'),
 				data:"id="+id+"", 
-				datatype:"JSON",
 				success:function(data){
 					var result = showDialog(data);
 					if(result){	
@@ -638,7 +632,6 @@ define(function(require, exports) {
 			var $obj = $(obj);
 			$.ajax({
 				url: KingServices.build_url('partnerAgency', 'findPartnerAnencyList'),
-                dataType: "JSON",
                 success:function(data){
 					var result = showDialog(data);
 					if(result){
@@ -775,7 +768,6 @@ define(function(require, exports) {
 			$.ajax({
 				url:KingServices.build_url("transfer","update"),
 				data:"id="+id+"&touristGroupTransfer="+JSON.stringify(saveDate.touristGroupTransfer)+"&transferFee="+JSON.stringify(saveDate.transferFee)+"&otherFee="+encodeURIComponent(otherFee),
-				datatype:"JSON",
 				success:function(data){
 					var result = showDialog(data);  
 					if(result){  
@@ -806,7 +798,6 @@ define(function(require, exports) {
 					url:KingServices.build_url("transfer","deleteFee"),
 					type:"POST",
 					data:"id="+id,
-					dataType:"JSON",
 					success:function(data){
 						$tr.remove();
 						transfer.PayMoneyF();
@@ -831,7 +822,6 @@ define(function(require, exports) {
 				url:KingServices.build_url("transfer","findMember"),
 				type:"POST",
 				data:"id="+id+"",
-				dataType:"JSON",
 				success:function(data){
 					var result = showDialog(data);
 					if(result){
@@ -873,7 +863,6 @@ define(function(require, exports) {
 								url:KingServices.build_url("transfer","refuse"),
 								type:"POST",
 								data:"id="+id + "&isDelete=1",
-								dataType:"json",
 								success:function(data){
 									var type="2";
 									    divId="Transfer-In";
@@ -903,7 +892,6 @@ define(function(require, exports) {
 			$.ajax({
 				url:KingServices.build_url("transfer","edit"),
 				data:"id="+id+"", 
-				datatype:"json",
 				success:function(data){
 					var result = showDialog(data);
 					if(result){
@@ -945,7 +933,6 @@ define(function(require, exports) {
 								$.ajax({
 									url:transfer.url("saveLine","view"),
 									data:"lineProductId="+lineProductId+"&tourGroupTransferId="+tourGroupTransferId,
-									datatype:"JSON",
 									success:function(data){
 										var result = showDialog(data);
 										if(result){  		

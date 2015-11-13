@@ -68,7 +68,6 @@ define(function(require, exports) {
 		$.ajax({
 			url:KingServices.build_url("innerTransfer","findListMain"),
 			type: 'POST',
-			dataType: 'JSON',
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
@@ -143,7 +142,6 @@ define(function(require, exports) {
 		$.ajax({
 			url:KingServices.build_url("innerTransfer","findTotal"),
 			type: 'POST',
-			dataType: 'JSON',
 			data: "searchParam="+encodeURIComponent(JSON.stringify(innerTransfer.$searchParam)),
 			success:function(data){
 				var result = showDialog(data);
@@ -173,7 +171,6 @@ define(function(require, exports) {
 		$.ajax({
 			url:KingServices.build_url("innerTransfer","findPager"),
 			type: 'POST',
-			dataType: 'json',
 			data: "searchParam="+encodeURIComponent(JSON.stringify(innerTransfer.$searchParam)),
 			success:function(data){
 				data.resultList = JSON.parse(data.resultList);
@@ -253,7 +250,6 @@ define(function(require, exports) {
 		$.ajax({  
 			url:KingServices.build_url("innerTransfer","edit"),
 			data:"id="+id,
-			dataType:'json',
 			success:function(data){
 				data.innerTransfer = JSON.parse(data.innerTransfer);
 				
@@ -272,7 +268,6 @@ define(function(require, exports) {
 		$.ajax({
 			url:KingServices.build_url("innerTransfer","edit"),
 			data:"id="+id,
-			dataType:'json',
 			success:function(data){
 				data.innerTransfer = JSON.parse(data.innerTransfer);
 				data.businessGroup = JSON.parse(data.businessGroup);
@@ -413,7 +408,6 @@ define(function(require, exports) {
 				url:innerTransfer.url("deleteFee","delete"),
 				type:"POST",
 				data:"id="+id,
-				dataType:"json",
 				success:function(data){
 					$tr.remove();
 					innerTransfer.PayMoneyF();
@@ -466,7 +460,6 @@ define(function(require, exports) {
 		$.ajax({
 			url:""+APP_ROOT+"back/innerTransfer.do?method=update&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
 			data:"innerTransfer="+encodeURIComponent(innerTransferJson),
-			datatype:"json",
 			success:function(data){
 				var result = showDialog(data);  
 				if(result){  
@@ -507,7 +500,6 @@ define(function(require, exports) {
 								url:KingServices.build_url("innerTransfer","delete"),
 								type:"POST",
 								data:"id="+id + "&isDelete=1",
-								dataType:"json",
 								success:function(data){
 									var result = showDialog(data);
 									if (result) {
@@ -551,7 +543,6 @@ define(function(require, exports) {
 							url:KingServices.build_url("innerTransfer","save"),
 							type:"POST",
 							data:"id="+id + "&isDelete=1",
-							dataType:"json",
 							success:function(data){
 								var result = showDialog(data);
 								if (result) {
@@ -594,7 +585,6 @@ define(function(require, exports) {
 							url:KingServices.build_url("innerTransfer","refuse"),
 							type:"POST",
 							data:"id="+id + "&isDelete=1",
-							dataType:"json",
 							success:function(data){
 								var result = showDialog(data);
 								if (result) {
