@@ -47,16 +47,8 @@ define(function(require, exports) {
 	    };
 	    
 	    transfer.transferList=function(){
-	    	//请求下拉数据
+	    	//异步Ajax请求下拉数据
 	    	transfer.listMainHead();
-	    	var html=listMainTemplate(transfer.allData);
-	    	addTab(menuKey,"转客管理",html);
-
-	    	transfer.$tab=$('#'+ tabId);
-	    	//初始化时间插件
-	    	transfer.datePicker(transfer.$tab);
-	    	//初始化事件的绑定
-	    	transfer.init_event(); 	
 	    };
 
 	    /**
@@ -80,6 +72,15 @@ define(function(require, exports) {
 						transfer.allData.travelAgency = JSON.parse(data.travelAgency);
 						transfer.allData.user1 = JSON.parse(data.user1);
 						transfer.allData.user2 = JSON.parse(data.user2);
+
+						var html=listMainTemplate(transfer.allData);
+				    	addTab(menuKey,"转客管理",html);
+
+				    	transfer.$tab=$('#'+ tabId);
+				    	//初始化时间插件
+				    	transfer.datePicker(transfer.$tab);
+				    	//初始化事件的绑定
+				    	transfer.init_event(); 	
 					}
 			    }
 	    	})
@@ -151,7 +152,13 @@ define(function(require, exports) {
 	     * @return {[type]}      [description]
 	     */
 		transfer.chooseLineProduct = function($obj){
-			var $that = $obj.find(".T-chooseLineProduct");
+			var $that = $obj.find(".T-chooseLineProduct"),list;
+			    list = transfer.allData.lineProduct2;
+			    if(!!list && list.length> 0){
+			    	for(var i=0; i < list.length; i++){
+						list[i].value = list[i].name;
+				    };
+			    }
 			$that.autocomplete({
 				minLength:0,
 				change :function(event, ui){
@@ -163,15 +170,10 @@ define(function(require, exports) {
 				select :function(event, ui){
 					var _this = this, parents = $(_this).parent();
 					parents.find("input[name=lineProductId]").val(ui.item.id).trigger('change');
-				}
+				},source:list
 			}).unbind("click").click(function(){
-				var obj = this,
-					list = transfer.allData.lineProduct2;
-				if(list && list.length > 0){
-					for(var i=0; i < list.length; i++){
-						list[i].value = list[i].name;
-					}
-					$(obj).autocomplete('option','source', list);
+				var obj = this;
+				if(!!list && list.length){
 					$(obj).autocomplete('search', '');
 				}else{
 					layer.tips('没有内容', obj, {
@@ -189,7 +191,18 @@ define(function(require, exports) {
 		 * @return {[type]}      [description]
 		 */
 		transfer.choosePartnerAgency=function($obj,type){
-			var $that = $obj.find(".T-choosePartnerAgency");
+			var $that = $obj.find(".T-choosePartnerAgency"),list;
+				if (type==1) {
+					list = transfer.allData.partnerAgency;
+				} else{
+					list = transfer.allData.partnerAgency2;
+				};
+					
+				if(!!list && list.length){
+					for(var i=0; i < list.length; i++){
+						list[i].value = list[i].travelAgencyName;
+				   }
+				}
 			$that.autocomplete({
 				minLength:0,
 				change :function(event, ui){
@@ -202,27 +215,17 @@ define(function(require, exports) {
 				select :function(event, ui){
 					var _this = this, parents = $(_this).parent();
 					parents.find("input[name=partnerAgencyId]").val(ui.item.id).trigger('change');
-				}
+				},source:list
 			}).unbind("click").click(function(){
-				var obj = this,list;
-				if (type==1) {
-					list = transfer.allData.partnerAgency;
-				} else{
-					list = transfer.allData.partnerAgency2;
-				};
-					
-				if(list && list.length > 0){
-					for(var i=0; i < list.length; i++){
-						list[i].value = list[i].travelAgencyName;
+				var obj = this;
+					if(!!list && list.length){
+						$(obj).autocomplete('search', '');
+					}else{
+						layer.tips('没有内容', obj, {
+						    tips: [1, '#3595CC'],
+						    time: 2000
+						});
 					}
-					$(obj).autocomplete('option','source', list);
-					$(obj).autocomplete('search', '');
-				}else{
-					layer.tips('没有内容', obj, {
-					    tips: [1, '#3595CC'],
-					    time: 2000
-					});
-				}
 			})
 
 		};
@@ -234,7 +237,13 @@ define(function(require, exports) {
 		 * @return {[type]}      [description]
 		 */
 		transfer.chooseUserList=function($obj,type){
-		   var $that = $obj.find(".T-chooseUserName");
+		   var $that = $obj.find(".T-chooseUserName"),list;
+		       list = transfer.allData.user1;
+		       if(!!list && list.length > 0){
+					for(var i=0; i < list.length; i++){
+							list[i].value = list[i].realName;
+					}
+				}
 				$that.autocomplete({
 					minLength:0,
 					change :function(event, ui){
@@ -246,16 +255,10 @@ define(function(require, exports) {
 					select :function(event, ui){
 						var _this = this, parents = $(_this).parent();
 						parents.find("input[name=userNameId]").val(ui.item.id).trigger('change');
-					}
+					},source:list
 				}).unbind("click").click(function(){
-					var obj = this,list;
-						list = transfer.allData.user1;
-						
-					if(list && list.length > 0){
-						for(var i=0; i < list.length; i++){
-							list[i].value = list[i].realName;
-						}
-						$(obj).autocomplete('option','source', list);
+					var obj = this;
+					if(!!list && list.length > 0){
 						$(obj).autocomplete('search', '');
 					}else{
 						layer.tips('没有内容', obj, {
@@ -566,13 +569,15 @@ define(function(require, exports) {
 				$obj.find("input[name=otherPrice]").keyup(function(){
 					transfer.PayMoneyF();
 				});
-				$(document).ready(function(){
-					transfer.PayMoneyF();
-				})
+				
 				//新增其他费用选项
 				$obj.find(".addOrOtherSelect").change(function(){
 					transfer.PayMoneyF();
 				})
+
+				//重新计算
+				transfer.PayMoneyF();
+
 			});
 			//成人数量
 			$obj.find("input[name=transChildPrice]").keyup(function(){
@@ -908,7 +913,7 @@ define(function(require, exports) {
 							type: 1,
 							title:"编辑同行转入信息",
 							skin: 'layui-layer-rim', //加上边框
-							area: ['45%', '55%'], //宽高
+							area: '45%', //宽高
 							zIndex:1028,
 							content: html,
 							success:function(){
@@ -977,14 +982,7 @@ define(function(require, exports) {
 				$.ajax({
 					url:KingServices.url("lineProduct","findAll"),
 					data:"pageNo="+page+"&name="+name,
-					dataType:"json",
-					beforeSend:function(){
-						globalLoadingLayer = layer.open({
-							type:3
-						});
-					},
 					success: function(data) {
-						layer.close(globalLoadingLayer);
 						var result =showDialog(data);
 						var dataD = data;
 						if(result){
@@ -1002,7 +1000,7 @@ define(function(require, exports) {
 									type: 1,
 									title:"选择路线",
 									skin: 'layui-layer-rim', //加上边框
-									area: ['85%', '80%'], //宽高
+									area: '85%', //宽高
 									zIndex:1029,
 									content: html,
 									success: function(data) {
@@ -1037,7 +1035,6 @@ define(function(require, exports) {
 							$(".T-submit-searchtravelLine").click(function(){
 								var trSearchtravelLine =$(".T-travelLineList-table tbody tr");
 								for(var i=0;i<trSearchtravelLine.length;i++){
-				
 									if(trSearchtravelLine.eq(i).find("input[name=choice-TravelLine]").is(":checked")==true){
 										travelLineName =trSearchtravelLine.eq(i).find("td[name=travelLine-select]").text();
 										travelLineId =trSearchtravelLine.eq(i).find("td[name=travelLine-select]").attr("data-travelLine-Id");

@@ -36,59 +36,6 @@ define(function(require, exports) {
 	innerTransfer.innerTransferList = function(){
 		//请求下拉框数据
 		innerTransfer.ListMainHead();
-		var html = listMainTemplate(innerTransfer.allData);
-		addTab(menuKey,"内转管理",html);
-
-		var tab = "tab-"+menuKey+"-content",
-			$innerTrsfOutObj=$('#inner-TransferOut');
-			$innerTrsfInObj=$('#inner-TransferIn');
-		//搜索 type:1 转出   type:2 转入
-		$innerTrsfOutObj.find(".btn-transferOut-search").off("click").on("click",{divId:"inner-TransferOut",btn:"btn-transferOut-search",type:"1"},innerTransfer.getListPage);
-		$innerTrsfInObj.find(".btn-transferIn-search").off("click").on("click",{divId:"inner-TransferIn",btn:"btn-transferIn-search",type:"2"},innerTransfer.getListPage);
-		//初始化列表
-		$innerTrsfOutObj.find(".btn-transferOut-search").trigger('click');
-		$innerTrsfInObj.find(".btn-transferIn-search").trigger('click');
-
-		//线路产品autocomplete
-		innerTransfer.chooseLineProduct("inner-TransferIn");
-		//部门autocomplete
-		innerTransfer.chooseBusinessGroup("inner-TransferOut","1");
-		innerTransfer.chooseBusinessGroup("inner-TransferIn","2");
-		//转客人autocomplete
-		innerTransfer.chooseCreator("inner-TransferOut","1");
-		innerTransfer.chooseCreator("inner-TransferIn","2");
-		//时间控件
-		innerTransfer.datePicker(tab);
-		//导出
-		$innerTrsfInObj.find(".btn-transfer-export").click(function(){
-			innerTransfer.$searchParam.type=2; 
-			var exportUrl ="" + innerTransfer.url("findExcel","view") + "&searchParam="+encodeURIComponent(JSON.stringify(innerTransfer.$searchParam));
-			window.location.href=exportUrl;
-		});
-		//导出操作 
-		$innerTrsfOutObj.find(".btn-transfer-export").click(function(){
-			innerTransfer.$searchParam.type=1; 
-			var exportUrl ="" + innerTransfer.url("findExcel","view") + "&searchParam="+encodeURIComponent(JSON.stringify(innerTransfer.$searchParam));
-			window.location.href=exportUrl;
-		});
-		$innerTrsfOutObj.find(".dropdown-menu a").click(function(){
-			$(this).closest('div').find("button").attr("data-value",$(this).attr("data-value"));
-			$(this).closest('div').find("span").text($(this).text());
-			var divId = "inner-TransferOut",
-				type = "1";
-			innerTransfer.getSearchParam(divId,type);
-			innerTransfer.innerList(divId,type,0);
-			innerTransfer.findTotal(divId);
-		})
-		$innerTrsfInObj.find(".dropdown-menu a").click(function(){
-			$(this).closest('div').find("button").attr("data-value",$(this).attr("data-value"));
-			$(this).closest('div').find("span").text($(this).text());
-			var divId = "inner-TransferIn",
-				type = "2";
-			innerTransfer.getSearchParam(divId,type);
-			innerTransfer.innerList(divId,type,0);
-			innerTransfer.findTotal(divId);
-		})
 	};
 	innerTransfer.getListPage = function(event){
 		var divId = event.data.divId,
@@ -129,11 +76,69 @@ define(function(require, exports) {
 					innerTransfer.allData.fromUser = JSON.parse(data.fromUser)
 					innerTransfer.allData.lineProduct = JSON.parse(data.lineProduct)
 					innerTransfer.allData.toBusinessGroup = JSON.parse(data.toBusinessGroup)
-					innerTransfer.allData.toUser = JSON.parse(data.toUser)
+					innerTransfer.allData.toUser = JSON.parse(data.toUser);
+					var html = listMainTemplate(innerTransfer.allData);
+					addTab(menuKey,"内转管理",html);
+
+					var tab = "tab-"+menuKey+"-content",
+						$innerTrsfOutObj=$('#inner-TransferOut');
+						$innerTrsfInObj=$('#inner-TransferIn');
+					//搜索 type:1 转出   type:2 转入
+					$innerTrsfOutObj.find(".T-transferOut-search").off("click").on("click",{divId:"inner-TransferOut",btn:"btn-transferOut-search",type:"1"},innerTransfer.getListPage);
+					$innerTrsfInObj.find(".T-transferIn-search").off("click").on("click",{divId:"inner-TransferIn",btn:"btn-transferIn-search",type:"2"},innerTransfer.getListPage);
+					//初始化列表
+					$innerTrsfOutObj.find(".T-transferOut-search").trigger('click');
+					$innerTrsfInObj.find(".T-transferIn-search").trigger('click');
+
+					//线路产品autocomplete
+					innerTransfer.chooseLineProduct("inner-TransferIn");
+					//部门autocomplete
+					innerTransfer.chooseBusinessGroup("inner-TransferOut","1");
+					innerTransfer.chooseBusinessGroup("inner-TransferIn","2");
+					//转客人autocomplete
+					innerTransfer.chooseCreator("inner-TransferOut","1");
+					innerTransfer.chooseCreator("inner-TransferIn","2");
+					//时间控件
+					innerTransfer.datePicker(tab);
+					//导出
+					$innerTrsfInObj.find(".T-transfer-export").click(function(){
+						innerTransfer.$searchParam.type=2; 
+						var exportUrl="" + KingServices.build_url("innerTransfer","findExcel") + "&searchParam="+encodeURIComponent(JSON.stringify(innerTransfer.$searchParam));
+						window.location.href=exportUrl;
+					});
+					//导出操作 
+					$innerTrsfOutObj.find(".T-transfer-export").click(function(){
+						innerTransfer.$searchParam.type=1;
+						var exportUrl="" + KingServices.build_url("innerTransfer","findExcel") + "&searchParam="+encodeURIComponent(JSON.stringify(innerTransfer.$searchParam));
+						window.location.href=exportUrl;
+					});
+					$innerTrsfOutObj.find(".dropdown-menu a").click(function(){
+						$(this).closest('div').find("button").attr("data-value",$(this).attr("data-value"));
+						$(this).closest('div').find("span").text($(this).text());
+						var divId = "inner-TransferOut",
+							type = "1";
+						innerTransfer.getSearchParam(divId,type);
+						innerTransfer.innerList(divId,type,0);
+						innerTransfer.findTotal(divId);
+					})
+					$innerTrsfInObj.find(".dropdown-menu a").click(function(){
+						$(this).closest('div').find("button").attr("data-value",$(this).attr("data-value"));
+						$(this).closest('div').find("span").text($(this).text());
+						var divId = "inner-TransferIn",
+							type = "2";
+						innerTransfer.getSearchParam(divId,type);
+						innerTransfer.innerList(divId,type,0);
+						innerTransfer.findTotal(divId);
+					})
 				}
 			}
 		});
 	};
+	/**
+	 * [findTotal 统计数据]
+	 * @param  {[type]} divId [description]
+	 * @return {[type]}       [description]
+	 */
 	innerTransfer.findTotal = function(divId){
 		$.ajax({
 			url:KingServices.build_url("innerTransfer","findTotal"),
@@ -156,6 +161,13 @@ define(function(require, exports) {
 			}
 		});
 	};
+	/**
+	 * [innerList 分页数据的详情]
+	 * @param  {[type]} divId [description]
+	 * @param  {[type]} type  [description]
+	 * @param  {[type]} page  [description]
+	 * @return {[type]}       [description]
+	 */
 	innerTransfer.innerList = function(divId,type,page){
 		innerTransfer.$searchParam.pageNo=page;
 		$.ajax({
@@ -327,6 +339,11 @@ define(function(require, exports) {
 			}
 		});
 	};
+	/**
+	 * [innitAddFee 新增费用项目的计算]
+	 * @param  {[type]} validator [description]
+	 * @return {[type]}           [description]
+	 */
 	innerTransfer.innitAddFee = function(validator){  
 		var $obj=$("#tab-arrange_inner_Transfer-edit-content");
 		$obj.find("input[name=transChildPrice],input[name=transAdultPrice],input[name=count],input[name=price]").keyup(function(){
@@ -598,7 +615,13 @@ define(function(require, exports) {
 		});
 	};
 	innerTransfer.chooseLineProduct = function(divId){
-		var chooseLineProduct = $("#"+divId).find(".T-lineProductChoose");
+		var chooseLineProduct = $("#"+divId).find(".T-lineProductChoose"),list;
+			list = innerTransfer.allData.lineProduct;
+			if(!!list && list.length > 0){
+				for(var i=0; i < list.length; i++){
+					list[i].value = list[i].name;
+				}				
+			}
 		chooseLineProduct.autocomplete({
 			minLength:0,
 			change :function(event, ui){
@@ -611,15 +634,10 @@ define(function(require, exports) {
 			select :function(event, ui){
 				var _this = this, parents = $(_this).parent();
 				parents.find("input[name=lineProductId]").val(ui.item.id).trigger('change');
-			}
+			},source:list
 		}).unbind("click").click(function(){
-			var obj = this,
-				list = innerTransfer.allData.lineProduct;
-			if(list && list.length > 0){
-				for(var i=0; i < list.length; i++){
-					list[i].value = list[i].name;
-				}
-				$(obj).autocomplete('option','source', list);
+			var obj = this;
+			if(!!list && list.length > 0){
 				$(obj).autocomplete('search', '');
 			}else{
 				layer.tips('没有内容', obj, {
@@ -630,7 +648,18 @@ define(function(require, exports) {
 		})
 	};
 	innerTransfer.chooseBusinessGroup = function(divId,type){
-		var chooseBusinessGroup = $("#"+divId).find(".T-businessGroupChoose");
+		var chooseBusinessGroup = $("#"+divId).find(".T-businessGroupChoose"),businessData;
+			if (type == 1) {
+				businessData = innerTransfer.allData.fromBusinessGroup;
+			}else{
+				businessData = innerTransfer.allData.toBusinessGroup;
+			}
+			var list = businessData;
+			if(!!list && list.length > 0){
+				for(var i=0; i < list.length; i++){
+					list[i].value = list[i].name;
+				}
+			}
 		chooseBusinessGroup.autocomplete({
 			minLength:0,
 			change :function(event, ui){
@@ -643,21 +672,10 @@ define(function(require, exports) {
 			select :function(event, ui){
 				var _this = this, parents = $(_this).parent();
 				parents.find("input[name=businessGroupId]").val(ui.item.id).trigger('change');
-			}
+			},source:list
 		}).unbind("click").click(function(){
-			var businessData;
-			if (type == 1) {
-				businessData = innerTransfer.allData.fromBusinessGroup;
-			}else{
-				businessData = innerTransfer.allData.toBusinessGroup;
-			}
-			var obj = this,
-				list = businessData;
-			if(list && list.length > 0){
-				for(var i=0; i < list.length; i++){
-					list[i].value = list[i].name;
-				}
-				$(obj).autocomplete('option','source', list);
+			var obj = this;
+			if(!!list && list.length > 0){
 				$(obj).autocomplete('search', '');
 			}else{
 				layer.tips('没有内容', obj, {
@@ -668,7 +686,18 @@ define(function(require, exports) {
 		})
 	};
 	innerTransfer.chooseCreator = function(divId,type){
-		var chooseCreator = $("#"+divId).find(".T-creatorChoose");
+		var chooseCreator = $("#"+divId).find(".T-creatorChoose"),creatorData;
+			if (type == 1) {
+				creatorData = innerTransfer.allData.fromUser;
+			}else{
+				creatorData = innerTransfer.allData.toUser;
+			}
+			var list = creatorData;
+			if(list && list.length > 0){
+				for(var i=0; i < list.length; i++){
+					list[i].value = list[i].realName;
+				}
+			}
 		chooseCreator.autocomplete({
 			minLength:0,
 			change :function(event, ui){
@@ -681,21 +710,10 @@ define(function(require, exports) {
 			select :function(event, ui){
 				var _this = this, parents = $(_this).parent();
 				parents.find("input[name=creatorId]").val(ui.item.id).trigger('change');
-			}
+			},source:list
 		}).unbind("click").click(function(){
-			var creatorData;
-			if (type == 1) {
-				creatorData = innerTransfer.allData.fromUser;
-			}else{
-				creatorData = innerTransfer.allData.toUser;
-			}
-			var obj = this,
-				list = creatorData;
-			if(list && list.length > 0){
-				for(var i=0; i < list.length; i++){
-					list[i].value = list[i].realName;
-				}
-				$(obj).autocomplete('option','source', list);
+			var obj = this;
+			if(!!list && list.length > 0){
 				$(obj).autocomplete('search', '');
 			}else{
 				layer.tips('没有内容', obj, {
