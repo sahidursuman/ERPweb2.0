@@ -65,7 +65,7 @@ define(function(require, exports) {
 	     */
 	    transfer.listMainHead=function(){
 	    	$.ajax({
-	    		url: transfer.url("findListInfo","view"),  
+	    		url: KingServices.build_url('transfer', 'findListInfo'),
 	    		type: 'POST',
 	    		dataType: 'JSON',
 	    		success:function(data){
@@ -319,7 +319,7 @@ define(function(require, exports) {
 	    };
 	    transfer.findTotal=function(divId){
 	    	$.ajax({
-	    		url: transfer.url("findTotal","view"),
+	    		url:KingServices.build_url("transfer","findTotal"),
 	    		type: 'POST',
 	    		dataType: 'JSON',
 	    		data: "searchParam="+encodeURIComponent(JSON.stringify(transfer.$searchParam)),
@@ -352,7 +352,7 @@ define(function(require, exports) {
 	    	transfer.$searchParam.pageNo=page;
 	    	transfer.$searchParam.type=type;
 	    	$.ajax({
-	    		url: transfer.url("findPager","view"),
+	    		url: KingServices.build_url('transfer', 'findPager'),
 	    		type: 'POST',
 	    		dataType: 'JSON',
 	    		data: "searchParam="+encodeURIComponent(JSON.stringify(transfer.$searchParam)),
@@ -435,7 +435,7 @@ define(function(require, exports) {
 	     */
 	    transfer.viewTransferOut=function(id){
 			$.ajax({
-				url: transfer.url("findMember","view"),
+				url:KingServices.build_url("transfer","findMember"),
 	    		type: 'POST',
 	    		dataType: 'JSON',
 				data:"id="+id+"",
@@ -477,7 +477,7 @@ define(function(require, exports) {
 						"class" : "btn btn-primary btn-minier",
 						click: function() {
 							$.ajax({
-								url:transfer.url("delete","delete"),
+								url:KingServices.build_url("transfer","delete"),
 								type:"POST",
 								data:"id="+id + "&isDelete=0",
 								dataType:"json",
@@ -506,7 +506,7 @@ define(function(require, exports) {
 		 */
 		transfer.updateTransferOut=function(id){
 			$.ajax({
-				url:transfer.url("edit","update"),
+				url: KingServices.build_url('transfer', 'edit'),
 				data:"id="+id+"", 
 				datatype:"JSON",
 				success:function(data){
@@ -632,7 +632,7 @@ define(function(require, exports) {
 		transfer.getPartnerAgencyList=function(obj,partnerAId){
 			var $obj = $(obj);
 			$.ajax({
-				url:transfer.partnerUrl("findPartnerAnencyList","view"),
+				url: KingServices.build_url('partnerAgency', 'findPartnerAnencyList'),
                 dataType: "JSON",
                 success:function(data){
 					var result = showDialog(data);
@@ -768,7 +768,7 @@ define(function(require, exports) {
 			}
 			var otherFee=JSON.stringify(otherFeeJsonAdd);
 			$.ajax({
-				url:transfer.url("update","update"),
+				url:KingServices.build_url("transfer","update"),
 				data:"id="+id+"&touristGroupTransfer="+JSON.stringify(saveDate.touristGroupTransfer)+"&transferFee="+JSON.stringify(saveDate.transferFee)+"&otherFee="+encodeURIComponent(otherFee),
 				datatype:"JSON",
 				success:function(data){
@@ -798,7 +798,7 @@ define(function(require, exports) {
 			$updateObj=$("#"+ tabIdOut).find('.updateTransfer');
 			if( id!=null && id!=""){
 				$.ajax({
-					url:transfer.url("deleteFee","delete"),
+					url:KingServices.build_url("transfer","deleteFee"),
 					type:"POST",
 					data:"id="+id,
 					dataType:"JSON",
@@ -823,7 +823,7 @@ define(function(require, exports) {
 		 */
 		transfer.viewTransferIn=function(id){
 			$.ajax({
-				url:transfer.url("findMember","view"),
+				url:KingServices.build_url("transfer","findMember"),
 				type:"POST",
 				data:"id="+id+"",
 				dataType:"JSON",
@@ -865,7 +865,7 @@ define(function(require, exports) {
 						"class" : "btn btn-primary btn-minier",
 						click: function() {
 							$.ajax({
-								url:transfer.url("refuse","view"),
+								url:KingServices.build_url("transfer","refuse"),
 								type:"POST",
 								data:"id="+id + "&isDelete=1",
 								dataType:"json",
@@ -896,7 +896,7 @@ define(function(require, exports) {
 		transfer.updateTransferIn=function(id){
 			var editTransferInTemplateLayer;
 			$.ajax({
-				url:transfer.url("edit","view"),
+				url:KingServices.build_url("transfer","edit"),
 				data:"id="+id+"", 
 				datatype:"json",
 				success:function(data){
@@ -975,7 +975,7 @@ define(function(require, exports) {
 		 */
 		transfer.searchLineProList=function(init,page,name,searchLineProLayer,$editTrsferInObj){
 				$.ajax({
-					url:transfer.lineProUrl("findAll","view"),
+					url:KingServices.url("lineProduct","findAll"),
 					data:"pageNo="+page+"&name="+name,
 					dataType:"json",
 					beforeSend:function(){
@@ -1054,19 +1054,5 @@ define(function(require, exports) {
 					}
 			    })
 		};
-	    //Ajax 请求url
-	    transfer.url = function(method,operation){
-		   return ""+APP_ROOT+"back/transfer.do?&method="+method+"&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation="+operation;
-	    };
-
-	    //Ajax 编辑我社转出同行地接
-	    transfer.partnerUrl=function(method,operation){
-	       return ""+APP_ROOT+"back/partnerAgency.do?&method="+method+"&token="+$.cookie("token")+"&menuKey="+pmenuKey+"&operation="+operation;
-	    };
-
-	    //Ajax 线路产品
-	    transfer.lineProUrl=function(method,operation){
-	    	return ""+APP_ROOT+"back/lineProduct.do?&method="+method+"&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation="+operation;
-	    };
     exports.init = transfer.initModule;
 });

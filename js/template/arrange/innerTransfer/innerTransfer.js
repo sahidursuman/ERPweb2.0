@@ -33,9 +33,6 @@ define(function(require, exports) {
 	innerTransfer.initModule = function(){
 		innerTransfer.innerTransferList();
 	};
-	innerTransfer.url = function(method,operation){
-		return ""+APP_ROOT+"back/innerTransfer.do?&method="+method+"&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation="+operation;
-	};
 	innerTransfer.innerTransferList = function(){
 		//请求下拉框数据
 		innerTransfer.ListMainHead();
@@ -122,7 +119,7 @@ define(function(require, exports) {
 	};
 	innerTransfer.ListMainHead = function(){
 		$.ajax({
-			url: innerTransfer.url("findListMain","view"),
+			url:KingServices.build_url("innerTransfer","findListMain"),
 			type: 'POST',
 			dataType: 'JSON',
 			success:function(data){
@@ -139,7 +136,7 @@ define(function(require, exports) {
 	};
 	innerTransfer.findTotal = function(divId){
 		$.ajax({
-			url: innerTransfer.url("findTotal","view"),
+			url:KingServices.build_url("innerTransfer","findTotal"),
 			type: 'POST',
 			dataType: 'JSON',
 			data: "searchParam="+encodeURIComponent(JSON.stringify(innerTransfer.$searchParam)),
@@ -162,7 +159,7 @@ define(function(require, exports) {
 	innerTransfer.innerList = function(divId,type,page){
 		innerTransfer.$searchParam.pageNo=page;
 		$.ajax({
-			url: innerTransfer.url("findPager","view"),
+			url:KingServices.build_url("innerTransfer","findPager"),
 			type: 'POST',
 			dataType: 'json',
 			data: "searchParam="+encodeURIComponent(JSON.stringify(innerTransfer.$searchParam)),
@@ -242,7 +239,7 @@ define(function(require, exports) {
 	};
 	innerTransfer.viewTransferOut = function(id,type){
 		$.ajax({  
-			url:innerTransfer.url("edit","view"),
+			url:KingServices.build_url("innerTransfer","edit"),
 			data:"id="+id,
 			dataType:'json',
 			success:function(data){
@@ -261,7 +258,7 @@ define(function(require, exports) {
 	};
 	innerTransfer.editTransferOut = function(id){
 		$.ajax({
-			url:innerTransfer.url("edit","view"),
+			url:KingServices.build_url("innerTransfer","edit"),
 			data:"id="+id,
 			dataType:'json',
 			success:function(data){
@@ -490,7 +487,7 @@ define(function(require, exports) {
 					"class" : "btn btn-primary btn-minier",
 					click: function() {
 							$.ajax({
-								url:innerTransfer.url("delete","delete"),
+								url:KingServices.build_url("innerTransfer","delete"),
 								type:"POST",
 								data:"id="+id + "&isDelete=1",
 								dataType:"json",
@@ -534,7 +531,7 @@ define(function(require, exports) {
 					click: function() {
 	
 						$.ajax({
-							url:innerTransfer.url("save","add"),
+							url:KingServices.build_url("innerTransfer","save"),
 							type:"POST",
 							data:"id="+id + "&isDelete=1",
 							dataType:"json",
@@ -577,7 +574,7 @@ define(function(require, exports) {
 					"class" : "btn btn-primary btn-minier",
 					click: function() {
 						$.ajax({
-							url:innerTransfer.url("refuse","delete"),
+							url:KingServices.build_url("innerTransfer","refuse"),
 							type:"POST",
 							data:"id="+id + "&isDelete=1",
 							dataType:"json",
@@ -731,7 +728,7 @@ define(function(require, exports) {
 		} 
 	}
 
-	exports.innerTransfer = innerTransfer.initModule;
+	exports.init = innerTransfer.initModule;
 	exports.isEdited = innerTransfer.isEdited; 
 	exports.save = innerTransfer.save; 
 	exports.clearEdit = innerTransfer.clearEdit; 
