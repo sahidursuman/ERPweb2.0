@@ -11,7 +11,8 @@ var listwidth = parseInt($("#tabList li").eq(0).css("width"));//ul总宽度，�
 var modals = {};
 var $tabList = $('#tabList'), $tabContent = $("#tabContent");
 var SWITCH_TAB_SAVE = 'switch.tab.save',
-	CLOSE_TAB_SAVE = 'close.tab.save';
+	CLOSE_TAB_SAVE = 'close.tab.save',
+	SWITCH_TAB_BIND_EVENT = 'switch.tab.bind_event';
 
 function addTab(tabId,tabName,html){
 	var $current_li = $tabList.find('.active'),
@@ -1585,7 +1586,7 @@ Tools.addTab = function(tab_id, tab_name, html)  {
 								},
 								function(){  // 不保存
 									updateTabContent();
-									$content.data('isEdited', false);
+									$content.data('isEdited', false).trigger(SWITCH_TAB_BIND_EVENT, [tab_id, tab_name, html]);
 								},
 								// 取消
 								false);
@@ -1743,7 +1744,7 @@ var KingServices = {};
  * @return {[type]}        [description]
  */
 KingServices.build_url = function(path,method){
-    return APP_ROOT+'back/'+path +'.do?method='+method+'&token='+$.cookie('token')+'';
+    return APP_ROOT+'back/'+path +'.do?method='+method+'&token='+$.cookie('token');
 };
 /**
  * 编辑中转安排——

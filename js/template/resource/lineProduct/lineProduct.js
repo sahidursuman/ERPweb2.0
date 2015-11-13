@@ -188,6 +188,18 @@ define(function(require, exports) {
 	ResLineProduct.updateLineProduct = function(id,clipboardMode){
 		if (!!id) {
 			// 编辑或者复制
+			var title = "修改线路产品", tab_id = menuKey + '-update';
+			if(clipboardMode){
+				title = "复制线路产品";
+				tab_id = menuKey + '-copy';
+			}
+
+			var $tab = $('#tab-'+ tab_id + '-content');
+			if ($tab.length && $tab.find('.T-btn-submit').data('id') == id) {	// 如果打开的是相同产品，则不替换
+				$('.tab-' + tab_id).children('a').trigger('click');
+				return;
+			}
+
 			$.ajax({
 	    		url: KingServices.build_url('lineProduct', 'getLineProductById'),
 				type:"POST",
@@ -210,12 +222,7 @@ define(function(require, exports) {
 								daysList : daysList
 						};
 						
-						data.viewLineProduct.clipboardMode = clipboardMode;
-						var title = "修改线路产品", tab_id = menuKey + '-update';
-						if(clipboardMode){
-							title = "复制线路产品";
-							tab_id = menuKey + '-copy';
-						}
+						data.viewLineProduct.clipboardMode = clipboardMode;				
 
 						ResLineProduct.tmpData.productId = id;
 						ResLineProduct.tmpData.type = clipboardMode;
@@ -227,7 +234,9 @@ define(function(require, exports) {
 							ResLineProduct.init_updata_tab(tab_id);							
 						}
 						// 绑定autocomplete
-						var $tab = $('#tab-'+ tab_id + '-content'),$dayListArea = $tab.find('.T-timeline-container');
+						$tab = $('#tab-'+ tab_id + '-content');
+						
+						var $dayListArea = $tab.find('.T-timeline-container');
 						ResLineProduct.bindRestaurantEvent($dayListArea.find('.T-choose-restaurantName'), $dayListArea.find('.T-choose-restaurantStandardsName'));
 						ResLineProduct.bindHotelEvent($dayListArea.find('.T-choose-hotelName'), $dayListArea.find('.T-choose-hotelRoom'), $dayListArea.find('.T-choose-hotelStarLevel'));
 						ResLineProduct.bindScenicEvent($dayListArea.find('.T-choose-scenicName'));
@@ -300,7 +309,8 @@ define(function(require, exports) {
 			var validator = rule.lineProductCheckor($tab);
 
 			// 监听修改
-			$tab.on('change', function(event) {
+			$tab.off('change').off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE)
+			.on('change', function(event) {
 				event.preventDefault();
 				$tab.data('isEdited', true);
 			})
@@ -308,6 +318,10 @@ define(function(require, exports) {
 			.on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
 				event.preventDefault();
 				ResLineProduct.saveProductData($tab, validator, [tab_id, title, html]);
+			})
+			.on(SWITCH_TAB_BIND_EVENT, function(event) {
+				event.preventDefault();
+				ResLineProduct.init_CRU_event($tab.find('.T-btn-submit').data('id'), $tab);
 			})
 			// 保存后关闭
 			.on(CLOSE_TAB_SAVE, function(event) {
