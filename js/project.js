@@ -576,7 +576,7 @@ function logout(){
 }
 
 function viewAllMsg(){
-	seajs.use("" + ASSETS_ROOT +"js/template/system/message/message.js",function(message){
+	seajs.use("" + ASSETS_ROOT +modalScripts['public_message'],function(message){
 		message.init();
 	});
 }
@@ -616,7 +616,8 @@ var modalScripts = {
 	//---------------------------------------------------------------------------------------------------------------
 	'public_message':"js/template/system/message/message.js",
 	'system_information':"js/template/system/information/information.js",
-	'system_user':"js/template/system/user/user.js"
+	'system_user':"js/template/system/user/user.js",
+	'system_department':"js/template/system/department/business.js"
 };
 
 
@@ -847,15 +848,15 @@ function listMenu(menuTemplate){
 				// 	});
 				// });
 
-				//绑定系统部门管理菜单功能
-				$("#sidebar .nav-list .system_department").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/system/department/business.js",function(business){
-						business.listBusiness(0, "");
-					});
-				});
+				// //绑定系统部门管理菜单功能
+				// $("#sidebar .nav-list .system_department").click(function(){
+				// 	$("#sidebar .nav-list li").removeClass("active");
+				// 	$(this).addClass("active");
+				// 	$(this).parent().parent().addClass("active");
+				// 	seajs.use("" + ASSETS_ROOT +"js/template/system/department/business.js",function(business){
+				// 		business.listBusiness(0, "");
+				// 	});
+				// });
 
 				//绑定系统旅行社
 				$("#sidebar .nav-list .system_travelAgency").click(function(){
