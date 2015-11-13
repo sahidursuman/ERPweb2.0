@@ -11,6 +11,7 @@ define(function(require, exports) {
     var groupDetailTemplate = require("./view/groupDetail");
     var Reimbursement = require("./view/Reimbursement");
     var outDetailTempLate = require("./view/outDetail");
+	var qualityTempLate = require("./view/quality");
     var uKey = menuKey + "-checkBill";
     
     var count = {
@@ -57,15 +58,15 @@ define(function(require, exports) {
                     "guideName":guideName,
                     "startTime":startTime,
                     "endTime":endTime,
-                    "billStatus":status,
+                    "billStatus":status
                 },
                 success: function(data) {
+
                     var result = showDialog(data);
                     if(result){
                         addTab(menuKey, "按团统计", listHeaderTemplate(data));
 						//count.getQueryTerms();
                          //分页控件
-                        
                         // 按照搜索条件，初始化报表
                         count.getlistCount(0,id, tripNumber,lineProductId,lineProductName,guideId,guideName,startTime,endTime,status);
                         // bind event
@@ -116,13 +117,15 @@ define(function(require, exports) {
                     layer.close(globalLoadingLayer);
                     var result = showDialog(data);
                     if(result){
-                    	
         				var tripPlanList = JSON.parse(data.tripPlanList);
                         data.tripPlanList = tripPlanList;
                         var html = listTableTemplate(data);
                         html = count.authFilter(html,data.tripPlanList);
                         $('.counterList').html(html);
-                        
+						//质量统计事件绑定
+						$('.T-quality').on('click', function() {
+							addTab(menuKey+"quality", "质量统计", qualityTempLate())
+						});
                       //搜索按钮事件
                         $(".main-content .financialCount .clearBlur").blur(function(){
                         	var a = $(this).next().val();
