@@ -602,6 +602,8 @@ var modalScripts = {
 	'resource_busCompany':"js/template/resource/busCompany/busCompany.js",
 	'resource_lineProduct': 'js/template/resource/lineProduct/lineProduct.js',
 	'resource_partnerAgency':'js/template/resource/partnerAgency/partnerAgency.js',
+	//-------------------------------------------发团管理模块---------------------------------------------------
+	'arrange_quote':'js/template/arrange/quote/quote.js',
 	//-------------------------------------------业务分析模块---------------------------------------------------
 	'business_analyst_saleProduct' : "js/template/businessAnalyst/saleProduct/saleProduct.js",//产品销量
 	'business_analyst_sourDstribution' : "js/template/businessAnalyst/sourDstribution/sourDstribution.js", //客源分布
@@ -1816,6 +1818,12 @@ KingServices.addSelfPay = function(fn){
 KingServices.addTicket = function(fn){
 	seajs.use("" + ASSETS_ROOT + modalScripts.resource_ticket,function(module){
 		module.addTicket(fn);
+	});
+}
+//报价  新增
+KingServices.addQuote = function(id){
+	seajs.use("" + ASSETS_ROOT + modalScripts.arrange_quote,function(module){
+		module.addQuote(id);
 	});
 }
 
