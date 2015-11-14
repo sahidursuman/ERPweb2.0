@@ -1,5 +1,5 @@
 <div class="col-xs-12">
-	<form class="form-horizontal touristGroupMainForm" role="form" style="margin-top:10px" onsubmit="return false">
+	<form class="form-horizontal touristGroupMainForm T-touristGroupMainForm" role="form" style="margin-top:10px" onsubmit="return false">
 		<div class=" ui-sortable-handle">
 				<h5 class="">
 					<label class="middle  title-size">小组信息</label>
@@ -119,7 +119,7 @@
 		</div>
 	</form>
 	
-	<form class="form-horizontal touristGroupMainForm" role="form" style="margin-top:10px" onsubmit="return false">
+	<form class="form-horizontal touristGroupMainForm T-touristGroupMainFormMember" role="form" style="margin-top:10px" onsubmit="return false">
 		<div class="form-group">
 			<div class="col-xs-12 col-sm-12 widget-container-col">
 				<div class=" ui-sortable-handle">
@@ -191,7 +191,7 @@
 												<th class="th-border">是否为联系人</th>
 											</tr>
 										</thead>
-										<tbody class="addTouristTbody">{{each touristGroupDetail.touristGroupMemberList as touristGroup}}  
+										<tbody class="T-addTouristTbody">{{each touristGroupDetail.touristGroupMemberList as touristGroup}}  
 											<tr data-entity-id="touristGroup.id">
 												<td></td>
 												<td>
@@ -227,7 +227,7 @@
 			</div>
 		</div>
 	</form>
-	<form class="form-horizontal touristGroupMainForm" role="form" style="margin-top:10px" onsubmit="return false">
+	<form class="form-horizontal touristGroupMainForm T-touristGroupMainFormRS" role="form" style="margin-top:10px" onsubmit="return false">
 		<div class="form-group">
 			<div class="col-xs-12 col-sm-12 widget-container-col">
 				<div class=" ui-sortable-handle">
@@ -248,7 +248,7 @@
 											</span>
 										</label>
 									</div>
-									<div class="col-sm-12 reception-div" style="padding-top:25px;">
+									<div class="col-sm-12 T-reception-div" style="padding-top:25px;">
 										<div class="form-group">
 											<label class="col-sm-3 control-label no-padding-right time">接待日期:</label>
 											<div class="col-sm-9">
@@ -301,7 +301,7 @@
 											</span>
 										</label>
 									</div>
-									<div class="col-sm-12 send-div" style="padding-top:25px;">
+									<div class="col-sm-12 T-send-div" style="padding-top:25px;">
 										<div class="form-group">
 											<label class="col-sm-3 control-label no-padding-right">送离日期:</label>
 											<div class="col-sm-9">
