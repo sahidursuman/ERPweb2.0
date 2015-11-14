@@ -43,9 +43,9 @@
 			<thead>
 				<tr class="bg-blur">
 					<th>餐厅名字</th>
-					<th>联系电话</th>
 					<th>联系人</th>
-					<th>餐厅地址</th>
+					<th>联系电话</th>
+					<th>所在地区</th>
 					<th>启用标志</th>
 					<th>操作</th>
 				</tr>
@@ -55,8 +55,8 @@
 				{{each restaurantList as restaurant}}
 					<tr class="restaurant-{{restaurant.id}}" data-id="{{restaurant.id}}">
 						<td>{{restaurant.name}}</td>
-						<td>{{restaurant.mobileNumber}}</td>
 						<td>{{restaurant.managerName}}</td>
+						<td>{{restaurant.mobileNumber}}</td>
 						<td>
 							{{if restaurant.province != null}}
 								{{restaurant.province.name}}

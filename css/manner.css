@@ -263,6 +263,21 @@ table tr td{
     top:0!important;
     left: 20px!important;
 }
+.newsMoreT{
+   position: absolute!important;
+    top:-13px !important;
+    left: -1px !important;  
+}
+.newsMore{
+    position: absolute!important;
+    top:33px !important;
+    left: -1px!important;
+}
+.newsMoreTh{
+  position: absolute!important;
+    top:80px !important;
+    left: 0px!important;   
+}
 .main-content {
     margin-top: 77px;
 }
