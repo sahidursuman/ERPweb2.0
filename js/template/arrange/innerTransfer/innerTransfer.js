@@ -165,7 +165,8 @@ define(function(require, exports) {
 		});
 	};
 	innerTransfer.innerList = function(divId,type,page){
-		innerTransfer.$searchParam.pageNo=page;
+		innerTransfer.$searchParam.pageNo = page;
+		innerTransfer.$searchParam.type = type;
 		$.ajax({
 			url: innerTransfer.url("findPager","view"),
 			type: 'POST',
