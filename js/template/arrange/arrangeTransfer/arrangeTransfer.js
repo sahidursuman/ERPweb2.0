@@ -73,7 +73,7 @@ define(function(require, exports) {
 						transfer.allData.user2 = JSON.parse(data.user2);
 
 						var html=listMainTemplate(transfer.allData);
-				    	addTab(menuKey,"转客管理",html);
+						Tools.addTab(menuKey,"转客管理",html);
 
 				    	transfer.$tab=$('#'+ tabId);
 				    	//初始化时间插件
@@ -445,7 +445,7 @@ define(function(require, exports) {
 						data.touristGroup =JSON.parse(data.touristGroup);
 						data.partnerAgency=JSON.parse(data.partnerAgency);
 						var html = viewTrsferOutTemplate(data);
-						addTab(menuKey+"-viewTransferOut","查看我社转出",html);
+						Tools.addTab(menuKey+"-viewTransferOut","查看我社转出",html);
 					}
 				}
 			});
@@ -510,125 +510,167 @@ define(function(require, exports) {
 					var result = showDialog(data);
 					if(result){	
 						data.touristGroupTransfer=JSON.parse(data.touristGroupTransfer);
-						var html = updateTransferOutTemplate(data);
-						addTab(menuKey+"-updateTransferOut","编辑我社转出",html);
+						var html = updateTransferOutTemplate(data),
+						    title="编辑我社转出",
+						    tab_id=menuKey+"-updateTransferOut";
 
-						//初始化编辑我社转出事件
-						transfer.initUpdateOutEvent(data);
+						// 初始化页面
+						if (Tools.addTab(tab_id, title, html)) {
+							transfer.init_updata_tab(tab_id,data);							
+						}
+
 					}
 				}
 			});
 		};
 
+
+	    /**
+	     * [init_updata_tab 为编辑我社转出绑定事件]
+	     * @param  {[type]} tab_id [description]
+	     * @param  {[type]} data   [description]
+	     * @return {[type]}        [description]
+	     */
+		transfer.init_updata_tab=function(tab_id,data){
+			var id=data.touristGroupTransfer.touristGroup.id,
+			 	$tab = $('#tab-'+ tab_id + '-content');
+			 	// 绑定页面事件
+		        transfer.init_CRU_event(id, $tab);
+		        $tab.find('.T-saveTransoutInfo').data('id', id);
+		};
+
+
 		/**
-		 * [initUpdateOutEvent 初始化编辑我社转出事件]
-		 * @param  {[type]} data [description]
+		 * [init_CRU_event 初始化Tab方法]
+		 * @param  {[type]} id   游客小组id
+		 * @param  {[type]} $tab 编辑我社转出页面ID
 		 * @return {[type]}      [description]
 		 */
-		transfer.initUpdateOutEvent=function(data){
-            var $obj=$("#"+ tabIdOut).find('.updateTransfer'),
-                partnerAId=data.touristGroupTransfer.partnerAgency.id,
-                validator=rule.transferCheckor($obj);//表单验证
+		transfer.init_CRU_event=function(id, $tab){
+			if (!!$tab && $tab.length === 1) {
+			var validator = rule.transferCheckor($tab);
+				// 监听修改
+				$tab.on('change', function(event) {
+					event.preventDefault();
+					$tab.data('isEdited', true);
+				})
+				// 监听保存，并切换tab
+				.on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
+					event.preventDefault();
+					transfer.saveUpdateTrsferOut($tab, validator, [tab_id, title, html]);
+				})
+				// 保存后关闭
+				.on(CLOSE_TAB_SAVE, function(event) {
+					event.preventDefault();
+					transfer.saveUpdateTrsferOut($tab, validator);
+				});
 
-			//查询所有同行地接
-			transfer.getPartnerAgencyList($obj.find(".T-choosePartnerAgency"),partnerAId);
-			//获取转态  
-			var statusVal=$obj.find("input[name=status]").val();
-			//给新增费用绑定事件
-			$obj.find(".T-transfer-addCost").click(function(){    
-				var html="<tr class=\"transferFee1SelectId\">"+
-				"<td><span name=\"type\" value=\"0\">其他费用</span></td>"+
-				"<td><input  name=\"discribe\" type=\"text\" class=\"col-sm-12  no-padding-right\" /></td>"+
-				"<td><input  name=\"count\" type=\"text\" maxlength=\"5\" class=\"col-sm-12  no-padding-right count\" /></td>"+
-				"<td><input  name=\"otherPrice\" type=\"text\" maxlength=\"11\" class=\"col-sm-12  no-padding-right price\" /></td>"+
-				"<td><a class=\"cursor T-updateTransfer-delete\">删除</a></td>"+
-				"</tr>";
-				$obj.find(".T-addTransferCost").append(html);
-				
-				// 更新表单验证的事件绑定
-				validator = rule.update(validator);   
-				
-				//绑定删除分团转客信息
+				//为新增费用绑定事件
+			    $tab.find('.T-transfer-addCost').on('click', function(event) {
+			    	event.preventDefault();
+			    	/* Act on the event */
+			    	transfer.newAddFee($tab ,validator);
+			    });
+
+			    //重新计算
+			    transfer.PayMoneyF($tab);
+
+			    //数量&&价格change事件
+				$tab.find(".count").on('change',function(event) {
+					event.preventDefault();
+					/* Act on the event */
+					transfer.PayMoneyF($tab);
+				});
+
+				$tab.find(".price").on('change',function(event) {
+					event.preventDefault();
+					/* Act on the event */
+					transfer.PayMoneyF($tab);
+				});
+
+				//同行地接
+				transfer.getPartnerAgencyList($tab.find(".T-choosePartnerAgency"),id);
+
+				//绑定分团转客信息
+				$tab.find('.T-saveTransoutInfo').on('click', function(event) {
+					event.preventDefault();
+					/* Act on the event */
+					// 表单校验
+					if (!validator.form()) { return; }
+					transfer.saveUpdateTrsferOut($tab,1); 
+				});
+
+				//取消关闭Tab
+				$tab.find('.T-cancelTransfer').on('click', function(event) {
+					event.preventDefault();
+					/* Act on the event */
+					Tools.closeTab(Tools.getTabKey($tab.prop('id')));	
+				});
+
+
+				//逻辑删除与及时删除
 				$(".T-updateTransfer-delete").off().on("click",function(){
 					var $that=$(this),
 					    $tr=$that.closest('tr');
 					var id = $tr.attr("data-entity-id");
-					transfer.delTransferData(id,$tr);
+					transfer.delTransferData(id,$tr,$tab);
 				});
-				//其他费用数量
-				$obj.find("input[name=count]").keyup(function(){
-					transfer.PayMoneyF();
-				});
-				//其他费用单价
-				$obj.find("input[name=otherPrice]").keyup(function(){
-					transfer.PayMoneyF();
-				});
-				
-				//新增其他费用选项
-				$obj.find(".addOrOtherSelect").change(function(){
-					transfer.PayMoneyF();
-				})
 
-				//重新计算
-				transfer.PayMoneyF();
-
-			});
-			//成人数量
-			$obj.find("input[name=transChildPrice]").keyup(function(){
-				transfer.PayMoneyF();	
-			});
-			
-			//成人单价
-			$obj.find("input[name=transAdultPrice]").keyup(function(){
-				transfer.PayMoneyF();
-			});
-	
-			//删除有费用的id记录
-			$obj.find(".T-updateTransfer-delete").click(function(){
-				var $that=$(this),
-					$tr=$that.closest('tr'),
-				    id =$tr.attr("data-entity-id");
-				transfer.delTransferData(id,$tr);
-				transfer.PayMoneyF();	
-			});
-
-			//绑定修改分团转客信息
-			$obj.find(".T-saveTransoutInfo").click(function(){
-				// 表单校验
-				if (!validator.form()) { return; }
-				transfer.saveUpdateTrsferOut($obj,1);  
-			});
-			
-			//取消分团转客信息
-			$obj.find(".T-cancelTransfer").click(function(){
-				closeTab(menuKey+"-updateTransferOut");
-			});
-		
-			//已付keyup事件
-			$obj.find("input[name=transPayedMoney]").keyup(function(){
-				transfer.PayMoneyF();
-			});
-			//其他费用数量
-			$obj.find("input[name=count]").keyup(function(){ 
-				transfer.PayMoneyF();
-			});
-			//其他费用价格
-			$obj.find("input[name=otherPrice]").keyup(function(){
-				transfer.PayMoneyF();
-			});
-			//新增其他费用选项
-			$obj.find(".addOrOtherSelect").change(function(){
-				transfer.PayMoneyF();
-			});
+		    }
 		};
 
+
 		/**
-		 * [getPartnerAgencyList 同行地接下拉数据Autocomplate]
-		 * @param  {[type]} obj        [description]
-		 * @param  {[type]} partnerAId [description]
-		 * @return {[type]}            [description]
+		 * [newAddFee 给新增费用绑定事件]
+		 * @param  {[type]} $tab      [description]
+		 * @param  {[type]} validator [description]
+		 * @return {[type]}           [description]
 		 */
-		transfer.getPartnerAgencyList=function(obj,partnerAId){
+		transfer.newAddFee=function($tab,validator){
+		  var html="<tr class=\"transferFee1SelectId\">"+
+			"<td><span name=\"type\" value=\"0\">其他费用</span></td>"+
+			"<td><input  name=\"discribe\" type=\"text\" class=\"col-sm-12  no-padding-right\" /></td>"+
+			"<td><input  name=\"count\" type=\"text\" maxlength=\"5\" class=\"col-sm-12  no-padding-right count\" /></td>"+
+			"<td><input  name=\"otherPrice\" type=\"text\" maxlength=\"11\" class=\"col-sm-12  no-padding-right price\" /></td>"+
+			"<td><a class=\"cursor T-updateTransfer-delete\">删除</a></td>"+
+			"</tr>";
+			$tab.find(".T-addTransferCost").append(html);
+			
+			// 更新表单验证的事件绑定
+			validator = rule.update(validator);   
+			
+			//绑定删除分团转客信息
+			$(".T-updateTransfer-delete").off().on("click",function(){
+				var $that=$(this),
+				    $tr=$that.closest('tr');
+				var id = $tr.attr("data-entity-id");
+				transfer.delTransferData(id,$tr,$tab);
+			});
+
+			$tab.find(".count").on('change',function(event) {
+				event.preventDefault();
+				/* Act on the event */
+				transfer.PayMoneyF($tab);
+			});
+
+			$tab.find(".price").on('change',function(event) {
+				event.preventDefault();
+				/* Act on the event */
+				transfer.PayMoneyF($tab);
+			});
+
+			//重新计算
+			transfer.PayMoneyF($tab);
+
+		};
+
+
+		/**
+		 * [getPartnerAgencyList 同行地接下拉数据]
+		 * @param  {[type]} obj [description]
+		 * @return {[type]}     [description]
+		 */
+		transfer.getPartnerAgencyList=function(obj){
 			var $obj = $(obj);
 			$.ajax({
 				url: KingServices.build_url('partnerAgency', 'findPartnerAnencyList'),
@@ -663,15 +705,13 @@ define(function(require, exports) {
 
 		/**
 		 * [PayMoneyF 付款账务--应付/现付/已付的计算]
-		 */
-		transfer.PayMoneyF=function(){
-			var $obj=$("#"+ tabIdOut).find('.updateTransfer');
-			var needPayMoney = 0;
-			
-			var transNeedPayAllMoney = $obj.find("input[name=transNeedPayAllMoney]");//应付
-			var transPayedMoney = $obj.find("input[name=transPayedMoney]"); //已付
-			var transCurrentPM = $obj.find("input[name=transCurrentPayedMoney]"); //现付
-			var trList = $(".addTransferCostTable tbody.addTransferCost").find("tr");
+		 */ 
+		transfer.PayMoneyF=function($tab){
+			var needPayMoney = 0,
+			    transNeedPayAllMoney = $tab.find("input[name=transNeedPayAllMoney]"),//应付
+			    transPayedMoney = $tab.find("input[name=transPayedMoney]"), //已付
+			    transCurrentPM = $tab.find("input[name=transCurrentPayedMoney]"), //现付
+			    trList = $tab.find("tbody.T-addTransferCost").find("tr");
 						
 			for(i=0;i<trList.length;i++){
 				var a =parseFloat(trList.eq(i).find(".count").val());
@@ -699,6 +739,7 @@ define(function(require, exports) {
 			}
 			transCurrentPM.val(transCurrent);
 		};
+
 
 		/**
 		 * 编辑保存转客信息
@@ -770,7 +811,8 @@ define(function(require, exports) {
 				data:"id="+id+"&touristGroupTransfer="+JSON.stringify(saveDate.touristGroupTransfer)+"&transferFee="+JSON.stringify(saveDate.transferFee)+"&otherFee="+encodeURIComponent(otherFee),
 				success:function(data){
 					var result = showDialog(data);  
-					if(result){  
+					if(result){
+					    $obj.data('isEdited', false);
 						showMessageDialog($( "#confirm-dialog-message" ),data.message);
 						if(isClose == 1){
 							closeTab(menuKey+"-updateTransferOut");
@@ -779,6 +821,20 @@ define(function(require, exports) {
 							transfer.getSearchParam(divId,type);
 							transfer.findPager(divId,type,0);
 						}
+						/*
+						if (!!tabArgs && tabArgs.length === 3) {
+							// 切换tab，就不做数据更新
+							Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
+
+							transfer.init_updata_tab(tabArgs[0]);
+						} else {
+							var divId="Transfer-Out",
+							    type="1";
+							    transfer.getSearchParam(divId,type);
+							    transfer.findPager(divId,type,0);	
+							Tools.closeTab(Tools.getTabKey($tab.prop('id')));						
+						}
+						 */
 						
 					}
 				}
@@ -786,12 +842,12 @@ define(function(require, exports) {
 		};
 
 		/**
-		 * 删除添加其他费用
-		 * @param  {[type]} id  [description]
-		 * @param  {[type]} $tr [description]
+		 * 逻辑删除&&及时删除
+		 * @param  {[type]} id  费用Id
+		 * @param  {[type]} $tr f行对象
 		 * @return {[type]}     [description]
 		 */
-		transfer.delTransferData=function(id,$tr){
+		transfer.delTransferData=function(id,$tr,$tab){
 			$updateObj=$("#"+ tabIdOut).find('.updateTransfer');
 			if( id!=null && id!=""){
 				$.ajax({
@@ -800,14 +856,14 @@ define(function(require, exports) {
 					data:"id="+id,
 					success:function(data){
 						$tr.remove();
-						transfer.PayMoneyF();
+						transfer.PayMoneyF($tab);
 					}
 				});	
 			}else{
 				//移除空的其他费用
-				$updateObj.find(".transferFee1SelectId").click(function(){
+				$tab.find(".transferFee1SelectId").click(function(){
 					var $that=$(this);
-					    $that.remove();transfer.PayMoneyF();
+					    $that.remove();transfer.PayMoneyF($tab);
 				});
 			}
 		};
@@ -829,7 +885,7 @@ define(function(require, exports) {
 						data.touristGroup =JSON.parse(data.touristGroup);
 						data.partnerAgency=JSON.parse(data.partnerAgency);
 						var html = viewTransferInTemplate(data);
-						addTab(menuKey+"-viewTransferIn","查看同行转入",html);
+						Tools.addTab(menuKey+"-viewTransferIn","查看同行转入",html);
 					}
 				}
 			});	

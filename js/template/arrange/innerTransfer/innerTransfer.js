@@ -77,7 +77,7 @@ define(function(require, exports) {
 					innerTransfer.allData.toBusinessGroup = JSON.parse(data.toBusinessGroup)
 					innerTransfer.allData.toUser = JSON.parse(data.toUser);
 					var html = listMainTemplate(innerTransfer.allData);
-					addTab(menuKey,"内转管理",html);
+					Tools.addTab(menuKey,"内转管理",html);
 
 					var tab = "tab-"+menuKey+"-content",
 						$innerTrsfOutObj=$('#inner-TransferOut');
@@ -256,9 +256,9 @@ define(function(require, exports) {
 				var html = viewTemplate(data);
 				var outViewTemplate = innerTransferOut(data);
 				if(type == 1){
-					addTab(menuKey+"-outView","我部转出小组信息",html);
+					Tools.addTab(menuKey+"-outView","我部转出小组信息",html);
 				}else{
-					addTab(menuKey+"-inView","他部转入小组信息",outViewTemplate);
+					Tools.addTab(menuKey+"-inView","他部转入小组信息",outViewTemplate);
 				}
 				
 			}
@@ -274,33 +274,40 @@ define(function(require, exports) {
 				var result = showDialog(data);
 				if (result) {
 					var html = editTemplate(data),validator,
-					$editObj=$("#tab-arrange_inner_Transfer-edit-content");
+					    title="修改内转信息",
+					    tab_id=menuKey+"-edit";
+						//Tools.addTab(menuKey+"-edit","修改内转信息",html);
+						//初始化Tab
+						if (Tools.addTab(tab_id,title,html)) {
+							innerTransfer.init_updata_tab(tab_id,data);
+						};
 
-					if($("#tab-"+menuKey+"-edit-content").length > 0) {
-						addTab(menuKey+"-edit","修改内转信息");
+					//$editObj=$("#tab-arrange_inner_Transfer-edit-content");
+
+					/*if($("#tab-"+menuKey+"-edit-content").length > 0) {
+						Tools.addTab(menuKey+"-edit","修改内转信息",html);
 						if(!!innerTransfer.edited["edit"] && innerTransfer.edited["edit"] != ""){
-							addTab(menuKey+"-edit","修改内转信息");
+						    Tools.addTab(menuKey+"-edit","修改内转信息",html);
 							rule.transferCheckor($editObj);
 							showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
 								 innerTransfer.saveEditTranIn(0);
 								 innerTransfer.edited["edit"] = "";
-								 addTab(menuKey+"-edit","修改内转信息",html);
+						         Tools.addTab(menuKey+"-edit","修改内转信息",html);
 								 validator=rule.transferCheckor($editObj);
 					
 							 },function(){
-								 addTab(menuKey+"-edit","修改内转信息",html);
+						         Tools.addTab(menuKey+"-edit","修改内转信息",html);
 								 innerTransfer.edited["edit"] = "";
 								 validator=rule.transferCheckor($editObj);
 						
 							 });
 						 }else{
-							addTab(menuKey+"-edit","修改内转信息",html);
+						   Tools.addTab(menuKey+"-edit","修改内转信息",html);
 							validator=rule.transferCheckor($editObj);
 						
 						 }
 					}else{
-						addTab(menuKey+"-edit","修改内转信息",html);
-
+						Tools.addTab(menuKey+"-edit","修改内转信息",html);
 						$editObj=$("#tab-arrange_inner_Transfer-edit-content");
 						validator=rule.transferCheckor($editObj);
 					}
@@ -329,16 +336,142 @@ define(function(require, exports) {
 							closeTab(menuKey + "-edit");
 							innerTransfer.edited["edit"] = "";
 						});
-					})
+					})*/
 				}
 			}
 		});
 	};
+
+    /**
+     * [init_updata_tab 为Tab编辑页面绑定事件]
+     * @param  {[type]} tab_id [description]
+     * @param  {[type]} data   [description]
+     * @return {[type]}        [description]
+     */
+	innerTransfer.init_updata_tab=function(tab_id,data){
+		var id=data.innerTransfer.touristGroup.id,
+		    $tab=$('#tab-'+ tab_id + '-content');
+		    //绑定所有事件
+		    innerTransfer.init_CRU_event(id,$tab);
+
+	};
+
+	/**
+	 * [init_CRU_event 我部转出编辑页面绑定事件]
+	 * @param  {[type]} id   内转小组ID
+	 * @param  {[type]} $tab [description]
+	 * @return {[type]}      [description]
+	 */
+	innerTransfer.init_CRU_event=function(id,$tab){
+		if (!!$tab && $tab.length === 1) {
+			var validator = rule.transferCheckor($tab);
+				// 监听修改
+				$tab.on('change', function(event) {
+					event.preventDefault();
+					$tab.data('isEdited', true);
+				})
+				// 监听保存，并切换tab
+				.on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
+					event.preventDefault();
+					innerTransfer.saveUpdateTrsferOut($tab, validator, [tab_id, title, html]);
+				})
+				// 保存后关闭
+				.on(CLOSE_TAB_SAVE, function(event) {
+					event.preventDefault();
+					innerTransfer.saveUpdateTrsferOut($tab, validator);
+				});
+
+				//为新增费用绑定事件
+			    $tab.find('.T-transfer-addCost').on('click', function(event) {
+			    	event.preventDefault();
+			    	/* Act on the event */
+			    	innerTransfer.innitAddFee($tab ,validator);
+			    });
+
+			    //重新计算
+			    innerTransfer.PayMoneyF($tab);
+
+			    //数量&&价格change事件
+				$tab.find(".count").on('change',function(event) {
+					event.preventDefault();
+					/* Act on the event */
+					innerTransfer.PayMoneyF($tab);
+				});
+				$tab.find(".price").on('change',function(event) {
+					event.preventDefault();
+					/* Act on the event */
+					innerTransfer.PayMoneyF($tab);
+				});
+
+				//绑定分团转客信息
+				$tab.find('.T-saveTransoutInfo').on('click', function(event) {
+					event.preventDefault();
+					/* Act on the event */
+					// 表单校验
+					if (!validator.form()) { return; }
+					innerTransfer.saveEditTranIn($tab,1); 
+				});
+
+				//取消关闭Tab
+				$tab.find('.T-cancelTransfer').on('click', function(event) {
+					event.preventDefault();
+					/* Act on the event */
+					Tools.closeTab(Tools.getTabKey($tab.prop('id')));	
+				});
+
+				//物理删除与及时删除
+				$tab.find('.T-edittransfer-delete').off().on("click",function(){
+					var $tr =$(this).closest('tr'),id = $tr.attr("data-entity-id");
+					innerTransfer.delTransferData(id,$tr,$tab);
+				});
+
+		}
+	};
+
+    /**
+     * [innitAddFee 新增费用项目]
+     * @param  {[type]} $tab      [description]
+     * @param  {[type]} validator [description]
+     * @return {[type]}           [description]
+     */
+	innerTransfer.innitAddFee=function($tab,validator){
+		var html="<tr class=\"transferFee1SelectId\">"+
+			"<td><span name=\"type\" value=\"0\">其他费用</span></td>"+
+			"<td><input  name=\"discribe\" type=\"text\" class=\"col-sm-10  no-padding-right\"  maxlength=\"100\" /></td>"+
+			"<td><input  name=\"count\" type=\"text\" class=\"col-sm-10  no-padding-right count\" maxlength=\"6\" /></td>"+
+			"<td><span class=\"necessary  pull-left col-sm-2\"></span><input  name=\"price\" type=\"text\" class=\"col-sm-10  no-padding-right price\" maxlength=\"9\" /></td>"+
+			"<td><a class=\"cursor T-edittransfer-delete\">删除</a></td>"+
+			"</tr>";
+			$tab.find(".addTransferCost").append(html);
+			//表单验证
+			rule.update(validator);
+
+			//绑定删除分团转客信息
+			$(".T-edittransfer-delete").off().on("click",function(){
+				var $tr =$(this).closest('tr'),id = $tr.attr("data-entity-id");
+				innerTransfer.delTransferData(id,$tr,$tab);
+			});
+
+			//重新计算
+			$tab.find('.count').on('change',function(event) {
+				event.preventDefault();
+				/* Act on the event */
+				innerTransfer.PayMoneyF($tab);
+			});
+
+			//重新计算
+			$tab.find('.price').on('change',function(event) {
+				event.preventDefault();
+				/* Act on the event */
+				innerTransfer.PayMoneyF($tab);
+			});
+
+	};
+
 	/**
 	 * [innitAddFee 新增费用项目的计算]
 	 * @param  {[type]} validator [description]
 	 * @return {[type]}           [description]
-	 */
 	innerTransfer.innitAddFee = function(validator){  
 		var $obj=$("#tab-arrange_inner_Transfer-edit-content");
 		$obj.find("input[name=transChildPrice],input[name=transAdultPrice],input[name=count],input[name=price]").keyup(function(){
@@ -369,17 +502,16 @@ define(function(require, exports) {
 				innerTransfer.PayMoneyF();
 			})
 		});
-	};
+	};*/
+
 	/**
 	 * [PayMoneyF 支付账务的计算]
 	 */
-	innerTransfer.PayMoneyF = function(){
-		var $objFee=$("#tab-arrange_inner_Transfer-edit-content");
-		var $obj=$(".addTransferCostTable"); 
-		var needPayMoney = 0;
-		var transNeedPayMoney = $objFee.find("input[name=transNeedPayMoney]");//应付
-		var transPayedMoney = $obj.find("input[name=transPayedMoney]"); //已付
-		var trList = $(".addTransferCostTable tbody.addTransferCost").find("tr");
+	innerTransfer.PayMoneyF = function($tab){
+		var needPayMoney = 0,
+			transNeedPayMoney = $tab.find("input[name=transNeedPayMoney]"),//应付
+			transPayedMoney = $tab.find("input[name=transPayedMoney]"), //已付
+			trList = $tab.find("tbody.addTransferCost").find("tr");
 					
 		for(i=0;i<trList.length;i++){
 			var a =parseFloat(trList.eq(i).find(".count").val());
@@ -397,12 +529,12 @@ define(function(require, exports) {
 	};
 
 	/**
-	 * [delTransferData 根据Id判定是物理删除&&及时删除]
+	 * delTransferData 根据Id判定是物理删除&&及时删除
 	 * @param  {[type]} id  [description]
 	 * @param  {[type]} $tr [description]
 	 * @return {[type]}     [description]
 	 */
-	innerTransfer.delTransferData = function(id,$tr){
+	innerTransfer.delTransferData = function(id,$tr,$tab){
 		if( id!=null && id!=""){
 			$.ajax({
 				url:innerTransfer.url("deleteFee","delete"),
@@ -410,17 +542,17 @@ define(function(require, exports) {
 				data:"id="+id,
 				success:function(data){
 					$tr.remove();
-					innerTransfer.PayMoneyF();
+					innerTransfer.PayMoneyF($tab);
 				}
 			});	
 		}else{
 			//移除空的其他费用
 			$tr.remove();
-			innerTransfer.PayMoneyF();
+			innerTransfer.PayMoneyF($tab);
 		}
 	}
-	innerTransfer.saveEditTranIn = function(isClose){
-		var $obj=$("#tab-arrange_inner_Transfer-edit-content")
+	innerTransfer.saveEditTranIn = function($tab,isClose){
+		var $obj=$tab;
 		function getValParam (name){
 			var val = $obj.find("[name="+name+"]").val();
 			return val;
