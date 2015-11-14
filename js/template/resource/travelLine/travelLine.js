@@ -241,7 +241,6 @@ define(function(require, exports) {
 		if (!!id) {
 			$.ajax({
 				url: KingServices.build_url('travelLine', 'getTravelLineById'),
-	    		// url:""+APP_ROOT+"back/travelLine.do?method=getTravelLineById&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 				type:"POST",
 				data:{ id: id},
 				success:function(data){
@@ -254,7 +253,6 @@ define(function(require, exports) {
 							var scheduleId = $(this).data('id');
 
 					    	$.ajax({
-					    		// url:""+APP_ROOT+"back/travelLine.do?method=getTravelLineDayById&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 					    		url: KingServices.build_url('travelLine', 'getTravelLineDayById'),
 								type:"POST",
 								data: {id : scheduleId},
