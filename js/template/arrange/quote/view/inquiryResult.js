@@ -1,0 +1,4 @@
+/*TMODJS:{"debug":true,"version":11,"md5":"eb7089f9fdb13714ad64b28daf130d72"}*/
+define(function(require) {
+    return require("../../../template")("arrange/quote/view/inquiryResult", '<div class="row col-xs-12"> <div class="tabbable"> <ul class="nav nav-tabs" id="inquiryTab"> <li class="active"> <a data-toggle="tab" href="#busInquiryResult" class="busInquiryResult" aria-expanded="false" data-value="1"> 车 </a> </li> <li> <a data-toggle="tab" href="#hotelInquiryContent" class="hotelInquiryContent" aria-expanded="true" data-value="2"> 房 </a> </li> </ul> <div class="tab-content" style="position:relative;top: -2px">  <div id="busInquiryResult" class="tab-pane fade active in clearfix"> 1 </div>  <div id="hotelInquiryContent" class="tab-pane fade clearfix"> 2 </div> </div> </div> </div> ');
+});

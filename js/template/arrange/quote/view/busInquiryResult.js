@@ -1,0 +1,4 @@
+/*TMODJS:{"debug":true,"version":6,"md5":"db9bd8d8400bd21868e41cb83cbbd3f0"}*/
+define(function(require) {
+    return require("../../../template")("arrange/quote/view/busInquiryResult", '<div class="col-xs-12"> <table class="table table-striped table-bordered table-hover"> <thead> <tr class="bg-blur"> <th>线路产品</th> <th>出游日期</th> <th>需求内容</th> <th>车队</th> <th>车费报价</th> <th>反馈内容</th> <th>资源保留期</th> <th>询价截止期</th> <th>询价状态</th> <th>操作</th> </tr> </thead> <tbody> <tr> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td> </tr> </tbody> </table> </div>');
+});
