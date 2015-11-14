@@ -620,7 +620,11 @@ var modalScripts = {
 	'public_message':"js/template/system/message/message.js",
 	'system_information':"js/template/system/information/information.js",
 	'system_user':"js/template/system/user/user.js",
-	'system_department':"js/template/system/department/business.js"
+	'system_department':"js/template/system/department/business.js",
+	'arrange_transfer':"js/template/arrange/arrangeTransfer/arrangeTransfer.js",  //转客管理
+	'arrange_inner_Transfer':"js/template/arrange/innerTransfer/innerTransfer.js",
+	'arrange_orderManage':"js/template/arrange/orderManage/orderManage.js"
+
 };
 
 
@@ -1101,7 +1105,7 @@ function listMenu(menuTemplate){
 				});
 
 				//绑定转客管理菜单功能
-				$("#sidebar .nav-list .arrange_transfer").click(function(){
+				/*$("#sidebar .nav-list .arrange_transfer").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
@@ -1109,11 +1113,11 @@ function listMenu(menuTemplate){
 						transfer.getlistTransferSumData(0,"","","","","","",2);
 						modals["arrange_transfer"] = transfer;
 					});
-				});
+				});*/
 
 
 				//绑定内转管理菜单功能
-				$("#sidebar .nav-list .arrange_inner_Transfer").click(function(){
+				/*$("#sidebar .nav-list .arrange_inner_Transfer").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
@@ -1125,12 +1129,12 @@ function listMenu(menuTemplate){
 							}
 						inner.list(searchParam);
 						modals["arrange_inner_Transfer"] = inner;
-					});*/
+					});
 					seajs.use("" + ASSETS_ROOT +"js/template/arrange/innerTransfer/innerTransfer.js",function(innerTransfer){ 
 						innerTransfer.innerTransfer();
 						modals["arrange_inner_Transfer"] = innerTransfer;
 					});
-				});
+				});*/
 
 
 				//绑定按团统计菜单功能

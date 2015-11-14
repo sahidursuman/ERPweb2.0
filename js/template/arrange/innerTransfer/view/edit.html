@@ -55,7 +55,7 @@
 	 <div class="search-area">       
 		<!-- 新增费用项目 -->
 		<div class="col-sm-8">
-			<button class="btn btn-sm btn-success btn-transfer-addCost pull-left">
+			<button class="btn btn-sm btn-success T-transfer-addCost pull-left">
 				<i class="ace-icon fa fa-plus"></i> 新增费用项
 			</button>
 		</div>
@@ -98,7 +98,7 @@
 				<td><input  name="discribe" type="text" class="col-sm-10  no-padding-right" maxlength="100" value="{{rs.discribe}}" /></td>
 				<td><input  name="count" type="text" class="col-sm-10  no-padding-right count" maxlength="6" value="{{rs.count}}" /></td>
 				<td><span class="necessary  pull-left col-sm-2"></span><input  name="price" type="text" maxlength="9" class="col-sm-10  no-padding-right price" value="{{rs.price}}" /></td>
-				<td><a class="cursor btn-edittransfer-delete">删除</a></td>
+				<td><a class="cursor T-edittransfer-delete">删除</a></td>
 			</tr>
 		{{/each}}
 
@@ -279,10 +279,10 @@
 	</form>
 	<form class="form-horizontal globalAdd" role="form" onsubmit="return false"> 
 		<div class="form-group" style="text-align: center;">
-		    <button class="btn btn-danger btn-cancelTransfer"> 
+		    <button class="btn btn-danger T-cancelTransfer">
 				<i class="ace-icon fa fa-times"></i> 取消
 			</button> 
-			<button class="btn btn-primary btn-saveTransoutInfo"> 
+			<button class="btn btn-primary T-saveTransoutInfo">
 			    <i class="ace-icon fa fa-check"></i> 保存 
 			</button> 
 		</div> 
