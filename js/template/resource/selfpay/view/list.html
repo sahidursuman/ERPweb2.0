@@ -53,10 +53,11 @@
 			<thead>
 				<tr class="bg-blur">
 					<th class="col-sm-3">公司名称</th>
-					<th class="col-sm-1">公司电话</th>
-					<th class="col-sm-3">地区</th>
+					
 					<th class="col-sm-1">联系人</th>
 					<th class="col-sm-1">联系电话</th>
+					<th class="col-sm-1">公司电话</th>
+					<th class="col-sm-3">地区</th>
 					<th class="col-sm-1">启用标志</th>
 					<th class="col-sm-2">操作</th>
 				</tr>
@@ -66,6 +67,9 @@
 				{{each selfPayList as selfpay}}
 					<tr data-entity-id="{{selfpay.id}}">
 					 	<td>{{selfpay.name}}</td>
+						
+						<td>{{selfpay.managerName}}</td>	
+						<td>{{selfpay.mobileNumber}}</td>
 						<td>{{selfpay.telNumber}}</td> 
 						<td>
 							{{if selfpay.province != null}}
@@ -79,8 +83,6 @@
 							{{/if}}		
 						
 						</td>
-						<td>{{selfpay.managerName}}</td>	
-						<td>{{selfpay.mobileNumber}}</td>
 						<td>
 							{{if selfpay.status == 1}}
 							<i class="ace-icon fa fa-check green bigger-130"></i>
