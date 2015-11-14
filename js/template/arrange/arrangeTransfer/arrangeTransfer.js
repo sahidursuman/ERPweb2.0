@@ -139,7 +139,7 @@ define(function(require, exports) {
 				var divId = "Transfer-Out",
 				    type = "1";
 				    transfer.getSearchParam(divId,type);
-				var exportUrl ="" + transfer.url("findExcel","view") + "&exportParam="+encodeURIComponent(JSON.stringify(transfer.$searchParam));
+				var exportUrl="" + KingServices.build_url("transfer","findExcel") + "&searchParam="+encodeURIComponent(JSON.stringify(transfer.$searchParam));
 				window.location.href=exportUrl;
 			});
 	    };
@@ -549,8 +549,10 @@ define(function(require, exports) {
 		transfer.init_CRU_event=function(id, $tab){
 			if (!!$tab && $tab.length === 1) {
 			var validator = rule.transferCheckor($tab);
-				// 监听修改
-				$tab.on('change', function(event) {
+
+				//监听修改
+				$tab.off('change').off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE)
+				.on('change', function(event) {
 					event.preventDefault();
 					$tab.data('isEdited', true);
 				})
@@ -559,6 +561,12 @@ define(function(require, exports) {
 					event.preventDefault();
 					transfer.saveUpdateTrsferOut($tab, validator, [tab_id, title, html]);
 				})
+
+				.on(SWITCH_TAB_BIND_EVENT, function(event) {
+					event.preventDefault();
+					transfer.init_CRU_event($tab.find('.T-saveTransoutInfo').data('id'), $tab); 
+				})
+
 				// 保存后关闭
 				.on(CLOSE_TAB_SAVE, function(event) {
 					event.preventDefault();
@@ -595,9 +603,7 @@ define(function(require, exports) {
 				$tab.find('.T-saveTransoutInfo').on('click', function(event) {
 					event.preventDefault();
 					/* Act on the event */
-					// 表单校验
-					if (!validator.form()) { return; }
-					transfer.saveUpdateTrsferOut($tab,1); 
+					transfer.saveUpdateTrsferOut($tab,validator); 
 				});
 
 				//取消关闭Tab
@@ -606,7 +612,6 @@ define(function(require, exports) {
 					/* Act on the event */
 					Tools.closeTab(Tools.getTabKey($tab.prop('id')));	
 				});
-
 
 				//逻辑删除与及时删除
 				$(".T-updateTransfer-delete").off().on("click",function(){
@@ -637,10 +642,10 @@ define(function(require, exports) {
 			$tab.find(".T-addTransferCost").append(html);
 			
 			// 更新表单验证的事件绑定
-			validator = rule.update(validator);   
+			rule.update(validator);   
 			
 			//绑定删除分团转客信息
-			$(".T-updateTransfer-delete").off().on("click",function(){
+			$tab.find(".T-updateTransfer-delete").off().on("click",function(){
 				var $that=$(this),
 				    $tr=$that.closest('tr');
 				var id = $tr.attr("data-entity-id");
@@ -747,9 +752,11 @@ define(function(require, exports) {
 		 * @param  {Boolean} isClose [description]
 		 * @return {[type]}          [description]
 		 */
-		transfer.saveUpdateTrsferOut=function($obj,isClose){ 
+		transfer.saveUpdateTrsferOut=function($tab,validator,tabArgs){ 
+			// 表单校验
+			if (!validator.form()) { return; }
 			getValue = function(name){
-				var value = $obj.find("[name="+name+"]").val()
+				var value = $tab.find("[name="+name+"]").val()
 				return value;
 			}
 			var id=getValue("touristGroupTransferId"),
@@ -771,8 +778,8 @@ define(function(require, exports) {
 			 * @type {Array}
 			 */
 			var otherFeeJsonAdd = [];
-			var otherFeeJsonAddLength=$obj.find(".T-addTransferCost tr").length;
-			$obj.find(".T-addTransferCost tr").each(function(i){
+			var otherFeeJsonAddLength=$tab.find(".T-addTransferCost tr").length;
+			$tab.find(".T-addTransferCost tr").each(function(i){
 				var $that=$(this);
 				var id=$that.attr("data-entity-id"),
 				    type = $that.find("[name=type]").attr("value"),
@@ -812,20 +819,10 @@ define(function(require, exports) {
 				success:function(data){
 					var result = showDialog(data);  
 					if(result){
-					    $obj.data('isEdited', false);
-						showMessageDialog($( "#confirm-dialog-message" ),data.message);
-						if(isClose == 1){
-							closeTab(menuKey+"-updateTransferOut");
-							var divId="Transfer-Out",
-							    type="1";
-							transfer.getSearchParam(divId,type);
-							transfer.findPager(divId,type,0);
-						}
-						/*
+					    $tab.data('isEdited', false);
 						if (!!tabArgs && tabArgs.length === 3) {
 							// 切换tab，就不做数据更新
 							Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
-
 							transfer.init_updata_tab(tabArgs[0]);
 						} else {
 							var divId="Transfer-Out",
@@ -834,7 +831,6 @@ define(function(require, exports) {
 							    transfer.findPager(divId,type,0);	
 							Tools.closeTab(Tools.getTabKey($tab.prop('id')));						
 						}
-						 */
 						
 					}
 				}
