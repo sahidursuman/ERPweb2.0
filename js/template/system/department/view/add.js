@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":36,"md5":"561b40f331fa5a74c25d5dfa0e9d3d8d"}*/
+/*TMODJS:{"debug":true,"version":37,"md5":"533958b564e66dcb21882655944a0c52"}*/
 define(function(require) {
     return require("../../../template")("system/department/view/add", '<div class="col-xs-12"> <form class="form-horizontal T-addBusiness-form" role="form" style="margin-top:50px" onsubmit="return false"> <div class="form-group"> <label class="col-sm-4 control-label no-padding-right"><span class="necessary">*</span>业务部门名称:</label> <div class="col-sm-6"> <input type="text" name="name" class="col-sm-12" /> </div> </div> <div class="space-10"></div> <button class="btn btn-block btn-primary T-save-business"> <i class="ace-icon fa fa-check"></i> 提交信息 </button> </form> </div> ');
 });

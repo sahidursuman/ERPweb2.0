@@ -1,15 +1,10 @@
 <div class="col-xs-12 globalAdd">
-	<form class="form-horizontal travelLineUpdateMainForm" role="form" style="margin-top:10px" onsubmit="return false">
-		{{if clipboardMode == false}}
-			<input name="id" type="hidden" value="{{travelLine.id}}"/>
-		{{/if}}
+	<form class="form-horizontal T-main-form" role="form" style="margin-top:10px" onsubmit="return false">
 		<div class=" ui-sortable-handle">
-			<div class="margin-top">
-				<h5 class="widget-title">   
-					<span class="badge badge-primary">1</span>
-					<a class="middle"> 线路主体信息</a>
-				</h5>
-			</div>
+			<h5 class="widget-title">
+				<span class="badge badge-primary">1</span>
+				<label class="middle title-size">线路主体信息 </label>
+			</h5>
 			<div class="widget-body">
 				<div class="widget-main">
 					<div class="form-group">
@@ -20,7 +15,7 @@
 						<label class="col-sm-1 control-label no-padding-right">是否启用:</label>
 						<div class="col-sm-2 checkbox" style="margin-left:-10px;padding-top:4px ;">
 							<label style="vertical-align: middle">
-								<input {{if travelLine.status == 1}}checked="checked" {{/if}} type="checkbox" class="ace travelLine-status" value="1">
+								<input {{if travelLine.status == 1}}checked="checked" {{/if}} type="checkbox" class="ace T-status" value="1">
 								<span class="lbl" style="margin-top: -25px"></span>
 							</label>
 						</div>
@@ -90,9 +85,9 @@
 										<th class="table-border">操作</th>
 									</tr>
 								</thead>
-								<tbody> 
+								<tbody class="T-schedule-list"> 
 									{{each travelLine.travelLineDayList as line}}
-									<tr>
+									<tr data-id="{{line.whichDay -1}}" {{if !!id}}data-entiy-id="{{line.id}}"{{/if}}>
 										<td>第{{line.whichDay}}天<input name="whichDay" value="{{line.whichDay}}" type="hidden"/></td>
 										<td>{{line.repastDetail}}</td>
 										<td>{{line.restPosition}}</td>
@@ -118,16 +113,16 @@
 										<td>{{line.title}}</td>
 										<td style="width:120px">
 											<div class="btn-group">
-												<a {{if clipboardMode == false}}data-entiy-id="{{line.id}}"{{/if}} class="btn-line-day-edit cursor">
-													修改 |
-												</a>
-												<a {{if clipboardMode == false}}data-entiy-id="{{line.id}}"{{/if}} class="btn-line-day-delete cursor">
+												<a class="T-action T-update cursor">
+													修改
+												</a> <a class="cursor"> |</a>
+												<a class="T-action T-delete cursor">
 													删除
 												</a>
 											</div>
 										<input type="hidden" name="hotelLevel" value="{{line.hotelLevel}}"/>
 										<input type="hidden" name="roadScenic" value="{{line.roadScenic}}"/>
-										<input type="hidden" name="detail" value="{{line.detail | encode}}"/>
+										<input type="hidden" name="description" value="{{line.detail | encode}}"/>
 										</td>
 									</tr>
 									{{/each}}
@@ -139,7 +134,7 @@
 			</div>
 		</div>
 		<div class="space-10"></div>
-			<button class="btn btn-block btn-primary btn-submit-travelLine guideSubmit">
+			<button class="btn btn-block btn-primary T-btn-save guideSubmit" {{if !!id}} data-id="{{id}}" {{/if}}>
 				<i class="ace-icon fa fa-check"></i>
 				提交信息
 			</button>
