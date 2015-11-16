@@ -586,22 +586,6 @@ define(function(require,exports){
 						};
 						
 					});
-					//游客名单删除按钮绑定事件
-					/*$(".addTouristList .btnDeleteTourist").click(function(){
-						var tr = $(this).parent().parent();
-						var touristListTrId = tr.attr("data-entity-id");
-						if(!(touristListTrId!=null && touristListTrId!="")){
-							$(this).parent().parent().fadeOut(function(){
-								$(this).remove();
-							})
-						}
-						else{
-							$(this).parent().parent().fadeOut(function(){
-								$(this).remove();
-								MenberNumber();
-							});
-						}
-					});*/
 					layer.close(addVisotorMoreLayer);
 				}
 			}
@@ -1176,14 +1160,9 @@ define(function(require,exports){
 			}
 			if (isContactUser && mobileNumber == "")  {
 				showMessageDialog($( "#confirm-dialog-message" ), "请填写名单中联系人的手机号码！");
-				//isValidate = false;
 			} else if (!mobileNumber && !idCardNumber) {
 				showMessageDialog($( "#confirm-dialog-message" ), "手机号码或证件号码必填一项！");
-				//isValidate = false;
 			}
-			/*if (!isValidate)  {
-				$that.find("input[name=mobileNumber]").focus();
-			}*/
 			var touristGroupMemberJson = {};
 			if(typeFlag == 2){
 			    touristGroupMemberJson = {
