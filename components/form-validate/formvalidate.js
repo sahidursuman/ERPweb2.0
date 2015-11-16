@@ -114,7 +114,9 @@
 				setting.$ele
 				.off('change.form-validation.api')
 				.on('change.form-validation.api', function(){ 
-					$(this).trigger(FOCUS_OUT_EVENT);
+						setTimeout(function() {
+							$(this).trigger(FOCUS_OUT_EVENT);
+						}, 0);
 					}
 				);
 			}
