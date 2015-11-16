@@ -10,7 +10,7 @@
 				<i class="ace-icon fa fa-info-circle title-size"></i>
 				<label class="middle title-size">线路产品主体信息</label>
 			</h5>
-            <div class="pull-right line-bluer " style="height: 23px;width: 90%;border-bottom:  1px solid #428bca;"></div>
+            <div class="pull-right line-bluer line-separated"></div>
             <div style="clear: both"></div>
             <div class="widget-body">
                 <div class="widget-main">
@@ -95,7 +95,7 @@
 						<i class="ace-icon fa fa-calendar-minus-o"></i>
 						<label class="middle title-size">基础安排模板</label>
 					</h5>
-                    <div class="pull-right line-bluer " style="height: 15px;width: 92%;border-bottom:  1px solid #428bca;"></div>
+                    <div class="pull-right line-bluer line-separatedT"></div>
                     <div style="clear: both"></div>
                     <div class="widget-body">
                         <div class="widget-main">
@@ -360,7 +360,7 @@
 						<i class="ace-icon fa fa-paper-plane"></i>
 						<label class="middle title-size">行程安排模板</label>
 					</h5>
-                    <div class="pull-right line-bluer " style="height: 15px;width: 92%;border-bottom:  1px solid #428bca;"></div>
+                    <div class="pull-right line-bluer line-separatedT"></div>
                     <div style="clear: both"></div>
                     <div class="widget-body">
                         <div class="widget-main">
@@ -535,7 +535,7 @@
                                                                                                             <input type="text" class="col-xs-12" name="remark" value="" />
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <a data-entity-id="{{hotelList.hotel.id}}" data-entity-name="hotelTemplate" class="cursor btn-restaurant-delete T-delete">
+                                                                                                            <a data-entity-id="{{hotelList.id}}" data-entity-name="hotelTemplate" class="cursor btn-restaurant-delete T-delete">
 																												删除
 																											</a>
                                                                                                         </td>
@@ -689,7 +689,7 @@
                                                                                                             <input type="hidden" name="templateId" value="{{selfPayList.id}}" />{{/if}}
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input type="text" class="chooseItemName bind-change" value="{{selfPayList.selfPayItem.name}}" />
+                                                                                                            <input type="text" class="chooseItemName bind-change" name="selfPayItemName" value="{{selfPayList.selfPayItem.name}}" />
                                                                                                             <input type="hidden" name="selfPayItemId" value="{{selfPayList.selfPayItem.id}}" />
                                                                                                         </td>
                                                                                                         <td>

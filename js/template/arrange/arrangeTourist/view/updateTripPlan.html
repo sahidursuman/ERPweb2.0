@@ -1,15 +1,15 @@
-<div class="mergeTripPlan globalAdd">
+<div class="mergeTripPlan globalAdd arrangeTouristInput">
 	<div class="col-xs-12 addTripPlanMain">
 		<form class="form-horizontal newAddTripPlanMainForm formOneList" role="form" style="margin-top:10px" onsubmit="return false">
 			<div class="form-group">
 				<div class="col-xs-12 col-sm-12 widget-container-col">
-					<div class="widget-box ui-sortable-handle">
-						<div class="widget-header">
-							<h5 class="widget-title">
-								<i class="ace-icon fa fa-building"></i>
-								基本信息
+					<div class="ui-sortable-handle">
+						<!-- <div class="widget-header"> -->
+							<h5 class=""> 
+								<span class="badge badge-primary">1</span>
+								<label class="middle title-size">基本信息</label>
 							</h5>
-						</div>
+						<!-- </div> -->
 						<div class="widget-body">
 							<div class="widget-main">
 								<div class="form-group">
@@ -136,7 +136,7 @@
 					</span>
 				</label> 
 			</div>
-			<div class="col-sm-2 addMergePlanTime">
+			<div class="col-sm-2 addMergePlanTime hide">
 				<input class="form-control col-sm-4 datetimepicker" type="text" name="executeTime" value="{{tripPlan.executeTime}}" />
 			</div>
         </div>
@@ -146,14 +146,11 @@
 		<form class="form-horizontal" role="form" onsubmit="return false">
 			<div class="form-group">
 				<div class="col-xs-12 col-sm-12 widget-container-col">
-					<div class="widget-box ui-sortable-handle">
-						<div class="widget-header">
-							<h5 class="widget-title">
-								<i class="ace-icon fa fa-building"></i>
-								游客名单
+					<div class="ui-sortable-handle">
+						<h5>
+								<span class="badge badge-primary">2</span>
+								<label class="middle title-size">游客名单</label>
 							</h5>
-						</div>
-	
 						<div class="widget-body">
 							<div class="widget-main">
 								<div class="form-group">
@@ -219,13 +216,13 @@
 													<td>{{touristGroup.includeSelfPay}}</td>
 													<td>{{touristGroup.remark}}</td>
 													<td>
-														<div class="hidden-sm hidden-xs btn-group">
-															<button data-entity-id="{{touristGroup.id}}" class="btn btn-xs btn-success touristGroupView">
-																<i class="ace-icon fa fa-search-plus bigger-120"></i>
-															</button>
-															<button data-entity-id="{{touristGroup.id}}" class="btn btn-xs btn-danger touristGroupDelete">
-																<i class="ace-icon fa fa-trash-o bigger-120"></i>
-															</button>
+														<div class="hidden-sm hidden-xs btn-group">										
+                                                        <a data-entity-id="{{touristGroup.id}}" class="cursor touristGroupView">
+																查看
+															</a><a class="cursor"> |</a>
+															<a data-entity-id="{{touristGroup.id}}" class="cursor touristGroupDelete">
+																删除
+															</a>
 														</div>
 													</td>
 												</tr>{{/each}}
@@ -242,13 +239,11 @@
 		<form class="form-horizontal formOneList" role="form" onsubmit="return false">
 			<div class="form-group">
 				<div class="col-xs-12 col-sm-12 widget-container-col">
-					<div class="widget-box ui-sortable-handle">
-						<div class="widget-header">
-							<h5 class="widget-title">
-								<i class="ace-icon fa fa-building"></i>
-								线路
+					<div class="ui-sortable-handle">
+						<h5>
+								<span class="badge badge-primary">3</span>
+								<label class="middle title-size">线路</label>
 							</h5>
-						</div>
 	
 						<div class="widget-body">
 							<div class="widget-main">
@@ -279,13 +274,11 @@
 		<form class="form-horizontal" role="form" onsubmit="return false">
 			<div class="form-group">
 				<div class="col-xs-12 col-sm-12 widget-container-col">
-					<div class="widget-box ui-sortable-handle">
-						<div class="widget-header">
-							<h5 class="widget-title">
-								<i class="ace-icon fa fa-building"></i>
-								日程
+					<div class="ui-sortable-handle">
+						<h5>
+								<span class="badge badge-primary">4</span>
+								<label class="middle title-size">日程</label>
 							</h5>
-						</div>
 	
 						<div class="widget-body">
 							<div class="widget-main">

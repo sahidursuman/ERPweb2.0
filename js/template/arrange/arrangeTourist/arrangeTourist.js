@@ -53,7 +53,7 @@ define(function(require, exports) {
 					if(result){
 						//data.lineProductList = JSON.parse(data.lineProductList);
 						var html = listMainTemplate(data);
-						addTab(menuKey,"分团转客",html);
+						addTab(menuKey,"分并转团",html);
 						//缓存autocomplate数据
 						arrangeTourist.lineProListData=data.lineProductList;
 						arrangeTourist.getlineProductList($('#'+tabId));
@@ -125,18 +125,18 @@ define(function(require, exports) {
 
 						html = filterUnAuth(html);
 						//无权限时移除“并团操作”列
-						function test(html){
+						function filterAuth(html){
 							var $obj = $(html);
 							if(!isAuth("1130004")){
 								$obj.find(".T-arrangeList .touristGroupMergeCheckBox").each(function(i){
 									$(this).closest('td').remove();
 								});
+								//移除表头
+								$obj.find(".T-arrangeList").closest('table').find('th').eq(0).remove();
 							}
-							//移除表头
-							$obj.find(".T-arrangeList").closest('table').find('th').eq(0).remove();
 							return html;
 						}
-						html = test(html);
+						html = filterAuth(html);
 						$("#"+tabId+" .arrangeTouristMain .arrangeTouristList").html(html);
 						$("#"+tabId+" .arrangeTouristMain .date-picker").datepicker({
 							autoclose: true,
@@ -653,6 +653,7 @@ define(function(require, exports) {
 			$.ajax({
 				url:""+APP_ROOT+"back/partnerAgency.do?method=findPartnerAgencyByOtherTravelAgency&token="+$.cookie("token")+"&menuKey=resource_partnerAgency&operation=view",
 				type:"POST",
+				showLoading:false,
 				dataType:"json",
 				success:function(data){
 					var html = "<option value=''>未选择</option>";
@@ -796,7 +797,7 @@ define(function(require, exports) {
 						    success:function(){
 						    	//chooseTripPlanTbody
 						    	//saveTouristGroupToTripPlan 方法名
-						    	$(".groupView").click(function(){
+						    	$(".chooseTripPlanMain .groupView").click(function(){
 						    		var id = $(this).attr("data-entity-id");
 						    		arrangeTourist.viewTripPlan(id);
 						    	})
@@ -1311,10 +1312,10 @@ define(function(require, exports) {
 												"<td>"+addGroupIdJson[i].remark+"</td>"+
 												"<td>"+
 												"<div class=\"hidden-sm hidden-xs btn-group\">"+
-												"<a data-entity-id=\""+addGroupIdJson[i].id+"\" class=\"cursor touristGroupView\">"+
+												"<a data-entity-id=\""+addGroupIdJson[i].id+"\" class=\"cursor addTripPlanView\">"+
 													"查看"+
 												"</a>"+"<a class='cursor'> |</a>"+
-												"<a data-entity-id=\""+addGroupIdJson[i].id+"\" class=\"cursor touristGroupDelete\">"+
+												"<a data-entity-id=\""+addGroupIdJson[i].id+"\" class=\"cursor addTripPlanDelete\">"+
 													"删除"+
 												"</a>"+
 												"</div>"+
@@ -1392,6 +1393,7 @@ define(function(require, exports) {
 					$.ajax({
 						url:""+APP_ROOT+"back/guide.do?method=getGuideById&token="+$.cookie("token")+"&menuKey=resource_guide&operation=view",
 	                    dataType: "json",
+	                    showLoading:false,
 	                    data:"id="+ui.item.id,
 	                    success: function(data) {
 	                    	layer.close(globalLoadingLayer);
@@ -1409,6 +1411,7 @@ define(function(require, exports) {
 				$.ajax({
 					url:""+APP_ROOT+"back/guide.do?method=findAll&token="+$.cookie("token")+"&menuKey=resource_guide&operation=view",
                     dataType: "json",
+                    showLoading:false,
                     success: function(data) {
                     	layer.close(globalLoadingLayer);
 						var result = showDialog(data);
@@ -1884,7 +1887,7 @@ define(function(require, exports) {
 									        				transferTr.each(function(i){
 									        					var id = transferTr.eq(i).attr("data-entity-id");
 									        					if(id == data.id){
-									        						transferTr.eq(i).find("td:last-child").html('<i class ="ace-icon fa fa-check"></i>已填写');
+									        						transferTr.eq(i).find("td.transferFeeStatus").html('<i class ="ace-icon fa fa-check green"></i>已填写');
 									        						transferTr.eq(i).find("[name=label_payed]").html(data.transPayedMoney);
 									        						transferTr.eq(i).find("[name=label_needPay]").html(data.transNeedPayAllMoney);
 									        					}
@@ -2068,7 +2071,7 @@ define(function(require, exports) {
 									        				transferTr.each(function(i){
 									        					var id = transferTr.eq(i).attr("data-entity-id");
 									        					if(id == data.touristGroupId){
-									        						transferTr.eq(i).find("td.transferFeeStatus").html('<i class ="ace-icon fa fa-check"></i>已填写');
+									        						transferTr.eq(i).find("td.transferFeeStatus").html('<i class ="ace-icon fa fa-check green"></i>已填写');
 									        						transferTr.eq(i).find("[name=label_payed]").html(data.transPayedMoney);
 									        						transferTr.eq(i).find("[name=label_needPay]").html(data.transNeedPayAllMoney);
 									        					}
@@ -2282,6 +2285,8 @@ define(function(require, exports) {
 			})
 			//新增资源
 			arrangeTourist.addResource(tab);
+			//集合时间   时间控件
+			arrangeTourist.dateTimePicker();
 		},
 		seatCountChoose : function(){
 			var chooseSeatCount = $(".widget-main").find(".chooseSeatCount");
@@ -2317,6 +2322,7 @@ define(function(require, exports) {
 				$.ajax({
 					url:""+APP_ROOT+"back/bookingOrder.do?method=getSeatCountList&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 					dataType:"json",
+					showLoading: false,
 					success:function(data){
 						var result = showDialog(data);
 						if(result){
@@ -2377,6 +2383,7 @@ define(function(require, exports) {
 						url:""+APP_ROOT+"back/bookingOrder.do?method=getBusBrandList&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 						data:"seatCount="+seatCount+"",
 						dateType:"json",
+						showLoading:false,
 						type:"POST",
 						success:function(data){
 							var result = showDialog(data);
@@ -2446,6 +2453,7 @@ define(function(require, exports) {
 							brand: busBrand
 						},
 						dateType:"json",
+						showLoading:false,
 						type:"POST",
 						success:function(data){
 							var result = showDialog(data);
@@ -2499,6 +2507,7 @@ define(function(require, exports) {
 						url:""+APP_ROOT+"back/busCompany.do?method=getDrivers&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 						data:"busId="+busLicenseNumberId+"",
 						dateType:"json",
+						showLoading:false,
 						type:"POST",
 						success:function(data){
 							var result = showDialog(data);

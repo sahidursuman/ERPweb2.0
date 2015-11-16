@@ -201,8 +201,16 @@ define(function(require, exports) {
 						content: html,
 						success:function(){
 							var $container = $(".T-updateTicketContainer");
+							var $province = $container.find("select[name=provinceId]");
+								var $city = $container.find("select[name=cityId]");
+								var validator = rule.check($container);
+								//省市区事件
+								if(data.ticket.provinceId != null )var provinceId = data.ticket.provinceId;
+								if(data.ticket.cityId != null )var cityId = data.ticket.cityId;
+								if(data.ticket.districtId != null ) var districtId = data.ticket.districtId;
+								KingServices.provinceCity($container,provinceId,cityId,districtId);
 							// 设置表单验证
-							var validator = rule.check($container);
+							
 							$container.find(".T-ticket-Submit").click(function() {
 								// 表单校验
 								if (!validator.form()) {

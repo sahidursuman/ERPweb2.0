@@ -278,32 +278,32 @@ define(function(require, exports) {
 									transit.submitUpdateTransit($(".arrangeTouristMain .btn-updateArrange").attr("data-entity-id"),0);
 									transit.edited["update"] = "";
 									addTab(menuKey+"-update","编辑中转安排",html);
-									transit.initUpdate(id,data);
 									validator = rule.setTranistCheckor($(".arrangeTouristMain"));
+									transit.initUpdate(id,data,validator);
 								},function(){
 									addTab(menuKey+"-update","编辑中转安排",html);
-									transit.initUpdate(id,data);
 									validator = rule.setTranistCheckor($(".arrangeTouristMain"));
+									transit.initUpdate(id,data,validator);
 									transit.edited["update"] = "";
 								});
 							}else{
 								addTab(menuKey+"-update","编辑中转安排",html);
-								transit.initUpdate(id,data);
+								transit.initUpdate(id,data,validator);
 								validator = rule.setTranistCheckor($(".arrangeTouristMain"));
 							}
 						}else{
 							addTab(menuKey+"-update","编辑中转安排",html);
-							transit.initUpdate(id,data);
 							validator = rule.setTranistCheckor($(".arrangeTouristMain"));
+							transit.initUpdate(id,data,validator);
 						}
 					}
 				}
 			})
 		},
-		initUpdate : function(id,data){
+		initUpdate : function(id,data,validator){
 			var tab = "tab-arrange_transit-update-content";
 			// 设置表单验证
-			var validator = rule.setTranistCheckor($(".arrangeTouristMain"));
+			//var validator = rule.setTranistCheckor($(".arrangeTouristMain"));
 			$('.arrangeTouristMain').on("change",function(){
 				transit.edited["update"] = "update";
 			});
@@ -312,59 +312,59 @@ define(function(require, exports) {
 			$("#"+tab+" #receptionList .btn-bus-add").click(function(){
 				var thisObj = $(this);
 				var id = transit.getArrangeTrId(thisObj);
-				transit.addOutBusList(id,0,tab);
+				transit.addOutBusList(id,0,tab,validator);
 			})
 			$("#"+tab+" #receptionList .btn-hotel-add").click(function(){
 				var thisObj = $(this);
 				var id = transit.getArrangeTrId(thisObj);
-				transit.addOutHotel(id,0,tab);
+				transit.addOutHotel(id,0,tab,validator);
 			})
 			$("#"+tab+" #receptionList .btn-ticket-add").click(function(){
 				var thisObj = $(this);
 				var id = transit.getArrangeTrId(thisObj);
-				transit.addTicketList(id,0,tab);
+				transit.addTicketList(id,0,tab,validator);
 			})
 			$("#"+tab+" #receptionList .btn-restaurant-add").click(function(){
 				var thisObj = $(this);
 				var id = transit.getArrangeTrId(thisObj);
-				transit.addRestaurantList(id,0,tab);
+				transit.addRestaurantList(id,0,tab,validator);
 			})
 			$("#"+tab+" #receptionList .btn-other-add").click(function(){
 				var thisObj = $(this);
 				var id = transit.getArrangeTrId(thisObj);
-				transit.addOtherList(id,0,tab);
+				transit.addOtherList(id,0,tab,validator);
 			})
 			//小车--------------------------开始--------------------------------------------------------	
 			$("#"+tab+" #carList .btn-bus-add").click(function(){
 				var thisObj = $(this);
 				var id = transit.getArrangeTrId(thisObj);
-				transit.addOutBusList(id,2,tab);
+				transit.addOutBusList(id,2,tab,validator);
 			})
 			//送团--------------------------开始--------------------------------------------------------	
 			$("#"+tab+" #sendList .btn-bus-add").click(function(){
 				var thisObj = $(this);
 				var id = transit.getArrangeTrId(thisObj);
-				transit.addOutBusList(id,1,tab);
+				transit.addOutBusList(id,1,tab,validator);
 			})
 			$("#"+tab+" #sendList .btn-hotel-add").click(function(){
 				var thisObj = $(this);
 				var id = transit.getArrangeTrId(thisObj);
-				transit.addOutHotel(id,1,tab);
+				transit.addOutHotel(id,1,tab,validator);
 			})
 			$("#"+tab+" #sendList .btn-ticket-add").click(function(){
 				var thisObj = $(this);
 				var id = transit.getArrangeTrId(thisObj);
-				transit.addTicketList(id,1,tab);
+				transit.addTicketList(id,1,tab,validator);
 			})
 			$("#"+tab+" #sendList .btn-restaurant-add").click(function(){
 				var thisObj = $(this);
 				var id = transit.getArrangeTrId(thisObj);
-				transit.addRestaurantList(id,1,tab);
+				transit.addRestaurantList(id,1,tab,validator);
 			})
 			$("#"+tab+" #sendList .btn-other-add").click(function(){
 				var thisObj = $(this);
 				var id = transit.getArrangeTrId(thisObj);
-				transit.addOtherList(id,1,tab);
+				transit.addOtherList(id,1,tab,validator);
 			})
 
 			//删除安排事件绑定
@@ -399,7 +399,7 @@ define(function(require, exports) {
 			transit.bindRestaurantChoose(tab);
 			//日期插件绑定
 			transit.outArrangeDateTimepicker("receptionList","bususeTime",tab);
-			transit.outArrangeDatepicker("receptionList","hotelCheckInTime",tab);
+			transit.outArrangeDatepicker("receptionList","hotelCheckInTime",tab,validator);
 			transit.outArrangeDateTimepicker("receptionList","ticketStartTime",tab);
 			transit.outArrangeDatepicker("receptionList","startTime",tab);
 			transit.outArrangeDateTimepicker("carList","bususeTime",tab);
@@ -555,7 +555,7 @@ define(function(require, exports) {
 			}
 		},
 		//新增团外安排接送车辆
-		addOutBusList :function(id,type,tab){
+		addOutBusList :function(id,type,tab,validator){
 			var html = '<tr data-entity-id="">'+
 			'<td><input type="text" class="col-sm-12 chooseSeatCount" name="seatCount" value="" /></td>'+
 			'<td><input class="col-sm-12 chooseBusBrand" name="busbrand" type="text" value="" /></td>'+
@@ -578,19 +578,22 @@ define(function(require, exports) {
 			'</tr>';
 			html  = filterUnAuth(html);//权限过滤
 			$("#"+id+" .busList tbody").append(html);
+			//表单验证
+			//var validator = rule.setTranistCheckor($('#'+id));
+			rule.update(validator);
 			$("#"+tab+" .arrangeTouristMain .busList .arrange-delete").click(function(){
 				var thisObj = $(this);
 				transit.delArrangeJudge (thisObj,"bus");
 			})
 			transit.addResource(tab);
-			transit.bindBusCompanyChoose(tab);
+			transit.bindBusCompanyChoose(tab,validator);
 			transit.outArrangeDateTimepicker("carList","bususeTime",tab);
 			transit.outArrangeDateTimepicker("sendList","bususeTime",tab);
 			transit.outArrangeDateTimepicker("receptionList","bususeTime",tab);
 			$("#"+tab+" .count,#"+tab+" .price,#"+tab+" .discount").blur(transit.calculation);
 		},
 		//新增团外安排酒店
-		addOutHotel :function(id,type,tab){
+		addOutHotel :function(id,type,tab,validator){
 			var html ='<tr>'+
 				'<td><input type="hidden" name="serviceType" value="'+type+'" />'+
 				'<input class="col-sm-12" name="hotelCheckInTime" value="" type="text" /></td>'+
@@ -616,18 +619,20 @@ define(function(require, exports) {
 				'</tr>';
 			html  = filterUnAuth(html);
 			$("#"+id+" .hotelList tbody").append(html);
+			//表单验证
+			rule.update(validator);
 			$("#"+tab+" .arrangeTouristMain .hotelList .arrange-delete").click(function(){
 				var thisObj = $(this);
 				transit.delArrangeJudge (thisObj,"hotel");
 			})
 			transit.addResource(tab);
-			transit.bindHotelChoose(tab);
+			transit.bindHotelChoose(tab,validator);
 			transit.outArrangeDatepicker("receptionList","hotelCheckInTime",tab);
 			transit.outArrangeDatepicker("sendList","hotelCheckInTime",tab);
 			$("#"+tab+" .count,#"+tab+" .price,#"+tab+" .discount").blur(transit.calculation);
 		},
 		//新增团外安排票务
-		addTicketList :function(id,type,tab){
+		addTicketList :function(id,type,tab,validator){
 			var html ='<tr>'+
 				'<td><div class="col-sm-12"><input type="hidden" name="serviceType" value="'+type+'" /><input class="col-sm-12 chooseTicket" name="ticketName" value="" type="text" /><input type="hidden" name="tickeId" />'+
 				'<span class="addResourceBtn T-addTicketResource R-right" data-right="1070002" title="添加票务"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
@@ -651,18 +656,20 @@ define(function(require, exports) {
 				'</tr>';
 			html  = filterUnAuth(html);
 			$("#"+id+" .ticketList tbody").append(html);
+			//表单验证
+			rule.update(validator);
 			$("#"+tab+" .arrangeTouristMain .ticketList .arrange-delete").click(function(){
 				var thisObj = $(this);
 				transit.delArrangeJudge (thisObj,"ticket");
 			})
 			transit.addResource(tab);
-			transit.bindTicketChoose(tab);
+			transit.bindTicketChoose(tab,validator);
 			transit.outArrangeDateTimepicker("receptionList","ticketStartTime",tab);
 			transit.outArrangeDateTimepicker("sendList","ticketStartTime",tab);
 			$("#"+tab+" .count,#"+tab+" .price,#"+tab+" .discount").blur(transit.calculation);
 		},
 		//新增餐厅安排
-		addRestaurantList :function(id,type,tab){
+		addRestaurantList :function(id,type,tab,validator){
 			var html = '<tr data-entity-id="">'+
 				'<td><input class="col-sm-12" name="startTime" type="text" value="" /></td>'+
 				'<td><div class="col-sm-12"><input type="hidden" name="serviceType" value="'+type+'" /><input class="col-sm-12 bind-change chooseRestaurant" name="restaurant" type="text" value="" />'+
@@ -682,6 +689,8 @@ define(function(require, exports) {
 				'</tr>';
 			html  = filterUnAuth(html);
 			$("#"+id+" .restaurantList tbody").append(html);
+			//表单验证
+			rule.update(validator);
 			transit.bindRestaurantChoose(tab);
 			$("#"+tab+" .arrangeTouristMain .restaurantList .arrange-delete").click(function(){
 				var thisObj = $(this);
@@ -693,7 +702,7 @@ define(function(require, exports) {
 			$("#"+tab+" .count,#"+tab+" .price,#"+tab+" .discount").blur(transit.calculation);
 		},
 		//新增其他安排
-		addOtherList :function(id,type,tab){
+		addOtherList :function(id,type,tab,validator){
 			var html = '<tr data-entity-id="">'+
 				'<td><input class="col-sm-12" name="startTime" type="text" value="" /></td>'+
 				'<td><input class="col-sm-12" name="name" type="text" value="" maxlength="30" /><input type="hidden" name="serviceType" value="'+type+'" /></td>'+
@@ -709,6 +718,8 @@ define(function(require, exports) {
 				'<td><a class="cursor arrange-delete" title="删除">删除</a></td>'+
 				'</tr>';
 			$("#"+id+" .otherList tbody").append(html);
+			//表单验证
+			rule.update(validator);
 			$("#"+tab+" .arrangeTouristMain .otherList .arrange-delete").click(function(){
 				var thisObj = $(this);
 				transit.delArrangeJudge (thisObj,"other");
@@ -825,6 +836,7 @@ define(function(require, exports) {
 				$.ajax({
 					url:""+APP_ROOT+"back/bookingOrder.do?method=getSeatCountList&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 					dataType:"json",
+					showLoading: false,
 					success:function(data){
 						var result = showDialog(data);
 						if(result){
@@ -884,6 +896,7 @@ define(function(require, exports) {
 						url:""+APP_ROOT+"back/bookingOrder.do?method=getBusBrandList&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 						data:"seatCount="+seatCount+"",
 						dateType:"json",
+						showLoading:false,
 						type:"POST",
 						success:function(data){
 							var result = showDialog(data);
@@ -952,6 +965,7 @@ define(function(require, exports) {
 							brand: busBrand
 						},
 						dateType:"json",
+						showLoading:false,
 						type:"POST",
 						success:function(data){
 							var result = showDialog(data);
@@ -1004,6 +1018,7 @@ define(function(require, exports) {
 						url:""+APP_ROOT+"back/busCompany.do?method=getDrivers&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 						data:"busId="+busLicenseNumberId+"",
 						dateType:"json",
+						showLoading:false,
 						type:"POST",
 						success:function(data){
 							var result = showDialog(data);
@@ -1208,7 +1223,7 @@ define(function(require, exports) {
 				}
 			})*/
 		},
-		bindHotelChoose : function(tab){
+		bindHotelChoose : function(tab,validator){
 			var hotelChoose = $("#"+tab+" .arrangeTouristMain .chooseHotel");
 			var $hotelStar = $("#"+tab+" .arrangeTouristMain .tripPlanHotelStar");
 			$hotelStar.off().on("change", function(){
@@ -1239,11 +1254,12 @@ define(function(require, exports) {
 				select:function(event,ui){
 					var _this = this, parents = $(_this).closest('tr');
 					parents.find("input[name=hotelId]").val(ui.item.id).trigger('change');
-					var validator = rule.setTranistCheckor($(".arrangeTouristMain"));
-					rule.updateTranistCheckor(validator);
+					//var validator = rule.setTranistCheckor($(".arrangeTouristMain"));
+					rule.update(validator);
 					$.ajax({
 						url:""+APP_ROOT+"back/hotel.do?method=getHotelById&token="+$.cookie("token")+"&menuKey=resource_hotel&operation=view",
 						dataType: "json",
+						showLoading:false,
 						data:"id=" + ui.item.id,
 						success: function(data) {
 							layer.close(globalLoadingLayer);
@@ -1255,60 +1271,7 @@ define(function(require, exports) {
 							}
 						}
 					});
-					if(this.chooseHotelRoom){
-						parents.find("[name=hotelRoomType]").autocomplete( "destroy");
-					}
-
-					this.chooseHotelRoom = parents.find("[name=hotelRoomType]").autocomplete({
-						minLength:0,
-						change:function(event,ui){
-							if(ui.item == null){
-								$(this).val("");
-								var objParent = $(this).closest('tr');
-								objParent.find("input[name=hotelRoomTypeId]").val("");
-								objParent.find("input[name=hotelPrice]").val("");
-							}
-						},
-						select:function(event,ui){
-							var $thisRoom =$(this).closest('tr');
-							$thisRoom.find("input[name=hotelRoomTypeId]").val(ui.item.id).trigger('change');
-							$.ajax({
-								url:""+APP_ROOT+"back/hotel.do?method=findRoomDetailById&token="+$.cookie("token")+"&menuKey=resource_hotel&operation=view",
-								dataType: "json",
-								data:"id=" + ui.item.id,
-								success: function(data) {
-									var hotelRoom = JSON.parse(data.hotelRoom);
-									$thisRoom.find("input[name=hotelPrice]").val(hotelRoom.contractPrice);
-								}
-							})
-						}
-					}).off("click").on("click", function(){
-						var _this = this;
-						$.ajax({
-							url:""+APP_ROOT+"back/hotel.do?method=findTypeByHotelId&token="+$.cookie("token")+"&menuKey=resource_hotel&operation=view",
-							dataType: "json",
-							data:"id=" + ui.item.id,
-							success: function(data) {
-								layer.close(globalLoadingLayer);
-								var result = showDialog(data);
-								if(result){
-									var hotelRommList = JSON.parse(data.hotelRommList);
-									if(hotelRommList && hotelRommList.length > 0){
-										for(var i=0; i < hotelRommList.length; i++){
-											hotelRommList[i].value = hotelRommList[i].type;
-										}
-										$(_this).autocomplete('option','source', hotelRommList);
-										$(_this).autocomplete('search', '');
-									}else{
-										layer.tips('没有房型可供选择，请选择其他星级', objhotelRoom, {
-											tips: [1, '#3595CC'],
-											time: 2000
-										});
-									}
-								}
-							}
-						});
-					});
+					
 				}
 			}).off("click").on("click", function(){
 				var hotelStarValue = $hotelStar.val(),
@@ -1317,6 +1280,7 @@ define(function(require, exports) {
 				$.ajax({
 					url:""+APP_ROOT+"back/hotel.do?method=findHotelListByLevel&token="+$.cookie("token")+"&menuKey=resource_hotel&operation=view",
 					dataType: "json",
+					showLoading:false,
 					data:"level=" + hotelStarValue,
 					success: function(data) {
 						layer.close(globalLoadingLayer);
@@ -1339,6 +1303,66 @@ define(function(require, exports) {
 					}
 				});
 			});
+			$("#"+tab+" .arrangeTouristMain").find("[name=hotelRoomType]").autocomplete({
+					minLength:0,
+					change:function(event,ui){
+						if(ui.item == null){
+							$(this).val("");
+							var objParent = $(this).closest('tr');
+							objParent.find("input[name=hotelRoomTypeId]").val("");
+							objParent.find("input[name=hotelPrice]").val("");
+						}
+					},
+					select:function(event,ui){
+						var $thisRoom =$(this).closest('tr');
+						$thisRoom.find("input[name=hotelRoomTypeId]").val(ui.item.id).trigger('change');
+						$.ajax({
+							url:""+APP_ROOT+"back/hotel.do?method=findRoomDetailById&token="+$.cookie("token")+"&menuKey=resource_hotel&operation=view",
+							dataType: "json",
+							showLoading:false,
+							data:"id=" + ui.item.id,
+							success: function(data) {
+								var hotelRoom = JSON.parse(data.hotelRoom);
+								$thisRoom.find("input[name=hotelPrice]").val(hotelRoom.contractPrice);
+							}
+						})
+					}
+				}).off("click").on("click", function(){
+					var _this = $(this), $parents = _this.closest('tr'),
+					id = $parents.find('input[name=hotelId]').val();
+					if (!!id) {
+						$.ajax({
+							url:""+APP_ROOT+"back/hotel.do?method=findTypeByHotelId&token="+$.cookie("token")+"&menuKey=resource_hotel&operation=view",
+							dataType: "json",
+							showLoading:false,
+							data:"id=" + id,
+							success: function(data) {
+								layer.close(globalLoadingLayer);
+								var result = showDialog(data);
+								if(result){
+									var hotelRommList = JSON.parse(data.hotelRommList);
+									if(hotelRommList && hotelRommList.length > 0){
+										for(var i=0; i < hotelRommList.length; i++){
+											hotelRommList[i].value = hotelRommList[i].type;
+										}
+										$(_this).autocomplete('option','source', hotelRommList);
+										$(_this).autocomplete('search', '');
+									}else{
+										layer.tips('没有房型可供选择', _this, {
+											tips: [1, '#3595CC'],
+											time: 2000
+										});
+									}
+								}
+							}
+						});
+					}else{
+						layer.tips('请选择酒店', _this, {
+							tips: [1, '#3595CC'],
+							time: 2000
+						});
+					}
+				});
 		},
 		bindTicketChoose : function(tab){
 			var ticketChoose = $("#"+tab+" .arrangeTouristMain .chooseTicket");
@@ -1349,7 +1373,7 @@ define(function(require, exports) {
 					var thisParent = $(_this).closest('tr');
 					thisParent.find("input[name=tickeId]").val(ui.item.id).trigger('change');
 					var validator = rule.setTranistCheckor($(".arrangeTouristMain"));
-					rule.updateTranistCheckor(validator);
+					rule.update(validator);
 				},
 				change : function(event, ui){
 					if(ui.item == null){
@@ -1363,6 +1387,7 @@ define(function(require, exports) {
 				$.ajax({
 					url:""+APP_ROOT+"back/ticket.do?method=findAll&token="+$.cookie("token")+"&menuKey=resource_ticket&operation=view",
 					dataType:"json",
+					showLoading:false,
 					success:function(data){
 						layer.close(globalLoadingLayer);
 						var result = showDialog(data);
@@ -1403,6 +1428,7 @@ define(function(require, exports) {
 					$.ajax({
 						url:""+APP_ROOT+"back/restaurant.do?method=findRestaurantById&token="+$.cookie("token")+"&menuKey=resource_restaurant&operation=view",
 						dataType: "json",
+						showLoading:false,
 						data:"id="+ui.item.id,
 						success: function(data) {
 							layer.close(globalLoadingLayer);
@@ -1433,6 +1459,7 @@ define(function(require, exports) {
 				$.ajax({
 					url:""+APP_ROOT+"back/restaurant.do?method=findAll&token="+$.cookie("token")+"&menuKey=resource_restaurant&operation=view",
 					dataType:"json",
+					showLoading:false,
 					success: function(data) {
 						layer.close(globalLoadingLayer);
 						var result = showDialog(data);
@@ -1474,6 +1501,7 @@ define(function(require, exports) {
 					$.ajax({
 						url:""+APP_ROOT+"back/restaurant.do?method=getRestaurantStandardByType&token="+$.cookie("token")+"&menuKey=resource_restaurant&operation=view",
 						dataType:"json",
+						showLoading:false,
 						data:"restaurantId=" + id + "&type=" + type,
 						success: function(data) {
 							layer.close(globalLoadingLayer);
@@ -1504,7 +1532,7 @@ define(function(require, exports) {
 
 			});
 		},
-		outArrangeDatepicker :function(clas,name,tab){
+		outArrangeDatepicker :function(clas,name,tab,validator){
 			$("#"+tab+" .arrangeTouristMain #"+clas+" input[name="+name+"]").datepicker({
 				autoclose: true,
 				todayHighlight: true,
@@ -1513,7 +1541,7 @@ define(function(require, exports) {
 			})
 				.on('changeDate', function() {
 					var validator = rule.setTranistCheckor($(".arrangeTouristMain"));
-					rule.updateTranistCheckor(validator);
+					rule.update(validator);
 				});
 		},
 		outArrangeDateTimepicker :function(clas,name,tab){
@@ -1632,7 +1660,7 @@ define(function(require, exports) {
 				if(arrangeObj !=null && arrangeObj.length>0) {
 					if(arrangeObj != null && arrangeObj.length){
 						for (var i = 0; i < arrangeObj.length; i++) {
-							arrangeObj[i].value = arrangeObj[i].name;
+							arrangeObj[i].value = arrangeObj[i].realName;
 						}
 					}
 					$(objM).autocomplete('option','source', arrangeObj);

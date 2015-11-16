@@ -112,7 +112,7 @@ define(function(require, exports) {
     //查看游客小组、收客团款明细
     innerProfit.viewTouristGroup = function(id){
         $.ajax({
-            url:innerProfit.url("touristGroup","viewTouristGroupDetails"),
+            url:innerProfit.url("touristGroup","findTouristGroupDetailAtInnerProfit"),
             type:"POST",
             data:{
                 id : id + ""
@@ -171,6 +171,10 @@ define(function(require, exports) {
                     data.sendGroup.outHotelList = JSON.parse(data.sendGroup.outHotelList);
                     data.sendGroup.outTicketList = JSON.parse(data.sendGroup.outTicketList);
                     data.touristGroup = JSON.parse(data.touristGroup);
+                    if (data.isNeedArriveService == 0 && data.isNeedBus == 0 && data.isNeedLeaveService == 0){
+                        showMessageDialog($( "#confirm-dialog-message" ), "暂无中转安排");
+                        return;
+                    }else{
                     var html =transitViewTemplate(data);
                     layer.open({
                         type : 1,
@@ -181,6 +185,7 @@ define(function(require, exports) {
                         content : html,
                         scrollbar: false
                     })
+                }
                 }
             }
         })

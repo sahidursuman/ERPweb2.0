@@ -1,17 +1,25 @@
 <div class="search-area touristGroupSearchForm clearfix globalAdd">
     <div class="form-horizontal" >
-        <label class="pull-left text-right control-label no-padding-right">来源:</label>
-        <div class="col-sm-1">
+        <!-- <label class="pull-left text-right control-label no-padding-right">来源:</label> -->
+        <div class="col-sm-2 tourist-partnerAid">
             <!-- <select name="partnerAgencyId" class="col-sm-12">
 				<option value=''>来源</option>
 				{{each partnerAgencyList as partnerAgency}}
 				<option value="{{partnerAgency.id}}" {{if searchParam.partnerAgencyId == partnerAgency.id}}selected="selected"{{/if}} >{{partnerAgency.travelAgencyName}}</option>
 				{{/each}}
 			</select> -->
-            <input type="text" class="col-sm-12 choosePartnerAgency marginLeft-Right7" placeholder="来源" name="fromPartnerAgencyName"   value="{{searchParam.fromPartnerAgencyName}}" />
+            <select class="choosePorB col-sm-3">
+                <option value='0' {{if searchParam.type == 0}}selected="selected"{{/if}}>全部</option>
+                <option value='1' {{if searchParam.type == 1}}selected="selected"{{/if}}>组团社</option>
+                <option value='2' {{if searchParam.type == 2}}selected="selected"{{/if}}>业务部</option>
+            </select>
+            <input type="text" class="col-sm-8 choosePAB marginLeft-Right7" placeholder="全部来源" style="float: right;{{if searchParam.type != 0}}display: none{{/if}}" readonly="readonly" />
+            <input type="text" class="col-sm-8 choosePartnerAgency marginLeft-Right7 T-PorB" placeholder="来源" name="fromPartnerAgencyName" style="float: right;{{if searchParam.type != 1 || searchParam.type == null}}display: none{{/if}}" value="{{if searchParam.fromPartnerAgencyName==''}}全部{{else}}{{searchParam.fromPartnerAgencyName}}{{/if}}" />
+            <input type="text" class="col-sm-8 chooseBussinessGroup marginLeft-Right7 T-PorB" placeholder="来源" name="fromBussinessGroupName" style="float: right;{{if searchParam.type != 2 || searchParam.type == null}}display: none;{{/if}}" value="{{if searchParam.fromBussinessGroupName == ""}}全部{{else}}{{searchParam.fromBussinessGroupName}}{{/if}}" />
             <input type="hidden" name="fromPartnerAgencyId" value="{{searchParam.fromPartnerAgencyId}}">
+            <input type="hidden" name="fromBussinessGroupId" value="{{searchParam.fromBussinessGroupId}}" />
         </div>
-        <label class="pull-left text-right control-label no-padding-right">线路:</label>
+        <label class="pull-left text-right control-label no-padding-right lineRoad-tourist">线路:</label>
         <div class="col-sm-1 marginLeft-Right7">
             <!--<select name="lineProductId" class="col-sm-12">-->
                 <!--<option value=''>全部</option>-->
@@ -20,19 +28,19 @@
                 <!--{{/each}}-->
             <!--</select>-->
 
-            <input type="text" class="col-sm-12 chooseLineProduct" placeholder="线路产品" name="lineProductName" value="{{searchParam.lineProductName}}" />
+            <input type="text" class="col-sm-12 chooseLineProduct tourist-LineProduct" placeholder="线路产品" name="lineProductName" value="{{searchParam.lineProductName}}" />
             <input type="hidden" name="lineProductId" value="{{searchParam.lineProductId}}">
         </div>
-        <label class="pull-left text-right control-label no-padding-right">出游时间:</label>
+        <label class="pull-left text-right control-label no-padding-right margin-left60">出游时间:</label>
         <div class="col-sm-1 marginLeft-Right7">
             <div class="input-group">
-                <input class="col-xs-12 datepicker" name="startTime" value="{{searchParam.startTime}}" type="text" />
+                <input class="col-xs-12 datepicker width110" name="startTime" value="{{searchParam.startTime}}" type="text" />
                 <span class="input-group-addon">
 					<i class="fa fa-calendar"></i>
 				</span>
             </div>
         </div>
-        <label class="pull-left text-right control-label no-padding-right">录入人:</label>
+        <label class="pull-left text-right control-label no-padding-right margin-left60">录入人:</label>
         <div class="col-sm-1 marginLeft-Right7">
             <!--<select name="userId" class="col-sm-12">-->
                 <!--<option value=''>全部</option>-->
@@ -40,37 +48,38 @@
                 <!--<option value="{{user.id}}" {{if searchParam.userId== user.id}}selected="selected" {{/if}}>{{user.realName}}</option>-->
                 <!--{{/each}}-->
             <!--</select>-->
-            <input type="text" class="col-xs-12 creatorUserChoose" placeholder="录入人" name="creatorName" value="{{searchParam.creatorName}}"/>
+            <input type="text" class="col-xs-12 creatorUserChoose tourist-userChoose" placeholder="录入人" name="creatorName" value="{{searchParam.creatorName}}"/>
             <input type="hidden" name="creatorId" value="{{searchParam.creatorId}}" />
         </div>
         <label class="pull-left text-right control-label no-padding-right">录入日期:</label>
         <div class="col-sm-1 marginLeft-Right7">
             <div class="input-group col-sm-12">
-                <input class="col-sm-12 datepicker" name="createTimeStart" value="{{if searchParam.createTimeStart!=''}}{{searchParam.createTimeStart  | dateFormat: 'yyyy-MM-dd'}}{{else}}{{/if}}" type="text" />
+                <input class="col-sm-12 datepicker width110" name="createTimeStart" value="{{if !!searchParam.createTimeStart}}{{searchParam.createTimeStart  | dateFormat: 'yyyy-MM-dd'}}{{else}}{{/if}}" type="text" />
                 <span class="input-group-addon">
 					<i class="fa fa-calendar"></i>
 				</span>
             </div>
         </div>
-        <label class="pull-left text-right control-label no-padding-right">--</label>
+        <label class="pull-left text-right control-label no-padding-right marginLeftTourist-30">--</label>
         <div class="col-sm-1">
             <div class="input-group col-sm-12">
-                <input class="col-sm-12 datepicker" name="createTimeEnd" value="{{if searchParam.createTimeStart!=''}}{{searchParam.createTimeEnd | dateFormat: 'yyyy-MM-dd'}}{{else}}{{/if}}"type="text" />
+                <input class="col-sm-12 datepicker width110" name="createTimeEnd" value="{{if !!searchParam.createTimeEnd}}{{searchParam.createTimeEnd | dateFormat: 'yyyy-MM-dd'}}{{else}}{{/if}}"type="text" />
                 <span class="input-group-addon">
 					<i class="fa fa-calendar"></i>
 				</span>
             </div>
         </div>
+        <div class="tourist-newline">
         <label class="pull-left text-right control-label no-padding-right">针对客源:</label>
-        <div class="col-sm-1 marginLeft-Right7">
+        <div class="col-sm-1 marginLeft-Right7 rangeTime">
             <select name="customerType" class="col-xs-12">
                 <option value="" {{if searchParam.customerType=="" }}selected="selected" {{/if}}>全部</option>
                 <option value="0" {{if searchParam.customerType=="0" }}selected="selected" {{/if}}>散客</option>
                 <option value="1" {{if searchParam.customerType=="1" }}selected="selected" {{/if}}>团体</option>
             </select>
         </div>
-        <label class="pull-left text-right control-label no-padding-right">状态:</label>
-        <div class="pull-left btn-group btn-status " style="margin-left: 7px">
+        <label class="pull-left text-right control-label no-padding-right margin-left33">状态:</label>
+        <div class="pull-left btn-group btn-status btn-touristStatus">
             <button data-value="{{searchParam.status}}" data-toggle="dropdown" class=" btn-sm dropdown-toggle block-up" aria-expanded="false">
                 <span>
 				   {{if searchParam.status == null || searchParam.status == ""}}
@@ -110,15 +119,16 @@
                 </li>
             </ul>
         </div>
-        <div class="pull-left" style="margin-left: 20px">
+        <div class="pull-left Touristsearch-btn">
             <button class=" btn-sm  btn-touristGroupList-search search-btn">
                 <i class="ace-icon fa fa-search"></i> 搜索
             </button>
         </div>
-        <div class="col-sm-1 pull-left" style="margin-left: 5px">
+        <div class="col-sm-1 pull-left timeStartMore" style="margin-left: 5px">
             <button class="btn btn-sm btn-success btn-touristGroup-add R-right" data-right="1120002">
                 <i class="ace-icon fa fa-plus"></i> 新增小组
             </button>
+        </div>
         </div>
         <div style="clear: both;height: 0px;line-height: 0px;"></div>
     </div>

@@ -17,7 +17,7 @@
 									<option value="{{month.value}}" {{if searchParam.month == month.value}}selected="selected"{{/if}}>{{month.value}}月</option>
 								{{/each}}
 							</select>
-                        <button class="btn-height btn-sm  btn-checking-search search-btn" >
+                        <button class="marginLeft-30 btn-sm  btn-checking-search search-btn" >
                              <i class="ace-icon fa fa-search"></i>
                                                                                                  搜索
                         </button>
@@ -70,7 +70,7 @@
 							<td name="consumeStartTime">{{if checking.consumeStartTime == null || checking.consumeStartTime == ""}}-{{else}}{{checking.consumeStartTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
 							<td>{{checking.restaurantStandardType}}</td>
 							<td>{{checking.price}}</td>
-							<td>{{checking.adultCount}}{{"大"}}{{checking.childCount}}{{"小"}}</td>
+							<td>{{checking.realCount}}</td>
 							<td>{{checking.reduceMoney}}</td>
 							<td>{{checking.needPayMoney}}</td>
 							<td>

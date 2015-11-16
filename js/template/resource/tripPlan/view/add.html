@@ -1,62 +1,62 @@
 <div id="tripPlan_addPlan_content" class="container-fluid globalAdd">
 	<input type="hidden" value="{{tripPlan.isArranged}}" id="isArranged">
     <div class="row show-grid">
-        <div class="col-sm-2 font-size-12 ">
+        <div class="col-sm-3 font-size-12 ">
             <span class="pull-left control-label align-right no-padding-right">线路：</span>
             <span class="col-sm-8 control-label">{{tripPlan.lineProduct.name}}</span>
         </div>
-        <div class="col-sm-2 font-size-12  no-border-left">
+        <div class="col-sm-3 font-size-12  no-border-left">
             <span class="pull-left control-label align-right no-padding">类别：</span>
             <span class="col-sm-8 control-label">{{tripPlan.lineProduct.type}}</span>
         </div>
-        <div class="col-sm-2 font-size-12  no-border-left">
+        <div class="col-sm-3 font-size-12  no-border-left">
             <span class="pull-left control-label align-right no-padding">应用范围：</span>
             <span class="col-sm-8 control-label">{{if tripPlan.lineProduct.customerType == 0}}散客{{else}}团体{{/if}}</span>
         </div>
-        <div class="col-sm-2 font-size-12  no-border-left">
+        <div class="col-sm-3 font-size-12  no-border-left">
             <span class="pull-left control-label align-right no-padding">天数：</span>
             <span class="col-sm-8 control-label tripPlanLineProductDays">{{tripPlan.lineProduct.days}}</span>
         </div>
         <div style="margin-top: 25px">
-        <div class="col-sm-2 font-size-12  no-border-top">
+        <div class="col-sm-3 font-size-12  no-border-top">
             <span class="pull-left control-label align-right no-padding">团号：</span>
             <span class="col-sm-8 control-label">{{tripPlan.tripNumber}}</span>
         </div>
-        <div class="col-sm-2 font-size-12  no-border-top no-border-left">
+        <div class="col-sm-3 font-size-12  no-border-top no-border-left">
             <span class="pull-left control-label align-right no-padding">出团日期：</span>
             <span class="col-sm-8 control-label" name="startTime_Choose">{{tripPlan.startTime | dateFormat:'yyyy-MM-dd'}}</span>
         </div>
-        <div class="col-sm-2 font-size-12  no-border-top no-border-left">
+        <div class="col-sm-3 font-size-12  no-border-top no-border-left">
             <span class="pull-left control-label align-right no-padding">完团日期：</span>
             <span class="col-sm-8 control-label">{{tripPlan.endTime | dateFormat:'yyyy-MM-dd'}}</span>
         </div>
-        <div class="col-sm-2 font-size-12  no-border-top no-border-left">
+        <div class="col-sm-3 font-size-12  no-border-top no-border-left">
             <span class="pull-left control-label align-right no-padding">团队人数：</span>
             <span class="col-sm-8 control-label">{{tripPlan.touristAdultCount}}大{{tripPlan.touristChildCount}}小</span>
         </div>
         </div>
-        <div class="col-sm-2 font-size-12  no-border-top" style="margin-top: 5px">
+        <div class="col-sm-3 font-size-12  no-border-top" style="margin-top: 5px">
             <span class="pull-left control-label align-right no-padding">导游：</span>
             <span class="col-sm-8 control-label">{{if tripPlan.guide != null}}{{tripPlan.guide.realname}}{{/if}}</span>
         </div>
-        <div class="col-sm-2 font-size-12  no-border-top no-border-left" style="margin-top: 5px">
+        <div class="col-sm-3 font-size-12  no-border-top no-border-left" style="margin-top: 5px">
             <span class="pull-left control-label align-right no-padding">全陪：</span>
             <span class="col-sm-8 control-label">{{tripPlan.accompanyGuideName}}</span>
         </div>
     <div id="tripPlan_addPlan_tripPlan" class="show-grid form-horizontal">
     	<input type="hidden" name="tripPlanId" value="{{tripPlan.id}}"  />
         <div class="col-sm-12" style="height: 40px; border-bottom: 1px solid #ccc;margin-top: 20px">
-        	<div class="col-sm-2">
+        	<div class="col-sm-3">
                 <label class="pull-left control-label no-padding-right"><strong>计划导付金额：</strong></label>
                 <label class="col-sm-6 control-label align-left"><strong>{{tripPlan.guideAllPayMoney}}</strong></label>
                 <input type="hidden" name="guideAllPayMoney" value="{{tripPlan.guideAllPayMoney}}"  />
             </div>
-            <div class="col-sm-2">
+            <div class="col-sm-3">
                 <label class="pull-left control-label no-padding-right"><strong>导游现收团款：</strong></label>
                 <label class="col-sm-6 control-label align-left"><strong>{{tripPlan.guideAllNowMoney}}</strong></label>
                 <input type="hidden" name="guideAllNowMoney" value="{{tripPlan.guideAllNowMoney}}"  />
             </div>
-            <div class="col-sm-2">
+            <div class="col-sm-3">
                 <label class="pull-left control-label align-right"><strong>导游预支金额：</strong></label>
                 <input type="text" class="col-sm-6" name="guideAllPreMoney" value="{{tripPlan.guideAllPreMoney}}"/>
             </div>
@@ -374,7 +374,7 @@
                                                                 <td class="whichDaysContainer" value="{{restaurant.whichDay}}"></td>
                                                                 <td>
                                                                     <div class="col-sm-12">
-                                                                        <input type="text" name="restaurantName" maxlength="32" value="{{if restaurant.restaurantId == -1}}-导游任选-{{else}}{{if restaurant.restaurant != null}}{{restaurant.restaurant.name}}{{/if}}{{/if}}" class="col-sm-12 chooseRestaurant" data-propover="{{restaurant.restaurantChooseArrangeList | stringify}}"/>
+                                                                        <input type="text" name="restaurantName" maxlength="32" value="{{if restaurant.isChoose == 1}}-导游任选-{{else}}{{if restaurant.restaurant != null}}{{restaurant.restaurant.name}}{{/if}}{{/if}}" class="col-sm-12 chooseRestaurant" data-propover="{{restaurant.restaurantChooseArrangeList | stringify}}"/>
                                                                         <input type="hidden" name="restaurantId" value="{{restaurant.restaurantId}}"/>
                                                                         <input type="hidden" name="optional" value="" />
                                                                         <span class="addResourceBtn T-addRestaurantResource R-right" data-right="1030002" title="添加餐厅">
@@ -382,8 +382,8 @@
                                                                         </span>
                                                                     </div>
                                                                 </td>
-                                                                <td><input type="text" name="managerName" readonly="readonly" value="{{if restaurant.restaurantId == -1}}-{{else}}{{if restaurant.restaurant != null}}{{restaurant.restaurant.managerName}}{{/if}}{{/if}}" class="col-sm-12"/></td>
-                                                                <td><input type="text" name="mobileNumber" readonly="readonly" value="{{if restaurant.restaurantId == -1}}-{{else}}{{if restaurant.restaurant != null}}{{restaurant.restaurant.mobileNumber}}{{/if}}{{/if}}" class="col-sm-12"/></td>
+                                                                <td><input type="text" name="managerName" readonly="readonly" value="{{if restaurant.isChoose == 1}}-{{else}}{{if restaurant.restaurant != null}}{{restaurant.restaurant.managerName}}{{/if}}{{/if}}" class="col-sm-12"/></td>
+                                                                <td><input type="text" name="mobileNumber" readonly="readonly" value="{{if restaurant.isChoose == 1}}-{{else}}{{if restaurant.restaurant != null}}{{restaurant.restaurant.mobileNumber}}{{/if}}{{/if}}" class="col-sm-12"/></td>
                                                                 <td>
 																<select name="type" class="col-sm-12 restauranType" maxlength="9" style="width:80px;">
 																{{if restaurant.restaurantStandard == null}}

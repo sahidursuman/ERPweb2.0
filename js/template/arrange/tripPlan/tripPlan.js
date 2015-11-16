@@ -50,7 +50,7 @@ define(function(require, exports) {
 			$.ajax({
 				url:""+APP_ROOT+"back/tripPlan.do?method=listTripPlan&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 				type:"POST",
-				data:"pageNo="+page+"&tripId="+tripId+"&tripNumber="+tripNumber+"&startTime="+startTime+"&guideId="+guideId+"&guideName="+realname+"&busId="+busId+"&busLicenseNumber="+licenseNumber+"&creator="+creator+"&creatorName="+creatorName+"&status="+status+"&sortType=auto",
+				data:"queryType=0&pageNo="+page+"&tripId="+tripId+"&tripNumber="+tripNumber+"&startTime="+startTime+"&guideId="+guideId+"&guideName="+realname+"&busId="+busId+"&busLicenseNumber="+licenseNumber+"&creator="+creator+"&creatorName="+creatorName+"&status="+status+"&sortType=auto",
 				dataType:"json",
 				beforeSend:function(){
 					globalLoadingLayer = openLoadingLayer();
@@ -260,7 +260,7 @@ define(function(require, exports) {
 												var dataD = data;
 												if(result){
 													showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-														tripPlan.listTripPlan(0,"","","","","","");
+														tripPlan.listTripPlan(0,"","","","","","","","","","");
 													});
 												}
 											}
@@ -770,7 +770,7 @@ define(function(require, exports) {
 					if(result){
 						showMessageDialog($( "#confirm-dialog-message" ),data.message);
 						// 确认发团成功后，刷新列表
-						tripPlan.listTripPlan(0,tripPlan.searchData.tripNumber,tripPlan.searchData.startTime,tripPlan.searchData.realname,tripPlan.searchData.licenseNumber,tripPlan.searchData.creator,tripPlan.searchData.status);
+						tripPlan.listTripPlan(0,tripPlan.searchData.tripId,tripPlan.searchData.tripNumber,tripPlan.searchData.startTime,tripPlan.searchData.guideId,tripPlan.searchData.realname,tripPlan.searchData.busId,tripPlan.searchData.licenseNumber,tripPlan.searchData.creator,tripPlan.searchData.creatorName,tripPlan.searchData.status);
 					}
 				}
 			})
@@ -796,7 +796,7 @@ define(function(require, exports) {
 			tripPlan.setValue("lineProductId",data.lineProduct.id);
 			tripPlan.setValue("startTime",data.lineProduct.startTime);
 
-			tripPlan.setValue("BusCompanyName",data.busCompanyTemplate.busCompany.companyName || "");
+			tripPlan.setValue("busCompany",data.busCompanyTemplate.busCompany.companyName || "");
 			tripPlan.setValue("busCompanyId",data.busCompanyTemplate.busCompany.id || "");
 			tripPlan.setValue("needBusBrand",data.busCompanyTemplate.bus.brand || "");
 			tripPlan.setValue("LicenseNumber",data.busCompanyTemplate.bus.licenseNumber || "");
@@ -951,6 +951,7 @@ define(function(require, exports) {
 					$.ajax({
 						url:""+APP_ROOT+"back/guide.do?method=getGuideById&token="+$.cookie("token")+"&menuKey=resource_guide&operation=view",
 	                    dataType: "json",
+	                    showLoading:false,
 	                    data:"id="+ui.item.id,
 	                    success: function(data) {
 	                    	layer.close(globalLoadingLayer);
@@ -968,6 +969,7 @@ define(function(require, exports) {
 				$.ajax({
 					url:""+APP_ROOT+"back/guide.do?method=findAll&token="+$.cookie("token")+"&menuKey=resource_guide&operation=view",
                     dataType: "json",
+                    showLoading:false,
                     success: function(data) {
                     	layer.close(globalLoadingLayer);
 						var result = showDialog(data);
@@ -1419,7 +1421,7 @@ define(function(require, exports) {
 									var result = showDialog(data);
 									if(result){
 										showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-											tripPlan.listTripPlan(0,"","","","","","");
+											tripPlan.listTripPlan(0,"","","","","","","","","","");
 										})
 									}
 								}
@@ -1472,6 +1474,7 @@ define(function(require, exports) {
 				$.ajax({
 					url:""+APP_ROOT+"back/bookingOrder.do?method=getSeatCountList&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 					dataType:"json",
+					showLoading: false,
 					success:function(data){
 						var result = showDialog(data);
 						if(result){
@@ -1532,6 +1535,7 @@ define(function(require, exports) {
 						url:""+APP_ROOT+"back/bookingOrder.do?method=getBusBrandList&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 						data:"seatCount="+seatCount+"",
 						dateType:"json",
+						showLoading:false,
 						type:"POST",
 						success:function(data){
 							var result = showDialog(data);
@@ -1568,6 +1572,7 @@ define(function(require, exports) {
 			$.ajax({
 				url:""+APP_ROOT+"back/tripPlan.do?method=getQueryTermsForPlan&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 				dateType:"json",
+				showLoading:false,
 				type:"POST",
 				success:function(data){
 					var result = showDialog(data);
@@ -1617,6 +1622,7 @@ define(function(require, exports) {
 							brand: busBrand
 						},
 						dateType:"json",
+						showLoading:false,
 						type:"POST",
 						success:function(data){
 							var result = showDialog(data);
@@ -1670,6 +1676,7 @@ define(function(require, exports) {
 						url:""+APP_ROOT+"back/busCompany.do?method=getDrivers&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 						data:"busId="+busLicenseNumberId+"",
 						dateType:"json",
+						showLoading:false,
 						type:"POST",
 						success:function(data){
 							var result = showDialog(data);
@@ -1772,7 +1779,7 @@ define(function(require, exports) {
 							showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
 								closeTab(menuKey+"-add");
 								tripPlan.edited["add"] = "";
-								tripPlan.listTripPlan(0,"","","","","","");
+								tripPlan.listTripPlan(0,"","","","","","","","","","");;
 							});
 						}
 					}
@@ -1869,7 +1876,7 @@ define(function(require, exports) {
 								tripPlan.edited["update"] = "";
 								if(isClose == 1){
 									closeTab(menuKey+"-update");
-									tripPlan.listTripPlan(0,"","","","","","");
+									tripPlan.listTripPlan(0,"","","","","","","","","","");
 								}
 							});
 						}

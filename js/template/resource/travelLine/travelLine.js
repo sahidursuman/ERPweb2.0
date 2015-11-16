@@ -7,7 +7,8 @@ define(function(require, exports) {
 	var scanDetailTemplate = require("./view/scanDetail");
 	var viewLineDayTemplate = require("./view/viewDetail");
 	var updateTemplate = require("./view/update");
-	var updateLineDayTemplate = require("./view/updateLineDay");
+	var updateLineDayTemplate = require("./view/updateLineDay");//addLineDayTemplate
+	var editLineDayTemplate = require("./view/editLineDay");
 	var addLineProductTemplate = require("./view/addLineProduct");
 	var tabId = "tab-"+menuKey+"-content";
 	var addLineId = menuKey+"-addLine";
@@ -58,6 +59,8 @@ define(function(require, exports) {
 			});
 		},
 		initList : function(data){
+			console.info(data);
+			var $tab = $('#' + tabId);
 			//新增线路产品button按钮事件
 			$("#"+tabId+"  .btn-lineProduct-add").click(function(){
 				var id = $(this).attr("data-entiy-id");
@@ -117,34 +120,22 @@ define(function(require, exports) {
 				}
 				travelLine.listTravelLine(0,travelLine.searchData.name,travelLine.searchData.status);
 			});
-			
-			//分页--首页按钮事件
-			$("#"+tabId+"  .pageMode a.first").click(function(){
-				travelLine.listTravelLine(0,travelLine.searchData.name,travelLine.searchData.status);
-			});
-			
-			//分页--上一页事件
-			$("#"+tabId+"  .pageMode a.previous").click(function(){
-				var previous = data.pageNo - 1;
-				if(data.pageNo == 0){
-					previous = 0;
-				}
-				travelLine.listTravelLine(previous,travelLine.searchData.name,travelLine.searchData.status);
-			});
-			
-			//分页--下一页事件
-			$("#"+tabId+"  .pageMode a.next").click(function(){
-				var next =  data.pageNo + 1;
-				if(data.pageNo == data.totalPage-1){
-					next = data.pageNo ;
-				}
-				travelLine.listTravelLine(next,travelLine.searchData.name,travelLine.searchData.status);
-			});
-			
-			//分页--尾页事件
-			$("#"+tabId+"  .pageMode a.last").click(function(){
-				travelLine.listTravelLine(data.totalPage-1,travelLine.searchData.name,travelLine.searchData.status);
-			});
+
+			// 绑定翻页组件
+			laypage({
+			    cont: $tab.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+			    pages: data.totalPage, //总页数
+			    curr: (data.pageNo + 1),
+			    jump: function(obj, first) {
+			    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+			    		travelLine.searchData = {
+			    			name : $tab.find("input[name=travelLine_name]").val(),
+			    			status : $tab.find(".btn-status").find("button").attr("data-value")
+			    		}
+			    		travelLine.listTravelLine(obj.curr -1,travelLine.searchData.name,travelLine.searchData.status);
+			    	}
+			    }
+			});	
 		},
 		addTravelLine:function(){
 			var html = addTemplate();
@@ -169,15 +160,16 @@ define(function(require, exports) {
 			}
 		},
 		initAdd : function(){
-			$('#tab-resource_travelLine-addLine-content').on("change",function(){
+			var $addTrLinObj=$('#tab-resource_travelLine-addLine-content');
+			$addTrLinObj.on("change",function(){
 				travelLine.edited["addLine"] = "addLine";
 			});	
-			$(".travelLineDayList .btn-submit-travelLine").unbind().click(function(){
+			$addTrLinObj.find(".travelLineDayList .btn-submit-travelLine").unbind().click(function(){
 				travelLine.submitAddTravelLine();
 			});
 
 			// 以弹出框的形式添加线路下行程信息
-			$(".travelLineDayList .btn-line-day-add").click(function(){
+			$addTrLinObj.find(".travelLineDayList .btn-line-day-add").click(function(){
 				function trim(str){
 					return str.replace(/(^\s*)|(\s*$)/g, "");
 				}
@@ -238,11 +230,11 @@ define(function(require, exports) {
 								"<input type=\"hidden\" name=\"hotelLevel\" value=\""+hotelLevel+"\"/>" +
 								"<input type=\"hidden\" name=\"roadScenic\" value=\""+roadScenic+"\"/>" +
 								"<input type=\"hidden\" name=\"detail\" value=\""+detail+"\"/></td></tr>";
-							$(".travelLineDayList .lineDayList tbody").append(lineDayHtml);
-							$(".travelLineDayList .lineDayList .btn-line-day-edit").unbind().click(function(){
+							$addTrLinObj.find(".travelLineDayList .lineDayList tbody").append(lineDayHtml);
+							$addTrLinObj.find(".travelLineDayList .lineDayList .btn-line-day-edit").unbind().click(function(){
 								travelLine.bindEditButton($(this));
 							});
-							$(".travelLineDayList .lineDayList .btn-line-day-delete").click(function(){
+							$addTrLinObj.find(".travelLineDayList .lineDayList .btn-line-day-delete").click(function(){
 								travelLine.deleteDayDialog($(this));
 							});
 							layer.close(addTravelLineDayLayer);
@@ -392,17 +384,18 @@ define(function(require, exports) {
 			});
 		},
 		initUpdate : function(clipboardMode){
+			var $travelLupObj=$('#tab-resource_travelLine-update-content');
 			travelLine.updateClipboardMode = clipboardMode;
-			$('#tab-resource_travelLine-update-content').on("change",function(){
+			$travelLupObj.on("change",function(){
 				travelLine.edited["update"] = "update";
 			});
 			// 初始化并绑定表单验证
-			var validator = rule.traveLineCheckor($('.travelLineUpdateMainForm'));
+			var validator = rule.traveLineCheckor($travelLupObj.find('.travelLineUpdateMainForm'));
 
 			travelLine.updateClipboardMode = clipboardMode;
 			// 添加行程安排
-			$(".travelLineDayList .btn-line-day-add").click(function(){
-				var lineDayHtml = addLineDayTemplate();
+			$travelLupObj.find(".travelLineDayList .btn-line-day-add").click(function(){
+				var lineDayHtml = editLineDayTemplate();
 				var addTravelLineDayLayer = layer.open({
 					type:1,
 					title:"新增日程",
@@ -412,19 +405,19 @@ define(function(require, exports) {
 					content: lineDayHtml,
 					success:function(){
 						// 绑定表单验证
-						var dayCheckor = rule.travelLineDayCheckor($('.travelLineDayForm'));
+						var dayCheckor = rule.travelLineDayCheckor($('.editLineDayForm'));
 						// 初始化UEditor
 						var ue = init_editor("detailEditor-add-travelLine",{zIndex:99999999}, EDITOR_HEIGHT);
 
-						$(".travelLineDayForm .btn-submit-line-day").click(function(){
+						$(".editLineDayForm .btn-submit-line-day").click(function(){
 							if( !dayCheckor.form() )  return;
 
 							function trim(str){ 
 								 return str.replace(/(^\s*)|(\s*$)/g, ""); 
 							}
-							var repastDetail = $(".travelLineDayForm input[name=repastDetail]").val();
-							var hotelLevel = $(".travelLineDayForm select[name=hotelLevel]").val();
-							var whichDay = $(".travelLineDayForm select[name=whichDay]").val();
+							var repastDetail = $(".editLineDayForm input[name=repastDetail]").val();
+							var hotelLevel = $(".editLineDayForm select[name=hotelLevel]").val();
+							var whichDay = $(".editLineDayForm select[name=whichDay]").val();
 							var level = "三星以下";
 							if (hotelLevel == 0) {
 								level = "未选择";
@@ -443,13 +436,13 @@ define(function(require, exports) {
 							}else if(hotelLevel == 7){
 								level = "五星以上";
 							}
-							var title = $(".travelLineDayForm input[name=title]").val();
+							var title = $(".editLineDayForm input[name=title]").val();
 							if(trim(title) == ""){
 								showMessageDialog($( "#confirm-dialog-message" ), "请输入行程标题");
 								return false;
 							}
-							var restPosition = $(".travelLineDayForm input[name=restPosition]").val();
-							var roadScenic = $(".travelLineDayForm input[name=roadScenic]").val();
+							var restPosition = $(".editLineDayForm input[name=restPosition]").val();
+							var roadScenic = $(".editLineDayForm input[name=roadScenic]").val();
 							var detail = encodeURIComponent(ue.getContent());
 							if(trim(detail) == ""){
 								showMessageDialog($( "#confirm-dialog-message" ), "请输入行程详情");
@@ -462,12 +455,12 @@ define(function(require, exports) {
 									"<input type=\"hidden\" name=\"hotelLevel\" value=\""+hotelLevel+"\"/>" +
 									"<input type=\"hidden\" name=\"roadScenic\" value=\""+roadScenic+"\"/>" +
 									"<input type=\"hidden\" name=\"detail\" value=\""+detail+"\"/></td></tr>";
-							$(".travelLineDayList .lineDayList tbody").append(lineDayHtml);
-							$(".travelLineDayList .lineDayList .btn-line-day-edit").unbind().click(function(){
+							$travelLupObj.find(".travelLineDayList .lineDayList tbody").append(lineDayHtml);
+							$travelLupObj.find(".travelLineDayList .lineDayList .btn-line-day-edit").unbind().click(function(){
 								travelLine.bindEditButton($(this));
 							});
 							
-							$(".travelLineDayList .lineDayList .btn-line-day-delete").click(function(){
+							$travelLupObj.find(".travelLineDayList .lineDayList .btn-line-day-delete").click(function(){
 								travelLine.deleteDayDialog($(this));
 							});
 							
@@ -479,17 +472,17 @@ define(function(require, exports) {
 			});
 			
 			// 删除日期行程
-			$(".travelLineDayList .lineDayList .btn-line-day-delete").click(function(){
+			$travelLupObj.find(".travelLineDayList .lineDayList .btn-line-day-delete").click(function(){
 				travelLine.deleteDayDialog($(this));
 			});
 			
 			// 修改日期行程
-			$(".travelLineDayList .lineDayList .btn-line-day-edit").unbind().click(function(){
+			$travelLupObj.find(".travelLineDayList .lineDayList .btn-line-day-edit").unbind().click(function(){
 				travelLine.bindEditButton($(this));
 			});
 			
 			// 2.序列化form表单，并通过Ajax实现保存操作
-			$(".travelLineDayList .btn-submit-travelLine").unbind().click(function(){
+			$travelLupObj.find(".travelLineDayList .btn-submit-travelLine").unbind().click(function(){
 				travelLine.submitUpdateTraveLine(clipboardMode,1);
 			});
 		},
@@ -723,6 +716,7 @@ define(function(require, exports) {
 					$.ajax({
 						url:""+APP_ROOT+"back/guide.do?method=getGuideById&token="+$.cookie("token")+"&menuKey=resource_guide&operation=view",
 						dataType: "json",
+						showLoading: false,
 						data:"id="+ui.item.id,
 						success: function(data) {
 							layer.close(globalLoadingLayer);
@@ -763,6 +757,7 @@ define(function(require, exports) {
 				$.ajax({
 					url:""+APP_ROOT+"back/guide.do?method=findAll&token="+$.cookie("token")+"&menuKey=resource_guide&operation=view",
 					dataType: "json",
+					showLoading: false,
 					success: function(data) {
 						layer.close(globalLoadingLayer);
 						var result = showDialog(data);
@@ -803,6 +798,7 @@ define(function(require, exports) {
 					$.ajax({
 						url:""+APP_ROOT+"back/insurance.do?method=getInsuranceById&token="+$.cookie("token")+"&menuKey=resource_insurance&operation=view",
 						dataType: "json",
+                        showLoading: false,
 						data:"id="+ui.item.id,
 						success: function(data) {
 							layer.close(globalLoadingLayer);
@@ -825,6 +821,7 @@ define(function(require, exports) {
 				$.ajax({
 					url:""+APP_ROOT+"back/insurance.do?method=findAll&token="+$.cookie("token")+"&menuKey=resource_insurance&operation=view",
 					dataType: "json",
+					showLoading: false,
 					success: function(data) {
 						layer.close(globalLoadingLayer);
 						var result = showDialog(data);
@@ -847,27 +844,27 @@ define(function(require, exports) {
 				minLength:0,
 				change:function(event,ui){
 					if(ui.item == null){
-						$(this).val("");
-						$(this).parent().parent().find("input[name=busCompanyId]").val("");
-						$(this).parent().parent().find("input[name=licenseNumber]").val("");
-						$(this).parent().parent().find("input[name=seatPrice]").val("");
-						$(this).parent().parent().find("input[name=seatCount]").val("");
-						$(this).parent().parent().find("input[name=charteredPrice]").val("");
-						$(this).parent().parent().find("input[name=mobileNumber]").val("");
+						var $tr = $(this).val("").closest('tr');
+						$tr.find("input[name=busCompanyId]").val("");
+						$tr.find("input[name=licenseNumber]").val("");
+						$tr.find("input[name=seatPrice]").val("");
+						$tr.find("input[name=seatCount]").val("");
+						$tr.find("input[name=charteredPrice]").val("");
+						$tr.find("input[name=mobileNumber]").val("");
 					}
 
 					// 更新表单验证的配置
 					validator = rule.lineProductUpdate(validator);
 				},
 				select:function(event,ui){
-					$(this).blur();
+					var $tr = $(this).blur().closest('tr');
 					
-					$(this).parent().parent().find("input[name=busCompanyId]").val(ui.item.id).trigger('change');
-					$(this).parent().parent().find("input[name=licenseNumber]").val("");
-					$(this).parent().parent().find("input[name=seatPrice]").val("");
-					$(this).parent().parent().find("input[name=seatCount]").val("");
-					$(this).parent().parent().find("input[name=charteredPrice]").val("");
-					$(this).parent().parent().find("input[name=mobileNumber]").val("");
+					$tr.find("input[name=busCompanyId]").val(ui.item.id).trigger('change');
+					$tr.find("input[name=licenseNumber]").val("");
+					$tr.find("input[name=seatPrice]").val("");
+					$tr.find("input[name=seatCount]").val("");
+					$tr.find("input[name=charteredPrice]").val("");
+					$tr.find("input[name=mobileNumber]").val("");
 					
 					// 更新表单验证的配置
 					validator = rule.lineProductUpdate(validator);
@@ -889,6 +886,7 @@ define(function(require, exports) {
 							$.ajax({
 								url:""+APP_ROOT+"back/busCompany.do?method=findBusDetailById&token="+$.cookie("token")+"&menuKey=resource_busCompany&operation=view",
 								dataType: "json",
+								showLoading: false,
 								data:"id="+ui.item.id,
 								success: function(data) {
 									layer.close(globalLoadingLayer);
@@ -924,6 +922,7 @@ define(function(require, exports) {
 						$.ajax({
 							url:""+APP_ROOT+"back/busCompany.do?method=findBusListBySeat&token="+$.cookie("token")+"&menuKey=resource_busCompany&operation=view",
 							dataType: "json",
+							showLoading: false,
 							data:"id="+busCompanyId+"&seatCount="+needSeatCount,
 							success: function(data) {
 								layer.close(globalLoadingLayer);
@@ -950,6 +949,7 @@ define(function(require, exports) {
 				$.ajax({
 					url:""+APP_ROOT+"back/busCompany.do?method=findBusCompanyBySeat&token="+$.cookie("token")+"&menuKey=resource_busCompany&operation=view",
 					dataType: "json",
+					showLoading: false,
 					data:"seatCount="+needSeatCount,
 					success: function(data) {
 						layer.close(globalLoadingLayer);
@@ -1034,6 +1034,7 @@ define(function(require, exports) {
 					$.ajax({
 						url:""+APP_ROOT+"back/restaurant.do?method=findRestaurantById&token="+$.cookie("token")+"&menuKey=resource_restaurant&operation=view",
 	                    dataType: "json",
+	                    showLoading:false,
 	                    data:"id="+restaurantNameId,
 	                    success: function(data) {
 	                    	layer.close(globalLoadingLayer);
@@ -1062,6 +1063,7 @@ define(function(require, exports) {
 										$.ajax({
 											url:""+APP_ROOT+"back/restaurant.do?method=findStandardDetailById&token="+$.cookie("token")+"&menuKey=resource_restaurant&operation=view",
 						                    dataType: "json",
+						                    showLoading:false,
 						                    data:"id="+ui.item.id,
 						                    success: function(data) {
 						                    	layer.close(globalLoadingLayer);
@@ -1081,6 +1083,7 @@ define(function(require, exports) {
 									$.ajax({
 										url:""+APP_ROOT+"back/restaurant.do?method=getRestaurantStandardByType&token="+$.cookie("token")+"&menuKey=resource_restaurant&operation=view",
 					                    dataType: "json",
+					                    showLoading:false,
 					                    data:"restaurantId="+restaurantNameId+"&type="+eatType,
 					                    success: function(data) {
 					                    	layer.close(globalLoadingLayer);
@@ -1113,6 +1116,7 @@ define(function(require, exports) {
 				$.ajax({
 					url:""+APP_ROOT+"back/restaurant.do?method=findAll&token="+$.cookie("token")+"&menuKey=resource_restaurant&operation=view",
                     dataType: "json",
+                    showLoading:false,
                     success: function(data) {
                     	layer.close(globalLoadingLayer);
 						var result = showDialog(data);
@@ -1188,6 +1192,7 @@ define(function(require, exports) {
 					$.ajax({
 						url:""+APP_ROOT+"back/hotel.do?method=getHotelById&token="+$.cookie("token")+"&menuKey=resource_hotel&operation=view",
 	                    dataType: "json",
+	                    showLoading:false,
 	                    data:"id=" + hotelDataId,
 	                    success: function(data) {
 	                    	layer.close(globalLoadingLayer);
@@ -1209,6 +1214,7 @@ define(function(require, exports) {
 							$.ajax({
 								url:""+APP_ROOT+"back/hotel.do?method=findRoomDetailById&token="+$.cookie("token")+"&menuKey=resource_hotel&operation=view",
 								dataType: "json",
+								showLoading:false,
 			                    data:"id=" + ui.item.id,
 			                    success: function(data) {
 			                    	layer.close(globalLoadingLayer);
@@ -1243,6 +1249,7 @@ define(function(require, exports) {
 						$.ajax({
 							url:""+APP_ROOT+"back/hotel.do?method=findTypeByHotelId&token="+$.cookie("token")+"&menuKey=resource_hotel&operation=view",
 		                    dataType: "json",
+		                    showLoading:false,
 		                    data:"id=" + hotelDataId,
 		                    success: function(data) {
 		                    	layer.close(globalLoadingLayer);
@@ -1286,6 +1293,7 @@ define(function(require, exports) {
 				$.ajax({
 					url:""+APP_ROOT+"back/hotel.do?method=findHotelListByLevel&token="+$.cookie("token")+"&menuKey=resource_hotel&operation=view",
                     dataType: "json",
+                    showLoading:false,
                     data:"level=" + hotelStarValue,
                     success: function(data) {
                     	layer.close(globalLoadingLayer);
@@ -1351,6 +1359,7 @@ define(function(require, exports) {
 					$.ajax({
 						url:""+APP_ROOT+"back/scenic.do?method=getScenicById&token="+$.cookie("token")+"&menuKey=resource_scenic&operation=view",
 	                    dataType: "json",
+	                    showLoading:false,
 	                    data: "id="+scenicNameId,
 	                    success: function(data) {
 	                    	layer.close(globalLoadingLayer);
@@ -1372,6 +1381,7 @@ define(function(require, exports) {
 							$.ajax({
 								url:""+APP_ROOT+"back/scenic.do?method=findItemDetailById&token="+$.cookie("token")+"&menuKey=resource_scenic&operation=view",
 			                    dataType: "json",
+			                    showLoading:false,
 			                    data: "id="+nameUiId,
 			                    success: function(data) {
 			                    	layer.close(globalLoadingLayer);
@@ -1406,6 +1416,7 @@ define(function(require, exports) {
 						$.ajax({
 							url:""+APP_ROOT+"back/scenic.do?method=findItemByScenicId&token="+$.cookie("token")+"&menuKey=resource_scenic&operation=view",
 		                    dataType: "json",
+		                    showLoading:false,
 		                    data: "id="+scenicNameId,
 		                    success: function(data) {
 		                    	layer.close(globalLoadingLayer);
@@ -1448,6 +1459,7 @@ define(function(require, exports) {
 				$.ajax({
 					url:""+APP_ROOT+"back/scenic.do?method=findAll&token="+$.cookie("token")+"&menuKey=resource_scenic&operation=view",
                     dataType: "json",
+                    showLoading:false,
                     success: function(data) {
                     	layer.close(globalLoadingLayer);
 						var result = showDialog(data);
@@ -1516,6 +1528,7 @@ define(function(require, exports) {
 					$.ajax({
 						url:""+APP_ROOT+"back/shop.do?method=getShopById&token="+$.cookie("token")+"&menuKey=resource_shop&operation=view",
 	                    dataType: "json",
+	                    showLoading:false,
 	                    data: "id="+vendorNameId,
 	                    success: function(data) {
 	                    	layer.close(globalLoadingLayer);
@@ -1559,6 +1572,7 @@ define(function(require, exports) {
 						$.ajax({
 							url:""+APP_ROOT+"back/shop.do?method=findPolicyByShopId&token="+$.cookie("token")+"&menuKey=resource_shop&operation=view",
 		                    dataType: "json",
+		                    showLoading:false,
 		                    data: "id="+vendorNameId,
 		                    success: function(data) {
 		                    	layer.close(globalLoadingLayer);
@@ -1602,6 +1616,7 @@ define(function(require, exports) {
 				$.ajax({
 					url:""+APP_ROOT+"back/shop.do?method=findAll&token="+$.cookie("token")+"&menuKey=resource_shop&operation=view",
                     dataType: "json",
+                    showLoading:false,
                     success: function(data) {
                     	layer.close(globalLoadingLayer);
 						var result = showDialog(data);
@@ -1658,6 +1673,7 @@ define(function(require, exports) {
 					$.ajax({
 						url:""+APP_ROOT+"back/selfpay.do?method=getSelfPayById&token="+$.cookie("token")+"&menuKey=resource_selfpay&operation=view",
 	                    dataType: "json",
+	                    showLoading:false,
 	                    data: "id="+ui.item.id,
 	                    success: function(data) {
 	                    	layer.close(globalLoadingLayer);
@@ -1694,6 +1710,7 @@ define(function(require, exports) {
 				$.ajax({
 					url:""+APP_ROOT+"back/selfpay.do?method=findAll&token="+$.cookie("token")+"&menuKey=resource_selfpay&operation=view",
 					dataType:"json",
+					showLoading:false,
 					success:function(data){
 						layer.close(globalLoadingLayer);
 						var result = showDialog(data);
@@ -1724,6 +1741,7 @@ define(function(require, exports) {
 						$.ajax({
 							url:""+APP_ROOT+"back/selfpay.do?method=findSelfPayRebateByItemId&token="+$.cookie("token")+"&menuKey=resource_selfpay&operation=view",
 		                    dataType: "json",
+		                    showLoading:false,
 		                    data: "id="+ui.item.id,
 		                    success: function(data) {
 		                    	layer.close(globalLoadingLayer);
@@ -1754,6 +1772,7 @@ define(function(require, exports) {
 					$.ajax({
 						url:""+APP_ROOT+"back/selfpay.do?method=findSelfPayItemBySelfPayId&token="+$.cookie("token")+"&menuKey=resource_selfpay&operation=view",
 						dataType:"json",
+						showLoading:false,
 						data:"id="+chooseCompanyNameId,
 						success:function(data){
 							layer.close(globalLoadingLayer);
@@ -1816,6 +1835,7 @@ define(function(require, exports) {
 					$.ajax({
 						url:""+APP_ROOT+"back/ticket.do?method=getTicketById&token="+$.cookie("token")+"&menuKey=resource_ticket&operation=view",
 	                    dataType: "json",
+	                    showLoading:false,
 	                    data: "id="+ui.item.id,
 	                    success: function(data) {
 	                    	layer.close(globalLoadingLayer);
@@ -1854,6 +1874,7 @@ define(function(require, exports) {
 				$.ajax({
 					url:""+APP_ROOT+"back/ticket.do?method=findAll&token="+$.cookie("token")+"&menuKey=resource_ticket&operation=view",
 					dataType:"json",
+					showLoading:false,
 					success:function(data){
 						layer.close(globalLoadingLayer);
 						var result = showDialog(data);

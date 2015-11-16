@@ -3,29 +3,22 @@
  *
  */
 define(function(require, exports) {	
-	var rule = {
-		setTranistCheckor: function($container) {
+	var rule = {};
+		rule.setTranistCheckor=function($container) {
 			this.$container = $container;
-
-			var settings = this.getTranistSettings();
-			return $container.formValidate(settings);
-		},
-
-		updateTranistCheckor: function(validator) {
-			validator.update(this.getTranistSettings());
-			return validator;
-		},
-		getTranistSettings: function() {
-			var $container = this.$container, 
-				$bus = $container.find('.busListTable').find('tbody').children('tr'),
+		var settings = this.getTranistSettings($container);
+		return $container.formValidate(settings);
+		};
+		rule.getTranistSettings=function($container) {
+			var	$bus = $container.find('.busListTable').find('tbody').children('tr'),
 				$hotel = $container.find('.hotelListTable').find('tbody').children('tr'),
 				$ticket = $container.find('.ticketListTable').find('tbody').children('tr'),
+				$restaurant = $container.find('.restaurantListTable').find('tbody').children('tr'),
+				$other = $container.find('.otherListTable').find('tbody').children('tr'),
 				settings = [];
 
 			$bus.each(function() {
 				var $that = $(this);
-
-				if ($that.find('input[name="busCompanyId"]').val())  {
 					// 设置车牌
 					settings.push({
 						$ele: $that.find('input[name="busLicenseNumber"]'),
@@ -70,15 +63,15 @@ define(function(require, exports) {
 						]
 					});
 
-					/*settings.push({
+					settings.push({
 						$ele: $that.find('input[name="busFee"]'),
 						rules: [
 							{
-								type: 'null',
-								errMsg: '数量不能为空'
+								type: 'float',
+								errMsg: '数据格式不正确'
 							}
 						]
-					});*/
+					});
 
 					settings.push({
 						$ele: $that.find('input[name="busReduceMoney"]'),
@@ -99,13 +92,10 @@ define(function(require, exports) {
 							}	
 						]
 					});
-				}
 			});
 
 			$hotel.each(function() {
 				var $that = $(this);
-
-				if ($that.find('input[name="hotelCheckInTime"]').val())  {
 					// 设置酒店
 					settings.push({
 						$ele: $that.find('input[name="hotelName"]'),
@@ -173,13 +163,10 @@ define(function(require, exports) {
 							}	
 						]
 					});
-				}
 			});
 
 			$ticket.each(function() {
 				var $that = $(this);
-
-				if ($that.find('input[name="tickeId"]').val())  {
 					/*settings.push({
 						$ele: $that.find('input[name="ticketStartCity"]'),
 						rules: [
@@ -231,19 +218,15 @@ define(function(require, exports) {
 						]
 					});
 
-					/*settings.push({
+					settings.push({
 						$ele: $that.find('input[name="ticketPrice"]'),
 						rules: [
 							{
-								type: 'null',
-								errMsg: '单价不能为空'
-							},
-							{
-								type: 'NoNumber',
-								errMsg: '数据格式不正确'
+								type: 'float',
+								errMsg: '票务单价不合法'
 							}
 						]
-					});*/
+					});
 
 					settings.push({
 						$ele: $that.find('input[name="ticketMemberCount"]'),
@@ -269,25 +252,101 @@ define(function(require, exports) {
 						]
 					});
 
-					/*settings.push({
+					settings.push({
 						$ele: $that.find('input[name="ticketPayedMoney"]'),
 						rules: [
 							{
-								type: 'null',
-								errMsg: '已付款不能为空'
-							},
+								type: 'float',
+								errMsg: '数据格式不正确'
+							}
+						]
+					});
+			});
+
+
+			$restaurant.each(function() {
+				var $that = $(this);
+					settings.push({
+						$ele: $that.find('input[name="reduceMoney"]'),
+						rules: [
+							{
+								type: 'float',
+								errMsg: '数据格式不正确'
+							}
+						]
+					});
+
+					settings.push({
+						$ele: $that.find('input[name="payedMoney"]'),
+						rules: [
+							{
+								type: 'float',
+								errMsg: '数据格式不正确'
+							}
+						]
+					});
+
+					settings.push({
+						$ele: $that.find('input[name="memberCount"]'),
+						rules: [
 							{
 								type: 'NoNumber',
 								errMsg: '数据格式不正确'
 							}
 						]
-					});*/
-				}
+					});
 			});
 
-			return settings;
-		}
-	};
+			$other.each(function() {
+				var $that = $(this);
+					settings.push({
+						$ele: $that.find('input[name="price"]'),
+						rules: [
+							{
+								type: 'int',
+								errMsg: '数字格式不正确'
+							}	
+						]
+					});
 
+					settings.push({
+						$ele: $that.find('input[name="memberCount"]'),
+						rules: [
+							{
+								type: 'int',
+								errMsg: '数字格式不正确'
+							}
+						]
+					});
+
+					settings.push({
+						$ele: $that.find('input[name="reduceMoney"]'),
+						rules: [
+							{
+								type: 'float',
+								errMsg: '数字格式不正确'
+							}	
+						]
+					});
+
+					settings.push({
+						$ele: $that.find('input[name="payedMoney"]'),
+						rules: [
+							{
+								type: 'int',
+								errMsg: '数字格式不正确'
+							}	
+						]
+					});
+			});
+			return settings;
+		};
+
+	rule.update = function(validator) {
+		if (!!validator)  {
+			validator.update(this.getTranistSettings(this.$container));
+		}
+		return validator;
+	}
 	return rule;
 });

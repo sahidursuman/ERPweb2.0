@@ -1,3 +1,13 @@
+/*分辨率*/
+/*@media screen and (max-width:1366px){
+    .page-content{
+    min-height: 768px!important;
+    width:1700px!important;
+    margin: auto;
+}
+
+}*/
+
 .search-btn{
     border-radius: 0;
     background: #51b0c2;
@@ -15,12 +25,14 @@
     white-space: nowrap!important;
     overflow: auto!important;
     height: auto!important;
+    z-index: 9999;
 }
-.btn-minier,.btn-group-minier>.btn{width: 65px;height: 35px!important;border-radius: 3px}
+
 input{
     vertical-align: middle !important;
     font-size: 12px !important;
     border: 1px solid #e2e2e2  !important;
+    text-indent:0.5em
 }
 .btn-success{
     font-size:12px;
@@ -251,10 +263,6 @@ table tr td{
     top:0!important;
     left: 20px!important;
 }
-.btn-height{
-    height: 24px!important;
-    margin-left: 20px!important;
-}
 .main-content {
     margin-top: 77px;
 }
@@ -386,7 +394,7 @@ table tr td{
     padding: 7px 0px 7px 0px;
 }
 .whereQ .style-myself{
-    width: 87px !important;
+    width: 90px !important;
     border: 2px solid #5d5d5d;
     text-align: right;
 }
@@ -516,9 +524,9 @@ input,select{
 .addTouristGroup .formOneList{
     margin-left: 20px;
 }
-.updateTouristGroup .formOneList{
+/*.updateTouristGroup .formOneList{
     margin-left: -53px !important;
-}
+}*/
 .formOneList input{
     width: 220px;
     height: 24px !important;
@@ -642,7 +650,13 @@ input,select{
     text-align: right !important;
     padding:7px 6px 7px 0px !important;
 }
+.triplan-dropdown-menu{
+    margin-left: -93px !important;
+}
 
+.Choose-spacing{
+    margin-left: -117px;
+}
 .departButton {
     height: 24px;
     line-height: 10px;
@@ -681,8 +695,8 @@ input,select{
 .guideMarginLeft{
     margin-left: -104px;
 }
-.btn-Plan-add{
-    margin-left: -95px;
+.transfer-startWidth{
+    margin-left: -100px;
 }
 .MiddleMarginLeft{
     margin-left: -190px;
@@ -740,10 +754,15 @@ input,select{
 .margin-top15{
     margin-top: 25px;
 }
-
+.margin-topF5{
+    margin-top: -5px !important;
+}
+.margin-leftF40{
+    left: -40px;
+}
 /*关闭操作页面时的button键*/
-.btn-heightMall{
-    /*height: 25px;*/
+.ui-dialog .ui-dialog-buttonpane button.btn-heightMall{
+    height: 27px !important;
     min-width: 55px;
     border-radius: 3px;
 }
@@ -780,13 +799,302 @@ padding-left:0;width: 360px;left: -35px;
 .transit-arrangeTime div{
     width: 260px;
 }
+/*中转分段显示不完整*/
+/*.ui-autocomplete .ui-state-focus{width:1000px;!important;}*/
+/*table 宽度*/
+.tableWidthImp{
+    width: 97% !important;
+}
+/*项目代订 input*/
 
+.orderNumInput{
+    width: 220px;
+}
+.partnerAgencyInput{
+    width: 120px;
+    margin-left: -10px;
+}
+/*新建线路产品-分割线样式*/
+.line-separated{
+    height: 23px;width: 90%;border-bottom:  1px solid #428bca;
+}
+.line-separatedT{
+   height: 15px;width: 92%;border-bottom:  1px solid #428bca;
+}
+.line-separatedS{
+   height: 15px;width: 93%;border-bottom:  1px solid #428bca;
+}
+.add-managerMore{
+    cursor:pointer;left:-38px;
+}
 
+.transfer-status{
+    width: 340px;
+    position:absolute;right:380px;
+}
+.getPay-type{
+    width: 220px;
+}
+.product-width{
+   width:155px !important;
+}
+.icon-tourist{
+    margin-left: -40px;
+}
+.status-transfer{
+    margin-left: 25px;
+}
 
+.transfer-startLeft{
+    margin-left: 90px;
+}
+.btn-touristStatus{
+    margin-left: 7px;
+}
+.Touristsearch-btn{
+  margin-left: 20px;
+}
 
 
 /*媒体查询*/
+@media screen and (max-width:1703px){
+  .line-separated{
+    height: 23px;width: 88%;border-bottom:  1px solid #428bca;
+} 
+.line-separatedT{
+   height: 15px;width: 90%;border-bottom:  1px solid #428bca;
+} 
+.line-separatedS{
+ height: 15px;width: 92%;border-bottom:  1px solid #428bca;
+}
+}
+
+
+/*媒体查询 1500*/
 
 @media screen and (max-width:1500px){
 
+/*中转分段 list*/
+.arrangeTouristInput input{
+          width: 185px;
+}
+.addResourceBtnTripPlan{
+        right: 8px;
+}
+.width110{
+    width: 110px
+}
+
+.subsectionStartTime{
+    width: 100px;
+}
+
+.innerTr-export{
+    margin-left: 20px;
+}
+
+/*内转管理*/
+
+
+.subsectionWords{
+    margin-left: 35px;
+}
+
+/*发团计划*/
+.triPlanInput input{
+          width: 185px;
+}
+.triplanName{
+    width: 115px !important;
+}
+.planSearchBtn{
+    position: absolute;
+}
+.triplanStartTime{
+  width: 100px;  
+}
+.Choose-spacing{
+    margin-left: -60px;
+}
+
+.triplan-searchBtn{
+    margin-left: 20px !important;
+}
+.newSearchBtn{
+    margin-left: -110px !important;
+}
+
+.line-separated{
+    height: 23px;width: 86%;border-bottom:  1px solid #428bca;
+}
+.line-separatedT{
+   height: 15px;width: 88%;border-bottom:  1px solid #428bca;
+}
+.line-separatedS{
+ height: 15px;width: 91%;border-bottom:  1px solid #428bca;
+}
+.orderNumInput{
+    width: 175px;
+}
+.partnerAgencyInput{
+    width: 120px;
+    margin-left: -10px;
+}
+.Choose-spacingNormal{
+    margin-left: 50px;
+}
+.search-spacing{
+    width: 240px;
+    margin-left: 15px !important;
+}
+.bookingInput input{
+    width: 180px;
+}
+.add-managerMore{
+    cursor:pointer;left:-20px;
+}
+.triplan-dropdown-menu{
+    margin-left: -35px !important;
+}
+
+/*转客管理*/
+.width-self160{
+    width: 160px;
+}
+.width-self220{
+    width: 220px;
+}
+.transfer-status{
+    width: 340px;
+    position:absolute;
+    right: 180px;
+}
+.transfer-startWidth{
+    width: 140px;margin-left: 1px;
+}
+.transfer-startWidth input{
+    width: 110px;
+
+}
+.timeStartMore{
+    margin-left: 20px !important;
+}
+.width110{
+    width: 110px;
+}
+.trans-PayedMoney{
+    width: 280px;
+}
+
+/*游客管理*/
+.updateTouristInput input{
+    width: 180px;
+}
+.getPay-type{
+    width: 180px;
+}
+.product-width{
+    width: 125px !important;
+}
+.travelLine-search{
+    position: absolute;
+}
+.icon-tourist{
+    margin-left: -20px !important;
+}
+.status-transfer{
+    margin-left: 65px;
+}
+.transfer-startLeft{
+    margin-left: 0px;
+}
+.transfer-startWidthT{
+    width: 140px;margin-left: 1px;  
+}
+.transfer-startWidthT input{
+    width: 110px;
+
+}
+.margin-leftF40{
+    left: -25px;
+}
+.tourist-newline{
+    width: 600px;
+    height: 60px;
+    margin-left: 10px;
+    padding-top: 40px;
+}
+.tourist-informationWidth{
+    width: 900px;
+}
+.tourist-contenWidth{
+width: 840px;
+}
+.rangeTime{
+    width: 175px;
+}
+.btn-touristStatus{
+    margin-left: 33px;
+}
+.Touristsearch-btn{
+  margin-left: 30px;
+}
+.tourist-partnerAid{
+    width: 230px;
+}
+.tourist-partnerAid select{
+    width: 63px;
+}
+.lineRoad-tourist{
+    margin-left: 30px;
+}
+.tourist-LineProduct{
+    width: 110px;
+}
+.margin-left60{
+    margin-left: 60px;
+}
+.tourist-userChoose{
+    width:70px;
+}
+.margin-left33{
+    margin-left: 33px;
+}
+.marginLeftTourist-30{
+    margin-left: 30px;
+}
+}
+
+/*媒体查询 1366*/
+@media screen and (max-width:1366px){
+
+ .arrangeTouristInput input{
+          width: 175px;
+}
+ .triPlanInput input{
+          width: 175px;
+}
+.addResourceBtnTripPlan{
+        right: 0px;
+}
+.line-separated{
+    height: 23px;width: 86%;border-bottom:  1px solid #428bca;
+}
+.line-separatedT{
+   height: 15px;width: 88%;border-bottom:  1px solid #428bca;margin-top: 2px;
+}
+.line-separatedS{
+ height: 15px;width: 90%;border-bottom:  1px solid #428bca;
+}
+.transfer-status{
+    width: 340px;
+    position:absolute;
+    right: 70px;
+}
+.trans-NeedPayAllMoney{
+    width: 220px;
+}
+.marginLeftTourist-30{
+    margin-left: 40px;
+}
 }

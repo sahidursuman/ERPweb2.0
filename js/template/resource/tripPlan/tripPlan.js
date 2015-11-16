@@ -31,7 +31,7 @@ define(function(require, exports) {
 			$.ajax({
 				url:""+APP_ROOT+"back/tripPlan.do?method=listTripPlan&token="+$.cookie("token")+"&menuKey=arrange_all&operation=view",
 				type:"POST",
-				data:"pageNo="+page+"&tripId="+encodeURIComponent(tripId)+"&tripNumber="+encodeURIComponent(tripNumber)+"&startTime="+encodeURIComponent(startTime)+"&guideId="+encodeURIComponent(guideId)+"&guideName="+encodeURIComponent(realname)+"&busId="+encodeURIComponent(busId)+"&busLicenseNumber="+encodeURIComponent(licenseNumber)+"&status="+encodeURIComponent(status)+"&sortType=auto&tripPlan=arrange",
+				data:"queryType=1&pageNo="+page+"&tripId="+encodeURIComponent(tripId)+"&tripNumber="+encodeURIComponent(tripNumber)+"&startTime="+encodeURIComponent(startTime)+"&guideId="+encodeURIComponent(guideId)+"&guideName="+encodeURIComponent(realname)+"&busId="+encodeURIComponent(busId)+"&busLicenseNumber="+encodeURIComponent(licenseNumber)+"&status="+encodeURIComponent(status)+"&sortType=auto&tripPlan=arrange",
 				dataType:"json",
 				beforeSend:function(){
 					globalLoadingLayer = layer.open({  
@@ -121,7 +121,7 @@ define(function(require, exports) {
 			$("#"+tabId+" .tripPlanViewList .btn-tripPlan-plan").on("click", function(){
 				var billStatus = $(this).attr("billStatus");
 				var id = $(this).attr("data-entiy-id");
-				if(billStatus != -1){
+				if(billStatus == 1 || billStatus == 2){
 					var dialogObj = $( "#confirm-dialog-message" );
 					dialogObj.removeClass('hide').dialog({
 						modal: true,
@@ -141,7 +141,28 @@ define(function(require, exports) {
 							$(this).find("p").text("该团已审核，无法编辑");
 						}
 					});
-				}else{
+				}else if(billStatus == 0){
+					var dialogObj = $( "#confirm-dialog-message" );
+					dialogObj.removeClass('hide').dialog({
+						modal: true,
+						title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
+						title_html: true,
+						draggable:false,
+						buttons: [ 
+							{
+								text: "确定",
+								"class" : "btn btn-primary btn-minier",
+								click: function() {
+									$( this ).dialog( "close" );
+								}
+							}
+						],
+						open:function(event,ui){
+							$(this).find("p").text("该团导游已报账，无法编辑");
+						}
+					});
+				}
+				else{
 					tripPlan.addTripPlan(id);
 				}
 			});
@@ -153,7 +174,7 @@ define(function(require, exports) {
 			$.ajax({
     			url:""+APP_ROOT+"back/tripPlan.do?method=findArrangeTripPlanById&token="+$.cookie("token")+"&menuKey=arrange_all&operation=view",
 				type:"GET",
-				data:"id="+id,
+				data:"id="+id+"&type=view",
 				dataType:"json",
 				beforeSend:function(){
 					globalLoadingLayer = openLoadingLayer();
@@ -347,10 +368,10 @@ define(function(require, exports) {
 		viewOptionalRestaurant :function($objInput){
 			$objInput.each(function(){
 				var $this = $(this),$parents = $this.closest('tr'),/*$value = $parents.find('[name=optional]').val(),*/$title = [],$value = $this.data("propover");
-				if (!!$value) {
-					if (!!$value && typeof $value === "string") {
-						$value = JSON.parse($value);
-					}
+				if (!!$value && typeof $value === "string") {
+					$value = JSON.parse($value);
+				}
+				if (!!$value && $value.length > 0) {
 					var html = '<table class="table table-striped table-hover"><thead><tr><th class="th-border">餐厅名称</th><th class="th-border">联系人</th><th class="th-border">联系电话</th></tr><tbody>';
 					for (var i = 0; i < $value.length; i++) {
 						html += '<tr><td>'+$value[i].name+'</td><td>'+$value[i].managerName+'</td><td>'+$value[i].mobileNumber+'</td></tr>'
@@ -732,6 +753,7 @@ define(function(require, exports) {
 				$.ajax({
 					url:""+APP_ROOT+"back/insurance.do?method=findAll&token="+$.cookie("token")+"&menuKey=resource_insurance&operation=view",
                     dataType: "json",
+                    showLoading: false,
                     success: function(data) {
                     	layer.close(globalLoadingLayer);
 						var result = showDialog(data);
@@ -1050,6 +1072,7 @@ define(function(require, exports) {
 						$.ajax({
 							url:""+APP_ROOT+"back/restaurant.do?method=findRestaurantById&token="+$.cookie("token")+"&menuKey=resource_restaurant&operation=view",
 		                    dataType: "json",
+		                    showLoading:false,
 		                    data:"id="+ui.item.id,
 		                    success: function(data){
 		                    	layer.close(globalLoadingLayer);
@@ -1070,6 +1093,7 @@ define(function(require, exports) {
 				$.ajax({
 					url:""+APP_ROOT+"back/restaurant.do?method=findAll&token="+$.cookie("token")+"&menuKey=resource_restaurant&operation=view",
                     dataType: "json",
+                    showLoading:false,
                     success: function(data) {
                     	layer.close(globalLoadingLayer);
 						var result = showDialog(data);
@@ -1140,6 +1164,7 @@ define(function(require, exports) {
 				$.ajax({
 					url:""+APP_ROOT+"back/restaurant.do?method=getRestaurantStandardByType&token="+$.cookie("token")+"&menuKey=resource_restaurant&operation=view",
                     dataType: "json",
+                    showLoading:false,
                     data:"restaurantId=" + id + "&type=" + type,
                     success: function(data) {
                     	layer.close(globalLoadingLayer);
@@ -1196,6 +1221,7 @@ define(function(require, exports) {
 					$.ajax({
 						url:""+APP_ROOT+"back/hotel.do?method=getHotelById&token="+$.cookie("token")+"&menuKey=resource_hotel&operation=view",
 	                    dataType: "json",
+	                    showLoading:false,
 	                    data:"id=" + ui.item.id,
 	                    success: function(data) {
 	                    	layer.close(globalLoadingLayer);
@@ -1217,6 +1243,7 @@ define(function(require, exports) {
 				$.ajax({
 					url:""+APP_ROOT+"back/hotel.do?method=findHotelListByLevel&token="+$.cookie("token")+"&menuKey=resource_hotel&operation=view",
 	                dataType: "json",
+	                showLoading:false,
 	                data:"level=" + hotelStarValue,
 	                success: function(data) {
 	                	layer.close(globalLoadingLayer);
@@ -1259,6 +1286,7 @@ define(function(require, exports) {
 					$.ajax({
 						url:""+APP_ROOT+"back/hotel.do?method=getHotelRoomPrice&token="+$.cookie("token")+"&menuKey=resource_hotel&operation=view",
 	                    dataType: "json",
+	                    showLoading:false,
 	                    data:"id=" + ui.item.id+"&whichDay=" + whichDay+"&enterTime=" + enterTime,
 	                    success: function(data) {
 							var result = showDialog(data);
@@ -1275,6 +1303,7 @@ define(function(require, exports) {
 				$.ajax({
 					url:""+APP_ROOT+"back/hotel.do?method=findTypeByHotelId&token="+$.cookie("token")+"&menuKey=resource_hotel&operation=view",
                     dataType: "json",
+                    showLoading:false,
                     data:"id=" + id,
                     success: function(data) {
                     	layer.close(globalLoadingLayer);
@@ -1326,6 +1355,7 @@ define(function(require, exports) {
 				$.ajax({
 					url:""+APP_ROOT+"back/scenic.do?method=findAll&token="+$.cookie("token")+"&menuKey=resource_scenic&operation=view",
                     dataType: "json",
+                    showLoading:false,
                     success: function(data) {
                     	layer.close(globalLoadingLayer);
 						var result = showDialog(data);
@@ -1361,6 +1391,7 @@ define(function(require, exports) {
 					$.ajax({
 						url:""+APP_ROOT+"back/scenic.do?method=getScenicItemPrice&token="+$.cookie("token")+"&menuKey=resource_scenic&operation=view",
 	                    dataType: "json",
+	                    showLoading:false,
 	                    data: "id="+nameUiId+"&whichDay="+whichDay+"&startTime="+startTime,
 	                    success: function(data) {
 	                    	layer.close(globalLoadingLayer);
@@ -1385,6 +1416,7 @@ define(function(require, exports) {
 				$.ajax({
 					url:""+APP_ROOT+"back/scenic.do?method=findItemByScenicId&token="+$.cookie("token")+"&menuKey=resource_scenic&operation=view",
                     dataType: "json",
+                    showLoading:false,
                     data: "id="+id,
                     success: function(data) {
                     	layer.close(globalLoadingLayer);
@@ -1424,6 +1456,7 @@ define(function(require, exports) {
 					$.ajax({
 						url:""+APP_ROOT+"back/shop.do?method=getShopById&token="+$.cookie("token")+"&menuKey=resource_shop&operation=view",
 	                    dataType: "json",
+	                    showLoading:false,
 	                    data: "id="+ui.item.id,
 	                    success: function(data) {
 	                    	layer.close(globalLoadingLayer);
@@ -1455,6 +1488,7 @@ define(function(require, exports) {
 				$.ajax({
 					url:""+APP_ROOT+"back/shop.do?method=findAll&token="+$.cookie("token")+"&menuKey=resource_shop&operation=view",
                     dataType: "json",
+                    showLoading:false,
                     success: function(data) {
                     	layer.close(globalLoadingLayer);
 						var result = showDialog(data);
@@ -1516,6 +1550,7 @@ define(function(require, exports) {
 				$.ajax({
 					url:""+APP_ROOT+"back/shop.do?method=findPolicyByShopId&token="+$.cookie("token")+"&menuKey=resource_shop&operation=view",
                     dataType: "json",
+                    showLoading:false,
                     data: "id="+id,
                     success: function(data) {
                     	layer.close(globalLoadingLayer);
@@ -1561,6 +1596,7 @@ define(function(require, exports) {
 					$.ajax({
 						url:""+APP_ROOT+"back/selfpay.do?method=findSelfPayItemBySelfPayId&token="+$.cookie("token")+"&menuKey=resource_selfpay&operation=view",
 	                    dataType: "json",
+	                    showLoading:false,
 	                    data: "id="+ui.item.id,
 	                    success: function(data) {
 	                    	layer.close(globalLoadingLayer);
@@ -1586,6 +1622,7 @@ define(function(require, exports) {
 				$.ajax({
 					url:""+APP_ROOT+"back/selfpay.do?method=findAll&token="+$.cookie("token")+"&menuKey=resource_selfpay&operation=view",
 					dataType:"json",
+					showLoading:false,
 					success:function(data){
 						layer.close(globalLoadingLayer);
 						var result = showDialog(data);
@@ -1625,6 +1662,7 @@ define(function(require, exports) {
 					$.ajax({
 						url:""+APP_ROOT+"back/selfpay.do?method=getSelfPayItemPrice&token="+$.cookie("token")+"&menuKey=resource_selfpay&operation=view",
 	                    dataType: "json",
+	                    showLoading:false,
 	                    data: "id="+ui.item.id+"&whichDay="+whichDay+"&startTime="+startTime,
 	                    success: function(data) {
 	                    	layer.close(globalLoadingLayer);
@@ -1643,6 +1681,7 @@ define(function(require, exports) {
 					$.ajax({
 						url:""+APP_ROOT+"back/selfpay.do?method=findSelfPayItemBySelfPayId&token="+$.cookie("token")+"&menuKey=resource_selfpay&operation=view",
 	                    dataType: "json",
+	                    showLoading:false,
 	                    data: "id="+id,
 	                    success: function(data) {
 	                    	layer.close(globalLoadingLayer);
@@ -1707,6 +1746,7 @@ define(function(require, exports) {
 				$.ajax({
 					url:""+APP_ROOT+"back/ticket.do?method=findAll&token="+$.cookie("token")+"&menuKey=resource_ticket&operation=view",
 					dataType:"json",
+					showLoading:false,
 					success:function(data){
 						layer.close(globalLoadingLayer);
 						var result = showDialog(data);
@@ -1842,17 +1882,19 @@ define(function(require, exports) {
 				}
 			}
 			//餐安排
-			var restaurant = $("#tripPlan_addPlan_restaurant tbody tr"),
-				isChoose = "0",restaurantChooseArrangeListJson;
+			var restaurant = $("#tripPlan_addPlan_restaurant tbody tr");
 			if(restaurant.length > 0){
 				for(var i=0; i<restaurant.length; i++){
+					var isChoose = "0",restaurantChooseArrangeListJson;
 					if (!!restaurant.eq(i).find('[name=restaurantName]').data('propover')) {
-						isChoose = "1";
 						restaurantChooseArrangeListJson = restaurant.eq(i).find('[name=restaurantName]').data('propover')
 						if(typeof restaurant.eq(i).find('[name=restaurantName]').data('propover') === 'string'){
 							restaurantChooseArrangeListJson = JSON.parse(restaurant.eq(i).find('[name=restaurantName]').data('propover'))
 						}
 					}
+					if(!!tripPlan.getVal(restaurant.eq(i), "restaurantId") && tripPlan.getVal(restaurant.eq(i), "restaurantId") == -1){{
+						isChoose = "1";
+					}}
 					if(tripPlan.getVal(restaurant.eq(i), "restaurantId")){
 						var restaurantJson = {
 							id : tripPlan.getVal(restaurant.eq(i), "id"),
@@ -2098,45 +2140,47 @@ define(function(require, exports) {
 			table.each(function(){
 				var _this = $(this);
 				_this.find("input[name=price], input[name=fee]").on("change", function(){
-					plusPrice(this);
+					tripPlan.plusPrice(this);
+				});
+				_this.find("input[name=price], input[name=fee]").on("blur", function(){
+					tripPlan.plusPrice(this);
 				});
 				_this.find("input[name=memberCount], input[name=memberCount], input[name=needRoomCount]").on("change", function(){
-					plusPrice(this);
+					tripPlan.plusPrice(this);
 				});
 				_this.find("input[name=reduceMoney]").on("change", function(){
-					plusPrice(this);
+					tripPlan.plusPrice(this);
 				});
 				_this.find("input[name=payedMoney]").on("change", function(){
-					plusPrice(this);
+					tripPlan.plusPrice(this);
 				});
 				_this.find("select[name=payType]").on("change", function(){
 					if($(this).val()!=0){
 						$(this).parent().parent().find("input[name=guidePayMoney]").val("");
 					}else{
-						plusPrice(this);
+						tripPlan.plusPrice(this);
 					}
 				});
-				
-				function plusPrice(obj){
-					var parents = $(obj).parent().parent();
-					var payType = parents.find("select[name=payType]").val(),
-						payedMoney = parents.find("input[name=payedMoney]").val(),
-						payedMoney = isNaN(payedMoney) ? 0 : payedMoney;
-					price = parseFloat(parents.find("input[name=price], input[name=fee]").val());
-					price = isNaN(price) ? 0 : price;
-					num = parseFloat(parents.find("input[name=memberCount], input[name=memberCount], input[name=needRoomCount]").val());
-					num = isNaN(num) ? 0 : num;
-					reduceMoney = parseFloat(parents.find("input[name=reduceMoney]").val());
-					reduceMoney = isNaN(reduceMoney) ? 0 : reduceMoney;
-
-					parents.find("input[name=needPayMoney]").val(price * num - reduceMoney);
-					
-					if(payType == 0){
-						parents.find("input[name=guidePayMoney]").val((price * num - reduceMoney)-payedMoney);
-					}
-					tripPlan.moneyTripPlan();
-				}
 			});			
+		},
+		plusPrice :function(obj){
+			var parents = $(obj).parent().parent();
+			var payType = parents.find("select[name=payType]").val(),
+				payedMoney = parents.find("input[name=payedMoney]").val(),
+				payedMoney = isNaN(payedMoney) ? 0 : payedMoney;
+			price = parseFloat(parents.find("input[name=price], input[name=fee]").val());
+			price = isNaN(price) ? 0 : price;
+			num = parseFloat(parents.find("input[name=memberCount], input[name=memberCount], input[name=needRoomCount]").val());
+			num = isNaN(num) ? 0 : num;
+			reduceMoney = parseFloat(parents.find("input[name=reduceMoney]").val());
+			reduceMoney = isNaN(reduceMoney) ? 0 : reduceMoney;
+
+			parents.find("input[name=needPayMoney]").val(price * num - reduceMoney);
+			
+			if(payType == 0){
+				parents.find("input[name=guidePayMoney]").val((price * num - reduceMoney)-payedMoney);
+			}
+			tripPlan.moneyTripPlan();
 		},
 		exportTripPlanArrange:function(){
 			var id = $(this).attr("data-entity-id");
@@ -2219,6 +2263,7 @@ define(function(require, exports) {
 				        			data.restaurantList = JSON.parse(data.restaurantList);
 									var html = optionalListTemplate(data);
 									$list.html(html);
+									$(window).trigger("resize");
 
 									// 绑定翻页组件
 									laypage({
@@ -2327,6 +2372,7 @@ define(function(require, exports) {
 		        				}else{
 		        					optionalArray.splice([a],1);
 				        			$parent.remove();
+				        			saveOptional(1); 
 						        }
 		        			} 
 		        		}
