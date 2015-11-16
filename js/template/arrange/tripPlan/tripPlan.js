@@ -65,7 +65,7 @@ define(function(require, exports) {
 				if(result){
 					data.tripPlanList = JSON.parse(data.tripPlanList);
 					var html = listTemplate(data);
-					addTab(menuKey,"发团计划",html);
+					Tools.addTab(menuKey,"发团计划",html);
 
 					tripPlan.initList(data);
 					tripPlan.getQueryTerms();
@@ -159,7 +159,7 @@ define(function(require, exports) {
 
 		var html = addTripPlanTemplate(); 
         if (Tools.addTab(menuKey+"-add", "新增计划", html)) {
-            tripPlan.initEdit(id,"add");                         
+            tripPlan.initEdit("add");                         
         }
         rule.checkdCreateTripPlan($('.T-addPlan-form'));  	
 	};
@@ -192,7 +192,7 @@ define(function(require, exports) {
 					//判断  立即发送  定时发送
 					var isCheckedStatus=data.tripPlan.executeTimeType;
 					if (Tools.addTab(menuKey+"-update", "编辑发团计划", html)) {
-			            tripPlan.initEdit(id,"update");  
+			            tripPlan.initEdit("update",id);  
 			            //短信状态
 					 	tripPlan.isMessageStatus(isSendMessageStatus,isCheckedStatus,$("#tab-"+menuKey+"-update-content"));                       
 			        }
@@ -202,12 +202,13 @@ define(function(require, exports) {
 		});	
 	};
 
-	tripPlan.initEdit = function(id,operation){
+	tripPlan.initEdit = function(operation,id){
 		
 		var $tab = $("#tab-" + menuKey + "-" + operation + "-content");
 		var $container = $tab.find('.T-plan-container');
-		$tab.find('.T-savePlan').data('id', id);
-		console.log("#tab-" + menuKey + "-" + operation + "-content");
+		if(arguments === 2){
+			$tab.find('.T-savePlan').data('id', id);
+		}
 
 		tripPlan.init_edit_event($tab,operation);
     	//搜索线路
@@ -344,26 +345,7 @@ define(function(require, exports) {
 										var daysLength = data.lineProductDays.length;
 										var html = "";
 										for(i=0;i<daysLength;i++){
-											function hotelLevel(){
-												if(data.lineProductDays[i].hotelLevel == 1){
-													return "三星以下"
-												}else if(data.lineProductDays[i].hotelLevel == 2){
-													return "三星"
-												}else if(data.lineProductDays[i].hotelLevel == 3){
-													return "准四星"
-												}else if(data.lineProductDays[i].hotelLevel == 4){
-													return "四星"
-												}else if(data.lineProductDays[i].hotelLevel == 5){
-													return "准五星"
-												}else if(data.lineProductDays[i].hotelLevel == 6){
-													return "五星"
-												}else if(data.lineProductDays[i].hotelLevel == 7){
-													return "五星以上"
-												}else{
-													return "-"
-												}
-											}
-											html +='<tr><td>第'+data.lineProductDays[i].whichDay+'天</td><td>'+data.lineProductDays[i].repastDetail+'</td><td>'+hotelLevel()+'</td><td class="col-xs-6">'+data.lineProductDays[i].title+'</td></tr>';
+											html +="<tr><td>第"+data.lineProductDays[i].whichDay+"天</td><td>"+data.lineProductDays[i].repastDetail+"</td><td>"+KingServices.getHotelDesc(data.lineProductDays[i].hotelLevel,'-')+"</td><td class='col-xs-6'>"+data.lineProductDays[i].title+"</td></tr>";
 										}
 										$(".T-plan-container .T-days").html(html);
 									}
@@ -630,7 +612,7 @@ define(function(require, exports) {
 							} else {
 	                            $tab.data('isEdited',false);
 	                            Tools.addTab(tab_id, title, html);
-	                            tripPlan.initEdit(id,operation);
+	                            tripPlan.initEdit(operation,id);
 							}
 						});
 					}
@@ -810,7 +792,6 @@ define(function(require, exports) {
 	};
 
 	tripPlan.init_edit_event = function($tab,operation,id) {
-		console.log($tab.length);
         if (!!$tab && $tab.length === 1) {
             var validator =rule.checkdCreateTripPlan($tab.find('.T-addPlan-form'));
 
@@ -822,7 +803,7 @@ define(function(require, exports) {
             $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
             	event.preventDefault();
             	
-				tripPlan.initEdit($tab.find('.T-savePlan').data('id'),operation);
+				tripPlan.initEdit(operation,$tab.find('.T-savePlan').data('id'));
             })
             // 监听保存，并切换tab
             .on('switch.tab.save', function(event, tab_id, title, html) {
