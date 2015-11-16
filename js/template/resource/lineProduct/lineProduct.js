@@ -9,6 +9,7 @@ define(function(require, exports) {
 		menuKey = "resource_lineProduct",
 		listTemplate = require("./view/list"),
 		addTemplate = require("./view/add"),
+		addLineProductTemplate = require("./view/addLineProduct"),
 		viewDetailTemplate = require("./view/viewDetail"),
 		addQouteTemplate = require("./view/addQoute"),
 		updateLineProductTemplate = require("./view/updateLineProduct"),
@@ -180,7 +181,34 @@ define(function(require, exports) {
 	};
 
 	/**
-	 * 添加、编辑、复制线路模板。其中编辑和添加功能将提供给其他模块调用
+	 * 使用模板增加线路产品
+	 * @param {[type]} templateId [description]
+	 */
+	ResLineProduct.addLineProduct = function(templateId) {
+		var tab_id = menuKey + '-add';
+
+		if (ResLineProduct.add_id === templateId) {
+			$('.tab-' + tab_id).children('a').trigger('click');
+			return;
+		}
+		$.ajax({
+			url: KingServices.build_url('travelLine', 'getTravelLineById'),
+			type: 'post',
+			data: {id: templateId},
+		})
+		.done(function(data) {
+			if (showDialog(data))  {
+				data.travelLine = JSON.parse(data.travelLine);
+				if (Tools.addTab(tab_id, '新建线路产品', addLineProductTemplate(data))) {
+					ResLineProduct.tmpData.type = true;  // 新增模式
+					ResLineProduct.init_updata_tab(tab_id);
+				}
+			}
+		});
+	}
+
+	/**
+	 * 编辑、复制线路模板。其中编辑和添加功能将提供给其他模块调用
 	 * @param  {id} id            编辑或者复制的线路产品的id
 	 * @param  {Boolean} clipboardMode true表示复制、false表示编辑
 	 * @return {[type]}               [description]
@@ -333,8 +361,6 @@ define(function(require, exports) {
 			$tab.find('.T-daylist').children('.tab-pane').each(function(index, el) {
 				init_editor($(this).find('.T-editor').prop('id'));
 			});
-
-
 			
 			//添加具体行程安排相应事件
 			$tab.find('.T-daylist').on('click', '.T-add', function(event) {
@@ -2030,4 +2056,5 @@ define(function(require, exports) {
 	};
 
 	exports.init = ResLineProduct.initModule;  
+	exports.addLineProduct = ResLineProduct.addLineProduct;  
 });
