@@ -11,7 +11,7 @@
 				<input type="hidden" name="partnerAgencyChooseId" value="{{searchParam.partnerAgencyId}}" />
 			</div>
 			<div class="col-xs-1">
-				<input type="text" name="operateUser" class="col-xs-12 operateUserChoose" placeholder="操作人" value="{{if searchParam.operateUser != null}}{{searchParam.operateUser}}{{/if}}" />
+				<input type="text" name="operateUser" class="col-xs-12 T-operateUserChoose" placeholder="操作人" value="{{if searchParam.operateUser != null}}{{searchParam.operateUser}}{{/if}}" />
 				<input type="hidden" name="operateUserId" value="{{searchParam.operateUserId}}" />
 			</div>
 			<div class="col-xs-3">
@@ -33,11 +33,11 @@
 				</div>
 			</div>
 			<div class="col-xs-2">
-				<button class=" btn-sm  btn-booking-search search-btn" style="margin-left: -25px">
+				<button class=" btn-sm  T-booking-search search-btn" style="margin-left: -25px">
 					<i class="ace-icon fa fa-search"></i>
 					搜索
 				</button>
-				<button class="btn btn-sm btn-success btn-Booking-add R-right" data-right="1170002" style="margin-left: 20px"> <i class="ace-icon fa fa-plus"></i> 新增项目代订</button>
+				<button class="btn btn-sm btn-success T-Booking-add R-right" data-right="1170002" style="margin-left: 20px"> <i class="ace-icon fa fa-plus"></i> 新增项目代订</button>
 			</div>
 			<div style="clear:both;height:0px;line-height:0px;">
 
@@ -103,14 +103,14 @@
 					<td>{{if booking.isConfirmAccount == 1}}已对账{{else}}未对账{{/if}}</td>
 					<td>
 
-						<a data-entity-id="{{booking.id}}" title="查看计划" class=" cursor btn-Booking-view">
+						<a data-entity-id="{{booking.id}}" title="查看计划" class=" cursor T-Booking-view">
 							查看
 						</a>
-					    <a data-entity-id="{{booking.id}}" title="编辑计划" class=" cursor {{if booking.isConfirmAccount != 1}}btn-Booking-edit{{/if}} R-right" data-right="1170003" {{if booking.isConfirmAccount == 1}} style="color: #bbb" {{/if}}>
+					    <a data-entity-id="{{booking.id}}" title="编辑计划" class=" cursor {{if booking.isConfirmAccount != 1}}T-Booking-edit{{/if}} R-right" data-right="1170003" {{if booking.isConfirmAccount == 1}} style="color: #bbb" {{/if}}>
 							<label class="padding-right20">|</label>
 							编辑
 						</a>
-						<a data-entity-id="{{booking.id}}" title="取消计划" class=" cursor {{if booking.isConfirmAccount != 1}}btn-Booking-cancel{{/if}} R-right" data-right="1170004" {{if booking.isConfirmAccount == 1}} style="color: #bbb" {{/if}}>
+						<a data-entity-id="{{booking.id}}" title="取消计划" class=" cursor {{if booking.isConfirmAccount != 1}}T-Booking-cancel{{/if}} R-right" data-right="1170004" {{if booking.isConfirmAccount == 1}} style="color: #bbb" {{/if}}>
 							<label class="padding-right20">|</label>
 							取消
 						</a>

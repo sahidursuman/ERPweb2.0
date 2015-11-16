@@ -1,4 +1,4 @@
-<div class="col-xs-12 addBooking globalAdd">
+<div class="col-xs-12 T-addBooking globalAdd">
 	<form class="form-horizontal bookingMainForm formOneList" role="form" style="margin-top:10px" onsubmit="return false">
 		<div class=" ui-sortable-handle">
 				<h5 class="">
@@ -11,15 +11,15 @@
 						<input name="id" type="hidden" value="" />
 						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>同行客户:</label>
 						<div class="col-sm-2">
-							<input type="text" name="partnerAgencyName bind-change" class="col-sm-12 choosePartnerAgency" value="">
+							<input type="text" name="partnerAgencyName" class="col-sm-12 bind-change T-choosePartnerAgency" value="">
 							<input type="hidden" name="partnerAgencyId" value="">
 						</div>
 						<label class="col-sm-1 control-label no-padding-right"> <span class="necessary">*</span>联系人:</label>
 						<div class="col-sm-2">
 							<div class="input-group">
-								<input type="text" name="contactRealname bind-change" class="col-sm-12 choosePartnerManager" value="">
+								<input type="text" name="contactRealname" class="col-sm-12 bind-change T-choosePartnerManager" value="">
 								<input type="hidden" name="partnerAgencyContactId" />
-								<span class="input-group-addon addPartnerManager" style="cursor:pointer;left:-38px;" title="为组团社新添加联系人">
+								<span class="input-group-addon T-addPartnerManager" style="cursor:pointer;left:-38px;" title="为组团社新添加联系人">
 									<i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
 								</span>
 							</div>
@@ -95,12 +95,10 @@
 						<h5 class="">
 							<span class="badge badge-primary">2</span>
 							<label class="middle title-size">酒店代订</label>
-							<a href="javascript:void(0)" class="btn-hotel-booking-add">
-								<button class="btn btn-sm btn-success" style="margin-left: 20px;">
-									<i class="ace-icon fa fa-plus"></i>
-									新增
-								</button>
-							</a>
+							<button class="btn btn-sm btn-success T-hotel-booking-add" style="margin-left: 20px;">
+								<i class="ace-icon fa fa-plus"></i>
+								新增
+							</button>
 						</h5>
 					<div class="widget-body">
 						<div class="widget-main no-padding">
@@ -181,12 +179,10 @@
 						<h5 class="">
 							<span class="badge badge-primary">3</span>
 							<label class="middle title-size">景区项目代订</label>
-							<a href="javascript:void(0)" class="btn-scenic-booking-add">
-								<button class="btn btn-sm btn-success" style="margin-left: 20px;">
+							<button class="btn btn-sm btn-success T-scenic-booking-add" style="margin-left: 20px;">
 								<i class="ace-icon fa fa-plus"></i>
 								新增
-								</button>
-							</a>
+							</button>
 						</h5>
 					<div class="widget-body">
 						<div class="widget-main no-padding">
@@ -246,12 +242,10 @@
 						<h5 class="">
 							<span class="badge badge-primary">4</span>
 							<label class="middle title-size">票务代订</label>
-							<a href="javascript:void(0)" class="btn-ticket-booking-add" style="margin-top: 20px">
-								<button class="btn btn-sm btn-success" style="margin-left: 20px;">
-									<i class="ace-icon fa fa-plus"></i>
-									新增
-								</button>
-							</a>
+							<button class="btn btn-sm btn-success T-ticket-booking-add" style="margin-left: 20px;">
+								<i class="ace-icon fa fa-plus"></i>
+								新增
+							</button>
 						</h5>
 					<div class="widget-body">
 						<div class="widget-main no-padding">
@@ -321,12 +315,10 @@
 						<h5 class="">
 							<span class="badge badge-primary">5</span>
 							<label class="middle title-size">旅游车代订</label>
-							<a href="javascript:void(0)" class="btn-bus-booking-add">
-								<button class="btn btn-sm btn-success" style="margin-left: 20px;">
-									<i class="ace-icon fa fa-plus"></i>
-									新增
-								</button>
-							</a>
+							<button class="btn btn-sm btn-success T-bus-booking-add" style="margin-left: 20px;">
+								<i class="ace-icon fa fa-plus"></i>
+								新增
+							</button>
 						</h5>
 						</div>
 					<div class="widget-body">
@@ -390,7 +382,7 @@
 			</div>
 		<div class="space-10"></div>
 		<div class="space-20"></div>
-		<button class="btn btn-block btn-primary btn-submit-booking guideSubmit">
+		<button class="btn btn-block btn-primary T-submit-booking guideSubmit">
 			<i class="ace-icon fa fa-check"></i>
 			提交信息
 		</button>
