@@ -151,14 +151,26 @@ define(function(require, exports) {
 
 	//新增计划
 	tripPlan.addTripPlan = function(){
+		var $tab = $("#tab-" + menuKey + "-add-content");
+		if ($tab.length) {// 如果打开的是相同产品，则不替换
+			$('.tab-arrange_plan-add').children('a').trigger('click');
+			return;
+		}
+
 		var html = addTripPlanTemplate(); 
         if (Tools.addTab(menuKey+"-add", "新增计划", html)) {
-            tripPlan.initEdit("add");                         
+            tripPlan.initEdit(id,"add");                         
         }
         rule.checkdCreateTripPlan($('.T-addPlan-form'));  	
 	};
 	//编辑计划
 	tripPlan.updateTripPlan = function(id){
+		var $tab = $("#tab-" + menuKey + "-update-content");
+		if ($tab.length && $tab.find('.T-savePlan').data('id') == id) {// 如果打开的是相同产品，则不替换
+			$('.tab-arrange_plan-update').children('a').trigger('click');
+			return;
+		}
+
 		$.ajax({
 			url:KingServices.build_url("tripPlan","getTripPlanById"),
 			data:{ tripPlanId : id + ""}, 
@@ -180,7 +192,7 @@ define(function(require, exports) {
 					//判断  立即发送  定时发送
 					var isCheckedStatus=data.tripPlan.executeTimeType;
 					if (Tools.addTab(menuKey+"-update", "编辑发团计划", html)) {
-			            tripPlan.initEdit("update");  
+			            tripPlan.initEdit(id,"update");  
 			            //短信状态
 					 	tripPlan.isMessageStatus(isSendMessageStatus,isCheckedStatus,$("#tab-"+menuKey+"-update-content"));                       
 			        }
@@ -190,9 +202,12 @@ define(function(require, exports) {
 		});	
 	};
 
-	tripPlan.initEdit = function(operation){
+	tripPlan.initEdit = function(id,operation){
+		
 		var $tab = $("#tab-" + menuKey + "-" + operation + "-content");
 		var $container = $tab.find('.T-plan-container');
+		$tab.find('.T-savePlan').data('id', id);
+		console.log("#tab-" + menuKey + "-" + operation + "-content");
 
 		tripPlan.init_edit_event($tab,operation);
     	//搜索线路
@@ -245,7 +260,7 @@ define(function(require, exports) {
 		})
 		//保存计划   btn-savelTripPlan
 		$tab.find(".T-savePlan").click(function(){
-			tripPlan.saveTripPlan(operation);
+			tripPlan.saveTripPlan(operation,id);
 		});
 	};
 
@@ -531,7 +546,7 @@ define(function(require, exports) {
 	};
 
 	//保存编辑
-	tripPlan.saveTripPlan = function (operation,tab_id, title, html){
+	tripPlan.saveTripPlan = function (operation,id,tab_id, title, html){
 		var $tab = $("#tab-arrange_plan-"+ operation +"-content"),argumentsLen = arguments.length;
 		function getValue(name){
 			var thisObj = $tab.find("[name="+name+"]"), objValue;
@@ -605,7 +620,7 @@ define(function(require, exports) {
 					var result = showDialog(data);
 					if(result){
 						showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-							if(argumentsLen === 0){
+							if(argumentsLen === 1){
 								Tools.closeTab(menuKey+"-" + operation);
 								if(operation == "update"){
 									tripPlan.listTripPlan(tripPlan.searchData.page,tripPlan.searchData.tripId,tripPlan.searchData.tripNumber,tripPlan.searchData.startTime,tripPlan.searchData.guideId,tripPlan.searchData.guideName,tripPlan.searchData.busId,tripPlan.searchData.licenseNumber,tripPlan.searchData.creatorName,tripPlan.searchData.creator,tripPlan.searchData.status);
@@ -615,7 +630,7 @@ define(function(require, exports) {
 							} else {
 	                            $tab.data('isEdited',false);
 	                            Tools.addTab(tab_id, title, html);
-	                            tripPlan.initEdit(operation);
+	                            tripPlan.initEdit(id,operation);
 							}
 						});
 					}
@@ -794,7 +809,8 @@ define(function(require, exports) {
 		},function(){},"取消","确定");
 	};
 
-	tripPlan.init_edit_event = function($tab,operation) {
+	tripPlan.init_edit_event = function($tab,operation,id) {
+		console.log($tab.length);
         if (!!$tab && $tab.length === 1) {
             var validator =rule.checkdCreateTripPlan($tab.find('.T-addPlan-form'));
 
@@ -802,16 +818,21 @@ define(function(require, exports) {
             $tab.find(".T-plan-container").on('change', function(event) {
                 event.preventDefault();
                 $tab.data('isEdited', true);
+            });
+            $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
+            	event.preventDefault();
+            	
+				tripPlan.initEdit($tab.find('.T-savePlan').data('id'),operation);
             })
             // 监听保存，并切换tab
             .on('switch.tab.save', function(event, tab_id, title, html) {
                 event.preventDefault();
-                Client.saveTripPlan(operation,tab_id, title, html);
+                tripPlan.saveTripPlan(operation,id,tab_id, title, html);
             })
             // 保存后关闭
             .on('close.tab.save', function(event) {
                 event.preventDefault();
-                Client.saveTripPlan(operation);
+                tripPlan.saveTripPlan(operation);
             });
         }
     };
