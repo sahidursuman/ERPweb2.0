@@ -128,6 +128,14 @@
             {{/each}}
          </tbody>
         </table>
+        <div class="form-group text-right">
+            <label class="control-label pull-right"/>
+                <input type="checkbox" class="ace pull-right innerTransferIn-selectAll">
+                <span class="lbl"></span>  
+                全选
+            </label>
+        </div>
+        <div class="clearfix"></div>
         <div class="row pageMode">
             <div class="col-xs-6">
                 <small>共计 {{recordSize}} 条记录</small>
@@ -137,13 +145,6 @@
                 </div>
             </div>
         </div>
-        <div class="form-group pull-right col-sm-4" style="text-align: right;margin-top: 40px;padding-right: 40px">
-                <label class="pos-rel" style="margin-left:20px">
-                    <span class="lbl"><input type="checkbox" class="innerTransferIn-selectAll"/>全选</span>
-                </label>
-       </div>
-       <div style="clear: both"></div>
-       <br>
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="form-group" style="text-align: center;">
                 <button class="btn btn-xs btn-primary btn-createTripPlan btn-transferFinancial-close">
@@ -156,6 +157,4 @@
                 </button>
             </div>
         </form>
-
-
 </div>

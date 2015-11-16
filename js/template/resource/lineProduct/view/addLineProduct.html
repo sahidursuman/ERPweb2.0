@@ -1,5 +1,5 @@
-<div class="col-xs-12 lineProductContainer">
-	<form class="form-horizontal lineProductMainForm" role="form" style="margin-top:10px" onsubmit="return false">
+<div class="col-xs-12  T-updateLineProductContainer">
+	<form class="form-horizontal T-mainForm" role="form" style="margin-top:10px" onsubmit="return false">
 		<div class=" ui-sortable-handle">
 				<h5 class=" pull-left " >
 					<i class="ace-icon fa fa-info-circle title-size"></i>
@@ -93,9 +93,9 @@
 															<th class="th-border">备注</th>
 														</tr>
 													</thead>  
-													<tbody>
+													<tbody  class="T-guideForm">
 														<tr>
-															<td><input class="chooseGuide col-xs-12 bind-change" name="guideName" type="text"/><input type="hidden" name="guideNameId"></td>
+															<td><input class="T-guide-name col-xs-12 bind-change" name="guideName" type="text"/><input type="hidden" name="guideNameId"></td>
 															<td><input class="col-xs-12" name="guideFee" type="text" /></td>
 															<td><input class="col-xs-12" name="gender" type="text" readonly="readonly"/></td>
 															<td><input class="col-xs-12" name="mobileNumber" type="text" readonly="readonly"/></td>
@@ -130,9 +130,9 @@
 															<th class="th-border">备注</th>
 														</tr>
 													</thead>
-													<tbody>
+													<tbody class="T-insuranceForm">
 														<tr>
-															<td><input class="chooseInsurance col-xs-12 bind-change" name="insuranceName" type="text"/><input type="hidden" name="insuranceId"/></td>
+															<td><input class="T-insurance-name col-xs-12 bind-change" name="insuranceName" type="text"/><input type="hidden" name="insuranceId"/></td>
 															<td><input class="col-xs-12" name="type" type="text" maxlength="100" /></td>
 															<td><input class="col-xs-12" name="price" type="text" maxlength="6" /></td>
 															<td><input class="col-xs-12" name="telNumber" type="text" readonly="readonly"/></td>
@@ -168,11 +168,11 @@
 															<th class="th-border">备注</th>
 														</tr>
 													</thead>
-													<tbody>
+													<tbody class="T-busCompanyForm">
 														<tr>
 															<td><input class="col-xs-12 bind-change" name="needSeatCount" type="text" maxlength="2" /></td>  
-															<td><input name="companyName" class="chooseBusCompany col-xs-12 bind-change" type="text"/><input type="hidden" name="busCompanyId"></td>
-															<td><input name="licenseNumber" class="chooseBusLicenseNumber col-xs-12 bind-change" type="text"/><input type="hidden" name="busLicenseNumberId"></td>
+															<td><input name="companyName" class="T-buscompany-name col-xs-12 bind-change" type="text"/><input type="hidden" name="busCompanyId"></td>
+															<td><input name="licenseNumber" class="T-licenseNumber col-xs-12 bind-change" type="text"/><input type="hidden" name="busLicenseNumberId"></td>
 															<td><input class="col-xs-12" name="seatPrice" type="text" maxlength="6" /></td>
 															<td><input class="col-xs-12" name="seatCount" type="text" readonly="readonly"/></td>   
 															<td><input class="col-xs-12" name="mobileNumber" type="text" readonly="readonly"/></td>
@@ -212,7 +212,7 @@
 									</li>
 									{{/each}}
 								</ul> 
-								<div class="tab-content" style="position:relative;top: -2px;border: 1px solid #ececec">
+								<div class="tab-content T-daylist" style="position:relative;top: -2px;border: 1px solid #ececec">
 									{{each travelLine.travelLineDayList as travelLineDay i}}
 									<div id="dayList-{{i}}" class="tab-pane fade {{if i == 0}}active in{{/if}}">
 										<div class="col-xs-12 col-sm-12 widget-container-col travelLineDayList">
@@ -221,33 +221,33 @@
 														<label class="title-size">行程标题：{{travelLineDay.title}}</label>
 													</h5>
 												<div class="widget-body">
-													<div class="scheduleContainer">
+													<div class="scheduleContainer T-dailyArrangeList">
 														<h5 class="header">行程详情：</h5>
-														<script id="detailEditor-add-lineProduct-{{i}}" type="text/plain" style="width:100%">
+														<script id="{{editorName}}-{{i}}" class="T-editor" type="text/plain" style="width:100%">
 															{{#travelLineDay.detail}}
 														</script>
 														<div style="margin-top:10px;margin-bottom:10px">
-															<button class="btn btn-app  btn-xs addRestaurant" style="background: #1fade0!important;">
+															<button class="btn btn-app  btn-xs  T-add T-addRestaurant" style="background: #1fade0!important;">
 																<i class="ace-icon fa fa-plus bigger-160"></i>
 																餐饮
 															</button>
-															<button class="btn btn-app   btn-xs addResourceHotel" style="background: #1fade0!important;">
+															<button class="btn btn-app   btn-xs  T-add T-addHotel" style="background: #1fade0!important;">
 																<i class="ace-icon fa fa-plus bigger-160"></i>
 																酒店
 															</button>
-															<button class="btn btn-app   btn-xs addResourceScenic" style="background: #1fade0!important;">
+															<button class="btn btn-app   btn-xs  T-add T-addScenic" style="background: #1fade0!important;">
 																<i class="ace-icon fa fa-plus bigger-160"></i>
 																景区
 															</button>
-															<button class="btn btn-app   btn-xs addResourceShopping" style="background: #1fade0!important;">
+															<button class="btn btn-app   btn-xs  T-add T-addShop" style="background: #1fade0!important;">
 																<i class="ace-icon fa fa-plus bigger-160"></i>
 																购物
 															</button>
-															<button class="btn btn-app   btn-xs addResourceSelfPaying" style="background: #1fade0!important;">
+															<button class="btn btn-app   btn-xs T-add T-addSelfPay" style="background: #1fade0!important;">
 																<i class="ace-icon fa fa-plus bigger-160"></i>  
 																自费
 															</button>
-															<button class="btn btn-app   btn-xs addResourceTraffic " style="background: #1fade0!important;">
+															<button class="btn btn-app   btn-xs T-add T-addTraffic " style="background: #1fade0!important;">
 																<i class="ace-icon fa fa-plus bigger-160"></i>
 																交通
 															</button>
@@ -256,7 +256,7 @@
 															<div class="row">
 																<div class="col-xs-12 col-sm-12">
 																	<div class="timeline-container">
-																		<div class="timeline-items scheduleListContainer">
+																		<div class="timeline-items scheduleListContainer T-timeline-detail-container">
 
 																		</div><!-- /.timeline-items -->
 																	</div><!-- /.timeline-container -->
@@ -316,7 +316,7 @@
 			</div>
 		</div>
 		<div class="space-10"></div>
-		<button class="btn btn-block btn-primary btn-submit-busCompany submitInfoLineProduct">
+		<button class="btn btn-block btn-primary T-btn-submit guideSubmit">
 			<i class="ace-icon fa fa-check"></i>
 			提交信息
 		</button>

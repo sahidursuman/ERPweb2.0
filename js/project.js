@@ -603,6 +603,7 @@ var modalScripts = {
 	'resource_busCompany':"js/template/resource/busCompany/busCompany.js",
 	'resource_lineProduct': 'js/template/resource/lineProduct/lineProduct.js',
 	'resource_partnerAgency':'js/template/resource/partnerAgency/partnerAgency.js',
+	'resource_travelLine': 'js/template/resource/travelLine/travelLine.js',
 	//-------------------------------------------发团管理---------------------------------------------------
 	'arrange_plan':"js/template/arrange/tripPlan/tripPlan.js",
 	//-------------------------------------------业务分析模块---------------------------------------------------
@@ -715,15 +716,15 @@ function listMenu(menuTemplate){
 
 
 				//绑定线路模板菜单功能
-				$("#sidebar .nav-list .resource_travelLine").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/resource/travelLine/travelLine.js",function(travelLine){
-						travelLine.listTravelLine(0,"",1);
-						modals["resource_travelLine"] = travelLine;
-					});
-				});
+				// $("#sidebar .nav-list .resource_travelLine").click(function(){
+				// 	$("#sidebar .nav-list li").removeClass("active");
+				// 	$(this).addClass("active");
+				// 	$(this).parent().parent().addClass("active");
+				// 	seajs.use("" + ASSETS_ROOT +"js/template/resource/travelLine/travelLine.js",function(travelLine){
+				// 		travelLine.listTravelLine(0,"",1);
+				// 		modals["resource_travelLine"] = travelLine;
+				// 	});
+				// });
 
 				//绑定景区菜单功能
 				/*$("#sidebar .nav-list .resource_scenic").click(function(){
@@ -1994,3 +1995,7 @@ KingServices.getDistrictList = function(obj,cityId,districtId){
 	}
 };
 //省市区 end
+KingServices.hotelDescArray = ['未选择', '三星以下', '三星', '准四星', '四星', '准五星', '五星', '五星以上']
+KingServices.getHotelDesc = function(level, defaultDesc) {
+	return  KingServices.hotelDescArray[level] || defaultDesc || '三星以下';
+}

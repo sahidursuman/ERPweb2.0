@@ -92,6 +92,14 @@
 			{{/each}}
             </tbody>
         </table>
+              <div class="form-group text-right">
+            <label class="control-label pull-right"/>
+                <input type="checkbox" class="ace pull-right scenicSelectAll">
+                <span class="lbl"></span>  
+                全选
+            </label>
+     </div>
+     <div class="clearfix"></div>
         <div class="row pageMode">
           <div class="col-xs-6">
             <small>共计 {{recordSize}} 条记录</small>
@@ -101,13 +109,6 @@
             </div>
           </div>
         </div>
-
-
-    <div class="form-group col-sm-12  " >
-        <label class="pos-rel pull-right" >
-			<span class="lbl"><input type="checkbox" class="scenicSelectAll"/>全选</span>
-		</label>
-    </div>
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="form-group" style="text-align: center;">
                 <button class="btn btn-xs btn-primary  btn-scenicFinancial-close">
