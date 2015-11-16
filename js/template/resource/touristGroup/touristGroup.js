@@ -17,6 +17,7 @@ define(function(require,exports){
 		$tab:false,
 		$searchArea:false,
 		validator:false,
+		checkInnerValidator:false,
 		autocompleteDate : {},
 		typeFlag:0,
 		visitorId:0,
@@ -197,8 +198,8 @@ define(function(require,exports){
 	//添加小组事件绑定
 	touristGroup.addEvents = function(){
 		var $addTabId = $("#tab-resource_touristGroup-add-content"),
-			$groupInfoForm = $addTabId.find(".T-touristGroupMainForm");//小组信息对象
-			$groupMemberForm = $addTabId.find(".T-touristGroupMainFormMember");//游客名单对象
+			$groupInfoForm = $addTabId.find(".T-touristGroupMainForm"),//小组信息对象
+			$groupMemberForm = $addTabId.find(".T-touristGroupMainFormMember"),//游客名单对象
 			$innerTransferForm = $addTabId.find(".T-touristGroupMainFormRS");//中转安排对象
 			//添加表单验证
 			touristGroup.validator = rule.checktouristGroup($groupInfoForm);
@@ -213,6 +214,7 @@ define(function(require,exports){
 			//提交按钮事件
 			$addTabId.find(".T-submit-addTouristGroup").on('click',function(){
 				if (!touristGroup.validator.form()) { return; }
+				
 				touristGroup.installData($addTabId);
 			});
 	};
@@ -220,11 +222,11 @@ define(function(require,exports){
 	touristGroup.updateEvents = function(){
 		var id = touristGroup.visitorId,
 			$updateTabId = $("#tab-resource_touristGroup-update-content"),
-			$groupInfoForm = $updateTabId.find(".T-touristGroupMainForm");//小组信息对象
-			$groupMemberForm = $updateTabId.find(".T-touristGroupMainFormMember");//游客名单对象
+			$groupInfoForm = $updateTabId.find(".T-touristGroupMainForm"),//小组信息对象
+			$groupMemberForm = $updateTabId.find(".T-touristGroupMainFormMember"),//游客名单对象
 			$innerTransferForm = $updateTabId.find(".T-touristGroupMainFormRS");//中转安排对象
 			//添加验证
-			touristGroup.validator = rule.checktouristGroup($groupInfoForm);
+			touristGroup.validator = rule.checktouristGroup($updateTabId);
 			//添加tab切换
 			touristGroup.init_CRU_event($updateTabId,id,2);
 			//游客的序号
@@ -237,7 +239,8 @@ define(function(require,exports){
 			touristGroup.innerTransferDispose($innerTransferForm,2);
 			//提交按钮事件
 			$updateTabId.find(".T-submit-updateTouristGroup").on('click',function(){
-				if (!touristGroup.validator.form()) { return; }
+				if(!touristGroup.validator.form()) { return; }
+				if(!touristGroup.checkInnerValidator.form()){return;}
 				touristGroup.installData($updateTabId,id,2);
 			});
 	};
@@ -295,6 +298,16 @@ define(function(require,exports){
 				event.preventDefault();
 				if (!touristGroup.validator.form()) { return; }
 				touristGroup.installData($tab,id,typeFlag,[tab_id,title,html]);
+			})
+			.on(SWITCH_TAB_BIND_EVENT, function(event,tab_id, title, html) {
+				event.preventDefault();
+				Tools.addTab(tab_id, title, html);
+				//通过typeFlag来判断；1--新增的事件绑定；2--修改的事件绑定
+				if(typeFlag == 2){
+					touristGroup.updateEvents();
+				}else{
+					touristGroup.addEvents();
+				}
 			})
 			// 保存后关闭
 			.on(CLOSE_TAB_SAVE, function(event) {
@@ -405,18 +418,19 @@ define(function(require,exports){
 			}
 		});
 		if(typeFlag == 2){
+			
 			var $reception = $obj.find('input[name=touristReception]');//接团
 			var $send = $obj.find('input[name=touristSend]');//送团
 			var $receptionFlag = $reception.is(":checked");
 			if($receptionFlag == true){
-				touristGroup.validator = rule.checktouristGroup($obj);
+				touristGroup.checkInnerValidator = rule.checkInnerTransfer($obj);
 				$obj.find('.T-reception-div').removeClass("hide");
 			}else{
 				$obj.find('.T-reception-div').addClass("hide");
 			}
 			var $sendFlag = $send.is(":checked");
 			if($sendFlag == true){
-				touristGroup.validator = rule.checktouristGroup($obj);
+				touristGroup.checkInnerValidator = rule.checkInnerTransfer($obj);
 				$obj.find('.T-send-div').removeClass("hide");
 			}else{
 				$obj.find('.T-send-div').addClass("hide");
@@ -446,7 +460,7 @@ define(function(require,exports){
 							type:1,
 							title:'选择线路',
 							skin:'layui-layer-rim',
-							area:['85%'],
+							area:['70%'],
 							zIndex:1028,
 							scrollbar:false,
 							content:html
@@ -1170,7 +1184,7 @@ define(function(require,exports){
 							Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
 							touristGroup.updateEvents();
 						}else{
-							Tools.close(tabId);
+							Tools.closeTab(tabId);
 							touristGroup.listTouristGroup(touristGroup.args);
 						};
 						if (innerStatus) {
