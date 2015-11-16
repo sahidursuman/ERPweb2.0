@@ -450,7 +450,7 @@ define(function(require, exports) {
 							}
 //									    		var day = $(".travelLineDayList .lineDayList tbody tr").length + 1;
 							var lineDayHtml = "<tr><td>第"+whichDay+"天<input name=\"whichDay\" value=\""+whichDay+"\" type=\"hidden\"/></td><td>"+repastDetail+"</td><td>"+restPosition+"</td><td>"+level+"</td><td>"+title+"</td>" +
-									"<td style=\"width:120px\"><div class=\"btn-group\"><a data-entiy-id=\"\" class=\" btn-line-day-edit cursor\">修改|</a>" +
+									"<td style=\"width:120px\"><div class=\"btn-group\"><a data-entiy-id=\"\" class=\" btn-line-day-edit cursor\">修改</a>" +"<a class='cursor'> |</a>" +
 									"<a data-entiy-id=\"\" class=\" btn-line-day-delete cursor\">删除</a></div>" +
 									"<input type=\"hidden\" name=\"hotelLevel\" value=\""+hotelLevel+"\"/>" +
 									"<input type=\"hidden\" name=\"roadScenic\" value=\""+roadScenic+"\"/>" +
