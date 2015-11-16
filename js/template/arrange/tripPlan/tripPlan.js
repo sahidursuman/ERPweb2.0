@@ -65,7 +65,7 @@ define(function(require, exports) {
 				if(result){
 					data.tripPlanList = JSON.parse(data.tripPlanList);
 					var html = listTemplate(data);
-					addTab(menuKey,"发团计划",html);
+					Tools.addTab(menuKey,"发团计划",html);
 
 					tripPlan.initList(data);
 					tripPlan.getQueryTerms();
@@ -151,6 +151,12 @@ define(function(require, exports) {
 
 	//新增计划
 	tripPlan.addTripPlan = function(){
+		var $tab = $("#tab-" + menuKey + "-add-content");
+		if ($tab.length) {// 如果打开的是相同产品，则不替换
+			$('.tab-arrange_plan-add').children('a').trigger('click');
+			return;
+		}
+
 		var html = addTripPlanTemplate(); 
         if (Tools.addTab(menuKey+"-add", "新增计划", html)) {
             tripPlan.initEdit("add");                         
@@ -159,6 +165,12 @@ define(function(require, exports) {
 	};
 	//编辑计划
 	tripPlan.updateTripPlan = function(id){
+		var $tab = $("#tab-" + menuKey + "-update-content");
+		if ($tab.length && $tab.find('.T-savePlan').data('id') == id) {// 如果打开的是相同产品，则不替换
+			$('.tab-arrange_plan-update').children('a').trigger('click');
+			return;
+		}
+
 		$.ajax({
 			url:KingServices.build_url("tripPlan","getTripPlanById"),
 			data:{ tripPlanId : id + ""}, 
@@ -180,7 +192,7 @@ define(function(require, exports) {
 					//判断  立即发送  定时发送
 					var isCheckedStatus=data.tripPlan.executeTimeType;
 					if (Tools.addTab(menuKey+"-update", "编辑发团计划", html)) {
-			            tripPlan.initEdit("update");  
+			            tripPlan.initEdit("update",id);  
 			            //短信状态
 					 	tripPlan.isMessageStatus(isSendMessageStatus,isCheckedStatus,$("#tab-"+menuKey+"-update-content"));                       
 			        }
@@ -190,9 +202,13 @@ define(function(require, exports) {
 		});	
 	};
 
-	tripPlan.initEdit = function(operation){
+	tripPlan.initEdit = function(operation,id){
+		
 		var $tab = $("#tab-" + menuKey + "-" + operation + "-content");
 		var $container = $tab.find('.T-plan-container');
+		if(arguments === 2){
+			$tab.find('.T-savePlan').data('id', id);
+		}
 
 		tripPlan.init_edit_event($tab,operation);
     	//搜索线路
@@ -245,7 +261,7 @@ define(function(require, exports) {
 		})
 		//保存计划   btn-savelTripPlan
 		$tab.find(".T-savePlan").click(function(){
-			tripPlan.saveTripPlan(operation);
+			tripPlan.saveTripPlan(operation,id);
 		});
 	};
 
@@ -329,26 +345,7 @@ define(function(require, exports) {
 										var daysLength = data.lineProductDays.length;
 										var html = "";
 										for(i=0;i<daysLength;i++){
-											function hotelLevel(){
-												if(data.lineProductDays[i].hotelLevel == 1){
-													return "三星以下"
-												}else if(data.lineProductDays[i].hotelLevel == 2){
-													return "三星"
-												}else if(data.lineProductDays[i].hotelLevel == 3){
-													return "准四星"
-												}else if(data.lineProductDays[i].hotelLevel == 4){
-													return "四星"
-												}else if(data.lineProductDays[i].hotelLevel == 5){
-													return "准五星"
-												}else if(data.lineProductDays[i].hotelLevel == 6){
-													return "五星"
-												}else if(data.lineProductDays[i].hotelLevel == 7){
-													return "五星以上"
-												}else{
-													return "-"
-												}
-											}
-											html +='<tr><td>第'+data.lineProductDays[i].whichDay+'天</td><td>'+data.lineProductDays[i].repastDetail+'</td><td>'+hotelLevel()+'</td><td class="col-xs-6">'+data.lineProductDays[i].title+'</td></tr>';
+											html +="<tr><td>第"+data.lineProductDays[i].whichDay+"天</td><td>"+data.lineProductDays[i].repastDetail+"</td><td>"+KingServices.getHotelDesc(data.lineProductDays[i].hotelLevel,'-')+"</td><td class='col-xs-6'>"+data.lineProductDays[i].title+"</td></tr>";
 										}
 										$(".T-plan-container .T-days").html(html);
 									}
@@ -531,7 +528,7 @@ define(function(require, exports) {
 	};
 
 	//保存编辑
-	tripPlan.saveTripPlan = function (operation,tab_id, title, html){
+	tripPlan.saveTripPlan = function (operation,id,tab_id, title, html){
 		var $tab = $("#tab-arrange_plan-"+ operation +"-content"),argumentsLen = arguments.length;
 		function getValue(name){
 			var thisObj = $tab.find("[name="+name+"]"), objValue;
@@ -605,7 +602,7 @@ define(function(require, exports) {
 					var result = showDialog(data);
 					if(result){
 						showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-							if(argumentsLen === 0){
+							if(argumentsLen === 1){
 								Tools.closeTab(menuKey+"-" + operation);
 								if(operation == "update"){
 									tripPlan.listTripPlan(tripPlan.searchData.page,tripPlan.searchData.tripId,tripPlan.searchData.tripNumber,tripPlan.searchData.startTime,tripPlan.searchData.guideId,tripPlan.searchData.guideName,tripPlan.searchData.busId,tripPlan.searchData.licenseNumber,tripPlan.searchData.creatorName,tripPlan.searchData.creator,tripPlan.searchData.status);
@@ -615,7 +612,7 @@ define(function(require, exports) {
 							} else {
 	                            $tab.data('isEdited',false);
 	                            Tools.addTab(tab_id, title, html);
-	                            tripPlan.initEdit(operation);
+	                            tripPlan.initEdit(operation,id);
 							}
 						});
 					}
@@ -794,7 +791,7 @@ define(function(require, exports) {
 		},function(){},"取消","确定");
 	};
 
-	tripPlan.init_edit_event = function($tab,operation) {
+	tripPlan.init_edit_event = function($tab,operation,id) {
         if (!!$tab && $tab.length === 1) {
             var validator =rule.checkdCreateTripPlan($tab.find('.T-addPlan-form'));
 
@@ -802,16 +799,21 @@ define(function(require, exports) {
             $tab.find(".T-plan-container").on('change', function(event) {
                 event.preventDefault();
                 $tab.data('isEdited', true);
+            });
+            $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
+            	event.preventDefault();
+            	
+				tripPlan.initEdit(operation,$tab.find('.T-savePlan').data('id'));
             })
             // 监听保存，并切换tab
             .on('switch.tab.save', function(event, tab_id, title, html) {
                 event.preventDefault();
-                Client.saveTripPlan(operation,tab_id, title, html);
+                tripPlan.saveTripPlan(operation,id,tab_id, title, html);
             })
             // 保存后关闭
             .on('close.tab.save', function(event) {
                 event.preventDefault();
-                Client.saveTripPlan(operation);
+                tripPlan.saveTripPlan(operation);
             });
         }
     };
