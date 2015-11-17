@@ -202,7 +202,7 @@
 					<div class="breadcrumbs breadcrumbs-fixed" style="border-bottom:none;background-color: #fff;padding:0 0 0 0">
 						<div style="width:100%;overflow: hidden;position: relative;background: #dcdcdc">
 							<div id="tab_left_scroll"  class="btn-com model-scroll-left"></div>
-							<ul id="tabList" class="nav nav-tabs nav-line" >
+							<ul id="tabList" class="nav nav-tabs nav-line" data-toggle="context" data-target="#tab-menu">
 								<li class=" active ">
 									<a data-toggle="tab" href="#tab-dashboard-content" aria-expanded="true">工作台</a>
 								</li>
@@ -221,8 +221,17 @@
 			</div><!-- /.main-content -->
 		</div><!-- /.main-container -->
 
+		<!-- tab menu -->
+		<div id="tab-menu">
+		  <ul class="dropdown-menu" role="menu">
+		    <li><a tabindex="-1" href="#" class="T-close">关闭</a></li>
+		    <li><a tabindex="-1" href="#" class="T-close-other">关闭其他</a></li>
+		    <li><a tabindex="-1" href="#" class="T-close-right">关闭右侧的Tab</a></li>
+		  </ul>
+		</div>
 		<!-- basic scripts -->
 		<script src="components/ace-admin/assets/js/jquery.1.11.1.min.js"></script>
+		<script src="js/libs/bootstrap-contextmenu.js"></script>
 		<script src="js/libs/jquery.cookie.js"></script>
 
 		<script type="text/javascript">

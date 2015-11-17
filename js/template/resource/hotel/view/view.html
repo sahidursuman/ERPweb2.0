@@ -85,23 +85,34 @@
 			</tr>
 			{{each hotel.hotelRoomList as room}}
 			<tr data-entity-id="{{room.id}}">
-			<td>{{room.type}}</td>
-			<td class="rangeTimeWidth">{{each room.priceList as price}}
-					{{price.startTime | dateFormat:'yyyy-MM-dd'}}至{{price.endTime | dateFormat:'yyyy-MM-dd'}}
-				{{/each}}</td>
-				<td>
+				<td>{{room.type}}</td>
+				<td class="rangeTimeWidth">
+					<div>日常</div>
 					{{each room.priceList as price}}
+						<div>
+							{{price.startTime | dateFormat:'yyyy-MM-dd'}}至{{price.endTime | dateFormat:'yyyy-MM-dd'}}
+						</div>
+					{{/each}}
+				</td>
+				<td>
 					<div>
-						{{price.marketPrice}}
+						{{room.normalMarketPrice}}
 					</div>
+					{{each room.priceList as price}}
+						<div>
+							{{price.marketPrice}}
+						</div>
 					{{/each}}
 				</td>
 
 				<td>
-					{{each room.priceList as price}}
 					<div>
-						{{price.contractPrice}}
+						{{room.normalInnerPrice}}
 					</div>
+					{{each room.priceList as price}}
+						<div>
+							{{price.contractPrice}}
+						</div>
 					{{/each}}
 				</td>
 

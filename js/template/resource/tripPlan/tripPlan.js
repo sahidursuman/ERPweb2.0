@@ -283,6 +283,7 @@ define(function(require, exports) {
 							ticketList : ticketList
 						};
 						var html = addTemplate(data);
+
 						//已填写提示
 						//var tab = "tab-resource_touristGroup-add-content";
 						var validator = rule.listTripPlanCheckor($("#tripPlan_addPlan_content"));  
@@ -330,6 +331,29 @@ define(function(require, exports) {
 			$("#tripPlan_addPlan_other .addOther").on("click",{validator:validator}, tripPlan.addOther);
 			//绑定删除时间
 			tripPlan.bindDeleteEvent();
+
+
+			//发送订单显示&&隐藏
+			tripPlan.isSendOrderHide($("#tripPlan_addPlan_bus"));
+			tripPlan.isSendOrderHide($("#tripPlan_addPlan_hotel"));
+
+            //车辆的发送订单
+			$("#tripPlan_addPlan_bus").find('.T-bus-SendOrder').on('click',  function(event) {
+				event.preventDefault();
+				var $that=$(this),$trBusData=$that.closest('tr');
+				/* Act on the event */
+			    tripPlan.busSendOrder($trBusData);
+			});
+
+			//住宿的发送订单
+			$("#tripPlan_addPlan_hotel").find('.T-Hotel-SendOrder').on('click', function(event) {
+				event.preventDefault();
+				var $that=$(this),$trHotelData=$that.closest('tr');
+				/* Act on the event */
+				tripPlan.hotelSendOrder($trHotelData);
+			});
+			
+
 			
 			tripPlan.bindInsuranceChoose();
 			//tripPlan.bindGuideChoose();
@@ -772,6 +796,88 @@ define(function(require, exports) {
 			});
 			
 		},
+
+
+		/**
+		 * 
+		 * @param  {[type]} $trBusData 车辆中的发送订单
+		 * @return {[type]}            [description]
+		 */
+		busSendOrder:function($trBusData){
+			var saveJson={};
+			saveJson.busJson=[];
+			if($trBusData.length > 0){
+				for(var i=0; i<$trBusData.length; i++){
+					if(tripPlan.getVal($trBusData.eq(i), "id")){
+						var busJsonArray = {
+							id : tripPlan.getVal($trBusData.eq(i), "id")
+						}
+						saveJson.busJson.push(busJsonArray);
+					}
+				}
+			}
+			
+			tripPlan.sendOrderRequest(saveJson);
+		},
+
+		/**
+		 * [hotelSendOrder 住宿的发送订单]
+		 * @param  {[type]} $trHotelData [description]
+		 * @return {[type]}              [description]
+		 */
+		hotelSendOrder:function($trHotelData){
+			var saveJson={};
+			    saveJson.hotelJson=[];
+			if($trHotelData.length > 0){
+				for(var i=0; i<$trHotelData.length; i++){
+					if(tripPlan.getVal($trHotelData.eq(i), "hotelId")){
+						var hotelJsonArray = {
+							id : tripPlan.getVal($trHotelData.eq(i), "id"),
+						}
+						saveJson.hotelJson.push(hotelJsonArray);
+					}
+				}
+			}
+			tripPlan.sendOrderRequest(saveJson);
+		},
+
+		/**
+		 * isSendOrderHide  判断发送订单是否显示隐藏
+		 * @param  {[type]}  $sendArea 发送订单域
+		 * @return {Boolean}           [description]
+		 */
+		isSendOrderHide:function($sendArea){
+			var $sendOrderObj=$sendArea.find('.T-sendOrder-Area');
+			for (var i = 0; i < $sendOrderObj.length; i++) {
+				var statusValue=$sendOrderObj.eq(i).data('value');
+				if (statusValue==2) {
+					$sendOrderObj.removeClass('hide');
+				} else{
+					$sendOrderObj.addClass('hide');
+				};
+			};
+		},
+
+
+		/**
+		 * [sendOrderRequest 发送订单请求]
+		 * @param  {[type]} saveJson [description]
+		 * @return {[type]}          [description]
+		 */
+		sendOrderRequest:function(saveJson){
+			$.ajax({
+				url:KingServices.build_url("busInquiry","saveBusCompanyOrder"),
+				type: 'POST',
+				dataType: 'JSON',
+				data: "saveJson="+encodeURIComponent(JSON.stringify(saveJson)),
+				success:function(data){
+					var result = showDialog(data);
+					if(result){
+					}
+			    }
+			})
+		},
+
 		//导游安排
 		bindGuideChoose : function(){
 			var guideChoose = $("#tripPlan_addPlan_guide .table-tripPlan-container .chooseGuide");

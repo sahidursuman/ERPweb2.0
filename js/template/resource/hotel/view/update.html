@@ -138,35 +138,42 @@
 									<tr data-entity-id="{{room.id}}">
 										<td><input name="type" type="text" class="col-sm-12" value="{{room.type}}" maxlength="32" /></td>
 										<td class="T-time">
-											{{each room.priceList as price i}}
-											<div data-index="{{i+1}}" data-entity-id="{{price.id}}" class="clearfix {{if i > 0}}appendDiv{{/if}} div-{{i+1}}" style="margin-top:1px">
-												<input name="startTime" type="text" class="datepicker" style="width:100px" value="{{price.startTime | dateFormat:'yyyy-MM-dd'}}"/><label>&nbsp;至&nbsp;</label><input name="endTime" type="text" class="datepicker" style="width:100px" value="{{price.endTime | dateFormat:'yyyy-MM-dd'}}"/>
-												{{if i == 0}}
+											<div class="clearfix" style="margin-top:1px">
+												日常
 												<label class="timeArea" style="float:right;padding-top:0px;">
 													<button class="btn btn-success btn-sm btn-white T-add">
 														<i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
 													</button>
 												</label>
-												{{else}}
+											</div>
+
+											{{each room.priceList as price i}}
+											<div data-index="{{i+1}}" data-entity-id="{{price.id}}" class="clearfix T-appendDiv div-{{i+1}}" style="margin-top:1px">
+												<input name="startTime" type="text" class="datepicker" style="width:100px" value="{{price.startTime | dateFormat:'yyyy-MM-dd'}}"/><label>&nbsp;至&nbsp;</label><input name="endTime" type="text" class="datepicker" style="width:100px" value="{{price.endTime | dateFormat:'yyyy-MM-dd'}}"/>
 												<label class="timeArea" style="float:right;padding-top:3px;">
 													<button class="btn btn-danger btn-sm btn-white T-del" style="margin-top: -3px">
 														<i class="ace-icon fa fa-minus bigger-110 icon-only"></i>
 													</button>
 												</label>
-												{{/if}}
 											</div>
 											{{/each}}
 										</td>
 										<td> 
+											<div class="clearfix" style="margin-top:1px">
+												<input name="normalMarketPrice" type="text" class="col-sm-12" value="{{room.normalMarketPrice}}" maxlength="9" />
+											</div>
 											{{each room.priceList as price i}}
-											<div data-index="{{i+1}}" class="clearfix marketPrice-{{i+1}}" style="margin-top:{{if i==0}}1{{else}}7{{/if}}px">
+											<div data-index="{{i+1}}" class="clearfix marketPrice-{{i+1}}" style="margin-top:7px">
 												<input name="marketPrice" type="text" class="col-sm-12" value="{{price.marketPrice}}" maxlength="9" />
 											</div>
 											{{/each}}
 										</td>
 										<td>
+											<div class="clearfix" style="margin-top:1px">
+												<input name="normalInnerPrice" type="text" class="col-sm-12" value="{{room.normalInnerPrice}}" maxlength="9" />
+											</div>
 											{{each room.priceList as price i}}
-											<div data-index="{{i+1}}" class="clearfix contractPrice-{{i+1}}" style="margin-top:{{if i==0}}1{{else}}7{{/if}}px">
+											<div data-index="{{i+1}}" class="clearfix contractPrice-{{i+1}}" style="margin-top:7px">
 												<input name="contractPrice" type="text" class="col-sm-12" value="{{price.contractPrice}}" maxlength="9" />
 											</div>
 											{{/each}}

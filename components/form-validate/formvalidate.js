@@ -79,7 +79,6 @@
 			$(setting.$ele).unbind(FOCUS_OUT_EVENT)
 				.bind(FOCUS_OUT_EVENT, '', function(event) {
 					var $that = $(this), data = $that.val(), res;
-					
 					if (!!setting.$valObj && setting.$valObj.length)  {
 						setTimeout(function() {
 							// 为了让设置值之后再读取
@@ -87,7 +86,10 @@
 							dataTask();
 						}, 0);
 					} else {
-						dataTask();
+						setTimeout(function(){
+							data = $that.val();
+							dataTask();
+						}, 0);
 					}
 					
 					function dataTask() {						

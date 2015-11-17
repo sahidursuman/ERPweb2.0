@@ -286,7 +286,7 @@
                                                         <th class="th-border">付款方式</th>
                                                         <th class="th-border">导付</th>
                                                         <th class="th-border">备注</th>
-                                                        <th class="th-border" style="display: none;">操作</th>
+                                                        <th class="th-border" width="110px">操作</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
@@ -315,10 +315,10 @@
                                                                 </td>
                                                                 <td><input name="guidePayMoney" type="text" value="{{busCompany.guidePayMoney}}" maxlength="9" class="col-sm-12" style="width: 60px;"/></td>
                                                                 <td><input name="remark" type="text" value="{{busCompany.remark}}" class="col-sm-12" maxlength="500"/></td>
-                                                                <td style="display: none;">
-                                                                    <button class="btn btn-xs btn-success" title="发送订单">
-                                                                        <i class="ace-icon fa fa-paper-plane-o bigger-120"></i>
-                                                                    </button>
+                                                                <td>
+                                                                   <a class="cursor T-bus-SendOrder T-sendOrder-Area R-right T-action" data-value='1'>
+                                                                    发送订单
+                                                                   </a>
                                                                 </td>
                                                             </tr>
                                                             {{/if}}
@@ -464,7 +464,7 @@
                                                         <th class="th-border">付款方式</th>
                                                         <th class="th-border">导付</th>
                                                         <th class="th-border">备注</th>
-                                                        <th class="th-border" style="width: 90px;">操作</th>
+                                                        <th class="th-border" style="width: 110px;">操作</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
@@ -514,6 +514,7 @@
                                                                 <td><input type="text" name="guidePayMoney" class="col-sm-12" value="{{hotel.guidePayMoney}}" style="width: 60px;" maxlength="9"/></td>
                                                                 <td><input type="text" name="remark" class="col-sm-12" value="{{hotel.remark}}" maxlength="500"/></td>
                                                                 <td>
+                                                                <a class="cursor T-Hotel-SendOrder T-sendOrder-Area R-right T-action" data-value="1">发送订单</a>
                                                                     <a class="cursor btn-deleteTripPlanList" data-entiy-id="{{hotel.id}}" data-entity-name="hotel" title="删除">
                                                                         删除
                                                                     </a>
