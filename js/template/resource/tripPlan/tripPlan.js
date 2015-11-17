@@ -329,6 +329,18 @@ define(function(require, exports) {
 			$("#tripPlan_addPlan_ticket .addTicket").on("click",{validator:validator}, tripPlan.addTicket);
 			$("#tripPlan_addPlan_other .addOther").on("click",{validator:validator}, tripPlan.addOther);
 
+			//一键下单操作
+			$("#tripPlan_addPlan_content").find('.T-singleClick-Order').on('click', function(event) {
+				event.preventDefault();
+				/* Act on the event */
+				var $trBusData=$("#tripPlan_addPlan_bus").find('.T-bus-SendOrder').find('tr'),
+				    $trHotelData=$("#tripPlan_addPlan_hotel").find('.T-Hotel-SendOrder').find('tr'),
+				    $obj=$('#tab-arrange_all-update-content'),
+				    qouteId=$obj.find('input[name=qouteId]').val();
+				    tripPlan.hotelSendOrder($trHotelData,qouteId);
+				    tripPlan.busSendOrder($trBusData,qouteId);
+
+			});
 
 			//发送订单显示&&隐藏
 			tripPlan.isSendOrderHide($("#tripPlan_addPlan_bus"));
@@ -337,17 +349,19 @@ define(function(require, exports) {
             //车辆的发送订单
 			$("#tripPlan_addPlan_bus").find('.T-bus-SendOrder').on('click',  function(event) {
 				event.preventDefault();
-				var $that=$(this),$trBusData=$that.closest('tr');
+				var $that=$(this),$trBusData=$that.closest('tr'),$obj=$('#tab-arrange_all-update-content'),
+				    qouteId=$obj.find('input[name=qouteId]').val();
 				/* Act on the event */
-			    tripPlan.busSendOrder($trBusData);
+			    tripPlan.busSendOrder($trBusData,qouteId);
 			});
 
 			//住宿的发送订单
 			$("#tripPlan_addPlan_hotel").find('.T-Hotel-SendOrder').on('click', function(event) {
 				event.preventDefault();
-				var $that=$(this),$trHotelData=$that.closest('tr');
+				var $that=$(this),$trHotelData=$that.closest('tr'),$obj=$('#tab-arrange_all-update-content'),
+				    qouteId=$obj.find('input[name=qouteId]').val();
 				/* Act on the event */
-				tripPlan.hotelSendOrder($trHotelData);
+				tripPlan.hotelSendOrder($trHotelData,qouteId);
 			});
 
 			//绑定删除时间
@@ -392,14 +406,16 @@ define(function(require, exports) {
 		 * @param  {[type]} $trBusData 车辆中的发送订单
 		 * @return {[type]}            [description]
 		 */
-		busSendOrder:function($trBusData){
-			var saveJson={};
+		busSendOrder:function($trBusData,quoteId){
+			var saveJson={
+				quoteId:quoteId
+			};
 			saveJson.busJson=[];
 			if($trBusData.length > 0){
 				for(var i=0; i<$trBusData.length; i++){
 					if(tripPlan.getVal($trBusData.eq(i), "id")){
 						var busJsonArray = {
-							id : tripPlan.getVal($trBusData.eq(i), "id")
+							busCompanyId : tripPlan.getVal($trBusData.eq(i), "id")
 						}
 						saveJson.busJson.push(busJsonArray);
 					}
@@ -414,14 +430,16 @@ define(function(require, exports) {
 		 * @param  {[type]} $trHotelData [description]
 		 * @return {[type]}              [description]
 		 */
-		hotelSendOrder:function($trHotelData){
-			var saveJson={};
-			    saveJson.hotelJson=[];
+		hotelSendOrder:function($trHotelData, quoteId){
+			var saveJson={
+				 quoteId: quoteId
+			};
+			saveJson.hotelJson=[];
 			if($trHotelData.length > 0){
 				for(var i=0; i<$trHotelData.length; i++){
 					if(tripPlan.getVal($trHotelData.eq(i), "hotelId")){
 						var hotelJsonArray = {
-							id : tripPlan.getVal($trHotelData.eq(i), "id"),
+							hotelId : tripPlan.getVal($trHotelData.eq(i), "id"),
 						}
 						saveJson.hotelJson.push(hotelJsonArray);
 					}
@@ -457,14 +475,19 @@ define(function(require, exports) {
 		 * @return {Boolean}           [description]
 		 */
 		isSendOrderHide:function($sendArea){
-			var $sendOrderObj=$sendArea.find('.T-sendOrder-Area');
-			for (var i = 0; i < $sendOrderObj.length; i++) {
-				var statusValue=$sendOrderObj.eq(i).data('value');
-				if (statusValue==2) {
-					$sendOrderObj.removeClass('hide');
-				} else{
-					$sendOrderObj.addClass('hide');
-				};
+			var $that=$('#tab-arrange_all-update-content'),
+			    qouteId=$that.find('input[name=qouteId]').val(),
+			    $sendOrderObj=$sendArea.find('.T-sendOrder-Area');
+			if (qouteId=="") {
+				$that.find('.T-singleClick-Order').addClass('hide');
+				for (var i = 0; i < $sendOrderObj.length; i++) {
+				  $sendOrderObj.eq(i).addClass('hide');
+			    }
+			}else{
+				$that.find('.T-singleClick-Order').removeClass('hide');
+				for (var i = 0; i < $sendOrderObj.length; i++) {
+				   $sendOrderObj.eq(i).removeClass('hide')
+			    }
 			};
 		},
 
