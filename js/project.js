@@ -602,6 +602,9 @@ var modalScripts = {
 	'business_analyst_saleProduct' : "js/template/businessAnalyst/saleProduct/saleProduct.js",
 	'resource_busCompany':"js/template/resource/busCompany/busCompany.js",
 	'resource_lineProduct': 'js/template/resource/lineProduct/lineProduct.js',
+
+	//-------------------------------------------发团管理模块--------------------------------------------------
+	'arrange_booking' : 'js/template/arrange/booking/booking.js',
 	'resource_partnerAgency':'js/template/resource/partnerAgency/partnerAgency.js',
 	'resource_touristGroup':'js/template/resource/touristGroup/touristGroup.js',//游客管理
 	//-------------------------------------------发团管理---------------------------------------------------
@@ -609,6 +612,7 @@ var modalScripts = {
 	'resource_travelLine': 'js/template/resource/travelLine/travelLine.js',
 	//-------------------------------------------发团管理---------------------------------------------------
 	'arrange_plan':"js/template/arrange/tripPlan/tripPlan.js",
+
 	//-------------------------------------------业务分析模块---------------------------------------------------
 	'business_analyst_saleProduct' : "js/template/businessAnalyst/saleProduct/saleProduct.js",//产品销量
 	'business_analyst_sourDstribution' : "js/template/businessAnalyst/sourDstribution/sourDstribution.js", //客源分布
@@ -1086,7 +1090,7 @@ function listMenu(menuTemplate){
 				// });
 
 				//绑定项目代订菜单功能
-				$("#sidebar .nav-list .arrange_booking").click(function(){
+				/*$("#sidebar .nav-list .arrange_booking").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
@@ -1094,7 +1098,7 @@ function listMenu(menuTemplate){
 						booking.listbooking(0,"","","","","","","","");
 						modals["arrange_booking"] = booking;
 					});
-				});
+				});*/
 
 				//绑定转客管理菜单功能
 				/*$("#sidebar .nav-list .arrange_transfer").click(function(){
