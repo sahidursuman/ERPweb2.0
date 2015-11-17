@@ -1206,7 +1206,14 @@ function listMenu(menuTemplate){
 						subsection.listMainSubsection();
 					});
 				});
-
+				// table 点击选中时间
+				$(document).on('click', 'td', function(event) {
+					event.preventDefault();
+					var $that = $(this);
+					if ($that.closest('table').hasClass('T-NotShowHighLight')) {
+						$that.closest('tr').toggleClass('success');
+					}
+				});
 				//dateTime
 				$(document).on("click",".input-group-addon",function(){
 					var $that = $(this);
