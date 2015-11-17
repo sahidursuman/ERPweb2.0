@@ -603,6 +603,9 @@ var modalScripts = {
 	'resource_busCompany':"js/template/resource/busCompany/busCompany.js",
 	'resource_lineProduct': 'js/template/resource/lineProduct/lineProduct.js',
 	'resource_partnerAgency':'js/template/resource/partnerAgency/partnerAgency.js',
+	'resource_touristGroup':'js/template/resource/touristGroup/touristGroup.js',//游客管理
+	//-------------------------------------------发团管理---------------------------------------------------
+	'arrange_plan':"js/template/arrange/tripPlan/tripPlan.js",
 	'resource_travelLine': 'js/template/resource/travelLine/travelLine.js',
 	//-------------------------------------------发团管理---------------------------------------------------
 	'arrange_plan':"js/template/arrange/tripPlan/tripPlan.js",
@@ -625,7 +628,6 @@ var modalScripts = {
 	'arrange_transfer':"js/template/arrange/arrangeTransfer/arrangeTransfer.js",  //转客管理
 	'arrange_inner_Transfer':"js/template/arrange/innerTransfer/innerTransfer.js",
 	'arrange_orderManage':"js/template/arrange/orderManage/orderManage.js"
-
 };
 
 
@@ -773,17 +775,6 @@ function listMenu(menuTemplate){
 				 modals["resource_touristGroup"] = touristGroup;
 				 });
 				 });*/
-
-
-				$("#sidebar .nav-list .resource_touristGroup").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/resource/touristGroup/touristGroup.js",function(touristGroup){
-						touristGroup.getTouristStatisticData(0,"0","","","","","","","","","","","","","");
-						modals["resource_touristGroup"] = touristGroup;
-					});
-				});
 
 
 				//绑定发团安排菜单功能
