@@ -450,8 +450,9 @@ define(function(require,exports){
 	//获取线路产品
 	touristGroup.searchLinproduct = function(typeFlag,pageNo,name,tabFlag){
 		$.ajax({
-			url:""+APP_ROOT+"back/lineProduct.do?method=findAll&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view&sortType=auto",
+			url:KingServices.build_url("lineProduct","findAll"),
 			data:"pageNo="+pageNo+"&name="+name,
+			type:'POST',
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
@@ -688,13 +689,14 @@ define(function(require,exports){
 	//新增同行联系人
 	touristGroup.addPartnerManagerFn = function(partnerAgencyId,managerName,managerMobile,departmentName,dutyName,$obj,addPartnerManagerLayer){
 		$.ajax({
-			url:""+APP_ROOT+"back/partnerAgency.do?method=saveContact&token="+$.cookie("token")+"&menuKey=resource_partnerAgency&operation=view",
+			url:KingServices.build_url("partnerAgency","saveContact"),
 			data:{
 				partnerAgencyId:partnerAgencyId,
 				contactRealname:managerName,
 				contactMobileNumber:managerMobile,
 				departmentName:departmentName,
-				dutyName:dutyName
+				dutyName:dutyName,
+				operation:"view"
 			},
 			type:'POST',
 			success:function(data){
@@ -858,8 +860,12 @@ define(function(require,exports){
 			var partnerAgencyId = $parentsObj.find('input[name=fromPartnerAgencyId]').val();
 			if(partnerAgencyId){
 				$.ajax({
-					url:""+APP_ROOT+"back/partnerAgency.do?method=getContactListByPartnerAgencyId&token="+$.cookie("token")+"&menuKey=resource_partnerAgency&operation=view",
-					data:"partnerAgencyId="+partnerAgencyId,
+					url:KingServices.build_url("partnerAgency","getContactListByPartnerAgencyId"),
+					data:{
+						partnerAgencyId:partnerAgencyId,
+						operation:"view"
+					},
+					type:''
 					success:function(data){
 						var result = showDialog(data);
 						if(result){
@@ -972,7 +978,10 @@ define(function(require,exports){
 	touristGroup.getSearchAreaData = function(){
 		
 		$.ajax({
-			url:""+APP_ROOT+"/back/touristGroup.do?method=getQueryTermsForTouristGroup&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
+			url:KingServices.build_url("touristGroup","getQueryTermsForTouristGroup"),
+			data:{
+				operation:"view"
+			},
 			type:'POST',
 			success:function(data){
 				var result = showDialog(data);
