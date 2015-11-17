@@ -43,6 +43,8 @@
             <span class="pull-left control-label align-right no-padding">全陪：</span>
             <span class="col-sm-8 control-label">{{tripPlan.accompanyGuideName}}</span>
         </div>
+
+
     <div id="tripPlan_addPlan_tripPlan" class="show-grid form-horizontal">
     	<input type="hidden" name="tripPlanId" value="{{tripPlan.id}}"  />
         <div class="col-sm-12" style="height: 40px; border-bottom: 1px solid #ccc;margin-top: 20px">
@@ -59,6 +61,7 @@
             <div class="col-sm-3">
                 <label class="pull-left control-label align-right"><strong>导游预支金额：</strong></label>
                 <input type="text" class="col-sm-6" name="guideAllPreMoney" value="{{tripPlan.guideAllPreMoney}}"/>
+                <input type="hidden" name="qouteId" value="1">
             </div>
             </div>
      </div>
@@ -96,7 +99,10 @@
                     </li>
                     <li class="col-sm-1 no-padding align-center">
                         <a data-toggle="tab" href="#tripPlan_addPlan_other" aria-expanded="false">其他</a>
-                    </li>
+                    </li>  
+                    <li style="border:none; margin-left:12px;">
+                       <button class="T-singleClick-Order">一键下单</button>
+                   </li>
                 </ul>
                 <div class="tab-content" style="position:relative;top: -2px">
                     <div id="tripPlan_addPlan_insurance" class="tab-pane fade active in">
@@ -316,7 +322,7 @@
                                                                 <td><input name="guidePayMoney" type="text" value="{{busCompany.guidePayMoney}}" maxlength="9" class="col-sm-12" style="width: 60px;"/></td>
                                                                 <td><input name="remark" type="text" value="{{busCompany.remark}}" class="col-sm-12" maxlength="500"/></td>
                                                                 <td>
-                                                                    <a class="cursor T-bus-SendOrder T-sendOrder-Area R-right T-action" data-value='1'>
+                                                                    <a class="cursor T-bus-SendOrder T-sendOrder-Area R-right T-action" data-value='{{busCompany.qouteId}}'>
                                                                     发送订单
                                                                    </a>
                                                                 </td>
@@ -514,7 +520,7 @@
                                                                 <td><input type="text" name="guidePayMoney" class="col-sm-12" value="{{hotel.guidePayMoney}}" style="width: 60px;" maxlength="9"/></td>
                                                                 <td><input type="text" name="remark" class="col-sm-12" value="{{hotel.remark}}" maxlength="500"/></td>
                                                                 <td>
-                                                                    <a class="cursor T-Hotel-SendOrder T-sendOrder-Area R-right T-action" data-value="1">发送订单</a>
+                                                                    <a class="cursor T-Hotel-SendOrder T-sendOrder-Area R-right T-action" data-value="{{hotel.qouteId}}">发送订单</a>
                                                                     <a class="cursor btn-deleteTripPlanList" data-entiy-id="{{hotel.id}}" data-entity-name="hotel" title="删除">
                                                                         删除
                                                                     </a>

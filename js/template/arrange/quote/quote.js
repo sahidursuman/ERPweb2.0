@@ -108,41 +108,43 @@ define(function(require, exports) {
 					var html = mainQuoteTemplate();
 					Tools.addTab(menukey+'-add',"新增报价",html)
 					quote.$tabAdd = $("#tab-arrange_quote-add-content");
-					var addHtml = addQuoteTemplate(data.viewLineProduct);
-					quote.$tabAdd.find('#quoteContent').html(addHtml);
+					$container = $("#tab-arrange_quote-add-content");
 
-					quote.$tabAdd.find('.inquiryContent').on("click",function(){
-						quote.quoteStatus();
+					var addHtml = addQuoteTemplate(data.viewLineProduct);
+					$container.find('#quoteContent').html(addHtml)
+
+					$container.find('.inquiryContent').on("click",function(){
+						quote.quoteStatus($container);
 					});	
 
-					quote.init_event(quote.$tabAdd);
+					quote.init_event($container);
 				}
 			}
 		})
 	};
 
 	//询价状态
-	quote.quoteStatus = function(){
-		var quoteId = quote.$tabAdd.find('[name=quoteId]').val();
+	quote.quoteStatus = function($container){
+		var quoteId = $container.find('[name=quoteId]').val();
 		if(!quoteId){
 			showMessageDialog($( "#confirm-dialog-message" ),"请先询价！");
 			return false;
 		} 
 		var inquiryHtml = inquiryResultTemplate();
-		quote.$tabAdd.find('#inquiryContent').html(inquiryHtml);
+		$container.find('#inquiryContent').html(inquiryHtml);
 		
 		quote.busStatusList(quoteId);
 
-		quote.$tabAdd.find('.busInquiryResult').on("click",function(){
-			quote.hotelStatusList(quoteId);
+		$container.find('.busInquiryResult').on("click",function(){
+			quote.hotelStatusList(quoteId,$container);
 		});
-		quote.$tabAdd.find('.hotelInquiryContent').on("click",function(){
-			quote.hotelStatusList(quoteId);
+		$container.find('.hotelInquiryContent').on("click",function(){
+			quote.hotelStatusList(quoteId,$container);
 		});
 	};
 
 	//询价状态-车
-	quote.busStatusList = function(quoteId){
+	quote.busStatusList = function(quoteId,$container){
 		//询车
 		$.ajax({
 			url: KingServices.build_url('busInquiry','statusList'),
@@ -152,10 +154,10 @@ define(function(require, exports) {
 				var result = showDialog(data);
 				if(result){
 					var busInquiryResultHtml = busInquiryResultTemplate(data);
-					quote.$tabAdd.find('#busInquiryResult').html(busInquiryResultHtml);
+					$container.find('#busInquiryResult').html(busInquiryResultHtml);
 
 					//操作
-					quote.$tabAdd.find('.T-bus-add').on("click",function(){
+					$container.find('.T-bus-add').on("click",function(){
 						var offerId = $(this).closest('td').data("id");
 						$.ajax({
 							url: KingServices.build_url('busInquiry','sumListInquiryBusAdd'),
@@ -165,7 +167,7 @@ define(function(require, exports) {
 								var result = showDialog(data);
 								if(result){
 									showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-										var $obj = quote.$tabAdd.find(".T-arrangeBusCompanyList"),
+										var $obj = $container.find(".T-arrangeBusCompanyList"),
 											bus = data.sumListInquiryBusAdd[0];
 										$obj.find("input[name=needSeatCount]").val(bus.seatCount);
 										$obj.find("input[name=brand]").val(bus.brand);
@@ -176,14 +178,14 @@ define(function(require, exports) {
 										$obj.find("input[name=seatcountPrice]").val(bus.seatPrice);
 										$obj.find("input[name=remark]").val(bus.remark);
 
-										quote.$tabAdd.find('.quoteContent').trigger('click');
+										$container.find('.quoteContent').trigger('click');
 									});
 								}
 							}
 						});
 					});
 
-					quote.$tabAdd.find('.T-bus-delete').on("click",function(){
+					$container.find('.T-bus-delete').on("click",function(){
 						var offerId = $(this).closest('td').data("id");
 						$.ajax({
 							url: KingServices.build_url('busInquiry','deleteListInquiryBus'),
@@ -205,7 +207,7 @@ define(function(require, exports) {
 	};
 
 	//询价状态-房
-	quote.hotelStatusList = function(quoteId){
+	quote.hotelStatusList = function(quoteId,$container){
 		$.ajax({
 			url: KingServices.build_url('hotelInquiry','statusList'),
 			type: 'POST',
@@ -219,10 +221,10 @@ define(function(require, exports) {
 						}
 					}
 					var hotelInquiryResultHtml = hotelInquiryResultTemplate(data);
-					quote.$tabAdd.find('#hotelInquiryContent').html(hotelInquiryResultHtml);
+					$container.find('#hotelInquiryContent').html(hotelInquiryResultHtml);
 
 					//操作
-					quote.$tabAdd.find('.T-hotel-add').on("click",function(){
+					$container.find('.T-hotel-add').on("click",function(){
 						var offerId = $(this).closest('td').data("id");
 						$.ajax({
 							url: KingServices.build_url('hotelInquiry','sumListInquiryHotelAdd'),
@@ -233,7 +235,7 @@ define(function(require, exports) {
 								if(result){
 									showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
 										//删除现有
-										quote.$tabAdd.find(".T-resourceHotelList").remove();
+										$container.find(".T-resourceHotelList").remove();
 										// quote.$tabAdd.find(".T-resourceHotelList").each(function(){
 										// 	var id = $(this).data("entity-id");
 										// 	if(id){
@@ -251,16 +253,16 @@ define(function(require, exports) {
 										// });
 
 										var html = quote.hotelHtml(data.hotelList);
-										quote.$tabAdd.find(".T-timeline-detail-container").append(html);
+										$container.find(".T-timeline-detail-container").append(html);
 
-										quote.$tabAdd.find('.quoteContent').trigger('click');
+										$container.find('.quoteContent').trigger('click');
 									});
 								}
 							}
 						});
 					});
 
-					quote.$tabAdd.find('.T-hotel-delete').on("click",function(){
+					$container.find('.T-hotel-delete').on("click",function(){
 						var offerId = $(this).closest('td').data("id");
 						$.ajax({
 							url: KingServices.build_url('hotelInquiry','deleteListInquiryHotel'),
@@ -380,6 +382,7 @@ define(function(require, exports) {
 					Tools.addTab(menukey+'-update',"修改报价",html)
 					$container = $("#tab-arrange_quote-update-content");
 
+					console.info(data)
 					var updateHtml = updateQuoteTemplate(data);
 					$container.find('#quoteContent').html(updateHtml)
 
@@ -454,19 +457,20 @@ define(function(require, exports) {
 			event.preventDefault();
 			/* Act on the event */
 			var lineProductInfo = {
-				id: quote.getValue(quote.$tabAdd,"lineProductId"),
-				name: quote.$tabAdd.find('.T-lineProductName').text(),
-				type: quote.$tabAdd.find('.T-lineProductType').text(),
-				customerType: quote.$tabAdd.find('.T-lineProductCusType').text(),
-				days: quote.$tabAdd.find('.T-lineProductDays').text(),
-				startTime: quote.getValue(quote.$tabAdd,'startTime'),
-				adultCount: quote.getValue(quote.$tabAdd,'adultCount'),
-				childCount: quote.getValue(quote.$tabAdd,'childCount'),
-				partnerAgencyId: quote.getValue(quote.$tabAdd,'partnerAgencyId'),
-				partnerAgencyContactId: quote.getValue(quote.$tabAdd,'managerId')
+				id: quote.getValue($container,"lineProductId"),
+				name: $container.find('.T-lineProductName').text(),
+				type: $container.find('.T-lineProductType').text(),
+				customerType: $container.find('.T-lineProductCusType').text(),
+				days: $container.find('.T-lineProductDays').text(),
+				startTime: quote.getValue($container,'startTime'),
+				adultCount: quote.getValue($container,'adultCount'),
+				childCount: quote.getValue($container,'childCount'),
+				partnerAgencyId: quote.getValue($container,'partnerAgencyId'),
+				partnerAgencyContactId: quote.getValue($container,'managerId')
 			}
+			var quoteId = quote.getValue($container,'quoteId');
 			if(!!lineProductInfo.startTime && !!lineProductInfo.partnerAgencyId && !!lineProductInfo.partnerAgencyContactId ){
-				quote.busInquiry(lineProductInfo);
+				quote.busInquiry(quoteId,lineProductInfo);
 			}else if (!!lineProductInfo.startTime != true){
 				showMessageDialog($( "#confirm-dialog-message" ),"请选择出游日期");
 			}else if (!!lineProductInfo.partnerAgencyId != true){
@@ -476,10 +480,11 @@ define(function(require, exports) {
 			}
 		});
 		//车辆询价
-		quote.busInquiry = function(lineProductInfo) {
+		quote.busInquiry = function(quoteId,lineProductInfo) {
 			$.ajax({
 				url: KingServices.build_url("busCompany","findBusList"),
 				type: 'POST',
+				data: 'quoteId='+quoteId+'',
 				success: function(data){
 					data.lineProductInfo = lineProductInfo;
 					autocompleteData.busBrandList = JSON.parse(data.brands);
@@ -534,7 +539,7 @@ define(function(require, exports) {
 				    					success: function(data){
 				    						var result = showDialog(data);
 				    						if (result) {
-												quote.$tabAdd.find('[name=quoteId]').val(data.quoteId);
+												$container.find('[name=quoteId]').val(data.quoteId);
 												layer.close(busInquiryLayer);
 				    						}
 				    					}
@@ -661,9 +666,10 @@ define(function(require, exports) {
 				partnerAgencyContactId: quote.getValue(quote.$tabAdd,'managerId')
 			}
 			var whichDay = 2;
+			var quoteId = quote.getValue(quote.$tabAdd,'quoteId');
 
 			if(!!lineProductInfo.startTime && !!lineProductInfo.partnerAgencyId && !!lineProductInfo.partnerAgencyContactId ){
-				quote.hotelInquiry(lineProductInfo,whichDay);
+				quote.hotelInquiry(lineProductInfo,whichDay,quoteId);
 			}else if (!!lineProductInfo.startTime != true){
 				showMessageDialog($( "#confirm-dialog-message" ),"请选择出游日期");
 			}else if (!!lineProductInfo.partnerAgencyId != true){
@@ -679,10 +685,11 @@ define(function(require, exports) {
 		})
 	};
 	//酒店询价
-	quote.hotelInquiry = function(lineProductInfo,whichDay) {
+	quote.hotelInquiry = function(lineProductInfo,whichDay,quoteId) {
 		$.ajax({
 			url: KingServices.build_url("hotel","findRoomTypeList"),
 			type: 'POST',
+			data: 'quoteId='+quoteId+'',
 			success: function(data){
 				var result = showDialog(data);
 				if (result) {
@@ -1269,7 +1276,6 @@ define(function(require, exports) {
 						}
                     }
 				});
-				
 			},
 			change:function(event, ui){
 				if(ui.item == null){
@@ -2150,7 +2156,7 @@ define(function(require, exports) {
 			adultCount: quote.getValue(quote.$tabAdd,'adultCount'),
 			adultQuotePrice: quote.getValue(quote.$tabAdd,'adultQuotePrice'),
 			childAdjustType: quote.getValue(quote.$tabAdd,'selectAmChild'),
-			childAdjustValue: quote.getValue(quote.$tabAdd,'selectAmAdult'),
+			childAdjustValue: quote.getValue(quote.$tabAdd,'childAdjustValue'),
 			childCostPrice: quote.$tabAdd.find('.T-childCost').text(),
 			childCount: quote.getValue(quote.$tabAdd,'childCount'),
 			childQuotePrice: quote.getValue(quote.$tabAdd,'childQuotePrice'),
@@ -2166,7 +2172,11 @@ define(function(require, exports) {
 			startTime: quote.getValue(quote.$tabAdd,'startTime'),
 			sumCostFee: quote.$tabAdd.find('.T-allCost').text(),
 			sumQuoteFee: quote.getValue(quote.$tabAdd,'sumQuoteFee'),
-			grossProfit: quote.$tabAdd.find('.T-grossProfit').text()
+			grossProfit: quote.$tabAdd.find('.T-grossProfit').text(),
+			isContainGuideFee: quote.getValue(quote.$tabAdd,'includeGuideFee'),
+			isContainSelfPay: quote.getValue(quote.$tabAdd,'includeSelfpay'),
+			isChildNeedRoom: quote.getValue(quote.$tabAdd,'childNeedBed'),
+			remark: quote.getValue(quote.$tabAdd,'quoteRemark')
 		}
 		var busList = quote.$tabAdd.find('.T-arrangeBusCompanyList');
 		var guideList = quote.$tabAdd.find('.T-arrangeGuideList');
@@ -2197,6 +2207,7 @@ define(function(require, exports) {
 
 			saveJson.lineDayList[index] = {
 				//detailEditor : encodeURIComponent(UE.getEditor($that.find('.T-editor').prop('id')).getContent()),
+				whichDay: index+1,
 				restaurant : [],
 				hotel : [],
 				scenic : [],
@@ -2245,6 +2256,7 @@ define(function(require, exports) {
 							id : $item.find("[name=templateId]").val(),
 							hotelId : hotelId,
 							hotelRoomId : hotelRoomId,
+							count: $item.find("[name=count]").val(),
 							price : $item.find("[name=contractPrice]").val(),
 							remark : $item.find("[name=remark]").val(),
 							orderIndex : $item.attr("data-entity-index")
@@ -2337,7 +2349,9 @@ define(function(require, exports) {
 							price : $item.find("[name=price]").val(),
 							remark : $item.find("[name=remark]").val(),
 							orderIndex : $item.attr("data-entity-index"),
-							startTime: $item.find("[name=time]").val()
+							startTime: $item.find("[name=time]").val(),
+							count: $item.find("[name=count]").val(),
+							seatLevel: $item.find("[name=seatLevel]").val()
 						}
 						saveJson.lineDayList[index].ticket.push(ticketJson);
 					}
