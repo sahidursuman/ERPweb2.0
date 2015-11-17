@@ -83,16 +83,22 @@
                 <td>{{serviceCount.hotelService.notBad}}</td>
                 <td>{{serviceCount.hotelService.bad}}</td>
             </tr>
-        </table>
+        </table> 
     </div>
     <div style="height: 25px"></div>
-    <div class="col-sm-7 pull-right border margin-top" >
-        <div class="col-sm-11 pull-left">
-            {{each adviceList as advice}}
-                <p style="line-height: 20px">
-                    {{advice}}
-                </p>
-            {{/each}}
+        <div class="col-sm-7 pull-right border margin-top" >
+        {{if adviceList.length >0}}
+        {{each adviceList as advice index}}
+             <div class="pull-left font-bold">
+                {{advice.name}}：
+             </div>
+             <div class="pull-left col-sm-11">
+                {{advice.advice}}
+             </div>
+        {{/each}}
+        {{else}}
+            <span>暂时还没有评论哦~</span>
+        {{/if}}
         </div>
     </div>
 </div>

@@ -76,10 +76,12 @@
                 报账
             </a>
             {{/if}}
-               <a  class="cursor R-right T-quality" data-right="1190004">
+            {{if financialTripPlan.tripPlan}}
+               <a  class="cursor R-right T-quality" data-id="{{financialTripPlan.tripPlan.id}}" data-right="1190004">
                    <label class="padding-right20">|</label>
                    质量
                </a>
+            {{/if}}
         </td>
         </tr> 
         {{if financialTripPlan.tripPlan.tripPlanDetails.length > 1}}
