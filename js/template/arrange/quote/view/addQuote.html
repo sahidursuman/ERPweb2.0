@@ -14,6 +14,7 @@
 						<div class="col-sm-3">
 							<label class="control-label T-lineProductName">{{lineProduct.name}}</label> 
 							<input type="hidden" value="{{lineProduct.id}}" name="lineProductId">
+							<input type="hidden" value="" name="quoteId">
 						</div>
 						<label class="col-sm-1 control-label no-padding-right">售卖标注:</label>
 						<div class="col-sm-3">
@@ -423,7 +424,7 @@
                                                                                                             <input class="col-xs-12" type="text" name="remark" value="" />
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <a data-entity-id="{{restaurantList.id}}" data-entity-type="" class="cursor btn-restaurant-delete T-delete">
+                                                                                                            <a data-entity-id="" data-entity-type="" class="cursor btn-restaurant-delete T-delete">
 																												删除
 																											</a>
                                                                                                         </td>
@@ -498,7 +499,7 @@
                                                                                                             <input type="text" class="col-xs-12" name="remark" value="" />
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <a data-entity-id="{{hotelList.id}}" data-entity-type="8" class="cursor btn-restaurant-delete T-delete">
+                                                                                                            <a data-entity-id="" data-entity-type="8" class="cursor btn-restaurant-delete T-delete">
 																												删除
 																											</a>
                                                                                                         </td>
@@ -552,7 +553,7 @@
                                                                                                             <input type="text" class="col-xs-12" name="remark" value="" />
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <a data-entity-id="{{scenicList.id}}" data-entity-type="4" class="cursor btn-restaurant-delete T-delete">
+                                                                                                            <a data-entity-id="" data-entity-type="4" class="cursor btn-restaurant-delete T-delete">
 																												删除
 																											</a>
                                                                                                         </td>
@@ -610,7 +611,7 @@
                                                                                                             <input type="text" class="col-xs-12" name="remark" value="" />
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <a data-entity-id="{{shopList.id}}" data-entity-type="6" class="cursor btn-restaurant-delete T-delete">
+                                                                                                            <a data-entity-id="" data-entity-type="6" class="cursor btn-restaurant-delete T-delete">
 																												删除
 																											</a>
                                                                                                         </td>
@@ -669,7 +670,7 @@
                                                                                                             <input type="text" class="col-xs-12" name="remark" value="" />
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <a data-entity-id="{{selfPayList.id}}" data-entity-type="7" class="cursor btn-restaurant-delete T-delete">
+                                                                                                            <a data-entity-id="" data-entity-type="7" class="cursor btn-restaurant-delete T-delete">
 																												删除
 																											</a>
                                                                                                         </td>
@@ -697,6 +698,7 @@
                                                                                                         <th class="th-border">票务公司名称</th>
                                                                                                         <th class="th-border">类型</th>
                                                                                                         <th class="th-border">座位级别</th>
+                                                                                                        <th class="th-border">日期</th>
                                                                                                         <th class="th-border">单价</th>
                                                                                                         <th class="th-border">数量</th>
                                                                                                         <th class="th-border">备注</th>
@@ -722,6 +724,9 @@
                                                                                                             <input type="text" class="col-xs-12" name="seatLevel" value="{{ticketList.seatLevel}}" />
                                                                                                         </td>
                                                                                                         <td>
+                                                                                                        	<input type="text" class="col-xs-12 T-dateTimePicker" name="time" value="">
+                                                                                                        </td>
+                                                                                                        <td>
                                                                                                             <input type="text" class="col-xs-12 T-changeQuote" name="price" value="{{ticketList.price}}" />
                                                                                                         </td>
                                                                                                         <td>
@@ -731,7 +736,7 @@
                                                                                                             <input type="text" class="col-xs-12" name="remark" value="" />
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <a data-entity-id="{{ticketList.id}}" data-entity-type="5" class="cursor btn-restaurant-delete T-delete">
+                                                                                                            <a data-entity-id="" data-entity-type="5" class="cursor btn-restaurant-delete T-delete">
 																												删除
 																											</a>
                                                                                                         </td>
