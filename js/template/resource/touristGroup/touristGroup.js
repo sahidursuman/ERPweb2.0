@@ -469,7 +469,7 @@ define(function(require,exports){
 							type:1,
 							title:'选择线路',
 							skin:'layui-layer-rim',
-							area:['70%'],
+							area:'70%',
 							zIndex:1028,
 							scrollbar:false,
 							content:html
@@ -569,7 +569,7 @@ define(function(require,exports){
 			type:1,
 			title:'批量添加游客',
 			skin:'layui-layer-rim',
-			area:['40%'],
+			area:'40%',
 			zIndex:1028,
 			content:html,
 			success:function(){
@@ -663,7 +663,7 @@ define(function(require,exports){
 				type:1,
 				title:'新增同行联系人',
 				skin:"layui-layer-rim",
-				area:['40%'],
+				area:'40%',
 				content:html,
 				scrollbar:false,
 				zIndex:1028,
@@ -865,7 +865,7 @@ define(function(require,exports){
 						partnerAgencyId:partnerAgencyId,
 						operation:"view"
 					},
-					type:''
+					type:'POST',
 					success:function(data){
 						var result = showDialog(data);
 						if(result){
