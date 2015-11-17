@@ -650,21 +650,7 @@ define(function(require, exports) {
                         data = count.covertRemark(tmp);
                         var html = Reimbursement(data);
                         addTab(menuKey+"-Reimbursement","单团报账",html);
-                        var ReimbursementId = menuKey+"-Reimbursement"
-                        /*$(document).on("mouseenter",".countWhichDaysContainer",function(){
-                            var whichDay
-                                whichDay = $(this).attr("whichDay");
-                                var $this = $(this),
-                                startTime = $("#tab-financial_count-Reimbursement-content").find("span[name=startTime_Choose]").text(),
-                                date = new Date(startTime.replace("-", "/").replace("-", "/"));
-                            var timer = date.getTime()+(whichDay-1)*24*60*60*1000;
-                            date.setTime(timer);
-                            var datetime = date.getFullYear()+ "-"+ (date.getMonth() + 1) + "-"+ (date.getDate() < 10 ? "0" + date.getDate() : date.getDate());
-                            layer.tips(datetime, $this, {
-                                tips: [1, '#3595CC'],
-                                time: 1500
-                            });
-                        });*/
+                        var ReimbursementId = menuKey+"-Reimbursement";
                          //新增按钮事件
                         var $tabId = $("#tab-financial_count-Reimbursement-content");
                         $tabId.find('.countReimbursement .T-addOtherIn').on('click',function() {
@@ -779,8 +765,9 @@ define(function(require, exports) {
                                 $(this).val(0);
                             }
                             vl = $(this).val();
-                            $(this).val(count.changeTwoDecimal(parseFloat(vl)));
-                            
+                            if($(this).prop('name') != 'billRemark'){
+                                $(this).val(count.changeTwoDecimal(parseFloat(vl)));
+                            };
                             if($(this).attr("name") == "travelAgencyRate" || $(this).attr("name") == "guideRate") {
                                 var rate = parseFloat($(this).val());
                                 if(rate > 100) {
@@ -813,8 +800,7 @@ define(function(require, exports) {
                                 $(this).val(0);
                             }
                             vl = $(this).val();
-                            $(this).val(count.changeTwoDecimal(parseFloat(vl)));
-                            
+                            if($(this).prop('name') != 'billRemark'){$(this).val(count.changeTwoDecimal(parseFloat(vl)));}
                             if($(this).attr("name") == "travelAgencyRate" || $(this).attr("name") == "guideRate") {
                                 var rate = parseFloat($(this).val());
                                 if(rate > 100) {
@@ -859,7 +845,8 @@ define(function(require, exports) {
                                 $(this).val(0);
                             }
                             vl = $(this).val();
-                            $(this).val(count.changeTwoDecimal(parseFloat(vl)));
+                            if($(this).prop('name') != 'billRemark'){$(this).val(count.changeTwoDecimal(parseFloat(vl)));}
+                            
                             count.bindBus(this,"countReimbursement");
                         });
                         //餐费
@@ -869,7 +856,7 @@ define(function(require, exports) {
                                 $(this).val(0);
                             }
                             vl = $(this).val();
-                            $(this).val(count.changeTwoDecimal(parseFloat(vl)));
+                            if($(this).prop('name') != 'billRemark'){$(this).val(count.changeTwoDecimal(parseFloat(vl)));}
                             count.bindRestaurant(this,"countReimbursement");
                         });
                         //房费
@@ -879,7 +866,7 @@ define(function(require, exports) {
                                 $(this).val(0);
                             }
                             vl = $(this).val();
-                            $(this).val(count.changeTwoDecimal(parseFloat(vl)));
+                            if($(this).prop('name') != 'billRemark'){$(this).val(count.changeTwoDecimal(parseFloat(vl)));}
                             count.bindHotel(this,"countReimbursement");
                         });
                         //景区
@@ -889,7 +876,7 @@ define(function(require, exports) {
                                 $(this).val(0);
                             }
                             vl = $(this).val();
-                            $(this).val(count.changeTwoDecimal(parseFloat(vl)));
+                            if($(this).prop('name') != 'billRemark'){$(this).val(count.changeTwoDecimal(parseFloat(vl)));}
                             count.bindScenic(this,"countReimbursement");
                         });
                         //票务
@@ -899,7 +886,7 @@ define(function(require, exports) {
                                 $(this).val(0);
                             }
                             vl = $(this).val();
-                            $(this).val(count.changeTwoDecimal(parseFloat(vl)));
+                            if($(this).prop('name') != 'billRemark'){$(this).val(count.changeTwoDecimal(parseFloat(vl)));}
                             count.bindTicket(this,"countReimbursement");
                         });
                         //其他支出
@@ -920,14 +907,17 @@ define(function(require, exports) {
                             var userName = $(this).attr('data-entity-userName');
                             var roleType = $(this).attr('data-entity-roleType');
                             count.saveTripCount(id, financialTripPlanId, userName, roleType,0,2);
+                           //
                         });
                         $('.countReimbursement .btn-guide-account').off('click').on('click',function() {
-                            //访问报账函数
-                            var id = $(this).attr('data-entity-id');
-                            var financialTripPlanId = $(this).attr('data-entity-financial-id');
-                            var roleType = $(this).attr('data-entity-roleType');
-                            var userName = $(this).attr('data-entity-userName');
-                            count.saveTripCount(id, financialTripPlanId, userName, roleType,0,3);
+
+                             //访问报账函数
+                             var id = $(this).attr('data-entity-id');
+                             var financialTripPlanId = $(this).attr('data-entity-financial-id');
+                             var roleType = $(this).attr('data-entity-roleType');
+                             var userName = $(this).attr('data-entity-userName');
+                             count.saveTripCount(id, financialTripPlanId, userName, roleType,0,3);
+                             //Tools.closeTab(menuKey+"-Reimbursement");
                         });
                         //单据图片
                         $('.countReimbursement .btn-view').off('click').on('click',function() {
@@ -1676,11 +1666,11 @@ define(function(require, exports) {
                         showMessageDialog($( "#confirm-dialog-message" ),data.message);
                         count.edited["checkBill"] = "";
                         if(isClose == 1){
-                            closeTab(uKey);
+                            Tools.closeTab(uKey);
                             count.getlistCount(count.searchData.pageNo,count.searchData.id,count.searchData.tripNumber,count.searchData.lineProductId,count.searchData.lineProductName,count.searchData.guideId,count.searchData.guideName,count.searchData.startTime,count.searchData.endTime,count.searchData.status);
                         }else{
-                            $('#tab-financial_count-Reimbursement-content').find('.btn-guide-account').addClass('hidden');
-                            count.Reimbursement(financialTripPlanId,"guide");
+                            $('#tab-financial_count-Reimbursement-content').find('.btn-guide-account').addClass('hide');
+                            Tools.closeTab(menuKey+"-Reimbursement");
                         }
                     }
                 }
