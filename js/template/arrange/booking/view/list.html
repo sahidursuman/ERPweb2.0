@@ -64,7 +64,7 @@
 					<th>旅游车</th>
 				</tr>
 			</thead>
-			<tbody>{{each bookingOrderList as booking}}
+			<tbody class="T-list">{{each bookingOrderList as booking}}
 				<tr data-entity-id="{{booking.id}}">
 					<td>{{booking.orderNumber}}</td>
 					<td>{{if booking.partnerAgency != null}}{{booking.partnerAgency.travelAgencyName}}{{/if}}</td>
@@ -103,14 +103,14 @@
 					<td>{{if booking.isConfirmAccount == 1}}已对账{{else}}未对账{{/if}}</td>
 					<td>
 
-						<a data-entity-id="{{booking.id}}" title="查看计划" class=" cursor T-Booking-view">
+						<a data-entity-id="{{booking.id}}" title="查看计划" class="T-action cursor T-view">
 							查看
 						</a>
-					    <a data-entity-id="{{booking.id}}" title="编辑计划" class=" cursor {{if booking.isConfirmAccount != 1}}T-Booking-edit{{/if}} R-right" data-right="1170003" {{if booking.isConfirmAccount == 1}} style="color: #bbb" {{/if}}>
+					    <a data-entity-id="{{booking.id}}" title="编辑计划" class=" cursor {{if booking.isConfirmAccount != 1}}T-action T-edit{{/if}} R-right" data-right="1170003" {{if booking.isConfirmAccount == 1}} style="color: #bbb" {{/if}}>
 							<label class="padding-right20">|</label>
 							编辑
 						</a>
-						<a data-entity-id="{{booking.id}}" title="取消计划" class=" cursor {{if booking.isConfirmAccount != 1}}T-Booking-cancel{{/if}} R-right" data-right="1170004" {{if booking.isConfirmAccount == 1}} style="color: #bbb" {{/if}}>
+						<a data-entity-id="{{booking.id}}" title="取消计划" class=" cursor {{if booking.isConfirmAccount != 1}}T-action T-cancel{{/if}} R-right" data-right="1170004" {{if booking.isConfirmAccount == 1}} style="color: #bbb" {{/if}}>
 							<label class="padding-right20">|</label>
 							取消
 						</a>
