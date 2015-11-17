@@ -7,7 +7,6 @@
 }
 
 }*/
-
 .search-btn{
     border-radius: 0;
     background: #51b0c2;
@@ -376,10 +375,15 @@ table tr td{
 .fa-sort-desc{
     margin-top: -4px !important;
 }
+/*评论*/
+.font-bold:{
+    font-weight: bold;
+}
 /*发团安排*/
 .tipPlan-gap{
     padding-bottom: 10px;
 }
+
 /*dqq style*/
 .viewI{
     margin: 0px 5px 0px 5px;

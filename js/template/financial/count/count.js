@@ -123,9 +123,9 @@ define(function(require, exports) {
                         html = count.authFilter(html,data.tripPlanList);
                         $('.counterList').html(html);
 						//质量统计事件绑定
-						$('.T-quality').on('click', function() {
-							addTab(menuKey+"quality", "质量统计", qualityTempLate())
-						});
+                        $('.T-quality').on('click', function(){
+                            count.getquality($(this).data('id'));
+                        });
                       //搜索按钮事件
                         $(".main-content .financialCount .clearBlur").blur(function(){
                         	var a = $(this).next().val();
@@ -2587,22 +2587,28 @@ define(function(require, exports) {
 		clearEdit : function(clearType){
 			count.edited[clearType] = "";
 		},
-
-		//getQueryTerms :function(){
-		//	$.ajax({
-		//		url:""+APP_ROOT+"back/financialTripPlan.do?method=getQueryTerms&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-		//		dateType:"json",
-		//		type:"POST",
-		//		success:function(data){
-		//			var result = showDialog(data);
-		//			if(result){
-		//				count.autocompleteDate.guideList = data.guideList;
-		//				count.autocompleteDate.lineProductList = data.lineProductList	;
-		//				count.autocompleteDate.tripList = data.tripList;
-		//			}
-		//		}
-		//	})
-		//},
+        /**
+         * 质量统计
+         * @param  {int} id trip plan id
+         * @return {[type]}    [description]
+         */
+		getquality :function(id){
+			if (!!id) {
+                $.ajax({
+                    url: KingServices.build_url('financialTripPlan', 'qualityTracking'),
+                    type:"POST",
+                    data: { tripPlanId: id},
+                    success:function(data){
+                        if(showDialog(data)){
+                            data.tripPlan = JSON.parse(data.tripPlan);
+                            console.log(data);
+                            var html = qualityTempLate(data);
+                            Tools.addTab(menuKey+"-quality","质量跟踪",html);                    
+                        }
+                    }
+                })
+            }
+		},
 
     }
     exports.init = count.init;
