@@ -79,6 +79,9 @@
 				{{/if}}
 			</td>
 			<td class="rangeTimeWidth" > 
+				<div>
+					日常
+				</div>
 				{{each shopPolicy.SelfPayRebateList as hopTimeArea i}}
 				<div>
 					{{hopTimeArea.startTime | dateFormat:'yyyy-MM-dd'}}至{{hopTimeArea.endTime | dateFormat:'yyyy-MM-dd'}}
@@ -86,46 +89,36 @@
 				{{/each}}
 			</td>
 			<td class="no-padding">
+				{{shopPolicy.normalInnerPrice}}<br>
 				{{each shopPolicy.SelfPayRebateList as hopTimeArea}}
-
-				
-
-				{{hopTimeArea.price}}<br>
-
-				
+					{{hopTimeArea.price}}<br>
 				{{/each}}
 			</td>
 
 			<td class="no-padding">
+				{{shopPolicy.normalMarketPrice}}<br>
 				{{each shopPolicy.SelfPayRebateList as hopTimeArea i}}
-
-				
-
-				{{hopTimeArea.marketPrice}}<br>
-
-				
+					{{hopTimeArea.marketPrice}}<br>
 				{{/each}}
 			</td>
 			<td class="no-padding">
+				<label class="col-sm-12 control-label center">
+					{{shopPolicy.normalGuideRate*100 | toFixed}}
+				</label>
 				{{each shopPolicy.SelfPayRebateList as hopTimeArea i}}
-				<!-- <div class="col-sm-12{{if i != 0}} border-top{{/if}}" > -->
-					
 					<label class="col-sm-12 control-label center">
 						{{hopTimeArea.guideRate*100 | toFixed}}
 					</label>
-					
-				<!-- </div> -->
 				{{/each}}
 			</td>
 			<td class="no-padding">
+				<label class="col-sm-12 control-label center">
+					{{shopPolicy.normalTravelAgencyRate*100 | toFixed}} 
+				</label>
 				{{each shopPolicy.SelfPayRebateList as hopTimeArea i}}
-				<!-- <div class="col-sm-12{{if i != 0}} border-top{{/if}}" > -->
-				
 					<label class="col-sm-12 control-label center">
 						{{hopTimeArea.travelAgencyRate*100 | toFixed}} 
 					</label>
-				
-				<!-- </div> -->
 				{{/each}}
 			</td>
 			<td class="remarkWidth">{{shopPolicy.remark}}</td>
