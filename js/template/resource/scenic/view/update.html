@@ -104,28 +104,31 @@
 									<tr data-entity-id="{{item.id}}">
 										<td><input name="name" type="text" value="{{item.name}}" maxlength="100"/></td>
 										<td class="time">
-											{{each item.priceList as price i}}
-											<div data-index="{{i+1}}" data-entity-id="{{price.id}}" class="clearfix {{if i > 0}}appendDiv{{/if}} div-{{i+1}}" style="margin-top:2px">
-												<input name="startTime" type="text" class="datepicker" style="width:100px" value="{{price.startTime | dateFormat:'yyyy-MM-dd'}}"/><label>&nbsp;至&nbsp;</label><input name="endTime" type="text" class="datepicker" style="width:100px" value="{{price.endTime | dateFormat:'yyyy-MM-dd'}}"/>
-												{{if i == 0}}
+											<div class="clearfix" style="margin-top:2px">
+												日常
 												<label class="timeArea" style="float:right">
 													<button class="btn btn-success btn-sm btn-white T-add">
 														<i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
 													</button>
 												</label>
-												{{else}}
+											</div>
+											{{each item.priceList as price i}}
+											<div data-index="{{i+1}}" data-entity-id="{{price.id}}" class="clearfix T-appendDiv div-{{i+1}}" style="margin-top:2px">
+												<input name="startTime" type="text" class="datepicker" style="width:100px" value="{{price.startTime | dateFormat:'yyyy-MM-dd'}}"/><label>&nbsp;至&nbsp;</label><input name="endTime" type="text" class="datepicker" style="width:100px" value="{{price.endTime | dateFormat:'yyyy-MM-dd'}}"/>
 												<label class="timeArea" style="float:right">
 													<button class="btn btn-danger btn-sm btn-white T-delete">
 														<i class="ace-icon fa fa-minus bigger-110 icon-only"></i>
 													</button>
 												</label>
-												{{/if}}
 											</div>
 											{{/each}}
 										</td>
 										<td>
+											<div class="clearfix" style="margin-top:2px">
+												<input name="contractPrice" type="text" value="{{item.normalInnerPrice}}" maxlength="7"/>
+											</div>
 											{{each item.priceList as price i}}
-											<div data-index="{{i+1}}" class="clearfix div-{{i+1}}" style="margin-top:{{if i==0}}2{{else}}7{{/if}}px">
+											<div data-index="{{i+1}}" class="clearfix div-{{i+1}}" style="margin-top:7px">
 												<input name="contractPrice" type="text" value="{{price.contractPrice}}" maxlength="7"/>
 											</div>
 											{{/each}}

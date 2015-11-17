@@ -1539,10 +1539,10 @@ define(function(require, exports) {
                     success: function(data) {
 						var result = showDialog(data);
 						if(result){
-							var selfPayRebate = JSON.parse(data.selfPayRebate); 
+							var selfPayItem = JSON.parse(data.selfPayItem); 
 							$tr.find("input[name=selfPayItemId]").val(ui.item.id).trigger('change');
-							$tr.find("input[name=contractPrice]").val(selfPayRebate.price);
-							$tr.find("input[name=marketPrice]").val(selfPayRebate.marketPrice);
+							$tr.find("input[name=contractPrice]").val(selfPayItem.normalInnerPrice);
+							$tr.find("input[name=marketPrice]").val(selfPayItem.normalMarketPrice);
 						}
                     }
                 });
