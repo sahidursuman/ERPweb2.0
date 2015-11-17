@@ -778,17 +778,6 @@ function listMenu(menuTemplate){
 				 });*/
 
 
-				$("#sidebar .nav-list .resource_touristGroup").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/resource/touristGroup/touristGroup.js",function(touristGroup){
-						touristGroup.getTouristStatisticData(0,"0","","","","","","","","","","","","","");
-						modals["resource_touristGroup"] = touristGroup;
-					});
-				});
-
-
 				//绑定发团安排菜单功能
 				$("#sidebar .nav-list .arrange_all").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");

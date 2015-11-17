@@ -52,11 +52,11 @@ define(function(require,exports){
 			fromPartnerAgencyName = touristGroup.$searchArea.find("input[name=fromPartnerAgencyName]").val();
 			fromBussinessGroupId = touristGroup.$searchArea.find("input[name=fromBussinessGroupId]").val();
 			fromBussinessGroupName = touristGroup.$searchArea.find("input[name=fromBussinessGroupName]").val();
-			if(fromPartnerAgencyId == ""){
+			if(fromPartnerAgencyName == "全部"){
 				fromPartnerAgencyId = "";
 				fromPartnerAgencyName = "";
 			};
-			if(fromBussinessGroupId == ""){
+			if(fromBussinessGroupName == "全部"){
 				fromBussinessGroupId = "";
 				fromBussinessGroupName = "";
 			};
@@ -89,7 +89,6 @@ define(function(require,exports){
 				if(result){
 					var html = listMainTemplate(data);
 					Tools.addTab(menuKey,'游客管理',html);
-
 					touristGroup.$tab = $("#"+tabId);
 				 	var $mainFormObj = touristGroup.$tab.find(".T-touristGroupSearchForm"),
 					 	$searchObj = $mainFormObj.find(".T-search-area");
@@ -177,6 +176,12 @@ define(function(require,exports){
 	};
 	//修改小组
 	touristGroup.updateTouristGroup = function(id){
+		//判断打开的是否是同一个页面
+		var $tab = $('#tab-'+ updateTabId + '-content');
+		if ($tab.length && $tab.find('.T-submit-updateTouristGroup').data('id') == id) {	// 如果打开的是相同数据模板，则不替换
+			$('.tab-' + updateTabId).children('a').trigger('click');
+			return;
+		};
 		$.ajax({
 			url:touristGroup.url("viewTouristGroupDetails","view"),
 			data:"id="+id,
@@ -203,6 +208,7 @@ define(function(require,exports){
 			$innerTransferForm = $addTabId.find(".T-touristGroupMainFormRS");//中转安排对象
 			//添加表单验证
 			touristGroup.validator = rule.checktouristGroup($groupInfoForm);
+			touristGroup.checkInnerValidator = rule.checkInnerTransfer($innerTransferForm);
 			//添加tab切换
 			touristGroup.init_CRU_event($addTabId);
 			//小组信息模块处理
@@ -214,7 +220,7 @@ define(function(require,exports){
 			//提交按钮事件
 			$addTabId.find(".T-submit-addTouristGroup").on('click',function(){
 				if (!touristGroup.validator.form()) { return; }
-				
+				if(!touristGroup.checkInnerValidator.form()){return;}
 				touristGroup.installData($addTabId);
 			});
 	};
@@ -225,8 +231,10 @@ define(function(require,exports){
 			$groupInfoForm = $updateTabId.find(".T-touristGroupMainForm"),//小组信息对象
 			$groupMemberForm = $updateTabId.find(".T-touristGroupMainFormMember"),//游客名单对象
 			$innerTransferForm = $updateTabId.find(".T-touristGroupMainFormRS");//中转安排对象
+			$updateTabId.find(".T-submit-updateTouristGroup").data('id',id);
 			//添加验证
 			touristGroup.validator = rule.checktouristGroup($updateTabId);
+			touristGroup.checkInnerValidator = rule.checkInnerTransfer($innerTransferForm);
 			//添加tab切换
 			touristGroup.init_CRU_event($updateTabId,id,2);
 			//游客的序号
@@ -398,7 +406,7 @@ define(function(require,exports){
 		//接团
 		var $reception = $obj.find('input[name=touristReception]');
 		$reception.on('click',function(){
-			touristGroup.validator = rule.checktouristGroup($obj);
+			touristGroup.checkInnerValidator = rule.checkInnerTransfer($obj);
 			var $showFlag = $reception.is(":checked");
 			if($showFlag){
 				$obj.find('.T-reception-div').removeClass("hide");
@@ -409,7 +417,7 @@ define(function(require,exports){
 		//送团
 		var $send = $obj.find('input[name=touristSend]');
 		$send.on('click',function(){
-			touristGroup.validator = rule.checktouristGroup($obj);
+			touristGroup.checkInnerValidator = rule.checkInnerTransfer($obj);
 			var $showFlag = $send.is(":checked");
 			if($showFlag){
 				$obj.find('.T-send-div').removeClass("hide");
@@ -423,14 +431,14 @@ define(function(require,exports){
 			var $send = $obj.find('input[name=touristSend]');//送团
 			var $receptionFlag = $reception.is(":checked");
 			if($receptionFlag == true){
-				touristGroup.checkInnerValidator = rule.checkInnerTransfer($obj);
+				
 				$obj.find('.T-reception-div').removeClass("hide");
 			}else{
 				$obj.find('.T-reception-div').addClass("hide");
 			}
 			var $sendFlag = $send.is(":checked");
 			if($sendFlag == true){
-				touristGroup.checkInnerValidator = rule.checkInnerTransfer($obj);
+				
 				$obj.find('.T-send-div').removeClass("hide");
 			}else{
 				$obj.find('.T-send-div').addClass("hide");
@@ -1131,6 +1139,10 @@ define(function(require,exports){
 		form +="&hotelLevel="+expectLevel+"&includeSelfPay="+includeOwnExpense+"&remark="+touristRemarks+"&buyInsurance="+buyInsurance+"&isNeedArriveService="+isNeedArriveService+"&isNeedBus="+isNeedBus+"&isNeedLeaveService="+isNeedLeaveService;
 		//游客json串
 		var touristGroupMemberJsonAdd = touristGroup.installVisiJson($visiForm,id,typeFlag);
+		if(touristGroupMemberJsonAdd.length == 0){
+			showMessageDialog($( "#confirm-dialog-message" ),"请添加游客成员");
+			return;
+		}
 		//删除游客小组
 		var touristGroupMemberJsonDel = [];
 		if(typeFlag == 2){						
@@ -1167,10 +1179,10 @@ define(function(require,exports){
 			var tabId = addTabId;
 		};
 		
-		touristGroup.submitData($obj,url,data,innerStatus,tabId,tabArgs);
+		touristGroup.submitData($obj,url,data,innerStatus,tabId,tabArgs,typeFlag);
 	};
 	//提交数据
-	touristGroup.submitData = function($obj,url,data,innerStatus,tabId,tabArgs){
+	touristGroup.submitData = function($obj,url,data,innerStatus,tabId,tabArgs,typeFlag){
 		$.ajax({
 			url:url,
 			type:"POST",
@@ -1182,7 +1194,9 @@ define(function(require,exports){
 					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
 						if(!!tabArgs && tabArgs.length === 3){
 							Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
-							touristGroup.updateEvents();
+							if(typeFlag !=2){touristGroup.addEvents();}
+							else{
+							touristGroup.updateEvents();}
 						}else{
 							Tools.closeTab(tabId);
 							touristGroup.listTouristGroup(touristGroup.args);
