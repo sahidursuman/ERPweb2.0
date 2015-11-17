@@ -101,7 +101,7 @@ define(function(require, exports) {
 			};
 			data.bookingOrderList = JSON.parse(data.bookingOrderList);
 			var html = listTemplate(data);
-			addTab(menuKey,"项目代订",html);
+			Tools.addTab(menuKey,"项目代订",html);
 
 			// 初始化jQuery 对象
 			BookingArrange.$tab = $('#' + tabId);
@@ -1057,7 +1057,7 @@ define(function(require, exports) {
 		BookingArrange.ajax({'url' : 'bookingOrder', 'method' : 'findBookingOrderById', 'menuKey' : menuKey, 'operation' : 'view', 'id' : id}, function(data){
 			data.bookingOrder = JSON.parse(data.bookingOrder);
 			var html = viewTemplate(data);
-			addTab(menuKey+"-view","查看项目代订",html);
+			Tools.addTab(menuKey+"-view","查看项目代订",html);
 			//导出查看项目代订按钮事件
 			$(".updateBooking .T-bookingBtn").on('click', function(){
 				BookingArrange.exportBooking(id);
