@@ -112,7 +112,12 @@ define(function(require, exports) {
 					$container.find('#quoteContent').html(addHtml)
 
 					$container.find('.inquiryContent').on("click",function(){
-						quote.quoteStatus($container);
+						var quoteId = $container.find('[name=quoteId]').val();
+						if(!quoteId){
+							showMessageDialog($( "#confirm-dialog-message" ),"请先询价！");
+							return false;
+						} 
+						quote.quoteStatus(quoteId,$container);
 					});	
 
 					quote.init_event($container);
@@ -122,19 +127,14 @@ define(function(require, exports) {
 	};
 
 	//询价状态
-	quote.quoteStatus = function($container){
-		var quoteId = $container.find('[name=quoteId]').val();
-		if(!quoteId){
-			showMessageDialog($( "#confirm-dialog-message" ),"请先询价！");
-			return false;
-		} 
+	quote.quoteStatus = function(quoteId,$container){
 		var inquiryHtml = inquiryResultTemplate();
 		$container.find('#inquiryContent').html(inquiryHtml);
 		
-		quote.busStatusList(quoteId);
+		quote.busStatusList(quoteId,$container);
 
 		$container.find('.busInquiryResult').on("click",function(){
-			quote.hotelStatusList(quoteId,$container);
+			quote.busStatusList(quoteId,$container);
 		});
 		$container.find('.hotelInquiryContent').on("click",function(){
 			quote.hotelStatusList(quoteId,$container);
@@ -147,7 +147,7 @@ define(function(require, exports) {
 		$.ajax({
 			url: KingServices.build_url('busInquiry','statusList'),
 			type: 'POST',
-			data: { quoteId : 180 + "" },
+			data: { quoteId : quoteId + "" },
 			success: function(data){
 				var result = showDialog(data);
 				if(result){
@@ -193,7 +193,7 @@ define(function(require, exports) {
 								var result = showDialog(data);
 								if(result){
 									showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-										quote.busStatusList(quoteId);
+										quote.busStatusList(quoteId,$container);
 									});
 								}
 							}
@@ -234,7 +234,7 @@ define(function(require, exports) {
 									showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
 										//删除现有
 										$container.find(".T-resourceHotelList").remove();
-										// quote.$tabAdd.find(".T-resourceHotelList").each(function(){
+										// $container.find(".T-resourceHotelList").each(function(){
 										// 	var id = $(this).data("entity-id");
 										// 	if(id){
 										// 		$.ajax({
@@ -270,7 +270,7 @@ define(function(require, exports) {
 								var result = showDialog(data);
 								if(result){
 									showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-										quote.hotelStatusList(quoteId);
+										quote.hotelStatusList(quoteId,$container);
 									});
 								}
 							}
