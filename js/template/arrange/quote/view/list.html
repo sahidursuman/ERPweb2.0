@@ -28,7 +28,7 @@
 				<td>{{quote.adultQuotePrice}}</td>
 				<td>{{quote.childQuotePrice}}</td>
 				<td>{{quote.sumQuoteFee}}</td>
-				<td>{{quote.user.realName}}</td>
+				<td>{{if quote.user != null}}{{quote.user.realName}}{{/if}}</td>
 				<td>{{quote.createTime}}</td>
 				<td>
 					<div class="hidden-sm hidden-xs btn-group">

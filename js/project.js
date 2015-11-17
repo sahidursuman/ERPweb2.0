@@ -619,7 +619,12 @@ var modalScripts = {
 	'public_message':"js/template/system/message/message.js",
 	'system_information':"js/template/system/information/information.js",
 	'system_user':"js/template/system/user/user.js",
-	'system_department':"js/template/system/department/business.js"
+	'system_department':"js/template/system/department/business.js",
+	
+	'arrange_transfer':"js/template/arrange/arrangeTransfer/arrangeTransfer.js",  //转客管理
+	'arrange_inner_Transfer':"js/template/arrange/innerTransfer/innerTransfer.js",
+	'arrange_orderManage':"js/template/arrange/orderManage/orderManage.js"
+
 };
 
 
