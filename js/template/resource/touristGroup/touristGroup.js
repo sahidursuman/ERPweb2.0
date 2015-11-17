@@ -5,6 +5,7 @@ define(function(require, exports) {
 	var listTemplate = require("./view/list"),
 		addTemplate = require("./view/add"),
 		searchTemplate = require("./view/searchList"),
+		lineproductSearchList = require("./view/lineproductSearchList"),
 		updateTemplate = require("./view/update"),
 		viewTemplate = require("./view/view"),
 		arrangeTemplate = require("./view/arrange"),
@@ -678,7 +679,8 @@ define(function(require, exports) {
 			});
 			//点击‘搜索路线’获取JSON
 			$("#"+tab+" .touristGroupMainForm .btn-travelLine-search").click(function(){
-				touristGroup.searchLineFunction(true,0,"");
+				touristGroup.initLineProductSearch($("#"+tab).find('.touristGroupMainForm').hasClass('updateTouristGroupMainForm'));
+				// touristGroup.searchLineFunction(true,0,"");
 			});
 
 			//初始化 组社团数据
@@ -1852,17 +1854,106 @@ define(function(require, exports) {
 			unIMn = needPayMoney-payedMN-cnPMn;
 			unIncomeMoney.val(unIMn);
 		},
+
+		initLineProductSearch: function(isUpdate) {
+			var type = isUpdate?'update': 'add',
+				html =searchTemplate({update: type}),
+				searchTravelLinelayer =layer.open({
+					type: 1,
+					title:"选择路线",
+					skin: 'layui-layer-rim', //加上边框
+					area: ['85%', '80%'], //宽高
+					zIndex:1029,
+					content: html
+				});
+
+			var $dialog = $('.T-lineproduct-search-' + type);
+			touristGroup.getLineProduct($dialog, 0);
+			touristGroup.getLineProduct($dialog, 1);
+			$dialog.find('.T-lineProduct-search').on('click', function(event) {
+				event.preventDefault();
+				var $that = $(this),
+					type = $that.prevAll('.tabbable').find('ul').find('.active').index();
+				touristGroup.getLineProduct($dialog, type, $dialog.find('input[name="lineProduct_name"]').val());
+			});	
+			$dialog.find('.T-searchtravelLine').on('click', function(event) {
+				event.preventDefault();
+				var $tr = $dialog.find('input[name="choice-TravelLine"]:checked').closest('tr'), 
+					$tab = $('#tab-resource_touristGroup-add-content');
+
+				if (isUpdate) {
+					$tab = $('#tab-resource_touristGroup-update-content');
+				}
+
+				console.info($tr.length)
+				$tab.find("input[name=lineProductIdName]").val($tr.children('[name="travelLine-select"]').text()).trigger('change');
+				$tab.find("input[name=lineProductId]").val($tr.data('id'));
+				layer.close(searchTravelLinelayer);
+			});	
+		},
+		getLineProduct:function($dialog, type, page, name) {
+			page = page || 0;
+			var url = KingServices.build_url('lineProduct', 'findAll'),
+				$tbody = $dialog.find('.T-normal-list');
+
+			if (type) {
+				url = KingServices.build_url('lineProduct', 'listQuoteLinePorduct');
+				$tbody = $dialog.find('.T-quote-list');
+			}
+			$.ajax({
+				url: url,
+				type: 'post',
+				data: {
+						pageNo: page,
+						name: name
+					},
+			})
+			.done(function(data) {
+				if (showDialog(data)) {
+					data.lineProductList = JSON.parse(data.lineProductList);
+
+					if (type) {
+						var list = [];
+						for (var i = 0, len = data.lineProductList.length, tmp, lineProduct; i < len; i ++) {
+							tmp = data.lineProductList[i];
+							lineProduct = tmp.lineProduct;
+							list.push({
+								id: tmp.id,
+								name: lineProduct.name,
+								days: lineProduct.days,
+								type: lineProduct.type,
+								customerType: lineProduct.customerType,
+								status: lineProduct.status,
+								travelAgencyName: tmp.partnerAgency.travelAgencyName,
+								createTime: tmp.createTime
+							})
+						}
+
+						data.lineProductList = list;
+						data.quote = type;
+						console.info(data)
+					}
+					$tbody.html(lineproductSearchList(data));
+
+					// 绑定翻页组件
+					laypage({
+					    cont: $tbody.closest('.tab-pane').find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+					    pages: data.totalPage, //总页数
+					    curr: (data.pageNo + 1),
+					    jump: function(obj, first) {
+					    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+								touristGroup.getLineProduct($dialog, type, obj.curr -1,$dialog.find('input[name=lineProduct_name]').val());
+					    	}
+					    }
+					});	
+				}
+			});			
+		},
 		searchLineFunction : function(init,page,name){
 			$.ajax({
 				url:""+APP_ROOT+"back/lineProduct.do?method=findAll&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view&sortType=auto",
 				data:"pageNo="+page+"&name="+name,
-				dataType:"json",
-				beforeSend:function(){
-					//打开一个遮罩层
-					globalLoadingLayer = openLoadingLayer();
-				},
 				success: function(data){
-					layer.close(globalLoadingLayer);
 					var result =showDialog(data);
 					var dataD = data;
 					if(result){
@@ -1895,6 +1986,7 @@ define(function(require, exports) {
 						//搜索按钮事件
 						$("#chooseLineProductId .btn-lineProduct-search").off("click").click(function(){
 							var name = $("#chooseLineProductId input[name=lineProduct_name]").val();
+							// touristGroup.initLineProduct()
 							touristGroup.searchLineFunction(false,0,name);
 						});
 
