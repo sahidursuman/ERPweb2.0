@@ -3,6 +3,7 @@
         <tr>
             <td class="th-border">团号</td>
             <td class="th-border">出团日期</td>
+            <td class="th-border">完团日期</td>
             <td class="th-border">线路产品</td>
             <td class="th-border">人数</td>
             <td class="th-border">团队人数</td>
@@ -12,18 +13,37 @@
             <td class="th-border">创建人</td>
             <td class="th-border">创建日期</td>
         </tr>
-        <tr>
-            <td>HCT01010120150101T</td>
-            <td>2015-10-13</td>
-            <td>2015-11-13</td>
-            <td>九寨黄龙双汽5日游(彩钻)</td>
-            <td>18</td>
-            <td>36</td>
-            <td>安安</td>
-            <td>川A1313</td>
-            <td>蒋润</td>
-            <td>杨灿义</td>
+        
+        <tr data-entity-id="{{tripPlan.id}}">
+            <td style="vertical-align:middle" rowspan="{{tripPlan.tripPlanDetails.length}}">{{tripPlan.tripNumber}}</td> 
+            <td style="vertical-align:middle" rowspan="{{tripPlan.tripPlanDetails.length}}">{{tripPlan.startTime | dateFormat:'yyyy-MM-dd'}}</td>
+            <td style="vertical-align:middle" rowspan="{{tripPlan.tripPlanDetails.length}}">{{tripPlan.endTime | dateFormat:'yyyy-MM-dd'}}</td>
+            {{if tripPlan.tripPlanDetails.length > 0}}
+            {{each tripPlan.tripPlanDetails as detail index}}
+            {{if index == 0}}
+            <td>{{detail.lineProductName}}</td>
+            <td>{{detail.sumMemberCount}}</td>
+            {{/if}}
+            {{/each}}
+            {{else}}
+            <td>{{tripPlan.lineProduct.name}}</td>
+            <td>{{tripPlan.touristAdultCount+tripPlan.touristChildCount}}</td>
+            {{/if}}
+            <td style="vertical-align:middle" rowspan="{{tripPlan.tripPlanDetails.length}}">{{tripPlan.touristAdultCount+tripPlan.touristChildCount}}</td>
+            <td style="vertical-align:middle" rowspan="{{tripPlan.tripPlanDetails.length}}">{{if tripPlan.guide == null}}-{{else}}{{tripPlan.guide.realname}}{{/if}}</td>
+            <td style="vertical-align:middle" rowspan="{{tripPlan.tripPlanDetails.length}}">{{if tripPlan.bus == null}}-{{else}}{{tripPlan.bus.licenseNumber}}{{/if}}</td>
+            <td style="vertical-align:middle" rowspan="{{tripPlan.tripPlanDetails.length}}">{{if tripPlan.driver == null}}-{{else}}{{tripPlan.driver.name}}{{/if}}</td>
+            <td style="vertical-align:middle" rowspan="{{tripPlan.tripPlanDetails.length}}">{{if tripPlan.user == null}}-{{else}}{{tripPlan.user.realName}}{{/if}}</td>
+            <td style="vertical-align:middle" rowspan="{{tripPlan.tripPlanDetails.length}}">{{tripPlan.createTime | dateFormat:'yyyy-MM-dd hh:mm:ss'}}</td>
         </tr>
+        {{each tripPlan.tripPlanDetails as detail index}}
+        {{if index > 0}}
+        <tr>
+            <td>{{detail.lineProductName}}</td>
+            <td>{{detail.sumMemberCount}}</td>
+        </tr>
+        {{/if}}
+        {{/each}}
     </table>
     <div class="pull-left col-sm-4" >
         <div class="title-size"><i class="fa fa-comments"></i> 游客评价</div>
@@ -36,47 +56,43 @@
                 <td>不满意</td>
             </tr>
             <tr>
+                <td>导游服务</td>
+                <td>{{serviceCount.guideService.veryGood}}</td>
+                <td>{{serviceCount.guideService.good}}</td>
+                <td>{{serviceCount.guideService.notBad}}</td>
+                <td>{{serviceCount.guideService.bad}}</td>
+            </tr>
+            <tr>
                 <td>司机服务</td>
-                <td>520</td>
-                <td>421</td>
-                <td>124</td>
-                <td>114</td>
+                <td>{{serviceCount.driverService.veryGood}}</td>
+                <td>{{serviceCount.driverService.good}}</td>
+                <td>{{serviceCount.guideService.notBad}}</td>
+                <td>{{serviceCount.driverService.bad}}</td>
             </tr>
             <tr>
                 <td>线路安排</td>
-                <td>520</td>
-                <td>421</td>
-                <td>124</td>
-                <td>114</td>
+                <td>{{serviceCount.lineService.veryGood}}</td>
+                <td>{{serviceCount.lineService.good}}</td>
+                <td>{{serviceCount.lineService.notBad}}</td>
+                <td>{{serviceCount.lineService.bad}}</td>
             </tr>
             <tr>
-                <td>线路安排</td>
-                <td>520</td>
-                <td>421</td>
-                <td>124</td>
-                <td>114</td>
+                <td>住宿安排</td>
+                <td>{{serviceCount.hotelService.veryGood}}</td>
+                <td>{{serviceCount.hotelService.good}}</td>
+                <td>{{serviceCount.hotelService.notBad}}</td>
+                <td>{{serviceCount.hotelService.bad}}</td>
             </tr>
         </table>
     </div>
     <div style="height: 25px"></div>
     <div class="col-sm-7 pull-right border margin-top" >
-        <div class="pull-left ">
-            <label style="font-size: 14px;font-weight: bold">清清 ：</label>
-        </div>
         <div class="col-sm-11 pull-left">
-            <p style="line-height: 20px">心中有了目标，就有了行动的力量。我向着自己的目标迈进，从未停息。在大学里，
-                我为了自己的梦想牺牲了娱乐、游戏、社交的时间，在一些人看来，我的生活近乎枯燥，
-                可是，只有我知道，在创意的世界里我像超人一样的天马行空，感受着设计带给我成就感和满足感。
-            </p>
-        </div>
-        <div class="pull-left ">
-            <label style="font-size: 14px;font-weight: bold">蒋润 ：</label>
-        </div>
-        <div class="col-sm-11 pull-left">
-            <p style="line-height: 20px">心中有了目标，就有了行动的力量。我向着自己的目标迈进，从未停息。在大学里，
-                我为了自己的梦想牺牲了娱乐、游戏、社交的时间，在一些人看来，我的生活近乎枯燥，
-                可是，只有我知道，在创意的世界里我像超人一样的天马行空，感受着设计带给我成就感和满足感。
-            </p>
+            {{each adviceList as advice}}
+                <p style="line-height: 20px">
+                    {{advice}}
+                </p>
+            {{/each}}
         </div>
     </div>
 </div>
