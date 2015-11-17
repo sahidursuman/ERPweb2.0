@@ -1507,7 +1507,7 @@ var Tools = {
  * @param  {object} $elements 需要绑定提示的DOM
  * @return {[type]}           [description]
  */
-Tools.descToolTip = function($elements,type) {
+Tools.descToolTip = function($elements,type, placement) {
 	if (!!$elements)  {
 		$elements.each(function() {
 			var $that = $(this), content = $that.prop('title'),html = $that.data("html");
@@ -1536,13 +1536,17 @@ Tools.descToolTip = function($elements,type) {
 					}, 100);
 				});
 			}else if (type == 2) {
-				// 绑定提示
-				$that.popover({
+				var options = {
 					trigger: 'manual',
 					container: '#desc-tooltip-containter',
 					content: html,
 					html : true
-				})
+				};
+				if (!!placement) {
+					options.placement = placement;
+				}
+				// 绑定提示
+				$that.popover(options)
 				// 处理显示与隐藏提示
 				.hover(function() {
 					// 进入时，触发提示

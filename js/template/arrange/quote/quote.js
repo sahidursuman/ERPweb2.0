@@ -9,6 +9,8 @@ define(function(require, exports) {
 		rule = require("./rule"),
 		mainQuoteTemplate = require("./view/mainQuote"),
 		addQuoteTemplate = require("./view/addQuote"),
+		viewQuoteTemplate = require("./view/viewQuote"),
+		// shareQuoteTemplate = require("./view/shareQuote"),
 		inquiryResultTemplate = require("./view/inquiryResult"),
 		busInquiryTemplate = require("./view/busInquiry"),
 		busInquiryListTemplate = require("./view/busInquiryList"),
@@ -19,6 +21,7 @@ define(function(require, exports) {
 		busInquiryTemplate = require("./view/busInquiry"),
 		listMainTemplate = require("./view/listMain"),
 		listTemplate = require("./view/list");
+		// var tabId = "tab-"+menuKey+"-content";
 	/**
 	 * 自定义报价对象
 	 * @type {Object}
@@ -28,6 +31,8 @@ define(function(require, exports) {
 		$tabAdd: false
 
 	};
+
+
 	//初始化报价模块
 	quote.initModule = function() {
 		quote.listMainQuote();
@@ -46,7 +51,84 @@ define(function(require, exports) {
 	quote.listQuote = function() {
 		var html = listTemplate();
 		quote.$tab.find('.T-quoteList').html(html);
+
+		
 	};
+	//查看报价
+	quote.viewQuote = function(id) {
+		$.ajax({
+			url: KingServices.build_url("quote","viewQuote"),
+			type: 'POST',
+			data: "id="+id+"",
+			success: function(data){
+				var result = showDialog(data);
+				if (result) {
+                    // data.viewquote{
+
+                    // }
+				}
+			}
+		})
+		var html = viewQuoteTemplate();
+		Tools.addTab(menukey+"-view","查看报价",html);
+	};
+
+
+
+   //初始化分享报价。。
+   quote.listQuote = function(){
+   	var html = listTemplate();
+   	quote.$tab.find('.T-quoteList').html(html);
+     quote.$tab.find('.T-share').on('click', function(event) {
+     	event.preventDefault();
+     	
+     	quote.shareQuote();
+     });
+
+     quote.$tab.find('.T-view').on('click', function(event,id) {
+			event.preventDefault();
+			/* Act on the event */
+			// var id = $(this).closest('tr').data(id);
+			// var id = $
+			quote.viewQuote(id);
+	});
+
+   }
+
+	//分享页面
+	quote.shareQuote = function() {
+		// $.ajax({
+		// 	url: KingServices.build_url("",""),
+		// 	type: 'POST',
+		// 	data: "id="+id+"",
+		// 	success: function(data){
+		// 		var result = showDialog(data);
+		// 		if (result) {
+
+		// 		}
+		// 	}
+		// })
+		
+		// window.open("quote.html?key=" + key);
+		window.open("quote.html")
+		// var html = shareQuoteTemplate();
+		// Tools.addTab(menukey+"-share","分享报价");
+	};
+
+
+// quote.shareQuote = function(id){
+// 			layer.open({
+// 				type:2,
+// 				title:"分享报价",
+// 				area: ['1190px', '520px'],
+// 				scrollbar:true,
+// 		        // content: APP_ROOT + 'back/travelLine.do?method=getLineProductDayDetail&token='+$.cookie("token")+'&menuKey='+menuKey+'&operation=view&travelLineId='+id,
+// 		        success:function(){
+		        	
+// 		        }
+// 			});
+// 		};
+
 
 	//新增报价
 	quote.addQuote = function(id) {
