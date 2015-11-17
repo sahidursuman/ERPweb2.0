@@ -9,6 +9,7 @@ define(function(require, exports) {
 		rule = require("./rule"),
 		mainQuoteTemplate = require("./view/mainQuote"),
 		addQuoteTemplate = require("./view/addQuote"),
+		updateQuoteTemplate = require("./view/updateQuote"),
 		inquiryResultTemplate = require("./view/inquiryResult"),
 		busInquiryTemplate = require("./view/busInquiry"),
 		busInquiryListTemplate = require("./view/busInquiryList"),
@@ -40,15 +41,15 @@ define(function(require, exports) {
 		Tools.addTab(menukey,"报价模块",html);
 		quote.$tab = $("#tab-arrange_quote-content");
 
-		quote.listQuote();
+		quote.listQuote(0);
 	};
 
 	//初始化报价列表
-	quote.listQuote = function() {
+	quote.listQuote = function(page) {
 		$.ajax({
 			url: KingServices.build_url('quote', 'listQuote'),
 			type: 'POST',
-			data: 'pageNo=0',
+			data: 'pageNo='+page+'',
 			success: function(data){
 				var result = showDialog(data);
 				if(result){
@@ -56,7 +57,7 @@ define(function(require, exports) {
 					var html = listTemplate(data);
 					quote.$tab.find('.T-quoteList').html(html);
 
-					quote.$tab.find('.T-quoteList').on('click','.T-action',function(){
+					quote.$tab.find('.T-quoteList').off('click').on('click','.T-action',function(){
 						var $this = $(this), id = $this.closest('tr').data('entity-id');
 						if ($this.hasClass('T-view')){
 							// 查看报价信息
@@ -70,6 +71,18 @@ define(function(require, exports) {
 							//....
 						}
 					})
+
+	                //绑定翻页组件
+	                laypage({
+	                	cont: quote.$tab.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+					    pages: data.totalPage, //总页数
+					    curr: (page + 1),
+					    jump: function(obj, first) {
+					    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+					    		quote.listQuote(obj.curr -1);
+					        }
+					    }
+	                });
 				}
 			}
 		})
@@ -123,30 +136,28 @@ define(function(require, exports) {
 			success: function(data){
 				var result = showDialog(data);
 				if(result){
-					data.viewLineProduct = {
-							lineProduct: JSON.parse(data.lineProduct),
-							busCompanyTemplate: JSON.parse(data.busCompanyTemplate),
-							guideTemplate: JSON.parse(data.guideTemplate),
-							insuranceTemplate: JSON.parse(data.insuranceTemplate),
-							daysList: JSON.parse(data.daysList)
-					};
-					data.viewLineProduct.editorName = menukey + '-ueditor'
+					data.busCompanyArrange = JSON.parse(data.busCompanyArrange);
+					data.daysList = JSON.parse(data.daysList);
+					data.guideArrange = JSON.parse(data.guideArrange);
+					data.insuranceArrange = JSON.parse(data.insuranceArrange);
+					data.quoteDetailJson = JSON.parse(data.quoteDetailJson);
+					data.editorName = menukey +'-update' + '-ueditor'
 					var html = mainQuoteTemplate();
-					Tools.addTab(menukey+'-add',"新增报价",html)
-					quote.$tabAdd = $("#tab-arrange_quote-add-content");
+					Tools.addTab(menukey+'-update',"修改报价",html)
+					$container = $("#tab-arrange_quote-update-content");
 
-					var addHtml = addQuoteTemplate(data.viewLineProduct);
-					quote.$tabAdd.find('#quoteContent').html(addHtml)
+					var updateHtml = updateQuoteTemplate(data);
+					$container.find('#quoteContent').html(updateHtml)
 
 					var inquiryHtml = inquiryResultTemplate();
-					quote.$tabAdd.find('#inquiryContent').html(inquiryHtml)
+					$container.find('#inquiryContent').html(inquiryHtml)
 					var busInquiryResultHtml = busInquiryResultTemplate();
 					var hotelInquiryResultHtml = hotelInquiryResultTemplate();
 
-					quote.$tabAdd.find('#busInquiryResult').html(busInquiryResultHtml)
-					quote.$tabAdd.find('#hotelInquiryContent').html(hotelInquiryResultHtml)
+					$container.find('#busInquiryResult').html(busInquiryResultHtml)
+					$container.find('#hotelInquiryContent').html(hotelInquiryResultHtml)
 
-					quote.init_event(quote.$tabAdd);
+					quote.init_event($container);
 				}
 			}
 		})
@@ -159,6 +170,7 @@ define(function(require, exports) {
 		quote.autocomplete($container);
 		//时间控件
 		quote.datePicker($container);
+		quote.dateTimePicker($container);
 		//报价计算器
 		quote.costCalculation($container)
 		$container.on("change",".T-changeQuote",function(){
@@ -215,12 +227,18 @@ define(function(require, exports) {
 				days: quote.$tabAdd.find('.T-lineProductDays').text(),
 				startTime: quote.getValue(quote.$tabAdd,'startTime'),
 				adultCount: quote.getValue(quote.$tabAdd,'adultCount'),
-				childCount: quote.getValue(quote.$tabAdd,'childCount')
+				childCount: quote.getValue(quote.$tabAdd,'childCount'),
+				partnerAgencyId: quote.getValue(quote.$tabAdd,'partnerAgencyId'),
+				partnerAgencyContactId: quote.getValue(quote.$tabAdd,'managerId')
 			}
-			if(!!lineProductInfo.startTime){
+			if(!!lineProductInfo.startTime && !!lineProductInfo.partnerAgencyId && !!lineProductInfo.partnerAgencyContactId ){
 				quote.busInquiry(lineProductInfo);
-			}else{
+			}else if (!!lineProductInfo.startTime != true){
 				showMessageDialog($( "#confirm-dialog-message" ),"请选择出游日期");
+			}else if (!!lineProductInfo.partnerAgencyId != true){
+				showMessageDialog($( "#confirm-dialog-message" ),"请选择客户");
+			}else if (!!lineProductInfo.partnerAgencyContactId != true){
+				showMessageDialog($( "#confirm-dialog-message" ),"请选择客户联系人");
 			}
 		});
 		//车辆询价
@@ -275,11 +293,14 @@ define(function(require, exports) {
 				    						seatCount: seatCount,
 				    						startTime: startTime,
 				    						busCompany: busCompany,
-				    						expiryTime: expiryTime
+				    						expiryTime: expiryTime,
+											partnerAgencyId: lineProductInfo.partnerAgencyId,
+											partnerAgencyContactId: lineProductInfo.partnerAgencyContactId
 				    					},
 				    					success: function(data){
 				    						var result = showDialog(data);
 				    						if (result) {
+												quote.$tabAdd.find('[name=quoteId]').val(data.quoteId);
 												layer.close(busInquiryLayer);
 				    						}
 				    					}
@@ -401,13 +422,20 @@ define(function(require, exports) {
 				days: quote.$tabAdd.find('.T-lineProductDays').text(),
 				startTime: quote.getValue(quote.$tabAdd,'startTime'),
 				adultCount: quote.getValue(quote.$tabAdd,'adultCount'),
-				childCount: quote.getValue(quote.$tabAdd,'childCount')
+				childCount: quote.getValue(quote.$tabAdd,'childCount'),
+				partnerAgencyId: quote.getValue(quote.$tabAdd,'partnerAgencyId'),
+				partnerAgencyContactId: quote.getValue(quote.$tabAdd,'managerId')
 			}
 			var whichDay = 2;
-			if(!!lineProductInfo.startTime){
+
+			if(!!lineProductInfo.startTime && !!lineProductInfo.partnerAgencyId && !!lineProductInfo.partnerAgencyContactId ){
 				quote.hotelInquiry(lineProductInfo,whichDay);
-			}else{
+			}else if (!!lineProductInfo.startTime != true){
 				showMessageDialog($( "#confirm-dialog-message" ),"请选择出游日期");
+			}else if (!!lineProductInfo.partnerAgencyId != true){
+				showMessageDialog($( "#confirm-dialog-message" ),"请选择客户");
+			}else if (!!lineProductInfo.partnerAgencyContactId != true){
+				showMessageDialog($( "#confirm-dialog-message" ),"请选择客户联系人");
 			}
 		});
 		//保存报价
@@ -474,7 +502,9 @@ define(function(require, exports) {
 									lineProductId: lineProductInfo.id+'',
 									params: [],
 									quoteId: '',
-									startTime: startTime
+									startTime: startTime,
+									partnerAgencyId: lineProductInfo.partnerAgencyId,
+									partnerAgencyContactId: lineProductInfo.partnerAgencyContactId
 								}
 								var seachAreaDiv = $hotelLayerContent.find('.T-seachAreaDiv');
 								seachAreaDiv.each(function(){
@@ -501,6 +531,7 @@ define(function(require, exports) {
 									success: function(data){
 										var result = showDialog(data);
 										if (result) {
+											quote.$tabAdd.find('[name=quoteId]').val(data.quoteId);
 											layer.close(hotelInquiryLayer);
 										}
 									}
@@ -1586,11 +1617,12 @@ define(function(require, exports) {
 		//添加行程安排交通
 		var shoppingDetails = '<div class="T-timeline-item timeline-item clearfix updateTicketList updateLineProductDaysDetail T-resourceTicketList ui-sortable-handle" data-entity-index='+quote.updateLineProductIndex+'><div class="timeline-info" style="color:#1fade0" ><i class="ace-icon fa fa-circle" ></i><span >交通</span></div>'+
 		'<div class="widget-box transparent" style="margin-top: 20px"><div class="widget-body"><div class=""><table class="table table-striped table-bordered table-hover">'+
-		'<thead><tr><th class="th-border">票务公司名称</th><th class="th-border">类型</th><th class="th-border">座位级别</th><th class="th-border">单价</th><th class="th-border">数量</th><th class="th-border">备注</th><th class="th-border" style="width: 60px;">操作</th></tr></thead>'+
+		'<thead><tr><th class="th-border">票务公司名称</th><th class="th-border">类型</th><th class="th-border">座位级别</th><th class="th-border">日期</th><th class="th-border">单价</th><th class="th-border">数量</th><th class="th-border">备注</th><th class="th-border" style="width: 60px;">操作</th></tr></thead>'+
 		'<tbody><tr>'+
 		'<td><input type="text" class="col-xs-12 chooseTicketName bind-change"/><input type="hidden" name="tickeId"/></td>'+
 		'<td><select name="type" class="col-xs-12 form-control" style="font-size: 12px !important;"><option value="1">机票</option><option value="2">汽车票</option><option value="3">火车票</option><option value="4">轮船票</option></select></td>'+
 		'<td><input type="text" class="col-xs-12" name="seatLevel"/></td>'+
+        '<td><input type="text" class="col-xs-12 T-dateTimePicker" name="time" value=""></td>'+
 		'<td><input type="text" class="col-xs-12 T-changeQuote" name="price"/></td>'+
 		'<td><input type="text" class="col-xs-12 T-changeQuote" name="count"/></td>'+
 		'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
@@ -1600,6 +1632,7 @@ define(function(require, exports) {
 		
 		//绑定选择自费名称事件
 		quote.bindTicketEvent($(".updateTicketList .chooseTicketName"), validator);
+		quote.dateTimePicker($(".T-timeline-item"));
 	};
 	quote.bindTicketEvent = function(obj, validator){
 		obj.autocomplete({
@@ -2069,7 +2102,8 @@ define(function(require, exports) {
 							type : $item.find("[name=type]").val(),
 							price : $item.find("[name=price]").val(),
 							remark : $item.find("[name=remark]").val(),
-							orderIndex : $item.attr("data-entity-index")
+							orderIndex : $item.attr("data-entity-index"),
+							startTime: $item.find("[name=time]").val()
 						}
 						saveJson.lineDayList[index].ticket.push(ticketJson);
 					}
