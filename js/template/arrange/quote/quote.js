@@ -104,18 +104,29 @@ define(function(require, exports) {
 
 					console.info(data);
 					var busCompanyArrange = JSON.parse(data.busCompanyArrange);
-
                     data.busCompanyArrange=busCompanyArrange;
+
 					var guideArrange = JSON.parse(data.guideArrange);
 					data.guideArrange=guideArrange;
+
 					var insuranceArrange = JSON.parse(data.insuranceArrange);
 					data.insuranceArrange=insuranceArrange;
+
 					var daysList = JSON.parse(data.daysList);
 					data.daysList=daysList;
+
 					var quoteDetailJson = JSON.parse(data.quoteDetailJson);
 					data.quoteDetailJson=quoteDetailJson;
+
               
 
+					// data.viewLineProduct = {
+					// 								lineProduct : lineProduct,
+					// 								busCompanyTemplate : busCompanyTemplate,
+					// 								guideTemplate : guideTemplate,
+					// 								insuranceTemplate : insuranceTemplate,
+					// 								daysList : daysList
+					// 						};
 					var html = viewQuoteTemplate(data);
 					Tools.addTab(menukey+"-view","查看报价",html);
 				}
@@ -155,6 +166,7 @@ define(function(require, exports) {
 					if (!!key) {
 						var url = location.origin + '/quote.html?key=' + key;
 						window.open(url);
+						showMessageDialog($( "#confirm-dialog-message" ),"分享成功");
 					}
 				}
 			}
