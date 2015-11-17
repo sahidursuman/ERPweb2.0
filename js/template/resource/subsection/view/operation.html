@@ -29,7 +29,7 @@
 					<th>操作</th>
 				</tr>  
 			</thead>
-			<tbody class="subsectionOperationTbody">{{each subtGroupList as subList}}
+			<tbody class="subsectionOperationTbody" data-entity-type="{{ptGroup.lineProduct.customerType}}">{{each subtGroupList as subList}}
 			{{if subList.id != null}}
 				<tr data-entity-id="{{subList.id}}">
 					<td>
