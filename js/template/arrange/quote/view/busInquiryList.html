@@ -13,22 +13,42 @@
 			</tr>
 		</thead>
 	
-		<tbody>{{each }}
-			<tr>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
+		<tbody>{{each result as busCompany}}
+			<tr data-entity-id="{{busCompany.id}}">
+				<td style="vertical-align: middle" rowspan="{{busCompany.busList.length}}" class="T-name">{{busCompany.companyName}}</td>
+				<td style="vertical-align: middle" rowspan="{{busCompany.busList.length}}">{{if busCompany.province != null}}{{busCompany.province.name}}{{/if}}-{{if busCompany.city != null}}{{busCompany.city.name}}{{/if}}-{{if busCompany.district != null}}{{busCompany.district.name}}{{/if}}</td>
+				<td style="vertical-align: middle" rowspan="{{busCompany.busList.length}}" class="T-managerName">{{busCompany.managerName}}</td>
+				<td style="vertical-align: middle" rowspan="{{busCompany.busList.length}}" class="T-mobileNumber">{{busCompany.mobileNumber}}</td>
+				{{if busCompany.busList.length == 0}}
+				<td>-</td>
+				<td>-</td>
+				<td>-</td>
+				{{else}}
+				{{each busCompany.busList as bus index}}
+				{{if index == 0}}
+				<td>{{bus.seatCount}}</td>
+				<td>{{bus.brand}}</td>
+				<td>{{bus.price}}</td>
+				{{/if}}
+				{{/each}}
+				{{/if}}
+				<td style="vertical-align: middle" rowspan="{{busCompany.busList.length}}"><a class="T-chooseBus">添加</a></td>
 			</tr>
+			{{each busCompany.busList as bus index}}
+			{{if index > 0}}
+				<tr>
+				<td>{{bus.seatCount}}</td>
+				<td>{{bus.brand}}</td>
+				<td>{{bus.price}}</td>
+				</tr>
+			{{/if}}
+			{{/each}}
+			{{/each}}
 		</tbody>
 	</table>
 	<div class="row pageMode">
 		<div class="col-xs-6">
-			<small>共计  条记录</small>
+			<small>共计 {{searchParam.totalCount}} 条记录</small>
 		</div>
 		<div class="col-xs-6">
 			<div class="dataTables_paginate paging_simple_numbers T-pagenation">

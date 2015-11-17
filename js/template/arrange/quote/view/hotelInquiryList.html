@@ -36,7 +36,7 @@
 						{{if index == 0}}
 						<td>{{room.type}}</td>
 						<td>{{if room.containBreakfast == 1}}早餐、{{/if}}{{if room.containLunch == 1}}午餐、{{/if}}{{if room.containDinner == 1}}晚餐{{/if}}</td>
-						<td>{{room.inquiryPriceList}}</td>
+						<td>{{if room.price !=null}}{{room.price.contractPrice}}{{/if}}</td>
 						{{/if}}
 					{{/each}}
 				{{/if}}
@@ -47,7 +47,7 @@
 			<tr>
 				<td>{{room.type}}</td>
 				<td>{{if room.containBreakfast == 1}}早餐、{{/if}}{{if room.containLunch == 1}}午餐、{{/if}}{{if room.containDinner == 1}}晚餐{{/if}}</td>
-				<td>{{room.inquiryPriceList}}</td>
+				<td>{{if room.price !=null}}{{room.price.contractPrice}}{{/if}}</td>
 			</tr>
 			{{/if}}
 			{{/each}}
