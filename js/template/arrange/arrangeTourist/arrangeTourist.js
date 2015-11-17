@@ -3,6 +3,7 @@ define(function(require, exports) {
 	var menuKey = "arrange_tourist",
 		listMainTemplate = require("./view/listMain"),
 		listTemplate = require("./view/list"),
+		touristGrouplistTemplate = require("./view/touristGrouplist"),
 		divideTemplate = require("./view/divide"),
 		addTripPlanTemplate = require("./view/addTripPlan"),
 		viewGroupTemplate = require("./view/viewGroup"),
@@ -20,7 +21,6 @@ define(function(require, exports) {
 		addMergePlanTemplateLayer = "",
 		chooseMergeLayer = "",
 		updateInnerFeeLayer = "",
-		//-arrange_tourist-addTripPlan
 		checkTable="arrange_tourist-addTripPlan",
 		tabId = "tab-"+menuKey+"-content";
 	var arrangeTourist = {
@@ -37,82 +37,118 @@ define(function(require, exports) {
 			}
 			return false;
 		},
-		//list Main
+
+		/**
+		 * listArrangeTouristMain 初始化数据模板
+		 * @return {[type]} [description]
+		 */
 		listArrangeTouristMain:function(){
-			$.ajax({
-				url:""+APP_ROOT+"back/touristGroup.do?method=getLineProductList&token="+$.cookie("token")+"&menuKey=resource_lineProduct&operation=view",
-				type:"POST",
-				data:"sortType=auto",
-				dataType:"json",
-				beforeSend:function(){
-					globalLoadingLayer = openLoadingLayer();
-				},
-				success:function(data){
-					layer.close(globalLoadingLayer);
-					var result = showDialog(data);
-					if(result){
-						//data.lineProductList = JSON.parse(data.lineProductList);
-						var html = listMainTemplate(data);
-						addTab(menuKey,"分并转团",html);
-						//缓存autocomplate数据
-						arrangeTourist.lineProListData=data.lineProductList;
-						arrangeTourist.getlineProductList($('#'+tabId));
+				var html = listMainTemplate();
+				addTab(menuKey,"分并转团",html);
 
-						arrangeTourist.touristGroupMergeData = {
-								touristGroupMergeList : []
-						}
-						arrangeTourist.listArrangeTourist(0,"","");  
-
-						//给搜索按钮绑定事件area
-						$("#"+tabId+" .arrangeTouristMain .btn-arrangeTourist-search").click(function(){
-							arrangeTourist.searchData = {
-									lineProductId : $("#tab-"+menuKey+"-content .arrangeTouristMain input[name=lineProductId]").val(),
-									startTime : $("#tab-"+menuKey+"-content .arrangeTouristMain input[name=startTime]").val()
-							}
-							arrangeTourist.listArrangeTourist(0,arrangeTourist.searchData.lineProductId,arrangeTourist.searchData.startTime);
-						});
-
-						//开始并团按钮绑定事件
-						$("#"+tabId+" .arrangeTouristMain .arrangeTouristMergeList .btn-start-touristGroup-merge").click(arrangeTourist.startTouristGroupMerge);
-					}
+				//声明一个用于存储并团对象集合
+				arrangeTourist.touristGroupMergeData = {
+						touristGroupMergeList : []
 				}
-			});
+				//初始化分散团事件
+				arrangeTourist.init_event();
 		},
 
-		//获取线路产品Autocomplete
-	    getlineProductList:function($obj){
-			var getlineProductList = $obj.find(".T-Choose-linProList");
-			getlineProductList.autocomplete({
+		/**
+		 * init_event 初始化分散团事件
+		 * @return {[type]} [description]
+		 */
+	    init_event:function(){
+	    	var $visitorObj=$('#T-Visitor-list'),
+				$GroupObj=$('#T-Group-list');
+				//散客团体搜索		
+				$visitorObj.find('.T-visitorTourist-search').off().on('click', function(event) {
+					event.preventDefault();
+					/* Act on the event */
+					var lineProductId=$visitorObj.find("input[name=lineProductId]").val(),
+						startTime=$visitorObj.find("input[name=startTime]").val(),
+						customerType=0,
+						divId="T-Visitor-list";
+					arrangeTourist.listArrangeTourist(0,lineProductId,startTime,customerType,divId);
+
+				});
+				$GroupObj.find('.T-GroupTourist-search').off().on('click', function(event) {
+					event.preventDefault();
+					/* Act on the event */
+					var lineProductId=$GroupObj.find("input[name=lineProductId]").val(),
+						startTime=$GroupObj.find("input[name=startTime]").val(),
+						customerType=1,
+						divId="T-Group-list";
+					arrangeTourist.listArrangeTourist(0,lineProductId,startTime,customerType,divId);
+				});
+
+				//初始化页面数据
+				arrangeTourist.listArrangeTourist(0,"","",0,"T-Visitor-list");
+				arrangeTourist.listArrangeTourist(0,"","",1,"T-Group-list");
+
+				//Autocomplate线路产品
+				arrangeTourist.getlineProductList($visitorObj,0);
+				arrangeTourist.getlineProductList($GroupObj,1);
+
+	    },
+
+
+	    /**
+	     * getlineProductList 线路产品的及时请求
+	     * @param  {[type]} $obj  散客团体DOM对象
+	     * @param  {[type]} customerType 0散客 1团体标识
+	     * @return {[type]}          
+	     */
+        getlineProductList:function($obj,customerType){
+			var $that = $obj.find(".T-Choose-linProList");	
+			$that.autocomplete({
 				minLength:0,
-				change:function(event,ui){
+				change :function(event, ui){
 					if(ui.item == null){
-						$(this).parent().parent().find("input[name=lineProductId]").val("");
+						//$(this).val("");
+						var parents = $(this).parent();
+						parents.find("input[name=lineProductId]").val("");
 					}
 				},
-				select:function(event,ui){
-					$(this).blur();
-					var obj = this;
-					$(obj).parent().parent().find("input[name=lineProductId]").val(ui.item.id).trigger('change');
+				select :function(event, ui){
+					var _this = this, parents = $(_this).parent();
+					parents.find("input[name=lineProductId]").val(ui.item.id).trigger('change');
 				}
-			}).click(function(){
-				var obj = this;
-				var listObj =arrangeTourist.lineProListData;
-				if(listObj !=null && listObj.length>0){
-					for(var i=0;i<listObj.length;i++){
-						listObj[i].value = listObj[i].name;
-					}
-				}
-				$(obj).autocomplete('option','source', listObj);
-				$(obj).autocomplete('search', '');
+			}).unbind("click").click(function(){
+				var obj = this,list;
+					$.ajax({
+						url:KingServices.build_url("touristGroup","getLineProductList"),
+						type: 'POST',
+						dataType: 'json',
+						data:"customerType="+customerType,
+						success:function(data){
+					       var result = showDialog(data),
+					           list=data.lineProductList;
+					       if(!!list && list.length){
+								for(var i=0; i < list.length; i++){
+								  list[i].value = list[i].name;
+						        }
+							}
+							$(obj).autocomplete('option','source', list);
+				            $(obj).autocomplete('search', '');
+				        }
+					})		
 			})
 		},
-
-		//list页面
-		listArrangeTourist:function(page,lineProductId,startTime){
+		/**
+		 * listArrangeTourist 散客团体列表数据
+		 * @param  {[type]} page          分页page
+		 * @param  {[type]} lineProductId 线路产品id
+		 * @param  {[type]} startTime     开始日提
+		 * @param  {[type]} customerType  0 散客、1 团体标识
+		 * @param  {[type]} divId         散客团体DOM-ID
+		 * @return {[type]}               [description]
+		 */
+		listArrangeTourist:function(page,lineProductId,startTime,customerType,divId){
 			$.ajax({
 				url:""+APP_ROOT+"back/tripPlan.do?method=arrangeTouristGroup&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 				type:"POST",
-				data:"pageNo="+page+"&lineProductId="+lineProductId+"&startTime="+startTime+"&sortType=auto",
+				data:"pageNo="+page+"&lineProductId="+lineProductId+"&startTime="+startTime+"&customerType="+customerType+"&sortType=auto",
 				dataType:"json",
 				beforeSend:function(){
 					globalLoadingLayer = openLoadingLayer();
@@ -121,65 +157,135 @@ define(function(require, exports) {
 					layer.close(globalLoadingLayer);
 					var result = showDialog(data);
 					if(result){
-						var html = listTemplate(data);
-
-						html = filterUnAuth(html);
-						//无权限时移除“并团操作”列
-						function filterAuth(html){
-							var $obj = $(html);
-							if(!isAuth("1130004")){
-								$obj.find(".T-arrangeList .touristGroupMergeCheckBox").each(function(i){
-									$(this).closest('td').remove();
-								});
-								//移除表头
-								$obj.find(".T-arrangeList").closest('table').find('th').eq(0).remove();
+						if (customerType==0) {// 0 散客 1团体
+							var html = listTemplate(data);
+							html = filterUnAuth(html);
+							//无权限时移除“并团操作”列
+							function filterAuth(html){
+								var $obj = $(html);
+								if(!isAuth("1130004")){
+									$obj.find(".T-arrangeList .T-touristGroupMergeCheckBox").each(function(i){
+										$(this).closest('td').remove();
+									});
+									//移除表头
+									$obj.find(".T-arrangeList").closest('table').find('th').eq(0).remove();
+								}
+								return html;
 							}
-							return html;
-						}
-						html = filterAuth(html);
-						$("#"+tabId+" .arrangeTouristMain .arrangeTouristList").html(html);
-						$("#"+tabId+" .arrangeTouristMain .date-picker").datepicker({
-							autoclose: true,
-							todayHighlight: true,
-							format: 'yyyy-mm-dd',
-							language: 'zh-CN'
-						});
-						
-						//给并团checkbox绑定事件
-						$("#"+tabId+" .arrangeTouristMain .arrangeTouristList .touristGroupMergeCheckBox").click(arrangeTourist.addTouristGroupMerge);
-						
-						//给分团按钮绑定事件
-						$("#"+tabId+" .arrangeTouristMain .btn-divide").click(function(){
-							var lineProductId = $(this).attr("data-entity-id");
-							var startTime = $(this).attr("data-entity-startTime");
-							arrangeTourist.divideTourist(lineProductId,startTime);
-						});
-						//给转客按钮绑定事件
-						$("#"+tabId+" .arrangeTouristMain .btn-transfer").click(function(){
-							var lineProductId = $(this).attr("data-entity-id");
-							var startTime = $(this).attr("data-entity-startTime");
-							arrangeTourist.transferTourist(lineProductId,startTime);
-						});
-						$("#"+tabId+" .arrangeTouristMain .btn-inTransfer").click(function(){
-							var lineProductId = $(this).attr("data-entity-id");
-							var startTime = $(this).attr("data-entity-startTime");
-							arrangeTourist.inTransferTourist(lineProductId,startTime);
-						})
+							html = filterAuth(html);
+							//绑定模板数据
+							$("#T-Visitor-list").find('.T-touristVisitor-list').html(html);
+					
+						} else{
+							var html=touristGrouplistTemplate(data);
+		                    $("#T-Group-list").find('.T-touristGroup-list').html(html);
+						};
+
+						//初始化时间控件
+						arrangeTourist.initDatePicker($("#"+tabId));
+
+						//散客团体的报表操作
+						arrangeTourist.init_VistorGroupEvent();
 						
 						// 绑定翻页组件
 						laypage({
-						    cont: $('#' + tabId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+						    cont: $('#' + divId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
 						    pages: data.totalPage, //总页数
 						    curr: (page + 1),
 						    jump: function(obj, first) {
 						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-						    		arrangeTourist.listArrangeTourist(obj.curr -1,arrangeTourist.searchData.lineProductId,arrangeTourist.searchData.startTime);
+						    		arrangeTourist.listArrangeTourist(obj.curr -1,lineProductId,startTime,customerType,divId);
 						    	}
 						    }
 						});
 					}
 				}
 			});
+		},
+
+		/**
+		 * 时间控件是初始化
+		 * @param  {[type]} $tabId 在外层ID
+		 * @return {[type]}
+		 */
+		initDatePicker:function($tabId){
+			$tabId.find('.datepicker').datepicker({
+				autoclose: true,
+				todayHighlight: true,
+				format: 'yyyy-mm-dd',
+				language: 'zh-CN'
+			})
+		},
+
+		/**
+		 * init_VistorGroupEvent 散客团体的报表操作
+		 * @return {[type]} [description]
+		 */
+		init_VistorGroupEvent:function(){
+			//散客操作
+			$("#T-Visitor-list").find('.T-arrageVisitor-list').on('click', '.T-action', function(event) {
+				event.preventDefault();
+				/* Act on the event */
+				var $that=$(this),$tr=$that.closest('tr'),lineProductId=$tr.attr("data-entity-id"), startTime=$tr.attr("data-entity-startTime");
+					if ($that.hasClass('T-divide'))  {
+						// 分团
+						arrangeTourist.divideTourist(lineProductId,startTime);
+					} else if ($that.hasClass('T-transfer'))  {
+						// 转客
+						arrangeTourist.transferTourist(lineProductId,startTime);
+					} else if ($that.hasClass('T-inTransfer'))  {
+						// 内转
+						arrangeTourist.inTransferTourist(lineProductId,startTime);
+					}
+
+
+					if($tr.hasClass('.T-touristGroupMergeCheckBox')){
+						//并团的checkbox绑定事件
+						arrangeTourist.addTouristGroupMerge();
+					}else if ($tr.hasClass('.T-start-touristGroup-merge')){
+						//并团绑定事件
+						arrangeTourist.startTouristGroupMerge();
+					}
+			});
+
+
+			//给并团checkbox绑定事件
+			$("#T-Visitor-list").find(".T-touristGroupMergeCheckBox").click(arrangeTourist.addTouristGroupMerge);
+			
+			//散客并团事件的绑定
+			$("#T-Visitor-list").find('.T-start-touristGroup-merge').on('click', function(event) {
+				event.preventDefault();
+				/* Act on the event */
+				arrangeTourist.startTouristGroupMerge();
+			});
+
+
+		    //团体操作
+		    $("#T-Group-list").find('.T-arrageGroup-list').on('click', '.T-action', function(event) {
+				event.preventDefault();
+				/* Act on the event */
+				var $that=$(this),$tr=$that.closest('tr'),lineProductId=$tr.attr("data-entity-id"), startTime=$tr.attr("data-entity-startTime");
+					if ($that.hasClass('T-divide'))  {
+						// 分团
+						arrangeTourist.divideTourist(lineProductId,startTime);
+					} else if ($that.hasClass('T-transfer'))  {
+						// 转客
+						arrangeTourist.transferTourist(lineProductId,startTime);
+					} else if ($that.hasClass('T-inTransfer'))  {
+						// 内转
+						arrangeTourist.inTransferTourist(lineProductId,startTime);
+					}
+			});
+		},
+
+
+		/**
+		 * 团体
+		 * @return {[type]} [description]
+		 */
+		listGroupTourist:function(){
+			var html=touristGrouplistTemplate();
+			$("#T-Group-list").find('.T-touristGroup-list').html(html);
 		},
 		//分团操作
 		divideTourist:function(lineProductId,startTime){
@@ -313,7 +419,12 @@ define(function(require, exports) {
 				}
 			});
 		},
-		//内转操作
+		/**
+		 * 内转操作
+		 * @param  {[type]} lineProductId 线路产品
+		 * @param  {[type]} startTime     开始时间
+		 * @return {[type]}
+		 */
 		inTransferTourist :function(lineProductId,startTime){
 			$.ajax({
 				url:""+APP_ROOT+"back/innerTransferOperation.do?method=getInTransferMainInfo&token="+$.cookie("token")+"&menuKey=resource_subsection&operation=view",
@@ -410,20 +521,21 @@ define(function(require, exports) {
 		},
 		//并团操作函数
 		addTouristGroupMerge:function(){
-			var $merge = $("#"+tabId+" .arrangeTouristMain .arrangeTouristMergeList .list");
-			var $parents = $(this).parent().parent().parent();
-			var memberCount = $parents.attr("data-entity-memberCount");
+			var $visitorObj=$('#T-Visitor-list'),
+			    $merge = $visitorObj.find('.T-arrangeTouristMergeList .list'),
+			    $that=$(this),$parents=$that.closest('tr'),
+			    memberCount = $parents.attr("data-entity-memberCount");
 			if(memberCount == 0){
 				$(this).prop("checked",false);
 				showMessageDialog($( "#confirm-dialog-message" ), "未分团人数为0，不能加入并团选择");
 				return;
 			}
-			var lineProductId = $parents.attr("data-entity-id");
-			var startTime = $parents.attr("data-entity-startTime");
-			var days = $parents.attr("data-entity-days");
-			var lineProductName = $parents.attr("data-entity-name");
-			var lineProductType = $parents.attr("data-entity-type");
-			if($(this).is(":checked")){
+			var lineProductId = $parents.attr("data-entity-id"),
+			    startTime = $parents.attr("data-entity-startTime"),
+			    days = $parents.attr("data-entity-days"),
+			    lineProductName = $parents.attr("data-entity-name"),
+			    lineProductType = $parents.attr("data-entity-type");
+			if($that.is(":checked")){
 				if($merge.find(".btn-"+lineProductId+"-"+startTime+"").length == 0){
 					var button = '<button class="btn btn-white btn-default btn-round btn-'+lineProductId+'-'+startTime+'" style="margin-bottom:10px;margin-right:10px">'+
 						'【'+lineProductName+'】 类别：'+lineProductType+'；出游日期：'+startTime+'；天数：'+days+'天'+
