@@ -1,10 +1,10 @@
-<div class="search-area globalAdd">
-	<input name="travelLine_name" class="col-xs-2 input-default-height guideInputList" value="{{searchParam.name}}" placeholder="请输入线路名称关键词"/>&nbsp;
-	<button class=" btn-sm  btn-travelLine-search search-btn pull-left">
+<div class="T-search-area search-area globalAdd">
+	<input name="travelLine_name" class="col-xs-2 T-search-template-name input-default-height guideInputList" value="{{searchParam.name}}" placeholder="请输入线路名称关键词"/>&nbsp;
+	<button class=" btn-sm  T-btn-search search-btn pull-left">
 		<i class="ace-icon fa fa-search"></i>
 		搜索
 	</button>
-	<div class="btn-group btn-status" style="margin-left: 20px">
+	<div class="btn-group T-select-status" style="margin-left: 20px">
 		<button data-value="{{searchParam.status}}" data-toggle="dropdown" class=" btn-sm  dropdown-toggle block-up" style="margin-top: -1px" aria-expanded="false">
 			<span>   
 				{{if searchParam.status == "1"}}   
@@ -31,7 +31,7 @@
 			</li>
 		</ul>
 	</div>
-	<button class="btn btn-sm btn-success btn-travelLine-add R-right" data-right="1100002" style="margin-left: 20px">
+	<button class="btn btn-sm btn-success T-btn-add R-right" data-right="1100002" style="margin-left: 20px">
 		<i class="ace-icon fa fa-plus"></i>
 		新增线路
 	</button>
@@ -50,15 +50,15 @@
 				</tr>
 			</thead>
 
-			<tbody>
+			<tbody class="T-list">
 				{{each travelLineList as travelLine}}
-					<tr class="travelLine-{{travelLine.id}}">
+					<tr class="travelLine-{{travelLine.id}}" data-id="{{travelLine.id}}">
 						<td style="display: none"><input name="id" type="hidden" value="{{travelLine.travelAgencyId}}"/>
 						<td>{{travelLine.name}}</td>
 						<td>{{travelLine.days}}天</td>
 						<td>{{travelLine.createTime}}</td>
 						<td>
-							<button data-entiy-id="{{travelLine.id}}" class="btn btn-xs btn-success btn-lineProduct-add R-right" data-right="1110002">
+							<button class="btn btn-xs btn-success T-action T-add-lineproduct R-right" data-right="1110002">
 								新建线路产品
 							</button>
 						</td>
@@ -70,22 +70,22 @@
 							{{/if}}
 						</td>
 						<td>
-							<a data-entiy-id="{{travelLine.id}}" class=" btn-line-pre-scan cursor">
+							<a class="T-action T-preview cursor">
 								预览
 							</a>
-							<a data-entiy-id="{{travelLine.id}}" class=" btn-line-scan cursor" >
+							<a class="T-action T-view cursor" >
 								<label class="padding-right20">|</label>
 								查看
 							</a>
-							<a data-entiy-id="{{travelLine.id}}" class="btn-line-edit cursor R-right" data-right="1100003">
+							<a class="T-action T-update cursor R-right" data-right="1100003">
 								<label class="padding-right20">|</label>
 								编辑
 							</a>
-							<a data-entiy-id="{{travelLine.id}}" class=" btn-line-clipboard cursor R-right" data-right="1100005">
+							<a class="T-action T-copy cursor R-right" data-right="1100005">
 								<label class="padding-right20">|</label>
 								复制
 							</a>
-							<a data-entiy-id="{{travelLine.id}}" class=" btn-line-delete cursor R-right" data-right="1100004">
+							<a class="T-action T-delete cursor R-right" data-right="1100004">
 								<label class="padding-right20">|</label>
 								删除
 							</a>

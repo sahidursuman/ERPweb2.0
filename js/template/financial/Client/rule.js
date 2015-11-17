@@ -1,7 +1,6 @@
 define(function(require, exports) {
 	var rule = {
 		check:function($obj){
-			console.info($obj);
 
 			var validator = $obj.formValidate([
 	    	    {	//未收对账

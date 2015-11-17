@@ -1,4 +1,4 @@
-<div class="col-sm-12" style="margin-top:10px;">
+<div class="col-sm-12 T-line-list" style="margin-top:10px;">
 	<div class="tabbable tripPlanSearchLine">
 		<ul id="myTab" class="nav nav-tabs">
 			<li class="active">
@@ -12,7 +12,7 @@
 			<div class="tab-pane fade active in col-xs-12" id="newTripPlanLineProduct">
 				<div class="search-area">
 					<input name="lineProduct_name" class="col-xs-2 input-default-height" value="{{if searchParam != null}}{{searchParam.name}}{{/if}}" placeholder="请输入线路名称关键词"/>&nbsp;
-					<button class="btn-sm search-btn btn-lineProduct-search" style="margin-left:-7px">
+					<button class="btn btn-sm btn-primary T-line-search" style="margin-left:-7px">
 						<i class="ace-icon fa fa-search"></i>
 						 搜索 
 					</button>
@@ -28,9 +28,9 @@
 							<td class="th-border">选择路线</td>
 						</tr>
 					</thead>
-					<tbody>{{each lineProductList as lineProduct}}
-						<tr>
-							<td name="travelLine-select" data-travelLine-Id="{{lineProduct.id}}">
+					<tbody class="T-lineList">{{each lineProductList as lineProduct}}
+						<tr data-id="{{lineProduct.id}}">
+							<td>
 								{{lineProduct.name}}
 							</td>
 							<td>
@@ -55,7 +55,7 @@
 							</td>
 							<td>
 								<label class="choice-TravelLine-click">
-									<input type="radio" class="ace" value="123" name="choice-TravelLine" index="0">
+									<input type="radio" class="ace T-line-check" value="123" name="choice-TravelLine" index="0">
 									<span class="lbl">
 
 									</span>
@@ -65,16 +65,15 @@
 					</tbody>
 				</table>
 				<div class="row pageMode">
-						<div class="col-xs-4">
-							<small>共计 {{recordSize}} 条记录</small>
-						</div>
-						<div class="col-xs-8">
-							<div class="dataTables_paginate paging_simple_numbers T-pagenation">
-							</div>
+					<div class="col-xs-6">
+						<small>共计 {{recordSize}} 条记录</small>
+					</div>
+					<div class="col-xs-6">
+						<div class="dataTables_paginate paging_simple_numbers T-pagenation">
 						</div>
 				</div>
 				<div class="space-10"></div>
-				<button class="btn btn-block btn-primary btn-submit-searchtravelLine">
+				<button class="btn btn-block btn-primary T-saveLine">
 					<i class="ace-icon fa fa-check"></i>
 					提交信息
 				</button>
