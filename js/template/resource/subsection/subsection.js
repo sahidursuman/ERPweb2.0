@@ -297,12 +297,10 @@ define(function(require, exports) {
 				}
 			}).unbind("click").click(function(){
 				var obj =this;
-				var typeId = $(obj).closest('tbody').data('entity-type');
 				$.ajax({
 					url:""+APP_ROOT+"back/innerTransferOperation.do?method=getLineProductList&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 	                dataType: "json",
 	                showLoading: false,
-	                data : 'customerType=' + typeId,
 	                success: function(data) {
 						var result = showDialog(data);
 						if(result){
