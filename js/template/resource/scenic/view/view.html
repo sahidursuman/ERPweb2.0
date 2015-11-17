@@ -64,6 +64,9 @@
 			<tr data-entity-id="{{item.id}}">
 				<td colspan="">{{item.name}}</td>
 				<td class="rangeTimeWidth">
+					<div>
+						日常
+					</div>
 					{{each item.priceList as price}}
 					<div>
 						{{price.startTime | dateFormat:'yyyy-MM-dd'}}至{{price.endTime | dateFormat:'yyyy-MM-dd'}}
@@ -71,6 +74,9 @@
 					{{/each}}
 				</td>
 				<td>
+					<div>
+						{{item.normalInnerPrice}}
+					</div>
 					{{each item.priceList as price}}
 					<div>
 						{{price.contractPrice}}

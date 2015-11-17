@@ -1,23 +1,23 @@
 <div class="row">
 	<div class="col-xs-12 bookingListMain globalAdd">
 	  <div class="form-group">
-		<div class="search-area" style="margin-left: -10px;">
-			<div class="col-xs-2 orderNumInput">
-				<input type="text" name="orderNumber" class="col-xs-12 T-orderNumberChoose" placeholder="代订单号" value="{{searchParam.orderNumber}}" />
+		<div class="search-area">
+			<div class="col-xs-2">
+				<input type="text" name="orderNumber" class="col-xs-12 guideInputList T-orderNumberChoose" placeholder="代订单号" value="{{searchParam.orderNumber}}" />
 				<input type="hidden" name="orderNumberId" value="{{searchParam.id}}" />
 				</div>
-			<div class="col-xs-1 " style="margin-left: 20px;">
-				<input type="text" name="partnerAgency" class="col-xs-12 T-partnerAgencyChoose partnerAgencyInput" placeholder="客户" value="{{if searchParam.partnerAgency != null}}{{searchParam.partnerAgency}}{{/if}}" />
+			<div class="col-xs-1">
+				<input type="text" name="partnerAgency" class="col-xs-12 T-partnerAgencyChoose" placeholder="客户" value="{{if searchParam.partnerAgency != null}}{{searchParam.partnerAgency}}{{/if}}" />
 				<input type="hidden" name="partnerAgencyChooseId" value="{{searchParam.partnerAgencyId}}" />
 			</div>
 			<div class="col-xs-1">
-				<input type="text" name="operateUser" class="col-xs-12 operateUserChoose Choose-spacingNormal" placeholder="操作人" value="{{if searchParam.operateUser != null}}{{searchParam.operateUser}}{{/if}}" />
+				<input type="text" name="operateUser" class="col-xs-12 T-operateUserChoose" placeholder="操作人" value="{{if searchParam.operateUser != null}}{{searchParam.operateUser}}{{/if}}" />
 				<input type="hidden" name="operateUserId" value="{{searchParam.operateUserId}}" />
 			</div>
-			<div class="col-xs-3 Choose-spacingNormal">
+			<div class="col-xs-3">
 				<div class="col-xs-6">
-					<div class="input-group ">
-						<input class="col-xs-12 datepicker triplanStartTime" name="startTime" placeholder="开始操作时间" value="{{searchParam.startTime}}" type="text" />
+					<div class="input-group">
+						<input class="col-xs-12 datepicker" name="startTime" placeholder="开始操作时间" value="{{searchParam.startTime}}" type="text" />
 						<span class="input-group-addon">
 							<i class="fa fa-calendar"></i>
 						</span>
@@ -25,19 +25,19 @@
 				</div>
 				<div class="col-xs-6">
 					<div class="input-group">
-						<input class="col-xs-12 datepicker triplanStartTime" name="endTime" placeholder="结束操作时间" value="{{searchParam.endTime}}" type="text" />
+						<input class="col-xs-12 datepicker" name="endTime" placeholder="结束操作时间" value="{{searchParam.endTime}}" type="text" />
 						<span class="input-group-addon">
 							<i class="fa fa-calendar"></i>
 						</span>
 					</div>
 				</div>
 			</div>
-			<div class="col-xs-2 search-spacing">
-				<button class=" btn-sm  btn-booking-search search-btn" style="margin-left: -25px">
+			<div class="col-xs-2">
+				<button class=" btn-sm  T-booking-search search-btn" style="margin-left: -25px">
 					<i class="ace-icon fa fa-search"></i>
 					搜索
 				</button>
-				<button class="btn btn-sm btn-success btn-Booking-add R-right" data-right="1170002" style="margin-left: 20px"> <i class="ace-icon fa fa-plus"></i> 新增项目代订</button>
+				<button class="btn btn-sm btn-success T-Booking-add R-right" data-right="1170002" style="margin-left: 20px"> <i class="ace-icon fa fa-plus"></i> 新增项目代订</button>
 			</div>
 			<div style="clear:both;height:0px;line-height:0px;">
 
@@ -64,7 +64,7 @@
 					<th>旅游车</th>
 				</tr>
 			</thead>
-			<tbody>{{each bookingOrderList as booking}}
+			<tbody class="T-list">{{each bookingOrderList as booking}}
 				<tr data-entity-id="{{booking.id}}">
 					<td>{{booking.orderNumber}}</td>
 					<td>{{if booking.partnerAgency != null}}{{booking.partnerAgency.travelAgencyName}}{{/if}}</td>
@@ -103,14 +103,14 @@
 					<td>{{if booking.isConfirmAccount == 1}}已对账{{else}}未对账{{/if}}</td>
 					<td>
 
-						<a data-entity-id="{{booking.id}}" title="查看计划" class=" cursor btn-Booking-view">
+						<a data-entity-id="{{booking.id}}" title="查看计划" class="T-action cursor T-view">
 							查看
 						</a>
-					    <a data-entity-id="{{booking.id}}" title="编辑计划" class=" cursor {{if booking.isConfirmAccount != 1}}btn-Booking-edit{{/if}} R-right" data-right="1170003" {{if booking.isConfirmAccount == 1}} style="color: #bbb" {{/if}}>
+					    <a data-entity-id="{{booking.id}}" title="编辑计划" class=" cursor {{if booking.isConfirmAccount != 1}}T-action T-edit{{/if}} R-right" data-right="1170003" {{if booking.isConfirmAccount == 1}} style="color: #bbb" {{/if}}>
 							<label class="padding-right20">|</label>
 							编辑
 						</a>
-						<a data-entity-id="{{booking.id}}" title="取消计划" class=" cursor {{if booking.isConfirmAccount != 1}}btn-Booking-cancel{{/if}} R-right" data-right="1170004" {{if booking.isConfirmAccount == 1}} style="color: #bbb" {{/if}}>
+						<a data-entity-id="{{booking.id}}" title="取消计划" class=" cursor {{if booking.isConfirmAccount != 1}}T-action T-cancel{{/if}} R-right" data-right="1170004" {{if booking.isConfirmAccount == 1}} style="color: #bbb" {{/if}}>
 							<label class="padding-right20">|</label>
 							取消
 						</a>
