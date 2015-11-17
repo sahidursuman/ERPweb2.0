@@ -45,14 +45,79 @@ define(function(require, exports) {
 
 	//初始化报价列表
 	quote.listQuote = function() {
-		var html = listTemplate();
-		quote.$tab.find('.T-quoteList').html(html);
+		$.ajax({
+			url: KingServices.build_url('quote', 'listQuote'),
+			type: 'POST',
+			data: 'pageNo=0',
+			success: function(data){
+				var result = showDialog(data);
+				if(result){
+					data.quoteList = JSON.parse(data.quoteList);
+					var html = listTemplate(data);
+					quote.$tab.find('.T-quoteList').html(html);
+
+					quote.$tab.find('.T-quoteList').on('click','.T-action',function(){
+						var $this = $(this), id = $this.closest('tr').data('entity-id');
+						if ($this.hasClass('T-view')){
+							// 查看报价信息
+							//....
+						} else if ($this.hasClass('T-update')){
+							// 编辑报价信息
+							quote.updateQuote(id);
+						} else if ($this.hasClass('T-delete')){
+							var $this = $(this);
+							// 删除报价
+							//....
+						}
+					})
+				}
+			}
+		})
 	};
 
 	//新增报价
 	quote.addQuote = function(id) {
+		console.log(1231)
 		$.ajax({
 			url: KingServices.build_url('lineProduct', 'getLineProductById'),
+			type: 'POST',
+			data: 'id='+id+'',
+			success: function(data){
+				var result = showDialog(data);
+				if(result){
+					data.viewLineProduct = {
+							lineProduct: JSON.parse(data.lineProduct),
+							busCompanyTemplate: JSON.parse(data.busCompanyTemplate),
+							guideTemplate: JSON.parse(data.guideTemplate),
+							insuranceTemplate: JSON.parse(data.insuranceTemplate),
+							daysList: JSON.parse(data.daysList)
+					};
+					data.viewLineProduct.editorName = menukey + '-ueditor'
+					var html = mainQuoteTemplate();
+					Tools.addTab(menukey+'-add',"新增报价",html)
+					quote.$tabAdd = $("#tab-arrange_quote-add-content");
+
+					var addHtml = addQuoteTemplate(data.viewLineProduct);
+					quote.$tabAdd.find('#quoteContent').html(addHtml)
+
+					var inquiryHtml = inquiryResultTemplate();
+					quote.$tabAdd.find('#inquiryContent').html(inquiryHtml)
+					var busInquiryResultHtml = busInquiryResultTemplate();
+					var hotelInquiryResultHtml = hotelInquiryResultTemplate();
+
+					quote.$tabAdd.find('#busInquiryResult').html(busInquiryResultHtml)
+					quote.$tabAdd.find('#hotelInquiryContent').html(hotelInquiryResultHtml)
+
+					quote.init_event(quote.$tabAdd);
+				}
+			}
+		})
+	};
+
+	//修改报价
+	quote.updateQuote = function(id) {
+		$.ajax({
+			url: KingServices.build_url('quote', 'viewQuote'),
 			type: 'POST',
 			data: 'id='+id+'',
 			success: function(data){
@@ -1698,9 +1763,9 @@ define(function(require, exports) {
 			grossProfit = 0,//毛利预估
 			oneRoomQuote = 0;//单房差报价
 
-		insurancePrice = $container.find('.arrangeInsuranceList [name=price]').val()-0 || 0;
-		seatCountPrice = $container.find('.arrangeBusCompanyList [name=seatcountPrice]').val()-0 || 0;
-		guidePrice = $container.find('.arrangeGuideList [name=guideFee]').val()-0 || 0;
+		insurancePrice = $container.find('.T-arrangeInsuranceList [name=price]').val()-0 || 0;
+		seatCountPrice = $container.find('.T-arrangeBusCompanyList [name=seatcountPrice]').val()-0 || 0;
+		guidePrice = $container.find('.T-arrangeGuideList [name=guideFee]').val()-0 || 0;
 		adultCount = $container.find('[name=adultCount]').val()-0 || 0;
 		childCount = $container.find('[name=childCount]').val()-0 || 0;
 		var scenicPriceArray = $container.find('.T-resourceScenicList [name=price]');
@@ -1825,6 +1890,7 @@ define(function(require, exports) {
 			days: quote.$tabAdd.find('[name=days]').attr("value"),
 			lineProductId: quote.getValue(quote.$tabAdd,'lineProductId'),
 			partnerAgencyId: quote.getValue(quote.$tabAdd,'partnerAgencyId'),
+			partnerAgencyContactId: quote.getValue(quote.$tabAdd,'managerId'),
 			singleRoomAdjustType: quote.getValue(quote.$tabAdd,'selectAmOneRoom'),
 			singleRoomAdjustValue: quote.getValue(quote.$tabAdd,'singleRoomAdjustValue'),
 			singleRoomCostPrice: quote.$tabAdd.find('.T-oneRoomCost').text(),
@@ -2019,7 +2085,7 @@ define(function(require, exports) {
 			success: function(data){
 				var result = showDialog(data);
 				if (result) {
-
+					Tools.closeTab("arrange_quote-add");
 				}
 			}
 		})
