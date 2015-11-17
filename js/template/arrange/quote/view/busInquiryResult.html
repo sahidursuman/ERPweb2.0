@@ -16,18 +16,20 @@
 		</thead>
 	
 		<tbody>
-			<tr>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-			</tr>
+			{{each busCompanyOfferList as rs}}
+				<tr>
+					<td>{{rs.lineProductName}}</td>
+					<td>{{rs.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
+					<td>{{rs.condition}}</td>
+					<td>{{rs.busCompanyOfferList.busCompanyName}}</td>
+					<td>{{rs.busCompanyOfferList.replyPrice}}</td>
+					<td>{{rs.busCompanyOfferList.remark}}</td>
+					<td>{{rs.busCompanyOfferList.reserveMinutes}}</td>
+					<td>{{rs.busCompanyOfferList.expiryTime | dateFormat: 'yyyy-MM-dd'}}</td>
+					<td>{{rs.busCompanyOfferList.status}}</td>
+					<td></td>
+				</tr>
+			{{/each}}
 		</tbody>
 	</table>
 </div>

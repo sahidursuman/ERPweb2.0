@@ -101,12 +101,33 @@ define(function(require, exports) {
 					quote.$tabAdd.find('#quoteContent').html(addHtml)
 
 					var inquiryHtml = inquiryResultTemplate();
-					quote.$tabAdd.find('#inquiryContent').html(inquiryHtml)
-					var busInquiryResultHtml = busInquiryResultTemplate();
-					var hotelInquiryResultHtml = hotelInquiryResultTemplate();
+					quote.$tabAdd.find('#inquiryContent').html(inquiryHtml);
+					var quoteId = quote.$tabAdd.find('[name=quoteId]').val();
+					//询车
+					$.ajax({
+						url: KingServices.build_url('busInquiry','statusList'),
+						type: 'POST',
+						data: { quoteId : quoteId + "" },
+						success: function(data){
+							var result = showDialog(data);
+							if(result){
+								var busInquiryResultHtml = busInquiryResultTemplate(data);
+								quote.$tabAdd.find('#busInquiryResult').html(busInquiryResultHtml)
+							}
+						}
+					});
 
-					quote.$tabAdd.find('#busInquiryResult').html(busInquiryResultHtml)
-					quote.$tabAdd.find('#hotelInquiryContent').html(hotelInquiryResultHtml)
+					quote.$tabAdd.find('.busInquiryResult').on("click",function(){
+						console.log("bus");
+					});
+					quote.$tabAdd.find('.hotelInquiryContent').on("click",function(){
+						console.log("hotel");
+					});
+					// var busInquiryResultHtml = busInquiryResultTemplate();
+					// var hotelInquiryResultHtml = hotelInquiryResultTemplate();
+
+					// quote.$tabAdd.find('#busInquiryResult').html(busInquiryResultHtml)
+					// quote.$tabAdd.find('#hotelInquiryContent').html(hotelInquiryResultHtml)
 
 					quote.init_event(quote.$tabAdd);
 				}
