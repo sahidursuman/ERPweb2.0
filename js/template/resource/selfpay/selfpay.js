@@ -198,6 +198,7 @@ define(function(require, exports) {
 								var $this = $(this);
 								selfpay.delSelfpayList($this);
 							});
+							selfpay.datepicker($tbody);
 					    	//添加时间区间
 							$tbody.find('.T-add').off("click").on('click', function(event) {
 								event.preventDefault();
