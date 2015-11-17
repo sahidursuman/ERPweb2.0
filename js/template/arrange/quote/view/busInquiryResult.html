@@ -16,19 +16,36 @@
 		</thead>
 	
 		<tbody>
-			{{each busCompanyOfferList as rs}}
+			{{each data as rs}}
 				<tr>
-					<td>{{rs.lineProductName}}</td>
-					<td>{{rs.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
-					<td>{{rs.condition}}</td>
-					<td>{{rs.busCompanyOfferList.busCompanyName}}</td>
-					<td>{{rs.busCompanyOfferList.replyPrice}}</td>
-					<td>{{rs.busCompanyOfferList.remark}}</td>
-					<td>{{rs.busCompanyOfferList.reserveMinutes}}</td>
-					<td>{{rs.busCompanyOfferList.expiryTime | dateFormat: 'yyyy-MM-dd'}}</td>
-					<td>{{rs.busCompanyOfferList.status}}</td>
-					<td></td>
+					<td rowspan="{{rs.busCompanyOfferList.length}}">{{rs.lineProductName}}</td>
+					<td rowspan="{{rs.busCompanyOfferList.length}}">{{rs.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
+					<td rowspan="{{rs.busCompanyOfferList.length}}">{{rs.condition}}</td>
+					{{each rs.busCompanyOfferList as bus index}}
+						{{if index == 0}}
+							<td>{{bus.busCompanyName}}</td>
+							<td>{{bus.replyPrice}}</td>
+							<td>{{bus.remark}}</td>
+							<td>{{bus.reserveMinutes}}</td>
+							<td>{{bus.expiryTime}}</td>
+							<td>{{bus.status}}</td>
+							<td data-id="{{bus.id}}"><a class="T-bus-add">加入</a> | <a class="T-bus-delete">删除</a></td>
+						{{/if}}
+					{{/each}}
 				</tr>
+				{{each rs.busCompanyOfferList as bus index}}
+					{{if index > 0}}
+						<tr>
+							<td>{{bus.busCompanyName}}</td>
+							<td>{{bus.replyPrice}}</td>
+							<td>{{bus.remark}}</td>
+							<td>{{bus.reserveMinutes}}</td>
+							<td>{{bus.expiryTime}}</td>
+							<td>{{bus.status}}</td>
+							<td data-id="{{bus.id}}"><a class="T-bus-add">加入</a> | <a class="T-bus-delete">删除</a></td>
+						</tr>
+					{{/if}}
+				{{/each}}
 			{{/each}}
 		</tbody>
 	</table>
