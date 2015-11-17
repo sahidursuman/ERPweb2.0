@@ -910,12 +910,14 @@ define(function(require, exports) {
                            //
                         });
                         $('.countReimbursement .btn-guide-account').off('click').on('click',function() {
-                            //访问报账函数
-                            var id = $(this).attr('data-entity-id');
-                            var financialTripPlanId = $(this).attr('data-entity-financial-id');
-                            var roleType = $(this).attr('data-entity-roleType');
-                            var userName = $(this).attr('data-entity-userName');
-                            count.saveTripCount(id, financialTripPlanId, userName, roleType,0,3);
+
+                             //访问报账函数
+                             var id = $(this).attr('data-entity-id');
+                             var financialTripPlanId = $(this).attr('data-entity-financial-id');
+                             var roleType = $(this).attr('data-entity-roleType');
+                             var userName = $(this).attr('data-entity-userName');
+                             count.saveTripCount(id, financialTripPlanId, userName, roleType,0,3);
+                             //Tools.closeTab(menuKey+"-Reimbursement");
                         });
                         //单据图片
                         $('.countReimbursement .btn-view').off('click').on('click',function() {
@@ -1664,11 +1666,11 @@ define(function(require, exports) {
                         showMessageDialog($( "#confirm-dialog-message" ),data.message);
                         count.edited["checkBill"] = "";
                         if(isClose == 1){
-                            closeTab(uKey);
+                            Tools.closeTab(uKey);
                             count.getlistCount(count.searchData.pageNo,count.searchData.id,count.searchData.tripNumber,count.searchData.lineProductId,count.searchData.lineProductName,count.searchData.guideId,count.searchData.guideName,count.searchData.startTime,count.searchData.endTime,count.searchData.status);
                         }else{
-                            $('#tab-financial_count-Reimbursement-content').find('.btn-guide-account').addClass('hidden');
-                            count.Reimbursement(financialTripPlanId,"guide");
+                            $('#tab-financial_count-Reimbursement-content').find('.btn-guide-account').addClass('hide');
+                            Tools.closeTab(menuKey+"-Reimbursement");
                         }
                     }
                 }
