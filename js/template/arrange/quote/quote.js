@@ -111,18 +111,254 @@ define(function(require, exports) {
 					var addHtml = addQuoteTemplate(data.viewLineProduct);
 					$container.find('#quoteContent').html(addHtml)
 
-					var inquiryHtml = inquiryResultTemplate();
-					$container.find('#inquiryContent').html(inquiryHtml)
-					var busInquiryResultHtml = busInquiryResultTemplate();
-					var hotelInquiryResultHtml = hotelInquiryResultTemplate();
-
-					$container.find('#busInquiryResult').html(busInquiryResultHtml)
-					$container.find('#hotelInquiryContent').html(hotelInquiryResultHtml)
+					$container.find('.inquiryContent').on("click",function(){
+						quote.quoteStatus($container);
+					});	
 
 					quote.init_event($container);
 				}
 			}
 		})
+	};
+
+	//询价状态
+	quote.quoteStatus = function($container){
+		var quoteId = $container.find('[name=quoteId]').val();
+		if(!quoteId){
+			showMessageDialog($( "#confirm-dialog-message" ),"请先询价！");
+			return false;
+		} 
+		var inquiryHtml = inquiryResultTemplate();
+		$container.find('#inquiryContent').html(inquiryHtml);
+		
+		quote.busStatusList(quoteId);
+
+		$container.find('.busInquiryResult').on("click",function(){
+			quote.hotelStatusList(quoteId,$container);
+		});
+		$container.find('.hotelInquiryContent').on("click",function(){
+			quote.hotelStatusList(quoteId,$container);
+		});
+	};
+
+	//询价状态-车
+	quote.busStatusList = function(quoteId,$container){
+		//询车
+		$.ajax({
+			url: KingServices.build_url('busInquiry','statusList'),
+			type: 'POST',
+			data: { quoteId : 180 + "" },
+			success: function(data){
+				var result = showDialog(data);
+				if(result){
+					var busInquiryResultHtml = busInquiryResultTemplate(data);
+					$container.find('#busInquiryResult').html(busInquiryResultHtml);
+
+					//操作
+					$container.find('.T-bus-add').on("click",function(){
+						var offerId = $(this).closest('td').data("id");
+						$.ajax({
+							url: KingServices.build_url('busInquiry','sumListInquiryBusAdd'),
+							type: 'POST',
+							data: { offerId : offerId + ""},
+							success: function(data){
+								var result = showDialog(data);
+								if(result){
+									showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+										var $obj = $container.find(".T-arrangeBusCompanyList"),
+											bus = data.sumListInquiryBusAdd[0];
+										$obj.find("input[name=needSeatCount]").val(bus.seatCount);
+										$obj.find("input[name=brand]").val(bus.brand);
+										$obj.find("input[name=companyName]").val(bus.companyName);
+										$obj.find("input[name=busCompanyId]").val(bus.id);
+										$obj.find("input[name=manager]").val(bus.managerName);
+										$obj.find("input[name=mobileNumber]").val(bus.mobileNumber);
+										$obj.find("input[name=seatcountPrice]").val(bus.seatPrice);
+										$obj.find("input[name=remark]").val(bus.remark);
+
+										$container.find('.quoteContent').trigger('click');
+									});
+								}
+							}
+						});
+					});
+
+					$container.find('.T-bus-delete').on("click",function(){
+						var offerId = $(this).closest('td').data("id");
+						$.ajax({
+							url: KingServices.build_url('busInquiry','deleteListInquiryBus'),
+							type: 'POST',
+							data: { id : offerId + ""},
+							success: function(data){
+								var result = showDialog(data);
+								if(result){
+									showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+										quote.busStatusList(quoteId);
+									});
+								}
+							}
+						});
+					});
+				}
+			}
+		});
+	};
+
+	//询价状态-房
+	quote.hotelStatusList = function(quoteId,$container){
+		$.ajax({
+			url: KingServices.build_url('hotelInquiry','statusList'),
+			type: 'POST',
+			data: { quoteId : quoteId + "" },
+			success: function(data){
+				var result = showDialog(data);
+				if(result){
+					for(var i = 0 ; i < data.data.length; i++){
+						for(var j = 0 ; j < data.data[i].hotelList.length; j++){
+							data.data[i].hotelList[j].roomTypeList = JSON.parse(data.data[i].hotelList[j].roomTypeList);
+						}
+					}
+					var hotelInquiryResultHtml = hotelInquiryResultTemplate(data);
+					$container.find('#hotelInquiryContent').html(hotelInquiryResultHtml);
+
+					//操作
+					$container.find('.T-hotel-add').on("click",function(){
+						var offerId = $(this).closest('td').data("id");
+						$.ajax({
+							url: KingServices.build_url('hotelInquiry','sumListInquiryHotelAdd'),
+							type: 'POST',
+							data: { id : offerId + ""},
+							success: function(data){
+								var result = showDialog(data);
+								if(result){
+									showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+										//删除现有
+										$container.find(".T-resourceHotelList").remove();
+										// quote.$tabAdd.find(".T-resourceHotelList").each(function(){
+										// 	var id = $(this).data("entity-id");
+										// 	if(id){
+										// 		$.ajax({
+										// 			url: KingServices.build_url('hotelInquiry','sumListInquiryHotelAdd'),
+										// 			type: 'POST',
+										// 			data: { id : id + ""},
+										// 			success: function(data){
+										// 				var result = showDialog(data);
+										// 				if(result){
+										// 				}
+										// 			}
+										// 		});
+										// 	}
+										// });
+
+										var html = quote.hotelHtml(data.hotelList);
+										$container.find(".T-timeline-detail-container").append(html);
+
+										$container.find('.quoteContent').trigger('click');
+									});
+								}
+							}
+						});
+					});
+
+					$container.find('.T-hotel-delete').on("click",function(){
+						var offerId = $(this).closest('td').data("id");
+						$.ajax({
+							url: KingServices.build_url('hotelInquiry','deleteListInquiryHotel'),
+							type: 'POST',
+							data: { id : offerId + ""},
+							success: function(data){
+								var result = showDialog(data);
+								if(result){
+									showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+										quote.hotelStatusList(quoteId);
+									});
+								}
+							}
+						});
+					});
+				}
+			}
+		});
+	};
+
+	//酒店html
+	quote.hotelHtml = function(hotelList){
+		var html = "";
+		for(var i=0; i < hotelList.length; i++){
+			html += "<div class='T-timeline-item timeline-item clearfix T-resourceHotelList ui-sortable-handle' data-entity-index='" + i +"'>" + 
+				"<div class='timeline-info' style='color:#1fade0;margin-left: 4px'><i class='ace-icon fa fa-circle'></i><span>酒店</span></div>" + 
+				"<div class='widget-box transparent' style='margin-top: 20px'><div class='widget-body'><div class='widget-main'>" +
+				"<table class='table table-striped table-bordered table-hover'>" +
+					"<thead><tr>" + 
+						"<th class='th-border'>酒店星级</th>" + 
+						"<th class='th-border'>酒店名称</th>" + 
+						"<th class='th-border'>房型</th>" + 
+						"<th class='th-border'>价格</th>" + 
+						"<th class='th-border'>数量</th>" + 
+						"<th class='th-border'>含餐</th>" +
+						"<th class='th-border'>电话</th>" + 
+						"<th class='th-border'>备注</th>" + 
+						"<th class='th-border' style='width: 60px;'>操作</th>" + 
+					"</tr></thead>" +
+					"<tbody><tr>" + 
+						"<td><input type='hidden' name='offerId' value='" + hotelList[i].offerId + "' /><select class='col-xs-12 T-choose-hotelStarLevel'><option";
+						 if (hotelList[i].hotelLevel==1)
+						 {
+						 	html += " selected='selected'";
+						 }
+						 html += " value='1'>三星以下</option><option";
+						 if (hotelList[i].hotelLevel==2)
+						 {
+						 	html += " selected='selected'";
+						 }
+						 html += " value='2'>三星</option><option";
+						 if (hotelList[i].hotelLevel==3)
+						 {
+						 	html += " selected='selected'";
+						 }
+						 html += " value='3'>准四星</option><option";
+						 if (hotelList[i].hotelLevel==4)
+						 {
+						 	html += " selected='selected'";
+						 }
+						 html += " value='4'>四星</option><option";
+						 if (hotelList[i].hotelLevel==5)
+						 {
+						 	html += " selected='selected'";
+						 }
+						 html += " value='5'>准五星</option><option";
+						 if (hotelList[i].hotelLevel==6)
+						 {
+						 	html += " selected='selected'";
+						 }
+						 html += " value='6'>五星</option><option";
+						 if (hotelList[i].hotelLevel==7)
+						 {
+						 	html += " selected='selected'";
+						 }
+						 html += " value='7'>五星以上</option></select></td>" +
+						 "<td><input type='text' class='T-choose-hotelName col-xs-12 bind-change' name='hotelNmae' value='" + hotelList[i].hotelName + "' /><input type='hidden' name='hotelId' value='" + hotelList[i].hotelId + "' /></td>" + 
+						 "<td><input type='text' class='T-choose-hotelRoom col-xs-12 bind-change' name='hotelRoom' value='" + hotelList[i].type + "' /><input type='hidden' name='hotelRoomId' value='" + hotelList[i].roomId +"' /></td>" +
+						 "<td><input type='text' readonly='readonly' class='T-changeQuote' name='contractPrice' value='" + hotelList[i].price + "' style='width:70px;' /></td>" +
+						 "<td><input type='text' name='count' class='T-changeQuote' value='" + hotelList[i].needRoomCount + "' style='width:70px;' /></td>" +
+						 "<td><input type='text' class='col-xs-12' readonly='readonly' name='containBreakfast' value='";
+						 if (hotelList[i].containBreakfast==1){
+					 		html += "含早餐"; 
+					 	}
+					 	if (hotelList[i].containLunch==1){
+					 		html += "含午餐"; 
+					 	}
+					 	if (hotelList[i].containDinner==1){
+					 		html += "含晚餐"; 
+					 	}
+					 	html +="' /></td>" + 
+					 	"<td><input type='text' class='col-xs-12' readonly='readonly' name='mobileNumber' value='" + hotelList[i].mobileNumber + "' /></td>" +
+					 	"<td><input type='text' class='col-xs-12' name='remark' value='' /></td>" +
+					 	"<td><a data-entity-id='" + hotelList[i].hotelId + "' data-entity-type='8' class='cursor btn-restaurant-delete T-delete'>删除</a></td>" +
+					"</tr></tbody>" + 
+				"</table></div></div></div></div>";
+		}
+		return html;
 	};
 
 	//修改报价
