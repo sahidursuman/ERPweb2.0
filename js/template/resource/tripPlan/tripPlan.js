@@ -117,6 +117,17 @@ define(function(require, exports) {
 				language: 'zh-CN'
 			});
 
+		    //报表下单操作
+			$("#" +tabId+ " .tripPlanViewList .T-tripPlan-sendOrder").on('click', function(event) {
+				event.preventDefault();
+				/* Act on the event */
+				var $that=$(this),
+				    qouteId=$that.attr("data-entiy-qouteId");
+				 tripPlan.singleClickSendOrder(qouteId);    
+			});
+
+		
+
 			$("#" +tabId+ " .tripPlanViewList .btn-tripPlan-view").on("click", tripPlan.viewTripPlan)
 			$("#"+tabId+" .tripPlanViewList .btn-tripPlan-plan").on("click", function(){
 				var billStatus = $(this).attr("billStatus");
@@ -333,13 +344,10 @@ define(function(require, exports) {
 			$("#tripPlan_addPlan_content").find('.T-singleClick-Order').on('click', function(event) {
 				event.preventDefault();
 				/* Act on the event */
-				var $trBusData=$("#tripPlan_addPlan_bus").find('.T-bus-SendOrder').find('tr'),
-				    $trHotelData=$("#tripPlan_addPlan_hotel").find('.T-Hotel-SendOrder').find('tr'),
-				    $obj=$('#tab-arrange_all-update-content'),
-				    qouteId=$obj.find('input[name=qouteId]').val();
-				    tripPlan.hotelSendOrder($trHotelData,qouteId);
-				    tripPlan.busSendOrder($trBusData,qouteId);
-
+				var $obj=$('#tab-arrange_all-update-content'),
+				    quoteId=$obj.find('input[name=qouteId]').val();
+				    tripPlan.singleClickSendOrder(quoteId);
+				    
 			});
 
 			//发送订单显示&&隐藏
@@ -413,12 +421,14 @@ define(function(require, exports) {
 			saveJson.busJson=[];
 			if($trBusData.length > 0){
 				for(var i=0; i<$trBusData.length; i++){
-					if(tripPlan.getVal($trBusData.eq(i), "id")){
+					$trBusData.each(function(i) {
 						var busJsonArray = {
-							busCompanyId : tripPlan.getVal($trBusData.eq(i), "id")
-						}
-						saveJson.busJson.push(busJsonArray);
-					}
+							id: $trBusData.eq(i).attr("data-entity-arrangeId"),
+							busCompanyId : $trBusData.eq(i).attr("data-entity-busCompanyId"),
+							busId : $trBusData.eq(i).attr("data-entity-busId")
+						}	
+						saveJson.busJson.push(busJsonArray);			
+					});
 				}
 			}
 			
@@ -435,22 +445,24 @@ define(function(require, exports) {
 				 quoteId: quoteId
 			};
 			saveJson.hotelJson=[];
-			if($trHotelData.length > 0){
-				for(var i=0; i<$trHotelData.length; i++){
-					if(tripPlan.getVal($trHotelData.eq(i), "hotelId")){
+			if($trHotelData.length > 0){  
+                for(var i=0; i<$trHotelData.length; i++){
+					$trHotelData.each(function(i) {
 						var hotelJsonArray = {
-							hotelId : tripPlan.getVal($trHotelData.eq(i), "id"),
-						}
-						saveJson.hotelJson.push(hotelJsonArray);
-					}
+							id: $trHotelData.eq(i).attr("data-entity-arrangeId"),
+							roomId : $trHotelData.eq(i).attr("data-entity-roomId"),
+							hotelId : $trHotelData.eq(i).attr("data-entity-hotelId")
+						}	
+						saveJson.hotelJson.push(hotelJsonArray);			
+					});
 				}
 			}
-			tripPlan.sendOrderRequest(saveJson);
+			tripPlan.sendHotelRequest(saveJson);
 		},
 
 
 		/**
-		 * [sendOrderRequest 发送订单请求]
+		 * [sendOrderRequest 车队发送订单请求]
 		 * @param  {[type]} saveJson [description]
 		 * @return {[type]}          [description]
 		 */
@@ -466,6 +478,48 @@ define(function(require, exports) {
 					}
 			    }
 			})
+		},
+
+
+
+		/**
+		 * [sendHotelRequest 酒店发送订单请求]
+		 * @param  {[type]} saveJson [description]
+		 * @return {[type]}          [description]
+		 */
+		sendHotelRequest:function(saveJson){
+			$.ajax({
+				url:KingServices.build_url("hotelInquiry","saveHotelOrder"),
+				type: 'POST',
+				dataType: 'JSON',
+				data: "saveJson="+encodeURIComponent(JSON.stringify(saveJson)),
+				success:function(data){
+					var result = showDialog(data);
+					if(result){
+					}
+			    }
+			})
+		},
+
+
+		/**
+		 * singleClickSendOrder 一键下单
+		 * @param  {[type]} qouteId 报价Id
+		 * @return {[type]}         [description]
+		 */
+		singleClickSendOrder:function(quoteId){
+			$.ajax({
+				url:KingServices.build_url("productQuote","saveOrder"),
+				type: 'POST',
+				dataType: 'JSON',
+				data: "quoteId="+quoteId,
+				success:function(data){
+					var result = showDialog(data);
+					if(result){
+					}
+			    }
+			})
+
 		},
 
 
