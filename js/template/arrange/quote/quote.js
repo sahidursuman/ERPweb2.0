@@ -26,8 +26,6 @@ define(function(require, exports) {
 	 */
 	var quote = {
 		$tab: false,
-		$tabAdd: false
-
 	};
 	var autocompleteData = {}
 	//初始化报价模块
@@ -90,7 +88,6 @@ define(function(require, exports) {
 
 	//新增报价
 	quote.addQuote = function(id) {
-		console.log(1231)
 		$.ajax({
 			url: KingServices.build_url('lineProduct', 'getLineProductById'),
 			type: 'POST',
@@ -108,7 +105,7 @@ define(function(require, exports) {
 					data.viewLineProduct.editorName = menukey + '-ueditor'
 					var html = mainQuoteTemplate();
 					Tools.addTab(menukey+'-add',"新增报价",html)
-					quote.$tabAdd = $("#tab-arrange_quote-add-content");
+					$container = $("#tab-arrange_quote-add-content");
 					$container = $("#tab-arrange_quote-add-content");
 
 					var addHtml = addQuoteTemplate(data.viewLineProduct);
@@ -147,7 +144,6 @@ define(function(require, exports) {
 					Tools.addTab(menukey+'-update',"修改报价",html)
 					$container = $("#tab-arrange_quote-update-content");
 
-					console.info(data)
 					var updateHtml = updateQuoteTemplate(data);
 					$container.find('#quoteContent').html(updateHtml)
 
@@ -186,31 +182,30 @@ define(function(require, exports) {
 		$container.find('.T-daylist').on('click', '.T-add', function(event) {
 			event.preventDefault();
 			var $that = $(this);
-
 			if ($that.hasClass('T-addRestaurant')) {
 				// 添加餐厅
-				quote.addRestaurant($that, validator);
+				quote.addRestaurant($that, validator, $container);
 			} else if ($that.hasClass('T-addHotel')) {
 				// 添加酒店
-				quote.addResourceHotel($that, validator);
+				quote.addResourceHotel($that, validator, $container);
 			} else if ($that.hasClass('T-addScenic')) {
 				// 添加景区
-				quote.addResourceScenic($that, validator);
+				quote.addResourceScenic($that, validator, $container);
 			} else if ($that.hasClass('T-addShop')) {
 				// 添加购物
-				quote.addResourceShopping($that, validator);
+				quote.addResourceShopping($that, validator, $container);
 			} else if ($that.hasClass('T-addSelfPay')) {
 				// 添加自费
-				quote.addResourceSelfPaying($that, validator);
+				quote.addResourceSelfPaying($that, validator, $container);
 			} else if ($that.hasClass('T-addTraffic')) {
 				// 添加交通
-				quote.addResourceTraffic($that, validator);
+				quote.addResourceTraffic($that, validator, $container);
 			}
 		})
-		.on('click', '.T-delete', quote.deleteLineProductDaysArrange);
+		.on('click', '.T-delete', quote.deleteLineProductDaysArrange($container));
 		//autocomplete
 		var $dayListArea = $container.find('.T-timeline-container');
-		quote.bindInsuranceChosen($container.find('.T-insurance-name'), validator);
+		quote.bindInsuranceChosen($container.find('.T-insurance-name'), validator, $container);
 		quote.bindRestaurantEvent($dayListArea.find('.T-choose-restaurantName'), $dayListArea.find('.T-choose-restaurantStandardsName'));
 		quote.bindHotelEvent($dayListArea.find('.T-choose-hotelName'), $dayListArea.find('.T-choose-hotelRoom'), $dayListArea.find('.T-choose-hotelStarLevel'));
 		quote.bindScenicEvent($dayListArea.find('.T-choose-scenicName'));
@@ -235,7 +230,7 @@ define(function(require, exports) {
 			}
 			var quoteId = quote.getValue($container,'quoteId');
 			if(!!lineProductInfo.startTime && !!lineProductInfo.partnerAgencyId && !!lineProductInfo.partnerAgencyContactId ){
-				quote.busInquiry(quoteId,lineProductInfo);
+				quote.busInquiry(quoteId,lineProductInfo,$container);
 			}else if (!!lineProductInfo.startTime != true){
 				showMessageDialog($( "#confirm-dialog-message" ),"请选择出游日期");
 			}else if (!!lineProductInfo.partnerAgencyId != true){
@@ -245,7 +240,7 @@ define(function(require, exports) {
 			}
 		});
 		//车辆询价
-		quote.busInquiry = function(quoteId,lineProductInfo) {
+		quote.busInquiry = function(quoteId,lineProductInfo,$container) {
 			$.ajax({
 				url: KingServices.build_url("busCompany","findBusList"),
 				type: 'POST',
@@ -304,7 +299,7 @@ define(function(require, exports) {
 				    					success: function(data){
 				    						var result = showDialog(data);
 				    						if (result) {
-												quote.$tabAdd.find('[name=quoteId]').val(data.quoteId);
+												$container.find('[name=quoteId]').val(data.quoteId);
 												layer.close(busInquiryLayer);
 				    						}
 				    					}
@@ -419,22 +414,22 @@ define(function(require, exports) {
 			event.preventDefault();
 			/* Act on the event */
 			var lineProductInfo = {
-				id: quote.getValue(quote.$tabAdd,"lineProductId"),
-				name: quote.$tabAdd.find('.T-lineProductName').text(),
-				type: quote.$tabAdd.find('.T-lineProductType').text(),
-				customerType: quote.$tabAdd.find('.T-lineProductCusType').text(),
-				days: quote.$tabAdd.find('.T-lineProductDays').text(),
-				startTime: quote.getValue(quote.$tabAdd,'startTime'),
-				adultCount: quote.getValue(quote.$tabAdd,'adultCount'),
-				childCount: quote.getValue(quote.$tabAdd,'childCount'),
-				partnerAgencyId: quote.getValue(quote.$tabAdd,'partnerAgencyId'),
-				partnerAgencyContactId: quote.getValue(quote.$tabAdd,'managerId')
+				id: quote.getValue($container,"lineProductId"),
+				name: $container.find('.T-lineProductName').text(),
+				type: $container.find('.T-lineProductType').text(),
+				customerType: $container.find('.T-lineProductCusType').text(),
+				days: $container.find('.T-lineProductDays').text(),
+				startTime: quote.getValue($container,'startTime'),
+				adultCount: quote.getValue($container,'adultCount'),
+				childCount: quote.getValue($container,'childCount'),
+				partnerAgencyId: quote.getValue($container,'partnerAgencyId'),
+				partnerAgencyContactId: quote.getValue($container,'managerId')
 			}
 			var whichDay = 2;
-			var quoteId = quote.getValue(quote.$tabAdd,'quoteId');
+			var quoteId = quote.getValue($container,'quoteId');
 
 			if(!!lineProductInfo.startTime && !!lineProductInfo.partnerAgencyId && !!lineProductInfo.partnerAgencyContactId ){
-				quote.hotelInquiry(lineProductInfo,whichDay,quoteId);
+				quote.hotelInquiry(lineProductInfo,whichDay,quoteId,$container);
 			}else if (!!lineProductInfo.startTime != true){
 				showMessageDialog($( "#confirm-dialog-message" ),"请选择出游日期");
 			}else if (!!lineProductInfo.partnerAgencyId != true){
@@ -446,11 +441,11 @@ define(function(require, exports) {
 		//保存报价
 		$container.find('.T-btn-submit-quote').on('click',function(){
 			var id = $container.find('input[name=quoteId]');
-			quote.saveQuote(id);
+			quote.saveQuote(id, $container);
 		})
 	};
 	//酒店询价
-	quote.hotelInquiry = function(lineProductInfo,whichDay,quoteId) {
+	quote.hotelInquiry = function(lineProductInfo,whichDay,quoteId,$container) {
 		$.ajax({
 			url: KingServices.build_url("hotel","findRoomTypeList"),
 			type: 'POST',
@@ -494,9 +489,9 @@ define(function(require, exports) {
 							var selectedHotelArray = [];
 							//酒店查询分页
 							var startTime = lineProductInfo.startTime;
-							quote.hotelInquiryList(0,$hotelLayerContent,whichDay,startTime);
+							quote.hotelInquiryList(0,$hotelLayerContent,whichDay,startTime,$container);
 							$hotelLayerContent.find('.T-btn-hotelInquiry-search').off('click').on('click',function(){
-								quote.hotelInquiryList(0,$hotelLayerContent,whichDay,startTime);
+								quote.hotelInquiryList(0,$hotelLayerContent,whichDay,startTime,$container);
 							})
 							//保存接口
 							$hotelLayerContent.find('.T-saveHotelInquiry').on('click', function(){
@@ -537,7 +532,7 @@ define(function(require, exports) {
 									success: function(data){
 										var result = showDialog(data);
 										if (result) {
-											quote.$tabAdd.find('[name=quoteId]').val(data.quoteId);
+											$container.find('[name=quoteId]').val(data.quoteId);
 											layer.close(hotelInquiryLayer);
 										}
 									}
@@ -747,7 +742,7 @@ define(function(require, exports) {
 		
 	};
 	//保险选择
-	quote.bindInsuranceChosen = function($input, validator) {
+	quote.bindInsuranceChosen = function($input, validator, $container) {
 		if (!$input || !$input.length) {
 			console.error('绑定保险的autocomplete，主体Dom为空!');
 			return;
@@ -763,7 +758,7 @@ define(function(require, exports) {
 					$tr.find("input[name=telNumber]").val("");
 					$tr.find("input[name=managerName]").val("");
 					$tr.find("input[name=mobileNumber]").val("");
-					quote.costCalculation(quote.$tabAdd)
+					quote.costCalculation($container)
 				}
 
 				// 更新表单验证的配置
@@ -783,7 +778,7 @@ define(function(require, exports) {
 							$tr.find("input[name=telNumber]").val(insurance.telNumber);
 							$tr.find("input[name=managerName]").val(insurance.managerName);
 							$tr.find("input[name=mobileNumber]").val(insurance.telNumber);
-							quote.costCalculation(quote.$tabAdd)
+							quote.costCalculation($container)
 
 							// 更新表单验证的配置
 							validator = rule.lineProductUpdate(validator);
@@ -813,7 +808,7 @@ define(function(require, exports) {
 		});
 	};
 	//添加餐厅
-	quote.addRestaurant = function($btn, validator){
+	quote.addRestaurant = function($btn, validator, $container){
 		//添加行程安排餐饮
 		var scheduleDetails = '<div class="T-timeline-item timeline-item clearfix updateRestaurantList updateLineProductDaysDetail T-RestaurantList ui-sortable-handle" data-entity-index='+quote.updateLineProductIndex+'><div class="timeline-info " style="color:#1fade0" ><i class="ace-icon fa fa-circle" ></i><span>餐饮</span></div>'+
 		'<div class="widget-box transparent" style="margin-top: 20px"><div class="widget-body"><div class=""><table class="table table-striped table-bordered table-hover">'+
@@ -839,16 +834,16 @@ define(function(require, exports) {
 			typeParent.find("input[name=price]").val("");
 			typeParent.find("input[name=typeId]").val("");
 
-			quote.costCalculation(quote.$tabAdd)
+			quote.costCalculation($container)
 		});
 		
-		quote.bindRestaurantEvent($(".updateRestaurantList .chooseRestaurantName"), $(".updateRestaurantList .restaurantStandardsName"), validator);
+		quote.bindRestaurantEvent($(".updateRestaurantList .chooseRestaurantName"), $(".updateRestaurantList .restaurantStandardsName"), validator, $container);
 		
 		
 		
 	};
 		
-	quote.bindRestaurantEvent = function( obj, typeObj, validator) {
+	quote.bindRestaurantEvent = function( obj, typeObj, validator, $container) {
 		//绑定选择餐厅名称事件
 		obj.autocomplete({
 			minLength:0,
@@ -862,7 +857,7 @@ define(function(require, exports) {
 					$tr.find("input[name=pricePerPerson]").val("");
 					$tr.find("input[name=price]").val("");
 					$tr.find("input[name=typeId]").val("");
-					quote.costCalculation(quote.$tabAdd)
+					quote.costCalculation($container)
 				}
 
 				// 更新表单验证的配置
@@ -876,7 +871,7 @@ define(function(require, exports) {
 				$tr.find("input[name=pricePerPerson]").val("");
 				$tr.find("input[name=price]").val("");
 				$tr.find("input[name=typeId]").val("");
-				quote.costCalculation(quote.$tabAdd)
+				quote.costCalculation($container)
 				
 				$.ajax({
 					url: KingServices.build_url('restaurant', 'findRestaurantById'),
@@ -925,7 +920,7 @@ define(function(require, exports) {
 					$tr.find("input[name=pricePerPerson]").val("");
 					$tr.find("input[name=menuList]").val("");
 					$tr.find("input[name=typeId]").val("");
-					quote.costCalculation(quote.$tabAdd)
+					quote.costCalculation($container)
 				}
 			},select:function(event,ui){
 				var objEatName = this;
@@ -941,7 +936,7 @@ define(function(require, exports) {
 							var restaurantStandard = JSON.parse(data.restaurantStandard);
 							
 							objParent.find("input[name=menuList]").val(restaurantStandard.menuList);
-							quote.costCalculation(quote.$tabAdd)
+							quote.costCalculation($container)
 						}
                     }
 				});
@@ -979,7 +974,7 @@ define(function(require, exports) {
 		
 	};
 	//添加酒店
-	quote.addResourceHotel = function($btn, validator){
+	quote.addResourceHotel = function($btn, validator, $container){
 		//添加行程安排酒店
 		var hotelDetails = '<div class="T-timeline-item timeline-item clearfix updateHotelList updateLineProductDaysDetail T-resourceHotelList ui-sortable-handle" data-entity-index='+quote.updateLineProductIndex+'><div class="timeline-info"  style="color:#1fade0" ><i class="ace-icon fa fa-circle" ></i><span >酒店</span></div>'+
 		'<div class="widget-box transparent" style="margin-top: 20px"><div class="widget-body"><div class=""><table class="table table-striped table-bordered table-hover">'+
@@ -998,9 +993,10 @@ define(function(require, exports) {
 		$btn.closest(".T-dailyArrangeList").find(".T-timeline-detail-container").append(hotelDetails);
 		quote.updateLineProductIndex += 1;
 		//绑定选择酒店名称事件
-		quote.bindHotelEvent($(".updateHotelList .chooseHotelName"), $(".updateHotelList .chooseHotelRoom"), $(".updateHotelList .resourceHotelStar"), validator)
+		quote.costCalculation($container)
+		quote.bindHotelEvent($(".updateHotelList .chooseHotelName"), $(".updateHotelList .chooseHotelRoom"), $(".updateHotelList .resourceHotelStar"), validator,$container)
 	};
-	quote.bindHotelEvent = function(obj, typeObj, selObj, validator){
+	quote.bindHotelEvent = function(obj, typeObj, selObj, validator ,$container){
 		var $hotelStar = selObj;
 		$hotelStar.on("change", function(){
 			var parentObj = $(this).closest('tr');
@@ -1012,7 +1008,7 @@ define(function(require, exports) {
 			parentObj.find("input[name=containBreakfast]").val("");
 			parentObj.find("input[name=mobileNumber]").val("");
 			parentObj.find("input[name=payType]").val("");
-			quote.costCalculation(quote.$tabAdd)
+			quote.costCalculation($container)
 		});
 		obj.autocomplete({
 			minLength:0,
@@ -1024,7 +1020,7 @@ define(function(require, exports) {
 				$tr.find("input[name=hotelRoomId]").val("");					
 				$tr.find("input[name=contractPrice]").val("");
 				$tr.find("input[name=containBreakfast]").val("");
-				quote.costCalculation(quote.$tabAdd)
+				quote.costCalculation($container)
 				
 				$.ajax({
                     url: KingServices.build_url('hotel', 'getHotelById'),
@@ -1053,7 +1049,7 @@ define(function(require, exports) {
 					objParent.find("input[name=hotelRoom]").val("");
 					objParent.find("input[name=mobileNumber]").val("");
 					objParent.find("input[name=payType]").val("");
-					quote.costCalculation(quote.$tabAdd)
+					quote.costCalculation($container)
 
 					// 更新表单验证的配置
 					validator = rule.lineProductUpdate(validator);
@@ -1104,7 +1100,7 @@ define(function(require, exports) {
 
 							$tr.find("input[name=contractPrice]").val(hotelRoom.contractPrice);
 							$tr.find("input[name=containBreakfast]").val(hotelRoom.containBreakfast == "0" ? "不含" : "包含");
-							quote.costCalculation(quote.$tabAdd)
+							quote.costCalculation($container)
 						}
                     }
 				})
@@ -1115,7 +1111,7 @@ define(function(require, exports) {
 					$tr.find("input[name=hotelRoomId]").val("");
 					$tr.find("input[name=contractPrice]").val("");
 					$tr.find("input[name=containBreakfast]").val("");
-					quote.costCalculation(quote.$tabAdd)
+					quote.costCalculation($container)
 				}
 			}
 		}).unbind("click").click(function(){
@@ -1156,7 +1152,7 @@ define(function(require, exports) {
 		
 	};
 	//添加景区
-	quote.addResourceScenic = function($btn, validator){
+	quote.addResourceScenic = function($btn, validator, $container){
 		//添加行程安排景区
 		var scenicDetails = '<div class="T-timeline-item timeline-item clearfix updateScenicList updateLineProductDaysDetail T-resourceScenicList ui-sortable-handle" data-entity-index='+quote.updateLineProductIndex+'><div class="timeline-info"  style="color:#1fade0" ><i class="ace-icon fa fa-circle" ></i><span >景区</span></div>'+
 		'<div class="widget-box transparent" style="margin-top: 20px"><div class="widget-body"><div class=""><table class="table table-striped table-bordered table-hover">'+
@@ -1172,9 +1168,9 @@ define(function(require, exports) {
 		quote.updateLineProductIndex += 1;
 		
 		//绑定选择景区名称事件
-		quote.bindScenicEvent($(".updateScenicList .chooseScenicName"), validator);
+		quote.bindScenicEvent($(".updateScenicList .chooseScenicName"), validator, $container);
 	},
-	quote.bindScenicEvent = function(obj, validator){
+	quote.bindScenicEvent = function(obj, validator, $container){
 		obj.autocomplete({
 			minLength:0,
 			select:function(event, ui){
@@ -1184,7 +1180,7 @@ define(function(require, exports) {
 				objParent.find("input[name=scenicId]").val(scenicNameId).trigger('change');
 				objParent.find("input[name=chargingProjects]").val("");
 				objParent.find("input[name=chargingId]").val("");
-				quote.costCalculation(quote.$tabAdd)
+				quote.costCalculation($container)
 				// 更新表单验证的配置
 				validator = rule.lineProductUpdate(validator);
 				
@@ -1209,7 +1205,7 @@ define(function(require, exports) {
 					$tr.find("input[name=chargingId]").val("");
 					$tr.find("input[name=mobileNumber]").val("");
 					$tr.find("input[name=price]").val("");
-					quote.costCalculation(quote.$tabAdd)
+					quote.costCalculation($container)
 					// 更新表单验证的配置
 					validator = rule.lineProductUpdate(validator);
 				}
@@ -1258,7 +1254,7 @@ define(function(require, exports) {
 							var scenicItem = JSON.parse(data.scenicItem);
 
 							thisParent.find("input[name=price]").val(scenicItem.contractPrice);
-							quote.costCalculation(quote.$tabAdd)
+							quote.costCalculation($container)
 						}
                     }
                 });
@@ -1269,7 +1265,7 @@ define(function(require, exports) {
 					var thisParent = $(this).parent().parent();
 					thisParent.find("input[name=chargingId]").val("");
 					thisParent.find("input[name=price]").val("");
-					quote.costCalculation(quote.$tabAdd)
+					quote.costCalculation($container)
 				}
 			}
 		}).unbind("click").click(function(){
@@ -1458,7 +1454,7 @@ define(function(require, exports) {
 	};
 	
 	//添加自费
-	quote.addResourceSelfPaying = function($btn, validator){
+	quote.addResourceSelfPaying = function($btn, validator, $container){
 		//添加行程安排自费
 		var selfPayingDetails = '<div class="T-timeline-item timeline-item clearfix updateSelfPayList updateLineProductDaysDetail T-resourceSelfPayList ui-sortable-handle" data-entity-index='+quote.updateLineProductIndex+'><div class="timeline-info" style="color:#1fade0" ><i class="ace-icon fa fa-circle" ></i><span >自费</span></div>'+
 		'<div class="widget-box transparent" style="margin-top: 20px"><div class="widget-body"><div class=""><table class="table table-striped table-bordered table-hover">'+
@@ -1475,11 +1471,11 @@ define(function(require, exports) {
 		quote.updateLineProductIndex += 1;
 		
 		//绑定选择自费名称事件
-		quote.bindSelfPay($(".updateSelfPayList .chooseCompanyName"), validator);
+		quote.bindSelfPay($(".updateSelfPayList .chooseCompanyName"), validator, $container);
 		
 	};
 	
-	quote.bindSelfPay = function(obj, validator){
+	quote.bindSelfPay = function(obj, validator, $container){
 		obj.autocomplete({
 			minLength:0,
 			select:function(event, ui){
@@ -1498,7 +1494,7 @@ define(function(require, exports) {
 							$tr.find("input[name=managerName]").val(selfpay.managerName);
 							$tr.find("input[name=selfPayItemName]").val("");
 							$tr.find("input[name=selfPayItemId]").val("");
-							quote.costCalculation(quote.$tabAdd)
+							quote.costCalculation($container)
 
 							// 更新表单验证的配置
 							validator = rule.lineProductUpdate(validator);
@@ -1519,7 +1515,7 @@ define(function(require, exports) {
 					$tr.find("input[name=managerName]").val("");
 					$tr.find("input[name=selfPayItemName]").val("");
 					$tr.find("input[name=selfPayItemId]").val("");
-					quote.costCalculation(quote.$tabAdd)
+					quote.costCalculation($container)
 
 					// 更新表单验证的配置
 					validator = rule.lineProductUpdate(validator);
@@ -1569,7 +1565,7 @@ define(function(require, exports) {
 							$tr.find("input[name=selfPayItemId]").val(ui.item.id).trigger('change');
 							$tr.find("input[name=contractPrice]").val(selfPayRebate.price);
 							$tr.find("input[name=marketPrice]").val(selfPayRebate.marketPrice);
-							quote.costCalculation(quote.$tabAdd)
+							quote.costCalculation($container)
 						}
                     }
                 });
@@ -1582,7 +1578,7 @@ define(function(require, exports) {
 					$tr.find("input[name=mobileNumber]").val("");
 					$tr.find("input[name=contractPrice]").val("");
 					$tr.find("input[name=managerName]").val("");
-					quote.costCalculation(quote.$tabAdd)
+					quote.costCalculation($container)
 				}
 			}
 		}).unbind("click").click(function(){
@@ -1618,7 +1614,7 @@ define(function(require, exports) {
 		
 	};
 	//添加交通
-	quote.addResourceTraffic = function($btn, validator){
+	quote.addResourceTraffic = function($btn, validator, $container){
 		//添加行程安排交通
 		var shoppingDetails = '<div class="T-timeline-item timeline-item clearfix updateTicketList updateLineProductDaysDetail T-resourceTicketList ui-sortable-handle" data-entity-index='+quote.updateLineProductIndex+'><div class="timeline-info" style="color:#1fade0" ><i class="ace-icon fa fa-circle" ></i><span >交通</span></div>'+
 		'<div class="widget-box transparent" style="margin-top: 20px"><div class="widget-body"><div class=""><table class="table table-striped table-bordered table-hover">'+
@@ -1636,10 +1632,10 @@ define(function(require, exports) {
 		quote.updateLineProductIndex += 1;
 		
 		//绑定选择自费名称事件
-		quote.bindTicketEvent($(".updateTicketList .chooseTicketName"), validator);
+		quote.bindTicketEvent($(".updateTicketList .chooseTicketName"), validator, $container);
 		quote.dateTimePicker($(".T-timeline-item"));
 	};
-	quote.bindTicketEvent = function(obj, validator){
+	quote.bindTicketEvent = function(obj, validator, $container){
 		obj.autocomplete({
 			minLength:0,
 			select:function(event, ui){
@@ -1657,7 +1653,7 @@ define(function(require, exports) {
 							$tr.find("input[name=managerName]").val(ticket.managerName);
 							$tr.find("input[name=mobileNumber]").val(ticket.mobileNumber);
 							$tr.find("input[name=telNumber]").val(ticket.telNumber);
-							quote.costCalculation(quote.$tabAdd)
+							quote.costCalculation($container)
 
 							// 更新表单验证的配置
 							validator = rule.lineProductUpdate(validator);
@@ -1674,7 +1670,7 @@ define(function(require, exports) {
 					$tr.find("input[name=managerName]").val("");
 					$tr.find("input[name=mobileNumber]").val("");
 					$tr.find("input[name=telNumber]").val("");
-					quote.costCalculation(quote.$tabAdd)
+					quote.costCalculation($container)
 
 					// 更新表单验证的配置
 					validator = rule.lineProductUpdate(validator);
@@ -1707,7 +1703,7 @@ define(function(require, exports) {
 		});
 	};
 	//删除日程安排
-	quote.deleteLineProductDaysArrange = function(){
+	quote.deleteLineProductDaysArrange = function($container){
 		var dialogObj = $( "#confirm-dialog-message" ), $obj = $(this);
 
 		if (!!$obj.data("entity-id")) {
@@ -1743,7 +1739,7 @@ define(function(require, exports) {
 									if(result){	
 										var index = objParents.index();									
 										$(".T-timeline-item").eq(index).remove();
-										quote.costCalculation(quote.$tabAdd);
+										quote.costCalculation($container);
 									}
 								}
 							});
@@ -1756,17 +1752,17 @@ define(function(require, exports) {
 			});
 		} else {
 			$obj.closest('.T-timeline-item').remove();
-			quote.updateRouteIndex($obj.closest('.T-updateLineProductContainer'));
-			quote.costCalculation(quote.$tabAdd);
+			quote.updateRouteIndex($obj.closest('.T-updateLineProductContainer'),$container);
+			quote.costCalculation($container);
 		}
 	};
 	/**
 	 * 更新安排的序号
 	 * @return {[type]} [description]
 	 */
-	quote.updateRouteIndex = function($tab) {
+	quote.updateRouteIndex = function($tab,$container) {
 		quote.updateLineProductIndex -= 1;
-		var itemList = quote.$tabAdd.find(".T-timeline-item");
+		var itemList = $container.find(".T-timeline-item");
 		for(var i=0; i<itemList.length; i++){
 			itemList.eq(i).attr("data-entity-index", i);
 		}
@@ -1913,39 +1909,39 @@ define(function(require, exports) {
 	 * @param  {[type]} id [报价ID]
 	 * @return {[type]}    [description]
 	 */
-	quote.saveQuote = function(id) {
+	quote.saveQuote = function(id, $container) {
 		var quoteJson = {
-			adultAdjustType: quote.getValue(quote.$tabAdd,'selectAmAdult'),
-			adultAdjustValue: quote.getValue(quote.$tabAdd,'adultAdjustValue'),
-			adultCostPrice: quote.$tabAdd.find('.T-adultCost').text(),
-			adultCount: quote.getValue(quote.$tabAdd,'adultCount'),
-			adultQuotePrice: quote.getValue(quote.$tabAdd,'adultQuotePrice'),
-			childAdjustType: quote.getValue(quote.$tabAdd,'selectAmChild'),
-			childAdjustValue: quote.getValue(quote.$tabAdd,'childAdjustValue'),
-			childCostPrice: quote.$tabAdd.find('.T-childCost').text(),
-			childCount: quote.getValue(quote.$tabAdd,'childCount'),
-			childQuotePrice: quote.getValue(quote.$tabAdd,'childQuotePrice'),
-			days: quote.$tabAdd.find('[name=days]').attr("value"),
-			lineProductId: quote.getValue(quote.$tabAdd,'lineProductId'),
-			partnerAgencyId: quote.getValue(quote.$tabAdd,'partnerAgencyId'),
-			partnerAgencyContactId: quote.getValue(quote.$tabAdd,'managerId'),
-			singleRoomAdjustType: quote.getValue(quote.$tabAdd,'selectAmOneRoom'),
-			singleRoomAdjustValue: quote.getValue(quote.$tabAdd,'singleRoomAdjustValue'),
-			singleRoomCostPrice: quote.$tabAdd.find('.T-oneRoomCost').text(),
-			singleRoomCount: quote.getValue(quote.$tabAdd,'singleRoomCount'),
-			singleRoomQuotePrice: quote.getValue(quote.$tabAdd,'singleRoomQuotePrice'),
-			startTime: quote.getValue(quote.$tabAdd,'startTime'),
-			sumCostFee: quote.$tabAdd.find('.T-allCost').text(),
-			sumQuoteFee: quote.getValue(quote.$tabAdd,'sumQuoteFee'),
-			grossProfit: quote.$tabAdd.find('.T-grossProfit').text(),
-			isContainGuideFee: quote.getValue(quote.$tabAdd,'includeGuideFee'),
-			isContainSelfPay: quote.getValue(quote.$tabAdd,'includeSelfpay'),
-			isChildNeedRoom: quote.getValue(quote.$tabAdd,'childNeedBed'),
-			remark: quote.getValue(quote.$tabAdd,'quoteRemark')
+			adultAdjustType: quote.getValue($container,'selectAmAdult'),
+			adultAdjustValue: quote.getValue($container,'adultAdjustValue'),
+			adultCostPrice: $container.find('.T-adultCost').text(),
+			adultCount: quote.getValue($container,'adultCount'),
+			adultQuotePrice: quote.getValue($container,'adultQuotePrice'),
+			childAdjustType: quote.getValue($container,'selectAmChild'),
+			childAdjustValue: quote.getValue($container,'childAdjustValue'),
+			childCostPrice: $container.find('.T-childCost').text(),
+			childCount: quote.getValue($container,'childCount'),
+			childQuotePrice: quote.getValue($container,'childQuotePrice'),
+			days: $container.find('[name=days]').attr("value"),
+			lineProductId: quote.getValue($container,'lineProductId'),
+			partnerAgencyId: quote.getValue($container,'partnerAgencyId'),
+			partnerAgencyContactId: quote.getValue($container,'managerId'),
+			singleRoomAdjustType: quote.getValue($container,'selectAmOneRoom'),
+			singleRoomAdjustValue: quote.getValue($container,'singleRoomAdjustValue'),
+			singleRoomCostPrice: $container.find('.T-oneRoomCost').text(),
+			singleRoomCount: quote.getValue($container,'singleRoomCount'),
+			singleRoomQuotePrice: quote.getValue($container,'singleRoomQuotePrice'),
+			startTime: quote.getValue($container,'startTime'),
+			sumCostFee: $container.find('.T-allCost').text(),
+			sumQuoteFee: quote.getValue($container,'sumQuoteFee'),
+			grossProfit: $container.find('.T-grossProfit').text(),
+			isContainGuideFee: quote.getValue($container,'includeGuideFee'),
+			isContainSelfPay: quote.getValue($container,'includeSelfpay'),
+			isChildNeedRoom: quote.getValue($container,'childNeedBed'),
+			remark: quote.getValue($container,'quoteRemark')
 		}
-		var busList = quote.$tabAdd.find('.T-arrangeBusCompanyList');
-		var guideList = quote.$tabAdd.find('.T-arrangeGuideList');
-		var insuranceList = quote.$tabAdd.find('.T-arrangeInsuranceList');
+		var busList = $container.find('.T-arrangeBusCompanyList');
+		var guideList = $container.find('.T-arrangeGuideList');
+		var insuranceList = $container.find('.T-arrangeInsuranceList');
 		var saveJson = {
 			busCompany: {
 				brand: quote.getValue(busList,'brand'),
@@ -1967,7 +1963,7 @@ define(function(require, exports) {
 			lineDayList: []
 		}
 
-		quote.$tabAdd.find(".T-dailyArrangeList").each(function(index, el) { // 获取每天的数据
+		$container.find(".T-dailyArrangeList").each(function(index, el) { // 获取每天的数据
 			var $that = $(this), $list, $item;
 
 			saveJson.lineDayList[index] = {
