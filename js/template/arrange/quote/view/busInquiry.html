@@ -3,43 +3,44 @@
 		<div class="form-horizontal clearfix">
 			<div class="col-sm-3 font-size-12 ">
 	            <span class="pull-left control-label align-right no-padding-right">产品名称：</span>
-	            <span class="control-label">九寨黄龙双汽3日游</span>
+	            <span class="control-label">{{lineProductInfo.name}}</span>
 	        </div>
 			<div class="col-sm-3 font-size-12 ">
 	            <span class="pull-left control-label align-right no-padding-right">类别：</span>
-	            <span class="control-label">纯玩</span>
+	            <span class="control-label">{{lineProductInfo.type}}</span>
 	        </div>
 			<div class="col-sm-3 font-size-12 ">
 	            <span class="pull-left control-label align-right no-padding-right">应用范围：</span>
-	            <span class="control-label">团体</span>
+	            <span class="control-label">{{lineProductInfo.customerType}}</span>
 	        </div>
 			<div class="col-sm-3 font-size-12 ">
 	            <span class="pull-left control-label align-right no-padding-right">天数：</span>
-	            <span class="control-label">3天</span>
+	            <span class="control-label">{{lineProductInfo.days}}</span>
 	        </div>
 			<div class="col-sm-3 font-size-12 ">
 	            <span class="pull-left control-label align-right no-padding-right">出团日期：</span>
-	            <span class="control-label">2015-09-09</span>
+	            <span class="control-label">{{lineProductInfo.startTime}}</span>
 	        </div>
 			<div class="col-sm-3 font-size-12 ">
 	            <span class="pull-left control-label align-right no-padding-right">人数：</span>
-	            <span class="control-label">30大2小</span>
+	            <span class="control-label">{{lineProductInfo.adultCount}}大{{lineProductInfo.childCount}}小</span>
 	        </div>
 		</div>
 		<div class="search-area clearfix" style="margin: 30px 0;border-top: 1px dotted #ccc;padding: 20px 0;border-bottom: 1px dotted #ccc;">
 			<label class="pull-left text-right control-label no-padding-right">要求:</label>
 			<label class="pull-left text-right control-label no-padding-right"><span class="necessary">*</span>车座数:</label>
 			<div class="col-sm-1">
-				<input type="text" class="col-sm-12 T-chooseLineProduct width110" name="lineProductName" value="{{}}"/>
+				<input type="text" class="col-sm-12 width110 T-chooseSeatCount" name="seatCount" value=""/>
 			</div>
 			<label class="pull-left text-right control-label no-padding-right">车辆品牌:</label>
 			<div class="col-sm-1">
-				<input type="text" class="col-sm-12 T-chooseLineProduct width110" name="lineProductName" value="{{}}"/>
+				<input type="text" class="col-sm-12 width110 T-chooseBusBrand" name="busBrand" value=""/>
 			</div>
 			<label class="pull-left text-right control-label no-padding-right"><span class="necessary">*</span>询价截止时间:</label>
-			<div class="col-sm-1">
-				<input type="text" class="col-sm-12 T-chooseLineProduct width110" name="lineProductName" value="{{}}"/>
+			<div class="col-sm-2">
+				<input type="text" class="col-sm-12 width110 T-dateTimePicker" name="expiryTime" value=""/>
 			</div>
+			<button class="btn btn-sm btn-success T-btn-busInquiry-search R-right" style="margin-left: 20px">  搜索 </button>
 		</div>
 		<div class="col-xs-12 T-busInquiryList" style="padding:10px 0 0 0;">
 			
@@ -64,7 +65,7 @@
 										<td>操作</td>
 									</tr>
 								</thead>
-								<tbody class="">
+								<tbody class="T-selectedBusTbody">
 								</tbody>
 							</table>
 						</td>
@@ -73,11 +74,11 @@
 			</table>
 		</div>
 		<div class="form-group col-sm-12" style="text-align: center;">
-			<button class="btn btn-sm btn-danger otherButton">
+			<button class="btn btn-sm btn-danger otherButton T-closeLayer">
 				<i class="ace-icon fa fa-times "></i>
 				取消
 			</button>
-			<button class="btn btn-sm btn-primary otherButton" style="margin-left: 30px">
+			<button class="btn btn-sm btn-primary otherButton T-saveBusInquiry" style="margin-left: 30px">
 				<i class="ace-icon fa fa-check"></i>
 				保存
 			</button>

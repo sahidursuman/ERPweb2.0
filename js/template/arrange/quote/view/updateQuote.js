@@ -1,6 +1,6 @@
-/*TMODJS:{"debug":true,"version":165,"md5":"9b3c425ffe90a4e005fde60216a94c9c"}*/
+/*TMODJS:{"debug":true,"version":2,"md5":"9b3c425ffe90a4e005fde60216a94c9c"}*/
 define(function(require) {
-    return require("../../../template")("arrange/quote/view/addQuote", function($data, $filename) {
+    return require("../../../template")("arrange/quote/view/updateQuote", function($data, $filename) {
         try {
             var $utils = this, $line = ($utils.$helpers, 0), $escape = $utils.$escape, lineProduct = $data.lineProduct, insuranceTemplate = $data.insuranceTemplate, busCompanyTemplate = $data.busCompanyTemplate, $each = $utils.$each, daysList = $data.daysList, editorName = ($data.lineProductDaysList, 
             $data.i, $data.editorName), $string = $utils.$string, clipboardMode = ($data.restaurantList, 

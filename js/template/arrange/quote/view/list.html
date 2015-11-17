@@ -8,8 +8,8 @@
 				<th>应用范围</th>
 				<th>客户</th>
 				<th>联系人</th>
-				<th>大人单价</th>
-				<th>小孩单价</th>
+				<th>大人报价</th>
+				<th>小孩报价</th>
 				<th>总报价</th>
 				<th>报价人</th>
 				<th class="col-sm-1">报价时间</th>
@@ -17,34 +17,34 @@
 			</tr>
 		</thead>
 	
-		<tbody>
-			<tr>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
+		<tbody>{{each quoteList as quote}}
+			<tr data-entity-id="{{quote.id}}">
+				<td>{{if quote.lineProduct != null}}{{quote.lineProduct.name}}{{/if}}</td>
+				<td>{{if quote.lineProduct != null}}{{quote.lineProduct.days}}{{/if}}</td>
+				<td>{{if quote.lineProduct != null}}{{quote.lineProduct.type}}{{/if}}</td>
+				<td>{{if quote.lineProduct != null}}{{if quote.lineProduct.customerType == 0}}散客{{else}}团体{{/if}}{{/if}}</td>
+				<td>{{quote.partnerAgency.travelAgencyName}}</td>
+				<td>{{quote.partnerAgencyContact.contactRealname}}</td>
+				<td>{{quote.adultQuotePrice}}</td>
+				<td>{{quote.childQuotePrice}}</td>
+				<td>{{quote.sumQuoteFee}}</td>
+				<td>{{quote.user.realName}}</td>
+				<td>{{quote.creatTime}}</td>
 				<td>
 					<div class="hidden-sm hidden-xs btn-group">
-						<a class="cursor R-right">
+						<a class="cursor R-right T-action">
 							询价状态
 						</a>
 						<a>|</a>
-						<a class="cursor R-right">
+						<a class="cursor R-right T-action T-update">
 							修改
 						</a>
 						<a>|</a>
-						<a class="cursor R-right T-view">
+						<a class="cursor R-right T-action T-view">
 							查看
 						</a>
 						<a>|</a>
-						<a class="cursor R-right">
+						<a class="cursor R-right T-action T-delete">
 							删除
 						</a>
 						<a>|</a>
@@ -53,7 +53,7 @@
 						</a>
 					</div>
 				</td>
-			</tr>
+			</tr>{{/each}}
 		</tbody>
 	</table>
 	
