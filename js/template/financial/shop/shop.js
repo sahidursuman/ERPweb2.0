@@ -141,7 +141,7 @@ define(function(require, exports) {
                  	    }
 
                  	    //取消对账权限过滤
-                        var checkTr = $(".T-checkList tr");
+                        var checkTr = $('.T-checkList tr .T-showTr');
                         var rightCode = $(".T-checkList").data("right");
                         checkDisabled(checkList,checkTr,rightCode);
 

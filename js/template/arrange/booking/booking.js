@@ -91,7 +91,8 @@ define(function(require, exports) {
 				partnerAgencyId: partnerAgency || '',
 				operateUser : operateUser || '',
 				startTime : startTime || '',
-				endTime : endTime || ''
+				endTime : endTime || '',
+				sortType : 'operationTime'
 			};
 
 		BookingArrange.ajax(data, listBookingInfo);
@@ -197,7 +198,7 @@ define(function(require, exports) {
 			}else if($that.hasClass('T-edit')){
 				BookingArrange.update(id);
 			}else if($that.hasClass('T-cancel')){
-				BookingArrange.deleteBooking(id);
+				BookingArrange.deleteBooking(id, $that);
 			}
 		});
 	};
@@ -298,7 +299,7 @@ define(function(require, exports) {
 		//车队旅游贷订
 		var validatorBus=rule.checkBookingBus($tab.find(".T-bookingBusList")); 
 
-		$tab.off('change').off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE)
+		$tab.off('change').off(SWITCH_TAB_SAVE).off(CLOSE_TAB_SAVE)
 		.on('change', function(event){
 			event.preventDefault();
 			$tab.data('isEdited', true);
@@ -307,17 +308,13 @@ define(function(require, exports) {
 			event.preventDefault();
 			BookingArrange.save($tab, validator, [tab_id, title, html]);
 		})
-		.on(SWITCH_TAB_BIND_EVENT, function(event){
-			event.preventDefault();
-			BookingArrange.CU_event($tab);
-		})
 		.on(CLOSE_TAB_SAVE, function(event){
 			event.preventDefault();
 			BookingArrange.save($tab, validator);
 		});
 
 		//新增list事件
-		$tab.on('click', '.T-action', function(event){
+		$tab.off('click', '.T-action').on('click', '.T-action', function(event){
 			var $that = $(this);
 			if($that.hasClass('T-hotel-add')){
 				BookingArrange.addHotelList($that);
@@ -1069,11 +1066,6 @@ define(function(require, exports) {
 	 */
 	BookingArrange.update = function(id){
 		if(!!id){
-			if (BookingArrange.update_id === id)  {
-				$('.tab-' + menuKey + '-update').children('a').trigger('click');
-				return;
-			}
-
 			BookingArrange.ajax({
 				'url' : 'bookingOrder', 
 				'method' : 'findBookingOrderById', 
@@ -1094,8 +1086,8 @@ define(function(require, exports) {
 	/**
 	 * 取消项目代订
 	 */
-	BookingArrange.deleteBooking = function(id){
-		var $parent = $(this).closest('tr');
+	BookingArrange.deleteBooking = function(id, $that){
+		var $parent = $that.closest('tr');
 		var dialogObj = $( "#confirm-dialog-message" );
 		dialogObj.removeClass('hide').dialog({
 			modal: true,
@@ -1125,8 +1117,11 @@ define(function(require, exports) {
 						}, function(data){
 							showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
 								$parent.fadeOut(function(){
+									var len = $parent.closest('tbody.T-list').find('tr').length;
 									$parent.remove();
-									BookingArrange.listBooking(BookingArrange.searchData.pageNo);
+									if(len <= 1 && BookingArrange.searchData.pageNo - 1 >=0){
+										BookingArrange.listBooking(BookingArrange.searchData.pageNo - 1);
+									}
 								})
 							});
 						});

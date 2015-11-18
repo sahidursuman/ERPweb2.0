@@ -255,6 +255,8 @@ define(function(require, exports) {
     	//小组总人数计算
     	tripPlan.tripPlanAllMemberCount($tab);
 
+    	tripPlan.addResource($tab);
+
 		//取消计划   btn-cancelTripPlan
 		$tab.find(".T-cancelPlan").click(function(){
 			closeTab(menuKey+"-"+operation);
@@ -490,7 +492,7 @@ define(function(require, exports) {
 					    type: 1,
 					    title:"查看小组信息",
 					    skin: 'layui-layer-rim',
-					    area: '700px',
+					    area: '1000px',
 					    zIndex:1028,
 					    content: html,
 					    scrollbar: false
@@ -548,9 +550,14 @@ define(function(require, exports) {
 		};
 
 		var planTouristCount = parseInt(getValue("planTouristCount")),
-			memberCount = parseInt($tab.find(".T-groupMemberCount").text());
+			memberCount = parseInt($tab.find(".T-groupMemberCount").text()),
+			seatCount = parseInt($tab.find("input[name=seatCount]").val());
 		if(planTouristCount < memberCount){
-			showMessageDialog($( "#confirm-dialog-message" ),"小组总人数不能大于计划人数");
+			showMessageDialog($( "#confirm-dialog-message" ),"游客总人数不能大于计划人数！");
+			return false;
+		}else if(seatCount < memberCount){
+			showMessageDialog($( "#confirm-dialog-message" ),"游客总人数不能大于车座数！");
+			return false;
 		}else{
 			// 表单校验
 			var validator = rule.checkdCreateTripPlan($tab.find(".T-plan-container"));
@@ -602,7 +609,7 @@ define(function(require, exports) {
 					var result = showDialog(data);
 					if(result){
 						showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-							if(argumentsLen === 1){
+							if(argumentsLen === 1 || argumentsLen === 2){
 								Tools.closeTab(menuKey+"-" + operation);
 								if(operation == "update"){
 									tripPlan.listTripPlan(tripPlan.searchData.page,tripPlan.searchData.tripId,tripPlan.searchData.tripNumber,tripPlan.searchData.startTime,tripPlan.searchData.guideId,tripPlan.searchData.guideName,tripPlan.searchData.busId,tripPlan.searchData.licenseNumber,tripPlan.searchData.creatorName,tripPlan.searchData.creator,tripPlan.searchData.status);
@@ -681,6 +688,10 @@ define(function(require, exports) {
 					if(result){
 						data.lineProduct = JSON.parse(data.lineProduct);
 						data.touristGroupList = JSON.parse(data.touristGroupList);
+						if(data.touristGroupList.length <= 0 ){
+							showMessageDialog($( "#confirm-dialog-message" ),"没有出游的游客小组，请在游客管理中添加！");
+							return false;
+						}
 						var html = addGroupTemplate(data);
 						var addGroupTemplateLayer = layer.open({
 						    type: 1,
@@ -726,7 +737,7 @@ define(function(require, exports) {
 											"<div class=\"hidden-sm hidden-xs btn-group\">"+
 											"<a class=\"cursor T-groupView\">"+
 												"查看"+
-											"</a>"+"<a class='cursor'> |</a>"+
+											"</a>"+"<a class='cursor'> </a>"+
 											"<a class=\"cursor T-groupDelete\">"+
 												"删除"+
 											"</a>"+
@@ -1265,6 +1276,24 @@ define(function(require, exports) {
 				$Obj.find("input[name=executeTime]").prop("disabled",true);
 			}
 		}
+	};
+
+	tripPlan.addResource = function($tab){
+		$tab.find('.T-addGuideResource').on('click' , {function : KingServices.addGuide ,type : ".widget-main" ,  name : "AddTPchooseGuide" , id : "AddTPchooseGuideId" , mobileNumber : "GmobileNumber"} , KingServices.addResourceFunction);
+		$tab.find(".T-addBusCompanyResource").off('click').on("click",{function : KingServices.addBusCompany}, KingServices.addResourceFunction);
+		$tab.find(".T-addBusResource,.T-addDriverResource").off('click').on("click",{
+			function : KingServices.addBusDriver,
+			busCompanyName : "busCompany",
+			busCompanyId : "busCompanyId",
+			busLicenseNumberId : "busLicenseNumberId",
+			busLicenseNumber : "LicenseNumber",
+			busbrand : "needBusBrand",
+			seatCount : "seatCount",
+			driverName : "driverName",
+			driverId : "driverId",
+			driverMobileNumber : "DmobileNumber",
+			type : ".widget-main"
+		}, KingServices.addBusDriverFunction);
 	};
 
 	exports.init = tripPlan.initModule;

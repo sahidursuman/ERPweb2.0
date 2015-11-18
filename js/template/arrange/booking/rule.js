@@ -112,7 +112,7 @@ define(function(require, exports) {
 							type: 'null',
 							errMsg: '数量不能为空'
 						},{
-							type: 'int',
+							type: 'float',
 							errMsg: '数量输入格式不正确'
 						}
 					]
@@ -121,7 +121,7 @@ define(function(require, exports) {
 					$ele: $checkBookingHoteObj.find('input[name="days"]'),
 					rules: [
 						{
-							type: 'int',
+							type: 'float',
 							errMsg: '天数输入不合法'
 						}
 					]
@@ -319,15 +319,6 @@ define(function(require, exports) {
 							type: 'int',
 							errMsg: '请输入数字'
 						}
-					]
-				},{//车辆品牌
-					$ele: $checkBookingBusObj.find('input[name="needBusBrand"]'),
-					rules: [
-						{
-							type: 'null',
-							errMsg: '车辆品牌不能为空'
-						}
-
 					]
 				},{//所属车队
 					$ele: $checkBookingBusObj.find('input[name="busCompany"]'),

@@ -14,25 +14,26 @@
 							<input value="{{innerTransfer.fromBusinessGroup.name}}" type="text" readonly="readonly" class="date-picker col-xs-12" />
 						</div>-->
 						<label class="col-sm-1 control-label no-padding-right">接收部门：</label>
-						<select name="businessGroup_id" class="col-sm-2">
-							<option value="">全部</option>
+						<div class="col-sm-2">
 							{{each businessGroup as rs}}
-							<option value="{{rs.id}}" {{if innerTransfer.toBusinessGroup!=null}}{{if innerTransfer.toBusinessGroup.id==rs.id}}selected="selected" {{/if}}{{/if}}>
-								{{rs.name}}
-							</option>
+								{{if innerTransfer.toBusinessGroup!=null}}
+									{{if innerTransfer.toBusinessGroup.id==rs.id}}
+										<input  value="{{rs.name}}" data-group-id="{{rs.id}}" type="text" name="businessGroup_id" class="col-xs-12" readonly="readonly"/>
+									{{/if}}
+								{{/if}}
 							{{/each}}
-						</select>
+						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-1 control-label no-padding-right">内转备注:</label>
-						<div class="col-sm-2">
-							<input value="{{innerTransfer.transRemark}}" type="text" name="transRemark" class="date-picker col-xs-12" maxlength="100" />
+						<div class="col-sm-5">
+							<input value="{{innerTransfer.transRemark}}" type="text" name="transRemark" class="date-picker col-xs-12" maxlength="500" />
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-1 control-label no-padding-right">应付：</label>
 						<div class="col-sm-2">
-							<input name="transNeedPayMoney" value="{{innerTransfer.transNeedPayMoney}}" maxlength="9" type="text" readonly="readonly" readonly="readonly" class="date-picker col-xs-12" />
+							<input name="transNeedPayMoney" value="{{innerTransfer.transNeedPayMoney}}" maxlength="9" type="text" readonly="readonly" class="date-picker col-xs-12" />
 						</div>
 
 						<label class="col-sm-1 control-label no-padding-right">已付：</label>
