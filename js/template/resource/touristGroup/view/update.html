@@ -19,6 +19,7 @@
 							{{else}}
 							<input type="text" value="{{if touristGroupDetail.lineProduct != null}}{{touristGroupDetail.lineProduct.name}}{{/if}}" name="lineProductIdName" class="col-sm-12" readonly="readonly" />
 							<input type="hidden" value="{{touristGroupDetail.lineProductId}}" name="lineProductId" />
+							<input type="hidden" value="{{touristGroupDetail.quoteId}}" name="quoteId" />
 							{{/if}}
 						</div>
 						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>出游日期:</label>
