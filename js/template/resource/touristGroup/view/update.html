@@ -28,8 +28,8 @@
 							{{if touristGroupDetail.status == 1}}
 							<div class="input-group">
 								<input type="text" name="startTime" value="{{touristGroupDetail.startTime | dateFormat: 'yyyy-MM-dd'}}" class="col-sm-12 date-picker datepicker" {{if !!touristGroupDetail.quoteId}} readonly {{/if}}/>
-									<span class="input-group-addon icon-tourist">
-										<i class="fa fa-calendar"></i>
+									<span class="input-group-addon icon-tourist"  >
+										<i class="fa fa-calendar" style="position: relative;left: -20px"></i>
 									</span>
 							</div>
 							{{else}}

@@ -456,7 +456,7 @@ define(function(require,exports){
 	 * @return {[type]}           [description]
 	 */
 	touristGroup.initLineProductSearch = function(isUpdate) {
-		var type = isUpdate?'update': 'add',
+		var type = isUpdate ?'update': 'add',
 			html =searchTemplate({update: type}),
 			searchTravelLinelayer =layer.open({
 				type: 1,
@@ -693,7 +693,7 @@ define(function(require,exports){
 						touristGroup.searchLinproduct(false,0,name);
 					});
 					//提交事件
-					$searchPanel.find('.T-submit-searchtravelLine').off('click').on('click',function(){
+					$searchPanel.find('.T-searchtravelLine').off('click').on('click',function(){
 						touristGroup.saveLineproduceJson($searchPanel,tabFlag);
 						layer.close(searchLinproductLayer);
 					});	
@@ -710,7 +710,7 @@ define(function(require,exports){
 			$addVisitorObj = $("#tab-resource_touristGroup-update-content")
 		}
 		
-		var $parentObj = $addVisitorObj.find('.T-touristGroupMainForm');
+		var $parentObj = $addVisitorObj.find('.T- ');
 		var lineProductName = $parentObj.find('input[name=lineProductIdName]');
 		var lineProductId = $parentObj.find('input[name=lineProductId]');
 		var $tr = $searchPanel.find('tbody tr'),
