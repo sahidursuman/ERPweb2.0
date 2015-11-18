@@ -1203,7 +1203,7 @@ function listMenu(menuTemplate){
 				});
 				// table 点击选中时间
 				$(document).on('click', 'td', function(event) {
-					event.preventDefault();
+					// event.preventDefault();
 					var $that = $(this);
 					if ($that.closest('table').hasClass('T-NotShowHighLight')) {
 						$that.closest('tr').toggleClass('success');
