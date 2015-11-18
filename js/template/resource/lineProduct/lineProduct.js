@@ -390,11 +390,10 @@ define(function(require, exports) {
 			.on('click', '.T-delete', ResLineProduct.deleteLineProductDaysArrange);
 
 			// 绑定安排的拖动事件				
-			$tab.find('.T-timeline-container').sortable({
+			$tab.find('.T-timeline-detail-container').sortable({
 				containment: 'parent',
-				handle: ace.vars['touch'] ? '.table-bordered thead' : false,
-				forceHelperSize:true,
-				forcePlaceholderSize:true,
+				axis: "y",
+				handle: '.table-bordered thead',
 				tolerance:'pointer',
 				update: function(event, ui) {
 					ResLineProduct.updateRouteIndex($tab);
