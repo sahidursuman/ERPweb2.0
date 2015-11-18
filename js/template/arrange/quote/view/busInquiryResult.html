@@ -26,7 +26,15 @@
 							<td>{{offer.busCompanyName}}</td>
 							<td class="T-price">{{offer.replyPrice}}</td>
 							<td>{{offer.remark}}</td>
-							<td>{{offer.reserveMinutes}}</td>
+							<td>{{if offer.reserveMinutes == -1}}
+									一直保留
+								{{else}}
+									{{if (offer.reserveMinutes/60) > 0}}
+										{{offer.reserveMinutes/60}}小时
+									{{/if}}
+									{{offer.reserveMinutes%60}}分钟
+								{{/if}}
+							</td>
 							<td>{{offer.expiryTime}}</td>
 							<td class="T-status">{{offer.status}}</td>
 							<td data-id="{{offer.id}}">

@@ -28,7 +28,23 @@
 					{{each rs.hotelList as offer index}}
 						{{if index == 0}}
 							<td rowspan="{{offer.roomTypeList.length}}">{{offer.hotelName}}</td>
-							<td rowspan="{{offer.roomTypeList.length}}">{{offer.hotelLevel}}</td>
+							<td rowspan="{{offer.roomTypeList.length}}">
+								{{if offer.hotelLevel == 1 }}
+							    	三星以下
+							   	{{else if offer.hotelLevel == 2 }}
+							   		三星
+							   	{{else if offer.hotelLevel == 3 }}
+							   		准四星
+							   	{{else if offer.hotelLevel == 4 }}
+							   		四星
+							   	{{else if offer.hotelLevel == 5 }}
+							   		准五星
+							   	{{else if offer.hotelLevel == 6 }}
+							   		五星
+							   	{{else if offer.hotelLevel == 7 }}
+							   		五星以上
+							   	{{/if}}
+							</td>
 							{{if offer.roomTypeList.length > 0}}
 								{{each offer.roomTypeList as room index}}
 									{{if index == 0}}
@@ -41,7 +57,16 @@
 								<td class="T-hotelPrice-{{offer.id}}"></td>
 							{{/if}}
 							<td rowspan="{{offer.roomTypeList.length}}">{{offer.remark}}</td>
-							<td rowspan="{{offer.roomTypeList.length}}">{{offer.reserveMinutes}}</td>
+							<td rowspan="{{offer.roomTypeList.length}}">
+								{{if offer.reserveMinutes == -1}}
+									一直保留
+								{{else}}
+									{{if (offer.reserveMinutes/60) > 0}}
+										{{offer.reserveMinutes/60}}小时
+									{{/if}}
+									{{offer.reserveMinutes%60}}分钟
+								{{/if}}
+							</td>
 							<td rowspan="{{offer.roomTypeList.length}}">{{offer.expiryTime}}</td>
 							<td rowspan="{{offer.roomTypeList.length}}">{{offer.status}}</td>
 							<td rowspan="{{offer.roomTypeList.length}}" data-id="{{offer.id}}">
@@ -74,7 +99,23 @@
 					{{if index > 0}}
 						<tr>
 							<td rowspan="{{offer.roomTypeList.length}}">{{offer.hotelName}}</td>
-							<td rowspan="{{offer.roomTypeList.length}}">{{offer.hotelLevel}}</td>
+							<td rowspan="{{offer.roomTypeList.length}}">
+								{{if offer.hotelLevel == 1 }}
+							    	三星以下
+							   	{{else if offer.hotelLevel == 2 }}
+							   		三星
+							   	{{else if offer.hotelLevel == 3 }}
+							   		准四星
+							   	{{else if offer.hotelLevel == 4 }}
+							   		四星
+							   	{{else if offer.hotelLevel == 5 }}
+							   		准五星
+							   	{{else if offer.hotelLevel == 6 }}
+							   		五星
+							   	{{else if offer.hotelLevel == 7 }}
+							   		五星以上
+							   	{{/if}}
+							</td>
 							{{if offer.roomTypeList.length > 0}}
 								{{each offer.roomTypeList as room index}}
 									{{if index == 0}}
