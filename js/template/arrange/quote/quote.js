@@ -287,15 +287,16 @@ define(function(require, exports) {
 								if(result){
 									showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
 										var $obj = $container.find(".T-arrangeBusCompanyList"),
-											bus = data.sumListInquiryBusAdd[0];
-										$obj.find("input[name=needSeatCount]").val(bus.seatCount);
-										$obj.find("input[name=brand]").val(bus.brand);
-										$obj.find("input[name=companyName]").val(bus.companyName);
-										$obj.find("input[name=busCompanyId]").val(bus.id);
-										$obj.find("input[name=manager]").val(bus.managerName);
-										$obj.find("input[name=mobileNumber]").val(bus.mobileNumber);
-										$obj.find("input[name=seatcountPrice]").val(bus.seatPrice);
-										$obj.find("input[name=remark]").val(bus.remark);
+											offer = data.sumListInquiryBusAdd[0];
+										$obj.find("input[name=needSeatCount]").val(offer.seatCount);
+										$obj.find("input[name=brand]").val(offer.brand);
+										$obj.find("input[name=offerId]").val(offer.id);
+										$obj.find("input[name=companyName]").val(offer.companyName);
+										$obj.find("input[name=busCompanyId]").val(offer.busCompanyId);
+										$obj.find("input[name=manager]").val(offer.managerName);
+										$obj.find("input[name=mobileNumber]").val(offer.mobileNumber);
+										$obj.find("input[name=seatcountPrice]").val(offer.seatPrice);
+										$obj.find("input[name=remark]").val(offer.remark);
 
 										$container.find('.quoteContent').trigger('click');
 									});
@@ -674,7 +675,6 @@ define(function(require, exports) {
 				    			$busLayerContent.find('.T-saveBusInquiry').on('click', function() {
 				    				var brand = quote.getValue($busLayerContent,"busBrand"),
 				    					lineProductId = lineProductInfo.id,
-				    					quoteId = "",
 				    					seatCount = quote.getValue($busLayerContent,"seatCount"),
 				    					startTime = lineProductInfo.startTime,
 				    					expiryTime = quote.getValue($busLayerContent,"expiryTime")
@@ -906,7 +906,7 @@ define(function(require, exports) {
 									hotelJson: [],
 									lineProductId: lineProductInfo.id+'',
 									params: [],
-									quoteId: '',
+									quoteId: quoteId,
 									startTime: startTime,
 									partnerAgencyId: lineProductInfo.partnerAgencyId,
 									partnerAgencyContactId: lineProductInfo.partnerAgencyContactId
@@ -2397,7 +2397,7 @@ define(function(require, exports) {
 						var restaurantJson = {
 							arrangeId: $item.find("[name=arrangeId]").val(),
 							restaurantId : restaurantId,
-							standardId : standardId,
+							standardId : $item.find("input[name=standardId]").val(),
 							price : $item.find("[name=price]").val(),
 							remark : $item.find("[name=remark]").val(),
 							orderIndex : $item.attr("data-entity-index")
@@ -2420,6 +2420,7 @@ define(function(require, exports) {
 						}
 						var hotelJson = {
 							arrangeId: $item.find("[name=arrangeId]").val(),
+							offerId: $item.find("[name=offerId]").val(),
 							hotelId : hotelId,
 							hotelRoomId : hotelRoomId,
 							count: $item.find("[name=count]").val(),
@@ -2657,4 +2658,5 @@ define(function(require, exports) {
 
 	exports.init = quote.initModule;
 	exports.addQuote = quote.addQuote;
+	exports.quote.updateQuote = quote.quote.updateQuote;
 })

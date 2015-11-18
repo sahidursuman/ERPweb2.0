@@ -176,7 +176,7 @@
 						<div class="form-group">
 							<label class="col-sm-2 control-label no-padding-right">备注:</label>
 							<div class="col-sm-7">
-								<input type="text" name="" class="col-sm-12" value="{{quoteDetailJson.remark}}">
+								<input type="text" name="quoteRemark" class="col-sm-12" value="{{quoteDetailJson.remark}}">
 							</div>
 						</div>
 					</div>
@@ -303,11 +303,12 @@
 																<input name="companyName" class="chooseBusCompany col-xs-12 bind-change" readonly="readonly" type="text" value="{{busCompanyArrange.busCompany.companyName}}" />
 																<input type="hidden" name="busCompanyId" value="{{busCompanyArrange.busCompany.id}}">
 																<input type="hidden" name="arrangeId" value="{{busCompanyArrange.id}}">
+																<input type="hidden" name="offerId" value="{{busCompanyArrange.offerId}}">
 															</td>
 															<td><input class="col-xs-12" name="manager" type="text" readonly="readonly" value="{{busCompanyArrange.busCompany.managerName}}" /></td>   
 															<td><input class="col-xs-12" name="mobileNumber" type="text" readonly="readonly" value="{{busCompanyArrange.busCompany.mobileNumber}}" /></td>
-															<td><input class="col-xs-12 T-changeQuote" name="seatcountPrice" type="text" readonly="readonly" maxlength="9" value="{{busCompanyArrange.price}}" /></td>
-															<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" readonly="readonly" value="{{busCompanyArrange.remark}}" /></td>
+															<td><input class="col-xs-12 T-changeQuote" name="seatcountPrice" type="text" maxlength="9" value="{{busCompanyArrange.price}}" /></td>
+															<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" value="{{busCompanyArrange.remark}}" /></td>
 														</tr>{{else}}
 														<tr>
 															<td><input class="col-xs-12 bind-change" name="needSeatCount" readonly="readonly" type="text" maxlength="2" value="" /></td>  
@@ -315,8 +316,8 @@
 															<td><input name="companyName" class="chooseBusCompany col-xs-12 bind-change" readonly="readonly" type="text" value="" /><input type="hidden" name="busCompanyId" value=""></td>
 															<td><input class="col-xs-12" name="manager" type="text" readonly="readonly" value="" /></td>   
 															<td><input class="col-xs-12" name="mobileNumber" type="text" readonly="readonly" value="" /></td>
-															<td><input class="col-xs-12 T-changeQuote" name="seatcountPrice" type="text" readonly="readonly" maxlength="9" value="" /></td>
-															<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" readonly="readonly" value="" /></td>
+															<td><input class="col-xs-12 T-changeQuote" name="seatcountPrice" type="text" maxlength="9" value="" /></td>
+															<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" value="" /></td>
 														</tr>
 														{{/if}}
 													</tbody>
@@ -355,7 +356,7 @@
                                 <div class="tab-content T-daylist" style="position: relative; top: -2px; border: 1px solid #ececec">
                                     {{each daysList as lineProductDaysList i}}
                                     <div id="dayListUpdate-{{i}}" class="tab-pane fade {{if i == 0}}active in{{/if}}">
-                                        <div class="col-xs-12 col-sm-12 widget-container-col T-dailyArrangeList">
+                                        <div class="col-xs-12 col-sm-12 widget-container-col T-dailyArrangeList" data-eneity-whichDay="{{i+1}}">
                                             <div class=" ui-sortable-handle">
                                                 <h5 class="">
 														<label class="title-size">行程标题：{{lineProductDaysList.lineProductDay.title}}</label>
@@ -433,7 +434,7 @@
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <input type="text" name="price" class="T-choose-restaurantStandardsName col-xs-12 bind-change T-changeQuote" value="{{restaurantList.price}}" />
-                                                                                                            <input type="hidden" name="typeId" value="{{restaurantList.restaurantStandard.id}}" />
+                                                                                                            <input type="hidden" name="standardId" value="{{restaurantList.restaurantStandard.id}}" />
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <input class="col-xs-12" type="text" readonly="readonly" name="menuList" value="{{restaurantList.restaurantStandard.menuList}}" />
@@ -495,6 +496,7 @@
                                                                                                             <input type="text" class="T-choose-hotelName col-xs-12 bind-change" name="hotelNmae" value="{{hotelList.hotel.name}}" />
                                                                                                             <input type="hidden" name="hotelId" value="{{hotelList.hotel.id}}" />
 																											<input type="hidden" name="arrangeId" value="{{hotelList.id}}">
+																											<input type="hidden" name="offerId" value="{{hotelList.offerId}}">
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <input type="text" class="T-choose-hotelRoom col-xs-12 bind-change" name="hotelRoom" value="{{hotelList.hotelRoom.type}}" />
@@ -685,7 +687,7 @@
                                                                                                             <input type="text" class="col-xs-12" readonly="readonly" name="managerName" value="{{selfPayList.selfPay.managerName}}" />
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input type="text" class="col-xs-12" name="remark" value="" />
+                                                                                                            <input type="text" class="col-xs-12" name="remark" value="{{selfPayList.remark}}" />
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <a data-entity-id="{{selfPayList.id}}" data-entity-type="7" class="cursor btn-restaurant-delete T-delete">

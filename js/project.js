@@ -1850,6 +1850,12 @@ KingServices.addQuote = function(id){
 		module.addQuote(id);	 
 			});	 
 }
+//修改报价  （查看询价结果）
+KingServices.updateQuote = function(id){
+	seajs.use("" + ASSETS_ROOT + modalScripts.arrange_quote,function(module){
+		module.updateQuote(id);
+	});
+}
 
 //添加资源函数
 KingServices.addResourceFunction = function(e){
