@@ -198,7 +198,7 @@ define(function(require, exports) {
 			}else if($that.hasClass('T-edit')){
 				BookingArrange.update(id);
 			}else if($that.hasClass('T-cancel')){
-				BookingArrange.deleteBooking(id);
+				BookingArrange.deleteBooking(id, $that);
 			}
 		});
 	};
@@ -1086,8 +1086,8 @@ define(function(require, exports) {
 	/**
 	 * 取消项目代订
 	 */
-	BookingArrange.deleteBooking = function(id){
-		var $parent = $(this).closest('tr');
+	BookingArrange.deleteBooking = function(id, $that){
+		var $parent = $that.closest('tr');
 		var dialogObj = $( "#confirm-dialog-message" );
 		dialogObj.removeClass('hide').dialog({
 			modal: true,
@@ -1117,8 +1117,11 @@ define(function(require, exports) {
 						}, function(data){
 							showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
 								$parent.fadeOut(function(){
+									var len = $parent.closest('tbody.T-list').find('tr').length;
 									$parent.remove();
-									BookingArrange.listBooking(BookingArrange.searchData.pageNo);
+									if(len <= 1 && BookingArrange.searchData.pageNo - 1 >=0){
+										BookingArrange.listBooking(BookingArrange.searchData.pageNo - 1);
+									}
 								})
 							});
 						});
