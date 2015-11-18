@@ -177,7 +177,8 @@ define(function(require, exports) {
 	 * @return {[type]}       [description]
 	 */
 	innerTransfer.innerList = function(divId,type,page){
-		innerTransfer.$searchParam.pageNo=page;
+		innerTransfer.$searchParam.pageNo = page;
+		innerTransfer.$searchParam.type = type;
 		$.ajax({
 			url:KingServices.build_url("innerTransfer","findPager"),
 			type: 'POST',

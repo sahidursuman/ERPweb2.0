@@ -130,6 +130,9 @@ define(function(require, exports) {
 			} else if ($that.hasClass('T-edit'))  {
 				// 编辑
 				ResLineProduct.updateLineProduct(id,false);
+			} else if ($that.hasClass('T-quote'))  {
+				// 报价
+				ResLineProduct.quoteLineProduct(id);
 			} else if ($that.hasClass('T-copy'))  {
 				// 复制
 				ResLineProduct.updateLineProduct(id,true);
@@ -2054,6 +2057,9 @@ define(function(require, exports) {
 		});
 	};
 
+	ResLineProduct.quoteLineProduct = function(id) {
+		KingServices.addQuote(id);
+	};
 	exports.init = ResLineProduct.initModule;  
 	exports.addLineProduct = ResLineProduct.addLineProduct;  
 });
