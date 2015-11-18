@@ -176,7 +176,7 @@
 						<div class="form-group">
 							<label class="col-sm-2 control-label no-padding-right">备注:</label>
 							<div class="col-sm-7">
-								<input type="text" name="" class="col-sm-12" value="{{quoteDetailJson.remark}}">
+								<input type="text" name="quoteRemark" class="col-sm-12" value="{{quoteDetailJson.remark}}">
 							</div>
 						</div>
 					</div>
@@ -685,7 +685,7 @@
                                                                                                             <input type="text" class="col-xs-12" readonly="readonly" name="managerName" value="{{selfPayList.selfPay.managerName}}" />
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input type="text" class="col-xs-12" name="remark" value="" />
+                                                                                                            <input type="text" class="col-xs-12" name="remark" value="{{selfPay.remark}}" />
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <a data-entity-id="{{selfPayList.id}}" data-entity-type="7" class="cursor btn-restaurant-delete T-delete">
