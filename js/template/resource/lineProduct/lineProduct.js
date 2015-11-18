@@ -323,8 +323,10 @@ define(function(require, exports) {
 					updateDays.html(arr.join(""));
 				}
 			}
-			var daysDetailList = $tab.find(".T-timeline-item");
-			ResLineProduct.updateLineProductIndex = parseInt(daysDetailList.eq(daysDetailList.length-1).attr("data-entity-index")) + 1;
+			var daysDetailList = $tab.find(".T-timeline-item"),
+			daysDetailListIndex = parseInt(daysDetailList.eq(daysDetailList.length-1).attr("data-entity-index")) + 1;
+			ResLineProduct.updateLineProductIndex = isNaN(daysDetailListIndex) ? 0 : daysDetailListIndex;
+
 		}
 	}
 
