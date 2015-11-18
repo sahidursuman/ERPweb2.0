@@ -7,6 +7,7 @@ define(function(require,exports){
 		updateTemplate = require('./view/update'),
 		viewTemplate = require('./view/view'),
 		searchTemplate = require('./view/searchList'),
+		lineproductSearchList = require("./view/lineproductSearchList"),
 		addPartnerManagerTemplate = require('./view/addPartnerManager'),
 		addVisitorMoreTemplate = require('./view/addVisitorMore'),
 		tabId = "tab-"+menuKey+"-content",
@@ -331,7 +332,8 @@ define(function(require,exports){
 		touristGroup.formatTime($obj);
 		//搜索线路
 		$obj.find(".T-travelLine-search").on('click',function(){
-			touristGroup.searchLinproduct(true,0,"",typeFlag);
+			// touristGroup.searchLinproduct(true,0,"",typeFlag);
+			touristGroup.initLineProductSearch(typeFlag == 2);
 		});
 		//客户来源
 		var $partnerAgencyObj = $obj.find('input[name=fromPartnerAgency]');
@@ -447,6 +449,115 @@ define(function(require,exports){
 		//格式化时间
 		touristGroup.formatTime($obj);
 	};
+
+	/**
+	 * 初始化选择线路的对话框
+	 * @param  {Boolean} isUpdate true：修改界面，false：添加界面
+	 * @return {[type]}           [description]
+	 */
+	touristGroup.initLineProductSearch = function(isUpdate) {
+		var type = isUpdate?'update': 'add',
+			html =searchTemplate({update: type}),
+			searchTravelLinelayer =layer.open({
+				type: 1,
+				title:"选择路线产品",
+				skin: 'layui-layer-rim', //加上边框
+				area: ['85%', '80%'], //宽高
+				zIndex:1029,
+				content: html
+			});
+
+		var $dialog = $('.T-lineproduct-search-' + type);
+		touristGroup.getLineProductList($dialog, 0);
+		touristGroup.getLineProductList($dialog, 1);
+		$dialog.find('.T-lineProduct-search').on('click', function(event) {
+			event.preventDefault();
+			var $that = $(this),
+				type = $that.prevAll('.tabbable').find('ul').find('.active').index();
+			touristGroup.getLineProductList($dialog, type, $dialog.find('input[name="lineProduct_name"]').val());
+		});	
+		$dialog.find('.T-searchtravelLine').on('click', function(event) {
+			event.preventDefault();
+			var $tr = $dialog.find('input[name="choice-TravelLine"]:checked').closest('tr'), 
+				$tab = $('#tab-resource_touristGroup-add-content');
+
+			if (isUpdate) {
+				$tab = $('#tab-resource_touristGroup-update-content');
+			}
+
+			console.info($tr.length)
+			$tab.find("input[name=lineProductIdName]").val($tr.children('[name="travelLine-select"]').text()).trigger('change');
+			$tab.find("input[name=lineProductId]").val($tr.data('id'));
+			layer.close(searchTravelLinelayer);
+		});	
+	};
+
+	/**
+	 * 获取线路产品数据，并填入选择线路产品的对话框
+	 * @param  {object} $dialog dialog的Jquery对象
+	 * @param  {int} type    0：新增 1：更新
+	 * @param  {int} page    页码
+	 * @param  {string} name    搜索关键字
+	 * @return {[type]}         [description]
+	 */
+	touristGroup.getLineProductList = function($dialog, type, page, name) {
+				page = page || 0;
+				var url = KingServices.build_url('lineProduct', 'findAll'),
+					$tbody = $dialog.find('.T-normal-list');
+
+				if (type) {
+					url = KingServices.build_url('lineProduct', 'listQuoteLinePorduct');
+					$tbody = $dialog.find('.T-quote-list');
+				}
+				$.ajax({
+					url: url,
+					type: 'post',
+					data: {
+							pageNo: page,
+							name: name
+						},
+				})
+				.done(function(data) {
+					if (showDialog(data)) {
+						data.lineProductList = JSON.parse(data.lineProductList);
+
+						if (type) {
+							var list = [];
+							for (var i = 0, len = data.lineProductList.length, tmp, lineProduct; i < len; i ++) {
+								tmp = data.lineProductList[i];
+								lineProduct = tmp.lineProduct;
+								list.push({
+									id: tmp.id,
+									name: lineProduct.name,
+									days: lineProduct.days,
+									type: lineProduct.type,
+									customerType: lineProduct.customerType,
+									status: lineProduct.status,
+									travelAgencyName: tmp.partnerAgency.travelAgencyName,
+									createTime: tmp.createTime
+								})
+							}
+
+							data.lineProductList = list;
+							data.quote = type;
+							console.info(data)
+						}
+						$tbody.html(lineproductSearchList(data));
+
+						// 绑定翻页组件
+						laypage({
+						    cont: $tbody.closest('.tab-pane').find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+						    pages: data.totalPage, //总页数
+						    curr: (data.pageNo + 1),
+						    jump: function(obj, first) {
+						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+									touristGroup.getLineProductList($dialog, type, obj.curr -1,$dialog.find('input[name=lineProduct_name]').val());
+						    	}
+						    }
+						});	
+					}
+				});			
+			},
 	//获取线路产品
 	touristGroup.searchLinproduct = function(typeFlag,pageNo,name,tabFlag){
 		$.ajax({
