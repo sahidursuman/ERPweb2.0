@@ -255,6 +255,8 @@ define(function(require, exports) {
     	//小组总人数计算
     	tripPlan.tripPlanAllMemberCount($tab);
 
+    	tripPlan.addResource($tab);
+
 		//取消计划   btn-cancelTripPlan
 		$tab.find(".T-cancelPlan").click(function(){
 			closeTab(menuKey+"-"+operation);
@@ -1269,6 +1271,24 @@ define(function(require, exports) {
 				$Obj.find("input[name=executeTime]").prop("disabled",true);
 			}
 		}
+	};
+
+	tripPlan.addResource = function($tab){
+		$tab.find('.T-addGuideResource').on('click' , {function : KingServices.addGuide ,type : ".widget-main" ,  name : "AddTPchooseGuide" , id : "AddTPchooseGuideId" , mobileNumber : "GmobileNumber"} , KingServices.addResourceFunction);
+		$tab.find(".T-addBusCompanyResource").off('click').on("click",{function : KingServices.addBusCompany}, KingServices.addResourceFunction);
+		$tab.find(".T-addBusResource,.T-addDriverResource").off('click').on("click",{
+			function : KingServices.addBusDriver,
+			busCompanyName : "busCompany",
+			busCompanyId : "busCompanyId",
+			busLicenseNumberId : "busLicenseNumberId",
+			busLicenseNumber : "LicenseNumber",
+			busbrand : "needBusBrand",
+			seatCount : "seatCount",
+			driverName : "driverName",
+			driverId : "driverId",
+			driverMobileNumber : "DmobileNumber",
+			type : ".widget-main"
+		}, KingServices.addBusDriverFunction);
 	};
 
 	exports.init = tripPlan.initModule;
