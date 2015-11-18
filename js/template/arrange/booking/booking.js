@@ -314,7 +314,7 @@ define(function(require, exports) {
 		});
 
 		//新增list事件
-		$tab.on('click', '.T-action', function(event){
+		$tab.off('click', '.T-action').on('click', '.T-action', function(event){
 			var $that = $(this);
 			if($that.hasClass('T-hotel-add')){
 				BookingArrange.addHotelList($that);
