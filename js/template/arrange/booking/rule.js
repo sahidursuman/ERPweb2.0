@@ -320,15 +320,6 @@ define(function(require, exports) {
 							errMsg: '请输入数字'
 						}
 					]
-				},{//车辆品牌
-					$ele: $checkBookingBusObj.find('input[name="needBusBrand"]'),
-					rules: [
-						{
-							type: 'null',
-							errMsg: '车辆品牌不能为空'
-						}
-
-					]
 				},{//所属车队
 					$ele: $checkBookingBusObj.find('input[name="busCompany"]'),
 					$valObj: $checkBookingBusObj.find('input[name="busCompanyId"]'),
