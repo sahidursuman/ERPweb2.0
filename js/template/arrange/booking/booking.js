@@ -299,7 +299,7 @@ define(function(require, exports) {
 		//车队旅游贷订
 		var validatorBus=rule.checkBookingBus($tab.find(".T-bookingBusList")); 
 
-		$tab.off('change').off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE)
+		$tab.off('change').off(SWITCH_TAB_SAVE).off(CLOSE_TAB_SAVE)
 		.on('change', function(event){
 			event.preventDefault();
 			$tab.data('isEdited', true);
@@ -307,10 +307,6 @@ define(function(require, exports) {
 		.on(SWITCH_TAB_SAVE, function(event, tab_id, title, html){
 			event.preventDefault();
 			BookingArrange.save($tab, validator, [tab_id, title, html]);
-		})
-		.on(SWITCH_TAB_BIND_EVENT, function(event){
-			event.preventDefault();
-			BookingArrange.CU_event($tab);
 		})
 		.on(CLOSE_TAB_SAVE, function(event){
 			event.preventDefault();
@@ -1070,11 +1066,6 @@ define(function(require, exports) {
 	 */
 	BookingArrange.update = function(id){
 		if(!!id){
-			if (BookingArrange.update_id === id)  {
-				$('.tab-' + menuKey + '-update').children('a').trigger('click');
-				return;
-			}
-
 			BookingArrange.ajax({
 				'url' : 'bookingOrder', 
 				'method' : 'findBookingOrderById', 
