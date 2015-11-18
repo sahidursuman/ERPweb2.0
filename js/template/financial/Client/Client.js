@@ -247,7 +247,7 @@ define(function(require, exports) {
     };
 
     Client.ClientClear = function(id,year,startMonth,endMonth){
-    var $tab =   $("#tab-"+menuKey + "-clearing"+"-content");
+        var $tab =   $("#tab-"+menuKey + "-clearing"+"-content");
     	if ($tab.length && $tab.find('.T-saveClear').data('id') == id) {// 如果打开的是相同产品，则不替换
 			$('.tab-financial_Client-clearing').children('a').trigger('click');
 			return;
@@ -397,6 +397,7 @@ define(function(require, exports) {
                              Client.listClient(Client.searchData.pageNo,Client.searchData.fromPartnerAgencyId,Client.searchData.fromPartnerAgencyName,Client.searchData.travelId,Client.searchData.travelName,Client.searchData.year,Client.searchData.month);
                         } else if(argumentsLen == 2){
                             $checktab.data('isEdited',false);
+                            $checktab.find('.T-saveCheck').data('id',"");
                              Client.ClientCheck(page,$checktab.find(".T-data-id").data("id"),"","");
                         } else {
                             $checktab.data('isEdited',false);
@@ -449,6 +450,7 @@ define(function(require, exports) {
                             Client.listClient(Client.searchData.pageNo,Client.searchData.fromPartnerAgencyId,Client.searchData.fromPartnerAgencyName,Client.searchData.travelId,Client.searchData.travelName,Client.searchData.year,Client.searchData.month);
                         }else if(argumentsLen === 2){
                             $cleartab.data('isEdited',false);
+                            $cleartab.find('.T-saveClear').data('id',"");
                             Client.ClientClear($cleartab.find(".T-data-id").data("id"),"","","");
                         } else {
                             $cleartab.data('isEdited',false);
