@@ -28,6 +28,8 @@
 							<td>{{offer.remark}}</td>
 							<td>{{if offer.reserveMinutes == -1}}
 									一直保留
+								{{else if offer.reserveMinutes == 0}}
+									-
 								{{else}}
 									{{if (offer.reserveMinutes/60) > 0}}
 										{{offer.reserveMinutes/60}}小时

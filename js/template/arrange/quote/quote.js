@@ -2659,5 +2659,5 @@ define(function(require, exports) {
 
 	exports.init = quote.initModule;
 	exports.addQuote = quote.addQuote;
-	exports.quote.updateQuote = quote.quote.updateQuote;
+	exports.updateQuote = quote.updateQuote;
 })
