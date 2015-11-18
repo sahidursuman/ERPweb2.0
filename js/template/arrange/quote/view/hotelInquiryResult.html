@@ -29,12 +29,17 @@
 						{{if index == 0}}
 							<td rowspan="{{offer.roomTypeList.length}}">{{offer.hotelName}}</td>
 							<td rowspan="{{offer.roomTypeList.length}}">{{offer.hotelLevel}}</td>
-							{{each offer.roomTypeList as room index}}
-								{{if index == 0}}
-									<td class="T-hotelType-{{offer.id}}">{{room.type}}</td>
-									<td class="T-hotelPrice-{{offer.id}}">{{room.replyPrice}}</td>
-								{{/if}}
-							{{/each}}
+							{{if offer.roomTypeList.length > 0}}
+								{{each offer.roomTypeList as room index}}
+									{{if index == 0}}
+										<td class="T-hotelType-{{offer.id}}">{{room.type}}</td>
+										<td class="T-hotelPrice-{{offer.id}}">{{room.replyPrice}}</td>
+									{{/if}}
+								{{/each}}
+							{{else}}
+								<td class="T-hotelType-{{offer.id}}"></td>
+								<td class="T-hotelPrice-{{offer.id}}"></td>
+							{{/if}}
 							<td rowspan="{{offer.roomTypeList.length}}">{{offer.remark}}</td>
 							<td rowspan="{{offer.roomTypeList.length}}">{{offer.reserveMinutes}}</td>
 							<td rowspan="{{offer.roomTypeList.length}}">{{offer.expiryTime}}</td>
@@ -52,14 +57,17 @@
 				</tr>
 				{{each rs.hotelList as offer index}}
 					{{if index == 0}}
-						{{each offer.roomTypeList as room index}}
-							{{if index > 0}}
-								<tr>
+						{{if offer.roomTypeList.length > 0}}
+							{{each offer.roomTypeList as room index}}
+								{{if index > 0}}
 									<td class="T-hotelType-{{offer.id}}">{{room.type}}</td>
 									<td class="T-hotelPrice-{{offer.id}}">{{room.replyPrice}}</td>
-								</tr>
-							{{/if}}
-						{{/each}}
+								{{/if}}
+							{{/each}}
+						{{else}}
+							<td class="T-hotelType-{{offer.id}}"></td>
+							<td class="T-hotelPrice-{{offer.id}}"></td>
+						{{/if}}
 					{{/if}}
 				{{/each}}
 				{{each rs.hotelList as offer index}}
@@ -67,12 +75,17 @@
 						<tr>
 							<td rowspan="{{offer.roomTypeList.length}}">{{offer.hotelName}}</td>
 							<td rowspan="{{offer.roomTypeList.length}}">{{offer.hotelLevel}}</td>
-							{{each offer.roomTypeList as room index}}
-								{{if index == 0}}
-									<td class="T-hotelType-{{offer.id}}">{{room.type}}</td>
-									<td class="T-hotelPrice-{{offer.id}}">{{room.replyPrice}}</td>
-								{{/if}}
-							{{/each}}
+							{{if offer.roomTypeList.length > 0}}
+								{{each offer.roomTypeList as room index}}
+									{{if index == 0}}
+										<td class="T-hotelType-{{offer.id}}">{{room.type}}</td>
+										<td class="T-hotelPrice-{{offer.id}}">{{room.replyPrice}}</td>
+									{{/if}}
+								{{/each}}
+							{{else}}
+								<td class="T-hotelType-{{offer.id}}"></td>
+								<td class="T-hotelPrice-{{offer.id}}"></td>
+							{{/if}}
 							<td rowspan="{{offer.roomTypeList.length}}">{{offer.remark}}</td>
 							<td rowspan="{{offer.roomTypeList.length}}">{{offer.reserveMinutes}}</td>
 							<td rowspan="{{offer.roomTypeList.length}}">{{offer.expiryTime}}</td>
@@ -86,14 +99,17 @@
 								<a class="T-hotel-delete">删除</a>
 							</td>
 						</tr>
-						{{each offer.roomTypeList as room index}}
-							{{if index > 0}}
-								<tr>
+						{{if offer.roomTypeList.length > 0}}
+							{{each offer.roomTypeList as room index}}
+								{{if index > 0}}
 									<td class="T-hotelType-{{offer.id}}">{{room.type}}</td>
 									<td class="T-hotelPrice-{{offer.id}}">{{room.replyPrice}}</td>
-								</tr>
-							{{/if}}
-						{{/each}}
+								{{/if}}
+							{{/each}}
+						{{else}}
+							<td class="T-hotelType-{{offer.id}}"></td>
+							<td class="T-hotelPrice-{{offer.id}}"></td>
+						{{/if}}
 					{{/if}}
 				{{/each}}
 			{{/each}}
