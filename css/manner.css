@@ -41,7 +41,7 @@ input{
 
 }
 .padding-right20{
-    padding-right:5px
+    padding-right:5px;
 }
 
 /**
@@ -112,17 +112,9 @@ label{
     margin-top: 20px;
     padding-top: 0px !important;
 }
-table tr td{
-    border: 1px solid #ececec !important;
-}
 .test-iocn{
     position: relative;
     left: -16px;
-}
-
-table tr th{
-
-    border: 1px solid white !important;
 }
 .table-border {
     border: 1px solid #ececec !important;
