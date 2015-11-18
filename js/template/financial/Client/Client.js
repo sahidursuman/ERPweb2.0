@@ -246,7 +246,8 @@ define(function(require, exports) {
         });
     };
 
-    Client.ClientClear = function(id,year,startMonth,endMonth){  
+    Client.ClientClear = function(id,year,startMonth,endMonth){
+    var $tab =   $("#tab-"+menuKey + "-clearing"+"-content");
     	if ($tab.length && $tab.find('.T-saveClear').data('id') == id) {// 如果打开的是相同产品，则不替换
 			$('.tab-financial_Client-clearing').children('a').trigger('click');
 			return;
