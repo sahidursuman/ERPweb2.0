@@ -2316,10 +2316,6 @@ define(function(require, exports) {
 					var restaurantId = $item.find("input[name=restaurantId]").val();
 					if(restaurantId){
 						var standardId = $item.find("[name=typeId]").val();
-						if(!standardId){
-							showMessageDialog($( "#confirm-dialog-message" ), "请选择餐标名称！");
-							return false;
-						}
 						var restaurantJson = {
 							arrangeId: $item.find("[name=arrangeId]").val(),
 							restaurantId : restaurantId,
