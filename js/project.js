@@ -1553,15 +1553,14 @@ Tools.descToolTip = function($elements,type,placement) {
 					}, 100);
 				});
 			}else if (type == 2) {
-				var options = {
+				var options = {};	 
 				// 绑定提示
 				$that.popover({
 					trigger: 'manual',
 					container: '#desc-tooltip-containter',
 					content: html,
-					html : true
-				})
-						};	 
+					html: true
+				});
 				if (!!placement) {	 
 					options.placement = placement;	 
 				} 
