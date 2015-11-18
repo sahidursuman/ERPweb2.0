@@ -9,6 +9,7 @@ define(function(require, exports) {
 		rule = require("./rule"),
 		mainQuoteTemplate = require("./view/mainQuote"),
 		addQuoteTemplate = require("./view/addQuote"),
+		viewQuoteTemplate = require("./view/viewQuote"),
 		updateQuoteTemplate = require("./view/updateQuote"),
 		inquiryResultTemplate = require("./view/inquiryResult"),
 		busInquiryTemplate = require("./view/busInquiry"),
@@ -20,6 +21,7 @@ define(function(require, exports) {
 		busInquiryTemplate = require("./view/busInquiry"),
 		listMainTemplate = require("./view/listMain"),
 		listTemplate = require("./view/list");
+		// var tabId = "tab-"+menuKey+"-content";
 	/**
 	 * 自定义报价对象
 	 * @type {Object}
@@ -59,14 +61,15 @@ define(function(require, exports) {
 						var $this = $(this), id = $this.closest('tr').data('entity-id');
 						if ($this.hasClass('T-view')){
 							// 查看报价信息
-							//....
+							quote.viewQuote(id);
 						} else if ($this.hasClass('T-update')){
 							// 编辑报价信息
 							quote.updateQuote(id);
 						} else if ($this.hasClass('T-delete')){
-							var $this = $(this);
 							// 删除报价
 							//....
+						} else if ($this.hasClass('T-share')){
+							quote.shareQuote(id);
 						}
 					})
 
@@ -84,6 +87,93 @@ define(function(require, exports) {
 				}
 			}
 		})
+	};
+
+
+	//查看报价
+	quote.viewQuote = function(id) {
+		$.ajax({
+			url: KingServices.build_url("quote","viewQuote"),
+			type: 'POST',
+			data: "id="+id+"",
+			success: function(data){
+				var result = showDialog(data);
+				if (result) {	
+
+					console.info(data);
+					var busCompanyArrange = JSON.parse(data.busCompanyArrange);
+                    data.busCompanyArrange=busCompanyArrange;
+
+					var guideArrange = JSON.parse(data.guideArrange);
+					data.guideArrange=guideArrange;
+
+					var insuranceArrange = JSON.parse(data.insuranceArrange);
+					data.insuranceArrange=insuranceArrange;
+
+					var daysList = JSON.parse(data.daysList);
+					data.daysList=daysList;
+
+					var quoteDetailJson = JSON.parse(data.quoteDetailJson);
+					data.quoteDetailJson=quoteDetailJson;
+
+              
+
+					// data.viewLineProduct = {
+					// 								lineProduct : lineProduct,
+					// 								busCompanyTemplate : busCompanyTemplate,
+					// 								guideTemplate : guideTemplate,
+					// 								insuranceTemplate : insuranceTemplate,
+					// 								daysList : daysList
+					// 						};
+					var html = viewQuoteTemplate(data);
+					Tools.addTab(menukey+"-view","查看报价",html);
+				}
+			}
+		})
+	}
+
+   //初始化分享报价。。
+ //   quote.listQuote = function(){
+ //   	var html = listTemplate();
+ //   	quote.$tab.find('.T-quoteList').html(html);
+ //     quote.$tab.find('.T-share').on('click', function(event) {
+ //     	event.preventDefault();
+     	
+ //     	quote.shareQuote();
+ //     });
+
+ //     quote.$tab.find('.T-view').on('click', function(event,id) {
+	// 		event.preventDefault();
+	// 		/* Act on the event */
+	// 		// var id = $(this).closest('tr').data(id);
+	// 		// var id = $
+	// 		quote.viewQuote(id);
+	// });
+
+ //   }
+
+	//分享页面
+	quote.shareQuote = function(id) {
+		$.ajax({
+			url: KingServices.build_url("quote","shareQuote"),
+			type: 'POST',
+			data: { id: id},
+			success: function(data){				
+				if (showDialog(data)) {
+					var key = data.shareKey;
+					if (!!key) {
+						var url = location.origin + '/quote.html?key=' + key;
+						window.open(url);
+						showMessageDialog($( "#confirm-dialog-message" ),"分享成功");
+					}
+				}
+			}
+		})
+		
+		// window.open("quote.html?key=" + key);
+		// window.open("quote.html")
+		// var html = shareQuoteTemplate();
+		// Tools.addTab(menukey+"-share","分享报价");
 	};
 
 	//新增报价
@@ -112,7 +202,12 @@ define(function(require, exports) {
 					$container.find('#quoteContent').html(addHtml)
 
 					$container.find('.inquiryContent').on("click",function(){
-						quote.quoteStatus($container);
+						var quoteId = $container.find('[name=quoteId]').val();
+						if(!quoteId){
+							showMessageDialog($( "#confirm-dialog-message" ),"请先询价！");
+							return false;
+						} 
+						quote.quoteStatus(quoteId,$container);
 					});	
 
 					quote.init_event($container);
@@ -122,19 +217,14 @@ define(function(require, exports) {
 	};
 
 	//询价状态
-	quote.quoteStatus = function($container){
-		var quoteId = $container.find('[name=quoteId]').val();
-		if(!quoteId){
-			showMessageDialog($( "#confirm-dialog-message" ),"请先询价！");
-			return false;
-		} 
+	quote.quoteStatus = function(quoteId,$container){
 		var inquiryHtml = inquiryResultTemplate();
 		$container.find('#inquiryContent').html(inquiryHtml);
 		
-		quote.busStatusList(quoteId);
+		quote.busStatusList(quoteId,$container);
 
 		$container.find('.busInquiryResult').on("click",function(){
-			quote.hotelStatusList(quoteId,$container);
+			quote.busStatusList(quoteId,$container);
 		});
 		$container.find('.hotelInquiryContent').on("click",function(){
 			quote.hotelStatusList(quoteId,$container);
@@ -147,7 +237,7 @@ define(function(require, exports) {
 		$.ajax({
 			url: KingServices.build_url('busInquiry','statusList'),
 			type: 'POST',
-			data: { quoteId : 180 + "" },
+			data: { quoteId : quoteId + "" },
 			success: function(data){
 				var result = showDialog(data);
 				if(result){
@@ -193,7 +283,7 @@ define(function(require, exports) {
 								var result = showDialog(data);
 								if(result){
 									showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-										quote.busStatusList(quoteId);
+										quote.busStatusList(quoteId,$container);
 									});
 								}
 							}
@@ -234,7 +324,7 @@ define(function(require, exports) {
 									showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
 										//删除现有
 										$container.find(".T-resourceHotelList").remove();
-										// quote.$tabAdd.find(".T-resourceHotelList").each(function(){
+										// $container.find(".T-resourceHotelList").each(function(){
 										// 	var id = $(this).data("entity-id");
 										// 	if(id){
 										// 		$.ajax({
@@ -270,7 +360,7 @@ define(function(require, exports) {
 								var result = showDialog(data);
 								if(result){
 									showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-										quote.hotelStatusList(quoteId);
+										quote.hotelStatusList(quoteId,$container);
 									});
 								}
 							}
