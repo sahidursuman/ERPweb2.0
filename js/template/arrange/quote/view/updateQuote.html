@@ -73,12 +73,12 @@
 						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>客户:</label>
 						<div class="col-sm-3">
 							<input type="text" name="partnerAgencyName" class="col-sm-12 T-choosePartnerAgency" value="{{quoteDetailJson.partnerAgency.travelAgencyName}}">
-							<input type="hidden" name="partnerAgencyId" value="" >
+							<input type="hidden" name="partnerAgencyId" value="{{quoteDetailJson.partnerAgency.id}}" >
 						</div>
 						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>联系人:</label>
 						<div class="col-sm-3">
 							<input type="text" name="managerName" class="col-sm-12 T-chooseManager" value="{{quoteDetailJson.partnerAgencyContact.contactRealname}}">
-							<input type="hidden" name="managerId" value="">
+							<input type="hidden" name="managerId" value="{{quoteDetailJson.partnerAgencyContact.id}}">
 						</div>
 						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>联系电话:</label>
 						<div class="col-sm-3">
@@ -214,7 +214,10 @@
 													<tbody>
 														{{if guideArrange != null}}
 														<tr data-entity-id="{{guideArrange.id}}">
-															<td><input class="col-xs-12 T-changeQuote" name="guideFee" type="text" maxlength="9" value="{{guideArrange.price}}" /></td>
+															<td>
+																<input class="col-xs-12 T-changeQuote" name="guideFee" type="text" maxlength="9" value="{{guideArrange.price}}" />
+																<input type="hidden" name="arrangeId" value="{{guideArrange.id}}">
+															</td>
 															<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" value="{{guideArrange.remark}}" /></td>
 														</tr>
 														{{else}}
@@ -249,8 +252,11 @@
 													</thead>
 													<tbody>{{if insuranceArrange != null}}
 														<tr>
-															<td><input class="T-insurance-name col-xs-12 bind-change" name="insuranceName" type="text" value="{{insuranceArrange.insurance.name}}" />
-															<input type="hidden" name="insuranceId" value="{{insuranceArrange.insurance.id}}" /></td>
+															<td>
+																<input class="T-insurance-name col-xs-12 bind-change" name="insuranceName" type="text" value="{{insuranceArrange.insurance.name}}" />
+																<input type="hidden" name="insuranceId" value="{{insuranceArrange.insurance.id}}" />
+																<input type="hidden" name="arrangeId" value="{{insuranceArrange.id}}">
+															</td>
 															<td><input class="col-xs-12" name="type" type="text" maxlength="100" value="{{insuranceArrange.type}}" /></td>
 															<td><input class="col-xs-12 T-changeQuote" name="price" type="text" maxlength="6" value="{{insuranceArrange.price}}" /></td>
 															<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" value="{{insuranceArrange.remark}}" /></td>
@@ -293,8 +299,11 @@
 														<tr data-entity-id="{{busCompanyArrange.id}}">
 															<td><input class="col-xs-12 bind-change" name="needSeatCount" readonly="readonly" type="text" maxlength="2" value="{{busCompanyArrange.bus.seatCount}}" /></td>  
 															<td><input name="brand" class="col-xs-12 bind-change" readonly="readonly" type="text" value="{{busCompanyArrange.brand}}" /></td>
-															<td><input name="companyName" class="chooseBusCompany col-xs-12 bind-change" readonly="readonly" type="text" value="{{busCompanyArrange.busCompany.companyName}}" />
-																<input type="hidden" name="busCompanyId" value="{{busCompanyArrange.busCompany.id}}"></td>
+															<td>
+																<input name="companyName" class="chooseBusCompany col-xs-12 bind-change" readonly="readonly" type="text" value="{{busCompanyArrange.busCompany.companyName}}" />
+																<input type="hidden" name="busCompanyId" value="{{busCompanyArrange.busCompany.id}}">
+																<input type="hidden" name="arrangeId" value="{{busCompanyArrange.id}}">
+															</td>
 															<td><input class="col-xs-12" name="manager" type="text" readonly="readonly" value="{{busCompanyArrange.busCompany.managerName}}" /></td>   
 															<td><input class="col-xs-12" name="mobileNumber" type="text" readonly="readonly" value="{{busCompanyArrange.busCompany.mobileNumber}}" /></td>
 															<td><input class="col-xs-12 T-changeQuote" name="seatcountPrice" type="text" readonly="readonly" maxlength="9" value="{{busCompanyArrange.price}}" /></td>
@@ -408,8 +417,8 @@
                                                                                                     <tr>
                                                                                                         <td>
                                                                                                             <input type="text" class="T-choose-restaurantName col-xs-12 bind-change" value="{{restaurantList.restaurant.name}}" />
-                                                                                                            <input type="hidden" name="restaurantId" value="{{restaurantList.restaurant.id}}" /> {{if clipboardMode == false}}
-                                                                                                            <input type="hidden" name="templateId" value="{{restaurantList.id}}" />{{/if}}
+                                                                                                            <input type="hidden" name="restaurantId" value="{{restaurantList.restaurant.id}}" />
+																											<input type="hidden" name="arrangeId" value="{{restaurantList.id}}">
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <input class="col-xs-12" type="text" readonly="readonly" name="mobileNumber" value="{{restaurantList.restaurant.mobileNumber}}" />
@@ -484,8 +493,8 @@
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <input type="text" class="T-choose-hotelName col-xs-12 bind-change" name="hotelNmae" value="{{hotelList.hotel.name}}" />
-                                                                                                            <input type="hidden" name="hotelId" value="{{hotelList.hotel.id}}" /> {{if clipboardMode == false}}
-                                                                                                            <input type="hidden" name="templateId" value="{{hotelList.id}}" />{{/if}}
+                                                                                                            <input type="hidden" name="hotelId" value="{{hotelList.hotel.id}}" />
+																											<input type="hidden" name="arrangeId" value="{{hotelList.id}}">
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <input type="text" class="T-choose-hotelRoom col-xs-12 bind-change" name="hotelRoom" value="{{hotelList.hotelRoom.type}}" />
@@ -545,8 +554,8 @@
                                                                                                     <tr>
                                                                                                         <td>
                                                                                                             <input type="text" class="T-choose-scenicName col-xs-12 bind-change" value="{{scenicList.scenic.name}}" />
-                                                                                                            <input type="hidden" name="scenicId" value="{{scenicList.scenic.id}}" /> {{if clipboardMode == false}}
-                                                                                                            <input type="hidden" name="templateId" value="{{scenicList.id}}" />{{/if}}
+                                                                                                            <input type="hidden" name="scenicId" value="{{scenicList.scenic.id}}" />
+																											<input type="hidden" name="arrangeId" value="{{scenicList.id}}">
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <input type="text" class="chooseChargingProjects col-xs-12 bind-change" name="chargingProjects" value="{{scenicList.scenicItem.name}}" />
@@ -601,7 +610,7 @@
                                                                                                         <td>
                                                                                                             <input type="text" class="T-choose-shopVendorName col-xs-12 bind-change" value="{{shopList.shop.name}}" />
                                                                                                             <input type="hidden" name="shopId" value="{{shopList.shop.id}}" />
-                                                                                                            <input type="hidden" name="templateId" value="{{shopList.id}}" />
+																											<input type="hidden" name="arrangeId" value="{{shopList.id}}">
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <input type="text" class="chooseGoodsPolicy col-xs-12 bind-change" name="goodsPolicy" value="{{shopList.shopPolicy.name}}" />
@@ -658,8 +667,8 @@
                                                                                                     <tr>
                                                                                                         <td>
                                                                                                             <input type="text" class="T-choose-ticketCompanyName col-xs-12 bind-change" value="{{selfPayList.selfPay.name}}" />
-                                                                                                            <input type="hidden" name="companyId" value="{{selfPayList.selfPay.id}}" /> {{if clipboardMode == false}}
-                                                                                                            <input type="hidden" name="templateId" value="{{selfPayList.id}}" />{{/if}}
+                                                                                                            <input type="hidden" name="companyId" value="{{selfPayList.selfPay.id}}" />
+																											<input type="hidden" name="arrangeId" value="{{selfPayList.id}}">
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <input type="text" class="chooseItemName bind-change" name="selfPayItemName" value="{{selfPayList.selfPayItem.name}}" />
@@ -718,8 +727,8 @@
                                                                                                     <tr>
                                                                                                         <td>
                                                                                                             <input type="text" class="chooseTicketName col-xs-12 bind-change" value="{{ticketList.ticket.name}}" />
-                                                                                                            <input type="hidden" name="tickeId" value="{{ticketList.ticket.id}}" /> {{if clipboardMode == false}}
-                                                                                                            <input type="hidden" name="templateId" value="{{ticketList.id}}" />{{/if}}
+                                                                                                            <input type="hidden" name="tickeId" value="{{ticketList.ticket.id}}" />
+																											<input type="hidden" name="arrangeId" value="{{ticketList.id}}">
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <select name="type" class="col-sm-12 no-padding" style="width:70px;">
