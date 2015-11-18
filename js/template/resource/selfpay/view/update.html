@@ -113,7 +113,7 @@
 									<tr>
 										<th class="table-border"><span class="necessary">*</span>项目名称</th>
 										<th class="table-border">针对客源</th>
-										<th class="table-border"><span class="necessary">*</span>时间区间</th>
+										<th class="table-border" width="260"><span class="necessary">*</span>时间区间</th>
 										<th class="table-border"><span class="necessary">*</span>内部价格(元)</th>
 										<th class="table-border"><span class="necessary">*</span>市场价格(元)</th>
 										<th class="table-border"><span class="necessary">*</span>导游返佣(%)</th>
@@ -133,66 +133,66 @@
 												<option value="1" {{if itemList.customerType == 1}}selected="selected"{{/if}}>团体</option>
 											</select>
 										</td>
-										<td>{{each itemList.SelfPayRebateList as rebateList index}}
-											{{if index == 0}}
-											<div class="col-sm-12 no-padding dateTimeArea" data-index="1">
-												<input type="hidden" name="rebateListId" value="{{rebateList.id}}" />
-												<input name="startTime" value="{{rebateList.startTime | dateFormat: 'yyyy-MM-dd'}}" type="text" class="datepicker col-sm-4">
-												<label class="col-sm-2 control-label center">&nbsp;至&nbsp;</label>
-												<input name="endTime" value="{{rebateList.endTime | dateFormat: 'yyyy-MM-dd'}}" type="text" class="datepicker col-sm-4">
+										<td><div class="col-sm-12 no-padding">
+												<label class="col-sm-10">日常</label>
 												<label class="priceArea col-sm-2" style="padding-top:0px;">
 													<button class="btn btn-success btn-sm btn-white T-add">
 														<i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
 													</button>
 												</label>
-											</div>{{else}}
-											<div class="col-sm-12 no-padding dateTimeArea" data-index="{{index+1}}">
-												<input type="hidden" name="rebateListId" value="{{rebateList.id}}" />
-												<input name="startTime" value="{{rebateList.startTime | dateFormat: 'yyyy-MM-dd'}}" type="text" class="datepicker col-sm-4">
-												<label class="col-sm-2 control-label center">&nbsp;至&nbsp;</label>
-												<input name="endTime" value="{{rebateList.endTime | dateFormat: 'yyyy-MM-dd'}}" type="text" class="datepicker col-sm-4">
-												<label class="priceArea col-sm-2" style="padding-top:0px;">
-													<button class="btn btn-danger btn-sm btn-white T-del">
-														<i class="ace-icon fa fa-minus bigger-110 icon-only" style="line-height: 14px"></i>
-													</button>
-												</label>
-											</div>{{/if}}{{/each}}
+											</div>
+
+
+											{{each itemList.SelfPayRebateList as rebateList index}}
+												<div class="col-sm-12 no-padding T-dateTimeArea" data-index="{{index+1}}">
+													<input type="hidden" name="rebateListId" value="{{rebateList.id}}" />
+													<input name="startTime" value="{{rebateList.startTime | dateFormat: 'yyyy-MM-dd'}}" type="text" class="datepicker col-sm-4">
+													<label class="col-sm-2 control-label center">&nbsp;至&nbsp;</label>
+													<input name="endTime" value="{{rebateList.endTime | dateFormat: 'yyyy-MM-dd'}}" type="text" class="datepicker col-sm-4">
+													<label class="priceArea col-sm-2" style="padding-top:0px;">
+														<button class="btn btn-danger btn-sm btn-white T-del">
+															<i class="ace-icon fa fa-minus bigger-110 icon-only" style="line-height: 14px"></i>
+														</button>
+													</label>
+												</div>
+											{{/each}}
 										</td>
-										<td>{{each itemList.SelfPayRebateList as rebateList index}}
-											{{if index == 0}}
-											<div class="col-sm-12 no-padding">
-												<input name="contractPrice" value="{{rebateList.price}}" class="col-sm-12" type="text" maxlength="10">
-											</div>{{else}}
-											<div class="col-sm-12 no-padding" style="padding-top:5px!important;">
-												<input name="contractPrice" value="{{rebateList.price}}" class="col-sm-12" type="text" maxlength="10">
-											</div>{{/if}}{{/each}}
+										<td><div class="col-sm-12 no-padding">
+												<input name="normalInnerPrice" value="{{itemList.normalInnerPrice}}" class="col-sm-12" type="text" maxlength="10">
+											</div>
+
+											{{each itemList.SelfPayRebateList as rebateList index}}
+												<div class="col-sm-12 no-padding" style="padding-top:5px!important;">
+													<input name="contractPrice" value="{{rebateList.price}}" class="col-sm-12" type="text" maxlength="10">
+												</div>
+											{{/each}}
 										</td>
-										<td>{{each itemList.SelfPayRebateList as rebateList index}}
-											{{if index == 0}}
-											<div class="col-sm-12 no-padding">
-												<input name="marketPrice" value="{{rebateList.marketPrice}}" class="col-sm-12" type="text" maxlength="10">
-											</div>{{else}}
-											<div class="col-sm-12 no-padding" style="padding-top:5px!important;">
-												<input name="marketPrice" value="{{rebateList.marketPrice}}" class="col-sm-12" type="text" maxlength="10">
-											</div>{{/if}}{{/each}}
+										<td><div class="col-sm-12 no-padding">
+												<input name="normalMarketPrice" value="{{itemList.normalMarketPrice}}" class="col-sm-12" type="text" maxlength="10">
+											</div>
+											{{each itemList.SelfPayRebateList as rebateList index}}
+												<div class="col-sm-12 no-padding" style="padding-top:5px!important;">
+													<input name="marketPrice" value="{{rebateList.marketPrice}}" class="col-sm-12" type="text" maxlength="10">
+												</div>
+											{{/each}}
 										</td>
-										<td>{{each itemList.SelfPayRebateList as rebateList index}}
-											{{if index == 0}}
-											<div class="col-sm-12 no-padding">
-												<input name="guideRate" value="{{rebateList.guideRate*100 | toFixed}}" class="col-sm-12" type="text" maxlength="5">
-											</div>{{else}}
-											<div class="col-sm-12 no-padding" style="padding-top:5px!important;">
-												<input name="guideRate" value="{{rebateList.guideRate*100 | toFixed}}" class="col-sm-12" type="text" maxlength="5">
-											</div>{{/if}}{{/each}}
+										<td><div class="col-sm-12 no-padding">
+												<input name="normalGuideRate" value="{{itemList.normalGuideRate*100}}" class="col-sm-12" type="text" maxlength="5">
+											</div>
+											{{each itemList.SelfPayRebateList as rebateList index}}
+												<div class="col-sm-12 no-padding" style="padding-top:5px!important;">
+													<input name="guideRate" value="{{rebateList.guideRate*100}}" class="col-sm-12" type="text" maxlength="5">
+												</div>
+											{{/each}}
 										</td>
-										<td>{{each itemList.SelfPayRebateList as rebateList index}}
-											{{if index == 0}}
-											<div class="col-sm-12 no-padding">
-												<input name="travelAgencyRate" value="{{rebateList.travelAgencyRate*100 | toFixed}}" class="col-sm-12" type="text" maxlength="5">
-											</div>{{else}}
-											<div class="col-sm-12 no-padding" style="padding-top:5px!important;">
-												<input name="travelAgencyRate" value="{{rebateList.travelAgencyRate*100 | toFixed}}" class="col-sm-12" type="text" maxlength="5">
-											</div>{{/if}}{{/each}}
+										<td><div class="col-sm-12 no-padding">
+												<input name="normalTravelAgencyRate" value="{{itemList.normalTravelAgencyRate*100}}" class="col-sm-12" type="text" maxlength="5">
+											</div>
+											{{each itemList.SelfPayRebateList as rebateList index}}
+												<div class="col-sm-12 no-padding" style="padding-top:5px!important;">
+													<input name="travelAgencyRate" value="{{rebateList.travelAgencyRate*100}}" class="col-sm-12" type="text" maxlength="5">
+												</div>
+											{{/each}}
 										</td>
 										<td>
 											<input name="remark" value="{{itemList.remark}}" type="text" class="col-sm-12" style="min-width:100px;" maxlength="1000">
