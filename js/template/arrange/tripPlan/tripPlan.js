@@ -726,7 +726,7 @@ define(function(require, exports) {
 											"<div class=\"hidden-sm hidden-xs btn-group\">"+
 											"<a class=\"cursor T-groupView\">"+
 												"查看"+
-											"</a>"+"<a class='cursor'> |</a>"+
+											"</a>"+"<a class='cursor'> </a>"+
 											"<a class=\"cursor T-groupDelete\">"+
 												"删除"+
 											"</a>"+
