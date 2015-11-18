@@ -43,6 +43,8 @@
             <span class="pull-left control-label align-right no-padding">全陪：</span>
             <span class="col-sm-8 control-label">{{tripPlan.accompanyGuideName}}</span>
         </div>
+
+
     <div id="tripPlan_addPlan_tripPlan" class="show-grid form-horizontal">
     	<input type="hidden" name="tripPlanId" value="{{tripPlan.id}}"  />
         <div class="col-sm-12" style="height: 40px; border-bottom: 1px solid #ccc;margin-top: 20px">
@@ -59,6 +61,7 @@
             <div class="col-sm-3">
                 <label class="pull-left control-label align-right"><strong>导游预支金额：</strong></label>
                 <input type="text" class="col-sm-6" name="guideAllPreMoney" value="{{tripPlan.guideAllPreMoney}}"/>
+                <input type="hidden" name="qouteId" value="{{tripPlan.qouteId}}">
             </div>
             </div>
      </div>
@@ -96,7 +99,10 @@
                     </li>
                     <li class="col-sm-1 no-padding align-center">
                         <a data-toggle="tab" href="#tripPlan_addPlan_other" aria-expanded="false">其他</a>
-                    </li>
+                    </li>  
+                    <li style="border:none; margin-left:12px;">
+                       <button class="T-singleClick-Order">一键下单</button>
+                   </li>
                 </ul>
                 <div class="tab-content" style="position:relative;top: -2px">
                     <div id="tripPlan_addPlan_insurance" class="tab-pane fade active in">
@@ -286,13 +292,13 @@
                                                         <th class="th-border">付款方式</th>
                                                         <th class="th-border">导付</th>
                                                         <th class="th-border">备注</th>
-                                                        <th class="th-border" width="110px">操作</th>
+                                                        <th class="th-border" width="110px;">操作</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
                                                         {{each busCompanyList as busCompany}}
                                                         {{if busCompany != "[]" || busCompany != null}}
-                                                            <tr>
+                                                            <tr data-entity-arrangeId={{busCompany.id}} data-entity-busCompanyId={{busCompany.busCompany.id}} data-entity-busId={{busCompany.bus.id}}>
                                                                 <td><input type="text" name="needSeatCount" readonly="readonly" value="{{if busCompany.bus != null}}{{busCompany.bus.seatCount}}{{/if}}" class="col-sm-12" style="width: 60px;"/></td>
                                                                 <td><input type="text" name="companyName" readonly="readonly" value="{{if busCompany.busCompany != null}}{{busCompany.busCompany.companyName}}{{/if}}" class="col-sm-12 chooseBusCompany"/><input type="hidden" name="busCompanyId" value="{{if busCompany.busCompany != null}}{{busCompany.busCompany.id}}{{/if}}"/></td>
                                                                 <td><input type="text" name="licenseNumber" readonly="readonly" value="{{if busCompany.bus != null}}{{busCompany.bus.licenseNumber}}{{/if}}" class="col-sm-12"/><input type="hidden" value="{{if busCompany.bus != null}}{{busCompany.bus.id}}{{/if}}" name="licenseNumberId"/></td>
@@ -316,7 +322,7 @@
                                                                 <td><input name="guidePayMoney" type="text" value="{{busCompany.guidePayMoney}}" maxlength="9" class="col-sm-12" style="width: 60px;"/></td>
                                                                 <td><input name="remark" type="text" value="{{busCompany.remark}}" class="col-sm-12" maxlength="500"/></td>
                                                                 <td>
-                                                                   <a class="cursor T-bus-SendOrder T-sendOrder-Area R-right T-action" data-value='1'>
+                                                                    <a class="cursor T-bus-SendOrder T-sendOrder-Area R-right T-action" data-value='{{busCompany.qouteId}}'>
                                                                     发送订单
                                                                    </a>
                                                                 </td>
@@ -364,7 +370,7 @@
                                                         <th class="th-border">付款方式</th>
                                                         <th class="th-border">导付</th>
                                                         <th class="th-border">备注</th>
-                                                        <th class="th-border">操作</th>
+                                                        <th class="th-border" width="110px">操作</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
@@ -470,7 +476,7 @@
                                                     <tbody>
                                                     	{{each hotelList as hotel}}
                                                         {{if hotel != "[]" || hotel != null}}
-                                                    		<tr>
+                                                    		<tr data-entity-arrangeId={{hotel.id}} data-entity-hotelId={{hotel.hotel.id}} data-entity-roomId={{hotel.hotelRoom.id}}>
                                                     			<td class="whichDaysContainer" value="{{hotel.whichDay}}"></td>
                                                                 <td>
                                                                     <select class="col-sm-12 no-padding tripPlanHotelStar" style="width: 80px;">
@@ -514,7 +520,7 @@
                                                                 <td><input type="text" name="guidePayMoney" class="col-sm-12" value="{{hotel.guidePayMoney}}" style="width: 60px;" maxlength="9"/></td>
                                                                 <td><input type="text" name="remark" class="col-sm-12" value="{{hotel.remark}}" maxlength="500"/></td>
                                                                 <td>
-                                                                <a class="cursor T-Hotel-SendOrder T-sendOrder-Area R-right T-action" data-value="1">发送订单</a>
+                                                                    <a class="cursor T-Hotel-SendOrder T-sendOrder-Area R-right T-action" data-value="{{hotel.qouteId}}">发送订单</a>
                                                                     <a class="cursor btn-deleteTripPlanList" data-entiy-id="{{hotel.id}}" data-entity-name="hotel" title="删除">
                                                                         删除
                                                                     </a>
@@ -709,21 +715,21 @@
                                                 <table class="table table-striped table-bordered table-hover table-tripPlan-container">
                                                     <thead>
                                                     <tr>
-                                                        <th class="th-border" style="width:100px;"><span class="necessary">*</span>日期</th>
-                                                        <th class="th-border"> <span class="necessary">*</span>自费商家</th>
-                                                        <th class="th-border">自费项目</th>
-                                                        <th class="th-border">联系人</th>
-                                                        <th class="th-border">联系电话</th>
-                                                        <th class="th-border" style="width: 77px;">单价</th>
-                                                        <th class="th-border" style="width: 77px;">底价</th>
-                                                        <th class="th-border" style="width: 77px;">数量</th>
-                                                        <th class="th-border" style="width: 77px;">优惠</th>
-                                                        <th class="th-border" style="width: 77px;">应付</th>
-                                                        <th class="th-border" style="width: 77px;">已付</th>
-                                                        <th class="th-border" style="width: 72px;">付款方式</th>
-                                                        <th class="th-border" style="width: 77px;">导付</th>
-                                                        <th class="th-border">备注</th>
-                                                        <th class="th-border">操作</th>
+                                                        <th style="width:100px;"><span class="necessary">*</span>日期</th>
+                                                        <th><span class="necessary">*</span>自费商家</th>
+                                                        <th>自费项目</th>
+                                                        <th>联系人</th>
+                                                        <th>联系电话</th>
+                                                        <th style="width: 77px;">单价</th>
+                                                        <th style="width: 77px;">底价</th>
+                                                        <th style="width: 77px;">数量</th>
+                                                        <th style="width: 77px;">优惠</th>
+                                                        <th style="width: 77px;">应付</th>
+                                                        <th style="width: 77px;">已付</th>
+                                                        <th style="width: 72px;">付款方式</th>
+                                                        <th style="width: 77px;">导付</th>
+                                                        <th>备注</th>
+                                                        <th>操作</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>

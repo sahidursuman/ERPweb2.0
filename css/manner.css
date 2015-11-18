@@ -406,7 +406,7 @@ table tr td{
 }
 .whereQ .style-myself{
     width: 90px !important;
-    border: 2px solid #5d5d5d;
+    /*border: 2px solid #5d5d5d;*/
     text-align: right;
 }
 .whereQ .styleOne-self{
@@ -422,7 +422,7 @@ table tr td{
 }
 .whereOne .style-myself{
     width: 90px;
-    border: 2px solid #5d5d5d;
+    /*border: 2px solid #5d5d5d;*/
     text-align: right;
 }
 .timeline-info{text-align: right}
@@ -736,7 +736,7 @@ input,select{
 }
 /*项目代订导出按钮*/
 
-.T-bookingBtn{
+.bookingBtn{
     height: 24px;
     line-height: 9px;
     position: absolute;
@@ -866,8 +866,66 @@ padding-left:0;width: 360px;left: -35px;
   margin-left: 20px;
 }
 
+/*消息提示*/
+.newMessage-prompt{
+    width: 27px;height:195px;position: fixed;top:300px;z-index: 999;right: 0;background-color:#ffffff; 
+}
+.newsMoreT{
+   position: absolute!important;
+    top:-13px !important;
+    left: -1px !important;  
+}
+.newsMore{
+    position: absolute!important;
+    top:63px !important;
+    left: -1px!important;
+}
+.newsMoreTh{
+  position: absolute!important;
+    top:132px !important;
+    left: 0px!important;   
+}
 
-/*媒体查询*/
+/*.busCompanyNew{
+   width:190px;height:auto;background:#DCDCDC;position:absolute;right:40px;top:290px;display: none;border-radius: 5px;padding:0px 6px 18px 5px;
+   line-height: 38px;
+}
+.hotelNews{
+  width:190px;height:auto;background:#DCDCDC;position:absolute;right:40px;top:365px; display: none; border-radius: 5px;padding:0px 6px 18px 5px;
+  line-height: 38px;
+}
+.guideNews{
+      width:190px;height:auto;background:#DCDCDC;position:absolute;right:40px;top:440px;display: none;border-radius: 5px;padding:0px 6px 18px 5px;
+      line-height: 38px;
+}*/
+.MessagePrompt-box{
+   font-family: "微软雅黑";
+   /*font-weight: 600;*/
+   font-size: 12px;
+}
+.MessagePrompt-box .list-group-item{
+    border: none;
+}
+.MessagePrompt-box .boxLiStyle:first-child{
+    border-top: none;
+}
+.MessagePrompt-box .boxLiStyle{
+    border-radius: 3px !important;
+    padding: 10px 15px 7px 15px;
+    border-bottom: 1px solid #ddd;
+    border-top: 1px solid #ddd;
+}
+
+/*报价、询价css*/
+.QuoteBtn{
+     height: 24px;
+    line-height: 9px;
+    position: absolute;
+    right: 19px;
+    top: 0px;
+}
+
+/*媒体查询-不同分辨率*/
 @media screen and (max-width:1703px){
   .line-separated{
     height: 23px;width: 88%;border-bottom:  1px solid #428bca;

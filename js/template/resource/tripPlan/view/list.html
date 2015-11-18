@@ -70,7 +70,7 @@
 					<th>娱</th>
 					<th>票</th>
 					<th>状态</th>
-					<th>操作</th>
+					<th class="col-sm-2">操作</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -153,6 +153,13 @@
 						{{/if}}
 					</td>
 					<td style="vertical-align:middle;width:200px" {{if tripPlan.tripPlanDetails.length > 1}}rowspan="{{tripPlan.tripPlanDetails.length}}"{{/if}}>
+
+						<a data-entiy-qouteId="{{tripPlan.qouteId}}" class="cursor {{if tripPlan.qouteId!=null}}T-tripPlan-sendOrder{{/if}} T-sendOrder  R-right"  data-right="1140010" title="下单" style="{{if tripPlan.qouteId==null}}color:#bbb;{{/if}}">
+							下单
+							<label style="padding-left:10px;">|</label>
+						</a>
+
+
 						<a data-entiy-id="{{tripPlan.id}}" class="cursor {{if tripPlan.status != -1 && tripPlan.status != 2}}btn-tripPlan-send{{/if}} R-right" data-right="1140010" title="通知" {{if tripPlan.status == -1 || tripPlan.status == 2}}style="color:#bbb;"{{/if}}>
 							通知
 							<label style="padding-left:10px;">|</label>
