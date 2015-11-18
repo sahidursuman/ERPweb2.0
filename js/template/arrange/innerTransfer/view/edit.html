@@ -14,25 +14,26 @@
 							<input value="{{innerTransfer.fromBusinessGroup.name}}" type="text" readonly="readonly" class="date-picker col-xs-12" />
 						</div>-->
 						<label class="col-sm-1 control-label no-padding-right">接收部门：</label>
-						<select name="businessGroup_id" class="col-sm-2">
-							<option value="">全部</option>
+						<div class="col-sm-2">
 							{{each businessGroup as rs}}
-							<option value="{{rs.id}}" {{if innerTransfer.toBusinessGroup!=null}}{{if innerTransfer.toBusinessGroup.id==rs.id}}selected="selected" {{/if}}{{/if}}>
-								{{rs.name}}
-							</option>
+								{{if innerTransfer.toBusinessGroup!=null}}
+									{{if innerTransfer.toBusinessGroup.id==rs.id}}
+										<input  value="{{rs.name}}" data-group-id="{{rs.id}}" type="text" name="businessGroup_id" class="col-xs-12" readonly="readonly"/>
+									{{/if}}
+								{{/if}}
 							{{/each}}
-						</select>
+						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-1 control-label no-padding-right">内转备注:</label>
-						<div class="col-sm-2">
-							<input value="{{innerTransfer.transRemark}}" type="text" name="transRemark" class="date-picker col-xs-12" maxlength="100" />
+						<div class="col-sm-5">
+							<input value="{{innerTransfer.transRemark}}" type="text" name="transRemark" class="date-picker col-xs-12" maxlength="500" />
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-1 control-label no-padding-right">应付：</label>
 						<div class="col-sm-2">
-							<input name="transNeedPayMoney" value="{{innerTransfer.transNeedPayMoney}}" maxlength="9" type="text" readonly="readonly" readonly="readonly" class="date-picker col-xs-12" />
+							<input name="transNeedPayMoney" value="{{innerTransfer.transNeedPayMoney}}" maxlength="9" type="text" readonly="readonly" class="date-picker col-xs-12" />
 						</div>
 
 						<label class="col-sm-1 control-label no-padding-right">已付：</label>
@@ -55,7 +56,7 @@
 	 <div class="search-area">       
 		<!-- 新增费用项目 -->
 		<div class="col-sm-8">
-			<button class="btn btn-sm btn-success btn-transfer-addCost pull-left">
+			<button class="btn btn-sm btn-success T-transfer-addCost pull-left">
 				<i class="ace-icon fa fa-plus"></i> 新增费用项
 			</button>
 		</div>
@@ -98,7 +99,7 @@
 				<td><input  name="discribe" type="text" class="col-sm-10  no-padding-right" maxlength="100" value="{{rs.discribe}}" /></td>
 				<td><input  name="count" type="text" class="col-sm-10  no-padding-right count" maxlength="6" value="{{rs.count}}" /></td>
 				<td><span class="necessary  pull-left col-sm-2"></span><input  name="price" type="text" maxlength="9" class="col-sm-10  no-padding-right price" value="{{rs.price}}" /></td>
-				<td><a class="cursor btn-edittransfer-delete">删除</a></td>
+				<td><a class="cursor T-edittransfer-delete">删除</a></td>
 			</tr>
 		{{/each}}
 
@@ -279,10 +280,10 @@
 	</form>
 	<form class="form-horizontal globalAdd" role="form" onsubmit="return false"> 
 		<div class="form-group" style="text-align: center;">
-		    <button class="btn btn-danger btn-cancelTransfer"> 
+		    <button class="btn btn-danger T-cancelTransfer">
 				<i class="ace-icon fa fa-times"></i> 取消
 			</button> 
-			<button class="btn btn-primary btn-saveTransoutInfo"> 
+			<button class="btn btn-primary T-saveTransoutInfo">
 			    <i class="ace-icon fa fa-check"></i> 保存 
 			</button> 
 		</div> 

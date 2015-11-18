@@ -9,6 +9,7 @@ define(function(require, exports) {
 		menuKey = "resource_lineProduct",
 		listTemplate = require("./view/list"),
 		addTemplate = require("./view/add"),
+		addLineProductTemplate = require("./view/addLineProduct"),
 		viewDetailTemplate = require("./view/viewDetail"),
 		addQouteTemplate = require("./view/addQoute"),
 		updateLineProductTemplate = require("./view/updateLineProduct"),
@@ -183,7 +184,34 @@ define(function(require, exports) {
 	};
 
 	/**
-	 * 添加、编辑、复制线路模板。其中编辑和添加功能将提供给其他模块调用
+	 * 使用模板增加线路产品
+	 * @param {[type]} templateId [description]
+	 */
+	ResLineProduct.addLineProduct = function(templateId) {
+		var tab_id = menuKey + '-add';
+
+		if (ResLineProduct.add_id === templateId) {
+			$('.tab-' + tab_id).children('a').trigger('click');
+			return;
+		}
+		$.ajax({
+			url: KingServices.build_url('travelLine', 'getTravelLineById'),
+			type: 'post',
+			data: {id: templateId},
+		})
+		.done(function(data) {
+			if (showDialog(data))  {
+				data.travelLine = JSON.parse(data.travelLine);
+				if (Tools.addTab(tab_id, '新建线路产品', addLineProductTemplate(data))) {
+					ResLineProduct.tmpData.type = true;  // 新增模式
+					ResLineProduct.init_updata_tab(tab_id);
+				}
+			}
+		});
+	}
+
+	/**
+	 * 编辑、复制线路模板。其中编辑和添加功能将提供给其他模块调用
 	 * @param  {id} id            编辑或者复制的线路产品的id
 	 * @param  {Boolean} clipboardMode true表示复制、false表示编辑
 	 * @return {[type]}               [description]
@@ -191,6 +219,18 @@ define(function(require, exports) {
 	ResLineProduct.updateLineProduct = function(id,clipboardMode){
 		if (!!id) {
 			// 编辑或者复制
+			var title = "修改线路产品", tab_id = menuKey + '-update';
+			if(clipboardMode){
+				title = "复制线路产品";
+				tab_id = menuKey + '-copy';
+			}
+
+			var $tab = $('#tab-'+ tab_id + '-content');
+			if ($tab.length && $tab.find('.T-btn-submit').data('id') == id) {	// 如果打开的是相同产品，则不替换
+				$('.tab-' + tab_id).children('a').trigger('click');
+				return;
+			}
+
 			$.ajax({
 	    		url: KingServices.build_url('lineProduct', 'getLineProductById'),
 				type:"POST",
@@ -213,12 +253,7 @@ define(function(require, exports) {
 								daysList : daysList
 						};
 						
-						data.viewLineProduct.clipboardMode = clipboardMode;
-						var title = "修改线路产品", tab_id = menuKey + '-update';
-						if(clipboardMode){
-							title = "复制线路产品";
-							tab_id = menuKey + '-copy';
-						}
+						data.viewLineProduct.clipboardMode = clipboardMode;				
 
 						ResLineProduct.tmpData.productId = id;
 						ResLineProduct.tmpData.type = clipboardMode;
@@ -230,7 +265,9 @@ define(function(require, exports) {
 							ResLineProduct.init_updata_tab(tab_id);							
 						}
 						// 绑定autocomplete
-						var $tab = $('#tab-'+ tab_id + '-content'),$dayListArea = $tab.find('.T-timeline-container');
+						$tab = $('#tab-'+ tab_id + '-content');
+						
+						var $dayListArea = $tab.find('.T-timeline-container');
 						ResLineProduct.bindRestaurantEvent($dayListArea.find('.T-choose-restaurantName'), $dayListArea.find('.T-choose-restaurantStandardsName'));
 						ResLineProduct.bindHotelEvent($dayListArea.find('.T-choose-hotelName'), $dayListArea.find('.T-choose-hotelRoom'), $dayListArea.find('.T-choose-hotelStarLevel'));
 						ResLineProduct.bindScenicEvent($dayListArea.find('.T-choose-scenicName'));
@@ -286,8 +323,10 @@ define(function(require, exports) {
 					updateDays.html(arr.join(""));
 				}
 			}
-			var daysDetailList = $tab.find(".T-timeline-item");
-			ResLineProduct.updateLineProductIndex = parseInt(daysDetailList.eq(daysDetailList.length-1).attr("data-entity-index")) + 1;
+			var daysDetailList = $tab.find(".T-timeline-item"),
+			daysDetailListIndex = parseInt(daysDetailList.eq(daysDetailList.length-1).attr("data-entity-index")) + 1;
+			ResLineProduct.updateLineProductIndex = isNaN(daysDetailListIndex) ? 0 : daysDetailListIndex;
+
 		}
 	}
 
@@ -303,7 +342,8 @@ define(function(require, exports) {
 			var validator = rule.lineProductCheckor($tab);
 
 			// 监听修改
-			$tab.on('change', function(event) {
+			$tab.off('change').off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE)
+			.on('change', function(event) {
 				event.preventDefault();
 				$tab.data('isEdited', true);
 			})
@@ -311,6 +351,10 @@ define(function(require, exports) {
 			.on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
 				event.preventDefault();
 				ResLineProduct.saveProductData($tab, validator, [tab_id, title, html]);
+			})
+			.on(SWITCH_TAB_BIND_EVENT, function(event) {
+				event.preventDefault();
+				ResLineProduct.init_CRU_event($tab.find('.T-btn-submit').data('id'), $tab);
 			})
 			// 保存后关闭
 			.on(CLOSE_TAB_SAVE, function(event) {
@@ -322,8 +366,6 @@ define(function(require, exports) {
 			$tab.find('.T-daylist').children('.tab-pane').each(function(index, el) {
 				init_editor($(this).find('.T-editor').prop('id'));
 			});
-
-
 			
 			//添加具体行程安排相应事件
 			$tab.find('.T-daylist').on('click', '.T-add', function(event) {
@@ -353,11 +395,10 @@ define(function(require, exports) {
 			.on('click', '.T-delete', ResLineProduct.deleteLineProductDaysArrange);
 
 			// 绑定安排的拖动事件				
-			$tab.find('.T-timeline-container').sortable({
+			$tab.find('.T-timeline-detail-container').sortable({
 				containment: 'parent',
-				handle: ace.vars['touch'] ? '.table-bordered thead' : false,
-				forceHelperSize:true,
-				forcePlaceholderSize:true,
+				axis: "y",
+				handle: '.table-bordered thead',
 				tolerance:'pointer',
 				update: function(event, ui) {
 					ResLineProduct.updateRouteIndex($tab);
@@ -1502,10 +1543,10 @@ define(function(require, exports) {
                     success: function(data) {
 						var result = showDialog(data);
 						if(result){
-							var selfPayRebate = JSON.parse(data.selfPayRebate); 
+							var selfPayItem = JSON.parse(data.selfPayItem); 
 							$tr.find("input[name=selfPayItemId]").val(ui.item.id).trigger('change');
-							$tr.find("input[name=contractPrice]").val(selfPayRebate.price);
-							$tr.find("input[name=marketPrice]").val(selfPayRebate.marketPrice);
+							$tr.find("input[name=contractPrice]").val(selfPayItem.normalInnerPrice);
+							$tr.find("input[name=marketPrice]").val(selfPayItem.normalMarketPrice);
 						}
                     }
                 });
@@ -2022,4 +2063,5 @@ define(function(require, exports) {
 		KingServices.addQuote(id);
 	};
 	exports.init = ResLineProduct.initModule;  
+	exports.addLineProduct = ResLineProduct.addLineProduct;  
 });

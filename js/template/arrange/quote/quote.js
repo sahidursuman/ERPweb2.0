@@ -245,6 +245,37 @@ define(function(require, exports) {
 					$container.find('#busInquiryResult').html(busInquiryResultHtml);
 
 					//操作
+					$container.find('.T-bus-refresh').on("click",function(){
+						var $this = $(this),
+							$tr = $this.closest('tr'),
+							offerId = $this.closest('td').data("id");
+						$.ajax({
+							url: KingServices.build_url('busInquiry','refreshListInquiryBus'),
+							type: 'POST',
+							data: { offerId : offerId + ""},
+							success: function(data){
+								var result = showDialog(data);
+								if(result){
+									showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+										var rs = data.List[0],
+											status = rs.status;
+										$tr.find(".T-status").html(status);
+										$tr.find(".T-price").html(rs.replyPrice);
+
+										if(status != "等待确认"){
+											$this.next().remove();
+											$this.remove();
+											if(status != "已同意"){ 
+												var html = "<a class='T-bus-add'>加入</a><span> | </span>";
+												$tr.find('td:last-child').prepend(html);
+											}
+										}	 
+									});
+								}
+							}
+						});
+					});
+
 					$container.find('.T-bus-add').on("click",function(){
 						var offerId = $(this).closest('td').data("id");
 						$.ajax({
@@ -313,6 +344,39 @@ define(function(require, exports) {
 					$container.find('#hotelInquiryContent').html(hotelInquiryResultHtml);
 
 					//操作
+					$container.find('.T-hotel-refresh').on("click",function(){
+						var $this = $(this),
+							$tr = $this.closest('tr'),
+							offerId = $this.closest('td').data("id");
+						$.ajax({
+							url: KingServices.build_url('hotelInquiry','refreshListInquiryHotel'),
+							type: 'POST',
+							data: { offerId : offerId + ""},
+							success: function(data){
+								var result = showDialog(data);
+								if(result){
+									showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+										var rs = data.List,
+											status = data.status;
+										$this.closest('td').prev().html(status);
+										$tr.find(".T-hotelPrice-" + offerId + "").each(function(i){
+											$(this).html(rs[i].replyPrice);
+										});
+
+										if(status != "等待确认"){
+											$this.next().remove();
+											$this.remove();
+											if(status == "已同意"){
+												var html = "<a class='T-hotel-add'>加入</a><span> | </span>";
+												$tr.find('td:last-child').prepend(html);
+											}
+										}
+									});
+								}
+							}
+						});
+					});
+
 					$container.find('.T-hotel-add').on("click",function(){
 						var offerId = $(this).closest('td').data("id");
 						$.ajax({
@@ -529,7 +593,21 @@ define(function(require, exports) {
 				quote.addResourceTraffic($that, validator, $container);
 			}
 		})
-		.on('click', '.T-delete', quote.deleteLineProductDaysArrange($container));
+		.on('click', '.T-delete', function(){
+			quote.deleteLineProductDaysArrange($(this), $container);
+		});
+
+		// 绑定安排的拖动事件				
+		$container.find('.T-timeline-detail-container').sortable({
+			containment: 'parent',
+			axis: "y",
+			handle: '.table-bordered thead',
+			tolerance:'pointer',
+			update: function(event, ui) {
+				quote.updateRouteIndex(null, $container);
+			}
+		});
+
 		//autocomplete
 		var $dayListArea = $container.find('.T-timeline-container');
 		quote.bindInsuranceChosen($container.find('.T-insurance-name'), validator, $container);
@@ -2029,8 +2107,8 @@ define(function(require, exports) {
 		});
 	};
 	//删除日程安排
-	quote.deleteLineProductDaysArrange = function($container){
-		var dialogObj = $( "#confirm-dialog-message" ), $obj = $(this);
+	quote.deleteLineProductDaysArrange = function($obj, $container){
+		var dialogObj = $( "#confirm-dialog-message" );
 
 		if (!!$obj.data("entity-id")) {
 			dialogObj.removeClass('hide').dialog({

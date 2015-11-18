@@ -7,7 +7,6 @@
 }
 
 }*/
-
 .search-btn{
     border-radius: 0;
     background: #51b0c2;
@@ -42,7 +41,7 @@ input{
 
 }
 .padding-right20{
-    padding-right:5px
+    padding-right:5px;
 }
 
 /**
@@ -113,17 +112,9 @@ label{
     margin-top: 20px;
     padding-top: 0px !important;
 }
-table tr td{
-    border: 1px solid #ececec !important;
-}
 .test-iocn{
     position: relative;
     left: -16px;
-}
-
-table tr th{
-
-    border: 1px solid white !important;
 }
 .table-border {
     border: 1px solid #ececec !important;
@@ -263,6 +254,21 @@ table tr td{
     top:0!important;
     left: 20px!important;
 }
+.newsMoreT{
+   position: absolute!important;
+    top:-13px !important;
+    left: -1px !important;  
+}
+.newsMore{
+    position: absolute!important;
+    top:33px !important;
+    left: -1px!important;
+}
+.newsMoreTh{
+  position: absolute!important;
+    top:80px !important;
+    left: 0px!important;   
+}
 .main-content {
     margin-top: 77px;
 }
@@ -359,12 +365,17 @@ table tr td{
     height: 12px !important;
 }
 .fa-sort-desc{
-    margin-top: -2px !important;
+    margin-top: -4px !important;
+}
+/*评论*/
+.font-bold:{
+    font-weight: bold;
 }
 /*发团安排*/
 .tipPlan-gap{
     padding-bottom: 10px;
 }
+
 /*dqq style*/
 .viewI{
     margin: 0px 5px 0px 5px;

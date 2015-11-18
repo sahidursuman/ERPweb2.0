@@ -8,11 +8,9 @@ var rule = {
 		//游客管理验证 
 		checktouristGroup:function($obj){  
 			this.$touristGroupContainer = $obj;
-
 			var validator = $obj.formValidate(this.gettTouristGroupSettings());  
 			return validator;
 		},
-
 		updateTouristGroupCheckor : function(validator)  {
 			validator.update(this.gettTouristGroupSettings());
 
@@ -21,6 +19,7 @@ var rule = {
 
 		gettTouristGroupSettings: function()  {
 			var $obj = this.$touristGroupContainer,
+
 				settings = [
 				 {
 					$ele: $obj.find('input[name="lineProductIdName"]'),
@@ -144,39 +143,7 @@ var rule = {
 					  			errMsg: '手机号码格式不正确'
 							}
 						]
-			         },{//接待日期
-						$ele: $obj.find('input[name="receptionTime"]'),   
-						rules: [
-							{
-					  			type:'null',
-					  			errMsg: '接待日期不能为空'
-							}
-						]
-			         },{//地点
-							$ele: $obj.find('input[name="receptionAddress"]'),   
-							rules: [
-								{
-					  			type:'null',
-					  			errMsg: '地点不能为空'
-								}
-							]
-				    },{//送离日期
-						$ele: $obj.find('input[name="sendTime"]'),   
-						rules: [
-							{
-					  			type:'null',
-					  			errMsg: '送离日期不能为空'
-							}
-						]
-			         },{//地点
-							$ele: $obj.find('input[name="sendAddress"]'),   
-							rules: [  
-								{
-					  			type:'null',
-					  			errMsg: '地点不能为空'
-								}
-							]
-				    }    
+			         }   
 			];
 
 			$obj.find('.addTouristTbody').children().each(function() {
@@ -223,6 +190,48 @@ var rule = {
  
   	    	  ]);
 			return validatorManager;
+		},
+		//中转验证
+		
+		checkInnerTransfer:function($obj){
+			var checkInnerValidator = $obj.formValidate([
+	    	    {//接待日期
+						$ele: $obj.find('input[name="receptionTime"]'),   
+						rules: [
+							{
+					  			type:'null',
+					  			errMsg: '接待日期不能为空'
+							}
+						]
+			         },{//地点
+							$ele: $obj.find('input[name="receptionAddress"]'),   
+							rules: [
+								{
+					  			type:'null',
+					  			errMsg: '地点不能为空'
+								}
+							]
+				    },{//送离日期
+						$ele: $obj.find('input[name="sendTime"]'),   
+						rules: [
+							{
+					  			type:'null',
+					  			errMsg: '送离日期不能为空'
+							}
+						]
+			         },{//地点
+							$ele: $obj.find('input[name="sendAddress"]'),   
+							rules: [  
+								{
+					  			type:'null',
+					  			errMsg: '地点不能为空'
+								}
+							]
+				    }
+	    	    
+	    	    
+                ]);
+			return checkInnerValidator;
 		}
 	}  
 	return rule;
