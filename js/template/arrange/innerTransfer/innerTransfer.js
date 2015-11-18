@@ -446,6 +446,9 @@ define(function(require, exports) {
 				}
 			needPayMoney += a*b;
 		}
+		if(Math.abs(needPayMoney) > 900000000){
+			showMessageDialog($( "#confirm-dialog-message" ),"计算应付值过大，请确认数据是否有误");
+		}
 		//应付
 		transNeedPayMoney.val(needPayMoney.toFixed(2));
 	};
@@ -481,10 +484,15 @@ define(function(require, exports) {
 			var val = $tab.find("[name="+name+"]").val();
 			return val;
 		}
+		var payMoney = parseFloat(getValParam("transNeedPayMoney"));
+		if(Math.abs(payMoney) > 900000000){
+			showMessageDialog($( "#confirm-dialog-message" ),"计算应付值过大，请确认数据是否有误");
+			return false;
+		}
 		var innerTransferJson = {
 			id : getValParam("id"),//	内转ID		
 			innerTransferFeeSet : "",	//内转的其他费用	array<object>	
-			toBusinessGroupId :$tab.find("select[name=businessGroup_id]").val(),//	转给的部门ID	  	
+			toBusinessGroupId :$tab.find("input[name=businessGroup_id]").data('group-id'),//	转给的部门ID	  	
 			transAdultPrice	: getValParam("transAdultPrice"),//内转大人价		
 			transChildPrice	: getValParam("transChildPrice"), //内转小孩价		
 			transNeedPayMoney :getValParam("transNeedPayMoney"),//	应付		需要计算
