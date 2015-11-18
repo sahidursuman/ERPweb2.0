@@ -64,7 +64,6 @@ define(function(require, exports) {
 				    content: html,
 				    scrollbar: false,
 				    success:function(){
-				    	message.listMsg(message.msgData.pageNo);
 				    	// 修改header的显示
 	    		    	var $msgCounter = $("#msgCountSpan"), count = $msgCounter.text();
 	    		    	if (!!count && !isNaN(count) && count != '0')  {

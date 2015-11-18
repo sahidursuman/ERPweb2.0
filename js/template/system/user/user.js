@@ -16,7 +16,7 @@ define(function(require, exports) {
 	};
 
 	user.initModule = function() {
-		user.listUser(0,"","");
+		user.listUser(0,"",1);
 	};
 
 	user.listUser = function(page,realname,status){
