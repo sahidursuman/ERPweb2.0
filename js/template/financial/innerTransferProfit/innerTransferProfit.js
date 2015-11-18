@@ -78,7 +78,7 @@ define(function(require, exports) {
         // 初始化jQuery 对象
         innerProfit.$tab = $('#' + tabId);
         innerProfit.$searchArea = innerProfit.$tab.find('.T-search-area');
-
+        innerProfit.formatTime(innerProfit.$searchArea);
         innerProfit.searchAreaList();
         //搜索按钮事件
         innerProfit.$tab.find('.T-search').on('click', function(event) {
@@ -108,11 +108,20 @@ define(function(require, exports) {
             }
         });
     };
-
+    //时间控件格式化
+    innerProfit.formatTime = function($obj){
+         $obj.find(".date-picker").datepicker({
+            autoclose: true,
+            todayHighlight: true,
+            format: 'yyyy-mm-dd',
+            language: 'zh-CN'
+        });
+    };
     //查看游客小组、收客团款明细
     innerProfit.viewTouristGroup = function(id){
         $.ajax({
             url:innerProfit.url("touristGroup","findTouristGroupDetailAtInnerProfit"),
+            //url:TurnProfit.url("touristGroup","viewTouristGroupDetails"),
             type:"POST",
             data:{
                 id : id + ""
