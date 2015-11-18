@@ -983,7 +983,7 @@ define(function(require, exports) {
 								return ;	
 							}else{
 								$.ajax({
-									url:transfer.url("saveLine","view"),
+									url:KingServices.build_url("transfer","saveLine"),
 									data:"lineProductId="+lineProductId+"&tourGroupTransferId="+tourGroupTransferId,
 									success:function(data){
 										var result = showDialog(data);
@@ -1019,7 +1019,7 @@ define(function(require, exports) {
 		 */
 		transfer.searchLineProList=function(init,page,name,searchLineProLayer,$editTrsferInObj){
 				$.ajax({
-					url:KingServices.url("lineProduct","findAll"),
+					url:KingServices.build_url("lineProduct","findAll"),
 					data:"pageNo="+page+"&name="+name,
 					success: function(data) {
 						var result =showDialog(data);
