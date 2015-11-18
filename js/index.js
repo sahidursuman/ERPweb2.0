@@ -133,10 +133,41 @@
 				$that.data('prev-tab', $prev);
 			}
 			Tools.justifyTab();
-		});
+		})
+		.contextmenu({
+			before: function (e) {
+				var $item = $(e.target).closest('li');
+				$tabList.data('menu-item', $item)
+				$('#tab-menu').find('.T-close').toggleClass('hidden', !$item.find('.tab-close').length);
+				return true;
+			},
+			onItem: function (context, e) {
+			  	var $menuItem = $(e.target), $item = $tabList.data('menu-item');
+
+			  	if ($menuItem.hasClass('T-close')) {
+			  		IndexFun.closeTab($item);
+			  	} else if ($menuItem.hasClass('T-close-other')) {
+			  		IndexFun.closeTab($item.siblings('li'));
+			  	} else if ($menuItem.hasClass('T-close-right')) {
+			  		IndexFun.closeTab($item.nextAll('li'));
+			  		
+			  	}
+			}
+		})
 	};
 
-	
+	/**
+	 * 传入tab页头，如果允许关闭，就关闭它
+	 * @param  {object} $tabItem 页头列表
+	 * @return {[type]}          [description]
+	 */
+	IndexFun.closeTab = function($tabItem) {
+		if (!!$tabItem)  {
+			$tabItem.each(function(index, el) {
+				$(this).find('.tab-close').trigger('click');
+			});
+		}
+	}
 	// 初始哈
 	jQuery(document).ready(function($) {
 		IndexFun.init();

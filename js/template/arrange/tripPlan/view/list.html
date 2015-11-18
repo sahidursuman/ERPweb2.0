@@ -1,10 +1,10 @@
 <div class="row">
 	<div class="col-xs-12 tripPlanMain globalAdd">
 	  <div class="form-group">
-		<div class="search-area clearfix">
+		<div class="T-search-area clearfix">
 			<div class="col-xs-2" style="width:220px;">
-				<input type="text" name="tripNumber" class="col-xs-12 tripChoosePlan guideInputList" placeholder="团号" value="{{searchParam.tripNumber}}" />
-				<input type="hidden" name="tripChoosePlanId" value="{{searchParam.tripId}}" />
+				<input type="text" name="tripNumber" class="col-xs-12 T-choosePlan guideInputList" placeholder="团号" value="{{searchParam.tripNumber}}" />
+				<input type="hidden" name="tripId" value="{{searchParam.tripId}}" />
 			</div>
 
 			<div class="col-xs-2 timeStart" style="margin:0 15px;">
@@ -18,19 +18,20 @@
 				</div>
 			</div>
 			<div class="col-xs-1">
-				<input type="text" name="realname" class="col-xs-12 T-guideChoose Choose-spacing" placeholder="导游" value="{{searchParam.guideName}}" />
-				<input type="hidden" name="guideChooseId" value="{{searchParam.guideId}}" />
+				<input type="text" name="guideName" class="col-xs-12 T-chooseGuide Choose-spacing" placeholder="导游" value="{{searchParam.guideName}}" />
+				<input type="hidden" name="guideId" value="{{searchParam.guideId}}" />
 			</div>
 			<div class="col-xs-1">
-				<input type="text" name="licenseNumber" class="col-xs-12 T-busChoose Choose-spacing" placeholder="车牌号" value="{{searchParam.busLicenseNumber}}" />
-				<input type="hidden" name="busChooseId" value="{{searchParam.busId}}" />
+				<input type="text" name="licenseNumber" class="col-xs-12 T-chooseBus Choose-spacing" placeholder="车牌号" value="{{searchParam.busLicenseNumber}}" />
+				<input type="hidden" name="busId" value="{{searchParam.busId}}" />
 			</div>
 			<div class="col-xs-1">
-				<input type="text" name="creator" class="col-xs-12 T-creatorChoose Choose-spacing" placeholder="创建人" value="{{searchParam.creatorName}}" />
-				<input type="hidden" name="creatorChooseId" value="{{searchParam.creator}}" />
+				<input type="text" name="creator" class="col-xs-12 T-chooseCreator Choose-spacing" placeholder="创建人" value="{{searchParam.creatorName}}" />
+				<input type="hidden" name="creatorId" value="{{searchParam.creator}}" />
 			</div>
-			<div class="col-sm-2" style="width:250px;">
-				<div class="btn-group btn-status">
+
+			<div class="pull-left">
+				<div class="btn-group T-status">
 					<button data-value="{{searchParam.status}}" data-toggle="dropdown" class="btn-sm  dropdown-toggle block-up Choose-spacing" aria-expanded="false">
 						<span>
 							{{if searchParam.status == "-1"}}
@@ -66,18 +67,18 @@
 					</ul>
 				</div>
 
-				<button class=" btn-sm  btn-tripPlan-search search-btn triplan-searchBtn" style="margin-left: -40px; width:75px;">
+				<button class=" btn-sm search-btn T-search" style="margin-left: -40px; width:75px;">
 					<i class="ace-icon fa fa-search"></i>
 					搜索
 				</button>
 			</div>
-			<button class="btn btn-sm btn-success btn-Plan-add R-right pull-left newSearchBtn" style="width:120px;" data-right="1140002"> 
+			<button class="btn btn-sm btn-success T-addPlan R-right pull-left newSearchBtn" style="width:120px;" data-right="1140002"> 
 			<i class="ace-icon fa fa-plus"></i> 
 			新增发团计划
 		   </button>
 		</div>
 		</div>
-		<table class="table table-striped table-bordered table-hover">
+		<table class="table table-striped table-bordered table-hover T-NotShowHighLight">
 			<thead>
 				<tr class="bg-blur">
 					<th>团号</th>
@@ -95,9 +96,9 @@
 					<th>操作</th>
 				</tr>
 			</thead>
-			<tbody>
+			<tbody class="T-planList">
 				{{each tripPlanList as tripPlan}}
-					<tr data-entity-id="{{tripPlan.id}}">
+					<tr data-id="{{tripPlan.id}}">
 						<td style="vertical-align:middle" {{if tripPlan.tripPlanDetails.length > 1}}rowspan="{{tripPlan.tripPlanDetails.length}}"{{/if}}>{{tripPlan.tripNumber}}</td>
 						{{if tripPlan.tripPlanDetails.length  < 2}}
 							<td>{{if tripPlan.startTime != null}}{{tripPlan.startTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
@@ -136,22 +137,22 @@
 							{{/if}}
 						</td>
 						<td style="vertical-align:middle;width:240px;" {{if tripPlan.tripPlanDetails.length > 1}}rowspan="{{tripPlan.tripPlanDetails.length}}"{{/if}}>
-							<a data-entity-id="{{tripPlan.id}}" billStatus="{{tripPlan.billStatus}}" statusValue="{{tripPlan.status}}" title="确认发团" class="{{if tripPlan.status != -1 && tripPlan.status != 2}}btn-Plan-confirm{{/if}} cursor R-right" data-right="1140006" {{if tripPlan.status == -1 || tripPlan.status == 2}} style="color:#bbb;"{{/if}}>
+							<a billStatus="{{tripPlan.billStatus}}" statusValue="{{tripPlan.status}}" title="确认发团" class="{{if tripPlan.status != -1 && tripPlan.status != 2}}T-option T-confirm{{/if}} cursor R-right" data-right="1140006" {{if tripPlan.status == -1 || tripPlan.status == 2}} style="color:#bbb;"{{/if}}>
 								确认
 								<label style="padding-left:10px;">|</label>
 							</a>
-							<a data-entity-id="{{tripPlan.id}}" title="查看计划" class="btn-Plan-view cursor">
+							<a title="查看计划" class="T-option T-view cursor">
 								查看
 							</a>
-						    <a data-entity-id="{{tripPlan.id}}" billStatus="{{tripPlan.billStatus}}" title="编辑计划" class="{{if tripPlan.status != -1}}btn-Plan-edit{{/if}} cursor R-right" data-right="1140003" {{if tripPlan.status == -1}} style="color:#bbb;"{{/if}}>
+						    <a billStatus="{{tripPlan.billStatus}}" title="编辑计划" class="{{if tripPlan.status != -1}}T-option T-update{{/if}} cursor R-right" data-right="1140003" {{if tripPlan.status == -1}} style="color:#bbb;"{{/if}}>
 								<label class="padding-right20">|</label>
 								编辑
 							</a>
-							<a data-entity-id="{{tripPlan.id}}" title="导出计划" class="btn-Plan-export cursor R-right" data-right="1140008">
+							<a title="导出计划" class="T-option T-export cursor R-right" data-right="1140008">
 								<label class="padding-right20">|</label>
 								导出
 							</a>
-							<a data-entity-id="{{tripPlan.id}}" billStatus="{{tripPlan.billStatus}}" title="取消计划" class="{{if tripPlan.status != -1}}btn-Plan-cancel{{/if}} cursor R-right" data-right="1140004" {{if tripPlan.status == -1}} style="color:#bbb;"{{/if}}>
+							<a billStatus="{{tripPlan.billStatus}}" title="取消计划" class="{{if tripPlan.status != -1}}T-option T-cancel{{/if}} cursor R-right" data-right="1140004" {{if tripPlan.status == -1}} style="color:#bbb;"{{/if}}>
 								<label class="padding-right20">|</label>
 								取消
 							</a>
