@@ -13,19 +13,21 @@
 					<td style="text-align: left;padding: 0px 0px 0px 10px">{{lineProduct.name}}</td>
 					<td class="style-myself CheckPlan">出团日期</td>
 					<td style="text-align: left;padding: 0px 0px 0px 10px">{{tripPlan.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
+					<td class="style-myself CheckPlan">计划人数</td>
+					<td style="text-align: left;padding: 0px 0px 0px 10px">{{tripPlan.planTouristCount}}</td>
 					<td class="style-myself CheckPlan">团队编号</td>
 					<td style="text-align: left;padding: 0px 0px 0px 10px" colspan="3">{{tripPlan.tripNumber}}</td>
 
 				</tr>
 				<tr>
-					<td class="style-myself CheckPlan">计划人数</td>
-					<td style="text-align: left;padding: 0px 0px 0px 10px">{{tripPlan.planTouristCount}}</td>
 					<td class="style-myself CheckPlan">车座数</td>
 					<td style="text-align: left;padding: 0px 0px 0px 10px">{{bus.seatCount}}</td>
 					<td class="style-myself CheckPlan">车辆品牌</td>
 					<td style="text-align: left;padding: 0px 0px 0px 10px">{{bus.brand}}</td>
 					<td class="style-myself CheckPlan">车辆号</td>
 					<td style="text-align: left;padding: 0px 0px 0px 10px">{{bus.licenseNumber}}</td>
+					<td class="style-myself CheckPlan">所属车队</td>
+					<td style="text-align: left;padding: 0px 0px 0px 10px">{{busCompant.companyName}}</td>
 				</tr>
 				<tr>
 					<td class="style-myself CheckPlan">导游</td>
@@ -44,7 +46,7 @@
 					<td style="text-align: left;padding: 0px 0px 0px 10px">{{tripPlan.accompanyGuideMobile}}</td>
 					<td class="style-myself CheckPlan">集合地点</td>
 					<td style="text-align: left;padding: 0px 0px 0px 10px">{{tripPlan.setPlacePosition}}</td>
-					<td class="style-myself CheckPlan">集合电话</td>
+					<td class="style-myself CheckPlan">集合时间</td>
 					<td style="text-align: left;padding: 0px 0px 0px 10px">{{tripPlan.setPlaceTime}}</td>
 				</tr>
 			</table>
