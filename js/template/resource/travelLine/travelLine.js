@@ -163,7 +163,8 @@ define(function(require, exports) {
 	 */
 	ResTravelLine.update = function(id) {
 		if (!!id) {
-			if (ResTravelLine.update_id === id)  {
+			var $tabItem = $('.tab-' + menuKey + '-update');
+			if ($tabItem.length && ResTravelLine.update_id === id)  {
 				$('.tab-' + menuKey + '-update').children('a').trigger('click');
 				return;
 			}
@@ -193,8 +194,9 @@ define(function(require, exports) {
 	 */
 	ResTravelLine.copy = function(id) {
 		if (!!id) {
-			if (ResTravelLine.copy_id === id)  {
-				$('.tab-' + menuKey + '-copy').children('a').trigger('click');
+			var $tabItem = $('.tab-' + menuKey + '-copy');
+			if ($tabItem.length && ResTravelLine.copy_id === id)  {
+				$tabItem.children('a').trigger('click');
 				return;
 			}
 
