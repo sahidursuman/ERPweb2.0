@@ -681,6 +681,10 @@ define(function(require, exports) {
 					if(result){
 						data.lineProduct = JSON.parse(data.lineProduct);
 						data.touristGroupList = JSON.parse(data.touristGroupList);
+						if(data.touristGroupList.length <= 0 ){
+							showMessageDialog($( "#confirm-dialog-message" ),"没有出游的游客小组，请在游客管理中添加！");
+							return false;
+						}
 						var html = addGroupTemplate(data);
 						var addGroupTemplateLayer = layer.open({
 						    type: 1,
