@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>九寨沟汽车三日游</title>
+	<link rel="stylesheet" href="components/ace-admin/assets/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="components/ace-admin/assets/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style" />
+	<link rel="stylesheet" href="css/base.css">
+	<link rel="stylesheet" href="css/manner.css">
+</head>
+<body>
+	<div class="" style="background-color: #ffffff;">
+	 <div style="background-color:#076598;height: 70px;">
+	 	<img src="images/logo_24x24.png" style="margin-left: 60px;margin-top: 10px">
+	 	<img src="images/huochaitou.png" style="margin-top: 10px">
+	 </div>
+	 <div style="height: 7px;background-color:#04558C "></div>
+	<div class="" style="margin:auto;width: 1366px;padding-top: 30px">
+		<div class="viewQuoteContainer" onload="shareQuote()">
+	       <form class="form-horizontal viewQuoteMainForm" role="form" style="" onsubmit="return false">
+
+               <h5 class=" pull-left" >
+					<i class="ace-icon fa fa-info-circle title-size"></i>
+					<label class="middle title-size">详情表</label>
+				</h5>
+	         <table class="whereQ whereTwo" style="width: 88%;margin-bottom: 30px;">
+			<!-- <tr>
+				<td colspan="4" class="HeadManage">详情表</td>
+			</tr> -->
+					<tr>
+						<td class="style-myself">客户</td>
+						<td class="" style="text-align: left;padding: 0px 0px 0px 10px">上海南京路18号青旅</td>
+						<td class="style-myself">联系人</td>
+						<td class="" style="text-align: left;padding: 0px 0px 0px 10px">王五</td>
+						<td class="style-myself">联系电话</td>
+						<td class="" style="text-align: left;padding: 0px 0px 0px 10px">13434657465</td>
+					</tr>
+					<tr>
+						<td class="style-myself">人数</td>
+						<td class="" style="text-align: left;padding: 0px 0px 0px 10px">21大 3小</td>
+						<td class="style-myself">单房差数</td>
+						<td class="" style="text-align: left;padding: 0px 0px 0px 10px">3</td>
+						<td class="style-myself">出游日期</td>
+						<td class="" style="text-align: left;padding: 0px 0px 0px 10px">2015-11-21</td>
+					</tr>
+					<tr>
+						<td class="style-myself">总价</td>
+						<td class="" style="text-align: left;padding: 0px 0px 0px 10px" colspan="6">3211</td>
+						
+						</tr>
+					<tr>
+						<td class="style-myself">大人单价</td>
+						<td class="" style="text-align: left;padding: 0px 0px 0px 10px">210/人</td>
+						<td class="style-myself">小孩单价</td>
+						<td class="" style="text-align: left;padding: 0px 0px 0px 10px">123/人</td>
+						<td class="style-myself">单房差</td>
+						<td class="" style="text-align: left;padding: 0px 0px 0px 10px">100</td>
+					</tr>
+					<tr>
+						<td class="style-myself">备注</td>
+						<td class="" style="text-align: left;padding: 0px 0px 0px 10px"  colspan="6">如有疑问请致电。。。</td>				
+					</tr>
+
+		    </table>
+
+			<div class="ui-sortable-handle" style="margin-bottom: 30px;">
+					<h5 class=" pull-left " >
+						<i class="ace-icon fa fa-info-circle title-size"></i>
+						<label class="middle title-size">线路产品信息</label>
+					</h5>
+				<div class="pull-right line-bluer line-separated"></div>
+				<div style="clear: both"></div>
+				<div class="widget-body">
+					<div class="widget-main">
+						<div class="form-group">
+							<label class="col-sm-1 control-label no-padding-right">线路产品名称:</label>
+							<div class="col-sm-3">
+								<label class="control-label">九寨黄龙双汽3日游</label> 
+								<input type="hidden" value="" name="lineProductId">
+							</div>
+						
+							<label class="col-sm-1 control-label no-padding-right">线路天数:</label>
+							<div class="col-sm-3">
+								<label class="control-label" name="days" value="">55天</label> 
+							</div>
+							<label class="col-sm-1 control-label no-padding-right">类别:</label>
+							<div class="col-sm-3">
+								<label class="control-label">纯玩</label> 
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+	</form>
+
+	<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
+		<div class="form-group">
+			<div class="col-xs-12 col-sm-12 widget-container-col">
+				<div class=" ui-sortable-handle">
+						<h5 class="pull-left title-size">
+							<i class="ace-icon fa fa-calendar-minus-o"></i>
+							<label class="middle title-size">基础安排模板</label>
+						</h5>
+					<div class="pull-right line-bluer line-separatedT"></div>
+					<div style="clear: both"></div>
+					<div class="widget-body">
+						<div class="widget-main">
+								<div class="col-xs-12 col-sm-12 widget-container-col">
+									<div class=" ui-sortable-handle">
+										<h5 class="" style="color: #666!important;font-size: 14px!important;">
+											<i class="ace-icon fa fa-circle " style="font-size: 10px!important;"></i>
+											<label class="middle " style="font-weight: bold!important;margin-top: 5px">导游安排</label>
+										</h5>
+										<div class="widget-body">
+											<div class="widget-main">
+												<table class="table table-striped table-bordered table-hover T-arrangeGuideList">
+													<thead>
+														<tr>
+															<th width="220" class="th-border">导服费</th>
+															<th class="th-border">备注</th>
+														</tr>
+													</thead>  
+													<tbody>
+														<tr>
+														<td>
+														<!-- <input class="col-xs-12 T-changeQuote" name="guideFee" type="text" maxlength="9" /> -->
+														100
+														</td>
+															<td>
+															<!-- <input class="col-xs-12" name="remark" type="text" maxlength="1000" /> -->
+															导服费支出人。。。
+															</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="clearfix"></div>
+								<div class="col-xs-12 col-sm-12 widget-container-col">
+									<div class=" ui-sortable-handle">
+											<h5 class="" style="color: #666!important;font-size: 14px!important;">
+												<i class="ace-icon fa fa-circle " style="font-size: 10px!important;"></i>
+												<label class="middle " style="font-weight: bold!important;margin-top: 5px">保险安排</label>
+											</h5>
+										<div class="widget-body">
+											<div class="widget-main">
+												<table class="table table-striped table-bordered table-hover T-arrangeInsuranceList">
+													<thead>
+														<tr>
+															<th class="th-border">保险公司</th>
+															<th class="th-border">险种</th>
+															<th class="th-border">单价</th>
+															<th class="th-border">备注</th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr>
+															<td>
+															<!-- <input class="T-insurance-name col-xs-12 bind-change" name="insuranceName" type="text" value="" /><input type="hidden" name="insuranceId" value="" /> -->
+															中国人寿保险
+															</td>
+															<td>
+															<!-- <input class="col-xs-12" name="type" type="text" maxlength="100" value="" /> -->
+															医疗保险</td>
+															<td>
+															<!-- <input class="col-xs-12 T-changeQuote" name="price" type="text" maxlength="6" value="" /> -->
+															2113
+															</td>
+															<td>
+															<!-- <input class="col-xs-12" name="remark" type="text" maxlength="1000" value="" /> -->备注备注备注。。。</td>
+														</tr>
+														<tr>
+															<td>
+															<!-- <input class="T-insurance-name col-xs-12 bind-change" name="insuranceName" type="text" value="" /><input type="hidden" name="insuranceId" value="" /> -->
+															中国平安</td>
+
+															<td>
+														<!-- 	<input class="col-xs-12" name="type" type="text" maxlength="100" value="" /> -->
+															意外险</td>
+
+															<td>
+															<!-- <input class="col-xs-12 T-changeQuote" name="price" type="text" maxlength="6" value="" /> -->
+															33221</td>
+
+															<td>
+														<!-- 	<input class="col-xs-12" name="remark" type="text" maxlength="1000" value="" /> -->意外受伤险</td>
+														</tr>
+														
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="clearfix"></div>
+								<div class="col-xs-12 col-sm-12 widget-container-col">
+									<div class=" ui-sortable-handle">
+											<h5 class="" style="color: #666!important;font-size: 14px!important;">
+												<i class="ace-icon fa fa-circle " style="font-size: 10px!important;"></i>
+												<label class="middle " style="font-weight: bold!important;margin-top: 5px">车队安排</label>
+											</h5>
+										<div class="widget-body">
+											<div class="widget-main">
+												<table class="table table-striped table-bordered table-hover T-arrangeBusCompanyList">
+													<thead>
+														<tr>
+															<th class="th-border">座位数</th>
+															<th class="th-border">车辆品牌</th>
+															<th class="th-border">车队</th>
+															<th class="th-border">联系人</th>
+															<th class="th-border">联系电话</th>
+															<th class="th-border">座位价</th>
+															<th class="th-border">备注</th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr>
+															<td><input class="col-xs-12 bind-change" name="needSeatCount" readonly="readonly" type="text" maxlength="2" value="" /></td>  
+															<td><input name="brand" class="col-xs-12 bind-change" readonly="readonly" type="text" value="" /></td>
+															<td><input name="companyName" class="chooseBusCompany col-xs-12 bind-change" readonly="readonly" type="text" value="" /><input type="hidden" name="busCompanyId" value=""></td>
+															<td><input class="col-xs-12" name="manager" type="text" readonly="readonly" value="" /></td>   
+															<td><input class="col-xs-12" name="mobileNumber" type="text" readonly="readonly" value="" /></td>
+															<td><input class="col-xs-12 T-changeQuote" name="seatcountPrice" type="text" readonly="readonly" maxlength="9" value="" /></td>
+															<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" readonly="readonly" value="" /></td>
+														</tr>
+														<tr>
+															<td><input class="col-xs-12 bind-change" name="needSeatCount" readonly="readonly" type="text" maxlength="2" value="" /></td>  
+															<td><input name="brand" class="col-xs-12 bind-change" readonly="readonly" type="text" value="" /></td>
+															<td><input name="companyName" class="chooseBusCompany col-xs-12 bind-change" readonly="readonly" type="text" value="" /><input type="hidden" name="busCompanyId" value=""></td>
+															<td><input class="col-xs-12" name="manager" type="text" readonly="readonly" value="" /></td>   
+															<td><input class="col-xs-12" name="mobileNumber" type="text" readonly="readonly" value="" /></td>
+															<td><input class="col-xs-12 T-changeQuote" name="seatcountPrice" type="text" readonly="readonly" maxlength="9" value="" /></td>
+															<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" readonly="readonly" value="" /></td>
+														</tr>
+														
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</div>
+								</div>
+							<div class="clearfix"></div>					
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="form-group lineDayArrangeTemplate">
+			<div class="col-xs-12 col-sm-12 widget-container-col">
+				<div class=" ui-sortable-handle widgetSchedule">
+						<h5 class="pull-left title-size">
+							<i class="ace-icon fa fa-paper-plane"></i>
+							<label class="middle title-size">行程安排模板</label>
+						</h5>
+					<div class="pull-right line-bluer  line-separatedT"></div>
+					<div style="clear: both"></div>
+					<div class="widget-body">
+                        <div class="widget-main">
+                            <div class="tabbable">
+                                <ul class="nav nav-tabs" id="myTab">                                  
+                                    <li class="active" >
+                                        <a aria-expanded="true" data-toggle="tab" href="#dayListUpdate-" style="text-align:center;width:140px;">
+											第4天
+										</a>
+                                    </li>                                  
+                                </ul>
+                                <div class="tab-content T-daylist" style="position: relative; top: -2px; border: 1px solid #ececec">
+                                   
+                                    <div id="" class="tab-pane fade">
+                                        <div class="col-xs-12 col-sm-12 widget-container-col T-dailyArrangeList">
+                                            <div class=" ui-sortable-handle">
+                                                <h5 class="">
+														<label class="title-size">行程标题：</label>
+													</h5>
+                                                <div class="widget-body">
+                                                    <div class="widget-main">
+                                                        <h5 class="header">行程详情：</h5>
+                                                        <script id="" class="T-editor" type="text/plain" style="width:100%">
+                                                           
+                                                        </script>
+                                                        <div style="margin-top:10px;margin-bottom:10px">
+                                                            <button class="btn btn-app btn-inverse btn-xs T-add T-addRestaurant" style="background: #1fade0!important;">
+                                                                <i class="ace-icon fa fa-plus bigger-160"></i> 餐饮
+                                                            </button>
+                                                            <button class="btn btn-app btn-inverse btn-xs T-add T-addHotel" style="background: #1fade0!important;">
+                                                                <i class="ace-icon fa fa-plus bigger-160"></i> 酒店
+                                                            </button>
+                                                            <button class="btn btn-app btn-inverse btn-xs T-add T-addScenic" style="background: #1fade0!important;">
+                                                                <i class="ace-icon fa fa-plus bigger-160"></i> 景区
+                                                            </button>
+                                                            <button class="btn btn-app btn-inverse btn-xs T-add T-addShop" style="background: #1fade0!important;">
+                                                                <i class="ace-icon fa fa-plus bigger-160"></i> 购物
+                                                            </button>
+                                                            <button class="btn btn-app btn-inverse btn-xs T-add T-addSelfPay" style="background: #1fade0!important;">
+                                                                <i class="ace-icon fa fa-plus bigger-160"></i> 自费
+                                                            </button>
+                                                            <button class="btn btn-app btn-inverse btn-xs T-add T-addTraffic" style="background: #1fade0!important;">
+                                                                <i class="ace-icon fa fa-plus bigger-160"></i> 交通
+                                                            </button>
+                                                        </div>
+                                                        <div id="timeline-1">
+                                                            <div class="row">
+                                                                <div class="col-xs-12 col-sm-12">
+                                                                    <div class="timeline-container T-timeline-container">
+                                                                        <div class="timeline-items T-timeline-detail-container">
+                                                                            <!-- /.餐饮列表 -->
+                                                                           
+                                                                            <div class="T-timeline-item timeline-item clearfix T-RestaurantList ui-sortable-handle" data-entity-index="">
+                                                                                <div class="timeline-info" style="color:#1fade0;margin-left: 4px">
+                                                                                    <i class="ace-icon fa fa-circle"></i>
+                                                                                    <span>餐饮</span>
+                                                                                </div>
+                                                                                <div class="widget-box transparent" style="margin-top: 20px">
+                                                                                    <div class="widget-body">
+                                                                                        <div class="widget-main">
+                                                                                            <table class="table table-striped table-bordered table-hover">
+                                                                                                <thead>
+                                                                                                    <tr>
+                                                                                                        <th class="th-border">餐厅名称</th>
+                                                                                                        <th class="th-border">餐厅电话</th>
+                                                                                                        <th class="th-border">用餐类型</th>
+                                                                                                        <th class="th-border">餐标</th>
+                                                                                                        <th class="th-border">菜单</th>
+                                                                                                        <th class="th-border">备注</th>
+                                                                                                        <th class="th-border" style="width: 60px;">操作</th>
+                                                                                                    </tr>
+                                                                                                </thead>
+                                                                                                <tbody>
+                                                                                                    <tr>
+                                                                                                        <td>
+                                                                                                            <input type="text" class="T-choose-restaurantName col-xs-12 bind-change" value="" />
+                                                                                                            <input type="hidden" name="restaurantId" value="" /> 
+                                                                                                            <input type="hidden" name="templateId" value="" />
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            <input class="col-xs-12" type="text" readonly="readonly" name="mobileNumber" value="" />
+                                                                                                        </td>
+                                                                                                        
+                                                                                                        <td>
+                                                                                                            <select name="type" class="restauranType col-xs-12">
+                                                                                                                <option value="早餐">早餐</option>
+                                                                                                                <option value="午餐">午餐</option>
+                                                                                                                <option value="晚餐">晚餐</option>
+                                                                                                            </select>
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            <input type="text" name="price" class="T-choose-restaurantStandardsName col-xs-12 bind-change T-changeQuote" value="" />
+                                                                                                            <input type="hidden" name="typeId" value="" />
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            <input class="col-xs-12" type="text" readonly="readonly" name="menuList" value="" />
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            <input class="col-xs-12" type="text" name="remark" value="" />
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            <a data-entity-id="" data-entity-name="restaurantTemplate" class="cursor btn-restaurant-delete T-delete">
+																												删除
+																											</a>
+                                                                                                        </td>
+                                                                                                    </tr>
+                                                                                                </tbody>
+                                                                                            </table>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                          
+                                                                            <!-- /.酒店 -->
+                                                                           
+                                                                            <div class="T-timeline-item timeline-item clearfix T-resourceHotelList ui-sortable-handle" data-entity-index="">
+                                                                                <div class="timeline-info" style="color:#1fade0;margin-left: 4px">
+                                                                                    <i class="ace-icon fa fa-circle"></i>
+                                                                                    <span>酒店</span>
+                                                                                </div>
+                                                                                <div class="widget-box transparent" style="margin-top: 20px">
+                                                                                    <div class="widget-body">
+                                                                                        <div class="widget-main">
+                                                                                            <table class="table table-striped table-bordered table-hover">
+                                                                                                <thead>
+                                                                                                    <tr>
+                                                                                                        <th class="th-border">酒店星级</th>
+                                                                                                        <th class="th-border">酒店名称</th>
+                                                                                                        <th class="th-border">房型</th>
+                                                                                                        <th class="th-border">价格</th>
+                                                                                                        <th class="th-border">数量</th>
+                                                                                                        <th class="th-border">早餐</th>
+                                                                                                        <th class="th-border">电话</th>
+                                                                                                        <th class="th-border">备注</th>
+                                                                                                        <th class="th-border" style="width: 60px;">操作</th>
+                                                                                                    </tr>
+                                                                                                </thead>
+                                                                                                <tbody>
+                                                                                                    <tr>
+                                                                                                        <td>
+                                                                                                            <select class="col-xs-12 T-choose-hotelStarLevel">
+                                                                                                                <option value="1">三星以下</option>
+                                                                                                                <option  value="2">三星</option>
+                                                                                                                <option value="3">准四星</option>
+                                                                                                                <option  value="4">四星</option>
+                                                                                                                <option  value="5">准五星</option>
+                                                                                                                <option  value="6">五星</option>
+                                                                                                                <option  value="7">五星以上</option>
+                                                                                                            </select>
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            <input type="text" class="T-choose-hotelName col-xs-12 bind-change" name="hotelNmae" value="" />
+                                                                                                            <input type="hidden" name="hotelId" value="" /> 
+                                                                                                            <input type="hidden" name="templateId" value="" />
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            <input type="text" class="T-choose-hotelRoom col-xs-12 bind-change" name="hotelRoom" value="" />
+                                                                                                            <input type="hidden" name="hotelRoomId" value="" />
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            <input type="text" readonly="readonly" class="T-changeQuote" name="contractPrice" value="" style="width:70px;" />
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            <input type="text" name="count" class="T-changeQuote" value="" style="width:70px;" />
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            <input type="text" class="col-xs-12" readonly="readonly" name="containBreakfast" value="" />
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            <input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber" value="" />
+                                                                                                        </td>
+                                                                                                       
+                                                                                                        <td>
+                                                                                                            <input type="text" class="col-xs-12" name="remark" value="" />
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            <a data-entity-id="" data-entity-name="hotelTemplate" class="cursor btn-restaurant-delete T-delete">
+																												删除
+																											</a>
+                                                                                                        </td>
+                                                                                                    </tr>
+                                                                                                </tbody>
+                                                                                            </table>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                           
+                                                                            <!-- /.景区 -->
+                                                                          
+                                                                            <div class="T-timeline-item timeline-item clearfix T-resourceScenicList ui-sortable-handle" data-entity-index="">
+                                                                                <div class="timeline-info" style="color:#1fade0;margin-left: 4px">
+                                                                                    <i class="ace-icon fa fa-circle"></i>
+                                                                                    <span>景区</span>
+                                                                                </div>
+                                                                                <div class="widget-box transparent" style="margin-top: 20px">
+                                                                                    <div class="widget-body">
+                                                                                        <div class="widget-main">
+                                                                                            <table class="table table-striped table-bordered table-hover">
+                                                                                                <thead>
+                                                                                                    <tr>
+                                                                                                        <th class="th-border">景区名称</th>
+                                                                                                        <th class="th-border">收费项目</th>
+                                                                                                        <th class="th-border">景区价格</th>
+                                                                                                        <th class="th-border">联系电话</th>
+                                                                                                        <th class="th-border">备注</th>
+                                                                                                        <th class="th-border" style="width: 60px;">操作</th>
+                                                                                                    </tr>
+                                                                                                </thead>
+                                                                                                <tbody>
+                                                                                                    <tr>
+                                                                                                        <td>
+                                                                                                            <input type="text" class="T-choose-scenicName col-xs-12 bind-change" value="" />
+                                                                                                            <input type="hidden" name="scenicId" value="" />
+                                                                                                            <input type="hidden" name="templateId" value="" />
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            <input type="text" class="chooseChargingProjects col-xs-12 bind-change" name="chargingProjects" value="" />
+                                                                                                            <input type="hidden" name="chargingId" value="" />
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            <input type="text" class="col-xs-12 T-changeQuote" readonly="readonly" name="price" value="" />
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            <input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber" value="" />
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            <input type="text" class="col-xs-12" name="remark" value="" />
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            <a data-entity-id="" data-entity-name="scenicTemplate" class="cursor btn-restaurant-delete T-delete">
+																												删除
+																											</a>
+                                                                                                        </td>
+                                                                                                    </tr>
+                                                                                                </tbody>
+                                                                                            </table>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                          
+                                                                            <!-- /.购物 -->
+                                                                           
+                                                                            <div class="T-timeline-item timeline-item clearfix T-resourceShoppingList ui-sortable-handle" data-entity-index="">
+                                                                                <div class="timeline-info" style="color:#1fade0;margin-left: 4px">
+                                                                                    <i class="ace-icon fa fa-circle"></i>
+                                                                                    <span>购物</span>
+                                                                                </div>
+                                                                                <div class="widget-box transparent" style="margin-top: 20px">
+                                                                                    <div class="widget-body">
+                                                                                        <div class="widget-main">
+                                                                                            <table class="table table-striped table-bordered table-hover">
+                                                                                                <thead>
+                                                                                                    <tr>
+                                                                                                        <th class="th-border">商家名称</th>
+                                                                                                        <th class="th-border">商品政策</th>
+                                                                                                        <th class="th-border">联系电话</th>
+                                                                                                        <th class="th-border">停车返佣（元/辆）</th>
+                                                                                                        <th class="th-border">人数返佣（元/人）</th>
+                                                                                                        <th class="th-border">备注</th>
+                                                                                                        <th class="th-border" style="width: 60px;">操作</th>
+                                                                                                    </tr>
+                                                                                                </thead>
+                                                                                                <tbody>
+                                                                                                    <tr>
+                                                                                                        <td>
+                                                                                                            <input type="text" class="T-choose-shopVendorName col-xs-12 bind-change" value="" />
+                                                                                                            <input type="hidden" name="shopId" value="" /> 
+                                                                                                            <input type="hidden" name="templateId" value="" />
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            <input type="text" class="chooseGoodsPolicy col-xs-12 bind-change" name="goodsPolicy" value="" />
+                                                                                                            <input type="hidden" name="shopPolicyId" value="" />
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            <input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber" value="" />
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            <input type="text" class="col-xs-12" readonly="readonly" name="parkingRebateMoney" value="" />
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            <input type="text" class="col-xs-12" readonly="readonly" name="customerRebateMoney" value="" />
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            <input type="text" class="col-xs-12" name="remark" value="" />
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            <a data-entity-id="" data-entity-name="shopTemplate" class="cursor btn-restaurant-delete T-delete">
+																												删除
+																											</a>
+                                                                                                        </td>
+                                                                                                    </tr>
+                                                                                                </tbody>
+                                                                                            </table>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                           
+                                                                            <!-- /.自费 -->
+                                                                           
+                                                                            <div  class="T-timeline-item timeline-item clearfix T-resourceSelfPayList ui-sortable-handle" data-entity-index="" >
+                                                                                      <div class="timeline-info" style="color:#1fade0;margin-left: 4px">
+                                                                                         <i class="ace-icon fa fa-circle"></i>
+                                                                                        <span>自费</span>
+                                                                                      </div>
+                                                                                <div class="widget-box transparent " style="margin-top: 20px">
+                                                                                    <div class="widget-body">
+                                                                                        <div class="widget-main">
+                                                                                            <table class="table table-striped table-bordered table-hover mar">
+                                                                                                <thead>
+                                                                                                    <tr>
+                                                                                                        <th class="th-border">公司名称</th>
+                                                                                                        <th class="th-border">项目名称</th>
+                                                                                                        <th class="th-border">联系电话</th>
+                                                                                                        <th class="th-border">价格</th>
+                                                                                                        <th class="th-border">负责人</th>
+                                                                                                        <th class="th-border">备注</th>
+                                                                                                        <th class="th-border" style="width: 60px;">操作</th>
+                                                                                                    </tr>
+                                                                                                </thead>
+                                                                                                <tbody>
+                                                                                                    <tr>
+                                                                                                        <td>
+                                                                                                            <input type="text" class="T-choose-ticketCompanyName col-xs-12 bind-change" value="" />
+                                                                                                            <input type="hidden" name="companyId" value="" />
+                                                                                                            <input type="hidden" name="templateId" value="" />
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            <input type="text" class="chooseItemName bind-change" name="selfPayItemName" value="" />
+                                                                                                            <input type="hidden" name="selfPayItemId" value="" />
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            <input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber" value="" />
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            <input type="text" class="col-xs-12 T-changeQuote" readonly="readonly" name="contractPrice" value="" />
+                                                                                                            <input type="hidden" class="col-xs-12" readonly="readonly" name="marketPrice" value="" />
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            <input type="text" class="col-xs-12" readonly="readonly" name="managerName" value="" />
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            <input type="text" class="col-xs-12" name="remark" value="" />
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            <a data-entity-id="" data-entity-name="selfPayTemplate" class="cursor btn-restaurant-delete T-delete">
+																												删除
+																											</a>
+                                                                                                        </td>
+                                                                                                    </tr>
+                                                                                                </tbody>
+                                                                                            </table>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                           
+                                                                            <!-- /.交通 -->
+                                                                          
+                                                                            <div class="T-timeline-item timeline-item clearfix T-resourceTicketList ui-sortable-handle" data-entity-index="">
+                                                                                <div class="timeline-info" style="color:#1fade0;margin-left: 4px">
+                                                                                    <i class="ace-icon fa fa-circle"></i>
+                                                                                    <span>交通</span>
+                                                                                </div>
+                                                                                <div class="widget-box transparent" style="margin-top: 20px">
+                                                                                    <div class="widget-body">
+                                                                                        <div class="widget-main">
+                                                                                            <table class="table table-striped table-bordered table-hover">
+                                                                                                <thead>
+                                                                                                    <tr>
+                                                                                                        <th class="th-border">票务公司名称</th>
+                                                                                                        <th class="th-border">类型</th>
+                                                                                                        <th class="th-border">座位级别</th>
+                                                                                                        <th class="th-border">单价</th>
+                                                                                                        <th class="th-border">数量</th>
+                                                                                                        <th class="th-border">备注</th>
+                                                                                                        <th class="th-border" style="width: 60px;">操作</th>
+                                                                                                    </tr>
+                                                                                                </thead>
+                                                                                                <tbody>
+                                                                                                    <tr>
+                                                                                                        <td>
+                                                                                                            <input type="text" class="chooseTicketName col-xs-12 bind-change" value="" />
+                                                                                                            <input type="hidden" name="tickeId" value="" /> 
+                                                                                                            <input type="hidden" name="templateId" value="" />
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            <select name="type" class="col-sm-12 no-padding" style="width:70px;">
+                                                                                                                <option  value="1">机票</option>
+                                                                                                                <option  value="2">汽车票</option>
+                                                                                                                <option value="3">火车票</option>
+                                                                                                                <option selected="selected"  value="4">轮船票</option>
+                                                                                                            </select>
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            <input type="text" class="col-xs-12" name="seatLevel" value="" />
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            <input type="text" class="col-xs-12 T-changeQuote" name="price" value="" />
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            <input type="text" class="col-xs-12 T-changeQuote" name="count" value="" />
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            <input type="text" class="col-xs-12" name="remark" value="" />
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            <a data-entity-id="" data-entity-name="ticketTemplate" class="cursor btn-restaurant-delete T-delete">
+																												删除
+																											</a>
+                                                                                                        </td>
+                                                                                                    </tr>
+                                                                                                </tbody>
+                                                                                            </table>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                           
+                                                                        </div>
+                                                                        <!-- /.timeline-items -->
+                                                                    </div>
+                                                                    <!-- /.timeline-container -->
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                   
+                                    <div style="clear:both;height:0px;line-height:0px;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+				</div>
+			</div>
+		</div>
+		<div class="form-group driverList">
+			<div class="col-xs-12 col-sm-12 widget-container-col">
+				<div class=" ui-sortable-handle">
+						<h5 class="">
+							<label class="title-size">特别说明</label>
+						</h5>
+					<div class="widget-body">
+						<div class="widget-main">
+							<div class="form-group">
+								<label class="col-sm-1 control-label no-padding-right">费用包含:</label>
+								<div class="col-sm-11">
+                                    <textarea class="form-control" class="col-sm-12" style="height: 60px;" readonly="readonly"> 
+                                    </textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-1 control-label no-padding-right">费用不含:</label>
+                                <div class="col-sm-11">
+                                    <textarea class="form-control" class="col-sm-12"  style="height: 60px;" readonly="readonly"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-1 control-label no-padding-right">行程特色:</label>
+                                <div class="col-sm-11">
+                                    <textarea class="form-control" class="col-sm-12" style="height: 60px;" readonly="readonly">
+                                    	 
+                                    </textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-1 control-label no-padding-right">行程须知:</label>
+                                <div class="col-sm-11">
+                                    <textarea class="form-control" class="col-sm-12" style="height: 60px;" readonly="readonly">
+                                    	 
+                                    </textarea>
+								</div>   
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
+</div>
+	</div>
+	
+	<script src="components/ace-admin/assets/js/jquery.1.11.1.min.js"></script>
+	<script src="components/ace-admin/assets/js/bootstrap.min.js"></script>
+
+	<script src="components/ace-admin/assets/js/ace-elements.min.js"></script>
+	<script src="components/ace-admin/assets/js/ace.min.js"></script>
+	<script src="js/qoute.js"></script>
+</body>
+</html>

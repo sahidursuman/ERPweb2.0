@@ -56,7 +56,7 @@ define(function(require, exports) {
 
 		// 客户客量列表查询
 		$.ajax({
-			url : customerVolObj.url("findPager","view"),
+			url : KingServices.build_url("numberOfPartnerAgency","findPager"),
 			type:"POST",
 			data : "searchParam="+encodeURIComponent(JSON.stringify(customerVolObj.$searchParam)),
 			success:function(data){
@@ -128,7 +128,7 @@ define(function(require, exports) {
     	// body...
     	//查询客户明细列
 		$.ajax({
-			url : customerVolObj.url("findTourist","view"),
+			url : KingServices.build_url("numberOfPartnerAgency","findTourist"),
 			type:"POST",
 			data : "id="+id+"&pageNo="+page,
 			success:function(data){
@@ -166,7 +166,7 @@ define(function(require, exports) {
 				}
 			}).on('click',function(){
 				$.ajax({
-						url : customerVolObj.url("findPartnerAgency","view"),
+					    url : KingServices.build_url("numberOfPartnerAgency","findPartnerAgency"),
 						type:"POST",
 						data : "",
 						success:function(data){
@@ -196,12 +196,6 @@ define(function(require, exports) {
 			language: 'zh-CN'
 		})
 	};
-
-	//ajax中的url
-	customerVolObj.url = function(method,operation){
-		var url = ''+APP_ROOT+' /back/numberOfPartnerAgency.do?method='+method+'&token='+$.cookie('token')+'&menuKey='+menuKey+'&operation='+operation+'';
-		return url;
-	}
 
 	exports.init = customerVolObj.initModule;
 
