@@ -13,20 +13,21 @@
 							{{if touristGroupDetail.status == 1}}
 							<input type="text"  value="{{if touristGroupDetail.lineProduct != null}}{{touristGroupDetail.lineProduct.name}}{{/if}}" name="lineProductIdName" class="col-sm-8 bind-change product-width" readonly="readonly" />
 							<input type="hidden" value="{{touristGroupDetail.lineProductId}}" name="lineProductId" />
+							<input type="hidden" value="{{touristGroupDetail.quoteId}}" name="quoteId" />
 							<button class="col-sm-4 btn btn-sm btn-primary btn-travelLine-search travelLine-search T-travelLine-search" style="padding-bottom:5px;width: 62px">
 								<i class="ace-icon fa fa-search "></i>搜索
-							</button>
+							</button> 
 							{{else}}
 							<input type="text" value="{{if touristGroupDetail.lineProduct != null}}{{touristGroupDetail.lineProduct.name}}{{/if}}" name="lineProductIdName" class="col-sm-12" readonly="readonly" />
 							<input type="hidden" value="{{touristGroupDetail.lineProductId}}" name="lineProductId" />
+							<input type="hidden" value="{{touristGroupDetail.quoteId}}" name="quoteId" />
 							{{/if}}
 						</div>
 						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>出游日期:</label>
 						<div class="col-sm-2">
-							<!-- <input type="text" name="startTime" class="col-sm-12" /> -->
 							{{if touristGroupDetail.status == 1}}
 							<div class="input-group">
-								<input type="text" name="startTime" value="{{touristGroupDetail.startTime | dateFormat: 'yyyy-MM-dd'}}" class="col-sm-12 date-picker datepicker" />
+								<input type="text" name="startTime" value="{{touristGroupDetail.startTime | dateFormat: 'yyyy-MM-dd'}}" class="col-sm-12 date-picker datepicker" {{if !!touristGroupDetail.quoteId}} readonly {{/if}}/>
 									<span class="input-group-addon icon-tourist">
 										<i class="fa fa-calendar"></i>
 									</span>
@@ -47,13 +48,13 @@
 					<div class="form-group choosePartnerAgencyDiv guideInterval">
 						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>客户来源:</label>
 						<div class="col-sm-2">
-							<input type="text" name="fromPartnerAgency" class="col-sm-12" placeholder="请输入客户来源" value="{{if touristGroupDetail.partnerAgency != null}}{{touristGroupDetail.partnerAgency.travelAgencyName}}{{/if}}">
+							<input type="text" name="fromPartnerAgency" class="col-sm-12" placeholder="请输入客户来源" value="{{if touristGroupDetail.partnerAgency != null}}{{touristGroupDetail.partnerAgency.travelAgencyName}}{{/if}}" {{if !!touristGroupDetail.quoteId}} readonly {{/if}}>
 							<input type="hidden" value="{{if touristGroupDetail.partnerAgency != null}}{{touristGroupDetail.partnerAgency.id}}{{/if}}" name="fromPartnerAgencyId">
 						</div>
 						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>同行联系人:</label>
 						<div class="col-sm-2">
 							<div class="input-group">
-								<input class="choosePartnerManager col-sm-12 bind-change" value="{{if touristGroupDetail.partnerAgencyContact != null}}{{touristGroupDetail.partnerAgencyContact.contactRealname}} -[{{touristGroupDetail.partnerAgencyContact.contactMobileNumber}}]{{/if}}" name="partnerAgencyNameList" type="text" />
+								<input class="choosePartnerManager col-sm-12 bind-change" value="{{if touristGroupDetail.partnerAgencyContact != null}}{{touristGroupDetail.partnerAgencyContact.contactRealname}} -[{{touristGroupDetail.partnerAgencyContact.contactMobileNumber}}]{{/if}}" name="partnerAgencyNameList" type="text" {{if !!touristGroupDetail.quoteId}} readonly {{/if}} />
 								<input type="hidden" name="partnerAgencyContactId" value="{{if touristGroupDetail.partnerAgencyContact != null}}{{touristGroupDetail.partnerAgencyContact.id}}{{/if}}" />
 								<span class="input-group-addon T-addPartnerManager margin-leftF40" style="cursor:pointer;" title="为客户来源添加联系人">
 									<i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
@@ -122,10 +123,10 @@
 									大人
 								</td>
 								<td>
-									<span class="necessary col-sm-1">*</span><input name="adultCount" value="{{touristGroupDetail.adultCount}}" type="text" class="col-sm-11  no-padding-right T-costCount" maxlength="3" />
+									<span class="necessary col-sm-1">*</span><input name="adultCount" value="{{touristGroupDetail.adultCount}}" type="text" class="col-sm-11  no-padding-right T-costCount" maxlength="3" {{if !!touristGroupDetail.quoteId}} readonly {{/if}}/>
 								</td>
 								<td>
-									<span class="necessary col-sm-1">*</span><input name="adultPrice" value="{{touristGroupDetail.adultPrice}}" type="text" class="col-sm-11  no-padding-right  T-costPrice" maxlength="6" />
+									<span class="necessary col-sm-1">*</span><input name="adultPrice" value="{{touristGroupDetail.adultPrice}}" type="text" class="col-sm-11  no-padding-right  T-costPrice" maxlength="6" {{if !!touristGroupDetail.quoteId}} readonly {{/if}}/>
 								</td>
 								<td></td>
 							</tr>
@@ -137,10 +138,10 @@
 									小孩
 								</td>
 								<td>
-									<input name="childCount" value="{{touristGroupDetail.childCount}}" type="text" class="col-sm-11  no-padding-right T-costCount" style="float:right;" maxlength="3" />
+									<input name="childCount" value="{{touristGroupDetail.childCount}}" type="text" class="col-sm-11  no-padding-right T-costCount" style="float:right;" maxlength="3" {{if !!touristGroupDetail.quoteId}} readonly {{/if}}/>
 								</td>
 								<td>
-									<input name="childPrice" value="{{touristGroupDetail.childPrice}}" type="text" class="col-sm-11  no-padding-right T-costPrice" style="float:right;" maxlength="6" />
+									<input name="childPrice" value="{{touristGroupDetail.childPrice}}" type="text" class="col-sm-11  no-padding-right T-costPrice" style="float:right;" maxlength="6" {{if !!touristGroupDetail.quoteId}} readonly {{/if}}/>
 								</td>
 								<td></td>
 							</tr>{{each touristGroupDetail.touristGroupFeeList as feeList}}
@@ -190,8 +191,8 @@
 										<option{{if touristGroupDetail.hotelLevel == 3}} selected="selected"{{/if}} value="3">准四星</option>
 										<option{{if touristGroupDetail.hotelLevel == 4}} selected="selected"{{/if}} value="4">四星</option>
 										<option{{if touristGroupDetail.hotelLevel == 5}} selected="selected"{{/if}} value="5">准五星</option>
-										<option{{if touristGroupDetail.hotelLevel == 5}} selected="selected"{{/if}} value="6">五星</option>
-										<option{{if touristGroupDetail.hotelLevel == 6}} selected="selected"{{/if}} value="7">五星以上</option>
+										<option{{if touristGroupDetail.hotelLevel == 6}} selected="selected"{{/if}} value="6">五星</option>
+										<option{{if touristGroupDetail.hotelLevel == 7}} selected="selected"{{/if}} value="7">五星以上</option>
 									</select>
 								</div>
 								<label class="col-sm-2 control-label no-padding-right">包含自费：</label>

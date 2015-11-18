@@ -608,8 +608,11 @@ var modalScripts = {
 	'arrange_booking' : 'js/template/arrange/booking/booking.js',
 	'resource_partnerAgency':'js/template/resource/partnerAgency/partnerAgency.js',
 	'resource_touristGroup':'js/template/resource/touristGroup/touristGroup.js',//游客管理
+	//-------------------------------------------发团管理---------------------------------------------------
 	'arrange_plan':"js/template/arrange/tripPlan/tripPlan.js",
+	'resource_travelLine': 'js/template/resource/travelLine/travelLine.js',
 	'arrange_quote':'js/template/arrange/quote/quote.js',
+
 	//-------------------------------------------业务分析模块---------------------------------------------------
 	'business_analyst_saleProduct' : "js/template/businessAnalyst/saleProduct/saleProduct.js",//产品销量
 	'business_analyst_sourDstribution' : "js/template/businessAnalyst/sourDstribution/sourDstribution.js", //客源分布
@@ -1198,12 +1201,21 @@ function listMenu(menuTemplate){
 						subsection.listMainSubsection();
 					});
 				});
-				// table 点击选中时间
-				$(document).on('click', 'td', function(event) {
-					// event.preventDefault();
-					var $that = $(this);
-					if ($that.closest('table').hasClass('T-NotShowHighLight')) {
-						$that.closest('tr').toggleClass('success');
+				// table 点击选中事件
+				$(document).on('click','tbody tr', function(event) {
+					var $that = $(this), $checkBox = $that.find('input[type="checkbox"]');
+					if ($that.closest('table').hasClass('T-NotShowHighLight')) {	
+							if ($checkBox.length) {
+								if ($checkBox.data('triggered-click')) {
+									$checkBox.data('triggered-click', false);
+								} else {
+									$checkBox.data('triggered-click', true);
+									$that.toggleClass('success');
+									$checkBox.trigger('click');
+								}
+							} else {
+								$that.toggleClass('success');
+							}				
 					}
 				});
 				//dateTime
@@ -1512,7 +1524,7 @@ var Tools = {
  * @param  {object} $elements 需要绑定提示的DOM
  * @return {[type]}           [description]
  */
-Tools.descToolTip = function($elements,type, placement) {
+Tools.descToolTip = function($elements,type,placement) {
 	if (!!$elements)  {
 		$elements.each(function() {
 			var $that = $(this), content = $that.prop('title'),html = $that.data("html");
@@ -1541,15 +1553,17 @@ Tools.descToolTip = function($elements,type, placement) {
 					}, 100);
 				});
 			}else if (type == 2) {
-				var options = {
+				var options = {};	 
+				// 绑定提示
+				$that.popover({
 					trigger: 'manual',
 					container: '#desc-tooltip-containter',
 					content: html,
-					html : true
-				};
-				if (!!placement) {
-					options.placement = placement;
-				}
+					html: true
+				});
+				if (!!placement) {	 
+					options.placement = placement;	 
+				} 
 				// 绑定提示
 				$that.popover(options)
 				// 处理显示与隐藏提示
@@ -1830,13 +1844,18 @@ KingServices.addTicket = function(fn){
 		module.addTicket(fn);
 	});
 }
-//报价  新增
-KingServices.addQuote = function(id){
+//报价  新增	 
+KingServices.addQuote = function(id){	 
 	seajs.use("" + ASSETS_ROOT + modalScripts.arrange_quote,function(module){
-		module.addQuote(id);
+		module.addQuote(id);	 
+			});	 
+}
+//修改报价  （查看询价结果）
+KingServices.updateQuote = function(id){
+	seajs.use("" + ASSETS_ROOT + modalScripts.arrange_quote,function(module){
+		module.updateQuote(id);
 	});
 }
-
 
 //添加资源函数
 KingServices.addResourceFunction = function(e){
