@@ -550,9 +550,14 @@ define(function(require, exports) {
 		};
 
 		var planTouristCount = parseInt(getValue("planTouristCount")),
-			memberCount = parseInt($tab.find(".T-groupMemberCount").text());
+			memberCount = parseInt($tab.find(".T-groupMemberCount").text()),
+			seatCount = parseInt($tab.find("input[name=seatCount]").val());
 		if(planTouristCount < memberCount){
-			showMessageDialog($( "#confirm-dialog-message" ),"小组总人数不能大于计划人数");
+			showMessageDialog($( "#confirm-dialog-message" ),"游客总人数不能大于计划人数！");
+			return false;
+		}else if(seatCount < memberCount){
+			showMessageDialog($( "#confirm-dialog-message" ),"游客总人数不能大于车座数！");
+			return false;
 		}else{
 			// 表单校验
 			var validator = rule.checkdCreateTripPlan($tab.find(".T-plan-container"));
