@@ -25,58 +25,72 @@
 					<td rowspan="{{rs.hotelList.length}}">{{rs.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
 					<td rowspan="{{rs.hotelList.length}}">{{rs.arriveTime | dateFormat: 'yyyy-MM-dd'}}</td>
 					<td rowspan="{{rs.hotelList.length}}">{{rs.condition}}</td>
-					{{each rs.hotelList as hotel index}}
+					{{each rs.hotelList as offer index}}
 						{{if index == 0}}
-							<td rowspan="{{hotel.roomTypeList.length}}">{{hotel.hotelName}}</td>
-							<td rowspan="{{hotel.roomTypeList.length}}">{{hotel.hotelLevel}}</td>
-							{{each hotel.roomTypeList as room index}}
+							<td rowspan="{{offer.roomTypeList.length}}">{{offer.hotelName}}</td>
+							<td rowspan="{{offer.roomTypeList.length}}">{{offer.hotelLevel}}</td>
+							{{each offer.roomTypeList as room index}}
 								{{if index == 0}}
-									<td>{{room.type}}</td>
-									<td>{{room.replyPrice}}</td>
+									<td class="T-hotelType-{{offer.id}}">{{room.type}}</td>
+									<td class="T-hotelPrice-{{offer.id}}">{{room.replyPrice}}</td>
 								{{/if}}
 							{{/each}}
-							<td rowspan="{{hotel.roomTypeList.length}}">{{hotel.remark}}</td>
-							<td rowspan="{{hotel.roomTypeList.length}}">{{hotel.reserveMinutes}}</td>
-							<td rowspan="{{hotel.roomTypeList.length}}">{{hotel.expiryTime}}</td>
-							<td rowspan="{{hotel.roomTypeList.length}}">{{hotel.status}}</td>
-							<td rowspan="{{hotel.roomTypeList.length}}" data-id="{{hotel.id}}"><a class="T-hotel-add">加入</a> | <a class="T-hotel-delete">删除</a></td>
+							<td rowspan="{{offer.roomTypeList.length}}">{{offer.remark}}</td>
+							<td rowspan="{{offer.roomTypeList.length}}">{{offer.reserveMinutes}}</td>
+							<td rowspan="{{offer.roomTypeList.length}}">{{offer.expiryTime}}</td>
+							<td rowspan="{{offer.roomTypeList.length}}">{{offer.status}}</td>
+							<td rowspan="{{offer.roomTypeList.length}}" data-id="{{offer.id}}">
+								{{if offer.status == "等待确认"}}
+									<a class="T-hotel-refresh">刷新</a><span> | </span> 
+								{{else if offer.status == "已同意"}}
+									<a class="T-hotel-add">加入</a><span> | </span>
+								{{/if}}
+								<a class="T-hotel-delete">删除</a>
+							</td>
 						{{/if}}
 					{{/each}}
 				</tr>
-				{{each rs.hotelList as hotel index}}
+				{{each rs.hotelList as offer index}}
 					{{if index == 0}}
-						{{each hotel.roomTypeList as room index}}
+						{{each offer.roomTypeList as room index}}
 							{{if index > 0}}
 								<tr>
-									<td>{{room.type}}</td>
-									<td>{{room.replyPrice}}</td>
+									<td class="T-hotelType-{{offer.id}}">{{room.type}}</td>
+									<td class="T-hotelPrice-{{offer.id}}">{{room.replyPrice}}</td>
 								</tr>
 							{{/if}}
 						{{/each}}
 					{{/if}}
 				{{/each}}
-				{{each rs.hotelList as hotel index}}
+				{{each rs.hotelList as offer index}}
 					{{if index > 0}}
 						<tr>
-							<td rowspan="{{hotel.roomTypeList.length}}">{{hotel.hotelName}}</td>
-							<td rowspan="{{hotel.roomTypeList.length}}">{{hotel.hotelLevel}}</td>
-							{{each hotel.roomTypeList as room index}}
+							<td rowspan="{{offer.roomTypeList.length}}">{{offer.hotelName}}</td>
+							<td rowspan="{{offer.roomTypeList.length}}">{{offer.hotelLevel}}</td>
+							{{each offer.roomTypeList as room index}}
 								{{if index == 0}}
-									<td>{{room.type}}</td>
-									<td>{{room.replyPrice}}</td>
+									<td class="T-hotelType-{{offer.id}}">{{room.type}}</td>
+									<td class="T-hotelPrice-{{offer.id}}">{{room.replyPrice}}</td>
 								{{/if}}
 							{{/each}}
-							<td rowspan="{{hotel.roomTypeList.length}}">{{hotel.remark}}</td>
-							<td rowspan="{{hotel.roomTypeList.length}}">{{hotel.reserveMinutes}}</td>
-							<td rowspan="{{hotel.roomTypeList.length}}">{{hotel.expiryTime}}</td>
-							<td rowspan="{{hotel.roomTypeList.length}}">{{hotel.status}}</td>
-							<td rowspan="{{hotel.roomTypeList.length}}" data-id="{{hotel.id}}"><a class="T-hotel-add">加入</a> | <a class="T-hotel-delete">删除</a></td>
+							<td rowspan="{{offer.roomTypeList.length}}">{{offer.remark}}</td>
+							<td rowspan="{{offer.roomTypeList.length}}">{{offer.reserveMinutes}}</td>
+							<td rowspan="{{offer.roomTypeList.length}}">{{offer.expiryTime}}</td>
+							<td rowspan="{{offer.roomTypeList.length}}">{{offer.status}}</td>
+							<td rowspan="{{offer.roomTypeList.length}}" data-id="{{hotel.id}}">
+								{{if offer.status == "等待确认"}}
+									<a class="T-hotel-refresh">刷新</a><span> | </span>
+								{{else if offer.status == "已同意"}}
+									<a class="T-hotel-add">加入</a><span> | </span>
+								{{/if}}
+								<a class="T-hotel-delete">删除</a>
+							</td>
 						</tr>
-						{{each hotel.roomTypeList as room index}}
+						{{each offer.roomTypeList as room index}}
 							{{if index > 0}}
 								<tr>
-									<td>{{room.type}}</td>
-									<td>{{room.replyPrice}}</td>
+									<td class="T-hotelType-{{offer.id}}">{{room.type}}</td>
+									<td class="T-hotelPrice-{{offer.id}}">{{room.replyPrice}}</td>
 								</tr>
 							{{/if}}
 						{{/each}}

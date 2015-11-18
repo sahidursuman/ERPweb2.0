@@ -21,28 +21,42 @@
 					<td rowspan="{{rs.busCompanyOfferList.length}}">{{rs.lineProductName}}</td>
 					<td rowspan="{{rs.busCompanyOfferList.length}}">{{rs.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
 					<td rowspan="{{rs.busCompanyOfferList.length}}">{{rs.condition}}</td>
-					{{each rs.busCompanyOfferList as bus index}}
+					{{each rs.busCompanyOfferList as offer index}}
 						{{if index == 0}}
-							<td>{{bus.busCompanyName}}</td>
-							<td>{{bus.replyPrice}}</td>
-							<td>{{bus.remark}}</td>
-							<td>{{bus.reserveMinutes}}</td>
-							<td>{{bus.expiryTime}}</td>
-							<td>{{bus.status}}</td>
-							<td data-id="{{bus.id}}"><a class="T-bus-add">加入</a> | <a class="T-bus-delete">删除</a></td>
+							<td>{{offer.busCompanyName}}</td>
+							<td class="T-price">{{offer.replyPrice}}</td>
+							<td>{{offer.remark}}</td>
+							<td>{{offer.reserveMinutes}}</td>
+							<td>{{offer.expiryTime}}</td>
+							<td class="T-status">{{offer.status}}</td>
+							<td data-id="{{offer.id}}">
+								{{if offer.status == "等待确认"}}
+									<a class="T-bus-refresh">刷新</a><span> | </span>
+								{{else if offer.status == "已同意"}}
+									<a class="T-bus-add">加入</a><span> | </span>
+								{{/if}}
+									<a class="T-bus-delete">删除</a>
+							</td>
 						{{/if}}
 					{{/each}}
 				</tr>
-				{{each rs.busCompanyOfferList as bus index}}
+				{{each rs.busCompanyOfferList as offer index}}
 					{{if index > 0}}
 						<tr>
-							<td>{{bus.busCompanyName}}</td>
-							<td>{{bus.replyPrice}}</td>
-							<td>{{bus.remark}}</td>
-							<td>{{bus.reserveMinutes}}</td>
-							<td>{{bus.expiryTime}}</td>
-							<td>{{bus.status}}</td>
-							<td data-id="{{bus.id}}"><a class="T-bus-add">加入</a> | <a class="T-bus-delete">删除</a></td>
+							<td>{{offer.busCompanyName}}</td>
+							<td class="T-price">{{offer.replyPrice}}</td>
+							<td>{{offer.remark}}</td>
+							<td>{{offer.reserveMinutes}}</td>
+							<td>{{offer.expiryTime}}</td>
+							<td class="T-status">{{offer.status}}</td>
+							<td data-id="{{offer.id}}">
+								{{if offer.status == "等待确认"}}
+									<a class="T-bus-refresh">刷新</a><span> | </span>
+								{{else if offer.status == "已同意"}}
+									<a class="T-bus-add">加入</a><span> | </span>
+								{{/if}}
+									<a class="T-bus-delete">删除</a>
+							</td>
 						</tr>
 					{{/if}}
 				{{/each}}
