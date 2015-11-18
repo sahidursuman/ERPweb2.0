@@ -604,7 +604,9 @@ define(function(require,exports){
 		if (!!data) {
 			setData('startTime', data.startTime);   //出游日期
 			setData('fromPartnerAgency', data.partnerAgency.travelAgencyName);   //客户来源
+			setData('fromPartnerAgencyId', data.partnerAgencyContact.id);   //客户来源的索引
 			setData('partnerAgencyNameList', data.partnerAgencyContact.contactRealname);   //同行联系人
+			setData('partnerAgencyContactId', data.partnerAgencyContact.id);   //同行联系人的索引
 			setData('adultCount', data.adultCount);   //大人人数
 			setData('adultPrice', data.adultQuotePrice);   //大人单价
 			setData('childCount', data.childCount);   //小孩人数
@@ -627,7 +629,9 @@ define(function(require,exports){
 		var names = [
 			'startTime', 
 			'fromPartnerAgency',
+			'fromPartnerAgencyId',
 			'partnerAgencyNameList', 
+			'partnerAgencyContactId',
 			'adultCount',
 			'adultPrice',
 			'childCount',
