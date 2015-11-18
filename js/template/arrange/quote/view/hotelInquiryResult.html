@@ -1,0 +1,88 @@
+<div class="col-xs-12">
+	<table class="table table-striped table-bordered table-hover">
+		<thead>
+			<tr class="bg-blur">  
+				<th>线路产品</th>
+				<th>出游日期</th>
+				<th>入住日期</th>               
+				<th>需求内容</th>
+				<th>酒店</th>
+				<th>星级</th>
+				<th>房型</th>
+				<th>房费报价</th>
+				<th>反馈内容</th>
+				<th>资源保留期</th>
+				<th>询价截止期</th>
+				<th>询价状态</th>
+				<th>操作</th>
+			</tr>
+		</thead>
+	
+		<tbody>
+			{{each data as rs}}
+				<tr>
+					<td rowspan="{{rs.hotelList.length}}">{{rs.lineProductName}}</td>
+					<td rowspan="{{rs.hotelList.length}}">{{rs.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
+					<td rowspan="{{rs.hotelList.length}}">{{rs.arriveTime | dateFormat: 'yyyy-MM-dd'}}</td>
+					<td rowspan="{{rs.hotelList.length}}">{{rs.condition}}</td>
+					{{each rs.hotelList as hotel index}}
+						{{if index == 0}}
+							<td rowspan="{{hotel.roomTypeList.length}}">{{hotel.hotelName}}</td>
+							<td rowspan="{{hotel.roomTypeList.length}}">{{hotel.hotelLevel}}</td>
+							{{each hotel.roomTypeList as room index}}
+								{{if index == 0}}
+									<td>{{room.type}}</td>
+									<td>{{room.replyPrice}}</td>
+								{{/if}}
+							{{/each}}
+							<td rowspan="{{hotel.roomTypeList.length}}">{{hotel.remark}}</td>
+							<td rowspan="{{hotel.roomTypeList.length}}">{{hotel.reserveMinutes}}</td>
+							<td rowspan="{{hotel.roomTypeList.length}}">{{hotel.expiryTime}}</td>
+							<td rowspan="{{hotel.roomTypeList.length}}">{{hotel.status}}</td>
+							<td rowspan="{{hotel.roomTypeList.length}}" data-id="{{hotel.id}}"><a class="T-hotel-add">加入</a> | <a class="T-hotel-delete">删除</a></td>
+						{{/if}}
+					{{/each}}
+				</tr>
+				{{each rs.hotelList as hotel index}}
+					{{if index == 0}}
+						{{each hotel.roomTypeList as room index}}
+							{{if index > 0}}
+								<tr>
+									<td>{{room.type}}</td>
+									<td>{{room.replyPrice}}</td>
+								</tr>
+							{{/if}}
+						{{/each}}
+					{{/if}}
+				{{/each}}
+				{{each rs.hotelList as hotel index}}
+					{{if index > 0}}
+						<tr>
+							<td rowspan="{{hotel.roomTypeList.length}}">{{hotel.hotelName}}</td>
+							<td rowspan="{{hotel.roomTypeList.length}}">{{hotel.hotelLevel}}</td>
+							{{each hotel.roomTypeList as room index}}
+								{{if index == 0}}
+									<td>{{room.type}}</td>
+									<td>{{room.replyPrice}}</td>
+								{{/if}}
+							{{/each}}
+							<td rowspan="{{hotel.roomTypeList.length}}">{{hotel.remark}}</td>
+							<td rowspan="{{hotel.roomTypeList.length}}">{{hotel.reserveMinutes}}</td>
+							<td rowspan="{{hotel.roomTypeList.length}}">{{hotel.expiryTime}}</td>
+							<td rowspan="{{hotel.roomTypeList.length}}">{{hotel.status}}</td>
+							<td rowspan="{{hotel.roomTypeList.length}}" data-id="{{hotel.id}}"><a class="T-hotel-add">加入</a> | <a class="T-hotel-delete">删除</a></td>
+						</tr>
+						{{each hotel.roomTypeList as room index}}
+							{{if index > 0}}
+								<tr>
+									<td>{{room.type}}</td>
+									<td>{{room.replyPrice}}</td>
+								</tr>
+							{{/if}}
+						{{/each}}
+					{{/if}}
+				{{/each}}
+			{{/each}}
+		</tbody>
+	</table>
+</div>

@@ -117,6 +117,17 @@ define(function(require, exports) {
 				language: 'zh-CN'
 			});
 
+		    //报表下单操作
+			$("#" +tabId+ " .tripPlanViewList .T-tripPlan-sendOrder").on('click', function(event) {
+				event.preventDefault();
+				/* Act on the event */
+				var $that=$(this),
+				    qouteId=$that.attr("data-entiy-qouteId");
+				 tripPlan.singleClickSendOrder(qouteId);    
+			});
+
+		
+
 			$("#" +tabId+ " .tripPlanViewList .btn-tripPlan-view").on("click", tripPlan.viewTripPlan)
 			$("#"+tabId+" .tripPlanViewList .btn-tripPlan-plan").on("click", function(){
 				var billStatus = $(this).attr("billStatus");
@@ -329,6 +340,39 @@ define(function(require, exports) {
 			$("#tripPlan_addPlan_selfPay .addSelfPay").on("click",{validator:validator}, tripPlan.addSelfPay);
 			$("#tripPlan_addPlan_ticket .addTicket").on("click",{validator:validator}, tripPlan.addTicket);
 			$("#tripPlan_addPlan_other .addOther").on("click",{validator:validator}, tripPlan.addOther);
+
+			//一键下单操作
+			$("#tripPlan_addPlan_content").find('.T-singleClick-Order').on('click', function(event) {
+				event.preventDefault();
+				/* Act on the event */
+				var $obj=$('#tab-arrange_all-update-content'),
+				    quoteId=$obj.find('input[name=qouteId]').val();
+				    tripPlan.singleClickSendOrder(quoteId);
+				    
+			});
+
+			//发送订单显示&&隐藏
+			tripPlan.isSendOrderHide($("#tripPlan_addPlan_bus"));
+			tripPlan.isSendOrderHide($("#tripPlan_addPlan_hotel"));
+
+            //车辆的发送订单
+			$("#tripPlan_addPlan_bus").find('.T-bus-SendOrder').on('click',  function(event) {
+				event.preventDefault();
+				var $that=$(this),$trBusData=$that.closest('tr'),$obj=$('#tab-arrange_all-update-content'),
+				    qouteId=$obj.find('input[name=qouteId]').val();
+				/* Act on the event */
+			    tripPlan.busSendOrder($trBusData,qouteId);
+			});
+
+			//住宿的发送订单
+			$("#tripPlan_addPlan_hotel").find('.T-Hotel-SendOrder').on('click', function(event) {
+				event.preventDefault();
+				var $that=$(this),$trHotelData=$that.closest('tr'),$obj=$('#tab-arrange_all-update-content'),
+				    qouteId=$obj.find('input[name=qouteId]').val();
+				/* Act on the event */
+				tripPlan.hotelSendOrder($trHotelData,qouteId);
+			});
+
 			//绑定删除时间
 			tripPlan.bindDeleteEvent();
 
@@ -388,6 +432,143 @@ define(function(require, exports) {
 			//组装JSON 浮动显示
 			
 		},
+
+		/**
+		 * 
+		 * @param  {[type]} $trBusData 车辆中的发送订单
+		 * @return {[type]}            [description]
+		 */
+		busSendOrder:function($trBusData,quoteId){
+			var saveJson={
+				quoteId:quoteId
+			};
+			saveJson.busJson=[];
+			if($trBusData.length > 0){
+				for(var i=0; i<$trBusData.length; i++){
+					$trBusData.each(function(i) {
+						var busJsonArray = {
+							id: $trBusData.eq(i).attr("data-entity-arrangeId"),
+							busCompanyId : $trBusData.eq(i).attr("data-entity-busCompanyId"),
+							busId : $trBusData.eq(i).attr("data-entity-busId")
+						}	
+						saveJson.busJson.push(busJsonArray);			
+					});
+				}
+			}
+			
+			tripPlan.sendOrderRequest(saveJson);
+		},
+
+		/**
+		 * [hotelSendOrder 住宿的发送订单]
+		 * @param  {[type]} $trHotelData [description]
+		 * @return {[type]}              [description]
+		 */
+		hotelSendOrder:function($trHotelData, quoteId){
+			var saveJson={
+				 quoteId: quoteId
+			};
+			saveJson.hotelJson=[];
+			if($trHotelData.length > 0){  
+                for(var i=0; i<$trHotelData.length; i++){
+					$trHotelData.each(function(i) {
+						var hotelJsonArray = {
+							id: $trHotelData.eq(i).attr("data-entity-arrangeId"),
+							roomId : $trHotelData.eq(i).attr("data-entity-roomId"),
+							hotelId : $trHotelData.eq(i).attr("data-entity-hotelId")
+						}	
+						saveJson.hotelJson.push(hotelJsonArray);			
+					});
+				}
+			}
+			tripPlan.sendHotelRequest(saveJson);
+		},
+
+
+		/**
+		 * [sendOrderRequest 车队发送订单请求]
+		 * @param  {[type]} saveJson [description]
+		 * @return {[type]}          [description]
+		 */
+		sendOrderRequest:function(saveJson){
+			$.ajax({
+				url:KingServices.build_url("busInquiry","saveBusCompanyOrder"),
+				type: 'POST',
+				dataType: 'JSON',
+				data: "saveJson="+encodeURIComponent(JSON.stringify(saveJson)),
+				success:function(data){
+					var result = showDialog(data);
+					if(result){
+					}
+			    }
+			})
+		},
+
+
+
+		/**
+		 * [sendHotelRequest 酒店发送订单请求]
+		 * @param  {[type]} saveJson [description]
+		 * @return {[type]}          [description]
+		 */
+		sendHotelRequest:function(saveJson){
+			$.ajax({
+				url:KingServices.build_url("hotelInquiry","saveHotelOrder"),
+				type: 'POST',
+				dataType: 'JSON',
+				data: "saveJson="+encodeURIComponent(JSON.stringify(saveJson)),
+				success:function(data){
+					var result = showDialog(data);
+					if(result){
+					}
+			    }
+			})
+		},
+
+
+		/**
+		 * singleClickSendOrder 一键下单
+		 * @param  {[type]} qouteId 报价Id
+		 * @return {[type]}         [description]
+		 */
+		singleClickSendOrder:function(quoteId){
+			$.ajax({
+				url:KingServices.build_url("productQuote","saveOrder"),
+				type: 'POST',
+				dataType: 'JSON',
+				data: "quoteId="+quoteId,
+				success:function(data){
+					var result = showDialog(data);
+					if(result){
+					}
+			    }
+			})
+
+		},
+
+
+		/**
+		 * isSendOrderHide  判断发送订单是否显示隐藏
+		 * @param  {[type]}  $sendArea 发送订单域
+		 * @return {Boolean}           [description]
+		 */
+		isSendOrderHide:function($sendArea){
+			var $that=$('#tab-arrange_all-update-content'),
+			    qouteId=$that.find('input[name=qouteId]').val(),
+			    $sendOrderObj=$sendArea.find('.T-sendOrder-Area');
+			if (qouteId=="") {
+				$that.find('.T-singleClick-Order').addClass('hide');
+				for (var i = 0; i < $sendOrderObj.length; i++) {
+				  $sendOrderObj.eq(i).addClass('hide');
+			    }
+			}else{
+				$that.find('.T-singleClick-Order').removeClass('hide');
+				for (var i = 0; i < $sendOrderObj.length; i++) {
+				   $sendOrderObj.eq(i).removeClass('hide')
+			    }
+			};
+		},
+
 		//浮动查看自选餐厅
 		viewOptionalRestaurant :function($objInput){
 			$objInput.each(function(){

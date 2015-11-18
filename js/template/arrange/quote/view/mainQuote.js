@@ -1,0 +1,4 @@
+/*TMODJS:{"debug":true,"version":5,"md5":"e83aa08794f5750b8c12d7086cb332a6"}*/
+define(function(require) {
+    return require("../../../template")("arrange/quote/view/mainQuote", '<div class="row col-xs-12"> <div class="tabbable"> <ul class="nav nav-tabs" id="quoteTab"> <li class="active"> <a data-toggle="tab" href="#quoteContent" class="quoteContent" aria-expanded="false" data-value="1"> 报价详情 </a> </li> <li> <a data-toggle="tab" href="#inquiryContent" class="inquiryContent" aria-expanded="true" data-value="2"> 询价状态 </a> </li> </ul> <div class="tab-content" style="position:relative;top: -2px">  <div id="quoteContent" class="tab-pane fade active in clearfix"> </div>  <div id="inquiryContent" class="tab-pane fade clearfix"> </div> </div> </div> </div> ');
+});
