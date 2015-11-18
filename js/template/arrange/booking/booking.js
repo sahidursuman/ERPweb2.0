@@ -91,7 +91,8 @@ define(function(require, exports) {
 				partnerAgencyId: partnerAgency || '',
 				operateUser : operateUser || '',
 				startTime : startTime || '',
-				endTime : endTime || ''
+				endTime : endTime || '',
+				sortType : 'operationTime'
 			};
 
 		BookingArrange.ajax(data, listBookingInfo);
