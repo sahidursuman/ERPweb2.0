@@ -532,17 +532,21 @@ define(function(require, exports) {
 			var $that=$('#tab-arrange_all-update-content'),
 			    qouteId=$that.find('input[name=qouteId]').val(),
 			    $sendOrderObj=$sendArea.find('.T-sendOrder-Area');
-			if (qouteId=="") {
-				$that.find('.T-singleClick-Order').addClass('hide');
+			    //车队&&酒店显示隐藏
 				for (var i = 0; i < $sendOrderObj.length; i++) {
-				  $sendOrderObj.eq(i).addClass('hide');
-			    }
-			}else{
-				$that.find('.T-singleClick-Order').removeClass('hide');
-				for (var i = 0; i < $sendOrderObj.length; i++) {
-				   $sendOrderObj.eq(i).removeClass('hide')
-			    }
-			};
+					var offerId=$sendOrderObj.eq(i).attr("data-entity-offerId");
+					    if (offerId=="") {
+					    	$sendOrderObj.eq(i).addClass('hide');
+					    } else{
+					    	$sendOrderObj.eq(i).removeClass('hide');
+					};	         
+				}
+	            //qouteId判定一键下单是否隐藏
+				if (qouteId=="") {  
+					$that.find('.T-singleClick-Order').addClass('hide');
+				}else{
+					$that.find('.T-singleClick-Order').removeClass('hide');
+				};
 		},
 
 		//浮动查看自选餐厅
