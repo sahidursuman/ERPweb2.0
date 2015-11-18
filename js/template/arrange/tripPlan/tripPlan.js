@@ -492,7 +492,7 @@ define(function(require, exports) {
 					    type: 1,
 					    title:"查看小组信息",
 					    skin: 'layui-layer-rim',
-					    area: '700px',
+					    area: '1000px',
 					    zIndex:1028,
 					    content: html,
 					    scrollbar: false
