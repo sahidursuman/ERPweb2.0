@@ -592,7 +592,21 @@ define(function(require, exports) {
 				quote.addResourceTraffic($that, validator, $container);
 			}
 		})
-		.on('click', '.T-delete', quote.deleteLineProductDaysArrange($container));
+		.on('click', '.T-delete', function(){
+			quote.deleteLineProductDaysArrange($(this), $container);
+		});
+
+		// 绑定安排的拖动事件				
+		$container.find('.T-timeline-detail-container').sortable({
+			containment: 'parent',
+			axis: "y",
+			handle: '.table-bordered thead',
+			tolerance:'pointer',
+			update: function(event, ui) {
+				quote.updateRouteIndex(null, $container);
+			}
+		});
+
 		//autocomplete
 		var $dayListArea = $container.find('.T-timeline-container');
 		quote.bindInsuranceChosen($container.find('.T-insurance-name'), validator, $container);
@@ -2093,8 +2107,8 @@ define(function(require, exports) {
 		});
 	};
 	//删除日程安排
-	quote.deleteLineProductDaysArrange = function($container){
-		var dialogObj = $( "#confirm-dialog-message" ), $obj = $(this);
+	quote.deleteLineProductDaysArrange = function($obj, $container){
+		var dialogObj = $( "#confirm-dialog-message" );
 
 		if (!!$obj.data("entity-id")) {
 			dialogObj.removeClass('hide').dialog({
