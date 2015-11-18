@@ -611,8 +611,6 @@ var modalScripts = {
 	//-------------------------------------------发团管理---------------------------------------------------
 	'arrange_plan':"js/template/arrange/tripPlan/tripPlan.js",
 	'resource_travelLine': 'js/template/resource/travelLine/travelLine.js',
-	//-------------------------------------------发团管理---------------------------------------------------
-	'arrange_plan':"js/template/arrange/tripPlan/tripPlan.js",
 	'arrange_quote':'js/template/arrange/quote/quote.js',
 
 	//-------------------------------------------业务分析模块---------------------------------------------------
