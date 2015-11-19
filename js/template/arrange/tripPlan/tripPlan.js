@@ -1175,8 +1175,8 @@ define(function(require, exports) {
 				parents.find("input[name=DmobileNumber]").val("");
 			}
 		}).unbind("click").click(function(){
-			var obj = $(this);
-			if (!!$obj.attr('readonly')) return;
+			var obj = this;
+			if (!!$(obj).attr('readonly')) return;
 			$.ajax({
 				url:KingServices.build_url("bookingOrder","getSeatCountList"),
 				success:function(data){
@@ -1232,7 +1232,7 @@ define(function(require, exports) {
 				parents.find("input[name=DmobileNumber]").val("");
 			}
 		}).unbind("click").click(function(){
-			var $obj = $(this);
+			var obj = this;
 			var seatCount = $(this).closest('.T-baseinfo-container').find(".T-chooseSeatCount").val();
 			if(seatCount){
 				$.ajax({
