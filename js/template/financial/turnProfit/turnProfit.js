@@ -4,7 +4,7 @@ define(function(require, exports) {
     tabId = "tab-"+menuKey+"-content",
     checkTabId = menuKey+"-checking",
     viewTemplate = require("./view/visitorGroup"),
-    transitViewTemplate = require("../../arrange/transit/view/view"),
+    transitViewTemplate = require("./view/innerTransferView"),
     visitorGroupMainInfo = require("./view/visitorGroupMainInfo"),
     arrangeTransferViewTemplate=require("./view/turnVisitorGroup"),
     blanceTabId = menuKey+"-blance";
