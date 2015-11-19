@@ -1348,6 +1348,10 @@ define(function(require,exports){
 		form +="&hotelLevel="+expectLevel+"&includeSelfPay="+includeOwnExpense+"&remark="+touristRemarks+"&buyInsurance="+buyInsurance+"&isNeedArriveService="+isNeedArriveService+"&isNeedBus="+isNeedBus+"&isNeedLeaveService="+isNeedLeaveService;
 		//游客json串
 		var touristGroupMemberJsonAdd = touristGroup.installVisiJson($visiForm,id,typeFlag);
+		
+		if(touristGroupMemberJsonAdd ==2 || touristGroupMemberJsonAdd == 1){
+			return;
+		}
 		if(touristGroupMemberJsonAdd.length == 0){
 			showMessageDialog($( "#confirm-dialog-message" ),"请添加游客成员");
 			return;
@@ -1423,6 +1427,7 @@ define(function(require,exports){
 	//拼接游客名单json
 	touristGroup.installVisiJson = function($obj,id,typeFlag){
 		var touristGroupMemberJsonAdd = [],
+			erroFlag = 0,
 			$tr;
 		if(typeFlag == 2){
 			$tr = $obj.find(".T-addTouristList tbody tr:not(.deleted)");
@@ -1444,9 +1449,11 @@ define(function(require,exports){
 			}
 			if (isContactUser && mobileNumber == "")  {
 				showMessageDialog($( "#confirm-dialog-message" ), "请填写名单中联系人的手机号码！");
+				erroFlag = 1;
 				return;
 			} else if (!mobileNumber && !idCardNumber) {
 				showMessageDialog($( "#confirm-dialog-message" ), "手机号码或证件号码必填一项！");
+				erroFlag = 2;
 				return;
 			}
 			var touristGroupMemberJson = {};
@@ -1471,7 +1478,12 @@ define(function(require,exports){
 			
 			touristGroupMemberJsonAdd.push(touristGroupMemberJson);
 		});
-		return touristGroupMemberJsonAdd;
+		if(erroFlag == 0){
+			return touristGroupMemberJsonAdd;
+		}else{
+			return erroFlag;
+		}
+		
 	};
 	//拼接安排json
 	touristGroup.installArrangeJson = function($outArrange){
