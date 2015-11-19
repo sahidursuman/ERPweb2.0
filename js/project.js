@@ -318,7 +318,7 @@ function showSaveConfirmDialog($dialog, message, yes_fn, no_fn, cacel_fn)  {
 
 	$dialog.removeClass('hide').dialog({
 		modal: true,
-		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i>保存修改？</h4></div>",
+		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i>数据保存</h4></div>",
 		title_html: true,
 		draggable:false,
 		buttons: buttons,
@@ -1604,7 +1604,7 @@ Tools.addTab = function(tab_id, tab_name, html)  {
 
 		// 页面已经编辑
 		if ($content.data('isEdited'))  {
-			showSaveConfirmDialog($( "#confirm-dialog-message" ), "内容已经被修改，是否保存?",
+			showSaveConfirmDialog($( "#confirm-dialog-message" ), "数据已经被修改，是否保存?",
 								function(){	// 保存
 									$content.trigger(SWITCH_TAB_SAVE, [tab_id, tab_name, html]);
 								},
@@ -1648,7 +1648,7 @@ Tools.addTab = function(tab_id, tab_name, html)  {
 
 				// 页面已经编辑
 				if ($content.data('isEdited'))  {
-					showSaveConfirmDialog($( "#confirm-dialog-message" ), "内容已经被修改，是否保存?",
+					showSaveConfirmDialog($( "#confirm-dialog-message" ), "数据已经被修改，是否保存?",
 										function(){	// 保存
 											$content.trigger(CLOSE_TAB_SAVE);
 										},
