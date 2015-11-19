@@ -1851,9 +1851,9 @@ KingServices.addQuote = function(id){
 			});	 
 }
 //修改报价  （查看询价结果）
-KingServices.updateQuote = function(id){
+KingServices.updateQuoteToOffer = function(id,type){
 	seajs.use("" + ASSETS_ROOT + modalScripts.arrange_quote,function(module){
-		module.updateQuote(id);
+		module.updateQuoteToOffer(id,type);
 	});
 }
 
