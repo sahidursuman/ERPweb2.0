@@ -64,8 +64,8 @@ define(function(require, exports) {
 							quote.viewQuote(id);
 						} else if ($this.hasClass('T-update')){
 							// 编辑报价信息
-							//quote.updateQuote(id);
-							quote.updateQuoteToOffer(id,'1');
+							quote.updateQuote(id);
+							//quote.updateQuoteToOffer(id,'1');
 						} else if ($this.hasClass('T-delete')){
 							// 删除报价
 							//....
