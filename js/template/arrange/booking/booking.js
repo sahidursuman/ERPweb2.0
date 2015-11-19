@@ -42,12 +42,8 @@ define(function(require, exports) {
 				url: url,
 				type:"POST",
 				data: data || "",
-				dataType:"json",
-				beforeSend:function(){
-					globalLoadingLayer = openLoadingLayer();
-				},
+				showLoading:false,
 				success:function(data){
-					layer.close(globalLoadingLayer);
 					var result = showDialog(data);
 					if(result){
 						callback(data);
@@ -740,7 +736,12 @@ define(function(require, exports) {
 		BookingArrange.choose(chooseManagerList, function(obj){
 			var partnerAgencyId = parentObj.find('.bookingMainForm input[name=partnerAgencyId]').val();
 			if(partnerAgencyId){
-				BookingArrange.ajax({'url' : 'partnerAgency', 'method' : 'getContactListByPartnerAgencyId', 'menuKey' : 'resource_partnerAgency', 'operation' : 'view', 'partnerAgencyId' : partnerAgencyId}, function(data){
+				BookingArrange.ajax({
+					'url' : 'partnerAgency',
+					'method' : 'getContactListByPartnerAgencyId', 
+					'menuKey' : 'resource_partnerAgency', 
+					'operation' : 'view', 
+					'partnerAgencyId' : partnerAgencyId}, function(data){
 					var contactList = JSON.parse(data.partnerAgencyContactList);
 					if(contactList != null && contactList.length>0){
 						if(contactList != null && contactList.length){
@@ -782,7 +783,8 @@ define(function(require, exports) {
 			if(BookingArrange.tmpData.partnerAgency){
 				setPartnerAgency(BookingArrange.tmpData.partnerAgency);
 			}else{
-				BookingArrange.ajax({'url' : 'bookingOrder', 'method' : 'getAllPartnerAgencyList', 'menuKey' : menuKey, 'operation' : 'view'}, function(data){
+				BookingArrange.ajax({'url' : 'bookingOrder',
+				 'method' : 'getAllPartnerAgencyList', 'menuKey' : menuKey, 'operation' : 'view'}, function(data){
 					BookingArrange.tmpData.partnerAgency = data;
 					setPartnerAgency(data);
 				});
