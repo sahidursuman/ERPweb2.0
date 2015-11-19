@@ -2706,11 +2706,9 @@ define(function(require, exports) {
 	 */
 	quote.deleteItem = function(quoteId) {
 		if (!!quoteId) {
-			showConfirmMsg(
+			showConfirmDialog(
 				$("#confirm-dialog-message"),
-
 				"你确定要删除该条记录？",
-
 				function(){
 					$.ajax({
 						url: KingServices.build_url('quote', 'deleteQuote'),
@@ -2722,12 +2720,8 @@ define(function(require, exports) {
 							quote.listQuote(0);
 						}
 					});
-				},
-				function(){
-
-				},
-
-				"取消","确定")
+				}
+			)
 
 		}
 	}
