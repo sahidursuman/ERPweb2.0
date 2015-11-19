@@ -25,6 +25,7 @@ define(function(require, exports) {
 	 * @return {[type]} [description]
 	 */
 	ResTravelLine.initModule = function() {
+		ResTravelLine.$tab = null;
 		ResTravelLine.getList();
 	};
 
