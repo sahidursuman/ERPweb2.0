@@ -17,6 +17,18 @@ define(function(require, exports) {
 
     TurnProfit.initModule = function() {
     	console.log('modal');
+        TurnProfit.searchParam = {
+            pageNo: 0,
+            lineProductId : "",
+            lineProductName :"",
+            partnerAgencyId : "",
+            partnerAgencyName : "",
+            toBusinessGroupId : "",
+            toBusinessGroupName : "",
+            startTime : "",
+            endTime : "",
+            sortType: 'auto' 
+        };
         TurnProfit.listTurnProfit(0,"","","","","","","","");
     };
 
