@@ -20,9 +20,6 @@
 						<div class="col-sm-3">
 							<label class="control-label T-lineProductStatus" data-entity-status="{{quoteDetailJson.lineProduct.status}}">{{if quoteDetailJson.lineProduct.status == 1}}售卖中{{else}}未售卖{{/if}}</label> 
 						</div>
-						<button class="car">车询价</button>
-						<button class="hotel">酒店询价</button>
-						<button class="T-quote">算报价</button>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-1 control-label no-padding-right">线路天数:</label>
@@ -280,6 +277,7 @@
 											<h5 class="" style="color: #666!important;font-size: 14px!important;">
 												<i class="ace-icon fa fa-circle " style="font-size: 10px!important;"></i>
 												<label class="middle " style="font-weight: bold!important;margin-top: 5px">车队安排</label>
+												<button class="btn btn-sm btn-success T-car" style="float: right;"> <i class="ace-icon fa fa-plus"></i> 车辆询价 </button>
 											</h5>
 										<div class="widget-body">
 											<div class="widget-main">
@@ -356,11 +354,12 @@
                                 <div class="tab-content T-daylist" style="position: relative; top: -2px; border: 1px solid #ececec">
                                     {{each daysList as lineProductDaysList i}}
                                     <div id="dayListUpdate-{{i}}" class="tab-pane fade {{if i == 0}}active in{{/if}}">
-                                        <div class="col-xs-12 col-sm-12 widget-container-col T-dailyArrangeList" data-eneity-whichDay="{{i+1}}">
+                                        <div class="col-xs-12 col-sm-12 widget-container-col T-dailyArrangeList" data-entity-whichday="{{i+1}}">
                                             <div class=" ui-sortable-handle">
                                                 <h5 class="">
 														<label class="title-size">行程标题：{{lineProductDaysList.lineProductDay.title}}</label>
-													</h5>
+														<button class="btn btn-sm btn-success T-hotel" style="float: right;"> <i class="ace-icon fa fa-plus"></i> 酒店询价 </button>
+												</h5>
                                                 <div class="widget-body">
                                                     <div class="widget-main">
                                                         <h5 class="header">行程详情：</h5>
