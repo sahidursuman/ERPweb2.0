@@ -234,7 +234,7 @@ define(function(require,exports){
 			$innerTransferForm = $updateTabId.find(".T-touristGroupMainFormRS");//中转安排对象
 			$updateTabId.find(".T-submit-updateTouristGroup").data('id',id);
 			//添加验证
-			touristGroup.validator = rule.checktouristGroup($updateTabId);
+			touristGroup.validator = rule.checktouristGroup($groupInfoForm);
 			touristGroup.checkInnerValidator = rule.checkInnerTransfer($innerTransferForm);
 			//添加tab切换
 			touristGroup.init_CRU_event($updateTabId,id,2);
@@ -456,11 +456,11 @@ define(function(require,exports){
 	 * @return {[type]}           [description]
 	 */
 	touristGroup.initLineProductSearch = function(isUpdate) {
-		var type = isUpdate?'update': 'add',
+		var type = isUpdate ?'update': 'add',
 			html =searchTemplate({update: type}),
 			searchTravelLinelayer =layer.open({
 				type: 1,
-				title:"选择路线产品",
+				title:"选择线路产品",
 				skin: 'layui-layer-rim', //加上边框
 				area: ['85%', '80%'], //宽高
 				zIndex:1029,
@@ -605,10 +605,10 @@ define(function(require,exports){
 	touristGroup.setQuoteData = function($mainForm, data) {
 		if (!!data) {
 			var isUpdate = $mainForm.hasClass('T-update');
-			setData('startTime', data.startTime);   //出游日期
+			setData('startTime', data.startTime.split(' ')[0]).prop('disabled', true).nextAll('span, .fa').addClass('hidden');   //出游日期
 			setData('fromPartnerAgency', data.partnerAgency.travelAgencyName);   //客户来源
-			setData('fromPartnerAgencyId', data.partnerAgencyContact.id);   //客户来源的索引
-			setData('partnerAgencyNameList', data.partnerAgencyContact.contactRealname);   //同行联系人
+			setData('fromPartnerAgencyId', data.partnerAgency.id);   //客户来源的索引
+			setData('partnerAgencyNameList', data.partnerAgencyContact.contactRealname).nextAll('.T-addPartnerManager').addClass('hidden');;   //同行联系人
 			setData('partnerAgencyContactId', data.partnerAgencyContact.id);   //同行联系人的索引
 			setData('adultCount', data.adultCount);   //大人人数
 			setData('adultPrice', data.adultQuotePrice);   //大人单价
@@ -625,7 +625,8 @@ define(function(require,exports){
 				$name.data('old', $name.val());
 			}
 
-			$name.val(val).prop('readonly', true);
+			$name.val(val).prop('readonly', true).trigger('change');
+			return $name;
 		}
 	};
 
@@ -651,7 +652,7 @@ define(function(require,exports){
 		names.forEach(function(name) {
 			var $name = $mainForm.find('[name="'+ name +'"]'), val = isUpdate? $name.data('old'): '';
 
-			$name.val(val).prop('readonly', false);
+			$name.val(val).prop('readonly', false).prop('disabled', false).nextAll('span,.fa').removeClass('hidden');
 		});
 
 		$mainForm.find('input[name="childPrice"]').trigger('change');
@@ -705,7 +706,7 @@ define(function(require,exports){
 						touristGroup.searchLinproduct(false,0,name);
 					});
 					//提交事件
-					$searchPanel.find('.T-submit-searchtravelLine').off('click').on('click',function(){
+					$searchPanel.find('.T-searchtravelLine').off('click').on('click',function(){
 						touristGroup.saveLineproduceJson($searchPanel,tabFlag);
 						layer.close(searchLinproductLayer);
 					});	
@@ -722,7 +723,7 @@ define(function(require,exports){
 			$addVisitorObj = $("#tab-resource_touristGroup-update-content")
 		}
 		
-		var $parentObj = $addVisitorObj.find('.T-touristGroupMainForm');
+		var $parentObj = $addVisitorObj.find('.T- ');
 		var lineProductName = $parentObj.find('input[name=lineProductIdName]');
 		var lineProductId = $parentObj.find('input[name=lineProductId]');
 		var $tr = $searchPanel.find('tbody tr'),
@@ -1021,6 +1022,7 @@ define(function(require,exports){
 			change:function(event,ui){
 				if(ui.item == null){
 					$(this).closest('div').find('input[name=fromPartnerAgencyId]').val("");
+					$(this).closest('div').find('input[name=partnerAgencyNameList]').val("");
 				}
 			},
 			select:function(event,ui){
@@ -1031,13 +1033,16 @@ define(function(require,exports){
 				if(touristGroup.typeFlag == 1){
 					var $tabId = $("#tab-resource_touristGroup-add-content");
 					$tabId.find("input[name=partnerAgencyNameList]").val("");
+					$tabId.closest('div').find('input[name=partnerAgencyContactId]').val("");
 				}
 				if(touristGroup.typeFlag == 2){
 					var $tabId = $("#tab-resource_touristGroup-update-content");
 					$tabId.find("input[name=partnerAgencyNameList]").val("");
+					$tabId.closest('div').find('input[name=partnerAgencyContactId]').val("");
 				}
 			}
 		}).off('click').on('click',function(){
+				if (!!$(this).attr('readonly')) return;
 				var obj = this;
 				var formParObj = touristGroup.autocompleteDate.fromPartnerAgencyList;
 				if(formParObj != null && formParObj.length>0){
@@ -1064,6 +1069,7 @@ define(function(require,exports){
 				objParent.find("input[name=partnerAgencyContactId]").val(ui.item.id).trigger('change');
 			}
 		}).off('click').on('click',function(){
+			if (!!$(this).attr('readonly')) return;
 			var objM = this;
 			var $parentsObj = $obj.closest('form');
 			var partnerAgencyId = $parentsObj.find('input[name=fromPartnerAgencyId]').val();
@@ -1256,7 +1262,14 @@ define(function(require,exports){
 		else{
 			buyInsuranceS = 0;
 		}
-		var form = $lineInfoForm.serialize();
+		var form = $lineInfoForm.serialize(),
+		 	$startTime = $lineInfoForm.find('input[name="startTime"]');
+
+		// for 出游日期
+		if ($startTime.prop('disabled')) {
+			form = form + '&startTime=' + $startTime.val();
+		}
+		
 		function trim(str){
 			return str.replace(/(^\s*)|(\s*$)/g, "");
 		};
@@ -1406,8 +1419,7 @@ define(function(require,exports){
 			type:"POST",
 			data:data,
 			success:function(data){
-				var result = showDialog('isEdited', false);
-				if(result){
+				if(showDialog(data)){
 					$obj.data('isEdited', false);
 					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
 						if(!!tabArgs && tabArgs.length === 3){

@@ -274,6 +274,15 @@ define(function(require, exports) {
 						ResLineProduct.bindShopEvent($dayListArea.find('.T-choose-shopVendorName'));
 						ResLineProduct.bindSelfPay($dayListArea.find('.T-choose-ticketCompanyName'));
 						ResLineProduct.bindTicketEvent($dayListArea.find('.chooseTicketName'));
+
+						//修改用餐类型后清空餐标和菜单
+						$tab.find(".T-restauranType").on("change", function(){
+							var typeParent = $(this).parent().parent();
+							typeParent.find("input[name=typeName]").val("");
+							typeParent.find("input[name=menuList]").val("");
+							typeParent.find("input[name=pricePerPerson]").val("");
+							typeParent.find("input[name=remark]").val("");
+						});
 					}
 				}
 			});
@@ -302,6 +311,9 @@ define(function(require, exports) {
 		if(!clipboardMode) {
 			$tab.find('.T-btn-submit').data('id', id);
 		}
+
+		
+		
 		// 以下待修改
 		ResLineProduct.mousedownBlur();
 
@@ -818,8 +830,8 @@ define(function(require, exports) {
 		'<tbody><tr>'+
 		'<td><input type="text" class="col-xs-12 chooseRestaurantName bind-change"/><input type="hidden" name="restaurantId"/></td>'+
 		'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
-		'<td><select name="type" class="col-xs-12 restauranType"><option value="早餐">早餐</option><option value="午餐">午餐</option><option value="晚餐">晚餐</option></select></td>'+
-		'<td><input type="text" name="price" class="col-xs-12 restaurantStandardsName bind-change"/><input type="hidden" name="typeId"/></td>'+
+		'<td><select name="type" class="col-xs-12 T-restauranType"><option value="早餐">早餐</option><option value="午餐">午餐</option><option value="晚餐">晚餐</option></select></td>'+
+		'<td><input type="text" name="typeName" class="col-xs-12 restaurantStandardsName bind-change"/><input type="hidden" name="typeId"/></td>'+
 		'<td><input type="text" class="col-xs-12" readonly="readonly" name="menuList"/></td>'+
 		'<td><input type="text" class="col-xs-12" name="remark"/></td><td><a class="cursor btn-restaurant-delete T-delete deleteAllother">删除 </a></td></tr>'+
 		'</tbody></table></div></div></div></div>';
@@ -827,7 +839,7 @@ define(function(require, exports) {
 		$btn.closest(".T-dailyArrangeList").find(".T-timeline-detail-container").append(scheduleDetails);
 		ResLineProduct.updateLineProductIndex += 1;
 
-		$(".updateRestaurantList .restauranType").on("change", function(){
+		$(".T-restauranType").on("change", function(){
 			var typeParent = $(this).parent().parent();
 			typeParent.find("input[name=typeName]").val("");
 			typeParent.find("input[name=menuList]").val("");
@@ -853,7 +865,7 @@ define(function(require, exports) {
 					$tr.find("input[name=payType]").val("");
 					$tr.find("input[name=menuList]").val("");
 					$tr.find("input[name=pricePerPerson]").val("");
-					$tr.find("input[name=price]").val("");
+					$tr.find("input[name=typeName]").val("");
 					$tr.find("input[name=typeId]").val("");
 				}
 
@@ -866,7 +878,7 @@ define(function(require, exports) {
 				$tr.find("input[name=typeName]").val("");
 				$tr.find("input[name=menuList]").val("");
 				$tr.find("input[name=pricePerPerson]").val("");
-				$tr.find("input[name=price]").val("");
+				$tr.find("input[name=typeName]").val("");
 				$tr.find("input[name=typeId]").val("");
 				
 				$.ajax({
@@ -1782,7 +1794,7 @@ define(function(require, exports) {
 							id : $item.find("[name=templateId]").val(),
 							restaurantId : restaurantId,
 							standardId : standardId,
-							price : $item.find("[name=price]").val(),
+							price : $item.find("[name=typeName]").val(),
 							remark : $item.find("[name=remark]").val(),
 							orderIndex : $item.attr("data-entity-index")
 						}

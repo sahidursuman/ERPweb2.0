@@ -316,7 +316,7 @@ define(function(require, exports) {
 						    addTab(menuKey+"-divide","分团操作",html);
 						} else{
 							var html=transferDivideTemplate(data);
-							 addTab(menuKey+"-transfer-divide","分体操作",html);
+							 addTab(menuKey+"-transfer-divide","分团操作",html);
 
 							 //团体分团操作--查看--生成计划
 							 arrangeTourist.init_trfdivieEvent();
@@ -712,6 +712,9 @@ define(function(require, exports) {
 						data.addTripPlan.bus = JSON.parse(data.addTripPlan.bus);
 						data.addTripPlan.driver = JSON.parse(data.addTripPlan.driver);
 						data.addTripPlan.busCompany = JSON.parse(data.addTripPlan.busCompany);
+						if (data.addTripPlan.quoteId!=null) {
+							data.addTripPlan.busCompanyArrange = JSON.parse(data.addTripPlan.busCompanyArrange);
+						};
 						data.addTripPlan.guide = JSON.parse(data.addTripPlan.guide);
 						var result = showDialog(data);
 						var html = addTripPlanTemplate(data);
@@ -734,7 +737,6 @@ define(function(require, exports) {
 
 			//短信发送  定时控件
 			arrangeTourist.setTripPlanPicker();
-
 
 			//游客短信及时发送显示隐藏
 			$("#"+tab+" .checkbox").unbind().click(function(){
@@ -2309,7 +2311,8 @@ define(function(require, exports) {
 					"driverId": getValue("driverId"),
 					"guideId": getValue("AddTPchooseGuideId"),
 					"busId": getValue("busLicenseNumberId"),
-					"touristGroupId": []
+					"touristGroupId": [],
+					"qouteId" :  getValue("qouteId") 
 				}
 				var touristGroupList = $("#"+tab+" ."+className+" ."+tbody+" tr").length;
 				$("#"+tab+" ."+className+" ."+tbody+" tr").each(function(i){

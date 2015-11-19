@@ -498,7 +498,8 @@ define(function(require, exports) {
 			transChildPrice	: getValParam("transChildPrice"), //内转小孩价		
 			transNeedPayMoney :getValParam("transNeedPayMoney"),//	应付		需要计算
 			transPayedMoney	 : getValParam("transPayedMoney"), //已付		填写
-			transRemark : getValParam("transRemark")
+			transRemark : getValParam("transRemark"),
+			isCurrent : getValParam("isCurrent")
 		}   
 
 		//获取新增费用项目

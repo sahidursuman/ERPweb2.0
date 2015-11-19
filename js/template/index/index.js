@@ -11,7 +11,7 @@ define(function(require, exports) {
                 that.init_event();
                 that.init_message();
                 that.bind_message();
-                //index.MessagePrompt({bus: 5, hotel: 2, guide: 4});
+                // index.MessagePrompt({bus: 5, hotel: 2});
             },
             /**
              * 绑定处理方法
@@ -154,10 +154,10 @@ define(function(require, exports) {
             + '<a class="T-item T-hotel" style="display: inline-block;margin-top:30px;"><i class="fa fa-home" style="font-size: 25px;margin-top: 20px"></i><span class="T-hotel-counter badge badge-important newsMore">0</span></a>'
             + '<a class="T-guide" style="display: inline-block;margin-left: 4px;margin-top: 25px"><i class="fa fa-user" style="font-size: 25px;margin-top: 20px"></i></a><span class="T-guide-counter badge badge-important newsMoreTh">0</span></div>';
     index.MessagePrompt = function(data) {
-    	var $messager = $('.newMessage-prompt');
+        var $messager = $('.newMessage-prompt');
 
-    	if (!$messager.length) {
-        	$messager = $(html).appendTo($('body'));
+        if (!$messager.length) {
+            $messager = $(html).appendTo($('body'));
 
             // 绑定hover
             $messager.find('.T-item').hover(
@@ -228,11 +228,12 @@ define(function(require, exports) {
                 $tip.on('click', '.T-view-qoute', function(event) {
                     event.preventDefault();
                     var $that = $(this), id = $that.data('qoute-id'), 
-                        target = $that.data('target'), count = 0;
+                        target = $that.data('target'), count = 0;  //target: T-hotel or T-bus
 
-                    // 查看询价
-                    // ....
-
+                    // 查看询价                    
+                    seajs.use(ASSETS_ROOT + modalScripts.arrange_quote,function(module){
+                        module.updateQuoteToOffer(id,target);  
+                    });
                     // 验证消息条数
                     $that.closest('ul').children('li').each(function(index, el) {
                         if ($(this).children('a').data('qoute-id') == id) {
@@ -259,9 +260,9 @@ define(function(require, exports) {
                     $tip.html('');
                 });
             }
-    	} else {
-    		$messager.removeClass('hidden');
-    	}
+        } else {
+            $messager.removeClass('hidden');
+        }
 
         if (data.bus != undefined) {
             $messager.find('.T-bus-counter').text(data.bus).closest('.T-item').data('isSentAjax',false);
