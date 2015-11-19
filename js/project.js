@@ -357,6 +357,61 @@ function showConfirmDialog(dialogObj,message, fn){
 		}
 	});
 }
+
+function showConfirmDialogOfShare(dialogObj,message, fn){
+	dialogObj.removeClass('hide').dialog({
+		modal: true,
+		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
+		title_html: true,
+		draggable:false,
+		buttons: [
+			{
+				text: "关闭",
+				"class" : "btn btn-primary btn-minier btn-heightMall",
+				click: function() {
+					$( this ).dialog( "close" );
+					if(fn){
+						fn();
+					}
+				}
+			}
+		],
+		open:function(event,ui){
+			$(this).find("p").html(message);
+		}
+	});
+}
+
+// function showConfirmDialogOfShare(dialogObj,message, fn){
+// 	dialogObj.removeClass('hide').dialog({
+// 		modal: true,
+// 		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
+// 		title_html: true,
+// 		draggable:false,
+// 		buttons: [
+// 			{
+// 				text: "取消",
+// 				"class" : "btn btn-minier btn-heightMall",
+// 				click: function() {
+// 					$( this ).dialog( "close" );
+// 				}
+// 			},
+// 			{
+// 				text: "复制",
+// 				"class" : "btn btn-primary btn-minier btn-heightMall",
+// 				click: function() {
+// 					$( this ).dialog( "close" );
+// 					if(fn){
+// 						fn();
+// 					}
+// 				}
+// 			}
+// 		],
+// 		open:function(event,ui){
+// 			$(this).find("p").text(message);
+// 		}
+// 	});
+// }
 function showLogoutDialog(dialogObj,message){
 	dialogObj.removeClass('hide').dialog({
 		modal: true,
@@ -1910,6 +1965,14 @@ KingServices.provinceCity = function($container,provinceIdU,cityIdU,districtIdU)
 	KingServices.getProvinceList($container.find("select[name=provinceId]"),provinceIdU);
 	if (!!cityIdU) {KingServices.getCityList($container.find("select[name=cityId]"),provinceIdU,cityIdU);} 
 	if (!!districtIdU) {KingServices.getDistrictList($container.find("select[name=districtId]"),cityIdU,districtIdU);} 
+	
+	if(provinceIdU != "" && !cityIdU){
+		KingServices.getCityList($container.find("select[name=cityId]"),provinceIdU);
+	}
+	if(cityIdU != "" && !districtIdU){
+		KingServices.getDistrictList($container.find("select[name=districtId]"),cityIdU);
+	}
+	 
 	//给省份select绑定事件
 	$container.find("select[name=provinceId]").change(function(){
 		var provinceId = $(this).val();

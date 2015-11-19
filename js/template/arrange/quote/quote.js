@@ -38,7 +38,7 @@ define(function(require, exports) {
 	//初始化报价搜索模块
 	quote.listMainQuote = function() {
 		var html = listMainTemplate();
-		Tools.addTab(menukey,"报价模块",html);
+		Tools.addTab(menukey,"报价管理",html);
 		quote.$tab = $("#tab-arrange_quote-content");
 
 		quote.listQuote(0);
@@ -68,9 +68,13 @@ define(function(require, exports) {
 							//quote.updateQuoteToOffer(id,'1');
 						} else if ($this.hasClass('T-delete')){
 							// 删除报价
-							//....
+							quote.deleteItem(id);
 						} else if ($this.hasClass('T-share')){
+							// 分享
 							quote.shareQuote(id);
+						} else if ($this.hasClass('T-status'))  {
+							// 查看询价状态
+							quote.updateQuote(id, 'T-bus');
 						}
 					})
 
@@ -133,26 +137,6 @@ define(function(require, exports) {
 		})
 	}
 
-   //初始化分享报价。。
- //   quote.listQuote = function(){
- //   	var html = listTemplate();
- //   	quote.$tab.find('.T-quoteList').html(html);
- //     quote.$tab.find('.T-share').on('click', function(event) {
- //     	event.preventDefault();
-     	
- //     	quote.shareQuote();
- //     });
-
- //     quote.$tab.find('.T-view').on('click', function(event,id) {
-	// 		event.preventDefault();
-	// 		/* Act on the event */
-	// 		// var id = $(this).closest('tr').data(id);
-	// 		// var id = $
-	// 		quote.viewQuote(id);
-	// });
-
- //   }
-
 	//分享页面
 	quote.shareQuote = function(id) {
 		$.ajax({
@@ -164,17 +148,13 @@ define(function(require, exports) {
 					var key = data.shareKey;
 					if (!!key) {
 						var url = location.origin + '/quote.html?key=' + key;
-						window.open(url);
-						showMessageDialog($( "#confirm-dialog-message" ),"分享成功");
+						// window.open(url);
+						showConfirmDialogOfShare($( "#confirm-dialog-message" ),"复制此分享链接:"+"  "+ url);
 					}
 				}
 			}
 		})
-		
-		// window.open("quote.html?key=" + key);
-		// window.open("quote.html")
-		// var html = shareQuoteTemplate();
-		// Tools.addTab(menukey+"-share","分享报价");
+
 	};
 
 	//新增报价
@@ -578,9 +558,9 @@ define(function(require, exports) {
 					if (!!target) {
 						$container.find('.inquiryContent').trigger('click');
 						if (target == "T-hotel") {
-							$container.find('.busInquiryResult').trigger('click');
+							$container.find('.hotelInquiryContent').trigger('click');
 						}else if (target == "T-bus") {
-							$container.find('.hotelInquiryResult').trigger('click');
+							$container.find('.busInquiryResult').trigger('click');
 						}
 					}
 				}
@@ -590,7 +570,7 @@ define(function(require, exports) {
 
 	//报价详情页事件绑定
 	quote.init_event =function($container) {
-		var validator = rule.lineProductCheckor($container);
+		var validator = rule.quoteCheckor($container);
 		//下拉
 		quote.autocomplete($container);
 		//时间控件
@@ -680,175 +660,6 @@ define(function(require, exports) {
 				showMessageDialog($( "#confirm-dialog-message" ),"请选择客户联系人");
 			}
 		});
-		//车辆询价
-		quote.busInquiry = function(quoteId,lineProductInfo,$container) {
-			$.ajax({
-				url: KingServices.build_url("busCompany","findBusList"),
-				type: 'POST',
-				data: 'quoteId='+quoteId+'',
-				success: function(data){
-					data.lineProductInfo = lineProductInfo;
-					autocompleteData.busBrandList = JSON.parse(data.brands);
-					autocompleteData.seatCountList = JSON.parse(data.seatCounts);
-					var result = showDialog(data);
-					if (result) {
-						var busInquiryHtml = busInquiryTemplate(data);
-						var busInquiryLayer = layer.open({
-						    type: 1,
-						    title:"车辆询价",
-						    skin: 'layui-layer-rim', //加上边框
-						    area: '1190px', //宽高
-						    zIndex:1028,
-						    content: busInquiryHtml,
-						    scrollbar: false,
-						    success:function(){
-						    	var $busLayerContent = $(".T-busInquiryContainer");
-						    	quote.busInquiryList(0,$busLayerContent,lineProductInfo);
-
-				    			quote.dateTimePicker($busLayerContent);
-				    			quote.chooseBusInfo($busLayerContent);
-				    			//保存接口
-				    			$busLayerContent.find('.T-saveBusInquiry').on('click', function() {
-				    				var brand = quote.getValue($busLayerContent,"busBrand"),
-				    					lineProductId = lineProductInfo.id,
-				    					seatCount = quote.getValue($busLayerContent,"seatCount"),
-				    					startTime = lineProductInfo.startTime,
-				    					expiryTime = quote.getValue($busLayerContent,"expiryTime")
-				    					busCompany = [];
-				    				$busLayerContent.find('.T-selectedBusTbody tr').each(function(){
-				    					var json ={
-				    						id: $(this).data("entity-id")
-				    					}
-				    					busCompany.push(json);
-				    				})
-				    				busCompany = JSON.stringify(busCompany);
-				    				$.ajax({
-				    					url: KingServices.build_url("busInquiry","saveInquiry"),
-				    					type: 'POST',
-				    					data: {
-				    						brand: brand,
-				    						lineProductId: lineProductId,
-				    						quoteId: quoteId,
-				    						seatCount: seatCount,
-				    						startTime: startTime,
-				    						busCompany: busCompany,
-				    						expiryTime: expiryTime,
-											partnerAgencyId: lineProductInfo.partnerAgencyId,
-											partnerAgencyContactId: lineProductInfo.partnerAgencyContactId
-				    					},
-				    					success: function(data){
-				    						var result = showDialog(data);
-				    						if (result) {
-												$container.find('[name=quoteId]').val(data.quoteId);
-												layer.close(busInquiryLayer);
-				    						}
-				    					}
-				    				})
-				    				
-
-				    			})
-								//关闭酒店询价
-								$busLayerContent.find(".T-closeLayer").on('click', function(){
-									layer.close(busInquiryLayer);
-								})
-						    }
-						})
-					}
-				}
-			});
-		};
-		//车辆询价列表
-		quote.busInquiryList = function(page,$container,lineProductInfo) {
-			var searchParam = {
-				brand: quote.getValue($container,"busBrand") || "",
-				lineProductId: lineProductInfo.id,
-				pageNo: page,
-				seatCount: quote.getValue($container,"seatCount") || "",
-				sortType: 'auto',
-				startTime: lineProductInfo.startTime
-			}
-			searchParam = JSON.stringify(searchParam);
-	    	$.ajax({
-	    		url: KingServices.build_url("busInquiry","findPager"),
-	    		type: 'POST',
-	    		data: "searchParam="+encodeURIComponent(searchParam),
-	    		success: function(data){
-	    			var result = showDialog(data);
-	    			if (result) {
-	    				data.result = JSON.parse(data.result);
-				    	var busInquiryListHtml = busInquiryListTemplate(data);
-				    	$container.find('.T-busInquiryList').html(busInquiryListHtml);
-						$(window).trigger("resize");
-
-						//搜索
-						$container.find(".T-btn-busInquiry-search").off('click').on('click', function(){
-					    	quote.busInquiryList(0,$container,lineProductInfo);
-						})
-						$container.find('.T-chooseBus').on('click',function(){
-							var $this = $(this),$parents = $this.closest('tr');
-							var chooseBusInfo = {
-								name: $parents.find('.T-name').text(),
-								id: $parents.data("entity-id"),
-								managerName: $parents.find('.T-managerName').text(),
-								mobileNumber: $parents.find('.T-mobileNumber').text()
-							}
-							addChooseBus(chooseBusInfo);
-						})
-						var selectedBusArray = [];
-						$container.find('.T-selectedBusTbody tr').each(function(){
-							selectedBusArray.push($(this).data("entity-id"));
-						})
-						function addChooseBus(chooseBusInfo){
-							var html = ''
-							+'<tr data-entity-id="'+chooseBusInfo.id+'">'
-							+'<td>'+chooseBusInfo.name+'</td>'
-							+'<td>'+chooseBusInfo.managerName+'</td>'
-							+'<td>'+chooseBusInfo.mobileNumber+'</td>'
-							+'<td><a class="T-del">删除</a></td>'
-							+'</tr>';
-							var isRepeat = 0;
-							for (var i = 0,len = selectedBusArray.length; i < len; i++) {
-								if (selectedBusArray[i] == chooseBusInfo.id) {
-									isRepeat = 1;
-								}
-							}
-							if (isRepeat == 1) {
-								showMessageDialog($( "#confirm-dialog-message" ),"该车队已经被选择");
-							}else{
-								$container.find('.T-selectedBusTbody').append(html);
-								selectedBusArray.push(chooseBusInfo.id);
-							}
-							delChooseBus();
-						}
-						function delChooseBus(){
-							$container.find('.T-del').off('click').on('click', function(){
-								$this = $(this), $parents = $this.closest("tr");
-								var id = $parents.data("entity-id");
-								for (var i = 0,len = selectedBusArray.length; i < len; i++) {
-									if (selectedBusArray[i] == id) {
-										selectedBusArray.splice(i,1);
-									}
-								}
-								$parents.remove();
-							})
-						}
-
-		                //绑定翻页组件
-		                laypage({
-		                	cont: $container.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
-						    pages: data.searchParam.totalPage, //总页数
-						    curr: (page + 1),
-						    jump: function(obj, first) {
-						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-						    		quote.busInquiryList(obj.curr -1,$container,lineProductInfo);
-						        }
-						    }
-		                });
-						
-	    			}
-	    		}
-	    	})
-		};
 		//酒店询价
 		$container.find('.T-hotel').on('click', function(event) {
 			event.preventDefault();
@@ -881,9 +692,179 @@ define(function(require, exports) {
 		});
 		//保存报价
 		$container.find('.T-btn-submit-quote').on('click',function(){
+			if (!validator.form())   return;
 			var id = $container.find('input[name=quoteId]').val();
 			quote.saveQuote(id, $container);
 		})
+	};
+	//车辆询价
+	quote.busInquiry = function(quoteId,lineProductInfo,$container) {
+		$.ajax({
+			url: KingServices.build_url("busCompany","findBusList"),
+			type: 'POST',
+			data: 'quoteId='+quoteId+'',
+			success: function(data){
+				data.lineProductInfo = lineProductInfo;
+				autocompleteData.busBrandList = JSON.parse(data.brands);
+				autocompleteData.seatCountList = JSON.parse(data.seatCounts);
+				var result = showDialog(data);
+				if (result) {
+					var busInquiryHtml = busInquiryTemplate(data);
+					var busInquiryLayer = layer.open({
+					    type: 1,
+					    title:"车辆询价",
+					    skin: 'layui-layer-rim', //加上边框
+					    area: '1190px', //宽高
+					    zIndex:1028,
+					    content: busInquiryHtml,
+					    scrollbar: false,
+					    success:function(){
+					    	var $busLayerContent = $(".T-busInquiryContainer");
+					    	quote.busInquiryList(0,$busLayerContent,lineProductInfo);
+
+			    			quote.dateTimePicker($busLayerContent);
+			    			quote.chooseBusInfo($busLayerContent);
+			    			//保存接口
+			    			$busLayerContent.find('.T-saveBusInquiry').on('click', function() {
+			    				var brand = quote.getValue($busLayerContent,"busBrand"),
+			    					lineProductId = lineProductInfo.id,
+			    					seatCount = quote.getValue($busLayerContent,"seatCount"),
+			    					startTime = lineProductInfo.startTime,
+			    					expiryTime = quote.getValue($busLayerContent,"expiryTime")
+			    					busCompany = [];
+			    				$busLayerContent.find('.T-selectedBusTbody tr').each(function(){
+			    					var json ={
+			    						id: $(this).data("entity-id")
+			    					}
+			    					busCompany.push(json);
+			    				})
+			    				busCompany = JSON.stringify(busCompany);
+			    				$.ajax({
+			    					url: KingServices.build_url("busInquiry","saveInquiry"),
+			    					type: 'POST',
+			    					data: {
+			    						brand: brand,
+			    						lineProductId: lineProductId,
+			    						quoteId: quoteId,
+			    						seatCount: seatCount,
+			    						startTime: startTime,
+			    						busCompany: busCompany,
+			    						expiryTime: expiryTime,
+										partnerAgencyId: lineProductInfo.partnerAgencyId,
+										partnerAgencyContactId: lineProductInfo.partnerAgencyContactId
+			    					},
+			    					success: function(data){
+			    						var result = showDialog(data);
+			    						if (result) {
+											$container.find('[name=quoteId]').val(data.quoteId);
+											layer.close(busInquiryLayer);
+			    						}
+			    					}
+			    				})
+			    				
+
+			    			})
+							//关闭酒店询价
+							$busLayerContent.find(".T-closeLayer").on('click', function(){
+								layer.close(busInquiryLayer);
+							})
+					    }
+					})
+				}
+			}
+		});
+	};
+	//车辆询价列表
+	quote.busInquiryList = function(page,$container,lineProductInfo) {
+		var searchParam = {
+			brand: quote.getValue($container,"busBrand") || "",
+			lineProductId: lineProductInfo.id,
+			pageNo: page,
+			seatCount: quote.getValue($container,"seatCount") || "",
+			sortType: 'auto',
+			startTime: lineProductInfo.startTime
+		}
+		searchParam = JSON.stringify(searchParam);
+    	$.ajax({
+    		url: KingServices.build_url("busInquiry","findPager"),
+    		type: 'POST',
+    		data: "searchParam="+encodeURIComponent(searchParam),
+    		success: function(data){
+    			var result = showDialog(data);
+    			if (result) {
+    				data.result = JSON.parse(data.result);
+			    	var busInquiryListHtml = busInquiryListTemplate(data);
+			    	$container.find('.T-busInquiryList').html(busInquiryListHtml);
+					$(window).trigger("resize");
+
+					//搜索
+					$container.find(".T-btn-busInquiry-search").off('click').on('click', function(){
+				    	quote.busInquiryList(0,$container,lineProductInfo);
+					})
+					$container.find('.T-chooseBus').on('click',function(){
+						var $this = $(this),$parents = $this.closest('tr');
+						var chooseBusInfo = {
+							name: $parents.find('.T-name').text(),
+							id: $parents.data("entity-id"),
+							managerName: $parents.find('.T-managerName').text(),
+							mobileNumber: $parents.find('.T-mobileNumber').text()
+						}
+						addChooseBus(chooseBusInfo);
+					})
+					var selectedBusArray = [];
+					$container.find('.T-selectedBusTbody tr').each(function(){
+						selectedBusArray.push($(this).data("entity-id"));
+					})
+					function addChooseBus(chooseBusInfo){
+						var html = ''
+						+'<tr data-entity-id="'+chooseBusInfo.id+'">'
+						+'<td>'+chooseBusInfo.name+'</td>'
+						+'<td>'+chooseBusInfo.managerName+'</td>'
+						+'<td>'+chooseBusInfo.mobileNumber+'</td>'
+						+'<td><a class="T-del">删除</a></td>'
+						+'</tr>';
+						var isRepeat = 0;
+						for (var i = 0,len = selectedBusArray.length; i < len; i++) {
+							if (selectedBusArray[i] == chooseBusInfo.id) {
+								isRepeat = 1;
+							}
+						}
+						if (isRepeat == 1) {
+							showMessageDialog($( "#confirm-dialog-message" ),"该车队已经被选择");
+						}else{
+							$container.find('.T-selectedBusTbody').append(html);
+							selectedBusArray.push(chooseBusInfo.id);
+						}
+						delChooseBus();
+					}
+					function delChooseBus(){
+						$container.find('.T-del').off('click').on('click', function(){
+							$this = $(this), $parents = $this.closest("tr");
+							var id = $parents.data("entity-id");
+							for (var i = 0,len = selectedBusArray.length; i < len; i++) {
+								if (selectedBusArray[i] == id) {
+									selectedBusArray.splice(i,1);
+								}
+							}
+							$parents.remove();
+						})
+					}
+
+	                //绑定翻页组件
+	                laypage({
+	                	cont: $container.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+					    pages: data.searchParam.totalPage, //总页数
+					    curr: (page + 1),
+					    jump: function(obj, first) {
+					    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+					    		quote.busInquiryList(obj.curr -1,$container,lineProductInfo);
+					        }
+					    }
+	                });
+					
+    			}
+    		}
+    	})
 	};
 	//酒店询价
 	quote.hotelInquiry = function(lineProductInfo,whichDay,quoteId,$container) {
@@ -1203,7 +1184,7 @@ define(function(require, exports) {
 				}
 
 				// 更新表单验证的配置
-				validator = rule.lineProductUpdate(validator);
+				validator = rule.quoteUpdate(validator);
 			},
 			select:function(event,ui){
 				var $that = $(this).blur();
@@ -1222,7 +1203,7 @@ define(function(require, exports) {
 							quote.costCalculation($container)
 
 							// 更新表单验证的配置
-							validator = rule.lineProductUpdate(validator);
+							validator = rule.quoteUpdate($container);
 						}
 					}
 				});
@@ -1302,7 +1283,7 @@ define(function(require, exports) {
 				}
 
 				// 更新表单验证的配置
-				validator = rule.lineProductUpdate(validator);
+				validator = rule.quoteUpdate(validator);
 			},
 			select:function(event,ui){
 				var $tr = $(this).closest('tr'), restaurantNameId=ui.item.id;
@@ -1326,7 +1307,7 @@ define(function(require, exports) {
 							//objParent.find("input[name=payType]").val(restaurant.payType == 0? "现付" : "账期" + (restaurant.payPeriod ? "(" + restaurant.payPeriod.month + "个月)" : "" ));
 
 							// 更新表单验证的配置
-							validator = rule.lineProductUpdate(validator);
+							validator = rule.quoteUpdate(validator);
 						}
                     }
 				})
@@ -1474,7 +1455,7 @@ define(function(require, exports) {
 							$tr.find("input[name=mobileNumber]").val(hotel.mobileNumber);
 							//objParent.find("input[name=payType]").val(hotel.payType == 0? "现付" : "账期" + (hotel.payPeriod ? "(" + hotel.payPeriod.month + "个月)" : "" ));
 							// 更新表单验证的配置
-							validator = rule.lineProductUpdate(validator);
+							validator = rule.quoteUpdate(validator);
 						}
                     }
 				});
@@ -1493,7 +1474,7 @@ define(function(require, exports) {
 					quote.costCalculation($container)
 
 					// 更新表单验证的配置
-					validator = rule.lineProductUpdate(validator);
+					validator = rule.quoteUpdate(validator);
 				}
 			}
 		}).unbind("click").click(function(){
@@ -1623,7 +1604,7 @@ define(function(require, exports) {
 				objParent.find("input[name=chargingId]").val("");
 				quote.costCalculation($container)
 				// 更新表单验证的配置
-				validator = rule.lineProductUpdate(validator);
+				validator = rule.quoteUpdate(validator);
 				
 				$.ajax({
                     url: KingServices.build_url('scenic', 'getScenicById'),
@@ -1648,7 +1629,7 @@ define(function(require, exports) {
 					$tr.find("input[name=price]").val("");
 					quote.costCalculation($container)
 					// 更新表单验证的配置
-					validator = rule.lineProductUpdate(validator);
+					validator = rule.quoteUpdate(validator);
 				}
 			}
 		}).unbind("click").click(function(){
@@ -1777,7 +1758,7 @@ define(function(require, exports) {
 				    policyParent.find("input[name=shopId]").val(vendorNameId).trigger('change');
 
 			    // 更新表单验证的配置
-			    validator = rule.lineProductUpdate(validator);
+			    validator = rule.quoteUpdate(validator);
 
 				$.ajax({
                     url: KingServices.build_url('shop', 'getShopById'),
@@ -1810,7 +1791,7 @@ define(function(require, exports) {
 					$tr.find("input[name=customerRebateMoney]").val("");
 
 					// 更新表单验证的配置
-					validator = rule.lineProductUpdate(validator);
+					validator = rule.quoteUpdate(validator);
 				}
 			}
 		}).unbind("click").click(function(){
@@ -1938,7 +1919,7 @@ define(function(require, exports) {
 							quote.costCalculation($container)
 
 							// 更新表单验证的配置
-							validator = rule.lineProductUpdate(validator);
+							validator = rule.quoteUpdate(validator);
 							//var SelfPayRebateList=JSON.parse(data.SelfPayRebateList);
 							//thisParent.find("input[name=contractPrice]").val(SelfPayRebateList.price);
 							
@@ -1959,7 +1940,7 @@ define(function(require, exports) {
 					quote.costCalculation($container)
 
 					// 更新表单验证的配置
-					validator = rule.lineProductUpdate(validator);
+					validator = rule.quoteUpdate(validator);
 				}
 			}
 		}).unbind("click").click(function(){
@@ -2097,7 +2078,7 @@ define(function(require, exports) {
 							quote.costCalculation($container)
 
 							// 更新表单验证的配置
-							validator = rule.lineProductUpdate(validator);
+							validator = rule.quoteUpdate(validator);
 						}
                     }
                 });
@@ -2114,7 +2095,7 @@ define(function(require, exports) {
 					quote.costCalculation($container)
 
 					// 更新表单验证的配置
-					validator = rule.lineProductUpdate(validator);
+					validator = rule.quoteUpdate(validator);
 				}
 			}
 		}).unbind("click").click(function(){
@@ -2696,9 +2677,54 @@ define(function(require, exports) {
 		});
 	}
 	quote.updateQuoteToOffer = function(id,target) {
-		var quoteContent = $(document).find('#tab-arrange_quote-add-content,#tab-arrange_quote-update-content')
-		quote.updateQuote(id,target);
+		var quoteContent = $(document).find('#tab-arrange_quote-add-content,#tab-arrange_quote-update-content'), isThere = 0;
+		quoteContent.each(function(i){
+			var menukeyId = quoteContent.eq(i).attr("id");
+			var quoteId = quoteContent.eq(i).find('[name=quoteId]').val();
+			if (quoteId == id) {
+				isThere = 1;
+				Tools.addTab(menukeyId.substring(menukeyId.indexOf('tab-')+4,menukeyId.lastIndexOf('-content')));
+				if (!!target) {
+					$container.find('.inquiryContent').trigger('click');
+					if (target == "T-hotel") {
+						$container.find('.hotelInquiryContent').trigger('click');
+					}else if (target == "T-bus") {
+						$container.find('.busInquiryResult').trigger('click');
+					}
+				}
+			}
+		})
+		if (isThere == 0) {
+			quote.updateQuote(id,target);
+		}
 	};
+
+	/**
+	 * 删除报价记录
+	 * @param  {int} quoteId 报价索引
+	 * @return {[type]}         [description]
+	 */
+	quote.deleteItem = function(quoteId) {
+		if (!!quoteId) {
+			showConfirmDialog(
+				$("#confirm-dialog-message"),
+				"你确定要删除该条记录？",
+				function(){
+					$.ajax({
+						url: KingServices.build_url('quote', 'deleteQuote'),
+						type: 'post',
+						data: {id: quoteId},
+					})
+					.done(function(data) {
+						if (showDialog(data)) {
+							quote.listQuote(0);
+						}
+					});
+				}
+			)
+
+		}
+	}
 	exports.init = quote.initModule;
 	exports.addQuote = quote.addQuote;
 	exports.updateQuoteToOffer = quote.updateQuoteToOffer;
