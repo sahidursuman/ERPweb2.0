@@ -351,10 +351,6 @@ define(function(require, exports) {
 				    
 			});
 
-			//发送订单显示&&隐藏
-			tripPlan.isSendOrderHide($("#tripPlan_addPlan_bus"));
-			tripPlan.isSendOrderHide($("#tripPlan_addPlan_hotel"));
-
             //车辆的发送订单
 			$("#tripPlan_addPlan_bus").find('.T-bus-SendOrder').on('click',  function(event) {
 				event.preventDefault();
@@ -375,30 +371,6 @@ define(function(require, exports) {
 
 			//绑定删除时间
 			tripPlan.bindDeleteEvent();
-
-
-			//发送订单显示&&隐藏
-			tripPlan.isSendOrderHide($("#tripPlan_addPlan_bus"));
-			tripPlan.isSendOrderHide($("#tripPlan_addPlan_hotel"));
-
-            //车辆的发送订单
-			$("#tripPlan_addPlan_bus").find('.T-bus-SendOrder').on('click',  function(event) {
-				event.preventDefault();
-				var $that=$(this),$trBusData=$that.closest('tr');
-				/* Act on the event */
-			    tripPlan.busSendOrder($trBusData);
-			});
-
-			//住宿的发送订单
-			$("#tripPlan_addPlan_hotel").find('.T-Hotel-SendOrder').on('click', function(event) {
-				event.preventDefault();
-				var $that=$(this),$trHotelData=$that.closest('tr');
-				/* Act on the event */
-				tripPlan.hotelSendOrder($trHotelData);
-			});
-			
-
-			
 			tripPlan.bindInsuranceChoose();
 			//tripPlan.bindGuideChoose();
 			//tripPlan.bindBusCompanyChoose();
@@ -552,13 +524,16 @@ define(function(require, exports) {
 		 * @param  {[type]}  $sendArea 发送订单域
 		 * @return {Boolean}           [description]
 		 */
-		isSendOrderHide:function($sendArea){
+		/*isSendOrderHide:function($sendArea){
+			alert('--roger---');
 			var $that=$('#tab-arrange_all-update-content'),
 			    qouteId=$that.find('input[name=qouteId]').val(),
 			    $sendOrderObj=$sendArea.find('.T-sendOrder-Area');
 			    //车队&&酒店显示隐藏
 				for (var i = 0; i < $sendOrderObj.length; i++) {
 					var offerId=$sendOrderObj.eq(i).attr("data-entity-offerId");
+
+					   console.info('------roger--------'+offerId);
 					    if (offerId=="") {
 					    	$sendOrderObj.eq(i).addClass('hide');
 					    } else{
@@ -571,7 +546,7 @@ define(function(require, exports) {
 				}else{
 					$that.find('.T-singleClick-Order').removeClass('hide');
 				};
-		},
+		},*/
 
 		//浮动查看自选餐厅
 		viewOptionalRestaurant :function($objInput){
@@ -980,50 +955,6 @@ define(function(require, exports) {
                 });
 			});
 			
-		},
-
-
-		/**
-		 * 
-		 * @param  {[type]} $trBusData 车辆中的发送订单
-		 * @return {[type]}            [description]
-		 */
-		busSendOrder:function($trBusData){
-			var saveJson={};
-			saveJson.busJson=[];
-			if($trBusData.length > 0){
-				for(var i=0; i<$trBusData.length; i++){
-					if(tripPlan.getVal($trBusData.eq(i), "id")){
-						var busJsonArray = {
-							id : tripPlan.getVal($trBusData.eq(i), "id")
-						}
-						saveJson.busJson.push(busJsonArray);
-					}
-				}
-			}
-			
-			tripPlan.sendOrderRequest(saveJson);
-		},
-
-		/**
-		 * [hotelSendOrder 住宿的发送订单]
-		 * @param  {[type]} $trHotelData [description]
-		 * @return {[type]}              [description]
-		 */
-		hotelSendOrder:function($trHotelData){
-			var saveJson={};
-			    saveJson.hotelJson=[];
-			if($trHotelData.length > 0){
-				for(var i=0; i<$trHotelData.length; i++){
-					if(tripPlan.getVal($trHotelData.eq(i), "hotelId")){
-						var hotelJsonArray = {
-							id : tripPlan.getVal($trHotelData.eq(i), "id"),
-						}
-						saveJson.hotelJson.push(hotelJsonArray);
-					}
-				}
-			}
-			tripPlan.sendOrderRequest(saveJson);
 		},
 
 		/**
