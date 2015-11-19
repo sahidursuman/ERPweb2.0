@@ -38,7 +38,7 @@ define(function(require, exports) {
 	//初始化报价搜索模块
 	quote.listMainQuote = function() {
 		var html = listMainTemplate();
-		Tools.addTab(menukey,"报价模块",html);
+		Tools.addTab(menukey,"报价管理",html);
 		quote.$tab = $("#tab-arrange_quote-content");
 
 		quote.listQuote(0);
@@ -68,9 +68,13 @@ define(function(require, exports) {
 							//quote.updateQuoteToOffer(id,'1');
 						} else if ($this.hasClass('T-delete')){
 							// 删除报价
-							//....
+							quote.deleteItem(id);
 						} else if ($this.hasClass('T-share')){
+							// 分享
 							quote.shareQuote(id);
+						} else if ($this.hasClass('T-status'))  {
+							// 查看询价状态
+							quote.updateQuote(id, 'T-bus');
 						}
 					})
 
@@ -2699,6 +2703,27 @@ define(function(require, exports) {
 		var quoteContent = $(document).find('#tab-arrange_quote-add-content,#tab-arrange_quote-update-content')
 		quote.updateQuote(id,target);
 	};
+
+	/**
+	 * 删除报价记录
+	 * @param  {int} quoteId 报价索引
+	 * @return {[type]}         [description]
+	 */
+	quote.deleteItem = function(quoteId) {
+		if (!!quoteId) {
+			$.ajax({
+				url: KingServices.build_url('quote', 'deleteQuote'),
+				type: 'post',
+				data: {id: quoteId},
+			})
+			.done(function(data) {
+				if (showDialog(data)) {
+					quote.listQuote(0);
+				}
+			});
+			
+		}
+	}
 	exports.init = quote.initModule;
 	exports.addQuote = quote.addQuote;
 	exports.updateQuoteToOffer = quote.updateQuoteToOffer;

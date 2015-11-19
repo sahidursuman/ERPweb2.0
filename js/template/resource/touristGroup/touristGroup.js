@@ -460,11 +460,12 @@ define(function(require,exports){
 			html =searchTemplate({update: type}),
 			searchTravelLinelayer =layer.open({
 				type: 1,
-				title:"选择路线产品",
+				title:"选择线路产品",
 				skin: 'layui-layer-rim', //加上边框
 				area: ['85%', '80%'], //宽高
 				zIndex:1029,
-				content: html
+				content: html,
+				scrollbar: false,
 			});
 
 		var $dialog = $('.T-lineproduct-search-' + type);
@@ -650,7 +651,7 @@ define(function(require,exports){
 		
 		names.forEach(function(name) {
 			$mainForm.find('[name="'+ name +'"]').val('').prop('readonly', false);
-			var $name = $mainForm.find('[name="'+ name +'"]'), val = isUpdate? $name.data('old'): '';
+			var $name = $mainForm.find('[name="'+ name +'"]'), val = $mainForm.hasClass('.T-update')? $name.data('old'): '';
 
 			$name.val(val).prop('readonly', false).prop('disabled', false).nextAll('span,.fa').removeClass('hidden');
 		});
