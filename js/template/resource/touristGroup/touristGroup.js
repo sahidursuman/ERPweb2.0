@@ -460,7 +460,7 @@ define(function(require,exports){
 			html =searchTemplate({update: type}),
 			searchTravelLinelayer =layer.open({
 				type: 1,
-				title:"选择线路产品",
+				title:"选择路线产品",
 				skin: 'layui-layer-rim', //加上边框
 				area: ['85%', '80%'], //宽高
 				zIndex:1029,
@@ -474,8 +474,8 @@ define(function(require,exports){
 		$dialog.find('.T-lineProduct-search').on('click', function(event) {
 			event.preventDefault();
 			var $that = $(this),
-				type = $that.closest('.layui-layer-content').find('.nav-tabs').find('.active').index();
-			touristGroup.getLineProductList($dialog, type, 0, $dialog.find('input[name="lineProduct_name"]').val());
+				type = $that.prevAll('.tabbable').find('ul').find('.active').index();
+			touristGroup.getLineProductList($dialog, type, $dialog.find('input[name="lineProduct_name"]').val());
 		});	
 		// 选择线路产品
 		$dialog.find('.T-searchtravelLine').on('click', function(event) {
@@ -490,15 +490,13 @@ define(function(require,exports){
 
 			$tab.find('input[name="lineProductIdName"]').val($tr.children('[name="travelLine-select"]').text()).trigger('change');
 			$tab.find('input[name="lineProductId"]').val($tr.data('id'));
-
-			var $form = $tab.find('.T-touristGroupMainForm'),
-				oldQuoteId = $tab.find('input[name="quoteId"]').val();
-				
 			$tab.find('input[name="quoteId"]').val(quoteId);
+
+			var $form = $tab.find('.T-touristGroupMainForm');
 			if ($tr.closest('.tab-pane').index() === 1) {
 				// 选择了报价产品，需要初始化游客小组的数据
 				touristGroup.initQuoteData($form, quoteId);
-			} else if (!!oldQuoteId) {
+			} else {
 				// 清理
 				touristGroup.clearQuoteData($form);
 			}
@@ -526,7 +524,6 @@ define(function(require,exports){
 		$.ajax({
 			url: url,
 			type: 'post',
-			showLoading: false,
 			data: {
 					pageNo: page,
 					name: name
@@ -556,9 +553,10 @@ define(function(require,exports){
 
 					data.lineProductList = list;
 					data.quote = type;
+					console.info(data)
 				}
 				$tbody.html(lineproductSearchList(data));
-				$tbody.closest('.tab-pane').find('.T-total').text(data.recordSize);
+
 				// 绑定翻页组件
 				laypage({
 				    cont: $tbody.closest('.tab-pane').find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
@@ -604,7 +602,6 @@ define(function(require,exports){
 	 */
 	touristGroup.setQuoteData = function($mainForm, data) {
 		if (!!data) {
-			var isUpdate = $mainForm.hasClass('T-update');
 			setData('startTime', data.startTime);   //出游日期
 			setData('fromPartnerAgency', data.partnerAgency.travelAgencyName);   //客户来源
 			setData('fromPartnerAgencyId', data.partnerAgencyContact.id);   //客户来源的索引
@@ -619,13 +616,7 @@ define(function(require,exports){
 		}
 
 		function setData(name, val) {
-			var $name = $mainForm.find('[name="'+ name +'"]');
-
-			if (!!isUpdate)  {
-				$name.data('old', $name.val());
-			}
-
-			$name.val(val).prop('readonly', true);
+			$mainForm.find('[name="'+ name +'"]').val(val).prop('readonly', true);
 		}
 	};
 
@@ -645,13 +636,10 @@ define(function(require,exports){
 			'adultPrice',
 			'childCount',
 			'childPrice'
-			],
-			isUpdate = $mainForm.hasClass('T-update');
+			];
 		
 		names.forEach(function(name) {
-			var $name = $mainForm.find('[name="'+ name +'"]'), val = isUpdate? $name.data('old'): '';
-
-			$name.val(val).prop('readonly', false);
+			$mainForm.find('[name="'+ name +'"]').val('').prop('readonly', false);
 		});
 
 		$mainForm.find('input[name="childPrice"]').trigger('change');
@@ -1413,17 +1401,19 @@ define(function(require,exports){
 				if(result){
 					$obj.data('isEdited', false);
 					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-						if(!!tabArgs && tabArgs.length === 3){
+						if(data.success == 1){
+							if(!!tabArgs && tabArgs.length === 3){
 							Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
 							if(typeFlag !=2){touristGroup.addEvents();}
 							else{
 							touristGroup.updateEvents();}
-						}else{
-							Tools.closeTab(tabId);
-							touristGroup.listTouristGroup(touristGroup.args);
-						};
-						if (innerStatus) {
-							KingServices.updateTransit(data.touristGroupId);
+							}else{
+								Tools.closeTab(tabId);
+								touristGroup.listTouristGroup(touristGroup.args);
+							};
+							if (innerStatus) {
+								KingServices.updateTransit(data.touristGroupId);
+							}
 						}
 					});
 				}
@@ -1454,8 +1444,10 @@ define(function(require,exports){
 			}
 			if (isContactUser && mobileNumber == "")  {
 				showMessageDialog($( "#confirm-dialog-message" ), "请填写名单中联系人的手机号码！");
+				return;
 			} else if (!mobileNumber && !idCardNumber) {
 				showMessageDialog($( "#confirm-dialog-message" ), "手机号码或证件号码必填一项！");
+				return;
 			}
 			var touristGroupMemberJson = {};
 			if(typeFlag == 2){
