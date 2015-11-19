@@ -21,13 +21,15 @@ define(function(require, exports) {
 		busInquiryTemplate = require("./view/busInquiry"),
 		listMainTemplate = require("./view/listMain"),
 		listTemplate = require("./view/list");
-		// var tabId = "tab-"+menuKey+"-content";
+		// tabId = "tab-"+menuKey+"-content";
 	/**
 	 * 自定义报价对象
 	 * @type {Object}
 	 */
 	var quote = {
 		$tab: false,
+		$searchArea : false,
+		searchData : false
 	};
 	var autocompleteData = {}
 	//初始化报价模块
@@ -41,15 +43,46 @@ define(function(require, exports) {
 		Tools.addTab(menukey,"报价管理",html);
 		quote.$tab = $("#tab-arrange_quote-content");
 
-		quote.listQuote(0);
+		quote.listQuote(0,"","","","","","","","","","");
 	};
 
 	//初始化报价列表
-	quote.listQuote = function(page) {
+	quote.listQuote = function(page,lineProductId,lineProductName,partnerAgencyId,partnerAgencyName,offerUserId,offerUserName,quoteUserId,quoteUserName,quoteTimeEnd,quoteTimeStart) {
+		if (quote.$searchArea && arguments.length === 1) {
+            // 初始化页面后，可以获取页面的参数
+            lineProductId = quote.$searchArea.find("input[name=lineProductId]").val(),
+            lineProductName = quote.$searchArea.find("input[name=lineProductName]").val(),
+            partnerAgencyId = quote.$searchArea.find("input[name=partnerId]").val(),
+            partnerAgencyName = quote.$searchArea.find("input[name=partnerName]").val(),
+            offerUserId = quote.$searchArea.find("input[name=inquiryUserId]").val(),
+            offerUserName = quote.$searchArea.find("input[name=inquiryUserName]").val(),
+            quoteUserId = quote.$searchArea.find("input[name=quoteUserId]").val(),
+            quoteUserName = quote.$searchArea.find("input[name=quoteUserName]").val(),
+            quoteTimeEnd = quote.$searchArea.find("input[name=quoteStartTime]").val(),
+            quoteTimeStart = quote.$searchArea.find("input[name=quoteEndTime]").val()
+        }
+        // 修正页码
+        page = page || 0;
+
+        //重置搜索条件
+        quote.searchData = {
+            pageNo : page,
+			lineProductId : lineProductId,
+			lineProductName : lineProductName,
+			partnerAgencyId : partnerAgencyId,
+			partnerAgencyName : partnerAgencyName,
+			offerUserId : offerUserId,
+			offerUserName : offerUserName,
+			quoteUserId : quoteUserId,
+			quoteUserName : quoteUserName,
+			quoteTimeEnd : quoteTimeEnd,
+			quoteTimeStart : quoteTimeStart,
+            sortType: 'auto'
+        };
 		$.ajax({
 			url: KingServices.build_url('quote', 'listQuote'),
 			type: 'POST',
-			data: 'pageNo='+page+'',
+			data: quote.searchData,
 			success: function(data){
 				var result = showDialog(data);
 				if(result){
@@ -57,27 +90,8 @@ define(function(require, exports) {
 					var html = listTemplate(data);
 					quote.$tab.find('.T-quoteList').html(html);
 
-					quote.$tab.find('.T-quoteList').off('click').on('click','.T-action',function(){
-						var $this = $(this), id = $this.closest('tr').data('entity-id');
-						if ($this.hasClass('T-view')){
-							// 查看报价信息
-							quote.viewQuote(id);
-						} else if ($this.hasClass('T-update')){
-							// 编辑报价信息
-							quote.updateQuote(id);
-							//quote.updateQuoteToOffer(id,'1');
-						} else if ($this.hasClass('T-delete')){
-							// 删除报价
-							quote.deleteItem(id);
-						} else if ($this.hasClass('T-share')){
-							// 分享
-							quote.shareQuote(id);
-						} else if ($this.hasClass('T-status'))  {
-							// 查看询价状态
-							quote.updateQuote(id, 'T-bus');
-						}
-					})
-
+					quote.getQuery(lineProductId,lineProductName,partnerAgencyId,partnerAgencyName,offerUserId,offerUserName,quoteUserId,quoteUserName,quoteTimeEnd,quoteTimeStart);
+					quote.initList();
 	                //绑定翻页组件
 	                laypage({
 	                	cont: quote.$tab.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
@@ -92,6 +106,47 @@ define(function(require, exports) {
 				}
 			}
 		})
+	};
+
+	quote.initList = function(){
+		// 初始化jQuery 对象
+        quote.$tab = $("#tab-arrange_quote-content");
+        quote.$searchArea = quote.$tab.find('.T-quoteSearchForm');
+
+        //时间控件（筛选搜索）
+		quote.$searchArea.find(".date-picker").datepicker({
+			autoclose: true,
+			todayHighlight: true,
+			format: 'yyyy-mm-dd',
+			language: 'zh-CN'
+		});
+
+		quote.$tab.find('.T-quoteList').off('click').on('click','.T-action',function(){
+			var $this = $(this), id = $this.closest('tr').data('entity-id');
+			if ($this.hasClass('T-view')){
+				// 查看报价信息
+				quote.viewQuote(id);
+			} else if ($this.hasClass('T-update')){
+				// 编辑报价信息
+				quote.updateQuote(id);
+				//quote.updateQuoteToOffer(id,'1');
+			} else if ($this.hasClass('T-delete')){
+				// 删除报价
+				quote.deleteItem(id);
+			} else if ($this.hasClass('T-share')){
+				// 分享
+				quote.shareQuote(id);
+			} else if ($this.hasClass('T-status'))  {
+				// 查看询价状态
+				quote.updateQuote(id, 'T-bus');
+			}
+		});
+
+		//搜索按钮事件
+	    quote.$tab.find('.T-btn-quote-search').off("click").on('click', function(event) {
+	        event.preventDefault();
+	        quote.listQuote(0);
+	    });
 	};
 
 
@@ -2718,7 +2773,126 @@ define(function(require, exports) {
 			});
 			
 		}
-	}
+	};
+
+	quote.getQuery = function(lineProductId,lineProductName,partnerAgencyId,partnerAgencyName,offerUserId,offerUserName,quoteUserId,quoteUserName,quoteTimeEnd,quoteTimeStart){
+		$.ajax({
+            url: KingServices.build_url('quote', 'getQueryList'),
+            type: 'POST',
+            data: {
+				lineProductId : lineProductId,
+				lineProductName : lineProductName,
+				partnerAgencyId : partnerAgencyId,
+				partnerAgencyName : partnerAgencyName,
+				offerUserId : offerUserId,
+				offerUserName : offerUserName,
+				quoteUserId : quoteUserId,
+				quoteUserName : quoteUserName,
+				quoteTimeEnd : quoteTimeEnd,
+				quoteTimeStart : quoteTimeStart,
+        	},
+            showLoading:false,
+            success: function(data) {
+				var result = showDialog(data);
+				if(result){
+					var $lineProduct = quote.$tab.find("input[name=lineProductName]"),
+						$partner = quote.$tab.find("input[name=partnerName]"),
+						$inquiryUser = quote.$tab.find("input[name=inquiryUserName]"),
+						$quoteUser = quote.$tab.find("input[name=quoteUserName]"),
+						lineProductList = data.lineProductList,
+						partnerAgencyList = data.partnerAgencyList,
+						offerUserList = data.offerUserList,
+						quoteUserList = data.quoteUserList;
+			        if(lineProductList != null && lineProductList.length > 0){
+			            for(var i=0;i<lineProductList.length;i++){
+			                lineProductList[i].value = lineProductList[i].name;
+			            }
+			        }
+			        if(partnerAgencyList != null && partnerAgencyList.length > 0){
+			            for(var i=0;i<partnerAgencyList.length;i++){
+			                partnerAgencyList[i].value = partnerAgencyList[i].name;
+			            }
+			        }
+			        if(offerUserList != null && offerUserList.length > 0){
+			            for(var i=0;i<offerUserList.length;i++){
+			                offerUserList[i].value = offerUserList[i].name;
+			            }
+			        }
+			        if(quoteUserList != null && quoteUserList.length > 0){
+			            for(var i=0;i<quoteUserList.length;i++){
+			                quoteUserList[i].value = quoteUserList[i].name;
+			            }
+			        }
+
+			        //产品名称
+			        $lineProduct.autocomplete({
+			            minLength: 0,
+			            source : lineProductList,
+			            change: function(event, ui) {
+			                if (!ui.item)  {
+			                    $(this).nextAll('input[name="lineProductId"]').val('');
+			                }
+			            },
+			            select: function(event, ui) {
+			                $(this).blur().nextAll('input[name="lineProductId"]').val(ui.item.id);
+			            }
+			        }).on("click",function(){
+			            $lineProduct.autocomplete('search', '');
+			        });  
+
+			        //组团社
+			        $partner.autocomplete({
+			            minLength: 0,
+			            source : partnerAgencyList,
+			            change: function(event, ui) {
+			                if (!ui.item)  {
+			                    $(this).nextAll('input[name="partnerId"]').val('');
+			                }
+			            },
+			            select: function(event, ui) {
+			                $(this).blur().nextAll('input[name="partnerId"]').val(ui.item.id);
+			            }
+			        }).on("click",function(){
+			            $partner.autocomplete('search', '');
+			        });  
+
+			        //询价人
+			        $inquiryUser.autocomplete({
+			            minLength: 0,
+			            source : offerUserList,
+			            change: function(event, ui) {
+			                if (!ui.item)  {
+			                    $(this).nextAll('input[name="inquiryUserId"]').val('');
+			                }
+			            },
+			            select: function(event, ui) {
+			                $(this).blur().nextAll('input[name="inquiryUserId"]').val(ui.item.id);
+			            }
+			        }).on("click",function(){
+			            $inquiryUser.autocomplete('search', '');
+			        });  
+
+			        //报价人
+			        $quoteUser.autocomplete({
+			            minLength: 0,
+			            source : quoteUserList,
+			            change: function(event, ui) {
+			                if (!ui.item)  {
+			                    $(this).nextAll('input[name="quoteUserId"]').val('');
+			                }
+			            },
+			            select: function(event, ui) {
+			                $(this).blur().nextAll('input[name="quoteUserId"]').val(ui.item.id);
+			            }
+			        }).on("click",function(){
+			            $quoteUser.autocomplete('search', '');
+			        });                           
+				}
+			}
+		});
+	};
+
+
 	exports.init = quote.initModule;
 	exports.addQuote = quote.addQuote;
 	exports.updateQuoteToOffer = quote.updateQuoteToOffer;
