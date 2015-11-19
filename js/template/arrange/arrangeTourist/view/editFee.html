@@ -20,17 +20,18 @@
 						</div>
 						<label class="col-sm-1 control-label no-padding-right">已付:</label>
 						<div class="col-sm-2">
-							<input value="0" type="text" name="payedMoney" class="col-sm-12" />
+							<input value="{{if touristGroup.transferFeeStatus==1}}{{touristGroup.payedMoney}}{{/if}}" type="text" name="payedMoney" class="col-sm-12" />
 						</div>
-						<div class="clo-sm-2">
-							<label style="margin: 2px 0 0 12px">
+
+                        <label class="col-sm-1 control-label no-padding-right" style="margin: 2px 0 0 12px">对方现收:</label>
+						<label>
 								<input type="checkbox" disabled="disabled" {{if touristGroup.operateCurrentNeedPayMoney == 1}}checked="checked"{{/if}} class="ace send-check">
 								<span class="lbl">
 								</span>
 								<input type="hidden" name="isCurrent" value="{{touristGroup.operateCurrentNeedPayMoney}}">
-							</label>
-						</div>
-						<label class="col-sm-1 control-label no-padding-right">对方现收:</label>
+						</label>
+
+						
 
 				</div>
 
@@ -64,7 +65,7 @@
 										<input name="adultCount" value="{{if touristGroup != null}}{{touristGroup.adultCount}}{{/if}}" readonly="readonly" type="text" class="col-sm-12  no-padding-right costCount" />
 									</td>
 									<td>
-										<input name="adultTransferMoney" value="0" type="text" class="col-sm-12  no-padding-right  costPrice" />
+										<input name="adultTransferMoney" value="{{if touristGroup.transferFeeStatus==1}}{{touristGroup.transAdultPrice}}{{/if}}" type="text" class="col-sm-12  no-padding-right  costPrice" />
 									</td>
 									<td></td>
 								</tr>
@@ -79,7 +80,7 @@
 										<input name="childCount" value="{{if touristGroup != null}}{{touristGroup.childCount}}{{/if}}" readonly="readonly" type="text" class="col-sm-12  no-padding-right costCount" />
 									</td>
 									<td>
-										<input name="childTransferMoney" value="0" type="text" class="col-sm-12  no-padding-right costPrice" />
+										<input name="childTransferMoney" value="{{if touristGroup.transferFeeStatus==1}}{{touristGroup.transChildPrice}}{{/if}}" type="text" class="col-sm-12  no-padding-right costPrice" />
 									</td>
 									<td></td>
 								</tr>  
@@ -152,8 +153,6 @@
 						<input readonly="readonly" value="{{if touristGroup != null}}{{touristGroup.transRemark}}{{/if}}" class="col-sm-12  no-padding-right" type="text">  
 					</div>
 				</div> 
-
-
 
 				<div class="form-group" style="margin-left:25%;">
 					    <label class="col-sm-1 control-label no-padding-right">应收：</label>
