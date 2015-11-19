@@ -318,7 +318,7 @@ function showSaveConfirmDialog($dialog, message, yes_fn, no_fn, cacel_fn)  {
 
 	$dialog.removeClass('hide').dialog({
 		modal: true,
-		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i>数据保存</h4></div>",
+		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i>保存修改？</h4></div>",
 		title_html: true,
 		draggable:false,
 		buttons: buttons,
@@ -602,7 +602,6 @@ var modalScripts = {
 	'business_analyst_saleProduct' : "js/template/businessAnalyst/saleProduct/saleProduct.js",
 	'resource_busCompany':"js/template/resource/busCompany/busCompany.js",
 	'resource_lineProduct': 'js/template/resource/lineProduct/lineProduct.js',
-	'resource_travelLine': 'js/template/resource/travelLine/travelLine.js',
 
 	//-------------------------------------------发团管理模块--------------------------------------------------
 	'arrange_booking' : 'js/template/arrange/booking/booking.js',
@@ -611,8 +610,8 @@ var modalScripts = {
 	//-------------------------------------------发团管理---------------------------------------------------
 	'arrange_plan':"js/template/arrange/tripPlan/tripPlan.js",
 	'resource_travelLine': 'js/template/resource/travelLine/travelLine.js',
+	//-------------------------------------------发团管理模块---------------------------------------------------
 	'arrange_quote':'js/template/arrange/quote/quote.js',
-
 	//-------------------------------------------业务分析模块---------------------------------------------------
 	'business_analyst_saleProduct' : "js/template/businessAnalyst/saleProduct/saleProduct.js",//产品销量
 	'business_analyst_sourDstribution' : "js/template/businessAnalyst/sourDstribution/sourDstribution.js", //客源分布
@@ -1218,6 +1217,7 @@ function listMenu(menuTemplate){
 							}				
 					}
 				});
+
 				//dateTime
 				$(document).on("click",".input-group-addon",function(){
 					var $that = $(this);
@@ -1524,7 +1524,7 @@ var Tools = {
  * @param  {object} $elements 需要绑定提示的DOM
  * @return {[type]}           [description]
  */
-Tools.descToolTip = function($elements,type,placement) {
+Tools.descToolTip = function($elements,type, placement) {
 	if (!!$elements)  {
 		$elements.each(function() {
 			var $that = $(this), content = $that.prop('title'),html = $that.data("html");
@@ -1553,17 +1553,15 @@ Tools.descToolTip = function($elements,type,placement) {
 					}, 100);
 				});
 			}else if (type == 2) {
-				var options = {};	 
-				// 绑定提示
-				$that.popover({
+				var options = {
 					trigger: 'manual',
 					container: '#desc-tooltip-containter',
 					content: html,
-					html: true
-				});
-				if (!!placement) {	 
-					options.placement = placement;	 
-				} 
+					html : true
+				};
+				if (!!placement) {
+					options.placement = placement;
+				}
 				// 绑定提示
 				$that.popover(options)
 				// 处理显示与隐藏提示
@@ -1604,7 +1602,7 @@ Tools.addTab = function(tab_id, tab_name, html)  {
 
 		// 页面已经编辑
 		if ($content.data('isEdited'))  {
-			showSaveConfirmDialog($( "#confirm-dialog-message" ), "数据已经被修改，是否保存?",
+			showSaveConfirmDialog($( "#confirm-dialog-message" ), "内容已经被修改，是否保存?",
 								function(){	// 保存
 									$content.trigger(SWITCH_TAB_SAVE, [tab_id, tab_name, html]);
 								},
@@ -1648,7 +1646,7 @@ Tools.addTab = function(tab_id, tab_name, html)  {
 
 				// 页面已经编辑
 				if ($content.data('isEdited'))  {
-					showSaveConfirmDialog($( "#confirm-dialog-message" ), "数据已经被修改，是否保存?",
+					showSaveConfirmDialog($( "#confirm-dialog-message" ), "内容已经被修改，是否保存?",
 										function(){	// 保存
 											$content.trigger(CLOSE_TAB_SAVE);
 										},
@@ -1844,18 +1842,13 @@ KingServices.addTicket = function(fn){
 		module.addTicket(fn);
 	});
 }
-//报价  新增	 
-KingServices.addQuote = function(id){	 
+//报价  新增
+KingServices.addQuote = function(id){
 	seajs.use("" + ASSETS_ROOT + modalScripts.arrange_quote,function(module){
-		module.addQuote(id);	 
-			});	 
-}
-//修改报价  （查看询价结果）
-KingServices.updateQuoteToOffer = function(id,type){
-	seajs.use("" + ASSETS_ROOT + modalScripts.arrange_quote,function(module){
-		module.updateQuoteToOffer(id,type);
+		module.addQuote(id);
 	});
 }
+
 
 //添加资源函数
 KingServices.addResourceFunction = function(e){

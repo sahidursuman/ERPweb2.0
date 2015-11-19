@@ -40,11 +40,25 @@
 						<div class="col-sm-2">
 							<input name="transPayedMoney" value="{{innerTransfer.transPayedMoney}}" maxlength="9" type="text" class="date-picker col-xs-12" />
 						</div>
+
+						{{if innerTransfer.touristGroup.operateCurrentNeedPayMoney==0}}
+						<label style="padding-left:0px;">  
+							<input  type="checkbox" class="ace" disabled="disabled" value="{{innerTransfer.touristGroup.operateCurrentNeedPayMoney}}" name="isCurrent">
+							<span class="lbl">
+							</span>
+							<input type="hidden" name="isCurrent" value="{{innerTransfer.touristGroup.operateCurrentNeedPayMoney}}" />
+						</label>
+						{{else}}
 						<label style="padding-left:0px;">  
 							<input  type="checkbox" class="ace" checked="checked" disabled="disabled" value="{{innerTransfer.touristGroup.operateCurrentNeedPayMoney}}" name="isCurrent">
 							<span class="lbl">
 							</span>
+							<input type="hidden" name="isCurrent" value="{{innerTransfer.touristGroup.operateCurrentNeedPayMoney}}" />
 						</label>
+                        {{/if}}
+
+
+
 						<label class="control-label no-padding-right">对方现收</label>
 					</div>
 				</div>
