@@ -1702,7 +1702,7 @@ define(function(require, exports) {
 	ResLineProduct.saveProductData = function($tab, validator, tabArgs){
 		if (!validator.form())   return;
 
-		var $form = $tab.find('.T-mainForm'), travelLineData = {};
+		var $form = $tab.find('.T-mainForm'), travelLineData = {},isAjax = true;
 		function getValue(obj, name){
 			var thisObj = obj.find("[name="+name+"]"), objValue;
 			if(thisObj.attr("type") == "checkbox"){
@@ -1792,6 +1792,7 @@ define(function(require, exports) {
 						var standardId = $item.find("[name=typeId]").val();
 						if(!standardId){
 							showMessageDialog($( "#confirm-dialog-message" ), "请选择餐标名称！");
+							isAjax = false;
 							return false;
 						}
 						var restaurantJson = {
@@ -1816,6 +1817,7 @@ define(function(require, exports) {
 						var hotelRoomId = $item.find("[name=hotelRoomId]").val();
 						if(!hotelRoomId){
 							showMessageDialog($( "#confirm-dialog-message" ), "请选择房型！");
+							isAjax = false;
 							return false;
 						}
 						var hotelJson = {
@@ -1839,7 +1841,8 @@ define(function(require, exports) {
 					if(scenicId){
 						var itemId = $item.find("[name=chargingId]").val();
 						if(!itemId){
-							showMessageDialog($( "#confirm-dialog-message" ), "请选择收费房型！");
+							showMessageDialog($( "#confirm-dialog-message" ), "请选择收费项目！");
+							isAjax = false;
 							return false;
 						}
 						var scenicJson= {
@@ -1866,6 +1869,7 @@ define(function(require, exports) {
 						var policyId = $item.find("[name=shopPolicyId]").val();
 						if(!policyId){
 							showMessageDialog($( "#confirm-dialog-message" ), "请选择商品政策！");
+							isAjax = false;
 							return false;
 						}
 						var shopJson = {
@@ -1884,7 +1888,12 @@ define(function(require, exports) {
 			if($list.length > 0){
 				for(var j=0; j<$list.length;j++){
 					$item = $list.eq(j);
-					var selfPayId = $item.find("[name=companyId]").val();
+					var selfPayId = $item.find("[name=selfPayItemId]").val();
+					if(!selfPayId){
+						showMessageDialog($( "#confirm-dialog-message" ), "请选择自费项目！");
+						isAjax = false;
+						return false;
+					}
 					if(selfPayId){
 						var selfPayJson = {
 							id : $item.find("[name=templateId]").val(),
@@ -1931,7 +1940,9 @@ define(function(require, exports) {
 			url = KingServices.build_url('lineProduct', 'updateLineProduct');
 			submitData = "id="+id+"&LineProductJsonUpdate="+encodeURIComponent(lineDataJson);
 		}
-		
+		if(!isAjax){
+			return false;
+		}
 		$.ajax({
 			url:url,
 			type:"POST",
