@@ -366,15 +366,18 @@ function showConfirmDialogOfShare(dialogObj,message, fn){
 		draggable:false,
 		buttons: [
 			{
-				text: "取消",
-				"class" : "btn btn-minier btn-heightMall",
+				text: "关闭",
+				"class" : "btn btn-primary btn-minier btn-heightMall",
 				click: function() {
 					$( this ).dialog( "close" );
+					if(fn){
+						fn();
+					}
 				}
 			}
 		],
 		open:function(event,ui){
-			$(this).find("p").text(message);
+			$(this).find("p").html(message);
 		}
 	});
 }
@@ -1962,6 +1965,14 @@ KingServices.provinceCity = function($container,provinceIdU,cityIdU,districtIdU)
 	KingServices.getProvinceList($container.find("select[name=provinceId]"),provinceIdU);
 	if (!!cityIdU) {KingServices.getCityList($container.find("select[name=cityId]"),provinceIdU,cityIdU);} 
 	if (!!districtIdU) {KingServices.getDistrictList($container.find("select[name=districtId]"),cityIdU,districtIdU);} 
+	
+	if(provinceIdU != "" && !cityIdU){
+		KingServices.getCityList($container.find("select[name=cityId]"),provinceIdU);
+	}
+	if(cityIdU != "" && !districtIdU){
+		KingServices.getDistrictList($container.find("select[name=districtId]"),cityIdU);
+	}
+	 
 	//给省份select绑定事件
 	$container.find("select[name=provinceId]").change(function(){
 		var provinceId = $(this).val();
