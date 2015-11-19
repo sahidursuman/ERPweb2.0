@@ -64,8 +64,8 @@ define(function(require, exports) {
 							quote.viewQuote(id);
 						} else if ($this.hasClass('T-update')){
 							// 编辑报价信息
-							//quote.updateQuote(id);
-							quote.updateQuoteToOffer(id,'1');
+							quote.updateQuote(id);
+							//quote.updateQuoteToOffer(id,'1');
 						} else if ($this.hasClass('T-delete')){
 							// 删除报价
 							//....
@@ -337,9 +337,13 @@ define(function(require, exports) {
 				var result = showDialog(data);
 				if(result){
 					for(var i = 0 ; i < data.data.length; i++){
+						var trLen = 0;
 						for(var j = 0 ; j < data.data[i].hotelList.length; j++){
-							data.data[i].hotelList[j].roomTypeList = JSON.parse(data.data[i].hotelList[j].roomTypeList);
+							var roomTypeList = JSON.parse(data.data[i].hotelList[j].roomTypeList);
+							data.data[i].hotelList[j].roomTypeList = roomTypeList;
+							trLen += roomTypeList.length;
 						}
+						data.data[i].trLen = trLen;
 					}
 					var hotelInquiryResultHtml = hotelInquiryResultTemplate(data);
 					$container.find('#hotelInquiryContent').html(hotelInquiryResultHtml);

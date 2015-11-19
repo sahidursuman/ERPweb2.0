@@ -234,7 +234,7 @@ define(function(require,exports){
 			$innerTransferForm = $updateTabId.find(".T-touristGroupMainFormRS");//中转安排对象
 			$updateTabId.find(".T-submit-updateTouristGroup").data('id',id);
 			//添加验证
-			touristGroup.validator = rule.checktouristGroup($updateTabId);
+			touristGroup.validator = rule.checktouristGroup($groupInfoForm);
 			touristGroup.checkInnerValidator = rule.checkInnerTransfer($innerTransferForm);
 			//添加tab切换
 			touristGroup.init_CRU_event($updateTabId,id,2);
@@ -456,11 +456,11 @@ define(function(require,exports){
 	 * @return {[type]}           [description]
 	 */
 	touristGroup.initLineProductSearch = function(isUpdate) {
-		var type = isUpdate?'update': 'add',
+		var type = isUpdate ?'update': 'add',
 			html =searchTemplate({update: type}),
 			searchTravelLinelayer =layer.open({
 				type: 1,
-				title:"选择路线产品",
+				title:"选择线路产品",
 				skin: 'layui-layer-rim', //加上边框
 				area: ['85%', '80%'], //宽高
 				zIndex:1029,
@@ -705,7 +705,7 @@ define(function(require,exports){
 						touristGroup.searchLinproduct(false,0,name);
 					});
 					//提交事件
-					$searchPanel.find('.T-submit-searchtravelLine').off('click').on('click',function(){
+					$searchPanel.find('.T-searchtravelLine').off('click').on('click',function(){
 						touristGroup.saveLineproduceJson($searchPanel,tabFlag);
 						layer.close(searchLinproductLayer);
 					});	
@@ -722,7 +722,7 @@ define(function(require,exports){
 			$addVisitorObj = $("#tab-resource_touristGroup-update-content")
 		}
 		
-		var $parentObj = $addVisitorObj.find('.T-touristGroupMainForm');
+		var $parentObj = $addVisitorObj.find('.T- ');
 		var lineProductName = $parentObj.find('input[name=lineProductIdName]');
 		var lineProductId = $parentObj.find('input[name=lineProductId]');
 		var $tr = $searchPanel.find('tbody tr'),
@@ -1021,6 +1021,7 @@ define(function(require,exports){
 			change:function(event,ui){
 				if(ui.item == null){
 					$(this).closest('div').find('input[name=fromPartnerAgencyId]').val("");
+					$(this).closest('div').find('input[name=partnerAgencyNameList]').val("");
 				}
 			},
 			select:function(event,ui){
@@ -1031,10 +1032,12 @@ define(function(require,exports){
 				if(touristGroup.typeFlag == 1){
 					var $tabId = $("#tab-resource_touristGroup-add-content");
 					$tabId.find("input[name=partnerAgencyNameList]").val("");
+					$tabId.closest('div').find('input[name=partnerAgencyContactId]').val("");
 				}
 				if(touristGroup.typeFlag == 2){
 					var $tabId = $("#tab-resource_touristGroup-update-content");
 					$tabId.find("input[name=partnerAgencyNameList]").val("");
+					$tabId.closest('div').find('input[name=partnerAgencyContactId]').val("");
 				}
 			}
 		}).off('click').on('click',function(){
