@@ -582,9 +582,9 @@ define(function(require, exports) {
 					if (!!target) {
 						$container.find('.inquiryContent').trigger('click');
 						if (target == "T-hotel") {
-							$container.find('.busInquiryResult').trigger('click');
+							$container.find('.hotelInquiryContent').trigger('click');
 						}else if (target == "T-bus") {
-							$container.find('.hotelInquiryResult').trigger('click');
+							$container.find('.busInquiryResult').trigger('click');
 						}
 					}
 				}
@@ -594,7 +594,7 @@ define(function(require, exports) {
 
 	//报价详情页事件绑定
 	quote.init_event =function($container) {
-		var validator = rule.lineProductCheckor($container);
+		var validator = rule.quoteCheckor($container);
 		//下拉
 		quote.autocomplete($container);
 		//时间控件
@@ -1207,7 +1207,7 @@ define(function(require, exports) {
 				}
 
 				// 更新表单验证的配置
-				validator = rule.lineProductUpdate(validator);
+				validator = rule.quoteCheckor(validator);
 			},
 			select:function(event,ui){
 				var $that = $(this).blur();
@@ -1226,7 +1226,7 @@ define(function(require, exports) {
 							quote.costCalculation($container)
 
 							// 更新表单验证的配置
-							validator = rule.lineProductUpdate(validator);
+							validator = rule.quoteCheckor(validator);
 						}
 					}
 				});
@@ -1306,7 +1306,7 @@ define(function(require, exports) {
 				}
 
 				// 更新表单验证的配置
-				validator = rule.lineProductUpdate(validator);
+				validator = rule.quoteCheckor(validator);
 			},
 			select:function(event,ui){
 				var $tr = $(this).closest('tr'), restaurantNameId=ui.item.id;
@@ -1330,7 +1330,7 @@ define(function(require, exports) {
 							//objParent.find("input[name=payType]").val(restaurant.payType == 0? "现付" : "账期" + (restaurant.payPeriod ? "(" + restaurant.payPeriod.month + "个月)" : "" ));
 
 							// 更新表单验证的配置
-							validator = rule.lineProductUpdate(validator);
+							validator = rule.quoteCheckor(validator);
 						}
                     }
 				})
@@ -1478,7 +1478,7 @@ define(function(require, exports) {
 							$tr.find("input[name=mobileNumber]").val(hotel.mobileNumber);
 							//objParent.find("input[name=payType]").val(hotel.payType == 0? "现付" : "账期" + (hotel.payPeriod ? "(" + hotel.payPeriod.month + "个月)" : "" ));
 							// 更新表单验证的配置
-							validator = rule.lineProductUpdate(validator);
+							validator = rule.quoteCheckor(validator);
 						}
                     }
 				});
@@ -1497,7 +1497,7 @@ define(function(require, exports) {
 					quote.costCalculation($container)
 
 					// 更新表单验证的配置
-					validator = rule.lineProductUpdate(validator);
+					validator = rule.quoteCheckor(validator);
 				}
 			}
 		}).unbind("click").click(function(){
@@ -1627,7 +1627,7 @@ define(function(require, exports) {
 				objParent.find("input[name=chargingId]").val("");
 				quote.costCalculation($container)
 				// 更新表单验证的配置
-				validator = rule.lineProductUpdate(validator);
+				validator = rule.quoteCheckor(validator);
 				
 				$.ajax({
                     url: KingServices.build_url('scenic', 'getScenicById'),
@@ -1652,7 +1652,7 @@ define(function(require, exports) {
 					$tr.find("input[name=price]").val("");
 					quote.costCalculation($container)
 					// 更新表单验证的配置
-					validator = rule.lineProductUpdate(validator);
+					validator = rule.quoteCheckor(validator);
 				}
 			}
 		}).unbind("click").click(function(){
@@ -1781,7 +1781,7 @@ define(function(require, exports) {
 				    policyParent.find("input[name=shopId]").val(vendorNameId).trigger('change');
 
 			    // 更新表单验证的配置
-			    validator = rule.lineProductUpdate(validator);
+			    validator = rule.quoteCheckor(validator);
 
 				$.ajax({
                     url: KingServices.build_url('shop', 'getShopById'),
@@ -1814,7 +1814,7 @@ define(function(require, exports) {
 					$tr.find("input[name=customerRebateMoney]").val("");
 
 					// 更新表单验证的配置
-					validator = rule.lineProductUpdate(validator);
+					validator = rule.quoteCheckor(validator);
 				}
 			}
 		}).unbind("click").click(function(){
@@ -1942,7 +1942,7 @@ define(function(require, exports) {
 							quote.costCalculation($container)
 
 							// 更新表单验证的配置
-							validator = rule.lineProductUpdate(validator);
+							validator = rule.quoteCheckor(validator);
 							//var SelfPayRebateList=JSON.parse(data.SelfPayRebateList);
 							//thisParent.find("input[name=contractPrice]").val(SelfPayRebateList.price);
 							
@@ -1963,7 +1963,7 @@ define(function(require, exports) {
 					quote.costCalculation($container)
 
 					// 更新表单验证的配置
-					validator = rule.lineProductUpdate(validator);
+					validator = rule.quoteCheckor(validator);
 				}
 			}
 		}).unbind("click").click(function(){
@@ -2101,7 +2101,7 @@ define(function(require, exports) {
 							quote.costCalculation($container)
 
 							// 更新表单验证的配置
-							validator = rule.lineProductUpdate(validator);
+							validator = rule.quoteCheckor(validator);
 						}
                     }
                 });
@@ -2118,7 +2118,7 @@ define(function(require, exports) {
 					quote.costCalculation($container)
 
 					// 更新表单验证的配置
-					validator = rule.lineProductUpdate(validator);
+					validator = rule.quoteCheckor(validator);
 				}
 			}
 		}).unbind("click").click(function(){
@@ -2700,8 +2700,26 @@ define(function(require, exports) {
 		});
 	}
 	quote.updateQuoteToOffer = function(id,target) {
-		var quoteContent = $(document).find('#tab-arrange_quote-add-content,#tab-arrange_quote-update-content')
-		quote.updateQuote(id,target);
+		var quoteContent = $(document).find('#tab-arrange_quote-add-content,#tab-arrange_quote-update-content'), isThere = 0;
+		quoteContent.each(function(i){
+			var menukeyId = quoteContent.eq(i).attr("id");
+			var quoteId = quoteContent.eq(i).find('[name=quoteId]').val();
+			if (quoteId == id) {
+				isThere = 1;
+				Tools.addTab(menukeyId.substring(menukeyId.indexOf('tab-')+4,menukeyId.lastIndexOf('-content')));
+				if (!!target) {
+					$container.find('.inquiryContent').trigger('click');
+					if (target == "T-hotel") {
+						$container.find('.hotelInquiryContent').trigger('click');
+					}else if (target == "T-bus") {
+						$container.find('.busInquiryResult').trigger('click');
+					}
+				}
+			}
+		})
+		if (isThere == 0) {
+			quote.updateQuote(id,target);
+		}
 	};
 
 	/**
