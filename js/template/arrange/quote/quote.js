@@ -2730,43 +2730,29 @@ define(function(require, exports) {
 	 */
 	quote.deleteItem = function(quoteId) {
 		if (!!quoteId) {
-			$("#confirm-dialog-message").removeClass('hide').dialog({
-				modal: true,
-				title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-				title_html: true,
-				draggable:false,
-				buttons: [ 
-					{
-						text: "取消",
-						"class" : "btn btn-minier",
-						click: function() {
-							$( this ).dialog( "close" );
-						}
-					},
-					{
-						text: "确定",
-						"class" : "btn btn-primary btn-minier",
-						click: function() {
-							$( this ).dialog( "close" );
+			showConfirmMsg(
+				$("#confirm-dialog-message"),
 
-							$.ajax({
-								url: KingServices.build_url('quote', 'deleteQuote'),
-								type: 'post',
-								data: {id: quoteId},
-							})
-							.done(function(data) {
-								if (showDialog(data)) {
-									quote.listQuote(0);
-								}
-							});
+				"你确定要删除该条记录？",
+
+				function(){
+					$.ajax({
+						url: KingServices.build_url('quote', 'deleteQuote'),
+						type: 'post',
+						data: {id: quoteId},
+					})
+					.done(function(data) {
+						if (showDialog(data)) {
+							quote.listQuote(0);
 						}
-					}
-				],
-				open:function(event,ui){
-					$(this).find("p").text("你确定要删除该条记录？");
-				}
-			});
-			
+					});
+				},
+				function(){
+
+				},
+
+				"取消","确定")
+
 		}
 	}
 	exports.init = quote.initModule;
