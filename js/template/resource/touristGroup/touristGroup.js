@@ -1409,8 +1409,7 @@ define(function(require,exports){
 			type:"POST",
 			data:data,
 			success:function(data){
-				var result = showDialog('isEdited', false);
-				if(result){
+				if(showDialog(data)){
 					$obj.data('isEdited', false);
 					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
 						if(!!tabArgs && tabArgs.length === 3){
