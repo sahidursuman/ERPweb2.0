@@ -322,9 +322,11 @@
                                                                 <td><input name="guidePayMoney" type="text" value="{{busCompany.guidePayMoney}}" maxlength="9" class="col-sm-12" style="width: 60px;"/></td>
                                                                 <td><input name="remark" type="text" value="{{busCompany.remark}}" class="col-sm-12" maxlength="500"/></td>
                                                                 <td>
+                                                                {{if busCompany.offerId!=null}}
                                                                     <a class="cursor T-bus-SendOrder T-sendOrder-Area R-right T-action" data-value='{{busCompany.qouteId}}' data-entity-offerId={{busCompany.offerId}}>
                                                                     发送订单
                                                                    </a>
+                                                                {{/if}}
                                                                 </td>
                                                             </tr>
                                                             {{/if}}
@@ -520,7 +522,9 @@
                                                                 <td><input type="text" name="guidePayMoney" class="col-sm-12" value="{{hotel.guidePayMoney}}" style="width: 60px;" maxlength="9"/></td>
                                                                 <td><input type="text" name="remark" class="col-sm-12" value="{{hotel.remark}}" maxlength="500"/></td>
                                                                 <td>
+                                                                    {{if hotel.offerId!=null}}
                                                                     <a class="cursor T-Hotel-SendOrder T-sendOrder-Area R-right T-action" data-value="{{hotel.qouteId}}" data-entity-offerId={{hotel.offerId}}>发送订单</a>
+                                                                    {{/if}}
                                                                     <a class="cursor btn-deleteTripPlanList" data-entiy-id="{{hotel.id}}" data-entity-name="hotel" title="删除">
                                                                         删除
                                                                     </a>
