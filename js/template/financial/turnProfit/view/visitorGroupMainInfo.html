@@ -3,51 +3,51 @@
 	<table class="whereQ whereOne" style="width:97%">
 		<tr>
 			<td class="style-myself">线路产品：</td>
-			<td class="styleOne-self">{{if touristGroupDetail.lineProduct != null}}{{touristGroupDetail.lineProduct.name}}{{/if}}</td>
+			<td class="styleOne-self">{{if needIncomeMoneyDetail.lineProductName != null}}{{needIncomeMoneyDetail.lineProductName}}{{/if}}</td>
 			<td class="style-myself">出游日期：</td>
-			<td class="styleOne-self">{{touristGroupDetail.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
+			<td class="styleOne-self">{{needIncomeMoneyDetail.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
 
 		</tr>
 		<tr>
 			<td class="style-myself" style="width:150px">是否购买保险：</td>
-			<td class="styleOne-self">{{if touristGroupDetail.buyInsurance == 0}}
+			<td class="styleOne-self">{{if needIncomeMoneyDetail.buyInsurance == 0}}
 				否
-				{{else touristGroupDetail.buyInsurance == 1}}
+				{{else needIncomeMoneyDetail.buyInsurance == 1}}
 				是
 				{{/if}}</td>
 			<td class="style-myself">客户来源：</td>
-			<td class="styleOne-self" >{{if touristGroupDetail.partnerAgency != null}}{{touristGroupDetail.partnerAgency.travelAgencyName}}{{/if}}</td>
+			<td class="styleOne-self" >{{if needIncomeMoneyDetail.partnerAgencyName != null}}{{needIncomeMoneyDetail.partnerAgencyName}}{{/if}}</td>
 
 		</tr>
 		<tr>
 			<td class="style-myself" style="width:150px">同行联系人：</td>
-			<td class="styleOne-self" >{{if touristGroupDetail.partnerAgencyContact != null}}{{touristGroupDetail.partnerAgencyContact.contactRealname}} -[{{touristGroupDetail.partnerAgencyContact.contactMobileNumber}}]{{/if}}</td>
+			<td class="styleOne-self" >{{if needIncomeMoneyDetail.partnerAgencyContactName != null}}{{needIncomeMoneyDetail.partnerAgencyContactName}} -[{{needIncomeMoneyDetail.partnerAgencyContactMobileNumber}}]{{/if}}</td>
 			<td class="style-myself">获得方式：</td>
-			<td class="styleOne-self" >{{if touristGroupDetail.getType == 1}}
+			<td class="styleOne-self" >{{if needIncomeMoneyDetail.getType == 1}}
 				旅行社系统
-				{{else if touristGroupDetail.getType == 2}}
+				{{else if needIncomeMoneyDetail.getType == 2}}
 				传真
-				{{else if touristGroupDetail.getType == 3}}
+				{{else if needIncomeMoneyDetail.getType == 3}}
 				短信
-				{{else if touristGroupDetail.getType == 4}}
+				{{else if needIncomeMoneyDetail.getType == 4}}
 				电话
-				{{else if touristGroupDetail.getType == 5}}
+				{{else if needIncomeMoneyDetail.getType == 5}}
 				QQ
 				{{/if}}</td>
 		</tr>
 
 		<tr>
 			<td class="style-myself">应收：</td>
-			<td class="styleOne-self" >{{touristGroupDetail.needPayAllMoney}}</td>
+			<td class="styleOne-self" >{{needIncomeMoneyDetail.needIncomeAllMoney}}</td>
 			<td class="style-myself">已收：</td>
-			<td class="styleOne-self">{{touristGroupDetail.payedMoney}}</td>
+			<td class="styleOne-self">{{needIncomeMoneyDetail.alreadyIncomeMoney}}</td>
 			</tr>
 		<tr>
 			<td class="style-myself">现收：</td>
-			<td class="styleOne-self">{{touristGroupDetail.currentNeedPayMoney}}</td>
+			<td class="styleOne-self">{{needIncomeMoneyDetail.currentNeedInComeMoney}}</td>
 
 			<td class="style-myself">未收：</td>
-			<td class="styleOne-self">{{touristGroupDetail.unIncomeMoney}}</td></tr>
+			<td class="styleOne-self">{{needIncomeMoneyDetail.unIncomeMoney}}</td></tr>
 	</table>
 
 	<table class="whereQ whereTwo" style="width:97%;margin-top:20px">
@@ -69,10 +69,10 @@
 				大人
 			</td>
 			<td>
-				<label class="control-label">{{touristGroupDetail.adultCount}}</label>
+				<label class="control-label">{{needIncomeMoneyDetail.adultCount}}</label>
 			</td>
 			<td>
-				<label class="control-label">{{touristGroupDetail.adultPrice}}</label>
+				<label class="control-label">{{needIncomeMoneyDetail.adultPrice}}</label>
 			</td>
 		</tr>
 		<tr>
@@ -83,20 +83,20 @@
 				小孩
 			</td>
 			<td>
-				<label class="control-label">{{touristGroupDetail.childCount}}</label>
+				<label class="control-label">{{needIncomeMoneyDetail.childCount}}</label>
 			</td>
 			<td>
-				<label class="control-label">{{touristGroupDetail.childPrice}}</label>
+				<label class="control-label">{{needIncomeMoneyDetail.childPrice}}</label>
 			</td>
 		</tr>
 		<!-- 其他费用 -->
-		  {{each touristGroupDetail.touristGroupTransferFeeSet as transferFee}}
+		  {{each needIncomeMoneyDetail.touristGroupFeeList as transferFee}}
 		    {{if transferFee!=null}}
 		      <tr>   
 		            <td>其他费用</td>  
-		            <td>{{transferFee.discribe}}</td>
+		            <td>{{transferFee.describeInfo}}</td>
 		            <td>{{transferFee.count}}</td>  
-		            <td>{{transferFee.otherPrice}}</td>
+		            <td>{{transferFee.price}}</td>
 		      </tr>
 		      {{/if}}  
 		  {{/each}} 
