@@ -14,7 +14,6 @@ var SWITCH_TAB_SAVE = 'switch.tab.save',
 	CLOSE_TAB_SAVE = 'close.tab.save',
 	SWITCH_TAB_BIND_EVENT = 'switch.tab.bind_event';
 
-var clipInstant = 
 function addTab(tabId,tabName,html){
 	var $current_li = $tabList.find('.active'),
 		$next_li = $tabList.find('.tab-'+tabId);
@@ -358,7 +357,6 @@ function showConfirmDialog(dialogObj,message, fn){
 		}
 	});
 }
-
 function showLogoutDialog(dialogObj,message){
 	dialogObj.removeClass('hide').dialog({
 		modal: true,
@@ -1912,14 +1910,6 @@ KingServices.provinceCity = function($container,provinceIdU,cityIdU,districtIdU)
 	KingServices.getProvinceList($container.find("select[name=provinceId]"),provinceIdU);
 	if (!!cityIdU) {KingServices.getCityList($container.find("select[name=cityId]"),provinceIdU,cityIdU);} 
 	if (!!districtIdU) {KingServices.getDistrictList($container.find("select[name=districtId]"),cityIdU,districtIdU);} 
-	
-	if(provinceIdU != "" && !cityIdU){
-		KingServices.getCityList($container.find("select[name=cityId]"),provinceIdU);
-	}
-	if(cityIdU != "" && !districtIdU){
-		KingServices.getDistrictList($container.find("select[name=districtId]"),cityIdU);
-	}
-	 
 	//给省份select绑定事件
 	$container.find("select[name=provinceId]").change(function(){
 		var provinceId = $(this).val();
