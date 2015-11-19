@@ -106,7 +106,7 @@ define(function(require,exports){
 					var $lineProductObj = touristGroup.$tab.find(".T-chooseLineProduct");//线路产品对象
 					var $createUserObj = touristGroup.$tab.find(".T-creatorUserChoose");//录入人对象
 					//来源--组团社
-					touristGroup.getPartnerAgencyList($partnerAgencyObj);
+					touristGroup.getListPartnerAgencyList($partnerAgencyObj);
 					//来源--业务部
 					touristGroup.getBussinessList($bussinessGroupObj);
 					//线路产品
@@ -1018,41 +1018,57 @@ define(function(require,exports){
 	};
 	//获取组团社的数据
 	touristGroup.getPartnerAgencyList = function($obj){
-		$obj.autocomplete({
-			minLength:0,
-			change:function(event,ui){
-				if(ui.item == null){
-					$(this).closest('div').find('input[name=fromPartnerAgencyId]').val("");
-					$(this).closest('div').find('input[name=partnerAgencyNameList]').val("");
-				}
+		$.ajax({
+			url:KingServices.build_url("partnerAgency","getPartnerAgency"),
+			data:{
+				operation:'view'
 			},
-			select:function(event,ui){
-				$(this).blur();
-				var obj = this;
-				$(obj).closest('div').find("input[name=fromPartnerAgencyId]").val(ui.item.id).trigger('change');
-				//通过typeFlag来判断--1、新增；2、修改
-				if(touristGroup.typeFlag == 1){
-					var $tabId = $("#tab-resource_touristGroup-add-content");
-					$tabId.find("input[name=partnerAgencyNameList]").val("");
-					$tabId.closest('div').find('input[name=partnerAgencyContactId]').val("");
-				}
-				if(touristGroup.typeFlag == 2){
-					var $tabId = $("#tab-resource_touristGroup-update-content");
-					$tabId.find("input[name=partnerAgencyNameList]").val("");
-					$tabId.closest('div').find('input[name=partnerAgencyContactId]').val("");
-				}
-			}
-		}).off('click').on('click',function(){
-				if (!!$(this).attr('readonly')) return;
-				var obj = this;
-				var formParObj = touristGroup.autocompleteDate.fromPartnerAgencyList;
-				if(formParObj != null && formParObj.length>0){
-					for(var i = 0;i<formParObj.length;i++){
-						formParObj[i].value = formParObj[i].travelAgencyName
+			type:'POST',
+			success:function(data){
+				var result = showDialog(data);
+				var partnerAgencyList = JSON.parse(data.partnerAgencyList);
+				data.partnerAgencyList = partnerAgencyList;
+				console.log(data);				if(result){
+					$obj.autocomplete({
+					minLength:0,
+					change:function(event,ui){
+						if(ui.item == null){
+							$(this).closest('div').find('input[name=fromPartnerAgencyId]').val("");
+							$(this).closest('div').find('input[name=partnerAgencyNameList]').val("");
+						}
+					},
+					select:function(event,ui){
+						$(this).blur();
+						var obj = this;
+						$(obj).closest('div').find("input[name=fromPartnerAgencyId]").val(ui.item.id).trigger('change');
+						//通过typeFlag来判断--1、新增；2、修改
+						if(touristGroup.typeFlag == 1){
+							var $tabId = $("#tab-resource_touristGroup-add-content");
+							$tabId.find("input[name=partnerAgencyNameList]").val("");
+							$tabId.closest('div').find('input[name=partnerAgencyContactId]').val("");
+						}
+						if(touristGroup.typeFlag == 2){
+							var $tabId = $("#tab-resource_touristGroup-update-content");
+							$tabId.find("input[name=partnerAgencyNameList]").val("");
+							$tabId.closest('div').find('input[name=partnerAgencyContactId]').val("");
+						}
 					}
-				};
-				$(obj).autocomplete('option','source',formParObj);
-				$(obj).autocomplete('search','');
+					}).off('click').on('click',function(){
+						if (!!$(this).attr('readonly')) return;
+						var obj = this;
+						var formParObj = data.partnerAgencyList;
+						if(formParObj != null && formParObj.length>0){
+							for(var i = 0;i<formParObj.length;i++){
+								formParObj[i].value = formParObj[i].travelAgencyName
+							}
+						};
+						$(obj).autocomplete('option','source',formParObj);
+						$(obj).autocomplete('search','');
+					});
+
+				}
+			
+			}
 		});
 	};
 	//获取同行联系人
@@ -1138,6 +1154,45 @@ define(function(require,exports){
 			$(obj).autocomplete('search', '');
 		});
 	};
+	//列表获取组团社数据
+	touristGroup.getListPartnerAgencyList = function($obj){
+		$obj.autocomplete({
+			minLength:0,
+			change:function(event,ui){
+				if(ui.item == null){
+					$(this).closest('div').find('input[name=fromPartnerAgencyId]').val("");
+					$(this).closest('div').find('input[name=partnerAgencyNameList]').val("");
+				}
+			},
+			select:function(event,ui){
+				$(this).blur();
+				var obj = this;
+				$(obj).closest('div').find("input[name=fromPartnerAgencyId]").val(ui.item.id).trigger('change');
+				//通过typeFlag来判断--1、新增；2、修改
+				if(touristGroup.typeFlag == 1){
+					var $tabId = $("#tab-resource_touristGroup-add-content");
+					$tabId.find("input[name=partnerAgencyNameList]").val("");
+					$tabId.closest('div').find('input[name=partnerAgencyContactId]').val("");
+				}
+				if(touristGroup.typeFlag == 2){
+					var $tabId = $("#tab-resource_touristGroup-update-content");
+					$tabId.find("input[name=partnerAgencyNameList]").val("");
+					$tabId.closest('div').find('input[name=partnerAgencyContactId]').val("");
+				}
+			}
+			}).off('click').on('click',function(){
+				if (!!$(this).attr('readonly')) return;
+				var obj = this;
+				var formParObj = touristGroup.autocompleteDate.fromPartnerAgencyList;
+				if(formParObj != null && formParObj.length>0){
+					for(var i = 0;i<formParObj.length;i++){
+						formParObj[i].value = formParObj[i].travelAgencyName
+					}
+				};
+				$(obj).autocomplete('option','source',formParObj);
+				$(obj).autocomplete('search','');
+			});
+	};
 	//获取线路产品数据
 	touristGroup.getLineProduct = function($obj){
 		$obj.autocomplete({
@@ -1192,7 +1247,6 @@ define(function(require,exports){
 	};
 	//获取搜索区域的数据
 	touristGroup.getSearchAreaData = function(){
-		
 		$.ajax({
 			url:KingServices.build_url("touristGroup","getQueryTermsForTouristGroup"),
 			data:{
@@ -1202,13 +1256,13 @@ define(function(require,exports){
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
-					/*var optional = {id : "" , travelAgencyName : "全部"},
-						buissness = {id : "" , businessGroupName : "全部"};*/
+					var optional = {id : "" , travelAgencyName : "全部"},
+						buissness = {id : "" , businessGroupName : "全部"};
 						touristGroup.autocompleteDate.lineProductList = data.lineProductList;
 						touristGroup.autocompleteDate.fromBusinessGroupList = data.fromBusinessGroupList;
 						touristGroup.autocompleteDate.fromPartnerAgencyList = data.fromPartnerAgencyList;
-						/*touristGroup.autocompleteDate.fromPartnerAgencyList.unshift(optional);
-						touristGroup.autocompleteDate.fromBusinessGroupList.unshift(buissness);*/
+						touristGroup.autocompleteDate.fromPartnerAgencyList.unshift(optional);
+						touristGroup.autocompleteDate.fromBusinessGroupList.unshift(buissness);
 						touristGroup.autocompleteDate.creatorList = data.creatorList;
 				}
 			}
@@ -1504,8 +1558,7 @@ define(function(require,exports){
 			return touristGroupMemberJsonAdd;
 		}else{
 			return erroFlag;
-		}
-		
+		}	
 	};
 	//拼接安排json
 	touristGroup.installArrangeJson = function($outArrange){
