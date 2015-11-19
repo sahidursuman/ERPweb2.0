@@ -1991,6 +1991,7 @@ define(function(require, exports) {
 									var $isCurrentObj=$(".editFeeMain "),
 										isCurrent,
 									    form = $(".editFeeMain .editFeeMainForm").serialize(),
+									    transferFeeStatus=$(".editFeeMain input[name=transferFeeStatus]").val(),
 								        touristGroup = {
 											"id" : id,
 											"transRemark" : $(".editFeeMain input[name=remark]").val() || "无",
@@ -2039,11 +2040,13 @@ define(function(require, exports) {
 										}
 									})*/
 									var otherFeeListDel = [];
-									$(".editFeeMain .editFeeTbody tr.deleted").each(function(i){
-										otherFeeListDel[i] = {
-												"id" : $(this).attr("data-entity-id")
-										}
-									})
+									if (transferFeeStatus==1) {
+										$(".editFeeMain .editFeeTbody tr.deleted").each(function(i){
+											otherFeeListDel[i] = {
+													"id" : $(this).attr("data-entity-id")
+											}
+										})
+									};
 									touristGroup = JSON.stringify(touristGroup);
 									otherFeeListDel = JSON.stringify(otherFeeListDel);
 										$.ajax({
@@ -2286,6 +2289,7 @@ define(function(require, exports) {
 				if (!validator.form()) {return; } 
 				var saveTripP = {
 					"tripPlan": {
+						"tripPlanId":getValue("tripPlanId"),
 						"startTime": getValue("startTime"),
 						"accompanyGuideName": getValue("accompanyGuideName"),
 						"accompanyGuideMobile": getValue("accompanyGuideMobile"),
