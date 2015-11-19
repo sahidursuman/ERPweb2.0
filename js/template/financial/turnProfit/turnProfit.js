@@ -4,7 +4,7 @@ define(function(require, exports) {
     tabId = "tab-"+menuKey+"-content",
     checkTabId = menuKey+"-checking",
     viewTemplate = require("./view/visitorGroup"),
-    transitViewTemplate = require("../../arrange/transit/view/view"),
+    transitViewTemplate = require("./view/innerTransferView"),
     visitorGroupMainInfo = require("./view/visitorGroupMainInfo"),
     arrangeTransferViewTemplate=require("./view/turnVisitorGroup"),
     blanceTabId = menuKey+"-blance";
@@ -17,6 +17,18 @@ define(function(require, exports) {
 
     TurnProfit.initModule = function() {
     	console.log('modal');
+        TurnProfit.searchParam = {
+            pageNo: 0,
+            lineProductId : "",
+            lineProductName :"",
+            partnerAgencyId : "",
+            partnerAgencyName : "",
+            toBusinessGroupId : "",
+            toBusinessGroupName : "",
+            startTime : "",
+            endTime : "",
+            sortType: 'auto' 
+        };
         TurnProfit.listTurnProfit(0,"","","","","","","","");
     };
 

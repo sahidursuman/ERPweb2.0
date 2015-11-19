@@ -427,11 +427,20 @@ define(function(require, exports) {
 	 */
 	tripPlan.setQuoteData = function($mainForm, data) {
 		if (!!data) {
-			var isUpdate = $mainForm.hasClass('T-update');
+			var isUpdate = $mainForm.hasClass('T-update'), tmp = '';
 			setData('startTime', data.quoteLinePorduct.startTime);   //出游日期
-			setData('seatCount', data.busCompanyArrange.needSeatCount);   //车坐数
-			setData('busCompany', data.busCompany.companyName);   //车队
-			setData('busCompanyId', data.busCompany.id);   //车队索引
+			
+			if (!!data.busCompanyArrange && !!data.busCompanyArrange.needSeatCount) {
+				tmp = data.busCompanyArrange.needSeatCount;
+			}
+			setData('seatCount', tmp);   //车坐数
+			if (!!data.busCompany) {
+				setData('busCompany', data.busCompany.companyName || '');   //车队
+				setData('busCompanyId', data.busCompany.id || '');   //车队索引
+			} else {
+				setData('busCompany', '');   //车队
+				setData('busCompanyId', '');   //车队索引
+			}
 
 			$mainForm.find('input[name="childPrice"]').trigger('change');
 		}
@@ -443,7 +452,11 @@ define(function(require, exports) {
 				$name.data('old', $name.val());
 			}
 
-			$name.val(val || '').prop('readonly', true);
+			if (!!val) {
+				$name.prop('readonly', true);
+			}
+			
+			$name.val(val || '');
 		}
 	};
 
@@ -1175,8 +1188,8 @@ define(function(require, exports) {
 				parents.find("input[name=DmobileNumber]").val("");
 			}
 		}).unbind("click").click(function(){
-			var obj = $(this);
-			if (!!$obj.attr('readonly')) return;
+			var obj = this;
+			if (!!$(obj).attr('readonly')) return;
 			$.ajax({
 				url:KingServices.build_url("bookingOrder","getSeatCountList"),
 				success:function(data){
@@ -1232,7 +1245,7 @@ define(function(require, exports) {
 				parents.find("input[name=DmobileNumber]").val("");
 			}
 		}).unbind("click").click(function(){
-			var $obj = $(this);
+			var obj = this;
 			var seatCount = $(this).closest('.T-baseinfo-container').find(".T-chooseSeatCount").val();
 			if(seatCount){
 				$.ajax({

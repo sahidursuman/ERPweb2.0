@@ -25,6 +25,7 @@ define(function(require, exports) {
 	 * @return {[type]} [description]
 	 */
 	ResTravelLine.initModule = function() {
+		ResTravelLine.$tab = null;
 		ResTravelLine.getList();
 	};
 
@@ -287,41 +288,20 @@ define(function(require, exports) {
 	 */
 	ResTravelLine.delete = function(id) {
 		if (!!id)  {
-			$( "#confirm-dialog-message" ).removeClass('hide').dialog({
-				modal: true,
-				title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-				title_html: true,
-				draggable:false,
-				buttons: [ 
-					{
-						text: "取消",
-						"class" : "btn btn-minier",
-						click: function() {
-							$( this ).dialog( "close" );
+			if (!!id)  {
+				showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
+					$.ajax({
+						url: KingServices.build_url('travelLine', 'deleteTravelLine'),
+						type:"POST",
+						data: { id: id},
+						success:function(data){
+							if(showDialog(data)){
+								ResTravelLine.getList(ResTravelLine.listPageNo);
+							}
 						}
-					},
-					{
-						text: "确定",
-						"class" : "btn btn-primary btn-minier",
-						click: function() {
-							$( this ).dialog( "close" );
-							$.ajax({
-								url: KingServices.build_url('travelLine', 'deleteTravelLine'),
-								type:"POST",
-								data: { id: id},
-								success:function(data){
-									if(showDialog(data)){
-										ResTravelLine.getList(ResTravelLine.listPageNo);
-									}
-								}
-							});
-						}
-					}
-				],
-				open:function(event,ui){
-					$(this).find("p").text("你确定要删除该条记录？");
-				}
-			});
+					});
+				});
+			}
 		}
 	};
 
@@ -450,13 +430,17 @@ define(function(require, exports) {
 						showMessageDialog($( "#confirm-dialog-message" ), "请输入行程详情");
 						return false;
 					}
+					if(ue.getContentTxt().length > 10000){
+						showMessageDialog($( "#confirm-dialog-message" ), "行程详情输入过长");
+						return false;
+					}
 					schedule.push('<td>第' + data.whichDay + '天</td>');
 					schedule.push('<td>' + $form.find('input[name="repastDetail"]').val() + '</td>');
 					schedule.push('<td>'+ $form.find('input[name="restPosition"]').val()  +'</td>');
 					tmp = $form.find("select[name=hotelLevel]").val();
 					schedule.push('<td>'+ KingServices.getHotelDesc(tmp) +'</td>');
 					schedule.push('<td>'+  $form.find("input[name=title]").val() +'</td>');
-					schedule.push('<td style="width:120px"><div class="btn-group"><a class="cursor T-action T-update">修改|</a><a class="cursor T-action T-delete">删除</a></div>');
+					schedule.push('<td style="width:120px"><div class="btn-group"><a class="cursor T-action T-update">修改</a><a class="cursor"> |</a> <a class="cursor T-action T-delete">删除</a></div>');
 					schedule.push('<input type="hidden" name="hotelLevel" value="'+ tmp + '"/>');
 					schedule.push('<input type="hidden" name="roadScenic" value="'+ $form.find("input[name=roadScenic]").val() + '"/>');
 					schedule.push('<input type="hidden" name="description" value="'+ description + '"/>');
@@ -469,7 +453,7 @@ define(function(require, exports) {
 					} else {
 						var newTr = '<tr data-id="'+ (data.whichDay -1) +'">' + schedule + '</tr>';
 						if (i < len) {
-							$(newTr).insertAfter($rows.eq(i));
+							$(newTr).insertBefore($rows.eq(i));
 						} else {
 							$tab.find('.T-schedule-list').append(newTr);
 						}
@@ -487,42 +471,19 @@ define(function(require, exports) {
 	 * @return {[type]}     [description]
 	 */
 	ResTravelLine.deleteSchedule = function($tr) {
-		$( "#confirm-dialog-message" ).removeClass('hide').dialog({
-			modal: true,
-			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-			title_html: true,
-			draggable:false,
-			buttons: [ 
-				{
-					text: "取消",
-					"class" : "btn btn-minier",
-					click: function() {
-						$( this ).dialog( "close" );
-					}
-				},
-				{
-					text: "确定",
-					"class" : "btn btn-primary btn-minier",
-					click: function() {
-						if (!!$tr.data('entity-id')) {
-							$tr.addClass('deleted').fadeOut(function(){
-								$tr.addClass('hidden');
-							});
-						} else {
-							$tr.fadeOut(function(){
-								$tr.remove();
-							});
-						}
-						
-						$( this ).dialog( "close" );
-						
-					}
+		if (!!$tr && $tr.length)  {
+			showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
+				if (!!$tr.data('entiy-id')) {
+					$tr.addClass('deleted').fadeOut(function(){
+						$tr.addClass('hidden');
+					});
+				} else {
+					$tr.fadeOut(function(){
+						$tr.remove();
+					});
 				}
-			],
-			open:function(event,ui){
-				$(this).find("p").text("你确定要删除该条记录？");
-			}
-		});
+			});
+		}
 	};
 
 
@@ -551,8 +512,7 @@ define(function(require, exports) {
 		// 获取日程数据
 		var addJson = [], delJson = [];
 		$tab.find('.T-schedule-list').children('tr').each(function(index, el) {
-			var $tr = $(this), id = $tr.data('entity-id');			
-
+			var $tr = $(this), id = $tr.data('entiy-id');
 			if ($tr.hasClass('deleted')) {  // 删除
 				delJson.push({id: id});
 			} else {
@@ -566,7 +526,6 @@ define(function(require, exports) {
 						roadScenic: $tr.find("input[name=roadScenic]").val(),
 						detail: $tr.find("input[name=description]").val(),
 					};
-
 				if (!!id)  {
 					schedule.id = id;
 				}
@@ -617,7 +576,7 @@ define(function(require, exports) {
 	 * @return {Boolean}      true: 连续，false: 不连续
 	 */
 	ResTravelLine.isScheduleInOrder = function($tab) {
-		for (var i = 0, $row = $tab.find('.T-schedule-list').children('tr'), len = $row.length; i < len; i ++ ) {
+		for (var i = 0, $row = $tab.find('.T-schedule-list').children('tr:not(.deleted)'), len = $row.length; i < len; i ++ ) {
 			if ($row.eq(i).data('id') != i) {
 				return false;
 			}

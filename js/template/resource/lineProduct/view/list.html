@@ -1,5 +1,5 @@
 <div class="search-area globalAdd">
-	<input name="lineProduct_name" class="col-xs-2 input-default-height guideInputList T-lineproduct-name" value="{{searchParam.name}}" placeholder="请输线路产品名称关键词"/>&nbsp;
+	<input name="lineProduct_name" class="col-xs-2 input-default-height guideInputList T-lineproduct-name" value="{{searchParam.name}}" placeholder="请输入线路产品名称关键词"/>&nbsp;
 	<button class=" btn-sm  T-btn-search btn-lineProduct-search pull-left search-btn">
 		<i class="ace-icon fa fa-search"></i>
 		搜索
@@ -142,7 +142,7 @@
 						{{/if}}
 						</td>
 						<td width="280">
-							<a data-entiy-id="{{lineProduct.id}}" class="T-action T-quote cursor" title="报价">
+							<a data-entiy-id="{{lineProduct.id}}" class="T-action {{if lineProduct.customerType == 1}}T-quote{{/if}} cursor" title="报价" {{if lineProduct.customerType != 1}}style="color:#bbb;"{{/if}}>
 								报价
 							</a>
 							<a data-entiy-id="{{lineProduct.id}}" class="T-action T-view cursor" title="查看">
