@@ -1,84 +1,115 @@
 /**
- * 【更新线路数据表单】的验证规则
+ * 【报价管理】的验证规则
  */
 
 define(function(require, exports) {
 	var rule = {};
 	
 	/**
-	 * 新增线路产品时的表单验证
+	 * 操作报价管理时的表单验证
 	 * @param  {object} $container 线路产品表单的父容器
 	 * @return {object}            表单验证对象
 	 */
-	rule.lineProductCheckor = function($container)  {
-		this.$lineProductContainer = $container;
-
-		var settings = this.getLineProductSettings(this.$lineProductContainer);
+	rule.quoteCheckor = function($container)  {
+		var settings = this.getQuoteSettings($container);
 
 		return $container.formValidate(settings);
 	};
 
 	/**
-	 * 设置产品线路表单的配置
+	 * 设置报价管理表单的配置
 	 * @param  {[type]} $container [description]
 	 * @return {[type]}            [description]
 	 */
-	rule.getLineProductSettings = function($container)  {
-		var $mainForm = $container.find('.lineProductMainForm'),
+	rule.getQuoteSettings = function($container)  {
+		var $mainForm = $container,
 		settings = [
 			{
-				$ele: $mainForm.find('input[name="name"]'),
+				$ele: $mainForm.find('input[name="startTime"]'),
 				rules: [
 					{
 						type: 'null',
-						errMsg: '线路产品名称不能为空'
+						errMsg: '出游日期不能为空'
 					}
 				]
 			},
 			{
-				$ele: $mainForm.find('input[name="type"]'),
+				$ele: $mainForm.find('input[name="adultCount"]'),
 				rules: [
 					{
 						type: 'null',
-						errMsg: '线路产品名称不能为空'
+						errMsg: '大人数量不能为空'
+					}
+				]
+			},
+			{
+				$ele: $mainForm.find('input[name="childCount"]'),
+				rules: [
+					{
+						type: 'null',
+						errMsg: '小孩数量不能为空'
+					}
+				]
+			},
+			{
+				$ele: $mainForm.find('input[name="adultCount"]'),
+				rules: [
+					{
+						type: 'null',
+						errMsg: '大人数量不能为空'
+					}
+				]
+			},
+			{
+				$ele: $mainForm.find('input[name="adultCount"]'),
+				rules: [
+					{
+						type: 'null',
+						errMsg: '大人数量不能为空'
+					}
+				]
+			},
+			{
+				$ele: $mainForm.find('input[name="adultCount"]'),
+				rules: [
+					{
+						type: 'null',
+						errMsg: '大人数量不能为空'
+					}
+				]
+			},
+			{
+				$ele: $mainForm.find('input[name="adultCount"]'),
+				rules: [
+					{
+						type: 'null',
+						errMsg: '大人数量不能为空'
 					}
 				]
 			}
 		];
 
-		// 导游安排
-		$container.find('.updateGuideList').find('tbody').find('tr').each(function() {
-			var $that = $(this);
-
-			if ($that.find('input[name="guideNameId"]').val())  {
-				settings.push({
-					$ele: $that.find('input[name="guideFee"]'),
-					rules: [
-						{
-							type: 'null',
-							errMsg: '导游服务费不能为空'
-						},
-						{
-							type: 'float',
-							errMsg: '导游服务费格式不正确'
-						}
-					]
-				});
-			}
-		});
-
 		// 保险安排	
-		$container.find('.updateInsuranceList').find('tbody').find('tr').each(function() {
+		$container.find('.T-arrangeInsuranceList').find('tbody').find('tr').each(function() {
 			var $that = $(this);
 
 			if ($that.find('input[name="insuranceId"]').val())  {
 				settings.push(
 					{
+						$ele: $that.find('input[name="insuranceName"]'),
+						rules: [
+							{
+								type: 'null',
+								errMsg: '保险公司不能为空'
+							}
+						]
+					},
+					{
 						$ele: $that.find('input[name="type"]'),
 						rules: [
 							{
 								type: 'null',
-								errMsg: '保险类型不能为空'
+								errMsg: '险种不能为空'
 							}
 						]
 					},
@@ -100,7 +131,7 @@ define(function(require, exports) {
 		});
 
 		// 车队安排
-		$container.find('.updateBusCompanyList').find('tbody').find('tr').each(function() {
+		$container.find('.T-arrangeBusCompanyList').find('tbody').find('tr').each(function() {
 			var $that = $(this);
 
 			settings.push({
