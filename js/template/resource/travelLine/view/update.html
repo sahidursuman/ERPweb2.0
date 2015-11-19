@@ -87,7 +87,7 @@
 								</thead>
 								<tbody class="T-schedule-list"> 
 									{{each travelLine.travelLineDayList as line}}
-									<tr data-id="{{line.whichDay -1}}" {{if !!id}}data-entiy-id="{{line.id}}"{{/if}}>
+									<tr data-id="{{line.whichDay -1}}" {{if !!id}}data-entity-id="{{line.id}}"{{/if}}>
 										<td>第{{line.whichDay}}天<input name="whichDay" value="{{line.whichDay}}" type="hidden"/></td>
 										<td>{{line.repastDetail}}</td>
 										<td>{{line.restPosition}}</td>
