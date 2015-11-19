@@ -469,7 +469,7 @@ define(function(require, exports) {
 					} else {
 						var newTr = '<tr data-id="'+ (data.whichDay -1) +'">' + schedule + '</tr>';
 						if (i < len) {
-							$(newTr).insertAfter($rows.eq(i));
+							$(newTr).insertBefore($rows.eq(i));
 						} else {
 							$tab.find('.T-schedule-list').append(newTr);
 						}
