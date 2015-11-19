@@ -14,6 +14,7 @@ var SWITCH_TAB_SAVE = 'switch.tab.save',
 	CLOSE_TAB_SAVE = 'close.tab.save',
 	SWITCH_TAB_BIND_EVENT = 'switch.tab.bind_event';
 
+var clipInstant = 
 function addTab(tabId,tabName,html){
 	var $current_li = $tabList.find('.active'),
 		$next_li = $tabList.find('.tab-'+tabId);
@@ -358,60 +359,6 @@ function showConfirmDialog(dialogObj,message, fn){
 	});
 }
 
-function showConfirmDialogOfShare(dialogObj,message, fn){
-	dialogObj.removeClass('hide').dialog({
-		modal: true,
-		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-		title_html: true,
-		draggable:false,
-		buttons: [
-			{
-				text: "关闭",
-				"class" : "btn btn-primary btn-minier btn-heightMall",
-				click: function() {
-					$( this ).dialog( "close" );
-					if(fn){
-						fn();
-					}
-				}
-			}
-		],
-		open:function(event,ui){
-			$(this).find("p").html(message);
-		}
-	});
-}
-
-// function showConfirmDialogOfShare(dialogObj,message, fn){
-// 	dialogObj.removeClass('hide').dialog({
-// 		modal: true,
-// 		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-// 		title_html: true,
-// 		draggable:false,
-// 		buttons: [
-// 			{
-// 				text: "取消",
-// 				"class" : "btn btn-minier btn-heightMall",
-// 				click: function() {
-// 					$( this ).dialog( "close" );
-// 				}
-// 			},
-// 			{
-// 				text: "复制",
-// 				"class" : "btn btn-primary btn-minier btn-heightMall",
-// 				click: function() {
-// 					$( this ).dialog( "close" );
-// 					if(fn){
-// 						fn();
-// 					}
-// 				}
-// 			}
-// 		],
-// 		open:function(event,ui){
-// 			$(this).find("p").text(message);
-// 		}
-// 	});
-// }
 function showLogoutDialog(dialogObj,message){
 	dialogObj.removeClass('hide').dialog({
 		modal: true,

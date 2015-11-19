@@ -71,7 +71,7 @@ define(function(require, exports) {
 							quote.deleteItem(id);
 						} else if ($this.hasClass('T-share')){
 							// 分享
-							quote.shareQuote(id);
+							quote.shareQuote($this, id);
 						} else if ($this.hasClass('T-status'))  {
 							// 查看询价状态
 							quote.updateQuote(id, 'T-bus');
@@ -138,22 +138,59 @@ define(function(require, exports) {
 	}
 
 	//分享页面
-	quote.shareQuote = function(id) {
-		$.ajax({
-			url: KingServices.build_url("quote","shareQuote"),
-			type: 'POST',
-			data: { id: id},
-			success: function(data){				
-				if (showDialog(data)) {
-					var key = data.shareKey;
-					if (!!key) {
-						var url = location.origin + '/quote.html?key=' + key;
-						// window.open(url);
-						showConfirmDialogOfShare($( "#confirm-dialog-message" ),"复制此分享链接:"+"  "+ url);
+	quote.shareQuote = function($btn, id) {
+		var url = $btn.data('clipboard-text');
+		if (!!url) {
+			bindCopy();
+		} else {
+			$.ajax({
+				url: KingServices.build_url("quote","shareQuote"),
+				type: 'POST',
+				data: { id: id},
+				success: function(data){				
+					if (showDialog(data)) {
+						var key = data.shareKey;
+						if (!!key) {
+							url = location.origin + '/quote.html?key=' + key;
+							// window.open(url);
+							// showConfirmDialogOfShare($( "#confirm-dialog-message" ),"分享链接:"+"  "+ url);
+							$btn.data('clipboard-text', url);
+							bindCopy();
+						}
 					}
 				}
-			}
-		})
+			})
+		}
+
+		function bindCopy() {
+			$( "#confirm-dialog-message" ).removeClass('hide').dialog({
+				modal: true,
+				title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
+				title_html: true,
+				draggable:false,
+				buttons: [
+					{
+						text: "取消",
+						"class" : "btn btn-minier btn-heightMall",
+						click: function() {
+							$( this ).dialog( "close" );
+						}
+					},
+					{
+						text: "复制",
+						"class" : "btn btn-primary btn-minier T-copy-clip btn-heightMall",
+						'data-clipboard-text': url,
+						click: function() {
+							$( this ).dialog( "close" );
+						}
+					}
+				],
+				open:function(event,ui){
+					$(this).find("p").html("分享链接:&nbsp;"+ url);
+				}
+			});
+			new ZeroClipboard($('.T-copy-clip'));
+		}
 
 	};
 
