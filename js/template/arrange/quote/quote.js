@@ -337,9 +337,13 @@ define(function(require, exports) {
 				var result = showDialog(data);
 				if(result){
 					for(var i = 0 ; i < data.data.length; i++){
+						var trLen = 0;
 						for(var j = 0 ; j < data.data[i].hotelList.length; j++){
-							data.data[i].hotelList[j].roomTypeList = JSON.parse(data.data[i].hotelList[j].roomTypeList);
+							var roomTypeList = JSON.parse(data.data[i].hotelList[j].roomTypeList);
+							data.data[i].hotelList[j].roomTypeList = roomTypeList;
+							trLen += roomTypeList.length;
 						}
+						data.data[i].trLen = trLen;
 					}
 					var hotelInquiryResultHtml = hotelInquiryResultTemplate(data);
 					$container.find('#hotelInquiryContent').html(hotelInquiryResultHtml);

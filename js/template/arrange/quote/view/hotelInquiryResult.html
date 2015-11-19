@@ -21,10 +21,10 @@
 		<tbody>
 			{{each data as rs}}
 				<tr>
-					<td rowspan="{{rs.hotelList.length}}">{{rs.lineProductName}}</td>
-					<td rowspan="{{rs.hotelList.length}}">{{rs.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
-					<td rowspan="{{rs.hotelList.length}}">{{rs.arriveTime | dateFormat: 'yyyy-MM-dd'}}</td>
-					<td rowspan="{{rs.hotelList.length}}">{{rs.condition}}</td>
+					<td rowspan="{{rs.trLen}}">{{rs.lineProductName}}</td>
+					<td rowspan="{{rs.trLen}}">{{rs.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
+					<td rowspan="{{rs.trLen}}">{{rs.arriveTime | dateFormat: 'yyyy-MM-dd'}}</td>
+					<td rowspan="{{rs.trLen}}">{{rs.condition}}</td>
 					{{each rs.hotelList as offer index}}
 						{{if index == 0}}
 							<td rowspan="{{offer.roomTypeList.length}}">{{offer.hotelName}}</td>
