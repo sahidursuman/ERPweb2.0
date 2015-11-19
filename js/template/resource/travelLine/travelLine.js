@@ -287,41 +287,20 @@ define(function(require, exports) {
 	 */
 	ResTravelLine.delete = function(id) {
 		if (!!id)  {
-			$( "#confirm-dialog-message" ).removeClass('hide').dialog({
-				modal: true,
-				title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-				title_html: true,
-				draggable:false,
-				buttons: [ 
-					{
-						text: "取消",
-						"class" : "btn btn-minier",
-						click: function() {
-							$( this ).dialog( "close" );
+			if (!!id)  {
+				showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
+					$.ajax({
+						url: KingServices.build_url('travelLine', 'deleteTravelLine'),
+						type:"POST",
+						data: { id: id},
+						success:function(data){
+							if(showDialog(data)){
+								ResTravelLine.getList(ResTravelLine.listPageNo);
+							}
 						}
-					},
-					{
-						text: "确定",
-						"class" : "btn btn-primary btn-minier",
-						click: function() {
-							$( this ).dialog( "close" );
-							$.ajax({
-								url: KingServices.build_url('travelLine', 'deleteTravelLine'),
-								type:"POST",
-								data: { id: id},
-								success:function(data){
-									if(showDialog(data)){
-										ResTravelLine.getList(ResTravelLine.listPageNo);
-									}
-								}
-							});
-						}
-					}
-				],
-				open:function(event,ui){
-					$(this).find("p").text("你确定要删除该条记录？");
-				}
-			});
+					});
+				});
+			}
 		}
 	};
 
@@ -487,42 +466,19 @@ define(function(require, exports) {
 	 * @return {[type]}     [description]
 	 */
 	ResTravelLine.deleteSchedule = function($tr) {
-		$( "#confirm-dialog-message" ).removeClass('hide').dialog({
-			modal: true,
-			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-			title_html: true,
-			draggable:false,
-			buttons: [ 
-				{
-					text: "取消",
-					"class" : "btn btn-minier",
-					click: function() {
-						$( this ).dialog( "close" );
-					}
-				},
-				{
-					text: "确定",
-					"class" : "btn btn-primary btn-minier",
-					click: function() {
-						if (!!$tr.data('entity-id')) {
-							$tr.addClass('deleted').fadeOut(function(){
-								$tr.addClass('hidden');
-							});
-						} else {
-							$tr.fadeOut(function(){
-								$tr.remove();
-							});
-						}
-						
-						$( this ).dialog( "close" );
-						
-					}
+		if (!!$tr && $tr.length)  {
+			showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
+				if (!!$tr.data('entity-id')) {
+					$tr.addClass('deleted').fadeOut(function(){
+						$tr.addClass('hidden');
+					});
+				} else {
+					$tr.fadeOut(function(){
+						$tr.remove();
+					});
 				}
-			],
-			open:function(event,ui){
-				$(this).find("p").text("你确定要删除该条记录？");
-			}
-		});
+			});
+		}
 	};
 
 
