@@ -28,7 +28,7 @@ define(function(require,exports){
 	 * @return {[type]} [description]
 	 */
 	ScenicResource.initModule=function(){
-		ScenicResource.listScenic(0,"",status);
+		ScenicResource.listScenic(0,"",1);
 	};
 
 	/**
