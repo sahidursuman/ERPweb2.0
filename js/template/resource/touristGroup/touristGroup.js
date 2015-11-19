@@ -1009,7 +1009,7 @@ define(function(require,exports){
 			change:function(event,ui){
 				if(ui.item == null){
 					$(this).closest('div').find('input[name=fromPartnerAgencyId]').val("");
-					//$(this).closest('div').find('input[name=partnerAgencyNameList]').val("");
+					$(this).closest('div').find('input[name=partnerAgencyNameList]').val("");
 				}
 			},
 			select:function(event,ui){
