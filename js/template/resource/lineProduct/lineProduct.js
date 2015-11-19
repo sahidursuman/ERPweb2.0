@@ -274,6 +274,15 @@ define(function(require, exports) {
 						ResLineProduct.bindShopEvent($dayListArea.find('.T-choose-shopVendorName'));
 						ResLineProduct.bindSelfPay($dayListArea.find('.T-choose-ticketCompanyName'));
 						ResLineProduct.bindTicketEvent($dayListArea.find('.chooseTicketName'));
+
+						//修改用餐类型后清空餐标和菜单
+						$tab.find(".T-restauranType").on("change", function(){
+							var typeParent = $(this).parent().parent();
+							typeParent.find("input[name=typeName]").val("");
+							typeParent.find("input[name=menuList]").val("");
+							typeParent.find("input[name=pricePerPerson]").val("");
+							typeParent.find("input[name=remark]").val("");
+						});
 					}
 				}
 			});
@@ -302,6 +311,9 @@ define(function(require, exports) {
 		if(!clipboardMode) {
 			$tab.find('.T-btn-submit').data('id', id);
 		}
+
+		
+		
 		// 以下待修改
 		ResLineProduct.mousedownBlur();
 
@@ -818,8 +830,8 @@ define(function(require, exports) {
 		'<tbody><tr>'+
 		'<td><input type="text" class="col-xs-12 chooseRestaurantName bind-change"/><input type="hidden" name="restaurantId"/></td>'+
 		'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
-		'<td><select name="type" class="col-xs-12 restauranType"><option value="早餐">早餐</option><option value="午餐">午餐</option><option value="晚餐">晚餐</option></select></td>'+
-		'<td><input type="text" name="price" class="col-xs-12 restaurantStandardsName bind-change"/><input type="hidden" name="typeId"/></td>'+
+		'<td><select name="type" class="col-xs-12 T-restauranType"><option value="早餐">早餐</option><option value="午餐">午餐</option><option value="晚餐">晚餐</option></select></td>'+
+		'<td><input type="text" name="typeName" class="col-xs-12 restaurantStandardsName bind-change"/><input type="hidden" name="typeId"/></td>'+
 		'<td><input type="text" class="col-xs-12" readonly="readonly" name="menuList"/></td>'+
 		'<td><input type="text" class="col-xs-12" name="remark"/></td><td><a class="cursor btn-restaurant-delete T-delete deleteAllother">删除 </a></td></tr>'+
 		'</tbody></table></div></div></div></div>';
@@ -827,7 +839,7 @@ define(function(require, exports) {
 		$btn.closest(".T-dailyArrangeList").find(".T-timeline-detail-container").append(scheduleDetails);
 		ResLineProduct.updateLineProductIndex += 1;
 
-		$(".updateRestaurantList .restauranType").on("change", function(){
+		$(".T-restauranType").on("change", function(){
 			var typeParent = $(this).parent().parent();
 			typeParent.find("input[name=typeName]").val("");
 			typeParent.find("input[name=menuList]").val("");
@@ -853,7 +865,7 @@ define(function(require, exports) {
 					$tr.find("input[name=payType]").val("");
 					$tr.find("input[name=menuList]").val("");
 					$tr.find("input[name=pricePerPerson]").val("");
-					$tr.find("input[name=price]").val("");
+					$tr.find("input[name=typeName]").val("");
 					$tr.find("input[name=typeId]").val("");
 				}
 
@@ -866,7 +878,7 @@ define(function(require, exports) {
 				$tr.find("input[name=typeName]").val("");
 				$tr.find("input[name=menuList]").val("");
 				$tr.find("input[name=pricePerPerson]").val("");
-				$tr.find("input[name=price]").val("");
+				$tr.find("input[name=typeName]").val("");
 				$tr.find("input[name=typeId]").val("");
 				
 				$.ajax({
@@ -1690,7 +1702,7 @@ define(function(require, exports) {
 	ResLineProduct.saveProductData = function($tab, validator, tabArgs){
 		if (!validator.form())   return;
 
-		var $form = $tab.find('.T-mainForm'), travelLineData = {};
+		var $form = $tab.find('.T-mainForm'), travelLineData = {},isAjax = true;
 		function getValue(obj, name){
 			var thisObj = obj.find("[name="+name+"]"), objValue;
 			if(thisObj.attr("type") == "checkbox"){
@@ -1704,9 +1716,13 @@ define(function(require, exports) {
          { 
              return str.replace(/(^\s*)|(\s*$)/g, ""); 
          }
-		var name = getValue($form.eq(0), "name");
+		var name = getValue($form.eq(0), "name"),
+			type = getValue($form.eq(0), "type");
 		if(trim(name) == ""){
 			showMessageDialog($( "#confirm-dialog-message" ), "请输入线路产品名称");
+			return false;
+		} else if(trim(type) == ""){
+			showMessageDialog($( "#confirm-dialog-message" ), "请输入线路类型");
 			return false;
 		}
 
@@ -1776,13 +1792,14 @@ define(function(require, exports) {
 						var standardId = $item.find("[name=typeId]").val();
 						if(!standardId){
 							showMessageDialog($( "#confirm-dialog-message" ), "请选择餐标名称！");
+							isAjax = false;
 							return false;
 						}
 						var restaurantJson = {
 							id : $item.find("[name=templateId]").val(),
 							restaurantId : restaurantId,
 							standardId : standardId,
-							price : $item.find("[name=price]").val(),
+							price : $item.find("[name=typeName]").val(),
 							remark : $item.find("[name=remark]").val(),
 							orderIndex : $item.attr("data-entity-index")
 						}
@@ -1800,6 +1817,7 @@ define(function(require, exports) {
 						var hotelRoomId = $item.find("[name=hotelRoomId]").val();
 						if(!hotelRoomId){
 							showMessageDialog($( "#confirm-dialog-message" ), "请选择房型！");
+							isAjax = false;
 							return false;
 						}
 						var hotelJson = {
@@ -1823,7 +1841,8 @@ define(function(require, exports) {
 					if(scenicId){
 						var itemId = $item.find("[name=chargingId]").val();
 						if(!itemId){
-							showMessageDialog($( "#confirm-dialog-message" ), "请选择收费房型！");
+							showMessageDialog($( "#confirm-dialog-message" ), "请选择收费项目！");
+							isAjax = false;
 							return false;
 						}
 						var scenicJson= {
@@ -1850,6 +1869,7 @@ define(function(require, exports) {
 						var policyId = $item.find("[name=shopPolicyId]").val();
 						if(!policyId){
 							showMessageDialog($( "#confirm-dialog-message" ), "请选择商品政策！");
+							isAjax = false;
 							return false;
 						}
 						var shopJson = {
@@ -1868,7 +1888,12 @@ define(function(require, exports) {
 			if($list.length > 0){
 				for(var j=0; j<$list.length;j++){
 					$item = $list.eq(j);
-					var selfPayId = $item.find("[name=companyId]").val();
+					var selfPayId = $item.find("[name=selfPayItemId]").val();
+					if(!selfPayId){
+						showMessageDialog($( "#confirm-dialog-message" ), "请选择自费项目！");
+						isAjax = false;
+						return false;
+					}
 					if(selfPayId){
 						var selfPayJson = {
 							id : $item.find("[name=templateId]").val(),
@@ -1915,7 +1940,9 @@ define(function(require, exports) {
 			url = KingServices.build_url('lineProduct', 'updateLineProduct');
 			submitData = "id="+id+"&LineProductJsonUpdate="+encodeURIComponent(lineDataJson);
 		}
-		
+		if(!isAjax){
+			return false;
+		}
 		$.ajax({
 			url:url,
 			type:"POST",

@@ -148,7 +148,8 @@ define(function(require,exports){
 					PartnerAgency.savePartnerAgency($mainObj,addPartnerAgencyLayer,1);
 				});
 			}
-		});g	};
+		});
+	};
 	//修改同行
 	PartnerAgency.updatePartnerAgency = function(id){
 		$.ajax({
@@ -213,7 +214,8 @@ define(function(require,exports){
 					});
 				}
 			}
-		});g	};
+		});
+	};
 	//查看同行
 	PartnerAgency.viewPartnerAgency = function(id){
 		$.ajax({

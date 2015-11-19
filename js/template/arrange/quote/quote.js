@@ -544,7 +544,7 @@ define(function(require, exports) {
 	};
 
 	//修改报价
-	quote.updateQuote = function(id,type) {
+	quote.updateQuote = function(id,target) {
 		$.ajax({
 			url: KingServices.build_url('quote', 'viewQuote'),
 			type: 'POST',
@@ -575,12 +575,12 @@ define(function(require, exports) {
 					});	
 
 					quote.init_event($container);
-					if (!!type) {
+					if (!!target) {
 						$container.find('.inquiryContent').trigger('click');
-						if (type == "T-hotel") {
-							$container.find('.inquiryContent').trigger('click');
-						}else if (type == "T-bus") {
-							$container.find('.inquiryContent').trigger('click');
+						if (target == "T-hotel") {
+							$container.find('.busInquiryResult').trigger('click');
+						}else if (target == "T-bus") {
+							$container.find('.hotelInquiryResult').trigger('click');
 						}
 					}
 				}
@@ -1357,7 +1357,7 @@ define(function(require, exports) {
 			minLength:0,
 			change:function(event,ui){
 				if(ui.item == null){
-					var $tr = $(this).val("").closest('tr');
+					var $tr = $(this).closest('tr');
 					$tr.find("input[name=pricePerPerson]").val("");
 					$tr.find("input[name=menuList]").val("");
 					$tr.find("input[name=typeId]").val("");
@@ -2560,7 +2560,7 @@ define(function(require, exports) {
 						saveJson.lineDayList[index].ticket.push(ticketJson);
 					}
 				}
-			} 
+			}
 		});
 		quoteJson = JSON.stringify(quoteJson);
 		saveJson = JSON.stringify(saveJson);
@@ -2571,7 +2571,10 @@ define(function(require, exports) {
 			success: function(data){
 				var result = showDialog(data);
 				if (result) {
+
 					Tools.closeTab("arrange_quote-add");
+
+					Tools.closeTab("arrange_quote-update");
 				}
 			}
 		})
@@ -2692,10 +2695,11 @@ define(function(require, exports) {
 			language: 'zh-CN'
 		});
 	}
-	quote.updateQuoteToOffer = function(id,type) {
-		quote.updateQuote(id,type);
+	quote.updateQuoteToOffer = function(id,target) {
+		var quoteContent = $(document).find('#tab-arrange_quote-add-content,#tab-arrange_quote-update-content')
+		quote.updateQuote(id,target);
 	};
 	exports.init = quote.initModule;
 	exports.addQuote = quote.addQuote;
-	exports.updateQuote = quote.updateQuoteToOffer;
+	exports.updateQuoteToOffer = quote.updateQuoteToOffer;
 })
