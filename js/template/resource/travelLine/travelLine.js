@@ -573,7 +573,7 @@ define(function(require, exports) {
 	 * @return {Boolean}      true: 连续，false: 不连续
 	 */
 	ResTravelLine.isScheduleInOrder = function($tab) {
-		for (var i = 0, $row = $tab.find('.T-schedule-list').children('tr'), len = $row.length; i < len; i ++ ) {
+		for (var i = 0, $row = $tab.find('.T-schedule-list').children('tr:not(.deleted)'), len = $row.length; i < len; i ++ ) {
 			if ($row.eq(i).data('id') != i) {
 				return false;
 			}
