@@ -1200,14 +1200,24 @@ function listMenu(menuTemplate){
 						subsection.listMainSubsection();
 					});
 				});
-				// table 点击选中时间
-				$(document).on('click', 'td', function(event) {
-					event.preventDefault();
-					var $that = $(this);
-					if ($that.closest('table').hasClass('T-NotShowHighLight')) {
-						$that.closest('tr').toggleClass('success');
+				// table 点击选中事件
+				$(document).on('click','tbody tr', function(event) {
+					var $that = $(this), $checkBox = $that.find('input[type="checkbox"]');
+					if ($that.closest('table').hasClass('T-NotShowHighLight')) {	
+							if ($checkBox.length) {
+								if ($checkBox.data('triggered-click')) {
+									$checkBox.data('triggered-click', false);
+								} else {
+									$checkBox.data('triggered-click', true);
+									$that.toggleClass('success');
+									$checkBox.trigger('click');
+								}
+							} else {
+								$that.toggleClass('success');
+							}				
 					}
 				});
+
 				//dateTime
 				$(document).on("click",".input-group-addon",function(){
 					var $that = $(this);
