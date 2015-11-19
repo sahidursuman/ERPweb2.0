@@ -1300,7 +1300,7 @@ define(function(require, exports) {
 		'<td><input type="text" class="col-xs-12 chooseRestaurantName bind-change"/><input type="hidden" name="restaurantId"/></td>'+
 		'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
 		'<td><select name="type" class="col-xs-12 restauranType"><option value="早餐">早餐</option><option value="午餐">午餐</option><option value="晚餐">晚餐</option></select></td>'+
-		'<td><input type="text" name="price" class="col-xs-12 restaurantStandardsName bind-change T-changeQuote"/><input type="hidden" name="typeId"/></td>'+
+		'<td><input type="text" name="price" class="col-xs-12 restaurantStandardsName bind-change T-changeQuote"/><input type="hidden" name="standardId" value="0" /></td>'+
 		'<td><input type="text" class="col-xs-12" readonly="readonly" name="menuList"/></td>'+
 		'<td><input type="text" class="col-xs-12" name="remark"/></td><td><a class="cursor btn-restaurant-delete T-delete deleteAllother">删除 </a></td></tr>'+
 		'</tbody></table></div></div></div></div>';
@@ -1339,7 +1339,7 @@ define(function(require, exports) {
 					$tr.find("input[name=menuList]").val("");
 					$tr.find("input[name=pricePerPerson]").val("");
 					$tr.find("input[name=price]").val("");
-					$tr.find("input[name=typeId]").val("");
+					$tr.find("input[name=standardId]").val(0);
 					quote.costCalculation($container)
 				}
 
@@ -1353,7 +1353,7 @@ define(function(require, exports) {
 				$tr.find("input[name=menuList]").val("");
 				$tr.find("input[name=pricePerPerson]").val("");
 				$tr.find("input[name=price]").val("");
-				$tr.find("input[name=typeId]").val("");
+				$tr.find("input[name=standardId]").val("");
 				quote.costCalculation($container)
 				
 				$.ajax({
@@ -1402,13 +1402,13 @@ define(function(require, exports) {
 					var $tr = $(this).closest('tr');
 					$tr.find("input[name=pricePerPerson]").val("");
 					$tr.find("input[name=menuList]").val("");
-					$tr.find("input[name=typeId]").val("");
+					$tr.find("input[name=standardId]").val(0);
 					quote.costCalculation($container)
 				}
 			},select:function(event,ui){
 				var objEatName = this;
 				var objParent = $(objEatName).parent().parent();
-				objParent.find("input[name=typeId]").val(ui.item.id);
+				objParent.find("input[name=standardId]").val(ui.item.id);
 				$.ajax({
 					url: KingServices.build_url('restaurant', 'findStandardDetailById'),
                     data:"id="+ui.item.id,
@@ -2616,10 +2616,11 @@ define(function(require, exports) {
 					var idString = $container.attr("id");
 					if (idString == "tab-arrange_quote-add-content") {
 						Tools.closeTab("arrange_quote-add");
-						
+						quote.listQuote(0);
 					}
 					else if (idString == "tab-arrange_quote-update-content") {
 						Tools.closeTab("arrange_quote-update");
+						quote.listQuote(quote.searchData.pageNo);
 					}
 				}
 			}
