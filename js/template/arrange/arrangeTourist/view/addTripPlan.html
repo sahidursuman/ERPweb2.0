@@ -11,6 +11,7 @@
 						<div class="widget-body">
 							<div class="widget-main">
 								<div class="form-group">
+								    <input type="hidden" name="qouteId" value="{{if addTripPlan.quoteId!=null}}{{addTripPlan.quoteId}}{{/if}}"/>
 									<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>线路名称：</label>
 									<div class="col-sm-2">
 										<input class="col-sm-12" readonly="readonly" type="text" name="" id="" value="{{addTripPlan.lineProduct.name}}" />
@@ -29,16 +30,30 @@
 										<input class="col-sm-12" readonly="readonly" type="text" name="" id="" value="" placeholder="系统自动生成" />
 									</div>
 								</div>
+
 								<div class="form-group">
-									<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>车座数：</label>
-									<div class="col-sm-2">
-										<input class="col-sm-12 bind-change chooseSeatCount" type="text" name="seatCount" id="" value="{{if addTripPlan.bus != null}}{{addTripPlan.bus.seatCount}}{{/if}}" />
-									</div>
-									<label class="col-sm-1 control-label no-padding-right">车辆品牌：</label>
-									<div class="col-sm-2">
-										<input class="col-sm-12 chooseBusBrand bind-change" type="text" name="needBusBrand" id="" value="{{if addTripPlan.bus != null}}{{addTripPlan.bus.brand}}{{/if}}" />
-										<input type="hidden" name="busBrandId" value="{{if addTripPlan.brand != null}}{{addTripPlan.brand.id}}{{/if}}" />
-									</div>
+									{{if addTripPlan.quoteId!=null}}
+										<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>车座数：</label>
+										<div class="col-sm-2">
+											<input class="col-sm-12" type="text" name="seatCount" id="" value="{{if addTripPlan.busCompanyArrange != null}}{{addTripPlan.busCompanyArrange.needSeatCount}}{{/if}}" readonly="readonly" />
+										</div>
+										<label class="col-sm-1 control-label no-padding-right">车辆品牌：</label>
+										<div class="col-sm-2">
+											<input class="col-sm-12" type="text" name="needBusBrand" id="" value="{{if addTripPlan.busCompanyArrange != null}}{{addTripPlan.busCompanyArrange.brand}}{{/if}}" readonly="readonly" />
+										</div>
+										{{else}}
+										<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>车座数：</label>
+										<div class="col-sm-2">
+											<input class="col-sm-12 bind-change chooseSeatCount" type="text" name="seatCount" id="" value="{{if addTripPlan.bus != null}}{{addTripPlan.bus.seatCount}}{{/if}}" />
+										</div>
+										<label class="col-sm-1 control-label no-padding-right">车辆品牌：</label>
+										<div class="col-sm-2">
+											<input class="col-sm-12 chooseBusBrand bind-change" type="text" name="needBusBrand" id="" value="{{if addTripPlan.bus != null}}{{addTripPlan.bus.brand}}{{/if}}" />
+											<input type="hidden" name="busBrandId" value="{{if addTripPlan.brand != null}}{{addTripPlan.brand.id}}{{/if}}" />
+										</div>
+									{{/if}}
+
+
 									<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>车牌号：</label>
 									<div class="col-sm-2">
 										<div class="col-sm-12 no-padding">

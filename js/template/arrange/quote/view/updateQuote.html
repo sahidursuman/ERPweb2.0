@@ -1,4 +1,4 @@
-<div class="col-xs-12 addQuoteContainer">
+<div class="col-xs-12">
 	<form class="form-horizontal addQuoteMainForm" role="form" style="margin-top:10px" onsubmit="return false">
 		<div class="ui-sortable-handle">
 				<h5 class=" pull-left " >
@@ -442,7 +442,7 @@
                                                                                                             <input class="col-xs-12" type="text" name="remark" value="{{restaurantList.remark}}" />
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <a data-entity-id="{{restaurantList.id}}" data-entity-type="" class="cursor btn-restaurant-delete T-delete">
+                                                                                                            <a data-entity-id="{{restaurantList.id}}" data-entity-type="10" class="cursor btn-restaurant-delete T-delete">
 																												删除
 																											</a>
                                                                                                         </td>
@@ -743,7 +743,7 @@
                                                                                                             <input type="text" class="col-xs-12" name="seatLevel" value="{{ticketList.seatLevel}}" />
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input type="text" class="col-xs-12" name="time" value="{{ticketList.startTime}}" />
+                                                                                                            <input type="text" class="col-xs-12 T-dateTimePicker" name="time" value="{{ticketList.startTime}}" />
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <input type="text" class="col-xs-12 T-changeQuote" name="price" value="{{ticketList.price}}" />

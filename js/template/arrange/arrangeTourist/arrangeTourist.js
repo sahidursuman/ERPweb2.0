@@ -316,7 +316,7 @@ define(function(require, exports) {
 						    addTab(menuKey+"-divide","分团操作",html);
 						} else{
 							var html=transferDivideTemplate(data);
-							 addTab(menuKey+"-transfer-divide","分体操作",html);
+							 addTab(menuKey+"-transfer-divide","分团操作",html);
 
 							 //团体分团操作--查看--生成计划
 							 arrangeTourist.init_trfdivieEvent();
@@ -712,6 +712,9 @@ define(function(require, exports) {
 						data.addTripPlan.bus = JSON.parse(data.addTripPlan.bus);
 						data.addTripPlan.driver = JSON.parse(data.addTripPlan.driver);
 						data.addTripPlan.busCompany = JSON.parse(data.addTripPlan.busCompany);
+						if (data.addTripPlan.quoteId!=null) {
+							data.addTripPlan.busCompanyArrange = JSON.parse(data.addTripPlan.busCompanyArrange);
+						};
 						data.addTripPlan.guide = JSON.parse(data.addTripPlan.guide);
 						var result = showDialog(data);
 						var html = addTripPlanTemplate(data);
@@ -734,7 +737,6 @@ define(function(require, exports) {
 
 			//短信发送  定时控件
 			arrangeTourist.setTripPlanPicker();
-
 
 			//游客短信及时发送显示隐藏
 			$("#"+tab+" .checkbox").unbind().click(function(){
@@ -1996,6 +1998,7 @@ define(function(require, exports) {
 											"transChildPrice" : $(".editFeeMain input[name=childTransferMoney]").val() || 0,
 											"transPayedMoney" : $(".editFeeMain input[name=payedMoney]").val() || 0,
 											"transNeedPayAllMoney":$(".editFeeMain input[name=needPayMoney]").val() || 0,
+											"isCurrent" : $(".editFeeMain input[name=isCurrent]").val() || 0
 									    },
 									    otherFeeList = "[",
 									    otherFeeListLength = $(".editFeeMain .editFeeTbody tr:not(.deleted)").length;
@@ -2023,13 +2026,6 @@ define(function(require, exports) {
 										}
 									})
 									otherFeeList += "]";
-
-									//是否现收状态 
-									if ($isCurrentObj.find('input[name=isCurrent]').is(":checked")) {
-										isCurrent=1
-									} else{
-										isCurrent=0;
-									};
 									
 									/*$(".editFeeMain .editFeeTbody tr:not(.deleted)").each(function(i){
 										if(i>1){
@@ -2050,8 +2046,6 @@ define(function(require, exports) {
 									})
 									touristGroup = JSON.stringify(touristGroup);
 									otherFeeListDel = JSON.stringify(otherFeeListDel);
-
-									if (isCurrent==1) {
 										$.ajax({
 											url:""+APP_ROOT+"back/transTourist.do?method=saveTransFee&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
 											data:"touristGroup="+encodeURIComponent(touristGroup)+"&otherFeeList="+encodeURIComponent(otherFeeList)+"&otherFeeListDel="+encodeURIComponent(otherFeeListDel)+"&isCurrent="+isCurrent,
@@ -2082,10 +2076,6 @@ define(function(require, exports) {
 										    	}
 											}
 										})
-
-									} else{
-										showMessageDialog($( "#confirm-dialog-message" ),"必须有一个游客小组指定现收!");
-									};
 								});
 						    }//编辑费用信息end
 						})
@@ -2309,7 +2299,8 @@ define(function(require, exports) {
 					"driverId": getValue("driverId"),
 					"guideId": getValue("AddTPchooseGuideId"),
 					"busId": getValue("busLicenseNumberId"),
-					"touristGroupId": []
+					"touristGroupId": [],
+					"qouteId" :  getValue("qouteId") 
 				}
 				var touristGroupList = $("#"+tab+" ."+className+" ."+tbody+" tr").length;
 				$("#"+tab+" ."+className+" ."+tbody+" tr").each(function(i){

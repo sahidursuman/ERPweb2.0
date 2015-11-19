@@ -167,10 +167,6 @@
 		</form>
 	</div> 
 	
-	
-	
-	
-	
 	<!-- 收客信息start--> 	
 	<div  class="col-xs-12"> 		
 	   	<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
@@ -181,9 +177,28 @@
 							<span class="badge badge-primary">4</span>
 							<label class="middle title-size">收客信息</label>
 						</h5>
-						<div class="search-area col-sm-12">
+
+					<div class="search-area col-sm-12">
+						{{if isParent==1}}
+						    
+							    <label class="col-sm-1 control-label no-padding-right" style="width:84px;">应收：</label>
+								<div class="col-sm-1">
+									<input name="needPayAllMoney" value="{{parentTouristGroup.needPayAllMoney}}" readonly="readonly" type="text" class="col-xs-12"/>
+								</div>
+
+								<label class="col-sm-1 control-label no-padding-right">已收：</label>
+								<div class="col-sm-1">
+									<input name="payedMoney" value="{{parentTouristGroup.payedMoney}}" readonly="readonly" type="text" class="col-xs-12"/>
+				  				</div>
+
+								<label class="col-sm-1 control-label no-padding-right">现收：</label>
+								<div class="col-sm-1">
+									<input name="currentNeedPayMoney" value="{{parentTouristGroup.currentNeedPayMoney}}" readonly="readonly" type="text" class="col-xs-12"/>
+				  				</div>
+						  
+						   {{else}}
 							<label class="col-sm-1 control-label no-padding-right" style="width:84px;">应收：</label>
-							<div class="col-sm-1">
+						    <div class="col-sm-1">
 								<input name="needPayAllMoney" value="{{touristGroupTransfer.touristGroup.needPayAllMoney}}" readonly="readonly" type="text" class="col-xs-12"/>
 							</div>
 
@@ -196,7 +211,11 @@
 							<div class="col-sm-1">
 								<input name="currentNeedPayMoney" value="{{touristGroupTransfer.touristGroup.currentNeedPayMoney}}" readonly="readonly" type="text" class="col-xs-12"/>
 			  				</div>
-						</div>
+						{{/if}}
+					</div>
+
+
+
 						<div class="search-area col-sm-12">
 							<label class="pull-left control-label no-padding-right">收客时的备注：</label>
 							<div class="col-sm-5">
