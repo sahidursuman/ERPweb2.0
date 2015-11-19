@@ -279,9 +279,9 @@ define(function(require, exports) {
 			html =searchTemplate({update: type}),
 			searchTravelLinelayer =layer.open({
 				type: 1,
-				title:"选择路线产品",
+				title:"选择线路产品",
 				skin: 'layui-layer-rim', //加上边框
-				area: ['85%', '80%'], //宽高
+				area: ['65%', '65%'], //宽高
 				zIndex:1029,
 				content: html
 			});
