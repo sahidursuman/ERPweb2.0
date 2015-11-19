@@ -47,7 +47,8 @@ input{
 /**
  * 设置自定义popover的样式
  */
-#desc-tooltip-containter  .popover-content {
+#desc-tooltip-containter .popover-content {
+    min-width: 175px;
     max-width: 260px;
     max-height: 300px;
     overflow-y: auto;
@@ -910,8 +911,8 @@ padding-left:0;width: 360px;left: -35px;
     border-top: none;
 }
 .MessagePrompt-box .boxLiStyle{
-    border-radius: 3px !important;
-    padding: 10px 15px 7px 15px;
+
+    padding: 10px 15px 8px 15px;
     border-bottom: 1px solid #ddd;
     border-top: 1px solid #ddd;
 }
