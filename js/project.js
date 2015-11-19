@@ -14,7 +14,6 @@ var SWITCH_TAB_SAVE = 'switch.tab.save',
 	CLOSE_TAB_SAVE = 'close.tab.save',
 	SWITCH_TAB_BIND_EVENT = 'switch.tab.bind_event';
 
-var clipInstant = 
 function addTab(tabId,tabName,html){
 	var $current_li = $tabList.find('.active'),
 		$next_li = $tabList.find('.tab-'+tabId);
