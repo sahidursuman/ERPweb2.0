@@ -142,7 +142,7 @@
 						{{/if}}
 						</td>
 						<td width="280">
-							<a data-entiy-id="{{lineProduct.id}}" class="T-action T-quote cursor" title="报价">
+							<a data-entiy-id="{{lineProduct.id}}" class="T-action {{if lineProduct.customerType == 1}}T-quote{{/if}} cursor" title="报价" {{if lineProduct.customerType != 1}}style="color:#bbb;"{{/if}}>
 								报价
 							</a>
 							<a data-entiy-id="{{lineProduct.id}}" class="T-action T-view cursor" title="查看">

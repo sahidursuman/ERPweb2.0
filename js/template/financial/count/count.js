@@ -126,6 +126,8 @@ define(function(require, exports) {
                         $('.T-quality').on('click', function(){
                             count.getquality($(this).data('id'));
                         });
+                        //状态改变自动搜索
+                        
                       //搜索按钮事件
                         $(".main-content .financialCount .clearBlur").blur(function(){
                         	var a = $(this).next().val();
@@ -139,6 +141,16 @@ define(function(require, exports) {
 						$("#tab-"+menuKey+"-content .search-area .btn-status .dropdown-menu a").click(function(){
 							$(this).parent().parent().parent().find("button").attr("data-value",$(this).attr("data-value"));
 							$(this).parent().parent().parent().find("span").text($(this).text());
+                            var id = $('.financialCount .search-area').find('input[name=tripNumber]').val();
+                            var tripNumber = $('.financialCount .search-area').find('input[name=chooseTripNumber]').val();
+                            var lineProductId = $('.financialCount .search-area').find('input[name=lineProductId]').val();
+                            var guideId = $('.financialCount .search-area').find('input[name=guideId]').val();
+                            var endTime = $('.financialCount .search-area').find('input[name=entTime]').val();
+                            var startTime = $('.financialCount .search-area').find('input[name=startTime]').val();
+                            var status = $('.financialCount .search-area .btn-status').find('button').attr('data-value');
+                            var lineProductName = $('.financialCount .search-area').find('input[name=chooseLineProductName]').val();
+                            var guideName = $('.financialCount .search-area').find('input[name=chooseGuideRealName]').val();
+                            count.initCount(id,tripNumber,lineProductId,lineProductName,guideId,guideName,startTime,endTime,status);
 						});
                         var tabid = $("#tab-financial_count-content");
                         laypage({
