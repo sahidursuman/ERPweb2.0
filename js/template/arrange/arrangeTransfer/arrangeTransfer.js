@@ -444,6 +444,7 @@ define(function(require, exports) {
 						data.lineProduct = JSON.parse(data.lineProduct);
 						data.touristGroup =JSON.parse(data.touristGroup);
 						data.partnerAgency=JSON.parse(data.partnerAgency);
+						data.parentTouristGroup=JSON.parse(data.parentTouristGroup);
 						var html = viewTrsferOutTemplate(data);
 						Tools.addTab(menuKey+"-viewTransferOut","查看我社转出",html);
 					}
@@ -510,6 +511,7 @@ define(function(require, exports) {
 					var result = showDialog(data);
 					if(result){	
 						data.touristGroupTransfer=JSON.parse(data.touristGroupTransfer);
+						data.parentTouristGroup=JSON.parse(data.parentTouristGroup);
 						var html = updateTransferOutTemplate(data),
 						    title="编辑我社转出",
 						    tab_id=menuKey+"-updateTransferOut";
