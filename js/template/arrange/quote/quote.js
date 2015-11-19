@@ -539,14 +539,14 @@ define(function(require, exports) {
 					var updateHtml = updateQuoteTemplate(data);
 					$container.find('#quoteContent').html(updateHtml)
 
-
-					/*var inquiryHtml = inquiryResultTemplate();
-					$container.find('#inquiryContent').html(inquiryHtml)
-					var busInquiryResultHtml = busInquiryResultTemplate();
-					var hotelInquiryResultHtml = hotelInquiryResultTemplate();
-
-					$container.find('#busInquiryResult').html(busInquiryResultHtml)
-					$container.find('#hotelInquiryContent').html(hotelInquiryResultHtml)*/
+					$container.find('.inquiryContent').on("click",function(){
+						var quoteId = $container.find('[name=quoteId]').val();
+						if(!quoteId){
+							showMessageDialog($( "#confirm-dialog-message" ),"请先询价！");
+							return false;
+						} 
+						quote.quoteStatus(quoteId,$container);
+					});	
 
 					quote.init_event($container);
 					if (!!type) {

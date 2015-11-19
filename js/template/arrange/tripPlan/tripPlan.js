@@ -6,6 +6,7 @@ define(function(require, exports) {
 		addTripPlanTemplate=require("./view/addTripPlan"),
 		updateTemplate = require("./view/updateTripPlan"),
 		searchTemplate = require("./view/searchList"),
+		lineproductSearchList = require("./view/lineproductSearchList"),
 		addGroupTemplate = require("./view/addGroup"),
 		viewGroupTemplate = require("./view/viewGroup"),
 		checkTable="arrange_plan-add",
@@ -213,7 +214,8 @@ define(function(require, exports) {
 		tripPlan.init_edit_event($tab,operation);
     	//搜索线路
     	$container.find(".T-search-line").click(function(){
-    		tripPlan.searchLineProduct(true,0,"");
+    		// tripPlan.searchLineProduct(true,0,"");
+    		tripPlan.initLineProductSearch();
     	});
     	tripPlan.seatCountChoose($tab);
     	tripPlan.brandChoose($tab);
@@ -255,6 +257,8 @@ define(function(require, exports) {
     	//小组总人数计算
     	tripPlan.tripPlanAllMemberCount($tab);
 
+    	tripPlan.addResource($tab);
+
 		//取消计划   btn-cancelTripPlan
 		$tab.find(".T-cancelPlan").click(function(){
 			closeTab(menuKey+"-"+operation);
@@ -263,6 +267,207 @@ define(function(require, exports) {
 		$tab.find(".T-savePlan").click(function(){
 			tripPlan.saveTripPlan(operation,id);
 		});
+	};
+
+	/**
+	 * 初始化选择线路的对话框
+	 * @param  {Boolean} isUpdate true：修改界面，false：添加界面
+	 * @return {[type]}           [description]
+	 */
+	tripPlan.initLineProductSearch = function(isUpdate) {
+		var type = isUpdate?'update': 'add',
+			html =searchTemplate({update: type}),
+			searchTravelLinelayer =layer.open({
+				type: 1,
+				title:"选择路线产品",
+				skin: 'layui-layer-rim', //加上边框
+				area: ['85%', '80%'], //宽高
+				zIndex:1029,
+				content: html
+			});
+
+		var $dialog = $('.T-tripplan-lineproduct-search-' + type);
+		tripPlan.getLineProductList($dialog, 0);
+		tripPlan.getLineProductList($dialog, 1);
+		// 搜索线路产品
+		$dialog.find('.T-lineProduct-search').on('click', function(event) {
+			event.preventDefault();
+			var $that = $(this),
+				type =  $that.closest('.layui-layer-content').find('.nav-tabs').find('.active').index();
+			tripPlan.getLineProductList($dialog, type, 0, $dialog.find('input[name="lineProduct_name"]').val());
+		});	
+		// 选择线路产品
+		$dialog.find('.T-btn-submit').on('click', function(event) {
+			event.preventDefault();
+			var $tr = $dialog.find('input[name="choice-TravelLine"]:checked').closest('tr'), 
+				$tab = $('#tab-arrange_plan-add-content'),
+				quoteId = $tr.data('quote-id');
+
+			if (isUpdate) {
+				$tab = $('#tab-arrange_plan-update-content');
+			}
+
+			var $form = $tab.find('.T-baseinfo-container'),
+				oldQuoteId = $tab.find('input[name="quoteId"]').val();
+			$form.find('input[name="name"]').val($tr.children('[name="travelLine-select"]').text()).trigger('change');
+			$form.find('input[name="lineProductId"]').val($tr.data('id'));				
+			$form.find('input[name="quoteId"]').val(quoteId);
+			
+			if ($tr.closest('.tab-pane').index() === 1) {
+				// 选择了报价产品，需要初始化游客小组的数据
+				tripPlan.initQuoteData($form, quoteId);
+			} else if (!!oldQuoteId) {
+				// 清理
+				tripPlan.clearQuoteData($form);
+			}
+
+			layer.close(searchTravelLinelayer);
+		});	
+	};
+
+	/**
+	 * 获取线路产品数据，并填入选择线路产品的对话框
+	 * @param  {object} $dialog dialog的Jquery对象
+	 * @param  {int} type    0：新增 1：更新
+	 * @param  {int} page    页码
+	 * @param  {string} name    搜索关键字
+	 * @return {[type]}         [description]
+	 */
+	tripPlan.getLineProductList = function($dialog, type, page, name) {
+		page = page || 0;
+		var url = KingServices.build_url('lineProduct', 'findAll'),
+			$tbody = $dialog.find('.T-normal-list');
+
+		if (type) {
+			url = KingServices.build_url('lineProduct', 'listQuoteLinePorduct');
+			$tbody = $dialog.find('.T-quote-list');
+		}
+		$.ajax({
+			url: url,
+			type: 'post',
+			showLoading: false,
+			data: {
+					pageNo: page,
+					name: name
+				},
+		})
+		.done(function(data) {
+			if (showDialog(data)) {
+				data.lineProductList = JSON.parse(data.lineProductList);
+
+				if (type) {
+					var list = [];
+					for (var i = 0, len = data.lineProductList.length, tmp, lineProduct; i < len; i ++) {
+						tmp = data.lineProductList[i];
+						lineProduct = tmp.lineProduct;
+						list.push({
+							quoteId: tmp.id,
+							id: lineProduct.id,
+							name: lineProduct.name,
+							days: lineProduct.days,
+							type: lineProduct.type,
+							customerType: lineProduct.customerType,
+							status: lineProduct.status,
+							travelAgencyName: tmp.partnerAgency.travelAgencyName,
+							createTime: tmp.createTime
+						})
+					}
+
+					data.lineProductList = list;
+					data.quote = type;
+					console.info(data)
+				}
+				$tbody.html(lineproductSearchList(data));
+				$tbody.closest('.tab-pane').find('.T-total').text(data.recordSize);
+				// 绑定翻页组件
+				laypage({
+				    cont: $tbody.closest('.tab-pane').find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+				    pages: data.totalPage, //总页数
+				    curr: (data.pageNo + 1),
+				    jump: function(obj, first) {
+				    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+							tripPlan.getLineProductList($dialog, type, obj.curr -1,$dialog.find('input[name=lineProduct_name]').val());
+				    	}
+				    }
+				});	
+			}
+		});			
+	};
+
+	/**
+	 * 用报价产品信息，初始化小组页面
+	 * @param  {object} $mainForm   对应小组页面容器
+	 * @param  {int} lineId 报价产品的索引
+	 * @return {[type]}        [description]
+	 */
+	tripPlan.initQuoteData = function($mainForm, quoteId) {
+		if (!!quoteId) {
+			$.ajax({
+				url: KingServices.build_url('lineProduct', 'findQuoteLineProduct'),
+				type: 'post',
+				showLoading: false,
+				data: {id: quoteId},
+			})
+			.done(function(data) {
+				if (showDialog(data)) {
+					data.quoteLinePorduct = JSON.parse(data.quoteLinePorduct || false);
+					data.busCompany = JSON.parse(data.busCompany || false);
+					data.busCompanyArrange = JSON.parse(data.busCompanyArrange || false);
+					tripPlan.setQuoteData($mainForm, data);
+				}
+			});
+			
+		}
+	}
+
+	/**
+	 * 设置报价产品数据到游客小组
+	 * @param {object} $mainForm 游客小组的父容器
+	 * @param {object} data 报价产品的数据
+	 */
+	tripPlan.setQuoteData = function($mainForm, data) {
+		if (!!data) {
+			var isUpdate = $mainForm.hasClass('T-update');
+			setData('startTime', data.quoteLinePorduct.startTime);   //出游日期
+			setData('seatCount', data.busCompanyArrange.needSeatCount);   //车坐数
+			setData('busCompany', data.busCompany.companyName);   //车队
+			setData('busCompanyId', data.busCompany.id);   //车队索引
+
+			$mainForm.find('input[name="childPrice"]').trigger('change');
+		}
+
+		function setData(name, val) {
+			var $name = $mainForm.find('[name="'+ name +'"]');
+
+			if (!!isUpdate)  {
+				$name.data('old', $name.val());
+			}
+
+			$name.val(val || '').prop('readonly', true);
+		}
+	};
+
+	/**
+	 * 选择线路产品时，需要清理报价数据
+	 * @param  {object} $mainForm 游客小组的父容器
+	 * @return {[type]}      [description]
+	 */
+	tripPlan.clearQuoteData = function($mainForm) {
+		var names = [
+			'startTime', 
+			'seatCount',
+			'busCompany',
+			'busCompanyId'
+			],
+			isUpdate = $mainForm.hasClass('T-update');
+		
+		names.forEach(function(name) {
+			var $name = $mainForm.find('[name="'+ name +'"]'), val = isUpdate? $name.data('old'): '';
+
+			$name.val(val).prop('readonly', false);
+		});
+
+		$mainForm.find('input[name="childPrice"]').trigger('change');
 	};
 
 	//新增页面中 搜索线路产品事件
@@ -490,7 +695,7 @@ define(function(require, exports) {
 					    type: 1,
 					    title:"查看小组信息",
 					    skin: 'layui-layer-rim',
-					    area: '700px',
+					    area: '1000px',
 					    zIndex:1028,
 					    content: html,
 					    scrollbar: false
@@ -548,9 +753,14 @@ define(function(require, exports) {
 		};
 
 		var planTouristCount = parseInt(getValue("planTouristCount")),
-			memberCount = parseInt($tab.find(".T-groupMemberCount").text());
+			memberCount = parseInt($tab.find(".T-groupMemberCount").text()),
+			seatCount = parseInt($tab.find("input[name=seatCount]").val());
 		if(planTouristCount < memberCount){
-			showMessageDialog($( "#confirm-dialog-message" ),"小组总人数不能大于计划人数");
+			showMessageDialog($( "#confirm-dialog-message" ),"游客总人数不能大于计划人数！");
+			return false;
+		}else if(seatCount < memberCount){
+			showMessageDialog($( "#confirm-dialog-message" ),"游客总人数不能大于车座数！");
+			return false;
 		}else{
 			// 表单校验
 			var validator = rule.checkdCreateTripPlan($tab.find(".T-plan-container"));
@@ -602,7 +812,7 @@ define(function(require, exports) {
 					var result = showDialog(data);
 					if(result){
 						showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-							if(argumentsLen === 1){
+							if(argumentsLen === 1 || argumentsLen === 2){
 								Tools.closeTab(menuKey+"-" + operation);
 								if(operation == "update"){
 									tripPlan.listTripPlan(tripPlan.searchData.page,tripPlan.searchData.tripId,tripPlan.searchData.tripNumber,tripPlan.searchData.startTime,tripPlan.searchData.guideId,tripPlan.searchData.guideName,tripPlan.searchData.busId,tripPlan.searchData.licenseNumber,tripPlan.searchData.creatorName,tripPlan.searchData.creator,tripPlan.searchData.status);
@@ -681,6 +891,10 @@ define(function(require, exports) {
 					if(result){
 						data.lineProduct = JSON.parse(data.lineProduct);
 						data.touristGroupList = JSON.parse(data.touristGroupList);
+						if(data.touristGroupList.length <= 0 ){
+							showMessageDialog($( "#confirm-dialog-message" ),"没有出游的游客小组，请在游客管理中添加！");
+							return false;
+						}
 						var html = addGroupTemplate(data);
 						var addGroupTemplateLayer = layer.open({
 						    type: 1,
@@ -726,7 +940,7 @@ define(function(require, exports) {
 											"<div class=\"hidden-sm hidden-xs btn-group\">"+
 											"<a class=\"cursor T-groupView\">"+
 												"查看"+
-											"</a>"+"<a class='cursor'> |</a>"+
+											"</a>"+"<a class='cursor'> </a>"+
 											"<a class=\"cursor T-groupDelete\">"+
 												"删除"+
 											"</a>"+
@@ -961,7 +1175,8 @@ define(function(require, exports) {
 				parents.find("input[name=DmobileNumber]").val("");
 			}
 		}).unbind("click").click(function(){
-			var obj = this;
+			var obj = $(this);
+			if (!!$obj.attr('readonly')) return;
 			$.ajax({
 				url:KingServices.build_url("bookingOrder","getSeatCountList"),
 				success:function(data){
@@ -1017,7 +1232,7 @@ define(function(require, exports) {
 				parents.find("input[name=DmobileNumber]").val("");
 			}
 		}).unbind("click").click(function(){
-			var obj = this;
+			var $obj = $(this);
 			var seatCount = $(this).closest('.T-baseinfo-container').find(".T-chooseSeatCount").val();
 			if(seatCount){
 				$.ajax({
@@ -1265,6 +1480,24 @@ define(function(require, exports) {
 				$Obj.find("input[name=executeTime]").prop("disabled",true);
 			}
 		}
+	};
+
+	tripPlan.addResource = function($tab){
+		$tab.find('.T-addGuideResource').on('click' , {function : KingServices.addGuide ,type : ".widget-main" ,  name : "AddTPchooseGuide" , id : "AddTPchooseGuideId" , mobileNumber : "GmobileNumber"} , KingServices.addResourceFunction);
+		$tab.find(".T-addBusCompanyResource").off('click').on("click",{function : KingServices.addBusCompany}, KingServices.addResourceFunction);
+		$tab.find(".T-addBusResource,.T-addDriverResource").off('click').on("click",{
+			function : KingServices.addBusDriver,
+			busCompanyName : "busCompany",
+			busCompanyId : "busCompanyId",
+			busLicenseNumberId : "busLicenseNumberId",
+			busLicenseNumber : "LicenseNumber",
+			busbrand : "needBusBrand",
+			seatCount : "seatCount",
+			driverName : "driverName",
+			driverId : "driverId",
+			driverMobileNumber : "DmobileNumber",
+			type : ".widget-main"
+		}, KingServices.addBusDriverFunction);
 	};
 
 	exports.init = tripPlan.initModule;
