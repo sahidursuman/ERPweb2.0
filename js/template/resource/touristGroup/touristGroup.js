@@ -603,9 +603,11 @@ define(function(require,exports){
 	touristGroup.setQuoteData = function($mainForm, data) {
 		if (!!data) {
 			setData('startTime', data.startTime);   //出游日期
+			var isUpdate = $mainForm.hasClass('T-update');
+			setData('startTime', data.startTime.split(' ')[0]).prop('disabled', true).nextAll('span, .fa').addClass('hidden');   //出游日期
 			setData('fromPartnerAgency', data.partnerAgency.travelAgencyName);   //客户来源
-			setData('fromPartnerAgencyId', data.partnerAgencyContact.id);   //客户来源的索引
-			setData('partnerAgencyNameList', data.partnerAgencyContact.contactRealname);   //同行联系人
+			setData('fromPartnerAgencyId', data.partnerAgency.id);   //客户来源的索引
+			setData('partnerAgencyNameList', data.partnerAgencyContact.contactRealname).nextAll('.T-addPartnerManager').addClass('hidden');;   //同行联系人
 			setData('partnerAgencyContactId', data.partnerAgencyContact.id);   //同行联系人的索引
 			setData('adultCount', data.adultCount);   //大人人数
 			setData('adultPrice', data.adultQuotePrice);   //大人单价
@@ -615,8 +617,16 @@ define(function(require,exports){
 			$mainForm.find('input[name="childPrice"]').trigger('change');
 		}
 
-		function setData(name, val) {
+		function setData(name, val) {                 
 			$mainForm.find('[name="'+ name +'"]').val(val).prop('readonly', true);
+			var $name = $mainForm.find('[name="'+ name +'"]');
+
+			if (!!isUpdate)  {
+				$name.data('old', $name.val());
+			}
+
+			$name.val(val).prop('readonly', true).trigger('change');
+			return $name;
 		}
 	};
 
@@ -640,6 +650,9 @@ define(function(require,exports){
 		
 		names.forEach(function(name) {
 			$mainForm.find('[name="'+ name +'"]').val('').prop('readonly', false);
+			var $name = $mainForm.find('[name="'+ name +'"]'), val = isUpdate? $name.data('old'): '';
+
+			$name.val(val).prop('readonly', false).prop('disabled', false).nextAll('span,.fa').removeClass('hidden');
 		});
 
 		$mainForm.find('input[name="childPrice"]').trigger('change');
@@ -1029,6 +1042,7 @@ define(function(require,exports){
 				}
 			}
 		}).off('click').on('click',function(){
+				if (!!$(this).attr('readonly')) return;
 				var obj = this;
 				var formParObj = touristGroup.autocompleteDate.fromPartnerAgencyList;
 				if(formParObj != null && formParObj.length>0){
@@ -1055,6 +1069,7 @@ define(function(require,exports){
 				objParent.find("input[name=partnerAgencyContactId]").val(ui.item.id).trigger('change');
 			}
 		}).off('click').on('click',function(){
+			if (!!$(this).attr('readonly')) return;
 			var objM = this;
 			var $parentsObj = $obj.closest('form');
 			var partnerAgencyId = $parentsObj.find('input[name=fromPartnerAgencyId]').val();
@@ -1247,7 +1262,14 @@ define(function(require,exports){
 		else{
 			buyInsuranceS = 0;
 		}
-		var form = $lineInfoForm.serialize();
+		var form = $lineInfoForm.serialize(),
+		 	$startTime = $lineInfoForm.find('input[name="startTime"]');
+
+		// for 出游日期
+		if ($startTime.prop('disabled')) {
+			form = form + '&startTime=' + $startTime.val();
+		}
+		
 		function trim(str){
 			return str.replace(/(^\s*)|(\s*$)/g, "");
 		};
@@ -1401,8 +1423,7 @@ define(function(require,exports){
 			type:"POST",
 			data:data,
 			success:function(data){
-				var result = showDialog('isEdited', false);
-				if(result){
+				if(showDialog(data)){
 					$obj.data('isEdited', false);
 					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
 						if(data.success == 1){

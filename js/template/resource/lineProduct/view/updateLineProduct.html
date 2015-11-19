@@ -447,14 +447,14 @@
                                                                                                         </td>
                                                                                                         <!-- <td><input type="text" readonly="readonly" name="payType" value="{{restaurantList.restaurant.payType}}"/></td> -->
                                                                                                         <td>
-                                                                                                            <select name="type" class="restauranType col-xs-12">
+                                                                                                            <select name="type" class="T-restauranType col-xs-12">
                                                                                                                 <option value="早餐" {{if restaurantList.restaurantStandard.type=="早餐" }}selected="selected" {{/if}}>早餐</option>
                                                                                                                 <option value="午餐" {{if restaurantList.restaurantStandard.type=="午餐" }}selected="selected" {{/if}}>午餐</option>
                                                                                                                 <option value="晚餐" {{if restaurantList.restaurantStandard.type=="晚餐" }}selected="selected" {{/if}}>晚餐</option>
                                                                                                             </select>
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input type="text" name="price" class="T-choose-restaurantStandardsName col-xs-12 bind-change" value="{{restaurantList.restaurantStandard.price}}" />
+                                                                                                            <input type="text" name="typeName" class="T-choose-restaurantStandardsName col-xs-12 bind-change" value="{{restaurantList.restaurantStandard.price}}" />
                                                                                                             <input type="hidden" name="typeId" value="{{restaurantList.restaurantStandard.id}}" />
                                                                                                         </td>
                                                                                                         <td>
@@ -493,7 +493,7 @@
                                                                                                         <th class="th-border">酒店名称</th>
                                                                                                         <th class="th-border">房型</th>
                                                                                                         <th class="th-border">价格</th>
-                                                                                                        <th class="th-border">早餐</th>
+                                                                                                        <th class="th-border">含餐</th>
                                                                                                         <th class="th-border">电话</th>
                                                                                                         <th class="th-border">备注</th>
                                                                                                         <th class="th-border" style="width: 60px;">操作</th>
