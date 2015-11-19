@@ -1716,9 +1716,13 @@ define(function(require, exports) {
          { 
              return str.replace(/(^\s*)|(\s*$)/g, ""); 
          }
-		var name = getValue($form.eq(0), "name");
+		var name = getValue($form.eq(0), "name"),
+			type = getValue($form.eq(0), "type");
 		if(trim(name) == ""){
 			showMessageDialog($( "#confirm-dialog-message" ), "请输入线路产品名称");
+			return false;
+		} else if(trim(type) == ""){
+			showMessageDialog($( "#confirm-dialog-message" ), "请输入线路类型");
 			return false;
 		}
 
