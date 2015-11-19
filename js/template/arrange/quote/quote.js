@@ -65,6 +65,7 @@ define(function(require, exports) {
 						} else if ($this.hasClass('T-update')){
 							// 编辑报价信息
 							quote.updateQuote(id);
+							//quote.updateQuoteToOffer(id,'1');
 						} else if ($this.hasClass('T-delete')){
 							// 删除报价
 							//....
@@ -336,9 +337,13 @@ define(function(require, exports) {
 				var result = showDialog(data);
 				if(result){
 					for(var i = 0 ; i < data.data.length; i++){
+						var trLen = 0;
 						for(var j = 0 ; j < data.data[i].hotelList.length; j++){
-							data.data[i].hotelList[j].roomTypeList = JSON.parse(data.data[i].hotelList[j].roomTypeList);
+							var roomTypeList = JSON.parse(data.data[i].hotelList[j].roomTypeList);
+							data.data[i].hotelList[j].roomTypeList = roomTypeList;
+							trLen += roomTypeList.length;
 						}
+						data.data[i].trLen = trLen;
 					}
 					var hotelInquiryResultHtml = hotelInquiryResultTemplate(data);
 					$container.find('#hotelInquiryContent').html(hotelInquiryResultHtml);
@@ -517,7 +522,7 @@ define(function(require, exports) {
 	};
 
 	//修改报价
-	quote.updateQuote = function(id) {
+	quote.updateQuote = function(id,type) {
 		$.ajax({
 			url: KingServices.build_url('quote', 'viewQuote'),
 			type: 'POST',
@@ -538,15 +543,24 @@ define(function(require, exports) {
 					var updateHtml = updateQuoteTemplate(data);
 					$container.find('#quoteContent').html(updateHtml)
 
-					/*var inquiryHtml = inquiryResultTemplate();
-					$container.find('#inquiryContent').html(inquiryHtml)
-					var busInquiryResultHtml = busInquiryResultTemplate();
-					var hotelInquiryResultHtml = hotelInquiryResultTemplate();
-
-					$container.find('#busInquiryResult').html(busInquiryResultHtml)
-					$container.find('#hotelInquiryContent').html(hotelInquiryResultHtml)*/
+					$container.find('.inquiryContent').on("click",function(){
+						var quoteId = $container.find('[name=quoteId]').val();
+						if(!quoteId){
+							showMessageDialog($( "#confirm-dialog-message" ),"请先询价！");
+							return false;
+						} 
+						quote.quoteStatus(quoteId,$container);
+					});	
 
 					quote.init_event($container);
+					if (!!type) {
+						$container.find('.inquiryContent').trigger('click');
+						if (type == "T-hotel") {
+							$container.find('.inquiryContent').trigger('click');
+						}else if (type == "T-bus") {
+							$container.find('.inquiryContent').trigger('click');
+						}
+					}
 				}
 			}
 		})
@@ -618,7 +632,7 @@ define(function(require, exports) {
 		quote.bindSelfPay($dayListArea.find('.T-choose-ticketCompanyName'), validator, $container);
 		quote.bindTicketEvent($dayListArea.find('.chooseTicketName'), validator, $container);
 		//车辆询价
-		$container.find('.car').on('click', function(event) {
+		$container.find('.T-car').on('click', function(event) {
 			event.preventDefault();
 			/* Act on the event */
 			var lineProductInfo = {
@@ -777,7 +791,7 @@ define(function(require, exports) {
 								}
 							}
 							if (isRepeat == 1) {
-								showMessageDialog($( "#confirm-dialog-message" ),"该酒店已经被选择");
+								showMessageDialog($( "#confirm-dialog-message" ),"该车队已经被选择");
 							}else{
 								$container.find('.T-selectedBusTbody').append(html);
 								selectedBusArray.push(chooseBusInfo.id);
@@ -814,9 +828,10 @@ define(function(require, exports) {
 	    	})
 		};
 		//酒店询价
-		$container.find('.hotel').on('click', function(event) {
+		$container.find('.T-hotel').on('click', function(event) {
 			event.preventDefault();
 			/* Act on the event */
+			var $this = $(this), $whichDiv = $this.closest('.T-dailyArrangeList');
 			var lineProductInfo = {
 				id: quote.getValue($container,"lineProductId"),
 				name: $container.find('.T-lineProductName').text(),
@@ -829,7 +844,7 @@ define(function(require, exports) {
 				partnerAgencyId: quote.getValue($container,'partnerAgencyId'),
 				partnerAgencyContactId: quote.getValue($container,'managerId')
 			}
-			var whichDay = 2;
+			var whichDay = $whichDiv.data("entity-whichday");
 			var quoteId = quote.getValue($container,'quoteId');
 
 			if(!!lineProductInfo.startTime && !!lineProductInfo.partnerAgencyId && !!lineProductInfo.partnerAgencyContactId ){
@@ -2222,7 +2237,7 @@ define(function(require, exports) {
 			var count = ticketPriceArray.eq(i).find('[name=count]').val()-0 || 0;
 			ticketCount += count;
 			ticketPrice += price*count;
-		}
+		} 
 		var selfpayPriceArray = $container.find('.T-resourceSelfPayList [name=contractPrice]');
 		for (var i = 0,len = selfpayPriceArray.length; i < len; i++) {
 			var value = selfpayPriceArray.eq(i).val()-0 || 0;
@@ -2655,8 +2670,10 @@ define(function(require, exports) {
 			language: 'zh-CN'
 		});
 	}
-
+	quote.updateQuoteToOffer = function(id,type) {
+		quote.updateQuote(id,type);
+	};
 	exports.init = quote.initModule;
 	exports.addQuote = quote.addQuote;
-	exports.quote.updateQuote = quote.quote.updateQuote;
+	exports.updateQuote = quote.updateQuoteToOffer;
 })

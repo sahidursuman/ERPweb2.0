@@ -40,8 +40,6 @@
 								待确认
 							{{else if searchParam.status == "1"}}
 								已发团
-							{{else if searchParam.status == "2"}}
-								已过期
 							{{else}}
 								全部
 							{{/if}}
@@ -61,9 +59,9 @@
 						<li>
 							<a data-value="1" href="javascript:void(0)">已发团</a>
 						</li>
-						<li>
+						<!-- <li>
 							<a data-value="2" href="javascript:void(0)">已过期</a>
-						</li>
+						</li> -->
 					</ul>
 				</div>
 
@@ -72,7 +70,7 @@
 					搜索
 				</button>
 			</div>
-			<button class="btn btn-sm btn-success T-addPlan R-right pull-left newSearchBtn" style="width:120px;" data-right="1140002"> 
+			<button class="btn btn-sm btn-success T-addPlan R-right pull-left newSearchBtn" style="width:120px;margin-left:30px;" data-right="1140002"> 
 			<i class="ace-icon fa fa-plus"></i> 
 			新增发团计划
 		   </button>
@@ -148,7 +146,7 @@
 								<label class="padding-right20">|</label>
 								编辑
 							</a>
-							<a title="导出计划" class="T-option T-export cursor R-right" data-right="1140008">
+							<a title="导出计划" class="T-option T-export cursor R-right" data-right="1140005">
 								<label class="padding-right20">|</label>
 								导出
 							</a>
