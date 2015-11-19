@@ -11,7 +11,8 @@ define(function(require, exports) {
 	 * @return {object}            表单验证对象
 	 */
 	rule.quoteCheckor = function($container)  {
-		var settings = this.getQuoteSettings($container);
+		this.$quoteContainer = $container;
+		var settings = this.getQuoteSettings(this.$quoteContainer);
 
 		return $container.formValidate(settings);
 	};
@@ -22,10 +23,9 @@ define(function(require, exports) {
 	 * @return {[type]}            [description]
 	 */
 	rule.getQuoteSettings = function($container)  {
-		var $mainForm = $container,
-		settings = [
+		var settings = [
 			{
-				$ele: $mainForm.find('input[name="startTime"]'),
+				$ele: $container.find('input[name="startTime"]'),
 				rules: [
 					{
 						type: 'null',
@@ -34,7 +34,7 @@ define(function(require, exports) {
 				]
 			},
 			{
-				$ele: $mainForm.find('input[name="adultCount"]'),
+				$ele: $container.find('input[name="adultCount"]'),
 				rules: [
 					{
 						type: 'null',
@@ -43,47 +43,11 @@ define(function(require, exports) {
 				]
 			},
 			{
-				$ele: $mainForm.find('input[name="childCount"]'),
+				$ele: $container.find('input[name="childCount"]'),
 				rules: [
 					{
 						type: 'null',
 						errMsg: '小孩数量不能为空'
-					}
-				]
-			},
-			{
-				$ele: $mainForm.find('input[name="adultCount"]'),
-				rules: [
-					{
-						type: 'null',
-						errMsg: '大人数量不能为空'
-					}
-				]
-			},
-			{
-				$ele: $mainForm.find('input[name="adultCount"]'),
-				rules: [
-					{
-						type: 'null',
-						errMsg: '大人数量不能为空'
-					}
-				]
-			},
-			{
-				$ele: $mainForm.find('input[name="adultCount"]'),
-				rules: [
-					{
-						type: 'null',
-						errMsg: '大人数量不能为空'
-					}
-				]
-			},
-			{
-				$ele: $mainForm.find('input[name="adultCount"]'),
-				rules: [
-					{
-						type: 'null',
-						errMsg: '大人数量不能为空'
 					}
 				]
 			}
@@ -92,18 +56,8 @@ define(function(require, exports) {
 		// 保险安排	
 		$container.find('.T-arrangeInsuranceList').find('tbody').find('tr').each(function() {
 			var $that = $(this);
-
 			if ($that.find('input[name="insuranceId"]').val())  {
 				settings.push(
-					{
-						$ele: $that.find('input[name="insuranceName"]'),
-						rules: [
-							{
-								type: 'null',
-								errMsg: '保险公司不能为空'
-							}
-						]
-					},
 					{
 						$ele: $that.find('input[name="type"]'),
 						rules: [
@@ -134,24 +88,14 @@ define(function(require, exports) {
 		$container.find('.T-arrangeBusCompanyList').find('tbody').find('tr').each(function() {
 			var $that = $(this);
 
-			settings.push({
-				$ele: $that.find('input[name="needSeatCount"]'),
-				rules: [ 
-					{
-						type: 'int',
-						errMsg: '需求座位数格式不正确'
-					}
-				]
-			});
-
 			if ($that.find('input[name="busCompanyId"]').val())  {
 				settings.push(
 					{
-						$ele: $that.find('input[name="licenseNumber"]'),
+						$ele: $that.find('input[name="seatcountPrice"]'),
 						rules: [
 							{
 								type: 'null',
-								errMsg: '车辆牌照不能为空'
+								errMsg: '座位价不能为空'
 							}
 						]
 					}
@@ -160,21 +104,21 @@ define(function(require, exports) {
 		});
 
 		// 行程安排
-		var $schedule = $container.find('.updateLineProductDaysListContainer');
+		var $schedule = $container.find('.T-timeline-detail-container');
 		{
 			// 餐饮
-			$schedule.find('.scheduleList').find('tbody').find('tr').each(function() {
+			$schedule.find('.T-RestaurantList').find('tbody').find('tr').each(function() {
 				var $that = $(this);
 
 				if ($that.find('input[name="restaurantId"]').val())  {
 					// 选择了餐厅
 					settings.push(
 						{
-							$ele: $that.find('input[name="typeName"]'),
+							$ele: $that.find('input[name="price"]'),
 							rules: [
 								{
 									type: 'null',
-									errMsg: '餐标名称不能为空'
+									errMsg: '餐标不能为空'
 								}
 							]
 						}
@@ -183,10 +127,10 @@ define(function(require, exports) {
 			});
 
 			// 酒店
-			$schedule.find('.resourceHotelList').find('tbody').find('tr').each(function() {
+			$schedule.find('.T-resourceHotelList').find('tbody').find('tr').each(function() {
 				var $that = $(this);
 
-				if ($that.find('input[name="hotelId"]').val())  {
+				if ($that.find('input[name="hotelId"]').val()) {
 					// 选择了酒店
 					settings.push(
 						{
@@ -197,13 +141,26 @@ define(function(require, exports) {
 									errMsg: '房型不能为空'
 								}
 							]
+						},
+						{
+							$ele: $that.find('input[name="count"]'),
+							rules: [
+								{
+									type: 'null',
+									errMsg: '数量不能为空'
+								},
+								{
+									type: 'float',
+									errMsg: '数量格式不正确'
+								},
+							]
 						}
 					);
 				}
 			});
 
 			// 景区
-			$schedule.find('.resourceScenicList').find('tbody').find('tr').each(function() {
+			$schedule.find('.T-resourceScenicList').find('tbody').find('tr').each(function() {
 				var $that = $(this);
 
 				if ($that.find('input[name="scenicId"]').val())  {
@@ -223,7 +180,7 @@ define(function(require, exports) {
 			});
 
 			// 购物
-			$schedule.find('.resourceSelfPayList').find('tbody').find('tr').each(function() {
+			$schedule.find('.T-resourceShoppingList').find('tbody').find('tr').each(function() {
 				var $that = $(this);
 
 				if ($that.find('input[name="shopId"]').val())  {
@@ -243,14 +200,14 @@ define(function(require, exports) {
 			});
 
 			// 自费
-			$schedule.find('.resourceSelfPayList').find('tbody').find('tr').each(function() {
+			$schedule.find('.T-resourceSelfPayList').find('tbody').find('tr').each(function() {
 				var $that = $(this);
 
 				if ($that.find('input[name="companyId"]').val())  {
 					// 选择了餐厅
 					settings.push(
 						{
-							$ele: $that.find('.chooseItemName'),
+							$ele: $that.find('input[name=selfPayItemName]'),
 							rules: [
 								{
 									type: 'null',
@@ -263,7 +220,7 @@ define(function(require, exports) {
 			});
 
 			// 交通
-			$schedule.find('.resourceTicketList').find('tbody').find('tr').each(function() {
+			$schedule.find('.T-resourceTicketList').find('tbody').find('tr').each(function() {
 				var $that = $(this);
 
 				if ($that.find('.chooseTicketName').val())  {
@@ -281,6 +238,28 @@ define(function(require, exports) {
 									errMsg: '价格格式不正确'
 								},
 							]
+						},
+						{
+							$ele: $that.find('input[name="count"]'),
+							rules: [
+								{
+									type: 'null',
+									errMsg: '数量不能为空'
+								},
+								{
+									type: 'float',
+									errMsg: '数量格式不正确'
+								},
+							]
+						},
+						{
+							$ele: $that.find('input[name="time"]'),
+							rules: [
+								{
+									type: 'null',
+									errMsg: '日期不能为空'
+								}
+							]
 						}
 					);
 				}
@@ -295,9 +274,9 @@ define(function(require, exports) {
 	 * @param  {[type]} validator [description]
 	 * @return {[type]}           [description]
 	 */
-	rule.lineProductUpdate = function(validator)  {
-		if (!!validator && this.$lineProductContainer)  {
-			validator.update(this.getLineProductSettings(this.$lineProductContainer));
+	rule.quoteUpdate = function(validator)  {
+		if (!!validator && this.$quoteContainer)  {
+			validator.update(this.getQuoteSettings(this.$quoteContainer));
 		}
 
 		return validator;
