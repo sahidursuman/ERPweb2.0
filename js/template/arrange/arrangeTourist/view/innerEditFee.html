@@ -20,14 +20,15 @@
 						</div>
 						<label class="col-sm-1 control-label no-padding-right">已付:</label>
 						<div class="col-sm-2">
-							<input value="{{if touristGroup.transferFeeStatus == 0}}{{touristGroup.payedMoney}}{{else}}{{touristGroup.transPayedMoney}}{{/if}}" type="text" name="transPayedMoney" class="col-sm-12"  maxlength="10" />
+							<input value="0" type="text" name="transPayedMoney" class="col-sm-12"  maxlength="10" />
 						</div>
 						<label class="col-sm-1 control-label no-padding-right">对方现收:</label>
 						<div class="clo-sm-2">
 							<label style="margin: 2px 0 0 12px">
-								<input type="checkbox" disabled="true" {{if touristGroup.operateCurrentNeedPayMoney == 1}}checked="checked"{{/if}} class="ace send-check" value="" name="operateCurrentNeedPayMoney">
+								<input type="checkbox" disabled="disabled" {{if touristGroup.operateCurrentNeedPayMoney == 1}}checked="checked"{{/if}} class="ace send-check" value="" name="operateCurrentNeedPayMoney">
 								<span class="lbl">
 								</span>
+								<input type="hidden" name="isCurrent" value="{{touristGroup.operateCurrentNeedPayMoney}}">
 							</label>
 						</div>
 					</div>
@@ -61,7 +62,7 @@
 										<input name="adultCount" value="{{if touristGroup != null}}{{touristGroup.adultCount}}{{/if}}" readonly="readonly" type="text" class="col-sm-12  no-padding-right costCount" />
 									</td>
 									<td>
-										<input name="transAdultPrice" value="{{if touristGroup.transferFeeStatus == 0}}{{touristGroup.adultPrice}}{{else}}{{touristGroup.transAdultPrice}}{{/if}}" type="text" class="col-sm-12  no-padding-right  costPrice"  maxlength="10" />
+										<input name="transAdultPrice" value="0" type="text" class="col-sm-12  no-padding-right  costPrice"  maxlength="10" />
 									</td>
 									<td></td>
 								</tr>
@@ -76,7 +77,7 @@
 										<input name="childCount" value="{{if touristGroup != null}}{{touristGroup.childCount}}{{/if}}" readonly="readonly" type="text" class="col-sm-12  no-padding-right costCount" />
 									</td>
 									<td>
-										<input name="transChildPrice" value="{{if touristGroup.transferFeeStatus == 0}}{{touristGroup.childPrice}}{{else}}{{touristGroup.transChildPrice}}{{/if}}" type="text" class="col-sm-12  no-padding-right costPrice"  maxlength="10" />
+										<input name="transChildPrice" value="0" type="text" class="col-sm-12  no-padding-right costPrice"  maxlength="10" />
 									</td>
 									<td></td>
 								</tr>  
@@ -92,10 +93,10 @@
 											<input name="discribe" value="{{transferList.describeInfo}}" type="text" class="col-sm-12  no-padding-right"  maxlength="500" />
 										</td>
 										<td>
-											<input name="count" value="{{transferList.count}}" type="text" class="col-sm-12  no-padding-right costCount"  maxlength="10" />
+											<input name="count" value="0" type="text" class="col-sm-12  no-padding-right costCount"  maxlength="10" />
 										</td>
 										<td>
-											<input name="otherPrice" value="{{transferList.price}}" type="text" class="col-sm-12  no-padding-right costPrice"  maxlength="10" />
+											<input name="otherPrice" value="0" type="text" class="col-sm-12  no-padding-right costPrice"  maxlength="10" />
 										</td>
 										<td><a class="  addCost-delete cursor">删除</a></td>
 									</tr>
