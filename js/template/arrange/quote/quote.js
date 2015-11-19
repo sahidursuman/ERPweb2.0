@@ -525,6 +525,12 @@ define(function(require, exports) {
 
 	//修改报价
 	quote.updateQuote = function(id,target) {
+		var tab_id = menukey + '-update';
+		var $tab = $('#tab-'+ tab_id + '-content');
+		if ($tab.length && $tab.find('input[name=quoteId]').val() == id) {	// 如果打开的是相同报价，则不替换
+			$('.tab-' + tab_id).children('a').trigger('click');
+			return;
+		}
 		$.ajax({
 			url: KingServices.build_url('quote', 'viewQuote'),
 			type: 'POST',
@@ -2552,10 +2558,14 @@ define(function(require, exports) {
 			success: function(data){
 				var result = showDialog(data);
 				if (result) {
-
-					Tools.closeTab("arrange_quote-add");
-
-					Tools.closeTab("arrange_quote-update");
+					var idString = $container.attr("id");
+					if (idString == "tab-arrange_quote-add-content") {
+						Tools.closeTab("arrange_quote-add");
+						
+					}
+					else if (idString == "tab-arrange_quote-update-content") {
+						Tools.closeTab("arrange_quote-update");
+					}
 				}
 			}
 		})
