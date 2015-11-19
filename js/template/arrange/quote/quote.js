@@ -133,26 +133,6 @@ define(function(require, exports) {
 		})
 	}
 
-   //初始化分享报价。。
- //   quote.listQuote = function(){
- //   	var html = listTemplate();
- //   	quote.$tab.find('.T-quoteList').html(html);
- //     quote.$tab.find('.T-share').on('click', function(event) {
- //     	event.preventDefault();
-     	
- //     	quote.shareQuote();
- //     });
-
- //     quote.$tab.find('.T-view').on('click', function(event,id) {
-	// 		event.preventDefault();
-	// 		/* Act on the event */
-	// 		// var id = $(this).closest('tr').data(id);
-	// 		// var id = $
-	// 		quote.viewQuote(id);
-	// });
-
- //   }
-
 	//分享页面
 	quote.shareQuote = function(id) {
 		$.ajax({
@@ -164,17 +144,13 @@ define(function(require, exports) {
 					var key = data.shareKey;
 					if (!!key) {
 						var url = location.origin + '/quote.html?key=' + key;
-						window.open(url);
-						showMessageDialog($( "#confirm-dialog-message" ),"分享成功");
+						// window.open(url);
+						showConfirmDialogOfShare($( "#confirm-dialog-message" ),"复制此分享链接:"+"  "+ url);
 					}
 				}
 			}
 		})
-		
-		// window.open("quote.html?key=" + key);
-		// window.open("quote.html")
-		// var html = shareQuoteTemplate();
-		// Tools.addTab(menukey+"-share","分享报价");
+
 	};
 
 	//新增报价
@@ -2675,5 +2651,5 @@ define(function(require, exports) {
 	};
 	exports.init = quote.initModule;
 	exports.addQuote = quote.addQuote;
-	exports.updateQuote = quote.updateQuoteToOffer;
+	exports.updateQuoteToOffer = quote.updateQuoteToOffer;
 })

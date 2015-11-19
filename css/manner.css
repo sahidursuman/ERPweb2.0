@@ -48,7 +48,7 @@ input{
  * 设置自定义popover的样式
  */
 #desc-tooltip-containter .popover-content {
-    min-width: 175px;
+    /*min-width: 175px;*/
     max-width: 260px;
     max-height: 300px;
     overflow-y: auto;
@@ -836,6 +836,9 @@ padding-left:0;width: 360px;left: -35px;
 .line-separatedS{
    height: 15px;width: 93%;border-bottom:  1px solid #428bca;
 }
+.line-separatedQuote{
+   height: 15px;width: 90%;border-bottom:  1px solid #428bca;  
+}
 .add-managerMore{
     cursor:pointer;left:-38px;
 }
@@ -887,18 +890,7 @@ padding-left:0;width: 360px;left: -35px;
     left: 0px!important;   
 }
 
-/*.busCompanyNew{
-   width:190px;height:auto;background:#DCDCDC;position:absolute;right:40px;top:290px;display: none;border-radius: 5px;padding:0px 6px 18px 5px;
-   line-height: 38px;
-}
-.hotelNews{
-  width:190px;height:auto;background:#DCDCDC;position:absolute;right:40px;top:365px; display: none; border-radius: 5px;padding:0px 6px 18px 5px;
-  line-height: 38px;
-}
-.guideNews{
-      width:190px;height:auto;background:#DCDCDC;position:absolute;right:40px;top:440px;display: none;border-radius: 5px;padding:0px 6px 18px 5px;
-      line-height: 38px;
-}*/
+
 .MessagePrompt-box{
    font-family: "微软雅黑";
    /*font-weight: 600;*/
@@ -915,6 +907,7 @@ padding-left:0;width: 360px;left: -35px;
     padding: 10px 15px 8px 15px;
     border-bottom: 1px solid #ddd;
     border-top: 1px solid #ddd;
+    white-space: nowrap;  /*文本不换行*/
 }
 
 /*报价、询价css*/
