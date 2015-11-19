@@ -1,6 +1,5 @@
 
 <div class="col-xs-12 viewQuoteContainer">
-<button class="btn btn-sm btn-success btn-Quote-export T-QuoteBtn QuoteBtn">导出信息</button>
 	<form class="form-horizontal viewQuoteMainForm" role="form" style="margin-top:10px" onsubmit="return false">
 
                 <h5 class=" pull-left " >
@@ -13,37 +12,36 @@
 			</tr> -->
 			<tr>
 				<td class="style-myself">客户</td>
-				<td class="" style="text-align: left;padding: 0px 0px 0px 10px">张小姐</td>
+				<td class="" style="text-align: left;padding: 0px 0px 0px 10px">{{quoteDetailJson.partnerAgency.travelAgencyName}}</td>
 				<td class="style-myself">联系人</td>
-				<td class="" style="text-align: left;padding: 0px 0px 0px 10px">王五</td>
+				<td class="" style="text-align: left;padding: 0px 0px 0px 10px">{{quoteDetailJson.partnerAgencyContact.contactRealname}}</td>
 				<td class="style-myself">联系电话</td>
-				<td class="" style="text-align: left;padding: 0px 0px 0px 10px">13434657465</td>
+				<td class="" style="text-align: left;padding: 0px 0px 0px 10px">{{quoteDetailJson.partnerAgencyContact.contactMobileNumber}}</td>
 			</tr>
 			<tr>
 				<td class="style-myself">人数</td>
-				<td class="" style="text-align: left;padding: 0px 0px 0px 10px">21大 3小</td>
+				<td class="" style="text-align: left;padding: 0px 0px 0px 10px">大人{{quoteDetailJson.adultCount}}小孩{{quoteDetailJson.childCount}}</td>
 				<td class="style-myself">单房差数</td>
-				<td class="" style="text-align: left;padding: 0px 0px 0px 10px">3</td>
+				<td class="" style="text-align: left;padding: 0px 0px 0px 10px">{{quoteDetailJson.singleRoomCount}}</td>
 				<td class="style-myself">出游日期</td>
-				<td class="" style="text-align: left;padding: 0px 0px 0px 10px">2015-11-21</td>
+				<td class="" style="text-align: left;padding: 0px 0px 0px 10px">{{quoteDetailJson.startTime}}</td>
 			</tr>
 			<tr>
 				<td class="style-myself">总价</td>
-				<td class="" style="text-align: left;padding: 0px 0px 0px 10px" colspan="6">3211</td>
+				<td class="" style="text-align: left;padding: 0px 0px 0px 10px" colspan="6">{{quoteDetailJson.sumQuoteFee}}</td>
 				
 				</tr>
 			<tr>
-				<td class="style-myself">大人单价</td>
-				<td class="" style="text-align: left;padding: 0px 0px 0px 10px">210/人</td>
-				<td class="style-myself">小孩单价</td>
-				<td class="" style="text-align: left;padding: 0px 0px 0px 10px">123/人</td>
-				<td class="style-myself">单房差</td>
-				<td class="" style="text-align: left;padding: 0px 0px 0px 10px">100</td>
-
-			</tr>
+						<td class="style-myself">大人单价</td>
+						<td class="" style="text-align: left;padding: 0px 0px 0px 10px">{{quoteDetailJson.childQuotePrice}}</td>
+						<td class="style-myself">小孩单价</td>
+						<td class="" style="text-align: left;padding: 0px 0px 0px 10px">{{quoteDetailJson.adultQuotePrice}}</td>
+						<td class="style-myself">单房差</td>
+						<td class="" style="text-align: left;padding: 0px 0px 0px 10px">{{quoteDetailJson.singleRoomCount}}</td>
+					</tr>
 			<tr>
 				<td class="style-myself">备注</td>
-				<td class="" style="text-align: left;padding: 0px 0px 0px 10px"  colspan="6">如有疑问请致电。。。</td>
+				<td class="" style="text-align: left;padding: 0px 0px 0px 10px"  colspan="6">{{quoteDetailJson.remark}}</td>
 			</tr>
 		</table>
 
@@ -529,26 +527,32 @@
 								<label class="col-sm-1 control-label no-padding-right">费用包含:</label>
 								<div class="col-sm-8">
                                     <textarea class="form-control" class="col-sm-12" readonly="readonly">
-                                    	 
+                                    	{{quoteDetailJson.lineProduct.includeFee}} 
                                     </textarea>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-1 control-label no-padding-right">费用不含:</label>
                                 <div class="col-sm-8">
-                                    <textarea class="form-control" class="col-sm-12" readonly="readonly"></textarea>
+                                    <textarea class="form-control" class="col-sm-12" readonly="readonly">
+                                    	{{quoteDetailJson.lineProduct.excludeFee}}
+                                    </textarea>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-1 control-label no-padding-right">行程特色:</label>
                                 <div class="col-sm-8">
-                                    <textarea class="form-control" class="col-sm-12" readonly="readonly"></textarea>
+                                    <textarea class="form-control" class="col-sm-12" readonly="readonly">
+                                    	{{quoteDetailJson.lineProduct.lineFeature}} 
+                                    </textarea>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-1 control-label no-padding-right">行程须知:</label>
                                 <div class="col-sm-8">
-                                    <textarea class="form-control" class="col-sm-12" readonly="readonly"></textarea>
+                                    <textarea class="form-control" class="col-sm-12" readonly="readonly">
+                                    	{{quoteDetailJson.lineProduct.lineNotice}} 
+                                    </textarea>
 								</div>   
 							</div>
 						</div>
@@ -556,11 +560,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="space-10"></div>
-		<button class="btn btn-block btn-primary T-btn-submit-quote">
-			<i class="ace-icon fa fa-check"></i>
-			提交信息
-		</button>
+		
 		<div class="space-20"></div>
 	</form>
 </div>
