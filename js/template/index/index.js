@@ -11,7 +11,7 @@ define(function(require, exports) {
                 that.init_event();
                 that.init_message();
                 that.bind_message();
-                // index.MessagePrompt({bus: 5, hotel: 2, guide: 4});
+                //index.MessagePrompt({bus: 5, hotel: 2, guide: 4});
             },
             /**
              * 绑定处理方法
