@@ -21,7 +21,6 @@
 							<label class="control-label T-lineProductStatus" data-entity-status="{{quoteDetailJson.lineProduct.status}}">{{if quoteDetailJson.lineProduct.status == 1}}售卖中{{else}}未售卖{{/if}}</label> 
 						</div>
 						<button class="car">车询价</button>
-						<button class="hotel">酒店询价</button>
 						<button class="T-quote">算报价</button>
 					</div>
 					<div class="form-group">
@@ -360,7 +359,8 @@
                                             <div class=" ui-sortable-handle">
                                                 <h5 class="">
 														<label class="title-size">行程标题：{{lineProductDaysList.lineProductDay.title}}</label>
-													</h5>
+														<button class="hotel">酒店询价</button>
+												</h5>
                                                 <div class="widget-body">
                                                     <div class="widget-main">
                                                         <h5 class="header">行程详情：</h5>

@@ -817,6 +817,7 @@ define(function(require, exports) {
 		$container.find('.hotel').on('click', function(event) {
 			event.preventDefault();
 			/* Act on the event */
+			var $this = $(this), $whichDiv = $this.closest('.T-dailyArrangeList');
 			var lineProductInfo = {
 				id: quote.getValue($container,"lineProductId"),
 				name: $container.find('.T-lineProductName').text(),
@@ -829,7 +830,7 @@ define(function(require, exports) {
 				partnerAgencyId: quote.getValue($container,'partnerAgencyId'),
 				partnerAgencyContactId: quote.getValue($container,'managerId')
 			}
-			var whichDay = 2;
+			var whichDay = $whichDiv.data("entity-whichDay");
 			var quoteId = quote.getValue($container,'quoteId');
 
 			if(!!lineProductInfo.startTime && !!lineProductInfo.partnerAgencyId && !!lineProductInfo.partnerAgencyContactId ){
@@ -2222,7 +2223,7 @@ define(function(require, exports) {
 			var count = ticketPriceArray.eq(i).find('[name=count]').val()-0 || 0;
 			ticketCount += count;
 			ticketPrice += price*count;
-		}
+		} 
 		var selfpayPriceArray = $container.find('.T-resourceSelfPayList [name=contractPrice]');
 		for (var i = 0,len = selfpayPriceArray.length; i < len; i++) {
 			var value = selfpayPriceArray.eq(i).val()-0 || 0;
@@ -2658,5 +2659,5 @@ define(function(require, exports) {
 
 	exports.init = quote.initModule;
 	exports.addQuote = quote.addQuote;
-	exports.quote.updateQuote = quote.quote.updateQuote;
+	exports.updateQuote = quote.updateQuote;
 })
