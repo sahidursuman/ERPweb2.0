@@ -189,7 +189,16 @@
 							res = rules[i].errMsg;
 						}
 						break;
-
+					case 'positive-int': 	// 正整数
+						if (!!data && !/^[1-9]\d*$/.test( data )) {
+							res = rules[i].errMsg;
+						}
+						break;
+					case 'nonnegative-int': 	// 非负整数
+						if (!!data && !/^\d+$/.test( data )) {
+							res = rules[i].errMsg;
+						}
+						break;
 					case 'float':	// 浮点型
 						if (!!data && !/^-?(\d*\.)?\d+$/.test( data )) {
 							res = rules[i].errMsg;

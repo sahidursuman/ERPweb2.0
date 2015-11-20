@@ -110,7 +110,7 @@
 							<div class="col-sm-1">
 								<label class="control-label T-adultCost">{{quoteDetailJson.adultCostPrice}}</label> 
 							</div>
-							<div class="col-sm-2">
+							<div class="col-sm-3">
 								<select name="selectAmAdult" class="T-changeQuote">
 									<option {{if quoteDetailJson.adultAdjustType == 0}}selected="selected"{{/if}} value="0">定额调幅</option>
 									<option {{if quoteDetailJson.adultAdjustType == 1}}selected="selected"{{/if}} value="1">比例调幅</option>
@@ -127,7 +127,7 @@
 							<div class="col-sm-1">
 								<label class="control-label T-childCost">{{quoteDetailJson.childCostPrice}}</label>
 							</div>
-							<div class="col-sm-2">
+							<div class="col-sm-3">
 								<select name="selectAmChild" class="T-changeQuote">
 									<option {{if quoteDetailJson.childAdjustType == 0}}selected="selected"{{/if}} value="0">定额调幅</option>
 									<option {{if quoteDetailJson.childAdjustType == 1}}selected="selected"{{/if}} value="1">比例调幅</option>
@@ -141,7 +141,7 @@
 						</div>
 						<div class="form-group">
 							<label class="col-sm-2 control-label no-padding-right">总成本:</label>
-							<div class="col-sm-3">
+							<div class="col-sm-4">
 								<label class="control-label T-allCost">{{quoteDetailJson.sumCostFee}}</label>
 							</div>
 							<label class="col-sm-1 control-label no-padding-right">总报价:</label>
@@ -158,7 +158,7 @@
 							<div class="col-sm-1">
 								<label class="control-label T-oneRoomCost">{{quoteDetailJson.singleRoomCostPrice}}</label>
 							</div>
-							<div class="col-sm-2">
+							<div class="col-sm-3">
 								<select name="selectAmOneRoom" class="T-changeQuote">
 									<option {{if quoteDetailJson.singleRoomAdjustType == 0}}selected="selected"{{/if}} value="0">定额调幅</option>
 									<option {{if quoteDetailJson.singleRoomAdjustType == 1}}selected="selected"{{/if}} value="1">比例调幅</option>

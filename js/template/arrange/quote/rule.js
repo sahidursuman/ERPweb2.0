@@ -39,6 +39,10 @@ define(function(require, exports) {
 					{
 						type: 'null',
 						errMsg: '大人数量不能为空'
+					},
+					{
+						type: 'nonnegative-int',
+						errMsg: '大人数量只能是非负整数'
 					}
 				]
 			},
@@ -48,6 +52,10 @@ define(function(require, exports) {
 					{
 						type: 'null',
 						errMsg: '小孩数量不能为空'
+					},
+					{
+						type: 'nonnegative-int',
+						errMsg: '小孩数量只能是非负整数'
 					}
 				]
 			},
@@ -70,7 +78,67 @@ define(function(require, exports) {
 				]
 			}
 		];
-
+		//车询价
+		$container.find('.T-busInquiry').each(function() {
+			var $this = $(this);
+			settings.push(
+				{
+					$ele: $this.find('input[name="seatCount"]'),
+					rules: [
+						{
+							type: 'null',
+							errMsg: '车座数不能为空'
+						},
+						{
+							type: 'int',
+							errMsg: '车座数格式不正确'
+						}
+					]
+				},
+				{
+					$ele: $this.find('input[name="expiryTime"]'),
+					rules: [
+						{
+							type: 'null',
+							errMsg: '询价截止时间不能为空'
+						}
+					]
+				}
+			)
+		});
+		//酒店询价
+		$container.find('.T-hotelInquiry').each(function() {
+			var $this = $(this);
+			settings.push(
+				{
+					$ele: $this.find('input[name="roomType"]'),
+					rules: [
+						{
+							type: 'null',
+							errMsg: '房型不能为空'
+						}
+					]
+				},
+				{
+					$ele: $this.find('input[name="expiryTime"]'),
+					rules: [
+						{
+							type: 'null',
+							errMsg: '询价截止时间不能为空'
+						}
+					]
+				},
+				{
+					$ele: $this.find('input[name="roomCount"]'),
+					rules: [
+						{
+							type: 'null',
+							errMsg: '数量不能为空'
+						}
+					]
+				}
+			)
+		});
 		// 保险安排	
 		$container.find('.T-arrangeInsuranceList').find('tbody').find('tr').each(function() {
 			var $that = $(this);

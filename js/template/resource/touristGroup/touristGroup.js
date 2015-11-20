@@ -569,7 +569,6 @@ define(function(require,exports){
 				    	}
 				    }
 				});	
-
 				// 让对话框居中
 				$(window).trigger('resize');
 			}

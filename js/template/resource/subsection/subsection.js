@@ -33,7 +33,7 @@ define(function(require, exports) {
 
 	subsection.listMainSubsection = function() {
 		$.ajax({
-			url: subsection.url("getSearchCondition","view"),
+			url: KingServices.build_url('innerTransferOperation', "getSearchCondition"),
 			type: 'POST',
 			success:function(data){
 				var result = showDialog(data);
@@ -100,7 +100,7 @@ define(function(require, exports) {
 		page = page || 0;
 
 		$.ajax({
-			url: subsection.url("listTransitSubTgroup","view"),
+			url: KingServices.build_url('innerTransferOperation', "listTransitSubTgroup"),
 			type: 'POST',
 			data: {
 				pageNo: page,
@@ -141,7 +141,7 @@ define(function(require, exports) {
 
 		//计算人数合计 和 现收款合计
 		$.ajax({
-			url: subsection.url("getTransitSubCount","view"),
+			url: KingServices.build_url('innerTransferOperation', "getTransitSubCount"),
 			type: 'POST',
 			data: {
 				lineProduct: lineProduct,
@@ -214,7 +214,7 @@ define(function(require, exports) {
 	 */
 	subsection.subsection = function(id) {
 		$.ajax({
-			url: subsection.url("getTouristGroup","view"),
+			url: KingServices.build_url('innerTransferOperation', "getTouristGroup"),
 			type: "POST",
 			data:"id="+id+"",
 			success:function(data){
@@ -382,7 +382,7 @@ define(function(require, exports) {
 			return;
 		}
 		$.ajax({
-			url:subsection.url("saveSubTgroup","view"),
+			url:KingServices.build_url('innerTransferOperation', "saveSubTgroup"),
 			type:"POST",
 			data:"subTouristGroup="+encodeURIComponent(subTouristGroup)+"",
 			success:function(data){
@@ -436,7 +436,7 @@ define(function(require, exports) {
 		}).unbind("click").click(function(){
 			var obj =this;
 			$.ajax({
-				url:subsection.url("getLineProductList","view"),
+				url:KingServices.build_url('innerTransferOperation', "getLineProductList"),
 				type: 'POST',
                 showLoading: false,
                 success: function(data) {
@@ -486,7 +486,7 @@ define(function(require, exports) {
 					click: function() {
 						$( this ).dialog( "close" );
 						$.ajax({
-							url: subsection.url("revokeSubTouristGroup","view"),
+							url: KingServices.build_url('innerTransferOperation', "revokeSubTouristGroup"),
 							type:"POST",
 							data:"id="+id+"",
 							success:function(data){
@@ -588,12 +588,6 @@ define(function(require, exports) {
 			$(obj).autocomplete('search', '');
 		});
 	}
-
-	//ajaxUrl方法
-	subsection.url = function(method,operation){
-		var url = ''+APP_ROOT+'back/innerTransferOperation.do?method='+method+'&token='+$.cookie('token')+'&menuKey='+menuKey+'&operation='+operation+'';
-		return url;
-	};
 
 	//时间控件 datePicker
 	subsection.datePicker = function(name){
