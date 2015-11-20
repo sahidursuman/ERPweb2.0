@@ -1146,7 +1146,7 @@ define(function(require, exports) {
 				    type: 1,
 				    title:"选择安排模板",
 				    skin: 'layui-layer-rim', //加上边框
-				    area: ['70%', '70%'], //宽高
+				    area: '70%', //宽高
 				    zIndex:1028,
 				    content: html,
 				    success:function(){
@@ -1826,7 +1826,7 @@ define(function(require, exports) {
 						    type: 1,
 						    title:"查看发团计划",
 						    skin: 'layui-layer-rim', //加上边框
-						    area: ['85%', '80%'], //宽高
+						    area: '85%', //宽高
 						    zIndex:1028,
 						    content: html,
 						    success:function(){
