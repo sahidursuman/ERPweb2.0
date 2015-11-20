@@ -52,7 +52,7 @@ define(function(require, exports) {
 	    orderManage.listHotelOrder(0);
 
 	    //导游订单Ajax
-	    orderManage.listGuidOrder();
+	    //orderManage.listGuidOrder();
 
 	
 	};
@@ -158,12 +158,12 @@ define(function(require, exports) {
 	/**
 	 * [listGuidOrder 导游订单列表]
 	 * @return {[type]} [description]
-	 */
+	 
 	orderManage.listGuidOrder=function(){
 		var listGuideHtml=listGuideTemplate();
 		//导订单
 		orderManage.$tab.find('#T-Guide-list').html(listGuideHtml);
-	};
+	};*/
 
 
 	/**
