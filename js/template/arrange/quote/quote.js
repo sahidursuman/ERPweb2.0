@@ -513,24 +513,10 @@ define(function(require, exports) {
 					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
 						//删除现有
 						$container.find(".T-resourceHotelList").remove();
-						// $container.find(".T-resourceHotelList").each(function(){
-						// 	var id = $(this).data("entity-id");
-						// 	if(id){
-						// 		$.ajax({
-						// 			url: KingServices.build_url('hotelInquiry','sumListInquiryHotelAdd'),
-						// 			type: 'POST',
-						// 			data: { id : id + ""},
-						// 			success: function(data){
-						// 				var result = showDialog(data);
-						// 				if(result){
-						// 				}
-						// 			}
-						// 		});
-						// 	}
-						// });
 
+						var whichDay = data.hotelList[0].whichDay-1;
 						var html = quote.hotelHtml(data.hotelList);
-						$container.find(".T-timeline-detail-container").append(html);
+						$container.find("#dayListUpdate-"+ whichDay +" .T-timeline-detail-container").append(html);
 
 						$container.find('.quoteContent').trigger('click');
 					});
@@ -607,12 +593,12 @@ define(function(require, exports) {
 					 		html += "含午餐"; 
 					 	}
 					 	if (hotelList[i].containDinner==1){
-					 		html += "含晚餐"; 
+					 		html += "含晚餐";
 					 	}
 					 	html +="' /></td>" + 
 					 	"<td><input type='text' class='col-xs-12' readonly='readonly' name='mobileNumber' value='" + hotelList[i].mobileNumber + "' /></td>" +
 					 	"<td><input type='text' class='col-xs-12' name='remark' value='' /></td>" +
-					 	"<td><a data-entity-id='" + hotelList[i].hotelId + "' data-entity-type='8' class='cursor btn-restaurant-delete T-delete'>删除</a></td>" +
+					 	"<td><a data-entity-type='8' class='cursor btn-restaurant-delete T-delete'>删除</a></td>" +
 					"</tr></tbody>" + 
 				"</table></div></div></div></div>";
 		}
@@ -825,7 +811,7 @@ define(function(require, exports) {
 					    scrollbar: false,
 					    success:function(){
 					    	var $busLayerContent = $(".T-busInquiryContainer");
-					    	quote.busInquiryList(0,$busLayerContent,lineProductInfo);
+					    	quote.busInquiryList(0,$busLayerContent,lineProductInfo,quoteId);
 
 			    			quote.dateTimePicker($busLayerContent);
 			    			quote.chooseBusInfo($busLayerContent);
@@ -883,7 +869,7 @@ define(function(require, exports) {
 		});
 	};
 	//车辆询价列表
-	quote.busInquiryList = function(page,$container,lineProductInfo) {
+	quote.busInquiryList = function(page,$container,lineProductInfo,quoteId) {
 		var searchParam = {
 			brand: quote.getValue($container,"busBrand") || "",
 			lineProductId: lineProductInfo.id,
@@ -907,7 +893,7 @@ define(function(require, exports) {
 
 					//搜索
 					$container.find(".T-btn-busInquiry-search").off('click').on('click', function(){
-				    	quote.busInquiryList(0,$container,lineProductInfo);
+				    	quote.busInquiryList(0,$container,lineProductInfo,quoteId);
 					})
 					$container.find('.T-chooseBus').on('click',function(){
 						var $this = $(this),$parents = $this.closest('tr');
@@ -917,7 +903,17 @@ define(function(require, exports) {
 							managerName: $parents.find('.T-managerName').text(),
 							mobileNumber: $parents.find('.T-mobileNumber').text()
 						}
-						addChooseBus(chooseBusInfo);
+						$.ajax({
+				    		url: KingServices.build_url("busInquiry","findBusCompanyInquiryStstus"),
+				    		type: 'POST',
+				    		data: "busCompanyId="+chooseBusInfo.id+"&quoteId="+quoteId+"",
+				    		success: function(data){
+				    			var result = showDialog(data);
+				    			if (result) {
+									addChooseBus(chooseBusInfo);
+				    			}
+				    		}
+				    	})
 					})
 					var selectedBusArray = [];
 					$container.find('.T-selectedBusTbody tr').each(function(){
@@ -965,7 +961,7 @@ define(function(require, exports) {
 					    curr: (page + 1),
 					    jump: function(obj, first) {
 					    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-					    		quote.busInquiryList(obj.curr -1,$container,lineProductInfo);
+					    		quote.busInquiryList(obj.curr -1,$container,lineProductInfo,quoteId);
 					        }
 					    }
 	                });
@@ -1025,9 +1021,9 @@ define(function(require, exports) {
 							var selectedHotelArray = [];
 							//酒店查询分页
 							var startTime = lineProductInfo.startTime;
-							quote.hotelInquiryList(0,$hotelLayerContent,whichDay,startTime,$container);
+							quote.hotelInquiryList(0,$hotelLayerContent,whichDay,startTime,quoteId);
 							$hotelLayerContent.find('.T-btn-hotelInquiry-search').off('click').on('click',function(){
-								quote.hotelInquiryList(0,$hotelLayerContent,whichDay,startTime,$container);
+								quote.hotelInquiryList(0,$hotelLayerContent,whichDay,startTime,quoteId);
 							})
 							//保存接口
 							$hotelLayerContent.find('.T-saveHotelInquiry').on('click', function(){
@@ -1181,7 +1177,7 @@ define(function(require, exports) {
 		return checkInTime;
 	}
 	//酒店查询分页
-	quote.hotelInquiryList = function(page,$container,whichDay,startTime) {
+	quote.hotelInquiryList = function(page,$container,whichDay,startTime,quoteId) {
 		var checkInTime = quote.checkInTime(whichDay,startTime);
 		var searchJson = {
 			pageNo: page,
@@ -1217,7 +1213,17 @@ define(function(require, exports) {
 							managerName: $parents.find('.T-managerName').text(),
 							mobileNumber: $parents.find('.T-mobileNumber').text()
 						}
-						addChooseHotel(chooseHotelInfo);
+						$.ajax({
+				    		url: KingServices.build_url("hotelInquiry","findHotelInquiryStstus"),
+				    		type: 'POST',
+				    		data: "hotelId="+chooseHotelInfo.id+"&quoteId="+quoteId+"",
+				    		success: function(data){
+				    			var result = showDialog(data);
+				    			if (result) {
+									addChooseHotel(chooseHotelInfo);
+				    			}
+				    		}
+				    	})
 					})
 					var selectedHotelArray = [];
 					$container.find('.T-selectedHotelTbody tr').each(function(){
@@ -1267,7 +1273,7 @@ define(function(require, exports) {
 					    curr: (page + 1),
 					    jump: function(obj, first) {
 					    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-					    		quote.hotelInquiryList(obj.curr -1,$container,whichDay,startTime);
+					    		quote.hotelInquiryList(obj.curr -1,$container,whichDay,startTime,quoteId);
 					        }
 					    }
 	                });
