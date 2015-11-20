@@ -50,6 +50,24 @@ define(function(require, exports) {
 						errMsg: '小孩数量不能为空'
 					}
 				]
+			},
+			{
+				$ele: $container.find('input[name="partnerAgencyName"]'),
+				rules: [
+					{
+						type: 'null',
+						errMsg: '客户不能为空'
+					}
+				]
+			},
+			{
+				$ele: $container.find('input[name="managerName"]'),
+				rules: [
+					{
+						type: 'null',
+						errMsg: '联系人不能为空'
+					}
+				]
 			}
 		];
 
