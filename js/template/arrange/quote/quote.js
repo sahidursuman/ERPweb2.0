@@ -821,8 +821,11 @@ define(function(require, exports) {
 
 			    			quote.dateTimePicker($busLayerContent);
 			    			quote.chooseBusInfo($busLayerContent);
+
+							var validator = rule.quoteCheckor($busLayerContent);
 			    			//保存接口
 			    			$busLayerContent.find('.T-saveBusInquiry').on('click', function() {
+			    				if (!validator.form())   return;
 			    				var brand = quote.getValue($busLayerContent,"busBrand"),
 			    					lineProductId = lineProductInfo.id,
 			    					seatCount = quote.getValue($busLayerContent,"seatCount"),
@@ -988,7 +991,7 @@ define(function(require, exports) {
 
 					    	quote.chooseRoomType($hotelLayerContent);
 					    	quote.dateTimePicker($hotelLayerContent);
-					    	
+					    	var validator = rule.quoteCheckor($hotelLayerContent);
 							$hotelLayerContent.find(".T-addSearchCondition").off('click').on('click', function(){
 								var html = ''
 								+'<div class="col-xs-12 T-seachAreaDiv" style="margin-top:5px;margin-left:-12px;">'
@@ -1000,9 +1003,15 @@ define(function(require, exports) {
 								+'<div class="col-sm-2 busQuoteWidth">'
 								+'<input type="text" class="col-sm-12 width110" name="roomCount" value=""/>'
 								+'</div>'
+								+'<a class="T-del">删除</a>'
 								+'</div>';
 								$hotelLayerContent.find('.T-searchArea').append(html);
 								quote.chooseRoomType($hotelLayerContent);
+								validator = rule.quoteCheckor($hotelLayerContent);
+								$hotelLayerContent.find('.T-del').off('click').on('click', function() {
+									var $this = $(this), $parents = $this.closest('div.T-seachAreaDiv');
+									$parents.remove();
+								})
 							})
 
 							var selectedHotelArray = [];
@@ -1014,7 +1023,7 @@ define(function(require, exports) {
 							})
 							//保存接口
 							$hotelLayerContent.find('.T-saveHotelInquiry').on('click', function(){
-
+								if (!validator.form())   return;
 								var saveJson ={
 									expiryTime: quote.getValue($hotelLayerContent,"expiryTime"),
 									arriveTime: quote.checkInTime(whichDay,startTime),
@@ -1702,7 +1711,6 @@ define(function(require, exports) {
 				quote.costCalculation($container)
 				// 更新表单验证的配置
 				validator = rule.quoteUpdate(validator);
-				
 				$.ajax({
                     url: KingServices.build_url('scenic', 'getScenicById'),
                     data: "id="+scenicNameId,
