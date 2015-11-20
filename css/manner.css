@@ -932,6 +932,10 @@ padding-left:0;width: 360px;left: -35px;
     margin-top: 10px;
 }
 
+.hotelQuoteWidth{
+    width: 164px;
+}
+
 /*媒体查询-不同分辨率*/
 @media screen and (max-width:1703px){
   .line-separated{
