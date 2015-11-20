@@ -937,6 +937,8 @@ function listMenu(menuTemplate){
 								$that.toggleClass('success');
 								// 有checkbox，就去点击
 								$checkBox.trigger('click');	
+								$that.parent().find('.success').removeClass('success');
+								$that.addClass('success');
 							}
 					}
 				});
