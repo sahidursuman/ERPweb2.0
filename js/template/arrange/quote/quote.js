@@ -275,7 +275,7 @@ define(function(require, exports) {
 
 					$container.find('.inquiryContent').on("click",function(){
 						var quoteId = $container.find('[name=quoteId]').val();
-						if(!quoteId){
+						if(!!quoteId == false){
 							showMessageDialog($( "#confirm-dialog-message" ),"请先询价！");
 							return false;
 						} 
