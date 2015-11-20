@@ -39,7 +39,7 @@
 										</div>
 										<label class="col-sm-1 control-label no-padding-right">车辆品牌：</label>
 										<div class="col-sm-2">
-											<input class="col-sm-12" type="text" name="needBusBrand" id="" value="{{if addTripPlan.busCompanyArrange != null}}{{addTripPlan.busCompanyArrange.brand}}{{/if}}" readonly="readonly" />
+											<input class="col-sm-12" type="text" name="needBusBrand" id="" value="{{if addTripPlan.busCompanyArrange != null}}{{addTripPlan.busCompanyArrange.brand}}{{/if}}"  {{if addTripPlan.busCompanyArrange != null && addTripPlan.busCompanyArrange.brand!=''}}readonly="readonly"{{/if}} />
 										</div>
 										{{else}}
 										<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>车座数：</label>
