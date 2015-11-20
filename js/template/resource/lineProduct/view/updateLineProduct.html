@@ -522,7 +522,7 @@
                                                                                                             <input type="hidden" name="hotelRoomId" value="{{hotelList.hotelRoom.id}}" />
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input type="text" readonly="readonly" name="contractPrice" value="{{hotelList.price}}" style="width:70px;" />
+                                                                                                            <input type="text" readonly="readonly" name="contractPrice" value="{{hotelList.price}}"  />
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <input type="text" class="col-xs-12" readonly="readonly" name="containBreakfast" value="{{if hotelList.hotelRoom.containBreakfast==1}}含早餐 {{/if}}{{if hotelList.hotelRoom.containLunch==1}}-含午餐{{/if}}{{if hotelList.hotelRoom.containDinner==1}}-含晚餐{{/if}}" />
@@ -696,8 +696,8 @@
                                                                                                             <input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber" value="{{selfPayList.selfPay.mobileNumber}}" />
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input type="text" class="col-xs-12" readonly="readonly" name="contractPrice" value="{{selfPayList.price}}" />
-                                                                                                            <input type="hidden" class="col-xs-12" readonly="readonly" name="marketPrice" value="{{selfPayList.marketPrice}}" />
+                                                                                                            <input type="text"  readonly="readonly" name="contractPrice" value="{{selfPayList.price}}" />
+                                                                                                            <input type="hidden" readonly="readonly" name="marketPrice" value="{{selfPayList.marketPrice}}" />
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <input type="text" class="col-xs-12" readonly="readonly" name="managerName" value="{{selfPayList.selfPay.managerName}}" />
@@ -749,7 +749,7 @@
                                                                                                             <input type="hidden" name="templateId" value="{{ticketList.id}}" />{{/if}}
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <select name="type" class="col-sm-12 no-padding" style="width:70px;">
+                                                                                                            <select name="type" class=" no-padding" >
                                                                                                                 <option {{if ticketList.type=="1" }}selected="selected" {{/if}} value="1">机票</option>
                                                                                                                 <option {{if ticketList.type=="2" }}selected="selected" {{/if}} value="2">汽车票</option>
                                                                                                                 <option {{if ticketList.type=="3" }}selected="selected" {{/if}} value="3">火车票</option>
