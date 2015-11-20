@@ -606,6 +606,7 @@ var modalScripts = {
 
 	//-------------------------------------------发团管理模块--------------------------------------------------
 	'arrange_booking' : 'js/template/arrange/booking/booking.js',
+	'resource_subsection' : 'js/template/resource/subsection/subsection.js',
 	'resource_partnerAgency':'js/template/resource/partnerAgency/partnerAgency.js',
 	'resource_touristGroup':'js/template/resource/touristGroup/touristGroup.js',//游客管理
 	//-------------------------------------------发团管理---------------------------------------------------
@@ -648,138 +649,6 @@ function listMenu(menuTemplate){
 				data.menuList = menuList;
 				var html = template("menu-template",data);
 				$("#sidebar .nav-list").html(html);
-
-				// //绑定导游菜单功能//
-				// $("#sidebar .nav-list .resource_guide").click(function(){
-				// 	$("#sidebar .nav-list li").removeClass("active");
-				// 	$(this).addClass("active");
-				// 	$(this).parent().parent().addClass("active");
-				// 	seajs.use("" + ASSETS_ROOT +"js/template/resource/guide/guide.js",function(guide){
-				// 		guide.listGuide(0,"",1);
-				// 	});
-				// });
-
-				//绑定车队菜单功能
-				/*$("#sidebar .nav-list .resource_busCompany").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/resource/busCompany/busCompany.js",function(busCompany){
-						busCompany.listBusCompany(0,"",1);
-					});
-				});*/
-
-				// //绑定餐厅菜单功能
-				// $("#sidebar .nav-list .resource_restaurant").click(function(){
-				// 	$("#sidebar .nav-list li").removeClass("active");
-				// 	$(this).addClass("active");
-				// 	$(this).parent().parent().addClass("active");
-				// 	seajs.use("" + ASSETS_ROOT +"js/template/resource/restaurant/restaurant.js",function(restaurant){
-				// 		restaurant.listRestaurant(0,"",1);
-				// 	});
-				// });
-				//绑定酒店菜单功能
-				/*$("#sidebar .nav-list .resource_hotel").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/resource/hotel/hotel.js",function(hotel){
-						hotel.init();
-					});
-				});*/
-
-				//绑定同行菜单功能
-			/*	$("#sidebar .nav-list .resource_partnerAgency").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/resource/partnerAgency/partnerAgency.js?version=",function(partnerAgency){
-						partnerAgency.listPartnerAgency(0,"",1);
-					});
-				});*/
-
-				// //绑定线路产品菜单功能
-				// $("#sidebar .nav-list .resource_lineProduct").click(function(){
-				// 	$("#sidebar .nav-list li").removeClass("active");
-				// 	$(this).addClass("active");
-				// 	$(this).parent().parent().addClass("active");
-				// 	seajs.use("" + ASSETS_ROOT +"js/template/resource/lineProduct/lineProduct.js",function(lineProduct){
-				// 		lineProduct.listLineProduct(0,"",1);
-				// 		modals["resource_lineProduct"] = lineProduct;
-				// 	});
-				// 	$("#main-container")[0].index = 0;
-				// });
-
-				// //绑定商家管理功能
-				// $("#sidebar .nav-list .resource_shop").click(function(){
-				// 	$("#sidebar .nav-list li").removeClass("active");
-				// 	$(this).addClass("active");
-				// 	$(this).parent().parent().addClass("active");
-				// 	seajs.use("" + ASSETS_ROOT +"js/template/resource/shop/shop.js",function(shop){
-				// 		shop.listShop(0,"",1);
-				// 	});
-				// });
-
-
-				//绑定线路模板菜单功能
-				// $("#sidebar .nav-list .resource_travelLine").click(function(){
-				// 	$("#sidebar .nav-list li").removeClass("active");
-				// 	$(this).addClass("active");
-				// 	$(this).parent().parent().addClass("active");
-				// 	seajs.use("" + ASSETS_ROOT +"js/template/resource/travelLine/travelLine.js",function(travelLine){
-				// 		travelLine.listTravelLine(0,"",1);
-				// 		modals["resource_travelLine"] = travelLine;
-				// 	});
-				// });
-
-				//绑定景区菜单功能
-				/*$("#sidebar .nav-list .resource_scenic").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/resource/scenic/scenic.js",function(scenic){
-						scenic.listScenic(0,"",1);
-					});
-				});*/
-				//绑定保险菜单功能
-				/*$("#sidebar .nav-list .resource_insurance").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/resource/insurance/insurance.js",function(insurance){
-						insurance.listInsurance(0,"",1);
-					});
-				});*/
-				//绑定自费项目菜单功能
-				/*$("#sidebar .nav-list .resource_selfpay").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/resource/selfpay/selfpay.js",function(selfpay){
-						selfpay.listSelfPay(0,"",1);
-					});
-				});
-				////绑定交通票务菜单功能
-				//$("#sidebar .nav-list .resource_ticket").click(function(){
-				//	$("#sidebar .nav-list li").removeClass("active");
-				//	$(this).addClass("active");
-				//	$(this).parent().parent().addClass("active");
-				//	seajs.use("" + ASSETS_ROOT +"js/template/resource/ticket/ticket.js",function(ticket){
-				//		ticket.TicketResource.initModule(0,"",1);
-				//	});
-				//});
-
-				//绑定游客管理菜单功能
-				/*$("#sidebar .nav-list .resource_touristGroup").click(function(){
-				 $("#sidebar .nav-list li").removeClass("active");
-				 $(this).addClass("active");
-				 $(this).parent().parent().addClass("active");
-				 seajs.use("" + ASSETS_ROOT +"js/template/resource/touristGroup/touristGroup.js",function(touristGroup){
-				 touristGroup.listTouristGroup(0,"","","","","","","","");
-				 modals["resource_touristGroup"] = touristGroup;
-				 });
-				 });*/
-
 
 				//绑定发团安排菜单功能
 				$("#sidebar .nav-list .arrange_all").click(function(){
@@ -841,26 +710,6 @@ function listMenu(menuTemplate){
 					});
 				});
 
-				//绑定系统人员管理菜单功能
-				// $("#sidebar .nav-list .system_user").click(function(){
-				// 	$("#sidebar .nav-list li").removeClass("active");
-				// 	$(this).addClass("active");
-				// 	$(this).parent().parent().addClass("active");
-				// 	seajs.use("" + ASSETS_ROOT +"js/template/system/user/user.js",function(user){
-				// 		user.listUser(0,"",1);
-				// 	});
-				// });
-
-				// //绑定系统部门管理菜单功能
-				// $("#sidebar .nav-list .system_department").click(function(){
-				// 	$("#sidebar .nav-list li").removeClass("active");
-				// 	$(this).addClass("active");
-				// 	$(this).parent().parent().addClass("active");
-				// 	seajs.use("" + ASSETS_ROOT +"js/template/system/department/business.js",function(business){
-				// 		business.listBusiness(0, "");
-				// 	});
-				// });
-
 				//绑定系统旅行社
 				$("#sidebar .nav-list .system_travelAgency").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
@@ -897,15 +746,7 @@ function listMenu(menuTemplate){
 						modals["financial_rummery"]  = hotel;
 					});
 				});
-				// //绑定系统信息菜单功能
-				// $("#sidebar .nav-list .system_information").click(function(){
-				// 	$("#sidebar .nav-list li").removeClass("active");
-				// 	$(this).addClass("active");
-				// 	$(this).parent().parent().addClass("active");
-				// 	seajs.use("" + ASSETS_ROOT +"js/template/system/information/information.js",function(information){
-				// 		information.listInformation();
-				// 	});
-				// });
+
 				//绑定系餐厅账务菜单功能
 				$("#sidebar .nav-list .financial_restaurant").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
@@ -962,17 +803,6 @@ function listMenu(menuTemplate){
 					});
 				});
 
-				// //绑定客户账务菜单功能
-				// $("#sidebar .nav-list .financial_Client").click(function(){
-				// 	$("#sidebar .nav-list li").removeClass("active");
-				// 	$(this).addClass("active");
-				// 	$(this).parent().parent().addClass("active");
-				// 	seajs.use("" + ASSETS_ROOT +"js/template/financial/Client/Client.js",function(Client){
-				// 		Client.listClient(0,"","","","","","");
-				// 		modals["financial_Client"] = Client;
-				// 	});
-				// });
-
 				//绑定系代订账务菜单功能
 				$("#sidebar .nav-list .financial_replace").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
@@ -1025,18 +855,7 @@ function listMenu(menuTemplate){
 						modals["financial_innerTransfer_out"] = innerTransferOut;
 					});
 				});
-				// //绑定内转利润账务
-				// $("#sidebar .nav-list .financial_innerTransfer_profit").click(function(){
-				// 	$("#sidebar .nav-list li").removeClass("active");
-				// 	$(this).addClass("active");
-				// 	$(this).parent().parent().addClass("active");
-				// 	seajs.use("" + ASSETS_ROOT +"js/template/financial/innerTransferProfit/innerTransferProfit.js",function(innerTransferProfit){
-				// 		/*var date = new Date();
-				// 		 var year = date.getFullYear();
-				// 		 var month = ""//date.getMonth()+1
-				// 		 */						innerTransferProfit.listInnerTransferProfit(0,"","","","","","","","");
-				// 	});
-				// });
+
 				//绑定购物菜单功能
 				$("#sidebar .nav-list .financial_shop").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
@@ -1068,71 +887,6 @@ function listMenu(menuTemplate){
 					});
 				});
 
-				//绑定分团计划菜单功能
-				/*$("#sidebar .nav-list .arrange_plan").click(function(){
-				 $("#sidebar .nav-list li").removeClass("active");
-				 $(this).addClass("active");
-				 $(this).parent().parent().addClass("active");
-				 seajs.use("" + ASSETS_ROOT +"js/template/arrange/plan/plan.js",function(plan){
-				 //plan.listPlan();
-				 });
-				 });*/
-
-				//绑定发团计划菜单功能
-				// $("#sidebar .nav-list .arrange_plan").click(function(){
-				// 	$("#sidebar .nav-list li").removeClass("active");
-				// 	$(this).addClass("active");
-				// 	$(this).parent().parent().addClass("active");
-				// 	seajs.use("" + ASSETS_ROOT +"js/template/arrange/tripPlan/tripPlan.js",function(tripPlan){
-				// 		tripPlan.listTripPlan(0,"","","","","","","","","","");
-				// 		modals["arrange_plan"] = tripPlan;
-				// 	});
-				// });
-
-				//绑定项目代订菜单功能
-				/*$("#sidebar .nav-list .arrange_booking").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/arrange/booking/booking.js",function(booking){
-						booking.listbooking(0,"","","","","","","","");
-						modals["arrange_booking"] = booking;
-					});
-				});*/
-
-				//绑定转客管理菜单功能
-				/*$("#sidebar .nav-list .arrange_transfer").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/arrange/arrangeTransfer/arrangeTransfer.js",function(transfer){
-						transfer.getlistTransferSumData(0,"","","","","","",2);
-						modals["arrange_transfer"] = transfer;
-					});
-				});*/
-
-
-				//绑定内转管理菜单功能
-				/*$("#sidebar .nav-list .arrange_inner_Transfer").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					/*seajs.use("" + ASSETS_ROOT +"js/template/arrange/innerTransfer/innerTransfer.js",function(inner){ 
-						var searchParam = {
-								pageNo : "0",
-								type : "1",
-								first : "1",
-							}
-						inner.list(searchParam);
-						modals["arrange_inner_Transfer"] = inner;
-					});
-					seajs.use("" + ASSETS_ROOT +"js/template/arrange/innerTransfer/innerTransfer.js",function(innerTransfer){ 
-						innerTransfer.innerTransfer();
-						modals["arrange_inner_Transfer"] = innerTransfer;
-					});
-				});*/
-
-
 				//绑定按团统计菜单功能
 				$("#sidebar .nav-list .financial_count").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
@@ -1145,26 +899,6 @@ function listMenu(menuTemplate){
 					});
 				});
 
-				// //绑定转客利润菜单功能
-				// $("#sidebar .nav-list .financial_turnProfit").click(function(){
-				// 	$("#sidebar .nav-list li").removeClass("active");
-				// 	$(this).addClass("active");
-				// 	$(this).parent().parent().addClass("active");
-				// 	seajs.use("" + ASSETS_ROOT +"js/template/financial/turnProfit/turnProfit.js",function(TurnProfit){
-				// 		var tu = new Date()
-				// 		 var vYear = tu.getFullYear()
-				// 		 var vMon = tu.getMonth() + 1
-				// 		 var vDay = tu.getDate()
-				// 		 var startTime = vYear+"-"+vMon+"-"+vDay;
-				// 		 var tmp = new Date(startTime);
-				// 		 tmp = tmp-7*24*60*60*1000;
-				// 		 tmp = new Date(tmp);
-				// 		 var endTime = tmp.getFullYear()+"-"+(tmp.getMonth()+1)+"-"+tmp.getDate();
-				// 		TurnProfit.listTurnProfit(0,"","","","","","","","");
-				// 	});
-				// });
-
-
 				//绑定代订利润功能
 				$("#sidebar .nav-list .financial_replaceProfit").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
@@ -1174,15 +908,7 @@ function listMenu(menuTemplate){
 						replaceProfit.listReplaceProfit(0,"","","","","","","","","","");
 					});
 				});
-				//绑定总利润菜单功能
-				// $("#sidebar .nav-list .financial_totalProfit").click(function(){
-				// 	$("#sidebar .nav-list li").removeClass("active");
-				// 	$(this).addClass("active");
-				// 	$(this).parent().parent().addClass("active");
-				// 	seajs.use("" + ASSETS_ROOT +"js/template/financial/totalProfit/totalProfit.js",function(totalProfit){
-				// 		totalProfit.listTotalProfit();
-				// 	});
-				// });
+
 				//绑定収支明细菜单功能
 				$("#sidebar .nav-list .financial_collectDetail").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
@@ -1192,15 +918,7 @@ function listMenu(menuTemplate){
 						collectDetail.listCollectDetail();
 					});
 				});
-				//绑定中转分段菜单功能
-				$("#sidebar .nav-list .resource_subsection").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/resource/subsection/subsection.js",function(subsection){
-						subsection.listMainSubsection();
-					});
-				});
+
 				// table 点击选中事件
 				$(document).on('click','tbody tr', function(event) {
 					var event = event ? event :window.event,
