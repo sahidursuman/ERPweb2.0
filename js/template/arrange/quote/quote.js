@@ -135,7 +135,7 @@ define(function(require, exports) {
 				quote.deleteItem(id);
 			} else if ($this.hasClass('T-share')){
 				// 分享
-				quote.shareQuote(id);
+				quote.shareQuote($(this),id);
 			} else if ($this.hasClass('T-status'))  {
 				// 查看询价状态
 				quote.updateQuote(id, 'T-bus');
@@ -821,8 +821,11 @@ define(function(require, exports) {
 
 			    			quote.dateTimePicker($busLayerContent);
 			    			quote.chooseBusInfo($busLayerContent);
+
+							var validator = rule.quoteCheckor($busLayerContent);
 			    			//保存接口
 			    			$busLayerContent.find('.T-saveBusInquiry').on('click', function() {
+			    				if (!validator.form())   return;
 			    				var brand = quote.getValue($busLayerContent,"busBrand"),
 			    					lineProductId = lineProductInfo.id,
 			    					seatCount = quote.getValue($busLayerContent,"seatCount"),
@@ -988,7 +991,7 @@ define(function(require, exports) {
 
 					    	quote.chooseRoomType($hotelLayerContent);
 					    	quote.dateTimePicker($hotelLayerContent);
-					    	
+					    	var validator = rule.quoteCheckor($hotelLayerContent);
 							$hotelLayerContent.find(".T-addSearchCondition").off('click').on('click', function(){
 								var html = ''
 								+'<div class="col-xs-12 T-seachAreaDiv" style="margin-top:5px;margin-left:-12px;">'
@@ -1000,9 +1003,15 @@ define(function(require, exports) {
 								+'<div class="col-sm-2 busQuoteWidth">'
 								+'<input type="text" class="col-sm-12 width110" name="roomCount" value=""/>'
 								+'</div>'
+								+'<a class="T-del">删除</a>'
 								+'</div>';
 								$hotelLayerContent.find('.T-searchArea').append(html);
 								quote.chooseRoomType($hotelLayerContent);
+								validator = rule.quoteCheckor($hotelLayerContent);
+								$hotelLayerContent.find('.T-del').off('click').on('click', function() {
+									var $this = $(this), $parents = $this.closest('div.T-seachAreaDiv');
+									$parents.remove();
+								})
 							})
 
 							var selectedHotelArray = [];
@@ -1014,7 +1023,7 @@ define(function(require, exports) {
 							})
 							//保存接口
 							$hotelLayerContent.find('.T-saveHotelInquiry').on('click', function(){
-
+								if (!validator.form())   return;
 								var saveJson ={
 									expiryTime: quote.getValue($hotelLayerContent,"expiryTime"),
 									arriveTime: quote.checkInTime(whichDay,startTime),
@@ -1702,7 +1711,6 @@ define(function(require, exports) {
 				quote.costCalculation($container)
 				// 更新表单验证的配置
 				validator = rule.quoteUpdate(validator);
-				
 				$.ajax({
                     url: KingServices.build_url('scenic', 'getScenicById'),
                     data: "id="+scenicNameId,
@@ -2429,6 +2437,16 @@ define(function(require, exports) {
 	 * @return {[type]}    [description]
 	 */
 	quote.saveQuote = function(id, $container) {
+		var isContainGuideFee = 0, isContainSelfPay = 0, isChildNeedRoom = 0;
+		if ($container.find('[name=includeGuideFee]').prop("checked")) {
+			isContainGuideFee = 1;
+		}
+		if ($container.find('[name=includeSelfpay]').prop("checked")) {
+			isContainSelfPay = 1;
+		}
+		if ($container.find('[name=childNeedBed]').prop("checked")) {
+			isChildNeedRoom = 1;
+		}
 		var quoteJson = {
 			id: id,
 			adultAdjustType: quote.getValue($container,'selectAmAdult'),
@@ -2454,10 +2472,18 @@ define(function(require, exports) {
 			sumCostFee: $container.find('.T-allCost').text(),
 			sumQuoteFee: quote.getValue($container,'sumQuoteFee'),
 			grossProfit: $container.find('.T-grossProfit').text(),
-			isContainGuideFee: quote.getValue($container,'includeGuideFee'),
-			isContainSelfPay: quote.getValue($container,'includeSelfpay'),
-			isChildNeedRoom: quote.getValue($container,'childNeedBed'),
+			isContainGuideFee: isContainGuideFee,//quote.getValue($container,'includeGuideFee'),
+			isContainSelfPay: isContainSelfPay,//quote.getValue($container,'includeSelfpay'),
+			isChildNeedRoom: isChildNeedRoom,//quote.getValue($container,'childNeedBed'),
 			remark: quote.getValue($container,'quoteRemark')
+		}
+
+		if ((quoteJson.adultCount + quoteJson.childCount) == 0) {
+			showDialog({
+				success: 0,
+				message: '人数不能为零'
+			})
+			return;
 		}
 		var busList = $container.find('.T-arrangeBusCompanyList');
 		var guideList = $container.find('.T-arrangeGuideList');
@@ -2676,7 +2702,7 @@ define(function(require, exports) {
 			},
 			select: function(event, ui){
 					var $this = $(this),$parents = $this.closest('.form-group');
-					$parents.find('[name=partnerAgencyId]').val(ui.item.id);
+					$parents.find('[name=partnerAgencyId]').val(ui.item.id).trigger('change');
 			}
 		}).off('click').on('click',function(){
 			var obj = this;
@@ -2718,7 +2744,7 @@ define(function(require, exports) {
 			},
 			select: function(event, ui){
 					var $this = $(this),$parents = $this.closest('.form-group');
-					$parents.find('[name=managerId]').val(ui.item.id);
+					$parents.find('[name=managerId]').val(ui.item.id).trigger('change');
 					$parents.find('[name=mobileNumber]').val(ui.item.contactMobileNumber);
 			}
 		}).off('click').on('click',function(){
