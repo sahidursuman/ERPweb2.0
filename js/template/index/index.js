@@ -193,9 +193,8 @@ define(function(require, exports) {
                                     for (var i =0, len = list.length, name, qId, res, tmp; i < len ; i ++)  {
                                         tmp = list[i];
                                         name = tmp[keys[1]][keys[2]];
-                                        qId = tmp.id;
+                                        qId = tmp.quoteId;
                                         res = tmp.result;
-                                        console.info(res)
                                         str.push('<li class="list-group-item boxLiStyle">'+ name + (res == 1? '已同意': (res == -1?'已拒绝': '')) +
                                             ', <a class="T-view-quote" data-target="'+ target +'" data-quote-id="'+ qId +'">查看</a></li>');
                                     }
