@@ -557,7 +557,7 @@ define(function(require,exports){
 					console.info(data)
 				}
 				$tbody.html(lineproductSearchList(data));
-
+				$tbody.closest('.tab-pane').find('.T-total').text(data.recordSize);
 				// 绑定翻页组件
 				laypage({
 				    cont: $tbody.closest('.tab-pane').find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,

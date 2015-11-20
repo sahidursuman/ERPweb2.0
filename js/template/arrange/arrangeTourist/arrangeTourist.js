@@ -176,17 +176,22 @@ define(function(require, exports) {
 							html = filterAuth(html);
 							//绑定模板数据
 							$("#T-Visitor-list").find('.T-touristVisitor-list').html(html);
+							//散客的报表操作
+						    arrangeTourist.init_VistorEvent();
 					
 						} else{
 							var html=touristGrouplistTemplate(data);
 		                    $("#T-Group-list").find('.T-touristGroup-list').html(html);
+
+		                    //团体报表操作
+		                    arrangeTourist.init_GroupEvent();
+
 						};
 
 						//初始化时间控件
 						arrangeTourist.initDatePicker($("#"+tabId));
 
-						//散客团体的报表操作
-						arrangeTourist.init_VistorGroupEvent();
+						
 						
 						// 绑定翻页组件
 						laypage({
@@ -222,7 +227,7 @@ define(function(require, exports) {
 		 * init_VistorGroupEvent 散客团体的报表操作
 		 * @return {[type]} [description]
 		 */
-		init_VistorGroupEvent:function(){
+		init_VistorEvent:function(){
 			//散客操作
 			$("#T-Visitor-list").find('.T-arrageVisitor-list').on('click', '.T-action', function(event) {
 				event.preventDefault();
@@ -251,7 +256,6 @@ define(function(require, exports) {
 					}
 			});
 
-
 			//给并团checkbox绑定事件
 			$("#T-Visitor-list").find(".T-touristGroupMergeCheckBox").click(arrangeTourist.addTouristGroupMerge);
 			
@@ -261,9 +265,12 @@ define(function(require, exports) {
 				/* Act on the event */
 				arrangeTourist.startTouristGroupMerge();
 			});
+		
+		},
 
-
-		    //团体操作
+		//团体事件绑定
+		init_GroupEvent:function(){
+		   //团体操作
 		    $("#T-Group-list").find('.T-arrageGroup-list').on('click', '.T-action', function(event) {
 				event.preventDefault();
 				/* Act on the event */
@@ -284,6 +291,7 @@ define(function(require, exports) {
 					}
 			});
 		},
+
 
 
 		/**
