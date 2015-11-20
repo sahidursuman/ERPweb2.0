@@ -44,6 +44,7 @@ define(function(require, exports) {
 		quote.$tab = $("#tab-arrange_quote-content");
 
 		quote.listQuote(0,"","","","","","","","","","");
+		quote.getQuery('','','','','','','','','','');
 	};
 
 	quote.listQuote = function(page,lineProductId,lineProductName,partnerAgencyId,partnerAgencyName,offerUserId,offerUserName,quoteUserId,quoteUserName,quoteTimeEnd,quoteTimeStart) {
@@ -57,8 +58,8 @@ define(function(require, exports) {
             offerUserName = quote.$searchArea.find("input[name=inquiryUserName]").val(),
             quoteUserId = quote.$searchArea.find("input[name=quoteUserId]").val(),
             quoteUserName = quote.$searchArea.find("input[name=quoteUserName]").val(),
-            quoteTimeEnd = quote.$searchArea.find("input[name=quoteStartTime]").val(),
-            quoteTimeStart = quote.$searchArea.find("input[name=quoteEndTime]").val()
+            quoteTimeEnd = quote.$searchArea.find("input[name=quoteEndTime]").val(),
+            quoteTimeStart = quote.$searchArea.find("input[name=quoteStartTime]").val()
         }
         // 修正页码
         page = page || 0;
@@ -89,7 +90,6 @@ define(function(require, exports) {
 					var html = listTemplate(data);
 					quote.$tab.find('.T-quoteList').html(html);
 
-					quote.getQuery(lineProductId,lineProductName,partnerAgencyId,partnerAgencyName,offerUserId,offerUserName,quoteUserId,quoteUserName,quoteTimeEnd,quoteTimeStart);
 					quote.initList();
 
 	                //绑定翻页组件
