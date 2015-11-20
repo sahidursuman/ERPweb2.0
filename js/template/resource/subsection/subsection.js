@@ -43,7 +43,7 @@ define(function(require, exports) {
 					autocompleteData.lineProductList = data.lineProductList;
 
 					var html = listMainTemplate(data);
-					addTab(menuKey,"中转分段",html);
+					Tools.addTab(menuKey,"中转分段",html);
 
 					subsection.$tab = $("#tab-resource_subsection-content");
 					subsection.$searchArea = subsection.$tab.find(".T-subsectionSearchForm");
@@ -223,55 +223,85 @@ define(function(require, exports) {
 				var result = showDialog(data);
 				if(result){
 					var html = operationTemplate(data);
-					addTab(menuKey+"-operation","分段操作",html);
+					Tools.addTab(menuKey+"-operation","分段操作",html);
 
 					subsection.$tabSub = $("#tab-resource_subsection-operation-content");
-					validator = rule.checkdSaveSubsection(subsection.$tabSub);
-					subsection.datePicker("T-startTime");
-					subsection.lineProductChoose();
-					subsection.$tabSub.find(".T-btn-operation-delete").on("click",function(){
-						var $this = $(this), $parents = $this.closest("tr"), id = $parents.data("entity-id");
-						subsection.deleteOperation(id,$this);
-					})
-					subsection.$tabSub.find(".T-btn-operation-add").click(function(){
-						var radio = '<input type="radio" name="operateCurrentNeedPayMoney" />';
-						if (data.mark != 0) {
-								radio = '-';
-						}
-						var html = ''
-						+ '<tr data-entity-id="">'
-						+ '<td><input type="hidden" name="lineProductId" value="" /><input class="T-chooseLineProduct col-sm-12" name="lineProduct" type="text" value="" /></td>'
-						+ '<td><input type="text" name="customerType" class="col-sm-12" readonly="readonly" /></td>'
-						+ '<td><input type="text" name="days" class="col-sm-10" readonly="readonly" /><span class="col-sm-2" style="line-height: 30px">天</span></td>'
-						+ '<td><input class="datepicker T-startTime col-sm-12" name="startTime" type="text" value="" /></td>'
-						+ '<td>' + radio + '</td>'
-						+ '<td>-</td>'
-						+ '<td><div class="hidden-sm hidden-xs btn-group"><a data-entity-id="" class=" T-btn-operation-delete cursor">删除</a></div></td>'
-						+ '</tr>';
-						subsection.$tabSub.find(".T-subsectionOperationTbody").append(html);
-
-						subsection.$tabSub.find(".T-btn-operation-delete").off("click").on("click",function(){
-							var $this = $(this), $parents = $this.closest("tr"), id = $parents.data("entity-id");
-							subsection.deleteOperation(id,$this);
-						})
-						subsection.datePicker("T-startTime");
-						subsection.lineProductChoose();
-						validator = rule.checkdSaveSubsection(subsection.$tabSub);
-					})
-					subsection.$tabSub.find(".T-btn-operation-close").click(function(){
-						closeTab(menuKey+"-operation");
-					})
-					subsection.$tabSub.find(".T-btn-operation-save").on("click",
-						{
-							"days" : data.ptGroup.lineProduct.days,
-							"validator" : validator,
-							"currentNeedPayMoney": data.ptGroup.currentNeedPayMoney
-						},
-						subsection.operationSave
-					);
+					subsection.init_section_event();
 				}
 			}
 		})
+	};
+
+	/**
+	 * 分段操作事件绑定
+	 */
+	subsection.init_section_event = function() {
+		subsection.$tabSub.off('change').off(SWITCH_TAB_SAVE).off(CLOSE_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT)
+		.on('change', function(event) {
+			subsection.$tabSub('isEdited', true);
+		})
+		.on(SWITCH_TAB_SAVE, function(event, tab_id, tab_name, html) {  // 选择保存
+			event.preventDefault();
+			subsection.operationSave([tab_id, tab_name, html]);
+			Tools.addTab(tab_id, tab_name, html);
+			subsection.init_section_event();
+		})
+		.on(SWITCH_TAB_BIND_EVENT, function(event) {
+			subsection.init_section_event();
+		})
+		.on(CLOSE_TAB_SAVE, function(event) {
+			subsection.operationSave();
+		})
+		validator = rule.checkdSaveSubsection(subsection.$tabSub);
+
+		subsection.datePicker("T-startTime");
+
+		subsection.lineProductChoose();
+
+		// 删除
+		subsection.$tabSub.find(".T-btn-operation-delete").on("click",function(){
+			var $this = $(this), $parents = $this.closest("tr"), id = $parents.data("entity-id");
+			subsection.deleteOperation(id,$this);
+			subsection.$tabSub('isEdited', true);
+		});
+
+		// 新增
+		subsection.$tabSub.find(".T-btn-operation-add").click(function(){
+			var radio = '<input type="radio" name="operateCurrentNeedPayMoney" />';
+			if (data.mark != 0) {
+					radio = '-';
+			}
+			var html = ''
+			+ '<tr data-entity-id="">'
+			+ '<td><input type="hidden" name="lineProductId" value="" /><input class="T-chooseLineProduct col-sm-12" name="lineProduct" type="text" value="" /></td>'
+			+ '<td><input type="text" name="customerType" class="col-sm-12" readonly="readonly" /></td>'
+			+ '<td><input type="text" name="days" class="col-sm-10" readonly="readonly" /><span class="col-sm-2" style="line-height: 30px">天</span></td>'
+			+ '<td><input class="datepicker T-startTime col-sm-12" name="startTime" type="text" value="" /></td>'
+			+ '<td>' + radio + '</td>'
+			+ '<td>-</td>'
+			+ '<td><div class="hidden-sm hidden-xs btn-group"><a data-entity-id="" class=" T-btn-operation-delete cursor">删除</a></div></td>'
+			+ '</tr>';
+			subsection.$tabSub.find(".T-subsectionOperationTbody").append(html);
+
+			subsection.$tabSub.find(".T-btn-operation-delete").off("click").on("click",function(){
+				var $this = $(this), $parents = $this.closest("tr"), id = $parents.data("entity-id");
+				subsection.deleteOperation(id,$this);
+			})
+			subsection.datePicker("T-startTime");
+			subsection.lineProductChoose();
+			validator = rule.checkdSaveSubsection(subsection.$tabSub);
+			subsection.$tabSub('isEdited', true);
+		});
+
+		// 取消
+		subsection.$tabSub.find(".T-btn-operation-close").click(function(){
+			Tools.closeTab(menuKey+"-operation");
+		});
+
+		// 保存
+		subsection.$tabSub.find(".T-btn-operation-save").on("click", function(event) {
+			subsection.operationSave();
+		});
 	};
 	/**
 	 * 删除分段
@@ -324,11 +354,13 @@ define(function(require, exports) {
 	 * @param  {[type]} e [description]
 	 * @return {[type]}   [description]
 	 */
-	subsection.operationSave = function(e) {
-		var days = e.data.days,
-			validator = e.data.validator,
-			isCheckNeedPayMoney = 0;
+	subsection.operationSave = function(tabArgs) {
 		if(!validator.form()){return;}
+
+		var $btn = subsection.$tabSub.find(".T-btn-operation-save"),
+			days = $btn.data('days'),
+			isCheckNeedPayMoney = 0;
+			
 		function getValue(obj,name){
 			var value = $(obj).find("[name="+name+"]").val();
 			return value;
@@ -381,8 +413,14 @@ define(function(require, exports) {
 				var result = showDialog(data);
 				if(result){
 					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-						closeTab(menuKey+"-operation");
-						subsection.subsectionList(0);
+						if (!!tabArgs) {
+							Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
+							subsection.init_section_event();
+							subsection.$tab.find('.T-btn-subsection-search').trigger('click');
+						} else {
+							Tools.closeTab(menuKey+"-operation");
+							subsection.subsectionList(0);
+						}
 					});
 				}
 			}
