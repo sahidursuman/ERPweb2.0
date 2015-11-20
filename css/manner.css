@@ -7,6 +7,16 @@
 }
 
 }*/
+.table-special{
+    padding:0!important;
+    width: 100%;
+}
+.table-special tr:first-child{
+    border: none;
+}
+.table-special tr{
+    border-top: 1px solid #ddd;
+}
 .search-btn{
     border-radius: 0;
     background: #51b0c2;
