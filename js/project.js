@@ -933,12 +933,11 @@ function listMenu(menuTemplate){
 					if ($that.closest('table').hasClass('T-showHighLight')) {	
 							if (targetIsCheckbox)  {	// 点击了checkbox
 								$that.toggleClass('success', $target.prop('checked'));
-							} else {  // 点击的不是checkbox
-								$that.toggleClass('success');
-								// 有checkbox，就去点击
+							} else if ($checkBox.length) {  // tr含有checkbox
+								$that.toggleClass('success');								
 								$checkBox.trigger('click');	
-								$that.parent().find('.success').removeClass('success');
-								$that.addClass('success');
+							} else {   // 普通tr
+								$that.addClass('success').siblings('tr').removeClass('success');
 							}
 					}
 				});
