@@ -2429,6 +2429,16 @@ define(function(require, exports) {
 	 * @return {[type]}    [description]
 	 */
 	quote.saveQuote = function(id, $container) {
+		var isContainGuideFee = 0, isContainSelfPay = 0, isChildNeedRoom = 0;
+		if ($container.find('[name=includeGuideFee]').prop("checked")) {
+			isContainGuideFee = 1;
+		}
+		if ($container.find('[name=includeSelfpay]').prop("checked")) {
+			isContainSelfPay = 1;
+		}
+		if ($container.find('[name=childNeedBed]').prop("checked")) {
+			isChildNeedRoom = 1;
+		}
 		var quoteJson = {
 			id: id,
 			adultAdjustType: quote.getValue($container,'selectAmAdult'),
@@ -2454,9 +2464,9 @@ define(function(require, exports) {
 			sumCostFee: $container.find('.T-allCost').text(),
 			sumQuoteFee: quote.getValue($container,'sumQuoteFee'),
 			grossProfit: $container.find('.T-grossProfit').text(),
-			isContainGuideFee: quote.getValue($container,'includeGuideFee'),
-			isContainSelfPay: quote.getValue($container,'includeSelfpay'),
-			isChildNeedRoom: quote.getValue($container,'childNeedBed'),
+			isContainGuideFee: isContainGuideFee,//quote.getValue($container,'includeGuideFee'),
+			isContainSelfPay: isContainSelfPay,//quote.getValue($container,'includeSelfpay'),
+			isChildNeedRoom: isChildNeedRoom,//quote.getValue($container,'childNeedBed'),
 			remark: quote.getValue($container,'quoteRemark')
 		}
 		var busList = $container.find('.T-arrangeBusCompanyList');
