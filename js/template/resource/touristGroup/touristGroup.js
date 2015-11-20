@@ -462,7 +462,7 @@ define(function(require,exports){
 				type: 1,
 				title:"选择线路产品",
 				skin: 'layui-layer-rim', //加上边框
-				area: '85%', //宽高
+				area: ['85%', '80%'], //宽高
 				zIndex:1029,
 				content: html,
 				scrollbar: false,
@@ -569,9 +569,6 @@ define(function(require,exports){
 				    	}
 				    }
 				});	
-
-				// 让对话框居中
-				$(window).trigger('resize');
 			}
 		});			
 	};
