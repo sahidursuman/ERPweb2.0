@@ -135,7 +135,7 @@ define(function(require, exports) {
 				quote.deleteItem(id);
 			} else if ($this.hasClass('T-share')){
 				// 分享
-				quote.shareQuote(id);
+				quote.shareQuote($(this),id);
 			} else if ($this.hasClass('T-status'))  {
 				// 查看询价状态
 				quote.updateQuote(id, 'T-bus');
