@@ -899,8 +899,7 @@ define(function(require, exports) {
 	 */
 	BookingArrange.save = function($tab, validator, tab_array){
 		//表单代订信息验证
-		var validator = rule.checkAddBooking($tab);
-		if (!validator.form() || !validatorHotel.form() || !validatorScenic.form() || !validatorTicket.form() || !validatorBus.form()) { return; }    
+		if (!validator.form()) { return; }    
 		BookingArrange.submitBooking($tab, validator, tab_array);
 	}
 	/**
