@@ -923,23 +923,21 @@ function listMenu(menuTemplate){
 				$(document).on('click','tbody tr', function(event) {
 					var event = event ? event :window.event,
 						$target = $(event.target  || event.srcElement);
-					if ($target.hasClass('T-action')) return; 
-					var $that = $(this), $checkBox = $that.find('input[type="checkbox"]');
-					var $that = $(this), $checkBox = $that.find('input[type="checkbox"]');
+
+					// 若点击操作或者checkbox的浮层，就直接退出
+					if ($target.hasClass('T-action') || $target.hasClass('lbl')) return;
+
+					var $that = $(this), $checkBox = $that.find('input[type="checkbox"]'),
+						targetIsCheckbox = $target.is('input[type="checkbox"]');
+
 					if ($that.closest('table').hasClass('T-showHighLight')) {	
-							if ($checkBox.length) {
-								if ($checkBox.data('triggered-click')) {
-									$checkBox.data('triggered-click', false);
-								} else {
-									$checkBox.data('triggered-click', true);
-									$that.toggleClass('success');
-									$checkBox.trigger('click');
-									
-								}
-							} else {
-								$that.parent().find('.success').removeClass('success');
-								$that.addClass('success');
-							}				
+							if (targetIsCheckbox)  {	// 点击了checkbox
+								$that.toggleClass('success', $target.prop('checked'));
+							} else {  // 点击的不是checkbox
+								$that.toggleClass('success');
+								// 有checkbox，就去点击
+								$checkBox.trigger('click');	
+							}
 					}
 				});
 

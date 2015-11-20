@@ -143,10 +143,10 @@ define(function(require, exports) {
 							type : 1,
 							title : "查看小组",
 							skin : 'layui-layer-rim',
-							area : [ "60%", '50%' ], 
+							area : "60%", 
 							zIndex : 1028,
 							content : html,
-							scrollbar: false
+							scrollbar: false // 推荐禁用浏览器外部滚动条
 						});
 					};
 					if(TurnProfit.clickFlag == 2){
@@ -155,10 +155,10 @@ define(function(require, exports) {
 							type : 1,
 							title : "收客团款明細",
 							skin : 'layui-layer-rim', 
-							area : [ "65%", '57%' ], 
+							area : "65%", 
 							zIndex : 1028,
 							content : html,
-							scrollbar: false
+							scrollbar: false // 推荐禁用浏览器外部滚动条
 						});
 					}
 				}
@@ -194,10 +194,10 @@ define(function(require, exports) {
 						type : 1,
 						title : "中转明细",
 						skin : 'layui-layer-rim', // 加上边框
-						area : [ "70%", '65%' ], // 宽高
+						area : "70%", // 宽高
 						zIndex : 1028,
 						content : html,
-						scrollbar: false
+						scrollbar: false // 推荐禁用浏览器外部滚动条
 					});
 	        	}
 			}
@@ -224,10 +224,10 @@ define(function(require, exports) {
 						type : 1,
 						title : "转客明细",
 						skin : 'layui-layer-rim', // 加上边框
-						area : [ "60%", '50%' ], // 宽高
+						area : "60%", // 宽高
 						zIndex : 1028,
 						content : html,
-						scrollbar: false
+						scrollbar: false // 推荐禁用浏览器外部滚动条
 					});
 				}
 			}

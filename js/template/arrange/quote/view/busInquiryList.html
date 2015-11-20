@@ -9,7 +9,7 @@
 				<th>车座数</th>
 				<th>车辆品牌</th>
 				<th>协议价</th>
-				<th>操作</th>
+				<th>操作2</th>
 			</tr>
 		</thead>
 	
@@ -28,7 +28,7 @@
 				{{if index == 0}}
 				<td>{{bus.seatCount}}</td>
 				<td>{{bus.brand}}</td>
-				<td>{{bus.price}}</td>
+				<td>{{bus.price | toFixed}}</td>
 				{{/if}}
 				{{/each}}
 				{{/if}}
@@ -39,7 +39,7 @@
 				<tr>
 				<td>{{bus.seatCount}}</td>
 				<td>{{bus.brand}}</td>
-				<td>{{bus.price}}</td>
+				<td>{{bus.price | toFixed}}</td>
 				</tr>
 			{{/if}}
 			{{/each}}
