@@ -2622,7 +2622,7 @@ define(function(require, exports) {
 			},
 			select: function(event, ui){
 					var $this = $(this),$parents = $this.closest('.form-group');
-					$parents.find('[name=partnerAgencyId]').val(ui.item.id);
+					$parents.find('[name=partnerAgencyId]').val(ui.item.id).trigger('change');
 			}
 		}).off('click').on('click',function(){
 			var obj = this;
@@ -2664,7 +2664,7 @@ define(function(require, exports) {
 			},
 			select: function(event, ui){
 					var $this = $(this),$parents = $this.closest('.form-group');
-					$parents.find('[name=managerId]').val(ui.item.id);
+					$parents.find('[name=managerId]').val(ui.item.id).trigger('change');
 					$parents.find('[name=mobileNumber]').val(ui.item.contactMobileNumber);
 			}
 		}).off('click').on('click',function(){
