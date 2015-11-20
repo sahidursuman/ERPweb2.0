@@ -958,6 +958,7 @@ define(function(require, exports) {
 							area: '45%', //宽高
 							zIndex:1028,
 							content: html,
+							scrollbar: false,
 							success:function(){
 								
 							}
@@ -1044,6 +1045,7 @@ define(function(require, exports) {
 									area: '85%', //宽高
 									zIndex:1029,
 									content: html,
+									scrollbar: false,
 									success: function(data) {
 									}
 								});

@@ -390,9 +390,10 @@ define(function(require, exports) {
 									type: 1,
 									title:"操作记录",
 									skin: 'layui-layer-rim', //加上边框
-									area: ['60%', '70%'], //宽高
+									area: '60%', //宽高
 									zIndex:1030,
 									content: html,
+									scrollbar: false, // 推荐禁用浏览器外部滚动条
 									success: function(){
 										 
 									}

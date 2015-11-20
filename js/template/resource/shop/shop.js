@@ -582,6 +582,7 @@ define(function(require, exports) {
 		    area: '800px', 
 		    zIndex:1029,
 		    content: html,
+		    scrollbar: false, // 推荐禁用浏览器外部滚动条
 		    success:function(){
 		    	var $form = $(".T-policyForm"),
 		    		$tbody = $form.find('.T-list'),

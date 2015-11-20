@@ -232,9 +232,10 @@ define(function(require,exports){
 						type:1,
 						title:'查看同行旅行社信息',
 						skin:'layui-layer-rim',
-						area:['60%','60%'],
+						area:'60%',
 						zIndex:1028,
-						content:html
+						content:html,
+						scrollbar: false,
 					});
 				}
 			}

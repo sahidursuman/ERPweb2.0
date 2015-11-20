@@ -16,7 +16,7 @@ define(function(require, exports) {
     
     var count = {
 		searchData : {
-			page : "",
+			page : 0,
 			id:"",
 			tripNumber : "",
 			lineProductId : "",
@@ -25,9 +25,12 @@ define(function(require, exports) {
 			guideName : "",
 			startTime : "",
 			endTime : "",
+            sortType:"auto",
 			status : ""
+                
 		},
 		edited : {},
+        $searchArea:false,
 		autocompleteDate : {},
 		isEdited : function(editedType){
 			if(!!count.edited[editedType] && count.edited[editedType] != ""){
@@ -68,6 +71,7 @@ define(function(require, exports) {
 						//count.getQueryTerms();
                          //分页控件
                         // 按照搜索条件，初始化报表
+                        count.$searchArea = $('.financialCount .search-area');
                         count.getlistCount(0,id, tripNumber,lineProductId,lineProductName,guideId,guideName,startTime,endTime,status);
                         // bind event
                         $('.btn-arrangeTourist-search').on('click', function(event) {
@@ -83,6 +87,18 @@ define(function(require, exports) {
                             var status = $('.financialCount .search-area .btn-status').find('button').attr('data-value');
                             var lineProductName = $('.financialCount .search-area').find('input[name=chooseLineProductName]').val();
                             var guideName = $('.financialCount .search-area').find('input[name=chooseGuideRealName]').val();
+                            count.searchData = {
+                                page:0,
+                                id:id,
+                                tripNumber:tripNumber,
+                                lineProductId:lineProductId,
+                                guideId:guideId,
+                                endTime:endTime,
+                                startTime:startTime,
+                                status:status,
+                                lineProductName:lineProductName,
+                                guideName:guideName
+                            };
                             count.initCount(id,tripNumber,lineProductId,lineProductName,guideId,guideName,startTime,endTime,status);
                         });
                     }
@@ -93,22 +109,36 @@ define(function(require, exports) {
             // trigger base
         },
         getlistCount:function(page,id,tripNumber,lineProductId,lineProductName,guideId,guideName,startTime,endTime,status){
+            var args = count.searchData;
+            if(count.$searchArea  && arguments.length === 1){
+                 id = $('.financialCount .search-area').find('input[name=tripNumber]').val();
+                 tripNumber = $('.financialCount .search-area').find('input[name=chooseTripNumber]').val();
+                 lineProductId = $('.financialCount .search-area').find('input[name=lineProductId]').val();
+                 guideId = $('.financialCount .search-area').find('input[name=guideId]').val();
+                 endTime = $('.financialCount .search-area').find('input[name=entTime]').val();
+                 startTime = $('.financialCount .search-area').find('input[name=startTime]').val();
+                 status = $('.financialCount .search-area .btn-status').find('button').attr('data-value');
+                 lineProductName = $('.financialCount .search-area').find('input[name=chooseLineProductName]').val();
+                 guideName = $('.financialCount .search-area').find('input[name=chooseGuideRealName]').val();
+                 args = {
+                    page: page || 0,
+                    id:id,
+                    tripNumber:tripNumber,
+                    lineProductId:lineProductId,
+                    guideId:guideId,
+                    endTime:endTime,
+                    startTime:startTime,
+                    status:status,
+                    lineProductName:lineProductName,
+                    guideName:guideName
+                 }
+            };
+            
+           console.log(args);
            $.ajax({
                 url:""+APP_ROOT+"back/financialTripPlan.do?method=listFinancialTripPlan&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
                 type:"POST",
-                data:{
-                	"pageNo":page,
-					"id":id,
-                	"tripNumber":tripNumber,
-                	"lineProductId":lineProductId,
-                	"lineProductName":lineProductName,
-                	"guideId":guideId,
-                	"guideName":guideName,
-                	"startTime":startTime,
-                	"endTime":endTime,
-                	"billStatus":status,
-                	"sortType":"auto"
-                },
+                data:args,
                 dataType:"json",
                 beforeSend:function(){
                     globalLoadingLayer = openLoadingLayer();

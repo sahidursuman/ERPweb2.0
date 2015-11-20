@@ -1203,8 +1203,12 @@ function listMenu(menuTemplate){
 				});
 				// table 点击选中事件
 				$(document).on('click','tbody tr', function(event) {
+					var event = event ? event :window.event,
+						$target = $(event.target  || event.srcElement);
+					if ($target.hasClass('T-action')) return; 
 					var $that = $(this), $checkBox = $that.find('input[type="checkbox"]');
-					if ($that.closest('table').hasClass('T-NotShowHighLight')) {	
+					var $that = $(this), $checkBox = $that.find('input[type="checkbox"]');
+					if ($that.closest('table').hasClass('T-showHighLight')) {	
 							if ($checkBox.length) {
 								if ($checkBox.data('triggered-click')) {
 									$checkBox.data('triggered-click', false);
