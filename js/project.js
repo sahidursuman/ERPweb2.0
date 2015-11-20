@@ -1204,7 +1204,7 @@ function listMenu(menuTemplate){
 				// table 点击选中事件
 				$(document).on('click','tbody tr', function(event) {
 					var $that = $(this), $checkBox = $that.find('input[type="checkbox"]');
-					if ($that.closest('table').hasClass('T-NotShowHighLight')) {	
+					if ($that.closest('table').hasClass('T-showHighLight')) {	
 							if ($checkBox.length) {
 								if ($checkBox.data('triggered-click')) {
 									$checkBox.data('triggered-click', false);
