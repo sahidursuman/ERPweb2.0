@@ -133,7 +133,7 @@
 							<td rowspan="{{offer.roomTypeList.length}}">{{offer.reserveMinutes}}</td>
 							<td rowspan="{{offer.roomTypeList.length}}">{{offer.expiryTime}}</td>
 							<td rowspan="{{offer.roomTypeList.length}}">{{offer.status}}</td>
-							<td rowspan="{{offer.roomTypeList.length}}" data-id="{{hotel.id}}">
+							<td rowspan="{{offer.roomTypeList.length}}" data-id="{{offer.id}}">
 								{{if offer.status == "等待确认"}}
 									<a class="T-hotel-refresh">刷新</a><span> | </span>
 								{{else if offer.status == "已同意"}}
