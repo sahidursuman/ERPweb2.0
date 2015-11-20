@@ -23,14 +23,14 @@
 							<input value="{{if touristGroup.transferFeeStatus==1}}{{touristGroup.payedMoney}}{{/if}}" type="text" name="payedMoney" class="col-sm-12" />
 						</div>
 
-                        <label class="col-sm-1 control-label no-padding-right" style="margin: 2px 0 0 12px">对方现收:</label>
-						<label>
+                        
+						<label style="margin: 2px 5px 0">
 								<input type="checkbox" disabled="disabled" {{if touristGroup.operateCurrentNeedPayMoney == 1}}checked="checked"{{/if}} class="ace send-check">
 								<span class="lbl">
 								</span>
 								<input type="hidden" name="isCurrent" value="{{touristGroup.operateCurrentNeedPayMoney}}">
 						</label>
-
+                        <label class="col-sm-1 control-label no-padding-right" >对方现收</label>
 						
 
 				</div>

@@ -418,7 +418,7 @@
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <input type="text" name="price" class="T-choose-restaurantStandardsName col-xs-12 bind-change T-changeQuote" value="{{restaurantList.restaurantStandard.price}}" />
-                                                                                                            <input type="hidden" name="standardId" value="{{restaurantList.restaurantStandard.id}}" />
+                                                                                                            <input type="hidden" name="standardId" value="{{if !!restaurantList.restaurantStandard.id}}{{restaurantList.restaurantStandard.id}}{{else}}{{0}}{{/if}}" />
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <input class="col-xs-12" type="text" readonly="readonly" name="menuList" value="{{restaurantList.restaurantStandard.menuList}}" />
