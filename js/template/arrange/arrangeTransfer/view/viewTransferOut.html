@@ -158,20 +158,37 @@
 						<label class="middle title-size">收客信息</label>
 					</h5>
 					<div class="search-area col-sm-12">
-						<label class="col-sm-1 control-label no-padding-right" style="width:84px;">应收：</label>
-						<div class="col-sm-1">
-							<input name="needPayAllMoney" value="{{touristGroup.needPayAllMoney}}" readonly="readonly" type="text" class="col-xs-12"/>
-						</div>
+						{{if isParent==1}}
+						    <label class="col-sm-1 control-label no-padding-right" style="width:84px;">应收：</label>
+							<div class="col-sm-1">
+								<input name="needPayAllMoney" value="{{parentTouristGroup.needPayAllMoney}}" readonly="readonly" type="text" class="col-xs-12"/>
+							</div>
 
-						<label class="col-sm-1 control-label no-padding-right">已收：</label>
-						<div class="col-sm-1">
-							<input name="payedMoney" value="{{touristGroup.payedMoney}}" readonly="readonly" type="text" class="col-xs-12"/>
-						</div>
+							<label class="col-sm-1 control-label no-padding-right">已收：</label>
+							<div class="col-sm-1">
+								<input name="payedMoney" value="{{parentTouristGroup.payedMoney}}" readonly="readonly" type="text" class="col-xs-12"/>
+			  				</div>
 
-						<label class="col-sm-1 control-label no-padding-right">现收：</label>
-						<div class="col-sm-1">
-							<input name="currentNeedPayMoney" value="{{touristGroup.currentNeedPayMoney}}" readonly="readonly" type="text" class="col-xs-12"/>
-						</div>
+							<label class="col-sm-1 control-label no-padding-right">现收：</label>
+							<div class="col-sm-1">
+								<input name="currentNeedPayMoney" value="{{parentTouristGroup.currentNeedPayMoney}}" readonly="readonly" type="text" class="col-xs-12"/>
+			  				</div>
+						    {{else}}
+							<label class="col-sm-1 control-label no-padding-right" style="width:84px;">应收：</label>
+							<div class="col-sm-1">
+								<input name="needPayAllMoney" value="{{touristGroup.needPayAllMoney}}" readonly="readonly" type="text" class="col-xs-12"/>
+							</div>
+
+							<label class="col-sm-1 control-label no-padding-right">已收：</label>
+							<div class="col-sm-1">
+								<input name="payedMoney" value="{{touristGroup.payedMoney}}" readonly="readonly" type="text" class="col-xs-12"/>
+							</div>
+
+							<label class="col-sm-1 control-label no-padding-right">现收：</label>
+							<div class="col-sm-1">
+								<input name="currentNeedPayMoney" value="{{touristGroup.currentNeedPayMoney}}" readonly="readonly" type="text" class="col-xs-12"/>
+							</div>
+						{{/if}}
 					</div>
 					<div class="search-area col-sm-12">
 						<label class="pull-left control-label no-padding-right">收客时的备注：</label>

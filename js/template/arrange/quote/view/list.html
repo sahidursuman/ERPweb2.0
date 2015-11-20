@@ -32,11 +32,11 @@
 				<td>{{quote.createTime}}</td>
 				<td>
 					<div class="hidden-sm hidden-xs btn-group">
-						<a class="cursor R-right T-action">
+						<a class="cursor R-right T-action T-status">
 							询价状态
 						</a>
 						<a>|</a>
-						<a class="cursor R-right T-action T-update">
+						<a class="cursor R-right T-action {{if !quote.touristGroupId}} T-update {{/if}}" {{if !!quote.touristGroupId}} style="color:#bbb;" {{/if}}>
 							修改
 						</a>
 						<a>|</a>
@@ -44,7 +44,7 @@
 							查看
 						</a>
 						<a>|</a>
-						<a class="cursor R-right T-action T-delete">
+						<a class="cursor R-right T-action {{if !quote.touristGroupId}} T-delete {{/if}}" {{if !!quote.touristGroupId}} style="color:#bbb;" {{/if}}>
 							删除
 						</a>
 						<a>|</a>

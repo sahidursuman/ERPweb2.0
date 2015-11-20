@@ -124,7 +124,7 @@ define(function(require, exports) {
     //查看遊客小組的信息
     TurnProfit.viewTouristGroup = function(id){
 		$.ajax({
-			url:TurnProfit.url("touristGroup","viewTouristGroupDetails"),
+			url:TurnProfit.url("touristGroup","viewTransferTouristGroupDetails"),
 			type:"POST",
 			data:{
 				id : id + ""
@@ -132,9 +132,11 @@ define(function(require, exports) {
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
-					var touristGroupInfo = JSON.parse(data.touristGroupDetail);
-					data.touristGroupDetail = touristGroupInfo;
-					console.log(data);
+                    console.log(data);
+                    var memberList = JSON.parse(data.touristGroupMemberDetail.touristGroupMemberList);
+                    var otherCost = JSON.parse(data.needIncomeMoneyDetail.touristGroupFeeList);
+                    data.touristGroupMemberDetail.touristGroupMemberList = memberList;
+                    data.needIncomeMoneyDetail.touristGroupFeeList = otherCost;
 					if(TurnProfit.clickFlag == 1){
 						var html = viewTemplate(data);
 						layer.open({
