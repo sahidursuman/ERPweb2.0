@@ -937,13 +937,13 @@ define(function(require, exports) {
 					    	
 							$hotelLayerContent.find(".T-addSearchCondition").off('click').on('click', function(){
 								var html = ''
-								+'<div class="col-xs-12 T-seachAreaDiv" style="margin-top:5px">'
+								+'<div class="col-xs-12 T-seachAreaDiv" style="margin-top:5px;margin-left:-12px;">'
 								+'<label class="pull-left text-right control-label no-padding-right"><span class="necessary">*</span>房型:</label>'
-								+'<div class="col-sm-1">'
+								+'<div class="col-sm-2 busQuoteWidth">'
 								+'<input type="text" class="col-sm-12 T-chooseRoomType width110" name="roomType" value=""/>'
 								+'</div>'
 								+'<label class="pull-left text-right control-label no-padding-right"><span class="necessary">*</span>数量:</label>'
-								+'<div class="col-sm-1">'
+								+'<div class="col-sm-2 busQuoteWidth">'
 								+'<input type="text" class="col-sm-12 width110" name="roomCount" value=""/>'
 								+'</div>'
 								+'</div>';

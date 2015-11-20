@@ -918,6 +918,9 @@ padding-left:0;width: 360px;left: -35px;
     right: 19px;
     top: 0px;
 }
+.margin-top10{
+    margin-top: 10px;
+}
 
 /*媒体查询-不同分辨率*/
 @media screen and (max-width:1703px){
@@ -1126,6 +1129,11 @@ width: 840px;
 .marginLeftTourist-30{
     margin-left: 30px;
 }
+
+/*报价媒体css样式*/
+.busQuoteWidth{
+    width: 140px;
+}
 }
 
 /*媒体查询 1366*/
@@ -1160,4 +1168,10 @@ width: 840px;
 .marginLeftTourist-30{
     margin-left: 40px;
 }
+
+/*报价媒体css样式*/
+.busQuoteWidth{
+    width: 140px;
+}
+
 }
