@@ -11,7 +11,7 @@ define(function(require, exports) {
                 that.init_event();
                 that.init_message();
                 that.bind_message();
-                // index.MessagePrompt({bus: 5, hotel: 2});
+                index.MessagePrompt({bus: IndexData.userInfo.unReadBusCompanyOffer || 0, hotel: IndexData.userInfo.unReadHotelOffer || 0});
             },
             /**
              * 绑定处理方法
@@ -60,11 +60,13 @@ define(function(require, exports) {
                     success: function(data) {
                         var result = showDialog(data);
                         if (result) {
-                            if (data.unReadMsgCount == 0) {
-                                $("#unReadCountStr").text("当前没有未读消息");
-                            } else {
-                                $("#unReadCountStr").text(data.unReadMsgCount + "  条新消息");
-                            }
+                            if (data.unReadMsgCount ==0) {
+                                    $("#unReadCountStr").text("当前没有未读消息");
+                                    // data.unReadMsgCount = 0;
+
+                                } else {
+                                    $("#unReadCountStr").text(data.unReadMsgCount + "  条新消息");
+                                }
                             $("#msgCountSpan").text(data.unReadMsgCount);
                             var html = messageTemplate(data);
                             $("#msgContainer .msgList").html(html);
@@ -157,116 +159,139 @@ define(function(require, exports) {
     index.MessagePrompt = function(data) {
         var $messager = $('.newMessage-prompt');
 
-        if (!$messager.length) {
-            $messager = $(html).appendTo($('body'));
+        if (hasData()) {
+            if (!$messager.length) {
+                $messager = $(html).appendTo($('body'));
 
-            // 绑定hover
-            $messager.find('.T-item').hover(
-            function() {
-                var $that = $(this), url, keys, target;
-                
-                $that.data('focus-in', true);
-                if ($that.hasClass('T-bus')) {
-                    url = KingServices.build_url('busInquiry', 'listUnReadBusCompanyOffer');
-                    keys = ['busCompanyOfferListJson', 'busComnpany', 'companyName'];
-                    target = 'T-bus';
-                } else if ($that.hasClass('T-hotel')) {
-                    url = KingServices.build_url('hotelInquiry', 'listUnReadHotelOffer');
-                    keys = ['hotelOfferListJson', 'hotel', 'name'];
-                    target = 'T-hotel';
-                }
-                if (!$that.data('isSentAjax') && !!url) {
-                    $.ajax({
-                        url: url,
-                        type: 'post',
-                        showLoading: false
-                    })
-                    .done(function(data) {
-                        console.info(data);
-                        if (data.success == 1) {
-                            var str = [], list = JSON.parse(data[keys[0]] || false);
-
-                            if (!!list)  {
-                                for (var i =0, len = list.length, name, qId, res, tmp; i < len ; i ++)  {
-                                    tmp = list[i];
-                                    name = tmp[keys[1]][keys[2]];
-                                    qId = tmp.id;
-                                    res = tmp.result;
-                                    console.info(res)
-                                    str.push('<li class="list-group-item boxLiStyle">'+ name + (res == 1? '已同意': (res == -1?'已拒绝': '')) +
-                                        ', <a class="T-view-qoute" data-target="'+ target +'" data-qoute-id="'+ qId +'">查看</a></li>');
-                                }
-
-                                if (len) {
-                                    str = '<div class="MessagePrompt-box"><ul class="list-group">'+ str.join('') +'</ul></div>';
-                                } else {
-                                    str = '';
-                                }
-
-                                $that.data('html', str);
-                                Tools.descToolTip($that, 2, 'left');
-
-                                var action = 'hide';
-
-                                if ($that.data('focus-in')) {
-                                    action = 'show';
-                                }
-                                $that.popover(action);
-                            }
-                        }
-
-                        $that.data('isSentAjax', true);
-                    });
-                }
-            }, function() {
-                $(this).data('focus-in', false);
-            });
-
-            // 绑定查看事件
-            var $tip = Tools.$descContainer;
-
-            if ($tip.length) {
-                $tip.on('click', '.T-view-qoute', function(event) {
-                    event.preventDefault();
-                    var $that = $(this), id = $that.data('qoute-id'), 
-                        target = $that.data('target'), count = 0;  //target: T-hotel or T-bus
-
-                    // 查看询价                    
-                    seajs.use(ASSETS_ROOT + modalScripts.arrange_quote,function(module){
-                        module.updateQuoteToOffer(id,target);  
-                    });
-                    // 验证消息条数
-                    $that.closest('ul').children('li').each(function(index, el) {
-                        if ($(this).children('a').data('qoute-id') == id) {
-                            count ++;
-                        }
-                    });
-                    var $target = $messager.find('.'+ target), curr = $target.find('span').text(), needHide = true;
-                    $target.find('span').text(curr - count);
-
-                    // 通过检查消息条数，确定是否显示右侧的询价组件。
-                    $messager.children('a').each(function(index, el) {
-                        if (!!$(this).find('span').text()) {
-                            needHide = false;
-                            return false;
-                        }
-                    });
-
-                    // 全部是零时，隐藏
-                    if (needHide) {
-                        $messager.addClass('hidden');
+                // 绑定hover
+                $messager.find('.T-item').hover(
+                function() {
+                    var $that = $(this), url, keys, target;
+                    
+                    $that.data('focus-in', true);
+                    if ($that.hasClass('T-bus')) {
+                        url = KingServices.build_url('busInquiry', 'listUnReadBusCompanyOffer');
+                        keys = ['busCompanyOfferListJson', 'busComnpany', 'companyName'];
+                        target = 'T-bus';
+                    } else if ($that.hasClass('T-hotel')) {
+                        url = KingServices.build_url('hotelInquiry', 'listUnReadHotelOffer');
+                        keys = ['hotelOfferListJson', 'hotel', 'name'];
+                        target = 'T-hotel';
                     }
+                    if (!$that.data('isSentAjax') && !!url) {
+                        $.ajax({
+                            url: url,
+                            type: 'post',
+                            showLoading: false
+                        })
+                        .done(function(data) {
+                            console.info(data);
+                            if (data.success == 1) {
+                                var str = [], list = JSON.parse(data[keys[0]] || false);
 
-                    // 查看后，清空tip的内容
-                    $tip.html('');
+                                if (!!list)  {
+                                    for (var i =0, len = list.length, name, qId, res, tmp; i < len ; i ++)  {
+                                        tmp = list[i];
+                                        name = tmp[keys[1]][keys[2]];
+                                        qId = tmp.id;
+                                        res = tmp.result;
+                                        console.info(res)
+                                        str.push('<li class="list-group-item boxLiStyle">'+ name + (res == 1? '已同意': (res == -1?'已拒绝': '')) +
+                                            ', <a class="T-view-quote" data-target="'+ target +'" data-quote-id="'+ qId +'">查看</a></li>');
+                                    }
+
+                                    if (len) {
+                                        str = '<div class="MessagePrompt-box"><ul class="list-group">'+ str.join('') +'</ul></div>';
+                                    } else {
+                                        str = '';
+                                    }
+
+                                    $that.data('html', str);
+                                    Tools.descToolTip($that, 2, 'left');
+
+                                    var action = 'hide';
+
+                                    if ($that.data('focus-in')) {
+                                        action = 'show';
+                                    }
+                                    $that.popover(action);
+                                }
+                            }
+
+                            $that.data('isSentAjax', true);
+                        });
+                    }
+                }, function() {
+                    $(this).data('focus-in', false);
                 });
-            }
-        } else {
-            $messager.removeClass('hidden');
-        }
 
-        if (data.bus != undefined) {
-            $messager.find('.T-bus-counter').text(data.bus).closest('.T-item').data('isSentAjax',false);
+                // 绑定查看事件
+                var $tip = Tools.$descContainer;
+
+                if ($tip.length) {
+                    $tip.on('click', '.T-view-quote', function(event) {
+                        event.preventDefault();
+                        var $that = $(this), id = $that.data('quote-id'), 
+                            target = $that.data('target'),
+                            count = 0;  //target: T-hotel or T-bus
+
+                        // 查看询价                    
+                        seajs.use(ASSETS_ROOT + modalScripts.arrange_quote,function(module){
+                            module.updateQuoteToOffer(id,target);  
+                        });
+                        // 验证消息条数
+                        $that.closest('ul').children('li').each(function(index, el) {
+                            if ($(this).children('a').data('quote-id') == id) {
+                                count ++;
+                            }
+                        });
+
+                        var $target = $messager.find('.'+ target), curr = $target.find('span').text(), needHide = true,
+                            inAll = curr - count;
+                            $target.find('span').text(inAll),
+                            $tipHtml = $($target.data('html'));
+
+                        // remove this item content
+                        $tipHtml.find('li').each(function(index, el) {
+                            var $li = $(this);
+                            if ($li.children('a').data('quote-id') == id) {
+                                $li.remove();
+                            }
+                        });
+                        // 修正提示内容
+                        var newHtml =  $tipHtml.prop('outerHTML');
+                        $target.data('html', newHtml);  // firefox 可能存在兼容性问题
+                        if (inAll > 0) {
+                            $target.data('bs.popover').options.content = newHtml;                        
+                        } else {
+                            // 为零时
+                            $target.popover('destroy');
+                            $target.data('bs.popover').options.content = "";
+                        }
+
+                        // 通过检查消息条数，确定是否显示右侧的询价组件。
+                        $('.newMessage-prompt').children('a').each(function(index, el) {
+                            console.info($(this).find('span').text())
+                            if ($(this).find('span').text() > 0) {
+                                needHide = false;
+                                return false;
+                            }
+                        });
+
+                        // 全部是零时，隐藏
+                        if (needHide) {
+                            $messager.addClass('hidden');
+                        }
+                        // 查看后，清空tip的内容
+                        $tip.html('');
+                    });
+                }
+            } else {
+                $messager.removeClass('hidden');
+            }
+            if (data.bus != undefined) {
+                $messager.find('.T-bus-counter').text(data.bus).closest('.T-item').data('isSentAjax',false);
+            }
         }
 
         if (data.hotel != undefined) {
@@ -275,6 +300,18 @@ define(function(require, exports) {
 
         if (data.guide != undefined) {
             $messager.find('.T-guide-counter').text(data.guide).closest('.T-item').data('isSentAjax',false);
+        }
+
+        function hasData() {
+            var res = false;
+
+            for( var i in data ){
+                if (data[i] > 0) {
+                    res = true;
+                }
+            }
+
+            return res;
         }
     };
 
