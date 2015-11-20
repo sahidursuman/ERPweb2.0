@@ -39,6 +39,10 @@ define(function(require, exports) {
 					{
 						type: 'null',
 						errMsg: '大人数量不能为空'
+					},
+					{
+						type: 'nonnegative-int',
+						errMsg: '大人数量只能是非负整数'
 					}
 				]
 			},
@@ -48,6 +52,10 @@ define(function(require, exports) {
 					{
 						type: 'null',
 						errMsg: '小孩数量不能为空'
+					},
+					{
+						type: 'nonnegative-int',
+						errMsg: '小孩数量只能是非负整数'
 					}
 				]
 			},
