@@ -2459,6 +2459,14 @@ define(function(require, exports) {
 			isChildNeedRoom: quote.getValue($container,'childNeedBed'),
 			remark: quote.getValue($container,'quoteRemark')
 		}
+
+		if ((quoteJson.adultCount + quoteJson.childCount) == 0) {
+			showDialog({
+				success: 0,
+				message: '人数不能为零'
+			})
+			return;
+		}
 		var busList = $container.find('.T-arrangeBusCompanyList');
 		var guideList = $container.find('.T-arrangeGuideList');
 		var insuranceList = $container.find('.T-arrangeInsuranceList');
