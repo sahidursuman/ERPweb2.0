@@ -133,6 +133,7 @@ define(function(require, exports) {
 					    content: html,
 					    scrollbar: false,
 					    success:function(){
+							var validator=rule.check($(".T-addUser-form"));
 							$(".T-addUser-form .T-addUser").click(function(){
 								user.saveAdd();
 							});
