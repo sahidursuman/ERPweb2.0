@@ -473,7 +473,7 @@ define(function(require, exports) {
 	ResTravelLine.deleteSchedule = function($tr) {
 		if (!!$tr && $tr.length)  {
 			showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
-				if (!!$tr.data('entiy-id')) {
+				if (!!$tr.data('entity-id')) {
 					$tr.addClass('deleted').fadeOut(function(){
 						$tr.addClass('hidden');
 					});
@@ -512,7 +512,7 @@ define(function(require, exports) {
 		// 获取日程数据
 		var addJson = [], delJson = [];
 		$tab.find('.T-schedule-list').children('tr').each(function(index, el) {
-			var $tr = $(this), id = $tr.data('entiy-id');
+			var $tr = $(this), id = $tr.data('entity-id');
 			if ($tr.hasClass('deleted')) {  // 删除
 				delJson.push({id: id});
 			} else {
