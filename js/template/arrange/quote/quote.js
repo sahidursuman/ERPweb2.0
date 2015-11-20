@@ -44,6 +44,7 @@ define(function(require, exports) {
 		quote.$tab = $("#tab-arrange_quote-content");
 
 		quote.listQuote(0,"","","","","","","","","","");
+		quote.getQuery('','','','','','','','','','');
 	};
 
 	quote.listQuote = function(page,lineProductId,lineProductName,partnerAgencyId,partnerAgencyName,offerUserId,offerUserName,quoteUserId,quoteUserName,quoteTimeEnd,quoteTimeStart) {
@@ -57,8 +58,8 @@ define(function(require, exports) {
             offerUserName = quote.$searchArea.find("input[name=inquiryUserName]").val(),
             quoteUserId = quote.$searchArea.find("input[name=quoteUserId]").val(),
             quoteUserName = quote.$searchArea.find("input[name=quoteUserName]").val(),
-            quoteTimeEnd = quote.$searchArea.find("input[name=quoteStartTime]").val(),
-            quoteTimeStart = quote.$searchArea.find("input[name=quoteEndTime]").val()
+            quoteTimeEnd = quote.$searchArea.find("input[name=quoteEndTime]").val(),
+            quoteTimeStart = quote.$searchArea.find("input[name=quoteStartTime]").val()
         }
         // 修正页码
         page = page || 0;
@@ -89,7 +90,6 @@ define(function(require, exports) {
 					var html = listTemplate(data);
 					quote.$tab.find('.T-quoteList').html(html);
 
-					quote.getQuery(lineProductId,lineProductName,partnerAgencyId,partnerAgencyName,offerUserId,offerUserName,quoteUserId,quoteUserName,quoteTimeEnd,quoteTimeStart);
 					quote.initList();
 
 	                //绑定翻页组件
@@ -265,21 +265,23 @@ define(function(require, exports) {
 							daysList: JSON.parse(data.daysList)
 					};
 					data.viewLineProduct.editorName = menukey + '-ueditor'
-					var html = mainQuoteTemplate();
+					var $a = {
+						a: 'add'
+					}
+					var html = mainQuoteTemplate($a);
 					Tools.addTab(menukey+'-add',"新增报价",html)
-					$container = $("#tab-arrange_quote-add-content");
-					$container = $("#tab-arrange_quote-add-content");
+					var $container = $("#tab-arrange_quote-add-content");
 
 					var addHtml = addQuoteTemplate(data.viewLineProduct);
-					$container.find('#quoteContent').html(addHtml)
+					$container.find('#quoteContent-'+$a.a).html(addHtml)
 
 					$container.find('.inquiryContent').on("click",function(){
 						var quoteId = $container.find('[name=quoteId]').val();
-						if(!quoteId){
+						if(!!quoteId == false){
 							showMessageDialog($( "#confirm-dialog-message" ),"请先询价！");
 							return false;
 						} 
-						quote.quoteStatus(quoteId,$container);
+						quote.quoteStatus(quoteId,$container,'add');
 					});	
 
 					quote.init_event($container);
@@ -289,22 +291,25 @@ define(function(require, exports) {
 	};
 
 	//询价状态
-	quote.quoteStatus = function(quoteId,$container){
-		var inquiryHtml = inquiryResultTemplate();
-		$container.find('#inquiryContent').html(inquiryHtml);
+	quote.quoteStatus = function(quoteId,$container,type){
+		var $a = {
+			a: type
+		}
+		var inquiryHtml = inquiryResultTemplate($a);
+		$container.find('#inquiryContent-'+$a.a).html(inquiryHtml);
 		
-		quote.busStatusList(quoteId,$container);
+		quote.busStatusList(quoteId,$container,$a);
 
 		$container.find('.busInquiryResult').on("click",function(){
-			quote.busStatusList(quoteId,$container);
+			quote.busStatusList(quoteId,$container,$a);
 		});
 		$container.find('.hotelInquiryContent').on("click",function(){
-			quote.hotelStatusList(quoteId,$container);
+			quote.hotelStatusList(quoteId,$container,$a);
 		});
 	};
 
 	//询价状态-车
-	quote.busStatusList = function(quoteId,$container){
+	quote.busStatusList = function(quoteId,$container,$a){
 		//询车
 		$.ajax({
 			url: KingServices.build_url('busInquiry','statusList'),
@@ -314,7 +319,7 @@ define(function(require, exports) {
 				var result = showDialog(data);
 				if(result){
 					var busInquiryResultHtml = busInquiryResultTemplate(data);
-					$container.find('#busInquiryResult').html(busInquiryResultHtml);
+					$container.find('#busInquiryResult-'+$a.a).html(busInquiryResultHtml);
 
 					//操作
 					$container.find('.T-bus-refresh').on("click",function(){
@@ -381,7 +386,7 @@ define(function(require, exports) {
 	};
 
 	//询价状态-房
-	quote.hotelStatusList = function(quoteId,$container){
+	quote.hotelStatusList = function(quoteId,$container,$a){
 		$.ajax({
 			url: KingServices.build_url('hotelInquiry','statusList'),
 			type: 'POST',
@@ -399,7 +404,7 @@ define(function(require, exports) {
 						data.data[i].trLen = trLen;
 					}
 					var hotelInquiryResultHtml = hotelInquiryResultTemplate(data);
-					$container.find('#hotelInquiryContent').html(hotelInquiryResultHtml);
+					$container.find('#hotelInquiryContent-'+$a.a).html(hotelInquiryResultHtml);
 
 					//操作
 					$container.find('.T-hotel-refresh').on("click",function(){
@@ -635,12 +640,15 @@ define(function(require, exports) {
 					data.insuranceArrange = JSON.parse(data.insuranceArrange);
 					data.quoteDetailJson = JSON.parse(data.quoteDetailJson);
 					data.editorName = menukey +'-update' + '-ueditor'
-					var html = mainQuoteTemplate();
+					var $a = {
+						a: 'update'
+					}
+					var html = mainQuoteTemplate($a);
 					Tools.addTab(menukey+'-update',"修改报价",html)
-					$container = $("#tab-arrange_quote-update-content");
+					var $container = $("#tab-arrange_quote-update-content");
 
 					var updateHtml = updateQuoteTemplate(data);
-					$container.find('#quoteContent').html(updateHtml)
+					$container.find('#quoteContent-'+$a.a).html(updateHtml)
 
 					$container.find('.inquiryContent').on("click",function(){
 						var quoteId = $container.find('[name=quoteId]').val();
@@ -648,7 +656,7 @@ define(function(require, exports) {
 							showMessageDialog($( "#confirm-dialog-message" ),"请先询价！");
 							return false;
 						} 
-						quote.quoteStatus(quoteId,$container);
+						quote.quoteStatus(quoteId,$container,'update');
 					});	
 
 					quote.init_event($container);
