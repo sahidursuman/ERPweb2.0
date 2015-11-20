@@ -286,14 +286,6 @@ define(function(require, exports) {
 	BookingArrange.CU_event = function($tab){
 		//表单代订信息验证
 		var validator = rule.checkAddBooking($tab);
-		//酒店代订验证
-		var validatorHotel=rule.checkBookingHotel($tab.find(".T-bookingHotelList")); 
-		//景区贷订
-		var validatorScenic=rule.checkBookingScenic($tab.find(".T-bookingScenicList"));   
-		//票务验证
-		var validatorTicket= rule.checkBookingTicket($tab.find(".T-bookingTicketList"));
-		//车队旅游贷订
-		var validatorBus=rule.checkBookingBus($tab.find(".T-bookingBusList")); 
 
 		$tab.off('change').off(SWITCH_TAB_SAVE).off(CLOSE_TAB_SAVE)
 		.on('change', function(event){
@@ -321,6 +313,8 @@ define(function(require, exports) {
 			}else if($that.hasClass('T-bus-add')){
 				BookingArrange.addBusList($that);
 			}
+
+			validator = rule.checkAddBooking($tab);
 		});
     	//同行客户联系人下拉
     	BookingArrange.getPartnerAgencyManagerList($tab);
@@ -434,8 +428,6 @@ define(function(require, exports) {
 			var $parent = $(obj).closest('tr');
 			$parent.find("input[name=hotelRoomId]").val("");
 		});
-		//酒店代订验证
-		var validatorHotel=rule.checkBookingHotel($tab);
 
 		BookingArrange.choose($tab.find(".T-chooseScenicItem"), function(obj){
 			var obj = $(obj);
@@ -513,8 +505,6 @@ define(function(require, exports) {
 			$parent.find("input[name=scenicItemId]").val("");
 			$parent.find("input[name=costPrice]").val("");
     	});
-    	//景区贷订
-		var validatorScenic=rule.checkBookingScenic($tab);  
 
 		//票务项目代订
 		//票务下拉
@@ -540,8 +530,6 @@ define(function(require, exports) {
 			var $parent = $(obj).closest('tr');
 			$parent.find("input[name=ticketId]").val("");
     	});
-    	//票务验证
-		var validatorTicket= rule.checkBookingTicket($tab);
 
 		//旅游车逆向联动
     	//车座数下拉列表
@@ -644,8 +632,6 @@ define(function(require, exports) {
     		$(obj).parent().parent().find("input[name=busCompanyId]").val("");
     	});
 
-		//车队旅游贷订
-		var validatorBus=rule.checkBookingBus($tab);
 	}
 
 	//添加酒店代订列表
@@ -913,14 +899,6 @@ define(function(require, exports) {
 	BookingArrange.save = function($tab, validator, tab_array){
 		//表单代订信息验证
 		var validator = rule.checkAddBooking($tab);
-		//酒店代订验证
-		var validatorHotel=rule.checkBookingHotel($tab.find(".T-bookingHotelList")); 
-		//景区代订
-		var validatorScenic=rule.checkBookingScenic($tab.find(".T-bookingScenicList"));   
-		//票务验证
-		var validatorTicket= rule.checkBookingTicket($tab.find(".T-bookingTicketList"));
-		//车队旅游代订
-		var validatorBus=rule.checkBookingBus($tab.find(".T-bookingBusList"));
 		if (!validator.form() || !validatorHotel.form() || !validatorScenic.form() || !validatorTicket.form() || !validatorBus.form()) { return; }    
 		BookingArrange.submitBooking($tab, validator, tab_array);
 	}
