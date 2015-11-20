@@ -977,9 +977,10 @@ define(function(require, exports) {
 						    type: 1,
 						    title:"选择计划",
 						    skin: 'layui-layer-rim', //加上边框
-						    area: ['60%', '50%'], //宽高
+						    area: '60%',//宽高
 						    zIndex:1028,
 						    content: html,
+						    scrollbar: false,
 						    success:function(){
 						    	//chooseTripPlanTbody
 						    	//saveTouristGroupToTripPlan 方法名
@@ -1149,6 +1150,7 @@ define(function(require, exports) {
 				    area: '70%', //宽高
 				    zIndex:1028,
 				    content: html,
+				    scrollbar: false,
 				    success:function(){
 				    	$(".chooseMerge .btn-mergeAddPlan").click(function(){
 				    		var lineProductId = "";
@@ -1255,9 +1257,10 @@ define(function(require, exports) {
 							    			type: 1,
 										    title:"选择计划",
 										    skin: 'layui-layer-rim', //加上边框
-										    area: ['85%', '80%'], //宽高
+										    area: '85%', //宽高
 										    zIndex:1029,
 										    content: html,
+										    scrollbar: false,
 										    success: function(data) {
 										    	
 										    	$(".groupView").click(function(){
@@ -1390,9 +1393,10 @@ define(function(require, exports) {
 						    type: 1,
 						    title:"查看小组信息",
 						    skin: 'layui-layer-rim', //加上边框
-						    area: ['60%', '50%'], //宽高
+						    area: '60%', //宽高
 						    zIndex:1028,
 						    content: html,
+						    scrollbar: false,
 						    success:function(){
 						    	
 						    }
@@ -1437,9 +1441,10 @@ define(function(require, exports) {
 						    type: 1,
 						    title:"添加游客小组",
 						    skin: 'layui-layer-rim', //加上边框
-						    area: ['60%', '50%'], //宽高
+						    area: '60%', //宽高
 						    zIndex:1028,
 						    content: html,
+						    scrollbar: false,
 						    success:function(){
 						    	//选择游客小组并提交（多选）
 						    	//绑定table的全选按钮事件
@@ -1829,8 +1834,8 @@ define(function(require, exports) {
 						    area: '85%', //宽高
 						    zIndex:1028,
 						    content: html,
+						    scrollbar: false,
 						    success:function(){
-						    	
 								var tab = "tab-arrange_plan-view-content";
 						    	arrangeTourist.MenberNumber("addTripPlanTouristTbody");
 						    	//查看计划中 查看游客小组
@@ -1868,6 +1873,7 @@ define(function(require, exports) {
 						    area: '60%', //宽高
 						    zIndex:1028,
 						    content: html,
+						    scrollbar: false,
 						    success:function(){  
 						    	var feeId = "";//data.touristGroupTransferFeeSet.id;
 						    	//给新增费用项绑定事件
@@ -2113,9 +2119,10 @@ define(function(require, exports) {
 						    type: 1,
 						    title:"编辑内转费用信息",
 						    skin: 'layui-layer-rim', //加上边框
-						    area: ['60%', '75%'], //宽高
+						    area: '60%', //宽高
 						    zIndex:1028,
 						    content: html,
+						    scrollbar: false,
 						    success:function(){
 						    	var form = $(".innerEditFeeMainForm");
 								saveInnerTransferFee(form);
@@ -2714,7 +2721,7 @@ define(function(require, exports) {
 					});
 				}
 			})
-		},
+		}, 
 		save : function(saveType){
 			if(saveType == "addTripPlan"){
 				var validator = rule.checkdCreateTripPlan($(".addTripPlan"));

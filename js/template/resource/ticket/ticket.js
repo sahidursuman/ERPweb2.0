@@ -196,9 +196,10 @@ define(function(require, exports) {
 						type: 1,
 						title:"编辑票务公司信息",
 						skin: 'layui-layer-rim', //加上边框
-						area: ['800px', '360px'], //宽高
+						area: '800px', //宽高
 						zIndex:1028,
 						content: html,
+						scrollbar: false, // 推荐禁用浏览器外部滚动条
 						success:function(){
 							var $container = $(".T-updateTicketContainer");
 							var $province = $container.find("select[name=provinceId]");

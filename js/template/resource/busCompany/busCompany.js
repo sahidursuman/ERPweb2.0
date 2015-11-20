@@ -263,6 +263,7 @@ define(function(require,exports){
 							area: '1190px', //宽高
 							zIndex:1028,
 							content: html,
+							scrollbar: false,
 							success:function(){
 								var $obj = $(".T-updateBusCompanyContainer");
 								var $updateObj = $obj.find(".T-busCompanyMainForm");

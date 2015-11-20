@@ -832,9 +832,10 @@ define(function(require, exports) {
 			    type: 1,
 			    title:"新增同行客户联系人",
 			    skin: 'layui-layer-rim', //加上边框
-			    area: ['35%', '40%'], //宽高
+			    area: '35%', //宽高
 			    zIndex:1028,
 			    content: html,
+			    scrollbar: false,
 			    success:function(){
 			    	
 			    	//新增同行联系客户人验证
