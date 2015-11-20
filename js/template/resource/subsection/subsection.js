@@ -238,13 +238,11 @@ define(function(require, exports) {
 	subsection.init_section_event = function() {
 		subsection.$tabSub.off('change').off(SWITCH_TAB_SAVE).off(CLOSE_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT)
 		.on('change', function(event) {
-			subsection.$tabSub('isEdited', true);
+			subsection.$tabSub.data('isEdited', true);
 		})
 		.on(SWITCH_TAB_SAVE, function(event, tab_id, tab_name, html) {  // 选择保存
 			event.preventDefault();
 			subsection.operationSave([tab_id, tab_name, html]);
-			Tools.addTab(tab_id, tab_name, html);
-			subsection.init_section_event();
 		})
 		.on(SWITCH_TAB_BIND_EVENT, function(event) {
 			subsection.init_section_event();
@@ -262,13 +260,13 @@ define(function(require, exports) {
 		subsection.$tabSub.find(".T-btn-operation-delete").on("click",function(){
 			var $this = $(this), $parents = $this.closest("tr"), id = $parents.data("entity-id");
 			subsection.deleteOperation(id,$this);
-			subsection.$tabSub('isEdited', true);
+			subsection.$tabSub.data('isEdited', true);
 		});
 
 		// 新增
 		subsection.$tabSub.find(".T-btn-operation-add").click(function(){
 			var radio = '<input type="radio" name="operateCurrentNeedPayMoney" />';
-			if (data.mark != 0) {
+			if ($(this).data('mark') != 0) {
 					radio = '-';
 			}
 			var html = ''
@@ -290,7 +288,7 @@ define(function(require, exports) {
 			subsection.datePicker("T-startTime");
 			subsection.lineProductChoose();
 			validator = rule.checkdSaveSubsection(subsection.$tabSub);
-			subsection.$tabSub('isEdited', true);
+			subsection.$tabSub.data('isEdited', true);
 		});
 
 		// 取消
@@ -312,37 +310,14 @@ define(function(require, exports) {
 	subsection.deleteOperation = function(id,$this) {
 		var $parents = $this.closest("tr");
 		if (!!id) {
+			showConfirmDialog($( "#confirm-dialog-message" ),"你确定要删除该分段？",function(){
+				$(this).dialog( "close" );
+				$parents.addClass("del");
+				$parents.fadeOut(function(){
+					$parents.hide();
+				})
+			})
 			//deleteSubTGroup
-			var dialogObj = $( "#confirm-dialog-message" );
-			dialogObj.removeClass('hide').dialog({
-				modal: true,
-				title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-				title_html: true,
-				draggable:false,
-				buttons: [ 
-					{
-						text: "取消",
-						"class" : "btn btn-minier",
-						click: function() {
-							$( this ).dialog( "close" );
-						}
-					},
-					{
-						text: "确定",
-						"class" : "btn btn-primary btn-minier",
-						click: function() {
-							$(this).dialog( "close" );
-							$parents.addClass("del");
-							$parents.fadeOut(function(){
-								$parents.hide();
-							})
-						}
-					}
-				],
-				open:function(event,ui){
-					$(this).find("p").text("你确定要删除该分段？");
-				}
-			});
 		}else{
 			$parents.fadeOut(function(){
 				$parents.remove();
@@ -359,6 +334,7 @@ define(function(require, exports) {
 
 		var $btn = subsection.$tabSub.find(".T-btn-operation-save"),
 			days = $btn.data('days'),
+			currentNeedPayMoney = $btn.data('currentNeedPayMoney'),
 			isCheckNeedPayMoney = 0;
 			
 		function getValue(obj,name){
@@ -401,7 +377,7 @@ define(function(require, exports) {
 		if (subsection.$tabSub.find(".T-btn-operation-save").data("entity-mark")) {
 			isCheckNeedPayMoney = 1;
 		}
-		if(isCheckNeedPayMoney == 0 && e.data.currentNeedPayMoney > 0){
+		if(isCheckNeedPayMoney == 0 && currentNeedPayMoney > 0){
 			showMessageDialog($( "#confirm-dialog-message" ),"请选择在哪一分段现收团款");
 			return;
 		}
@@ -412,7 +388,8 @@ define(function(require, exports) {
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
-					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+					subsection.$tabSub.data('isEdited', false);
+					showMessageDialog($( "#confirm-dialog-message" ), data.message,function(){
 						if (!!tabArgs) {
 							Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
 							subsection.init_section_event();
@@ -488,6 +465,7 @@ define(function(require, exports) {
 	 * @return {[type]} id [id]
 	 */
 	subsection.subsectionRevoke = function(id) {
+		//showConfirmDialog($( "#confirm-dialog-message" ),"你确定要撤销该分段？",function(){})
 		var dialogObj = $( "#confirm-dialog-message" );
 		dialogObj.removeClass('hide').dialog({
 			modal: true,
