@@ -92,9 +92,10 @@ define(function(require, exports) {
                                             type: 1,
                                             title: "查看信息",
                                             skin: 'layui-layer.-rim', //加上边框
-                                            area: ['600px', '480px'], //宽高
+                                            area: '600px', //宽高
                                             zIndex: 1028,
                                             content: html,
+                                            scrollbar: false, // 推荐禁用浏览器外部滚动条
                                             success: function() {}
                                         });
                                     }
