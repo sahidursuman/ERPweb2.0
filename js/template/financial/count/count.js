@@ -26,7 +26,7 @@ define(function(require, exports) {
 			startTime : "",
 			endTime : "",
             sortType:"auto",
-			status : ""
+			billStatus : ""
                 
 		},
 		edited : {},
@@ -95,7 +95,7 @@ define(function(require, exports) {
                                 guideId:guideId,
                                 endTime:endTime,
                                 startTime:startTime,
-                                status:status,
+                                billStatus:status,
                                 lineProductName:lineProductName,
                                 guideName:guideName
                             };
@@ -128,7 +128,7 @@ define(function(require, exports) {
                     guideId:guideId,
                     endTime:endTime,
                     startTime:startTime,
-                    status:status,
+                    billStatus:status,
                     lineProductName:lineProductName,
                     guideName:guideName
                  }
@@ -180,6 +180,18 @@ define(function(require, exports) {
                             var status = $('.financialCount .search-area .btn-status').find('button').attr('data-value');
                             var lineProductName = $('.financialCount .search-area').find('input[name=chooseLineProductName]').val();
                             var guideName = $('.financialCount .search-area').find('input[name=chooseGuideRealName]').val();
+                            count.searchData = {
+                                page:0,
+                                id:id,
+                                tripNumber:tripNumber,
+                                lineProductId:lineProductId,
+                                guideId:guideId,
+                                endTime:endTime,
+                                startTime:startTime,
+                                billStatus:status,
+                                lineProductName:lineProductName,
+                                guideName:guideName
+                            };
                             count.initCount(id,tripNumber,lineProductId,lineProductName,guideId,guideName,startTime,endTime,status);
 						});
                         var tabid = $("#tab-financial_count-content");

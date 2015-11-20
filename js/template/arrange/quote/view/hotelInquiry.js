@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":138,"md5":"85424a2b58e1f37a53212d3dcc9c03fe"}*/
+/*TMODJS:{"debug":true,"version":127,"md5":"85424a2b58e1f37a53212d3dcc9c03fe"}*/
 define(function(require) {
     return require("../../../template")("arrange/quote/view/hotelInquiry", function($data, $filename) {
         try {
