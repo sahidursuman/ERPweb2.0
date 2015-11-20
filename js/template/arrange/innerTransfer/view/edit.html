@@ -18,7 +18,7 @@
 							{{each businessGroup as rs}}
 								{{if innerTransfer.toBusinessGroup!=null}}
 									{{if innerTransfer.toBusinessGroup.id==rs.id}}
-										<input  value="{{rs.name}}" data-group-id="{{rs.id}}" type="text" name="businessGroup_id" class="col-xs-12" readonly="readonly"/>
+										<input  value="{{rs.name}}" data-group-id="{{rs.id}}" type="text" name="businessGroup_id" class="col-xs-12" {{if innerTransfer.status!=2}}readonly="readonly"{{/if}}/>
 									{{/if}}
 								{{/if}}
 							{{/each}}
