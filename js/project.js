@@ -1208,7 +1208,7 @@ function listMenu(menuTemplate){
 					if ($target.hasClass('T-action')) return; 
 					var $that = $(this), $checkBox = $that.find('input[type="checkbox"]');
 					var $that = $(this), $checkBox = $that.find('input[type="checkbox"]');
-					if ($that.closest('table').hasClass('T-NotShowHighLight')) {	
+					if ($that.closest('table').hasClass('T-showHighLight')) {	
 							if ($checkBox.length) {
 								if ($checkBox.data('triggered-click')) {
 									$checkBox.data('triggered-click', false);

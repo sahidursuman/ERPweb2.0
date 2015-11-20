@@ -180,9 +180,13 @@ define(function(require, exports) {
 					data.receiveGroup.outBusList = JSON.parse(data.receiveGroup.outBusList);
 					data.receiveGroup.outHotelList = JSON.parse(data.receiveGroup.outHotelList);
 					data.receiveGroup.outTicketList = JSON.parse(data.receiveGroup.outTicketList);
+                    data.receiveGroup.outRestaurantList = JSON.parse(data.receiveGroup.outRestaurantList);
+                    data.receiveGroup.outOtherList = JSON.parse(data.receiveGroup.outOtherList);
 					data.sendGroup.outBusList = JSON.parse(data.sendGroup.outBusList);
 					data.sendGroup.outHotelList = JSON.parse(data.sendGroup.outHotelList);
 					data.sendGroup.outTicketList = JSON.parse(data.sendGroup.outTicketList);
+                    data.sendGroup.outRestaurantList = JSON.parse(data.sendGroup.outRestaurantList);
+                    data.sendGroup.outOtherList = JSON.parse(data.sendGroup.outOtherList);
 					data.touristGroup = JSON.parse(data.touristGroup);
 					var html =transitViewTemplate(data);
 					
