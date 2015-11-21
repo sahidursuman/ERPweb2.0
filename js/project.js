@@ -1251,33 +1251,21 @@ var Tools = {
 Tools.descToolTip = function($elements,type, placement) {
 	if (!!$elements)  {
 		$elements.each(function() {
-			var $that = $(this), content = $that.prop('title'),html = $that.data("html");
+			var $that = $(this), content = $that.prop('title'),
+				html = $that.data("html"), 
+				timer = false, options = false;
 
 			// 内容过长，才提示
 			$that.prop('title', '');
+			// set options
 			if ($that.width() < $that.children().width() && type == 1)  {
-				// 绑定提示
-				$that.popover({
+				options = {
 					trigger: 'click',
 					container: '#desc-tooltip-containter',
 					content: content,
-				})
-				// 处理显示与隐藏提示
-				.hover(function() {
-					// 进入时，触发提示
-					setTimeout(function() {
-						$that.popover('show');
-					},200)
-				}, function() {
-					// 设置超时，通过判断来确定提示
-					setTimeout(function() {
-						if (Tools.$descContainer.data('focus-in') != true)  {
-							$that.popover('hide');
-						}
-					}, 100);
-				});
+				};
 			}else if (type == 2) {
-				var options = {
+				options = {
 					trigger: 'manual',
 					container: '#desc-tooltip-containter',
 					content: html,
@@ -1285,18 +1273,29 @@ Tools.descToolTip = function($elements,type, placement) {
 				};
 				if (!!placement) {
 					options.placement = placement;
-				}
+				}				
+			}
+
+			if (options)  {
 				// 绑定提示
 				$that.popover(options)
 				// 处理显示与隐藏提示
 				.hover(function() {
 					// 进入时，触发提示
-					$that.popover('show');
+					timer = setTimeout(function() {
+						timer = false;
+						$that.popover('show');
+					},200)
 				}, function() {
-					// 设置超时，通过判断来确定提示
-					if (Tools.$descContainer.data('focus-in') != true)  {
-						$that.popover('hide');
+					if (timer) {
+						clearTimeout(timer);
 					}
+					// 设置超时，通过判断来确定提示
+					setTimeout(function() {
+						if (Tools.$descContainer.data('focus-in') != true)  {
+							$that.popover('hide');
+						}
+					}, 100);
 				});
 			}
 		});

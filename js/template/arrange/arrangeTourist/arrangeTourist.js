@@ -245,19 +245,11 @@ define(function(require, exports) {
 						// 内转
 						arrangeTourist.inTransferTourist(lineProductId,startTime);
 					}
-
-
-					if($tr.hasClass('.T-touristGroupMergeCheckBox')){
-						//并团的checkbox绑定事件
-						arrangeTourist.addTouristGroupMerge();
-					}else if ($tr.hasClass('.T-start-touristGroup-merge')){
-						//并团绑定事件
-						arrangeTourist.startTouristGroupMerge();
-					}
 			});
 
 			//给并团checkbox绑定事件
-			$("#T-Visitor-list").find(".T-touristGroupMergeCheckBox").click(arrangeTourist.addTouristGroupMerge);
+			
+			$("#T-Visitor-list").find(".T-touristGroupMergeCheckBox").off().click(arrangeTourist.addTouristGroupMerge);
 			
 			//散客并团事件的绑定
 			$("#T-Visitor-list").find('.T-start-touristGroup-merge').on('click', function(event) {
@@ -568,7 +560,9 @@ define(function(require, exports) {
 						'<i class="ace-icon fa fa-times icon-on-right red2"></i>'+
 					'</button>';
 					$merge.prepend(button);
-					$merge.find('.btn-'+lineProductId+'-'+startTime+'').click(function(){
+					$merge.find('.btn-'+lineProductId+'-'+startTime+'').on('click', function(event) {
+						event.preventDefault();
+						/* Act on the event */
 						arrangeTourist.bindRemoveTouristGroupMerge($merge,lineProductId,startTime)
 					});
 					var touristGroupMerge = {
@@ -1136,7 +1130,7 @@ define(function(require, exports) {
 		},
 		removeTouristGroupMergeData:function($merge,lineProductId,startTime){
 			$merge.find(".btn-"+lineProductId+"-"+startTime+"").remove();
-			$("#"+tabId+" .arrangeTouristMain .arrangeTouristList .tr-"+lineProductId+"-"+startTime+" .touristGroupMergeCheckBox").prop("checked",false);
+			$("#"+tabId+" .tr-"+lineProductId+"-"+startTime+" .T-touristGroupMergeCheckBox").prop("checked",false);
 			var touristGroupMergeList = arrangeTourist.touristGroupMergeData.touristGroupMergeList;
 			if(touristGroupMergeList.length > 0){
 				for(var i=0;i<touristGroupMergeList.length;i++){
