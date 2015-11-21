@@ -2698,6 +2698,7 @@ define(function(require, exports) {
 						Tools.closeTab("arrange_quote-update");
 						quote.listQuote(quote.searchData.pageNo);
 					}
+					showMessageDialog($( "#confirm-dialog-message" ), "报价添加成功，请在报价管理中查看！");
 				}
 			}
 		})
