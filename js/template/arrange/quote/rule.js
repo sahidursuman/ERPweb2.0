@@ -134,6 +134,10 @@ define(function(require, exports) {
 						{
 							type: 'null',
 							errMsg: '数量不能为空'
+						},
+						{
+							type: 'float',
+							errMsg: '数量格式不正确'
 						}
 					]
 				}
