@@ -2849,17 +2849,18 @@ define(function(require, exports) {
 	 */
 	quote.deleteItem = function(quoteId) {
 		if (!!quoteId) {
-			$.ajax({
-				url: KingServices.build_url('quote', 'deleteQuote'),
-				type: 'post',
-				data: {id: quoteId},
+			showConfirmDialog($("#confirm-dialog-message"),"你确定要删除该报价？", function() {
+				$.ajax({
+					url: KingServices.build_url('quote', 'deleteQuote'),
+					type: 'post',
+					data: {id: quoteId},
+				})
+				.done(function(data) {
+					if (showDialog(data)) {
+						quote.listQuote(0);
+					}
+				});
 			})
-			.done(function(data) {
-				if (showDialog(data)) {
-					quote.listQuote(0);
-				}
-			});
-			
 		}
 	}
 
