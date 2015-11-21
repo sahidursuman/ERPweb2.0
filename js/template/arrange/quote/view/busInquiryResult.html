@@ -31,10 +31,7 @@
 								{{else if offer.reserveMinutes == 0}}
 									-
 								{{else}}
-									{{if (offer.reserveMinutes/60) > 1}}
-										{{ ((offer.reserveMinutes - offer.reserveMinutes%60)/60) }}小时
-									{{/if}}
-									{{offer.reserveMinutes%60}}分钟
+									{{offer.reserveTime}}
 								{{/if}}
 							</td>
 							<td>{{offer.expiryTime}}</td>
@@ -56,7 +53,14 @@
 							<td>{{offer.busCompanyName}}</td>
 							<td class="T-price">{{if offer.status == '已同意'}}{{offer.replyPrice}}{{else}}-{{/if}}</td>
 							<td>{{offer.remark}}</td>
-							<td>{{offer.reserveMinutes}}</td>
+							<td>{{if offer.reserveMinutes == -1}}
+									一直保留
+								{{else if offer.reserveMinutes == 0}}
+									-
+								{{else}}
+									{{offer.reserveTime}}
+								{{/if}}
+							</td>
 							<td>{{offer.expiryTime}}</td>
 							<td class="T-status">{{offer.status}}</td>
 							<td data-id="{{offer.id}}">
