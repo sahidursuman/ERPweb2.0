@@ -1,6 +1,6 @@
-/*TMODJS:{"debug":true,"version":1,"md5":"0077b27393b183285c1e8c711960a0a9"}*/
+/*TMODJS:{"debug":true,"version":2,"md5":"0af5ecd25eeca66be610018a2c045de9"}*/
 define(function(require) {
-    return require("../../template")("arrange/tripPlan/list", function($data, $filename) {
+    return require("../../../template")("arrange/tripPlan/view/list", function($data, $filename) {
         try {
             var $utils = this, $helpers = $utils.$helpers, $line = 0, $escape = $utils.$escape, searchParam = $data.searchParam, $each = $utils.$each, tripPlanList = $data.tripPlanList, recordSize = ($data.tripPlan, 
             $data.$index, $data.tripPlanDetails, $data.index, $data.recordSize), $out = "";

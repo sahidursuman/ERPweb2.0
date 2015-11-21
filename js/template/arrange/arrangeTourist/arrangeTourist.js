@@ -2611,7 +2611,7 @@ define(function(require, exports) {
 			})
 		},
 		licenseNumberChoose :function(){
-			var chooseLicense = $(".widget-main").find("input[name=LicenseNumber]");
+			var chooseLicense = $(".widget-main").find("input.chooseBusLicenseNumber");
 			chooseLicense.autocomplete({
 				minLength:0,
 				change :function(event, ui){
@@ -2670,6 +2670,58 @@ define(function(require, exports) {
 					})
 				}else{
 					layer.tips('请选择车座数', obj, {
+					    tips: [1, '#3595CC'],
+					    time: 2000
+					});
+				}
+			})
+			var chooseLicenseByCompany = $(".widget-main").find("input.T-chooseBusbyCompanyId");
+			chooseLicenseByCompany.autocomplete({
+				minLength:0,
+				change :function(event, ui){
+					if(ui.item == null){
+						var $this = $(this),parents = $(this).closest('.widget-main');
+						$this.val("");
+						parents.find("input[name=busLicenseNumberId]").val("");
+					}
+				},
+				select :function(event, ui){
+					var $this = $(this),parents = $(this).closest('.widget-main');
+						parents.find("input[name=busLicenseNumberId]").val(ui.item.id).trigger('change');
+				}
+			}).unbind("click").click(function(){
+				var obj = this;
+				var id = $(this).closest('.widget-main').find("input[name=busCompanyId]").val();
+				if (!!id) {
+					$.ajax({
+						url:""+APP_ROOT+"back/busCompany.do?method=findBusListByBusCompanyId&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
+						data: {
+							busCompanyId: id
+						},
+						dateType:"json",
+						showLoading:false,
+						type:"POST",
+						success:function(data){
+							var result = showDialog(data);
+							if(result){
+								var licenseList = JSON.parse(data.busList);
+								if(licenseList && licenseList.length > 0){
+									for(var i=0; i < licenseList.length; i++){
+										licenseList[i].value = licenseList[i].licenseNumber;
+									}
+									$(obj).autocomplete('option','source', licenseList);
+									$(obj).autocomplete('search', '');
+								}else{
+									layer.tips('没有内容', obj, {
+									    tips: [1, '#3595CC'],
+									    time: 2000
+									});
+								}
+							}
+						}
+					})
+				}else{
+					layer.tips('请选择车车队', obj, {
 					    tips: [1, '#3595CC'],
 					    time: 2000
 					});
