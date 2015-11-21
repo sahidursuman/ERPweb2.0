@@ -288,15 +288,6 @@ define(function(require, exports) {
 							errMsg: '请输入数字'
 						}
 					]
-				},{//所属车队
-					$ele: $bus.find('input[name="busCompany"]'),
-					$valObj: $bus.find('input[name="busCompanyId"]'),
-					rules: [
-						{
-							type: 'null',
-							errMsg: '所属车队不能为空'
-						}
-					]
 				},{//数量
 					$ele: $bus.find('input[name="roomCount"]'),
 					rules: [
