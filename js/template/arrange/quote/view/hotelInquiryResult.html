@@ -73,10 +73,7 @@
 								{{else if offer.reserveMinutes == 0}}
 									-
 								{{else}}
-									{{if (offer.reserveMinutes/60) > 1}}
-										{{ ((offer.reserveMinutes - offer.reserveMinutes%60)/60) }}小时
-									{{/if}}
-									{{offer.reserveMinutes%60}}分钟
+									{{offer.reserveTime}}
 								{{/if}}
 							</td>
 							<td rowspan="{{offer.roomTypeList.length}}">{{offer.expiryTime}}</td>
@@ -160,7 +157,15 @@
 								<td class="T-hotelPrice-{{offer.id}}"></td>
 							{{/if}}
 							<td rowspan="{{offer.roomTypeList.length}}">{{offer.remark}}</td>
-							<td rowspan="{{offer.roomTypeList.length}}">{{offer.reserveMinutes}}</td>
+							<td rowspan="{{offer.roomTypeList.length}}">
+								{{if offer.reserveMinutes == -1}}
+									一直保留
+								{{else if offer.reserveMinutes == 0}}
+									-
+								{{else}}
+									{{offer.reserveTime}}
+								{{/if}}
+							</td>
 							<td rowspan="{{offer.roomTypeList.length}}">{{offer.expiryTime}}</td>
 							<td rowspan="{{offer.roomTypeList.length}}">{{offer.status}}</td>
 							<td rowspan="{{offer.roomTypeList.length}}" data-id="{{offer.id}}">

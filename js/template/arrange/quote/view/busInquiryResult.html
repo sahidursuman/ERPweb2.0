@@ -31,10 +31,7 @@
 								{{else if offer.reserveMinutes == 0}}
 									-
 								{{else}}
-									{{if (offer.reserveMinutes/60) > 1}}
-										{{ ((offer.reserveMinutes - offer.reserveMinutes%60)/60) }}小时
-									{{/if}}
-									{{offer.reserveMinutes%60}}分钟
+									{{offer.reserveTime}}
 								{{/if}}
 							</td>
 							<td>{{offer.expiryTime}}</td>
@@ -61,10 +58,7 @@
 								{{else if offer.reserveMinutes == 0}}
 									-
 								{{else}}
-									{{if (offer.reserveMinutes/60) > 1}}
-										{{ ((offer.reserveMinutes - offer.reserveMinutes%60)/60) }}小时
-									{{/if}}
-									{{offer.reserveMinutes%60}}分钟
+									{{offer.reserveTime}}
 								{{/if}}
 							</td>
 							<td>{{offer.expiryTime}}</td>
