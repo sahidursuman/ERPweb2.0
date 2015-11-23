@@ -55,13 +55,24 @@
 					<label class="middle title-size">详情表</label>
 				</h5>
 	         <table class="whereQ whereTwo" style="width: 88%;margin-bottom: 30px;">
+					<!-- <tr>
+						<td class="style-myself">地接社</td>
+						<td class="" style="text-align: left;padding: 0px 0px 0px 10px">{{quoteDetailJson.partnerAgency.travelAgencyName}}</td>
+						<td class="style-myself">报价人</td>
+						<td class="" style="text-align: left;padding: 0px 0px 0px 10px">{{quoteDetailJson.partnerAgencyContact.contactRealname}}</td>
+						<td class="style-myself">联系电话</td>
+						<td class="" style="text-align: left;padding: 0px 0px 0px 10px">{{quoteDetailJson.partnerAgencyContact.contactMobileNumber}}</td>
+						<td>报价日期</td>
+						<td>2015-11-25</td>
+					</tr> -->
+
 					<tr>
 						<td class="style-myself">客户</td>
 						<td class="" style="text-align: left;padding: 0px 0px 0px 10px">{{quoteDetailJson.partnerAgency.travelAgencyName}}</td>
 						<td class="style-myself">联系人</td>
 						<td class="" style="text-align: left;padding: 0px 0px 0px 10px">{{quoteDetailJson.partnerAgencyContact.contactRealname}}</td>
 						<td class="style-myself">联系电话</td>
-						<td class="" style="text-align: left;padding: 0px 0px 0px 10px">{{quoteDetailJson.partnerAgencyContact.contactMobileNumber}}</td>
+						<td class="" style="text-align: left;padding: 0px 0px 0px 10px" colspan="3">{{quoteDetailJson.partnerAgencyContact.contactMobileNumber}}</td>
 					</tr>
 					<tr>
 						<td class="style-myself">人数</td>
@@ -69,11 +80,11 @@
 						<td class="style-myself">单房差数</td>
 						<td class="" style="text-align: left;padding: 0px 0px 0px 10px">{{quoteDetailJson.singleRoomCount}}</td>
 						<td class="style-myself">出游日期</td>
-						<td class="" style="text-align: left;padding: 0px 0px 0px 10px">{{quoteDetailJson.startTime}}</td>
+						<td class="" style="text-align: left;padding: 0px 0px 0px 10px" colspan="3">{{quoteDetailJson.startTime}}</td>
 					</tr>
 					<tr>
 						<td class="style-myself">总价</td>
-						<td class="" style="text-align: left;padding: 0px 0px 0px 10px" colspan="6">{{quoteDetailJson.sumQuoteFee}}</td>
+						<td class="" style="text-align: left;padding: 0px 0px 0px 10px" colspan="8">{{quoteDetailJson.sumQuoteFee}}</td>
 						
 						</tr>
 					<tr>
@@ -82,11 +93,11 @@
 						<td class="style-myself">小孩单价</td>
 						<td class="" style="text-align: left;padding: 0px 0px 0px 10px">{{quoteDetailJson.adultQuotePrice}}</td>
 						<td class="style-myself">单房差</td>
-						<td class="" style="text-align: left;padding: 0px 0px 0px 10px">{{quoteDetailJson.singleRoomCount}}</td>
+						<td class="" style="text-align: left;padding: 0px 0px 0px 10px"  colspan="3">{{quoteDetailJson.singleRoomCount}}</td>
 					</tr>
 					<tr>
 						<td class="style-myself">备注</td>
-						<td class="" style="text-align: left;padding: 0px 0px 0px 10px"  colspan="6">{{quoteDetailJson.remark}}</td>
+						<td class="" style="text-align: left;padding: 0px 0px 0px 10px"  colspan="8">{{quoteDetailJson.remark}}</td>
 						</tr>
 
 		   		 </table>
@@ -127,7 +138,7 @@
 				<div class=" ui-sortable-handle">
 						<h5 class="pull-left title-size">
 							<i class="ace-icon fa fa-calendar-minus-o"></i>
-							<label class="middle title-size">基础安排模板</label>
+							<label class="middle title-size">基础信息</label>
 						</h5>
 					<div class="pull-right line-bluer line-separatedQuote"></div>
 					<div style="clear: both"></div>
@@ -179,7 +190,7 @@
 				<div class=" ui-sortable-handle widgetSchedule">
 						<h5 class="pull-left title-size">
 							<i class="ace-icon fa fa-paper-plane"></i>
-							<label class="middle title-size">行程安排模板</label>
+							<label class="middle title-size">行程信息</label>
 						</h5>
 					<div class="pull-right line-bluer  line-separatedQuote"></div>
 					<div style="clear: both"></div>
@@ -230,21 +241,17 @@
                                                                                             <table class="table table-striped table-bordered table-hover">
                                                                                                 <thead>
                                                                                                     <tr>
-                                                                                                        <th class="th-border">餐厅名称</th>
-                                                                                                        <th class="th-border">餐厅电话</th>
+
                                                                                                         <th class="th-border">用餐类型</th>
-                                                                                                        <th class="th-border">餐标</th>
-                                                                                                        <th class="th-border">菜单</th>
+                                                                                                        <th class="th-border">餐厅名称</th>
                                                                                                         <th class="th-border">备注</th>
                                                                                                     </tr>
                                                                                                 </thead>
                                                                                                 <tbody>
                                                                                                     <tr>
-                                                                                            <td>{{restaurantList.restaurant.name}}</td>
-                                                                                            <td>{{restaurantList.restaurant.mobileNumber}}</td>
+
                                                                                             <td>{{restaurantList.type}}</td>
-                                                                                            <td>{{restaurantList.price}}</td>
-                                                                                            <td>{{restaurantList.menuList}}</td>
+                                                                                            <td>{{restaurantList.restaurant.name}}</td>
                                                                                             <td>{{restaurantList.remark}}</td>
                                                                                         </tr>
                                                                                                 </tbody>
@@ -270,10 +277,7 @@
                                                                                                         <th class="th-border">酒店星级</th>
                                                                                                         <th class="th-border">酒店名称</th>
                                                                                                         <th class="th-border">房型</th>
-                                                                                                        <th class="th-border">价格</th>
-                                                                                                        <th class="th-border">数量</th>
                                                                                                         <th class="th-border">早餐</th>
-                                                                                                        <th class="th-border">电话</th>
                                                                                                         <th class="th-border">备注</th>
                                                                                                     </tr>
                                                                                                 </thead>
@@ -284,12 +288,9 @@
                                                                                             </td>
                                                                                             <td>{{hotelList.hotel.name}}</td>
                                                                                             <td>{{hotelList.hotelRoom.type}}</td>
-                                                                                            <td>{{hotelList.price}}</td>
-                                                                                            <td>{{hotelList.memberCount}}</td>
                                                                                             <td>
                                                                                                 {{if hotelList.hotelRoom.containBreakfast==1}}含早餐{{/if}} {{if hotelList.hotelRoom.containLunch==1}}含午餐{{/if}} {{if hotelList.hotelRoom.containDinner==1}}含晚餐{{/if}}
                                                                                             </td>
-                                                                                            <td>{{hotelList.hotel.mobileNumber}}</td>
                                                                                             <td>{{hotelList.remark}}</td>
                                                                                         </tr>
                                                                                                 </tbody>
@@ -313,18 +314,14 @@
                                                                                                 <thead>
                                                                                                     <tr>
                                                                                                         <th class="th-border">景区名称</th>
-                                                                                                        <th class="th-border">收费项目</th>
-                                                                                                        <th class="th-border">景区价格</th>
-                                                                                                        <th class="th-border">联系电话</th>
+                                                                                                        <th class="th-border">时间</th>
                                                                                                         <th class="th-border">备注</th>
                                                                                                     </tr>
                                                                                                 </thead>
                                                                                                 <tbody>
                                                                                                   <tr>
                                                                                                    <td>{{scenicList.scenic.name}}</td>
-                                                                                            		<td>{{scenicList.name}}</td>
-                                                                                            		<td>{{scenicList.price}}</td>
-                                                                                            	<td>{{scenicList.scenic.mobileNumber}}</td>
+                                                                                                   <td>{{scenicList.tourDuration}}</td>
                                                                                            			 <td>{{scenicList.remark}}</td>     
                                                                                                   </tr>
                                                                                                 </tbody>
