@@ -123,6 +123,7 @@ define(function(require,exports){
 			area:'1190px',
 			zIndex:1028,
 			content:addHtml,
+			scrollbar: false, // 推荐禁用浏览器外部滚动条
 			success:function(){
 				var $obj = $(".T-addPartnerAgencyContainer");
 				var $mainObj = $obj.find('.T-form-main');
@@ -169,7 +170,7 @@ define(function(require,exports){
 						area:'1190px',
 						zIndex:1028,
 						content:html,
-						scrollbar:false,
+						scrollbar: false, // 推荐禁用浏览器外部滚动条
 						success:function(){
 							var $obj = $('.T-updatePartnerAgencyContainer');
 							var $mainObj = $obj.find('.T-partnerAgencyMainForm');
@@ -235,7 +236,7 @@ define(function(require,exports){
 						area:'60%',
 						zIndex:1028,
 						content:html,
-						scrollbar: false,
+						scrollbar: false, // 推荐禁用浏览器外部滚动条
 					});
 				}
 			}
@@ -399,9 +400,10 @@ define(function(require,exports){
 			type:1,
 			title:'新增同行总社',
 			skin:'layui-layer-rim',
-			area:['35%','35%'],
+			area:'35%',
 			zIndex:1028,
 			content:html,
+			scrollbar: false, // 推荐禁用浏览器外部滚动条
 			success:function(){
 				var $mainContainer = $('.T-addHeaderAgencyContainer');
 				$mainContainer.find('.T-addHeaderAgency').on('click',function(){
