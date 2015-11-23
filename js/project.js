@@ -1212,9 +1212,11 @@ function listMenu(menuTemplate){
 									$checkBox.data('triggered-click', true);
 									$that.toggleClass('success');
 									$checkBox.trigger('click');
+									
 								}
 							} else {
-								$that.toggleClass('success');
+								$that.parent().find('.success').removeClass('success');
+								$that.addClass('success');
 							}				
 					}
 				});
