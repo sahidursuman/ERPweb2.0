@@ -2631,15 +2631,21 @@ define(function(require, exports) {
 				}
 			}).unbind("click").click(function(){
 				var obj = this;
-				var seatCount = $(this).closest('.widget-main').find("input[name=seatCount]").val();
-				var busBrand = $(this).closest('.widget-main').find("input[name=needBusBrand]").val();
+				var seatCount = $(this).closest('.widget-main').find("input[name=seatCount]").val(),
+				    busBrand = $(this).closest('.widget-main').find("input[name=needBusBrand]").val(),
+				    busCompanyId = $(this).closest('.widget-main').find("input[name=busCompanyId]").val(),
+				    quoteId= $(this).closest('.widget-main').find("input[name=qouteId]").val();
+				  var data={
+					seatCount: seatCount,
+					brand: busBrand,
+				}
+				 if (quoteId != null&& quoteId!='') {
+					data.busCompanyId = busCompanyId;
+				 } 
 				if (!!seatCount) {
 					$.ajax({
 						url:""+APP_ROOT+"back/busCompany.do?method=getLicenseNumbers&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-						data: {
-							seatCount: seatCount,
-							brand: busBrand
-						},
+						data:data,
 						dateType:"json",
 						showLoading:false,
 						type:"POST",
@@ -2685,13 +2691,22 @@ define(function(require, exports) {
 				}
 			}).unbind("click").click(function(){
 				var obj = this;
-				var id = $(this).closest('.widget-main').find("input[name=busCompanyId]").val();
+				var id = $(this).closest('.widget-main').find("input[name=busCompanyId]").val()
+				    busBrand = $(this).closest('.widget-main').find("input[name=needBusBrand]").val(),
+				    quoteId= $(this).closest('.widget-main').find("input[name=qouteId]").val(),
+				    seatCount=$(this).closest('.widget-main').find("input[name=seatCount]").val();
+				var data= {
+							busBrand:busBrand,
+							seatCount:seatCount
+						};
+				    if (quoteId!=null&&quoteId!='') {
+				    	data.busCompanyId=id;
+				    };
+
 				if (!!id) {
 					$.ajax({
-						url:""+APP_ROOT+"back/busCompany.do?method=findBusListByBusCompanyId&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-						data: {
-							busCompanyId: id
-						},
+						url:""+APP_ROOT+"back/busCompany.do?method=getLicenseNumbers&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
+						data:data,
 						dateType:"json",
 						showLoading:false,
 						type:"POST",
