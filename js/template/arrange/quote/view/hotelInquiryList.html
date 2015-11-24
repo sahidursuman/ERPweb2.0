@@ -40,7 +40,9 @@
 						{{/if}}
 					{{/each}}
 				{{/if}}
-				<td style="vertical-align:middle" rowspan="{{hotel.inquiryHotelRoolList.length}}"><a class="T-chooseHotel">添加</a></td>
+				<td style="vertical-align:middle" rowspan="{{hotel.inquiryHotelRoolList.length}}"><!-- <a class="T-chooseHotel">添加</a> -->
+					<label class="pos-rel"><input type="checkbox" class="ace T-chooseHotel"> <span class="lbl"></span> </label>
+				</td>
 			</tr>
 			{{each hotel.inquiryHotelRoolList as room index}}
 			{{if index > 0}}
