@@ -3,15 +3,20 @@
 		<td name="travelLine-select" data-travelLine-Id="{{lineProduct.id}}">
 			{{lineProduct.name}}
 		</td>
+		{{if !!quote}}
+		<td>{{lineProduct.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
+		{{/if}}
 		<td>
 			{{lineProduct.days}}
 		</td>
 		<td>
 			{{lineProduct.type}}
 		</td>
+		{{if !!quote}}
 		<td>
 			{{lineProduct.adultCount}}大{{lineProduct.childCount}}小
 		</td>
+		{{/if}}
 		<td>
 			{{if lineProduct.customerType==0}}
 			散客
@@ -28,6 +33,7 @@
 		</td> -->
 		{{if !!quote}}
 		<td>{{lineProduct.travelAgencyName}}</td>
+		<td>{{lineProduct.contactRealname}}</td>
 		<td>{{lineProduct.createTime}}</td>
 		{{/if}}
 		<td>
