@@ -382,12 +382,8 @@
                                                 <h5 class="">
 														<label class="title-size">行程标题：{{lineProductDaysList.lineProductDay.title}}</label>
 													</h5>
-                                                <div class="widget-body">
-                                                    <div class="widget-main">
-                                                        <h5 class="header">行程详情：</h5>
-                                                        <script id="{{editorName}}-{{i}}" class="T-editor" type="text/plain" style="width:100%">
-                                                            {{#lineProductDaysList.lineProductDay.detail}}
-                                                        </script>
+                                                    
+
                                                         <div style="margin-top:10px;margin-bottom:10px">
                                                             <button class="btn btn-app btn-inverse btn-xs T-add T-addRestaurant" style="background: #1fade0!important;">
                                                                 <i class="ace-icon fa fa-plus bigger-160"></i> 餐饮
@@ -408,6 +404,8 @@
                                                                 <i class="ace-icon fa fa-plus bigger-160"></i> 交通
                                                             </button>
                                                         </div>
+
+                                                        
                                                         <div id="timeline-1">
                                                             <div class="row">
                                                                 <div class="col-xs-12 col-sm-12">
@@ -465,8 +463,8 @@
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <a data-entity-id="{{restaurantList.id}}" data-entity-name="restaurantTemplate" class="cursor btn-restaurant-delete T-delete">
-																												删除
-																											</a>
+                                                                                                                删除
+                                                                                                            </a>
                                                                                                         </td>
                                                                                                     </tr>
                                                                                                 </tbody>
@@ -522,7 +520,7 @@
                                                                                                             <input type="hidden" name="hotelRoomId" value="{{hotelList.hotelRoom.id}}" />
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input type="text" readonly="readonly" name="contractPrice" value="{{hotelList.price}}" style="width:70px;" />
+                                                                                                            <input type="text" readonly="readonly" name="contractPrice" value="{{hotelList.price}}"  />
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <input type="text" class="col-xs-12" readonly="readonly" name="containBreakfast" value="{{if hotelList.hotelRoom.containBreakfast==1}}含早餐 {{/if}}{{if hotelList.hotelRoom.containLunch==1}}-含午餐{{/if}}{{if hotelList.hotelRoom.containDinner==1}}-含晚餐{{/if}}" />
@@ -536,8 +534,8 @@
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <a data-entity-id="{{hotelList.id}}" data-entity-name="hotelTemplate" class="cursor btn-restaurant-delete T-delete">
-																												删除
-																											</a>
+                                                                                                                删除
+                                                                                                            </a>
                                                                                                         </td>
                                                                                                     </tr>
                                                                                                 </tbody>
@@ -590,8 +588,8 @@
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <a data-entity-id="{{scenicList.id}}" data-entity-name="scenicTemplate" class="cursor btn-restaurant-delete T-delete">
-																												删除
-																											</a>
+                                                                                                                删除
+                                                                                                            </a>
                                                                                                         </td>
                                                                                                     </tr>
                                                                                                 </tbody>
@@ -648,8 +646,8 @@
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <a data-entity-id="{{shopList.id}}" data-entity-name="shopTemplate" class="cursor btn-restaurant-delete T-delete">
-																												删除
-																											</a>
+                                                                                                                删除
+                                                                                                            </a>
                                                                                                         </td>
                                                                                                     </tr>
                                                                                                 </tbody>
@@ -696,8 +694,8 @@
                                                                                                             <input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber" value="{{selfPayList.selfPay.mobileNumber}}" />
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input type="text" class="col-xs-12" readonly="readonly" name="contractPrice" value="{{selfPayList.price}}" />
-                                                                                                            <input type="hidden" class="col-xs-12" readonly="readonly" name="marketPrice" value="{{selfPayList.marketPrice}}" />
+                                                                                                            <input type="text"  readonly="readonly" name="contractPrice" value="{{selfPayList.price}}" />
+                                                                                                            <input type="hidden" readonly="readonly" name="marketPrice" value="{{selfPayList.marketPrice}}" />
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <input type="text" class="col-xs-12" readonly="readonly" name="managerName" value="{{selfPayList.selfPay.managerName}}" />
@@ -707,8 +705,8 @@
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <a data-entity-id="{{selfPayList.id}}" data-entity-name="selfPayTemplate" class="cursor btn-restaurant-delete T-delete">
-																												删除
-																											</a>
+                                                                                                                删除
+                                                                                                            </a>
                                                                                                         </td>
                                                                                                     </tr>
                                                                                                 </tbody>
@@ -749,7 +747,7 @@
                                                                                                             <input type="hidden" name="templateId" value="{{ticketList.id}}" />{{/if}}
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <select name="type" class="col-sm-12 no-padding" style="width:70px;">
+                                                                                                            <select name="type" class=" no-padding" >
                                                                                                                 <option {{if ticketList.type=="1" }}selected="selected" {{/if}} value="1">机票</option>
                                                                                                                 <option {{if ticketList.type=="2" }}selected="selected" {{/if}} value="2">汽车票</option>
                                                                                                                 <option {{if ticketList.type=="3" }}selected="selected" {{/if}} value="3">火车票</option>
@@ -773,8 +771,8 @@
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <a data-entity-id="{{ticketList.id}}" data-entity-name="ticketTemplate" class="cursor btn-restaurant-delete T-delete">
-																												删除
-																											</a>
+                                                                                                                删除
+                                                                                                            </a>
                                                                                                         </td>
                                                                                                     </tr>
                                                                                                 </tbody>
@@ -792,6 +790,13 @@
                                                             </div>
                                                         </div>
                                                     </div>
+
+                                                <div class="widget-body">
+                                                    <div class="widget-main">
+                                                        <h5 class="header">行程详情：</h5>
+                                                        <script id="{{editorName}}-{{i}}" class="T-editor" type="text/plain" style="width:100%">
+                                                            {{#lineProductDaysList.lineProductDay.detail}}
+                                                        </script>
                                                 </div>
                                             </div>
                                         </div>

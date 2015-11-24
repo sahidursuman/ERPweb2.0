@@ -39,7 +39,7 @@
 										</div>
 										<label class="col-sm-1 control-label no-padding-right">车辆品牌：</label>
 										<div class="col-sm-2">
-											<input class="col-sm-12" type="text" name="needBusBrand" id="" value="{{if addTripPlan.busCompanyArrange != null}}{{addTripPlan.busCompanyArrange.brand}}{{/if}}" readonly="readonly" />
+											<input class="col-sm-12" type="text" name="needBusBrand" id="" value="{{if addTripPlan.busCompanyArrange != null}}{{addTripPlan.busCompanyArrange.brand}}{{/if}}"  {{if addTripPlan.busCompanyArrange != null && addTripPlan.busCompanyArrange.brand!=''}}readonly="readonly"{{/if}} />
 										</div>
 										{{else}}
 										<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>车座数：</label>
@@ -57,7 +57,7 @@
 									<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>车牌号：</label>
 									<div class="col-sm-2">
 										<div class="col-sm-12 no-padding">
-											<input class="col-sm-12 chooseBusLicenseNumber bind-change" type="text" name="LicenseNumber" id="" value="{{if addTripPlan.bus != null}}{{addTripPlan.bus.licenseNumber}}{{/if}}" />
+											<input class="col-sm-12 {{if addTripPlan.busCompanyArrange != null && addTripPlan.busCompanyArrange.brand!=''}}T-chooseBusbyCompanyId{{else}} chooseBusLicenseNumber{{/if}} bind-change" type="text" name="LicenseNumber" id="" value="{{if addTripPlan.bus != null}}{{addTripPlan.bus.licenseNumber}}{{/if}}" />
 											<input type="hidden" name="busLicenseNumberId" value="{{if addTripPlan.bus != null}}{{addTripPlan.bus.id}}{{/if}}" />
 											<span class="addResourceBtnTripPlan T-addBusResource R-right" data-right="1020003" title="添加车辆">
                                                 <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>

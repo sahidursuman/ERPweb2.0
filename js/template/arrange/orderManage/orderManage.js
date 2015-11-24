@@ -52,7 +52,7 @@ define(function(require, exports) {
 	    orderManage.listHotelOrder(0);
 
 	    //导游订单Ajax
-	    orderManage.listGuidOrder();
+	    //orderManage.listGuidOrder();
 
 	
 	};
@@ -80,20 +80,18 @@ define(function(require, exports) {
 				        //初始化页面事件
 				        orderManage.init_evet();
 
-				        //分页组件
-				        orderManage.initPager=function(data,type){
-								// 绑定翻页组件
-								laypage({
-								    cont: orderManage.$tab.find('#T-HotelOrder-list').find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
-								    pages: data.searchParam.totalPage, //总页数 
-								    curr: (page + 1),
-								    jump: function(obj, first) {
-								    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-								    		orderManage.listBusCompanyOrder(obj.curr -1);
-								    	}
-								    }
-								});
-						};
+						// 绑定翻页组件
+						laypage({
+						    cont: orderManage.$tab.find('#T-BusCompany-list').find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+						    pages: data.searchParam.totalPage, //总页数 
+						    curr: (page + 1),
+						    jump: function(obj, first) {
+						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+						    		orderManage.listBusCompanyOrder(obj.curr -1);
+						    	}
+						    }
+						});
+					
 				    }
 				}
 			})
@@ -158,12 +156,12 @@ define(function(require, exports) {
 	/**
 	 * [listGuidOrder 导游订单列表]
 	 * @return {[type]} [description]
-	 */
+	 
 	orderManage.listGuidOrder=function(){
 		var listGuideHtml=listGuideTemplate();
 		//导订单
 		orderManage.$tab.find('#T-Guide-list').html(listGuideHtml);
-	};
+	};*/
 
 
 	/**

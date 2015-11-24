@@ -20,42 +20,58 @@
 			</thead>
 			<tbody class="T-Hotel-list">
 			{{each hotelOrderList as hotOrderList}}
-					{{if hotOrderList.hotelOrderNeedRoomList!=null}}
-						{{each hotOrderList.hotelOrderNeedRoomList as htOrderNList index}}
-							<tr data-value={{hotOrderList.id}}>
-							    {{if index==0}}<td rowspan="{{hotOrderList.hotelOrderNeedRoomList.length}}">{{hotOrderList.orderNumber}}</td>
-							    <td rowspan="{{hotOrderList.hotelOrderNeedRoomList.length}}">发团</td>
-								<td rowspan="{{hotOrderList.hotelOrderNeedRoomList.length}}">{{if hotOrderList.tripPlan!=null}}{{hotOrderList.tripPlan.tripNumber}}{{/if}}</td>
-
-								<td rowspan="{{hotOrderList.hotelOrderNeedRoomList.length}}">
-								{{if hotOrderList.hotel!=null}}
-									{{if hotOrderList.hotel.level==1}}三星以下
-										{{else if hotOrderList.hotel.level==2}}三星
-										{{else if hotOrderList.hotel.level==3}}准四星
-										{{else if hotOrderList.hotel.level=4}}四星
-										{{else if hotOrderList.hotel.level==5}}准五星
-										{{else if hotOrderList.hotel.level==6}}五星
-										{{else if hotOrderList.hotel.level==7}}五星以上
-									{{/if}}
-								{{/if}}</td>{{/if}}
-								<td>{{htOrderNList.type}}</td>
-								<td class="count">{{htOrderNList.needRoomCount}}</td>
-								<td class="price">{{htOrderNList.price}}</td>
-								<td class="totalMoney">{{htOrderNList.price}}</td>
-								{{if index==0}}<td rowspan="{{hotOrderList.hotelOrderNeedRoomList.length}}">{{if hotOrderList.user!=null}}{{hotOrderList.user.realName}}{{/if}}</td>
-
-								<td rowspan="{{hotOrderList.hotelOrderNeedRoomList.length}}">{{if hotOrderList.hotel!=null}}{{hotOrderList.hotel.name}}{{/if}}</td>
-								<td rowspan="{{hotOrderList.hotelOrderNeedRoomList.length}}" class="T-ctrl-tip">{{if hotOrderList.hotel!=null}}{{hotOrderList.hotel.remark}}{{/if}}</td>
-								<td rowspan="{{hotOrderList.hotelOrderNeedRoomList.length}}">{{hotOrderList.statusStr}}</td>
-								<td rowspan="{{hotOrderList.hotelOrderNeedRoomList.length}}">
-									<a class="cursor {{if hotOrderList.status==0}}T-listHotel-refuse{{/if}} R-right T-action" style="{{if hotOrderList.status==1 || hotOrderList.status==-1}}color:#bbb;{{/if}}">
-										撤销
-									</a>
-								</td>{{/if}}					
-				            </tr>
-						{{/each}}
+				<tr data-value="{{hotOrderList.id}}">
+				    <td rowspan="{{hotOrderList.hotelOrderNeedRoomList.length}}" style="vertical-align:middle">{{hotOrderList.orderNumber}}</td>
+				    <td rowspan="{{hotOrderList.hotelOrderNeedRoomList.length}}" style="vertical-align:middle">发团</td>
+				    <td rowspan="{{hotOrderList.hotelOrderNeedRoomList.length}}" style="vertical-align:middle">{{if hotOrderList.tripPlan!=null}}{{hotOrderList.tripPlan.tripNumber}}{{/if}}</td>
+					<td rowspan="{{hotOrderList.hotelOrderNeedRoomList.length}}" style="vertical-align:middle">{{if hotOrderList.hotel!=null}}
+							{{if hotOrderList.hotel.level==1}}三星以下
+								{{else if hotOrderList.hotel.level==2}}三星
+								{{else if hotOrderList.hotel.level==3}}准四星
+								{{else if hotOrderList.hotel.level=4}}四星
+								{{else if hotOrderList.hotel.level==5}}准五星
+								{{else if hotOrderList.hotel.level==6}}五星
+								{{else if hotOrderList.hotel.level==7}}五星以上
+							{{/if}}
+			            {{/if}}
+					</td>
+					{{if hotOrderList.hotelOrderNeedRoomList.length > 0}}
+					{{each hotOrderList.hotelOrderNeedRoomList as htOrderNList index}}
+					{{if index == 0}}
+					<td>{{htOrderNList.type}}</td>
+					<td>{{htOrderNList.needRoomCount}}</td>
+					<td>{{htOrderNList.price}}</td>
+					<td>{{htOrderNList.price}}</td>
 					{{/if}}
-				
+					{{/each}}
+					{{else}}
+					<td>-</td>
+					<td>-</td>
+					<td>-</td>
+					<td>-</td>
+					{{/if}}
+					<td rowspan="{{hotOrderList.hotelOrderNeedRoomList.length}}" style="vertical-align:middle">{{if hotOrderList.user!=null}}{{hotOrderList.user.realName}}{{/if}}</td>					    				    	    
+
+					<td rowspan="{{hotOrderList.hotelOrderNeedRoomList.length}}" style="vertical-align:middle">{{if hotOrderList.hotel!=null}}{{hotOrderList.hotel.name}}{{/if}}</td>
+					<td rowspan="{{hotOrderList.hotelOrderNeedRoomList.length}}" style="vertical-align:middle" class="T-ctrl-tip">{{if hotOrderList.hotel!=null}}{{hotOrderList.hotel.remark}}{{/if}}</td>
+					<td rowspan="{{hotOrderList.hotelOrderNeedRoomList.length}}" style="vertical-align:middle">{{hotOrderList.statusStr}}</td>
+					<td rowspan="{{hotOrderList.hotelOrderNeedRoomList.length}}" style="vertical-align:middle">
+						<a class="cursor {{if hotOrderList.status==0}}T-listHotel-refuse{{/if}} R-right T-action" data-right="1450002" style="{{if hotOrderList.status==1 || hotOrderList.status==-1}}color:#bbb;{{/if}}">
+							撤销
+						</a>
+					</td>
+				</tr>	
+
+				{{each hotOrderList.hotelOrderNeedRoomList as htOrderNList index}}
+				{{if index > 0}}
+				<tr>
+				<td>{{htOrderNList.type}}</td>
+				<td>{{htOrderNList.needRoomCount}}</td>
+				<td>{{htOrderNList.price}}</td>
+				<td>{{htOrderNList.price}}</td>
+				</tr>
+				{{/if}}
+				{{/each}}
 			{{/each}}
 			</tbody>
 	</table>

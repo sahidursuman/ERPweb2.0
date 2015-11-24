@@ -178,6 +178,7 @@ define(function(require, exports) {
 					    area: '800px', //宽高
 					    zIndex:1028,
 					    content: html,
+					    scrollbar: false,
 					    success:function(){}
 					});
 				}
@@ -207,6 +208,7 @@ define(function(require, exports) {
 					    area: '800px', //宽高
 					    zIndex:1028,
 					    content: html,
+					    scrollbar: false,
 					    success:function(){
 					    	var $container = $(".T-updateInsuranceContainer");
 							//初始化地区

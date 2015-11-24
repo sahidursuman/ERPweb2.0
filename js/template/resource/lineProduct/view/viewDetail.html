@@ -236,13 +236,9 @@
 
 											<label class="middle title-size">行程标题：{{lineProductDaysList.lineProductDay.title}}</label>
 										</h5>
-                                    <div class="widget-body">
-                                        <div class=" scheduleContainer">
-                                            <h5 class="header">行程详情：</h5>
-                                            <div class="detailEditor wysiwyg-editor" style="height: 200px;overflow: scroll;">
-                                                {{#lineProductDaysList.lineProductDay.detail}}
-                                            </div>
-                                            <div id="timeline-1">
+
+
+                                        <div id="timeline-1">
                                                 <div class="row">
                                                     <div class="col-xs-12 col-sm-12">
                                                         <div class="timeline-container">
@@ -455,6 +451,7 @@
                                                                                     <thead>
                                                                                         <tr>
                                                                                             <th class="th-border">公司名称</th>
+                                                                                            <th class="th-border">项目名称</th>
                                                                                             <th class="th-border">联系电话</th>
                                                                                             <th class="th-border">价格</th>
                                                                                             <th class="th-border">联系人</th>
@@ -464,6 +461,7 @@
                                                                                     <tbody>
                                                                                         <tr>
                                                                                             <td>{{selfPayList.selfPay.name}}</td>
+                                                                                            <td>{{selfPayList.selfPayItem.name}}</td>
                                                                                             <td>{{selfPayList.selfPay.mobileNumber}}</td>
                                                                                             <td>{{selfPayList.price}}</td>
                                                                                             <td>{{selfPayList.selfPay.managerName}}</td>
@@ -482,6 +480,13 @@
                                                         <!-- /.timeline-container -->
                                                     </div>
                                                 </div>
+                                            </div>
+
+                                    <div class="widget-body">
+                                        <div class=" scheduleContainer">
+                                            <h5 class="header">行程详情：</h5>
+                                            <div class="detailEditor wysiwyg-editor" style="height: 200px;overflow: scroll;margin-bottom: 40px;">
+                                                {{#lineProductDaysList.lineProductDay.detail}}
                                             </div>
                                         </div>
                                     </div>

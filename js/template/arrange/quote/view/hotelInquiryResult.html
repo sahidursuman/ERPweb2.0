@@ -49,7 +49,17 @@
 								{{each offer.roomTypeList as room index}}
 									{{if index == 0}}
 										<td class="T-hotelType-{{offer.id}}">{{room.type}}</td>
-										<td class="T-hotelPrice-{{offer.id}}">{{room.replyPrice}}</td>
+										<td class="T-hotelPrice-{{offer.id}}">
+										{{if room.isContractPrice == 1}}
+											{{room.price}}
+										{{else}}
+											{{if offer.status == '已同意'}}
+												{{room.replyPrice}}
+											{{else}}
+												-
+											{{/if}}
+										{{/if}}
+										</td>
 									{{/if}}
 								{{/each}}
 							{{else}}
@@ -63,10 +73,7 @@
 								{{else if offer.reserveMinutes == 0}}
 									-
 								{{else}}
-									{{if (offer.reserveMinutes/60) > 0}}
-										{{offer.reserveMinutes/60}}小时
-									{{/if}}
-									{{offer.reserveMinutes%60}}分钟
+									{{offer.reserveTime}}
 								{{/if}}
 							</td>
 							<td rowspan="{{offer.roomTypeList.length}}">{{offer.expiryTime}}</td>
@@ -88,7 +95,17 @@
 							{{each offer.roomTypeList as room index}}
 								{{if index > 0}}
 									<td class="T-hotelType-{{offer.id}}">{{room.type}}</td>
-									<td class="T-hotelPrice-{{offer.id}}">{{room.replyPrice}}</td>
+									<td class="T-hotelPrice-{{offer.id}}">
+									{{if room.isContractPrice == 1}}
+										{{room.price}}
+									{{else}}
+										{{if offer.status == '已同意'}}
+											{{room.replyPrice}}
+										{{else}}
+											-
+										{{/if}}
+									{{/if}}
+									</td>
 								{{/if}}
 							{{/each}}
 						{{else}}
@@ -122,7 +139,17 @@
 								{{each offer.roomTypeList as room index}}
 									{{if index == 0}}
 										<td class="T-hotelType-{{offer.id}}">{{room.type}}</td>
-										<td class="T-hotelPrice-{{offer.id}}">{{room.replyPrice}}</td>
+										<td class="T-hotelPrice-{{offer.id}}">
+										{{if room.isContractPrice == 1}}
+											{{room.price}}
+										{{else}}
+											{{if offer.status == '已同意'}}
+												{{room.replyPrice}}
+											{{else}}
+												-
+											{{/if}}
+										{{/if}}
+										</td>
 									{{/if}}
 								{{/each}}
 							{{else}}
@@ -130,10 +157,18 @@
 								<td class="T-hotelPrice-{{offer.id}}"></td>
 							{{/if}}
 							<td rowspan="{{offer.roomTypeList.length}}">{{offer.remark}}</td>
-							<td rowspan="{{offer.roomTypeList.length}}">{{offer.reserveMinutes}}</td>
+							<td rowspan="{{offer.roomTypeList.length}}">
+								{{if offer.reserveMinutes == -1}}
+									一直保留
+								{{else if offer.reserveMinutes == 0}}
+									-
+								{{else}}
+									{{offer.reserveTime}}
+								{{/if}}
+							</td>
 							<td rowspan="{{offer.roomTypeList.length}}">{{offer.expiryTime}}</td>
 							<td rowspan="{{offer.roomTypeList.length}}">{{offer.status}}</td>
-							<td rowspan="{{offer.roomTypeList.length}}" data-id="{{hotel.id}}">
+							<td rowspan="{{offer.roomTypeList.length}}" data-id="{{offer.id}}">
 								{{if offer.status == "等待确认"}}
 									<a class="T-hotel-refresh">刷新</a><span> | </span>
 								{{else if offer.status == "已同意"}}
@@ -146,7 +181,17 @@
 							{{each offer.roomTypeList as room index}}
 								{{if index > 0}}
 									<td class="T-hotelType-{{offer.id}}">{{room.type}}</td>
-									<td class="T-hotelPrice-{{offer.id}}">{{room.replyPrice}}</td>
+									<td class="T-hotelPrice-{{offer.id}}">
+									{{if room.isContractPrice == 1}}
+										{{room.price}}
+									{{else}}
+										{{if offer.status == '已同意'}}
+											{{room.replyPrice}}
+										{{else}}
+											-
+										{{/if}}
+									{{/if}}
+									</td>
 								{{/if}}
 							{{/each}}
 						{{else}}

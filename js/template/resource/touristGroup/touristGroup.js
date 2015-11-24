@@ -462,7 +462,7 @@ define(function(require,exports){
 				type: 1,
 				title:"选择线路产品",
 				skin: 'layui-layer-rim', //加上边框
-				area: ['85%', '80%'], //宽高
+				area: '85%', //宽高
 				zIndex:1029,
 				content: html,
 				scrollbar: false,
@@ -548,7 +548,9 @@ define(function(require,exports){
 							customerType: lineProduct.customerType,
 							status: lineProduct.status,
 							travelAgencyName: tmp.partnerAgency.travelAgencyName,
-							createTime: tmp.createTime
+							createTime: tmp.createTime,
+							adultCount: tmp.adultCount,
+							childCount: tmp.childCount
 						})
 					}
 
@@ -557,7 +559,7 @@ define(function(require,exports){
 					console.info(data)
 				}
 				$tbody.html(lineproductSearchList(data));
-
+				$tbody.closest('.tab-pane').find('.T-total').text(data.recordSize);
 				// 绑定翻页组件
 				laypage({
 				    cont: $tbody.closest('.tab-pane').find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
@@ -569,6 +571,8 @@ define(function(require,exports){
 				    	}
 				    }
 				});	
+				// 让对话框居中
+				$(window).trigger('resize');
 			}
 		});			
 	};

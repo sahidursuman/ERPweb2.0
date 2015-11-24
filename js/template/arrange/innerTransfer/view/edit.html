@@ -18,7 +18,7 @@
 							{{each businessGroup as rs}}
 								{{if innerTransfer.toBusinessGroup!=null}}
 									{{if innerTransfer.toBusinessGroup.id==rs.id}}
-										<input  value="{{rs.name}}" data-group-id="{{rs.id}}" type="text" name="businessGroup_id" class="col-xs-12" readonly="readonly"/>
+										<input  value="{{rs.name}}" data-group-id="{{rs.id}}" type="text" name="businessGroup_id" class="col-xs-12" {{if innerTransfer.status!=2}}readonly="readonly"{{/if}}/>
 									{{/if}}
 								{{/if}}
 							{{/each}}
@@ -100,7 +100,7 @@
 		<tr>
 			<td>内转价</td>      
 			<td>小孩</td>
-			<td><input type="text" name="transChildPrice" value="{{innerTransfer.transChildCount}}" readonly="readonly" class="col-sm-10 count"/></td>
+			<td><input type="text" name="transChildCount" value="{{innerTransfer.transChildCount}}" readonly="readonly" class="col-sm-10 count"/></td>
 			<td><span class="necessary  pull-left col-sm-2"></span><input type="text" name="transChildPrice" maxlength="9" value="{{innerTransfer.transChildPrice}}"  class="col-sm-10 price"/></td>	
 			<td></td>
 		</tr>
