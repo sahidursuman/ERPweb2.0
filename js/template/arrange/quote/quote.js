@@ -496,6 +496,9 @@ define(function(require, exports) {
 					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
 						var $obj = $container.find(".T-arrangeBusCompanyList"),
 							offer = data.sumListInquiryBusAdd[0];
+						if (offer.brand == 'null') {
+							offer.brand = '';
+						}
 						var html =''
 						+'<tr>'
 						+'<td><input class="col-xs-12 bind-change T-chooseSeatCount ui-autocomplete-input" name="needSeatCount" readonly="readonly" type="text" maxlength="2" value="'+offer.seatCount+'" autocomplete="off"></td>'
