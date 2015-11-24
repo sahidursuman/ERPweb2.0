@@ -981,6 +981,7 @@ define(function(require,exports){
 			currInMoney = 0;
 		};
 		unInMoney = needSumIncome - hadInMoney - currInMoney;
+		unInMoney=unInMoney.toFixed(2);
 		unIncome.val(unInMoney);	
 	};
 	//获取列表数据
