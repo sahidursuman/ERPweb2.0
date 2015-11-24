@@ -154,8 +154,7 @@ define(function(require, exports) {
      */
     
     var html = '<div class="newMessage-prompt"><a class="T-item T-bus"> <i class="fa fa-car" style="font-size: 21px;"></i><span class="T-bus-counter badge badge-important newsMoreT">0</span></a>'
-            + '<a class="T-item T-hotel" style="display: inline-block;margin-top:30px;"><i class="fa fa-home" style="font-size: 25px;margin-top: 20px"></i><span class="T-hotel-counter badge badge-important newsMore">0</span></a>'
-            + '<a class="T-guide" style="display: inline-block;margin-left: 4px;margin-top: 25px"><i class="fa fa-user" style="font-size: 25px;margin-top: 20px"></i></a><span class="T-guide-counter badge badge-important newsMoreTh">0</span></div>';
+            + '<a class="T-item T-hotel" style="display: inline-block;margin-top:30px;"><i class="fa fa-home" style="font-size: 25px;margin-top: 20px"></i><span class="T-hotel-counter badge badge-important newsMore">0</span></a></div>';
     index.MessagePrompt = function(data) {
         var $messager = $('.newMessage-prompt');
 
