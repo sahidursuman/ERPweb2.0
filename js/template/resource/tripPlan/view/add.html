@@ -14,7 +14,7 @@
             <span class="col-sm-8 control-label">{{if tripPlan.lineProduct.customerType == 0}}散客{{else}}团体{{/if}}</span>
         </div>
         <div class="col-sm-3 font-size-12  no-border-left">
-            <span class="pull-left control-label align-right no-padding">天数：</span>
+            <span class="pull-left control-label align-right no-padding">天数：</span>tripPlan.hotelSendOrder($trHotelData,qouteId);
             <span class="col-sm-8 control-label tripPlanLineProductDays">{{tripPlan.lineProduct.days}}</span>
         </div>
         <div style="margin-top: 25px">
@@ -101,7 +101,9 @@
                         <a data-toggle="tab" href="#tripPlan_addPlan_other" aria-expanded="false">其他</a>
                     </li>  
                     <li style="border:none; margin-left:12px;">
-                       <button class="T-singleClick-Order R-right" data-right="1450001">一键下单</button>
+                        {{if tripPlan.qouteId!=null}}
+                           <button class="T-singleClick-Order R-right" data-right="1450001">一键下单</button>
+                        {{/if}}
                    </li>
                 </ul>
                 <div class="tab-content" style="position:relative;top: -2px">
