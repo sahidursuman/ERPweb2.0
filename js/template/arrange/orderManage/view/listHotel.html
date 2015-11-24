@@ -56,7 +56,7 @@
 					<td rowspan="{{hotOrderList.hotelOrderNeedRoomList.length}}" style="vertical-align:middle" class="T-ctrl-tip">{{if hotOrderList.hotel!=null}}{{hotOrderList.hotel.remark}}{{/if}}</td>
 					<td rowspan="{{hotOrderList.hotelOrderNeedRoomList.length}}" style="vertical-align:middle">{{hotOrderList.statusStr}}</td>
 					<td rowspan="{{hotOrderList.hotelOrderNeedRoomList.length}}" style="vertical-align:middle">
-						<a class="cursor {{if hotOrderList.status==0}}T-listHotel-refuse{{/if}} R-right T-action" style="{{if hotOrderList.status==1 || hotOrderList.status==-1}}color:#bbb;{{/if}}">
+						<a class="cursor {{if hotOrderList.status==0}}T-listHotel-refuse{{/if}} R-right T-action" data-right="1450002" style="{{if hotOrderList.status==1 || hotOrderList.status==-1}}color:#bbb;{{/if}}">
 							撤销
 						</a>
 					</td>
