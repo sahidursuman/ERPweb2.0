@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":255,"md5":"d89e7f5b63ebeebccf7f38f193cfc340"}*/
+/*TMODJS:{"debug":true,"version":272,"md5":"92c7cc8eca0b2a562a50175c56086284"}*/
 define(function(require) {
     return require("../../../template")("resource/lineProduct/view/addQoute", function($data, $filename) {
         try {
