@@ -3,7 +3,9 @@
 		<thead>
 			<tr class="bg-blur">  
 				<th>产品名称</th>
+				<th>出游日期</th>
 				<th>天数</th>
+				<th>人数</th>
 				<th>类别</th>               
 				<th>应用范围</th>
 				<th>客户</th>
@@ -20,7 +22,9 @@
 		<tbody>{{each quoteList as quote}}
 			<tr data-entity-id="{{quote.id}}">
 				<td>{{if quote.lineProduct != null}}{{quote.lineProduct.name}}{{/if}}</td>
+				<td>{{if !!quote.startTime}}{{quote.startTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
 				<td>{{if quote.lineProduct != null}}{{quote.lineProduct.days}}{{/if}}</td>
+				<td>{{quote.adultCount}}大{{quote.childCount}}小</td>
 				<td>{{if quote.lineProduct != null}}{{quote.lineProduct.type}}{{/if}}</td>
 				<td>{{if quote.lineProduct != null}}{{if quote.lineProduct.customerType == 0}}散客{{else}}团体{{/if}}{{/if}}</td>
 				<td>{{quote.partnerAgency.travelAgencyName}}</td>

@@ -548,7 +548,9 @@ define(function(require,exports){
 							customerType: lineProduct.customerType,
 							status: lineProduct.status,
 							travelAgencyName: tmp.partnerAgency.travelAgencyName,
-							createTime: tmp.createTime
+							createTime: tmp.createTime,
+							adultCount: tmp.adultCount,
+							childCount: tmp.childCount
 						})
 					}
 
