@@ -9,7 +9,7 @@
 				<th>车座数</th>
 				<th>车辆品牌</th>
 				<th>协议价</th>
-				<th>操作2</th>
+				<th>操作</th>
 			</tr>
 		</thead>
 	
@@ -32,7 +32,9 @@
 				{{/if}}
 				{{/each}}
 				{{/if}}
-				<td style="vertical-align: middle" rowspan="{{busCompany.busList.length}}"><a class="T-chooseBus">添加</a></td>
+				<td style="vertical-align: middle" rowspan="{{busCompany.busList.length}}"><!-- <a class="T-chooseBus">添加</a> -->
+					<label class="pos-rel"><input type="checkbox" class="ace T-chooseBus"> <span class="lbl"></span> </label>
+				</td>
 			</tr>
 			{{each busCompany.busList as bus index}}
 			{{if index > 0}}
