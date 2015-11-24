@@ -1349,7 +1349,7 @@ define(function(require, exports) {
 							quote.costCalculation($container)
 
 							// 更新表单验证的配置
-							validator = rule.quoteUpdate($container);
+							validator = rule.quoteUpdate(validator);
 						}
 					}
 				});
