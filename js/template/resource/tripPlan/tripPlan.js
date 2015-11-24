@@ -123,7 +123,10 @@ define(function(require, exports) {
 				/* Act on the event */
 				var $that=$(this),
 				    qouteId=$that.attr("data-entiy-qouteId");
-				 tripPlan.singleClickSendOrder(qouteId);    
+				    showMessageDialog($( "#confirm-dialog-message" ),"订单发送成功",function(){
+						tripPlan.singleClickSendOrder(qouteId);
+					});
+				     
 			});
 
 		
