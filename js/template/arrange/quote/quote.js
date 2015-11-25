@@ -450,7 +450,15 @@ define(function(require, exports) {
 											status = data.status;
 										$this.closest('td').prev().html(status);
 										$tr.find(".T-hotelPrice-" + offerId + "").each(function(i){
-											$(this).html(rs[i].replyPrice);
+											if (rs[i].isContractPrice == 1) {
+												$(this).html(rs[i].price);
+											}else{
+												if (status == '已同意') {
+													$(this).html(rs[i].replyPrice);
+												}else{
+													$(this).html('-');
+												}
+											}
 										});
 
 										if(status != "等待确认"){
