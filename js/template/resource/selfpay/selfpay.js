@@ -315,7 +315,7 @@ define(function(require, exports) {
 		var $tbody = $container.find('.T-selfpayList-Tbody');
 		var html = '<tr><td><input name="name" class="col-sm-12" type="text" style="min-width:100px;" maxlength="100"/></td>'+
 			'<td><select class="col-sm-12" name="customerType" style="min-width:100px;"><option value="0">散客</option><option value="1">团体</option></select></td>'+
-			'<td><div class="col-sm-12 no-padding"><label class="col-sm-10">日常</label><label class="priceArea col-sm-2" style="padding-top:0px;"><button class="btn btn-success btn-sm btn-white T-add"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button></label></div></td>'+
+			'<td><div class="col-sm-12 no-padding"><label class="col-sm-10">日常价格</label><label class="priceArea col-sm-2" style="padding-top:0px;"><button class="btn btn-success btn-sm btn-white T-add"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button></label></div></td>'+
 			'<td><div class="col-sm-12 no-padding"><input name="normalInnerPrice" class="col-sm-12" type="text" maxlength="10"/></div></td>'+
 			'<td><div class="col-sm-12 no-padding"><input name="normalMarketPrice" class="col-sm-12" type="text" maxlength="10"/></div></td>'+
 			'<td><div class="col-sm-12 no-padding"><input name="normalGuideRate" class="col-sm-12" type="text" maxlength="5"/></div></td>'+
@@ -420,7 +420,7 @@ define(function(require, exports) {
 	 * @return {[type]}       [description]
 	 */
 	selfpay.delTimeArea = function($this){
-		var $parents = $this.closest('tr'), td = $parents.find("td"), index = $this.closest('div').data("index"), id = $this.closest('div').find("input[name=rebateListId]").val();
+		var $parents = $this.closest('tr'), td = $parents.find("td"), index = $this.closest('.T-dateTimeArea').index(), id = $this.closest('div').find("input[name=rebateListId]").val();
 		if (!!id) {
 			var dialogObj = $( "#confirm-dialog-message" );
 			dialogObj.removeClass('hide').dialog({
@@ -470,7 +470,7 @@ define(function(require, exports) {
 		}else{
 			for(var i=2; i < 7; i++){
 				var $children =  td.eq(i).children("div");
-				$children.eq(index - 1).fadeOut(function(){
+				$children.eq(index).fadeOut(function(){
 					$(this).remove();
 					for(var j=0; j<$parents.find(".T-dateTimeArea").length;j++){
 						$parents.find(".T-dateTimeArea").eq(j).attr("data-index", j+1)

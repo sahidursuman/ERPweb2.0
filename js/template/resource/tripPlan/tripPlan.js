@@ -123,7 +123,7 @@ define(function(require, exports) {
 				/* Act on the event */
 				var $that=$(this),
 				    qouteId=$that.attr("data-entiy-qouteId");
-				    showMessageDialog($( "#confirm-dialog-message" ),"订单发送成功",function(){
+				    showMessageDialog($( "#confirm-dialog-message" ),"订单已发送",function(){
 						tripPlan.singleClickSendOrder(qouteId);
 					});
 				     
@@ -351,7 +351,7 @@ define(function(require, exports) {
 				var $obj=$('#tab-arrange_all-update-content'),
 				    quoteId=$obj.find('input[name=qouteId]').val();
 				    /* Act on the event */
-					showMessageDialog($( "#confirm-dialog-message" ),"订单发送成功",function(){
+					showMessageDialog($( "#confirm-dialog-message" ),"订单已发送",function(){
 							tripPlan.singleClickSendOrder(quoteId);
 					});
 				        
@@ -363,7 +363,7 @@ define(function(require, exports) {
 				var $that=$(this),$trBusData=$that.closest('tr'),$obj=$('#tab-arrange_all-update-content'),
 				    qouteId=$obj.find('input[name=qouteId]').val();
 				/* Act on the event */
-				showMessageDialog($( "#confirm-dialog-message" ),"订单发送成功",function(){
+				showMessageDialog($( "#confirm-dialog-message" ),"订单已发送",function(){
 						tripPlan.busSendOrder($trBusData,qouteId);
 				});  
 			});
@@ -374,7 +374,7 @@ define(function(require, exports) {
 				/* Act on the event */
 				var $that=$(this),$trHotelData=$that.closest('tr'),$obj=$('#tab-arrange_all-update-content'),
 				    qouteId=$obj.find('input[name=qouteId]').val();
-					showMessageDialog($( "#confirm-dialog-message" ),"订单发送成功",function(){
+					showMessageDialog($( "#confirm-dialog-message" ),"订单已发送",function(){
 						tripPlan.hotelSendOrder($trHotelData,qouteId);
 					});
 			});

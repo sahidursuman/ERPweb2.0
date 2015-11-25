@@ -550,7 +550,9 @@ define(function(require,exports){
 							travelAgencyName: tmp.partnerAgency.travelAgencyName,
 							createTime: tmp.createTime,
 							adultCount: tmp.adultCount,
-							childCount: tmp.childCount
+							childCount: tmp.childCount,
+							startTime: tmp.startTime,
+							contactRealname: tmp.partnerAgencyContact.contactRealname
 						})
 					}
 
@@ -1102,6 +1104,7 @@ define(function(require,exports){
 						partnerAgencyId:partnerAgencyId,
 						operation:"view"
 					},
+					showLoading: false,
 					type:'POST',
 					success:function(data){
 						var result = showDialog(data);
