@@ -69,7 +69,11 @@
 							<td rowspan="{{offer.roomTypeList.length}}">{{offer.remark}}</td>
 							<td rowspan="{{offer.roomTypeList.length}}">
 								{{if offer.reserveMinutes == -1}}
+									{{if offer.status == "已拒绝"}}
+									-
+									{{else}}
 									一直保留
+									{{/if}}
 								{{else if offer.reserveMinutes == 0}}
 									-
 								{{else}}
@@ -159,7 +163,11 @@
 							<td rowspan="{{offer.roomTypeList.length}}">{{offer.remark}}</td>
 							<td rowspan="{{offer.roomTypeList.length}}">
 								{{if offer.reserveMinutes == -1}}
+									{{if offer.status == "已拒绝"}}
+									-
+									{{else}}
 									一直保留
+									{{/if}}
 								{{else if offer.reserveMinutes == 0}}
 									-
 								{{else}}
