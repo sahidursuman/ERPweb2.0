@@ -73,7 +73,8 @@ define(function(require, exports) {
 		                var busOrderList=JSON.parse(data.busOrderList);
 		                data.busOrderList=busOrderList;
 	             
-						var listBusHtml=listBusCompanyTemplate(data);
+						var listBusHtml=listBusCompanyTemplate(data),
+						    listBusHtml = filterUnAuth(listBusHtml);
 						//车队订单
 				        orderManage.$tab.find('#T-BusCompany-list').html(listBusHtml);
 
@@ -113,7 +114,8 @@ define(function(require, exports) {
 						var hotelOrderList=JSON.parse(data.hotelOrderList);
 						    data.hotelOrderList=hotelOrderList;
 
-						var listHotelHtml=listHotelTemplate(data);
+						var listHotelHtml=listHotelTemplate(data),
+						    listHotelHtml = filterUnAuth(listHotelHtml);
 						//房订单
 						orderManage.$tab.find('#T-HotelOrder-list').html(listHotelHtml);
 
