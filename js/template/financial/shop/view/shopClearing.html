@@ -1,45 +1,27 @@
 <div class= "row Cleaning globalAdd">
     <div class="col-sm-12  border borderNormal" >
         <form class="form-horizontal" role="form" onsubmit="return false">
-            <div class="search-area  editable editable-click" style="margin-top: 10px">
+            <div class="search-area  editable editable-click T-search-area" style="margin-top: 10px">
                 <div class="form-group"> <label  class=" control-label pull-left" style="margin-left: 15px"> 购物店：{{searchParam.shopName}}</label>
                     <label class="col-sm-1 control-label no-padding-right">账期：</label>
-                    <select name="year" class="col-sm-1">
-                        {{each yearList as year}}
-						<option value="{{year}}">{{year}}</option>
-						{{/each}} 
+                    <select name="year" class="col-sm-1 T-search-year">
+                        {{each yearList as yearInfo}}
+                        <option value="{{yearInfo}}" {{if yearInfo == searchParam.year}}selected="selected"{{/if}}>{{yearInfo}}</option>
+                        {{/each}}
                     </select>
                     <label class="col-sm-1 control-label no-padding-right">起始月：</label>
-                    <select class="col-sm-1" name="start_month">
-                        <option value="1">1月</option>
-                        <option value="2">2月</option>
-                        <option value="3">3月</option>
-                        <option value="4">4月</option>
-                        <option value="5">5月</option>
-                        <option value="6">6月</option>
-                        <option value="7">7月</option>
-                        <option value="8">8月</option>
-                        <option value="9">9月</option>
-                        <option value="10">10月</option>
-                        <option value="11">11月</option>
-                        <option value="12">12月</option>
+                    <select class="col-sm-1 T-search-start-month" name="start_month">
+                        {{each monthList as monthInfo}}
+                        <option value="{{monthInfo}}" {{if monthInfo == searchParam.start_month}}selected="selected"{{/if}}>{{monthInfo}}月</option>
+                        {{/each}}
                     </select>
                     <label class="col-sm-1 control-label no-padding-right">结束月：</label>
-                    <select style="margin-left: 20px" class="col-sm-1" name="end_month">
-                        <option value="1">1月</option>
-                        <option value="2">2月</option>
-                        <option value="3">3月</option>
-                        <option value="4">4月</option>
-                        <option value="5">5月</option>
-                        <option value="6">6月</option>
-                        <option value="7">7月</option>
-                        <option value="8">8月</option>
-                        <option value="9">9月</option>
-                        <option value="10">10月</option>
-                        <option value="11">11月</option>
-                        <option value="12">12月</option>
+                    <select style="margin-left: 20px" class="col-sm-1 T-search-end-month" name="end_month">
+                        {{each monthList as monthInfo}}
+                        <option value="{{monthInfo}}" {{if monthInfo == searchParam.end_month}}selected="selected"{{/if}}>{{monthInfo}}月</option>
+                        {{/each}}
                     </select>
-                    <button class="marginLeft-30 btn-sm search-btn btn-arrangeTourist-search btn-shopSettlement-search" >
+                    <button class="marginLeft-30 btn-sm search-btn T-btn-search" >
                         <i class="ace-icon fa fa-search"></i>
                         搜索
                     </button>
@@ -60,7 +42,7 @@
         </form>
 
     </div>
-    <button class="btn btn-sm btn-success btn-shop-records pull-left margin-topTicket" >
+    <button class="btn btn-sm btn-success T-records pull-left margin-topTicket" >
         <i class="ace-icon fa fa-wrench icon-animated-wrench bigger-125"></i> 操作记录
     </button>
     <div style="clear: both"></div>
@@ -85,7 +67,7 @@
 			<th class="th-border">操作</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody class="T-list">
         {{each shopSettlementList as shopSettlement}}
         <tr data-entity-id="{{shopSettlement.id}}">
             <td>{{shopSettlement.year}}年{{shopSettlement.month}}月</td>
@@ -119,10 +101,10 @@
                 {{/if}}
             </td>
             <td>
-                <a data-entity-id="{{shopSettlement.id}}" class="cursor btn-settlement-save" >
+                <a data-entity-id="{{shopSettlement.id}}" class="cursor T-action T-save" >
                                                               保存
                 </a><a class="cursor"> |</a>
-                <a data-entity-year="{{shopSettlement.year}}" data-entity-month="{{shopSettlement.month}}" style="border:none" class="cursor btn-transfter btn-shop-checkDetail">
+                <a data-entity-year="{{shopSettlement.year}}" data-entity-month="{{shopSettlement.month}}" style="border:none" class="cursor btn-transfter T-action T-checkDetail">
                    	 对账
                 </a>
             </td>
