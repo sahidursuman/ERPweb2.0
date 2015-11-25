@@ -476,7 +476,7 @@ define(function(require, exports) {
 								var result = showDialog(data);
 								if(result){
 									showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-										quote.hotelStatusList(quoteId,$container);
+										quote.hotelStatusList(quoteId,$container,$a);
 									});
 								}
 							}
@@ -1582,7 +1582,7 @@ define(function(require, exports) {
 				}
 
 				// 更新表单验证的配置
-				validator = rule.lineProductUpdate(validator);
+				validator = rule.quoteUpdate(validator);
 			},
 			select:function(event,ui){
 				var $tr = $(this).blur().closest('tr');
@@ -1592,7 +1592,7 @@ define(function(require, exports) {
 					$tr.find("input[name=mobileNumber]").val("");
 				
 				// 更新表单验证的配置
-				validator = rule.lineProductUpdate(validator);	
+				validator = rule.quoteUpdate(validator);	
 			}
 		}).click(function(){
 			var obj = this,$parents = $(obj).closest('tr');
