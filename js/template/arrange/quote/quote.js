@@ -1586,10 +1586,10 @@ define(function(require, exports) {
 			},
 			select:function(event,ui){
 				var $tr = $(this).blur().closest('tr');
-					$tr.find("input[name=busCompanyId]").val("");
+					$tr.find("input[name=busCompanyId]").val(ui.item.id);
 					$tr.find("input[name=offerId]").val("");
-					$tr.find("input[name=manager]").val("");
-					$tr.find("input[name=mobileNumber]").val("");
+					$tr.find("input[name=manager]").val(ui.item.managerName);
+					$tr.find("input[name=mobileNumber]").val(ui.item.mobileNumber);
 				
 				// 更新表单验证的配置
 				validator = rule.quoteUpdate(validator);	
@@ -2070,7 +2070,7 @@ define(function(require, exports) {
 						if(result){
 							var scenicItem = JSON.parse(data.scenicItem);
 
-							thisParent.find("input[name=price]").val(scenicItem.contractPrice);
+							thisParent.find("input[name=price]").val(scenicItem.normalInnerPrice);
 							quote.costCalculation($container)
 						}
                     }
