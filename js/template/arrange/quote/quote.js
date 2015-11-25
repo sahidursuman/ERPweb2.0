@@ -335,6 +335,18 @@ define(function(require, exports) {
 				if(result){
 					var busInquiryResultHtml = busInquiryResultTemplate(data);
 					$container.find('#busInquiryResult-'+$a.a).html(busInquiryResultHtml);
+					/*for (var i = 0,dataLen = data.data.length; i < dataLen; i++) {
+						for (var j = 0,len = data.data[i].busCompanyOfferList.length; j < len; j++) {
+							var $this = data.data[i].busCompanyOfferList[j];
+							var endTime = new Date($this.reserveTime.replace(/-/,"/"));
+				            var nowTime = new Date();
+				            var nMS =endTime.getTime() - nowTime.getTime();
+				            var nH=Math.floor(nMS/(1000*60*60)) % 24;
+				            var nM=Math.floor(nMS/(1000*60)) % 60;
+				            var nS=Math.floor(nMS/1000) % 60;
+				            console.log(nH,nM,nS)
+						}
+					}*/
 
 					//操作
 					$container.find('.T-bus-refresh').on("click",function(){
