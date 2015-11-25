@@ -930,30 +930,33 @@ define(function(require, exports) {
 			    					}
 			    					busCompany.push(json);
 			    				}
-			    				busCompany = JSON.stringify(busCompany);
-			    				$.ajax({
-			    					url: KingServices.build_url("busInquiry","saveInquiry"),
-			    					type: 'POST',
-			    					data: {
-			    						brand: brand,
-			    						lineProductId: lineProductId,
-			    						quoteId: quoteId,
-			    						seatCount: seatCount,
-			    						startTime: startTime,
-			    						busCompany: busCompany,
-			    						expiryTime: expiryTime,
-										partnerAgencyId: lineProductInfo.partnerAgencyId,
-										partnerAgencyContactId: lineProductInfo.partnerAgencyContactId
-			    					},
-			    					success: function(data){
-			    						var result = showDialog(data);
-			    						if (result) {
-											$container.find('[name=quoteId]').val(data.quoteId);
-											layer.close(busInquiryLayer);
-			    						}
-			    					}
-			    				})
-			    				
+			    				if (busCompany.length) {
+			    					busCompany = JSON.stringify(busCompany);
+				    				$.ajax({
+				    					url: KingServices.build_url("busInquiry","saveInquiry"),
+				    					type: 'POST',
+				    					data: {
+				    						brand: brand,
+				    						lineProductId: lineProductId,
+				    						quoteId: quoteId,
+				    						seatCount: seatCount,
+				    						startTime: startTime,
+				    						busCompany: busCompany,
+				    						expiryTime: expiryTime,
+											partnerAgencyId: lineProductInfo.partnerAgencyId,
+											partnerAgencyContactId: lineProductInfo.partnerAgencyContactId
+				    					},
+				    					success: function(data){
+				    						var result = showDialog(data);
+				    						if (result) {
+												$container.find('[name=quoteId]').val(data.quoteId);
+												layer.close(busInquiryLayer);
+				    						}
+				    					}
+				    				})
+			    				}else{
+			    					showMessageDialog($( "#confirm-dialog-message" ),"至少选择一个车队");
+			    				}
 
 			    			})
 							//关闭酒店询价
@@ -1145,20 +1148,23 @@ define(function(require, exports) {
 			    					}
 			    					saveJson.hotelJson.push(json);
 			    				}
-
-								saveJson = JSON.stringify(saveJson);
-								$.ajax({
-									url: KingServices.build_url("hotelInquiry","saveHotelInquiry"),
-									type: 'POST',
-									data:"saveJson="+encodeURIComponent(saveJson),
-									success: function(data){
-										var result = showDialog(data);
-										if (result) {
-											$container.find('[name=quoteId]').val(data.quoteId);
-											layer.close(hotelInquiryLayer);
+			    				if (!!saveJson.hotelJson.length) {
+									saveJson = JSON.stringify(saveJson);
+									$.ajax({
+										url: KingServices.build_url("hotelInquiry","saveHotelInquiry"),
+										type: 'POST',
+										data:"saveJson="+encodeURIComponent(saveJson),
+										success: function(data){
+											var result = showDialog(data);
+											if (result) {
+												$container.find('[name=quoteId]').val(data.quoteId);
+												layer.close(hotelInquiryLayer);
+											}
 										}
-									}
-								})
+									})
+								}else{
+									showMessageDialog($( "#confirm-dialog-message" ),"至少选择一个酒店");
+								}
 							})
 							//关闭酒店询价
 							$hotelLayerContent.find(".T-closeLayer").on('click', function(){
