@@ -26,6 +26,7 @@ define(function(require, exports) {
 			year : "",
 			month : ""
 		},
+		AutobusCompanyList:"",
 	    searchCheckData:{
 			"busCompanyId":"",
 			"buscompanyName":"",
@@ -63,7 +64,8 @@ define(function(require, exports) {
 					layer.close(globalLoadingLayer);
 					var result = showDialog(data);
 					if(result){
-						data.companyNameListNew = JSON.parse(data.companyNameListNew);
+						data.companyNameListNew = data.companyNameListNew;
+						BusCompany.AutobusCompanyList=data.companyNameListNew;
 						BusCompany.searchData={
 							page : page,
 							busCompanyId:busCompanyId,
@@ -80,13 +82,16 @@ define(function(require, exports) {
 						//搜索按钮事件 BusCompany.listBusCompany
 						$("#" + tabId + " .btn-busCompany-search").click(function(){
 							BusCompany.searchData = {
-									busCompanyId:$("#" + tabId + " select[name=busCompanyId]").val(),
+									busCompanyId:$("#" + tabId + " input[name=busCompanyId]").val(),
 									year:$("#" + tabId + "  select[name=year]").val(),
 									month:$("#" + tabId + " select[name=month]").val(),
 							}
 							BusCompany.listBusCompany(0,BusCompany.searchData.busCompanyId,BusCompany.searchData.year,BusCompany.searchData.month);
 						});
-						
+
+						//获取车队下拉数据
+						BusCompany.getBusCompanyList($("#" + tabId ).find('.T-choosebusCompany'));
+
 						// 绑定翻页组件
 						laypage({
 						    cont: $('#' + tabId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
@@ -124,6 +129,43 @@ define(function(require, exports) {
 				}  
 			});
 		},
+
+
+
+		//车队Autocomplete
+		getBusCompanyList:function($obj){
+			var list =BusCompany.AutobusCompanyList;
+				if(list && list.length > 0){
+			        for(var i=0; i < list.length; i++){
+			            list[i].value = list[i].CompanyName;
+			        }
+			    }
+		$obj.autocomplete({
+			minLength:0,
+		    change :function(event, ui){
+		        if(ui.item == null){
+		            var parents = $(this).parent();
+		            parents.find("input[name=busCompanyId]").val("");
+		        }
+		    },
+		    select :function(event, ui){
+		        var _this = this, parents = $(_this).parent();
+		        parents.find("input[name=busCompanyId]").val(ui.item.busCompanyId).trigger('change');
+		    },source: list
+			}).unbind("click").click(function(){
+			    var $obj = $(this);
+				    if(!!list && list.length){  
+				        $obj.autocomplete('search', '');
+				    }else{
+				        layer.tips('没有内容', obj, {
+				            tips: [1, '#3595CC'],
+				            time: 2000
+				    });
+				}
+		    })
+		},
+
+
 		//车队对账
 		busCompanyCheck:function(pageNo,busCompanyId,companyName,year,month){
 			 $.ajax({

@@ -28,6 +28,8 @@ define(function(require, exports) {
             year : "",
             month : ""
         },
+
+        AutocompleteList:"",
         searchCheckData:{
             "partnerAgencyId":"",
             "travelAgencyName":"",
@@ -72,7 +74,8 @@ define(function(require, exports) {
                             year:year,
                             month:month
                         }
-                        data.travelAgencyNameListNew = JSON.parse(data.partnerAgencyNameListNew);
+                        data.travelAgencyNameListNew = data.partnerAgencyNameListNew;
+                        Replace.AutocompleteList=data.travelAgencyNameListNew;
                         data.yearList = yearList;
                         data.monthList = monthList;
                         data.searchParam = Replace.searchData;
@@ -89,7 +92,7 @@ define(function(require, exports) {
                             }
                             Replace.listReplace(0,Replace.searchData.partnerAgencyId,Replace.searchData.travelAgencyName,Replace.searchData.year, Replace.searchData.month);
                         });
-                        Replace.getPartnerAgencyList($("#"+tabId+" .choosePartnerAgency"),"");
+                        Replace.getPartnerAgencyList($("#"+tabId+" .choosePartnerAgency"));
 
                         // 绑定翻页组件
                         laypage({
@@ -532,47 +535,39 @@ define(function(require, exports) {
                 }
             })
         },
-        getPartnerAgencyList:function(obj,partnerAId){
-            var $objC = $(obj)
-            $.ajax({
-                url:""+APP_ROOT+"back/financial/financialBookingOrder.do?method=listSumFcBookingOrder&token="+$.cookie("token")+"&menuKey=resource_partnerAgency&operation=view",
-                dataType: "json",
-                data:"travelAgencyName="+$objC.val(),
-                success:function(data){
-                    layer.close(globalLoadingLayer);
-                        var result = showDialog(data);
-                        if(result){
-                            var partnerAgencyList = JSON.parse(data.partnerAgencyList);
-                            if(partnerAgencyList != null && partnerAgencyList.length > 0){
-                                for(var i=0;i<partnerAgencyList.length;i++){
-                                    partnerAgencyList[i].value = partnerAgencyList[i].travelAgencyName;
-                                }
-                            };
-                            $(obj).autocomplete({
-                                
-                                minLength: 0,
-                                change: function(event, ui) {
-                                    if (!ui.item)  {
-                                        $(this).val('').nextAll('input[name="partnerAgencyId"]').val('');
-                                    }
-                                },
-                                select: function(event, ui) {
-                                    var $tabId = $("#tab-resource_touristGroup-add-content");
-                                    $(this).blur().nextAll('input[name="partnerAgencyId"]').val(ui.item.id);
-                                    $tabId.find("input[name=partnerAgencyId]").val("");
-
-                                }
-                            }).off("click").on("click",function(){
-                                
-                                $objC.autocomplete('option','source', partnerAgencyList);
-                                $objC.autocomplete('search', '');
-
-                            });
-                            
-                        }
+        
+        //代订客户Autocomplete
+        getPartnerAgencyList : function(obj){
+            var $obj=$(obj),list;
+                list =Replace.AutocompleteList;
+                if(list && list.length > 0){
+                    for(var i=0; i < list.length; i++){
+                        list[i].value = list[i].travelAgencyName;
+                    }
                 }
-            });
-                     
+        $obj.autocomplete({
+            minLength:0,
+            change :function(event, ui){
+                if(ui.item == null){
+                    var parents = $(this).parent();
+                    parents.find("input[name=partnerAgencyId]").val("");
+                }
+            },
+            select :function(event, ui){
+                var _this = this, parents = $(_this).parent();
+                parents.find("input[name=partnerAgencyId]").val(ui.item.partnerAgencyId).trigger('change');
+            },source: list
+            }).unbind("click").click(function(){
+                var $obj = $(this);
+                    if(!!list && list.length){  
+                        $obj.autocomplete('search', '');
+                    }else{
+                        layer.tips('没有内容', obj, {
+                            tips: [1, '#3595CC'],
+                            time: 2000
+                    });
+                }
+            })
         },
         save : function(saveType){
             console.log(saveType);
