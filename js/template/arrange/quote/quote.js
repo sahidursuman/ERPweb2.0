@@ -370,7 +370,7 @@ define(function(require, exports) {
 										if(status != "等待确认"){
 											$this.next().remove();
 											$this.remove();
-											if(status != "已同意"){ 
+											if(status == "已同意"){ 
 												var html = "<a class='T-bus-add'>加入</a><span> | </span>";
 												$tr.find('td:last-child').prepend(html);
 
