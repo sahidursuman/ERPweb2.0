@@ -242,8 +242,10 @@ define(function(require, exports) {
 						// 转客
 						arrangeTourist.transferTourist(lineProductId,startTime);
 					} else if ($that.hasClass('T-inTransfer'))  {
+						var customerType=0,
+						    divId="T-Visitor-list";
 						// 内转
-						arrangeTourist.inTransferTourist(lineProductId,startTime);
+						arrangeTourist.inTransferTourist(lineProductId,startTime,customerType,divId);
 					}
 			});
 
@@ -278,8 +280,10 @@ define(function(require, exports) {
 						// 转客
 						arrangeTourist.transferTourist(lineProductId,startTime);
 					} else if ($that.hasClass('T-inTransfer'))  {
+						var customerType=1,
+						    divId="T-Group-list";
 						// 内转
-						arrangeTourist.inTransferTourist(lineProductId,startTime);
+						arrangeTourist.inTransferTourist(lineProductId,startTime,customerType,divId);
 					}
 			});
 		},
@@ -443,7 +447,7 @@ define(function(require, exports) {
 		 * @param  {[type]} startTime     开始时间
 		 * @return {[type]}
 		 */
-		inTransferTourist :function(lineProductId,startTime){
+		inTransferTourist :function(lineProductId,startTime,customerType,divId){
 			$.ajax({
 				url:""+APP_ROOT+"back/innerTransferOperation.do?method=getInTransferMainInfo&token="+$.cookie("token")+"&menuKey=resource_subsection&operation=view",
 				type:"POST",
@@ -525,7 +529,7 @@ define(function(require, exports) {
 										if(result){
 											showMessageDialog($( "#confirm-dialog-message" ), data.message,function(){
 												closeTab("resource_subsection-intransfer");
-												arrangeTourist.listArrangeTourist(0,"","");
+												arrangeTourist.listArrangeTourist(0,"","",customerType,divId);
 											});
 										}
 									}
@@ -2631,15 +2635,21 @@ define(function(require, exports) {
 				}
 			}).unbind("click").click(function(){
 				var obj = this;
-				var seatCount = $(this).closest('.widget-main').find("input[name=seatCount]").val();
-				var busBrand = $(this).closest('.widget-main').find("input[name=needBusBrand]").val();
+				var seatCount = $(this).closest('.widget-main').find("input[name=seatCount]").val(),
+				    busBrand = $(this).closest('.widget-main').find("input[name=needBusBrand]").val(),
+				    busCompanyId = $(this).closest('.widget-main').find("input[name=busCompanyId]").val(),
+				    quoteId= $(this).closest('.widget-main').find("input[name=qouteId]").val();
+				  var data={
+					seatCount: seatCount,
+					brand: busBrand,
+				}
+				 if (quoteId != null&& quoteId!='') {
+					data.busCompanyId = busCompanyId;
+				 } 
 				if (!!seatCount) {
 					$.ajax({
 						url:""+APP_ROOT+"back/busCompany.do?method=getLicenseNumbers&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-						data: {
-							seatCount: seatCount,
-							brand: busBrand
-						},
+						data:data,
 						dateType:"json",
 						showLoading:false,
 						type:"POST",
@@ -2685,13 +2695,22 @@ define(function(require, exports) {
 				}
 			}).unbind("click").click(function(){
 				var obj = this;
-				var id = $(this).closest('.widget-main').find("input[name=busCompanyId]").val();
+				var id = $(this).closest('.widget-main').find("input[name=busCompanyId]").val()
+				    busBrand = $(this).closest('.widget-main').find("input[name=needBusBrand]").val(),
+				    quoteId= $(this).closest('.widget-main').find("input[name=qouteId]").val(),
+				    seatCount=$(this).closest('.widget-main').find("input[name=seatCount]").val();
+				var data= {
+							busBrand:busBrand,
+							seatCount:seatCount
+						};
+				    if (quoteId!=null&&quoteId!='') {
+				    	data.busCompanyId=id;
+				    };
+
 				if (!!id) {
 					$.ajax({
-						url:""+APP_ROOT+"back/busCompany.do?method=findBusListByBusCompanyId&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-						data: {
-							busCompanyId: id
-						},
+						url:""+APP_ROOT+"back/busCompany.do?method=getLicenseNumbers&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
+						data:data,
 						dateType:"json",
 						showLoading:false,
 						type:"POST",

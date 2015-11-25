@@ -26,6 +26,9 @@ define(function(require, exports) {
 	        year : "",
 	        month : ""
         },
+        AutocompleteData:{
+           allData:""
+        },
         searchCheckData:{
 	        "partnerAgencyId":"",
 	        "partnerAgencyName":"",
@@ -68,7 +71,8 @@ define(function(require, exports) {
                     	    year:year,
                     	    month:month
                         },
-                        data.partnerAgencyListNew = JSON.parse(data.partnerAgencyListNew);
+                        data.partnerAgencyListNew = data.partnerAgencyListNew;
+                        Transfer.AutocompleteData.allData = data.partnerAgencyListNew;
                     	data.searchParam = Transfer.searchData
                         data.yearList = yearList;
                         data.monthList = monthList;
@@ -554,41 +558,40 @@ define(function(require, exports) {
         	})
 	    	
 	    },
-		getPartnerAgencyList:function(obj,partnerAId){
-			$(obj).autocomplete({
-				minLength: 0,
-				change: function(event, ui) {
-					if (!ui.item)  {
-						$(this).val('').nextAll('input[name="fromPartnerAgencyId"]').val('');
-					}
-				},
-				select: function(event, ui) {
-					$(this).blur().nextAll('input[name="fromPartnerAgencyId"]').val(ui.item.id);
+
+		getPartnerAgencyList:function(obj){
+			var $obj=$(obj),list;
+				list =Transfer.AutocompleteData.allData;
+				if(list && list.length > 0){
+			        for(var i=0; i < list.length; i++){
+			            list[i].value = list[i].partnerAgencyName;
+			        }
+			    }
+		$obj.autocomplete({
+			minLength:0,
+		    change :function(event, ui){
+		        if(ui.item == null){
+		            var parents = $(this).parent();
+		            parents.find("input[name=fromPartnerAgencyId]").val("");
+		        }
+		    },
+		    select :function(event, ui){
+		        var _this = this, parents = $(_this).parent();
+		        parents.find("input[name=fromPartnerAgencyId]").val(ui.item.partnerAgencyId).trigger('change');
+		    },source: list
+			}).unbind("click").click(function(){
+			    var $obj = $(this);
+				    if(!!list && list.length){  
+				        $obj.autocomplete('search', '');
+				    }else{
+				        layer.tips('没有内容', obj, {
+				            tips: [1, '#3595CC'],
+				            time: 2000
+				    });
 				}
-			})
-			.click(function(event) {
-				var $objC = $(this);
-				$.ajax({
-					url:""+APP_ROOT+"back/partnerAgency.do?method=findPartnerAnencyList&token="+$.cookie("token")+"&menuKey=resource_partnerAgency&operation=view",
-                    dataType: "json",
-                    showLoading:false,
-                    success: function(data) {
-                    	layer.close(globalLoadingLayer);
-						var result = showDialog(data);
-						if(result){
-							var partnerAgencyList = JSON.parse(data.partnerAgencyList);
-							if(partnerAgencyList != null && partnerAgencyList.length > 0){
-								for(var i=0;i<partnerAgencyList.length;i++){
-									partnerAgencyList[i].value = partnerAgencyList[i].travelAgencyName;
-								}
-							}
-							$objC.autocomplete('option','source', partnerAgencyList);
-							$objC.autocomplete('search', '');
-						}
-                    }
-                });
-			});
+		    })
 		},
+
 		save : function(saveType){
 			console.log(saveType);
 			if(saveType == "checking"){

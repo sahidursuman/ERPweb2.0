@@ -69,7 +69,6 @@ define(function(require, exports) {
                              year:year,
                              month:month
                          };
-                         data.scenicNameListNew = JSON.parse(data.scenicNameListNew);
                          data.searchParam = Scenic.searchData;
                          var html = listTemplate(data);
                          addTab(menuKey,"景区账务",html);

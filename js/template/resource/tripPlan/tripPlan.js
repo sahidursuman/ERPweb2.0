@@ -123,7 +123,10 @@ define(function(require, exports) {
 				/* Act on the event */
 				var $that=$(this),
 				    qouteId=$that.attr("data-entiy-qouteId");
-				 tripPlan.singleClickSendOrder(qouteId);    
+				    showMessageDialog($( "#confirm-dialog-message" ),"订单已发送",function(){
+						tripPlan.singleClickSendOrder(qouteId);
+					});
+				     
 			});
 
 		
@@ -347,8 +350,11 @@ define(function(require, exports) {
 				/* Act on the event */
 				var $obj=$('#tab-arrange_all-update-content'),
 				    quoteId=$obj.find('input[name=qouteId]').val();
-				    tripPlan.singleClickSendOrder(quoteId);
-				    
+				    /* Act on the event */
+					showMessageDialog($( "#confirm-dialog-message" ),"订单已发送",function(){
+							tripPlan.singleClickSendOrder(quoteId);
+					});
+				        
 			});
 
             //车辆的发送订单
@@ -357,16 +363,20 @@ define(function(require, exports) {
 				var $that=$(this),$trBusData=$that.closest('tr'),$obj=$('#tab-arrange_all-update-content'),
 				    qouteId=$obj.find('input[name=qouteId]').val();
 				/* Act on the event */
-			    tripPlan.busSendOrder($trBusData,qouteId);
+				showMessageDialog($( "#confirm-dialog-message" ),"订单已发送",function(){
+						tripPlan.busSendOrder($trBusData,qouteId);
+				});  
 			});
 
 			//住宿的发送订单
 			$("#tripPlan_addPlan_hotel").find('.T-Hotel-SendOrder').on('click', function(event) {
 				event.preventDefault();
+				/* Act on the event */
 				var $that=$(this),$trHotelData=$that.closest('tr'),$obj=$('#tab-arrange_all-update-content'),
 				    qouteId=$obj.find('input[name=qouteId]').val();
-				/* Act on the event */
-				tripPlan.hotelSendOrder($trHotelData,qouteId);
+					showMessageDialog($( "#confirm-dialog-message" ),"订单已发送",function(){
+						tripPlan.hotelSendOrder($trHotelData,qouteId);
+					});
 			});
 
 			//绑定删除时间
@@ -517,36 +527,6 @@ define(function(require, exports) {
 			})
 
 		},
-
-
-		/**
-		 * isSendOrderHide  判断发送订单是否显示隐藏
-		 * @param  {[type]}  $sendArea 发送订单域
-		 * @return {Boolean}           [description]
-		 */
-		/*isSendOrderHide:function($sendArea){
-			alert('--roger---');
-			var $that=$('#tab-arrange_all-update-content'),
-			    qouteId=$that.find('input[name=qouteId]').val(),
-			    $sendOrderObj=$sendArea.find('.T-sendOrder-Area');
-			    //车队&&酒店显示隐藏
-				for (var i = 0; i < $sendOrderObj.length; i++) {
-					var offerId=$sendOrderObj.eq(i).attr("data-entity-offerId");
-
-					   console.info('------roger--------'+offerId);
-					    if (offerId=="") {
-					    	$sendOrderObj.eq(i).addClass('hide');
-					    } else{
-					    	$sendOrderObj.eq(i).removeClass('hide');
-					};	         
-				}
-	            //qouteId判定一键下单是否隐藏
-				if (qouteId=="") {  
-					$that.find('.T-singleClick-Order').addClass('hide');
-				}else{
-					$that.find('.T-singleClick-Order').removeClass('hide');
-				};
-		},*/
 
 		//浮动查看自选餐厅
 		viewOptionalRestaurant :function($objInput){
@@ -956,24 +936,6 @@ define(function(require, exports) {
 			});
 			
 		},
-
-		/**
-		 * isSendOrderHide  判断发送订单是否显示隐藏
-		 * @param  {[type]}  $sendArea 发送订单域
-		 * @return {Boolean}           [description]
-		 */
-		isSendOrderHide:function($sendArea){
-			var $sendOrderObj=$sendArea.find('.T-sendOrder-Area');
-			for (var i = 0; i < $sendOrderObj.length; i++) {
-				var statusValue=$sendOrderObj.eq(i).data('value');
-				if (statusValue==2) {
-					$sendOrderObj.removeClass('hide');
-				} else{
-					$sendOrderObj.addClass('hide');
-				};
-			};
-		},
-
 
 		/**
 		 * [sendOrderRequest 发送订单请求]
