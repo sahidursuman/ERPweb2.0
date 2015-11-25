@@ -512,7 +512,7 @@ define(function(require, exports) {
 
 		selfList.each(function(i){
 			var name = $(this).find("input[name=name]").val(),
-			id = $(this).data("entity-id") || 0,
+			id = $(this).data("entity-id") || "",
 			customerType = $(this).find("select[name=customerType]").val(),
 			remark = $(this).find("input[name=remark]").val(),
 			priceJson = {
