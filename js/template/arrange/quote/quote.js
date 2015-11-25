@@ -499,7 +499,7 @@ define(function(require, exports) {
 					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
 						var $obj = $container.find(".T-arrangeBusCompanyList"),
 							offer = data.sumListInquiryBusAdd[0];
-						if (offer.brand == 'null') {
+						if (offer.brand == null) {
 							offer.brand = '';
 						}
 						var html =''
