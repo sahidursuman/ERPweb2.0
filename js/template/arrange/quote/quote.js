@@ -949,6 +949,7 @@ define(function(require, exports) {
 				    					success: function(data){
 				    						var result = showDialog(data);
 				    						if (result) {
+												showMessageDialog($( "#confirm-dialog-message" ),"询价成功");
 												$container.find('[name=quoteId]').val(data.quoteId);
 												layer.close(busInquiryLayer);
 				    						}
@@ -1157,6 +1158,7 @@ define(function(require, exports) {
 										success: function(data){
 											var result = showDialog(data);
 											if (result) {
+												showMessageDialog($( "#confirm-dialog-message" ),"询价成功");
 												$container.find('[name=quoteId]').val(data.quoteId);
 												layer.close(hotelInquiryLayer);
 											}
