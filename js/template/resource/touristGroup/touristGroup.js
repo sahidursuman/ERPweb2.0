@@ -550,7 +550,9 @@ define(function(require,exports){
 							travelAgencyName: tmp.partnerAgency.travelAgencyName,
 							createTime: tmp.createTime,
 							adultCount: tmp.adultCount,
-							childCount: tmp.childCount
+							childCount: tmp.childCount,
+							startTime: tmp.startTime,
+							contactRealname: tmp.partnerAgencyContact.contactRealname
 						})
 					}
 

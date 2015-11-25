@@ -3,20 +3,12 @@
 		<td name="travelLine-select" data-travelLine-Id="{{lineProduct.id}}">
 			{{lineProduct.name}}
 		</td>
-		{{if !!quote}}
-		<td>{{lineProduct.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
-		{{/if}}
 		<td>
-			{{lineProduct.days}}
+			{{lineProduct.days}}天
 		</td>
 		<td>
 			{{lineProduct.type}}
 		</td>
-		{{if !!quote}}
-		<td>
-			{{lineProduct.adultCount}}大{{lineProduct.childCount}}小
-		</td>
-		{{/if}}
 		<td>
 			{{if lineProduct.customerType==0}}
 			散客
@@ -24,18 +16,6 @@
 			团体
 			{{/if}}
 		</td>
-		<!-- <td>
-			{{if lineProduct.status==0}}
-			未启用
-			{{else if lineProduct.status==1}}
-			已启用
-			{{/if}}
-		</td> -->
-		{{if !!quote}}
-		<td>{{lineProduct.travelAgencyName}}</td>
-		<td>{{lineProduct.contactRealname}}</td>
-		<td>{{lineProduct.createTime}}</td>
-		{{/if}}
 		<td>
 			<label class="choice-TravelLine-click">
 				<input type="radio" class="ace" value="123" name="choice-TravelLine" index="0">
