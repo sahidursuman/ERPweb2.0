@@ -780,7 +780,7 @@ define(function(require, exports) {
 				partnerAgencyContactId: quote.getValue($container,'managerId')
 			}
 			var quoteId = quote.getValue($container,'quoteId');
-			if(!!lineProductInfo.startTime && !!lineProductInfo.partnerAgencyId && !!lineProductInfo.partnerAgencyContactId ){
+			if(!!lineProductInfo.startTime && !!lineProductInfo.partnerAgencyId && !!lineProductInfo.partnerAgencyContactId && !!lineProductInfo.adultCount && !!lineProductInfo.childCount){
 				quote.busInquiry(quoteId,lineProductInfo,$container);
 			}else if (!!lineProductInfo.startTime != true){
 				showMessageDialog($( "#confirm-dialog-message" ),"请选择出游日期");
@@ -788,6 +788,10 @@ define(function(require, exports) {
 				showMessageDialog($( "#confirm-dialog-message" ),"请选择客户");
 			}else if (!!lineProductInfo.partnerAgencyContactId != true){
 				showMessageDialog($( "#confirm-dialog-message" ),"请选择客户联系人");
+			}else if (!!lineProductInfo.adultCount != true){
+				showMessageDialog($( "#confirm-dialog-message" ),"请填写大人数");
+			}else if (!!lineProductInfo.childCount != true){
+				showMessageDialog($( "#confirm-dialog-message" ),"请填写小孩数");
 			}
 		});
 		//酒店询价
@@ -810,7 +814,7 @@ define(function(require, exports) {
 			var whichDay = $whichDiv.data("entity-whichday");
 			var quoteId = quote.getValue($container,'quoteId');
 
-			if(!!lineProductInfo.startTime && !!lineProductInfo.partnerAgencyId && !!lineProductInfo.partnerAgencyContactId ){
+			if(!!lineProductInfo.startTime && !!lineProductInfo.partnerAgencyId && !!lineProductInfo.partnerAgencyContactId && !!lineProductInfo.adultCount && !!lineProductInfo.childCount){
 				quote.hotelInquiry(lineProductInfo,whichDay,quoteId,$container);
 			}else if (!!lineProductInfo.startTime != true){
 				showMessageDialog($( "#confirm-dialog-message" ),"请选择出游日期");
@@ -818,6 +822,10 @@ define(function(require, exports) {
 				showMessageDialog($( "#confirm-dialog-message" ),"请选择客户");
 			}else if (!!lineProductInfo.partnerAgencyContactId != true){
 				showMessageDialog($( "#confirm-dialog-message" ),"请选择客户联系人");
+			}else if (!!lineProductInfo.adultCount != true){
+				showMessageDialog($( "#confirm-dialog-message" ),"请填写大人数");
+			}else if (!!lineProductInfo.childCount != true){
+				showMessageDialog($( "#confirm-dialog-message" ),"请填写小孩数");
 			}
 		});
 		//保存报价
