@@ -242,8 +242,10 @@ define(function(require, exports) {
 						// 转客
 						arrangeTourist.transferTourist(lineProductId,startTime);
 					} else if ($that.hasClass('T-inTransfer'))  {
+						var customerType=0,
+						    divId="T-Visitor-list";
 						// 内转
-						arrangeTourist.inTransferTourist(lineProductId,startTime);
+						arrangeTourist.inTransferTourist(lineProductId,startTime,customerType,divId);
 					}
 			});
 
@@ -278,8 +280,10 @@ define(function(require, exports) {
 						// 转客
 						arrangeTourist.transferTourist(lineProductId,startTime);
 					} else if ($that.hasClass('T-inTransfer'))  {
+						var customerType=1,
+						    divId="T-Group-list";
 						// 内转
-						arrangeTourist.inTransferTourist(lineProductId,startTime);
+						arrangeTourist.inTransferTourist(lineProductId,startTime,customerType,divId);
 					}
 			});
 		},
@@ -443,7 +447,7 @@ define(function(require, exports) {
 		 * @param  {[type]} startTime     开始时间
 		 * @return {[type]}
 		 */
-		inTransferTourist :function(lineProductId,startTime){
+		inTransferTourist :function(lineProductId,startTime,customerType,divId){
 			$.ajax({
 				url:""+APP_ROOT+"back/innerTransferOperation.do?method=getInTransferMainInfo&token="+$.cookie("token")+"&menuKey=resource_subsection&operation=view",
 				type:"POST",
@@ -525,7 +529,7 @@ define(function(require, exports) {
 										if(result){
 											showMessageDialog($( "#confirm-dialog-message" ), data.message,function(){
 												closeTab("resource_subsection-intransfer");
-												arrangeTourist.listArrangeTourist(0,"","");
+												arrangeTourist.listArrangeTourist(0,"","",customerType,divId);
 											});
 										}
 									}
