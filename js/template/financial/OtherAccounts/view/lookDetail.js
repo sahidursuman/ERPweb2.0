@@ -1,0 +1,4 @@
+/*TMODJS:{"debug":true,"version":51,"md5":"52cbe4abca4b0e8fc64ce8d7dc9a37a5"}*/
+define(function(require) {
+    return require("../../../template")("financial/OtherAccounts/view/lookDetail", '<form class="form-horizontal T-lookDetail col-sm-12 margin-top" role="form" onsubmit="return false"> <table class="table table-striped table-bordered table-hover col-sm-11"> <tr> <th>付款内别</th> <th>发生业务</th> <th>付款方</th> <th>金额</th> <th>付款方式</th> <th>备注</th> <th>操作人</th> <th>操作时间</th> </tr> <tr> <td>联系电话：</td> <td>1212</td> <td>所属导服司：</td> <td>1212</td> <td>导游证号：</td> <td>1212</td> <td>身份证号：</td> <td>1212</td> </tr> </table> </form> ');
+});
