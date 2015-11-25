@@ -88,6 +88,7 @@ define(function(require, exports) {
 				if(result){
 					data.quoteList = JSON.parse(data.quoteList);
 					var html = listTemplate(data);
+					    html = filterUnAuth(html);
 					quote.$tab.find('.T-quoteList').html(html);
 
 					quote.initList();
