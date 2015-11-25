@@ -20,7 +20,7 @@
 				<td class="style-myself">单房差数</td>
 				<td class="" style="text-align: left;padding: 0px 0px 0px 10px">{{quoteDetailJson.singleRoomCount}}</td>
 				<td class="style-myself">出游日期</td>
-				<td class="" style="text-align: left;padding: 0px 0px 0px 10px">{{quoteDetailJson.startTime}}</td>
+				<td class="" style="text-align: left;padding: 0px 0px 0px 10px">{{quoteDetailJson.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
 			</tr>
 			<tr>
 				<td class="style-myself">总价</td>
@@ -190,7 +190,7 @@
 															<td>{{busCompanyArrange.busCompany.mobileNumber}}</td>
 
 															<td>{{busCompanyArrange.price}}</td>
-															<td>{{busCompanyArrange.busCompany.remark}}</td>
+															<td>{{busCompanyArrange.remark}}</td>
 															{{else}}
 															<td></td>
 															<td></td>

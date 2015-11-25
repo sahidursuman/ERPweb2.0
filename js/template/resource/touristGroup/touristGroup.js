@@ -1102,6 +1102,7 @@ define(function(require,exports){
 						partnerAgencyId:partnerAgencyId,
 						operation:"view"
 					},
+					showLoading: false,
 					type:'POST',
 					success:function(data){
 						var result = showDialog(data);

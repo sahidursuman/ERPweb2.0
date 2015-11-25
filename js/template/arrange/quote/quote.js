@@ -496,6 +496,9 @@ define(function(require, exports) {
 					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
 						var $obj = $container.find(".T-arrangeBusCompanyList"),
 							offer = data.sumListInquiryBusAdd[0];
+						if (offer.brand == 'null') {
+							offer.brand = '';
+						}
 						var html =''
 						+'<tr>'
 						+'<td><input class="col-xs-12 bind-change T-chooseSeatCount ui-autocomplete-input" name="needSeatCount" readonly="readonly" type="text" maxlength="2" value="'+offer.seatCount+'" autocomplete="off"></td>'
@@ -1161,18 +1164,41 @@ define(function(require, exports) {
 				}
 			}
 		}).off('click').on('click', function(){
-			var obj = this,dataList = [];
-			if(autocompleteData.busBrandList && autocompleteData.busBrandList.length > 0){
-				for (var i = 0,len = autocompleteData.busBrandList.length; i < len; i++) {
-					var json = {
-						value: autocompleteData.busBrandList[i]
-					};
-					dataList.push(json);
-				}
-				$(obj).autocomplete('option','source', dataList);
-				$(obj).autocomplete('search', '');
+			var obj = this;
+			var seatCount = $(this).closest('.search-area').find("[name=seatCount]").val();
+			if(seatCount){
+				$.ajax({
+					url:KingServices.build_url("bookingOrder","getBusBrandList"),
+					data:{
+						seatCount : seatCount
+					},
+					showLoading:false,
+					type:"POST",
+					success:function(data){
+						var result = showDialog(data);
+						if(result){
+							var busBrandListJson = [];
+							var busBrandList = data.busBrandList;
+							if(busBrandList && busBrandList.length > 0){
+								for(var i=0; i < busBrandList.length; i++){
+									var busBrand = {
+										value : busBrandList[i]
+									}
+									busBrandListJson.push(busBrand);
+								}
+								$(obj).autocomplete('option','source', busBrandListJson);
+								$(obj).autocomplete('search', '');
+							}else{
+								layer.tips('没有内容', obj, {
+								    tips: [1, '#3595CC'],
+								    time: 2000
+								});
+							}
+						}
+					}
+				})
 			}else{
-				layer.tips('没有内容。', obj, {
+				layer.tips('请选择车座数', obj, {
 				    tips: [1, '#3595CC'],
 				    time: 2000
 				});
@@ -1326,7 +1352,7 @@ define(function(require, exports) {
 							quote.costCalculation($container)
 
 							// 更新表单验证的配置
-							validator = rule.quoteUpdate($container);
+							validator = rule.quoteUpdate(validator);
 						}
 					}
 				});
