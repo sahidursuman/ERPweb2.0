@@ -626,7 +626,8 @@ var modalScripts = {
 	'financial_totalProfit': "js/template/financial/totalProfit/totalProfit.js",
 	'financial_Client': "js/template/financial/Client/Client.js",
 	'financial_planProfit': "js/template/financial/planProfit/planProfit.js", //发团利润
-	'financial_replaceProfit':"js/template/financial/replaceProfit/replaceProfit.js",
+	'financial_replaceProfit':"js/template/financial/replaceProfit/replaceProfit.js",//代订利润
+	'financial_restaurant':"js/template/financial/Restaurant/Restaurant.js",//餐厅账务
 	//---------------------------------------------------------------------------------------------------------------
 	'public_message':"js/template/system/message/message.js",
 	'system_information':"js/template/system/information/information.js",
@@ -749,18 +750,18 @@ function listMenu(menuTemplate){
 				});
 
 				//绑定系餐厅账务菜单功能
-				$("#sidebar .nav-list .financial_restaurant").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/financial/Restaurant/Restaurant.js",function( Restaurant){
-						var date = new Date();
-						var year = date.getFullYear();
-						var month = ""//date.getMonth()+1
-						Restaurant.listRestaurant(0,"",year,month);/*new Date().getFullYear()*/
-						modals["financial_restaurant"] = Restaurant;
-					});
-				});
+				// $("#sidebar .nav-list .financial_restaurant").click(function(){
+				// 	$("#sidebar .nav-list li").removeClass("active");
+				// 	$(this).addClass("active");
+				// 	$(this).parent().parent().addClass("active");
+				// 	seajs.use("" + ASSETS_ROOT +"js/template/financial/Restaurant/Restaurant.js",function( Restaurant){
+				// 		var date = new Date();
+				// 		var year = date.getFullYear();
+				// 		var month = ""//date.getMonth()+1
+				// 		Restaurant.listRestaurant(0,"",year,month);/*new Date().getFullYear()*/
+				// 		modals["financial_restaurant"] = Restaurant;
+				// 	});
+				// });
 
 				//绑定景区账务
 				$("#sidebar .nav-list .financial_scenic").click(function(){
