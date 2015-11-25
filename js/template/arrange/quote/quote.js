@@ -1335,7 +1335,7 @@ define(function(require, exports) {
 								}
 							})
 						}
-
+						var arriveTime = $container.find('[name=checkInTime]').val();
 						$container.find('.T-chooseHotel').on('click',function(){
 							var $this = $(this),$parents = $this.closest('tr');
 							var chooseHotelInfo = {
@@ -1347,7 +1347,7 @@ define(function(require, exports) {
 							$.ajax({
 					    		url: KingServices.build_url("hotelInquiry","findHotelInquiryStstus"),
 					    		type: 'POST',
-					    		data: "hotelId="+chooseHotelInfo.id+"&quoteId="+quoteId+"",
+					    		data: "hotelId="+chooseHotelInfo.id+"&quoteId="+quoteId+"&arriveTime="+arriveTime+"",
 					    		showLoading: false,
 					    		success: function(data){
 					    			var result = showDialog(data);
