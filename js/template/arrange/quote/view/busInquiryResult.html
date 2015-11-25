@@ -11,7 +11,7 @@
 				<th>资源保留期</th>
 				<th>询价截止期</th>
 				<th>询价状态</th>
-				<th>操作</th>
+				<th width="130">操作</th>
 			</tr>
 		</thead>
 	
@@ -27,7 +27,11 @@
 							<td class="T-price">{{if offer.status == '已同意'}}{{offer.replyPrice}}{{else}}-{{/if}}</td>
 							<td>{{offer.remark}}</td>
 							<td>{{if offer.reserveMinutes == -1}}
+									{{if offer.status == "已拒绝"}}
+									-
+									{{else}}
 									一直保留
+									{{/if}}
 								{{else if offer.reserveMinutes == 0}}
 									-
 								{{else}}
@@ -54,7 +58,11 @@
 							<td class="T-price">{{if offer.status == '已同意'}}{{offer.replyPrice}}{{else}}-{{/if}}</td>
 							<td>{{offer.remark}}</td>
 							<td>{{if offer.reserveMinutes == -1}}
+									{{if offer.status == "已拒绝"}}
+									-
+									{{else}}
 									一直保留
+									{{/if}}
 								{{else if offer.reserveMinutes == 0}}
 									-
 								{{else}}
