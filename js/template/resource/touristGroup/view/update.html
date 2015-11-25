@@ -49,6 +49,9 @@
 						<div class="col-sm-2">
 							<input type="text" name="fromPartnerAgency" class="col-sm-12" placeholder="请输入客户来源" value="{{if touristGroupDetail.partnerAgency != null}}{{touristGroupDetail.partnerAgency.travelAgencyName}}{{/if}}" {{if !!touristGroupDetail.quoteId}} readonly {{/if}}>
 							<input type="hidden" value="{{if touristGroupDetail.partnerAgency != null}}{{touristGroupDetail.partnerAgency.id}}{{/if}}" name="fromPartnerAgencyId">
+							<span class="input-group-addon T-addPartner R-right {{if !!touristGroupDetail.quoteId}} hidden {{/if}}" data-right="1150002" style="display: inline-block;left:0" title="添加客户">
+								<i class="ace-icon fa fa-plus bigger-110 icon-only" ></i>
+							</span>
 						</div>
 						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>同行联系人:</label>
 						<div class="col-sm-2">
