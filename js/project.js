@@ -620,11 +620,13 @@ var modalScripts = {
 	'business_analyst_customerVolume' : "js/template/businessAnalyst/customerVolume/customerVolume.js", //客户客量
 	'business_analyst_employeePerfor' : "js/template/businessAnalyst/employeePerfor/employeePerfor.js", //员工业绩 
 	'business_analyst_tourguidePerfor' : "js/template/businessAnalyst/tourguidePerfor/tourguidePerfor.js", //导游业绩
-	//---------------------------------------------------------------------------------------------------------------
+	//------------------------------------------------财务---------------------------------------------------------------
 	'financial_innerTransfer_profit': "js/template/financial/innerTransferProfit/innerTransferProfit.js",
 	'financial_turnProfit': "js/template/financial/turnProfit/turnProfit.js",
 	'financial_totalProfit': "js/template/financial/totalProfit/totalProfit.js",
 	'financial_Client': "js/template/financial/Client/Client.js",
+	'financial_planProfit': "js/template/financial/planProfit/planProfit.js", //发团利润
+	'financial_replaceProfit':"js/template/financial/replaceProfit/replaceProfit.js",
 	//---------------------------------------------------------------------------------------------------------------
 	'public_message':"js/template/system/message/message.js",
 	'system_information':"js/template/system/information/information.js",
@@ -634,7 +636,6 @@ var modalScripts = {
 	'arrange_inner_Transfer':"js/template/arrange/innerTransfer/innerTransfer.js",
 	'arrange_orderManage':"js/template/arrange/orderManage/orderManage.js"
 };
-
 
 function listMenu(menuTemplate){
 	$.ajax({
@@ -899,15 +900,15 @@ function listMenu(menuTemplate){
 					});
 				});
 
-				//绑定代订利润功能
-				$("#sidebar .nav-list .financial_replaceProfit").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/financial/replaceProfit/replaceProfit.js",function(replaceProfit){
-						replaceProfit.listReplaceProfit(0,"","","","","","","","","","");
-					});
-				});
+				// //绑定代订利润功能
+				// $("#sidebar .nav-list .financial_replaceProfit").click(function(){
+				// 	$("#sidebar .nav-list li").removeClass("active");
+				// 	$(this).addClass("active");
+				// 	$(this).parent().parent().addClass("active");
+				// 	seajs.use("" + ASSETS_ROOT +"js/template/financial/replaceProfit/replaceProfit.js",function(replaceProfit){
+				// 		replaceProfit.listReplaceProfit(0,"","","","","","","","","","");
+				// 	});
+				// });
 
 				//绑定収支明细菜单功能
 				$("#sidebar .nav-list .financial_collectDetail").click(function(){
@@ -1571,7 +1572,18 @@ KingServices.addQuote = function(id){
 		module.addQuote(id);
 	});
 }
-
+//单团明细
+KingServices.tripDetail = function(id){
+	seajs.use("" + ASSETS_ROOT + "js/template/financial/count/count.js",function(module){
+		module.tripDetail(id);
+	});
+}
+//代订明细
+KingServices.replaceDetail = function(id){
+	seajs.use("" + ASSETS_ROOT + modalScripts.arrange_booking,function(module){
+		module.replaceDetail(id);
+	});
+}
 
 //添加资源函数
 KingServices.addResourceFunction = function(e){

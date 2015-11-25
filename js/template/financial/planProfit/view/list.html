@@ -1,0 +1,159 @@
+<div class="row">
+	<div class="col-xs-12 T-search-area border" style="margin:0px;border-style:solid">  
+		<div class="form-horizontal clearfix">      
+	      	<label class="control-label pull-left" style="margin-left: 15px">团号：</label>
+	    	<input type="text" class="col-sm-12" style="width: 220px" placeholder="团号" name="tripNumber" value="{{searchParam.tripNumber}}" />
+
+			<label class="control-label pull-left" style="margin-left: 15px">线路产品：</label>
+	    	<input type="text" class="col-sm-12" style="width: 220px" placeholder="线路产品" name="lineProductName" value="{{searchParam.lineProductName}}" />
+			<input type="hidden" name="lineProductId" value="{{searchParam.lineProductId}}"/>
+
+			<label class="control-label pull-left" style="margin-left: 15px">导游：</label>
+	    	<input type="text" class="col-sm-12" style="width: 220px" placeholder="导游" name="guideName" value="{{searchParam.guideName}}"/>
+			<input type="hidden" name="guideId" value="{{searchParam.guideId}}"/>
+			
+			<label class="control-label pull-left" style="margin-left: 15px">开始日期：</label>
+			<div class="col-xs-1">
+				<div class="input-group">
+			    	<input class="col-xs-12 date-picker" name="startTime" placeholder="开始日期" type="text" value="{{searchParam.startTime}}" />	
+					<span class="input-group-addon">
+						<i class="fa fa-calendar"></i>
+					</span>
+				</div>
+			</div>
+			<label class="control-label pull-left" style="margin-left: 15px">结束日期：</label>
+			<div class="col-xs-1">
+				<div class="input-group">
+			    	<input class="col-xs-12 date-picker" name="endTime" placeholder="结束日期" type="text" value="{{searchParam.endTime}}" />	
+					<span class="input-group-addon">
+						<i class="fa fa-calendar"></i>
+					</span>
+				</div>
+			</div>
+
+			<label class="control-label pull-left" style="margin-left: 15px">状态：</label>
+	    	<div class="btn-group T-status" style="margin-left: 20px;">
+				<button data-toggle="dropdown" class=" btn-sm  dropdown-toggle block-up block-up" aria-expanded="false" style="height:24px;padding:0px 10px;line-height:24px;">
+					<span>全部
+					</span>
+					<i class="ace-icon fa fa-angle-down icon-on-right" ></i>
+				</button>
+				<ul class="dropdown-menu">
+					<li>
+						<a data-value="" href="javascript:void(0)">全部</a>
+					</li>
+					<li>
+						<a data-value="1" href="javascript:void(0)">已启用</a>
+					</li>
+					<li>
+						<a data-value="0" href="javascript:void(0)">已停用</a>
+					</li> 
+				</ul>
+			</div>			
+
+	        <button class="btn-sm marginLeft-30 search-btn T-search"> <i class="ace-icon fa fa-search"></i>搜索</button> 
+	    </div>
+
+	    <div class="border" style="margin:0px;padding:0px;padding-top:10px;border-style:dashed none none none;margin-top:10px;">
+            <label class="control-label" style="margin-left:15px;">收入合计：26732</label>
+            <label class="control-label marginLeft-30">发团成本合计：7263478</label>
+            <label class="control-label marginLeft-30">中转成本合计：673457263</label>
+            <label class="control-label marginLeft-30">毛利：6537465</label>
+            <label class="control-label marginLeft-30">人均毛利：7263478</label>
+            <label class="control-label marginLeft-30">人数：673大57小</label>
+            <label class="control-label marginLeft-30">团数：673大57小</label>
+        </div>
+    </div>
+
+    <table class="table table-striped table-bordered table-hover T-showHighLight">
+		<thead>
+			<tr class="bg-blur">
+				<th rowspan="2">团号</th>
+				<th rowspan="2">线路产品</th>
+				<th rowspan="2">出游日期</th>
+				<th rowspan="2">人数</th>
+				<th rowspan="2">导游</th>
+				<th rowspan="2">责任计调</th>
+				<th rowspan="2">状态</th>
+				<th colspan="5">收入</th>
+				<th colspan="10">发团成本</th>
+				<th colspan="5">中转成本</th>
+				<th rowspan="2">收入小计</th>
+				<th rowspan="2">发团成本小计</th>
+				<th rowspan="2">中转成本小计</th>
+				<th rowspan="2">毛利</th>
+				<th rowspan="2">人均毛利</th>
+			</tr>
+			<tr class="bg-blur">
+				<th>团款</th>
+				<th>购物佣金</th>
+				<th>自费</th>
+				<th>其他收入</th>
+				<th>导游管理费</th>
+
+				<th>导服费</th>
+				<th>保险</th>
+				<th>车费</th>
+				<th>餐费</th>
+				<th>房费</th>
+				<th>景区</th>
+				<th>票务</th>
+				<th>其他支出</th>
+				<th>购物导佣</th>
+				<th>自费导佣</th>
+
+				<th>车费</th>
+				<th>餐费</th>
+				<th>房费</th>
+				<th>票务</th>
+				<th>其他</th>
+			</tr>
+		</thead>
+		<tbody class="T-planProfit-list">
+
+				<tr><td><a class="T-tripDetail">ZQL20254920161212T</a></td>
+					<td>线路产品</td>
+					<td>出游日期2015-09-15</td>
+					<td>人数</td>
+					<td>导游</td>
+					<td>责任计调</td>
+					<td>状态</td>
+					<td>团款</td>
+					<td>购物佣金</td>
+					<td>自费</td>
+					<td>其他收入</td>
+					<td>导游管理费</td>
+					<td>导服费</td>
+					<td>保险</td>
+					<td>车费</td>
+					<td>餐费</td>
+					<td>房费</td>
+					<td>景区</td>
+					<td>票务</td>
+					<td>其他支出</td>
+					<td>购物导佣</td>
+					<td>自费导佣</td>
+					<td>车费</td>
+					<td>餐费</td>
+					<td>房费</td>
+					<td>票务</td>
+					<td>其他</td>
+					<td>收入小计</td>
+					<td>发团成本小计</td>
+					<td>中转成本小计</td>
+					<td>毛利</td>
+					<td>人均毛利</td>
+				</tr>
+
+		</tbody>
+	</table>
+	<div class="row pageMode">
+		<div class="col-xs-6">
+			<small>共计 1 条记录</small>
+		</div>
+		<div class="col-xs-6">
+			<div class="dataTables_paginate paging_simple_numbers T-pagenation">
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,32 +1,30 @@
-<div class="row bookingProFit">
-	<div class="col-xs-12">
-	  <div class="form-group">
-		<div class="search-area border" style="margin:0px;border-style:solid solid none solid">
+<div class="row">
+	<div class="col-xs-12 form-group">
+		<div class="T-search-area border" style="margin:0px;border-style:solid solid none solid">
 			<div class="col-xs-1"> 
-	            <input type="text" value = "{{searchParam.partnerAgencyName}}" name ="chooseAgencies" class="col-xs-12" placeholder="客户" />
+	            <input type="text" value="{{searchParam.partnerAgencyName}}" name="partnerAgencyName" class="col-xs-12" placeholder="客户" />
 	            <input type="hidden" value="{{searchParam.partnerAgencyId}}" name="partnerAgencyId" />
             </div>
             <div class="col-xs-1"> 
-	            <input type="text" value = "{{searchParam.hotelName}}" name="chooseLineHotels" class="col-xs-12" placeholder="酒店" />
+	            <input type="text" value = "{{searchParam.hotelName}}" name="hotelName" class="col-xs-12" placeholder="酒店" />
 	            <input type="hidden" value="{{searchParam.hotelId}}" name="hotelId" />
 			</div>
 			 
 			<div class="col-xs-1">
-	            <input type="text" value = "{{searchParam.scenicName}}" name="chooseScenics" class="col-xs-12" placeholder="景区" />
+	            <input type="text" value = "{{searchParam.scenicName}}" name="scenicName" class="col-xs-12" placeholder="景区" />
 	            <input type="hidden" value="{{searchParam.scenicId}}" name="scenicId" />
 			</div>
 			<div class="col-xs-1">
-	             <select class="col-sm-12" name="ticketType">
-						<option value="">票务</option>
-						<option value="1" {{if searchParam.type == 1}}selected="selected"{{/if}}>飞机票</option>
-						<option value="2" {{if searchParam.type == 2}}selected="selected"{{/if}}>汽车票</option>
-						<option value="3" {{if searchParam.type == 3}}selected="selected"{{/if}}>火车票</option>
-						<option value="4" {{if searchParam.type == 4}}selected="selected"{{/if}}>轮船票</option>
+	            <select class="col-sm-12" name="ticketType">
+					<option value="">票务</option>
+					<option value="1" {{if searchParam.type == 1}}selected="selected"{{/if}}>飞机票</option>
+					<option value="2" {{if searchParam.type == 2}}selected="selected"{{/if}}>汽车票</option>
+					<option value="3" {{if searchParam.type == 3}}selected="selected"{{/if}}>火车票</option>
+					<option value="4" {{if searchParam.type == 4}}selected="selected"{{/if}}>轮船票</option>
 				</select>
 			</div> 
 			<div class="col-xs-1">
-				<input type="text" value = "{{searchParam.needSeatCount}}" name="chooseBus" class="col-xs-12" placeholder="旅游车" />
-	            <input type="hidden" value="{{searchParam.needSeatCount}}" name="busSeat" />
+				<input type="text" value="{{searchParam.needSeatCount}}" name="seatCount" class="col-xs-12" placeholder="旅游车" />
 			</div>
 			<div class="col-xs-3">
 				<div class="col-xs-6">  
@@ -47,29 +45,27 @@
 				</div>
 			</div>
 			<div class="col-xs-2">			
-				<button class="search-btn btn-sm btn-height btn-bookingProFit-search" style="border-top-width: 4px;border-bottom-width: 4px;">
+				<button class="search-btn btn-sm btn-height T-search" style="border-top-width: 4px;border-bottom-width: 4px;">
 					<i class="ace-icon fa fa-search"></i>
 					搜索
 				</button>
 			</div>
-                
-           
+
 			<div style="clear:both;height:0px;line-height:0px;"></div>
 		</div>
-		<div class="form-group border" style="margin:0px;border-style:dashed solid solid solid">
-                    <label class=" control-label " style="margin-left:12px;">总应收：{{allSumNeedGetMoney}}</label>
-                    <label class=" control-label " style="margin-left:30px;">总应付：{{allSumCostMoney}}</label>
-                    <label class=" control-label " style="margin-left:30px;">总毛利：{{allGrossProfit}}</label>
-        </div>
+		<div class="border" style="margin:0px;border-style:dashed solid solid solid">
+            <label class=" control-label " style="margin-left:12px;">总应收：{{allSumNeedGetMoney}}</label>
+            <label class=" control-label " style="margin-left:30px;">总应付：{{allSumCostMoney}}</label>
+            <label class=" control-label " style="margin-left:30px;">总毛利：{{allGrossProfit}}</label>
 		</div>
-		<table class="table table-striped table-bordered table-hover T-showHighLight">
+		<table class="table table-striped table-bordered table-hover">
 			<thead>
 				<tr class="bg-blur">
 					<th rowspan="2">订单代号</th>
 					<th rowspan="2">客户</th>
-					<th rowspan="2">应收</th>
 					<th colspan="4">项目</th>
-					<th rowspan="2">应付</th>
+					<th rowspan="2">应收</th>
+					<th rowspan="2">成本</th>
 					<th rowspan="2">毛利</th>
 				</tr>
 				<tr class="bg-blur">
@@ -79,42 +75,44 @@
 					<th>旅游车</th>
 				</tr>
 			</thead>
-			<tbody>{{each bookingOrderList as booking}}
-				<tr data-entity-id="{{booking.id}}">
-					<td>{{booking.orderNumber}}</td>
+			<tbody>
+				{{each bookingOrderList as booking}}
+				<tr data-id="{{booking.id}}">
+					<td><a class="T-replaceDetail">{{booking.orderNumber}}</a></td>
 					<td>{{if booking.partnerAgency != null}}{{booking.partnerAgency.travelAgencyName}}{{/if}}</td>
+					<td>
+						{{if booking.financialHotel == ""}}
+							-
+						{{else}}
+							{{booking.financialHotel}}
+						{{/if}}
+					</td>
+					<td>
+						{{if booking.financialTicket == ""}}
+							-
+						{{else}}
+							{{booking.financialTicket}}
+						{{/if}}
+					</td>
+					<td>
+						{{if booking.financialScenic == ""}}
+							-
+						{{else}}
+							{{booking.financialScenic}}
+						{{/if}}
+					</td>
+					<td>
+						{{if booking.financialBus == ""}}
+							-
+						{{else}}
+							{{booking.financialBus}}
+						{{/if}}
+					</td>
 					<td>{{booking.sumNeedGetMoney}}</td>
-					<td>
-					{{if booking.financialHotel == ""}}
-					-
-					{{else}}
-					{{booking.financialHotel}}
-					{{/if}}
-					</td>
-					<td>
-					{{if booking.financialTicket == ""}}
-					-
-					{{else}}
-					{{booking.financialTicket}}
-					{{/if}}
-					</td>
-					<td>
-					{{if booking.financialScenic == ""}}
-					-
-					{{else}}
-					{{booking.financialScenic}}
-					{{/if}}
-					</td>
-					<td>
-					{{if booking.financialBus == ""}}
-					-
-					{{else}}
-					{{booking.financialBus}}
-					{{/if}}
-					</td>
 					<td>{{booking.sumCostMoney}}</td>
 					<td>{{booking.financialGrossProfit}}</td>
-				</tr>{{/each}}
+				</tr>
+				{{/each}}
 			</tbody>
 		</table>
 		<div class="row pageMode">
