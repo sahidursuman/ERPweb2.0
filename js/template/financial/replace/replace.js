@@ -535,7 +535,7 @@ define(function(require, exports) {
         getPartnerAgencyList:function(obj,partnerAId){
             var $objC = $(obj)
             $.ajax({
-                url:""+APP_ROOT+"back/partnerAgency.do?method=findPartnerAnencyList&token="+$.cookie("token")+"&menuKey=resource_partnerAgency&operation=view",
+                url:""+APP_ROOT+"back/financial/financialBookingOrder.do?method=listSumFcBookingOrder&token="+$.cookie("token")+"&menuKey=resource_partnerAgency&operation=view",
                 dataType: "json",
                 data:"travelAgencyName="+$objC.val(),
                 success:function(data){
