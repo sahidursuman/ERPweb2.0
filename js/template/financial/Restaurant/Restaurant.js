@@ -62,7 +62,7 @@ define(function(require, exports) {
                     data.searchParam = restaurant.searchData;
 
                     var html = listTemplate(data);
-                    addTab(menuKey,"餐厅账务",html);
+                    Tools.addTab(menuKey,"餐厅账务",html);
 
                     restaurant.initList(year,month);
                     // 绑定翻页组件
@@ -109,7 +109,6 @@ define(function(require, exports) {
 
     //对账
     restaurant.restaurantCheck = function(page,restaurantId,restaurantName,year,month){
-        console.log(restaurantName);
         if (restaurant.$checkSearchArea && arguments.length === 3) {
             year = restaurant.$checkSearchArea.find("select[name=year]").val(),
             month = restaurant.$checkSearchArea.find("select[name=month]").val()
@@ -169,8 +168,6 @@ define(function(require, exports) {
     	// 初始化jQuery 对象 
         restaurant.$checkTab = $("#tab-" + menuKey + "-checking-content");
         restaurant.$checkSearchArea = restaurant.$checkTab.find('.T-search-area');
-        restaurant.$checkTab.find('.T-saveCheck').data('id', id);
-        restaurant.$checkTab.find('.T-saveCheck').data('page', page);
 
         restaurant.init_check_event(page,id,name);
 
@@ -188,6 +185,13 @@ define(function(require, exports) {
                 var url = KingServices.build_url("export","restaurant") + "&restaurantId="+id+"&year="+year+"&month="+month+"&sortType=auto";
                 exportXLS(url)
             });
+        });
+
+        //给查看单据绑定事件
+        restaurant.$checkTab.find(".T-restaurantImg").click(function(){
+            var WEB_IMG_URL_BIG = restaurant.$checkTab.find("input[name=WEB_IMG_URL_BIG]").val();//大图
+            var WEB_IMG_URL_SMALL = restaurant.$checkTab.find("input[name=WEB_IMG_URL_SMALL]").val();//大图
+            restaurant.viewImage(this,WEB_IMG_URL_BIG,WEB_IMG_URL_SMALL);
         });
 
         //给全选按钮绑定事件
@@ -208,7 +212,7 @@ define(function(require, exports) {
 
         //关闭页面事件
         restaurant.$checkTab.find(".T-close-check").click(function(){
-            closeTab(menuKey + "-checking");
+            Tools.closeTab(menuKey + "-checking");
         });
         //确认对账按钮事件
         restaurant.$checkTab.find(".T-saveCheck").click(function(){ 
@@ -258,7 +262,6 @@ define(function(require, exports) {
         // 初始化jQuery 对象 
         restaurant.$clearTab = $("#tab-" + menuKey + "-clearing-content");
         restaurant.$clearSearchArea = restaurant.$clearTab.find('.T-search-area');
-        restaurant.$clearTab.find('.T-saveClear').data('id', id);
 
         restaurant.init_clear_event(id);
 
@@ -270,7 +273,7 @@ define(function(require, exports) {
         //保存结算事件
         restaurant.$clearTab.find(".T-saveClear").click(function(){
             if (!rule.check(restaurant.$clearTab).form()) { return; }
-            restaurant.saveClear($(this),id);
+            restaurant.saveClear(id,name,$(this));
         });
         //明细按钮事件
         restaurant.$clearTab.find(".T-detail").click(function(){
@@ -307,6 +310,59 @@ define(function(require, exports) {
                     }
                 }
             })
+        });
+    };
+
+    //显示单据
+    restaurant.viewImage = function(obj,WEB_IMG_URL_BIG,WEB_IMG_URL_SMALL) {
+        var data = { "images":[]  };
+        var str = $(obj).attr('url');
+        var strs = str.split(",");
+        for(var i = 0; i < strs.length; i ++) {
+            var s = strs[i];
+            if(s != null && s != "" && s.length > 0) {
+                var image = {
+                    "WEB_IMG_URL_BIG":imgUrl+s,
+                    "WEB_IMG_URL_SMALL":imgUrl+s+"?imageView2/2/w/150",
+                }
+                data.images.push(image);
+            }
+        }
+        var html = billImageTempLate(data);
+        
+        layer.open({
+            type : 1,
+            title : "单据图片",
+            skin : 'layui-layer-rim', // 加上边框
+            area : '500px', // 宽高
+            zIndex : 1028,
+            content : html,
+            scrollbar: false, // 推荐禁用浏览器外部滚动条
+            success : function() {
+                var colorbox_params = {
+                    rel: 'colorbox',
+                    reposition:true,
+                    scalePhotos:true,
+                    scrolling:false,
+                    previous:'<i class="ace-icon fa fa-arrow-left"></i>',
+                    next:'<i class="ace-icon fa fa-arrow-right"></i>',
+                    close:'&times;',
+                    current:'{current} of {total}',
+                    maxWidth:'100%',
+                    maxHeight:'100%',
+                    onOpen:function(){ 
+                        $overflow = document.body.style.overflow;
+                        document.body.style.overflow = 'hidden';
+                    },
+                    onClosed:function(){
+                        document.body.style.overflow = $overflow;
+                    },
+                    onComplete:function(){
+                        $.colorbox.resize();
+                    }
+                };
+                $('#layer-photos-financial-count [data-rel="colorbox"]').colorbox(colorbox_params);
+            } 
         });
     };
 
@@ -365,8 +421,7 @@ define(function(require, exports) {
                             restaurant.listRestaurant(restaurant.searchData.pageNo,restaurant.searchData.restaurantId,restaurant.searchData.year,restaurant.searchData.month);
                         } else if(argumentsLen == 3){
                             restaurant.$checkTab.data('isEdited',false);
-                            restaurant.$checkTab.find('.T-saveCheck').data('id',"");
-                            restaurant.restaurantCheck(page,restaurant.$checkTab.find(".T-data-id").data("id"),restaurantName);
+                            restaurant.restaurantCheck(page,restaurantId,restaurantName);
                         } else {
                             restaurant.$checkTab.data('isEdited',false);
                             Tools.addTab(tab_id, title, html);
@@ -378,17 +433,16 @@ define(function(require, exports) {
         });
     };
 
-    restaurant.saveClear = function($obj,id,tab_id, title, html){
+    restaurant.saveClear = function(id,name,$obj,tab_id, title, html){
         if(!restaurant.$clearTab.data('isEdited')){
             showMessageDialog($( "#confirm-dialog-message" ),"您未进行任何操作！");
             return false;
         }
         var $tr,argumentsLen = arguments.length;
-        console.log(argumentsLen);
         if (!!$obj)  {
             $tr= $obj.closest('tr');
         } else{
-            $tr = $cleartab.find(".T-clearList tr");
+            $tr = restaurant.$clearTab.find(".T-clearList tr");
         }
 
         var fcRestaurantSettlementStr = [];
@@ -419,17 +473,16 @@ define(function(require, exports) {
                 var result = showDialog(data);
                 if(result){
                     showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-                        if(argumentsLen === 0){
+                        if(argumentsLen === 2){
                             Tools.closeTab(menuKey + "-clearing");
                             restaurant.listRestaurant(restaurant.searchData.pageNo,restaurant.searchData.restaurantId,restaurant.searchData.year,restaurant.searchData.month);
-                        }else if(argumentsLen === 2){
+                        }else if(argumentsLen === 3){
                             restaurant.$clearTab.data('isEdited',false);
-                            restaurant.$clearTab.find('.T-saveClear').data('id',"");
                             restaurant.restaurantClear(id,name);
                         } else {
                             restaurant.$clearTab.data('isEdited',false);
                             Tools.addTab(tab_id, title, html);
-                            restaurant.initClear(restaurant.$clearTab.find(".T-data-id").data("id"));
+                            restaurant.initClear(restaurant.$clearTab.find(".T-data-id").data("id"),name);
                         }
                     });
                     
@@ -475,17 +528,17 @@ define(function(require, exports) {
             });
             restaurant.$clearTab.off('change').off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
                 event.preventDefault();
-                restaurant.initClear(restaurant.$clearTab.find('.T-saveClear').data('id'));
+                restaurant.initClear(id,name);
             })
             // 监听保存，并切换tab
             .on('switch.tab.save', function(event, tab_id, title, html) {
                 event.preventDefault();
-                restaurant.saveClear("",id,tab_id, title, html);
+                restaurant.saveClear(id,name,"",tab_id, title, html);
             })
             // 保存后关闭
             .on('close.tab.save', function(event) {
                 event.preventDefault();
-                restaurant.saveClear();
+                restaurant.saveClear(id,name);
             });
         }
     };

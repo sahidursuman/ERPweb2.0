@@ -1,4 +1,4 @@
-<div class="row T-data-id" data-id="{{searchParam.restaurantId}}" data-id="{{restaurantName}}">
+<div class="row T-data-id" data-id="{{searchParam.restaurantId}}">
     <div class="col-xs-12 border" >
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="T-search-area editable editable-click" >
@@ -73,7 +73,7 @@
 			    <td>{{checking.needPayMoney}}</td>
 			    <td>{{"社付:"}}{{checking.travelAgencyPayedMoney}}{{","}}{{"导付:"}}{{checking.guidePayedMoney}}</td> 
 			    <td>{{checking.unPayedMoney}}</td>
-			    <td>{{if checking.billImages != null && checking.billImages !=""}}<a href="#" class="restaurantImg" url="{{checking.billImages}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
+			    <td>{{if checking.billImages != null && checking.billImages !=""}}<a href="#" class="T-restaurantImg" url="{{checking.billImages}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
 			    <td><input type="text" maxlength="10" name="realUnPayedMoney" value="{{checking.realUnPayedMoney}}" style="text-align:center"></td>
                 <td><input type="text" maxlength="1000" name="remark" style="text-align:center" ></td>
 				<td>{{if checking.checkTime == null || checking.checkTime == ""}}-{{else}}{{checking.checkTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
