@@ -198,13 +198,14 @@ function showDialog(data){
 	}
 	return true;
 }
-function showMessageDialog(dialogObj,message, fn){
+function showMessageDialog(dialogObj,message,fn){
 	dialogObj.removeClass('hide').dialog({
 		modal: true,
 		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
 		title_html: true,
 		draggable:false,
-		buttons: [
+		closeBtn: 0, //不显示关闭按钮
+		/*buttons: [
 			{
 				text: "确定",
 				"class" : "btn btn-primary btn-minier btn-heightMall",
@@ -215,9 +216,14 @@ function showMessageDialog(dialogObj,message, fn){
 					}
 				}
 			}
-		],
+		],*/
 		open:function(event,ui){
-			$(this).find("p").html(message);
+			var $that=$(this);
+			$that.find("p").html(message);
+				setTimeout(function(){
+					$that.dialog("close");
+					if(fn){ fn(); }
+			},1500)
 		}
 	});
 }
