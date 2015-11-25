@@ -273,7 +273,7 @@ define(function(require, exports) {
 		var $tbody = $container.find(".T-roomListTbody"),
 			html = '<tr>' +
 			'<td><input name="type" type="text" class="col-sm-12"  maxlength="32" /></td>' +
-			'<td class="T-time"><div class="clearfix" style="margin-top:1px;">日常<label class="timeArea" style="float:right; padding-top:0px;"><button class="btn btn-success btn-sm btn-white T-add"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button></label></div></td>' +
+			'<td class="T-time"><div class="clearfix" style="margin-top:1px;">日常价格<label class="timeArea" style="float:right; padding-top:0px;"><button class="btn btn-success btn-sm btn-white T-add"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button></label></div></td>' +
 			'<td><div class="clearfix" style="margin-top:1px"><input name="normalMarketPrice" class="col-sm-12" maxlength="9" type="text"/></div></td>' +
 			'<td><div class="clearfix" style="margin-top:1px"><input name="normalInnerPrice" class="col-sm-12" maxlength="9" type="text"/></div></td>' +
 			'<td><select name="containBreakfast" class="no-padding foodsAll"><option value="0">不含</option><option value="1">包含</option></select></td>' +
