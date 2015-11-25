@@ -172,7 +172,7 @@ define(function(require,exports){
 			    	$project.find(".T-btn-scenic-add").click(function(){
 			    		var html = "<tr>" +
 			    				"<td><input name=\"name\" class='col-sm-12' type=\"text\" maxlength=\"100\"/></td>" +
-			    				"<td class=\"time\"><div class=\"clearfix\" style=\"margin-top:1px\">日常<label class=\"timeArea\" style=\"float:right;padding-top:3px;\"><button class=\"btn btn-success btn-sm btn-white T-add addScenice\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i></button></label></div></td>" +
+			    				"<td class=\"time\"><div class=\"clearfix\" style=\"margin-top:1px\">日常价格<label class=\"timeArea\" style=\"float:right;padding-top:3px;\"><button class=\"btn btn-success btn-sm btn-white T-add addScenice\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i></button></label></div></td>" +
 			    				"<td><div class=\"clearfix\" style=\"margin-top:0px\"><input name=\"normalInnerPrice\" style='margin-top: 2px' class='col-sm-12' type=\"text\" maxlength=\"7\"/></div></td>" +
 			    				"<td><input name=\"remark\" class='col-sm-12' type=\"text\" maxlength=\"1000\"/></td>" +
 			    				"<td style=\"width:70px\"><a data-entity-id=\"\" class=\" T-btn-scenic--delete\">删除</a></td>" +
@@ -302,7 +302,7 @@ define(function(require,exports){
 						    	$project.find(".T-scenic-standard-add").click(function(){
 						    		var html = "<tr>" +
 						    				"<td><input name=\"name\" class='col-sm-12' type=\"text\" maxlength=\"100\"/></td>" +
-						    				"<td class=\"time\"><div class=\"clearfix\" style=\"margin-top:1px\">日常<label class=\"timeArea\" style=\"float:right\"><button class=\"btn btn-success btn-sm btn-white T-add\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i></button></label></div></td>" +
+						    				"<td class=\"time\"><div class=\"clearfix\" style=\"margin-top:1px\">日常价格<label class=\"timeArea\" style=\"float:right\"><button class=\"btn btn-success btn-sm btn-white T-add\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i></button></label></div></td>" +
 						    				"<td><div class=\"clearfix\" style=\"margin-top:2px\"><input name=\"normalInnerPrice\" class='col-sm-12' type=\"text\" maxlength=\"7\"/></div></td>" +
 						    				"<td><input name=\"remark\"  class='col-sm-12' type=\"text\" maxlength=\"1000\"/></td>" +
 						    				"<td style=\"width:70px\"><a data-entity-id=\"\" class=\"T-scenic-standard-delete\">删除</a></td>" +
