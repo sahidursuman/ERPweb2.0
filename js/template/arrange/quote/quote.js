@@ -530,10 +530,12 @@ define(function(require, exports) {
 				var result = showDialog(data);
 				if(result){
 					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-						//删除现有
-						$container.find(".T-resourceHotelList").remove();
 
 						var whichDay = data.hotelList[0].whichDay-1;
+						//删除现有
+						$container.find("#dayListUpdate-"+whichDay+"  .T-resourceHotelList").remove();
+
+						
 						var html = quote.hotelHtml(data.hotelList);
 						$container.find("#dayListUpdate-"+ whichDay +" .T-timeline-detail-container").append(html);
 
