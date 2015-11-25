@@ -20,7 +20,9 @@ define(function(require, exports) {
 		hotelInquiryResultTemplate = require("./view/hotelInquiryResult"),
 		busInquiryTemplate = require("./view/busInquiry"),
 		listMainTemplate = require("./view/listMain"),
-		listTemplate = require("./view/list");
+		listTemplate = require("./view/list"),
+		lineProductListMainTemplate = require("./view/lineProductListMain"),
+		lineProductListTemplate = require("./view/lineProductList");
 		// var tabId = "tab-"+menuKey+"-content";
 	/**
 	 * 自定义报价对象
@@ -122,7 +124,8 @@ define(function(require, exports) {
 		});
 		//新增报价
 		quote.$searchArea.find('.T-quote-add').on('click',function(){
-			quote.addQuote(false);
+			// quote.addQuote(false);
+			quote.chooseLineProduct();
 		});
 
 		quote.$tab.find('.T-quoteList').off('click').on('click','.T-action',function(){
@@ -719,6 +722,11 @@ define(function(require, exports) {
 		.on('click', '.T-delete', function(){
 			quote.deleteLineProductDaysArrange($(this), $container);
 		});
+		//线路产品搜索添加
+		/*$container.find('.T-travelLine-search').on('click',function(){
+			quote.chooseLineProduct($container);
+		})*/
+		
 
 		// 绑定安排的拖动事件				
 		$container.find('.T-timeline-detail-container').sortable({
@@ -803,6 +811,74 @@ define(function(require, exports) {
 			if (!validator.form())   return;
 			var id = $container.find('input[name=quoteId]').val();
 			quote.saveQuote(id, $container);
+		})
+	};
+	//选择线路
+	quote.chooseLineProduct = function() {
+		var html = lineProductListMainTemplate();
+		var lineProductChooseLayer = layer.open({
+		    type: 1,
+		    title:"选择线路产品",
+		    skin: 'layui-layer-rim', //加上边框
+		    area: '1190px', //宽高
+		    zIndex:1028,
+		    content: html,
+		    scrollbar: false,
+		    success:function(){
+		    	var $layerContent = $(".T-quote-lineproduct-search");
+
+		    	searchLineProductList(0,'');
+		    	$layerContent.find('.T-lineProduct-search').on('click', function(){
+		    		var name = $layerContent.find('[name=lineProduct_name]').val();
+		    		searchLineProductList(0,name);
+		    	})
+		    	function searchLineProductList(page, name){
+		    		$.ajax({
+						url: KingServices.build_url("lineProduct","findAll"),
+						type: 'POST',
+						data: {
+							pageNo: page,
+							name: name
+						},
+						success: function(data){
+							data.lineProductList = JSON.parse(data.lineProductList);
+							var result = showDialog(data);
+							if (result) {
+
+								var htmlList = lineProductListTemplate(data);
+								$layerContent.find('.T-normal-list').html(htmlList);
+								$layerContent.find('.T-total').text(data.recordSize);
+								// 让对话框居中
+								$(window).trigger('resize');
+								// 绑定翻页组件
+								laypage({
+								    cont: $layerContent.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+								    pages: data.totalPage, //总页数
+								    curr: (data.pageNo + 1),
+								    jump: function(obj, first) {
+								    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+											searchLineProductList(obj.curr -1,$layerContent.find('[name=lineProduct_name]').val());
+								    	}
+								    }
+								});	
+								//提交
+								$layerContent.find(".T-searchtravelLine").on('click', function() {
+									var $tr = $layerContent.find('.T-normal-list tr'), id ='';
+									$tr.each(function(i){
+										var $selectFlag = $(this).find('input[name=choice-TravelLine]').is(":checked");
+										var $that = $(this);
+										if($selectFlag){
+											id = $that.find('td[name=travelLine-select]').attr("data-travelLine-Id");
+										};
+									});
+									quote.addQuote(id);
+									layer.close(lineProductChooseLayer);
+								})
+							}
+						}
+					})
+		    	}
+		    }
 		})
 	};
 	//车辆询价
@@ -1259,7 +1335,7 @@ define(function(require, exports) {
 								}
 							})
 						}
-
+						var arriveTime = $container.find('[name=checkInTime]').val();
 						$container.find('.T-chooseHotel').on('click',function(){
 							var $this = $(this),$parents = $this.closest('tr');
 							var chooseHotelInfo = {
@@ -1271,7 +1347,7 @@ define(function(require, exports) {
 							$.ajax({
 					    		url: KingServices.build_url("hotelInquiry","findHotelInquiryStstus"),
 					    		type: 'POST',
-					    		data: "hotelId="+chooseHotelInfo.id+"&quoteId="+quoteId+"",
+					    		data: "hotelId="+chooseHotelInfo.id+"&quoteId="+quoteId+"&arriveTime="+arriveTime+"",
 					    		showLoading: false,
 					    		success: function(data){
 					    			var result = showDialog(data);
