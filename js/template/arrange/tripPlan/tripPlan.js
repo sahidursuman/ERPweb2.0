@@ -243,7 +243,7 @@ define(function(require, exports) {
 			tripPlan.addTouristGroup(lineProductId,startTime,$tab);
 		});
 		//查看旅游小组成员
-    	$tab.find(".T-groupView").on("click",function(){
+    	$tab.find(".T-groupView").off().on("click",function(){
     		var id = $(this).closest('tr').data("id");
     		tripPlan.viewTouristGroup(id);
     	});
@@ -967,7 +967,7 @@ define(function(require, exports) {
 									});
 						    		$tab.find(".T-tourist-list").append(html);
 						    		//查看旅游小组成员
-							    	$tab.find(".T-groupView").on("click",function(){
+							    	$tab.find(".T-groupView").off().on("click",function(){
 							    		var id = $(this).closest('tr').data("id");
 							    		tripPlan.viewTouristGroup(id);
 							    	});
