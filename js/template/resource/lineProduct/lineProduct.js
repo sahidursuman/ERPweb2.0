@@ -776,52 +776,8 @@ define(function(require, exports) {
 			ResLineProduct.updateRouteIndex($obj.closest('.T-updateLineProductContainer'));
 		}
 	};
-	// ResLineProduct.deleteLineProduct = function(id){
-	// 	if (!!id) {
-	// 		$("#confirm-dialog-message").removeClass('hide').dialog({
-	// 			modal: true,
-	// 			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-	// 			title_html: true,
-	// 			draggable:false,
-	// 			buttons: [ 
-	// 				{
-	// 					text: "取消",
-	// 					"class" : "btn btn-minier",
-	// 					click: function() {
-	// 						$( this ).dialog( "close" );
-	// 					}
-	// 				},
-	// 				{
-	// 					text: "确定",
-	// 					"class" : "btn btn-primary btn-minier",
-	// 					click: function() {
-	// 						$( this ).dialog( "close" );
-	// 						$.ajax({							
-	// 							url: KingServices.build_url('lineProduct', 'deleteLineProduct'),
-	// 							type:"POST",
-	// 							showLoading:false,
-	// 							data:"id="+id+"",
-	// 							success:function(data){
-	// 								var result = showDialog(data);
-	// 								if(result){
-	// 									ResLineProduct.$tab.find('.lineProduct-' + id).fadeOut(function() {
-	// 										var len = ResLineProduct.$tab.find('.T-list').children('tr').length
 
-	// 										ResLineProduct.getProductList(len <= 1? (ResLineProduct.pageNo - 1): ResLineProduct.pageNo);
-	// 									});
-	// 								}
-	// 							}
-	// 						});
-	// 					}
-	// 				}
-	// 			],
-	// 			open:function(event,ui){
-	// 				$(this).find("p").text("你确定要删除该条记录？");
-	// 			}
-	// 		});
-	// 	}
-	// };
-	
+	// 删除线路产品
 		ResLineProduct.deleteLineProduct = function(id){
 			if(!!id){
 				showConfirmDialog($("#confirm-dialog-message"),"你确定要删除该条记录？",function(){
