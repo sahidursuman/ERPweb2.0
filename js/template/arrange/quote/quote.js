@@ -432,7 +432,7 @@ define(function(require, exports) {
 						}
 						data.data[i].trLen = trLen;
 					}
-					
+
 					for (var i = 0,dataLen = data.data.length; i < dataLen; i++) {
 						for (var j = 0,len = data.data[i].hotelList.length; j < len; j++) {
 							var $this = data.data[i].hotelList[j];
@@ -1273,8 +1273,14 @@ define(function(require, exports) {
 			minLength: 0,
 			change: function(event,ui){
 				if (ui.item == null) {
-					$(this).val("")
+					var $this = $(this), $parents = $this.closest('.search-area');
+					$this.val("")
+					$parents.find('[name=busBrand]').val("");
 				}
+			},
+			select: function(event,ui){
+				var $this = $(this), $parents = $this.closest('.search-area');
+				$parents.find('[name=busBrand]').val("");
 			}
 		}).off('click').on('click', function(){
 			var obj = this,dataList = [];
