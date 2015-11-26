@@ -604,7 +604,7 @@ define(function(require, exports) {
     	BookingArrange.choose($tab.find('.T-busCompany'), function(obj){
 			var seatCount = $(obj).closest('tr').find("input[name=needSeatCount]").val();
 			var brand = $(obj).closest('tr').find("input[name=needBusBrand]").val();
-			if(seatCount && brand){
+			if(seatCount){
 				BookingArrange.ajax({'url' : 'bookingOrder', 'method' : 'getBusCompanyList', 'menuKey' : menuKey, 'operation' : 'view', 'seatCount' : seatCount, 'brand' : brand}, function(data){
 					var busCompanyList = JSON.parse(data.busCompanyList);
 					if(busCompanyList && busCompanyList.length > 0){
@@ -621,7 +621,7 @@ define(function(require, exports) {
 					}
 				});
 			}else{
-				layer.tips('请选择车辆品牌', obj, {
+				layer.tips('请选择车座数', obj, {
 				    tips: [1, '#3595CC'],
 				    time: 2000
 				});
