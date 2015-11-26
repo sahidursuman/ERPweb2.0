@@ -542,52 +542,70 @@ define(function(require,exports){
 	};
 
 	//删除景区信息
+	// ScenicResource.deleteScenic=function(id){
+	// 	var dialogObj = $( "#confirm-dialog-message" );
+	// 	dialogObj.removeClass('hide').dialog({
+	// 		modal:true,
+	// 		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
+	// 		title_html: true,
+	// 		draggable:false,
+	// 		buttons:[
+	// 			{
+	// 				text :'取消',
+	// 				"class" : "btn btn-minier btn-heightMall",
+	// 				click: function() {
+	// 						$( this ).dialog( "close" );
+	// 				}
+	// 			},
+	// 			{
+	// 				text: "确定",
+	// 				"class" : "btn btn-primary btn-minier btn-heightMall",
+	// 				click: function() {
+	// 					$( this ).dialog( "close" );
+	// 					$.ajax({
+	// 						url:""+APP_ROOT+"back/scenic.do?method=deleteScenic&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=delete",
+	// 						type:"POST",
+	// 						data:"id="+id+"",
+	// 						dataType:"json",
+	// 						beforeSend:function(){
+	// 							globalLoadingLayer = openLoadingLayer();
+	// 						},
+	// 						success:function(data){
+	// 							layer.close(globalLoadingLayer);
+	// 							var result = showDialog(data);
+	// 							if(result){
+	// 								ScenicResource.$tab.find(".scenic-"+id).fadeOut(function(){
+	// 									ScenicResource.listScenic(ScenicResource.searchData.pageNo);
+	// 								});
+	// 							}
+	// 						}
+	// 					});
+	// 				}
+	// 			}
+	// 		],
+	// 		open:function(event,ui){
+	// 				$(this).find("p").text("你确定要删除该条记录？");
+	// 		}
+	// 	});
+	// };
+	
 	ScenicResource.deleteScenic=function(id){
-		var dialogObj = $( "#confirm-dialog-message" );
-		dialogObj.removeClass('hide').dialog({
-			modal:true,
-			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-			title_html: true,
-			draggable:false,
-			buttons:[
-				{
-					text :'取消',
-					"class" : "btn btn-minier btn-heightMall",
-					click: function() {
-							$( this ).dialog( "close" );
-					}
-				},
-				{
-					text: "确定",
-					"class" : "btn btn-primary btn-minier btn-heightMall",
-					click: function() {
-						$( this ).dialog( "close" );
-						$.ajax({
-							url:""+APP_ROOT+"back/scenic.do?method=deleteScenic&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=delete",
-							type:"POST",
-							data:"id="+id+"",
-							dataType:"json",
-							beforeSend:function(){
-								globalLoadingLayer = openLoadingLayer();
-							},
-							success:function(data){
-								layer.close(globalLoadingLayer);
-								var result = showDialog(data);
-								if(result){
-									ScenicResource.$tab.find(".scenic-"+id).fadeOut(function(){
-										ScenicResource.listScenic(ScenicResource.searchData.pageNo);
-									});
-								}
-							}
-						});
-					}
-				}
-			],
-			open:function(event,ui){
-					$(this).find("p").text("你确定要删除该条记录？");
+			if(!!id){
+				showConfirmDialog($("#confirm-dialog-message"),"你确定要删除该条记录？",function(){
+					$.ajax({
+						url:""+APP_ROOT+"back/scenic.do?method=deleteScenic&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=delete",
+						type:"POST",
+	 					data:"id="+id+"",	
+					}).done(function(data){
+						if(showDialog(data)){
+							ScenicResource.listScenic(0);
+						}
+					});
+				});
 			}
-		});
-	};
+
+	}	
+
 	//添加时间区间
 	ScenicResource.modifyOriginalRecord=function(obj,$scenicItemObj){
     	var $td = obj.closest('td'), 
