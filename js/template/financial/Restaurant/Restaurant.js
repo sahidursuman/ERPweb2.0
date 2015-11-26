@@ -2,6 +2,7 @@ define(function(require, exports) {
     var rule = require("./rule"),
     	menuKey = "financial_restaurant",
     	listTemplate = require("./view/list"),
+        billImageTempLate = require("./view/billImages"),
     	restaurantChecking = require("./view/restaurantChecking"),
         restaurantClearing = require("./view/restaurantClearing"),
         blanceRecords = require("./view/restaurantRecords"),
@@ -141,7 +142,7 @@ define(function(require, exports) {
                     // 初始化页面
                     if (Tools.addTab(menuKey + "-checking", "餐厅对账", html)) {
                         restaurant.initCheck(page,restaurantId,restaurantName); 
-                        validator = rule.check(restaurant.$checkTab.find('.T-checkList'));                       
+                        validator = restaurant.validatorTable();                       
                     }
                     //取消对账权限过滤
                     var checkTr = restaurant.$checkTab.find(".T-checkTr");
@@ -216,7 +217,7 @@ define(function(require, exports) {
         });
         //确认对账按钮事件
         restaurant.$checkTab.find(".T-saveCheck").click(function(){ 
-            validator = rule.check(restaurant.$checkTab.find('.T-checkList'));
+            validator = restaurant.validatorTable();
             if (!validator.form()) { return; }
             restaurant.saveChecking(id,name,page);
          });
@@ -493,7 +494,7 @@ define(function(require, exports) {
 
     restaurant.init_check_event = function(page,id,name) {
         if (!!restaurant.$checkTab && restaurant.$checkTab.length === 1) {
-            var validator = rule.check(restaurant.$checkTab);
+            var validator = restaurant.validatorTable();
 
             // 监听修改
             restaurant.$checkTab.find(".T-checkList").off('change').on('change', function(event) {
@@ -541,6 +542,16 @@ define(function(require, exports) {
                 restaurant.saveClear(id,name);
             });
         }
+    };
+
+    //给每个tr增加验证
+    restaurant.validatorTable = function(){
+        var validator,$tr = restaurant.$checkTab.find(".T-checkList tr");
+        //给每个tr添加表单验证
+        $tr.each(function(){
+            validator = rule.check($(this));
+        });
+        return validator;
     };
 
     exports.init = restaurant.initModule;

@@ -141,7 +141,7 @@ define(function(require, exports) {
                     // 初始化页面
                     if (Tools.addTab(menuKey + "-checking", "酒店对账", html)) {
                         hotel.initCheck(page,hotelId,hotelName); 
-                        validator = rule.check(hotel.$checkTab.find('.T-checkList'));                       
+                        validator = hotel.validatorTable();                       
                     }
                     //取消对账权限过滤
                     var checkTr = hotel.$checkTab.find(".T-checkTr");
@@ -216,7 +216,7 @@ define(function(require, exports) {
         });
         //确认对账按钮事件
         hotel.$checkTab.find(".T-saveCheck").click(function(){ 
-            validator = rule.check(hotel.$checkTab.find('.T-checkList'));
+            validator = hotel.validatorTable();
             if (!validator.form()) { return; }
             hotel.saveChecking(id,name,page);
          });
@@ -539,6 +539,16 @@ define(function(require, exports) {
                 hotel.saveClear();
             });
         }
+    };
+
+    //给每个tr增加验证
+    hotel.validatorTable = function(){
+        var validator,$tr = hotel.$checkTab.find(".T-checkList tr");
+        //给每个tr添加表单验证
+        $tr.each(function(){
+            validator = rule.check($(this));
+        });
+        return validator;
     };
 
     exports.init = hotel.initModule;

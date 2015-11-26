@@ -143,7 +143,7 @@ define(function(require, exports) {
                     // 初始化页面
                     if (Tools.addTab(menuKey + "-checking", "车队对账", html)) {
                         busCompany.initCheck(page,busCompanyId,busCompanyName); 
-                        validator = rule.check(busCompany.$checkTab.find('.T-checkList'));                       
+                        validator = busCompany.validatorTable();                       
                     }
                     //取消对账权限过滤
                     var checkTr = busCompany.$checkTab.find(".T-checkTr");
@@ -218,7 +218,7 @@ define(function(require, exports) {
         });
         //确认对账按钮事件
         busCompany.$checkTab.find(".T-saveCheck").click(function(){ 
-            validator = rule.check(busCompany.$checkTab.find('.T-checkList'));
+            validator = busCompany.validatorTable();
             if (!validator.form()) { return; }
             busCompany.saveChecking(id,name,page);
         });
@@ -543,6 +543,16 @@ define(function(require, exports) {
                 busCompany.saveClear(id,name);
             });
         }
+    };
+
+    //给每个tr增加验证
+    busCompany.validatorTable = function(){
+        var validator,$tr = busCompany.$checkTab.find(".T-checkList tr");
+        //给每个tr添加表单验证
+        $tr.each(function(){
+            validator = rule.check($(this));
+        });
+        return validator;
     };
 
 	exports.init = busCompany.initModule;
