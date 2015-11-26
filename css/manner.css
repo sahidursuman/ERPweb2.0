@@ -16,6 +16,10 @@
     border: none;
 }
 
+/*list顶部操作区域 */
+.operation-area {
+    margin-bottom: 10px;
+}
 /*搜索按钮*/
 .search-btn{
     border-radius: 0;

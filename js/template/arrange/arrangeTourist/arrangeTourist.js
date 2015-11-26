@@ -2301,6 +2301,7 @@ define(function(require, exports) {
 				// 表单校验
 				if (!validator.form()) {return; } 
 				var saveTripP = {
+					tripPlanId: getValue("tripPlanId"),
 					"tripPlan": {
 						"tripPlanId":getValue("tripPlanId"),
 						"startTime": getValue("startTime"),
@@ -2327,8 +2328,14 @@ define(function(require, exports) {
 				})
 				
 				var saveTripPlan = JSON.stringify(saveTripP);
+				var url = '';
+				if (status == 2) {
+					url = KingServices.build_url("tripPlan","updateTripPlan")
+				}else{
+					url = KingServices.build_url("tripPlan","saveTripPlan")
+				}
 				$.ajax({
-					url:""+APP_ROOT+"back/tripPlan.do?method=saveTripPlan&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
+					url:url,
 					data:"saveTripPlan="+encodeURIComponent(saveTripPlan),
 					dataType: "json",
 					type:"POST",
