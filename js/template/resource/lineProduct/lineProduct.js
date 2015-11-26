@@ -315,7 +315,7 @@ define(function(require, exports) {
 		
 		
 		// 以下待修改
-		ResLineProduct.mousedownBlur();
+		ResLineProduct.mousedownBlur($tab);
 
 		var updateList =$tab.find(".T-dailyArrangeList");
 		if(updateList.length > 0){
@@ -2079,9 +2079,13 @@ define(function(require, exports) {
 		});
 	};
 
-
-	ResLineProduct.mousedownBlur = function(){
-		$("#tab-resource_lineProduct-update-content .T-timeline-detail-container ").mousedown(function() {
+	/**
+	 * 解决autocomplete点击sortable区域无法收起的问题
+	 * @param  {object} $tab 区域容器
+	 * @return {[type]}      [description]
+	 */
+	ResLineProduct.mousedownBlur = function($tab){
+		$tab.find('.T-timeline-detail-container').mousedown(function() {
 			$(this).find(":focus").blur();
 		});
 	};
