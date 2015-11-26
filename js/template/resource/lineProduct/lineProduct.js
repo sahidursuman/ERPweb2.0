@@ -315,7 +315,7 @@ define(function(require, exports) {
 		
 		
 		// 以下待修改
-		ResLineProduct.mousedownBlur();
+		ResLineProduct.mousedownBlur($tab);
 
 		var updateList =$tab.find(".T-dailyArrangeList");
 		if(updateList.length > 0){
@@ -776,52 +776,27 @@ define(function(require, exports) {
 			ResLineProduct.updateRouteIndex($obj.closest('.T-updateLineProductContainer'));
 		}
 	};
-	ResLineProduct.deleteLineProduct = function(id){
-		if (!!id) {
-			$("#confirm-dialog-message").removeClass('hide').dialog({
-				modal: true,
-				title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-				title_html: true,
-				draggable:false,
-				buttons: [ 
-					{
-						text: "取消",
-						"class" : "btn btn-minier",
-						click: function() {
-							$( this ).dialog( "close" );
-						}
-					},
-					{
-						text: "确定",
-						"class" : "btn btn-primary btn-minier",
-						click: function() {
-							$( this ).dialog( "close" );
-							$.ajax({							
-								url: KingServices.build_url('lineProduct', 'deleteLineProduct'),
-								type:"POST",
-								showLoading:false,
-								data:"id="+id+"",
-								success:function(data){
-									var result = showDialog(data);
-									if(result){
-										ResLineProduct.$tab.find('.lineProduct-' + id).fadeOut(function() {
-											var len = ResLineProduct.$tab.find('.T-list').children('tr').length
 
-											ResLineProduct.getProductList(len <= 1? (ResLineProduct.pageNo - 1): ResLineProduct.pageNo);
-										});
-									}
-								}
-							});
-						}
-					}
-				],
-				open:function(event,ui){
-					$(this).find("p").text("你确定要删除该条记录？");
-				}
-			});
+	// 删除线路产品
+		ResLineProduct.deleteLineProduct = function(id){
+			if(!!id){
+				showConfirmDialog($("#confirm-dialog-message"),"你确定要删除该条记录？",function(){
+				 $.ajax({
+				 	url: KingServices.build_url('lineProduct', 'deleteLineProduct'),
+				 	type:"POST",
+				 	data:"id="+id+"",
+				 })
+				 .done(function(data) {
+				 	if(showDialog(data)){
+				 		ResLineProduct.getProductList(0);
+				 	}
+				 })
+				 		
+				});
+			}
+
 		}
-	};
-	
+
 	ResLineProduct.addRestaurant = function($btn, validator){
 		//添加行程安排餐饮
 		var scheduleDetails = '<div class="T-timeline-item timeline-item clearfix updateRestaurantList updateLineProductDaysDetail T-RestaurantList ui-sortable-handle" data-entity-index='+ResLineProduct.updateLineProductIndex+'><div class="timeline-info " style="color:#1fade0" ><i class="ace-icon fa fa-circle" ></i><span>餐饮</span></div>'+
@@ -2079,9 +2054,13 @@ define(function(require, exports) {
 		});
 	};
 
-
-	ResLineProduct.mousedownBlur = function(){
-		$("#tab-resource_lineProduct-update-content .T-timeline-detail-container ").mousedown(function() {
+	/**
+	 * 解决autocomplete点击sortable区域无法收起的问题
+	 * @param  {object} $tab 区域容器
+	 * @return {[type]}      [description]
+	 */
+	ResLineProduct.mousedownBlur = function($tab){
+		$tab.find('.T-timeline-detail-container').mousedown(function() {
 			$(this).find(":focus").blur();
 		});
 	};

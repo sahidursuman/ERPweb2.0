@@ -1,5 +1,5 @@
 <div class="col-xs-12">
-	<table class="table table-striped table-bordered table-hover">
+	<table class="table table-striped table-bordered table-hover T-showHighLight">
 		<thead>
 			<tr class="bg-blur">  
 				<th>产品名称</th>
@@ -15,7 +15,7 @@
 				<th>总报价</th>
 				<th>报价人</th>
 				<th class="col-sm-1">报价时间</th>
-				<th width="230">操作</th>
+				<th width="248">操作</th>
 			</tr>
 		</thead>
 	
@@ -37,21 +37,19 @@
 				<td>
 					<div class="hidden-sm hidden-xs btn-group">
 						<a class="cursor R-right T-action T-status">
-							询价状态
+							询价状态 <span style='margin-left:5px;'>|</span>
 						</a>
-						<a>|</a>
 						<a class="cursor R-right T-action {{if !quote.touristGroupId}} T-update {{/if}}" data-right="1440002" {{if !!quote.touristGroupId}} style="color:#bbb;" {{/if}}>
-							修改
+							修改  <span style='margin-left:5px;'>|</span>
 						</a>
-						<a>|</a>
+						
 						<a class="cursor R-right T-action T-view">
-							查看
+							查看  <span style='margin-left:5px;'>|</span>
 						</a>
-						<a>|</a>
+						
 						<a class="cursor R-right T-action {{if !quote.touristGroupId}} T-delete {{/if}}" data-right="1440003" {{if !!quote.touristGroupId}} style="color:#bbb;" {{/if}}>
-							删除
+							删除  <span style='margin-left:5px;'>|</span>
 						</a>
-						<a>|</a>
 						<a class="cursor R-right T-action T-share">
 							分享
 						</a>
