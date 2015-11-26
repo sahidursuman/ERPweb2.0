@@ -569,7 +569,7 @@ define(function(require, exports) {
 
 						var whichDay = data.hotelList[0].whichDay-1;
 						//删除现有
-						$container.find("#dayListUpdate-"+whichDay+"  .T-resourceHotelList").remove();
+						//$container.find("#dayListUpdate-"+whichDay+"  .T-resourceHotelList").remove();
 
 						
 						var html = quote.hotelHtml(data.hotelList);
