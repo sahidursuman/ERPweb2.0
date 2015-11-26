@@ -630,7 +630,10 @@ var modalScripts = {
 	'financial_innerTransfer_out':"js/template/financial/innerTransferOut/innerTransferOut.js",//内转转出
 
 	'financial_planProfit': "js/template/financial/planProfit/planProfit.js", //发团利润
-	'financial_replaceProfit':"js/template/financial/replaceProfit/replaceProfit.js",
+	'financial_replaceProfit':"js/template/financial/replaceProfit/replaceProfit.js",//代订利润
+	'financial_restaurant':"js/template/financial/Restaurant/Restaurant.js",//餐厅账务
+	'financial_rummery':"js/template/financial/hotel/hotel.js",//酒店账务
+	'financial_busCompany':"js/template/financial/busCompany/busCompany.js",//车队账务
 	//---------------------------------------------------------------------------------------------------------------
 	'public_message':"js/template/system/message/message.js",
 	'system_information':"js/template/system/information/information.js",
@@ -725,45 +728,45 @@ function listMenu(menuTemplate){
 				});
 
 				//绑定车队帐务菜单功能
-				$("#sidebar .nav-list .financial_busCompany").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/financial/busCompany/busCompany.js",function(busCompany){
-						var date = new Date();
-						var year = date.getFullYear();
-						busCompany.listBusCompany(0,"",year,"");
-						modals["financial_busCompany"] = busCompany;
-					});
-				});
+				// $("#sidebar .nav-list .financial_busCompany").click(function(){
+				// 	$("#sidebar .nav-list li").removeClass("active");
+				// 	$(this).addClass("active");
+				// 	$(this).parent().parent().addClass("active");
+				// 	seajs.use("" + ASSETS_ROOT +"js/template/financial/busCompany/busCompany.js",function(busCompany){
+				// 		var date = new Date();
+				// 		var year = date.getFullYear();
+				// 		busCompany.listBusCompany(0,"",year,"");
+				// 		modals["financial_busCompany"] = busCompany;
+				// 	});
+				// });
 
 				//绑定酒店账务菜单功能
-				$("#sidebar .nav-list .financial_rummery").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/financial/hotel/hotel.js",function(hotel){
-						var date = new Date();
-						var year = date.getFullYear();
-						var month = ""
-						hotel.listHotel(0,"",year,month);
-						modals["financial_rummery"]  = hotel;
-					});
-				});
+				// $("#sidebar .nav-list .financial_rummery").click(function(){
+				// 	$("#sidebar .nav-list li").removeClass("active");
+				// 	$(this).addClass("active");
+				// 	$(this).parent().parent().addClass("active");
+				// 	seajs.use("" + ASSETS_ROOT +"js/template/financial/hotel/hotel.js",function(hotel){
+				// 		var date = new Date();
+				// 		var year = date.getFullYear();
+				// 		var month = ""
+				// 		hotel.listHotel(0,"",year,month);
+				// 		modals["financial_rummery"]  = hotel;
+				// 	});
+				// });
 
 				//绑定系餐厅账务菜单功能
-				$("#sidebar .nav-list .financial_restaurant").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/financial/Restaurant/Restaurant.js",function( Restaurant){
-						var date = new Date();
-						var year = date.getFullYear();
-						var month = ""//date.getMonth()+1
-						Restaurant.listRestaurant(0,"",year,month);/*new Date().getFullYear()*/
-						modals["financial_restaurant"] = Restaurant;
-					});
-				});
+				// $("#sidebar .nav-list .financial_restaurant").click(function(){
+				// 	$("#sidebar .nav-list li").removeClass("active");
+				// 	$(this).addClass("active");
+				// 	$(this).parent().parent().addClass("active");
+				// 	seajs.use("" + ASSETS_ROOT +"js/template/financial/Restaurant/Restaurant.js",function( Restaurant){
+				// 		var date = new Date();
+				// 		var year = date.getFullYear();
+				// 		var month = ""//date.getMonth()+1
+				// 		Restaurant.listRestaurant(0,"",year,month);/*new Date().getFullYear()*/
+				// 		modals["financial_restaurant"] = Restaurant;
+				// 	});
+				// });
 
 				//绑定景区账务
 				$("#sidebar .nav-list .financial_scenic").click(function(){
