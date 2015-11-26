@@ -531,7 +531,7 @@ define(function(require, exports) {
 						+'<td><input class="col-xs-12" name="manager" type="text" readonly="readonly" value="'+offer.managerName+'"></td>'
 						+'<td><input class="col-xs-12" name="mobileNumber" type="text" readonly="readonly" value="'+offer.mobileNumber+'"></td>'
 						+'<td><input class="col-xs-12 T-changeQuote" readonly="readonly" name="seatcountPrice" type="text" maxlength="9" value="'+offer.seatPrice+'"></td>'
-						+'<td><input class="col-xs-12" name="remark" readonly="readonly" type="text" maxlength="1000" value="'+offer.remark+'"></td>'
+						+'<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" value=""></td>'
 						+'</tr>';
 						$obj.find('tbody').html(html);
 						$container.find('.quoteContent').trigger('click');
