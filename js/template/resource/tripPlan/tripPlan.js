@@ -123,9 +123,8 @@ define(function(require, exports) {
 				/* Act on the event */
 				var $that=$(this),
 				    qouteId=$that.attr("data-entiy-qouteId");
-				    showMessageDialog($( "#confirm-dialog-message" ),"订单已发送",function(){
-						tripPlan.singleClickSendOrder(qouteId);
-					});
+					tripPlan.singleClickSendOrder(qouteId);
+					
 				     
 			});
 
