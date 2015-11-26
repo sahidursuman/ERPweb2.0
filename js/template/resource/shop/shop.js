@@ -256,14 +256,14 @@ define(function(require, exports) {
 			buttons: [ 
 				{
 					text: "取消",
-					"class" : "btn btn-minier",
+					"class" : "btn btn-minier btn-heightMall",
 					click: function() {
 						$( this ).dialog( "close" );
 					}
 				},
 				{
 					text: "确定",
-					"class" : "btn btn-primary btn-minier",
+					"class" : "btn btn-primary btn-minier btn-heightMall",
 					click: function() {
 						$( this ).dialog( "close" );
 						$.ajax({
@@ -662,14 +662,14 @@ define(function(require, exports) {
 				buttons: [ 
 					{
 						text: "取消",
-						"class" : "btn btn-minier",
+						"class" : "btn btn-minier btn-heightMall",
 						click: function() {
 							$( this ).dialog( "close" );
 						}
 					},
 					{
 						text: "确定",
-						"class" : "btn btn-primary btn-minier",
+						"class" : "btn btn-primary btn-minier btn-heightMall",
 						click: function() {
 							$.ajax({
 								url:""+APP_ROOT+"back/shop.do?method=deleteShopTimeArea&token="+$.cookie("token")+"&menuKey=resource_shop&operation=delete",
@@ -731,14 +731,14 @@ define(function(require, exports) {
 				buttons: [ 
 					{
 						text: "取消",
-						"class" : "btn btn-minier",
+						"class" : "btn btn-minier btn-heightMall",
 						click: function() {
 							$( this ).dialog( "close" );
 						}
 					},
 					{
 						text: "确定",
-						"class" : "btn btn-primary btn-minier",
+						"class" : "btn btn-primary btn-minier btn-heightMall",
 						click: function() {
 							$.ajax({
 								url:""+APP_ROOT+"back/shop.do?method=deleteShopCostRebate&token="+$.cookie("token")+"&menuKey=resource_shop&operation=delete",
