@@ -1,4 +1,4 @@
-<div class="row Financialinsurance globalAdd" >
+<div class="row T-ListInsure globalAdd" >
     <div class="form-horizontal search-area">    
         <div class="form-group" >      
           <label class="control-label pull-left">保险公司：</label>
@@ -20,7 +20,7 @@
 						<option value="{{month.value}}" {{if searchParam.month == month.value}}selected="selected"{{/if}}>{{month.value}}月</option>
 					{{/each}}
 				</select>
-            <button class=" btn-sm marginLeft-30  btn-insurance-search search-btn " > <i class="ace-icon fa fa-search"></i> 搜索 </button> </div>
+            <button class=" btn-sm marginLeft-30  T-search search-btn " > <i class="ace-icon fa fa-search"></i> 搜索 </button> </div>
     </div>
     <div class="row insuranceList">
         <div class="col-xs-12">
@@ -38,7 +38,7 @@
                 </tr>
                 </thead>
 
-                <tbody>
+                <tbody class="T-list">
                 {{each financialInsuranceSettlementList as insurance}}
                 <tr>
                     <td>{{insurance.insuranceCompanyName}}</td>
@@ -58,7 +58,7 @@
 	                    {{/if}}
                     </td>
                     <td>
-                        <a data-entity-id="{{insurance.insuranceId}}" data-entity-insuranceCompanyName="{{insurance.insuranceCompanyName}}" data-entity-year="{{searchParam.year}}" data-entity-month="{{searchParam.month}}" class="cursor R-right btn-insurance-check" data-right="1270002">
+                        <a data-entity-id="{{insurance.insuranceId}}" data-entity-insuranceCompanyName="{{insurance.insuranceCompanyName}}" data-entity-year="{{searchParam.year}}" data-entity-month="{{searchParam.month}}" class="cursor R-right T-check T-option  btn-insurance-check" data-right="1270002">
                             	 对账
                         </a>
                         <label class="cursor R-right" data-right="1270002"><a class="R-right" data-right="1270003"> |</a></label>
@@ -68,7 +68,7 @@
                                   {{else}}
                                  	 data-entity-startMonth="{{searchParam.month}}" data-entity-endMonth="{{searchParam.month}}" 
                                 {{/if}}
-                        		class="cursor R-right btn-insurance-balance" data-right="1270003">
+                        		class="cursor T-option T-clear  R-right btn-insurance-balance" data-right="1270003">
                            		 结算
                         </a>
                     </td>
