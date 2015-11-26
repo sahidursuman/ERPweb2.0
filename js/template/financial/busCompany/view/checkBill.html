@@ -1,9 +1,9 @@
-<div class="row busCompanyChecking globalAdd">
+<div class="row T-data-id" data-id="{{searchParam.busCompanyId}}">
     <div class="col-xs-12 border" style="padding-bottom: 0px">
             <form class="form-horizontal" role="form" onsubmit="return false">
-                <div class="search-area editable editable-click" >
+                <div class="T-search-area editable editable-click" >
                     <div class="form-group"> 
-                        <label style="float: left;margin: 0px auto auto 15px" class="control-label pull-left"> 车队:{{companyName}}</label>
+                        <label style="float: left;margin: 0px auto auto 15px" class="control-label pull-left"> 车队：{{companyName}}</label>
                         <label class="control-label col-sm-1" style="float:left;">账期:</label>
 	                        <select class="col-sm-1" name="year" style="margin-left:20px">
 								{{each yearList as year index}}
@@ -17,11 +17,11 @@
 									<option value="{{month.value}}" {{if searchParam.month == month.value}}selected="selected"{{/if}}>{{month.value}}月</option>
 								{{/each}}
 							</select>
-                        <button class=" btn-sm  btn-checking-search search-btn marginLeft-30">
+                        <button class=" btn-sm T-search search-btn marginLeft-30">
                              <i class="ace-icon fa fa-search"></i>
                                 搜索
                         </button>
-                        <button type="button" class="btn btn-sm btn-primary btn-success btn-busCompanyExport" style="margin-left: 15px">
+                        <button type="button" class="btn btn-sm btn-primary btn-success T-busCompanyExport" style="margin-left: 15px">
 							<span>导出报表</span>
 							<i class="ace-icon fa fa-arrow-right icon-on-right"></i>
 						</button>
@@ -65,7 +65,7 @@
             </thead>
             <tbody class="T-checkList" data-right="230005">
                {{each financialBusCompanyList as checking index}}
-					    <tr data-entity-id="{{checking.id}}" data-entity-isConfirmAccount="{{checking.isConfirmAccount}}" data-entity-realUnPayedMoney="{{checking.realUnPayedMoney}}" data-entity-remark="{{checking.remark}}">
+					    <tr class="T-checkTr" data-id="{{checking.id}}" data-isConfirmAccount="{{checking.isConfirmAccount}}" data-realUnPayedMoney="{{checking.realUnPayedMoney}}" data-remark="{{checking.remark}}">
 				         <td>{{index+1}}</td>
 							<td>
 								{{if checking.arrangeType == 0}}
@@ -87,14 +87,14 @@
 							    {{"导付:"}}{{checking.guidePayedMoney}}
 							</td>   
 							<td>{{checking.unPayedMoney}}</td>
-							<td>{{if checking.billImages != null && checking.billImages !=""}}<a href="#" class="busCompanyImg" url="{{checking.billImages}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
-							<td><input type="text" name="FinancialbusCompanyRealUnPayedMoney" value="{{checking.realUnPayedMoney}}" style="text-align:center" /></td>
-	                        <td><input type="text" name="FinancialbusCompanyRemark" value="{{checking.remark}}" style="text-align:center"/></td>
+							<td>{{if checking.billImages != null && checking.billImages !=""}}<a href="#" class="T-busCompanyImg" url="{{checking.billImages}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
+							<td><input type="text" name="realUnPayedMoney" value="{{checking.realUnPayedMoney}}" style="text-align:center" /></td>
+	                        <td><input type="text" name="remark" value="{{checking.remark}}" style="text-align:center"/></td>
 							<td>{{if checking.checkTime == null || checking.checkTime == ""}}-{{else}}{{checking.checkTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td> 
 	                        <td>{{checking.checkUserRealName}}</td>
 							<td>
 							   <label class="pos-rel">
-							   		<input type="checkbox" data-entity-checkStatus="{{checking.isConfirmAccount}}" class="ace busCompanyFinancial" disable="true" 
+							   		<input type="checkbox" data-entity-checkStatus="{{checking.isConfirmAccount}}" class="ace T-checkbox" disable="true" 
 							   		{{if checking.isConfirmAccount == 1}}checked="checked"{{/if}} />
 							   		<span class="lbl"></span>
 							   </label>
@@ -105,7 +105,7 @@
         </table>
        <div class="form-group text-right">
           <label class="control-label pull-right"/>
-            <input type="checkbox" class="ace pull-right busCompany-selectAll">
+            <input type="checkbox" class="ace pull-right T-checkAll">
             <span class="lbl"></span>  
             全选
           </label>
@@ -121,11 +121,11 @@
         </div>
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="form-group" style="text-align: center;">
-                <button class="btn btn-xs btn-primary btn-busCompanyFinancial-close">
+                <button class="btn btn-xs btn-primary T-close-check">
                     <i class="ace-icon fa fa-times-circle"></i>
                   			 关闭
                 </button>
-                <button class="btn btn-xs btn-primary btn-busCompanyFinancial-checking">
+                <button class="btn btn-xs btn-primary T-saveCheck">
                     <i class="ace-icon fa fa-check-circle"></i>
                    			 确认
                 </button>
