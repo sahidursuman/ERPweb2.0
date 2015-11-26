@@ -625,6 +625,7 @@ var modalScripts = {
 	'financial_turnProfit': "js/template/financial/turnProfit/turnProfit.js",
 	'financial_totalProfit': "js/template/financial/totalProfit/totalProfit.js",
 	'financial_Client': "js/template/financial/Client/Client.js",
+	'financial_insure': "js/template/financial/insure/insure.js",
 	//---------------------------------------------------------------------------------------------------------------
 	'public_message':"js/template/system/message/message.js",
 	'system_information':"js/template/system/information/information.js",
@@ -790,18 +791,18 @@ function listMenu(menuTemplate){
 				});
 
 				//绑定保险账务菜单功能
-				$("#sidebar .nav-list .financial_insure").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/financial/insure/insure.js",function(Insure){
-						var date = new Date();
-						var year = date.getFullYear();
-						var month = ""//date.getMonth()+1
-						Insure.listInsure(0,"",year,"");
-						modals["financial_insure"] = Insure;
-					});
-				});
+				// $("#sidebar .nav-list .financial_insure").click(function(){
+				// 	$("#sidebar .nav-list li").removeClass("active");
+				// 	$(this).addClass("active");
+				// 	$(this).parent().parent().addClass("active");
+				// 	seajs.use("" + ASSETS_ROOT +"js/template/financial/insure/insure.js",function(Insure){
+				// 		var date = new Date();
+				// 		var year = date.getFullYear();
+				// 		var month = ""//date.getMonth()+1
+				// 		Insure.listInsure(0,"",year,"");
+				// 		modals["financial_insure"] = Insure;
+				// 	});
+				// });
 
 				//绑定系代订账务菜单功能
 				$("#sidebar .nav-list .financial_replace").click(function(){
