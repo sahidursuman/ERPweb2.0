@@ -1,36 +1,28 @@
 <div class="row check shop-rs globalAdd">
     <div class="col-xs-12 border borderNormal">
         <form class="form-horizontal" role="form" onsubmit="return false">
-            <div class="search-area  editable editable-click" style="margin-top: 10px">
-                <div class="form-group"> <label style="float: left;margin: 5px auto auto 15px" class=" control-label "> 购物店：{{shopName}}</label>
+            <div class="search-area  editable editable-click T-search-area" style="margin-top: 10px">
+                <div class="form-group"> 
+                    <label style="float: left;margin: 5px auto auto 15px" class=" control-label "> 购物店：<span class="T-shop-name">{{shopName}}</span></label>
                     <label class="col-sm-1 control-label no-padding-right">账期：</label>
-                    <select class="col-sm-1" name="year">
-                        {{each yearList as year}}
-                        <option value="{{year}}">{{year}}</option>
+                    <select class="col-sm-1 T-search-year" name="year">
+                        {{each yearList as yearInfo}}
+                        <option value="{{yearInfo}}" {{if yearInfo == year}}selected="selected"{{/if}}>{{yearInfo}}</option>
                         {{/each}}
                     </select>
                     <label class="col-sm-1 control-label no-padding-right"></label>
-                    <select class="col-sm-1" name="month">
+                    <select class="col-sm-1 T-search-month" name="month">
                         <option value="">全部</option>
-                        <option value="1">1月</option>
-                        <option value="2">2月</option>
-                        <option value="3">3月</option>
-                        <option value="4">4月</option>
-                        <option value="5">5月</option>
-                        <option value="6">6月</option>
-                        <option value="7">7月</option>
-                        <option value="8">8月</option>
-                        <option value="9">9月</option>
-                        <option value="10">10月</option>
-                        <option value="11">11月</option>
-                        <option value="12">12月</option>
+                        {{each monthList as monthInfo}}
+                            <option value="{{monthInfo}}" {{if monthInfo == month}}selected="selected"{{/if}}>{{monthInfo}}月</option>
+                        {{/each}}
                     </select>
  
-                    <button class="marginLeft-30 btn-sm search-btn btn-shopChecking-search" >
+                    <button class="marginLeft-30 btn-sm search-btn T-btn-search" >
                         <i class="ace-icon fa fa-search"></i>
                        	 搜索
                     </button>
-                    <button type="button" class="btn btn-sm btn-primary btn-success btn-shopExport" style="margin-left: 25px">
+                    <button type="button" class="btn btn-sm btn-primary btn-success T-btn-export" style="margin-left: 25px" data-id="">
 							<span>导出报表</span>
 							<i class="ace-icon fa fa-arrow-right icon-on-right"></i>
 						</button>
@@ -75,20 +67,20 @@
               <th class="th-border" style="min-width:50px">对账</th>
             </tr>
             </thead>
-            <tbody class="T-checkList" data-right="1310005">
+            <tbody class="T-list" data-right="1310005">
             {{each shopList as shop index}}
             <tr data-entity-id="{{shop.id}}" data-entity-isConfirmAccount="{{shop.isConfirmAccount}}" data-entity-startTime="{{shop.consumeStartTime}}" data-entity-rebateMoney="{{shop.rebateMoney}}" data-entity-billRemark="{{shop.billRemark}}" class="T-showTr">
                 <td>{{index+1}}</td>
                 <td class="cost-detail" style="color: rgb(102,159,199);min-width:70px"> {{shop.tripNumber}},{{shop.lineProductName}},{{shop.guideName}}</td>
                 <td>{{if shop.consumeStartTime == null || shop.consumeStartTime == ""}}-{{else}}{{shop.consumeStartTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
                 <td>{{shop.adultCount}}大{{shop.childCount}}小</td>
-                <td><a href="#" class="seeGroup" style="margin-left:5px">展开</a></td>
+                <td><a class="cursor T-action T-see-group" style="margin-left:5px">展开</a></td>
                 <td>{{shop.consumeMoney}}</td>
                 <td>{{shop.travelAgencyRebateMoney}}</td>
                 <td>{{shop.guideRebateMoney}}</td>
                 <td>{{shop.sumCustomerRebateMoney}}</td>
                 <td>{{shop.sumParkingRebateMoney}}</td>
-                <td>{{if shop.billImages != null && shop.billImages !=""}}<a href="#" class="shopImg" url="{{shop.billImages}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
+                <td>{{if shop.billImages != null && shop.billImages !=""}}<a class="cursor T-action T-bill-images" url="{{shop.billImages}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
                 <td>{{shop.rebateMoney}}</td>
                 <td class="col-sm-1">
 	               	{{if shop.isConfirmAccount == 0}}
@@ -107,7 +99,7 @@
                 </td>
                 <td>{{shop.checkUserRealName}}</td>
                 <td>
-                    <input type="checkbox" class="ace" name="isConfirmAccount" data-entity-checkStatus="{{shop.isConfirmAccount}}" {{if shop.isConfirmAccount == 1}}checked="checked"{{/if}} />
+                    <input type="checkbox" class="ace T-action T-account" name="isConfirmAccount" data-entity-checkStatus="{{shop.isConfirmAccount}}" {{if shop.isConfirmAccount == 1}}checked="checked"{{/if}} />
                     <span class="lbl"></span>
                 </td>
             </tr>
@@ -151,7 +143,7 @@
         </div>
         <div class="form-group text-right">
             <label class="control-label pull-right"/>
-                <input type="checkbox" class="ace pull-right selectAll">
+                <input type="checkbox" class="ace pull-right T-select-all">
                 <span class="lbl"></span>  
                 全选
             </label>
@@ -159,11 +151,11 @@
         <div class="clearfix"></div>
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="form-group" style="text-align: center;">
-            	<button class="btn btn-xs btn-primary btn-shop-close">
+            	<button class="btn btn-xs btn-primary T-shop-close">
                     <i class="ace-icon fa fa-times-circle"></i>
                    	 关闭
                 </button>
-                <button class="btn btn-xs btn-primary btn-confirm-shop-rs"  style="margin-left:20px">
+                <button class="btn btn-xs btn-primary T-confirm-shop-rs"  style="margin-left:20px">
                     <i class="ace-icon fa fa-check-circle"></i>
                    	 确认
                 </button>
