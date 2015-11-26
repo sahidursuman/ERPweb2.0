@@ -1000,7 +1000,7 @@ define(function(require, exports) {
 				    					success: function(data){
 				    						var result = showDialog(data);
 				    						if (result) {
-												showMessageDialog($( "#confirm-dialog-message" ),"询价成功");
+												showMessageDialog($( "#confirm-dialog-message" ),"询价信息发送成功");
 												$container.find('[name=quoteId]').val(data.quoteId);
 												$container.find('[name=startTime]').attr('disabled','disabled');
 												$container.find('[name=adultCount]').attr('readonly','readonly');
@@ -1215,7 +1215,7 @@ define(function(require, exports) {
 										success: function(data){
 											var result = showDialog(data);
 											if (result) {
-												showMessageDialog($( "#confirm-dialog-message" ),"询价成功");
+												showMessageDialog($( "#confirm-dialog-message" ),"询价信息发送成功");
 												$container.find('[name=quoteId]').val(data.quoteId);
 												$container.find('[name=startTime]').attr('disabled','disabled');
 												$container.find('[name=adultCount]').attr('readonly','readonly');
