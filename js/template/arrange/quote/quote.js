@@ -1054,6 +1054,9 @@ define(function(require, exports) {
 					    			if (result) {
 										addChooseBus($this);
 					    			}
+									if (data.success == '0') {
+										$this.prop('checked',false)
+									}
 					    		}
 					    	})
 						})
