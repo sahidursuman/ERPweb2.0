@@ -221,7 +221,7 @@ define(function(require, exports) {
                         count.buildDatePicker();
                         //count.bindTripChoose();
 						count.bindTripChoose($("#tab-"+menuKey+"-content"));
-                        count.bindLineProductChoose();
+                        count.bindLineProductChoose($("#tab-"+menuKey+"-content"));
                         count.bindGuideRealNameChoose();
                     }
                 }
@@ -265,18 +265,18 @@ define(function(require, exports) {
 			});
 		},
         //线路产品
-        bindLineProductChoose : function(){
-        	var lineProduct = $(".financialCount input[name=chooseLineProductName]");
+        bindLineProductChoose : function($obj){
+        	var lineProduct = $obj.find("input[name=chooseLineProductName]");
         	lineProduct.autocomplete({
 				minLength:0,
 				change:function(event,ui){
 					if(ui.item == null){
-						$(this).nextAll('input[name="lineProductId"]').val('');
+						$(this).closest('div').find('input[name=lineProductId]').val('');
 					}
 				},
 				select:function(event,ui){
 					$(this).blur();
-					$(this).next().val(ui.item.lineProductId);
+                    $(this).closest('div').find('input[name=lineProductId]').val(ui.item.id);
 				}
 			}).off("click").on("click", function(){
 				var obj = this;
