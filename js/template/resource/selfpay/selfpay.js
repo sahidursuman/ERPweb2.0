@@ -237,14 +237,14 @@ define(function(require, exports) {
 			buttons: [ 
 				{
 					text: "取消",
-					"class" : "btn btn-minier",
+					"class" : "btn btn-minier btn-heightMall",
 					click: function() {
 						$( this ).dialog( "close" );
 					}
 				},
 				{
 					text: "确定",
-					"class" : "btn btn-primary btn-minier",
+					"class" : "btn btn-primary btn-minier btn-heightMall",
 					click: function() {
 						$( this ).dialog( "close" );
 						$.ajax({
@@ -357,14 +357,14 @@ define(function(require, exports) {
 				buttons: [ 
 					{
 						text: "取消",
-						"class" : "btn btn-minier",
+						"class" : "btn btn-minier btn-heightMall",
 						click: function() {
 							$( this ).dialog( "close" );
 						}
 					},
 					{
 						text: "确定",
-						"class" : "btn btn-primary btn-minier",
+						"class" : "btn btn-primary btn-minier btn-heightMall",
 						click: function() {
 							$( this ).dialog( "close" );
 							$.ajax({
@@ -431,14 +431,14 @@ define(function(require, exports) {
 				buttons: [ 
 					{
 						text: "取消",
-						"class" : "btn btn-minier",
+						"class" : "btn btn-minier btn-heightMall",
 						click: function() {
 							$( this ).dialog( "close" );
 						}
 					},
 					{
 						text: "确定",
-						"class" : "btn btn-primary btn-minier",
+						"class" : "btn btn-primary btn-minier btn-heightMall",
 						click: function() {
 							$( this ).dialog( "close" );
 							$.ajax({
@@ -486,15 +486,15 @@ define(function(require, exports) {
 	 * @return {[type]}            [description]
 	 */
 	selfpay.saveSelfpay = function($container,type,fn){
+		if(!rule.check($container).form()){return;}
+		if(ruleData.validatorList != undefined){
+			if(!ruleData.validatorList.form()){return;}
+		}
 		var operation = "",method = "",jsonName = "";
 		if (type == 1) {
 			method = "addSelfPay";
 			operation = "add";
 			jsonName = "priceJsonAdd";
-    		if(!ruleData.validator.form()){return;}
-    		if(ruleData.validatorList != undefined){
-    			if(!ruleData.validatorList.form()){return;}
-    		}
 		}else if(type == 2){
 			method = "updateSelfPay";
 			operation = "update";

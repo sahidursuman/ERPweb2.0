@@ -282,6 +282,7 @@ define(function(require, exports) {
 			success:function(data){
 				data.innerTransfer = JSON.parse(data.innerTransfer);
 				data.businessGroup = JSON.parse(data.businessGroup);
+				data.parentTouristGroup = JSON.parse(data.parentTouristGroup);
 				var result = showDialog(data);
 				if (result) {
 					var html = editTemplate(data),validator,

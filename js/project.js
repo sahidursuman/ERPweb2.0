@@ -198,17 +198,16 @@ function showDialog(data){
 	}
 	return true;
 }
-function showMessageDialog(dialogObj,message,fn){
-	dialogObj.removeClass('hide').dialog({
+function showMessageDialog(dialogObj,message,fn,isNotClose){
+	var showDiolog=dialogObj.removeClass('hide').dialog({
 		modal: true,
 		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
 		title_html: true,
 		draggable:false,
-		closeBtn: 0, //不显示关闭按钮
-		/*buttons: [
+		buttons: [
 			{
 				text: "确定",
-				"class" : "btn btn-primary btn-minier btn-heightMall",
+				"class" : "btn btn-primary btn-minier btn-heightMall T-ok",
 				click: function() {
 					$( this ).dialog( "close" );
 					if(fn){
@@ -216,16 +215,20 @@ function showMessageDialog(dialogObj,message,fn){
 					}
 				}
 			}
-		],*/
+		],
 		open:function(event,ui){
-			var $that=$(this);
-			$that.find("p").html(message);
-				setTimeout(function(){
-					$that.dialog("close");
-					if(fn){ fn(); }
-			},1500)
+			$( this ).find("p").html(message);
 		}
 	});
+
+	if (!isNotClose) {
+		setTimeout(function(){
+			showDiolog.dialog('close');
+			if (fn) {
+				fn();	
+			}	
+		},1500)
+	}
 }
 function showConfirmMsg(dialogObj,message,confirmFn ,cancelFn,btnStr1,btnStr2){
 	var buttons;
@@ -324,7 +327,7 @@ function showSaveConfirmDialog($dialog, message, yes_fn, no_fn, cacel_fn)  {
 
 	$dialog.removeClass('hide').dialog({
 		modal: true,
-		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i>保存修改？</h4></div>",
+		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i>数据保存</h4></div>",
 		title_html: true,
 		draggable:false,
 		buttons: buttons,
@@ -1331,7 +1334,7 @@ Tools.addTab = function(tab_id, tab_name, html)  {
 
 		// 页面已经编辑
 		if ($content.data('isEdited'))  {
-			showSaveConfirmDialog($( "#confirm-dialog-message" ), "内容已经被修改，是否保存?",
+			showSaveConfirmDialog($( "#confirm-dialog-message" ), "数据已经被修改，是否保存?",
 								function(){	// 保存
 									$content.trigger(SWITCH_TAB_SAVE, [tab_id, tab_name, html]);
 								},
@@ -1375,7 +1378,7 @@ Tools.addTab = function(tab_id, tab_name, html)  {
 
 				// 页面已经编辑
 				if ($content.data('isEdited'))  {
-					showSaveConfirmDialog($( "#confirm-dialog-message" ), "内容已经被修改，是否保存?",
+					showSaveConfirmDialog($( "#confirm-dialog-message" ), "数据已经被修改，是否保存?",
 										function(){	// 保存
 											$content.trigger(CLOSE_TAB_SAVE);
 										},

@@ -403,7 +403,7 @@ define(function(require, exports) {
 								var result = showDialog(data);
 								if(result){
 									showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-										quote.busStatusList(quoteId,$container);
+										quote.busStatusList(quoteId,$container, $a);
 									});
 								}
 							}
@@ -889,7 +889,7 @@ define(function(require, exports) {
 						data: {
 							pageNo: page,
 							name: name,
-							customerType: 1
+							customerType: 1  // 选择团体
 						},
 						success: function(data){
 							data.lineProductList = JSON.parse(data.lineProductList);

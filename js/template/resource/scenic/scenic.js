@@ -552,14 +552,14 @@ define(function(require,exports){
 			buttons:[
 				{
 					text :'取消',
-					"class" : "btn btn-minier",
+					"class" : "btn btn-minier btn-heightMall",
 					click: function() {
 							$( this ).dialog( "close" );
 					}
 				},
 				{
 					text: "确定",
-					"class" : "btn btn-primary btn-minier",
+					"class" : "btn btn-primary btn-minier btn-heightMall",
 					click: function() {
 						$( this ).dialog( "close" );
 						$.ajax({
