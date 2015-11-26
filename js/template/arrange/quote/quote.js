@@ -869,7 +869,8 @@ define(function(require, exports) {
 						type: 'POST',
 						data: {
 							pageNo: page,
-							name: name
+							name: name,
+							customerType: 1  // 选择团体
 						},
 						success: function(data){
 							data.lineProductList = JSON.parse(data.lineProductList);
