@@ -620,13 +620,20 @@ var modalScripts = {
 	'business_analyst_customerVolume' : "js/template/businessAnalyst/customerVolume/customerVolume.js", //客户客量
 	'business_analyst_employeePerfor' : "js/template/businessAnalyst/employeePerfor/employeePerfor.js", //员工业绩 
 	'business_analyst_tourguidePerfor' : "js/template/businessAnalyst/tourguidePerfor/tourguidePerfor.js", //导游业绩
-	//------------------------------------------------财务---------------------------------------------------------------
+
+	//-------------------------------------------财务管理模块--------------------------------------------------------------------
+
 	'financial_innerTransfer_profit': "js/template/financial/innerTransferProfit/innerTransferProfit.js",
 	'financial_turnProfit': "js/template/financial/turnProfit/turnProfit.js",
 	'financial_totalProfit': "js/template/financial/totalProfit/totalProfit.js",
 	'financial_Client': "js/template/financial/Client/Client.js",
+
+	'financial_innerTransfer_in':"js/template/financial/innerTransferIn/innerTransferIn.js",//内转转入
+	'financial_innerTransfer_out':"js/template/financial/innerTransferOut/innerTransferOut.js",//内转转出
+
 	'financial_planProfit': "js/template/financial/planProfit/planProfit.js", //发团利润
 	'financial_replaceProfit':"js/template/financial/replaceProfit/replaceProfit.js",
+
 	//---------------------------------------------------------------------------------------------------------------
 	'public_message':"js/template/system/message/message.js",
 	'system_information':"js/template/system/information/information.js",
@@ -674,7 +681,6 @@ function listMenu(menuTemplate){
 						modals["financial_guide"] = guide;
 					});
 				});
-
 				//绑定分团转客菜单功能
 				$("#sidebar .nav-list .arrange_tourist").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
@@ -830,32 +836,8 @@ function listMenu(menuTemplate){
 						modals["financial_transfer"] = transfer;
 					});
 				});
-				//绑定内转转出账务
-				$("#sidebar .nav-list .financial_innerTransfer_in").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/financial/innerTransferIn/innerTransferIn.js",function(innerTransferIn){
-						var date = new Date();
-						var year = date.getFullYear();
-						var month = ""//date.getMonth()+1
-						innerTransferIn.listInnerTransferIn(0,"",year,month);
-						modals["financial_innerTransfer_in"] = innerTransferIn;
-					});
-				});
-				//绑定内转转出账务
-				$("#sidebar .nav-list .financial_innerTransfer_out").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/financial/innerTransferOut/innerTransferOut.js",function(innerTransferOut){
-						var date = new Date();
-						var year = date.getFullYear();
-						var month = ""//date.getMonth()+1
-						innerTransferOut.listInnerTransferOut(0,"",year,month);
-						modals["financial_innerTransfer_out"] = innerTransferOut;
-					});
-				});
+				
+				
 
 				//绑定购物菜单功能
 				$("#sidebar .nav-list .financial_shop").click(function(){

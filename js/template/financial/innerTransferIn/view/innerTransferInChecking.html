@@ -2,9 +2,10 @@
     <div class="col-xs-12 border">
         <form class="form-horizontal" role="form" onsubmit="return false">
                 <div class="search-area editable editable-click" >
-                    <div class="form-group"> 
+                    <div class="form-group T-search"> 
                         <label style="float: left;margin: 0px auto auto 15px" class="control-label pull-left"> 部门:{{searchParam.fromBusinessGroupName}}</label>
-                        
+                        <input type="hidden" name="fromBusinessGroupId"/>
+                        <input type="hidden" name="fromBusinessGroupName"/>
                         <label class="control-label col-sm-1" style="float:left;">账期:</label>
                             <select class="col-sm-1" name="year" style="margin-left:20px">
                                 {{each yearList as year index}}
@@ -17,17 +18,17 @@
                                     <option value="{{month.value}}" {{if searchParam.month == month.value}}selected="selected"{{/if}}>{{month.value}}月</option>
                                 {{/each}}
                             </select>
-                        <button class="btn-sm search-btn btn-checking-search marginLeft-30">
+                        <button class="btn-sm search-btn T-checking-search marginLeft-30">
                              <i class="ace-icon fa fa-search"></i>
                                  搜索
                         </button>    
-                        <button type="button" class="btn btn-sm marginLeft-30 btn-primary btn-success btn-transferExport">
+                        <button type="button" class="btn btn-sm marginLeft-30 btn-primary btn-success T-transferExport">
                             <span>导出报表</span>
                             <i class="ace-icon fa fa-arrow-right icon-on-right"></i>
                         </button>
                     </div>
                 </div>
-            </form>
+        </form>
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="form-group ">
                 <label class=" control-label pull-left" style="margin-left: 15px">总人数:{{allPerson}}<label>
@@ -70,7 +71,7 @@
                 <td>{{checking.lineProductName}}</td>
                 <td name="startTime">{{checking.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
                 <td>{{checking.contactUserName}}</td>
-                <td>{{checking.adultCount}}大{{checking.childCount}}小<a href="#" class="seeGroup" style="margin-left:5px">展开</a></td>
+                <td>{{checking.adultCount}}大{{checking.childCount}}小<a href="#" class="T-seeGroup" style="margin-left:5px">展开</a></td>
                 <td>{{checking.receiveUserName}}</td>
                 <td>{{checking.receiveTime | dateFormat: 'yyyy-MM-dd'}}</td>
                 <td>{{checking.needIncomeMoney}}</td>
@@ -143,7 +144,7 @@
         </div>
         <div class="form-group text-right">
             <label class="control-label pull-right"/>
-                <input type="checkbox" class="ace pull-right innerTransferIn-selectAll">
+                <input type="checkbox" class="ace pull-right T-selectAll">
                 <span class="lbl"></span>  
                 全选
             </label>
@@ -151,14 +152,14 @@
         <div class="clearfix"></div>
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="form-group" style="text-align: center;">
-                <button class="btn btn-xs btn-primary btn-createTripPlan btn-transferFinancial-close">
+                <button class="btn btn-xs btn-primary btn-createTripPlan T-close">
                     <i class="ace-icon fa fa-times-circle"></i>
                     关闭
                 </button>
-                <button class="btn btn-xs btn-primary btn-transferFinancial-checking">
+                <button class="btn btn-xs btn-primary T-checking">
                     <i class="ace-icon fa fa-check-circle"></i>
                      确认对账
-                </button>
+                </button> 
             </div>
         </form>
 
