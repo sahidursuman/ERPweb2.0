@@ -425,7 +425,7 @@ define(function(require, exports) {
                         } else {
                             restaurant.$checkTab.data('isEdited',false);
                             Tools.addTab(tab_id, title, html);
-                            restaurant.initCheck(page,restaurantId,restaurantName);
+                            restaurant.initCheck(0,restaurant.$checkTab.find(".T-newData").data("id"),restaurant.$checkTab.find(".T-newData").data("name"));
                         }
                     });
                 }
@@ -482,7 +482,7 @@ define(function(require, exports) {
                         } else {
                             restaurant.$clearTab.data('isEdited',false);
                             Tools.addTab(tab_id, title, html);
-                            restaurant.initClear(restaurant.$clearTab.find(".T-data-id").data("id"),name);
+                            restaurant.initClear(restaurant.$clearTab.find(".T-newData").data("id"),restaurant.$clearTab.find(".T-newData").data("name"));
                         }
                     });
                     

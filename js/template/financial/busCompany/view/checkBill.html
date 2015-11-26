@@ -1,134 +1,127 @@
-<div class="row T-data-id" data-id="{{searchParam.busCompanyId}}">
+<div class="row T-newData" data-id="{{searchParam.busCompanyId}}" data-name="{{companyName}}">
     <div class="col-xs-12 border" style="padding-bottom: 0px">
-            <form class="form-horizontal" role="form" onsubmit="return false">
-                <div class="T-search-area editable editable-click" >
-                    <div class="form-group"> 
-                        <label style="float: left;margin: 0px auto auto 15px" class="control-label pull-left"> 车队：{{companyName}}</label>
-                        <label class="control-label col-sm-1" style="float:left;">账期:</label>
-	                        <select class="col-sm-1" name="year" style="margin-left:20px">
-								{{each yearList as year index}}
-									<option value="{{year.value}}" {{if searchParam.year == year.value}}selected="selected"{{/if}}>{{year.value}}</option>
-								{{/each}}
-							</select>
-							
-							<select class="col-sm-1" name="month" style="margin-left:5px">
-							    <option value ="">全部</option>
-								{{each monthList as month index}}
-									<option value="{{month.value}}" {{if searchParam.month == month.value}}selected="selected"{{/if}}>{{month.value}}月</option>
-								{{/each}}
-							</select>
-                        <button class=" btn-sm T-search search-btn marginLeft-30">
-                             <i class="ace-icon fa fa-search"></i>
-                                搜索
-                        </button>
-                        <button type="button" class="btn btn-sm btn-primary btn-success T-busCompanyExport" style="margin-left: 15px">
-							<span>导出报表</span>
-							<i class="ace-icon fa fa-arrow-right icon-on-right"></i>
-						</button>
-                    </div>
-                </div>
-            </form>
-            <form class="form-horizontal" role="form" onsubmit="return false">
-                <div class="form-group ">
-                    <label class=" control-label pull-left" style="margin-left: 15px">总账面应付：{{sumNeedPayMoney}}</label>
-                    <label class=" control-label " style="margin-left:30px;">总实际已付：{{sumRealPayedMoney}}</label>
-                    <label class=" control-label " style="margin-left:30px;">总账面未付：{{sumUnPayedMoney}}</label>
-                    <label class=" control-label " style="margin-left:30px;">总实际未付：{{sumRealUnPayedMoney}}</label>
-                </div>
-            </form>
-        </div>
-        <input type="hidden" value="{{WEB_IMG_URL_BIG}}" name="WEB_IMG_URL_BIG" />
-    	<input type="hidden" value="{{WEB_IMG_URL_SMALL}}" name="WEB_IMG_URL_SMALL" />
-    <div class="clearfix"></div>
-        <table class="table table-striped table-bordered table-hover all" style="margin-top: 30px">
-            <thead>
-            <tr>
-              <th class="th-border">序号</th>
-              <th class="th-border">账务类别</th>
-              <th class="th-border">用车时间</th>
-              <th class="th-border">人数</th>
-              <th class="th-border">司机</th>
-              <th class="th-border">车型</th>
-              <th class="th-border">车牌号</th>
-              <th class="th-border">车费</th>
-              <th class="th-border">优惠</th>
-              <th class="th-border">账面应付</th>
-              <th class="th-border">实际已付</th>
-              <th class="th-border">账面未付</th>
-              <th class="th-border">单据</th>
-              <th class="th-border"><span class="necessary">*</span>实际未付</th>
-              <th class="th-border">说明</th>
-              <th class="th-border">对账时间</th>
-              <th class="th-border">对账人</th>
-              <th class="th-border">对账</th>
-            </tr>
-            </thead>
-            <tbody class="T-checkList" data-right="230005">
-               {{each financialBusCompanyList as checking index}}
-					    <tr class="T-checkTr" data-id="{{checking.id}}" data-isConfirmAccount="{{checking.isConfirmAccount}}" data-realUnPayedMoney="{{checking.realUnPayedMoney}}" data-remark="{{checking.remark}}">
-				         <td>{{index+1}}</td>
-							<td>
-								{{if checking.arrangeType == 0}}
-									{{checking.tripNumber}}{{","}}{{checking.lineProductName}}{{","}}{{checking.guideName}}
-							  	{{else}}
-									{{checking.tripNumber}}{{","}}{{checking.arrangeRealname}}{{","}}{{checking.arrangeMobileNumber}}
-							  	{{/if}}
-							</td>
-							<td name="startTime">{{if checking.startTime == null || checking.startTime == ""}}-{{else}}{{checking.startTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
-							<td>{{checking.adultCount}}大{{checking.childCount}}小</td>
-							<td>{{checking.driverName}}</td>
-							<td>{{checking.busType}}</td>
-							<td>{{checking.licenseNumber}}</td>
-							<td>{{checking.fee}}</td>
-							<td>{{checking.reduceMoney}}</td>
-							<td>{{checking.needPayMoney}}</td>  
-							<td>
-								{{"社付:"}}{{checking.travelAgencyPayedMoney}}{{","}}
-							    {{"导付:"}}{{checking.guidePayedMoney}}
-							</td>   
-							<td>{{checking.unPayedMoney}}</td>
-							<td>{{if checking.billImages != null && checking.billImages !=""}}<a href="#" class="T-busCompanyImg" url="{{checking.billImages}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
-							<td><input type="text" name="realUnPayedMoney" value="{{checking.realUnPayedMoney}}" style="text-align:center" /></td>
-	                        <td><input type="text" name="remark" value="{{checking.remark}}" style="text-align:center"/></td>
-							<td>{{if checking.checkTime == null || checking.checkTime == ""}}-{{else}}{{checking.checkTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td> 
-	                        <td>{{checking.checkUserRealName}}</td>
-							<td>
-							   <label class="pos-rel">
-							   		<input type="checkbox" data-entity-checkStatus="{{checking.isConfirmAccount}}" class="ace T-checkbox" disable="true" 
-							   		{{if checking.isConfirmAccount == 1}}checked="checked"{{/if}} />
-							   		<span class="lbl"></span>
-							   </label>
-							</td>
-					     </tr>
-			    {{/each}}
-            </tbody>  
-        </table>
-       <div class="form-group text-right">
-          <label class="control-label pull-right"/>
-            <input type="checkbox" class="ace pull-right T-checkAll">
-            <span class="lbl"></span>  
-            全选
-          </label>
-       </div>
-        <div class="row pageMode">
-          <div class="col-xs-6">
-            <small>共计 {{recordSize}} 条记录</small>
-          </div>
-          <div class="col-xs-6">
-            <div class="dataTables_paginate paging_simple_numbers T-pagenation">
-            </div>
-          </div>
-        </div>
         <form class="form-horizontal" role="form" onsubmit="return false">
-            <div class="form-group" style="text-align: center;">
-                <button class="btn btn-xs btn-primary T-close-check">
-                    <i class="ace-icon fa fa-times-circle"></i>
-                  			 关闭
-                </button>
-                <button class="btn btn-xs btn-primary T-saveCheck">
-                    <i class="ace-icon fa fa-check-circle"></i>
-                   			 确认
-                </button>
+            <div class="T-search-area editable editable-click" >
+                <div class="form-group"> 
+                    <label style="float: left;margin: 0px auto auto 15px" class="control-label pull-left"> 车队：{{companyName}}</label>
+                    <label class="control-label col-sm-1" style="float:left;">账期:</label>
+                    <select class="col-sm-1" name="year" style="margin-left:20px">
+						{{each yearList as year index}}
+						<option value="{{year.value}}" {{if searchParam.year == year.value}}selected="selected"{{/if}}>{{year.value}}</option>
+						{{/each}}
+					</select>	
+					<select class="col-sm-1" name="month" style="margin-left:5px">
+					    <option value ="">全部</option>
+						{{each monthList as month index}}
+						<option value="{{month.value}}" {{if searchParam.month == month.value}}selected="selected"{{/if}}>{{month.value}}月</option>
+						{{/each}}
+					</select>
+                    <button class=" btn-sm T-search search-btn marginLeft-30">
+                        <i class="ace-icon fa fa-search"></i>搜索
+                    </button>
+                    <button type="button" class="btn btn-sm btn-primary btn-success T-busCompanyExport" style="margin-left: 15px">
+						<span>导出报表</span>
+						<i class="ace-icon fa fa-arrow-right icon-on-right"></i>
+					</button>
+                </div>
             </div>
         </form>
+        <form class="form-horizontal" role="form" onsubmit="return false">
+            <div class="form-group ">
+                <label class=" control-label pull-left" style="margin-left: 15px">总账面应付：{{sumNeedPayMoney}}</label>
+                <label class=" control-label " style="margin-left:30px;">总实际已付：{{sumRealPayedMoney}}</label>
+                <label class=" control-label " style="margin-left:30px;">总账面未付：{{sumUnPayedMoney}}</label>
+                <label class=" control-label " style="margin-left:30px;">总实际未付：{{sumRealUnPayedMoney}}</label>
+            </div>
+        </form>
+    </div>
+    <input type="hidden" value="{{WEB_IMG_URL_BIG}}" name="WEB_IMG_URL_BIG" />
+	<input type="hidden" value="{{WEB_IMG_URL_SMALL}}" name="WEB_IMG_URL_SMALL" />
+    <div class="clearfix"></div>
+    <table class="table table-striped table-bordered table-hover all" style="margin-top: 30px">
+        <thead>
+            <tr><th class="th-border">序号</th>
+                <th class="th-border">账务类别</th>
+                <th class="th-border">用车时间</th>
+                <th class="th-border">人数</th>
+                <th class="th-border">司机</th>
+                <th class="th-border">车型</th>
+                <th class="th-border">车牌号</th>
+                <th class="th-border">车费</th>
+                <th class="th-border">优惠</th>
+                <th class="th-border">账面应付</th>
+                <th class="th-border">实际已付</th>
+                <th class="th-border">账面未付</th>
+                <th class="th-border">单据</th>
+                <th class="th-border"><span class="necessary">*</span>实际未付</th>
+                <th class="th-border">说明</th>
+                <th class="th-border">对账时间</th>
+                <th class="th-border">对账人</th>
+                <th class="th-border">对账</th>
+            </tr>
+        </thead>
+        <tbody class="T-checkList" data-right="230005">
+            {{each financialBusCompanyList as checking index}}
+		    <tr class="T-checkTr" data-id="{{checking.id}}" data-isConfirmAccount="{{checking.isConfirmAccount}}" data-realUnPayedMoney="{{checking.realUnPayedMoney}}" data-remark="{{checking.remark}}">
+			    <td>{{index+1}}</td>
+				<td>
+					{{if checking.arrangeType == 0}}
+						{{checking.tripNumber}}{{","}}{{checking.lineProductName}}{{","}}{{checking.guideName}}
+				  	{{else}}
+						{{checking.tripNumber}}{{","}}{{checking.arrangeRealname}}{{","}}{{checking.arrangeMobileNumber}}
+				  	{{/if}}
+				</td>
+				<td name="startTime">{{if checking.startTime == null || checking.startTime == ""}}-{{else}}{{checking.startTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
+				<td>{{checking.adultCount}}大{{checking.childCount}}小</td>
+				<td>{{checking.driverName}}</td>
+				<td>{{checking.busType}}</td>
+				<td>{{checking.licenseNumber}}</td>
+				<td>{{checking.fee}}</td>
+				<td>{{checking.reduceMoney}}</td>
+				<td>{{checking.needPayMoney}}</td>  
+				<td>
+					{{"社付:"}}{{checking.travelAgencyPayedMoney}}{{","}}
+				    {{"导付:"}}{{checking.guidePayedMoney}}
+				</td>   
+				<td>{{checking.unPayedMoney}}</td>
+				<td>{{if checking.billImages != null && checking.billImages !=""}}<a href="#" class="T-busCompanyImg" url="{{checking.billImages}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
+				<td><input type="text" name="realUnPayedMoney" value="{{checking.realUnPayedMoney}}" style="text-align:center" /></td>
+                <td><input type="text" name="remark" value="{{checking.remark}}" style="text-align:center"/></td>
+				<td>{{if checking.checkTime == null || checking.checkTime == ""}}-{{else}}{{checking.checkTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td> 
+                <td>{{checking.checkUserRealName}}</td>
+				<td>
+				   <label class="pos-rel">
+				   		<input type="checkbox" data-entity-checkStatus="{{checking.isConfirmAccount}}" class="ace T-checkbox" disable="true" {{if checking.isConfirmAccount == 1}}checked="checked"{{/if}} />
+				   		<span class="lbl"></span>
+				   </label>
+				</td>
+			</tr>
+		    {{/each}}
+        </tbody>  
+    </table>
+    <div class="form-group text-right">
+        <label class="control-label pull-right">
+            <input type="checkbox" class="ace pull-right T-checkAll">
+            <span class="lbl"></span>全选
+        </label>
+    </div>
+    <div class="row pageMode">
+        <div class="col-xs-6">
+            <small>共计 {{recordSize}} 条记录</small>
+        </div>
+        <div class="col-xs-6">
+            <div class="dataTables_paginate paging_simple_numbers T-pagenation">
+            </div>
+        </div>
+    </div>
+    <form class="form-horizontal" role="form" onsubmit="return false">
+        <div class="form-group" style="text-align: center;">
+            <button class="btn btn-xs btn-primary T-close-check">
+                <i class="ace-icon fa fa-times-circle"></i>关闭
+            </button>
+            <button class="btn btn-xs btn-primary T-saveCheck">
+                <i class="ace-icon fa fa-check-circle"></i>确认
+            </button>
+        </div>
+    </form>
 </div>

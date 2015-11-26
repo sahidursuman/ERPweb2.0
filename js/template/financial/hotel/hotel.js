@@ -418,12 +418,11 @@ define(function(require, exports) {
                             hotel.listhotel(hotel.searchData.pageNo,hotel.searchData.hotelId,hotel.searchData.year,hotel.searchData.month);
                         } else if(argumentsLen == 3){
                             hotel.$checkTab.data('isEdited',false);
-                            hotel.$checkTab.find('.T-saveCheck').data('id',"");
                             hotel.hotelCheck(page,hotelId,hotelName);
                         } else {
                             hotel.$checkTab.data('isEdited',false);
                             Tools.addTab(tab_id, title, html);
-                            hotel.initCheck(page,hotel.$checkTab.find(".T-data-id").data("id"),hotelName);
+                            hotel.initCheck(0,hotel.$checkTab.find(".T-newData").data("id"),hotel.$checkTab.find(".T-newData").data("name"));
                         }
                     });
                 }
@@ -481,7 +480,7 @@ define(function(require, exports) {
                         } else {
                             hotel.$clearTab.data('isEdited',false);
                             Tools.addTab(tab_id, title, html);
-                            hotel.initClear(hotel.$clearTab.find(".T-data-id").data("id"));
+                            hotel.initClear(hotel.$clearTab.find(".T-newData").data("id"),hotel.$clearTab.find(".T-newData").data("name"));
                         }
                     });
                     

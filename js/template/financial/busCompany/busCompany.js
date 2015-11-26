@@ -374,7 +374,7 @@ define(function(require, exports) {
                         } else {
                             busCompany.$checkTab.data('isEdited',false);
                             Tools.addTab(tab_id, title, html);
-                            busCompany.initCheck(page,busCompanyId,busCompanyName);
+                            busCompany.initCheck(0,busCompany.$checkTab.find(".T-newData").data("id"),busCompany.$checkTab.find(".T-newData").data("name"));
                         }
                     });
                 }
@@ -431,7 +431,7 @@ define(function(require, exports) {
                         } else {
                             busCompany.$clearTab.data('isEdited',false);
                             Tools.addTab(tab_id, title, html);
-                            busCompany.initClear(busCompany.$clearTab.find(".T-data-id").data("id"),name);
+                            busCompany.initClear(busCompany.$clearTab.find(".T-newData").data("id"),busCompany.$clearTab.find(".T-newData").data("name"));
                         }
                     });
                     
