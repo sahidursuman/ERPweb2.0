@@ -63,7 +63,7 @@ define(function(require, exports) {
 					data.yearList = yearList;
 					data.monthList = monthList;
 					var html = listTemplate(data);
-					addTab(menuKey,"车队账务",html);
+					Tools.addTab(menuKey,"车队账务",html);
 
 					busCompany.initList(year,month);
 
@@ -141,7 +141,7 @@ define(function(require, exports) {
                     
                     var validator;
                     // 初始化页面
-                    if (Tools.addTab(menuKey + "-checking", "餐厅对账", html)) {
+                    if (Tools.addTab(menuKey + "-checking", "车队对账", html)) {
                         busCompany.initCheck(page,busCompanyId,busCompanyName); 
                         validator = rule.check(busCompany.$checkTab.find('.T-checkList'));                       
                     }
