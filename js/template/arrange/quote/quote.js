@@ -334,21 +334,22 @@ define(function(require, exports) {
 			success: function(data){
 				var result = showDialog(data);
 				if(result){
-					var busInquiryResultHtml = busInquiryResultTemplate(data);
-					$container.find('#busInquiryResult-'+$a.a).html(busInquiryResultHtml);
-					/*for (var i = 0,dataLen = data.data.length; i < dataLen; i++) {
+					for (var i = 0,dataLen = data.data.length; i < dataLen; i++) {
 						for (var j = 0,len = data.data[i].busCompanyOfferList.length; j < len; j++) {
 							var $this = data.data[i].busCompanyOfferList[j];
-							var endTime = new Date($this.reserveTime.replace(/-/,"/"));
-				            var nowTime = new Date();
-				            var nMS =endTime.getTime() - nowTime.getTime();
-				            var nH=Math.floor(nMS/(1000*60*60)) % 24;
-				            var nM=Math.floor(nMS/(1000*60)) % 60;
-				            var nS=Math.floor(nMS/1000) % 60;
-				            console.log(nH,nM,nS)
+							var $minutes = $this.reserveMinutes;
+							var $h = parseInt($minutes/60);
+							var $m = $minutes%60;
+							if ($h == 0) {
+								$this.reserveTime = $m+'分钟';
+							}else{
+								$this.reserveTime = $h+'小时'+$m+'分钟';
+							}
 						}
-					}*/
+					}
 
+					var busInquiryResultHtml = busInquiryResultTemplate(data);
+					$container.find('#busInquiryResult-'+$a.a).html(busInquiryResultHtml);
 					//操作
 					$container.find('.T-bus-refresh').on("click",function(){
 						var $this = $(this),
@@ -430,6 +431,20 @@ define(function(require, exports) {
 							trLen += roomTypeList.length;
 						}
 						data.data[i].trLen = trLen;
+					}
+					
+					for (var i = 0,dataLen = data.data.length; i < dataLen; i++) {
+						for (var j = 0,len = data.data[i].hotelList.length; j < len; j++) {
+							var $this = data.data[i].hotelList[j];
+							var $minutes = $this.reserveMinutes;
+							var $h = parseInt($minutes/60);
+							var $m = $minutes%60;
+							if ($h == 0) {
+								$this.reserveTime = $m+'分钟';
+							}else{
+								$this.reserveTime = $h+'小时'+$m+'分钟';
+							}
+						}
 					}
 					var hotelInquiryResultHtml = hotelInquiryResultTemplate(data);
 					$container.find('#hotelInquiryContent-'+$a.a).html(hotelInquiryResultHtml);
