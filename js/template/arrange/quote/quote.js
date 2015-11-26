@@ -3142,6 +3142,7 @@ define(function(require, exports) {
 			if (quoteId == id) {
 				isThere = 1;
 				Tools.addTab(menukeyId.substring(menukeyId.indexOf('tab-')+4,menukeyId.lastIndexOf('-content')));
+				var $container = $("#"+menukeyId);
 				if (!!target) {
 					$container.find('.inquiryContent').trigger('click');
 					if (target == "T-hotel") {
