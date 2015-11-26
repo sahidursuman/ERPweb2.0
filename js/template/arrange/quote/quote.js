@@ -550,6 +550,8 @@ define(function(require, exports) {
 						+'</tr>';
 						$obj.find('tbody').html(html);
 						$container.find('.quoteContent').trigger('click');
+						//报价计算器
+						quote.costCalculation($container)
 					});
 				}
 			}
@@ -576,6 +578,8 @@ define(function(require, exports) {
 						$container.find("#dayListUpdate-"+ whichDay +" .T-timeline-detail-container").append(html);
 
 						$container.find('.quoteContent').trigger('click');
+						//报价计算器
+						quote.costCalculation($container)
 					});
 				}
 			}
