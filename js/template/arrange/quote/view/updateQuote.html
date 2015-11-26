@@ -52,13 +52,13 @@
 					<div class="form-group">
 						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>出游日期:</label>
 						<div class="col-sm-3">
-							<input type="text" name="startTime" class="col-sm-12 T-datePicker datepicker" maxlength="20" value="{{quoteDetailJson.startTime | dateFormat: 'yyyy-MM-dd'}}">
+							<input type="text" name="startTime" readonly="readonly" class="col-sm-12 datepicker" maxlength="20" value="{{quoteDetailJson.startTime | dateFormat: 'yyyy-MM-dd'}}">
 						</div>
 						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>人数:</label>
 						<div class="col-sm-3">
-							<input type="text" name="adultCount" class="T-changeQuote" maxlength="5" style="width:50px;" value="{{quoteDetailJson.adultCount}}">
+							<input type="text" name="adultCount" class="T-changeQuote" maxlength="5" readonly="readonly" style="width:50px;" value="{{quoteDetailJson.adultCount}}">
 							<label class="control-label">大人</label> 
-							<input type="text" name="childCount" class="T-changeQuote" maxlength="5" style="width:50px;" value="{{quoteDetailJson.childCount}}">
+							<input type="text" name="childCount" class="T-changeQuote" maxlength="5" readonly="readonly" style="width:50px;" value="{{quoteDetailJson.childCount}}">
 							<label class="control-label">小孩</label>
 						</div>
 						<label class="col-sm-1 control-label no-padding-right">单房差数:</label>

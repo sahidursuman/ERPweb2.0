@@ -869,7 +869,8 @@ define(function(require, exports) {
 						type: 'POST',
 						data: {
 							pageNo: page,
-							name: name
+							name: name,
+							customerType: 1
 						},
 						success: function(data){
 							data.lineProductList = JSON.parse(data.lineProductList);
@@ -982,6 +983,9 @@ define(function(require, exports) {
 				    						if (result) {
 												showMessageDialog($( "#confirm-dialog-message" ),"询价成功");
 												$container.find('[name=quoteId]').val(data.quoteId);
+												$container.find('[name=startTime]').attr('disabled','disabled');
+												$container.find('[name=adultCount]').attr('readonly','readonly');
+												$container.find('[name=childCount]').attr('readonly','readonly');
 												layer.close(busInquiryLayer);
 				    						}
 				    					}
@@ -1194,6 +1198,9 @@ define(function(require, exports) {
 											if (result) {
 												showMessageDialog($( "#confirm-dialog-message" ),"询价成功");
 												$container.find('[name=quoteId]').val(data.quoteId);
+												$container.find('[name=startTime]').attr('disabled','disabled');
+												$container.find('[name=adultCount]').attr('readonly','readonly');
+												$container.find('[name=childCount]').attr('readonly','readonly');
 												layer.close(hotelInquiryLayer);
 											}
 										}
