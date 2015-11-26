@@ -402,7 +402,7 @@ define(function(require, exports) {
 								var result = showDialog(data);
 								if(result){
 									showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-										quote.busStatusList(quoteId,$container);
+										quote.busStatusList(quoteId,$container, $a);
 									});
 								}
 							}
