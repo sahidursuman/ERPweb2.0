@@ -227,50 +227,7 @@ define(function(require, exports) {
 	 * @param  {[type]} id    [id]
 	 * @param  {[type]} $this [对象]
 	 */
-	// selfpay.deleteSelfpay = function(id,$this){
-	// 	var dialogObj = $( "#confirm-dialog-message" );
-	// 	dialogObj.removeClass('hide').dialog({
-	// 		modal: true,
-	// 		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-	// 		title_html: true,
-	// 		draggable:false,
-	// 		buttons: [ 
-	// 			{
-	// 				text: "取消",
-	// 				"class" : "btn btn-minier btn-heightMall",
-	// 				click: function() {
-	// 					$( this ).dialog( "close" );
-	// 				}
-	// 			},
-	// 			{
-	// 				text: "确定",
-	// 				"class" : "btn btn-primary btn-minier btn-heightMall",
-	// 				click: function() {
-	// 					$( this ).dialog( "close" );
-	// 					$.ajax({
-	// 						url:selfpay.url("deleteSelfPay","delete"),
-	// 						type:"POST",
-	// 						data:"id="+id+"&cateName=selfpay"+"",
-	// 						success:function(data){
-	// 							var result = showDialog(data);
-	// 							if(result){
-	// 								$this.closest('tr').fadeOut(function() {
-	// 									$(this).remove();
-	// 									selfpay.selfpayList(0);
-	// 								});
-	// 							}
-	// 						}
-	// 					});
-	// 				}
-	// 			}
-	// 		],
-	// 		open:function(event,ui){
-	// 			$(this).find("p").text("你确定要删除该自费项目？");
-	// 		}
-	// 	});
-	// };
-
-
+	
 		selfpay.deleteSelfpay = function(id,$this){
 			if(!!id){
 				showConfirmDialog($("#confirm-dialog-message"),"你确定要删除该自费项目？",function(){
