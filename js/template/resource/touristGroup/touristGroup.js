@@ -477,8 +477,8 @@ define(function(require,exports){
 		$dialog.find('.T-lineProduct-search').on('click', function(event) {
 			event.preventDefault();
 			var $that = $(this),
-				type = $that.prevAll('.tabbable').find('ul').find('.active').index();
-			touristGroup.getLineProductList($dialog, type, $dialog.find('input[name="lineProduct_name"]').val());
+				type = $that.closest('.T-lineproduct-search-add').find('ul').find('.active').index();
+			touristGroup.getLineProductList($dialog, type, 0,$dialog.find('input[name="lineProduct_name"]').val());
 		});	
 		// 选择线路产品
 		$dialog.find('.T-searchtravelLine').on('click', function(event) {
