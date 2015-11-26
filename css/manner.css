@@ -950,6 +950,10 @@ padding-left:0;width: 360px;left: -35px;
     max-width: 1190px;
     margin:auto;padding-top: 30px;
 }
+.quoteWidthAdd{
+    padding-left: 30px !important;
+    padding-right: 30px !important;
+}
 /*分享*/
 .quoteHr{
    width: 280px;margin-bottom: 8px;margin-top:18px;border-top:1px solid #DDDDDD;
