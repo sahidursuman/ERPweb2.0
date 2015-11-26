@@ -1251,7 +1251,7 @@ define(function(require, exports) {
 						if(result){
 							var scenicItem = JSON.parse(data.scenicItem);
 
-							thisParent.find("input[name=price]").val(scenicItem.contractPrice);
+							thisParent.find("input[name=price]").val(scenicItem.normalInnerPrice);
 						}
                     }
                 });

@@ -341,6 +341,8 @@ define(function(require,exports){
 		//同行联系人
 		var $contactObj = $obj.find('input[name=partnerAgencyNameList]');
 		touristGroup.getContactList($contactObj);
+		//新增同行
+		$obj.find('.T-addPartner').off('click').on("click",{function : KingServices.addPartnerAgency , type : ".form-group" , name : "fromPartnerAgency" , id : "fromPartnerAgencyId"}, KingServices.addResourceFunction);
 		//新增同行联系人
 		$obj.find('.T-addPartnerManager').on('click',function(){
 			touristGroup.addPartnerManager($(this));
@@ -550,7 +552,9 @@ define(function(require,exports){
 							travelAgencyName: tmp.partnerAgency.travelAgencyName,
 							createTime: tmp.createTime,
 							adultCount: tmp.adultCount,
-							childCount: tmp.childCount
+							childCount: tmp.childCount,
+							startTime: tmp.startTime,
+							contactRealname: tmp.partnerAgencyContact.contactRealname
 						})
 					}
 
@@ -610,9 +614,9 @@ define(function(require,exports){
 			setData('startTime', data.startTime);   //出游日期
 			var isUpdate = $mainForm.hasClass('T-update');
 			setData('startTime', data.startTime.split(' ')[0]).prop('disabled', true).nextAll('span, .fa').addClass('hidden');   //出游日期
-			setData('fromPartnerAgency', data.partnerAgency.travelAgencyName);   //客户来源
+			setData('fromPartnerAgency', data.partnerAgency.travelAgencyName).nextAll('.T-addPartner').addClass('hidden');;   //客户来源
 			setData('fromPartnerAgencyId', data.partnerAgency.id);   //客户来源的索引
-			setData('partnerAgencyNameList', data.partnerAgencyContact.contactRealname).nextAll('.T-addPartnerManager').addClass('hidden');;   //同行联系人
+			setData('partnerAgencyNameList', data.partnerAgencyContact.contactRealname).nextAll('.T-addPartnerManager').addClass('hidden');  //同行联系人
 			setData('partnerAgencyContactId', data.partnerAgencyContact.id);   //同行联系人的索引
 			setData('adultCount', data.adultCount);   //大人人数
 			setData('adultPrice', data.adultQuotePrice);   //大人单价
@@ -981,6 +985,7 @@ define(function(require,exports){
 			currInMoney = 0;
 		};
 		unInMoney = needSumIncome - hadInMoney - currInMoney;
+		unInMoney=unInMoney.toFixed(2);
 		unIncome.val(unInMoney);	
 	};
 	//获取列表数据
@@ -1101,6 +1106,7 @@ define(function(require,exports){
 						partnerAgencyId:partnerAgencyId,
 						operation:"view"
 					},
+					showLoading: false,
 					type:'POST',
 					success:function(data){
 						var result = showDialog(data);

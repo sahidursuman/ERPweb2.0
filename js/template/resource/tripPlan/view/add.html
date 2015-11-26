@@ -101,7 +101,9 @@
                         <a data-toggle="tab" href="#tripPlan_addPlan_other" aria-expanded="false">其他</a>
                     </li>  
                     <li style="border:none; margin-left:12px;">
-                       <button class="T-singleClick-Order R-right" data-right="1450001">一键下单</button>
+                        {{if tripPlan.qouteId!=null}}
+                           <button class="T-singleClick-Order R-right" data-right="1450001">一键下单</button>
+                        {{/if}}
                    </li>
                 </ul>
                 <div class="tab-content" style="position:relative;top: -2px">

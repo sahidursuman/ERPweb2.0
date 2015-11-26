@@ -114,7 +114,7 @@ define(function(require,exports){
 		});
 	};
 	//新增同行
-	PartnerAgency.addPartnerAgency = function(){
+	PartnerAgency.addPartnerAgency = function(fn){
 		var addHtml = addTempLate();
 		var addPartnerAgencyLayer = layer.open({
 			type:1,
@@ -146,7 +146,7 @@ define(function(require,exports){
 				//保存数据
 				$obj.find('.T-submit-data').on('click',function(){
 					if (!validator.form()) { return;}
-					PartnerAgency.savePartnerAgency($mainObj,addPartnerAgencyLayer,1);
+					PartnerAgency.savePartnerAgency($mainObj,addPartnerAgencyLayer,1,fn);
 				});
 			}
 		});
@@ -259,7 +259,7 @@ define(function(require,exports){
 		});
 	};
 	//数据组装
-	PartnerAgency.savePartnerAgency = function($obj,layerType,typeFlag){
+	PartnerAgency.savePartnerAgency = function($obj,layerType,typeFlag,fn){
 		//先获取表单数据
 		var status = 0,
 		    checkStatus = $obj.find('.T-partnerAgency-status').is(':checked'),
@@ -289,7 +289,7 @@ define(function(require,exports){
 			var contactAddJson = JSON.stringify(contactList);
 			var url = PartnerAgency.url("savePartnerAgency","add");
 			var data = form+"&contactListJsonAdd="+encodeURIComponent(contactAddJson);
-			PartnerAgency.submitData(url,data,layerType);
+			PartnerAgency.submitData(url,data,layerType,fn);
 		};
 		if(typeFlag == 2){
 			$tr.each(function(){
@@ -325,7 +325,7 @@ define(function(require,exports){
 		}
 	};
 	//提交数据
-	PartnerAgency.submitData = function(url,data,$obj){
+	PartnerAgency.submitData = function(url,data,$obj,fn){
 		$.ajax({
 			url:url,
 			type:'POST',
@@ -334,8 +334,17 @@ define(function(require,exports){
 				var result = showDialog(data);
 				if(result){
 					layer.close($obj);
-					showMessageDialog($( "#confirm-dialog-message" ),data.message);
-					PartnerAgency.listPartnerAgency(0);
+					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+						var formData = {};
+                        if (typeof fn === "function") {
+                            data.partnerAgency = JSON.parse(data.partnerAgency);
+                            formData.id = data.partnerAgency.id;
+                            formData.name = data.partnerAgency.travelAgencyName;
+                            fn(formData);
+                        }else{
+							PartnerAgency.listPartnerAgency(0);
+                        }
+					});
 				}
 			}
 		});
@@ -434,4 +443,5 @@ define(function(require,exports){
 		return url
 	};
 	exports.init = PartnerAgency.initModule;
+	exports.addPartnerAgency = PartnerAgency.addPartnerAgency;
 });

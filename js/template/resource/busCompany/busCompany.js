@@ -318,7 +318,7 @@ define(function(require,exports){
 								var $addTimeArea = $busList.find('.timeArea .T-add');
 								$addTimeArea.unbind().on('click',function(){
 									var $td = $(this).closest('td'), isVal = false;
-									$td.children('div').each(function(index){
+									/*$td.children('div').each(function(index){
 										var $s = $(this).find('input[name=startTime]');
 										var $e = $(this).find('input[name=endTime]');
 										if(!$s.val()){
@@ -334,11 +334,11 @@ define(function(require,exports){
 										}else{
 											isVal = true;
 										}
-									});
-									if(isVal){
-										BusCompany.addTimeArea($(this),2);
-										validator = rule.update(validator);
-									}
+									});*/
+									//if(isVal){
+										BusCompany.addTimeArea($(this),2,validator);
+										//validator = rule.update(validator);
+									//}
 								});
 								//删除原有包车区间
 								$busList.find(".T-del").on('click',function(){
@@ -557,8 +557,8 @@ define(function(require,exports){
 		//动态添加包车时限区间
 		var $addTimeArea = $obj.find('.timeArea .T-add');
 		$addTimeArea.unbind().on('click',function(){
-			BusCompany.addTimeArea($(this),typeFlag);
-			validator = rule.update(validator);
+			BusCompany.addTimeArea($(this),typeFlag,validator);
+			
 		});
 		
 	};
@@ -584,7 +584,7 @@ define(function(require,exports){
 		}
 	};
 	//动态增加班车时限
-	BusCompany.addTimeArea = function($obj,typeFlag){
+	BusCompany.addTimeArea = function($obj,typeFlag,validator){
 		var $td = $obj.closest('td');
 		var index = $td.find('div').length;
 		//console.log(index);
@@ -598,6 +598,7 @@ define(function(require,exports){
 		$td.find(".T-del").off('click').on('click',function(typeFlag){
 			BusCompany.deletedTimeArea($(this),typeFlag);
 		});
+		validator = rule.update(validator);
 	};
 	BusCompany.addTimeEvents = function(obj){
 		obj.find('input[name=startTime]').off('click').on('click', function(){
