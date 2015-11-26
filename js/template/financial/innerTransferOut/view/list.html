@@ -1,6 +1,6 @@
 <div class="row FinancialinnerTransferOut" >
     <div class="form-horizontal search-area">    
-        <div class="form-group" >      
+        <div class="form-group T-search-area">      
           <label class="control-label pull-left" style="margin-left: 22px">部门：</label>
                 <select  class="col-xs-12" name="toBusinessGroupId" style="width: 220px">
                     <option value ="">全部</option>    
@@ -21,7 +21,8 @@
 						<option value="{{month.value}}" {{if searchParam.month == month.value}}selected="selected"{{/if}}>{{month.value}}月</option>
 					{{/each}}
 				</select>
-            <button class="marginLeft-30 btn-sm search-btn btn-innerTransferOut-search"> <i class="ace-icon fa fa-search"></i> 搜索 </button> </div>
+            <button class="marginLeft-30 btn-sm search-btn T-innerTransferOut-search"> <i class="ace-icon fa fa-search"></i> 搜索 </button> 
+        </div>
     </div>
     </div>
     <div class="row innerTransferOutList">
@@ -40,7 +41,7 @@
                     <th>操作</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody class="T-innerTransferOutList">
                 {{each financialInnerTransferInList as innerTransferOut}}
                 <tr>
                     <td>{{innerTransferOut.toBusinessGroupName}}</td>
@@ -62,7 +63,7 @@
 	                    {{/if}}
                     </td>
                     <td>
-                        <a data-entity-id="{{innerTransferOut.toBusinessGroupId}}" data-entity-toBusinessGroupName="{{innerTransferOut.toBusinessGroupName}}" data-entity-year="{{searchParam.year}}" data-entity-month="{{searchParam.month}}" class="cursor btn-innerTransferOut-check R-right" data-right="1370001">
+                        <a data-entity-id="{{innerTransferOut.toBusinessGroupId}}" data-entity-toBusinessGroupName="{{innerTransferOut.toBusinessGroupName}}" data-entity-year="{{searchParam.year}}" data-entity-month="{{searchParam.month}}" class="cursor T-action T-check R-right" data-right="1370001">
                             	对账
                         </a>
                         <label class="cursor R-right" data-right="1370001"><a class="R-right" data-right="1370002"> |</a></label>
@@ -72,7 +73,7 @@
                                   {{else}}
                                  	 data-entity-startMonth="{{searchParam.month}}" data-entity-endMonth="{{searchParam.month}}" 
                                 {{/if}}
-                        		class="cursor btn-innerTransferOut-balance R-right" data-right="1370002">
+                        		class="cursor T-action T-balance R-right" data-right="1370002">
                            		 结算
                         </a>
                     </td>

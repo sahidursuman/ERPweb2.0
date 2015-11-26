@@ -2670,4 +2670,5 @@ define(function(require, exports) {
 	exports.isEdited = count.isEdited;
 	exports.save = count.save;
 	exports.clearEdit = count.clearEdit;
+    exports.tripDetail = count.tripDetail;
 });
