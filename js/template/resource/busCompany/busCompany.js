@@ -756,48 +756,24 @@ define(function(require,exports){
 		});
 	};
 	//删除车队
-	BusCompany.deletebusCompany = function($id){
-		var dialogObj = $( "#confirm-dialog-message" );
-		dialogObj.removeClass('hide').dialog({
-			modal: true,
-			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-			title_html: true,
-			draggable:false,
-			buttons: [
-				{
-					text: "取消",
-					"class" : "btn btn-minier btn-heightMall",
-					click: function() {
-						$( this ).dialog( "close" );
-					}
-				},
-				{
-					text: "确定",
-					"class" : "btn btn-primary btn-minier btn-heightMall",
-					click: function() {
-						$( this ).dialog( "close" );
+		BusCompany.deletebusCompany = function($id){
+				if (!!$id) {
+					showConfirmDialog($("#confirm-dialog-message"),"你确定要删除该条记录？", function() {
 						$.ajax({
 							url:""+APP_ROOT+"back/busCompany.do?method=deleteBusCompany&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=delete",
-							type:"POST",
-							data:"id="+$id+"",
-							success:function(data){
-								layer.close(globalLoadingLayer);
-								var result = showDialog(data);
-								if(result){
-									$("#" + tabId +" .busCompanyList .busCompany-"+$id+"").fadeOut(function(){
-										BusCompany.listBusCompany(BusCompany.searchData.pageNo);
-									});
-								}
+							type: 'post',
+							data: {id: $id},
+						})
+						.done(function(data) {
+							if (showDialog(data)) {
+								BusCompany.listBusCompany(0);
 							}
 						});
-					}
+					})
 				}
-			],
-			open:function(event,ui){
-				$(this).find("p").text("你确定要删除该条记录？");
-			}
-		});
-	};
+	}
+
+
 	//添加司机和车辆
 	BusCompany.addBusDriver = function(fn,$busCompany,$busCompanyId){
 		var html = addBusDriverTemplate();
