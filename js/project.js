@@ -631,6 +631,7 @@ var modalScripts = {
 
 	'financial_planProfit': "js/template/financial/planProfit/planProfit.js", //发团利润
 	'financial_replaceProfit':"js/template/financial/replaceProfit/replaceProfit.js",
+	'financial_Other_accounts':"js/template/financial/OtherAccounts/OtherAccounts.js",
 	//---------------------------------------------------------------------------------------------------------------
 	'public_message':"js/template/system/message/message.js",
 	'system_information':"js/template/system/information/information.js",

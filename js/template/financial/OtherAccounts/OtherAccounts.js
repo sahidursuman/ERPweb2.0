@@ -7,10 +7,12 @@ define(function(require,exports){
 	viewhandleTemplate = require("./view/viewhandle"),
 	ViewAmountPaidTemplate = require("./view/ViewAmountPaid"),
 	viewOrderDetailTemplate = require("./view/viewOrderDetail"),
-	 checkTabId = menuKey+"-checking";
+	checkTabId = menuKey+"-checking";
 	var  OtherAccounts={
 
-		listFinancialOtherAccounts:function(page,OtherAccountsID,year,month){
+	};
+
+		OtherAccounts.listFinancialOtherAccounts = function(page,OtherAccountsID,year,month){
 			// $.ajax({
 			// 	url: "",
 			// 	type: 'POST',
@@ -37,7 +39,7 @@ define(function(require,exports){
 			// 对账
 		OtherAccounts.AccountsChecking = function(){
 			var html = AccountsCheckingTemplate();
-			addTab(checkTabId,"其他对账",html);
+			Tools.addTab(checkTabId,"其他对账",html);
 			var $checkTabId = $("#tab-"+checkTabId+"-content");
 			// 查看已付金额明细
 			$(".T-Accounts").find('.T-lookDetail').click(function(event) {
@@ -61,18 +63,15 @@ define(function(require,exports){
 				format: 'yyyy-mm-dd',
 				language: 'zh-CN'
 			});
-			//关闭按钮事件
-			$checkTabId.find('.T-btn-close').click(function(){
-				 showConfirmDialog($( "#confirm-dialog-message" ), "确定关闭本选项卡?",function(){
-					 closeTab(checkTabId);
-					 OtherAccounts.edited["checking"] = "";
-				 });
-			 });
-		}	
-		//付款
+			//关闭页面事件
+	        $container.find(".T-closeTab").click(function(){
+	            closeTab(checkTabId);
+	        });
+			}	
+			//付款
 		OtherAccounts.AccountsPayment = function(){
 			var html = AccountsPaymentTemplate();
-			addTab("-payment","其他付款",html);
+			Tools.addTab("-payment","其他付款",html);
 
 			//已付付金额明细
 			$(".T-AccountsPayment").find('.T-ViewAmountPaid').click(function(event) {
@@ -157,7 +156,7 @@ define(function(require,exports){
 		}
 		
 
-	}
+	
 
 	exports.init = OtherAccounts.listFinancialOtherAccounts;
 })
