@@ -8,13 +8,13 @@
         "output": "",
         "charset": "utf-8",
         "syntax": "simple",
-        "helpers": "js/template/template-helper.js",
+        "helpers": "template-helper.js",
         "escape": true,
         "compress": true,
         "type": "cmd",
         "runtime": "template.js",
         "alias": null,
         "minify": true,
-        "cache": true
+        "cache": false
     }
 }
