@@ -1196,4 +1196,5 @@ define(function(require, exports) {
 	};
 
 	exports.init = BookingArrange.initModule;
+	exports.replaceDetail = BookingArrange.viewBooking;
 })

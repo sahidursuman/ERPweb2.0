@@ -1,36 +1,27 @@
 <div class="row globalAdd">
     <div class="search-area shopMain">
-        <div class="form-group">
+        <div class="form-group T-search-area">
             <label class="pull-left" style="margin-left: 15px;margin-top: 3px">购物店：</label>
-                <select name="shopId" class="col-xs-12" style="width: 220px">
+                <select name="shopId" class="col-xs-12 T-search-name" style="width: 220px">
                     <option value="">全部</option>
                     {{each shopInfoList as shopInfo}}
-                    <option value="{{shopInfo.shopId}}">{{shopInfo.shopName}}</option>
+                    <option value="{{shopInfo.shopId}}" {{if shopInfo.shopId == shopId}}selected="selected"{{/if}}>{{shopInfo.shopName}}</option>
                     {{/each}}
   
                 </select>
                 <label class=" control-label pull-left marginLeft-30" style="margin-top: 3px">账期：</label>
-                <select name="year" class="col-sm-1">
-                    {{each yearList as year}}
-                    <option value="{{year}}">{{year}}</option>
+                <select name="year" class="col-sm-1 T-search-year">
+                    {{each yearList as yearInfo}}
+                    <option value="{{yearInfo}}" {{if yearInfo == year}}selected="selected"{{/if}}>{{yearInfo}}</option>
                     {{/each}}
                 </select>
-                <select name="month"  class="col-sm-1 marginLeft-30">
+                <select name="month"  class="col-sm-1 marginLeft-30 T-search-month">
                     <option value="">全部</option>
-                    <option value="1">1月</option>
-                    <option value="2">2月</option>
-                    <option value="3">3月</option>
-                    <option value="4">4月</option>
-                    <option value="5">5月</option>
-                    <option value="6">6月</option>
-                    <option value="7">7月</option>
-                    <option value="8">8月</option>
-                    <option value="9">9月</option>
-                    <option value="10">10月</option>
-                    <option value="11">11月</option>
-                    <option value="12">12月</option>
+                    {{each monthList as monthInfo}}
+                        <option value="{{monthInfo}}" {{if monthInfo == month}}selected="selected"{{/if}}>{{monthInfo}}月</option>
+                    {{/each}}
                 </select>
-            <button class=" btn-sm search-btn btn-shop-search marginLeft-30" >
+            <button class=" btn-sm search-btn T-btn-search marginLeft-30" >
                 <i class="ace-icon fa fa-search"></i>
                 搜索
             </button>
@@ -52,9 +43,9 @@
                 </tr>
                 </thead>
 
-                <tbody>
+                <tbody class="T-list">
                 {{each financialShopSumList as sumList}}
-                <tr>
+                <tr data-id="{{sumList.shopId}}">
                     <td>{{sumList.shopName}}</td>
                     <td>{{sumList.sumPerson}}</td>
                     <td>{{sumList.sumConsumeMoney}}</td>
@@ -71,11 +62,11 @@
 	                    {{/if}}
 					</td>
                     <td>
-                        <a data-entity-id="{{sumList.shopId}}" class="cursor R-right btn-divide btn-shop-checking" data-right="1310002">
+                        <a data-entity-id="{{sumList.shopId}}" class="cursor R-right T-action T-checking" data-right="1310002">
                             对账
                         </a>
                         <label class="cursor R-right" data-right="1310002"><a class="R-right" data-right="1310003"> |</a></label>
-                        <a data-entity-id="{{sumList.shopId}}" class="cursor R-right btn-guide-view btn-transfter btn-shop-clearing" data-right="1310003">
+                        <a data-entity-id="{{sumList.shopId}}" class="cursor R-right T-action T-settlement" data-right="1310003">
                             结算
                         </a>
                     </td>

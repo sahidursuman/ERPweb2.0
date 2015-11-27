@@ -19,22 +19,19 @@ define(function(require, exports) {
             startTime = TotalProfit.$searchArea.find("input[name=startTime]").val(),
             endTime = TotalProfit.$searchArea.find("input[name=endTime]").val()
         }
+        TotalProfit.searchData = {
+            startTime:startTime,
+            endTime:endTime
+        };
 
         $.ajax({
-            url:TotalProfit.url("profitTotal","getTotalProfit"),
+            url:KingServices.build_url("profitTotal","getTotalProfit"),
             type: "POST",
-            data: {
-                startTime : startTime,
-                endTime : endTime,
-                sortType: 'auto'
-            },
+            data: TotalProfit.searchData,
             success: function(data) {
                 var result = showDialog(data);
                 if (result) {
-                    TotalProfit.searchData={
-                        startTime:startTime,
-                        endTime:endTime
-                    };
+                    
                     data.searchParam = TotalProfit.searchData
                     var html = listTemplate(data);
                     addTab(menuKey,"总利润表",html);
@@ -56,11 +53,6 @@ define(function(require, exports) {
                 }
             }
         });
-    };
-
-    TotalProfit.url = function(path,method){
-        var url = ''+APP_ROOT+'back/'+path +'.do?method='+method+'&token='+$.cookie('token')+'';
-        return url;
     };
 
     exports.init = TotalProfit.initModule;
