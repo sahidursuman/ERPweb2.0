@@ -91,8 +91,9 @@ define(function(require, exports) {
 					data.quoteList = JSON.parse(data.quoteList);
 					var html = listTemplate(data);
 					    html = filterUnAuth(html);
-					quote.$tab.find('.T-quoteList').html(html);
-
+				    if (!!quote.$tab) {
+						quote.$tab.find('.T-quoteList').html(html);
+					}
 					quote.initList();
 
 	                //绑定翻页组件
@@ -257,6 +258,10 @@ define(function(require, exports) {
 	};
 	//新增报价
 	quote.addQuote = function(id) {
+		$("#tab-arrange_quote-add-content").find(".T-newData").data("id",id);
+		var $a = {
+			a: 'add'
+		};
 		if (!!id) {
 			$.ajax({
 				url: KingServices.build_url('lineProduct', 'getLineProductById'),
@@ -274,20 +279,24 @@ define(function(require, exports) {
 						};
 						data.viewLineProduct.editorName = menukey + '-ueditor'
 						var htmlT = data.viewLineProduct;
-						addQuoteInit(htmlT);
+						var html = mainQuoteTemplate($a);
+						if(Tools.addTab(menukey+'-add',"新增报价",html)){
+							console.log(htmlT);
+							addQuoteInit(htmlT);
+						}
 					}
 				}
 			})
 		}else{
 			var htmlT = '';
-			addQuoteInit(htmlT);
-		}
-		function addQuoteInit(htmlT){
-			var $a = {
-				a: 'add'
-			}
 			var html = mainQuoteTemplate($a);
-			Tools.addTab(menukey+'-add',"新增报价",html)
+			if(Tools.addTab(menukey+'-add',"新增报价",html)){
+				console.log(htmlT);
+				addQuoteInit(htmlT);
+			}
+		}
+
+		function addQuoteInit(htmlT){
 			var $container = $("#tab-arrange_quote-add-content");
 
 			var addHtml = addQuoteTemplate(htmlT);
@@ -302,7 +311,7 @@ define(function(require, exports) {
 				quote.quoteStatus(quoteId,$container,'add');
 			});	
 
-			quote.init_event($container);
+			quote.init_event($container,id);
 		}
 	};
 
@@ -526,7 +535,7 @@ define(function(require, exports) {
 						"<th class='th-border' style='width: 60px;'>操作</th>" + 
 					"</tr></thead>" +
 					"<tbody><tr>" + 
-						"<td><input type='hidden' name='offerId' value='" + hotelList[i].offerId + "' /><select class='col-xs-12 T-choose-hotelStarLevel'><option";
+						"<td><input type='hidden' name='offerId' value='" + hotelList[i].offerId + "' /><select class='col-xs-12 T-choose-hotelStarLevel' disabled='disabled'><option";
 						 if (hotelList[i].hotelLevel==1)
 						 {
 						 	html += " selected='selected'";
@@ -562,8 +571,8 @@ define(function(require, exports) {
 						 	html += " selected='selected'";
 						 }
 						 html += " value='7'>五星以上</option></select></td>" +
-						 "<td><input type='text' class='T-choose-hotelName col-xs-12 bind-change' name='hotelNmae' value='" + hotelList[i].hotelName + "' /><input type='hidden' name='hotelId' value='" + hotelList[i].hotelId + "' /></td>" + 
-						 "<td><input type='text' class='T-choose-hotelRoom col-xs-12 bind-change' name='hotelRoom' value='" + hotelList[i].type + "' /><input type='hidden' name='hotelRoomId' value='" + hotelList[i].roomId +"' /></td>" +
+						 "<td><input type='text' class='T-choose-hotelName col-xs-12 bind-change' name='hotelNmae' value='" + hotelList[i].hotelName + "' disabled='disabled'/><input type='hidden' name='hotelId' value='" + hotelList[i].hotelId + "' /></td>" + 
+						 "<td><input type='text' class='T-choose-hotelRoom col-xs-12 bind-change' name='hotelRoom' value='" + hotelList[i].type + "' disabled='disabled'/><input type='hidden' name='hotelRoomId' value='" + hotelList[i].roomId +"' /></td>" +
 						 "<td><input type='text' readonly='readonly' class='T-changeQuote' name='contractPrice' value='" + hotelList[i].replyPrice + "' style='width:70px;' /></td>" +
 						 "<td><input type='text' readonly='readonly' name='count' class='T-changeQuote' value='" + hotelList[i].needRoomCount + "' style='width:70px;' /></td>" +
 						 "<td><input type='text' class='col-xs-12' readonly='readonly' name='containBreakfast' value='";
@@ -647,32 +656,26 @@ define(function(require, exports) {
 	quote.init_event =function($container,id) {
 		var validator = rule.quoteCheckor($container);
 
-		if(arguments.length == 2){
-			// $container.find(".T-editor").addListener("contentChange",function(){
-			// 	console.log("changedwaerfwa");
-			//     $container.data('isEdited', true);
-			// });
-			// 监听修改
-			$container.off('change').off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE)
-			.on('change','input, select,.T-editor', function(event) {
-				event.preventDefault();
-				$container.data('isEdited', true);
-			})
-			// 监听保存，并切换tab
-			.on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
-				event.preventDefault();
-				quote.saveQuote(id,$container,tab_id, title, html);
-			})
-			.on(SWITCH_TAB_BIND_EVENT, function(event) {
-				event.preventDefault();
-				quote.init_event($container,id);
-			})
-			// 保存后关闭
-			.on(CLOSE_TAB_SAVE, function(event) {
-				event.preventDefault();
-				quote.saveQuote(id,$container);
-			});
-		}	
+		// 监听修改
+		$container.off('change').off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE)
+		.on('change','input, select,.T-editor', function(event) {
+			event.preventDefault();
+			$container.data('isEdited', true);
+		})
+		// 监听保存，并切换tab
+		.on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
+			event.preventDefault();
+			quote.saveQuote(id,$container,tab_id, title, html);
+		})
+		.on(SWITCH_TAB_BIND_EVENT, function(event) {
+			event.preventDefault();
+			quote.init_event($container,id);
+		})
+		// 保存后关闭
+		.on(CLOSE_TAB_SAVE, function(event) {
+			event.preventDefault();
+			quote.saveQuote(id,$container);
+		});
 
 		//下拉
 		quote.autocomplete($container);
@@ -1432,6 +1435,7 @@ define(function(require, exports) {
 							}console.log(quote.hotelSelectedArray)
 						}
 
+						console.log($container.find('.T-pagenation').length);
 		                //绑定翻页组件
 		                laypage({
 		                	cont: $container.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
@@ -3064,8 +3068,8 @@ define(function(require, exports) {
 				var result = showDialog(data);
 				if (result) {
 					showMessageDialog($( "#confirm-dialog-message" ), "报价添加成功，请在报价管理中查看！",function(){
+						var idString = $container.attr("id");
 						if(argumentsLen === 2){
-                            var idString = $container.attr("id");
 							if (idString == "tab-arrange_quote-add-content") {
 								Tools.closeTab("arrange_quote-add");
 								quote.listQuote(0);
@@ -3076,7 +3080,12 @@ define(function(require, exports) {
 							}
 						}else {
 							$container.data('isEdited',false);
-                            quote.updateQuote($container.find(".T-newData").data("id"),"T-bus");
+                            if (idString == "tab-arrange_quote-add-content") {
+								quote.addQuote($container.find(".T-newData").data("id"));
+							}
+							else if (idString == "tab-arrange_quote-update-content") {
+								quote.updateQuote($container.find(".T-newData").data("id"),"T-bus");
+							}
                         }
 					});
 				}
