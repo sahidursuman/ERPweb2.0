@@ -1,4 +1,4 @@
-<div class="row insuranceChecking globalAdd">
+<div class="row T-Checking globalAdd">
 <div class="col-xs-12 border" style="padding-bottom: 0px">
             <form class="form-horizontal" role="form" onsubmit="return false">
                 <div class="search-area editable editable-click" >
@@ -35,7 +35,7 @@
                     <label class=" control-label " style="margin-left:30px;">总实际未付：{{sumRealUnPayedMoney}}</label>
                 </div>
             </form>
-        </div>
+</div>
         <input type="hidden" value="{{WEB_IMG_URL_BIG}}" name="WEB_IMG_URL_BIG" />
     	<input type="hidden" value="{{WEB_IMG_URL_SMALL}}" name="WEB_IMG_URL_SMALL" />
          <div class="clearfix"></div>
@@ -59,13 +59,13 @@
                            <th class="th-border">对账人</th>
                            <th class="th-border">对账</th>
                         </tr>  
-					</thead>   
-					<tbody class="T-checkList" data-right="1270005">
+					</thead>
+					<tbody class="T-checkListNum" data-right="1270005">
 					    {{each financialInsuranceList as checking index}}
 					    <tr data-entity-id="{{checking.id}}" data-entity-isConfirmAccount="{{checking.isConfirmAccount}}" data-entity-realUnPayedMoney="{{checking.realUnPayedMoney}}" data-entity-remark="{{checking.remark}}">
 				         <td>{{index+1}}</td>
 							<td>{{checking.tripNumber}}{{","}}{{checking.lineProductName}}{{","}}{{checking.guideName}}</td>
-							<td name="startTime">{{checking.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
+							<td name="startTime">121212</td>
 							<td>{{checking.insuranceType}}</td>
 							<td>{{checking.price}}</td>
 							<td>{{checking.realCount}}</td>
@@ -89,12 +89,12 @@
 							   </label>
 							</td>
 					     </tr>
-					     {{/each}}  
+					     {{/each}}
 					</tbody>
 				</table>
         <div class="form-group text-right">
             <label class="control-label pull-right"/>
-                <input type="checkbox" class="ace pull-right selectAll">
+                <input type="checkbox" class="ace pull-right T-selectAll">
                 <span class="lbl"></span>  
                 全选
             </label>
@@ -111,7 +111,7 @@
             </div>
             <form class="form-horizontal" role="form" onsubmit="return false">
                 <div class="form-group" style="text-align: center;">
-                    <button class="btn btn-xs btn-primary btn-insuanceFinancial-close">
+                    <button class="btn btn-xs btn-primary T-closeTab">
                         <i class="ace-icon fa fa-times-circle"></i>
                        	 	关闭
                     </button>

@@ -67,7 +67,7 @@ define(function(require, exports) {
                     Client.initList();
                     // 绑定翻页组件
                     laypage({
-                        cont: Client.$tab.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+                        cont: $("T-listMain").find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
                         pages: data.searchParam.totalPage, //总页数
                         curr: (page + 1),
                         jump: function(obj, first) {
