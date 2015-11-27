@@ -143,7 +143,7 @@ define(function(require, exports) {
 	                    var checkTr = $(".T-checkList tr");
 	                    var rightCode = $(".T-checkList").data("right");
 	                    checkDisabled(checkList,checkTr,rightCode);
-		                    
+		                
                  	    // 绑定翻页组件
 						laypage({
 						    cont: $('#' + checkTabId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,

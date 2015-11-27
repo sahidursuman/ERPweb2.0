@@ -626,6 +626,7 @@ var modalScripts = {
 	'financial_totalProfit': "js/template/financial/totalProfit/totalProfit.js",
 	'financial_Client': "js/template/financial/Client/Client.js",
 	'financial_shop': "js/template/financial/shop/shop.js",//购物账务
+	'financial_guide':"js/template/financial/guide/guideR.js",
 	'financial_innerTransfer_in':"js/template/financial/innerTransferIn/innerTransferIn.js",//内转转入
 	'financial_innerTransfer_out':"js/template/financial/innerTransferOut/innerTransferOut.js",//内转转出
 
@@ -669,7 +670,7 @@ function listMenu(menuTemplate){
 				});
 
 				//绑定财务管理菜单功能 
-				$("#sidebar .nav-list .financial_guide").click(function(){
+				/*$("#sidebar .nav-list .financial_guide").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
@@ -677,7 +678,7 @@ function listMenu(menuTemplate){
 						guide.listFinancialGuide(0,"","","");
 						modals["financial_guide"] = guide;
 					});
-				});
+				});*/
 				//绑定分团转客菜单功能
 				$("#sidebar .nav-list .arrange_tourist").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
