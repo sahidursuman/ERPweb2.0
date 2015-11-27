@@ -1079,13 +1079,6 @@ define(function(require, exports) {
 			success: function(data){
 				var result = showDialog(data);
 				if (result) {
-					data.days = [];
-					for (var i = 1,len = lineProductInfo.days.replace(/[^0-9]/ig,""); i <= len; i++) {
-						var json = {
-							time: quote.checkInTime(i,lineProductInfo.startTime)
-						}
-						data.days.push(json);
-					}
 					autocompleteData.roomTypeList = data.roomTypeList;
 					data.lineProductInfo = lineProductInfo;
 					var hotelInquiryHtml = hotelInquiryTemplate(data);
@@ -1100,6 +1093,8 @@ define(function(require, exports) {
 					    success:function(data){
 					    	var $hotelLayerContent = $(".T-hotelInquiryContainer");
 
+							//酒店是否已询价
+							quote.isInquiryHotel(quoteId, $hotelLayerContent);
 					    	quote.chooseRoomType($hotelLayerContent);
 					    	quote.dateTimePicker($hotelLayerContent);
 					    	var validator = rule.quoteCheckor($hotelLayerContent);
@@ -1196,6 +1191,29 @@ define(function(require, exports) {
 			}
 		})
 	};
+	//酒店是否已询价 (在某天)
+	quote.isInquiryHotel = function(quoteId, $layerContainer){
+		$.ajax({
+			url: KingServices.build_url("hotelInquiry","findIsInquiryHotleList"),
+			type: 'POST',
+			data: {quoteId: quoteId},
+			showLoading: false,
+			success: function(data){
+				if (showDialog(data)) {
+					var html = '';
+					for (var i = 0; i < data.dayStatus.length; i++) {
+						if(data.dayStatus[i].success == 0){
+							html += '<option value="'+data.dayStatus[i].arriveTime+'">'+data.dayStatus[i].arriveTime+'</option>'
+						}else{
+							html += '<option value="'+data.dayStatus[i].arriveTime+'">'+data.dayStatus[i].arriveTime+'[已询价]</option>'
+						}
+					}
+					$layerContainer.find('[name=checkInTime]').html(html);
+				}
+			}
+		})
+	}
+
 	//选择房间类型
 	quote.chooseRoomType = function($obj) {
 		var chooseRoomType = $obj.find('.T-chooseRoomType');
@@ -1321,6 +1339,7 @@ define(function(require, exports) {
 		var checkInTime = date.getFullYear()+ "-"+ (date.getMonth() + 1) + "-"+ (date.getDate() < 10 ? "0" + date.getDate() : date.getDate());
 		return checkInTime;
 	}
+
 	//酒店查询分页
 	quote.hotelInquiryList = function(page,$container,quoteId) {
 		var checkInTime = $container.find('[name=checkInTime]').val(), isSearch = true;
