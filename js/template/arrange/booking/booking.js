@@ -1189,7 +1189,7 @@ define(function(require, exports) {
 								'operation': 'delete', 
 								'cateName' : $list, 
 								'id' : id
-							}, function(){
+							}, function(data){
 								showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
 									$parent.fadeOut(function(){
 										var $thatPar = $parent.parents('[class*="Booking"]');
