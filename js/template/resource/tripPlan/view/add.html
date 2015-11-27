@@ -169,7 +169,7 @@
                                                     			</select>
                                                     		</td>
                                                     		<td><input type="text" name="remark" value="{{insurance.remark}}" class="col-sm-12" maxlength="500" /></td>
-                                                            <td> <a class="cursor btn-deleteTripPlanList" data-entiy-id="4" data-entity-name="hotel" title="删除"> 删除 </a> </td>
+                                                            <td> <a class="cursor btn-deleteTripPlanList" data-entiy-id="4" data-entity-name="insurance" title="删除"> 删除 </a> </td>
                                                         </tr>
                                                     	{{/if}}
                                                     	{{/each}}
@@ -311,9 +311,9 @@
                                                                 <td><input type="text" name="brand" {{if busCompany.qouteId!=null}}readonly="readonly"{{/if}} value="{{if busCompany.bus != null}}{{busCompany.bus.brand}}{{/if}}" class="col-sm-12"/></td>
                                                                 <td><input type="text" name="mobileNumber" {{if busCompany.qouteId!=null}}readonly="readonly"{{/if}} value="{{if busCompany.busCompany != null}}{{busCompany.busCompany.mobileNumber}}{{/if}}" class="col-sm-12"/></td>
                                                                 <td><input type="text" name="driverName" {{if busCompany.qouteId!=null}}readonly="readonly"{{/if}} value="{{if busCompany.driver != null}}{{busCompany.driver.name}}{{/if}}" class="col-sm-12"/></td>
-                                                                <td><input type="text" name="contractNumber" {{if busCompany.qouteId!=null}}readonly="readonly"{{/if}} value="{{busCompany.contractNumber}}" maxlength="20" class="col-sm-12"/></td>
+                                                                <td><input type="text" name="contractNumber" value="{{busCompany.contractNumber}}" maxlength="20" class="col-sm-12"/></td>
                                                                 <td><input type="text" name="price" value="{{busCompany.price}}" {{if busCompany.qouteId!=null}}readonly="readonly"{{/if}} class="col-sm-12" maxlength="9" style="width: 60px;"/><input type="hidden" name="memberCount" value="1" /></td>
-                                                                <td><input type="text" name="reduceMoney" {{if busCompany.qouteId!=null}}readonly="readonly"{{/if}} value="{{busCompany.reduceMoney}}" class="col-sm-12" maxlength="9" style="width: 60px;"/></td>
+                                                                <td><input type="text" name="reduceMoney" value="{{busCompany.reduceMoney}}" class="col-sm-12" maxlength="9" style="width: 60px;"/></td>
                                                                 <td><input type="text" name="needPayMoney" readonly="readonly" value="{{busCompany.needPayMoney}}" maxlength="9" class="col-sm-12" style="width: 60px;"/></td>
                                                                 <td><input type="text" name="payedMoney" value="{{busCompany.payedMoney}}" class="col-sm-12" maxlength="9" style="width: 60px;"/></td>
                                                                 <td>
@@ -534,12 +534,6 @@
                                                                 <td>
                                                                     {{if hotel.offerId!=null}}
                                                                     <a class="cursor T-Hotel-SendOrder T-sendOrder-Area R-right T-action" data-value="{{hotel.qouteId}}" data-right="1450001" data-entity-offerId={{hotel.offerId}}>发送订单</a>
-                                                                    {{/if}}
-
-                                                                    {{if hotel.qouteId!=null}}
-                                                                    <a class="cursor btn-deleteTripPlanList" data-entiy-id="{{hotel.id}}" data-entity-name="hotel" title="删除">
-                                                                        删除
-                                                                    </a>
                                                                     {{/if}}
                                                                 </td>
                                                     		</tr>

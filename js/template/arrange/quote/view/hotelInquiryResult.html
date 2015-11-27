@@ -75,7 +75,7 @@
 									一直保留
 									{{/if}}
 								{{else if offer.reserveMinutes == 0}}
-									-
+									{{if offer.status == "已同意"}}已到期{{else}}-{{/if}}
 								{{else}}
 									{{offer.reserveTime}}
 								{{/if}}
@@ -96,7 +96,7 @@
 						{{if offer.roomTypeList.length > 0}}
 							{{each offer.roomTypeList as room index}}
 								{{if index > 0}}
-									<td class="T-hotelType-{{offer.id}}">{{room.type}}</td>
+									<tr><td class="T-hotelType-{{offer.id}}">{{room.type}}</td>
 									<td class="T-hotelPrice-{{offer.id}}">
 									{{if room.isContractPrice == 1}}
 										{{room.price}}
@@ -107,12 +107,12 @@
 											-
 										{{/if}}
 									{{/if}}
-									</td>
+									</td></tr>
 								{{/if}}
 							{{/each}}
 						{{else}}
-							<td class="T-hotelType-{{offer.id}}"></td>
-							<td class="T-hotelPrice-{{offer.id}}"></td>
+							<tr><td class="T-hotelType-{{offer.id}}"></td>
+							<td class="T-hotelPrice-{{offer.id}}"></td></tr>
 						{{/if}}
 					{{/if}}
 				{{/each}}
@@ -167,7 +167,7 @@
 									一直保留
 									{{/if}}
 								{{else if offer.reserveMinutes == 0}}
-									-
+									{{if offer.status == "已同意"}}已到期{{else}}-{{/if}}
 								{{else}}
 									{{offer.reserveTime}}
 								{{/if}}
@@ -184,7 +184,7 @@
 						{{if offer.roomTypeList.length > 0}}
 							{{each offer.roomTypeList as room index}}
 								{{if index > 0}}
-									<td class="T-hotelType-{{offer.id}}">{{room.type}}</td>
+									<tr><td class="T-hotelType-{{offer.id}}">{{room.type}}</td>
 									<td class="T-hotelPrice-{{offer.id}}">
 									{{if room.isContractPrice == 1}}
 										{{room.price}}
@@ -195,12 +195,12 @@
 											-
 										{{/if}}
 									{{/if}}
-									</td>
+									</td></tr>
 								{{/if}}
 							{{/each}}
 						{{else}}
-							<td class="T-hotelType-{{offer.id}}"></td>
-							<td class="T-hotelPrice-{{offer.id}}"></td>
+							<tr><td class="T-hotelType-{{offer.id}}"></td>
+							<td class="T-hotelPrice-{{offer.id}}"></td></tr>
 						{{/if}}
 					{{/if}}
 				{{/each}}
