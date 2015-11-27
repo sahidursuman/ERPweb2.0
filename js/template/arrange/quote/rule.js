@@ -240,7 +240,7 @@ define(function(require, exports) {
 									errMsg: '数量不能为空'
 								},
 								{
-									type: 'positive-float',
+									type: 'positive-float2',
 									errMsg: '数量格式不正确'
 								},
 							]
