@@ -33,7 +33,7 @@
 									一直保留
 									{{/if}}
 								{{else if offer.reserveMinutes == 0}}
-									-
+									{{if offer.status == "已同意"}}已到期{{else}}-{{/if}}
 								{{else}}
 									{{offer.reserveTime}}
 								{{/if}}
@@ -62,7 +62,7 @@
 									一直保留
 									{{/if}}
 								{{else if offer.reserveMinutes == 0}}
-									-
+									{{if offer.status == "已同意"}}已到期{{else}}-{{/if}}
 								{{else}}
 									{{offer.reserveTime}}
 								{{/if}}

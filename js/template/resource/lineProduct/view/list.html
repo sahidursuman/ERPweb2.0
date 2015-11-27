@@ -50,6 +50,7 @@
 					<th>票务</th>
 					<th>保险</th>
 					<th>自费</th>
+					<th>其他</th>
 					<th>是否启用</th>
 					<!-- <th>报价</th> -->
 					<th>操作</th>
@@ -127,6 +128,13 @@
 						</td>
 						<td>
 						{{if lineProduct.selfPayStatus == 1}}
+							<i class="ace-icon fa fa-check green"></i>
+						{{else}}
+							<i class="ace-icon fa fa-times red"></i>
+						{{/if}}
+						</td>
+						<td>
+						{{if lineProduct.otherStatus == 1}}
 							<i class="ace-icon fa fa-check green"></i>
 						{{else}}
 							<i class="ace-icon fa fa-times red"></i>
