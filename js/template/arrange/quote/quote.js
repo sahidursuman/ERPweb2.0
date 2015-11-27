@@ -943,40 +943,43 @@ define(function(require, exports) {
 			    					}
 			    					busCompany.push(json);
 			    				}
-			    				if (busCompany.length) {
-			    					busCompany = JSON.stringify(busCompany);
-				    				$.ajax({
-				    					url: KingServices.build_url("busInquiry","saveInquiry"),
-				    					type: 'POST',
-				    					data: {
-				    						brand: brand,
-				    						lineProductId: lineProductId,
-				    						quoteId: quoteId,
-				    						seatCount: seatCount,
-				    						startTime: startTime,
-				    						busCompany: busCompany,
-				    						expiryTime: expiryTime,
-											partnerAgencyId: lineProductInfo.partnerAgencyId,
-											partnerAgencyContactId: lineProductInfo.partnerAgencyContactId,
-											adultCount: lineProductInfo.adultCount,
-											childCount: lineProductInfo.childCount
-				    					},
-				    					success: function(data){
-				    						var result = showDialog(data);
-				    						if (result) {
-												showMessageDialog($( "#confirm-dialog-message" ),"询价信息发送成功");
-												$container.find('[name=quoteId]').val(data.quoteId);
-												$container.find('[name=startTime]').attr('disabled','disabled');
-												$container.find('[name=adultCount]').attr('readonly','readonly');
-												$container.find('[name=childCount]').attr('readonly','readonly');
-												layer.close(busInquiryLayer);
-				    						}
-				    					}
-				    				})
-			    				}else{
-			    					showMessageDialog($( "#confirm-dialog-message" ),"至少选择一个车队");
-			    				}
-
+			    				if (seatCount-(lineProductInfo.adultCount-0)+(lineProductInfo.childCount-0) >= 0) {
+				    				if (busCompany.length) {
+				    					busCompany = JSON.stringify(busCompany);
+					    				$.ajax({
+					    					url: KingServices.build_url("busInquiry","saveInquiry"),
+					    					type: 'POST',
+					    					data: {
+					    						brand: brand,
+					    						lineProductId: lineProductId,
+					    						quoteId: quoteId,
+					    						seatCount: seatCount,
+					    						startTime: startTime,
+					    						busCompany: busCompany,
+					    						expiryTime: expiryTime,
+												partnerAgencyId: lineProductInfo.partnerAgencyId,
+												partnerAgencyContactId: lineProductInfo.partnerAgencyContactId,
+												adultCount: lineProductInfo.adultCount,
+												childCount: lineProductInfo.childCount
+					    					},
+					    					success: function(data){
+					    						var result = showDialog(data);
+					    						if (result) {
+													showMessageDialog($( "#confirm-dialog-message" ),"询价信息发送成功");
+													$container.find('[name=quoteId]').val(data.quoteId);
+													$container.find('[name=startTime]').attr('disabled','disabled');
+													$container.find('[name=adultCount]').attr('readonly','readonly');
+													$container.find('[name=childCount]').attr('readonly','readonly');
+													layer.close(busInquiryLayer);
+					    						}
+					    					}
+					    				})
+				    				}else{
+				    					showMessageDialog($( "#confirm-dialog-message" ),"至少选择一个车队");
+				    				}
+				    			}else{
+				    				showMessageDialog($( "#confirm-dialog-message" ),"车座数小于总人数，请选择更大车座数");
+				    			}
 			    			})
 							//关闭酒店询价
 							$busLayerContent.find(".T-closeLayer").on('click', function(){
@@ -2824,7 +2827,7 @@ define(function(require, exports) {
 			isChildNeedRoom = 1;
 		}
 		var quoteJson = {
-			id: id,
+			id: quote.getValue($container,'quoteId'),
 			adultAdjustType: quote.getValue($container,'selectAmAdult'),
 			adultAdjustValue: quote.getValue($container,'adultAdjustValue'),
 			adultCostPrice: $container.find('.T-adultCost').text(),
