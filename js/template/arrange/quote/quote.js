@@ -322,6 +322,11 @@ define(function(require, exports) {
 		$container.find('.hotelInquiryContent').on("click",function(){
 			quote.hotelStatusList(quoteId,$container,$a);
 		});
+
+		$container.find('.T-refresh-status').on('click', function(event) {
+			event.preventDefault();
+			$(this).nextAll('.nav-tabs').find('.active').children('a').trigger('click');
+		});
 	};
 
 	//询价状态-车
@@ -351,43 +356,6 @@ define(function(require, exports) {
 					var busInquiryResultHtml = busInquiryResultTemplate(data);
 					$container.find('#busInquiryResult-'+$a.a).html(busInquiryResultHtml);
 					//操作
-					$container.find('.T-bus-refresh').on("click",function(){
-						var $this = $(this),
-							$tr = $this.closest('tr'),
-							offerId = $this.closest('td').data("id");
-						$.ajax({
-							url: KingServices.build_url('busInquiry','refreshListInquiryBus'),
-							type: 'POST',
-							data: { offerId : offerId + ""},
-							success: function(data){
-								var result = showDialog(data);
-								if(result){
-									showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-										var rs = data.List[0],
-											status = rs.status;
-										$tr.find(".T-status").html(status);
-										$tr.find(".T-price").html(rs.replyPrice);
-
-										if(status != "等待确认"){
-											$this.next().remove();
-											$this.remove();
-											if(status == "已同意"){ 
-												var html = "<a class='T-bus-add'>加入</a><span> | </span>";
-												$tr.find('td:last-child').prepend(html);
-
-												//给“加入”绑定事件
-												$container.find('.T-bus-add').on("click",function(){
-													var offerId = $(this).closest('td').data("id");
-													quote.busAdd(offerId,$container);
-												});
-											}
-										}	 
-									});
-								}
-							}
-						});
-					});
-
 					$container.find('.T-bus-add').on("click",function(){
 						var offerId = $(this).closest('td').data("id");
 						quote.busAdd(offerId,$container);
@@ -448,54 +416,6 @@ define(function(require, exports) {
 					}
 					var hotelInquiryResultHtml = hotelInquiryResultTemplate(data);
 					$container.find('#hotelInquiryContent-'+$a.a).html(hotelInquiryResultHtml);
-
-					//操作
-					$container.find('.T-hotel-refresh').on("click",function(){
-						var $this = $(this),
-							$tr = $this.closest('tr'),
-							offerId = $this.closest('td').data("id");
-						$.ajax({
-							url: KingServices.build_url('hotelInquiry','refreshListInquiryHotel'),
-							type: 'POST',
-							data: { offerId : offerId + ""},
-							success: function(data){
-								var result = showDialog(data);
-								if(result){
-									showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-										var rs = data.List,
-											status = data.status;
-										$this.closest('td').prev().html(status);
-										$tr.find(".T-hotelPrice-" + offerId + "").each(function(i){
-											if (rs[i].isContractPrice == 1) {
-												$(this).html(rs[i].price);
-											}else{
-												if (status == '已同意') {
-													$(this).html(rs[i].replyPrice);
-												}else{
-													$(this).html('-');
-												}
-											}
-										});
-
-										if(status != "等待确认"){
-											$this.next().remove();
-											$this.remove();
-											if(status == "已同意"){
-												var html = "<a class='T-hotel-add'>加入</a><span> | </span>";
-												$tr.find('td:last-child').prepend(html);
-
-												//给“加入”绑定事件
-												$container.find('.T-hotel-add').on("click",function(){
-													var offerId = $(this).closest('td').data("id");
-													quote.hotelAdd(offerId,$container);
-												});
-											}
-										}
-									});
-								}
-							}
-						});
-					});
 
 					$container.find('.T-hotel-add').on("click",function(){
 						var offerId = $(this).closest('td').data("id");
@@ -674,6 +594,8 @@ define(function(require, exports) {
 			$('.tab-' + tab_id).children('a').trigger('click');
 			return;
 		}
+		$tab.find(".T-newData").data("id",id);
+
 		$.ajax({
 			url: KingServices.build_url('quote', 'viewQuote'),
 			type: 'POST',
@@ -691,28 +613,29 @@ define(function(require, exports) {
 						a: 'update'
 					}
 					var html = mainQuoteTemplate($a);
-					Tools.addTab(menukey+'-update',"修改报价",html)
-					var $container = $("#tab-arrange_quote-update-content");
+					if(Tools.addTab(menukey+'-update',"修改报价",html)){
+						var $container = $("#tab-arrange_quote-update-content");
 
-					var updateHtml = updateQuoteTemplate(data);
-					$container.find('#quoteContent-'+$a.a).html(updateHtml)
+						var updateHtml = updateQuoteTemplate(data);
+						$container.find('#quoteContent-'+$a.a).html(updateHtml)
 
-					$container.find('.inquiryContent').on("click",function(){
-						var quoteId = $container.find('[name=quoteId]').val();
-						if(!quoteId){
-							showMessageDialog($( "#confirm-dialog-message" ),"请先询价！");
-							return false;
-						} 
-						quote.quoteStatus(quoteId,$container,'update');
-					});	
+						$container.find('.inquiryContent').on("click",function(){
+							var quoteId = $container.find('[name=quoteId]').val();
+							if(!quoteId){
+								showMessageDialog($( "#confirm-dialog-message" ),"请先询价！");
+								return false;
+							} 
+							quote.quoteStatus(quoteId,$container,'update');
+						});	
 
-					quote.init_event($container);
-					if (!!target) {
-						$container.find('.inquiryContent').trigger('click');
-						if (target == "T-hotel") {
-							$container.find('.hotelInquiryContent').trigger('click');
-						}else if (target == "T-bus") {
-							$container.find('.busInquiryResult').trigger('click');
+						quote.init_event($container,id);
+						if (!!target) {
+							$container.find('.inquiryContent').trigger('click');
+							if (target == "T-hotel") {
+								$container.find('.hotelInquiryContent').trigger('click');
+							}else if (target == "T-bus") {
+								$container.find('.busInquiryResult').trigger('click');
+							}
 						}
 					}
 				}
@@ -721,8 +644,36 @@ define(function(require, exports) {
 	};
 
 	//报价详情页事件绑定
-	quote.init_event =function($container) {
+	quote.init_event =function($container,id) {
 		var validator = rule.quoteCheckor($container);
+
+		if(arguments.length == 2){
+			// $container.find(".T-editor").addListener("contentChange",function(){
+			// 	console.log("changedwaerfwa");
+			//     $container.data('isEdited', true);
+			// });
+			// 监听修改
+			$container.off('change').off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE)
+			.on('change','input, select,.T-editor', function(event) {
+				event.preventDefault();
+				$container.data('isEdited', true);
+			})
+			// 监听保存，并切换tab
+			.on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
+				event.preventDefault();
+				quote.saveQuote(id,$container,tab_id, title, html);
+			})
+			.on(SWITCH_TAB_BIND_EVENT, function(event) {
+				event.preventDefault();
+				quote.init_event($container,id);
+			})
+			// 保存后关闭
+			.on(CLOSE_TAB_SAVE, function(event) {
+				event.preventDefault();
+				quote.saveQuote(id,$container);
+			});
+		}	
+
 		//下拉
 		quote.autocomplete($container);
 		//时间控件
@@ -1875,7 +1826,7 @@ define(function(require, exports) {
 		'<td><select class="col-xs-12 resourceHotelStar"><option selected="selected" value="1">三星以下</option><option value="2">三星</option><option value="3">准四星</option><option value="4">四星</option><option value="5">准五星</option><option value="6">五星</option><option value="7">五星以上</option></select></td>'+
 		'<td><input type="text" class="col-xs-12 chooseHotelName bind-change" name="hotelNmae"/><input type="hidden" name="hotelId"/></td>'+
 		'<td><input type="text" class="col-xs-12 chooseHotelRoom bind-change" name="hotelRoom"/><input type="hidden" name="hotelRoomId"/></td>'+
-		'<td><input type="text" class="col-xs-12 T-changeQuote" readonly="readonly" name="contractPrice" style="width:70px;"/></td>'+
+		'<td><input type="text" class="col-xs-12 T-changeQuote" name="contractPrice" style="width:70px;"/></td>'+
 		'<td><input type="text" class="col-xs-12 T-changeQuote" name="count" style="width:70px;"/></td>'+
 		'<td><input type="text" class="col-xs-12" readonly="readonly" name="containBreakfast"/></td>'+
 		'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
@@ -2052,7 +2003,7 @@ define(function(require, exports) {
 		'<tbody><tr>'+
 		'<td><input type="text" class="col-xs-12 chooseScenicName bind-change"/><input type="hidden" name="scenicId"/></td>'+
 		'<td><input type="text" class="col-xs-12 chooseChargingProjects bind-change" name="chargingProjects"/><input type="hidden" name="chargingId"/></td>'+
-		'<td><input type="text" class="col-xs-12 T-changeQuote" readonly="readonly" name="price"/></td>'+
+		'<td><input type="text" class="col-xs-12 T-changeQuote" name="price"/></td>'+
 		'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
 		'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
 		'<td><a class="cursor btn-restaurant-delete T-delete deleteAllother"> 删除</a></td></tr></tbody></table></div></div></div></div>';
@@ -2207,8 +2158,8 @@ define(function(require, exports) {
 		'<td><input type="text" class="col-xs-12 chooseVendorName bind-change"/><input type="hidden" name="shopId"/></td>'+
 		'<td><input type="text" class="col-xs-12 chooseGoodsPolicy bind-change" name="goodsPolicy"/><input type="hidden" name="shopPolicyId"/></td>'+
 		'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
-		'<td><input type="text" class="col-xs-12" readonly="readonly" name="parkingRebateMoney"/></td>'+
-		'<td><input type="text" class="col-xs-12" readonly="readonly" name="customerRebateMoney"/></td>'+
+		'<td><input type="text" class="col-xs-12" name="parkingRebateMoney"/></td>'+
+		'<td><input type="text" class="col-xs-12" name="customerRebateMoney"/></td>'+
 		'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
 		'<td><a class="cursor btn-restaurant-delete T-delete deleteAllother"> 删除 </a></td></tr></tbody></table></div></div></div></div>';
 		$btn.closest(".T-dailyArrangeList").find(".T-timeline-detail-container").append(shoppingDetails);
@@ -2354,7 +2305,7 @@ define(function(require, exports) {
 		'<td><input type="text" class="col-xs-12 chooseCompanyName bind-change"/><input type="hidden" name="companyId"/></td>'+
 		'<td><input type="text" class="col-xs-12 chooseItemName bind-change" name="selfPayItemName"/><input type="hidden" name="selfPayItemId"/></td>'+
 		'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
-		'<td><input type="text" class="col-xs-12 T-changeQuote" readonly="readonly" name="contractPrice"/><input type="hidden" class="col-xs-12" readonly="readonly" name="marketPrice"/></td>'+
+		'<td><input type="text" class="col-xs-12 T-changeQuote" name="contractPrice"/><input type="hidden" class="col-xs-12" readonly="readonly" name="marketPrice"/></td>'+
 		'<td><input type="text" class="col-xs-12" readonly="readonly" name="managerName"/></td>'+
 		'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
 		'<td><a class="cursor btn-restaurant-delete T-delete deleteAllother"> 删除</a></td></tr></tbody></table></div></div></div></div>';
@@ -2801,7 +2752,7 @@ define(function(require, exports) {
 	 * @return {[type]}    [description]
 	 */
 	quote.saveQuote = function(id, $container) {
-		var isContainGuideFee = 0, isContainSelfPay = 0, isChildNeedRoom = 0;
+		var isContainGuideFee = 0, isContainSelfPay = 0, isChildNeedRoom = 0,argumentsLen = arguments.length;
 		if ($container.find('[name=includeGuideFee]').prop("checked")) {
 			isContainGuideFee = 1;
 		}
@@ -3039,16 +2990,22 @@ define(function(require, exports) {
 			success: function(data){
 				var result = showDialog(data);
 				if (result) {
-					var idString = $container.attr("id");
-					if (idString == "tab-arrange_quote-add-content") {
-						Tools.closeTab("arrange_quote-add");
-						quote.listQuote(0);
-					}
-					else if (idString == "tab-arrange_quote-update-content") {
-						Tools.closeTab("arrange_quote-update");
-						quote.listQuote(quote.searchData.pageNo);
-					}
-					showMessageDialog($( "#confirm-dialog-message" ), "报价添加成功，请在报价管理中查看！");
+					showMessageDialog($( "#confirm-dialog-message" ), "报价添加成功，请在报价管理中查看！",function(){
+						if(argumentsLen === 2){
+                            var idString = $container.attr("id");
+							if (idString == "tab-arrange_quote-add-content") {
+								Tools.closeTab("arrange_quote-add");
+								quote.listQuote(0);
+							}
+							else if (idString == "tab-arrange_quote-update-content") {
+								Tools.closeTab("arrange_quote-update");
+								quote.listQuote(quote.searchData.pageNo);
+							}
+						}else {
+							$container.data('isEdited',false);
+                            quote.updateQuote($container.find(".T-newData").data("id"),"T-bus");
+                        }
+					});
 				}
 			}
 		})

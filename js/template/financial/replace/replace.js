@@ -542,7 +542,7 @@ define(function(require, exports) {
                 list =Replace.AutocompleteList;
                 if(list && list.length > 0){
                     for(var i=0; i < list.length; i++){
-                        list[i].value = list[i].travelAgencyName;
+                        list[i].value = list[i].partnerAgencyName;
                     }
                 }
         $obj.autocomplete({

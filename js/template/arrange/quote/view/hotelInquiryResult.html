@@ -83,9 +83,7 @@
 							<td rowspan="{{offer.roomTypeList.length}}">{{offer.expiryTime}}</td>
 							<td rowspan="{{offer.roomTypeList.length}}">{{offer.status}}</td>
 							<td rowspan="{{offer.roomTypeList.length}}" data-id="{{offer.id}}">
-								{{if offer.status == "等待确认"}}
-									<a class="T-hotel-refresh">刷新</a><span> | </span> 
-								{{else if offer.status == "已同意"}}
+								{{if offer.status == "已同意"}}
 									<a class="T-hotel-add">加入</a><span> | </span>
 								{{/if}}
 								<a class="T-hotel-delete">删除</a>
@@ -177,9 +175,7 @@
 							<td rowspan="{{offer.roomTypeList.length}}">{{offer.expiryTime}}</td>
 							<td rowspan="{{offer.roomTypeList.length}}">{{offer.status}}</td>
 							<td rowspan="{{offer.roomTypeList.length}}" data-id="{{offer.id}}">
-								{{if offer.status == "等待确认"}}
-									<a class="T-hotel-refresh">刷新</a><span> | </span>
-								{{else if offer.status == "已同意"}}
+								{{if offer.status == "已同意"}}
 									<a class="T-hotel-add">加入</a><span> | </span>
 								{{/if}}
 								<a class="T-hotel-delete">删除</a>
