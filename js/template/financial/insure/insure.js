@@ -19,11 +19,6 @@ define(function(require, exports) {
 	        Insure.listInsure(0,"",2015,"");
 	        
 	   	};
-	   	Insure.check = function() {
-	        Insure.listInsure(0,"",2015,"");
-	        
-	   	};
-
 	  	Insure.listInsure = function(pageNo,insuranceId,year,month){
 	  		
 	  		// data传数据
@@ -51,7 +46,9 @@ define(function(require, exports) {
 	  	}
 	  	 Insure.initList = function(){
         // 初始化jQuery 对象
+        
         Insure.$tab = $('#' + tabId);
+        
         // 报表内的操作
         Insure.$tab.find('.T-list').on('click', '.T-option', function(event) {
             event.preventDefault();
@@ -81,11 +78,37 @@ define(function(require, exports) {
 				type:"POST",
 				data:Insure.checkSearchData,
 				success : function(data){
+					console.log(data);
 					var result = showDialog(data);
 					if(result){
 						var html = insuranceChecking(data);
 		  				Tools.addTab("-checking","客户对账",html);
-					}
+		  				 Insure.initList();
+
+		  				 //给全选按钮绑定事件
+				        $(".T-Checking").find(".T-checkAll").click(function(){
+				        	alert(index())
+				            var checkboxList = $checktab.find(".T-checkList tr input[type=checkbox]");
+				            if($(this).is(":checked")){
+				                checkboxList.each(function(i){
+				                    $(this).prop("checked",true);
+				                });
+				            } else{
+
+				                checkboxList.each(function(i){
+				                	if(!$(this).prop("disabled")){
+				                		$(this).prop("checked",false);
+				                	}                                
+				                });
+				            } 
+				        });
+		  				
+						//关闭页面事件
+				        	$(".T-Checking").find(".T-closeTab").click(function(){
+					            closeTab(checkTabId);
+					            alert(checkTabId);
+					        });
+						}
 				}
 		  		
 		  		
@@ -108,10 +131,12 @@ define(function(require, exports) {
 				type:"POST",
 				data:Insure.ClearSearchData,
 				success : function(data){
+					console.log(data);
 					var result = showDialog(data);
 					if(result){
 						var html = insuranceChecking(data);
 		  				Tools.addTab("-Clearing","客户结算",html);
+		  				Insure.initList();
 					}
 				}
 		  		
