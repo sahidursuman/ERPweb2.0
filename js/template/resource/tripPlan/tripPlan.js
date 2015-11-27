@@ -122,8 +122,9 @@ define(function(require, exports) {
 				event.preventDefault();
 				/* Act on the event */
 				var $that=$(this),
-				    qouteId=$that.attr("data-entiy-qouteId");
-					tripPlan.singleClickSendOrder(qouteId);
+				    qouteId=$that.attr("data-entiy-qouteId"),
+				    tripPlanId=$that.attr("data-tripPlanId");
+					tripPlan.singleClickSendOrder(qouteId,tripPlanId);
 					
 				     
 			});
@@ -349,9 +350,10 @@ define(function(require, exports) {
 				event.preventDefault();
 				/* Act on the event */
 				var $obj=$('#tab-arrange_all-update-content'),
-				    quoteId=$obj.find('input[name=qouteId]').val();
+				    quoteId=$obj.find('input[name=qouteId]').val(),
+				     tripPlanId=$obj.find('input[name=tripPlanId]').val();
 				    /* Act on the event */
-					tripPlan.singleClickSendOrder(quoteId);
+					tripPlan.singleClickSendOrder(quoteId,tripPlanId);
 				        
 			});
 
@@ -381,6 +383,9 @@ define(function(require, exports) {
 				/* Act on the event */
 				var $that=$(this),id=$that.attr('data-qouteId');
 					KingServices.updateQuoteToOffer(id);
+					 tripPlanId=$that.attr("data-tripPlanId");
+					tripPlan.addTripPlan(tripPlanId);
+
 				
 			});
 
@@ -540,12 +545,12 @@ define(function(require, exports) {
 		 * @param  {[type]} qouteId 报价Id
 		 * @return {[type]}         [description]
 		 */
-		singleClickSendOrder:function(quoteId){
+		singleClickSendOrder:function(quoteId,tripPlanId){
 			$.ajax({
 				url:KingServices.build_url("productQuote","saveOrder"),
 				type: 'POST',
 				dataType: 'JSON',
-				data: "quoteId="+quoteId,
+				data: "quoteId="+quoteId+"&tripPlanId="+tripPlanId,
 				success:function(data){
 					var result = showDialog(data);
 						if(result){
