@@ -125,7 +125,7 @@ define(function(require, exports) {
 			language: 'zh-CN'
 		});
 		//新增报价
-		quote.$searchArea.find('.T-quote-add').on('click',function(){
+		quote.$searchArea.find('.T-quote-add').off('click').on('click',function(){
 			// quote.addQuote(false);
 			quote.chooseLineProduct();
 		});
