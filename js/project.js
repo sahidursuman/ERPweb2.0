@@ -1578,12 +1578,23 @@ KingServices.addTicket = function(fn){
 		module.addTicket(fn);
 	});
 }
+
 //报价  新增
 KingServices.addQuote = function(id){
 	seajs.use("" + ASSETS_ROOT + modalScripts.arrange_quote,function(module){
 		module.addQuote(id);
 	});
 }
+
+
+//报价  修改
+KingServices.updateQuoteToOffer = function(id){
+	seajs.use("" + ASSETS_ROOT + modalScripts.arrange_quote,function(module){
+		module.updateQuoteToOffer(id);
+	});
+}
+
+
 //同行  新增
 KingServices.addPartnerAgency = function(fn){
 	seajs.use("" + ASSETS_ROOT + modalScripts.resource_partnerAgency,function(module){
