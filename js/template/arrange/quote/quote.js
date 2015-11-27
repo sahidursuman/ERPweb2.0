@@ -759,6 +759,9 @@ define(function(require, exports) {
 			} else if ($that.hasClass('T-addTraffic')) {
 				// 添加交通
 				quote.addResourceTraffic($that, validator, $container);
+			} else if ($that.hasClass('T-addOther')) {
+				// 添加交通 
+				quote.addOther($that, validator, $container);
 			}
 		})
 		.on('click', '.T-delete', function(){
@@ -995,7 +998,9 @@ define(function(require, exports) {
 				    						busCompany: busCompany,
 				    						expiryTime: expiryTime,
 											partnerAgencyId: lineProductInfo.partnerAgencyId,
-											partnerAgencyContactId: lineProductInfo.partnerAgencyContactId
+											partnerAgencyContactId: lineProductInfo.partnerAgencyContactId,
+											adultCount: lineProductInfo.adultCount,
+											childCount: lineProductInfo.childCount
 				    					},
 				    					success: function(data){
 				    						var result = showDialog(data);
@@ -1189,7 +1194,9 @@ define(function(require, exports) {
 									quoteId: quoteId,
 									startTime: startTime,
 									partnerAgencyId: lineProductInfo.partnerAgencyId,
-									partnerAgencyContactId: lineProductInfo.partnerAgencyContactId
+									partnerAgencyContactId: lineProductInfo.partnerAgencyContactId,
+									adultCount: lineProductInfo.adultCount,
+									childCount: lineProductInfo.childCount
 								}
 								var seachAreaDiv = $hotelLayerContent.find('.T-seachAreaDiv');
 								seachAreaDiv.each(function(){
@@ -2593,6 +2600,22 @@ define(function(require, exports) {
 			});
 		});
 	};
+	//添加其他安排
+	quote.addOther = function($btn, validator, $container) {
+		var otherDetails = '<div class="T-timeline-item timeline-item clearfix updateOtherList updateLineProductDaysDetail T-resourceOtherList ui-sortable-handle" data-entity-index='+quote.updateLineProductIndex+'><div class="timeline-info" style="color:#1fade0" ><i class="ace-icon fa fa-circle" ></i><span >其他</span></div>'+
+		'<div class="widget-box transparent" style="margin-top: 20px"><div class="widget-body"><div class=""><table class="table table-striped table-bordered table-hover">'+
+		'<thead><tr><th class="th-border">项目名称</th><th class="th-border">联系人</th><th class="th-border">联系电话</th><th class="th-border">单价</th><th class="th-border">数量</th><th class="th-border">备注</th><th class="th-border" style="width: 60px;">操作</th></tr></thead>'+
+		'<tbody><tr>'+
+		'<td><input type="text" class="col-xs-12 otherName bind-change" name="name"/><input type="hidden" name="otherId"/></td>'+
+		'<td><input type="text" class="col-xs-12" name="managerName"/></td>'+
+        '<td><input type="text" class="col-xs-12" name="mobileNumber" value=""></td>'+
+		'<td><input type="text" class="col-xs-12" name="price"/></td>'+
+		'<td><input type="text" class="col-xs-12" name="count"/></td>'+
+		'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
+		'<td><a class="cursor btn-restaurant-delete T-delete deleteAllother">删除</a></td></tr></tbody></table></div></div></div></div>';
+		$btn.closest(".T-dailyArrangeList").find(".T-timeline-detail-container").append(otherDetails);
+		quote.updateLineProductIndex += 1;
+	};
 	//删除日程安排
 	quote.deleteLineProductDaysArrange = function($obj, $container){
 		var dialogObj = $( "#confirm-dialog-message" );
@@ -2888,7 +2911,8 @@ define(function(require, exports) {
 				scenic : [],
 				shop : [],
 				selfPay : [],
-				ticket : []
+				ticket : [],
+				otherArrangeList: []
 			}
 			//获取餐饮
 			$list= $that.find(".T-RestaurantList");
@@ -3026,6 +3050,26 @@ define(function(require, exports) {
 							seatLevel: $item.find("[name=seatLevel]").val()
 						}
 						saveJson.lineDayList[index].ticket.push(ticketJson);
+					}
+				}
+			}
+			//获取其他
+			$list = $that.find(".T-resourceOtherList");
+			if($list.length > 0){
+				for(var j=0; j<$list.length;j++){
+					$item = $list.eq(j);
+					var otherName = $item.find("[name=name]").val();
+					if(otherName){
+						otherJson = {
+							arrangeId: $item.find("[name=arrangeId]").val(),
+							name : $item.find("[name=name]").val(),
+							managerName : $item.find("[name=managerName]").val(),
+							mobileNumber : $item.find("[name=mobileNumber]").val(),
+							memberCount: $item.find("[name=count]").val(),
+							price: $item.find("[name=price]").val(),
+							remark: $item.find("[name=remark]").val()
+						}
+						saveJson.lineDayList[index].otherArrangeList.push(otherJson);
 					}
 				}
 			}
