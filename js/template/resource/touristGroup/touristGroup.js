@@ -1036,9 +1036,15 @@ define(function(require,exports){
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
-					var $listObj = touristGroup.$tab.find(".T-touristGroupSearchForm");
-					var html = listMainTemplate(data);
-					$listObj.html(html);
+					var $listObj = touristGroup.$tab.find(".T-touristGroupSearchForm"),
+    					$countBody = $listObj.find('.T-countData'),
+    					$statistics = data.statistics;
+    				$countBody.find(".allPerson").text($statistics.adultCount+"大"+$statistics.childCount+"小");
+    				$countBody.find(".needIncome").text($statistics.needPay | toFixed+"小");
+    				$countBody.find(".payedMoney").text($statistics.payedMoney | toFixed+"小");
+    				$countBody.find(".currentNeedPay").text($statistics.currentNeedPay | toFixed+"小");
+    				$countBody.find(".unIncome").text($statistics.unIncomeMoney | toFixed+"小");
+					
 				}	
 			}
 		});
