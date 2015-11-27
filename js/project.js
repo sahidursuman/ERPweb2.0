@@ -209,25 +209,28 @@ function showMessageDialog(dialogObj,message,fn,isNotClose){
 				text: "确定",
 				"class" : "btn btn-primary btn-minier btn-heightMall T-ok",
 				click: function() {
-					$( this ).dialog( "close" );
-					if(fn){
-						fn();
-					}
+					ok_callback();
 				}
 			}
 		],
 		open:function(event,ui){
 			$( this ).find("p").html(message);
 		}
-	});
+	}), timer, running = false;
 
 	if (!isNotClose) {
-		setTimeout(function(){
-			showDiolog.dialog('close');
-			if (fn) {
-				fn();	
-			}	
-		},1500)
+		timer = setTimeout(ok_callback, 1500)
+	}
+
+	function ok_callback() {
+		if (running) {
+			return;
+		}
+		running = true;
+		showDiolog.dialog('close');
+		if (fn) {
+			fn();	
+		}
 	}
 }
 function showConfirmMsg(dialogObj,message,confirmFn ,cancelFn,btnStr1,btnStr2){
@@ -352,6 +355,37 @@ function showConfirmDialog(dialogObj,message, fn){
 			},
 			{
 				text: "确定",
+				"class" : "btn btn-primary btn-minier btn-heightMall",
+				click: function() {
+					$( this ).dialog( "close" );
+					if(fn){
+						fn();
+					}
+				}
+			}
+		],
+		open:function(event,ui){
+			$(this).find("p").text(message);
+		}
+	});
+}
+// 撤销 undo 
+function showNndoConfirmDialog(dialogObj,message, fn){
+	dialogObj.removeClass('hide').dialog({
+		modal: true,
+		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
+		title_html: true,
+		draggable:false,
+		buttons: [
+			{
+				text: "否",
+				"class" : "btn btn-minier btn-heightMall",
+				click: function() {
+					$( this ).dialog( "close" );
+				}
+			},
+			{
+				text: "是",
 				"class" : "btn btn-primary btn-minier btn-heightMall",
 				click: function() {
 					$( this ).dialog( "close" );
@@ -1198,23 +1232,27 @@ var _statusText = {
 	 * @param  {[object]} options [自定义选项]
 	 * @return {[type]}         [description]
 	 */
-	var _laypage = laypage;
-	laypage = function(options)  {
-		var last = options.last || false;
-		if (!last) {
-			last = options.pages || false;
-		}
-		// 合并配置
-		options = $.extend({},
-			{
-			    skip: true, //是否开启跳页
-			    skin: '#51b0c2',
-			    last: last,
-			    groups: 3 //连续显示分页数
-			}, options);
+	if (typeof laypage !== 'undefined') {
+		var _laypage = laypage;
+		laypage = function(options)  {
+			var last = options.last || false;
+			if (!last) {
+				last = options.pages || false;
+			}
+			// 合并配置
+			options = $.extend({},
+				{
+				    skip: true, //是否开启跳页
+				    skin: '#51b0c2',
+				    last: last,
+				    groups: 3 //连续显示分页数
+				}, options);
 
-		_laypage(options);
-	};
+			_laypage(options);
+		};
+	} else {
+		console.info('laypage was not loaded!');
+	}
 
 	$('body').append('<div id="desc-tooltip-containter"></div>');
 	$('#desc-tooltip-containter').hover(function() {
@@ -1508,7 +1546,6 @@ KingServices.build_url = function(path,method){
 KingServices.updateTransit = function(id)  {
 	seajs.use("" + ASSETS_ROOT +"js/template/arrange/transit/transit.js",function(module){
 		module.updateTransit(id);
-		modals["arrange_transit"] = transit;
 	});
 }
 
@@ -1574,12 +1611,23 @@ KingServices.addTicket = function(fn){
 		module.addTicket(fn);
 	});
 }
+
 //报价  新增
 KingServices.addQuote = function(id){
 	seajs.use("" + ASSETS_ROOT + modalScripts.arrange_quote,function(module){
 		module.addQuote(id);
 	});
 }
+
+
+//报价  修改
+KingServices.updateQuoteToOffer = function(id){
+	seajs.use("" + ASSETS_ROOT + modalScripts.arrange_quote,function(module){
+		module.updateQuoteToOffer(id);
+	});
+}
+
+
 //同行  新增
 KingServices.addPartnerAgency = function(fn){
 	seajs.use("" + ASSETS_ROOT + modalScripts.resource_partnerAgency,function(module){

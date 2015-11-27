@@ -548,26 +548,12 @@ define(function(require, exports) {
 			}
 		});
 	}
-	innerTransfer.deleteTransferOut = function(id){
-		var dialogObj = $( "#confirm-dialog-message" );
-		dialogObj.removeClass('hide').dialog({
-			modal: true,
-			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-			title_html: true,
-			draggable:false,
-			buttons: [ 
-				{
-					text: "否",
-					"class" : "btn btn-minier",
-					click: function() {
-						$( this ).dialog( "close" );
-					}
-				},
-				{
-					text: "是",
-					"class" : "btn btn-primary btn-minier",
-					click: function() {
-							$.ajax({
+
+
+		innerTransfer.deleteTransferOut = function(id){
+			if(!!id){
+				showNndoConfirmDialog($("#confirm-dialog-message"),"是否撤销内转操作？",function(){
+					$.ajax({
 								url:KingServices.build_url("innerTransfer","delete"),
 								type:"POST",
 								data:"id="+id + "&isDelete=1",
@@ -576,20 +562,16 @@ define(function(require, exports) {
 									if (result) {
 										var divId = "inner-TransferOut",
 											type = "1";
-										innerTransfer.getSearchParam(divId,type);
-										innerTransfer.innerList(divId,type,0);
+											innerTransfer.getSearchParam(divId,type);
+											innerTransfer.innerList(divId,type,0);
 									}
 								 }
 							});
-						$( this ).dialog( "close" );
-					}
-				}
-			],
-			open:function(event,ui){
-				$(this).find("p").text("是否撤销内转操作？");
+					
+				});
 			}
-		});
-	};
+		}
+
 	innerTransfer.saveTransferIn = function(id){
 		var dialogObj = $( "#confirm-dialog-message" );
 		dialogObj.removeClass('hide').dialog({

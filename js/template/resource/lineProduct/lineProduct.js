@@ -964,7 +964,7 @@ define(function(require, exports) {
 		'<td><select class="col-xs-12 resourceHotelStar"><option selected="selected" value="1">三星以下</option><option value="2">三星</option><option value="3">准四星</option><option value="4">四星</option><option value="5">准五星</option><option value="6">五星</option><option value="7">五星以上</option></select></td>'+
 		'<td><input type="text" class="col-xs-12 chooseHotelName bind-change" name="hotelNmae"/><input type="hidden" name="hotelId"/></td>'+
 		'<td><input type="text" class="col-xs-12 chooseHotelRoom bind-change" name="hotelRoom"/><input type="hidden" name="hotelRoomId"/></td>'+
-		'<td><input type="text" class="col-xs-12" readonly="readonly" name="contractPrice" /></td>'+
+		'<td><input type="text" class="col-xs-12" name="contractPrice" /></td>'+
 		'<td><input type="text" class="col-xs-12" readonly="readonly" name="containBreakfast"/></td>'+
 		'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
 		'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
@@ -1135,7 +1135,7 @@ define(function(require, exports) {
 		'<tbody><tr>'+
 		'<td><input type="text" class="col-xs-12 chooseScenicName bind-change"/><input type="hidden" name="scenicId"/></td>'+
 		'<td><input type="text" class="col-xs-12 chooseChargingProjects bind-change" name="chargingProjects"/><input type="hidden" name="chargingId"/></td>'+
-		'<td><input type="text" class="col-xs-12" readonly="readonly" name="price"/></td>'+
+		'<td><input type="text" class="col-xs-12" name="price"/></td>'+
 		'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
 		'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
 		'<td><a class="cursor btn-restaurant-delete T-delete deleteAllother"> 删除</a></td></tr></tbody></table></div></div></div></div>';
@@ -1287,8 +1287,8 @@ define(function(require, exports) {
 		'<td><input type="text" class="col-xs-12 chooseVendorName bind-change"/><input type="hidden" name="shopId"/></td>'+
 		'<td><input type="text" class="col-xs-12 chooseGoodsPolicy bind-change" name="goodsPolicy"/><input type="hidden" name="shopPolicyId"/></td>'+
 		'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
-		'<td><input type="text" class="col-xs-12" readonly="readonly" name="parkingRebateMoney"/></td>'+
-		'<td><input type="text" class="col-xs-12" readonly="readonly" name="customerRebateMoney"/></td>'+
+		'<td><input type="text" class="col-xs-12" name="parkingRebateMoney"/></td>'+
+		'<td><input type="text" class="col-xs-12" name="customerRebateMoney"/></td>'+
 		'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
 		'<td><a class="cursor btn-restaurant-delete T-delete deleteAllother"> 删除 </a></td></tr></tbody></table></div></div></div></div>';
 		$btn.closest(".T-dailyArrangeList").find(".T-timeline-detail-container").append(shoppingDetails);
@@ -1434,7 +1434,7 @@ define(function(require, exports) {
 		'<td><input type="text" class="col-xs-12 chooseCompanyName bind-change"/><input type="hidden" name="companyId"/></td>'+
 		'<td><input type="text" class="col-xs-12 chooseItemName bind-change" name="selfPayItemName"/><input type="hidden" name="selfPayItemId"/></td>'+
 		'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
-		'<td><input type="text" class="col-xs-12" readonly="readonly" name="contractPrice"/><input type="hidden" class="col-xs-12" readonly="readonly" name="marketPrice"/></td>'+
+		'<td><input type="text" class="col-xs-12" name="contractPrice"/><input type="hidden" class="col-xs-12" readonly="readonly" name="marketPrice"/></td>'+
 		'<td><input type="text" class="col-xs-12" readonly="readonly" name="managerName"/></td>'+
 		'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
 		'<td><a class="cursor btn-restaurant-delete T-delete deleteAllother"> 删除</a></td></tr></tbody></table></div></div></div></div>';
