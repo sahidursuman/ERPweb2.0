@@ -500,7 +500,7 @@
                                                                                                             <input type="hidden" name="hotelRoomId" value="{{hotelList.hotelRoom.id}}" />
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input type="text" readonly="readonly" class="T-changeQuote" name="contractPrice" value="{{hotelList.price}}" style="width:70px;" />
+                                                                                                            <input type="text" class="T-changeQuote" name="contractPrice" value="{{hotelList.price}}" style="width:70px;" />
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <input type="text" name="count" class="T-changeQuote" value="{{hotelList.needRoomCount}}" style="width:70px;" />
@@ -561,7 +561,7 @@
                                                                                                             <input type="hidden" name="chargingId" value="{{scenicList.scenicItem.id}}" />
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input type="text" class="col-xs-12 T-changeQuote" readonly="readonly" name="price" value="{{scenicList.price}}" />
+                                                                                                            <input type="text" class="col-xs-12 T-changeQuote" name="price" value="{{scenicList.price}}" />
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber" value="{{scenicList.scenic.mobileNumber}}" />
@@ -619,10 +619,10 @@
                                                                                                             <input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber" value="{{shopList.shop.mobileNumber}}" />
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input type="text" class="col-xs-12" readonly="readonly" name="parkingRebateMoney" value="{{shopList.shop.parkingRebateMoney || 0}}" />
+                                                                                                            <input type="text" class="col-xs-12" name="parkingRebateMoney" value="{{shopList.shop.parkingRebateMoney || 0}}" />
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input type="text" class="col-xs-12" readonly="readonly" name="customerRebateMoney" value="{{shopList.shop.customerRebateMoney || 0}}" />
+                                                                                                            <input type="text" class="col-xs-12" name="customerRebateMoney" value="{{shopList.shop.customerRebateMoney || 0}}" />
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <input type="text" class="col-xs-12" name="remark" value="{{shopList.remark}}" />
@@ -678,7 +678,7 @@
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <input type="text" class="col-xs-12 T-changeQuote" readonly="readonly" name="contractPrice" value="{{selfPayList.price}}" />
-                                                                                                            <input type="hidden" class="col-xs-12" readonly="readonly" name="marketPrice" value="{{selfPayList.marketPrice}}" />
+                                                                                                            <input type="hidden" class="col-xs-12" name="marketPrice" value="{{selfPayList.marketPrice}}" />
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <input type="text" class="col-xs-12" readonly="readonly" name="managerName" value="{{selfPayList.selfPay.managerName}}" />
