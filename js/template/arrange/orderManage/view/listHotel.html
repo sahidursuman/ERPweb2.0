@@ -14,8 +14,6 @@
 					<th class="col-sm-1">操作人</th>
 					<th class="col-sm-1">酒店</th>
 					<th class="col-sm-1">备注</th>
-					<th class="col-sm-1">状态</th>
-					<th class="col-sm-1">操作</th>
 				</tr>
 			</thead>
 			<tbody class="T-Hotel-list">
@@ -54,24 +52,6 @@
 
 					<td rowspan="{{hotOrderList.hotelOrderNeedRoomList.length}}" style="vertical-align:middle">{{if hotOrderList.hotel!=null}}{{hotOrderList.hotel.name}}{{/if}}</td>
 					<td rowspan="{{hotOrderList.hotelOrderNeedRoomList.length}}" style="vertical-align:middle" class="T-ctrl-tip">{{if hotOrderList.hotel!=null}}{{hotOrderList.hotel.remark}}{{/if}}</td>
-					<td rowspan="{{hotOrderList.hotelOrderNeedRoomList.length}}" style="vertical-align:middle">
-					     {{if hotOrderList.statusStr==0}}
-					        已下单
-					        {{else if hotOrderList.statusStr==-1}}
-					        已撤单
-					        {{else if hotOrderList.statusStr==1 }}
-							已确认
-					        {{else if hotOrderList.statusStr==2 }}
-                            以完成
-					        {{else if hotOrderList.statusStr==3 }}
-							进行中
-						{{/if}}
-					</td>
-					<td rowspan="{{hotOrderList.hotelOrderNeedRoomList.length}}" style="vertical-align:middle">
-						<a class="cursor {{if hotOrderList.statusStr==0 || hotOrderList.statusStr==1 }}T-listHotel-refuse{{/if}} R-right T-action" data-right="1450002" style="{{if hotOrderList.statusStr==-1 ||  hotOrderList.statusStr==2 || hotOrderList.statusStr==3}}color:#bbb;{{/if}}">
-							撤销
-						</a>
-					</td>
 				</tr>	
 
 				{{each hotOrderList.hotelOrderNeedRoomList as htOrderNList index}}
@@ -87,16 +67,18 @@
 			{{/each}}
 			</tbody>
 	</table>
-  <!--分页条数-->
+
+   	<!--分页条数-->
 	<div class="row pageMode">
-		<div class="col-xs-4">
-			<small>共计{{searchParam.totalCount}}条记录</small>
-		</div>
-		<div style="width:320px; float:right;">
-			<div class="dataTables_paginate paging_simple_numbers T-pagenation">
-			</div>  
-		</div>
+			<div class="col-xs-6">
+				<small>共计 {{searchParam.totalCount}} 条记录</small>
+			</div>
+			<div class="col-xs-6">
+				<div class="dataTables_paginate paging_simple_numbers T-pagenation">
+				</div>
+			</div>
 	</div>
-   <!--分页条数-->	
+	<!--分页条数-->	
+
 
 </div>
