@@ -55,12 +55,11 @@
             <th class="th-border">备注</th>
             <th class="th-border">对账进度</th>
             <th class="th-border">操作</th>
-
         </tr>
         </thead>
         <tbody>
         {{each fcInsuranceSettlementList as SettlementList index}}
-        <tr>
+        <tr >
             <td >{{SettlementList.year}}{{"年"}}{{SettlementList.month}}{{"月"}}</td>
             <td >{{SettlementList.needPayMoney}}</td>
             <td  name="blancerealNeedPayMoney">{{SettlementList.realNeedPayMoney}}</td>

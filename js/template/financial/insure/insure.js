@@ -11,10 +11,18 @@ define(function(require, exports) {
 	    blanceTabId = menuKey+"-blance",
 	    yearList=[],
 	    monthList = [];
+	    for(var i=2013;i<=new Date().getFullYear();i++){
+	    	var yeardata={"value":i}
+	    	yearList.push(yeardata)
+	    };
+	    for(var j = 1;j<=12;j++){
+	    	var monthData = {"value":j}
+	    	monthList.push(monthData);
+	    }
 
 		var  Insure = {
-
-		};
+			$searchArea : false
+		}
 		Insure.initModule = function() {
 	        Insure.listInsure(0,"",2015,"");
 	        
@@ -28,7 +36,7 @@ define(function(require, exports) {
 	  			year:year,
 	  			month:month,
 	  			sortType: 'auto'
-	  		};
+	  	};
 	  	$.ajax({
 	       url:KingServices.build_url("financial/financialInsurance","listSumFcInsurance"),
 			type:"POST",
@@ -36,45 +44,53 @@ define(function(require, exports) {
 	        success: function(data){
 	            var result = showDialog(data);
 	            if (result) {
+	            	data.insuranceCompanyNameListNew = JSON.parse(data.insuranceCompanyNameListNew);
+	            	data.yearList = yearList
+	            	data.monthList = monthList
 	                var html = listTemplate(data);
 	                Tools.addTab(menuKey,"保险账务",html);
 	                Insure.initList();
+
 	            }
 	        	}
 	    	});
 
 	  	}
-	  	 Insure.initList = function(){
+	  	Insure.initList = function(){
         // 初始化jQuery 对象
         
         Insure.$tab = $('#' + tabId);
+        Insure.$searchArea=Insure.$tab.find('.T-search-area');
         
         // 报表内的操作
         Insure.$tab.find('.T-list').on('click', '.T-option', function(event) {
             event.preventDefault();
-            var $that = $(this),id = $that.closest('tr').data('id');
+            var $that = $(this),
+            	id = $that.closest('tr').attr('data-value'),
+                yearList = Insure.$searchArea.find("select[name=year]").val(),
+                monthList = Insure.$searchArea.find("select[name=month]").val(),
+                insuranceName = Insure.$searchArea.find('select[name=insuranceId]').val();
+                console.log(yearList);
 
             if ($that.hasClass('T-check')) {
                 // 对账
-                Insure.GetChecking(0,id,"","","");
+                Insure.GetChecking(0,id,insuranceName,yearList,monthList);
             } else if ($that.hasClass('T-clear')) {
                 // 结算
-                Insure.getClearing(id,"","","","","");
+                Insure.getClearing(0,id,2015,1,12);
             }
         });
     };
 	  	// 保险对账
-	  	Insure.GetChecking = function(page,insuranceId,insuranceCompanyName,year,month){
+		Insure.GetChecking = function(page,insuranceId,insuranceName,year,month){
 	  		Insure.checkSearchData = {
 	  			pageNo : page,
-	  			id : insuranceId,
-	  			year : year,
-	  			month : month,
-	  			insuranceCompanyName:"",
-	  			sortType : 'auto'
-	  		}
+                insuranceId :insuranceId,
+                year : year,
+                month : month,
+	  		};
 			$.ajax({
-		       url:KingServices.build_url("financial/financialInsurance","accountChecking"),
+		       url:KingServices.build_url("financial/financialInsurance","listFcInsurance"),
 				type:"POST",
 				data:Insure.checkSearchData,
 				success : function(data){
@@ -82,70 +98,61 @@ define(function(require, exports) {
 					var result = showDialog(data);
 					if(result){
 						var html = insuranceChecking(data);
-		  				Tools.addTab("-checking","客户对账",html);
+		  				Tools.addTab(checkTabId,"保险对账",html);
 		  				 Insure.initList();
 
-		  				 //给全选按钮绑定事件
-				        $(".T-Checking").find(".T-checkAll").click(function(){
-				        	alert(index())
-				            var checkboxList = $checktab.find(".T-checkList tr input[type=checkbox]");
-				            if($(this).is(":checked")){
-				                checkboxList.each(function(i){
-				                    $(this).prop("checked",true);
-				                });
-				            } else{
 
-				                checkboxList.each(function(i){
-				                	if(!$(this).prop("disabled")){
-				                		$(this).prop("checked",false);
-				                	}                                
-				                });
-				            } 
-				        });
-		  				
 						//关闭页面事件
-				        	$(".T-Checking").find(".T-closeTab").click(function(){
-					            closeTab(checkTabId);
-					            alert(checkTabId);
-					        });
+			        	$(".T-Checking").find(".T-closeTab").click(function(){
+				            Tools.closeTab(checkTabId);
+				        });
+					    //给全选按钮绑定事件
+							$(".T-Checking").find(".T-selectAll").click(function(event) {
+								alert();
+								var checkboxList = $(".T-Checking").find(".T-checkListNum tr input[type=checkbox]");
+					            if($(this).is(":checked")){
+					                checkboxList.each(function(i){
+					                    $(this).prop("checked",true);
+					                });
+					            } else{
+					                checkboxList.each(function(i){
+					                	if(!$(this).prop("disabled")){
+					                		$(this).prop("checked",false);
+					                	}                                
+					                });
+					            } 
+							});
+		  				
 						}
 				}
-		  		
-		  		
-		  	});
+		});
 
-	  	}
+		}
 	  	// 结算
-	  	Insure.getClearing = function(page,insuranceId,insuranceCompanyName,year,startMonth,endMonth){
+	  	Insure.getClearing = function(page,insuranceId,year,startMonth,endMonth){
 	  		Insure.ClearSearchData = {
-	  			page : page,
+	  			pageNo:page,
 	  			insuranceId : insuranceId,
-	  			insuranceCompanyName : insuranceCompanyName,
 	  			year : year,
-	  			startMonth:"",
-	  			endMonth : "",
+	  			monthStart:startMonth,
+	  			monthEnd : endMonth ,
 	  			sortType : 'auto'
 	  		}
 	  		$.ajax({
-		       url:KingServices.build_url("financial/financialInsurance","saveFcInsuranceSettlement"),
+		       url:KingServices.build_url("financial/financialInsurance","listFcInsuranceSettlement"),
 				type:"POST",
 				data:Insure.ClearSearchData,
 				success : function(data){
 					console.log(data);
 					var result = showDialog(data);
 					if(result){
-						var html = insuranceChecking(data);
+						var html = insureClearing(data);
 		  				Tools.addTab("-Clearing","客户结算",html);
 		  				Insure.initList();
 					}
 				}
-		  		
-		  		
 		  	});
 	  		
 	  	}
-
-
-
 	exports.init = Insure.initModule;
 });
