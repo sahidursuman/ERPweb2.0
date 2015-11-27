@@ -1193,25 +1193,27 @@ define(function(require, exports) {
 	};
 	//酒店是否已询价 (在某天)
 	quote.isInquiryHotel = function(quoteId, $layerContainer){
-		$.ajax({
-			url: KingServices.build_url("hotelInquiry","findIsInquiryHotleList"),
-			type: 'POST',
-			data: {quoteId: quoteId},
-			showLoading: false,
-			success: function(data){
-				if (showDialog(data)) {
-					var html = '';
-					for (var i = 0; i < data.dayStatus.length; i++) {
-						if(data.dayStatus[i].success == 0){
-							html += '<option value="'+data.dayStatus[i].arriveTime+'">'+data.dayStatus[i].arriveTime+'</option>'
-						}else{
-							html += '<option value="'+data.dayStatus[i].arriveTime+'">'+data.dayStatus[i].arriveTime+'[已询价]</option>'
+		if (!!quoteId) {
+			$.ajax({
+				url: KingServices.build_url("hotelInquiry","findIsInquiryHotleList"),
+				type: 'POST',
+				data: {quoteId: quoteId},
+				showLoading: false,
+				success: function(data){
+					if (showDialog(data)) {
+						var html = '';
+						for (var i = 0; i < data.dayStatus.length; i++) {
+							if(data.dayStatus[i].success == 0){
+								html += '<option value="'+data.dayStatus[i].arriveTime+'">'+data.dayStatus[i].arriveTime+'</option>'
+							}else{
+								html += '<option value="'+data.dayStatus[i].arriveTime+'">'+data.dayStatus[i].arriveTime+'[已询价]</option>'
+							}
 						}
+						$layerContainer.find('[name=checkInTime]').html(html);
 					}
-					$layerContainer.find('[name=checkInTime]').html(html);
 				}
-			}
-		})
+			})
+		}
 	}
 
 	//选择房间类型
