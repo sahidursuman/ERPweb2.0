@@ -1077,14 +1077,14 @@ define(function(require, exports) {
 			buttons: [ 
 				{
 					text: "取消",
-					"class" : "btn btn-minier",
+					"class" : "btn btn-minier btn-heightMall",
 					click: function() {
 						$( this ).dialog( "close" );
 					}
 				},
 				{
 					text: "确定",
-					"class" : "btn btn-primary btn-minier",
+					"class" : "btn btn-primary btn-minier btn-heightMall",
 					click: function() {
 						$( this ).dialog( "close" );
 						BookingArrange.ajax({
@@ -1113,6 +1113,25 @@ define(function(require, exports) {
 			}
 		});
 	};
+
+		// BookingArrange.deleteBooking = function(id, $that){
+		// 	if(!!id){
+		// 		showConfirmDialog($("#confirm-dialog-message"),"你确定要删除该项目代订？",function(){
+		// 			$.ajax({
+		// 					'url' : 'bookingOrder',
+	 // 						'method' : 'deleteBookingOrderByIdAndCateName',
+	 // 						'menuKey' : menuKey,
+	 // 						'operation' : 'delete',
+	 // 						'cateName' : 'order',
+	 // 						'id' : id	
+		// 			}).done(function(data){
+		// 				if(showDialog(data)){
+		// 					BookingArrange.listBooking(0);
+		// 				}
+		// 			})
+		// 		});
+		// 	}
+		// }
 
 	/**
 	 * 导出项目代订信息

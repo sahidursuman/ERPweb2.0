@@ -24,7 +24,7 @@
 					<div class="col-sm-12" style="margin-top: 10px;margin-left: -9px;">
 						<div class="col-sm-2">大人单价：{{quoteDetailJson.adultQuotePrice}}</div>
 						<div class="col-sm-2">小孩单价：{{quoteDetailJson.childQuotePrice}}</div>
-						<div class="col-sm-2">单房差：{{quoteDetailJson.singleRoomCount}}</div>
+						<div class="col-sm-2">单房差：{{quoteDetailJson.singleRoomQuotePrice}}</div>
 						<div class="col-sm-2">总价：<span style="color: #FE8922"> {{quoteDetailJson.sumQuoteFee}}</span></div>
 						<div class="col-sm-2">单房差数：{{quoteDetailJson.singleRoomCount}}</div>
 					</div>
@@ -151,7 +151,7 @@
                                                                                 <tbody>
                                                                                 <tr>
 
-                                                                                    <td>{{restaurantList.type}}</td>
+                                                                                    <td>{{restaurantList.restaurantStandard.type}}</td>
                                                                                     <td>{{restaurantList.restaurant.name}}</td>
                                                                                     <td>{{restaurantList.remark}}</td>
                                                                                 </tr>

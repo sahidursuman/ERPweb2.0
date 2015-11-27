@@ -209,25 +209,28 @@ function showMessageDialog(dialogObj,message,fn,isNotClose){
 				text: "确定",
 				"class" : "btn btn-primary btn-minier btn-heightMall T-ok",
 				click: function() {
-					$( this ).dialog( "close" );
-					if(fn){
-						fn();
-					}
+					ok_callback();
 				}
 			}
 		],
 		open:function(event,ui){
 			$( this ).find("p").html(message);
 		}
-	});
+	}), timer, running = false;
 
 	if (!isNotClose) {
-		setTimeout(function(){
-			showDiolog.dialog('close');
-			if (fn) {
-				fn();	
-			}	
-		},1500)
+		timer = setTimeout(ok_callback, 1500)
+	}
+
+	function ok_callback() {
+		if (running) {
+			return;
+		}
+		running = true;
+		showDiolog.dialog('close');
+		if (fn) {
+			fn();	
+		}
 	}
 }
 function showConfirmMsg(dialogObj,message,confirmFn ,cancelFn,btnStr1,btnStr2){
@@ -352,6 +355,37 @@ function showConfirmDialog(dialogObj,message, fn){
 			},
 			{
 				text: "确定",
+				"class" : "btn btn-primary btn-minier btn-heightMall",
+				click: function() {
+					$( this ).dialog( "close" );
+					if(fn){
+						fn();
+					}
+				}
+			}
+		],
+		open:function(event,ui){
+			$(this).find("p").text(message);
+		}
+	});
+}
+// 撤销 undo 
+function showNndoConfirmDialog(dialogObj,message, fn){
+	dialogObj.removeClass('hide').dialog({
+		modal: true,
+		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
+		title_html: true,
+		draggable:false,
+		buttons: [
+			{
+				text: "否",
+				"class" : "btn btn-minier btn-heightMall",
+				click: function() {
+					$( this ).dialog( "close" );
+				}
+			},
+			{
+				text: "是",
 				"class" : "btn btn-primary btn-minier btn-heightMall",
 				click: function() {
 					$( this ).dialog( "close" );
@@ -1512,7 +1546,6 @@ KingServices.build_url = function(path,method){
 KingServices.updateTransit = function(id)  {
 	seajs.use("" + ASSETS_ROOT +"js/template/arrange/transit/transit.js",function(module){
 		module.updateTransit(id);
-		modals["arrange_transit"] = transit;
 	});
 }
 
