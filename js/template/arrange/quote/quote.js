@@ -91,8 +91,9 @@ define(function(require, exports) {
 					data.quoteList = JSON.parse(data.quoteList);
 					var html = listTemplate(data);
 					    html = filterUnAuth(html);
-					quote.$tab.find('.T-quoteList').html(html);
-
+				    if (!!quote.$tab) {
+						quote.$tab.find('.T-quoteList').html(html);
+					}
 					quote.initList();
 
 	                //绑定翻页组件
