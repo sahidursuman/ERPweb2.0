@@ -240,7 +240,7 @@ define(function(require, exports) {
 					},
 					{
 						text: "复制",
-						"class" : "btn btn-primary btn-minier T-copy-clip btn-heightMall",
+						"class" : "btn btn-primary btn-minier T-copy-clip-btn-share btn-heightMall",
 						'data-clipboard-text': url,
 						click: function() {
 							$( this ).dialog( "close" );
@@ -251,7 +251,7 @@ define(function(require, exports) {
 					$(this).find("p").html("分享链接:&nbsp;"+ url);
 				}
 			});
-			new ZeroClipboard($('.T-copy-clip'));
+			new ZeroClipboard($('.T-copy-clip-btn-share'));
 		}
 
 	};
