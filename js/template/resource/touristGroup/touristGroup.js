@@ -39,7 +39,8 @@ define(function(require,exports){
 			statusSearch: "",
 			customerType: "",
 			sortType: 'auto'
-		}
+		},
+		$freshData:false
 	};
 	//游客管理页面初始化
 	touristGroup.initModule = function(){
@@ -94,6 +95,7 @@ define(function(require,exports){
 				 	var $mainFormObj = touristGroup.$tab.find(".T-touristGroupSearchForm"),
 					 	$searchObj = $mainFormObj.find(".T-search-area");
 					touristGroup.$searchArea = $searchObj;
+					touristGroup.$freshData = $args;
 					//业务事件
 					touristGroup.initEvents();
 					//获取搜索区域的数据
@@ -1025,6 +1027,22 @@ define(function(require,exports){
 				}
 			});
 	};
+	//刷新数据合计
+	touristGroup.freshHeader = function($args){
+		$.ajax({
+			url:touristGroup.url("getTouristStatisticData","view"),
+			data:$args,
+			type:"POST",
+			success:function(data){
+				var result = showDialog(data);
+				if(result){
+					var $listObj = touristGroup.$tab.find(".T-touristGroupSearchForm");
+					var html = listMainTemplate(data);
+					$listObj.html(html);
+				}	
+			}
+		});
+	};
 	//获取组团社的数据
 	touristGroup.getPartnerAgencyList = function($obj){
 		$.ajax({
@@ -1499,7 +1517,10 @@ define(function(require,exports){
 							touristGroup.updateEvents();}
 							}else{
 								Tools.closeTab(tabId);
-								touristGroup.listTouristGroup(touristGroup.args);
+								//
+								touristGroup.freshHeader(touristGroup.$freshData);
+								//刷新列表数据
+								touristGroup.getListData(touristGroup.$freshData);
 							};
 							if (innerStatus) {
 								KingServices.updateTransit(data.touristGroupId);
