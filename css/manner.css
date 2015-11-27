@@ -948,7 +948,7 @@ padding-left:0;width: 360px;left: -35px;
 }
 .quoteMainWidth{
     max-width: 1190px;
-    margin:auto;padding-top: 30px;
+    margin:auto;padding-top: 15px;
 }
 .quoteWidthAdd{
     padding-left: 30px !important;
@@ -958,7 +958,14 @@ padding-left:0;width: 360px;left: -35px;
 .quoteHr{
    width: 280px;margin-bottom: 8px;margin-top:18px;border-top:1px solid #DDDDDD;
 }
-
+.quoteTable td{
+    border: 1px solid #ddd !important;
+     padding: 7px 0px 7px 0px;
+}
+.quoteTable .style-myself{
+    text-align: center;
+}
+.quoteTable td td{border: 0!important;padding-right:6px;}
 /*媒体查询-不同分辨率*/
 @media screen and (max-width:1703px){
   .line-separated{

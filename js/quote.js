@@ -22,7 +22,7 @@ define(function(require, exports) {
 			else{
 				alert(data.message);
 			}
-
+			document.title = '报价单—来自'+data.quoteDetailJson.travelAgency.name;
 			function checkInTime(i,startTime) {
 				var	date = new Date(startTime.replace("-", "/").replace("-", "/"));
 				var timer = date.getTime()+(i)*24*60*60*1000;
@@ -30,6 +30,7 @@ define(function(require, exports) {
 				var checkInTime = date.getFullYear()+ "-"+ (date.getMonth() + 1) + "-"+ (date.getDate() < 10 ? "0" + date.getDate() : date.getDate());
 				return checkInTime;
 			}
+
 		}
 	})
 });
