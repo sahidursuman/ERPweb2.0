@@ -558,14 +558,14 @@ define(function(require, exports) {
 			buttons: [ 
 				{
 					text: "否",
-					"class" : "btn btn-minier",
+					"class" : "btn btn-minier btn-heightMall",
 					click: function() {
 						$( this ).dialog( "close" );
 					}
 				},
 				{
 					text: "是",
-					"class" : "btn btn-primary btn-minier",
+					"class" : "btn btn-primary btn-minier btn-heightMall",
 					click: function() {
 							$.ajax({
 								url:KingServices.build_url("innerTransfer","delete"),
