@@ -18,6 +18,7 @@ define(function(require, exports) {
 			else{
 				alert(data.message);
 			}
+			document.title = '报价单—来自'+data.quoteDetailJson.travelAgency.name;
 		}
 	})
 });
