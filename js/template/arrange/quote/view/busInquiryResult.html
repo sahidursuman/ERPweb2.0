@@ -41,9 +41,7 @@
 							<td>{{offer.expiryTime}}</td>
 							<td class="T-status">{{offer.status}}</td>
 							<td data-id="{{offer.id}}">
-								{{if offer.status == "等待确认"}}
-									<a class="T-bus-refresh">刷新</a><span> | </span>
-								{{else if offer.status == "已同意"}}
+								{{if offer.status == "已同意"}}
 									<a class="T-bus-add">加入</a><span> | </span>
 								{{/if}}
 									<a class="T-bus-delete">删除</a>
@@ -72,9 +70,7 @@
 							<td>{{offer.expiryTime}}</td>
 							<td class="T-status">{{offer.status}}</td>
 							<td data-id="{{offer.id}}">
-								{{if offer.status == "等待确认"}}
-									<a class="T-bus-refresh">刷新</a><span> | </span>
-								{{else if offer.status == "已同意"}}
+								{{if offer.status == "已同意"}}
 									<a class="T-bus-add">加入</a><span> | </span>
 								{{/if}}
 									<a class="T-bus-delete">删除</a>
