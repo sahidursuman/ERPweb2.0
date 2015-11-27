@@ -631,7 +631,7 @@ var modalScripts = {
 
 	'financial_planProfit': "js/template/financial/planProfit/planProfit.js", //发团利润
 	'financial_replaceProfit':"js/template/financial/replaceProfit/replaceProfit.js",
-	'financial_Other_accounts':"js/template/financial/OtherAccounts/OtherAccounts.js",
+	'financial_Other_accounts':"js/template/financial/OtherAccounts/OtherAccounts.js",//其他账务
 	//---------------------------------------------------------------------------------------------------------------
 	'public_message':"js/template/system/message/message.js",
 	'system_information':"js/template/system/information/information.js",
@@ -879,17 +879,6 @@ function listMenu(menuTemplate){
 						// count.getlistCount(0,"","","","","","","","");
 					});
 				});
-
-				// //绑定代订利润功能
-				// $("#sidebar .nav-list .financial_replaceProfit").click(function(){
-				// 	$("#sidebar .nav-list li").removeClass("active");
-				// 	$(this).addClass("active");
-				// 	$(this).parent().parent().addClass("active");
-				// 	seajs.use("" + ASSETS_ROOT +"js/template/financial/replaceProfit/replaceProfit.js",function(replaceProfit){
-				// 		replaceProfit.listReplaceProfit(0,"","","","","","","","","","");
-				// 	});
-				// });
-
 				//绑定収支明细菜单功能
 				$("#sidebar .nav-list .financial_collectDetail").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
