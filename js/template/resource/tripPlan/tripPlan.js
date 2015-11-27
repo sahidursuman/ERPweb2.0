@@ -123,9 +123,8 @@ define(function(require, exports) {
 				/* Act on the event */
 				var $that=$(this),
 				    qouteId=$that.attr("data-entiy-qouteId");
-				    showMessageDialog($( "#confirm-dialog-message" ),"订单已发送",function(){
-						tripPlan.singleClickSendOrder(qouteId);
-					});
+					tripPlan.singleClickSendOrder(qouteId);
+					
 				     
 			});
 
@@ -343,6 +342,7 @@ define(function(require, exports) {
 			$("#tripPlan_addPlan_selfPay .addSelfPay").on("click",{validator:validator}, tripPlan.addSelfPay);
 			$("#tripPlan_addPlan_ticket .addTicket").on("click",{validator:validator}, tripPlan.addTicket);
 			$("#tripPlan_addPlan_other .addOther").on("click",{validator:validator}, tripPlan.addOther);
+		
 
 			//一键下单操作
 			$("#tripPlan_addPlan_content").find('.T-singleClick-Order').on('click', function(event) {
@@ -351,9 +351,7 @@ define(function(require, exports) {
 				var $obj=$('#tab-arrange_all-update-content'),
 				    quoteId=$obj.find('input[name=qouteId]').val();
 				    /* Act on the event */
-					showMessageDialog($( "#confirm-dialog-message" ),"订单已发送",function(){
-							tripPlan.singleClickSendOrder(quoteId);
-					});
+					tripPlan.singleClickSendOrder(quoteId);
 				        
 			});
 
@@ -362,10 +360,9 @@ define(function(require, exports) {
 				event.preventDefault();
 				var $that=$(this),$trBusData=$that.closest('tr'),$obj=$('#tab-arrange_all-update-content'),
 				    qouteId=$obj.find('input[name=qouteId]').val();
-				/* Act on the event */
-				showMessageDialog($( "#confirm-dialog-message" ),"订单已发送",function(){
-						tripPlan.busSendOrder($trBusData,qouteId);
-				});  
+				    /* Act on the event */
+					tripPlan.busSendOrder($trBusData,qouteId);
+
 			});
 
 			//住宿的发送订单
@@ -374,9 +371,17 @@ define(function(require, exports) {
 				/* Act on the event */
 				var $that=$(this),$trHotelData=$that.closest('tr'),$obj=$('#tab-arrange_all-update-content'),
 				    qouteId=$obj.find('input[name=qouteId]').val();
-					showMessageDialog($( "#confirm-dialog-message" ),"订单已发送",function(){
-						tripPlan.hotelSendOrder($trHotelData,qouteId);
-					});
+					tripPlan.hotelSendOrder($trHotelData,qouteId);
+			});
+
+
+			//修改报价
+			$("#tripPlan_addPlan_content").find('.T-update-Quote').on('click', function(event) {
+				event.preventDefault();
+				/* Act on the event */
+				var $that=$(this),id=$that.attr('data-qouteId');
+					KingServices.updateQuoteToOffer(id);
+				
 			});
 
 			//绑定删除时间
@@ -404,6 +409,23 @@ define(function(require, exports) {
 			tripPlan.bindMoneyTripPlan();
 			tripPlan.moneyTripPlan();
 			tripPlan.setChooseDays();
+
+
+			//住宿--报价--日期--星级不能修改
+			var $hoteltdList=$("#tripPlan_addPlan_hotel").find('.T-whichDays');
+			for (var i = 0; i < $hoteltdList.length; i++) {
+				var qouteId=$hoteltdList.eq(i).attr("data-qouteId");
+                    if (qouteId!=null && qouteId!='') {
+                    	$hoteltdList.eq(i).find('select').prop("disabled",true);
+                    	$hoteltdList.eq(i).find('select').css({ "background":"#EFEBEB"});
+                    }else{
+                    	$hoteltdList.eq(i).find('select').eq(i).prop("disabled",false);
+                    	$hoteltdList.eq(i).find('select').css({ "background":"#FFF"});
+                    };
+				   
+			};
+
+			
 
 			//添加资源
 			tripPlan.addResource();
@@ -481,6 +503,8 @@ define(function(require, exports) {
 				success:function(data){
 					var result = showDialog(data);
 					if(result){
+						showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+						});
 					}
 			    }
 			})
@@ -502,6 +526,9 @@ define(function(require, exports) {
 				success:function(data){
 					var result = showDialog(data);
 					if(result){
+						showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+
+						});
 					}
 			    }
 			})
@@ -521,7 +548,9 @@ define(function(require, exports) {
 				data: "quoteId="+quoteId,
 				success:function(data){
 					var result = showDialog(data);
-					if(result){
+						if(result){
+							showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+						});
 					}
 			    }
 			})
@@ -577,8 +606,6 @@ define(function(require, exports) {
 			tripPlan.calculatePrice();
 			validator = rule.update(validator);
 			tripPlan.addResource();
-
-
 		},
 		//添加导游安排
 		addGuide : function(){
@@ -935,25 +962,6 @@ define(function(require, exports) {
                 });
 			});
 			
-		},
-
-		/**
-		 * [sendOrderRequest 发送订单请求]
-		 * @param  {[type]} saveJson [description]
-		 * @return {[type]}          [description]
-		 */
-		sendOrderRequest:function(saveJson){
-			$.ajax({
-				url:KingServices.build_url("busInquiry","saveBusCompanyOrder"),
-				type: 'POST',
-				dataType: 'JSON',
-				data: "saveJson="+encodeURIComponent(JSON.stringify(saveJson)),
-				success:function(data){
-					var result = showDialog(data);
-					if(result){
-					}
-			    }
-			})
 		},
 
 		//导游安排
@@ -2606,5 +2614,6 @@ define(function(require, exports) {
 	exports.isEdited = tripPlan.isEdited;
 	exports.save = tripPlan.save;
 	exports.clearEdit = tripPlan.clearEdit;
+	exports.updateQuote=tripPlan.updateQuote;
 });
 

@@ -2707,7 +2707,7 @@ define(function(require, exports) {
 				    quoteId= $(this).closest('.widget-main').find("input[name=qouteId]").val(),
 				    seatCount=$(this).closest('.widget-main').find("input[name=seatCount]").val();
 				var data= {
-							busBrand:busBrand,
+							brand:busBrand,
 							seatCount:seatCount
 						};
 				    if (quoteId!=null&&quoteId!='') {

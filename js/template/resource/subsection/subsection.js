@@ -464,46 +464,22 @@ define(function(require, exports) {
 	 * 撤销分段操作
 	 * @return {[type]} id [id]
 	 */
-	subsection.subsectionRevoke = function(id) {
-		//showConfirmDialog($( "#confirm-dialog-message" ),"你确定要撤销该分段？",function(){})
-		var dialogObj = $( "#confirm-dialog-message" );
-		dialogObj.removeClass('hide').dialog({
-			modal: true,
-			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-			title_html: true,
-			draggable:false,
-			buttons: [ 
-				{
-					text: "取消",
-					"class" : "btn btn-minier",
-					click: function() {
-						$( this ).dialog( "close" );
-					}
-				},
-				{
-					text: "确定",
-					"class" : "btn btn-primary btn-minier",
-					click: function() {
-						$( this ).dialog( "close" );
-						$.ajax({
+
+     subsection.subsectionRevoke = function(id) {
+		if(!!id){
+			showConfirmDialog($( "#confirm-dialog-message" ),"你确定要撤销该分段？",function(){
+					$.ajax({
 							url: KingServices.build_url('innerTransferOperation', "revokeSubTouristGroup"),
 							type:"POST",
 							data:"id="+id+"",
-							success:function(data){
-								var result = showDialog(data);
-								if(result){
-									subsection.subsectionList(0);
-								}
+						}).done(function(data){
+							if (showDialog(data)) {
+								subsection.listMainSubsection(0);
 							}
-						})
-					}
-				}
-			],
-			open:function(event,ui){
-				$(this).find("p").text("你确定要撤销该小组分段？");
-			}
-		});
-	};
+						})	
+						});
+		}
+	}
 
 	//来源
 	subsection.getPartnerAgencyList = function(){

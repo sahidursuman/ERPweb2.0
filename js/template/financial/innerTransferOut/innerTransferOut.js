@@ -107,24 +107,23 @@ define(function(require,exports){
                         $tabId.find(".btn-innerTransferOut-check").click(function(){
                         	InnerTransferOut.searchCheckData = {
 						    	"toBusinessGroupId":$(this).attr("data-entity-id"),
-						    	"toBusinessGroupNam":$(this).attr("data-entity-tobusinessgroupname"),
+						    	"tobusinessgroupname":$(this).attr("data-entity-tobusinessgroupname"),
 						    	"year":$(this).attr("data-entity-year"),
 						    	"month":$(this).attr("data-entity-month")
 		    				};
-		    				console.log(InnerTransferOut.searchCheckData);
-		    				InnerTransferOut.InnerTransferOutCheck(0,InnerTransferOut.searchCheckData.toBusinessGroupId,InnerTransferOut.searchCheckData.toBusinessGroupNam,InnerTransferOut.searchCheckData.year,InnerTransferOut.searchCheckData.month)
+		    				InnerTransferOut.InnerTransferOutCheck(0,InnerTransferOut.searchCheckData.toBusinessGroupId,InnerTransferOut.searchCheckData.tobusinessgroupname,InnerTransferOut.searchCheckData.year,InnerTransferOut.searchCheckData.month)
                         });
                         //结算事件
                         $tabId.find(".btn-innerTransferOut-balance").click(function(){
                         	InnerTransferOut.searchBalanceData = {
 						    	"toBusinessGroupId":$(this).attr("data-entity-id"),
-						    	"toBusinessGroupNam":$(this).attr("data-entity-tobusinessgroupname"),
+						    	"tobusinessgroupname":$(this).attr("data-entity-tobusinessgroupname"),
 						    	"year":$(this).attr("data-entity-year"),
 						    	"startMonth":$(this).attr("data-entity-startmonth"),
 						    	"endMonth":$(this).attr("data-entity-endmonth"),
 
 		    				};
-		    				InnerTransferOut.InnerTransferInBalance(0,InnerTransferOut.searchBalanceData.toBusinessGroupId,InnerTransferOut.searchBalanceData.toBusinessGroupNam,InnerTransferOut.searchBalanceData.year,InnerTransferOut.searchBalanceData.startMonth,InnerTransferOut.searchBalanceData.endMonth);
+		    				InnerTransferOut.InnerTransferInBalance(0,InnerTransferOut.searchBalanceData.toBusinessGroupId,InnerTransferOut.searchBalanceData.tobusinessgroupname,InnerTransferOut.searchBalanceData.year,InnerTransferOut.searchBalanceData.startMonth,InnerTransferOut.searchBalanceData.endMonth);
                         });
 						}
 					}
@@ -132,6 +131,8 @@ define(function(require,exports){
 			},
 			//对账处理
 			InnerTransferOutCheck:function(pageNo,toBusinessGroupId,toBusinessGroupName,year,month){
+				console.log(InnerTransferOut.searchCheckData);
+				console.log(toBusinessGroupName);
 				$.ajax({
 					url:""+APP_ROOT+"back/financialInnerTransferOut.do?method=listFinancialInnerTransferOutChecking&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 					type:"POST",
@@ -151,7 +152,6 @@ define(function(require,exports){
 					    	"year":year,
 					    	"month":month
 					    };
-					    console.log(InnerTransferOut.searchCheckData);
 					    data.yearList = yearList;
 					    data.monthList = monthList;
 					    data.searchParam = InnerTransferOut.searchCheckData;
@@ -206,7 +206,7 @@ define(function(require,exports){
 						    curr: (pageNo + 1),
 						    jump: function(obj, first) {
 						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-						    		InnerTransferOut.InnerTransferOutCheck(obj.curr -1,InnerTransferOut.searchCheckData.toBusinessGroupId,InnerTransferOut.searchCheckData.toBusinessGroupNam,InnerTransferOut.searchCheckData.year,InnerTransferOut.searchCheckData.month);
+						    		InnerTransferOut.InnerTransferOutCheck(obj.curr -1,InnerTransferOut.searchCheckData.toBusinessGroupId,InnerTransferOut.searchCheckData.toBusinessGroupName,InnerTransferOut.searchCheckData.year,InnerTransferOut.searchCheckData.month);
                         		}
 						    }
 						});;
@@ -214,11 +214,11 @@ define(function(require,exports){
 						$checkId.find(".btn-checking-search").click(function(){
 							InnerTransferOut.searchCheckData = {
 						    	"toBusinessGroupId":toBusinessGroupId,
-						    	"toBusinessGroupName":toBusinessGroupName,
+						    	"toBusinessGroupName":toBusinessGroupNamee,
 						    	"year":$checkId.find("select[name=year]").val(),
 						    	"month":$checkId.find("select[name=month]").val()
 					    	};
-		    				InnerTransferOut.InnerTransferOutCheck(0,InnerTransferOut.searchCheckData.toBusinessGroupId,InnerTransferOut.searchCheckData.toBusinessGroupNam,InnerTransferOut.searchCheckData.year,InnerTransferOut.searchCheckData.month)
+		    				InnerTransferOut.InnerTransferOutCheck(0,InnerTransferOut.searchCheckData.toBusinessGroupId,InnerTransferOut.searchCheckData.toBusinessGroupNamee,InnerTransferOut.searchCheckData.year,InnerTransferOut.searchCheckData.month)
 
 						});
 						//导出事件
@@ -226,7 +226,7 @@ define(function(require,exports){
 							var year=$checkId.find("select[name=year]").val();
 	                      	var month=$checkId.find("select[name=month]").val();
 	                      	checkLogin(function(){
-	                        	var url = ""+APP_ROOT+"back/export.do?method=exportInnerTransferOut&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view"+"&toBusinessGroupId="+toBusinessGroupId+"&toBusinessGroupName="+toBusinessGroupName+"&year="+year+"&month="+month+"&sortType=auto";
+	                        	var url = ""+APP_ROOT+"back/export.do?method=exportInnerTransferOut&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view"+"&toBusinessGroupId="+toBusinessGroupId+"&toBusinessGroupNamee="+toBusinessGroupNamee+"&year="+year+"&month="+month+"&sortType=auto";
 	                        	exportXLS(url)
 	                        });
 						});
@@ -293,7 +293,7 @@ define(function(require,exports){
 				});
 			},
 			//结算处理
-			InnerTransferInBalance:function(pageNo,toBusinessGroupId,toBusinessGroupNam,year,startMonth,endMonth){
+			InnerTransferInBalance:function(pageNo,toBusinessGroupId,toBusinessGroupName,year,startMonth,endMonth){
 				$.ajax({
 					 url:""+APP_ROOT+"back/financialInnerTransferOut.do?method=listFinancialInnerTransferOutSettlement&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 					 type:"POST",
@@ -309,7 +309,7 @@ define(function(require,exports){
 						 if(result){
 						 	InnerTransferOut.searchBalanceData = {
 						    	"toBusinessGroupId":toBusinessGroupId,
-						        "toBusinessGroupNam":toBusinessGroupNam,
+						        "toBusinessGroupName":toBusinessGroupName,
 						    	"year":year,
 						    	"startMonth":startMonth,
 						    	"endMonth":endMonth
@@ -356,13 +356,13 @@ define(function(require,exports){
 
 	    	    			InnerTransferOut.searchBalanceData = {
 						    	"toBusinessGroupId":toBusinessGroupId,
-						        "toBusinessGroupNam":toBusinessGroupNam,
+						        "toBusinessGroupName":toBusinessGroupName,
 						    	"year":$settleId.find("select[name=year]").val(),
 						    	"startMonth":$settleId.find("select[name=startMonth]").val(),
 						    	"endMonth":$settleId.find("select[name=endMonth]").val()
 						    };
 						    console.log(InnerTransferOut.searchBalanceData);
-		    				InnerTransferOut.InnerTransferInBalance(0,InnerTransferOut.searchBalanceData.toBusinessGroupId,InnerTransferOut.searchBalanceData.toBusinessGroupNam,InnerTransferOut.searchBalanceData.year,InnerTransferOut.searchBalanceData.startMonth,InnerTransferOut.searchBalanceData.endMonth);
+		    				InnerTransferOut.InnerTransferInBalance(0,InnerTransferOut.searchBalanceData.toBusinessGroupId,InnerTransferOut.searchBalanceData.toBusinessGroupName,InnerTransferOut.searchBalanceData.year,InnerTransferOut.searchBalanceData.startMonth,InnerTransferOut.searchBalanceData.endMonth);
 	    	    		});
 						//保存结算事件
 						$settleId.find(".btn-transferBlance-save").click(function(){
@@ -373,11 +373,11 @@ define(function(require,exports){
 						$settleId.find(".btn-restaurantBlance-checkDetail").click(function(){
 							InnerTransferOut.searchCheckData = {
 						    	"toBusinessGroupId":toBusinessGroupId,
-						    	"toBusinessGroupNam":toBusinessGroupNam,
+						    	"toBusinessGroupName":toBusinessGroupNamee,
 						    	"year":$(this).attr("data-entity-year"),
 						    	"month":$(this).attr("data-entity-month")
 					    	};
-		    				InnerTransferOut.InnerTransferOutCheck(0,InnerTransferOut.searchCheckData.toBusinessGroupId,InnerTransferOut.searchCheckData.toBusinessGroupNam,InnerTransferOut.searchCheckData.year,InnerTransferOut.searchCheckData.month)
+		    				InnerTransferOut.InnerTransferOutCheck(0,InnerTransferOut.searchCheckData.toBusinessGroupId,InnerTransferOut.searchCheckData.toBusinessGroupNamee,InnerTransferOut.searchCheckData.year,InnerTransferOut.searchCheckData.month)
 
 						});
 						//操作记录按钮事件
@@ -504,7 +504,7 @@ define(function(require,exports){
 										closeTab(checkTabId);
 			    						InnerTransferOut.listInnerTransferOut(0,InnerTransferOut.searchData.toBusinessGroupId,InnerTransferOut.searchData.year,InnerTransferOut.searchData.month);
 									} else {
-		    							InnerTransferOut.InnerTransferOutCheck(0,InnerTransferOut.searchCheckData.toBusinessGroupId,InnerTransferOut.searchCheckData.toBusinessGroupNam,InnerTransferOut.searchCheckData.year,InnerTransferOut.searchCheckData.month)
+		    							InnerTransferOut.InnerTransferOutCheck(0,InnerTransferOut.searchCheckData.toBusinessGroupId,InnerTransferOut.searchCheckData.toBusinessGroupNamee,InnerTransferOut.searchCheckData.year,InnerTransferOut.searchCheckData.month)
 									}
 								}
 							}
@@ -544,7 +544,7 @@ define(function(require,exports){
 								closeTab(clearTabId);
 			    				InnerTransferOut.listInnerTransferOut(0,InnerTransferOut.searchData.toBusinessGroupId,InnerTransferOut.searchData.year,InnerTransferOut.searchData.month);
 							} else {
-		    				    InnerTransferOut.InnerTransferInBalance(0,InnerTransferOut.searchBalanceData.toBusinessGroupId,InnerTransferOut.searchBalanceData.toBusinessGroupNam,InnerTransferOut.searchBalanceData.year,InnerTransferOut.searchBalanceData.startMonth,InnerTransferOut.searchBalanceData.endMonth);
+		    				    InnerTransferOut.InnerTransferInBalance(0,InnerTransferOut.searchBalanceData.toBusinessGroupId,InnerTransferOut.searchBalanceData.toBusinessGroupName,InnerTransferOut.searchBalanceData.year,InnerTransferOut.searchBalanceData.startMonth,InnerTransferOut.searchBalanceData.endMonth);
 							}
 	                    }
 	                }

@@ -779,52 +779,27 @@ define(function(require, exports) {
 			ResLineProduct.updateRouteIndex($obj.closest('.T-updateLineProductContainer'));
 		}
 	};
-	ResLineProduct.deleteLineProduct = function(id){
-		if (!!id) {
-			$("#confirm-dialog-message").removeClass('hide').dialog({
-				modal: true,
-				title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-				title_html: true,
-				draggable:false,
-				buttons: [ 
-					{
-						text: "取消",
-						"class" : "btn btn-minier",
-						click: function() {
-							$( this ).dialog( "close" );
-						}
-					},
-					{
-						text: "确定",
-						"class" : "btn btn-primary btn-minier",
-						click: function() {
-							$( this ).dialog( "close" );
-							$.ajax({							
-								url: KingServices.build_url('lineProduct', 'deleteLineProduct'),
-								type:"POST",
-								showLoading:false,
-								data:"id="+id+"",
-								success:function(data){
-									var result = showDialog(data);
-									if(result){
-										ResLineProduct.$tab.find('.lineProduct-' + id).fadeOut(function() {
-											var len = ResLineProduct.$tab.find('.T-list').children('tr').length
 
-											ResLineProduct.getProductList(len <= 1? (ResLineProduct.pageNo - 1): ResLineProduct.pageNo);
-										});
-									}
-								}
-							});
-						}
-					}
-				],
-				open:function(event,ui){
-					$(this).find("p").text("你确定要删除该条记录？");
-				}
-			});
+	// 删除线路产品
+		ResLineProduct.deleteLineProduct = function(id){
+			if(!!id){
+				showConfirmDialog($("#confirm-dialog-message"),"你确定要删除该条记录？",function(){
+				 $.ajax({
+				 	url: KingServices.build_url('lineProduct', 'deleteLineProduct'),
+				 	type:"POST",
+				 	data:"id="+id+"",
+				 })
+				 .done(function(data) {
+				 	if(showDialog(data)){
+				 		ResLineProduct.getProductList(0);
+				 	}
+				 })
+				 		
+				});
+			}
+
 		}
-	};
-	
+
 	ResLineProduct.addRestaurant = function($btn, validator){
 		//添加行程安排餐饮
 		var scheduleDetails = '<div class="T-timeline-item timeline-item clearfix updateRestaurantList updateLineProductDaysDetail T-RestaurantList ui-sortable-handle" data-entity-index='+ResLineProduct.updateLineProductIndex+'><div class="timeline-info " style="color:#1fade0" ><i class="ace-icon fa fa-circle" ></i><span>餐饮</span></div>'+
@@ -992,7 +967,7 @@ define(function(require, exports) {
 		'<td><select class="col-xs-12 resourceHotelStar"><option selected="selected" value="1">三星以下</option><option value="2">三星</option><option value="3">准四星</option><option value="4">四星</option><option value="5">准五星</option><option value="6">五星</option><option value="7">五星以上</option></select></td>'+
 		'<td><input type="text" class="col-xs-12 chooseHotelName bind-change" name="hotelNmae"/><input type="hidden" name="hotelId"/></td>'+
 		'<td><input type="text" class="col-xs-12 chooseHotelRoom bind-change" name="hotelRoom"/><input type="hidden" name="hotelRoomId"/></td>'+
-		'<td><input type="text" class="col-xs-12" readonly="readonly" name="contractPrice" /></td>'+
+		'<td><input type="text" class="col-xs-12" name="contractPrice" /></td>'+
 		'<td><input type="text" class="col-xs-12" readonly="readonly" name="containBreakfast"/></td>'+
 		'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
 		'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
@@ -1163,7 +1138,7 @@ define(function(require, exports) {
 		'<tbody><tr>'+
 		'<td><input type="text" class="col-xs-12 chooseScenicName bind-change"/><input type="hidden" name="scenicId"/></td>'+
 		'<td><input type="text" class="col-xs-12 chooseChargingProjects bind-change" name="chargingProjects"/><input type="hidden" name="chargingId"/></td>'+
-		'<td><input type="text" class="col-xs-12" readonly="readonly" name="price"/></td>'+
+		'<td><input type="text" class="col-xs-12" name="price"/></td>'+
 		'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
 		'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
 		'<td><a class="cursor btn-restaurant-delete T-delete deleteAllother"> 删除</a></td></tr></tbody></table></div></div></div></div>';
@@ -1315,8 +1290,8 @@ define(function(require, exports) {
 		'<td><input type="text" class="col-xs-12 chooseVendorName bind-change"/><input type="hidden" name="shopId"/></td>'+
 		'<td><input type="text" class="col-xs-12 chooseGoodsPolicy bind-change" name="goodsPolicy"/><input type="hidden" name="shopPolicyId"/></td>'+
 		'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
-		'<td><input type="text" class="col-xs-12" readonly="readonly" name="parkingRebateMoney"/></td>'+
-		'<td><input type="text" class="col-xs-12" readonly="readonly" name="customerRebateMoney"/></td>'+
+		'<td><input type="text" class="col-xs-12" name="parkingRebateMoney"/></td>'+
+		'<td><input type="text" class="col-xs-12" name="customerRebateMoney"/></td>'+
 		'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
 		'<td><a class="cursor btn-restaurant-delete T-delete deleteAllother"> 删除 </a></td></tr></tbody></table></div></div></div></div>';
 		$btn.closest(".T-dailyArrangeList").find(".T-timeline-detail-container").append(shoppingDetails);
@@ -1462,7 +1437,7 @@ define(function(require, exports) {
 		'<td><input type="text" class="col-xs-12 chooseCompanyName bind-change"/><input type="hidden" name="companyId"/></td>'+
 		'<td><input type="text" class="col-xs-12 chooseItemName bind-change" name="selfPayItemName"/><input type="hidden" name="selfPayItemId"/></td>'+
 		'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
-		'<td><input type="text" class="col-xs-12" readonly="readonly" name="contractPrice"/><input type="hidden" class="col-xs-12" readonly="readonly" name="marketPrice"/></td>'+
+		'<td><input type="text" class="col-xs-12" name="contractPrice"/><input type="hidden" class="col-xs-12" readonly="readonly" name="marketPrice"/></td>'+
 		'<td><input type="text" class="col-xs-12" readonly="readonly" name="managerName"/></td>'+
 		'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
 		'<td><a class="cursor btn-restaurant-delete T-delete deleteAllother"> 删除</a></td></tr></tbody></table></div></div></div></div>';

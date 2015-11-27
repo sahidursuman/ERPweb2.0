@@ -12,7 +12,7 @@
 					<th class="col-sm-1">单价</th>
 					<th class="col-sm-1">金额</th>
 					<th class="col-sm-1">操作人</th>
-					<th class="col-sm-1">酒店</th>`
+					<th class="col-sm-1">酒店</th>
 					<th class="col-sm-1">备注</th>
 					<th class="col-sm-1">状态</th>
 					<th class="col-sm-1">操作</th>
@@ -54,9 +54,21 @@
 
 					<td rowspan="{{hotOrderList.hotelOrderNeedRoomList.length}}" style="vertical-align:middle">{{if hotOrderList.hotel!=null}}{{hotOrderList.hotel.name}}{{/if}}</td>
 					<td rowspan="{{hotOrderList.hotelOrderNeedRoomList.length}}" style="vertical-align:middle" class="T-ctrl-tip">{{if hotOrderList.hotel!=null}}{{hotOrderList.hotel.remark}}{{/if}}</td>
-					<td rowspan="{{hotOrderList.hotelOrderNeedRoomList.length}}" style="vertical-align:middle">{{hotOrderList.statusStr}}</td>
 					<td rowspan="{{hotOrderList.hotelOrderNeedRoomList.length}}" style="vertical-align:middle">
-						<a class="cursor {{if hotOrderList.status==0}}T-listHotel-refuse{{/if}} R-right T-action" data-right="1450002" style="{{if hotOrderList.status==1 || hotOrderList.status==-1}}color:#bbb;{{/if}}">
+					     {{if hotOrderList.statusStr==0}}
+					        已下单
+					        {{else if hotOrderList.statusStr==-1}}
+					        已撤单
+					        {{else if hotOrderList.statusStr==1 }}
+							已确认
+					        {{else if hotOrderList.statusStr==2 }}
+                            以完成
+					        {{else if hotOrderList.statusStr==3 }}
+							进行中
+						{{/if}}
+					</td>
+					<td rowspan="{{hotOrderList.hotelOrderNeedRoomList.length}}" style="vertical-align:middle">
+						<a class="cursor {{if hotOrderList.statusStr==0 || hotOrderList.statusStr==1 }}T-listHotel-refuse{{/if}} R-right T-action" data-right="1450002" style="{{if hotOrderList.statusStr==-1 ||  hotOrderList.statusStr==2 || hotOrderList.statusStr==3}}color:#bbb;{{/if}}">
 							撤销
 						</a>
 					</td>

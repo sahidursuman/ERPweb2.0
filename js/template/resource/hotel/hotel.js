@@ -200,48 +200,24 @@ define(function(require, exports) {
 			}
 		})
 	};
+  //删除酒店消息 
 	hotel.deleteHotel = function(id,$this){
-		var dialogObj = $( "#confirm-dialog-message" );
-		dialogObj.removeClass('hide').dialog({
-			modal: true,
-			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-			title_html: true,
-			draggable:false,
-			buttons: [
-				{
-					text: "取消",
-					"class" : "btn btn-minier btn-heightMall",
-					click: function() {
-						$( this ).dialog( "close" );
+		if (!!id) {
+			showConfirmDialog($("#confirm-dialog-message"),"你确定要删除该酒店？", function() {
+				$.ajax({
+					url:hotel.url("deleteHotel","delete"),
+					type: 'post',
+					data: {id: id},
+				})
+				.done(function(data) {
+					if (showDialog(data)) {
+						hotel.listHotel(0);
 					}
-				},
-				{
-					text: "确定",
-					"class" : "btn btn-primary btn-minier btn-heightMall",
-					click: function() {
-						$( this ).dialog( "close" );
-						$.ajax({
-							url:hotel.url("deleteHotel","delete"),
-							type:"POST",
-							data:"id="+id+"",
-							success:function(data){
-								var result = showDialog(data);
-								if(result){
-									$this.closest('tr').fadeOut(function() {
-										$(this).remove();
-										hotel.listHotel(0);
-									});
-								}
-							}
-						});
-					}
-				}
-			],
-			open:function(event,ui){
-				$(this).find("p").text("你确定要删除该酒店？");
-			}
-		});
-	};
+				});
+			})
+		}
+	}
+
 	hotel.addHotel = function(fn){
 		var html = addTemplate();
 		hotel.$addLayer = layer.open({

@@ -1198,23 +1198,27 @@ var _statusText = {
 	 * @param  {[object]} options [自定义选项]
 	 * @return {[type]}         [description]
 	 */
-	var _laypage = laypage;
-	laypage = function(options)  {
-		var last = options.last || false;
-		if (!last) {
-			last = options.pages || false;
-		}
-		// 合并配置
-		options = $.extend({},
-			{
-			    skip: true, //是否开启跳页
-			    skin: '#51b0c2',
-			    last: last,
-			    groups: 3 //连续显示分页数
-			}, options);
+	if (typeof laypage !== 'undefined') {
+		var _laypage = laypage;
+		laypage = function(options)  {
+			var last = options.last || false;
+			if (!last) {
+				last = options.pages || false;
+			}
+			// 合并配置
+			options = $.extend({},
+				{
+				    skip: true, //是否开启跳页
+				    skin: '#51b0c2',
+				    last: last,
+				    groups: 3 //连续显示分页数
+				}, options);
 
-		_laypage(options);
-	};
+			_laypage(options);
+		};
+	} else {
+		console.info('laypage was not loaded!');
+	}
 
 	$('body').append('<div id="desc-tooltip-containter"></div>');
 	$('#desc-tooltip-containter').hover(function() {
@@ -1574,12 +1578,23 @@ KingServices.addTicket = function(fn){
 		module.addTicket(fn);
 	});
 }
+
 //报价  新增
 KingServices.addQuote = function(id){
 	seajs.use("" + ASSETS_ROOT + modalScripts.arrange_quote,function(module){
 		module.addQuote(id);
 	});
 }
+
+
+//报价  修改
+KingServices.updateQuoteToOffer = function(id){
+	seajs.use("" + ASSETS_ROOT + modalScripts.arrange_quote,function(module){
+		module.updateQuoteToOffer(id);
+	});
+}
+
+
 //同行  新增
 KingServices.addPartnerAgency = function(fn){
 	seajs.use("" + ASSETS_ROOT + modalScripts.resource_partnerAgency,function(module){

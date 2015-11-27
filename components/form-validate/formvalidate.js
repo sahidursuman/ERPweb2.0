@@ -205,7 +205,7 @@
 						}
 						break;
 					case 'positive-float':	// 正浮点型
-						if (!!data && !/^(\d*\.)?\d+$/.test( data )) {
+						if (!!data && !/^(?:[1-9][0-9]*\.[0-9]+|0\.(?!0+$)[0-9]+)$/.test( data )) {
 							res = rules[i].errMsg;
 						}
 						break;
