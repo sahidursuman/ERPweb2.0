@@ -626,7 +626,7 @@ var modalScripts = {
 	'financial_totalProfit': "js/template/financial/totalProfit/totalProfit.js",
 	'financial_Client': "js/template/financial/Client/Client.js",
 	'financial_shop': "js/template/financial/shop/shop.js",//购物账务
-	'financial_guide':"js/template/financial/guide/guideR.js",
+	'financial_guide':"js/template/financial/guide/guide.js",//导游账务
 	'financial_innerTransfer_in':"js/template/financial/innerTransferIn/innerTransferIn.js",//内转转入
 	'financial_innerTransfer_out':"js/template/financial/innerTransferOut/innerTransferOut.js",//内转转出
 
