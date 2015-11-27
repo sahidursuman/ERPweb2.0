@@ -2584,9 +2584,9 @@ define(function(require, exports) {
 			});
 		});
 	};
-	//添加其他安排
+	//添加其它安排
 	quote.addOther = function($btn, validator, $container) {
-		var otherDetails = '<div class="T-timeline-item timeline-item clearfix updateOtherList updateLineProductDaysDetail T-resourceOtherList ui-sortable-handle" data-entity-index='+quote.updateLineProductIndex+'><div class="timeline-info" style="color:#1fade0" ><i class="ace-icon fa fa-circle" ></i><span >其他</span></div>'+
+		var otherDetails = '<div class="T-timeline-item timeline-item clearfix updateOtherList updateLineProductDaysDetail T-resourceOtherList ui-sortable-handle" data-entity-index='+quote.updateLineProductIndex+'><div class="timeline-info" style="color:#1fade0" ><i class="ace-icon fa fa-circle" ></i><span >其它</span></div>'+
 		'<div class="widget-box transparent" style="margin-top: 20px"><div class="widget-body"><div class=""><table class="table table-striped table-bordered table-hover">'+
 		'<thead><tr><th class="th-border">项目名称</th><th class="th-border">联系人</th><th class="th-border">联系电话</th><th class="th-border">单价</th><th class="th-border">数量</th><th class="th-border">备注</th><th class="th-border" style="width: 60px;">操作</th></tr></thead>'+
 		'<tbody><tr>'+
@@ -3037,7 +3037,7 @@ define(function(require, exports) {
 					}
 				}
 			}
-			//获取其他
+			//获取其它
 			$list = $that.find(".T-resourceOtherList");
 			if($list.length > 0){
 				for(var j=0; j<$list.length;j++){
