@@ -594,6 +594,8 @@ define(function(require, exports) {
 			$('.tab-' + tab_id).children('a').trigger('click');
 			return;
 		}
+		$tab.find(".T-newData").data("id",id);
+
 		$.ajax({
 			url: KingServices.build_url('quote', 'viewQuote'),
 			type: 'POST',
@@ -611,28 +613,29 @@ define(function(require, exports) {
 						a: 'update'
 					}
 					var html = mainQuoteTemplate($a);
-					Tools.addTab(menukey+'-update',"修改报价",html)
-					var $container = $("#tab-arrange_quote-update-content");
+					if(Tools.addTab(menukey+'-update',"修改报价",html)){
+						var $container = $("#tab-arrange_quote-update-content");
 
-					var updateHtml = updateQuoteTemplate(data);
-					$container.find('#quoteContent-'+$a.a).html(updateHtml)
+						var updateHtml = updateQuoteTemplate(data);
+						$container.find('#quoteContent-'+$a.a).html(updateHtml)
 
-					$container.find('.inquiryContent').on("click",function(){
-						var quoteId = $container.find('[name=quoteId]').val();
-						if(!quoteId){
-							showMessageDialog($( "#confirm-dialog-message" ),"请先询价！");
-							return false;
-						} 
-						quote.quoteStatus(quoteId,$container,'update');
-					});	
+						$container.find('.inquiryContent').on("click",function(){
+							var quoteId = $container.find('[name=quoteId]').val();
+							if(!quoteId){
+								showMessageDialog($( "#confirm-dialog-message" ),"请先询价！");
+								return false;
+							} 
+							quote.quoteStatus(quoteId,$container,'update');
+						});	
 
-					quote.init_event($container);
-					if (!!target) {
-						$container.find('.inquiryContent').trigger('click');
-						if (target == "T-hotel") {
-							$container.find('.hotelInquiryContent').trigger('click');
-						}else if (target == "T-bus") {
-							$container.find('.busInquiryResult').trigger('click');
+						quote.init_event($container,id);
+						if (!!target) {
+							$container.find('.inquiryContent').trigger('click');
+							if (target == "T-hotel") {
+								$container.find('.hotelInquiryContent').trigger('click');
+							}else if (target == "T-bus") {
+								$container.find('.busInquiryResult').trigger('click');
+							}
 						}
 					}
 				}
@@ -641,8 +644,36 @@ define(function(require, exports) {
 	};
 
 	//报价详情页事件绑定
-	quote.init_event =function($container) {
+	quote.init_event =function($container,id) {
 		var validator = rule.quoteCheckor($container);
+
+		if(arguments.length == 2){
+			// $container.find(".T-editor").addListener("contentChange",function(){
+			// 	console.log("changedwaerfwa");
+			//     $container.data('isEdited', true);
+			// });
+			// 监听修改
+			$container.off('change').off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE)
+			.on('change','input, select,.T-editor', function(event) {
+				event.preventDefault();
+				$container.data('isEdited', true);
+			})
+			// 监听保存，并切换tab
+			.on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
+				event.preventDefault();
+				quote.saveQuote(id,$container,tab_id, title, html);
+			})
+			.on(SWITCH_TAB_BIND_EVENT, function(event) {
+				event.preventDefault();
+				quote.init_event($container,id);
+			})
+			// 保存后关闭
+			.on(CLOSE_TAB_SAVE, function(event) {
+				event.preventDefault();
+				quote.saveQuote(id,$container);
+			});
+		}	
+
 		//下拉
 		quote.autocomplete($container);
 		//时间控件
@@ -2721,7 +2752,7 @@ define(function(require, exports) {
 	 * @return {[type]}    [description]
 	 */
 	quote.saveQuote = function(id, $container) {
-		var isContainGuideFee = 0, isContainSelfPay = 0, isChildNeedRoom = 0;
+		var isContainGuideFee = 0, isContainSelfPay = 0, isChildNeedRoom = 0,argumentsLen = arguments.length;
 		if ($container.find('[name=includeGuideFee]').prop("checked")) {
 			isContainGuideFee = 1;
 		}
@@ -2959,16 +2990,22 @@ define(function(require, exports) {
 			success: function(data){
 				var result = showDialog(data);
 				if (result) {
-					var idString = $container.attr("id");
-					if (idString == "tab-arrange_quote-add-content") {
-						Tools.closeTab("arrange_quote-add");
-						quote.listQuote(0);
-					}
-					else if (idString == "tab-arrange_quote-update-content") {
-						Tools.closeTab("arrange_quote-update");
-						quote.listQuote(quote.searchData.pageNo);
-					}
-					showMessageDialog($( "#confirm-dialog-message" ), "报价添加成功，请在报价管理中查看！");
+					showMessageDialog($( "#confirm-dialog-message" ), "报价添加成功，请在报价管理中查看！",function(){
+						if(argumentsLen === 2){
+                            var idString = $container.attr("id");
+							if (idString == "tab-arrange_quote-add-content") {
+								Tools.closeTab("arrange_quote-add");
+								quote.listQuote(0);
+							}
+							else if (idString == "tab-arrange_quote-update-content") {
+								Tools.closeTab("arrange_quote-update");
+								quote.listQuote(quote.searchData.pageNo);
+							}
+						}else {
+							$container.data('isEdited',false);
+                            quote.updateQuote($container.find(".T-newData").data("id"),"T-bus");
+                        }
+					});
 				}
 			}
 		})
