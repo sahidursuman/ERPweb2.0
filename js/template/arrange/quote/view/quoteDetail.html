@@ -66,7 +66,7 @@
 				</div>
 			</div>
 	</form>
-
+    {{if !!busCompanyArrange}}
 	<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
 		<div class="form-group">
 			<div class="col-xs-12 col-sm-12 widget-container-col">
@@ -84,8 +84,8 @@
 											<div  class="col-sm-1">
 											<button style="padding: 2px 20px 2px 20px;margin-left:-24px;">车</button></div>
 											<div class="col-sm-11" style="padding: 4px 0px 3px 0px">
-											<div class="col-sm-3">{{busCompanyArrange.bus.seatCount}}座</div>
-											<div class="col-sm-3">{{busCompanyArrange.bus.brand}}</div>
+											<div class="col-sm-3">{{if !!busCompanyArrange.bus}}{{busCompanyArrange.bus.seatCount}}{{/if}}座</div>
+											<div class="col-sm-3">{{if !!busCompanyArrange.bus}}{{busCompanyArrange.bus.brand}}{{/if}}</div>
 											<div class="col-sm-3">{{busCompanyArrange.remark}}</div>
 											</div>
 											</div>
@@ -101,7 +101,7 @@
 				</div>
 			</div>
 		</div>
-
+        {{/if}}
 		<div class="form-group lineDayArrangeTemplate">
 		<label class="" style="font-size: 18px;color:#428bca;font-weight:bold;">行程特色:</label>
 		 {{each daysList as viewQuoteDaysList i}}
