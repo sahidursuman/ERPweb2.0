@@ -464,15 +464,15 @@
                                                                                                 </thead>
                                                                                                 <tbody>
                                                                                                     <tr>
-                                                                                            <td>{{ticketList.ticket.name}}</td>
-                                                                                            <td>
-                                                                                                {{if ticketList.type == 1 }}机票 {{ else if ticketList.type == 2}} 汽车票 {{ else if ticketList.type == 3 }} 火车票 {{ else if ticketList.type == 4}} 轮船票 {{ /if }}
-                                                                                            </td>
-                                                                                            <td>{{ticketList.seatLevel}}</td>
-                                                                                            <td>{{ticketList.price}}</td>
-                                                                                            <td>{{ticketList.memberCount}}</td>
-                                                                                            <td>{{ticketList.remark}}</td>
-                                                                                        </tr>
+			                                                                                            <td>{{ticketList.ticket.name}}</td>
+			                                                                                            <td>
+			                                                                                                {{if ticketList.type == 1 }}机票 {{ else if ticketList.type == 2}} 汽车票 {{ else if ticketList.type == 3 }} 火车票 {{ else if ticketList.type == 4}} 轮船票 {{ /if }}
+			                                                                                            </td>
+			                                                                                            <td>{{ticketList.seatLevel}}</td>
+			                                                                                            <td>{{ticketList.price}}</td>
+			                                                                                            <td>{{ticketList.memberCount}}</td>
+			                                                                                            <td>{{ticketList.remark}}</td>
+			                                                                                        </tr>
                                                                                                  </tbody>
                                                                                             </table>
                                                                                         </div>
@@ -480,6 +480,43 @@
                                                                                 </div>
                                                                             </div>
                                                                            {{/each}}
+                                                                            <!-- /.其他 -->
+                                                                            {{each viewQuoteDaysList.otherArrange as otherList}}
+                                                                            <div class="T-timeline-item timeline-item clearfix T-resourceOtherList ui-sortable-handle" data-entity-index="{{otherList.orderIndex}}">
+                                                                                <div class="timeline-info" style="color:#1fade0;margin-left: 4px">
+                                                                                    <i class="ace-icon fa fa-circle"></i>
+                                                                                    <span>其他</span>
+                                                                                </div>
+                                                                                <div class="widget-box transparent" style="margin-top: 20px">
+                                                                                    <div class="widget-body">
+                                                                                        <div class="widget-main">
+                                                                                            <table class="table table-striped table-bordered table-hover">
+                                                                                                <thead>
+                                                                                                    <tr>
+                                                                                                        <th class="th-border">项目名称</th>
+                                                                                                        <th class="th-border">联系人</th>
+                                                                                                        <th class="th-border">联系电话</th>
+                                                                                                        <th class="th-border">单价</th>
+                                                                                                        <th class="th-border">数量</th>
+                                                                                                        <th class="th-border">备注</th>
+                                                                                                    </tr>
+                                                                                                </thead>
+                                                                                                <tbody>
+                                                                                                    <tr>
+                                                                                                        <td>{{otherList.name}}</td>
+                                                                                                        <td>{{otherList.managerName}}</td>
+                                                                                                        <td>{{otherList.mobileNumber}}</td>
+                                                                                                        <td>{{otherList.price}}</td>
+                                                                                                        <td>{{otherList.memberCount}}</td>
+                                                                                                        <td>{{otherList.remark}}" /></td>
+                                                                                                    </tr>
+                                                                                                </tbody>
+                                                                                            </table>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            {{/each}}
                                                                         </div>
                                                                         <!-- /.timeline-items -->
                                                                     </div>

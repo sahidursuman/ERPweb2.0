@@ -770,7 +770,7 @@
                                                                             {{/each}}
                                                                             <!-- /.其他 -->
                                                                             {{each lineProductDaysList.otherArrange as otherList}}
-                                                                            <div class="T-timeline-item timeline-item clearfix T-resourceTicketList ui-sortable-handle" data-entity-index="{{otherList.orderIndex}}">
+                                                                            <div class="T-timeline-item timeline-item clearfix T-resourceOtherList ui-sortable-handle" data-entity-index="{{otherList.orderIndex}}">
                                                                                 <div class="timeline-info" style="color:#1fade0;margin-left: 4px">
                                                                                     <i class="ace-icon fa fa-circle"></i>
                                                                                     <span>其他</span>
@@ -793,7 +793,7 @@
                                                                                                 <tbody>
                                                                                                     <tr>
                                                                                                         <td>
-                                                                                                            <input type="text" class="col-xs-12 bind-change" value="{{otherList.name}}" />
+                                                                                                            <input type="text" class="col-xs-12 bind-change" name="name" value="{{otherList.name}}" />
 																											<input type="hidden" name="arrangeId" value="{{otherList.id}}">
                                                                                                         </td>
                                                                                                         <td>
