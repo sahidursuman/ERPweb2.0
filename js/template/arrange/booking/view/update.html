@@ -19,7 +19,7 @@
 							<div class="input-group">
 								<input type="text" name="contactRealname" class="col-sm-12 T-choosePartnerManager" value="{{if bookingOrder.partnerAgencyContact != null}}{{bookingOrder.partnerAgencyContact.contactRealname}}{{/if}}">
 								<input type="hidden" name="partnerAgencyContactId" value="{{if bookingOrder.partnerAgencyContact != null}}{{bookingOrder.partnerAgencyContact.id}}{{/if}}" />
-								<span class="input-group-addon addPartnerManager" style="cursor:pointer;left:-38px;" title="为组团社新添加联系人">
+								<span class="input-group-addon T-addPartnerManager" style="cursor:pointer;left:-38px;" title="为组团社新添加联系人">
 									<i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
 								</span>
 							</div>
@@ -163,7 +163,7 @@
 										<td><input name="sumCostMoney" value="{{hotelList.sumCostMoney}}" readonly="readonly" type="text" class="col-sm-12"/></td>
 										<td><input name="sumNeedGetMoney" value="{{hotelList.sumNeedGetMoney}}" readonly="readonly" type="text" class="col-sm-12"/></td>
 										<td>
-											<a class="cursor T-hotel-delete">删除</a>
+											<a class="cursor T-action T-hotel-delete">删除</a>
 										</td>
 									</tr>{{/each}}
 								</tbody>
@@ -226,7 +226,7 @@
 										<td><input name="sumNeedGetMoney" value="{{scenicList.sumNeedGetMoney}}" readonly="readonly" type="text" class="col-sm-12"/></td>
 										<td><input name="orderNumber" value="{{scenicList.orderNumber}}" type="text" class="col-sm-12" maxlength="50" /></td>
 										<td>
-											<a class="cursor T-scenic-delete">删除</a>
+											<a class="cursor T-action T-scenic-delete">删除</a>
 										</td>
 									</tr>{{/each}}
 								</tbody>
@@ -300,7 +300,7 @@
 										<td><input name="sumCostMoney" value="{{ticketList.sumCostMoney}}" readonly="readonly" type="text" class="col-sm-12"/></td>
 										<td><input name="sumNeedGetMoney" value="{{ticketList.sumNeedGetMoney}}" readonly="readonly" type="text" class="col-sm-12"/></td>
 										<td>
-											<a class="cursor T-ticket-delete">删除</a>
+											<a class="cursor T-action T-ticket-delete">删除</a>
 										</td>
 									</tr>{{/each}}
 								</tbody>
@@ -329,7 +329,7 @@
 										<th class="th-border" width="50"><span class="necessary">*</span>开始日期</th>
 										<th class="th-border" width="50"><span class="necessary">*</span>结束日期</th>
 										<th class="th-border"><span class="necessary">*</span>车座数</th>
-										<th class="th-border"> <span class="necessary">*</span>车辆品牌</th>
+										<th class="th-border">车辆品牌</th>
 										<th class="th-border"><span class="necessary">*</span>所属车队</th>
 										<th class="th-border"><span class="necessary">*</span>数量</th>
 										<th class="th-border">成本单价</th>
@@ -371,7 +371,7 @@
 										<td><input name="sumCostMoney" value="{{busList.sumCostMoney}}" readonly="readonly" type="text" class="col-sm-12"/></td>
 										<td><input name="sumNeedGetMoney" value="{{busList.sumNeedGetMoney}}" readonly="readonly" type="text" class="col-sm-12"/></td>
 										<td>
-											<a class="cursor T-bus-delete">删除</a>
+											<a class="cursor T-action T-bus-delete">删除</a>
 										</td>
 									</tr>{{/each}}
 								</tbody>

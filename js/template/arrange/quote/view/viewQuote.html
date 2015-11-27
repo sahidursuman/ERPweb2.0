@@ -20,7 +20,7 @@
 				<td class="style-myself">单房差数</td>
 				<td class="" style="text-align: left;padding: 0px 0px 0px 10px">{{quoteDetailJson.singleRoomCount}}</td>
 				<td class="style-myself">出游日期</td>
-				<td class="" style="text-align: left;padding: 0px 0px 0px 10px">{{quoteDetailJson.startTime}}</td>
+				<td class="" style="text-align: left;padding: 0px 0px 0px 10px">{{quoteDetailJson.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
 			</tr>
 			<tr>
 				<td class="style-myself">总价</td>
@@ -29,11 +29,11 @@
 				</tr>
 			<tr>
 						<td class="style-myself">大人单价</td>
-						<td class="" style="text-align: left;padding: 0px 0px 0px 10px">{{quoteDetailJson.childQuotePrice}}</td>
-						<td class="style-myself">小孩单价</td>
 						<td class="" style="text-align: left;padding: 0px 0px 0px 10px">{{quoteDetailJson.adultQuotePrice}}</td>
+						<td class="style-myself">小孩单价</td>
+						<td class="" style="text-align: left;padding: 0px 0px 0px 10px">{{quoteDetailJson.childQuotePrice}}</td>
 						<td class="style-myself">单房差</td>
-						<td class="" style="text-align: left;padding: 0px 0px 0px 10px">{{quoteDetailJson.singleRoomCount}}</td>
+						<td class="" style="text-align: left;padding: 0px 0px 0px 10px">{{quoteDetailJson.singleRoomQuotePrice}}</td>
 					</tr>
 			<tr>
 				<td class="style-myself">备注</td>
@@ -190,7 +190,7 @@
 															<td>{{busCompanyArrange.busCompany.mobileNumber}}</td>
 
 															<td>{{busCompanyArrange.price}}</td>
-															<td>{{busCompanyArrange.busCompany.remark}}</td>
+															<td>{{busCompanyArrange.remark}}</td>
 															{{else}}
 															<td></td>
 															<td></td>
@@ -243,17 +243,9 @@
                                                 <h5 class="">
 														<label class="title-size">行程标题：{{viewQuoteDaysList.lineProductDay.title}}</label>
 													</h5>
-                                                <div class="widget-body">
-                                                    <div class="widget-main"> 
-                                                        <h5 class="header">行程详情：</h5>
-                                                        <!-- <script id="" class="T-editor" type="text/plain" style="width:100%">
-                                                           
-                                                        </script> -->
-                                                        <div class="detailEditor wysiwyg-editor" style="height: 200px;overflow: scroll;margin-bottom: 40px;">
-                                               				 {{#viewQuoteDaysList.lineProductDay.detail}}
-                                            			</div>
-                                                      
-                                                        <div id="timeline-1">
+
+
+													<div id="timeline-1">
                                                             <div class="row">
                                                                 <div class="col-xs-12 col-sm-12">
                                                                     <div class="timeline-container T-timeline-container">
@@ -472,15 +464,15 @@
                                                                                                 </thead>
                                                                                                 <tbody>
                                                                                                     <tr>
-                                                                                            <td>{{ticketList.ticket.name}}</td>
-                                                                                            <td>
-                                                                                                {{if ticketList.type == 1 }}机票 {{ else if ticketList.type == 2}} 汽车票 {{ else if ticketList.type == 3 }} 火车票 {{ else if ticketList.type == 4}} 轮船票 {{ /if }}
-                                                                                            </td>
-                                                                                            <td>{{ticketList.seatLevel}}</td>
-                                                                                            <td>{{ticketList.price}}</td>
-                                                                                            <td>{{ticketList.memberCount}}</td>
-                                                                                            <td>{{ticketList.remark}}</td>
-                                                                                        </tr>
+			                                                                                            <td>{{ticketList.ticket.name}}</td>
+			                                                                                            <td>
+			                                                                                                {{if ticketList.type == 1 }}机票 {{ else if ticketList.type == 2}} 汽车票 {{ else if ticketList.type == 3 }} 火车票 {{ else if ticketList.type == 4}} 轮船票 {{ /if }}
+			                                                                                            </td>
+			                                                                                            <td>{{ticketList.seatLevel}}</td>
+			                                                                                            <td>{{ticketList.price}}</td>
+			                                                                                            <td>{{ticketList.memberCount}}</td>
+			                                                                                            <td>{{ticketList.remark}}</td>
+			                                                                                        </tr>
                                                                                                  </tbody>
                                                                                             </table>
                                                                                         </div>
@@ -488,6 +480,43 @@
                                                                                 </div>
                                                                             </div>
                                                                            {{/each}}
+                                                                            <!-- /.其他 -->
+                                                                            {{each viewQuoteDaysList.otherArrange as otherList}}
+                                                                            <div class="T-timeline-item timeline-item clearfix T-resourceOtherList ui-sortable-handle" data-entity-index="{{otherList.orderIndex}}">
+                                                                                <div class="timeline-info" style="color:#1fade0;margin-left: 4px">
+                                                                                    <i class="ace-icon fa fa-circle"></i>
+                                                                                    <span>其他</span>
+                                                                                </div>
+                                                                                <div class="widget-box transparent" style="margin-top: 20px">
+                                                                                    <div class="widget-body">
+                                                                                        <div class="widget-main">
+                                                                                            <table class="table table-striped table-bordered table-hover">
+                                                                                                <thead>
+                                                                                                    <tr>
+                                                                                                        <th class="th-border">项目名称</th>
+                                                                                                        <th class="th-border">联系人</th>
+                                                                                                        <th class="th-border">联系电话</th>
+                                                                                                        <th class="th-border">单价</th>
+                                                                                                        <th class="th-border">数量</th>
+                                                                                                        <th class="th-border">备注</th>
+                                                                                                    </tr>
+                                                                                                </thead>
+                                                                                                <tbody>
+                                                                                                    <tr>
+                                                                                                        <td>{{otherList.name}}</td>
+                                                                                                        <td>{{otherList.managerName}}</td>
+                                                                                                        <td>{{otherList.mobileNumber}}</td>
+                                                                                                        <td>{{otherList.price}}</td>
+                                                                                                        <td>{{otherList.memberCount}}</td>
+                                                                                                        <td>{{otherList.remark}}" /></td>
+                                                                                                    </tr>
+                                                                                                </tbody>
+                                                                                            </table>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            {{/each}}
                                                                         </div>
                                                                         <!-- /.timeline-items -->
                                                                     </div>
@@ -495,6 +524,16 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+
+                                                <div class="widget-body">
+                                                    <div class="widget-main"> 
+                                                        <h5 class="header">行程详情：</h5>
+                                                        <!-- <script id="" class="T-editor" type="text/plain" style="width:100%">
+                                                           
+                                                        </script> -->
+                                                        <div class="detailEditor wysiwyg-editor" style="height: 200px;overflow: scroll;margin-bottom: 40px;">
+                                               				 {{#viewQuoteDaysList.lineProductDay.detail}}
+                                            			</div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -521,7 +560,7 @@
 						<div class="widget-main">
 							<div class="form-group">
 								<label class="col-sm-1 control-label no-padding-right">费用包含:</label>
-								<div class="col-sm-10">
+								<div class="col-sm-11">
                                     <textarea class="form-control" class="col-sm-12" readonly="readonly">
                                     	{{quoteDetailJson.lineProduct.includeFee}} 
                                     </textarea>
@@ -529,7 +568,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-1 control-label no-padding-right">费用不含:</label>
-                                <div class="col-sm-10">
+                                <div class="col-sm-11">
                                     <textarea class="form-control" class="col-sm-12" readonly="readonly">
                                     	{{quoteDetailJson.lineProduct.excludeFee}}
                                     </textarea>
@@ -537,7 +576,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-1 control-label no-padding-right">行程特色:</label>
-                                <div class="col-sm-10">
+                                <div class="col-sm-11">
                                     <textarea class="form-control" class="col-sm-12" readonly="readonly">
                                     	{{quoteDetailJson.lineProduct.lineFeature}} 
                                     </textarea>
@@ -545,7 +584,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-1 control-label no-padding-right">行程须知:</label>
-                                <div class="col-sm-10">
+                                <div class="col-sm-11">
                                     <textarea class="form-control" class="col-sm-12" readonly="readonly">
                                     	{{quoteDetailJson.lineProduct.lineNotice}} 
                                     </textarea>

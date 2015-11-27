@@ -1,0 +1,306 @@
+<div class="shareQuoteS" style="background-color: #ffffff;">
+	 <div style="background-color:#076598;height: 70px;">
+	 	<img src="images/logo_24x24.png" style="margin-left: 60px;margin-top: 10px">
+	 	<img src="images/huochaitou.png" style="margin-top: 10px">
+	 </div>
+	 <div style="height: 7px;background-color:#04558C"></div>
+	<div class="quoteMainWidth" >
+		<div class="viewQuoteContainer" onload="shareQuote()">
+	       <form class="form-horizontal viewQuoteMainForm" role="form" style="" onsubmit="return false">
+
+
+				<div style="width: 100%;">
+				<h4 style="text-align: center;font-family: '微软雅黑';">{{quoteDetailJson.travelAgency.name}}</h4>
+				<hr class='quoteHr'>
+					<h5 style="text-align: center;font-family: '微软雅黑';font-size: 22px;color: #666666;">报价单</h5>
+				<hr class='quoteHr'>
+					<div class="col-sm-12" style="margin-top:13px;">
+						<h5 class="col-sm-4" style="font-family: '微软雅黑';margin-left: -10px;">{{quoteDetailJson.partnerAgency.travelAgencyName}} ：</h5>
+					</div>
+					<div class="col-sm-12">
+						<div class="col-sm-12" style="margin-left: 20px;">感谢惠顾，现将出游日期为：&nbsp;&nbsp;
+						{{quoteDetailJson.startTime | dateFormat:'yyyy-MM-dd'}}&nbsp;&nbsp;&nbsp;&nbsp;线路产品名称为：&nbsp;&nbsp;{{quoteDetailJson.lineProduct.name}}&nbsp;&nbsp;&nbsp;&nbsp;大人数为{{quoteDetailJson.adultCount}}小孩数为{{quoteDetailJson.childCount}}&nbsp;&nbsp;&nbsp;&nbsp;的报价为您展示如下:</div>
+					</div>
+					<div class="col-sm-12" style="margin-top: 10px;margin-left: -9px;">
+						<div class="col-sm-2">大人单价：{{quoteDetailJson.adultQuotePrice}}</div>
+						<div class="col-sm-2">小孩单价：{{quoteDetailJson.childQuotePrice}}</div>
+						<div class="col-sm-2">单房差：{{quoteDetailJson.singleRoomQuotePrice}}</div>
+						<div class="col-sm-2">总价：<span style="color: #FE8922"> {{quoteDetailJson.sumQuoteFee}}</span></div>
+						<div class="col-sm-2">单房差数：{{quoteDetailJson.singleRoomCount}}</div>
+					</div>
+					
+					<div class="col-sm-12" style="margin-top: 35px;margin-left: -9px;">
+					<div class="col-sm-2" style="font-weight: bolder;">联系我们</div>
+						<div class="col-sm-2">联系人：</span> &nbsp;{{quoteDetailJson.user.realName}}</div>
+						<div class="col-sm-2">联系电话：</span> &nbsp;{{quoteDetailJson.user.mobileNumber}}</div>
+						<div class="col-sm-4">报价时间：{{quoteDetailJson.createTime}}</div>	
+					</div>
+				</div>
+
+			<div class="ui-sortable-handle" style="margin-bottom: 30px;">
+				<div class="pull-right line-bluer line-separatedQuote" style="margin-top: 30px;"></div>
+				<div style="clear: both"></div>
+				<div class="widget-body">
+
+					<div class="widget-main">
+						<div class="form-group">
+						<h5 class="">
+                          <label class="title-size" style="margin-left: 25px;">线路信息:</label>
+                        </h5>
+							<label class="col-sm-1 control-label no-padding-right">线路名称:</label>
+							<div class="col-sm-3">
+								<label class="control-label">{{quoteDetailJson.lineProduct.name}}</label> 
+								<input type="hidden" value="" name="lineProductId">
+							</div>
+						
+							<label class="col-sm-1 control-label no-padding-right">天数:</label>
+							<div class="col-sm-3">
+								<label class="control-label" name="days" value="">{{quoteDetailJson.lineProduct.days}}</label> 
+							</div>
+							<label class="col-sm-1 control-label no-padding-right">类别:</label>
+							<div class="col-sm-3">
+								<label class="control-label">{{quoteDetailJson.lineProduct.type}}</label> 
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+	</form>
+    {{if !!busCompanyArrange}}
+	<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
+		<div class="form-group">
+			<div class="col-xs-12 col-sm-12 widget-container-col">
+				<div class=" ui-sortable-handle">
+					<div class="pull-right line-bluer line-separatedQuote" style="margin-top: 10px;"></div>
+					<div style="clear: both"></div>
+					<div class="widget-body">
+						<div class="widget-main">
+								<div class="col-xs-12 widget-container-col">
+									<div class=" ui-sortable-handle">
+											
+										<div class="widget-body">
+											<div class="widget-main">
+											<div class="col-sm-12" style="margin-top: 20px;">
+											<div  class="col-sm-1">
+											<button style="padding: 2px 20px 2px 20px;margin-left:-24px;">车</button></div>
+											<div class="col-sm-11" style="padding: 4px 0px 3px 0px">
+											<div class="col-sm-3">{{if !!busCompanyArrange.bus}}{{busCompanyArrange.bus.seatCount}}{{/if}}座</div>
+											<div class="col-sm-3">{{if !!busCompanyArrange.bus}}{{busCompanyArrange.bus.brand}}{{/if}}</div>
+											<div class="col-sm-3">{{busCompanyArrange.remark}}</div>
+											</div>
+											</div>
+											<table class="table table-striped table-bordered table-hover T-arrangeBusCompanyList">
+												</table>
+											</div>
+										</div>
+									</div>
+								</div>
+							<div class="clearfix"></div>					
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+        {{/if}}
+		<div class="form-group lineDayArrangeTemplate">
+		<label class="" style="font-size: 18px;color:#428bca;font-weight:bold;">行程特色:</label>
+		 {{each daysList as viewQuoteDaysList i}}
+
+			 <div class="tabbable" style="margin-top: 15px;">
+			 			
+                        <ul class="nav" id="myTab">
+                        <li {{if i==0 }}class="active" {{/if}}>
+                            <a aria-expanded="true" data-toggle="tab" href="#dayListView-{{i}}" style="margin-left:-25px;font-size:16px;width: 140px;margin-top: -10px;">
+                                第{{i+1}}天
+                            </a>
+                            </li>
+                           
+                        </ul>
+                         <div class="pull-right line-bluer line-separatedQuote" style="width: 100%"></div>
+                        <div class="tab-content T-daylist" style="position: relative; top: -2px; border: 1px solid #ececec">
+                            {{each daysList as viewQuoteDaysList i}}
+                            <div id="dayListView-{{i}}" class="tab-pane fade {{if i == 0}}active in{{/if}}">
+                                <div class="col-xs-12 col-sm-12 widget-container-col T-dailyArrangeList">
+                                    <div class=" ui-sortable-handle">
+                                        <h5 class="">
+                                            <label class="title-size">行程标题：{{viewQuoteDaysList.lineProductDay.title}}</label>
+                                        </h5>
+                                        <div id="timeline-1">
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-12">
+                                                    <!-- <div class="timeline-container T-timeline-container"> -->
+                                                        <div class="timeline-items T-timeline-detail-container">
+                                                            <!-- /.餐饮列表 -->
+                                                            {{each viewQuoteDaysList.restaurantArrange as restaurantList}}
+                                                            <div class="T-timeline-item timeline-item clearfix T-RestaurantList ui-sortable-handle" style="margin-left: 20px;" data-entity-index="">
+                                                                <div class="timeline-info" style="margin-left: -33px;margin-top: 4px;">
+                                                                    <button style="padding: 2px 20px 2px 20px;margin-top: 18px;height: 30px;">吃</button>
+                                                                </div>
+                                                                <div class="widget-box transparent" style="margin-top: 20px">
+                                                                    <div class="widget-body">
+                                                                        <div class="widget-main">
+                                                                            <table class="table table-striped table-bordered table-hover">
+                                                                              <!--   <thead>
+                                                                                <tr>
+
+                                                                                    <th class="th-border">用餐类型</th>
+                                                                                    <th class="th-border">餐厅名称</th>
+                                                                                    <th class="th-border">备注</th>
+                                                                                </tr>
+                                                                                </thead> -->
+                                                                                <tbody>
+                                                                                <tr>
+
+                                                                                    <td>{{restaurantList.restaurantStandard.type}}</td>
+                                                                                    <td>{{restaurantList.restaurant.name}}</td>
+                                                                                    <td>{{restaurantList.remark}}</td>
+                                                                                </tr>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            {{/each}}
+                                                            <!-- /.酒店 -->
+                                                            {{each viewQuoteDaysList.hotelArrange as hotelList}}
+                                                            <div class="T-timeline-item timeline-item clearfix T-resourceHotelList ui-sortable-handle" style="margin-left: 20px;" data-entity-index="">
+                                                                 <div class="timeline-info" style="margin-left: -33px;margin-top: 4px;">
+                                                                    <button style="padding: 2px 20px 2px 20px;margin-top: 18px;height: 30px;">住</button>
+                                                                </div>
+                                                                <div class="widget-box transparent" style="margin-top: 20px">
+                                                                    <div class="widget-body">
+                                                                        <div class="widget-main">
+                                                                            <table class="table table-striped table-bordered table-hover">
+                                                                               <!--  <thead>
+                                                                                <tr>
+                                                                                    <th class="th-border">酒店星级</th>
+                                                                                    <th class="th-border">酒店名称</th>
+                                                                                    <th class="th-border">房型</th>
+                                                                                    <th class="th-border">早餐</th>
+                                                                                    <th class="th-border">备注</th>
+                                                                                </tr>
+                                                                                </thead> -->
+                                                                                <tbody>
+                                                                                <tr>
+                                                                                    <td>
+                                                                                        {{if hotelList.hotel.level == 1}} 三星以下 {{else if hotelList.hotel.level == 2}} 三星 {{else if hotelList.hotel.level == 3}} 准四星 {{else if hotelList.hotel.level == 4}} 四星 {{else if hotelList.hotel.level == 5}} 准五星 {{else if hotelList.hotel.level == 6}} 五星 {{else}} 五星以上 {{/if}}
+                                                                                    </td>
+                                                                                    <td>{{hotelList.hotel.name}}</td>
+                                                                                    <td>{{hotelList.hotelRoom.type}}</td>
+                                                                                    <td>
+                                                                                        {{if hotelList.hotelRoom.containBreakfast==1}}含早餐{{/if}} {{if hotelList.hotelRoom.containLunch==1}}含午餐{{/if}} {{if hotelList.hotelRoom.containDinner==1}}含晚餐{{/if}}
+                                                                                    </td>
+                                                                                    <td>{{hotelList.remark}}</td>
+                                                                                </tr>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            {{/each}}
+                                                            <!-- /.景区 -->
+                                                            {{each viewQuoteDaysList.scenicArrange as scenicList}}
+                                                            <div class="T-timeline-item timeline-item clearfix T-resourceScenicList ui-sortable-handle" style="margin-left: 20px;" data-entity-index="">
+                                                                 <div class="timeline-info" style="margin-left: -33px;margin-top: 4px;">
+                                                                    <button style="padding: 2px 20px 2px 20px;margin-top: 18px;height: 30px;">游</button>
+                                                                </div>
+                                                                <div class="widget-box transparent" style="margin-top: 20px">
+                                                                    <div class="widget-body">
+                                                                        <div class="widget-main">
+                                                                            <table class="table table-striped table-bordered table-hover">
+                                                                                <!-- <thead>
+                                                                                <tr>
+                                                                                    <th class="th-border">景区名称</th>
+                                                                                    <th class="th-border">时间</th>
+                                                                                    <th class="th-border">备注</th>
+                                                                                </tr>
+                                                                                </thead> -->
+                                                                                <tbody>
+                                                                                <tr>
+                                                                                    <td>{{scenicList.scenic.name}}</td>
+                                                                                    <td>{{scenicList.tourDuration}}</td>
+                                                                                    <td>{{scenicList.remark}}</td>
+                                                                                </tr>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            {{/each}}
+                                                        </div>
+                                                        <!-- /.timeline-items -->
+                                                    <!-- </div> -->
+                                                    <!-- /.timeline-container -->
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="widget-body">
+                                            <div class="widget-main">
+                                                <h5 class="header" style="font-family: '微软雅黑'">行程详情：</h5>
+                                                <div class="detailEditor wysiwyg-editor" style="max-height: 200px;overflow: scroll;margin-bottom: 40px;">
+                                                    {{#viewQuoteDaysList.lineProductDay.detail}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                            {{/each}}
+                            <div style="clear:both;height:0px;line-height:0px;"></div>
+                        </div>
+
+                    </div>
+			{{/each}}
+		</div>
+		<div class="form-group driverList">
+			<div class="col-xs-12 col-sm-12 widget-container-col">
+				<div class=" ui-sortable-handle">
+						<!-- <h5 class="">
+							<label class="title-size">特别说明</label>
+						</h5> -->
+					<div class="widget-body">
+						<div class="widget-main">
+							<div class="form-group">
+								<label class="col-sm-1 control-label no-padding-right">费用包含:</label>
+								<div class="col-sm-11">
+                                    <p class="form-control" class="col-sm-12" style="height: auto;"> 
+                                  {{quoteDetailJson.lineProduct.includeFee}} </p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-1 control-label no-padding-right">费用不含:</label>
+                                <div class="col-sm-11">
+                                    <p class="form-control" class="col-sm-12"  style="height: auto;">{{quoteDetailJson.lineProduct.excludeFee}}</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-1 control-label no-padding-right">行程特色:</label>
+                                <div class="col-sm-11">
+                                    <p class="form-control" class="col-sm-12" style="height: auto;">
+                                    	{{quoteDetailJson.lineProduct.lineFeature}} 
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-1 control-label no-padding-right">行程须知:</label>
+                                <div class="col-sm-11">
+                                    <p class="form-control" class="col-sm-12" style="height: auto;" >
+                                    	{{quoteDetailJson.lineProduct.lineNotice}} 
+                                    </p>
+								</div>   
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="space-20"></div>
+	</form>
+</div>
+</div>
+	</div>

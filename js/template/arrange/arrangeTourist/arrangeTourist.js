@@ -176,17 +176,22 @@ define(function(require, exports) {
 							html = filterAuth(html);
 							//绑定模板数据
 							$("#T-Visitor-list").find('.T-touristVisitor-list').html(html);
+							//散客的报表操作
+						    arrangeTourist.init_VistorEvent();
 					
 						} else{
 							var html=touristGrouplistTemplate(data);
 		                    $("#T-Group-list").find('.T-touristGroup-list').html(html);
+
+		                    //团体报表操作
+		                    arrangeTourist.init_GroupEvent();
+
 						};
 
 						//初始化时间控件
 						arrangeTourist.initDatePicker($("#"+tabId));
 
-						//散客团体的报表操作
-						arrangeTourist.init_VistorGroupEvent();
+						
 						
 						// 绑定翻页组件
 						laypage({
@@ -222,7 +227,7 @@ define(function(require, exports) {
 		 * init_VistorGroupEvent 散客团体的报表操作
 		 * @return {[type]} [description]
 		 */
-		init_VistorGroupEvent:function(){
+		init_VistorEvent:function(){
 			//散客操作
 			$("#T-Visitor-list").find('.T-arrageVisitor-list').on('click', '.T-action', function(event) {
 				event.preventDefault();
@@ -237,23 +242,16 @@ define(function(require, exports) {
 						// 转客
 						arrangeTourist.transferTourist(lineProductId,startTime);
 					} else if ($that.hasClass('T-inTransfer'))  {
+						var customerType=0,
+						    divId="T-Visitor-list";
 						// 内转
-						arrangeTourist.inTransferTourist(lineProductId,startTime);
-					}
-
-
-					if($tr.hasClass('.T-touristGroupMergeCheckBox')){
-						//并团的checkbox绑定事件
-						arrangeTourist.addTouristGroupMerge();
-					}else if ($tr.hasClass('.T-start-touristGroup-merge')){
-						//并团绑定事件
-						arrangeTourist.startTouristGroupMerge();
+						arrangeTourist.inTransferTourist(lineProductId,startTime,customerType,divId);
 					}
 			});
 
-
 			//给并团checkbox绑定事件
-			$("#T-Visitor-list").find(".T-touristGroupMergeCheckBox").click(arrangeTourist.addTouristGroupMerge);
+			
+			$("#T-Visitor-list").find(".T-touristGroupMergeCheckBox").off().click(arrangeTourist.addTouristGroupMerge);
 			
 			//散客并团事件的绑定
 			$("#T-Visitor-list").find('.T-start-touristGroup-merge').on('click', function(event) {
@@ -261,9 +259,12 @@ define(function(require, exports) {
 				/* Act on the event */
 				arrangeTourist.startTouristGroupMerge();
 			});
+		
+		},
 
-
-		    //团体操作
+		//团体事件绑定
+		init_GroupEvent:function(){
+		   //团体操作
 		    $("#T-Group-list").find('.T-arrageGroup-list').on('click', '.T-action', function(event) {
 				event.preventDefault();
 				/* Act on the event */
@@ -279,11 +280,14 @@ define(function(require, exports) {
 						// 转客
 						arrangeTourist.transferTourist(lineProductId,startTime);
 					} else if ($that.hasClass('T-inTransfer'))  {
+						var customerType=1,
+						    divId="T-Group-list";
 						// 内转
-						arrangeTourist.inTransferTourist(lineProductId,startTime);
+						arrangeTourist.inTransferTourist(lineProductId,startTime,customerType,divId);
 					}
 			});
 		},
+
 
 
 		/**
@@ -443,7 +447,7 @@ define(function(require, exports) {
 		 * @param  {[type]} startTime     开始时间
 		 * @return {[type]}
 		 */
-		inTransferTourist :function(lineProductId,startTime){
+		inTransferTourist :function(lineProductId,startTime,customerType,divId){
 			$.ajax({
 				url:""+APP_ROOT+"back/innerTransferOperation.do?method=getInTransferMainInfo&token="+$.cookie("token")+"&menuKey=resource_subsection&operation=view",
 				type:"POST",
@@ -525,7 +529,7 @@ define(function(require, exports) {
 										if(result){
 											showMessageDialog($( "#confirm-dialog-message" ), data.message,function(){
 												closeTab("resource_subsection-intransfer");
-												arrangeTourist.listArrangeTourist(0,"","");
+												arrangeTourist.listArrangeTourist(0,"","",customerType,divId);
 											});
 										}
 									}
@@ -560,7 +564,9 @@ define(function(require, exports) {
 						'<i class="ace-icon fa fa-times icon-on-right red2"></i>'+
 					'</button>';
 					$merge.prepend(button);
-					$merge.find('.btn-'+lineProductId+'-'+startTime+'').click(function(){
+					$merge.find('.btn-'+lineProductId+'-'+startTime+'').on('click', function(event) {
+						event.preventDefault();
+						/* Act on the event */
 						arrangeTourist.bindRemoveTouristGroupMerge($merge,lineProductId,startTime)
 					});
 					var touristGroupMerge = {
@@ -1128,7 +1134,7 @@ define(function(require, exports) {
 		},
 		removeTouristGroupMergeData:function($merge,lineProductId,startTime){
 			$merge.find(".btn-"+lineProductId+"-"+startTime+"").remove();
-			$("#"+tabId+" .arrangeTouristMain .arrangeTouristList .tr-"+lineProductId+"-"+startTime+" .touristGroupMergeCheckBox").prop("checked",false);
+			$("#"+tabId+" .tr-"+lineProductId+"-"+startTime+" .T-touristGroupMergeCheckBox").prop("checked",false);
 			var touristGroupMergeList = arrangeTourist.touristGroupMergeData.touristGroupMergeList;
 			if(touristGroupMergeList.length > 0){
 				for(var i=0;i<touristGroupMergeList.length;i++){
@@ -2295,6 +2301,7 @@ define(function(require, exports) {
 				// 表单校验
 				if (!validator.form()) {return; } 
 				var saveTripP = {
+					tripPlanId: getValue("tripPlanId"),
 					"tripPlan": {
 						"tripPlanId":getValue("tripPlanId"),
 						"startTime": getValue("startTime"),
@@ -2321,8 +2328,14 @@ define(function(require, exports) {
 				})
 				
 				var saveTripPlan = JSON.stringify(saveTripP);
+				var url = '';
+				if (status == 2) {
+					url = KingServices.build_url("tripPlan","updateTripPlan")
+				}else{
+					url = KingServices.build_url("tripPlan","saveTripPlan")
+				}
 				$.ajax({
-					url:""+APP_ROOT+"back/tripPlan.do?method=saveTripPlan&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
+					url:url,
 					data:"saveTripPlan="+encodeURIComponent(saveTripPlan),
 					dataType: "json",
 					type:"POST",
@@ -2603,7 +2616,7 @@ define(function(require, exports) {
 			})
 		},
 		licenseNumberChoose :function(){
-			var chooseLicense = $(".widget-main").find("input[name=LicenseNumber]");
+			var chooseLicense = $(".widget-main").find("input.chooseBusLicenseNumber");
 			chooseLicense.autocomplete({
 				minLength:0,
 				change :function(event, ui){
@@ -2629,15 +2642,21 @@ define(function(require, exports) {
 				}
 			}).unbind("click").click(function(){
 				var obj = this;
-				var seatCount = $(this).closest('.widget-main').find("input[name=seatCount]").val();
-				var busBrand = $(this).closest('.widget-main').find("input[name=needBusBrand]").val();
+				var seatCount = $(this).closest('.widget-main').find("input[name=seatCount]").val(),
+				    busBrand = $(this).closest('.widget-main').find("input[name=needBusBrand]").val(),
+				    busCompanyId = $(this).closest('.widget-main').find("input[name=busCompanyId]").val(),
+				    quoteId= $(this).closest('.widget-main').find("input[name=qouteId]").val();
+				  var data={
+					seatCount: seatCount,
+					brand: busBrand,
+				}
+				 if (quoteId != null&& quoteId!='') {
+					data.busCompanyId = busCompanyId;
+				 } 
 				if (!!seatCount) {
 					$.ajax({
 						url:""+APP_ROOT+"back/busCompany.do?method=getLicenseNumbers&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-						data: {
-							seatCount: seatCount,
-							brand: busBrand
-						},
+						data:data,
 						dateType:"json",
 						showLoading:false,
 						type:"POST",
@@ -2662,6 +2681,67 @@ define(function(require, exports) {
 					})
 				}else{
 					layer.tips('请选择车座数', obj, {
+					    tips: [1, '#3595CC'],
+					    time: 2000
+					});
+				}
+			})
+			var chooseLicenseByCompany = $(".widget-main").find("input.T-chooseBusbyCompanyId");
+			chooseLicenseByCompany.autocomplete({
+				minLength:0,
+				change :function(event, ui){
+					if(ui.item == null){
+						var $this = $(this),parents = $(this).closest('.widget-main');
+						$this.val("");
+						parents.find("input[name=busLicenseNumberId]").val("");
+					}
+				},
+				select :function(event, ui){
+					var $this = $(this),parents = $(this).closest('.widget-main');
+						parents.find("input[name=busLicenseNumberId]").val(ui.item.id).trigger('change');
+				}
+			}).unbind("click").click(function(){
+				var obj = this;
+				var id = $(this).closest('.widget-main').find("input[name=busCompanyId]").val()
+				    busBrand = $(this).closest('.widget-main').find("input[name=needBusBrand]").val(),
+				    quoteId= $(this).closest('.widget-main').find("input[name=qouteId]").val(),
+				    seatCount=$(this).closest('.widget-main').find("input[name=seatCount]").val();
+				var data= {
+							brand:busBrand,
+							seatCount:seatCount
+						};
+				    if (quoteId!=null&&quoteId!='') {
+				    	data.busCompanyId=id;
+				    };
+
+				if (!!id) {
+					$.ajax({
+						url:""+APP_ROOT+"back/busCompany.do?method=getLicenseNumbers&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
+						data:data,
+						dateType:"json",
+						showLoading:false,
+						type:"POST",
+						success:function(data){
+							var result = showDialog(data);
+							if(result){
+								var licenseList = JSON.parse(data.busList);
+								if(licenseList && licenseList.length > 0){
+									for(var i=0; i < licenseList.length; i++){
+										licenseList[i].value = licenseList[i].licenseNumber;
+									}
+									$(obj).autocomplete('option','source', licenseList);
+									$(obj).autocomplete('search', '');
+								}else{
+									layer.tips('没有内容', obj, {
+									    tips: [1, '#3595CC'],
+									    time: 2000
+									});
+								}
+							}
+						}
+					})
+				}else{
+					layer.tips('请选择车车队', obj, {
 					    tips: [1, '#3595CC'],
 					    time: 2000
 					});

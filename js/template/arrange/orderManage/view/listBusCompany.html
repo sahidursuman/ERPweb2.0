@@ -13,8 +13,6 @@
 					<th class="col-sm-1">操作人</th>
 					<th class="col-sm-2">车队</th>
 					<th class="col-sm-1">备注</th>
-					<th class="col-sm-1">状态</th>
-					<th class="col-sm-1">操作</th>
 				</tr>
 			</thead>
 			<tbody class="T-Bus-list">
@@ -31,27 +29,24 @@
 					<td>{{if busOrderList.user!=null}}{{busOrderList.user.realName}}{{/if}}</td>
 					<td>{{if busOrderList.busCompanyArrange!=null && busOrderList.busCompanyArrange.busCompany!=null}}{{busOrderList.busCompanyArrange.busCompany.companyName}}{{/if}}</td>
 					<td>{{busOrderList.remark}}</td>
-					<td>{{busOrderList.statusStr}}</td>
-					
-					<td>
-						<a class="cursor {{if busOrderList.status==0}}T-listBusCompany-refuse{{/if}} R-right T-action" style="{{if busOrderList.status==1 || busOrderList.status==-1}}color:#bbb{{/if}}">
-							撤销
-						</a>
-					</td>
 				</tr>
 			{{/each}}									
 			</tbody>
 	</table>
+
+ 
 	<!--分页条数-->
 	<div class="row pageMode">
-		<div class="col-xs-4">
-			<small>共计{{searchParam.totalCount}}条记录</small>
-		</div>
-		<div style="width:320px; float:right;">
-			<div class="dataTables_paginate paging_simple_numbers T-pagenation">
-			</div>  
-		</div>
+			<div class="col-xs-6">
+				<small>共计 {{searchParam.totalCount}} 条记录</small>
+			</div>
+			<div class="col-xs-6">
+				<div class="dataTables_paginate paging_simple_numbers T-pagenation">
+				</div>
+			</div>
 	</div>
-	<!--分页条数-->
+	<!--分页条数-->	
+
+
 
 </div>

@@ -286,14 +286,6 @@ define(function(require, exports) {
 	BookingArrange.CU_event = function($tab){
 		//表单代订信息验证
 		var validator = rule.checkAddBooking($tab);
-		//酒店代订验证
-		var validatorHotel=rule.checkBookingHotel($tab.find(".T-bookingHotelList")); 
-		//景区贷订
-		var validatorScenic=rule.checkBookingScenic($tab.find(".T-bookingScenicList"));   
-		//票务验证
-		var validatorTicket= rule.checkBookingTicket($tab.find(".T-bookingTicketList"));
-		//车队旅游贷订
-		var validatorBus=rule.checkBookingBus($tab.find(".T-bookingBusList")); 
 
 		$tab.off('change').off(SWITCH_TAB_SAVE).off(CLOSE_TAB_SAVE)
 		.on('change', function(event){
@@ -321,6 +313,8 @@ define(function(require, exports) {
 			}else if($that.hasClass('T-bus-add')){
 				BookingArrange.addBusList($that);
 			}
+
+			validator = rule.checkAddBooking($tab);
 		});
     	//同行客户联系人下拉
     	BookingArrange.getPartnerAgencyManagerList($tab);
@@ -434,8 +428,6 @@ define(function(require, exports) {
 			var $parent = $(obj).closest('tr');
 			$parent.find("input[name=hotelRoomId]").val("");
 		});
-		//酒店代订验证
-		var validatorHotel=rule.checkBookingHotel($tab);
 
 		BookingArrange.choose($tab.find(".T-chooseScenicItem"), function(obj){
 			var obj = $(obj);
@@ -513,8 +505,6 @@ define(function(require, exports) {
 			$parent.find("input[name=scenicItemId]").val("");
 			$parent.find("input[name=costPrice]").val("");
     	});
-    	//景区贷订
-		var validatorScenic=rule.checkBookingScenic($tab);  
 
 		//票务项目代订
 		//票务下拉
@@ -540,8 +530,6 @@ define(function(require, exports) {
 			var $parent = $(obj).closest('tr');
 			$parent.find("input[name=ticketId]").val("");
     	});
-    	//票务验证
-		var validatorTicket= rule.checkBookingTicket($tab);
 
 		//旅游车逆向联动
     	//车座数下拉列表
@@ -616,7 +604,7 @@ define(function(require, exports) {
     	BookingArrange.choose($tab.find('.T-busCompany'), function(obj){
 			var seatCount = $(obj).closest('tr').find("input[name=needSeatCount]").val();
 			var brand = $(obj).closest('tr').find("input[name=needBusBrand]").val();
-			if(seatCount && brand){
+			if(seatCount){
 				BookingArrange.ajax({'url' : 'bookingOrder', 'method' : 'getBusCompanyList', 'menuKey' : menuKey, 'operation' : 'view', 'seatCount' : seatCount, 'brand' : brand}, function(data){
 					var busCompanyList = JSON.parse(data.busCompanyList);
 					if(busCompanyList && busCompanyList.length > 0){
@@ -633,7 +621,7 @@ define(function(require, exports) {
 					}
 				});
 			}else{
-				layer.tips('请选择车辆品牌', obj, {
+				layer.tips('请选择车座数', obj, {
 				    tips: [1, '#3595CC'],
 				    time: 2000
 				});
@@ -644,8 +632,6 @@ define(function(require, exports) {
     		$(obj).parent().parent().find("input[name=busCompanyId]").val("");
     	});
 
-		//车队旅游贷订
-		var validatorBus=rule.checkBookingBus($tab);
 	}
 
 	//添加酒店代订列表
@@ -913,16 +899,7 @@ define(function(require, exports) {
 	 */
 	BookingArrange.save = function($tab, validator, tab_array){
 		//表单代订信息验证
-		var validator = rule.checkAddBooking($tab);
-		//酒店代订验证
-		var validatorHotel=rule.checkBookingHotel($tab.find(".T-bookingHotelList")); 
-		//景区代订
-		var validatorScenic=rule.checkBookingScenic($tab.find(".T-bookingScenicList"));   
-		//票务验证
-		var validatorTicket= rule.checkBookingTicket($tab.find(".T-bookingTicketList"));
-		//车队旅游代订
-		var validatorBus=rule.checkBookingBus($tab.find(".T-bookingBusList"));
-		if (!validator.form() || !validatorHotel.form() || !validatorScenic.form() || !validatorTicket.form() || !validatorBus.form()) { return; }    
+		if (!validator.form()) { return; }    
 		BookingArrange.submitBooking($tab, validator, tab_array);
 	}
 	/**
@@ -1100,14 +1077,14 @@ define(function(require, exports) {
 			buttons: [ 
 				{
 					text: "取消",
-					"class" : "btn btn-minier",
+					"class" : "btn btn-minier btn-heightMall",
 					click: function() {
 						$( this ).dialog( "close" );
 					}
 				},
 				{
 					text: "确定",
-					"class" : "btn btn-primary btn-minier",
+					"class" : "btn btn-primary btn-minier btn-heightMall",
 					click: function() {
 						$( this ).dialog( "close" );
 						BookingArrange.ajax({
@@ -1136,6 +1113,25 @@ define(function(require, exports) {
 			}
 		});
 	};
+
+		// BookingArrange.deleteBooking = function(id, $that){
+		// 	if(!!id){
+		// 		showConfirmDialog($("#confirm-dialog-message"),"你确定要删除该项目代订？",function(){
+		// 			$.ajax({
+		// 					'url' : 'bookingOrder',
+	 // 						'method' : 'deleteBookingOrderByIdAndCateName',
+	 // 						'menuKey' : menuKey,
+	 // 						'operation' : 'delete',
+	 // 						'cateName' : 'order',
+	 // 						'id' : id	
+		// 			}).done(function(data){
+		// 				if(showDialog(data)){
+		// 					BookingArrange.listBooking(0);
+		// 				}
+		// 			})
+		// 		});
+		// 	}
+		// }
 
 	/**
 	 * 导出项目代订信息
@@ -1193,7 +1189,7 @@ define(function(require, exports) {
 								'operation': 'delete', 
 								'cateName' : $list, 
 								'id' : id
-							}, function(){
+							}, function(data){
 								showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
 									$parent.fadeOut(function(){
 										var $thatPar = $parent.parents('[class*="Booking"]');

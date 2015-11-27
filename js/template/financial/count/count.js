@@ -16,7 +16,7 @@ define(function(require, exports) {
     
     var count = {
 		searchData : {
-			page : 0,
+			pageNo : 0,
 			id:"",
 			tripNumber : "",
 			lineProductId : "",
@@ -26,7 +26,7 @@ define(function(require, exports) {
 			startTime : "",
 			endTime : "",
             sortType:"auto",
-			status : ""
+			billStatus : ""
                 
 		},
 		edited : {},
@@ -87,18 +87,6 @@ define(function(require, exports) {
                             var status = $('.financialCount .search-area .btn-status').find('button').attr('data-value');
                             var lineProductName = $('.financialCount .search-area').find('input[name=chooseLineProductName]').val();
                             var guideName = $('.financialCount .search-area').find('input[name=chooseGuideRealName]').val();
-                            count.searchData = {
-                                page:0,
-                                id:id,
-                                tripNumber:tripNumber,
-                                lineProductId:lineProductId,
-                                guideId:guideId,
-                                endTime:endTime,
-                                startTime:startTime,
-                                status:status,
-                                lineProductName:lineProductName,
-                                guideName:guideName
-                            };
                             count.initCount(id,tripNumber,lineProductId,lineProductName,guideId,guideName,startTime,endTime,status);
                         });
                     }
@@ -108,8 +96,7 @@ define(function(require, exports) {
             
             // trigger base
         },
-        getlistCount:function(page,id,tripNumber,lineProductId,lineProductName,guideId,guideName,startTime,endTime,status){
-            var args = count.searchData;
+        getlistCount:function(pageNo,id,tripNumber,lineProductId,lineProductName,guideId,guideName,startTime,endTime,status){
             if(count.$searchArea  && arguments.length === 1){
                  id = $('.financialCount .search-area').find('input[name=tripNumber]').val();
                  tripNumber = $('.financialCount .search-area').find('input[name=chooseTripNumber]').val();
@@ -120,28 +107,22 @@ define(function(require, exports) {
                  status = $('.financialCount .search-area .btn-status').find('button').attr('data-value');
                  lineProductName = $('.financialCount .search-area').find('input[name=chooseLineProductName]').val();
                  guideName = $('.financialCount .search-area').find('input[name=chooseGuideRealName]').val();
-                 args = {
-                    page: page || 0,
+                 
+            };
+           $.ajax({
+                url:""+APP_ROOT+"back/financialTripPlan.do?method=listFinancialTripPlan&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
+                type:"POST",
+                data:{
+                    pageNo: pageNo || 0,
                     id:id,
                     tripNumber:tripNumber,
                     lineProductId:lineProductId,
                     guideId:guideId,
                     endTime:endTime,
                     startTime:startTime,
-                    status:status,
+                    billStatus:status,
                     lineProductName:lineProductName,
                     guideName:guideName
-                 }
-            };
-            
-           console.log(args);
-           $.ajax({
-                url:""+APP_ROOT+"back/financialTripPlan.do?method=listFinancialTripPlan&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-                type:"POST",
-                data:args,
-                dataType:"json",
-                beforeSend:function(){
-                    globalLoadingLayer = openLoadingLayer();
                 },
                 success:function(data){
                     layer.close(globalLoadingLayer);
@@ -180,13 +161,25 @@ define(function(require, exports) {
                             var status = $('.financialCount .search-area .btn-status').find('button').attr('data-value');
                             var lineProductName = $('.financialCount .search-area').find('input[name=chooseLineProductName]').val();
                             var guideName = $('.financialCount .search-area').find('input[name=chooseGuideRealName]').val();
+                            count.searchData = {
+                                pageNo:0,
+                                id:id,
+                                tripNumber:tripNumber,
+                                lineProductId:lineProductId,
+                                guideId:guideId,
+                                endTime:endTime,
+                                startTime:startTime,
+                                billStatus:status,
+                                lineProductName:lineProductName,
+                                guideName:guideName
+                            };
                             count.initCount(id,tripNumber,lineProductId,lineProductName,guideId,guideName,startTime,endTime,status);
 						});
                         var tabid = $("#tab-financial_count-content");
                         laypage({
                             cont: tabid.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
                             pages: data.totalPage, //总页数
-                            curr: (page + 1),
+                            curr: (pageNo + 1),
                             jump: function(obj, first) {
                                 if (!first) {  // 避免死循环，第一次进入，不调用页面方法
                                     count.getlistCount(obj.curr -1);
@@ -228,7 +221,7 @@ define(function(require, exports) {
                         count.buildDatePicker();
                         //count.bindTripChoose();
 						count.bindTripChoose($("#tab-"+menuKey+"-content"));
-                        count.bindLineProductChoose();
+                        count.bindLineProductChoose($("#tab-"+menuKey+"-content"));
                         count.bindGuideRealNameChoose();
                     }
                 }
@@ -272,18 +265,18 @@ define(function(require, exports) {
 			});
 		},
         //线路产品
-        bindLineProductChoose : function(){
-        	var lineProduct = $(".financialCount input[name=chooseLineProductName]");
+        bindLineProductChoose : function($obj){
+        	var lineProduct = $obj.find("input[name=chooseLineProductName]");
         	lineProduct.autocomplete({
 				minLength:0,
 				change:function(event,ui){
 					if(ui.item == null){
-						$(this).nextAll('input[name="lineProductId"]').val('');
+						$(this).closest('div').find('input[name=lineProductId]').val('');
 					}
 				},
 				select:function(event,ui){
 					$(this).blur();
-					$(this).next().val(ui.item.lineProductId);
+                    $(this).closest('div').find('input[name=lineProductId]').val(ui.item.id);
 				}
 			}).off("click").on("click", function(){
 				var obj = this;
@@ -2214,9 +2207,10 @@ define(function(require, exports) {
 				type : 1,
 				title : "单据图片",
 				skin : 'layui-layer-rim', // 加上边框
-				area : [ '500px', '540px' ], // 宽高
+				area : '500px', // 宽高
 				zIndex : 1028,
 				content : html,
+                scrollbar: false, // 推荐禁用浏览器外部滚动条
 				success : function() {
 					var colorbox_params = {
 		    			rel: 'colorbox',

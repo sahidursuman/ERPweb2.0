@@ -246,53 +246,24 @@ define(function(require, exports) {
 	 * @param  {int} id     shop id
 	 * @return {[type]}        [description]
 	 */
+	
+
 	shop.deleteShop = function(id){
-		var dialogObj = $( "#confirm-dialog-message" );
-		dialogObj.removeClass('hide').dialog({
-			modal: true,
-			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-			title_html: true,
-			draggable:false,
-			buttons: [ 
-				{
-					text: "取消",
-					"class" : "btn btn-minier",
-					click: function() {
-						$( this ).dialog( "close" );
-					}
-				},
-				{
-					text: "确定",
-					"class" : "btn btn-primary btn-minier",
-					click: function() {
-						$( this ).dialog( "close" );
-						$.ajax({
+		if(!!id){
+			showConfirmDialog($("#confirm-dialog-message"),"你确定要删除该条记录？",function(){
+					$.ajax({
 							url:""+APP_ROOT+"back/shop.do?method=deleteShop&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=delete",
-							type:"POST",
-							data:"id="+id+"",
-							dataType:"json",
-							beforeSend:function(){
-								globalLoadingLayer = openLoadingLayer();
-							},
-							success:function(data){
-								layer.close(globalLoadingLayer);
-								var result = showDialog(data);
-								if(result){
-									shop.$tab.find('.T-shop-list').find(".shop-"+id).fadeOut(function(){
-										shop.listShop(shop.currentPage);
-									});
-								}
-							}
-						});
-					}
-				}
-			],
-			open:function(event,ui){
-				$(this).find("p").text("你确定要删除该条记录？");
-			}
-		});
-		
-	};
+	 						type:"POST",
+	 						data:"id="+id+"",
+					}).done(function(data){
+						if(showDialog(data)){
+							shop.listShop(0);
+						}
+					})
+			});
+		}
+	}	
+
 
 	/**
 	 * view this shop
@@ -662,14 +633,14 @@ define(function(require, exports) {
 				buttons: [ 
 					{
 						text: "取消",
-						"class" : "btn btn-minier",
+						"class" : "btn btn-minier btn-heightMall",
 						click: function() {
 							$( this ).dialog( "close" );
 						}
 					},
 					{
 						text: "确定",
-						"class" : "btn btn-primary btn-minier",
+						"class" : "btn btn-primary btn-minier btn-heightMall",
 						click: function() {
 							$.ajax({
 								url:""+APP_ROOT+"back/shop.do?method=deleteShopTimeArea&token="+$.cookie("token")+"&menuKey=resource_shop&operation=delete",
@@ -731,14 +702,14 @@ define(function(require, exports) {
 				buttons: [ 
 					{
 						text: "取消",
-						"class" : "btn btn-minier",
+						"class" : "btn btn-minier btn-heightMall",
 						click: function() {
 							$( this ).dialog( "close" );
 						}
 					},
 					{
 						text: "确定",
-						"class" : "btn btn-primary btn-minier",
+						"class" : "btn btn-primary btn-minier btn-heightMall",
 						click: function() {
 							$.ajax({
 								url:""+APP_ROOT+"back/shop.do?method=deleteShopCostRebate&token="+$.cookie("token")+"&menuKey=resource_shop&operation=delete",

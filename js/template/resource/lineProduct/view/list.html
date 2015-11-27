@@ -50,6 +50,7 @@
 					<th>票务</th>
 					<th>保险</th>
 					<th>自费</th>
+					<th>其他</th>
 					<th>是否启用</th>
 					<!-- <th>报价</th> -->
 					<th>操作</th>
@@ -132,6 +133,13 @@
 							<i class="ace-icon fa fa-times red"></i>
 						{{/if}}
 						</td>
+						<td>
+						{{if lineProduct.otherStatus == 1}}
+							<i class="ace-icon fa fa-check green"></i>
+						{{else}}
+							<i class="ace-icon fa fa-times red"></i>
+						{{/if}}
+						</td>
 						<td width="80">
 						{{if lineProduct.status == 1}}
 							<i class="ace-icon fa fa-check green bigger-130"></i>
@@ -142,7 +150,7 @@
 						{{/if}}
 						</td>
 						<td width="280">
-							<a data-entiy-id="{{lineProduct.id}}" class="T-action {{if lineProduct.customerType == 1}}T-quote{{/if}} cursor" title="报价" {{if lineProduct.customerType != 1}}style="color:#bbb;"{{/if}}>
+							<a data-entiy-id="{{lineProduct.id}}" class="T-action R-right {{if lineProduct.status == 1 && lineProduct.customerType == 1}}T-quote{{/if}} cursor" title="报价" data-right="1440001" {{if lineProduct.customerType != 1 || lineProduct.status != 1}}style="color:#bbb;"{{/if}}>
 								报价
 							</a>
 							<a data-entiy-id="{{lineProduct.id}}" class="T-action T-view cursor" title="查看">

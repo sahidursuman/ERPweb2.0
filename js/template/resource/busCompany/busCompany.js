@@ -318,7 +318,7 @@ define(function(require,exports){
 								var $addTimeArea = $busList.find('.timeArea .T-add');
 								$addTimeArea.unbind().on('click',function(){
 									var $td = $(this).closest('td'), isVal = false;
-									$td.children('div').each(function(index){
+									/*$td.children('div').each(function(index){
 										var $s = $(this).find('input[name=startTime]');
 										var $e = $(this).find('input[name=endTime]');
 										if(!$s.val()){
@@ -334,11 +334,11 @@ define(function(require,exports){
 										}else{
 											isVal = true;
 										}
-									});
-									if(isVal){
-										BusCompany.addTimeArea($(this),2);
-										validator = rule.update(validator);
-									}
+									});*/
+									//if(isVal){
+										BusCompany.addTimeArea($(this),2,validator);
+										//validator = rule.update(validator);
+									//}
 								});
 								//删除原有包车区间
 								$busList.find(".T-del").on('click',function(){
@@ -557,8 +557,8 @@ define(function(require,exports){
 		//动态添加包车时限区间
 		var $addTimeArea = $obj.find('.timeArea .T-add');
 		$addTimeArea.unbind().on('click',function(){
-			BusCompany.addTimeArea($(this),typeFlag);
-			validator = rule.update(validator);
+			BusCompany.addTimeArea($(this),typeFlag,validator);
+			
 		});
 		
 	};
@@ -584,7 +584,7 @@ define(function(require,exports){
 		}
 	};
 	//动态增加班车时限
-	BusCompany.addTimeArea = function($obj,typeFlag){
+	BusCompany.addTimeArea = function($obj,typeFlag,validator){
 		var $td = $obj.closest('td');
 		var index = $td.find('div').length;
 		//console.log(index);
@@ -598,6 +598,7 @@ define(function(require,exports){
 		$td.find(".T-del").off('click').on('click',function(typeFlag){
 			BusCompany.deletedTimeArea($(this),typeFlag);
 		});
+		validator = rule.update(validator);
 	};
 	BusCompany.addTimeEvents = function(obj){
 		obj.find('input[name=startTime]').off('click').on('click', function(){
@@ -755,48 +756,24 @@ define(function(require,exports){
 		});
 	};
 	//删除车队
-	BusCompany.deletebusCompany = function($id){
-		var dialogObj = $( "#confirm-dialog-message" );
-		dialogObj.removeClass('hide').dialog({
-			modal: true,
-			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-			title_html: true,
-			draggable:false,
-			buttons: [
-				{
-					text: "取消",
-					"class" : "btn btn-minier",
-					click: function() {
-						$( this ).dialog( "close" );
-					}
-				},
-				{
-					text: "确定",
-					"class" : "btn btn-primary btn-minier",
-					click: function() {
-						$( this ).dialog( "close" );
+		BusCompany.deletebusCompany = function($id){
+				if (!!$id) {
+					showConfirmDialog($("#confirm-dialog-message"),"你确定要删除该条记录？", function() {
 						$.ajax({
 							url:""+APP_ROOT+"back/busCompany.do?method=deleteBusCompany&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=delete",
-							type:"POST",
-							data:"id="+$id+"",
-							success:function(data){
-								layer.close(globalLoadingLayer);
-								var result = showDialog(data);
-								if(result){
-									$("#" + tabId +" .busCompanyList .busCompany-"+$id+"").fadeOut(function(){
-										BusCompany.listBusCompany(BusCompany.searchData.pageNo);
-									});
-								}
+							type: 'post',
+							data: {id: $id},
+						})
+						.done(function(data) {
+							if (showDialog(data)) {
+								BusCompany.listBusCompany(0);
 							}
 						});
-					}
+					})
 				}
-			],
-			open:function(event,ui){
-				$(this).find("p").text("你确定要删除该条记录？");
-			}
-		});
-	};
+	}
+
+
 	//添加司机和车辆
 	BusCompany.addBusDriver = function(fn,$busCompany,$busCompanyId){
 		var html = addBusDriverTemplate();

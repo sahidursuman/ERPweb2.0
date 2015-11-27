@@ -98,28 +98,50 @@
 				{{each tripPlanList as tripPlan}}
 					<tr data-id="{{tripPlan.id}}">
 						<td style="vertical-align:middle" >{{tripPlan.tripNumber}}</td>
-						<td style="padding-left:0;padding-right:0"><table class="table-special">
+						<td style="padding-left:0;padding-right:0">
+						<table class="table-special">
+						    {{if tripPlan.tripPlanDetails.length!=0}}
 								{{each tripPlan.tripPlanDetails as tripPlanDetails index}}
-									<tr><td>{{tripPlanDetails.startTime | dateFormat: 'yyyy-MM-dd'}}</td><tr>
+										<tr><td>{{tripPlanDetails.startTime | dateFormat: 'yyyy-MM-dd'}}</td><tr>
+									
 								{{/each}}
-							</table>
+								{{else}}
+								 {{tripPlan.startTime | dateFormat: 'yyyy-MM-dd'}}
+							{{/if}}
+						</table>	
 						</td>
-						<td style="padding-left:0;padding-right:0"><table class="table-special">
+						<td style="padding-left:0;padding-right:0">
+						<table class="table-special">
+								{{if tripPlan.tripPlanDetails.length!=0}}
+							        {{each tripPlan.tripPlanDetails as tripPlanDetails index}}
+										<tr ><td>{{tripPlan.endTime | dateFormat: 'yyyy-MM-dd'}}</td><tr>
+									{{/each}}
+									{{else}}
+									   {{tripPlan.endTime | dateFormat: 'yyyy-MM-dd'}}
+								{{/if}}
+						</table>
+						</td>
+						<td style="padding-left:0;padding-right:0">
+						<table class="table-special">
+							{{if tripPlan.tripPlanDetails.length!=0}}
 								{{each tripPlan.tripPlanDetails as tripPlanDetails index}}
-									<tr><td>{{tripPlan.endTime | dateFormat: 'yyyy-MM-dd'}}</td><tr>
+										<tr><td>{{tripPlanDetails.lineProductName}}</td><tr>
 								{{/each}}
-							</table>
+								{{else}}
+								{{tripPlan.lineProduct.name}}
+							{{/if}}
+						</table>
 						</td>
-						<td style="padding-left:0;padding-right:0"><table class="table-special">
-								{{each tripPlan.tripPlanDetails as tripPlanDetails index}}
-									<tr><td>{{tripPlanDetails.lineProductName}}</td><tr>
-								{{/each}}
-							</table>
-						</td>
-						<td style="padding-left:0;padding-right:0"><table>
+						<td style="padding-left:0;padding-right:0">
+						<table class="table-special">
+							{{if tripPlan.tripPlanDetails.length!=0}}
 								{{each tripPlan.tripPlanDetails as tripPlanDetails index}}
 									<tr><td>{{tripPlanDetails.sumMemberCount}}</td><tr>
 								{{/each}}
+								{{else}}
+								{{tripPlan.planTouristCount}}
+							{{/if}}
+
 							</table>
 						</td>
 						<td style="vertical-align:middle">{{tripPlan.touristAdultCount+tripPlan.touristChildCount}}</td>

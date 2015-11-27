@@ -11,7 +11,7 @@
 				<th>资源保留期</th>
 				<th>询价截止期</th>
 				<th>询价状态</th>
-				<th>操作</th>
+				<th width="130">操作</th>
 			</tr>
 		</thead>
 	
@@ -24,25 +24,24 @@
 					{{each rs.busCompanyOfferList as offer index}}
 						{{if index == 0}}
 							<td>{{offer.busCompanyName}}</td>
-							<td class="T-price">{{offer.replyPrice}}</td>
+							<td class="T-price">{{if offer.status == '已同意'}}{{offer.replyPrice}}{{else}}-{{/if}}</td>
 							<td>{{offer.remark}}</td>
 							<td>{{if offer.reserveMinutes == -1}}
-									一直保留
-								{{else if offer.reserveMinutes == 0}}
+									{{if offer.status == "已拒绝"}}
 									-
-								{{else}}
-									{{if (offer.reserveMinutes/60) > 0}}
-										{{offer.reserveMinutes/60}}小时
+									{{else}}
+									一直保留
 									{{/if}}
-									{{offer.reserveMinutes%60}}分钟
+								{{else if offer.reserveMinutes == 0}}
+									{{if offer.status == "已同意"}}已到期{{else}}-{{/if}}
+								{{else}}
+									{{offer.reserveTime}}
 								{{/if}}
 							</td>
 							<td>{{offer.expiryTime}}</td>
 							<td class="T-status">{{offer.status}}</td>
 							<td data-id="{{offer.id}}">
-								{{if offer.status == "等待确认"}}
-									<a class="T-bus-refresh">刷新</a><span> | </span>
-								{{else if offer.status == "已同意"}}
+								{{if offer.status == "已同意"}}
 									<a class="T-bus-add">加入</a><span> | </span>
 								{{/if}}
 									<a class="T-bus-delete">删除</a>
@@ -54,15 +53,24 @@
 					{{if index > 0}}
 						<tr>
 							<td>{{offer.busCompanyName}}</td>
-							<td class="T-price">{{offer.replyPrice}}</td>
+							<td class="T-price">{{if offer.status == '已同意'}}{{offer.replyPrice}}{{else}}-{{/if}}</td>
 							<td>{{offer.remark}}</td>
-							<td>{{offer.reserveMinutes}}</td>
+							<td>{{if offer.reserveMinutes == -1}}
+									{{if offer.status == "已拒绝"}}
+									-
+									{{else}}
+									一直保留
+									{{/if}}
+								{{else if offer.reserveMinutes == 0}}
+									{{if offer.status == "已同意"}}已到期{{else}}-{{/if}}
+								{{else}}
+									{{offer.reserveTime}}
+								{{/if}}
+							</td>
 							<td>{{offer.expiryTime}}</td>
 							<td class="T-status">{{offer.status}}</td>
 							<td data-id="{{offer.id}}">
-								{{if offer.status == "等待确认"}}
-									<a class="T-bus-refresh">刷新</a><span> | </span>
-								{{else if offer.status == "已同意"}}
+								{{if offer.status == "已同意"}}
 									<a class="T-bus-add">加入</a><span> | </span>
 								{{/if}}
 									<a class="T-bus-delete">删除</a>

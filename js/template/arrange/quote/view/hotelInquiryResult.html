@@ -14,7 +14,7 @@
 				<th>资源保留期</th>
 				<th>询价截止期</th>
 				<th>询价状态</th>
-				<th>操作</th>
+				<th width="130">操作</th>
 			</tr>
 		</thead>
 	
@@ -49,7 +49,17 @@
 								{{each offer.roomTypeList as room index}}
 									{{if index == 0}}
 										<td class="T-hotelType-{{offer.id}}">{{room.type}}</td>
-										<td class="T-hotelPrice-{{offer.id}}">{{room.replyPrice}}</td>
+										<td class="T-hotelPrice-{{offer.id}}">
+										{{if room.isContractPrice == 1}}
+											{{room.price}}
+										{{else}}
+											{{if offer.status == '已同意'}}
+												{{room.replyPrice}}
+											{{else}}
+												-
+											{{/if}}
+										{{/if}}
+										</td>
 									{{/if}}
 								{{/each}}
 							{{else}}
@@ -59,22 +69,21 @@
 							<td rowspan="{{offer.roomTypeList.length}}">{{offer.remark}}</td>
 							<td rowspan="{{offer.roomTypeList.length}}">
 								{{if offer.reserveMinutes == -1}}
-									一直保留
-								{{else if offer.reserveMinutes == 0}}
+									{{if offer.status == "已拒绝"}}
 									-
-								{{else}}
-									{{if (offer.reserveMinutes/60) > 0}}
-										{{offer.reserveMinutes/60}}小时
+									{{else}}
+									一直保留
 									{{/if}}
-									{{offer.reserveMinutes%60}}分钟
+								{{else if offer.reserveMinutes == 0}}
+									{{if offer.status == "已同意"}}已到期{{else}}-{{/if}}
+								{{else}}
+									{{offer.reserveTime}}
 								{{/if}}
 							</td>
 							<td rowspan="{{offer.roomTypeList.length}}">{{offer.expiryTime}}</td>
 							<td rowspan="{{offer.roomTypeList.length}}">{{offer.status}}</td>
 							<td rowspan="{{offer.roomTypeList.length}}" data-id="{{offer.id}}">
-								{{if offer.status == "等待确认"}}
-									<a class="T-hotel-refresh">刷新</a><span> | </span> 
-								{{else if offer.status == "已同意"}}
+								{{if offer.status == "已同意"}}
 									<a class="T-hotel-add">加入</a><span> | </span>
 								{{/if}}
 								<a class="T-hotel-delete">删除</a>
@@ -88,7 +97,17 @@
 							{{each offer.roomTypeList as room index}}
 								{{if index > 0}}
 									<td class="T-hotelType-{{offer.id}}">{{room.type}}</td>
-									<td class="T-hotelPrice-{{offer.id}}">{{room.replyPrice}}</td>
+									<td class="T-hotelPrice-{{offer.id}}">
+									{{if room.isContractPrice == 1}}
+										{{room.price}}
+									{{else}}
+										{{if offer.status == '已同意'}}
+											{{room.replyPrice}}
+										{{else}}
+											-
+										{{/if}}
+									{{/if}}
+									</td>
 								{{/if}}
 							{{/each}}
 						{{else}}
@@ -122,7 +141,17 @@
 								{{each offer.roomTypeList as room index}}
 									{{if index == 0}}
 										<td class="T-hotelType-{{offer.id}}">{{room.type}}</td>
-										<td class="T-hotelPrice-{{offer.id}}">{{room.replyPrice}}</td>
+										<td class="T-hotelPrice-{{offer.id}}">
+										{{if room.isContractPrice == 1}}
+											{{room.price}}
+										{{else}}
+											{{if offer.status == '已同意'}}
+												{{room.replyPrice}}
+											{{else}}
+												-
+											{{/if}}
+										{{/if}}
+										</td>
 									{{/if}}
 								{{/each}}
 							{{else}}
@@ -130,13 +159,23 @@
 								<td class="T-hotelPrice-{{offer.id}}"></td>
 							{{/if}}
 							<td rowspan="{{offer.roomTypeList.length}}">{{offer.remark}}</td>
-							<td rowspan="{{offer.roomTypeList.length}}">{{offer.reserveMinutes}}</td>
+							<td rowspan="{{offer.roomTypeList.length}}">
+								{{if offer.reserveMinutes == -1}}
+									{{if offer.status == "已拒绝"}}
+									-
+									{{else}}
+									一直保留
+									{{/if}}
+								{{else if offer.reserveMinutes == 0}}
+									{{if offer.status == "已同意"}}已到期{{else}}-{{/if}}
+								{{else}}
+									{{offer.reserveTime}}
+								{{/if}}
+							</td>
 							<td rowspan="{{offer.roomTypeList.length}}">{{offer.expiryTime}}</td>
 							<td rowspan="{{offer.roomTypeList.length}}">{{offer.status}}</td>
-							<td rowspan="{{offer.roomTypeList.length}}" data-id="{{hotel.id}}">
-								{{if offer.status == "等待确认"}}
-									<a class="T-hotel-refresh">刷新</a><span> | </span>
-								{{else if offer.status == "已同意"}}
+							<td rowspan="{{offer.roomTypeList.length}}" data-id="{{offer.id}}">
+								{{if offer.status == "已同意"}}
 									<a class="T-hotel-add">加入</a><span> | </span>
 								{{/if}}
 								<a class="T-hotel-delete">删除</a>
@@ -146,7 +185,17 @@
 							{{each offer.roomTypeList as room index}}
 								{{if index > 0}}
 									<td class="T-hotelType-{{offer.id}}">{{room.type}}</td>
-									<td class="T-hotelPrice-{{offer.id}}">{{room.replyPrice}}</td>
+									<td class="T-hotelPrice-{{offer.id}}">
+									{{if room.isContractPrice == 1}}
+										{{room.price}}
+									{{else}}
+										{{if offer.status == '已同意'}}
+											{{room.replyPrice}}
+										{{else}}
+											-
+										{{/if}}
+									{{/if}}
+									</td>
 								{{/if}}
 							{{/each}}
 						{{else}}
