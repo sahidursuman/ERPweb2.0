@@ -628,8 +628,8 @@ var modalScripts = {
 	'financial_shop': "js/template/financial/shop/shop.js",//购物账务
 	'financial_innerTransfer_in':"js/template/financial/innerTransferIn/innerTransferIn.js",//内转转入
 	'financial_innerTransfer_out':"js/template/financial/innerTransferOut/innerTransferOut.js",//内转转出
-
 	'financial_planProfit': "js/template/financial/planProfit/planProfit.js", //发团利润
+	'financial_Other_accounts':"js/template/financial/OtherAccounts/OtherAccounts.js",//其他账务
 	'financial_replaceProfit':"js/template/financial/replaceProfit/replaceProfit.js",//代订利润
 	'financial_restaurant':"js/template/financial/Restaurant/Restaurant.js",//餐厅账务
 	'financial_rummery':"js/template/financial/hotel/hotel.js",//酒店账务
@@ -881,17 +881,6 @@ function listMenu(menuTemplate){
 						// count.getlistCount(0,"","","","","","","","");
 					});
 				});
-
-				// //绑定代订利润功能
-				// $("#sidebar .nav-list .financial_replaceProfit").click(function(){
-				// 	$("#sidebar .nav-list li").removeClass("active");
-				// 	$(this).addClass("active");
-				// 	$(this).parent().parent().addClass("active");
-				// 	seajs.use("" + ASSETS_ROOT +"js/template/financial/replaceProfit/replaceProfit.js",function(replaceProfit){
-				// 		replaceProfit.listReplaceProfit(0,"","","","","","","","","","");
-				// 	});
-				// });
-
 				//绑定収支明细菜单功能
 				$("#sidebar .nav-list .financial_collectDetail").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
