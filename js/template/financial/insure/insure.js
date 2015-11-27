@@ -44,13 +44,6 @@ define(function(require, exports) {
 	                var html = listTemplate(data);
 	                Tools.addTab(menuKey,"保险账务",html);
 	                Insure.initList();
-
-	             // 对账		
-					// $(".T-ListInsure").find('.T-check').click(function(event) {
-					// 	Insure.GetChecking($(this).data('id'));
-					// 	Insure.GetChecking(0,"",2015,"");
-						
-					// });
 	            }
 	        	}
 	    	});
