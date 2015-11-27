@@ -3086,11 +3086,13 @@ define(function(require, exports) {
 					var idString = $container.attr("id");
 					if (idString == "tab-arrange_quote-add-content") {
 						Tools.closeTab("arrange_quote-add");
-						quote.listQuote(0);
+						//quote.listQuote(0);
+						quote.listMainQuote();
 					}
 					else if (idString == "tab-arrange_quote-update-content") {
 						Tools.closeTab("arrange_quote-update");
-						quote.listQuote(quote.searchData.pageNo);
+						//quote.listQuote(quote.searchData.pageNo);
+						quote.listMainQuote();
 					}
 					showMessageDialog($( "#confirm-dialog-message" ), "报价添加成功，请在报价管理中查看！");
 				}
