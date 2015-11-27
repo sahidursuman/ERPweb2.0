@@ -457,46 +457,6 @@ define(function(require, exports) {
 		 * @param  {[type]} id [description]
 		 * @return {[type]}    [description]
 		 */
-		// transfer.deleteTransferOut=function(id){
-		// 	var dialogObj = $( "#confirm-dialog-message" );
-		// 	dialogObj.removeClass('hide').dialog({
-		// 		modal: true,
-		// 		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-		// 		title_html: true,
-		// 		draggable:false,
-		// 		buttons: [ 
-		// 			{
-		// 				text: "否",
-		// 				"class" : "btn btn-minier btn-heightMall",
-		// 				click: function() {
-		// 					$( this ).dialog( "close" );
-		// 				}
-		// 			},
-		// 			{
-		// 				text: "是",
-		// 				"class" : "btn btn-primary btn-minier btn-heightMall",
-		// 				click: function() {
-		// 					$.ajax({
-		// 						url:KingServices.build_url("transfer","delete"),
-		// 						type:"POST",
-		// 						data:"id="+id + "&isDelete=0",
-		// 						success:function(data){
-		// 							 var result = showDialog(data);
-		// 							 var type="1",
-		// 							     divId="Transfer-Out";
-		// 							 transfer.getSearchParam(divId,type);
-		// 							 transfer.findPager(divId,type,0);
-		// 						}
-		// 					});
-		// 					$( this ).dialog( "close" );
-		// 				}
-		// 			}
-		// 		],
-		// 		open:function(event,ui){
-		// 			$(this).find("p").text("是否撤销转客操作？");
-		// 		}
-		// 	});
-		// };
 
 		transfer.deleteTransferOut = function(id){
 			if(!!id){
@@ -508,7 +468,11 @@ define(function(require, exports) {
 					})
 					.done(function(data) {
 						if(showDialog(data)){
-							transfer.listMainHead(0);
+										var type="1",
+		 							    divId="Transfer-Out";
+										transfer.getSearchParam(divId,type);
+										transfer.findPager(divId,type,0);
+										transfer.listMainHead(0);
 						}
 					})
 					
