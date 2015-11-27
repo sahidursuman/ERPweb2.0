@@ -115,12 +115,12 @@
     <div style="clear: both;margin-top:20px;border-top:1px dotted #ccc;padding-top:15px;">
         <div style="clear: both;height: 0px;line-height: 0px;"></div>
     </div>
-    <div class="form-horizontal">
-        <label class="control-label pull-left" name="statistics-count">人数合计：{{statistics.adultCount}}大{{statistics.childCount}}小</label>
-        <label class="control-label col-sm-2" name="statistics-needPay">应收款合计：{{statistics.needPay | toFixed}}元</label>
-        <label class="control-label col-sm-2" name="statistics-payed">已收款合计：{{statistics.payedMoney | toFixed}}元</label>
-        <label class="control-label col-sm-2" name="statistics-currentNeedPay">现收款合计：{{statistics.currentNeedPay | toFixed}}元</label>
-        <label class="control-label col-sm-2" name="statistics-unIncome">未收款合计：{{statistics.unIncomeMoney | toFixed}}元</label>
+    <div class="form-horizontal T-countData">
+        <label class="control-label pull-left" name="statistics-count">人数合计：<span class="allPerson">{{statistics.adultCount}}大{{statistics.childCount}}小</span></label>
+        <label class="control-label col-sm-2" name="statistics-needPay">应收款合计：<span class="needIncome">{{statistics.needPay | toFixed}}元</span></label>
+        <label class="control-label col-sm-2" name="statistics-payed">已收款合计：<span class="payedMoney">{{statistics.payedMoney | toFixed}}元</span></label>
+        <label class="control-label col-sm-2" name="statistics-currentNeedPay">现收款合计：<span class="currentNeedPay">{{statistics.currentNeedPay | toFixed}}元</span></label>
+        <label class="control-label col-sm-2" name="statistics-unIncome">未收款合计：<span class="unIncome">{{statistics.unIncomeMoney | toFixed}}元</span></label>
     </div>
 </div>
 <div id="touristGroup-listMain" class="col-sm-12 clearfix">
