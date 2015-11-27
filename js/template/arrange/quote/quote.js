@@ -322,6 +322,11 @@ define(function(require, exports) {
 		$container.find('.hotelInquiryContent').on("click",function(){
 			quote.hotelStatusList(quoteId,$container,$a);
 		});
+
+		$container.find('.T-refresh-status').on('click', function(event) {
+			event.preventDefault();
+			$(this).nextAll('.nav-tabs').find('.active').children('a').trigger('click');
+		});
 	};
 
 	//询价状态-车
@@ -351,43 +356,6 @@ define(function(require, exports) {
 					var busInquiryResultHtml = busInquiryResultTemplate(data);
 					$container.find('#busInquiryResult-'+$a.a).html(busInquiryResultHtml);
 					//操作
-					$container.find('.T-bus-refresh').on("click",function(){
-						var $this = $(this),
-							$tr = $this.closest('tr'),
-							offerId = $this.closest('td').data("id");
-						$.ajax({
-							url: KingServices.build_url('busInquiry','refreshListInquiryBus'),
-							type: 'POST',
-							data: { offerId : offerId + ""},
-							success: function(data){
-								var result = showDialog(data);
-								if(result){
-									showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-										var rs = data.List[0],
-											status = rs.status;
-										$tr.find(".T-status").html(status);
-										$tr.find(".T-price").html(rs.replyPrice);
-
-										if(status != "等待确认"){
-											$this.next().remove();
-											$this.remove();
-											if(status == "已同意"){ 
-												var html = "<a class='T-bus-add'>加入</a><span> | </span>";
-												$tr.find('td:last-child').prepend(html);
-
-												//给“加入”绑定事件
-												$container.find('.T-bus-add').on("click",function(){
-													var offerId = $(this).closest('td').data("id");
-													quote.busAdd(offerId,$container);
-												});
-											}
-										}	 
-									});
-								}
-							}
-						});
-					});
-
 					$container.find('.T-bus-add').on("click",function(){
 						var offerId = $(this).closest('td').data("id");
 						quote.busAdd(offerId,$container);
@@ -448,54 +416,6 @@ define(function(require, exports) {
 					}
 					var hotelInquiryResultHtml = hotelInquiryResultTemplate(data);
 					$container.find('#hotelInquiryContent-'+$a.a).html(hotelInquiryResultHtml);
-
-					//操作
-					$container.find('.T-hotel-refresh').on("click",function(){
-						var $this = $(this),
-							$tr = $this.closest('tr'),
-							offerId = $this.closest('td').data("id");
-						$.ajax({
-							url: KingServices.build_url('hotelInquiry','refreshListInquiryHotel'),
-							type: 'POST',
-							data: { offerId : offerId + ""},
-							success: function(data){
-								var result = showDialog(data);
-								if(result){
-									showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-										var rs = data.List,
-											status = data.status;
-										$this.closest('td').prev().html(status);
-										$tr.find(".T-hotelPrice-" + offerId + "").each(function(i){
-											if (rs[i].isContractPrice == 1) {
-												$(this).html(rs[i].price);
-											}else{
-												if (status == '已同意') {
-													$(this).html(rs[i].replyPrice);
-												}else{
-													$(this).html('-');
-												}
-											}
-										});
-
-										if(status != "等待确认"){
-											$this.next().remove();
-											$this.remove();
-											if(status == "已同意"){
-												var html = "<a class='T-hotel-add'>加入</a><span> | </span>";
-												$tr.find('td:last-child').prepend(html);
-
-												//给“加入”绑定事件
-												$container.find('.T-hotel-add').on("click",function(){
-													var offerId = $(this).closest('td').data("id");
-													quote.hotelAdd(offerId,$container);
-												});
-											}
-										}
-									});
-								}
-							}
-						});
-					});
 
 					$container.find('.T-hotel-add').on("click",function(){
 						var offerId = $(this).closest('td').data("id");
