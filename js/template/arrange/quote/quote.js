@@ -880,8 +880,13 @@ define(function(require, exports) {
 											id = $that.find('td[name=travelLine-select]').attr("data-travelLine-Id");
 										};
 									});
-									quote.addQuote(id);
-									layer.close(lineProductChooseLayer);
+									if (!!id) {
+										console.log(id)
+										quote.addQuote(id);
+										layer.close(lineProductChooseLayer);
+									}else{
+										showMessageDialog($( "#confirm-dialog-message" ),"请选择线路产品");
+									}
 								})
 							}
 						}
