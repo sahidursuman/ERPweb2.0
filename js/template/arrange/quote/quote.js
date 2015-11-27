@@ -245,6 +245,7 @@ define(function(require, exports) {
 						'data-clipboard-text': url,
 						click: function() {
 							$( this ).dialog( "close" );
+							showMessageDialog($("#confirm-dialog-message" ),"复制成功！",function(){});
 						}
 					}
 				],
