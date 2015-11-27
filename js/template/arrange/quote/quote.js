@@ -1476,6 +1476,7 @@ define(function(require, exports) {
 							}console.log(quote.hotelSelectedArray)
 						}
 
+						console.log($container.find('.T-pagenation').length);
 		                //绑定翻页组件
 		                laypage({
 		                	cont: $container.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
