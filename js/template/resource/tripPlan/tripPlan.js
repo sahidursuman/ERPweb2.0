@@ -2337,7 +2337,7 @@ define(function(require, exports) {
 				_this.find("input[name=price], input[name=fee]").on("blur", function(){
 					tripPlan.plusPrice(this);
 				});
-				_this.find("input[name=memberCount], input[name=memberCount], input[name=needRoomCount]").on("change", function(){
+				_this.find("input[name=memberCount], input[name=needRoomCount]").on("change", function(){
 					tripPlan.plusPrice(this);
 				});
 				_this.find("input[name=reduceMoney]").on("change", function(){
@@ -2353,6 +2353,8 @@ define(function(require, exports) {
 						tripPlan.plusPrice(this);
 					}
 				});
+				//加载时自动计算
+				tripPlan.plusPrice(_this.find('input[name=fee], input[name=memberCount], input[name=reduceMoney], input[name=payedMoney]'));
 			});			
 		},
 		plusPrice :function(obj){
