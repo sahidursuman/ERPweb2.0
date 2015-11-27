@@ -1078,7 +1078,7 @@ define(function(require, exports) {
 						if(result){
 							var hotelRoom = JSON.parse(data.hotelRoom);
 
-							$tr.find("input[name=contractPrice]").val(hotelRoom.contractPrice);
+							$tr.find("input[name=contractPrice]").val(hotelRoom.normalInnerPrice);
 							$tr.find("input[name=containBreakfast]").val(hotelRoom.containBreakfast == "0" ? "不含" : "包含");
 						}
                     }
@@ -1535,7 +1535,7 @@ define(function(require, exports) {
 						if(result){
 							var selfPayItem = JSON.parse(data.selfPayItem); 
 							$tr.find("input[name=selfPayItemId]").val(ui.item.id).trigger('change');
-							$tr.find("input[name=contractPrice]").val(selfPayItem.normalInnerPrice);
+							$tr.find("input[name=contractPrice]").val(selfPayItem.normalTravelAgencyRate);
 							$tr.find("input[name=marketPrice]").val(selfPayItem.normalMarketPrice);
 						}
                     }

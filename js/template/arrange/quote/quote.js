@@ -1094,7 +1094,7 @@ define(function(require, exports) {
 					    	var $hotelLayerContent = $(".T-hotelInquiryContainer");
 
 							//酒店是否已询价
-							quote.isInquiryHotel(quoteId, $hotelLayerContent);
+							quote.isInquiryHotel(quoteId, $hotelLayerContent, data, lineProductInfo);
 					    	quote.chooseRoomType($hotelLayerContent);
 					    	quote.dateTimePicker($hotelLayerContent);
 					    	var validator = rule.quoteCheckor($hotelLayerContent);
@@ -1192,26 +1192,36 @@ define(function(require, exports) {
 		})
 	};
 	//酒店是否已询价 (在某天)
-	quote.isInquiryHotel = function(quoteId, $layerContainer){
-		$.ajax({
-			url: KingServices.build_url("hotelInquiry","findIsInquiryHotleList"),
-			type: 'POST',
-			data: {quoteId: quoteId},
-			showLoading: false,
-			success: function(data){
-				if (showDialog(data)) {
-					var html = '';
-					for (var i = 0; i < data.dayStatus.length; i++) {
-						if(data.dayStatus[i].success == 0){
-							html += '<option value="'+data.dayStatus[i].arriveTime+'">'+data.dayStatus[i].arriveTime+'</option>'
-						}else{
-							html += '<option value="'+data.dayStatus[i].arriveTime+'">'+data.dayStatus[i].arriveTime+'[已询价]</option>'
+	quote.isInquiryHotel = function(quoteId, $layerContainer, dataHotel, lineProductInfo){
+		if (!!quoteId) {
+			$.ajax({
+				url: KingServices.build_url("hotelInquiry","findIsInquiryHotleList"),
+				type: 'POST',
+				data: {quoteId: quoteId},
+				showLoading: false,
+				success: function(data){
+					if (showDialog(data)) {
+						var html = '';
+						for (var i = 0; i < data.dayStatus.length; i++) {
+							if(data.dayStatus[i].success == 0){
+								html += '<option value="'+data.dayStatus[i].arriveTime+'">'+data.dayStatus[i].arriveTime+'</option>'
+							}else{
+								html += '<option value="'+data.dayStatus[i].arriveTime+'">'+data.dayStatus[i].arriveTime+'[已询价]</option>'
+							}
 						}
+						$layerContainer.find('[name=checkInTime]').html(html);
 					}
-					$layerContainer.find('[name=checkInTime]').html(html);
 				}
+			})
+		}else{
+			dataHotel.days = [];
+			var html = '';
+			for (var i = 1,len = lineProductInfo.days.replace(/[^0-9]/ig,""); i <= len; i++) {
+				var time = quote.checkInTime(i,lineProductInfo.startTime);
+				html += '<option value="'+time+'">'+time+'</option>'
 			}
-		})
+			$layerContainer.find('[name=checkInTime]').html(html);
+		}
 	}
 
 	//选择房间类型
