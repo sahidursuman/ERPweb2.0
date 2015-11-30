@@ -1696,6 +1696,7 @@ define(function(require, exports) {
 		if (!validator.form())   return;
 
 		var $form = $tab.find('.T-mainForm'), travelLineData = {},isAjax = true;
+		var $middleForm = $tab.find('.T-middleForm'), travelLineData = {},isAjax = true;
 		function getValue(obj, name){
 			var thisObj = obj.find("[name="+name+"]"), objValue;
 			if(thisObj.attr("type") == "checkbox"){
@@ -1719,6 +1720,7 @@ define(function(require, exports) {
 			return false;
 		}
 
+
 		// 获取表单的数据
 		travelLineData.lineProduct = 
 			[{
@@ -1728,6 +1730,10 @@ define(function(require, exports) {
 				remark : getValue($form, "remark"),
 				type : getValue($form, "type"),
 				customerType : getValue($form, "customerType"),
+				includeFee  : getValue($middleForm, "includeFee"),
+				excludeFee  : getValue($middleForm, "excludeFee"),
+				lineFeature : getValue($middleForm, "lineFeature"),
+				lineNotice  : getValue($middleForm, "lineNotice"),
 				status : getValue($form, "status")
 			}];
 		
