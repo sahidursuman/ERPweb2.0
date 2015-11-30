@@ -28,15 +28,19 @@ define(function(require, exports) {
 	        
 	   	};
 	  	Insure.listInsure = function(pageNo,insuranceId,year,month){
-	  		
-	  		// data传数据
+	  		if (Insure.$searchArea && arguments.length === 1) {
+	            // 初始化页面后，可以获取页面的参数
+	            insuranceId = Insure.$searchArea.find("select[name=insuranceId]").val(),
+	            year = Insure.$searchArea.find("select[name=year]").val(),
+	            month = Insure.$searchArea.find("select[name=month]").val()
+        	}
 	  		Insure.searchData={
 	  			pageNo:pageNo,
 	  			insuranceId:insuranceId,
 	  			year:year,
 	  			month:month,
 	  			sortType: 'auto'
-	  	};
+	  		};
 	  	$.ajax({
 	       url:KingServices.build_url("financial/financialInsurance","listSumFcInsurance"),
 			type:"POST",
@@ -50,7 +54,6 @@ define(function(require, exports) {
 	                var html = listTemplate(data);
 	                Tools.addTab(menuKey,"保险账务",html);
 	                Insure.initList();
-
 	            }
 	        	}
 	    	});
@@ -61,20 +64,23 @@ define(function(require, exports) {
         
         Insure.$tab = $('#' + tabId);
         Insure.$searchArea=Insure.$tab.find('.T-search-area');
-        
+ 		//搜索按钮事件
+        Insure.$tab.find('.T-search').on('click', function(event) {
+            event.preventDefault();
+            Insure.listInsure(0);
+        });
         // 报表内的操作
         Insure.$tab.find('.T-list').on('click', '.T-option', function(event) {
             event.preventDefault();
             var $that = $(this),
-            	id = $that.closest('tr').attr('data-value'),
+            	id = $that.closest('tr').data('id'),
                 yearList = Insure.$searchArea.find("select[name=year]").val(),
-                monthList = Insure.$searchArea.find("select[name=month]").val(),
-                insuranceName = Insure.$searchArea.find('select[name=insuranceId]').val();
-                console.log(yearList);
+                monthList = Insure.$searchArea.find("select[name=month]").val();
+                console.log(id);
 
             if ($that.hasClass('T-check')) {
                 // 对账
-                Insure.GetChecking(0,id,insuranceName,yearList,monthList);
+                Insure.GetChecking(0,id,yearList,monthList);
             } else if ($that.hasClass('T-clear')) {
                 // 结算
                 Insure.getClearing(0,id,2015,1,12);
@@ -82,10 +88,10 @@ define(function(require, exports) {
         });
     };
 	  	// 保险对账
-		Insure.GetChecking = function(page,insuranceId,insuranceName,year,month){
+		Insure.GetChecking = function(page,id,year,month){
 	  		Insure.checkSearchData = {
 	  			pageNo : page,
-                insuranceId :insuranceId,
+	  			id:id,
                 year : year,
                 month : month,
 	  		};
@@ -108,7 +114,6 @@ define(function(require, exports) {
 				        });
 					    //给全选按钮绑定事件
 							$(".T-Checking").find(".T-selectAll").click(function(event) {
-								alert();
 								var checkboxList = $(".T-Checking").find(".T-checkListNum tr input[type=checkbox]");
 					            if($(this).is(":checked")){
 					                checkboxList.each(function(i){

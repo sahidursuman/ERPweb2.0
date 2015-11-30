@@ -3,11 +3,11 @@
         <div class="form-group" >      
           <label class="control-label pull-left">保险公司：</label>
                 <select  class="col-xs-1 T-insuranceName" name="insuranceId">
-                    <option value ="">全部</option>
+                    <option value ="" class="insuranceName">全部</option>
                     {{each insuranceCompanyNameListNew as insurance index}}
 						<option value="{{insurance.id}}" {{if searchParam.insuranceId == insurance.id}} selected="selected"{{/if}}>{{insurance.name}}</option>
 					{{/each}}
-                </select>        
+                </select>
                 <label class="control-label pull-left marginLeft-30" >账期：</label>
 				<select class="col-sm-1 T-year" name="year" >
 					{{each yearList as year index}}
@@ -39,7 +39,7 @@
                 </thead>
                 <tbody class="T-list">
                 {{each financialInsuranceSettlementList as insurance}}
-                <tr data-value="{{insurance.insuranceId}}">
+                <tr data-id="{{insurance.insuranceId}}">
                     <td>{{insurance.insuranceCompanyName}}</td>
                     <td>{{insurance.sumNeedPayMoney}}</td>
                     <td>{{insurance.sumRealNeedPayMoney}}</td>
