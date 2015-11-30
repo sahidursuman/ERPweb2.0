@@ -172,7 +172,7 @@ define(function(require,exports){
 			    	$project.find(".T-btn-scenic-add").click(function(){
 			    		var html = "<tr>" +
 			    				"<td><input name=\"name\" class='col-sm-12' type=\"text\" maxlength=\"100\"/></td>" +
-			    				"<td class=\"time\"><div class=\"clearfix\" style=\"margin-top:1px\">日常<label class=\"timeArea\" style=\"float:right;padding-top:3px;\"><button class=\"btn btn-success btn-sm btn-white T-add addScenice\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i></button></label></div></td>" +
+			    				"<td class=\"time\"><div class=\"clearfix\" style=\"margin-top:1px\">日常价格<label class=\"timeArea\" style=\"float:right;padding-top:3px;\"><button class=\"btn btn-success btn-sm btn-white T-add addScenice\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i></button></label></div></td>" +
 			    				"<td><div class=\"clearfix\" style=\"margin-top:0px\"><input name=\"normalInnerPrice\" style='margin-top: 2px' class='col-sm-12' type=\"text\" maxlength=\"7\"/></div></td>" +
 			    				"<td><input name=\"remark\" class='col-sm-12' type=\"text\" maxlength=\"1000\"/></td>" +
 			    				"<td style=\"width:70px\"><a data-entity-id=\"\" class=\" T-btn-scenic--delete\">删除</a></td>" +
@@ -302,7 +302,7 @@ define(function(require,exports){
 						    	$project.find(".T-scenic-standard-add").click(function(){
 						    		var html = "<tr>" +
 						    				"<td><input name=\"name\" class='col-sm-12' type=\"text\" maxlength=\"100\"/></td>" +
-						    				"<td class=\"time\"><div class=\"clearfix\" style=\"margin-top:1px\">日常<label class=\"timeArea\" style=\"float:right\"><button class=\"btn btn-success btn-sm btn-white T-add\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i></button></label></div></td>" +
+						    				"<td class=\"time\"><div class=\"clearfix\" style=\"margin-top:1px\">日常价格<label class=\"timeArea\" style=\"float:right\"><button class=\"btn btn-success btn-sm btn-white T-add\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i></button></label></div></td>" +
 						    				"<td><div class=\"clearfix\" style=\"margin-top:2px\"><input name=\"normalInnerPrice\" class='col-sm-12' type=\"text\" maxlength=\"7\"/></div></td>" +
 						    				"<td><input name=\"remark\"  class='col-sm-12' type=\"text\" maxlength=\"1000\"/></td>" +
 						    				"<td style=\"width:70px\"><a data-entity-id=\"\" class=\"T-scenic-standard-delete\">删除</a></td>" +
@@ -542,52 +542,24 @@ define(function(require,exports){
 	};
 
 	//删除景区信息
+	
 	ScenicResource.deleteScenic=function(id){
-		var dialogObj = $( "#confirm-dialog-message" );
-		dialogObj.removeClass('hide').dialog({
-			modal:true,
-			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-			title_html: true,
-			draggable:false,
-			buttons:[
-				{
-					text :'取消',
-					"class" : "btn btn-minier",
-					click: function() {
-							$( this ).dialog( "close" );
-					}
-				},
-				{
-					text: "确定",
-					"class" : "btn btn-primary btn-minier",
-					click: function() {
-						$( this ).dialog( "close" );
-						$.ajax({
-							url:""+APP_ROOT+"back/scenic.do?method=deleteScenic&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=delete",
-							type:"POST",
-							data:"id="+id+"",
-							dataType:"json",
-							beforeSend:function(){
-								globalLoadingLayer = openLoadingLayer();
-							},
-							success:function(data){
-								layer.close(globalLoadingLayer);
-								var result = showDialog(data);
-								if(result){
-									ScenicResource.$tab.find(".scenic-"+id).fadeOut(function(){
-										ScenicResource.listScenic(ScenicResource.searchData.pageNo);
-									});
-								}
-							}
-						});
-					}
-				}
-			],
-			open:function(event,ui){
-					$(this).find("p").text("你确定要删除该条记录？");
+			if(!!id){
+				showConfirmDialog($("#confirm-dialog-message"),"你确定要删除该条记录？",function(){
+					$.ajax({
+						url:""+APP_ROOT+"back/scenic.do?method=deleteScenic&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=delete",
+						type:"POST",
+	 					data:"id="+id+"",	
+					}).done(function(data){
+						if(showDialog(data)){
+							ScenicResource.listScenic(0);
+						}
+					});
+				});
 			}
-		});
-	};
+
+	}	
+
 	//添加时间区间
 	ScenicResource.modifyOriginalRecord=function(obj,$scenicItemObj){
     	var $td = obj.closest('td'), 

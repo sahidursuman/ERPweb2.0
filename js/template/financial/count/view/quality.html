@@ -46,7 +46,7 @@
     </table>
     <div class="pull-left col-sm-4" >
         <div class="title-size"><i class="fa fa-comments"></i> 游客评价</div>
-        <table class="table  table-striped table-hover margin-top">
+        <table class="table  table-striped border table-hover margin-top">
             <tr>
                 <td></td>
                 <td>非常满意</td>
@@ -65,7 +65,7 @@
                 <td>司机服务</td>
                 <td>{{serviceCount.driverService.veryGood}}</td>
                 <td>{{serviceCount.driverService.good}}</td>
-                <td>{{serviceCount.guideService.notBad}}</td>
+                <td>{{serviceCount.driverService.notBad}}</td>
                 <td>{{serviceCount.driverService.bad}}</td>
             </tr>
             <tr>
@@ -81,6 +81,27 @@
                 <td>{{serviceCount.hotelService.good}}</td>
                 <td>{{serviceCount.hotelService.notBad}}</td>
                 <td>{{serviceCount.hotelService.bad}}</td>
+            </tr>
+            <tr>
+                <td>餐饮安排</td>
+                <td>{{serviceCount.foodQualityService.veryGood}}</td>
+                <td>{{serviceCount.foodQualityService.good}}</td>
+                <td>{{serviceCount.foodQualityService.notBad}}</td>
+                <td>{{serviceCount.foodQualityService.bad}}</td>
+            </tr>
+            <tr>
+                <td>购物安排</td>
+                <td>{{serviceCount.shoppingService.veryGood}}</td>
+                <td>{{serviceCount.shoppingService.good}}</td>
+                <td>{{serviceCount.shoppingService.notBad}}</td>
+                <td>{{serviceCount.shoppingService.bad}}</td>
+            </tr>
+            <tr>
+                <td>娱乐安排</td>
+                <td>{{serviceCount.entertainmentService.veryGood}}</td>
+                <td>{{serviceCount.entertainmentService.good}}</td>
+                <td>{{serviceCount.entertainmentService.notBad}}</td>
+                <td>{{serviceCount.entertainmentService.bad}}</td>
             </tr>
         </table> 
     </div>

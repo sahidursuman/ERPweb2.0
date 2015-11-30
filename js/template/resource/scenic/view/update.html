@@ -60,13 +60,13 @@
 					<div class="form-group guideInterval">
 						<label class="col-sm-2 control-label no-padding-right">季节政策:</label>
 						<div class="col-sm-6">
-							<input type="text" name="seasonPolicy" class="col-sm-12 addressMinute" placeholder="季节政策" value="{{scenic.seasonPolicy}}"/>
+							<input type="text" name="seasonPolicy" class="col-sm-12 addressMinute" maxlength="300" placeholder="季节政策" value="{{scenic.seasonPolicy}}"/>
 						</div>
 					</div>
 					<div class="form-group guideInterval">
 						<label class="col-sm-2 control-label no-padding-right">景区简介:</label>
 						<div class="col-sm-8">
-							<textarea class="form-control" name="remark" class="col-sm-12" >{{scenic.remark}}</textarea>
+							<textarea class="form-control" name="remark" class="col-sm-12" maxlength="1000">{{scenic.remark}}</textarea>
 						</div>
 					</div>
 				</div>
@@ -93,7 +93,7 @@
 								<thead>
 									<tr>
 										<th class="table-border" width="170"><span class="necessary">*</span>收费项目</th>
-										<th class="table-border" width="270"><span class="necessary">*</span>时间范围</th>
+										<th class="table-border col-sm-3"><span class="necessary">*</span>时间范围</th>
 										<th class="table-border" width="160"><span class="necessary">*</span>单价(元)</th>
 										<th class="table-border">备注</th>
 										<th class="table-border" width="80">操作</th>
@@ -105,7 +105,7 @@
 										<td><input name="name" type="text" value="{{item.name}}" maxlength="100"/></td>
 										<td class="time">
 											<div class="clearfix" style="margin-top:2px">
-												日常
+												日常价格
 												<label class="timeArea" style="float:right">
 													<button class="btn btn-success btn-sm btn-white T-add">
 														<i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
@@ -124,8 +124,8 @@
 											{{/each}}
 										</td>
 										<td>
-											<div class="clearfix" style="margin-top:2px">
-												<input name="contractPrice" type="text" value="{{item.normalInnerPrice}}" maxlength="7"/>
+											<div class="clearfix normalInnerPrice" style="margin-top:2px" data-index="0">
+												<input name="normalInnerPrice" type="text" value="{{item.normalInnerPrice}}" maxlength="7"/>
 											</div>
 											{{each item.priceList as price i}}
 											<div data-index="{{i+1}}" class="clearfix div-{{i+1}}" style="margin-top:7px">

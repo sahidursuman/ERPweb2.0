@@ -1,6 +1,6 @@
 <div style="clear: both;margin-bottom:10px;border-top:1px dotted #ccc;padding-bottom:5px;"></div>
 <div class="col-xs-12">
-	<table class="table table-striped table-bordered table-hover T-NotShowHighLight">
+	<table class="table table-striped table-bordered table-hover T-showHighLight">
 		<thead>
 			<tr class="bg-blur">  
 				<th>客户来源</th>
@@ -19,7 +19,7 @@
 		</thead>
 	
 		<tbody>{{each transitSubTgroupList as subList indexA}}
-			<tr date-entity-id="{{subList.id}}">
+			<tr data-entity-id="{{subList.id}}">
 				<td>{{subList.partnerAgency.travelAgencyName}}</td>
 				<td>{{subList.lineProduct.name}}
 					{{if subList.subTouristGroupDetails != null}}
@@ -41,10 +41,10 @@
 				<td>{{if subList.status == 1}}未分团{{else if subList.status == 5}}已分段{{/if}}</td>
 				<td>
 					<div class="hidden-sm hidden-xs btn-group">
-						<a data-entity-id="{{subList.id}}" class=" btn-subsection cursor R-right" data-right="1350001">
+						<a data-entity-id="{{subList.id}}" class="T-btn-subsection cursor R-right" data-right="1350001">
 							分段
 						</a>
-						<a data-entity-id="{{subList.id}}" class="{{if subList.status == 5}}btn-subsection-revoke{{/if}} cursor R-right" data-right="1350002" {{if subList.status != 5}}style="color:#bbb;"{{/if}}>
+						<a data-entity-id="{{subList.id}}" class="{{if subList.status == 5}}T-btn-subsection-revoke{{/if}} cursor R-right" data-right="1350002" {{if subList.status != 5}}style="color:#bbb;"{{/if}}>
 							<label class="padding-right20">|</label>
 							撤销
 						</a>
@@ -54,7 +54,7 @@
 			 {{if subList.subTouristGroupDetails != null}}
 			 	{{each subList.subTouristGroupDetails as subDetails index}}
 			 	{{if index == 0}}
-			 	<tr class="tr_{{indexA}}" style="display: none;">
+			 	<tr class="T-tr_{{indexA}}" style="display: none;">
 			 		<td rowspan="{{subList.subTouristGroupDetails.length}}"></td>
 			 		<td>{{subDetails.lineProductName}}</td>
 			 		<td>{{if subDetails.customerType == 0}}散客{{else}}团体{{/if}}</td>
@@ -81,7 +81,7 @@
 			 		<td rowspan="{{subList.subTouristGroupDetails.length}}"></td>
 			 	</tr> 
 			 	{{else}}
-			 	<tr class="tr_{{indexA}}" style="display: none;">
+			 	<tr class="T-tr_{{indexA}}" style="display: none;">
 			 		<td>{{subDetails.lineProductName}}</td>
 			 		<td>{{if subDetails.customerType == 0}}散客{{else}}团体{{/if}}</td>
 			 		<td>{{subDetails.startTime | dateFormat: 'yyyy-MM-dd'}}</td>

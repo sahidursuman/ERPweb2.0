@@ -243,7 +243,7 @@ define(function(require, exports) {
 			tripPlan.addTouristGroup(lineProductId,startTime,$tab);
 		});
 		//查看旅游小组成员
-    	$tab.find(".T-groupView").on("click",function(){
+    	$tab.find(".T-groupView").off().on("click",function(){
     		var id = $(this).closest('tr').data("id");
     		tripPlan.viewTouristGroup(id);
     	});
@@ -281,9 +281,10 @@ define(function(require, exports) {
 				type: 1,
 				title:"选择线路产品",
 				skin: 'layui-layer-rim', //加上边框
-				area: ['65%', '65%'], //宽高
+				area: '85%', //宽高
 				zIndex:1029,
-				content: html
+				content: html,
+				scrollbar: false,
 			});
 
 		var $dialog = $('.T-tripplan-lineproduct-search-' + type);
@@ -390,6 +391,9 @@ define(function(require, exports) {
 				    	}
 				    }
 				});	
+
+				// 让对话框居中
+				$(window).trigger('resize');
 			}
 		});			
 	};
@@ -963,7 +967,7 @@ define(function(require, exports) {
 									});
 						    		$tab.find(".T-tourist-list").append(html);
 						    		//查看旅游小组成员
-							    	$tab.find(".T-groupView").on("click",function(){
+							    	$tab.find(".T-groupView").off().on("click",function(){
 							    		var id = $(this).closest('tr').data("id");
 							    		tripPlan.viewTouristGroup(id);
 							    	});

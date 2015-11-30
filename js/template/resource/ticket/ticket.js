@@ -196,9 +196,10 @@ define(function(require, exports) {
 						type: 1,
 						title:"编辑票务公司信息",
 						skin: 'layui-layer-rim', //加上边框
-						area: ['800px', '360px'], //宽高
+						area: '800px', //宽高
 						zIndex:1028,
 						content: html,
+						scrollbar: false, // 推荐禁用浏览器外部滚动条
 						success:function(){
 							var $container = $(".T-updateTicketContainer");
 							var $province = $container.find("select[name=provinceId]");
@@ -250,47 +251,23 @@ define(function(require, exports) {
 	 * @param  {int} pageNo 当前页码
 	 * @return {[type]}        [description]
 	 */
+	
 	TicketResource.deleteTicket = function(id){
-		var dialogObj = $( "#confirm-dialog-message" );
-		dialogObj.removeClass('hide').dialog({
-			modal: true,
-			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-			title_html: true,
-			draggable:false,
-			buttons: [
-				{
-					text: "取消",
-					"class" : "btn btn-minier",
-					click: function() {
-						$( this ).dialog( "close" );
-					}
-				},
-				{
-					text: "确定",
-					"class" : "btn btn-primary btn-minier",
-					click: function() {
-						$( this ).dialog( "close" );
-						$.ajax({
+		if(!!id){
+			showConfirmDialog($("#confirm-dialog-message"),"你确定要删除该条记录？",function(){
+					$.ajax({
 							url:""+APP_ROOT+"back/ticket.do?method=deleteTicket&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=delete",
-							type:"POST",
-							data:"id="+id+"",
-							success:function(data){
-								var result = showDialog(data);
-								if(result){
-									$("#"+tabId+" .ticketList .ticket-"+id+"").fadeOut(function(){
-										TicketResource.listTicket(0,"","");
-									});
-								}
-							}
-						});
-					}
-				}
-			],
-			open:function(event,ui){
-				$(this).find("p").text("你确定要删除该条记录？");
-			}
-		});
-	};
+	 						type:"POST",
+	 						data:"id="+id+"",
+					}).done(function(data){
+						if(showDialog(data)){
+							TicketResource.listTicket(0);
+						}
+					})
+			})
+		}
+	}	
+
 	/**
 	 * 查看票务信息
 	 * @param  {int} id 票务编号

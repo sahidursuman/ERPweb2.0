@@ -28,18 +28,20 @@
 				{{if index == 0}}
 				<td>{{bus.seatCount}}</td>
 				<td>{{bus.brand}}</td>
-				<td>{{bus.price}}</td>
+				<td>{{bus.price | toFixed}}</td>
 				{{/if}}
 				{{/each}}
 				{{/if}}
-				<td style="vertical-align: middle" rowspan="{{busCompany.busList.length}}"><a class="T-chooseBus">添加</a></td>
+				<td style="vertical-align: middle" rowspan="{{busCompany.busList.length}}"><!-- <a class="T-chooseBus">添加</a> -->
+					<label class="pos-rel"><input type="checkbox" class="ace T-chooseBus"> <span class="lbl"></span> </label>
+				</td>
 			</tr>
 			{{each busCompany.busList as bus index}}
 			{{if index > 0}}
 				<tr>
 				<td>{{bus.seatCount}}</td>
 				<td>{{bus.brand}}</td>
-				<td>{{bus.price}}</td>
+				<td>{{bus.price | toFixed}}</td>
 				</tr>
 			{{/if}}
 			{{/each}}

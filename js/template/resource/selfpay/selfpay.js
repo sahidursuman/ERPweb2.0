@@ -227,48 +227,24 @@ define(function(require, exports) {
 	 * @param  {[type]} id    [id]
 	 * @param  {[type]} $this [对象]
 	 */
-	selfpay.deleteSelfpay = function(id,$this){
-		var dialogObj = $( "#confirm-dialog-message" );
-		dialogObj.removeClass('hide').dialog({
-			modal: true,
-			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-			title_html: true,
-			draggable:false,
-			buttons: [ 
-				{
-					text: "取消",
-					"class" : "btn btn-minier",
-					click: function() {
-						$( this ).dialog( "close" );
-					}
-				},
-				{
-					text: "确定",
-					"class" : "btn btn-primary btn-minier",
-					click: function() {
-						$( this ).dialog( "close" );
-						$.ajax({
+	
+		selfpay.deleteSelfpay = function(id,$this){
+			if(!!id){
+				showConfirmDialog($("#confirm-dialog-message"),"你确定要删除该自费项目？",function(){
+					$.ajax({
 							url:selfpay.url("deleteSelfPay","delete"),
 							type:"POST",
 							data:"id="+id+"&cateName=selfpay"+"",
-							success:function(data){
-								var result = showDialog(data);
-								if(result){
-									$this.closest('tr').fadeOut(function() {
-										$(this).remove();
-										selfpay.selfpayList(0);
-									});
-								}
-							}
-						});
-					}
-				}
-			],
-			open:function(event,ui){
-				$(this).find("p").text("你确定要删除该自费项目？");
+					})
+					.done(function(data){
+						if(showDialog(data)){
+							selfpay.selfpayList(0);
+						}
+					})
+				})
 			}
-		});
-	};
+		}
+
 
 	selfpay.deleteSelfitem = function(id,cateName,$parent){
 		
@@ -315,7 +291,7 @@ define(function(require, exports) {
 		var $tbody = $container.find('.T-selfpayList-Tbody');
 		var html = '<tr><td><input name="name" class="col-sm-12" type="text" style="min-width:100px;" maxlength="100"/></td>'+
 			'<td><select class="col-sm-12" name="customerType" style="min-width:100px;"><option value="0">散客</option><option value="1">团体</option></select></td>'+
-			'<td><div class="col-sm-12 no-padding"><label class="col-sm-10">日常</label><label class="priceArea col-sm-2" style="padding-top:0px;"><button class="btn btn-success btn-sm btn-white T-add"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button></label></div></td>'+
+			'<td><div class="col-sm-12 no-padding"><label class="col-sm-10">日常价格</label><label class="priceArea col-sm-2" style="padding-top:0px;"><button class="btn btn-success btn-sm btn-white T-add"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button></label></div></td>'+
 			'<td><div class="col-sm-12 no-padding"><input name="normalInnerPrice" class="col-sm-12" type="text" maxlength="10"/></div></td>'+
 			'<td><div class="col-sm-12 no-padding"><input name="normalMarketPrice" class="col-sm-12" type="text" maxlength="10"/></div></td>'+
 			'<td><div class="col-sm-12 no-padding"><input name="normalGuideRate" class="col-sm-12" type="text" maxlength="5"/></div></td>'+
@@ -357,14 +333,14 @@ define(function(require, exports) {
 				buttons: [ 
 					{
 						text: "取消",
-						"class" : "btn btn-minier",
+						"class" : "btn btn-minier btn-heightMall",
 						click: function() {
 							$( this ).dialog( "close" );
 						}
 					},
 					{
 						text: "确定",
-						"class" : "btn btn-primary btn-minier",
+						"class" : "btn btn-primary btn-minier btn-heightMall",
 						click: function() {
 							$( this ).dialog( "close" );
 							$.ajax({
@@ -420,7 +396,7 @@ define(function(require, exports) {
 	 * @return {[type]}       [description]
 	 */
 	selfpay.delTimeArea = function($this){
-		var $parents = $this.closest('tr'), td = $parents.find("td"), index = $this.closest('div').data("index"), id = $this.closest('div').find("input[name=rebateListId]").val();
+		var $parents = $this.closest('tr'), td = $parents.find("td"), index = $this.closest('.T-dateTimeArea').index(), id = $this.closest('div').find("input[name=rebateListId]").val();
 		if (!!id) {
 			var dialogObj = $( "#confirm-dialog-message" );
 			dialogObj.removeClass('hide').dialog({
@@ -431,14 +407,14 @@ define(function(require, exports) {
 				buttons: [ 
 					{
 						text: "取消",
-						"class" : "btn btn-minier",
+						"class" : "btn btn-minier btn-heightMall",
 						click: function() {
 							$( this ).dialog( "close" );
 						}
 					},
 					{
 						text: "确定",
-						"class" : "btn btn-primary btn-minier",
+						"class" : "btn btn-primary btn-minier btn-heightMall",
 						click: function() {
 							$( this ).dialog( "close" );
 							$.ajax({
@@ -470,7 +446,7 @@ define(function(require, exports) {
 		}else{
 			for(var i=2; i < 7; i++){
 				var $children =  td.eq(i).children("div");
-				$children.eq(index - 1).fadeOut(function(){
+				$children.eq(index).fadeOut(function(){
 					$(this).remove();
 					for(var j=0; j<$parents.find(".T-dateTimeArea").length;j++){
 						$parents.find(".T-dateTimeArea").eq(j).attr("data-index", j+1)
@@ -486,15 +462,15 @@ define(function(require, exports) {
 	 * @return {[type]}            [description]
 	 */
 	selfpay.saveSelfpay = function($container,type,fn){
+		if(!rule.check($container).form()){return;}
+		if(ruleData.validatorList != undefined){
+			if(!ruleData.validatorList.form()){return;}
+		}
 		var operation = "",method = "",jsonName = "";
 		if (type == 1) {
 			method = "addSelfPay";
 			operation = "add";
 			jsonName = "priceJsonAdd";
-    		if(!ruleData.validator.form()){return;}
-    		if(ruleData.validatorList != undefined){
-    			if(!ruleData.validatorList.form()){return;}
-    		}
 		}else if(type == 2){
 			method = "updateSelfPay";
 			operation = "update";
@@ -512,7 +488,7 @@ define(function(require, exports) {
 
 		selfList.each(function(i){
 			var name = $(this).find("input[name=name]").val(),
-			id = $(this).data("entity-id") || 0,
+			id = $(this).data("entity-id") || "",
 			customerType = $(this).find("select[name=customerType]").val(),
 			remark = $(this).find("input[name=remark]").val(),
 			priceJson = {

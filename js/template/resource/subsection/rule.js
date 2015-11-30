@@ -18,7 +18,7 @@ var rule = {
 		getSettings:function(){
 			var $container = this.$container, settings = [];
 
-			$container.find('.subsectionOperationTbody').children('tr').each(function() {
+			$container.find('.T-subsectionOperationTbody').children('tr').each(function() {
 				var $tr = $(this),
 					lineProductId = $tr.find("[name=lineProductId]").val();
 				if(!!lineProductId){

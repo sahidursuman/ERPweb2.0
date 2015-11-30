@@ -33,15 +33,6 @@ var rule = {
 	  	    	        	errMsg: '车牌号不能为空'
 	  	    	        }
 		    	        ]
-			      },{//导游driverId  
-		    	       	$ele: $checkdCreateTripPlanObj.find('input[name="AddTPchooseGuide"]'),    
-		    	    	$valObj: $checkdCreateTripPlanObj.find('input[name="AddTPchooseGuideId"]'),  // 默认是undefined，用于autocomplete之类的插件       
-		    	    	rules: [
-	  	    	        {
-	  	    	        	type: 'null', 
-	  	    	        	errMsg: '导游不能为空'
-	  	    	        }
-		    	        ]
 			      },{//司机
 		    	       	$ele: $checkdCreateTripPlanObj.find('input[name="driverName"]'),  
 		    	    	$valObj: $checkdCreateTripPlanObj.find('input[name="driverId"]'),  // 默认是undefined，用于autocomplete之类的插件

@@ -39,7 +39,8 @@ define(function(require,exports){
 			statusSearch: "",
 			customerType: "",
 			sortType: 'auto'
-		}
+		},
+		$freshData:false
 	};
 	//游客管理页面初始化
 	touristGroup.initModule = function(){
@@ -94,6 +95,7 @@ define(function(require,exports){
 				 	var $mainFormObj = touristGroup.$tab.find(".T-touristGroupSearchForm"),
 					 	$searchObj = $mainFormObj.find(".T-search-area");
 					touristGroup.$searchArea = $searchObj;
+					touristGroup.$freshData = $args;
 					//业务事件
 					touristGroup.initEvents();
 					//获取搜索区域的数据
@@ -341,6 +343,8 @@ define(function(require,exports){
 		//同行联系人
 		var $contactObj = $obj.find('input[name=partnerAgencyNameList]');
 		touristGroup.getContactList($contactObj);
+		//新增同行
+		$obj.find('.T-addPartner').off('click').on("click",{function : KingServices.addPartnerAgency , type : ".form-group" , name : "fromPartnerAgency" , id : "fromPartnerAgencyId"}, KingServices.addResourceFunction);
 		//新增同行联系人
 		$obj.find('.T-addPartnerManager').on('click',function(){
 			touristGroup.addPartnerManager($(this));
@@ -462,7 +466,7 @@ define(function(require,exports){
 				type: 1,
 				title:"选择线路产品",
 				skin: 'layui-layer-rim', //加上边框
-				area: ['85%', '80%'], //宽高
+				area: '85%', //宽高
 				zIndex:1029,
 				content: html,
 				scrollbar: false,
@@ -475,8 +479,8 @@ define(function(require,exports){
 		$dialog.find('.T-lineProduct-search').on('click', function(event) {
 			event.preventDefault();
 			var $that = $(this),
-				type = $that.prevAll('.tabbable').find('ul').find('.active').index();
-			touristGroup.getLineProductList($dialog, type, $dialog.find('input[name="lineProduct_name"]').val());
+				type = $that.closest('.T-lineproduct-search-add').find('ul').find('.active').index();
+			touristGroup.getLineProductList($dialog, type, 0,$dialog.find('input[name="lineProduct_name"]').val());
 		});	
 		// 选择线路产品
 		$dialog.find('.T-searchtravelLine').on('click', function(event) {
@@ -548,7 +552,11 @@ define(function(require,exports){
 							customerType: lineProduct.customerType,
 							status: lineProduct.status,
 							travelAgencyName: tmp.partnerAgency.travelAgencyName,
-							createTime: tmp.createTime
+							createTime: tmp.createTime,
+							adultCount: tmp.adultCount,
+							childCount: tmp.childCount,
+							startTime: tmp.startTime,
+							contactRealname: tmp.partnerAgencyContact.contactRealname
 						})
 					}
 
@@ -557,7 +565,7 @@ define(function(require,exports){
 					console.info(data)
 				}
 				$tbody.html(lineproductSearchList(data));
-
+				$tbody.closest('.tab-pane').find('.T-total').text(data.recordSize);
 				// 绑定翻页组件
 				laypage({
 				    cont: $tbody.closest('.tab-pane').find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
@@ -569,6 +577,8 @@ define(function(require,exports){
 				    	}
 				    }
 				});	
+				// 让对话框居中
+				$(window).trigger('resize');
 			}
 		});			
 	};
@@ -606,9 +616,9 @@ define(function(require,exports){
 			setData('startTime', data.startTime);   //出游日期
 			var isUpdate = $mainForm.hasClass('T-update');
 			setData('startTime', data.startTime.split(' ')[0]).prop('disabled', true).nextAll('span, .fa').addClass('hidden');   //出游日期
-			setData('fromPartnerAgency', data.partnerAgency.travelAgencyName);   //客户来源
+			setData('fromPartnerAgency', data.partnerAgency.travelAgencyName).nextAll('.T-addPartner').addClass('hidden');;   //客户来源
 			setData('fromPartnerAgencyId', data.partnerAgency.id);   //客户来源的索引
-			setData('partnerAgencyNameList', data.partnerAgencyContact.contactRealname).nextAll('.T-addPartnerManager').addClass('hidden');;   //同行联系人
+			setData('partnerAgencyNameList', data.partnerAgencyContact.contactRealname).nextAll('.T-addPartnerManager').addClass('hidden');  //同行联系人
 			setData('partnerAgencyContactId', data.partnerAgencyContact.id);   //同行联系人的索引
 			setData('adultCount', data.adultCount);   //大人人数
 			setData('adultPrice', data.adultQuotePrice);   //大人单价
@@ -977,6 +987,7 @@ define(function(require,exports){
 			currInMoney = 0;
 		};
 		unInMoney = needSumIncome - hadInMoney - currInMoney;
+		unInMoney=unInMoney.toFixed(2);
 		unIncome.val(unInMoney);	
 	};
 	//获取列表数据
@@ -1015,6 +1026,28 @@ define(function(require,exports){
 					}
 				}
 			});
+	};
+	//刷新数据合计
+	touristGroup.freshHeader = function($args){
+		$.ajax({
+			url:touristGroup.url("getTouristStatisticData","view"),
+			data:$args,
+			type:"POST",
+			success:function(data){
+				var result = showDialog(data);
+				if(result){
+					var $listObj = touristGroup.$tab.find(".T-touristGroupSearchForm"),
+    					$countBody = $listObj.find('.T-countData'),
+    					$statistics = data.statistics;
+    				$countBody.find(".allPerson").text($statistics.adultCount+"大"+$statistics.childCount+"小");
+    				$countBody.find(".needIncome").text($statistics.needPay | toFixed+"小");
+    				$countBody.find(".payedMoney").text($statistics.payedMoney | toFixed+"小");
+    				$countBody.find(".currentNeedPay").text($statistics.currentNeedPay | toFixed+"小");
+    				$countBody.find(".unIncome").text($statistics.unIncomeMoney | toFixed+"小");
+					
+				}	
+			}
+		});
 	};
 	//获取组团社的数据
 	touristGroup.getPartnerAgencyList = function($obj){
@@ -1097,6 +1130,7 @@ define(function(require,exports){
 						partnerAgencyId:partnerAgencyId,
 						operation:"view"
 					},
+					showLoading: false,
 					type:'POST',
 					success:function(data){
 						var result = showDialog(data);
@@ -1489,7 +1523,10 @@ define(function(require,exports){
 							touristGroup.updateEvents();}
 							}else{
 								Tools.closeTab(tabId);
-								touristGroup.listTouristGroup(touristGroup.args);
+								//
+								touristGroup.freshHeader(touristGroup.$freshData);
+								//刷新列表数据
+								touristGroup.getListData(touristGroup.$freshData);
 							};
 							if (innerStatus) {
 								KingServices.updateTransit(data.touristGroupId);
