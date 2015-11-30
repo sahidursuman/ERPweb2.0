@@ -561,7 +561,7 @@ define(function(require, exports) {
 			'<td><input class="col-sm-12 chooseBusBrand" name="busbrand" type="text" value="" /></td>'+
 			'<td><div class="col-sm-12"><input class="col-sm-12 chooseBusLicenseNumber bind-change" name="busLicenseNumber" type="text" value="" /><input type="hidden" name="busLicenseNumberId" value="" /><span class="addResourceBtn T-addBusResource R-right" data-right="1020002" title="添加车辆"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
 			'<td><div class="col-sm-12"><input type="hidden" name="serviceType" value="'+type+'" />'+
-			'<input class="col-sm-12 bind-change" name="busCompanyName" readonly="readonly" type="text" value="" />'+
+			'<input class="col-sm-12 bind-change" name="busCompanyName"  type="text" value="" />'+
 			'<input type="hidden" name="busCompanyId" value="" /><span class="addResourceBtn T-addBusCompanyResource R-right" data-right="1020002" title="添加车队"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
 			'<td><div class="col-sm-12"><input class="col-sm-12 chooseDriver bind-change" name="driverName" type="text" value="" /><input type="hidden" name="driverId" value="" /><span class="addResourceBtn T-addDriverResource R-right" data-right="1020002" title="添加司机"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
 			'<td><input class="col-sm-12" name="driverMobileNumber" readonly="readonly" type="text" value="" /></td>'+
@@ -678,8 +678,8 @@ define(function(require, exports) {
 				'<td><input class="col-sm-12" name="manager" readonly="readonly" type="text" value="" /></td>'+
 				'<td><input class="col-sm-12" name="mobileNumber" readonly="readonly" type="text" value="" /></td>'+
 				'<td><select name="standardType"><option value="早餐">早餐</option><option value="午餐">午餐</option><option value="晚餐">晚餐</option></select>'+
-				'</td><td><input class="col-sm-12 chooseStandard price" name="restaurantStandardId" type="text" value="" maxlength="9" /><input type="hidden" name="price" value="" />'+
-				'</td><td><input class="col-sm-12 count" name="memberCount" maxlength="6" type="text" value="" /></td>'+
+				'</td><td><input class="col-sm-8 chooseStandard price" name="restaurantStandardId" type="text" value="" maxlength="9" /><input type="hidden" name="price" value="" />'+
+				'<span style="line-height: 22px;">(元/人)</span></td><td><input class="col-sm-12 count" name="memberCount" maxlength="6" type="text" value="" /></td>'+
 				'<td><input class="col-sm-12 discount" name="reduceMoney" maxlength="9" type="text" value="" /></td>'+
 				'<td><input class="col-sm-12 needPay" name="needPayMoney" readonly="readonly" type="text" value="" /></td>'+
 				'<td><input class="col-sm-12" name="payedMoney" maxlength="9"  type="text" value="" /></td>'+
@@ -1013,7 +1013,7 @@ define(function(require, exports) {
 			}).unbind("click").click(function(){
 				var obj = this;
 				var busLicenseNumberId = $(this).closest('tr').find("input[name=busLicenseNumberId]").val();
-				if(busLicenseNumberId){
+				// if(busLicenseNumberId){
 					$.ajax({
 						url:""+APP_ROOT+"back/busCompany.do?method=getDrivers&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 						data:"busId="+busLicenseNumberId+"",
@@ -1039,12 +1039,13 @@ define(function(require, exports) {
 							}
 						}
 					})
-				}else{
-					layer.tips('请选择车牌号', obj, {
-					    tips: [1, '#3595CC'],
-					    time: 2000
-					});
-				}
+				// }
+				// else{
+				// 	layer.tips('请选择车牌号', obj, {
+				// 	    tips: [1, '#3595CC'],
+				// 	    time: 2000
+				// 	});
+				// }
 			});
 			/*var chooseBusLicenseNumber = $("#"+tab+" .arrangeTouristMain .chooseBusLicenseNumber");
 			chooseBusLicenseNumber.autocomplete({
