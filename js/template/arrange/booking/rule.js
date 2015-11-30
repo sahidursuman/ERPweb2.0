@@ -7,6 +7,10 @@ define(function(require, exports) {
 
 		//游客管理验证 
 		checkAddBooking:function($obj){
+			var $hotel = $obj.find('.T-bookingHotelList'),
+				$scenic = $obj.find('.T-bookingScenicList'),
+				$ticket = $obj.find('.T-bookingTicketList'),
+				$bus = $obj.find('.T-bookingBusList');
 			var validator = $obj.formValidate([
 				{	//同行客户验证 
 					$ele: $obj.find('input[name="partnerAgencyName"]'),
@@ -60,17 +64,9 @@ define(function(require, exports) {
 							errMsg: '已付数字不合法'
 						}
 					]
-				}
-			]);
-			return validator;
-		},
-
-
-		//酒店代订验证	
-		checkBookingHotel:function($checkBookingHoteObj){
-			var validatorHotel=$checkBookingHoteObj.formValidate([
+				},
 				{//入住日期
-					$ele:$checkBookingHoteObj.find('input[name="enterTime"]'),
+					$ele:$hotel.find('input[name="enterTime"]'),
 					rules: [
 						{
 							type: 'null',
@@ -78,7 +74,7 @@ define(function(require, exports) {
 						}
 					]
 				},{//离开日期
-					$ele: $checkBookingHoteObj.find('input[name="leaveTime"]'),
+					$ele: $hotel.find('input[name="leaveTime"]'),
 					rules: [
 						{
 							type: 'null',
@@ -86,8 +82,8 @@ define(function(require, exports) {
 						}
 					]
 				},{//酒店
-					$ele: $checkBookingHoteObj.find('input[name="hotelName"]'),
-					$valObj: $checkBookingHoteObj.find('input[name="hotelId"]'),  // 默认是undefined，用于autocomplete之类的插件
+					$ele: $hotel.find('input[name="hotelName"]'),
+					$valObj: $hotel.find('input[name="hotelId"]'),  // 默认是undefined，用于autocomplete之类的插件
 					rules: [
 						{
 							type:'null',
@@ -97,8 +93,8 @@ define(function(require, exports) {
 
 				},{//房型
 
-					$ele: $checkBookingHoteObj.find('input[name="hotelRoom"]'),
-					$valObj: $checkBookingHoteObj.find('input[name="hotelRoomId"]'),  // 默认是undefined，用于autocomplete之类的插件
+					$ele: $hotel.find('input[name="hotelRoom"]'),
+					$valObj: $hotel.find('input[name="hotelRoomId"]'),  // 默认是undefined，用于autocomplete之类的插件
 					rules: [
 						{
 							type:'null',
@@ -106,28 +102,28 @@ define(function(require, exports) {
 						}
 					]
 				},{//数量
-					$ele: $checkBookingHoteObj.find('input[name="roomCount"]'),
+					$ele: $hotel.find('input[name="roomCount"]'),
 					rules: [
 						{
 							type: 'null',
 							errMsg: '数量不能为空'
 						},{
-							type: 'int',
+							type: 'float',
 							errMsg: '数量输入格式不正确'
 						}
 					]
 				},
 				{//天数
-					$ele: $checkBookingHoteObj.find('input[name="days"]'),
+					$ele: $hotel.find('input[name="days"]'),
 					rules: [
 						{
-							type: 'int',
+							type: 'float',
 							errMsg: '天数输入不合法'
 						}
 					]
 				},
 				{//成本单价
-					$ele: $checkBookingHoteObj.find('input[name="costPrice"]'),
+					$ele: $hotel.find('input[name="costPrice"]'),
 					rules: [
 						{
 							type: 'float',
@@ -136,24 +132,16 @@ define(function(require, exports) {
 					]
 				},
 				{//成本单价
-					$ele: $checkBookingHoteObj.find('input[name="salePrice"]'),
+					$ele: $hotel.find('input[name="salePrice"]'),
 					rules: [
 						{
 							type: 'float',
 							errMsg: '请输入数字'
 						}
 					]
-				}
-			]);
-			return validatorHotel;
-		},
-
-
-		//景区项目贷订订验证
-		checkBookingScenic:function($checkBookingScenicObj){
-			var validatorScenic=$checkBookingScenicObj.formValidate([
+				},
 				{//日期
-					$ele:$checkBookingScenicObj.find('input[name="startTime"]'),
+					$ele:$scenic.find('input[name="startTime"]'),
 					rules: [
 						{
 							type: 'null',
@@ -161,8 +149,8 @@ define(function(require, exports) {
 						}
 					]
 				},{//景区
-					$ele: $checkBookingScenicObj.find('input[name="scenicName"]'),
-					$valObj: $checkBookingScenicObj.find('input[name="scenicId"]'),  // 默认是undefined，用于autocomplete之类的插件
+					$ele: $scenic.find('input[name="scenicName"]'),
+					$valObj: $scenic.find('input[name="scenicId"]'),  // 默认是undefined，用于autocomplete之类的插件
 					rules: [
 						{
 							type:'null',
@@ -172,15 +160,15 @@ define(function(require, exports) {
 
 				},{//收费项
 
-					$ele: $checkBookingScenicObj.find('input[name="scenicItemName"]'),
-					$valObj: $checkBookingScenicObj.find('input[name="scenicItemId"]'),  // 默认是undefined，用于autocomplete之类的插件
+					$ele: $scenic.find('input[name="scenicItemName"]'),
+					$valObj: $scenic.find('input[name="scenicItemId"]'),  // 默认是undefined，用于autocomplete之类的插件
 					rules: [
 						{
 							type:'null',
 							errMsg: '收费金额不能为空'
 						}
 					]},{//房型数量
-					$ele: $checkBookingScenicObj.find('input[name="roomCount"]'),
+					$ele: $scenic.find('input[name="roomCount"]'),
 					rules: [
 						{
 							type: 'null',
@@ -192,7 +180,7 @@ define(function(require, exports) {
 					]
 				},
 				{//成本单价
-					$ele: $checkBookingScenicObj.find('input[name="costPrice"]'),
+					$ele: $scenic.find('input[name="costPrice"]'),
 					rules: [
 						{
 							type: 'float',
@@ -201,26 +189,17 @@ define(function(require, exports) {
 					]
 				},
 				{//成本单价
-					$ele: $checkBookingScenicObj.find('input[name="salePrice"]'),
+					$ele: $scenic.find('input[name="salePrice"]'),
 					rules: [
 						{
 							type: 'float',
 							errMsg: '请输入数字'
 						}
 					]
-				}
-
-			]);
-			return validatorScenic;
-		},
-
-
-		//票务贷订订验证
-		checkBookingTicket:function($checkBookingTicketObj){
-			var validatorTicket=$checkBookingTicketObj.formValidate([
+				},
 				{//票务公司
-					$ele:$checkBookingTicketObj.find('input[name="ticketName"]'),
-					$valObj:$checkBookingTicketObj.find('input[name="ticketId"]'),  // 默认是undefined，用于autocomplete之类的插件
+					$ele:$ticket.find('input[name="ticketName"]'),
+					$valObj:$ticket.find('input[name="ticketId"]'),  // 默认是undefined，用于autocomplete之类的插件
 					rules: [
 						{
 							type: 'null',
@@ -228,7 +207,7 @@ define(function(require, exports) {
 						}
 					]
 				},{//班次
-					$ele: $checkBookingTicketObj.find('input[name="shift"]'),
+					$ele: $ticket.find('input[name="shift"]'),
 					rules: [
 						{
 							type: 'null',
@@ -236,7 +215,7 @@ define(function(require, exports) {
 						}
 					]
 				},{//时间
-					$ele:$checkBookingTicketObj.find('input[name="startTime"]'),
+					$ele:$ticket.find('input[name="startTime"]'),
 					rules: [
 						{
 							type: 'null',
@@ -244,7 +223,7 @@ define(function(require, exports) {
 						}
 					]
 				},{//数量
-					$ele: $checkBookingTicketObj.find('input[name="roomCount"]'),
+					$ele: $ticket.find('input[name="roomCount"]'),
 					rules: [
 						{
 							type: 'null',
@@ -255,7 +234,7 @@ define(function(require, exports) {
 						}
 					]
 				},{//座位级别
-					$ele: $checkBookingTicketObj.find('input[name="seatLevel"]'),
+					$ele: $ticket.find('input[name="seatLevel"]'),
 					rules: [
 						{
 							type: 'null',
@@ -264,7 +243,7 @@ define(function(require, exports) {
 					]
 				},
 				{//成本单价
-					$ele: $checkBookingTicketObj.find('input[name="costPrice"]'),
+					$ele: $ticket.find('input[name="costPrice"]'),
 					rules: [
 						{
 							type: 'float',
@@ -273,27 +252,16 @@ define(function(require, exports) {
 					]
 				},
 				{//成本单价
-					$ele: $checkBookingTicketObj.find('input[name="salePrice"]'),
+					$ele: $ticket.find('input[name="salePrice"]'),
 					rules: [
 						{
 							type: 'float',
 							errMsg: '请输入数字'
 						}
 					]
-				}
-
-			]);
-			return validatorTicket;
-		},
-
-
-
-
-		//旅游车贷订订验证
-		checkBookingBus:function($checkBookingBusObj){
-			var validatorBus=$checkBookingBusObj.formValidate([
+				},
 				{//开始日期
-					$ele:$checkBookingBusObj.find('input[name="startTime"]'),
+					$ele:$bus.find('input[name="startTime"]'),
 					rules: [
 						{
 							type: 'null',
@@ -301,7 +269,7 @@ define(function(require, exports) {
 						}
 					]
 				},{//结束日期
-					$ele: $checkBookingBusObj.find('input[name="endTime"]'),
+					$ele: $bus.find('input[name="endTime"]'),
 					rules: [
 						{
 							type: 'null',
@@ -309,7 +277,7 @@ define(function(require, exports) {
 						}
 					]
 				},{//车座数
-					$ele: $checkBookingBusObj.find('input[name="needSeatCount"]'),
+					$ele: $bus.find('input[name="needSeatCount"]'),
 					rules: [
 						{
 							type: 'null',
@@ -320,18 +288,9 @@ define(function(require, exports) {
 							errMsg: '请输入数字'
 						}
 					]
-				},{//车辆品牌
-					$ele: $checkBookingBusObj.find('input[name="needBusBrand"]'),
-					rules: [
-						{
-							type: 'null',
-							errMsg: '车辆品牌不能为空'
-						}
-
-					]
-				},{//所属车队
-					$ele: $checkBookingBusObj.find('input[name="busCompany"]'),
-					$valObj: $checkBookingBusObj.find('input[name="busCompanyId"]'),
+				},{//车座数
+					$ele: $bus.find('input[name="busCompany"]'),
+					$valObj:$ticket.find('input[name="busCompanyId"]'),
 					rules: [
 						{
 							type: 'null',
@@ -339,7 +298,7 @@ define(function(require, exports) {
 						}
 					]
 				},{//数量
-					$ele: $checkBookingBusObj.find('input[name="roomCount"]'),
+					$ele: $bus.find('input[name="roomCount"]'),
 					rules: [
 						{
 							type: 'null',
@@ -351,7 +310,7 @@ define(function(require, exports) {
 					]
 				},
 				{//成本单价
-					$ele: $checkBookingBusObj.find('input[name="costPrice"]'),
+					$ele: $bus.find('input[name="costPrice"]'),
 					rules: [
 						{
 							type: 'float',
@@ -360,7 +319,7 @@ define(function(require, exports) {
 					]
 				},
 				{//成本单价
-					$ele: $checkBookingBusObj.find('input[name="salePrice"]'),
+					$ele: $bus.find('input[name="salePrice"]'),
 					rules: [
 						{
 							type: 'float',
@@ -368,10 +327,10 @@ define(function(require, exports) {
 						}
 					]
 				}
-
 			]);
-			return validatorBus;
+			return validator;
 		},
+		
 		//新增同行客户联系人验证
 		checkdPartnerManager:function($checkdPartnerManagerObj){
 			var validatorManager=$checkdPartnerManagerObj.formValidate([

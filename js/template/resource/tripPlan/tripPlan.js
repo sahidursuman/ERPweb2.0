@@ -117,6 +117,20 @@ define(function(require, exports) {
 				language: 'zh-CN'
 			});
 
+		    //报表下单操作
+			$("#" +tabId+ " .tripPlanViewList .T-tripPlan-sendOrder").on('click', function(event) {
+				event.preventDefault();
+				/* Act on the event */
+				var $that=$(this),
+				    qouteId=$that.attr("data-entiy-qouteId"),
+				    tripPlanId=$that.attr("data-tripPlanId");
+					tripPlan.singleClickSendOrder(qouteId,tripPlanId);
+					
+				     
+			});
+
+		
+
 			$("#" +tabId+ " .tripPlanViewList .btn-tripPlan-view").on("click", tripPlan.viewTripPlan)
 			$("#"+tabId+" .tripPlanViewList .btn-tripPlan-plan").on("click", function(){
 				var billStatus = $(this).attr("billStatus");
@@ -283,6 +297,7 @@ define(function(require, exports) {
 							ticketList : ticketList
 						};
 						var html = addTemplate(data);
+
 						//已填写提示
 						//var tab = "tab-resource_touristGroup-add-content";
 						var validator = rule.listTripPlanCheckor($("#tripPlan_addPlan_content"));  
@@ -328,9 +343,54 @@ define(function(require, exports) {
 			$("#tripPlan_addPlan_selfPay .addSelfPay").on("click",{validator:validator}, tripPlan.addSelfPay);
 			$("#tripPlan_addPlan_ticket .addTicket").on("click",{validator:validator}, tripPlan.addTicket);
 			$("#tripPlan_addPlan_other .addOther").on("click",{validator:validator}, tripPlan.addOther);
+		
+
+			//一键下单操作
+			$("#tripPlan_addPlan_content").find('.T-singleClick-Order').on('click', function(event) {
+				event.preventDefault();
+				/* Act on the event */
+				var $obj=$('#tab-arrange_all-update-content'),
+				    quoteId=$obj.find('input[name=qouteId]').val(),
+				     tripPlanId=$obj.find('input[name=tripPlanId]').val();
+				    /* Act on the event */
+					tripPlan.singleClickSendOrder(quoteId,tripPlanId);
+				        
+			});
+
+            //车辆的发送订单
+			$("#tripPlan_addPlan_bus").find('.T-bus-SendOrder').on('click',  function(event) {
+				event.preventDefault();
+				var $that=$(this),$trBusData=$that.closest('tr'),$obj=$('#tab-arrange_all-update-content'),
+				    qouteId=$obj.find('input[name=qouteId]').val();
+				    /* Act on the event */
+					tripPlan.busSendOrder($trBusData,qouteId);
+
+			});
+
+			//住宿的发送订单
+			$("#tripPlan_addPlan_hotel").find('.T-Hotel-SendOrder').on('click', function(event) {
+				event.preventDefault();
+				/* Act on the event */
+				var $that=$(this),$trHotelData=$that.closest('tr'),$obj=$('#tab-arrange_all-update-content'),
+				    qouteId=$obj.find('input[name=qouteId]').val();
+					tripPlan.hotelSendOrder($trHotelData,qouteId);
+			});
+
+
+			//修改报价
+			$("#tripPlan_addPlan_content").find('.T-update-Quote').on('click', function(event) {
+				event.preventDefault();
+				/* Act on the event */
+				var $that=$(this),id=$that.attr('data-qouteId');
+					KingServices.updateQuoteToOffer(id);
+					 tripPlanId=$that.attr("data-tripPlanId");
+					tripPlan.addTripPlan(tripPlanId);
+
+				
+			});
+
 			//绑定删除时间
 			tripPlan.bindDeleteEvent();
-			
 			tripPlan.bindInsuranceChoose();
 			//tripPlan.bindGuideChoose();
 			//tripPlan.bindBusCompanyChoose();
@@ -355,6 +415,23 @@ define(function(require, exports) {
 			tripPlan.moneyTripPlan();
 			tripPlan.setChooseDays();
 
+
+			//住宿--报价--日期--星级不能修改
+			var $hoteltdList=$("#tripPlan_addPlan_hotel").find('.T-whichDays');
+			for (var i = 0; i < $hoteltdList.length; i++) {
+				var qouteId=$hoteltdList.eq(i).attr("data-qouteId");
+                    if (qouteId!=null && qouteId!='') {
+                    	$hoteltdList.eq(i).find('select').prop("disabled",true);
+                    	$hoteltdList.eq(i).find('select').css({ "background":"#EFEBEB"});
+                    }else{
+                    	$hoteltdList.eq(i).find('select').eq(i).prop("disabled",false);
+                    	$hoteltdList.eq(i).find('select').css({ "background":"#FFF"});
+                    };
+				   
+			};
+
+			
+
 			//添加资源
 			tripPlan.addResource();
 
@@ -364,6 +441,127 @@ define(function(require, exports) {
 			//组装JSON 浮动显示
 			
 		},
+
+		/**
+		 * 
+		 * @param  {[type]} $trBusData 车辆中的发送订单
+		 * @return {[type]}            [description]
+		 */
+		busSendOrder:function($trBusData,quoteId){
+			var saveJson={
+				quoteId:quoteId
+			};
+			saveJson.busJson=[];
+			if($trBusData.length > 0){
+				for(var i=0; i<$trBusData.length; i++){
+					$trBusData.each(function(i) {
+						var busJsonArray = {
+							id: $trBusData.eq(i).attr("data-entity-arrangeId"),
+							busCompanyId : $trBusData.eq(i).attr("data-entity-busCompanyId"),
+							busId : $trBusData.eq(i).attr("data-entity-busId")
+						}	
+						saveJson.busJson.push(busJsonArray);			
+					});
+				}
+			}
+			
+			tripPlan.sendOrderRequest(saveJson);
+		},
+
+		/**
+		 * [hotelSendOrder 住宿的发送订单]
+		 * @param  {[type]} $trHotelData [description]
+		 * @return {[type]}              [description]
+		 */
+		hotelSendOrder:function($trHotelData, quoteId){
+			var saveJson={
+				 quoteId: quoteId
+			};
+			saveJson.hotelJson=[];
+			if($trHotelData.length > 0){  
+                for(var i=0; i<$trHotelData.length; i++){
+					$trHotelData.each(function(i) {
+						var hotelJsonArray = {
+							id: $trHotelData.eq(i).attr("data-entity-arrangeId"),
+							roomId : $trHotelData.eq(i).attr("data-entity-roomId"),
+							hotelId : $trHotelData.eq(i).attr("data-entity-hotelId")
+						}	
+						saveJson.hotelJson.push(hotelJsonArray);			
+					});
+				}
+			}
+			tripPlan.sendHotelRequest(saveJson);
+		},
+
+
+		/**
+		 * [sendOrderRequest 车队发送订单请求]
+		 * @param  {[type]} saveJson [description]
+		 * @return {[type]}          [description]
+		 */
+		sendOrderRequest:function(saveJson){
+			$.ajax({
+				url:KingServices.build_url("busInquiry","saveBusCompanyOrder"),
+				type: 'POST',
+				dataType: 'JSON',
+				data: "saveJson="+encodeURIComponent(JSON.stringify(saveJson)),
+				success:function(data){
+					var result = showDialog(data);
+					if(result){
+						showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+						});
+					}
+			    }
+			})
+		},
+
+
+
+		/**
+		 * [sendHotelRequest 酒店发送订单请求]
+		 * @param  {[type]} saveJson [description]
+		 * @return {[type]}          [description]
+		 */
+		sendHotelRequest:function(saveJson){
+			$.ajax({
+				url:KingServices.build_url("hotelInquiry","saveHotelOrder"),
+				type: 'POST',
+				dataType: 'JSON',
+				data: "saveJson="+encodeURIComponent(JSON.stringify(saveJson)),
+				success:function(data){
+					var result = showDialog(data);
+					if(result){
+						showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+
+						});
+					}
+			    }
+			})
+		},
+
+
+		/**
+		 * singleClickSendOrder 一键下单
+		 * @param  {[type]} qouteId 报价Id
+		 * @return {[type]}         [description]
+		 */
+		singleClickSendOrder:function(quoteId,tripPlanId){
+			$.ajax({
+				url:KingServices.build_url("productQuote","saveOrder"),
+				type: 'POST',
+				dataType: 'JSON',
+				data: "quoteId="+quoteId+"&tripPlanId="+tripPlanId,
+				success:function(data){
+					var result = showDialog(data);
+						if(result){
+							showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+						});
+					}
+			    }
+			})
+
+		},
+
 		//浮动查看自选餐厅
 		viewOptionalRestaurant :function($objInput){
 			$objInput.each(function(){
@@ -413,8 +611,6 @@ define(function(require, exports) {
 			tripPlan.calculatePrice();
 			validator = rule.update(validator);
 			tripPlan.addResource();
-
-
 		},
 		//添加导游安排
 		addGuide : function(){
@@ -772,6 +968,7 @@ define(function(require, exports) {
 			});
 			
 		},
+
 		//导游安排
 		bindGuideChoose : function(){
 			var guideChoose = $("#tripPlan_addPlan_guide .table-tripPlan-container .chooseGuide");
@@ -2145,7 +2342,7 @@ define(function(require, exports) {
 				_this.find("input[name=price], input[name=fee]").on("blur", function(){
 					tripPlan.plusPrice(this);
 				});
-				_this.find("input[name=memberCount], input[name=memberCount], input[name=needRoomCount]").on("change", function(){
+				_this.find("input[name=memberCount], input[name=needRoomCount]").on("change", function(){
 					tripPlan.plusPrice(this);
 				});
 				_this.find("input[name=reduceMoney]").on("change", function(){
@@ -2161,6 +2358,8 @@ define(function(require, exports) {
 						tripPlan.plusPrice(this);
 					}
 				});
+				//加载时自动计算
+				tripPlan.plusPrice(_this.find('input[name=fee], input[name=memberCount], input[name=reduceMoney], input[name=payedMoney]'));
 			});			
 		},
 		plusPrice :function(obj){
@@ -2422,5 +2621,6 @@ define(function(require, exports) {
 	exports.isEdited = tripPlan.isEdited;
 	exports.save = tripPlan.save;
 	exports.clearEdit = tripPlan.clearEdit;
+	exports.updateQuote=tripPlan.updateQuote;
 });
 

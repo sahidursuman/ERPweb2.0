@@ -1,4 +1,4 @@
-<table class="table table-striped table-bordered table-hover globalAdd">
+<table class="table table-striped table-bordered table-hover globalAdd T-showHighLight">
 	<thead>
 		<tr class="bg-blur">
 			<th class="R-right" data-right="1130004">并团选择</th>
@@ -9,17 +9,14 @@
 			<th>出游日期</th>
 			<th>人数</th>
 			<th>未分团人数</th>
-			<!-- <th>应收款</th>
-			<th>已收款</th>
-			<th>现收款</th> -->
 			<th>操作</th>
 		</tr>
 	</thead>
-	<tbody>
+	<tbody class="T-arrageVisitor-list">
 		{{each arrangeTouristGroupList as arrangeTourist}}
 			<tr data-entity-id="{{arrangeTourist.lineProductId}}" data-entity-startTime="{{arrangeTourist.startTime}}" data-entity-days="{{arrangeTourist.days}}" data-entity-name="{{arrangeTourist.name}}" data-entity-type="{{arrangeTourist.type}}" data-entity-memberCount="{{arrangeTourist.sumNoOperationAdultCount+arrangeTourist.sumNoOperationChildCount}}" class="tr-{{arrangeTourist.lineProductId}}-{{arrangeTourist.startTime}}">
 				<td class="R-right" data-right="1130004">
-					<label class="pos-rel"> <input type="checkbox" class="ace touristGroupMergeCheckBox"> <span class="lbl"></span> </label>
+					<label class="pos-rel"> <input type="checkbox" class="ace 	T-touristGroupMergeCheckBox"> <span class="lbl"></span> </label>
 				</td>
 				<td>{{arrangeTourist.name}}</td>
 				<td>{{arrangeTourist.type}}</td>
@@ -34,18 +31,15 @@
 				<td>{{arrangeTourist.startTime}}</td>
 				<td>大人{{arrangeTourist.sumAdultCount}}小孩{{arrangeTourist.sumChildCount}}</td>
 				<td>大人{{arrangeTourist.sumNoOperationAdultCount}}小孩{{arrangeTourist.sumNoOperationChildCount}}</td>
-				<!-- <td>{{arrangeTourist.sumNeedPayAllMoney}}</td>
-				<td>{{arrangeTourist.sumPayedMoney}}</td>
-				<td>{{arrangeTourist.sumCurrentNeedPayMoney}}</td> -->
 				<td>
-					<a data-entity-id="{{arrangeTourist.lineProductId}}" data-entity-startTime="{{arrangeTourist.startTime}}" class="btn-divide cursor R-right" data-right="1130002">
+					<a data-entity-id="{{arrangeTourist.lineProductId}}" data-entity-startTime="{{arrangeTourist.startTime}}" class="T-divide T-action cursor R-right" data-right="1130002">
 						分团
 					</a>
-					<a data-entity-id="{{arrangeTourist.lineProductId}}" data-entity-startTime="{{arrangeTourist.startTime}}" class=" btn-transfer cursor R-right" data-right="1130003">
+					<a data-entity-id="{{arrangeTourist.lineProductId}}" data-entity-startTime="{{arrangeTourist.startTime}}" class="T-transfer T-action cursor R-right" data-right="1130003">
 						<label class="padding-right20">|</label>
 						转客
 					</a>
-					<a data-entity-id="{{arrangeTourist.lineProductId}}" data-entity-startTime="{{arrangeTourist.startTime}}" class=" btn-inTransfer cursor R-right" data-right="1130005">
+					<a data-entity-id="{{arrangeTourist.lineProductId}}" data-entity-startTime="{{arrangeTourist.startTime}}" class="T-inTransfer T-action cursor R-right" data-right="1130005">
 						<label class="padding-right20">|</label>
 						内转
 					</a>
@@ -55,6 +49,23 @@
 
 	</tbody>
 </table>
+<div class="row">
+	<div class="col-xs-12 T-arrangeTouristList">
+	</div>
+</div>
+<div class="col-xs-12 	T-arrangeTouristMergeList">
+	<div>
+		<button class="btn btn-sm btn-success T-start-touristGroup-merge R-right" data-right="1130004">
+			<i class="ace-icon fa fa-user-plus"></i>
+			开始并团
+		</button>
+	</div>
+	<div class="space-10"></div>
+	<div class="list">
+
+	</div>
+</div>
+
 
 <div class="row pageMode">
 	<div class="col-xs-6">

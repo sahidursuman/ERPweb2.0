@@ -1,0 +1,4 @@
+/*TMODJS:{"debug":true,"version":111,"md5":"1b3087c4564f07417b6852c4abdc0928"}*/
+define(function(require) {
+    return require("../../../template")("arrange/orderManage/view/orderManagerList", '<div class="row col-xs-12 T-OrderManager-Container"> <div class="col-xs-12"> <div class="tabbable"> <ul class="nav nav-tabs" id="myTab"> <li class="active" style="width:10%; text-align:center;"> <a data-toggle="tab" href="#T-BusCompany-list" class="T-Bus" aria-expanded="true" data-value="1"> 车 </a> </li> <li style="width:10%; text-align:center;" > <a data-toggle="tab" href="#T-HotelOrder-list" class="T-House" aria-expanded="false" data-value="2" > 酒店 </a> </li> </ul> <div class="tab-content" style="position: relative;top: -2px"> <div id="T-BusCompany-list" class="tab-pane fade active in clearfix" > </div>  <div id="T-HotelOrder-list" class="tab-pane fade in clearfix" > </div> </div> </div> </div> </div>');
+});

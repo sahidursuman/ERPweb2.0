@@ -1,13 +1,26 @@
-/*分辨率*/
-/*@media screen and (max-width:1366px){
-    .page-content{
-    min-height: 768px!important;
-    width:1700px!important;
-    margin: auto;
+.table-special{
+    padding:0!important;
+    width: 100%;
+}
+.table-special tr:first-child{
+    border: none;
+}
+.table-special tr{
+    border-top: 1px solid #ddd;
+}
+.table-special{
+    padding:0!important;
+    width: 100%;
+}
+.table-special tr:first-child{
+    border: none;
 }
 
-}*/
-
+/*list顶部操作区域 */
+.operation-area {
+    margin-bottom: 10px;
+}
+/*搜索按钮*/
 .search-btn{
     border-radius: 0;
     background: #51b0c2;
@@ -42,13 +55,14 @@ input{
 
 }
 .padding-right20{
-    padding-right:5px
+    padding-right:5px;
 }
 
 /**
  * 设置自定义popover的样式
  */
-#desc-tooltip-containter  .popover-content {
+#desc-tooltip-containter .popover-content {
+    /*min-width: 175px;*/
     max-width: 260px;
     max-height: 300px;
     overflow-y: auto;
@@ -113,17 +127,9 @@ label{
     margin-top: 20px;
     padding-top: 0px !important;
 }
-table tr td{
-    border: 1px solid #ececec !important;
-}
 .test-iocn{
     position: relative;
     left: -16px;
-}
-
-table tr th{
-
-    border: 1px solid white !important;
 }
 .table-border {
     border: 1px solid #ececec !important;
@@ -263,6 +269,21 @@ table tr td{
     top:0!important;
     left: 20px!important;
 }
+.newsMoreT{
+   position: absolute!important;
+    top:-13px !important;
+    left: -1px !important;  
+}
+.newsMore{
+    position: absolute!important;
+    top:33px !important;
+    left: -1px!important;
+}
+.newsMoreTh{
+  position: absolute!important;
+    top:80px !important;
+    left: 0px!important;   
+}
 .main-content {
     margin-top: 77px;
 }
@@ -359,12 +380,17 @@ table tr td{
     height: 12px !important;
 }
 .fa-sort-desc{
-    margin-top: -2px !important;
+    margin-top: -4px !important;
+}
+/*评论*/
+.font-bold:{
+    font-weight: bold;
 }
 /*发团安排*/
 .tipPlan-gap{
     padding-bottom: 10px;
 }
+
 /*dqq style*/
 .viewI{
     margin: 0px 5px 0px 5px;
@@ -395,7 +421,7 @@ table tr td{
 }
 .whereQ .style-myself{
     width: 90px !important;
-    border: 2px solid #5d5d5d;
+    /*border: 2px solid #5d5d5d;*/
     text-align: right;
 }
 .whereQ .styleOne-self{
@@ -411,7 +437,7 @@ table tr td{
 }
 .whereOne .style-myself{
     width: 90px;
-    border: 2px solid #5d5d5d;
+    /*border: 2px solid #5d5d5d;*/
     text-align: right;
 }
 .timeline-info{text-align: right}
@@ -725,7 +751,7 @@ input,select{
 }
 /*项目代订导出按钮*/
 
-.T-bookingBtn{
+.bookingBtn{
     height: 24px;
     line-height: 9px;
     position: absolute;
@@ -824,6 +850,13 @@ padding-left:0;width: 360px;left: -35px;
 .line-separatedS{
    height: 15px;width: 93%;border-bottom:  1px solid #428bca;
 }
+.line-separatedQuote{
+   height: 1px;width: 100%;
+   background-color:#A0C2E7; 
+   /*border-bottom:  1px solid #428bca;  */
+   margin-bottom:10px;
+   /*padding-bottom: 3px;*/
+}
 .add-managerMore{
     cursor:pointer;left:-38px;
 }
@@ -855,8 +888,85 @@ padding-left:0;width: 360px;left: -35px;
   margin-left: 20px;
 }
 
+/*消息提示*/
+.newMessage-prompt{
+    width: 27px;height:195px;position: fixed;top:300px;z-index: 999;right: 0;background-color:#ffffff; 
+}
+.newsMoreT{
+   position: absolute!important;
+    top:-13px !important;
+    left: -1px !important;  
+}
+.newsMore{
+    position: absolute!important;
+    top:63px !important;
+    left: -1px!important;
+}
+.newsMoreTh{
+  position: absolute!important;
+    top:132px !important;
+    left: 0px!important;   
+}
 
-/*媒体查询*/
+
+.MessagePrompt-box{
+   font-family: "微软雅黑";
+   /*font-weight: 600;*/
+   font-size: 12px;
+}
+.MessagePrompt-box .list-group-item{
+    border: none;
+}
+.MessagePrompt-box .boxLiStyle:first-child{
+    border-top: none;
+}
+.MessagePrompt-box .boxLiStyle{
+
+    padding: 10px 15px 8px 15px;
+    border-bottom: 1px solid #ddd;
+    border-top: 1px solid #ddd;
+    white-space: nowrap;  /*文本不换行*/
+}
+
+/*报价、询价css*/
+.QuoteBtn{
+     height: 24px;
+    line-height: 9px;
+    position: absolute;
+    right: 19px;
+    top: 0px;
+}
+.margin-top10{
+    margin-top: 10px;
+}
+
+.hotelQuoteWidth{
+    width: 164px;
+}
+.stateQuoteStyle{
+  width: 50px;text-align: center;
+}
+.quoteMainWidth{
+    max-width: 1190px;
+    margin:auto;padding-top: 15px;
+}
+.quoteWidthAdd{
+    padding-left: 30px !important;
+    padding-right: 30px !important;
+}
+/*分享*/
+.quoteHr{
+   width: 280px;margin-bottom: 8px;margin-top:18px;border-top:1px solid #DDDDDD;
+}
+.quoteTable td{
+    border: 1px solid #ddd !important;
+     padding: 7px 0px 7px 0px;
+}
+.quoteTable .style-myself{
+    text-align: center;
+}
+.quoteTable td td{border: 0!important;padding-right:6px;}
+/*媒体查询-不同分辨率*/
 @media screen and (max-width:1703px){
   .line-separated{
     height: 23px;width: 88%;border-bottom:  1px solid #428bca;
@@ -1063,6 +1173,11 @@ width: 840px;
 .marginLeftTourist-30{
     margin-left: 30px;
 }
+
+/*报价媒体css样式*/
+.busQuoteWidth{
+    width: 140px;
+}
 }
 
 /*媒体查询 1366*/
@@ -1097,4 +1212,10 @@ width: 840px;
 .marginLeftTourist-30{
     margin-left: 40px;
 }
+
+/*报价媒体css样式*/
+.busQuoteWidth{
+    width: 140px;
+}
+
 }

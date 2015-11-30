@@ -12,6 +12,7 @@
 						<input name="remark" value="{{if touristGroup != null}}{{if touristGroup.transferFeeStatus==1}}{{touristGroup.remark}}{{/if}}{{/if}}" class="col-sm-12  no-padding-right" type="text" maxlength="500">  
 					</div>
 				</div>
+				<input type="hidden" name="transferFeeStatus" value="{{touristGroup.transferFeeStatus}}">
 				<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right">应付:</label>
 						<div class="col-sm-2">
@@ -19,14 +20,18 @@
 						</div>
 						<label class="col-sm-1 control-label no-padding-right">已付:</label>
 						<div class="col-sm-2">
-							<input value="{{if touristGroup != null}}{{touristGroup.transPayedMoney}}{{/if}}" type="text" name="payedMoney" class="col-sm-12" />
+							<input value="{{if touristGroup.transferFeeStatus==1}}{{touristGroup.transPayedMoney}}{{/if}}" type="text" name="payedMoney" class="col-sm-12"/>
 						</div>
-						<label>
-							<input  type="checkbox" class="ace" checked="checked" value="1" name="isCurrent" disabled="disabled">
-							<span class="lbl">
-							</span>
+
+                        
+						<label style="margin: 2px 5px 0">
+								<input type="checkbox" disabled="disabled" {{if touristGroup.operateCurrentNeedPayMoney == 1}}checked="checked"{{/if}} class="ace send-check">
+								<span class="lbl">
+								</span>
+								<input type="hidden" name="isCurrent" value="{{touristGroup.operateCurrentNeedPayMoney}}">
 						</label>
-						<label class="control-label no-padding-right">对方现收</label>
+                        <label class="col-sm-1 control-label no-padding-right" >对方现收</label>
+						
 
 				</div>
 
@@ -60,7 +65,7 @@
 										<input name="adultCount" value="{{if touristGroup != null}}{{touristGroup.adultCount}}{{/if}}" readonly="readonly" type="text" class="col-sm-12  no-padding-right costCount" />
 									</td>
 									<td>
-										<input name="adultTransferMoney" value="{{if touristGroup != null}}{{if touristGroup.transferFeeStatus==1}}{{touristGroup.transAdultPrice}}{{/if}}{{/if}}" type="text" class="col-sm-12  no-padding-right  costPrice" />
+										<input name="adultTransferMoney" value="{{if touristGroup.transferFeeStatus==1}}{{touristGroup.transAdultPrice}}{{/if}}" type="text" class="col-sm-12  no-padding-right  costPrice" />
 									</td>
 									<td></td>
 								</tr>
@@ -75,7 +80,7 @@
 										<input name="childCount" value="{{if touristGroup != null}}{{touristGroup.childCount}}{{/if}}" readonly="readonly" type="text" class="col-sm-12  no-padding-right costCount" />
 									</td>
 									<td>
-										<input name="childTransferMoney" value="{{if touristGroup != null}}{{if touristGroup.transferFeeStatus==1}}{{touristGroup.transChildPrice}}{{/if}}{{/if}}" type="text" class="col-sm-12  no-padding-right costPrice" />
+										<input name="childTransferMoney" value="{{if touristGroup.transferFeeStatus==1}}{{touristGroup.transChildPrice}}{{/if}}" type="text" class="col-sm-12  no-padding-right costPrice" />
 									</td>
 									<td></td>
 								</tr>  
@@ -148,8 +153,6 @@
 						<input readonly="readonly" value="{{if touristGroup != null}}{{touristGroup.transRemark}}{{/if}}" class="col-sm-12  no-padding-right" type="text">  
 					</div>
 				</div> 
-
-
 
 				<div class="form-group" style="margin-left:25%;">
 					    <label class="col-sm-1 control-label no-padding-right">应收：</label>

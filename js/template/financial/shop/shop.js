@@ -141,7 +141,7 @@ define(function(require, exports) {
                  	    }
 
                  	    //取消对账权限过滤
-                        var checkTr = $(".T-checkList tr");
+                        var checkTr = $('.T-checkList tr .T-showTr');
                         var rightCode = $(".T-checkList").data("right");
                         checkDisabled(checkList,checkTr,rightCode);
 
@@ -339,9 +339,10 @@ define(function(require, exports) {
             					    			type: 1,
             								    title:"操作记录",
             								    skin: 'layui-layer-rim', //加上边框
-            								    area: ['60%', '70%'], //宽高
+            								    area: '60%', //宽高
             								    zIndex:1030,
             								    content: html,
+            								    scrollbar: false, // 推荐禁用浏览器外部滚动条
             								    success: function(){}
             					    		})
                                 		}
@@ -391,9 +392,10 @@ define(function(require, exports) {
 				type : 1,
 				title : "单据图片",
 				skin : 'layui-layer-rim', // 加上边框
-				area : [ '500px', '540px' ], // 宽高
+				area : '500px', // 宽高
 				zIndex : 1028,
 				content : html,
+				scrollbar: false, // 推荐禁用浏览器外部滚动条
 				success : function() {
 					var colorbox_params = {
 			    			rel: 'colorbox',

@@ -3,33 +3,30 @@
 	<table class="whereQ whereOne" style="width:97%">
 		<tr>
 			<td class="style-myself">住宿标准：</td>
-			<td class="styleOne-self">{{if touristGroupDetail.hotelLevel == 1}}
+			<td class="styleOne-self">{{if touristGroupMemberDetail.hotelLevel == 1}}
 				三星以下
-				{{else if touristGroupDetail.hotelLevel == 2}}
+				{{else if touristGroupMemberDetail.hotelLevel == 2}}
 				三星
-				{{else if touristGroupDetail.hotelLevel == 3}}
+				{{else if touristGroupMemberDetail.hotelLevel == 3}}
 				准四星
-				{{else if touristGroupDetail.hotelLevel == 4}}
+				{{else if touristGroupMemberDetail.hotelLevel == 4}}
 				四星
-				{{else if touristGroupDetail.hotelLevel == 5}}
+				{{else if touristGroupMemberDetail.hotelLevel == 5}}
 				准五星
-				{{else if touristGroupDetail.hotelLevel == 6}}
+				{{else if touristGroupMemberDetail.hotelLevel == 6}}
 				五星
-				{{else if touristGroupDetail.hotelLevel == 7}}
+				{{else if touristGroupMemberDetail.hotelLevel == 7}}
 				五星以上
 				{{/if}}</td>
 			<td class="style-myself">包含自费：</td>
-			<td class="styleOne-self">{{touristGroupDetail.includeSelfPay}}</td>
+			<td class="styleOne-self">{{touristGroupMemberDetail.includeSelfPay}}</td>
 		</tr>
 		<tr>
 			<td class="style-myself">备注：</td>
-			<td class="styleOne-self" colspan="3">{{touristGroupDetail.remark}}</td>
+			<td class="styleOne-self" colspan="3">{{touristGroupMemberDetail.remark}}</td>
 		</tr>
 	</table>
 	<table class="whereQ whereTwo margin-top15" style="width:97%">
-		<!--<tr>-->
-			<!--<td colspan="8" class="HeadManage" style="text-align: left"></td>-->
-		<!--</tr>-->
 		<tr>
 			<td class="style-myself">序号</td>
 			<td class="style-myself">姓名</td>
@@ -39,7 +36,7 @@
 			<td class="style-myself">是否为联系人</td>
 
 		</tr>
-		{{each touristGroupDetail.touristGroupMemberList as touristGroup index}}
+		{{each touristGroupMemberDetail.touristGroupMemberList as touristGroup index}}
 		<tr  data-entity-id="touristGroup.id">
 			<td>{{index+1}}</td>
 			<td class="">{{touristGroup.name}}</td>

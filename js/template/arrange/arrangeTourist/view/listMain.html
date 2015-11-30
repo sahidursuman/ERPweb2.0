@@ -1,53 +1,67 @@
-<div class="row">
-	<div class="col-xs-12 arrangeTouristMain globalAdd">
-		<div class="search-area">
-			<form class="form-horizontal" role="form" onsubmit="return false">
-				<div class="form-group" style="max-width: 1100px;">
-					<!--<label class="pull-left control-label no-padding-right" style="margin-left: 20px">线路产品：</label>
-					<div class="col-sm-3 marginLeft-Right7">
-						<select name="lineProductId" class="col-xs-10">
-							<option></option>
-							{{each lineProductList as lineProduct}}
-								<option value="{{lineProduct.id}}">{{lineProduct.name}}</option>
-							{{/each}}
-						</select>
-					</div>-->
+<div class="row col-xs-12 arrangeTouristMain globalAdd">
+	<div class="tabbable">
+			<ul class="nav nav-tabs" id="myTab">
+				<li class="active" style="width:10%; text-align:center;">
+					<a data-toggle="tab" href="#T-Visitor-list" class="T-Visitor" aria-expanded="true" data-value="1">
+						散客
+					</a>
+				</li>
+				<li  style="width:10%; text-align:center;" >
+					<a data-toggle="tab" href="#T-Group-list" class="T-Group"  aria-expanded="false" data-value="2" >
+						团体
+					</a>
+				</li>
+			</ul> 
 
-			        <label class="pull-left text-right control-label no-padding-right">线路产品:</label>
-			        <div class="col-xs-3">
-						<input type="text" name="lineProductName" class="col-xs-12 T-Choose-linProList" placeholder="请选择或输入线路产品" value="" />
-						<input type="hidden" name="lineProductId" value="" />
+			<div class="tab-content" style="position: relative;top: -2px">
+				<!--散客start-->
+				<div id="T-Visitor-list" class="tab-pane fade active in clearfix" >
+					<div class="search-area" style="margin-left:25px; margin-bottom:15px; ">
+						<form class="form-horizontal" role="form" onsubmit="return false">
+						        <label class="pull-left text-right control-label no-padding-right">线路产品:</label>
+						        <div class="col-sm-2">
+									<input type="text" name="lineProductName" class="col-xs-12 T-Choose-linProList" placeholder="请选择或输入线路产品" value="" />
+									<input type="hidden" name="lineProductId" value="" />
+								</div>
+							
+								<label class="pull-left control-label no-padding-right">出游日期：</label>
+								<div class="col-sm-2 marginLeft-Right7">
+									<input name="startTime" value="" type="text" class="datepicker col-xs-11"/>
+								</div>
+								
+								<button class=" btn-sm  T-visitorTourist-search search-btn" style="margin-left: 2px">
+									<i class="ace-icon fa fa-search"></i>
+									搜索
+								</button>
+					    </form>	
 					</div>
-				
-					<label class="pull-left control-label no-padding-right">出游日期：</label>
-					<div class="col-sm-2 marginLeft-Right7">
-						<input name="startTime" value="" type="text" class="date-picker col-xs-11"/>
-					</div>
+					<div class="T-touristVisitor-list col-sm-12"></div>
 					
-					<button class=" btn-sm  btn-arrangeTourist-search search-btn" style="margin-left: 2px">
-						<i class="ace-icon fa fa-search"></i>
-						搜索
-					</button>
 				</div>
-			</form>
-		</div>
-		<div class="row">
-			<div class="col-xs-12 arrangeTouristList">
 
-
+               <!--团体start-->
+				<div id="T-Group-list" class="tab-pane fade in clearfix" >
+					<div class="search-area" style="margin-left:25px; margin-bottom:15px;">
+						<form class="form-horizontal" role="form" onsubmit="return false">
+						        <label class="pull-left text-right control-label no-padding-right">线路产品:</label>
+						        <div class="col-sm-2">
+									<input type="text" name="lineProductName" class="col-xs-12 T-Choose-linProList" placeholder="请选择或输入线路产品" value="" />
+									<input type="hidden" name="lineProductId" value="" />
+								</div>
+							
+								<label class="pull-left control-label no-padding-right">出游日期：</label>
+								<div class="col-sm-2 marginLeft-Right7">
+									<input name="startTime" value="" type="text" class="datepicker col-xs-11"/>
+								</div>
+								
+								<button class=" btn-sm  T-GroupTourist-search search-btn" style="margin-left: 2px">
+									<i class="ace-icon fa fa-search"></i>
+									搜索
+								</button>
+						</form>
+					</div>
+					<div class="T-touristGroup-list col-sm-12"></div>
+				</div>
 			</div>
-		</div>
-		<div class="col-xs-12 arrangeTouristMergeList">
-			<div>
-				<button class="btn btn-sm btn-success btn-start-touristGroup-merge R-right" data-right="1130004">
-					<i class="ace-icon fa fa-user-plus"></i>
-					开始并团
-				</button>
-			</div>
-			<div class="space-10"></div>
-			<div class="list">
-
-			</div>
-		</div>
 	</div>
 </div>

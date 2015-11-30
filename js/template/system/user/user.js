@@ -16,7 +16,7 @@ define(function(require, exports) {
 	};
 
 	user.initModule = function() {
-		user.listUser(0,"","");
+		user.listUser(0,"",1);
 	};
 
 	user.listUser = function(page,realname,status){
@@ -133,6 +133,7 @@ define(function(require, exports) {
 					    content: html,
 					    scrollbar: false,
 					    success:function(){
+							var validator=rule.check($(".T-addUser-form"));
 							$(".T-addUser-form .T-addUser").click(function(){
 								user.saveAdd();
 							});

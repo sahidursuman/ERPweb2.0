@@ -11,7 +11,8 @@ var listwidth = parseInt($("#tabList li").eq(0).css("width"));//ul总宽度，�
 var modals = {};
 var $tabList = $('#tabList'), $tabContent = $("#tabContent");
 var SWITCH_TAB_SAVE = 'switch.tab.save',
-	CLOSE_TAB_SAVE = 'close.tab.save';
+	CLOSE_TAB_SAVE = 'close.tab.save',
+	SWITCH_TAB_BIND_EVENT = 'switch.tab.bind_event';
 
 function addTab(tabId,tabName,html){
 	var $current_li = $tabList.find('.active'),
@@ -197,8 +198,8 @@ function showDialog(data){
 	}
 	return true;
 }
-function showMessageDialog(dialogObj,message, fn){
-	dialogObj.removeClass('hide').dialog({
+function showMessageDialog(dialogObj,message,fn,isNotClose){
+	var showDiolog=dialogObj.removeClass('hide').dialog({
 		modal: true,
 		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
 		title_html: true,
@@ -206,19 +207,31 @@ function showMessageDialog(dialogObj,message, fn){
 		buttons: [
 			{
 				text: "确定",
-				"class" : "btn btn-primary btn-minier btn-heightMall",
+				"class" : "btn btn-primary btn-minier btn-heightMall T-ok",
 				click: function() {
-					$( this ).dialog( "close" );
-					if(fn){
-						fn();
-					}
+					ok_callback();
 				}
 			}
 		],
 		open:function(event,ui){
-			$(this).find("p").html(message);
+			$( this ).find("p").html(message);
 		}
-	});
+	}), timer, running = false;
+
+	if (!isNotClose) {
+		timer = setTimeout(ok_callback, 1500)
+	}
+
+	function ok_callback() {
+		if (running) {
+			return;
+		}
+		running = true;
+		showDiolog.dialog('close');
+		if (fn) {
+			fn();	
+		}
+	}
 }
 function showConfirmMsg(dialogObj,message,confirmFn ,cancelFn,btnStr1,btnStr2){
 	var buttons;
@@ -317,7 +330,7 @@ function showSaveConfirmDialog($dialog, message, yes_fn, no_fn, cacel_fn)  {
 
 	$dialog.removeClass('hide').dialog({
 		modal: true,
-		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i>保存修改？</h4></div>",
+		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i>数据保存</h4></div>",
 		title_html: true,
 		draggable:false,
 		buttons: buttons,
@@ -356,6 +369,38 @@ function showConfirmDialog(dialogObj,message, fn){
 		}
 	});
 }
+// 撤销 undo 
+function showNndoConfirmDialog(dialogObj,message, fn){
+	dialogObj.removeClass('hide').dialog({
+		modal: true,
+		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
+		title_html: true,
+		draggable:false,
+		buttons: [
+			{
+				text: "否",
+				"class" : "btn btn-minier btn-heightMall",
+				click: function() {
+					$( this ).dialog( "close" );
+				}
+			},
+			{
+				text: "是",
+				"class" : "btn btn-primary btn-minier btn-heightMall",
+				click: function() {
+					$( this ).dialog( "close" );
+					if(fn){
+						fn();
+					}
+				}
+			}
+		],
+		open:function(event,ui){
+			$(this).find("p").text(message);
+		}
+	});
+}
+
 function showLogoutDialog(dialogObj,message){
 	dialogObj.removeClass('hide').dialog({
 		modal: true,
@@ -601,7 +646,17 @@ var modalScripts = {
 	'business_analyst_saleProduct' : "js/template/businessAnalyst/saleProduct/saleProduct.js",
 	'resource_busCompany':"js/template/resource/busCompany/busCompany.js",
 	'resource_lineProduct': 'js/template/resource/lineProduct/lineProduct.js',
+
+	//-------------------------------------------发团管理模块--------------------------------------------------
+	'arrange_booking' : 'js/template/arrange/booking/booking.js',
+	'resource_subsection' : 'js/template/resource/subsection/subsection.js',
 	'resource_partnerAgency':'js/template/resource/partnerAgency/partnerAgency.js',
+	'resource_touristGroup':'js/template/resource/touristGroup/touristGroup.js',//游客管理
+	//-------------------------------------------发团管理---------------------------------------------------
+	'arrange_plan':"js/template/arrange/tripPlan/tripPlan.js",
+	'resource_travelLine': 'js/template/resource/travelLine/travelLine.js',
+	//-------------------------------------------发团管理模块---------------------------------------------------
+	'arrange_quote':'js/template/arrange/quote/quote.js',
 	//-------------------------------------------业务分析模块---------------------------------------------------
 	'business_analyst_saleProduct' : "js/template/businessAnalyst/saleProduct/saleProduct.js",//产品销量
 	'business_analyst_sourDstribution' : "js/template/businessAnalyst/sourDstribution/sourDstribution.js", //客源分布
@@ -617,7 +672,10 @@ var modalScripts = {
 	'public_message':"js/template/system/message/message.js",
 	'system_information':"js/template/system/information/information.js",
 	'system_user':"js/template/system/user/user.js",
-	'system_department':"js/template/system/department/business.js"
+	'system_department':"js/template/system/department/business.js",
+	'arrange_transfer':"js/template/arrange/arrangeTransfer/arrangeTransfer.js",  //转客管理
+	'arrange_inner_Transfer':"js/template/arrange/innerTransfer/innerTransfer.js",
+	'arrange_orderManage':"js/template/arrange/orderManage/orderManage.js"
 };
 
 
@@ -634,149 +692,6 @@ function listMenu(menuTemplate){
 				data.menuList = menuList;
 				var html = template("menu-template",data);
 				$("#sidebar .nav-list").html(html);
-
-				// //绑定导游菜单功能//
-				// $("#sidebar .nav-list .resource_guide").click(function(){
-				// 	$("#sidebar .nav-list li").removeClass("active");
-				// 	$(this).addClass("active");
-				// 	$(this).parent().parent().addClass("active");
-				// 	seajs.use("" + ASSETS_ROOT +"js/template/resource/guide/guide.js",function(guide){
-				// 		guide.listGuide(0,"",1);
-				// 	});
-				// });
-
-				//绑定车队菜单功能
-				/*$("#sidebar .nav-list .resource_busCompany").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/resource/busCompany/busCompany.js",function(busCompany){
-						busCompany.listBusCompany(0,"",1);
-					});
-				});*/
-
-				// //绑定餐厅菜单功能
-				// $("#sidebar .nav-list .resource_restaurant").click(function(){
-				// 	$("#sidebar .nav-list li").removeClass("active");
-				// 	$(this).addClass("active");
-				// 	$(this).parent().parent().addClass("active");
-				// 	seajs.use("" + ASSETS_ROOT +"js/template/resource/restaurant/restaurant.js",function(restaurant){
-				// 		restaurant.listRestaurant(0,"",1);
-				// 	});
-				// });
-				//绑定酒店菜单功能
-				/*$("#sidebar .nav-list .resource_hotel").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/resource/hotel/hotel.js",function(hotel){
-						hotel.init();
-					});
-				});*/
-
-				//绑定同行菜单功能
-			/*	$("#sidebar .nav-list .resource_partnerAgency").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/resource/partnerAgency/partnerAgency.js?version=",function(partnerAgency){
-						partnerAgency.listPartnerAgency(0,"",1);
-					});
-				});*/
-
-				// //绑定线路产品菜单功能
-				// $("#sidebar .nav-list .resource_lineProduct").click(function(){
-				// 	$("#sidebar .nav-list li").removeClass("active");
-				// 	$(this).addClass("active");
-				// 	$(this).parent().parent().addClass("active");
-				// 	seajs.use("" + ASSETS_ROOT +"js/template/resource/lineProduct/lineProduct.js",function(lineProduct){
-				// 		lineProduct.listLineProduct(0,"",1);
-				// 		modals["resource_lineProduct"] = lineProduct;
-				// 	});
-				// 	$("#main-container")[0].index = 0;
-				// });
-
-				// //绑定商家管理功能
-				// $("#sidebar .nav-list .resource_shop").click(function(){
-				// 	$("#sidebar .nav-list li").removeClass("active");
-				// 	$(this).addClass("active");
-				// 	$(this).parent().parent().addClass("active");
-				// 	seajs.use("" + ASSETS_ROOT +"js/template/resource/shop/shop.js",function(shop){
-				// 		shop.listShop(0,"",1);
-				// 	});
-				// });
-
-
-				//绑定线路模板菜单功能
-				$("#sidebar .nav-list .resource_travelLine").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/resource/travelLine/travelLine.js",function(travelLine){
-						travelLine.listTravelLine(0,"",1);
-						modals["resource_travelLine"] = travelLine;
-					});
-				});
-
-				//绑定景区菜单功能
-				/*$("#sidebar .nav-list .resource_scenic").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/resource/scenic/scenic.js",function(scenic){
-						scenic.listScenic(0,"",1);
-					});
-				});*/
-				//绑定保险菜单功能
-				/*$("#sidebar .nav-list .resource_insurance").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/resource/insurance/insurance.js",function(insurance){
-						insurance.listInsurance(0,"",1);
-					});
-				});*/
-				//绑定自费项目菜单功能
-				/*$("#sidebar .nav-list .resource_selfpay").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/resource/selfpay/selfpay.js",function(selfpay){
-						selfpay.listSelfPay(0,"",1);
-					});
-				});
-				////绑定交通票务菜单功能
-				//$("#sidebar .nav-list .resource_ticket").click(function(){
-				//	$("#sidebar .nav-list li").removeClass("active");
-				//	$(this).addClass("active");
-				//	$(this).parent().parent().addClass("active");
-				//	seajs.use("" + ASSETS_ROOT +"js/template/resource/ticket/ticket.js",function(ticket){
-				//		ticket.TicketResource.initModule(0,"",1);
-				//	});
-				//});
-
-				//绑定游客管理菜单功能
-				/*$("#sidebar .nav-list .resource_touristGroup").click(function(){
-				 $("#sidebar .nav-list li").removeClass("active");
-				 $(this).addClass("active");
-				 $(this).parent().parent().addClass("active");
-				 seajs.use("" + ASSETS_ROOT +"js/template/resource/touristGroup/touristGroup.js",function(touristGroup){
-				 touristGroup.listTouristGroup(0,"","","","","","","","");
-				 modals["resource_touristGroup"] = touristGroup;
-				 });
-				 });*/
-
-
-				$("#sidebar .nav-list .resource_touristGroup").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/resource/touristGroup/touristGroup.js",function(touristGroup){
-						touristGroup.getTouristStatisticData(0,"0","","","","","","","","","","","","","");
-						modals["resource_touristGroup"] = touristGroup;
-					});
-				});
-
 
 				//绑定发团安排菜单功能
 				$("#sidebar .nav-list .arrange_all").click(function(){
@@ -838,26 +753,6 @@ function listMenu(menuTemplate){
 					});
 				});
 
-				//绑定系统人员管理菜单功能
-				// $("#sidebar .nav-list .system_user").click(function(){
-				// 	$("#sidebar .nav-list li").removeClass("active");
-				// 	$(this).addClass("active");
-				// 	$(this).parent().parent().addClass("active");
-				// 	seajs.use("" + ASSETS_ROOT +"js/template/system/user/user.js",function(user){
-				// 		user.listUser(0,"",1);
-				// 	});
-				// });
-
-				// //绑定系统部门管理菜单功能
-				// $("#sidebar .nav-list .system_department").click(function(){
-				// 	$("#sidebar .nav-list li").removeClass("active");
-				// 	$(this).addClass("active");
-				// 	$(this).parent().parent().addClass("active");
-				// 	seajs.use("" + ASSETS_ROOT +"js/template/system/department/business.js",function(business){
-				// 		business.listBusiness(0, "");
-				// 	});
-				// });
-
 				//绑定系统旅行社
 				$("#sidebar .nav-list .system_travelAgency").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
@@ -894,15 +789,7 @@ function listMenu(menuTemplate){
 						modals["financial_rummery"]  = hotel;
 					});
 				});
-				// //绑定系统信息菜单功能
-				// $("#sidebar .nav-list .system_information").click(function(){
-				// 	$("#sidebar .nav-list li").removeClass("active");
-				// 	$(this).addClass("active");
-				// 	$(this).parent().parent().addClass("active");
-				// 	seajs.use("" + ASSETS_ROOT +"js/template/system/information/information.js",function(information){
-				// 		information.listInformation();
-				// 	});
-				// });
+
 				//绑定系餐厅账务菜单功能
 				$("#sidebar .nav-list .financial_restaurant").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
@@ -959,17 +846,6 @@ function listMenu(menuTemplate){
 					});
 				});
 
-				// //绑定客户账务菜单功能
-				// $("#sidebar .nav-list .financial_Client").click(function(){
-				// 	$("#sidebar .nav-list li").removeClass("active");
-				// 	$(this).addClass("active");
-				// 	$(this).parent().parent().addClass("active");
-				// 	seajs.use("" + ASSETS_ROOT +"js/template/financial/Client/Client.js",function(Client){
-				// 		Client.listClient(0,"","","","","","");
-				// 		modals["financial_Client"] = Client;
-				// 	});
-				// });
-
 				//绑定系代订账务菜单功能
 				$("#sidebar .nav-list .financial_replace").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
@@ -1022,18 +898,7 @@ function listMenu(menuTemplate){
 						modals["financial_innerTransfer_out"] = innerTransferOut;
 					});
 				});
-				// //绑定内转利润账务
-				// $("#sidebar .nav-list .financial_innerTransfer_profit").click(function(){
-				// 	$("#sidebar .nav-list li").removeClass("active");
-				// 	$(this).addClass("active");
-				// 	$(this).parent().parent().addClass("active");
-				// 	seajs.use("" + ASSETS_ROOT +"js/template/financial/innerTransferProfit/innerTransferProfit.js",function(innerTransferProfit){
-				// 		/*var date = new Date();
-				// 		 var year = date.getFullYear();
-				// 		 var month = ""//date.getMonth()+1
-				// 		 */						innerTransferProfit.listInnerTransferProfit(0,"","","","","","","","");
-				// 	});
-				// });
+
 				//绑定购物菜单功能
 				$("#sidebar .nav-list .financial_shop").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
@@ -1065,71 +930,6 @@ function listMenu(menuTemplate){
 					});
 				});
 
-				//绑定分团计划菜单功能
-				/*$("#sidebar .nav-list .arrange_plan").click(function(){
-				 $("#sidebar .nav-list li").removeClass("active");
-				 $(this).addClass("active");
-				 $(this).parent().parent().addClass("active");
-				 seajs.use("" + ASSETS_ROOT +"js/template/arrange/plan/plan.js",function(plan){
-				 //plan.listPlan();
-				 });
-				 });*/
-
-				//绑定发团计划菜单功能
-				$("#sidebar .nav-list .arrange_plan").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/arrange/tripPlan/tripPlan.js",function(tripPlan){
-						tripPlan.listTripPlan(0,"","","","","","","","","","");
-						modals["arrange_plan"] = tripPlan;
-					});
-				});
-
-				//绑定项目代订菜单功能
-				$("#sidebar .nav-list .arrange_booking").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/arrange/booking/booking.js",function(booking){
-						booking.listbooking(0,"","","","","","","","");
-						modals["arrange_booking"] = booking;
-					});
-				});
-
-				//绑定转客管理菜单功能
-				$("#sidebar .nav-list .arrange_transfer").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/arrange/arrangeTransfer/arrangeTransfer.js",function(transfer){
-						transfer.getlistTransferSumData(0,"","","","","","",2);
-						modals["arrange_transfer"] = transfer;
-					});
-				});
-
-
-				//绑定内转管理菜单功能
-				$("#sidebar .nav-list .arrange_inner_Transfer").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					/*seajs.use("" + ASSETS_ROOT +"js/template/arrange/innerTransfer/innerTransfer.js",function(inner){ 
-						var searchParam = {
-								pageNo : "0",
-								type : "1",
-								first : "1",
-							}
-						inner.list(searchParam);
-						modals["arrange_inner_Transfer"] = inner;
-					});*/
-					seajs.use("" + ASSETS_ROOT +"js/template/arrange/innerTransfer/innerTransfer.js",function(innerTransfer){ 
-						innerTransfer.innerTransfer();
-						modals["arrange_inner_Transfer"] = innerTransfer;
-					});
-				});
-
-
 				//绑定按团统计菜单功能
 				$("#sidebar .nav-list .financial_count").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
@@ -1142,26 +942,6 @@ function listMenu(menuTemplate){
 					});
 				});
 
-				// //绑定转客利润菜单功能
-				// $("#sidebar .nav-list .financial_turnProfit").click(function(){
-				// 	$("#sidebar .nav-list li").removeClass("active");
-				// 	$(this).addClass("active");
-				// 	$(this).parent().parent().addClass("active");
-				// 	seajs.use("" + ASSETS_ROOT +"js/template/financial/turnProfit/turnProfit.js",function(TurnProfit){
-				// 		var tu = new Date()
-				// 		 var vYear = tu.getFullYear()
-				// 		 var vMon = tu.getMonth() + 1
-				// 		 var vDay = tu.getDate()
-				// 		 var startTime = vYear+"-"+vMon+"-"+vDay;
-				// 		 var tmp = new Date(startTime);
-				// 		 tmp = tmp-7*24*60*60*1000;
-				// 		 tmp = new Date(tmp);
-				// 		 var endTime = tmp.getFullYear()+"-"+(tmp.getMonth()+1)+"-"+tmp.getDate();
-				// 		TurnProfit.listTurnProfit(0,"","","","","","","","");
-				// 	});
-				// });
-
-
 				//绑定代订利润功能
 				$("#sidebar .nav-list .financial_replaceProfit").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
@@ -1171,15 +951,7 @@ function listMenu(menuTemplate){
 						replaceProfit.listReplaceProfit(0,"","","","","","","","","","");
 					});
 				});
-				//绑定总利润菜单功能
-				// $("#sidebar .nav-list .financial_totalProfit").click(function(){
-				// 	$("#sidebar .nav-list li").removeClass("active");
-				// 	$(this).addClass("active");
-				// 	$(this).parent().parent().addClass("active");
-				// 	seajs.use("" + ASSETS_ROOT +"js/template/financial/totalProfit/totalProfit.js",function(totalProfit){
-				// 		totalProfit.listTotalProfit();
-				// 	});
-				// });
+
 				//绑定収支明细菜单功能
 				$("#sidebar .nav-list .financial_collectDetail").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
@@ -1189,14 +961,28 @@ function listMenu(menuTemplate){
 						collectDetail.listCollectDetail();
 					});
 				});
-				//绑定中转分段菜单功能
-				$("#sidebar .nav-list .resource_subsection").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/resource/subsection/subsection.js",function(subsection){
-						subsection.listMainSubsection();
-					});
+
+				// table 点击选中事件
+				$(document).on('click','tbody tr', function(event) {
+					var event = event ? event :window.event,
+						$target = $(event.target  || event.srcElement);
+
+					// 若点击操作或者checkbox的浮层，就直接退出
+					if ($target.hasClass('T-action') || $target.hasClass('lbl')) return;
+
+					var $that = $(this), $checkBox = $that.find('input[type="checkbox"]'),
+						targetIsCheckbox = $target.is('input[type="checkbox"]');
+
+					if ($that.closest('table').hasClass('T-showHighLight')) {	
+							if (targetIsCheckbox)  {	// 点击了checkbox
+								$that.toggleClass('success', $target.prop('checked'));
+							} else if ($checkBox.length) {  // tr含有checkbox
+								$that.toggleClass('success');								
+								$checkBox.trigger('click');	
+							} else {   // 普通tr
+								$that.addClass('success').siblings('tr').removeClass('success');
+							}
+					}
 				});
 
 				//dateTime
@@ -1446,23 +1232,27 @@ var _statusText = {
 	 * @param  {[object]} options [自定义选项]
 	 * @return {[type]}         [description]
 	 */
-	var _laypage = laypage;
-	laypage = function(options)  {
-		var last = options.last || false;
-		if (!last) {
-			last = options.pages || false;
-		}
-		// 合并配置
-		options = $.extend({},
-			{
-			    skip: true, //是否开启跳页
-			    skin: '#51b0c2',
-			    last: last,
-			    groups: 3 //连续显示分页数
-			}, options);
+	if (typeof laypage !== 'undefined') {
+		var _laypage = laypage;
+		laypage = function(options)  {
+			var last = options.last || false;
+			if (!last) {
+				last = options.pages || false;
+			}
+			// 合并配置
+			options = $.extend({},
+				{
+				    skip: true, //是否开启跳页
+				    skin: '#51b0c2',
+				    last: last,
+				    groups: 3 //连续显示分页数
+				}, options);
 
-		_laypage(options);
-	};
+			_laypage(options);
+		};
+	} else {
+		console.info('laypage was not loaded!');
+	}
 
 	$('body').append('<div id="desc-tooltip-containter"></div>');
 	$('#desc-tooltip-containter').hover(function() {
@@ -1505,51 +1295,54 @@ var Tools = {
  * @param  {object} $elements 需要绑定提示的DOM
  * @return {[type]}           [description]
  */
-Tools.descToolTip = function($elements,type) {
+Tools.descToolTip = function($elements,type, placement) {
 	if (!!$elements)  {
 		$elements.each(function() {
-			var $that = $(this), content = $that.prop('title'),html = $that.data("html");
+			var $that = $(this), content = $that.prop('title'),
+				html = $that.data("html"), 
+				timer = false, options = false;
 
 			// 内容过长，才提示
 			$that.prop('title', '');
+			// set options
 			if ($that.width() < $that.children().width() && type == 1)  {
-				// 绑定提示
-				$that.popover({
+				options = {
 					trigger: 'click',
 					container: '#desc-tooltip-containter',
 					content: content,
-				})
+				};
+			}else if (type == 2) {
+				options = {
+					trigger: 'manual',
+					container: '#desc-tooltip-containter',
+					content: html,
+					html : true
+				};
+				if (!!placement) {
+					options.placement = placement;
+				}				
+			}
+
+			if (options)  {
+				// 绑定提示
+				$that.popover(options)
 				// 处理显示与隐藏提示
 				.hover(function() {
 					// 进入时，触发提示
-					setTimeout(function() {
+					timer = setTimeout(function() {
+						timer = false;
 						$that.popover('show');
 					},200)
 				}, function() {
+					if (timer) {
+						clearTimeout(timer);
+					}
 					// 设置超时，通过判断来确定提示
 					setTimeout(function() {
 						if (Tools.$descContainer.data('focus-in') != true)  {
 							$that.popover('hide');
 						}
 					}, 100);
-				});
-			}else if (type == 2) {
-				// 绑定提示
-				$that.popover({
-					trigger: 'manual',
-					container: '#desc-tooltip-containter',
-					content: html,
-					html : true
-				})
-				// 处理显示与隐藏提示
-				.hover(function() {
-					// 进入时，触发提示
-					$that.popover('show');
-				}, function() {
-					// 设置超时，通过判断来确定提示
-					if (Tools.$descContainer.data('focus-in') != true)  {
-						$that.popover('hide');
-					}
 				});
 			}
 		});
@@ -1579,13 +1372,13 @@ Tools.addTab = function(tab_id, tab_name, html)  {
 
 		// 页面已经编辑
 		if ($content.data('isEdited'))  {
-			showSaveConfirmDialog($( "#confirm-dialog-message" ), "内容已经被修改，是否保存?",
+			showSaveConfirmDialog($( "#confirm-dialog-message" ), "数据已经被修改，是否保存?",
 								function(){	// 保存
 									$content.trigger(SWITCH_TAB_SAVE, [tab_id, tab_name, html]);
 								},
 								function(){  // 不保存
 									updateTabContent();
-									$content.data('isEdited', false);
+									$content.data('isEdited', false).trigger(SWITCH_TAB_BIND_EVENT, [tab_id, tab_name, html]);
 								},
 								// 取消
 								false);
@@ -1623,7 +1416,7 @@ Tools.addTab = function(tab_id, tab_name, html)  {
 
 				// 页面已经编辑
 				if ($content.data('isEdited'))  {
-					showSaveConfirmDialog($( "#confirm-dialog-message" ), "内容已经被修改，是否保存?",
+					showSaveConfirmDialog($( "#confirm-dialog-message" ), "数据已经被修改，是否保存?",
 										function(){	// 保存
 											$content.trigger(CLOSE_TAB_SAVE);
 										},
@@ -1743,7 +1536,7 @@ var KingServices = {};
  * @return {[type]}        [description]
  */
 KingServices.build_url = function(path,method){
-    return APP_ROOT+'back/'+path +'.do?method='+method+'&token='+$.cookie('token')+'';
+    return APP_ROOT+'back/'+path +'.do?method='+method+'&token='+$.cookie('token');
 };
 /**
  * 编辑中转安排——
@@ -1753,7 +1546,6 @@ KingServices.build_url = function(path,method){
 KingServices.updateTransit = function(id)  {
 	seajs.use("" + ASSETS_ROOT +"js/template/arrange/transit/transit.js",function(module){
 		module.updateTransit(id);
-		modals["arrange_transit"] = transit;
 	});
 }
 
@@ -1820,6 +1612,29 @@ KingServices.addTicket = function(fn){
 	});
 }
 
+//报价  新增
+KingServices.addQuote = function(id){
+	seajs.use("" + ASSETS_ROOT + modalScripts.arrange_quote,function(module){
+		module.addQuote(id);
+	});
+}
+
+
+//报价  修改
+KingServices.updateQuoteToOffer = function(id){
+	seajs.use("" + ASSETS_ROOT + modalScripts.arrange_quote,function(module){
+		module.updateQuoteToOffer(id);
+	});
+}
+
+
+//同行  新增
+KingServices.addPartnerAgency = function(fn){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_partnerAgency,function(module){
+		module.addPartnerAgency(fn);
+	});
+}
+
 
 //添加资源函数
 KingServices.addResourceFunction = function(e){
@@ -1831,7 +1646,7 @@ KingServices.addResourceFunction = function(e){
 		mobileNumber = e.data.mobileNumber,
 		$function = e.data.function,
 		fn = function (data){
-			if (!!data.name && !!name && !!data.id && !!id) {$parents.find('input[name=price],input[name=hotelRoom],input[name=hotelRoomId],input[name=fee],input[name=chargingProjects],input[name=chargingId],input[name=goodsPolicy],input[name=shopPolicyId],input[name=selfitem],input[name=selfitemId],input[name=oldPrice],input[name=hotelRoomType],input[name=hotelRoomTypeId],input[name=hotelPrice]').val("")}
+			if (!!data.name && !!name && !!data.id && !!id) {$parents.find('input[name=price],input[name=hotelRoom],input[name=hotelRoomId],input[name=fee],input[name=chargingProjects],input[name=chargingId],input[name=goodsPolicy],input[name=shopPolicyId],input[name=selfitem],input[name=selfitemId],input[name=oldPrice],input[name=hotelRoomType],input[name=hotelRoomTypeId],input[name=hotelPrice],input[name=partnerAgencyNameList],input[name=partnerAgencyContactId]').val("")}
 			if (!!data.name && !!name) {$parents.find('input[name='+name+']').val(data.name).trigger('change');}
 			if (!!data.id && !!id) {$parents.find('input[name='+id+']').val(data.id).trigger('change');}
 			if (!!data.managerName && !!managerName) {$parents.find('input[name='+managerName+']').val(data.managerName);}
@@ -1881,6 +1696,14 @@ KingServices.provinceCity = function($container,provinceIdU,cityIdU,districtIdU)
 	KingServices.getProvinceList($container.find("select[name=provinceId]"),provinceIdU);
 	if (!!cityIdU) {KingServices.getCityList($container.find("select[name=cityId]"),provinceIdU,cityIdU);} 
 	if (!!districtIdU) {KingServices.getDistrictList($container.find("select[name=districtId]"),cityIdU,districtIdU);} 
+	
+	if(provinceIdU != "" && !cityIdU){
+		KingServices.getCityList($container.find("select[name=cityId]"),provinceIdU);
+	}
+	if(cityIdU != "" && !districtIdU){
+		KingServices.getDistrictList($container.find("select[name=districtId]"),cityIdU);
+	}
+	 
 	//给省份select绑定事件
 	$container.find("select[name=provinceId]").change(function(){
 		var provinceId = $(this).val();
@@ -1987,3 +1810,7 @@ KingServices.getDistrictList = function(obj,cityId,districtId){
 	}
 };
 //省市区 end
+KingServices.hotelDescArray = ['未选择', '三星以下', '三星', '准四星', '四星', '准五星', '五星', '五星以上']
+KingServices.getHotelDesc = function(level, defaultDesc) {
+	return  KingServices.hotelDescArray[level] || defaultDesc || '三星以下';
+}

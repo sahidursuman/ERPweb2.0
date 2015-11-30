@@ -14,7 +14,7 @@
 				</tr>
 				<tr>
 					<td class="style-myself CheckPlan">客户来源</td>
-					<td style="text-align: left;padding: 0px 0px 0px 10px">{{innerTransfer.touristGroup.partnerAgency.travelAgencyName}}</td>
+					<td style="text-align: left;padding: 0px 0px 0px 10px">{{if innerTransfer.fromBusinessGroup!=null}}{{innerTransfer.fromBusinessGroup.name}}{{/if}}</td>
 					<td class="style-myself CheckPlan">同行联系人</td>
 					<td style="text-align: left;padding: 0px 0px 0px 10px">{{if innerTransfer.touristGroup.partnerAgency != null}}{{innerTransfer.touristGroup.partnerAgencyContact.contactRealname}}{{/if}}</td>
 					<td class="style-myself CheckPlan">联系人电话</td>

@@ -1,0 +1,210 @@
+<div class="col-xs-12">
+	<table class="table table-striped table-bordered table-hover">
+		<thead>
+			<tr class="bg-blur">  
+				<th>线路产品</th>
+				<th>出游日期</th>
+				<th>入住日期</th>               
+				<th>需求内容</th>
+				<th>酒店</th>
+				<th>星级</th>
+				<th>房型</th>
+				<th>房费报价</th>
+				<th>反馈内容</th>
+				<th>资源保留期</th>
+				<th>询价截止期</th>
+				<th>询价状态</th>
+				<th width="130">操作</th>
+			</tr>
+		</thead>
+	
+		<tbody>
+			{{each data as rs}}
+				<tr>
+					<td rowspan="{{rs.trLen}}">{{rs.lineProductName}}</td>
+					<td rowspan="{{rs.trLen}}">{{rs.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
+					<td rowspan="{{rs.trLen}}">{{rs.arriveTime | dateFormat: 'yyyy-MM-dd'}}</td>
+					<td rowspan="{{rs.trLen}}">{{rs.condition}}</td>
+					{{each rs.hotelList as offer index}}
+						{{if index == 0}}
+							<td rowspan="{{offer.roomTypeList.length}}">{{offer.hotelName}}</td>
+							<td rowspan="{{offer.roomTypeList.length}}">
+								{{if offer.hotelLevel == 1 }}
+							    	三星以下
+							   	{{else if offer.hotelLevel == 2 }}
+							   		三星
+							   	{{else if offer.hotelLevel == 3 }}
+							   		准四星
+							   	{{else if offer.hotelLevel == 4 }}
+							   		四星
+							   	{{else if offer.hotelLevel == 5 }}
+							   		准五星
+							   	{{else if offer.hotelLevel == 6 }}
+							   		五星
+							   	{{else if offer.hotelLevel == 7 }}
+							   		五星以上
+							   	{{/if}}
+							</td>
+							{{if offer.roomTypeList.length > 0}}
+								{{each offer.roomTypeList as room index}}
+									{{if index == 0}}
+										<td class="T-hotelType-{{offer.id}}">{{room.type}}</td>
+										<td class="T-hotelPrice-{{offer.id}}">
+										{{if room.isContractPrice == 1}}
+											{{room.price}}
+										{{else}}
+											{{if offer.status == '已同意'}}
+												{{room.replyPrice}}
+											{{else}}
+												-
+											{{/if}}
+										{{/if}}
+										</td>
+									{{/if}}
+								{{/each}}
+							{{else}}
+								<td class="T-hotelType-{{offer.id}}"></td>
+								<td class="T-hotelPrice-{{offer.id}}"></td>
+							{{/if}}
+							<td rowspan="{{offer.roomTypeList.length}}">{{offer.remark}}</td>
+							<td rowspan="{{offer.roomTypeList.length}}">
+								{{if offer.reserveMinutes == -1}}
+									{{if offer.status == "已拒绝"}}
+									-
+									{{else}}
+									一直保留
+									{{/if}}
+								{{else if offer.reserveMinutes == 0}}
+									{{if offer.status == "已同意"}}已到期{{else}}-{{/if}}
+								{{else}}
+									{{offer.reserveTime}}
+								{{/if}}
+							</td>
+							<td rowspan="{{offer.roomTypeList.length}}">{{offer.expiryTime}}</td>
+							<td rowspan="{{offer.roomTypeList.length}}">{{offer.status}}</td>
+							<td rowspan="{{offer.roomTypeList.length}}" data-id="{{offer.id}}">
+								{{if offer.status == "已同意"}}
+									<a class="T-hotel-add">加入</a><span> | </span>
+								{{/if}}
+								<a class="T-hotel-delete">删除</a>
+							</td>
+						{{/if}}
+					{{/each}}
+				</tr>
+				{{each rs.hotelList as offer index}}
+					{{if index == 0}}
+						{{if offer.roomTypeList.length > 0}}
+							{{each offer.roomTypeList as room index}}
+								{{if index > 0}}
+									<tr><td class="T-hotelType-{{offer.id}}">{{room.type}}</td>
+									<td class="T-hotelPrice-{{offer.id}}">
+									{{if room.isContractPrice == 1}}
+										{{room.price}}
+									{{else}}
+										{{if offer.status == '已同意'}}
+											{{room.replyPrice}}
+										{{else}}
+											-
+										{{/if}}
+									{{/if}}
+									</td></tr>
+								{{/if}}
+							{{/each}}
+						{{else}}
+							<tr><td class="T-hotelType-{{offer.id}}"></td>
+							<td class="T-hotelPrice-{{offer.id}}"></td></tr>
+						{{/if}}
+					{{/if}}
+				{{/each}}
+				{{each rs.hotelList as offer index}}
+					{{if index > 0}}
+						<tr>
+							<td rowspan="{{offer.roomTypeList.length}}">{{offer.hotelName}}</td>
+							<td rowspan="{{offer.roomTypeList.length}}">
+								{{if offer.hotelLevel == 1 }}
+							    	三星以下
+							   	{{else if offer.hotelLevel == 2 }}
+							   		三星
+							   	{{else if offer.hotelLevel == 3 }}
+							   		准四星
+							   	{{else if offer.hotelLevel == 4 }}
+							   		四星
+							   	{{else if offer.hotelLevel == 5 }}
+							   		准五星
+							   	{{else if offer.hotelLevel == 6 }}
+							   		五星
+							   	{{else if offer.hotelLevel == 7 }}
+							   		五星以上
+							   	{{/if}}
+							</td>
+							{{if offer.roomTypeList.length > 0}}
+								{{each offer.roomTypeList as room index}}
+									{{if index == 0}}
+										<td class="T-hotelType-{{offer.id}}">{{room.type}}</td>
+										<td class="T-hotelPrice-{{offer.id}}">
+										{{if room.isContractPrice == 1}}
+											{{room.price}}
+										{{else}}
+											{{if offer.status == '已同意'}}
+												{{room.replyPrice}}
+											{{else}}
+												-
+											{{/if}}
+										{{/if}}
+										</td>
+									{{/if}}
+								{{/each}}
+							{{else}}
+								<td class="T-hotelType-{{offer.id}}"></td>
+								<td class="T-hotelPrice-{{offer.id}}"></td>
+							{{/if}}
+							<td rowspan="{{offer.roomTypeList.length}}">{{offer.remark}}</td>
+							<td rowspan="{{offer.roomTypeList.length}}">
+								{{if offer.reserveMinutes == -1}}
+									{{if offer.status == "已拒绝"}}
+									-
+									{{else}}
+									一直保留
+									{{/if}}
+								{{else if offer.reserveMinutes == 0}}
+									{{if offer.status == "已同意"}}已到期{{else}}-{{/if}}
+								{{else}}
+									{{offer.reserveTime}}
+								{{/if}}
+							</td>
+							<td rowspan="{{offer.roomTypeList.length}}">{{offer.expiryTime}}</td>
+							<td rowspan="{{offer.roomTypeList.length}}">{{offer.status}}</td>
+							<td rowspan="{{offer.roomTypeList.length}}" data-id="{{offer.id}}">
+								{{if offer.status == "已同意"}}
+									<a class="T-hotel-add">加入</a><span> | </span>
+								{{/if}}
+								<a class="T-hotel-delete">删除</a>
+							</td>
+						</tr>
+						{{if offer.roomTypeList.length > 0}}
+							{{each offer.roomTypeList as room index}}
+								{{if index > 0}}
+									<tr><td class="T-hotelType-{{offer.id}}">{{room.type}}</td>
+									<td class="T-hotelPrice-{{offer.id}}">
+									{{if room.isContractPrice == 1}}
+										{{room.price}}
+									{{else}}
+										{{if offer.status == '已同意'}}
+											{{room.replyPrice}}
+										{{else}}
+											-
+										{{/if}}
+									{{/if}}
+									</td></tr>
+								{{/if}}
+							{{/each}}
+						{{else}}
+							<tr><td class="T-hotelType-{{offer.id}}"></td>
+							<td class="T-hotelPrice-{{offer.id}}"></td></tr>
+						{{/if}}
+					{{/if}}
+				{{/each}}
+			{{/each}}
+		</tbody>
+	</table>
+</div>
