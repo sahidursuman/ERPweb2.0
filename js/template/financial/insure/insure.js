@@ -103,6 +103,8 @@ define(function(require, exports) {
 					console.log(data);
 					var result = showDialog(data);
 					if(result){
+					data.yearList = yearList
+	            	data.monthList = monthList
 						var html = insuranceChecking(data);
 		  				Tools.addTab(checkTabId,"保险对账",html);
 		  				 Insure.initList();
@@ -151,13 +153,34 @@ define(function(require, exports) {
 					console.log(data);
 					var result = showDialog(data);
 					if(result){
+						data.yearList = yearList
+	            		data.monthList = monthList
 						var html = insureClearing(data);
 		  				Tools.addTab("-Clearing","客户结算",html);
 		  				Insure.initList();
+		  				$(".T-insureClearing").find('.T-Records').click(function(event) {
+		  					alert();
+		  					event.preventDefault();
+		  					Insure.lookRecord();
+		  				});
 					}
 				}
-		  	});
-	  		
+		  	});	
+	  	}
+	  	// 查看操作记录
+	  	Insure.lookRecord = function(){
+	  		var html = blanceRecords();
+	  		var RecordsLayer =layer.open({
+    			type: 1,
+			    title:"操作记录",
+			    skin: 'layui-layer-rim', //加上边框
+			    area: '60%', //宽高
+			    zIndex:1030,
+			    content: html,
+			    scrollbar: false, // 推荐禁用浏览器外部滚动条
+			    success: function(){}
+        	})
+
 	  	}
 	exports.init = Insure.initModule;
 });
