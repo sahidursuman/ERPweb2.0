@@ -974,11 +974,19 @@ define(function(require, exports) {
 										var result = showDialog(data);
 										if(result){  		
 											layer.close(editTransferInTemplateLayer);
-											showMessageDialog($( "#confirm-dialog-message" ),data.message);
+											//showMessageDialog($( "#confirm-dialog-message" ),data.message);
 											var type="2",
 											    divId="Transfer-In";
 											transfer.getSearchParam(divId,type);
 											transfer.findPager(divId,type,0);
+
+											var touristGroupId=data.touristGroupId,
+											    typeOut="out";
+											//是否跳转到中转安排
+										    transfer.transitMessage(touristGroupId,typeOut);
+
+
+
 										}
 									}
 								});
@@ -992,6 +1000,45 @@ define(function(require, exports) {
 				}
 			})	
 		};
+
+
+	/**
+	 * [transitMessage description]
+	 * @param  {[type]} touristGroupId [游客小组id]
+	 * @param  {[type]} type           [标识]
+	 * @return {[type]}                [description]
+	 */
+	transfer.transitMessage=function(touristGroupId,typeOut){
+	  	   var dialogObj = $( "#confirm-dialog-message" );
+				dialogObj.removeClass('hide').dialog({
+					modal: true,
+					title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
+					title_html: true,
+					draggable:false,
+					buttons: [ 
+						{
+							text: "否",
+							"class" : "btn btn-minier",
+							click: function() {
+								$( this ).dialog( "close" );
+							}
+						},
+						{
+							text: "是",
+							"class" : "btn btn-primary btn-minier",
+							click: function() {
+								KingServices.addTouristGroup(touristGroupId,typeOut);
+								$( this ).dialog( "close" );
+							}
+						}
+					],
+					open:function(event,ui){
+						$(this).find("p").text("是否中转安排？");
+					}
+				});
+
+	};
+
 
 		/**
 		 * 调用线路产品Layer层
