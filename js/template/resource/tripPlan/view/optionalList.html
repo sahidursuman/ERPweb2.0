@@ -19,7 +19,7 @@
 			<td>{{standard.menuList}}</td>
 			{{/if}}
 			{{/each}}
-			<td {{if restaurant.restaurantStandardList.length > 1}}rowspan="{{restaurant.restaurantStandardList.length}}"{{/if}} style="vertical-align:middle"><a class="T-add">添加</a></td>
+			<td {{if restaurant.restaurantStandardList.length > 1}}rowspan="{{restaurant.restaurantStandardList.length}}"{{/if}} style="vertical-align:middle"><label class="pos-rel"><input type="checkbox" class="ace T-add"> <span class="lbl"></span> </label></td>
 		</tr>
 		{{each restaurant.restaurantStandardList as standard index}}
 		{{if index > 0}}
