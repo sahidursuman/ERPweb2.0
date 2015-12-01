@@ -1508,7 +1508,19 @@ define(function(require,exports){
 			})
 		}
 		//接送事件点json
-		var outArrangeRemarkJson = touristGroup.installArrangeJson($arrangeForm);
+		var outArrangeRemarkJson;
+		if ( !!typeInner ) {
+			var $arrangeChecked = $arrangeForm.find('.T-touristReception','T-smallCar','T-touristSend').is(':checked')
+			if ($arrangeChecked == true ) {
+				outArrangeRemarkJson = touristGroup.installArrangeJson($arrangeForm);
+			} else{
+				showMessageDialog($( "#confirm-dialog-message" ),"请选择中转安排信息!");
+				return;
+			};
+		}else{
+				outArrangeRemarkJson = touristGroup.installArrangeJson($arrangeForm);
+		};
+		
 		//将json对象转换成字符串
 		touristGroupFeeJsonAdd = JSON.stringify(touristGroupFeeJsonAdd);
 		touristGroupMemberJsonAdd = JSON.stringify(touristGroupMemberJsonAdd);
@@ -1555,10 +1567,8 @@ define(function(require,exports){
 
 								console.info(typeInner+"......");
 								if (!!typeInner) {
-									console.info('1111');
 									KingServices.listTransit();
 								} else{
-									console.info('1222');
 									touristGroup.freshHeader(touristGroup.$freshData);
 									//刷新列表数据
 									touristGroup.getListData(touristGroup.$freshData);

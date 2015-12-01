@@ -184,6 +184,15 @@ define(function(require, exports) {
 
 					    	$container = $(".T-update-selfpay-form"),$tbody = $container.find('.T-selfpayList-Tbody');
 					    	ruleData.Uvalidator = rule.check($container);
+
+				    		var $normalInPrice=$container.find('input[name=normalInnerPrice]'),
+							    $normalMarPrice=$container.find('input[name=normalMarketPrice]'),
+							    $contractPrice=$container.find('input[name=contractPrice]'),
+							    $marketPrice=$container.find('input[name=marketPrice]');
+							    InputCtrolObj.inputCtrolFloat($normalInPrice);
+							    InputCtrolObj.inputCtrolFloat($normalMarPrice);
+							    InputCtrolObj.inputCtrolFloat($contractPrice);
+							    InputCtrolObj.inputCtrolFloat($marketPrice);
 					    	//初始化地区
 							KingServices.provinceCity($container,provinceId,cityId,districtId);
 					    	//添加项目列表
@@ -266,6 +275,16 @@ define(function(require, exports) {
 
 		    	var $container = $(".T-add-selfpay-form");
 		    	ruleData.validator = rule.check($container);
+		    	var $normalInPrice=$container.find('input[name=normalInnerPrice]'),
+		    	    $normalMarPrice=$container.find('input[name=normalMarketPrice]'),
+		    	    $contractPrice=$container.find('input[name=contractPrice]'),
+		            $marketPrice=$container.find('input[name=marketPrice]');
+		    	 InputCtrolObj.inputCtrolFloat($normalInPrice);
+		    	 InputCtrolObj.inputCtrolFloat($normalMarPrice);
+		    	 InputCtrolObj.inputCtrolFloat($contractPrice);
+		    	 InputCtrolObj.inputCtrolFloat($marketPrice);
+
+
 		    	//初始化地区
 		    	KingServices.provinceCity($container);
 		    	//添加项目列表
@@ -299,6 +318,16 @@ define(function(require, exports) {
 			'<td><input name="remark" type="text" class="col-sm-12" style="min-width:100px;" maxlength="1000"/></div></td>'+
 			'<td style="width:70px"><a class="T-btn-price-delete">删除</a></td></tr>';
 		$tbody.append(html);
+		var $normalInPrice=$tbody.find('input[name=normalInnerPrice]'),
+		    $normalMarPrice=$tbody.find('input[name=normalMarketPrice]'),
+		    $contractPrice=$tbody.find('input[name=contractPrice]'),
+		    $marketPrice=$tbody.find('input[name=marketPrice]');
+		    InputCtrolObj.inputCtrolFloat($normalInPrice);
+		    InputCtrolObj.inputCtrolFloat($normalMarPrice);
+		    InputCtrolObj.inputCtrolFloat($contractPrice);
+		    InputCtrolObj.inputCtrolFloat($marketPrice);
+
+
 		// 再调整对话框的高度
 		$(window).trigger('resize');
 		ruleData.validatorList = rule.checkItems($tbody);

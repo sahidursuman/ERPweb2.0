@@ -166,6 +166,10 @@ define(function(require, exports) {
 							});
 							//时间控件
 							hotel.datepicker($tbody);
+							var $normalMPrice=$tbody.find('input[name=normalMarketPrice]'),
+						   		$normalInPrice=$tbody.find('input[name=normalInnerPrice]');
+								InputCtrolObj.inputCtrolFloat($normalMPrice);
+								InputCtrolObj.inputCtrolFloat($normalInPrice);
 
 							//提交事件绑定
 							$container.find(".T-btn-submit-hotel").on("click",function(){
@@ -232,6 +236,13 @@ define(function(require, exports) {
 		    	var $container = $(".T-addHotelContainer");
 		    	// 设置表单验证
 		    	ruleData.validator = rule.check($container);
+		    	//normalMarketPrice====normalInnerPrice
+		    	var $normalMPrice=$container.find('input[name=normalMarketPrice]'),
+				    $normalInPrice=$container.find('input[name=normalInnerPrice]');
+				InputCtrolObj.inputCtrolFloat($normalMPrice);
+				InputCtrolObj.inputCtrolFloat($normalInPrice);
+
+
 		    	//初始化地区
 		    	KingServices.provinceCity($container);
 		    	//新增房间列表
@@ -265,6 +276,10 @@ define(function(require, exports) {
 		hotel.datepicker($tbody);
 		ruleData.roomTd = $tbody.find('tr');
 		ruleData.UroomTd = $tbody.find('tr');
+	   var $normalMPrice=$tbody.find('input[name=normalMarketPrice]'),
+		   $normalInPrice=$tbody.find('input[name=normalInnerPrice]');
+		InputCtrolObj.inputCtrolFloat($normalMPrice);
+		InputCtrolObj.inputCtrolFloat($normalInPrice);
 		// 再调整对话框的高度
 		$(window).trigger('resize');
 		// 对酒店房型设置表单验证
