@@ -77,7 +77,7 @@ define(function(require, exports) {
 						$ele: $that.find('input[name="busReduceMoney"]'),
 						rules: [
 							{
-								type: 'int',
+								type: 'float',
 								errMsg: '数据格式不正确'
 							}	
 						]
@@ -87,7 +87,7 @@ define(function(require, exports) {
 						$ele: $that.find('input[name="busPayedMoney"]'),
 						rules: [
 							{
-								type: 'int',
+								type: 'float',
 								errMsg: '数据格式不正确'
 							}	
 						]
@@ -124,7 +124,7 @@ define(function(require, exports) {
 						$ele: $that.find('input[name="hotelPrice"]'),
 						rules: [
 							{
-								type: 'int',
+								type: 'float',
 								errMsg: '单价格式不正确'
 							}	
 						]
@@ -148,7 +148,7 @@ define(function(require, exports) {
 						$ele: $that.find('input[name="hotelReduceMoney"]'),
 						rules: [
 							{
-								type: 'int',
+								type: 'float',
 								errMsg: '数据格式不正确'
 							}	
 						]
@@ -158,7 +158,7 @@ define(function(require, exports) {
 						$ele: $that.find('input[name="hotelPayedMoney"]'),
 						rules: [
 							{
-								type: 'int',
+								type: 'float',
 								errMsg: '数据格式不正确'
 							}	
 						]

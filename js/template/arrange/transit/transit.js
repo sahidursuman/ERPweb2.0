@@ -577,7 +577,15 @@ define(function(require, exports) {
 			'<td><a class="cursor arrange-delete" title="删除">删除</a></td>'+
 			'</tr>';
 			html  = filterUnAuth(html);//权限过滤
-			$("#"+id+" .busList tbody").append(html);
+			var $tbody= $("#"+id+" .busList tbody");
+			    $tbody.append(html);
+			var $busFee=$tbody.find('input[name=busFee]'),
+			    $busPayedMoney=$tbody.find('input[name=busPayedMoney]'),
+			    $busReduceMoney=$tbody.find('input[name=busReduceMoney]');
+			Tools.inputCtrolFloat($busFee);	
+			Tools.inputCtrolFloat($busPayedMoney);	
+			Tools.inputCtrolFloat($busReduceMoney);	
+			    
 			//表单验证
 			//var validator = rule.setTranistCheckor($('#'+id));
 			rule.update(validator);
@@ -618,7 +626,16 @@ define(function(require, exports) {
 				'<td><a class="cursor arrange-delete" title="删除">删除</a></td>'+
 				'</tr>';
 			html  = filterUnAuth(html);
-			$("#"+id+" .hotelList tbody").append(html);
+			var $tbody=$("#"+id+" .hotelList tbody");
+			    $tbody.append(html);
+
+			var $hotelPrice=$tbody.find('input[name=hotelPrice]'),
+			    $hotelReduceMoney=$tbody.find('input[name=hotelReduceMoney]'),
+			    $hotelPayedMoney=$tbody.find('input[name=hotelPayedMoney]');
+			Tools.inputCtrolFloat($hotelPrice);	
+			Tools.inputCtrolFloat($hotelReduceMoney);	
+			Tools.inputCtrolFloat($hotelPayedMoney);
+
 			//表单验证
 			rule.update(validator);
 			$("#"+tab+" .arrangeTouristMain .hotelList .arrange-delete").click(function(){
@@ -655,7 +672,16 @@ define(function(require, exports) {
 				'<td><a class="cursor arrange-delete" title="删除">删除</a></td>'+
 				'</tr>';
 			html  = filterUnAuth(html);
-			$("#"+id+" .ticketList tbody").append(html);
+			var $tbody=$("#"+id+" .ticketList tbody");
+			    $tbody.append(html);
+			    
+			var $ticketPrice=$tbody.find('input[name=ticketPrice]'),
+			    $ticketReduceMoney=$tbody.find('input[name=ticketReduceMoney]'),
+			    $ticketPayedMoney=$tbody.find('input[name=ticketPayedMoney]');
+			Tools.inputCtrolFloat($ticketPrice);	
+			Tools.inputCtrolFloat($ticketReduceMoney);	
+			Tools.inputCtrolFloat($ticketPayedMoney);
+
 			//表单验证
 			rule.update(validator);
 			$("#"+tab+" .arrangeTouristMain .ticketList .arrange-delete").click(function(){
@@ -688,7 +714,15 @@ define(function(require, exports) {
 				'<td><a class="cursor arrange-delete" title="删除">删除</a></td>'+
 				'</tr>';
 			html  = filterUnAuth(html);
-			$("#"+id+" .restaurantList tbody").append(html);
+
+			var $tbody=$("#"+id+" .restaurantList tbody");
+			    $tbody.append(html);
+			    
+			var $reduceMoney=$tbody.find('input[name=reduceMoney]'),
+			    $payedMoney=$tbody.find('input[name=payedMoney]');
+			Tools.inputCtrolFloat($reduceMoney);	
+			Tools.inputCtrolFloat($payedMoney);	
+
 			//表单验证
 			rule.update(validator);
 			transit.bindRestaurantChoose(tab);
@@ -717,7 +751,15 @@ define(function(require, exports) {
 				'<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000"/></td>'+
 				'<td><a class="cursor arrange-delete" title="删除">删除</a></td>'+
 				'</tr>';
-			$("#"+id+" .otherList tbody").append(html);
+			
+			var $tbody=$("#"+id+" .otherList tbody");
+			    $tbody.append(html);
+			    
+			var $reduceMoney=$tbody.find('input[name=reduceMoney]'),
+			    $payedMoney=$tbody.find('input[name=payedMoney]');
+			Tools.inputCtrolFloat($reduceMoney);	
+			Tools.inputCtrolFloat($payedMoney);	
+
 			//表单验证
 			rule.update(validator);
 			$("#"+tab+" .arrangeTouristMain .otherList .arrange-delete").click(function(){
