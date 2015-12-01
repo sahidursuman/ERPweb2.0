@@ -441,6 +441,25 @@ define(function(require, exports) {
 			//组装JSON 浮动显示
 			
 		},
+		//浮动查看自选餐厅
+		viewOptionalRestaurant :function($objInput){
+			$objInput.each(function(){
+				var $this = $(this),$parents = $this.closest('tr'),/*$value = $parents.find('[name=optional]').val(),*/$title = [],$value = $this.data("propover");
+				if (!!$value && typeof $value === "string") {
+					$value = JSON.parse($value);
+				}
+				if (!!$value && $value.length > 0) {
+					var html = '<table class="table table-striped table-hover"><thead><tr><th class="th-border">餐厅名称</th><th class="th-border">联系人</th><th class="th-border">联系电话</th></tr><tbody>';
+					for (var i = 0; i < $value.length; i++) {
+						html += '<tr><td>'+$value[i].name+'</td><td>'+$value[i].managerName+'</td><td>'+$value[i].mobileNumber+'</td></tr>'
+					};
+					html += '</tbody></table>';
+					$this.data("html",html)
+					Tools.descToolTip($this,2);
+					$this.data('bs.popover').options.content = html;
+				}
+			})
+		},
 
 		/**
 		 * 
@@ -562,25 +581,6 @@ define(function(require, exports) {
 
 		},
 
-		//浮动查看自选餐厅
-		viewOptionalRestaurant :function($objInput){
-			$objInput.each(function(){
-				var $this = $(this),$parents = $this.closest('tr'),/*$value = $parents.find('[name=optional]').val(),*/$title = [],$value = $this.data("propover");
-				if (!!$value && typeof $value === "string") {
-					$value = JSON.parse($value);
-				}
-				if (!!$value && $value.length > 0) {
-					var html = '<table class="table table-striped table-hover"><thead><tr><th class="th-border">餐厅名称</th><th class="th-border">联系人</th><th class="th-border">联系电话</th></tr><tbody>';
-					for (var i = 0; i < $value.length; i++) {
-						html += '<tr><td>'+$value[i].name+'</td><td>'+$value[i].managerName+'</td><td>'+$value[i].mobileNumber+'</td></tr>'
-					};
-					html += '</tbody></table>';
-					$this.data("html",html)
-					Tools.descToolTip($this,2);
-					$this.data('bs.popover').options.content = html;
-				}
-			})
-		},
 		//添加资源 
 		addResource : function(){
 			$("#tripPlan_addPlan_insurance .T-addInsuranceResource").off('click').on("click",{function : KingServices.addInsurance , type : "tr" , name : "insuranceName" , id : "insuranceId"}, KingServices.addResourceFunction);
@@ -2414,6 +2414,7 @@ define(function(require, exports) {
 		//添加自选餐厅
 		addOptional :function($objInput){
 			var html = addOptionalTemplate(),$inputJson = $objInput.data("propover");
+			console.log($inputJson)
 			if (!!$inputJson && typeof $inputJson === "string") {
 				$inputJson = JSON.parse($inputJson);
 			}
@@ -2433,14 +2434,14 @@ define(function(require, exports) {
 
 	                if (!!$inputJson && $inputJson.length != 0) {
 	                	for (var i = 0; i < $inputJson.length; i++) {
-	                		var html = '<tr data-entity-id="'+$inputJson[i].id+'" data-entity-restaurantid="'+$inputJson[i].restaurantId+'">'+
-							'<td class="name">'+$inputJson[i].name+'</td>'+
-							'<td class="managerName">'+$inputJson[i].managerName+'</td>'+
-							'<td class="mobileNumber">'+$inputJson[i].mobileNumber+'</td>'+
-							'<td><a class="T-del">删除</a></td>'+
-							'</tr>';
-							$tbody.append(html);
-							optionalArray.push($inputJson[i].restaurantId)
+	                		var json = {
+	                			id: $inputJson[i].id,
+	                			restaurantId: $inputJson[i].restaurantId,
+	                			name: $inputJson[i].name,
+	                			managerName: $inputJson[i].managerName,
+	                			mobileNumber: $inputJson[i].mobileNumber
+	                		}
+							optionalArray.push(json)
 	                	}
 	                }
 	                //初始化list列表
@@ -2465,6 +2466,19 @@ define(function(require, exports) {
 									$list.html(html);
 									$(window).trigger("resize");
 
+									//翻页自动勾选已选餐厅
+									var $tr = $list.find('tr');
+									if (!!optionalArray.length) {
+										for (var i = 0, len = optionalArray.length; i < len; i++) {
+											$tr.each(function(j) {
+												var $id = $tr.eq(j).data('entity-id');
+												if (optionalArray[i].restaurantId == $id) {
+													$tr.eq(j).find('.T-add').prop('checked',true);
+												}
+											});
+										}
+									}
+
 									// 绑定翻页组件
 									laypage({
 									    cont: $container.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
@@ -2477,10 +2491,8 @@ define(function(require, exports) {
 									    }
 									});	
 
-									//添加自选
+									//添加/删除自选
 									$container.find(".T-add").off('click').on('click', addOptional);
-									//删除自选
-									$container.find(".T-del").off('click').on('click', delOptional);
 				        		}
 				        	}
 				        })
@@ -2488,114 +2500,58 @@ define(function(require, exports) {
 		        	//添加自选函数
 		        	function addOptional(){
 		        		var $this = $(this),$parent = $this.closest('tr'),
-							$id = $parent.data("entity-id"),
+							$restaurantId = $parent.data("entity-id"),
 							$name = $parent.data("entity-name"),
 							$managerName = $parent.data("entity-managername"),
 							$mobileNumber = $parent.data("entity-mobilenumber");
-						var html = '<tr data-entity-id="" data-entity-restaurantid="'+$id+'">'+
-							'<td class="name">'+$name+'</td>'+
-							'<td class="managerName">'+$managerName+'</td>'+
-							'<td class="mobileNumber">'+$mobileNumber+'</td>'+
-							'<td><a class="T-del">删除</a></td>'+
-							'</tr>';
-						if (optionalArray.length >= 5) {
-							showMessageDialog($("#confirm-dialog-message"),"最多只能添加5个自选餐厅");
-							return;
-						}else{
+							console.log(optionalArray)
 							if (optionalArray.length == 0) {
-								$tbody.append(html);
-								optionalArray.push($id);
+								var json = {
+									restaurantId:  $restaurantId,
+									name: $name,
+									managerName: $managerName,
+									mobileNumber: $mobileNumber
+								}
+								optionalArray.push(json);
 							}else{
 								for (var i = 0,$length = optionalArray.length; i < $length; i++) {
-				        			if (optionalArray[i] == $id) {
-				        				showMessageDialog($("#confirm-dialog-message"),"该餐厅已经添加");
-				        				return;
+				        			if (optionalArray[i].restaurantId == $restaurantId) {
+	        							if (!!optionalArray[i].id) {
+	        								$.ajax({
+	        									url: KingServices.build_url("restaurant","deleteChooseRestaurant"),
+	        									type: 'POST',
+	        									data: "id="+optionalArray[i].id,
+	        									showLoading: false,
+	        									success: function(){
+							        				optionalArray.splice(i,1);
+				        							$this.prop("checked",false);
+	        										saveOptional(1);
+	        									}
+	        								})
+	        							}else{
+					        				optionalArray.splice(i,1);
+	        							}
+	        							return;
 				        			}
 				        		}
-		        				$tbody.append(html);
-								optionalArray.push($id);
+				        		if(optionalArray.length >= 5){
+									showMessageDialog($("#confirm-dialog-message"),"最多只能添加5个自选餐厅");
+			        				$this.prop("checked",false);
+				        		}else{
+									var json = {
+										restaurantId:  $restaurantId,
+										name: $name,
+										managerName: $managerName,
+										mobileNumber: $mobileNumber
+									}
+									optionalArray.push(json);
+								}
 			        		}
-						}
-						//删除自选
-						$container.find(".T-del").off('click').on('click', delOptional);
-		        	};
-		        	//删除自选函数
-		        	function delOptional(){
-		        		var $this = $(this),$parent = $this.closest('tr'),
-		        			$restaurantid = $parent.data("entity-restaurantid"),
-		        			$id = $parent.data("entity-id")+"";
-		        		for (var i = 0,$length = optionalArray.length; i < $length; i++) {
-		        			if (optionalArray[i] == $restaurantid) {
-	        					var a = i;
-		        				if (!!$id) {
-		        					var dialogObj = $( "#confirm-dialog-message" );
-									dialogObj.removeClass('hide').dialog({
-										modal: true,
-										title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-										title_html: true,
-										draggable:false,
-										buttons: [ 
-											{
-												text: "取消",
-												"class" : "btn btn-minier",
-												click: function() {
-													$( this ).dialog( "close" );
-												}
-											},
-											{
-												text: "确定",
-												"class" : "btn btn-primary btn-minier",
-												click: function() {
-													$( this ).dialog( "close" );
-							        				$.ajax({
-											        	url: ""+APP_ROOT+"back/restaurant.do?method=deleteChooseRestaurant&token="+$.cookie("token")+"&menuKey=resource_restaurant"+"&operation=view",
-											        	type: "POST",
-											        	data: "id="+$id,
-											        	success: function(data){
-											        		var result = showDialog(data);
-											        		if (result) {
-											        			showMessageDialog($("#confirm-dialog-message"),data.message,function(){
-											        				optionalArray.splice([a],1);
-												        			$parent.remove();
-												        			saveOptional(1);
-											        			})
-												        	}
-												        }
-												    })
-												}
-											}
-										],
-										open:function(event,ui){
-											$(this).find("p").text("你确定要删除该条记录？");
-										}
-									});	
-		        				}else{
-		        					optionalArray.splice([a],1);
-				        			$parent.remove();
-				        			saveOptional(1); 
-						        }
-		        			} 
-		        		}
+						console.log(optionalArray)
 		        	};
 		        	//保存函数
 		        	function saveOptional(type){
-		        		var $tr = $tbody.find('tr'),
-		        			optionalJson = [];
-		        		function getValue($obj,className){
-		        			var value = $obj.find('.'+className).text();
-		        			return value;
-		        		}
-		        		$tr.each(function(){
-		        			var $this = $(this),$id = $this.data("entity-id")+"" || "";
-		        				json = {
-		        				id : $id+"",
-		        				restaurantId : $this.data("entity-restaurantid")+"",
-		        				name : getValue($this,"name"),
-		        				managerName : getValue($this,"managerName"),
-		        				mobileNumber : getValue($this,"mobileNumber")
-		        				}
-		        			optionalJson.push(json);
-		        		})
+		        		var optionalJson = optionalArray;
 		        		optionalJson = JSON.stringify(optionalJson);
 		        		//$objInput.closest('tr').find("[name=optional]").val(encodeURIComponent(optionalJson))
 		        		$objInput.data("propover" , optionalJson);
