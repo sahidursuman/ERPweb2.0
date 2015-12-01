@@ -483,6 +483,7 @@
                                                                                                     <tr>
                                                                                                         <td>{{if hotelList.offerId != null}}<input type='hidden' name='offerId' value='{{hotelList.offerId}}' />{{/if}}
                                                                                                             <select class="col-xs-12 T-choose-hotelStarLevel" {{if hotelList.offerId != null}}disabled='disabled'{{/if}}>
+                                                                                                            <option {{if hotelList.hotel.level==0 }}selected="selected" {{/if}} value="">--全部--</option>
                                                                                                                 <option {{if hotelList.hotel.level==1 }}selected="selected" {{/if}} value="1">三星以下</option>
                                                                                                                 <option {{if hotelList.hotel.level==2 }}selected="selected" {{/if}} value="2">三星</option>
                                                                                                                 <option {{if hotelList.hotel.level==3 }}selected="selected" {{/if}} value="3">准四星</option>
