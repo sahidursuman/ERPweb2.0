@@ -1549,6 +1549,44 @@ KingServices.updateTransit = function(id)  {
 	});
 }
 
+/**
+ * 中转安排——
+ * @param  {string} id 游客小组的ID
+ * @return {[type]}    [description]
+ */
+KingServices.listTransit = function()  {
+	seajs.use("" + ASSETS_ROOT +"js/template/arrange/transit/transit.js",function(module){
+		module.listTransit(0,"","","","","","","","","","","","");
+	});
+}
+
+
+/**
+ * 编辑游客小组
+ * @param  {string} id 游客小组的ID
+ * @return {[type]}    [description]
+ */
+KingServices.updateTouristGroup = function(id,type)  {
+	seajs.use("" + ASSETS_ROOT +modalScripts.resource_touristGroup,function(module){
+		module.updateTouristGroup(id,type);
+	});
+}
+
+
+/**
+ * 新增游客小组
+ * @param  {string} id 游客小组的ID
+ * @return {[type]}    [description]
+ */
+KingServices.addTouristGroup = function(touristGroupId,typeOut)  {
+	seajs.use("" + ASSETS_ROOT +modalScripts.resource_touristGroup,function(module){
+		module.addTouristGroup(touristGroupId,typeOut);
+	});
+}
+
+
+
+
 //导游  新增
 KingServices.addGuide = function(fn){
 	seajs.use("" + ASSETS_ROOT + modalScripts.resource_guide,function(module){
