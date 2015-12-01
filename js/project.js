@@ -636,6 +636,7 @@ var modalScripts = {
 	'financial_restaurant':"js/template/financial/Restaurant/Restaurant.js",//餐厅账务
 	'financial_rummery':"js/template/financial/hotel/hotel.js",//酒店账务
 	'financial_busCompany':"js/template/financial/busCompany/busCompany.js",//车队账务
+	'financial_self':"js/template/financial/Self/Self.js",//自费账务
 
 	//---------------------------------------------------------------------------------------------------------------
 	'public_message':"js/template/system/message/message.js",
@@ -784,21 +785,6 @@ function listMenu(menuTemplate){
 						modals["financial_scenic"] = Scenic;
 					});
 				});
-
-				//绑定自费账务菜单功能
-				$("#sidebar .nav-list .financial_self").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/financial/Self/Self.js",function( Self){
-						var date = new Date();
-						var year = date.getFullYear();
-						var month = ""
-						Self.listSelf(0,"",year,month);
-						modals["financial_Self"] = Self;
-					});
-				});
-
 				//绑定保险账务菜单功能
 				// $("#sidebar .nav-list .financial_insure").click(function(){
 				// 	$("#sidebar .nav-list li").removeClass("active");
