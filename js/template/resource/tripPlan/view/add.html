@@ -491,6 +491,7 @@
                                                                 <td>
                                                                     <select class="col-sm-12 no-padding tripPlanHotelStar T-tripPlanHotelStar" {{if hotel.qouteId!=null}}disabled="disabled"{{/if}} style="width: 80px; {{if hotel.qouteId!=null}}background:#EFEBEB{{/if}}">
                                                                     	{{if hotel.hotel !=null}}
+                                                                        <option selected="selected" {{if hotel.hotel.level == 0}}selected="selected"{{/if}} value="">--全部--</option>
                                                                         <option {{if hotel.hotel.level == 1}}selected="selected"{{/if}} value="1">三星以下</option>
                                                                         <option {{if hotel.hotel.level == 2}}selected="selected"{{/if}} value="2">三星</option>
                                                                         <option {{if hotel.hotel.level == 3}}selected="selected"{{/if}} value="3">准四星</option>
