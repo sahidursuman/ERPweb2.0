@@ -274,7 +274,7 @@ define(function(require,exports){
 								validator = rule.busComCheckor($('.T-updateBusCompanyContainer'));
 								var $inputPrice=$busList.find("input[name=contractPrice]");
 								//控件
-								InputCtrolObj.inputCtrolFloat($inputPrice);
+								Tools.inputCtrolFloat($inputPrice);
 								//省市区事件
 								if(data.busCompany.provinceId != null )var provinceId = data.busCompany.provinceId;
 								if(data.busCompany.cityId != null )var cityId = data.busCompany.cityId;
@@ -632,7 +632,7 @@ define(function(require,exports){
 				BusCompany.datepicker($parents.find("input[name=startTime],input[name=endTime]"));
 				BusCompany.addTimeEvents($parents);
 				//Input控件控制位数
-				InputCtrolObj.inputCtrolFloat($parents.find("input[name=contractPrice]"));
+				Tools.inputCtrolFloat($parents.find("input[name=contractPrice]"));
 
 			validator = rule.update(validator);
 			}else{

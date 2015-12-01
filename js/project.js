@@ -1525,17 +1525,12 @@ Tools.getTabKey = function(id) {
 };
 
 /**
- * 用于input控件精度调整
- * @type {Object}
- */
-var InputCtrolObj={};
-/**
  * inputCtrolFloat Input控件位数的输入
  * @param  {[type]} $inputCtrol input控件对象
  * @return {[type]}
  */
 
-InputCtrolObj.inputCtrolFloat=function($inputCtrol){
+Tools.inputCtrolFloat=function($inputCtrol){
 	$inputCtrol.on('keyup', function (event) {
 	    var $amountInput = $(this);
 	    //响应鼠标事件，允许左右方向键移动 

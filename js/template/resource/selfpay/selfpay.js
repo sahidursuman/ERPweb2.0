@@ -189,10 +189,10 @@ define(function(require, exports) {
 							    $normalMarPrice=$container.find('input[name=normalMarketPrice]'),
 							    $contractPrice=$container.find('input[name=contractPrice]'),
 							    $marketPrice=$container.find('input[name=marketPrice]');
-							    InputCtrolObj.inputCtrolFloat($normalInPrice);
-							    InputCtrolObj.inputCtrolFloat($normalMarPrice);
-							    InputCtrolObj.inputCtrolFloat($contractPrice);
-							    InputCtrolObj.inputCtrolFloat($marketPrice);
+							    Tools.inputCtrolFloat($normalInPrice);
+							    Tools.inputCtrolFloat($normalMarPrice);
+							    Tools.inputCtrolFloat($contractPrice);
+							    Tools.inputCtrolFloat($marketPrice);
 					    	//初始化地区
 							KingServices.provinceCity($container,provinceId,cityId,districtId);
 					    	//添加项目列表
@@ -279,10 +279,10 @@ define(function(require, exports) {
 		    	    $normalMarPrice=$container.find('input[name=normalMarketPrice]'),
 		    	    $contractPrice=$container.find('input[name=contractPrice]'),
 		            $marketPrice=$container.find('input[name=marketPrice]');
-		    	 InputCtrolObj.inputCtrolFloat($normalInPrice);
-		    	 InputCtrolObj.inputCtrolFloat($normalMarPrice);
-		    	 InputCtrolObj.inputCtrolFloat($contractPrice);
-		    	 InputCtrolObj.inputCtrolFloat($marketPrice);
+		    	 Tools.inputCtrolFloat($normalInPrice);
+		    	 Tools.inputCtrolFloat($normalMarPrice);
+		    	 Tools.inputCtrolFloat($contractPrice);
+		    	 Tools.inputCtrolFloat($marketPrice);
 
 
 		    	//初始化地区
@@ -322,10 +322,10 @@ define(function(require, exports) {
 		    $normalMarPrice=$tbody.find('input[name=normalMarketPrice]'),
 		    $contractPrice=$tbody.find('input[name=contractPrice]'),
 		    $marketPrice=$tbody.find('input[name=marketPrice]');
-		    InputCtrolObj.inputCtrolFloat($normalInPrice);
-		    InputCtrolObj.inputCtrolFloat($normalMarPrice);
-		    InputCtrolObj.inputCtrolFloat($contractPrice);
-		    InputCtrolObj.inputCtrolFloat($marketPrice);
+		    Tools.inputCtrolFloat($normalInPrice);
+		    Tools.inputCtrolFloat($normalMarPrice);
+		    Tools.inputCtrolFloat($contractPrice);
+		    Tools.inputCtrolFloat($marketPrice);
 
 
 		// 再调整对话框的高度

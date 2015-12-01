@@ -171,8 +171,8 @@ define(function(require,exports){
 		    	    //景区Input控件输入
 	    	    	var $normalMPrice=$container.find('input[name=contractPrice]'),
 					   	$normalInPrice=$container.find('input[name=normalInnerPrice]');
-						InputCtrolObj.inputCtrolFloat($normalMPrice);
-						InputCtrolObj.inputCtrolFloat($normalInPrice);
+						Tools.inputCtrolFloat($normalMPrice);
+						Tools.inputCtrolFloat($normalInPrice);
 			    	//给项目列表新增按钮绑定事件
 			    	var $scenicItemObj=$project.find(".T-scenicItemStandardList");
 			    	$project.find(".T-btn-scenic-add").click(function(){
@@ -187,8 +187,8 @@ define(function(require,exports){
 
 			    	   var $normalMPrice=$scenicItemObj.find('input[name=contractPrice]'),
 					   	   $normalInPrice=$scenicItemObj.find('input[name=normalInnerPrice]');
-						   InputCtrolObj.inputCtrolFloat($normalMPrice);
-						   InputCtrolObj.inputCtrolFloat($normalInPrice);
+						   Tools.inputCtrolFloat($normalMPrice);
+						   Tools.inputCtrolFloat($normalInPrice);
 						// 再调整对话框的高度
 						$(window).trigger('resize');
 			    		//对景区管理的项目列表校验
@@ -278,8 +278,8 @@ define(function(require,exports){
 						    	var itemsValidator;
 						    	var $normalMPrice=$container.find('input[name=contractPrice]'),
 								   	$normalInPrice=$container.find('input[name=normalInnerPrice]');
-									InputCtrolObj.inputCtrolFloat($normalMPrice);
-									InputCtrolObj.inputCtrolFloat($normalInPrice);
+									Tools.inputCtrolFloat($normalMPrice);
+									Tools.inputCtrolFloat($normalInPrice);
 
 						    	//初始化地区
 							    KingServices.provinceCity($container,provinceId,cityId,districtId);						    	
@@ -327,8 +327,8 @@ define(function(require,exports){
 
 						    		var $normalMPrice=$scenicItemObj.find('input[name=contractPrice]'),
 									   	$normalInPrice=$scenicItemObj.find('input[name=normalInnerPrice]');
-										InputCtrolObj.inputCtrolFloat($normalMPrice);
-										InputCtrolObj.inputCtrolFloat($normalInPrice);
+										Tools.inputCtrolFloat($normalMPrice);
+										Tools.inputCtrolFloat($normalInPrice);
 									// 再调整对话框的高度
 									$(window).trigger('resize');
 						    		//项目列表表单验证

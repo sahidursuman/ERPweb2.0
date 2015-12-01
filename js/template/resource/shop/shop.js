@@ -564,8 +564,8 @@ define(function(require, exports) {
 		       var $costMoneyStart=$tbody.find('input[name=costMoneyStart]'),
 		   		   $costMoneyEnd=$tbody.find('input[name=costMoneyEnd]');
 
-				InputCtrolObj.inputCtrolFloat($costMoneyStart);
-				InputCtrolObj.inputCtrolFloat($costMoneyEnd);
+				Tools.inputCtrolFloat($costMoneyStart);
+				Tools.inputCtrolFloat($costMoneyEnd);
 
 		    	// 绑定事件处理
 		    	$form.on('click', '.T-item-add', function(event) {
@@ -692,8 +692,8 @@ define(function(require, exports) {
 		var $costMoneyStart=$tbody.find('input[name=costMoneyStart]'),
 		    $costMoneyEnd=$tbody.find('input[name=costMoneyEnd]');
 
-		InputCtrolObj.inputCtrolFloat($costMoneyStart);
-		InputCtrolObj.inputCtrolFloat($costMoneyEnd);
+		Tools.inputCtrolFloat($costMoneyStart);
+		Tools.inputCtrolFloat($costMoneyEnd);
 
 		td.next().append(guideRateInput);
 		td.next().next().append(travelAgencyRateInput);
