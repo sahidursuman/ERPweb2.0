@@ -167,6 +167,12 @@ define(function(require,exports){
 			    	var itemValidator;
 			    	//初始化地区
 		    	    KingServices.provinceCity($container);
+
+		    	    //景区Input控件输入
+	    	    	var $normalMPrice=$container.find('input[name=contractPrice]'),
+					   	$normalInPrice=$container.find('input[name=normalInnerPrice]');
+						Tools.inputCtrolFloat($normalMPrice);
+						Tools.inputCtrolFloat($normalInPrice);
 			    	//给项目列表新增按钮绑定事件
 			    	var $scenicItemObj=$project.find(".T-scenicItemStandardList");
 			    	$project.find(".T-btn-scenic-add").click(function(){
@@ -178,6 +184,11 @@ define(function(require,exports){
 			    				"<td style=\"width:70px\"><a data-entity-id=\"\" class=\" T-btn-scenic--delete\">删除</a></td>" +
 			    				"</tr>";
 			    		$scenicItemObj.find("tbody").append(html);
+
+			    	   var $normalMPrice=$scenicItemObj.find('input[name=contractPrice]'),
+					   	   $normalInPrice=$scenicItemObj.find('input[name=normalInnerPrice]');
+						   Tools.inputCtrolFloat($normalMPrice);
+						   Tools.inputCtrolFloat($normalInPrice);
 						// 再调整对话框的高度
 						$(window).trigger('resize');
 			    		//对景区管理的项目列表校验
@@ -265,6 +276,11 @@ define(function(require,exports){
 			    		            $project = $(".T-updateScenicContainer .T-scenicProjectForm");
 				    		 	var validator = rule.check($container);
 						    	var itemsValidator;
+						    	var $normalMPrice=$container.find('input[name=contractPrice]'),
+								   	$normalInPrice=$container.find('input[name=normalInnerPrice]');
+									Tools.inputCtrolFloat($normalMPrice);
+									Tools.inputCtrolFloat($normalInPrice);
+
 						    	//初始化地区
 							    KingServices.provinceCity($container,provinceId,cityId,districtId);						    	
 						    	var $scenicItemObj=$project.find(".T-scenicItemStandardList");
@@ -308,6 +324,11 @@ define(function(require,exports){
 						    				"<td style=\"width:70px\"><a data-entity-id=\"\" class=\"T-scenic-standard-delete\">删除</a></td>" +
 						    				"</tr>";
 						    		$scenicItemObj.find("tbody").append(html);
+
+						    		var $normalMPrice=$scenicItemObj.find('input[name=contractPrice]'),
+									   	$normalInPrice=$scenicItemObj.find('input[name=normalInnerPrice]');
+										Tools.inputCtrolFloat($normalMPrice);
+										Tools.inputCtrolFloat($normalInPrice);
 									// 再调整对话框的高度
 									$(window).trigger('resize');
 						    		//项目列表表单验证

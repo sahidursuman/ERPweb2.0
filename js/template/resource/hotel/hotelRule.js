@@ -132,7 +132,7 @@ define(function(require, exports) {
 							errMsg: '旅行社价不能为空'
 						},
 				        {
-				        	type: 'int', 
+				        	type: 'float', 
 				        	errMsg: '请输入数字'
 				        }
 				    ]

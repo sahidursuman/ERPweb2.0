@@ -561,6 +561,12 @@ define(function(require, exports) {
 		    	
 		    	shop.datePicter($tbody.find(".T-date"));
 
+		       var $costMoneyStart=$tbody.find('input[name=costMoneyStart]'),
+		   		   $costMoneyEnd=$tbody.find('input[name=costMoneyEnd]');
+
+				Tools.inputCtrolFloat($costMoneyStart);
+				Tools.inputCtrolFloat($costMoneyEnd);
+
 		    	// 绑定事件处理
 		    	$form.on('click', '.T-item-add', function(event) {
 		    		event.preventDefault();
@@ -681,6 +687,14 @@ define(function(require, exports) {
 		var guideRateInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-bottom:7px\"><input name=\"guideRate\" type=\"text\" maxlength=\"5\" class='form-control'/></div>";
 		var travelAgencyRateInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-bottom:7px\"><input name=\"travelAgencyRate\" type=\"text\" maxlength=\"5\"  class='form-control'/></div>";
 		td.append(priceAreaDiv);
+
+		var $form = $(".T-policyForm"),$tbody = $form.find('.T-list');
+		var $costMoneyStart=$tbody.find('input[name=costMoneyStart]'),
+		    $costMoneyEnd=$tbody.find('input[name=costMoneyEnd]');
+
+		Tools.inputCtrolFloat($costMoneyStart);
+		Tools.inputCtrolFloat($costMoneyEnd);
+
 		td.next().append(guideRateInput);
 		td.next().next().append(travelAgencyRateInput);
 	};
