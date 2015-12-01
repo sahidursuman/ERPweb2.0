@@ -561,7 +561,7 @@ define(function(require, exports) {
 			'<td><input class="col-sm-12 chooseBusBrand" name="busbrand" type="text" value="" /></td>'+
 			'<td><div class="col-sm-12"><input class="col-sm-12 chooseBusLicenseNumber bind-change" name="busLicenseNumber" type="text" value="" /><input type="hidden" name="busLicenseNumberId" value="" /><span class="addResourceBtn T-addBusResource R-right" data-right="1020002" title="添加车辆"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
 			'<td><div class="col-sm-12"><input type="hidden" name="serviceType" value="'+type+'" />'+
-			'<input class="col-sm-12 bind-change" name="busCompanyName"  type="text" value="" />'+
+			'<input class="col-sm-12 bind-change T-busCompanyName" name="busCompanyName"  type="text" value="" />'+
 			'<input type="hidden" name="busCompanyId" value="" /><span class="addResourceBtn T-addBusCompanyResource R-right" data-right="1020002" title="添加车队"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
 			'<td><div class="col-sm-12"><input class="col-sm-12 chooseDriver bind-change" name="driverName" type="text" value="" /><input type="hidden" name="driverId" value="" /><span class="addResourceBtn T-addDriverResource R-right" data-right="1020002" title="添加司机"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
 			'<td><input class="col-sm-12" name="driverMobileNumber" readonly="readonly" type="text" value="" /></td>'+
@@ -937,19 +937,19 @@ define(function(require, exports) {
 						var $this = $(this),parents = $(this).closest('tr');
 						$this.val("");
 						parents.find("input[name=busLicenseNumberId]").val("");
-						parents.find("input[name=busCompanyName]").val("");
+					/*	parents.find("input[name=busCompanyName]").val("");
 						parents.find("input[name=busCompanyId]").val("");
 						parents.find("input[name=driverName]").val("");
-						parents.find("input[name=driverId]").val("");
+						parents.find("input[name=driverId]").val("");*/
 						parents.find("input[name=driverMobileNumber]").val("");
 					}
 				},
 				select :function(event, ui){
 					var $this = $(this),parents = $(this).closest('tr');
-						parents.find("input[name=busCompanyName]").val(ui.item.busCompanyName);
+					/*	parents.find("input[name=busCompanyName]").val(ui.item.busCompanyName);
 						parents.find("input[name=busCompanyId]").val(ui.item.busCompanyId);
 						parents.find("input[name=driverName]").val("");
-						parents.find("input[name=driverId]").val("");
+						parents.find("input[name=driverId]").val("");*/
 						parents.find("input[name=driverMobileNumber]").val("");
 						parents.find("input[name=busLicenseNumberId]").val(ui.item.id).trigger('change');
 				}
@@ -993,6 +993,70 @@ define(function(require, exports) {
 					});
 				}
 			});
+
+
+			// 选择车队
+			var chooseLicense = $("#"+tab).find(".T-busCompanyName");
+			chooseLicense.autocomplete({
+				minLength:0,
+				change :function(event, ui){
+					if(ui.item == null){
+						var $this = $(this),parents = $(this).closest('tr');
+						$this.val("");
+						parents.find("input[name=busCompanyId]").val("");
+						parents.find("input[name=busCompanyName]").val("");
+				
+					}
+				},
+				select :function(event, ui){
+					var $this = $(this),parents = $(this).closest('tr');
+						parents.find("input[name=busCompanyName]").val(ui.item.busCompanyName);
+						parents.find("input[name=busCompanyId]").val(ui.item.busCompanyId);
+						parents.find("input[name=busCompanyId]").val(ui.item.id).trigger('change');
+				}
+			}).unbind("click").click(function(){
+				var obj = this,parents = $(obj).closest('tr'),
+					seatCount = parents.find("[name=seatCount]").val(),
+					busBrand = parents.find("[name=busbrand]").val();
+				if (!!seatCount) {
+					$.ajax({
+						url:""+APP_ROOT+"back/busCompany.do?method=getAllBusCompanyList&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
+						data: {
+							seatCount: seatCount,
+							brand: busBrand
+						},
+						dateType:"json",
+						showLoading:false,
+						type:"POST",
+						success:function(data){
+							var result = showDialog(data);
+							if(result){
+								console.info(data);
+								var busCompanyList = JSON.parse(data.busCompanyList);
+								if(busCompanyList && busCompanyList.length > 0){
+									for(var i=0; i < busCompanyList.length; i++){
+										busCompanyList[i].value = busCompanyList[i].companyName;
+									}
+									$(obj).autocomplete('option','source', busCompanyList);
+									$(obj).autocomplete('search', '');
+								}else{
+									layer.tips('无数据', obj, {
+									    tips: [1, '#3595CC'],
+									    time: 2000
+									});
+								}
+							}
+						}
+					})
+				}
+				else{
+					layer.tips('请选择车队', obj, {
+					    tips: [1, '#3595CC'],
+					    time: 2000
+					});
+				}
+			});
+
 			//司机选择
 			var chooseDriver = $("#"+tab).find(".chooseDriver");
 			chooseDriver.autocomplete({
@@ -1011,12 +1075,14 @@ define(function(require, exports) {
 					parents.find("input[name=driverMobileNumber]").val(ui.item.mobileNumber);
 				}
 			}).unbind("click").click(function(){
-				var obj = this;
-				var busLicenseNumberId = $(this).closest('tr').find("input[name=busLicenseNumberId]").val();
+				var obj = this,
+				    $tr=$(this).closest('tr');//busCompanyId
+				var busLicenseNumberId = $tr.find("input[name=busLicenseNumberId]").val();
+				var busCompanyId = $tr.find("input[name=busCompanyId]").val();
 				// if(busLicenseNumberId){
 					$.ajax({
 						url:""+APP_ROOT+"back/busCompany.do?method=getDrivers&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-						data:"busId="+busLicenseNumberId+"",
+						data:"busId="+busLicenseNumberId+"&busCompanyId="+busCompanyId+"",
 						dateType:"json",
 						showLoading:false,
 						type:"POST",
