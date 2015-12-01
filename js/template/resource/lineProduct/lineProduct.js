@@ -1695,8 +1695,7 @@ define(function(require, exports) {
 	ResLineProduct.saveProductData = function($tab, validator, tabArgs){
 		if (!validator.form())   return;
 
-		var $form = $tab.find('.T-mainForm'), travelLineData = {},isAjax = true;
-		var $middleForm = $tab.find('.T-middleForm'), travelLineData = {},isAjax = true;
+		var $form = $tab.find('.T-mainForm'), travelLineData = {},isAjax = true,$middleForm = $tab.find('.T-middleForm');
 		function getValue(obj, name){
 			var thisObj = obj.find("[name="+name+"]"), objValue;
 			if(thisObj.attr("type") == "checkbox"){
