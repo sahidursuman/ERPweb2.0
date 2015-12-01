@@ -53,7 +53,7 @@
 						</div>
 						<label class="col-sm-1 control-label no-padding-right">已收:</label>
 						<div class="col-sm-2">
-							<input type="text" name="getedMoney" class="col-sm-12" value="{{bookingOrder.getedMoney}}" maxlength="9" />
+							<input type="text" name="getedMoney" class="col-sm-12 price" value="{{bookingOrder.getedMoney}}" maxlength="9" />
 						</div>
 						<label class="col-sm-1 control-label no-padding-right">收款方式:</label>
 						<div class="col-sm-2">
@@ -72,7 +72,7 @@
 						</div>
 						<label class="col-sm-1 control-label no-padding-right">已付:</label>
 						<div class="col-sm-2">
-							<input type="text" name="payedMoney" class="col-sm-12" value="{{bookingOrder.payedMoney}}" maxlength="9" />
+							<input type="text" name="payedMoney" class="col-sm-12 price" value="{{bookingOrder.payedMoney}}" maxlength="9" />
 						</div>
 						<label class="col-sm-1 control-label no-padding-right">付款方式:</label>
 						<div class="col-sm-2">
@@ -159,8 +159,8 @@
 										</td>
 										<td><input name="days" value="{{hotelList.days}}" type="text" class="col-sm-12 T-action-blur" maxlength="4" /></td>
 										<td><input name="roomCount" value="{{hotelList.roomCount}}" type="text" class="col-sm-12 T-action-blur" maxlength="5" /></td>
-										<td><input name="costPrice" value="{{hotelList.costPrice}}" type="text" class="col-sm-12 T-action-blur" style="width:55px;" maxlength="9" /><label class="col-sm-4 control-label" style="padding: 7px 0 0 0;width:25px;" >/天</label></td>
-										<td><input name="salePrice" value="{{hotelList.salePrice}}" type="text" class="col-sm-12 T-action-blur" style="width:55px;" maxlength="9" /><label class="col-sm-4 control-label" style="padding: 7px 0 0 0;width:25px;" >/天</label></td>
+										<td><input name="costPrice" value="{{hotelList.costPrice}}" type="text" class="col-sm-12 T-action-blur  price" style="width:55px;" maxlength="9" /><label class="col-sm-4 control-label" style="padding: 7px 0 0 0;width:25px;" >/天</label></td>
+										<td><input name="salePrice" value="{{hotelList.salePrice}}" type="text" class="col-sm-12 T-action-blur  price" style="width:55px;" maxlength="9" /><label class="col-sm-4 control-label" style="padding: 7px 0 0 0;width:25px;" >/天</label></td>
 										<td><input name="sumCostMoney" value="{{hotelList.sumCostMoney}}" readonly="readonly" type="text" class="col-sm-12"/></td>
 										<td><input name="sumNeedGetMoney" value="{{hotelList.sumNeedGetMoney}}" readonly="readonly" type="text" class="col-sm-12"/></td>
 										<td>
@@ -221,8 +221,8 @@
 											<input name="scenicItemId" value="{{if scenicList.scenicItem != null}}{{scenicList.scenicItem.id}}{{/if}}" type="hidden" />
 										</td>
 										<td><input name="roomCount" value="{{scenicList.roomCount}}" type="text" class="col-sm-12 T-action-blur" maxlength="5" /></td>
-										<td><input name="costPrice" value="{{scenicList.costPrice}}" type="text" class="col-sm-12 T-action-blur" maxlength="9" /></td>
-										<td><input name="salePrice" value="{{scenicList.salePrice}}" type="text" class="col-sm-12 T-action-blur" maxlength="9" /></td>
+										<td><input name="costPrice" value="{{scenicList.costPrice}}" type="text" class="col-sm-12 T-action-blur  price" maxlength="9" /></td>
+										<td><input name="salePrice" value="{{scenicList.salePrice}}" type="text" class="col-sm-12 T-action-blur  price" maxlength="9" /></td>
 										<td><input name="sumCostMoney" value="{{scenicList.sumCostMoney}}" type="text" readonly="readonly" class="col-sm-12"/></td>
 										<td><input name="sumNeedGetMoney" value="{{scenicList.sumNeedGetMoney}}" readonly="readonly" type="text" class="col-sm-12"/></td>
 										<td><input name="orderNumber" value="{{scenicList.orderNumber}}" type="text" class="col-sm-12" maxlength="50" /></td>
@@ -296,8 +296,8 @@
 											</div>
 										</td>
 										<td><input name="roomCount" value="{{ticketList.roomCount}}" type="text" class="col-sm-12 T-action-blur" maxlength="5" /></td>
-										<td><input name="costPrice" value="{{ticketList.costPrice}}" type="text" class="col-sm-12 T-action-blur" maxlength="9" /></td>
-										<td><input name="salePrice" value="{{ticketList.salePrice}}" type="text" class="col-sm-12 T-action-blur" maxlength="9" /></td>
+										<td><input name="costPrice" value="{{ticketList.costPrice}}" type="text" class="col-sm-12 T-action-blur  price" maxlength="9" /></td>
+										<td><input name="salePrice" value="{{ticketList.salePrice}}" type="text" class="col-sm-12 T-action-blur  price" maxlength="9" /></td>
 										<td><input name="sumCostMoney" value="{{ticketList.sumCostMoney}}" readonly="readonly" type="text" class="col-sm-12"/></td>
 										<td><input name="sumNeedGetMoney" value="{{ticketList.sumNeedGetMoney}}" readonly="readonly" type="text" class="col-sm-12"/></td>
 										<td>
@@ -367,8 +367,8 @@
 											<input name="busCompanyId" value="{{if busList.busCompany != null}}{{busList.busCompany.id}}{{/if}}" type="hidden" />
 										</td>
 										<td><input name="roomCount" value="{{busList.roomCount}}" type="text" class="col-sm-12 T-action-blur" maxlength="5" /></td>
-										<td><input name="costPrice" value="{{busList.costPrice}}" type="text" class="col-sm-12 T-action-blur" maxlength="9" /></td>
-										<td><input name="salePrice" value="{{busList.salePrice}}" type="text" class="col-sm-12 T-action-blur" maxlength="9" /></td>
+										<td><input name="costPrice" value="{{busList.costPrice}}" type="text" class="col-sm-12 T-action-blur  price" maxlength="9" /></td>
+										<td><input name="salePrice" value="{{busList.salePrice}}" type="text" class="col-sm-12 T-action-blur  price" maxlength="9" /></td>
 										<td><input name="sumCostMoney" value="{{busList.sumCostMoney}}" readonly="readonly" type="text" class="col-sm-12"/></td>
 										<td><input name="sumNeedGetMoney" value="{{busList.sumNeedGetMoney}}" readonly="readonly" type="text" class="col-sm-12"/></td>
 										<td>
