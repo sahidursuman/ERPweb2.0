@@ -422,7 +422,7 @@ define(function(require, exports) {
                     if (result) {
                         showMessageDialog($("#confirm-dialog-message"), data.message, function() {
                             $.ajax({
-                                url: "" + APP_ROOT + "back/user.do?method=logOut&token=" + $.cookie("token") + "&operation=self",
+                                url: APP_ROOT + "base.do?method=logOut&token=" + $.cookie("token") + "&operation=self",
                                 type: "POST",
                                 dataType: "json",
                                 beforeSend: function() {
