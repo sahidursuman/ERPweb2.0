@@ -19,18 +19,6 @@ define(function(require, exports) {
 
 			$bus.each(function() {
 				var $that = $(this);
-					// 设置车牌
-					settings.push({
-						$ele: $that.find('input[name="busLicenseNumber"]'),
-						$valObj: $that.find('input[name="busLicenseNumberId"]'),
-						rules: [
-							{
-								type: 'null',
-								errMsg: '车牌不能为空'
-							}
-						]
-					});
-
 					// 设置司机
 					settings.push({
 						$ele: $that.find('input[name="driverName"]'),

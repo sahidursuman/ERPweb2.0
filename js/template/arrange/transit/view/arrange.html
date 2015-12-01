@@ -66,12 +66,12 @@
 									</h5>
 								<div class="widget-body">
 									<div class="widget-main no-padding">
-										<table class="table table-striped table-bordered table-hover busListTable margin-top">
+										<table class="table table-striped table-bordered table-hover busListTable margin-top" style="border:1px solid #ddd;">
 											<thead>
 												<tr>
 													<th class="th-border">车座数</th>
 													<th class="th-border">车辆品牌</th>
-													<th class="th-border"><span class="necessary">*</span>车牌</th>
+													<th class="th-border">车牌</th>
 													<th class="th-border">车队</th>              
 													<th class="th-border"><span class="necessary">*</span>司机</th>
 													<th class="th-border"><span class="necessary">*</span>司机电话</th>
@@ -103,7 +103,7 @@
 													<td>
 														<div class="col-sm-12">
 															<input type="hidden" name="serviceType" value="0" />
-															<input class="col-sm-12 bind-change" name="busCompanyName" readonly="readonly" type="text" value="{{outBus.busCompany.companyName}}" />
+															<input class="col-sm-12 bind-change T-busCompanyName" name="busCompanyName"  type="text" value="{{outBus.busCompany.companyName}}" />
 															<input type="hidden" name="busCompanyId" value="{{if outBus.busCompany != null}}{{outBus.busCompany.id}}{{/if}}" />
 		                                                    <span class="addResourceBtn T-addBusCompanyResource R-right" data-right="1020002" title="添加车队">
 		                                                        <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
@@ -164,7 +164,7 @@
 									</h5>
 								<div class="widget-body">
 									<div class="widget-main no-padding">
-										<table class="table table-striped table-bordered table-hover hotelListTable margin-top">
+										<table class="table table-striped table-bordered table-hover hotelListTable margin-top"  style="border:1px solid #ddd;">
 											<thead>
 												<tr>
 													<th class="th-border">日期</th>
@@ -191,6 +191,7 @@
 													<td>
 														<!-- <input class="col-sm-12 tripPlanHotelStar" name="hotelLevel" value="{{outHotel.hotel.level}}" type="text" /> -->
 														<select class="tripPlanHotelStar" name="hotelLevel">
+														<option value="" {{if outHotel.hotel.level == 0}}selected="selected"{{/if}}>--全部--</option>
 															<option value="1" {{if outHotel.hotel.level == 1}}selected="selected"{{/if}}>三星以下</option>
 															<option value="2" {{if outHotel.hotel.level == 2}}selected="selected"{{/if}}>三星</option>
 															<option value="3" {{if outHotel.hotel.level == 3}}selected="selected"{{/if}}>准四星</option>
@@ -258,7 +259,7 @@
 									</h5>
 								<div class="widget-body">
 									<div class="widget-main no-padding">
-										<table class="table table-striped table-bordered table-hover ticketListTable margin-top">
+										<table class="table table-striped table-bordered table-hover ticketListTable margin-top"  style="border:1px solid #ddd;">
 											<thead>
 												<tr>
 													<th class="th-border">票务公司</th>
@@ -353,7 +354,7 @@
 									</h5>
 								<div class="widget-body">
 									<div class="widget-main no-padding">
-										<table class="table table-striped table-bordered table-hover restaurantListTable margin-top">
+										<table class="table table-striped table-bordered table-hover restaurantListTable margin-top"  style="border:1px solid #ddd;">
 											<thead>
 												<tr>
 													<th class="th-border"><span class="necessary">*</span>日期</th>
@@ -395,8 +396,9 @@
 														</select>
 													</td>
 													<td>
-														<input class="col-sm-12 chooseStandard price" name="restaurantStandardId" type="text" value="{{outRestaurant.price}}" maxlength="9" />
+														<input class="col-sm-8 chooseStandard price" name="restaurantStandardId" type="text" value="{{outRestaurant.price}}" maxlength="9" />
 														<input type="hidden" name="price" value="{{outRestaurant.price}}" />
+														<span style="line-height: 22px;">(元/人)</span>
 													</td>
 													<td><input class="col-sm-12 count" name="memberCount"  maxlength="6" type="text" value="{{outRestaurant.memberCount}}" /></td>
 													<td><input class="col-sm-12 discount" name="reduceMoney"  maxlength="9" type="text" value="{{outRestaurant.reduceMoney}}" /></td>
@@ -439,7 +441,7 @@
 									</h5>
 								<div class="widget-body">
 									<div class="widget-main no-padding">
-										<table class="table table-striped table-bordered table-hover otherListTable margin-top">
+										<table class="table table-striped table-bordered table-hover otherListTable margin-top" style="border:1px solid #ddd;">
 											<thead>
 												<tr>
 													<th class="th-border"><span class="necessary">*</span>日期</th>
@@ -518,7 +520,7 @@
 												<tr>
 													<th class="th-border">车座数</th> 
 													<th class="th-border">车辆品牌</th>
-													<th class="th-border"><span class="necessary">*</span>车牌</th>
+													<th class="th-border">车牌</th>
 													<th class="th-border">车队</th>              
 													<th class="th-border"><span class="necessary">*</span>司机</th>
 													<th class="th-border"><span class="necessary">*</span>司机电话</th>
@@ -616,12 +618,12 @@
 									</h5>
 								<div class="widget-body">
 									<div class="widget-main no-padding">
-										<table class="table table-striped table-bordered table-hover busListTable margin-top">
+										<table class="table table-striped table-bordered table-hover busListTable margin-top" style="border: 1px solid #ddd">
 											<thead>
 												<tr>
 													<th class="th-border">车座数</th>
 													<th class="th-border">车辆品牌</th>
-													<th class="th-border"><span class="necessary">*</span>车牌</th>
+													<th class="th-border">车牌</th>
 													<th class="th-border">车队</th>              
 													<th class="th-border"><span class="necessary">*</span>司机</th>
 													<th class="th-border"><span class="necessary">*</span>司机电话</th>
@@ -714,7 +716,7 @@
 									</h5>
 								<div class="widget-body">
 									<div class="widget-main no-padding">
-										<table class="table table-striped table-bordered table-hover hotelListTable margin-top ">
+										<table class="table table-striped table-bordered table-hover hotelListTable margin-top " style="border: 1px solid #ddd">
 											<thead>
 												<tr>
 													<th class="th-border">日期</th>
@@ -809,7 +811,7 @@
 
 								<div class="widget-body">
 									<div class="widget-main no-padding">
-										<table class="table table-striped table-bordered table-hover ticketListTable margin-top">
+										<table class="table table-striped table-bordered table-hover ticketListTable margin-top" style="border: 1px solid #ddd">
 											<thead>
 												<tr>
 													<th class="th-border">票务公司</th>
@@ -904,7 +906,7 @@
 									</h5>
 								<div class="widget-body">
 									<div class="widget-main no-padding">
-										<table class="table table-striped table-bordered table-hover restaurantListTable margin-top">
+										<table class="table table-striped table-bordered table-hover restaurantListTable margin-top"  style="border: 1px solid #ddd">
 											<thead>
 												<tr>
 													<th class="th-border"><span class="necessary">*</span>日期</th>
@@ -946,8 +948,9 @@
 														</select>
 													</td>
 													<td>
-														<input class="col-sm-12 pirce chooseStandard" name="restaurantStandardId" type="text" value="{{outRestaurant.price}}" />
+														<input class="col-sm-8 pirce chooseStandard" name="restaurantStandardId" type="text" value="{{outRestaurant.price}}" />
 														<input type="hidden" name="price" value="{{outRestaurant.price}}" />
+														<span style="line-height: 22px;">(元/人)</span>
 													</td>
 													<td><input class="col-sm-12 count" name="memberCount"  maxlength="6" type="text" value="{{outRestaurant.memberCount}}" /></td>
 													<td><input class="col-sm-12 discount" name="reduceMoney"  maxlength="9" type="text" value="{{outRestaurant.reduceMoney}}" /></td>
@@ -990,7 +993,7 @@
 									</h5>
 								<div class="widget-body">
 									<div class="widget-main no-padding">
-										<table class="table table-striped table-bordered table-hover otherListTable margin-top">
+										<table class="table table-striped table-bordered table-hover otherListTable margin-top" style="border: 1px solid #ddd">
 											<thead>
 												<tr>
 													<th class="th-border"><span class="necessary">*</span>日期</th>
