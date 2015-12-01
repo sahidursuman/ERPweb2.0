@@ -68,7 +68,7 @@
 	 */
 	IndexFun.checkLogin = function() {
 		$.ajax({
-			url:""+APP_ROOT+"base.do?method=checkLogin",
+			url: APP_ROOT+"base.do?method=checkLogin",
 			type:"GET",
 			success:function(data){
 				IndexData.userInfo = data;
