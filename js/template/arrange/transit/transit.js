@@ -597,7 +597,8 @@ define(function(require, exports) {
 			var html ='<tr>'+
 				'<td><input type="hidden" name="serviceType" value="'+type+'" />'+
 				'<input class="col-sm-12" name="hotelCheckInTime" value="" type="text" /></td>'+
-				'<td><select class="tripPlanHotelStar" name="hotelLevel"><option value="1">三星以下</option>'+
+				'<td><select class="tripPlanHotelStar" name="hotelLevel">'+
+				'<option  selected="selected" value="" {{if outHotel.hotel.level == 0}}selected="selected"{{/if}}>--全部--</option><option value="1">三星以下</option>'+
 				'<option value="2">三星</option><option value="3">准四星</option>'+
 				'<option value="4">四星</option><option value="5">准五星</option>'+
 				'<option value="6">五星</option><option value="7">五星以上</option></select></td>'+

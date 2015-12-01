@@ -639,7 +639,8 @@ define(function(require, exports) {
 		var html = '<tr>'+
 			'<td><div class="input-group"><input name="enterTime" value="" type="text" class="datepicker"/><span class="input-group-addon"><i class="fa fa-calendar"></i></span></div></td>'+
 			'<td><div class="input-group"><input name="leaveTime" value="" type="text" class="datepicker"/><span class="input-group-addon"><i class="fa fa-calendar"></i></span></div></td>'+
-			'<td><select name="level" class="col-sm-12 T-hotelStar"><option selected="selected" value="1" {{if hotelList.hotel.level == 1}}selected="selected"{{/if}}>三星以下</option>'+
+			'<td><select name="level" class="col-sm-12 T-hotelStar"><option selected="selected" value="" {{if hotelList.hotel.level == 0}}selected="selected"{{/if}}>全部</option>'+
+			'<option value="1">三星以下</option>'+
 			'<option value="2">三星</option><option value="3">准四星</option><option value="4">四星</option><option value="5">准五星</option><option value="6">五星</option><option value="7">五星以上</option></select></td>'+
 			'<td><input name="hotelName" value="" type="text" class="col-sm-12 T-chooseHotel bind-change"/><input name="hotelId" type="hidden" value="" /></td>'+
 			'<td><input name="hotelRoom" value="" type="text" class="col-sm-12 T-chooseHotelRoom bind-change"/><input name="hotelRoomId" type="hidden" value="" /></td>'+
