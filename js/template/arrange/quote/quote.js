@@ -541,7 +541,7 @@ define(function(require, exports) {
 						 {
 						 	html += " selected='selected'";
 						 }
-						 html += " value=''>--全部--</option><option";
+						 html += " value=''>全部</option><option";
 						 if (hotelList[i].hotelLevel==1)
 						 {
 						 	html += " selected='selected'";
@@ -632,6 +632,7 @@ define(function(require, exports) {
 						var $container = $("#tab-arrange_quote-update-content");
 
 						var updateHtml = updateQuoteTemplate(data);
+						// var hotelStarValue = $(this).closest('tr').find('.resourceHotelStar').val();
 						$container.find('#quoteContent-'+$a.a).html(updateHtml)
 
 						$container.find('.inquiryContent').on("click",function(){
@@ -1877,7 +1878,7 @@ define(function(require, exports) {
 		'<div class="widget-box transparent" style="margin-top: 20px"><div class="widget-body"><div class=""><table class="table table-striped table-bordered table-hover">'+
 		'<thead><tr><th  class="th-border">酒店星级</th><th  class="th-border">酒店名称</th><th class="th-border">房型</th><th class="th-border">价格</th><th class="th-border">数量</th><th class="th-border">含餐</th><th class="th-border">电话</th><th class="th-border">备注</th><th  class="th-border" style="width: 60px;">操作</th></tr></thead>'+
 		'<tbody><tr>'+
-		'<td><select class="col-xs-12 resourceHotelStar"><option  selected="selected" {{if hotelList.hotel.level==0 }}selected="selected" {{/if}} value="">--全部--</option>'+
+		'<td><select class="col-xs-12 resourceHotelStar"><option  selected="selected" {{if hotelList.hotel.level==0 }}selected="selected" {{/if}} value="">全部</option>'+
 		'<option value="1">三星以下</option><option value="2">三星</option><option value="3">准四星</option><option value="4">四星</option><option value="5">准五星</option><option value="6">五星</option><option value="7">五星以上</option></select></td>'+
 		'<td><input type="text" class="col-xs-12 chooseHotelName bind-change" name="hotelNmae"/><input type="hidden" name="hotelId"/></td>'+
 		'<td><input type="text" class="col-xs-12 chooseHotelRoom bind-change" name="hotelRoom"/><input type="hidden" name="hotelRoomId"/></td>'+
@@ -1954,7 +1955,7 @@ define(function(require, exports) {
 				}
 			}
 		}).unbind("click").click(function(){
-			var hotelStarValue = $(this).closest('tr').find('.resourceHotelStar').val(),
+			var hotelStarValue = $(this).closest('tr').find('.resourceHotelStar, .T-choose-hotelStarLevel').val(),
 			    obj = this;
 			$.ajax({
                 url: KingServices.build_url('hotel', 'findHotelListByLevel'),
