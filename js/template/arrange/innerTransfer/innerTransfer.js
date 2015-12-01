@@ -364,6 +364,13 @@ define(function(require, exports) {
 					innerTransfer.PayMoneyF($tab);
 				});
 
+				//精度调整
+				var $price=$tab.find('.price'),
+				    $transPayedMoney=$tab.find('input[name=transPayedMoney]');
+				Tools.inputCtrolFloat($transPayedMoney);
+				Tools.inputCtrolFloat($price);
+
+
 				//绑定分团转客信息
 				$tab.find('.T-saveTransoutInfo').on('click', function(event) {
 					event.preventDefault();
@@ -402,6 +409,12 @@ define(function(require, exports) {
 			"<td><a class=\"cursor T-edittransfer-delete\">删除</a></td>"+
 			"</tr>";
 			$tab.find(".addTransferCost").append(html);
+
+			var $tbody=$tab.find(".addTransferCost");
+			    $tbody.append(html);
+			var $price=$tbody.find('input[name=price]');
+			Tools.inputCtrolFloat($price);
+
 			//表单验证
 			rule.update(validator);
 
