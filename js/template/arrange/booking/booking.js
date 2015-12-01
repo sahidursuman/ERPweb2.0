@@ -301,6 +301,9 @@ define(function(require, exports) {
 			BookingArrange.save($tab, validator);
 		});
 
+		var $price=$tab.find('.price');
+		Tools.inputCtrolFloat($price);
+
 		//新增list事件
 		$tab.off('click', '.T-action').on('click', '.T-action', function(event){
 			var $that = $(this);
@@ -646,13 +649,16 @@ define(function(require, exports) {
 			'<td><input name="hotelRoom" value="" type="text" class="col-sm-12 T-chooseHotelRoom bind-change"/><input name="hotelRoomId" type="hidden" value="" /></td>'+
 			'<td><input name="days" value="" type="text" class="col-sm-12 T-action-blur" maxlength="5" /></td>'+
 			'<td><input name="roomCount" value="" type="text" class="col-sm-12 T-action-blur" maxlength="5" /></td>'+
-			'<td><input name="costPrice" value="" type="text" class="col-sm-12 T-action-blur" style="width: 55px" maxlength="9" /><label class="col-sm-4 control-label" style="padding: 7px 0 0 0;width:25px;" >/天</label></td>'+
-			'<td><input name="salePrice" value="" type="text" class="col-sm-12 T-action-blur"  style="width: 55px"  maxlength="9" /><label class="col-sm-4 control-label" style="padding: 7px 0 0 0;width:25px;" >/天</label></td>'+
+			'<td><input name="costPrice" value="" type="text" class="col-sm-12 T-action-blur price" style="width: 55px" maxlength="9" /><label class="col-sm-4 control-label" style="padding: 7px 0 0 0;width:25px;" >/天</label></td>'+
+			'<td><input name="salePrice" value="" type="text" class="col-sm-12 T-action-blur price"  style="width: 55px"  maxlength="9" /><label class="col-sm-4 control-label" style="padding: 7px 0 0 0;width:25px;" >/天</label></td>'+
 			'<td><input name="sumCostMoney" readonly="readonly" value="" type="text" class="col-sm-12"/></td>'+
 			'<td><input name="sumNeedGetMoney" readonly="readonly" value="" type="text" class="col-sm-12"/></td>'+
 			'<td><a class="cursor T-action T-hotel-delete">删除</a></td></tr>';
 		var $this = $that.closest('.T-bookingHotelList');
-		var $container = $this.find(".T-hotelList").append(html);
+		var $container = $this.find(".T-hotelList");
+		    $container.append(html);
+		var $price= $container.find('.price');
+		Tools.inputCtrolFloat($price);
 		BookingArrange.BL_event($this.find(".T-hotelList"));
 		
 	};
@@ -665,13 +671,16 @@ define(function(require, exports) {
 			'<td><input name="scenicName" value="" type="text" class="col-sm-12 T-chooseScenic bind-change" /><input name="scenicId" value="" type="hidden" /></td>'+
 			'<td><input name="scenicItemName" value="" type="text"  class="col-sm-12 T-chooseScenicItem bind-change" /><input name="scenicItemId" value="" type="hidden" /></td>'+
 			'<td><input name="roomCount" value="" type="text" class="col-sm-12 T-action-blur"  maxlength="5" /></td>'+
-			'<td><input name="costPrice" value="" type="text" class="col-sm-12 T-action-blur" maxlength="9" /></td>'+
-			'<td><input name="salePrice" value="" type="text" class="col-sm-12 T-action-blur" maxlength="9" /></td>'+
+			'<td><input name="costPrice" value="" type="text" class="col-sm-12 T-action-blur price" maxlength="9" /></td>'+
+			'<td><input name="salePrice" value="" type="text" class="col-sm-12 T-action-blur price" maxlength="9" /></td>'+
 			'<td><input name="sumCostMoney" value="" readonly="readonly" type="text" class="col-sm-12"/></td>'+
 			'<td><input name="sumNeedGetMoney" value="" readonly="readonly" type="text" class="col-sm-12"/></td>'+
 			'<td><input name="orderNumber" value="" type="text" class="col-sm-12" maxlength="50" /></td>'+
 			'<td><a class="cursor T-action T-scenic-delete">删除</a></td></tr>';
-		var $container = $this.find('.T-scenicList').append(html);
+		var $container=	$this.find('.T-scenicList');
+		    $container.append(html);
+		var $price=$container.find('.price')
+		Tools.inputCtrolFloat($price);
 		BookingArrange.BL_event($this.find(".T-scenicList"));
 	};
 
@@ -687,12 +696,15 @@ define(function(require, exports) {
 			'<td><input name="seatLevel" value="" type="text" class="col-sm-12" maxlength="30" /></td>'+
 			'<td><div class="input-group" style="min-width: 165px;"><input name="startTime" value="" type="text" class="datetimepicker col-sm-12"/><span class="input-group-addon"><i class="fa fa-clock-o"></i></span></div></td>'+
 			'<td><input name="roomCount" value="" type="text" class="col-sm-12 T-action-blur" maxlength="5" /></td>'+
-			'<td><input name="costPrice" value="" type="text" class="col-sm-12 T-action-blur" maxlength="9" /></td>'+
-			'<td><input name="salePrice" value="" type="text" class="col-sm-12 T-action-blur" maxlength="9" /></td>'+
+			'<td><input name="costPrice" value="" type="text" class="col-sm-12 T-action-blur price" maxlength="9" /></td>'+
+			'<td><input name="salePrice" value="" type="text" class="col-sm-12 T-action-blur price" maxlength="9" /></td>'+
 			'<td><input name="sumCostMoney" value="" readonly="readonly" type="text" class="col-sm-12"/></td>'+
 			'<td><input name="sumNeedGetMoney" value="" readonly="readonly" type="text" class="col-sm-12"/></td>'+
 			'<td><a class="cursor T-action T-ticket-delete">删除</a></td></tr>';
-		$this.find(".T-ticketList").append(html);
+		var $container=$this.find(".T-ticketList");
+		    $container.append(html);
+        var $price=$container.find('.price')
+			Tools.inputCtrolFloat($price);
 		BookingArrange.BL_event($this.find(".T-ticketList"));
 	};
 
@@ -706,12 +718,15 @@ define(function(require, exports) {
 			'<td><input name="needBusBrand" value="" type="text" class="col-sm-12 bind-change T-chooseNeedBusBrand" /></td>'+
 			'<td><input name="busCompany" value="" type="text" class="col-sm-12 bind-change T-busCompany" /><input name="busCompanyId" value="" type="hidden" /></td>'+
 			'<td><input name="roomCount" value="" type="text" class="col-sm-12 T-action-blur" maxlength="5" /></td>'+
-			'<td><input name="costPrice" value="" type="text" class="col-sm-12 T-action-blur" maxlength="9" /></td>'+
-			'<td><input name="salePrice" value="" type="text" class="col-sm-12 T-action-blur" maxlength="9" /></td>'+
+			'<td><input name="costPrice" value="" type="text" class="col-sm-12 T-action-blur price" maxlength="9" /></td>'+
+			'<td><input name="salePrice" value="" type="text" class="col-sm-12 T-action-blur price" maxlength="9" /></td>'+
 			'<td><input name="sumCostMoney" value="" readonly="readonly" type="text" class="col-sm-12"/></td>'+
 			'<td><input name="sumNeedGetMoney" value="" readonly="readonly" type="text" class="col-sm-12"/></td>'+
 			'<td><a class="cursor T-action T-bus-delete">删除</a></td></tr>';
-		var $container = $this.find(".T-busList").append(html);		
+		var $container = $this.find(".T-busList");
+		$container.append(html);	
+		var $price=$container.find('.price')
+		Tools.inputCtrolFloat($price);	
 		BookingArrange.BL_event($this.find(".T-busList"));
 	};
 	/**
