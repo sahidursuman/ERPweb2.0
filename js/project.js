@@ -785,20 +785,6 @@ function listMenu(menuTemplate){
 						modals["financial_scenic"] = Scenic;
 					});
 				});
-
-				//绑定自费账务菜单功能
-				$("#sidebar .nav-list .financial_self").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/financial/Self/Self.js",function( Self){
-						var date = new Date();
-						var year = date.getFullYear();
-						var month = ""
-						Self.listSelf(0,"",year,month);
-						modals["financial_Self"] = Self;
-					});
-				});
 				//绑定系代订账务菜单功能
 				$("#sidebar .nav-list .financial_replace").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
@@ -825,20 +811,6 @@ function listMenu(menuTemplate){
 						modals["financial_transfer"] = transfer;
 					});
 				});
-				
-				
-
-				//绑定购物菜单功能
-				/*$("#sidebar .nav-list .financial_shop").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/financial/shop/shop.js",function(shop){
-						shop.listFinancialShop(0,"","","");
-						modals["financial_shop"] = shop;
-					});
-				});*/
-
 				//绑定其他支出菜单功能
 				$("#sidebar .nav-list .financial_else").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");

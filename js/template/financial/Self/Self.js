@@ -25,8 +25,6 @@ define(function(require, exports) {
 	    Self.initModule = function() {
         	Self.listSelf(0,"",2015,"");
     	};
-
-
 	    Self.listSelf = function(page,selfPayId,year,month){
     		Self.searchData={
 				pageNo : page,
@@ -35,8 +33,6 @@ define(function(require, exports) {
 				month : month,
 				sortType : 'auto'
 			};
-		    
-			
 		$.ajax({
 			url:KingServices.build_url("financial/financialSelfPay","listSumFcSelfPay"),
 			type:"POST",
@@ -74,76 +70,79 @@ define(function(require, exports) {
 		        // 报表内的操作
 		        Self.$tab.find('.T-list').on('click', '.T-option', function(event) {
 		            event.preventDefault();
-		            var $that = $(this),id = $that.closest('tr').data('id'),
+		            var $that = $(this),
 		            yearList = Self.$searchArea.find("select[name=year]").val(),
 	                monthList = Self.$searchArea.find("select[name=month]").val(),
+	                selfPayId = $that.attr("data-entity-id");
 	                selfPayName = $that.attr("data-entity-selfPayName");
-					console.log(yearList);
+	                startMonth = $that.attr("data-entity-startMonth");
+	                endMonth = $that.attr("data-entity-endMonth");
+	                endMonth = $that.attr("data-entity-id");
+					console.log(selfPayId);
 		            if ($that.hasClass('T-check')) {
 		                // 对账
-		               Self.Getcheck(0,id,selfPayName,yearList,monthList);
+		               Self.Getcheck(0,selfPayId,selfPayName,yearList,monthList);
 		            } else if ($that.hasClass('T-clear')) {
-		            	alert("结算");
 		                // 结算
-		                Self.GetChecking(0,id,selfPayName,yearList,monthList,monthList);
+		                Self.GetChecking(0,selfPayId,selfPayName,yearList,startMonth,endMonth);
 		            }
 		        });
 
     		};
     Self.Getcheck = function(page,selfPayId,selfPayName,year,month){
-    	Self.CheckData = {
-    		pageNo : page,
-    		selfPayId :selfPayId,
-    		year : year,
-    		month  : month,
-    		sortType : "auto"
-    	}
-    	 $.ajax({
-    		 url:KingServices.build_url("financial/financialSelfPay","listFcSelfPay"),
-             type:"POST",
-             data:Self.CheckData,
-             dataType:"json",
-             success:function(data){
-                var result = showDialog(data);
-             	if(result){
-             	data.yearList=yearList;
-				data.monthList=monthList;
-				data.searchParam=Self.searchData;
-             	data.financialSelfPayList = JSON.parse(data.financialSelfPayList);
-             	var html = SelfChecking(data);
-    			Tools.addTab(checkTabId,"自费对账",html);
-    			         //给全选按钮绑定事件
-		        $(".T-cking").find(".T-checkAll").click(function(){
-		            var checkboxList = $(".T-cking").find(".T-checkList tr input[type=checkbox]");
-		            if($(this).is(":checked")){
-		                checkboxList.each(function(i){
-		                    $(this).prop("checked",true);
-		                });
-		            } else{
-		                checkboxList.each(function(i){
-		                	if(!$(this).prop("disabled")){
-		                		$(this).prop("checked",false);
-		                	}                                
-		                });
-		            } 
-		        });
-		        //关闭页面事件
-		        $(".T-cking").find(".T-closeTab").click(function(){
-		            closeTab(checkTabId);
-		        });
-             }
-             	
+		    	Self.CheckData = {
+		    		pageNo : page,
+		    		selfPayId:selfPayId,
+		    		selfPayName :selfPayName,
+		    		year : year,
+		    		month  : month,
+		    		sortType : "auto"
+		    	}
+		    	$.ajax({
+		    		 url:KingServices.build_url("financial/financialSelfPay","listFcSelfPay"),
+		             type:"POST",
+		             data:Self.CheckData,
+		             dataType:"json",
+		             success:function(data){
+		                var result = showDialog(data);
+		             	if(result){
+		             	data.yearList=yearList;
+						data.monthList=monthList;
+						data.searchParam=Self.searchData;
+		             	data.financialSelfPayList = JSON.parse(data.financialSelfPayList);
+		             	var html = SelfChecking(data);
+		    			Tools.addTab(checkTabId,"自费对账",html);
+		    			         //给全选按钮绑定事件
+				        $(".T-cking").find(".T-checkAll").click(function(){
+				            var checkboxList = $(".T-cking").find(".T-checkList tr input[type=checkbox]");
+				            if($(this).is(":checked")){
+				                checkboxList.each(function(i){
+				                    $(this).prop("checked",true);
+				                });
+				            } else{
+				                checkboxList.each(function(i){
+				                	if(!$(this).prop("disabled")){
+				                		$(this).prop("checked",false);
+				                	}                                
+				                });
+				            } 
+				        });
+				        //关闭页面事件
+				        $(".T-cking").find(".T-closeTab").click(function(){
+				            closeTab(checkTabId);
+				        });
+		             }
 
-            }
-         })
+		            }
+		         })
 
-    	
     }
     // 结算
     Self.GetChecking = function(page,selfPayId,selfPayName,year,startMonth,endMonth){
     	Self.CheckData = {
     		pageNo : page,
-    		selfPayId : selfPayId,
+    		selfPayId:selfPayId,
+    		selfPayName : selfPayName,
     		year : year,
     		monthStart :startMonth,
     		monthEnd : endMonth,
@@ -161,16 +160,46 @@ define(function(require, exports) {
              	if(result){
              		data.yearList=yearList;
 					data.monthList=monthList;
-					data.searchParam=Self.searchData;
-             		var html = SelfClearing();
+             		var html = SelfClearing(data);
     				Tools.addTab(blanceTabId,"自费结算",html);
+    				$(".T-Clear").find('.T-Records').click(function(id) {
+    					alert();
+    					Self.lookDetail(37);
+    				});
              	}
 
              }
     	})
-    	
-    	
-    	
     }
+    Self.lookDetail = function(selfPayId){
+    	Self.ClearData = {
+    		selfPayId:selfPayId
+    	}
+    	$.ajax({
+    		url:KingServices.build_url("financial/financialSelfPay","listFcSelfPaySettlementRecord"),
+			type:"POST",
+			data:Self.ClearData,
+			dataType:"json",
+			success : function(data){
+				var result = showDialog(data);
+				if(result){
+					var html = blanceRecords(data);
+				var lookDetailLayer = layer.open({
+				    type: 1,
+				    title:"已付金额明细",
+				    skin: 'layui-layer-rim', //加上边框
+				    area: '55%', //宽高
+				    zIndex:1028,
+				    content: html,
+				    scrollbar: false,
+
+				    });
+				}
+			}
+    	})
+
+				
+		}
+
 	exports.init = Self.initModule;
 });
