@@ -479,94 +479,12 @@ function login(){
 	var userName = $("input[name=userName]").val();
 	var password = $("input[name=password]").val();
 	$.ajax({
-		url:""+APP_ROOT+"base.do?method=login",
+		url: APP_ROOT+"base.do?method=login",
 		type:"POST",
 		data:"userName="+userName+"&password="+password+"",
-		dataType:"json",
-		beforeSend:function(){
-			globalLoadingLayer = layer.open({
-				type:3
-			});
-		},
 		success:function(data){
 			if(data.success == 1){
 				window.location.href = "index.html";
-			}
-			else if(data.success == 2){ // 首次登陆，先修改密码
-				var userId = data.id;
-				var updatePasswordLayer=layer.open({
-					type: 1,
-					title: "首次登录，先修改密码",
-					skin: 'layui-layer-lan', //加上边框
-					area: ['500px', '300px'], //宽高
-					content: "<div class='login-userData-form clearfix'><div class='col-sm-12' style='margin:25px 0 5px 0'><div class='form-group'>"+
-					"<div class='search-area'><div class='col-xs-12'><div class='input-group'>"+
-					"<input class='col-xs-12 date-picker' name='oldPassword' placeholder='请输入旧密码' value='' type='password' />"+
-					"<span class='input-group-addon'><i class='ace-icon fa fa-lock'></i></span></div></div></div></div></div>"+
-					"<div class='col-sm-12' style='margin:5px 0'><div class='form-group'><div class='search-area'><div class='col-xs-12'>"+
-					"<div class='input-group'><input class='col-xs-12' name='newPassword' placeholder='请输入新密码' value='' type='password' />"+
-					"<span class='input-group-addon'><i class='ace-icon fa fa-lock'></i></span></div></div></div></div></div>"+
-					"<div class='col-sm-12' style='margin:5px 0'><div class='form-group'><div class='search-area'><div class='col-xs-12'>"+
-					"<div class='input-group'><input class='col-xs-12' name='newPassword1' placeholder='请输入新密码' value='' type='password' />"+
-					"<span class='input-group-addon'><i class='ace-icon fa fa-lock'></i></span></div></div></div></div></div>"+
-					"<div class='col-xs-12'><div class='input-group'><h4 class='lighter'>"+
-					"<p class='red password-validate'></p></h4></div></div>"+
-					"<form class='form-horizontal col-sm-12' role='form' style='margin-top:30px;' onsubmit='return false'><div class='form-group' style='text-align: center;'>"+
-					" <button class='btn btn-danger btn-cancelUserInfo'>"+
-					"<i class='ace-icon fa fa-times'></i> 取消 </button> <button class='btn btn-primary btn-UserSaveInfo'> <i class='ace-icon fa fa-check'></i> 修改 </button></div></form></div>",
-					success:function(){
-						var $loginObj=$(".login-userData-form");
-						$loginObj.find('[name="oldPassword"]').focus();
-						//修改用户密码
-						$loginObj.find(".btn-UserSaveInfo").click(function(){
-							var newPassword=$loginObj.find("input[name='newPassword']").val();
-							var newPassword1=$loginObj.find("input[name='newPassword1']").val();
-							var oldPassword=$loginObj.find("input[name='oldPassword']").val();
-							if(newPassword!=newPassword1){
-								//两次密码是否一致性的验证
-								$loginObj.find(".password-validate").text("两次输入的密码不一致！");
-								return false;
-							}
-							else{
-								$.ajax({
-									url:""+APP_ROOT+"base.do?method=rePassword&menuKey=system_userinfo&operation=self",
-									data:"oldPassword="+oldPassword+"&newPassword="+newPassword+"&userId="+userId,
-									type:"POST",
-									datatype:"json",
-									beforSend:function(){
-										globalLoadingLayer = openLoadingLayer();
-									},
-									success:function(data){
-										layer.close(globalLoadingLayer);
-										var result = showDialog(data);
-										if(result){
-											layer.close(updatePasswordLayer);
-											showMessageDialog($( "#dialog-message" ),"修改成功，请用新密码登陆");
-											window.location.href = "login.html";
-										}else{
-											$loginObj.find("input[name='newPassword']").val("");
-											$loginObj.find("input[name='newPassword1']").val("");
-											$loginObj.find("input[name='oldPassword']").val("");
-											$loginObj.find(".password-validate").text(data.message);
-											return false;
-										}
-									}
-								});
-							}
-						});
-						//取消
-						$loginObj.find(".btn-cancelUserInfo").click(function(){
-							layer.close(updatePasswordLayer);
-							layer.close(globalLoadingLayer);
-						})
-						layer.close(globalLoadingLayer);
-					}
-				});
-			}
-			else{
-				layer.close(globalLoadingLayer);
-				showMessageDialog($( "#dialog-message" ),data.message);
-				window.forbiddenError = true;
 			}
 		}
 	});
@@ -1523,6 +1441,35 @@ Tools.getTabKey = function(id) {
 
 	return res;
 };
+
+/**
+ * inputCtrolFloat Input控件位数的输入
+ * @param  {[type]} $inputCtrol input控件对象
+ * @return {[type]}
+ */
+
+Tools.inputCtrolFloat=function($inputCtrol){
+	$inputCtrol.on('keyup', function (event) {
+	    var $amountInput = $(this);
+	    //响应鼠标事件，允许左右方向键移动 
+	    event = window.event || event;
+	    if (event.keyCode == 37 | event.keyCode == 39) {
+	        return;
+	    }
+	    //先把非数字的都替换掉，除了数字和. 
+	    $amountInput.val($amountInput.val().replace(/[^\d.]/g, "").
+	        //只允许一个小数点              
+	        //replace(/^\./g, "").replace(/\.{2,}/g, ".").
+	        //只能输入小数点后两位
+	        replace(".", "$#$").replace(/\./g, "").replace("$#$", ".").replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3'));
+    });
+	$inputCtrol.on('blur', function () {
+	    var $amountInput = $(this);
+		    //最后一位是小数点的话，移除
+		    $amountInput.val(($amountInput.val().replace(/\.$/g, "")));
+	});
+}
+
 /**
  * 用于定义公共请求或者与数据相关的公共组件处理
  * @type {Object}
@@ -1548,6 +1495,44 @@ KingServices.updateTransit = function(id)  {
 		module.updateTransit(id);
 	});
 }
+
+/**
+ * 中转安排——
+ * @param  {string} id 游客小组的ID
+ * @return {[type]}    [description]
+ */
+KingServices.listTransit = function()  {
+	seajs.use("" + ASSETS_ROOT +"js/template/arrange/transit/transit.js",function(module){
+		module.listTransit(0,"","","","","","","","","","","","");
+	});
+}
+
+
+/**
+ * 编辑游客小组
+ * @param  {string} id 游客小组的ID
+ * @return {[type]}    [description]
+ */
+KingServices.updateTouristGroup = function(id,type)  {
+	seajs.use("" + ASSETS_ROOT +modalScripts.resource_touristGroup,function(module){
+		module.updateTouristGroup(id,type);
+	});
+}
+
+
+/**
+ * 新增游客小组
+ * @param  {string} id 游客小组的ID
+ * @return {[type]}    [description]
+ */
+KingServices.addTouristGroup = function(touristGroupId,typeOut)  {
+	seajs.use("" + ASSETS_ROOT +modalScripts.resource_touristGroup,function(module){
+		module.addTouristGroup(touristGroupId,typeOut);
+	});
+}
+
+
+
 
 //导游  新增
 KingServices.addGuide = function(fn){

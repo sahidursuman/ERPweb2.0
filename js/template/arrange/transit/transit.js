@@ -561,7 +561,7 @@ define(function(require, exports) {
 			'<td><input class="col-sm-12 chooseBusBrand" name="busbrand" type="text" value="" /></td>'+
 			'<td><div class="col-sm-12"><input class="col-sm-12 chooseBusLicenseNumber bind-change" name="busLicenseNumber" type="text" value="" /><input type="hidden" name="busLicenseNumberId" value="" /><span class="addResourceBtn T-addBusResource R-right" data-right="1020002" title="添加车辆"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
 			'<td><div class="col-sm-12"><input type="hidden" name="serviceType" value="'+type+'" />'+
-			'<input class="col-sm-12 bind-change" name="busCompanyName" readonly="readonly" type="text" value="" />'+
+			'<input class="col-sm-12 bind-change T-busCompanyName" name="busCompanyName"  type="text" value="" />'+
 			'<input type="hidden" name="busCompanyId" value="" /><span class="addResourceBtn T-addBusCompanyResource R-right" data-right="1020002" title="添加车队"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
 			'<td><div class="col-sm-12"><input class="col-sm-12 chooseDriver bind-change" name="driverName" type="text" value="" /><input type="hidden" name="driverId" value="" /><span class="addResourceBtn T-addDriverResource R-right" data-right="1020002" title="添加司机"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
 			'<td><input class="col-sm-12" name="driverMobileNumber" readonly="readonly" type="text" value="" /></td>'+
@@ -577,7 +577,15 @@ define(function(require, exports) {
 			'<td><a class="cursor arrange-delete" title="删除">删除</a></td>'+
 			'</tr>';
 			html  = filterUnAuth(html);//权限过滤
-			$("#"+id+" .busList tbody").append(html);
+			var $tbody= $("#"+id+" .busList tbody");
+			    $tbody.append(html);
+			var $busFee=$tbody.find('input[name=busFee]'),
+			    $busPayedMoney=$tbody.find('input[name=busPayedMoney]'),
+			    $busReduceMoney=$tbody.find('input[name=busReduceMoney]');
+			Tools.inputCtrolFloat($busFee);	
+			Tools.inputCtrolFloat($busPayedMoney);	
+			Tools.inputCtrolFloat($busReduceMoney);	
+			    
 			//表单验证
 			//var validator = rule.setTranistCheckor($('#'+id));
 			rule.update(validator);
@@ -597,7 +605,8 @@ define(function(require, exports) {
 			var html ='<tr>'+
 				'<td><input type="hidden" name="serviceType" value="'+type+'" />'+
 				'<input class="col-sm-12" name="hotelCheckInTime" value="" type="text" /></td>'+
-				'<td><select class="tripPlanHotelStar" name="hotelLevel"><option value="1">三星以下</option>'+
+				'<td><select class="tripPlanHotelStar" name="hotelLevel">'+
+				'<option  selected="selected" value="" {{if outHotel.hotel.level == 0}}selected="selected"{{/if}}>--全部--</option><option value="1">三星以下</option>'+
 				'<option value="2">三星</option><option value="3">准四星</option>'+
 				'<option value="4">四星</option><option value="5">准五星</option>'+
 				'<option value="6">五星</option><option value="7">五星以上</option></select></td>'+
@@ -618,7 +627,16 @@ define(function(require, exports) {
 				'<td><a class="cursor arrange-delete" title="删除">删除</a></td>'+
 				'</tr>';
 			html  = filterUnAuth(html);
-			$("#"+id+" .hotelList tbody").append(html);
+			var $tbody=$("#"+id+" .hotelList tbody");
+			    $tbody.append(html);
+
+			var $hotelPrice=$tbody.find('input[name=hotelPrice]'),
+			    $hotelReduceMoney=$tbody.find('input[name=hotelReduceMoney]'),
+			    $hotelPayedMoney=$tbody.find('input[name=hotelPayedMoney]');
+			Tools.inputCtrolFloat($hotelPrice);	
+			Tools.inputCtrolFloat($hotelReduceMoney);	
+			Tools.inputCtrolFloat($hotelPayedMoney);
+
 			//表单验证
 			rule.update(validator);
 			$("#"+tab+" .arrangeTouristMain .hotelList .arrange-delete").click(function(){
@@ -655,7 +673,16 @@ define(function(require, exports) {
 				'<td><a class="cursor arrange-delete" title="删除">删除</a></td>'+
 				'</tr>';
 			html  = filterUnAuth(html);
-			$("#"+id+" .ticketList tbody").append(html);
+			var $tbody=$("#"+id+" .ticketList tbody");
+			    $tbody.append(html);
+			    
+			var $ticketPrice=$tbody.find('input[name=ticketPrice]'),
+			    $ticketReduceMoney=$tbody.find('input[name=ticketReduceMoney]'),
+			    $ticketPayedMoney=$tbody.find('input[name=ticketPayedMoney]');
+			Tools.inputCtrolFloat($ticketPrice);	
+			Tools.inputCtrolFloat($ticketReduceMoney);	
+			Tools.inputCtrolFloat($ticketPayedMoney);
+
 			//表单验证
 			rule.update(validator);
 			$("#"+tab+" .arrangeTouristMain .ticketList .arrange-delete").click(function(){
@@ -678,8 +705,8 @@ define(function(require, exports) {
 				'<td><input class="col-sm-12" name="manager" readonly="readonly" type="text" value="" /></td>'+
 				'<td><input class="col-sm-12" name="mobileNumber" readonly="readonly" type="text" value="" /></td>'+
 				'<td><select name="standardType"><option value="早餐">早餐</option><option value="午餐">午餐</option><option value="晚餐">晚餐</option></select>'+
-				'</td><td><input class="col-sm-12 chooseStandard price" name="restaurantStandardId" type="text" value="" maxlength="9" /><input type="hidden" name="price" value="" />'+
-				'</td><td><input class="col-sm-12 count" name="memberCount" maxlength="6" type="text" value="" /></td>'+
+				'</td><td><input class="col-sm-8 chooseStandard price" name="restaurantStandardId" type="text" value="" maxlength="9" /><input type="hidden" name="price" value="" />'+
+				'<span style="line-height: 22px;">(元/人)</span></td><td><input class="col-sm-12 count" name="memberCount" maxlength="6" type="text" value="" /></td>'+
 				'<td><input class="col-sm-12 discount" name="reduceMoney" maxlength="9" type="text" value="" /></td>'+
 				'<td><input class="col-sm-12 needPay" name="needPayMoney" readonly="readonly" type="text" value="" /></td>'+
 				'<td><input class="col-sm-12" name="payedMoney" maxlength="9"  type="text" value="" /></td>'+
@@ -688,7 +715,15 @@ define(function(require, exports) {
 				'<td><a class="cursor arrange-delete" title="删除">删除</a></td>'+
 				'</tr>';
 			html  = filterUnAuth(html);
-			$("#"+id+" .restaurantList tbody").append(html);
+
+			var $tbody=$("#"+id+" .restaurantList tbody");
+			    $tbody.append(html);
+			    
+			var $reduceMoney=$tbody.find('input[name=reduceMoney]'),
+			    $payedMoney=$tbody.find('input[name=payedMoney]');
+			Tools.inputCtrolFloat($reduceMoney);	
+			Tools.inputCtrolFloat($payedMoney);	
+
 			//表单验证
 			rule.update(validator);
 			transit.bindRestaurantChoose(tab);
@@ -717,7 +752,15 @@ define(function(require, exports) {
 				'<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000"/></td>'+
 				'<td><a class="cursor arrange-delete" title="删除">删除</a></td>'+
 				'</tr>';
-			$("#"+id+" .otherList tbody").append(html);
+			
+			var $tbody=$("#"+id+" .otherList tbody");
+			    $tbody.append(html);
+			    
+			var $reduceMoney=$tbody.find('input[name=reduceMoney]'),
+			    $payedMoney=$tbody.find('input[name=payedMoney]');
+			Tools.inputCtrolFloat($reduceMoney);	
+			Tools.inputCtrolFloat($payedMoney);	
+
 			//表单验证
 			rule.update(validator);
 			$("#"+tab+" .arrangeTouristMain .otherList .arrange-delete").click(function(){
@@ -937,19 +980,19 @@ define(function(require, exports) {
 						var $this = $(this),parents = $(this).closest('tr');
 						$this.val("");
 						parents.find("input[name=busLicenseNumberId]").val("");
-						parents.find("input[name=busCompanyName]").val("");
+					/*	parents.find("input[name=busCompanyName]").val("");
 						parents.find("input[name=busCompanyId]").val("");
 						parents.find("input[name=driverName]").val("");
-						parents.find("input[name=driverId]").val("");
+						parents.find("input[name=driverId]").val("");*/
 						parents.find("input[name=driverMobileNumber]").val("");
 					}
 				},
 				select :function(event, ui){
 					var $this = $(this),parents = $(this).closest('tr');
-						parents.find("input[name=busCompanyName]").val(ui.item.busCompanyName);
+					/*	parents.find("input[name=busCompanyName]").val(ui.item.busCompanyName);
 						parents.find("input[name=busCompanyId]").val(ui.item.busCompanyId);
 						parents.find("input[name=driverName]").val("");
-						parents.find("input[name=driverId]").val("");
+						parents.find("input[name=driverId]").val("");*/
 						parents.find("input[name=driverMobileNumber]").val("");
 						parents.find("input[name=busLicenseNumberId]").val(ui.item.id).trigger('change');
 				}
@@ -993,6 +1036,70 @@ define(function(require, exports) {
 					});
 				}
 			});
+
+
+			// 选择车队
+			var chooseLicense = $("#"+tab).find(".T-busCompanyName");
+			chooseLicense.autocomplete({
+				minLength:0,
+				change :function(event, ui){
+					if(ui.item == null){
+						var $this = $(this),parents = $(this).closest('tr');
+						$this.val("");
+						parents.find("input[name=busCompanyId]").val("");
+						parents.find("input[name=busCompanyName]").val("");
+				
+					}
+				},
+				select :function(event, ui){
+					var $this = $(this),parents = $(this).closest('tr');
+						parents.find("input[name=busCompanyName]").val(ui.item.busCompanyName);
+						parents.find("input[name=busCompanyId]").val(ui.item.busCompanyId);
+						parents.find("input[name=busCompanyId]").val(ui.item.id).trigger('change');
+				}
+			}).unbind("click").click(function(){
+				var obj = this,parents = $(obj).closest('tr'),
+					seatCount = parents.find("[name=seatCount]").val(),
+					busBrand = parents.find("[name=busbrand]").val();
+				if (!!seatCount) {
+					$.ajax({
+						url:""+APP_ROOT+"back/busCompany.do?method=getAllBusCompanyList&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
+						data: {
+							seatCount: seatCount,
+							brand: busBrand
+						},
+						dateType:"json",
+						showLoading:false,
+						type:"POST",
+						success:function(data){
+							var result = showDialog(data);
+							if(result){
+								console.info(data);
+								var busCompanyList = JSON.parse(data.busCompanyList);
+								if(busCompanyList && busCompanyList.length > 0){
+									for(var i=0; i < busCompanyList.length; i++){
+										busCompanyList[i].value = busCompanyList[i].companyName;
+									}
+									$(obj).autocomplete('option','source', busCompanyList);
+									$(obj).autocomplete('search', '');
+								}else{
+									layer.tips('无数据', obj, {
+									    tips: [1, '#3595CC'],
+									    time: 2000
+									});
+								}
+							}
+						}
+					})
+				}
+				else{
+					layer.tips('请选择车队', obj, {
+					    tips: [1, '#3595CC'],
+					    time: 2000
+					});
+				}
+			});
+
 			//司机选择
 			var chooseDriver = $("#"+tab).find(".chooseDriver");
 			chooseDriver.autocomplete({
@@ -1011,12 +1118,14 @@ define(function(require, exports) {
 					parents.find("input[name=driverMobileNumber]").val(ui.item.mobileNumber);
 				}
 			}).unbind("click").click(function(){
-				var obj = this;
-				var busLicenseNumberId = $(this).closest('tr').find("input[name=busLicenseNumberId]").val();
-				if(busLicenseNumberId){
+				var obj = this,
+				    $tr=$(this).closest('tr');//busCompanyId
+				var busLicenseNumberId = $tr.find("input[name=busLicenseNumberId]").val();
+				var busCompanyId = $tr.find("input[name=busCompanyId]").val();
+				// if(busLicenseNumberId){
 					$.ajax({
 						url:""+APP_ROOT+"back/busCompany.do?method=getDrivers&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-						data:"busId="+busLicenseNumberId+"",
+						data:"busId="+busLicenseNumberId+"&busCompanyId="+busCompanyId+"",
 						dateType:"json",
 						showLoading:false,
 						type:"POST",
@@ -1039,12 +1148,13 @@ define(function(require, exports) {
 							}
 						}
 					})
-				}else{
-					layer.tips('请选择车牌号', obj, {
-					    tips: [1, '#3595CC'],
-					    time: 2000
-					});
-				}
+				// }
+				// else{
+				// 	layer.tips('请选择车牌号', obj, {
+				// 	    tips: [1, '#3595CC'],
+				// 	    time: 2000
+				// 	});
+				// }
 			});
 			/*var chooseBusLicenseNumber = $("#"+tab+" .arrangeTouristMain .chooseBusLicenseNumber");
 			chooseBusLicenseNumber.autocomplete({
