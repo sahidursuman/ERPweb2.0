@@ -2290,7 +2290,6 @@ define(function(require, exports) {
 				}
 				return objValue;
 			}
-
 		    var executeTimeType=$("#"+tab+" .checkbox input[name=executeTimeType]:radio:checked").val();
 			var planTouristCount = parseInt(getValue("planTouristCount")),
 				memberCount = parseInt($("#" + tab + " .tripPlanAllMemberCount").text());
@@ -2310,7 +2309,9 @@ define(function(require, exports) {
 						"planTouristCount": getValue("planTouristCount"),
 						"setPlacePosition": getValue("setPlacePosition"),
 						"setPlaceTime": getValue("setPlaceTime"),
-						"executeTimeType": executeTimeType+"",  
+						"executeTimeType": executeTimeType+"",
+						"chooseSeatCount":getValue("seatCount"), 	
+						"remark":getValue("remark"),
 						"executeTime": getValue("executeTime")
 					},
 					"lineProductId": getValue("lineProductId"),
@@ -2495,6 +2496,7 @@ define(function(require, exports) {
 					if(ui.item == null){
 						var $this = $(this),parents = $(this).closest('.widget-main');
 						$this.val("");
+						parents.find("input[name=seatCount]").val("");
 						parents.find("input[name=needBusBrand]").val("");
 						parents.find("input[name=LicenseNumber]").val("");
 						parents.find("input[name=busLicenseNumberId]").val("");
@@ -2506,7 +2508,9 @@ define(function(require, exports) {
 					}
 				},
 				select :function(event, ui){
+					console.log(ui)
 					var $this = $(this),parents = $(this).closest('.widget-main');
+					parents.find("input[name=seatCount]").val(ui.item.value);
 					parents.find("input[name=needBusBrand]").val("");
 					parents.find("input[name=LicenseNumber]").val("");
 					parents.find("input[name=busLicenseNumberId]").val("");
@@ -2518,6 +2522,7 @@ define(function(require, exports) {
 				}
 			}).unbind("click").click(function(){
 				var obj = this;
+				// var seatCountId = $(obj).closest('.widget-main').find("input[name=seatCountId]").val();
 				$.ajax({
 					url:""+APP_ROOT+"back/bookingOrder.do?method=getSeatCountList&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
 					dataType:"json",
