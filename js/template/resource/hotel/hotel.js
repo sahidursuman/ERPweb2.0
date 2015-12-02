@@ -44,7 +44,7 @@ define(function(require, exports) {
 				var result = showDialog(data);
 				if(result){
 					var html = listTemplate(data);
-					addTab(menuKey,"酒店管理",html);
+					Tools.addTab(menuKey,"酒店管理",html);
 
 					hotel.$tab = $("#tab-resource_hotel-content");
 					hotel.$searchArea = hotel.$tab.find(".T-search-area");
