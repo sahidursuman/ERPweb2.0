@@ -791,6 +791,8 @@ define(function(require, exports) {
 					planTouristCount : getValue("planTouristCount"),
 					setPlacePosition : getValue("setPlacePosition"),
 					setPlaceTime : getValue("setPlaceTime"),
+					chooseSeatCount: getValue("seatCount"),
+					remark: getValue("remark"),
 					executeTimeType :executeTimeType+"",
 					executeTime : getValue("executeTime")
 				},
