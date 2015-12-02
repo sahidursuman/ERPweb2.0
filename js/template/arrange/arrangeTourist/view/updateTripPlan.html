@@ -33,7 +33,7 @@
 									</div>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>车座数：</label>
+									<label class="col-sm-1 control-label no-padding-right">车座数：</label>
 									<div class="col-sm-2">
 										<input class="col-sm-12 bind-change chooseSeatCount" type="text" name="seatCount" id="" value="{{bus.seatCount}}" />
 									</div>
@@ -42,7 +42,7 @@
 										<input class="col-sm-12 chooseBusBrand bind-change" type="text" name="needBusBrand" id="" value="{{bus.brand}}" />
 										<input type="hidden" name="busBrandId" value="" />
 									</div>
-									<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>车牌号：</label>
+									<label class="col-sm-1 control-label no-padding-right">车牌号：</label>
 									<div class="col-sm-2">
 										<div class="col-sm-12 no-padding">
 											<input class="col-sm-12 chooseBusLicenseNumber bind-change" type="text" name="LicenseNumber" id="" value="{{bus.licenseNumber}}" />
@@ -64,7 +64,7 @@
 									</div>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>导游：</label>
+									<label class="col-sm-1 control-label no-padding-right">导游：</label>
 									<div class="col-sm-2">
 										<div class="col-sm-12 no-padding">
 											<input class="col-sm-12 AddTPchooseGuide bind-change" type="text" name="AddTPchooseGuide" id="" value="{{guide.realname}}" />
@@ -78,7 +78,7 @@
 									<div class="col-sm-2">
 										<input class="col-sm-12" readonly="readonly" type="text" name="GmobileNumber" id="" value="{{guide.mobileNumber}}" />
 									</div>
-									<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>司机：</label>
+									<label class="col-sm-1 control-label no-padding-right">司机：</label>
 									<div class="col-sm-2">
 										<div class="col-sm-12 no-padding">
 											<input class="col-sm-12 chooseDriver bind-change" type="text" name="driverName" id="" value="{{driver.name}}" />
@@ -109,6 +109,14 @@
 									<label class="col-sm-1 control-label no-padding-right">集合时间：</label>
 									<div class="col-sm-2">
 										<input class="form-control col-sm-12 dataTimePicker" type="text" name="setPlaceTime" value="{{tripPlan.setPlaceTime}}" />
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-1 control-label no-padding-right">备注:</label>
+									<div class="col-sm-10">
+									 <textarea class="form-control col-sm-12" name="remark" value="" ></textarea>
+										
+									</textarea>
 									</div>
 								</div>
 							</div>

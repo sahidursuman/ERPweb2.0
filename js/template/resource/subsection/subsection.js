@@ -265,6 +265,14 @@ define(function(require, exports) {
 
 		// 新增
 		subsection.$tabSub.find(".T-btn-operation-add").click(function(){
+			var isHasTr = 0;
+			// 找到T-subsectionOperationTbody的最后一个tr的input.val()赋给days/startTime  在下面调用startIntime的时候把这两个参数传过去
+			var days = subsection.$tabSub.find('.T-subsectionOperationTbody tr:last-child').find('input[name=days]').val();
+			var startTimeS = subsection.$tabSub.find('.T-subsectionOperationTbody tr:last-child').find('input[name=startTime]').val();
+
+			if (subsection.$tabSub.find('.T-subsectionOperationTbody tr').length > 0) {
+				isHasTr = 1;
+			}
 			var radio = '<input type="radio" name="operateCurrentNeedPayMoney" />';
 			if ($(this).data('mark') != 0) {
 					radio = '-';
@@ -281,6 +289,14 @@ define(function(require, exports) {
 			+ '</tr>';
 			subsection.$tabSub.find(".T-subsectionOperationTbody").append(html);
 
+				// 判断是不是第一个tr
+			 if(isHasTr == 0){
+				startTime = subsection.$tabSub.find('.T-startTime').text();
+				subsection.$tabSub.find('.T-subsectionOperationTbody tr:last-child').find('.T-startTime').val(startTime)
+		     }else{
+				
+			subsection.$tabSub.find('.T-subsectionOperationTbody tr:last-child').find('.T-startTime').val(subsection.startIntime(days,startTimeS));
+			}
 			subsection.$tabSub.find(".T-btn-operation-delete").off("click").on("click",function(){
 				var $this = $(this), $parents = $this.closest("tr"), id = $parents.data("entity-id");
 				subsection.deleteOperation(id,$this);
@@ -290,6 +306,16 @@ define(function(require, exports) {
 			validator = rule.checkdSaveSubsection(subsection.$tabSub);
 			subsection.$tabSub.data('isEdited', true);
 		});
+
+		subsection.startIntime = function(whichDay,startTime){
+			var	date = new Date(startTime.replace("-", "/").replace("-", "/"));
+			var timer = date.getTime()+(whichDay)*24*60*60*1000;
+			date.setTime(timer);
+			var startIntime = date.getFullYear()+ "-"+ (date.getMonth() + 1) + "-"+ (date.getDate() < 10 ? "0" + date.getDate() : date.getDate());
+			return startIntime;
+			// $container.find('input[name=startTime]').val(subsection.startIntime("2","5012-55-08"))
+		}
+
 
 		// 取消
 		subsection.$tabSub.find(".T-btn-operation-close").click(function(){

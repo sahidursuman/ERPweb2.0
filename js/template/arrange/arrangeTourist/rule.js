@@ -14,36 +14,7 @@ var rule = {
 	  	    	        	errMsg: '计划人数不能为空'
 	  	    	        }
 		    	        ]
-			       },{//车队
-			    	    $ele: $checkdCreateTripPlanObj.find('input[name="busCompanyName"]'), 
-				  		$valObj: $checkdCreateTripPlanObj.find('input[name="busCompanyId"]'),  // 默认是undefined，用于autocomplete之类的插件
-				  		rules: [
-				  			{
-		    		  			type:'null',
-		    		  			errMsg: '车队不能为空'
-				  			}
-				 		]   
-			      },{//车牌号
-		    	    	$ele: $checkdCreateTripPlanObj.find('input[name="LicenseNumber"]'),  
-		    	    	$valObj: $checkdCreateTripPlanObj.find('input[name="busLicenseNumberId"]'),  // 默认是undefined，用于autocomplete之类的插件
-
-		    	    	rules: [
-	  	    	        {
-	  	    	        	type: 'null', 
-	  	    	        	errMsg: '车牌号不能为空'
-	  	    	        }
-		    	        ]
-			      },{//司机
-		    	       	$ele: $checkdCreateTripPlanObj.find('input[name="driverName"]'),  
-		    	    	$valObj: $checkdCreateTripPlanObj.find('input[name="driverId"]'),  // 默认是undefined，用于autocomplete之类的插件
-
-		    	    	rules: [
-	  	    	        {
-	  	    	        	type: 'null', 
-	  	    	        	errMsg: '司机不能为空'
-	  	    	        }
-		    	        ]
-			      },{//及时发送
+			       },{//及时发送
 		    	       	$ele: $checkdCreateTripPlanObj.find('input[name="executeTime"]'),  
 		    	    	rules: [
 	  	    	        {
