@@ -266,7 +266,7 @@ define(function(require, exports) {
 		// 新增
 		subsection.$tabSub.find(".T-btn-operation-add").click(function(){
 			var isHasTr = 0;
-			// $("#tb").find("tr:last").children().text();
+			// 找到T-subsectionOperationTbody的最后一个tr的input.val()赋给days/startTime  在下面调用startIntime的时候把这两个参数传过去
 			var days = subsection.$tabSub.find('.T-subsectionOperationTbody tr:last-child').find('input[name=days]').val();
 			var startTimeS = subsection.$tabSub.find('.T-subsectionOperationTbody tr:last-child').find('input[name=startTime]').val();
 
@@ -289,14 +289,13 @@ define(function(require, exports) {
 			+ '</tr>';
 			subsection.$tabSub.find(".T-subsectionOperationTbody").append(html);
 
+				// 判断是不是第一个tr
 			 if(isHasTr == 0){
 				startTime = subsection.$tabSub.find('.T-startTime').text();
 				subsection.$tabSub.find('.T-subsectionOperationTbody tr:last-child').find('.T-startTime').val(startTime)
 		     }else{
 				
 			subsection.$tabSub.find('.T-subsectionOperationTbody tr:last-child').find('.T-startTime').val(subsection.startIntime(days,startTimeS));
-
-				// console.log(startTimeT)
 			}
 			subsection.$tabSub.find(".T-btn-operation-delete").off("click").on("click",function(){
 				var $this = $(this), $parents = $this.closest("tr"), id = $parents.data("entity-id");
@@ -306,9 +305,6 @@ define(function(require, exports) {
 			subsection.lineProductChoose();
 			validator = rule.checkdSaveSubsection(subsection.$tabSub);
 			subsection.$tabSub.data('isEdited', true);
-
-			// var lastElement = $(this).prev();
-			// alert(lastElement.children().length);
 		});
 
 		subsection.startIntime = function(whichDay,startTime){
