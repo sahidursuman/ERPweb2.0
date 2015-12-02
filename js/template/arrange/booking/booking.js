@@ -653,6 +653,8 @@ define(function(require, exports) {
 			'<td><input name="salePrice" value="" type="text" class="col-sm-12 T-action-blur price"  style="width: 55px"  maxlength="9" /><label class="col-sm-4 control-label" style="padding: 7px 0 0 0;width:25px;" >/天</label></td>'+
 			'<td><input name="sumCostMoney" readonly="readonly" value="" type="text" class="col-sm-12"/></td>'+
 			'<td><input name="sumNeedGetMoney" readonly="readonly" value="" type="text" class="col-sm-12"/></td>'+
+			'<td><input name="payedMoney" value="" type="text" class="col-sm-12 T-action-blur"/></td>'+
+			'<td><select name="getType" ><option selected="selected" value="0">现金</option><option value="1">银行转账</option><option value="1">网上支付</option><option value="3">支票</option><option value="4">其它</option></select></td>'+
 			'<td><a class="cursor T-action T-hotel-delete">删除</a></td></tr>';
 		var $this = $that.closest('.T-bookingHotelList');
 		var $container = $this.find(".T-hotelList");
@@ -676,6 +678,8 @@ define(function(require, exports) {
 			'<td><input name="sumCostMoney" value="" readonly="readonly" type="text" class="col-sm-12"/></td>'+
 			'<td><input name="sumNeedGetMoney" value="" readonly="readonly" type="text" class="col-sm-12"/></td>'+
 			'<td><input name="orderNumber" value="" type="text" class="col-sm-12" maxlength="50" /></td>'+
+			'<td><input name="payedMoney" value="" type="text" class="col-sm-12 T-action-blur"/></td>'+
+			'<td><select name="getType" ><option selected="selected" value="0">现金</option><option value="1">银行转账</option><option value="1">网上支付</option><option value="3">支票</option><option value="4">其它</option></select></td>'+
 			'<td><a class="cursor T-action T-scenic-delete">删除</a></td></tr>';
 		var $container=	$this.find('.T-scenicList');
 		    $container.append(html);
@@ -700,6 +704,8 @@ define(function(require, exports) {
 			'<td><input name="salePrice" value="" type="text" class="col-sm-12 T-action-blur price" maxlength="9" /></td>'+
 			'<td><input name="sumCostMoney" value="" readonly="readonly" type="text" class="col-sm-12"/></td>'+
 			'<td><input name="sumNeedGetMoney" value="" readonly="readonly" type="text" class="col-sm-12"/></td>'+
+			'<td><input name="payedMoney" value="" type="text" class="col-sm-12 T-action-blur"/></td>'+
+			'<td><select name="getType" ><option selected="selected" value="0">现金</option><option value="1">银行转账</option><option value="1">网上支付</option><option value="3">支票</option><option value="4">其它</option></select></td>'+
 			'<td><a class="cursor T-action T-ticket-delete">删除</a></td></tr>';
 		var $container=$this.find(".T-ticketList");
 		    $container.append(html);
@@ -722,6 +728,8 @@ define(function(require, exports) {
 			'<td><input name="salePrice" value="" type="text" class="col-sm-12 T-action-blur price" maxlength="9" /></td>'+
 			'<td><input name="sumCostMoney" value="" readonly="readonly" type="text" class="col-sm-12"/></td>'+
 			'<td><input name="sumNeedGetMoney" value="" readonly="readonly" type="text" class="col-sm-12"/></td>'+
+			'<td><input name="payedMoney" value="" type="text" class="col-sm-12 T-action-blur"/></td>'+
+			'<td><select name="getType" ><option selected="selected" value="0">现金</option><option value="1">银行转账</option><option value="1">网上支付</option><option value="3">支票</option><option value="4">其它</option></select></td>'+
 			'<td><a class="cursor T-action T-bus-delete">删除</a></td></tr>';
 		var $container = $this.find(".T-busList");
 		$container.append(html);	
@@ -883,13 +891,15 @@ define(function(require, exports) {
 		var Tr = $that.find('tbody[class*="List"]').find('tr'),
 			$costS = [],
 			$saleS = [];
+			$payedS = [];
 		Tr.each(function(i){
 			var count = Tr.eq(i).find("[name=roomCount]").val() || 0,
 				cost = Tr.eq(i).find("[name=costPrice]").val() || 0,
 				sale = Tr.eq(i).find("[name=salePrice]").val() || 0,
 				costS = Tr.eq(i).find("[name=sumCostMoney]"),
 				saleS = Tr.eq(i).find("[name=sumNeedGetMoney]"),
-				days = Tr.eq(i).find("[name=days]").val() || 1;
+				days = Tr.eq(i).find("[name=days]").val() || 1,
+				payed = Tr.eq(i).find("[name=payedMoney]").val()-0 || 0;
 			
 			if(count*cost*days - 900000000 >0){
 				showMessageDialog($( "#confirm-dialog-message" ),"计算成本值过大，请确认数据是否有误");
@@ -901,11 +911,14 @@ define(function(require, exports) {
 			}
 			$costS.push(costS.val());
 			$saleS.push(saleS.val());
+			$payedS.push(payed);
 		});
 		var sumCost = eval($costS.join("+"));
 		var sumSale = eval($saleS.join("+"));
+		var sumPayed = eval($payedS.join("+"));
 		$that.find(".sumNeedGetMoney").val(sumSale);
 		$that.find(".sumCostMoney").val(sumCost);
+		$that.find(".sumPayedMoney").val(sumPayed);
 	};
 	/**
 	 * 保存模板数据
@@ -957,7 +970,10 @@ define(function(require, exports) {
 				costPrice : BookingArrange.getValue(hotelListTr.eq(i),"costPrice"),
 				salePrice : BookingArrange.getValue(hotelListTr.eq(i),"salePrice"),
 				sumCostMoney : BookingArrange.getValue(hotelListTr.eq(i),"sumCostMoney"),
-				sumNeedGetMoney : BookingArrange.getValue(hotelListTr.eq(i),"sumNeedGetMoney")
+				sumNeedGetMoney : BookingArrange.getValue(hotelListTr.eq(i),"sumNeedGetMoney"),
+				payedMoney : BookingArrange.getValue(hotelListTr.eq(i),"payedMoney"),
+				payType : BookingArrange.getValue(hotelListTr.eq(i),"payType")
+
 			}
 			if(hotelJson.hotelId){
 				bookingOrder.bookingHotelList.push(hotelJson);
@@ -975,7 +991,9 @@ define(function(require, exports) {
 				costPrice : BookingArrange.getValue(scenicListTr.eq(i),"costPrice"),
 				salePrice : BookingArrange.getValue(scenicListTr.eq(i),"salePrice"),
 				sumCostMoney : BookingArrange.getValue(scenicListTr.eq(i),"sumCostMoney"),
-				sumNeedGetMoney : BookingArrange.getValue(scenicListTr.eq(i),"sumNeedGetMoney")
+				sumNeedGetMoney : BookingArrange.getValue(scenicListTr.eq(i),"sumNeedGetMoney"),
+				payedMoney : BookingArrange.getValue(scenicListTr.eq(i),"payedMoney"),
+				payType : BookingArrange.getValue(scenicListTr.eq(i),"payType")
 			}
 			if(scenicJson.scenicId){
 				bookingOrder.bookingScenicList.push(scenicJson);
@@ -996,7 +1014,9 @@ define(function(require, exports) {
 				costPrice : BookingArrange.getValue(ticketListTr.eq(i),"costPrice"),
 				salePrice : BookingArrange.getValue(ticketListTr.eq(i),"salePrice"),
 				sumCostMoney : BookingArrange.getValue(ticketListTr.eq(i),"sumCostMoney"),
-				sumNeedGetMoney : BookingArrange.getValue(ticketListTr.eq(i),"sumNeedGetMoney")
+				sumNeedGetMoney : BookingArrange.getValue(ticketListTr.eq(i),"sumNeedGetMoney"),
+				payedMoney : BookingArrange.getValue(ticketListTr.eq(i),"payedMoney"),
+				payType : BookingArrange.getValue(ticketListTr.eq(i),"payType")
 			}
 			if(ticketJson.ticketId){
 				bookingOrder.bookingTicketList.push(ticketJson);
@@ -1015,12 +1035,15 @@ define(function(require, exports) {
 				costPrice : BookingArrange.getValue(busListTr.eq(i),"costPrice"),
 				salePrice : BookingArrange.getValue(busListTr.eq(i),"salePrice"),
 				sumCostMoney : BookingArrange.getValue(busListTr.eq(i),"sumCostMoney"),
-				sumNeedGetMoney : BookingArrange.getValue(busListTr.eq(i),"sumNeedGetMoney")
+				sumNeedGetMoney : BookingArrange.getValue(busListTr.eq(i),"sumNeedGetMoney"),
+				payedMoney : BookingArrange.getValue(busListTr.eq(i),"payedMoney"),
+				payType : BookingArrange.getValue(busListTr.eq(i),"payType")
 			}
 			if(busJson.busCompanyId){
 				bookingOrder.bookingBusCompanieList.push(busJson);
 			}
 		})
+		console.log(bookingOrder)
 		bookingOrder = JSON.stringify(bookingOrder);
 		var operation = $that.children().hasClass('T-addBooking') ? 'add' : 'update';
 		BookingArrange.ajax({
