@@ -156,7 +156,7 @@ define(function(require, exports) {
 						data.yearList = yearList
 	            		data.monthList = monthList
 						var html = insureClearing(data);
-		  				Tools.addTab("-Clearing","客户结算",html);
+		  				Tools.addTab("-Clearing","操作记录",html);
 		  				Insure.initList();
 		  				$(".T-insureClearing").find('.T-Records').click(function(event) {
 		  					alert();
