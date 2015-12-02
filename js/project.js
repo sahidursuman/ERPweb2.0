@@ -1441,6 +1441,35 @@ Tools.getTabKey = function(id) {
 
 	return res;
 };
+
+/**
+ * inputCtrolFloat Input控件位数的输入
+ * @param  {[type]} $inputCtrol input控件对象
+ * @return {[type]}
+ */
+
+Tools.inputCtrolFloat=function($inputCtrol){
+	$inputCtrol.on('keyup', function (event) {
+	    var $amountInput = $(this);
+	    //响应鼠标事件，允许左右方向键移动 
+	    event = window.event || event;
+	    if (event.keyCode == 37 | event.keyCode == 39) {
+	        return;
+	    }
+	    //先把非数字的都替换掉，除了数字和. 
+	    $amountInput.val($amountInput.val().replace(/[^\d.]/g, "").
+	        //只允许一个小数点              
+	        //replace(/^\./g, "").replace(/\.{2,}/g, ".").
+	        //只能输入小数点后两位
+	        replace(".", "$#$").replace(/\./g, "").replace("$#$", ".").replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3'));
+    });
+	$inputCtrol.on('blur', function () {
+	    var $amountInput = $(this);
+		    //最后一位是小数点的话，移除
+		    $amountInput.val(($amountInput.val().replace(/\.$/g, "")));
+	});
+}
+
 /**
  * 用于定义公共请求或者与数据相关的公共组件处理
  * @type {Object}

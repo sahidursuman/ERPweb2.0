@@ -272,6 +272,9 @@ define(function(require,exports){
 								var $province = $obj.find("select[name=provinceId]");
 								var $city = $obj.find("select[name=cityId]");
 								validator = rule.busComCheckor($('.T-updateBusCompanyContainer'));
+								var $inputPrice=$busList.find("input[name=contractPrice]");
+								//控件
+								Tools.inputCtrolFloat($inputPrice);
 								//省市区事件
 								if(data.busCompany.provinceId != null )var provinceId = data.busCompany.provinceId;
 								if(data.busCompany.cityId != null )var cityId = data.busCompany.cityId;
@@ -628,6 +631,9 @@ define(function(require,exports){
 				$parents.find(".timeArea").removeClass("hide");
 				BusCompany.datepicker($parents.find("input[name=startTime],input[name=endTime]"));
 				BusCompany.addTimeEvents($parents);
+				//Input控件控制位数
+				Tools.inputCtrolFloat($parents.find("input[name=contractPrice]"));
+
 			validator = rule.update(validator);
 			}else{
 				if($typeFlag == 1){

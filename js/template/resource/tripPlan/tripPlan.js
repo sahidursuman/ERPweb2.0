@@ -344,6 +344,9 @@ define(function(require, exports) {
 			$("#tripPlan_addPlan_ticket .addTicket").on("click",{validator:validator}, tripPlan.addTicket);
 			$("#tripPlan_addPlan_other .addOther").on("click",{validator:validator}, tripPlan.addOther);
 		
+			//精度控件 
+			var $price=$("#tripPlan_addPlan_content").find('.price');
+			Tools.inputCtrolFloat($price);
 
 			//一键下单操作
 			$("#tripPlan_addPlan_content").find('.T-singleClick-Order').on('click', function(event) {
@@ -440,6 +443,25 @@ define(function(require, exports) {
 			tripPlan.viewOptionalRestaurant($("#tripPlan_addPlan_restaurant .chooseRestaurant"));
 			//组装JSON 浮动显示
 			
+		},
+		//浮动查看自选餐厅
+		viewOptionalRestaurant :function($objInput){
+			$objInput.each(function(){
+				var $this = $(this),$parents = $this.closest('tr'),/*$value = $parents.find('[name=optional]').val(),*/$title = [],$value = $this.data("propover");
+				if (!!$value && typeof $value === "string") {
+					$value = JSON.parse($value);
+				}
+				if (!!$value && $value.length > 0) {
+					var html = '<table class="table table-striped table-hover"><thead><tr><th class="th-border">餐厅名称</th><th class="th-border">联系人</th><th class="th-border">联系电话</th></tr><tbody>';
+					for (var i = 0; i < $value.length; i++) {
+						html += '<tr><td>'+$value[i].name+'</td><td>'+$value[i].managerName+'</td><td>'+$value[i].mobileNumber+'</td></tr>'
+					};
+					html += '</tbody></table>';
+					$this.data("html",html)
+					Tools.descToolTip($this,2);
+					$this.data('bs.popover').options.content = html;
+				}
+			})
 		},
 
 		/**
@@ -562,25 +584,6 @@ define(function(require, exports) {
 
 		},
 
-		//浮动查看自选餐厅
-		viewOptionalRestaurant :function($objInput){
-			$objInput.each(function(){
-				var $this = $(this),$parents = $this.closest('tr'),/*$value = $parents.find('[name=optional]').val(),*/$title = [],$value = $this.data("propover");
-				if (!!$value && typeof $value === "string") {
-					$value = JSON.parse($value);
-				}
-				if (!!$value && $value.length > 0) {
-					var html = '<table class="table table-striped table-hover"><thead><tr><th class="th-border">餐厅名称</th><th class="th-border">联系人</th><th class="th-border">联系电话</th></tr><tbody>';
-					for (var i = 0; i < $value.length; i++) {
-						html += '<tr><td>'+$value[i].name+'</td><td>'+$value[i].managerName+'</td><td>'+$value[i].mobileNumber+'</td></tr>'
-					};
-					html += '</tbody></table>';
-					$this.data("html",html)
-					Tools.descToolTip($this,2);
-					$this.data('bs.popover').options.content = html;
-				}
-			})
-		},
 		//添加资源 
 		addResource : function(){
 			$("#tripPlan_addPlan_insurance .T-addInsuranceResource").off('click').on("click",{function : KingServices.addInsurance , type : "tr" , name : "insuranceName" , id : "insuranceId"}, KingServices.addResourceFunction);
@@ -598,14 +601,17 @@ define(function(require, exports) {
 				tableContainer = _this.parents(".ui-sortable-handle").find(".table tbody"),
 				html = '<tr><td><div class="col-sm-12"><input type="text" maxlength="32" name="insuranceName" class="col-sm-12 chooseInsurance bind-change"/><input type="hidden" name="insuranceId"/><span class="addResourceBtn T-addInsuranceResource R-right" data-right="1080002" title="添加保险公司"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>' +
 						'<td><input type="text" name="type" maxlength="32" class="col-sm-12"/></td>' +
-						'<td><input type="text" name="price" maxlength="6" class="col-sm-12"/></td>' +
+						'<td><input type="text" name="price" maxlength="6" class="col-sm-12 price"/></td>' +
 						'<td><input type="text" name="memberCount" class="col-sm-12" maxlength="8"/></td>' +
 						'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12"/></td>' +
-						'<td><input type="text" name="payedMoney" class="col-sm-12" maxlength="9"/></td>' +
+						'<td><input type="text" name="payedMoney" class="col-sm-12 price" maxlength="9"/></td>' +
 						'<td><select name="payType" class="col-sm-12 no-padding"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>' +		
 						'<td><input name="remark" type="text" class="col-sm-12" maxlength="500"/></td>' +
 						'<td><a class="cursor btn-deleteTripPlanList" title="删除">删除</a></td></tr>';
 			tableContainer.append(filterUnAuth(html));
+			//精度控件
+			var $price=tableContainer.find('.price');
+			Tools.inputCtrolFloat($price);
 			tripPlan.bindDeleteEvent();
 			tripPlan.bindInsuranceChoose();
 			tripPlan.calculatePrice();
@@ -618,12 +624,15 @@ define(function(require, exports) {
 			tableContainer = _this.parents(".ui-sortable-handle").find(".table tbody"),
 			html = '<tr><td><input type="text" name="guideName" readonly="readonly" class="col-sm-12 chooseGuide"/><input type="hidden" name="guideId"/></td>' +
 			'<td><input type="text" name="mobileNumber" class="col-sm-12" readonly="readonly"/></td>' +
-			'<td><input type="text" name="guideFee" class="col-sm-12"/></td>' +
-			'<td><input type="text" name="manageFee" class="col-sm-12"/></td>' +
+			'<td><input type="text" name="guideFee" class="col-sm-12 price"/></td>' +
+			'<td><input type="text" name="manageFee" class="col-sm-12 price"/></td>' +
 			'<td><select name="payType" class="col-sm-12 no-padding"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>' +
 			'<td><input name="remark" type="text" class="col-sm-12"/></td>' +
 			'<td><button class="btn btn-xs btn-success" title="发送订单"><i class="ace-icon fa fa-paper-plane-o bigger-120"></i></button></td></tr>';
 			tableContainer.append(html);
+			//精度控件
+			var $price=tableContainer.find('.price');
+			Tools.inputCtrolFloat($price);
 			tripPlan.bindDeleteEvent();
 			//tripPlan.bindGuideChoose();
 			tripPlan.calculatePrice();
@@ -638,15 +647,18 @@ define(function(require, exports) {
 			'<td><input type="text" name="brand" class="col-sm-12"/></td>' +
 			'<td><input type="text" name="mobileNumber" class="col-sm-12"/></td>' +
 			'<td><input type="text" name="driverName" class="col-sm-12"/></td>' +
-			'<td><input type="text" name="price" class="col-sm-12" style="width: 60px;"/></td>' +
-			'<td><input type="text" name="reduceMoney" class="col-sm-12" style="width: 60px;"/></td>' +
+			'<td><input type="text" name="price" class="col-sm-12 price" style="width: 60px;"/></td>' +
+			'<td><input type="text" name="reduceMoney" class="col-sm-12 price" style="width: 60px;"/></td>' +
 			'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12" style="width: 60px;"/></td>' +
-			'<td><input type="text" name="payedMoney" class="col-sm-12" style="width: 60px;"/></td>' +
+			'<td><input type="text" name="payedMoney" class="col-sm-12 price" style="width: 60px;"/></td>' +
 			'<td><select name="payType" class="col-sm-12 no-padding"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>' +
 			'<td><input type="text" name="" class="col-sm-12" style="width: 60px;"/></td>' +
 			'<td><input type="text" name="remark" class="col-sm-12"/></td>' +
 			'<td><button class="btn btn-xs btn-success" title="发送订单"><i class="ace-icon fa fa-paper-plane-o bigger-120"></i></button></td></tr>';
 			tableContainer.append(html);
+			//精度控件
+			var $price=tableContainer.find('.price');
+			Tools.inputCtrolFloat($price);
 			tripPlan.bindDeleteEvent();
 			//tripPlan.bindBusCompanyChoose();
 			tripPlan.calculatePrice();
@@ -663,15 +675,18 @@ define(function(require, exports) {
 			'<td><select name="type" class="col-sm-12 restauranType" style="width:80px;"><option value="早餐">早餐</option><option value="午餐">午餐</option><option value="晚餐">晚餐</option></select></td>' +
 			'<td><input type="text" name="price" value="" class="col-sm-12 typeNameChoose"/><input type="hidden" name="restaurantStandardId" value="0"/></td>' +
 			'<td><input name="memberCount" type="text" class="col-sm-12" style="width: 60px;" maxlength="4"/></td>' +
-			'<td><input name="reduceMoney" type="text" class="col-sm-12" style="width: 60px;" maxlength="9"/></td>' +
+			'<td><input name="reduceMoney" type="text" class="col-sm-12 price" style="width: 60px;" maxlength="9"/></td>' +
 			'<td><input name="needPayMoney" readonly="readonly" type="text" class="col-sm-12" style="width: 60px;"/></td>' +
-			'<td><input name="payedMoney" type="text" class="col-sm-12" style="width: 60px;" maxlength="9"/></td>' +
+			'<td><input name="payedMoney" type="text" class="col-sm-12 price" style="width: 60px;" maxlength="9"/></td>' +
 			'<td><select name="payType" class="col-sm-12 no-padding" style="width:55px;"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>' +
 			'<td><input name="guidePayMoney" type="text" class="col-sm-12" style="width: 60px;" maxlength="9"/></td>' +
 			'<td><input name="remark" type="text" class="col-sm-12"/></td>' +
 			//'<td><button class="btn btn-xs btn-success" title="发送订单"><i class="ace-icon fa fa-paper-plane-o bigger-120"></i></button></td></tr>';
 			'<td><a class="cursor btn-deleteTripPlanList" data-entity-name="restaurant" title="删除">删除</a></td>';
 			tableContainer.append(filterUnAuth(html));
+			//精度控件
+			var $price=tableContainer.find('.price');
+			Tools.inputCtrolFloat($price);
 			tripPlan.bindDeleteEvent();
 			tripPlan.bindRestaurantChoose();
 			tripPlan.bindMoneyTripPlan();
@@ -687,22 +702,26 @@ define(function(require, exports) {
 			var _this = $(this),
 			tableContainer = _this.parents(".ui-sortable-handle").find(".table tbody"),
 			html = '<tr><td class="whichDaysContainer"></td>' +
-			'<td><select class="col-sm-12 no-padding tripPlanHotelStar" style="width: 80px;"><option value="1">三星以下</option><option value="2">三星</option><option value="3">准四星</option><option value="4">四星</option><option value="5">准五星</option><option value="6">五星</option><option value="7">五星以上</option></select></td>' +
+			'<td><select class="col-sm-12 no-padding tripPlanHotelStar" style="width: 80px;"><option selected="selected" {{if hotel.hotel.level == 0}}selected="selected"{{/if}} value="">--全部--</option>'+
+			'<option value="1">三星以下</option><option value="2">三星</option><option value="3">准四星</option><option value="4">四星</option><option value="5">准五星</option><option value="6">五星</option><option value="7">五星以上</option></select></td>' +
 			'<td><div class="col-sm-12"><input type="text" class="col-sm-12 chooseHotel" name="name" /><input type="hidden" name="hotelId"><span class="addResourceBtn T-addHotelResource R-right" data-right="1040002" title="添加酒店"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>' +
 			'<td><input type="text" class="col-sm-12" readonly="readonly" name="managerName"/></td>' +
 			'<td><input type="text" class="col-sm-12" readonly="readonly" name="mobileNumber"/></td>' +
 			'<td><input type="text" class="col-sm-12 chooseHotelRoom" name="hotelRoom"/><input type="hidden" name="hotelRoomId"></td>' +
-			'<td><input type="text" class="col-sm-12" name="fee" style="width: 60px;" maxlength="6"/></td>' +
+			'<td><input type="text" class="col-sm-12 price" name="fee" style="width: 60px;" maxlength="6"/></td>' +
 			'<td><input type="text" class="col-sm-12" name="memberCount" style="width: 60px;" maxlength="6"/></td>' +
-			'<td><input type="text" class="col-sm-12" name="reduceMoney" style="width: 60px;" maxlength="9"/></td>' +
+			'<td><input type="text" class="col-sm-12 price" name="reduceMoney" style="width: 60px;" maxlength="9"/></td>' +
 			'<td><input type="text" class="col-sm-12" name="needPayMoney" readonly="readonly" style="width: 60px;"/></td>' +
-			'<td><input type="text" class="col-sm-12" name="payedMoney" style="width: 60px;" maxlength="9"/></td>' +
+			'<td><input type="text" class="col-sm-12 price" name="payedMoney" style="width: 60px;" maxlength="9"/></td>' +
 			'<td><select name="payType" class="col-sm-12 no-padding" style="width:55px;"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>' +
 			'<td><input type="text" class="col-sm-12" name="guidePayMoney" style="width: 60px;" maxlength="9"/></td>' +
 			'<td><input type="text" class="col-sm-12" name="remark" maxlength="500"/></td>' +
 			'<td><a class="cursor btn-deleteTripPlanList" title="删除">删除</a></td></tr>';
 
 			tableContainer.append(filterUnAuth(html));
+			//精度控件
+			var $price=tableContainer.find('.price');
+			Tools.inputCtrolFloat($price);
 			tripPlan.bindDeleteEvent();
 			tripPlan.bindHotelChoose();
 			tripPlan.bindHotelRoomeChoose();
@@ -723,16 +742,19 @@ define(function(require, exports) {
 			'<td><select name="tourTime" class="col-sm-12 no-padding" style="width: 75px;"> <option value="全天">全天</option> <option value="上午">上午</option> <option value="下午">下午</option> </select> </td>' +
 			'<td><input type="text" name="tourDuration" class="col-sm-12" value="" style="width: 60px;" maxlength="3"> </td>' +
 			'<td><input type="text" name="orderNumber" class="col-sm-12" value="" maxlength="20"/></td>'+
-			'<td><input type="text" name="fee" class="col-sm-12" style="width: 60px;" maxlength="6"/></td>' +
+			'<td><input type="text" name="fee" class="col-sm-12 price" style="width: 60px;" maxlength="6"/></td>' +
 			'<td><input type="text" name="memberCount" class="col-sm-12" style="width: 60px;" maxlength="8"/></td>' +
-			'<td><input type="text" name="reduceMoney" class="col-sm-12" style="width: 60px;" maxlength="9"/></td>' +
+			'<td><input type="text" name="reduceMoney" class="col-sm-12 price" style="width: 60px;" maxlength="9"/></td>' +
 			'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12" style="width: 60px;"/></td>' +
-			'<td><input type="text" name="payedMoney" class="col-sm-12" style="width: 60px;" maxlength="9"/></td>' +
+			'<td><input type="text" name="payedMoney" class="col-sm-12 price" style="width: 60px;" maxlength="9"/></td>' +
 			'<td><select name="payType" class="col-sm-12 no-padding" style="width:55px;"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>' +
 			'<td><input type="text" name="guidePayMoney" class="col-sm-12" style="width: 60px;" maxlength="9"/></td>' +
 			'<td><input type="text" name="remark" class="col-sm-12" maxlength="500"/></td>' +
 			'<td><a class="cursor btn-deleteTripPlanList" title="删除">删除</a></td></tr>';
 			tableContainer.append(filterUnAuth(html));
+			//精度控件
+			var $price=tableContainer.find('.price');
+			Tools.inputCtrolFloat($price);
 			tripPlan.bindDeleteEvent(); 
 			tripPlan.bindScenicChoose();
 			tripPlan.bindMoneyTripPlan();
@@ -776,18 +798,21 @@ define(function(require, exports) {
 			'<td><input type="hidden" name="selfitemId" value="" /><input type="text" name="selfitem" class="col-sm-12 chooseSelfitem" value="" /></td>'+
 			'<td><input type="text" readonly="readonly" name="managerName" class="col-sm-12"/></td>' +
 			'<td><input type="text" readonly="readonly" name="mobileNumber" class="col-sm-12"/></td>' +
-			'<td><input type="text" name="oldPrice" class="col-sm-12" maxlength="6"/></td>' +
-			'<td><input type="text" name="price" class="col-sm-12" maxlength="6"/></td>' +
+			'<td><input type="text" name="oldPrice" class="col-sm-12 price" maxlength="6"/></td>' +
+			'<td><input type="text" name="price" class="col-sm-12 price" maxlength="6"/></td>' +
 			'<td><input type="text" name="memberCount" class="col-sm-12" maxlength="8"/></td>' +
-			'<td><input type="text" name="reduceMoney" class="col-sm-12" maxlength="9"/></td>' +
+			'<td><input type="text" name="reduceMoney" class="col-sm-12 price" maxlength="9"/></td>' +
 			'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12" maxlength="9"/></td>' +
-			'<td><input type="text" name="payedMoney" class="col-sm-12" maxlength="9"/></td>' +
+			'<td><input type="text" name="payedMoney" class="col-sm-12 price" maxlength="9"/></td>' +
 			'<td><select name="payType" class="col-sm-12 no-padding" style="width:55px;"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>' +
 			'<td><input type="text" name="guidePayMoney" class="col-sm-12" maxlength="9"/></td>' +
 			'<td><input type="text" name="remark" class="col-sm-12" maxlength="500"/></td>' +
 			'<td><a class="cursor btn-deleteTripPlanList" title="删除">删除</a></td></tr>';
 
 			tableContainer.append(filterUnAuth(html));
+			//精度控件
+			var $price=tableContainer.find('.price');
+			Tools.inputCtrolFloat($price);
 			tripPlan.bindDeleteEvent();
 			tripPlan.bindSelfPayChoose();
 			tripPlan.bindMoneyTripPlan();
@@ -809,17 +834,20 @@ define(function(require, exports) {
 			'<td><input type="text" name="shift" class="col-sm-12" maxlength="9"/></td>' +
 			'<td><input type="text" name="startTime" class="col-sm-13 col-xs-12 date-time-picker"/></td>' +
 			'<td><input type="text" name="seatLevel" class="col-sm-12" maxlength="32"/></td>' +
-			'<td><input type="text" name="fee" class="col-sm-12" maxlength="6"/></td>' +
+			'<td><input type="text" name="fee" class="col-sm-12 price" maxlength="6"/></td>' +
 			'<td><input type="text" name="memberCount" class="col-sm-12" maxlength="8"/></td>' +
-			'<td><input type="text" name="reduceMoney" class="col-sm-12" maxlength="9"/></td>' +
+			'<td><input type="text" name="reduceMoney" class="col-sm-12 price" maxlength="9"/></td>' +
 			'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12"/></td>' +
-			'<td><input type="text" name="payedMoney" class="col-sm-12" maxlength="9"/></td>' +
+			'<td><input type="text" name="payedMoney" class="col-sm-12 price" maxlength="9"/></td>' +
 			'<td><select name="payType" class="col-sm-12 no-padding" style="width:55px;"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>' +
 			'<td><input type="text" name="guidePayMoney" class="col-sm-12" maxlength="9"/></td>' +
 			'<td><input type="text" name="remark" class="col-sm-12" maxlength="500"/></td>' +
 			'<td><a class="cursor btn-deleteTripPlanList" title="删除">删除</a></td></tr>';
 
 			tableContainer.append(filterUnAuth(html));
+			//精度控件
+			var $price=tableContainer.find('.price');
+			Tools.inputCtrolFloat($price);
 			tripPlan.bindDeleteEvent();
 			tripPlan.bindTicketChoose();
 			tripPlan.bindMoneyTripPlan();
@@ -838,17 +866,20 @@ define(function(require, exports) {
 			'<td><input type="text" name="name" maxlength="32" class="col-sm-12"/></td>' +
 			'<td><input type="text" name="managerName" maxlength="32" class="col-sm-12"/></td>' +
 			'<td><input type="text" name="mobileNumber" class="col-sm-12" maxlength="11"/></td>' +
-			'<td><input type="text" name="fee" class="col-sm-12" maxlength="6"/></td>' +
+			'<td><input type="text" name="fee" class="col-sm-12 price" maxlength="6"/></td>' +
 			'<td><input type="text" name="memberCount" class="col-sm-12" maxlength="8"/></td>' +
-			'<td><input type="text" name="reduceMoney" class="col-sm-12" maxlength="9"/></td>' +
+			'<td><input type="text" name="reduceMoney" class="col-sm-12 price" maxlength="9"/></td>' +
 			'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12"/></td>' +
-			'<td><input type="text" name="payedMoney" class="col-sm-12" maxlength="9"/></td>' +
+			'<td><input type="text" name="payedMoney" class="col-sm-12 price" maxlength="9"/></td>' +
 			'<td><select name="payType" class="col-sm-12 no-padding" style="width:55px;"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>' +
 			'<td><input type="text" name="guidePayMoney" class="col-sm-12" maxlength="9"/></td>' +
 			'<td><input type="text" name="remark" class="col-sm-12" maxlength="500"/></td>' +
 			'<td><a class="cursor btn-deleteTripPlanList" title="删除">删除</a></td></tr>';
 
 			tableContainer.append(html);
+			//精度控件
+			var $price=tableContainer.find('.price');
+			Tools.inputCtrolFloat($price);
 			tripPlan.bindDeleteEvent();
 			tripPlan.bindMoneyTripPlan();
 			tripPlan.setChooseDays("tripPlan_addPlan_other");
@@ -2413,6 +2444,7 @@ define(function(require, exports) {
 		//添加自选餐厅
 		addOptional :function($objInput){
 			var html = addOptionalTemplate(),$inputJson = $objInput.data("propover");
+			console.log($inputJson)
 			if (!!$inputJson && typeof $inputJson === "string") {
 				$inputJson = JSON.parse($inputJson);
 			}
@@ -2432,14 +2464,14 @@ define(function(require, exports) {
 
 	                if (!!$inputJson && $inputJson.length != 0) {
 	                	for (var i = 0; i < $inputJson.length; i++) {
-	                		var html = '<tr data-entity-id="'+$inputJson[i].id+'" data-entity-restaurantid="'+$inputJson[i].restaurantId+'">'+
-							'<td class="name">'+$inputJson[i].name+'</td>'+
-							'<td class="managerName">'+$inputJson[i].managerName+'</td>'+
-							'<td class="mobileNumber">'+$inputJson[i].mobileNumber+'</td>'+
-							'<td><a class="T-del">删除</a></td>'+
-							'</tr>';
-							$tbody.append(html);
-							optionalArray.push($inputJson[i].restaurantId)
+	                		var json = {
+	                			id: $inputJson[i].id,
+	                			restaurantId: $inputJson[i].restaurantId,
+	                			name: $inputJson[i].name,
+	                			managerName: $inputJson[i].managerName,
+	                			mobileNumber: $inputJson[i].mobileNumber
+	                		}
+							optionalArray.push(json)
 	                	}
 	                }
 	                //初始化list列表
@@ -2464,6 +2496,19 @@ define(function(require, exports) {
 									$list.html(html);
 									$(window).trigger("resize");
 
+									//翻页自动勾选已选餐厅
+									var $tr = $list.find('tr');
+									if (!!optionalArray.length) {
+										for (var i = 0, len = optionalArray.length; i < len; i++) {
+											$tr.each(function(j) {
+												var $id = $tr.eq(j).data('entity-id');
+												if (optionalArray[i].restaurantId == $id) {
+													$tr.eq(j).find('.T-add').prop('checked',true);
+												}
+											});
+										}
+									}
+
 									// 绑定翻页组件
 									laypage({
 									    cont: $container.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
@@ -2476,10 +2521,8 @@ define(function(require, exports) {
 									    }
 									});	
 
-									//添加自选
+									//添加/删除自选
 									$container.find(".T-add").off('click').on('click', addOptional);
-									//删除自选
-									$container.find(".T-del").off('click').on('click', delOptional);
 				        		}
 				        	}
 				        })
@@ -2487,114 +2530,58 @@ define(function(require, exports) {
 		        	//添加自选函数
 		        	function addOptional(){
 		        		var $this = $(this),$parent = $this.closest('tr'),
-							$id = $parent.data("entity-id"),
+							$restaurantId = $parent.data("entity-id"),
 							$name = $parent.data("entity-name"),
 							$managerName = $parent.data("entity-managername"),
 							$mobileNumber = $parent.data("entity-mobilenumber");
-						var html = '<tr data-entity-id="" data-entity-restaurantid="'+$id+'">'+
-							'<td class="name">'+$name+'</td>'+
-							'<td class="managerName">'+$managerName+'</td>'+
-							'<td class="mobileNumber">'+$mobileNumber+'</td>'+
-							'<td><a class="T-del">删除</a></td>'+
-							'</tr>';
-						if (optionalArray.length >= 5) {
-							showMessageDialog($("#confirm-dialog-message"),"最多只能添加5个自选餐厅");
-							return;
-						}else{
+							console.log(optionalArray)
 							if (optionalArray.length == 0) {
-								$tbody.append(html);
-								optionalArray.push($id);
+								var json = {
+									restaurantId:  $restaurantId,
+									name: $name,
+									managerName: $managerName,
+									mobileNumber: $mobileNumber
+								}
+								optionalArray.push(json);
 							}else{
 								for (var i = 0,$length = optionalArray.length; i < $length; i++) {
-				        			if (optionalArray[i] == $id) {
-				        				showMessageDialog($("#confirm-dialog-message"),"该餐厅已经添加");
-				        				return;
+				        			if (optionalArray[i].restaurantId == $restaurantId) {
+	        							if (!!optionalArray[i].id) {
+	        								$.ajax({
+	        									url: KingServices.build_url("restaurant","deleteChooseRestaurant"),
+	        									type: 'POST',
+	        									data: "id="+optionalArray[i].id,
+	        									showLoading: false,
+	        									success: function(){
+							        				optionalArray.splice(i,1);
+				        							$this.prop("checked",false);
+	        										saveOptional(1);
+	        									}
+	        								})
+	        							}else{
+					        				optionalArray.splice(i,1);
+	        							}
+	        							return;
 				        			}
 				        		}
-		        				$tbody.append(html);
-								optionalArray.push($id);
+				        		if(optionalArray.length >= 5){
+									showMessageDialog($("#confirm-dialog-message"),"最多只能添加5个自选餐厅");
+			        				$this.prop("checked",false);
+				        		}else{
+									var json = {
+										restaurantId:  $restaurantId,
+										name: $name,
+										managerName: $managerName,
+										mobileNumber: $mobileNumber
+									}
+									optionalArray.push(json);
+								}
 			        		}
-						}
-						//删除自选
-						$container.find(".T-del").off('click').on('click', delOptional);
-		        	};
-		        	//删除自选函数
-		        	function delOptional(){
-		        		var $this = $(this),$parent = $this.closest('tr'),
-		        			$restaurantid = $parent.data("entity-restaurantid"),
-		        			$id = $parent.data("entity-id")+"";
-		        		for (var i = 0,$length = optionalArray.length; i < $length; i++) {
-		        			if (optionalArray[i] == $restaurantid) {
-	        					var a = i;
-		        				if (!!$id) {
-		        					var dialogObj = $( "#confirm-dialog-message" );
-									dialogObj.removeClass('hide').dialog({
-										modal: true,
-										title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-										title_html: true,
-										draggable:false,
-										buttons: [ 
-											{
-												text: "取消",
-												"class" : "btn btn-minier",
-												click: function() {
-													$( this ).dialog( "close" );
-												}
-											},
-											{
-												text: "确定",
-												"class" : "btn btn-primary btn-minier",
-												click: function() {
-													$( this ).dialog( "close" );
-							        				$.ajax({
-											        	url: ""+APP_ROOT+"back/restaurant.do?method=deleteChooseRestaurant&token="+$.cookie("token")+"&menuKey=resource_restaurant"+"&operation=view",
-											        	type: "POST",
-											        	data: "id="+$id,
-											        	success: function(data){
-											        		var result = showDialog(data);
-											        		if (result) {
-											        			showMessageDialog($("#confirm-dialog-message"),data.message,function(){
-											        				optionalArray.splice([a],1);
-												        			$parent.remove();
-												        			saveOptional(1);
-											        			})
-												        	}
-												        }
-												    })
-												}
-											}
-										],
-										open:function(event,ui){
-											$(this).find("p").text("你确定要删除该条记录？");
-										}
-									});	
-		        				}else{
-		        					optionalArray.splice([a],1);
-				        			$parent.remove();
-				        			saveOptional(1); 
-						        }
-		        			} 
-		        		}
+						console.log(optionalArray)
 		        	};
 		        	//保存函数
 		        	function saveOptional(type){
-		        		var $tr = $tbody.find('tr'),
-		        			optionalJson = [];
-		        		function getValue($obj,className){
-		        			var value = $obj.find('.'+className).text();
-		        			return value;
-		        		}
-		        		$tr.each(function(){
-		        			var $this = $(this),$id = $this.data("entity-id")+"" || "";
-		        				json = {
-		        				id : $id+"",
-		        				restaurantId : $this.data("entity-restaurantid")+"",
-		        				name : getValue($this,"name"),
-		        				managerName : getValue($this,"managerName"),
-		        				mobileNumber : getValue($this,"mobileNumber")
-		        				}
-		        			optionalJson.push(json);
-		        		})
+		        		var optionalJson = optionalArray;
 		        		optionalJson = JSON.stringify(optionalJson);
 		        		//$objInput.closest('tr').find("[name=optional]").val(encodeURIComponent(optionalJson))
 		        		$objInput.data("propover" , optionalJson);

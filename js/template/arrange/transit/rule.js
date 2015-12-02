@@ -19,18 +19,6 @@ define(function(require, exports) {
 
 			$bus.each(function() {
 				var $that = $(this);
-					// 设置车牌
-					settings.push({
-						$ele: $that.find('input[name="busLicenseNumber"]'),
-						$valObj: $that.find('input[name="busLicenseNumberId"]'),
-						rules: [
-							{
-								type: 'null',
-								errMsg: '车牌不能为空'
-							}
-						]
-					});
-
 					// 设置司机
 					settings.push({
 						$ele: $that.find('input[name="driverName"]'),
@@ -77,7 +65,7 @@ define(function(require, exports) {
 						$ele: $that.find('input[name="busReduceMoney"]'),
 						rules: [
 							{
-								type: 'int',
+								type: 'float',
 								errMsg: '数据格式不正确'
 							}	
 						]
@@ -87,7 +75,7 @@ define(function(require, exports) {
 						$ele: $that.find('input[name="busPayedMoney"]'),
 						rules: [
 							{
-								type: 'int',
+								type: 'float',
 								errMsg: '数据格式不正确'
 							}	
 						]
@@ -124,7 +112,7 @@ define(function(require, exports) {
 						$ele: $that.find('input[name="hotelPrice"]'),
 						rules: [
 							{
-								type: 'int',
+								type: 'float',
 								errMsg: '单价格式不正确'
 							}	
 						]
@@ -148,7 +136,7 @@ define(function(require, exports) {
 						$ele: $that.find('input[name="hotelReduceMoney"]'),
 						rules: [
 							{
-								type: 'int',
+								type: 'float',
 								errMsg: '数据格式不正确'
 							}	
 						]
@@ -158,7 +146,7 @@ define(function(require, exports) {
 						$ele: $that.find('input[name="hotelPayedMoney"]'),
 						rules: [
 							{
-								type: 'int',
+								type: 'float',
 								errMsg: '数据格式不正确'
 							}	
 						]

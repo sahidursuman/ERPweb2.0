@@ -537,6 +537,11 @@ define(function(require, exports) {
 					"</tr></thead>" +
 					"<tbody><tr>" + 
 						"<td><input type='hidden' name='offerId' value='" + hotelList[i].offerId + "' /><select class='col-xs-12 T-choose-hotelStarLevel' disabled='disabled'><option";
+						 if (hotelList[i].hotelLevel==0)
+						 {
+						 	html += " selected='selected'";
+						 }
+						 html += " value=''>全部</option><option";
 						 if (hotelList[i].hotelLevel==1)
 						 {
 						 	html += " selected='selected'";
@@ -627,7 +632,22 @@ define(function(require, exports) {
 						var $container = $("#tab-arrange_quote-update-content");
 
 						var updateHtml = updateQuoteTemplate(data);
+						// var hotelStarValue = $(this).closest('tr').find('.resourceHotelStar').val();
 						$container.find('#quoteContent-'+$a.a).html(updateHtml)
+
+						//精度控制
+						var $guideFee=$container.find('#quoteContent-'+$a.a).find('input[name=guideFee]'),
+						    $price=$container.find('#quoteContent-'+$a.a).find('input[name=price]'),
+						    $seatCount=$container.find('#quoteContent-'+$a.a).find('input[name=seatcountPrice]'),
+						    $contractPrice=$container.find('#quoteContent-'+$a.a).find('input[name=contractPrice]'),
+						    $parkingRebateMoney=$container.find('#quoteContent-'+$a.a).find('input[name=parkingRebateMoney]'),
+						    $customerRebateMoney=$container.find('#quoteContent-'+$a.a).find('input[name=customerRebateMoney]');
+						Tools.inputCtrolFloat($guideFee);
+				        Tools.inputCtrolFloat($price);
+				        Tools.inputCtrolFloat($seatCount);
+				        Tools.inputCtrolFloat($contractPrice);
+				        Tools.inputCtrolFloat($parkingRebateMoney);
+				        Tools.inputCtrolFloat($customerRebateMoney);
 
 						$container.find('.inquiryContent').on("click",function(){
 							var quoteId = $container.find('[name=quoteId]').val();
@@ -1872,7 +1892,8 @@ define(function(require, exports) {
 		'<div class="widget-box transparent" style="margin-top: 20px"><div class="widget-body"><div class=""><table class="table table-striped table-bordered table-hover">'+
 		'<thead><tr><th  class="th-border">酒店星级</th><th  class="th-border">酒店名称</th><th class="th-border">房型</th><th class="th-border">价格</th><th class="th-border">数量</th><th class="th-border">含餐</th><th class="th-border">电话</th><th class="th-border">备注</th><th  class="th-border" style="width: 60px;">操作</th></tr></thead>'+
 		'<tbody><tr>'+
-		'<td><select class="col-xs-12 resourceHotelStar"><option selected="selected" value="1">三星以下</option><option value="2">三星</option><option value="3">准四星</option><option value="4">四星</option><option value="5">准五星</option><option value="6">五星</option><option value="7">五星以上</option></select></td>'+
+		'<td><select class="col-xs-12 resourceHotelStar"><option  selected="selected" {{if hotelList.hotel.level==0 }}selected="selected" {{/if}} value="">全部</option>'+
+		'<option value="1">三星以下</option><option value="2">三星</option><option value="3">准四星</option><option value="4">四星</option><option value="5">准五星</option><option value="6">五星</option><option value="7">五星以上</option></select></td>'+
 		'<td><input type="text" class="col-xs-12 chooseHotelName bind-change" name="hotelNmae"/><input type="hidden" name="hotelId"/></td>'+
 		'<td><input type="text" class="col-xs-12 chooseHotelRoom bind-change" name="hotelRoom"/><input type="hidden" name="hotelRoomId"/></td>'+
 		'<td><input type="text" class="col-xs-12 T-changeQuote" name="contractPrice" style="width:70px;"/></td>'+
@@ -1881,8 +1902,10 @@ define(function(require, exports) {
 		'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
 		'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
 		'<td><a class="cursor btn-restaurant-delete T-delete deleteAllother">删除 </a></td></tr></tbody></table></div></div></div></div>';
-
-		$btn.closest(".T-dailyArrangeList").find(".T-timeline-detail-container").append(hotelDetails);
+		var $container=$btn.closest(".T-dailyArrangeList").find(".T-timeline-detail-container");
+		    $container.append(hotelDetails);
+		var $contractPrice= $container.find('input[name=contractPrice]');
+		    Tools.inputCtrolFloat($contractPrice);
 		quote.updateLineProductIndex += 1;
 		//绑定选择酒店名称事件
 		quote.costCalculation($container)
@@ -1948,7 +1971,7 @@ define(function(require, exports) {
 				}
 			}
 		}).unbind("click").click(function(){
-			var hotelStarValue = $hotelStar.val(),
+			var hotelStarValue = $(this).closest('tr').find('.resourceHotelStar, .T-choose-hotelStarLevel').val(),
 			    obj = this;
 			$.ajax({
                 url: KingServices.build_url('hotel', 'findHotelListByLevel'),
@@ -2056,7 +2079,10 @@ define(function(require, exports) {
 		'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
 		'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
 		'<td><a class="cursor btn-restaurant-delete T-delete deleteAllother"> 删除</a></td></tr></tbody></table></div></div></div></div>';
-		$btn.closest(".T-dailyArrangeList").find(".T-timeline-detail-container").append(scenicDetails);
+		var $container=$btn.closest(".T-dailyArrangeList").find(".T-timeline-detail-container");
+		    $container.append(scenicDetails);
+		    $price=$container.find('input[name=price]');
+		Tools.inputCtrolFloat($price);
 		quote.updateLineProductIndex += 1;
 		
 		//绑定选择景区名称事件
@@ -2211,7 +2237,12 @@ define(function(require, exports) {
 		'<td><input type="text" class="col-xs-12" name="customerRebateMoney"/></td>'+
 		'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
 		'<td><a class="cursor btn-restaurant-delete T-delete deleteAllother"> 删除 </a></td></tr></tbody></table></div></div></div></div>';
-		$btn.closest(".T-dailyArrangeList").find(".T-timeline-detail-container").append(shoppingDetails);
+		var $container=$btn.closest(".T-dailyArrangeList").find(".T-timeline-detail-container");
+		    $container.append(shoppingDetails);
+		$parkingRebateMoney=$container.find('input[name=parkingRebateMoney]'),
+		$customerRebateMoney=$container.find('input[name=customerRebateMoney]');  
+		Tools.inputCtrolFloat($parkingRebateMoney);  
+		Tools.inputCtrolFloat($customerRebateMoney);  
 		quote.updateLineProductIndex += 1;
 		
 		//绑定选择商家名称事件
@@ -2358,9 +2389,12 @@ define(function(require, exports) {
 		'<td><input type="text" class="col-xs-12" readonly="readonly" name="managerName"/></td>'+
 		'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
 		'<td><a class="cursor btn-restaurant-delete T-delete deleteAllother"> 删除</a></td></tr></tbody></table></div></div></div></div>';
-		$btn.closest(".T-dailyArrangeList").find(".T-timeline-detail-container").append(selfPayingDetails);
+		var $container=$btn.closest(".T-dailyArrangeList").find(".T-timeline-detail-container");
+		    $container.append(selfPayingDetails);
+		    $contractPrice=$container.find('input[name=contractPrice]');
+		//精度控件控制
+		Tools.inputCtrolFloat($contractPrice);
 		quote.updateLineProductIndex += 1;
-		
 		//绑定选择自费名称事件
 		quote.bindSelfPay($(".updateSelfPayList .chooseCompanyName"), validator, $container);
 		
@@ -2501,8 +2535,6 @@ define(function(require, exports) {
 				}
 			})
 		});
-		
-		
 	};
 	//添加交通
 	quote.addResourceTraffic = function($btn, validator, $container){
@@ -2519,7 +2551,10 @@ define(function(require, exports) {
 		'<td><input type="text" class="col-xs-12 T-changeQuote" name="count"/></td>'+
 		'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
 		'<td><a class="cursor btn-restaurant-delete T-delete deleteAllother">删除</a></td></tr></tbody></table></div></div></div></div>';
-		$btn.closest(".T-dailyArrangeList").find(".T-timeline-detail-container").append(shoppingDetails);
+		var $container=$btn.closest(".T-dailyArrangeList").find(".T-timeline-detail-container");
+		    $container.append(shoppingDetails)
+        var $price=$container.find('input[name=price]');
+            Tools.inputCtrolFloat($price);
 		quote.updateLineProductIndex += 1;
 		
 		//绑定选择自费名称事件
@@ -2606,7 +2641,11 @@ define(function(require, exports) {
 		'<td><input type="text" class="col-xs-12" name="count"/></td>'+
 		'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
 		'<td><a class="cursor btn-restaurant-delete T-delete deleteAllother">删除</a></td></tr></tbody></table></div></div></div></div>';
-		$btn.closest(".T-dailyArrangeList").find(".T-timeline-detail-container").append(otherDetails);
+		var $container=$btn.closest(".T-dailyArrangeList").find(".T-timeline-detail-container");
+		    $container.append(otherDetails);
+		var $price=$container.find('input[name=price]');
+		Tools.inputCtrolFloat($price);
+
 		quote.updateLineProductIndex += 1;
 	};
 	//删除日程安排

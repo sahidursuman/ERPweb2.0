@@ -580,6 +580,13 @@ define(function(require, exports) {
 					transfer.PayMoneyF($tab);
 				});
 
+				//精度调整
+				var $price=$tab.find('.price'),
+				    $transPayedMoney=$tab.find('input[name=transPayedMoney]');
+				Tools.inputCtrolFloat($transPayedMoney);
+				Tools.inputCtrolFloat($price);
+
+
 				//同行地接
 				transfer.getPartnerAgencyList($tab.find(".T-choosePartnerAgency"),id);
 
@@ -623,7 +630,11 @@ define(function(require, exports) {
 			"<td><input  name=\"otherPrice\" type=\"text\" maxlength=\"11\" class=\"col-sm-12  no-padding-right price\" /></td>"+
 			"<td><a class=\"cursor T-updateTransfer-delete\">删除</a></td>"+
 			"</tr>";
-			$tab.find(".T-addTransferCost").append(html);
+
+			var $tbody=$tab.find(".T-addTransferCost");
+			    $tbody.append(html);
+			var $otherPrice=$tbody.find('input[name=otherPrice]');
+			Tools.inputCtrolFloat($otherPrice);
 			
 			// 更新表单验证的事件绑定
 			rule.update(validator);   

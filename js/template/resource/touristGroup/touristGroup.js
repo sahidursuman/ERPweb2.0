@@ -233,6 +233,18 @@ define(function(require,exports){
 			$groupInfoForm = $addTabId.find(".T-touristGroupMainForm"),//小组信息对象
 			$groupMemberForm = $addTabId.find(".T-touristGroupMainFormMember"),//游客名单对象
 			$innerTransferForm = $addTabId.find(".T-touristGroupMainFormRS");//中转安排对象
+			//精度控制
+			var $payedMoney=$groupInfoForm.find('input[name=payedMoney]'),
+			    $currentNeedPayMoney=$groupInfoForm.find('input[name=currentNeedPayMoney]'),
+			    $adultPrice=$groupInfoForm.find('input[name=adultPrice]'),
+			    $childPrice=$groupInfoForm.find('input[name=childPrice]'),
+			    $price=$groupInfoForm.find('input[name=price]');
+			Tools.inputCtrolFloat($payedMoney);
+			Tools.inputCtrolFloat($currentNeedPayMoney);	
+			Tools.inputCtrolFloat($adultPrice);
+			Tools.inputCtrolFloat($childPrice);
+			Tools.inputCtrolFloat($price);
+
 			//添加表单验证
 			touristGroup.validator = rule.checktouristGroup($groupInfoForm);
 			touristGroup.checkInnerValidator = rule.checkInnerTransfer($innerTransferForm);
@@ -260,6 +272,16 @@ define(function(require,exports){
 			id=$updateTabId.find(".T-submit-updateTouristGroup").attr('data-entity-id'),
 			$innerTransferForm = $updateTabId.find(".T-touristGroupMainFormRS");//中转安排对象
 			//$updateTabId.find(".T-submit-updateTouristGroup").data('id',id);
+			var $payedMoney=$groupInfoForm.find('input[name=payedMoney]'),
+			    $currentNeedPayMoney=$groupInfoForm.find('input[name=currentNeedPayMoney]'),
+			    $adultPrice=$groupInfoForm.find('input[name=adultPrice]'),
+			    $childPrice=$groupInfoForm.find('input[name=childPrice]'),
+			    $price=$groupInfoForm.find('input[name=price]');
+			Tools.inputCtrolFloat($payedMoney);
+			Tools.inputCtrolFloat($currentNeedPayMoney);	
+			Tools.inputCtrolFloat($adultPrice);
+			Tools.inputCtrolFloat($childPrice);
+			Tools.inputCtrolFloat($price);
 
 			//添加验证
 			touristGroup.validator = rule.checktouristGroup($groupInfoForm);
@@ -970,6 +992,11 @@ define(function(require,exports){
 		var $parentsObj = $obj.closest("form");
 		var $tableObj = $parentsObj.find(".T-addCostTbody");
 		$tableObj.append(html);
+		
+		//精度控制
+		var $price=$tableObj.find('input[name=price]');
+		Tools.inputCtrolFloat($price);
+
 		//删除事件
 		$tableObj.find(".addCost-delete").off('click').on('click',function(){
 			var $tr = $(this).closest('tr');
@@ -1508,7 +1535,19 @@ define(function(require,exports){
 			})
 		}
 		//接送事件点json
-		var outArrangeRemarkJson = touristGroup.installArrangeJson($arrangeForm);
+		var outArrangeRemarkJson;
+		if ( !!typeInner ) {
+			var $arrangeChecked = $arrangeForm.find('.T-touristReception','T-smallCar','T-touristSend').is(':checked')
+			if ($arrangeChecked == true ) {
+				outArrangeRemarkJson = touristGroup.installArrangeJson($arrangeForm);
+			} else{
+				showMessageDialog($( "#confirm-dialog-message" ),"请选择中转安排信息!");
+				return;
+			};
+		}else{
+				outArrangeRemarkJson = touristGroup.installArrangeJson($arrangeForm);
+		};
+		
 		//将json对象转换成字符串
 		touristGroupFeeJsonAdd = JSON.stringify(touristGroupFeeJsonAdd);
 		touristGroupMemberJsonAdd = JSON.stringify(touristGroupMemberJsonAdd);
@@ -1555,10 +1594,8 @@ define(function(require,exports){
 
 								console.info(typeInner+"......");
 								if (!!typeInner) {
-									console.info('1111');
 									KingServices.listTransit();
 								} else{
-									console.info('1222');
 									touristGroup.freshHeader(touristGroup.$freshData);
 									//刷新列表数据
 									touristGroup.getListData(touristGroup.$freshData);

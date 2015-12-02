@@ -87,7 +87,7 @@
 			</div>
 		</div>
 	</form> -->
-    <form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
+    <form class="form-horizontal T-middleForm" role="form" style="margin-top:10px" onsubmit="return false">
         <div class="form-group">
             <div class="col-xs-12 col-sm-12 widget-container-col">
                 <div class=" ui-sortable-handle">
@@ -504,6 +504,7 @@
                                                                                                     <tr>
                                                                                                         <td>
                                                                                                             <select class="col-xs-12 T-choose-hotelStarLevel">
+                                                                                                            <option {{if hotelList.hotel.level==0 }}selected="selected" {{/if}} value="">全部</option>
                                                                                                                 <option {{if hotelList.hotel.level==1 }}selected="selected" {{/if}} value="1">三星以下</option>
                                                                                                                 <option {{if hotelList.hotel.level==2 }}selected="selected" {{/if}} value="2">三星</option>
                                                                                                                 <option {{if hotelList.hotel.level==3 }}selected="selected" {{/if}} value="3">准四星</option>
@@ -877,25 +878,25 @@
                             <div class="form-group">
                                 <label class="col-sm-1 control-label no-padding-right">费用包含:</label>
                                 <div class="col-sm-8">
-                                    <textarea class="form-control" class="col-sm-12" readonly="readonly">{{lineProduct.includeFee}}</textarea>
+                                    <textarea class="form-control" name="includeFee" class="col-sm-12">{{lineProduct.includeFee}}</textarea>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-1 control-label no-padding-right">费用不含:</label>
                                 <div class="col-sm-8">
-                                    <textarea class="form-control" class="col-sm-12" readonly="readonly">{{lineProduct.excludeFee}}</textarea>
+                                    <textarea class="form-control"  name="excludeFee" class="col-sm-12">{{lineProduct.excludeFee}}</textarea>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-1 control-label no-padding-right">行程特色:</label>
                                 <div class="col-sm-8">
-                                    <textarea class="form-control" class="col-sm-12" readonly="readonly">{{lineProduct.lineFeature}}</textarea>
+                                    <textarea class="form-control"  name="lineFeature" class="col-sm-12">{{lineProduct.lineFeature}}</textarea>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-1 control-label no-padding-right">行程须知:</label>
                                 <div class="col-sm-8">
-                                    <textarea class="form-control" class="col-sm-12" readonly="readonly">{{lineProduct.lineNotice}}</textarea>
+                                    <textarea class="form-control"  name="lineNotice" class="col-sm-12">{{lineProduct.lineNotice}}</textarea>
                                 </div>
                             </div>
                         </div>
