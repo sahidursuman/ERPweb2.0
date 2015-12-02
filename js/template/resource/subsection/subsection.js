@@ -265,6 +265,14 @@ define(function(require, exports) {
 
 		// 新增
 		subsection.$tabSub.find(".T-btn-operation-add").click(function(){
+			var isHasTr = 0;
+			// $("#tb").find("tr:last").children().text();
+			var days = subsection.$tabSub.find('.T-subsectionOperationTbody tr:last-child').find('input[name=days]').val();
+			var startTimeS = subsection.$tabSub.find('.T-subsectionOperationTbody tr:last-child').find('input[name=startTime]').val();
+
+			if (subsection.$tabSub.find('.T-subsectionOperationTbody tr').length > 0) {
+				isHasTr = 1;
+			}
 			var radio = '<input type="radio" name="operateCurrentNeedPayMoney" />';
 			if ($(this).data('mark') != 0) {
 					radio = '-';
@@ -281,6 +289,15 @@ define(function(require, exports) {
 			+ '</tr>';
 			subsection.$tabSub.find(".T-subsectionOperationTbody").append(html);
 
+			 if(isHasTr == 0){
+				startTime = subsection.$tabSub.find('.T-startTime').text();
+				subsection.$tabSub.find('.T-subsectionOperationTbody tr:last-child').find('.T-startTime').val(startTime)
+		     }else{
+				
+			subsection.$tabSub.find('.T-subsectionOperationTbody tr:last-child').find('.T-startTime').val(subsection.startIntime(days,startTimeS));
+
+				// console.log(startTimeT)
+			}
 			subsection.$tabSub.find(".T-btn-operation-delete").off("click").on("click",function(){
 				var $this = $(this), $parents = $this.closest("tr"), id = $parents.data("entity-id");
 				subsection.deleteOperation(id,$this);
@@ -289,7 +306,20 @@ define(function(require, exports) {
 			subsection.lineProductChoose();
 			validator = rule.checkdSaveSubsection(subsection.$tabSub);
 			subsection.$tabSub.data('isEdited', true);
+
+			// var lastElement = $(this).prev();
+			// alert(lastElement.children().length);
 		});
+
+		subsection.startIntime = function(whichDay,startTime){
+			var	date = new Date(startTime.replace("-", "/").replace("-", "/"));
+			var timer = date.getTime()+(whichDay)*24*60*60*1000;
+			date.setTime(timer);
+			var startIntime = date.getFullYear()+ "-"+ (date.getMonth() + 1) + "-"+ (date.getDate() < 10 ? "0" + date.getDate() : date.getDate());
+			return startIntime;
+			// $container.find('input[name=startTime]').val(subsection.startIntime("2","5012-55-08"))
+		}
+
 
 		// 取消
 		subsection.$tabSub.find(".T-btn-operation-close").click(function(){
