@@ -62,7 +62,7 @@ define(function(require,exports){
 					busCompanyList = JSON.parse(busCompanyList);
 					data.busCompanyList = busCompanyList;
 					var html = listTemplate(data);
-					addTab(menuKey,"车队管理",html);
+					Tools.addTab(menuKey,"车队管理",html);
 					//对车队的公共参数设置
 					BusCompany.$tab = $("#"+tabId);
 					BusCompany.$searchArea = BusCompany.$tab.find(".search-area");
