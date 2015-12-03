@@ -1,6 +1,6 @@
 define(function(require, exports) {
-	var rule = require("./rule"); 
-	var menuKey = "financial_busCompany",
+	var rule = require("./rule"),
+        menuKey = "financial_busCompany",
 		listTemplate = require("./view/list"),
 		checkBill = require("./view/checkBill"),
 		Clearing = require("./view/Clearing"),
@@ -174,6 +174,7 @@ define(function(require, exports) {
 
         busCompany.init_check_event(page,id,name);
         busCompany.initDate(busCompany.$checkTab);
+        FinancialService.updateUnpayMoney(busCompany.$checkTab,rule);
 
         //搜索按钮事件
         busCompany.$checkSearchArea.find('.T-search').on('click', function(event) {
@@ -305,18 +306,7 @@ define(function(require, exports) {
                 });
             });
         });
-        busCompany.sumPayMoney();  
-    };
-
-    //自动计算本次付款总额
-    busCompany.sumPayMoney = function(){
-        var $sumPayMoney = busCompany.$clearTab.find("input[name=sumPayMoney]");
-        busCompany.$clearTab.find("input[name=payMoney]").on("change",function(){
-            var $this = $(this),validator = rule.check($this.closest('tr'));
-            if(!validator.form()){ return false;}
-            var sumPayMoney = parseInt($sumPayMoney.val());
-            $sumPayMoney.val(sumPayMoney + parseInt($this.val()));
-        });
+        FinancialService.updateSumPayMoney(busCompany.$clearTab,rule);
     };
 
     //对账数据保存
@@ -327,7 +317,7 @@ define(function(require, exports) {
         }
         //保存对账时提交的数据
         var $this = busCompany.$checkTab.find(".T-checkList"),argumentsLen = arguments.length;
-        var financialBusCompanyListStr = [];
+        var checkSaveJson = [];
         function getValue($obj,name){
             var result = $obj.find("[name="+name+"]").val();
             if (result == "") {//所有空字符串变成0
@@ -337,29 +327,33 @@ define(function(require, exports) {
         } 
         var busCompanyCheckingTr = $this.find(".T-checkTr");
         busCompanyCheckingTr.each(function(){
-            var id = $(this).data("id");
-            var settlementMoney = getValue($(this),"settlementMoney");
-            var checkRemark = getValue($(this),"checkRemark");
-            var isConfirmAccount = "";
-            if ($(this).find(".T-checkbox").is(':checked')) {
-                isConfirmAccount = 1;
-            } else {
-                isConfirmAccount = 0; 
+            var $this = $(this);
+            if($this.data("change")){//遍历修改行
+                var isConfirmAccount = "";
+                if ($this.find(".T-checkbox").is(':checked')) {
+                    isConfirmAccount = 1;
+                } else {
+                    isConfirmAccount = 0; 
+                }
+                //提交修改了对账状态或已对账行数据的行
+                if(($this.data("confirm") != isConfirmAccount) || ($this.data("confirm") == 1)){
+                    var checkRecord = {
+                        id : $this.data("id"),
+                        settlementMoney : getValue($this,"settlementMoney"),
+                        unPayedMoney : $this.find("td[name=unPayedMoney]").text(),
+                        checkRemark : getValue($this,"checkRemark"),
+                        isConfirmAccount : isConfirmAccount
+                    };
+                    checkSaveJson.push(checkRecord);
+                }
             }
-            var checkRecord = {
-                id : id,
-                settlementMoney : settlementMoney,
-                checkRemark : checkRemark,
-                isConfirmAccount : isConfirmAccount
-            };
-            financialBusCompanyListStr.push(checkRecord);
         });
-        financialBusCompanyListStr = JSON.stringify(financialBusCompanyListStr);
+        checkSaveJson = JSON.stringify(checkSaveJson);
         $.ajax({
             url:KingServices.build_url("financial/financialBusCompany","saveAccountChecking"),
             type:"POST",
             data:{
-                financialBusCompanyListStr : financialBusCompanyListStr
+                financialBusCompanyListStr : checkSaveJson
             },
             success:function(data){
                 var result = showDialog(data);
@@ -539,8 +533,9 @@ define(function(require, exports) {
             var validator = rule.check(busCompany.$checkTab);
 
             // 监听修改
-            busCompany.$checkTab.find(".T-checkList").off('change').on('change', function(event) {
+            busCompany.$checkTab.find(".T-checkList").off('change').on('change',"input",function(event) {
                 event.preventDefault();
+                $(this).closest('tr').data("change",true);
                 busCompany.$checkTab.data('isEdited', true);
             });
             busCompany.$checkTab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {

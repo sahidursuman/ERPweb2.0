@@ -1,10 +1,10 @@
 <div class="row T-newData" data-id="{{searchParam.restaurantId}}" data-name="{{restaurantName}}">
-    <div class="col-xs-12 border">
+    <div class="col-xs-12 border" style="padding-bottom:0px;">
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="T-search-area editable editable-click" >
                 <div class="form-group"> 
                     <label style="float: left;margin: 0px auto auto 15px" class=" control-label "> 餐厅：{{restaurantName}}</label>
-                    <label class="control-label col-sm-1" style="float:left;">账期:</label>
+                    <label class="control-label marginLeft-30" style="float:left;">账期:</label>
                     <div class="col-xs-1">
                         <div class="input-group">
                             <input class="col-xs-12 date-picker" name="startDate" placeholder="开始日期" type="text" value="{{searchParam.startDate}}" />   
@@ -22,22 +22,22 @@
                         </div>
                     </div>
 
-                    <label class="control-label col-sm-1" style="float:left;">账务类别:</label>
+                    <label class="control-label marginLeft-30" style="float:left;">账务类别：</label>
                     <input class="col-xs-1" name="accountInfo" placeholder="账务类别" type="text" value="{{searchParam.accountInfo}}" />
 
-                    <button class="marginLeft-30 btn-sm search-btn T-search">
+                    <button class="marginLeft-30 btn-sm search-btn T-search marginLeft-30">
                         <i class="ace-icon fa fa-search"></i>搜索
                     </button>
                         
-                    <button type="button" class="btn btn-sm btn-primary btn-success T-restaurantExport" style="margin-left: 25px;padding:0px;">
+                    <!-- <button type="button" class="btn btn-sm btn-primary btn-success T-restaurantExport" style="margin-left: 25px;padding:0px;">
 				        <span>导出报表</span>
 				        <i class="ace-icon fa fa-arrow-right icon-on-right"></i>
-			        </button>
+			        </button> -->
                 </div>
             </div>
         </form>
         <form class="form-horizontal" role="form" onsubmit="return false">
-            <div class="form-group ">
+            <div class="form-group" style="padding-top:10px;">
                 <label class=" control-label pull-left" style="margin-left:15px">账面应付合计：{{sumNeedPayMoney}}</label>
                 <label class=" control-label " style="margin-left:30px;">已付金额合计：{{sumPayedMoney}}</label>
                 <label class=" control-label " style="margin-left:30px;">结算金额合计：{{sumSettlementMoney}}</label>
@@ -71,33 +71,31 @@
 		</thead>
 		<tbody class="T-checkList" data-right="1240005">
 		    {{each financialRestaurantList as rs index}}  
-		    <tr class="T-checkTr" data-id="{{rs.id}}">
+		    <tr class="T-checkTr" data-id="{{rs.id}}" data-confirm="{{rs.isConfirmAccount}}">
 			    <td>{{index+1}}</td>
 			    <td>{{rs.tripNumber}}{{","}}{{rs.lineProductName}}{{","}}{{rs.guideName}}</td>
-			    <td name="consumeStartTime">
-                    {{if rs.consumeStartTime == null || rs.consumeStartTime == ""}}
+			    <td>{{if rs.accountTime == null || rs.accountTime == ""}}
                         -
                     {{else}}
-                        {{rs.consumeStartTime | dateFormat: 'yyyy-MM-dd'}}
+                        {{rs.accountTime | dateFormat:'yyyy-MM-dd'}}
                     {{/if}}
                 </td>
-			    <td>{{rs.type}}</td>
+			    <td>{{if rs.type == null || rs.type == ""}}-{{else}}{{rs.type}}{{/if}}</td>
                 <td>{{rs.price}}</td>
-			    <td>{{rs.adultCount}} 大 {{rs.childCount}} 小</td>
+			    <td>{{rs.memberCount}}</td>
 			    <td>{{rs.reduceMoney}}</td>
 			    <td>{{rs.needPayMoney}}</td>
-			    <td><a class="T-option T-payedDetail">{{"社付:"}}{{rs.travelAgencyPayedMoney}}{{","}}{{"导付:"}}{{rs.guidePayedMoney}}</a></td> 
+			    <td><a class="T-option T-payedDetail" data-money="{{rs.payedMoney + rs.realGuidePayMoney}}">{{"社付:"}}{{rs.payedMoney}}{{","}}{{"导付:"}}{{rs.realGuidePayMoney}}</a></td> 
 			    <td>{{if rs.billImage != null && rs.billImage !=""}}<a href="#" class="T-option T-restaurantImg" url="{{rs.billImage}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
 			    <td><input type="text" maxlength="10" name="settlementMoney" value="{{rs.settlementMoney}}" style="text-align:center"></td>
-                <td>{{rs.unPayedMoney}}</td>
+                <td name="unPayedMoney">{{rs.unPayedMoney}}</td>
                 <td><input type="text" maxlength="1000" name="checkRemark" style="text-align:center" value="{{rs.checkRemark}}" /></td>
-				<td>{{if rs.checkTime == null || rs.checkTime == ""}}-{{else}}{{rs.checkTime}}{{/if}}</td>
-                <td>{{rs.checkUserRealName}}</td>
+				<td>{{if rs.checkTime == null || rs.checkTime == ""}}-{{else}}{{rs.checkTime | dateFormat:'yyyy-MM-dd hh:mm:ss'}}{{/if}}</td>
+                <td>{{rs.checkUserName}}</td>
 				<td><label class="pos-rel">
 				   	    <input type="checkbox" class="ace T-checkbox" {{if rs.isConfirmAccount == 1}}checked="checked"{{/if}} />
 				   		<span class="lbl"></span>
 			        </label>
-
                     <a class="T-option T-needPayDetail">查看</a>
 			    </td>
 			</tr>
@@ -105,7 +103,7 @@
 		</tbody>
 	</table>
     <div class="form-group text-right">
-        <label class="control-label pull-right"/> 
+        <label class="control-label pull-right" style="margin-right:50px;"> 
             <input type="checkbox" class="ace pull-right T-checkAll">
             <span class="lbl"></span>  
             全选
