@@ -11,7 +11,7 @@
 				<td class="style-myself">出游日期：</td>
 				<td style="text-align: left;padding: 0px 0px 0px 10px" colspan="3">{{if touristGroup.startTime != null}}{{touristGroup.startTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
 				<td class="style-myself">人数合计：</td>
-				<td style="text-align: left;padding: 0px 0px 0px 10px" colspan="3">大人{{touristGroup.adultCount}}小孩{{touristGroup.childCount}}</td>
+				<td style="text-align: left;padding: 0px 0px 0px 10px" colspan="3">{{touristGroup.adultCount}}大{{touristGroup.childCount}}小</td>
 			</tr>
 		</table>
 		<div class="form-group" style="margin-left: 23px;margin-top: 10px">
