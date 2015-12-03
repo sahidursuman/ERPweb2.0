@@ -629,9 +629,11 @@ var modalScripts = {
 	'financial_guide':"js/template/financial/guide/guide.js",//导游账务
 	'financial_innerTransfer_in':"js/template/financial/innerTransferIn/innerTransferIn.js",//内转转入
 	'financial_innerTransfer_out':"js/template/financial/innerTransferOut/innerTransferOut.js",//内转转出
-
+	'financial_replace' : 'js/template/financial/replace/replace.js',//代订账务
 	'financial_planProfit': "js/template/financial/planProfit/planProfit.js", //发团利润
 	'financial_replaceProfit':"js/template/financial/replaceProfit/replaceProfit.js",
+	'financial_payment_details':"js/template/financial/paymentDetails/paymentDetails.js",//收支明细
+	'financial_ticket':"js/template/financial/ticket/ticket.js",//票务账务
 	//---------------------------------------------------------------------------------------------------------------
 	'public_message':"js/template/system/message/message.js",
 	'system_information':"js/template/system/information/information.js",
@@ -698,20 +700,6 @@ function listMenu(menuTemplate){
 					seajs.use("" + ASSETS_ROOT +"js/template/arrange/transit/transit.js",function(transit){
 						transit.listTransit(0,"","","","","","","","","","","","");
 						modals["arrange_transit"] = transit;
-					});
-				});
-
-				//绑定交通票务菜单功能
-				$("#sidebar .nav-list .financial_ticket").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/financial/ticket/ticket.js",function(ticket){
-						var date = new Date();
-						var year = date.getFullYear();
-						var month = ""
-						ticket.listTicket(0,"",year,"");
-						modals["financial_ticket"] = ticket;
 					});
 				});
 
@@ -809,7 +797,7 @@ function listMenu(menuTemplate){
 				});
 
 				//绑定系代订账务菜单功能
-				$("#sidebar .nav-list .financial_replace").click(function(){
+				/*$("#sidebar .nav-list .financial_replace").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
@@ -820,7 +808,7 @@ function listMenu(menuTemplate){
 						Replace.listReplace(0,"","",year,month);
 						modals["financial_replace"] = Replace;
 					});
-				});
+				});*/
 
 				//绑定转客菜单功能
 				$("#sidebar .nav-list .financial_transfer").click(function(){
