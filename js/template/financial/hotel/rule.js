@@ -3,7 +3,7 @@ define(function(require, exports) {
 		check:function($obj){
 			var validator = $obj.formValidate([
 	    	    {	//实际未付
-	    	    	$ele: $obj.find('input[name=FinancialHotelRealUnPayedMoney]'),
+	    	    	$ele: $obj.find('input[name=realUnPayedMoney]'),
 	    	    	rules: [
 	    	    	        {
 	    	    	        	type: 'null', 

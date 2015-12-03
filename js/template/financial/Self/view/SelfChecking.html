@@ -1,4 +1,4 @@
-<div class="row selfPayChecking globalAdd">
+<div class="row T-cking globalAdd">
 <div class="col-xs-12 border" style="padding-bottom: 0px">
             <form class="form-horizontal" role="form" onsubmit="return false">
                 <div class="search-area editable editable-click" >
@@ -18,7 +18,7 @@
 							</select>
                         <button class="marginLeft-30 btn-sm search-btn btn-checking-search" >
                              <i class="ace-icon fa fa-search"></i>
-                                                                                                 搜索
+                              搜索
                         </button>
                         <button type="button" class="btn btn-sm btn-primary btn-success btn-selfExport marginLeft-30">
 							<span>导出报表</span>
@@ -67,7 +67,7 @@
 						    <tr data-entity-id="{{checking.id}}" data-entity-isConfirmAccount="{{checking.isConfirmAccount}}" data-entity-realUnPayedMoney="{{checking.realUnPayedMoney}}" data-entity-remark="{{checking.remark}}">
 					         <td>{{index+1}}</td>
 								<td>{{checking.tripNumber}}{{","}}{{checking.lineProductName}}{{","}}{{checking.guideName}}</td>
-								<td name="consumeStartTime">{{if checking.consumeStartTime == null || checking.consumeStartTime == ""}}-{{else}}{{checking.consumeStartTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
+								<td name="consumeStartTime">1010</td>
 								<td>{{checking.realCount}}</td>
 								<td>{{checking.marketPrice}}</td>
 								<td>{{checking.price}}</td>
@@ -96,7 +96,7 @@
 				</table>
       <div class="form-group text-right">
             <label class="control-label pull-right"/>
-                <input type="checkbox" class="ace pull-right selectAll">
+                <input type="checkbox" class="ace pull-right T-checkAll">
                 <span class="lbl"></span>  
                 全选
             </label>
@@ -113,7 +113,7 @@
             </div>
             <form class="form-horizontal" role="form" onsubmit="return false">
                 <div class="form-group" style="text-align: center;">
-                    <button class="btn btn-xs btn-primary btn-selfPayFinancial-close" >
+                    <button class="btn btn-xs btn-primary T-closeTab" >
                         <i class="ace-icon fa fa-times-circle"></i>
                        	 	关闭
                     </button>
@@ -125,5 +125,4 @@
                 </div>
             </form>
 			</div>
-
 </div>

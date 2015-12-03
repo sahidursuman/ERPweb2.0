@@ -625,15 +625,22 @@ var modalScripts = {
 	'financial_turnProfit': "js/template/financial/turnProfit/turnProfit.js",
 	'financial_totalProfit': "js/template/financial/totalProfit/totalProfit.js",
 	'financial_Client': "js/template/financial/Client/Client.js",
+	'financial_insure': "js/template/financial/insure/insure.js",
 	'financial_shop': "js/template/financial/shop/shop.js",//购物账务
 	'financial_guide':"js/template/financial/guide/guide.js",//导游账务
 	'financial_innerTransfer_in':"js/template/financial/innerTransferIn/innerTransferIn.js",//内转转入
 	'financial_innerTransfer_out':"js/template/financial/innerTransferOut/innerTransferOut.js",//内转转出
 	'financial_replace' : 'js/template/financial/replace/replace.js',//代订账务
-	'financial_planProfit': "js/template/financial/planProfit/planProfit.js", //发团利润
 	'financial_replaceProfit':"js/template/financial/replaceProfit/replaceProfit.js",
 	'financial_payment_details':"js/template/financial/paymentDetails/paymentDetails.js",//收支明细
 	'financial_ticket':"js/template/financial/ticket/ticket.js",//票务账务
+	'financial_planProfit': "js/template/financial/planProfit/planProfit.js", //发团利润
+	'financial_Other_accounts':"js/template/financial/OtherAccounts/OtherAccounts.js",//其他账务
+	'financial_replaceProfit':"js/template/financial/replaceProfit/replaceProfit.js",//代订利润
+	'financial_restaurant':"js/template/financial/Restaurant/Restaurant.js",//餐厅账务
+	'financial_rummery':"js/template/financial/hotel/hotel.js",//酒店账务
+	'financial_busCompany':"js/template/financial/busCompany/busCompany.js",//车队账务
+	'financial_self':"js/template/financial/Self/Self.js",//自费账务
 	//---------------------------------------------------------------------------------------------------------------
 	'public_message':"js/template/system/message/message.js",
 	'system_information':"js/template/system/information/information.js",
@@ -714,45 +721,45 @@ function listMenu(menuTemplate){
 				});
 
 				//绑定车队帐务菜单功能
-				$("#sidebar .nav-list .financial_busCompany").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/financial/busCompany/busCompany.js",function(busCompany){
-						var date = new Date();
-						var year = date.getFullYear();
-						busCompany.listBusCompany(0,"",year,"");
-						modals["financial_busCompany"] = busCompany;
-					});
-				});
+				// $("#sidebar .nav-list .financial_busCompany").click(function(){
+				// 	$("#sidebar .nav-list li").removeClass("active");
+				// 	$(this).addClass("active");
+				// 	$(this).parent().parent().addClass("active");
+				// 	seajs.use("" + ASSETS_ROOT +"js/template/financial/busCompany/busCompany.js",function(busCompany){
+				// 		var date = new Date();
+				// 		var year = date.getFullYear();
+				// 		busCompany.listBusCompany(0,"",year,"");
+				// 		modals["financial_busCompany"] = busCompany;
+				// 	});
+				// });
 
 				//绑定酒店账务菜单功能
-				$("#sidebar .nav-list .financial_rummery").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/financial/hotel/hotel.js",function(hotel){
-						var date = new Date();
-						var year = date.getFullYear();
-						var month = ""
-						hotel.listHotel(0,"",year,month);
-						modals["financial_rummery"]  = hotel;
-					});
-				});
+				// $("#sidebar .nav-list .financial_rummery").click(function(){
+				// 	$("#sidebar .nav-list li").removeClass("active");
+				// 	$(this).addClass("active");
+				// 	$(this).parent().parent().addClass("active");
+				// 	seajs.use("" + ASSETS_ROOT +"js/template/financial/hotel/hotel.js",function(hotel){
+				// 		var date = new Date();
+				// 		var year = date.getFullYear();
+				// 		var month = ""
+				// 		hotel.listHotel(0,"",year,month);
+				// 		modals["financial_rummery"]  = hotel;
+				// 	});
+				// });
 
 				//绑定系餐厅账务菜单功能
-				$("#sidebar .nav-list .financial_restaurant").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/financial/Restaurant/Restaurant.js",function( Restaurant){
-						var date = new Date();
-						var year = date.getFullYear();
-						var month = ""//date.getMonth()+1
-						Restaurant.listRestaurant(0,"",year,month);/*new Date().getFullYear()*/
-						modals["financial_restaurant"] = Restaurant;
-					});
-				});
+				// $("#sidebar .nav-list .financial_restaurant").click(function(){
+				// 	$("#sidebar .nav-list li").removeClass("active");
+				// 	$(this).addClass("active");
+				// 	$(this).parent().parent().addClass("active");
+				// 	seajs.use("" + ASSETS_ROOT +"js/template/financial/Restaurant/Restaurant.js",function( Restaurant){
+				// 		var date = new Date();
+				// 		var year = date.getFullYear();
+				// 		var month = ""//date.getMonth()+1
+				// 		Restaurant.listRestaurant(0,"",year,month);/*new Date().getFullYear()*/
+				// 		modals["financial_restaurant"] = Restaurant;
+				// 	});
+				// });
 
 				//绑定景区账务
 				$("#sidebar .nav-list .financial_scenic").click(function(){
@@ -767,35 +774,6 @@ function listMenu(menuTemplate){
 						modals["financial_scenic"] = Scenic;
 					});
 				});
-
-				//绑定自费账务菜单功能
-				$("#sidebar .nav-list .financial_self").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/financial/Self/Self.js",function( Self){
-						var date = new Date();
-						var year = date.getFullYear();
-						var month = ""
-						Self.listSelf(0,"",year,month);
-						modals["financial_Self"] = Self;
-					});
-				});
-
-				//绑定保险账务菜单功能
-				$("#sidebar .nav-list .financial_insure").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/financial/insure/insure.js",function(Insure){
-						var date = new Date();
-						var year = date.getFullYear();
-						var month = ""//date.getMonth()+1
-						Insure.listInsure(0,"",year,"");
-						modals["financial_insure"] = Insure;
-					});
-				});
-
 				//绑定系代订账务菜单功能
 				/*$("#sidebar .nav-list .financial_replace").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
@@ -822,20 +800,6 @@ function listMenu(menuTemplate){
 						modals["financial_transfer"] = transfer;
 					});
 				});
-				
-				
-
-				//绑定购物菜单功能
-				/*$("#sidebar .nav-list .financial_shop").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/financial/shop/shop.js",function(shop){
-						shop.listFinancialShop(0,"","","");
-						modals["financial_shop"] = shop;
-					});
-				});*/
-
 				//绑定其他支出菜单功能
 				$("#sidebar .nav-list .financial_else").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
@@ -867,17 +831,6 @@ function listMenu(menuTemplate){
 						// count.getlistCount(0,"","","","","","","","");
 					});
 				});
-
-				// //绑定代订利润功能
-				// $("#sidebar .nav-list .financial_replaceProfit").click(function(){
-				// 	$("#sidebar .nav-list li").removeClass("active");
-				// 	$(this).addClass("active");
-				// 	$(this).parent().parent().addClass("active");
-				// 	seajs.use("" + ASSETS_ROOT +"js/template/financial/replaceProfit/replaceProfit.js",function(replaceProfit){
-				// 		replaceProfit.listReplaceProfit(0,"","","","","","","","","","");
-				// 	});
-				// });
-
 				//绑定収支明细菜单功能
 				$("#sidebar .nav-list .financial_collectDetail").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
@@ -1730,4 +1683,47 @@ KingServices.getDistrictList = function(obj,cityId,districtId){
 KingServices.hotelDescArray = ['未选择', '三星以下', '三星', '准四星', '四星', '准五星', '五星', '五星以上']
 KingServices.getHotelDesc = function(level, defaultDesc) {
 	return  KingServices.hotelDescArray[level] || defaultDesc || '三星以下';
+};
+
+KingServices.checkAll = function($checkAll,checkboxList){//$checkAll全选按钮对象，checkboxList复选框列表
+	//全选框初始化
+    if(isAllChecked(checkboxList)){
+        $checkAll.prop("checked",true);
+    }
+
+	//给全选按钮绑定事件
+    $checkAll.click(function(){
+        if($checkAll.is(":checked")){
+            checkboxList.each(function(i){
+                $(this).prop("checked",true);
+            });
+        } else{
+            checkboxList.each(function(i){
+                if(!$(this).prop("disabled")){
+                    $(this).prop("checked",false);
+                }                                
+            });
+        } 
+    });
+
+    checkboxList.on("click",function(){
+        if($(this).is(":checked")){
+            if(isAllChecked(checkboxList)){
+		        $checkAll.prop("checked",true);
+		    }
+        } else{
+            $checkAll.prop("checked",false);
+        }
+    });
+};
+//判断列表是否已全选
+function isAllChecked(checkboxList){
+	var isAll = true;
+    checkboxList.each(function(){
+        if(!$(this).is(":checked")){
+          isAll = false;
+          return false;  
+        }
+    });
+    return isAll;
 }

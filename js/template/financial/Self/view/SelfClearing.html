@@ -1,4 +1,4 @@
-<div class= "row selfPayFinancialBalancing globalAdd">
+<div class= "row T-Clear globalAdd">
     <div class="col-sm-12 " style="border: 1px solid #ccc">
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="search-area  editable editable-click" style="margin-top: 10px">
@@ -39,7 +39,7 @@
         </form>
 
     </div>
-    <button class="btn btn-sm btn-success btn-selfPayBlance-Records pull-left margin-topTicket" > <i class="ace-icon fa fa-wrench icon-animated-wrench bigger-125"></i> 操作记录 </button>
+    <button class="btn btn-sm btn-success T-Records pull-left margin-topTicket" > <i class="ace-icon fa fa-wrench icon-animated-wrench bigger-125"></i> 操作记录 </button>
     <div style="clear: both"></div>
     <table class="table table-striped table-bordered table-hover all margin-top">
         <thead>
@@ -59,7 +59,7 @@
         </thead>
         <tbody>
         {{each fcSelfPaySettlementList as SettlementList index}}
-        <tr data-entity-id="{{SettlementList.id}}" data-entity-year="{{SettlementList.year}}" data-entity-month="{{SettlementList.month}}">
+        <tr data-entity-selfPayName="{{SettlementList.id}}" data-entity-year="{{SettlementList.year}}" data-entity-month="{{SettlementList.month}}">
             <td >{{SettlementList.year}}{{"年"}}{{SettlementList.month}}{{"月"}}</td>
             <td >{{SettlementList.needPayMoney}}</td>
             <td  name="blancerealNeedPayMoney">{{SettlementList.realNeedPayMoney}}</td>

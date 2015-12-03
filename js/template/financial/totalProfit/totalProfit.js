@@ -10,7 +10,14 @@ define(function(require, exports) {
     };
 
     TotalProfit.initModule = function() {
-        TotalProfit.listTotalProfit();
+        var date = new Date(),
+            year = date.getFullYear(),
+            month = date.getMonth()+1,
+            day = date.getDate();
+        var startTime = year + "-" + month + "-1",
+            endTime = year + "-" + month + "-" + day;
+
+        TotalProfit.listTotalProfit(startTime,endTime);
     };
 
     TotalProfit.listTotalProfit = function(startTime,endTime){
@@ -32,7 +39,7 @@ define(function(require, exports) {
                 var result = showDialog(data);
                 if (result) {
                     
-                    data.searchParam = TotalProfit.searchData
+                    data.searchParam = TotalProfit.searchData;
                     var html = listTemplate(data);
                     addTab(menuKey,"总利润表",html);
                     // 初始化jQuery 对象

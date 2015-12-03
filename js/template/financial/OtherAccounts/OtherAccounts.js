@@ -6,10 +6,13 @@ define(function(require,exports){
 	lookDetailTemplate = require("./view/lookDetail"),
 	viewhandleTemplate = require("./view/viewhandle"),
 	ViewAmountPaidTemplate = require("./view/ViewAmountPaid"),
-	viewOrderDetailTemplate = require("./view/viewOrderDetail");
+	viewOrderDetailTemplate = require("./view/viewOrderDetail"),
+	checkTabId = menuKey+"-checking";
 	var  OtherAccounts={
 
-		listFinancialOtherAccounts:function(page,OtherAccountsID,year,month){
+	};
+
+		OtherAccounts.listFinancialOtherAccounts = function(page,OtherAccountsID,year,month){
 			// $.ajax({
 			// 	url: "",
 			// 	type: 'POST',
@@ -23,58 +26,74 @@ define(function(require,exports){
 						Tools.addTab(menuKey,"其他账务",html);
 					// 对账		
 					$(".T-other").find('.T-checking').click(function(event) {
-						var html = AccountsCheckingTemplate();
-						addTab("-checking","其他对账",html);
-						// 设置表单验证
-						var $container = $(".T-Accounts");
-						var validator = rule.check($container);
-						//时间控件
-						$container.find("input[name=joinTime]").datepicker({
-							autoclose: true,
-							todayHighlight: true,
-							format: 'yyyy-mm-dd',
-							language: 'zh-CN'
-						});
-
-						// 查看已付金额明细
-						$(".T-Accounts").find('.T-lookDetail').click(function(event) {
-							event.preventDefault();
-							/* Act on the event */
-							OtherAccounts.lookDetail();
-						});
-
-						//应付金额明细
-						$(".T-Accounts").find('.T-viewhandle').click(function(event) {
-							event.preventDefault();
-							/* Act on the event */
-							OtherAccounts.viewhandle();
-						});
-						
+						OtherAccounts.AccountsChecking($(this).data('id'));
 					});
 					// 付款
 					$(".T-other").find('.T-payment').click(function(event) {
-
-						var html = AccountsPaymentTemplate();
-						addTab("-payment","其他付款",html);
-
-						//已付付金额明细
-						$(".T-AccountsPayment").find('.T-ViewAmountPaid').click(function(event) {
-							event.preventDefault();
-							/* Act on the event */
-							OtherAccounts.ViewAmountPaid();
-						});
-						//应付金额明细
-						$(".T-AccountsPayment").find('.T-viewPaid').click(function(event) {
-							event.preventDefault();
-							/* Act on the event */
-							OtherAccounts.viewOrderDetail();
-						});
-
+						OtherAccounts.AccountsPayment($(this).data('id'));
 					});
 
 
 			// })
 			
+			// 对账
+		OtherAccounts.AccountsChecking = function(){
+			var html = AccountsCheckingTemplate();
+			Tools.addTab(checkTabId,"其他对账",html);
+			var $checkTabId = $("#tab-"+checkTabId+"-content");
+			// 查看已付金额明细
+			$(".T-Accounts").find('.T-lookDetail').click(function(event) {
+				event.preventDefault();
+				/* Act on the event */
+				OtherAccounts.lookDetail();
+			});
+
+			//应付金额明细
+			$(".T-Accounts").find('.T-viewhandle').click(function(event) {
+				event.preventDefault();
+				/* Act on the event */
+				OtherAccounts.viewhandle();
+			});
+			
+			//时间控件
+			var $container = $(".T-Accounts");
+			$container.find("input[name=joinTime]").datepicker({
+				autoclose: true,
+				todayHighlight: true,
+				format: 'yyyy-mm-dd',
+				language: 'zh-CN'
+			});
+			//关闭页面事件
+	        $container.find(".T-closeTab").click(function(){
+	            closeTab(checkTabId);
+	        });
+			}	
+			//付款
+		OtherAccounts.AccountsPayment = function(){
+			var html = AccountsPaymentTemplate();
+			Tools.addTab("-payment","其他付款",html);
+
+			//已付付金额明细
+			$(".T-AccountsPayment").find('.T-ViewAmountPaid').click(function(event) {
+				event.preventDefault();
+				/* Act on the event */
+				OtherAccounts.ViewAmountPaid();
+			});
+			//应付金额明细
+			$(".T-AccountsPayment").find('.T-viewPaid').click(function(event) {
+				event.preventDefault();
+				/* Act on the event */
+				OtherAccounts.viewOrderDetail();
+			});
+									//时间控件
+			var $container = $(".T-AccountsPayment");
+			$container.find("input[name=joinTime]").datepicker({
+				autoclose: true,
+				todayHighlight: true,
+				format: 'yyyy-mm-dd',
+				language: 'zh-CN'
+			});
+		}
 
 			// // 查看已付金额a-1
 		OtherAccounts.lookDetail = function(){
@@ -129,7 +148,6 @@ define(function(require,exports){
 				    zIndex:1028,
 				    content: html,
 				    scrollbar: false,
-
 				    });
 		}
 			
@@ -138,7 +156,7 @@ define(function(require,exports){
 		}
 		
 
-	}
+	
 
 	exports.init = OtherAccounts.listFinancialOtherAccounts;
 })

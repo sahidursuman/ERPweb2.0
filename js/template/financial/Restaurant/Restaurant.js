@@ -1,606 +1,659 @@
 define(function(require, exports) {
-	var rule = require("./rule");
-    var menuKey = "financial_restaurant",
-        listTemplate = require("./view/list"),
-        billImageTempLate = require("./view/billImages"),
+    var rule = require("./rule"),
+    	menuKey = "financial_restaurant",
+    	listTemplate = require("./view/list"),
         restaurantChecking = require("./view/restaurantChecking"),
         restaurantClearing = require("./view/restaurantClearing"),
-        blanceRecords = require("./view/restaurantRecords"),
-        exportInfo = require("./view/restaurantExportInfo"),
-        tabId = "tab-"+menuKey+"-content",
-        checkTabId = menuKey+"-checking",
-        blanceTabId = menuKey+"-blance",
-        yearList=[],
-        monthList = []
-	    for(var i=2013;i<=new Date().getFullYear();i++){
-	    	var yeardata={"value":i}
-	    	yearList.push(yeardata)
-	    }
-	    for(var j = 1;j<=12;j++){
-	    	var monthData = {"value":j}
-	    	monthList.push(monthData);
-	    }
-    var Restaurant = {
-        searchData:{
-			page : "",
-        	restaurantId : "",
-        	year : "",
-        	month : ""
-        },
-        searchCheckData:{
-        	"restaurantId":"",
-        	"restaurantName":"",
-        	"year":"",
-        	"month":""
-        },
-        searchBalanceData:{
-        	"restaurantId":"",
-            "restaurantName":"",
-        	"year":"",
-        	"startMonth":"",
-        	"endMonth":""
-        },
-        /**/
-        edited : {},
-		isEdited : function(editedType){
-			if(!!Restaurant.edited[editedType] && Restaurant.edited[editedType] != ""){
-				return true;
-			}
-			return false;
-		},
-		oldCheckRestaurantId : 0,
-        oldBlanceRestaurantId : 0,
-        listRestaurant:function(page,restaurantId,year,month){
-            $.ajax({
-                url:""+APP_ROOT+"back/financial/financialRestaurant.do?method=listSumFcRestaurant&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-                type:"POST",
-                data:"pageNo="+page+"&restaurantId="+restaurantId+"&year="+year+"&month="+month+"&sortType=auto",
-                dataType:"json",
-                beforeSend:function(){
-                    globalLoadingLayer = openLoadingLayer();
-                },
-                success:function(data){
-                   layer.close(globalLoadingLayer);
-                   var result = showDialog(data);
-                    if(result){
-                    	data.restaurantNameListNew = JSON.parse(data.restaurantNameListNew);
-	                    Restaurant.searchData={
-							page : page,
-							restaurantId:restaurantId,
-							year:year,
-							month:month
+        billImageTempLate = require("./view/billImages"),
+        payedDetailTempLate = require("./view/viewPayedDetail"),
+        needPayDetailTempLate = require("./view/viewNeedPayDetail");
+
+    var restaurant = {
+    	searchData : false,
+    	$tab :false,
+    	$checkTab : false,
+    	$clearTab : false,
+    	$searchArea : false,
+    	$checkSearchArea: false,
+        $clearSearchArea : false,
+        restaurantList : false
+    };
+
+    restaurant.initModule = function() {
+    	var date = new Date(),
+            year = date.getFullYear(),
+            month = date.getMonth()+1,
+            day = date.getDate();
+        var startDate = year + "-" + month + "-1",
+            endDate = year + "-" + month + "-" + day;
+
+        restaurant.listRestaurant(0,"","",startDate,endDate);
+    };
+
+    restaurant.listRestaurant = function(page,restaurantName,restaurantId,startDate,endDate){
+    	if (restaurant.$searchArea && arguments.length === 1) {
+            restaurantName = restaurant.$searchArea.find("input[name=restaurantName]").val(),
+            restaurantId = restaurant.$searchArea.find("input[name=restaurantId]").val(),
+            startDate = restaurant.$searchArea.find("input[name=startDate]").val(),
+            endDate = restaurant.$searchArea.find("input[name=endDate]").val()
+        }
+        // 修正页码
+        page = page || 0;
+        restaurant.searchData = {
+            pageNo : page,
+            restaurantName : restaurantName,
+            restaurantId : restaurantId,
+            startDate : startDate,
+            endDate : endDate,
+            sortType: 'auto'
+        };
+
+        var searchParam = JSON.stringify(restaurant.searchData);
+        $.ajax({
+            url:KingServices.build_url("financial/financialRestaurant","listSumFinancialRestaurant"),
+            type:"POST",
+            data:{ searchParam : searchParam },
+            success:function(data){
+               layer.close(globalLoadingLayer);
+               var result = showDialog(data);
+                if(result){
+                    restaurant.restaurantList = data.restaurantNameList;
+                    var html = listTemplate(data);
+                    Tools.addTab(menuKey,"餐厅账务",html);
+
+                    restaurant.initList();
+                    // 绑定翻页组件
+                    laypage({
+                        cont: restaurant.$tab.find('.T-pagenation'),
+                        pages: data.searchParam.totalPage,
+                        curr: (page + 1),
+                        jump: function(obj, first) {
+                            if (!first) {
+                                restaurant.listRestaurant(obj.curr - 1);
+                            }
                         }
-	                    data.yearList = yearList
-	                    data.monthList = monthList
-	                    data.searchParam = Restaurant.searchData
-	                    
-                        var html = listTemplate(data);
-                        addTab(menuKey,"餐厅账务",html);
-                        //搜索按钮事件
-                        $("#" + tabId + " .btn-restaurant-search").click(function(){
-                            Restaurant.searchData={
-                                restaurantId:$("#" + tabId + " select[name=restaurantId]").val(),
-                            	year:$("#" + tabId + "  select[name=year]").val(),
-                            	month:$("#" + tabId + " select[name=month]").val(),
-                            }
-                            Restaurant.listRestaurant(0,Restaurant.searchData.restaurantId,Restaurant.searchData.year,Restaurant.searchData.month);
-                        });
-                        // 绑定翻页组件
-						laypage({
-						    cont: $('#' + tabId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
-						    pages: data.totalPage, //总页数
-						    curr: (page + 1),
-						    jump: function(obj, first) {
-						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-						    		Restaurant.listRestaurant(obj.curr -1,Restaurant.searchData.restaurantId,Restaurant.searchData.year,Restaurant.searchData.month);
-								}
-						    }
-						});
-                      
-                        //给对账按钮绑定事件
-						$("#" + tabId + " .btn-divide").click(function(){
-							Restaurant.searchCheckData={
-                        		restaurantId:$(this).attr("data-entity-id"),
-                        		restaurantName:$(this).attr("data-entity-restaurantName"),
-                        		year:$(this).attr("data-entity-year"),
-                        		month:$(this).attr("data-entity-month")        
-                            }
-                            Restaurant.restaurantCheckList(0,Restaurant.searchCheckData.restaurantId,Restaurant.searchCheckData.restaurantName,Restaurant.searchCheckData.year,Restaurant.searchCheckData.month)
-                        });
-                        //给结算按钮绑定事件
-						$("#" + tabId + " .btn-balance").click(function(){
-                            Restaurant.searchBalanceData={
-                            	"restaurantId":$(this).attr("data-entity-id"),
-                            	"restaurantName":$(this).attr("data-entity-restaurantName"),
-                            	"year":$(this).attr("data-entity-year"),
-                            	"startMonth":$(this).attr("data-entity-startMonth"),
-                            	"endMonth":$(this).attr("data-entity-endMonth")
-                            }
-                            Restaurant.restaurantBalanceList(0,Restaurant.searchBalanceData.restaurantId,Restaurant.searchBalanceData.restaurantName,Restaurant.searchBalanceData.year,Restaurant.searchBalanceData.startMonth,Restaurant.searchBalanceData.endMonth);
-                        });
-                    }
+                    });
                 }
-           });
-        },    
-		//餐厅对账处理 
-		restaurantCheckList:function(page,restaurantId,restaurantName,year,month){ 
-	    	$.ajax({
-	    		 url:""+APP_ROOT+"back/financial/financialRestaurant.do?method=listFcRestaurant&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-	             type:"POST",
-	             data:"pageNo="+page+"&restaurantId="+restaurantId+"&year="+year+"&month="+month+"&sortType=auto",
-	             dataType:"json",
-	             beforeSend:function(){
-	                 globalLoadingLayer = openLoadingLayer();
-	             },
-	             success:function(data){
-	            	//表单验证
-	            	var $obj = $(".restChecking .form-horizontal");
-	                layer.close(globalLoadingLayer);
-	                var result = showDialog(data);
-	                 if(result){
-	                 	data.financialRestaurantList = JSON.parse(data.financialRestaurantList);
-						Restaurant.searchCheckData={
-							restaurantId:restaurantId,
-							restaurantName:restaurantName,
-							year:year,
-							month:month        
-						}
-						data.yearList = yearList
-						data.monthList = monthList
-						data.restaurantName = restaurantName
-						data.searchParam = Restaurant.searchCheckData  
-						var html = restaurantChecking(data);
-					    //addTab(checkTabId,"餐厅对账",html);
-						var validator;
-						//addTab(checkTabId,"餐厅对账",html);
-					    if($("#" +"tab-"+checkTabId+"-content").length > 0)  {
-							 if(!!Restaurant.edited["checking"] && Restaurant.edited["checking"] != ""){
-								addTab(checkTabId,"餐厅对账");
-								showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
-									 validator = rule.check($('.restChecking'));
-									 if (!validator.form()) { return; }
-									 Restaurant.saveCheckingData(Restaurant.oldCheckRestaurantId,restaurantName,0)
-									 Restaurant.edited["checking"] = "";
-									 addTab(checkTabId,"餐厅对账",html);
-									 validator = rule.check($('.restChecking'));
-								},function(){
-									 addTab(checkTabId,"餐厅对账",html);
-									 Restaurant.edited["checking"] = "";
-									 validator = rule.check($('.restChecking'));
-								});
-							}else{
-								addTab(checkTabId,"餐厅对账",html);
-								validator = rule.check($('.restChecking'));
-							}
-						}else{
-							addTab(checkTabId,"餐厅对账",html);
-							validator = rule.check($('.restChecking'));
-							
-						}
+            }
+        });
+    };
 
-						//取消对账权限过滤
-                 	    var checkList = data.financialRestaurantList;
-	                    var checkTr = $(".T-checkList tr");
-	                    var rightCode = $(".T-checkList").data("right");
-	                    checkDisabled(checkList,checkTr,rightCode);
-		                    
-						$("#" +"tab-"+checkTabId+"-content .all").on("change",function(){
-							Restaurant.edited["checking"] = "checking";
-							Restaurant.oldCheckRestaurantId = restaurantId;
-						});
-	                   //给搜索按钮绑定事件
-		                 $("#" +"tab-"+ checkTabId+"-content"+" .btn-checking-search").click(function(){
-	                         Restaurant.searchCheckData={
-	                            restaurantId:restaurantId,
-	                            restaurantName:restaurantName,
-	                         	year:$("#" +"tab-"+ checkTabId+"-content"+"  select[name=year]").val(),
-	                         	month:$("#" +"tab-"+ checkTabId+"-content"+" select[name=month]").val(),
-	                         }
-	                         Restaurant.restaurantCheckList(0,Restaurant.searchCheckData.restaurantId,Restaurant.searchCheckData.restaurantName,Restaurant.searchCheckData.year,Restaurant.searchCheckData.month)
-	                     });
-		               //导出报表btn-restaurantExport
-			             $("#" +"tab-"+ checkTabId+"-content"+" .btn-restaurantExport").click(function(){
- 	                         var year=$("#" +"tab-"+ checkTabId+"-content"+"  select[name=year]").val();
-	                         var month=$("#" +"tab-"+ checkTabId+"-content"+" select[name=month]").val();
-	                        /**/
-	                        checkLogin(function(){
-	                        	var url = ""+APP_ROOT+"back/export.do?method=restaurant&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view"+"&restaurantId="+restaurantId+"&restaurantName="+restaurantName+"&year="+year+"&month="+month+"&sortType=auto";
-	                        	exportXLS(url)
-	                        });
-	                       
-			             });
-			             // 绑定翻页组件
-						laypage({
-						    cont: $("#tab-"+checkTabId+"-content").find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
-						    pages: data.totalPage, //总页数
-						    curr: (page + 1),
-						    jump: function(obj, first) {
-						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-						    		Restaurant.restaurantCheckList(obj.curr -1,Restaurant.searchCheckData.restaurantId,Restaurant.searchCheckData.restaurantName,Restaurant.searchCheckData.year,Restaurant.searchCheckData.month)
-		                		}
-						    }
-						});
-	                   
-			             //给全选绑定事件
-			                 $("#" +"tab-"+ checkTabId+"-content"+" .selectAll").click(function(){
-			                	 var flag = this.checked;
-			                	 $(".restChecking .all tbody tr").each(function(){
-			                		 var checkedbox = $(this).find(".restaurantFinancial") 
-			                		 if(flag){
-			                			 checkedbox.prop("checked",true);
-			                		 }else{
-										 //判断对账状态
-										 if(checkedbox.attr("data-entity-checkStatus") == 1){
-											 checkedbox.prop("checked",true);
-										 }else{ 	
-											 checkedbox.prop("checked",false);
-										 }
-									 }
-			                	 });
-			                 }); 
-			               //给复选框绑定事件
-			                 $("#" +"tab-"+ checkTabId+"-content"+" .restaurantFinancial").click(function(){
-			                		 var flag = true
-				                	 $(this).each(function(){
-				                		 if(!$(this).prop("checked")){
-					                			flag = false;
-					                		} 
-				                	 })
-				                	 $("#" +"tab-"+ checkTabId+"-content"+" .selectAll").prop("checked",flag)
-			                 });
-		                 //给确认对账按钮绑定事件
-			                 $("#" +"tab-"+ checkTabId+"-content"+" .btn-restaurantFinancial-checking").click(function(){
-			                	 if (!validator.form()) { return; }
-			            		 Restaurant.saveCheckingData(restaurantId,restaurantName,0)
-			                 })
-		                 //给查看单据绑定事件
-		                 $("#" +"tab-"+ checkTabId+"-content"+" .restaurantImg").click(function(){
-		                	 var WEB_IMG_URL_BIG = $("#" +"tab-"+ checkTabId+"-content").find("input[name=WEB_IMG_URL_BIG]").val();//大图
-		                	 var WEB_IMG_URL_SMALL = $("#" +"tab-"+ checkTabId+"-content").find("input[name=WEB_IMG_URL_SMALL]").val();//大图
-		                	 Restaurant.viewImage(this,WEB_IMG_URL_BIG,WEB_IMG_URL_SMALL);
-		                 });
-			             //关闭按钮事件
-			             $("#" +"tab-"+ checkTabId+"-content"+" .btn-restaurantFinancial-close").click(function(){
-			            	 showConfirmDialog($( "#confirm-dialog-message" ), "确定关闭本选项卡?",function(){
-			            		 closeTab(checkTabId);
-								 Restaurant.edited["checking"] = "";
-			            	 });
-			             });
-			             
-	                 }          
-		                 
-	             }
-	    	 });
-	    },
-	    //餐厅结算处理
-	    restaurantBalanceList:function(page,restaurantId,restaurantName,year,startMonth,endMonth){
-	    	$.ajax({
-                url:""+APP_ROOT+"back/financial/financialRestaurant.do?method=listFcRestaurantSettlement&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-                type:"POST",
-                data:"pageNo="+page+"&restaurantId="+restaurantId+"&year="+year+"&monthStart="+startMonth+"&monthEnd="+endMonth+"&sortType=auto",
-                dataType:"json",
-                beforeSend:function(){
-                    globalLoadingLayer = openLoadingLayer();
-                },
-                success:function(data){
-                   layer.close(globalLoadingLayer);    
-                   var result = showDialog(data);
-                    if(result){
-	                    data.yearList = yearList
-	                    data.monthList = monthList
-	                    data.restaurantName = restaurantName
-                        var html = restaurantClearing(data);
-	                    if($("#" +"tab-"+blanceTabId+"-content").length > 0)
-	             	    {
-	             	    	 if(!!Restaurant.edited["blance"] && Restaurant.edited["blance"] != ""){
-	             	    		addTab(blanceTabId,"餐厅结算");
-			                    //给每个tr添加表单验证
-	             	    		showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
-	             	    			 Restaurant.validatorTable()
-	             	    			 var saveBtn = $("#" +"tab-"+ blanceTabId+"-content"+" .btn-restaurantBlance-save")
-	             	    			 if (!$(saveBtn).data('validata').form()) { return; }
-	             	    			 Restaurant.saveBlanceData(Restaurant.oldBlanceRestaurantId,restaurantName,0)
-				            		 Restaurant.edited["blance"] = "";
-				            		 addTab(blanceTabId,"餐厅结算",html);
-				            		 Restaurant.validatorTable();
-				            	 },function(){
-				            		    addTab(blanceTabId,"餐厅结算",html);
-				            		    Restaurant.edited["blance"] = "";
-				            		    Restaurant.validatorTable();
-				            	 });
-	             	    	 }else{
-	                 	    	addTab(blanceTabId,"餐厅结算",html);
-	                 	    	Restaurant.validatorTable();
-	             	    	 }
-	         	    		 
-	             	    }else{
-	             	    	addTab(blanceTabId,"餐厅结算",html);
-	             	    	Restaurant.validatorTable();
-	             	    };
-	             	   $("#" +"tab-"+blanceTabId+"-content .all").on('change', 'input, select', function() {
-	             		    Restaurant.edited["blance"] = "blance";
-	             		    Restaurant.oldBlanceRestaurantId = restaurantId;
-	    	    			$(this).closest('tr').data('blanceStatus',true);
-	    	    		});
-                        //搜索按钮事件
-                        $("#" +"tab-"+ blanceTabId + "-content"+" .btn-blance-search").click(function(){
-                            Restaurant.searchBalanceData={
-                                restaurantId:restaurantId,
-                                restaurantName:restaurantName,
-                            	year:$("#" +"tab-"+ blanceTabId + "-content"+"  select[name=year]").val(),
-                            	startMonth:$("#" +"tab-"+ blanceTabId + "-content"+" select[name=startMonth]").val(),
-                            	endMonth:$("#" +"tab-"+ blanceTabId + "-content"+" select[name=endMonth]").val(),
-                            }
-                            
-                            Restaurant.restaurantBalanceList(0,Restaurant.searchBalanceData.restaurantId,Restaurant.searchBalanceData.restaurantName,Restaurant.searchBalanceData.year,Restaurant.searchBalanceData.startMonth,Restaurant.searchBalanceData.endMonth);
-                        });
-                       //保存按钮事件
-                        $("#" +"tab-"+ blanceTabId+"-content"+" .btn-restaurantBlance-save").click(function(){
-         	    			 if (!$(this).data('validata').form()) { return; }
-         	    			 Restaurant.saveBlanceData(Restaurant.oldBlanceRestaurantId,restaurantName,0)
-                        });
-                        //对账明细按钮事件
-                        $("#" +"tab-"+ blanceTabId+"-content"+" .btn-restaurantBlance-checkDetail").click(function(){
-                        	Restaurant.searchCheckData={
-                        			restaurantId:restaurantId,
-                        			restaurantName:restaurantName,
-                        			year:$(this).attr("data-entity-year"),
-                        			month:$(this).attr("data-entity-month"),
-                        	}
-                        	Restaurant.restaurantCheckList(0,Restaurant.searchCheckData.restaurantId,Restaurant.searchCheckData.restaurantName,Restaurant.searchCheckData.year,Restaurant.searchCheckData.month)
-                        });
+    restaurant.initList = function(){
+        restaurant.$tab = $('#tab-' + menuKey + "-content");
+        restaurant.$searchArea = restaurant.$tab.find('.T-search-area');
 
-                      //给操作记录按钮绑定事件
-                        $("#" +"tab-"+ blanceTabId+"-content"+" .btn-restaurantBlance-Records").click(function(){
-                        	$.ajax({
-                        		url:""+APP_ROOT+"back/financial/financialRestaurant.do?method=listFcRestaurantSettlementRecord&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-                                type:"POST",
-                                data:"restaurantId="+restaurantId,
-                                dataType:"json",
-                                beforeSend:function(){
-                                    globalLoadingLayer = openLoadingLayer();
-                                },
-                                success:function(data){
-                                	
-                                	layer.close(globalLoadingLayer);
-                                    var result = showDialog(data);
-                                	if(result){
-                                		if(data.financialRestaurantSettlementRecordList.length == 0){
-                                			showMessageDialog($( "#confirm-dialog-message" ),"暂时还没有操作记录");
-                                		}else{
-                                			var html =blanceRecords(data);
-            					    		var blanceRecordsTemplateLayer =layer.open({
-            					    			type: 1,
-            								    title:"操作记录",
-            								    skin: 'layui-layer-rim', //加上边框
-            								    area: '60%', //宽高
-            								    zIndex:1030,
-            								    content: html,
-            								    scrollbar: false, // 推荐禁用浏览器外部滚动条
-            								    success: function(){}
-            					    		})
-                                		}
-        		                	}
-                                }
-                        	});
-                        });
+        restaurant.getQueryList();
+        restaurant.initDate(restaurant.$tab);
+
+        //搜索按钮事件
+        restaurant.$tab.find('.T-search').on('click',function(event) {
+            event.preventDefault();
+            restaurant.listRestaurant(0);
+        });
+
+        // 报表内的操作
+        restaurant.$tab.find('.T-list').on('click','.T-option',function(event) {
+            event.preventDefault();
+            var $that = $(this),
+            	id = $that.closest('tr').data('id'),
+            	name = $that.closest('tr').data('name'),
+                startDate = restaurant.$searchArea.find("input[name=startDate]").val(),
+                endDate = restaurant.$searchArea.find("input[name=endDate]").val();
+            if ($that.hasClass('T-check')) {
+                // 对账
+                restaurant.restaurantCheck(0,id,name,"",startDate,endDate);
+            } else if ($that.hasClass('T-clear')) {
+                // 付款
+                restaurant.restaurantClear(0,id,name,"",startDate,endDate);
+            }
+        });
+    };
+
+    //对账
+    restaurant.restaurantCheck = function(page,restaurantId,restaurantName,accountInfo,startDate,endDate){
+        if (restaurant.$checkSearchArea && arguments.length === 3) {
+            accountInfo = restaurant.$checkSearchArea.find("input[name=accountInfo]").val(),
+            startDate = restaurant.$checkSearchArea.find("input[name=startDate]").val(),
+            endDate = restaurant.$checkSearchArea.find("input[name=endDate]").val()
+        }
+        // 修正页码
+        page = page || 0;
+        var searchParam = {
+            pageNo : page,
+            restaurantId : restaurantId + "",
+            accountInfo : accountInfo,
+            startDate : startDate,
+            endDate : endDate,
+            sortType : "auto"
+        };
+        searchParam = JSON.stringify(searchParam);
+        $.ajax({
+            url:KingServices.build_url("financial/financialRestaurant","listAccountChecking"),
+            type:"POST",
+            data:{ searchParam : searchParam },
+            success:function(data){
+                var result = showDialog(data);
+                if(result){
+                    var frList = data.financialRestaurantList;
+                    data.restaurantName = restaurantName;
+                    var html = restaurantChecking(data);
+                    
+                    var validator;
+                    // 初始化页面
+                    if (Tools.addTab(menuKey + "-checking", "餐厅对账", html)) {
+                        restaurant.initCheck(page,restaurantId,restaurantName); 
+                        validator = rule.check(restaurant.$checkTab.find(".T-checkList"));                     
                     }
+                    //取消对账权限过滤
+                    var checkTr = restaurant.$checkTab.find(".T-checkTr");
+                    var rightCode = restaurant.$checkTab.find(".T-checkList").data("right");
+                    checkDisabled(frList,checkTr,rightCode);
+
+                    //绑定翻页组件
+                    laypage({
+                        cont: restaurant.$checkTab.find('.T-pagenation'),
+                        pages: data.searchParam.totalPage,
+                        curr: (page + 1),
+                        jump: function(obj, first) {
+                            if (!first) { 
+                                restaurant.restaurantCheck(obj.curr-1,restaurantId,restaurantName);
+                            }
+                        }
+                    });
                 }
-           });
-	    },
-	  //给每个tr增加验证
-	    validatorTable:function(){
-	    	//获取table中的tr
- 	    	var $tr = $("#" +"tab-"+ blanceTabId + "-content"+" .all tbody tr")
-            //给每个tr添加表单验证
-            $tr.each(function(){
-            	$(this).find('.btn-restaurantBlance-save').data('validata', rule.check($(this)));
+            }
+        });
+    };
+
+    restaurant.initCheck = function(page,id,name){
+    	// 初始化jQuery 对象 
+        restaurant.$checkTab = $("#tab-" + menuKey + "-checking-content");
+        restaurant.$checkSearchArea = restaurant.$checkTab.find('.T-search-area');
+
+        restaurant.init_check_event(page,id,name);
+        restaurant.initDate(restaurant.$checkTab);
+
+        //搜索按钮事件
+        restaurant.$checkSearchArea.find('.T-search').on('click', function(event) {
+            event.preventDefault();
+            restaurant.restaurantCheck(0,id,name);
+        });
+
+        //导出报表事件 btn-restaurantExport
+        // restaurant.$checkSearchArea.find(".T-restaurantExport").click(function(){
+        //     var year = restaurant.$checkSearchArea.find("[name=year]").val();
+        //     var month = restaurant.$checkSearchArea.find("[name=month]").val();
+        //     checkLogin(function(){
+        //         var url = KingServices.build_url("export","restaurant") + "&restaurantId="+id+"&year="+year+"&month="+month+"&sortType=auto";
+        //         exportXLS(url)
+        //     });
+        // });
+
+        //报表内的操作
+        restaurant.listOption(restaurant.$checkTab);
+
+        //复选框事件初始化
+        var checkboxList = restaurant.$checkTab.find(".T-checkList tr .T-checkbox"),
+            $checkAll = restaurant.$checkTab.find(".T-checkAll");
+        KingServices.checkAll($checkAll,checkboxList);
+
+        //关闭页面事件
+        restaurant.$checkTab.find(".T-close-check").click(function(){
+            Tools.closeTab(menuKey + "-checking");
+        });
+        //确认对账按钮事件
+        restaurant.$checkTab.find(".T-saveCheck").click(function(){ 
+            validator = rule.check(restaurant.$checkTab.find(".T-checkList"));
+            if (!validator.form()) { return; }
+            restaurant.saveChecking(id,name,page);
+         });
+    };
+
+    //结算
+    restaurant.restaurantClear= function(page,restaurantId,restaurantName,accountInfo,startDate,endDate){
+        if (restaurant.$clearSearchArea && arguments.length === 3) {
+            accountInfo = restaurant.$clearSearchArea.find("input[name=accountInfo]").val(),
+            startDate = restaurant.$clearSearchArea.find("input[name=startDate]").val(),
+            endDate = restaurant.$clearSearchArea.find("input[name=endDate]").val()
+        }
+
+        page = page || 0;
+        var searchParam = {
+            pageNo : page,
+            restaurantId : restaurantId + "",
+            accountInfo : accountInfo,
+            startDate : startDate,
+            endDate : endDate,
+            sortType : "auto"
+        };
+        $.ajax({
+            url:KingServices.build_url("financial/financialRestaurant","listAccountSettlement"),
+            type:"POST",
+            data:{ searchParam : searchParam },
+            success:function(data){
+                var result = showDialog(data);
+                if(result){
+                    data.restaurantName = restaurantName
+                    var html = restaurantClearing(data);
+                    
+                    var validator;
+                    // 初始化页面
+                    if (Tools.addTab(menuKey + "-clearing", "餐厅结算", html)) {
+                        restaurant.initClear(page,restaurantId,restaurantName); 
+                        validator = rule.check(restaurant.$clearTab.find('.T-clearList'));                       
+                    }
+
+                    //绑定翻页组件
+                    laypage({
+                        cont: restaurant.$clearTab.find('.T-pagenation'),
+                        pages: data.searchParam.totalPage,
+                        curr: (page + 1),
+                        jump: function(obj, first) {
+                            if (!first) { 
+                                restaurant.restaurantClear(obj.curr -1,restaurantId,restaurantName);
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    };
+
+    restaurant.initClear = function(page,id,name){
+        // 初始化jQuery 对象 
+        restaurant.$clearTab = $("#tab-" + menuKey + "-clearing-content");
+        restaurant.$clearSearchArea = restaurant.$clearTab.find('.T-search-area');
+
+        restaurant.init_clear_event(page,id,name);
+        restaurant.initDate(restaurant.$clearTab);
+
+        //搜索事件
+        restaurant.$clearTab.find(".T-search").click(function(){
+            restaurant.restaurantClear(0,id,name);
+        });
+
+        //关闭页面事件
+        restaurant.$checkTab.find(".T-close-clear").click(function(){
+            Tools.closeTab(menuKey + "-clearing");
+        });
+
+        //保存结算事件
+        restaurant.$clearTab.find(".T-saveClear").click(function(){
+            if (!rule.check(restaurant.$clearTab).form()) { return; }
+            restaurant.saveClear(id,name,page);
+        });
+
+        //报表内的操作
+        restaurant.listOption(restaurant.$clearTab);
+
+        //自动下账
+        restaurant.$clearTab.find(".T-clear-auto").click(function(){
+            var startDate = restaurant.$clearSearchArea.find("input[name=startDate]").val(),
+                endDate = restaurant.$clearSearchArea.find("input[name=endDate]").val();
+            var searchParam = {
+                restaurantId : id + "",
+                sumPayMoney : restaurant.$clearSearchArea.find("input[name=sumPayMoney]").val(),
+                sumPayType : restaurant.$clearSearchArea.find("select[name=sumPayType]").val(),
+                startDate : startDate,
+                endDate : endDate
+            };
+            searchParam = JSON.stringify(searchParam);
+            showConfirmMsg($( "#confirm-dialog-message" ), "是否按当前账期 " + startTime + " 至 " + endTime + " 下账？",function(){
+                $.ajax({
+                    url:KingServices.build_url("financial/financialRestaurant","autoPayment"),
+                    type:"POST",
+                    data:{ searchParam : searchParam },
+                    success:function(data){
+                        var result = showDialog(data);
+                        if(result){
+                            showMessageDialog($("#confirm-dialog-message"),data.message,function(){
+                                restaurant.restaurantClear(page,id,name);
+                            });
+                        }
+                    }
+                });
             });
-	    },
-	    //显示单据
-	    viewImage:function(obj,WEB_IMG_URL_BIG,WEB_IMG_URL_SMALL) {
-	    	console.log(imgUrl);
-	    	var data = {
-	    			"images":[]
-	    	};
-	    	var str = $(obj).attr('url');
-	    	var strs = str.split(",");
-	    	for(var i = 0; i < strs.length; i ++) {
-	    		var s = strs[i];
-	    		if(s != null && s != "" && s.length > 0) {
-		    		var image = {
-		    				"WEB_IMG_URL_BIG":imgUrl+s,
-		    				"WEB_IMG_URL_SMALL":imgUrl+s+"?imageView2/2/w/150",
-		    		}
-		    		data.images.push(image);
-	    		}
-	    	}
-	    	var html = billImageTempLate(data);
-	    	
-			layer.open({
-				type : 1,
-				title : "单据图片",
-				skin : 'layui-layer-rim', // 加上边框
-				area : '500px', // 宽高
-				zIndex : 1028,
-				content : html,
-				scrollbar: false, // 推荐禁用浏览器外部滚动条
-				success : function() {
-					var colorbox_params = {
-						rel: 'colorbox',
-						reposition:true,
-						scalePhotos:true,
-						scrolling:false,
-						previous:'<i class="ace-icon fa fa-arrow-left"></i>',
-						next:'<i class="ace-icon fa fa-arrow-right"></i>',
-						close:'&times;',
-						current:'{current} of {total}',
-						maxWidth:'100%',
-						maxHeight:'100%',
-						onOpen:function(){ 
-							$overflow = document.body.style.overflow;
-							document.body.style.overflow = 'hidden';
-						},
-						onClosed:function(){
-							document.body.style.overflow = $overflow;
-						},
-						onComplete:function(){
-							$.colorbox.resize();
-						}
-					};
-					$('#layer-photos-financial-count [data-rel="colorbox"]').colorbox(colorbox_params);
-				} 
-			});
-	    },
-	    //对账数据保存
-	    saveCheckingData:function(restaurantId,restaurantName,isClose){
-			console.log("save");
-           var JsonStr = [],
-               oldUnPayedMoney,
-               newUnPayedMoney,
-               oldRemark,
-               newRemark,
-    	       $tr = $("#" +"tab-"+ checkTabId+"-content"+" .all tbody tr");
-    	   $tr.each(function(i){
-    		   var flag = $(this).find(".restaurantFinancial").is(":checked");
-    		   if(flag){
-    			   if($(this).attr("data-entity-isConfirmAccount") == 1){
-    				   //取值用于是否修改对账判断
-    				   oldUnPayedMoney = $(this).attr("data-entity-realUnPayedMoney");
-    				   oldRemark = $(this).attr("data-entity-remark");
-    				   newUnPayedMoney = $tr.eq(i).find("input[name=FinancialRestaurantRealUnPayedMoney]").val();
-    				   newRemark = $tr.eq(i).find("input[name=FinancialRestaurantRemark]").val();
-    				   //判断是否是修改对账
-    				   if(oldUnPayedMoney !== newUnPayedMoney || oldRemark !== newRemark){
-    					   var checkData = {
-            					   id:$(this).attr("data-entity-id"),
-            					   restaurantId:restaurantId,
-            					   restaurantName:restaurantName,
-            					   consumeStartTime:$tr.eq(i).find("td[name=consumeStartTime]").text(),
-            					   realUnPayedMoney:$tr.eq(i).find("input[name=FinancialRestaurantRealUnPayedMoney]").val(),
-            					   remark:$tr.eq(i).find("input[name=FinancialRestaurantRemark]").val(),
-            					   isConfirmAccount:1
-            			   }
-    					   JsonStr.push(checkData)
-    				   }
-    			   }else{
-    				   var checkData = {
-        					   id:$(this).attr("data-entity-id"),
-        					   restaurantId:restaurantId,
-        					   restaurantName:restaurantName,
-        					   consumeStartTime:$tr.eq(i).find("td[name=consumeStartTime]").text(),
-        					   realUnPayedMoney:$tr.eq(i).find("input[name=FinancialRestaurantRealUnPayedMoney]").val(),
-        					   remark:$tr.eq(i).find("input[name=FinancialRestaurantRemark]").val(),
-        					   isConfirmAccount:1
-        			   }
-    				   JsonStr.push(checkData)
-    			   }
-    		   }else{
-    			   if($(this).attr("data-entity-isConfirmAccount") == 1){
-    				   var checkData = {
-        					   id:$(this).attr("data-entity-id"),
-        					   restaurantId:restaurantId,
-        					   restaurantName:restaurantName,
-        					   consumeStartTime:$tr.eq(i).find("td[name=consumeStartTime]").text(),
-        					   realUnPayedMoney:$tr.eq(i).find("input[name=FinancialRestaurantRealUnPayedMoney]").val(),
-        					   remark:$tr.eq(i).find("input[name=FinancialRestaurantRemark]").val(),
-        					   isConfirmAccount:0
-        			   } 
-    				   JsonStr.push(checkData)
-    			   }
-    		   }
-		    });
-    	   if(JsonStr.length == 0){
-    		   showMessageDialog($( "#confirm-dialog-message" ),"您当前未进行任何操作");
-    		   return
-    	   }else{
-    		   JsonStr = JSON.stringify(JsonStr);
-        	   $.ajax({
-        		   url:""+APP_ROOT+"back/financial/financialRestaurant.do?method=accountChecking&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
-                   type:"POST",
-                   data:"financialRestaurantListStr="+encodeURIComponent(JsonStr),
-                   dataType:"json",
-                   beforeSend:function(){
-						globalLoadingLayer = openLoadingLayer();
-					},
-					success:function(data){
-						layer.close(globalLoadingLayer);
-						var result = showDialog(data);
-						if(result){
-							showMessageDialog($( "#confirm-dialog-message" ),data.message);
-							Restaurant.edited["checking"] = "";
-							if(isClose == 1){
-								closeTab(checkTabId);
-								Restaurant.listRestaurant(Restaurant.searchData.page,Restaurant.searchData.restaurantId,Restaurant.searchData.year,Restaurant.searchData.month);
-							} else {
-								Restaurant.restaurantCheckList(0,Restaurant.searchCheckData.restaurantId,Restaurant.searchCheckData.restaurantName,Restaurant.searchCheckData.year,Restaurant.searchCheckData.month);
-							}
-						}
-					}
-        	   });
-    	   }
-          },
-          //结算数据保存
-          saveBlanceData:function(restaurantId,restaurantName,isClose){
-  	    	var $tr = $("#" +"tab-"+ blanceTabId+"-content"+" .all tbody tr"),
-  	    	DataArr = [],
-  		    JsonData;
-  	    	$tr.each(function(i){
-				if($(this).data('blanceStatus')){
-					var blanceData = {
-						id:$(this).attr("data-entity-id"),
-						restaurantId:restaurantId,
-						year:$(this).attr("data-entity-year"),  
-						month:$(this).attr("data-entity-month"),
-						realPayedMoney:$tr.eq(i).find("td[name=blancerealrealPayedMoney]").text(),
-						unPayedMoney:$tr.eq(i).find("td[name=blanceunPayedMoney]").text(),
-						realUnPayedMoney:$tr.eq(i).find("td[name=blancerealrealUnPayedMoney]").text(),
-						payMoney:$tr.eq(i).find("input[name=blancerealPayedMoney]").val(),
-						payType:$tr.eq(i).find("select[name=blancePayType]").val(),
-						remark:$tr.eq(i).find("input[name=blancerealRemark]").val()
-					}
-					 DataArr.push(blanceData)
-				}
-			})
-  	    	JsonData = JSON.stringify(DataArr)
-  	    	$.ajax({
-        		url:""+APP_ROOT+"back/financial/financialRestaurant.do?method=saveFcRestaurantSettlement&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
-                type:"POST",
-                data:"fcRestaurantSettlementStr="+JsonData,
-                dataType:"json",
-                beforeSend:function(){
-                    globalLoadingLayer = openLoadingLayer();
-                },
-                success:function(data){
-                	layer.close(globalLoadingLayer);
-                    var result = showDialog(data);
-                    if(result){
-                    	showMessageDialog($( "#confirm-dialog-message" ),data.message);
-                    	Restaurant.edited["blance"] = "";
-						if(isClose == 1){
-							closeTab(blanceTabId);
-							Restaurant.listRestaurant(Restaurant.searchData.page,Restaurant.searchData.restaurantId,Restaurant.searchData.year,Restaurant.searchData.month);
-						} else {
-							Restaurant.restaurantBalanceList(0,Restaurant.searchBalanceData.restaurantId,Restaurant.searchBalanceData.restaurantName,Restaurant.searchBalanceData.year,Restaurant.searchBalanceData.startMonth,Restaurant.searchBalanceData.endMonth);
-						}
-                    }
+        });
+
+        restaurant.sumPayMoney();
+    };
+
+    //自动计算本次付款总额
+    restaurant.sumPayMoney = function(){
+        var $sumPayMoney = restaurant.$clearTab.find("input[name=sumPayMoney]");
+        restaurant.$clearTab.find("input[name=payMoney]").on("change",function(){
+            var $this = $(this),validator = rule.check($this.closest('tr'));
+            if(!validator.form()){ return false;}
+            var sumPayMoney = parseInt($sumPayMoney.val());
+            $sumPayMoney.val(sumPayMoney + parseInt($this.val()));
+        });
+    };
+
+    //显示单据
+    restaurant.viewImage = function(obj,WEB_IMG_URL_BIG,WEB_IMG_URL_SMALL) {
+        var data = { "images":[]  };
+        var str = $(obj).attr('url');
+        var strs = str.split(",");
+        for(var i = 0; i < strs.length; i ++) {
+            var s = strs[i];
+            if(s != null && s != "" && s.length > 0) {
+                var image = {
+                    "WEB_IMG_URL_BIG":imgUrl+s,
+                    "WEB_IMG_URL_SMALL":imgUrl+s+"?imageView2/2/w/150",
                 }
-        	})
-  		
-        },
-		save : function(saveType){
-			if(saveType == "checking"){
-				Restaurant.saveCheckingData(Restaurant.oldCheckRestaurantId,"",1);
-			} else if(saveType == "blance"){
-				Restaurant.saveBlanceData(Restaurant.oldBlanceRestaurantId,"",1);
-			}
-		},
-		clearEdit : function(clearType){
-			Restaurant.edited[clearType] = "";
-		}
-    }
-    exports.listRestaurant = Restaurant.listRestaurant;
-	exports.isEdited = Restaurant.isEdited;
-	exports.save = Restaurant.save;
-	exports.clearEdit = Restaurant.clearEdit;
+                data.images.push(image);
+            }
+        }
+        var html = billImageTempLate(data);
+        
+        layer.open({
+            type : 1,
+            title : "单据图片",
+            skin : 'layui-layer-rim', // 加上边框
+            area : '500px', // 宽高
+            zIndex : 1028,
+            content : html,
+            scrollbar: false, // 推荐禁用浏览器外部滚动条
+            success : function() {
+                var colorbox_params = {
+                    rel: 'colorbox',
+                    reposition:true,
+                    scalePhotos:true,
+                    scrolling:false,
+                    previous:'<i class="ace-icon fa fa-arrow-left"></i>',
+                    next:'<i class="ace-icon fa fa-arrow-right"></i>',
+                    close:'&times;',
+                    current:'{current} of {total}',
+                    maxWidth:'100%',
+                    maxHeight:'100%',
+                    onOpen:function(){ 
+                        $overflow = document.body.style.overflow;
+                        document.body.style.overflow = 'hidden';
+                    },
+                    onClosed:function(){
+                        document.body.style.overflow = $overflow;
+                    },
+                    onComplete:function(){
+                        $.colorbox.resize();
+                    }
+                };
+                $('#layer-photos-financial-count [data-rel="colorbox"]').colorbox(colorbox_params);
+            } 
+        });
+    };
+
+    //已付金额明细
+    restaurant.payedDetail = function(id){
+        $.ajax({
+            url:KingServices.build_url("financial/financialRestaurant","listFcRestaurantSettlementRecord"),
+            type:"POST",
+            data:{
+                restaurantId : id + ""
+            },
+            success:function(data){
+                var result = showDialog(data);
+                if(result){
+                    var html = payedDetailTempLate();
+                    layer.open({
+                        type : 1,
+                        title : "已付金额明细",
+                        skin : 'layui-layer-rim',
+                        area : '1000px',
+                        zIndex : 1028,
+                        content : html,
+                        scrollbar: false 
+                    });
+                }
+            }
+        });
+    };
+
+    //应付金额明细
+    restaurant.needPayDetail = function(id){
+        $.ajax({
+            url:KingServices.build_url("financial/financialRestaurant","listFcRestaurantSettlementRecord"),
+            type:"POST",
+            data:{
+                restaurantId : id + ""
+            },
+            success:function(data){
+                var result = showDialog(data);
+                if(result){
+                    var html = needPayDetailTempLate(data);
+                    layer.open({
+                        type : 1,
+                        title : "应付金额明细",
+                        skin : 'layui-layer-rim',
+                        area : '800px',
+                        zIndex : 1028,
+                        content : html,
+                        scrollbar: false 
+                    });
+                }
+            }
+        });
+    };
+
+    //对账数据保存
+    restaurant.saveChecking = function(restaurantId,restaurantName,page,tab_id, title, html){
+        if(!restaurant.$checkTab.data('isEdited')){
+            showMessageDialog($( "#confirm-dialog-message" ),"您未进行任何操作！");
+            return false;
+        }
+        //保存对账时提交的数据
+        var $this = restaurant.$checkTab.find(".T-checkList"),argumentsLen = arguments.length;
+        var checkSaveJson = [];
+        function getValue($obj,name){
+            var result = $obj.find("[name="+name+"]").val();
+            if (result == "") {//所有空字符串变成0
+                result = 0;
+            }
+            return result;
+        } 
+        var restaurantCheckingTr = $this.find(".T-checkTr");
+        restaurantCheckingTr.each(function(){
+            var id = $(this).data("id"),
+                settlementMoney = getValue($(this),"settlementMoney"),
+                checkRemark = getValue($(this),"checkRemark"),
+                isConfirmAccount = "";
+            if ($(this).find(".T-checkbox").is(':checked')) {
+                isConfirmAccount = 1;
+            } else {
+                isConfirmAccount = 0; 
+            }
+            var checkRecord = {
+                id : id,
+                settlementMoney : settlementMoney,
+                checkRemark : checkRemark,
+                isConfirmAccount : isConfirmAccount
+            };
+            checkSaveJson.push(checkRecord);
+        });
+        checkSaveJson = JSON.stringify(checkSaveJson);
+        $.ajax({
+            url:KingServices.build_url("financial/financialRestaurant","saveAccountChecking"),
+            type:"POST",
+            data:{
+                financialRestaurantListStr : checkSaveJson
+            },
+            success:function(data){
+                var result = showDialog(data);
+                if(result){
+                    showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+                        if(argumentsLen == 2){
+                            Tools.closeTab(menuKey + "-checking");
+                            restaurant.listRestaurant(restaurant.searchData.pageNo,restaurant.searchData.restaurantName,restaurant.searchData.restaurantId,restaurant.searchData.startDate,restaurant.searchData.endDate);
+                        } else if(argumentsLen == 3){
+                            restaurant.$checkTab.data('isEdited',false);
+                            restaurant.restaurantCheck(page,restaurantId,restaurantName);
+                        } else {
+                            restaurant.$checkTab.data('isEdited',false);
+                            Tools.addTab(tab_id, title, html);
+                            restaurant.initCheck(0,restaurant.$checkTab.find(".T-newData").data("id"),restaurant.$checkTab.find(".T-newData").data("name"));
+                        }
+                    });
+                }
+            }
+        });
+    };
+
+    restaurant.saveClear = function(id,name,page,tab_id, title, html){
+        if(!restaurant.$clearTab.data('isEdited')){
+            showMessageDialog($( "#confirm-dialog-message" ),"您未进行任何操作！");
+            return false;
+        }
+        var $tr,argumentsLen = arguments.length;
+        $tr = restaurant.$clearTab.find(".T-clearList tr");
+
+        var clearSaveJson = [];
+        $tr.each(function(i){
+            //获取数据
+            var clearJson = {
+                id : $(this).data("id"),
+                payMoney : $(this).find("input[name=payMoney]").val(),
+                payType : $(this).find("select[name=payType]").val(),
+                payRemark : $(this).find("input[name=payRemark]").val()
+            };
+            clearSaveJson.push(clearJson);
+        });
+        clearSaveJson = JSON.stringify(clearSaveJson);
+        $.ajax({
+            url:KingServices.build_url("financial/financialRestaurant","saveAccountSettlement"),
+            type:"POST",
+            data:{
+                financialRestaurantListStr : clearSaveJson
+            },
+            success:function(data){
+                var result = showDialog(data);
+                if(result){
+                    showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+                        if(argumentsLen === 2){
+                            Tools.closeTab(menuKey + "-clearing");
+                            restaurant.listRestaurant(restaurant.searchData.pageNo,restaurant.searchData.restaurantName,restaurant.searchData.restaurantId,restaurant.searchData.startDate,restaurant.searchData.endDate);
+                        }else if(argumentsLen === 3){
+                            restaurant.$clearTab.data('isEdited',false);
+                            restaurant.restaurantClear(page,id,name);
+                        } else {
+                            restaurant.$clearTab.data('isEdited',false);
+                            Tools.addTab(tab_id, title, html);
+                            restaurant.initClear(0,restaurant.$clearTab.find(".T-newData").data("id"),restaurant.$clearTab.find(".T-newData").data("name"));
+                        }
+                    });
+                    
+                }
+            }
+        });
+    };
+
+    restaurant.init_check_event = function(page,id,name) {
+        if (!!restaurant.$checkTab && restaurant.$checkTab.length === 1) {
+            var validator = rule.check(restaurant.$checkTab);
+
+            // 监听修改
+            restaurant.$checkTab.find(".T-checkList").off('change').on('change', function(event) {
+                event.preventDefault();
+                restaurant.$checkTab.data('isEdited', true);
+            });
+            restaurant.$checkTab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
+				event.preventDefault();
+				restaurant.initCheck(page,id,name);
+			})
+            // 监听保存，并切换tab
+            .on('switch.tab.save', function(event, tab_id, title, html) {
+                event.preventDefault();
+                restaurant.saveChecking(id,name,0,tab_id, title, html);
+            })
+            // 保存后关闭
+            .on('close.tab.save', function(event) {
+                event.preventDefault();
+                restaurant.saveChecking(id,name);
+            });
+        }
+    };
+
+    restaurant.init_clear_event = function(page,id,name) {
+        if (!!restaurant.$clearTab && restaurant.$clearTab.length === 1) {
+            var validator = rule.check(restaurant.$clearTab);
+
+           restaurant.$clearTab.find(".T-clearList").off('change').off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE)
+            .on('change', function(event) {
+                event.preventDefault();
+                restaurant.$clearTab.data('isEdited', true);
+            });
+            restaurant.$clearTab.off('change').off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
+                event.preventDefault();
+                restaurant.initClear(page,id,name);
+            })
+            // 监听保存，并切换tab
+            .on('switch.tab.save', function(event, tab_id, title, html) {
+                event.preventDefault();
+                restaurant.saveClear(id,name,0,tab_id, title, html);
+            })
+            // 保存后关闭
+            .on('close.tab.save', function(event) {
+                event.preventDefault();
+                restaurant.saveClear(id,name);
+            });
+        }
+    };
+
+    restaurant.getQueryList = function(){
+        var $restaurant = restaurant.$tab.find(".T-chooseRestaurant"),
+            restaurantList = restaurant.restaurantList;
+        if(restaurantList != null && restaurantList.length > 0){
+            for(var i=0;i<restaurantList.length;i++){
+                restaurantList[i].id = restaurantList[i].restaurantId;
+                restaurantList[i].value = restaurantList[i].restaurantName;
+            }
+        }
+
+        //餐厅
+        $restaurant.autocomplete({
+            minLength: 0,
+            source : restaurantList,
+            change: function(event,ui) {
+                if (!ui.item)  {
+                    $(this).nextAll('input[name="restaurantId"]').val('');
+                }
+            },
+            select: function(event,ui) {
+                $(this).blur().nextAll('input[name="restaurantId"]').val(ui.item.id);
+            }
+        }).on("click",function(){
+            $restaurant.autocomplete('search','');
+        });      
+    };
+
+    //时间控件初始化
+    restaurant.initDate = function($tab){
+        $tab.find('.date-picker').datepicker({
+            autoclose: true,
+            todayHighlight: true,
+            format: 'yyyy-mm-dd',
+            language: 'zh-CN'
+        });
+    };
+
+    // 对账、付款报表内的操作
+    restaurant.listOption = function($tab){
+        $tab.find('.T-option').on('click',function(event) {
+            event.preventDefault();
+            var $that = $(this),
+                id = $that.closest('tr').data('id');
+            if ($that.hasClass('T-restaurantImg')) {
+                // 查看单据
+                var WEB_IMG_URL_BIG = $tab.find("input[name=WEB_IMG_URL_BIG]").val();//大图
+                var WEB_IMG_URL_SMALL = $tab.find("input[name=WEB_IMG_URL_SMALL]").val();//大图
+                restaurant.viewImage(this,WEB_IMG_URL_BIG,WEB_IMG_URL_SMALL);
+            } else if ($that.hasClass('T-payedDetail')) {
+                // 已付明细
+                restaurant.payedDetail(id);
+            } else if ($that.hasClass('T-needPayDetail')) {
+                // 应收明细
+                restaurant.needPayDetail(id);
+            }
+        });
+    };
+
+    exports.init = restaurant.initModule;
 });

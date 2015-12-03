@@ -33,7 +33,7 @@
 
 			<label class="control-label pull-left" style="margin-left: 15px">状态：</label>
 	    	<div class="btn-group T-status" style="margin-left: 20px;">
-				<button data-toggle="dropdown" class=" btn-sm  dropdown-toggle block-up block-up" aria-expanded="false" style="height:24px;padding:0px 10px;line-height:24px;">
+				<button data-toggle="dropdown" data-value="{{searchParam.status}}" class=" btn-sm  dropdown-toggle block-up block-up" aria-expanded="false" style="height:24px;padding:0px 10px;line-height:24px;">
 					<span>全部
 					</span>
 					<i class="ace-icon fa fa-angle-down icon-on-right" ></i>
@@ -61,7 +61,7 @@
             <label class="control-label marginLeft-30">毛利：6537465</label>
             <label class="control-label marginLeft-30">人均毛利：7263478</label>
             <label class="control-label marginLeft-30">人数：673大57小</label>
-            <label class="control-label marginLeft-30">团数：673大57小</label>
+            <label class="control-label marginLeft-30">团数：21</label>
         </div>
     </div>
 
@@ -110,41 +110,42 @@
 			</tr>
 		</thead>
 		<tbody class="T-planProfit-list">
-
-				<tr><td><a class="T-tripDetail">ZQL20254920161212T</a></td>
-					<td>线路产品</td>
-					<td>出游日期2015-09-15</td>
-					<td>人数</td>
-					<td>导游</td>
-					<td>责任计调</td>
-					<td>状态</td>
-					<td>团款</td>
-					<td>购物佣金</td>
-					<td>自费</td>
-					<td>其他收入</td>
-					<td>导游管理费</td>
-					<td>导服费</td>
-					<td>保险</td>
-					<td>车费</td>
-					<td>餐费</td>
-					<td>房费</td>
-					<td>景区</td>
-					<td>票务</td>
-					<td>其他支出</td>
-					<td>购物导佣</td>
-					<td>自费导佣</td>
-					<td>车费</td>
-					<td>餐费</td>
-					<td>房费</td>
-					<td>票务</td>
-					<td>其他</td>
-					<td>收入小计</td>
-					<td>发团成本小计</td>
-					<td>中转成本小计</td>
-					<td>毛利</td>
-					<td>人均毛利</td>
-				</tr>
-
+			{{each}}
+			<tr data-id="">
+				<td><a class="T-tripDetail">ZQL20254920161212T</a></td>
+				<td>线路产品</td>
+				<td>出游日期2015-09-15</td>
+				<td>人数</td>
+				<td>导游</td>
+				<td>责任计调</td>
+				<td>状态</td>
+				<td>团款</td>
+				<td>购物佣金</td>
+				<td>自费</td>
+				<td>其他收入</td>
+				<td>导游管理费</td>
+				<td>导服费</td>
+				<td>保险</td>
+				<td>车费</td>
+				<td>餐费</td>
+				<td>房费</td>
+				<td>景区</td>
+				<td>票务</td>
+				<td>其他支出</td>
+				<td>购物导佣</td>
+				<td>自费导佣</td>
+				<td>车费</td>
+				<td>餐费</td>
+				<td>房费</td>
+				<td>票务</td>
+				<td>其他</td>
+				<td>收入小计</td>
+				<td>发团成本小计</td>
+				<td>中转成本小计</td>
+				<td>毛利</td>
+				<td>人均毛利</td>
+			</tr>
+			{{/each}}
 		</tbody>
 	</table>
 	<div class="row pageMode">
