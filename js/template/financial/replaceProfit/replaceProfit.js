@@ -10,7 +10,14 @@ define(function(require, exports) {
     };
 
     replace.initModule = function() {
-        replace.listReplace(0,"","","","","","","","","","");
+        var date = new Date(),
+            year = date.getFullYear(),
+            month = date.getMonth()+1,
+            day = date.getDate();
+        var startTime = year + "-" + month + "-1",
+            endTime = year + "-" + month + "-" + day;
+
+        replace.listReplace(0,"","","","","","","","",startTime,endTime);
     };
 
     replace.listReplace = function(page,partnerAgencyName,partnerAgencyId,hotelName,hotelId,scenicName,scenicId,ticketType,seatCount,startTime,endTime){
@@ -62,7 +69,7 @@ define(function(require, exports) {
                     // 绑定翻页组件
                     laypage({
                         cont: replace.$tab.find('.T-pagenation'),
-                        pages: data.searchParam.totalPage,
+                        pages: data.totalPage,
                         curr: (page + 1),
                         jump: function(obj, first) {
                             if (!first) { 
