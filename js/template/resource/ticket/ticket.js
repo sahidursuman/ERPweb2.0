@@ -50,7 +50,7 @@ define(function(require, exports) {
 					ticketList = JSON.parse(ticketList);
 					data.ticketList = ticketList;
 					var html = listTemplate(data);
-					addTab(menuKey,"票务管理",html);
+					Tools.addTab(menuKey,"票务管理",html);
 
 					// 初始化jQuery 对象
 					TicketResource.$tab = $('#' + tabId);

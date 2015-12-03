@@ -67,7 +67,7 @@ define(function(require, exports) {
 					guideList = JSON.parse(guideList);
 					data.guideList = guideList;
 					var html = listTemplate(data);
-					addTab(menuKey,"导游管理",html);
+					Tools.addTab(menuKey,"导游管理",html);
 					
 					// 初始化jQuery 对象
 					GuideResource.$tab = $('#' + tabId);

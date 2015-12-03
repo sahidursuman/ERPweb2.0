@@ -70,7 +70,7 @@ define(function(require,exports){
 					data.scenicList = scenicList;
 
 					var html=listTemplate(data);
-	                addTab(menuKey,"景区管理",html);
+	                Tools.addTab(menuKey,"景区管理",html);
 	                //初始化JQuery对象
 	                ScenicResource.$tab = $('#'+tabId);
 	                ScenicResource.$searchArea = ScenicResource.$tab.find('.T-search-area'); //搜索模块区域
