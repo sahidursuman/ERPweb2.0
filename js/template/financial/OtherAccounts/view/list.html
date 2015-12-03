@@ -3,18 +3,22 @@
         <div class="form-group" >      
           <label class="control-label pull-left marginLeft-30" >项目名称：</label>
                 <select  class="col-xs-1" name="busCompanyId" >
-                    <option value ="">全部</option>     
-                        <option value=""</option>
+                     {{each financialOtherList as other index}}
+                        <option>{{other.name}}</option>
+                    {{/each}}
                 </select>        
            <label class="control-label pull-left marginLeft-30" >账期：</label>
                 <select class="col-sm-1" name="year" >
-                        <option value=""></option>
+                    {{each searchParam as year index}}
+                    <option value="{{year.startAccountTime}}" {{if searchParam.year == year.startAccountTime}}selected="selected"{{/if}}>{{year.startAccountTime}}</option>
+                    {{/each}}
                 </select> 
                 <select class="col-sm-1 marginLeft-30" name="month" >
-                    <option value ="">全部</option>
-                        <option value="">月</option>
+                    {{each searchParam as month index}}
+                        <option value="{{month.endAccountTime}}" {{if searchParam.month == month.endAccountTime}}selected="selected"{{/if}}>{{month.endAccountTime}}</option>
+                    {{/each}}
                 </select>
-            <button class="btn-sm  btn-busCompany-search search-btn marginLeft-30" >
+            <button class="btn-sm T-search search-btn marginLeft-30" >
                 <i class="ace-ico n fa fa-search"></i> 搜索
             </button>
         </div>
@@ -34,14 +38,15 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr> 
-                    <td>122</td>
-                    <td>122</td>
-                    <td>122</td>
-                    <td>122</td>
-                    <td>122</td>
-                    <td>122<span style="color:red"></span></td>
-                    <td>1212</td>
+                 {{each financialOtherList as other}}
+                <tr>
+                    <td>{{other.name}}</td>
+                    <td>{{other.sumNeedPayMoney}}</td>
+                    <td>{{other.sumSettlementMoney }}</td>
+                    <td>{{other.sumPayedMoney }}</td>
+                    <td>{{other.sumUnPayedMoney }}</td>
+                    <td><span style="color:red">{{other.confirmedCount }}/{{other.confirmedCount}}</span></td>
+                    <td>{{other.payedCount }}/{{other.payedCount}}</td>
                     <td>
                     <a  class=" btn-divide T-checking cursor R-right" data-right="">
                             对账
@@ -53,8 +58,18 @@
                         </a>
                     </td>
                 </tr>
+                {{/each}}
                
                 </tbody>
             </table>
+             <div class="row pageMode">
+                <div class="col-xs-6">
+                    <small>共计 2 条记录</small>
+                </div>
+                <div class="col-xs-6">
+                    <div class="dataTables_paginate paging_simple_numbers T-pagenation">
+                    </div>
+                </div>
+            </div>
         </div>
 </div>
