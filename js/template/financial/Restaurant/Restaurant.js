@@ -16,7 +16,9 @@ define(function(require, exports) {
     	$searchArea : false,
     	$checkSearchArea: false,
         $clearSearchArea : false,
-        restaurantList : false
+        restaurantList : false,
+        clearTempData : false,
+        clearTempSumPay : false
     };
 
     restaurant.initModule = function() {
@@ -50,7 +52,7 @@ define(function(require, exports) {
 
         var searchParam = JSON.stringify(restaurant.searchData);
         $.ajax({
-            url:KingServices.build_url("financial/financialRestaurant","listSumFinancialRestaurant"),
+            url:KingServices.build_url("account/arrangeRestaurantFinancial","listSumFinancialRestaurant"),
             type:"POST",
             data:{ searchParam : searchParam },
             success:function(data){
@@ -104,6 +106,7 @@ define(function(require, exports) {
                 restaurant.restaurantCheck(0,id,name,"",startDate,endDate);
             } else if ($that.hasClass('T-clear')) {
                 // 付款
+                restaurant.clearTempData = false;
                 restaurant.restaurantClear(0,id,name,"",startDate,endDate);
             }
         });
@@ -128,7 +131,7 @@ define(function(require, exports) {
         };
         searchParam = JSON.stringify(searchParam);
         $.ajax({
-            url:KingServices.build_url("financial/financialRestaurant","listAccountChecking"),
+            url:KingServices.build_url("account/arrangeRestaurantFinancial","listAccountChecking"),
             type:"POST",
             data:{ searchParam : searchParam },
             success:function(data){
@@ -155,7 +158,7 @@ define(function(require, exports) {
                         pages: data.searchParam.totalPage,
                         curr: (page + 1),
                         jump: function(obj, first) {
-                            if (!first) { 
+                            if (!first) {
                                 restaurant.restaurantCheck(obj.curr-1,restaurantId,restaurantName);
                             }
                         }
@@ -172,6 +175,7 @@ define(function(require, exports) {
 
         restaurant.init_check_event(page,id,name);
         restaurant.initDate(restaurant.$checkTab);
+        FinancialService.updateUnpayMoney(restaurant.$checkTab,rule);
 
         //搜索按钮事件
         restaurant.$checkSearchArea.find('.T-search').on('click', function(event) {
@@ -209,7 +213,7 @@ define(function(require, exports) {
          });
     };
 
-    //结算
+    //付款
     restaurant.restaurantClear= function(page,restaurantId,restaurantName,accountInfo,startDate,endDate){
         if (restaurant.$clearSearchArea && arguments.length === 3) {
             accountInfo = restaurant.$clearSearchArea.find("input[name=accountInfo]").val(),
@@ -226,30 +230,69 @@ define(function(require, exports) {
             endDate : endDate,
             sortType : "auto"
         };
+        searchParam = JSON.stringify(searchParam);
         $.ajax({
-            url:KingServices.build_url("financial/financialRestaurant","listAccountSettlement"),
+            url:KingServices.build_url("account/arrangeRestaurantFinancial","listAccountSettlement"),
             type:"POST",
             data:{ searchParam : searchParam },
             success:function(data){
                 var result = showDialog(data);
                 if(result){
-                    data.restaurantName = restaurantName
+                    data.restaurantName = restaurantName;
+
+                    var financialRestaurantList = data.financialRestaurantList;
+                    //暂存数据读取
+                    if(restaurant.clearTempSumPay){
+                        data.sumPayMoney = restaurant.clearTempSumPay;
+                    } else {
+                        data.sumPayMoney = 0;
+                    }
+                    if(restaurant.clearTempData){
+                        for(var i = 0; i < restaurant.clearTempData.length; i++){
+                            var tempId = restaurant.clearTempData[i].id;
+                            for(var i = 0; i < financialRestaurantList.length; i++){
+                                var id = financialRestaurantList[i].id;
+                                if(tempId == id){
+                                    var $tr = restaurant.$clearTab.find(".T-clearList .T-clearTr" + id + "");
+                                    financialRestaurantList[i].payMoney = restaurant.clearTempData[i].payMoney;
+                                    financialRestaurantList[i].payType = restaurant.clearTempData[i].payType;
+                                    financialRestaurantList[i].payRemark = restaurant.clearTempData[i].payRemark;
+                                }
+                            }
+                        }
+                        data.financialRestaurantList = financialRestaurantList;
+                    }
+
                     var html = restaurantClearing(data);
                     
                     var validator;
                     // 初始化页面
-                    if (Tools.addTab(menuKey + "-clearing", "餐厅结算", html)) {
+                    if (Tools.addTab(menuKey + "-clearing", "餐厅付款", html)) {
                         restaurant.initClear(page,restaurantId,restaurantName); 
                         validator = rule.check(restaurant.$clearTab.find('.T-clearList'));                       
                     }
 
                     //绑定翻页组件
+                    var $tr = restaurant.$clearTab.find('.T-clearList tr');
                     laypage({
                         cont: restaurant.$clearTab.find('.T-pagenation'),
                         pages: data.searchParam.totalPage,
                         curr: (page + 1),
                         jump: function(obj, first) {
                             if (!first) { 
+                                $tr.each(function(){
+                                    var $this = $(this);
+                                    if($this.data("change")){
+                                        var clearTemp = {
+                                            id : $this.data("id"),
+                                            payMoney : $this.find("input[name=payMoney]").val(),
+                                            payType : $this.find("select[name=payType]").val(),
+                                            payRemark : $this.find("input[name=payRemark]").val()
+                                        };
+                                        restaurant.clearTempData.push(clearTemp);
+                                    }
+                                });
+                                restaurant.clearTempSumPay = parseInt(restaurant.$clearTab.find('input[name=sumPayMoney]').val());
                                 restaurant.restaurantClear(obj.curr -1,restaurantId,restaurantName);
                             }
                         }
@@ -273,11 +316,11 @@ define(function(require, exports) {
         });
 
         //关闭页面事件
-        restaurant.$checkTab.find(".T-close-clear").click(function(){
+        restaurant.$clearTab.find(".T-close-clear").click(function(){
             Tools.closeTab(menuKey + "-clearing");
         });
 
-        //保存结算事件
+        //保存付款事件
         restaurant.$clearTab.find(".T-saveClear").click(function(){
             if (!rule.check(restaurant.$clearTab).form()) { return; }
             restaurant.saveClear(id,name,page);
@@ -300,7 +343,7 @@ define(function(require, exports) {
             searchParam = JSON.stringify(searchParam);
             showConfirmMsg($( "#confirm-dialog-message" ), "是否按当前账期 " + startTime + " 至 " + endTime + " 下账？",function(){
                 $.ajax({
-                    url:KingServices.build_url("financial/financialRestaurant","autoPayment"),
+                    url:KingServices.build_url("account/arrangeRestaurantFinancial","autoPayment"),
                     type:"POST",
                     data:{ searchParam : searchParam },
                     success:function(data){
@@ -315,18 +358,7 @@ define(function(require, exports) {
             });
         });
 
-        restaurant.sumPayMoney();
-    };
-
-    //自动计算本次付款总额
-    restaurant.sumPayMoney = function(){
-        var $sumPayMoney = restaurant.$clearTab.find("input[name=sumPayMoney]");
-        restaurant.$clearTab.find("input[name=payMoney]").on("change",function(){
-            var $this = $(this),validator = rule.check($this.closest('tr'));
-            if(!validator.form()){ return false;}
-            var sumPayMoney = parseInt($sumPayMoney.val());
-            $sumPayMoney.val(sumPayMoney + parseInt($this.val()));
-        });
+        FinancialService.updateSumPayMoney(restaurant.$clearTab,rule);
     };
 
     //显示单据
@@ -385,7 +417,7 @@ define(function(require, exports) {
     //已付金额明细
     restaurant.payedDetail = function(id){
         $.ajax({
-            url:KingServices.build_url("financial/financialRestaurant","listFcRestaurantSettlementRecord"),
+            url:KingServices.build_url("account/arrangeRestaurantFinancial","listFcRestaurantSettlementRecord"),
             type:"POST",
             data:{
                 restaurantId : id + ""
@@ -411,7 +443,7 @@ define(function(require, exports) {
     //应付金额明细
     restaurant.needPayDetail = function(id){
         $.ajax({
-            url:KingServices.build_url("financial/financialRestaurant","listFcRestaurantSettlementRecord"),
+            url:KingServices.build_url("account/arrangeRestaurantFinancial","listFcRestaurantSettlementRecord"),
             type:"POST",
             data:{
                 restaurantId : id + ""
@@ -452,29 +484,33 @@ define(function(require, exports) {
         } 
         var restaurantCheckingTr = $this.find(".T-checkTr");
         restaurantCheckingTr.each(function(){
-            var id = $(this).data("id"),
-                settlementMoney = getValue($(this),"settlementMoney"),
-                checkRemark = getValue($(this),"checkRemark"),
-                isConfirmAccount = "";
-            if ($(this).find(".T-checkbox").is(':checked')) {
-                isConfirmAccount = 1;
-            } else {
-                isConfirmAccount = 0; 
+            var $this = $(this);
+            if($this.data("change")){//遍历修改行
+                var isConfirmAccount = "";
+                if ($this.find(".T-checkbox").is(':checked')) {
+                    isConfirmAccount = 1;
+                } else {
+                    isConfirmAccount = 0; 
+                }
+                //提交修改了对账状态或已对账行数据的行
+                if(($this.data("confirm") != isConfirmAccount) || ($this.data("confirm") == 1)){
+                    var checkRecord = {
+                        id : $this.data("id"),
+                        settlementMoney : getValue($this,"settlementMoney"),
+                        unPayedMoney : $this.find("td[name=unPayedMoney]").text(),
+                        checkRemark : getValue($this,"checkRemark"),
+                        isConfirmAccount : isConfirmAccount
+                    };
+                    checkSaveJson.push(checkRecord);
+                }
             }
-            var checkRecord = {
-                id : id,
-                settlementMoney : settlementMoney,
-                checkRemark : checkRemark,
-                isConfirmAccount : isConfirmAccount
-            };
-            checkSaveJson.push(checkRecord);
         });
         checkSaveJson = JSON.stringify(checkSaveJson);
         $.ajax({
-            url:KingServices.build_url("financial/financialRestaurant","saveAccountChecking"),
+            url:KingServices.build_url("account/arrangeRestaurantFinancial","saveAccountChecking"),
             type:"POST",
             data:{
-                financialRestaurantListStr : checkSaveJson
+                restaurantJson : checkSaveJson
             },
             success:function(data){
                 var result = showDialog(data);
@@ -502,26 +538,27 @@ define(function(require, exports) {
             showMessageDialog($( "#confirm-dialog-message" ),"您未进行任何操作！");
             return false;
         }
-        var $tr,argumentsLen = arguments.length;
-        $tr = restaurant.$clearTab.find(".T-clearList tr");
+        var $tr = restaurant.$clearTab.find(".T-clearList tr"),
+            argumentsLen = arguments.length;
 
-        var clearSaveJson = [];
-        $tr.each(function(i){
-            //获取数据
-            var clearJson = {
-                id : $(this).data("id"),
-                payMoney : $(this).find("input[name=payMoney]").val(),
-                payType : $(this).find("select[name=payType]").val(),
-                payRemark : $(this).find("input[name=payRemark]").val()
-            };
-            clearSaveJson.push(clearJson);
+        $tr.each(function(){
+            var $this = $(this);
+            if($this.data("change")){
+                var clearTemp = {
+                    id : $this.data("id"),
+                    payMoney : $this.find("input[name=payMoney]").val(),
+                    payType : $this.find("select[name=payType]").val(),
+                    payRemark : $this.find("input[name=payRemark]").val()
+                };
+                restaurant.clearTempData.push(clearTemp);
+            }
         });
-        clearSaveJson = JSON.stringify(clearSaveJson);
+        var financialRestaurantListStr = JSON.stringify(restaurant.clearTempData);
         $.ajax({
-            url:KingServices.build_url("financial/financialRestaurant","saveAccountSettlement"),
+            url:KingServices.build_url("account/arrangeRestaurantFinancial","saveAccountSettlement"),
             type:"POST",
             data:{
-                financialRestaurantListStr : clearSaveJson
+                financialRestaurantListStr : financialRestaurantListStr
             },
             success:function(data){
                 var result = showDialog(data);
@@ -550,8 +587,9 @@ define(function(require, exports) {
             var validator = rule.check(restaurant.$checkTab);
 
             // 监听修改
-            restaurant.$checkTab.find(".T-checkList").off('change').on('change', function(event) {
+            restaurant.$checkTab.find(".T-checkList").off('change').on('change',"input",function(event) {
                 event.preventDefault();
+                $(this).closest('tr').data("change",true);
                 restaurant.$checkTab.data('isEdited', true);
             });
             restaurant.$checkTab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
@@ -575,9 +613,10 @@ define(function(require, exports) {
         if (!!restaurant.$clearTab && restaurant.$clearTab.length === 1) {
             var validator = rule.check(restaurant.$clearTab);
 
-           restaurant.$clearTab.find(".T-clearList").off('change').off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE)
+           restaurant.$clearTab.find(".T-clearList tr").off('change').off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE)
             .on('change', function(event) {
                 event.preventDefault();
+                $(this).closest('tr').data("change",true);
                 restaurant.$clearTab.data('isEdited', true);
             });
             restaurant.$clearTab.off('change').off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {

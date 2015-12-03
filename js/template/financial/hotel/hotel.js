@@ -1,6 +1,6 @@
 define(function(require, exports) {
-	var rule = require("./rule");
-    var menuKey = "financial_rummery",
+	var rule = require("./rule"),
+        menuKey = "financial_rummery",
 	    listTemplate = require("./view/list"),
         hotelChecking = require("./view/hotelChecking"),
         hotelClearing = require("./view/hotelClearing"),
@@ -173,6 +173,7 @@ define(function(require, exports) {
 
         hotel.init_check_event(page,id,name);
         hotel.initDate(hotel.$checkTab);
+        FinancialService.updateUnpayMoney(hotel.$checkTab,rule);
 
         //搜索按钮事件
         hotel.$checkSearchArea.find('.T-search').on('click', function(event) {
@@ -304,18 +305,7 @@ define(function(require, exports) {
             });
         });
 
-        hotel.sumPayMoney();
-    }; 
-
-    //自动计算本次付款总额
-    hotel.sumPayMoney = function(){
-        var $sumPayMoney = hotel.$clearTab.find("input[name=sumPayMoney]");
-        hotel.$clearTab.find("input[name=payMoney]").on("change",function(){
-            var $this = $(this),validator = rule.check($this.closest('tr'));
-            if(!validator.form()){ return false;}
-            var sumPayMoney = parseInt($sumPayMoney.val());
-            $sumPayMoney.val(sumPayMoney + parseInt($this.val()));
-        });
+        FinancialService.updateSumPayMoney(hotel.$clearTab,rule);
     };
 
     //显示单据
@@ -435,20 +425,26 @@ define(function(require, exports) {
         var checkSaveJson = [];
         var hotelCheckingTr = $this.find(".T-checkTr");
         hotelCheckingTr.each(function(){
-            var id = $(this).data("id");
-            var isConfirmAccount = "";
-            if ($(this).find(".T-checkbox").is(':checked')) {
-                isConfirmAccount = 1;
-            } else {
-                isConfirmAccount = 0; 
+            var $this = $(this);
+            if($this.data("change")){//遍历修改行
+                var isConfirmAccount = "";
+                if ($this.find(".T-checkbox").is(':checked')) {
+                    isConfirmAccount = 1;
+                } else {
+                    isConfirmAccount = 0; 
+                }
+                //提交修改了对账状态或已对账行数据的行
+                if(($this.data("confirm") != isConfirmAccount) || ($this.data("confirm") == 1)){
+                    var checkRecord = {
+                        id : $this.data("id"),
+                        settlementMoney : getValue($this,"settlementMoney"),
+                        unPayedMoney : $this.find("td[name=unPayedMoney]").text(),
+                        checkRemark : getValue($this,"checkRemark"),
+                        isConfirmAccount : isConfirmAccount
+                    };
+                    checkSaveJson.push(checkRecord);
+                }
             }
-            var checkRecord = {
-                id : id,
-			    settlementMoney : $(this).find("input[name=settlementMoney]").val(),
-			    checkRemark : $(this).find("input[name=checkRemark]").val(),
-			    isConfirmAccount : isConfirmAccount
-            };
-            checkSaveJson.push(checkRecord);
         });
         checkSaveJson = JSON.stringify(checkSaveJson);
         $.ajax({
@@ -528,8 +524,9 @@ define(function(require, exports) {
             var validator = rule.check(hotel.$checkTab);
 
             // 监听修改
-            hotel.$checkTab.find(".T-checkList").off('change').on('change', function(event) {
+            hotel.$checkTab.find(".T-checkList").off('change').on('change',"input",function(event) {
                 event.preventDefault();
+                $(this).closest('tr').data("change",true);
                 hotel.$checkTab.data('isEdited', true);
             });
             hotel.$checkTab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
