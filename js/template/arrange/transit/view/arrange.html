@@ -362,7 +362,7 @@
 													<th class="th-border">联系人</th>
 													<th class="th-border">联系电话</th>
 													<th class="th-border">类型</th>
-													<th class="th-border">餐标</th>
+													<th class="th-border">餐标<span style="font-size:12px;">(元/人)</span></th>
 													<th class="th-border">人数</th>
 													<th class="th-border">优惠</th>
 													<th class="th-border">应付款</th>
@@ -396,9 +396,8 @@
 														</select>
 													</td>
 													<td>
-														<input class="col-sm-8 chooseStandard price" name="restaurantStandardId" type="text" value="{{outRestaurant.price}}" maxlength="9" />
+														<input class="col-sm-12 chooseStandard price" name="restaurantStandardId" type="text" value="{{outRestaurant.price}}" maxlength="9" />
 														<input type="hidden" name="price" value="{{outRestaurant.price}}" />
-														<span style="line-height: 22px;">(元/人)</span>
 													</td>
 													<td><input class="col-sm-12 count" name="memberCount"  maxlength="6" type="text" value="{{outRestaurant.memberCount}}" /></td>
 													<td><input class="col-sm-12 discount" name="reduceMoney"  maxlength="9" type="text" value="{{outRestaurant.reduceMoney}}" /></td>
@@ -914,7 +913,7 @@
 													<th class="th-border">联系人</th>
 													<th class="th-border">联系电话</th>
 													<th class="th-border">类型</th>
-													<th class="th-border">餐标</th>
+													<th class="th-border">餐标 <span style="font-size:12px;">(元/人)</span></th>
 													<th class="th-border">人数</th>
 													<th class="th-border">优惠</th>
 													<th class="th-border">应付款</th>
@@ -948,9 +947,8 @@
 														</select>
 													</td>
 													<td>
-														<input class="col-sm-8 pirce chooseStandard" name="restaurantStandardId" type="text" value="{{outRestaurant.price}}" />
+														<input class="col-sm-12 pirce chooseStandard" name="restaurantStandardId" type="text" value="{{outRestaurant.price}}" />
 														<input type="hidden" name="price" value="{{outRestaurant.price}}" />
-														<span style="line-height: 22px;">(元/人)</span>
 													</td>
 													<td><input class="col-sm-12 count" name="memberCount"  maxlength="6" type="text" value="{{outRestaurant.memberCount}}" /></td>
 													<td><input class="col-sm-12 discount" name="reduceMoney"  maxlength="9" type="text" value="{{outRestaurant.reduceMoney}}" /></td>

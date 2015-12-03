@@ -966,6 +966,12 @@ padding-left:0;width: 360px;left: -35px;
     text-align: center;
 }
 .quoteTable td td{border: 0!important;padding-right:6px;}
+
+/*table表格border*/
+.arrangeTouristMain .widget-main.no-padding .table{
+    border-width:1px;
+}
+
 /*媒体查询-不同分辨率*/
 @media screen and (max-width:1703px){
   .line-separated{
