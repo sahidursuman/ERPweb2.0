@@ -7,8 +7,8 @@
 				<label class="pitch control-label no-padding-right">应用范围：{{if lineProduct.customerType == 0}}散客{{else}}团体{{/if}}</label>
 				<label class="pitch control-label no-padding-right">天数：{{lineProduct.days}}</label>
 				<label class="pitch control-label no-padding-right">出游日期：{{lineProduct.startTime}}</label>
-				<label class="pitch control-label no-padding-right">人数合计：大人{{lineProduct.adultCount}}小孩{{lineProduct.childCount}}</label>
-				<label class="pitch control-label no-padding-right">已选人数：<span class="choosenAdultAndChildCount">大人0小孩0</span></label>
+				<label class="pitch control-label no-padding-right">人数合计：{{lineProduct.adultCount}}大{{lineProduct.childCount}}小</label>
+				<label class="pitch control-label no-padding-right">已选人数：<span class="choosenAdultAndChildCount">0 大 0 小</span></label> 
 			</div>
 		</form>
 		<div class="col-xs-12">
@@ -45,7 +45,7 @@
 								<td>{{if touristGroup.partnerAgency != null}}{{touristGroup.partnerAgency.travelAgencyName}}{{/if}}</td>
 								<td>{{if touristGroup.contactMember != null}}{{touristGroup.contactMember.name}}{{/if}}</td>
 								<td>{{if touristGroup.contactMember != null}}{{touristGroup.contactMember.mobileNumber}}{{/if}}</td>
-								<td><span class="viewTouristGroup_transfer" data-entity-id="{{touristGroup.id}}" style="color:blue;text-decoration: underline; cursor:pointer;">大人{{touristGroup.adultCount}}小孩{{touristGroup.childCount}}</span></td>
+								<td><span class="viewTouristGroup_transfer" data-entity-id="{{touristGroup.id}}" style="color:blue;text-decoration: underline; cursor:pointer;">{{touristGroup.adultCount}}大{{touristGroup.childCount}}小</span></td>
 								<td>{{touristGroup.areaData}}</td>
 								<td>{{touristGroup.ageData}}</td>
 								<td><label name="label_needPay">{{touristGroup.transNeedPayAllMoney}}</label></td>

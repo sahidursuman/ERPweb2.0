@@ -786,6 +786,13 @@ input,select{
 .margin-leftF40{
     left: -40px;
 }
+.Touristwidth{
+    width: 160px !important;
+}
+.margin-leftGroup{
+    margin-left: 74px;
+}
+
 /*关闭操作页面时的button键*/
 .ui-dialog .ui-dialog-buttonpane button.btn-heightMall{
     height: 27px !important;
@@ -1109,6 +1116,9 @@ padding-left:0;width: 360px;left: -35px;
 .getPay-type{
     width: 180px;
 }
+.Touristwidth{
+    width: 120px !important;
+}
 .product-width{
     width: 125px !important;
 }
@@ -1117,6 +1127,9 @@ padding-left:0;width: 360px;left: -35px;
 }
 .icon-tourist{
     margin-left: -20px !important;
+}
+.margin-leftGroup{
+    margin-left: 38px;
 }
 .status-transfer{
     margin-left: 65px;
@@ -1179,7 +1192,9 @@ width: 840px;
 .marginLeftTourist-30{
     margin-left: 30px;
 }
-
+.update-divWidth{
+    width: 230px;
+}
 /*报价媒体css样式*/
 .busQuoteWidth{
     width: 140px;
@@ -1218,7 +1233,13 @@ width: 840px;
 .marginLeftTourist-30{
     margin-left: 40px;
 }
-
+/*游客管理*/
+.margin-leftGroup{
+    margin-left: 28px;
+}
+.update-divWidth{
+    width: 230px;
+}
 /*报价媒体css样式*/
 .busQuoteWidth{
     width: 140px;

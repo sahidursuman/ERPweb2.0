@@ -24,7 +24,7 @@
 							<td>{{tripPlanList.tripNumber}}</td>
 							<td>{{if tripPlanList.lineProduct != null}}{{tripPlanList.lineProduct.name}}{{/if}}</td>
 							<td>{{tripPlanList.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
-							<td>大人{{tripPlanList.touristAdultCount}}小孩{{tripPlanList.touristChildCount}}</td>
+							<td>{{tripPlanList.touristAdultCount}}大{{tripPlanList.touristChildCount}}小</td>
 							<td>{{if tripPlanList.guide != null}}{{tripPlanList.guide.realname}}{{/if}}</td>
 							<td>{{if tripPlanList.bus != null}}{{tripPlanList.bus.licenseNumber}}{{/if}}</td>
 							<td>

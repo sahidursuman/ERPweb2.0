@@ -7,8 +7,8 @@
 				<label class="pull-left control-label pitch no-padding-right">应用范围：{{if lineProduct.customerType == 0}}散客{{else}}团体{{/if}}</label>
 				<label class="pull-left control-label pitch no-padding-right">天数：{{lineProduct.days}}</label>
 				<label class="pull-left control-label pitch no-padding-right">出游日期：{{lineProduct.startTime}}</label>
-				<label class="pull-left control-label pitch no-padding-right">人数合计：大人{{lineProduct.adultCount}}小孩{{lineProduct.childCount}}</label>
-				<label class="pull-left control-label pitch no-padding-right">已选人数：<span class="choosenAdultAndChildCount">大人0小孩0</span></label>
+				<label class="pull-left control-label pitch no-padding-right">人数合计：{{lineProduct.adultCount}}大{{lineProduct.childCount}}小</label>
+				<label class="pull-left control-label pitch no-padding-right">已选人数：<span class="choosenAdultAndChildCount">0大0小</span></label>
 			</div>
 		</form>
 		<div class="col-xs-12">
@@ -33,7 +33,7 @@
 								<td>{{if touristGroup.contactMember!=null}}{{touristGroup.contactMember.mobileNumber}}{{/if}}</td>
 								<td>{{touristGroup.areaData}}</td>
 								<td>{{touristGroup.ageData}}</td>
-								<td>大人{{touristGroup.adultCount}}小孩{{touristGroup.childCount}}</td>
+								<td>{{touristGroup.adultCount}}大{{touristGroup.childCount}}小</td>
 								<td>{{touristGroup.remark}}</td>
 								<td>
 									<a data-entity-id="{{touristGroup.id}}" class="cursor T-groupView T-action">
