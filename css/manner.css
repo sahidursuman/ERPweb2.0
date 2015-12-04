@@ -758,6 +758,9 @@ input,select{
     right: 14px;
     top: 0px;
 }
+.addManagerRight{
+    cursor:pointer;left:-38px;
+}
 /*.layui-layer-page .layui-layer-content{
     max-height: 550px !important;
     overflow-y: auto;
@@ -1022,6 +1025,18 @@ padding-left:0;width: 360px;left: -35px;
 .subsectionWords{
     margin-left: 35px;
 }
+/*项目代订*/
+.bookingFormOneList .formOneList input{
+    width: 200px;
+   
+}
+.addManagerRight{
+    cursor:pointer;left:-18px;
+}
+.partnerAgencyWidth{
+    width:145px;
+    margin-left: 63px;
+}
 
 /*发团计划*/
 .triPlanInput input{
@@ -1239,6 +1254,14 @@ width: 840px;
 }
 .update-divWidth{
     width: 230px;
+}
+/*项目代订*/
+.bookingFormOneList .formOneList input{
+    width: 180px;
+   
+}
+.addManagerRight{
+    cursor:pointer;left:-18px;
 }
 /*报价媒体css样式*/
 .busQuoteWidth{
