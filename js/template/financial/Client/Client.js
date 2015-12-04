@@ -671,11 +671,16 @@ define(function(require, exports) {
             }
         }).on("click",function(){
             if (!$obj.data('ajax')) {  // 避免重复请求
+                var val = Client.$tab.find('.T-search-head-office').val();
+                if (val === '全部') {
+                    val = '';
+                }
+                
                 $.ajax({
                     url : KingServices.build_url('financial/customerAccount', 'selectPartnerAgency'),
                     type : 'POST',
                     showLoading:false,
-                    data : {headerAgencyId : Client.$tab.find('.T-search-head-office').data('id')}
+                    data : {headerAgencyName : val}
                 }).done(function(data) {
                     for(var i=0; i<data.fromPartnerAgencyList.length; i++){
                         data.fromPartnerAgencyList[i].value = data.fromPartnerAgencyList[i].fromPartnerAgencyName;
