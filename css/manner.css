@@ -835,7 +835,13 @@ padding-left:0;width: 360px;left: -35px;
 .transit-arrangeTime div{
     width: 260px;
 }
-/*中转分段显示不完整*/
+/*中转分段*/
+.subsection-width-time{
+    width: 145px;
+}
+.marginLeftTourist-38{
+    margin-left:15px;
+}
 /*.ui-autocomplete .ui-state-focus{width:1000px;!important;}*/
 /*table 宽度*/
 .tableWidthImp{
@@ -1014,7 +1020,9 @@ padding-left:0;width: 360px;left: -35px;
 .subsectionStartTime{
     width: 100px;
 }
-
+.marginLeftTourist-38{
+    margin-left: 54px;
+}
 .innerTr-export{
     margin-left: 20px;
 }
@@ -1262,6 +1270,13 @@ width: 840px;
 }
 .addManagerRight{
     cursor:pointer;left:-18px;
+}
+/*中转分段*/
+.subsection-width-time{
+    width: 120px;
+}
+.marginLeftTourist-38{
+    margin-left: 38px;
 }
 /*报价媒体css样式*/
 .busQuoteWidth{
