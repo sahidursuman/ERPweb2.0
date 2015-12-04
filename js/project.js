@@ -1407,6 +1407,7 @@ Tools.getTabKey = function(id) {
 Tools.addZero2Two = function(num)  {
 	return num > 9 ? num : '0' + num;
 }
+
 /**
  * 用于定义公共请求或者与数据相关的公共组件处理
  * @type {Object}

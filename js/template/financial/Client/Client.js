@@ -12,12 +12,14 @@ define(function(require, exports) {
         recordTemplate = require("./view/record"),
         receivedTemplate = require('./view/received'),
         detailsTemplate = require('./view/details'),
+        touristsTemplate = require('./view/tourists'),
         ClientCheckTab = "financial_Client_checking",
         ClientClearTab = "financial_Client_clearing",
         tabId = "tab-"+menuKey+"-content",
         validator;
     
     var Client = {
+        mock: true,
 		searchData: false,
         $tab: false,
         $searchArea: false,
@@ -32,31 +34,45 @@ define(function(require, exports) {
     Client.initModule = function() {
         Client.listClient(0);
     };	
-
-    Client.setDateZreo = function(num){
-        return num > 9 ? num : '0' + num;
-    };
     
     Client.listClient = function(page){
         var date = new Date(),
             year = date.getFullYear(),
-            month = Client.setDateZreo(date.getMonth() + 1),
-            day = Client.setDateZreo(date.getDate()),
+            month = Tools.addZero2Two(date.getMonth() + 1),
+            day = Tools.addZero2Two(date.getDate()),
             args = {
                 pageNo : (page || 0),
-                headerAgencyName : "",
-                fromPartnerAgencyName : "",
                 startTime : year + '-' + month + '-' + '01',
                 endTime : year + '-' + month + '-' + day
             };
         if(Client.$tab){
             args = {
                 pageNo : (page || 0),
-                headerAgencyName : Client.$tab.find('.T-search-head-office').val(),
-                fromPartnerAgencyName : Client.$tab.find('.T-search-customer').val(),
                 startTime : Client.$tab.find('.T-search-start-date').val(),
                 endTime : Client.$tab.find('.T-search-end-date').val()
             };
+
+            var $office = Client.$tab.find('.T-search-head-office'),
+                $customer = Client.$tab.find('.T-search-customer'),
+                val;
+
+            if ($office.val() != '全部') {
+                args.headerAgencyName = $office.val();
+
+                val = $office.data('id');
+                if (!!val) {
+                    args.headerAgencyId = val;
+                }
+            }
+
+            if ($customer.val() != '全部') {
+                args.fromPartnerAgencyName = $customer.val();
+
+                val = $customer.data('id');
+                if (!!val) {
+                    args.fromPartnerAgencyId = val;
+                }
+            }
         }
         $.ajax({
             url : KingServices.build_url('financial/customerAccount', 'listPager'),
@@ -179,6 +195,8 @@ define(function(require, exports) {
         Client.$checkSearchArea = Client.$checkingTab.find('.T-search-area');
 
         //Client.init_check_event(id, $checktab);
+        // 初始化下拉选项
+        Client.getLineProductList(Client.$checkSearchArea.find('.T-search-line'));
 
         Client.datepicker(Client.$checkSearchArea);
 
@@ -244,29 +262,110 @@ define(function(require, exports) {
     };
 
     Client.unfoldGroup = function($that){
-        var $tr = $that.closest('tr').next('.T-group-list');
-        if($tr.hasClass('hide')){
-            $that.text("收起");
-            $tr.removeClass("hide");
-        }else{
-            $that.text("展开");
-            $tr.addClass("hide");
+        if ('undefined' === $that)  {
+            return;
+        }
+
+        var $next = $that.closest('tr').next();
+
+        if ($that.data('ajax')) {
+            $that.text('收起' === $that.text()? '展开': '收起');
+            $next.fadeToggle();
+        } else {
+            $.ajax({
+                url: KingServices.build_url('financial/customerAccount', 'findTouristGroupDetail'),
+                type: 'post',
+                data: {touristGroupId: $that.data('touristGroupId')},
+            })
+            .done(function(data) {
+                if (showDialog(data)) {
+                    data.memberList = JSON.parse(data.memberList || false) || [];
+                    data.memberList = [{
+                        idCardNumber: 'D-1234-123456',
+                        idCardType: 1,
+                        isContactUser: 0,
+                        mobileNumber: '15881158856',
+                        name: 'roger wei'
+                    },
+                    {
+                        idCardNumber: 'D-1234-123456',
+                        idCardType: 0,
+                        isContactUser: 1,
+                        mobileNumber: '15881158856',
+                        name: 'roger wei'
+                    },
+                    {
+                        idCardNumber: 'D-1234-123456',
+                        idCardType: 2,
+                        isContactUser: 0,
+                        mobileNumber: '15881158856',
+                        name: 'roger wei'
+                    },
+                    ]
+
+                    $next.find('.T-group-list').html(touristsTemplate(data));
+                    $that.data('ajax', true).trigger('click');
+                }
+            });            
         }
     };
 
     Client.viewReceive = function($that){
-        /*$.ajax({
-            url : KingServices.build_url('', '')
-        })*/
-        var data = {}
-        layer.open({
-            type: 1,
-            title:"已收金额明细",
-            skin: 'layui-layer-rim', 
-            area: '1024px', 
-            zIndex:1028,
-            content: receivedTemplate(data),
-            scrollbar: false
+        if ('undefined' === $that || !$that.length) {
+            return;
+        }
+        $.ajax({
+            url: KingServices.build_url('financial/customerAccount', 'findCustomerAccountDetail'),
+            type: 'post',
+            data: {id: $that.closest('tr').data('id')},
+        })
+        .done(function(data) {
+            if (showDialog(data)) {
+                data.customerAcountDetailList = JSON.parse(data.customerAcountDetailList || false) || [];
+
+                if (Client.mock) {
+                    data.customerAcountDetailList = [
+                        {
+                            resourceType: '团款收入',
+                            businessType: '游客管理-新增小组收入',
+                            incomePart: '社收',
+                            incomeMoney: '200',
+                            incomeType: '现金',
+                            remark: 'wa',
+                            creatorName: '李四',
+                            createTime: '2015-07-01 20:54:32'
+                        },{
+                            resourceType: '团款收入',
+                            businessType: '游客管理-新增小组收入',
+                            incomePart: '社收',
+                            incomeMoney: '200',
+                            incomeType: '现金',
+                            remark: 'wa',
+                            creatorName: '李四',
+                            createTime: '2015-07-01 20:54:32'
+                        },{
+                            resourceType: '团款收入',
+                            businessType: '游客管理-新增小组收入',
+                            incomePart: '社收',
+                            incomeMoney: '200',
+                            incomeType: '现金',
+                            remark: 'wa',
+                            creatorName: '李四',
+                            createTime: '2015-07-01 20:54:32'
+                        }
+                    ];
+                }
+
+                layer.open({
+                    type: 1,
+                    title:"已收金额明细",
+                    skin: 'layui-layer-rim', 
+                    area: '1024px', 
+                    zIndex:1028,
+                    content: receivedTemplate(data),
+                    scrollbar: false
+                });
+            }
         });
     };
 
@@ -514,6 +613,11 @@ define(function(require, exports) {
         return validator;
     };
 
+    /**
+     * 获取总社
+     * @param  {object} $obj 总社输入框的Jquery对象
+     * @return {[type]}      [description]
+     */
     Client.getPartnerAgencyList = function($obj){
         $obj.autocomplete({
             minLength: 0,
@@ -524,22 +628,36 @@ define(function(require, exports) {
             },
             select: function(event, ui) {
                 $(this).blur().data('id', ui.item.id);
+                Client.$searchArea.find('.T-search-head-office').data('ajax', false);
             }
         }).on("click",function(){
-            $.ajax({
-                url : KingServices.build_url('financial/customerAccount', 'selectHeaderAgency'),
-                type : "POST",
-                showLoading:false
-            }).done(function(data){
-                for(var i=0; i<data.headerAgencyList.length; i++){
-                    data.headerAgencyList[i].value = data.headerAgencyList[i].headerAgencyName;
-                    data.headerAgencyList[i].id = data.headerAgencyList[i].headerAgencyId;
-                }
-                $obj.autocomplete('option', 'source', data.headerAgencyList);
+            if (!$obj.data('ajax')) {  // 避免重复请求
+                $.ajax({
+                    url : KingServices.build_url('financial/customerAccount', 'selectHeaderAgency'),
+                    type : "POST",
+                    showLoading:false
+                }).done(function(data){
+                    for(var i=0; i<data.headerAgencyList.length; i++){
+                        data.headerAgencyList[i].value = data.headerAgencyList[i].headerAgencyName;
+                        data.headerAgencyList[i].id = data.headerAgencyList[i].headerAgencyId;
+                    }
+                    data.headerAgencyList.unshift({id:'', value: '全部'});
+                    $obj.autocomplete('option', 'source', data.headerAgencyList);
+                    $obj.autocomplete('search', '');
+
+                    $obj.data('ajax', true);
+                });
+            } else {
                 $obj.autocomplete('search', '');
-            });
+            }
         });
     };
+
+    /**
+     * 获取客户列表
+     * @param  {object} $obj 客户列表搜索框的Jquery对象
+     * @return {[type]}      [description]
+     */
     Client.getTravelAgencyList = function($obj){
         $obj.autocomplete({
             minLength: 0,
@@ -552,18 +670,72 @@ define(function(require, exports) {
                 $(this).blur().data('id', ui.item.id);
             }
         }).on("click",function(){
-            $.ajax({
-                url : KingServices.build_url('financial/customerAccount', 'selectPartnerAgency'),
-                type : 'POST',
-                data : {headerAgencyId : Client.$tab.find('.T-search-head-office').data('id')}
-            }).done(function(data) {
-                for(var i=0; i<data.fromPartnerAgencyList.length; i++){
-                    data.fromPartnerAgencyList[i].value = data.fromPartnerAgencyList[i].fromPartnerAgencyName;
-                    data.fromPartnerAgencyList[i].id = data.fromPartnerAgencyList[i].fromPartnerAgencyId;
-                }
-                $obj.autocomplete('option', 'source', data.fromPartnerAgencyList);
+            if (!$obj.data('ajax')) {  // 避免重复请求
+                $.ajax({
+                    url : KingServices.build_url('financial/customerAccount', 'selectPartnerAgency'),
+                    type : 'POST',
+                    showLoading:false,
+                    data : {headerAgencyId : Client.$tab.find('.T-search-head-office').data('id')}
+                }).done(function(data) {
+                    for(var i=0; i<data.fromPartnerAgencyList.length; i++){
+                        data.fromPartnerAgencyList[i].value = data.fromPartnerAgencyList[i].fromPartnerAgencyName;
+                        data.fromPartnerAgencyList[i].id = data.fromPartnerAgencyList[i].fromPartnerAgencyId;
+                    }
+                    data.fromPartnerAgencyList.unshift({id:'', value: '全部'});
+                    $obj.autocomplete('option', 'source', data.fromPartnerAgencyList);
+                    $obj.autocomplete('search', '');
+                    $obj.data('ajax', true);
+                })
+            } else {
                 $obj.autocomplete('search', '');
-            })
+            }
+        });        
+    };
+
+    /**
+     * 获取线路产品
+     * @param  {object} $obj 搜索框
+     * @return {[type]}      [description]
+     */
+    Client.getLineProductList = function($obj){
+        $obj.autocomplete({
+            minLength: 0,
+            change: function(event, ui) {
+                if (!ui.item)  {
+                    $(this).data('id', '');
+                }
+            },
+            select: function(event, ui) {
+                $(this).blur().data('id', ui.item.id);
+            }
+        }).on("click",function(){
+            if (!$obj.data('ajax')) {  // 避免重复请求
+                $.ajax({
+                    url : KingServices.build_url('financial/customerAccount', 'selectLineProduct'),
+                    type : 'POST',
+                    showLoading:false,
+                }).done(function(data) {
+                    for(var i=0; i<data.lineProductList.length; i++){
+                        data.lineProductList[i].value = data.lineProductList[i].lineProductName;
+                        data.lineProductList[i].id = data.lineProductList[i].lineProductId;
+                    }
+
+                    if (Client.mock) {
+                        data.lineProductList = [
+                            {id: 1, value: '峨眉三日游'},
+                            {id: 2, value: '峨眉1日游'},
+                            {id: 3, value: '峨眉2日游'},
+                        ];
+                    }
+                    data.lineProductList.unshift({id:'', value: '全部'});
+
+                    $obj.autocomplete('option', 'source', data.lineProductList);
+                    $obj.autocomplete('search', '');
+                    $obj.data('ajax', true);
+                })
+            } else {
+                $obj.autocomplete('search', '');
+            }
         });        
     };
 
