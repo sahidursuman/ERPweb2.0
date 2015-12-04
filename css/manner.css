@@ -671,10 +671,13 @@ input,select{
 .operationA{
     margin-left:-240px;margin-top:5px;
 }
-/*查看发团计划*/
+/*发团计划*/
 .CheckPlan{
     text-align: right !important;
     padding:7px 6px 7px 0px !important;
+}
+.tripPlan-search-margin{
+    margin-left: -40px;width: 75px;
 }
 .triplan-dropdown-menu{
     margin-left: -93px !important;
@@ -1055,6 +1058,10 @@ padding-left:0;width: 360px;left: -35px;
 }
 .planSearchBtn{
     position: absolute;
+}
+.tripPlan-search-margin{
+    width: 75px;
+    margin-left: 10px;
 }
 .triplanStartTime{
   width: 100px;  
