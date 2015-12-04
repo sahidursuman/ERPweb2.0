@@ -1910,17 +1910,17 @@ define(function(require, exports) {
 			if($list.length > 0){
 				for(var j=0; j<$list.length;j++){
 					$item = $list.eq(j);
-					var selfPayId = $item.find("[name=selfPayItemId]").val();
-					if(!selfPayId){
+					var companyId = $item.find("[name=companyId]").val();
+					if(!companyId){
 						showMessageDialog($( "#confirm-dialog-message" ), "请选择自费项目！");
 						isAjax = false;
 						return false;
 					}
-					if(selfPayId){
+					if(companyId){
 						var selfPayJson = {
 							id : $item.find("[name=templateId]").val(),
 							selfPayItemId :$item.find("[name=selfPayItemId]").val(),
-							selfPayId : selfPayId,
+							selfPayId : companyId,
 							price : $item.find("[name=contractPrice]").val(),
 							marketPrice : $item.find("[name=marketPrice]").val(),
 							remark : $item.find("[name=remark]").val(),
