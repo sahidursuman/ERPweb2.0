@@ -43,19 +43,19 @@ define(function(require, exports) {
 		if (!!FinGuide.$tab) {
 			args = {
 				pageNo: (page || 0),
-				guideId: FinGuide.$tab.find('.T-search-name').val(),
+				guideId: FinGuide.$tab.find('.T-search-name').data('id'),
+				guideName: FinGuide.$tab.find('.T-search-name').val(),
 				year: FinGuide.$tab.find('.T-search-year').val(),
 				month : FinGuide.$tab.find('.T-search-month').val(),
 			}
 		}
 
 		$.ajax({
-			url: KingServices.build_url('financialGuide', 'listFinancialGuide'),
+			url: KingServices.build_url('account/guideFinancial', 'listSumFinancialGuide'),
 			type: 'POST',
 			data: args,
 		}).done(function(data){
 			if(showDialog(data)){
-				data.monthList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 				Tools.addTab(menuKey,"导游账务",listTemplate(data));
 				// 绑定事件
 				FinGuide.init_event();

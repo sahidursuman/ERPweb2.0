@@ -1,0 +1,124 @@
+<div class="row T-search-area">
+    <form class="form-inline" role="form" onsubmit="return false">
+        <div class="form-group">
+            <label>对方单位：</label>
+            <input type="text" class="form-control T-search-unit" style="width: 220px;">
+        </div>
+        <div class="form-group marginLeft-30">
+            <label>收支类别：</label>
+            <select class="form-control T-search-category">
+                <option>团款收入</option>
+            </select>
+        </div>
+        <div class="form-group marginLeft-30">
+            <label>收支大类：</label>
+            <select class="form-control T-search-type">
+                <option>团款收入</option>
+            </select>
+        </div>
+        <div class="form-group marginLeft-30">
+            <label>开始日期</label>
+            <input type="text" class="form-control date-picker T-search-start-time">
+        </div>
+        <div class="form-group marginLeft-30">
+            <label>结束日期</label>
+            <input type="text" class="form-control date-picker T-search-end-time">
+        </div>
+        <div class="form-group marginLeft-30">
+            <button class="btn-sm search-btn T-btn-search">
+                <i class="ace-icon fa fa-search"></i> 搜索 
+            </button>
+        </div>
+    </form>
+    <form class="form-inline" role="form" onsubmit="return false">
+        <div class="form-group">
+            <label>费用类别：</label>
+            <select class="form-control T-search-cost" style="width: 220px;">
+                <option>团款收入</option>
+            </select>
+        </div>
+        <div class="form-group marginLeft-30">
+            <label>发生业务：</label>
+            <select class="form-control T-search-business">
+                <option>游客管理</option>
+            </select>
+        </div>
+        <div class="form-group marginLeft-30">
+            <label>支付方式：</label>
+            <select class="form-control T-search-payment">
+                <option>现金</option>
+                <option>银行转账</option>
+                <option>网上支付</option>
+                <option>支票</option>
+                <option>其它</option>
+            </select>
+        </div>
+        <div class="form-group marginLeft-30">
+            <label>收款合计：27000</label>
+        </div>
+        <div class="form-group marginLeft-30">
+            <label>付款合计：21000</label>
+        </div>
+    </form>
+</div>
+<div class="row">
+    <table class="table table-striped table-bordered table-hover T-showHighLight">
+        <thead>
+            <tr class="bg-blur">
+                <th>对方单位</th>
+                <th>收付类别</th>
+                <th>收支大类</th>
+                <th>费用类别</th>
+                <th>发生业务</th>
+                <th>支付方式</th>
+                <th>收款</th>
+                <th>付款</th>
+                <th>备注</th>
+                <th>创建时间</th>
+            </tr>
+        </thead>
+        <tbody class="T-list">
+            <tr data-id="" data-name="">
+                <td>四川省青年旅行社</td>
+                <td>百事通桐梓林</td>
+                <td>50大2小</td>
+                <td>25000</td>
+                <td>20000</td>
+                <td>20000</td>
+                <td>
+                    <span style="color:#FF0000;">5000</span>
+                </td>
+                <td>
+                    <span style="color:#FF9900;">80/110</span>
+                </td>
+                <td>
+                    <span style="color:#FF9900;">80/110</span>
+                </td>
+                <td>
+                    2015-08-08 17:00:00
+                </td>
+            </tr>
+            <tr data-id="" data-name="">
+                <td>四川省青年旅行社</td>
+                <td>百事通桐梓林</td>
+                <td>50大2小</td>
+                <td>25000</td>
+                <td>20000</td>
+                <td>20000</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>2015-08-08 17:00:00</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="row pageMode">
+        <div class="col-xs-6">
+            <small>共计 {{recordSize}} 条记录</small>
+        </div>
+        <div class="col-xs-6">
+            <div class="dataTables_paginate paging_simple_numbers T-pagenation">
+            </div>
+        </div>
+    </div>
+</div>
