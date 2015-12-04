@@ -6,7 +6,10 @@ var FinancialService = {};
 
 //对账-自动计算未付金额
 FinancialService.updateUnpayMoney = function($tab,rule){
-    $tab.find(".T-checkList tr input[name=settlementMoney]").on("change",function(){
+    $tab.find(".T-checkList tr input[name=settlementMoney]").on("focus",function(){
+        $(this).data("oldVal",$(this).val());
+    })
+    .on("change",function(){
         var $this = $(this),
             $tr = $(this).closest('tr'),
             validator = rule.check($tr);
@@ -19,9 +22,17 @@ FinancialService.updateUnpayMoney = function($tab,rule){
         if(payedMoney == ""){
             payedMoney = 0;
         }
+
+        //计算结算金额修改前后差值
+        var cz = (settlementMoney*1 - $(this).data("oldVal")*1);
+        //统计数据更新
+        var $st = $tab.find(".T-stMoney"),
+            $unpay = $tab.find(".T-unpayMoney");
+        $st.text($st.text()*1 + cz);
+        $unpay.text($unpay.text()*1 + cz);
+
         settlementMoney = parseInt(settlementMoney);
         payedMoney = parseInt(payedMoney);
-
         var unPayedMoney = settlementMoney - payedMoney;
         $tr.find("td[name=unPayedMoney]").text(unPayedMoney);
     });
