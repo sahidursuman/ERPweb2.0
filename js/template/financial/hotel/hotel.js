@@ -20,14 +20,8 @@ define(function(require, exports) {
   	};
 
   	hotel.initModule = function() {
-    	var date = new Date(),
-            year = date.getFullYear(),
-            month = date.getMonth()+1,
-            day = date.getDate();
-        var startTime = year + "-" + month + "-1",
-            endTime = year + "-" + month + "-" + day;
-
-        hotel.listHotel(0,"","",startTime,endTime);
+        var dateJson = FinancialService.getInitDate();
+        hotel.listHotel(0,"","",dateJson.startDate,dateJson.endDate);
     };
 
     hotel.listHotel = function(page,hotelName,hotelId,startTime,endTime){
@@ -37,6 +31,11 @@ define(function(require, exports) {
             startTime = hotel.$searchArea.find("input[name=startTime]").val(),
             endTime = hotel.$searchArea.find("input[name=endTime]").val()
         }
+        if(startTime > endTime){
+            showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
+            return false;
+        }
+
         // 修正页码
         page = page || 0;
         hotel.searchData = {
@@ -117,6 +116,11 @@ define(function(require, exports) {
             startTime = hotel.$checkSearchArea.find("input[name=startTime]").val(),
             endTime = hotel.$checkSearchArea.find("input[name=endTime]").val()
         }
+        if(startTime > endTime){
+            showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
+            return false;
+        }
+
         // 修正页码
         page = page || 0;
         var searchParam = {
@@ -218,6 +222,10 @@ define(function(require, exports) {
             startTime = hotel.$clearSearchArea.find("input[name=startTime]").val(),
             endTime = hotel.$clearSearchArea.find("input[name=endTime]").val()
         }
+        if(startTime > endTime){
+            showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
+            return false;
+        }
 
         page = page || 0;
         var searchParam = {
@@ -288,7 +296,7 @@ define(function(require, exports) {
                 endTime : endTime
             };
             searchParam = JSON.stringify(searchParam);
-            showConfirmMsg($( "#confirm-dialog-message" ), "是否按当前账期 " + startTime + " 至 " + endTime + " 下账？",function(){
+            showConfirmMsg($("#confirm-dialog-message"), "是否按当前账期 " + startTime + " 至 " + endTime + " 下账？",function(){
                 $.ajax({
                     url:KingServices.build_url("financial/financialRestaurant","autoPayment"),
                     type:"POST",
@@ -417,36 +425,11 @@ define(function(require, exports) {
     //对账数据保存
     hotel.saveChecking = function(hotelId,hotelName,page,tab_id, title, html){
         if(!hotel.$checkTab.data('isEdited')){
-            showMessageDialog($( "#confirm-dialog-message" ),"您未进行任何操作！");
+            showMessageDialog($("#confirm-dialog-message"),"您未进行任何操作！");
             return false;
         }
-        //保存对账时提交的数据
-        var $this = hotel.$checkTab.find(".T-checkList"),argumentsLen = arguments.length;
-        var checkSaveJson = [];
-        var hotelCheckingTr = $this.find(".T-checkTr");
-        hotelCheckingTr.each(function(){
-            var $this = $(this);
-            if($this.data("change")){//遍历修改行
-                var isConfirmAccount = "";
-                if ($this.find(".T-checkbox").is(':checked')) {
-                    isConfirmAccount = 1;
-                } else {
-                    isConfirmAccount = 0; 
-                }
-                //提交修改了对账状态或已对账行数据的行
-                if(($this.data("confirm") != isConfirmAccount) || ($this.data("confirm") == 1)){
-                    var checkRecord = {
-                        id : $this.data("id"),
-                        settlementMoney : getValue($this,"settlementMoney"),
-                        unPayedMoney : $this.find("td[name=unPayedMoney]").text(),
-                        checkRemark : getValue($this,"checkRemark"),
-                        isConfirmAccount : isConfirmAccount
-                    };
-                    checkSaveJson.push(checkRecord);
-                }
-            }
-        });
-        checkSaveJson = JSON.stringify(checkSaveJson);
+        var argumentsLen = arguments.length,
+            checkSaveJson = FinancialService.checkSaveJson(hotel.$checkTab);
         $.ajax({
             url:KingServices.build_url("financial/financialHotel","saveAccountChecking"),
             type:"POST",
@@ -454,7 +437,7 @@ define(function(require, exports) {
             success:function(data){
                 var result = showDialog(data);
                 if(result){
-                    showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+                    showMessageDialog($("#confirm-dialog-message"),data.message,function(){
                         if(argumentsLen == 2){
                             Tools.closeTab(menuKey + "-checking");
                             hotel.listhotel(hotel.searchData.pageNo,hotel.searchData.hotelName,hotel.searchData.hotelId,hotel.searchData.startTime,hotel.searchData.endTime);
@@ -474,7 +457,7 @@ define(function(require, exports) {
 
     hotel.saveClear = function(id,name,page,tab_id, title, html){
         if(!hotel.$clearTab.data('isEdited')){
-            showMessageDialog($( "#confirm-dialog-message" ),"您未进行任何操作！");
+            showMessageDialog($("#confirm-dialog-message"),"您未进行任何操作！");
             return false;
         }
         var $tr,argumentsLen = arguments.length;
@@ -501,7 +484,7 @@ define(function(require, exports) {
             success:function(data){
                 var result = showDialog(data);
                 if(result){
-                    showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+                    showMessageDialog($("#confirm-dialog-message"),data.message,function(){
                         if(argumentsLen === 2){
                             Tools.closeTab(menuKey + "-clearing");
                             hotel.listhotel(hotel.searchData.pageNo,hotel.searchData.hotelName,hotel.searchData.hotelId,hotel.searchData.startTime,hotel.searchData.endTime);

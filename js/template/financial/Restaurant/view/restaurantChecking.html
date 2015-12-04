@@ -73,7 +73,7 @@
 		    {{each financialRestaurantList as rs index}}  
 		    <tr class="T-checkTr" data-id="{{rs.id}}" data-confirm="{{rs.isConfirmAccount}}">
 			    <td>{{index+1}}</td>
-			    <td>{{rs.tripNumber}}{{","}}{{rs.lineProductName}}{{","}}{{rs.guideName}}</td>
+			    <td>{{rs.tripNumber}}{{"，"}}{{rs.lineProductName}}{{"，"}}{{rs.guideName}}</td>
 			    <td>{{if rs.accountTime == null || rs.accountTime == ""}}
                         -
                     {{else}}
@@ -85,7 +85,7 @@
 			    <td>{{rs.memberCount}}</td>
 			    <td>{{rs.reduceMoney}}</td>
 			    <td>{{rs.needPayMoney}}</td>
-			    <td><a class="T-option T-payedDetail" data-money="{{rs.payedMoney + rs.realGuidePayMoney}}">{{"社付:"}}{{rs.payedMoney}}{{","}}{{"导付:"}}{{rs.realGuidePayMoney}}</a></td> 
+			    <td><a class="T-option T-payedDetail" data-money="{{rs.payedMoney + rs.realGuidePayMoney}}">{{"社付："}}{{rs.payedMoney}}{{"，"}}{{"导付："}}{{rs.realGuidePayMoney}}</a></td> 
 			    <td>{{if rs.billImage != null && rs.billImage !=""}}<a href="#" class="T-option T-restaurantImg" url="{{rs.billImage}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
 			    <td><input type="text" maxlength="10" name="settlementMoney" value="{{rs.settlementMoney}}" style="text-align:center"></td>
                 <td name="unPayedMoney">{{rs.unPayedMoney}}</td>
