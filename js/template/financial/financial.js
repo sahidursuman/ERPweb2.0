@@ -6,7 +6,10 @@ var FinancialService = {};
 
 //对账-自动计算未付金额
 FinancialService.updateUnpayMoney = function($tab,rule){
-    $tab.find(".T-checkList tr input[name=settlementMoney]").on("change",function(){
+    $tab.find(".T-checkList tr input[name=settlementMoney]").on("focus",function(){
+        $(this).data("oldVal",$(this).val());
+    })
+    .on("change",function(){
         var $this = $(this),
             $tr = $(this).closest('tr'),
             validator = rule.check($tr);
@@ -19,22 +22,32 @@ FinancialService.updateUnpayMoney = function($tab,rule){
         if(payedMoney == ""){
             payedMoney = 0;
         }
+
+        //计算结算金额修改前后差值
+        var cz = (settlementMoney*1 - $(this).data("oldVal")*1);
+        //统计数据更新
+        var $st = $tab.find(".T-stMoney"),
+            $unpay = $tab.find(".T-unpayMoney");
+        $st.text($st.text()*1 + cz);
+        $unpay.text($unpay.text()*1 + cz);
+
         settlementMoney = parseInt(settlementMoney);
         payedMoney = parseInt(payedMoney);
-
         var unPayedMoney = settlementMoney - payedMoney;
         $tr.find("td[name=unPayedMoney]").text(unPayedMoney);
     });
 };
 
 //对账-保存json组装
-FinancialService.checkSaveJson = function($tab){
+FinancialService.checkSaveJson = function($tab,rule){
     var $list = $tab.find(".T-checkList"),
         $tr = $list.find(".T-checkTr"),
         saveJson = []; 
     $tr.each(function(){
         var $this = $(this);
         if($this.data("change")){//遍历修改行
+            var validator = rule.check($this);
+            if(!validator.form()){ return false; }
             var isConfirmAccount = "";
             if ($this.find(".T-checkbox").is(':checked')) {
                 isConfirmAccount = 1;
@@ -67,14 +80,73 @@ FinancialService.updateSumPayMoney = function($tab,rule){
     })
     .on("change",function(){
         var $this = $(this),validator = rule.check($this.closest('tr'));
-        if(!validator.form()){ return false;}
-        var sumPayMoney = $sumPayMoney.val();
-        if(sumPayMoney == ""){
-            sumPayMoney = 0;
-        }
+        var sumPayMoney = $sumPayMoney.val(),
+            newVal = $this.val(),
+            oldVal = $(this).data("oldVal");
+        if(isNaN(sumPayMoney)){ sumPayMoney = 0; }
+        if(isNaN(newVal)){ newVal = 0; }
+        if(isNaN(oldVal)){ oldVal = 0; }
         sumPayMoney = parseInt(sumPayMoney);
-        $sumPayMoney.val(sumPayMoney + parseInt($this.val()-$(this).data("oldVal")));
+        $sumPayMoney.val(sumPayMoney + parseInt(newVal-oldVal));
+
+        if(!validator.form()){ return false; }
     });
+};
+
+//付款-翻页暂存数据读取
+FinancialService.getTempDate = function(resultList,tempJson){
+    if(tempJson){
+        for(var i = 0; i < tempJson.length; i++){
+            var tempId = tempJson[i].id;
+            for(var i = 0; i < resultList.length; i++){
+                var id = resultList[i].id;
+                if(tempId == id){
+                    resultList[i].payMoney = tempJson[i].payMoney;
+                    resultList[i].payType = tempJson[i].payType;
+                    resultList[i].payRemark = tempJson[i].payRemark;
+                }
+            }
+        }
+    }
+    return resultList;
+};
+
+//付款-保存(暂存)数据组装，数组，需转换为json
+FinancialService.clearSaveJson = function($tab,clearSaveJson,rule){
+    $tr = $tab.find(".T-clearList tr")
+    $tr.each(function(){
+        var $this = $(this);
+        if($this.data("change")){
+            var validator = rule.check($this);
+            if(!validator.form()){ return false; }
+
+            var id = $this.data("id"),i = 0,len = clearSaveJson.length;
+            if(!clearSaveJson){
+               len = 0; 
+               clearSaveJson = [];
+            }
+            //已有数据更新
+            for(i = 0; i < len; i++){
+                if(clearSaveJson[i].id == id){
+                    clearSaveJson[i].payMoney = $this.find("input[name=payMoney]").val();
+                    clearSaveJson[i].payType = $this.find("select[name=payType]").val();
+                    clearSaveJson[i].payRemark = $this.find("input[name=payRemark]").val();
+                    return;
+                }
+            }
+            //新数据
+            if(i >= len){
+                var clearTemp = {
+                    id : $this.data("id"),
+                    payMoney : $this.find("input[name=payMoney]").val(),
+                    payType : $this.find("select[name=payType]").val(),
+                    payRemark : $this.find("input[name=payRemark]").val()
+                };
+                clearSaveJson.push(clearTemp);
+            }
+        }
+    });
+    return clearSaveJson;
 };
 
 //获取当月第一天日期和当前日期

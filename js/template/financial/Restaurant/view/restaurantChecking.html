@@ -1,7 +1,7 @@
 <div class="row T-newData" data-id="{{searchParam.restaurantId}}" data-name="{{restaurantName}}">
-    <div class="col-xs-12 border" style="padding-bottom:0px;">
+    <div class="col-xs-12 border T-search-area" style="padding-bottom:0px;">
         <form class="form-horizontal" role="form" onsubmit="return false">
-            <div class="T-search-area editable editable-click" >
+            <div class="editable editable-click" >
                 <div class="form-group"> 
                     <label style="float: left;margin: 0px auto auto 15px" class=" control-label "> 餐厅：{{restaurantName}}</label>
                     <label class="control-label marginLeft-30" style="float:left;">账期:</label>
@@ -38,10 +38,10 @@
         </form>
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="form-group" style="padding-top:10px;">
-                <label class=" control-label pull-left" style="margin-left:15px">账面应付合计：{{sumNeedPayMoney}}</label>
-                <label class=" control-label " style="margin-left:30px;">已付金额合计：{{sumPayedMoney}}</label>
-                <label class=" control-label " style="margin-left:30px;">结算金额合计：{{sumSettlementMoney}}</label>
-                <label class=" control-label " style="margin-left:30px;">未付金额合计：{{sumUnPayedMoney}}</label>
+                <label class="control-label pull-left" style="margin-left:15px">账面应付合计：{{sumNeedPayMoney}}</label>
+                <label class="control-label" style="margin-left:30px;">已付金额合计：{{sumPayedMoney}}</label>
+                <label class="control-label" style="margin-left:30px;">结算金额合计：<span class="T-stMoney">{{sumSettlementMoney}}</span></label>
+                <label class="control-label" style="margin-left:30px;">未付金额合计：<span class="T-unpayMoney">{{sumUnPayedMoney}}</span></label>
             </div>
         </form>
     </div>
