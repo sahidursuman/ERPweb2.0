@@ -21,14 +21,8 @@ define(function(require, exports) {
 	};
 
 	busCompany.initModule = function() {
-    	var date = new Date(),
-            year = date.getFullYear(),
-            month = date.getMonth()+1,
-            day = date.getDate();
-        var startDate = year + "-" + month + "-1",
-            endDate = year + "-" + month + "-" + day;
-
-        busCompany.listBusCompany(0,"","",startDate,endDate);
+    	var dateJson = FinancialService.getInitDate();
+        busCompany.listBusCompany(0,"","",dateJson.startDate,dateJson.endDate);
     };
 
     busCompany.listBusCompany = function(page,busCompanyName,busCompanyId,startDate,endDate){
@@ -38,6 +32,11 @@ define(function(require, exports) {
             startDate = busCompany.$searchArea.find("input[name=startDate]").val(),
             endDate = busCompany.$searchArea.find("input[name=endDate]").val()
         }
+        if(startDate > endDate){
+            showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
+            return false;
+        }
+
         // 修正页码
         page = page || 0;
         busCompany.searchData = {
@@ -118,6 +117,11 @@ define(function(require, exports) {
             startDate = busCompany.$checkSearchArea.find("input[name=startDate]").val(),
             endDate = busCompany.$checkSearchArea.find("input[name=endDate]").val()
         }
+        if(startDate > endDate){
+            showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
+            return false;
+        }
+
         // 修正页码
         page = page || 0;
         var searchParam = {
@@ -219,6 +223,10 @@ define(function(require, exports) {
             startDate = busCompany.$clearSearchArea.find("input[name=startDate]").val(),
             endDate = busCompany.$clearSearchArea.find("input[name=endDate]").val()
         }
+        if(startDate > endDate){
+            showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
+            return false;
+        }
 
         page = page || 0;
         var searchParam = {
@@ -290,7 +298,7 @@ define(function(require, exports) {
                 endDate : endDate
             };
             searchParam = JSON.stringify(searchParam);
-            showConfirmMsg($( "#confirm-dialog-message" ), "是否按当前账期 " + startDate + " 至 " + endDate + " 下账？",function(){
+            showConfirmMsg($("#confirm-dialog-message"), "是否按当前账期 " + startDate + " 至 " + endDate + " 下账？",function(){
                 $.ajax({
                     url:KingServices.build_url("financial/financialBusCompany","autoPayment"),
                     type:"POST",
@@ -312,43 +320,11 @@ define(function(require, exports) {
     //对账数据保存
     busCompany.saveChecking = function(busCompanyId,busCompanyName,page,tab_id,title,html){
         if(!busCompany.$checkTab.data('isEdited')){
-            showMessageDialog($( "#confirm-dialog-message" ),"您未进行任何操作！");
+            showMessageDialog($("#confirm-dialog-message"),"您未进行任何操作！");
             return false;
         }
-        //保存对账时提交的数据
-        var $this = busCompany.$checkTab.find(".T-checkList"),argumentsLen = arguments.length;
-        var checkSaveJson = [];
-        function getValue($obj,name){
-            var result = $obj.find("[name="+name+"]").val();
-            if (result == "") {//所有空字符串变成0
-                result = 0;
-            }
-            return result;
-        } 
-        var busCompanyCheckingTr = $this.find(".T-checkTr");
-        busCompanyCheckingTr.each(function(){
-            var $this = $(this);
-            if($this.data("change")){//遍历修改行
-                var isConfirmAccount = "";
-                if ($this.find(".T-checkbox").is(':checked')) {
-                    isConfirmAccount = 1;
-                } else {
-                    isConfirmAccount = 0; 
-                }
-                //提交修改了对账状态或已对账行数据的行
-                if(($this.data("confirm") != isConfirmAccount) || ($this.data("confirm") == 1)){
-                    var checkRecord = {
-                        id : $this.data("id"),
-                        settlementMoney : getValue($this,"settlementMoney"),
-                        unPayedMoney : $this.find("td[name=unPayedMoney]").text(),
-                        checkRemark : getValue($this,"checkRemark"),
-                        isConfirmAccount : isConfirmAccount
-                    };
-                    checkSaveJson.push(checkRecord);
-                }
-            }
-        });
-        checkSaveJson = JSON.stringify(checkSaveJson);
+        var argumentsLen = arguments.length,
+            checkSaveJson = FinancialService.checkSaveJson(busCompany.$checkTab);
         $.ajax({
             url:KingServices.build_url("financial/financialBusCompany","saveAccountChecking"),
             type:"POST",
@@ -378,7 +354,7 @@ define(function(require, exports) {
 
     busCompany.saveClear = function(id,name,page,tab_id, title, html){
         if(!busCompany.$clearTab.data('isEdited')){
-            showMessageDialog($( "#confirm-dialog-message" ),"您未进行任何操作！");
+            showMessageDialog($("#confirm-dialog-message"),"您未进行任何操作！");
             return false;
         }
         var $tr,argumentsLen = arguments.length;
@@ -403,7 +379,7 @@ define(function(require, exports) {
             success:function(data){
                 var result = showDialog(data);
                 if(result){
-                    showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+                    showMessageDialog($("#confirm-dialog-message"),data.message,function(){
                         if(argumentsLen === 2){
                             Tools.closeTab(menuKey + "-clearing");
                             busCompany.listBusCompany(busCompany.searchData.pageNo,busCompany.searchData.busCompanyName,busCompany.searchData.busCompanyId,busCompany.searchData.startDate,busCompany.searchData.endDate);
