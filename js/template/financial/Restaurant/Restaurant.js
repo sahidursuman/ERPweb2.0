@@ -244,8 +244,6 @@ define(function(require, exports) {
                 if(result){
                     data.restaurantName = restaurantName;
 
-                    var financialRestaurantList = data.financialRestaurantList;
-                    console.log(financialRestaurantList);
                     //暂存数据读取
                     if(restaurant.clearTempSumDate){
                         data.sumPayMoney = restaurant.clearTempSumDate.sumPayMoney;
@@ -254,22 +252,8 @@ define(function(require, exports) {
                         data.sumPayMoney = 0;
                         data.sumPayType = 0;
                     }
-                    var tempJson = restaurant.clearTempData;
-                    if(tempJson){
-                        for(var i = 0; i < tempJson.length; i++){
-                            var tempId = tempJson[i].id;
-                            for(var i = 0; i < financialRestaurantList.length; i++){
-                                var id = financialRestaurantList[i].id;
-                                if(tempId == id){
-                                    financialRestaurantList[i].payMoney = tempJson[i].payMoney;
-                                    financialRestaurantList[i].payType = tempJson[i].payType;
-                                    financialRestaurantList[i].payRemark = tempJson[i].payRemark;
-                                }
-                            }
-                        }
-                        data.financialRestaurantList = financialRestaurantList;
-                        console.log(financialRestaurantList);
-                    }
+                    var resultList = data.financialRestaurantList;
+                    data.financialRestaurantList = FinancialService.getTempDate(resultList,restaurant.clearTempData);
 
                     var html = restaurantClearing(data);
                     
@@ -288,35 +272,7 @@ define(function(require, exports) {
                         curr: (page + 1),
                         jump: function(obj, first) {
                             if (!first) { 
-                                var tempJson = restaurant.clearTempData;
-                                $tr.each(function(){
-                                    var $this = $(this);
-                                    var validator = rule.check($this);
-                                    if(!validator.form()){ return false; }
-                                    if($this.data("change")){
-                                        var id = $this.data("id");
-                                        var i = 0;
-                                        //已有数据更新
-                                        for(i = 0; i < tempJson.length; i++){
-                                            if(tempJson[i].id == id){
-                                                tempJson[i].payMoney = $this.find("input[name=payMoney]").val();
-                                                tempJson[i].payType = $this.find("select[name=payType]").val();
-                                                tempJson[i].payRemark = $this.find("input[name=payRemark]").val();
-                                                return;
-                                            }
-                                        }
-                                        //新数据
-                                        if(i >= tempJson.length){
-                                            var clearTemp = {
-                                                id : $this.data("id"),
-                                                payMoney : $this.find("input[name=payMoney]").val(),
-                                                payType : $this.find("select[name=payType]").val(),
-                                                payRemark : $this.find("input[name=payRemark]").val()
-                                            };
-                                            tempJson.push(clearTemp);
-                                        }
-                                    }
-                                });
+                                var tempJson = FinancialService.clearSaveJson(restaurant.$clearTab,restaurant.clearTempData,rule);
                                 restaurant.clearTempData = tempJson;
                                 var sumPayMoney = parseInt(restaurant.$clearTab.find('input[name=sumPayMoney]').val());
                                     sumPayType = parseInt(restaurant.$clearTab.find('select[name=sumPayType]').val());
@@ -353,7 +309,6 @@ define(function(require, exports) {
 
         //保存付款事件
         restaurant.$clearTab.find(".T-saveClear").click(function(){
-            if (!rule.check(restaurant.$clearTab).form()) { return; }
             restaurant.saveClear(id,name,page);
         });
 
@@ -507,12 +462,16 @@ define(function(require, exports) {
 
     //对账数据保存
     restaurant.saveChecking = function(restaurantId,restaurantName,page,tab_id, title, html){
+        var validator = rule.check(restaurant.$checkTab);
+        if(!validator.form()){return false;}
+
         if(!restaurant.$checkTab.data('isEdited')){
             showMessageDialog($("#confirm-dialog-message"),"您未进行任何操作！");
             return false;
         }
+
         var argumentsLen = arguments.length,
-            checkSaveJson = FinancialService.checkSaveJson(restaurant.$checkTab);
+            checkSaveJson = FinancialService.checkSaveJson(restaurant.$checkTab,rule);
         $.ajax({
             url:KingServices.build_url("account/arrangeRestaurantFinancial","saveAccountChecking"),
             type:"POST",
@@ -541,48 +500,22 @@ define(function(require, exports) {
     };
 
     restaurant.saveClear = function(id,name,page,tab_id, title, html){
+        var validator = rule.check(restaurant.$clearTab);
+        if(!validator.form()){return false;}
+
         if(!restaurant.$clearTab.data('isEdited')){
             showMessageDialog($("#confirm-dialog-message"),"您未进行任何操作！");
             return false;
         }
-        var $tr = restaurant.$clearTab.find(".T-clearList tr"),
-            argumentsLen = arguments.length,
-            clearSaveJson = restaurant.clearTempData;
+        var argumentsLen = arguments.length,
+            clearSaveJson = FinancialService.clearSaveJson(restaurant.$clearTab,restaurant.clearTempData,rule);
 
-        $tr.each(function(){
-            var $this = $(this);
-            var validator = rule.check($this);
-            if(!validator.form()){ return false; }
-            if($this.data("change")){
-                var id = $this.data("id");
-                var i = 0;
-                //已有数据更新
-                for(i = 0; i < clearSaveJson.length; i++){
-                    if(clearSaveJson[i].id == id){
-                        clearSaveJson[i].payMoney = $this.find("input[name=payMoney]").val();
-                        clearSaveJson[i].payType = $this.find("select[name=payType]").val();
-                        clearSaveJson[i].payRemark = $this.find("input[name=payRemark]").val();
-                        return;
-                    }
-                }
-                //新数据
-                if(i >= clearSaveJson.length){
-                    var clearTemp = {
-                        id : $this.data("id"),
-                        payMoney : $this.find("input[name=payMoney]").val(),
-                        payType : $this.find("select[name=payType]").val(),
-                        payRemark : $this.find("input[name=payRemark]").val()
-                    };
-                    clearSaveJson.push(clearTemp);
-                }
-            }
-        });
         clearSaveJson = JSON.stringify(clearSaveJson);
         $.ajax({
             url:KingServices.build_url("account/arrangeRestaurantFinancial","saveAccountSettlement"),
             type:"POST",
             data:{
-                financialRestaurantListStr : clearSaveJson
+                restaurantJson : clearSaveJson
             },
             success:function(data){
                 var result = showDialog(data);
