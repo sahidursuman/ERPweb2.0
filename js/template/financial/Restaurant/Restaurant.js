@@ -201,7 +201,7 @@ define(function(require, exports) {
         //复选框事件初始化
         var checkboxList = restaurant.$checkTab.find(".T-checkList tr .T-checkbox"),
             $checkAll = restaurant.$checkTab.find(".T-checkAll");
-        KingServices.checkAll($checkAll,checkboxList);
+        FinancialService.initCheckBoxs($checkAll,checkboxList);
 
         //关闭页面事件
         restaurant.$checkTab.find(".T-close-check").click(function(){
@@ -318,8 +318,12 @@ define(function(require, exports) {
                                     }
                                 });
                                 restaurant.clearTempData = tempJson;
-                                restaurant.clearTempSumDate.sumPayMoney = parseInt(restaurant.$clearTab.find('input[name=sumPayMoney]').val());
-                                restaurant.clearTempSumDate.sumPayType = parseInt(restaurant.$clearTab.find('select[name=sumPayType]').val());
+                                var sumPayMoney = parseInt(restaurant.$clearTab.find('input[name=sumPayMoney]').val());
+                                    sumPayType = parseInt(restaurant.$clearTab.find('select[name=sumPayType]').val());
+                                restaurant.clearTempSumDate = {
+                                    sumPayMoney : sumPayMoney,
+                                    sumPayType : sumPayType
+                                }
                                 restaurant.restaurantClear(obj.curr -1,restaurantId,restaurantName);
                             }
                         }
@@ -367,7 +371,6 @@ define(function(require, exports) {
                 startDate : startDate,
                 endDate : endDate
             };
-            console.log(restaurant.$clearSearchArea.find("select[name=sumPayType]").val());
             searchParam = JSON.stringify(searchParam);
             showConfirmMsg($("#confirm-dialog-message"),"是否按当前账期 " + startDate + " 至 " + endDate + " 下账？",function(){
                 $.ajax({
@@ -380,9 +383,12 @@ define(function(require, exports) {
                             showMessageDialog($("#confirm-dialog-message"),"自动下账成功！",function(){
                                 restaurant.$clearTab.data('isEdited',false);
                                 restaurant.clearTempData = data.autoPaymentJson;
-                                restaurant.clearTempSumDate.sumPayMoney = parseInt(restaurant.$clearTab.find('input[name=sumPayMoney]').val());
-                                restaurant.clearTempSumDate.sumPayType = parseInt(restaurant.$clearTab.find('select[name=sumPayType]').val());
-                                console.log(estaurant.clearTempSumDate.sumPayType);
+                                var sumPayMoney = parseInt(restaurant.$clearTab.find('input[name=sumPayMoney]').val());
+                                    sumPayType = parseInt(restaurant.$clearTab.find('select[name=sumPayType]').val());
+                                restaurant.clearTempSumDate = {
+                                    sumPayMoney : sumPayMoney,
+                                    sumPayType : sumPayType
+                                };
                                 restaurant.restaurantClear(0,id,name);
                             });
                         }
@@ -583,6 +589,7 @@ define(function(require, exports) {
                 if(result){
                     showMessageDialog($("#confirm-dialog-message"),data.message,function(){
                         restaurant.clearTempData = false;
+                        restaurant.clearTempSumDate = false;
                         if(argumentsLen === 2){
                             Tools.closeTab(menuKey + "-clearing");
                             restaurant.listRestaurant(restaurant.searchData.pageNo,restaurant.searchData.restaurantName,restaurant.searchData.restaurantId,restaurant.searchData.startDate,restaurant.searchData.endDate);

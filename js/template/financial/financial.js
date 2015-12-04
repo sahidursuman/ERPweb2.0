@@ -98,6 +98,51 @@ FinancialService.getInitDate = function(){
     return dateJson;
 };
 
+FinancialService.initCheckBoxs = function($checkAll,checkboxList){//$checkAll全选按钮对象，checkboxList复选框列表
+    //全选框初始化
+    if(isAllChecked(checkboxList)){
+        $checkAll.prop("checked",true);
+    }
+
+    //给全选按钮绑定事件
+    $checkAll.click(function(){
+        if($checkAll.is(":checked")){
+            checkboxList.each(function(i){
+                $(this).prop("checked",true);
+                $(this).closest('tr').data("change",true);
+            });
+        } else{
+            checkboxList.each(function(i){
+                if(!$(this).prop("disabled")){
+                    $(this).prop("checked",false);
+                }                                
+            });
+        } 
+    });
+
+    checkboxList.on("click",function(){
+        if($(this).is(":checked")){
+            $(this).closest('tr').data("change",true);
+            if(isAllChecked(checkboxList)){
+                $checkAll.prop("checked",true);
+            }
+        } else{
+            $checkAll.prop("checked",false);
+        }
+    });
+};
+//判断列表是否已全选
+function isAllChecked(checkboxList){
+    var isAll = true;
+    checkboxList.each(function(){
+        if(!$(this).is(":checked")){
+          isAll = false;
+          return false;  
+        }
+    });
+    return isAll;
+}
+
 function getValue($obj,name){
     var result = $obj.find("[name="+name+"]").val();
     if (result == "") {//所有空字符串变成0
