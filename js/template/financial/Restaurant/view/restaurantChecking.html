@@ -1,7 +1,7 @@
 <div class="row T-newData" data-id="{{searchParam.restaurantId}}" data-name="{{restaurantName}}">
-    <div class="col-xs-12 border" style="padding-bottom:0px;">
+    <div class="col-xs-12 border T-search-area" style="padding-bottom:0px;">
         <form class="form-horizontal" role="form" onsubmit="return false">
-            <div class="T-search-area editable editable-click" >
+            <div class="editable editable-click" >
                 <div class="form-group"> 
                     <label style="float: left;margin: 0px auto auto 15px" class=" control-label "> 餐厅：{{restaurantName}}</label>
                     <label class="control-label marginLeft-30" style="float:left;">账期:</label>
@@ -38,10 +38,10 @@
         </form>
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="form-group" style="padding-top:10px;">
-                <label class=" control-label pull-left" style="margin-left:15px">账面应付合计：{{sumNeedPayMoney}}</label>
-                <label class=" control-label " style="margin-left:30px;">已付金额合计：{{sumPayedMoney}}</label>
-                <label class=" control-label " style="margin-left:30px;">结算金额合计：{{sumSettlementMoney}}</label>
-                <label class=" control-label " style="margin-left:30px;">未付金额合计：{{sumUnPayedMoney}}</label>
+                <label class="control-label pull-left" style="margin-left:15px">账面应付合计：{{sumNeedPayMoney}}</label>
+                <label class="control-label" style="margin-left:30px;">已付金额合计：{{sumPayedMoney}}</label>
+                <label class="control-label" style="margin-left:30px;">结算金额合计：<span class="T-stMoney">{{sumSettlementMoney}}</span></label>
+                <label class="control-label" style="margin-left:30px;">未付金额合计：<span class="T-unpayMoney">{{sumUnPayedMoney}}</span></label>
             </div>
         </form>
     </div>
@@ -73,7 +73,7 @@
 		    {{each financialRestaurantList as rs index}}  
 		    <tr class="T-checkTr" data-id="{{rs.id}}" data-confirm="{{rs.isConfirmAccount}}">
 			    <td>{{index+1}}</td>
-			    <td>{{rs.tripNumber}}{{","}}{{rs.lineProductName}}{{","}}{{rs.guideName}}</td>
+			    <td>{{rs.tripNumber}}{{"，"}}{{rs.lineProductName}}{{"，"}}{{rs.guideName}}</td>
 			    <td>{{if rs.accountTime == null || rs.accountTime == ""}}
                         -
                     {{else}}
@@ -85,7 +85,7 @@
 			    <td>{{rs.memberCount}}</td>
 			    <td>{{rs.reduceMoney}}</td>
 			    <td>{{rs.needPayMoney}}</td>
-			    <td><a class="T-option T-payedDetail" data-money="{{rs.payedMoney + rs.realGuidePayMoney}}">{{"社付:"}}{{rs.payedMoney}}{{","}}{{"导付:"}}{{rs.realGuidePayMoney}}</a></td> 
+			    <td><a class="T-option T-payedDetail" data-money="{{rs.payedMoney + rs.realGuidePayMoney}}">{{"社付："}}{{rs.payedMoney}}{{"，"}}{{"导付："}}{{rs.realGuidePayMoney}}</a></td> 
 			    <td>{{if rs.billImage != null && rs.billImage !=""}}<a href="#" class="T-option T-restaurantImg" url="{{rs.billImage}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
 			    <td><input type="text" maxlength="10" name="settlementMoney" value="{{rs.settlementMoney}}" style="text-align:center"></td>
                 <td name="unPayedMoney">{{rs.unPayedMoney}}</td>

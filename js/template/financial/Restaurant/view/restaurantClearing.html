@@ -1,7 +1,7 @@
 <div class="row T-newData" data-id="{{searchParam.restaurantId}}" data-name="{{restaurantName}}">
-    <div class="col-sm-12 " style="border: 1px solid #ccc">
+    <div class="col-sm-12 T-search-area" style="border: 1px solid #ccc">
         <form class="form-horizontal" role="form" onsubmit="return false">
-            <div class="T-search-area editable editable-click" style="margin-top: 10px">
+            <div class="editable editable-click" style="margin-top: 10px">
                 <div class="form-group"> 
                     <label style="float: left;margin: 0px 20px 0 15px" class=" control-label "> 餐厅：{{restaurantName}}</label>
                     <label class="control-label marginLeft-30" style="float:left;">账期：</label>
@@ -39,14 +39,14 @@
                 <label class="control-label pull-left" style="margin-left:30px;">结算金额合计：{{sumSettlementMoney}}</label>
                 <label class="control-label pull-left" style="margin-left:30px;">未付金额合计：{{sumUnPayedMoney}}</label>
                 <label class="control-label pull-left" style="margin-left:30px;">本次付款金额：</label>
-                <input class="col-xs-1 pull-left" name="sumPayMoney" type="text" value="{{sumCurrentPayMoney}}" style="float:none;" />
+                <input class="col-xs-1 pull-left" name="sumPayMoney" type="text" value="{{sumPayMoney}}" style="float:none;" />
                 <label class="control-label pull-left" style="margin-left:30px;">付款方式：</label>
                 <select style="text-align:center" name="sumPayType">
-                    <option value="0" selected="selected">现金</option>
-                    <option value="1">银行转账</option>
-                    <option value="2">网上支付</option>
-                    <option value="3">支票</option>
-                    <option value="4">其他</option>
+                    <option value="0" {{if sumPayType == 0}}selected="selected"{{/if}}>现金</option>
+                    <option value="1" {{if sumPayType == 1}}selected="selected"{{/if}}>银行转账</option>
+                    <option value="2" {{if sumPayType == 2}}selected="selected"{{/if}}>网上支付</option>
+                    <option value="3" {{if sumPayType == 3}}selected="selected"{{/if}}>支票</option>
+                    <option value="4" {{if sumPayType == 4}}selected="selected"{{/if}}>其他</option>
                 </select>
 
                 <button class="btn-height btn-sm btn-height T-clear-auto search-btn" style="margin-left: 20px">
@@ -94,7 +94,7 @@
                 <td>{{rs.settlementMoney}}</td>
                 <td>{{rs.unPayedMoney}}</td>
                 <td>{{if rs.billImage != null && rs.billImage !=""}}<a href="#" class="T-option T-restaurantImg" url="{{rs.billImage}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
-                <td class="col-sm-1"><input name="payMoney" type="text" value="{{rs.currentPayMoney}}" maxlength="9"></td>
+                <td class="col-sm-1"><input name="payMoney" type="text" value="{{rs.payMoney}}" maxlength="9"></td>
                 <td style="width:120px;">
                     <select style="text-align:center" name="payType">
                         <option value="0" {{if rs.payType == 0}}selected="selected"{{/if}}>现金</option>
