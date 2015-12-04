@@ -1398,6 +1398,15 @@ Tools.getTabKey = function(id) {
 
 	return res;
 };
+
+/**
+ * 为满足两位数，在需要的时候补充零
+ * @param {int} num 数值
+ * 返回处理过后的字符串
+ */
+Tools.addZero2Two = function(num)  {
+	return num > 9 ? num : '0' + num;
+}
 /**
  * 用于定义公共请求或者与数据相关的公共组件处理
  * @type {Object}
