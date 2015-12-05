@@ -23,17 +23,13 @@ define(function(require, exports) {
 	    	    {//付款金额
 	    	    	$ele: $obj.find('input[name=payMoney]'),
 	    	    	rules:[
-    	    	       {
-    	    	    	   type:'null',
-    	    	    	   errMsg:'金额不能为空'   
-    	    	       },
-    	    	       {
+    	    	       	{
     	    	    	   type: 'float',
     	    	        	errMsg: '请输入数字'   
-    	    	       }
-    	    	       ]
-	    	    	}
-                ]);
+    	    	        }
+	    	       ]
+    	    	}
+            ]);
 			return validator;
 		}
 	}

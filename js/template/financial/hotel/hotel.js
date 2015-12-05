@@ -24,14 +24,14 @@ define(function(require, exports) {
         hotel.listHotel(0,"","",dateJson.startDate,dateJson.endDate);
     };
 
-    hotel.listHotel = function(page,hotelName,hotelId,startTime,endTime){
+    hotel.listHotel = function(page,hotelName,hotelId,startDate,endDate){
     	if (hotel.$searchArea && arguments.length === 1) {
             hotelName = hotel.$searchArea.find("input[name=hotelName]").val(),
             hotelId = hotel.$searchArea.find("input[name=hotelId]").val(),
-            startTime = hotel.$searchArea.find("input[name=startTime]").val(),
-            endTime = hotel.$searchArea.find("input[name=endTime]").val()
+            startDate = hotel.$searchArea.find("input[name=startDate]").val(),
+            endDate = hotel.$searchArea.find("input[name=endDate]").val()
         }
-        if(startTime > endTime){
+        if(startDate > endDate){
             showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
             return false;
         }
@@ -42,14 +42,14 @@ define(function(require, exports) {
             pageNo : page,
             hotelName : hotelName,
             hotelId : hotelId,
-            startTime : startTime,
-            endTime : endTime,
+            startTime : startDate,
+            endTime : endDate,
             sortType: 'auto'
         };
 
         var searchParam = JSON.stringify(hotel.searchData);
         $.ajax({
-            url:KingServices.build_url("financial/financialHotel","listSumFinancialHotel"),
+            url:KingServices.build_url("account/financialHotel","listSumFinancialHotel"),
             type:"POST",
             data:{ searchParam : searchParam },
             success:function(data){
@@ -97,26 +97,26 @@ define(function(require, exports) {
             var $that = $(this),
                 id = $that.closest('tr').data('id'),
                 name = $that.closest('tr').data('name'),
-                startTime = hotel.$searchArea.find("input[name=startTime]").val(),
-                endTime = hotel.$searchArea.find("input[name=endTime]").val();
+                startDate = hotel.$searchArea.find("input[name=startDate]").val(),
+                endDate = hotel.$searchArea.find("input[name=endDate]").val();
             if ($that.hasClass('T-check')) {
                 // 对账
-                hotel.hotelCheck(0,id,name,"",startTime,endTime);
+                hotel.hotelCheck(0,id,name,"",startDate,endDate);
             } else if ($that.hasClass('T-clear')) {
                 // 结算
-                hotel.hotelClear(0,id,name,"",startTime,endTime);
+                hotel.hotelClear(0,id,name,"",startDate,endDate);
             }
         });
     };
 
     //对账
-    hotel.hotelCheck = function(page,hotelId,hotelName,accountInfo,startTime,endTime){
+    hotel.hotelCheck = function(page,hotelId,hotelName,accountInfo,startDate,endDate){
         if (hotel.$checkSearchArea && arguments.length === 3) {
             accountInfo = hotel.$checkSearchArea.find("input[name=accountInfo]").val(),
-            startTime = hotel.$checkSearchArea.find("input[name=startTime]").val(),
-            endTime = hotel.$checkSearchArea.find("input[name=endTime]").val()
+            startDate = hotel.$checkSearchArea.find("input[name=startDate]").val(),
+            endDate = hotel.$checkSearchArea.find("input[name=endDate]").val()
         }
-        if(startTime > endTime){
+        if(startDate > endDate){
             showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
             return false;
         }
@@ -127,13 +127,13 @@ define(function(require, exports) {
             pageNo : page,
             hotelId : hotelId + "",
             accountInfo : accountInfo,
-            startTime : startTime,
-            endTime : endTime,
+            startTime : startDate,
+            endTime : endDate,
             sortType : "auto"
         };
         searchParam = JSON.stringify(searchParam);
         $.ajax({
-            url:KingServices.build_url("financial/financialHotel","listFcHotel"),
+            url:KingServices.build_url("account/financialHotel","listAccountChecking"),
             type:"POST",
             data:{ searchParam : searchParam },
             success:function(data){
@@ -198,7 +198,7 @@ define(function(require, exports) {
         //复选框事件初始化
         var checkboxList = hotel.$checkTab.find(".T-checkList tr .T-checkbox"),
             $checkAll = hotel.$checkTab.find(".T-checkAll");
-        KingServices.checkAll($checkAll,checkboxList);
+        FinancialService.initCheckBoxs($checkAll,checkboxList);
 
         //报表内的操作
         hotel.listOption(hotel.$checkTab);
@@ -216,13 +216,13 @@ define(function(require, exports) {
     };
 
     //结算
-    hotel.hotelClear = function(page,hotelId,hotelName,accountInfo,startTime,endTime){
+    hotel.hotelClear = function(page,hotelId,hotelName,accountInfo,startDate,endDate){
         if (hotel.$clearSearchArea && arguments.length === 3) {
             accountInfo = hotel.$clearSearchArea.find("input[name=accountInfo]").val(),
-            startTime = hotel.$clearSearchArea.find("input[name=startTime]").val(),
-            endTime = hotel.$clearSearchArea.find("input[name=endTime]").val()
+            startDate = hotel.$clearSearchArea.find("input[name=startDate]").val(),
+            endDate = hotel.$clearSearchArea.find("input[name=endDate]").val()
         }
-        if(startTime > endTime){
+        if(startDate > endDate){
             showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
             return false;
         }
@@ -232,13 +232,13 @@ define(function(require, exports) {
             pageNo : page,
             hotelId : hotelId + "",
             accountInfo : accountInfo,
-            startTime : startTime,
-            endTime : endTime,
+            startTime : startDate,
+            endTime : endDate,
             sortType : "auto"
         };
         searchParam = JSON.stringify(searchParam);
         $.ajax({
-            url:KingServices.build_url("financial/financialHotel","listFcHotelSettlement"),
+            url:KingServices.build_url("account/financialHotel","listAccountSettlement"),
             type:"POST",
             data:{ searchParam : searchParam },
             success:function(data){
@@ -249,7 +249,7 @@ define(function(require, exports) {
                     
                     var validator;
                     // 初始化页面
-                    if (Tools.addTab(menuKey + "-clearing", "酒店结算", html)) {
+                    if (Tools.addTab(menuKey + "-clearing", "酒店付款", html)) {
                         hotel.initClear(page,hotelId,hotelName); 
                         validator = rule.check(hotel.$clearTab.find('.T-clearList'));                       
                     }
@@ -275,7 +275,7 @@ define(function(require, exports) {
         hotel.listOption(hotel.$clearTab);
 
         //关闭页面事件
-        hotel.$checkTab.find(".T-close-clear").click(function(){
+        hotel.$clearTab.find(".T-close-clear").click(function(){
             Tools.closeTab(menuKey + "-clearing");
         });
         //保存结算事件
@@ -286,25 +286,26 @@ define(function(require, exports) {
 
         //自动下账
         hotel.$clearTab.find(".T-clear-auto").click(function(){
-            var startTime = hotel.$clearSearchArea.find("input[name=startTime]").val(),
-                endTime = hotel.$clearSearchArea.find("input[name=endTime]").val();
-            var searchParam = {
-                hotelId : id + "",
-                sumPayMoney : hotel.$clearSearchArea.find("input[name=sumPayMoney]").val(),
-                sumPayType : hotel.$clearSearchArea.find("select[name=sumPayType]").val(),
-                startTime : startTime,
-                endTime : endTime
-            };
-            searchParam = JSON.stringify(searchParam);
-            showConfirmMsg($("#confirm-dialog-message"), "是否按当前账期 " + startTime + " 至 " + endTime + " 下账？",function(){
+            var autoPayJson = FinancialService.autoPayJson(id,hotel.$clearTab,rule);
+            if(!autoPayJson){return false;}
+
+            var startDate = hotel.$clearTab.find("input[name=startDate]").val(),
+                endDate = hotel.$clearTab.find("input[name=endDate]").val();
+            showConfirmMsg($("#confirm-dialog-message"), "是否按当前账期 " + startDate + " 至 " + endDate + " 下账？",function(){
                 $.ajax({
-                    url:KingServices.build_url("financial/financialRestaurant","autoPayment"),
+                    url:KingServices.build_url("account/financialHotel","autoPayment"),
                     type:"POST",
-                    data:{ searchParam : searchParam },
+                    data:{ searchParam : autoPayJson },
                     success:function(data){
                         var result = showDialog(data);
                         if(result){
-                            showMessageDialog($("#confirm-dialog-message"),data.message,function(){
+                            showMessageDialog($("#confirm-dialog-message"),"自动下账成功！",function(){
+                                hotel.$clearTab.data('isEdited',false);
+                                hotel.clearTempData = data.autoPaymentJson;
+                                hotel.clearTempSumDate = {
+                                    sumPayMoney : hotel.$clearTab.find('input[name=sumPayMoney]').val(),
+                                    sumPayType : hotel.$clearTab.find('select[name=sumPayType]').val()
+                                };
                                 hotel.hotelClear(page,id,name);
                             });
                         }
@@ -560,7 +561,8 @@ define(function(require, exports) {
             hotelList = hotel.hotelList;
         if(hotelList != null && hotelList.length > 0){
             for(var i=0;i<hotelList.length;i++){
-                hotelList[i].value = hotelList[i].name;
+                hotelList[i].id = hotelList[i].hotelId;
+                hotelList[i].value = hotelList[i].hotelName;
             }
         }
         var all = {

@@ -8,7 +8,7 @@
             <label class="control-label pull-left marginLeft-30" >账期：</label>
             <div class="col-xs-1">
                 <div class="input-group">
-                    <input class="col-xs-12 date-picker" name="startTime" placeholder="开始日期" type="text" value="{{searchParam.startTime}}" />   
+                    <input class="col-xs-12 date-picker" name="startDate" placeholder="开始日期" type="text" value="{{searchParam.startTime}}" />   
                     <span class="input-group-addon">
                         <i class="fa fa-calendar"></i>
                     </span>
@@ -17,7 +17,7 @@
             <label class="pull-left">至</label>
             <div class="col-xs-1">
                 <div class="input-group">
-                    <input class="col-xs-12 date-picker" name="endTime" placeholder="结束日期" type="text" value="{{searchParam.endTime}}" />   
+                    <input class="col-xs-12 date-picker" name="endDate" placeholder="结束日期" type="text" value="{{searchParam.endTime}}" />   
                     <span class="input-group-addon">
                         <i class="fa fa-calendar"></i>
                     </span>
@@ -45,25 +45,25 @@
                     </tr>
                 </thead>
                 <tbody class="T-list">
-                    {{each financialHotelArrangeList as rs}}
+                    {{each financialHotelList as rs}}
                     <tr data-id="{{rs.hotelId}}" data-name="{{rs.hotelName}}">
                         <td>{{rs.hotelName}}</td>
                         <td>{{rs.sumNeedPayMoney}}</td>
                         <td>{{rs.sumSettlementMoney}}</td>
                         <td>{{rs.sumPayedMoney}}</td>
                         <td>{{rs.sumUnPayedMoney}}</td>
-                        <td>{{if rs.checkCount != rs.checkedCount}}
-                                <span style="color:#ff9900"> {{rs.checkedCount}}{{"/"}}{{rs.checkCount}}</span>
+                        <td>{{if rs.allCheckCount != rs.checkedCount}}
+                                <span style="color:#ff9900"> {{rs.checkedCount}}{{"/"}}{{rs.allCheckCount}}</span>
                             {{/if}}
-                            {{if rs.checkCount == rs.checkedCount}}
-                                <span style="color:green"> {{rs.checkedCount}}{{"/"}}{{rs.checkCount}}</span>
+                            {{if rs.allCheckCount == rs.checkedCount}}
+                                <span style="color:green"> {{rs.checkedCount}}{{"/"}}{{rs.allCheckCount}}</span>
                             {{/if}}
                         </td>
-                        <td>{{if rs.payCount != rs.payedCount}}
-                                <span style="color:#ff9900"> {{rs.payedCount}}{{"/"}}{{rs.payCount}}</span>
+                        <td>{{if rs.allPayCount != rs.payedCount}}
+                                <span style="color:#ff9900"> {{rs.payedCount}}{{"/"}}{{rs.allPayCount}}</span>
                             {{/if}}
-                            {{if rs.payCount == rs.payedCount}}
-                                <span style="color:green"> {{rs.payedCount}}{{"/"}}{{rs.payCount}}</span>
+                            {{if rs.allPayCount == rs.payedCount}}
+                                <span style="color:green"> {{rs.payedCount}}{{"/"}}{{rs.allPayCount}}</span>
                             {{/if}}
                         </td>
                         <td>
@@ -77,7 +77,7 @@
             </table>
             <div class="row pageMode">
                 <div class="col-xs-6">
-                    <small>共计 {{searchParam.recordSize}} 条记录</small>
+                    <small>共计 {{searchParam.totalCount}} 条记录</small>
                 </div>
                 <div class="col-xs-6">
                     <div class="dataTables_paginate paging_simple_numbers T-pagenation">
