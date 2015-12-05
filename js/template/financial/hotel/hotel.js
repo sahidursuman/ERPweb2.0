@@ -35,7 +35,7 @@ define(function(require, exports) {
             showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
             return false;
         }
-
+        hotelName = (hotelName == "全部") ? "" : hotelName;
         // 修正页码
         page = page || 0;
         hotel.searchData = {
@@ -83,7 +83,7 @@ define(function(require, exports) {
         hotel.$searchArea = hotel.$tab.find('.T-search-area');
 
         hotel.getQueryList();
-        hotel.initDate(hotel.$tab);
+        FinancialService.initDate(hotel.$tab);
 
         //搜索按钮事件
         hotel.$tab.find('.T-search').on('click', function(event) {
@@ -176,7 +176,7 @@ define(function(require, exports) {
         hotel.$checkSearchArea = hotel.$checkTab.find('.T-search-area');
 
         hotel.init_check_event(page,id,name);
-        hotel.initDate(hotel.$checkTab);
+        FinancialService.initDate(hotel.$checkTab);
         FinancialService.updateUnpayMoney(hotel.$checkTab,rule);
 
         //搜索按钮事件
@@ -264,7 +264,7 @@ define(function(require, exports) {
         hotel.$clearSearchArea = hotel.$clearTab.find('.T-search-area');
 
         hotel.init_clear_event(page,id,name);
-        hotel.initDate(hotel.$clearTab);
+        FinancialService.initDate(hotel.$clearTab);
 
         //搜索事件
         hotel.$clearTab.find(".T-search").click(function(){
@@ -563,6 +563,11 @@ define(function(require, exports) {
                 hotelList[i].value = hotelList[i].name;
             }
         }
+        var all = {
+            id : "",
+            value : "全部"
+        };
+        hotelList.unshift(all);
 
         //酒店
         $hotel.autocomplete({
@@ -579,16 +584,6 @@ define(function(require, exports) {
         }).on("click",function(){
             $hotel.autocomplete('search','');
         });      
-    };
-
-    //时间控件初始化
-    hotel.initDate = function($tab){
-        $tab.find('.date-picker').datepicker({
-            autoclose: true,
-            todayHighlight: true,
-            format: 'yyyy-mm-dd',
-            language: 'zh-CN'
-        });
     };
 
     // 对账、付款报表内的操作
