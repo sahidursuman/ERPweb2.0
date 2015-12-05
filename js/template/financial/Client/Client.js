@@ -228,7 +228,7 @@ define(function(require, exports) {
         });
 
         //给全选按钮绑定事件
-        KingServices.checkAll(Client.$checkingTab.find(".T-checkAll"), Client.$checkingTab.find(".T-list").find('.T-check'));
+        FinancialService.initCheckBoxs(Client.$checkingTab.find(".T-checkAll"), Client.$checkingTab.find(".T-list").find('.T-check'));
 
         //绑定表内事件
         var $body = Client.$checkingTab.find('.T-list').on('click', '.T-action', function(event){
