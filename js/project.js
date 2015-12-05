@@ -625,15 +625,22 @@ var modalScripts = {
 	'financial_turnProfit': "js/template/financial/turnProfit/turnProfit.js",
 	'financial_totalProfit': "js/template/financial/totalProfit/totalProfit.js",
 	'financial_Client': "js/template/financial/Client/Client.js",
+	'financial_insure': "js/template/financial/insure/insure.js",
 	'financial_shop': "js/template/financial/shop/shop.js",//购物账务
+	'financial_guide':"js/template/financial/guide/guide.js",//导游账务
 	'financial_innerTransfer_in':"js/template/financial/innerTransferIn/innerTransferIn.js",//内转转入
 	'financial_innerTransfer_out':"js/template/financial/innerTransferOut/innerTransferOut.js",//内转转出
-
+	'financial_replace' : 'js/template/financial/replace/replace.js',//代订账务
+	'financial_replaceProfit':"js/template/financial/replaceProfit/replaceProfit.js",
+	'financial_payment_details':"js/template/financial/paymentDetails/paymentDetails.js",//收支明细
+	'financial_ticket':"js/template/financial/ticket/ticket.js",//票务账务
 	'financial_planProfit': "js/template/financial/planProfit/planProfit.js", //发团利润
+	'financial_Other_accounts':"js/template/financial/OtherAccounts/OtherAccounts.js",//其他账务
 	'financial_replaceProfit':"js/template/financial/replaceProfit/replaceProfit.js",//代订利润
 	'financial_restaurant':"js/template/financial/Restaurant/Restaurant.js",//餐厅账务
 	'financial_rummery':"js/template/financial/hotel/hotel.js",//酒店账务
 	'financial_busCompany':"js/template/financial/busCompany/busCompany.js",//车队账务
+	'financial_self':"js/template/financial/Self/Self.js",//自费账务
 	//---------------------------------------------------------------------------------------------------------------
 	'public_message':"js/template/system/message/message.js",
 	'system_information':"js/template/system/information/information.js",
@@ -672,7 +679,7 @@ function listMenu(menuTemplate){
 				});
 
 				//绑定财务管理菜单功能 
-				$("#sidebar .nav-list .financial_guide").click(function(){
+				/*$("#sidebar .nav-list .financial_guide").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
@@ -680,7 +687,7 @@ function listMenu(menuTemplate){
 						guide.listFinancialGuide(0,"","","");
 						modals["financial_guide"] = guide;
 					});
-				});
+				});*/
 				//绑定分团转客菜单功能
 				$("#sidebar .nav-list .arrange_tourist").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
@@ -700,20 +707,6 @@ function listMenu(menuTemplate){
 					seajs.use("" + ASSETS_ROOT +"js/template/arrange/transit/transit.js",function(transit){
 						transit.listTransit(0,"","","","","","","","","","","","");
 						modals["arrange_transit"] = transit;
-					});
-				});
-
-				//绑定交通票务菜单功能
-				$("#sidebar .nav-list .financial_ticket").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/financial/ticket/ticket.js",function(ticket){
-						var date = new Date();
-						var year = date.getFullYear();
-						var month = ""
-						ticket.listTicket(0,"",year,"");
-						modals["financial_ticket"] = ticket;
 					});
 				});
 
@@ -781,37 +774,8 @@ function listMenu(menuTemplate){
 						modals["financial_scenic"] = Scenic;
 					});
 				});
-
-				//绑定自费账务菜单功能
-				$("#sidebar .nav-list .financial_self").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/financial/Self/Self.js",function( Self){
-						var date = new Date();
-						var year = date.getFullYear();
-						var month = ""
-						Self.listSelf(0,"",year,month);
-						modals["financial_Self"] = Self;
-					});
-				});
-
-				//绑定保险账务菜单功能
-				$("#sidebar .nav-list .financial_insure").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/financial/insure/insure.js",function(Insure){
-						var date = new Date();
-						var year = date.getFullYear();
-						var month = ""//date.getMonth()+1
-						Insure.listInsure(0,"",year,"");
-						modals["financial_insure"] = Insure;
-					});
-				});
-
 				//绑定系代订账务菜单功能
-				$("#sidebar .nav-list .financial_replace").click(function(){
+				/*$("#sidebar .nav-list .financial_replace").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
@@ -822,7 +786,7 @@ function listMenu(menuTemplate){
 						Replace.listReplace(0,"","",year,month);
 						modals["financial_replace"] = Replace;
 					});
-				});
+				});*/
 
 				//绑定转客菜单功能
 				$("#sidebar .nav-list .financial_transfer").click(function(){
@@ -836,20 +800,6 @@ function listMenu(menuTemplate){
 						modals["financial_transfer"] = transfer;
 					});
 				});
-				
-				
-
-				//绑定购物菜单功能
-				/*$("#sidebar .nav-list .financial_shop").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/financial/shop/shop.js",function(shop){
-						shop.listFinancialShop(0,"","","");
-						modals["financial_shop"] = shop;
-					});
-				});*/
-
 				//绑定其他支出菜单功能
 				$("#sidebar .nav-list .financial_else").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
@@ -881,17 +831,6 @@ function listMenu(menuTemplate){
 						// count.getlistCount(0,"","","","","","","","");
 					});
 				});
-
-				// //绑定代订利润功能
-				// $("#sidebar .nav-list .financial_replaceProfit").click(function(){
-				// 	$("#sidebar .nav-list li").removeClass("active");
-				// 	$(this).addClass("active");
-				// 	$(this).parent().parent().addClass("active");
-				// 	seajs.use("" + ASSETS_ROOT +"js/template/financial/replaceProfit/replaceProfit.js",function(replaceProfit){
-				// 		replaceProfit.listReplaceProfit(0,"","","","","","","","","","");
-				// 	});
-				// });
-
 				//绑定収支明细菜单功能
 				$("#sidebar .nav-list .financial_collectDetail").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
@@ -1459,6 +1398,16 @@ Tools.getTabKey = function(id) {
 
 	return res;
 };
+
+/**
+ * 为满足两位数，在需要的时候补充零
+ * @param {int} num 数值
+ * 返回处理过后的字符串
+ */
+Tools.addZero2Two = function(num)  {
+	return num > 9 ? num : '0' + num;
+}
+
 /**
  * 用于定义公共请求或者与数据相关的公共组件处理
  * @type {Object}

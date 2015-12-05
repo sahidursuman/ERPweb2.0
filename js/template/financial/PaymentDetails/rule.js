@@ -1,10 +1,9 @@
 define(function(require, exports) {
 	var rule = {
 		check:function($obj){
-
 			var validator = $obj.formValidate([
-	    	    {	//未收对账
-	    	    	$ele: $obj.find('input[name=unIncomeMoney]'),
+	    	    {	//账面返佣
+	    	    	$ele: $obj.find('input[name=realRebateMoney]'),
 	    	    	rules: [
 	    	    	        {
 	    	    	        	type: 'null', 
@@ -17,25 +16,23 @@ define(function(require, exports) {
 		    	        ]
 	    	    },
 	    	    
-	    	    {
-	    	    	//返款
-	    	    	$ele: $obj.find('input[name="T-refund"]'),
-	    	    	rules:[
-	    	    	       {
-	    	    	    	   type:'null',
-	    	    	    	   errMsg:'返款不能为空'
-	    	    	       },
-	    	    	       {
+	    	    
+	    	    {	//实际返佣
+	    	    	$ele: $obj.find('input[name=realRebateMoney]'),
+	    	    	rules: [
+	    	    	        {
+	    	    	        	type: 'null', 
+	    	    	        	errMsg: '不能为空'
+	    	    	        },
+	    	    	        {
 	    	    	        	type: 'float',
 	    	    	        	errMsg: '请输入数字'
 	    	    	        }
-	    	    	       ]	
+		    	        ]
 	    	    },
 	    	    
-	    	    
-	    	    
 	    	    {//付款金额
-	    	    	$ele: $obj.find('input[name=ClientClear_payMoney]'),
+	    	    	$ele: $obj.find('input[name=payMoney]'),
 	    	    	
 	    	    	rules:[
 	    	    	       
@@ -51,6 +48,7 @@ define(function(require, exports) {
 	    	    	       
 	    	    	       ]
 	    	    }
+	    	    
                 ]);
 			
 			return validator;

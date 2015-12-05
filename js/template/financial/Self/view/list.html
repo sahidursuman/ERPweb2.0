@@ -1,6 +1,6 @@
-<div class="row FinancialselfPay globalAdd" >
+<div class="row T-ListSelf globalAdd" >
     <div class="form-horizontal search-area">    
-        <div class="form-group" >      
+        <div class="form-group T-search-area" >      
           <label class="control-label pull-left" style="margin-left: 15px">自费商家：</label>
                 <select  class="col-xs-12" name="selfPayId" style="width: 220px">
                     <option value ="">全部</option>    
@@ -13,14 +13,14 @@
 					{{each yearList as year index}}
 						<option value="{{year.value}}" {{if searchParam.year == year.value}}selected="selected"{{/if}}>{{year.value}}</option>
 					{{/each}}
-				</select> 
+				</select>
 				<select class="col-sm-1 marginLeft-30" name="month">
 				    <option value ="">全部</option>
 					{{each monthList as month index}}
 						<option value="{{month.value}}" {{if searchParam.month == month.value}}selected="selected"{{/if}}>{{month.value}}月</option>
 					{{/each}}
 				</select>
-            <button class=" btn-sm search-btn marginLeft-30 btn-selfPay-search "> <i class="ace-icon fa fa-search"></i> 搜索 </button> </div>
+            <button class=" btn-sm search-btn marginLeft-30 T-search "> <i class="ace-icon fa fa-search"></i> 搜索 </button> </div>
     </div>
     <div class="row selfPayList">
         <div class="col-xs-12">
@@ -37,9 +37,9 @@
                     <th>操作</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody class="T-list">
                 {{each financialSelfPayList as selfPay}}
-                <tr>
+                <tr data-id ="{{selfPay.id}}">
                     <td>{{selfPay.selfPayName}}</td>
                     <td>{{selfPay.sumNeedPayMoney}}</td>
                     <td>{{selfPay.sumRealNeedPayMoney}}</td>
@@ -57,7 +57,7 @@
 	                    {{/if}}
                     </td>
                     <td>
-                        <a data-entity-id="{{selfPay.selfPayId}}" data-entity-selfPayName="{{selfPay.selfPayName}}" data-entity-year="{{searchParam.year}}" data-entity-month="{{searchParam.month}}" class="cursor btn-selfPay-check R-right" data-right="1260002">
+                        <a data-entity-id="{{selfPay.selfPayId}}" data-entity-selfPayName="{{selfPay.selfPayName}}" data-entity-year="{{searchParam.year}}" data-entity-month="{{searchParam.month}}" class="cursor T-option T-check R-right" data-right="1260002">
                             	对账
                         </a>
                         <label class="cursor R-right" data-right="1260002"><a class="R-right" data-right="1260003"> |</a></label>
@@ -67,7 +67,7 @@
                                   {{else}}
                                  	 data-entity-startMonth="{{searchParam.month}}" data-entity-endMonth="{{searchParam.month}}" 
                                 {{/if}}
-                        		class="cursor R-right btn-self-balance" data-right="1260003">
+                        		class="cursor R-right T-option T-clear" data-right="1260003">
                            		 结算
                         </a>
                     </td>
