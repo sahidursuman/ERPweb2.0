@@ -16,6 +16,7 @@ define(function(require, exports) {
         clearMenuKey = menuKey+"-clearing";
 
     var FinGuide = {
+    	mock: true,
 		$tab: false,
 		$checkingTab : false,
 		checkingId : null,
@@ -34,20 +35,23 @@ define(function(require, exports) {
 	 * @param  {int} page 页码
 	 */
 	FinGuide.getList = function(page){
-		var args = {
-			pageNo : (page || 0),
-			guideId : "",
-			year : "",
-			month : ""
-		}
+		var args = FinancialService.getInitDate();
+
+		args.pageNo = page || 0;
 		if (!!FinGuide.$tab) {
 			args = {
 				pageNo: (page || 0),
 				guideId: FinGuide.$tab.find('.T-search-name').data('id'),
-				guideName: FinGuide.$tab.find('.T-search-name').val(),
-				year: FinGuide.$tab.find('.T-search-year').val(),
-				month : FinGuide.$tab.find('.T-search-month').val(),
+				startDate: FinGuide.$tab.find('.T-search-start-date').val(),
+				endDate : FinGuide.$tab.find('.T-search-end-date').val(),
 			}
+
+			var guideName = FinGuide.$tab.find('.T-search-name').val();
+			if (guideName === '全部') {
+				guideName = '';
+			}
+
+			args.guideName = guideName;
 		}
 
 		$.ajax({
@@ -56,6 +60,7 @@ define(function(require, exports) {
 			data: args,
 		}).done(function(data){
 			if(showDialog(data)){
+				data.guideName = data.guideName || '全部';
 				Tools.addTab(menuKey,"导游账务",listTemplate(data));
 				// 绑定事件
 				FinGuide.init_event();
@@ -82,7 +87,27 @@ define(function(require, exports) {
 	FinGuide.init_event = function(){
 		FinGuide.$tab = $('#tab-' + menuKey + '-content');
 		//搜索顶部的事件绑定
-		var $searchArea = FinGuide.$tab.find('.T-search-area');
+		var $searchArea = FinGuide.$tab.find('.T-search-area'),
+			$datepicker = $searchArea.find('.datepicker');
+
+		// 导游绑定
+		FinGuide.getGuideNameList($searchArea.find('.T-search-name'), [$datepicker.eq(0).val(), $datepicker.eq(1).val()])
+		// 绑定时间控件
+		FinancialService.setDatePicker($datepicker).on('changeDate', function(event) {
+			event.preventDefault();
+			$searchArea.find('.T-search-name').data('ajax', false);
+		});;
+		$searchArea.find('.T-search-start-date').on('changeDate', function(event) {
+			event.preventDefault();
+			var start = $(this).val(),
+				$end = $searchArea.find('.T-search-end-date').datepicker('setStartDate', start);
+
+			if ($end.val() < start) {
+				$end.val(start);
+			}
+		}).trigger('changeDate');
+
+
 		$searchArea.find('.T-btn-search').on('click', function(event) {
 			event.preventDefault();
 			FinGuide.getList();
@@ -91,15 +116,56 @@ define(function(require, exports) {
 		FinGuide.$tab.find('.T-list').on('click', '.T-action', function(event) {
 			event.preventDefault();
 			var $that = $(this), id = $that.closest('tr').data('id');
-			if ($that.hasClass('T-checking'))  {
+			if ($that.hasClass('T-check'))  {
 				// 对账
 				FinGuide.checking(id);
-			} else if ($that.hasClass('T-clearing'))  {
+			} else if ($that.hasClass('T-pay'))  {
 				// 结算
 				FinGuide.clearing(id);
 			}
 		});
 	};
+
+	FinGuide.getGuideNameList = function($obj, valArray)  {
+		$obj.autocomplete({
+		    minLength: 0,
+		    change: function(event, ui) {
+		        if (!ui.item)  {
+		            $(this).data('id', '');
+		        }
+		    },
+		    select: function(event, ui) {
+		        $(this).blur().data('id', ui.item.id);
+		    }
+		}).on("click",function(){
+		    if (!$obj.data('ajax')) {  // 避免重复请求
+		    	var args = {};
+
+		    	if (!!valArray && valArray.length === 2) {
+		    		args.startDate = valArray[0];
+		    		args.endDate = valArray[1];
+		    	}
+		        $.ajax({
+		            url : KingServices.build_url('account/guideFinancial', 'listFinancialGuideQuery'),
+		            type : "POST",
+		            showLoading:false,
+		            data: args
+		        }).done(function(data){
+		            for(var i=0; i<data.guideList.length; i++){
+		                data.guideList[i].value = data.guideList[i].realname;
+		                data.guideList[i].id = data.guideList[i].guideId;
+		            }
+		            data.guideList.unshift({id:'', value: '全部'});
+		            $obj.autocomplete('option', 'source', data.guideList);
+		            $obj.autocomplete('search', '');
+
+		            $obj.data('ajax', true);
+		        });
+		    } else {
+		        $obj.autocomplete('search', '');
+		    }
+		});
+	}
 	/**
 	 * 初始化对账模块
 	 * @param  {int} id    导游ID

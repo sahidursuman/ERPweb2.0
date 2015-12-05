@@ -203,6 +203,21 @@ FinancialService.initCheckBoxs = function($checkAll,checkboxList){//$checkAll全
         }
     });
 };
+
+/**
+ * 设置时间控件
+ * @param {object} $obj    绑定时间控件的对象
+ * @param {[type]} options [description]
+ */
+FinancialService.setDatePicker = function($obj, options)  {
+    return $obj.datepicker($.extend({}, {
+        autoclose: true,
+        todayHighlight: true,
+        format: 'yyyy-mm-dd',
+        language: 'zh-CN'
+    }, options));
+};
+
 //判断列表是否已全选
 function isAllChecked(checkboxList){
     var isAll = true;
@@ -222,3 +237,4 @@ function getValue($obj,name){
     }
     return result;
 } 
+
