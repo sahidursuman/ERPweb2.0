@@ -36,7 +36,7 @@ define(function(require, exports) {
             showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
             return false;
         }
-
+        busCompanyName = (busCompanyName == "全部") ? "" : busCompanyName;
         // 修正页码
         page = page || 0;
         busCompany.searchData = {
@@ -84,7 +84,7 @@ define(function(require, exports) {
         busCompany.$searchArea = busCompany.$tab.find('.T-search-area');
 
         busCompany.getQueryList();
-        busCompany.initDate(busCompany.$tab);
+        FinancialService.initDate(busCompany.$tab);
 
         //搜索按钮事件
         busCompany.$tab.find('.T-search').on('click',function(event) {
@@ -177,7 +177,7 @@ define(function(require, exports) {
         busCompany.$checkSearchArea = busCompany.$checkTab.find('.T-search-area');
 
         busCompany.init_check_event(page,id,name);
-        busCompany.initDate(busCompany.$checkTab);
+        FinancialService.initDate(busCompany.$checkTab);
         FinancialService.updateUnpayMoney(busCompany.$checkTab,rule);
 
         //搜索按钮事件
@@ -265,7 +265,7 @@ define(function(require, exports) {
         busCompany.$clearSearchArea = busCompany.$clearTab.find('.T-search-area');
 
         busCompany.init_clear_event(page,id,name);
-        busCompany.initDate(busCompany.$clearTab);
+        FinancialService.initDate(busCompany.$clearTab);
 
         //搜索事件
         busCompany.$clearTab.find(".T-search").click(function(){
@@ -566,6 +566,11 @@ define(function(require, exports) {
                 busCompanyList[i].value = busCompanyList[i].busCompanyName;
             }
         }
+        var all = {
+            id : "",
+            value : "全部"
+        };
+        busCompanyList.unshift(all);
 
         //车队
         $busCompany.autocomplete({
@@ -582,16 +587,6 @@ define(function(require, exports) {
         }).on("click",function(){
             $busCompany.autocomplete('search','');
         });      
-    };
-
-    //时间控件初始化
-    busCompany.initDate = function($tab){
-        $tab.find('.date-picker').datepicker({
-            autoclose: true,
-            todayHighlight: true,
-            format: 'yyyy-mm-dd',
-            language: 'zh-CN'
-        });
     };
 
     // 对账、付款报表内的操作
