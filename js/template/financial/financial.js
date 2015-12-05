@@ -6,35 +6,27 @@ var FinancialService = {};
 
 //对账-自动计算未付金额
 FinancialService.updateUnpayMoney = function($tab,rule){
-    $tab.find(".T-checkList tr input[name=settlementMoney]").on("focus",function(){
+    $tab.find('.T-checkList').on('focusin', 'input[name="settlementMoney"]', function(event) {
         $(this).data("oldVal",$(this).val());
     })
-    .on("change",function(){
+    .on('change', 'input[name="settlementMoney"]', function(event) {
         var $this = $(this),
             $tr = $(this).closest('tr'),
             validator = rule.check($tr);
         if(!validator.form()){ return false;}
-        var settlementMoney = $tr.find("input[name=settlementMoney]").val(),
-            payedMoney = $tr.find(".T-payedDetail").data("money");
-        if(settlementMoney == ""){
-            settlementMoney = 0;
-        }
-        if(payedMoney == ""){
-            payedMoney = 0;
-        }
+        var settlementMoney = ($tr.find("input[name=settlementMoney]").val() || 0) * 1,
+            payedMoney = ($tr.find(".T-payedDetail").data("money") || 0) * 1;
+
+        // 设置未付金额
+        $tr.find("td[name=unPayedMoney]").text(settlementMoney - payedMoney);
 
         //计算结算金额修改前后差值
-        var cz = (settlementMoney*1 - $(this).data("oldVal")*1);
+        var spread = settlementMoney - $(this).data("oldVal")*1;
         //统计数据更新
         var $st = $tab.find(".T-stMoney"),
             $unpay = $tab.find(".T-unpayMoney");
-        $st.text($st.text()*1 + cz);
-        $unpay.text($unpay.text()*1 + cz);
-
-        settlementMoney = parseInt(settlementMoney);
-        payedMoney = parseInt(payedMoney);
-        var unPayedMoney = settlementMoney - payedMoney;
-        $tr.find("td[name=unPayedMoney]").text(unPayedMoney);
+        $st.text($st.text()*1 + spread);
+        $unpay.text($unpay.text()*1 + spread);
     });
 };
 
@@ -68,7 +60,7 @@ FinancialService.checkSaveJson = function($tab,rule){
                     id : $this.data("id"),
                     settlementMoney : getValue($this,"settlementMoney"),
                     unPayedMoney : $this.find("td[name=unPayedMoney]").text(),
-                    checkRemark : getValue($this,"checkRemark"),
+                    checkRemark : $this.find("[name=checkRemark]").val(),
                     isConfirmAccount : isConfirmAccount
                 };
                 saveJson.push(checkRecord);
