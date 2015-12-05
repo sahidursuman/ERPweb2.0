@@ -17,7 +17,9 @@ define(function(require, exports) {
     	$searchArea : false,
     	$checkSearchArea: false,
         $clearSearchArea : false,
-        busCompanyList : false
+        busCompanyList : false,
+        clearTempData : false,
+        clearTempSumDate : false
 	};
 
 	busCompany.initModule = function() {
@@ -43,8 +45,8 @@ define(function(require, exports) {
             pageNo : page,
             busCompanyName : busCompanyName,
             busCompanyId : busCompanyId,
-            startDate : startDate,
-            endDate : endDate,
+            startTime : startDate,
+            endTime : endDate,
             sortType: 'auto'
         };
 
@@ -128,8 +130,8 @@ define(function(require, exports) {
             pageNo : page,
             busCompanyId : busCompanyId + "",
             accountInfo : accountInfo,
-            startDate : startDate,
-            endDate : endDate,
+            startTime : startDate,
+            endTime : endDate,
             sortType : "auto"
         };
         searchParam = JSON.stringify(searchParam);
@@ -176,7 +178,7 @@ define(function(require, exports) {
         busCompany.$checkTab = $("#tab-" + menuKey + "-checking-content");
         busCompany.$checkSearchArea = busCompany.$checkTab.find('.T-search-area');
 
-        busCompany.init_check_event(page,id,name);
+        busCompany.init_event(page,id,name,busCompany.$checkTab,"check");
         FinancialService.initDate(busCompany.$checkTab);
         FinancialService.updateUnpayMoney(busCompany.$checkTab,rule);
 
@@ -202,7 +204,7 @@ define(function(require, exports) {
         //复选框事件初始化
         var checkboxList = busCompany.$checkTab.find(".T-checkList tr .T-checkbox"),
             $checkAll = busCompany.$checkTab.find(".T-checkAll");
-        KingServices.checkAll($checkAll,checkboxList);
+        FinancialService.initCheckBoxs($checkAll,checkboxList);
 
         //关闭页面事件
         busCompany.$checkTab.find(".T-close-check").click(function(){
@@ -233,27 +235,58 @@ define(function(require, exports) {
             pageNo : page,
             busCompanyId : busCompanyId + "",
             accountInfo : accountInfo,
-            startDate : startDate,
-            endDate : endDate,
+            startTime : startDate,
+            endTime : endDate,
             sortType : "auto"
         };
         searchParam = JSON.stringify(searchParam);
         $.ajax({
-            url:KingServices.build_url("financial/financialBusCompany","listFcBusCompanySettlement"),
+            url:KingServices.build_url("financial/financialBusCompany","listAccountSettlement"),
             type:"POST",
             data:{ searchParam : searchParam },
             success:function(data){
                 var result = showDialog(data);
                 if(result){
 					data.busCompanyName = busCompanyName;
+                    //暂存数据读取
+                    if(busCompany.clearTempSumDate){
+                        data.sumPayMoney = busCompany.clearTempSumDate.sumPayMoney;
+                        data.sumPayType = busCompany.clearTempSumDate.sumPayType;
+                    } else {
+                        data.sumPayMoney = 0;
+                        data.sumPayType = 0;
+                    }
+                    var resultList = data.financialBusCompanyListData;
+                    data.financialBusCompanyListData = FinancialService.getTempDate(resultList,busCompany.clearTempData);
 					var html = Clearing(data);
                     
                     var validator;
                     // 初始化页面
-                    if (Tools.addTab(menuKey + "-clearing", "车队结算", html)) {
+                    if (Tools.addTab(menuKey + "-clearing", "车队付款", html)) {
                         busCompany.initClear(page,busCompanyId,busCompanyName); 
                         validator = rule.check(busCompany.$clearTab.find('.T-clearList'));                       
                     }
+
+                    //绑定翻页组件
+                    var $tr = busCompany.$clearTab.find('.T-clearList tr');
+                    laypage({
+                        cont: busCompany.$clearTab.find('.T-pagenation'),
+                        pages: data.searchParam.totalPage,
+                        curr: (page + 1),
+                        jump: function(obj, first) {
+                            if (!first) { 
+                                var tempJson = FinancialService.clearSaveJson(busCompany.$clearTab,busCompany.clearTempData,rule);
+                                busCompany.clearTempData = tempJson;
+                                var sumPayMoney = parseInt(busCompany.$clearTab.find('input[name=sumPayMoney]').val());
+                                    sumPayType = parseInt(busCompany.$clearTab.find('select[name=sumPayType]').val());
+                                busCompany.clearTempSumDate = {
+                                    sumPayMoney : sumPayMoney,
+                                    sumPayType : sumPayType
+                                }
+                                busCompany.busCompanyClear(obj.curr -1,busCompanyId,busCompanyName);
+                            }
+                        }
+                    });
                 }
             }
         });
@@ -264,7 +297,7 @@ define(function(require, exports) {
         busCompany.$clearTab = $("#tab-" + menuKey + "-clearing-content");
         busCompany.$clearSearchArea = busCompany.$clearTab.find('.T-search-area');
 
-        busCompany.init_clear_event(page,id,name);
+        busCompany.init_event(page,id,name,busCompany.$clearTab,"clear");
         FinancialService.initDate(busCompany.$clearTab);
 
         //搜索事件
@@ -273,7 +306,7 @@ define(function(require, exports) {
         });
 
         //关闭页面事件
-        busCompany.$checkTab.find(".T-close-clear").click(function(){
+        busCompany.$clearTab.find(".T-close-clear").click(function(){
             Tools.closeTab(menuKey + "-clearing");
         });
 
@@ -287,26 +320,27 @@ define(function(require, exports) {
         busCompany.listOption(busCompany.$clearTab);
 
         //自动下账
-        busCompany.$clearTab.find(".T-clear-auto").click(function(){
-            var startDate = busCompany.$clearSearchArea.find("input[name=startDate]").val(),
-                endDate = busCompany.$clearSearchArea.find("input[name=endDate]").val();
-            var searchParam = {
-                busCompanyId : id + "",
-                sumPayMoney : busCompany.$clearSearchArea.find("input[name=sumPayMoney]").val(),
-                payType : busCompany.$clearSearchArea.find("select[name=sumPayType]").val(),
-                startDate : startDate,
-                endDate : endDate
-            };
-            searchParam = JSON.stringify(searchParam);
-            showConfirmMsg($("#confirm-dialog-message"), "是否按当前账期 " + startDate + " 至 " + endDate + " 下账？",function(){
+        busCompany.$clearTab.find(".T-clear-auto").off().on("click",function(){
+            var autoPayJson = FinancialService.autoPayJson(id,busCompany.$clearTab,rule);
+            if(!autoPayJson){return false;}
+
+            var startDate = busCompany.$clearTab.find("input[name=startDate]").val(),
+                endDate = busCompany.$clearTab.find("input[name=endDate]").val();
+            showConfirmMsg($("#confirm-dialog-message"),"是否按当前账期 " + startDate + " 至 " + endDate + " 下账？",function(){
                 $.ajax({
                     url:KingServices.build_url("financial/financialBusCompany","autoPayment"),
                     type:"POST",
-                    data:{ searchParam : searchParam },
+                    data:{ searchParam : autoPayJson },
                     success:function(data){
                         var result = showDialog(data);
                         if(result){
-                            showMessageDialog($("#confirm-dialog-message"),data.message,function(){
+                            showMessageDialog($("#confirm-dialog-message"),"自动下账成功！",function(){
+                                busCompany.$clearTab.data('isEdited',false);
+                                busCompany.clearTempData = data.autoPaymentJson;
+                                busCompany.clearTempSumDate = {
+                                    sumPayMoney : busCompany.$clearTab.find('input[name=sumPayMoney]').val(),
+                                    sumPayType : busCompany.$clearTab.find('select[name=sumPayType]').val()
+                                };
                                 busCompany.busCompanyClear(page,id,name);
                             });
                         }
@@ -353,24 +387,13 @@ define(function(require, exports) {
     };
 
     busCompany.saveClear = function(id,name,page,tab_id, title, html){
-        if(!busCompany.$clearTab.data('isEdited')){
-            showMessageDialog($("#confirm-dialog-message"),"您未进行任何操作！");
+        if(!FinancialService.isClearSave(busCompany.$clearTab,rule)){
             return false;
         }
-        var $tr,argumentsLen = arguments.length;
-        $tr = busCompany.$clearTab.find(".T-clearList tr");
 
-        var clearSaveJson = [];
-        $tr.each(function(i){
-            //获取数据
-            var clearJson = {
-                id : $(this).data("id"),
-                payMoney : $(this).find("input[name=payMoney]").val(),
-                payType : $(this).find("select[name=payType]").val(),
-                payRemark : $(this).find("input[name=payRemark]").val()
-            };
-            clearSaveJson.push(clearJson);
-        });
+        var argumentsLen = arguments.length,
+            clearSaveJson = FinancialService.clearSaveJson(busCompany.$clearTab,busCompany.clearTempData,rule);
+
         clearSaveJson = JSON.stringify(clearSaveJson);
         $.ajax({
             url:KingServices.build_url("financial/financialBusCompany","saveAccountSettlement"),
@@ -380,6 +403,8 @@ define(function(require, exports) {
                 var result = showDialog(data);
                 if(result){
                     showMessageDialog($("#confirm-dialog-message"),data.message,function(){
+                        restaurant.clearTempData = false;
+                        restaurant.clearTempSumDate = false;
                         if(argumentsLen === 2){
                             Tools.closeTab(menuKey + "-clearing");
                             busCompany.listBusCompany(busCompany.searchData.pageNo,busCompany.searchData.busCompanyName,busCompany.searchData.busCompanyId,busCompany.searchData.startDate,busCompany.searchData.endDate);
@@ -504,55 +529,41 @@ define(function(require, exports) {
         });
     };
 
-	busCompany.init_check_event = function(page,id,name) {
-        if (!!busCompany.$checkTab && busCompany.$checkTab.length === 1) {
-            var validator = rule.check(busCompany.$checkTab);
+	busCompany.init_event = function(page,id,name,$tab,option) {
+        if (!!$tab && $tab.length === 1) {
+            var validator = rule.check($tab);
 
             // 监听修改
-            busCompany.$checkTab.find(".T-checkList").off('change').on('change',"input",function(event) {
+            $tab.find(".T-checkList").off('change').on('change',"input",function(event) {
                 event.preventDefault();
                 $(this).closest('tr').data("change",true);
-                busCompany.$checkTab.data('isEdited', true);
+                $tab.data('isEdited', true);
             });
-            busCompany.$checkTab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
+            $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
 				event.preventDefault();
-				busCompany.initCheck(page,id,name);
+                if(option == "check"){
+                    busCompany.initCheck(page,id,name);
+                } else if(option == "clear"){
+                    busCompany.initClear(page,id,name);
+                }
 			})
             // 监听保存，并切换tab
             .on('switch.tab.save', function(event, tab_id, title, html) {
                 event.preventDefault();
-                busCompany.saveChecking(id,name,0,tab_id, title, html);
+                if(option == "check"){
+                    busCompany.saveChecking(id,name,0,tab_id, title, html);
+                } else if(option == "clear"){
+                    busCompany.saveClear(id,name,"",tab_id, title, html);
+                }
             })
             // 保存后关闭
             .on('close.tab.save', function(event) {
                 event.preventDefault();
-                busCompany.saveChecking(id,name);
-            });
-        }
-    };
-
-    busCompany.init_clear_event = function(page,id,name) {
-        if (!!busCompany.$clearTab && busCompany.$clearTab.length === 1) {
-            var validator = rule.check(busCompany.$clearTab);
-
-           busCompany.$clearTab.find(".T-clearList").off('change').off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE)
-            .on('change', function(event) {
-                event.preventDefault();
-                busCompany.$clearTab.data('isEdited', true);
-            });
-            busCompany.$clearTab.off('change').off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
-                event.preventDefault();
-                busCompany.initClear(page,id,name);
-            })
-            // 监听保存，并切换tab
-            .on('switch.tab.save', function(event, tab_id, title, html) {
-                event.preventDefault();
-                busCompany.saveClear(id,name,"",tab_id, title, html);
-            })
-            // 保存后关闭
-            .on('close.tab.save', function(event) {
-                event.preventDefault();
-                busCompany.saveClear(id,name);
+                if(option == "check"){
+                    busCompany.saveChecking(id,name);
+                } else if(option == "clear"){
+                    busCompany.saveClear(id,name);
+                }
             });
         }
     };
@@ -595,7 +606,7 @@ define(function(require, exports) {
             event.preventDefault();
             var $that = $(this),
                 id = $that.closest('tr').data('id');
-            if ($that.hasClass('T-restaurantImg')) {
+            if ($that.hasClass('T-busCompanyImg')) {
                 // 查看单据
                 var WEB_IMG_URL_BIG = $tab.find("input[name=WEB_IMG_URL_BIG]").val();//大图
                 var WEB_IMG_URL_SMALL = $tab.find("input[name=WEB_IMG_URL_SMALL]").val();//大图

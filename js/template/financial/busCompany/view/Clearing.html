@@ -1,12 +1,12 @@
-<div class="col-sm-12 T-newData" data-id="{{searchParam.busCompanyId}}" data-name="{{busCompanyName}}" style="border: 1px solid #ccc">
+<div class="col-sm-12 T-newData" data-id="{{searchParam.busCompanyId}}" data-name="{{busCompanyName}}">
     <form class="form-horizontal" role="form" onsubmit="return false">
-        <div class="T-search-area editable editable-click" style="margin-top: 10px">
+        <div class="T-search-area">
             <div class="form-group"> 
-                <label style="margin-left: 15px" class=" control-label pull-left "> 车队：{{busCompanyName}}</label>
+                <label class=" control-label pull-left "> 车队：{{busCompanyName}}</label>
                 <label class="col-sm-1 control-label no-padding-right">账期：</label>
                 <div class="col-xs-1">
                     <div class="input-group">
-                        <input class="col-xs-12 date-picker" name="startDate" placeholder="开始日期" type="text" value="{{searchParam.startDate}}" />   
+                        <input class="col-xs-12 date-picker" name="startDate" placeholder="开始日期" type="text" value="{{searchParam.startTime}}" />   
                         <span class="input-group-addon">
                             <i class="fa fa-calendar"></i>
                         </span>
@@ -14,7 +14,7 @@
                 </div>
                 <div class="col-xs-1">
                     <div class="input-group">
-                        <input class="col-xs-12 date-picker" name="endDate" placeholder="结束日期" type="text" value="{{searchParam.endDate}}" />   
+                        <input class="col-xs-12 date-picker" name="endDate" placeholder="结束日期" type="text" value="{{searchParam.endTime}}" />   
                         <span class="input-group-addon">
                             <i class="fa fa-calendar"></i>
                         </span>
@@ -31,20 +31,20 @@
         </div>
     </form>
     <form class="form-horizontal" role="form" onsubmit="return false">
-        <div class="form-group " style="padding-bottom: 0;padding-top:10px;">
-            <label class="control-label pull-left" style="margin-left: 15px">账面应付合计：{{sumNeedPayMoney}}元 </label>
-            <label class="control-label pull-left" style="margin-left:30px;">已付金额合计：{{sumPayedMoney}} </label>
-            <label class="control-label pull-left" style="margin-left:30px;">结算金额合计：{{sumSettlementMoney}}</label>
-            <label class="control-label pull-left" style="margin-left:30px;">未付金额合计：{{sumUnPayedMoney}}</label>
-            <label class="control-label pull-left" style="margin-left:30px;">本次付款金额：</label>
+        <div class="form-group">
+            <label class="control-label pull-left">账面应付合计：{{sumNeedPayMoney}}元 </label>
+            <label class="control-label pull-left marginLeft-30">已付金额合计：{{sumPayedMoney}} </label>
+            <label class="control-label pull-left marginLeft-30">结算金额合计：{{sumSettlementMoney}}</label>
+            <label class="control-label pull-left marginLeft-30">未付金额合计：<span class="T-unpayMoney">{{sumUnPayedMoney}}</span></label>
+            <label class="control-label pull-left marginLeft-30">本次付款金额：</label>
             <input class="col-xs-1 pull-left" name="sumPayMoney" type="text" value="{{sumPayMoney}}" maxlength="9" style="float:none;" />
-            <label class="control-label pull-left" style="margin-left:30px;">付款方式：</label>
+            <label class="control-label pull-left marginLeft-30">付款方式：</label>
             <select style="text-align:center" name="sumPayType">
-                <option value="0" selected="selected">现金</option>
-                <option value="1">银行转账</option>
-                <option value="2">网上支付</option>
-                <option value="3">支票</option>
-                <option value="4">其他</option>
+                <option value="0" {{if sumPayType == 0}}selected="selected"{{/if}}>现金</option>
+                <option value="1" {{if sumPayType == 1}}selected="selected"{{/if}}>银行转账</option>
+                <option value="2" {{if sumPayType == 2}}selected="selected"{{/if}}>网上支付</option>
+                <option value="3" {{if sumPayType == 3}}selected="selected"{{/if}}>支票</option>
+                <option value="4" {{if sumPayType == 4}}selected="selected"{{/if}}>其他</option>
             </select>
 
             <button class="btn-height btn-sm btn-height T-clear-auto search-btn" style="margin-left: 20px">
@@ -53,10 +53,6 @@
         </div>
     </form>
 </div>
-<button class="btn btn-sm btn-success pull-left T-clear-records margin-topTicket"> 
-    <i class="ace-icon fa fa-wrench icon-animated-wrench bigger-125"></i> 操作记录 
-</button>
-<div style="clear: both"></div>
 <table class="table table-striped table-bordered table-hover all margin-top">
     <thead>
         <tr><th class="th-border">序号</th>
@@ -73,44 +69,44 @@
             <th class="th-border">单据</th>
             <th class="th-border">结算金额</th>
             <th class="th-border">未付金额</th>
-            <th class="th-border" style="width: 100px"><span class="necessary">*</span>本次付款金额</th>
+            <th class="th-border" style="width: 80px"><span class="necessary">*</span>本次付款金额</th>
             <th class="th-border">付款方式</th>
             <th class="th-border" style="width: 100px!important;">备注</th>
             <th class="th-border">对账时间</th>
             <th class="th-border">对账人</th>
-            <th class="th-border">对账</th>
+            <th class="th-border" width="100">对账</th>
         </tr>
     </thead>
     <tbody class="T-clearList">
-        {{each financialBusCompanyList as rs index}}  
+        {{each financialBusCompanyListData as rs index}}  
         <tr data-id="{{rs.id}}">
             <td>{{index+1}}</td>
-            <td>{{rs.tripNumber}}{{","}}{{rs.lineProductName}}{{","}}{{rs.guideName}}</td>
-            <td>{{consumeStartTime | dateFormat: 'yyyy-MM-dd'}}</td>
-            <td>{{rs.adultCount}} 大 {{rs.childCount}} 小</td>
-            <td>{{rs.driverName}}</td>
-            <td>{{rs.busType}}</td>
-            <td>{{rs.licenseNumber}}</td>
-            <td>{{rs.price}}</td>
+            <td>{{rs.tripNumber}}{{"，"}}{{rs.lineProductName}}{{"，"}}{{rs.guideName}}</td>
+            <td>{{if rs.accountTime == null || rs.accountTime == ""}}-{{else}}{{rs.accountTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
+            <td>{{rs.touristAdultCount}} 大 {{rs.touristChildCount}} 小</td>
+            <td>{{if rs.driverName == null || rs.driverName == ""}}-{{else}}{{rs.driverName}}{{/if}}</td>
+            <td>{{rs.brand}} {{rs.needSeatCount}}座</td>
+            <td>{{if rs.licenseNumber == null || rs.licenseNumber == ""}}-{{else}}{{rs.licenseNumber}}{{/if}}</td>
+            <td>{{rs.fee}}</td>
             <td>{{rs.reduceMoney}}</td>
             <td>{{rs.needPayMoney}}</td>
-            <td><a class="T-option T-payedDetail">{{"社付:"}}{{rs.travelAgencyPayedMoney}}{{","}}{{"导付:"}}{{rs.guidePayedMoney}}</a></td>
+            <td><a class="T-option T-payedDetail">{{"社付："}}{{rs.payedMoney}}{{"，"}}{{"导付："}}{{rs.realGuidePayMoney}}</a></td>
             <td>{{if rs.billImage != null && rs.billImage !=""}}<a href="#" class="T-option T-busCompanyImg" url="{{rs.billImage}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
             <td>{{rs.settlementMoney}}</td>
             <td>{{rs.unPayedMoney}}</td>
-            <td class="col-sm-1"><input name="payMoney" type="text" maxlength="9"></td>
+            <td class="col-sm-1"><input name="payMoney" type="text" value="{{rs.payMoney}}" maxlength="9"></td>
             <td style="width:120px;">
                 <select style="text-align:center" name="payType">
-                    <option value="0" selected="selected">现金</option>
-                    <option value="1">银行转账</option>
-                    <option value="2">网上支付</option>
-                    <option value="3">支票</option>
-                    <option value="4">其他</option>
+                    <option value="0" {{if rs.payType == 0}}selected="selected"{{/if}}>现金</option>
+                    <option value="1" {{if rs.payType == 1}}selected="selected"{{/if}}>银行转账</option>
+                    <option value="2" {{if rs.payType == 2}}selected="selected"{{/if}}>网上支付</option>
+                    <option value="3" {{if rs.payType == 3}}selected="selected"{{/if}}>支票</option>
+                    <option value="4" {{if rs.payType == 4}}selected="selected"{{/if}}>其他</option>
                 </select>
             </td>
             <td class="col-sm-1" ><input name="payRemark" type="text"  maxlength="1000"></td>
-            <td>{{if rs.checkTime == null || rs.checkTime == ""}}-{{else}}{{rs.checkTime}}{{/if}}</td>
-            <td>{{rs.checkUserRealName}}</td>
+            <td>{{if rs.checkTime == null || rs.checkTime == ""}}-{{else}}{{rs.checkTime | dateFormat:'yyyy-MM-dd hh:mm:ss'}}{{/if}}</td>
+            <td>{{if rs.checkUserName == null || rs.checkUserName == ""}}-{{else}}{{rs.checkUserName}}{{/if}}</td>
             <td style="width:220px">
                 {{if rs.isConfirmAccount == 1}}已对账{{else if rs.isConfirmAccount == 0}}未对账{{/if}}
                 <a class="cursor"> |</a>
@@ -123,7 +119,7 @@
 
 <div class="row pageMode">
     <div class="col-xs-6">
-        <small>共计 {{searchParam.recordSize}} 条记录</small>
+        <small>共计 {{searchParam.totalCount}} 条记录</small>
     </div>
     <div class="col-xs-6">
         <div class="dataTables_paginate paging_simple_numbers T-pagenation">

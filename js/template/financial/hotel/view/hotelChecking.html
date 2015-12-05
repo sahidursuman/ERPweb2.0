@@ -1,13 +1,13 @@
 <div class="row T-newData" data-id="{{searchParam.hotelId}}" data-name="{{hotelName}}">
-    <div class="col-xs-12 border" style="padding-bottom: 0px">
+    <div class="col-xs-12">
         <form class="form-horizontal" role="form" onsubmit="return false">
-            <div class="T-search-area editable editable-click" >
+            <div class="T-search-area" >
                 <div class="form-group"> 
-                    <label style="float: left;margin: 0px auto auto 15px" class="control-label pull-left"> 酒店：{{hotelName}}</label>
-                    <label class="control-label" style="float:left;marginLeft-30">账期：</label>
+                    <label style="float: left;margin: 0px auto auto 0px" class="control-label pull-left"> 酒店：{{hotelName}}</label>
+                    <label class="control-label marginLeft-30" style="float:left;">账期：</label>
 	                  <div class="col-xs-1">
                         <div class="input-group">
-                            <input class="col-xs-12 date-picker" name="startTime" placeholder="开始日期" type="text" value="{{searchParam.startTime}}" />   
+                            <input class="col-xs-12 date-picker" name="startDate" placeholder="开始日期" type="text" value="{{searchParam.startTime}}" />   
                             <span class="input-group-addon">
                                 <i class="fa fa-calendar"></i>
                             </span>
@@ -15,30 +15,30 @@
                     </div>
                     <div class="col-xs-1">
                         <div class="input-group">
-                            <input class="col-xs-12 date-picker" name="endTime" placeholder="结束日期" type="text" value="{{searchParam.endTime}}" />   
+                            <input class="col-xs-12 date-picker" name="endDate" placeholder="结束日期" type="text" value="{{searchParam.endTime}}" />   
                             <span class="input-group-addon">
                                 <i class="fa fa-calendar"></i>
                             </span>
                         </div>
                     </div>
 
-                    <label class="control-label" style="float:left;marginLeft-30">账务类别:</label>
+                    <label class="control-label" style="float:left;marginLeft-30">账务类别：</label>
                     <input class="col-xs-1" name="accountInfo" placeholder="账务类别" type="text" value="{{searchParam.accountInfo}}" />
 
                     <button class="btn-sm T-search search-btn marginLeft-30" >
                         <i class="ace-icon fa fa-search"></i>搜索
                     </button>
-                    <button type="button" class=" btn-sm btn btn-primary marginLeft-30 btn-success T-hotelExport" style="padding:0px;">
+                    <!-- <button type="button" class=" btn-sm btn btn-primary marginLeft-30 btn-success T-hotelExport" style="padding:0px;">
 						<span>导出报表</span>
 						<i class="ace-icon fa fa-arrow-right icon-on-right"></i>
-  					</button>
+  					</button> -->
                 </div>
             </div>
         </form>
 
         <form class="form-horizontal" role="form" onsubmit="return false">
-            <div class="form-group ">
-                <label class=" control-label pull-left" style="margin-left: 15px">账面应付合计：{{sumNeedPayMoney}}</label>
+            <div class="form-group">
+                <label class=" control-label pull-left">账面应付合计：{{sumNeedPayMoney}}</label>
                 <label class=" control-label marginLeft-30">已付金额合计：{{sumPayedMoney}}</label>
                 <label class=" control-label marginLeft-30">结算金额合计：<span class="T-stMoney">{{sumSettlementMoney}}</span></label>
                 <label class=" control-label marginLeft-30">未付金额合计：<span class="T-unpayMoney">{{sumUnPayedMoney}}</span></label>
@@ -47,7 +47,6 @@
     </div>
     <input type="hidden" value="{{WEB_IMG_URL_BIG}}" name="WEB_IMG_URL_BIG" />
     <input type="hidden" value="{{WEB_IMG_URL_SMALL}}" name="WEB_IMG_URL_SMALL" />
-    <div class="clearfix"></div>
     <table class="table table-striped table-bordered table-hover all" style="margin-top: 30px">
         <thead>
             <tr>
@@ -73,23 +72,23 @@
             {{each financialHotelList as rs index}}
 		    <tr class="T-checkTr" data-id="{{rs.id}}" data-confirm="{{rs.isConfirmAccount}}">
 	            <td>{{index+1}}</td>
-				<td>{{rs.tripNumber}}{{","}}{{rs.lineProductName}}{{","}}{{rs.guideName}}/td>
-				<td>{{if rs.consumeStartTime == null || rs.consumeStartTime == ""}}-{{else}}{{rs.consumeStartTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
-				<td>{{rs.hotelStandardType}}</td>
+				<td>{{rs.tripNumber}}{{"，"}}{{rs.lineProductName}}{{"，"}}{{rs.guideName}}</td>
+				<td>{{if rs.accountTime == null || rs.accountTime == ""}}-{{else}}{{rs.accountTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
+				<td>{{if rs.type == null || rs.type == ""}}-{{else}}{{rs.type}}{{/if}}</td>
 				<td>{{rs.price}}</td>
 				<td>{{rs.memberCount}}</td>  
 				<td>{{rs.reduceMoney}}</td>
 				<td>{{rs.needPayMoney}}</td>
-				<td><a class="T-option T-payedDetail" data-money="{{rs.payedMoney + rs.realGuidePayMoney}}">{{"社付:"}}{{rs.travelAgencyPayedMoney}}{{","}}{{"导付:"}}{{rs.guidePayedMoney}}</a></td> 
+				<td><a class="T-option T-payedDetail" data-money="{{rs.payedMoney + rs.realGuidePayMoney}}">{{"社付："}}{{rs.payedMoney}}{{"，"}}{{"导付："}}{{rs.realGuidePayMoney}}</a></td> 
 				<td>{{if rs.billImages != null && rs.billImages !=""}}<a href="#" class="T-option T-hotelImg" url="{{rs.billImages}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
 				<td><input type="text" name="settlementMoney" value="{{rs.settlementMoney}}" style="text-align:center"></td>
                 <td name="unPayedMoney">{{rs.unPayedMoney}}</td>
                 <td><input type="text" name="checkRemark" value="{{rs.checkRemark}}" style="text-align:center"/></td>
-				<td>{{if rs.checkTime == null || rs.checkTime == ""}}-{{else}}{{rs.checkTime}}{{/if}}</td>
-                <td>{{rs.checkUserRealName}}</td>
+				<td>{{if rs.checkTime == null || rs.checkTime == ""}}-{{else}}{{rs.checkTime | dateFormat:'yyyy-MM-dd hh:mm:ss'}}{{/if}}</td>
+                <td>{{if rs.checkUserName == null || rs.checkUserName == ""}}-{{else}}{{rs.checkUserName}}{{/if}}</td>
 				<td>
 				    <label class="pos-rel">
-				   	    <input type="checkbox" class="ace hotelFinancial" {{if rs.isConfirmAccount == 1}}checked="checked"{{/if}} />
+				   	    <input type="checkbox" class="ace T-checkbox" {{if rs.isConfirmAccount == 1}}checked="checked"{{/if}} />
 				   		  <span class="lbl"></span>
 				    </label>
                     <a class="T-option T-needPayDetail">查看</a>
