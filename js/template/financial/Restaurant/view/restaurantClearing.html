@@ -37,9 +37,9 @@
                 <label class="control-label pull-left" style="margin-left: 15px">账面应付合计：{{sumNeedPayMoney}}元 </label>
                 <label class="control-label pull-left" style="margin-left:30px;">已付金额合计：{{sumPayedMoney}} </label>
                 <label class="control-label pull-left" style="margin-left:30px;">结算金额合计：{{sumSettlementMoney}}</label>
-                <label class="control-label pull-left" style="margin-left:30px;">未付金额合计：{{sumUnPayedMoney}}</label>
+                <label class="control-label pull-left" style="margin-left:30px;">未付金额合计：<span class="T-unpayMoney">{{sumUnPayedMoney}}</span></label>
                 <label class="control-label pull-left" style="margin-left:30px;">本次付款金额：</label>
-                <input class="col-xs-1 pull-left" name="sumPayMoney" type="text" value="{{sumPayMoney}}" style="float:none;" />
+                <input class="col-xs-1 pull-left" name="sumPayMoney" type="text" value="{{sumPayMoney}}" maxlength="9" style="float:none;" />
                 <label class="control-label pull-left" style="margin-left:30px;">付款方式：</label>
                 <select style="text-align:center" name="sumPayType">
                     <option value="0" {{if sumPayType == 0}}selected="selected"{{/if}}>现金</option>

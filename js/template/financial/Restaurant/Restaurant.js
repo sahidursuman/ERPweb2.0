@@ -31,12 +31,13 @@ define(function(require, exports) {
             restaurantName = restaurant.$searchArea.find("input[name=restaurantName]").val(),
             restaurantId = restaurant.$searchArea.find("input[name=restaurantId]").val(),
             startDate = restaurant.$searchArea.find("input[name=startDate]").val(),
-            endDate = restaurant.$searchArea.find("input[name=endDate]").val()
+            endDate = restaurant.$searchArea.find("input[name=endDate]").val();
         }
         if(startDate > endDate){
             showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
             return false;
         }
+        restaurantName = (restaurantName == "全部") ? "" : restaurantName;
         // 修正页码
         page = page || 0;
         restaurant.searchData = {
@@ -83,7 +84,7 @@ define(function(require, exports) {
         restaurant.$searchArea = restaurant.$tab.find('.T-search-area');
 
         restaurant.getQueryList();
-        restaurant.initDate(restaurant.$tab);
+        FinancialService.initDate(restaurant.$tab);
 
         //搜索按钮事件
         restaurant.$tab.find('.T-search').on('click',function(event) {
@@ -176,7 +177,7 @@ define(function(require, exports) {
         restaurant.$checkSearchArea = restaurant.$checkTab.find('.T-search-area');
 
         restaurant.init_event(page,id,name,restaurant.$checkTab,"check");
-        restaurant.initDate(restaurant.$checkTab);
+        FinancialService.initDate(restaurant.$checkTab);
         FinancialService.updateUnpayMoney(restaurant.$checkTab,rule);
 
         //搜索按钮事件
@@ -295,7 +296,7 @@ define(function(require, exports) {
         restaurant.$clearSearchArea = restaurant.$clearTab.find('.T-search-area');
 
         restaurant.init_event(page,id,name,restaurant.$clearTab,"clear");
-        restaurant.initDate(restaurant.$clearTab);
+        FinancialService.initDate(restaurant.$clearTab);
 
         //搜索事件
         restaurant.$clearTab.find(".T-search").click(function(){
@@ -317,32 +318,25 @@ define(function(require, exports) {
 
         //自动下账
         restaurant.$clearTab.find(".T-clear-auto").off().on("click",function(){
-            var startDate = restaurant.$clearSearchArea.find("input[name=startDate]").val(),
-                endDate = restaurant.$clearSearchArea.find("input[name=endDate]").val();
-            var searchParam = {
-                restaurantId : id + "",
-                sumCurrentPayMoney : restaurant.$clearSearchArea.find("input[name=sumPayMoney]").val(),
-                payType : restaurant.$clearSearchArea.find("select[name=sumPayType]").val(),
-                startDate : startDate,
-                endDate : endDate
-            };
-            searchParam = JSON.stringify(searchParam);
+            var autoPayJson = FinancialService.autoPayJson(id,restaurant.$clearTab,rule);
+            if(!autoPayJson){return false;}
+
+            var startDate = restaurant.$clearTab.find("input[name=startDate]").val(),
+                endDate = restaurant.$clearTab.find("input[name=endDate]").val();
             showConfirmMsg($("#confirm-dialog-message"),"是否按当前账期 " + startDate + " 至 " + endDate + " 下账？",function(){
                 $.ajax({
                     url:KingServices.build_url("account/arrangeRestaurantFinancial","autoPayment"),
                     type:"POST",
-                    data:{ searchParam : searchParam },
+                    data:{ searchParam : autoPayJson },
                     success:function(data){
                         var result = showDialog(data);
                         if(result){
                             showMessageDialog($("#confirm-dialog-message"),"自动下账成功！",function(){
                                 restaurant.$clearTab.data('isEdited',false);
                                 restaurant.clearTempData = data.autoPaymentJson;
-                                var sumPayMoney = parseInt(restaurant.$clearTab.find('input[name=sumPayMoney]').val());
-                                    sumPayType = parseInt(restaurant.$clearTab.find('select[name=sumPayType]').val());
                                 restaurant.clearTempSumDate = {
-                                    sumPayMoney : sumPayMoney,
-                                    sumPayType : sumPayType
+                                    sumPayMoney : restaurant.$clearTab.find('input[name=sumPayMoney]').val(),
+                                    sumPayType : restaurant.$clearTab.find('select[name=sumPayType]').val()
                                 };
                                 restaurant.restaurantClear(0,id,name);
                             });
@@ -462,16 +456,10 @@ define(function(require, exports) {
 
     //对账数据保存
     restaurant.saveChecking = function(restaurantId,restaurantName,page,tab_id, title, html){
-        var validator = rule.check(restaurant.$checkTab);
-        if(!validator.form()){return false;}
-
-        if(!restaurant.$checkTab.data('isEdited')){
-            showMessageDialog($("#confirm-dialog-message"),"您未进行任何操作！");
-            return false;
-        }
-
         var argumentsLen = arguments.length,
             checkSaveJson = FinancialService.checkSaveJson(restaurant.$checkTab,rule);
+        if(!checkSaveJson){ return false; }
+
         $.ajax({
             url:KingServices.build_url("account/arrangeRestaurantFinancial","saveAccountChecking"),
             type:"POST",
@@ -500,13 +488,10 @@ define(function(require, exports) {
     };
 
     restaurant.saveClear = function(id,name,page,tab_id, title, html){
-        var validator = rule.check(restaurant.$clearTab);
-        if(!validator.form()){return false;}
-
-        if(!restaurant.$clearTab.data('isEdited')){
-            showMessageDialog($("#confirm-dialog-message"),"您未进行任何操作！");
+        if(!FinancialService.isClearSave(restaurant.$clearTab,rule)){
             return false;
         }
+
         var argumentsLen = arguments.length,
             clearSaveJson = FinancialService.clearSaveJson(restaurant.$clearTab,restaurant.clearTempData,rule);
 
@@ -589,6 +574,11 @@ define(function(require, exports) {
                 restaurantList[i].value = restaurantList[i].restaurantName;
             }
         }
+        var all = {
+            id : "",
+            value : "全部"
+        };
+        restaurantList.unshift(all);
 
         //餐厅
         $restaurant.autocomplete({
@@ -605,16 +595,6 @@ define(function(require, exports) {
         }).on("click",function(){
             $restaurant.autocomplete('search','');
         });      
-    };
-
-    //时间控件初始化
-    restaurant.initDate = function($tab){
-        $tab.find('.date-picker').datepicker({
-            autoclose: true,
-            todayHighlight: true,
-            format: 'yyyy-mm-dd',
-            language: 'zh-CN'
-        });
     };
 
     // 对账、付款报表内的操作

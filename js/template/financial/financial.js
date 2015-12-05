@@ -40,6 +40,14 @@ FinancialService.updateUnpayMoney = function($tab,rule){
 
 //对账-保存json组装
 FinancialService.checkSaveJson = function($tab,rule){
+    var validator = rule.check($tab);
+    if(!validator.form()){return false;}
+
+    if(!$tab.data('isEdited')){
+        showMessageDialog($("#confirm-dialog-message"),"您未进行任何操作！");
+        return false;
+    }
+
     var $list = $tab.find(".T-checkList"),
         $tr = $list.find(".T-checkTr"),
         saveJson = []; 
@@ -149,6 +157,56 @@ FinancialService.clearSaveJson = function($tab,clearSaveJson,rule){
     return clearSaveJson;
 };
 
+//付款-保存前校验
+FinancialService.isClearSave = function($tab,rule){
+    var validator = rule.check($tab);
+    if(!validator.form()){return false;}
+
+    if(!$tab.data('isEdited')){
+        showMessageDialog($("#confirm-dialog-message"),"您未进行任何操作！");
+        return false;
+    }
+    var sumPayMoney = parseInt($tab.find('input[name=sumPayMoney]').val()),
+        unpayMoney = parseInt($tab.find('.T-unpayMoney').val());
+    if(sumPayMoney > unpayMoney){
+        showMessageDialog($("#confirm-dialog-message"),"付款金额大于未付总额！");
+        return false;
+    }
+    return true;
+};
+
+//自动下账前校验及数据组装
+FinancialService.autoPayJson = function(id,$tab,rule){
+    var validator = rule.check($tab);
+    if(!validator.form()){ return false; }
+
+    var startDate = $tab.find("input[name=startDate]").val(),
+        endDate = $tab.find("input[name=endDate]").val(),
+        sumPayMoney = parseInt($tab.find('input[name=sumPayMoney]').val()),
+        sumPayType = parseInt($tab.find('select[name=sumPayType]').val()),
+        unpayMoney = parseInt($tab.find('.T-unpayMoney').text());
+    if(sumPayMoney == 0 || sumPayMoney == ""){
+        showMessageDialog($("#confirm-dialog-message"),"请输入本次付款金额！");
+        return false;
+    }
+
+    if(isNaN(sumPayMoney)){ sumPayMoney = 0; }
+    if(isNaN(unpayMoney)){ unpayMoney = 0; }
+    if(sumPayMoney > unpayMoney){
+        showMessageDialog($("#confirm-dialog-message"),"付款金额大于未付总额！");
+        return false;
+    }
+    var searchParam = {
+        restaurantId : id + "",
+        sumCurrentPayMoney : sumPayMoney,
+        payType : sumPayType,
+        startDate : startDate,
+        endDate : endDate
+    };
+    searchParam = JSON.stringify(searchParam);
+    return searchParam;
+};
+
 //获取当月第一天日期和当前日期
 FinancialService.getInitDate = function(){
     var date = new Date(),
@@ -168,6 +226,16 @@ FinancialService.getInitDate = function(){
         endDate : endDate
     };
     return dateJson;
+};
+
+//时间控件初始化
+FinancialService.initDate = function($tab){
+    $tab.find('.date-picker').datepicker({
+        autoclose: true,
+        todayHighlight: true,
+        format: 'yyyy-mm-dd',
+        language: 'zh-CN'
+    });
 };
 
 FinancialService.initCheckBoxs = function($checkAll,checkboxList){//$checkAll全选按钮对象，checkboxList复选框列表
@@ -193,8 +261,8 @@ FinancialService.initCheckBoxs = function($checkAll,checkboxList){//$checkAll全
     });
 
     checkboxList.on("click",function(){
+        $(this).closest('tr').data("change",true);
         if($(this).is(":checked")){
-            $(this).closest('tr').data("change",true);
             if(isAllChecked(checkboxList)){
                 $checkAll.prop("checked",true);
             }
