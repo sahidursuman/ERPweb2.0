@@ -29,21 +29,25 @@
             </form>
         </div>
         <form class="form-horizontal" role="form" onsubmit="return false">
-            <div class="form-group col-sm-10">
-                <label class=" control-label pull-left">预支款合计：{{sumData.sumGuideAllPreMoney}}</label>
-                <label class=" control-label marginLeft-30">现收合计：{{sumData.sumGuideAllNowIncomeMoney}}</label>
-                <label class=" control-label marginLeft-30">现付合计：{{sumData.sumGuideAllNowPayMoney}}</label>
-                <label class=" control-label marginLeft-30">导服费合计：{{sumData.sumPrice}}</label>
-                <label class=" control-label marginLeft-30">管理费合计：{{sumData.sumManageFee}}</label>
-                <label class=" control-label marginLeft-30">购物导佣合计：{{sumData.sumShoppingRebateMoney}}</label>
-                <label class=" control-label marginLeft-30">自费导佣合计：{{sumData.sumSelfPayRebateMoney}}</label>
-            </div>
-            <div class="form-group col-sm-10">
-                <label class=" control-label pull-left">导游收入合计：{{sumData.sumGuideIncomeMoney}}</label>
-                <label class=" control-label marginLeft-30">账面应付合计：{{sumData.sumZhangmiantuibu}}</label>
+            <div class="form-group col-sm-12">
+                <label class=" control-label">账面应付合计：{{sumData.sumZhangmiantuibu}}</label>
                 <label class=" control-label marginLeft-30">结算金额合计：<span class="T-stMoney">{{sumData.sumSettlementMoney}}</span></label>
                 <label class=" control-label marginLeft-30">已付金额合计：{{sumData.sumPayedMoney}}</label>
-                <label class=" control-label marginLeft-30">未付金额合计：<span class="T-unpayMoney">{{sumData.sumUnPayedMoney}}</span></label>
+                <label class=" control-label marginLeft-30">未付金额合计：<span class="T-unpayMoney-temp">{{sumData.sumUnPayedMoney}}</span></label>
+                <label class=" control-label marginLeft-30">已对账未付金额合计：<span class="T-unpayMoney">{{sumData.sumConfirmedUnPayedMoney}}</span></label>
+                <label class=" control-label marginLeft-30">本次付款金额合计：<input type="text" name="sumPayMoney" class="T-sumPayMoney"></label>
+                <label class=" control-label marginLeft-30">付款方式：
+                    <select class="T-sumPayType">
+                        <option value="0">现金</option>
+                        <option value="1">银行转账</option>
+                        <option value="2">网上支付</option>
+                        <option value="3">支票</option>
+                        <option value="4">其它</option>
+                    </select>
+                </label>
+                <button class="btn btn-xs btn-primary T-btn-autofill marginLeft-30">
+                    <i class="ace-icon fa fa-check-circle"></i> 自动下账
+                </button>
             </div>
         </form>
     </div>
@@ -66,10 +70,12 @@
                 <th class="th-border">结算金额</th>
                 <th class="th-border">已付金额</th>
                 <th class="th-border">未付金额</th>
+                <th class="th-border">本次付款</th>
+                <th class="th-border">付款方式</th>
                 <th class="th-border col-sm-1">备注</th>
                 <th class="th-border col-sm-1">对账时间</th>
                 <th class="th-border">对账人</th>
-                <th class="th-border">对账</th>
+                <th class="th-border">对账状态</th>
             </tr>
         </thead>
         <tbody class="T-checkList" data-right="1200005">            
@@ -83,10 +89,6 @@
         <div class="col-xs-8">
             <div class="dataTables_paginate paging_simple_numbers T-pagenation">
             </div>
-            <label class="pos-rel pull-right">
-                <input type="checkbox" class="ace T-checkAll"/> 
-                <span class="lbl">全选</span>
-            </label>
         </div>
 
     </div>
@@ -96,7 +98,7 @@
                 <i class="ace-icon fa fa-times-circle"></i> 关闭
             </button>
             <button class="btn btn-xs btn-primary T-btn-save" style="margin-left:20px" data-id={{id}} data-type="{{type}}">
-                <i class="ace-icon fa fa-check-circle"></i> 确认
+                <i class="ace-icon fa fa-check-circle"></i> 确认付款
             </button>
         </div>
     </form>

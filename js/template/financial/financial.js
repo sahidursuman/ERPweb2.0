@@ -75,10 +75,10 @@ FinancialService.checkSaveJson = function($tab,rule){
 //付款-自动计算本次付款总额
 FinancialService.updateSumPayMoney = function($tab,rule){
     var $sumPayMoney = $tab.find("input[name=sumPayMoney]");
-    $tab.find("input[name=payMoney]").on("focus",function(){
+    $tab.on('focusin', 'input[name="payMoney"]', function(event) {
         $(this).data("oldVal",$(this).val());
     })
-    .on("change",function(){
+    .on("change", 'input[name="payMoney"]', function(){
         var $this = $(this),validator = rule.check($this.closest('tr'));
         var sumPayMoney = $sumPayMoney.val(),
             newVal = $this.val(),

@@ -7,15 +7,19 @@ define(function(require, exports) {
 	var rule = require("./rule"),
 		menuKey = "financial_guide",
         listTemplate = require("./view/list"),
+        // 对账模板
         guideCheckingTemplate = require("./view/guideChecking"),
         checkingTableTemplate = require('./view/guideCheckingTable'),
         needPayDetailTemplate = require('./view/needPayDetail'),
+        // 付款模板
+        guidePayTemplate = require("./view/guidePaying"),
+        payingTableTemplate = require('./view/guidePayingTable'),
+
         billImagesTemplate = require("./view/billImages"),
-        guideClearingTemplate = require("./view/guideClearing"),
         costDetail = require("./view/costDetail"),
         guideRecords = require("./view/guideRecords"),
         checkMenuKey = menuKey+"_checking",
-        clearMenuKey = menuKey+"-clearing";
+        payMenuKey = menuKey+"-paying";
 
     var FinGuide = {
     	mock: true,
@@ -122,11 +126,12 @@ define(function(require, exports) {
 
 			if ($that.hasClass('T-check'))  {
 				// 对账
-				FinGuide.checkingId = id;
-				FinGuide.initCheckModule(id, name);
+				FinGuide.currentId = id;
+				FinGuide.initOperationModule(id, name, 0);
 			} else if ($that.hasClass('T-pay'))  {
 				// 结算
-				FinGuide.clearing(id);
+				FinGuide.currentId = id;
+				FinGuide.initOperationModule(id, name, 1);
 			}
 		});
 	};
@@ -179,18 +184,18 @@ define(function(require, exports) {
 	 * @param  {Boolean} isSearchIn true: 来自搜索，false: 来自初始化
 	 * @return {[type]}             [description]
 	 */
-	FinGuide.initCheckModule = function(id, name, isSearchIn) {
+	FinGuide.initOperationModule = function(id, name, type, $tab) {
 		var args = FinancialService.getInitDate();
 
 		args.guideId = id;
-		if (isSearchIn && FinGuide.$checkingTab) { 
-			var $line = FinGuide.$checkingTab.find('.T-lineProductName');
+		if (!!$tab) { 
+			var $line = $tab.find('.T-lineProductName');
 
 			args = {
-				guideId: FinGuide.$checkingTab.find('.T-btn-save').data('id'),
-				startDate: FinGuide.$checkingTab.find('.T-search-start-date').val(),
-				endDate: FinGuide.$checkingTab.find('.T-search-end-date').val(),
-				tripPlanNumber: FinGuide.$checkingTab.find('.T-tripPlanNumber').val(),
+				guideId: $tab.find('.T-btn-save').data('id'),
+				startDate: $tab.find('.T-search-start-date').val(),
+				endDate: $tab.find('.T-search-end-date').val(),
+				tripPlanNumber: $tab.find('.T-tripPlanNumber').val(),
 				lineProductId: $line.data('id'),
 				lineProductName: $line.val(),
 			};
@@ -199,7 +204,7 @@ define(function(require, exports) {
 				args.lineProductName = '';
 			}
 
-			name = FinGuide.$checkingTab.find('.T-guideName').text();
+			name = $tab.find('.T-guideName').text();
 		}
 
 		$.ajax({
@@ -210,10 +215,21 @@ define(function(require, exports) {
 		.done(function(data) {
 			if (showDialog(data)) {
 				data.guideName = name;
+				data.id = id;
+				data.type = type;
 				data.lineProductName = data.lineProductName || '全部';
+				// 临时缓存
 				FinGuide.checkingTabLineProduct = data.lineProductList;
-				if (Tools.addTab(checkMenuKey, '导游对账', guideCheckingTemplate(data))) {
-					FinGuide.initCheckingEvent();
+
+				var key = checkMenuKey, title = '导游对账', html;
+				if (type) {
+					key = payMenuKey, title = '导游付款';
+					html = guidePayTemplate(data);
+				} else {
+					html = guideCheckingTemplate(data);
+				}
+				if (Tools.addTab(key, title, html)) {
+					FinGuide.initOperationEvent($('#tab-'+ key + '-content'), type);
 				}
 			}
 		});
@@ -224,9 +240,7 @@ define(function(require, exports) {
 	 * 对账页面事件初始化及列表初始化
 	 * @return {[type]} [description]
 	 */
-	FinGuide.initCheckingEvent = function() {
-		var $tab = $('#tab-'+ checkMenuKey + '-content');
-
+	FinGuide.initOperationEvent = function($tab, type) {
 		// 绑定搜索
 		var $searchArea = $tab.find('.T-search-area');
 		
@@ -248,7 +262,11 @@ define(function(require, exports) {
 		});
 
 		// 计算
-		FinancialService.updateUnpayMoney($tab, rule);
+		if (type) {
+			FinancialService.updateSumPayMoney($tab, rule);
+		} else {
+			FinancialService.updateUnpayMoney($tab, rule);
+		}
 
 		var validator = rule.check($tab);
 
@@ -262,7 +280,7 @@ define(function(require, exports) {
 			FinGuide.saveCheckingData($tab, [tab_id, title, html]);
 		})
 		.on(SWITCH_TAB_BIND_EVENT, function() {
-			FinGuide.initCheckingEvent();			
+			FinGuide.initOperationEvent();			
 		})
 		.on(CLOSE_TAB_SAVE, function(event){
 			event.preventDefault();
@@ -292,13 +310,11 @@ define(function(require, exports) {
 
 		//关闭页面事件
 		$tab.find(".T-btn-close").click(function(){
-		    Tools.closeTab(ClientCheckTab);
+		    Tools.closeTab(Tools.getTabKey($tab.prop('id')));
 		});
 
 		// 后续业务
-		$tab.find('.T-btn-save').data('id', FinGuide.checkingId);
-		FinGuide.$checkingTab = $tab;
-		FinGuide.getCheckingList(0);
+		FinGuide.getOperationList(0, $tab);
 	}
 
 	/**
@@ -323,7 +339,7 @@ define(function(require, exports) {
 					showMessageDialog($('#confirm-dialog-message'), data.message, function() {
 						if (!!tabArgs)  {
 							Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
-							FinGuide.initCheckingEvent();
+							FinGuide.initOperationEvent();
 						} else {
 							Tools.closeTab(checkMenuKey);
 							FinGuide.getList(FinGuide.listPageNo);
@@ -339,16 +355,16 @@ define(function(require, exports) {
 	 * @param  {int} pageNo 列表页码
 	 * @return {[type]}        [description]
 	 */
-	FinGuide.getCheckingList = function(pageNo) {
-		if (FinGuide.$checkingTab) { 
-			var $line = FinGuide.$checkingTab.find('.T-lineProductName');
+	FinGuide.getOperationList = function(pageNo, $tab) {
+		if ($tab) { 
+			var $line = $tab.find('.T-lineProductName');
 
 			var args = {
 				pageNo: pageNo || 0,
-				guideId: FinGuide.$checkingTab.find('.T-btn-save').data('id'),
-				startDate: FinGuide.$checkingTab.find('.T-search-start-date').val(),
-				endDate: FinGuide.$checkingTab.find('.T-search-end-date').val(),
-				tripPlanNumber: FinGuide.$checkingTab.find('.T-tripPlanNumber').val(),
+				guideId: $tab.find('.T-btn-save').data('id'),
+				startDate: $tab.find('.T-search-start-date').val(),
+				endDate: $tab.find('.T-search-end-date').val(),
+				tripPlanNumber: $tab.find('.T-tripPlanNumber').val(),
 				lineProductId: $line.data('id'),
 				lineProductName: $line.val(),
 			};
@@ -365,22 +381,31 @@ define(function(require, exports) {
 			})
 			.done(function(data) {
 				if (showDialog(data)) {
-					FinGuide.$checkingTab.find('.T-checkList').html(checkingTableTemplate(data));
+					var html,
+						type = $tab.find('.T-btn-save').data('type');
+					if (!!type) {
+						html = payingTableTemplate(data);
+					} else {
+						html = checkingTableTemplate(data);
+					}
+					$tab.find('.T-checkList').html(html);
 
-					//给全选按钮绑定事件: 未去重
-					FinancialService.initCheckBoxs(FinGuide.$checkingTab.find(".T-checkAll"), FinGuide.$checkingTab.find(".T-checkList").find('.T-checkbox'));
+					if (!type) {
+						//给全选按钮绑定事件: 未去重
+						FinancialService.initCheckBoxs($tab.find(".T-checkAll"), $tab.find(".T-checkList").find('.T-checkbox'));
+					}
 
 					// 设置记录条数及页面
-					FinGuide.$checkingTab.find('.T-sumItem').text('共计'+ data.recordSize + '条记录');
-					FinGuide.checkingListPageNo = args.pageNo;
+					$tab.find('.T-sumItem').text('共计'+ data.recordSize + '条记录');
+					$tab.find('.T-btn-save').data('pageNo', args.pageNo);
 					// 绑定翻页组件
 					laypage({
-					    cont: FinGuide.$checkingTab.find('.T-pagenation'), 
+					    cont: $tab.find('.T-pagenation'), 
 					    pages: data.totalPage, //总页数
 					    curr: (data.pageNo + 1),
 					    jump: function(obj, first) {
 					    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-					    		FinGuide.getCheckingList(obj.curr -1);
+					    		FinGuide.getOperationList(obj.curr -1, $tab);
 					    	}
 					    }
 					});	
@@ -456,6 +481,8 @@ define(function(require, exports) {
 	FinGuide.viewFeeDetail = function(tripId) {
 
 	}
+
+
 
 	/**
 	 * 初始化对账模块
