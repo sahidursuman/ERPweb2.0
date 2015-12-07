@@ -98,12 +98,11 @@ FinancialService.getTempDate = function(resultList,tempJson){
     if(tempJson){
         for(var i = 0; i < tempJson.length; i++){
             var tempId = tempJson[i].id;
-            for(var i = 0; i < resultList.length; i++){
-                var id = resultList[i].id;
+            for(var j = 0; j < resultList.length; j++){
+                var id = resultList[j].id;
                 if(tempId == id){
-                    resultList[i].payMoney = tempJson[i].payMoney;
-                    resultList[i].payType = tempJson[i].payType;
-                    resultList[i].payRemark = tempJson[i].payRemark;
+                    resultList[j].payMoney = tempJson[i].payMoney;
+                    resultList[j].payRemark = tempJson[i].payRemark;
                 }
             }
         }
@@ -129,7 +128,6 @@ FinancialService.clearSaveJson = function($tab,clearSaveJson,rule){
             for(i = 0; i < len; i++){
                 if(clearSaveJson[i].id == id){
                     clearSaveJson[i].payMoney = $this.find("input[name=payMoney]").val();
-                    clearSaveJson[i].payType = $this.find("select[name=payType]").val();
                     clearSaveJson[i].payRemark = $this.find("input[name=payRemark]").val();
                     return;
                 }
@@ -139,7 +137,6 @@ FinancialService.clearSaveJson = function($tab,clearSaveJson,rule){
                 var clearTemp = {
                     id : $this.data("id"),
                     payMoney : $this.find("input[name=payMoney]").val(),
-                    payType : $this.find("select[name=payType]").val(),
                     payRemark : $this.find("input[name=payRemark]").val()
                 };
                 clearSaveJson.push(clearTemp);
@@ -176,7 +173,12 @@ FinancialService.autoPayJson = function(id,$tab,rule){
         endDate = $tab.find("input[name=endDate]").val(),
         sumPayMoney = parseInt($tab.find('input[name=sumPayMoney]').val()),
         sumPayType = parseInt($tab.find('select[name=sumPayType]').val()),
+        sumPayRemark = $tab.find('input[name=sumPayRemark]').val(),
         unpayMoney = parseInt($tab.find('.T-unpayMoney').text());
+    if(startDate > endDate){
+        showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
+        return false;
+    }
     if(sumPayMoney == 0 || sumPayMoney == ""){
         showMessageDialog($("#confirm-dialog-message"),"请输入本次付款金额！");
         return false;
@@ -192,6 +194,7 @@ FinancialService.autoPayJson = function(id,$tab,rule){
         id : id,//字段id需与后台协调
         sumCurrentPayMoney : sumPayMoney,
         payType : sumPayType,
+        payRemark : sumPayRemark,
         startDate : startDate,
         endDate : endDate
     };

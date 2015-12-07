@@ -105,7 +105,7 @@ define(function(require, exports) {
                 restaurant.restaurantCheck(0,id,name,"",startDate,endDate);
             } else if ($that.hasClass('T-clear')) {
                 // 付款
-                restaurant.restaurantClear(0,id,name,"",startDate,endDate);
+                restaurant.restaurantClear(0,0,id,name,"",startDate,endDate);
             }
         });
     };
@@ -134,7 +134,7 @@ define(function(require, exports) {
         };
         searchParam = JSON.stringify(searchParam);
         $.ajax({
-            url:KingServices.build_url("account/arrangeRestaurantFinancial","listAccountChecking"),
+            url:KingServices.build_url("account/arrangeRestaurantFinancial","listRestaurantAccount"),
             type:"POST",
             data:{ searchParam : searchParam },
             success:function(data){
@@ -215,8 +215,8 @@ define(function(require, exports) {
     };
 
     //付款
-    restaurant.restaurantClear= function(page,restaurantId,restaurantName,accountInfo,startDate,endDate){
-        if (restaurant.$clearSearchArea && arguments.length === 3) {
+    restaurant.restaurantClear= function(isAutoPay,page,restaurantId,restaurantName,accountInfo,startDate,endDate){
+        if (restaurant.$clearSearchArea && arguments.length === 4) {
             accountInfo = restaurant.$clearSearchArea.find("input[name=accountInfo]").val(),
             startDate = restaurant.$clearSearchArea.find("input[name=startDate]").val(),
             endDate = restaurant.$clearSearchArea.find("input[name=endDate]").val()
@@ -237,7 +237,7 @@ define(function(require, exports) {
         };
         searchParam = JSON.stringify(searchParam);
         $.ajax({
-            url:KingServices.build_url("account/arrangeRestaurantFinancial","listAccountSettlement"),
+            url:KingServices.build_url("account/arrangeRestaurantFinancial","listRestaurantAccount"),
             type:"POST",
             data:{ searchParam : searchParam },
             success:function(data){
@@ -249,9 +249,11 @@ define(function(require, exports) {
                     if(restaurant.clearTempSumDate){
                         data.sumPayMoney = restaurant.clearTempSumDate.sumPayMoney;
                         data.sumPayType = restaurant.clearTempSumDate.sumPayType;
+                        data.sumPayRemark = restaurant.clearTempSumDate.sumPayRemark;
                     } else {
                         data.sumPayMoney = 0;
                         data.sumPayType = 0;
+                        data.sumPayRemark = "";
                     }
                     var resultList = data.financialRestaurantList;
                     data.financialRestaurantList = FinancialService.getTempDate(resultList,restaurant.clearTempData);
@@ -265,6 +267,13 @@ define(function(require, exports) {
                         validator = rule.check(restaurant.$clearTab.find('.T-clearList'));                       
                     }
 
+                    if(isAutoPay == 1){
+                        restaurant.$clearTab.find('input[name=sumPayMoney]').prop("disabled",true);
+                        restaurant.$clearTab.find(".T-clear-auto").hide(); 
+                    } else {
+                        restaurant.$clearTab.find(".T-cancel-auto").hide();
+                    }
+
                     //绑定翻页组件
                     var $tr = restaurant.$clearTab.find('.T-clearList tr');
                     laypage({
@@ -275,13 +284,15 @@ define(function(require, exports) {
                             if (!first) { 
                                 var tempJson = FinancialService.clearSaveJson(restaurant.$clearTab,restaurant.clearTempData,rule);
                                 restaurant.clearTempData = tempJson;
-                                var sumPayMoney = parseInt(restaurant.$clearTab.find('input[name=sumPayMoney]').val());
-                                    sumPayType = parseInt(restaurant.$clearTab.find('select[name=sumPayType]').val());
+                                var sumPayMoney = parseInt(restaurant.$clearTab.find('input[name=sumPayMoney]').val()),
+                                    sumPayType = parseInt(restaurant.$clearTab.find('select[name=sumPayType]').val()),
+                                    sumPayRemark = restaurant.$clearTab.find('input[name=sumPayRemark]').val();
                                 restaurant.clearTempSumDate = {
                                     sumPayMoney : sumPayMoney,
-                                    sumPayType : sumPayType
+                                    sumPayType : sumPayType,
+                                    sumPayRemark : sumPayRemark
                                 }
-                                restaurant.restaurantClear(obj.curr -1,restaurantId,restaurantName);
+                                restaurant.restaurantClear(isAutoPay,obj.curr -1,restaurantId,restaurantName);
                             }
                         }
                     });
@@ -300,7 +311,9 @@ define(function(require, exports) {
 
         //搜索事件
         restaurant.$clearTab.find(".T-search").click(function(){
-            restaurant.restaurantClear(0,id,name);
+            restaurant.clearTempSumDate = false;
+            restaurant.clearTempData = false;
+            restaurant.restaurantClear(0,0,id,name);
         });
 
         //关闭页面事件
@@ -318,32 +331,56 @@ define(function(require, exports) {
 
         //自动下账
         restaurant.$clearTab.find(".T-clear-auto").off().on("click",function(){
-            var autoPayJson = FinancialService.autoPayJson(id,restaurant.$clearTab,rule);
-            if(!autoPayJson){return false;}
+            var isAutoPay = FinancialService.autoPayJson(id,restaurant.$clearTab,rule);
+            if(!isAutoPay){return false;}
 
             var startDate = restaurant.$clearTab.find("input[name=startDate]").val(),
-                endDate = restaurant.$clearTab.find("input[name=endDate]").val();
+                endDate = restaurant.$clearTab.find("input[name=endDate]").val(),
+                sumPayMoney = parseInt(restaurant.$clearTab.find('input[name=sumPayMoney]').val()),
+                sumPayType = parseInt(restaurant.$clearTab.find('select[name=sumPayType]').val()),
+                sumPayRemark = restaurant.$clearTab.find('input[name=sumPayRemark]').val();
+            var searchParam = {
+                restaurantId : id,//字段id需与后台协调
+                sumCurrentPayMoney : sumPayMoney,
+                payType : sumPayType,
+                payRemark : sumPayRemark,
+                startDate : startDate,
+                endDate : endDate,
+                isAutoPay : 1
+            };
+            searchParam = JSON.stringify(searchParam);
             showConfirmMsg($("#confirm-dialog-message"),"是否按当前账期 " + startDate + " 至 " + endDate + " 下账？",function(){
                 $.ajax({
-                    url:KingServices.build_url("account/arrangeRestaurantFinancial","autoPayment"),
+                    url:KingServices.build_url("account/arrangeRestaurantFinancial","listRestaurantAccount"),
                     type:"POST",
-                    data:{ searchParam : autoPayJson },
+                    data:{ searchParam : searchParam },
                     success:function(data){
                         var result = showDialog(data);
                         if(result){
                             showMessageDialog($("#confirm-dialog-message"),"自动下账成功！",function(){
+                                restaurant.$clearTab.find(".T-clear-auto").toggle();
+                                restaurant.$clearTab.find(".T-cancel-auto").toggle();
                                 restaurant.$clearTab.data('isEdited',false);
                                 restaurant.clearTempData = data.autoPaymentJson;
                                 restaurant.clearTempSumDate = {
                                     sumPayMoney : restaurant.$clearTab.find('input[name=sumPayMoney]').val(),
-                                    sumPayType : restaurant.$clearTab.find('select[name=sumPayType]').val()
+                                    sumPayType : restaurant.$clearTab.find('select[name=sumPayType]').val(),
+                                    sumPayRemark : restaurant.$clearTab.find('input[name=sumPayRemark]').val()
                                 };
-                                restaurant.restaurantClear(0,id,name);
+                                restaurant.restaurantClear(1,0,id,name);
                             });
                         }
                     }
                 });
             });
+        });
+
+        restaurant.$clearTab.find(".T-cancel-auto").off().on("click",function(){
+            restaurant.$clearTab.find(".T-cancel-auto").toggle();
+            restaurant.$clearTab.find(".T-clear-auto").toggle();
+            restaurant.clearTempSumDate = false;
+            restaurant.clearTempData = false;
+            restaurant.restaurantClear(0,0,id,name);
         });
 
         FinancialService.updateSumPayMoney(restaurant.$clearTab,rule);
@@ -513,7 +550,7 @@ define(function(require, exports) {
                             restaurant.listRestaurant(restaurant.searchData.pageNo,restaurant.searchData.restaurantName,restaurant.searchData.restaurantId,restaurant.searchData.startDate,restaurant.searchData.endDate);
                         }else if(argumentsLen === 3){
                             restaurant.$clearTab.data('isEdited',false);
-                            restaurant.restaurantClear(page,id,name);
+                            restaurant.restaurantClear(0,page,id,name);
                         } else {
                             restaurant.$clearTab.data('isEdited',false);
                             Tools.addTab(tab_id, title, html);

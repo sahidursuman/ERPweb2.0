@@ -107,7 +107,7 @@ define(function(require, exports) {
                 busCompany.busCompanyCheck(0,id,name,"",startDate,endDate);
             } else if ($that.hasClass('T-clear')) {
                 // 结算
-                busCompany.busCompanyClear(0,id,name,"",startDate,endDate);
+                busCompany.busCompanyClear(0,0,id,name,"",startDate,endDate);
             }
         });
     };
@@ -219,8 +219,8 @@ define(function(require, exports) {
     };
 
     //结算
-    busCompany.busCompanyClear = function(page,busCompanyId,busCompanyName,accountInfo,startDate,endDate){
-        if (busCompany.$clearSearchArea && arguments.length === 3) {
+    busCompany.busCompanyClear = function(isAutoPay,page,busCompanyId,busCompanyName,accountInfo,startDate,endDate){
+        if (busCompany.$clearSearchArea && arguments.length === 4) {
             accountInfo = busCompany.$clearSearchArea.find("input[name=accountInfo]").val(),
             startDate = busCompany.$clearSearchArea.find("input[name=startDate]").val(),
             endDate = busCompany.$clearSearchArea.find("input[name=endDate]").val()
@@ -267,6 +267,13 @@ define(function(require, exports) {
                         validator = rule.check(busCompany.$clearTab.find('.T-clearList'));                       
                     }
 
+                    if(isAutoPay == 1){
+                        busCompany.$clearTab.find('input[name=sumPayMoney]').prop("disabled",true);
+                        busCompany.$clearTab.find(".T-clear-auto").hide(); 
+                    } else {
+                        busCompany.$clearTab.find(".T-cancel-auto").hide();
+                    }
+
                     //绑定翻页组件
                     var $tr = busCompany.$clearTab.find('.T-clearList tr');
                     laypage({
@@ -283,7 +290,7 @@ define(function(require, exports) {
                                     sumPayMoney : sumPayMoney,
                                     sumPayType : sumPayType
                                 }
-                                busCompany.busCompanyClear(obj.curr -1,busCompanyId,busCompanyName);
+                                busCompany.busCompanyClear(isAutoPay,obj.curr -1,busCompanyId,busCompanyName);
                             }
                         }
                     });
@@ -302,7 +309,9 @@ define(function(require, exports) {
 
         //搜索事件
         busCompany.$clearTab.find(".T-search").click(function(){
-            busCompany.busCompanyClear(0,id,name);
+            busCompany.clearTempSumDate = false;
+            busCompany.clearTempData = false;
+            busCompany.busCompanyClear(0,0,id,name);
         });
 
         //关闭页面事件
@@ -335,18 +344,28 @@ define(function(require, exports) {
                         var result = showDialog(data);
                         if(result){
                             showMessageDialog($("#confirm-dialog-message"),"自动下账成功！",function(){
+                                busCompany.$clearTab.find(".T-clear-auto").toggle();
+                                busCompany.$clearTab.find(".T-cancel-auto").toggle();
                                 busCompany.$clearTab.data('isEdited',false);
                                 busCompany.clearTempData = data.autoPaymentJson;
                                 busCompany.clearTempSumDate = {
                                     sumPayMoney : busCompany.$clearTab.find('input[name=sumPayMoney]').val(),
                                     sumPayType : busCompany.$clearTab.find('select[name=sumPayType]').val()
                                 };
-                                busCompany.busCompanyClear(page,id,name);
+                                busCompany.busCompanyClear(1,page,id,name);
                             });
                         }
                     }
                 });
             });
+        });
+
+        busCompany.$clearTab.find(".T-cancel-auto").off().on("click",function(){
+            busCompany.$clearTab.find(".T-cancel-auto").toggle();
+            busCompany.$clearTab.find(".T-clear-auto").toggle();
+            busCompany.clearTempSumDate = false;
+            busCompany.clearTempData = false;
+            busCompany.busCompanyClear(0,0,id,name);
         });
         FinancialService.updateSumPayMoney(busCompany.$clearTab,rule);
     };
@@ -408,7 +427,7 @@ define(function(require, exports) {
                             busCompany.listBusCompany(busCompany.searchData.pageNo,busCompany.searchData.busCompanyName,busCompany.searchData.busCompanyId,busCompany.searchData.startDate,busCompany.searchData.endDate);
                         }else if(argumentsLen === 3){
                             busCompany.$clearTab.data('isEdited',false);
-                            busCompany.busCompanyClear(page,id,name);
+                            busCompany.busCompanyClear(0,page,id,name);
                         } else {
                             busCompany.$clearTab.data('isEdited',false);
                             Tools.addTab(tab_id, title, html);

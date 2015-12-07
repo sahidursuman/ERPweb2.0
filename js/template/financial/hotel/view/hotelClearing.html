@@ -48,9 +48,14 @@
                     <option value="3" {{if sumPayType == 3}}selected="selected"{{/if}}>支票</option>
                     <option value="4" {{if sumPayType == 4}}selected="selected"{{/if}}>其他</option>
                 </select>
+                <label class="control-label pull-left marginLeft-30">备注：</label>
+                <input class="col-xs-1 pull-left" name="sumPayRemark" type="text" value="{{sumPayRemark}}" style="float:none;" />
 
                 <button class="btn-height btn-sm btn-height T-clear-auto search-btn" style="margin-left: 20px">
                     自动下账
+                </button>
+                <button class="btn-height btn-sm btn-height T-cancel-auto search-btn" style="margin-left: 20px">
+                    取消下账
                 </button>
             </div>
         </form>
@@ -70,7 +75,6 @@
                 <th class="th-border">结算金额</th>
                 <th class="th-border">未付金额</th>
                 <th class="th-border"><span class="necessary">*</span>本次付款金额</th>
-                <th class="th-border">付款方式</th>
                 <th class="th-border" style="width: 100px">备注</th>
                 <th class="th-border">对账时间</th>
                 <th class="th-border">对账人</th>
@@ -93,15 +97,6 @@
                 <td>{{rs.settlementMoney}}</td>  
                 <td>{{rs.unPayedMoney}}</td>
                 <td class="col-sm-1"><input name="payMoney" type="text" value="{{rs.payMoney}}" maxlength="9"></td>
-                <td style="width:120px;">
-                    <select style="text-align:center" name="payType">
-                        <option value="0" {{if rs.payType == 0}}selected="selected"{{/if}}>现金</option>
-                        <option value="1" {{if rs.payType == 1}}selected="selected"{{/if}}>银行转账</option>
-                        <option value="2" {{if rs.payType == 2}}selected="selected"{{/if}}>网上支付</option>
-                        <option value="3" {{if rs.payType == 3}}selected="selected"{{/if}}>支票</option>
-                        <option value="4" {{if rs.payType == 4}}selected="selected"{{/if}}>其他</option>
-                    </select>
-                </td>
                 <td class="col-sm-1" ><input name="payRemark" type="text" value="{{rs.payRemark}}" maxlength="1000"></td>
                 <td>{{if rs.checkTime == null || rs.checkTime == ""}}-{{else}}{{rs.checkTime | dateFormat:'yyyy-MM-dd hh:mm:ss'}}{{/if}}</td>
                 <td>{{if rs.checkUserName == null || rs.checkUserName == ""}}-{{else}}{{rs.checkUserName}}{{/if}}</td>
