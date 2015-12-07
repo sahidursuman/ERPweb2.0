@@ -90,14 +90,16 @@ define(function(require, exports) {
         };
 
     // 对账
-    OtherAccounts.AccountsChecking = function(pageNo, name, startAccountTime, endAccountTime) {
+    OtherAccounts.AccountsChecking = function(pageNo, id, name, startAccountTime, endAccountTime) {
             name = OtherAccounts.$searchArea.find("select[name=otherId]").val();
+            id = $(".T-list").attr('data-id');
             startAccountTime = OtherAccounts.$searchArea.find("input[name=startTime]").val();
             endAccountTime = OtherAccounts.$searchArea.find("input[name=endTime]").val();
 
             //重置搜索条件
             OtherAccounts.CheckingData = {
                 pageNo: pageNo,
+                id: id,
                 name: name,
                 startAccountTime: startAccountTime,
                 endAccountTime: endAccountTime,
@@ -117,7 +119,7 @@ define(function(require, exports) {
                             type: "POST",
                             data: OtherAccounts.CheckingData,
                             success: function(data) {
-                                console.log(dataTable);
+                                // console.log(dataTable);
                                 dataTable.statistics = data.statistics;
                                 var result = showDialog(data);
                                 if (result) {
@@ -147,8 +149,9 @@ define(function(require, exports) {
                                         closeTab(checkTabId);
                                     });
                                     //对账保存
-                                    $container.find(".T-confirm").click(function() {
-                                        OtherAccounts.CheckConfirm(id,newRemark,newUnPayedMoney,isConfirmAccount)
+                                    $container.find(".T-confirm").click(function(id, settlementMoney, checkRemark, isConfirmAccount) {
+
+                                        OtherAccounts.CheckConfirm(id)
                                     });
                                     //给全选按钮绑定事件
                                     $container.find('.T-selectAll').click(function(event) {
@@ -177,65 +180,66 @@ define(function(require, exports) {
 
         },
         // 保存对账 主键 结算金额  对账备注 对账状态[0(未对账)、1(已对账)]
-        OtherAccounts.CheckConfirm = function(id, settlementMoney, checkRemark, isConfirmAccount) {
+        OtherAccounts.CheckConfirm = function(id) {
             var $checkTabId = $("#tab-" + checkTabId + "-content");
-            var $checkboxList = $checkTabId.find(".T-checkListNum tr");
+            var $tr = $checkTabId.find(".T-checkListNum tr");
             var JsonStr = [];
-            $checkboxList.each(function() {
+            $tr.each(function(i) {
+                //取值用于是否修改对账判断
+                var oldRemark = $(this).attr("data-entity-remark"); //得到对账结算金额旧的值
+                var oldUnPayedMoney = $(this).attr("data-entity-checkRemark"); //得到对账备注旧的值
+                var newUnPayedMoney = $tr.eq(i).find("input[name=ClearMoney]").val(); //得到对账结算金额被修改之后值
+                var newRemark = $tr.eq(i).find("input[name=checkRemark]").val(); //得到对账备注金额被修改之后值
                 var flag = $(this).find(".T-insuanceFinancial").is(":checked");
                 if (flag) {
                     if ($(this).attr("data-entity-isConfirmAccount") == 1) {
                         //取值用于是否修改对账判断
-                        id = $(".T-checkListNum").attr('data-id');
-                        oldRemark = $(this).attr("data-entity-remark"); //得到对账结算金额旧的值
-                        oldUnPayedMoney = $(this).attr("data-entity-checkRemark"); //得到对账备注旧的值
-                        newRemark = $tr.eq(i).find("input[name=ClearMoney]").val(); //得到对账结算金额被修改之后值
-                        newUnPayedMoney = $tr.eq(i).find("input[name=checkRemark]").val(); //得到对账备注被修改后的值
                         // 判断是否修改对账
                         if (oldUnPayedMoney != newUnPayedMoney || oldRemark != newRemark) {
                             OtherAccounts.CheckConfirmData = {
                                 id: id,
-                                settlementMoney: newRemark,
-                                checkRemark: checkRemark,
-                                isConfirmAccount: isConfirmAccount,
+                                settlementMoney: newUnPayedMoney,
+                                checkRemark: newRemark,
+                                isConfirmAccount: 1,
                                 sortType: 'auto'
                             }
-                            JsonStr.push(checkData)
+                            JsonStr.push(OtherAccounts.CheckConfirmData)
                         }
 
                     } else {
                         OtherAccounts.CheckConfirmData = {
                             id: id,
-                            settlementMoney: newRemark,
-                            checkRemark: checkRemark,
-                            isConfirmAccount: isConfirmAccount,
+                            settlementMoney: newUnPayedMoney,
+                            checkRemark: newRemark,
+                            isConfirmAccount: 1,
                             sortType: 'auto'
                         }
-                        JsonStr.push(checkData)
+                        JsonStr.push(OtherAccounts.CheckConfirmData)
                     }
                 } else {
                     if ($(this).attr("data-entity-isConfirmAccount") == 1) {
-                        //取值用于是否修改对账判断
-                        oldRemark = $(this).attr("data-entity-remark"); //得到对账结算金额旧的值
-                        oldUnPayedMoney = $(this).attr("data-entity-checkRemark"); //得到对账备注旧的值
-                        newRemark = $tr.eq(i).find("input[name=ClearMoney]").val(); //得到对账结算金额被修改之后值
-                        newUnPayedMoney = $tr.eq(i).find("input[name=checkRemark]").val(); //得到对账备注被修改后的值
+                        OtherAccounts.CheckConfirmData = {
+                            id: id,
+                            settlementMoney: newUnPayedMoney,
+                            checkRemark: newRemark,
+                            isConfirmAccount: 0,
+                            sortType: 'auto'
+                        }
+                        JsonStr.push(OtherAccounts.CheckConfirmData)
                     }
 
                 }
 
             });
-            console.log(checkboxList);
-            settlementMoney = $checkTabId.find("input[name=ClearMoney]").val();
-            checkRemark = $checkTabId.find("input[name=checkRemark]").val();
-            console.log(settlementMoney, checkRemark, "保存对账");
-
+            // 对账保存接口
             $.ajax({
                 url: KingServices.build_url("account/arrangeOtherFinancial", "saveReconciliation"),
                 type: "POST",
-                data:OtherAccounts.CheckConfirmData,
+                data:{
+                    reconciliation:JsonStr
+                },
                 success: function(data) {
-                    // console.log(data);
+                    console.log(data);
                 }
             })
         }
@@ -315,6 +319,17 @@ define(function(require, exports) {
 
     // // 查看已付金额a-1
     OtherAccounts.lookDetail = function() {
+            // 对账页面
+            $.ajax({
+                url: KingServices.build_url("account/arrangeOtherFinancial", "saveReconciliation"),
+                type: "POST",
+                data:{
+                    reconciliation:JsonStr
+                },
+                success: function(data) {
+                    console.log(data);
+                }
+            })
             var html = lookDetailTemplate();
             var lookDetailLayer = layer.open({
                 type: 1,

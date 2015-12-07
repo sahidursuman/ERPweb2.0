@@ -66,7 +66,7 @@
         </thead>
         <tbody class="T-checkListNum" >
          {{each financialOtherDetailsList as Checking index}}
-            <tr data-id = "{{Checking.id}}" data-entity-isConfirmAccount="{{checking.isConfirmAccount}}"  data-entity-checkRemark="{{checking.checkRemark}}"  data-entity-settlementMoney="{{checking.settlementMoney}}">
+            <tr data-id = "{{Checking.id}}" data-entity-isConfirmAccount="{{Checking.isConfirmAccount}}"  data-entity-checkRemark="{{Checking.checkRemark}}"  data-entity-settlementMoney="{{Checking.settlementMoney}}">
                 <td>{{index+1}}</td>
                 <td>{{Checking.info}}</td>
                 <td name="startTime">{{Checking.accountTime}}</td>

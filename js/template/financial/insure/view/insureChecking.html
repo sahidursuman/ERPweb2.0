@@ -7,13 +7,13 @@
                     <label class="control-label col-sm-1" style="float:left;">账期:</label>
                     <select class="col-sm-1" name="year" style="margin-left:20px">
                         {{each yearList as year index}}
-                        <option value="{{year.value}}" {{if searchParam.year==y ear.value}}selected="selected" {{/if}}>{{year.value}}</option>
+                        <option value="{{year.value}}" {{if searchParam.year==year.value}}selected="selected" {{/if}}>{{year.value}}</option>
                         {{/each}}
                     </select>
                     <select class="col-sm-1" name="month" style="margin-left:5px">
                         <option value="">全部</option>
                         {{each monthList as month index}}
-                        <option value="{{month.value}}" {{if searchParam.month==m onth.value}}selected="selected" {{/if}}>{{month.value}}月</option>
+                        <option value="{{month.value}}" {{if searchParam.month==month.value}}selected="selected" {{/if}}>{{month.value}}月</option>
                         {{/each}}
                     </select>
                     <button class=" btn-sm  btn-checking-search search-btn marginLeft-30">
@@ -60,7 +60,8 @@
             </tr>
         </thead>
         <tbody class="T-checkListNum" data-right="1270005">
-            {{each financialInsuranceList as checking index}} {{if checking != null}}
+            {{each financialInsuranceList as checking index}} 
+            {{if checking != null}}
             <tr data-entity-id="{{checking.id}}" data-entity-isConfirmAccount="{{checking.isConfirmAccount}}" data-entity-realUnPayedMoney="{{checking.realUnPayedMoney}}" data-entity-remark="{{checking.remark}}">
                 <td>{{index+1}}</td>
                 <td>{{checking.tripNumber}}{{","}}{{checking.lineProductName}}{{","}}{{checking.guideName}}</td>
@@ -90,7 +91,8 @@
                     </label>
                 </td>
             </tr>
-            {{/if}} {{/each}}
+            {{/if}}
+             {{/each}}
         </tbody>
     </table>
     <div class="form-group text-right">
