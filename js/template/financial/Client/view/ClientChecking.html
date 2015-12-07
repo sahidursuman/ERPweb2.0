@@ -52,7 +52,7 @@
     </div>
 </div>
 <div class="row" style="margin-top: 30px">
-    <table class="table table-striped table-bordered table-hover T-showHighLight">
+    <table class="table table-striped table-bordered table-hover">
         <thead>
             <tr>
                 <th style="min-width: 45px;">序号</th>
@@ -90,10 +90,10 @@
                 <td class="T-contractMoney">{{rs.contractMoney}}</td>
                 <td>{{rs.detail}}</td>
                 <td><a class="cursor T-action T-receive">社收{{rs.travleReciveMoney}}，导游现收{{rs.guideReciveMoney}}</a></td>
-                <td><input type="text" class="col-sm-12 T-refund"></td>
+                <td><input type="text" class="col-sm-12 T-refund money" value="{{rs.backMoney}}"></td>
                 <td class="T-settlementMoney">{{rs.settlementMoney}}</td>
                 <td class="T-unReceivedMoney">{{rs.unReceivedMoney}}</td>
-                <td><input type="text" class="col-sm-12 T-remark"></td>
+                <td><input type="text" class="col-sm-12 T-remark" value="{{rs.checkRemark}}"></td>
                 <td>{{rs.checkTime}}</td>
                 <td>{{rs.checkUserName}}</td>
                 <td>
