@@ -205,7 +205,7 @@
 						}
 						break;
 					case 'positive-float':	// 正浮点型
-						if (!!data && !/^(\d*\.)?\d+$/.test( data )) {
+						if (!!data && (isNaN( data ) || data <= 0)) {
 							res = rules[i].errMsg;
 						}
 						break;

@@ -81,6 +81,9 @@ FinancialService.updateSumPayMoney = function($tab,rule){
     .on("change", 'input[name="payMoney"]', function(){
         var $this = $(this), $tr = $this.closest('tr').data('change', true),
             validator = rule.check($tr);
+
+        if (!validator.form())  return;
+
         var sumPayMoney = $sumPayMoney.val() || 0,
             newVal = $this.val() || 0,
             oldVal = $(this).data("oldVal") || 0;
@@ -96,7 +99,7 @@ FinancialService.updateSumPayMoney = function($tab,rule){
 
 //付款-翻页暂存数据读取
 FinancialService.getTempDate = function(resultList,tempJson){
-    if(tempJson){
+    if(!!tempJson && tempJson.length){
         for(var i = 0; i < tempJson.length; i++){
             var tempId = tempJson[i].id;
             for(var i = 0; i < resultList.length; i++){
@@ -129,7 +132,6 @@ FinancialService.clearSaveJson = function($tab,clearSaveJson,rule){
             for(i = 0; i < len; i++){
                 if(clearSaveJson[i].id == id){
                     clearSaveJson[i].payMoney = $this.find("input[name=payMoney]").val();
-                    clearSaveJson[i].payType = $this.find("select[name=payType]").val();
                     clearSaveJson[i].payRemark = $this.find("input[name=payRemark]").val();
                     return;
                 }
@@ -139,13 +141,13 @@ FinancialService.clearSaveJson = function($tab,clearSaveJson,rule){
                 var clearTemp = {
                     id : $this.data("id"),
                     payMoney : $this.find("input[name=payMoney]").val(),
-                    payType : $this.find("select[name=payType]").val(),
                     payRemark : $this.find("input[name=payRemark]").val()
                 };
                 clearSaveJson.push(clearTemp);
             }
         }
     });
+
     return clearSaveJson;
 };
 
