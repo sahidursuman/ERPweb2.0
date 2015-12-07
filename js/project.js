@@ -621,6 +621,7 @@ var modalScripts = {
 	'business_analyst_employeePerfor' : "js/template/businessAnalyst/employeePerfor/employeePerfor.js", //员工业绩 
 	'business_analyst_tourguidePerfor' : "js/template/businessAnalyst/tourguidePerfor/tourguidePerfor.js", //导游业绩
 	//-------------------------------------------财务管理模块--------------------------------------------------------------------
+	'financial_count': "js/template/financial/count/count.js",//报账审核
 	'financial_innerTransfer_profit': "js/template/financial/innerTransferProfit/innerTransferProfit.js",
 	'financial_turnProfit': "js/template/financial/turnProfit/turnProfit.js",
 	'financial_totalProfit': "js/template/financial/totalProfit/totalProfit.js",

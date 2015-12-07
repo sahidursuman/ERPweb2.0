@@ -79,15 +79,19 @@ FinancialService.updateSumPayMoney = function($tab,rule){
         $(this).data("oldVal",$(this).val());
     })
     .on("change", 'input[name="payMoney"]', function(){
-        var $this = $(this),validator = rule.check($this.closest('tr'));
-        var sumPayMoney = $sumPayMoney.val(),
-            newVal = $this.val(),
-            oldVal = $(this).data("oldVal");
+        var $this = $(this), $tr = $this.closest('tr').data('change', true),
+            validator = rule.check($tr);
+
+        if (!validator.form())  return;
+
+        var sumPayMoney = $sumPayMoney.val() || 0,
+            newVal = $this.val() || 0,
+            oldVal = $(this).data("oldVal") || 0;
         if(isNaN(sumPayMoney)){ sumPayMoney = 0; }
         if(isNaN(newVal)){ newVal = 0; }
         if(isNaN(oldVal)){ oldVal = 0; }
         sumPayMoney = parseInt(sumPayMoney);
-        $sumPayMoney.val(sumPayMoney + parseInt(newVal-oldVal));
+        $sumPayMoney.val(sumPayMoney + parseFloat(newVal-oldVal));
 
         if(!validator.form()){ return false; }
     });
@@ -95,7 +99,7 @@ FinancialService.updateSumPayMoney = function($tab,rule){
 
 //付款-翻页暂存数据读取
 FinancialService.getTempDate = function(resultList,tempJson){
-    if(tempJson){
+    if(!!tempJson && tempJson.length){
         for(var i = 0; i < tempJson.length; i++){
             var tempId = tempJson[i].id;
             for(var j = 0; j < resultList.length; j++){
@@ -119,11 +123,10 @@ FinancialService.clearSaveJson = function($tab,clearSaveJson,rule){
             var validator = rule.check($this);
             if(!validator.form()){ return false; }
 
-            var id = $this.data("id"),i = 0,len = clearSaveJson.length;
-            if(!clearSaveJson){
-               len = 0; 
-               clearSaveJson = [];
-            }
+            clearSaveJson = clearSaveJson || [];
+            var id = $this.data("id"),i = 0,
+                len = clearSaveJson.length;
+
             //已有数据更新
             for(i = 0; i < len; i++){
                 if(clearSaveJson[i].id == id){
@@ -143,6 +146,7 @@ FinancialService.clearSaveJson = function($tab,clearSaveJson,rule){
             }
         }
     });
+
     return clearSaveJson;
 };
 

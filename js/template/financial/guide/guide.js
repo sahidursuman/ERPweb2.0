@@ -258,15 +258,10 @@ define(function(require, exports) {
 		}).trigger('changeDate');
 		$searchArea.find('.T-btn-search').on('click', function(event) {
 			event.preventDefault();
-			FinGuide.initCheckModule(false, false, true);
-		});
+			var $btn = $tab.find('.T-btn-save');
 
-		// 计算
-		if (type) {
-			FinancialService.updateSumPayMoney($tab, rule);
-		} else {
-			FinancialService.updateUnpayMoney($tab, rule);
-		}
+			FinGuide.initOperationModule($btn.data('id'), $btn.data('name'), type, $tab);
+		});
 
 		var validator = rule.check($tab);
 
@@ -288,6 +283,13 @@ define(function(require, exports) {
 			FinGuide.saveCheckingData($tab);
 		});
 
+		// 计算
+		if (type) {
+			FinancialService.updateSumPayMoney($tab, rule);
+		} else {
+			FinancialService.updateUnpayMoney($tab, rule);
+		}
+
 		// 绑定表格内容元素的事件
 		$tab.find('.T-checkList').on('click', '.T-action', function(event) {
 			event.preventDefault();
@@ -302,16 +304,36 @@ define(function(require, exports) {
 				FinGuide.viewFeeDetail($that.data('id'));
 			}
 		});
-		//确认对账按钮事件
+
+		//确认按钮事件
 		$tab.find(".T-btn-save").click(function(){ 
-		    if (!validator.form()) { return; }		    
-		    FinGuide.saveCheckingData($tab);
+		    if (!validator.form()) { return; }
+		    if (type) {
+		    	FinGuide.savePayingData($tab);
+		    } else {
+		    	FinGuide.saveCheckingData($tab);		    	
+		    }
 		 });
 
 		//关闭页面事件
 		$tab.find(".T-btn-close").click(function(){
 		    Tools.closeTab(Tools.getTabKey($tab.prop('id')));
 		});
+
+		// 付款时，自动下账
+		if (type) {
+			$tab.find('.T-btn-autofill').on('click', function(event) {
+				event.preventDefault();
+				if ($(this).hasClass('btn-primary')) {
+					if (validator.form()) {
+						FinGuide.autoFillMoney($tab);					
+					}
+				} else {
+					FinGuide.payingJson = [];
+					FinGuide.setAutoFillEdit($tab, false);
+				}
+			});
+		}
 
 		// 后续业务
 		FinGuide.getOperationList(0, $tab);
@@ -339,7 +361,7 @@ define(function(require, exports) {
 					showMessageDialog($('#confirm-dialog-message'), data.message, function() {
 						if (!!tabArgs)  {
 							Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
-							FinGuide.initOperationEvent();
+							FinGuide.initOperationEvent($tab, 0);
 						} else {
 							Tools.closeTab(checkMenuKey);
 							FinGuide.getList(FinGuide.listPageNo);
@@ -350,6 +372,95 @@ define(function(require, exports) {
 		}
 	}
 
+	/**
+	 * 保存付款
+	 * @param  {object} $tab    对账页面的Jquery对象
+	 * @param  {array} tabArgs 翻页提示所需的切换参数
+	 * @return {[type]}         [description]
+	 */
+	FinGuide.savePayingData = function($tab, tabArgs) {
+		var json = FinancialService.clearSaveJson($tab, FinGuide.payingJson, rule);
+		if (json.length) {
+			$.ajax({
+				url: KingServices.build_url('account/guideFinancial', 'operatePayAccount'),
+				type: 'post',
+				data: {
+					payJson: JSON.stringify(json),
+					guideId: $tab.find('.T-btn-save').data('id'),
+					payType: $tab.find('.T-sumPayType').val(),
+					remark: $tab.find('.T-remark').val()
+				},
+			})
+			.done(function(data) {
+				$tab.data('isEdited', false);
+				FinGuide.payingJson = [];
+				showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+					if (!!tabArgs)  {
+						Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
+						FinGuide.initOperationEvent($tab, 1);
+					} else {
+						Tools.closeTab(payMenuKey);
+						FinGuide.getList(FinGuide.listPageNo);
+					}
+				})
+			});
+		} else {
+			showMessageDialog($('#confirm-dialog-message'), '您当前未进行任何操作！');
+		}
+	};
+
+	/**
+	 * 自动下账业务逻辑
+	 * @param  {[type]} $tab [description]
+	 * @return {[type]}      [description]
+	 */
+	FinGuide.autoFillMoney = function($tab) {
+		if(!!$tab && $tab.length) {
+			var $line = $tab.find('.T-lineProductName'),
+				$autoPayMoney = $tab.find('.T-sumPayMoney');
+
+			var args = {
+				guideId: $tab.find('.T-btn-save').data('id'),
+				startDate: $tab.find('.T-search-start-date').val(),
+				endDate: $tab.find('.T-search-end-date').val(),
+				tripPlanNumber: $tab.find('.T-tripPlanNumber').val(),
+				lineProductId: $line.data('id'),
+				lineProductName: $line.val(),
+				autoPayMoney: $autoPayMoney.val(),
+				payType: $tab.find('.T-sumPayType').val()
+			};
+
+			if (args.lineProductName === '全部') {
+				args.lineProductName = '';
+			}
+
+			$.ajax({
+				url: KingServices.build_url('account/guideFinancial', 'autoPay'),
+				type: 'post',
+				data: args,
+				showLoading: false
+			})
+			.done(function(data) {
+				if (showDialog(data)) {
+					FinGuide.payingJson = data.autoPayList;
+
+					FinGuide.setAutoFillEdit($tab, true);
+				}
+			});
+		}
+	};
+
+	FinGuide.setAutoFillEdit = function($tab, disable) {
+		var $sum = $tab.find('input[name="sumPayMoney"]').prop('disabled', disable);
+		if (!disable) {
+			$sum.val(0);
+		}
+
+		$tab.find('.T-btn-autofill').html(disable?'<i class="ace-icon fa fa-times"></i> 取消下账': '<i class="ace-icon fa fa-check-circle"></i> 自动下账').toggleClass('btn-primary btn-warning');;
+		
+		FinGuide.getOperationList(0, $tab);
+
+	}
 	/**
 	 * 获取对账列表数据
 	 * @param  {int} pageNo 列表页码
@@ -384,6 +495,8 @@ define(function(require, exports) {
 					var html,
 						type = $tab.find('.T-btn-save').data('type');
 					if (!!type) {
+						data.list = FinancialService.getTempDate(data.list, FinGuide.payingJson);
+
 						html = payingTableTemplate(data);
 					} else {
 						html = checkingTableTemplate(data);
