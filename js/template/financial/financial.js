@@ -102,12 +102,11 @@ FinancialService.getTempDate = function(resultList,tempJson){
     if(!!tempJson && tempJson.length){
         for(var i = 0; i < tempJson.length; i++){
             var tempId = tempJson[i].id;
-            for(var i = 0; i < resultList.length; i++){
-                var id = resultList[i].id;
+            for(var j = 0; j < resultList.length; j++){
+                var id = resultList[j].id;
                 if(tempId == id){
-                    resultList[i].payMoney = tempJson[i].payMoney;
-                    resultList[i].payType = tempJson[i].payType;
-                    resultList[i].payRemark = tempJson[i].payRemark;
+                    resultList[j].payMoney = tempJson[i].payMoney;
+                    resultList[j].payRemark = tempJson[i].payRemark;
                 }
             }
         }
@@ -178,7 +177,12 @@ FinancialService.autoPayJson = function(id,$tab,rule){
         endDate = $tab.find("input[name=endDate]").val(),
         sumPayMoney = parseInt($tab.find('input[name=sumPayMoney]').val()),
         sumPayType = parseInt($tab.find('select[name=sumPayType]').val()),
+        sumPayRemark = $tab.find('input[name=sumPayRemark]').val(),
         unpayMoney = parseInt($tab.find('.T-unpayMoney').text());
+    if(startDate > endDate){
+        showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
+        return false;
+    }
     if(sumPayMoney == 0 || sumPayMoney == ""){
         showMessageDialog($("#confirm-dialog-message"),"请输入本次付款金额！");
         return false;
@@ -191,9 +195,10 @@ FinancialService.autoPayJson = function(id,$tab,rule){
         return false;
     }
     var searchParam = {
-        id : id + "",//字段id需与后台协调
+        id : id,//字段id需与后台协调
         sumCurrentPayMoney : sumPayMoney,
         payType : sumPayType,
+        payRemark : sumPayRemark,
         startDate : startDate,
         endDate : endDate
     };
