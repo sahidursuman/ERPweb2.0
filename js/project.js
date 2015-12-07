@@ -1409,6 +1409,25 @@ Tools.addZero2Two = function(num)  {
 }
 
 /**
+ * 删除JSON中空字符串或者未定义的
+ * @param  {[type]} json [description]
+ * @return {[type]}      [description]
+ */
+Tools.delBlankJson = function(json) {
+	if (!!json) {
+		var value;
+		for (var item in json) {
+			value = json[item];
+			
+			if (undefined === value || '' === value) {
+				delete json[item];
+			}
+		}
+	}
+	return json;
+}
+
+/**
  * 用于定义公共请求或者与数据相关的公共组件处理
  * @type {Object}
  */

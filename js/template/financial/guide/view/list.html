@@ -2,13 +2,13 @@
     <form class="form-inline" role="form" onsubmit="return false">
         <div class="form-group">
             <label>导游：</label>
-            <input type="text" class="form-control T-search-head-office" style="width: 220px;" value="{{searchParam.headerAgencyName}}" maxlength="100">
+            <input type="text" class="form-control T-search-name" style="width: 220px;" value="{{guideName}}" maxlength="100">
         </div>
-        <div class="form-group marginLeft-30">
+        <div class="form-group input-daterange marginLeft-30">
             <label>账期：</label>
-            <input type="text" class="form-control date-picker T-search-start-date" value="{{searchParam.startTime}}">
+            <input type="text" class="form-control datepicker T-search-start-date" value="{{startDate}}">
             <label>&nbsp;至&nbsp;</label>
-            <input type="text" class="form-control date-picker T-search-end-date" value="{{searchParam.endTime}}">
+            <input type="text" class="form-control datepicker T-search-end-date" value="{{endDate}}">
         </div>
         <div class="form-group marginLeft-30">
             <button class="btn-sm search-btn T-btn-search">
@@ -37,14 +37,14 @@
                 <td>{{rs.realname}}</td>
                 <td>{{rs.sumZhangmiantuibu}}</td>
                 <td>{{rs.sumSettlementMoney}}</td>
-                <td>{{rs.sumAlreadyPayedMoney}}</td>
+                <td>{{rs.sumPayedMoney}}</td>
                 <td>{{if rs.sumUnPayedMoney != 0}}<span style="color:#FF0000;">{{rs.sumUnPayedMoney}}</span>{{else}}{{rs.sumUnPayedMoney}}{{/if}}</td>
                 <td>{{if rs.checkFCount == rs.sumFCount}}<span style="color:#00CC00;">{{rs.checkFCount}}/{{rs.sumFCount}}</span>{{else}}<span style="color:#FF9900;">{{rs.checkFCount}}/{{rs.sumFCount}}</span>{{/if}}</td>
                 <td>{{if rs.payFCount == rs.sumFCount}}<span style="color:#00CC00;">{{rs.payFCount}}/{{rs.sumFCount}}</span>{{else}}<span style="color:#FF9900;">{{rs.payFCount}}/{{rs.sumFCount}}</span>{{/if}}</td>
                 <td>
-                    <a class="cursor T-action T-checking R-right" data-right="1290002">对账</a>
+                    <a class="cursor T-action T-check R-right" data-right="1290002">对账</a>
                     <label class="cursor R-right" data-right="1290002"> <a class="R-right" data-right="1290003"> |</a></label>
-                    <a class="cursor T-action T-balance R-right" data-right="1290003">收款</a>
+                    <a class="cursor T-action T-pay R-right" data-right="1290003">付款</a>
                 </td>
             </tr>
         {{/each}}
