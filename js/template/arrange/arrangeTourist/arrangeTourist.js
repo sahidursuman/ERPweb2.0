@@ -2064,7 +2064,11 @@ define(function(require, exports) {
          * @return {[type]} [description]
          */
 		arrangeTourist.innerEditFee_Event = function(type) {
-			var $editFeeObj = $("#T-innerEditFeeMain"); 
+			var $editFeeObj = $("#T-innerEditFeeMain"),
+
+			    //精度限制
+			    $price = $editFeeObj.find('.price');
+			    Tools.inputCtrolFloat( $price );
 
 			    $editFeeObj.find(".T-newEditFee").on('click', function(event) {
 			    	//新增内外转编辑费用
@@ -2100,7 +2104,11 @@ define(function(require, exports) {
 		 */
 		arrangeTourist.outEditFee_Event = function(type){
 
-			var $outFeeObj = $("#T-outEditFeeMain"); 
+			var $outFeeObj = $("#T-outEditFeeMain"),
+
+				//精度限制
+			    $price = $outFeeObj.find('.price');
+			    Tools.inputCtrolFloat( $price );
 
 			    $outFeeObj.find(".T-newEditFee").on('click', function(event) {
 			    	//新增内外转编辑费用
@@ -2144,7 +2152,12 @@ define(function(require, exports) {
 			          "<td><input  name=\"count\" type=\"text\" class=\"col-sm-12  no-padding-right count\" /></td>"+
 					  "<td><input  name=\"otherPrice\" type=\"text\" class=\"col-sm-12  no-padding-right price\" /></td>"+
 					  "<td><a class=\"cursor T-delete\">删除</a></td></tr>";
-	    	$tab.find(".T-innerOutEditFeeTbody").append(html);
+		    var $tbody = $tab.find(".T-innerOutEditFeeTbody");
+	    	    $tbody.append(html);
+
+	    	//精度限制
+	    	var  $price = $tbody.find('.price');
+	    	     Tools.inputCtrolFloat( $price );
 
 			// 更新表单验证的事件绑定
 			//rule.update(validator);   
