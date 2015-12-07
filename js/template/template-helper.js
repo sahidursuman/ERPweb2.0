@@ -33,3 +33,28 @@ template.helper("toFixed", function(data) {
 template.helper("stringify", function(data) {
     return JSON.stringify(data);
 });
+template.helper("getCardText", function(idCardType) {
+    switch(idCardType*1) {
+    	case 0: 
+    		return '身份证';
+		case 1:
+			return '护照';
+		default:
+			return '其他';
+    }
+});
+
+template.helper("getTicketText", function(ticketType) {
+    switch(ticketType*1) {
+    	case 1: 
+    		return '机票';
+		case 2:
+			return '汽车票';
+		case 3:
+			return '火车票';
+		case 4:
+			return '轮船票';
+		default:
+			return '其他';
+    }
+});

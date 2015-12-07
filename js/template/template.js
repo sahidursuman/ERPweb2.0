@@ -101,5 +101,16 @@
         return data.toFixed(2);
     }), template.helper("stringify", function(data) {
         return JSON.stringify(data);
+    }), template.helper("getCardText", function(idCardType) {
+        switch (idCardType) {
+          case 0:
+            return "身份证";
+
+          case 1:
+            return "护照";
+
+          default:
+            return "其他";
+        }
     });
 }();
