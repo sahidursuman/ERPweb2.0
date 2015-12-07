@@ -4,18 +4,18 @@
                 <div class="form-horizontal col-sm-12 row form-group">
                     <label class="pull-left text-right ">项目名称:</label>
                     <div class="col-sm-1">
-                        <label>海天大酒店</label>
+                        <label>{{searchParam.name}}</label>
                     </div>
                     <label class="pull-left text-right">账期:</label>
                     <div class="col-sm-1">
                         <div class="input-group col-sm-12">
                             <input class="col-sm-12 datepicker T-time T-subsectionStartTime" name="joinTime" value="" type="text">
                             <span class="input-group-addon"> 
-                  <i class="fa fa-calendar"></i> 
-                  </span>
+                              <i class="fa fa-calendar"></i> 
+                              </span>
                         </div>
                     </div>
-                    <label class="pull-left text-right ">--</label>
+                    <label class="pull-left text-right ">至</label>
                     <div class="col-sm-1">
                         <div class="input-group col-sm-12">
                             <input class="col-sm-12 datepicker T-time T-subsectionStartTime" name="joinTime" value="" type="text">
@@ -27,16 +27,16 @@
                         <input type="hidden" name="creatorId" value="">
                     </div>
                     <div class="col-sm-1">
-                        <button class=" btn-sm T-btn-subsection-search search-btn"> <i class="ace-icon fa fa-search"></i> 搜索 </button>
+                        <button class=" btn-sm T-selectAll search-btn"> <i class="ace-icon fa fa-search"></i> 搜索 </button>
                     </div>
                 </div>
         </form>
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="form-group ">
-                <label class=" control-label pull-left" >账面应付合计：123</label>
-                <label class=" control-label marginLeft-30">已付金额合计：999</label>
-                <label class=" control-label marginLeft-30">结算金额合计：53563</label>
-                <label class=" control-label marginLeft-30">未付金额合计：654764</label>
+                <label class=" control-label pull-left">账面应付合计：{{statistics.sumNeedPayMoney}}</label>
+                <label class=" control-label marginLeft-30">已付金额合计：{{statistics.sumPayedMoney}}</label>
+                <label class=" control-label marginLeft-30">结算金额合计：{{statistics.sumSettlementMoney}}</label>
+                <label class=" control-label marginLeft-30">未付金额合计：{{statistics.sumUnPayedMoney}}</label>
             </div>
         </form>
     </div>
@@ -64,35 +64,37 @@
                 <th class="th-border">对账</th>
             </tr>
         </thead>
-        <tbody class="T-checkListNum" data-right="1270005">
-            <tr>
-                <td></td>
-                <td></td>
-                <td name="startTime"></td>
-                <td>2323</td>
-                <td>2323</td>
-                <td>2323</td>
-                <td>2323</td>
-                <td>2323</td>
-                <td><a class="T-lookDetail">社付：123;导付：500</a></td>
+        <tbody class="T-checkListNum" >
+         {{each financialOtherDetailsList as Checking index}}
+            <tr data-id = "{{Checking.id}}" data-entity-isConfirmAccount="{{checking.isConfirmAccount}}"  data-entity-checkRemark="{{checking.checkRemark}}"  data-entity-settlementMoney="{{checking.settlementMoney}}">
+                <td>{{index+1}}</td>
+                <td>{{Checking.info}}</td>
+                <td name="startTime">{{Checking.accountTime}}</td>
+                <td>{{Checking.adultCount}}{{"大人"}}{{Checking.childCount}}{{"小孩"}}</td>
+                <td>{{Checking.price}}</td>
+                <td>{{Checking.memberCount}}</td>
+                <td>{{Checking.reduceMoney}}</td>
+                <td>{{Checking.needPayMoney}}</td>
+                <td><a class="T-lookDetail">{{"社付："}}{{Checking.agencyPayedMoney}}{{";导付："}}{{Checking.guidePayedMoney}}</a></td>
                 <td><a href="#" class="insuanceImg" url=""><span>查看</span></a></td>
-                <td>21312</td>
                 <td>
-                    <input type="text" name="FinancialinsuanceRealUnPayedMoney" value=""/>
+                    <input type="text" name="ClearMoney" value="{{Checking.settlementMoney}}"/>
                 </td>
                 <td>
-                    <input type="text" name="FinancialinsuanceRemark" value="" />
+                   {{Checking.unPayedMoney}}
                 </td>
-                <td></td>
-                <td></td>
+                <td><input type="text" value="{{Checking.checkRemark}}" name="checkRemark"></td>
+                <td>{{Checking.checkTime}}</td>
+                <td>{{Checking.checkUser }}</td>
                 <td>
                     <label class="pos-rel">
-                        <input type="checkbox" data-entity-checkStatus="" class="ace insuanceFinancial" checked="checked" />
+                        <input type="checkbox" data-entity-checkStatus="{{Checking.isConfirmAccount}}" class="ace T-insuanceFinancial" checked="checked" />
                         <span class="lbl"></span>
                         <a class="T-viewhandle">查看</a>
                     </label>
                 </td>
             </tr>
+            {{/each}}
         </tbody>
     </table>
     <div class="form-group text-right">
@@ -104,7 +106,7 @@
     <div class="clearfix"></div>
     <div class="row pageMode">
         <div class="col-xs-6">
-            <small>共计 45 条记录</small>
+            <small>共计 {{recordSize}} 条记录</small>
         </div>
         <div class="col-xs-6">
             <div class="dataTables_paginate paging_simple_numbers T-pagenation">
@@ -116,7 +118,7 @@
             <button class="btn btn-xs btn-primary T-closeTab">
                 <i class="ace-icon fa fa-times-circle"></i> 关闭
             </button>
-            <button class="btn btn-xs btn-primary btn-insuanceFinancial-checking">
+            <button class="btn btn-xs btn-primary T-confirm">
                 <i class="ace-icon fa fa-check-circle"></i> 确认
             </button>
         </div>
