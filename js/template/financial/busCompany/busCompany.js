@@ -353,12 +353,10 @@ define(function(require, exports) {
 
     //对账数据保存
     busCompany.saveChecking = function(busCompanyId,busCompanyName,page,tab_id,title,html){
-        if(!busCompany.$checkTab.data('isEdited')){
-            showMessageDialog($("#confirm-dialog-message"),"您未进行任何操作！");
-            return false;
-        }
         var argumentsLen = arguments.length,
-            checkSaveJson = FinancialService.checkSaveJson(busCompany.$checkTab);
+            checkSaveJson = FinancialService.checkSaveJson(busCompany.$checkTab,rule);
+        if(!checkSaveJson){ return false; }
+        
         $.ajax({
             url:KingServices.build_url("financial/financialBusCompany","saveAccountChecking"),
             type:"POST",
@@ -403,8 +401,8 @@ define(function(require, exports) {
                 var result = showDialog(data);
                 if(result){
                     showMessageDialog($("#confirm-dialog-message"),data.message,function(){
-                        restaurant.clearTempData = false;
-                        restaurant.clearTempSumDate = false;
+                        busCompany.clearTempData = false;
+                        busCompany.clearTempSumDate = false;
                         if(argumentsLen === 2){
                             Tools.closeTab(menuKey + "-clearing");
                             busCompany.listBusCompany(busCompany.searchData.pageNo,busCompany.searchData.busCompanyName,busCompany.searchData.busCompanyId,busCompany.searchData.startDate,busCompany.searchData.endDate);

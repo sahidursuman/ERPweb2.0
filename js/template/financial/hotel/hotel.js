@@ -16,7 +16,9 @@ define(function(require, exports) {
         $searchArea : false,
         $checkSearchArea: false,
         $clearSearchArea : false,
-        hotelList : false
+        hotelList : false,
+        clearTempData : false,
+        clearTempSumDate : false
   	};
 
   	hotel.initModule = function() {
@@ -245,6 +247,17 @@ define(function(require, exports) {
                 var result = showDialog(data);
                 if(result){
                     data.hotelName = hotelName;
+
+                    //暂存数据读取
+                    if(hotel.clearTempSumDate){
+                        data.sumPayMoney = hotel.clearTempSumDate.sumPayMoney;
+                        data.sumPayType = hotel.clearTempSumDate.sumPayType;
+                    } else {
+                        data.sumPayMoney = 0;
+                        data.sumPayType = 0;
+                    }
+                    var resultList = data.financialHotelListData;
+                    data.financialHotelListData = FinancialService.getTempDate(resultList,hotel.clearTempData);
                     var html = hotelClearing(data);
                     
                     var validator;
@@ -253,6 +266,27 @@ define(function(require, exports) {
                         hotel.initClear(page,hotelId,hotelName); 
                         validator = rule.check(hotel.$clearTab.find('.T-clearList'));                       
                     }
+
+                    //绑定翻页组件
+                    var $tr = hotel.$clearTab.find('.T-clearList tr');
+                    laypage({
+                        cont: hotel.$clearTab.find('.T-pagenation'),
+                        pages: data.searchParam.totalPage,
+                        curr: (page + 1),
+                        jump: function(obj, first) {
+                            if (!first) { 
+                                var tempJson = FinancialService.clearSaveJson(hotel.$clearTab,hotel.clearTempData,rule);
+                                hotel.clearTempData = tempJson;
+                                var sumPayMoney = parseInt(hotel.$clearTab.find('input[name=sumPayMoney]').val());
+                                    sumPayType = parseInt(hotel.$clearTab.find('select[name=sumPayType]').val());
+                                hotel.clearTempSumDate = {
+                                    sumPayMoney : sumPayMoney,
+                                    sumPayType : sumPayType
+                                }
+                                hotel.hotelClear(obj.curr-1,hotelId,hotelName);
+                            }
+                        }
+                    });
                 }
             }
         });
@@ -281,7 +315,7 @@ define(function(require, exports) {
         //保存结算事件
         hotel.$clearTab.find(".T-saveClear").click(function(){
             if (!rule.check(hotel.$clearTab).form()) { return; }
-            hotel.saveClear($(this),id);
+            hotel.saveClear(id,name,page);
         });
 
         //自动下账
@@ -374,7 +408,7 @@ define(function(require, exports) {
     //已付金额明细
     hotel.payedDetail = function(id){
         $.ajax({
-            url:KingServices.build_url("financial/financialRestaurant","listFcRestaurantSettlementRecord"),
+            url:KingServices.build_url("financial/financialHotel","listFcRestaurantSettlementRecord"),
             type:"POST",
             data:{
                 hotelId : id + ""
@@ -400,7 +434,7 @@ define(function(require, exports) {
     //应付金额明细
     hotel.needPayDetail = function(id){
         $.ajax({
-            url:KingServices.build_url("financial/financialRestaurant","listFcRestaurantSettlementRecord"),
+            url:KingServices.build_url("financial/financialHotel","listFcRestaurantSettlementRecord"),
             type:"POST",
             data:{
                 hotelId : id + ""
@@ -425,12 +459,10 @@ define(function(require, exports) {
 
     //对账数据保存
     hotel.saveChecking = function(hotelId,hotelName,page,tab_id, title, html){
-        if(!hotel.$checkTab.data('isEdited')){
-            showMessageDialog($("#confirm-dialog-message"),"您未进行任何操作！");
-            return false;
-        }
         var argumentsLen = arguments.length,
-            checkSaveJson = FinancialService.checkSaveJson(hotel.$checkTab);
+            checkSaveJson = FinancialService.checkSaveJson(hotel.$checkTab,rule);
+        if(!checkSaveJson){ return false; }
+
         $.ajax({
             url:KingServices.build_url("financial/financialHotel","saveAccountChecking"),
             type:"POST",
@@ -441,7 +473,7 @@ define(function(require, exports) {
                     showMessageDialog($("#confirm-dialog-message"),data.message,function(){
                         if(argumentsLen == 2){
                             Tools.closeTab(menuKey + "-checking");
-                            hotel.listhotel(hotel.searchData.pageNo,hotel.searchData.hotelName,hotel.searchData.hotelId,hotel.searchData.startTime,hotel.searchData.endTime);
+                            hotel.listhotel(hotel.searchData.pageNo,hotel.searchData.hotelName,hotel.searchData.hotelId,hotel.searchData.startDate,hotel.searchData.endDate);
                         } else if(argumentsLen == 3){
                             hotel.$checkTab.data('isEdited',false);
                             hotel.hotelCheck(page,hotelId,hotelName);
@@ -457,24 +489,13 @@ define(function(require, exports) {
     };
 
     hotel.saveClear = function(id,name,page,tab_id, title, html){
-        if(!hotel.$clearTab.data('isEdited')){
-            showMessageDialog($("#confirm-dialog-message"),"您未进行任何操作！");
+        if(!FinancialService.isClearSave(hotel.$clearTab,rule)){
             return false;
         }
-        var $tr,argumentsLen = arguments.length;
-        $tr = $cleartab.find(".T-clearList tr");
 
-        var clearSaveJson = [];
-        $tr.each(function(i){
-            //获取数据
-            var clearJson = {
-                id : $(this).data("id"),
-				payMoney : $(this).find("input[name=payMoney]").val(),
-				payType : $(this).find("select[name=payType]").val(),
-				payRemark : $(this).find("input[name=payRemark]").val()
-            };
-            clearSaveJson.push(clearJson);
-        });
+        var argumentsLen = arguments.length,
+            clearSaveJson = FinancialService.clearSaveJson(hotel.$clearTab,hotel.clearTempData,rule);
+
         clearSaveJson = JSON.stringify(clearSaveJson);
         $.ajax({
             url:KingServices.build_url("financial/financialHotel","saveFcHotelSettlement"),
@@ -486,9 +507,11 @@ define(function(require, exports) {
                 var result = showDialog(data);
                 if(result){
                     showMessageDialog($("#confirm-dialog-message"),data.message,function(){
+                        hotel.clearTempData = false;
+                        hotel.clearTempSumDate = false;
                         if(argumentsLen === 2){
                             Tools.closeTab(menuKey + "-clearing");
-                            hotel.listhotel(hotel.searchData.pageNo,hotel.searchData.hotelName,hotel.searchData.hotelId,hotel.searchData.startTime,hotel.searchData.endTime);
+                            hotel.listhotel(hotel.searchData.pageNo,hotel.searchData.hotelName,hotel.searchData.hotelId,hotel.searchData.startDate,hotel.searchData.endDate);
                         }else if(argumentsLen === 3){
                             hotel.$clearTab.data('isEdited',false);
                             hotel.hotelClear(page,id,name);
@@ -503,7 +526,7 @@ define(function(require, exports) {
         });
     };
 
-    hotel.init_check_event = function(page,id,name) {
+    hotel.init_event = function(page,id,name,$tab,option) {
         if (!!hotel.$checkTab && hotel.$checkTab.length === 1) {
             var validator = rule.check(hotel.$checkTab);
 
@@ -515,43 +538,29 @@ define(function(require, exports) {
             });
             hotel.$checkTab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
 				event.preventDefault();
-				hotel.initCheck(page,id,name);
+                if(option == "check"){
+                    hotel.initCheck(page,id,name);
+                } else if(option == "clear"){
+                    hotel.initClear(page,id,name);
+                }
 			})
             // 监听保存，并切换tab
             .on('switch.tab.save', function(event,tab_id,title,html) {
                 event.preventDefault();
-                hotel.saveChecking(id,name,0,tab_id,title,html);
+                if(option == "check"){
+                    hotel.saveChecking(id,name,0,tab_id,title,html);
+                } else if(option == "clear"){
+                    hotel.saveClear(id,name,0,tab_id,title,html);
+                }
             })
             // 保存后关闭
             .on('close.tab.save', function(event) {
                 event.preventDefault();
-                hotel.saveChecking(id,name);
-            });
-        }
-    };
-
-    hotel.init_clear_event = function(page,id,name) {
-        if (!!hotel.$clearTab && hotel.$clearTab.length === 1) {
-            var validator = rule.check(hotel.$clearTab);
-
-           hotel.$clearTab.find(".T-clearList").off('change').off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE)
-            .on('change', function(event) {
-                event.preventDefault();
-                hotel.$clearTab.data('isEdited', true);
-            });
-            hotel.$clearTab.off('change').off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
-                event.preventDefault();
-                hotel.initClear(id);
-            })
-            // 监听保存，并切换tab
-            .on('switch.tab.save', function(event,tab_id, title,html) {
-                event.preventDefault();
-                hotel.saveClear(id,name,0,tab_id,title,html);
-            })
-            // 保存后关闭
-            .on('close.tab.save', function(event) {
-                event.preventDefault();
-                hotel.saveClear();
+                if(option == "check"){
+                    hotel.saveChecking(id,name);
+                } else if(option == "clear"){
+                    hotel.saveClear(id,name);
+                }
             });
         }
     };
@@ -594,7 +603,7 @@ define(function(require, exports) {
             event.preventDefault();
             var $that = $(this),
                 id = $that.closest('tr').data('id');
-            if ($that.hasClass('T-restaurantImg')) {
+            if ($that.hasClass('T-hotelImg')) {
                 // 查看单据
                 var WEB_IMG_URL_BIG = $tab.find("input[name=WEB_IMG_URL_BIG]").val();//大图
                 var WEB_IMG_URL_SMALL = $tab.find("input[name=WEB_IMG_URL_SMALL]").val();//大图

@@ -197,7 +197,7 @@ FinancialService.autoPayJson = function(id,$tab,rule){
         return false;
     }
     var searchParam = {
-        id : id + "",//字段id需与后台协调
+        id : id,//字段id需与后台协调
         sumCurrentPayMoney : sumPayMoney,
         payType : sumPayType,
         startDate : startDate,

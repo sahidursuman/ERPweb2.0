@@ -4,7 +4,7 @@
             <div class="T-search-area">
                 <div class="form-group"> 
                     <label style="float: left;margin: 0px 20px 0 0px" class=" control-label">酒店：{{hotelName}}</label>
-                    <label class="col-sm-1 control-label no-padding-right">账期：</label>
+                    <label class="control-label marginLeft-30">账期：</label>
                     <div class="col-xs-1">
                         <div class="input-group">
                             <input class="col-xs-12 date-picker" name="startDate" placeholder="开始日期" type="text" value="{{searchParam.startTime}}" />   
@@ -22,10 +22,10 @@
                         </div>
                     </div>
 
-                    <label class="control-label col-sm-1" style="float:left;">账务类别：</label>
+                    <label class="control-label marginLeft-30" style="float:left;">账务类别：</label>
                     <input class="col-xs-1" name="accountInfo" placeholder="账务类别" type="text" value="{{searchParam.accountInfo}}" />
                     
-                    <button class=" btn-sm T-search search-btn btn-height" >
+                    <button class=" btn-sm T-search search-btn btn-height" style="margin-left:20px;">
                         <i class="ace-icon fa fa-search"></i>搜索
                     </button>
                 </div>
@@ -34,13 +34,13 @@
 
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="form-group">
-                <label class="control-label pull-left" style="margin-left: 15px">账面应付合计：{{sumNeedPayMoney}}元 </label>
-                <label class="control-label pull-left" style="margin-left:30px;">已付金额合计：{{sumPayedMoney}} </label>
-                <label class="control-label pull-left" style="margin-left:30px;">结算金额合计：{{sumSettlementMoney}}</label>
-                <label class="control-label pull-left" style="margin-left:30px;">未付金额合计：<span class="T-unpayMoney">{{sumUnPayedMoney}}</span></label>
-                <label class="control-label pull-left" style="margin-left:30px;">本次付款金额：</label>
+                <label class="control-label pull-left">账面应付合计：{{sumNeedPayMoney}}元 </label>
+                <label class="control-label pull-left marginLeft-30">已付金额合计：{{sumPayedMoney}} </label>
+                <label class="control-label pull-left marginLeft-30">结算金额合计：{{sumSettlementMoney}}</label>
+                <label class="control-label pull-left marginLeft-30">未付金额合计：<span class="T-unpayMoney">{{sumUnPayedMoney}}</span></label>
+                <label class="control-label pull-left marginLeft-30">本次付款金额：</label>
                 <input class="col-xs-1 pull-left" name="sumPayMoney" type="text" value="{{sumPayMoney}}" maxlength="9" style="float:none;" />
-                <label class="control-label pull-left" style="margin-left:30px;">付款方式：</label>
+                <label class="control-label pull-left marginLeft-30">付款方式：</label>
                 <select style="text-align:center" name="sumPayType">
                     <option value="0" {{if sumPayType == 0}}selected="selected"{{/if}}>现金</option>
                     <option value="1" {{if sumPayType == 1}}selected="selected"{{/if}}>银行转账</option>
@@ -102,7 +102,7 @@
                         <option value="4" {{if rs.payType == 4}}selected="selected"{{/if}}>其他</option>
                     </select>
                 </td>
-                <td class="col-sm-1" ><input name="payRemark" type="text"  maxlength="1000"></td>
+                <td class="col-sm-1" ><input name="payRemark" type="text" value="{{rs.payRemark}}" maxlength="1000"></td>
                 <td>{{if rs.checkTime == null || rs.checkTime == ""}}-{{else}}{{rs.checkTime | dateFormat:'yyyy-MM-dd hh:mm:ss'}}{{/if}}</td>
                 <td>{{if rs.checkUserName == null || rs.checkUserName == ""}}-{{else}}{{rs.checkUserName}}{{/if}}</td>
                 <td style="width:220px">
