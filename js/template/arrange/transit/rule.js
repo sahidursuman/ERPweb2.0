@@ -19,18 +19,7 @@ define(function(require, exports) {
 
 			$bus.each(function() {
 				var $that = $(this);
-					// 设置司机
-					settings.push({
-						$ele: $that.find('input[name="driverName"]'),
-						$valObj: $that.find('input[name="driverId"]'),
-						rules: [
-							{
-								type: 'null',
-								errMsg: '司机不能为空'
-							}
-						]
-					});
-
+					
 					settings.push({
 						$ele: $that.find('input[name="bususeTime"]'),
 						rules: [

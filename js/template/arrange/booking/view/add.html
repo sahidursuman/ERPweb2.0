@@ -1,4 +1,4 @@
-<div class="col-xs-12 T-addBooking globalAdd">
+<div class="col-xs-12 T-addBooking globalAdd bookingFormOneList">
 	<form class="form-horizontal bookingMainForm formOneList" role="form" style="margin-top:10px" onsubmit="return false">
 		<div class=" ui-sortable-handle">
 				<h5 class="">
@@ -19,7 +19,7 @@
 							<div class="input-group">
 								<input type="text" name="contactRealname" class="col-sm-12 bind-change T-choosePartnerManager" value="">
 								<input type="hidden" name="partnerAgencyContactId" />
-								<span class="input-group-addon T-addPartnerManager" style="cursor:pointer;left:-38px;" title="为组团社新添加联系人">
+								<span class="input-group-addon T-addPartnerManager addManagerRight" title="为组团社新添加联系人">
 									<i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
 								</span>
 							</div>
@@ -43,7 +43,8 @@
 					<div class="form-group">
 						<label class="col-sm-1 control-label no-padding-right">备注:</label>
 						<div class="col-sm-8">
-							<input type="text" name="remark" class="col-sm-12" value="" maxlength="500">
+							<!-- <input type="text" name="remark" class="col-sm-12" value="" maxlength="500"> -->
+							<textarea name="remark"  value="" class="col-sm-12" maxlength="500"></textarea>
 						</div>
 					</div>
 					<div class="form-group" style="border-top:1px dotted #ccc;padding-top:20px;">

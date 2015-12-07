@@ -791,6 +791,8 @@ define(function(require, exports) {
 					planTouristCount : getValue("planTouristCount"),
 					setPlacePosition : getValue("setPlacePosition"),
 					setPlaceTime : getValue("setPlaceTime"),
+					chooseSeatCount: getValue("seatCount"),
+					remark: getValue("remark"),
 					executeTimeType :executeTimeType+"",
 					executeTime : getValue("executeTime")
 				},
@@ -1196,6 +1198,7 @@ define(function(require, exports) {
 			if (!!$(obj).attr('readonly')) return;
 			$.ajax({
 				url:KingServices.build_url("bookingOrder","getSeatCountList"),
+				showLoading:false,
 				success:function(data){
 					var result = showDialog(data);
 					if(result){

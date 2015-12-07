@@ -84,7 +84,7 @@ define(function(require, exports) {
 					shopList = JSON.parse(shopList);
 					data.shopList = shopList;
 					var html = listTemplate(data);
-					addTab(menuKey,"商家管理",html);
+					Tools.addTab(menuKey,"商家管理",html);
 					
 					// 初始化页面对象
 					shop.$tab = $("#tab-"+menuKey+"-content");

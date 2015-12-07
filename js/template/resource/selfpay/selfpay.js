@@ -52,7 +52,7 @@ define(function(require, exports) {
 				var result = showDialog(data);
 				if(result){
 					var html = listTemplate(data);
-					addTab(menuKey,"自费管理",html);
+					Tools.addTab(menuKey,"自费管理",html);
 
 					// 初始化jQuery 对象
 					selfpay.$tab = $("#tab-resource_selfpay-content");

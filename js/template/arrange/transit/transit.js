@@ -705,8 +705,8 @@ define(function(require, exports) {
 				'<td><input class="col-sm-12" name="manager" readonly="readonly" type="text" value="" /></td>'+
 				'<td><input class="col-sm-12" name="mobileNumber" readonly="readonly" type="text" value="" /></td>'+
 				'<td><select name="standardType"><option value="早餐">早餐</option><option value="午餐">午餐</option><option value="晚餐">晚餐</option></select>'+
-				'</td><td><input class="col-sm-8 chooseStandard price" name="restaurantStandardId" type="text" value="" maxlength="9" /><input type="hidden" name="price" value="" />'+
-				'<span style="line-height: 22px;">(元/人)</span></td><td><input class="col-sm-12 count" name="memberCount" maxlength="6" type="text" value="" /></td>'+
+				'</td><td><input class="col-sm-12 chooseStandard price" name="restaurantStandardId" type="text" value="" maxlength="9" /><input type="hidden" name="price" value="" />'+
+				'</td><td><input class="col-sm-12 count" name="memberCount" maxlength="6" type="text" value="" /></td>'+
 				'<td><input class="col-sm-12 discount" name="reduceMoney" maxlength="9" type="text" value="" /></td>'+
 				'<td><input class="col-sm-12 needPay" name="needPayMoney" readonly="readonly" type="text" value="" /></td>'+
 				'<td><input class="col-sm-12" name="payedMoney" maxlength="9"  type="text" value="" /></td>'+
