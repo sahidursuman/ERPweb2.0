@@ -1,5 +1,5 @@
 {{each list as guide}}
-<tr class="T-checkTr" data-confirm="{{guide.isConfirmAccount}}" data-id="{{guide.id}}">
+<tr class="T-checkTr" data-confirm="{{guide.isConfirmAccount}}" data-id="{{guide.id}}" {{ if (!!guide.payMoney) }} data-change='true' {{/if}}>
     <td><a class="T-gid" data-id="{{guide.tripPlanId}}">{{guide.tripNumber}}</a></td>
     <td>{{guide.lineProductName}}</td>
     <td>{{guide.accountTime}}</td>
@@ -15,17 +15,8 @@
     <td>{{guide.settlementMoney}}</td>
     <td>{{guide.payedMoney}}</td>
     <td>{{guide.unPayedMoney}}</td>
-    <td><input type="text" name="payMoney" class=""></td>
-    <td>
-        <select class="T-payType">
-            <option value="0">现金</option>
-            <option value="1">银行转账</option>
-            <option value="2">网上支付</option>
-            <option value="3">支票</option>
-            <option value="4">其它</option>
-        </select>
-    </td>
-    <td><input type="text" name="payRemark" class=""></td>
+    <td><input type="text" name="payMoney" value="{{guide.payMoney}}" class="money"></td>
+    <td><input type="text" name="payRemark" value="{{guide.payRemark}}"></td>
     <td>{{guide.checkTime}}</td>
     <td>{{guide.checkRealName}}</td>
     <td>

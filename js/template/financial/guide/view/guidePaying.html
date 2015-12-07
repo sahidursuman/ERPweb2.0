@@ -35,9 +35,11 @@
                 <label class=" control-label marginLeft-30">已付金额合计：{{sumData.sumPayedMoney}}</label>
                 <label class=" control-label marginLeft-30">未付金额合计：<span class="T-unpayMoney-temp">{{sumData.sumUnPayedMoney}}</span></label>
                 <label class=" control-label marginLeft-30">已对账未付金额合计：<span class="T-unpayMoney">{{sumData.sumConfirmedUnPayedMoney}}</span></label>
-                <label class=" control-label marginLeft-30">本次付款金额合计：<input type="text" name="sumPayMoney" class="T-sumPayMoney"></label>
+            </div>
+            <div class="form-group col-sm-12">
+                <label class=" control-label">本次付款金额合计：<input type="text" name="sumPayMoney" class="T-sumPayMoney money"></label>
                 <label class=" control-label marginLeft-30">付款方式：
-                    <select class="T-sumPayType">
+                    <select name="sumPayType" class="T-sumPayType">
                         <option value="0">现金</option>
                         <option value="1">银行转账</option>
                         <option value="2">网上支付</option>
@@ -45,9 +47,11 @@
                         <option value="4">其它</option>
                     </select>
                 </label>
+                <label class=" control-label marginLeft-30">备注：<input type="text" name="remark" class="T-remark"></label>
                 <button class="btn btn-xs btn-primary T-btn-autofill marginLeft-30">
                     <i class="ace-icon fa fa-check-circle"></i> 自动下账
                 </button>
+                
             </div>
         </form>
     </div>
@@ -71,14 +75,13 @@
                 <th class="th-border">已付金额</th>
                 <th class="th-border">未付金额</th>
                 <th class="th-border">本次付款</th>
-                <th class="th-border">付款方式</th>
                 <th class="th-border col-sm-1">备注</th>
                 <th class="th-border col-sm-1">对账时间</th>
                 <th class="th-border">对账人</th>
                 <th class="th-border">对账状态</th>
             </tr>
         </thead>
-        <tbody class="T-checkList" data-right="1200005">            
+        <tbody class="T-checkList T-clearList" data-right="1200005">            
         </tbody>
     </table>
     <div class="clearfix"></div>
@@ -97,7 +100,7 @@
             <button class="btn btn-xs btn-primary T-btn-close">
                 <i class="ace-icon fa fa-times-circle"></i> 关闭
             </button>
-            <button class="btn btn-xs btn-primary T-btn-save" style="margin-left:20px" data-id={{id}} data-type="{{type}}">
+            <button class="btn btn-xs btn-primary T-btn-save" style="margin-left:20px" data-id={{id}} data-type="{{type}}" data-name="{{guideName}}">
                 <i class="ace-icon fa fa-check-circle"></i> 确认付款
             </button>
         </div>
