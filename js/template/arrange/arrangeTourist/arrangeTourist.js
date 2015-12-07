@@ -2136,7 +2136,7 @@ define(function(require, exports) {
 
 			    $editFeeObj.find(".T-newEditFee").on('click', function(event) {
 			    	//新增内外转编辑费用
-			    	arrangeTourist.newAddFee($editFeeObj);
+			    	arrangeTourist.newAddFee($editFeeObj,type);
 			    });
 			    //计算应付款
 			    arrangeTourist.PayMoneyF($editFeeObj);
@@ -2159,6 +2159,14 @@ define(function(require, exports) {
 					/* Act on the event */
 					arrangeTourist.saveTransFee($editFeeObj,type);
 				});
+
+				//绑定删除
+				$editFeeObj.find(".T-delete").off().on("click",function(){
+					var $that=$(this),
+					    $tr=$that.closest('tr');
+					var id = $tr.attr("data-entity-id");
+					arrangeTourist.delTransferData(id,$tr,$editFeeObj);
+				});
 		};
 
 
@@ -2176,8 +2184,17 @@ define(function(require, exports) {
 
 			    $outFeeObj.find(".T-newEditFee").on('click', function(event) {
 			    	//新增内外转编辑费用
-			    	arrangeTourist.newAddFee($outFeeObj);
+			    	arrangeTourist.newAddFee($outFeeObj,type);
 			    });
+
+			    //绑定删除分团转客信息
+				$outFeeObj.find(".T-delete").off().on("click",function(){
+					var $that=$(this),
+					    $tr=$that.closest('tr');
+					var id = $tr.attr("data-entity-id");
+					 arrangeTourist.delOutTransfer(id,$tr,$outFeeObj);
+				});
+
 			    //计算应付款
 			    arrangeTourist.PayMoneyF($outFeeObj);
 
@@ -2210,7 +2227,7 @@ define(function(require, exports) {
 		 * @param  {[type]} $tab      [description]
 		 * @return {[type]}           [description]
 		 */
-		arrangeTourist.newAddFee=function($tab){
+		arrangeTourist.newAddFee=function($tab,type){
 		 	var html="<tr><td><span name=\"type\" value=\"0\">其他费用</span></td>"+
 			          "<td><input  name=\"describe\" type=\"text\" class=\"col-sm-12  no-padding-right\" /></td>"+
 			          "<td><input  name=\"count\" type=\"text\" class=\"col-sm-12  no-padding-right count\" /></td>"+
@@ -2227,12 +2244,23 @@ define(function(require, exports) {
 			//rule.update(validator);   
 			
 			//绑定删除分团转客信息
-			$tab.find(".T-delete").off().on("click",function(){
-				var $that=$(this),
-				    $tr=$that.closest('tr');
-				var id = $tr.attr("data-entity-id");
-				arrangeTourist.delTransferData(id,$tr,$tab);
-			});
+			if (type == '1') {
+				$tab.find(".T-delete").off().on("click",function(){
+					var $that=$(this),
+					    $tr=$that.closest('tr');
+					var id = $tr.attr("data-entity-id");
+					arrangeTourist.delTransferData(id,$tr,$tab);
+			    });
+
+			} else{
+				 $tab.find(".T-delete").off().on("click",function(){
+					var $that=$(this),
+					    $tr=$that.closest('tr');
+					var id = $tr.attr("data-entity-id");
+					arrangeTourist.delOutTransfer(id,$tr,$tab);
+			    });
+			};
+			
 
 			$tab.find(".count").on('change',function(event) {
 				event.preventDefault();
@@ -2274,13 +2302,34 @@ define(function(require, exports) {
 				//移除空的其他费用
 				$tr.fadeOut(function() {
 					$tr.remove();
-				});
-				$tab.find(".transferFee1SelectId").click(function(){
-					var $that=$(this);
-					    $that.remove();arrangeTourist.PayMoneyF($tab);
+					arrangeTourist.PayMoneyF($tab);
 				});
 			}
 		};
+
+		/**
+		 * delOutTransfer        外转删除
+		 * @param  {[type]} id   [description]
+		 * @param  {[type]} $tr  [description]
+		 * @param  {[type]} $tab [description]
+		 * @return {[type]}      [description]
+		 */
+	    arrangeTourist.delOutTransfer = function(id,$tr,$tab){
+	    	if (!!id &&　id != null) {
+	    		//移除空的其他费用
+				$tr.fadeOut(function() {
+					$tr.addClass('deleted');
+					$tr.hide();
+					arrangeTourist.PayMoneyF($tab);
+				});
+	    	} else{
+	    		//移除空的其他费用
+				$tr.fadeOut(function() {
+					$tr.remove();
+					arrangeTourist.PayMoneyF($tab);
+				});
+	    	};
+	    };
 
 		/**
 		 * [PayMoneyF 付款账务--应付/现付/已付的计算]
@@ -2362,9 +2411,10 @@ define(function(require, exports) {
 			var otherFeeListDel = [];
 			if (transferFeeStatus==1) {
 				$tbodyFee.find(" tr.deleted").each(function(i){
-					otherFeeListDel[i] = {
+				var otherFeeDel = {
 						"id" : $(this).attr("data-entity-id")
-					}
+					};
+					otherFeeListDel.push( otherFeeDel );
 				})
 			};
 			var formInData = $innerForm.serialize();
