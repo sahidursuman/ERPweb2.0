@@ -17,11 +17,11 @@
 			<th>查看</th>
 		</tr>
 	</thead>
-	<tbody class="T-arrageVisitor-list">
+	<tbody class="T-arrageTransfer-list">
 		{{each touristGroupList as touristGroupList}}
-			<tr data-value={{touristGroupList.id}} data-entity-id = {{touristGroupList.lineProduct.id}} data-entity-partnerAgency= {{touristGroupList.partnerAgency.travelAgencyName}} data-entity-name= {{touristGroupList.lineProduct.name}}  data-entity-type = {{touristGroupList.lineProduct.type}}   data-entity-days = {{touristGroupList.lineProduct.days}}   data-entity-startTime = {{touristGroupList.startTime}} data-entity-memberCount={{touristGroupList.adultCount +touristGroupList.childCount}} class="tr-{{touristGroupList.lineProduct.id}}-{{touristGroupList.startTime}}" data-entity-adultCount = {{touristGroupList.adultCount}}  data-entity-childCount = {{touristGroupList.childCount}} >
-			    <td><label class="pos-rel"> <input type="checkbox" class="ace T-touristGroupMergeCheckBox T-cheked"> <span class="lbl"></span> </label></td>
-				<td>{{touristGroupList.partnerAgency.travelAgencyName}}</td>
+			<tr data-value={{touristGroupList.id}} data-entity-adultCount = {{touristGroupList.adultCount}}  data-entity-childCount = {{touristGroupList.childCount}}>
+			    <td><label class="pos-rel"> <input type="checkbox" class="ace T-transferCheckBox T-cheked"> <span class="lbl"></span> </label></td>
+				<td>{{if touristGroupList.partnerAgency!=null}}{{touristGroupList.partnerAgency.travelAgencyName}}{{/if}}</td>
 				<td>{{touristGroupList.lineProduct.name}}</td>
 				<td>{{touristGroupList.lineProduct.type}}</td>
 				<td>
@@ -39,28 +39,26 @@
 				<td>{{touristGroupList.ageData}}</td>
 				<td>{{touristGroupList.ageData}}</td>
 				<td>{{touristGroupList.remark}}</td>
-				<td><a class="cursor T-arrageVisitor-view T-action"> 查看 </a></td>
+				<td><a class="cursor T-arrageTransfer-view T-action"> 查看 </a></td>
 			</tr>
 		{{/each}}
 	</tbody>
 </table>
 
-<div class="row">
-	<div class="col-xs-12 T-arrangeTouristList">
-	</div>
-</div>
-<div class="col-xs-12 	T-arrangeTouristMergeList">
-	<div>
-		<button class="btn btn-sm btn-success T-start-touristGroup-merge R-right" data-right="1130004">
+
+<form class="form-horizontal" role="form" onsubmit="return false" style="margin-top:25px;">
+	<div class="form-group col-sm-12" style="text-align: center;"> 
+		<button class="btn btn-sm btn-success T-arrageTransfer-inner R-right">
 			<i class="ace-icon fa fa-user-plus"></i>
-			开始并团
+			内转
+		</button>
+		<button class="btn btn-sm btn-success T-arrageTransfer-out R-right">
+			<i class="ace-icon fa fa-user-plus"></i>
+			外转
 		</button>
 	</div>
-	<div class="space-10"></div>
-	<div class="list">
+</form>
 
-	</div>
-</div>
 
 
 <div class="row pageMode">
@@ -72,3 +70,4 @@
 		</div>
 	</div>
 </div>
+

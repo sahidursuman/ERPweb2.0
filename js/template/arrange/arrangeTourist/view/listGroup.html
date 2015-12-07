@@ -17,18 +17,18 @@
 			<th>查看</th>
 		</tr>
 	</thead>
-	<tbody class="T-arrageVisitor-list">
+	<tbody class="T-arrageGroup-list">
 		{{each touristGroupList as touristGroupList}}
-			<tr data-value={{touristGroupList.id}} data-entity-id = {{touristGroupList.lineProduct.id}} data-entity-partnerAgency= {{touristGroupList.partnerAgency.travelAgencyName}} data-entity-name= {{touristGroupList.lineProduct.name}}  data-entity-type = {{touristGroupList.lineProduct.type}}   data-entity-days = {{touristGroupList.lineProduct.days}}   data-entity-startTime = {{touristGroupList.startTime}} data-entity-memberCount={{touristGroupList.adultCount +touristGroupList.childCount}} class="tr-{{touristGroupList.lineProduct.id}}-{{touristGroupList.startTime}}" data-entity-adultCount = {{touristGroupList.adultCount}}  data-entity-childCount = {{touristGroupList.childCount}} >
-			    <td><label class="pos-rel"> <input type="checkbox" class="ace T-touristGroupMergeCheckBox T-cheked"> <span class="lbl"></span> </label></td>
-				<td>{{touristGroupList.partnerAgency.travelAgencyName}}</td>
+			<tr data-value={{touristGroupList.id}} data-entity-adultCount = {{touristGroupList.adultCount}}  data-entity-childCount = {{touristGroupList.childCount}}>
+			    <td><label class="pos-rel"> <input type="checkbox" class="ace T-arrageGroupCheckBox T-cheked"> <span class="lbl"></span> </label></td>
+				<td>{{if touristGroupList.partnerAgency!=null}}{{touristGroupList.partnerAgency.travelAgencyName}}{{/if}}</td>
 				<td>{{touristGroupList.lineProduct.name}}</td>
 				<td>{{touristGroupList.lineProduct.type}}</td>
 				<td>
 					{{if touristGroupList.lineProduct.customerType == 0}}散拼
 					    {{else if touristGroupList.lineProduct.customerType == 1}}团体
 					    {{else if touristGroupList.lineProduct.customerType == 2}}转客
-					{{/if}} 
+					{{/if}}
 				</td>
 				<td>{{touristGroupList.lineProduct.days}}</td>
 				<td>{{touristGroupList.startTime | dateFormat: 'yyyy-MM-dd' }}</td>
@@ -39,29 +39,15 @@
 				<td>{{touristGroupList.ageData}}</td>
 				<td>{{touristGroupList.ageData}}</td>
 				<td>{{touristGroupList.remark}}</td>
-				<td><a class="cursor T-arrageVisitor-view T-action"> 查看 </a></td>
+				<td><a class="cursor T-arrageGroup-view T-action"> 查看 </a></td>
 			</tr>
 		{{/each}}
 	</tbody>
 </table>
-
 <div class="row">
 	<div class="col-xs-12 T-arrangeTouristList">
 	</div>
 </div>
-<div class="col-xs-12 	T-arrangeTouristMergeList">
-	<div>
-		<button class="btn btn-sm btn-success T-start-touristGroup-merge R-right" data-right="1130004">
-			<i class="ace-icon fa fa-user-plus"></i>
-			开始并团
-		</button>
-	</div>
-	<div class="space-10"></div>
-	<div class="list">
-
-	</div>
-</div>
-
 
 <div class="row pageMode">
 	<div class="col-xs-6">
@@ -70,5 +56,17 @@
 	<div class="col-xs-6">
 		<div class="dataTables_paginate paging_simple_numbers T-pagenation">
 		</div>
+	</div>
+</div>
+
+<div class="col-xs-12 	T-arrangeTouristMergeList" style="margin-top:20px;">
+	<div>
+		<button class="btn btn-sm btn-success T-createTripPlan R-right">
+			<i class="ace-icon fa fa-user-plus"></i>
+			生成计划
+		</button>
+	</div>
+	<div class="space-10"></div>
+	<div class="list">
 	</div>
 </div>
