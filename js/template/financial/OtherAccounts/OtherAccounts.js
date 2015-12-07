@@ -80,17 +80,17 @@ define(function(require, exports) {
                 var $that = $(this)
                 if ($that.hasClass('T-checking')) {
                     //对账
-                    OtherAccounts.AccountsChecking(0, name, "", "");
+                    OtherAccounts.AccountsChecking(0, name);
                 } else if ($that.hasClass('T-payment')) {
                     alert("付款");
                     // 结算
-                    OtherAccounts.AccountsPayment(0, name, "", "");
+                    OtherAccounts.AccountsPayment(0, name);
                 }
             });
         };
 
     // 对账
-    OtherAccounts.AccountsChecking = function(pageNo, id, name, startAccountTime, endAccountTime) {
+    OtherAccounts.AccountsChecking = function(pageNo, name) {
             name = OtherAccounts.$searchArea.find("select[name=otherId]").val();
             id = $(".T-list").attr('data-id');
             startAccountTime = OtherAccounts.$searchArea.find("input[name=startTime]").val();
@@ -149,7 +149,7 @@ define(function(require, exports) {
                                         closeTab(checkTabId);
                                     });
                                     //对账保存
-                                    $container.find(".T-confirm").click(function(id, settlementMoney, checkRemark, isConfirmAccount) {
+                                    $container.find(".T-confirm").click(function(event) {
 
                                         OtherAccounts.CheckConfirm(id)
                                     });
@@ -231,6 +231,8 @@ define(function(require, exports) {
                 }
 
             });
+console.log(JsonStr);
+return ;
             // 对账保存接口
             $.ajax({
                 url: KingServices.build_url("account/arrangeOtherFinancial", "saveReconciliation"),
