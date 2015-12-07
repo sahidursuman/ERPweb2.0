@@ -19,7 +19,7 @@ define(function(require, exports) {
 	    	    
 	    	    {
 	    	    	//返款
-	    	    	$ele: $obj.find('input[name=backMoney]'),
+	    	    	$ele: $obj.find('input[name="T-refund"]'),
 	    	    	rules:[
 	    	    	       {
 	    	    	    	   type:'null',

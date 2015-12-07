@@ -247,7 +247,7 @@ define(function(require, exports){
 	    		data.images.push(image);
     		}
     	}
-
+    	var $overflow = null;
     	layer.open({
 			type : 1,
 			title : "单据图片",
@@ -258,6 +258,7 @@ define(function(require, exports){
 			scrollbar: false, // 推荐禁用浏览器外部滚动条
 			success : function() {
 				var colorbox_params = {
+					photo : true,
 	    			rel: 'colorbox',
 	    			reposition:true,
 	    			scalePhotos:true,

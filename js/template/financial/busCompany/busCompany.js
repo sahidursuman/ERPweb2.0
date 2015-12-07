@@ -1,24 +1,14 @@
 define(function(require, exports) {
-	var rule = require("./rule"); 
-	var  menuKey = "financial_busCompany",
-		 blanceTabId = menuKey+"-blance",
-		 listTemplate = require("./view/list"),
-		 checkBill = require("./view/checkBill"),
-		 Clearing = require("./view/Clearing"),
-		 blanceRecords = require("./view/busCompanyRecords"),
-		 billImageTempLate = require("./view/billImages"),
-		 tabId = "tab-"+menuKey+"-content",
-	     checkTabId = menuKey+"-checking",
-		 yearList=[],
-	     monthList = [];
-	    for(var i=2013;i<=new Date().getFullYear();i++){
-	    	var yeardata={"value":i}
-	    	yearList.push(yeardata)
-	    }
-	    for(var j = 1;j<=12;j++){
-	    	var monthData = {"value":j}
-	    	monthList.push(monthData);
-	    }
+	var rule = require("./rule"),
+        menuKey = "financial_busCompany",
+		listTemplate = require("./view/list"),
+		checkBill = require("./view/checkBill"),
+		Clearing = require("./view/Clearing"),
+		blanceRecords = require("./view/busCompanyRecords"),
+		billImageTempLate = require("./view/billImages"),
+        payedDetailTempLate = require("./view/viewPayedDetail"),
+        needPayDetailTempLate = require("./view/viewNeedPayDetail");
+
 	var busCompany = {
 		searchData : false,
     	$tab :false,
@@ -26,51 +16,59 @@ define(function(require, exports) {
     	$clearTab : false,
     	$searchArea : false,
     	$checkSearchArea: false,
-        $clearSearchArea : false
+        $clearSearchArea : false,
+        busCompanyList : false,
+        clearTempData : false,
+        clearTempSumDate : false
 	};
 
 	busCompany.initModule = function() {
-    	var date = new Date(),
-    		year = date.getFullYear();
-        busCompany.listBusCompany(0,"",year,"");
+    	var dateJson = FinancialService.getInitDate();
+        busCompany.listBusCompany(0,"","",dateJson.startDate,dateJson.endDate);
     };
 
-    busCompany.listBusCompany = function(page,busCompanyId,year,month){
+    busCompany.listBusCompany = function(page,busCompanyName,busCompanyId,startDate,endDate){
     	if (busCompany.$searchArea && arguments.length === 1) {
-            busCompanyId = busCompany.$searchArea.find("select[name=busCompanyId]").val(),
-            year = busCompany.$searchArea.find("select[name=year]").val(),
-            month = busCompany.$searchArea.find("select[name=month]").val()
+            busCompanyName = busCompany.$searchArea.find("input[name=busCompanyName]").val(),
+            busCompanyId = busCompany.$searchArea.find("input[name=busCompanyId]").val(),
+            startDate = busCompany.$searchArea.find("input[name=startDate]").val(),
+            endDate = busCompany.$searchArea.find("input[name=endDate]").val()
         }
+        if(startDate > endDate){
+            showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
+            return false;
+        }
+        busCompanyName = (busCompanyName == "全部") ? "" : busCompanyName;
         // 修正页码
         page = page || 0;
         busCompany.searchData = {
             pageNo : page,
+            busCompanyName : busCompanyName,
             busCompanyId : busCompanyId,
-            year : year,
-            month : month,
+            startTime : startDate,
+            endTime : endDate,
             sortType: 'auto'
         };
 
+        var searchParam = JSON.stringify(busCompany.searchData);
         $.ajax({
-            url:KingServices.build_url("financial/financialBusCompany","listSumFcBusCompany"),
+            url:KingServices.build_url("financial/financialBusCompany","listSumFinancialBusCompany"),
             type:"POST",
-            data:busCompany.searchData,
+            data:{ searchParam : searchParam },
             success:function(data){
                layer.close(globalLoadingLayer);
                var result = showDialog(data);
                 if(result){
-                	data.searchParam = busCompany.searchData;
-					data.yearList = yearList;
-					data.monthList = monthList;
+                	busCompany.busCompanyList = data.busCompanyNameList;
 					var html = listTemplate(data);
 					Tools.addTab(menuKey,"车队账务",html);
 
-					busCompany.initList(year,month);
+					busCompany.initList();
 
 					// 绑定翻页组件
 					laypage({
 					    cont: busCompany.$tab.find('.T-pagenation'),
-					    pages: data.totalPage,
+					    pages: data.searchParam.totalPage,
 					    curr: (page + 1),
 					    jump: function(obj, first) {
 					    	if (!first) {
@@ -87,68 +85,77 @@ define(function(require, exports) {
     	busCompany.$tab = $('#tab-' + menuKey + "-content");
         busCompany.$searchArea = busCompany.$tab.find('.T-search-area');
 
+        busCompany.getQueryList();
+        FinancialService.initDate(busCompany.$tab);
+
         //搜索按钮事件
-        busCompany.$tab.find('.T-search').on('click', function(event) {
+        busCompany.$tab.find('.T-search').on('click',function(event) {
             event.preventDefault();
             busCompany.listBusCompany(0);
         });
 
         // 报表内的操作
-        busCompany.$tab.find('.T-list').on('click', '.T-option', function(event) {
+        busCompany.$tab.find('.T-list').on('click','.T-option',function(event) {
             event.preventDefault();
             var $that = $(this),
             	id = $that.closest('tr').data('id'),
-            	name = $that.closest('tr').data('name');
+            	name = $that.closest('tr').data('name'),
+                startDate = busCompany.$searchArea.find("input[name=startDate]").val(),
+                endDate = busCompany.$searchArea.find("input[name=endDate]").val();
             if ($that.hasClass('T-check')) {
                 // 对账
-                busCompany.busCompanyCheck(0,id,name,year,month);
+                busCompany.busCompanyCheck(0,id,name,"",startDate,endDate);
             } else if ($that.hasClass('T-clear')) {
                 // 结算
-                busCompany.busCompanyClear(id,name,year,1,12);
+                busCompany.busCompanyClear(0,id,name,"",startDate,endDate);
             }
         });
     };
 
     //对账
-    busCompany.busCompanyCheck = function(page,busCompanyId,busCompanyName,year,month){
+    busCompany.busCompanyCheck = function(page,busCompanyId,busCompanyName,accountInfo,startDate,endDate){
         if (busCompany.$checkSearchArea && arguments.length === 3) {
-            year = busCompany.$checkSearchArea.find("select[name=year]").val(),
-            month = busCompany.$checkSearchArea.find("select[name=month]").val()
+            accountInfo = busCompany.$checkSearchArea.find("input[name=accountInfo]").val(),
+            startDate = busCompany.$checkSearchArea.find("input[name=startDate]").val(),
+            endDate = busCompany.$checkSearchArea.find("input[name=endDate]").val()
         }
+        if(startDate > endDate){
+            showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
+            return false;
+        }
+
         // 修正页码
         page = page || 0;
+        var searchParam = {
+            pageNo : page,
+            busCompanyId : busCompanyId + "",
+            accountInfo : accountInfo,
+            startTime : startDate,
+            endTime : endDate,
+            sortType : "auto"
+        };
+        searchParam = JSON.stringify(searchParam);
         $.ajax({
-            url:KingServices.build_url("financial/financialBusCompany","listFcBusCompany"),
+            url:KingServices.build_url("financial/financialBusCompany","listAccountChecking"),
             type:"POST",
-            data:{
-                pageNo : page,
-                busCompanyId : busCompanyId + "",
-                year : year,
-                month : month,
-                sortType : "auto"
-            },
+            data:{ searchParam : searchParam },
             success:function(data){
                 var result = showDialog(data);
                 if(result){
-                    var financialBusCompanyList = JSON.parse(data.financialBusCompanyList);
-                    data.financialBusCompanyList = financialBusCompanyList;
-					data.yearList = yearList;
-					data.monthList = monthList;
-					data.companyName = busCompanyName;
-					data.searchParam.year = year;
-					data.searchParam.month = month;
+                    var fbList = data.financialBusCompanyList;
+                    data.busCompanyName = busCompanyName;
                     var html = checkBill(data);
                     
                     var validator;
                     // 初始化页面
                     if (Tools.addTab(menuKey + "-checking", "车队对账", html)) {
                         busCompany.initCheck(page,busCompanyId,busCompanyName); 
-                        validator = busCompany.validatorTable();                       
+                        validator = rule.check(busCompany.$checkTab.find(".T-checkList"));                       
                     }
                     //取消对账权限过滤
                     var checkTr = busCompany.$checkTab.find(".T-checkTr");
                     var rightCode = busCompany.$checkTab.find(".T-checkList").data("right");
-                    checkDisabled(financialBusCompanyList,checkTr,rightCode);
+                    checkDisabled(fbList,checkTr,rightCode);
 
                     //绑定翻页组件
                     laypage({
@@ -157,7 +164,7 @@ define(function(require, exports) {
                         curr: (page + 1),
                         jump: function(obj, first) {
                             if (!first) { 
-                                busCompany.busCompanyCheck(obj.curr -1,busCompanyId);
+                                busCompany.busCompanyCheck(obj.curr-1,busCompanyId,busCompanyName);
                             }
                         }
                     });
@@ -171,7 +178,9 @@ define(function(require, exports) {
         busCompany.$checkTab = $("#tab-" + menuKey + "-checking-content");
         busCompany.$checkSearchArea = busCompany.$checkTab.find('.T-search-area');
 
-        busCompany.init_check_event(page,id,name);
+        busCompany.init_event(page,id,name,busCompany.$checkTab,"check");
+        FinancialService.initDate(busCompany.$checkTab);
+        FinancialService.updateUnpayMoney(busCompany.$checkTab,rule);
 
         //搜索按钮事件
         busCompany.$checkSearchArea.find('.T-search').on('click', function(event) {
@@ -180,37 +189,22 @@ define(function(require, exports) {
         });
 
         //导出报表事件 btn-busCompanyExport
-        busCompany.$checkSearchArea.find(".T-busCompanyExport").click(function(){
-            var year = busCompany.$checkSearchArea.find("[name=year]").val();
-            var month = busCompany.$checkSearchArea.find("[name=month]").val();
-            checkLogin(function(){
-                var url = KingServices.build_url("export","busCompany") + "&busCompanyId="+id+"&year="+year+"&month="+month+"&sortType=auto";
-                exportXLS(url)
-            });
-        });
+        // busCompany.$checkSearchArea.find(".T-busCompanyExport").click(function(){
+        //     var year = busCompany.$checkSearchArea.find("[name=year]").val();
+        //     var month = busCompany.$checkSearchArea.find("[name=month]").val();
+        //     checkLogin(function(){
+        //         var url = KingServices.build_url("export","busCompany") + "&busCompanyId="+id+"&year="+year+"&month="+month+"&sortType=auto";
+        //         exportXLS(url)
+        //     });
+        // });
 
-        //给查看单据绑定事件
-        busCompany.$checkTab.find(".T-busCompanyImg").click(function(){
-            var WEB_IMG_URL_BIG = busCompany.$checkTab.find("input[name=WEB_IMG_URL_BIG]").val();//大图
-            var WEB_IMG_URL_SMALL = busCompany.$checkTab.find("input[name=WEB_IMG_URL_SMALL]").val();//大图
-            busCompany.viewImage(this,WEB_IMG_URL_BIG,WEB_IMG_URL_SMALL);
-        });
+        //报表内的操作
+        busCompany.listOption(busCompany.$checkTab);
 
-        //给全选按钮绑定事件
-        busCompany.$checkTab.find(".T-checkAll").click(function(){
-            var checkboxList = busCompany.$checkTab.find(".T-checkList tr input[type=checkbox]");
-            if($(this).is(":checked")){
-                checkboxList.each(function(i){
-                    $(this).prop("checked",true);
-                });
-            } else{
-                checkboxList.each(function(i){
-                	if(!$(this).prop("disabled")){
-                		$(this).prop("checked",false);
-                	}                                
-                });
-            } 
-        });
+        //复选框事件初始化
+        var checkboxList = busCompany.$checkTab.find(".T-checkList tr .T-checkbox"),
+            $checkAll = busCompany.$checkTab.find(".T-checkAll");
+        FinancialService.initCheckBoxs($checkAll,checkboxList);
 
         //关闭页面事件
         busCompany.$checkTab.find(".T-close-check").click(function(){
@@ -218,156 +212,166 @@ define(function(require, exports) {
         });
         //确认对账按钮事件
         busCompany.$checkTab.find(".T-saveCheck").click(function(){ 
-            validator = busCompany.validatorTable();
+            validator = rule.check(busCompany.$checkTab.find(".T-checkList"));
             if (!validator.form()) { return; }
             busCompany.saveChecking(id,name,page);
         });
     };
 
     //结算
-    busCompany.busCompanyClear = function(busCompanyId,busCompanyName,year,startMonth,endMonth){
-        if (busCompany.$clearSearchArea && arguments.length === 2) {
-            year = busCompany.$clearSearchArea.find("select[name=year]").val(),
-            startMonth = busCompany.$clearSearchArea.find("select[name=startMonth]").val(),
-            endMonth = busCompany.$clearSearchArea.find("select[name=endMonth]").val()
+    busCompany.busCompanyClear = function(page,busCompanyId,busCompanyName,accountInfo,startDate,endDate){
+        if (busCompany.$clearSearchArea && arguments.length === 3) {
+            accountInfo = busCompany.$clearSearchArea.find("input[name=accountInfo]").val(),
+            startDate = busCompany.$clearSearchArea.find("input[name=startDate]").val(),
+            endDate = busCompany.$clearSearchArea.find("input[name=endDate]").val()
         }
+        if(startDate > endDate){
+            showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
+            return false;
+        }
+
+        page = page || 0;
+        var searchParam = {
+            pageNo : page,
+            busCompanyId : busCompanyId + "",
+            accountInfo : accountInfo,
+            startTime : startDate,
+            endTime : endDate,
+            sortType : "auto"
+        };
+        searchParam = JSON.stringify(searchParam);
         $.ajax({
-            url:KingServices.build_url("financial/financialBusCompany","listFcBusCompanySettlement"),
+            url:KingServices.build_url("financial/financialBusCompany","listAccountSettlement"),
             type:"POST",
-            data:{
-                busCompanyId : busCompanyId + "",
-                year : year,
-                monthStart : startMonth,
-                monthEnd : endMonth,
-                sortType : "auto"
-            },
+            data:{ searchParam : searchParam },
             success:function(data){
                 var result = showDialog(data);
                 if(result){
-                    data.yearList = yearList;
-					data.companyName = busCompanyName;
-					data.monthList = monthList;
+					data.busCompanyName = busCompanyName;
+                    //暂存数据读取
+                    if(busCompany.clearTempSumDate){
+                        data.sumPayMoney = busCompany.clearTempSumDate.sumPayMoney;
+                        data.sumPayType = busCompany.clearTempSumDate.sumPayType;
+                    } else {
+                        data.sumPayMoney = 0;
+                        data.sumPayType = 0;
+                    }
+                    var resultList = data.financialBusCompanyListData;
+                    data.financialBusCompanyListData = FinancialService.getTempDate(resultList,busCompany.clearTempData);
 					var html = Clearing(data);
                     
                     var validator;
                     // 初始化页面
-                    if (Tools.addTab(menuKey + "-clearing", "车队结算", html)) {
-                        busCompany.initClear(busCompanyId,busCompanyName); 
+                    if (Tools.addTab(menuKey + "-clearing", "车队付款", html)) {
+                        busCompany.initClear(page,busCompanyId,busCompanyName); 
                         validator = rule.check(busCompany.$clearTab.find('.T-clearList'));                       
                     }
+
+                    //绑定翻页组件
+                    var $tr = busCompany.$clearTab.find('.T-clearList tr');
+                    laypage({
+                        cont: busCompany.$clearTab.find('.T-pagenation'),
+                        pages: data.searchParam.totalPage,
+                        curr: (page + 1),
+                        jump: function(obj, first) {
+                            if (!first) { 
+                                var tempJson = FinancialService.clearSaveJson(busCompany.$clearTab,busCompany.clearTempData,rule);
+                                busCompany.clearTempData = tempJson;
+                                var sumPayMoney = parseInt(busCompany.$clearTab.find('input[name=sumPayMoney]').val());
+                                    sumPayType = parseInt(busCompany.$clearTab.find('select[name=sumPayType]').val());
+                                busCompany.clearTempSumDate = {
+                                    sumPayMoney : sumPayMoney,
+                                    sumPayType : sumPayType
+                                }
+                                busCompany.busCompanyClear(obj.curr -1,busCompanyId,busCompanyName);
+                            }
+                        }
+                    });
                 }
             }
         });
     };
 
-    busCompany.initClear = function(id,name){
+    busCompany.initClear = function(page,id,name){
         // 初始化jQuery 对象 
         busCompany.$clearTab = $("#tab-" + menuKey + "-clearing-content");
         busCompany.$clearSearchArea = busCompany.$clearTab.find('.T-search-area');
 
-        busCompany.init_clear_event(id);
+        busCompany.init_event(page,id,name,busCompany.$clearTab,"clear");
+        FinancialService.initDate(busCompany.$clearTab);
 
         //搜索事件
         busCompany.$clearTab.find(".T-search").click(function(){
-            busCompany.busCompanyClear(id,name);
+            busCompany.busCompanyClear(0,id,name);
+        });
+
+        //关闭页面事件
+        busCompany.$clearTab.find(".T-close-clear").click(function(){
+            Tools.closeTab(menuKey + "-clearing");
         });
 
         //保存结算事件
         busCompany.$clearTab.find(".T-saveClear").click(function(){
             if (!rule.check(busCompany.$clearTab).form()) { return; }
-            busCompany.saveClear(id,name,$(this));
+            busCompany.saveClear(id,name,page);
         });
-        //明细按钮事件
-        busCompany.$clearTab.find(".T-detail").click(function(){
-            var year = $(this).closest('tr').data("year");
-            var month = $(this).closest('tr').data("month");
-            busCompany.busCompanyCheck(0,id,name,year,month);
-        });
+        
+        //报表内的操作
+        busCompany.listOption(busCompany.$clearTab);
 
-        //操作记录事件
-        busCompany.$clearTab.find(".T-clear-records").click(function(){
-            $.ajax({
-                url:KingServices.build_url("financial/financialBusCompany","listFcBusCompanySettlementRecord"),
-                type:"POST",
-                data:{
-                    busCompanyId : id + ""
-                },
-                success:function(data){
-                    var result = showDialog(data);
-                    if(result){
-                        if(data.financialBusCompanySettlementRecordList.length == 0){
-                            showMessageDialog($( "#confirm-dialog-message" ),"暂时还没有操作记录");
-                        }else{
-                            var html = blanceRecords(data);
-                            var blanceRecordsTemplateLayer =layer.open({
-                                type: 1,
-                                title:"操作记录",
-                                skin: 'layui-layer-rim', //加上边框
-                                area: '60%', //宽高
-                                zIndex:1030,
-                                content: html,
-                                scrollbar: false
+        //自动下账
+        busCompany.$clearTab.find(".T-clear-auto").off().on("click",function(){
+            var autoPayJson = FinancialService.autoPayJson(id,busCompany.$clearTab,rule);
+            if(!autoPayJson){return false;}
+
+            var startDate = busCompany.$clearTab.find("input[name=startDate]").val(),
+                endDate = busCompany.$clearTab.find("input[name=endDate]").val();
+            showConfirmMsg($("#confirm-dialog-message"),"是否按当前账期 " + startDate + " 至 " + endDate + " 下账？",function(){
+                $.ajax({
+                    url:KingServices.build_url("financial/financialBusCompany","autoPayment"),
+                    type:"POST",
+                    data:{ searchParam : autoPayJson },
+                    success:function(data){
+                        var result = showDialog(data);
+                        if(result){
+                            showMessageDialog($("#confirm-dialog-message"),"自动下账成功！",function(){
+                                busCompany.$clearTab.data('isEdited',false);
+                                busCompany.clearTempData = data.autoPaymentJson;
+                                busCompany.clearTempSumDate = {
+                                    sumPayMoney : busCompany.$clearTab.find('input[name=sumPayMoney]').val(),
+                                    sumPayType : busCompany.$clearTab.find('select[name=sumPayType]').val()
+                                };
+                                busCompany.busCompanyClear(page,id,name);
                             });
                         }
                     }
-                }
-            })
+                });
+            });
         });
+        FinancialService.updateSumPayMoney(busCompany.$clearTab,rule);
     };
 
     //对账数据保存
-    busCompany.saveChecking = function(busCompanyId,busCompanyName,page,tab_id, title, html){
+    busCompany.saveChecking = function(busCompanyId,busCompanyName,page,tab_id,title,html){
         if(!busCompany.$checkTab.data('isEdited')){
-            showMessageDialog($( "#confirm-dialog-message" ),"您未进行任何操作！");
+            showMessageDialog($("#confirm-dialog-message"),"您未进行任何操作！");
             return false;
         }
-        //保存对账时提交的数据
-        var $this = busCompany.$checkTab.find(".T-checkList"),argumentsLen = arguments.length;
-        var financialBusCompanyListStr = [];
-        function getValue($obj,name){
-            var result = $obj.find("[name="+name+"]").val();
-            if (result == "") {//所有空字符串变成0
-                result = 0;
-            }
-            return result;
-        } 
-        var busCompanyCheckingTr = $this.find(".T-checkTr");
-        busCompanyCheckingTr.each(function(){
-            var id = $(this).data("id");
-            var consumeStartTime = $(this).find("td[name=startTime]").text();
-            var realUnPayedMoney = getValue($(this),"realUnPayedMoney");
-            var remark = getValue($(this),"remark");
-            var isConfirmAccount = "";
-            if ($(this).find(".T-checkbox").is(':checked')) {
-                isConfirmAccount = 1;
-            } else {
-                isConfirmAccount = 0; 
-            }
-            var checkRecord = {
-                id : id,
-                busCompanyId : busCompanyId,
-                busCompanyName : busCompanyName,
-                startTime : consumeStartTime,
-                realUnPayedMoney : realUnPayedMoney,
-                remark : remark,
-                isConfirmAccount : isConfirmAccount
-            };
-            financialBusCompanyListStr.push(checkRecord);
-        });
-        financialBusCompanyListStr = JSON.stringify(financialBusCompanyListStr);
+        var argumentsLen = arguments.length,
+            checkSaveJson = FinancialService.checkSaveJson(busCompany.$checkTab);
         $.ajax({
-            url:KingServices.build_url("financial/financialBusCompany","accountChecking"),
+            url:KingServices.build_url("financial/financialBusCompany","saveAccountChecking"),
             type:"POST",
             data:{
-                financialBusCompanyListStr : financialBusCompanyListStr
+                financialBusCompanyListStr : checkSaveJson
             },
             success:function(data){
                 var result = showDialog(data);
                 if(result){
-                    showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+                    showMessageDialog($("#confirm-dialog-message"),data.message,function(){
                         if(argumentsLen == 2){
                             Tools.closeTab(menuKey + "-checking");
-                            busCompany.listBusCompany(busCompany.searchData.pageNo,busCompany.searchData.busCompanyId,busCompany.searchData.year,busCompany.searchData.month);
+                            busCompany.listBusCompany(busCompany.searchData.pageNo,busCompany.searchData.busCompanyName,busCompany.searchData.busCompanyId,busCompany.searchData.startDate,busCompany.searchData.endDate);
                         } else if(argumentsLen == 3){
                             busCompany.$checkTab.data('isEdited',false);
                             busCompany.busCompanyCheck(page,busCompanyId,busCompanyName);
@@ -382,56 +386,35 @@ define(function(require, exports) {
         });
     };
 
-    busCompany.saveClear = function(id,name,$obj,tab_id, title, html){
-        if(!busCompany.$clearTab.data('isEdited')){
-            showMessageDialog($( "#confirm-dialog-message" ),"您未进行任何操作！");
+    busCompany.saveClear = function(id,name,page,tab_id, title, html){
+        if(!FinancialService.isClearSave(busCompany.$clearTab,rule)){
             return false;
         }
-        var $tr,argumentsLen = arguments.length;
-        if (!!$obj)  {
-            $tr= $obj.closest('tr');
-        } else{
-            $tr = busCompany.$clearTab.find(".T-clearList tr");
-        }
 
-        var fcbusCompanySettlementStr = [];
-        $tr.each(function(i){
-            //获取数据
-            var clearJson = {
-                id : $(this).data("id"),
-                busCompanyId : id,
-                year : $(this).data("year"),  
-                month : $(this).data("month"),
-                realPayedMoney : $(this).find("td[name=blancerealrealPayedMoney]").text(),
-                unPayedMoney : $(this).find("td[name=blanceunPayedMoney]").text(),
-                realUnPayedMoney : $(this).find("td[name=blancerealrealUnPayedMoney]").text(),
-                payMoney : $(this).find("input[name=blancerealPayedMoney]").val(),
-                payType : $(this).find("select[name=blancePayType]").val(),
-                remark : $(this).find("input[name=blancerealRemark]").val()
-            };
-            fcbusCompanySettlementStr.push(clearJson);
-        });
-        fcbusCompanySettlementStr = JSON.stringify(fcbusCompanySettlementStr);
+        var argumentsLen = arguments.length,
+            clearSaveJson = FinancialService.clearSaveJson(busCompany.$clearTab,busCompany.clearTempData,rule);
+
+        clearSaveJson = JSON.stringify(clearSaveJson);
         $.ajax({
-            url:KingServices.build_url("financial/financialBusCompany","saveFcBusCompanySettlement"),
+            url:KingServices.build_url("financial/financialBusCompany","saveAccountSettlement"),
             type:"POST",
-            data:{
-                fcBusCompanySettlementStr : fcbusCompanySettlementStr
-            },
+            data:{ financialBusCompanyListStr : clearSaveJson },
             success:function(data){
                 var result = showDialog(data);
                 if(result){
-                    showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+                    showMessageDialog($("#confirm-dialog-message"),data.message,function(){
+                        restaurant.clearTempData = false;
+                        restaurant.clearTempSumDate = false;
                         if(argumentsLen === 2){
                             Tools.closeTab(menuKey + "-clearing");
-                            busCompany.listBusCompany(busCompany.searchData.pageNo,busCompany.searchData.busCompanyId,busCompany.searchData.year,busCompany.searchData.month);
+                            busCompany.listBusCompany(busCompany.searchData.pageNo,busCompany.searchData.busCompanyName,busCompany.searchData.busCompanyId,busCompany.searchData.startDate,busCompany.searchData.endDate);
                         }else if(argumentsLen === 3){
                             busCompany.$clearTab.data('isEdited',false);
-                            busCompany.busCompanyClear(id,name);
+                            busCompany.busCompanyClear(page,id,name);
                         } else {
                             busCompany.$clearTab.data('isEdited',false);
                             Tools.addTab(tab_id, title, html);
-                            busCompany.initClear(busCompany.$clearTab.find(".T-newData").data("id"),busCompany.$clearTab.find(".T-newData").data("name"));
+                            busCompany.initClear(0,busCompany.$clearTab.find(".T-newData").data("id"),busCompany.$clearTab.find(".T-newData").data("name"));
                         }
                     });
                     
@@ -467,6 +450,7 @@ define(function(require, exports) {
 			scrollbar: false, // 推荐禁用浏览器外部滚动条
 			success : function() {
 				var colorbox_params = {
+                    photo : true,
 					rel: 'colorbox',
 					reposition:true,
 					scalePhotos:true,
@@ -493,66 +477,148 @@ define(function(require, exports) {
 		});
 	};
 
-	busCompany.init_check_event = function(page,id,name) {
-        if (!!busCompany.$checkTab && busCompany.$checkTab.length === 1) {
-            var validator = rule.check(busCompany.$checkTab);
+    //已付金额明细
+    busCompany.payedDetail = function(id){
+        $.ajax({
+            url:KingServices.build_url("financial/financialbusCompany","listFcbusCompanySettlementRecord"),
+            type:"POST",
+            data:{
+                busCompanyId : id + ""
+            },
+            success:function(data){
+                var result = showDialog(data);
+                if(result){
+                    var html = payedDetailTempLate();
+                    layer.open({
+                        type : 1,
+                        title : "已付金额明细",
+                        skin : 'layui-layer-rim',
+                        area : '1000px',
+                        zIndex : 1028,
+                        content : html,
+                        scrollbar: false 
+                    });
+                }
+            }
+        });
+    };
+
+    //应付金额明细
+    busCompany.needPayDetail = function(id){
+        $.ajax({
+            url:KingServices.build_url("financial/financialbusCompany","listFcbusCompanySettlementRecord"),
+            type:"POST",
+            data:{
+                busCompanyId : id + ""
+            },
+            success:function(data){
+                var result = showDialog(data);
+                if(result){
+                    var html = needPayDetailTempLate(data);
+                    layer.open({
+                        type : 1,
+                        title : "应付金额明细",
+                        skin : 'layui-layer-rim',
+                        area : '800px',
+                        zIndex : 1028,
+                        content : html,
+                        scrollbar: false 
+                    });
+                }
+            }
+        });
+    };
+
+	busCompany.init_event = function(page,id,name,$tab,option) {
+        if (!!$tab && $tab.length === 1) {
+            var validator = rule.check($tab);
 
             // 监听修改
-            busCompany.$checkTab.find(".T-checkList").off('change').on('change', function(event) {
+            $tab.find(".T-checkList").off('change').on('change',"input",function(event) {
                 event.preventDefault();
-                busCompany.$checkTab.data('isEdited', true);
+                $(this).closest('tr').data("change",true);
+                $tab.data('isEdited', true);
             });
-            busCompany.$checkTab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
+            $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
 				event.preventDefault();
-				busCompany.initCheck(page,id,name);
+                if(option == "check"){
+                    busCompany.initCheck(page,id,name);
+                } else if(option == "clear"){
+                    busCompany.initClear(page,id,name);
+                }
 			})
             // 监听保存，并切换tab
             .on('switch.tab.save', function(event, tab_id, title, html) {
                 event.preventDefault();
-                busCompany.saveChecking(id,name,0,tab_id, title, html);
+                if(option == "check"){
+                    busCompany.saveChecking(id,name,0,tab_id, title, html);
+                } else if(option == "clear"){
+                    busCompany.saveClear(id,name,"",tab_id, title, html);
+                }
             })
             // 保存后关闭
             .on('close.tab.save', function(event) {
                 event.preventDefault();
-                busCompany.saveChecking(id,name);
+                if(option == "check"){
+                    busCompany.saveChecking(id,name);
+                } else if(option == "clear"){
+                    busCompany.saveClear(id,name);
+                }
             });
         }
     };
 
-    busCompany.init_clear_event = function(id, $tab) {
-        if (!!busCompany.$clearTab && busCompany.$clearTab.length === 1) {
-            var validator = rule.check(busCompany.$clearTab);
-
-           busCompany.$clearTab.find(".T-clearList").off('change').off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE)
-            .on('change', function(event) {
-                event.preventDefault();
-                busCompany.$clearTab.data('isEdited', true);
-            });
-            busCompany.$clearTab.off('change').off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
-                event.preventDefault();
-                busCompany.initClear(id,name);
-            })
-            // 监听保存，并切换tab
-            .on('switch.tab.save', function(event, tab_id, title, html) {
-                event.preventDefault();
-                busCompany.saveClear(id,name,"",tab_id, title, html);
-            })
-            // 保存后关闭
-            .on('close.tab.save', function(event) {
-                event.preventDefault();
-                busCompany.saveClear(id,name);
-            });
+    busCompany.getQueryList = function(){
+        var $busCompany = busCompany.$tab.find(".T-chooseBusCompany"),
+            busCompanyList = busCompany.busCompanyList;
+        if(busCompanyList != null && busCompanyList.length > 0){
+            for(var i=0;i<busCompanyList.length;i++){
+                busCompanyList[i].id = busCompanyList[i].busCompanyId;
+                busCompanyList[i].value = busCompanyList[i].busCompanyName;
+            }
         }
+        var all = {
+            id : "",
+            value : "全部"
+        };
+        busCompanyList.unshift(all);
+
+        //车队
+        $busCompany.autocomplete({
+            minLength: 0,
+            source : busCompanyList,
+            change: function(event,ui) {
+                if (!ui.item)  {
+                    $(this).nextAll('input[name="busCompanyId"]').val('');
+                }
+            },
+            select: function(event,ui) {
+                $(this).blur().nextAll('input[name="busCompanyId"]').val(ui.item.id);
+            }
+        }).on("click",function(){
+            $busCompany.autocomplete('search','');
+        });      
     };
 
-    //给每个tr增加验证
-    busCompany.validatorTable = function(){
-        var validator,$tr = busCompany.$checkTab.find(".T-checkList tr");
-        //给每个tr添加表单验证
-        $tr.each(function(){
-            validator = rule.check($(this));
+    // 对账、付款报表内的操作
+    busCompany.listOption = function($tab){
+        $tab.find('.T-option').on('click',function(event) {
+            event.preventDefault();
+            var $that = $(this),
+                id = $that.closest('tr').data('id');
+            if ($that.hasClass('T-busCompanyImg')) {
+                // 查看单据
+                var WEB_IMG_URL_BIG = $tab.find("input[name=WEB_IMG_URL_BIG]").val();//大图
+                var WEB_IMG_URL_SMALL = $tab.find("input[name=WEB_IMG_URL_SMALL]").val();//大图
+                busCompany.viewImage(this,WEB_IMG_URL_BIG,WEB_IMG_URL_SMALL);
+            } else if ($that.hasClass('T-payedDetail')) {
+                // 已付明细
+                busCompany.payedDetail(id);
+            } else if ($that.hasClass('T-needPayDetail')) {
+                // 应收明细
+                busCompany.needPayDetail(id);
+            }
         });
-        return validator;
     };
 
 	exports.init = busCompany.initModule;

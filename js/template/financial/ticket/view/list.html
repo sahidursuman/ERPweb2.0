@@ -1,8 +1,8 @@
 <div class="row FinancialTicket globalAdd" >
-    <div class="form-horizontal search-area">
+    <div class="form-horizontal search-area T-search-area">
         <div class="form-group" >
           <label class="control-label pull-left" style="margin-left: 15px">票务商家：</label>
-              <select  class="col-xs-12" name="ticketId" style="width: 220px">
+              <select class="col-xs-12 T-search-name" name="ticketId" style="width: 220px">
                   <option value ="">全部</option>
                   {{each companyNameListNew as ticket index}}
                   <option value="{{ticket.id}}" {{if searchParam.ticketId == ticket.id}}selected="selected"{{/if}}>{{ticket.name}}</option>
@@ -10,20 +10,20 @@
               </select>
            <label class="control-label pull-left  marginLeft-30" >账期：</label>
 			<!--<div class="col-sm-2" >-->
-				<select class="col-sm-1" name="year" >
+				<select class="col-sm-1 T-search-year" name="year" >
 					{{each yearList as year index}}
 						<option value="{{year.value}}" {{if searchParam.year == year.value}}selected="selected"{{/if}}>{{year.value}}</option>
 					{{/each}}
 				</select>
 
-				<select class="marginLeft-30 col-sm-1" name="month">
+				<select class="marginLeft-30 col-sm-1 T-search-month" name="month">
 				    <option value ="">全部</option>
 					{{each monthList as month index}}
 						<option value="{{month.value}}" {{if searchParam.month == month.value}}selected="selected"{{/if}}>{{month.value}}月</option>
 					{{/each}}
 				</select>
 			<!--</div>-->
-            <button class=" btn-sm search-btn marginLeft-30 btn-ticket-search "> <i class="ace-icon fa fa-search"></i> 搜索 </button> </div>
+            <button class=" btn-sm search-btn marginLeft-30 T-btn-search "> <i class="ace-icon fa fa-search"></i> 搜索 </button> </div>
     </div>
     <div class="row ticketList">
         <div class="col-xs-12">
@@ -41,9 +41,9 @@
                 </tr>
                 </thead>
 
-                <tbody>
+                <tbody class="T-list">
                 {{each financialTicketSettlementList as ticket}}
-                <tr>
+                <tr data-id="{{ticket.ticketId}}">
                     <td>{{ticket.companyName}}</td>
                     <td>{{ticket.sumNeedPayMoney}}</td>
                     <td>{{ticket.sumRealNeedPayMoney}}</td>
@@ -61,17 +61,17 @@
 	                    {{/if}}
                     </td>
                     <td>
-                        <a data-entity-id="{{ticket.ticketId}}" data-entity-companyName="{{ticket.companyName}}" data-entity-year="{{searchParam.year}}" data-entity-month="{{searchParam.month}}" class="cursor btn-ticket-check R-right" data-right="1210002">
-                            	 对账
+                        <a data-entity-companyName="{{ticket.companyName}}" data-entity-year="{{searchParam.year}}" data-entity-month="{{searchParam.month}}" class="cursor T-action T-check R-right" data-right="1210002">
+                            对账
                         </a>
                         <label class="cursor R-right" data-right="1210002"><a class="R-right" data-right="1210003"> |</a></label>
-                        <a data-entity-id="{{ticket.ticketId}}" data-entity-companyName="{{ticket.companyName}}" data-entity-year="{{searchParam.year}}"
+                        <a data-entity-companyName="{{ticket.companyName}}" data-entity-year="{{searchParam.year}}"
                                 {{if searchParam.month == ""}}
                                  	 data-entity-startMonth=1 data-entity-endMonth=12
                                   {{else}}
                                  	 data-entity-startMonth="{{searchParam.month}}" data-entity-endMonth="{{searchParam.month}}"
                                 {{/if}}
-                        		class="cursor R-right btn-ticket-balance" data-right="1210003">
+                        		class="cursor R-right T-action T-balance" data-right="1210003">
                            		 结算
                         </a>
                     </td>
