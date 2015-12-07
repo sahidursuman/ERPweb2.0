@@ -3,7 +3,7 @@
 		<div class=" ui-sortable-handle">
 				<h5 class="">
 					<span class="badge badge-primary">1</span>
-					<label class="middle title-size">填写内转费用</label>
+					<label class="middle title-size">填写费用</label>
 				</h5>
 			<div class="widget-body" >
 				<div class="form-group">
@@ -83,45 +83,45 @@
 								</tr>  
 
 								{{if touristGroup.transferFeeStatus == 0}}
-								<!--初始化游客小组费用start--> 
-								{{each touristGroupFeeList as transferList}}         
-									<tr  data-entity-id="">    
+									<!--初始化游客小组费用start--> 
+									{{each touristGroupFeeList as transferList}}         
+										<tr  data-entity-id="{{transferList.id}}">  
+											<td>
+												<span name="type" value="0">其他费用</span>   
+											</td>   
+											<td>
+												<input name="discribe" value="{{transferList.describeInfo}}" type="text" class="col-sm-12  no-padding-right"  maxlength="500" />
+											</td>
+											<td>
+												<input name="count" value="" type="text" class="col-sm-12  no-padding-right count"  maxlength="10" />
+											</td>
+											<td>
+												<input name="otherPrice" value="" type="text" class="col-sm-12  no-padding-right price"  maxlength="10" />
+											</td>
+											<td><a class="T-delete cursor">删除</a></td>
+										</tr>
+									{{/each}} 
+									<!--游客小组费end-->
+									{{else}}
+									<!--转客其他费用start-->
+									{{each innerTransferFeeList as innerFee}}
+									<tr data-entity-id="{{innerFee.id}}">
 										<td>
-											<span name="type" value="0">其他费用</span>   
-										</td>   
-										<td>
-											<input name="discribe" value="{{transferList.describeInfo}}" type="text" class="col-sm-12  no-padding-right"  maxlength="500" />
+											<span name="type" value="0">其他费用</span>
 										</td>
 										<td>
-											<input name="count" value="" type="text" class="col-sm-12  no-padding-right count"  maxlength="10" />
+											<input name="discribe" value="{{innerFee.discribe}}" type="text" class="col-sm-12  no-padding-right"  maxlength="500" />
 										</td>
 										<td>
-											<input name="otherPrice" value="" type="text" class="col-sm-12  no-padding-right price"  maxlength="10" />
+											<input name="count" value="{{innerFee.count}}" type="text" class="col-sm-12  no-padding-right count"  maxlength="10" />
 										</td>
-										<td><a class="  addCost-delete cursor">删除</a></td>
+										<td>
+											<input name="otherPrice" value="{{innerFee.price}}" type="text" class="col-sm-12  no-padding-right price"  maxlength="10" />
+										</td>
+										<td><a class="T-delete cursor">删除</a></td>
 									</tr>
-								{{/each}} 
-								<!--游客小组费end-->
-								{{else}}
-								<!--转客其他费用start-->
-								{{each innerTransferFeeList as innerFee}}
-								<tr data-entity-id="{{innerFee.id}}">
-									<td>
-										<span name="type" value="0">其他费用</span>
-									</td>
-									<td>
-										<input name="discribe" value="{{innerFee.discribe}}" type="text" class="col-sm-12  no-padding-right"  maxlength="500" />
-									</td>
-									<td>
-										<input name="count" value="{{innerFee.count}}" type="text" class="col-sm-12  no-padding-right count"  maxlength="10" />
-									</td>
-									<td>
-										<input name="otherPrice" value="{{innerFee.price}}" type="text" class="col-sm-12  no-padding-right price"  maxlength="10" />
-									</td>
-									<td><a class="addCost-delete cursor">删除</a></td>
-								</tr>
-								{{/each}}
-								<!--转客其他费用end-->
+									{{/each}}
+									<!--转客其他费用end-->
 
 								{{/if}}
 							</tbody>
