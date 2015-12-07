@@ -1,6 +1,6 @@
 {{each list as guide}}
 <tr class="T-checkTr" data-confirm="{{guide.isConfirmAccount}}" data-id="{{guide.id}}" {{ if (!!guide.payMoney) }} data-change='true' {{/if}}>
-    <td><a class="T-gid" data-id="{{guide.tripPlanId}}">{{guide.tripNumber}}</a></td>
+    <td><a class="T-action T-gid" data-id="{{guide.tripPlanId}}">{{guide.tripNumber}}</a></td>
     <td>{{guide.lineProductName}}</td>
     <td>{{guide.accountTime}}</td>
     <td>{{guide.guideAllPreMoney}}</td>
@@ -13,18 +13,15 @@
     <td>{{guide.guideIncomeMoney}}</td>
     <td>{{guide.zhangmiantuibu}}</td>
     <td>{{guide.settlementMoney}}</td>
-    <td>{{guide.payedMoney}}</td>
+    <td>{{ if (guide.payedMoney > 0)}}<a href="javascript:void(0);" class="T-action T-viewPayedMoney">{{guide.payedMoney}}</a>{{else}} {{guide.payedMoney}} {{/if}}</td>
     <td>{{guide.unPayedMoney}}</td>
     <td><input type="text" name="payMoney" value="{{guide.payMoney}}" class="money"></td>
     <td><input type="text" name="payRemark" value="{{guide.payRemark}}"></td>
     <td>{{guide.checkTime}}</td>
     <td>{{guide.checkRealName}}</td>
     <td>
-        {{ if guide.isConfirmAccount }} 已对账 {{else}} 未对账 {{/if}}
-        {{ if guide.isConfirmAccount }}
-        <label class="cursor R-right" data-right="1290002"> <a class="R-right" data-right="1290003"> |</a></label>
+        {{ if guide.isConfirmAccount }} 已对账 {{else}} 未对账 {{/if}} &nbsp;
         <a class="cursor T-action T-view R-right" data-right="1290003">查看</a>
-        {{/if}}
     </td>
 </tr>
 {{/each}}

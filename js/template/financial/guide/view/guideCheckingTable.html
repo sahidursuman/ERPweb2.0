@@ -1,6 +1,6 @@
 {{each list as guide}}
 <tr class="T-checkTr" data-confirm="{{guide.isConfirmAccount}}" data-id="{{guide.id}}">
-    <td><a class="T-gid" data-id="{{guide.tripPlanId}}">{{guide.tripNumber}}</a></td>
+    <td><a class="T-action T-gid" data-id="{{guide.tripPlanId}}">{{guide.tripNumber}}</a></td>
     <td>{{guide.lineProductName}}</td>
     <td>{{guide.accountTime}}</td>
     <td>{{guide.guideAllPreMoney}}</td>
@@ -13,7 +13,7 @@
     <td>{{guide.guideIncomeMoney}}</td>
     <td>{{guide.zhangmiantuibu}}</td>
     <td>{{if guide.isConfirmAccount}} {{guide.settlementMoney}} {{ else }} <input name="settlementMoney" type="text" class="T-settlementMoney" value="{{guide.settlementMoney}}"> {{/if}}</td>
-    <td class="T-payedDetail" data-money="{{guide.payedMoney}}">{{guide.payedMoney}}</td>
+    <td class="T-payedDetail" data-money="{{guide.payedMoney}}">{{ if (guide.payedMoney > 0)}}<a href="javascript:void(0);" class="T-action T-viewPayedMoney">{{guide.payedMoney}}</a>{{else}} {{guide.payedMoney}} {{/if}}</td>
     <td name="unPayedMoney">{{guide.unPayedMoney}}</td>
     <td>{{if guide.isConfirmAccount}} {{guide.checkRemark}} {{ else }} <input type="text" class="T-checkRemark" name="checkRemark" value="{{guide.checkRemark}}"> {{/if}}</td>
     <td>{{guide.checkTime}}</td>
