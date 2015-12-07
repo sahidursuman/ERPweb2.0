@@ -23,16 +23,22 @@
 			{{/each}}
 		</tbody>
 	</table>
-	<form class="form-horizontal" role="form" onsubmit="return false">
-		<div class="form-group" style="text-align: center;">
-			<button class="btn btn-xs btn-primary btn-mergeAddPlan">
-				<i class="ace-icon fa fa-plus"></i>
-				生成计划 
-			</button>
-			<button class="btn btn-xs btn-primary btn-chooseMergePlan">
-				<i class="ace-icon fa fa-bars"></i>
-				选择计划
-			 </button>
+
+	<div class="row pageMode">
+		<div class="col-xs-5">
+			<small>共计 <small class="T-total">0</small> 条记录</small>
+		</div>
+		<div class="col-xs-7">
+			<div class="dataTables_paginate paging_simple_numbers T-pagenation"></div>
+		</div>
+	</div>
+
+	<div class="space-10"></div>
+	<form class="form-horizontal" role="form" onsubmit="return false" style="margin-top:25px;"> 
+		<div class="form-group col-sm-12" style="text-align: center;"> 
+			<button class="btn btn-sm btn-danger T-cancelMergenTripPlan otherButton"> <i class="ace-icon fa fa-times "></i> 取消 </button> 
+			<button class="btn btn-sm btn-primary T-saveMergenTripPlan otherButton" style="margin-left: 30px"> <i class="ace-icon fa fa-check"></i> 确定 </button>
 		</div>
 	</form>
+
 </div>
