@@ -635,7 +635,6 @@ define(function(require, exports) {
                 .done(function(data) {
                     if (showDialog(data)) {
                     	data.touristGroupList = JSON.parse(data.touristGroupList || false) || [];
-                    	console.info(data)
                         Tools.addTab(menuKey + "-costDetail", "费用明细", costDetailTemplate(data));
                         //查看图片事件
                         $("#tab-" + menuKey + "-costDetail-content").find(".T-view-bill").click(function() {
