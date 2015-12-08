@@ -103,7 +103,7 @@ define(function(require, exports) {
         });
     };
 
-    Self.Getcheck = function(page,selfPayId,busCompanyName,accountInfo,startDate,endDate) {
+    Self.Getcheck = function(page,selfPayId,selfPayName,accountInfo,startDate,endDate) {
             Self.CheckData = {
                 pageNo: page,
                 selfPayId: selfPayId,

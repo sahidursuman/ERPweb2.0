@@ -103,6 +103,8 @@ define(function(require, exports) {
                 restaurant.restaurantCheck(0,id,name,"",startDate,endDate);
             } else if ($that.hasClass('T-clear')) {
                 // 付款
+                restaurant.clearTempSumDate = false;
+                restaurant.clearTempData = false;
                 restaurant.restaurantClear(0,0,id,name,"",startDate,endDate);
             }
         });

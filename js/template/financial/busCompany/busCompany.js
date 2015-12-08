@@ -105,6 +105,8 @@ define(function(require, exports) {
                 busCompany.busCompanyCheck(0,id,name,"",startDate,endDate);
             } else if ($that.hasClass('T-clear')) {
                 // 结算
+                busCompany.clearTempSumDate = false;
+                busCompany.clearTempData = false;
                 busCompany.busCompanyClear(0,0,id,name,"",startDate,endDate);
             }
         });

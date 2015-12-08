@@ -104,6 +104,8 @@ define(function(require, exports) {
                 hotel.hotelCheck(0,id,name,"",startDate,endDate);
             } else if ($that.hasClass('T-clear')) {
                 // 结算
+                hotel.clearTempSumDate = false;
+                hotel.clearTempData = false;
                 hotel.hotelClear(0,0,id,name,"",startDate,endDate);
             }
         });
