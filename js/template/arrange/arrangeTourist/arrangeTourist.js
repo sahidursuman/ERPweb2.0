@@ -941,7 +941,8 @@ define(function(require, exports) {
 						"setPlacePosition": getValue("setPlacePosition"),
 						"setPlaceTime": getValue("setPlaceTime"),
 						"executeTimeType": executeTimeType+"",  
-						"executeTime": getValue("executeTime")
+						"executeTime": getValue("executeTime"),
+						"remark" : getValue("remark")
 					},
 					"lineProductId": getValue("lineProductId"),
 					"driverId": getValue("driverId"),
