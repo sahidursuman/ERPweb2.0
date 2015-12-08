@@ -75,8 +75,8 @@
                 <td>{{Checking.memberCount}}</td>
                 <td>{{Checking.reduceMoney}}</td>
                 <td>{{Checking.needPayMoney}}</td>
-                <td><a class="T-lookDetail">{{"社付："}}{{Checking.agencyPayedMoney}}{{";导付："}}{{Checking.guidePayedMoney}}</a></td>
-                <td><a href="#" class="insuanceImg" url=""><span>查看</span></a></td>
+                <td><a class="T-action T-lookDetail">{{"社付："}}{{Checking.agencyPayedMoney}}{{";导付："}}{{Checking.guidePayedMoney}}</a></td>
+                <td><a href="#" class="T-action T-viewInsuanceImg" url=""><span>查看</span></a></td>
                 <td>
                     <input type="text" name="ClearMoney" value="{{Checking.settlementMoney}}"/>
                 </td>
@@ -90,7 +90,7 @@
                     <label class="pos-rel">
                         <input type="checkbox" data-entity-checkStatus="{{Checking.isConfirmAccount}}" class="ace T-insuanceFinancial" checked="checked" />
                         <span class="lbl"></span>
-                        <a class="T-viewhandle">查看</a>
+                        <a class="T-action T-viewhandle">查看</a>
                     </label>
                 </td>
             </tr>
