@@ -3421,4 +3421,5 @@ define(function(require, exports){
         return saveJson;
 	};
 	exports.init = Count.initModule;
+	exports.tripDetail = Count.viewTripDetail;
 });

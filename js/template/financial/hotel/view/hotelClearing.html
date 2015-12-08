@@ -41,7 +41,7 @@
                 <label class="control-label pull-left marginLeft-30">本次付款金额：</label>
                 <input class="col-xs-1 pull-left" name="sumPayMoney" type="text" value="{{sumPayMoney}}" maxlength="9" style="float:none;" />
                 <label class="control-label pull-left marginLeft-30">付款方式：</label>
-                <select style="text-align:center" name="sumPayType">
+                <select class="pull-left" style="text-align:center" name="sumPayType">
                     <option value="0" {{if sumPayType == 0}}selected="selected"{{/if}}>现金</option>
                     <option value="1" {{if sumPayType == 1}}selected="selected"{{/if}}>银行转账</option>
                     <option value="2" {{if sumPayType == 2}}selected="selected"{{/if}}>网上支付</option>
@@ -96,7 +96,7 @@
                 <td>{{if rs.billImage != null && rs.billImage !=""}}<a href="#" class="T-option T-hotelImg" url="{{rs.billImage}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
                 <td>{{rs.settlementMoney}}</td>  
                 <td>{{rs.unPayedMoney}}</td>
-                <td class="col-sm-1"><input name="payMoney" type="text" value="{{rs.payMoney}}" maxlength="9"></td>
+                <td><input name="payMoney" type="text" value="{{rs.payMoney}}" class="money" maxlength="9"></td>
                 <td class="col-sm-1" ><input name="payRemark" type="text" value="{{rs.payRemark}}" maxlength="1000"></td>
                 <td>{{if rs.checkTime == null || rs.checkTime == ""}}-{{else}}{{rs.checkTime | dateFormat:'yyyy-MM-dd hh:mm:ss'}}{{/if}}</td>
                 <td>{{if rs.checkUserName == null || rs.checkUserName == ""}}-{{else}}{{rs.checkUserName}}{{/if}}</td>

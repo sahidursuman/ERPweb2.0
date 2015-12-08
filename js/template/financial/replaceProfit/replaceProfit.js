@@ -1,6 +1,8 @@
 define(function(require, exports) {
     var menuKey = "financial_replaceProfit",
         listTemplate = require("./view/list"),
+        needPayDetailTempLate = require("./view/viewNeedPayDetail"),
+        costDetailTempLate = require("./view/viewCostDetail"),
         tabId = "tab-"+menuKey+"-content";
 
     var replace = {
@@ -10,17 +12,12 @@ define(function(require, exports) {
     };
 
     replace.initModule = function() {
-        var date = new Date(),
-            year = date.getFullYear(),
-            month = date.getMonth()+1,
-            day = date.getDate();
-        var startTime = year + "-" + month + "-1",
-            endTime = year + "-" + month + "-" + day;
+        var dateJson = FinancialService.getInitDate();
 
-        replace.listReplace(0,"","","","","","","","",startTime,endTime);
+        replace.listReplace(0,"","","","","","","","",dateJson.startDate,dateJson.endDate);
     };
 
-    replace.listReplace = function(page,partnerAgencyName,partnerAgencyId,hotelName,hotelId,scenicName,scenicId,ticketType,seatCount,startTime,endTime){
+    replace.listReplace = function(page,partnerAgencyName,partnerAgencyId,hotelName,hotelId,scenicName,scenicId,ticketType,seatCount,startDate,endDate){
         if (replace.$searchArea && arguments.length === 1) {
             // 初始化页面后，可以获取页面的参数
             partnerAgencyName = replace.$searchArea.find("input[name=partnerAgencyName]").val(),
@@ -31,9 +28,17 @@ define(function(require, exports) {
             scenicId = replace.$searchArea.find("input[name=scenicId]").val(),
             ticketType = replace.$searchArea.find("select[name=ticketType]").val(),
             seatCount = replace.$searchArea.find("input[name=seatCount]").val(),
-            startTime = replace.$searchArea.find("input[name=startTime]").val(),
-            endTime = replace.$searchArea.find("input[name=endTime]").val()
+            startDate = replace.$searchArea.find("input[name=startDate]").val(),
+            endDate = replace.$searchArea.find("input[name=endDate]").val()
         }
+        if(startDate > endDate){
+            showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
+            return false;
+        }
+        partnerAgencyName = (partnerAgencyName == "全部") ? "" : partnerAgencyName;
+        hotelName = (hotelName == "全部") ? "" : hotelName;
+        scenicName = (scenicName == "全部") ? "" : scenicName;
+        seatCount = (seatCount == "全部") ? "" : seatCount;
         // 修正页码
         page = page || 0;
 
@@ -45,10 +50,10 @@ define(function(require, exports) {
             hotelId : hotelId,
             scenicName : scenicName,
             scenicId :scenicId,
-            type : ticketType,
+            ticketType : ticketType,
             needSeatCount : seatCount,
-            startTime : startTime,
-            endTime : endTime,
+            startTime : startDate,
+            endTime : endDate,
             sortType: 'auto'
         };
 
@@ -61,7 +66,6 @@ define(function(require, exports) {
                 var result = showDialog(data);
                 if(result){
                     data.bookingOrderList = JSON.parse(data.bookingOrderList);
-                    data.searchParam = replace.searchData;
                     var html = listTemplate(data);
                     addTab(menuKey,"代订利润",html);
                     replace.initList();
@@ -100,15 +104,78 @@ define(function(require, exports) {
             replace.listReplace(0);
         });
 
-        replace.$tab.find(".T-replaceDetail").on("click",function(){
-            var id = $(this).closest('tr').data("id");
-            KingServices.replaceDetail(id);
+        replace.$tab.find('.T-list').on('click','.T-option',function(event) {
+            event.preventDefault();
+            var $that = $(this),
+                id = $that.closest('tr').data('id');
+            if ($that.hasClass('T-replaceDetail')) {
+                // 查看代订明细
+                KingServices.replaceDetail(id);
+            } else if ($that.hasClass('T-needPayDetail')) {
+                // 应收明细
+                replace.viewNeedPayDetail(id);
+            } else if ($that.hasClass('T-costDetail')) {
+                // 成本明细
+                replace.viewCostDetail(id);
+            }
+        });
+    };
+
+    //应收金额明细
+    replace.viewNeedPayDetail = function(id){
+        $.ajax({
+            url:KingServices.build_url("profitBooking","getNeedIncomeDetails"),
+            type:"POST",
+            data:{
+                id : id + ""
+            },
+            success:function(data){
+                var result = showDialog(data);
+                if(result){
+                    var html = needPayDetailTempLate(data);
+                    layer.open({
+                        type : 1,
+                        title : "代订应收明细",
+                        skin : 'layui-layer-rim',
+                        area : '1000px',
+                        zIndex : 1028,
+                        content : html,
+                        scrollbar: false 
+                    });
+                }
+            }
+        });
+    };
+
+    //成本明细
+    replace.viewCostDetail = function(id){
+        $.ajax({
+            url:KingServices.build_url("profitBooking","getNeedIncomeDetails"),
+            type:"POST",
+            data:{
+                id : id
+            },
+            success:function(data){
+                var result = showDialog(data);
+                if(result){
+                    var html = costDetailTempLate(data);
+                    layer.open({
+                        type : 1,
+                        title : "代订成本明细",
+                        skin : 'layui-layer-rim',
+                        area : '800px',
+                        zIndex : 1028,
+                        content : html,
+                        scrollbar: false 
+                    });
+                }
+            }
         });
     };
 
     replace.getQuery = function(){
         $.ajax({
-            url: KingServices.build_url('profitBooking', 'getFinancialConditions'),
+            url: KingServices.build_url('profitBooking', 'getQueryTerms'),
             type: 'POST',
             data: "",
             showLoading:false,
@@ -148,6 +215,14 @@ define(function(require, exports) {
                             seatCountList[j].value = seatCountList[j].count
                         }
                     }
+                    var all = {
+                        id : "",
+                        value : "全部"
+                    };
+                    partnerAgencyList.unshift(all);
+                    hotelList.unshift(all);
+                    scenicList.unshift(all);
+                    seatCountList.unshift(all);
 
                     //客户
                     $partner.autocomplete({

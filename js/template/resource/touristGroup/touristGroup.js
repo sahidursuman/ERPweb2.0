@@ -1582,4 +1582,5 @@ define(function(require,exports){
 		return url;
 	};
 	exports.init = touristGroup.initModule;
+	exports.viewTouristGroup = touristGroup.viewTouristGroupDetails;
 });

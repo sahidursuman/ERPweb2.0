@@ -19,7 +19,8 @@
 
 								<tbody>
 									{{each payedMoneyDetailList as rs}}
-									<tr><td>{{if rs.receivableType == null || rs.receivableType == ""}}-{{else}}{{rs.receivableType}}{{/if}}</td>
+									<tr data-id="{{rs.id}}">
+										<td>{{if rs.payType == null || rs.payType == ""}}-{{else}}{{rs.payType}}{{/if}}</td>
 										<td>{{if rs.businessType == null || rs.businessType == ""}}-{{else}}{{rs.businessType}}{{/if}}</td>
 										<td>{{rs.payDifferenceMoney}}</td>
 										<td>{{rs.remark}}</td>
