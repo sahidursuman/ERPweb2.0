@@ -315,28 +315,6 @@ define(function(require, exports) {
             .done(function(data) {
                 if (showDialog(data)) {
                     data.memberList = JSON.parse(data.memberList || false) || [];
-                    data.memberList = [{
-                        idCardNumber: 'D-1234-123456',
-                        idCardType: 1,
-                        isContactUser: 0,
-                        mobileNumber: '15881158856',
-                        name: 'roger wei'
-                    },
-                    {
-                        idCardNumber: 'D-1234-123456',
-                        idCardType: 0,
-                        isContactUser: 1,
-                        mobileNumber: '15881158856',
-                        name: 'roger wei'
-                    },
-                    {
-                        idCardNumber: 'D-1234-123456',
-                        idCardType: 2,
-                        isContactUser: 0,
-                        mobileNumber: '15881158856',
-                        name: 'roger wei'
-                    },
-                    ]
 
                     $next.find('.T-group-list').html(touristsTemplate(data));
                     $that.data('ajax', true).trigger('click');
@@ -354,39 +332,6 @@ define(function(require, exports) {
         .done(function(data) {
             if (showDialog(data)) {
                 data.customerAcountDetailList = JSON.parse(data.customerAcountDetailList || false) || [];
-
-                if (Client.mock) {
-                    data.customerAcountDetailList = [
-                        {
-                            resourceType: '团款收入',
-                            businessType: '游客管理-新增小组收入',
-                            incomePart: '社收',
-                            incomeMoney: '200',
-                            incomeType: '现金',
-                            remark: 'wa',
-                            creatorName: '李四',
-                            createTime: '2015-07-01 20:54:32'
-                        },{
-                            resourceType: '团款收入',
-                            businessType: '游客管理-新增小组收入',
-                            incomePart: '社收',
-                            incomeMoney: '200',
-                            incomeType: '现金',
-                            remark: 'wa',
-                            creatorName: '李四',
-                            createTime: '2015-07-01 20:54:32'
-                        },{
-                            resourceType: '团款收入',
-                            businessType: '游客管理-新增小组收入',
-                            incomePart: '社收',
-                            incomeMoney: '200',
-                            incomeType: '现金',
-                            remark: 'wa',
-                            creatorName: '李四',
-                            createTime: '2015-07-01 20:54:32'
-                        }
-                    ];
-                }
 
                 layer.open({
                     type: 1,
