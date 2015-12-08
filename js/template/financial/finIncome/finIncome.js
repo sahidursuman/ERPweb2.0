@@ -94,14 +94,8 @@ define(function(require, exports) {
 			case 2:  //购物账务
 				options.url = KingServices.build_url('', 'listPager');
 				break;
-			case 3:  //代订账务
+			default:  //代订账务
 				options.url = KingServices.build_url('', 'listPager');
-				break;
-			default:  //其它账务 4
-				options.url = KingServices.build_url('account/arrangeOtherFinancial', 'listFinancialOther');
-				resArgs.startAccountTime = args.startTime;
-				resArgs.endAccountTime = args.endTime;
-				resArgs.name = args.name;
 				break;
 		}
 		
@@ -139,23 +133,7 @@ define(function(require, exports) {
 					break;
 				case 2:  //购物账务
 					break;
-				case 3:  //代订账务
-					break;
-				default:  //其它账务 4
-					var src = data.financialOtherList;
-					for (var i = 0, len = src.length, tmp; i < len; i++) {
-						tmp = src[i];
-
-						list.push({
-							orgName: tmp.name,
-							needPayMoney: tmp.sumNeedPayMoney,
-							payedMoney: tmp.sumPayedMoney,
-							unPayedMoney: tmp.sumUnPayedMoney,
-						})
-					}
-
-					data.totalPage = data.searchParam.totalPage;
-					data.totalCount = data.recordSize;
+				default:  //代订账务
 					break;
 			}
 		}
