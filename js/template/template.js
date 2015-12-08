@@ -101,5 +101,50 @@
         return data.toFixed(2);
     }), template.helper("stringify", function(data) {
         return JSON.stringify(data);
+    }), template.helper("getCardText", function(idCardType) {
+        switch (1 * idCardType) {
+          case 0:
+            return "身份证";
+
+          case 1:
+            return "护照";
+
+          default:
+            return "其他";
+        }
+    }), template.helper("getTicketText", function(ticketType) {
+        switch (1 * ticketType) {
+          case 1:
+            return "机票";
+
+          case 2:
+            return "汽车票";
+
+          case 3:
+            return "火车票";
+
+          case 4:
+            return "轮船票";
+
+          default:
+            return "其他";
+        }
+    }), template.helper("getPayTypeText", function(payType) {
+        switch (1 * payType) {
+          case 0:
+            return "现金";
+
+          case 1:
+            return "银行转账";
+
+          case 2:
+            return "网上支付";
+
+          case 3:
+            return "支票";
+
+          default:
+            return "其他";
+        }
     });
 }();
