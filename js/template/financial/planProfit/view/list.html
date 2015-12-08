@@ -1,7 +1,7 @@
 <div class="row">
-	<div class="col-xs-12 T-search-area border" style="margin:0px;border-style:solid">  
+	<div class="col-xs-12 T-search-area" style="margin:0px;">  
 		<div class="form-horizontal clearfix">      
-	      	<label class="control-label pull-left" style="margin-left: 15px">团号：</label>
+	      	<label class="control-label pull-left">团号：</label>
 	    	<input type="text" class="col-sm-12" style="width: 220px" placeholder="团号" name="tripNumber" value="{{searchParam.tripNumber}}" />
 
 			<label class="control-label pull-left" style="margin-left: 15px">线路产品：</label>
@@ -15,7 +15,7 @@
 			<label class="control-label pull-left" style="margin-left: 15px">开始日期：</label>
 			<div class="col-xs-1">
 				<div class="input-group">
-			    	<input class="col-xs-12 date-picker" name="startTime" placeholder="开始日期" type="text" value="{{searchParam.startTime}}" />	
+			    	<input class="col-xs-12 date-picker" name="startTime" placeholder="开始日期" type="text" value="{{searchParam.start}}" />	
 					<span class="input-group-addon">
 						<i class="fa fa-calendar"></i>
 					</span>
@@ -24,7 +24,7 @@
 			<label class="control-label pull-left" style="margin-left: 15px">结束日期：</label>
 			<div class="col-xs-1">
 				<div class="input-group">
-			    	<input class="col-xs-12 date-picker" name="endTime" placeholder="结束日期" type="text" value="{{searchParam.endTime}}" />	
+			    	<input class="col-xs-12 date-picker" name="endTime" placeholder="结束日期" type="text" value="{{searchParam.end}}" />	
 					<span class="input-group-addon">
 						<i class="fa fa-calendar"></i>
 					</span>
@@ -34,7 +34,16 @@
 			<label class="control-label pull-left" style="margin-left: 15px">状态：</label>
 	    	<div class="btn-group T-status" style="margin-left: 20px;">
 				<button data-toggle="dropdown" data-value="{{searchParam.status}}" class=" btn-sm  dropdown-toggle block-up block-up" aria-expanded="false" style="height:24px;padding:0px 10px;line-height:24px;">
-					<span>全部
+					<span>
+						{{if searchParam.status == ""}}
+							全部
+						{{else if searchParam.status == 0}}
+							待确认
+						{{else if searchParam.status == 1}}
+							已发团
+						{{else if searchParam.status == -1}}
+							已取消
+						{{/if}}	
 					</span>
 					<i class="ace-icon fa fa-angle-down icon-on-right" ></i>
 				</button>
@@ -43,10 +52,13 @@
 						<a data-value="" href="javascript:void(0)">全部</a>
 					</li>
 					<li>
-						<a data-value="1" href="javascript:void(0)">已启用</a>
+						<a data-value="0" href="javascript:void(0)">待确认</a>
 					</li>
 					<li>
-						<a data-value="0" href="javascript:void(0)">已停用</a>
+						<a data-value="1" href="javascript:void(0)">已发团</a>
+					</li> 
+					<li>
+						<a data-value="1" href="javascript:void(0)">已取消</a>
 					</li> 
 				</ul>
 			</div>			
@@ -54,14 +66,14 @@
 	        <button class="btn-sm marginLeft-30 search-btn T-search"> <i class="ace-icon fa fa-search"></i>搜索</button> 
 	    </div>
 
-	    <div class="border" style="margin:0px;padding:0px;padding-top:10px;border-style:dashed none none none;margin-top:10px;">
-            <label class="control-label" style="margin-left:15px;">收入合计：26732</label>
-            <label class="control-label marginLeft-30">发团成本合计：7263478</label>
-            <label class="control-label marginLeft-30">中转成本合计：673457263</label>
-            <label class="control-label marginLeft-30">毛利：6537465</label>
-            <label class="control-label marginLeft-30">人均毛利：7263478</label>
-            <label class="control-label marginLeft-30">人数：673大57小</label>
-            <label class="control-label marginLeft-30">团数：21</label>
+	    <div style="margin:0px;padding:0px;margin-top:10px;">
+            <label class="control-label">收入合计：{{sumData.totalIncome}}</label>
+            <label class="control-label marginLeft-30">发团成本合计：{{sumData.totalTrip}}</label>
+            <label class="control-label marginLeft-30">中转成本合计：{{sumData.totalOut}}</label>
+            <label class="control-label marginLeft-30">毛利：{{sumData.profit}}</label>
+            <label class="control-label marginLeft-30">人均毛利：{{sumData.perCapitaProfit}}</label>
+            <label class="control-label marginLeft-30">人数：{{sumData.adultCount}} 大 {{sumData.childCount}} 小</label>
+            <label class="control-label marginLeft-30">团数：{{sumData.tripCount}}</label>
         </div>
     </div>
 
@@ -90,7 +102,6 @@
 				<th>自费</th>
 				<th>其他收入</th>
 				<th>导游管理费</th>
-
 				<th>导服费</th>
 				<th>保险</th>
 				<th>车费</th>
@@ -101,7 +112,6 @@
 				<th>其他支出</th>
 				<th>购物导佣</th>
 				<th>自费导佣</th>
-
 				<th>车费</th>
 				<th>餐费</th>
 				<th>房费</th>
@@ -110,47 +120,54 @@
 			</tr>
 		</thead>
 		<tbody class="T-planProfit-list">
-			{{each}}
-			<tr data-id="">
-				<td><a class="T-tripDetail">ZQL20254920161212T</a></td>
-				<td>线路产品</td>
-				<td>出游日期2015-09-15</td>
-				<td>人数</td>
-				<td>导游</td>
-				<td>责任计调</td>
-				<td>状态</td>
-				<td>团款</td>
-				<td>购物佣金</td>
-				<td>自费</td>
-				<td>其他收入</td>
-				<td>导游管理费</td>
-				<td>导服费</td>
-				<td>保险</td>
-				<td>车费</td>
-				<td>餐费</td>
-				<td>房费</td>
-				<td>景区</td>
-				<td>票务</td>
-				<td>其他支出</td>
-				<td>购物导佣</td>
-				<td>自费导佣</td>
-				<td>车费</td>
-				<td>餐费</td>
-				<td>房费</td>
-				<td>票务</td>
-				<td>其他</td>
-				<td>收入小计</td>
-				<td>发团成本小计</td>
-				<td>中转成本小计</td>
-				<td>毛利</td>
-				<td>人均毛利</td>
+			{{each result as rs}}
+			<tr data-id="{{rs.financialId}}">
+				<td><a class="T-tripDetail">{{rs.tripNumber}}</a></td>
+				<td>{{rs.lineProductName}}</td>
+				<td>{{rs.startTime | dateFormat:'yyyy-MM-dd'}}</td>
+				<td>{{rs.adultCount}} 大 {{rs.childCount}} 小</td>
+				<td>{{rs.guideName}}</td>
+				<td>{{rs.creatorName}}</td>
+				<td>{{if rs.status == 0}}
+						待确认
+					{{else if rs.status == 1}}
+						已发团
+					{{else if rs.status == -1}}
+						已取消
+					{{/if}}
+				</td>
+				<td>{{rs.needPayAllMoney}}</td>
+				<td>{{rs.shopMoney}}</td>
+				<td>{{rs.selfPayMoney}}</td>
+				<td>{{rs.incomeMoney}}</td>
+				<td>{{rs.guideMoney}}</td>
+				<td>{{rs.guideTip}}</td>
+				<td>{{rs.insuranceMoney}}</td>
+				<td>{{rs.busMoney}}</td>
+				<td>{{rs.restaurantMoney}}</td>
+				<td>{{rs.hotelMoney}}</td>
+				<td>{{rs.scenicMoney}}</td>
+				<td>{{rs.ticketMoney}}</td>
+				<td>{{rs.otherMoney}}</td>
+				<td>{{rs.shopCostMoney}}</td>
+				<td>{{rs.selfMoney}}</td>
+				<td>{{rs.outBusMoney}}</td>
+				<td>{{rs.outRestaurantMoney}}</td>
+				<td>{{rs.outHotelMoney}}</td>
+				<td>{{rs.outTicketMoney}}</td>
+				<td>{{rs.outOtherMoney}}</td>
+				<td>{{rs.totalIncome}}</td>
+				<td>{{rs.totalTrip}}</td>
+				<td>{{rs.totalOut}}</td>
+				<td>{{rs.profit}}</td>
+				<td>{{rs.perCapitaProfit}}</td>
 			</tr>
 			{{/each}}
 		</tbody>
 	</table>
 	<div class="row pageMode">
 		<div class="col-xs-6">
-			<small>共计 1 条记录</small>
+			<small>共计 {{searchParam.totalCount}} 条记录</small>
 		</div>
 		<div class="col-xs-6">
 			<div class="dataTables_paginate paging_simple_numbers T-pagenation">

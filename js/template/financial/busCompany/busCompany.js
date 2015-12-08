@@ -63,7 +63,7 @@ define(function(require, exports) {
 					var html = listTemplate(data);
 					Tools.addTab(menuKey,"车队账务",html);
 
-					busCompany.initList();
+					busCompany.initList(startDate,endDate);
 
 					// 绑定翻页组件
 					laypage({
@@ -81,7 +81,7 @@ define(function(require, exports) {
         });
     };
 
-    busCompany.initList = function(year,month){
+    busCompany.initList = function(startDate,endDate){
     	busCompany.$tab = $('#tab-' + menuKey + "-content");
         busCompany.$searchArea = busCompany.$tab.find('.T-search-area');
 
@@ -99,9 +99,7 @@ define(function(require, exports) {
             event.preventDefault();
             var $that = $(this),
             	id = $that.closest('tr').data('id'),
-            	name = $that.closest('tr').data('name'),
-                startDate = busCompany.$searchArea.find("input[name=startDate]").val(),
-                endDate = busCompany.$searchArea.find("input[name=endDate]").val();
+            	name = $that.closest('tr').data('name');
             if ($that.hasClass('T-check')) {
                 // 对账
                 busCompany.busCompanyCheck(0,id,name,"",startDate,endDate);
@@ -380,7 +378,7 @@ define(function(require, exports) {
             url:KingServices.build_url("financial/financialBusCompany","saveAccountChecking"),
             type:"POST",
             data:{
-                financialBusCompanyListStr : checkSaveJson
+                busCompanyJson : checkSaveJson
             },
             success:function(data){
                 var result = showDialog(data);
@@ -415,7 +413,7 @@ define(function(require, exports) {
         $.ajax({
             url:KingServices.build_url("financial/financialBusCompany","saveAccountSettlement"),
             type:"POST",
-            data:{ financialBusCompanyListStr : clearSaveJson },
+            data:{ busCompanyJson : clearSaveJson },
             success:function(data){
                 var result = showDialog(data);
                 if(result){
@@ -497,15 +495,15 @@ define(function(require, exports) {
     //已付金额明细
     busCompany.payedDetail = function(id){
         $.ajax({
-            url:KingServices.build_url("financial/financialbusCompany","listFcbusCompanySettlementRecord"),
+            url:KingServices.build_url("account/scenicFinancial","getPayedMoneyDetail"),
             type:"POST",
             data:{
-                busCompanyId : id + ""
+                id : id
             },
             success:function(data){
                 var result = showDialog(data);
                 if(result){
-                    var html = payedDetailTempLate();
+                    var html = payedDetailTempLate(data);
                     layer.open({
                         type : 1,
                         title : "已付金额明细",
@@ -523,10 +521,10 @@ define(function(require, exports) {
     //应付金额明细
     busCompany.needPayDetail = function(id){
         $.ajax({
-            url:KingServices.build_url("financial/financialbusCompany","listFcbusCompanySettlementRecord"),
+            url:KingServices.build_url("account/scenicFinancial","getNeedPayDetail"),
             type:"POST",
             data:{
-                busCompanyId : id + ""
+                id : id
             },
             success:function(data){
                 var result = showDialog(data);
@@ -551,7 +549,7 @@ define(function(require, exports) {
             var validator = rule.check($tab);
 
             // 监听修改
-            $tab.find(".T-checkList").off('change').on('change',"input",function(event) {
+            $tab.find(".T-" + option + "List").off('change').on('change',"input",function(event) {
                 event.preventDefault();
                 $(this).closest('tr').data("change",true);
                 $tab.data('isEdited', true);

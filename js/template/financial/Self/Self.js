@@ -8,58 +8,79 @@ define(function(require, exports) {
         blanceRecords = require("./view/selfPayRecords"),
         tabId = "tab-" + menuKey + "-content",
         checkTabId = menuKey + "-checking",
-        blanceTabId = menuKey + "-blance",
-        yearList = [],
-        monthList = [];
-    for (var i = 2013; i <= new Date().getFullYear(); i++) {
-        var yeardata = {
-            "value": i
-        }
-        yearList.push(yeardata)
-    }
-    for (var j = 1; j <= 12; j++) {
-        var monthData = {
-            "value": j
-        }
-        monthList.push(monthData);
-    }
+        blanceTabId = menuKey + "-blance";
+
     var Self = {
-        $searchArea: false
+        searchData : false,
+        $tab :false,
+        $checkTab : false,
+        $clearTab : false,
+        $searchArea : false,
+        $checkSearchArea: false,
+        $clearSearchArea : false,
+        selfList : false,
+        clearTempData : false,
+        clearTempSumDate : false
     };
     Self.initModule = function() {
-        Self.listSelf(0, "", 2015, "");
+        var dateJson = FinancialService.getInitDate();
+        Self.listSelf(0,"","",dateJson.startDate,dateJson.endDate);
     };
-    Self.listSelf = function(page, selfPayId, year, month) {
+    Self.listSelf = function(page,selfPayName,selfPayId,startDate,endDate) {
+        if (Self.$searchArea && arguments.length === 1) {
+            selfPayName = Self.$searchArea.find("input[name=selfPayName]").val(),
+            selfPayId = Self.$searchArea.find("input[name=selfPayId]").val(),
+            startDate = Self.$searchArea.find("input[name=startDate]").val(),
+            endDate = Self.$searchArea.find("input[name=endDate]").val()
+        }
+        if(startDate > endDate){
+            showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
+            return false;
+        }
+        selfPayName = (selfPayName == "全部") ? "" : selfPayName;
+
         Self.searchData = {
             pageNo: page,
+            selfPayName : selfPayName,
             selfPayId: selfPayId,
-            year: year,
-            month: month,
+            startTime: startDate,
+            endTime: endDate,
             sortType: 'auto'
         };
         $.ajax({
-            url: KingServices.build_url("financial/financialSelfPay", "listSumFcSelfPay"),
+            url: KingServices.build_url("account/selfPayFinancial", "listFinancialSummaryOfSelfPay"),
             type: "POST",
             data: Self.searchData,
             success: function(data) {
                 var result = showDialog(data);
                 if (result) {
-                    data.selfPayNameListNew = JSON.parse(data.selfPayNameListNew);
-                    data.yearList = yearList;
-                    data.monthList = monthList;
-                    data.searchParam = Self.searchData;
                     var html = listTemplate(data);
                     Tools.addTab(menuKey, "自费账务", html);
                     Self.initList();
 
+                    // 绑定翻页组件
+                    laypage({
+                        cont: Self.$tab.find('.T-pagenation'),
+                        pages: data.totalPage,
+                        curr: (page + 1),
+                        jump: function(obj, first) {
+                            if (!first) {
+                                Self.listSelf(obj.curr -1);
+                            }
+                        }
+                    });
                 }
             }
         });
     }
-    Self.initList = function() {
+    Self.initList = function(startDate,endDate) {
         // 初始化jQuery 对象
         Self.$tab = $('#' + tabId);
         Self.$searchArea = Self.$tab.find('.T-search-area');
+
+        Self.getQueryList();
+        FinancialService.initDate(Self.$tab);
+
         //搜索按钮事件
         Self.$tab.find('.T-search').on('click', function(event) {
             event.preventDefault();
@@ -70,25 +91,19 @@ define(function(require, exports) {
         Self.$tab.find('.T-list').on('click', '.T-option', function(event) {
             event.preventDefault();
             var $that = $(this),
-                yearList = Self.$searchArea.find("select[name=year]").val(),
-                monthList = Self.$searchArea.find("select[name=month]").val(),
-                selfPayId = $that.attr("data-entity-id");
-            selfPayName = $that.attr("data-entity-selfPayName");
-            startMonth = $that.attr("data-entity-startMonth");
-            endMonth = $that.attr("data-entity-endMonth");
-            endMonth = $that.attr("data-entity-id");
-            console.log(selfPayId);
+                id = $that.closest("tr").data("id"),
+                name = $that.closest("tr").data("name");
             if ($that.hasClass('T-check')) {
                 // 对账
-                Self.Getcheck(0, selfPayId, selfPayName, yearList, monthList);
+                Self.Getcheck(0,id,selfPayName,startDate,endDate);
             } else if ($that.hasClass('T-clear')) {
                 // 结算
-                Self.GetChecking(0, selfPayId, selfPayName, yearList, startMonth, endMonth);
+                Self.GetChecking(0,id,selfPayName,startDate,endDate);
             }
         });
-
     };
-    Self.Getcheck = function(page, selfPayId, selfPayName, year, month) {
+
+    Self.Getcheck = function(page,selfPayId,busCompanyName,accountInfo,startDate,endDate) {
             Self.CheckData = {
                 pageNo: page,
                 selfPayId: selfPayId,
@@ -194,7 +209,50 @@ define(function(require, exports) {
                 }
             }
         })
-    }
+    };
+
+    Self.getQueryList = function(){
+        $.ajax({
+            url: KingServices.build_url("account/selfPayFinancial","getSelfPayNames"),
+            type: "POST",
+            data: Self.ClearData,
+            dataType: "json",
+            success: function(data) {
+                var result = showDialog(data);
+                if (result) {
+                    var $selfPay = Self.$tab.find(".T-chooseSelfPay"),
+                        selfPayList = data.selfPayNames;
+                    if(selfPayList != null && selfPayList.length > 0){
+                        for(var i=0;i<selfPayList.length;i++){
+                            selfPayList[i].value = selfPayList[i].name;
+                        }
+                    }
+                    var all = {
+                        id : "",
+                        value : "全部"
+                    };
+                    selfPayList.unshift(all);
+
+                    //车队
+                    $selfPay.autocomplete({
+                        minLength: 0,
+                        source : selfPayList,
+                        change: function(event,ui) {
+                            if (!ui.item)  {
+                                $(this).nextAll('input[name="busCompanyId"]').val('');
+                            }
+                        },
+                        select: function(event,ui) {
+                            $(this).blur().nextAll('input[name="busCompanyId"]').val(ui.item.id);
+                        }
+                    }).on("click",function(){
+                        $selfPay.autocomplete('search','');
+                    });
+                }
+            }
+        });
+              
+    };
 
     exports.init = Self.initModule;
 });

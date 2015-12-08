@@ -29,7 +29,7 @@
 			<div class="col-xs-3">
 				<div class="col-xs-6">  
 					<div class="input-group">
-						<input class="col-xs-12 date-picker" name="startTime" placeholder="开始日期" value="{{searchParam.startTime}}" type="text" />	
+						<input class="col-xs-12 date-picker" name="startDate" placeholder="开始日期" value="{{searchParam.startTime}}" type="text" />	
 						<span class="input-group-addon">
 							<i class="fa fa-calendar"></i>
 						</span>
@@ -37,7 +37,7 @@
 				</div>
 				<div class="col-xs-6">
 					<div class="input-group">
-						<input class="col-xs-12 date-picker" name="endTime" placeholder="结束日期" value="{{searchParam.endTime}}" type="text" />	
+						<input class="col-xs-12 date-picker" name="endDate" placeholder="结束日期" value="{{searchParam.endTime}}" type="text" />	
 						<span class="input-group-addon">
 							<i class="fa fa-calendar"></i>
 						</span>
@@ -75,42 +75,42 @@
 					<th>旅游车</th>
 				</tr>
 			</thead>
-			<tbody>
-				{{each bookingOrderList as booking}}
-				<tr data-id="{{booking.id}}">
-					<td><a class="T-replaceDetail">{{booking.orderNumber}}</a></td>
-					<td>{{if booking.partnerAgency != null}}{{booking.partnerAgency.travelAgencyName}}{{/if}}</td>
+			<tbody class="T-list">
+				{{each bookingOrderList as rs}}
+				<tr data-id="{{rs.id}}">
+					<td><a class="T-option T-replaceDetail">{{rs.orderNumber}}</a></td>
+					<td>{{if rs.partnerAgency != null}}{{rs.partnerAgency.travelAgencyName}}{{/if}}</td>
 					<td>
-						{{if booking.financialHotel == ""}}
+						{{if rs.financialHotel == ""}}
 							-
 						{{else}}
-							{{booking.financialHotel}}
+							{{rs.financialHotel}}
 						{{/if}}
 					</td>
 					<td>
-						{{if booking.financialTicket == ""}}
+						{{if rs.financialTicket == ""}}
 							-
 						{{else}}
-							{{booking.financialTicket}}
+							{{rs.financialTicket}}
 						{{/if}}
 					</td>
 					<td>
-						{{if booking.financialScenic == ""}}
+						{{if rs.financialScenic == ""}}
 							-
 						{{else}}
-							{{booking.financialScenic}}
+							{{rs.financialScenic}}
 						{{/if}}
 					</td>
 					<td>
-						{{if booking.financialBus == ""}}
+						{{if rs.financialBus == ""}}
 							-
 						{{else}}
-							{{booking.financialBus}}
+							{{rs.financialBus}}
 						{{/if}}
 					</td>
-					<td>{{booking.sumNeedGetMoney}}</td>
-					<td>{{booking.sumCostMoney}}</td>
-					<td>{{booking.financialGrossProfit}}</td>
+					<td><a class="T-option T-needPayDetail">{{rs.sumNeedGetMoney}}</a></td>
+					<td><a class="T-option T-costDetail">{{rs.sumCostMoney}}</a></td>
+					<td>{{rs.financialGrossProfit}}</td>
 				</tr>
 				{{/each}}
 			</tbody>
