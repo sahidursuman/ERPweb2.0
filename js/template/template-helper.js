@@ -58,3 +58,17 @@ template.helper("getTicketText", function(ticketType) {
             return '其他';
     }
 });
+template.helper("getPayTypeText", function(payType) {
+    switch (payType * 1) {
+        case 0:
+            return '现金';
+        case 1:
+            return '银行转账';
+        case 2:
+            return '网上支付';
+        case 3:
+            return '支票';
+        default:
+            return '其他';
+    }
+});
