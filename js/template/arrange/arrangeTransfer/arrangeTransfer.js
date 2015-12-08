@@ -73,7 +73,7 @@ define(function(require, exports) {
 						transfer.allData.user2 = JSON.parse(data.user2);
 
 						var html=listMainTemplate(transfer.allData);
-						Tools.addTab(menuKey,"转客管理",html);
+						Tools.addTab(menuKey,"外转管理",html);
 
 				    	transfer.$tab=$('#'+ tabId);
 				    	//初始化时间插件

@@ -77,7 +77,7 @@ define(function(require, exports) {
                         data.yearList = yearList;
                         data.monthList = monthList;
                         var html = listTemplate(data);
-                        addTab(menuKey,"转客账务",html);
+                        addTab(menuKey,"外转账务",html);
                       //搜索按钮事件
                         $("#" + tabId + " .btn-transfer-search").click(function(){
 							console.log($("#" + tabId + " input[name=travelAgencyName]").val());
@@ -167,25 +167,25 @@ define(function(require, exports) {
 	                        if($("#" +"tab-"+checkTabId+"-content").length > 0)
 	                 	      {
 	                 	    	 if(!!Transfer.edited["checking"] && Transfer.edited["checking"] != ""){
-	                 	    		addTab(checkTabId,"转客对账");
+	                 	    		addTab(checkTabId,"外转对账");
 	                 	    		showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
 	                 	    			 validator = rule.check($('.transferChecking'));
 	  				            		 if (!validator.form()) { return; }
 	  				            		 Transfer.saveCheckingData(partnerAgencyId,partnerAgencyName,0);
 	  				            		 Transfer.edited["checking"] = "";
-	  				            		 addTab(checkTabId,"转客对账",html);
+	  				            		 addTab(checkTabId,"外转对账",html);
 	  				            		 validator = rule.check($('.transferChecking'));
 	  				            	 },function(){
-	  				            		 addTab(checkTabId,"转客对账",html);
+	  				            		 addTab(checkTabId,"外转对账",html);
 	  				            		 Transfer.edited["checking"] = "";
 	  				            		 validator = rule.check($('.transferChecking'));
 	  				            	 });
 	                 	    	 }else{
-	  	                 	    	addTab(checkTabId,"转客对账",html);
+	  	                 	    	addTab(checkTabId,"外转对账",html);
 	  	                 	        validator = rule.check($('.transferChecking'));
 	                 	    	 }
 	                 	    }else{
-	                 	    	addTab(checkTabId,"转客对账",html);
+	                 	    	addTab(checkTabId,"外转对账",html);
 	                 	    	validator = rule.check($('.transferChecking'));
 	                 	    }
 
@@ -319,7 +319,7 @@ define(function(require, exports) {
 	                    if($("#" +"tab-"+blanceTabId+"-content").length > 0)
 	             	    {
 	             	    	 if(!!Transfer.edited["blance"] && Transfer.edited["blance"] != ""){
-	             	    		addTab(blanceTabId,"转客结算");
+	             	    		addTab(blanceTabId,"外转结算");
 			                    //给每个tr添加表单验证
 	             	    		showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
 	             	    			 Transfer.validatorTable()
@@ -327,19 +327,19 @@ define(function(require, exports) {
 	             	    			 if (!$(saveBtn).data('validata').form()) { return; }
 	             	    			 Transfer.saveBlanceData(Transfer.oldBlancePartnerAgencyId,partnerAgencyName,0);
 				            		 Transfer.edited["blance"] = "";
-				            		 addTab(blanceTabId,"转客结算",html);
+				            		 addTab(blanceTabId,"外转结算",html);
 				            		 Transfer.validatorTable();
 				            	 },function(){
-				            		    addTab(blanceTabId,"转客结算",html);
+				            		    addTab(blanceTabId,"外转结算",html);
 				            		    Transfer.edited["blance"] = "";
 				            		    Transfer.validatorTable();
 				            	 });
 	             	    	 }else{
-	                 	    	addTab(blanceTabId,"转客结算",html);
+	                 	    	addTab(blanceTabId,"外转结算",html);
 	                 	    	Transfer.validatorTable();
 	             	    	 }
 	             	    }else{
-	             	    	addTab(blanceTabId,"转客结算",html);
+	             	    	addTab(blanceTabId,"外转结算",html);
 	             	    	Transfer.validatorTable();
 	             	    };
 	             	   $("#" +"tab-"+blanceTabId+"-content .all").on('change', 'input, select', function() {
