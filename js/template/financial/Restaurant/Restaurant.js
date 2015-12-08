@@ -267,11 +267,14 @@ define(function(require, exports) {
                         validator = rule.check(restaurant.$clearTab.find('.T-clearList'));                       
                     }
 
-                    if(isAutoPay == 1){
+                    if(isAutoPay == 0){
+                        restaurant.$clearTab.find(".T-cancel-auto").hide();
+                    } else {
                         restaurant.$clearTab.find('input[name=sumPayMoney]').prop("disabled",true);
                         restaurant.$clearTab.find(".T-clear-auto").hide(); 
-                    } else {
-                        restaurant.$clearTab.find(".T-cancel-auto").hide();
+                        if(isAutoPay == 2){
+                            restaurant.$clearTab.find(".T-cancel--auto").hide();
+                        }
                     }
 
                     //绑定翻页组件
@@ -655,5 +658,10 @@ define(function(require, exports) {
         });
     };
 
+    restaurant.initPay = function(options){
+        restaurant.restaurantClear(2,0,options.id,options.name,"",options.startDate,options.endDate); 
+    };
+
     exports.init = restaurant.initModule;
+    exports.initPay = restaurant.initPay;
 });
