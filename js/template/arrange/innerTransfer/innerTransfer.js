@@ -263,6 +263,7 @@ define(function(require, exports) {
 			data:"id="+id,
 			success:function(data){
 				data.innerTransfer = JSON.parse(data.innerTransfer);
+				data.parentTouristGroup = JSON.parse(data.parentTouristGroup);
 				
 				var html = viewTemplate(data);
 				var outViewTemplate = innerTransferOut(data);
