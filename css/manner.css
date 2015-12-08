@@ -991,6 +991,10 @@ padding-left:0;width: 360px;left: -35px;
     border-width:1px;
 }
 
+/*转客*/
+.TransferTable .widget-main.no-padding .table{
+    border-width:1px; 
+}
 /*媒体查询-不同分辨率*/
 @media screen and (max-width:1703px){
   .line-separated{
@@ -1129,6 +1133,7 @@ padding-left:0;width: 360px;left: -35px;
     width: 110px;
 
 }
+
 .timeStartMore{
     margin-left: 20px !important;
 }

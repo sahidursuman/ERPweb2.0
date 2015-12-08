@@ -216,16 +216,10 @@
 									{{each travelLine.travelLineDayList as travelLineDay i}}
 									<div id="dayList-{{i}}" class="tab-pane fade {{if i == 0}}active in{{/if}}">
 										<div class="col-xs-12 col-sm-12 widget-container-col travelLineDayList">
-											<div class=" ui-sortable-handle">
+											<div class="ui-sortable-handle T-dailyArrangeList">
 													<h5 class="">
 														<label class="title-size">行程标题：{{travelLineDay.title}}</label>
 													</h5>
-												<div class="widget-body">
-													<div class="scheduleContainer T-dailyArrangeList">
-														<h5 class="header">行程详情：</h5>
-														<script id="{{editorName}}-{{i}}" class="T-editor" type="text/plain" style="width:100%">
-															{{#travelLineDay.detail}}
-														</script>
 														<div style="margin-top:10px;margin-bottom:10px">
 															<button class="btn btn-app  btn-xs  T-add T-addRestaurant" style="background: #1fade0!important;">
 																<i class="ace-icon fa fa-plus bigger-160"></i>
@@ -256,6 +250,7 @@
 																其它
 															</button>
 														</div>
+
 														<div id="timeline-1">
 															<div class="row">
 																<div class="col-xs-12 col-sm-12">
@@ -267,6 +262,12 @@
 																</div>
 															</div>
 														</div>
+												<div class="widget-body">
+													<div class="scheduleContainer">
+														<h5 class="header">行程详情：</h5>
+														<script id="{{editorName}}-{{i}}" class="T-editor" type="text/plain" style="width:100%">
+															{{#travelLineDay.detail}}
+														</script>
 													</div>
 												</div>
 											</div>
