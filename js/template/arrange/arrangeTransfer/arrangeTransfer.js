@@ -73,7 +73,7 @@ define(function(require, exports) {
 						transfer.allData.user2 = JSON.parse(data.user2);
 
 						var html=listMainTemplate(transfer.allData);
-						Tools.addTab(menuKey,"转客管理",html);
+						Tools.addTab(menuKey,"外转管理",html);
 
 				    	transfer.$tab=$('#'+ tabId);
 				    	//初始化时间插件
@@ -468,11 +468,11 @@ define(function(require, exports) {
 					})
 					.done(function(data) {
 						if(showDialog(data)){
-										var type="1",
-		 							    divId="Transfer-Out";
-										transfer.getSearchParam(divId,type);
-										transfer.findPager(divId,type,0);
-										transfer.listMainHead(0);
+							var type="1",
+ 							    divId="Transfer-Out";
+								transfer.getSearchParam(divId,type);
+								transfer.findPager(divId,type,0);
+								transfer.listMainHead(0);
 						}
 					})
 					
@@ -929,11 +929,34 @@ define(function(require, exports) {
 		};
 
 
+
+		
+		/**
+		 * [updateTransferIn 外转确认
+		 * @return {[type]} [description]
+		 */
+		transfer.updateTransferIn = function(id){
+			$.ajax({
+				url:KingServices.build_url("transfer","saveLine"),
+				data:"transferId="+id+"",
+				success:function(data){
+					var result = showDialog(data);
+					if(result){  	
+					   var touristGroupId = data.touristGroupId,
+					       typeOut = "out";
+					   //跳转游客小组新增页面
+					   KingServices.addTouristGroup(touristGroupId,typeOut);
+			
+					}
+				}
+			});
+		};
+
 		/**
 		 * 同行转入确认
 		 * @param  {[type]} id [description]
 		 * @return {[type]}    [description]
-		 */
+		 
 		transfer.updateTransferIn=function(id){
 			var editTransferInTemplateLayer;
 			$.ajax({
@@ -1010,7 +1033,7 @@ define(function(require, exports) {
 					}	
 				}
 			})	
-		};
+		};*/
 
 
 	/**

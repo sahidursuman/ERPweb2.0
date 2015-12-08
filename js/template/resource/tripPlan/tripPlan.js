@@ -2302,7 +2302,8 @@ define(function(require, exports) {
 				id : $('#tripPlan_addPlan_tripPlan input[name=tripPlanId]').val(),
 				guideAllPayMoney : $('#tripPlan_addPlan_tripPlan input[name=guideAllPayMoney]').val(),
 				guideAllNowMoney : $('#tripPlan_addPlan_tripPlan input[name=guideAllNowMoney]').val(),
-				guideAllPreMoney : $('#tripPlan_addPlan_tripPlan input[name=guideAllPreMoney]').val()
+				guideAllPreMoney : $('#tripPlan_addPlan_tripPlan input[name=guideAllPreMoney]').val(),
+				guideAllPreMoney : $('#tripPlan_addPlan_tripPlan textarea[name=remark]').val()
 			}
 			tmp.guideAllPayMoney = guideAllPayMoney;
 			
