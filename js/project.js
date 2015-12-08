@@ -632,7 +632,6 @@ var modalScripts = {
 	'financial_innerTransfer_in':"js/template/financial/innerTransferIn/innerTransferIn.js",//内转转入
 	'financial_innerTransfer_out':"js/template/financial/innerTransferOut/innerTransferOut.js",//内转转出
 	'financial_replace' : 'js/template/financial/replace/replace.js',//代订账务
-	'financial_replaceProfit':"js/template/financial/replaceProfit/replaceProfit.js",
 	'financial_payment_details':"js/template/financial/paymentDetails/paymentDetails.js",//收支明细
 	'financial_ticket':"js/template/financial/ticket/ticket.js",//票务账务
 	'financial_planProfit': "js/template/financial/planProfit/planProfit.js", //发团利润
@@ -1533,6 +1532,18 @@ KingServices.tripDetail = function(id){
 KingServices.replaceDetail = function(id){
 	seajs.use("" + ASSETS_ROOT + modalScripts.arrange_booking,function(module){
 		module.replaceDetail(id);
+	});
+}
+//查看线路产品
+KingServices.viewLineProduct = function(id){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_lineProduct,function(module){
+		module.viewLineProduct(id);
+	});
+}
+//查看游客小组
+KingServices.viewTouristGroup = function(id){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_touristGroup,function(module){
+		module.viewTouristGroup(id);
 	});
 }
 

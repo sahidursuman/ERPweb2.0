@@ -62,7 +62,7 @@ define(function(require, exports) {
                     var html = listTemplate(data);
                     Tools.addTab(menuKey,"餐厅账务",html);
 
-                    restaurant.initList();
+                    restaurant.initList(startDate,endDate);
                     // 绑定翻页组件
                     laypage({
                         cont: restaurant.$tab.find('.T-pagenation'),
@@ -79,7 +79,7 @@ define(function(require, exports) {
         });
     };
 
-    restaurant.initList = function(){
+    restaurant.initList = function(startDate,endDate){
         restaurant.$tab = $('#tab-' + menuKey + "-content");
         restaurant.$searchArea = restaurant.$tab.find('.T-search-area');
 
@@ -97,14 +97,14 @@ define(function(require, exports) {
             event.preventDefault();
             var $that = $(this),
             	id = $that.closest('tr').data('id'),
-            	name = $that.closest('tr').data('name'),
-                startDate = restaurant.$searchArea.find("input[name=startDate]").val(),
-                endDate = restaurant.$searchArea.find("input[name=endDate]").val();
+            	name = $that.closest('tr').data('name');
             if ($that.hasClass('T-check')) {
                 // 对账
                 restaurant.restaurantCheck(0,id,name,"",startDate,endDate);
             } else if ($that.hasClass('T-clear')) {
                 // 付款
+                restaurant.clearTempSumDate = false;
+                restaurant.clearTempData = false;
                 restaurant.restaurantClear(0,0,id,name,"",startDate,endDate);
             }
         });
@@ -442,15 +442,15 @@ define(function(require, exports) {
     //已付金额明细
     restaurant.payedDetail = function(id){
         $.ajax({
-            url:KingServices.build_url("account/arrangeRestaurantFinancial","listFcRestaurantSettlementRecord"),
+            url:KingServices.build_url("account/arrangeRestaurantFinancial","getPayedMoneyDetail"),
             type:"POST",
             data:{
-                restaurantId : id + ""
+                id : id
             },
             success:function(data){
                 var result = showDialog(data);
                 if(result){
-                    var html = payedDetailTempLate();
+                    var html = payedDetailTempLate(data);
                     layer.open({
                         type : 1,
                         title : "已付金额明细",
@@ -468,10 +468,10 @@ define(function(require, exports) {
     //应付金额明细
     restaurant.needPayDetail = function(id){
         $.ajax({
-            url:KingServices.build_url("account/arrangeRestaurantFinancial","listFcRestaurantSettlementRecord"),
+            url:KingServices.build_url("account/arrangeRestaurantFinancial","getNeedPayDetail"),
             type:"POST",
             data:{
-                restaurantId : id + ""
+                id : id
             },
             success:function(data){
                 var result = showDialog(data);

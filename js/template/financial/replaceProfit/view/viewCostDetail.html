@@ -8,6 +8,7 @@
 							<table class="table table-striped table-bordered table-hover">
 								<thead>
 									<tr>
+										<th class="th-border">对方单位</th>
 										<th class="th-border">应付类别</th>
 										<th class="th-border">发生业务</th>
 										<th class="th-border">金额</th>
@@ -18,10 +19,12 @@
 								</thead>
 
 								<tbody>
-									{{each payedMoneyDetailList as rs}}
-									<tr><td>{{if rs.receivableType == null || rs.receivableType == ""}}-{{else}}{{rs.receivableType}}{{/if}}</td>
+									{{each needPayDetailsList as rs}}
+									<tr data-id="{{rs.id}}">
+										<td>{{if rs.name == null || rs.name == ""}}-{{else}}{{rs.name}}{{/if}}</td>
+										<td>{{if rs.receivableType == null || rs.receivableType == ""}}-{{else}}{{rs.receivableType}}{{/if}}</td>
 										<td>{{if rs.businessType == null || rs.businessType == ""}}-{{else}}{{rs.businessType}}{{/if}}</td>
-										<td>{{rs.payDifferenceMoney}}</td>
+										<td>{{rs.payMoney}}</td>
 										<td>{{rs.remark}}</td>
 										<td>{{if rs.checkRealname == null || rs.checkRealname == ""}}-{{else}}{{rs.checkRealname}}{{/if}}</td>
 										<td>{{if rs.checkTime == null || rs.checkTime == ""}}-{{else}}{{rs.checkTime | dateFormat:'yyyy-MM-dd hh:mm:ss'}}{{/if}}</td>

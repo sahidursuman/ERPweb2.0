@@ -20,46 +20,17 @@
 								</thead>
 
 								<tbody>
-									<tr data-id="">
-										<td>付款类别</td>
-										<td>发生业务</td>
-										<td>付款方</td>
-										<td>金额</td>
-										<td>付款方式</td>
-										<td>备注</td>
-										<td>操作人</td>
-										<td>操作时间</td>
+									{{each payedMoneyDetailList as rs}}
+									<tr><td>{{if rs.receivableType == null || rs.receivableType == ""}}-{{else}}{{rs.receivableType}}{{/if}}</td>
+										<td>{{if rs.businessType == null || rs.businessType == ""}}-{{else}}{{rs.businessType}}{{/if}}</td>
+										<td>{{if rs.payParty == null || rs.payParty == ""}}-{{else}}{{rs.payParty}}{{/if}}</td>
+										<td>{{rs.payDifferenceMoney}}</td>
+										<td>{{rs.payType | getPayTypeText}}</td>
+										<td>{{rs.remark}}</td>
+										<td>{{if rs.checkRealname == null || rs.checkRealname == ""}}-{{else}}{{rs.checkRealname}}{{/if}}</td>
+										<td>{{if rs.checkTime == null || rs.checkTime == ""}}-{{else}}{{rs.checkTime | dateFormat:'yyyy-MM-dd hh:mm:ss'}}{{/if}}</td>
 									</tr>
-									<tr data-id="">
-										<td>付款类别</td>
-										<td>发生业务</td>
-										<td>付款方</td>
-										<td>金额</td>
-										<td>付款方式</td>
-										<td>备注</td>
-										<td>操作人</td>
-										<td>操作时间</td>
-									</tr>
-									<tr data-id="">
-										<td>付款类别</td>
-										<td>发生业务</td>
-										<td>付款方</td>
-										<td>金额</td>
-										<td>付款方式</td>
-										<td>备注</td>
-										<td>操作人</td>
-										<td>操作时间</td>
-									</tr>
-									<tr data-id="">
-										<td>付款类别</td>
-										<td>发生业务</td>
-										<td>付款方</td>
-										<td>金额</td>
-										<td>付款方式</td>
-										<td>备注</td>
-										<td>操作人</td>
-										<td>操作时间</td>
-									</tr>
+									{{/each}}
 								</tbody>
 							</table>
 						</div>

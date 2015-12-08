@@ -1,26 +1,30 @@
 <div class="row T-ListSelf globalAdd" >
     <div class="form-horizontal search-area">    
         <div class="form-group T-search-area" >      
-          <label class="control-label pull-left" style="margin-left: 15px">自费商家：</label>
-                <select  class="col-xs-12" name="selfPayId" style="width: 220px">
-                    <option value ="">全部</option>    
-                    {{each selfPayNameListNew as selfPay index}}
-						<option value="{{selfPay.id}}" {{if searchParam.selfPayId == selfPay.id}}selected="selected"{{/if}}>{{selfPay.name}}</option>
-					{{/each}}
-                </select>        
-                <label class="control-label pull-left marginLeft-30" >账期：</label>
-				<select class="col-sm-1" name="year" >
-					{{each yearList as year index}}
-						<option value="{{year.value}}" {{if searchParam.year == year.value}}selected="selected"{{/if}}>{{year.value}}</option>
-					{{/each}}
-				</select>
-				<select class="col-sm-1 marginLeft-30" name="month">
-				    <option value ="">全部</option>
-					{{each monthList as month index}}
-						<option value="{{month.value}}" {{if searchParam.month == month.value}}selected="selected"{{/if}}>{{month.value}}月</option>
-					{{/each}}
-				</select>
-            <button class=" btn-sm search-btn marginLeft-30 T-search "> <i class="ace-icon fa fa-search"></i> 搜索 </button> </div>
+            <label class="control-label pull-left" style="margin-left: 15px">自费商家：</label>
+            <input type="text" class="T-chooseSelfPay col-xs-1" name="selfPayName" value="{{searchParam.selfPayName}}" />
+            <input type="hidden" name="selfPayId" value="{{searchParam.selfPayId}}" /> 
+
+            <label class="control-label pull-left marginLeft-30">账期：</label>
+            <div class="col-xs-1">
+                <div class="input-group">
+                    <input class="col-xs-12 date-picker" name="startDate" placeholder="开始日期" type="text" value="{{searchParam.startTime | dateFormat:'yyyy-MM-dd'}}" />   
+                    <span class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </span>
+                </div>
+            </div>
+            <label class="pull-left">至</label>
+            <div class="col-xs-1">
+                <div class="input-group">
+                    <input class="col-xs-12 date-picker" name="endDate" placeholder="结束日期" type="text" value="{{searchParam.endTime | dateFormat:'yyyy-MM-dd'}}" />   
+                    <span class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </span>
+                </div>
+            </div>
+            <button class=" btn-sm search-btn marginLeft-30 T-search "> <i class="ace-icon fa fa-search"></i> 搜索 </button> 
+        </div>
     </div>
     <div class="row selfPayList">
         <div class="col-xs-12">
@@ -28,51 +32,44 @@
                 <thead>
                 <tr class="bg-blur">
                     <th>自费商家</th>
-                    <th>总账面应付</th>
-                    <th>总实际应付</th>
-                    <th>总实际已付</th>
-                    <th>总账面未付</th>
-                    <th>总实际未付</th>
+                    <th>账面应付</th>
+                    <th>结算金额</th>
+                    <th>已付金额</th>
+                    <th>未付金额</th>
                     <th>对账进度</th>
+                    <th>付款进度</th>
                     <th>操作</th>
                 </tr>
                 </thead>
                 <tbody class="T-list">
-                {{each financialSelfPayList as selfPay}}
-                <tr data-id ="{{selfPay.id}}">
-                    <td>{{selfPay.selfPayName}}</td>
-                    <td>{{selfPay.sumNeedPayMoney}}</td>
-                    <td>{{selfPay.sumRealNeedPayMoney}}</td>
-                    <td>{{selfPay.sumRealPayedMoney}}</td>
-                    <td>{{selfPay.sumUnPayedMoney}}</td>
-                    <td>
-                    	<span style="color:red">{{selfPay.sumRealUnPayedMoney}}</span>
-                    </td>
-                    <td >
-	                    {{if selfPay.allCount != selfPay.checkedCount}}
-	                      <span style="color:#ff9900"> {{selfPay.checkedCount}}{{"/"}}{{selfPay.allCount}}</span>
-	                    {{/if}}
-	                    {{if selfPay.allCount == selfPay.checkedCount}}
-	                      <span style="color:green"> {{selfPay.checkedCount}}{{"/"}}{{selfPay.allCount}}</span>
-	                    {{/if}}
-                    </td>
-                    <td>
-                        <a data-entity-id="{{selfPay.selfPayId}}" data-entity-selfPayName="{{selfPay.selfPayName}}" data-entity-year="{{searchParam.year}}" data-entity-month="{{searchParam.month}}" class="cursor T-option T-check R-right" data-right="1260002">
-                            	对账
-                        </a>
-                        <label class="cursor R-right" data-right="1260002"><a class="R-right" data-right="1260003"> |</a></label>
-                        <a data-entity-id="{{selfPay.selfPayId}}" data-entity-selfPayName="{{selfPay.selfPayName}}" data-entity-year="{{searchParam.year}}"
-                                {{if searchParam.month == ""}}
-                                 	 data-entity-startMonth=1 data-entity-endMonth=12 
-                                  {{else}}
-                                 	 data-entity-startMonth="{{searchParam.month}}" data-entity-endMonth="{{searchParam.month}}" 
-                                {{/if}}
-                        		class="cursor R-right T-option T-clear" data-right="1260003">
-                           		 结算
-                        </a>
-                    </td>
-                </tr>
-                {{/each}}
+                    {{each list as rs}}
+                    <tr data-id="{{rs.id}}" data-name="{{rs.selfPayName}}">
+                        <td>{{rs.selfPayName}}</td>
+                        <td>{{rs.sumNeedPayMoney}}</td>
+                        <td>{{rs.sumSettlementMoney}}</td>
+                        <td>{{rs.sumPayedMoney}}</td>
+                        <td><span {{if rs.sumUnPayedMoney != 0}}style="color:red"{{/if}}>{{rs.sumUnPayedMoney}}</span></td>
+                        <td>{{if rs.allCheckCount != rs.checkedCount}}
+                                <span style="color:#ff9900"> {{rs.checkedCount}}{{"/"}}{{rs.allCheckCount}}</span>
+                            {{/if}}
+                            {{if rs.allCheckCount == rs.checkedCount}}
+                                <span style="color:green"> {{rs.checkedCount}}{{"/"}}{{rs.allCheckCount}}</span>
+                            {{/if}}
+                        </td>
+                        <td>{{if rs.allPayCount != rs.payedCount}}
+                                <span style="color:#ff9900"> {{rs.payedCount}}{{"/"}}{{rs.allPayCount}}</span>
+                            {{/if}}
+                            {{if rs.allPayCount == rs.payedCount}}
+                                <span style="color:green"> {{rs.payedCount}}{{"/"}}{{rs.allPayCount}}</span>
+                            {{/if}}
+                        </td>
+                        <td>
+                            <a class="cursor T-option T-check R-right" data-right="1260002">对账</a>
+                            <label class="cursor R-right" data-right="1260002"><a class="R-right" data-right="1260003"> |</a></label>
+                            <a class="cursor T-option T-clear R-right" data-right="1260003">付款</a>
+                        </td>
+                    </tr>
+                    {{/each}}
                 </tbody>
             </table>
             <div class="row pageMode">

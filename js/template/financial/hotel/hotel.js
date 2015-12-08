@@ -62,7 +62,7 @@ define(function(require, exports) {
                     var html = listTemplate(data);
                     Tools.addTab(menuKey,"酒店账务",html);
 
-                    hotel.initList();
+                    hotel.initList(startDate,endDate);
 
                     // 绑定翻页组件
 					laypage({
@@ -80,7 +80,7 @@ define(function(require, exports) {
         });
     };
 
-    hotel.initList = function(){
+    hotel.initList = function(startDate,endDate){
     	hotel.$tab = $('#tab-' + menuKey + "-content");
         hotel.$searchArea = hotel.$tab.find('.T-search-area');
 
@@ -98,14 +98,14 @@ define(function(require, exports) {
             event.preventDefault();
             var $that = $(this),
                 id = $that.closest('tr').data('id'),
-                name = $that.closest('tr').data('name'),
-                startDate = hotel.$searchArea.find("input[name=startDate]").val(),
-                endDate = hotel.$searchArea.find("input[name=endDate]").val();
+                name = $that.closest('tr').data('name');
             if ($that.hasClass('T-check')) {
                 // 对账
                 hotel.hotelCheck(0,id,name,"",startDate,endDate);
             } else if ($that.hasClass('T-clear')) {
                 // 结算
+                hotel.clearTempSumDate = false;
+                hotel.clearTempData = false;
                 hotel.hotelClear(0,0,id,name,"",startDate,endDate);
             }
         });
@@ -177,7 +177,7 @@ define(function(require, exports) {
         hotel.$checkTab = $("#tab-" + menuKey + "-checking-content");
         hotel.$checkSearchArea = hotel.$checkTab.find('.T-search-area');
 
-        hotel.init_check_event(page,id,name);
+        hotel.init_event(page,id,name,hotel.$checkTab,"check");
         FinancialService.initDate(hotel.$checkTab);
         FinancialService.updateUnpayMoney(hotel.$checkTab,rule);
 
@@ -304,7 +304,7 @@ define(function(require, exports) {
         hotel.$clearTab = $("#tab-" + menuKey + "-clearing-content");
         hotel.$clearSearchArea = hotel.$clearTab.find('.T-search-area');
 
-        hotel.init_clear_event(page,id,name);
+        hotel.init_event(page,id,name,hotel.$clearTab,"clear");
         FinancialService.initDate(hotel.$clearTab);
 
         //搜索事件
@@ -427,15 +427,15 @@ define(function(require, exports) {
     //已付金额明细
     hotel.payedDetail = function(id){
         $.ajax({
-            url:KingServices.build_url("financial/financialHotel","listFcRestaurantSettlementRecord"),
+            url:KingServices.build_url("account/financialHotel","getPayedMoneyDetail"),
             type:"POST",
             data:{
-                hotelId : id + ""
+                id : id
             },
             success:function(data){
                 var result = showDialog(data);
                 if(result){
-                    var html = payedDetailTempLate();
+                    var html = payedDetailTempLate(data);
                     layer.open({
                         type : 1,
                         title : "已付金额明细",
@@ -453,10 +453,10 @@ define(function(require, exports) {
     //应付金额明细
     hotel.needPayDetail = function(id){
         $.ajax({
-            url:KingServices.build_url("financial/financialHotel","listFcRestaurantSettlementRecord"),
+            url:KingServices.build_url("account/financialHotel","getNeedPayDetail"),
             type:"POST",
             data:{
-                hotelId : id + ""
+                id : id
             },
             success:function(data){
                 var result = showDialog(data);
@@ -483,9 +483,9 @@ define(function(require, exports) {
         if(!checkSaveJson){ return false; }
 
         $.ajax({
-            url:KingServices.build_url("financial/financialHotel","saveAccountChecking"),
+            url:KingServices.build_url("account/financialHotel","saveAccountChecking"),
             type:"POST",
-            data:{ financialHotelListStr : checkSaveJson },
+            data:{ hotelJson : checkSaveJson },
             success:function(data){
                 var result = showDialog(data);
                 if(result){
@@ -517,10 +517,10 @@ define(function(require, exports) {
 
         clearSaveJson = JSON.stringify(clearSaveJson);
         $.ajax({
-            url:KingServices.build_url("financial/financialHotel","saveFcHotelSettlement"),
+            url:KingServices.build_url("account/financialHotel","saveAccountSettlement"),
             type:"POST",
             data:{
-                financialHotelListStr : clearSaveJson
+                hotelJson : clearSaveJson
             },
             success:function(data){
                 var result = showDialog(data);
@@ -546,16 +546,16 @@ define(function(require, exports) {
     };
 
     hotel.init_event = function(page,id,name,$tab,option) {
-        if (!!hotel.$checkTab && hotel.$checkTab.length === 1) {
-            var validator = rule.check(hotel.$checkTab);
+        if (!!$tab && $tab.length === 1) {
+            var validator = rule.check($tab);
 
             // 监听修改
-            hotel.$checkTab.find(".T-checkList").off('change').on('change',"input",function(event) {
+            $tab.find(".T-" + option + "List").off('change').on('change',"input",function(event) {
                 event.preventDefault();
                 $(this).closest('tr').data("change",true);
-                hotel.$checkTab.data('isEdited', true);
+                $tab.data('isEdited', true);
             });
-            hotel.$checkTab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
+            $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
 				event.preventDefault();
                 if(option == "check"){
                     hotel.initCheck(page,id,name);
