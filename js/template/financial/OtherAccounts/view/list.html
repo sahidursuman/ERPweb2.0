@@ -2,7 +2,7 @@
     <div class="form-horizontal search-area">    
         <div class="form-group T-search-area" >      
           <label class="control-label pull-left marginLeft-30" >项目名称：</label>
-          <input type="text" class="T-search-head col-sm-1" value="{{financialOtherList.name}}" name="otherId">
+          <input type="text" class="T-search-head col-sm-1 T-search-head-office" value="{{financialOtherList.name || '全部'}}" name="otherId">
                 <label class="pull-left text-right marginLeft-30">账期:</label>
                     <div class="col-sm-1">
                         <div class="input-group col-sm-12">
@@ -75,7 +75,7 @@
             </table>
              <div class="row pageMode">
                 <div class="col-xs-6">
-                    <small>共计 2 条记录</small>
+                    <small>共计 {{recordSize}} 条记录</small>
                 </div>
                 <div class="col-xs-6">
                     <div class="dataTables_paginate paging_simple_numbers T-pagenation">
