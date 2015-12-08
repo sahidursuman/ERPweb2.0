@@ -620,6 +620,7 @@ var modalScripts = {
 	'business_analyst_customerVolume' : "js/template/businessAnalyst/customerVolume/customerVolume.js", //客户客量
 	'business_analyst_employeePerfor' : "js/template/businessAnalyst/employeePerfor/employeePerfor.js", //员工业绩 
 	'business_analyst_tourguidePerfor' : "js/template/businessAnalyst/tourguidePerfor/tourguidePerfor.js", //导游业绩
+
 	//-------------------------------------------财务管理模块--------------------------------------------------------------------
 	'financial_count': "js/template/financial/count/count.js",//报账审核
 	'financial_innerTransfer_profit': "js/template/financial/innerTransferProfit/innerTransferProfit.js",
@@ -632,6 +633,7 @@ var modalScripts = {
 	'financial_innerTransfer_in':"js/template/financial/innerTransferIn/innerTransferIn.js",//内转转入
 	'financial_innerTransfer_out':"js/template/financial/innerTransferOut/innerTransferOut.js",//内转转出
 	'financial_replace' : 'js/template/financial/replace/replace.js',//代订账务
+	'financial_replaceProfit':"js/template/financial/replaceProfit/replaceProfit.js",
 	'financial_payment_details':"js/template/financial/paymentDetails/paymentDetails.js",//收支明细
 	'financial_ticket':"js/template/financial/ticket/ticket.js",//票务账务
 	'financial_planProfit': "js/template/financial/planProfit/planProfit.js", //发团利润
@@ -680,16 +682,6 @@ function listMenu(menuTemplate){
 					});
 				});
 
-				//绑定财务管理菜单功能 
-				/*$("#sidebar .nav-list .financial_guide").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/financial/guide/guide.js",function(guide){
-						guide.listFinancialGuide(0,"","","");
-						modals["financial_guide"] = guide;
-					});
-				});*/
 				//绑定分团转客菜单功能
 				$("#sidebar .nav-list .arrange_tourist").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
@@ -802,6 +794,20 @@ function listMenu(menuTemplate){
 						modals["financial_transfer"] = transfer;
 					});
 				});
+				
+				
+/*
+				//绑定购物菜单功能
+				$("#sidebar .nav-list .financial_shop").click(function(){
+					$("#sidebar .nav-list li").removeClass("active");
+					$(this).addClass("active");
+					$(this).parent().parent().addClass("active");
+					seajs.use("" + ASSETS_ROOT +"js/template/financial/shop/shop.js",function(shop){
+						shop.listFinancialShop(0,"","","");
+						modals["financial_shop"] = shop;
+					});
+				});*/
+
 				//绑定其他支出菜单功能
 				$("#sidebar .nav-list .financial_else").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
@@ -822,7 +828,7 @@ function listMenu(menuTemplate){
 					});
 				});
 
-				//绑定按团统计菜单功能
+				/*//绑定按团统计菜单功能
 				$("#sidebar .nav-list .financial_count").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
@@ -832,7 +838,7 @@ function listMenu(menuTemplate){
 						modals["financial_count"] = count;
 						// count.getlistCount(0,"","","","","","","","");
 					});
-				});
+				});*/
 				//绑定収支明细菜单功能
 				$("#sidebar .nav-list .financial_collectDetail").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
@@ -1534,18 +1540,6 @@ KingServices.tripDetail = function(id){
 KingServices.replaceDetail = function(id){
 	seajs.use("" + ASSETS_ROOT + modalScripts.arrange_booking,function(module){
 		module.replaceDetail(id);
-	});
-}
-//查看线路产品
-KingServices.viewLineProduct = function(id){
-	seajs.use("" + ASSETS_ROOT + modalScripts.resource_lineProduct,function(module){
-		module.viewLineProduct(id);
-	});
-}
-//查看游客小组
-KingServices.viewTouristGroup = function(id){
-	seajs.use("" + ASSETS_ROOT + modalScripts.resource_touristGroup,function(module){
-		module.viewTouristGroup(id);
 	});
 }
 
