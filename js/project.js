@@ -642,6 +642,8 @@ var modalScripts = {
 	'financial_rummery':"js/template/financial/hotel/hotel.js",//酒店账务
 	'financial_busCompany':"js/template/financial/busCompany/busCompany.js",//车队账务
 	'financial_self':"js/template/financial/Self/Self.js",//自费账务
+	'financial_income': 'js/template/financial/FinIncome/finIncome.js',	//财务收款
+	'financial_pay': 'js/template/financial/FinPay/finPay.js',	//财务收款
 	//---------------------------------------------------------------------------------------------------------------
 	'public_message':"js/template/system/message/message.js",
 	'system_information':"js/template/system/information/information.js",

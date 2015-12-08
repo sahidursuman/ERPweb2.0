@@ -1,0 +1,53 @@
+<div class="row T-search-area">
+    <form class="form-inline" role="form" onsubmit="return false">
+        <div class="form-group">
+            <label>业务类别：</label>
+            <select name="T-business-type" class="T-business-type">
+                <option value="0">客户</option>
+                <option value="1">内转</option>
+                <option value="2">购物</option>
+                <option value="3">代订</option>
+                <option value="4">其它</option>
+            </select>
+        </div>
+        <div class="form-group marginLeft-30">
+            <label>单位：</label>
+            <input type="text" class="form-control T-org-name" style="width: 180px;"  maxlength="100">
+        </div>
+        <div class="form-group input-daterange marginLeft-30">
+            <label>账期：</label>
+            <input type="text" class="form-control T-datepicker T-start" value="{{startDate}}">
+            <label>&nbsp;至&nbsp;</label>
+            <input type="text" class="form-control T-datepicker T-end" value="{{endDate}}">
+        </div>
+        <div class="form-group marginLeft-30">
+            <button class="btn-sm search-btn T-btn-search">
+                <i class="ace-icon fa fa-search"></i> 搜索 
+            </button>
+        </div>
+    </form>
+</div>
+<div class="row">
+    <table class="table table-striped table-bordered table-hover T-showHighLight">
+        <thead>
+            <tr class="bg-blur">
+                <th>对方单位</th>
+                <th>应收金额</th>
+                <th>已收金额</th>
+                <th>未收金额</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody class="T-list">        
+        </tbody>
+    </table>
+    <div class="row pageMode">
+        <div class="col-xs-6">
+            <small class="T-sumItem">没有查询到相关记录</small>
+        </div>
+        <div class="col-xs-6">
+            <div class="dataTables_paginate paging_simple_numbers T-pagenation">
+            </div>
+        </div>
+    </div>
+</div>
