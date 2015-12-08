@@ -2076,7 +2076,7 @@ define(function(require, exports) {
 							var html = innerEditFeeTemplate(data);
 							arrangeTourist.editFeeLayer = layer.open({
 							    type: 1,
-							    title:"编辑内转费用信息",
+							    title:"编辑转客费用信息",
 							    skin: 'layui-layer-rim', //加上边框
 							    area: '60%', //宽高
 							    zIndex:1028,
@@ -2106,7 +2106,7 @@ define(function(require, exports) {
 							var html = outEditFeeTemplate(data);
 							arrangeTourist.editFeeLayer = layer.open({
 							    type: 1,
-							    title:"编辑外转费用信息",
+							    title:"编辑转客费用信息",
 							    skin: 'layui-layer-rim', //加上边框
 							    area: '60%', //宽高
 							    zIndex:1028,
