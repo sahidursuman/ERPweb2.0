@@ -437,7 +437,11 @@ define(function(require, exports) {
         $.ajax({
             url:KingServices.build_url("account/financialBusCompany","saveAccountSettlement"),
             type:"POST",
-            data:{ busCompanyJson : clearSaveJson },
+            data:{ 
+                busCompanyJson : clearSaveJson,
+                payType : busCompany.$clearTab.find('select[name=sumPayType]').val(),
+                payRemark : busCompany.$clearTab.find('input[name=sumPayRemark]').val() 
+            },
             success:function(data){
                 var result = showDialog(data);
                 if(result){

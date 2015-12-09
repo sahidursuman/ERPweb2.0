@@ -9,7 +9,7 @@ define(function(require, exports) {
         needPayDetailTempLate = require("./view/viewNeedPayDetail"),
         tabId = "tab-" + menuKey + "-content",
         checkTabId = menuKey + "-checking",
-        blanceTabId = menuKey + "-blance";
+        blanceTabId = menuKey + "-clearing";
 
     var Self = {
         searchData : false,
@@ -133,7 +133,7 @@ define(function(require, exports) {
             success: function(data) {
                 var result = showDialog(data);
                 if (result) {
-                    data.sumData = self.getSumData(selfPayId,tripInfo,startDate,endDate);
+                    data.sumData = Self.getSumData(selfPayId,tripInfo,startDate,endDate);
                     var fsList = data.list;
                     data.selfPayName = selfPayName;
                     var html = SelfChecking(data);
@@ -224,8 +224,8 @@ define(function(require, exports) {
             success: function(data) {
                 var result = showDialog(data);
                 if (result) {
+                    data.sumData = Self.getSumData(selfPayId,tripInfo,startDate,endDate);
                     data.selfPayName = selfPayName;
-                    data.sumData = self.getSumData(selfPayId,tripInfo,startDate,endDate);
 
                     //暂存数据读取
                     if(Self.clearTempSumDate){
@@ -237,7 +237,7 @@ define(function(require, exports) {
                         data.sumPayType = 0;
                         data.sumPayRemark = "";
                     }
-                    var resultList = data.financialRestaurantList;
+                    var resultList = data.list;
                     data.list = FinancialService.getTempDate(resultList,Self.clearTempData);
 
                     var html = SelfClearing(data);
@@ -248,11 +248,16 @@ define(function(require, exports) {
                         validator = rule.check(Self.$clearTab.find('.T-clearList'));                       
                     }
 
-                    if(isAutoPay == 1){
+                    if(isAutoPay == 0){
+                        Self.$clearTab.find(".T-cancel-auto").hide();
+                    } else {
                         Self.$clearTab.find('input[name=sumPayMoney]').prop("disabled",true);
                         Self.$clearTab.find(".T-clear-auto").hide(); 
-                    } else {
-                        Self.$clearTab.find(".T-cancel-auto").hide();
+                        if(isAutoPay == 1){
+                            Self.$clearTab.data('isEdited',true);
+                        } else if(isAutoPay == 2){
+                            Self.$clearTab.find(".T-cancel--auto").hide();
+                        }
                     }
 
                     //绑定翻页组件
@@ -423,11 +428,11 @@ define(function(require, exports) {
         $.ajax({
             url: KingServices.build_url("account/selfPayFinancial", "getSelfPayPayedMoneyDetail"),
             type: "POST",
-            data: { id : selfId },
+            data: { id : selfPayId },
             success: function(data) {
                 var result = showDialog(data);
                 if (result) {
-                    var html = blanceRecords(data);
+                    var html = payedDetailTempLate(data);
                     var lookDetailLayer = layer.open({
                         type: 1,
                         title: "已付金额明细",
@@ -447,11 +452,11 @@ define(function(require, exports) {
         $.ajax({
             url: KingServices.build_url("account/selfPayFinancial", "getSelfPayNeedPayDetail"),
             type: "POST",
-            data: { id : selfId },
+            data: { id : selfPayId },
             success: function(data) {
                 var result = showDialog(data);
                 if (result) {
-                    var html = blanceRecords(data);
+                    var html = needPayDetailTempLate(data);
                     var lookDetailLayer = layer.open({
                         type: 1,
                         title: "应付金额明细",
@@ -509,10 +514,12 @@ define(function(require, exports) {
 
         clearSaveJson = JSON.stringify(clearSaveJson);
         $.ajax({
-            url:KingServices.build_url("account/arrangeRestaurantFinancial","saveAccountSettlement"),
+            url:KingServices.build_url("account/selfPayFinancial","confirmSelfPayPayment"),
             type:"POST",
             data:{
-                selfPayPaymentJson : clearSaveJson
+                selfPayPaymentJson : clearSaveJson,
+                payType : Self.$clearTab.find('select[name=sumPayType]').val(),
+                payRemark : Self.$clearTab.find('input[name=sumPayRemark]').val()
             },
             success:function(data){
                 var result = showDialog(data);
@@ -640,7 +647,7 @@ define(function(require, exports) {
         });
     };
 
-    self.getSumData = function(id,tripInfo,startDate,endDate){
+    Self.getSumData = function(id,tripInfo,startDate,endDate){
         var sumData = false;
         $.ajax({
             url: KingServices.build_url("account/selfPayFinancial","collectSelfPayAccount"),

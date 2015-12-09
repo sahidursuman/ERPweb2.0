@@ -540,7 +540,9 @@ define(function(require, exports) {
             url:KingServices.build_url("account/financialHotel","saveAccountSettlement"),
             type:"POST",
             data:{
-                hotelJson : clearSaveJson
+                hotelJson : clearSaveJson,
+                payType : hotel.$clearTab.find('select[name=sumPayType]').val(),
+                payRemark : hotel.$clearTab.find('input[name=sumPayRemark]').val()
             },
             success:function(data){
                 var result = showDialog(data);
