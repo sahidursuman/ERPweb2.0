@@ -1,8 +1,8 @@
 <div class="row" >
     <div class="form-horizontal T-search-area">
         <div class="form-group" > 
-            <label>酒店：</label>
-            <input type="text" class="T-chooseHotel" name="hotelName" value="{{searchParam.hotelName}}" />
+            <label style="margin-left:15px;">酒店：</label>
+            <input type="text" class="T-chooseHotel" name="hotelName" value="{{if searchParam.hotelName == ""}}全部{{else}}{{searchParam.hotelName}}{{/if}}" />
             <input type="hidden" name="hotelId" value="{{searchParam.hotelId}}" />  
 
             <label class="marginLeft-30" >账期：</label>

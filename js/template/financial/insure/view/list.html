@@ -2,6 +2,9 @@
     <div class="form-horizontal  T-search-area  search-area">    
         <div class="form-group" >      
             <label class="marginLeft-30">保险公司：</label>
+            <input type="text" class="T-chooseInsurance" name="insuranceName" value="{{if searchParam.insuranceName == ""}}全部{{else}}{{searchParam.insuranceName}}{{/if}}" />
+            <input type="hidden" name="insuranceId" value="{{searchParam.insuranceId}}" />
+
             <label class="marginLeft-30">账期：</label>
             <input class="date-picker" name="startDate" placeholder="开始日期" type="text" value="{{searchParam.startDate | dateFormat:'yyyy-MM-dd'}}" style="width:100px;" />   
             <label>&nbsp;至&nbsp;</label>

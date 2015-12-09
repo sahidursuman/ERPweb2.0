@@ -291,8 +291,8 @@ define(function(require, exports) {
                             if (!first) {
                                 var tempJson = FinancialService.clearSaveJson(busCompany.$clearTab,busCompany.clearTempData,rule);
                                 busCompany.clearTempData = tempJson;
-                                var sumPayMoney = parseInt(busCompany.$clearTab.find('input[name=sumPayMoney]').val()),
-                                    sumPayType = parseInt(busCompany.$clearTab.find('select[name=sumPayType]').val()),
+                                var sumPayMoney = parseFloat(busCompany.$clearTab.find('input[name=sumPayMoney]').val()),
+                                    sumPayType = parseFloat(busCompany.$clearTab.find('select[name=sumPayType]').val()),
                                     sumPayRemark = busCompany.$clearTab.find('input[name=sumPayRemark]').val();
                                 busCompany.clearTempSumDate = {
                                     sumPayMoney : sumPayMoney,
@@ -320,6 +320,7 @@ define(function(require, exports) {
         busCompany.$clearTab.find(".T-search").click(function(){
             busCompany.clearTempSumDate = false;
             busCompany.clearTempData = false;
+            busCompany.$clearTab.data('isEdited',false);
             busCompany.busCompanyClear(0,0,id,name);
         });
 
@@ -344,8 +345,8 @@ define(function(require, exports) {
 
             var startDate = busCompany.$clearTab.find("input[name=startDate]").val(),
                 endDate = busCompany.$clearTab.find("input[name=endDate]").val(),
-                sumPayMoney = parseInt(busCompany.$clearTab.find('input[name=sumPayMoney]').val()),
-                sumPayType = parseInt(busCompany.$clearTab.find('select[name=sumPayType]').val()),
+                sumPayMoney = parseFloat(busCompany.$clearTab.find('input[name=sumPayMoney]').val()),
+                sumPayType = parseFloat(busCompany.$clearTab.find('select[name=sumPayType]').val()),
                 sumPayRemark = busCompany.$clearTab.find('input[name=sumPayRemark]').val();
             var searchParam = {
                 busCompanyId : id,
@@ -387,6 +388,7 @@ define(function(require, exports) {
             busCompany.$clearTab.find(".T-clear-auto").toggle();
             busCompany.clearTempSumDate = false;
             busCompany.clearTempData = false;
+            busCompany.$clearTab.data('isEdited',false);
             busCompany.busCompanyClear(0,0,id,name);
         });
         FinancialService.updateSumPayMoney(busCompany.$clearTab,rule);

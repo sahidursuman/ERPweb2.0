@@ -291,8 +291,8 @@ define(function(require, exports) {
                             if (!first) { 
                                 var tempJson = FinancialService.clearSaveJson(hotel.$clearTab,hotel.clearTempData,rule);
                                 hotel.clearTempData = tempJson;
-                                var sumPayMoney = parseInt(hotel.$clearTab.find('input[name=sumPayMoney]').val()),
-                                    sumPayType = parseInt(hotel.$clearTab.find('select[name=sumPayType]').val()),
+                                var sumPayMoney = parseFloat(hotel.$clearTab.find('input[name=sumPayMoney]').val()),
+                                    sumPayType = parseFloat(hotel.$clearTab.find('select[name=sumPayType]').val()),
                                     sumPayRemark = hotel.$clearTab.find('input[name=sumPayRemark]').val();
                                 hotel.clearTempSumDate = {
                                     sumPayMoney : sumPayMoney,
@@ -320,6 +320,7 @@ define(function(require, exports) {
         hotel.$clearTab.find(".T-search").click(function(){
             hotel.clearTempSumDate = false;
             hotel.clearTempData = false;
+            hotel.$clearTab.data('isEdited',false);
             hotel.hotelClear(0,0,id,name);
         });
 
@@ -343,8 +344,8 @@ define(function(require, exports) {
 
             var startDate = hotel.$clearTab.find("input[name=startDate]").val(),
                 endDate = hotel.$clearTab.find("input[name=endDate]").val(),
-                sumPayMoney = parseInt(hotel.$clearTab.find('input[name=sumPayMoney]').val()),
-                sumPayType = parseInt(hotel.$clearTab.find('select[name=sumPayType]').val()),
+                sumPayMoney = parseFloat(hotel.$clearTab.find('input[name=sumPayMoney]').val()),
+                sumPayType = parseFloat(hotel.$clearTab.find('select[name=sumPayType]').val()),
                 sumPayRemark = hotel.$clearTab.find('input[name=sumPayRemark]').val();
             var searchParam = {
                 hotelId : id,
@@ -384,6 +385,7 @@ define(function(require, exports) {
             hotel.$clearTab.find(".T-clear-auto").toggle();
             hotel.clearTempSumDate = false;
             hotel.clearTempData = false;
+            hotel.$clearTab.data('isEdited',false);
             hotel.hotelClear(0,0,id,name);
         });
 

@@ -90,7 +90,7 @@ FinancialService.updateSumPayMoney = function($tab,rule){
         if(isNaN(sumPayMoney)){ sumPayMoney = 0; }
         if(isNaN(newVal)){ newVal = 0; }
         if(isNaN(oldVal)){ oldVal = 0; }
-        sumPayMoney = parseInt(sumPayMoney);
+        sumPayMoney = parseFloat(sumPayMoney);
         $sumPayMoney.val(sumPayMoney + parseFloat(newVal-oldVal));
 
         if(!validator.form()){ return false; }
@@ -159,8 +159,8 @@ FinancialService.isClearSave = function($tab,rule){
         showMessageDialog($("#confirm-dialog-message"),"您未进行任何操作！");
         return false;
     }
-    var sumPayMoney = parseInt($tab.find('input[name=sumPayMoney]').val()),
-        unpayMoney = parseInt($tab.find('.T-unpayMoney').val());
+    var sumPayMoney = parseFloat($tab.find('input[name=sumPayMoney]').val()),
+        unpayMoney = parseFloat($tab.find('.T-unpayMoney').val());
     if(sumPayMoney > unpayMoney){
         showMessageDialog($("#confirm-dialog-message"),"付款金额大于未付总额！");
         return false;
@@ -175,10 +175,10 @@ FinancialService.autoPayJson = function(id,$tab,rule){
 
     var startDate = $tab.find("input[name=startDate]").val(),
         endDate = $tab.find("input[name=endDate]").val(),
-        sumPayMoney = parseInt($tab.find('input[name=sumPayMoney]').val()),
-        sumPayType = parseInt($tab.find('select[name=sumPayType]').val()),
+        sumPayMoney = parseFloat($tab.find('input[name=sumPayMoney]').val()),
+        sumPayType = parseFloat($tab.find('select[name=sumPayType]').val()),
         sumPayRemark = $tab.find('input[name=sumPayRemark]').val(),
-        unpayMoney = parseInt($tab.find('.T-unpayMoney').text());
+        unpayMoney = parseFloat($tab.find('.T-unpayMoney').text());
     if(startDate > endDate){
         showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
         return false;

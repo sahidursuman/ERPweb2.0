@@ -270,8 +270,8 @@ define(function(require, exports) {
                             if (!first) { 
                                 var tempJson = FinancialService.clearSaveJson(Self.$clearTab,Self.clearTempData,rule);
                                 Self.clearTempData = tempJson;
-                                var sumPayMoney = parseInt(Self.$clearTab.find('input[name=sumPayMoney]').val()),
-                                    sumPayType = parseInt(Self.$clearTab.find('select[name=sumPayType]').val()),
+                                var sumPayMoney = parseFloat(Self.$clearTab.find('input[name=sumPayMoney]').val()),
+                                    sumPayType = parseFloat(Self.$clearTab.find('select[name=sumPayType]').val()),
                                     sumPayRemark = Self.$clearTab.find('input[name=sumPayRemark]').val();
                                 Self.clearTempSumDate = {
                                     sumPayMoney : sumPayMoney,
@@ -299,6 +299,7 @@ define(function(require, exports) {
         Self.$clearTab.find(".T-search").click(function(){
             Self.clearTempSumDate = false;
             Self.clearTempData = false;
+            Self.$clearTab.data('isEdited',false);
             Self.GetClear(0,0,id,name);
         });
 
@@ -323,8 +324,8 @@ define(function(require, exports) {
             var startDate = Self.$clearTab.find("input[name=startDate]").val(),
                 endDate = Self.$clearTab.find("input[name=endDate]").val(),
                 tripInfo = Self.$clearTab.find("input[name=tripInfo]").val(),
-                sumPayMoney = parseInt(Self.$clearTab.find('input[name=sumPayMoney]').val()),
-                sumPayType = parseInt(Self.$clearTab.find('select[name=sumPayType]').val());
+                sumPayMoney = parseFloat(Self.$clearTab.find('input[name=sumPayMoney]').val()),
+                sumPayType = parseFloat(Self.$clearTab.find('select[name=sumPayType]').val());
             showConfirmMsg($("#confirm-dialog-message"),"是否按当前账期 " + startDate + " 至 " + endDate + " 下账？",function(){
                 $.ajax({
                     url:KingServices.build_url("account/arrangeRestaurantFinancial","listRestaurantAccount"),
@@ -363,6 +364,7 @@ define(function(require, exports) {
             Self.$clearTab.find(".T-clear-auto").toggle();
             Self.clearTempSumDate = false;
             Self.clearTempData = false;
+            Self.$clearTab.data('isEdited',false);
             Self.GetClear(0,0,id,name);
         });
 
