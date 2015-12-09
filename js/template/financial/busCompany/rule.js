@@ -15,8 +15,8 @@ define(function(require, exports) {
 	    	    	$ele: $obj.find('input[name=sumPayMoney]'),
 	    	    	rules: [
     	    	        {
-    	    	        	type: 'float',
-    	    	        	errMsg: '请输入数字'
+    	    	        	type: 'nonnegative-float',
+   			    	        errMsg: '请输入非负数
     	    	        }
 	    	        ]
 	    	    },
