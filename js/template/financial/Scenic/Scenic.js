@@ -51,7 +51,7 @@ define(function(require, exports) {
 
         var searchParam = JSON.stringify(scenic.searchData);
         $.ajax({
-            url:KingServices.build_url("account/financialScenic","listSumFinancialScenic"),
+            url:KingServices.build_url("financial/financialScenic","listSumFinancialScenic"),
             type:"POST",
             data:{ searchParam : searchParam },
             success:function(data){
@@ -59,6 +59,7 @@ define(function(require, exports) {
                var result = showDialog(data);
                 if(result){
                     scenic.scenicList = data.scenicNameList;
+                    data.searchParam.scenicName = scenicName || '全部';
                     var html = listTemplate(data);
                     Tools.addTab(menuKey,"景区账务",html);
 
@@ -135,13 +136,13 @@ define(function(require, exports) {
         };
         searchParam = JSON.stringify(searchParam);
         $.ajax({
-            url:KingServices.build_url("account/arrangeScenicFinancial","listScenicAccount"),
+            url:KingServices.build_url("financial/financialScenic","listScenicAccount"),
             type:"POST",
             data:{ searchParam : searchParam },
             success:function(data){
                 var result = showDialog(data);
                 if(result){
-                    var fhList = data.financialscenicList;
+                    var fhList = data.financialScenicListData;
                     data.scenicName = scenicName;
                     var html = scenicChecking(data);
                     
@@ -240,7 +241,7 @@ define(function(require, exports) {
         };
         searchParam = JSON.stringify(searchParam);
         $.ajax({
-            url:KingServices.build_url("account/arrangeScenicFinancial","listScenicAccount"),
+            url:KingServices.build_url("financial/financialScenic","listScenicAccount"),
             type:"POST",
             data:{ searchParam : searchParam },
             success:function(data){
@@ -336,7 +337,7 @@ define(function(require, exports) {
                 endDate = scenic.$clearTab.find("input[name=endDate]").val();
             showConfirmMsg($("#confirm-dialog-message"), "是否按当前账期 " + startDate + " 至 " + endDate + " 下账？",function(){
                 $.ajax({
-                    url:KingServices.build_url("account/arrangeScenicFinancial","listScenicAccount"),
+                    url:KingServices.build_url("financial/financialScenic","listScenicAccount"),
                     type:"POST",
                     data:{ searchParam : autoPayJson },
                     success:function(data){
@@ -427,7 +428,7 @@ define(function(require, exports) {
     //已付金额明细
     scenic.payedDetail = function(id){
         $.ajax({
-            url:KingServices.build_url("account/scenicFinancial","getPayedMoneyDetail"),
+            url:KingServices.build_url("financial/financialScenic","getPayedMoneyDetail"),
             type:"POST",
             data:{
                 id : id
@@ -453,7 +454,7 @@ define(function(require, exports) {
     //应付金额明细
     scenic.needPayDetail = function(id){
         $.ajax({
-            url:KingServices.build_url("account/scenicFinancial","getNeedPayDetail"),
+            url:KingServices.build_url("financial/financialScenic","getNeedPayDetail"),
             type:"POST",
             data:{
                 id : id
@@ -483,7 +484,7 @@ define(function(require, exports) {
         if(!checkSaveJson){ return false; }
 
         $.ajax({
-            url:KingServices.build_url("account/financialScenic","saveAccountChecking"),
+            url:KingServices.build_url("financial/financialScenic","saveAccountChecking"),
             type:"POST",
             data:{ scenicJson : checkSaveJson },
             success:function(data){
@@ -517,7 +518,7 @@ define(function(require, exports) {
 
         clearSaveJson = JSON.stringify(clearSaveJson);
         $.ajax({
-            url:KingServices.build_url("account/financialScenic","saveAccountSettlement"),
+            url:KingServices.build_url("financial/financialScenic","saveAccountSettlement"),
             type:"POST",
             data:{
                 scenicJson : clearSaveJson
@@ -585,7 +586,7 @@ define(function(require, exports) {
     };
 
     scenic.getQueryList = function(){
-        var $scenic = scenic.$tab.find(".T-choosescenic"),
+        var $scenic = scenic.$tab.find(".T-chooseScenic"),
             scenicList = scenic.scenicList;
         if(scenicList != null && scenicList.length > 0){
             for(var i=0;i<scenicList.length;i++){

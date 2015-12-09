@@ -1,8 +1,8 @@
 <div class="row" >
     <div class="form-horizontal T-search-area">
         <div class="form-group" > 
-            <label class="control-label pull-left" style="margin-left: 15px">酒店：</label>
-            <input type="text" class="T-chooseHotel col-xs-1" name="scenicName" value="{{searchParam.scenicName}}" />
+            <label class="control-label pull-left" style="margin-left: 15px">景区：</label>
+            <input type="text" class="T-chooseScenic col-xs-1" name="scenicName" value="{{searchParam.scenicName}}" />
             <input type="hidden" name="scenicId" value="{{searchParam.scenicId}}" />  
 
             <label class="control-label pull-left marginLeft-30" >账期：</label>
@@ -77,7 +77,7 @@
             </table>
             <div class="row pageMode">
                 <div class="col-xs-6">
-                    <small>共计 {{searchParam.totalCount}} 条记录</small>
+                    <small>共计 {{searchParam.recordSize}} 条记录</small>
                 </div>
                 <div class="col-xs-6">
                     <div class="dataTables_paginate paging_simple_numbers T-pagenation">

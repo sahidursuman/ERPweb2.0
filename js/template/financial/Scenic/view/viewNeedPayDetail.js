@@ -1,6 +1,6 @@
-/*TMODJS:{"debug":true,"version":7,"md5":"0c8154b17365a234fb5b30b2749dd940"}*/
+/*TMODJS:{"debug":true,"version":9,"md5":"0c8154b17365a234fb5b30b2749dd940"}*/
 define(function(require) {
-    return require("../../../template")("financial/hotel/view/viewNeedPayDetail", function($data, $filename) {
+    return require("../../../template")("financial/Scenic/view/viewNeedPayDetail", function($data, $filename) {
         try {
             var $utils = this, $helpers = $utils.$helpers, $line = 0, $each = $utils.$each, payedMoneyDetailList = $data.payedMoneyDetailList, $escape = ($data.rs, 
             $data.$index, $utils.$escape), $out = "";

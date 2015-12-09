@@ -70,13 +70,13 @@
             </tr>
         </thead>
         <tbody class="T-checkList" data-right="1220005">
-            {{each financialScenicList as rs index}}
+            {{each financialScenicListData as rs index}}
 		    <tr class="T-checkTr" data-id="{{rs.id}}" data-confirm="{{rs.isConfirmAccount}}">
 	            <td>{{index+1}}</td>
 				<td>{{rs.tripNumber}}{{"，"}}{{rs.lineProductName}}{{"，"}}{{rs.guideName}}</td>
-				<td>{{if rs.consumeStartTime == null || rs.consumeStartTime == ""}}-{{else}}{{rs.consumeStartTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
-				<td>{{if rs.type == null || rs.type == ""}}-{{else}}{{rs.type}}{{/if}}</td>
-                <td>{{rs.price}}</td>
+				<td>{{if rs.accountTime == null || rs.accountTime == ""}}-{{else}}{{rs.accountTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
+				<td>{{rs.name}}</td>
+                <td>{{rs.orderNumber}}</td>
 				<td>{{rs.price}}</td>
 				<td>{{rs.memberCount}}</td>  
 				<td>{{rs.reduceMoney}}</td>
@@ -93,7 +93,9 @@
 				   	    <input type="checkbox" class="ace T-checkbox" {{if rs.isConfirmAccount == 1}}checked="checked"{{/if}} />
 				   		  <span class="lbl"></span>
 				    </label>
+                    {{ if rs.isConfirmAccount}}
                     <a class="T-option T-needPayDetail">查看</a>
+                    {{/if}}
 				</td>
 		    </tr>
 	        {{/each}}
