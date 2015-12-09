@@ -1,0 +1,66 @@
+<div class="row">
+	<div class="col-xs-12 T-search-area" style="margin:0px;">  
+		<div class="form-horizontal clearfix">      
+	      	<label>团号：</label>
+	    	<input type="text" style="width: 220px" placeholder="团号" name="tripNumber" value="{{searchParam.tripNumber}}" />
+
+			<label style="margin-left: 15px">线路产品：</label>
+	    	<input type="text" style="width: 220px" placeholder="线路产品" name="lineProductName" value="{{searchParam.lineProductName}}" />
+			<input type="hidden" name="lineProductId" value="{{searchParam.lineProductId}}"/>
+
+			<label style="margin-left: 15px">导游：</label>
+	    	<input type="text" style="width: 220px" placeholder="导游" name="guideName" value="{{searchParam.guideName}}"/>
+			<input type="hidden" name="guideId" value="{{searchParam.guideId}}"/>
+			
+			<label style="margin-left: 15px">开始日期：</label>
+	    	<input class="date-picker" name="startTime" placeholder="开始日期" type="text" value="{{searchParam.start}}" style="width:100px;" />	
+			<label style="margin-left: 15px">结束日期：</label>
+	    	<input class="date-picker" name="endTime" placeholder="结束日期" type="text" value="{{searchParam.end}}" style="width:100px;" />	
+
+			<label style="margin-left: 15px">状态：</label>
+	    	<div class="btn-group T-status">
+				<button data-toggle="dropdown" data-value="{{searchParam.status}}" class=" btn-sm  dropdown-toggle block-up block-up" aria-expanded="false" style="height:24px;padding:0px 10px;line-height:24px;">
+					<span>
+						{{if searchParam.status == ""}}
+							全部
+						{{else if searchParam.status == 0}}
+							待确认
+						{{else if searchParam.status == 1}}
+							已发团
+						{{else if searchParam.status == -1}}
+							已取消
+						{{/if}}	
+					</span>
+					<i class="ace-icon fa fa-angle-down icon-on-right" ></i>
+				</button>
+				<ul class="dropdown-menu">
+					<li>
+						<a data-value="" href="javascript:void(0)">全部</a>
+					</li>
+					<li>
+						<a data-value="0" href="javascript:void(0)">待确认</a>
+					</li>
+					<li>
+						<a data-value="1" href="javascript:void(0)">已发团</a>
+					</li> 
+					<li>
+						<a data-value="1" href="javascript:void(0)">已取消</a>
+					</li> 
+				</ul>
+			</div>			
+
+	        <button class="btn-sm marginLeft-30 search-btn T-search"> <i class="ace-icon fa fa-search"></i>搜索</button> 
+	    </div>
+
+	    <div style="margin:0px;padding:0px;margin-top:10px;">
+            <label class="control-label">收入合计：{{total.totalIncome}}</label>
+            <label class="control-label marginLeft-30">发团成本合计：{{total.totalTrip}}</label>
+            <label class="control-label marginLeft-30">中转成本合计：{{total.totalOut}}</label>
+            <label class="control-label marginLeft-30">毛利：{{total.profit}}</label>
+            <label class="control-label marginLeft-30">人均毛利：{{total.perCapitaProfit}}</label>
+            <label class="control-label marginLeft-30">人数：{{total.adultCount}} 大 {{total.childCount}} 小</label>
+            <label class="control-label marginLeft-30">团数：{{total.tripCount}}</label>
+        </div>
+    </div>
+    <div class="T-listHtml"></div>
+</div>

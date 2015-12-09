@@ -1,55 +1,48 @@
 <div class="row T-ListInsure globalAdd" >
     <div class="form-horizontal  T-search-area  search-area">    
         <div class="form-group" >      
-          <label class="control-label pull-left marginLeft-30">保险公司：</label>
-                <select  class="col-xs-1 T-insuranceName" name="insuranceId">
-                    <option value ="" class="insuranceName">全部</option>
-                    {{each insuranceCompanyNameListNew as insurance index}}
-						<option value="{{insurance.id}}" {{if searchParam.insuranceId == insurance.id}} selected="selected"{{/if}}>{{insurance.name}}</option>
-					{{/each}}
-                </select>
-                <label class="control-label pull-left marginLeft-30" >账期：</label>
-				<select class="col-sm-1 T-year" name="year" >
-					{{each yearList as year index}}
-						<option value="{{year.value}}" {{if searchParam.year == year.value}}selected="selected"{{/if}}>{{year.value}}</option>
-					{{/each}}
-				</select>
-				<select class="col-sm-1 T-month marginLeft-30" name="month" >
-				    <option value ="">全部</option>
-					{{each monthList as month index}}
-						<option value="{{month.value}}" {{if searchParam.month == month.value}}selected="selected"{{/if}}>{{month.value}}月</option>
-					{{/each}}
-				</select>
-            <button class=" btn-sm marginLeft-30  T-search search-btn " > <i class="ace-icon fa fa-search"></i> 搜索 </button> </div>
+            <label class="marginLeft-30">保险公司：</label>
+            <input type="text" class="T-chooseInsurance" name="insuranceName" value="{{if searchParam.insuranceName == ""}}全部{{else}}{{searchParam.insuranceName}}{{/if}}" />
+            <input type="hidden" name="insuranceId" value="{{searchParam.insuranceId}}" />
+
+            <label class="marginLeft-30">账期：</label>
+            <input class="date-picker" name="startDate" placeholder="开始日期" type="text" value="{{searchParam.startDate | dateFormat:'yyyy-MM-dd'}}" style="width:100px;" />   
+            <label>&nbsp;至&nbsp;</label>
+            <input class="date-picker" name="endDate" placeholder="结束日期" type="text" value="{{searchParam.endDate | dateFormat:'yyyy-MM-dd'}}" style="width:100px;" />   
+
+            <button class="btn-sm marginLeft-30 T-search search-btn">
+                <i class="ace-icon fa fa-search"></i> 搜索 
+            </button> 
+        </div>
     </div>
     <div class="row insuranceList">
         <div class="col-xs-12">
             <table class="table table-striped table-bordered table-hover T-showHighLight">
                 <thead>
-                <tr class="bg-blur" >
-                    <th>保险公司</th>
-                    <th>总账面应付</th>
-                    <th>总实际应付</th>
-                    <th>总实际已付</th>
-                    <th>总账面未付</th>
-                    <th>总实际未付</th>
-                    <th>对账进度</th>
-                    <th>操作</th>
-                </tr>
+                    <tr class="bg-blur" >
+                        <th>保险公司</th>
+                        <th>账面应付</th>
+                        <th>结算金额</th>
+                        <th>已付金额</th>
+                        <th>未付金额</th>
+                        <th>总实际未付</th>
+                        <th>对账进度</th>
+                        <th>操作</th>
+                    </tr>
                 </thead>
                 <tbody class="T-list">
-                {{each financialInsuranceSettlementList as insurance}}
+                {{each financialInsuranceSettlementList as rs}}
                 <tr data-id="{{insurance.insuranceId}}">
-                    <td>{{insurance.insuranceCompanyName}}</td>
-                    <td>{{insurance.sumNeedPayMoney}}</td>
-                    <td>{{insurance.sumRealNeedPayMoney}}</td>
-                    <td>{{insurance.sumRealPayedMoney}}</td>
-                    <td>{{insurance.sumUnPayedMoney}}</td>
+                    <td>{{rs.insuranceCompanyName}}</td>
+                    <td>{{rs.sumNeedPayMoney}}</td>
+                    <td>{{rs.sumRealNeedPayMoney}}</td>
+                    <td>{{rs.sumRealPayedMoney}}</td>
+                    <td>{{rs.sumUnPayedMoney}}</td>
                     <td>
-                    	<span style="color:red">{{insurance.sumRealUnPayedMoney}}</span>
+                    	<span style="color:red">{{rs.sumRealUnPayedMoney}}</span>
                     </td>
                     <td >
-	                    {{if insurance.allCount != insurance.checkedCount}}
+	                    {{if rs.allCount != insurance.checkedCount}}
 	                      <span style="color:#ff9900"> {{insurance.checkedCount}}{{"/"}}{{insurance.allCount}}</span>
 	                    {{/if}}
 	                    {{if insurance.allCount == insurance.checkedCount}}

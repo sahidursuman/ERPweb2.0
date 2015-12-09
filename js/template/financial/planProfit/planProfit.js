@@ -1,22 +1,21 @@
 define(function(require, exports) {
 	var menuKey = "financial_planProfit",
+        listMainTemplate = require("./view/listMain"),
         listTemplate = require("./view/list");
 
     var plan = {
     	searchData : false,
 		$tab : false,
-        $searchArea: false,
-        sumData : false
+        $searchArea: false
 	};
 
     plan.initModule = function() {
     	var dateJson = FinancialService.getInitDate();
-    	plan.getSumData();
-        plan.listPlan(0,"","","","","",dateJson.startDate,dateJson.endDate,"");
+        plan.listMain("","","","","",dateJson.startDate,dateJson.endDate,"");
     };
 
-    plan.listPlan = function(page,tripNumber,lineProductName,lineProductId,guideName,guideId,startTime,endTime,status){
-    	if (plan.$searchArea && arguments.length === 1) {
+    plan.listMain = function(tripNumber,lineProductName,lineProductId,guideName,guideId,startTime,endTime,status){
+        if (plan.$searchArea && arguments.length === 1) {
             // 初始化页面后，可以获取页面的参数
             tripNumber = plan.$searchArea.find("input[name=tripNumber]").val(),
             lineProductName = plan.$searchArea.find("input[name=lineProductName]").val(),
@@ -34,33 +33,56 @@ define(function(require, exports) {
         tripNumber = (tripNumber == "全部") ? "" : tripNumber;
         lineProductName = (lineProductName == "全部") ? "" : lineProductName;
         guideName = (guideName == "全部") ? "" : guideName;
-        // 修正页码
-        page = page || 0;
 
         plan.searchData = {
-        	page : page,
-        	tripNumber : tripNumber,
-        	lineProductName : lineProductName,
-        	lineProductId : lineProductId,
-        	guideName : guideName,
-        	guideId : guideId,
-        	start : startTime,
-        	end : endTime,
-        	status : status,
-        	sortType: 'auto'
+            page : 0,
+            tripNumber : tripNumber,
+            lineProductName : lineProductName,
+            lineProductId : lineProductId,
+            guideName : guideName,
+            guideId : guideId,
+            start : startTime,
+            end : endTime,
+            status : status,
+            sortType: 'auto'
         };
         var searchParam = JSON.stringify(plan.searchData);
 
         $.ajax({
+            url: KingServices.build_url('financialTrip', 'findTotal'),
+            type: 'POST',
+            data: { searchParam : searchParam},
+            success: function(data) {
+                var result = showDialog(data);
+                if(result){
+                    data.searchParam = plan.searchData;
+                    var html = listMainTemplate(data);
+                    Tools.addTab(menuKey,"发团利润",html);
+                    plan.$tab = $("#tab-" + menuKey + "-content"),
+                    plan.$searchArea = plan.$tab.find('.T-search-area');
+                    plan.getQuery();
+                    plan.listPlan(0);
+                }
+            }
+        });
+    };
+
+    plan.listPlan = function(page){
+        // 修正页码
+        page = page || 0;
+        plan.searchData.page = page;
+
+        var searchParam = JSON.stringify(plan.searchData);
+        $.ajax({
             url:KingServices.build_url("financialTrip","findPager"),
             type: "POST",
-            data: plan.searchData,
+            async: false,
+            data: { searchParam : searchParam},
             success: function(data) {
                 var result = showDialog(data);
                 if (result) {
-                	data.sumData = plan.sumData;
                 	var html = listTemplate(data);
-			    	Tools.addTab(menuKey,"发团利润",html);
+			    	$("#tab-" + menuKey + "-content").find(".T-listHtml").html(html);
 
 			    	plan.initList();
 
@@ -81,17 +103,7 @@ define(function(require, exports) {
     };
 
     plan.initList = function(){
-    	plan.$tab = $("#tab-" + menuKey + "-content"),
-    	plan.$searchArea = plan.$tab.find('.T-search-area');
-
-    	plan.getQuery();
-
-    	plan.$searchArea.find('.date-picker').datepicker({
-			autoclose: true,
-			todayHighlight: true,
-			format: 'yyyy-mm-dd',
-			language: 'zh-CN'
-		});
+    	FinancialService.initDate(plan.$tab);
 
     	plan.$tab.find('.T-status').on('click', 'a', function(event) {
 			event.preventDefault();
@@ -102,8 +114,7 @@ define(function(require, exports) {
 		//搜索按钮事件
         plan.$tab.find('.T-search').on('click', function(event) {
             event.preventDefault();
-            plan.getSumData();
-            plan.listPlan(0);
+            plan.listMain();
         });
 
     	plan.$tab.find(".T-tripDetail").on("click",function(){
@@ -116,25 +127,16 @@ define(function(require, exports) {
     	$.ajax({
             url: KingServices.build_url('financialTrip', 'findSelectValue'),
             type: 'POST',
-            data: {},
-            showLoading:false,
             success: function(data) {
 				var result = showDialog(data);
 				if(result){
-					var $tripNumber = plan.$tab.find("input[name=tripNumber]"),
-						$lineProduct = plan.$tab.find("input[name=lineProductName]"),
-						$guide = plan.$tab.find("input[name=guideName]"),
+					var $lineProduct = $("#tab-" + menuKey + "-content").find("input[name=lineProductName]"),
+						$guide = $("#tab-" + menuKey + "-content").find("input[name=guideName]"),
 						lineProductList = data.lineProducts,
-						tripNumbers = data.tripNumbers,
 						guideList = data.guides;
 			        if(lineProductList != null && lineProductList.length > 0){
 			            for(var i=0;i<lineProductList.length;i++){
 			                lineProductList[i].value = lineProductList[i].name;
-			            }
-			        }
-			        if(tripNumbers != null && tripNumbers.length > 0){
-			            for(var i=0;i<tripNumbers.length;i++){
-			                tripNumbers[i].value = tripNumbers[i].tripNumber;
 			            }
 			        }
 			        if(guideList != null && guideList.length > 0){
@@ -147,24 +149,7 @@ define(function(require, exports) {
 			            value : "全部"
 			        };
 			        lineProductList.unshift(all);
-			        tripNumbers.unshift(all);
-			        guideList.unshift(all);
-
-			        //团号
-			        $tripNumber.autocomplete({
-			            minLength: 0,
-			            source : tripNumbers,
-			            change: function(event, ui) {
-			                if (!ui.item)  {
-			                    $(this).nextAll('input[name=tripNumber]').val('');
-			                }
-			            },
-			            select: function(event, ui) {
-			                $(this).blur().nextAll('input[name=tripNumber]').val(ui.item.id);
-			            }
-			        }).on("click",function(){
-			            $tripNumber.autocomplete('search', '');
-			        });  
+			        guideList.unshift(all); 
 
 			        //线路产品
 			        $lineProduct.autocomplete({
@@ -200,21 +185,6 @@ define(function(require, exports) {
 				}
 			}
 		});
-    };
-
-    plan.getSumData = function(){
-    	$.ajax({
-            url: KingServices.build_url('financialTrip', 'findTotal'),
-            type: 'POST',
-            data: {},
-            showLoading:false,
-            success: function(data) {
-				var result = showDialog(data);
-				if(result){
-					plan.sumData = data.total;
-				}
-			}
-    	});
     };
 
     exports.init = plan.initModule;
