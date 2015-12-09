@@ -1629,6 +1629,10 @@ define(function(require,exports){
 
 								if (!!typeInner && typeInner != 'out') {
 									KingServices.listTransit();
+								}else if( !!typeInner && typeInner != 'inner'){ 
+								
+								    KingServices.getListPage({divId:"Transfer-In",type:"2"});//外转数据刷新
+
 								} else {  //外转
 									touristGroup.freshHeader(touristGroup.$freshData);
 									//刷新列表数据
