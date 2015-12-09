@@ -620,6 +620,7 @@ var modalScripts = {
 	'business_analyst_customerVolume' : "js/template/businessAnalyst/customerVolume/customerVolume.js", //客户客量
 	'business_analyst_employeePerfor' : "js/template/businessAnalyst/employeePerfor/employeePerfor.js", //员工业绩 
 	'business_analyst_tourguidePerfor' : "js/template/businessAnalyst/tourguidePerfor/tourguidePerfor.js", //导游业绩
+
 	//-------------------------------------------财务管理模块--------------------------------------------------------------------
 	'financial_count': "js/template/financial/count/count.js",//报账审核
 	'financial_innerTransfer_profit': "js/template/financial/innerTransferProfit/innerTransferProfit.js",
@@ -679,16 +680,6 @@ function listMenu(menuTemplate){
 					});
 				});
 
-				//绑定财务管理菜单功能 
-				/*$("#sidebar .nav-list .financial_guide").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/financial/guide/guide.js",function(guide){
-						guide.listFinancialGuide(0,"","","");
-						modals["financial_guide"] = guide;
-					});
-				});*/
 				//绑定分团转客菜单功能
 				$("#sidebar .nav-list .arrange_tourist").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
@@ -801,6 +792,20 @@ function listMenu(menuTemplate){
 						modals["financial_transfer"] = transfer;
 					});
 				});
+				
+				
+/*
+				//绑定购物菜单功能
+				$("#sidebar .nav-list .financial_shop").click(function(){
+					$("#sidebar .nav-list li").removeClass("active");
+					$(this).addClass("active");
+					$(this).parent().parent().addClass("active");
+					seajs.use("" + ASSETS_ROOT +"js/template/financial/shop/shop.js",function(shop){
+						shop.listFinancialShop(0,"","","");
+						modals["financial_shop"] = shop;
+					});
+				});*/
+
 				//绑定其他支出菜单功能
 				$("#sidebar .nav-list .financial_else").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
@@ -821,7 +826,7 @@ function listMenu(menuTemplate){
 					});
 				});
 
-				//绑定按团统计菜单功能
+				/*//绑定按团统计菜单功能
 				$("#sidebar .nav-list .financial_count").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
@@ -831,7 +836,7 @@ function listMenu(menuTemplate){
 						modals["financial_count"] = count;
 						// count.getlistCount(0,"","","","","","","","");
 					});
-				});
+				});*/
 				//绑定収支明细菜单功能
 				$("#sidebar .nav-list .financial_collectDetail").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");

@@ -3,27 +3,14 @@
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="T-search-area">
                 <div class="form-group"> 
-                    <label style="float: left;margin: 0px 20px 0 0px" class=" control-label">酒店：{{hotelName}}</label>
-                    <label class="control-label marginLeft-30">账期：</label>
-                    <div class="col-xs-1">
-                        <div class="input-group">
-                            <input class="col-xs-12 date-picker" name="startDate" placeholder="开始日期" type="text" value="{{searchParam.startTime}}" />   
-                            <span class="input-group-addon">
-                                <i class="fa fa-calendar"></i>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="col-xs-1">
-                        <div class="input-group">
-                            <input class="col-xs-12 date-picker" name="endDate" placeholder="结束日期" type="text" value="{{searchParam.endTime}}" />   
-                            <span class="input-group-addon">
-                                <i class="fa fa-calendar"></i>
-                            </span>
-                        </div>
-                    </div>
+                    <label>酒店：{{hotelName}}</label>
+                    <label class="marginLeft-30">账期：</label>
+                    <input class="date-picker" name="startDate" placeholder="开始日期" type="text" value="{{searchParam.startTime}}" style="width:100px;" />   
+                    <label>&nbsp;至&nbsp;</label>
+                    <input class="date-picker" name="endDate" placeholder="结束日期" type="text" value="{{searchParam.endTime}}" style="width:100px;" />   
 
-                    <label class="control-label marginLeft-30" style="float:left;">账务类别：</label>
-                    <input class="col-xs-1" name="accountInfo" placeholder="账务类别" type="text" value="{{searchParam.accountInfo}}" />
+                    <label class="marginLeft-30">账务类别：</label>
+                    <input name="accountInfo" placeholder="账务类别" type="text" value="{{searchParam.accountInfo}}" style="width:200px;" />
                     
                     <button class=" btn-sm T-search search-btn btn-height" style="margin-left:20px;">
                         <i class="ace-icon fa fa-search"></i>搜索
@@ -33,7 +20,7 @@
         </form>
 
         <form class="form-horizontal" role="form" onsubmit="return false">
-            <div class="form-group">
+            <div class="form-group globalAdd">
                 <label class="control-label pull-left">账面应付合计：{{sumNeedPayMoney}}元 </label>
                 <label class="control-label pull-left marginLeft-30">已付金额合计：{{sumPayedMoney}} </label>
                 <label class="control-label pull-left marginLeft-30">结算金额合计：{{sumSettlementMoney}}</label>
@@ -41,7 +28,7 @@
                 <label class="control-label pull-left marginLeft-30">本次付款金额：</label>
                 <input class="col-xs-1 pull-left" name="sumPayMoney" type="text" value="{{sumPayMoney}}" maxlength="9" style="float:none;" />
                 <label class="control-label pull-left marginLeft-30">付款方式：</label>
-                <select style="text-align:center" name="sumPayType">
+                <select class="pull-left" style="text-align:center" name="sumPayType">
                     <option value="0" {{if sumPayType == 0}}selected="selected"{{/if}}>现金</option>
                     <option value="1" {{if sumPayType == 1}}selected="selected"{{/if}}>银行转账</option>
                     <option value="2" {{if sumPayType == 2}}selected="selected"{{/if}}>网上支付</option>
@@ -51,11 +38,11 @@
                 <label class="control-label pull-left marginLeft-30">备注：</label>
                 <input class="col-xs-1 pull-left" name="sumPayRemark" type="text" value="{{sumPayRemark}}" style="float:none;" />
 
-                <button class="btn-height btn-sm btn-height T-clear-auto search-btn" style="margin-left: 20px">
-                    自动下账
+                <button class="btn btn-xs btn-primary marginLeft-30 T-clear-auto">
+                    <i class="ace-icon fa fa-check-circle"></i> 自动下账
                 </button>
-                <button class="btn-height btn-sm btn-height T-cancel-auto search-btn" style="margin-left: 20px">
-                    取消下账
+                <button class="btn btn-xs btn-warning marginLeft-30 T-cancel-auto">
+                    <i class="ace-icon fa fa-times-circle"></i> 取消下账
                 </button>
             </div>
         </form>
@@ -96,14 +83,14 @@
                 <td>{{if rs.billImage != null && rs.billImage !=""}}<a href="#" class="T-option T-hotelImg" url="{{rs.billImage}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
                 <td>{{rs.settlementMoney}}</td>  
                 <td>{{rs.unPayedMoney}}</td>
-                <td class="col-sm-1"><input name="payMoney" type="text" value="{{rs.payMoney}}" maxlength="9"></td>
+                <td><input name="payMoney" type="text" value="{{rs.payMoney}}" class="money" maxlength="9"></td>
                 <td class="col-sm-1" ><input name="payRemark" type="text" value="{{rs.payRemark}}" maxlength="1000"></td>
                 <td>{{if rs.checkTime == null || rs.checkTime == ""}}-{{else}}{{rs.checkTime | dateFormat:'yyyy-MM-dd hh:mm:ss'}}{{/if}}</td>
                 <td>{{if rs.checkUserName == null || rs.checkUserName == ""}}-{{else}}{{rs.checkUserName}}{{/if}}</td>
                 <td style="width:220px">
                     {{if rs.isConfirmAccount == 1}}已对账{{else if rs.isConfirmAccount == 0}}未对账{{/if}}
                     <a class="cursor"> |</a>
-                    <a class="cursor T-needPayDetail" style="border:none">查看</a>
+                    <a class="cursor T-option T-needPayDetail" style="border:none">查看</a>
                 </td>
             </tr>
             {{/each}}
@@ -112,7 +99,7 @@
 
     <div class="row pageMode">
         <div class="col-xs-6">
-            <small>共计 {{searchParam.totalCount}} 条记录</small>
+            <small>共计 {{searchParam.recordSize}} 条记录</small>
         </div>
         <div class="col-xs-6">
             <div class="dataTables_paginate paging_simple_numbers T-pagenation">
