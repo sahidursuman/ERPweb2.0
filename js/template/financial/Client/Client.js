@@ -9,7 +9,6 @@ define(function(require, exports) {
         listTemplate = require("./view/list"),
         ClientCheckingTemplate = require("./view/ClientChecking"),
         ClientClearingTemplate = require("./view/ClientClearing"),
-        recordTemplate = require("./view/record"),
         receivedTemplate = require('./view/received'),
         detailsTemplate = require('./view/details'),
         touristsTemplate = require('./view/tourists'),
@@ -158,21 +157,14 @@ define(function(require, exports) {
 
     Client.ClientCheck = function(pageNo, args, $tab){
         if(!!$tab){
-            args = {
-                pageNo : pageNo || 0,
-                partnerAgencyId : $tab.data('id'),
-                creatorId : $tab.find('.T-search-enter').data('id'),
-                lineProductId : $tab.find('.T-search-line').data('id'),
-                lineProductName : $tab.find('.T-search-line').val(),
-                creatorName : $tab.find('.T-search-enter').val(),
-                startTime : $tab.find('.T-search-start-date').val(),
-                endTime :  $tab.find('.T-search-end-date').val()
-            };
-
+            args = getBaseArgs($tab);
+            args.partnerAgencyId = $tab.data("id");
             partnerAgencyName = $tab.find('.T-partnerAgencyName').text();
         } else {
             partnerAgencyName = args.name;
         }
+
+        args.pageNo = pageNo || 0;
 
         $.ajax({
             url : KingServices.build_url('financial/customerAccount', 'listCheckCustomerAcccount'),
@@ -182,6 +174,8 @@ define(function(require, exports) {
             if(showDialog(data)){
                 data.partnerAgencyName = partnerAgencyName;
                 data.partnerAgencyId = args.partnerAgencyId;
+                data.searchParam.lineProductName = args.lineProductName || '全部';
+                data.searchParam.creatorName = args.creatorName || '全部';
                 // 合并数据
                 Client.pushClearData(data, Client.clearDataArray);
 
@@ -211,7 +205,7 @@ define(function(require, exports) {
         $tab.data('id', id);
         $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
             event.preventDefault();
-            Client.initCheck(0, id);
+            Client.initCheck($tab);
         })
         // 监听保存，并切换tab
         .on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
@@ -240,6 +234,7 @@ define(function(require, exports) {
         //搜索按钮事件
         Client.$checkSearchArea.find('.T-btn-search').on('click', function(event) {
             event.preventDefault();
+            $tab.data('isEdited', false);
             Client.ClientCheck(0, false, $tab);
         });
 
@@ -253,9 +248,9 @@ define(function(require, exports) {
             if($that.hasClass('T-unfold')){
                 Client.unfoldGroup($that);
             }else if($that.hasClass('T-receive')){
-                Client.viewReceive(gid)
+                Client.viewReceive(gid);
             }else if($that.hasClass('T-view')){
-                Client.viewDetails(gid)
+                Client.viewDetails(gid);
             }
         })
         .on('change', 'input', function(event) {
@@ -344,8 +339,6 @@ define(function(require, exports) {
         })
         .done(function(data) {
             if (showDialog(data)) {
-                data.customerAcountDetailList = JSON.parse(data.customerAcountDetailList || false) || [];
-
                 layer.open({
                     type: 1,
                     title:"已收金额明细",
@@ -407,15 +400,8 @@ define(function(require, exports) {
         var partnerAgencyName, type;
 
         if (!!$tab) {
-            args = {
-                partnerAgencyId : $tab.data('id'),
-                creatorId : $tab.find('.T-search-enter').data('id'),
-                lineProductId : $tab.find('.T-search-line').data('id'),
-                lineProductName : $tab.find('.T-search-line').val(),
-                creatorName : $tab.find('.T-search-enter').val(),
-                startTime : $tab.find('.T-search-start-date').val(),
-                endTime : $tab.find('.T-search-end-date').val()
-            }
+            args = getBaseArgs($tab);
+            args.partnerAgencyId = $tab.data('id');
 
             partnerAgencyName = $tab.find('.T-partnerAgencyName').text();
             type = $tab.find('.T-btn-save').data('type');
@@ -436,6 +422,9 @@ define(function(require, exports) {
                 data.partnerAgencyName = partnerAgencyName;
                 data.partnerAgencyId = args.partnerAgencyId;
 
+                data.searchParam.lineProductName = args.lineProductName || '全部';
+                data.searchParam.creatorName = args.creatorName || '全部';
+                
                 if (Tools.addTab(ClientClearTab, "客户收款", ClientClearingTemplate(data))) {
                     $tab = $("#tab-"+ ClientClearTab + "-content").data('id', args.partnerAgencyId);
                     Client.initClear($tab, args.partnerAgencyId);                    
@@ -559,16 +548,9 @@ define(function(require, exports) {
 
     Client.autoFillData = function($tab) {
         if(!!$tab && $tab.length){
-            args = {
-                partnerAgencyId : $tab.data('id'),
-                creatorId : $tab.find('.T-search-enter').data('id'),
-                lineProductId : $tab.find('.T-search-line').data('id'),
-                lineProductName : $tab.find('.T-search-line').val(),
-                creatorName : $tab.find('.T-search-enter').val(),
-                startTime : $tab.find('.T-search-start-date').val(),
-                endTime : $tab.find('.T-search-end-date').val(),
-                sumTemporaryIncomeMoney: $tab.find('.T-sumReciveMoney').val(),
-            }
+            var args = getBaseArgs($tab);
+            args.partnerAgencyId = $tab.data('id');
+            args.sumTemporaryIncomeMoney = $tab.find('.T-sumReciveMoney').val();
 
             $.ajax({
                 url: KingServices.build_url('financial/customerAccount', 'autoCustomerAccount'),
@@ -912,6 +894,27 @@ define(function(require, exports) {
             }
         });        
     };
+
+    function getBaseArgs($tab) {
+        var args = {
+            creatorId : $tab.find('.T-search-enter').data('id'),
+            lineProductId : $tab.find('.T-search-line').data('id'),
+            lineProductName : $tab.find('.T-search-line').val(),
+            creatorName : $tab.find('.T-search-enter').val(),
+            startTime : $tab.find('.T-search-start-date').val(),
+            endTime : $tab.find('.T-search-end-date').val()
+        }
+
+        if (args.lineProductName === '全部') {
+            args.lineProductName = '';
+        }
+
+        if (args.creatorName === '全部') {
+            args.creatorName = '';
+        }    
+
+        return args;
+    }
 
     exports.init = Client.initModule;
     exports.initIncome = Client.initIncome;

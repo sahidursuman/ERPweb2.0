@@ -14,8 +14,8 @@ define(function(require, exports) {
 	    	    	        });
 	       	} else {
    		   		rule.push({
-   			    	        	type: 'positive-float',
-   			    	        	errMsg: '请输入正数'
+   			    	        	type: 'nonnegative-float',
+   			    	        	errMsg: '请输入非负数'
    			    	        });
 	       	}
 
