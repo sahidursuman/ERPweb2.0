@@ -1,6 +1,6 @@
-/*TMODJS:{"debug":true,"version":11,"md5":"d85843849a512c88d3e5efe4ac72de56"}*/
+/*TMODJS:{"debug":true,"version":10,"md5":"d85843849a512c88d3e5efe4ac72de56"}*/
 define(function(require) {
-    return require("../../../template")("financial/Scenic/view/lookBillsImg", function($data, $filename) {
+    return require("../../../template")("financial/hotel/view/billImages", function($data, $filename) {
         try {
             var $utils = this, $line = ($utils.$helpers, 0), $each = $utils.$each, images = $data.images, $escape = ($data.image, 
             $data.$index, $utils.$escape), $out = "";
