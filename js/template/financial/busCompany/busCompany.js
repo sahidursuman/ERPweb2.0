@@ -358,7 +358,7 @@ define(function(require, exports) {
                 isAutoPay : 1
             };
             searchParam = JSON.stringify(searchParam);
-            showConfirmMsg($("#confirm-dialog-message"),"是否按当前账期 " + startDate + " 至 " + endDate + " 下账？",function(){
+            FinancialService.autoPayConfirm(startDate,endDate,function(){
                 $.ajax({
                     url:KingServices.build_url("account/financialBusCompany","listBusCompanyAccount"),
                     type:"POST",

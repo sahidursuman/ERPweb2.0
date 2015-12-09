@@ -285,6 +285,13 @@ FinancialService.setDatePicker = function($obj, options)  {
     }, options));
 };
 
+//自动下账提示
+FinancialService.autoPayConfirm = function(startDate,endDate,fn){
+    showConfirmMsg($("#confirm-dialog-message"),"是否按当前账期 " + startDate + " 至 " + endDate + " 下账？",function(){
+        fn();
+    });
+};
+
 //判断列表是否已全选
 function isAllChecked(checkboxList){
     var isAll = true;

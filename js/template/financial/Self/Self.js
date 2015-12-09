@@ -326,7 +326,7 @@ define(function(require, exports) {
                 tripInfo = Self.$clearTab.find("input[name=tripInfo]").val(),
                 sumPayMoney = parseFloat(Self.$clearTab.find('input[name=sumPayMoney]').val()),
                 sumPayType = parseFloat(Self.$clearTab.find('select[name=sumPayType]').val());
-            showConfirmMsg($("#confirm-dialog-message"),"是否按当前账期 " + startDate + " 至 " + endDate + " 下账？",function(){
+            FinancialService.autoPayConfirm(startDate,endDate,function(){
                 $.ajax({
                     url:KingServices.build_url("account/arrangeRestaurantFinancial","listRestaurantAccount"),
                     type:"POST",
