@@ -1,28 +1,14 @@
 <div class="row">   
     <div class="form-group T-search-area" >      
-        <label class="control-label pull-left" style="margin-left: 15px">餐厅：</label>
-        <input type="text" class="T-chooseRestaurant col-xs-1" name="restaurantName" value="{{searchParam.restaurantName}}" />
+        <label>餐厅：</label>
+        <input type="text" class="T-chooseRestaurant" name="restaurantName" value="{{searchParam.restaurantName}}" />
         <input type="hidden" name="restaurantId" value="{{searchParam.restaurantId}}" />  
 
-        <label class="control-label pull-left marginLeft-30">账期：</label>
-        <div class="col-xs-1">
-            <div class="input-group">
-                <input class="col-xs-12 date-picker" name="startDate" placeholder="开始日期" type="text" value="{{searchParam.startDate}}" />   
-                <span class="input-group-addon">
-                    <i class="fa fa-calendar"></i>
-                </span>
-            </div>
-        </div>
-        <label class="pull-left">至</label>
-        <div class="col-xs-1">
-            <div class="input-group">
-                <input class="col-xs-12 date-picker" name="endDate" placeholder="结束日期" type="text" value="{{searchParam.endDate}}" />   
-                <span class="input-group-addon">
-                    <i class="fa fa-calendar"></i>
-                </span>
-            </div>
-        </div>
-        <button class=" btn-sm search-btn T-search marginLeft-30"> <i class="ace-icon fa fa-search"></i> 搜索 </button> 
+        <label class="control-label marginLeft-30">账期：</label>
+        <input class="date-picker" name="startDate" placeholder="开始日期" type="text" value="{{searchParam.startDate}}" style="width:100px;" />   
+        <label>&nbsp;至&nbsp;</label>
+        <input class="date-picker" name="endDate" placeholder="结束日期" type="text" value="{{searchParam.endDate}}" style="width:100px;" />   
+        <button class="btn-sm search-btn T-search marginLeft-30"><i class="ace-icon fa fa-search"></i> 搜索 </button> 
     </div>
 
     <div class="row">
@@ -74,7 +60,7 @@
             </table>
             <div class="row pageMode">
                 <div class="col-xs-6">
-                    <small>共计 {{searchParam.totalCount}} 条记录</small>
+                    <small>共计 {{searchParam.recordSize}} 条记录</small>
                 </div>
                 <div class="col-xs-6">
                     <div class="dataTables_paginate paging_simple_numbers T-pagenation">

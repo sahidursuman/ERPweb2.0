@@ -183,8 +183,8 @@ FinancialService.autoPayJson = function(id,$tab,rule){
         showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
         return false;
     }
-    if(sumPayMoney == 0 || sumPayMoney == ""){
-        showMessageDialog($("#confirm-dialog-message"),"请输入本次付款金额！");
+    if(sumPayMoney < 0 || sumPayMoney == ""){
+        showMessageDialog($("#confirm-dialog-message"),"付款金额需大于0！");
         return false;
     }
 
