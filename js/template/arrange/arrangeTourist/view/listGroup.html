@@ -20,7 +20,9 @@
 	<tbody class="T-arrageGroup-list">
 		{{each touristGroupList as touristGroupList}}
 			<tr data-value={{touristGroupList.id}} data-entity-adultCount = {{touristGroupList.adultCount}}  data-entity-childCount = {{touristGroupList.childCount}}>
-			    <td><label class="pos-rel"> <input type="checkbox" class="ace T-arrageGroupCheckBox T-cheked"> <span class="lbl"></span> </label></td>
+			    <td>
+			      <label class="pos-rel"> <input type="radio" class="ace T-arrageGroupCheckBox T-cheked" name="form-field-radio"> <span class="lbl"></span> </label>
+			    </td>
 				<td>{{if touristGroupList.partnerAgency!=null}}{{touristGroupList.partnerAgency.travelAgencyName}}{{/if}}</td>
 				<td>{{touristGroupList.lineProduct.name}}</td>
 				<td>{{touristGroupList.lineProduct.type}}</td>

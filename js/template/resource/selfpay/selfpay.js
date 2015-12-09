@@ -182,8 +182,13 @@ define(function(require, exports) {
 						scrollbar: false,    // 推荐禁用浏览器外部滚动条
 					    success:function(){
 
-					    	$container = $(".T-update-selfpay-form"),$tbody = $container.find('.T-selfpayList-Tbody');
+					    	$container = $(".T-update-selfpay-form"),$tbody = $container.find('.T-selfpayList-Tbody');//T-selfpayList-Tbody
 					    	ruleData.Uvalidator = rule.check($container);
+
+
+					    	//导游返佣&旅行社返佣计算
+					    	selfpay.numberRate($tbody);
+					    	
 
 				    		var $normalInPrice=$container.find('input[name=normalInnerPrice]'),
 							    $normalMarPrice=$container.find('input[name=normalMarketPrice]'),
@@ -307,17 +312,22 @@ define(function(require, exports) {
 	 * @param {[type]} $container [容器]
 	 */
 	selfpay.addSelfpayList = function($container){
-		var $tbody = $container.find('.T-selfpayList-Tbody');
+		var $tbody = $container.find('.T-selfpayList-Tbody'),
+		    index = $tbody.find('tr').find('td').children('div').length;
 		var html = '<tr><td><input name="name" class="col-sm-12" type="text" style="min-width:100px;" maxlength="100"/></td>'+
 			'<td><select class="col-sm-12" name="customerType" style="min-width:100px;"><option value="0">散客</option><option value="1">团体</option></select></td>'+
 			'<td><div class="col-sm-12 no-padding"><label class="col-sm-10">日常价格</label><label class="priceArea col-sm-2" style="padding-top:0px;"><button class="btn btn-success btn-sm btn-white T-add"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button></label></div></td>'+
-			'<td><div class="col-sm-12 no-padding"><input name="normalInnerPrice" class="col-sm-12" type="text" maxlength="10"/></div></td>'+
-			'<td><div class="col-sm-12 no-padding"><input name="normalMarketPrice" class="col-sm-12" type="text" maxlength="10"/></div></td>'+
-			'<td><div class="col-sm-12 no-padding"><input name="normalGuideRate" class="col-sm-12" type="text" maxlength="5"/></div></td>'+
-			'<td><div class="col-sm-12 no-padding"><input name="normalTravelAgencyRate" class="col-sm-12" type="text" maxlength="5"/></div></td>'+
+			'<td><div class="col-sm-12 no-padding"><input data-index="'+(index)+'" name="normalInnerPrice" class="col-sm-12 contractPrice" type="text" maxlength="10"/></div></td>'+
+			'<td><div class="col-sm-12 no-padding"><input data-index="'+(index)+'" name="customerRebateMoney" class="col-sm-12 customerRebateMoney" type="text" maxlength="10"/></div></td>'+
+			'<td><div class="col-sm-12 no-padding"><input data-index="'+(index)+'" name="normalMarketPrice" class="col-sm-12 marketPrice" type="text" maxlength="10"/></div></td>'+
+			'<td><div class="col-sm-12 no-padding"><input data-index="'+(index)+'" name="normalGuideRate" class="col-sm-12 guideRate" type="text" maxlength="5"/></div></td>'+
+			'<td><div class="col-sm-12 no-padding"><input data-index="'+(index)+'" name="normalTravelAgencyRate" class="col-sm-12 travelAgencyRate" type="text" maxlength="5" readonly="readonly" /></div></td>'+
 			'<td><input name="remark" type="text" class="col-sm-12" style="min-width:100px;" maxlength="1000"/></div></td>'+
 			'<td style="width:70px"><a class="T-btn-price-delete">删除</a></td></tr>';
 		$tbody.append(html);
+		//索引排序
+		selfpay.numberRate($tbody);
+
 		var $normalInPrice=$tbody.find('input[name=normalInnerPrice]'),
 		    $normalMarPrice=$tbody.find('input[name=normalMarketPrice]'),
 		    $contractPrice=$tbody.find('input[name=contractPrice]'),
@@ -326,6 +336,8 @@ define(function(require, exports) {
 		    Tools.inputCtrolFloat($normalMarPrice);
 		    Tools.inputCtrolFloat($contractPrice);
 		    Tools.inputCtrolFloat($marketPrice);
+
+
 
 
 		// 再调整对话框的高度
@@ -403,16 +415,19 @@ define(function(require, exports) {
 	 * @param {[type]} $this [对象]
 	 */
 	selfpay.addTimeArea = function($this,$tbody){
-		var $parents = $this.closest('tr'), td = $parents.find("td");
+	 var $parents = $this.closest('tr'), td = $parents.find("td"),index = td.find('div').length;
 		td.eq(2).append('<div class="col-sm-12 no-padding T-dateTimeArea" style=""><input type="hidden" name="rebateListId" value="" /><input name="startTime" value="" type="text" class="datepicker col-sm-4"><label class="col-sm-2 control-label center">&nbsp;至&nbsp;</label><input name="endTime" value="" type="text" class="datepicker col-sm-4"><label class="priceArea col-sm-2" style="padding-top:0px;"><button class="btn btn-danger btn-sm btn-white T-del"><i class="ace-icon fa fa-minus bigger-110 icon-only" style="line-height: 20px"></i></button></label></div>');
-		td.eq(3).append('<div class="col-sm-12 no-padding" style="padding-top:5px!important;"><input name="contractPrice" value="" class="col-sm-12" type="text" maxlength="10"></div>');
-		td.eq(4).append('<div class="col-sm-12 no-padding" style="padding-top:5px!important;"><input name="marketPrice" value="" class="col-sm-12" type="text" maxlength="10"></div>');
-		td.eq(5).append('<div class="col-sm-12 no-padding" style="padding-top:5px!important;"><input name="guideRate" value="" class="col-sm-12" type="text" maxlength="5"></div>');
-		td.eq(6).append('<div class="col-sm-12 no-padding" style="padding-top:5px!important;"><input name="travelAgencyRate" value="" class="col-sm-12" type="text" maxlength="5"></div>');
+		td.eq(3).append('<div class="col-sm-12 no-padding" style="padding-top:5px!important;"><input data-index="'+(index)+'" name="contractPrice" value="" class="col-sm-12 contractPrice" type="text" maxlength="10"></div>');
+		td.eq(4).append('<div class="col-sm-12 no-padding" style="padding-top:5px!important;"><input data-index="'+(index)+'" name="customerRebateMoney" value="" class="col-sm-12 customerRebateMoney" type="text" maxlength="10"></div>');
+		td.eq(5).append('<div class="col-sm-12 no-padding" style="padding-top:5px!important;"><input data-index="'+(index)+'" name="marketPrice" value="" class="col-sm-12 marketPrice" type="text" maxlength="10"></div>');
+		td.eq(6).append('<div class="col-sm-12 no-padding" style="padding-top:5px!important;"><input data-index="'+(index)+'" name="guideRate" value="" class="col-sm-12 guideRate" type="text" maxlength="5"></div>');
+		td.eq(7).append('<div class="col-sm-12 no-padding" style="padding-top:5px!important;"><input data-index="'+(index)+'" name="travelAgencyRate" value="" class="col-sm-12 travelAgencyRate" type="text" maxlength="5" readonly="readonly"></div>');
 		$parents.find(".T-del").off().on("click", selfpay.deteleDateArea);
 		$parents.find(".T-dateTimeArea").eq($parents.find(".T-dateTimeArea").length - 1).attr("data-index", $parents.find(".T-dateTimeArea").length);
 		ruleData.validatorList = rule.checkItems($tbody);
 		selfpay.datepicker($tbody);
+		//导返佣计算
+		selfpay.numberRate($tbody);
 		//删除时间区间
 		$tbody.find('.T-del').off('click').on('click',function() {
 			var $this = $(this);
@@ -525,6 +540,7 @@ define(function(require, exports) {
 				name : name,
 				customerType : customerType,
 				normalInnerPrice : $(this).find("input[name=normalInnerPrice]").val(),
+				customerRebateMoney : $(this).find("input[name=customerRebateMoney]").val(),
 				normalMarketPrice : $(this).find("input[name=normalMarketPrice]").val(),
 				normalGuideRate : $(this).find("input[name=normalGuideRate]").val(),
 				normalTravelAgencyRate : $(this).find("input[name=normalTravelAgencyRate]").val(),
@@ -580,6 +596,131 @@ define(function(require, exports) {
 			}
 		});
 	};
+
+	/**
+	 * numberRate导游返佣 和 旅行社返佣 
+	 * @param  {[type]} $tbody 
+	 * @return {[type]} 
+	 */
+	selfpay.numberRate = function($tbody){
+		$tbody.find("tr").each(function(){
+	    	for(var i=0; i<$(this).find(".guideRate").length;i++){
+	    		$(this).find(".guideRate").eq(i).attr("data-index", i+1);
+	    		console.log("1");
+			}
+    	})
+    	$tbody.find("tr").each(function(){
+	    	for(var i=0; i<$(this).find(".travelAgencyRate").length;i++){
+	    		$(this).find(".travelAgencyRate").eq(i).attr("data-index", i+1)
+	    		console.log("2");
+			}
+    	})
+
+    	//导游返佣
+    	var $guide = $tbody.find(".guideRate");
+    	$guide.on('change', function(event) {
+    		event.preventDefault();
+    		console.info('mrs zhang.....');
+    		/* Act on the event */
+    		$guide.each(function(i) {
+    			var guideVal = $guide.eq(i).val(),
+    			    index = $guide.eq(i).attr("data-index");
+    			    if (isNaN(guideVal)) {//非法数字验证
+    			    	$guide.eq(i).val("0");
+    			    	guideVal = $guide.eq(i).val();
+    			    }
+			    	$travelAgency = $guide.eq(i).closest('td').next('td').find('.travelAgencyRate');
+    			    $travelAgency.each(function(j){
+	    				if($travelAgency.eq(j).attr("data-index") == index){
+	    					$travelAgency.eq(j).val(100 - guideVal);
+	    					
+	    				}
+    			   })	
+    			       
+    		});
+    	}); 
+
+    	//若人数返佣有值
+    	/*市场价格-人数返佣 = 内部价格*/
+    	//旅行社返佣
+    	var $customerRebateMoney = $tbody.find(".customerRebateMoney");//人数返佣
+    		$customerRebateMoney.on('change', function(event) {
+    			event.preventDefault();
+    			/* Act on the event */
+	    		$customerRebateMoney.each(function(i) {
+	    	    	var customerVal = $customerRebateMoney.eq(i).val();
+	    	    	    if ( customerVal!=null && customerVal!='' && !isNaN(customerVal) ) {
+	    	    	    	var index = $customerRebateMoney.eq(i).attr("data-index"),
+	    	    	    	    //市场价格
+	    	    	    	    $marketPrice = $customerRebateMoney.eq(i).closest('td').next('td').find('.marketPrice');
+	    	    	    	    var marketVal = 0 ;
+	    	    	    	    $marketPrice.each(function(j) {
+	    	    	    	    	if ($marketPrice.eq(j).attr("data-index") == index) {
+	    	    	    	    		marketVal = $marketPrice.eq(j).val();//市场价格
+	    	    	    	    	};
+	    	    	    	    });
+	    	    	    	    //内部价格
+	    	    	    	    $contractPrice = $customerRebateMoney.eq(i).closest('td').prev('td').find('.contractPrice');
+	    	    	    	    var marketVal = 0 ;
+	    	    	    	    $contractPrice.each(function(j) {
+	    	    	    	    	if ($contractPrice.eq(j).attr("data-index") == index) {
+	    	    	    	    		marketVal = $marketPrice.eq(j).val();
+	    	    	    	    		//内部价格 = 市场价格-人数返佣
+	    	    	    	    		$contractPrice.eq(j).val(marketVal-customerVal)
+	    	    	    	    	};
+	    	    	    	    });
+	    	    	    }else{
+    	    	    	    var index = $customerRebateMoney.eq(i).attr("data-index"),
+    	    	    	    //市场价格
+    	    	    	    $marketPrice = $customerRebateMoney.eq(i).closest('td').next('td').find('.marketPrice');
+    	    	    	    var marketVal = 0 ;
+    	    	    	    $marketPrice.each(function(j) {
+    	    	    	    	if ($marketPrice.eq(j).attr("data-index") == index) {
+    	    	    	    		marketVal = $marketPrice.eq(j).val();//市场价格
+    	    	    	    	};
+    	    	    	    });
+    	    	    	    //内部价格
+    	    	    	    $contractPrice = $customerRebateMoney.eq(i).closest('td').prev('td').find('.contractPrice');
+    	    	    	    var marketVal = 0 ;
+    	    	    	    $contractPrice.each(function(j) {
+    	    	    	    	if ($contractPrice.eq(j).attr("data-index") == index) {
+    	    	    	    		marketVal = $marketPrice.eq(j).val();
+    	    	    	    		//内部价格 = 市场价格-人数返佣
+    	    	    	    		$contractPrice.eq(j).val(marketVal)
+    	    	    	    	};
+    	    	    	    });
+
+	    	    	    };
+	    	    });
+    		});
+    	   
+
+
+
+    /*	$customerRebateMoney.on('change', function(event) {
+    		event.preventDefault();
+    		$travelAgency.each(function(i) {
+    			var traveVal = $travelAgency.eq(i).val(),
+    			    index = $travelAgency.eq(i).attr("data-index"); //修改的索引值
+    			    if (isNaN(traveVal)) {//非法数字验证
+    			    	$travelAgency.eq(i).val("0");
+    			    	traveVal = $travelAgency.eq(i).val();
+    			    }
+			    	$guideRate = $travelAgency.eq(i).closest('td').next('td').find('.guideRate');
+    			    $guideRate.each(function(j){
+	    				if($guideRate.eq(j).attr("data-index") == index){
+	    					$guideRate.eq(j).val(100 - guideVal);
+	    					
+	    				}
+    			   })	
+    			       
+    		});
+    	});*/
+
+
+
+	};
+
 	/**
 	 * ajax url方法
 	 * @param  {[type]} method    [方法名]
