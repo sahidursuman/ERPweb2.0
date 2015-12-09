@@ -16,20 +16,20 @@ define(function(require, exports) {
 	    	    	rules: [
     	    	        {
     	    	        	type: 'float',
-    	    	        	errMsg: '请输入数字'
+	    	    	        errMsg: '请输入数字'  
     	    	        }
 	    	        ]
 	    	    },
-	    	    {//付款金额
+	    	  	{//付款金额
 	    	    	$ele: $obj.find('input[name=payMoney]'),
 	    	    	rules:[
-    	    	       {
-    	    	    	   type: 'float',
-    	    	        	errMsg: '请输入数字'   
-    	    	       }
-	    	        ]
-    	    	}
-            ]);
+	    	    	       {
+	    	    	    	    type: 'float',
+	    	    	        	errMsg: '请输入数字'   
+	    	    	       }
+    	    	       ]
+	    	    	}
+                ]);
 			return validator;
 		}
 	}

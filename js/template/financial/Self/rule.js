@@ -16,7 +16,7 @@ define(function(require, exports) {
 	    	    	rules: [
     	    	        {
     	    	        	type: 'float',
-    	    	        	errMsg: '请输入数字'
+	    	    	        errMsg: '请输入数字'  
     	    	        }
 	    	        ]
 	    	    },
@@ -24,7 +24,7 @@ define(function(require, exports) {
 	    	    	$ele: $obj.find('input[name=payMoney]'),
 	    	    	rules:[
 	    	    	       {
-	    	    	    	   type: 'float',
+	    	    	    	    type: 'float',
 	    	    	        	errMsg: '请输入数字'   
 	    	    	       }
     	    	       ]

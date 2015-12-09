@@ -328,7 +328,7 @@ define(function(require, exports) {
                 sumPayType = parseFloat(Self.$clearTab.find('select[name=sumPayType]').val());
             FinancialService.autoPayConfirm(startDate,endDate,function(){
                 $.ajax({
-                    url:KingServices.build_url("account/arrangeRestaurantFinancial","listRestaurantAccount"),
+                    url:KingServices.build_url("account/selfPayFinancial","autoWiredSelfPayAccount"),
                     type:"POST",
                     data:{ 
                         selfPayId : id,
@@ -341,18 +341,16 @@ define(function(require, exports) {
                     success:function(data){
                         var result = showDialog(data);
                         if(result){
-                            showMessageDialog($("#confirm-dialog-message"),"自动下账成功！",function(){
-                                Self.$clearTab.find(".T-clear-auto").toggle();
-                                Self.$clearTab.find(".T-cancel-auto").toggle();
-                                Self.$clearTab.data('isEdited',false);
-                                Self.clearTempData = data.autoPaymentJson;
-                                Self.clearTempSumDate = {
-                                    sumPayMoney : Self.$clearTab.find('input[name=sumPayMoney]').val(),
-                                    sumPayType : Self.$clearTab.find('select[name=sumPayType]').val(),
-                                    sumPayRemark : Self.$clearTab.find('input[name=sumPayRemark]').val()
-                                };
-                                Self.GetClear(1,0,id,name);
-                            });
+                            Self.$clearTab.find(".T-clear-auto").toggle();
+                            Self.$clearTab.find(".T-cancel-auto").toggle();
+                            Self.$clearTab.data('isEdited',false);
+                            Self.clearTempData = data.autoPayList;
+                            Self.clearTempSumDate = {
+                                sumPayMoney : Self.$clearTab.find('input[name=sumPayMoney]').val(),
+                                sumPayType : Self.$clearTab.find('select[name=sumPayType]').val(),
+                                sumPayRemark : Self.$clearTab.find('input[name=sumPayRemark]').val()
+                            };
+                            Self.GetClear(1,0,id,name);
                         }
                     }
                 });
@@ -534,7 +532,7 @@ define(function(require, exports) {
                             Self.listSelf(Self.searchData.pageNo,Self.searchData.selfPayName,Self.searchData.selfPayId,Self.searchData.startDate,Self.searchData.endDate);
                         }else if(argumentsLen === 3){
                             Self.$clearTab.data('isEdited',false);
-                            Self.restaurantClear(0,page,id,name);
+                            Self.GetClear(0,page,id,name);
                         } else {
                             Self.$clearTab.data('isEdited',false);
                             Tools.addTab(tab_id, title, html);
@@ -678,5 +676,10 @@ define(function(require, exports) {
         return sumData;
     };
 
+    Self.initPay = function(options){
+        Self.GetClear(2,0,options.id,options.name,"",options.startDate,options.endDate); 
+    };
+
     exports.init = Self.initModule;
+    exports.initPay = Self.initPay;
 });
