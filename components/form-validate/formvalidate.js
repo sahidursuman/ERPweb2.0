@@ -204,6 +204,11 @@
 							res = rules[i].errMsg;
 						}
 						break;
+					case 'nonnegative-float': 	// 非负数
+						if (!!data && (isNaN( data ) || data < 0)) {
+							res = rules[i].errMsg;
+						}
+						break;
 					case 'positive-float':	// 正浮点型
 						if (!!data && (isNaN( data ) || data <= 0)) {
 							res = rules[i].errMsg;

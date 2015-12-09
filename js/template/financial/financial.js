@@ -176,9 +176,13 @@ FinancialService.autoPayJson = function(id,$tab,rule){
     var startDate = $tab.find("input[name=startDate]").val(),
         endDate = $tab.find("input[name=endDate]").val(),
         sumPayMoney = parseFloat($tab.find('input[name=sumPayMoney]').val()),
+<<<<<<< HEAD
         sumPayType = parseInt($tab.find('select[name=sumPayType]').val()),
+=======
+        sumPayType = parseFloat($tab.find('select[name=sumPayType]').val()),
+>>>>>>> 03ababebd16ab12649462dcbec5dc5875297d45c
         sumPayRemark = $tab.find('input[name=sumPayRemark]').val(),
-        unpayMoney = parseInt($tab.find('.T-unpayMoney').text());
+        unpayMoney = parseFloat($tab.find('.T-unpayMoney').text());
     if(startDate > endDate){
         showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
         return false;
@@ -283,6 +287,13 @@ FinancialService.setDatePicker = function($obj, options)  {
         format: 'yyyy-mm-dd',
         language: 'zh-CN'
     }, options));
+};
+
+//自动下账提示
+FinancialService.autoPayConfirm = function(startDate,endDate,fn){
+    showConfirmMsg($("#confirm-dialog-message"),"是否按当前账期 " + startDate + " 至 " + endDate + " 下账？",function(){
+        fn();
+    });
 };
 
 //判断列表是否已全选
