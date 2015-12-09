@@ -66,7 +66,7 @@
         </thead>
         <tbody class="T-checkListNum" >
          {{each financialOtherDetailsList as Checking index}}
-            <tr data-id = "{{Checking.id}}" data-entity-isConfirmAccount="{{Checking.isConfirmAccount}}"  data-entity-checkRemark="{{Checking.checkRemark}}"  data-entity-settlementMoney="{{Checking.settlementMoney}}">
+            <tr data-id = "{{Checking.id}}" data-entity-isConfirmAccount="{{Checking.isConfirmAccount}}"  data-entity-checkRemark="{{Checking.checkRemark}}">
                 <td>{{index+1}}</td>
                 <td>{{Checking.info}}</td>
                 <td name="startTime">{{Checking.accountTime}}</td>
@@ -78,7 +78,7 @@
                 <td><a class="T-action T-lookDetail">{{"社付："}}{{Checking.agencyPayedMoney}}{{";导付："}}{{Checking.guidePayedMoney}}</a></td>
                 <td><a href="#" class="T-action T-viewInsuanceImg" url=""><span>查看</span></a></td>
                 <td>
-                    <input type="text" name="ClearMoney" value="{{Checking.settlementMoney}}"/>
+                    <input type="text" name="ClearMoney input-success" value="{{Checking.settlementMoney}}"/>
                 </td>
                 <td>
                    {{Checking.unPayedMoney}}

@@ -81,13 +81,11 @@ define(function(require, exports) {
                 event.preventDefault();
                 var $that = $(this);
                 var name = $(this).closest('tr').attr("data-name");
-
                 if ($that.hasClass('T-checking')) {
                     //对账
                     OtherAccounts.AccountsChecking(0, name, startAccountTime, endAccountTime);
                 } else if ($that.hasClass('T-payment')) {
-                    alert("付款");
-                    // 结算
+                    // 付款
                     OtherAccounts.AccountsPayment(0, name, startAccountTime, endAccountTime);
                 }
             });
@@ -298,8 +296,6 @@ define(function(require, exports) {
 
             });
             JsonStr = JSON.stringify(JsonStr);
-            // console.log(JsonStr);
-            // return;
             // 对账保存接口
             $.ajax({
                 url: KingServices.build_url("account/arrangeOtherFinancial", "saveReconciliation"),
@@ -314,7 +310,6 @@ define(function(require, exports) {
         }
         //付款
     OtherAccounts.AccountsPayment = function(pageNo, name, startAccountTime, endAccountTime) {
-        name = OtherAccounts.$searchArea.find("input[name=otherId]").val();
         startAccountTime = OtherAccounts.$searchArea.find("input[name=startTime]").val();
         endAccountTime = OtherAccounts.$searchArea.find("input[name=endTime]").val();
         //重置搜索条件
@@ -331,10 +326,11 @@ define(function(require, exports) {
             type: "POST",
             data: OtherAccounts.CheckingData,
             success: function(data) {
+                console.log(data);
                 var result = showDialog(data);
                 if (result) {
                     var dataTable = data;
-                    // 对账 
+                    // 付款头部的接口
                     $.ajax({
                         url: KingServices.build_url("account/arrangeOtherFinancial", "getStatistics"),
                         type: "POST",
@@ -344,32 +340,40 @@ define(function(require, exports) {
                             var result = showDialog(data);
                             if (result) {
                                 var html = AccountsPaymentTemplate(dataTable);
-                                Tools.addTab("-payment", "其他付款", html);
-
+                                Tools.addTab(PaymentTabId, "其他付款", html);
                                 var $PaymentTabId = $("#tab-" + PaymentTabId + "-content");
-                                // 查看已付金额明细
-                                $PaymentTabId.find(".T-lookPay").click(function(event) {
+                                $PaymentTabId.find('.T-PaymentListNum').on('click', '.T-action', function(event) {
                                     event.preventDefault();
-                                    OtherAccounts.lookDetail();
-                                });
-
-                                //应付金额明细
-                                $PaymentTabId.find('.T-viewhandle').click(function(event) {
-                                    event.preventDefault();
-                                    OtherAccounts.viewhandle();
+                                    var $that = $(this),
+                                        $tr = $that.closest('tr'),
+                                        id = $tr.data('id');
+                                    console.log(id);
+                                    if ($that.hasClass('T-lookPay')) {
+                                        alert("已付金额");
+                                        // 查看已付明细
+                                        OtherAccounts.ViewAmountPaid(id);
+                                    } else if ($that.hasClass('T-insuanceImg')) {
+                                        // 查看单据
+                                        OtherAccounts.viewInsuranceImg(id);
+                                    } else if ($that.hasClass('T-viewhandle')) {
+                                        // 查看对账明细
+                                        OtherAccounts.viewOrderDetail(id);
+                                    }
                                 });
 
                                 //时间控件
-                                var $container = $(".T-AccountsPayment");
-                                $container.find("input[name=joinTime]").datepicker({
+                                $PaymentTabId.find("input[name=joinTime]").datepicker({
                                     autoclose: true,
                                     todayHighlight: true,
                                     format: 'yyyy-mm-dd',
                                     language: 'zh-CN'
                                 });
                                 //关闭页面事件
-                                $container.find(".T-closeTab").click(function() {
-                                    closeTab(checkTabId);
+                                $PaymentTabId.find(".T-closeTab").click(function() {
+                                    closeTab(PaymentTabId);
+                                });
+                                $PaymentTabId.find('.T-save').click(function(event) {
+                                    OtherAccounts.paysave(name);
                                 });
 
 
@@ -384,8 +388,45 @@ define(function(require, exports) {
             }
         })
     };
-
-    // // 查看已付金额a-1
+    // 保存付款 主键 结算金额  对账备注 对账状态[0(未对账)、1(已对账)]
+    OtherAccounts.paysave = function(name, $PaymentTabId) {
+            var $PaymentTabId = $("#tab-" + PaymentTabId + "-content");
+            var $tr = $PaymentTabId.find(".T-PaymentListNum tr");
+            var JsonStr = [];
+            $tr.each(function(i) {
+                //取值用于是否修改对账判断
+                var $that = $(this),
+                    id = $that.data('id');
+                var oldRemark = $that.attr("data-entity-checkRemark"); //得到付款付款金额旧的值
+                var payMoney = $tr.eq(i).find("input[name=ClearMoney]").val(); //得到付款付款金额被修改之后值
+                var newRemark = $tr.eq(i).find("input[name=checkRemark]").val(); //得到付款备注金额被修改之后值、
+                var paymentMethod = $tr.find('select option:selected').val();
+                if (oldRemark != newRemark) { //是否有修改
+                    OtherAccounts.CheckConfirmData = {
+                        id: id,
+                        payMoney: payMoney,
+                        payRemark: newRemark,
+                        payType: paymentMethod,
+                        isConfirmAccount: 1,
+                        sortType: 'auto'
+                    }
+                    JsonStr.push(OtherAccounts.CheckConfirmData);
+                }
+            });
+            JsonStr = JSON.stringify(JsonStr);
+            // 付款保存接口
+            $.ajax({
+                url: KingServices.build_url("account/arrangeOtherFinancial", "saveReconciliation"),
+                type: "POST",
+                data: {
+                    reconciliation: JsonStr
+                },
+                success: function(data) {
+                    console.log(data, "付款保存");
+                }
+            })
+        }
+        // // 查看已付金额a-1
     OtherAccounts.lookDetail = function(id) {
 
         // 对账查看明细页面
@@ -445,31 +486,58 @@ define(function(require, exports) {
 
         }
         //已付金额明细b-1
-    OtherAccounts.ViewAmountPaid = function() {
-            var html = ViewAmountPaidTemplate();
-            var lookDetailLayer = layer.open({
-                type: 1,
-                title: "已付金额明细",
-                skin: 'layui-layer-rim', //加上边框
-                area: '55%', //宽高
-                zIndex: 1028,
-                content: html,
-                scrollbar: false,
+    OtherAccounts.ViewAmountPaid = function(id) {
+            $.ajax({
+                url: KingServices.build_url("account/arrangeOtherFinancial", "getPaymentDetails"),
+                type: "POST",
+                data: {
+                    id: id
+                },
+                success: function(data) {
+                    console.log(data, "123");
+                    var result = showDialog(data);
+                    if (result) {
+                        var html = ViewAmountPaidTemplate(data);
+                        var lookDetailLayer = layer.open({
+                            type: 1,
+                            title: "已付金额明细",
+                            skin: 'layui-layer-rim', //加上边框
+                            area: '55%', //宽高
+                            zIndex: 1028,
+                            content: html,
+                            scrollbar: false,
+                        });
+                    }
 
-            });
+                }
+            })
+
         }
         //应付金额明细b-2
-    OtherAccounts.viewOrderDetail = function() {
-        var html = viewOrderDetailTemplate();
-        var lookDetailLayer = layer.open({
-            type: 1,
-            title: "应付金额明细",
-            skin: 'layui-layer-rim', //加上边框
-            area: '55%', //宽高
-            zIndex: 1028,
-            content: html,
-            scrollbar: false,
-        });
+    OtherAccounts.viewOrderDetail = function(id) {
+        $.ajax({
+            url: KingServices.build_url("account/arrangeOtherFinancial", "getReconciliationDetails"),
+            type: "POST",
+            data: {
+                id: id
+            },
+            success: function(data) {
+                var result = showDialog(data);
+                if (result) {
+                    var html = viewOrderDetailTemplate(data);
+                    var lookDetailLayer = layer.open({
+                        type: 1,
+                        title: "应付金额明细",
+                        skin: 'layui-layer-rim', //加上边框
+                        area: '55%', //宽高
+                        zIndex: 1028,
+                        content: html,
+                        scrollbar: false,
+                    });
+                }
+            }
+        })
+
     }
     exports.init = OtherAccounts.initModule;
 })
