@@ -15,21 +15,21 @@ define(function(require, exports) {
 	    	    	$ele: $obj.find('input[name=sumPayMoney]'),
 	    	    	rules: [
     	    	        {
-    	    	        	type: 'nonnegative-float',
-   			    	        errMsg: '请输入非负数'
+    	    	        	type: 'float',
+	    	    	        errMsg: '请输入数字'  
     	    	        }
 	    	        ]
 	    	    },
-	    	    {//付款金额
+	    	  	{//付款金额
 	    	    	$ele: $obj.find('input[name=payMoney]'),
 	    	    	rules:[
-    	    	       {
-    	    	    	   type: 'float',
-    	    	        	errMsg: '请输入数字'   
-    	    	       }
-	    	        ]
-    	    	}
-            ]);
+	    	    	       {
+	    	    	    	    type: 'float',
+	    	    	        	errMsg: '请输入数字'   
+	    	    	       }
+    	    	       ]
+	    	    	}
+                ]);
 			return validator;
 		}
 	}
