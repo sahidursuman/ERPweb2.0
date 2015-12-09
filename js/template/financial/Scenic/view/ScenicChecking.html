@@ -1,48 +1,32 @@
 <div class="row T-newData" data-id="{{searchParam.scenicId}}" data-name="{{scenicName}}">
-    <div class="col-xs-12">
-        <form class="form-horizontal" role="form" onsubmit="return false">
-            <div class="T-search-area" >
-                <div class="form-group"> 
-                    <label style="float: left;margin: 0px auto auto 0px" class="control-label pull-left"> 酒店：{{scenicName}}</label>
-                    <label class="control-label marginLeft-30" style="float:left;">账期：</label>
-	                  <div class="col-xs-1">
-                        <div class="input-group">
-                            <input class="col-xs-12 date-picker" name="startDate" placeholder="开始日期" type="text" value="{{searchParam.startTime}}" />   
-                            <span class="input-group-addon">
-                                <i class="fa fa-calendar"></i>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="col-xs-1">
-                        <div class="input-group">
-                            <input class="col-xs-12 date-picker" name="endDate" placeholder="结束日期" type="text" value="{{searchParam.endTime}}" />   
-                            <span class="input-group-addon">
-                                <i class="fa fa-calendar"></i>
-                            </span>
-                        </div>
-                    </div>
-
-                    <label class="control-label" style="float:left;marginLeft-30">账务类别：</label>
-                    <input class="col-xs-1" name="accountInfo" placeholder="账务类别" type="text" value="{{searchParam.accountInfo}}" />
-
-                    <button class="btn-sm T-search search-btn marginLeft-30" >
-                        <i class="ace-icon fa fa-search"></i>搜索
-                    </button>
-                    <!-- <button type="button" class=" btn-sm btn btn-primary marginLeft-30 btn-success T-hotelExport" style="padding:0px;">
-						<span>导出报表</span>
-						<i class="ace-icon fa fa-arrow-right icon-on-right"></i>
-  					</button> -->
-                </div>
+    <div>
+        <form class="form-inline T-search-area" role="form" onsubmit="return false">
+            <div class="form-group">
+                <label>酒店：</label>
+                <span>{{scenicName}}</span>
+            </div>
+            <div class="form-group input-daterange marginLeft-30">
+                <label>账期：</label>
+                <input type="text"  name="startDate" class="form-control datepicker" name="startDate" style="width:100px;" value="{{searchParam.startTime}}">
+                <label>&nbsp;至&nbsp;</label>
+                <input type="text" class="form-control datepicker" name="endDate" style="width:100px;" value="{{searchParam.endTime}}">
+            </div>
+            <div class="form-group marginLeft-30">
+                <label for="">账务类别：</label>
+                <input class="form-control" name="accountInfo" placeholder="账务类别" type="text" value="{{searchParam.accountInfo}}" />
+            </div>
+            <div class="form-group marginLeft-30">
+                <button class="btn-sm search-btn  T-search">
+                    <i class="ace-icon fa fa-search"></i> 搜索 
+                </button>
             </div>
         </form>
 
         <form class="form-horizontal" role="form" onsubmit="return false">
-            <div class="form-group">
-                <label class=" control-label pull-left">账面应付合计：{{sumNeedPayMoney}}</label>
-                <label class=" control-label marginLeft-30">已付金额合计：{{sumPayedMoney}}</label>
-                <label class=" control-label marginLeft-30">结算金额合计：<span class="T-stMoney">{{sumSettlementMoney}}</span></label>
-                <label class=" control-label marginLeft-30">未付金额合计：<span class="T-unpayMoney">{{sumUnPayedMoney}}</span></label>
-            </div>
+            <label class=" control-label pull-left">账面应付合计：{{sumNeedPayMoney}}</label>
+            <label class=" control-label marginLeft-30">已付金额合计：{{sumPayedMoney}}</label>
+            <label class=" control-label marginLeft-30">结算金额合计：<span class="T-stMoney">{{sumSettlementMoney}}</span></label>
+            <label class=" control-label marginLeft-30">未付金额合计：<span class="T-unpayMoney">{{sumUnPayedMoney}}</span></label>
         </form>
     </div>
     <input type="hidden" value="{{WEB_IMG_URL_BIG}}" name="WEB_IMG_URL_BIG" />
