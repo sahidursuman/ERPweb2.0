@@ -269,7 +269,7 @@ define(function(require, exports) {
             FinGuide.initOperationModule($btn.data('id'), $btn.data('name'), type, $tab);
         });
 
-        var validator = rule.check($tab);
+        var validator = rule.check($tab), autoValidator = rule.autoFillCheck($tab.find('.T-auto-fill-area'));
 
         // 处理关闭与切换tab
         $tab.off('change').off(SWITCH_TAB_SAVE).off(CLOSE_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT)
@@ -338,7 +338,7 @@ define(function(require, exports) {
             $tab.find('.T-btn-autofill').on('click', function(event) {
                 event.preventDefault();
                 if ($(this).hasClass('btn-primary')) {
-                    if (validator.form()) {
+                    if (autoValidator.form()) {
                         FinGuide.autoFillMoney($tab);
                     }
                 } else {
@@ -381,8 +381,8 @@ define(function(require, exports) {
                                 Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
                                 FinGuide.initOperationEvent($tab, 0);
                             } else {
-                                Tools.closeTab(checkMenuKey);
-                                FinGuide.getList(FinGuide.listPageNo);
+                                $tab.find('.T-btn-search').trigger('click');
+                                // FinGuide.getList(FinGuide.listPageNo);
                             }
                         })
                     }
@@ -417,8 +417,8 @@ define(function(require, exports) {
                             Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
                             FinGuide.initOperationEvent($tab, 1);
                         } else {
-                            Tools.closeTab(payMenuKey);
-                            FinGuide.getList(FinGuide.listPageNo);
+                            $tab.find('.T-btn-search').trigger('click');
+                            // FinGuide.getList(FinGuide.listPageNo);
                         }
                     })
                 });

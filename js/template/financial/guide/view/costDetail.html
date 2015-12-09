@@ -61,7 +61,7 @@
                             {{each group.touristGroupMemberList as member memberIndex}}
 	                        <tr>
 	                        	{{if memberIndex == 0}}
-                        		<td rowspan="{{group.length}}">{{groupIndex}}</td>
+                        		<td rowspan="{{group.length}}">第{{groupIndex+1}}组</td>
 	                        	{{/if}}
                         		<td>{{member.name}}</td>
 	                            <td>{{member.mobileNumber}}</td>
