@@ -267,11 +267,16 @@ define(function(require, exports) {
                         validator = rule.check(restaurant.$clearTab.find('.T-clearList'));                       
                     }
 
-                    if(isAutoPay == 1){
+                    if(isAutoPay == 0){
+                        restaurant.$clearTab.find(".T-cancel-auto").hide();
+                    } else {
                         restaurant.$clearTab.find('input[name=sumPayMoney]').prop("disabled",true);
                         restaurant.$clearTab.find(".T-clear-auto").hide(); 
-                    } else {
-                        restaurant.$clearTab.find(".T-cancel-auto").hide();
+                        if(isAutoPay == 1){
+                            restaurant.$clearTab.data('isEdited',true);
+                        } else if(isAutoPay == 2){
+                            restaurant.$clearTab.find(".T-cancel--auto").hide();
+                        }
                     }
 
                     //绑定翻页组件
@@ -340,7 +345,7 @@ define(function(require, exports) {
                 sumPayType = parseInt(restaurant.$clearTab.find('select[name=sumPayType]').val()),
                 sumPayRemark = restaurant.$clearTab.find('input[name=sumPayRemark]').val();
             var searchParam = {
-                restaurantId : id,//字段id需与后台协调
+                restaurantId : id,
                 sumCurrentPayMoney : sumPayMoney,
                 payType : sumPayType,
                 payRemark : sumPayRemark,
@@ -357,18 +362,15 @@ define(function(require, exports) {
                     success:function(data){
                         var result = showDialog(data);
                         if(result){
-                            showMessageDialog($("#confirm-dialog-message"),"自动下账成功！",function(){
-                                restaurant.$clearTab.find(".T-clear-auto").toggle();
-                                restaurant.$clearTab.find(".T-cancel-auto").toggle();
-                                restaurant.$clearTab.data('isEdited',false);
-                                restaurant.clearTempData = data.autoPaymentJson;
-                                restaurant.clearTempSumDate = {
-                                    sumPayMoney : restaurant.$clearTab.find('input[name=sumPayMoney]').val(),
-                                    sumPayType : restaurant.$clearTab.find('select[name=sumPayType]').val(),
-                                    sumPayRemark : restaurant.$clearTab.find('input[name=sumPayRemark]').val()
-                                };
-                                restaurant.restaurantClear(1,0,id,name);
-                            });
+                            restaurant.$clearTab.find(".T-clear-auto").toggle();
+                            restaurant.$clearTab.find(".T-cancel-auto").toggle();
+                            restaurant.clearTempData = data.autoPaymentJson;
+                            restaurant.clearTempSumDate = {
+                                sumPayMoney : restaurant.$clearTab.find('input[name=sumPayMoney]').val(),
+                                sumPayType : restaurant.$clearTab.find('select[name=sumPayType]').val(),
+                                sumPayRemark : restaurant.$clearTab.find('input[name=sumPayRemark]').val()
+                            };
+                            restaurant.restaurantClear(1,0,id,name);
                         }
                     }
                 });
@@ -413,6 +415,7 @@ define(function(require, exports) {
             scrollbar: false, // 推荐禁用浏览器外部滚动条
             success : function() {
                 var colorbox_params = {
+                    photo : true,
                     rel: 'colorbox',
                     reposition:true,
                     scalePhotos:true,
@@ -537,7 +540,9 @@ define(function(require, exports) {
             url:KingServices.build_url("account/arrangeRestaurantFinancial","saveAccountSettlement"),
             type:"POST",
             data:{
-                restaurantJson : clearSaveJson
+                restaurantJson : clearSaveJson,
+                payType : restaurant.$clearTab.find('select[name=sumPayType]').val(),
+                payRemark : restaurant.$clearTab.find('input[name=sumPayRemark]').val()
             },
             success:function(data){
                 var result = showDialog(data);
@@ -655,5 +660,10 @@ define(function(require, exports) {
         });
     };
 
+    restaurant.initPay = function(options){
+        restaurant.restaurantClear(2,0,options.id,options.name,"",options.startDate,options.endDate); 
+    };
+
     exports.init = restaurant.initModule;
+    exports.initPay = restaurant.initPay;
 });

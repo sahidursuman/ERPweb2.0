@@ -52,7 +52,7 @@ define(function(require, exports) {
 
         var searchParam = JSON.stringify(busCompany.searchData);
         $.ajax({
-            url:KingServices.build_url("financial/financialBusCompany","listSumFinancialBusCompany"),
+            url:KingServices.build_url("account/financialBusCompany","listSumFinancialBusCompany"),
             type:"POST",
             data:{ searchParam : searchParam },
             success:function(data){
@@ -136,13 +136,13 @@ define(function(require, exports) {
         };
         searchParam = JSON.stringify(searchParam);
         $.ajax({
-            url:KingServices.build_url("financial/financialBusCompany","listAccountChecking"),
+            url:KingServices.build_url("account/financialBusCompany","listBusCompanyAccount"),
             type:"POST",
             data:{ searchParam : searchParam },
             success:function(data){
                 var result = showDialog(data);
                 if(result){
-                    var fbList = data.financialBusCompanyList;
+                    var fbList = data.financialBusCompanyListData;
                     data.busCompanyName = busCompanyName;
                     var html = checkBill(data);
                     
@@ -241,7 +241,7 @@ define(function(require, exports) {
         };
         searchParam = JSON.stringify(searchParam);
         $.ajax({
-            url:KingServices.build_url("financial/financialBusCompany","listAccountSettlement"),
+            url:KingServices.build_url("account/financialBusCompany","listBusCompanyAccount"),
             type:"POST",
             data:{ searchParam : searchParam },
             success:function(data){
@@ -252,9 +252,11 @@ define(function(require, exports) {
                     if(busCompany.clearTempSumDate){
                         data.sumPayMoney = busCompany.clearTempSumDate.sumPayMoney;
                         data.sumPayType = busCompany.clearTempSumDate.sumPayType;
+                        data.sumPayRemark = busCompany.clearTempSumDate.sumPayRemark;
                     } else {
                         data.sumPayMoney = 0;
                         data.sumPayType = 0;
+                        data.sumPayRemark = "";
                     }
                     var resultList = data.financialBusCompanyListData;
                     data.financialBusCompanyListData = FinancialService.getTempDate(resultList,busCompany.clearTempData);
@@ -267,11 +269,16 @@ define(function(require, exports) {
                         validator = rule.check(busCompany.$clearTab.find('.T-clearList'));                       
                     }
 
-                    if(isAutoPay == 1){
+                    if(isAutoPay == 0){
+                        busCompany.$clearTab.find(".T-cancel-auto").hide();
+                    } else {
                         busCompany.$clearTab.find('input[name=sumPayMoney]').prop("disabled",true);
                         busCompany.$clearTab.find(".T-clear-auto").hide(); 
-                    } else {
-                        busCompany.$clearTab.find(".T-cancel-auto").hide();
+                        if(isAutoPay == 1){
+                            busCompany.$clearTab.data('isEdited',true);
+                        } else if(isAutoPay == 2){
+                            busCompany.$clearTab.find(".T-cancel--auto").hide();
+                        }
                     }
 
                     //绑定翻页组件
@@ -281,14 +288,16 @@ define(function(require, exports) {
                         pages: data.searchParam.totalPage,
                         curr: (page + 1),
                         jump: function(obj, first) {
-                            if (!first) { 
+                            if (!first) {
                                 var tempJson = FinancialService.clearSaveJson(busCompany.$clearTab,busCompany.clearTempData,rule);
                                 busCompany.clearTempData = tempJson;
-                                var sumPayMoney = parseInt(busCompany.$clearTab.find('input[name=sumPayMoney]').val());
-                                    sumPayType = parseInt(busCompany.$clearTab.find('select[name=sumPayType]').val());
+                                var sumPayMoney = parseInt(busCompany.$clearTab.find('input[name=sumPayMoney]').val()),
+                                    sumPayType = parseInt(busCompany.$clearTab.find('select[name=sumPayType]').val()),
+                                    sumPayRemark = busCompany.$clearTab.find('input[name=sumPayRemark]').val();
                                 busCompany.clearTempSumDate = {
                                     sumPayMoney : sumPayMoney,
-                                    sumPayType : sumPayType
+                                    sumPayType : sumPayType,
+                                    sumPayRemark : sumPayRemark
                                 }
                                 busCompany.busCompanyClear(isAutoPay,obj.curr -1,busCompanyId,busCompanyName);
                             }
@@ -334,26 +343,39 @@ define(function(require, exports) {
             if(!autoPayJson){return false;}
 
             var startDate = busCompany.$clearTab.find("input[name=startDate]").val(),
-                endDate = busCompany.$clearTab.find("input[name=endDate]").val();
+                endDate = busCompany.$clearTab.find("input[name=endDate]").val(),
+                sumPayMoney = parseInt(busCompany.$clearTab.find('input[name=sumPayMoney]').val()),
+                sumPayType = parseInt(busCompany.$clearTab.find('select[name=sumPayType]').val()),
+                sumPayRemark = busCompany.$clearTab.find('input[name=sumPayRemark]').val();
+            var searchParam = {
+                busCompanyId : id,
+                sumCurrentPayMoney : sumPayMoney,
+                payType : sumPayType,
+                payRemark : sumPayRemark,
+                startTime : startDate,
+                endTime : endDate,
+                isAutoPay : 1
+            };
+            searchParam = JSON.stringify(searchParam);
             showConfirmMsg($("#confirm-dialog-message"),"是否按当前账期 " + startDate + " 至 " + endDate + " 下账？",function(){
                 $.ajax({
-                    url:KingServices.build_url("financial/financialBusCompany","autoPayment"),
+                    url:KingServices.build_url("account/financialBusCompany","listBusCompanyAccount"),
                     type:"POST",
-                    data:{ searchParam : autoPayJson },
+                    data:{ searchParam : searchParam },
                     success:function(data){
                         var result = showDialog(data);
                         if(result){
-                            showMessageDialog($("#confirm-dialog-message"),"自动下账成功！",function(){
-                                busCompany.$clearTab.find(".T-clear-auto").toggle();
-                                busCompany.$clearTab.find(".T-cancel-auto").toggle();
-                                busCompany.$clearTab.data('isEdited',false);
-                                busCompany.clearTempData = data.autoPaymentJson;
-                                busCompany.clearTempSumDate = {
-                                    sumPayMoney : busCompany.$clearTab.find('input[name=sumPayMoney]').val(),
-                                    sumPayType : busCompany.$clearTab.find('select[name=sumPayType]').val()
-                                };
-                                busCompany.busCompanyClear(1,page,id,name);
-                            });
+                            busCompany.$clearTab.find(".T-clear-auto").toggle();
+                            busCompany.$clearTab.find(".T-cancel-auto").toggle();
+                            busCompany.clearTempSumDate = false;
+                            busCompany.clearTempData = false;
+                            busCompany.clearTempData = data.autoPaymentJson;
+                            busCompany.clearTempSumDate = {
+                                sumPayMoney : busCompany.$clearTab.find('input[name=sumPayMoney]').val(),
+                                sumPayType : busCompany.$clearTab.find('select[name=sumPayType]').val(),
+                                sumPayRemark : busCompany.$clearTab.find('input[name=sumPayRemark]').val()
+                            };
+                            busCompany.busCompanyClear(1,page,id,name);
                         }
                     }
                 });
@@ -377,7 +399,7 @@ define(function(require, exports) {
         if(!checkSaveJson){ return false; }
         
         $.ajax({
-            url:KingServices.build_url("financial/financialBusCompany","saveAccountChecking"),
+            url:KingServices.build_url("account/financialBusCompany","saveAccountChecking"),
             type:"POST",
             data:{
                 busCompanyJson : checkSaveJson
@@ -413,7 +435,7 @@ define(function(require, exports) {
 
         clearSaveJson = JSON.stringify(clearSaveJson);
         $.ajax({
-            url:KingServices.build_url("financial/financialBusCompany","saveAccountSettlement"),
+            url:KingServices.build_url("account/financialBusCompany","saveAccountSettlement"),
             type:"POST",
             data:{ busCompanyJson : clearSaveJson },
             success:function(data){
@@ -497,7 +519,7 @@ define(function(require, exports) {
     //已付金额明细
     busCompany.payedDetail = function(id){
         $.ajax({
-            url:KingServices.build_url("account/scenicFinancial","getPayedMoneyDetail"),
+            url:KingServices.build_url("account/financialBusCompany","getPayedMoneyDetail"),
             type:"POST",
             data:{
                 id : id
@@ -523,7 +545,7 @@ define(function(require, exports) {
     //应付金额明细
     busCompany.needPayDetail = function(id){
         $.ajax({
-            url:KingServices.build_url("account/scenicFinancial","getNeedPayDetail"),
+            url:KingServices.build_url("account/financialBusCompany","getNeedPayDetail"),
             type:"POST",
             data:{
                 id : id
@@ -638,5 +660,10 @@ define(function(require, exports) {
         });
     };
 
+    busCompany.initPay = function(options){
+        busCompany.busCompanyClear(2,0,options.id,options.name,"",options.startDate,options.endDate); 
+    };
+
 	exports.init = busCompany.initModule;
+    exports.initPay = busCompany.initPay;
 });

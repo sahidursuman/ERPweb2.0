@@ -135,13 +135,13 @@ define(function(require, exports) {
         };
         searchParam = JSON.stringify(searchParam);
         $.ajax({
-            url:KingServices.build_url("account/financialHotel","listAccountChecking"),
+            url:KingServices.build_url("account/financialHotel","listHotelAccount"),
             type:"POST",
             data:{ searchParam : searchParam },
             success:function(data){
                 var result = showDialog(data);
                 if(result){
-                    var fhList = data.financialHotelList;
+                    var fhList = data.financialHotelListData;
                     data.hotelName = hotelName;
                     var html = hotelChecking(data);
                     
@@ -240,7 +240,7 @@ define(function(require, exports) {
         };
         searchParam = JSON.stringify(searchParam);
         $.ajax({
-            url:KingServices.build_url("account/financialHotel","listAccountSettlement"),
+            url:KingServices.build_url("account/financialHotel","listHotelAccount"),
             type:"POST",
             data:{ searchParam : searchParam },
             success:function(data){
@@ -252,9 +252,11 @@ define(function(require, exports) {
                     if(hotel.clearTempSumDate){
                         data.sumPayMoney = hotel.clearTempSumDate.sumPayMoney;
                         data.sumPayType = hotel.clearTempSumDate.sumPayType;
+                        data.sumPayRemark = hotel.clearTempSumDate.sumPayRemark;
                     } else {
                         data.sumPayMoney = 0;
                         data.sumPayType = 0;
+                        data.sumPayRemark = "";
                     }
                     var resultList = data.financialHotelListData;
                     data.financialHotelListData = FinancialService.getTempDate(resultList,hotel.clearTempData);
@@ -267,11 +269,16 @@ define(function(require, exports) {
                         validator = rule.check(hotel.$clearTab.find('.T-clearList'));                       
                     }
 
-                    if(isAutoPay == 1){
+                   if(isAutoPay == 0){
+                        hotel.$clearTab.find(".T-cancel-auto").hide();
+                    } else {
                         hotel.$clearTab.find('input[name=sumPayMoney]').prop("disabled",true);
                         hotel.$clearTab.find(".T-clear-auto").hide(); 
-                    } else {
-                        hotel.$clearTab.find(".T-cancel-auto").hide();
+                        if(isAutoPay == 1){
+                            hotel.$clearTab.data('isEdited',true);
+                        } else if(isAutoPay == 2){
+                            hotel.$clearTab.find(".T-cancel--auto").hide();
+                        }
                     }
 
                     //绑定翻页组件
@@ -284,11 +291,13 @@ define(function(require, exports) {
                             if (!first) { 
                                 var tempJson = FinancialService.clearSaveJson(hotel.$clearTab,hotel.clearTempData,rule);
                                 hotel.clearTempData = tempJson;
-                                var sumPayMoney = parseInt(hotel.$clearTab.find('input[name=sumPayMoney]').val());
-                                    sumPayType = parseInt(hotel.$clearTab.find('select[name=sumPayType]').val());
+                                var sumPayMoney = parseInt(hotel.$clearTab.find('input[name=sumPayMoney]').val()),
+                                    sumPayType = parseInt(hotel.$clearTab.find('select[name=sumPayType]').val()),
+                                    sumPayRemark = hotel.$clearTab.find('input[name=sumPayRemark]').val();
                                 hotel.clearTempSumDate = {
                                     sumPayMoney : sumPayMoney,
-                                    sumPayType : sumPayType
+                                    sumPayType : sumPayType,
+                                    sumPayRemark : sumPayRemark
                                 }
                                 hotel.hotelClear(isAutoPay,obj.curr-1,hotelId,hotelName);
                             }
@@ -333,26 +342,37 @@ define(function(require, exports) {
             if(!autoPayJson){return false;}
 
             var startDate = hotel.$clearTab.find("input[name=startDate]").val(),
-                endDate = hotel.$clearTab.find("input[name=endDate]").val();
+                endDate = hotel.$clearTab.find("input[name=endDate]").val(),
+                sumPayMoney = parseInt(hotel.$clearTab.find('input[name=sumPayMoney]').val()),
+                sumPayType = parseInt(hotel.$clearTab.find('select[name=sumPayType]').val()),
+                sumPayRemark = hotel.$clearTab.find('input[name=sumPayRemark]').val();
+            var searchParam = {
+                hotelId : id,
+                sumCurrentPayMoney : sumPayMoney,
+                payType : sumPayType,
+                payRemark : sumPayRemark,
+                startTime : startDate,
+                endTime : endDate,
+                isAutoPay : 1
+            };
+            searchParam = JSON.stringify(searchParam);
             showConfirmMsg($("#confirm-dialog-message"), "是否按当前账期 " + startDate + " 至 " + endDate + " 下账？",function(){
                 $.ajax({
-                    url:KingServices.build_url("account/financialHotel","autoPayment"),
+                    url:KingServices.build_url("account/financialHotel","listHotelAccount"),
                     type:"POST",
-                    data:{ searchParam : autoPayJson },
+                    data:{ searchParam : searchParam },
                     success:function(data){
                         var result = showDialog(data);
                         if(result){
-                            showMessageDialog($("#confirm-dialog-message"),"自动下账成功！",function(){
-                                hotel.$clearTab.find(".T-clear-auto").toggle();
-                                hotel.$clearTab.find(".T-cancel-auto").toggle();
-                                hotel.$clearTab.data('isEdited',false);
-                                hotel.clearTempData = data.autoPaymentJson;
-                                hotel.clearTempSumDate = {
-                                    sumPayMoney : hotel.$clearTab.find('input[name=sumPayMoney]').val(),
-                                    sumPayType : hotel.$clearTab.find('select[name=sumPayType]').val()
-                                };
-                                hotel.hotelClear(1,page,id,name);
-                            });
+                            hotel.$clearTab.find(".T-clear-auto").toggle();
+                            hotel.$clearTab.find(".T-cancel-auto").toggle();
+                            hotel.clearTempData = data.autoPaymentJson;
+                            hotel.clearTempSumDate = {
+                                sumPayMoney : hotel.$clearTab.find('input[name=sumPayMoney]').val(),
+                                sumPayType : hotel.$clearTab.find('select[name=sumPayType]').val(),
+                                sumPayRemark : hotel.$clearTab.find('input[name=sumPayRemark]').val()
+                            };
+                            hotel.hotelClear(1,page,id,name);
                         }
                     }
                 });
@@ -637,5 +657,10 @@ define(function(require, exports) {
         });
     };
 
+    hotel.initPay = function(options){
+        hotel.hotelClear(2,0,options.id,options.name,"",options.startDate,options.endDate); 
+    };
+
     exports.init = hotel.initModule;
+    exports.initPay = hotel.initPay;
 });

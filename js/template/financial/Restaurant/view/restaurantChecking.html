@@ -2,27 +2,14 @@
     <div class="col-xs-12 T-search-area" style="padding-bottom:0px;">
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="form-group"> 
-                <label style="float: left;margin: 0px auto auto 0px" class=" control-label "> 餐厅：{{restaurantName}}</label>
-                <label class="control-label marginLeft-30" style="float:left;">账期:</label>
-                <div class="col-xs-1">
-                    <div class="input-group">
-                        <input class="col-xs-12 date-picker" name="startDate" placeholder="开始日期" type="text" value="{{searchParam.startDate}}" />   
-                        <span class="input-group-addon">
-                            <i class="fa fa-calendar"></i>
-                        </span>
-                    </div>
-                </div>
-                <div class="col-xs-1">
-                    <div class="input-group">
-                        <input class="col-xs-12 date-picker" name="endDate" placeholder="结束日期" type="text" value="{{searchParam.endDate}}" />   
-                        <span class="input-group-addon">
-                            <i class="fa fa-calendar"></i>
-                        </span>
-                    </div>
-                </div>
+                <label> 餐厅：{{restaurantName}}</label>
+                <label class="marginLeft-30">账期：</label>
+                <input class="date-picker" name="startDate" placeholder="开始日期" type="text" value="{{searchParam.startDate}}" style="width:100px;" />   
+                <label>&nbsp;至&nbsp;</label>
+                <input class="date-picker" name="endDate" placeholder="结束日期" type="text" value="{{searchParam.endDate}}" style="width:100px;" />   
 
-                <label class="control-label marginLeft-30" style="float:left;">账务类别：</label>
-                <input class="col-xs-1" name="accountInfo" placeholder="账务类别" type="text" value="{{searchParam.accountInfo}}" />
+                <label class="marginLeft-30">账务类别：</label>
+                <input name="accountInfo" placeholder="账务类别" type="text" value="{{searchParam.accountInfo}}" style="width:200px;" />
 
                 <button class="marginLeft-30 btn-sm search-btn T-search marginLeft-30">
                     <i class="ace-icon fa fa-search"></i>搜索
@@ -93,7 +80,7 @@
 				   	    <input type="checkbox" class="ace T-checkbox" {{if rs.isConfirmAccount == 1}}checked="checked"{{/if}} />
 				   		<span class="lbl"></span>
 			        </label>
-                    <a class="T-option T-needPayDetail">查看</a>
+                    {{if rs.isConfirmAccount == 1}}<a class="T-option T-needPayDetail">查看</a>{{/if}}
 			    </td>
 			</tr>
 			{{/each}}
@@ -109,7 +96,7 @@
     <div class="clearfix"></div>
     <div class="row pageMode">
         <div class="col-xs-6">
-            <small>共计 {{searchParam.totalCount}} 条记录</small>
+            <small>共计 {{searchParam.recordSize}} 条记录</small>
         </div>
         <div class="col-xs-6">
             <div class="dataTables_paginate paging_simple_numbers T-pagenation">
