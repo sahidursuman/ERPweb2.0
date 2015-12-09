@@ -2,27 +2,14 @@
     <div class="col-sm-12 T-search-area" style="padding-bottom:0px;">
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="form-group"> 
-                <label style="float: left;margin: 0px 20px 0 0px" class=" control-label "> 餐厅：{{restaurantName}}</label>
-                <label class="control-label marginLeft-30" style="float:left;">账期：</label>
-                <div class="col-xs-1">
-                    <div class="input-group">
-                        <input class="col-xs-12 date-picker" name="startDate" placeholder="开始日期" type="text" value="{{searchParam.startDate}}" />   
-                        <span class="input-group-addon">
-                            <i class="fa fa-calendar"></i>
-                        </span>
-                    </div>
-                </div>
-                <div class="col-xs-1">
-                    <div class="input-group">
-                        <input class="col-xs-12 date-picker" name="endDate" placeholder="结束日期" type="text" value="{{searchParam.endDate}}" />   
-                        <span class="input-group-addon">
-                            <i class="fa fa-calendar"></i>
-                        </span>
-                    </div>
-                </div>
+                <label> 餐厅：{{restaurantName}}</label>
+                <label class="marginLeft-30">账期：</label>
+                <input class="date-picker" name="startDate" placeholder="开始日期" type="text" value="{{searchParam.startDate}}" style="width:100px;" />   
+                <label>&nbsp;至&nbsp;</label>
+                <input class="date-picker" name="endDate" placeholder="结束日期" type="text" value="{{searchParam.endDate}}" style="width:100px;" />   
 
-                <label class="control-label marginLeft-30" style="float:left;">账务类别：</label>
-                <input class="col-xs-1" name="accountInfo" placeholder="账务类别" type="text" value="{{searchParam.accountInfo}}" />
+                <label class="marginLeft-30">账务类别：</label>
+                <input name="accountInfo" placeholder="账务类别" type="text" value="{{searchParam.accountInfo}}" style="width:200px;" />
                 
                 <button class="btn-height btn-sm btn-height T-search search-btn marginLeft-30">
                     <i class="ace-icon fa fa-search"></i>搜索
@@ -31,7 +18,7 @@
         </form>
 
         <form class="form-horizontal" role="form" onsubmit="return false">
-            <div class="form-group">
+            <div class="form-group globalAdd">
                 <label class="control-label pull-left">账面应付合计：{{sumNeedPayMoney}}元 </label>
                 <label class="control-label pull-left marginLeft-30">已付金额合计：{{sumPayedMoney}} </label>
                 <label class="control-label pull-left marginLeft-30">结算金额合计：{{sumSettlementMoney}}</label>
@@ -49,11 +36,11 @@
                 <label class="control-label pull-left marginLeft-30">备注：</label>
                 <input class="col-xs-1 pull-left" name="sumPayRemark" type="text" value="{{sumPayRemark}}" style="float:none;" />
 
-                <button class="btn-height btn-sm btn-height T-clear-auto search-btn" style="margin-left: 20px">
-                    自动下账
+                <button class="btn btn-xs btn-primary marginLeft-30 T-clear-auto">
+                    <i class="ace-icon fa fa-check-circle"></i> 自动下账
                 </button>
-                <button class="btn-height btn-sm btn-height T-cancel-auto search-btn" style="margin-left: 20px">
-                    取消下账
+                <button class="btn btn-xs btn-warning marginLeft-30 T-cancel-auto">
+                    <i class="ace-icon fa fa-times-circle"></i> 取消下账
                 </button>
             </div>
         </form>
@@ -111,7 +98,7 @@
 
     <div class="row pageMode">
         <div class="col-xs-6">
-            <small>共计 {{searchParam.totalCount}} 条记录</small>
+            <small>共计 {{searchParam.recordSize}} 条记录</small>
         </div>
         <div class="col-xs-6">
             <div class="dataTables_paginate paging_simple_numbers T-pagenation">

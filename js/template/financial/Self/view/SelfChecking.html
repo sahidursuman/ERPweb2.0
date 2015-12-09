@@ -1,30 +1,17 @@
-<div class="row T-cking globalAdd">
+<div class="row T-cking T-newData" data-id="{{searchParam.selfPayId}}" data-name="{{selfPayName}}">
     <div class="col-xs-12" style="padding-bottom: 0px">
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="search-area T-search-area">
                 <div class="form-group"> 
-                    <label style="float: left;margin: 0px auto auto 0px" class=" control-label "> 自费商家:{{selfPayName}}</label>
+                    <label>自费商家:{{selfPayName}}</label>
 
-	                <label class="control-label marginLeft-30" style="float:left;">账期:</label>
-                    <div class="col-xs-1">
-                        <div class="input-group">
-                            <input class="col-xs-12 date-picker" name="startDate" placeholder="开始日期" type="text" value="{{searchParam.startTime}}" />   
-                            <span class="input-group-addon">
-                                <i class="fa fa-calendar"></i>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="col-xs-1">
-                        <div class="input-group">
-                            <input class="col-xs-12 date-picker" name="endDate" placeholder="结束日期" type="text" value="{{searchParam.endTime}}" />   
-                            <span class="input-group-addon">
-                                <i class="fa fa-calendar"></i>
-                            </span>
-                        </div>
-                    </div>
+	                <label class="marginLeft-30">账期:</label>
+                    <input class="date-picker" name="startDate" placeholder="开始日期" type="text" value="{{searchParam.startTime | dateFormat:'yyyy-MM-dd'}}" style="width:100px;" />   
+                    <label>&nbsp;至&nbsp;</label>
+                    <input class="date-picker" name="endDate" placeholder="结束日期" type="text" value="{{searchParam.endTime | dateFormat:'yyyy-MM-dd'}}" style="width:100px;" />   
 
-                    <label class="control-label marginLeft-30" style="float:left;">团信息：</label>
-                    <input class="col-xs-1" name="tripInfo" placeholder="团信息" type="text" value="{{searchParam.tripInfo}}" />
+                    <label class="marginLeft-30">团信息：</label>
+                    <input name="tripInfo" placeholder="团信息" type="text" value="{{searchParam.tripInfo}}" style="width:200px;" />
 
                     <button class="marginLeft-30 btn-sm search-btn T-search">
                         <i class="ace-icon fa fa-search"></i>搜索
@@ -75,10 +62,10 @@
 				<td>{{rs.lowestPrice}}</td>
 				<td>{{rs.reduceMoney}}</td>
 				<td>{{rs.needPayMoney}}</td>
-				<td><a class="T-option T-payedDetail" data-money="{{rs.payedMoney + rs.guidePayMoney}}">{{"社付："}}{{rs.payedMoney}}{{"，"}}{{"导付："}}{{rs.guidePayMoney}}</a></td> 
+				<td><a {{if rs.isConfirmAccount == 1}}class="T-option T-payedDetail" {{else}}style="color:#999"{{/if}} data-money="{{rs.payedMoney + rs.guidePayMoney}}">{{"社付："}}{{rs.payedMoney}}{{"，"}}{{"导付："}}{{rs.guidePayMoney}}</a></td> 
                 <td>{{if rs.billImage != null && rs.billImage !=""}}<a class="T-option T-selfPayImg" url="{{rs.billImage}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
 				<td><input type="text" maxlength="9" name="settlementMoney" value="{{rs.settlementMoney}}" class="money" style="text-align:center" /></td>
-                <td>{{rs.unPayedMoney}}</td>
+                <td name="unPayedMoney">{{rs.unPayedMoney}}</td>
                 <td><input type="text" maxlength="1000" name="checkRemark" value="{{rs.payRemark}}" style="text-align:center" /></td>
 				<td>{{if rs.checkTime == null || rs.checkTime == ""}}-{{else}}{{rs.checkTime | dateFormat:'yyyy-MM-dd hh:mm:ss'}}{{/if}}</td>
                 <td>{{if rs.checkUser == null || rs.checkUser == ""}}-{{else}}{{rs.checkUser}}{{/if}}</td>
@@ -87,7 +74,7 @@
 				   		<input type="checkbox" class="ace T-checkbox" {{if rs.isConfirmAccount == 1}}checked="checked"{{/if}} />
 				   		<span class="lbl"></span>
 				    </label>
-                    <a class="T-option T-needPayDetail">查看</a>
+                    {{if rs.isConfirmAccount == 1}}<a class="T-option T-needPayDetail">查看</a>{{/if}}
 				</td>
 		    </tr>
 		    {{/each}}
@@ -101,24 +88,23 @@
         </label>
     </div>
     <div class="clearfix"></div>
-        <div class="row pageMode">
-            <div class="col-xs-6">
-                <small>共计 {{recordSize}} 条记录</small>
-            </div>
-            <div class="col-xs-6">
-              <div class="dataTables_paginate paging_simple_numbers T-pagenation">
-              </div>
-            </div>
+    <div class="row pageMode">
+        <div class="col-xs-6">
+            <small>共计 {{recordSize}} 条记录</small>
         </div>
-        <form class="form-horizontal" role="form" onsubmit="return false">
-            <div class="form-group" style="text-align: center;">
-                <button class="btn btn-xs btn-primary T-close-check" >
-                    <i class="ace-icon fa fa-times-circle"></i>关闭
-                </button>
-                <button class="btn btn-xs btn-primary T-saveCheck" style="margin-left:20px">
-                    <i class="ace-icon fa fa-check-circle"></i>确认
-                </button>
-            </div>
-        </form>
-	</div>
+        <div class="col-xs-6">
+          <div class="dataTables_paginate paging_simple_numbers T-pagenation">
+          </div>
+        </div>
+    </div>
+    <form class="form-horizontal" role="form" onsubmit="return false">
+        <div class="form-group" style="text-align: center;">
+            <button class="btn btn-xs btn-primary T-close-check" >
+                <i class="ace-icon fa fa-times-circle"></i>关闭
+            </button>
+            <button class="btn btn-xs btn-primary T-saveCheck" style="margin-left:20px">
+                <i class="ace-icon fa fa-check-circle"></i>确认
+            </button>
+        </div>
+    </form>
 </div>

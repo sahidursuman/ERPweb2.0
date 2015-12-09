@@ -3,27 +3,14 @@
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="T-search-area" >
                 <div class="form-group"> 
-                    <label style="float: left;margin: 0px auto auto 0px" class="control-label pull-left"> 酒店：{{hotelName}}</label>
-                    <label class="control-label marginLeft-30" style="float:left;">账期：</label>
-	                  <div class="col-xs-1">
-                        <div class="input-group">
-                            <input class="col-xs-12 date-picker" name="startDate" placeholder="开始日期" type="text" value="{{searchParam.startTime}}" />   
-                            <span class="input-group-addon">
-                                <i class="fa fa-calendar"></i>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="col-xs-1">
-                        <div class="input-group">
-                            <input class="col-xs-12 date-picker" name="endDate" placeholder="结束日期" type="text" value="{{searchParam.endTime}}" />   
-                            <span class="input-group-addon">
-                                <i class="fa fa-calendar"></i>
-                            </span>
-                        </div>
-                    </div>
+                    <label> 酒店：{{hotelName}}</label>
+                    <label class="marginLeft-30">账期：</label>
+                    <input class="date-picker" name="startDate" placeholder="开始日期" type="text" value="{{searchParam.startTime}}" style="width:100px;" />   
+                    <label>&nbsp;至&nbsp;</label>
+                    <input class="date-picker" name="endDate" placeholder="结束日期" type="text" value="{{searchParam.endTime}}" style="width:100px;" />   
 
-                    <label class="control-label" style="float:left;marginLeft-30">账务类别：</label>
-                    <input class="col-xs-1" name="accountInfo" placeholder="账务类别" type="text" value="{{searchParam.accountInfo}}" />
+                    <label class="marginLeft-30">账务类别：</label>
+                    <input name="accountInfo" placeholder="账务类别" type="text" value="{{searchParam.accountInfo}}" style="width:200px;" />
 
                     <button class="btn-sm T-search search-btn marginLeft-30" >
                         <i class="ace-icon fa fa-search"></i>搜索
@@ -69,7 +56,7 @@
             </tr>
         </thead>
         <tbody class="T-checkList" data-right="1220005">
-            {{each financialHotelList as rs index}}
+            {{each financialHotelListData as rs index}}
 		    <tr class="T-checkTr" data-id="{{rs.id}}" data-confirm="{{rs.isConfirmAccount}}">
 	            <td>{{index+1}}</td>
 				<td>{{rs.tripNumber}}{{"，"}}{{rs.lineProductName}}{{"，"}}{{rs.guideName}}</td>
@@ -79,7 +66,7 @@
 				<td>{{rs.memberCount}}</td>  
 				<td>{{rs.reduceMoney}}</td>
 				<td>{{rs.needPayMoney}}</td>
-				<td><a class="T-option T-payedDetail" data-money="{{rs.payedMoney + rs.realGuidePayMoney}}">{{"社付："}}{{rs.payedMoney}}{{"，"}}{{"导付："}}{{rs.realGuidePayMoney}}</a></td> 
+				<td><a {{if rs.isConfirmAccount == 1}}class="T-option T-payedDetail" {{else}}style="color:#999"{{/if}} data-money="{{rs.payedMoney + rs.realGuidePayMoney}}">{{"社付："}}{{rs.payedMoney}}{{"，"}}{{"导付："}}{{rs.realGuidePayMoney}}</a></td> 
 				<td>{{if rs.billImages != null && rs.billImages !=""}}<a href="#" class="T-option T-hotelImg" url="{{rs.billImages}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
 				<td><input type="text" name="settlementMoney" value="{{rs.settlementMoney}}" class="money"></td>
                 <td name="unPayedMoney">{{rs.unPayedMoney}}</td>
@@ -91,7 +78,7 @@
 				   	    <input type="checkbox" class="ace T-checkbox" {{if rs.isConfirmAccount == 1}}checked="checked"{{/if}} />
 				   		  <span class="lbl"></span>
 				    </label>
-                    <a class="T-option T-needPayDetail">查看</a>
+                    {{if rs.isConfirmAccount == 1}}<a class="T-option T-needPayDetail">查看</a>{{/if}}
 				</td>
 		    </tr>
 	        {{/each}}

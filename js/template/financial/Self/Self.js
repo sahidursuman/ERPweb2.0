@@ -5,7 +5,8 @@ define(function(require, exports) {
         billImagesTemplate = require("./view/billImages"),
         SelfChecking = require("./view/SelfChecking"),
         SelfClearing = require("./view/SelfClearing"),
-        blanceRecords = require("./view/selfPayRecords"),
+        payedDetailTempLate = require("./view/viewPayedDetail"),
+        needPayDetailTempLate = require("./view/viewNeedPayDetail"),
         tabId = "tab-" + menuKey + "-content",
         checkTabId = menuKey + "-checking",
         blanceTabId = menuKey + "-blance";
@@ -20,8 +21,7 @@ define(function(require, exports) {
         $clearSearchArea : false,
         selfList : false,
         clearTempData : false,
-        clearTempSumDate : false,
-        sumData : false
+        clearTempSumDate : false
     };
     Self.initModule = function() {
         var dateJson = FinancialService.getInitDate();
@@ -101,7 +101,7 @@ define(function(require, exports) {
                 // 结算
                 Self.clearTempSumDate = false;
                 Self.clearTempData = false;
-                Self.GetChecking(0,id,name,"",startDate,endDate);
+                Self.GetClear(0,0,id,name,"",startDate,endDate);
             }
         });
     };
@@ -126,15 +126,15 @@ define(function(require, exports) {
                 pageNo: page,
                 selfPayId: selfPayId,
                 tripInfo : tripInfo,
-                startDate: startDate,
-                endDate: endDate,
+                startTime: startDate,
+                endTime: endDate,
                 sortType: "auto"
             },
             success: function(data) {
                 var result = showDialog(data);
                 if (result) {
-                    var fsList = data.list;
                     data.sumData = self.getSumData(selfPayId,tripInfo,startDate,endDate);
+                    var fsList = data.list;
                     data.selfPayName = selfPayName;
                     var html = SelfChecking(data);
                     
@@ -217,14 +217,14 @@ define(function(require, exports) {
                 pageNo: page,
                 selfPayId: selfPayId,
                 tripInfo : tripInfo,
-                startDate: startDate,
-                endDate: endDate,
+                startTime: startDate,
+                endTime: endDate,
                 sortType: "auto"
             },
             success: function(data) {
                 var result = showDialog(data);
                 if (result) {
-                    data.restaurantName = restaurantName;
+                    data.selfPayName = selfPayName;
                     data.sumData = self.getSumData(selfPayId,tripInfo,startDate,endDate);
 
                     //暂存数据读取
@@ -364,15 +364,66 @@ define(function(require, exports) {
         FinancialService.updateSumPayMoney(Self.$clearTab,rule);
     };
 
-    Self.lookDetail = function(selfPayId) {
-        Self.ClearData = {
-            selfPayId: selfPayId
+    //显示单据
+    Self.viewImage = function(obj,WEB_IMG_URL_BIG,WEB_IMG_URL_SMALL) {
+        var data = { "images":[]  };
+        var str = $(obj).attr('url');
+        var strs = str.split(",");
+        for(var i = 0; i < strs.length; i ++) {
+            var s = strs[i];
+            if(s != null && s != "" && s.length > 0) {
+                var image = {
+                    "WEB_IMG_URL_BIG":imgUrl+s,
+                    "WEB_IMG_URL_SMALL":imgUrl+s+"?imageView2/2/w/150",
+                }
+                data.images.push(image);
+            }
         }
+        var html = billImageTempLate(data);
+        
+        layer.open({
+            type : 1,
+            title : "单据图片",
+            skin : 'layui-layer-rim', // 加上边框
+            area : '500px', // 宽高
+            zIndex : 1028,
+            content : html,
+            scrollbar: false, // 推荐禁用浏览器外部滚动条
+            success : function() {
+                var colorbox_params = {
+                    photo : true,
+                    rel: 'colorbox',
+                    reposition:true,
+                    scalePhotos:true,
+                    scrolling:false,
+                    previous:'<i class="ace-icon fa fa-arrow-left"></i>',
+                    next:'<i class="ace-icon fa fa-arrow-right"></i>',
+                    close:'&times;',
+                    current:'{current} of {total}',
+                    maxWidth:'100%',
+                    maxHeight:'100%',
+                    onOpen:function(){ 
+                        $overflow = document.body.style.overflow;
+                        document.body.style.overflow = 'hidden';
+                    },
+                    onClosed:function(){
+                        document.body.style.overflow = $overflow;
+                    },
+                    onComplete:function(){
+                        $.colorbox.resize();
+                    }
+                };
+                $('#layer-photos-financial-count [data-rel="colorbox"]').colorbox(colorbox_params);
+            } 
+        });
+    };
+
+    //已付明细
+    Self.viewPayedDetail = function(selfPayId) {
         $.ajax({
-            url: KingServices.build_url("financial/financialSelfPay", "listFcSelfPaySettlementRecord"),
+            url: KingServices.build_url("account/selfPayFinancial", "getSelfPayPayedMoneyDetail"),
             type: "POST",
-            data: Self.ClearData,
-            dataType: "json",
+            data: { id : selfId },
             success: function(data) {
                 var result = showDialog(data);
                 if (result) {
@@ -381,15 +432,110 @@ define(function(require, exports) {
                         type: 1,
                         title: "已付金额明细",
                         skin: 'layui-layer-rim', //加上边框
-                        area: '55%', //宽高
+                        area: '1000px', //宽高
                         zIndex: 1028,
                         content: html,
-                        scrollbar: false,
-
+                        scrollbar: false
                     });
                 }
             }
         })
+    };
+
+    //应付明细
+    Self.viewNeedPayDetail = function(selfPayId) {
+        $.ajax({
+            url: KingServices.build_url("account/selfPayFinancial", "getSelfPayNeedPayDetail"),
+            type: "POST",
+            data: { id : selfId },
+            success: function(data) {
+                var result = showDialog(data);
+                if (result) {
+                    var html = blanceRecords(data);
+                    var lookDetailLayer = layer.open({
+                        type: 1,
+                        title: "应付金额明细",
+                        skin: 'layui-layer-rim', //加上边框
+                        area: '1000px', //宽高
+                        zIndex: 1028,
+                        content: html,
+                        scrollbar: false
+                    });
+                }
+            }
+        })
+    };
+
+    //对账数据保存
+    Self.saveChecking = function(selfId,selfName,page,tab_id, title, html){
+        var argumentsLen = arguments.length,
+            checkSaveJson = FinancialService.checkSaveJson(Self.$checkTab,rule);
+        if(!checkSaveJson){ return false; }
+
+        $.ajax({
+            url:KingServices.build_url("account/selfPayFinancial","operateSelfPayAccount"),
+            type:"POST",
+            data:{
+                checkJson : checkSaveJson
+            },
+            success:function(data){
+                var result = showDialog(data);
+                if(result){
+                    showMessageDialog($("#confirm-dialog-message"),data.message,function(){
+                        if(argumentsLen == 2){
+                            Tools.closeTab(menuKey + "-checking");
+                            Self.listSelf(Self.searchData.pageNo,Self.searchData.selfPayName,Self.searchData.selfPayId,Self.searchData.startDate,Self.searchData.endDate);
+                        } else if(argumentsLen == 3){
+                            Self.$checkTab.data('isEdited',false);
+                            Self.Getcheck(page,selfId,selfName);
+                        } else {
+                            Self.$checkTab.data('isEdited',false);
+                            Tools.addTab(tab_id, title, html);
+                            Self.initCheck(0,Self.$checkTab.find(".T-newData").data("id"),Self.$checkTab.find(".T-newData").data("name"));
+                        }
+                    });
+                }
+            }
+        });
+    };
+
+    Self.saveClear = function(id,name,page,tab_id, title, html){
+        if(!FinancialService.isClearSave(Self.$clearTab,rule)){
+            return false;
+        }
+
+        var argumentsLen = arguments.length,
+            clearSaveJson = FinancialService.clearSaveJson(Self.$clearTab,Self.clearTempData,rule);
+
+        clearSaveJson = JSON.stringify(clearSaveJson);
+        $.ajax({
+            url:KingServices.build_url("account/arrangeRestaurantFinancial","saveAccountSettlement"),
+            type:"POST",
+            data:{
+                selfPayPaymentJson : clearSaveJson
+            },
+            success:function(data){
+                var result = showDialog(data);
+                if(result){
+                    showMessageDialog($("#confirm-dialog-message"),data.message,function(){
+                        Self.clearTempData = false;
+                        Self.clearTempSumDate = false;
+                        if(argumentsLen === 2){
+                            Tools.closeTab(menuKey + "-clearing");
+                            Self.listSelf(Self.searchData.pageNo,Self.searchData.selfPayName,Self.searchData.selfPayId,Self.searchData.startDate,Self.searchData.endDate);
+                        }else if(argumentsLen === 3){
+                            Self.$clearTab.data('isEdited',false);
+                            Self.restaurantClear(0,page,id,name);
+                        } else {
+                            Self.$clearTab.data('isEdited',false);
+                            Tools.addTab(tab_id, title, html);
+                            Self.initClear(0,Self.$clearTab.find(".T-newData").data("id"),Self.$clearTab.find(".T-newData").data("name"));
+                        }
+                    });
+                    
+                }
+            }
+        });
     };
 
     Self.init_event = function(page,id,name,$tab,option) {
@@ -486,17 +632,19 @@ define(function(require, exports) {
                 Self.viewImage(this,WEB_IMG_URL_BIG,WEB_IMG_URL_SMALL);
             } else if ($that.hasClass('T-payedDetail')) {
                 // 已付明细
-                Self.payedDetail(id);
+                Self.viewPayedDetail(id);
             } else if ($that.hasClass('T-needPayDetail')) {
                 // 应收明细
-                Self.needPayDetail(id);
+                Self.viewNeedPayDetail(id);
             }
         });
     };
 
     self.getSumData = function(id,tripInfo,startDate,endDate){
-         $.ajax({
+        var sumData = false;
+        $.ajax({
             url: KingServices.build_url("account/selfPayFinancial","collectSelfPayAccount"),
+            async: false, 
             type: "POST",
             data: {
                 selfPayId : id,
@@ -507,11 +655,18 @@ define(function(require, exports) {
             success: function(data) {
                 var result = showDialog(data);
                 if(result) {
-                    console.log(data.statistic);
-                    return data.statistic;
+                    sumData = data.statistic;
+                } else {
+                    sumData = {
+                        needPayMoney : 0,
+                        payedMoney : 0,
+                        settlementMoney : 0,
+                        unPayedMoney : 0
+                    };
                 }
             }
         });
+        return sumData;
     };
 
     exports.init = Self.initModule;
