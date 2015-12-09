@@ -1498,6 +1498,17 @@ KingServices.updateTransit = function(id)  {
 }
 
 /**
+ * [listTransit 外转数据
+ * @return {[type]} [description]
+ */
+KingServices.getListPage = function(event)  {
+	seajs.use("" + ASSETS_ROOT +"js/template/arrange/arrangeTransfer/arrangeTransfer.js",function(module){
+		module.getListPage(event);
+	});
+}
+
+
+/**
  * 中转安排——
  * @param  {string} id 游客小组的ID
  * @return {[type]}    [description]

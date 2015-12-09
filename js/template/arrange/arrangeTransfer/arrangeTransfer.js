@@ -1158,4 +1158,6 @@ define(function(require, exports) {
 			    })
 		};
     exports.init = transfer.initModule;
+    exports.getListPage = transfer.getListPage;
+
 });
