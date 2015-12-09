@@ -1,34 +1,22 @@
 <div class="row" >
-    <div class="form-horizontal T-search-area">
-        <div class="form-group" > 
-            <label class="control-label pull-left" style="margin-left: 15px">景区：</label>
-            <input type="text" class="T-chooseScenic col-xs-1" name="scenicName" value="{{searchParam.scenicName}}" />
+    <form class="form-inline T-search-area" role="form" onsubmit="return false">
+        <div class="form-group">
+            <label>景区：</label>
+            <input type="text" class="form-control T-chooseScenic"  name="scenicName" style="width: 220px;" value="{{searchParam.scenicName}}" maxlength="100">
             <input type="hidden" name="scenicId" value="{{searchParam.scenicId}}" />  
-
-            <label class="control-label pull-left marginLeft-30" >账期：</label>
-            <div class="col-xs-1">
-                <div class="input-group">
-                    <input class="col-xs-12 date-picker" name="startDate" placeholder="开始日期" type="text" value="{{searchParam.startTime}}" />   
-                    <span class="input-group-addon">
-                        <i class="fa fa-calendar"></i>
-                    </span>
-                </div>
-            </div>
-            <label class="pull-left">至</label>
-            <div class="col-xs-1">
-                <div class="input-group">
-                    <input class="col-xs-12 date-picker" name="endDate" placeholder="结束日期" type="text" value="{{searchParam.endTime}}" />   
-                    <span class="input-group-addon">
-                        <i class="fa fa-calendar"></i>
-                    </span>
-                </div>
-            </div>
-
-            <button class="btn-sm  T-search search-btn marginLeft-30 " >
-                <i class="ace-icon fa fa-search"></i> 搜索
+        </div>
+        <div class="form-group input-daterange marginLeft-30">
+            <label>账期：</label>
+            <input type="text"  name="startDate" class="form-control datepicker" name="startDate" style="width:100px;" value="{{searchParam.startTime}}">
+            <label>&nbsp;至&nbsp;</label>
+            <input type="text" class="form-control datepicker" name="endDate" style="width:100px;" value="{{searchParam.endTime}}">
+        </div>
+        <div class="form-group marginLeft-30">
+            <button class="btn-sm search-btn  T-search">
+                <i class="ace-icon fa fa-search"></i> 搜索 
             </button>
         </div>
-    </div>
+    </form>
     <div class="row hotelaurantList">
         <div class="col-xs-12">
             <table class="table table-striped table-bordered table-hover T-showHighLight">

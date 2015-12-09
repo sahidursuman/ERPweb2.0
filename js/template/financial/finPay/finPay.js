@@ -109,7 +109,7 @@ define(function(require, exports) {
 				resArgs.busCompanyName = args.name;
 				break;
 			case 6:  //景区账务
-				options.url = KingServices.build_url('account/financialScenic', 'listSumFinancialScenic');
+				options.url = KingServices.build_url('financial/financialScenic', 'listSumFinancialScenic');
 				resArgs.busCompanyName = args.name;
 				break;
 			case 7:  //自费账务
