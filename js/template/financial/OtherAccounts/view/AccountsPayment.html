@@ -4,22 +4,19 @@
             <div class="form-horizontal col-sm-12 row form-group">
                 <label class="pull-left text-right ">项目名称:</label>
                 <div class="col-sm-1">
-                    <label>{{searchParam.name}}</label>
+                    <label class="T-name">{{searchParam.name}}</label>
                 </div>
                 <label class="pull-left text-right">账期:</label>
-                <div class="col-sm-1">
+                <div class="col-sm-1 input-daterange">
                     <div class="input-group col-sm-12">
-                        <input class="col-sm-12 datepicker T-time T-subsectionStartTime" name="joinTime" value="" type="text">
-                        <span class="input-group-addon"> 
-                              <i class="fa fa-calendar"></i> 
-                              </span>
+                        <input class="col-sm-12 datepicker T-time T-subsectionStartTime" name="joinTime" value="{{searchParam.startAccountTime}}" type="text">
                     </div>
                 </div>
                 <label class="pull-left text-right ">至</label>
-                <div class="col-sm-1">
+                <div class="col-sm-1 input-daterange">
                     <div class="input-group col-sm-12">
-                        <input class="col-sm-12 datepicker T-time T-subsectionStartTime" name="joinTime" value="" type="text">
-                        <span class="input-group-addon"> <i class="fa fa-calendar"></i> </span> </div>
+                        <input class="col-sm-12 datepicker T-time T-subsectionStartTime" name="joinTime" value="{{searchParam.endAccountTime}}" type="text">
+                        </div>
                 </div>
                 <label class="pull-left text-right">团信息:</label>
                 <div class="col-sm-1">
@@ -36,10 +33,10 @@
                 <label class=" control-label pull-left">账面应付合计：{{statistics.sumNeedPayMoney}}</label>
                 <label class=" control-label marginLeft-30">已付金额合计：{{statistics.sumPayedMoney}}</label>
                 <label class=" control-label marginLeft-30">结算金额合计：{{statistics.sumSettlementMoney}}</label>
-                <label class=" control-label marginLeft-30">未付金额合计：{{statistics.sumUnPayedMoney}}</label>
-                <label class=" control-label marginLeft-30">本次付款金额：{{statistics.sumSettlementMoney}}</label>
+                <label class=" control-label marginLeft-30">未付金额合计：<span class="T-unpayMoney">{{statistics.sumUnPayedMoney}}</span></label>
+                <label class=" control-label marginLeft-30">本次付款金额：<input name="sumPayMoney" type="text" ></label>
                 <label class=" control-label marginLeft-30">付款方式：
-                    <select>
+                    <select name="sumPayType">
                         <option>现金</option>
                         <option>银行转账</option>
                         <option>网上支付</option>
@@ -47,8 +44,9 @@
                         <option>其他</option>
                     </select>
                 </label>
+                <label class=" control-label marginLeft-30">备注：<input type="text" name="sumPayRemark"></label>
                 <label class="control-label marginLeft-30">
-                    <button class=" btn-sm search-btn">自动下账</button>
+                    <button class=" btn-sm search-btn T-clear-auto">自动下账</button>
                 </label>
             </div>
         </form>

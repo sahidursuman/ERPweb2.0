@@ -1,5 +1,6 @@
 define(function(require, exports) {
     var menuKey = "financial_Other_accounts",
+        rule = require("./rule"),
         listTemplate = require("./view/list"),
         AccountsCheckingTemplate = require("./view/AccountsChecking"),
         AccountsPaymentTemplate = require("./view/AccountsPayment"),
@@ -303,9 +304,7 @@ define(function(require, exports) {
                 data: {
                     reconciliation: JsonStr
                 },
-                success: function(data) {
-                    // console.log(data);
-                }
+                success: function(data) {}
             })
         }
         //付款
@@ -372,10 +371,56 @@ define(function(require, exports) {
                                 $PaymentTabId.find(".T-closeTab").click(function() {
                                     closeTab(PaymentTabId);
                                 });
+                                // 付款保存
                                 $PaymentTabId.find('.T-save').click(function(event) {
                                     OtherAccounts.paysave(name);
                                 });
-
+                                //自动下账
+                                $PaymentTabId.find(".T-clear-auto").off().on("click", function() {
+                                    var sumPayMoney = parseInt($PaymentTabId.find('input[name=sumPayMoney]').val()),
+                                        sumPayType =$PaymentTabId.find('select[name=sumPayType]').val(),
+                                        sumPayRemark = $PaymentTabId.find('input[name=sumPayRemark]').val(), //备注
+                                        names = $PaymentTabId.find(".T-name").text(),
+                                        creator = $PaymentTabId.find('input[name=creator]').val();
+                                        console.log(name,"项目名称");
+                                    var isAutoPay = FinancialService.autoPayJson(name,$PaymentTabId, rule);
+                                    if (!isAutoPay) {
+                                        return false;
+                                    }
+                                    var searchParam = {
+                                        name : names,
+                                        autoPayMoney: sumPayMoney,
+                                        startAccountTime: startAccountTime,
+                                        endAccountTime: endAccountTime,
+                                        info: creator,
+                                        payType: sumPayType,
+                                    };
+                                    searchParam = JSON.stringify(searchParam);
+                                    showConfirmMsg($("#confirm-dialog-message"), "是否按当前账期 " + startAccountTime + " 至 " + endAccountTime + " 下账？", function() {
+                                        $.ajax({
+                                            url: KingServices.build_url("account/arrangeOtherFinancial", "autoPayment"),
+                                            type: "POST",
+                                            data: {
+                                                searchParam: searchParam
+                                            },
+                                            success: function(data) {
+                                                console.log(data)
+                                                var result = showDialog(data);
+                                                if (result) {
+                                                    $PaymentTabId.find(".T-clear-auto").toggle();
+                                                    $PaymentTabId.find(".T-cancel-auto").toggle();
+                                                    data.clearTempData = data.autoPaymentJson;
+                                                    data.clearTempSumDate = {
+                                                        sumPayMoney: $PaymentTabId.find('input[name=sumPayMoney]').val(),
+                                                        sumPayType: $PaymentTabId.find('select[name=sumPayType]').val(),
+                                                        sumPayRemark: $PaymentTabId.find('input[name=sumPayRemark]').val()
+                                                    };
+                                                    data.restaurantClear(1, 0, id, name);
+                                                }
+                                            }
+                                        });
+                                    });
+                                });
 
                             }
 
@@ -422,7 +467,11 @@ define(function(require, exports) {
                     reconciliation: JsonStr
                 },
                 success: function(data) {
-                    console.log(data, "付款保存");
+                    var result = showDialog(data);
+                    var $tab = $tab = $('#' + tabId);
+                    if (result) {
+                        // FinancialService.isClearSave($tab,rule);
+                    }
                 }
             })
         }

@@ -7,19 +7,16 @@
                         <label>{{searchParam.name}}</label>
                     </div>
                     <label class="pull-left text-right">账期:</label>
-                    <div class="col-sm-1">
+                    <div class="col-sm-1 input-daterange">
                         <div class="input-group col-sm-12">
-                            <input class="col-sm-12 datepicker T-time T-subsectionStartTime" name="joinTime" value="" type="text">
-                            <span class="input-group-addon"> 
-                              <i class="fa fa-calendar"></i> 
-                              </span>
+                            <input class="col-sm-12 datepicker T-time T-subsectionStartTime" name="joinTime" value="{{searchParam.startAccountTime}}" type="text">
                         </div>
                     </div>
                     <label class="pull-left text-right ">至</label>
-                    <div class="col-sm-1">
+                    <div class="col-sm-1 input-daterange">
                         <div class="input-group col-sm-12">
-                            <input class="col-sm-12 datepicker T-time T-subsectionStartTime" name="joinTime" value="" type="text">
-                            <span class="input-group-addon"> <i class="fa fa-calendar"></i> </span> </div>
+                            <input class="col-sm-12 datepicker T-time T-subsectionStartTime" name="joinTime" value="{{searchParam.endAccountTime}}" type="text">
+                            </div>
                     </div>
                     <label class="pull-left text-right">团信息:</label>
                     <div class="col-sm-1">
