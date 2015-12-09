@@ -37,8 +37,8 @@ define(function(require, exports) {
 	FinPay.getList = function(pageNo) {
 		if (FinPay.$tab) {
 			var args = {
-				startTime: FinPay.$tab.find('.T-start').val(),
-				endTime: FinPay.$tab.find('.T-end').val()
+				startDate: FinPay.$tab.find('.T-start').val(),
+				endDate: FinPay.$tab.find('.T-end').val()
 			},
 			org = FinPay.$tab.find('.T-org-name').val();
 
@@ -86,9 +86,11 @@ define(function(require, exports) {
 			case 0:  //内转转出账务
 				options.url = KingServices.build_url('account/innerTransferOutFinancial', 'listSumFinancialInnerTransferOut');
 				resArgs.toBusinessGroupName = args.name;
+				beJson = false;
 				break;
 			case 1:  //外转转出账务
-				options.url = KingServices.build_url('', 'listPager');
+				options.url = KingServices.build_url('account/financialTransfer', 'listSumTransfer');
+				resArgs.partnerAgencyName = args.name;
 				break;
 			case 2:  //餐厅账务
 				options.url = KingServices.build_url('account/arrangeRestaurantFinancial', 'listSumFinancialRestaurant');
@@ -126,8 +128,8 @@ define(function(require, exports) {
 				break;
 		}
 		
-		resArgs.startTime = args.startTime;
-		resArgs.endTime = args.endTime;
+		resArgs.startDate = args.startDate;
+		resArgs.endDate = args.endDate;
 		if (beJson) {
 			options.data = {searchParam: JSON.stringify(resArgs)};
 		} else {
@@ -153,7 +155,7 @@ define(function(require, exports) {
 
 						list.push({
 							orgName: tmp.businessGroupName,
-							needPayMoney: tmp.sumTransNeedPayMoney,
+							needPayMoney: tmp.sumSettlementMoney,
 							payedMoney: tmp.sumPayedMoney,
 							unPayedMoney: tmp.sumUnPayedMoney,
 							id: tmp.businessGroupId
@@ -165,15 +167,15 @@ define(function(require, exports) {
 					break;
 					break;
 				case 1:  //外转转出账务
-					var src = data.customerAccountList;
+					var src = data.financialTransferList;
 					for (var i = 0, len = src.length, tmp; i < len; i++) {
 						tmp = src[i];
 
 						list.push({
-							orgName: tmp.fromPartnerAgencyName,
-							needPayMoney: tmp.settlementMoney,
-							payedMoney: tmp.receiveMoney,
-							unPayedMoney: tmp.unReceivedMoney,
+							orgName: tmp.partnerAgencyName,
+							needPayMoney: tmp.sumSettlementMoney,
+							payedMoney: tmp.sumPayedMoney,
+							unPayedMoney: tmp.sumUnPayedMoney,
 							id: tmp.partnerAgencyId
 						})
 					}
