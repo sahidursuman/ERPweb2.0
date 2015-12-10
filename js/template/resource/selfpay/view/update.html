@@ -158,54 +158,54 @@
 										
 
 										<td><div class="col-sm-12 no-padding">
-												<input name="normalMarketPrice" value="{{itemList.normalMarketPrice}}" class="col-sm-12 marketPrice" type="text" maxlength="10" data-index="0">
+												<input name="normalMarketPrice" value="{{itemList.normalMarketPrice}}" class="col-sm-12 T-marketPrice T-calc" type="text" maxlength="10" data-index="0">
 											</div>
 											{{each itemList.SelfPayRebateList as rebateList index}}
 												<div class="col-sm-12 no-padding" style="padding-top:5px!important;">
-													<input name="marketPrice" value="{{rebateList.marketPrice}}" class="col-sm-12 marketPrice" type="text" maxlength="10" data-index="{{index+1}}">
+													<input name="marketPrice" value="{{rebateList.marketPrice}}" class="col-sm-12 T-marketPrice T-calc" type="text" maxlength="10" data-index="{{index+1}}">
 												</div>
 											{{/each}}
 										</td>
 
 										<td>
 											<div class="col-sm-12">
-												<input type="text" name="customerRebateMoney" value="{{itemList.customerRebateMoney}}" class="col-sm-12 customerRebateMoney" maxlength="10" data-index="0">
+												<input type="text" name="customerRebateMoney" value="{{itemList.customerRebateMoney}}" class="col-sm-12 T-customerRebateMoney T-calc" maxlength="10" data-index="0">
 											</div>
 											{{each itemList.SelfPayRebateList as rebateList index}}
 												<div class="col-sm-12 no-padding" style="padding-top:5px!important;">
-													<input name="customerRebateMoney" value="{{rebateList.customerRebateMoney}}" class="col-sm-12 customerRebateMoney" type="text" maxlength="10" data-index="{{index+1}}">
+													<input name="customerRebateMoney" value="{{rebateList.customerRebateMoney}}" class="col-sm-12 T-customerRebateMoney T-calc" type="text" maxlength="10" data-index="{{index+1}}">
 												</div>
 											{{/each}}
 										</td>
 
 
 										<td><div class="col-sm-12 no-padding" data-index="0">
-												<input name="normalInnerPrice" value="{{itemList.normalInnerPrice}}" class="col-sm-12 contractPrice" type="text" maxlength="10" data-index="0">
+												<input name="normalInnerPrice" value="{{itemList.normalInnerPrice}}" class="col-sm-12 T-contractPrice T-calc" type="text" maxlength="10" data-index="0">
 											</div>
 
 											{{each itemList.SelfPayRebateList as rebateList index}}
 												<div class="col-sm-12 no-padding" style="padding-top:5px!important;">
-													<input name="contractPrice" value="{{rebateList.price}}" class="col-sm-12 contractPrice" type="text" maxlength="10" data-index="{{index+1}}">
+													<input name="contractPrice" value="{{rebateList.price}}" class="col-sm-12 T-contractPrice T-calc" type="text" maxlength="10" data-index="{{index+1}}">
 												</div>
 											{{/each}}
 										</td>
 
 									
 										<td><div class="col-sm-12 no-padding">
-												<input name="normalGuideRate" value="{{itemList.normalGuideRate*100}}" class="col-sm-12 guideRate" type="text" maxlength="5" data-index="0">
+												<input name="normalGuideRate" value="{{itemList.normalGuideRate*100}}" class="col-sm-12 T-guideRate T-calc" type="text" maxlength="5" data-index="0">
 											</div>
 											{{each itemList.SelfPayRebateList as rebateList index}}
 												<div class="col-sm-12 no-padding" style="padding-top:5px!important;" >
-													<input name="guideRate" value="{{rebateList.guideRate*100}}" class="col-sm-12 guideRate" type="text" maxlength="5" data-index="{{index+1}}">
+													<input name="guideRate" value="{{rebateList.guideRate*100}}" class="col-sm-12 T-guideRate T-calc" type="text" maxlength="5" data-index="{{index+1}}">
 												</div>
 											{{/each}}
 										</td>
 										<td><div class="col-sm-12 no-padding">
-												<input name="normalTravelAgencyRate" value="{{itemList.normalTravelAgencyRate*100}}" class="col-sm-12 travelAgencyRate" type="text" maxlength="5" data-index="0">
+												<input name="normalTravelAgencyRate" value="{{itemList.normalTravelAgencyRate*100}}" class="col-sm-12 T-travelAgencyRate T-calc" type="text" maxlength="5" data-index="0">
 											</div>
 											{{each itemList.SelfPayRebateList as rebateList index}}
 												<div class="col-sm-12 no-padding" style="padding-top:5px!important;">
-													<input name="travelAgencyRate" value="{{rebateList.travelAgencyRate*100}}" class="col-sm-12 travelAgencyRate" type="text" maxlength="5" data-index="{{index+1}}">
+													<input name="travelAgencyRate" value="{{rebateList.travelAgencyRate*100}}" class="col-sm-12 T-travelAgencyRate T-calc" type="text" maxlength="5" data-index="{{index+1}}">
 												</div>
 											{{/each}}
 										</td>
