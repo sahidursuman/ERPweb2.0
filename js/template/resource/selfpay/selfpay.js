@@ -275,7 +275,7 @@ define(function(require, exports) {
 			scrollbar: false,    // 推荐禁用浏览器外部滚动条
 		    success:function(){
 
-		    	var $container = $(".T-add-selfpay-form"),$body= $container.find('.T-selfpayList-Tbody');
+		    	var $container = $(".T-add-selfpay-form"),$tbody= $container.find('.T-selfpayList-Tbody');
 		    	ruleData.validator = rule.check($container);
 		    	//精度控制--非法数字退格
 			    var $price = $tbody.find('.T-calc');
@@ -651,7 +651,7 @@ define(function(require, exports) {
 						showMessageDialog($( "#confirm-dialog-message" ),"内部价格不能大于市场价格");
 				   };
 
-				   
+
 				
 			} else if ($that.hasClass('T-guideRate')) {
 				// 当导游返佣改变时
@@ -662,8 +662,11 @@ define(function(require, exports) {
 				    if ( guideVal!=null && guideVal!="" && guideVal < 0 ) {
 				    	 $tr.find('.T-guideRate').eq(index).focus();
 				    	 showMessageDialog($( "#confirm-dialog-message" ),"导游返佣不能是负数");
-				    }else{
+				    }else if(guideVal!=null && guideVal!="" && guideVal < 100){
 				    	$tr.find('.T-travelAgencyRate').eq(index).val(100-guideVal)
+				    }else if(guideVal!=null && guideVal!="" && guideVal > 100){
+				    	 $tr.find('.T-guideRate').eq(index).focus();
+				    	 showMessageDialog($( "#confirm-dialog-message" ),"导游返佣不能大于100");
 				    };
 				
 			} else if ($that.hasClass('T-travelAgencyRate')) {
@@ -675,8 +678,11 @@ define(function(require, exports) {
 				    if (traveVal!=null && traveVal!="" && traveVal < 0 ) {
 				    	  $tr.find('.T-travelAgencyRate').eq(index).focus();
 				    	 showMessageDialog($( "#confirm-dialog-message" ),"旅行社返佣不能是负数");
-				    }else{
+				    }else if(traveVal!=null && traveVal!="" && traveVal < 100){
 				    	$tr.find('.T-guideRate').eq(index).val(100-traveVal);
+				    }else if(traveVal!=null && traveVal!="" && traveVal > 100){
+				    	$tr.find('.T-travelAgencyRate').eq(index).focus();
+				    	showMessageDialog($( "#confirm-dialog-message" ),"旅行社返佣不能大于100");
 				    };
 				
 			} 
