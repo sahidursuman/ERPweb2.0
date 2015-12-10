@@ -1513,6 +1513,18 @@ KingServices.replaceDetail = function(id){
 		module.replaceDetail(id);
 	});
 }
+//查看线路产品
+KingServices.viewLineProduct = function(id){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_lineProduct,function(module){
+		module.viewLineProduct(id);
+	});
+}
+//查看游客小组
+KingServices.viewTouristGroup = function(id){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_touristGroup,function(module){
+		module.viewTouristGroup(id);
+	});
+}
 
 //添加资源函数
 KingServices.addResourceFunction = function(e){

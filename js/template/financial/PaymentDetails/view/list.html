@@ -2,12 +2,12 @@
     <form class="form-inline" role="form" onsubmit="return false">
         <div class="form-group">
             <label>对方单位：</label>
-            <input type="text" class="form-control T-search-unit" data-id="{{searchParam.resourceId}}" style="width: 220px;" value="{{searchParam. || '全部'}}">
+            <input type="text" class="form-control T-search-unit" data-id="{{searchParam.resourceId}}" style="width: 220px;" value="{{searchParam.resourceName || '全部'}}">
         </div>
         <div class="form-group marginLeft-30">
             <label>收支类别：</label>
-            <select class="form-control T-search-category">
-                <option>全部</option>
+            <select class="form-control T-search-category" style="width: 120px;">
+                <option value="">全部</option>
                 {{each selectData.receivableTypes as rs}}
                 <option value="{{rs.id}}" {{if rs.id == searchParam.receivableTypeId}}selected="selected"{{/if}}>{{rs.name}}</option>
                 {{/each}}
@@ -15,8 +15,8 @@
         </div>
         <div class="form-group marginLeft-30">
             <label>收支大类：</label>
-            <select class="form-control T-search-type">
-                <option>全部</option>
+            <select class="form-control T-search-type" style="width: 120px;">
+                <option value="">全部</option>
                 {{each selectData.incomeOrPayTypes as rs}}
                 <option value="{{rs.id}}" {{if rs.id == searchParam.incomeOrPayTypeId}}selected="selected"{{/if}}>{{rs.name}}</option>
                 {{/each}}
@@ -24,11 +24,11 @@
         </div>
         <div class="form-group marginLeft-30">
             <label>开始日期</label>
-            <input type="text" class="form-control datepicker T-search-start-time">
+            <input type="text" class="form-control datepicker T-search-start-time" value="{{searchParam.startTime}}" style="width: 100px;text-align: center;">
         </div>
         <div class="form-group marginLeft-30">
             <label>结束日期</label>
-            <input type="text" class="form-control datepicker T-search-end-time">
+            <input type="text" class="form-control datepicker T-search-end-time" value="{{searchParam.endTime}}" style="width: 100px;text-align: center;">
         </div>
         <div class="form-group marginLeft-30">
             <button class="btn-sm search-btn T-btn-search">
@@ -40,7 +40,7 @@
         <div class="form-group">
             <label>费用类别：</label>
             <select class="form-control T-search-cost" style="width: 220px;">
-                <option>全部</option>
+                <option value="">全部</option>
                 {{each selectData.costTypes as rs}}
                 <option value="{{rs.id}}" {{if rs.id == searchParam.costTypeId}}selected="selected"{{/if}}>{{rs.name}}</option>
                 {{/each}}
@@ -48,8 +48,8 @@
         </div>
         <div class="form-group marginLeft-30">
             <label>发生业务：</label>
-            <select class="form-control T-search-business">
-                <option>全部</option>
+            <select class="form-control T-search-business" style="width: 120px;">
+                <option value="">全部</option>
                 {{each selectData.businessTypes as rs}}
                 <option value="{{rs.id}}" {{if rs.id == searchParam.businessTypeId}}selected="selected"{{/if}}>{{rs.name}}</option>
                 {{/each}}
@@ -57,19 +57,18 @@
         </div>
         <div class="form-group marginLeft-30">
             <label>支付方式：</label>
-            <select class="form-control T-search-payment">
-                <option value="1">现金</option>
-                <option>银行转账</option>
-                <option>网上支付</option>
-                <option>支票</option>
-                <option>其它</option>
+            <select class="form-control T-search-payment" style="width: 120px;">
+                <option value="">全部</option>
+                {{each payTypeList as rs index}}
+                <option value="{{index}}" {{if index + "" === searchParam.payType}}selected="selected"{{/if}}>{{rs}}</option>
+                {{/each}}
             </select>
         </div>
         <div class="form-group marginLeft-30">
-            <label>收款合计：27000</label>
+            <label>收款合计：{{total.incomeMoney}}</label>
         </div>
         <div class="form-group marginLeft-30">
-            <label>付款合计：21000</label>
+            <label>付款合计：{{total.payMoney}}</label>
         </div>
     </form>
 </div>
