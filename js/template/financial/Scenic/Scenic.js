@@ -44,8 +44,8 @@ define(function(require, exports) {
             pageNo : page,
             scenicName : scenicName,
             scenicId : scenicId,
-            startTime : startDate,
-            endTime : endDate,
+            startDate : startDate,
+            endDate : endDate,
             sortType: 'auto'
         };
 
@@ -130,8 +130,8 @@ define(function(require, exports) {
             pageNo : page,
             scenicId : scenicId + "",
             accountInfo : accountInfo,
-            startTime : startDate,
-            endTime : endDate,
+            startDate : startDate,
+            endDate : endDate,
             sortType : "auto"
         };
         searchParam = JSON.stringify(searchParam);
@@ -238,8 +238,8 @@ define(function(require, exports) {
                 pageNo : page,
                 scenicId : scenicId + "",
                 accountInfo : accountInfo,
-                startTime : startDate,
-                endTime : endDate,
+                startDate : startDate,
+                endDate : endDate,
                 sortType : "auto"
             };
             searchParam = JSON.stringify(searchParam);

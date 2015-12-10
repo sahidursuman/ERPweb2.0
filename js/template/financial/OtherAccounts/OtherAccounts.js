@@ -1,5 +1,6 @@
 define(function(require, exports) {
     var menuKey = "financial_Other_accounts",
+        rule = require("./rule"),
         listTemplate = require("./view/list"),
         AccountsCheckingTemplate = require("./view/AccountsChecking"),
         AccountsPaymentTemplate = require("./view/AccountsPayment"),
@@ -12,7 +13,9 @@ define(function(require, exports) {
         PaymentTabId = menuKey + "-Payment";
 
     var OtherAccounts = {
-        $searchArea: false
+        $searchArea: false,
+        $checkSearchArea: false,
+        $clearSearchArea : false
     };
     OtherAccounts.initModule = function() {
         var myDate = new Date(),
@@ -83,37 +86,35 @@ define(function(require, exports) {
                 var name = $(this).closest('tr').attr("data-name");
                 if ($that.hasClass('T-checking')) {
                     //对账
-                    OtherAccounts.AccountsChecking(0, name, startAccountTime, endAccountTime);
+                    OtherAccounts.AccountsChecking(0, name, "",startAccountTime, endAccountTime);
                 } else if ($that.hasClass('T-payment')) {
                     // 付款
-                    OtherAccounts.AccountsPayment(0, name, startAccountTime, endAccountTime);
+                    OtherAccounts.AccountsPayment(0, name, "",startAccountTime, endAccountTime);
                 }
             });
         };
 
     // 对账
-    OtherAccounts.AccountsChecking = function(pageNo, name, startAccountTime, endAccountTime) {
-
-        if (OtherAccounts.$searchArea) {
-            var args = {
-                startAccountTime: OtherAccounts.$searchArea.find("input[name=startTime]").val(),
-                endAccountTime: OtherAccounts.$searchArea.find("input[name=endTime]").val(),
-                name: name,
-                info: OtherAccounts.$searchArea.find('.T-creatorUserChoose').val()
-            }
+    OtherAccounts.AccountsChecking = function(pageNo,name,info,startAccountTime, endAccountTime) {
+        
+        if (OtherAccounts.$checkSearchArea && arguments .length === 1) {
+                startAccountTime = OtherAccounts.$checkSearchArea.find(".T-startTime").val();
+                endAccountTime = OtherAccounts.$checkSearchArea.find(".T-endTime").val();
+                name = OtherAccounts.$checkSearchArea.find("input[name=itemName]").val();
+                info = OtherAccounts.$checkSearchArea.find('.T-creatorUserChoose').val();
         }
 
-        args.pageNo = pageNo || 0;
+        pageNo = pageNo || 0;
         //重置搜索条件
         OtherAccounts.CheckingData = {
             pageNo: pageNo,
             name: name,
             startAccountTime: startAccountTime,
             endAccountTime: endAccountTime,
+            info:info,
             sortType: 'auto'
         }
         console.log(OtherAccounts.CheckingData);
-
         $.ajax({
             url: KingServices.build_url("account/arrangeOtherFinancial", "listFinancialOtherDetails"),
             type: "POST",
@@ -122,20 +123,28 @@ define(function(require, exports) {
                 var result = showDialog(data);
                 if (result) {
                     var dataTable = data;
+                    console.log(dataTable);
                     // 对账 
                     $.ajax({
                         url: KingServices.build_url("account/arrangeOtherFinancial", "getStatistics"),
                         type: "POST",
                         data: OtherAccounts.CheckingData,
                         success: function(data) {
-                            console.log(dataTable, "对账");
                             dataTable.statistics = data.statistics;
                             var result = showDialog(data);
 
                             if (result) {
+                                data.searchParam = OtherAccounts.CheckingData;
                                 var html = AccountsCheckingTemplate(dataTable);
                                 Tools.addTab(checkTabId, "其他对账", html);
                                 var $checkTab = $("#tab-" + checkTabId + "-content");
+                                var info = $checkTab.find('.T-creatorUserChoose').val();
+                                var nam = $checkTab.find('.name').text();
+                                var startTime = $checkTab.find('.T-startTime').val();
+                                var endTime = $checkTab.find('.T-endTime').val()
+                                
+                                OtherAccounts.$checkSearchArea = $checkTab.find('.T-search-area');
+                                console.log(info,"minzi");
                                 // 查看已付金额明细
                                 $checkTab.find('.T-checkListNum').on('click', '.T-action', function(event) {
                                     event.preventDefault();
@@ -155,27 +164,26 @@ define(function(require, exports) {
                                     }
                                 });
                                 //时间控件
-                                var $container = $(".T-Accounts");
-                                $container.find("input[name=joinTime]").datepicker({
+                                $checkTab.find("input[name=joinTime]").datepicker({
                                     autoclose: true,
                                     todayHighlight: true,
                                     format: 'yyyy-mm-dd',
                                     language: 'zh-CN'
                                 });
-                                //关闭页面事件
-                                $container.find(".T-closeTab").click(function() {
+                                //关闭页面事
+                                $checkTab.find(".T-closeTab").click(function() {
                                     closeTab(checkTabId);
                                 });
-                                $container.on('change', '.selector', function(event) {
-                                    event.preventDefault();
-                                    /* Act on the event */
-                                });
                                 //对账保存
-                                $container.find(".T-confirm").click(function(event) {
+                                $checkTab.find(".T-confirm").click(function(event) {
                                     OtherAccounts.CheckConfirm(name);
                                 });
+                                //对账搜索
+                                $checkTab.find('.T-search').click(function(event) {
+                                    OtherAccounts.AccountsChecking(0);
+                                });
                                 //给全选按钮绑定事件
-                                $container.find('.T-selectAll').click(function(event) {
+                                $checkTab.find('.T-selectAll').click(function(event) {
                                     var checkboxList = $(".T-Accounts").find(".T-checkListNum tr input[type=checkbox]");
                                     if ($(this).is(":checked")) {
                                         checkboxList.each(function(i) {
@@ -304,18 +312,24 @@ define(function(require, exports) {
                     reconciliation: JsonStr
                 },
                 success: function(data) {
-                    // console.log(data);
+
                 }
             })
         }
         //付款
-    OtherAccounts.AccountsPayment = function(pageNo, name, startAccountTime, endAccountTime) {
-        startAccountTime = OtherAccounts.$searchArea.find("input[name=startTime]").val();
-        endAccountTime = OtherAccounts.$searchArea.find("input[name=endTime]").val();
+    OtherAccounts.AccountsPayment = function(pageNo, name,info, startAccountTime, endAccountTime) {
+        if (OtherAccounts.$clearSearchArea && arguments .length === 1) {
+                startAccountTime = OtherAccounts.$clearSearchArea.find(".T-startTime").val();
+                endAccountTime = OtherAccounts.$clearSearchArea.find(".T-endTime").val();
+                name = OtherAccounts.$clearSearchArea.find("input[name=itemName]").val();
+                info = OtherAccounts.$clearSearchArea.find('.T-creatorUserChoose').val();
+        }
+        pageNo = pageNo || 0;
         //重置搜索条件
-        OtherAccounts.CheckingData = {
+        OtherAccounts.PaymentData = {
             pageNo: pageNo,
             name: name,
+            info : info,
             startAccountTime: startAccountTime,
             endAccountTime: endAccountTime,
             sortType: 'auto'
@@ -324,7 +338,7 @@ define(function(require, exports) {
         $.ajax({
             url: KingServices.build_url("account/arrangeOtherFinancial", "listFinancialOtherDetails"),
             type: "POST",
-            data: OtherAccounts.CheckingData,
+            data: OtherAccounts.PaymentData,
             success: function(data) {
                 console.log(data);
                 var result = showDialog(data);
@@ -334,14 +348,21 @@ define(function(require, exports) {
                     $.ajax({
                         url: KingServices.build_url("account/arrangeOtherFinancial", "getStatistics"),
                         type: "POST",
-                        data: OtherAccounts.CheckingData,
+                        data: OtherAccounts.PaymentData,
                         success: function(data) {
                             dataTable.statistics = data.statistics;
                             var result = showDialog(data);
                             if (result) {
+                                data.searchParam = OtherAccounts.PaymentData;
                                 var html = AccountsPaymentTemplate(dataTable);
                                 Tools.addTab(PaymentTabId, "其他付款", html);
                                 var $PaymentTabId = $("#tab-" + PaymentTabId + "-content");
+                                var info = $PaymentTabId.find('.T-creatorUserChoose').val();
+                                var nam = $PaymentTabId.find('input[name=itemName]').val();
+                                var startTime = $PaymentTabId.find('.T-startTime').val();
+                                var endTime = $PaymentTabId.find('.T-endTime').val();
+
+                                OtherAccounts.$clearSearchArea = $PaymentTabId.find('.T-search-area');
                                 $PaymentTabId.find('.T-PaymentListNum').on('click', '.T-action', function(event) {
                                     event.preventDefault();
                                     var $that = $(this),
@@ -372,10 +393,40 @@ define(function(require, exports) {
                                 $PaymentTabId.find(".T-closeTab").click(function() {
                                     closeTab(PaymentTabId);
                                 });
+                                //付款搜索
+                                $PaymentTabId.find('.T-paymentSearch').click(function(event) {
+                                    OtherAccounts.AccountsPayment(0);
+                                });
+                                // 付款保存
                                 $PaymentTabId.find('.T-save').click(function(event) {
                                     OtherAccounts.paysave(name);
                                 });
-
+                                //自动下账
+                                $PaymentTabId.find(".T-clear-auto").off().on("click", function() {
+                                    var sumPayMoney = parseInt($PaymentTabId.find('input[name=sumPayMoney]').val()),
+                                        sumPayType = $PaymentTabId.find('select[name=sumPayType]').val(),
+                                        sumPayRemark = $PaymentTabId.find('input[name=sumPayRemark]').val(), //备注
+                                        names = $PaymentTabId.find(".T-name").text();
+                                    var isAutoPay = FinancialService.autoPayJson(name, $PaymentTabId, rule);
+                                    if (!isAutoPay) {
+                                        return false;
+                                    }
+                                    var searchParam = {
+                                        name: names,
+                                        autoPayMoney: sumPayMoney,
+                                        startAccountTime: startAccountTime,
+                                        endAccountTime: endAccountTime,
+                                        payType: sumPayType
+                                    };
+                                    showConfirmMsg($("#confirm-dialog-message"), "是否按当前账期 " + startAccountTime + " 至 " + endAccountTime + " 下账？", function() {
+                                        $.ajax({
+                                            url: KingServices.build_url("account/arrangeOtherFinancial", "autoPayment"),
+                                            type: "POST",
+                                            data: searchParam,
+                                            success: function(data) {}
+                                        });
+                                    });
+                                });
 
                             }
 
@@ -422,7 +473,11 @@ define(function(require, exports) {
                     reconciliation: JsonStr
                 },
                 success: function(data) {
-                    console.log(data, "付款保存");
+                    var result = showDialog(data);
+                    var $tab = $tab = $('#' + tabId);
+                    if (result) {
+                        // FinancialService.isClearSave($tab,rule);
+                    }
                 }
             })
         }
