@@ -275,7 +275,7 @@ define(function(require, exports) {
                         if(isAutoPay == 1){
                             restaurant.$clearTab.data('isEdited',true);
                         } else if(isAutoPay == 2){
-                            restaurant.$clearTab.find(".T-cancel--auto").hide();
+                            restaurant.$clearTab.find(".T-cancel-auto").hide();
                         }
                     }
 
@@ -536,15 +536,20 @@ define(function(require, exports) {
 
         var argumentsLen = arguments.length,
             clearSaveJson = FinancialService.clearSaveJson(restaurant.$clearTab,restaurant.clearTempData,rule);
+        var searchParam = {
+            sumCurrentPayMoney : restaurant.$clearTab.find('input[name=sumPayMoney]').val(),
+            payType : restaurant.$clearTab.find('select[name=sumPayType]').val(),
+            payRemark : restaurant.$clearTab.find('input[name=sumPayRemark]').val()
+        };
 
         clearSaveJson = JSON.stringify(clearSaveJson);
+        searchParam = JSON.stringify(searchParam);
         $.ajax({
             url:KingServices.build_url("account/arrangeRestaurantFinancial","saveAccountSettlement"),
             type:"POST",
             data:{
                 restaurantJson : clearSaveJson,
-                payType : restaurant.$clearTab.find('select[name=sumPayType]').val(),
-                payRemark : restaurant.$clearTab.find('input[name=sumPayRemark]').val()
+                searchParam : searchParam
             },
             success:function(data){
                 var result = showDialog(data);
@@ -586,6 +591,7 @@ define(function(require, exports) {
                     restaurant.initCheck(page,id,name);
                 } else if(option == "clear"){
                     restaurant.initClear(page,id,name);
+                    restaurant.$clearTab.find(".T-cancel-auto").hide();
                 }
 			})
             // 监听保存，并切换tab

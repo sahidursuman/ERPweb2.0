@@ -277,7 +277,7 @@ define(function(require, exports) {
                         if(isAutoPay == 1){
                             hotel.$clearTab.data('isEdited',true);
                         } else if(isAutoPay == 2){
-                            hotel.$clearTab.find(".T-cancel--auto").hide();
+                            hotel.$clearTab.find(".T-cancel-auto").hide();
                         }
                     }
 
@@ -536,15 +536,20 @@ define(function(require, exports) {
 
         var argumentsLen = arguments.length,
             clearSaveJson = FinancialService.clearSaveJson(hotel.$clearTab,hotel.clearTempData,rule);
+        var searchParam = {
+            sumCurrentPayMoney : hotel.$clearTab.find('input[name=sumPayMoney]').val(),
+            payType : hotel.$clearTab.find('select[name=sumPayType]').val(),
+            payRemark : hotel.$clearTab.find('input[name=sumPayRemark]').val()
+        };
 
         clearSaveJson = JSON.stringify(clearSaveJson);
+        searchParam = JSON.stringify(searchParam);
         $.ajax({
             url:KingServices.build_url("account/financialHotel","saveAccountSettlement"),
             type:"POST",
             data:{
                 hotelJson : clearSaveJson,
-                payType : hotel.$clearTab.find('select[name=sumPayType]').val(),
-                payRemark : hotel.$clearTab.find('input[name=sumPayRemark]').val()
+                searchParam : searchParam
             },
             success:function(data){
                 var result = showDialog(data);
@@ -585,6 +590,7 @@ define(function(require, exports) {
                     hotel.initCheck(page,id,name);
                 } else if(option == "clear"){
                     hotel.initClear(page,id,name);
+                    hotel.$clearTab.find(".T-cancel-auto").hide();
                 }
 			})
             // 监听保存，并切换tab

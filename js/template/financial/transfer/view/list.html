@@ -2,7 +2,7 @@
     <div class="form-horizontal search-area">    
         <div class="form-group T-search-area">      
             <label style="margin-left: 15px">同行地接：</label>
-			<input type="text" class="T-choosePartnerAgency" name="travelAgencyName" value="{{if searchParam.travelAgencyName == ""}}全部{{else}}{{searchParam.travelAgencyName}}{{/if}}" />
+			<input type="text" class="T-choosePartnerAgency" name="partnerAgencyName" value="{{if searchParam.partnerAgencyName == ""}}全部{{else}}{{searchParam.partnerAgencyName}}{{/if}}" />
             <input type="hidden" name="partnerAgencyId" value="{{searchParam.partnerAgencyId}}" />  
 
             <label class="control-label marginLeft-30">账期：</label>
@@ -54,7 +54,7 @@
                                 <span style="color:green"> {{rs.payedCount}}{{"/"}}{{rs.allPayCount}}</span>
                             {{/if}}
                         </td>
-                        <td><a class="cursor T-option T-check R-right" data-right="1300002">对账</a>
+                        <td><a class="cursor T-option T-check R-right" data-right="1300002|1300005">对账</a>
                             <label class="cursor R-right" data-right="1300002"><a class="R-right" data-right="1300003"> |</a></label>
                             <a class="cursor R-right T-option T-clear" data-right="1300003">付款</a>
                         </td>

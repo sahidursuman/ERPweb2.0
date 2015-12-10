@@ -256,7 +256,7 @@ define(function(require, exports) {
                         if(isAutoPay == 1){
                             Self.$clearTab.data('isEdited',true);
                         } else if(isAutoPay == 2){
-                            Self.$clearTab.find(".T-cancel--auto").hide();
+                            Self.$clearTab.find(".T-cancel-auto").hide();
                         }
                     }
 
@@ -561,6 +561,7 @@ define(function(require, exports) {
                     Self.initCheck(page,id,name);
                 } else if(option == "clear"){
                     Self.initClear(page,id,name);
+                    Self.$clearTab.find(".T-cancel-auto").hide();
                 }
             })
             // 监听保存，并切换tab
@@ -632,7 +633,7 @@ define(function(require, exports) {
             event.preventDefault();
             var $that = $(this),
                 id = $that.closest('tr').data('id');
-            if ($that.hasClass('T-selfImg')) {
+            if ($that.hasClass('T-selfPayImg')) {
                 // 查看单据
                 var WEB_IMG_URL_BIG = $tab.find("input[name=WEB_IMG_URL_BIG]").val();//大图
                 var WEB_IMG_URL_SMALL = $tab.find("input[name=WEB_IMG_URL_SMALL]").val();//大图

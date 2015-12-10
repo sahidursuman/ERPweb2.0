@@ -4,7 +4,6 @@ define(function(require, exports) {
 		listTemplate = require("./view/list"),
 		checkBill = require("./view/checkBill"),
 		Clearing = require("./view/Clearing"),
-		blanceRecords = require("./view/busCompanyRecords"),
 		billImageTempLate = require("./view/billImages"),
         payedDetailTempLate = require("./view/viewPayedDetail"),
         needPayDetailTempLate = require("./view/viewNeedPayDetail");
@@ -277,7 +276,7 @@ define(function(require, exports) {
                         if(isAutoPay == 1){
                             busCompany.$clearTab.data('isEdited',true);
                         } else if(isAutoPay == 2){
-                            busCompany.$clearTab.find(".T-cancel--auto").hide();
+                            busCompany.$clearTab.find(".T-cancel-auto").hide();
                         }
                     }
 
@@ -434,15 +433,20 @@ define(function(require, exports) {
 
         var argumentsLen = arguments.length,
             clearSaveJson = FinancialService.clearSaveJson(busCompany.$clearTab,busCompany.clearTempData,rule);
+        var searchParam = {
+            sumCurrentPayMoney : busCompany.$clearTab.find('input[name=sumPayMoney]').val(),
+            payType : busCompany.$clearTab.find('select[name=sumPayType]').val(),
+            payRemark : busCompany.$clearTab.find('input[name=sumPayRemark]').val()
+        };
 
         clearSaveJson = JSON.stringify(clearSaveJson);
+        searchParam = JSON.stringify(searchParam);
         $.ajax({
             url:KingServices.build_url("account/financialBusCompany","saveAccountSettlement"),
             type:"POST",
             data:{ 
                 busCompanyJson : clearSaveJson,
-                payType : busCompany.$clearTab.find('select[name=sumPayType]').val(),
-                payRemark : busCompany.$clearTab.find('input[name=sumPayRemark]').val() 
+                searchParam : searchParam 
             },
             success:function(data){
                 var result = showDialog(data);
@@ -590,6 +594,7 @@ define(function(require, exports) {
                     busCompany.initCheck(page,id,name);
                 } else if(option == "clear"){
                     busCompany.initClear(page,id,name);
+                    busCompany.$clearTab.find(".T-cancel-auto").hide();
                 }
 			})
             // 监听保存，并切换tab
