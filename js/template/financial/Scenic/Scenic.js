@@ -218,8 +218,16 @@ define(function(require, exports) {
         });
     };
 
+    /**
+     * 对外付款接口
+     * @param  {object} options 付款参数
+     * @return {[type]}         [description]
+     */
+    scenic.initPay = function(options) {
+        scenic.scenicClear(0, 0, options.id, options.name, '', options.startDate, options.endDate, true);
+    }
     //结算
-    scenic.scenicClear = function(isAutoPay,page,scenicId,scenicName,accountInfo,startDate,endDate){
+    scenic.scenicClear = function(isAutoPay,page,scenicId,scenicName,accountInfo,startDate,endDate, isOuter){
         if (isAutoPay) {
             var searchParam = FinancialService.autoPayJson(scenicId,scenic.$clearTab,rule);
         } else {
@@ -272,6 +280,7 @@ define(function(require, exports) {
                         data.sumPayMoney = 0;
                         data.sumPayType = 0;
                     }
+                    data.isOuter = !!isOuter;
                     var resultList = data.financialScenicListData;
                     data.financialScenicListData = FinancialService.getTempDate(data.financialScenicListData,scenic.clearTempData);
                     var html = scenicClearing(data);
@@ -643,4 +652,5 @@ define(function(require, exports) {
     };
 
     exports.init = scenic.initModule;
+    exports.initPay = scenic.initPay;
 });
