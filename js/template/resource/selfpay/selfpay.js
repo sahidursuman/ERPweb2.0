@@ -454,7 +454,7 @@ define(function(require, exports) {
 								success:function(data){
 									var result = showDialog(data);
 									if(result){
-										for(var i=2; i < 7; i++){
+										for(var i=2; i < 8; i++){
 											var $children =  td.eq(i).children("div");
 											$children.eq(index).fadeOut(function(){
 												$(this).remove();
@@ -474,7 +474,7 @@ define(function(require, exports) {
 				}
 			});
 		}else{
-			for(var i=2; i < 7; i++){
+			for(var i=2; i < 8; i++){
 				var $children =  td.eq(i).children("div");
 				$children.eq(index).fadeOut(function(){
 					$(this).remove();
