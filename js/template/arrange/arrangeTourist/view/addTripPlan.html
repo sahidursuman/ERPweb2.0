@@ -33,7 +33,7 @@
 
 								<div class="form-group">
 									{{if addTripPlan.quoteId!=null}}
-										<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>车座数：</label>
+										<label class="col-sm-1 control-label no-padding-right">车座数：</label>
 										<div class="col-sm-2">
 											<input class="col-sm-12" type="text" name="seatCount" id="" value="{{if addTripPlan.busCompanyArrange != null}}{{addTripPlan.busCompanyArrange.needSeatCount}}{{/if}}" readonly="readonly" />
 										</div>
@@ -42,7 +42,7 @@
 											<input class="col-sm-12" type="text" name="needBusBrand" id="" value="{{if addTripPlan.busCompanyArrange != null}}{{addTripPlan.busCompanyArrange.brand}}{{/if}}"  {{if addTripPlan.busCompanyArrange != null && addTripPlan.busCompanyArrange.brand!=''}}readonly="readonly"{{/if}} />
 										</div>
 										{{else}}
-										<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>车座数：</label>
+										<label class="col-sm-1 control-label no-padding-right">车座数：</label>
 										<div class="col-sm-2">
 											<input class="col-sm-12 bind-change T-chooseSeatCount" type="text" name="seatCount" id="" value="{{if addTripPlan.bus != null}}{{addTripPlan.bus.seatCount}}{{/if}}" />
 										</div>
@@ -54,7 +54,7 @@
 									{{/if}}
 
 
-									<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>车牌号：</label>
+									<label class="col-sm-1 control-label no-padding-right">车牌号：</label>
 									<div class="col-sm-2">
 										<div class="col-sm-12 no-padding">
 											<input class="col-sm-12 {{if addTripPlan.busCompanyArrange != null && addTripPlan.busCompanyArrange.brand!=''}}T-chooseBusbyCompanyId{{else}} chooseBusLicenseNumber{{/if}} bind-change" type="text" name="LicenseNumber" id="" value="{{if addTripPlan.bus != null}}{{addTripPlan.bus.licenseNumber}}{{/if}}" />
@@ -76,7 +76,7 @@
 									</div>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>导游：</label>
+									<label class="col-sm-1 control-label no-padding-right">导游：</label>
 									<div class="col-sm-2">  
 										<div class="col-sm-12 no-padding">
 											<input class="col-sm-12 AddTPchooseGuide bind-change" type="text" name="AddTPchooseGuide" id="" value="{{if addTripPlan.guide != null}}{{addTripPlan.guide.realname}}{{/if}}" />
@@ -90,7 +90,7 @@
 									<div class="col-sm-2">
 										<input class="col-sm-12" readonly="readonly" type="text" name="GmobileNumber" id="" value="{{if addTripPlan.guide != null}}{{addTripPlan.guide.mobileNumber}}{{/if}}" />
 									</div>
-									<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>司机：</label>
+									<label class="col-sm-1 control-label no-padding-right">司机：</label>
 									<div class="col-sm-2">
 										<div class="col-sm-12 no-padding">
 											<input class="col-sm-12 chooseDriver bind-change" type="text" name="driverName" id="" value="{{if addTripPlan.driver != null}}{{addTripPlan.driver.name}}{{/if}}" />
@@ -157,7 +157,7 @@
 				</label>  
 			</div>
 			<div class="col-sm-2 addMergePlanTime">
-				<input class="form-control col-sm-4 datepicker hide T-To-TimeChecked" type="text" name="executeTime" value="" />
+				<input class="form-control col-sm-4 dataTimePicker hide T-To-TimeChecked" type="text" name="executeTime" value="" />
 			</div>
         </div>
 		<form class="form-horizontal" role="form" onsubmit="return false">

@@ -2828,6 +2828,16 @@ define(function(require, exports) {
 				format: 'yyyy-mm-dd',
 				language: 'zh-CN'
 			})
+
+			//定时发送
+			$tabId.find('.dataTimePicker').datetimepicker({
+				autoclose: true,
+				todayHighlight: true,
+				format: 'L',
+				language: 'zh-CN'
+			});
+
+
 		};
 
 		exports.init = arrangeTourist.initModule;
