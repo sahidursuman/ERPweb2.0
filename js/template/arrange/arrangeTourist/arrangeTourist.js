@@ -1651,7 +1651,8 @@ define(function(require, exports) {
 					$merge.find('.btn-'+lineProductId+'-'+startTime+'').on('click', function(event) {
 						event.preventDefault();
 						/* Act on the event */
-						arrangeTourist.bindRemoveTouristGroupMerge($merge,lineProductId,startTime)
+						arrangeTourist.bindRemoveTouristGroupMerge($merge,lineProductId,startTime);
+
 					});
 					var touristGroupMerge = {
 						lineProductId : lineProductId,
@@ -1703,6 +1704,7 @@ define(function(require, exports) {
 							obj.remove();
 							$( this ).dialog( "close" );
 							arrangeTourist.removeTouristGroupMergeData($merge,lineProductId,startTime);
+
 						} 
 					}
 				],
@@ -1722,6 +1724,9 @@ define(function(require, exports) {
 		arrangeTourist.removeTouristGroupMergeData = function($merge,lineProductId,startTime){
 			$merge.find(".btn-"+lineProductId+"-"+startTime+"").remove();
 			$("#"+tabId+" .tr-"+lineProductId+"-"+startTime+" .T-touristGroupMergeCheckBox").prop("checked",false);
+			//取消选择后==重置计算
+			var $visitorObj = $('#T-Visitor-list');
+			arrangeTourist.choosenAdultAndChildCount($visitorObj);
 			var touristGroupMergeList = arrangeTourist.touristGroupMergeData.touristGroupMergeList;
 			if(touristGroupMergeList.length > 0){
 				for(var i=0;i<touristGroupMergeList.length;i++){
