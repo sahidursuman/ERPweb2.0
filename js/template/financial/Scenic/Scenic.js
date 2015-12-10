@@ -218,8 +218,16 @@ define(function(require, exports) {
         });
     };
 
+    /**
+     * 对外付款接口
+     * @param  {object} options 付款参数
+     * @return {[type]}         [description]
+     */
+    scenic.initPay = function(options) {
+        scenic.scenicClear(0, 0, options.id, options.name, '', options.startDate, options.endDate, true);
+    }
     //结算
-    scenic.scenicClear = function(isAutoPay,page,scenicId,scenicName,accountInfo,startDate,endDate){
+    scenic.scenicClear = function(isAutoPay,page,scenicId,scenicName,accountInfo,startDate,endDate, isOuter){
         if (isAutoPay) {
             var searchParam = FinancialService.autoPayJson(scenicId,scenic.$clearTab,rule);
         } else {
@@ -272,6 +280,7 @@ define(function(require, exports) {
                         data.sumPayMoney = 0;
                         data.sumPayType = 0;
                     }
+                    data.isOuter = !!isOuter;
                     var resultList = data.financialScenicListData;
                     data.financialScenicListData = FinancialService.getTempDate(data.financialScenicListData,scenic.clearTempData);
                     var html = scenicClearing(data);
@@ -280,37 +289,40 @@ define(function(require, exports) {
                     // 初始化页面
                     if (Tools.addTab(menuKey + "-clearing", "景区付款", html)) {
                         scenic.initClear(page,scenicId,scenicName); 
-                        validator = rule.check(scenic.$clearTab.find('.T-clearList'));                       
-                    }
+                        validator = rule.check(scenic.$clearTab.find('.T-clearList'));  
 
-                    if(isAutoPay == 1){
-                        scenic.$clearTab.find('input[name=sumPayMoney]').prop("disabled",true);
-                        scenic.$clearTab.find(".T-clear-auto").hide(); 
-                        scenic.$clearTab.data('isEdited', !!data.autoPaymentJson.length);
-                    } else {
-                        scenic.$clearTab.find(".T-cancel-auto").hide();
-                    }
-
-                    //绑定翻页组件
-                    var $tr = scenic.$clearTab.find('.T-clearList tr');
-                    laypage({
-                        cont: scenic.$clearTab.find('.T-pagenation'),
-                        pages: data.searchParam.totalPage,
-                        curr: (page + 1),
-                        jump: function(obj, first) {
-                            if (!first) { 
-                                var tempJson = FinancialService.clearSaveJson(scenic.$clearTab,scenic.clearTempData,rule);
-                                scenic.clearTempData = tempJson;
-                                var sumPayMoney = parseInt(scenic.$clearTab.find('input[name=sumPayMoney]').val());
-                                    sumPayType = parseInt(scenic.$clearTab.find('select[name=sumPayType]').val());
-                                scenic.clearTempSumDate = {
-                                    sumPayMoney : sumPayMoney,
-                                    sumPayType : sumPayType
-                                }
-                                scenic.scenicClear(isAutoPay,obj.curr-1,scenicId,scenicName);
-                            }
+                        if(isAutoPay == 1){
+                            scenic.$clearTab.find('input[name=sumPayMoney]').prop("disabled",true);
+                            scenic.$clearTab.find(".T-clear-auto").hide(); 
+                            scenic.$clearTab.find(".T-cancel-auto").show();
+                            scenic.$clearTab.data('isEdited', !!data.autoPaymentJson.length);
+                        } else {
+                            scenic.$clearTab.find(".T-clear-auto").show(); 
+                            scenic.$clearTab.find(".T-cancel-auto").hide();
                         }
-                    });
+
+                        //绑定翻页组件
+                        var $tr = scenic.$clearTab.find('.T-clearList tr');
+                        laypage({
+                            cont: scenic.$clearTab.find('.T-pagenation'),
+                            pages: data.searchParam.totalPage,
+                            curr: (page + 1),
+                            jump: function(obj, first) {
+                                if (!first) { 
+                                    var tempJson = FinancialService.clearSaveJson(scenic.$clearTab,scenic.clearTempData,rule);
+                                    scenic.clearTempData = tempJson;
+                                    var sumPayMoney = parseInt(scenic.$clearTab.find('input[name=sumPayMoney]').val());
+                                        sumPayType = parseInt(scenic.$clearTab.find('select[name=sumPayType]').val());
+                                    scenic.clearTempSumDate = {
+                                        sumPayMoney : sumPayMoney,
+                                        sumPayType : sumPayType
+                                    }
+                                    scenic.scenicClear(isAutoPay,obj.curr-1,scenicId,scenicName);
+                                }
+                            }
+                        });
+                    }
+
                 }
             }
         });
@@ -353,31 +365,6 @@ define(function(require, exports) {
                 endDate = scenic.$clearTab.find("input[name=endDate]").val();
             FinancialService.autoPayConfirm(startDate, endDate, function() {
                 scenic.scenicClear(1,page,id,name);
-            });
-
-            return;
-            showConfirmMsg($("#confirm-dialog-message"), "是否按当前账期 " + startDate + " 至 " + endDate + " 下账？",function(){
-                $.ajax({
-                    url:KingServices.build_url("financial/financialScenic","listScenicAccount"),
-                    type:"POST",
-                    data:{ searchParam : autoPayJson },
-                    success:function(data){
-                        var result = showDialog(data);
-                        if(result){
-                            showMessageDialog($("#confirm-dialog-message"),"自动下账成功！",function(){
-                                scenic.$clearTab.find(".T-clear-auto").toggle();
-                                scenic.$clearTab.find(".T-cancel-auto").toggle();
-                                scenic.$clearTab.data('isEdited',false);
-                                scenic.clearTempData = data.autoPaymentJson;
-                                scenic.clearTempSumDate = {
-                                    sumPayMoney : scenic.$clearTab.find('input[name=sumPayMoney]').val(),
-                                    sumPayType : scenic.$clearTab.find('select[name=sumPayType]').val()
-                                };
-                                scenic.scenicClear(1,page,id,name);
-                            });
-                        }
-                    }
-                });
             });
         });
 
@@ -535,14 +522,19 @@ define(function(require, exports) {
         }
 
         var argumentsLen = arguments.length,
-            clearSaveJson = FinancialService.clearSaveJson(scenic.$clearTab,scenic.clearTempData,rule);
+            clearSaveJson = FinancialService.clearSaveJson(scenic.$clearTab,scenic.clearTempData,rule),
+            searchParam = {
+                        sumCurrentPayMoney : scenic.$clearTab.find('input[name=sumPayMoney]').val(),
+                        payType : scenic.$clearTab.find('select[name=sumPayType]').val(),
+                        payRemark : scenic.$clearTab.find('input[name=sumPayRemark]').val()
+                    };
 
-        clearSaveJson = JSON.stringify(clearSaveJson);
         $.ajax({
             url:KingServices.build_url("financial/financialScenic","saveAccountSettlement"),
             type:"POST",
             data:{
-                scenicJson : clearSaveJson
+                scenicJson : JSON.stringify(clearSaveJson),
+                searchParam : JSON.stringify(searchParam)
             },
             success:function(data){
                 var result = showDialog(data);
@@ -660,4 +652,5 @@ define(function(require, exports) {
     };
 
     exports.init = scenic.initModule;
+    exports.initPay = scenic.initPay;
 });

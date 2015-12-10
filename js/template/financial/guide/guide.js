@@ -432,19 +432,21 @@ define(function(require, exports) {
                 args.lineProductName = '';
             }
 
-            $.ajax({
-                    url: KingServices.build_url('account/guideFinancial', 'autoPay'),
-                    type: 'post',
-                    data: args,
-                    showLoading: false
-                })
-                .done(function(data) {
-                    if (showDialog(data)) {
-                        FinGuide.payingJson = data.autoPayList;
-                        $tab.find('input[name="sumPayMoney"]').val(data.realAutoPayMoney);
-                        FinGuide.setAutoFillEdit($tab, true);
-                    }
-                });
+            FinancialService.autoPayConfirm(args.startDate, args.endDate, function() {
+                $.ajax({
+                        url: KingServices.build_url('account/guideFinancial', 'autoPay'),
+                        type: 'post',
+                        data: args,
+                        showLoading: false
+                    })
+                    .done(function(data) {
+                        if (showDialog(data)) {
+                            FinGuide.payingJson = data.autoPayList;
+                            $tab.find('input[name="sumPayMoney"]').val(data.realAutoPayMoney);
+                            FinGuide.setAutoFillEdit($tab, true);
+                        }
+                    });
+            })
         }
     };
 
