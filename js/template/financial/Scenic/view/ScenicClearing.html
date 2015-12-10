@@ -83,7 +83,7 @@
                 <td>{{rs.settlementMoney}}</td>  
                 <td>{{rs.unPayedMoney}}</td>
                 <td><input name="payMoney" type="text" value="{{rs.payMoney}}" class="money" maxlength="9"></td>
-                <td class="col-sm-1" ><input name="payRemark" type="text" value="{{rs.payRemark}}" maxlength="1000"></td>
+                <td class="col-sm-1" ><input name="payRemark" type="text" maxlength="1000"></td>
                 <td>{{if rs.checkTime == null || rs.checkTime == ""}}-{{else}}{{rs.checkTime | dateFormat:'yyyy-MM-dd hh:mm:ss'}}{{/if}}</td>
                 <td>{{if rs.checkUserName == null || rs.checkUserName == ""}}-{{else}}{{rs.checkUserName}}{{/if}}</td>
                 <td style="width:220px">
