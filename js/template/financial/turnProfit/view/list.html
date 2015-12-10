@@ -42,10 +42,11 @@
             </div>
             <div class="form-group border" style="margin:0px;border-style:dashed solid solid solid" >
                 <label class="control-label" style="margin-left:12px;">总人数：{{sumAdultCount}} 大 {{sumChildCount}} 小</label>
-                <label class="control-label" style="margin-left:12px;">总应收：{{sumNeedIncomeMoney}}</label>
-                <label class="control-label" style="margin-left:12px;">总应付：{{sumNeedPayMoney}}</label>
-                <label class="control-label" style="margin-left:12px;">毛利：{{sumGrossProfit}}</label>
-                <label class="control-label" style="margin-left:12px;">人均毛利：{{sumAveragerGrossProfit}}</label>
+                <label class="control-label" style="margin-left:12px;">团款应收合计：{{sumTripIncome}}</label>
+                <label class="control-label" style="margin-left:12px;">中转成本合计：{{sumOutCost}}</label>
+                <label class="control-label" style="margin-left:12px;">外转成本合计：{{sumTransCost}}</label>
+                <label class="control-label" style="margin-left:12px;">毛利合计：{{sumProfit}}</label>
+                <label class="control-label" style="margin-left:12px;">人均毛利合计：{{sumAverProfit}}</label>
             </div>
         </div>
         <div class="row ticketList" style="margin-top:10px;">
@@ -60,16 +61,16 @@
                              <th> 客户来源</th>   
                              <th > 团款应收</th>
                              <th> 中转</th>
-                             <th> 中转应付</th>
+                             <th> 中转成本</th>
                              <th> 同行地接</th>
-                             <th> 转客应付</th>  
+                             <th> 外转成本</th>  
                              <th> 毛利</th>
                              <th> 人均毛利</th>
                         </tr>
                     </thead>
                     <tbody>
                         {{each touristGroupTransferList as turnProfit index}}
-                            <tr data-id = "{{turnProfit.touristGroupId}}">  
+                            <tr data-id = "{{turnProfit.touristGroupId}}" tgTransferId = "{{turnProfit.tgTransferId}}">  
                                 <td>{{turnProfit.lineProductName}}</td>
                                 <!--给日期转码-->
                                 <td>{{turnProfit.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
