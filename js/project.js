@@ -104,18 +104,22 @@ function closeTab(tabId){
 }
 
 //判断是否有权限
-function isAuth(rightCode){
+function isAuth(codes){
+	var res = false;
 	if (!IndexData.userInfo || !IndexData.userInfo.listUserFunctionShip){
-		return false;
+		return res;
 	}
 	var functionList = IndexData.userInfo.listUserFunctionShip;
-	if(rightCode){
-		var index = functionList.indexOf(rightCode);
-		if(index < 0){
-			return false;
-		}
+	codes = (codes+'').split('|');	//考虑权限合并的情况
+
+	if(Object.prototype.toString.call(codes) === '[object Array]'){
+		codes.forEach(function(code) {
+			if (functionList.indexOf(code) >= 0) {
+				res = true;
+			}
+		});
 	}
-	return true;
+	return res;
 }
 //权限过滤
 function filterUnAuth(obj) {
@@ -124,9 +128,7 @@ function filterUnAuth(obj) {
 	}
 	var $obj = $(obj);
 	$obj.find(".R-right").each(function(){
-		var right = $(this).data("right");
-		var auth = isAuth(right);
-		if(!auth){
+		if(!isAuth($(this).data("right"))){
 			$(this).remove();
 		}
 	});

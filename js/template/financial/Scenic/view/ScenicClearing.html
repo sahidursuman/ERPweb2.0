@@ -83,7 +83,7 @@
                 <td>{{rs.settlementMoney}}</td>  
                 <td>{{rs.unPayedMoney}}</td>
                 <td><input name="payMoney" type="text" value="{{rs.payMoney}}" class="money" maxlength="9"></td>
-                <td class="col-sm-1" ><input name="payRemark" type="text" value="{{rs.payRemark}}" maxlength="1000"></td>
+                <td class="col-sm-1" ><input name="payRemark" type="text" maxlength="1000"></td>
                 <td>{{if rs.checkTime == null || rs.checkTime == ""}}-{{else}}{{rs.checkTime | dateFormat:'yyyy-MM-dd hh:mm:ss'}}{{/if}}</td>
                 <td>{{if rs.checkUserName == null || rs.checkUserName == ""}}-{{else}}{{rs.checkUserName}}{{/if}}</td>
                 <td style="width:220px">
@@ -110,8 +110,8 @@
             <button class="btn btn-xs btn-primary T-close-clear" style="margin-left:20px">
                 <i class="ace-icon fa fa-times-circle"></i>关闭
             </button>
-            <button class="btn btn-xs btn-primary T-saveClear">
-                <i class="ace-icon fa fa-check-circle"></i>确认
+            <button class="btn btn-xs btn-primary R-right T-saveClear" data-right="1250003">
+                <i class="ace-icon fa fa-check-circle"></i>确认付款
             </button>
         </div>
     </form>

@@ -67,13 +67,13 @@
 				<td>{{rs.needPayMoney}}</td>
 				<td><a class="T-option T-payedDetail" data-money="{{rs.payedMoney + rs.realGuidePayMoney}}">{{"社付："}}{{rs.payedMoney}}{{"，"}}{{"导付："}}{{rs.realGuidePayMoney}}</a></td> 
 				<td>{{if rs.billImages != null && rs.billImages !=""}}<a href="#" class="T-option T-hotelImg" url="{{rs.billImages}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
-				<td><input type="text" name="settlementMoney" value="{{rs.settlementMoney}}" class="money"></td>
+				<td><input type="text" name="settlementMoney" value="{{rs.settlementMoney}}" class="money" {{if rs.isConfirmAccount}} disabled="disabled"{{/if}}></td>
                 <td name="unPayedMoney">{{rs.unPayedMoney}}</td>
-                <td><input type="text" name="checkRemark" value="{{rs.checkRemark}}" style="text-align:center"/></td>
+                <td><input type="text" name="checkRemark" value="{{rs.checkRemark}}" {{if rs.isConfirmAccount}} disabled="disabled" {{/if}}/></td>
 				<td>{{if rs.checkTime == null || rs.checkTime == ""}}-{{else}}{{rs.checkTime | dateFormat:'yyyy-MM-dd hh:mm:ss'}}{{/if}}</td>
                 <td>{{if rs.checkUserName == null || rs.checkUserName == ""}}-{{else}}{{rs.checkUserName}}{{/if}}</td>
 				<td>
-				    <label class="pos-rel">
+				    <label class="pos-rel R-right" {{if rs.isConfirmAccount}} data-right="1250005"{{else}}data-right="1250002"{{/if}}>
 				   	    <input type="checkbox" class="ace T-checkbox" {{if rs.isConfirmAccount == 1}}checked="checked"{{/if}} />
 				   		  <span class="lbl"></span>
 				    </label>
@@ -106,7 +106,7 @@
             <button class="btn btn-xs btn-primary T-close-check">
                 <i class="ace-icon fa fa-times-circle"></i>关闭
             </button>
-            <button class="btn btn-xs btn-primary T-saveCheck" style="margin-left: 20px">
+            <button class="btn btn-xs btn-primary R-right T-saveCheck" style="margin-left: 20px" data-right="1250002|1250005">
                 <i class="ace-icon fa fa-check-circle"></i>确认
             </button>
         </div>

@@ -220,26 +220,31 @@ define(function(require, exports) {
 
     //结算
     scenic.scenicClear = function(isAutoPay,page,scenicId,scenicName,accountInfo,startDate,endDate){
-        if (scenic.$clearSearchArea && arguments.length === 4) {
-            accountInfo = scenic.$clearSearchArea.find("input[name=accountInfo]").val(),
-            startDate = scenic.$clearSearchArea.find("input[name=startDate]").val(),
-            endDate = scenic.$clearSearchArea.find("input[name=endDate]").val()
-        }
-        if(startDate > endDate){
-            showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
-            return false;
-        }
+        if (isAutoPay) {
+            var searchParam = FinancialService.autoPayJson(scenicId,scenic.$clearTab,rule);
+        } else {
+            if (scenic.$clearSearchArea && arguments.length === 4) {
+                accountInfo = scenic.$clearSearchArea.find("input[name=accountInfo]").val(),
+                startDate = scenic.$clearSearchArea.find("input[name=startDate]").val(),
+                endDate = scenic.$clearSearchArea.find("input[name=endDate]").val()
+            }
+            if(startDate > endDate){
+                showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
+                return false;
+            }
 
-        page = page || 0;
-        var searchParam = {
-            pageNo : page,
-            scenicId : scenicId + "",
-            accountInfo : accountInfo,
-            startTime : startDate,
-            endTime : endDate,
-            sortType : "auto"
-        };
-        searchParam = JSON.stringify(searchParam);
+            page = page || 0;
+            var searchParam = {
+                pageNo : page,
+                scenicId : scenicId + "",
+                accountInfo : accountInfo,
+                startTime : startDate,
+                endTime : endDate,
+                sortType : "auto"
+            };
+            searchParam = JSON.stringify(searchParam);
+        }
+        
         $.ajax({
             url:KingServices.build_url("financial/financialScenic","listScenicAccount"),
             type:"POST",
@@ -248,6 +253,16 @@ define(function(require, exports) {
                 var result = showDialog(data);
                 if(result){
                     data.scenicName = scenicName;
+                    if (isAutoPay && scenic.$clearTab) {
+                        scenic.$clearTab.find(".T-clear-auto").toggle();
+                        scenic.$clearTab.find(".T-cancel-auto").toggle();
+                        scenic.$clearTab.data('isEdited', false);
+                        scenic.clearTempData = data.autoPaymentJson;
+                        scenic.clearTempSumDate = {
+                            sumPayMoney : scenic.$clearTab.find('input[name=sumPayMoney]').val(),
+                            sumPayType : scenic.$clearTab.find('select[name=sumPayType]').val()
+                        };
+                    }
 
                     //暂存数据读取
                     if(scenic.clearTempSumDate){
@@ -257,8 +272,8 @@ define(function(require, exports) {
                         data.sumPayMoney = 0;
                         data.sumPayType = 0;
                     }
-                    var resultList = data.financialscenicListData;
-                    data.financialscenicListData = FinancialService.getTempDate(resultList,scenic.clearTempData);
+                    var resultList = data.financialScenicListData;
+                    data.financialScenicListData = FinancialService.getTempDate(data.financialScenicListData,scenic.clearTempData);
                     var html = scenicClearing(data);
                     
                     var validator;
@@ -271,6 +286,7 @@ define(function(require, exports) {
                     if(isAutoPay == 1){
                         scenic.$clearTab.find('input[name=sumPayMoney]').prop("disabled",true);
                         scenic.$clearTab.find(".T-clear-auto").hide(); 
+                        scenic.$clearTab.data('isEdited', !!data.autoPaymentJson.length);
                     } else {
                         scenic.$clearTab.find(".T-cancel-auto").hide();
                     }
@@ -335,6 +351,11 @@ define(function(require, exports) {
 
             var startDate = scenic.$clearTab.find("input[name=startDate]").val(),
                 endDate = scenic.$clearTab.find("input[name=endDate]").val();
+            FinancialService.autoPayConfirm(startDate, endDate, function() {
+                scenic.scenicClear(1,page,id,name);
+            });
+
+            return;
             showConfirmMsg($("#confirm-dialog-message"), "是否按当前账期 " + startDate + " 至 " + endDate + " 下账？",function(){
                 $.ajax({
                     url:KingServices.build_url("financial/financialScenic","listScenicAccount"),

@@ -515,9 +515,9 @@ define(function(require, exports) {
                         if (!!type) {
                             data.list = FinancialService.getTempDate(data.list, FinGuide.payingJson);
 
-                            html = payingTableTemplate(data);
+                            html = filterUnAuth(payingTableTemplate(data));
                         } else {
-                            html = checkingTableTemplate(data);
+                            html = filterUnAuth(checkingTableTemplate(data));
                         }
                         $tab.find('.T-checkList').html(html);
 
