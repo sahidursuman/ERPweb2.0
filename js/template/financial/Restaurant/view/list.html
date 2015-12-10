@@ -15,47 +15,47 @@
         <div class="col-xs-12">
             <table class="table table-striped table-bordered table-hover T-showHighLight">
                 <thead>
-                <tr class="bg-blur">
-                    <th>餐厅</th>
-                    <th>账面应付</th>
-                    <th>结算金额</th>
-                    <th>已付金额</th>
-                    <th>未付金额</th>
-                    <th>对账进度</th>
-                    <th>付款进度</th>
-                    <th>操作</th>
-                </tr>
+                    <tr class="bg-blur">
+                        <th>餐厅</th>
+                        <th>账面应付</th>
+                        <th>结算金额</th>
+                        <th>已付金额</th>
+                        <th>未付金额</th>
+                        <th>对账进度</th>
+                        <th>付款进度</th>
+                        <th>操作</th>
+                    </tr>
                 </thead>
 
                 <tbody class="T-list">
-                {{each financialRestaurantList as rs}}
-                <tr data-id="{{rs.restaurantId}}" data-name="{{rs.restaurantName}}">
-                    <td>{{rs.restaurantName}}</td>
-                    <td>{{rs.sumNeedPayMoney}}</td>
-                    <td>{{rs.sumSettlementMoney}}</td>
-                    <td>{{rs.sumPayedMoney}}</td>
-                    <td><span {{if rs.sumUnPayedMoney != 0}}style="color:red"{{/if}}>{{rs.sumUnPayedMoney}}</span></td>
-                    <td>{{if rs.allCheckCount != rs.checkedCount}}
-	                        <span style="color:#ff9900"> {{rs.checkedCount}}{{"/"}}{{rs.allCheckCount}}</span>
-	                    {{/if}}
-	                    {{if rs.allCheckCount == rs.checkedCount}}
-	                        <span style="color:green"> {{rs.checkedCount}}{{"/"}}{{rs.allCheckCount}}</span>
-	                    {{/if}}
-                    </td>
-                    <td>{{if rs.allPayCount != rs.payedCount}}
-                            <span style="color:#ff9900"> {{rs.payedCount}}{{"/"}}{{rs.allPayCount}}</span>
-                        {{/if}}
-                        {{if rs.allPayCount == rs.payedCount}}
-                            <span style="color:green"> {{rs.payedCount}}{{"/"}}{{rs.allPayCount}}</span>
-                        {{/if}}
-                    </td>
-                    <td>
-                        <a class="cursor T-option T-check R-right" data-right="1240002">对账</a>
-                        <label class="cursor R-right" data-right="1240002"><a class="R-right" data-right="1240003"> |</a></label>
-                        <a class="cursor T-option T-clear R-right" data-right="1240003">付款</a>
-                    </td>
-                </tr>
-                {{/each}}
+                    {{each financialRestaurantList as rs}}
+                    <tr data-id="{{rs.restaurantId}}" data-name="{{rs.restaurantName}}">
+                        <td>{{rs.restaurantName}}</td>
+                        <td>{{rs.sumNeedPayMoney}}</td>
+                        <td>{{rs.sumSettlementMoney}}</td>
+                        <td>{{rs.sumPayedMoney}}</td>
+                        <td><span {{if rs.sumUnPayedMoney != 0}}style="color:red"{{/if}}>{{rs.sumUnPayedMoney}}</span></td>
+                        <td>{{if rs.allCheckCount != rs.checkedCount}}
+    	                        <span style="color:#ff9900"> {{rs.checkedCount}}{{"/"}}{{rs.allCheckCount}}</span>
+    	                    {{/if}}
+    	                    {{if rs.allCheckCount == rs.checkedCount}}
+    	                        <span style="color:green"> {{rs.checkedCount}}{{"/"}}{{rs.allCheckCount}}</span>
+    	                    {{/if}}
+                        </td>
+                        <td>{{if rs.allPayCount != rs.payedCount}}
+                                <span style="color:#ff9900"> {{rs.payedCount}}{{"/"}}{{rs.allPayCount}}</span>
+                            {{/if}}
+                            {{if rs.allPayCount == rs.payedCount}}
+                                <span style="color:green"> {{rs.payedCount}}{{"/"}}{{rs.allPayCount}}</span>
+                            {{/if}}
+                        </td>
+                        <td>
+                            <a class="cursor T-option T-check R-right" data-right="1240002|1240005">对账</a>
+                            <label class="cursor R-right" data-right="1240002"><a class="R-right" data-right="1240003"> |</a></label>
+                            <a class="cursor T-option T-clear R-right" data-right="1240003">付款</a>
+                        </td>
+                    </tr>
+                    {{/each}}
                 </tbody>
             </table>
             <div class="row pageMode">

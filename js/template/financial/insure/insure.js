@@ -265,7 +265,7 @@ define(function(require, exports) {
                         if(isAutoPay == 1){
                             Insure.$clearTab.data('isEdited',true);
                         } else if(isAutoPay == 2){
-                            Insure.$clearTab.find(".T-cancel--auto").hide();
+                            Insure.$clearTab.find(".T-cancel-auto").hide();
                         }
                     }
 
@@ -526,15 +526,20 @@ define(function(require, exports) {
 
         var argumentsLen = arguments.length,
             clearSaveJson = FinancialService.clearSaveJson(Insure.$clearTab,Insure.clearTempData,rule);
+        var searchParam = {
+            sumCurrentPayMoney : Insure.$clearTab.find('input[name=sumPayMoney]').val(),
+            payType : Insure.$clearTab.find('select[name=sumPayType]').val(),
+            payRemark : Insure.$clearTab.find('input[name=sumPayRemark]').val()
+        };
 
         clearSaveJson = JSON.stringify(clearSaveJson);
+        searchParam = JSON.stringify(searchParam);
         $.ajax({
             url:KingServices.build_url("account/insuranceFinancial","saveAccountSettlement"),
             type:"POST",
             data:{
                 insuranceJson : clearSaveJson,
-                payType : Insure.$clearTab.find('select[name=sumPayType]').val(),
-                payRemark : Insure.$clearTab.find('input[name=sumPayRemark]').val()
+                searchParam : searchParam
             },
             success:function(data){
                 var result = showDialog(data);
@@ -575,6 +580,7 @@ define(function(require, exports) {
                     Insure.initCheck(page,id,name);
                 } else if(option == "clear"){
                     Insure.initClear(page,id,name);
+                    Insure.$clearTab.find(".T-cancel-auto").hide();
                 }
 			})
             // 监听保存，并切换tab
@@ -636,7 +642,7 @@ define(function(require, exports) {
             event.preventDefault();
             var $that = $(this),
                 id = $that.closest('tr').data('id');
-            if ($that.hasClass('T-restaurantImg')) {
+            if ($that.hasClass('T-insuranceImg')) {
                 // 查看单据
                 var WEB_IMG_URL_BIG = $tab.find("input[name=WEB_IMG_URL_BIG]").val();//大图
                 var WEB_IMG_URL_SMALL = $tab.find("input[name=WEB_IMG_URL_SMALL]").val();//大图
