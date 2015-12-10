@@ -32,7 +32,7 @@
 								<div class="form-group">
 									<label class="col-sm-1 control-label no-padding-right">车座数：</label>
 									<div class="col-sm-2">
-										<input class="col-sm-12 bind-change T-chooseSeatCount" type="text" name="seatCount" id="" value="{{if addTripPlan.bus != null}}{{addTripPlan.bus.seatCount}}{{/if}}" />
+										<input class="col-sm-12 bind-change T-chooseSeatCount" type="text" name="seatCount" id="" value="{{if addTripPlan.bus != null}}{{ if addTripPlan.bus.seatCount!=0}}{{addTripPlan.bus.seatCount}}{{/if}}{{/if}}" />
 									</div>
 									<label class="col-sm-1 control-label no-padding-right">车辆品牌：</label>
 									<div class="col-sm-2">

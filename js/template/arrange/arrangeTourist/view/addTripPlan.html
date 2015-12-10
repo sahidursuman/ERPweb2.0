@@ -35,7 +35,7 @@
 									{{if addTripPlan.quoteId!=null}}
 										<label class="col-sm-1 control-label no-padding-right">车座数：</label>
 										<div class="col-sm-2">
-											<input class="col-sm-12" type="text" name="seatCount" id="" value="{{if addTripPlan.busCompanyArrange != null}}{{addTripPlan.busCompanyArrange.needSeatCount}}{{/if}}" readonly="readonly" />
+											<input class="col-sm-12" type="text" name="seatCount" id="" value="{{if addTripPlan.busCompanyArrange != null}}{{if addTripPlan.busCompanyArrange.needSeatCount!=0}}{{addTripPlan.busCompanyArrange.needSeatCount}}{{/if}}{{/if}}" readonly="readonly" />
 										</div>
 										<label class="col-sm-1 control-label no-padding-right">车辆品牌：</label>
 										<div class="col-sm-2">
