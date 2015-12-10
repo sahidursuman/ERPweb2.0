@@ -470,8 +470,10 @@ define(function(require, exports) {
 				var $that = $(this),$dvi = $that.closest('div.T-checkBox'),$is_ImChecked = $that.is(':checked');
 				    if ( $is_ImChecked ) {
 				    	$dvi.find('.T-To-TimeChecked').addClass('hide');
+				    	$dvi.find('.fa-exclamation').addClass('hide');
 				    } else{
                         $dvi.find('.T-To-TimeChecked').removeClass('hide');
+                        $dvi.find('.fa-exclamation').removeClass('hide');
 				    };
 			});
 
@@ -550,8 +552,10 @@ define(function(require, exports) {
 				var $that = $(this),$dvi = $that.closest('div.T-checkBox'),$is_ImChecked = $that.is(':checked');
 				    if ( $is_ImChecked ) {
 				    	$dvi.find('.T-To-TimeChecked').addClass('hide');
+				    	$dvi.find('.fa-exclamation').addClass('hide');
 				    } else{
                         $dvi.find('.T-To-TimeChecked').removeClass('hide');
+                        $dvi.find('.fa-exclamation').removeClass('hide');
 				    };
 			});
 			$addMergeAddTr.find('.T-checkBox').find('.T-timeChecked').off().on('click', function(event) {
@@ -761,8 +765,10 @@ define(function(require, exports) {
 				var $that = $(this),$dvi = $that.closest('div.T-checkBox'),$is_ImChecked = $that.is(':checked');
 				    if ( $is_ImChecked ) {
 				    	$dvi.find('.T-To-TimeChecked').addClass('hide');
+				    	$dvi.find('.fa-exclamation').addClass('hide');
 				    } else{
                         $dvi.find('.T-To-TimeChecked').removeClass('hide');
+                        $dvi.find('.fa-exclamation').removeClass('hide');
 				    };
 			});
 
