@@ -9,9 +9,9 @@
                 </div>
                 <div class="form-group input-daterange marginLeft-30">
                     <label>账期：</label>
-                    <input type="text" class="form-control datepicker T-search-start-date" value="{{startDate}}">
+                    <input type="text" class="form-control datepicker T-search-start-date" style="width:100px;" value="{{startDate}}">
                     <label>&nbsp;至&nbsp;</label>
-                    <input type="text" class="form-control datepicker T-search-end-date" value="{{endDate}}">
+                    <input type="text" class="form-control datepicker T-search-end-date" style="width:100px;" value="{{endDate}}">
                 </div>
                 <div class="form-group marginLeft-30">
                     <label>团号：</label>
@@ -28,7 +28,7 @@
                 </div>
             </form>
         </div>
-        <form class="form-horizontal" role="form" onsubmit="return false">
+        <form class="form-horizontal T-auto-fill-area" role="form" onsubmit="return false">
             <div class="form-group col-sm-12">
                 <label class=" control-label">账面应付合计：{{sumData.sumZhangmiantuibu}}</label>
                 <label class=" control-label marginLeft-30">结算金额合计：<span class="T-stMoney">{{sumData.sumSettlementMoney}}</span></label>
@@ -100,7 +100,7 @@
             <button class="btn btn-xs btn-primary T-btn-close">
                 <i class="ace-icon fa fa-times-circle"></i> 关闭
             </button>
-            <button class="btn btn-xs btn-primary T-btn-save" style="margin-left:20px" data-id={{id}} data-type="{{type}}" data-name="{{guideName}}">
+            <button class="btn btn-xs btn-primary R-right T-btn-save" style="margin-left:20px" data-id={{id}} data-type="{{type}}" data-name="{{guideName}}" data-right="1200003">
                 <i class="ace-icon fa fa-check-circle"></i> 确认付款
             </button>
         </div>

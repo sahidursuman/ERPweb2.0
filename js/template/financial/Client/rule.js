@@ -1,59 +1,30 @@
 define(function(require, exports) {
 	var rule = {
 		check:function($obj){
+			var rule = [{
+    	    	    	   type:'null',
+    	    	    	   errMsg:'返款不能为空'
+    	    	       }];
 
-			var validator = $obj.formValidate([
-	    	    {	//未收对账
-	    	    	$ele: $obj.find('input[name=unIncomeMoney]'),
-	    	    	rules: [
-	    	    	        {
-	    	    	        	type: 'null', 
-	    	    	        	errMsg: '不能为空'
-	    	    	        },
-	    	    	        {
+			// 财务收款可以输入负数    	    	       
+	       	if ($obj.find('.T-btn-save').data('type')) {
+	       		rule.push({
 	    	    	        	type: 'float',
 	    	    	        	errMsg: '请输入数字'
-	    	    	        }
-		    	        ]
-	    	    },
-	    	    
+	    	    	        });
+	       	} else {
+   		   		rule.push({
+   			    	        	type: 'nonnegative-float',
+   			    	        	errMsg: '请输入非负数'
+   			    	        });
+	       	}
+
+
+			return $obj.formValidate([
 	    	    {
-	    	    	//返款
-	    	    	$ele: $obj.find('input[name="T-refund"]'),
-	    	    	rules:[
-	    	    	       {
-	    	    	    	   type:'null',
-	    	    	    	   errMsg:'返款不能为空'
-	    	    	       },
-	    	    	       {
-	    	    	        	type: 'float',
-	    	    	        	errMsg: '请输入数字'
-	    	    	        }
-	    	    	       ]	
-	    	    },
-	    	    
-	    	    
-	    	    
-	    	    {//付款金额
-	    	    	$ele: $obj.find('input[name=ClientClear_payMoney]'),
-	    	    	
-	    	    	rules:[
-	    	    	       
-	    	    	       {
-	    	    	    	   type:'null',
-	    	    	    	   errMsg:'金额不能为空'   
-	    	    	       },
-	    	    	       
-	    	    	       {
-	    	    	    	   type: 'float',
-	    	    	        	errMsg: '请输入数字'   
-	    	    	       }
-	    	    	       
-	    	    	       ]
-	    	    }
-                ]);
-			
-			return validator;
+	    	    	$ele: $obj.find('.money'),
+	    	    	rules:rule	
+	    	    }]);
 		}
 	}
 	return rule;

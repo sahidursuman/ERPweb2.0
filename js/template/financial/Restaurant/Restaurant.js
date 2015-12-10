@@ -289,8 +289,8 @@ define(function(require, exports) {
                             if (!first) { 
                                 var tempJson = FinancialService.clearSaveJson(restaurant.$clearTab,restaurant.clearTempData,rule);
                                 restaurant.clearTempData = tempJson;
-                                var sumPayMoney = parseInt(restaurant.$clearTab.find('input[name=sumPayMoney]').val()),
-                                    sumPayType = parseInt(restaurant.$clearTab.find('select[name=sumPayType]').val()),
+                                var sumPayMoney = parseFloat(restaurant.$clearTab.find('input[name=sumPayMoney]').val()),
+                                    sumPayType = parseFloat(restaurant.$clearTab.find('select[name=sumPayType]').val()),
                                     sumPayRemark = restaurant.$clearTab.find('input[name=sumPayRemark]').val();
                                 restaurant.clearTempSumDate = {
                                     sumPayMoney : sumPayMoney,
@@ -318,6 +318,7 @@ define(function(require, exports) {
         restaurant.$clearTab.find(".T-search").click(function(){
             restaurant.clearTempSumDate = false;
             restaurant.clearTempData = false;
+            restaurant.$clearTab.data('isEdited',false);
             restaurant.restaurantClear(0,0,id,name);
         });
 
@@ -341,8 +342,8 @@ define(function(require, exports) {
 
             var startDate = restaurant.$clearTab.find("input[name=startDate]").val(),
                 endDate = restaurant.$clearTab.find("input[name=endDate]").val(),
-                sumPayMoney = parseInt(restaurant.$clearTab.find('input[name=sumPayMoney]').val()),
-                sumPayType = parseInt(restaurant.$clearTab.find('select[name=sumPayType]').val()),
+                sumPayMoney = parseFloat(restaurant.$clearTab.find('input[name=sumPayMoney]').val()),
+                sumPayType = parseFloat(restaurant.$clearTab.find('select[name=sumPayType]').val()),
                 sumPayRemark = restaurant.$clearTab.find('input[name=sumPayRemark]').val();
             var searchParam = {
                 restaurantId : id,
@@ -354,7 +355,7 @@ define(function(require, exports) {
                 isAutoPay : 1
             };
             searchParam = JSON.stringify(searchParam);
-            showConfirmMsg($("#confirm-dialog-message"),"是否按当前账期 " + startDate + " 至 " + endDate + " 下账？",function(){
+            FinancialService.autoPayConfirm(startDate,endDate,function(){
                 $.ajax({
                     url:KingServices.build_url("account/arrangeRestaurantFinancial","listRestaurantAccount"),
                     type:"POST",
@@ -382,6 +383,7 @@ define(function(require, exports) {
             restaurant.$clearTab.find(".T-clear-auto").toggle();
             restaurant.clearTempSumDate = false;
             restaurant.clearTempData = false;
+            restaurant.$clearTab.data('isEdited',false);
             restaurant.restaurantClear(0,0,id,name);
         });
 

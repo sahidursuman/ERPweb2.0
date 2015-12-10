@@ -2,7 +2,7 @@
     <form class="form-inline" role="form" onsubmit="return false" style="padding-top: 10px;">
         <div class="form-group">
             <label class="control-label">客户：</label>
-            <label class="control-label">{{partnerAgencyName}}</label>
+            <label class="control-label T-partnerAgencyName">{{partnerAgencyName}}</label>
         </div>
         <div class="form-group marginLeft-30">
             <label class="control-label">账期：</label>
@@ -55,9 +55,10 @@
         <div class="form-group">
             <label class="control-label">本次收款金额合计：</label>
             <label class="control-label">
-                <input type="text" style="width:70px;" class="T-sumReciveMoney">
+                <input type="text" class="T-sumReciveMoney money"  {{if type}}disabled {{/if}}>
             </label>
         </div>
+
         <div class="form-group marginLeft-30">
             <label class="control-label">收款方式：</label>
             <select class="form-control T-sumPayType" name="payType">
@@ -74,9 +75,11 @@
                 <input type="text" class="T-sumRemark">
             </label>
         </div>
+        {{if !type}} 
         <div class="form-group marginLeft-30">
-            <button class="btn-sm search-btn T-btn-auto-accounts">自动下账</button>
+            <button class="btn btn-xs btn-primary marginLeft-30 T-btn-autofill"><i class="ace-icon fa fa-check-circle"></i> 自动下账</button>
         </div>
+        {{/if}}
     </div>
 </div>
 <div class="row" style="margin-top: 30px">
@@ -178,7 +181,7 @@
             <button class="btn btn-xs btn-primary T-btn-close">
                 <i class="ace-icon fa fa-times-circle"></i> 关闭
             </button>
-            <button class="btn btn-xs btn-primary T-btn-save" style="margin-left: 20px">
+            <button class="btn btn-xs btn-primary T-btn-save" data-right="1280003" data-type="{{type}}" data-id={{partnerAgencyId}} style="margin-left: 20px">
                 <i class="ace-icon fa fa-check-circle"></i> 确认收款
             </button>
         </div>

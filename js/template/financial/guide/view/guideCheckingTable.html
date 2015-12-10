@@ -12,20 +12,20 @@
     <td>{{guide.selfPayRebateMoney}}</td>
     <td>{{guide.guideIncomeMoney}}</td>
     <td>{{guide.zhangmiantuibu}}</td>
-    <td>{{if guide.isConfirmAccount}} {{guide.settlementMoney}} {{ else }} <input name="settlementMoney" type="text" class="T-settlementMoney" value="{{guide.settlementMoney}}"> {{/if}}</td>
+    <td><input name="settlementMoney" type="text" class="T-settlementMoney" value="{{guide.settlementMoney}}" {{if guide.isConfirmAccount}} disabled="disabled"{{/if}}> </td>
     <td class="T-payedDetail" data-money="{{guide.payedMoney}}">{{ if (guide.payedMoney > 0)}}<a href="javascript:void(0);" class="T-action T-viewPayedMoney">{{guide.payedMoney}}</a>{{else}} {{guide.payedMoney}} {{/if}}</td>
     <td name="unPayedMoney">{{guide.unPayedMoney}}</td>
-    <td>{{if guide.isConfirmAccount}} {{guide.checkRemark}} {{ else }} <input type="text" class="T-checkRemark" name="checkRemark" value="{{guide.checkRemark}}"> {{/if}}</td>
+    <td><input type="text" class="T-checkRemark" name="checkRemark" value="{{guide.checkRemark}}"  {{if guide.isConfirmAccount}} disabled="disabled"{{/if}}></td>
     <td>{{guide.checkTime}}</td>
     <td>{{guide.checkRealName}}</td>
     <td>
-        <label class="pos-rel  R-right" data-right="1290002">
+        <label class="pos-rel  R-right" {{ if guide.isConfirmAccount }} data-right="1200005" {{else}} data-right="1200002" {{/if}}>
             <input type="checkbox" class="ace T-checkbox" {{ if guide.isConfirmAccount }} checked="checked" {{/if}}/> 
             <span class="lbl"></span>
         </label>
-        {{ if guide.isConfirmAccount }}
-        <label class="cursor R-right" data-right="1290002"> <a class="R-right" data-right="1290003"> |</a></label>
-        <a class="cursor T-action T-view R-right" data-right="1290003">查看</a>
+        {{if guide.isConfirmAccount }}
+        <label class="cursor R-right"  {{ if guide.isConfirmAccount }} data-right="1200005" {{else}} data-right="1200002" {{/if}}> <a class="R-right" data-right="1200003"> |</a></label>
+        <a class="cursor T-action T-view R-right" data-right="1200003">查看</a>
         {{/if}}
     </td>
 </tr>

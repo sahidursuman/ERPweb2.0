@@ -1,82 +1,71 @@
-<div class="row Scenic scenicMain globalAdd">
-   <div class="form-horizontal search-area">    
-        <div class="form-group" >      
-          <label class="control-label pull-left" style="margin-left: 15px">景区：</label>
-                <select  class="col-xs-12" name="scenicId" style="width: 220px">
-                    <option value ="">全部</option>
-                    {{each scenicNameListNew as scenic index}}
-						<option value="{{scenic.id}}" {{if searchParam.scenicId == scenic.id}}selected="selected"{{/if}}>{{scenic.name}}</option>
-					{{/each}}
-                </select>        
-                <label class="control-label pull-left marginLeft-30" >账期：</label>
-				<select class="col-sm-1" name="year" >
-					{{each yearList as year index}}
-						<option value="{{year.value}}" {{if searchParam.year == year.value}}selected="selected"{{/if}}>{{year.value}}</option>
-					{{/each}}
-				</select>
-				<select class="col-sm-1 marginLeft-30" name="month" >
-				    <option value ="">全部</option>
-					{{each monthList as month index}}
-						<option value="{{month.value}}" {{if searchParam.month == month.value}}selected="selected"{{/if}}>{{month.value}}</option>
-					{{/each}}
-				</select>
-            <button class=" btn-sm search-btn btn-scenic-search marginLeft-30"> <i class="ace-icon fa fa-search"></i> 搜索 </button> </div>
-    </div>
-    <div class="row ticketList">
+<div class="row" >
+    <form class="form-inline T-search-area" role="form" onsubmit="return false">
+        <div class="form-group">
+            <label>景区：</label>
+            <input type="text" class="form-control T-chooseScenic"  name="scenicName" style="width: 220px;" value="{{searchParam.scenicName}}" maxlength="100">
+            <input type="hidden" name="scenicId" value="{{searchParam.scenicId}}" />  
+        </div>
+        <div class="form-group input-daterange marginLeft-30">
+            <label>账期：</label>
+            <input type="text"  name="startDate" class="form-control datepicker" name="startDate" style="width:100px;" value="{{searchParam.startTime}}">
+            <label>&nbsp;至&nbsp;</label>
+            <input type="text" class="form-control datepicker" name="endDate" style="width:100px;" value="{{searchParam.endTime}}">
+        </div>
+        <div class="form-group marginLeft-30">
+            <button class="btn-sm search-btn  T-search">
+                <i class="ace-icon fa fa-search"></i> 搜索 
+            </button>
+        </div>
+    </form>
+    <div class="row hotelaurantList">
         <div class="col-xs-12">
             <table class="table table-striped table-bordered table-hover T-showHighLight">
                 <thead>
-                <tr class="bg-blur">
-                    <th  class="col-sm-1">景区</th>
-                    <th >总账面应付</th>
-                    <th >总实际应付</th>
-                    <th >总实际已付</th>
-                    <th >总账面未付</th>
-                    <th >总实际未付</th>
-                    <th >对账进度</th>
-                    <th >操作</th>
-                </tr>
+                    <tr class="bg-blur">
+                        <th>酒店</th>
+                        <th>账面应付</th>
+                        <th>结算金额</th>
+                        <th>已付金额</th>
+                        <th>未付金额</th>
+                        <th>对账进度</th>
+                        <th>付款进度</th>
+                        <th>操作</th>
+                    </tr>
                 </thead>
-
-                <tbody>
-                {{each financialScenicList as rs}}
-                <tr data-entity-id="{{rs.scenicId}}">
-                    <td>{{rs.scenicName}}</td>
-                    <td>{{rs.sumNeedPayMoney}}</td>
-                    <td>{{rs.sumRealNeedPayMoney}}</td>
-                    <td>{{rs.sumRealPayedMoney}}</td>
-                    <td>{{rs.sumUnPayedMoney}}</td>
-                    <td><span style="color:red">{{rs.sumRealUnPayedMoney}}</span></td>
-                    <td>
-	                    {{if rs.allCount != rs.checkedCount}}
-		                      <span style="color:#ff9900">{{rs.checkedCount}}{{"/"}}{{rs.allCount}}</span>
-		                {{/if}}
-	                    {{if rs.allCount == rs.checkedCount}}
-	                      	<span style="color:green"> {{rs.checkedCount}}{{"/"}}{{rs.allCount}}</span>
-	                    {{/if}}
-                   </td>
-                    <td>  
-                        <a data-entity-id="{{rs.scenicId}}" data-entity-scenicName="{{rs.scenicName}}" data-entity-year="{{searchParam.year}}" data-entity-month="{{searchParam.month}}" class="cursor R-right btn-scenic-Check" data-right="1250002">
-                            	对账
-                        </a>
-                        <label class="cursor R-right" data-right="1250002"><a class="R-right" data-right="1250003"> |</a></label>
-                        <a data-entity-id="{{rs.scenicId}}" data-entity-scenicName="{{rs.scenicName}}" data-entity-year="{{searchParam.year}}"
-                                {{if searchParam.month == ""}}
-                                 	 data-entity-startMonth=1 data-entity-endMonth=12 
-                                  {{else}}
-                                 	 data-entity-startMonth="{{searchParam.month}}" data-entity-endMonth="{{searchParam.month}}" 
-                                {{/if}}
-                        		class="cursor R-right btn-scenic-balance" data-right="1250003">
-                           		 结算
-                        </a>
-                    </td>
-                </tr>
-                {{/each}}
+                <tbody class="T-list">
+                    {{each financialScenicList as rs}}
+                    <tr data-id="{{rs.scenicId}}" data-name="{{rs.scenicName}}">
+                        <td>{{rs.scenicName}}</td>
+                        <td>{{rs.sumNeedPayMoney}}</td>
+                        <td>{{rs.sumSettlementMoney}}</td>
+                        <td>{{rs.sumPayedMoney}}</td>
+                        <td>{{rs.sumUnPayedMoney}}</td>
+                        <td>{{if rs.allCheckCount != rs.checkedCount}}
+                                <span style="color:#ff9900"> {{rs.checkedCount}}{{"/"}}{{rs.allCheckCount}}</span>
+                            {{/if}}
+                            {{if rs.allCheckCount == rs.checkedCount}}
+                                <span style="color:green"> {{rs.checkedCount}}{{"/"}}{{rs.allCheckCount}}</span>
+                            {{/if}}
+                        </td>
+                        <td>{{if rs.allPayCount != rs.payedCount}}
+                                <span style="color:#ff9900"> {{rs.payedCount}}{{"/"}}{{rs.allPayCount}}</span>
+                            {{/if}}
+                            {{if rs.allPayCount == rs.payedCount}}
+                                <span style="color:green"> {{rs.payedCount}}{{"/"}}{{rs.allPayCount}}</span>
+                            {{/if}}
+                        </td>
+                        <td>
+                            <a class="cursor T-option T-check R-right" data-right="1250002|1250005">对账</a>
+                            <label class="cursor R-right" data-right="1250002|1250005"><a class="R-right" data-right="1250003"> |</a></label>
+                            <a class="cursor R-right T-option T-clear" data-right="1250003">付款</a>
+                        </td>
+                    </tr>
+                    {{/each}}
                 </tbody>
             </table>
             <div class="row pageMode">
                 <div class="col-xs-6">
-                    <small>共计 {{recordSize}} 条记录</small>
+                    <small>共计 {{searchParam.recordSize}} 条记录</small>
                 </div>
                 <div class="col-xs-6">
                     <div class="dataTables_paginate paging_simple_numbers T-pagenation">
