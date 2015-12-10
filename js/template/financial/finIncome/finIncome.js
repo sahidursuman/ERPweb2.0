@@ -89,7 +89,7 @@ define(function(require, exports) {
 				resArgs.fromPartnerAgencyName = args.name;
 				break;
 			case 1:  //内转转入
-				options.url = KingServices.build_url('financial/innerTransferAccount', 'listPager');
+				options.url = KingServices.build_url('account/innerTransferIn', 'listInnerTransferIncome');
 				break;
 			case 2:  //购物账务
 				options.url = KingServices.build_url('', 'listPager');
@@ -127,7 +127,7 @@ define(function(require, exports) {
 					}
 
 					data.totalPage = data.searchParam.totalPage;
-					data.totalCount = data.searchParam.totalCount;
+					data.totalCount = data.searchParam.recordSize;
 					break;
 				case 1:  //内转转入
 					break;

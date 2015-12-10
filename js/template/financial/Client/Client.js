@@ -503,17 +503,19 @@ define(function(require, exports) {
             }
         });
 
-        var validator = rule.check($tab);
+        var validator = rule.check($tab), autoValidator = rule.autoFillCheck(Client.$clearSearchArea);
         // 自动下账
         $tab.find('.T-btn-autofill').on('click', function(event) {
             event.preventDefault();
             var $that = $(this);
 
             if ($that.hasClass('btn-primary')) {
-                if (validator.form()) {
+                if (autoValidator.form()) {
                     Client.autoFillData($tab);
                 }
             } else {
+                Client.clearDataArray = [];
+                $tab.data('isEdited', false);
                 Client.setAutoFillEdit($tab, false);
             }
         });
@@ -549,19 +551,47 @@ define(function(require, exports) {
     Client.autoFillData = function($tab) {
         if(!!$tab && $tab.length){
             var args = getBaseArgs($tab);
-            args.partnerAgencyId = $tab.data('id');
-            args.sumTemporaryIncomeMoney = $tab.find('.T-sumReciveMoney').val();
+            FinancialService.autoPayConfirm(args.startTime, args.endTime, function() {
+                args.partnerAgencyId = $tab.data('id');
+                args.sumTemporaryIncomeMoney = $tab.find('.T-sumReciveMoney').val();
 
-            $.ajax({
-                url: KingServices.build_url('financial/customerAccount', 'autoCustomerAccount'),
-                type: 'post',
-                data: args,
+                $.ajax({
+                    url: KingServices.build_url('financial/customerAccount', 'autoCustomerAccount'),
+                    type: 'post',
+                    data: args,
+                })
+                .done(function(data) {
+                    if (showDialog(data)) {
+                        Client.clearDataArray = data.customerAccountList;
+                        $tab.find('.T-sumReciveMoney').val(data.realAutoPayMoney || 0);
+                        var len = Client.clearDataArray.length;
+
+                        $tab.find('.T-list').children('tr:nth-child(2n+1)').each(function() {
+                            var $tr = $(this),
+                                gid = $tr.data('gid'),
+                                $receive = $tr.find('.T-reciveMoney'),
+                                hasData = false;
+
+                            for (var i = 0, tmp;i < len; i ++) {
+                                tmp = Client.clearDataArray[i];
+
+                                if (tmp.touristGroupId === gid) {
+                                    hasData = true;
+                                    $receive.val(tmp.temporaryIncomeMoney).trigger('change');
+                                    return true;
+                                }
+                            }
+
+                            if (!hasData) {
+                                $receive.val('');
+                                $tr.data('change', false);
+                            }
+                        })
+
+                        Client.setAutoFillEdit($tab, true);
+                    }
+                });
             })
-            .done(function(data) {
-                if (showDialog(data)) {
-                    Client.clearDataArray = data.customerAccountList;
-                }
-            });
         }
     };
 
@@ -571,14 +601,16 @@ define(function(require, exports) {
      * @param {boolean} disable true: 禁用，false：启用
      */
     Client.setAutoFillEdit = function($tab, disable) {
-        var $sum = $tab.find('input[name="sumPayMoney"]').prop('disabled', disable);
+        var $sum = $tab.find('.T-sumReciveMoney').prop('disabled', disable);
         if (!disable) {
             $sum.val(0);
         }
 
         $tab.find('.T-btn-autofill').html(disable ? '<i class="ace-icon fa fa-times"></i> 取消下账' : '<i class="ace-icon fa fa-check-circle"></i> 自动下账').toggleClass('btn-primary btn-warning');;
 
-        Client.ClientClear(0, false, $tab);
+        if (!disable) {
+            Client.ClientClear(0, false, $tab);
+        }
 
     };
     /**

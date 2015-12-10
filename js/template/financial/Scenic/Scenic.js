@@ -281,7 +281,7 @@ define(function(require, exports) {
                     if (Tools.addTab(menuKey + "-clearing", "景区付款", html)) {
                         scenic.initClear(page,scenicId,scenicName); 
                         validator = rule.check(scenic.$clearTab.find('.T-clearList'));  
-                                             
+
                         if(isAutoPay == 1){
                             scenic.$clearTab.find('input[name=sumPayMoney]').prop("disabled",true);
                             scenic.$clearTab.find(".T-clear-auto").hide(); 
@@ -356,31 +356,6 @@ define(function(require, exports) {
                 endDate = scenic.$clearTab.find("input[name=endDate]").val();
             FinancialService.autoPayConfirm(startDate, endDate, function() {
                 scenic.scenicClear(1,page,id,name);
-            });
-
-            return;
-            showConfirmMsg($("#confirm-dialog-message"), "是否按当前账期 " + startDate + " 至 " + endDate + " 下账？",function(){
-                $.ajax({
-                    url:KingServices.build_url("financial/financialScenic","listScenicAccount"),
-                    type:"POST",
-                    data:{ searchParam : autoPayJson },
-                    success:function(data){
-                        var result = showDialog(data);
-                        if(result){
-                            showMessageDialog($("#confirm-dialog-message"),"自动下账成功！",function(){
-                                scenic.$clearTab.find(".T-clear-auto").toggle();
-                                scenic.$clearTab.find(".T-cancel-auto").toggle();
-                                scenic.$clearTab.data('isEdited',false);
-                                scenic.clearTempData = data.autoPaymentJson;
-                                scenic.clearTempSumDate = {
-                                    sumPayMoney : scenic.$clearTab.find('input[name=sumPayMoney]').val(),
-                                    sumPayType : scenic.$clearTab.find('select[name=sumPayType]').val()
-                                };
-                                scenic.scenicClear(1,page,id,name);
-                            });
-                        }
-                    }
-                });
             });
         });
 
