@@ -317,11 +317,11 @@ define(function(require, exports) {
 		var html = '<tr><td><input name="name" class="col-sm-12" type="text" style="min-width:100px;" maxlength="100"/></td>'+
 			'<td><select class="col-sm-12" name="customerType" style="min-width:100px;"><option value="0">散客</option><option value="1">团体</option></select></td>'+
 			'<td><div class="col-sm-12 no-padding"><label class="col-sm-10">日常价格</label><label class="priceArea col-sm-2" style="padding-top:0px;"><button class="btn btn-success btn-sm btn-white T-add"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button></label></div></td>'+
-			'<td><div class="col-sm-12 no-padding"><input data-index="'+(index)+'" name="normalInnerPrice" class="col-sm-12 contractPrice" type="text" maxlength="10"/></div></td>'+
-			'<td><div class="col-sm-12 no-padding"><input data-index="'+(index)+'" name="customerRebateMoney" class="col-sm-12 customerRebateMoney" type="text" maxlength="10"/></div></td>'+
 			'<td><div class="col-sm-12 no-padding"><input data-index="'+(index)+'" name="normalMarketPrice" class="col-sm-12 marketPrice" type="text" maxlength="10"/></div></td>'+
+			'<td><div class="col-sm-12 no-padding"><input data-index="0" name="customerRebateMoney" class="col-sm-12 customerRebateMoney" type="text" maxlength="10"/></div></td>'+
+			'<td><div class="col-sm-12 no-padding"><input data-index="'+(index)+'" name="normalInnerPrice" class="col-sm-12 contractPrice" type="text" maxlength="10"/></div></td>'+
 			'<td><div class="col-sm-12 no-padding"><input data-index="'+(index)+'" name="normalGuideRate" class="col-sm-12 guideRate" type="text" maxlength="5"/></div></td>'+
-			'<td><div class="col-sm-12 no-padding"><input data-index="'+(index)+'" name="normalTravelAgencyRate" class="col-sm-12 travelAgencyRate" type="text" maxlength="5" readonly="readonly" /></div></td>'+
+			'<td><div class="col-sm-12 no-padding"><input data-index="'+(index)+'" name="normalTravelAgencyRate" class="col-sm-12 travelAgencyRate" type="text" maxlength="5"/></div></td>'+
 			'<td><input name="remark" type="text" class="col-sm-12" style="min-width:100px;" maxlength="1000"/></div></td>'+
 			'<td style="width:70px"><a class="T-btn-price-delete">删除</a></td></tr>';
 		$tbody.append(html);
@@ -415,13 +415,12 @@ define(function(require, exports) {
 	 * @param {[type]} $this [对象]
 	 */
 	selfpay.addTimeArea = function($this,$tbody){
-	 var $parents = $this.closest('tr'), td = $parents.find("td"),index = td.find('div').length;
-		td.eq(2).append('<div class="col-sm-12 no-padding T-dateTimeArea" style=""><input type="hidden" name="rebateListId" value="" /><input name="startTime" value="" type="text" class="datepicker col-sm-4"><label class="col-sm-2 control-label center">&nbsp;至&nbsp;</label><input name="endTime" value="" type="text" class="datepicker col-sm-4"><label class="priceArea col-sm-2" style="padding-top:0px;"><button class="btn btn-danger btn-sm btn-white T-del"><i class="ace-icon fa fa-minus bigger-110 icon-only" style="line-height: 20px"></i></button></label></div>');
-		td.eq(3).append('<div class="col-sm-12 no-padding" style="padding-top:5px!important;"><input data-index="'+(index)+'" name="contractPrice" value="" class="col-sm-12 contractPrice" type="text" maxlength="10"></div>');
-		td.eq(4).append('<div class="col-sm-12 no-padding" style="padding-top:5px!important;"><input data-index="'+(index)+'" name="customerRebateMoney" value="" class="col-sm-12 customerRebateMoney" type="text" maxlength="10"></div>');
-		td.eq(5).append('<div class="col-sm-12 no-padding" style="padding-top:5px!important;"><input data-index="'+(index)+'" name="marketPrice" value="" class="col-sm-12 marketPrice" type="text" maxlength="10"></div>');
-		td.eq(6).append('<div class="col-sm-12 no-padding" style="padding-top:5px!important;"><input data-index="'+(index)+'" name="guideRate" value="" class="col-sm-12 guideRate" type="text" maxlength="5"></div>');
-		td.eq(7).append('<div class="col-sm-12 no-padding" style="padding-top:5px!important;"><input data-index="'+(index)+'" name="travelAgencyRate" value="" class="col-sm-12 travelAgencyRate" type="text" maxlength="5" readonly="readonly"></div>');
+	 var $parents = $this.closest('tr'), $td = $parents.find("td"),index = $td.find('div').length; 
+		$td.eq(2).append('<div class="col-sm-12 no-padding T-dateTimeArea" style=""><input type="hidden" name="rebateListId" value="" /><input name="startTime" value="" type="text" class="datepicker col-sm-4"><label class="col-sm-2 control-label center">&nbsp;至&nbsp;</label><input name="endTime" value="" type="text" class="datepicker col-sm-4"><label class="priceArea col-sm-2" style="padding-top:0px;"><button class="btn btn-danger btn-sm btn-white T-del"><i class="ace-icon fa fa-minus bigger-110 icon-only" style="line-height: 20px"></i></button></label></div>');
+		$td.eq(3).append('<div class="col-sm-12 no-padding" style="padding-top:5px!important;"><input data-index="'+(index)+'" name="marketPrice" value="" class="col-sm-12 marketPrice" type="text" maxlength="10"></div>');
+		$td.eq(5).append('<div class="col-sm-12 no-padding" style="padding-top:5px!important;"><input data-index="'+(index)+'" name="contractPrice" value="" class="col-sm-12 contractPrice" type="text" maxlength="10"></div>');
+		$td.eq(6).append('<div class="col-sm-12 no-padding" style="padding-top:5px!important;"><input data-index="'+(index)+'" name="guideRate" value="" class="col-sm-12 guideRate" type="text" maxlength="5"></div>');
+		$td.eq(7).append('<div class="col-sm-12 no-padding" style="padding-top:5px!important;"><input data-index="'+(index)+'" name="travelAgencyRate" value="" class="col-sm-12 travelAgencyRate" type="text" maxlength="5"></div>');
 		$parents.find(".T-del").off().on("click", selfpay.deteleDateArea);
 		$parents.find(".T-dateTimeArea").eq($parents.find(".T-dateTimeArea").length - 1).attr("data-index", $parents.find(".T-dateTimeArea").length);
 		ruleData.validatorList = rule.checkItems($tbody);
@@ -598,9 +597,9 @@ define(function(require, exports) {
 	};
 
 	/**
-	 * numberRate导游返佣 和 旅行社返佣 
-	 * @param  {[type]} $tbody 
-	 * @return {[type]} 
+	 * [numberRate description]  市场、内部、人数返佣 导社返佣的计算
+	 * @param  {[type]} $tbody [description]
+	 * @return {[type]}        [description]
 	 */
 	selfpay.numberRate = function($tbody){
 		$tbody.find("tr").each(function(){
@@ -615,110 +614,184 @@ define(function(require, exports) {
 	    		console.log("2");
 			}
     	})
+        
 
-    	//导游返佣
+        //若改变导游返佣
+        //导游返佣+旅行社返佣 = 100
     	var $guide = $tbody.find(".guideRate");
-    	$guide.on('change', function(event) {
-    		event.preventDefault();
-    		console.info('mrs zhang.....');
-    		/* Act on the event */
-    		$guide.each(function(i) {
-    			var guideVal = $guide.eq(i).val(),
-    			    index = $guide.eq(i).attr("data-index");
-    			    if (isNaN(guideVal)) {//非法数字验证
-    			    	$guide.eq(i).val("0");
-    			    	guideVal = $guide.eq(i).val();
-    			    }
-			    	$travelAgency = $guide.eq(i).closest('td').next('td').find('.travelAgencyRate');
-    			    $travelAgency.each(function(j){
-	    				if($travelAgency.eq(j).attr("data-index") == index){
-	    					$travelAgency.eq(j).val(100 - guideVal);
-	    					
-	    				}
-    			   })	
+    	    $guide.each(function(i){
+    	    	var $that = $(this);
+    	    	    $that.on('change', function(event) {
+    	    	    	event.preventDefault();
+    	    	    	/* Act on the event */
+    	    	    	$that.each(function(i) {
+    	    	    		var $_that = $(this);
+			    			var guideVal = $_that.eq(i).val(),
+			    			    guideIndex = $_that.eq(i).attr("data-index");
+			    			    if (isNaN(guideVal)) {//非法数字验证
+			    			    	$_that.eq(i).val("0");
+			    			    	guideVal = $_that.eq(i).val();
+			    			    }
+						    	$travelAgency = $_that.eq(i).closest('td').next('td').find('.travelAgencyRate');
+			    			    $travelAgency.each(function(j){
+			    			    	var travelIndex=$travelAgency.eq(j).attr("data-index")
+				    				if(travelIndex == guideIndex){
+				    					$travelAgency.eq(j).val(100 - guideVal);
+				    				}
+			    			   })	
     			       
-    		});
-    	}); 
+    		            });
+    	    	    });
+    	    });
+
+
+    	  //若改变旅行社返佣值
+		  var $travelAgencyRate = $tbody.find(".travelAgencyRate");
+    	    $travelAgencyRate.each(function(i){
+    	    	var $that = $(this);
+    	    	    $that.on('change', function(event) {
+    	    	    	event.preventDefault();
+    	    	    	/* Act on the event */
+    	    	    	$that.each(function(i) {
+    	    	    		var $_that = $(this);
+			    			var traveVal = $_that.eq(i).val(),
+			    			    traveIndex = $_that.eq(i).attr("data-index");
+			    			    if (isNaN(traveVal)) {//非法数字验证
+			    			    	$_that.eq(i).val("0");
+			    			    	traveVal = $_that.eq(i).val();
+			    			    }
+						    	$guideRate = $_that.eq(i).closest('td').next('td').find('.guideRate');
+			    			    $guideRate.each(function(j){
+			    			    	var guideIndex=$guideRate.eq(j).attr("data-index");
+				    				if(travelIndex == guideIndex){
+				    					$guideRate.eq(j).val(100 - traveVal);
+				    				}
+			    			   })	
+    		            });
+    	    	    });
+    	    });
+
+
 
     	//若人数返佣有值
     	/*市场价格-人数返佣 = 内部价格*/
-    	//旅行社返佣
     	var $customerRebateMoney = $tbody.find(".customerRebateMoney");//人数返佣
-    		$customerRebateMoney.on('change', function(event) {
-    			event.preventDefault();
-    			/* Act on the event */
-	    		$customerRebateMoney.each(function(i) {
-	    	    	var customerVal = $customerRebateMoney.eq(i).val();
-	    	    	    if ( customerVal!=null && customerVal!='' && !isNaN(customerVal) ) {
-	    	    	    	var index = $customerRebateMoney.eq(i).attr("data-index"),
-	    	    	    	    //市场价格
-	    	    	    	    $marketPrice = $customerRebateMoney.eq(i).closest('td').next('td').find('.marketPrice');
-	    	    	    	    var marketVal = 0 ;
-	    	    	    	    $marketPrice.each(function(j) {
-	    	    	    	    	if ($marketPrice.eq(j).attr("data-index") == index) {
-	    	    	    	    		marketVal = $marketPrice.eq(j).val();//市场价格
-	    	    	    	    	};
-	    	    	    	    });
-	    	    	    	    //内部价格
-	    	    	    	    $contractPrice = $customerRebateMoney.eq(i).closest('td').prev('td').find('.contractPrice');
-	    	    	    	    var marketVal = 0 ;
-	    	    	    	    $contractPrice.each(function(j) {
-	    	    	    	    	if ($contractPrice.eq(j).attr("data-index") == index) {
-	    	    	    	    		marketVal = $marketPrice.eq(j).val();
-	    	    	    	    		//内部价格 = 市场价格-人数返佣
-	    	    	    	    		$contractPrice.eq(j).val(marketVal-customerVal)
-	    	    	    	    	};
-	    	    	    	    });
-	    	    	    }else{
-    	    	    	    var index = $customerRebateMoney.eq(i).attr("data-index"),
-    	    	    	    //市场价格
-    	    	    	    $marketPrice = $customerRebateMoney.eq(i).closest('td').next('td').find('.marketPrice');
-    	    	    	    var marketVal = 0 ;
-    	    	    	    $marketPrice.each(function(j) {
-    	    	    	    	if ($marketPrice.eq(j).attr("data-index") == index) {
-    	    	    	    		marketVal = $marketPrice.eq(j).val();//市场价格
-    	    	    	    	};
-    	    	    	    });
-    	    	    	    //内部价格
-    	    	    	    $contractPrice = $customerRebateMoney.eq(i).closest('td').prev('td').find('.contractPrice');
-    	    	    	    var marketVal = 0 ;
-    	    	    	    $contractPrice.each(function(j) {
-    	    	    	    	if ($contractPrice.eq(j).attr("data-index") == index) {
-    	    	    	    		marketVal = $marketPrice.eq(j).val();
-    	    	    	    		//内部价格 = 市场价格-人数返佣
-    	    	    	    		$contractPrice.eq(j).val(marketVal)
-    	    	    	    	};
-    	    	    	    });
+    		$customerRebateMoney.each(function(i) {
+    			var $that = $(this);
+    			    $that.on('change', function(event) {
+		    			event.preventDefault();
 
-	    	    	    };
-	    	    });
+		    			/* Act on the event */
+			    		$(this).each(function(i) {
+			    			var $_that = $(this),customerVal;
+			    			var index = $_that.eq(i).attr("data-index");
+			    			    if( index == 0 ){
+			    			    	 customerVal =$_that.eq(i).val();
+			    			    }
+			    			 //市场价格
+			    			 var $marketPrice = $_that.eq(i).closest('td').prev('td').find('.marketPrice');
+			    			 var marketVal=0;
+		    			         $marketPrice.each(function(j) {
+		    			         	marketVal=$marketPrice.eq(j).val();  
+		    			         });
+			    			 
+			    			 //内部价格   
+		    			     var $contractPrice = $_that.eq(i).closest('td').next('td').find('.contractPrice');
+		    			         $contractPrice.each(function(j) {
+		    			         	 //内部价格 = 市场价格 - 人数返佣
+		    			         	 var contractVal=parseFloat(marketVal-customerVal);
+		    			         	 $contractPrice.eq(j).val(contractVal);
+		    			         });
+			    	    });
+		    		});
+
     		});
-    	   
+        
+        //若改变市场价格并人数返佣有值
+        //*市场价格-人数返佣 = 内部价格*/
+        var $marketPrice = $tbody.find(".marketPrice");//人数返佣
+    		$marketPrice.each(function(i) {
+    			var $that = $(this);
+    			    $that.on('change', function(event) {
+		    			event.preventDefault();
+		    			/* Act on the event */
+			    		$(this).each(function(i) {   
+			    			var $_that = $(this),marketVal;
+			    			var marketIndex = $_that.eq(i).attr("data-index");  //市场价index
+			    			    ////获取市场价
+			    			    marketVal =$_that.eq(i).val();
+			    			    
+			    			 //获取人数返佣
+			    			 var $customerRebateMoney = $_that.eq(i).closest('td').next('td').find('.customerRebateMoney');
+			    			 var customerVal=0;
+		    			         $marketPrice.each(function(j) {
+		    			         	var customerIndex = $customerRebateMoney.eq(j).attr("data-index");
+		    			         	    if (customerIndex == 0) {
+		    			         	    	customerVal=$customerRebateMoney.eq(j).val();
+		    			         	    };
+		    			         	  
+		    			         });
+			    			 
+			    			 //内部价格   
+		    			     var $contractPrice = $_that.eq(i).closest('td').next('td').next('td').find('.contractPrice');
+		    			         $contractPrice.each(function(j) {
+		    			         	var contractIndex = $contractPrice.eq(j).attr("data-index");
+		    			         	if (marketIndex == contractIndex) {
+		    			         		 //内部价格 = 市场价格 - 人数返佣
+			    			         	 var contractVal=parseFloat(marketVal-customerVal);
+			    			         	 $contractPrice.eq(j).val(contractVal);
+		    			         	};
+		    			         	
+		    			         });
+			    	    });
+		    		});
 
-
-
-    /*	$customerRebateMoney.on('change', function(event) {
-    		event.preventDefault();
-    		$travelAgency.each(function(i) {
-    			var traveVal = $travelAgency.eq(i).val(),
-    			    index = $travelAgency.eq(i).attr("data-index"); //修改的索引值
-    			    if (isNaN(traveVal)) {//非法数字验证
-    			    	$travelAgency.eq(i).val("0");
-    			    	traveVal = $travelAgency.eq(i).val();
-    			    }
-			    	$guideRate = $travelAgency.eq(i).closest('td').next('td').find('.guideRate');
-    			    $guideRate.each(function(j){
-	    				if($guideRate.eq(j).attr("data-index") == index){
-	    					$guideRate.eq(j).val(100 - guideVal);
-	    					
-	    				}
-    			   })	
-    			       
     		});
-    	});*/
 
+	     //若改变内部价格并人数返佣有值
+		 var $contractPrice = $tbody.find(".contractPrice");//人数返佣
+    		$contractPrice.each(function(i) {
+    			var $that = $(this);
+    			    $that.on('change', function(event) {
+		    			event.preventDefault();
+		    			/* Act on the event */
+			    		$(this).each(function(i) {   
+			    			var $_that = $(this),contractVal;
+			    			var contractIndex = $_that.eq(i).attr("data-index");  //市场价index
+			    			    //获取内部价
+			    			    contractVal =$_that.eq(i).val();
+			    			    
+			    			 //获取人数返佣
+			    			 var $customerRebateMoney = $_that.eq(i).closest('td').prev('td').find('.customerRebateMoney');
+			    			 var customerVal=0;
+		    			         $customerRebateMoney.each(function(j) {
+		    			         	var customerIndex = $customerRebateMoney.eq(j).attr("data-index");
+		    			         	    if (customerIndex == 0) {
+		    			         	    	customerVal=$customerRebateMoney.eq(j).val();
+		    			         	    };
+		    			         	  
+		    			         });
+			    			 
+			    			 //内部价格   
+		    			     var $marketPrice = $_that.eq(i).closest('td').prev('td').prev('td').find('.marketPrice');
+		    			         $marketPrice.each(function(j) {
+		    			         	var marketIndex = $marketPrice.eq(j).attr("data-index");
+		    			         	if ( marketIndex == contractIndex) { //内部价格index <==> 市场价格index
+		    			         		 // 市场价格= 内部价格 + 人数返佣
+		    			         		      contractVal=parseFloat(contractVal);//
+		    			         		      customerVal=parseFloat(customerVal);
+			    			         	 var totalVal=parseFloat(contractVal+customerVal);
+			    			         	 $marketPrice.eq(j).val(totalVal);
+		    			         	};
+		    			         	
+		    			         });
+			    	    });
+		    		});
 
-
+    		});
+        
+        
+ 
 	};
 
 	/**
