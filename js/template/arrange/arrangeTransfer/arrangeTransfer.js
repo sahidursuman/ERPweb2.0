@@ -934,7 +934,7 @@ define(function(require, exports) {
 		/**
 		 * [updateTransferIn 外转确认
 		 * @return {[type]} [description]
-		 */
+		 
 		transfer.updateTransferIn = function(id){
 			$.ajax({
 				url:KingServices.build_url("transfer","saveLine"),
@@ -950,7 +950,7 @@ define(function(require, exports) {
 					}
 				}
 			});
-		};
+		};*/
 
 		/**
 		 * 同行转入确认
@@ -1042,7 +1042,7 @@ define(function(require, exports) {
 	 * @param  {[type]} type           [标识]
 	 * @return {[type]}                [description]
 	 */
-	transfer.transitMessage=function(touristGroupId,typeOut){
+	transfer.updateTransferIn=function(id){
 	  	   var dialogObj = $( "#confirm-dialog-message" );
 				dialogObj.removeClass('hide').dialog({
 					modal: true,
@@ -1061,13 +1061,27 @@ define(function(require, exports) {
 							text: "是",
 							"class" : "btn btn-primary btn-minier",
 							click: function() {
-								KingServices.addTouristGroup(touristGroupId,typeOut);
 								$( this ).dialog( "close" );
+								$.ajax({
+									url:KingServices.build_url("transfer","saveLine"),
+									data:"transferId="+id+"",
+									success:function(data){
+										var result = showDialog(data);
+										if(result){  	
+										   var touristGroupId = data.touristGroupId,
+										       typeOut = "out";
+										   //跳转游客小组新增页面
+										   KingServices.addTouristGroup(touristGroupId,typeOut);
+								
+										}
+									}
+								});
+								
 							}
 						}
 					],
 					open:function(event,ui){
-						$(this).find("p").text("是否中转安排？");
+						$(this).find("p").text("是否确认外转？");
 					}
 				});
 
