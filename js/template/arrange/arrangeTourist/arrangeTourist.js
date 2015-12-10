@@ -927,7 +927,6 @@ define(function(require, exports) {
 				return objValue;
 			}
 
-		    var executeTimeType=$tab.find(".checkbox input[name=executeTimeType]:radio:checked").val();
 			var planTouristCount = parseInt(getValue("planTouristCount")),
 				memberCount = parseInt($tab.find(".tripPlanAllMemberCount").text());
 			if(planTouristCount < memberCount){
@@ -946,7 +945,7 @@ define(function(require, exports) {
 						"planTouristCount": getValue("planTouristCount"),
 						"setPlacePosition": getValue("setPlacePosition"),
 						"setPlaceTime": getValue("setPlaceTime"),
-						"executeTimeType": executeTimeType+"",  
+						"executeTimeType": getValue("executeTimeType")+"",  
 						"executeTime": getValue("executeTime"),
 						"remark" : getValue("remark")
 					},
