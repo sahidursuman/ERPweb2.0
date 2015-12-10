@@ -106,9 +106,9 @@
 							<table class="table table-striped table-bordered table-hover priceList" style="border: 1px solid #ccc">
 								<thead>
 									<tr>
-										<th class="table-border"><span class="necessary">*</span>项目名称</th>
-										<th class="table-border">针对客源</th>
-										<th class="table-border" width="260"><span class="necessary">*</span>时间区间</th>
+										<th class="table-border" width="100"><span class="necessary">*</span>项目名称</th>
+										<th class="table-border" width="100">针对客源</th>
+										<th class="table-border" width="400"><span class="necessary">*</span>时间区间</th>
 										
 										<th class="table-border" width="125"><span class="necessary">*</span>市场价格(元)</th>
 										<th class="table-border" width="125"><span class="necessary">*</span>人数返佣(人/元)</th>
@@ -192,20 +192,20 @@
 
 									
 										<td><div class="col-sm-12 no-padding">
-												<input name="normalGuideRate" value="{{itemList.normalGuideRate*100}}" class="col-sm-12 T-guideRate T-calc" type="text" maxlength="5" data-index="0">
+												<input name="normalGuideRate" value="{{itemList.normalGuideRate*100 | toFixed}}" class="col-sm-12 T-guideRate T-calc" type="text" maxlength="5" data-index="0">
 											</div>
 											{{each itemList.SelfPayRebateList as rebateList index}}
 												<div class="col-sm-12 no-padding" style="padding-top:5px!important;" >
-													<input name="guideRate" value="{{rebateList.guideRate*100}}" class="col-sm-12 T-guideRate T-calc" type="text" maxlength="5" data-index="{{index+1}}">
+													<input name="guideRate" value="{{rebateList.guideRate*100  | toFixed}}" class="col-sm-12 T-guideRate T-calc" type="text" maxlength="5" data-index="{{index+1}}">
 												</div>
 											{{/each}}
 										</td>
 										<td><div class="col-sm-12 no-padding">
-												<input name="normalTravelAgencyRate" value="{{itemList.normalTravelAgencyRate*100}}" class="col-sm-12 T-travelAgencyRate T-calc" type="text" maxlength="5" data-index="0">
+												<input name="normalTravelAgencyRate" value="{{itemList.normalTravelAgencyRate*100 | toFixed}}" class="col-sm-12 T-travelAgencyRate T-calc" type="text" maxlength="5" data-index="0">
 											</div>
 											{{each itemList.SelfPayRebateList as rebateList index}}
 												<div class="col-sm-12 no-padding" style="padding-top:5px!important;">
-													<input name="travelAgencyRate" value="{{rebateList.travelAgencyRate*100}}" class="col-sm-12 T-travelAgencyRate T-calc" type="text" maxlength="5" data-index="{{index+1}}">
+													<input name="travelAgencyRate" value="{{rebateList.travelAgencyRate*100 | toFixed}}" class="col-sm-12 T-travelAgencyRate T-calc" type="text" maxlength="5" data-index="{{index+1}}">
 												</div>
 											{{/each}}
 										</td>
