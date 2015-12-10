@@ -137,9 +137,11 @@ function filterUnAuth(obj) {
 function checkDisabled(checkList,checkTr,rightCode){
 	var auth = isAuth(rightCode);
     for(var i = 0;i < checkList.length; i++){
-        if(checkList[i].isConfirmAccount == 1 && !auth){
+        if(checkList[i].isConfirmAccount == 1){
             checkTr.eq(i).find('input[type=text]').prop("disabled",true);
-            checkTr.eq(i).find('input[type=checkbox]').prop("disabled",true);
+            if(!auth){
+            	checkTr.eq(i).find('input[type=checkbox]').prop("disabled",true);
+            }
         }
     }
 }
@@ -646,6 +648,7 @@ var modalScripts = {
 	'financial_self':"js/template/financial/Self/Self.js",//自费账务
 	'financial_income': 'js/template/financial/FinIncome/finIncome.js',	//财务收款
 	'financial_pay': 'js/template/financial/FinPay/finPay.js',	//财务收款
+	'financial_transfer':"js/template/financial/transfer/transfer.js",
 	//---------------------------------------------------------------------------------------------------------------
 	'public_message':"js/template/system/message/message.js",
 	'system_information':"js/template/system/information/information.js",
@@ -716,17 +719,17 @@ function listMenu(menuTemplate){
 				});
 
 				//绑定转客菜单功能
-				$("#sidebar .nav-list .financial_transfer").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/financial/transfer/transfer.js",function(transfer){
-						var date = new Date();
-						var year = date.getFullYear();
-						transfer.listTransfer(0,"","",year,"");
-						modals["financial_transfer"] = transfer;
-					});
-				});
+				// $("#sidebar .nav-list .financial_transfer").click(function(){
+				// 	$("#sidebar .nav-list li").removeClass("active");
+				// 	$(this).addClass("active");
+				// 	$(this).parent().parent().addClass("active");
+				// 	seajs.use("" + ASSETS_ROOT +"js/template/financial/transfer/transfer.js",function(transfer){
+				// 		var date = new Date();
+				// 		var year = date.getFullYear();
+				// 		transfer.listTransfer(0,"","",year,"");
+				// 		modals["financial_transfer"] = transfer;
+				// 	});
+				// });
 				
 				
 /*

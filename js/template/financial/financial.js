@@ -162,7 +162,7 @@ FinancialService.isClearSave = function($tab,rule){
     var sumPayMoney = parseFloat($tab.find('input[name=sumPayMoney]').val()),
         unpayMoney = parseFloat($tab.find('.T-unpayMoney').val());
     if(sumPayMoney > unpayMoney){
-        showMessageDialog($("#confirm-dialog-message"),"付款金额大于未付总额！");
+        showMessageDialog($("#confirm-dialog-message"),"付款金额大于已对账未付总额！");
         return false;
     }
     return true;
