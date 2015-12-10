@@ -73,7 +73,7 @@
 				<td>{{if rs.checkTime == null || rs.checkTime == ""}}-{{else}}{{rs.checkTime | dateFormat:'yyyy-MM-dd hh:mm:ss'}}{{/if}}</td>
                 <td>{{if rs.checkUserName == null || rs.checkUserName == ""}}-{{else}}{{rs.checkUserName}}{{/if}}</td>
 				<td>
-				    <label class="pos-rel">
+				    <label class="pos-rel R-right" {{if rs.isConfirmAccount}} data-right="1250005"{{else}}data-right="1250002"{{/if}}>
 				   	    <input type="checkbox" class="ace T-checkbox" {{if rs.isConfirmAccount == 1}}checked="checked"{{/if}} />
 				   		  <span class="lbl"></span>
 				    </label>
@@ -106,7 +106,7 @@
             <button class="btn btn-xs btn-primary T-close-check">
                 <i class="ace-icon fa fa-times-circle"></i>关闭
             </button>
-            <button class="btn btn-xs btn-primary T-saveCheck" style="margin-left: 20px">
+            <button class="btn btn-xs btn-primary R-right T-saveCheck" style="margin-left: 20px" data-right="1250002|1250005">
                 <i class="ace-icon fa fa-check-circle"></i>确认
             </button>
         </div>
