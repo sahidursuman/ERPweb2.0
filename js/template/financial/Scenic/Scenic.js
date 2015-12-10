@@ -280,37 +280,40 @@ define(function(require, exports) {
                     // 初始化页面
                     if (Tools.addTab(menuKey + "-clearing", "景区付款", html)) {
                         scenic.initClear(page,scenicId,scenicName); 
-                        validator = rule.check(scenic.$clearTab.find('.T-clearList'));                       
-                    }
-
-                    if(isAutoPay == 1){
-                        scenic.$clearTab.find('input[name=sumPayMoney]').prop("disabled",true);
-                        scenic.$clearTab.find(".T-clear-auto").hide(); 
-                        scenic.$clearTab.data('isEdited', !!data.autoPaymentJson.length);
-                    } else {
-                        scenic.$clearTab.find(".T-cancel-auto").hide();
-                    }
-
-                    //绑定翻页组件
-                    var $tr = scenic.$clearTab.find('.T-clearList tr');
-                    laypage({
-                        cont: scenic.$clearTab.find('.T-pagenation'),
-                        pages: data.searchParam.totalPage,
-                        curr: (page + 1),
-                        jump: function(obj, first) {
-                            if (!first) { 
-                                var tempJson = FinancialService.clearSaveJson(scenic.$clearTab,scenic.clearTempData,rule);
-                                scenic.clearTempData = tempJson;
-                                var sumPayMoney = parseInt(scenic.$clearTab.find('input[name=sumPayMoney]').val());
-                                    sumPayType = parseInt(scenic.$clearTab.find('select[name=sumPayType]').val());
-                                scenic.clearTempSumDate = {
-                                    sumPayMoney : sumPayMoney,
-                                    sumPayType : sumPayType
-                                }
-                                scenic.scenicClear(isAutoPay,obj.curr-1,scenicId,scenicName);
-                            }
+                        validator = rule.check(scenic.$clearTab.find('.T-clearList'));  
+                                             
+                        if(isAutoPay == 1){
+                            scenic.$clearTab.find('input[name=sumPayMoney]').prop("disabled",true);
+                            scenic.$clearTab.find(".T-clear-auto").hide(); 
+                            scenic.$clearTab.find(".T-cancel-auto").show();
+                            scenic.$clearTab.data('isEdited', !!data.autoPaymentJson.length);
+                        } else {
+                            scenic.$clearTab.find(".T-clear-auto").show(); 
+                            scenic.$clearTab.find(".T-cancel-auto").hide();
                         }
-                    });
+
+                        //绑定翻页组件
+                        var $tr = scenic.$clearTab.find('.T-clearList tr');
+                        laypage({
+                            cont: scenic.$clearTab.find('.T-pagenation'),
+                            pages: data.searchParam.totalPage,
+                            curr: (page + 1),
+                            jump: function(obj, first) {
+                                if (!first) { 
+                                    var tempJson = FinancialService.clearSaveJson(scenic.$clearTab,scenic.clearTempData,rule);
+                                    scenic.clearTempData = tempJson;
+                                    var sumPayMoney = parseInt(scenic.$clearTab.find('input[name=sumPayMoney]').val());
+                                        sumPayType = parseInt(scenic.$clearTab.find('select[name=sumPayType]').val());
+                                    scenic.clearTempSumDate = {
+                                        sumPayMoney : sumPayMoney,
+                                        sumPayType : sumPayType
+                                    }
+                                    scenic.scenicClear(isAutoPay,obj.curr-1,scenicId,scenicName);
+                                }
+                            }
+                        });
+                    }
+
                 }
             }
         });
@@ -535,14 +538,19 @@ define(function(require, exports) {
         }
 
         var argumentsLen = arguments.length,
-            clearSaveJson = FinancialService.clearSaveJson(scenic.$clearTab,scenic.clearTempData,rule);
+            clearSaveJson = FinancialService.clearSaveJson(scenic.$clearTab,scenic.clearTempData,rule),
+            searchParam = {
+                        sumCurrentPayMoney : scenic.$clearTab.find('input[name=sumPayMoney]').val(),
+                        payType : scenic.$clearTab.find('select[name=sumPayType]').val(),
+                        payRemark : scenic.$clearTab.find('input[name=sumPayRemark]').val()
+                    };
 
-        clearSaveJson = JSON.stringify(clearSaveJson);
         $.ajax({
             url:KingServices.build_url("financial/financialScenic","saveAccountSettlement"),
             type:"POST",
             data:{
-                scenicJson : clearSaveJson
+                scenicJson : JSON.stringify(clearSaveJson),
+                searchParam : JSON.stringify(searchParam)
             },
             success:function(data){
                 var result = showDialog(data);
