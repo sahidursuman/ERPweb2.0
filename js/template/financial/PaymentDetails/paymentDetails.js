@@ -9,7 +9,11 @@ define(function(require, exports){
 		menuKey = "financial_payment_details";
 
 	var Payment = {
-		$tab : false
+		$tab : false,
+		list : {},
+		total : {},
+		isList : false,
+		isTotal : false
 	};
 
 	/**
@@ -17,6 +21,7 @@ define(function(require, exports){
 	 */
 	Payment.initModule = function(){
 		Payment.$tab = null;
+		Payment.isList = Payment.isTotal = false;
 		Payment.getList();
 	};
 
@@ -35,39 +40,123 @@ define(function(require, exports){
 			startTime : year + "-" + month + "-01"
 		}
 		if (!!Payment.$tab) {
+			var name = Payment.$tab.find('.T-search-unit').val();
 			args = {
 				pageNo: (page || 0),
+				businessTypeId : Payment.$tab.find('.T-search-business').val(),
+				costTypeId : Payment.$tab.find('.T-search-cost').val(),
+				incomeOrPayTypeId : Payment.$tab.find('.T-search-type').val(),
+				receivableTypeId : Payment.$tab.find('.T-search-category').val(),
+				resourceId : Payment.$tab.find('.T-search-unit').data('id'),
+				resourceName : name == "全部" ? "" : name,
+				endTime : Payment.$tab.find('.T-search-end-time').val(),
+				startTime : Payment.$tab.find('.T-search-start-time').val(),
+				payType : Payment.$tab.find('.T-search-payment').val()
 			}
 		}
-		
-		$.ajax({
-			url : KingServices.build_url('financialIncomeOrPay', 'findSelectValue'),
-			type : "POST",
-		}).done(function(selectData){
-
-
+		Payment.globalLoadingLayer = openLoadingLayer();
+		if(!Payment.$tab || !Payment.$tab.data('ajax')){
 			$.ajax({
-				url : KingServices.build_url('financialIncomeOrPay', 'findPager'),
+				url : KingServices.build_url('financialIncomeOrPay', 'findSelectValue'),
 				type : "POST",
-				data : args
-			})
-			.done(function(data){
-				if(showDialog(data)){
-					data.selectData = selectData;
-					Tools.addTab(menuKey,"收支明细",listTemplate(data));
-					Payment.$tab = $('#tab-' + menuKey + '-content');
-					Payment.init_event(Payment.$tab);
+				showLoading: false
+			}).done(function(selectData){
+				Payment.list.businessTypes = JSON.parse(selectData.businessTypes);
+				Payment.list.costTypes = JSON.parse(selectData.costTypes);
+				Payment.list.incomeOrPayTypes = JSON.parse(selectData.incomeOrPayTypes);
+				Payment.list.receivableTypes = JSON.parse(selectData.receivableTypes);
+				Payment.list.units = selectData.units;
+				Payment.isList = true;
+				if(Payment.isTotal){
+					Payment.ajaxInit(args);
 				}
 			});
-		});
+
+			$.ajax({
+				url : KingServices.build_url('financialIncomeOrPay', 'findTotal'),
+				type : "POST",
+				data : {searchParam : JSON.stringify(args)},
+				showLoading: false
+			}).done(function(data){
+				Payment.total = data.total;
+				Payment.isTotal = true;
+				if(Payment.isList){
+					Payment.ajaxInit(args);
+				}
+			});
+		}
+		if(Payment.isList && Payment.isTotal){
+			Payment.ajaxInit(args)
+		}
 	};
 
 	Payment.init_event = function($tab){
 		var $searchArea = $tab.find('.T-search-area'),
 			$datepicker = $searchArea.find('.datepicker');
 		FinancialService.setDatePicker($datepicker);
+		$searchArea.find('.T-btn-search').on('click', function(event){
+			event.preventDefault();
+			Payment.getList(0);
+		})
+		Payment.chooseUnit($searchArea.find('.T-search-unit'));
+		
 	};
 
+	Payment.ajaxInit = function(args){
+		$.ajax({
+			url : KingServices.build_url('financialIncomeOrPay', 'findPager'),
+			type : "POST",
+			data : {searchParam : JSON.stringify(args)},
+			showLoading: false
+		})
+		.done(function(data){
+			if(showDialog(data)){
+				data.result = JSON.parse(data.result);
+				data.selectData = Payment.list;
+				data.total = Payment.total;
+            	data.payTypeList = ['现金', '银行转账', '网上支付', '支票', '其它'];
+				Tools.addTab(menuKey,"收支明细",listTemplate(data));
+				Payment.$tab = $('#tab-' + menuKey + '-content');
+				Payment.$tab.data('ajax', 'true');
+				Payment.init_event(Payment.$tab);
+				layer.close(Payment.globalLoadingLayer);
+				// 绑定翻页组件
+				laypage({
+				    cont: Payment.$tab.find('.T-pagenation'), 
+				    pages: data.searchParam.totalPage, //总页数
+				    curr: (data.searchParam.pageNo + 1),
+				    jump: function(obj, first) {
+				    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+				    		Payment.getList(obj.curr -1);
+				    	}
+				    }
+				});	
+			}
+		});
+	};
+
+	Payment.chooseUnit = function($obj){
+		$obj.autocomplete({
+			minLength: 0,
+		    change: function(event, ui) {
+		        if (!ui.item)  {
+		            $(this).data('id', '');
+		        }
+		    },
+		    select: function(event, ui) {
+		        $(this).blur().data('id', ui.item.id);
+		    }
+		}).on('click', function(){
+			var data = Payment.list.units;
+			for(var i=0; i<data.length; i++){
+                data[i].value = data[i].name;
+                data[i].id = data[i].resourceId;
+            }
+            data.unshift({id:'', value: '全部'});
+            $obj.autocomplete('option', 'source', data);
+            $obj.autocomplete('search', '');
+		});
+	};
 	// 暴露方法
 	exports.init = Payment.initModule;
 });
