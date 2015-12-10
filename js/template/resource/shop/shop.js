@@ -611,7 +611,7 @@ define(function(require, exports) {
 		    		var result = shop.submitShopPolicy(obj);
 			    	if(result){
 			    		layer.close(policyLayer);
-			    		showMessageDialog($( "#confirm-dialog-message" ), "成功更新购物政策");
+			    		//showMessageDialog($( "#confirm-dialog-message" ), "成功更新购物政策");
 			    	}
 		    	});
 
