@@ -155,17 +155,7 @@ define(function(require, exports) {
 			FinIncome.getList();
 		});
 
-		FinancialService.setDatePicker($tab.find('.T-datepicker'));
-		$tab.find('.T-start').on('changeDate', function(event) {
-		    event.preventDefault();
-		    var start = $(this).val(),
-		        $end = $tab.find('.T-end').datepicker('setStartDate', start);
-
-		    if ($end.val() < start) {
-		        $end.val(start);
-		    }
-		}).trigger('changeDate');
-
+		Tools.setDatePicker($tab.find('.T-datepicker'), true);
 
 		$tab.find('.T-btn-search').on('click', function(event) {
 		    event.preventDefault();

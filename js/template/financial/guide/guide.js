@@ -98,20 +98,8 @@ define(function(require, exports) {
 
         // 导游绑定
         FinGuide.getGuideNameList($searchArea.find('.T-search-name'), [$datepicker.eq(0).val(), $datepicker.eq(1).val()])
-            // 绑定时间控件
-        FinancialService.setDatePicker($datepicker).on('changeDate', function(event) {
-            event.preventDefault();
-            $searchArea.find('.T-search-name').data('ajax', false);
-        });
-        $searchArea.find('.T-search-start-date').on('changeDate', function(event) {
-            event.preventDefault();
-            var start = $(this).val(),
-                $end = $searchArea.find('.T-search-end-date').datepicker('setStartDate', start);
-
-            if ($end.val() < start) {
-                $end.val(start);
-            }
-        }).trigger('changeDate');
+        // 绑定时间控件
+        Tools.setDatePicker($datepicker, true);
 
 
         $searchArea.find('.T-btn-search').on('click', function(event) {
@@ -252,16 +240,8 @@ define(function(require, exports) {
 
         FinGuide.getLineProduct($searchArea.find('.T-lineProductName'), FinGuide.checkingTabLineProduct);
 
-        FinancialService.setDatePicker($searchArea.find('.datepicker'));
-        $searchArea.find('.T-search-start-date').on('changeDate', function(event) {
-            event.preventDefault();
-            var start = $(this).val(),
-                $end = $searchArea.find('.T-search-end-date').datepicker('setStartDate', start);
+        Tools.setDatePicker($searchArea.find('.datepicker'), true);
 
-            if ($end.val() < start) {
-                $end.val(start);
-            }
-        }).trigger('changeDate');
         $searchArea.find('.T-btn-search').on('click', function(event) {
             event.preventDefault();
             var $btn = $tab.find('.T-btn-save');

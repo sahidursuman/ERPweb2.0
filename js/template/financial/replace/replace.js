@@ -87,7 +87,7 @@ define(function(require, exports) {
 			$datepicker = $searchArea.find('.datepicker');
 
 		Replace.chooseCustomer($searchArea.find('.T-search-customer'));
-		FinancialService.setDatePicker($datepicker);
+		Tools.setDatePicker($datepicker, true);
 		$searchArea.find('.T-btn-search').on('click', function(event) {
 			event.preventDefault();
 			Replace.getList();
@@ -233,7 +233,7 @@ define(function(require, exports) {
 		//搜索
 		var $searchArea = $tab.find('.T-search-area'),
 			$datepicker = $searchArea.find('.datepicker');
-		FinancialService.setDatePicker($datepicker);
+		Tools.setDatePicker($datepicker, true);
 		Replace.chooseOrder($searchArea.find('.T-search-order'));
 		Replace.chooseProject($searchArea.find('.T-search-project'));
 

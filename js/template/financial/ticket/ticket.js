@@ -87,7 +87,7 @@ define(function(require, exports) {
 			$datepicker = $searchArea.find('.datepicker');
 
 		Ticket.getTicketNameList($searchArea.find('.T-search-name'));
-		FinancialService.setDatePicker($datepicker);
+		Tools.setDatePicker($datepicker, true);
 
 		$searchArea.find('.T-btn-search').on('click', function(event) {
 			event.preventDefault();
@@ -197,7 +197,7 @@ define(function(require, exports) {
 			$searchArea = $tab.find('.T-search-area'),
 			$datepicker = $searchArea.find('.datepicker');
 
-		FinancialService.setDatePicker($datepicker);
+		Tools.setDatePicker($datepicker, true);
 		FinancialService.updateUnpayMoney($tab, rule);
 
 		$searchArea.find(".T-btn-search").on('click', function(event){
@@ -384,7 +384,7 @@ define(function(require, exports) {
 		var $searchArea = $tab.find('.T-search-area'),
 			$datepicker = $searchArea.find('.datepicker');
 
-		FinancialService.setDatePicker($datepicker);
+		Tools.setDatePicker($datepicker, true);
 
 		$searchArea.find('.T-btn-search').on('click', function(event) {
 			event.preventDefault();

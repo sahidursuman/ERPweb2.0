@@ -93,7 +93,7 @@ define(function(require, exports){
 	Payment.init_event = function($tab){
 		var $searchArea = $tab.find('.T-search-area'),
 			$datepicker = $searchArea.find('.datepicker');
-		FinancialService.setDatePicker($datepicker);
+		Tools.setDatePicker($datepicker, true);
 		$searchArea.find('.T-btn-search').on('click', function(event){
 			event.preventDefault();
 			Payment.getList(0);
