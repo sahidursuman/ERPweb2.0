@@ -1,3 +1,8 @@
+/**
+ * 财务管理--票务账务
+ *
+ * by David Bear 2015-11-24
+ */
 define(function(require, exports) {
 	var rule = require("./rule"),
 		menuKey = "financial_ticket",
@@ -6,11 +11,15 @@ define(function(require, exports) {
 		ticketChecking = require("./view/TicketChecking"),
 		ticketClearing = require("./view/TicketClearing"),
 		blanceRecords = require("./view/ticketRecords"),
+		payDetailsTemplate = require("./view/payDetails"),
+		viewDetailsTemplate = require("./view/viewDetails"),
+		payingTableTemplate = require("./view/ticketPayingTable"),
 		checkMenuKey = menuKey + '_checking',
 		clearMenuKey = menuKey + '_clearing';
 
 	var Ticket = {
-		$tab : false
+		$tab : false,
+		ticketNameList : []
 	};
 
 	Ticket.initModule = function(){
@@ -19,31 +28,40 @@ define(function(require, exports) {
 	};
 
 	Ticket.getList = function(page){
-		var args = {
+		var date = new Date(),
+        year = date.getFullYear(),
+        month = Tools.addZero2Two(date.getMonth() + 1),
+        day = Tools.addZero2Two(date.getDate()),
+        args = {
 			pageNo : (page || 0),
 			ticketId : "",
-			year : 2015,
-			month : ""
+			startDate : year + "-" + month + "-01",
+			endDate : year + "-" + month + "-" + day,
+			ticketName : ""
 		};
 		if(!!Ticket.$tab){
+			var name = Ticket.$tab.find('.T-search-name').val();
 			args = {
 				pageNo : (page || 0),
-				ticketId : Ticket.$tab.find('.T-search-name').val(),
-				year : Ticket.$tab.find('.T-search-year').val(),
-				month : Ticket.$tab.find('.T-search-month').val()
+				ticketId : Ticket.$tab.find('.T-search-name').data('id'),
+				ticketName : name == "全部" ? '' : name,
+				startDate : Ticket.$tab.find('.T-search-start-date').val(),
+				endDate : Ticket.$tab.find('.T-search-end-date').val()
 			};
 		}
 		$.ajax({
-			url : KingServices.build_url('financial/financialTicket', 'listSumFcTicket'),
+			url : KingServices.build_url('account/arrangeTicketFinancial', 'listSumFinancialTicket'),
 			type : 'POST',
-            data : args
+            data : {searchParam : JSON.stringify(args)}
 		}).done(function(data){
 			if(showDialog(data)){
-				data.companyNameListNew = JSON.parse(data.companyNameListNew);
-				data.yearList = [{value : '2015'}, {value : '2014'}, {value : '2013'}];
-				data.monthList = [{value : 1}, {value : 2}, {value : 3}, {value : 4}, {value : 5}, {value : 6}, {value : 7}, {value : 8}, {value : 9}, {value : 10}, {value : 11}, {value : 12}];
+				//缓存数据
+				Ticket.ticketNameList = data.ticketNameList;
+				//打开TAB
 				Tools.addTab(menuKey, "票务账务", listTemplate(data));
-				Ticket.init_event();
+				Ticket.$tab = $("#tab-"+menuKey+"-content");
+				//绑定事件
+				Ticket.init_event(Ticket.$tab);
 				// 缓存页面
 				Ticket.listPageNo = args.pageNo;
 				// 绑定翻页组件
@@ -61,26 +79,57 @@ define(function(require, exports) {
 		});
 	};
 
-	Ticket.init_event = function(){
-		Ticket.$tab = $("#tab-"+menuKey+"-content");
+	Ticket.init_event = function($tab){
 		/**
 		 * 搜索顶部的事件绑定
 		 */
-		var $searchArea = Ticket.$tab.find('.T-search-area');
+		var $searchArea = $tab.find('.T-search-area'),
+			$datepicker = $searchArea.find('.datepicker');
+
+		Ticket.getTicketNameList($searchArea.find('.T-search-name'));
+		FinancialService.setDatePicker($datepicker);
+
 		$searchArea.find('.T-btn-search').on('click', function(event) {
 			event.preventDefault();
 			Ticket.getList();
 		});
 		// 报表内的操作
-		Ticket.$tab.find('.T-list').on('click', '.T-action', function(event) {
+		$tab.find('.T-list').on('click', '.T-action', function(event) {
 			event.preventDefault();
 			var $that = $(this), id = $that.closest('tr').data('id');
-			if ($that.hasClass('T-check'))  {
+			if ($that.hasClass('T-checking'))  {
 				// 对账
 				Ticket.checking(id);
 			} else if ($that.hasClass('T-balance'))  {
 				// 结算
 				Ticket.clearing(id);
+			}
+		});
+	};
+
+	Ticket.getTicketNameList = function($obj){
+		$obj.autocomplete({
+			minLength: 0,
+			change : function(){
+				if (!ui.item)  {
+		            $(this).data('id', '');
+		        }
+			},
+			select: function(event, ui) {
+		        $(this).blur().data('id', ui.item.id);
+		    }
+		}).on('click', function(event){
+			if (!$obj.data('ajax')) {  // 避免重复请求
+				for(var i=0; i<Ticket.ticketNameList.length; i++){
+					Ticket.ticketNameList[i].id = Ticket.ticketNameList[i].ticketId;
+					Ticket.ticketNameList[i].value = Ticket.ticketNameList[i].ticketName;
+				}
+				Ticket.ticketNameList.unshift({id:'', value: '全部'});
+			    $obj.autocomplete('option', 'source', Ticket.ticketNameList);
+			    $obj.autocomplete('search', '');
+			    $obj.data('ajax', true);
+			}else{
+			    $obj.autocomplete('search', '');
 			}
 		});
 	};
@@ -91,106 +140,403 @@ define(function(require, exports) {
 		Ticket.checkingList(0, id);
 	};
 
-	Ticket.checkingList = function(page, id){
+	Ticket.checkingList = function(page, id, start, end){
 		var args = {
 			pageNo : (page || 0),
-			ticketId : id || Ticket.checkingId
+			ticketId : id || Ticket.checkingId,
+			accountInfo : "",
+			startDate : start || Ticket.$tab.find('.T-search-start-date').val(),
+			endDate : end || Ticket.$tab.find('.T-search-end-date').val()
 		};
-
 		$.ajax({
-			url : KingServices.build_url('financial/financialTicket', 'listFcTicket'),
+			url : KingServices.build_url('account/arrangeTicketFinancial', 'listTicketAccount'),
 			type : "POST",
-			data : args
+			data : {searchParam : JSON.stringify(args)}
 		}).done(function(data){
 			if(showDialog(data)){
-				data.financialTicketList = JSON.parse(data.financialTicketList);
 				Tools.addTab(checkMenuKey, "票务对账", ticketChecking(data));
-				Ticket.check_event();
+				Ticket.$checkingTab = $("#tab-" + checkMenuKey + "-content");
+				Ticket.check_event(Ticket.$checkingTab);
+				// 绑定翻页组件
+				laypage({
+				    cont: Ticket.$checkingTab.find('.T-pagenation'), 
+				    pages: data.totalPage, //总页数
+				    curr: (data.pageNo + 1),
+				    jump: function(obj, first) {
+				    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+				    		Ticket.checkingList(obj.curr -1);
+				    	}
+				    }
+				});
 			}
 		});
 	};
 
-	Ticket.check_event = function(){
-		Ticket.$checkingTab = $("#tab-" + checkMenuKey + "-content");
+	Ticket.check_event = function($tab){
+		var validator = rule.check($tab);
+		// 处理关闭与切换tab
+        $tab.off('change').off(SWITCH_TAB_SAVE).off(CLOSE_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT)
+        .on('change', '.T-checkList', function() {
+            $tab.data('isEdited', true);
+        })
+        .on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
+            event.preventDefault();
+            Ticket.saveCheckingData($tab, [tab_id, title, html]);
+        })
+        .on(SWITCH_TAB_BIND_EVENT, function() {
+            Ticket.checkingList();
+        })
+        .on(CLOSE_TAB_SAVE, function(event) {
+            event.preventDefault();
+            if (!validator.form()) {
+                return;
+            }
+            Ticket.saveCheckingData($tab);
+        });
+		var validator = rule.check($tab),
+			$searchArea = $tab.find('.T-search-area'),
+			$datepicker = $searchArea.find('.datepicker');
+
+		FinancialService.setDatePicker($datepicker);
+		FinancialService.updateUnpayMoney($tab, rule);
+
+		$searchArea.find(".T-btn-search").on('click', function(event){
+			event.preventDefault();
+			Ticket.checkingList(0);
+		});
+
+		$tab.find('.T-list').on('click', '.T-action', function(event) {
+			event.preventDefault();
+			var $that = $(this), id = $that.closest('tr').data('id');
+			if ($that.hasClass('T-payDetails'))  {
+				// 已付金额
+				Ticket.payDetails(id);
+			} else if ($that.hasClass('T-view-receipts'))  {
+				// 单据
+				Ticket.viewReceipts(id);
+			}else if($that.hasClass('T-view-details')){
+				// 查看对账
+				Ticket.viewDetails(id);
+			}
+		});
+
+		$tab.find(".T-btn-close").on('click', function(event){
+			event.preventDefault();
+			Tools.closeTab(checkMenuKey);
+		});
+		$tab.find(".T-btn-save").on('click', function(event){
+			event.preventDefault();
+		 	if (!validator.form()) {
+                return;
+            }
+			Ticket.saveCheckData($tab);
+		});
 	};
 
-	Ticket.clearing = function(id){
+	Ticket.payDetails = function(id){
+		if(!!id){
+			$.ajax({
+				url : KingServices.build_url('account/arrangeTicketFinancial', 'getPayedMoneyDetail'),
+				data : "POST",
+				data : {id : id}
+			}).done(function(data){
+				if(showDialog(data)){
+					layer.open({
+		                type: 1,
+		                title: "已付金额明细",
+		                skin: 'layui-layer-rim',
+		                area: '1024px',
+		                zIndex: 1028,
+		                content: payDetailsTemplate(data),
+		                scrollbar: false
+		            });
+				}
+			});			
+		}
+	};
+
+	Ticket.viewReceipts = function(id){
+		
+	};
+
+	Ticket.viewDetails = function(id){
+		if(!!id){
+			$.ajax({
+				url : KingServices.build_url('account/arrangeTicketFinancial', 'getNeedPayDetail'),
+				data : "POST",
+				data : {id : id}
+			}).done(function(data){
+				if(showDialog(data)){
+					layer.open({
+		                type: 1,
+		                title: "应付金额明细",
+		                skin: 'layui-layer-rim',
+		                area: '1024px',
+		                zIndex: 1028,
+		                content: viewDetailsTemplate(data),
+		                scrollbar: false
+		            });
+				}
+			});
+		}
+	};
+
+	Ticket.saveCheckData = function($tab, tabArgs){
+		var json = FinancialService.checkSaveJson($tab, rule);
+		console.log(json);
+		if(json > 0){
+			$.ajax({
+				url : KingServices.build_url('account/arrangeTicketFinancial', 'saveAccountChecking'),
+				type : "POST",
+				data : {ticketJson : JSON.stringify(json)}
+			}).done(function(data){
+				Ticket.$checkingTab.data('isEdited', false);
+
+                showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+                    if (!!tabArgs) {
+                        Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
+                        Ticket.checkList($tab, 1);
+                    } else {
+                        Tools.closeTab(payMenuKey);
+                        Ticket.getList(Ticket.listPageNo);
+                    }
+                })
+			});
+		}else{
+			showMessageDialog($('#confirm-dialog-message'), '您当前未进行任何操作！');
+		}
+	};
+
+	Ticket.clearing = function(id, name){
 		Ticket.$clearingTab = null;
 		Ticket.clearingId = id;
 		Ticket.clearingList(0, id);
+		Ticket.balanceName = name;
 	};
 
-	Ticket.clearingList = function(page, id){
+	Ticket.clearingList = function(page, id, start, end){
 		var args = {
 			pageNo : (page || 0),
-			ticketId : id || Ticket.clearingId
+			ticketId : id || Ticket.clearingId,
+			startDate : start || Ticket.$tab.find('.T-search-start-date').val(),
+			endDate : end || Ticket.$tab.find('.T-search-end-date').val(),
+			accountInfo : ""
 		};
 		if(Ticket.$clearingTab){
 			args = {
 				pageNo : (page || 0),
-				ticketId : id || Ticket.clearingId
+				ticketId : id || Ticket.clearingId,
+				startDate : Ticket.$clearingTab.find('.T-search-start-date').val(),
+				endDate : Ticket.$clearingTab.find('.T-search-end-date').val(),
+				accountInfo : Ticket.$clearingTab.find('.T-search-type').val()
 			};
 		}
 
 		$.ajax({
-			url : KingServices.build_url('financial/financialTicket', 'listSumFcTicket'),
+			url : KingServices.build_url('account/arrangeTicketFinancial', 'listTicketAccount'),
 			type : "POST",
-			data : args
+			data : {searchParam : JSON.stringify(args)}
 		}).done(function(data){
 			if(showDialog(data)){
-				data.companyNameListNew = JSON.parse(data.companyNameListNew);
+				data.name = Ticket.balanceName;
 				Tools.addTab(clearMenuKey, "票务结算", ticketClearing(data));
-				Ticket.clear_init();
+				Ticket.$clearingTab = $("#tab-" + clearMenuKey + "-content");
+				var html = payingTableTemplate(data);
+				Ticket.$clearingTab.find('.T-checkList').html(html);
+				Ticket.clear_init(Ticket.$clearingTab);
+				// 绑定翻页组件
+				laypage({
+				    cont: Ticket.$clearingTab.find('.T-pagenation'), 
+				    pages: data.totalPage, //总页数
+				    curr: (data.pageNo + 1),
+				    jump: function(obj, first) {
+				    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+				    		Ticket.clearingList(obj.curr -1);
+				    	}
+				    }
+				});	
 			}
 		});
 	};
 
-	Ticket.clear_init = function(){
-		Ticket.$clearingTab = $("#tab-" + clearMenuKey + "-content");
-		var $searchArea = Ticket.$clearingTab.find('.T-search-area');
+	Ticket.clear_init = function($tab){
+		var validator = rule.check($tab);
+		// 处理关闭与切换tab
+        $tab.off('change').off(SWITCH_TAB_SAVE).off(CLOSE_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT)
+        .on('change', '.T-checkList', function() {
+            $tab.data('isEdited', true);
+        })
+        .on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
+            event.preventDefault();
+            Ticket.savePayingData($tab, [tab_id, title, html]);
+        })
+        .on(SWITCH_TAB_BIND_EVENT, function() {
+            Ticket.clearingList();
+        })
+        .on(CLOSE_TAB_SAVE, function(event) {
+            event.preventDefault();
+            if (!validator.form()) {
+                return;
+            }
+            Ticket.savePayingData($tab);
+        });
+
+		var $searchArea = $tab.find('.T-search-area'),
+			$datepicker = $searchArea.find('.datepicker');
+
+		FinancialService.setDatePicker($datepicker);
+
 		$searchArea.find('.T-btn-search').on('click', function(event) {
 			event.preventDefault();
 			Ticket.clearingList(0, Ticket.clearingId);
 		});
-		Ticket.$clearingTab.find('.T-records').on('click', function(event){
+		$tab.find('.T-records').on('click', function(event){
 			event.preventDefault();
 			Ticket.records();
 		});
 
 		// 报表内的操作
-		Ticket.$tab.find('.T-list').on('click', '.T-action', function(event) {
+		$tab.find('.T-list').on('click', '.T-action', function(event) {
 			event.preventDefault();
 			var $that = $(this), id = $that.closest('tr').data('id');
-			if ($that.hasClass('T-check'))  {
-				// 对账
-				//Ticket.checking(id);
-			} else if ($that.hasClass('T-balance'))  {
-				// 结算
-				//Ticket.clearing(id);
+			if ($that.hasClass('T-payDetails'))  {
+				// 已付金额
+				Ticket.payDetails(id);
+			} else if ($that.hasClass('T-view-receipts'))  {
+				// 单据
+				Ticket.viewReceipts(id);
+			}else if($that.hasClass('T-view-details')){
+				// 查看对账
+				Ticket.viewDetails(id);
 			}
 		});
+		$tab.find(".T-btn-close").on('click', function(event){
+			event.preventDefault();
+			Tools.closeTab(checkMenuKey);
+		});
+		$tab.find(".T-btn-save").on('click', function(event){
+			event.preventDefault();
+			Ticket.savePayingData($tab);
+		});
+
+		$tab.find(".T-btn-autofill").on('click', function(event){
+			event.preventDefault();
+			if ($(this).hasClass('btn-primary')) {
+                if (validator.form()) {
+                    Ticket.autoFillMoney($tab);
+                }
+            } else {
+                Ticket.payingJson = [];
+                Ticket.setAutoFillEdit($tab, false);
+            }
+		})
 	};
 
-	//查看操作历史记录
-	Ticket.records = function(){
-		$.ajax({
-			url : KingServices.build_url('financial/financialTicket', 'listFcTicketSettlementRecord'),
-			type : "POST",
-			data : {ticketId : Ticket.clearingId}
-		}).done(function(data){
-			if(showDialog(data)){
-				layer.open({
-	    			type: 1,
-				    title:"操作记录",
-				    skin: 'layui-layer-rim', //加上边框
-				    area: '60%', //宽高
-				    zIndex:1030,
-				    content: blanceRecords(data),
-				    scrollbar: false, // 推荐禁用浏览器外部滚动条
-				    success: function(){}
-	    		});
-			}
-		});
+	/**
+     * 自动下账业务逻辑
+     * @param  {[type]} $tab [description]
+     * @return {[type]}      [description]
+     */
+    Ticket.autoFillMoney = function($tab) {
+        if (!!$tab && $tab.length) {
+            var $autoPayMoney = $tab.find('.T-sumPayMoney');
+
+            var args = {
+				ticketId : Ticket.clearingId,
+				startDate : $tab.find('.T-search-start-date').val(),
+				endDate : $tab.find('.T-search-end-date').val(),
+				accountInfo : $tab.find('.T-search-type').val()
+            };
+
+            $.ajax({
+                    url: KingServices.build_url('account/guideFinancial', 'autoPay'),
+                    type: 'post',
+                    data: args,
+                    showLoading: false
+                })
+                .done(function(data) {
+                    if (showDialog(data)) {
+                        Ticket.payingJson = data.autoPayList;
+                        $tab.find('input[name="sumPayMoney"]').val(data.realAutoPayMoney);
+                        Ticket.setAutoFillEdit($tab, true);
+                    }
+                });
+        }
+    };
+
+    Ticket.setAutoFillEdit = function($tab, disable) {
+        var $sum = $tab.find('input[name="sumPayMoney"]').prop('disabled', disable);
+        if (!disable) {
+            $sum.val(0);
+        }
+
+        $tab.find('.T-btn-autofill').html(disable ? '<i class="ace-icon fa fa-times"></i> 取消下账' : '<i class="ace-icon fa fa-check-circle"></i> 自动下账').toggleClass('btn-primary btn-warning');;
+
+        Ticket.getOperationList(0, $tab);
+
+    };
+    /**
+     * 获取对账列表数据
+     * @param  {int} pageNo 列表页码
+     * @return {[type]}        [description]
+     */
+    Ticket.getOperationList = function(pageNo, $tab) {
+        if ($tab) {
+            var args = {
+                pageNo: pageNo || 0,
+				ticketId : Ticket.clearingId,
+				startDate : $tab.find('.T-search-start-date').val(),
+				endDate : $tab.find('.T-search-end-date').val(),
+				accountInfo : $tab.find('.T-search-type').val()
+            };
+
+            $.ajax({
+                    url: KingServices.build_url('account/guideFinancial', 'listFinancialGuideByGuideId'),
+                    type: 'post',
+                    data: args,
+                    showLoading: false
+                })
+                .done(function(data) {
+                    if (showDialog(data)) {
+                        var html,
+                            type = $tab.find('.T-btn-save').data('type');
+                        if (!!type) {
+                            data.list = FinancialService.getTempDate(data.list, FinGuide.payingJson);
+
+                            html = payingTableTemplate(data);
+                        } else {
+                            html = checkingTableTemplate(data);
+                        }
+                        $tab.find('.T-checkList').html(html);
+
+                        if (!type) {
+                            //给全选按钮绑定事件: 未去重
+                            FinancialService.initCheckBoxs($tab.find(".T-checkAll"), $tab.find(".T-checkList").find('.T-checkbox'));
+                        }
+
+                        // 设置记录条数及页面
+                        $tab.find('.T-sumItem').text('共计' + data.recordSize + '条记录');
+                        $tab.find('.T-btn-save').data('pageNo', args.pageNo);
+                        // 绑定翻页组件
+                        laypage({
+                            cont: $tab.find('.T-pagenation'),
+                            pages: data.totalPage, //总页数
+                            curr: (data.pageNo + 1),
+                            jump: function(obj, first) {
+                                if (!first) { // 避免死循环，第一次进入，不调用页面方法
+                                    FinGuide.getOperationList(obj.curr - 1, $tab);
+                                }
+                            }
+                        });
+                    }
+                });
+
+        }
+    }
+
+	//确认收款
+	Ticket.savePayingData = function($tab){
+
 	};
 
 	exports.init = Ticket.initModule;
