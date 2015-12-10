@@ -25,22 +25,47 @@ define(function(require, exports){
 	 * @param  {int} page 页码
 	 */
 	Payment.getList = function(page){
-		var args = {
+		var date = new Date(),
+        year = date.getFullYear(),
+        month = Tools.addZero2Two(date.getMonth() + 1),
+        day = Tools.addZero2Two(date.getDate()),
+        args = {
 			pageNo : (page || 0),
+			endTime : year + "-" + month + "-" + day,
+			startTime : year + "-" + month + "-01"
 		}
 		if (!!Payment.$tab) {
 			args = {
 				pageNo: (page || 0),
 			}
 		}
-		data = {};
-		Tools.addTab(menuKey,"收支明细",listTemplate(data));
-		Payment.init_event();
+		
+		$.ajax({
+			url : KingServices.build_url('financialIncomeOrPay', 'findSelectValue'),
+			type : "POST",
+		}).done(function(selectData){
+
+
+			$.ajax({
+				url : KingServices.build_url('financialIncomeOrPay', 'findPager'),
+				type : "POST",
+				data : args
+			})
+			.done(function(data){
+				if(showDialog(data)){
+					data.selectData = selectData;
+					Tools.addTab(menuKey,"收支明细",listTemplate(data));
+					Payment.$tab = $('#tab-' + menuKey + '-content');
+					Payment.init_event(Payment.$tab);
+				}
+			});
+		});
 	};
 
-	Payment.init_event = function(){
-		Payment.$tab = $('#tab-' + menuKey + '-content');
-		var $searchArea = Payment.$tab.find('.T-search-area');
+	Payment.init_event = function($tab){
+		var $searchArea = $tab.find('.T-search-area'),
+			$datepicker = $searchArea.find('.datepicker');
+		FinancialService.setDatePicker($datepicker);
 	};
 
 	// 暴露方法
