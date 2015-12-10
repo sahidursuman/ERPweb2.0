@@ -96,7 +96,12 @@
 				{{/each}}
 			</td>
 
-			<td>--</td>
+			<td>
+			    {{shopPolicy.customerRebateMoney}}<br>
+				{{each shopPolicy.SelfPayRebateList as customer}}
+					{{customer.customerRebateMoney}}<br>
+				{{/each}}
+			</td>
 
 			<td class="no-padding">
 				{{shopPolicy.normalMarketPrice}}<br>
