@@ -339,7 +339,7 @@ define(function(require, exports) {
 			FinPay.getList();
 		});
 
-		FinancialService.setDatePicker($tab.find('.T-datepicker'));
+		Tools.setDatePicker($tab.find('.T-datepicker'), true);
 		$tab.find('.T-start').on('changeDate', function(event) {
 		    event.preventDefault();
 		    var start = $(this).val(),

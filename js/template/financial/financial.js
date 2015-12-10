@@ -271,20 +271,6 @@ FinancialService.initCheckBoxs = function($checkAll,checkboxList){//$checkAll全
     });
 };
 
-/**
- * 设置时间控件
- * @param {object} $obj    绑定时间控件的对象
- * @param {[type]} options [description]
- */
-FinancialService.setDatePicker = function($obj, options)  {
-    return $obj.datepicker($.extend({}, {
-        autoclose: true,
-        todayHighlight: true,
-        format: 'yyyy-mm-dd',
-        language: 'zh-CN'
-    }, options));
-};
-
 //自动下账提示
 FinancialService.autoPayConfirm = function(startDate,endDate,fn){
     showConfirmMsg($("#confirm-dialog-message"),"是否按当前账期 " + startDate + " 至 " + endDate + " 下账？",function(){
