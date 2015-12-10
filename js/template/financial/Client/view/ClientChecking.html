@@ -80,7 +80,7 @@
         	{{each customerAccountList as rs index}}
             <tr data-gid="{{rs.touristGroupId}}">
                 <td>{{index + 1}}</td>
-                <td>{{rs.id}}</td>
+                <td>{{rs.otaOrderNumber}}</td>
                 <td>{{rs.lineProductName}}</td>
                 <td>{{rs.startTime}}</td>
                 <td>{{rs.contactName}}</td>
@@ -135,7 +135,7 @@
     </table>
     <div class="row pageMode">
         <div class="col-xs-4">
-            <small>共计 {{searchParam.totalCount}} 条记录</small>
+            <small>共计 {{searchParam.recordSize}} 条记录</small>
         </div>
         <div class="col-xs-8">
             <div class="dataTables_paginate paging_simple_numbers T-pagenation">
