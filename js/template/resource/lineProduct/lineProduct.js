@@ -811,7 +811,7 @@ define(function(require, exports) {
 		//添加行程安排餐饮
 		var scheduleDetails = '<div class="T-timeline-item timeline-item clearfix updateRestaurantList updateLineProductDaysDetail T-RestaurantList ui-sortable-handle" data-entity-index='+ResLineProduct.updateLineProductIndex+'><div class="timeline-info " style="color:#1fade0" ><i class="ace-icon fa fa-circle" ></i><span>餐饮</span></div>'+
 		'<div class="widget-box transparent" style="margin-top: 20px"><div class="widget-body"><div class=""><table class="table table-striped table-bordered table-hover">'+
-		'<thead><tr><th  class="th-border">餐厅名称</th><th class="th-border">餐厅电话</th><th class="th-border">用餐类型</th><th class="th-border">餐标</th>	<th class="th-border">菜单</th><th  class="th-border">备注</th>	<th  class="th-border" style="width: 60px;">操作</th></tr></thead>'+
+		'<thead><tr><th  class="th-border">餐厅名称</th><th class="th-border">餐厅电话</th><th class="th-border">用餐类型</th><th class="th-border">餐标<span style="font-size:12px;">(元/人)</span></th>	<th class="th-border">菜单</th><th  class="th-border">备注</th>	<th  class="th-border" style="width: 60px;">操作</th></tr></thead>'+
 		'<tbody><tr>'+
 		'<td><input type="text" class="col-xs-12 chooseRestaurantName bind-change"/><input type="hidden" name="restaurantId"/></td>'+
 		'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
@@ -1910,17 +1910,17 @@ define(function(require, exports) {
 			if($list.length > 0){
 				for(var j=0; j<$list.length;j++){
 					$item = $list.eq(j);
-					var selfPayId = $item.find("[name=selfPayItemId]").val();
-					if(!selfPayId){
+					var companyId = $item.find("[name=companyId]").val();
+					if(!companyId){
 						showMessageDialog($( "#confirm-dialog-message" ), "请选择自费项目！");
 						isAjax = false;
 						return false;
 					}
-					if(selfPayId){
+					if(companyId){
 						var selfPayJson = {
 							id : $item.find("[name=templateId]").val(),
 							selfPayItemId :$item.find("[name=selfPayItemId]").val(),
-							selfPayId : selfPayId,
+							selfPayId : companyId,
 							price : $item.find("[name=contractPrice]").val(),
 							marketPrice : $item.find("[name=marketPrice]").val(),
 							remark : $item.find("[name=remark]").val(),

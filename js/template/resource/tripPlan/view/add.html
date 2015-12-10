@@ -47,7 +47,7 @@
 
     <div id="tripPlan_addPlan_tripPlan" class="show-grid form-horizontal">
     	<input type="hidden" name="tripPlanId" value="{{tripPlan.id}}"  />
-        <div class="col-sm-12" style="height: 40px; border-bottom: 1px solid #ccc;margin-top: 20px">
+        <div class="col-sm-12" style="height: 90px; border-bottom: 1px solid #ccc;margin-top: 20px">
         	<div class="col-sm-3">
                 <label class="pull-left control-label no-padding-right"><strong>计划导付金额：</strong></label>
                 <label class="col-sm-6 control-label align-left"><strong>{{tripPlan.guideAllPayMoney}}</strong></label>
@@ -62,9 +62,17 @@
                 <label class="pull-left control-label align-right"><strong>导游预支金额：</strong></label>
                 <input type="text" class="col-sm-6" name="guideAllPreMoney" value="{{tripPlan.guideAllPreMoney}}"/>
                 <input type="hidden" name="qouteId" value="{{tripPlan.qouteId}}">
-            </div>
-            </div>
+            </div> 
+             <div class="col-sm-12" style="height: 25px; margin-top: 10px">
+                 <label class="pull-left control-label no-padding-right">备注:</label>
+                <div class="col-sm-10">
+                 <textarea class="form-control col-sm-12" name="remark" value="" ></textarea>
+                </div>
+            </div>  
+        </div>
+
      </div>
+
     </div>
     <div class="row" id="tripPlan_tab_content" >
         <div class="col-sm-12">
@@ -370,7 +378,7 @@
                                                         <th class="th-border">联系人</th>
                                                         <th class="th-border">联系电话</th>
                                                         <th class="th-border">类型</th>
-                                                        <th class="th-border">餐标</th>
+                                                        <th class="th-border">餐标<span style="font-size:12px;">(元/人)</span></th>
                                                         <th class="th-border">人数</th>
                                                         <th class="th-border">优惠</th>
                                                         <th class="th-border">应付</th>

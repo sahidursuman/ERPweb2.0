@@ -30,16 +30,16 @@
 									</div>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-1 control-label no-padding-right">车座数：</label>
+									<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>车座数：</label>
 									<div class="col-sm-2">
-										<input class="col-sm-12 bind-change chooseSeatCount" type="text" name="seatCount" id="" value="{{if addTripPlan.bus != null}}{{addTripPlan.bus.seatCount}}{{/if}}" />
+										<input class="col-sm-12 bind-change T-chooseSeatCount" type="text" name="seatCount" id="" value="{{if addTripPlan.bus != null}}{{addTripPlan.bus.seatCount}}{{/if}}" />
 									</div>
 									<label class="col-sm-1 control-label no-padding-right">车辆品牌：</label>
 									<div class="col-sm-2">
 										<input class="col-sm-12 chooseBusBrand bind-change" type="text" name="needBusBrand" id="" value="{{if addTripPlan.bus != null}}{{addTripPlan.bus.brand}}{{/if}}" />
 										<input type="hidden" name="busBrandId" value="{{if addTripPlan.brand != null}}{{addTripPlan.brand.id}}{{/if}}" />
 									</div>
-									<label class="col-sm-1 control-label no-padding-right">车牌号：</label>
+									<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>车牌号：</label>
 									<div class="col-sm-2">
 										<div class="col-sm-12 no-padding">
 											<input class="col-sm-12 chooseBusLicenseNumber bind-change" type="text" name="LicenseNumber" id="" value="{{if addTripPlan.bus != null}}{{addTripPlan.bus.licenseNumber}}{{/if}}" />
@@ -61,7 +61,7 @@
 									</div>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-1 control-label no-padding-right">导游：</label>
+									<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>导游：</label>
 									<div class="col-sm-2">
 										<div class="col-sm-12 no-padding">
 											<input class="col-sm-12 AddTPchooseGuide bind-change" type="text" name="AddTPchooseGuide" id="" value="{{if addTripPlan.guide != null}}{{addTripPlan.guide.realname}}{{/if}}" />
@@ -71,11 +71,11 @@
                                             </span>
                                         </div>
 									</div>  
-									<label class="col-sm-1 control-label no-padding-right">导游电话：</label>     
+									<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>导游电话：</label>     
 									<div class="col-sm-2">
 										<input class="col-sm-12" readonly="readonly" type="text" name="GmobileNumber" id="" value="{{if addTripPlan.guide != null}}{{addTripPlan.guide.mobileNumber}}{{/if}}" />
 									</div>
-									<label class="col-sm-1 control-label no-padding-right">司机：</label>
+									<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>司机：</label>
 									<div class="col-sm-2">
 										<div class="col-sm-12 no-padding">
 											<input class="col-sm-12 chooseDriver bind-change" type="text" name="driverName" id="" value="{{if addTripPlan.driver != null}}{{addTripPlan.driver.name}}{{/if}}" />
@@ -105,7 +105,7 @@
 									</div>
 									<label class="col-sm-1 control-label no-padding-right">集合时间：</label>
 									<div class="col-sm-2">
-										<input class="form-control col-sm-12 dataTimePicker" type="text" name="setPlaceTime" value="" />
+										<input class="form-control col-sm-12 datepicker" type="text" name="setPlaceTime" value="" />
 									</div>
 								</div>
 
@@ -114,34 +114,34 @@
 									<div class="col-sm-10">
 									 <textarea class="form-control col-sm-12" name="remark" value="" ></textarea>
 										
-									</textarea>
 									</div>
 								</div>
+
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</form>
-		<div class="form-horizontal col-sm-12 checkbox">
+		<div class="form-horizontal col-sm-12 T-checkBox">
 			<div class="pull-left  no-padding-right">
 				<label class="control-label no-padding-right">确认发团后游客短信设置:</label>
 				立即发送
 				<label style="padding-left:0px;">
-					<input type="radio" class="ace checked" checked="checked" value="0" name="executeTimeType">
+					<input type="radio" class="ace T-immSendChecked" checked="checked" value="0" name="executeTimeType">
 					<span class="lbl">
 					</span>
 				</label>
 				&nbsp;&nbsp;&nbsp;&nbsp;
 				定时发送
 				<label  style="padding-left:0px;">
-					<input type="radio" class="ace checked"  value="1" name="executeTimeType">
+					<input type="radio" class="ace T-timeChecked"  value="1" name="executeTimeType">
 					<span class="lbl">
 					</span>
 				</label>  
 			</div>
-			<div class="col-sm-2 addMergePlanTime hide">
-				<input class="form-control col-sm-4 datetimepicker" type="text" name="executeTime" value="" />
+			<div class="col-sm-2 addMergePlanTime">
+				<input class="form-control col-sm-4 datepicker T-To-TimeChecked hide" type="text" name="executeTime" value="" />
 			</div>
         </div>
 
@@ -187,7 +187,7 @@
 												</tr>
 											</thead>
 											<tbody class="mergeTripPlanTouristTbody">{{each addTripPlan.touristGroupList as touristGroupList}}
-												<tr data-entity-id="{{touristGroupList.id}}" data-entity-pid="{{touristGroupList.pid}}">
+												<tr data-value="{{touristGroupList.id}}" data-entity-pid="{{touristGroupList.pid}}">
 												    <td></td> 
 												    <td>{{touristGroupList.creatorName}}</td>
 												    <td>{{touristGroupList.lineProduct.name}}</td>
@@ -231,10 +231,10 @@
 													<td>{{touristGroupList.includeSelfPay}}</td>  
 													<td>{{touristGroupList.remark}}</td>
 													<td><div class="hidden-sm hidden-xs btn-group">
-															<a data-entity-id="{{touristGroupList.id}}" class="cursor addTripPlanView">
+															<a data-entity-id="{{touristGroupList.id}}" class="cursor T-action T-addTripPlanView">
 																查看
 															</a><a class="cursor"> |</a>
-															<a data-entity-id="{{touristGroupList.id}}" class= "cursor addTripPlanDelete">
+															<a data-entity-id="{{touristGroupList.id}}" class= "cursor T-action T-addTripPlanDelete">
 																删除
 															</a>
 														</div>
@@ -370,11 +370,11 @@
 		</form>
 		<form class="form-horizontal" role="form" onsubmit="return false">
 			<div class="form-group" style="text-align: center;">
-				<button class="btn btn-danger btn-cancelTripPlan otherButton">
+				<button class="btn btn-danger T-cancelMergnPlan otherButton">
 					<i class="ace-icon fa fa-times"></i>
 					取消
 				</button>
-				<button class="btn btn-primary btn-saveTripPlan otherButton">
+				<button class="btn btn-primary T-saveMergnPlan otherButton">
 					<i class="ace-icon fa fa-check"></i>
 					保存
 				</button>

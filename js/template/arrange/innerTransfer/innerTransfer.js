@@ -263,6 +263,7 @@ define(function(require, exports) {
 			data:"id="+id,
 			success:function(data){
 				data.innerTransfer = JSON.parse(data.innerTransfer);
+				data.parentTouristGroup = JSON.parse(data.parentTouristGroup);
 				
 				var html = viewTemplate(data);
 				var outViewTemplate = innerTransferOut(data);
@@ -522,7 +523,7 @@ define(function(require, exports) {
 		var otherFeeJsonAddLength=$tab.find(".addTransferCost tr").length;
 		$tab.find(".addTransferCost tr").each(function(i){
 			var id=$(this).attr("data-entity-id");
-			var discribe = "\""+$(this).find("input[name=discribe]").val()+"\"";
+			var discribe = $(this).find("input[name=discribe]").val();
 			var count = $(this).find("input[name=count]").val();
 			var price = $(this).find("input[name=price]").val();
 			if(i>1){

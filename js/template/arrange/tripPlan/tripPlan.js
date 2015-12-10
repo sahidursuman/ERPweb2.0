@@ -1198,6 +1198,7 @@ define(function(require, exports) {
 			if (!!$(obj).attr('readonly')) return;
 			$.ajax({
 				url:KingServices.build_url("bookingOrder","getSeatCountList"),
+				showLoading:false,
 				success:function(data){
 					var result = showDialog(data);
 					if(result){

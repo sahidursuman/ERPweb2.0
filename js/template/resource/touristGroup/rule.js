@@ -21,15 +21,6 @@ var rule = {
 			var $obj = this.$touristGroupContainer,
 
 				settings = [
-				 {
-					$ele: $obj.find('input[name="lineProductIdName"]'),
-					$valObj: $obj.find('input[name="lineProductId"]'),
-					rules: [{
-						type: 'null',
-						errMsg: '线路产品不能为空'
-					}]
-				},
-
 			     {	//出游日期   
 					$ele: $obj.find('input[name="startTime"]'),
 					rules: [

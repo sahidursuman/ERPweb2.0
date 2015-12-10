@@ -593,7 +593,8 @@ var modalScripts = {
 	'system_department':"js/template/system/department/business.js",
 	'arrange_transfer':"js/template/arrange/arrangeTransfer/arrangeTransfer.js",  //转客管理
 	'arrange_inner_Transfer':"js/template/arrange/innerTransfer/innerTransfer.js",
-	'arrange_orderManage':"js/template/arrange/orderManage/orderManage.js"
+	'arrange_orderManage':"js/template/arrange/orderManage/orderManage.js",
+	'arrange_tourist':"js/template/arrange/arrangeTourist/arrangeTourist.js"   //并团转客
 };
 
 
@@ -636,7 +637,7 @@ function listMenu(menuTemplate){
 				});
 
 				//绑定分团转客菜单功能
-				$("#sidebar .nav-list .arrange_tourist").click(function(){
+				/*$("#sidebar .nav-list .arrange_tourist").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
 					$(this).addClass("active");
 					$(this).parent().parent().addClass("active");
@@ -644,7 +645,7 @@ function listMenu(menuTemplate){
 						arrangeTourist.listArrangeTouristMain();
 						modals["arrange_tourist"] = arrangeTourist;
 					});
-				});
+				});*/
 
 				//绑定中转安排菜单功能
 				$("#sidebar .nav-list .arrange_transit").click(function(){
@@ -1495,6 +1496,17 @@ KingServices.updateTransit = function(id)  {
 		module.updateTransit(id);
 	});
 }
+
+/**
+ * [listTransit 外转数据
+ * @return {[type]} [description]
+ */
+KingServices.getListPage = function(event)  {
+	seajs.use("" + ASSETS_ROOT +"js/template/arrange/arrangeTransfer/arrangeTransfer.js",function(module){
+		module.getListPage(event);
+	});
+}
+
 
 /**
  * 中转安排——

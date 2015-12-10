@@ -68,7 +68,7 @@
 						<h5 class="">
 							<label class="middle title-size">内转列表</label>
 						</h5>
-					<div class="widget-body">
+					<div class="widget-body TransferTable">
 						<div class="widget-main no-padding">
 							<table class="table table-striped table-bordered table-hover hotelRoomStandardList">
 								<thead>
@@ -123,6 +123,8 @@
 					<h5 class="">
 						<label class="middle title-size">收客信息</label>
 					</h5>
+
+					{{if isParent ==  0 }}
 					<div class="search-area col-sm-12">
 						<label class="col-sm-1 control-label no-padding-right" style="width:84px;">应收：</label>
 						<div class="col-sm-1">
@@ -138,13 +140,32 @@
 							<input name="currentNeedPayMoney" value="{{innerTransfer.touristGroup.currentNeedPayMoney}}" readonly="readonly" type="text" class="col-xs-12" />
 						</div>
 					</div>
+					{{else}}
+					<div class="search-area col-sm-12">
+						<label class="col-sm-1 control-label no-padding-right" style="width:84px;">应收：</label>
+						<div class="col-sm-1">
+							<input name="needPayAllMoney" value="{{parentTouristGroup.needPayAllMoney}}" readonly="readonly" type="text" class="col-xs-12" />
+						</div>
+						<label class="col-sm-1 control-label no-padding-right">已收：</label>
+						<div class="col-sm-1">
+							<input name="payedMoney" value="{{parentTouristGroup.payedMoney}}" readonly="readonly" type="text" class="col-xs-12" />
+						</div>
+
+						<label class="col-sm-1 control-label no-padding-right">现收：</label>
+						<div class="col-sm-1">
+							<input name="currentNeedPayMoney" value="{{parentTouristGroup.currentNeedPayMoney}}" readonly="readonly" type="text" class="col-xs-12" />
+						</div>
+					</div>
+
+					{{/if}}
+
 					<div class="search-area col-sm-12">
 						<label class="pull-left control-label no-padding-right">收客时的备注：</label>
 						<div class="col-sm-5">
 							<input name="remark" value="{{innerTransfer.touristGroup.remark}}" type="text" class="col-xs-12" readonly="readonly" />
 						</div>
 					</div>
-					<div class="widget-body">
+					<div class="widget-body TransferTable">
 						<div class="widget-main no-padding">
 							<table class="table table-striped table-bordered table-hover hotelRoomStandardList">
 								<thead>
@@ -196,7 +217,7 @@
 						<h5 class="">
 							<label class="middle title-size">游客小组信息</label>
 						</h5>
-					<div class="widget-body">
+					<div class="widget-body TransferTable">
 						<div class="widget-main no-padding">
 							<table class="table table-striped table-bordered table-hover hotelRoomStandardList">
 								<thead>

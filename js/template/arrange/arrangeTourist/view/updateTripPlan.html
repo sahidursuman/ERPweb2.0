@@ -33,16 +33,16 @@
 									</div>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-1 control-label no-padding-right">车座数：</label>
+									<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>车座数：</label>
 									<div class="col-sm-2">
-										<input class="col-sm-12 bind-change chooseSeatCount" type="text" name="seatCount" id="" value="{{bus.seatCount}}" />
+										<input class="col-sm-12 bind-change T-chooseSeatCount" type="text" name="seatCount" id="" value="{{bus.seatCount}}" />
 									</div>
 									<label class="col-sm-1 control-label no-padding-right">车辆品牌：</label>
 									<div class="col-sm-2">
 										<input class="col-sm-12 chooseBusBrand bind-change" type="text" name="needBusBrand" id="" value="{{bus.brand}}" />
 										<input type="hidden" name="busBrandId" value="" />
 									</div>
-									<label class="col-sm-1 control-label no-padding-right">车牌号：</label>
+									<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>车牌号：</label>
 									<div class="col-sm-2">
 										<div class="col-sm-12 no-padding">
 											<input class="col-sm-12 chooseBusLicenseNumber bind-change" type="text" name="LicenseNumber" id="" value="{{bus.licenseNumber}}" />
@@ -64,7 +64,7 @@
 									</div>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-1 control-label no-padding-right">导游：</label>
+									<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>导游：</label>
 									<div class="col-sm-2">
 										<div class="col-sm-12 no-padding">
 											<input class="col-sm-12 AddTPchooseGuide bind-change" type="text" name="AddTPchooseGuide" id="" value="{{guide.realname}}" />
@@ -78,7 +78,7 @@
 									<div class="col-sm-2">
 										<input class="col-sm-12" readonly="readonly" type="text" name="GmobileNumber" id="" value="{{guide.mobileNumber}}" />
 									</div>
-									<label class="col-sm-1 control-label no-padding-right">司机：</label>
+									<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>司机：</label>
 									<div class="col-sm-2">
 										<div class="col-sm-12 no-padding">
 											<input class="col-sm-12 chooseDriver bind-change" type="text" name="driverName" id="" value="{{driver.name}}" />
@@ -108,15 +108,15 @@
 									</div>
 									<label class="col-sm-1 control-label no-padding-right">集合时间：</label>
 									<div class="col-sm-2">
-										<input class="form-control col-sm-12 dataTimePicker" type="text" name="setPlaceTime" value="{{tripPlan.setPlaceTime}}" />
+										<input class="form-control col-sm-12 datepicker" type="text" name="setPlaceTime" value="{{tripPlan.setPlaceTime}}" />
 									</div>
 								</div>
+
 								<div class="form-group">
 									<label class="col-sm-1 control-label no-padding-right">备注:</label>
 									<div class="col-sm-10">
 									 <textarea class="form-control col-sm-12" name="remark" value="" ></textarea>
 										
-									</textarea>
 									</div>
 								</div>
 							</div>
@@ -127,25 +127,25 @@
 		</form>
 
 
-		<div class="form-horizontal col-sm-12 checkbox">
+		<div class="form-horizontal col-sm-12 T-checkBox">
 			<div class="pull-left  no-padding-right">
 				<label class="control-label no-padding-right">确认发团后游客短信设置:</label>
 				立即发送
 				<label style="padding-left:0px;">
-					<input type="radio" class="ace checked" value="0" name="executeTimeType">
+					<input type="radio" class="ace T-immSendChecked" checked="checked" value="0" name="executeTimeType">
 					<span class="lbl">
 					</span>
 				</label>
 				&nbsp;&nbsp;&nbsp;&nbsp;
 				定时发送
 				<label style="padding-left:0px;">
-					<input type="radio" class="ace checked"  value="1" name="executeTimeType">
+					<input type="radio" class="ace T-timeChecked"  value="1" name="executeTimeType">
 					<span class="lbl">
 					</span>
 				</label> 
 			</div>
-			<div class="col-sm-2 addMergePlanTime hide">
-				<input class="form-control col-sm-4 datetimepicker" type="text" name="executeTime" value="{{tripPlan.executeTime}}" />
+			<div class="col-sm-2 addMergePlanTime">
+				<input class="form-control col-sm-4 datepicker T-To-TimeChecked hide" type="text" name="executeTime" value="{{tripPlan.executeTime}}" />
 			</div>
         </div>
 
@@ -192,7 +192,7 @@
 												</tr>
 											</thead>
 											<tbody class="updateTripPlanTouristTbody">{{each touristGroupList as touristGroup}}
-												<tr data-entity-id="{{touristGroup.id}}" data-entity-pid="{{touristGroup.pid}}">
+												<tr data-value="{{touristGroup.id}}" data-entity-pid="{{touristGroup.pid}}">
 													<td></td>
 													<td>{{touristGroup.creatorName}}</td>
 													<td>{{touristGroup.lineProduct.name}}</td>
@@ -225,10 +225,10 @@
 													<td>{{touristGroup.remark}}</td>
 													<td>
 														<div class="hidden-sm hidden-xs btn-group">										
-                                                        <a data-entity-id="{{touristGroup.id}}" class="cursor touristGroupView">
+                                                        <a data-entity-id="{{touristGroup.id}}" class="cursor T-action T-touristGroupView">
 																查看
 															</a><a class="cursor"> |</a>
-															<a data-entity-id="{{touristGroup.id}}" class="cursor touristGroupDelete">
+															<a data-entity-id="{{touristGroup.id}}" class="cursor T-action T-touristGroupDelete">
 																删除
 															</a>
 														</div>
@@ -366,11 +366,11 @@
 		</form>
 		<form class="form-horizontal" role="form" onsubmit="return false">
 			<div class="form-group" style="text-align: center;">
-				<button class="btn btn-danger btn-updatecancelTripPlan otherButton">
+				<button class="btn btn-danger T-updatecancelTripPlan otherButton">
 					<i class="ace-icon fa fa-times"></i>
 					取消
 				</button>
-				<button class="btn btn-primary btn-saveTripPlan otherButton">
+				<button class="btn btn-primary T-saveTripPlan otherButton">
 					<i class="ace-icon fa fa-check"></i>
 					保存
 				</button>
