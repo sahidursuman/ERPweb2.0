@@ -49,7 +49,7 @@ define(function(require, exports) {
                 success: function(data) {
                     var result = showDialog(data);
                     if (result) {
-                        console.log(data);
+                        // console.log(data);
                         data.startAccountTime = startAccountTime
                         data.endAccountTime = endAccountTime
                         var html = listTemplate(data);
@@ -114,7 +114,7 @@ define(function(require, exports) {
             info:info,
             sortType: 'auto'
         }
-        console.log(OtherAccounts.CheckingData);
+        // console.log(OtherAccounts.CheckingData);
         $.ajax({
             url: KingServices.build_url("account/arrangeOtherFinancial", "listFinancialOtherDetails"),
             type: "POST",
@@ -123,7 +123,8 @@ define(function(require, exports) {
                 var result = showDialog(data);
                 if (result) {
                     var dataTable = data;
-                    console.log(dataTable);
+                    // console.log(dataTable);
+
                     // 对账 
                     $.ajax({
                         url: KingServices.build_url("account/arrangeOtherFinancial", "getStatistics"),
@@ -138,13 +139,15 @@ define(function(require, exports) {
                                 var html = AccountsCheckingTemplate(dataTable);
                                 Tools.addTab(checkTabId, "其他对账", html);
                                 var $checkTab = $("#tab-" + checkTabId + "-content");
+                                //自动计算金额
+                               
                                 var info = $checkTab.find('.T-creatorUserChoose').val();
                                 var nam = $checkTab.find('.name').text();
                                 var startTime = $checkTab.find('.T-startTime').val();
                                 var endTime = $checkTab.find('.T-endTime').val()
                                 
                                 OtherAccounts.$checkSearchArea = $checkTab.find('.T-search-area');
-                                console.log(info,"minzi");
+                                FinancialService.updateUnpayMoney($checkTab,rule);
                                 // 查看已付金额明细
                                 $checkTab.find('.T-checkListNum').on('click', '.T-action', function(event) {
                                     event.preventDefault();
@@ -233,7 +236,7 @@ define(function(require, exports) {
                 success: function(data) {
                     var result = showDialog(data);
                     if (result) {
-                        console.log(data);
+                        // console.log(data);
                         var $nameList = data.nameList
                         for (var i = 0; i < $nameList.length; i++) {
                             $nameList[i].value = $nameList[i].name;
@@ -260,7 +263,7 @@ define(function(require, exports) {
                     id = $that.data('id');
                 var oldRemark = $that.attr("data-entity-checkRemark"); //得到对账结算金额旧的值
                 var oldUnPayedMoney = $that.attr("data-entity-settlementMoney"); //得到对账备注旧的值
-                var newUnPayedMoney = $tr.eq(i).find("input[name=ClearMoney]").val(); //得到对账结算金额被修改之后值
+                var newUnPayedMoney = $tr.eq(i).find("input[name=settlementMoney]").val(); //得到对账结算金额被修改之后值
                 var newRemark = $tr.eq(i).find("input[name=checkRemark]").val(); //得到对账备注金额被修改之后值
                 var flag = $that.find(".T-insuanceFinancial").is(":checked");
                 if (flag) { //勾选
@@ -340,10 +343,11 @@ define(function(require, exports) {
             type: "POST",
             data: OtherAccounts.PaymentData,
             success: function(data) {
-                console.log(data);
+                // console.log(data);
                 var result = showDialog(data);
                 if (result) {
                     var dataTable = data;
+
                     // 付款头部的接口
                     $.ajax({
                         url: KingServices.build_url("account/arrangeOtherFinancial", "getStatistics"),
@@ -361,16 +365,15 @@ define(function(require, exports) {
                                 var nam = $PaymentTabId.find('input[name=itemName]').val();
                                 var startTime = $PaymentTabId.find('.T-startTime').val();
                                 var endTime = $PaymentTabId.find('.T-endTime').val();
-
+                                //调用付款自动计算
+                                FinancialService.updateSumPayMoney($PaymentTabId,rule);
                                 OtherAccounts.$clearSearchArea = $PaymentTabId.find('.T-search-area');
                                 $PaymentTabId.find('.T-PaymentListNum').on('click', '.T-action', function(event) {
                                     event.preventDefault();
                                     var $that = $(this),
                                         $tr = $that.closest('tr'),
                                         id = $tr.data('id');
-                                    console.log(id);
                                     if ($that.hasClass('T-lookPay')) {
-                                        alert("已付金额");
                                         // 查看已付明细
                                         OtherAccounts.ViewAmountPaid(id);
                                     } else if ($that.hasClass('T-insuanceImg')) {
@@ -381,7 +384,6 @@ define(function(require, exports) {
                                         OtherAccounts.viewOrderDetail(id);
                                     }
                                 });
-
                                 //时间控件
                                 $PaymentTabId.find("input[name=joinTime]").datepicker({
                                     autoclose: true,
@@ -449,7 +451,7 @@ define(function(require, exports) {
                 var $that = $(this),
                     id = $that.data('id');
                 var oldRemark = $that.attr("data-entity-checkRemark"); //得到付款付款金额旧的值
-                var payMoney = $tr.eq(i).find("input[name=ClearMoney]").val(); //得到付款付款金额被修改之后值
+                var payMoney = $tr.eq(i).find("input[name=payMoney]").val(); //得到付款付款金额被修改之后值
                 var newRemark = $tr.eq(i).find("input[name=checkRemark]").val(); //得到付款备注金额被修改之后值、
                 var paymentMethod = $tr.find('select option:selected').val();
                 if (oldRemark != newRemark) { //是否有修改
@@ -492,7 +494,7 @@ define(function(require, exports) {
                 id: id
             },
             success: function(data) {
-                console.log(data, "查看已付");
+                // console.log(data, "查看已付");
                 var result = showDialog(data);
                 if (result) {
                     var html = lookDetailTemplate(data);
@@ -523,7 +525,7 @@ define(function(require, exports) {
                 success: function(data) {
                     var result = showDialog(data);
                     if (result) {
-                        console.log(data);
+                        // console.log(data);
                         var html = viewhandleTemplate(data);
                         var lookDetailLayer = layer.open({
                             type: 1,
@@ -549,7 +551,7 @@ define(function(require, exports) {
                     id: id
                 },
                 success: function(data) {
-                    console.log(data, "123");
+                    // console.log(data, "123");
                     var result = showDialog(data);
                     if (result) {
                         var html = ViewAmountPaidTemplate(data);
