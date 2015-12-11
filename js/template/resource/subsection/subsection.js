@@ -265,12 +265,12 @@ define(function(require, exports) {
 
 		// 新增
 		subsection.$tabSub.find(".T-btn-operation-add").click(function(){
-			var isHasTr = 0;
-			// 找到T-subsectionOperationTbody的最后一个tr的input.val()赋给days/startTime  在下面调用startIntime的时候把这两个参数传过去
-			var days = subsection.$tabSub.find('.T-subsectionOperationTbody tr:last-child').find('input[name=days]').val();
-			var startTimeS = subsection.$tabSub.find('.T-subsectionOperationTbody tr:last-child').find('input[name=startTime]').val();
+			var $tbody = subsection.$tabSub.find('.T-subsectionOperationTbody'),
+			     isHasTr = 0,
+			     days = $tbody.find('tr:last-child').find('input[name=days]').val(),
+			     startTimeS = $tbody.find('tr:last-child').find('input[name=startTime]').val();
 
-			if (subsection.$tabSub.find('.T-subsectionOperationTbody tr').length > 0) {
+			if ($tbody.find('tr').length > 0) {
 				isHasTr = 1;
 			}
 			var radio = '<input type="radio" name="operateCurrentNeedPayMoney" />';
@@ -287,15 +287,19 @@ define(function(require, exports) {
 			+ '<td>-</td>'
 			+ '<td><div class="hidden-sm hidden-xs btn-group"><a data-entity-id="" class=" T-btn-operation-delete cursor">删除</a></div></td>'
 			+ '</tr>';
-			subsection.$tabSub.find(".T-subsectionOperationTbody").append(html);
+			$tbody.append(html);
 
-				// 判断是不是第一个tr
+            //获取新增tr后前一个TR
+			var preDays = $tbody.find('tr:last-child').prev('tr').find('input[name=days]').val();
+
+			// 判断是不是第一个tr
 			 if(isHasTr == 0){
 				startTime = subsection.$tabSub.find('.T-startTime').text();
-				subsection.$tabSub.find('.T-subsectionOperationTbody tr:last-child').find('.T-startTime').val(startTime)
+				$tbody.find('tr:last-child').find('.T-startTime').val(startTime)
 		     }else{
-				
-			subsection.$tabSub.find('.T-subsectionOperationTbody tr:last-child').find('.T-startTime').val(subsection.startIntime(days,startTimeS));
+				if(preDays!=""){
+					$tbody.find('tr:last-child').find('.T-startTime').val(subsection.startIntime(days,startTimeS));
+				}
 			}
 			subsection.$tabSub.find(".T-btn-operation-delete").off("click").on("click",function(){
 				var $this = $(this), $parents = $this.closest("tr"), id = $parents.data("entity-id");
@@ -306,7 +310,6 @@ define(function(require, exports) {
 			validator = rule.checkdSaveSubsection(subsection.$tabSub);
 			subsection.$tabSub.data('isEdited', true);
 		});
-
 		subsection.startIntime = function(whichDay,startTime){
 			var	date = new Date(startTime.replace("-", "/").replace("-", "/"));
 			var timer = date.getTime()+(whichDay)*24*60*60*1000;
@@ -456,6 +459,11 @@ define(function(require, exports) {
 					$parents.find("input[name=customerType]").val("团体");
 				}
 				$parents.find("input[name=days]").val(ui.item.days);
+				var currentDays = ui.item.days;
+				    currentTime = $parents.find('.T-startTime').val();
+				if ($parents.next('tr').length > 0) {
+					$parents.next('tr').find('.T-startTime').val(subsection.startIntime(currentDays,currentTime));
+				};
 				validator = rule.updateCheckdSaveSubsection(validator);
 				return false;
 			}
