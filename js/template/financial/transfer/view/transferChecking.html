@@ -13,8 +13,8 @@
                     <input name="lineProductName" placeholder="线路名称" type="text" value="{{searchParam.lineProductName}}" style="width:200px;" />
 
                     <label class="marginLeft-30">操作人：</label>
-                    <input name="accountInfo" type="text" value="{{searchParam.accountInfo}}" style="width:200px;" />
-                    <input name="accountInfo" type="hidden" value="{{searchParam.accountInfo}}" style="width:200px;" />
+                    <input name="operateName" type="text" value="{{if searchParam.operateName == ""}}全部{{else}}{{searchParam.operateName}}{{/if}}" style="width:100px;" />
+                    <input name="operateId" type="hidden" value="{{searchParam.operateId}}" />
 
                     <button class="marginLeft-30 btn-sm search-btn T-search" >
                         <i class="ace-icon fa fa-search"></i>搜索
@@ -101,7 +101,24 @@
 								</tr>
 							</thead>  
 							<tbody>
-							  
+							    {{each rs.memberList as member index}}
+                                <tr><td>{{index+1}}</td>
+                                    <td>{{if member.name == null || member.name == ""}}-{{else}}{{member.name}}{{/if}}</td>
+                                    <td>{{member.mobileNumber}}</td>
+                                    <td>{{if member.idCardType == 0}}
+                                            身份证
+                                        {{else if member.idCardType == 1}}
+                                            护照
+                                        {{else if member.idCardType == 2}}
+                                            其他
+                                        {{else}}
+                                            -
+                                        {{/if}}
+                                    </td>
+                                    <td>{{if member.idCardNumber == null || member.idCardNumber == ""}}-{{else}}{{member.idCardNumber}}{{/if}}</td>
+                                    <td>{{if member.isContactUser == 1}}是{{/if}}</td>
+                                </tr>
+                                {{/each}}
 							</tbody>
     					</table>
     				</td>
