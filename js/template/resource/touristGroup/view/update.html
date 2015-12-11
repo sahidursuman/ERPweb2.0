@@ -14,7 +14,7 @@
 							<input type="text"  value="{{if touristGroupDetail.lineProduct != null}}{{touristGroupDetail.lineProduct.name}}{{/if}}" name="lineProductIdName" class="col-sm-8 bind-change product-width" readonly="readonly" />
 							<input type="hidden" value="{{touristGroupDetail.lineProductId}}" name="lineProductId" />
 							<input type="hidden" value="{{touristGroupDetail.quoteId}}" name="quoteId" />
-							<button class="col-sm-4 btn btn-sm btn-primary btn-travelLine-search travelLine-search {{if !!type}}T-travelLine-search{{/if}}" style="padding-bottom:5px;width: 62px">
+							<button class="col-sm-4 btn btn-sm btn-primary btn-travelLine-search travelLine-search {{if !!type || touristGroupDetail.status == 1}}T-travelLine-search{{/if}}" style="padding-bottom:5px;width: 62px">
 								<i class="ace-icon fa fa-search "></i>搜索
 							</button> 
 							{{else}}
