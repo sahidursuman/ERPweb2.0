@@ -641,7 +641,6 @@ define(function(require, exports) {
 			}
 		}).click(function(){
 			var obj = this;
-			console.log(obj)
 			var needSeatCount = $(obj).parent().parent().find("input[name=needSeatCount]").val();
 			$.ajax({
 				url: KingServices.build_url('busCompany', 'findBusCompanyBySeat'),
