@@ -529,6 +529,7 @@ define(function(require, exports) {
         var argumentsLen = arguments.length,
             clearSaveJson = FinancialService.clearSaveJson(Transfer.$clearTab,Transfer.clearTempData,rule);
         var searchParam = {
+            partnerAgencyId : id,
             sumCurrentPayMoney : Transfer.$clearTab.find('input[name=sumPayMoney]').val(),
         	payType : Transfer.$clearTab.find('select[name=sumPayType]').val(),
             payRemark : Transfer.$clearTab.find('input[name=sumPayRemark]').val()

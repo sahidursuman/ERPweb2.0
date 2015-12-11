@@ -525,6 +525,7 @@ define(function(require, exports) {
         var argumentsLen = arguments.length,
             clearSaveJson = FinancialService.clearSaveJson(Insure.$clearTab,Insure.clearTempData,rule);
         var searchParam = {
+            insuranceId : id,
             sumCurrentPayMoney : Insure.$clearTab.find('input[name=sumPayMoney]').val(),
             payType : Insure.$clearTab.find('select[name=sumPayType]').val(),
             payRemark : Insure.$clearTab.find('input[name=sumPayRemark]').val()

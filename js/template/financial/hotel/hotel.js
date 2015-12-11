@@ -535,6 +535,7 @@ define(function(require, exports) {
         var argumentsLen = arguments.length,
             clearSaveJson = FinancialService.clearSaveJson(hotel.$clearTab,hotel.clearTempData,rule);
         var searchParam = {
+            hotelId : id,
             sumCurrentPayMoney : hotel.$clearTab.find('input[name=sumPayMoney]').val(),
             payType : hotel.$clearTab.find('select[name=sumPayType]').val(),
             payRemark : hotel.$clearTab.find('input[name=sumPayRemark]').val()

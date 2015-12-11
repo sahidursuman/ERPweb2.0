@@ -516,6 +516,7 @@ define(function(require, exports) {
             type:"POST",
             data:{
                 selfPayPaymentJson : clearSaveJson,
+                selfPayId : id,
                 payType : Self.$clearTab.find('select[name=sumPayType]').val(),
                 payRemark : Self.$clearTab.find('input[name=sumPayRemark]').val()
             },
