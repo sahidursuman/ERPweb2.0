@@ -386,10 +386,6 @@ define(function(require, exports) {
 				/* Act on the event */
 				var $that=$(this),id=$that.attr('data-qouteId');
 					KingServices.updateQuoteToOffer(id);
-					 tripPlanId=$that.attr("data-tripPlanId");
-					tripPlan.addTripPlan(tripPlanId);
-
-				
 			});
 
 			//绑定删除时间
