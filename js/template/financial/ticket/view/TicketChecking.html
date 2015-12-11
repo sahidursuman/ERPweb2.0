@@ -3,13 +3,13 @@
         <form class="form-inline" role="form" onsubmit="return false">
             <div class="form-group">
                 <label>票务商家：</label>
-                <label>百事通桐梓林店</label>
+                <label>{{name}}</label>
             </div>
             <div class="form-group marginLeft-30">
                 <label>账期：</label>
-                <input type="text" class="form-control datepicker T-search-start-date" value="{{searchParam.startDate}}">
+                <input type="text" class="form-control datepicker T-search-start-date" value="{{searchParam.startDate}}" style="width: 100px; text-align: center;">
                 <label>&nbsp;至&nbsp;</label>
-                <input type="text" class="form-control datepicker T-search-end-date" value="{{searchParam.endDate}}">
+                <input type="text" class="form-control datepicker T-search-end-date" value="{{searchParam.endDate}}" style="width: 100px; text-align: center;">
             </div>
             <div class="form-group marginLeft-30">
                 <label>账务类别：</label>
@@ -44,24 +44,24 @@
     <table class="table table-striped table-bordered table-hover">
         <thead>
             <tr>
-                <th class="th-border">序号</th>
-                <th class="th-border">账务类别</th>
-                <th class="th-border">发生日期（账期）</th>
-                <th class="th-border">类型</th>
-                <th class="th-border">班次</th>
-                <th class="th-border">座位级别</th>
-                <th class="th-border">数量</th>
-                <th class="th-border">单价</th>
-                <th class="th-border">优惠</th>
-                <th class="th-border">账面应付</th>
-                <th class="th-border">已付金额</th>
-                <th class="th-border">单据</th>
-                <th class="th-border">结算金额</th>
-                <th class="th-border">未付金额</th>
-                <th class="th-border">备注</th>
-                <th class="th-border">对账时间</th>
-                <th class="th-border">对账人</th>
-                <th class="th-border">对账</th>
+                <th class="th-border" style="min-width: 45px;">序号</th>
+                <th class="th-border" style="min-width: 70px;">账务类别</th>
+                <th class="th-border" style="min-width: 120px;">发生日期（账期）</th>
+                <th class="th-border" style="min-width: 45px;">类型</th>
+                <th class="th-border" style="min-width: 45px;">班次</th>
+                <th class="th-border" style="min-width: 70px;">座位级别</th>
+                <th class="th-border" style="min-width: 45px;">数量</th>
+                <th class="th-border" style="min-width: 45px;">单价</th>
+                <th class="th-border" style="min-width: 45px;">优惠</th>
+                <th class="th-border" style="min-width: 70px;">账面应付</th>
+                <th class="th-border" style="min-width: 70px;">已付金额</th>
+                <th class="th-border" style="min-width: 45px;">单据</th>
+                <th class="th-border" style="min-width: 70px;">结算金额</th>
+                <th class="th-border" style="min-width: 70px;">未付金额</th>
+                <th class="th-border" style="min-width: 45px;">备注</th>
+                <th class="th-border" style="min-width: 70px;">对账时间</th>
+                <th class="th-border" style="min-width: 55px;">对账人</th>
+                <th class="th-border" style="min-width: 100px;">对账</th>
             </tr>
         </thead>
         <tbody class="T-list T-checkList">

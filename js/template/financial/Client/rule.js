@@ -25,6 +25,23 @@ define(function(require, exports) {
 	    	    	$ele: $obj.find('.money'),
 	    	    	rules:rule	
 	    	    }]);
+		},
+		autoFillCheck: function($obj) {
+			return $obj.formValidate([
+		    	    {	//付款金额
+		    	    	$ele: $obj.find('.T-sumReciveMoney'),
+		    	    	rules: [
+		    	    	        {
+		    	    	        	type: 'null', 
+		    	    	        	errMsg: '不能为空'
+		    	    	        },
+		    	    	        {
+		    	    	        	type: 'positive-float',
+		    	    	        	errMsg: '请输入正数'
+		    	    	        }
+			    	        ]
+		    	    }
+				]);
 		}
 	}
 	return rule;
