@@ -21,23 +21,23 @@
 
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="form-group globalAdd">
-                <label class="control-label pull-left">账面应付合计：{{sumNeedPayMoney}}元 </label>
-                <label class="control-label pull-left marginLeft-30">已付金额合计：{{sumPayedMoney}} </label>
-                <label class="control-label pull-left marginLeft-30">结算金额合计：{{sumSettlementMoney}}</label>
-                <label class="control-label pull-left marginLeft-30">未付金额合计：{{sumUnPayedMoney}}</label>
-                <label class="control-label marginLeft-30">已对账未付金额合计：<span class="T-unpayMoney">{{checkedUnPayedMoney}}</span></label>
-                <label class="control-label pull-left marginLeft-30">本次付款金额：</label>
-                <input class="col-xs-1 pull-left" name="sumPayMoney" type="text" value="{{sumPayMoney}}" maxlength="9" style="float:none;" />
-                <label class="control-label pull-left marginLeft-30">付款方式：</label>
-                <select class="pull-left" style="text-align:center" name="sumPayType">
+                <label>账面应付合计：{{sumNeedPayMoney}}元 </label>
+                <label class="marginLeft-30">已付金额合计：{{sumPayedMoney}} </label>
+                <label class="marginLeft-30">结算金额合计：{{sumSettlementMoney}}</label>
+                <label class="marginLeft-30">未付金额合计：{{sumUnPayedMoney}}</label>
+                <label class="marginLeft-30">已对账未付金额合计：<span class="T-unpayMoney">{{checkedUnPayedMoney}}</span></label>
+                <label class="marginLeft-30">本次付款金额：</label>
+                <input name="sumPayMoney" type="text" value="{{sumPayMoney}}" maxlength="9" style="float:none;" />
+                <label class="marginLeft-30">付款方式：</label>
+                <select style="text-align:center" name="sumPayType">
                     <option value="0" {{if sumPayType == 0}}selected="selected"{{/if}}>现金</option>
                     <option value="1" {{if sumPayType == 1}}selected="selected"{{/if}}>银行转账</option>
                     <option value="2" {{if sumPayType == 2}}selected="selected"{{/if}}>网上支付</option>
                     <option value="3" {{if sumPayType == 3}}selected="selected"{{/if}}>支票</option>
                     <option value="4" {{if sumPayType == 4}}selected="selected"{{/if}}>其他</option>
                 </select>
-                <label class="control-label pull-left marginLeft-30">备注：</label>
-                <input class="col-xs-1 pull-left" name="sumPayRemark" type="text" value="{{sumPayRemark}}" style="float:none;" />
+                <label class="marginLeft-30">备注：</label>
+                <input name="sumPayRemark" type="text" value="{{sumPayRemark}}" style="float:none;" />
 
                 <button class="btn btn-xs btn-primary marginLeft-30 T-clear-auto">
                     <i class="ace-icon fa fa-check-circle"></i> 自动下账

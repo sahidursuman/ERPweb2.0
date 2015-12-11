@@ -89,13 +89,22 @@ define(function(require, exports) {
 				resArgs.fromPartnerAgencyName = args.name;
 				break;
 			case 1:  //内转转入
-				options.url = KingServices.build_url('financial/innerTransferAccount', 'listPager');
+				options.url = KingServices.build_url('account/innerTransferIn', 'listInnerTransferIncome');
+				resArgs.startAccountTime = args.startTime;
+				resArgs.endAccountTime = args.endTime;
+				resArgs.businessGroupName = args.name;
 				break;
 			case 2:  //购物账务
-				options.url = KingServices.build_url('', 'listPager');
+				options.url = KingServices.build_url('financial/shopAccount', 'listPager');
+				resArgs.startTime = args.startTime;
+				resArgs.endTime = args.endTime;
+				resArgs.shopName = args.name;
 				break;
 			default:  //代订账务
-				options.url = KingServices.build_url('', 'listPager');
+				options.url = KingServices.build_url('financial/bookingAccount', 'listPager');
+				resArgs.startTime = args.startTime;
+				resArgs.endTime = args.endTime;
+				resArgs.travelAgencyName = args.name;
 				break;
 		}
 		
@@ -127,13 +136,58 @@ define(function(require, exports) {
 					}
 
 					data.totalPage = data.searchParam.totalPage;
-					data.totalCount = data.searchParam.totalCount;
+					data.totalCount = data.searchParam.recordSize;
 					break;
 				case 1:  //内转转入
+					var src = data.innerTransferIncomeList;
+					for (var i = 0, len = src.length, tmp; i < len; i++) {
+						tmp = src[i];
+
+						list.push({
+							orgName: tmp.businessGroupName,
+							needPayMoney: tmp.settlementMoney,
+							payedMoney: tmp.alreadyIncomeMoney,
+							unPayedMoney: tmp.unIncomeMoney,
+							id: tmp.businessGroupId
+						})
+					}
+
+					data.totalPage = data.totalPage;
+					data.totalCount = data.recordSize;
 					break;
 				case 2:  //购物账务
+					var src = data.shopAccountList;
+					for (var i = 0, len = src.length, tmp; i < len; i++) {
+						tmp = src[i];
+
+						list.push({
+							orgName: tmp.shopName,
+							needPayMoney: tmp.settlementMoney,
+							payedMoney: tmp.reciveMoney,
+							unPayedMoney: tmp.unReciveMoney,
+							id: tmp.partnerAgencyId
+						})
+					}
+
+					data.totalPage = data.searchParam.totalPage;
+					data.totalCount = data.searchParam.recordSize;
 					break;
 				default:  //代订账务
+					var src = data.bookingAccountList;
+					for (var i = 0, len = src.length, tmp; i < len; i++) {
+						tmp = src[i];
+
+						list.push({
+							orgName: tmp.fromPartnerAgencyName,
+							needPayMoney: tmp.settlementMoney,
+							payedMoney: tmp.receiveMoney,
+							unPayedMoney: tmp.unReceivedMoney,
+							id: tmp.partnerAgencyId
+						})
+					}
+
+					data.totalPage = data.searchParam.totalPage;
+					data.totalCount = data.searchParam.recordSize;
 					break;
 			}
 		}
@@ -155,17 +209,7 @@ define(function(require, exports) {
 			FinIncome.getList();
 		});
 
-		FinancialService.setDatePicker($tab.find('.T-datepicker'));
-		$tab.find('.T-start').on('changeDate', function(event) {
-		    event.preventDefault();
-		    var start = $(this).val(),
-		        $end = $tab.find('.T-end').datepicker('setStartDate', start);
-
-		    if ($end.val() < start) {
-		        $end.val(start);
-		    }
-		}).trigger('changeDate');
-
+		Tools.setDatePicker($tab.find('.T-datepicker'), true);
 
 		$tab.find('.T-btn-search').on('click', function(event) {
 		    event.preventDefault();

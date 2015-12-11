@@ -15,7 +15,7 @@ define(function(require, exports) {
     };
 
     plan.listMain = function(tripNumber,lineProductName,lineProductId,guideName,guideId,startTime,endTime,status){
-        if (plan.$searchArea && arguments.length === 1) {
+        if (plan.$searchArea && arguments.length === 0) {
             // 初始化页面后，可以获取页面的参数
             tripNumber = plan.$searchArea.find("input[name=tripNumber]").val(),
             lineProductName = plan.$searchArea.find("input[name=lineProductName]").val(),

@@ -181,7 +181,7 @@ define(function(require, exports) {
 					}
 
 					data.totalPage = data.searchParam.totalPage;
-					data.totalCount = data.searchParam.totalCount;
+					data.totalCount = data.searchParam.recordSize;
 					break;
 				case 2:  //餐厅账务
 					var src = data.financialRestaurantList;
@@ -303,21 +303,21 @@ define(function(require, exports) {
 					data.totalCount = data.searchParam.recordSize;
 					break;
 				default:  //其它账务 8
-					var src = data.customerAccountList;
+					var src = data.financialOtherList;
 					for (var i = 0, len = src.length, tmp; i < len; i++) {
 						tmp = src[i];
 
 						list.push({
-							orgName: tmp.fromPartnerAgencyName,
-							needPayMoney: tmp.settlementMoney,
-							payedMoney: tmp.receiveMoney,
-							unPayedMoney: tmp.unReceivedMoney,
-							id: tmp.partnerAgencyId
+							orgName: tmp.name,
+							needPayMoney: tmp.sumNeedPayMoney,
+							payedMoney: tmp.sumPayedMoney,
+							unPayedMoney: tmp.sumUnPayedMoney,
+							id: ''
 						})
 					}
 
-					data.totalPage = data.searchParam.totalPage;
-					data.totalCount = data.searchParam.recordSize;
+					data.totalPage = data.totalPage;
+					data.totalCount = data.recordSize;
 					break;
 			}
 		}
@@ -339,7 +339,7 @@ define(function(require, exports) {
 			FinPay.getList();
 		});
 
-		FinancialService.setDatePicker($tab.find('.T-datepicker'));
+		Tools.setDatePicker($tab.find('.T-datepicker'), true);
 		$tab.find('.T-start').on('changeDate', function(event) {
 		    event.preventDefault();
 		    var start = $(this).val(),
