@@ -426,7 +426,10 @@ define(function(require, exports) {
 	 * @return {[type]}       [description]
 	 */
 	selfpay.delTimeArea = function($this){
-		var $parents = $this.closest('tr'), td = $parents.find("td"), index = $this.closest('.T-dateTimeArea').index(), id = $this.closest('div').find("input[name=rebateListId]").val();
+		var $parents = $this.closest('tr'), 
+		    td = $parents.find("td"),
+		    index = $this.closest('.T-dateTimeArea').index(), 
+		    id = $this.closest('div').find("input[name=rebateListId]").val();
 		if (!!id) {
 			var dialogObj = $( "#confirm-dialog-message" );
 			dialogObj.removeClass('hide').dialog({
@@ -650,20 +653,16 @@ define(function(require, exports) {
 				    	$tr.find(".T-contractPrice").eq(index).focus();
 						showMessageDialog($( "#confirm-dialog-message" ),"内部价格不能大于市场价格");
 				   };
-
-
-				
 			} else if ($that.hasClass('T-guideRate')) {
 				// 当导游返佣改变时
-				 var guideVal = $tr.find('.T-guideRate').val(),
-				     travelVal = $tr.find('.T-travelAgencyRate').eq(index).val();
-				     traveVal = parseFloat(traveVal);
+				 var guideVal = $tr.find('.T-guideRate').eq(index).val();
 					 guideVal = parseFloat(guideVal);
 				    if ( guideVal!=null && guideVal!="" && guideVal < 0 ) {
 				    	 $tr.find('.T-guideRate').eq(index).focus();
 				    	 showMessageDialog($( "#confirm-dialog-message" ),"导游返佣不能是负数");
 				    }else if(guideVal!=null && guideVal!="" && guideVal < 100){
-				    	$tr.find('.T-travelAgencyRate').eq(index).val(100-guideVal)
+				    	var traveVal = parseFloat(100-guideVal);
+				    	    $tr.find('.T-travelAgencyRate').eq(index).val(traveVal);
 				    }else if(guideVal!=null && guideVal!="" && guideVal > 100){
 				    	 $tr.find('.T-guideRate').eq(index).focus();
 				    	 showMessageDialog($( "#confirm-dialog-message" ),"导游返佣不能大于100");
@@ -671,15 +670,14 @@ define(function(require, exports) {
 				
 			} else if ($that.hasClass('T-travelAgencyRate')) {
 				// 当旅行社返佣改变时
-				var traveVal = $tr.find('.T-travelAgencyRate').val(),
-				    guideVal = $tr.find('.T-guideRate').eq(index).val();
+				var traveVal = $tr.find('.T-travelAgencyRate').eq(index).val(),
 				    traveVal = parseFloat(traveVal);
-					guideVal = parseFloat(guideVal);
 				    if (traveVal!=null && traveVal!="" && traveVal < 0 ) {
 				    	  $tr.find('.T-travelAgencyRate').eq(index).focus();
 				    	 showMessageDialog($( "#confirm-dialog-message" ),"旅行社返佣不能是负数");
 				    }else if(traveVal!=null && traveVal!="" && traveVal < 100){
-				    	$tr.find('.T-guideRate').eq(index).val(100-traveVal);
+				    	var traveVal = parseFloat(100-traveVal);
+				    	    $tr.find('.T-guideRate').eq(index).val(traveVal);
 				    }else if(traveVal!=null && traveVal!="" && traveVal > 100){
 				    	$tr.find('.T-travelAgencyRate').eq(index).focus();
 				    	showMessageDialog($( "#confirm-dialog-message" ),"旅行社返佣不能大于100");
