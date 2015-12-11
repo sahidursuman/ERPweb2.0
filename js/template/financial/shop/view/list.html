@@ -7,9 +7,9 @@
             </div>
             <div class="form-group marginLeft-30">
                 <label>账期：</label>
-                <input type="text" class="form-control datepicker T-search-start-date" value="{{searchParam.startTime}}" style="width: 100px; text-align: center;">
+                <input type="text" class="form-control datepicker T-search-start-date" value="{{searchParam.startDate}}" style="width: 100px; text-align: center;">
                 <label>&nbsp;至&nbsp;</label>
-                <input type="text" class="form-control datepicker T-search-end-date" value="{{searchParam.endTime}}" style="width: 100px; text-align: center;">
+                <input type="text" class="form-control datepicker T-search-end-date" value="{{searchParam.endDate}}" style="width: 100px; text-align: center;">
             </div>
             <div class="form-group marginLeft-30">
                 <button class="btn-sm search-btn T-btn-search">
@@ -36,7 +36,7 @@
         </thead>
         <tbody class="T-list">
         {{each shopAccountList as rs}}
-            <tr data-id="{{rs.shopId}}">
+            <tr data-id="{{rs.shopId}}" data-name="{{rs.shopName}}">
                 <td>{{rs.shopName}}</td>
                 <td>大小</td>
                 <td>{{rs.shopMoney}}</td>
