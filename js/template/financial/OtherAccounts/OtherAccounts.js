@@ -8,6 +8,7 @@ define(function(require, exports) {
         viewhandleTemplate = require("./view/viewhandle"),
         ViewAmountPaidTemplate = require("./view/ViewAmountPaid"),
         viewOrderDetailTemplate = require("./view/viewOrderDetail"),
+        viewImgCheckingTemplate = require("./view/viewImgChecking"),
         checkTabId = menuKey + "-checking",
         tabId = "tab-" + menuKey + "-content",
         PaymentTabId = menuKey + "-Payment";
@@ -63,6 +64,17 @@ define(function(require, exports) {
                             format: 'yyyy-mm-dd',
                             language: 'zh-CN'
                         });
+                                 // 绑定翻页组件
+                        laypage({
+                            cont: $container.find('.T-pagenation'),
+                            pages: data.searchParam.totalPage,
+                            curr: (pageNo + 1),
+                            jump: function(obj, first) {
+                                if (!first) {
+                                    OtherAccounts.listFinancialOtherAccounts(obj.curr - 1);
+                                }
+                            }
+                        });
                     }
                 }
             })
@@ -114,7 +126,6 @@ define(function(require, exports) {
             info:info,
             sortType: 'auto'
         }
-        // console.log(OtherAccounts.CheckingData);
         $.ajax({
             url: KingServices.build_url("account/arrangeOtherFinancial", "listFinancialOtherDetails"),
             type: "POST",
@@ -123,8 +134,7 @@ define(function(require, exports) {
                 var result = showDialog(data);
                 if (result) {
                     var dataTable = data;
-                    // console.log(dataTable);
-
+                    console.log(dataTable,"pop");
                     // 对账 
                     $.ajax({
                         url: KingServices.build_url("account/arrangeOtherFinancial", "getStatistics"),
@@ -159,8 +169,11 @@ define(function(require, exports) {
                                         // 查看已付明细
                                         OtherAccounts.lookDetail(id);
                                     } else if ($that.hasClass('T-viewInsuanceImg')) {
-                                        // 查看单据
-                                        OtherAccounts.viewInsuranceImg(id);
+                                        alert();
+                                               // 查看单据
+                                        var WEB_IMG_URL_BIG = $checkTab.find("input[name=WEB_IMG_URL_BIG]").val();//大图
+                                        var WEB_IMG_URL_SMALL = $checkTab.find("input[name=WEB_IMG_URL_SMALL]").val();//大图
+                                        OtherAccounts.viewInsuranceImg(this,WEB_IMG_URL_BIG,WEB_IMG_URL_SMALL);
                                     } else if ($that.hasClass('T-viewhandle')) {
                                         // 查看对账明细
                                         OtherAccounts.viewhandle(id);
@@ -378,7 +391,9 @@ define(function(require, exports) {
                                         OtherAccounts.ViewAmountPaid(id);
                                     } else if ($that.hasClass('T-insuanceImg')) {
                                         // 查看单据
-                                        OtherAccounts.viewInsuranceImg(id);
+                                        var WEB_IMG_URL_BIG = $PaymentTabId.find("input[name=WEB_IMG_URL_BIG]").val();//大图
+                                        var WEB_IMG_URL_SMALL = $PaymentTabId.find("input[name=WEB_IMG_URL_SMALL]").val();//大图
+                                        OtherAccounts.viewInsuranceImg(this,WEB_IMG_URL_BIG,WEB_IMG_URL_SMALL);
                                     } else if ($that.hasClass('T-viewhandle')) {
                                         // 查看对账明细
                                         OtherAccounts.viewOrderDetail(id);
@@ -482,7 +497,61 @@ define(function(require, exports) {
                     }
                 }
             })
+        };
+        //显示单据
+    OtherAccounts.viewInsuranceImg = function(obj,WEB_IMG_URL_BIG,WEB_IMG_URL_SMALL) {
+        var data = { "images":[]  };
+        var str = $(obj).attr('url');
+        var strs = str.split(",");
+        for(var i = 0; i < strs.length; i ++) {
+            var s = strs[i];
+            if(s != null && s != "" && s.length > 0) {
+                var image = {
+                    "WEB_IMG_URL_BIG":imgUrl+s,
+                    "WEB_IMG_URL_SMALL":imgUrl+s+"?imageView2/2/w/150",
+                }
+                data.images.push(image);
+            }
         }
+        var html = viewImgCheckingTemplate(data);
+        
+        layer.open({
+            type : 1,
+            title : "单据图片",
+            skin : 'layui-layer-rim', // 加上边框
+            area : '500px', // 宽高
+            zIndex : 1028,
+            content : html,
+            scrollbar: false, // 推荐禁用浏览器外部滚动条
+            success : function() {
+                var colorbox_params = {
+                    photo : true,
+                    rel: 'colorbox',
+                    reposition:true,
+                    scalePhotos:true,
+                    scrolling:false,
+                    previous:'<i class="ace-icon fa fa-arrow-left"></i>',
+                    next:'<i class="ace-icon fa fa-arrow-right"></i>',
+                    close:'&times;',
+                    current:'{current} of {total}',
+                    maxWidth:'100%',
+                    maxHeight:'100%',
+                    onOpen:function(){ 
+                        $overflow = document.body.style.overflow;
+                        document.body.style.overflow = 'hidden';
+                    },
+                    onClosed:function(){
+                        document.body.style.overflow = $overflow;
+                    },
+                    onComplete:function(){
+                        $.colorbox.resize();
+                    }
+                };
+                $('#layer-photos-financial-count [data-rel="colorbox"]').colorbox(colorbox_params);
+            } 
+        });
+    };
+//
         // // 查看已付金额a-1
     OtherAccounts.lookDetail = function(id) {
 

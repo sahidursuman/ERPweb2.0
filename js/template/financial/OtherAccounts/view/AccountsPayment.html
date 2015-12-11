@@ -91,7 +91,7 @@
                 <td>{{Checking.reduceMoney}}</td>
                 <td>{{Checking.needPayMoney}}</td>
                 <td><a class="T-action T-lookPay">{{"社付："}}{{Checking.agencyPayedMoney}}{{";导付："}}{{Checking.guidePayedMoney}}</a></td>
-                <td><a href="#" class="T-action T-insuanceImg" url=""><span>查看</span></a></td>
+                <td>{{if Checking.billImage != null && Checking.billImage !=""}}<a href="#" class="T-option T-viewInsuanceImg" url="{{Checking.billImage}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
                 <td>
                     {{Checking.sumSettlementMoney}}
                 </td>

@@ -2,7 +2,8 @@
     <div class="form-horizontal search-area">
         <div class="form-group T-search-area">
             <label class="control-label pull-left marginLeft-30">项目名称：</label>
-            <input type="text" class="T-search-head col-sm-1 T-search-head-office" value="{{financialOtherList.name || '全部'}}" name="otherId">
+            <input type="text" class="T-search-head col-sm-1 T-search-head-office" 
+            name="otherId" value="{{if searchParam.name == ""}}全部{{else}}{{searchParam.name}}{{/if}}" />
             <label class="pull-left text-right   marginLeft-30">账期:</label>
             <div class="col-sm-1 input-daterange">
                 <div class="input-group col-sm-12">
