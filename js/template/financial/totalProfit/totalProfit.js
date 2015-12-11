@@ -43,12 +43,7 @@ define(function(require, exports) {
                     TotalProfit.$tab = $('#' + tabId);
                     TotalProfit.$searchArea = TotalProfit.$tab.find('.T-search-area');
 
-                    TotalProfit.$tab.find(".date-picker").datepicker({
-                        autoclose: true,
-                        todayHighlight: true,
-                        format: 'yyyy-mm-dd',
-                        language: 'zh-CN'
-                    });
+                    Tools.setDatePicker(TotalProfit.$tab.find(".date-picker"),true);
                     //搜索按钮事件
                     TotalProfit.$tab.find('.T-search').on('click', function(event) {
                         event.preventDefault();

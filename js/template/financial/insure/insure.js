@@ -85,7 +85,7 @@ define(function(require, exports) {
         Insure.$searchArea=Insure.$tab.find('.T-search-area');
 
         Insure.getQueryList();
-        FinancialService.initDate(Insure.$tab);
+        Tools.setDatePicker(Insure.$tab.find(".date-picker"),true);
 
  		//搜索按钮事件
         Insure.$tab.find('.T-search').on('click', function(event) {
@@ -177,7 +177,7 @@ define(function(require, exports) {
         Insure.$checkSearchArea = Insure.$checkTab.find('.T-search-area');
 
         Insure.init_event(page,id,name,Insure.$checkTab,"check");
-        FinancialService.initDate(Insure.$checkTab);
+        Tools.setDatePicker(Insure.$checkTab.find(".date-picker"),true);
         FinancialService.updateUnpayMoney(Insure.$checkTab,rule);
 
         //搜索按钮事件
@@ -302,7 +302,7 @@ define(function(require, exports) {
         Insure.$clearSearchArea = Insure.$clearTab.find('.T-search-area');
 
         Insure.init_event(page,id,name,Insure.$clearTab,"clear");
-        FinancialService.initDate(Insure.$clearTab);
+        Tools.setDatePicker(Insure.$clearTab.find(".date-picker"),true);
 
         //搜索事件
         Insure.$clearTab.find(".T-search").click(function(){

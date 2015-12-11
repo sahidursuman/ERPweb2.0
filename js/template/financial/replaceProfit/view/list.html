@@ -1,128 +1,37 @@
-<div class="row">
-	<div class="col-xs-12 form-group">
-		<div class="T-search-area border" style="margin:0px;border-style:solid solid none solid">
-			<div class="col-xs-1"> 
-	            <input type="text" value="{{searchParam.partnerAgencyName}}" name="partnerAgencyName" class="col-xs-12" placeholder="客户" />
-	            <input type="hidden" value="{{searchParam.partnerAgencyId}}" name="partnerAgencyId" />
-            </div>
-            <div class="col-xs-1"> 
-	            <input type="text" value = "{{searchParam.hotelName}}" name="hotelName" class="col-xs-12" placeholder="酒店" />
-	            <input type="hidden" value="{{searchParam.hotelId}}" name="hotelId" />
-			</div>
-			 
-			<div class="col-xs-1">
-	            <input type="text" value = "{{searchParam.scenicName}}" name="scenicName" class="col-xs-12" placeholder="景区" />
-	            <input type="hidden" value="{{searchParam.scenicId}}" name="scenicId" />
-			</div>
-			<div class="col-xs-1">
-	            <select class="col-sm-12" name="ticketType">
-					<option value="" {{if searchParam.ticketType == ""}}selected="selected"{{/if}}>全部</option>
-					<option value="1" {{if searchParam.ticketType == 1}}selected="selected"{{/if}}>飞机票</option>
-					<option value="2" {{if searchParam.ticketType == 2}}selected="selected"{{/if}}>汽车票</option>
-					<option value="3" {{if searchParam.ticketType == 3}}selected="selected"{{/if}}>火车票</option>
-					<option value="4" {{if searchParam.ticketType == 4}}selected="selected"{{/if}}>轮船票</option>
-				</select>
-			</div> 
-			<div class="col-xs-1">
-				<input type="text" value="{{searchParam.needSeatCount}}" name="seatCount" class="col-xs-12" placeholder="旅游车" />
-			</div>
-			<div class="col-xs-3">
-				<div class="col-xs-6">  
-					<div class="input-group">
-						<input class="col-xs-12 date-picker" name="startDate" placeholder="开始日期" value="{{searchParam.startTime}}" type="text" />	
-						<span class="input-group-addon">
-							<i class="fa fa-calendar"></i>
-						</span>
-					</div>
-				</div>
-				<div class="col-xs-6">
-					<div class="input-group">
-						<input class="col-xs-12 date-picker" name="endDate" placeholder="结束日期" value="{{searchParam.endTime}}" type="text" />	
-						<span class="input-group-addon">
-							<i class="fa fa-calendar"></i>
-						</span>
-					</div>
-				</div>
-			</div>
-			<div class="col-xs-2">			
-				<button class="search-btn btn-sm btn-height T-search" style="border-top-width: 4px;border-bottom-width: 4px;">
-					<i class="ace-icon fa fa-search"></i>
-					搜索
-				</button>
-			</div>
-
-			<div style="clear:both;height:0px;line-height:0px;"></div>
-		</div>
-		<div class="border" style="margin:0px;border-style:dashed solid solid solid">
-            <label class=" control-label " style="margin-left:12px;">应收合计：{{allSumNeedGetMoney}}</label>
-            <label class=" control-label " style="margin-left:30px;">成本合计：{{allSumCostMoney}}</label>
-            <label class=" control-label " style="margin-left:30px;">毛利合计：{{allGrossProfit}}</label>
-		</div>
-		<table class="table table-striped table-bordered table-hover">
-			<thead>
-				<tr class="bg-blur">
-					<th rowspan="2">代订单号</th>
-					<th rowspan="2">客户</th>
-					<th colspan="4">项目</th>
-					<th rowspan="2">应收</th>
-					<th rowspan="2">成本</th>
-					<th rowspan="2">毛利</th>
-				</tr>
-				<tr class="bg-blur">
-					<th>酒店</th>
-					<th>票务</th>
-					<th>景区</th>
-					<th>旅游车</th>
-				</tr>
-			</thead>
-			<tbody class="T-list">
-				{{each bookingOrderList as rs}}
-				<tr data-id="{{rs.id}}">
-					<td><a class="T-option T-replaceDetail">{{rs.orderNumber}}</a></td>
-					<td>{{if rs.partnerAgency != null}}{{rs.partnerAgency.travelAgencyName}}{{/if}}</td>
-					<td>
-						{{if rs.financialHotel == ""}}
-							-
-						{{else}}
-							{{rs.financialHotel}}
-						{{/if}}
-					</td>
-					<td>
-						{{if rs.financialTicket == ""}}
-							-
-						{{else}}
-							{{rs.financialTicket}}
-						{{/if}}
-					</td>
-					<td>
-						{{if rs.financialScenic == ""}}
-							-
-						{{else}}
-							{{rs.financialScenic}}
-						{{/if}}
-					</td>
-					<td>
-						{{if rs.financialBus == ""}}
-							-
-						{{else}}
-							{{rs.financialBus}}
-						{{/if}}
-					</td>
-					<td><a class="T-option T-needPayDetail">{{rs.sumNeedGetMoney}}</a></td>
-					<td><a class="T-option T-costDetail">{{rs.sumCostMoney}}</a></td>
-					<td>{{rs.financialGrossProfit}}</td>
-				</tr>
-				{{/each}}
-			</tbody>
-		</table>
-		<div class="row pageMode">
-			<div class="col-xs-6">
-				<small>共计 {{recordSize}} 条记录</small>
-			</div>
-			<div class="col-xs-6">
-				<div class="dataTables_paginate paging_simple_numbers T-pagenation">
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
+{{each bookingOrderList as rs}}
+<tr data-id="{{rs.id}}">
+	<td><a class="T-option T-replaceDetail">{{rs.orderNumber}}</a></td>
+	<td>{{if rs.partnerAgency != null}}{{rs.partnerAgency.travelAgencyName}}{{/if}}</td>
+	<td>
+		{{if rs.financialHotel == ""}}
+			-
+		{{else}}
+			{{rs.financialHotel}}
+		{{/if}}
+	</td>
+	<td>
+		{{if rs.financialTicket == ""}}
+			-
+		{{else}}
+			{{rs.financialTicket}}
+		{{/if}}
+	</td>
+	<td>
+		{{if rs.financialScenic == ""}}
+			-
+		{{else}}
+			{{rs.financialScenic}}
+		{{/if}}
+	</td>
+	<td>
+		{{if rs.financialBus == ""}}
+			-
+		{{else}}
+			{{rs.financialBus}}
+		{{/if}}
+	</td>
+	<td><a class="T-option T-needPayDetail">{{rs.sumNeedGetMoney}}</a></td>
+	<td><a class="T-option T-costDetail">{{rs.sumCostMoney}}</a></td>
+	<td>{{rs.financialGrossProfit}}</td>
+</tr>
+{{/each}}

@@ -85,7 +85,7 @@ define(function(require, exports) {
         hotel.$searchArea = hotel.$tab.find('.T-search-area');
 
         hotel.getQueryList();
-        FinancialService.initDate(hotel.$tab);
+        Tools.setDatePicker(hotel.$tab.find(".date-picker"),true);
 
         //搜索按钮事件
         hotel.$tab.find('.T-search').on('click', function(event) {
@@ -178,7 +178,7 @@ define(function(require, exports) {
         hotel.$checkSearchArea = hotel.$checkTab.find('.T-search-area');
 
         hotel.init_event(page,id,name,hotel.$checkTab,"check");
-        FinancialService.initDate(hotel.$checkTab);
+        Tools.setDatePicker(hotel.$checkTab.find(".date-picker"),true);
         FinancialService.updateUnpayMoney(hotel.$checkTab,rule);
 
         //搜索按钮事件
@@ -314,7 +314,7 @@ define(function(require, exports) {
         hotel.$clearSearchArea = hotel.$clearTab.find('.T-search-area');
 
         hotel.init_event(page,id,name,hotel.$clearTab,"clear");
-        FinancialService.initDate(hotel.$clearTab);
+        Tools.setDatePicker(hotel.$clearTab.find(".date-picker"),true);
 
         //搜索事件
         hotel.$clearTab.find(".T-search").click(function(){

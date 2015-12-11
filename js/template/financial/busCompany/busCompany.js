@@ -85,7 +85,7 @@ define(function(require, exports) {
         busCompany.$searchArea = busCompany.$tab.find('.T-search-area');
 
         busCompany.getQueryList();
-        FinancialService.initDate(busCompany.$tab);
+        Tools.setDatePicker(busCompany.$tab.find(".date-picker"),true);
 
         //搜索按钮事件
         busCompany.$tab.find('.T-search').on('click',function(event) {
@@ -178,7 +178,7 @@ define(function(require, exports) {
         busCompany.$checkSearchArea = busCompany.$checkTab.find('.T-search-area');
 
         busCompany.init_event(page,id,name,busCompany.$checkTab,"check");
-        FinancialService.initDate(busCompany.$checkTab);
+        Tools.setDatePicker(busCompany.$checkTab.find(".date-picker"),true);
         FinancialService.updateUnpayMoney(busCompany.$checkTab,rule);
 
         //搜索按钮事件
@@ -313,7 +313,7 @@ define(function(require, exports) {
         busCompany.$clearSearchArea = busCompany.$clearTab.find('.T-search-area');
 
         busCompany.init_event(page,id,name,busCompany.$clearTab,"clear");
-        FinancialService.initDate(busCompany.$clearTab);
+        Tools.setDatePicker(busCompany.$clearTab.find(".date-picker"),true);
 
         //搜索事件
         busCompany.$clearTab.find(".T-search").click(function(){

@@ -84,7 +84,7 @@ define(function(require, exports) {
         restaurant.$searchArea = restaurant.$tab.find('.T-search-area');
 
         restaurant.getQueryList();
-        FinancialService.initDate(restaurant.$tab);
+        Tools.setDatePicker(restaurant.$tab.find(".date-picker"),true);
 
         //搜索按钮事件
         restaurant.$tab.find('.T-search').on('click',function(event) {
@@ -177,7 +177,7 @@ define(function(require, exports) {
         restaurant.$checkSearchArea = restaurant.$checkTab.find('.T-search-area');
 
         restaurant.init_event(page,id,name,restaurant.$checkTab,"check");
-        FinancialService.initDate(restaurant.$checkTab);
+        Tools.setDatePicker(restaurant.$checkTab.find(".date-picker"),true);
         FinancialService.updateUnpayMoney(restaurant.$checkTab,rule);
 
         //搜索按钮事件
@@ -312,7 +312,7 @@ define(function(require, exports) {
         restaurant.$clearSearchArea = restaurant.$clearTab.find('.T-search-area');
 
         restaurant.init_event(page,id,name,restaurant.$clearTab,"clear");
-        FinancialService.initDate(restaurant.$clearTab);
+        Tools.setDatePicker(restaurant.$clearTab.find(".date-picker"),true);
 
         //搜索事件
         restaurant.$clearTab.find(".T-search").click(function(){
@@ -537,6 +537,7 @@ define(function(require, exports) {
         var argumentsLen = arguments.length,
             clearSaveJson = FinancialService.clearSaveJson(restaurant.$clearTab,restaurant.clearTempData,rule);
         var searchParam = {
+            restaurantId : id,
             sumCurrentPayMoney : restaurant.$clearTab.find('input[name=sumPayMoney]').val(),
             payType : restaurant.$clearTab.find('select[name=sumPayType]').val(),
             payRemark : restaurant.$clearTab.find('input[name=sumPayRemark]').val()

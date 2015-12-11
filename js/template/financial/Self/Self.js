@@ -80,7 +80,7 @@ define(function(require, exports) {
         Self.$searchArea = Self.$tab.find('.T-search-area');
 
         Self.getQueryList();
-        FinancialService.initDate(Self.$tab);
+        Tools.setDatePicker(Self.$tab.find(".date-picker"),true);
 
         //搜索按钮事件
         Self.$tab.find('.T-search').on('click', function(event) {
@@ -171,7 +171,7 @@ define(function(require, exports) {
         Self.$checkSearchArea = Self.$checkTab.find('.T-search-area');
 
         Self.init_event(page,id,name,Self.$checkTab,"check");
-        FinancialService.initDate(Self.$checkTab);
+        Tools.setDatePicker(Self.$checkTab.find(".date-picker"),true);
         FinancialService.updateUnpayMoney(Self.$checkTab,rule);
 
         //搜索按钮事件
@@ -293,7 +293,7 @@ define(function(require, exports) {
         Self.$clearSearchArea = Self.$clearTab.find('.T-search-area');
 
         Self.init_event(page,id,name,Self.$clearTab,"clear");
-        FinancialService.initDate(Self.$clearTab);
+        Tools.setDatePicker(Self.$clearTab.find(".date-picker"),true);
 
         //搜索事件
         Self.$clearTab.find(".T-search").click(function(){

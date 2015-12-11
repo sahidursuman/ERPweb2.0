@@ -82,7 +82,7 @@ define(function(require, exports) {
         Transfer.$searchArea = Transfer.$tab.find('.T-search-area');
 
         Transfer.getQueryList();
-        FinancialService.initDate(Transfer.$tab);
+        Tools.setDatePicker(Transfer.$tab.find(".date-picker"),true);
 
         //搜索按钮事件
         Transfer.$tab.find('.T-search').on('click',function(event) {
@@ -175,7 +175,7 @@ define(function(require, exports) {
         Transfer.$checkSearchArea = Transfer.$checkTab.find('.T-search-area');
 
         Transfer.init_event(page,id,name,Transfer.$checkTab,"check");
-        FinancialService.initDate(Transfer.$checkTab);
+        Tools.setDatePicker(Transfer.$checkTab.find(".date-picker"),true);
         Transfer.updateUnpayMoney();
 
         //搜索按钮事件
@@ -300,7 +300,7 @@ define(function(require, exports) {
         Transfer.$clearSearchArea = Transfer.$clearTab.find('.T-search-area');
 
         Transfer.init_event(page,id,name,Transfer.$clearTab,"clear");
-        FinancialService.initDate(Transfer.$clearTab);
+        Tools.setDatePicker(Transfer.$clearTab.find(".date-picker"),true);
 
         //搜索事件
         Transfer.$clearTab.find(".T-search").click(function(){
