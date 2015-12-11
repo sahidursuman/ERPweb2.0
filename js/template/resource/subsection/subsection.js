@@ -307,8 +307,8 @@ define(function(require, exports) {
 			})
 			subsection.datePicker("T-startTime");
 			subsection.lineProductChoose();
-			validator = rule.checkdSaveSubsection(subsection.$tabSub);
-			subsection.$tabSub.data('isEdited', true);
+			validator = rule.checkdSaveSubsection($tbody);
+			$tbody.data('isEdited', true);
 		});
 		subsection.startIntime = function(whichDay,startTime){
 			var	date = new Date(startTime.replace("-", "/").replace("-", "/"));
