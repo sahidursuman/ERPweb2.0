@@ -80,7 +80,7 @@ define(function(require, exports) {
         Self.$searchArea = Self.$tab.find('.T-search-area');
 
         Self.getQueryList();
-        FinancialService.initDate(Self.$tab);
+        Tools.setDatePicker(Self.$tab.find(".date-picker"),true);
 
         //搜索按钮事件
         Self.$tab.find('.T-search').on('click', function(event) {
@@ -171,7 +171,7 @@ define(function(require, exports) {
         Self.$checkSearchArea = Self.$checkTab.find('.T-search-area');
 
         Self.init_event(page,id,name,Self.$checkTab,"check");
-        FinancialService.initDate(Self.$checkTab);
+        Tools.setDatePicker(Self.$checkTab.find(".date-picker"),true);
         FinancialService.updateUnpayMoney(Self.$checkTab,rule);
 
         //搜索按钮事件
@@ -293,7 +293,7 @@ define(function(require, exports) {
         Self.$clearSearchArea = Self.$clearTab.find('.T-search-area');
 
         Self.init_event(page,id,name,Self.$clearTab,"clear");
-        FinancialService.initDate(Self.$clearTab);
+        Tools.setDatePicker(Self.$clearTab.find(".date-picker"),true);
 
         //搜索事件
         Self.$clearTab.find(".T-search").click(function(){
@@ -322,21 +322,19 @@ define(function(require, exports) {
             if(!isAutoPay){return false;}
 
             var startDate = Self.$clearTab.find("input[name=startDate]").val(),
-                endDate = Self.$clearTab.find("input[name=endDate]").val(),
-                tripInfo = Self.$clearTab.find("input[name=tripInfo]").val(),
-                sumPayMoney = parseFloat(Self.$clearTab.find('input[name=sumPayMoney]').val()),
-                sumPayType = parseFloat(Self.$clearTab.find('select[name=sumPayType]').val());
+                endDate = Self.$clearTab.find("input[name=endDate]").val();
             FinancialService.autoPayConfirm(startDate,endDate,function(){
                 $.ajax({
                     url:KingServices.build_url("account/selfPayFinancial","autoWiredSelfPayAccount"),
                     type:"POST",
                     data:{ 
                         selfPayId : id,
-                        autoPayMoney : sumPayMoney,
-                        payType : sumPayType,
-                        tripInfo : tripInfo,
+                        autoPayMoney : Self.$clearTab.find('input[name=sumPayMoney]').val(),
+                        payType : Self.$clearTab.find('select[name=sumPayType]').val(),
+                        payRemark : Self.$clearTab.find('input[name=payRemark]').val(),
                         accountTimeStart :startDate,
-                        accountTimeEnd : endDate
+                        accountTimeEnd : endDate,
+                        tripInfo : Self.$clearTab.find('select[name=tripInfo]').val()
                     },
                     success:function(data){
                         var result = showDialog(data);
@@ -518,6 +516,7 @@ define(function(require, exports) {
             type:"POST",
             data:{
                 selfPayPaymentJson : clearSaveJson,
+                selfPayId : id,
                 payType : Self.$clearTab.find('select[name=sumPayType]').val(),
                 payRemark : Self.$clearTab.find('input[name=sumPayRemark]').val()
             },

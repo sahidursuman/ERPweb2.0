@@ -85,7 +85,7 @@ define(function(require, exports) {
         Insure.$searchArea=Insure.$tab.find('.T-search-area');
 
         Insure.getQueryList();
-        FinancialService.initDate(Insure.$tab);
+        Tools.setDatePicker(Insure.$tab.find(".date-picker"),true);
 
  		//搜索按钮事件
         Insure.$tab.find('.T-search').on('click', function(event) {
@@ -177,7 +177,7 @@ define(function(require, exports) {
         Insure.$checkSearchArea = Insure.$checkTab.find('.T-search-area');
 
         Insure.init_event(page,id,name,Insure.$checkTab,"check");
-        FinancialService.initDate(Insure.$checkTab);
+        Tools.setDatePicker(Insure.$checkTab.find(".date-picker"),true);
         FinancialService.updateUnpayMoney(Insure.$checkTab,rule);
 
         //搜索按钮事件
@@ -302,7 +302,7 @@ define(function(require, exports) {
         Insure.$clearSearchArea = Insure.$clearTab.find('.T-search-area');
 
         Insure.init_event(page,id,name,Insure.$clearTab,"clear");
-        FinancialService.initDate(Insure.$clearTab);
+        Tools.setDatePicker(Insure.$clearTab.find(".date-picker"),true);
 
         //搜索事件
         Insure.$clearTab.find(".T-search").click(function(){
@@ -331,17 +331,15 @@ define(function(require, exports) {
             if(!isAutoPay){return false;}
 
             var startDate = Insure.$clearTab.find("input[name=startDate]").val(),
-                endDate = Insure.$clearTab.find("input[name=endDate]").val(),
-                sumPayMoney = parseFloat(Insure.$clearTab.find('input[name=sumPayMoney]').val()),
-                sumPayType = parseFloat(Insure.$clearTab.find('select[name=sumPayType]').val()),
-                sumPayRemark = Insure.$clearTab.find('input[name=sumPayRemark]').val();
+                endDate = Insure.$clearTab.find("input[name=endDate]").val();
             var searchParam = {
                 insuranceId : id,
-                sumCurrentPayMoney : sumPayMoney,
-                payType : sumPayType,
-                payRemark : sumPayRemark,
+                sumCurrentPayMoney : Insure.$clearTab.find('input[name=sumPayMoney]').val(),
+                payType : Insure.$clearTab.find('select[name=sumPayType]').val(),
+                payRemark : Insure.$clearTab.find('input[name=sumPayRemark]').val(),
                 startDate : startDate,
                 endDate : endDate,
+                accountInfo : Insure.$clearTab.find('input[name=accountInfo]').val(),
                 isAutoPay : 1
             };
             searchParam = JSON.stringify(searchParam);
@@ -527,6 +525,7 @@ define(function(require, exports) {
         var argumentsLen = arguments.length,
             clearSaveJson = FinancialService.clearSaveJson(Insure.$clearTab,Insure.clearTempData,rule);
         var searchParam = {
+            insuranceId : id,
             sumCurrentPayMoney : Insure.$clearTab.find('input[name=sumPayMoney]').val(),
             payType : Insure.$clearTab.find('select[name=sumPayType]').val(),
             payRemark : Insure.$clearTab.find('input[name=sumPayRemark]').val()

@@ -82,7 +82,7 @@ define(function(require, exports) {
         Transfer.$searchArea = Transfer.$tab.find('.T-search-area');
 
         Transfer.getQueryList();
-        FinancialService.initDate(Transfer.$tab);
+        Tools.setDatePicker(Transfer.$tab.find(".date-picker"),true);
 
         //搜索按钮事件
         Transfer.$tab.find('.T-search').on('click',function(event) {
@@ -98,20 +98,22 @@ define(function(require, exports) {
             	name = $that.closest('tr').data('name');
             if ($that.hasClass('T-check')) {
                 // 对账
-                Transfer.transferCheck(0,id,name,"",startDate,endDate);
+                Transfer.transferCheck(0,id,name,"","","",startDate,endDate);
             } else if ($that.hasClass('T-clear')) {
                 // 付款
                 Transfer.clearTempSumDate = false;
                 Transfer.clearTempData = false;
-                Transfer.transferClear(0,0,id,name,"",startDate,endDate);
+                Transfer.transferClear(0,0,id,name,"","","",startDate,endDate);
             }
         });
     };
 
     //对账
-    Transfer.transferCheck = function(page,partnerAgencyId,partnerAgencyName,lineProductName,startDate,endDate){
+    Transfer.transferCheck = function(page,partnerAgencyId,partnerAgencyName,lineProductName,operateId,operateName,startDate,endDate){
         if (Transfer.$checkSearchArea && arguments.length === 3) {
             lineProductName = Transfer.$checkSearchArea.find("input[name=lineProductName]").val(),
+            operateId = Transfer.$checkSearchArea.find("input[name=operateId]").val(),
+            operateName = Transfer.$checkSearchArea.find("input[name=operateName]").val(),
             startDate = Transfer.$checkSearchArea.find("input[name=startDate]").val(),
             endDate = Transfer.$checkSearchArea.find("input[name=endDate]").val()
         }
@@ -120,12 +122,15 @@ define(function(require, exports) {
             return false;
         }
 
+        operateName = (operateName == "全部") ? "" : operateName;
         // 修正页码
         page = page || 0;
         var searchParam = {
             pageNo : page,
             partnerAgencyId : partnerAgencyId,
             lineProductName : lineProductName,
+            operateId : operateId,
+            operateName : operateName,
             startDate : startDate,
             endDate : endDate,
             sortType : "auto"
@@ -148,6 +153,8 @@ define(function(require, exports) {
                         Transfer.initCheck(page,partnerAgencyId,partnerAgencyName); 
                         validator = rule.check(Transfer.$checkTab.find(".T-checkList"));                     
                     }
+
+                    Transfer.getOperateList(Transfer.$checkTab,data.operateList);
                     //取消对账权限过滤
                     var checkTr = Transfer.$checkTab.find(".T-checkTr");
                     var rightCode = Transfer.$checkTab.find(".T-checkList").data("right");
@@ -175,7 +182,7 @@ define(function(require, exports) {
         Transfer.$checkSearchArea = Transfer.$checkTab.find('.T-search-area');
 
         Transfer.init_event(page,id,name,Transfer.$checkTab,"check");
-        FinancialService.initDate(Transfer.$checkTab);
+        Tools.setDatePicker(Transfer.$checkTab.find(".date-picker"),true);
         Transfer.updateUnpayMoney();
 
         //搜索按钮事件
@@ -203,9 +210,11 @@ define(function(require, exports) {
     };
 
     //付款
-    Transfer.transferClear= function(isAutoPay,page,partnerAgencyId,partnerAgencyName,lineProductName,startDate,endDate){
+    Transfer.transferClear= function(isAutoPay,page,partnerAgencyId,partnerAgencyName,lineProductName,operateId,operateName,startDate,endDate){
         if (Transfer.$clearSearchArea && arguments.length === 4) {
             lineProductName = Transfer.$clearSearchArea.find("input[name=lineProductName]").val(),
+            operateId = Transfer.$clearSearchArea.find("input[name=operateId]").val(),
+            operateName = Transfer.$clearSearchArea.find("input[name=operateName]").val(),
             startDate = Transfer.$clearSearchArea.find("input[name=startDate]").val(),
             endDate = Transfer.$clearSearchArea.find("input[name=endDate]").val()
         }
@@ -214,11 +223,14 @@ define(function(require, exports) {
             return false;
         }
 
+        operateName = (operateName == "全部") ? "" : operateName;
         page = page || 0;
         var searchParam = {
             pageNo : page,
             partnerAgencyId : partnerAgencyId,
             lineProductName : lineProductName,
+            operateId : operateId,
+            operateName : operateName,
             startDate : startDate,
             endDate : endDate,
             sortType : "auto"
@@ -255,6 +267,8 @@ define(function(require, exports) {
                         validator = rule.check(Transfer.$clearTab.find('.T-clearList'));                       
                     }
 
+                    Transfer.getOperateList(Transfer.$clearTab,data.operateList);
+
                     if(isAutoPay == 0){
                         Transfer.$clearTab.find(".T-cancel-auto").hide();
                     } else {
@@ -276,7 +290,7 @@ define(function(require, exports) {
                         jump: function(obj, first) {
                             if (!first) { 
                                 var tempJson = FinancialService.clearSaveJson(Transfer.$clearTab,Transfer.clearTempData,rule);
-                                restaurant.clearTempData = tempJson;
+                                Transfer.clearTempData = tempJson;
                                 var sumPayMoney = parseFloat(Transfer.$clearTab.find('input[name=sumPayMoney]').val()),
                                     sumPayType = parseFloat(Transfer.$clearTab.find('select[name=sumPayType]').val()),
                                     sumPayRemark = Transfer.$clearTab.find('input[name=sumPayRemark]').val();
@@ -300,7 +314,7 @@ define(function(require, exports) {
         Transfer.$clearSearchArea = Transfer.$clearTab.find('.T-search-area');
 
         Transfer.init_event(page,id,name,Transfer.$clearTab,"clear");
-        FinancialService.initDate(Transfer.$clearTab);
+        Tools.setDatePicker(Transfer.$clearTab.find(".date-picker"),true);
 
         //搜索事件
         Transfer.$clearTab.find(".T-search").click(function(){
@@ -329,17 +343,15 @@ define(function(require, exports) {
             if(!isAutoPay){return false;}
 
             var startDate = Transfer.$clearTab.find("input[name=startDate]").val(),
-                endDate = Transfer.$clearTab.find("input[name=endDate]").val(),
-                lineProductName = Transfer.$clearTab.find("input[name=lineProductName]").val(),
-                sumPayMoney = parseFloat(Transfer.$clearTab.find('input[name=sumPayMoney]').val()),
-                sumPayType = parseFloat(Transfer.$clearTab.find('select[name=sumPayType]').val()),
-                sumPayRemark = Transfer.$clearTab.find('input[name=sumPayRemark]').val();
+                endDate = Transfer.$clearTab.find("input[name=endDate]").val();
             var searchParam = {
                 partnerAgencyId : id,
-                lineProductName : lineProductName,
-                sumCurrentPayMoney : sumPayMoney,
-                payType : sumPayType,
-                payRemark : sumPayRemark,
+                lineProductName : Transfer.$clearTab.find("input[name=lineProductName]").val(),
+                operateId : Transfer.$clearTab.find('input[name=operateId]').val(),
+                operateName : Transfer.$clearTab.find('input[name=operateName]').val(),
+                sumCurrentPayMoney : Transfer.$clearTab.find('input[name=sumPayMoney]').val(),
+                payType : Transfer.$clearTab.find('select[name=sumPayType]').val(),
+                payRemark : Transfer.$clearTab.find('input[name=sumPayRemark]').val(),
                 startDate : startDate,
                 endDate : endDate,
                 isAutoPay : 1
@@ -517,6 +529,7 @@ define(function(require, exports) {
         var argumentsLen = arguments.length,
             clearSaveJson = FinancialService.clearSaveJson(Transfer.$clearTab,Transfer.clearTempData,rule);
         var searchParam = {
+            partnerAgencyId : id,
             sumCurrentPayMoney : Transfer.$clearTab.find('input[name=sumPayMoney]').val(),
         	payType : Transfer.$clearTab.find('select[name=sumPayType]').val(),
             payRemark : Transfer.$clearTab.find('input[name=sumPayRemark]').val()
@@ -539,10 +552,10 @@ define(function(require, exports) {
                         Transfer.clearTempSumDate = false;
                         if(argumentsLen === 2){
                             Tools.closeTab(menuKey + "-clearing");
-                            Transfer.listRestaurant(restaurant.searchData.pageNo,restaurant.searchData.restaurantName,restaurant.searchData.restaurantId,restaurant.searchData.startDate,restaurant.searchData.endDate);
+                            Transfer.listTransfer(Transfer.searchData.pageNo,Transfer.searchData.partnerAgencyId,Transfer.searchData.partnerAgencyName,Transfer.searchData.startDate,Transfer.searchData.endDate);
                         }else if(argumentsLen === 3){
                             Transfer.$clearTab.data('isEdited',false);
-                            Transfer.restaurantClear(0,page,id,name);
+                            Transfer.transferClear(0,page,id,name);
                         } else {
                             Transfer.$clearTab.data('isEdited',false);
                             Tools.addTab(tab_id, title, html);
@@ -623,6 +636,37 @@ define(function(require, exports) {
             }
         }).on("click",function(){
             $partnerAgency.autocomplete('search','');
+        });      
+    };
+
+    Transfer.getOperateList = function($tab,operateList){
+        var $operate = $tab.find("input[name=operateName]");
+        if(operateList != null && operateList.length > 0){
+            for(var i=0;i<operateList.length;i++){
+                operateList[i].id = operateList[i].operateId;
+                operateList[i].value = operateList[i].operateName;
+            }
+        }
+        var all = {
+            id : "",
+            value : "全部"
+        };
+        operateList.unshift(all);
+
+        //餐厅
+        $operate.autocomplete({
+            minLength: 0,
+            source : operateList,
+            change: function(event,ui) {
+                if (!ui.item)  {
+                    $(this).nextAll('input[name="operateId"]').val('');
+                }
+            },
+            select: function(event,ui) {
+                $(this).blur().nextAll('input[name="operateId"]').val(ui.item.id);
+            }
+        }).on("click",function(){
+            $operate.autocomplete('search','');
         });      
     };
 

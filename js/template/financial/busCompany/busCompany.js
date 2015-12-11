@@ -85,7 +85,7 @@ define(function(require, exports) {
         busCompany.$searchArea = busCompany.$tab.find('.T-search-area');
 
         busCompany.getQueryList();
-        FinancialService.initDate(busCompany.$tab);
+        Tools.setDatePicker(busCompany.$tab.find(".date-picker"),true);
 
         //搜索按钮事件
         busCompany.$tab.find('.T-search').on('click',function(event) {
@@ -178,7 +178,7 @@ define(function(require, exports) {
         busCompany.$checkSearchArea = busCompany.$checkTab.find('.T-search-area');
 
         busCompany.init_event(page,id,name,busCompany.$checkTab,"check");
-        FinancialService.initDate(busCompany.$checkTab);
+        Tools.setDatePicker(busCompany.$checkTab.find(".date-picker"),true);
         FinancialService.updateUnpayMoney(busCompany.$checkTab,rule);
 
         //搜索按钮事件
@@ -313,7 +313,7 @@ define(function(require, exports) {
         busCompany.$clearSearchArea = busCompany.$clearTab.find('.T-search-area');
 
         busCompany.init_event(page,id,name,busCompany.$clearTab,"clear");
-        FinancialService.initDate(busCompany.$clearTab);
+        Tools.setDatePicker(busCompany.$clearTab.find(".date-picker"),true);
 
         //搜索事件
         busCompany.$clearTab.find(".T-search").click(function(){
@@ -343,17 +343,15 @@ define(function(require, exports) {
             if(!autoPayJson){return false;}
 
             var startDate = busCompany.$clearTab.find("input[name=startDate]").val(),
-                endDate = busCompany.$clearTab.find("input[name=endDate]").val(),
-                sumPayMoney = parseFloat(busCompany.$clearTab.find('input[name=sumPayMoney]').val()),
-                sumPayType = parseFloat(busCompany.$clearTab.find('select[name=sumPayType]').val()),
-                sumPayRemark = busCompany.$clearTab.find('input[name=sumPayRemark]').val();
+                endDate = busCompany.$clearTab.find("input[name=endDate]").val();
             var searchParam = {
                 busCompanyId : id,
-                sumCurrentPayMoney : sumPayMoney,
-                payType : sumPayType,
-                payRemark : sumPayRemark,
+                sumCurrentPayMoney : busCompany.$clearTab.find('input[name=sumPayMoney]').val(),
+                payType : busCompany.$clearTab.find('select[name=sumPayType]').val(),
+                payRemark : busCompany.$clearTab.find('input[name=sumPayRemark]').val(),
                 startTime : startDate,
                 endTime : endDate,
+                accountInfo : busCompany.$clearTab.find('input[name=accountInfo]').val(),
                 isAutoPay : 1
             };
             searchParam = JSON.stringify(searchParam);
@@ -434,6 +432,7 @@ define(function(require, exports) {
         var argumentsLen = arguments.length,
             clearSaveJson = FinancialService.clearSaveJson(busCompany.$clearTab,busCompany.clearTempData,rule);
         var searchParam = {
+            busCompanyId ： id,
             sumCurrentPayMoney : busCompany.$clearTab.find('input[name=sumPayMoney]').val(),
             payType : busCompany.$clearTab.find('select[name=sumPayType]').val(),
             payRemark : busCompany.$clearTab.find('input[name=sumPayRemark]').val()
