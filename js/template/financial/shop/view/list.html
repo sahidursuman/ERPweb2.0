@@ -1,90 +1,67 @@
-<div class="row globalAdd">
-    <div class="search-area shopMain">
-        <div class="form-group T-search-area">
-            <label class="pull-left" style="margin-left: 15px;margin-top: 3px">购物店：</label>
-                <select name="shopId" class="col-xs-12 T-search-name" style="width: 220px">
-                    <option value="">全部</option>
-                    {{each shopInfoList as shopInfo}}
-                    <option value="{{shopInfo.shopId}}" {{if shopInfo.shopId == shopId}}selected="selected"{{/if}}>{{shopInfo.shopName}}</option>
-                    {{/each}}
-  
-                </select>
-                <label class=" control-label pull-left marginLeft-30" style="margin-top: 3px">账期：</label>
-                <select name="year" class="col-sm-1 T-search-year">
-                    {{each yearList as yearInfo}}
-                    <option value="{{yearInfo}}" {{if yearInfo == year}}selected="selected"{{/if}}>{{yearInfo}}</option>
-                    {{/each}}
-                </select>
-                <select name="month"  class="col-sm-1 marginLeft-30 T-search-month">
-                    <option value="">全部</option>
-                    {{each monthList as monthInfo}}
-                        <option value="{{monthInfo}}" {{if monthInfo == month}}selected="selected"{{/if}}>{{monthInfo}}月</option>
-                    {{/each}}
-                </select>
-            <button class=" btn-sm search-btn T-btn-search marginLeft-30" >
-                <i class="ace-icon fa fa-search"></i>
-                搜索
-            </button>
+<div class="row check globalAdd">
+    <div class="T-search-area">
+        <form class="form-inline" role="form" onsubmit="return false">
+            <div class="form-group">
+                <label>购物店</label>
+                <input type="text" class="form-control T-search-name" value="{{searchParam.shopName || "全部"}}" style="width: 220px;">
+            </div>
+            <div class="form-group marginLeft-30">
+                <label>账期：</label>
+                <input type="text" class="form-control datepicker T-search-start-date" value="{{searchParam.startTime}}" style="width: 100px; text-align: center;">
+                <label>&nbsp;至&nbsp;</label>
+                <input type="text" class="form-control datepicker T-search-end-date" value="{{searchParam.endTime}}" style="width: 100px; text-align: center;">
+            </div>
+            <div class="form-group marginLeft-30">
+                <button class="btn-sm search-btn T-btn-search">
+                    <i class="ace-icon fa fa-search"></i> 搜索 
+                </button>
+            </div>
+        </form>
     </div>
-    <div class="row ticketList">
-        <div class="col-xs-12">
-            <table class="table table-striped table-bordered table-hover T-showHighLight">
-                <thead>
-                <tr class="bg-blur">
-                    <th>购物店</th>
-                    <th>总人数</th>
-                    <th>购物总额</th>
-                    <th>总账面返佣</th>
-                    <th>总实际返佣</th>
-                    <th>总已结账</th>
-                    <th>总未结账</th>
-                    <th>对账进度</th>
-                    <th>操作</th>
-                </tr>
-                </thead>
-
-                <tbody class="T-list">
-                {{each financialShopSumList as sumList}}
-                <tr data-id="{{sumList.shopId}}">
-                    <td>{{sumList.shopName}}</td>
-                    <td>{{sumList.sumPerson}}</td>
-                    <td>{{sumList.sumConsumeMoney}}</td>
-                    <td>{{sumList.sumRebateMoney}}</td>
-                    <td>{{sumList.sumRealRebateMoney}}</td>
-                    <td>{{sumList.sumAlreadyCloseAccountMoney}}</td>
-                    <td>{{sumList.sumUnCloseAccountMoney}}</td>
-                    <td>
-						{{if sumList.allCount != sumList.checkedCount}}
-	                      <span style="color:#ff9900"> {{sumList.checkedCount}}{{"/"}}{{sumList.allCount}}</span>
-	                    {{/if}}
-	                    {{if sumList.allCount == sumList.checkedCount}}
-	                      <span style="color:green"> {{sumList.checkedCount}}{{"/"}}{{sumList.allCount}}</span>
-	                    {{/if}}
-					</td>
-                    <td>
-                        <a data-entity-id="{{sumList.shopId}}" class="cursor R-right T-action T-checking" data-right="1310002">
-                            对账
-                        </a>
-                        <label class="cursor R-right" data-right="1310002"><a class="R-right" data-right="1310003"> |</a></label>
-                        <a data-entity-id="{{sumList.shopId}}" class="cursor R-right T-action T-settlement" data-right="1310003">
-                            结算
-                        </a>
-                    </td>
-                </tr>
-                {{/each}}
-                </tbody>
-            </table>
-            <div class="row pageMode">
-                <div class="col-xs-6">
-                    <small>共计 {{recordSize}} 条记录</small>
-                </div>
-                <div class="col-xs-6">
-                    <div class="dataTables_paginate paging_simple_numbers T-pagenation">
-                    </div>
-                </div>
+    <div class="clearfix"></div>
+    <table class="table table-striped table-bordered table-hover T-showHighLight">
+        <thead>
+            <tr class="bg-blur">
+                <th>购物店</th>
+                <th>总人数</th>
+                <th>购物金额</th>
+                <th>返佣金额</th>
+                <th>结算金额</th>
+                <th>已收金额</th>
+                <th>未收金额</th>
+                <th>对账进度</th>
+                <th>付款进度</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody class="T-list">
+        {{each shopAccountList as rs}}
+            <tr data-id="{{rs.shopId}}">
+                <td>{{rs.shopName}}</td>
+                <td>大小</td>
+                <td>{{rs.shopMoney}}</td>
+                <td>{{rs.backMoney}}</td>
+                <td>{{rs.settlementMoney}}</td>
+                <td>{{rs.reciveMoney}}</td>
+                <td><span {{if rs.unReciveMoney != 0}}style="color:#FF0000;"{{/if}}>{{rs.unReciveMoney}}</span></td>
+                <td><span style="color:#{{if rs.checkStep == rs.allRecord}}00CC00{{else}}FF9900{{/if}};">{{rs.checkStep}}/{{rs.allRecord}}</span></td>
+                <td><span style="color:#{{if rs.reciveStep == rs.allRecord}}00CC00{{else}}FF9900{{/if}};">{{rs.reciveStep}}/{{rs.allRecord}}</span></td>
+                <td>
+                    <a class="cursor T-action T-checking">对账</a>
+                    <label class="cursor"> <a> |</a></label>
+                    <a class="cursor T-action T-settlement">收款</a>
+                </td>
+            </tr>
+        {{/each}}
+        </tbody>
+    </table>
+    <div class="row pageMode">
+        <div class="col-xs-6">
+            <small>共计 {{searchParam.recordSize}} 条记录</small>
+        </div>
+        <div class="col-xs-6">
+            <div class="dataTables_paginate paging_simple_numbers T-pagenation">
             </div>
         </div>
     </div>
 </div>
-</div>
-   </div>

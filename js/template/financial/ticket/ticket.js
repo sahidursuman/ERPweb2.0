@@ -307,7 +307,7 @@ define(function(require, exports) {
 	                showMessageDialog($('#confirm-dialog-message'), data.message, function() {
 	                    if (!!tabArgs) {
 	                        Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
-	                        Ticket.checkList($tab, 1);
+	                        Ticket.checkList(0);
 	                    } else {
 	                        Tools.closeTab(checkMenuKey);
 	                        Ticket.getList(Ticket.listPageNo);
