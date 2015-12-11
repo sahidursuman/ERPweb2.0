@@ -243,7 +243,7 @@ define(function(require, exports) {
                     var html = SelfClearing(data);
                     var validator;
                     // 初始化页面
-                    if (Tools.addTab(blanceTabId, "自费结算", html)) {
+                    if (Tools.addTab(blanceTabId, "自费付款", html)) {
                         Self.initClear(page,selfPayId,selfPayName); 
                         validator = rule.check(Self.$clearTab.find('.T-clearList'));                       
                     }

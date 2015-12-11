@@ -33,7 +33,7 @@
                 <tbody class="T-list">
                 {{each financialInsuranceList as rs}}
                 <tr data-id="{{rs.insuranceId}}" data-name="{{rs.insuranceName}}">
-                    <td>{{rs.insuranceName}}</td>
+                    <td>{{if rs.insuranceName == null || rs.insuranceName == ""}}-{{else}}{{rs.insuranceName}}{{/if}}</td>
                     <td>{{rs.sumNeedPayMoney}}</td>
                     <td>{{rs.sumSettlementMoney}}</td>
                     <td>{{rs.sumPayedMoney}}</td>
