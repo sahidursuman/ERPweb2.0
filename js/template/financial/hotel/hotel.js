@@ -343,17 +343,15 @@ define(function(require, exports) {
             if(!autoPayJson){return false;}
 
             var startDate = hotel.$clearTab.find("input[name=startDate]").val(),
-                endDate = hotel.$clearTab.find("input[name=endDate]").val(),
-                sumPayMoney = parseFloat(hotel.$clearTab.find('input[name=sumPayMoney]').val()),
-                sumPayType = parseFloat(hotel.$clearTab.find('select[name=sumPayType]').val()),
-                sumPayRemark = hotel.$clearTab.find('input[name=sumPayRemark]').val();
+                endDate = hotel.$clearTab.find("input[name=endDate]").val();
             var searchParam = {
                 hotelId : id,
-                sumCurrentPayMoney : sumPayMoney,
-                payType : sumPayType,
-                payRemark : sumPayRemark,
+                sumCurrentPayMoney : hotel.$clearTab.find('input[name=sumPayMoney]').val(),
+                payType : hotel.$clearTab.find('select[name=sumPayType]').val(),
+                payRemark : hotel.$clearTab.find('input[name=sumPayRemark]').val(),
                 startTime : startDate,
                 endTime : endDate,
+                accountInfo : hotel.$clearTab.find('input[name=accountInfo]').val(),
                 isAutoPay : 1
             };
             searchParam = JSON.stringify(searchParam);

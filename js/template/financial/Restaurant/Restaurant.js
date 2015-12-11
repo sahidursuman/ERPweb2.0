@@ -341,17 +341,15 @@ define(function(require, exports) {
             if(!isAutoPay){return false;}
 
             var startDate = restaurant.$clearTab.find("input[name=startDate]").val(),
-                endDate = restaurant.$clearTab.find("input[name=endDate]").val(),
-                sumPayMoney = parseFloat(restaurant.$clearTab.find('input[name=sumPayMoney]').val()),
-                sumPayType = parseFloat(restaurant.$clearTab.find('select[name=sumPayType]').val()),
-                sumPayRemark = restaurant.$clearTab.find('input[name=sumPayRemark]').val();
+                endDate = restaurant.$clearTab.find("input[name=endDate]").val();
             var searchParam = {
                 restaurantId : id,
-                sumCurrentPayMoney : sumPayMoney,
-                payType : sumPayType,
-                payRemark : sumPayRemark,
+                sumCurrentPayMoney : restaurant.$clearTab.find('input[name=sumPayMoney]').val(),
+                payType : restaurant.$clearTab.find('select[name=sumPayType]').val(),
+                payRemark : restaurant.$clearTab.find('input[name=sumPayRemark]').val(),
                 startDate : startDate,
                 endDate : endDate,
+                accountInfo : restaurant.$clearTab.find('input[name=accountInfo]').val(), 
                 isAutoPay : 1
             };
             searchParam = JSON.stringify(searchParam);

@@ -322,21 +322,19 @@ define(function(require, exports) {
             if(!isAutoPay){return false;}
 
             var startDate = Self.$clearTab.find("input[name=startDate]").val(),
-                endDate = Self.$clearTab.find("input[name=endDate]").val(),
-                tripInfo = Self.$clearTab.find("input[name=tripInfo]").val(),
-                sumPayMoney = parseFloat(Self.$clearTab.find('input[name=sumPayMoney]').val()),
-                sumPayType = parseFloat(Self.$clearTab.find('select[name=sumPayType]').val());
+                endDate = Self.$clearTab.find("input[name=endDate]").val();
             FinancialService.autoPayConfirm(startDate,endDate,function(){
                 $.ajax({
                     url:KingServices.build_url("account/selfPayFinancial","autoWiredSelfPayAccount"),
                     type:"POST",
                     data:{ 
                         selfPayId : id,
-                        autoPayMoney : sumPayMoney,
-                        payType : sumPayType,
-                        tripInfo : tripInfo,
+                        autoPayMoney : Self.$clearTab.find('input[name=sumPayMoney]').val(),
+                        payType : Self.$clearTab.find('select[name=sumPayType]').val(),
+                        payRemark : Self.$clearTab.find('input[name=payRemark]').val(),
                         accountTimeStart :startDate,
-                        accountTimeEnd : endDate
+                        accountTimeEnd : endDate,
+                        tripInfo : Self.$clearTab.find('select[name=tripInfo]').val()
                     },
                     success:function(data){
                         var result = showDialog(data);

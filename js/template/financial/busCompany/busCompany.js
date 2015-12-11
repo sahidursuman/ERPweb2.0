@@ -343,17 +343,15 @@ define(function(require, exports) {
             if(!autoPayJson){return false;}
 
             var startDate = busCompany.$clearTab.find("input[name=startDate]").val(),
-                endDate = busCompany.$clearTab.find("input[name=endDate]").val(),
-                sumPayMoney = parseFloat(busCompany.$clearTab.find('input[name=sumPayMoney]').val()),
-                sumPayType = parseFloat(busCompany.$clearTab.find('select[name=sumPayType]').val()),
-                sumPayRemark = busCompany.$clearTab.find('input[name=sumPayRemark]').val();
+                endDate = busCompany.$clearTab.find("input[name=endDate]").val();
             var searchParam = {
                 busCompanyId : id,
-                sumCurrentPayMoney : sumPayMoney,
-                payType : sumPayType,
-                payRemark : sumPayRemark,
+                sumCurrentPayMoney : busCompany.$clearTab.find('input[name=sumPayMoney]').val(),
+                payType : busCompany.$clearTab.find('select[name=sumPayType]').val(),
+                payRemark : busCompany.$clearTab.find('input[name=sumPayRemark]').val(),
                 startTime : startDate,
                 endTime : endDate,
+                accountInfo : busCompany.$clearTab.find('input[name=accountInfo]').val(),
                 isAutoPay : 1
             };
             searchParam = JSON.stringify(searchParam);
