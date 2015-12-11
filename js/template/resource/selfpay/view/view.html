@@ -61,6 +61,7 @@
 			<td class="style-myself">针对客源</td>
 			<td class="style-myself">时间范围</td>
 			<td class="style-myself">内部价格（元）</td>
+			<td class="style-myself">人数返佣（人/元）</td>
 			<td class="style-myself">市场价格（元）</td>
 			<td class="style-myself">导佣比例(%)</td>
 			<td class="style-myself">社佣比例(%)</td>
@@ -92,6 +93,13 @@
 				{{shopPolicy.normalInnerPrice}}<br>
 				{{each shopPolicy.SelfPayRebateList as hopTimeArea}}
 					{{hopTimeArea.price}}<br>
+				{{/each}}
+			</td>
+
+			<td>
+			    {{shopPolicy.customerRebateMoney}}<br>
+				{{each shopPolicy.SelfPayRebateList as customer}}
+					{{customer.customerRebateMoney}}<br>
 				{{/each}}
 			</td>
 
