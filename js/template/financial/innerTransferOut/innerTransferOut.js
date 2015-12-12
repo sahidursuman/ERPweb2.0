@@ -768,5 +768,9 @@ define(function(require,exports) {
 		}
 		return newVal;
 	};
+	InnerTransferOut.initPay = function(options){
+        InnerTransferOut.settlement(0,options.id,options.name,"","","",options.startDate,options.endDate,2); 
+    };
 	exports.init = InnerTransferOut.initModule;
+	exports.initPay = InnerTransferOut.initPay;
 });

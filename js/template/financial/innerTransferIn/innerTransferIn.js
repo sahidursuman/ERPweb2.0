@@ -575,7 +575,7 @@ define(function(require,exports) {
 			 	data.yearList = yearList;
                 data.monthList = monthList;                
                 var html = settlementTemplate(data);
-                Tools.addTab(settleId,'内转转入付款',html);
+                Tools.addTab(settleId,'内转转入收款',html);
                 //表单验证
                 InnerTransferIn.validatorTable();
                 //页面资源对象
@@ -833,7 +833,7 @@ define(function(require,exports) {
 		}
 		return newVal;
 	};
-	InnerTransferIn.initPay = function(options){
+	InnerTransferIn.initIncome = function(options){
 		var args = {
 				pageNo:0,
 				businessGroupId:options.id,
@@ -849,5 +849,5 @@ define(function(require,exports) {
     };
     
 	exports.init = InnerTransferIn.initModule;
-	exports.initPay = InnerTransferIn.initPay;
+	exports.initIncome = InnerTransferIn.initIncome;
 });
