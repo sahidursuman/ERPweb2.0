@@ -1,4 +1,0 @@
-/*TMODJS:{"debug":true,"version":5,"md5":"d53b5b8d05c0614487ef6b6ca0e50bb1"}*/
-define(function(require) {
-    return require("../../../template")("financial/innerTransferIn/view/innerTransferInIncomeDetail", '<div style="form-group"> <table class="table table-striped table-bordered table-hover" > <thead> <tr> <th class="th-border">收款类别</th> <th class="th-border">发生业务</th> <th class="th-border">收款方</th> <th class="th-border">金额</th> <th class="th-border">收款方式</th> <th class="th-border">备注</th> <th class="th-border">操作者</th> <th class="th-border">操作时间</th> </tr> </thead> <tbody> <tr> <td>11</td> <td>11</td> <td>11</td> <td>11</td> <td>11</td> <td>11</td> <td>11</td> <td>11</td> </tr> </tbody> </table> </div> ');
-});
