@@ -266,7 +266,7 @@ define(function(require, exports) {
                 FinGuide.saveCheckingData($tab, [tab_id, title, html]);
             })
             .on(SWITCH_TAB_BIND_EVENT, function() {
-                FinGuide.initOperationEvent();
+                FinGuide.initOperationEvent($tab, type);
             })
             .on(CLOSE_TAB_SAVE, function(event) {
                 event.preventDefault();

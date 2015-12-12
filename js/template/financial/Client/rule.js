@@ -1,10 +1,7 @@
 define(function(require, exports) {
 	var rule = {
 		check:function($obj){
-			var rule = [{
-    	    	    	   type:'null',
-    	    	    	   errMsg:'返款不能为空'
-    	    	       }];
+			var rule = [];
 
 			// 财务收款可以输入负数    	    	       
 	       	if ($obj.find('.T-btn-save').data('type')) {

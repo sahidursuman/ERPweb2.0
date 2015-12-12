@@ -86,11 +86,12 @@ define(function(require, exports){
 		var $searchArea = $tab.find('.T-search-area'),
 			$datepicker = $searchArea.find('.datepicker');
 		Tools.setDatePicker($datepicker, true);
+
 		$searchArea.find('.T-btn-search').on('click', function(event){
 			event.preventDefault();
 			Payment.getList(0);
 		})
-		Payment.chooseUnit($searchArea.find('.T-search-unit'));
+		//Payment.chooseUnit($searchArea.find('.T-search-unit'));
 		
 	};
 
@@ -106,7 +107,7 @@ define(function(require, exports){
 				data.incomeOrPayTypes = JSON.parse(data.incomeOrPayTypes);
 				data.receivableTypes = JSON.parse(data.receivableTypes);
 				data.searchParam = args;
-				Payment.list.units = data.units;
+				//Payment.list.units = data.units;
 
 				Payment.isSelect = true;
 
@@ -151,7 +152,7 @@ define(function(require, exports){
 		});
 	};
 
-	Payment.chooseUnit = function($obj){
+	/*Payment.chooseUnit = function($obj){
 		$obj.autocomplete({
 			minLength: 0,
 		    change: function(event, ui) {
@@ -172,7 +173,7 @@ define(function(require, exports){
             $obj.autocomplete('option', 'source', data);
             $obj.autocomplete('search', '');
 		});
-	};
+	};*/
 
 	Payment.closeLayer = function(){
         if(Payment.isList && Payment.isTotal)
