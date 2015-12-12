@@ -1,14 +1,15 @@
 <div class="row innerTransferChecking globalAdd">
-    <div class="col-xs-12 border">
-        <form class="form-horizontal" role="form" onsubmit="return false">
-                <div class="search-area editable editable-click" >
-                    <div class="form-group T-search"> 
-                         <label  class="control-label pull-left" style="margin:5px auto auto 30px;"> 部门:{{searchParam.businessGroupName}}</label>
+    <div>
+        <div class="T-search">
+            <form class="form-inline" role="form" onsubmit="return false">
+                    <div class="form-group">
+                    <label  class="control-label pull-left" style="margin-left: 0px;">部门:</label>
+                    <span>{{searchParam.businessGroupName}}</span>
                     <input type="hidden" value="{{searchParam.businessGroupId}}" name="businessGroupId">
                     <input type="hidden" value="{{searchParam.businessGroupName}}" name="businessGroupName"> 
                     <label class="control-label" style="margin-left:30px;">账期:
                       <input type="text" style="width:100px;" class="date-picker" name="startDate" value="{{searchParam.startAccountTime}}"/>
-                      <span>至</span>
+                      <span>&nbsp;至&nbsp;</span>
                       <input type="text" style="width:100px;" class="date-picker" name="endDate" value="{{searchParam.endAccountTime}}"/>
                     </label>
                     <label class="control-label" style="margin-left:30px;">线路名称:
@@ -20,7 +21,7 @@
                     <input type="hidden" name="receiveUserId" value="{{searchParam.receiveUserId}}"/>
                     
                       
-                    </label>
+                    </label> 
                     <button class="marginLeft-30 btn-sm search-btn T-checking-search" >
                          <i class="ace-icon fa fa-search"></i>
                              搜索
@@ -30,12 +31,12 @@
                             <i class="ace-icon fa fa-arrow-right icon-on-right"></i>
                         </button> -->
                     </div>
-                </div>
             </form>
+        </div>
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="form-group T-count">
                 <label class=" control-label pull-left" style="margin-left: 15px">人数合计:<span class="sumTransCount"></span><label>
-                <label class=" control-label " style="margin-left:30px;">合同金额合计:<span class="sumTransNeedPayMoney"></span></label>
+                <label class=" control-label " style="margin-left:30px;">内转转入金额合计:<span class="sumTransNeedPayMoney"></span></label>
                 <label class=" control-label " style="margin-left:30px;">已收金额合计:<span class="sumPayedMoney"></span></label>
                 <label class=" control-label " style="margin-left:30px;">返款金额合计:<span class="sumPunishMoney"></span></label>
                 <label class=" control-label " style="margin-left:30px;">结算金额合计:<span class="sumSettlementMoney"></span></label>
@@ -49,7 +50,7 @@
             <tr>
                  <th class='th-border'>序号</th>
                  <th class='th-border'>线路产品</th>
-                 <th class='th-border'>出游日期</th>
+                 <th class='th-border'>出游日期(账期)</th>
                  <th class='th-border'>联系人</th>
                  <th class='th-border'>人数</th>
                  <th class='th-border'>接收人</th>
@@ -76,7 +77,7 @@
                 <td>{{checking.adultCount}}大{{checking.childCount}}小<a href="#" class="T-seeGroup" style="margin-left:5px">展开</a></td>
                 <td>{{checking.receiveUserName}}</td>
                 <td>{{if checking.receiveTime != null}}{{checking.receiveTime | dateFormat: 'yyyy-MM-dd'}}{{else}}-{{/if}}</td>
-                <td>{{checking.transInMoney}}</td>
+                <td><span class="transInMoney">{{checking.transInMoney}}</span></td>
                 <td>
                     大人:{{checking.transAdultPrice}}*{{checking.transAdultCount}}={{checking.transAdultPrice*checking.transAdultCount}}<br>
                     小孩:{{checking.transChildPrice}}*{{checking.transChildCount}}={{checking.transChildPrice*checking.transChildCount}}<br>
@@ -88,12 +89,12 @@
                         -
                     {{/if}} 
                 </td>
-                <td><a href="javascript:void(0)" class="T-viewDetail"><span>社收:{{checking.transGetedMoney}},导游现收:0</span></a></td>
-                <td>{{if checking.isConfirmAccount == 1}}{{checking.backMoney}}{{else}}<input type="text" name="backMoney" value="{{checking.backMoney}}" maxlength="9" style="text-align:center">{{/if}}</td>
-                <td>{{checking.settlementMoney}}</td>
-                <td>{{checking.unIncomeMoney}}</td>
+                <td><a href="javascript:void(0)" class="T-viewDetail"><span>社收:<span class="transGetedMoney">{{checking.transGetedMoney}}</span>,导游现收:0</span></a></td>
+                <td>{{if checking.isConfirmAccount == 1}}<input type="text" readonly="readonly" value="{{checking.backMoney}}" name="backMoney"></span>{{else}}<input type="text" name="backMoney" class="backMoney" value="{{checking.backMoney}}" maxlength="9" style="text-align:center">{{/if}}</td>
+                <td><span class="settlementMoney">{{checking.settlementMoney}}</span></td>
+                <td><span class="unIncomeMoney">{{checking.unIncomeMoney}}</span></td>
                 <td>{{if checking.isConfirmAccount == 1}}{{checking.checkRemark}}{{else}}<input type="text" maxlength="1000"  name="checkRemark" value="{{checking.checkRemark}}" style="text-align:center">{{/if}}</td>
-                <td>{{if checking.checkTime == null || checking.checkTime == ""}}-{{else}}{{checking.checkTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
+                <td>{{if checking.checkTime == null || checking.checkTime == ""}}-{{else}}{{checking.checkTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}{{/if}}</td>
                 <td>{{if checking.checkUserName == null || checking.checkUserName == ""}}-{{else}}{{checking.checkUserName}}{{/if}}</td>
                 <td>
                     <label class="pos-rel">
