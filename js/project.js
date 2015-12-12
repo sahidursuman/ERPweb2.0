@@ -1411,7 +1411,7 @@ Tools.inputCtrolFloat=function($inputCtrol){
 		    //最后一位是小数点的话，移除
 		    $amountInput.val(($amountInput.val().replace(/\.$/g, "")));
 	});
-
+}
 /**
  * 为满足两位数，在需要的时候补充零
  * @param {int} num 数值
