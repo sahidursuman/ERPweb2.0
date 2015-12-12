@@ -821,10 +821,7 @@ define(function(require,exports) {
 			});
 		}
 	};
-	InnerTransferIn.initPay = function(options){
-        InnerTransferIn.chenking(0,options.id,options.name,"","","","",options.startDate,options.endDate,2); 
-    };
-    //规范输入的数字数据
+	//规范输入的数字数据
 	InnerTransferIn.changeTwoDecimal = function($val){
 		var newVal = parseFloat($val);
 		if (isNaN(newVal) || newVal == Number.POSITIVE_INFINITY){
@@ -836,6 +833,21 @@ define(function(require,exports) {
 		}
 		return newVal;
 	};
+	InnerTransferIn.initPay = function(options){
+		var args = {
+				pageNo:0,
+				businessGroupId:options.id,
+				businessGroupName:options.name,
+				lineProductId:'',
+				lineProductName:'',
+				receiveUserId:'',
+				receiveUserName:'',
+				startAccountTime:options.startDate,
+				endAccountTime:options.endDate
+			}
+        InnerTransferIn.chenking(args,2,"settle"); 
+    };
+    
 	exports.init = InnerTransferIn.initModule;
 	exports.initPay = InnerTransferIn.initPay;
 });
