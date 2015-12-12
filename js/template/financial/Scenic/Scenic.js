@@ -230,6 +230,9 @@ define(function(require, exports) {
     scenic.scenicClear = function(isAutoPay,page,scenicId,scenicName,accountInfo,startDate,endDate, isOuter){
         if (isAutoPay) {
             var searchParam = FinancialService.autoPayJson(scenicId,scenic.$clearTab,rule);
+            searchParam = JSON.parse(searchParam);
+            searchParam.scenicId = searchParam.id;   
+            delete(searchParam.id);
         } else {
             if (scenic.$clearSearchArea && arguments.length === 4) {
                 accountInfo = scenic.$clearSearchArea.find("input[name=accountInfo]").val(),
@@ -250,8 +253,8 @@ define(function(require, exports) {
                 endDate : endDate,
                 sortType : "auto"
             };
-            searchParam = JSON.stringify(searchParam);
         }
+        searchParam = JSON.stringify(searchParam);
         
         $.ajax({
             url:KingServices.build_url("financial/financialScenic","listScenicAccount"),
