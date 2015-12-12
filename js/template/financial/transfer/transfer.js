@@ -58,7 +58,7 @@ define(function(require, exports) {
                 if(result){
                 	Transfer.partnerList = data.partnerAgencyNameList;
                 	var html = listTemplate(data);
-                    Tools.addTab(menuKey,"转客账务",html);
+                    Tools.addTab(menuKey,"外传账务",html);
 
                     Transfer.initList(startDate,endDate);
                     // 绑定翻页组件

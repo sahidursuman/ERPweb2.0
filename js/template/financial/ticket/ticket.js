@@ -352,7 +352,7 @@ define(function(require, exports) {
 		}).done(function(data){
 			if(showDialog(data)){
 				data.name = Ticket.balanceName;
-				Tools.addTab(clearMenuKey, "票务结算", ticketClearing(data));
+				Tools.addTab(clearMenuKey, "票务付款", ticketClearing(data));
 				Ticket.$clearingTab = $("#tab-" + clearMenuKey + "-content");
 				var html = payingTableTemplate(data);
 				Ticket.$clearingTab.find('.T-checkList').html(html);

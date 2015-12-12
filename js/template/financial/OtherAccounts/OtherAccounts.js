@@ -326,9 +326,7 @@ define(function(require, exports) {
                         }
                         JsonStr.push(OtherAccounts.CheckConfirmData)
                     }
-
                 }
-
             });
             JsonStr = JSON.stringify(JsonStr);
             // 对账保存接口

@@ -437,7 +437,7 @@ define(function(require, exports){
 		}).done(function(data){
 			if(showDialog(data)){
 				data.name = FinShop.settlementName;
-				Tools.addTab(settMenuKey, "购物结算", shopClearingTemplate(data));
+				Tools.addTab(settMenuKey, "购物付款", shopClearingTemplate(data));
 
 				FinShop.$settlementTab = $('#tab-' + settMenuKey + '-content');
 				FinShop.sett_init_event(FinShop.$settlementTab);

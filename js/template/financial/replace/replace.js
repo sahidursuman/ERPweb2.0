@@ -618,7 +618,7 @@ define(function(require, exports) {
 				var html;
 				data.name = Replace.balanceName;
 
-				Tools.addTab(blanceMenuKey, "代订结算", replaceClearing(data));
+				Tools.addTab(blanceMenuKey, "代订付款", replaceClearing(data));
 				Replace.$balanceTab = $('#tab-' + blanceMenuKey + '-content');
 
 				//data.bookinAccountList = FinancialService.getTempDate(data.bookinAccountList);
