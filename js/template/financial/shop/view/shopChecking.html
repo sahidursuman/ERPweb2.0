@@ -89,7 +89,7 @@
             <tr class="T-checkTr" data-id="{{rs.id}}" data-confirm="{{if !!rs.isConfirmAccount}}1{{else}}0{{/if}}">
                 <td>{{index + 1}}</td>
                 <td>{{rs.tripMessage}}</td>
-                <td>{{rs.startTime}}</td>
+                <td>{{rs.accountTime}}</td>
                 <td>{{rs.count}}</td>
                 <td>{{rs.shopName}}{{if rs.shopName}}<a class="cursor T-action T-see-group">展开</a>{{/if}}</td>
                 <td>{{rs.consumeMoney}}</td>
@@ -136,7 +136,7 @@
                 <i class="ace-icon fa fa-times-circle"></i> 关闭
             </button>
             <button class="btn btn-xs btn-primary T-btn-save" style="margin-left:20px">
-                <i class="ace-icon fa fa-check-circle"></i> 确认对账
+                <i class="ace-icon fa fa-check-circle"></i> 确认
             </button>
         </div>
     </form>

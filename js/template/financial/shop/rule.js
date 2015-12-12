@@ -7,7 +7,7 @@ define(function(require, exports) {
 	    	    	$ele: $obj.find('input[name=settlementMoney]'),
 	    	    	rules: [
     	    	        {
-    	    	        	type: 'positive-float',
+    	    	        	type: 'nonnegative-float',
     	    	        	errMsg: '请输入数字'
     	    	        }
 	    	        ]

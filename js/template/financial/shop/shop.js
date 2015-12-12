@@ -179,22 +179,6 @@ define(function(require, exports){
 				tripMessage : FinShop.$checkingTab.find('.T-search-trip').val()
 			}
 		}
-		var data = {
-			searchParam : {},
-			shopAccountList : [{
-				id : 1,
-				shopName : "商品",
-				receiveMoney : 500
-			},
-			{
-				id : 2,
-				shopName : "商品2",
-				receiveMoney : 500,
-				isConfirmAccount : 1
-			}],
-			totalList : {}
-		}
-		
 		$.ajax({
 			url: KingServices.build_url('financial/shopAccount', 'listCheckShopAcccount'),
 			type: 'post',
@@ -219,11 +203,11 @@ define(function(require, exports){
 		})
 		.on(SWITCH_TAB_SAVE, function(event, tab_id, title, html){
 			event.preventDefault();
-			FinShop.saveChecking($tab, validator, [tab_id, title, html], false);
+			FinShop.saveChecking($tab, [tab_id, title, html]);
 		})
 		.on(CLOSE_TAB_SAVE, function(event){
 			event.preventDefault();
-			FinShop.saveChecking($tab, validator, null, true);
+			FinShop.saveChecking($tab);
 		});
 
 		//搜索顶部的事件绑定
@@ -231,6 +215,10 @@ define(function(require, exports){
 		$searchArea.find('.T-btn-search').on('click', function(event){
 			event.preventDefault();
 			FinShop.checkingList(0, FinShop.checkingId);
+		});
+
+		$tab.find('.T-checkTr').on('change', function(){
+			$(this).data('change', 'true');
 		});
 
 		Tools.setDatePicker($searchArea.find('.datepicker'), true);
@@ -243,7 +231,7 @@ define(function(require, exports){
 			if($that.hasClass('T-see-group')){
 				FinShop.unfold($that);
 			}else if($that.hasClass('T-view-receipts')){
-				FinShop.viewImage($that);
+				FinShop.viewImage($tab, $that.closest('tr').data('images'));
 			}else if($that.hasClass('T-payDetails')){
 				FinShop.viewOperationDetail(id, 0);
 			}else if($that.hasClass('T-view-details')){
@@ -257,7 +245,7 @@ define(function(require, exports){
 		//绑定确定事件
 		$tab.find('.T-btn-save').on('click', function(event){
 			event.preventDefault();
-			FinShop.saveChecking($tab, validator, null, false);
+			FinShop.saveChecking($tab);
 		});
 		//绑定取消事件
 		$tab.find('.T-btn-close').on('click', function(event){
@@ -322,13 +310,14 @@ define(function(require, exports){
 		}
 	};
 
-	FinShop.viewImage = function($that){
-		var WEB_IMG_URL_BIG = FinShop.$checkingTab.find("input[name=WEB_IMG_URL_BIG]").val(),
-			WEB_IMG_URL_SMALL = FinShop.$checkingTab.find("input[name=WEB_IMG_URL_SMALL]").val(),
+	FinShop.viewImage = function($tab, strImage){
+		if(!strImage)return;
+		var WEB_IMG_URL_BIG = $tab.find(".globalAdd").data('big'),
+			WEB_IMG_URL_SMALL = $tab.find(".globalAdd").data('small'),
 				data = {
 	    		"images":[]
     		},
-    		str = $that.attr('url'),
+    		str = strImage,
     		strs = str.split(",");
     	for(var i = 0; i < strs.length; i ++) {
     		var s = strs[i];
@@ -381,7 +370,7 @@ define(function(require, exports){
 	FinShop.saveChecking = function($tab, tab_array){
 		// 表单校验
 		var json = FinancialService.checkSaveJson($tab, rule);
-		if(json.length > 0){
+		if(JSON.parse(json).length > 0){
 			$.ajax({
 				url : KingServices.build_url('financial/shopAccount', 'checkShopAccount'),
 				type : "POST",
@@ -400,6 +389,8 @@ define(function(require, exports){
 	                });
 	            }
 			});
+		}else if(!json){
+
 		}else{
 			showMessageDialog($('#confirm-dialog-message'), '您当前未进行任何操作！');
 		}
@@ -437,7 +428,7 @@ define(function(require, exports){
 		}).done(function(data){
 			if(showDialog(data)){
 				data.name = FinShop.settlementName;
-				Tools.addTab(settMenuKey, "购物付款", shopClearingTemplate(data));
+				Tools.addTab(settMenuKey, "购物结算", shopClearingTemplate(data));
 
 				FinShop.$settlementTab = $('#tab-' + settMenuKey + '-content');
 				FinShop.sett_init_event(FinShop.$settlementTab);
@@ -468,8 +459,8 @@ define(function(require, exports){
 			event.preventDefault();
 			FinShop.settlementList(0, FinShop.settlementId);
 		});
-
-		Tools.setDatePicker($searchArea.find('.datepicker'), true);
+		var $datepicker = $searchArea.find('.datepicker');
+		Tools.setDatePicker($datepicker, true);
 		FinancialService.updateUnpayMoney($tab, rule);
 
 		// 报表内的操作
@@ -486,7 +477,6 @@ define(function(require, exports){
 				FinShop.viewOperationDetail(id, 1);
 			}
 		});
-		FinancialService.updateSumPayMoney($tab, rule);
 		//给全选按钮绑定事件: 未去重
         FinancialService.initCheckBoxs($tab.find(".T-checkAll"), $tab.find(".T-checkList").find('.T-checkbox'));
 
@@ -514,7 +504,9 @@ define(function(require, exports){
 			event.preventDefault();
 			if ($(this).hasClass('btn-primary')) {
                 if (validator.form()) {
-                    FinShop.autoFillMoney($tab);
+                	FinancialService.autoPayConfirm($datepicker.eq(0).val(), $datepicker.eq(1).val(),function(){
+                    	FinShop.autoFillMoney($tab);
+                	});
                 }
             } else {
                 FinShop.payingJson = [];
@@ -534,16 +526,15 @@ define(function(require, exports){
             var $autoPayMoney = $tab.find('.T-sumPayMoney');
 
             var args = {
-				ticketId : FinShop.settlementId,
+				shopId : FinShop.settlementId,
 				startDate : $tab.find('.T-search-start-date').val(),
 				endDate : $tab.find('.T-search-end-date').val(),
-				accountInfo : $tab.find('.T-search-type').val(),
-				isAutoPay : 1,
-				sumCurrentPayMoney : $tab.find('.T-sumReciveMoney').val()
+				tripMessage : $tab.find('.T-search-trip').val(),
+				sumTemporaryIncomeMoney : $tab.find('.T-sumReciveMoney').val()
             };
 
             $.ajax({
-                    url: KingServices.build_url('financial/shopAccount', 'autoBookingAccount'),
+                    url: KingServices.build_url('financial/shopAccount', 'autoShopAccount'),
                     type: 'post',
                     data: {searchParam : JSON.stringify(args)},
                     showLoading: false
@@ -578,7 +569,7 @@ define(function(require, exports){
         if ($tab) {
             var args = {
                 pageNo: pageNo || 0,
-				shopId : Ticket.settlementId,
+				shopId : FinShop.settlementId,
 				startTime : $tab.find('.T-search-start-date').val(),
 				endTime : $tab.find('.T-search-end-date').val(),
 				tripMessage : $tab.find('.T-search-trip').val()
