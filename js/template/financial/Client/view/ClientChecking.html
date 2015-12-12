@@ -78,7 +78,7 @@
         <tbody class="T-list">
             {{if customerAccountList != null}}
         	{{each customerAccountList as rs index}}
-            <tr data-gid="{{rs.touristGroupId}}">
+            <tr data-gid="{{rs.touristGroupId}}" data-id="{{rs.id}}">
                 <td>{{index + 1}}</td>
                 <td>{{rs.otaOrderNumber}}</td>
                 <td>{{rs.lineProductName}}</td>
