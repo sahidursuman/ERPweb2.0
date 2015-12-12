@@ -140,9 +140,6 @@ define(function(require, exports) {
 		Ticket.checkingList(0, id);
 		Ticket.checkingName = name;
 	};
-	Ticket.initPay = function(args){
-		console.log(args);
-	};
 	Ticket.checkingList = function(page, id, start, end){
 		var args = {
 			pageNo : (page || 0),
@@ -385,9 +382,17 @@ define(function(require, exports) {
 		Ticket.$clearingTab = null;
 		Ticket.clearingId = id;
 		Ticket.clearingList(0, id);
+		Ticket.isBalanceSource = false;
 		Ticket.balanceName = name;
 	};
 
+	Ticket.initPay = function(args){
+		Ticket.$clearingTab = null;
+		Ticket.clearingId = args.id;
+		Ticket.balanceName = args.name;
+		Ticket.isBalanceSource = true;
+		Ticket.clearingList(0, args.id, args.startDate, args.endDate);
+	};
 	Ticket.clearingList = function(page, id, start, end){
 		var args = {
 			pageNo : (page || 0),
@@ -413,6 +418,7 @@ define(function(require, exports) {
 		}).done(function(data){
 			if(showDialog(data)){
 				data.name = Ticket.balanceName;
+				data.source = Ticket.isBalanceSource;
 				Tools.addTab(clearMenuKey, "票务付款", ticketClearing(data));
 				Ticket.$clearingTab = $("#tab-" + clearMenuKey + "-content");
 				var html = payingTableTemplate(data);

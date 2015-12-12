@@ -400,22 +400,29 @@ define(function(require, exports){
 		FinShop.$settlementTab = null;
 		FinShop.settlementId = id;
 		FinShop.settlementName = name;
+		FinShop.isBalanceSource = false;
 		FinShop.settlementList(0, id);
 	};
-
-	FinShop.settlementList = function(page, id){
+	FinShop.initPay = function(args){
+		FinShop.$settlementTab = null;
+		FinShop.settlementId = args.id;
+		FinShop.settlementName = args.name;
+		FinShop.isBalanceSource = true;
+		FinShop.settlementList(0, args.id, args.startDate, args.endDate);
+	}
+	FinShop.settlementList = function(page, id, start, end){
 		var args = {
 			pageNo : (page || 0),
 			shopId : id || FinShop.settlementId,
-			startTime: FinShop.$tab.find('.T-search-start-date').val(),
-			endTime : FinShop.$tab.find('.T-search-end-date').val()
+			startTime: start || FinShop.$tab.find('.T-search-start-date').val(),
+			endTime : end || FinShop.$tab.find('.T-search-end-date').val()
 		}
 		if (!!FinShop.$settlementTab) {
 			args = {
 				pageNo: (page || 0),
 				shopId : id || FinShop.settlementId,
-				startTime: FinShop.$settlementTab.find('.T-search-start-date').val(),
-				endTime : FinShop.$settlementTab.find('.T-search-end-date').val(),
+				startTime: start || FinShop.$settlementTab.find('.T-search-start-date').val(),
+				endTime : end || FinShop.$settlementTab.find('.T-search-end-date').val(),
 				tripMessage : FinShop.$settlementTab.find('.T-search-trip').val()
 			}
 		}
@@ -428,6 +435,7 @@ define(function(require, exports){
 		}).done(function(data){
 			if(showDialog(data)){
 				data.name = FinShop.settlementName;
+				data.source = FinShop.isBalanceSource;
 				Tools.addTab(settMenuKey, "购物结算", shopClearingTemplate(data));
 
 				FinShop.$settlementTab = $('#tab-' + settMenuKey + '-content');
@@ -645,4 +653,5 @@ define(function(require, exports){
 
 	// 暴露方法
 	exports.init = FinShop.initModule;
+	exports.initIncome = FinShop.initPay;
 });
