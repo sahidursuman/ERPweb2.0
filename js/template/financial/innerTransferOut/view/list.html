@@ -1,27 +1,17 @@
 <div class="row FinancialinnerTransferOut" >
     <div class="form-horizontal search-area">    
-        <div class="form-group T-search-area">      
-          <label class="control-label pull-left" style="margin-left: 22px">部门：</label>
-                <select  class="col-xs-12" name="toBusinessGroupId" style="width: 220px">
-                    <option value ="">全部</option>    
-                    {{each toBusinessGroupList as innerTransferOut index}}
-						<option value="{{innerTransferOut.toBusinessGroupId}}" {{if searchParam.toBusinessGroupId == innerTransferOut.toBusinessGroupId}}selected="selected"{{/if}}>{{innerTransferOut.toBusinessGroupName}}</option>
-					{{/each}}
-                </select>        
-
-             <label class="control-label pull-left marginLeft-30" >账期：</label>
-				<select class="col-sm-1" name="year" >
-					{{each yearList as year index}}
-						<option value="{{year.value}}" {{if searchParam.year == year.value}}selected="selected"{{/if}}>{{year.value}}</option>
-					{{/each}}
-				</select> 
-				<select class="col-sm-1 marginLeft-30" name="month" >
-				    <option value ="">全部</option>
-					{{each monthList as month index}}
-						<option value="{{month.value}}" {{if searchParam.month == month.value}}selected="selected"{{/if}}>{{month.value}}月</option>
-					{{/each}}
-				</select>
-            <button class="marginLeft-30 btn-sm search-btn T-innerTransferOut-search"> <i class="ace-icon fa fa-search"></i> 搜索 </button> 
+        <div class="form-group T-search-area" >      
+          <label class="control-label pull-left" style="margin-left: 22px">部门：</label>     
+                <div class="col-xs-2">
+                    <input type="text" name="toBusinessGroupName" value="{{toBusinessGroupName}}" />
+                    <input type="hidden" name="toBusinessGroupId" value="{{toBusinessGroupId}}" />
+                </div>
+             <label class="control-label pull-left marginLeft-30" >账期：
+                <input type="text" class="date-picker" name="startDate" value="{{startDate}}" />
+                <span>至</span>
+                <input type="text" class="date-picker" name="endDate" value="{{endDate}}"/>
+             </label>
+            <button class="marginLeft-30 btn-sm search-btn T-search" style="margin-top:2px;"> <i class="ace-icon fa fa-search"></i> 搜索 </button> 
         </div>
     </div>
     </div>
@@ -32,49 +22,46 @@
                 <tr class="bg-blur">
                     <th>部门</th>
                     <th>总人数</th>
-                    <th>总账面应付</th>
-                    <th>总实际应付</th>
-                    <th>总实际已付</th>
-                    <th>总账面未付</th>
-                    <th>总实际未付</th>
+                    <th>内转应付</th>
+                    <th>结算金额</th>
+                    <th>已付金额</th>
+                    <th>未付金额</th>
                     <th>对账进度</th>
+                    <th>付款进度</th>
                     <th>操作</th>
                 </tr>
                 </thead>
                 <tbody class="T-innerTransferOutList">
-                {{each financialInnerTransferInList as innerTransferOut}}
-                <tr>
-                    <td>{{innerTransferOut.toBusinessGroupName}}</td>
-                    <td>{{innerTransferOut.allPerson}}</td>
-                    <td>{{innerTransferOut.needPayMoney}}</td>
-                    <td>{{innerTransferOut.realNeedPayMoney}}</td>
-                    <td>{{innerTransferOut.realPayedMoney}}</td>
-                    <td>{{innerTransferOut.unPayedMoney}}</td>
-                    <td>
-                    	<span style="color:red">{{innerTransferOut.realUnPayedMoney}}</span>
+                {{each list as innerTransferOut}}
+                <tr businessGroupId="{{innerTransferOut.businessGroupId}}" businessGroupName="{{innerTransferOut.businessGroupName}}" endDate="{{endDate}}" startDate="{{startDate}}">
+                    <td>{{innerTransferOut.businessGroupName}}</td>
+                    <td>{{innerTransferOut.sumTransAdultCount}}大{{innerTransferOut.sumTransChildCount}}小</td>
+                    <td>{{innerTransferOut.sumTransNeedPayMoney}}</td>
+                    <td>{{innerTransferOut.sumSettlementMoney}}</td>
+                    <td>{{innerTransferOut.sumPayedMoney}}</td>
+                    <td><span style="color:#FF0000">{{innerTransferOut.sumUnPayedMoney}}</span></td>
+                     <td >
+                        {{if innerTransferOut.checkFCount != innerTransferOut.sumFCount}}
+                        <span style="color:#ff9900">{{innerTransferOut.checkFCount}}/{{innerTransferOut.sumFCount}}</span>
+                          {{else}}
+                          <span style="color:#00CC00"> {{innerTransferOut.checkFCount}}/{{innerTransferOut.sumFCount}}</span>
+                        {{/if}}
                     </td>
                    
                     <td >
-	                    {{if innerTransferOut.allCount != innerTransferOut.checkedCount}}
-	                      <span style="color:#ff9900"> {{innerTransferOut.checkedCount}}{{"/"}}{{innerTransferOut.allCount}}</span>
-	                    {{/if}}
-	                    {{if innerTransferOut.allCount == innerTransferOut.checkedCount}}
-	                      <span style="color:green"> {{innerTransferOut.checkedCount}}{{"/"}}{{innerTransferOut.allCount}}</span>
-	                    {{/if}}
+                        {{if innerTransferOut.payFCount != innerTransferOut.sumFCount}}
+                          <span style="color:#ff9900"> {{innerTransferOut.payFCount}}/{{innerTransferOut.sumFCount}}</span>
+                          {{else}}
+                          <span style="color:#00CC00"> {{innerTransferOut.payFCount}}/{{innerTransferOut.sumFCount}}</span>
+                        {{/if}}
                     </td>
                     <td>
-                        <a data-entity-id="{{innerTransferOut.toBusinessGroupId}}" data-entity-toBusinessGroupName="{{innerTransferOut.toBusinessGroupName}}" data-entity-year="{{searchParam.year}}" data-entity-month="{{searchParam.month}}" class="cursor T-action T-check R-right" data-right="1370001">
-                            	对账
+                        <a class="cursor T-action T-check R-right" data-right="1370001">
+                                对账
                         </a>
                         <label class="cursor R-right" data-right="1370001"><a class="R-right" data-right="1370002"> |</a></label>
-                        <a data-entity-id="{{innerTransferOut.toBusinessGroupId}}" data-entity-toBusinessGroupName="{{innerTransferOut.toBusinessGroupName}}" data-entity-year="{{searchParam.year}}"
-                                {{if searchParam.month == ""}}
-                                 	 data-entity-startMonth=1 data-entity-endMonth=12 
-                                  {{else}}
-                                 	 data-entity-startMonth="{{searchParam.month}}" data-entity-endMonth="{{searchParam.month}}" 
-                                {{/if}}
-                        		class="cursor T-action T-balance R-right" data-right="1370002">
-                           		 结算
+                        <a class="cursor T-action T-balance R-right" data-right="1370002">
+                                付款
                         </a>
                     </td>
                 </tr>

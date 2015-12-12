@@ -24,7 +24,7 @@
                 <label class="control-label marginLeft-30">已付金额合计：{{sumPayedMoney}}</label>
                 <label class="control-label marginLeft-30">结算金额合计：<span class="T-stMoney">{{sumSettlementMoney}}</span></label>
                 <label class="control-label marginLeft-30">未付金额合计：<span class="T-unpayMoney">{{sumUnPayedMoney}}</span></label>
-                <label class="control-label marginLeft-30">已对账未付金额合计：{{checkedUnPayedMoney}}</label>
+                <label class="control-label marginLeft-30">未付金额合计(已对账)：{{checkedUnPayedMoney}}</label>
             </div>
         </form>
     </div>
@@ -36,7 +36,7 @@
             <tr>
                 <th class="th-border">序号</th>
                 <th class="th-border">团信息</th>
-                <th class="th-border">消费日期</th>
+                <th class="th-border">消费日期(账期)</th>
                 <th class="th-border">险种</th>
                 <th class="th-border">单价</th>
                 <th class="th-border">数量</th>
@@ -74,7 +74,7 @@
                 <td name="unPayedMoney">{{rs.unPayedMoney}}</td>
                 <td><input type="text" maxlength="1000" name="checkRemark" style="text-align:center" value="{{rs.checkRemark}}" /></td>
                 <td>{{if rs.checkTime == null || rs.checkTime == ""}}-{{else}}{{rs.checkTime | dateFormat:'yyyy-MM-dd hh:mm:ss'}}{{/if}}</td>
-                <td>{{if rs.checkUserRealName == null || rs.checkUserRealName == ""}}-{{else}}{{rs.checkUserRealName}}{{/if}}</td>
+                <td>{{if rs.checkUserName == null || rs.checkUserName == ""}}-{{else}}{{rs.checkUserName}}{{/if}}</td>
                 <td><label class="pos-rel">
                         <input type="checkbox" class="ace T-checkbox" {{if rs.isConfirmAccount==1 }}checked="checked"{{/if}} />
                         <span class="lbl"></span>

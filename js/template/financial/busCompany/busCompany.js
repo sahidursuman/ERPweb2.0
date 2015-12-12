@@ -9,16 +9,16 @@ define(function(require, exports) {
         needPayDetailTempLate = require("./view/viewNeedPayDetail");
 
 	var busCompany = {
-		searchData : false,
+		searchData: false,
     	$tab :false,
-    	$checkTab : false,
-    	$clearTab : false,
-    	$searchArea : false,
+    	$checkTab: false,
+    	$clearTab: false,
+    	$searchArea: false,
     	$checkSearchArea: false,
-        $clearSearchArea : false,
-        busCompanyList : false,
-        clearTempData : false,
-        clearTempSumDate : false
+        $clearSearchArea: false,
+        busCompanyList: false,
+        clearTempData: false,
+        clearTempSumDate: false
 	};
 
 	busCompany.initModule = function() {
@@ -37,15 +37,15 @@ define(function(require, exports) {
             showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
             return false;
         }
-        busCompanyName = (busCompanyName == "全部") ? "" : busCompanyName;
+        busCompanyName = (busCompanyName == "全部") ? "": busCompanyName;
         // 修正页码
         page = page || 0;
         busCompany.searchData = {
-            pageNo : page,
-            busCompanyName : busCompanyName,
-            busCompanyId : busCompanyId,
-            startTime : startDate,
-            endTime : endDate,
+            pageNo: page,
+            busCompanyName: busCompanyName,
+            busCompanyId: busCompanyId,
+            startTime: startDate,
+            endTime: endDate,
             sortType: 'auto'
         };
 
@@ -53,7 +53,7 @@ define(function(require, exports) {
         $.ajax({
             url:KingServices.build_url("account/financialBusCompany","listSumFinancialBusCompany"),
             type:"POST",
-            data:{ searchParam : searchParam },
+            data:{ searchParam: searchParam },
             success:function(data){
                layer.close(globalLoadingLayer);
                var result = showDialog(data);
@@ -85,7 +85,7 @@ define(function(require, exports) {
         busCompany.$searchArea = busCompany.$tab.find('.T-search-area');
 
         busCompany.getQueryList();
-        FinancialService.initDate(busCompany.$tab);
+        Tools.setDatePicker(busCompany.$tab.find(".date-picker"),true);
 
         //搜索按钮事件
         busCompany.$tab.find('.T-search').on('click',function(event) {
@@ -126,18 +126,18 @@ define(function(require, exports) {
         // 修正页码
         page = page || 0;
         var searchParam = {
-            pageNo : page,
-            busCompanyId : busCompanyId + "",
-            accountInfo : accountInfo,
-            startTime : startDate,
-            endTime : endDate,
-            sortType : "auto"
+            pageNo: page,
+            busCompanyId: busCompanyId + "",
+            accountInfo: accountInfo,
+            startTime: startDate,
+            endTime: endDate,
+            sortType: "auto"
         };
         searchParam = JSON.stringify(searchParam);
         $.ajax({
             url:KingServices.build_url("account/financialBusCompany","listBusCompanyAccount"),
             type:"POST",
-            data:{ searchParam : searchParam },
+            data:{ searchParam: searchParam },
             success:function(data){
                 var result = showDialog(data);
                 if(result){
@@ -178,7 +178,7 @@ define(function(require, exports) {
         busCompany.$checkSearchArea = busCompany.$checkTab.find('.T-search-area');
 
         busCompany.init_event(page,id,name,busCompany.$checkTab,"check");
-        FinancialService.initDate(busCompany.$checkTab);
+        Tools.setDatePicker(busCompany.$checkTab.find(".date-picker"),true);
         FinancialService.updateUnpayMoney(busCompany.$checkTab,rule);
 
         //搜索按钮事件
@@ -231,18 +231,18 @@ define(function(require, exports) {
 
         page = page || 0;
         var searchParam = {
-            pageNo : page,
-            busCompanyId : busCompanyId + "",
-            accountInfo : accountInfo,
-            startTime : startDate,
-            endTime : endDate,
-            sortType : "auto"
+            pageNo: page,
+            busCompanyId: busCompanyId + "",
+            accountInfo: accountInfo,
+            startTime: startDate,
+            endTime: endDate,
+            sortType: "auto"
         };
         searchParam = JSON.stringify(searchParam);
         $.ajax({
             url:KingServices.build_url("account/financialBusCompany","listBusCompanyAccount"),
             type:"POST",
-            data:{ searchParam : searchParam },
+            data:{ searchParam: searchParam },
             success:function(data){
                 var result = showDialog(data);
                 if(result){
@@ -294,9 +294,9 @@ define(function(require, exports) {
                                     sumPayType = parseFloat(busCompany.$clearTab.find('select[name=sumPayType]').val()),
                                     sumPayRemark = busCompany.$clearTab.find('input[name=sumPayRemark]').val();
                                 busCompany.clearTempSumDate = {
-                                    sumPayMoney : sumPayMoney,
-                                    sumPayType : sumPayType,
-                                    sumPayRemark : sumPayRemark
+                                    sumPayMoney: sumPayMoney,
+                                    sumPayType: sumPayType,
+                                    sumPayRemark: sumPayRemark
                                 }
                                 busCompany.busCompanyClear(isAutoPay,obj.curr -1,busCompanyId,busCompanyName);
                             }
@@ -313,7 +313,7 @@ define(function(require, exports) {
         busCompany.$clearSearchArea = busCompany.$clearTab.find('.T-search-area');
 
         busCompany.init_event(page,id,name,busCompany.$clearTab,"clear");
-        FinancialService.initDate(busCompany.$clearTab);
+        Tools.setDatePicker(busCompany.$clearTab.find(".date-picker"),true);
 
         //搜索事件
         busCompany.$clearTab.find(".T-search").click(function(){
@@ -343,25 +343,23 @@ define(function(require, exports) {
             if(!autoPayJson){return false;}
 
             var startDate = busCompany.$clearTab.find("input[name=startDate]").val(),
-                endDate = busCompany.$clearTab.find("input[name=endDate]").val(),
-                sumPayMoney = parseFloat(busCompany.$clearTab.find('input[name=sumPayMoney]').val()),
-                sumPayType = parseFloat(busCompany.$clearTab.find('select[name=sumPayType]').val()),
-                sumPayRemark = busCompany.$clearTab.find('input[name=sumPayRemark]').val();
+                endDate = busCompany.$clearTab.find("input[name=endDate]").val();
             var searchParam = {
-                busCompanyId : id,
-                sumCurrentPayMoney : sumPayMoney,
-                payType : sumPayType,
-                payRemark : sumPayRemark,
-                startTime : startDate,
-                endTime : endDate,
-                isAutoPay : 1
+                busCompanyId: id,
+                sumCurrentPayMoney: busCompany.$clearTab.find('input[name=sumPayMoney]').val(),
+                payType: busCompany.$clearTab.find('select[name=sumPayType]').val(),
+                payRemark: busCompany.$clearTab.find('input[name=sumPayRemark]').val(),
+                startTime: startDate,
+                endTime: endDate,
+                accountInfo: busCompany.$clearTab.find('input[name=accountInfo]').val(),
+                isAutoPay: 1
             };
             searchParam = JSON.stringify(searchParam);
             FinancialService.autoPayConfirm(startDate,endDate,function(){
                 $.ajax({
                     url:KingServices.build_url("account/financialBusCompany","listBusCompanyAccount"),
                     type:"POST",
-                    data:{ searchParam : searchParam },
+                    data:{ searchParam: searchParam },
                     success:function(data){
                         var result = showDialog(data);
                         if(result){
@@ -371,9 +369,9 @@ define(function(require, exports) {
                             busCompany.clearTempData = false;
                             busCompany.clearTempData = data.autoPaymentJson;
                             busCompany.clearTempSumDate = {
-                                sumPayMoney : busCompany.$clearTab.find('input[name=sumPayMoney]').val(),
-                                sumPayType : busCompany.$clearTab.find('select[name=sumPayType]').val(),
-                                sumPayRemark : busCompany.$clearTab.find('input[name=sumPayRemark]').val()
+                                sumPayMoney: busCompany.$clearTab.find('input[name=sumPayMoney]').val(),
+                                sumPayType: busCompany.$clearTab.find('select[name=sumPayType]').val(),
+                                sumPayRemark: busCompany.$clearTab.find('input[name=sumPayRemark]').val()
                             };
                             busCompany.busCompanyClear(1,page,id,name);
                         }
@@ -403,7 +401,7 @@ define(function(require, exports) {
             url:KingServices.build_url("account/financialBusCompany","saveAccountChecking"),
             type:"POST",
             data:{
-                busCompanyJson : checkSaveJson
+                busCompanyJson: checkSaveJson
             },
             success:function(data){
                 var result = showDialog(data);
@@ -434,9 +432,10 @@ define(function(require, exports) {
         var argumentsLen = arguments.length,
             clearSaveJson = FinancialService.clearSaveJson(busCompany.$clearTab,busCompany.clearTempData,rule);
         var searchParam = {
-            sumCurrentPayMoney : busCompany.$clearTab.find('input[name=sumPayMoney]').val(),
-            payType : busCompany.$clearTab.find('select[name=sumPayType]').val(),
-            payRemark : busCompany.$clearTab.find('input[name=sumPayRemark]').val()
+            busCompanyId: id,
+            sumCurrentPayMoney: busCompany.$clearTab.find('input[name=sumPayMoney]').val(),
+            payType: busCompany.$clearTab.find('select[name=sumPayType]').val(),
+            payRemark: busCompany.$clearTab.find('input[name=sumPayRemark]').val()
         };
 
         clearSaveJson = JSON.stringify(clearSaveJson);
@@ -445,8 +444,8 @@ define(function(require, exports) {
             url:KingServices.build_url("account/financialBusCompany","saveAccountSettlement"),
             type:"POST",
             data:{ 
-                busCompanyJson : clearSaveJson,
-                searchParam : searchParam 
+                busCompanyJson: clearSaveJson,
+                searchParam: searchParam 
             },
             success:function(data){
                 var result = showDialog(data);
@@ -490,16 +489,16 @@ define(function(require, exports) {
 		var html = billImageTempLate(data);
 		
 		layer.open({
-			type : 1,
-			title : "单据图片",
-			skin : 'layui-layer-rim', // 加上边框
-			area : '500px', // 宽高
-			zIndex : 1028,
-			content : html,
+			type: 1,
+			title: "单据图片",
+			skin: 'layui-layer-rim', // 加上边框
+			area: '500px', // 宽高
+			zIndex: 1028,
+			content: html,
 			scrollbar: false, // 推荐禁用浏览器外部滚动条
-			success : function() {
+			success: function() {
 				var colorbox_params = {
-                    photo : true,
+                    photo: true,
 					rel: 'colorbox',
 					reposition:true,
 					scalePhotos:true,
@@ -532,19 +531,19 @@ define(function(require, exports) {
             url:KingServices.build_url("account/financialBusCompany","getPayedMoneyDetail"),
             type:"POST",
             data:{
-                id : id
+                id: id
             },
             success:function(data){
                 var result = showDialog(data);
                 if(result){
                     var html = payedDetailTempLate(data);
                     layer.open({
-                        type : 1,
-                        title : "已付金额明细",
-                        skin : 'layui-layer-rim',
-                        area : '1000px',
-                        zIndex : 1028,
-                        content : html,
+                        type: 1,
+                        title: "已付金额明细",
+                        skin: 'layui-layer-rim',
+                        area: '1000px',
+                        zIndex: 1028,
+                        content: html,
                         scrollbar: false 
                     });
                 }
@@ -558,19 +557,19 @@ define(function(require, exports) {
             url:KingServices.build_url("account/financialBusCompany","getNeedPayDetail"),
             type:"POST",
             data:{
-                id : id
+                id: id
             },
             success:function(data){
                 var result = showDialog(data);
                 if(result){
                     var html = needPayDetailTempLate(data);
                     layer.open({
-                        type : 1,
-                        title : "应付金额明细",
-                        skin : 'layui-layer-rim',
-                        area : '800px',
-                        zIndex : 1028,
-                        content : html,
+                        type: 1,
+                        title: "应付金额明细",
+                        skin: 'layui-layer-rim',
+                        area: '800px',
+                        zIndex: 1028,
+                        content: html,
                         scrollbar: false 
                     });
                 }
@@ -628,15 +627,15 @@ define(function(require, exports) {
             }
         }
         var all = {
-            id : "",
-            value : "全部"
+            id: "",
+            value: "全部"
         };
         busCompanyList.unshift(all);
 
         //车队
         $busCompany.autocomplete({
             minLength: 0,
-            source : busCompanyList,
+            source: busCompanyList,
             change: function(event,ui) {
                 if (!ui.item)  {
                     $(this).nextAll('input[name="busCompanyId"]').val('');

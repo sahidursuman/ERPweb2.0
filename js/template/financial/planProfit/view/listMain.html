@@ -1,15 +1,15 @@
 <div class="row">
-	<div class="col-xs-12 T-search-area" style="margin:0px;">  
-		<div class="form-horizontal clearfix">      
+	<div class="T-search-area" style="margin:0px;">  
+		<div class="form-horizontal">      
 	      	<label>团号：</label>
-	    	<input type="text" style="width: 220px" placeholder="团号" name="tripNumber" value="{{searchParam.tripNumber}}" />
+	    	<input type="text" style="width: 160px" placeholder="团号" name="tripNumber" value="{{searchParam.tripNumber}}" />
 
 			<label style="margin-left: 15px">线路产品：</label>
 	    	<input type="text" style="width: 220px" placeholder="线路产品" name="lineProductName" value="{{searchParam.lineProductName}}" />
 			<input type="hidden" name="lineProductId" value="{{searchParam.lineProductId}}"/>
 
 			<label style="margin-left: 15px">导游：</label>
-	    	<input type="text" style="width: 220px" placeholder="导游" name="guideName" value="{{searchParam.guideName}}"/>
+	    	<input type="text" style="width: 100px" placeholder="导游" name="guideName" value="{{searchParam.guideName}}"/>
 			<input type="hidden" name="guideId" value="{{searchParam.guideId}}"/>
 			
 			<label style="margin-left: 15px">开始日期：</label>
@@ -44,7 +44,7 @@
 						<a data-value="1" href="javascript:void(0)">已发团</a>
 					</li> 
 					<li>
-						<a data-value="1" href="javascript:void(0)">已取消</a>
+						<a data-value="-1" href="javascript:void(0)">已取消</a>
 					</li> 
 				</ul>
 			</div>			
@@ -52,15 +52,69 @@
 	        <button class="btn-sm marginLeft-30 search-btn T-search"> <i class="ace-icon fa fa-search"></i>搜索</button> 
 	    </div>
 
-	    <div style="margin:0px;padding:0px;margin-top:10px;">
-            <label class="control-label">收入合计：{{total.totalIncome}}</label>
-            <label class="control-label marginLeft-30">发团成本合计：{{total.totalTrip}}</label>
-            <label class="control-label marginLeft-30">中转成本合计：{{total.totalOut}}</label>
-            <label class="control-label marginLeft-30">毛利：{{total.profit}}</label>
-            <label class="control-label marginLeft-30">人均毛利：{{total.perCapitaProfit}}</label>
-            <label class="control-label marginLeft-30">人数：{{total.adultCount}} 大 {{total.childCount}} 小</label>
-            <label class="control-label marginLeft-30">团数：{{total.tripCount}}</label>
+	    <div style="margin:8px 0px;">
+            <label>收入合计：<span class="T-totalIncome"></span></label>
+            <label class="marginLeft-30">发团成本合计：<span class="T-totalTrip"></span></label>
+            <label class="marginLeft-30">中转成本合计：<span class="T-totalOut"></span></label>
+            <label class="marginLeft-30">毛利：<span class="T-profit"></span></label>
+            <label class="marginLeft-30">人均毛利：<span class="T-perCapitaProfit"></span></label>
+            <label class="marginLeft-30">人数：<span class="T-personCount"></span></label>
+            <label class="marginLeft-30">团数：<span class="T-tripCount"></span></label>
         </div>
     </div>
-    <div class="T-listHtml"></div>
+    <table class="table table-striped table-bordered table-hover T-showHighLight">
+		<thead>
+			<tr class="bg-blur">
+				<th rowspan="2">团号</th>
+				<th rowspan="2">线路产品</th>
+				<th rowspan="2">出游日期</th>
+				<th rowspan="2">人数</th>
+				<th rowspan="2">导游</th>
+				<th rowspan="2">责任计调</th>
+				<th rowspan="2">状态</th>
+				<th colspan="5">收入</th>
+				<th colspan="10">发团成本</th>
+				<th colspan="5">中转成本</th>
+				<th rowspan="2">收入小计</th>
+				<th rowspan="2">发团成本小计</th>
+				<th rowspan="2">中转成本小计</th>
+				<th rowspan="2">毛利</th>
+				<th rowspan="2">人均毛利</th>
+			</tr>
+			<tr class="bg-blur">
+				<th>团款</th>
+				<th>购物佣金</th>
+				<th>自费</th>
+				<th>其他收入</th>
+				<th>导游管理费</th>
+				<th>导服费</th>
+				<th>保险</th>
+				<th>车费</th>
+				<th>餐费</th>
+				<th>房费</th>
+				<th>景区</th>
+				<th>票务</th>
+				<th>其他支出</th>
+				<th>购物导佣</th>
+				<th>自费导佣</th>
+				<th>车费</th>
+				<th>餐费</th>
+				<th>房费</th>
+				<th>票务</th>
+				<th>其他</th>
+			</tr>
+		</thead>
+		<tbody class="T-planProfit-list">
+		</tbody>
+	</table>
+</div>
+
+<div class="row pageMode">
+	<div class="col-xs-6">
+		<small class="T-totalSize">没有查询到相关记录</small>
+	</div>
+	<div class="col-xs-6">
+		<div class="dataTables_paginate paging_simple_numbers T-pagenation">
+		</div>
+	</div>
 </div>

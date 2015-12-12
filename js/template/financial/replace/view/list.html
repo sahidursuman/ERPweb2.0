@@ -27,7 +27,7 @@
                 <th>已收金额 </th>
                 <th>未收金额</th>
                 <th>对账进度</th>
-                <th>付款进度</th>
+                <th>收款进度</th>
                 <th>操作</th>
             </tr>
         </thead>
@@ -38,7 +38,7 @@
                 <td>{{rs.bookingMoney}}</td>
                 <td>{{rs.settlementMoney}}</td>
                 <td>{{rs.receiveMoney}}</td>
-                <td><span {{if rs.unReceiveMoney != 0}}style="color:#FF0000;"{{/if}}>{{rs.unReceiveMoney}}</span></td>
+                <td><span {{if rs.unReceivedMoney != 0}}style="color:#FF0000;"{{/if}}>{{rs.unReceivedMoney}}</span></td>
                 <td><span style="color:#{{if rs.checkStep == rs.allRecord}}00CC00{{else}}FF9900{{/if}};">{{rs.checkStep}}/{{rs.allRecord}}</span></td>
                 <td><span style="color:#{{if rs.reciveStep == rs.allRecord}}00CC00{{else}}FF9900{{/if}};">{{rs.reciveStep}}/{{rs.allRecord}}</span></td>
                 <td>

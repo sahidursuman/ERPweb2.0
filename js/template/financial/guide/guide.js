@@ -109,18 +109,20 @@ define(function(require, exports) {
         // 报表内的操作
         FinGuide.$tab.find('.T-list').on('click', '.T-action', function(event) {
             event.preventDefault();
-            var $that = $(this),
-                id = $that.closest('tr').data('id'),
-                name = $that.closest('tr').children('td').first().text();
+            var $that = $(this), $tr = $that.closest('tr'),
+                args = {
+                    guideId: $tr.data('id'),
+                    guideName: $tr.children('td').first().text(),
+                    startDate: $datepicker.eq(0).val(),
+                    endDate: $datepicker.eq(1).val()
+                };
 
             if ($that.hasClass('T-check')) {
                 // 对账
-                FinGuide.currentId = id;
-                FinGuide.initOperationModule(id, name, 0);
+                FinGuide.initOperationModule(args, 0);
             } else if ($that.hasClass('T-pay')) {
                 // 结算
-                FinGuide.currentId = id;
-                FinGuide.initOperationModule(id, name, 1);
+                FinGuide.initOperationModule(args, 1);
             }
         });
     };
@@ -176,10 +178,7 @@ define(function(require, exports) {
      * @param  {Boolean} isSearchIn true: 来自搜索，false: 来自初始化
      * @return {[type]}             [description]
      */
-    FinGuide.initOperationModule = function(id, name, type, $tab) {
-        var args = FinancialService.getInitDate();
-
-        args.guideId = id;
+    FinGuide.initOperationModule = function(args, type, $tab) {
         if (!!$tab) {
             var $line = $tab.find('.T-lineProductName');
 
@@ -206,8 +205,8 @@ define(function(require, exports) {
             })
             .done(function(data) {
                 if (showDialog(data)) {
-                    data.guideName = name;
-                    data.id = id;
+                    data.guideName = args.name;
+                    data.id = args.guideId;
                     data.type = type;
                     data.lineProductName = data.lineProductName || '全部';
                     // 临时缓存
@@ -217,6 +216,7 @@ define(function(require, exports) {
                         title = '导游对账',
                         html;
                     if (type) {
+                        data.isOuter = args.isOuter;
                         key = payMenuKey, title = '导游付款';
                         html = guidePayTemplate(data);
                     } else {
@@ -240,13 +240,18 @@ define(function(require, exports) {
 
         FinGuide.getLineProduct($searchArea.find('.T-lineProductName'), FinGuide.checkingTabLineProduct);
 
-        Tools.setDatePicker($searchArea.find('.datepicker'), true);
+        var $datePicker = Tools.setDatePicker($searchArea.find('.datepicker'), true);
 
         $searchArea.find('.T-btn-search').on('click', function(event) {
             event.preventDefault();
             var $btn = $tab.find('.T-btn-save');
 
-            FinGuide.initOperationModule($btn.data('id'), $btn.data('name'), type, $tab);
+            FinGuide.initOperationModule({
+                                        guideId: $btn.data('id'), 
+                                        guideName:$btn.data('name'),
+                                        startDate: $datePicker.eq(0).val(),
+                                        endDate: $datePicker.eq(1).val()
+                                    }, type, $tab);
         });
 
         var validator = rule.check($tab), autoValidator = rule.autoFillCheck($tab.find('.T-auto-fill-area'));
@@ -685,6 +690,15 @@ define(function(require, exports) {
         });
     };
 
+    FinGuide.initPayModule = function(options) {
+        options.guideId = options.id;
+        delete(options.id);
+        options.isOuter = true;
+
+        FinGuide.initOperationModule(options, 1)
+    };
+
     // 暴露方法
     exports.init = FinGuide.initModule;
+    exports.initPay = FinGuide.initPayModule;
 });
