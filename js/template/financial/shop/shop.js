@@ -469,7 +469,7 @@ define(function(require, exports){
 		});
 		var $datepicker = $searchArea.find('.datepicker');
 		Tools.setDatePicker($datepicker, true);
-		FinancialService.updateUnpayMoney($tab, rule);
+		FinancialService.updateSumPayMoney($tab, rule);
 
 		// 报表内的操作
 		$tab.find('.T-list').on('click', '.T-action', function(event) {
