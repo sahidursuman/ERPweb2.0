@@ -2,51 +2,29 @@ define(function(require, exports) {
 	var rule = {
 		check:function($obj){
 			var validator = $obj.formValidate([
-	    	    {	//账面返佣
-	    	    	$ele: $obj.find('input[name=realRebateMoney]'),
+	    	    {	
+	    	    	//结算金额
+	    	    	$ele: $obj.find('input[name=settlementMoney]'),
 	    	    	rules: [
-	    	    	        {
-	    	    	        	type: 'null', 
-	    	    	        	errMsg: '不能为空'
-	    	    	        },
-	    	    	        {
-	    	    	        	type: 'float',
-	    	    	        	errMsg: '请输入数字'
-	    	    	        }
-		    	        ]
+    	    	        {
+    	    	        	type: 'positive-float',
+    	    	        	errMsg: '请输入数字'
+    	    	        }
+	    	        ]
 	    	    },
-	    	    
-	    	    
-	    	    {	//实际返佣
-	    	    	$ele: $obj.find('input[name=realRebateMoney]'),
-	    	    	rules: [
-	    	    	        {
-	    	    	        	type: 'null', 
-	    	    	        	errMsg: '不能为空'
-	    	    	        },
-	    	    	        {
-	    	    	        	type: 'float',
-	    	    	        	errMsg: '请输入数字'
-	    	    	        }
-		    	        ]
-	    	    },
-	    	    
-	    	    {//付款金额
-	    	    	$ele: $obj.find('input[name=payMoney]'),
-	    	    	
+	    	    {
+	    	    	//本次收款金额合计
+	    	    	$ele: $obj.find('input.T-sumReciveMoney'),
 	    	    	rules:[
-	    	    	       
-	    	    	       {
-	    	    	    	   type:'null',
-	    	    	    	   errMsg:'金额不能为空'   
-	    	    	       },
-	    	    	       
-	    	    	       {
-	    	    	    	   type: 'float',
-	    	    	        	errMsg: '请输入数字'   
-	    	    	       }
-	    	    	       
-	    	    	       ]
+    	    	       {
+    	    	    	   type:'null',
+    	    	    	   errMsg:'金额不能为空'   
+    	    	       },
+    	    	       {
+    	    	    	   type: 'positive-float',
+    	    	        	errMsg: '请输入数字'   
+    	    	       }
+    	    	    ]
 	    	    }
 	    	    
                 ]);

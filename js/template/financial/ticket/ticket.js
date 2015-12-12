@@ -442,6 +442,8 @@ define(function(require, exports) {
 			Ticket.savePayingData($tab);
 		});
 
+		FinancialService.updateSumPayMoney($tab, rule);
+		
 		$tab.find(".T-btn-autofill").on('click', function(event){
 			event.preventDefault();
 			if ($(this).hasClass('btn-primary')) {
