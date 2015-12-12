@@ -1,7 +1,7 @@
 <div class="row T-Accounts globalAdd">
     <div class="col-xs-12 " >
         <form class="form-horizontal" role="form" onsubmit="return false">
-                <div class="form-horizontal col-sm-12 row form-group T-search-area">
+                <div class="form-horizontal row form-group T-search-area">
                     <label class="pull-left text-right ">项目名称:</label>
                     <div class="col-sm-1">
                         <label class="name">{{searchParam.name}}</label>
@@ -33,8 +33,8 @@
             <div class="form-group ">
                 <label class=" control-label pull-left">账面应付合计：{{statistics.sumNeedPayMoney}}</label>
                 <label class=" control-label marginLeft-30">已付金额合计：{{statistics.sumPayedMoney}}</label>
-                <label class=" control-label marginLeft-30">结算金额合计：{{statistics.sumSettlementMoney}}</label>
-                <label class=" control-label marginLeft-30">未付金额合计：{{statistics.sumUnPayedMoney}}</label>
+                <label class=" control-label marginLeft-30">结算金额合计：<span class="T-stMoney">{{statistics.sumSettlementMoney}}</span></label>
+                <label class=" control-label marginLeft-30">未付金额合计：<span class="T-unpayMoney">{{statistics.sumUnPayedMoney}}</span></label>
             </div>
         </form>
     </div>
@@ -46,7 +46,7 @@
             <tr>
                 <th class="th-border">序号</th>
                 <th class="th-border">团信息</th>
-                <th class="th-border">消费日期</th>
+                <th class="th-border">消费日期(账期)</th>
                 <th class="th-border">团队人数</th>
                 <th class="th-border">单价</th>
                 <th class="th-border">数量</th>
@@ -62,7 +62,7 @@
                 <th class="th-border">对账</th>
             </tr>
         </thead>
-        <tbody class="T-checkListNum" >
+        <tbody class="T-checkListNum T-checkList" >
          {{each financialOtherDetailsList as Checking index}}
             <tr data-id = "{{Checking.id}}" data-entity-isConfirmAccount="{{Checking.isConfirmAccount}}"  data-entity-checkRemark="{{Checking.checkRemark}}">
                 <td>{{index+1}}</td>
@@ -73,11 +73,9 @@
                 <td>{{Checking.memberCount}}</td>
                 <td>{{Checking.reduceMoney}}</td>
                 <td>{{Checking.needPayMoney}}</td>
-                <td><a class="T-action T-lookDetail">{{"社付："}}{{Checking.agencyPayedMoney}}{{";导付："}}{{Checking.guidePayedMoney}}</a></td>
-                <td><a href="#" class="T-action T-viewInsuanceImg" url=""><span>查看</span></a></td>
-                <td>
-                    <input type="text" name="ClearMoney input-success" value="{{Checking.settlementMoney}}"/>
-                </td>
+                <td><a class="T-action T-lookDetail T-payedDetail" data-money="{{Checking.agencyPayedMoney + Checking.guidePayedMoney}}">{{"社付："}}{{Checking.agencyPayedMoney}}{{";导付："}}{{Checking.guidePayedMoney}}</a></td>
+                <td>{{if Checking.billImage != null && Checking.billImage !=""}}<a href="#" class="T-option T-viewInsuanceImg" url="{{Checking.billImage}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
+                 <td><input type="text" maxlength="9" name="settlementMoney" value="{{Checking.settlementMoney}}" class="money"></td>
                 <td>
                    {{Checking.unPayedMoney}}
                 </td>
@@ -117,7 +115,7 @@
                 <i class="ace-icon fa fa-times-circle"></i> 关闭
             </button>
             <button class="btn btn-xs btn-primary T-confirm">
-                <i class="ace-icon fa fa-check-circle"></i> 确认
+                <i class="ace-icon fa fa-check-circle"></i> 确认对账
             </button>
         </div>
     </form>

@@ -1,4 +1,4 @@
-<div class="row check globalAdd">
+<div class="row check globalAdd" data-big="{{WEB_IMG_URL_BIG}}" data-small="{{WEB_IMG_URL_SMALL}}">
     <div class="T-search-area">
         <form class="form-inline" role="form" onsubmit="return false">
             <div class="form-group">
@@ -77,8 +77,8 @@
                 <td>{{rs.price}}</td>
                 <td>{{rs.reduceMoney}}</td>
                 <td>{{rs.needPayMoney}}</td>
-                <td><a class="cursor T-action T-payDetails">社付{{rs.payedMoney}}，导付{{rs.realGuidePayMoney}}</a></td>
-                <td><a class="cursor T-action T-view-receipts">查看</a></td>
+                <td class="T-payedDetail" data-money="{{rs.payedMoney + rs.realGuidePayMoney}}"><a class="cursor T-action T-payDetails">社付{{rs.payedMoney}}，导付{{rs.realGuidePayMoney}}</a></td>
+                <td>{{if !rs.billImage}}<span style="color:#bbb">查看</span>{{else}}<a class="cursor T-action T-view-receipts" data-billImage="{{rs.billImage}}">查看</a>{{/if}}</td>
                 <td>{{if !!rs.isConfirmAccount}}{{rs.settlementMoney}}{{else}}<input type="text" class="col-sm-12" name="settlementMoney" value="{{rs.settlementMoney}}">{{/if}}</td>
                 <td name="unPayedMoney">{{rs.unPayedMoney}}</td>
                 <td>{{if !!rs.isConfirmAccount}}{{rs.checkRemark}}{{else}}<input type="text" class="col-sm-12" name="checkRemark" value="{{rs.checkRemark}}">{{/if}}</td>
@@ -115,7 +115,7 @@
                 <i class="ace-icon fa fa-times-circle"></i> 关闭
             </button>
             <button class="btn btn-xs btn-primary T-btn-save" style="margin-left:20px">
-                <i class="ace-icon fa fa-check-circle"></i> 确认
+                <i class="ace-icon fa fa-check-circle"></i> 确认对账
             </button>
         </div>
     </form>

@@ -1,7 +1,7 @@
 <div class="row T-AccountsPayment globalAdd">
     <div class="col-xs-12 ">
         <form class="form-horizontal" role="form" onsubmit="return false">
-            <div class="form-horizontal col-sm-12 row form-group T-search-area">
+            <div class="form-horizontal row form-group T-search-area">
                 <label class="pull-left text-right ">项目名称:</label>
                 <div class="col-sm-1">
                     <label class="T-name">{{searchParam.name}}</label>
@@ -35,8 +35,8 @@
                 <label class=" control-label pull-left">账面应付合计：{{statistics.sumNeedPayMoney}}</label>
                 <label class=" control-label marginLeft-30">已付金额合计：{{statistics.sumPayedMoney}}</label>
                 <label class=" control-label marginLeft-30">结算金额合计：{{statistics.sumSettlementMoney}}</label>
-                <label class=" control-label marginLeft-30">未付金额合计：<span class="T-unpayMoney">{{statistics.sumUnPayedMoney}}</span></label>
-                <label class=" control-label marginLeft-30">本次付款金额：<input name="sumPayMoney" type="text" ></label>
+                <label class=" control-label marginLeft-30">未付金额合计：<span class="T-unpayMoney ">{{statistics.sumUnPayedMoney}}</span></label>
+                <label class=" control-label marginLeft-30">本次付款金额：<input name="sumPayMoney" type="text" class="T-btn-autofill" {{if type}}disabled {{/if}} /></label>
                 <label class=" control-label marginLeft-30">付款方式：
                     <select name="sumPayType">
                         <option>现金</option>
@@ -48,7 +48,7 @@
                 </label>
                 <label class=" control-label marginLeft-30">备注：<input type="text" name="sumPayRemark"></label>
                 <label class="control-label marginLeft-30">
-                    <button class=" btn-sm search-btn T-clear-auto">自动下账</button>
+                    <button class=" btn-sm search-btn T-clear-auto ">自动下账</button>
                 </label>
             </div>
         </form>
@@ -61,7 +61,7 @@
             <tr>
                 <th class="th-border">序号</th>
                 <th class="th-border">团信息</th>
-                <th class="th-border">消费日期</th>
+                <th class="th-border">消费日期(账期)</th>
                 <th class="th-border">团队人数</th>
                 <th class="th-border">单价</th>
                 <th class="th-border">数量</th>
@@ -91,7 +91,7 @@
                 <td>{{Checking.reduceMoney}}</td>
                 <td>{{Checking.needPayMoney}}</td>
                 <td><a class="T-action T-lookPay">{{"社付："}}{{Checking.agencyPayedMoney}}{{";导付："}}{{Checking.guidePayedMoney}}</a></td>
-                <td><a href="#" class="T-action T-insuanceImg" url=""><span>查看</span></a></td>
+                <td>{{if Checking.billImage != null && Checking.billImage !=""}}<a href="#" class="T-option T-viewInsuanceImg" url="{{Checking.billImage}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
                 <td>
                     {{Checking.sumSettlementMoney}}
                 </td>
@@ -99,7 +99,7 @@
                     {{Checking.unPayedMoney}}
                 </td>
                 <td>
-                    <input type="text" name="ClearMoney input-success">
+                    <input type="text" name="payMoney" class="name">
                 </td>
                 <td>
                     <select name="paymentMethod">
@@ -140,7 +140,7 @@
                 <i class="ace-icon fa fa-times-circle"></i> 关闭
             </button>
             <button class="btn btn-xs btn-primary T-save">
-                <i class="ace-icon fa fa-check-circle"></i> 确认
+                <i class="ace-icon fa fa-check-circle"></i> 确认付款
             </button>
         </div>
     </form>

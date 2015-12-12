@@ -10,8 +10,8 @@
         <td>{{rs.price}}</td>
         <td>{{rs.reduceMoney}}</td>
         <td>{{rs.needPayMoney}}</td>
-        <td><a class="cursor T-action T-payDetails">社付{{rs.payedMoney}}，导付{{rs.realGuidePayMoney}}</a></td>
-        <td><a class="cursor T-action T-view-receipts">查看</a></td>
+        <td class="T-payedDetail" data-money="{{rs.payedMoney + rs.realGuidePayMoney}}"><a class="cursor T-action T-payDetails">社付{{rs.payedMoney}}，导付{{rs.realGuidePayMoney}}</a></td>
+        <td>{{if !rs.billImage}}<span style="color:#bbb">查看</span>{{else}}<a class="cursor T-action T-view-receipts" data-billImage="{{rs.billImage}}">查看</a>{{/if}}</td>
         <td>{{rs.settlementMoney}}</td>
         <td>{{rs.unPayedMoney}}</td>
         <td><input type="text" class="col-sm-12 T-reciveMoney" name="payMoney" value="{{rs.payMoney}}"></td>

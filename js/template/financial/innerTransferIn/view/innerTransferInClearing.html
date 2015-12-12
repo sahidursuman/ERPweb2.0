@@ -1,14 +1,15 @@
 <div class="row innerTransferChecking globalAdd">
-    <div class="col-xs-12 border">
-        <form class="form-horizontal" role="form" onsubmit="return false">
-                <div class="search-area editable editable-click" >
-                    <div class="form-group T-search"> 
-                         <label  class="control-label pull-left" style="margin:5px auto auto 30px;"> 部门:{{searchParam.businessGroupName}}</label>
+    <div>
+         <div class="T-search">
+            <form class="form-inline" role="form" onsubmit="return false">
+                    <div class="form-group">
+                    <label  class="control-label pull-left" style="margin-left: 0px;">部门:</label>
+                    <span>{{searchParam.businessGroupName}}</span>
                     <input type="hidden" value="{{searchParam.businessGroupId}}" name="businessGroupId">
                     <input type="hidden" value="{{searchParam.businessGroupName}}" name="businessGroupName"> 
                     <label class="control-label" style="margin-left:30px;">账期:
                       <input type="text" style="width:100px;" class="date-picker" name="startDate" value="{{searchParam.startAccountTime}}"/>
-                      <span>至</span>
+                      <span>&nbsp;至&nbsp;</span>
                       <input type="text" style="width:100px;" class="date-picker" name="endDate" value="{{searchParam.endAccountTime}}"/>
                     </label>
                     <label class="control-label" style="margin-left:30px;">线路名称:
@@ -20,14 +21,18 @@
                     <input type="hidden" name="receiveUserId" value="{{searchParam.receiveUserId}}"/>
                     
                       
-                    </label>
+                    </label> 
                     <button class="marginLeft-30 btn-sm search-btn T-checking-search" >
                          <i class="ace-icon fa fa-search"></i>
                              搜索
-                    </button>    
+                    </button>   
+                        <!-- <button type="button" class="btn btn-sm marginLeft-30 btn-primary btn-success btn-transferExport">
+                            <span>导出报表</span>
+                            <i class="ace-icon fa fa-arrow-right icon-on-right"></i>
+                        </button> -->
                     </div>
-                </div>
             </form>
+        </div>
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="form-group T-count">
                 <label class=" control-label pull-left" style="margin-left: 15px">人数合计:<span class="sumTransCount"></span><label>
@@ -48,7 +53,7 @@
                 </label>
                 <label class=" control-label " style="margin-left:30px;">备注:<input type="text" name="sumRemark"/></label>
                 <label class=" control-label " style="margin-left:30px;">
-                    <button class="btn-sm btn-primary search-btn T-btn-autofill marginLeft-30">自动下账</button>
+                    <button class="btn-sm btn-primary search-btn T-btn-autofill" style="margin-left:15px;">自动下账</button>
                 </label>
             </div>
         </form>
@@ -169,7 +174,7 @@
                     <i class="ace-icon fa fa-times-circle"></i>
                     关闭
                 </button>
-                <button class="btn btn-xs btn-primary T-incomeMoney">
+                <button class="btn btn-xs btn-primary R-right  T-incomeMoney">
                     <i class="ace-icon fa fa-check-circle"></i>
                      确认收款
                 </button>
