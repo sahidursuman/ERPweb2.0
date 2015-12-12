@@ -13,16 +13,18 @@
 			</tr>
 		</thead>
 		<tbody>
+		{{each incomeDetailsList as income}}
 			<tr>
-				<td>11</td>
-				<td>11</td>
-				<td>11</td>
-				<td>11</td>
-				<td>11</td>
-				<td>11</td>
-				<td>11</td>
-				<td>11</td>
+				<td>{{income.receivableType}}</td>
+				<td>{{income.businessType}}</td>
+				<td>{{income.incomeOrPayParty}}</td>
+				<td>{{income.incomeDifferenceMoney}}</td>
+				<td>{{income.payType}}</td>
+				<td>{{income.remark}}</td>
+				<td>{{income.checkRealname}}</td>
+				<td>{{income.checkTime | dateFormat: 'yyyy-MM-dd'}}</td>
 			</tr>
+		{{/each}}
 		</tbody>
 	</table>
 </div>
