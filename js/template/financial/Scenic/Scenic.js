@@ -86,7 +86,7 @@ define(function(require, exports) {
         scenic.$searchArea = scenic.$tab.find('.T-search-area');
 
         scenic.getQueryList();
-        FinancialService.initDate(scenic.$tab);
+        Tools.setDatePicker(scenic.$searchArea.find('.datepicker'), true);
 
         //搜索按钮事件
         scenic.$tab.find('.T-search').on('click', function(event) {
