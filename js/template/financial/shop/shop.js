@@ -367,7 +367,7 @@ define(function(require, exports){
 		});
 	};
 
-	FinShop.saveChecking = function($tab, tab_array){
+	FinShop.saveChecking = function($tab, tabArgs){
 		// 表单校验
 		var json = FinancialService.checkSaveJson($tab, rule);
 		if(JSON.parse(json).length > 0){
@@ -446,11 +446,11 @@ define(function(require, exports){
 		})
 		.on(SWITCH_TAB_SAVE, function(event, tab_id, title, html){
 			event.preventDefault();
-			FinShop.saveSettlement($tab, validator, [tab_id, title, html], false);
+			FinShop.saveSettlement($tab, [tab_id, title, html]);
 		})
 		.on(CLOSE_TAB_SAVE, function(event){
 			event.preventDefault();
-			FinShop.saveSettlement($tab, validator, null, true);
+			FinShop.saveSettlement($tab);
 		});
 
 		//搜索顶部的事件绑定
@@ -483,7 +483,7 @@ define(function(require, exports){
 		//绑定确定事件
 		$tab.find('.T-btn-save').on('click', function(event){
 			event.preventDefault();
-			FinShop.saveSettlement($tab, validator, null, false);
+			FinShop.saveSettlement($tab);
 		});
 		//绑定取消事件
 		$tab.find('.T-btn-close').on('click', function(event){
@@ -536,13 +536,13 @@ define(function(require, exports){
             $.ajax({
                     url: KingServices.build_url('financial/shopAccount', 'autoShopAccount'),
                     type: 'post',
-                    data: {searchParam : JSON.stringify(args)},
+                    data: args,
                     showLoading: false
                 })
                 .done(function(data) {
                     if (showDialog(data)) {
-                        FinShop.payingJson = data.autoPaymentJson;
-                        $tab.find('input[name="sumPayMoney"]').val(data.checkedUnPayedMoney);
+                        FinShop.payingJson = data.autoAccountList;
+                        $tab.find('input[name="sumPayMoney"]').val(data.realAutoPayMoney);
                         FinShop.setAutoFillEdit($tab, true);
                     }
                 });
@@ -578,11 +578,11 @@ define(function(require, exports){
             $.ajax({
                     url : KingServices.build_url('financial/shopAccount', 'listReciveShopAcccount'),
 					type : "POST",
-					data : {searchParam : JSON.stringify(args)}
+					data : args
                 })
                 .done(function(data) {
                     if (showDialog(data)) {
-                    	data.financialTicketList = FinancialService.getTempDate(data.financialTicketList, Ticket.payingJson);
+                    	data.shopAccountList = FinancialService.getTempDate(data.shopAccountList, FinShop.payingJson);
                     	var html = payingTableTemplate(data);
 						FinShop.$settlementTab.find('.T-checkList').html(html);
 
@@ -633,7 +633,7 @@ define(function(require, exports){
                             Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
                             FinShop.settlementList(0);
                         } else {
-                            Tools.closeTab(clearingTab);
+                            Tools.closeTab(settMenuKey);
                             FinShop.getList(FinShop.listPageNo);
                         }
                     })
