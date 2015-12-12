@@ -31,9 +31,11 @@ define(function(require, exports) {
     OtherAccounts.listFinancialOtherAccounts = function(pageNo, name, startAccountTime, endAccountTime) {
             if (OtherAccounts.$searchArea && arguments.length === 1) {
                 // 初始化页面后，可以获取页面的参数
-                name = OtherAccounts.$searchArea.find("input[name=otherId]").val();
+                var itemName = OtherAccounts.$searchArea.find("input[name=otherId]").val();
+                name = itemName == "全部"?"":itemName;
                 startAccountTime = OtherAccounts.$searchArea.find("input[name=startTime]").val();
                 endAccountTime = OtherAccounts.$searchArea.find("input[name=endTime]").val();
+                
             }
             //重置搜索条件
             OtherAccounts.searchData = {
@@ -169,8 +171,7 @@ define(function(require, exports) {
                                         // 查看已付明细
                                         OtherAccounts.lookDetail(id);
                                     } else if ($that.hasClass('T-viewInsuanceImg')) {
-                                        alert();
-                                               // 查看单据
+                                       // 查看单据
                                         var WEB_IMG_URL_BIG = $checkTab.find("input[name=WEB_IMG_URL_BIG]").val();//大图
                                         var WEB_IMG_URL_SMALL = $checkTab.find("input[name=WEB_IMG_URL_SMALL]").val();//大图
                                         OtherAccounts.viewInsuranceImg(this,WEB_IMG_URL_BIG,WEB_IMG_URL_SMALL);
@@ -189,6 +190,16 @@ define(function(require, exports) {
                                 //关闭页面事
                                 $checkTab.find(".T-closeTab").click(function() {
                                     closeTab(checkTabId);
+                                });
+                                laypage({
+                                    cont: $checkTab.find('.T-pagenation'),
+                                    pages: data.searchParam.totalPage,
+                                    curr: (pageNo + 1),
+                                    jump: function(obj, first) {
+                                        if (!first) {
+                                            OtherAccounts.AccountsChecking(obj.curr - 1);
+                                        }
+                                    }
                                 });
                                 //对账保存
                                 $checkTab.find(".T-confirm").click(function(event) {
@@ -440,7 +451,9 @@ define(function(require, exports) {
                                             url: KingServices.build_url("account/arrangeOtherFinancial", "autoPayment"),
                                             type: "POST",
                                             data: searchParam,
-                                            success: function(data) {}
+                                            success: function(data) {
+
+                                            }
                                         });
                                     });
                                 });
