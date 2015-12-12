@@ -213,7 +213,7 @@ define(function(require, exports) {
 		var validator = rule.check($tab);
 		// 处理关闭与切换tab
         $tab.off('change').off(SWITCH_TAB_SAVE).off(CLOSE_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT)
-        .on('change', '.T-checkList', function() {
+        .on('change', '.T-checkList, .T-clearList', function() {
             $tab.data('isEdited', true);
         })
         .on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
@@ -221,7 +221,11 @@ define(function(require, exports) {
             Replace.saveCheckingData($tab, [tab_id, title, html]);
         })
         .on(SWITCH_TAB_BIND_EVENT, function() {
-            Replace.CM_event();
+            if (!isCheck) {
+				Replace.balanceList();
+            }else{
+            	Replace.checkingList();
+            }
         })
         .on(CLOSE_TAB_SAVE, function(event) {
             event.preventDefault();
@@ -258,26 +262,26 @@ define(function(require, exports) {
 				Replace.viewOperationDetail(id, false);
 			}
 		});
-
+		var oMenuKey = checkMenuKey;
 		// 计算
         if (!isCheck) {
+        	oMenuKey = blanceMenuKey;
             FinancialService.updateSumPayMoney($tab, rule);
         } else {
             //给全选按钮绑定事件: 未去重
         	FinancialService.initCheckBoxs($tab.find(".T-checkAll"), $tab.find(".T-checkList").find('.T-checkbox'));
 			FinancialService.updateUnpayMoney($tab, rule);
         }
-		
 		$tab.find('.T-btn-close').on('click', function(event){
 			if(!!$tab.data('isEdited')){
 				showSaveConfirmDialog($('#confirm-dialog-message'), "内容已经被修改，是否保存?", function(){
 					Replace.saveCheckingData($tab);
 				}, function(){
-					Tools.closeTab(checkMenuKey);
+					Tools.closeTab(oMenuKey);
                 	Replace.getList(Replace.listPageNo);
 				});
 			}else{
-				Tools.closeTab(checkMenuKey);
+				Tools.closeTab(oMenuKey);
                 Replace.getList(Replace.listPageNo);
 			}
 		});
@@ -299,7 +303,9 @@ define(function(require, exports) {
 
 	            if ($that.hasClass('btn-primary')) {
 	                if (validator.form()) {
-	                    Replace.autoFillData($tab);
+	                    FinancialService.autoPayConfirm($datepicker.eq(0).val(), $datepicker.eq(1).val(),function(){
+	                    	Replace.autoFillData($tab)
+	                    });
 	                }
 	            } else {
 	            	Replace.payingJson = [];
@@ -404,16 +410,15 @@ define(function(require, exports) {
 			}).done(function(data){
 				if (showDialog(data)) {
 					var html;
-
 					data.bookinAccountList = FinancialService.getTempDate(data.bookinAccountList, Replace.payingJson);
 					html = payingTableTemplate(data);
-					Replace.$balanceTab.find('.T-checkList').html(html);
+					Replace.$balanceTab.find('.T-clearList').html(html);
 
                     // 设置记录条数及页面
                     $tab.find('.T-sumItem').text('共计' + data.recordSize + '条记录');
                     $tab.find('.T-btn-save').data('pageNo', args.pageNo);
                     //给全选按钮绑定事件: 未去重
-                    FinancialService.initCheckBoxs($tab.find(".T-checkAll"), $tab.find(".T-checkList").find('.T-checkbox'));
+                    FinancialService.initCheckBoxs($tab.find(".T-checkAll"), $tab.find(".T-clearList").find('.T-checkbox'));
 
 					// 绑定翻页组件
 					laypage({
@@ -618,7 +623,7 @@ define(function(require, exports) {
 				var html;
 				data.name = Replace.balanceName;
 
-				Tools.addTab(blanceMenuKey, "代订结算", replaceClearing(data));
+				Tools.addTab(blanceMenuKey, "代订收款", replaceClearing(data));
 				Replace.$balanceTab = $('#tab-' + blanceMenuKey + '-content');
 
 				//data.bookinAccountList = FinancialService.getTempDate(data.bookinAccountList);
