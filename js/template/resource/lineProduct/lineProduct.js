@@ -2135,4 +2135,5 @@ define(function(require, exports) {
 	};
 	exports.init = ResLineProduct.initModule;  
 	exports.addLineProduct = ResLineProduct.addLineProduct;  
+	exports.viewLineProduct = ResLineProduct.viewLineProductDetail;
 });

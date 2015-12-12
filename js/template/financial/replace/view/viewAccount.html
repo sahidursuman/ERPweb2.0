@@ -1,0 +1,26 @@
+<div class="row" style="margin: 0; padding: 10px 10px 0;">
+	<table class="table table-striped table-bordered table-hover">
+        <thead>
+            <tr>
+                <td class="th-border">应收类别</td>
+                <td class="th-border">发生业务</td>
+                <td class="th-border">金额</td>
+                <td class="th-border">备注</td>
+                <td class="th-border">操作人</td>
+                <td class="th-border">操作时间</td>
+            </tr>
+        </thead>
+        <tbody>
+        {{each bookingAcountDetailList as rs}}
+            <tr>
+                <td>{{rs.resourceType}}</td>
+                <td>{{rs.businessType}}</td>
+                <td>{{rs.incomeDifferenceMoney}}</td>
+                <td>{{rs.remark}}</td>
+                <td>{{rs.creatorName}}</td>
+                <td>{{rs.createTime}}</td>
+            </tr>
+        {{/each}}
+        </tbody>
+    </table>
+</div>

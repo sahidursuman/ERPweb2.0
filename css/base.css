@@ -88,3 +88,7 @@ textarea:focus, input[type=text]:focus, input[type=password]:focus, input[type=d
 	width: 120px;
 	overflow: scroll;
 }*/
+
+.money {
+	width: 60px;
+}

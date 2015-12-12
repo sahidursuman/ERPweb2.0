@@ -1,0 +1,30 @@
+{{each shopAccountList as rs index}}
+            <tr class="T-checkTr" data-id="{{rs.id}}" data-confirm="{{if !!rs.isConfirmAccount}}1{{else}}0{{/if}}">
+                <td>{{index + 1}}</td>
+                <td>{{rs.tripMessage}}</td>
+                <td>{{rs.accountTime}}</td>
+                <td>{{rs.count}}</td>
+                <td>{{rs.shopName}}{{if rs.shopName}}<a class="cursor T-action">展开</a>{{/if}}</td>
+                <td>{{rs.consumeMoney}}</td>
+                <td>{{rs.travelAgencyRebateMoney}}</td>
+                <td>{{rs.guideRebateMoney}}</td>
+                <td>{{rs.customerRebateMoney}}</td>
+                <td>{{rs.parkingRebateMoney}}</td>
+                <td>{{if !rs.billImage}}<span style="color:#bbb">查看</span>{{else}}<a class="cursor T-action T-view-receipts" data-billImage="{{rs.billImage}}">查看</a>{{/if}}</td>
+                <td>{{rs.backMoney}}</td>
+                <td><a class="cursor T-action T-payDetails">{{rs.receiveMoney}}</a>
+                <td>{{rs.settlementMoney}}</td>
+                <td name="unPayedMoney">{{rs.unReceiveMoney}}</td>
+                <td><input type="text" class="col-sm-12 T-reciveMoney" name="payMoney" value="{{rs.payMoney}}"></td>
+                <td><input type="text" class="col-sm-12 T-payRemark" name="payRemark" value="{{rs.checkRemark}}"></td>
+                <td>{{rs.checkTime}}</td>
+                <td>{{rs.checkName}}</td>
+                <td>
+                    <label class="pos-rel">
+                        <span class="lbl">{{if !!rs.isConfirmAccount}}已{{else}}未{{/if}}对账</span>
+                    </label>
+                    <label class="cursor"> <a> |</a></label>
+                    <a class="cursor T-action T-view-details">查看</a>
+                </td>
+            </tr>
+        {{/each}}

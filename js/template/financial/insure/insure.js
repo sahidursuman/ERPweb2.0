@@ -1,682 +1,665 @@
 define(function(require, exports) {
 	var rule = require("./rule");
-	var menuKey = "financial_insure",
+		menuKey = "financial_insure",
 	    listTemplate = require("./view/list"),
-	    billImagesTemplate = require("./view/billImages"),
-	    blanceRecords = require("./view/insuranceRecords"),
+	    billImageTempLate = require("./view/billImages"),
+        payedDetailTempLate = require("./view/viewPayedDetail"),
+        needPayDetailTempLate = require("./view/viewNeedPayDetail"),
 	    insuranceChecking = require("./view/insureChecking"),
 	    insureClearing = require("./view/insureClearing"),
 		tabId = "tab-"+menuKey+"-content",
 	    checkTabId = menuKey+"-checking",
-	    blanceTabId = menuKey+"-blance",
-	    yearList=[],
-	    monthList = []
-	    for(var i=2013;i<=new Date().getFullYear();i++){
-	    	var yeardata={"value":i}
-	    	yearList.push(yeardata)
-	    }
-	    for(var j = 1;j<=12;j++){
-	    	var monthData = {"value":j}
-	    	monthList.push(monthData);
-	    }
-	var Insure = {
-		searchData:{
-			pageNo : "",
-	    	insuranceId : "",
-	    	year : "",
-	    	month : ""
-	    },
-	    searchCheckData:{
-	    	"insuranceId":"",
-	    	"insuranceCompanyName":"",
-	    	"year":"",
-	    	"month":""
-	    },
-	    searchBalanceData:{
-	    	"insuranceId":"",
-	        "insuranceCompanyName":"",
-	    	"year":"",
-	    	"startMonth":"",
-	    	"endMonth":""
-	    },//back/financial/financialHotel.do
-	    edited : {},
-		isEdited : function(editedType){
-			if(!!Insure.edited[editedType] && Insure.edited[editedType] != ""){
-				return true;
-			}
-			return false;
-		},
-		oldCheckInsuranceId:0,
-        oldBlanceInsuranceId:0,
-		listInsure:function(pageNo,insuranceId,year,month){
-			$.ajax({
-				url:""+APP_ROOT+"back/financial/financialInsurance.do?method=listSumFcInsurance&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-				type:"POST",
-				data:"pageNo="+pageNo+"&insuranceId="+insuranceId+"&year="+year+"&month="+month+"&sortType=auto",
-				dataType:"json",
-				beforeSend:function(){
-					globalLoadingLayer = openLoadingLayer();
-				},
-				success:function(data){
-					layer.close(globalLoadingLayer);
-					var result = showDialog(data);
-					if(result){
-						Insure.searchData={
-							pageNo : pageNo,
-					    	insuranceId:insuranceId,
-					    	year:year,
-					    	month:month
-					    },
-						data.insuranceCompanyNameListNew = JSON.parse(data.insuranceCompanyNameListNew);
-						data.searchParam = Insure.searchData
-						data.yearList = yearList
-	                    data.monthList = monthList
-						var html = listTemplate(data);
-						addTab(menuKey,"保险财务",html);
-						//搜索按钮事件
-                        $("#" + tabId + " .btn-insurance-search").click(function(){
-                        	Insure.searchData={
-                                insuranceId:$("#" + tabId + " select[name=insuranceId]").val(),
-                            	year:$("#" + tabId + "  select[name=year]").val(),
-                            	month:$("#" + tabId + " select[name=month]").val(),
+	    blanceTabId = menuKey+"-clearing";
+
+	var  Insure = {
+		searchData : false,
+        $tab :false,
+        $checkTab : false,
+        $clearTab : false,
+        $searchArea : false,
+        $checkSearchArea: false,
+        $clearSearchArea : false,
+        insureList : false,
+        clearTempData : false,
+        clearTempSumDate : false
+	};
+
+	Insure.initModule = function() {
+		var dateJson = FinancialService.getInitDate();
+        Insure.listInsure(0,"","",dateJson.startDate,dateJson.endDate);
+   	};
+  	Insure.listInsure = function(page,insuranceName,insuranceId,startDate,endDate){
+  		if (Insure.$searchArea && arguments.length === 1) {
+            // 初始化页面后，可以获取页面的参数
+            insuranceName = Insure.$searchArea.find("input[name=insuranceName]").val(),
+            insuranceId = Insure.$searchArea.find("input[name=insuranceId]").val(),
+            startDate = Insure.$searchArea.find("input[name=startDate]").val(),
+            endDate = Insure.$searchArea.find("input[name=endDate]").val()
+    	}
+    	if(startDate > endDate){
+            showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
+            return false;
+        }
+        insuranceName = (insuranceName == "全部") ? "" : insuranceName;
+
+  		Insure.searchData={
+  			pageNo : page,
+  			insuranceName : insuranceName,
+  			insuranceId : insuranceId,
+  			startDate : startDate,
+  			endDate : endDate,
+  			sortType: 'auto'
+  		};
+  		var searchParam = JSON.stringify(Insure.searchData);
+	  	$.ajax({
+	       url:KingServices.build_url("account/insuranceFinancial","listSumFinancialInsurance"),
+			type:"POST",
+			data:{ searchParam : searchParam },
+	        success: function(data){
+	            var result = showDialog(data);
+	            if (result) {
+	            	Insure.insureList = data.insuranceNameList;
+	                var html = listTemplate(data);
+	                Tools.addTab(menuKey,"保险账务",html);
+	                Insure.initList(startDate,endDate);
+
+	                // 绑定翻页组件
+                    laypage({
+                        cont: Insure.$tab.find('.T-pagenation'),
+                        pages: data.searchParam.totalPage,
+                        curr: (page + 1),
+                        jump: function(obj, first) {
+                            if (!first) {
+                                Insure.listInsure(obj.curr -1);
                             }
-                            Insure.listInsure(0,Insure.searchData.insuranceId,Insure.searchData.year,Insure.searchData.month);
-                        });
-
-                        // 绑定翻页组件
-						laypage({
-						    cont: $('#' + tabId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
-						    pages: data.totalPage, //总页数
-						    curr: (pageNo + 1),
-						    jump: function(obj, first) {
-						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-						    		Insure.listInsure(obj.curr -1,Insure.searchData.insuranceId,Insure.searchData.year,Insure.searchData.month);
-								}
-						    }
-						});
-                      
-						//给对账按钮绑定事件
-						$("#tab-"+menuKey+"-content  .btn-insurance-check").click(function(){
-							Insure.searchCheckData={
-	                        		insuranceId:$(this).attr("data-entity-id"),
-	                        		insuranceCompanyName:$(this).attr("data-entity-insuranceCompanyName"),
-	                        		year:$(this).attr("data-entity-year"),
-	                        		month:$(this).attr("data-entity-month")        
-	                            }
-	                        Insure.insuranceCheckList(0,Insure.searchCheckData.insuranceId,Insure.searchCheckData.insuranceCompanyName,Insure.searchCheckData.year,Insure.searchCheckData.month)
-						});
-						////给结算按钮绑定事件
-						$("#tab-"+menuKey+"-content  .btn-insurance-balance").click(function(){
-							Insure.searchBalanceData={
-	                            	"insuranceId":$(this).attr("data-entity-id"),
-	                            	"insuranceCompanyName":$(this).attr("data-entity-insuranceCompanyName"),
-	                            	"year":$(this).attr("data-entity-year"),
-	                            	"startMonth":$(this).attr("data-entity-startMonth"),
-	                            	"endMonth":$(this).attr("data-entity-endMonth")
-	                            	}
-	                        Insure.insuranceBalanceList(0,Insure.searchBalanceData.insuranceId,Insure.searchBalanceData.insuranceCompanyName,Insure.searchBalanceData.year,Insure.searchBalanceData.startMonth,Insure.searchBalanceData.endMonth);
-						});
-					}
-				}
-			});
-		},
-        //保险票务对账处理
-		insuranceCheckList:function(page,insuranceId,insuranceCompanyName,year,month){ 
-    	 $.ajax({
-    		 url:""+APP_ROOT+"back/financial/financialInsurance.do?method=listFcInsurance&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-             type:"POST",
-             data:"pageNo="+page+"&insuranceId="+insuranceId+"&year="+year+"&month="+month+"&sortType=auto",
-             dataType:"json",
-             beforeSend:function(){
-                 globalLoadingLayer = openLoadingLayer();
-             },
-             success:function(data){
-            	 
-            	//表单验证
-            	 var $obj = $(".insuranceChecking .form-horizontal"); 
-            	 
-                layer.close(globalLoadingLayer);
-                var result = showDialog(data);
-                 if(result){
-                 	 data.financialInsuranceList = JSON.parse(data.financialInsuranceList);
-                 	    Insure.searchCheckData={
-                    		insuranceId:insuranceId,
-                    		insuranceCompanyName:insuranceCompanyName,
-                    		year:year,
-                    		month:month        
                         }
-	                    data.yearList = yearList
-	                    data.monthList = monthList
-	                    data.insuranceCompanyName = insuranceCompanyName
-	                    data.searchParam = Insure.searchCheckData  
-	                    var html = insuranceChecking(data);
-                 	    var validator;
-                 	    //addTab(checkTabId,"保险对账",html);
-                 	   if($("#" +"tab-"+checkTabId+"-content").length > 0)
-                	    {
-                	    	
-                	    	 if(!!Insure.edited["checking"] && Insure.edited["checking"] != ""){
-                	    		addTab(checkTabId,"保险对账");
-                	    		showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
-                	    			 validator = rule.check($('.insuranceChecking'));
-				            		 if (!validator.form()) { return; }
-				            		 Insure.saveCheckingData(insuranceId,insuranceCompanyName,0)
-				            		 Insure.edited["checking"] = "";
-				            		 addTab(checkTabId,"保险对账",html);
-				            		 validator = rule.check($('.insuranceChecking'));
-				            	 },function(){
-				            		 addTab(checkTabId,"保险对账",html);
-				            		 Insure.edited["checking"] = "";
-				            		 validator = rule.check($('.insuranceChecking'));
-				            	 });
-                	    	 }else{
-	                 	    	addTab(checkTabId,"保险对账",html);
-	                 	        validator = rule.check($('.insuranceChecking'));
-                	    	 }
-         	    		 
-                	    }else{
-                	    	addTab(checkTabId,"保险对账",html);
-                	    	validator = rule.check($('.insuranceChecking'));
-                	    	
-                	    }
+                    });
+	            }
+        	}
+    	});
+  	};
 
-                	    //取消对账权限过滤
-                 	    var checkList = data.financialInsuranceList;
-	                    var checkTr = $(".T-checkList tr");
-	                    var rightCode = $(".T-checkList").data("right");
-	                    checkDisabled(checkList,checkTr,rightCode);
-	                    
-                	    $("#" +"tab-"+checkTabId+"-content .all").on("change",function(){
-            	    		Insure.edited["checking"] = "checking"; 
-							Insure.oldCheckInsuranceId = insuranceId;
-            	    	});
-                 }          
-	                 //给搜索按钮绑定事件
-	                 $("#" +"tab-"+ checkTabId+"-content"+" .btn-checking-search").click(function(){
-                         Insure.searchCheckData={
-                            insuranceId:insuranceId,
-                            insuranceCompanyName:insuranceCompanyName,
-                         	year:$("#" +"tab-"+ checkTabId+"-content"+"  select[name=year]").val(),
-                         	month:$("#" +"tab-"+ checkTabId+"-content"+" select[name=month]").val(),
-                         }
-                         Insure.insuranceCheckList(0,Insure.searchCheckData.insuranceId,Insure.searchCheckData.insuranceCompanyName,Insure.searchCheckData.year,Insure.searchCheckData.month)
-                     });
-                    //保险导出事件btn-insureExport
-	                 $("#" +"tab-"+ checkTabId+"-content"+" .btn-insureExport").click(function(){
-	                	 var year=$("#" +"tab-"+ checkTabId+"-content"+"  select[name=year]").val();
-                      	 var month=$("#" +"tab-"+ checkTabId+"-content"+" select[name=month]").val();
-                      	 console.log(year);
-                      	checkLogin(function(){
-	                        	var url = ""+APP_ROOT+"back/export.do?method=insurance&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view"+"&insuranceId="+insuranceId+"&insuranceCompanyName="+insuranceCompanyName+"&year="+year+"&month="+month+"&sortType=auto";
-	                        	exportXLS(url)
-	                        });
-	                 });
+  	Insure.initList = function(startDate,endDate){
+        // 初始化jQuery 对象
+        Insure.$tab = $('#' + tabId);
+        Insure.$searchArea=Insure.$tab.find('.T-search-area');
 
-	                 // 绑定翻页组件
-					laypage({
-					    cont: $("#tab-"+ checkTabId+"-content").find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
-					    pages: data.totalPage, //总页数
-					    curr: (page + 1),
-					    jump: function(obj, first) {
-					    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-					    		Insure.insuranceCheckList(obj.curr -1,Insure.searchCheckData.insuranceId,Insure.searchCheckData.insuranceCompanyName,Insure.searchCheckData.year,Insure.searchCheckData.month)
-	                 		}
-					    }
-					});
-                   
-		             //给全选绑定事件
-		                 $("#" +"tab-"+ checkTabId+"-content"+" .selectAll").click(function(){
-		                	 var flag = this.checked;
-		                	 $(".insuranceChecking .all tbody tr").each(function(){
-		                		 var checkedbox = $(this).find(".insuanceFinancial") 
-		                		 if(flag){
-		                			 checkedbox.prop("checked",true);
-		                		 }else{
-									 //判断对账状态
-									 if(checkedbox.attr("data-entity-checkStatus") == 1){
-										 checkedbox.prop("checked",true);
-									 }else{ 	
-										 checkedbox.prop("checked",false);
-									 }
-								 }
-		                	 });
-		                 });
-		                 //给复选框绑定事件
-		                 $("#" +"tab-"+ checkTabId+"-content"+" .insuanceFinancial").click(function(){
-		                	 var flag = true
-		                	 $("#" +"tab-"+ checkTabId+"-content"+" .insuanceFinancial").each(function(){
-		                		 if(!$(this).prop("checked")){
-			                			flag = false;
-			                		} 
-		                	 })
-		                	 $("#" +"tab-"+ checkTabId+"-content"+" .selectAll").prop("checked",flag)
-		                 });
-	                 //给确认对账按钮绑定事件
-		                 $("#" +"tab-"+ checkTabId+"-content"+" .btn-insuanceFinancial-checking").click(function(){
-		            		 if (!validator.form()) { return; }
-		            		 Insure.saveCheckingData(insuranceId,insuranceCompanyName,0);
-		                 })
-	                 //给查看单据绑定事件
-	                 $("#" +"tab-"+ checkTabId+"-content"+" .insuanceImg").click(function(){
-	                	 var WEB_IMG_URL_BIG = $("#" +"tab-"+ checkTabId+"-content").find("input[name=WEB_IMG_URL_BIG]").val();//大图
-	                	 var WEB_IMG_URL_SMALL = $("#" +"tab-"+ checkTabId+"-content").find("input[name=WEB_IMG_URL_SMALL]").val();//小图
-	                	 console.log(WEB_IMG_URL_SMALL);
-	                	 Insure.viewImage(this,WEB_IMG_URL_BIG,WEB_IMG_URL_SMALL);
-	                 });
-		             //关闭按钮事件
-		             $("#" +"tab-"+ checkTabId+"-content"+" .btn-insuanceFinancial-close").click(function(){
-		            	 showConfirmDialog($( "#confirm-dialog-message" ), "确定关闭本选项卡?",function(){
-		            		 closeTab(checkTabId);
-							 Insure.edited["checking"] = "";
-		            	 });
-		             });
-             }
-    	 });
-    },
-    //保险公司结算处理
-    insuranceBalanceList:function(page,insuranceId,insuranceCompanyName,year,startMonth,endMonth){
-    	$.ajax({
-            url:""+APP_ROOT+"back/financial/financialInsurance.do?method=listFcInsuranceSettlement&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
+        Insure.getQueryList();
+        Tools.setDatePicker(Insure.$tab.find(".date-picker"),true);
+
+ 		//搜索按钮事件
+        Insure.$tab.find('.T-search').on('click', function(event) {
+            event.preventDefault();
+            Insure.listInsure(0);
+        });
+        // 报表内的操作
+        Insure.$tab.find('.T-list').on('click', '.T-option', function(event) {
+            event.preventDefault();
+            var $that = $(this),
+            	id = $that.closest('tr').data('id'),
+            	name = $that.closest('tr').data('name');
+
+            if ($that.hasClass('T-check')) {
+                // 对账
+                Insure.GetChecking(0,id,name,"",startDate,endDate);
+            } else if ($that.hasClass('T-clear')) {
+                // 结算
+                Insure.getClearing(0,0,id,name,"",startDate,endDate);
+            }
+        });
+    };
+
+  	// 保险对账
+	Insure.GetChecking = function(page,insuranceId,insuranceName,accountInfo,startDate,endDate){
+		if (Insure.$checkSearchArea && arguments.length === 3) {
+            accountInfo = Insure.$checkSearchArea.find("input[name=accountInfo]").val(),
+            startDate = Insure.$checkSearchArea.find("input[name=startDate]").val(),
+            endDate = Insure.$checkSearchArea.find("input[name=endDate]").val()
+        }
+        if(startDate > endDate){
+            showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
+            return false;
+        }
+
+        // 修正页码
+        page = page || 0;
+        var searchParam = {
+            pageNo : page,
+            insuranceId : insuranceId,
+            accountInfo : accountInfo,
+            startDate : startDate,
+            endDate : endDate,
+            sortType : "auto"
+        };
+        searchParam = JSON.stringify(searchParam);
+		$.ajax({
+	       url:KingServices.build_url("account/insuranceFinancial","listInsuranceAccount"),
+			type:"POST",
+			data:{ searchParam : searchParam },
+			success : function(data){
+				var result = showDialog(data);
+				if(result){
+					var fiList = data.financialInsuranceList;
+                    data.insuranceName = insuranceName;
+					var html = insuranceChecking(data);
+
+					var validator;
+                    // 初始化页面
+                    if (Tools.addTab(checkTabId,"保险对账",html)) {
+                        Insure.initCheck(page,insuranceId,insuranceName); 
+                        validator = rule.check(Insure.$checkTab.find(".T-checkList"));                     
+                    }
+
+                    //取消对账权限过滤
+                    var checkTr = Insure.$checkTab.find(".T-checkTr");
+                    var rightCode = Insure.$checkTab.find(".T-checkList").data("right");
+                    checkDisabled(fiList,checkTr,rightCode);
+
+                    //绑定翻页组件
+                    laypage({
+                        cont: Insure.$checkTab.find('.T-pagenation'),
+                        pages: data.searchParam.totalPage,
+                        curr: (page + 1),
+                        jump: function(obj, first) {
+                            if (!first) {
+                                Insure.GetChecking(obj.curr-1,insuranceId,insuranceName);
+                            }
+                        }
+                    });
+				}
+			}
+		});
+	};
+
+	Insure.initCheck = function(page,id,name){
+    	// 初始化jQuery 对象 
+        Insure.$checkTab = $("#tab-" + menuKey + "-checking-content");
+        Insure.$checkSearchArea = Insure.$checkTab.find('.T-search-area');
+
+        Insure.init_event(page,id,name,Insure.$checkTab,"check");
+        Tools.setDatePicker(Insure.$checkTab.find(".date-picker"),true);
+        FinancialService.updateUnpayMoney(Insure.$checkTab,rule);
+
+        //搜索按钮事件
+        Insure.$checkSearchArea.find('.T-search').on('click', function(event) {
+            event.preventDefault();
+            Insure.GetChecking(0,id,name);
+        });
+
+        //报表内的操作
+        Insure.listOption(Insure.$checkTab);
+
+        //复选框事件初始化
+        var checkboxList = Insure.$checkTab.find(".T-checkList tr .T-checkbox"),
+            $checkAll = Insure.$checkTab.find(".T-checkAll");
+        FinancialService.initCheckBoxs($checkAll,checkboxList);
+
+        //关闭页面事件
+        Insure.$checkTab.find(".T-close-check").click(function(){
+            Tools.closeTab(menuKey + "-checking");
+        });
+        //确认对账按钮事件
+        Insure.$checkTab.find(".T-saveCheck").click(function(){
+            Insure.saveChecking(id,name,page);
+         });
+    };
+
+  	// 结算
+  	Insure.getClearing = function(isAutoPay,page,insuranceId,insuranceName,accountInfo,startDate,endDate){
+  		if (Insure.$clearSearchArea && arguments.length === 4) {
+            accountInfo = Insure.$clearSearchArea.find("input[name=accountInfo]").val(),
+            startDate = Insure.$clearSearchArea.find("input[name=startDate]").val(),
+            endDate = Insure.$clearSearchArea.find("input[name=endDate]").val()
+        }
+        if(startDate > endDate){
+            showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
+            return false;
+        }
+
+        page = page || 0;
+        var searchParam = {
+            pageNo : page,
+            insuranceId : insuranceId,
+            accountInfo : accountInfo,
+            startDate : startDate,
+            endDate : endDate,
+            sortType : "auto"
+        };
+        searchParam = JSON.stringify(searchParam);
+  		$.ajax({
+	       url:KingServices.build_url("account/insuranceFinancial","listInsuranceAccount"),
+			type:"POST",
+			data:{ searchParam : searchParam },
+			success : function(data){
+				var result = showDialog(data);
+				if(result){
+					data.insuranceName = insuranceName;
+
+                    //暂存数据读取
+                    if(Insure.clearTempSumDate){
+                        data.sumPayMoney = Insure.clearTempSumDate.sumPayMoney;
+                        data.sumPayType = Insure.clearTempSumDate.sumPayType;
+                        data.sumPayRemark = Insure.clearTempSumDate.sumPayRemark;
+                    } else {
+                        data.sumPayMoney = 0;
+                        data.sumPayType = 0;
+                        data.sumPayRemark = "";
+                    }
+                    var resultList = data.financialInsuranceList;
+                    data.financialInsuranceList = FinancialService.getTempDate(resultList,Insure.clearTempData);
+
+					var html = insureClearing(data);
+	  				
+	  				var validator;
+                    // 初始化页面
+                    if (Tools.addTab(menuKey + "-clearing", "保险付款", html)) {
+                        Insure.initClear(page,insuranceId,insuranceName); 
+                        validator = rule.check(Insure.$clearTab.find('.T-clearList'));                       
+                    }
+
+                    if(isAutoPay == 0){
+                        Insure.$clearTab.find(".T-cancel-auto").hide();
+                    } else {
+                        Insure.$clearTab.find('input[name=sumPayMoney]').prop("disabled",true);
+                        Insure.$clearTab.find(".T-clear-auto").hide(); 
+                        if(isAutoPay == 1){
+                            Insure.$clearTab.data('isEdited',true);
+                        } else if(isAutoPay == 2){
+                            Insure.$clearTab.find(".T-cancel-auto").hide();
+                        }
+                    }
+
+                    //绑定翻页组件
+                    var $tr = Insure.$clearTab.find('.T-clearList tr');
+                    laypage({
+                        cont: Insure.$clearTab.find('.T-pagenation'),
+                        pages: data.searchParam.totalPage,
+                        curr: (page + 1),
+                        jump: function(obj, first) {
+                            if (!first) { 
+                                var tempJson = FinancialService.clearSaveJson(Insure.$clearTab,Insure.clearTempData,rule);
+                                Insure.clearTempData = tempJson;
+                                var sumPayMoney = parseFloat(Insure.$clearTab.find('input[name=sumPayMoney]').val()),
+                                    sumPayType = parseFloat(Insure.$clearTab.find('select[name=sumPayType]').val()),
+                                    sumPayRemark = Insure.$clearTab.find('input[name=sumPayRemark]').val();
+                                Insure.clearTempSumDate = {
+                                    sumPayMoney : sumPayMoney,
+                                    sumPayType : sumPayType,
+                                    sumPayRemark : sumPayRemark
+                                }
+                                Insure.restaurantClear(isAutoPay,obj.curr -1,insuranceId,insuranceName);
+                            }
+                        }
+                    });
+				}
+			}
+	  	});	
+  	};
+
+  	Insure.initClear = function(page,id,name){
+        // 初始化jQuery 对象 
+        Insure.$clearTab = $("#tab-" + menuKey + "-clearing-content");
+        Insure.$clearSearchArea = Insure.$clearTab.find('.T-search-area');
+
+        Insure.init_event(page,id,name,Insure.$clearTab,"clear");
+        Tools.setDatePicker(Insure.$clearTab.find(".date-picker"),true);
+
+        //搜索事件
+        Insure.$clearTab.find(".T-search").click(function(){
+            Insure.clearTempSumDate = false;
+            Insure.clearTempData = false;
+            Insure.$clearTab.data('isEdited',false);
+            Insure.getClearing(0,0,id,name);
+        });
+
+        //关闭页面事件
+        Insure.$clearTab.find(".T-close-clear").click(function(){
+            Tools.closeTab(menuKey + "-clearing");
+        });
+
+        //保存付款事件
+        Insure.$clearTab.find(".T-saveClear").click(function(){
+            Insure.saveClear(id,name,page);
+        });
+
+        //报表内的操作
+        Insure.listOption(Insure.$clearTab);
+
+        //自动下账
+        Insure.$clearTab.find(".T-clear-auto").off().on("click",function(){
+            var isAutoPay = FinancialService.autoPayJson(id,Insure.$clearTab,rule);
+            if(!isAutoPay){return false;}
+
+            var startDate = Insure.$clearTab.find("input[name=startDate]").val(),
+                endDate = Insure.$clearTab.find("input[name=endDate]").val();
+            var searchParam = {
+                insuranceId : id,
+                sumCurrentPayMoney : Insure.$clearTab.find('input[name=sumPayMoney]').val(),
+                payType : Insure.$clearTab.find('select[name=sumPayType]').val(),
+                payRemark : Insure.$clearTab.find('input[name=sumPayRemark]').val(),
+                startDate : startDate,
+                endDate : endDate,
+                accountInfo : Insure.$clearTab.find('input[name=accountInfo]').val(),
+                isAutoPay : 1
+            };
+            searchParam = JSON.stringify(searchParam);
+            FinancialService.autoPayConfirm(startDate,endDate,function(){
+                $.ajax({
+                    url:KingServices.build_url("account/insuranceFinancial","listInsuranceAccount"),
+                    type:"POST",
+                    data:{ searchParam : searchParam },
+                    success:function(data){
+                        var result = showDialog(data);
+                        if(result){
+                            Insure.$clearTab.find(".T-clear-auto").toggle();
+                            Insure.$clearTab.find(".T-cancel-auto").toggle();
+                            Insure.clearTempData = data.autoPaymentJson;
+                            Insure.clearTempSumDate = {
+                                sumPayMoney : Insure.$clearTab.find('input[name=sumPayMoney]').val(),
+                                sumPayType : Insure.$clearTab.find('select[name=sumPayType]').val(),
+                                sumPayRemark : Insure.$clearTab.find('input[name=sumPayRemark]').val()
+                            };
+                            Insure.getClearing(1,0,id,name);
+                        }
+                    }
+                });
+            });
+        });
+
+        Insure.$clearTab.find(".T-cancel-auto").off().on("click",function(){
+            Insure.$clearTab.find(".T-cancel-auto").toggle();
+            Insure.$clearTab.find(".T-clear-auto").toggle();
+            Insure.clearTempSumDate = false;
+            Insure.clearTempData = false;
+            Insure.$clearTab.data('isEdited',false);
+            Insure.getClearing(0,0,id,name);
+        });
+
+        FinancialService.updateSumPayMoney(Insure.$clearTab,rule);
+    };
+
+    //显示单据
+    Insure.viewImage = function(obj,WEB_IMG_URL_BIG,WEB_IMG_URL_SMALL) {
+        var data = { "images":[]  };
+        var str = $(obj).attr('url');
+        var strs = str.split(",");
+        for(var i = 0; i < strs.length; i ++) {
+            var s = strs[i];
+            if(s != null && s != "" && s.length > 0) {
+                var image = {
+                    "WEB_IMG_URL_BIG":imgUrl+s,
+                    "WEB_IMG_URL_SMALL":imgUrl+s+"?imageView2/2/w/150",
+                }
+                data.images.push(image);
+            }
+        }
+        var html = billImageTempLate(data);
+        
+        layer.open({
+            type : 1,
+            title : "单据图片",
+            skin : 'layui-layer-rim', // 加上边框
+            area : '500px', // 宽高
+            zIndex : 1028,
+            content : html,
+            scrollbar: false, // 推荐禁用浏览器外部滚动条
+            success : function() {
+                var colorbox_params = {
+                    photo : true,
+                    rel: 'colorbox',
+                    reposition:true,
+                    scalePhotos:true,
+                    scrolling:false,
+                    previous:'<i class="ace-icon fa fa-arrow-left"></i>',
+                    next:'<i class="ace-icon fa fa-arrow-right"></i>',
+                    close:'&times;',
+                    current:'{current} of {total}',
+                    maxWidth:'100%',
+                    maxHeight:'100%',
+                    onOpen:function(){ 
+                        $overflow = document.body.style.overflow;
+                        document.body.style.overflow = 'hidden';
+                    },
+                    onClosed:function(){
+                        document.body.style.overflow = $overflow;
+                    },
+                    onComplete:function(){
+                        $.colorbox.resize();
+                    }
+                };
+                $('#layer-photos-financial-count [data-rel="colorbox"]').colorbox(colorbox_params);
+            } 
+        });
+    };
+
+    //已付金额明细
+    Insure.payedDetail = function(id){
+        $.ajax({
+            url:KingServices.build_url("account/insuranceFinancial","getPayedMoneyDetail"),
             type:"POST",
-            data:"pageNo="+page+"&insuranceId="+insuranceId+"&year="+year+"&monthStart="+startMonth+"&monthEnd="+endMonth+"&sortType=auto",
-            dataType:"json",
-            beforeSend:function(){
-                globalLoadingLayer = openLoadingLayer();
+            data:{
+                id : id
             },
             success:function(data){
-               layer.close(globalLoadingLayer);    
-               var result = showDialog(data);
+                var result = showDialog(data);
                 if(result){
-                	Insure.searchBalanceData={
-                            insuranceId:insuranceId,
-                            insuranceCompanyName:insuranceCompanyName,
-                        	year:year,
-                        	startMonth:startMonth,
-                        	endMonth:endMonth,
-                        }
-                    data.yearList = yearList
-                    data.monthList = monthList
-                    data.insuranceCompanyName = insuranceCompanyName
-                    var html = insureClearing(data);
-                    //addTab(blanceTabId,"保险结算",html);
-                    //设置表单验证
-                  //获取table中的tr
-                    
-                    if($("#" +"tab-"+blanceTabId+"-content").length > 0)
-             	    {
-             	    	
-             	    	 if(!!Insure.edited["blance"] && Insure.edited["blance"] != ""){
-             	    		addTab(blanceTabId,"保险结算");
-		                    //给每个tr添加表单验证
-             	    		showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
-             	    			//获取table中的tr
-             	    			var $tr = $("#" +"tab-"+ blanceTabId + "-content"+" .all tbody tr")
-                                //给每个tr添加表单验证
-                                $tr.each(function(){
-                                	$(this).find('.btn-hotelBlance-save').data('validata', rule.check($(this)));
-                                });
-             	    			 var saveBtn = $("#" +"tab-"+ blanceTabId+"-content"+" .btn-hotelBlance-save")
-             	    			 if (!$(saveBtn).data('validata').form()) { return; }
-             	    			 Insure.saveBlanceData(saveBtn,Insure.oldBlanceInsuranceId,insuranceCompanyName,0)
-			            		 Insure.edited["blance"] = "";
-			            		 addTab(blanceTabId,"保险结算",html);
-			            		//获取table中的tr
-			            		 var $tr = $("#" +"tab-"+ blanceTabId + "-content"+" .all tbody tr")
-			                     //给每个tr添加表单验证
-			                     $tr.each(function(){
-			                     	$(this).find('.btn-hotelBlance-save').data('validata', rule.check($(this)));
-			                     });
-			            	 },function(){
-			            		    addTab(blanceTabId,"保险结算",html);
-			            		    Insure.edited["blance"] = "";
-			            		 	//获取table中的tr
-			            		    var $tr = $("#" +"tab-"+ blanceTabId + "-content"+" .all tbody tr")
-			                        //给每个tr添加表单验证
-			                        $tr.each(function(){
-			                        	$(this).find('.btn-hotelBlance-save').data('validata', rule.check($(this)));
-			                        });
-			            	 });
-             	    	 }else{
-                 	    	addTab(blanceTabId,"保险结算",html);
-                 	    	//获取table中的tr
-                 	    	var $tr = $("#" +"tab-"+ blanceTabId + "-content"+" .all tbody tr")
-                            //给每个tr添加表单验证
-                            $tr.each(function(){
-                            	$(this).find('.btn-hotelBlance-save').data('validata', rule.check($(this)));
-                            });
-             	    	 }
-         	    		 
-             	    }else{
-             	    	addTab(blanceTabId,"保险结算",html);
-             	    	//获取table中的tr
-             	    	var $tr = $("#" +"tab-"+ blanceTabId + "-content"+" .all tbody tr")
-                        //给每个tr添加表单验证
-                        $tr.each(function(){
-                        	$(this).find('.btn-hotelBlance-save').data('validata', rule.check($(this)));
-                        });
-             	    };
-             	   $("#" +"tab-"+blanceTabId+"-content .all").on('change', 'input, select', function() {
-             		   	Insure.edited["blance"] = "blance";
-             		  	Insure.oldBlanceInsuranceId = insuranceId;
-    	    			$(this).closest('tr').data('blanceStatus',true);
-    	    		});
-                    //搜索按钮事件
-                    $("#" +"tab-"+ blanceTabId + "-content"+" .btn-blance-search").click(function(){
-                        Insure.searchBalanceData={
-                            insuranceId:insuranceId,
-                            insuranceCompanyName:insuranceCompanyName,
-                        	year:$("#" +"tab-"+ blanceTabId + "-content"+" select[name=year]").val(),
-                        	startMonth:$("#" +"tab-"+ blanceTabId + "-content"+" select[name=startMonth]").val(),
-                        	endMonth:$("#" +"tab-"+ blanceTabId + "-content"+" select[name=endMonth]").val(),
-                        }
-                        Insure.insuranceBalanceList(0,Insure.searchBalanceData.insuranceId,Insure.searchBalanceData.insuranceCompanyName,Insure.searchBalanceData.year,Insure.searchBalanceData.startMonth,Insure.searchBalanceData.endMonth);
-                    });
-                   //保存按钮事件
-                    $("#" +"tab-"+ blanceTabId+"-content"+" .btn-hotelBlance-save").click(function(){
-                    	var saveBtn = $("#" +"tab-"+ blanceTabId+"-content"+" .btn-hotelBlance-save")
-    	    			 if (!$(this).data('validata').form()) { return; }
-    	    			 Insure.saveBlanceData($(this),Insure.oldBlanceInsuranceId,insuranceCompanyName,0);
-                    	/*// 表单校验
-                    	if (!$(this).data('validata').form()) { return; }
-                    	var tr = $(this).parent().parent(),
-                    	    DataArr = [],
-                    	    JsonData,
-                    		needPayMoney = tr.find("input[name=blancerealPayedMoney]").val();
-                    	if(needPayMoney == null || needPayMoney == ""){
-                    		showMessageDialog($( "#confirm-dialog-message" ),"请输入付款金额");
-                    		return
-                    	}else{
-                    		var blanceData = {
-                            		id:$(this).attr("data-entity-id"),
-                                    insuranceId:insuranceId,
-                                    year:$(this).attr("data-entity-year"),
-                                    month:$(this).attr("data-entity-month"),
-                                    realPayedMoney:tr.find("td[name=blancerealrealPayedMoney]").text(),
-                                    unPayedMoney:tr.find("td[name=blanceunPayedMoney]").text(),
-                                    realUnPayedMoney:tr.find("td[name=blancerealrealUnPayedMoney]").text(),
-                                    payMoney:tr.find("input[name=blancerealPayedMoney]").val(),
-                                    payType:tr.find("select[name=blancePayType]").val(),
-                                    remark:tr.find("input[name=blancerealRemark]").val()
-                            	}
-                            	 DataArr.push(blanceData)
-                            	 JsonData = JSON.stringify(DataArr)
-                            	$.ajax({
-                            		url:""+APP_ROOT+"back/financial/financialInsurance.do?method=saveFcInsuranceSettlement&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
-                                    type:"POST",
-                                    data:"fcInsuranceSettlementStr="+JsonData,
-                                    dataType:"json",
-                                    beforeSend:function(){
-                                        globalLoadingLayer = openLoadingLayer();
-                                    },
-                                    success:function(data){
-                                    	layer.close(globalLoadingLayer);
-                                        var result = showDialog(data);
-                                        if(result){
-                                        	showMessageDialog($( "#confirm-dialog-message" ),data.message);
-        									Insure.insuranceBalanceList(0,Insure.searchBalanceData.insuranceId,Insure.searchBalanceData.insuranceCompanyName,Insure.searchBalanceData.year,Insure.searchBalanceData.startMonth,Insure.searchBalanceData.endMonth);
-                                        }
-                                    }
-                            	})
-                    	}*/
-                    	
-                    	//
-                    });
-                    //对账明细按钮事件
-                    $("#" +"tab-"+ blanceTabId+"-content"+" .btn-hotelBlance-checkDetail").click(function(){
-                    	Insure.searchCheckData={
-                    			insuranceId:insuranceId,
-                    			insuranceCompanyName:insuranceCompanyName,
-                    			year:$(this).attr("data-entity-year"),
-                    			month:$(this).attr("data-entity-month"),
-                    	}
-                    	Insure.insuranceCheckList(0,Insure.searchCheckData.insuranceId,Insure.searchCheckData.insuranceCompanyName,Insure.searchCheckData.year,Insure.searchCheckData.month)
-                    });
-
-                  //给操作记录按钮绑定事件
-                    $("#" +"tab-"+ blanceTabId+"-content"+" .btn-hotelBlance-Records").click(function(){
-                    	$.ajax({
-                    		url:""+APP_ROOT+"back/financial/financialInsurance.do?method=listFcInsuranceSettlementRecord&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-                            type:"POST",
-                            data:"insuranceId="+insuranceId,
-                            dataType:"json",
-                            beforeSend:function(){
-                                globalLoadingLayer = openLoadingLayer();
-                            },
-                            success:function(data){
-                            	
-                            	layer.close(globalLoadingLayer);
-                                var result = showDialog(data);
-                            	if(result){
-                            		if(data.financialInsuranceSettlementRecordList.length == 0){
-                            			showMessageDialog($( "#confirm-dialog-message" ),"暂时还没有操作记录");
-                            		}else{
-                            			var html =blanceRecords(data);
-        					    		var blanceRecordsTemplateLayer =layer.open({
-        					    			type: 1,
-        								    title:"操作记录",
-        								    skin: 'layui-layer-rim', //加上边框
-        								    area: '60%', //宽高
-        								    zIndex:1030,
-        								    content: html,
-        								    scrollbar: false, // 推荐禁用浏览器外部滚动条
-        								    success: function(){}
-        					    		})
-                            		}
-    		                	}
-                            }
-                    	});
+                    var html = payedDetailTempLate(data);
+                    layer.open({
+                        type : 1,
+                        title : "已付金额明细",
+                        skin : 'layui-layer-rim',
+                        area : '1000px',
+                        zIndex : 1028,
+                        content : html,
+                        scrollbar: false 
                     });
                 }
             }
-       });
-    },
-    //显示单据
-    viewImage:function(obj,WEB_IMG_URL_BIG,WEB_IMG_URL_SMALL) {
-    	var data = {
-    			"images":[]
-    	};
-    	var str = $(obj).attr('url');
-    	var strs = str.split(",");
-    	for(var i = 0; i < strs.length; i ++) {
-    		var s = strs[i];
-    		if(s != null && s != "" && s.length > 0) {
-	    		var image = {
-	    				"WEB_IMG_URL_BIG":imgUrl+s,
-	    				"WEB_IMG_URL_SMALL":imgUrl+s+"?imageView2/2/w/150",
-	    		}
-	    		data.images.push(image);
-    		}
-    	}
-    	var html = billImagesTemplate(data);
-    	
-		layer.open({
-			type : 1,
-			title : "单据图片",
-			skin : 'layui-layer-rim', // 加上边框
-			area :'500px', // 宽高
-			zIndex : 1028,
-			content : html,
-			scrollbar: false, // 推荐禁用浏览器外部滚动条
-			success : function() {
-				var colorbox_params = {
-		    			rel: 'colorbox',
-		    			reposition:true,
-		    			scalePhotos:true,
-		    			scrolling:false,
-		    			previous:'<i class="ace-icon fa fa-arrow-left"></i>',
-		    			next:'<i class="ace-icon fa fa-arrow-right"></i>',
-		    			close:'&times;',
-		    			current:'{current} of {total}',
-		    			maxWidth:'100%',
-		    			maxHeight:'100%',
-		    			onOpen:function(){ 
-		    				$overflow = document.body.style.overflow;
-		    				document.body.style.overflow = 'hidden';
-		    			},
-		    			onClosed:function(){
-		    				document.body.style.overflow = $overflow;
-		    			},
-		    			onComplete:function(){
-		    				$.colorbox.resize();
-		    			}
-		    		};
-		    		$('#layer-photos-financial-count [data-rel="colorbox"]').colorbox(colorbox_params);
-			}
-		});
-    },
-    //处理对账数据
-    saveCheckingData:function(insuranceId,insuranceCompanyName,isClose){
-       var JsonStr = [],
-           oldUnPayedMoney,
-           newUnPayedMoney,
-           oldRemark,
-           newRemark,
-	       $tr = $("#" +"tab-"+ checkTabId+"-content"+" .all tbody tr");
-	   $tr.each(function(i){
-		   var flag = $(this).find(".insuanceFinancial").is(":checked");
-		   if(flag){
-			   newUnPayedMoney = $tr.eq(i).find("input[name=FinancialinsuanceRealUnPayedMoney]").val();
-			   newRemark = $tr.eq(i).find("input[name=FinancialinsuanceRemark]").val();
-			   if($(this).attr("data-entity-isConfirmAccount") == 1){
-				   //取值用于是否修改对账判断
-				   oldUnPayedMoney = $(this).attr("data-entity-realUnPayedMoney");
-				   oldRemark = $(this).attr("data-entity-remark");
-				   //newUnPayedMoney = $tr.eq(i).find("input[name=FinancialinsuanceRealUnPayedMoney]").val();
-				   //newRemark = $tr.eq(i).find("input[name=FinancialinsuanceRemark]").val();
-				   //判断是否是修改对账
-				   if(oldUnPayedMoney !== newUnPayedMoney || oldRemark !== newRemark){
-					   var checkData = {
-        					   id:$(this).attr("data-entity-id"),
-        					   insuranceId:insuranceId,
-        					   insuranceCompanyName:insuranceCompanyName,
-        					   startTime:$tr.eq(i).find("td[name=startTime]").text(),
-        					   realUnPayedMoney:newUnPayedMoney,
-        					   remark:newRemark,
-        					   isConfirmAccount:1
-        			   }
-					   JsonStr.push(checkData)
-				   }
-			   }else{
-				   var checkData = {
-    					   id:$(this).attr("data-entity-id"),
-    					   insuranceId:insuranceId,
-    					   insuranceCompanyName:insuranceCompanyName,
-    					   startTime:$tr.eq(i).find("td[name=startTime]").text(),
-    					   realUnPayedMoney:newUnPayedMoney,
-    					   remark:newRemark,
-    					   isConfirmAccount:1
-    			   }
-				   JsonStr.push(checkData)
-			   }
-		   }else{
-			   if($(this).attr("data-entity-isConfirmAccount") == 1){
-				   var checkData = {
-    					   id:$(this).attr("data-entity-id"),
-    					   insuranceId:insuranceId,
-    					   insuranceCompanyName:insuranceCompanyName,
-    					   startTime:$tr.eq(i).find("td[name=startTime]").text(),
-    					   realUnPayedMoney:newUnPayedMoney,
-    					   remark:newRemark,
-    					   isConfirmAccount:0
-    			   } 
-				   JsonStr.push(checkData)
-			   }
-		   }
-	    });
-	   //判断用户是否操作
-	   if(JsonStr.length == 0){
-		   showMessageDialog($( "#confirm-dialog-message" ),"您当前未进行任何操作");
-		   return
-	   }else{
-		   JsonStr = JSON.stringify(JsonStr);
-		   /*return*/
-    	   $.ajax({
-    		   url:""+APP_ROOT+"back/financial/financialInsurance.do?method=accountChecking&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
-               type:"POST",
-               data:"financialInsuranceListStr="+encodeURIComponent(JsonStr),
-               dataType:"json",
-               beforeSend:function(){
-					globalLoadingLayer = openLoadingLayer();
-				},
-				success:function(data){
-					layer.close(globalLoadingLayer);
-					var result = showDialog(data);
-					if(result){
-						showMessageDialog($( "#confirm-dialog-message" ),data.message);
-						Insure.edited["checking"] = "";
-						if(isClose == 1){
-							closeTab(checkTabId);
-							Insure.listInsure(Insure.searchData.pageNo,Insure.searchData.insuranceId,Insure.searchData.year,Insure.searchData.month);
-						} else{
-							Insure.insuranceCheckList(0,Insure.searchCheckData.insuranceId,Insure.searchCheckData.insuranceCompanyName,Insure.searchCheckData.year,Insure.searchCheckData.month);
-						}
-					}
-				}
-    	   });
-	   }
-	   
-      },
-      saveBlanceData:function(saveBtn,insuranceId,insuranceCompanyName,isClose){
-	    	var $tr = $("#" +"tab-"+ blanceTabId+"-content"+" .all tbody tr"),
-	    	DataArr = [],
-		    JsonData;
-	    	$tr.each(function(i){
-          		if($(this).data('blanceStatus')){
-          			var blanceData = {
-    		        		id:$(this).find(".btn-hotelBlance-save").attr("data-entity-id"),
-    		                insuranceId:insuranceId,
-    		                year:$(this).find(".btn-hotelBlance-save").attr("data-entity-year"),
-    		                month:$(this).find(".btn-hotelBlance-save").attr("data-entity-month"),
-    		                realPayedMoney:$tr.eq(i).find("td[name=blancerealrealPayedMoney]").text(),
-    		                unPayedMoney:$tr.eq(i).find("td[name=blanceunPayedMoney]").text(),
-    		                realUnPayedMoney:$tr.eq(i).find("td[name=blancerealrealUnPayedMoney]").text(),
-    		                payMoney:$tr.eq(i).find("input[name=blancerealPayedMoney]").val(),
-    		                payType:$tr.eq(i).find("select[name=blancePayType]").val(),
-    		                remark:$tr.eq(i).find("input[name=blancerealRemark]").val()
-    		        	}
-          			 DataArr.push(blanceData)
-          		}
-          	})
-          	JsonData = JSON.stringify(DataArr)
-          	$.ajax({
-        		url:""+APP_ROOT+"back/financial/financialInsurance.do?method=saveFcInsuranceSettlement&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
-                type:"POST",
-                data:"fcInsuranceSettlementStr="+JsonData,
-                dataType:"json",
-                beforeSend:function(){
-                    globalLoadingLayer = openLoadingLayer();
-                },
-                success:function(data){
-                	layer.close(globalLoadingLayer);
-                    var result = showDialog(data);
-                    if(result){
-                    	showMessageDialog($( "#confirm-dialog-message" ),data.message);
-						Insure.edited["blance"] = "";
-						if(isClose == 1){
-							closeTab(blanceTabId);
-							Insure.listInsure(Insure.searchData.pageNo,Insure.searchData.insuranceId,Insure.searchData.year,Insure.searchData.month);
-						} else{
-							Insure.insuranceBalanceList(0,Insure.searchBalanceData.insuranceId,Insure.searchBalanceData.insuranceCompanyName,Insure.searchBalanceData.year,Insure.searchBalanceData.startMonth,Insure.searchBalanceData.endMonth);
-						}
-                    }
+        });
+    };
+
+    //应付金额明细
+    Insure.needPayDetail = function(id){
+        $.ajax({
+            url:KingServices.build_url("account/insuranceFinancial","getNeedPayDetail"),
+            type:"POST",
+            data:{
+                id : id
+            },
+            success:function(data){
+                var result = showDialog(data);
+                if(result){
+                    var html = needPayDetailTempLate(data);
+                    layer.open({
+                        type : 1,
+                        title : "应付金额明细",
+                        skin : 'layui-layer-rim',
+                        area : '800px',
+                        zIndex : 1028,
+                        content : html,
+                        scrollbar: false 
+                    });
                 }
-        	})
-		},
-		save : function(saveType){
-			console.log(saveType);
-			if(saveType == "checking"){
-				Insure.saveCheckingData(Insure.oldCheckInsuranceId,"",1);
-			} else if(saveType == "blance"){
-				 var saveBtn = $("#" +"tab-"+ blanceTabId+"-content"+" .btn-hotelBlance-save")
-				Insure.saveBlanceData(saveBtn,Insure.oldBlanceInsuranceId,"",1);
-			}
-		},
-		clearEdit : function(clearType){
-			Insure.edited[clearType] = "";
-		}
-	}
-	exports.listInsure = Insure.listInsure;
-	exports.isEdited = Insure.isEdited;
-	exports.save = Insure.save;
-	exports.clearEdit = Insure.clearEdit;
+            }
+        });
+    };
+
+    //对账数据保存
+    Insure.saveChecking = function(insuranceId,insuranceName,page,tab_id, title, html){
+        var argumentsLen = arguments.length,
+            checkSaveJson = FinancialService.checkSaveJson(Insure.$checkTab,rule);
+        if(!checkSaveJson){ return false; }
+
+        $.ajax({
+            url:KingServices.build_url("account/insuranceFinancial","saveAccountChecking"),
+            type:"POST",
+            data:{
+                insuranceJson : checkSaveJson
+            },
+            success:function(data){
+                var result = showDialog(data);
+                if(result){
+                    showMessageDialog($("#confirm-dialog-message"),data.message,function(){
+                        if(argumentsLen == 2){
+                            Tools.closeTab(menuKey + "-checking");
+                            Insure.listInsure(Insure.searchData.pageNo,Insure.searchData.insuranceName,Insure.searchData.insuranceId,Insure.searchData.startDate,Insure.searchData.endDate);
+                        } else if(argumentsLen == 3){
+                            Insure.$checkTab.data('isEdited',false);
+                            Insure.GetChecking(page,insuranceId,insuranceName);
+                        } else {
+                            Insure.$checkTab.data('isEdited',false);
+                            Tools.addTab(tab_id, title, html);
+                            Insure.initCheck(0,Insure.$checkTab.find(".T-newData").data("id"),Insure.$checkTab.find(".T-newData").data("name"));
+                        }
+                    });
+                }
+            }
+        });
+    };
+
+    Insure.saveClear = function(id,name,page,tab_id, title, html){
+        if(!FinancialService.isClearSave(Insure.$clearTab,rule)){
+            return false;
+        }
+
+        var argumentsLen = arguments.length,
+            clearSaveJson = FinancialService.clearSaveJson(Insure.$clearTab,Insure.clearTempData,rule);
+        var searchParam = {
+            insuranceId : id,
+            sumCurrentPayMoney : Insure.$clearTab.find('input[name=sumPayMoney]').val(),
+            payType : Insure.$clearTab.find('select[name=sumPayType]').val(),
+            payRemark : Insure.$clearTab.find('input[name=sumPayRemark]').val()
+        };
+
+        clearSaveJson = JSON.stringify(clearSaveJson);
+        searchParam = JSON.stringify(searchParam);
+        $.ajax({
+            url:KingServices.build_url("account/insuranceFinancial","saveAccountSettlement"),
+            type:"POST",
+            data:{
+                insuranceJson : clearSaveJson,
+                searchParam : searchParam
+            },
+            success:function(data){
+                var result = showDialog(data);
+                if(result){
+                    showMessageDialog($("#confirm-dialog-message"),data.message,function(){
+                        Insure.clearTempData = false;
+                        Insure.clearTempSumDate = false;
+                        if(argumentsLen === 2){
+                            Tools.closeTab(menuKey + "-clearing");
+                            Insure.listInsure(Insure.searchData.pageNo,Insure.searchData.insuranceName,Insure.searchData.insuranceId,Insure.searchData.startDate,Insure.searchData.endDate);
+                        }else if(argumentsLen === 3){
+                            Insure.$clearTab.data('isEdited',false);
+                            Insure.getClearing(0,page,id,name);
+                        } else {
+                            Insure.$clearTab.data('isEdited',false);
+                            Tools.addTab(tab_id, title, html);
+                            Insure.initClear(0,Insure.$clearTab.find(".T-newData").data("id"),Insure.$clearTab.find(".T-newData").data("name"));
+                        }
+                    });  
+                }
+            }
+        });
+    };
+
+	Insure.init_event = function(page,id,name,$tab,option) {
+        if (!!$tab && $tab.length === 1) {
+            var validator = rule.check($tab);
+
+            // 监听修改
+            $tab.find(".T-" + option + "List").off('change').on('change',"input",function(event) {
+                event.preventDefault();
+                $(this).closest('tr').data("change",true);
+                $tab.data('isEdited', true);
+            });
+            $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
+				event.preventDefault();
+                if(option == "check"){
+                    Insure.initCheck(page,id,name);
+                } else if(option == "clear"){
+                    Insure.initClear(page,id,name);
+                    Insure.$clearTab.find(".T-cancel-auto").hide();
+                }
+			})
+            // 监听保存，并切换tab
+            .on('switch.tab.save', function(event, tab_id, title, html) {
+                event.preventDefault();
+                if(option == "check"){
+                    Insure.saveChecking(id,name,0,tab_id, title, html);
+                } else if(option == "clear"){
+                    Insure.saveClear(id,name,0,tab_id, title, html);
+                }
+            })
+            // 保存后关闭
+            .on('close.tab.save', function(event) {
+                event.preventDefault();
+                if(option == "check"){
+                    Insure.saveChecking(id,name);
+                } else if(option == "clear"){
+                    Insure.saveClear(id,name);
+                }
+            });
+        }
+    };
+
+	Insure.getQueryList = function(){
+        var $Insure = Insure.$tab.find(".T-chooseInsure"),
+            insureList = Insure.insureList;
+        if(insureList != null && insureList.length > 0){
+            for(var i=0;i<insureList.length;i++){
+            	insureList[i].id = insureList[i].insuranceId;
+                insureList[i].value = insureList[i].insuranceName;
+            }
+        }
+        var all = {
+            id : "",
+            value : "全部"
+        };
+        insureList.unshift(all);
+
+        //车队
+        $Insure.autocomplete({
+            minLength: 0,
+            source : insureList,
+            change: function(event,ui) {
+                if (!ui.item)  {
+                    $(this).nextAll('input[name="insuranceId"]').val('');
+                }
+            },
+            select: function(event,ui) {
+                $(this).blur().nextAll('input[name="insuranceId"]').val(ui.item.id);
+            }
+        }).on("click",function(){
+            $Insure.autocomplete('search','');
+        });      
+    };
+
+    // 对账、付款报表内的操作
+    Insure.listOption = function($tab){
+        $tab.find('.T-option').on('click',function(event) {
+            event.preventDefault();
+            var $that = $(this),
+                id = $that.closest('tr').data('id');
+            if ($that.hasClass('T-insuranceImg')) {
+                // 查看单据
+                var WEB_IMG_URL_BIG = $tab.find("input[name=WEB_IMG_URL_BIG]").val();//大图
+                var WEB_IMG_URL_SMALL = $tab.find("input[name=WEB_IMG_URL_SMALL]").val();//大图
+                restaurant.viewImage(this,WEB_IMG_URL_BIG,WEB_IMG_URL_SMALL);
+            } else if ($that.hasClass('T-payedDetail')) {
+                // 已付明细
+                Insure.payedDetail(id);
+            } else if ($that.hasClass('T-needPayDetail')) {
+                // 应收明细
+                Insure.needPayDetail(id);
+            }
+        });
+    };
+
+    Insure.initPay = function(options){
+        Insure.GetChecking(0,options.id,options.name,"",options.startDate,options.endDate, 2); 
+    };
+
+    exports.init = Insure.initModule;
+    exports.initPay = Insure.initPay;
 });

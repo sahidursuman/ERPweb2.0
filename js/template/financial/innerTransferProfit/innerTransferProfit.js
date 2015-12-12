@@ -5,7 +5,7 @@ define(function(require, exports) {
         checkTabId = menuKey+"-checking",
         viewTemplate = require("./view/visitorGroup"),
         visitorGroupMainInfo = require("./view/visitorGroupMainInfo"),
-        transitViewTemplate = require("../../arrange/transit/view/view"),
+        transitViewTemplate = require("./view/innerTransferView"),
         innerTransferInfoTemplate = require("./view/innerTransferInfo"),
         blanceTabId = menuKey+"-blance";
 
@@ -89,7 +89,9 @@ define(function(require, exports) {
         // 报表内的操作
         innerProfit.$tab.find('.T-option').on('click', function(event) {
             event.preventDefault();
-            var $that = $(this),id = $that.closest('tr').data('id');
+            var $that = $(this),
+                id = $that.closest('tr').data('id'),
+                transferId = $that.closest('tr').attr('tgTransferId');
 
             if ($that.hasClass('T-showTourist')) {
                 // 查看游客小组
@@ -98,10 +100,10 @@ define(function(require, exports) {
             } else if ($that.hasClass('T-showIncomeDetail')) {
                 // 查看收客团款
                 innerProfit.clickFlag = 2;
-                innerProfit.viewTouristGroup(id);
+                innerProfit.viewTouristGroup(transferId);
             } else if ($that.hasClass('T-showChangePay')) {
                 // 查看中转明细
-                innerProfit.viewTransit(id);
+                innerProfit.viewTransit(transferId);
             } else if ($that.hasClass('T-showTransPay')) {
                 // 查看内转明细
                 innerProfit.viewTransfer(this);
@@ -119,8 +121,11 @@ define(function(require, exports) {
     };
     //查看游客小组、收客团款明细
     innerProfit.viewTouristGroup = function(id){
+        var $path = innerProfit.clickFlag == 2?'profitTransfer':'touristGroup';
+        var $method = innerProfit.clickFlag == 2?'findIncome':'viewTransferTouristGroupDetails';
+        var $title = innerProfit.clickFlag == 2?'收客团款明細':'查看小组';
         $.ajax({
-            url:innerProfit.url("touristGroup","findTouristGroupDetailAtInnerProfit"),
+            url:innerProfit.url($path,$method),
             //url:TurnProfit.url("touristGroup","viewTouristGroupDetails"),
             type:"POST",
             data:{
@@ -129,32 +134,36 @@ define(function(require, exports) {
             success:function(data){
                 var result = showDialog(data);
                 if(result){
-                    console.log("result");
-                    var touristGroup = JSON.parse(data.touristGroupDetail);
-                    data.touristGroupDetail = touristGroup;
-                    if(innerProfit.clickFlag == 1){
-                        var html = viewTemplate(data);
-                        layer.open({
-                            type : 1,
-                            title : "查看小组",
-                            skin : 'layui-layer-rim', // 加上边框
-                            area : "60%", // 宽高
-                            zIndex : 1028,
-                            content : html,
-                            scrollbar: false // 推荐禁用浏览器外部滚动条
-                        });
-                    }
                     if(innerProfit.clickFlag == 2){
+                        data.income = JSON.parse(data.income);
+                        console.log(data);
                         var html = visitorGroupMainInfo(data);
                         layer.open({
                             type : 1,
-                            title : "收客团款明細",
-                            skin : 'layui-layer-rim',
+                            title : $title,
+                            skin : 'layui-layer-rim', 
                             area : "65%", 
                             zIndex : 1028,
                             content : html,
                             scrollbar: false // 推荐禁用浏览器外部滚动条
                         });
+                    }else{
+                        var memberList = JSON.parse(data.touristGroupMemberDetail.touristGroupMemberList);
+                        var otherCost = JSON.parse(data.needIncomeMoneyDetail.touristGroupFeeList);
+                        data.touristGroupMemberDetail.touristGroupMemberList = memberList;
+                        data.needIncomeMoneyDetail.touristGroupFeeList = otherCost;
+                        if(innerProfit.clickFlag == 1){
+                            var html = viewTemplate(data);
+                            layer.open({
+                                type : 1,
+                                title :$title,
+                                skin : 'layui-layer-rim',
+                                area : "60%", 
+                                zIndex : 1028,
+                                content : html,
+                                scrollbar: false // 推荐禁用浏览器外部滚动条
+                            });
+                        };
                     }
                 }
             }
@@ -164,7 +173,7 @@ define(function(require, exports) {
     //查看中转明细
     innerProfit.viewTransit = function(id){
         $.ajax({
-            url:innerProfit.url("touristGroup","findTouristGroupArrangeById"),
+            url:innerProfit.url("profitTransfer","findOut"),
             type:"POST",
             data:{
                 id : id + ""
@@ -172,29 +181,17 @@ define(function(require, exports) {
             success:function(data){
                 var result = showDialog(data);
                 if(result){
-                    data.bus = JSON.parse(data.bus);
-                    data.receiveGroup.outBusList = JSON.parse(data.receiveGroup.outBusList);
-                    data.receiveGroup.outHotelList = JSON.parse(data.receiveGroup.outHotelList);
-                    data.receiveGroup.outTicketList = JSON.parse(data.receiveGroup.outTicketList);
-                    data.sendGroup.outBusList = JSON.parse(data.sendGroup.outBusList);
-                    data.sendGroup.outHotelList = JSON.parse(data.sendGroup.outHotelList);
-                    data.sendGroup.outTicketList = JSON.parse(data.sendGroup.outTicketList);
-                    data.touristGroup = JSON.parse(data.touristGroup);
-                    if (data.isNeedArriveService == 0 && data.isNeedBus == 0 && data.isNeedLeaveService == 0){
-                        showMessageDialog($( "#confirm-dialog-message" ), "暂无中转安排");
-                        return;
-                    }else{
+                    data.financial = JSON.parse(data.financial);
                     var html =transitViewTemplate(data);
                     layer.open({
                         type : 1,
-                        title : "中转明细",
-                        skin : 'layui-layer-rim',
-                        area : "90%", 
+                        title : "中转成本明细",
+                        skin : 'layui-layer-rim', // 加上边框
+                        area : "70%", // 宽高
                         zIndex : 1028,
                         content : html,
-                        scrollbar: false, // 推荐禁用浏览器外部滚动条
-                    })
-                }
+                        scrollbar: false // 推荐禁用浏览器外部滚动条
+                    });
                 }
             }
         })
@@ -204,7 +201,7 @@ define(function(require, exports) {
     innerProfit.viewTransfer = function(obj){
         var id = $(obj).data("inner-id");
         $.ajax({
-            url:innerProfit.url("innerTransfer","edit"),
+            url:innerProfit.url("profitTransfer","findPay"),
             type:"POST",
             data:{
                 id : id + ""
@@ -212,7 +209,7 @@ define(function(require, exports) {
             success:function(data){
                 var result = showDialog(data);
                 if(result){
-                    data.innerTransfer = JSON.parse(data.innerTransfer);
+                    data.financial = JSON.parse(data.income);
                     var html = innerTransferInfoTemplate(data);
                     layer.open({
                         type : 1,

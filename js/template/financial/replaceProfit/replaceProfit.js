@@ -1,209 +1,346 @@
 define(function(require, exports) {
     var menuKey = "financial_replaceProfit",
+        listMain = require("./view/listMain"),
         listTemplate = require("./view/list"),
-        tabId = "tab-"+menuKey+"-content"
+        needPayDetailTempLate = require("./view/viewNeedPayDetail"),
+        costDetailTempLate = require("./view/viewCostDetail"),
+        tabId = "tab-"+menuKey+"-content";
 
-    var ReplaceProfit = {
-    	searchData:{
-    		"partnerAgencyId":"",
-    		"partnerAgencyName":"",
-            "hotelId":"",
-            "hotelName":"",
-            "scenicId":"",
-            "scenicName":"",
-            "type":"",
-            "needSeatCount":"",
-            "startTime":"",
-            "endTime":""
-            
-    	},
-    	listReplaceProfit:function(pageNo,partnerAgencyId,partnerAgencyName,hotelId,hotelName,scenicId,scenicName,type,needSeatCount,startTime,endTime){
-            $.ajax({
-                url:""+APP_ROOT+"back/profitBooking.do?method=listFinancialBookingOrder&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-                type:"POST",
-                data:"pageNo="+pageNo+"&partnerAgencyId="+partnerAgencyId+"&hotelId="+hotelId+"&scenicId="+scenicId+"&type="+type+"&needSeatCount="+needSeatCount+"&startTime="+startTime+"&endTime="+endTime+"&sortType=auto",
-                dataType:"json",
-                beforeSend:function(){
-                    globalLoadingLayer = openLoadingLayer();
-                },
-                success:function(data){
-                    layer.close(globalLoadingLayer);
-                    var result = showDialog(data);
-                    if(result){
-                    	data.bookingOrderList = JSON.parse(data.bookingOrderList);
-                    	ReplaceProfit.searchData={
-                    		partnerAgencyId:partnerAgencyId,
-                    		partnerAgencyName:partnerAgencyName,
-                            hotelId:scenicId,
-                            hotelName:hotelName,
-                            scenicId:scenicId,
-                            scenicName:scenicName,
-                            type:type,
-                            needSeatCount:needSeatCount,
-                            startTime:startTime,
-                            endTime:endTime
-                            
-                    	};
-                    	data.searchParam = ReplaceProfit.searchData;
-                        var html = listTemplate(data);
-                        addTab(menuKey,"代订利润",html);
-                        $("#" + tabId + " .date-picker").datepicker({
-							autoclose: true,
-							todayHighlight: true,
-							format: 'yyyy-mm-dd',
-							language: 'zh-CN'
-						});
-                        //获取搜索框数据
-                        ReplaceProfit.getSearchData()
-                        //搜索按钮事件
-                        $("#" + tabId + " .btn-bookingProFit-search").click(function(){
-                        	ReplaceProfit.searchData={
-                            		partnerAgencyId:$("#" + tabId + " .search-area").find("input[name=partnerAgencyId]").val(),
-                            		partnerAgencyName:$("#" + tabId + " .search-area").find("input[name=chooseAgencies]").val(),
-                                    hotelId:$("#" + tabId + " .search-area").find("input[name=hotelId]").val(),
-                                    hotelName:$("#" + tabId + " .search-area").find("input[name=chooseLineHotels]").val(),
-                                    scenicId:$("#" + tabId + " .search-area").find("input[name=scenicId]").val(),
-                                    scenicName:$("#" + tabId + " .search-area").find("input[name=chooseScenics]").val(),
-                                    type:$("#" + tabId + " .search-area").find("select[name=ticketType]").val(),
-                                    needSeatCount:$("#" + tabId + " .search-area").find("input[name=busSeat]").val(),
-                                    startTime:$("#" + tabId + " .search-area").find("input[name=startTime]").val(),
-                                    endTime:$("#" + tabId + " .search-area").find("input[name=endTime]").val()
-                            };
-                        	ReplaceProfit.listReplaceProfit(0,ReplaceProfit.searchData.partnerAgencyId,ReplaceProfit.searchData.partnerAgencyName,ReplaceProfit.searchData.hotelId,ReplaceProfit.searchData.hotelName,ReplaceProfit.searchData.scenicId,ReplaceProfit.searchData.scenicName,ReplaceProfit.searchData.type,ReplaceProfit.searchData.needSeatCount,ReplaceProfit.searchData.startTime,ReplaceProfit.searchData.endTime);
-                        });
+    var replace = {
+        searchData : false,
+        $tab : false,
+        $searchArea: false,
+        sumData : false,
+        partnerAgencyList : false,
+        hotelList : false,
+        scenicList : false,
+        seatCountList : false
+    };
 
-                        // 绑定翻页组件
-                        laypage({
-                            cont: $('#' + tabId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
-                            pages: data.totalPage, //总页数
-                            curr: (pageNo + 1),
-                            jump: function(obj, first) {
-                                if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-                                    ReplaceProfit.listReplaceProfit(obj.curr -1,ReplaceProfit.searchData.partnerAgencyId,ReplaceProfit.searchData.partnerAgencyName,ReplaceProfit.searchData.hotelId,ReplaceProfit.searchData.hotelName,ReplaceProfit.searchData.scenicId,ReplaceProfit.searchData.scenicName,ReplaceProfit.searchData.type,ReplaceProfit.searchData.needSeatCount,ReplaceProfit.searchData.startTime,ReplaceProfit.searchData.endTime);
-                                }
-                            }
-                        });
+    replace.initModule = function() {
+        var dateJson = FinancialService.getInitDate();
+        replace.searchData = {
+            partnerAgencyName : "",
+            partnerAgencyId : "",
+            hotelName : "",
+            hotelId : "",
+            scenicName : "",
+            scenicId :"",
+            ticketType : "",
+            needSeatCount : "",
+            startTime : dateJson.startDate,
+            endTime : dateJson.endDate,
+            sortType: 'auto'
+        };
+        var data = {};
+        data.searchParam = replace.searchData;
+        var html = listMain(data);
+        addTab(menuKey,"代订利润",html);
+
+        replace.listMain("","","","","","","","",dateJson.startDate,dateJson.endDate);
+    };
+
+    replace.listMain = function(partnerAgencyName,partnerAgencyId,hotelName,hotelId,scenicName,scenicId,ticketType,seatCount,startDate,endDate){
+        replace.searchData = {
+            partnerAgencyName : partnerAgencyName,
+            partnerAgencyId : partnerAgencyId,
+            hotelName : hotelName,
+            hotelId : hotelId,
+            scenicName : scenicName,
+            scenicId :scenicId,
+            ticketType : ticketType,
+            needSeatCount : seatCount,
+            startTime : startDate,
+            endTime : endDate,
+            sortType: 'auto'
+        };
+        $.ajax({
+            url : KingServices.build_url("profitBooking","getQueryTerms"),
+            type  :"POST",
+            data : replace.searchData,
+            success:function(data){
+                layer.close(globalLoadingLayer);
+                var result = showDialog(data);
+                if(result){
+                    replace.$tab = $("#tab-" + menuKey + "-content"),
+                    replace.$searchArea = replace.$tab.find('.T-search-area');
+                    replace.listReplace(0);
+                    var conditions = JSON.parse(data.conditions);
+                        partnerAgencyList = conditions.agencies,
+                        hotelList = conditions.hotels,
+                        scenicList = conditions.scenics,
+                        seatCountList = [];
+                    if(partnerAgencyList != null && partnerAgencyList.length > 0){
+                        for(var i=0;i<partnerAgencyList.length;i++){
+                            partnerAgencyList[i].value = partnerAgencyList[i].travelAgencyName;
+                        }
                     }
+                    if(hotelList != null && hotelList.length > 0){
+                        for(var i=0;i<hotelList.length;i++){
+                            hotelList[i].value = hotelList[i].name;
+                        }
+                    }
+                    if(scenicList != null && scenicList.length > 0){
+                        for(var i=0;i<scenicList.length;i++){
+                            scenicList[i].value = scenicList[i].name;
+                        }
+                    }
+                    if(conditions.needSeatCounts != null && conditions.needSeatCounts.length > 0){
+                        for(var i = 0;i<conditions.needSeatCounts.length;i++){
+                            var busSeat = {"count":conditions.needSeatCounts[i]};
+                            seatCountList.push(busSeat);
+                        }
+                        for(var j = 0;j<seatCountList.length;j++){
+                            seatCountList[j].value = seatCountList[j].count
+                        }
+                    }
+                    var all = {
+                        id : "",
+                        value : "全部"
+                    };
+                    partnerAgencyList.unshift(all);
+                    hotelList.unshift(all);
+                    scenicList.unshift(all);
+                    seatCountList.unshift(all);
+
+                    replace.partnerAgencyList = partnerAgencyList;
+                    replace.hotelList = hotelList;
+                    replace.scenicList = scenicList;
+                    replace.seatCountList = seatCountList;
                 }
-            });
-        },
-        //获取搜索框的数据
-        getSearchData:function(){
-        	var customer = $("#" + tabId + " input[name=chooseAgencies]"),
-        	    hotel = $("#" + tabId + " input[name=chooseLineHotels]"),
-        	    scenics = $("#" + tabId + " input[name=chooseScenics]"),
-        	    chooseBus = $("#" + tabId + " input[name=chooseBus]");
-        	$.ajax({
-        		url:""+APP_ROOT+"back/profitBooking.do?method=getFinancialConditions&token="+$.cookie("token")+"&menuKey=resource_lineProduct&operation=view",
-        		dataType:"json",
-        		success:function(data){
-        			var result = showDialog(data);
-        			if(result){
-        				var searchData = JSON.parse(data.conditions),
-        				    customerList = searchData.agencies,
-        				    hotelList = searchData.hotels,
-        				    busList = searchData.needSeatCounts,
-        				    scenicsList = searchData.scenics,
-        				    busList = []
-        				    
-        				if(searchData.needSeatCounts !=null && searchData.needSeatCounts.length>0){
-        					for(var i = 0;i<searchData.needSeatCounts.length;i++){
-        						var busSeat = {"count":searchData.needSeatCounts[i]}
-        						busList.push(busSeat)
-        						for(var j = 0;j<busList.length;j++){
-        							busList[j].value = busList[j].count
-        						}
-        					}
-        				}
-        				if(customerList !=null && customerList.length>0){
-        					for(var i = 0;i<customerList.length;i++){
-        						customerList[i].value =  customerList[i].travelAgencyName
-        					}
-        				}
-        				if(hotelList !=null && hotelList.length>0){
-        					for(var i = 0;i<hotelList.length;i++){
-        						hotelList[i].value =  hotelList[i].name
-        					}
-        				}
-        				
-        				if(scenicsList !=null && scenicsList.length>0){
-        					for(var i = 0;i<scenicsList.length;i++){
-        						scenicsList[i].value =  scenicsList[i].name
-        					}
-        				}
-        				//旅游车数据
-        				chooseBus.autocomplete({
-        					minLength:0,
-        					change:function(event,ui){
-        						if(ui.item == null){
-        							$(this).next().val("");
-        						}
-        					},
-        					select:function(event,ui){
-        						$(this).blur();
-        						$(this).next().val(ui.item.count);
-        					}
-        				}).off("click").on("click", function(){
-        					var Obj = chooseBus;
-        					$(Obj).autocomplete('option','source',busList );
-							$(Obj).autocomplete('search', '');
-        				});
-        				//客户数据
-        				customer.autocomplete({
-        					minLength:0,
-        					change:function(event,ui){
-        						if(ui.item == null){
-        							$(this).next().val("");
-        						}
-        					},
-        					select:function(event,ui){
-        						$(this).blur();
-        						$(this).next().val(ui.item.id);
-        					}
-        				}).off("click").on("click", function(){
-        					var Obj = customer;
-        					$(Obj).autocomplete('option','source', customerList);
-							$(Obj).autocomplete('search', '');
-        				});
-        				//酒店数据
-        				hotel.autocomplete({
-        					minLength:0,
-        					change:function(event,ui){
-        						if(ui.item == null){
-        							$(this).next().val("");
-        						}
-        					},
-        					select:function(event,ui){
-        						$(this).blur();
-        						$(this).next().val(ui.item.id);
-        					}
-        				}).off("click").on("click", function(){
-        					var Obj = hotel;
-        					$(Obj).autocomplete('option','source', hotelList);
-							$(Obj).autocomplete('search', '');
-        				});
-        				//景区
-        				scenics.autocomplete({
-        					minLength:0,
-        					change:function(event,ui){
-        						if(ui.item == null){
-        							$(this).next().val("");
-        						}
-        					},
-        					select:function(event,ui){
-        						$(this).blur();
-        						$(this).next().val(ui.item.id);
-        					}
-        				}).off("click").on("click", function(){
-        					var Obj = scenics;
-        					$(Obj).autocomplete('option','source', scenicsList);
-							$(Obj).autocomplete('search', '');
-        				});
-        			}
-        		}
-        	
-        	})
-        },
-    }
-    exports.listReplaceProfit = ReplaceProfit.listReplaceProfit;
+            }
+        });
+    };
+
+    replace.listReplace = function(page,partnerAgencyName,partnerAgencyId,hotelName,hotelId,scenicName,scenicId,ticketType,seatCount,startDate,endDate){
+        if (replace.$searchArea && arguments.length === 1) {
+            // 初始化页面后，可以获取页面的参数
+            partnerAgencyName = replace.$searchArea.find("input[name=partnerAgencyName]").val(),
+            partnerAgencyId = replace.$searchArea.find("input[name=partnerAgencyId]").val(),
+            hotelName = replace.$searchArea.find("input[name=hotelName]").val(),
+            hotelId = replace.$searchArea.find("input[name=hotelId]").val(),
+            scenicName = replace.$searchArea.find("input[name=scenicName]").val(),
+            scenicId = replace.$searchArea.find("input[name=scenicId]").val(),
+            ticketType = replace.$searchArea.find("select[name=ticketType]").val(),
+            seatCount = replace.$searchArea.find("input[name=seatCount]").val(),
+            startDate = replace.$searchArea.find("input[name=startDate]").val(),
+            endDate = replace.$searchArea.find("input[name=endDate]").val()
+        }
+        if(startDate > endDate){
+            showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
+            return false;
+        }
+        partnerAgencyName = (partnerAgencyName == "全部") ? "" : partnerAgencyName;
+        hotelName = (hotelName == "全部") ? "" : hotelName;
+        scenicName = (scenicName == "全部") ? "" : scenicName;
+        seatCount = (seatCount == "全部") ? "" : seatCount;
+        // 修正页码
+        page = page || 0;
+        replace.searchData = {
+            pageNo : page,
+            partnerAgencyName : partnerAgencyName,
+            partnerAgencyId : partnerAgencyId,
+            hotelName : hotelName,
+            hotelId : hotelId,
+            scenicName : scenicName,
+            scenicId :scenicId,
+            ticketType : ticketType,
+            needSeatCount : seatCount,
+            startTime : startDate,
+            endTime : endDate,
+            sortType: 'auto'
+        };
+
+        $.ajax({
+            url : KingServices.build_url("profitBooking","listFinancialBookingOrder"),
+            type  :"POST",
+            data : replace.searchData,
+            success:function(data){
+                layer.close(globalLoadingLayer);
+                var result = showDialog(data);
+                if(result){
+                    data.bookingOrderList = JSON.parse(data.bookingOrderList);
+                    var html = listTemplate(data);
+                    replace.$tab.find('.T-list').html(html);
+                    replace.$tab.find(".T-totalSize").text("共计 " + data.recordSize + " 条记录");
+
+                    replace.getSumData();
+                    replace.getQuery();
+                    Tools.setDatePicker(replace.$searchArea.find('.date-picker'),true);
+                    //搜索按钮事件
+                    replace.$tab.find('.T-search').off().on('click', function(event) {
+                        event.preventDefault();
+                        replace.listReplace(0);
+                    });
+
+                    replace.$tab.find('.T-list').on('click','.T-option',function(event) {
+                        event.preventDefault();
+                        var $that = $(this),
+                            id = $that.closest('tr').data('id');
+                        if ($that.hasClass('T-replaceDetail')) {
+                            // 查看代订明细
+                            KingServices.replaceDetail(id);
+                        } else if ($that.hasClass('T-needPayDetail')) {
+                            // 应收明细
+                            replace.viewNeedPayDetail(id);
+                        } else if ($that.hasClass('T-costDetail')) {
+                            // 成本明细
+                            replace.viewCostDetail(id);
+                        }
+                    });
+
+                    // 绑定翻页组件
+                    laypage({
+                        cont: replace.$tab.find('.T-pagenation'),
+                        pages: data.totalPage,
+                        curr: (page + 1),
+                        jump: function(obj, first) {
+                            if (!first) { 
+                                replace.listReplace(obj.curr - 1);
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    };
+    //应收金额明细
+    replace.viewNeedPayDetail = function(id){
+        $.ajax({
+            url:KingServices.build_url("profitBooking","getNeedIncomeDetails"),
+            type:"POST",
+            data:{
+                id : id + ""
+            },
+            success:function(data){
+                var result = showDialog(data);
+                if(result){
+                    var html = needPayDetailTempLate(data);
+                    layer.open({
+                        type : 1,
+                        title : "代订应收明细",
+                        skin : 'layui-layer-rim',
+                        area : '1000px',
+                        zIndex : 1028,
+                        content : html,
+                        scrollbar: false 
+                    });
+                }
+            }
+        });
+    };
+
+    //成本明细
+    replace.viewCostDetail = function(id){
+        $.ajax({
+            url:KingServices.build_url("profitBooking","getNeedIncomeDetails"),
+            type:"POST",
+            data:{
+                id : id
+            },
+            success:function(data){
+                var result = showDialog(data);
+                if(result){
+                    var html = costDetailTempLate(data);
+                    layer.open({
+                        type : 1,
+                        title : "代订成本明细",
+                        skin : 'layui-layer-rim',
+                        area : '800px',
+                        zIndex : 1028,
+                        content : html,
+                        scrollbar: false 
+                    });
+                }
+            }
+        });
+    };
+
+    replace.getSumData = function(){
+        $.ajax({
+            url: KingServices.build_url('profitBooking', 'getStatistics'),
+            type: 'POST',
+            data: replace.searchData,
+            success: function(data) {
+                var result = showDialog(data);
+                if(result){
+                    replace.$tab.find(".T-sumCostMoney").text(data.sumCostMoney);
+                    replace.$tab.find(".T-sumNeedGetMoney").text(data.sumNeedGetMoney);
+                    replace.$tab.find(".T-sumGrossProfit").text(data.sumGrossProfit);
+                }
+            }
+        });
+    };
+
+    replace.getQuery = function(){
+        var $partner = replace.$tab.find("input[name=partnerAgencyName]"),
+            $hotel = replace.$tab.find("input[name=hotelName]"),
+            $scenic = replace.$tab.find("input[name=scenicName]"),
+            $seat = replace.$tab.find("input[name=seatCount]");
+        //客户
+        $partner.autocomplete({
+            minLength: 0,
+            source : replace.partnerAgencyList,
+            change: function(event, ui) {
+                if (!ui.item)  {
+                    $(this).nextAll('input[name=partnerAgencyId]').val('');
+                }
+            },
+            select: function(event, ui) {
+                $(this).blur().nextAll('input[name=partnerAgencyId]').val(ui.item.id);
+            }
+        }).on("click",function(){
+            $partner.autocomplete('search', '');
+        });  
+
+        //酒店
+        $hotel.autocomplete({
+            minLength: 0,
+            source : replace.hotelList,
+            change: function(event, ui) {
+                if (!ui.item)  {
+                    $(this).nextAll('input[name=hotelId]').val('');
+                }
+            },
+            select: function(event, ui) {
+                $(this).blur().nextAll('input[name=hotelId]').val(ui.item.id);
+            }
+        }).on("click",function(){
+            $hotel.autocomplete('search', '');
+        });  
+
+        //景区
+        $scenic.autocomplete({
+            minLength: 0,
+            source : replace.scenicList,
+            change: function(event, ui) {
+                if (!ui.item)  {
+                    $(this).nextAll('input[name=scenicId]').val('');
+                }
+            },
+            select: function(event, ui) {
+                $(this).blur().nextAll('input[name=scenicId]').val(ui.item.id);
+            }
+        }).on("click",function(){
+            $scenic.autocomplete('search', '');
+        });
+
+        //车坐数
+        $seat.autocomplete({
+            minLength: 0,
+            source : replace.seatCountList,
+            change: function(event, ui) {
+                if (!ui.item)  {
+                    $(this).nextAll('input[name=seatCount]').val('');
+                }
+            },
+            select: function(event, ui) {
+                $(this).blur().nextAll('input[name=seatCount]').val(ui.item.value);
+            }
+        }).on("click",function(){
+            $seat.autocomplete('search', '');
+        }); 
+    };
+
+    exports.init = replace.initModule;
 });

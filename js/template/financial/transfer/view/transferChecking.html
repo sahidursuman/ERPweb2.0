@@ -1,98 +1,95 @@
-<div class="row transferChecking globalAdd">
-    <div class="col-xs-12 border" style="padding-bottom: 0px">
+<div class="row T-newData" data-id="{{searchParam.partnerAgencyId}}" data-name="{{partnerAgencyName}}">
+    <div class="col-xs-12" style="padding-bottom: 0px">
         <form class="form-horizontal" role="form" onsubmit="return false">
-                <div class="search-area editable editable-click" >
-                    <div class="form-group"> 
-                        <label style="float: left;margin: 0px auto auto 15px" class="control-label pull-left"> 同行地接:{{transferPartnerAgencyName}}</label>
-                        
-                        <label class="control-label col-sm-1" style="float:left;">账期:</label>
-                        	<select class="col-sm-1" name="year" style="margin-left:20px">
-								{{each yearList as year index}}
-									<option value="{{year.value}}" {{if searchParam.year == year.value}}selected="selected"{{/if}}>{{year.value}}</option>
-								{{/each}}
-							</select>
-							<select class="col-sm-1" name="month" style="margin-left:5px">
-							    <option value ="">全部</option>
-								{{each monthList as month index}}
-									<option value="{{month.value}}" {{if searchParam.month == month.value}}selected="selected"{{/if}}>{{month.value}}月</option>
-								{{/each}}
-							</select>
-                        <button class="marginLeft-30 btn-sm search-btn btn-checking-search" >
-                             <i class="ace-icon fa fa-search"></i>
-                             搜索
-                        </button>
-                        <button type="button" class="btn btn-sm btn-primary btn-success btn-transferExport marginLeft-30">
-							<span>导出报表</span>
-							<i class="ace-icon fa fa-arrow-right icon-on-right"></i>
-						</button>
-                    </div>
+            <div class="search-area" >
+                <div class="form-group T-search-area"> 
+                    <label class="control-label pull-left"> 同行地接：{{partnerAgencyName}}</label>
+                    <label class="marginLeft-30">账期：</label>
+                    <input class="date-picker" name="startDate" placeholder="开始日期" type="text" value="{{searchParam.startDate}}" style="width:100px;" />   
+                    <label>&nbsp;至&nbsp;</label>
+                    <input class="date-picker" name="endDate" placeholder="结束日期" type="text" value="{{searchParam.endDate}}" style="width:100px;" />   
+
+                    <label class="marginLeft-30">线路名称：</label>
+                    <input name="lineProductName" placeholder="线路名称" type="text" value="{{searchParam.lineProductName}}" style="width:200px;" />
+
+                    <label class="marginLeft-30">操作人：</label>
+                    <input name="operateName" type="text" value="{{if searchParam.operateName == ""}}全部{{else}}{{searchParam.operateName}}{{/if}}" style="width:100px;" />
+                    <input name="operateId" type="hidden" value="{{searchParam.operateId}}" />
+
+                    <button class="marginLeft-30 btn-sm search-btn T-search" >
+                        <i class="ace-icon fa fa-search"></i>搜索
+                    </button>
                 </div>
-            </form>
+            </div>
+        </form>
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="form-group ">
-                <label class=" control-label pull-left" style="margin-left: 15px">总人数:{{sumPersonCount}}</label>
-                <label class=" control-label " style="margin-left:30px;">总账面应付:{{sumNeedPayMoney}}</label>
-                <label class=" control-label " style="margin-left:30px;">总实际已付:{{sumRealPayedMoney}}</label>
-                <label class=" control-label " style="margin-left:30px;">总账面未付:{{sumUnPayedMoney}}</label>
-                <label class=" control-label " style="margin-left:30px;">总实际未付:{{sumRealUnPayedMoney}}</label>
+                <label style="margin-left: 15px">人数合计：{{sumPerson}}</label>
+                <label style="margin-left:30px;">外转金额合计：{{sumNeedPayMoney}}</label>
+                <label style="margin-left:30px;">已付金额合计：{{sumPayedMoney}}</label>
+                <label style="margin-left:30px;">返款金额合计：<span class="T-punishMoney">{{sumPunishMoney}}</span></label>
+                <label style="margin-left:30px;">结算金额合计：<span class="T-stMoney">{{sumSettlementMoney}}</span></label>
+                <label style="margin-left:30px;">未付金额合计：<span class="T-unpayMoney">{{sumUnPayedMoney}}</span></label>
             </div>
         </form>
     </div>
     <div class="clearfix"></div>
-        <table class="table table-striped table-bordered table-hover all" style="margin-top: 30px">
+        <table class="table table-striped table-bordered table-hover all">
             <thead>
-            <tr>
-                 <th class="th-border">序号</th>
-                 <th class="th-border">线路产品</th>
-                 <th class="th-border">出游日期</th>
-                 <th class="th-border">联系人</th>
-                 <th class="th-border">人数</th>
-                 <th class="th-border">操作人</th>
-                 <th class="th-border">操作时间</th>
-                 <th class="th-border">账面应付</th>
-                 <th class="th-border">明细</th>
-                 <th class="th-border">实际已付</th>
-                 <th class="th-border">账面未付</th>
-                 <th class="th-border"> <span class="necessary">*</span>实际未付</th>
-                 <th class="th-border">说明</th>
-                 <th class="th-border">对账时间</th>
-                 <th class="th-border">对账人</th>
-                 <th class="th-border">对账</th>
-            </tr>
+                <tr>
+                     <th class="th-border">序号</th>
+                     <th class="th-border">线路产品</th>
+                     <th class="th-border">出游日期</th>
+                     <th class="th-border">联系人</th>
+                     <th class="th-border">人数</th>
+                     <th class="th-border">操作人</th>
+                     <th class="th-border">操作时间</th>
+                     <th class="th-border">外转金额</th>
+                     <th class="th-border">明细</th>
+                     <th class="th-border">已付金额</th>
+                     <th class="th-border"> <span class="necessary">*</span>返款金额</th>
+                     <th class="th-border">结算金额</th>
+                     <th class="th-border">未付金额</th>
+                     <th class="th-border">备注</th>
+                     <th class="th-border">对账时间</th>
+                     <th class="th-border">对账人</th>
+                     <th class="th-border">对账</th>
+                </tr>
             </thead>   
             <tbody class="T-checkList" data-right="1300005">
-            {{each financialTransferList as checking index}}
-            <tr data-entity-id="{{checking.id}}" data-entity-isConfirmAccount="{{checking.isConfirmAccount}}" data-entity-realUnPayedMoney="{{checking.transRealUnPayedMoney}}" data-entity-remark="{{checking.transRemark}}">                
-                <td>{{index+1}}</td>
-                <td>{{checking.lineProductName}}</td>
-                <td name="startTime">{{checking.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
-                <td>{{checking.contact}}</td>
-                <td>{{checking.adultCount}}大{{checking.childCount}}小<a href="#" class="seeGroup" style="margin-left:5px">展开</a></td>
-                <td>{{checking.operate}}</td>
-                <td>{{checking.operateTime | dateFormat: 'yyyy-MM-dd'}}</td>
-                <td>{{checking.needPayMoney}}</td>
-                <td>
-	                {{each checking.detailList as detail}}
-	                	{{detail.describe}}：{{detail.count}}*{{detail.unitPrice}}={{detail.count*detail.unitPrice}}<br> 
-	                {{/each}}  
-                </td>
-                <td>{{checking.realPayedMoney}}</td>
-                <td>{{checking.unPayedMoney}}</td>
-                <td><input type="text" maxlength="9" name="FinancialTransferRealUnPayedMoney" value="{{checking.transRealUnPayedMoney}}" style="text-align:center"></td>
-	            <td><input type="text" maxlength="1000"  name="FinancialTransferRemark" value="{{checking.transRemark}}" style="text-align:center"></td>
-				<td>{{if checking.checkTime == null || checking.checkTime == ""}}-{{else}}{{checking.checkTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
-	            <td>{{checking.checkUser}}</td>
-				<td>
-					<label class="pos-rel">
-							<input type="checkbox" data-entity-checkStatus="{{checking.isConfirmAccount}}" class="ace transferFinancial" 
-							{{if checking.isConfirmAccount == 1}}checked="checked"{{/if}} />
-								<span class="lbl"></span>
-					</label>
-				</td>
-            </tr>
-            <tr class="hide">
-				<td colspan="17">
-					<table class="table table-striped table-bordered table-hover">
+                {{each financialTransferList as rs index}}
+                <tr class="T-checkTr" data-id="{{rs.id}}">                
+                    <td>{{index+1}}</td>
+                    <td>{{rs.lineProductName}}</td>
+                    <td>{{rs.accountTime | dateFormat: 'yyyy-MM-dd'}}</td>
+                    <td>{{if rs.contactName == null || rs.contactName == ""}}-{{else}}{{rs.contactName}}{{/if}}</td>
+                    <td>{{rs.adultCount}} 大 {{rs.childCount}} 小<a href="#" class="T-option T-viewGroup" style="margin-left:5px">展开</a></td>
+                    <td>{{rs.operateName}}</td>
+                    <td>{{rs.operateTime | dateFormat: 'yyyy-MM-dd'}}</td>
+                    <td>{{rs.needPayMoney}}</td>
+                    <td>
+    	                {{each rs.detailList as detail}}
+    	                	{{detail.describe}}：{{detail.count}} * {{detail.price}} = {{detail.count*detail.price}}<br> 
+    	                {{/each}}  
+                    </td>
+                    <td><a class="T-option T-payedDetail" data-money="{{rs.payedMoney}}">{{"社付："}}{{rs.payedMoney}}</a></td> 
+                    <td><input type="text" maxlength="9" name="punishMoney" value="{{rs.punishMoney}}" style="text-align:center"></td>
+                    <td name="settlementMoney">{{rs.settlementMoney}}</td>
+                    <td name="unPayedMoney">{{rs.unPayedMoney}}</td>
+    	            <td><input type="text" maxlength="1000"  name="checkRemark" value="{{rs.checkRemark}}" style="text-align:center"></td>
+    				<td>{{if rs.checkTime == null || rs.checkTime == ""}}-{{else}}{{rs.checkTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}{{/if}}</td>
+    	            <td>{{if rs.checkUserName == null || rs.checkUserName == ""}}-{{else}}{{rs.checkUserName}}{{/if}}</td>
+    				<td>
+    					<label class="pos-rel">
+    						<input type="checkbox" class="ace T-checkbox" {{if rs.isConfirmAccount == 1}}checked="checked"{{/if}} />
+    						<span class="lbl"></span>
+    					</label>
+                        {{if rs.isConfirmAccount == 1}}<a class="T-option T-needPayDetail">查看</a>{{/if}}
+    				</td>
+                </tr>
+                <tr class="hide">
+    				<td colspan="17">
+    					<table class="table table-striped table-bordered table-hover">
 							<thead>
 								<tr>
 									<th class="th-border">序号</th>
@@ -104,52 +101,57 @@
 								</tr>
 							</thead>  
 							<tbody>
-							   {{each checking.touristGroupMemberList as visitor index}}
-								<tr>
-									<td>{{index+1}}</td>
-									<td>{{visitor.name}}</td>
-									<td>{{visitor.mobileNumber}}</td>
-									<td>{{if visitor.idCardType == 0}}身份证{{/if}}{{if visitor.idCardType == 1}}护照{{/if}}{{if visitor.idCardType == 2}}其他{{/if}}</td>
-									<td>{{visitor.idCardNumber}}</td>
-									<td>{{if visitor.isContactUser == 1}}是{{/if}}</td>
-								</tr>
-							  {{/each}}	
+							    {{each rs.memberList as member index}}
+                                <tr><td>{{index+1}}</td>
+                                    <td>{{if member.name == null || member.name == ""}}-{{else}}{{member.name}}{{/if}}</td>
+                                    <td>{{member.mobileNumber}}</td>
+                                    <td>{{if member.idCardType == 0}}
+                                            身份证
+                                        {{else if member.idCardType == 1}}
+                                            护照
+                                        {{else if member.idCardType == 2}}
+                                            其他
+                                        {{else}}
+                                            -
+                                        {{/if}}
+                                    </td>
+                                    <td>{{if member.idCardNumber == null || member.idCardNumber == ""}}-{{else}}{{member.idCardNumber}}{{/if}}</td>
+                                    <td>{{if member.isContactUser == 1}}是{{/if}}</td>
+                                </tr>
+                                {{/each}}
 							</tbody>
-					</table>
-				</td>
-			</tr>
-			{{/each}}
-         </tbody>
+    					</table>
+    				</td>
+    			</tr>
+    			{{/each}}
+            </tbody>
         </table>
-        <div class="form-group text-right">
-            <label class="control-label pull-right"/>
-                <input type="checkbox" class="ace pull-right transfer-selectAll">
-                <span class="lbl"></span>  
-                全选
-            </label>
-        </div>
         <div class="clearfix"></div>
         <div class="row pageMode">
             <div class="col-xs-6">
-                <small>共计 {{recordSize}} 条记录</small>
+                <small>共计 {{searchParam.recordSize}} 条记录</small>
             </div>
             <div class="col-xs-6">
                 <div class="dataTables_paginate paging_simple_numbers T-pagenation">
                 </div>
             </div>
         </div>
+        <div class="form-group text-right">
+            <label class="control-label pull-right" style="margin-right:20px;">
+                <input type="checkbox" class="ace pull-right T-checkAll">
+                <span class="lbl"></span>  
+                全选
+            </label>
+        </div>
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="form-group" style="text-align: center;">
-                <button class="btn btn-xs btn-primary btn-createTripPlan btn-transferFinancial-close">
-                    <i class="ace-icon fa fa-times-circle"></i>
-                   	关闭
+                <button class="btn btn-xs btn-primary T-close-check">
+                    <i class="ace-icon fa fa-times-circle"></i>关闭
                 </button>
-                <button class="btn btn-xs btn-primary btn-transferFinancial-checking" style="margin-left: 20px">
-                    <i class="ace-icon fa fa-check-circle"></i>
-                   	 确认
+                <button class="btn btn-xs btn-primary T-saveCheck" style="margin-left: 20px">
+                    <i class="ace-icon fa fa-check-circle"></i>确认对账
                 </button>
             </div>
         </form>
-
-
+    </div>
 </div>

@@ -1,566 +1,648 @@
-define(function(require, exports) {
-	var rule = require("./rule");
-    var menuKey = "financial_shop",
-        listTemplate = require("./view/list"),
-        shopCheckingTemplate = require("./view/shopChecking"),
-        shopClearingTemplate = require("./view/shopClearing"),
+/**
+ * 财务管理--购物账务
+ *
+ * by David Bear 2015-11-24
+ */
+define(function(require, exports){
+	var rule = require("./rule"),
+		listTemplate = require("./view/list"),
+		shopCheckingTemplate = require("./view/shopChecking"),
 		billImagesTemplate = require("./view/shopLookImg"),
+		shopClearingTemplate = require("./view/shopClearing"),
 		shopRecords = require("./view/shopRecords"),
-        tabId = "tab-"+menuKey+"-content",
-        checkTabId = "tab-"+ menuKey+"-checking"+"-content",//
-        clearTabId = "tab-"+ menuKey+"-clearing"+"-content";
-   /*  $("#" + tabId + "").off().on("edited.api",function(){
-    	shop.edited = true;
-    }); */
-	var shop = {
-		searchData : {
-			page : "",
-			shopId : "",
-			year : "",
-			month : ""
-		},
-		edited : {},
-		isEdited : function(editedType){
-			if(!!shop.edited[editedType] && shop.edited[editedType] != ""){
-				return true;
-			}
-			return false;
-		},
-		oldCheckShopId:0,
-        oldBlanceShopId:0,
-		listFinancialShop:function(page,shopId,year,month){   
-			$.ajax({
-				url:""+APP_ROOT+"back/financialShop.do?method=listFinancialShop&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-				type:"POST",
-				data:"pageNo="+page+"&shopId="+shopId+"&year="+year+"&month="+month,
-				dataType:"json",
-				beforeSend:function(){
-					globalLoadingLayer = openLoadingLayer();
-				},
-				success:function(data){
-					layer.close(globalLoadingLayer);
-					var result = showDialog(data);
-					if(result){
-						shop.searchData = {
-							page : page,
-							shopId : shopId,
-							year : year,
-							month : month
-						};
-						var html = listTemplate(data);
-						addTab(menuKey,"购物账务",html);
-						
-						$("#"+tabId+ " select[name=shopId]").val(data.shopId);
-						$("#"+tabId+ " select[name=year]").val(data.year);
-						$("#"+tabId+ " select[name=month]").val(data.month);
-						
-						//搜索按钮事件
-						$("#"+tabId+ " .btn-shop-search").click(function(){
-							var shopId = $("#"+tabId+ " select[name=shopId]").val();
-							var year = $("#"+tabId+ " select[name=year]").val();
-							var month = $("#"+tabId+ " select[name=month]").val();
-							shop.listFinancialShop(0,shopId,year,month);
-						});
-						//分页--首页按钮事件
-						$("#"+tabId+ " .pageMode a.first").click(function(){
-							shop.listFinancialShop(0,shopId,data.year,data.month);
-						});
-						// 绑定翻页组件
-						laypage({
-						    cont: $('#' + tabId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
-						    pages: data.totalPage, //总页数
-						    curr: (page + 1),
-						    jump: function(obj, first) {
-						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-						    		shop.listFinancialShop(obj.curr -1,shopId,data.year,data.month);
-						    	}
-						    }
-						});
-						//给对账按钮绑定事件
-						$("#"+tabId+" .btn-divide").click(function(){
-							var shopId = $(this).attr("data-entity-id");
-							shop.listShopChecking(0,shopId,data.year,data.month);
-						});
-						//给结算按钮绑定事件
-						$("#"+tabId+" .btn-transfter").click(function(){
-							var shopId = $(this).attr("data-entity-id");
-							var start_month = 1;
-							var end_month = 12;
-							shop.listShopSettlement(shopId,data.year,start_month,end_month);
-						});
-					}
-				}
-			});
-		},
-		//对账
-		listShopChecking:function(page,shopId,year,month){
-			$.ajax({
-				url:""+APP_ROOT+"back/financialShop.do?method=listShopChecking&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-				type:"POST",
-				data:"pageNo="+page+"&shopId="+shopId+"&year="+year+"&month="+month+"&sortType=auto",
-				dataType:"json",
-				beforeSend:function(){
-					globalLoadingLayer = openLoadingLayer();
-				},
-				success:function(data){
-					//表单验证
-					var $obj = $(".shop-checking .form-horizontal");
-					layer.close(globalLoadingLayer);
-					var result = showDialog(data);
-					if(result){
-						var checkList = data.shopList;
-						var html = shopCheckingTemplate(data);
-						var validator;
-                 	    //判断页面是否存在
-                 	    if($("#"+checkTabId+"").length > 0) {
-                 	    	if(!!shop.edited["checking"] && shop.edited["checking"] != ""){
-                 	    		addTab(menuKey+"-checking","购物对账");
-                 	    		showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
-                 	    			 validator = rule.check($('.shop-checking'));
-				            		 if (!validator.form()) { 
-				            			 return; 
-				            		 }
-				            		 shop.saveCheckingData(page,shopId,year,month,0);
-				            		 shop.edited["checking"] = "";
-				            		 addTab(menuKey+"-checking","购物对账",html);
-				            		 validator = rule.check($('.shop-checking'));
-				            	 },function(){
-				            		 addTab(menuKey+"-checking","购物对账",html);
-				            		 shop.edited["checking"] = "";
-				            		 validator = rule.check($('.shop-checking'));
-				            	 });
-                 	    	 }else{
-	                 	    	addTab(menuKey+"-checking","购物对账",html);
-	                 	        validator = rule.check($('.shop-checking'));
-                 	    	 }
-             	    		 
-                 	    }else{
-                 	    	addTab(menuKey+"-checking","购物对账",html);
-                 	    	validator = rule.check($('.shop-checking'));
-                 	    	
-                 	    }
+		viewReceivedTemplate = require("./view/viewReceived"),
+		viewAccountTemplate = require('./view/viewAccount'),
+		payingTableTemplate = require('./view/shopPayingTable'),
+		menuKey = "financial_shop",
+		checkMenuKey = menuKey + "_checking",
+		settMenuKey = menuKey+"_clearing";
 
-                 	    //取消对账权限过滤
-                        var checkTr = $('.T-checkList tr .T-showTr');
-                        var rightCode = $(".T-checkList").data("right");
-                        checkDisabled(checkList,checkTr,rightCode);
-
-                 	   $("#"+checkTabId+ " .all").on("change",function(){
-            	    		shop.edited["checking"] = "checking"; 
-							shop.oldCheckShopId = shopId;
-            	    	});
-						$("#"+checkTabId+ " select[name=year]").val(data.year);
-						$("#"+checkTabId+ " select[name=month]").val(data.month);
-						
-						//搜索按钮事件
-						$("#"+checkTabId+ " .btn-shopChecking-search").click(function(){
-							var year = $("#"+checkTabId+ " select[name=year]").val();
-							var month = $("#"+checkTabId+ " select[name=month]").val();
-							shop.listShopChecking(0,shopId,year,month);
-						});
-						//导出事件btn-shopExport
-						$("#"+checkTabId+ " .btn-shopExport").click(function(){
-							var year = $("#"+checkTabId+ " select[name=year]").val();
-							var month = $("#"+checkTabId+ " select[name=month]").val();
-							checkLogin(function(){
-	                         	var url = ""+APP_ROOT+"back/export.do?method=shop&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view"+"&shopId="+shopId+"&shopName="+data.shopName+"&year="+year+"&month="+month+"&sortType=auto";
-	                         	exportXLS(url)
-	                         });
-						});
-						// 绑定翻页组件
-						laypage({
-						    cont: $('#' + checkTabId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
-						    pages: data.totalPage, //总页数
-						    curr: (page + 1),
-						    jump: function(obj, first) {
-						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-						    		shop.listShopChecking(obj.curr -1,shopId,data.year,data.month);
-						    	}
-						    }
-						});
-						
-						//给全选绑定事件
-		                $("#"+checkTabId+ " input[type='checkbox'].selectAll").click(function(){
-		                	if(!$(this).prop("checked")){
-		                		$("#"+checkTabId+ " input[name='isConfirmAccount']").each(function(){
-		                			if($(this).attr("data-entity-checkStatus")==0){
-		                				$(this).prop("checked",false);
-				                	}else{
-				                		$(this).prop("checked",true);
-				                	}
-		                		});
-		                	}else{
-		                		$("#"+checkTabId+ " input[name='isConfirmAccount']").prop("checked",true);
-		                	}
-		                });
-		                //给复选框绑定事件
-		                $("#"+checkTabId+ " input[name='isConfirmAccount']").click(function(){
-		                	var flag = true;
-		                	$("#"+checkTabId+ " input[name='isConfirmAccount']").each(function(){
-		                		if(!$(this).prop("checked")){
-		                			flag = false;
-		                		}
-		                	});
-		                	$("#"+checkTabId+ " input[type='checkbox'].selectAll").prop("checked",flag);
-		                });
-		                //关闭按钮事件
-			            $("#"+checkTabId+ " .btn-shop-close").click(function(){
-			            	 showConfirmDialog($( "#confirm-dialog-message" ), "确定关闭本选项卡?",function(){
-			            		 closeTab(menuKey+"-checking");
-								 shop.edited["checking"] = "";
-			            	 });
-			            });
-		                //已对账的实际退补款不可修改
-		                //$("#"+checkTabId+ " input[name='isConfirmAccount']:checked").parent().siblings().find("input[name='realBackshopMoney']").prop("disabled",true);
-		                
-		                 //给查看单据绑定事件
-		                 $("#"+checkTabId+ " .shopImg").click(function(){
-		                	 var WEB_IMG_URL_BIG = $("#"+checkTabId).find("input[name=WEB_IMG_URL_BIG]").val();//大图
-		                	 var WEB_IMG_URL_SMALL = $("#"+ checkTabId).find("input[name=WEB_IMG_URL_SMALL]").val();//大图
-		                	 shop.viewImage(this,WEB_IMG_URL_BIG,WEB_IMG_URL_SMALL);
-		                 });
-						
-		                 //展开事件
-	                     $("#"+checkTabId+ " .seeGroup").click(function(){
-	                    	var tr = $(this).parent().parent().next();
-	                    	if($(this).text()=="展开"){
-	                    		$(this).text("收起");
-	                    	}else{$(this).text("展开");}
-	                     	if(tr.hasClass("hide")){
-									$(this).find("i").removeClass("fa-chevron-up");
-									$(this).find("i").addClass("fa-chevron-down");
-									tr.removeClass("hide");
-								}
-								else{
-									$(this).find("i").removeClass("fa-chevron-down");
-									$(this).find("i").addClass("fa-chevron-up");
-									tr.addClass("hide");
-								}
-	                        });
-	                     
-						//给对账按钮绑定事件 
-						$("#"+checkTabId+ " .btn-confirm-shop-rs").click(function(){
-							// 表单校验
-							if (!validator.form()) { 
-								return;
-							}
-							shop.saveCheckingData(page,shopId,year,month,0);
-			            });
-					}
-				}
-			});
-		},
-		//结算
-		listShopSettlement:function(shopId,year,start_month,end_month){
-			$.ajax({
-				url:""+APP_ROOT+"back/financialShop.do?method=listShopSettlement&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-				type:"POST",
-				data:"shopId="+shopId+"&year="+year+"&start_month="+start_month+"&end_month="+end_month,
-				dataType:"json",
-				beforeSend:function(){
-					globalLoadingLayer = openLoadingLayer();
-				},
-				success:function(data){
-					layer.close(globalLoadingLayer);
-					var result = showDialog(data);
-					if(result){
-						var html = shopClearingTemplate(data);
-						var validator;       
-                 	    //判断页面是否存在 #tab-financial_shop-clearing-content  "tab-"+ menuKey+"-clearing"+"-content" 
-                 	    if($("#tab-"+menuKey+"-clearing-content").length > 0) {
-                 	    	if(!!shop.edited["clearing"] && shop.edited["clearing"] != ""){
-                 	    		addTab(menuKey+"-clearing","购物结算");
-                 	    		showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
-                 	    			 shop.validatorTable();
-                 	    			 var saveBtn = $("#"+clearTabId+" .btn-settlement-save");
-	             	    			 if (!$(saveBtn).data('validata').form()) { return; };
-				            		 shop.saveShopSettlement(shopId,year,start_month,end_month,0);
-				            		 shop.edited["clearing"] = "";
-				            		 addTab(menuKey+"-clearing","购物结算",html);
-				            		 shop.validatorTable();
-				            	 },function(){
-				            		 addTab(menuKey+"-clearing","购物结算",html);
-				            		 shop.edited["clearing"] = "";
-				            		 shop.validatorTable();
-				            	 });
-                 	    	 }else{
-	                 	    	addTab(menuKey+"-clearing","购物结算",html);
-	                 	    	shop.validatorTable();
-                 	    	 }
-             	    		 
-                 	    }else{
-                 	    	addTab(menuKey+"-clearing","购物结算",html);
-                 	    	shop.validatorTable();
-                 	    };
-                 	   $("#"+clearTabId+" .all").on('change', 'input, select', function() {
-                 		  shop.edited["clearing"] = "clearing";
-						  shop.oldBlanceShopId = shopId;
-	    	    		  $(this).closest('tr').data('blanceStatus',true);
-	    	    		});
-											
-						$("#"+clearTabId+ " select[name=year]").val(year);
-						$("#"+clearTabId+ " select[name=start_month]").val(start_month);
-						$("#"+clearTabId+ " select[name=end_month]").val(end_month);
-						
-						//搜索按钮事件
-						$("#"+clearTabId+ " .btn-shopSettlement-search").click(function(){
-							var year = $("#"+clearTabId+ " select[name=year]").val();
-							var start_month = $("#"+clearTabId+ " select[name=start_month]").val();
-							var end_month = $("#"+clearTabId+ " select[name=end_month]").val();
-							shop.listShopSettlement(shopId,year,start_month,end_month);
-						});
-						
-						//对账明细按钮事件
-                        $("#"+clearTabId+ " .btn-shop-checkDetail").click(function(){
-                        	var year = $(this).attr("data-entity-year");
-                        	var month = $(this).attr("data-entity-month");
-                        	shop.listShopChecking(0,shopId,year,month);
-                        });
-						
-						//给操作记录按钮绑定事件
-                        $("#"+clearTabId+ " .btn-shop-records").click(function(){
-                        	$.ajax({
-                        		url:""+APP_ROOT+"back/financialShop.do?method=listFinancialShopSettlementRecord&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-                                type:"POST",
-                                data:"shopId="+shopId,
-                                dataType:"json",
-                                beforeSend:function(){
-                                    globalLoadingLayer = openLoadingLayer();
-                                },
-                                success:function(data){
-                                	layer.close(globalLoadingLayer);
-                                    var result = showDialog(data);
-                                	if(result){
-                                		if(data.financialShopSettlementRecordList.length == 0){
-                                			showMessageDialog($( "#confirm-dialog-message" ),"暂时还没有操作记录");
-                                		}else{
-                                			var html =shopRecords(data);
-            					    		var blanceRecordsTemplateLayer =layer.open({
-            					    			type: 1,
-            								    title:"操作记录",
-            								    skin: 'layui-layer-rim', //加上边框
-            								    area: '60%', //宽高
-            								    zIndex:1030,
-            								    content: html,
-            								    scrollbar: false, // 推荐禁用浏览器外部滚动条
-            								    success: function(){}
-            					    		})
-                                		}
-        		                	}
-                                }
-                        	});
-                        });
-		                
-						//保存按钮事件
-                        $("#"+clearTabId+" .btn-settlement-save").click(function(){
-                        	if (!$(this).data('validata').form()) { return; }
-		            		shop.saveShopSettlement(shop.oldBlanceShopId,year,start_month,end_month,0);
-                        });
-					}
-				}
-			});
-		},
-		//给每个tr增加验证
-	    validatorTable:function(){
-	    	//获取table中的tr
-            var $tr = $("#"+clearTabId+ " .all tbody tr")
-            //给每个tr添加表单验证
-            $tr.each(function(){
-            	$(this).find('.btn-settlement-save').data('validata', rule.check($(this)));
-            });	
-	    },
-		//显示单据
-	    viewImage:function(obj,WEB_IMG_URL_BIG,WEB_IMG_URL_SMALL) {
-	    	var data = {
-	    			"images":[]
-	    	};
-	    	var str = $(obj).attr('url');
-	    	var strs = str.split(",");
-	    	for(var i = 0; i < strs.length; i ++) {
-	    		var s = strs[i];
-	    		if(s != null && s != "" && s.length > 0) {
-		    		var image = {
-		    				"WEB_IMG_URL_BIG":imgUrl+s,
-		    				"WEB_IMG_URL_SMALL":imgUrl+s+"?imageView2/2/w/150",
-		    		}
-		    		data.images.push(image);
-	    		}
-	    	}
-	    	var html = billImagesTemplate(data);
-	    	
-			layer.open({
-				type : 1,
-				title : "单据图片",
-				skin : 'layui-layer-rim', // 加上边框
-				area : '500px', // 宽高
-				zIndex : 1028,
-				content : html,
-				scrollbar: false, // 推荐禁用浏览器外部滚动条
-				success : function() {
-					var colorbox_params = {
-			    			rel: 'colorbox',
-			    			reposition:true,
-			    			scalePhotos:true,
-			    			scrolling:false,
-			    			previous:'<i class="ace-icon fa fa-arrow-left"></i>',
-			    			next:'<i class="ace-icon fa fa-arrow-right"></i>',
-			    			close:'&times;',
-			    			current:'{current} of {total}',
-			    			maxWidth:'100%',
-			    			maxHeight:'100%',
-			    			onOpen:function(){ 
-			    				$overflow = document.body.style.overflow;
-			    				document.body.style.overflow = 'hidden';
-			    			},
-			    			onClosed:function(){
-			    				document.body.style.overflow = $overflow;
-			    			},
-			    			onComplete:function(){
-			    				$.colorbox.resize();
-			    			}
-			    		};
-			    		$('#layer-photos-financial-count [data-rel="colorbox"]').colorbox(colorbox_params);
-				}
-			});
-	    },
-		saveCheckingData : function(page,shopId,year,month,isClose){
-			console.log("test");
-			var JsonStr = [],$tr = $("#"+checkTabId+" .all tbody tr"),
-            oldRealRebateMoney,
-            newRealRebateMoney,
-            oldRemark,
-            newRemark;
-     	    $tr.each(function(i){
-     		   var checkStatus = $(this).attr("data-entity-isConfirmAccount");
-     		   var consumeStartTime = $(this).attr("data-entity-startTime");
-     		   var flag = $(this).find("input[name='isConfirmAccount']").is(":checked");
-     		   newRealRebateMoney = $(this).find("input[name='realRebateMoney']").val();
-     		   newRemark = $(this).find("input[name='billRemark']").val();
-     		   oldRemark = $(this).attr("data-entity-billRemark");
-     		   oldRealRebateMoney = $(this).attr("data-entity-rebateMoney");
-     		   if(flag){
-     			  if(checkStatus == 1){
-     				  //判断是否修改对账
-     				  if(oldRealRebateMoney != newRealRebateMoney || oldRemark != newRemark){
-     				  	var checkData = {
- 				  		   id:$(this).attr("data-entity-id"),
-	 					   shopId:shopId,
-	 					   consumeStartTime:consumeStartTime,
-	 					   realRebateMoney:newRealRebateMoney,
-	 					   billRemark:newRemark,
-	 					   isConfirmAccount:1
-     				  	}
-     				  	JsonStr.push(checkData);
-     				  }
- 			      }else{
- 			      		var checkData = {
- 				  		   id:$(this).attr("data-entity-id"),
-	 					   shopId:shopId,
-	 					   consumeStartTime:consumeStartTime,
-	 					   realRebateMoney:newRealRebateMoney,
-	 					   billRemark:newRemark,
-	 					   isConfirmAccount:1
-     				  	}
-     				  	JsonStr.push(checkData);
- 			      }
-     		   }else{
-     			   if(checkStatus == 1){
- 					   var checkData = {
- 				  		   id:$(this).attr("data-entity-id"),
-	 					   shopId:shopId,
-	 					   consumeStartTime:consumeStartTime,
-	 					   realRebateMoney:newRealRebateMoney,
-	 					   billRemark:newRemark,
-	 					   isConfirmAccount:0
-     				  	}
-         			   JsonStr.push(checkData);
-     			   }
-     		   }
-		   });
-     	   if(JsonStr.length == 0){
-     		   showMessageDialog($( "#confirm-dialog-message" ),"您当前未进行任何操作");
-     		   return;
-     	   }
-     	   JsonStr = JSON.stringify(JsonStr);
-     	   $.ajax({
-     		   url:""+APP_ROOT+"back/financialShop.do?method=updateShopChecking&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
-                type:"POST",
-                data:"financialShopListStr="+encodeURIComponent(JsonStr),
-                dataType:"json",
-                beforeSend:function(){
-					globalLoadingLayer = openLoadingLayer();
-				},
-				success:function(data){
-					layer.close(globalLoadingLayer);
-					console.log(data);
-					var result = showDialog(data);
-					if(result){
-						showMessageDialog($( "#confirm-dialog-message" ),data.message);
-						shop.edited["checking"] = "";
-						if(isClose == 1){
-							closeTab(checkTabId);
-							shop.listFinancialShop(shop.searchData.page,shop.searchData.shopId,shop.searchData.year,shop.searchData.month);
-						} else {
-							shop.listShopChecking(page,shopId,year,month);
-						}
-					}
-				}
-     	   });
-		},
-		//保存结算
-		saveShopSettlement : function(shopId,year,start_month,end_month,obj,isClose){
-	    	var $tr = $("#"+clearTabId+ " .all tbody tr");
-	    	var id ; 
-        	var payMoney ;
-        	var payType;
-        	var remark;
-	    	$tr.each(function(i){
-          		if($(this).data('blanceStatus')){
-                	 id = $(this).attr("data-entity-id"); 
-                	 payMoney = $tr.eq(i).find("input[name='payMoney']").val();
-                	 payType = $tr.eq(i).find("select[name='payType'] :selected").text();
-                	 remark = $tr.eq(i).find(" input[name='remark']").val();
-          		}
-          	})
-          	console.log(payMoney);
-	    	$.ajax({
-        		url:""+APP_ROOT+"back/financialShop.do?method=saveFinancialShopSettlement&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
-                type:"POST",
-                data:"id="+id+"&payMoney="+payMoney+"&payType="+payType+"&remark="+remark,
-                dataType:"json",
-                beforeSend:function(){
-                    globalLoadingLayer = openLoadingLayer();
-                },
-                success:function(data){
-                	layer.close(globalLoadingLayer);
-                    var result = showDialog(data);
-                    if(result){
-                    	showMessageDialog($( "#confirm-dialog-message" ),data.message);
-                    	shop.edited["clearing"] = "";
-						if(isClose == 1){
-							closeTab(clearTabId);
-							shop.listFinancialShop(shop.searchData.page,shop.searchData.shopId,shop.searchData.year,shop.searchData.month);
-						} else {
-							shop.listShopSettlement(shopId,year,start_month,end_month);
-						}
-                    }
-                }
-        	})
-		},
-		save : function(saveType){
-			console.log(saveType);
-			if(saveType == "checking"){
-				shop.saveCheckingData(0,shop.oldCheckShopId,"","",1);
-			} else if(saveType == "clearing"){
-				shop.saveShopSettlement(shop.oldBlanceShopId,"","","",1);
-			}
-		},
-		clearEdit : function(clearType){
-			shop.edited[clearType] = "";
-		}
+	var FinShop = {
+		$tab: false,
+		$checkingTab : false,
+		checkingId : null
 	}
-	exports.listFinancialShop = shop.listFinancialShop;
-	exports.isEdited = shop.isEdited;
-	exports.save = shop.save;
-	exports.clearEdit = shop.clearEdit;
+
+	/**
+	 * 初始化模块
+	 */
+	FinShop.initModule = function(){
+		FinShop.$tab = null;
+		FinShop.getList();
+	};
+
+	/**
+	 * 获取购物账务列表，初始化列表页面
+	 * @param  {int} page 页码
+	 */
+	FinShop.getList = function(page){
+		var args = FinancialService.getInitDate();
+        args.pageNo = page || 0;
+		if (!!FinShop.$tab) {
+			args = {
+				pageNo: (page || 0),
+				startDate: FinShop.$tab.find('.T-search-start-date').val(),
+				endDate : FinShop.$tab.find('.T-search-end-date').val(),
+			}
+			var shopName = FinShop.$tab.find('.T-search-name').val();
+            args.shopName = shopName === '全部' ? '' : shopName;
+		}
+		var data = {
+			searchParam : {},
+			shopAccountList : [
+				{
+					shopId : 1,
+					shopName : "商品名字"
+				}
+			],
+			totalList : {}
+		}
+		$.ajax({
+			url: KingServices.build_url('financial/shopAccount', 'listPager'),
+			type: 'post',
+			data: args,
+		}).done(function(data){
+			if (showDialog(data)) {
+				Tools.addTab(menuKey,"购物账务",listTemplate(data));
+				// 绑定事件
+				FinShop.$tab = $('#tab-' + menuKey + '-content');
+				FinShop.init_event(FinShop.$tab);
+				// 缓存页面
+				FinShop.listPageNo = args.pageNo;
+				// 绑定翻页组件
+				laypage({
+				    cont: FinShop.$tab.find('.T-pagenation'), 
+				    pages: data.totalPage, //总页数
+				    curr: (data.pageNo + 1),
+				    jump: function(obj, first) {
+				    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+				    		FinShop.getList(obj.curr -1);
+				    	}
+				    }
+				});	
+			}
+		});
+	};
+
+	/**
+	 * 初始化列表页面的事件绑定
+	 */
+	FinShop.init_event = function($tab){
+		/**
+		 * 搜索顶部的事件绑定
+		 */
+		var $searchArea = $tab.find('.T-search-area');
+		$searchArea.find('.T-btn-search').on('click', function(event) {
+			event.preventDefault();
+			FinShop.getList();
+		});
+		Tools.setDatePicker($searchArea.find('.datepicker'), true);
+		FinShop.getShopName($searchArea.find('.T-search-name'));
+		// 报表内的操作
+		$tab.find('.T-list').on('click', '.T-action', function(event) {
+			event.preventDefault();
+			var $that = $(this), id = $that.closest('tr').data('id'), name = $that.closest('tr').data('name');
+			if ($that.hasClass('T-checking'))  {
+				// 对账
+				FinShop.accountChecking(id, name);
+			} else if ($that.hasClass('T-settlement'))  {
+				// 结算
+				FinShop.settlement(id, name);
+			}
+		});
+	};
+
+	FinShop.getShopName = function($obj){
+		$obj.autocomplete({
+			minLength: 0,
+		    change: function(event, ui) {
+		        if (!ui.item)  {
+		            $(this).data('id', '');
+		        }
+		    },
+		    select: function(event, ui) {
+		        $(this).blur().data('id', ui.item.id);
+		    }
+		}).on('click', function(){
+			if (!$obj.data('ajax')) {  // 避免重复请求
+				$.ajax({
+					url : KingServices.build_url('financial/shopAccount', 'selectShopName'),
+					type : "POST"
+				}).done(function(data){
+					if(showDialog(data)){
+						for(var i=0; i<data.shopList.length; i++){
+			                data.shopList[i].value = data.shopList[i].shopName;
+			                data.shopList[i].id = data.shopList[i].shopId;
+			            }
+			            data.shopList.unshift({id:'', value: '全部'});
+			            $obj.autocomplete('option', 'source', data.shopList);
+			            $obj.autocomplete('search', '');
+
+			            $obj.data('ajax', true);
+		        	}
+				});
+			} else {
+		        $obj.autocomplete('search', '');
+		    }
+		});
+	};
+
+	/**
+	 * 初始化对账模块
+	 * @param  {[int]} id 购物账务ID
+	 */
+	FinShop.accountChecking = function(id, name){
+		FinShop.$checkingTab = null;
+		FinShop.checkingId = id;
+		FinShop.checkingName = name;
+		FinShop.checkingList(0, id);
+	};
+
+	/**
+	 * 获取购物账务-对账列表，初始化列表页面
+	 * @param  {int} page 页码
+	 * @param  {[int]} id 购物账务ID
+	 */
+	FinShop.checkingList = function(page, id){
+		var args = {
+			pageNo : (page || 0),
+			shopId : id || FinShop.checkingId,
+			startTime: FinShop.$tab.find('.T-search-start-date').val(),
+			endTime : FinShop.$tab.find('.T-search-end-date').val()
+		}
+		if (!!FinShop.$checkingTab) {
+			args = {
+				pageNo: (page || 0),
+				shopId : id || FinShop.checkingId,
+				startTime: FinShop.$checkingTab.find('.T-search-start-date').val(),
+				endTime : FinShop.$checkingTab.find('.T-search-end-date').val(),
+				tripMessage : FinShop.$checkingTab.find('.T-search-trip').val()
+			}
+		}
+		$.ajax({
+			url: KingServices.build_url('financial/shopAccount', 'listCheckShopAcccount'),
+			type: 'post',
+			data: args,
+		}).done(function(data){
+			if (showDialog(data)) {
+				data.name = FinShop.checkingName;
+				Tools.addTab(checkMenuKey,"购物对账",shopCheckingTemplate(data));
+				FinShop.$checkingTab = $('#tab-' + checkMenuKey + '-content');
+				FinShop.check_init_event(FinShop.$checkingTab);
+			}
+		});
+	};
+
+	FinShop.check_init_event = function($tab){
+		var validator = rule.check($tab);
+
+		$tab.off('change').off(SWITCH_TAB_SAVE).off(CLOSE_TAB_SAVE)
+		.on('change', '.T-checkList', function(event) {
+			event.preventDefault();
+			$tab.data('isEdited', true);
+		})
+		.on(SWITCH_TAB_SAVE, function(event, tab_id, title, html){
+			event.preventDefault();
+			FinShop.saveChecking($tab, [tab_id, title, html]);
+		})
+		.on(CLOSE_TAB_SAVE, function(event){
+			event.preventDefault();
+			FinShop.saveChecking($tab);
+		});
+
+		//搜索顶部的事件绑定
+		var $searchArea = $tab.find('.T-search-area');
+		$searchArea.find('.T-btn-search').on('click', function(event){
+			event.preventDefault();
+			FinShop.checkingList(0, FinShop.checkingId);
+		});
+
+		$tab.find('.T-checkTr').on('change', function(){
+			$(this).data('change', 'true');
+		});
+
+		Tools.setDatePicker($searchArea.find('.datepicker'), true);
+		FinancialService.updateUnpayMoney($tab, rule);
+		
+		// 报表内的操作
+		$tab.find('.T-list').on('click', '.T-action', function(event) {
+			event.preventDefault();
+			var $that = $(this), id = $that.closest('tr').data('id');
+			if($that.hasClass('T-see-group')){
+				FinShop.unfold($that);
+			}else if($that.hasClass('T-view-receipts')){
+				FinShop.viewImage($tab, $that.closest('tr').data('images'));
+			}else if($that.hasClass('T-payDetails')){
+				FinShop.viewOperationDetail(id, 0);
+			}else if($that.hasClass('T-view-details')){
+				FinShop.viewOperationDetail(id, 1);
+			}
+		});
+
+		//给全选按钮绑定事件: 未去重
+        FinancialService.initCheckBoxs($tab.find(".T-checkAll"), $tab.find(".T-checkList").find('.T-checkbox'));
+
+		//绑定确定事件
+		$tab.find('.T-btn-save').on('click', function(event){
+			event.preventDefault();
+			FinShop.saveChecking($tab);
+		});
+		//绑定取消事件
+		$tab.find('.T-btn-close').on('click', function(event){
+			event.preventDefault();
+			if(!!$tab.data('isEdited')){
+				showSaveConfirmDialog($('#confirm-dialog-message'), "内容已经被修改，是否保存?", function(){
+					FinShop.saveCheckData($tab);
+				}, function(){
+					Tools.closeTab(checkMenuKey);
+                	FinShop.getList(FinShop.listPageNo);
+				});
+			}else{
+				Tools.closeTab(checkMenuKey);
+                FinShop.getList(FinShop.listPageNo);
+			}
+		});
+	};
+
+	FinShop.viewOperationDetail = function(id, type){
+		if (!!id) {
+			var method = 'findCheckAccountDetail',
+                title = '应付金额明细',
+                html = viewAccountTemplate;
+            if (!type) {
+                method = 'findReciveAccountDetail';
+                title = '已付金额明细';
+                html = viewReceivedTemplate;
+            }
+            $.ajax({
+                url: KingServices.build_url('financial/bookingAccount', method),
+                type: 'post',
+                data: {
+                    id: id
+                },
+            })
+            .done(function(data) {
+                if (showDialog(data)) {
+                    data.type = type;
+                    layer.open({
+                        type: 1,
+                        title: title,
+                        skin: 'layui-layer-rim',
+                        area: '1024px',
+                        zIndex: 1028,
+                        content: html(data),
+                        scrollbar: false
+                    });
+                }
+            });
+		}
+	};
+
+	FinShop.unfold = function($that){
+		if($that.data('is-show')){
+			$that.html('展开');
+			$that.data('is-show', '');
+			$that.closest('tr').next().addClass('hide');
+		}else{
+			$that.html('收起');
+			$that.data('is-show', 'true');
+			$that.closest('tr').next().removeClass('hide');
+		}
+	};
+
+	FinShop.viewImage = function($tab, strImage){
+		if(!strImage)return;
+		var WEB_IMG_URL_BIG = $tab.find(".globalAdd").data('big'),
+			WEB_IMG_URL_SMALL = $tab.find(".globalAdd").data('small'),
+				data = {
+	    		"images":[]
+    		},
+    		str = strImage,
+    		strs = str.split(",");
+    	for(var i = 0; i < strs.length; i ++) {
+    		var s = strs[i];
+    		if(s != null && s != "" && s.length > 0) {
+	    		var image = {
+	    			"WEB_IMG_URL_BIG":imgUrl+s,
+	    			"WEB_IMG_URL_SMALL":imgUrl+s+"?imageView2/2/w/150",
+	    		}
+	    		data.images.push(image);
+    		}
+    	}
+    	var $overflow = null;
+    	layer.open({
+			type : 1,
+			title : "单据图片",
+			skin : 'layui-layer-rim', // 加上边框
+			area : '500px', // 宽高
+			zIndex : 1028,
+			content : billImagesTemplate(data),
+			scrollbar: false, // 推荐禁用浏览器外部滚动条
+			success : function() {
+				var colorbox_params = {
+					photo : true,
+	    			rel: 'colorbox',
+	    			reposition:true,
+	    			scalePhotos:true,
+	    			scrolling:false,
+	    			previous:'<i class="ace-icon fa fa-arrow-left"></i>',
+	    			next:'<i class="ace-icon fa fa-arrow-right"></i>',
+	    			close:'&times;',
+	    			current:'{current} of {total}',
+	    			maxWidth:'100%',
+	    			maxHeight:'100%',
+	    			onOpen:function(){ 
+	    				$overflow = document.body.style.overflow;
+	    				document.body.style.overflow = 'hidden';
+	    			},
+	    			onClosed:function(){
+	    				document.body.style.overflow = $overflow;
+	    			},
+	    			onComplete:function(){
+	    				$.colorbox.resize();
+	    			}
+	    		};
+	    		$('#layer-photos-financial-count [data-rel="colorbox"]').colorbox(colorbox_params);
+			}
+		});
+	};
+
+	FinShop.saveChecking = function($tab, tab_array){
+		// 表单校验
+		var json = FinancialService.checkSaveJson($tab, rule);
+		if(JSON.parse(json).length > 0){
+			$.ajax({
+				url : KingServices.build_url('financial/shopAccount', 'checkShopAccount'),
+				type : "POST",
+				data : {checkAccountList : json}
+			}).done(function(data){
+				if(showDialog(data)){
+					$tab.data('isEdited', false);
+	                showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+	                    if (!!tabArgs) {
+	                        Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
+	                        FinShop.checkingList(0);
+	                    } else {
+	                        Tools.closeTab(checkMenuKey);
+	                        FinShop.getList(FinShop.listPageNo);
+	                    }
+	                });
+	            }
+			});
+		}else if(!json){
+
+		}else{
+			showMessageDialog($('#confirm-dialog-message'), '您当前未进行任何操作！');
+		}
+	};
+
+	FinShop.settlement = function(id, name){
+		FinShop.$settlementTab = null;
+		FinShop.settlementId = id;
+		FinShop.settlementName = name;
+		FinShop.settlementList(0, id);
+	};
+
+	FinShop.settlementList = function(page, id){
+		var args = {
+			pageNo : (page || 0),
+			shopId : id || FinShop.settlementId,
+			startTime: FinShop.$tab.find('.T-search-start-date').val(),
+			endTime : FinShop.$tab.find('.T-search-end-date').val()
+		}
+		if (!!FinShop.$settlementTab) {
+			args = {
+				pageNo: (page || 0),
+				shopId : id || FinShop.settlementId,
+				startTime: FinShop.$settlementTab.find('.T-search-start-date').val(),
+				endTime : FinShop.$settlementTab.find('.T-search-end-date').val(),
+				tripMessage : FinShop.$settlementTab.find('.T-search-trip').val()
+			}
+		}
+		FinShop.settListPageNo = args.pageNo;
+
+		$.ajax({
+			url : KingServices.build_url('financial/shopAccount', 'listReciveShopAcccount'),
+			type : "POST",
+			data : args
+		}).done(function(data){
+			if(showDialog(data)){
+				data.name = FinShop.settlementName;
+				Tools.addTab(settMenuKey, "购物结算", shopClearingTemplate(data));
+
+				FinShop.$settlementTab = $('#tab-' + settMenuKey + '-content');
+				FinShop.sett_init_event(FinShop.$settlementTab);
+			}
+		});
+	};
+
+	FinShop.sett_init_event = function($tab){
+		var validator = rule.check($tab);
+
+		$tab.off('change').off(SWITCH_TAB_SAVE).off(CLOSE_TAB_SAVE)
+		.on('change', '.T-checkList', function(event) {
+			event.preventDefault();
+			$tab.data('isEdited', true);
+		})
+		.on(SWITCH_TAB_SAVE, function(event, tab_id, title, html){
+			event.preventDefault();
+			FinShop.saveSettlement($tab, validator, [tab_id, title, html], false);
+		})
+		.on(CLOSE_TAB_SAVE, function(event){
+			event.preventDefault();
+			FinShop.saveSettlement($tab, validator, null, true);
+		});
+
+		//搜索顶部的事件绑定
+		var $searchArea = $tab.find('.T-search-area');
+		$searchArea.find('.T-btn-search').on('click', function(event){
+			event.preventDefault();
+			FinShop.settlementList(0, FinShop.settlementId);
+		});
+		var $datepicker = $searchArea.find('.datepicker');
+		Tools.setDatePicker($datepicker, true);
+		FinancialService.updateUnpayMoney($tab, rule);
+
+		// 报表内的操作
+		$tab.find('.T-list').on('click', '.T-action', function(event) {
+			event.preventDefault();
+			var $that = $(this), id = $that.closest('tr').data('id');
+			if($that.hasClass('T-see-group')){
+				FinShop.unfold($that);
+			}else if($that.hasClass('T-view-receipts')){
+				FinShop.viewImage($that);
+			}else if($that.hasClass('T-payDetails')){
+				FinShop.viewOperationDetail(id, 0);
+			}else if($that.hasClass('T-view-details')){
+				FinShop.viewOperationDetail(id, 1);
+			}
+		});
+		//给全选按钮绑定事件: 未去重
+        FinancialService.initCheckBoxs($tab.find(".T-checkAll"), $tab.find(".T-checkList").find('.T-checkbox'));
+
+		//绑定确定事件
+		$tab.find('.T-btn-save').on('click', function(event){
+			event.preventDefault();
+			FinShop.saveSettlement($tab, validator, null, false);
+		});
+		//绑定取消事件
+		$tab.find('.T-btn-close').on('click', function(event){
+			event.preventDefault();
+			if(!!$tab.data('isEdited')){
+				showSaveConfirmDialog($('#confirm-dialog-message'), "内容已经被修改，是否保存?", function(){
+					FinShop.saveSettlement($tab);
+				}, function(){
+					Tools.closeTab(settMenuKey);
+                	FinShop.getList(FinShop.listPageNo);
+				});
+			}else{
+				Tools.closeTab(settMenuKey);
+                FinShop.getList(FinShop.listPageNo);
+			}
+		});
+		$tab.find(".T-btn-autofill").on('click', function(event){
+			event.preventDefault();
+			if ($(this).hasClass('btn-primary')) {
+                if (validator.form()) {
+                	FinancialService.autoPayConfirm($datepicker.eq(0).val(), $datepicker.eq(1).val(),function(){
+                    	FinShop.autoFillMoney($tab);
+                	});
+                }
+            } else {
+                FinShop.payingJson = [];
+                FinShop.setAutoFillEdit($tab, false);
+            }
+		})
+
+	};
+
+	/**
+     * 自动下账业务逻辑
+     * @param  {[type]} $tab [description]
+     * @return {[type]}      [description]
+     */
+    FinShop.autoFillMoney = function($tab) {
+        if (!!$tab && $tab.length) {
+            var $autoPayMoney = $tab.find('.T-sumPayMoney');
+
+            var args = {
+				shopId : FinShop.settlementId,
+				startDate : $tab.find('.T-search-start-date').val(),
+				endDate : $tab.find('.T-search-end-date').val(),
+				tripMessage : $tab.find('.T-search-trip').val(),
+				sumTemporaryIncomeMoney : $tab.find('.T-sumReciveMoney').val()
+            };
+
+            $.ajax({
+                    url: KingServices.build_url('financial/shopAccount', 'autoShopAccount'),
+                    type: 'post',
+                    data: {searchParam : JSON.stringify(args)},
+                    showLoading: false
+                })
+                .done(function(data) {
+                    if (showDialog(data)) {
+                        FinShop.payingJson = data.autoPaymentJson;
+                        $tab.find('input[name="sumPayMoney"]').val(data.checkedUnPayedMoney);
+                        FinShop.setAutoFillEdit($tab, true);
+                    }
+                });
+        }
+    };
+
+    FinShop.setAutoFillEdit = function($tab, disable) {
+        var $sum = $tab.find('input[name="sumPayMoney"]').prop('disabled', disable);
+        if (!disable) {
+            $sum.val(0);
+        }
+
+        $tab.find('.T-btn-autofill').html(disable ? '<i class="ace-icon fa fa-times"></i> 取消下账' : '<i class="ace-icon fa fa-check-circle"></i> 自动下账').toggleClass('btn-primary btn-warning');;
+
+        FinShop.getOperationList(0, $tab);
+
+    };
+    /**
+     * 获取对账列表数据
+     * @param  {int} pageNo 列表页码
+     * @return {[type]}        [description]
+     */
+    FinShop.getOperationList = function(pageNo, $tab) {
+        if ($tab) {
+            var args = {
+                pageNo: pageNo || 0,
+				shopId : FinShop.settlementId,
+				startTime : $tab.find('.T-search-start-date').val(),
+				endTime : $tab.find('.T-search-end-date').val(),
+				tripMessage : $tab.find('.T-search-trip').val()
+            };
+
+            $.ajax({
+                    url : KingServices.build_url('financial/shopAccount', 'listReciveShopAcccount'),
+					type : "POST",
+					data : {searchParam : JSON.stringify(args)}
+                })
+                .done(function(data) {
+                    if (showDialog(data)) {
+                    	data.financialTicketList = FinancialService.getTempDate(data.financialTicketList, Ticket.payingJson);
+                    	var html = payingTableTemplate(data);
+						FinShop.$settlementTab.find('.T-checkList').html(html);
+
+						//给全选按钮绑定事件: 未去重
+                        FinancialService.initCheckBoxs($tab.find(".T-checkAll"), $tab.find(".T-checkList").find('.T-checkbox'));
+                        // 设置记录条数及页面
+                        $tab.find('.T-sumItem').text('共计' + data.recordSize + '条记录');
+                        $tab.find('.T-btn-save').data('pageNo', args.pageNo);
+						// 绑定翻页组件
+						laypage({
+						    cont: $tab.find('.T-pagenation'), 
+						    pages: data.totalPage, //总页数
+						    curr: (data.pageNo + 1),
+						    jump: function(obj, first) {
+						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+						    		FinShop.getOperationList(obj.curr -1);
+						    	}
+						    }
+						});	
+                    }
+                });
+
+        }
+    }
+
+	FinShop.saveSettlement = function($tab, tabArgs){
+		var json = FinancialService.clearSaveJson($tab, FinShop.payingJson, rule);
+		if (json.length) {
+			var args = {
+                ticketId: FinShop.settlementId,
+                sumCurrentPayMoney: $tab.find('.T-sumReciveMoney').val(),
+                payType: $tab.find('.T-sumPayType').val(),
+                payRemark: $tab.find('.T-sumRemark').val()
+			}
+            $.ajax({
+                    url: KingServices.build_url('account/arrangeTicketFinancial', 'saveAccountSettlement'),
+                    type: 'post',
+                    data: {
+                    	searchParam : JSON.stringify(args),
+                    	ticketJson : JSON.stringify(json)
+                    },
+                })
+                .done(function(data) {
+                    $tab.data('isEdited', false);
+                    FinShop.payingJson = [];
+                    showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+                        if (!!tabArgs) {
+                            Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
+                            FinShop.settlementList(0);
+                        } else {
+                            Tools.closeTab(clearingTab);
+                            FinShop.getList(FinShop.listPageNo);
+                        }
+                    })
+                });
+        } else {
+            showMessageDialog($('#confirm-dialog-message'), '您当前未进行任何操作！');
+        }
+	};
+
+	// 暴露方法
+	exports.init = FinShop.initModule;
 });
