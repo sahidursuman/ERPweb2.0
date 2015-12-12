@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":6,"md5":"36b765cc29da1505cc20398f3c3df6d3"}*/
+/*TMODJS:{"debug":true,"version":8,"md5":"36b765cc29da1505cc20398f3c3df6d3"}*/
 define(function(require) {
     return require("../../../template")("financial/replace/view/replacePayingTable", function($data, $filename) {
         try {

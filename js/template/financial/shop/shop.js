@@ -97,18 +97,53 @@ define(function(require, exports){
 			FinShop.getList();
 		});
 		Tools.setDatePicker($searchArea.find('.datepicker'), true);
-
+		FinShop.getShopName($searchArea.find('.T-search-name'));
 		// 报表内的操作
 		$tab.find('.T-list').on('click', '.T-action', function(event) {
 			event.preventDefault();
-			var $that = $(this), id = $that.closest('tr').data('id');
+			var $that = $(this), id = $that.closest('tr').data('id'), name = $that.closest('tr').data('name');
 			if ($that.hasClass('T-checking'))  {
 				// 对账
-				FinShop.accountChecking(id);
+				FinShop.accountChecking(id, name);
 			} else if ($that.hasClass('T-settlement'))  {
 				// 结算
-				FinShop.settlement(id);
+				FinShop.settlement(id, name);
 			}
+		});
+	};
+
+	FinShop.getShopName = function($obj){
+		$obj.autocomplete({
+			minLength: 0,
+		    change: function(event, ui) {
+		        if (!ui.item)  {
+		            $(this).data('id', '');
+		        }
+		    },
+		    select: function(event, ui) {
+		        $(this).blur().data('id', ui.item.id);
+		    }
+		}).on('click', function(){
+			if (!$obj.data('ajax')) {  // 避免重复请求
+				$.ajax({
+					url : KingServices.build_url('financial/shopAccount', 'selectShopName'),
+					type : "POST"
+				}).done(function(data){
+					if(showDialog(data)){
+						for(var i=0; i<data.shopList.length; i++){
+			                data.shopList[i].value = data.shopList[i].shopName;
+			                data.shopList[i].id = data.shopList[i].shopId;
+			            }
+			            data.shopList.unshift({id:'', value: '全部'});
+			            $obj.autocomplete('option', 'source', data.shopList);
+			            $obj.autocomplete('search', '');
+
+			            $obj.data('ajax', true);
+		        	}
+				});
+			} else {
+		        $obj.autocomplete('search', '');
+		    }
 		});
 	};
 
@@ -116,9 +151,10 @@ define(function(require, exports){
 	 * 初始化对账模块
 	 * @param  {[int]} id 购物账务ID
 	 */
-	FinShop.accountChecking = function(id){
+	FinShop.accountChecking = function(id, name){
 		FinShop.$checkingTab = null;
 		FinShop.checkingId = id;
+		FinShop.checkingName = name;
 		FinShop.checkingList(0, id);
 	};
 
@@ -165,6 +201,7 @@ define(function(require, exports){
 			data: args,
 		}).done(function(data){
 			if (showDialog(data)) {
+				data.name = FinShop.checkingName;
 				Tools.addTab(checkMenuKey,"购物对账",shopCheckingTemplate(data));
 				FinShop.$checkingTab = $('#tab-' + checkMenuKey + '-content');
 				FinShop.check_init_event(FinShop.$checkingTab);
@@ -198,7 +235,7 @@ define(function(require, exports){
 
 		Tools.setDatePicker($searchArea.find('.datepicker'), true);
 		FinancialService.updateUnpayMoney($tab, rule);
-
+		
 		// 报表内的操作
 		$tab.find('.T-list').on('click', '.T-action', function(event) {
 			event.preventDefault();
@@ -368,9 +405,10 @@ define(function(require, exports){
 		}
 	};
 
-	FinShop.settlement = function(id){
+	FinShop.settlement = function(id, name){
 		FinShop.$settlementTab = null;
 		FinShop.settlementId = id;
+		FinShop.settlementName = name;
 		FinShop.settlementList(0, id);
 	};
 
@@ -381,7 +419,7 @@ define(function(require, exports){
 			startTime: FinShop.$tab.find('.T-search-start-date').val(),
 			endTime : FinShop.$tab.find('.T-search-end-date').val()
 		}
-		if (!!FinShop.$checkingTab) {
+		if (!!FinShop.$settlementTab) {
 			args = {
 				pageNo: (page || 0),
 				shopId : id || FinShop.settlementId,
@@ -398,6 +436,7 @@ define(function(require, exports){
 			data : args
 		}).done(function(data){
 			if(showDialog(data)){
+				data.name = FinShop.settlementName;
 				Tools.addTab(settMenuKey, "购物结算", shopClearingTemplate(data));
 
 				FinShop.$settlementTab = $('#tab-' + settMenuKey + '-content');
@@ -447,7 +486,7 @@ define(function(require, exports){
 				FinShop.viewOperationDetail(id, 1);
 			}
 		});
-
+		FinancialService.updateSumPayMoney($tab, rule);
 		//给全选按钮绑定事件: 未去重
         FinancialService.initCheckBoxs($tab.find(".T-checkAll"), $tab.find(".T-checkList").find('.T-checkbox'));
 
@@ -471,6 +510,18 @@ define(function(require, exports){
                 FinShop.getList(FinShop.listPageNo);
 			}
 		});
+		$tab.find(".T-btn-autofill").on('click', function(event){
+			event.preventDefault();
+			if ($(this).hasClass('btn-primary')) {
+                if (validator.form()) {
+                    FinShop.autoFillMoney($tab);
+                }
+            } else {
+                FinShop.payingJson = [];
+                FinShop.setAutoFillEdit($tab, false);
+            }
+		})
+
 	};
 
 	/**

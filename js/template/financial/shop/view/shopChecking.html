@@ -6,9 +6,9 @@
         </div>
         <div class="form-group marginLeft-30">
             <label>账期：</label>
-            <input type="text" class="form-control datepicker T-search-start-date" value="{{searchParam.startDate}}" style="width: 100px; text-align: center;">
+            <input type="text" class="form-control datepicker T-search-start-date" value="{{searchParam.startTime}}" style="width: 100px; text-align: center;">
             <label>&nbsp;至&nbsp;</label>
-            <input type="text" class="form-control datepicker T-search-end-date" value="{{searchParam.endDate}}" style="width: 100px; text-align: center;">
+            <input type="text" class="form-control datepicker T-search-end-date" value="{{searchParam.endTime}}" style="width: 100px; text-align: center;">
         </div>
         <div class="form-group marginLeft-30">
             <label>团信息：</label>
@@ -35,23 +35,23 @@
         </div>
         <div class="form-group marginLeft-30">
             <label>导佣合计：</label>
-            <label class="T-stMoney">{{totalList.sumGuideRebateMoney}}</label>
+            <label>{{totalList.sumGuideRebateMoney}}</label>
         </div>
         <div class="form-group marginLeft-30">
             <label>人数返佣合计：</label>
-            <label class="T-unpayMoney">{{totalList.sumCustomerRebateMoney}}</label>
+            <label>{{totalList.sumCustomerRebateMoney}}</label>
         </div>
         <div class="form-group marginLeft-30">
             <label>停车返佣合计：</label>
-            <label class="T-unpayMoney">{{totalList.sumCustomerRebateMoney}}</label>
+            <label>{{totalList.sumCustomerRebateMoney}}</label>
         </div>
         <div class="form-group marginLeft-30">
             <label>返佣金额合计：</label>
-            <label class="T-unpayMoney">{{totalList.sumBackMoney}}</label>
+            <label>{{totalList.sumBackMoney}}</label>
         </div>
         <div class="form-group marginLeft-30">
             <label>已收金额合计：</label>
-            <label class="T-unpayMoney">{{totalList.sumReceiveMoney}}</label>
+            <label>{{totalList.sumReceiveMoney}}</label>
         </div>
         <div class="form-group marginLeft-30">
             <label>未收金额合计：</label>
@@ -97,7 +97,7 @@
                 <td>{{rs.guideRebateMoney}}</td>
                 <td>{{rs.customerRebateMoney}}</td>
                 <td>{{rs.parkingRebateMoney}}</td>
-                <td><a class="cursor T-action T-view-receipts">查看</a></td>
+                <td>{{if !rs.billImage}}<span style="color:#bbb">查看</span>{{else}}<a class="cursor T-action T-view-receipts" data-billImage="{{rs.billImage}}">查看</a>{{/if}}</td>
                 <td>{{rs.backMoney}}</td>
                 <td><a class="cursor T-action T-payDetails">{{rs.receiveMoney}}</a>
                 <td>{{if !!rs.isConfirmAccount}}{{rs.settlementMoney}}{{else}}<input type="text" class="col-sm-12" name="settlementMoney" value="{{rs.settlementMoney}}">{{/if}}</td>
