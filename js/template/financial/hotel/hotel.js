@@ -85,7 +85,7 @@ define(function(require, exports) {
         hotel.$searchArea = hotel.$tab.find('.T-search-area');
 
         hotel.getQueryList();
-        FinancialService.initDate(hotel.$tab);
+        Tools.setDatePicker(hotel.$tab.find(".date-picker"),true);
 
         //搜索按钮事件
         hotel.$tab.find('.T-search').on('click', function(event) {
@@ -178,7 +178,7 @@ define(function(require, exports) {
         hotel.$checkSearchArea = hotel.$checkTab.find('.T-search-area');
 
         hotel.init_event(page,id,name,hotel.$checkTab,"check");
-        FinancialService.initDate(hotel.$checkTab);
+        Tools.setDatePicker(hotel.$checkTab.find(".date-picker"),true);
         FinancialService.updateUnpayMoney(hotel.$checkTab,rule);
 
         //搜索按钮事件
@@ -314,7 +314,7 @@ define(function(require, exports) {
         hotel.$clearSearchArea = hotel.$clearTab.find('.T-search-area');
 
         hotel.init_event(page,id,name,hotel.$clearTab,"clear");
-        FinancialService.initDate(hotel.$clearTab);
+        Tools.setDatePicker(hotel.$clearTab.find(".date-picker"),true);
 
         //搜索事件
         hotel.$clearTab.find(".T-search").click(function(){
@@ -343,17 +343,15 @@ define(function(require, exports) {
             if(!autoPayJson){return false;}
 
             var startDate = hotel.$clearTab.find("input[name=startDate]").val(),
-                endDate = hotel.$clearTab.find("input[name=endDate]").val(),
-                sumPayMoney = parseFloat(hotel.$clearTab.find('input[name=sumPayMoney]').val()),
-                sumPayType = parseFloat(hotel.$clearTab.find('select[name=sumPayType]').val()),
-                sumPayRemark = hotel.$clearTab.find('input[name=sumPayRemark]').val();
+                endDate = hotel.$clearTab.find("input[name=endDate]").val();
             var searchParam = {
                 hotelId : id,
-                sumCurrentPayMoney : sumPayMoney,
-                payType : sumPayType,
-                payRemark : sumPayRemark,
+                sumCurrentPayMoney : hotel.$clearTab.find('input[name=sumPayMoney]').val(),
+                payType : hotel.$clearTab.find('select[name=sumPayType]').val(),
+                payRemark : hotel.$clearTab.find('input[name=sumPayRemark]').val(),
                 startTime : startDate,
                 endTime : endDate,
+                accountInfo : hotel.$clearTab.find('input[name=accountInfo]').val(),
                 isAutoPay : 1
             };
             searchParam = JSON.stringify(searchParam);
@@ -537,6 +535,7 @@ define(function(require, exports) {
         var argumentsLen = arguments.length,
             clearSaveJson = FinancialService.clearSaveJson(hotel.$clearTab,hotel.clearTempData,rule);
         var searchParam = {
+            hotelId : id,
             sumCurrentPayMoney : hotel.$clearTab.find('input[name=sumPayMoney]').val(),
             payType : hotel.$clearTab.find('select[name=sumPayType]').val(),
             payRemark : hotel.$clearTab.find('input[name=sumPayRemark]').val()

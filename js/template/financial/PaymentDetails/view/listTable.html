@@ -1,0 +1,14 @@
+{{each result as rs}}
+    <tr>
+        <td>{{rs.resourceName}}</td>
+        <td>{{rs.receivableType.name}}</td>
+        <td>{{rs.incomeOrPayType.name}}</td>
+        <td>{{rs.costType.name}}</td>
+        <td>{{rs.businessType.name}}</td>
+        <td>{{rs.payType}}</td>
+        <td>{{rs.incomeMoney}}</td>
+        <td>{{rs.payMoney}}</td>
+        <td>{{rs.remark}}</td>
+        <td>{{rs.createTime}}</td>
+    </tr>
+{{/each}}

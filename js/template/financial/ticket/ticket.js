@@ -181,7 +181,7 @@ define(function(require, exports) {
         })
         .on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
             event.preventDefault();
-            Ticket.saveCheckingData($tab, [tab_id, title, html]);
+            Ticket.saveCheckData($tab, [tab_id, title, html]);
         })
         .on(SWITCH_TAB_BIND_EVENT, function() {
             Ticket.checkingList();
@@ -191,7 +191,7 @@ define(function(require, exports) {
             if (!validator.form()) {
                 return;
             }
-            Ticket.saveCheckingData($tab);
+            Ticket.saveCheckData($tab);
         });
 		var validator = rule.check($tab),
 			$searchArea = $tab.find('.T-search-area'),
@@ -203,6 +203,9 @@ define(function(require, exports) {
 		$searchArea.find(".T-btn-search").on('click', function(event){
 			event.preventDefault();
 			Ticket.checkingList(0);
+		});
+		$tab.find('.T-checkTr').on('change', function(){
+			$(this).data('change', true);
 		});
 
 		$tab.find('.T-list').on('click', '.T-action', function(event) {
@@ -222,7 +225,17 @@ define(function(require, exports) {
 
 		$tab.find(".T-btn-close").on('click', function(event){
 			event.preventDefault();
-			Tools.closeTab(checkMenuKey);
+			if(!!$tab.data('isEdited')){
+				showSaveConfirmDialog($('#confirm-dialog-message'), "内容已经被修改，是否保存?", function(){
+					Ticket.saveCheckData($tab);
+				}, function(){
+					Tools.closeTab(checkMenuKey);
+                	Ticket.getList(Ticket.listPageNo);
+				});
+			}else{
+				Tools.closeTab(checkMenuKey);
+                Ticket.getList(Ticket.listPageNo);
+			}
 		});
 		$tab.find(".T-btn-save").on('click', function(event){
 			event.preventDefault();
@@ -283,24 +296,24 @@ define(function(require, exports) {
 
 	Ticket.saveCheckData = function($tab, tabArgs){
 		var json = FinancialService.checkSaveJson($tab, rule);
-		console.log(json);
-		if(json > 0){
+		if(json.length > 0){
 			$.ajax({
 				url : KingServices.build_url('account/arrangeTicketFinancial', 'saveAccountChecking'),
 				type : "POST",
-				data : {ticketJson : JSON.stringify(json)}
+				data : {ticketJson : json}
 			}).done(function(data){
-				Ticket.$checkingTab.data('isEdited', false);
-
-                showMessageDialog($('#confirm-dialog-message'), data.message, function() {
-                    if (!!tabArgs) {
-                        Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
-                        Ticket.checkList($tab, 1);
-                    } else {
-                        Tools.closeTab(payMenuKey);
-                        Ticket.getList(Ticket.listPageNo);
-                    }
-                })
+				if(showDialog(data)){
+					$tab.data('isEdited', false);
+	                showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+	                    if (!!tabArgs) {
+	                        Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
+	                        Ticket.checkList(0);
+	                    } else {
+	                        Tools.closeTab(checkMenuKey);
+	                        Ticket.getList(Ticket.listPageNo);
+	                    }
+	                });
+	            }
 			});
 		}else{
 			showMessageDialog($('#confirm-dialog-message'), '您当前未进行任何操作！');
@@ -412,7 +425,17 @@ define(function(require, exports) {
 		});
 		$tab.find(".T-btn-close").on('click', function(event){
 			event.preventDefault();
-			Tools.closeTab(checkMenuKey);
+			if(!!$tab.data('isEdited')){
+				showSaveConfirmDialog($('#confirm-dialog-message'), "内容已经被修改，是否保存?", function(){
+					Ticket.savePayingData($tab);
+				}, function(){
+					Tools.closeTab(clearMenuKey);
+                	Ticket.getList(Ticket.listPageNo);
+				});
+			}else{
+				Tools.closeTab(clearMenuKey);
+                Ticket.getList(Ticket.listPageNo);
+			}
 		});
 		$tab.find(".T-btn-save").on('click', function(event){
 			event.preventDefault();
@@ -445,19 +468,21 @@ define(function(require, exports) {
 				ticketId : Ticket.clearingId,
 				startDate : $tab.find('.T-search-start-date').val(),
 				endDate : $tab.find('.T-search-end-date').val(),
-				accountInfo : $tab.find('.T-search-type').val()
+				accountInfo : $tab.find('.T-search-type').val(),
+				isAutoPay : 1,
+				sumCurrentPayMoney : $tab.find('.T-sumReciveMoney').val()
             };
 
             $.ajax({
-                    url: KingServices.build_url('account/guideFinancial', 'autoPay'),
+                    url: KingServices.build_url('account/arrangeTicketFinancial', 'listTicketAccount'),
                     type: 'post',
-                    data: args,
+                    data: {searchParam : JSON.stringify(args)},
                     showLoading: false
                 })
                 .done(function(data) {
                     if (showDialog(data)) {
-                        Ticket.payingJson = data.autoPayList;
-                        $tab.find('input[name="sumPayMoney"]').val(data.realAutoPayMoney);
+                        Ticket.payingJson = data.autoPaymentJson;
+                        $tab.find('input[name="sumPayMoney"]').val(data.checkedUnPayedMoney);
                         Ticket.setAutoFillEdit($tab, true);
                     }
                 });
@@ -491,43 +516,32 @@ define(function(require, exports) {
             };
 
             $.ajax({
-                    url: KingServices.build_url('account/guideFinancial', 'listFinancialGuideByGuideId'),
-                    type: 'post',
-                    data: args,
-                    showLoading: false
+                    url : KingServices.build_url('account/arrangeTicketFinancial', 'listTicketAccount'),
+					type : "POST",
+					data : {searchParam : JSON.stringify(args)}
                 })
                 .done(function(data) {
                     if (showDialog(data)) {
-                        var html,
-                            type = $tab.find('.T-btn-save').data('type');
-                        if (!!type) {
-                            data.list = FinancialService.getTempDate(data.list, FinGuide.payingJson);
+                    	data.financialTicketList = FinancialService.getTempDate(data.financialTicketList, Ticket.payingJson);
+                    	var html = payingTableTemplate(data);
+						Ticket.$clearingTab.find('.T-checkList').html(html);
 
-                            html = payingTableTemplate(data);
-                        } else {
-                            html = checkingTableTemplate(data);
-                        }
-                        $tab.find('.T-checkList').html(html);
-
-                        if (!type) {
-                            //给全选按钮绑定事件: 未去重
-                            FinancialService.initCheckBoxs($tab.find(".T-checkAll"), $tab.find(".T-checkList").find('.T-checkbox'));
-                        }
-
+						//给全选按钮绑定事件: 未去重
+                        FinancialService.initCheckBoxs($tab.find(".T-checkAll"), $tab.find(".T-checkList").find('.T-checkbox'));
                         // 设置记录条数及页面
                         $tab.find('.T-sumItem').text('共计' + data.recordSize + '条记录');
                         $tab.find('.T-btn-save').data('pageNo', args.pageNo);
-                        // 绑定翻页组件
-                        laypage({
-                            cont: $tab.find('.T-pagenation'),
-                            pages: data.totalPage, //总页数
-                            curr: (data.pageNo + 1),
-                            jump: function(obj, first) {
-                                if (!first) { // 避免死循环，第一次进入，不调用页面方法
-                                    FinGuide.getOperationList(obj.curr - 1, $tab);
-                                }
-                            }
-                        });
+						// 绑定翻页组件
+						laypage({
+						    cont: $tab.find('.T-pagenation'), 
+						    pages: data.totalPage, //总页数
+						    curr: (data.pageNo + 1),
+						    jump: function(obj, first) {
+						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+						    		Ticket.getOperationList(obj.curr -1);
+						    	}
+						    }
+						});	
                     }
                 });
 
@@ -535,8 +549,39 @@ define(function(require, exports) {
     }
 
 	//确认收款
-	Ticket.savePayingData = function($tab){
-
+	Ticket.savePayingData = function($tab, tabArgs){
+		var json = FinancialService.clearSaveJson($tab, Ticket.payingJson, rule);
+		if (json.length) {
+			var args = {
+                ticketId: Ticket.clearingId,
+                sumCurrentPayMoney: $tab.find('.T-sumReciveMoney').val(),
+                payType: $tab.find('.T-sumPayType').val(),
+                payRemark: $tab.find('.T-sumRemark').val()
+			}
+            $.ajax({
+                    url: KingServices.build_url('account/arrangeTicketFinancial', 'saveAccountSettlement'),
+                    type: 'post',
+                    data: {
+                    	searchParam : JSON.stringify(args),
+                    	ticketJson : JSON.stringify(json)
+                    },
+                })
+                .done(function(data) {
+                    $tab.data('isEdited', false);
+                    Ticket.payingJson = [];
+                    showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+                        if (!!tabArgs) {
+                            Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
+                            Ticket.clearingList(0);
+                        } else {
+                            Tools.closeTab(clearingTab);
+                            Ticket.getList(Ticket.listPageNo);
+                        }
+                    })
+                });
+        } else {
+            showMessageDialog($('#confirm-dialog-message'), '您当前未进行任何操作！');
+        }
 	};
 
 	exports.init = Ticket.initModule;
