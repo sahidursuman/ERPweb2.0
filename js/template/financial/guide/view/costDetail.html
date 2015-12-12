@@ -61,7 +61,7 @@
                             {{each group.touristGroupMemberList as member memberIndex}}
 	                        <tr>
 	                        	{{if memberIndex == 0}}
-                        		<td rowspan="{{group.length}}">第{{groupIndex+1}}组</td>
+                        		<td rowspan="{{group.touristGroupMemberList.length}}">第{{groupIndex+1}}组</td>
 	                        	{{/if}}
                         		<td>{{member.name}}</td>
 	                            <td>{{member.mobileNumber}}</td>
@@ -73,9 +73,9 @@
 	                            	{{if member.isContactUser == 1}}是{{/if}}
 	                            </td>
                                 {{if memberIndex == 0}}
-                                <td rowspan="{{group.length}}">{{member.needPayAllMoney}}</td>
-                                <td rowspan="{{group.length}}">{{member.payedMoney}}</td>
-                                <td rowspan="{{group.length}}">{{member.currentNeedPayMoney}}</td>
+                                <td rowspan="{{group.touristGroupMemberList.length}}">{{member.needPayAllMoney}}</td>
+                                <td rowspan="{{group.touristGroupMemberList.length}}">{{member.payedMoney}}</td>
+                                <td rowspan="{{group.touristGroupMemberList.length}}">{{member.currentNeedPayMoney}}</td>
                                 {{/if}}
 	                        </tr>
 	                        {{/each}} 

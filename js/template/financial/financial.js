@@ -177,6 +177,7 @@ FinancialService.autoPayJson = function(id,$tab,rule){
         endDate = $tab.find("input[name=endDate]").val(),
         sumPayMoney = parseFloat($tab.find('input[name=sumPayMoney]').val()),
         sumPayType = parseFloat($tab.find('select[name=sumPayType]').val()),
+        $accountInfo = $tab.find('input[name="accountInfo"]'),
         sumPayRemark = $tab.find('input[name=sumPayRemark]').val(),
         unpayMoney = parseFloat($tab.find('.T-unpayMoney').text());
     if(startDate > endDate){
@@ -202,6 +203,10 @@ FinancialService.autoPayJson = function(id,$tab,rule){
         startDate : startDate,
         endDate : endDate
     };
+    if ($accountInfo.length) {
+        searchParam.accountInfo = $accountInfo.val();
+    }
+    
     searchParam = JSON.stringify(searchParam);
     return searchParam;
 };
