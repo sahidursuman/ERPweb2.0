@@ -448,7 +448,8 @@ OtherAccounts.AccountsPayment = function(pageNo, name, info, startAccountTime, e
                                 var sumPayMoney = parseInt($PaymentTabId.find('input[name=sumPayMoney]').val()),
                                     sumPayType = $PaymentTabId.find('select[name=sumPayType]').val(),
                                     sumPayRemark = $PaymentTabId.find('input[name=sumPayRemark]').val(), //备注
-                                    names = $PaymentTabId.find(".T-name").text();
+                                    names = $PaymentTabId.find(".T-name").text(),
+                                    $that = $(this);
                                 var isAutoPay = FinancialService.autoPayJson(name, $PaymentTabId, rule);
                                 if (!isAutoPay) {
                                     return false;
@@ -466,9 +467,10 @@ OtherAccounts.AccountsPayment = function(pageNo, name, info, startAccountTime, e
                                         type: "POST",
                                         data: searchParam,
                                                success: function(data) {
+                                                $that.addClass('.btn-warning')
+
                                                     var result = showDialog(data);
                                                     if (result) {
-                                                        var 
                                                         $PaymentTabId.data('isEdited', false);
                                                         showMessageDialog($("#confirm-dialog-message"), data.message, function() {
                                                             if (argLen === 2) {
