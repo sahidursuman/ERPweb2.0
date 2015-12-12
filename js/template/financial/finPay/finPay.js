@@ -12,7 +12,7 @@ define(function(require, exports) {
 	var FinPay = {
 		currentType: 0,
 		moduleKeys: ['financial_innerTransfer_out', 'financial_transfer', 'financial_restaurant', 'financial_rummery', 'financial_busCompany',
-					'financial_ticket', 'financial_scenic', 'financial_self', 'financial_insure', 'financial_Other_accounts']
+					'financial_ticket', 'financial_scenic', 'financial_self', 'financial_insure', 'financial_Other_accounts','financial_guide']
 	};
 
 	/**
@@ -120,11 +120,19 @@ define(function(require, exports) {
 				options.url = KingServices.build_url('account/insuranceFinancial', 'listSumFinancialInsurance');
 				resArgs.busCompanyName = args.name;
 				break;
-			default:  //其它账务 4
+
+			case 9:  //其它账务
 				options.url = KingServices.build_url('account/arrangeOtherFinancial', 'listFinancialOther');
 				resArgs.name = args.name;
 
 				beJson = false;
+				break;
+			case 10:  //导游账务
+				options.url = KingServices.build_url('account/guideFinancial', 'listSumFinancialGuide');
+				resArgs.guideName = args.name;
+				beJson = false;
+				break;
+			default:
 				break;
 		}
 		
@@ -302,7 +310,7 @@ define(function(require, exports) {
 					data.totalPage = data.searchParam.totalPage;
 					data.totalCount = data.searchParam.recordSize;
 					break;
-				default:  //其它账务 8
+				case 9:  //其它账务 9
 					var src = data.financialOtherList;
 					for (var i = 0, len = src.length, tmp; i < len; i++) {
 						tmp = src[i];
@@ -313,6 +321,23 @@ define(function(require, exports) {
 							payedMoney: tmp.sumPayedMoney,
 							unPayedMoney: tmp.sumUnPayedMoney,
 							id: ''
+						})
+					}
+
+					data.totalPage = data.totalPage;
+					data.totalCount = data.recordSize;
+					break;
+				case 10:  //导游账务 10
+					var src = data.list;
+					for (var i = 0, len = src.length, tmp; i < len; i++) {
+						tmp = src[i];
+
+						list.push({
+							orgName: tmp.realname,
+							needPayMoney: tmp.sumSettlementMoney,
+							payedMoney: tmp.sumPayedMoney,
+							unPayedMoney: tmp.sumUnPayedMoney,
+							id: tmp.guideId
 						})
 					}
 
