@@ -246,6 +246,10 @@ define(function(require, exports) {
 			}
 		});
 
+		$tab.find('.T-checkTr').on('change', function(){
+			$(this).data('change', true);
+		});
+
 		$tab.find('.T-list').on('click', '.T-action', function(event){
 			var $that = $(this), id = $that.closest('tr').data('id');
 			if($that.hasClass('T-view-Received')){
@@ -259,11 +263,11 @@ define(function(require, exports) {
         if (!isCheck) {
             FinancialService.updateSumPayMoney($tab, rule);
         } else {
-            FinancialService.updateUnpayMoney($tab, rule);
+            //给全选按钮绑定事件: 未去重
+        	FinancialService.initCheckBoxs($tab.find(".T-checkAll"), $tab.find(".T-checkList").find('.T-checkbox'));
+			FinancialService.updateUnpayMoney($tab, rule);
         }
-		//给全选按钮绑定事件: 未去重
-        FinancialService.initCheckBoxs($tab.find(".T-checkAll"), $tab.find(".T-checkList").find('.T-checkbox'));
-
+		
 		$tab.find('.T-btn-close').on('click', function(event){
 			if(!!$tab.data('isEdited')){
 				showSaveConfirmDialog($('#confirm-dialog-message'), "内容已经被修改，是否保存?", function(){
@@ -501,11 +505,11 @@ define(function(require, exports) {
 	Replace.viewOperationDetail = function(id, type){
 		if (!!id) {
 			var method = 'findCheckAccountDetail',
-                title = '应付金额明细',
+                title = '应收金额明细',
                 html = viewAccountTemplate;
             if (!type) {
                 method = 'findReciveAccountDetail';
-                title = '已付金额明细';
+                title = '已收金额明细';
                 html = viewReceivedTemplate;
             }
             $.ajax({
@@ -619,7 +623,7 @@ define(function(require, exports) {
 
 				//data.bookinAccountList = FinancialService.getTempDate(data.bookinAccountList);
 				html = payingTableTemplate(data);
-				Replace.$balanceTab.find('.T-checkList').html(html);
+				Replace.$balanceTab.find('.T-clearList').html(html);
 
 				Replace.CM_event(Replace.$balanceTab, false);
 
@@ -639,6 +643,7 @@ define(function(require, exports) {
 	};
 	Replace.savePayingData = function($tab, tabArgs){
 		var json = FinancialService.clearSaveJson($tab, Replace.payingJson, rule);
+
 		if (json.length) {
             $.ajax({
                     url: KingServices.build_url('financial/bookingAccount', 'receiveBookingAccount'),

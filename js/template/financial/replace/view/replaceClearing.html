@@ -86,19 +86,16 @@
                     <th class="th-border">对账</th>
                 </tr>
             </thead>
-            <tbody class="T-list T-checkList">
+            <tbody class="T-list T-clearList">
             </tbody>
         </table>
     </div>
     <div class="row pageMode">
         <div class="col-xs-6">
-            <small>共计 {{searchParam.totalCount}} 条记录</small>
+            <small>共计 {{searchParam.recordSize}} 条记录</small>
         </div>
         <div class="col-xs-6">
             <div class="dataTables_paginate paging_simple_numbers T-pagenation"></div>
-            <label class="pos-rel pull-right">
-                <input type="checkbox" class="ace T-checkAll"> <span class="lbl">全选</span> 
-            </label>
         </div>
     </div>
     <div class="row">

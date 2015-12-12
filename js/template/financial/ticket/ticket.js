@@ -443,9 +443,7 @@ define(function(require, exports) {
 		});
 
 		FinancialService.updateSumPayMoney($tab, rule);
-		//给全选按钮绑定事件: 未去重
-        FinancialService.initCheckBoxs($tab.find(".T-checkAll"), $tab.find(".T-checkList").find('.T-checkbox'));
-
+		
 		$tab.find(".T-btn-autofill").on('click', function(event){
 			event.preventDefault();
 			if ($(this).hasClass('btn-primary')) {
