@@ -575,7 +575,7 @@ define(function(require,exports) {
 			 	data.yearList = yearList;
                 data.monthList = monthList;                
                 var html = settlementTemplate(data);
-                Tools.addTab(settleId,'内转转入结算',html);
+                Tools.addTab(settleId,'内转转入付款',html);
                 //表单验证
                 InnerTransferIn.validatorTable();
                 //页面资源对象

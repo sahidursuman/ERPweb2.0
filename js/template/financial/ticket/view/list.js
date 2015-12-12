@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":10,"md5":"c35ad3953039722fb4893cd7f1b2b104"}*/
+/*TMODJS:{"debug":true,"version":11,"md5":"81ef24166e9ff9c72bc0fe0bbfca8266"}*/
 define(function(require) {
     return require("../../../template")("financial/ticket/view/list", function($data, $filename) {
         try {

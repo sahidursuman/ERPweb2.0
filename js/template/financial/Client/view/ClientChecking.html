@@ -78,7 +78,7 @@
         <tbody class="T-list">
             {{if customerAccountList != null}}
         	{{each customerAccountList as rs index}}
-            <tr data-gid="{{rs.touristGroupId}}">
+            <tr data-gid="{{rs.touristGroupId}}" data-id="{{rs.id}}">
                 <td>{{index + 1}}</td>
                 <td>{{rs.otaOrderNumber}}</td>
                 <td>{{rs.lineProductName}}</td>
@@ -154,7 +154,7 @@
                 <i class="ace-icon fa fa-times-circle"></i> 关闭
             </button>
             <button class="btn btn-xs btn-primary T-btn-save" data-right="1280002|1280005" data-id={{partnerAgencyId}} style="margin-left: 20px">
-                <i class="ace-icon fa fa-check-circle"></i> 确认
+                <i class="ace-icon fa fa-check-circle"></i> 确认对账
             </button>
         </div>
     </form>

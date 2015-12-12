@@ -622,7 +622,6 @@ define(function(require, exports) {
 			if (showDialog(data)) {
 				var html;
 				data.name = Replace.balanceName;
-
 				Tools.addTab(blanceMenuKey, "代订收款", replaceClearing(data));
 				Replace.$balanceTab = $('#tab-' + blanceMenuKey + '-content');
 
