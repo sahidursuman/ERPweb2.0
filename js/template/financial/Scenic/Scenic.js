@@ -86,7 +86,7 @@ define(function(require, exports) {
         scenic.$searchArea = scenic.$tab.find('.T-search-area');
 
         scenic.getQueryList();
-        FinancialService.initDate(scenic.$tab);
+        Tools.setDatePicker(scenic.$searchArea.find('.datepicker'), true);
 
         //搜索按钮事件
         scenic.$tab.find('.T-search').on('click', function(event) {
@@ -179,7 +179,7 @@ define(function(require, exports) {
         scenic.$checkSearchArea = scenic.$checkTab.find('.T-search-area');
 
         scenic.init_event(page,id,name,scenic.$checkTab,"check");
-        FinancialService.initDate(scenic.$checkTab);
+        Tools.setDatePicker(scenic.$searchArea.find('.datepicker'), true);
         FinancialService.updateUnpayMoney(scenic.$checkTab,rule);
 
         //搜索按钮事件
@@ -337,7 +337,7 @@ define(function(require, exports) {
         scenic.$clearSearchArea = scenic.$clearTab.find('.T-search-area');
 
         scenic.init_event(page,id,name,scenic.$clearTab,"clear");
-        FinancialService.initDate(scenic.$clearTab);
+        Tools.setDatePicker(scenic.$searchArea.find('.datepicker'), true);
 
         //搜索事件
         scenic.$clearTab.find(".T-search").click(function(){
