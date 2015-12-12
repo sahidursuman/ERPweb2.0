@@ -16,7 +16,7 @@ define(function(require, exports) {
 		    	        ]
 	    	    },
 	    	    {	//返款
-	    	    	$ele: $obj.find('input[name=punishMoney]'),
+	    	    	$ele: $obj.find('input[name=backMoney]'),
 	    	    	rules: [
 	    	    	        {
 	    	    	        	type: 'null', 
