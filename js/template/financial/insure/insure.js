@@ -657,7 +657,7 @@ define(function(require, exports) {
     };
 
     Insure.initPay = function(options){
-        Insure.GetChecking(2,0,options.id,options.name,"",options.startDate,options.endDate); 
+        Insure.GetChecking(0,options.id,options.name,"",options.startDate,options.endDate, 2); 
     };
 
     exports.init = Insure.initModule;
