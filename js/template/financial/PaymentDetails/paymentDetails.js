@@ -109,7 +109,6 @@ define(function(require, exports){
 				Payment.list.units = data.units;
 
 				Payment.isSelect = true;
-				Payment.closeLayer();
 
 				data.total = Payment.total;
 				data.payTypeList = ['现金', '银行转账', '网上支付', '支票', '其它'];
@@ -176,7 +175,7 @@ define(function(require, exports){
 	};
 
 	Payment.closeLayer = function(){
-        if(Payment.isList && Payment.isTotal && Payment.isSelect)
+        if(Payment.isList && Payment.isTotal)
         {
 			layer.close(Payment.globalLoadingLayer);
         }
