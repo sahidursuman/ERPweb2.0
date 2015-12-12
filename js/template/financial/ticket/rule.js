@@ -32,6 +32,20 @@ define(function(require, exports) {
                 ]);
 			
 			return validator;
+		},
+		reciveCheck : function($obj){
+			var validator = $obj.formValidate([
+				{
+					$ele: $obj.find('.T-reciveMoney'),
+					rules:[	    	    	       
+    	    	       {
+    	    	    	   type: 'positive-float',
+    	    	        	errMsg: '请输入数字'   
+    	    	       }
+    	    	    ]
+				}
+			]);
+			return validator;
 		}
 	}
 	return rule;
