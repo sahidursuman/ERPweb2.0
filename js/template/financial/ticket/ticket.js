@@ -627,6 +627,7 @@ define(function(require, exports) {
     		return;
         }
 		var json = FinancialService.clearSaveJson($tab, Ticket.payingJson, rule);
+		console.log(json);
 		if (json.length) {
 			var args = {
                 ticketId: Ticket.clearingId,
