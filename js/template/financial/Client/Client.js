@@ -244,13 +244,13 @@ define(function(require, exports) {
         //绑定表内事件
         $tab.find('.T-list').on('click', '.T-action', function(event){
             event.preventDefault();
-            var $that = $(this), gid = $that.closest('tr').data('gid');
+            var $that = $(this), id = $that.closest('tr').data('id');
             if($that.hasClass('T-unfold')){
                 Client.unfoldGroup($that);
             }else if($that.hasClass('T-receive')){
-                Client.viewReceive(gid);
+                Client.viewReceive(id);
             }else if($that.hasClass('T-view')){
-                Client.viewDetails(gid);
+                Client.viewDetails(id);
             }
         })
         .on('change', 'input', function(event) {
@@ -331,11 +331,11 @@ define(function(require, exports) {
         }
     };
 
-    Client.viewReceive = function(gid){
+    Client.viewReceive = function(id){
         $.ajax({
             url: KingServices.build_url('financial/customerAccount', 'findReciveCustomerAccountDetail'),
             type: 'post',
-            data: {trouristGroupId: gid},
+            data: {id: id},
         })
         .done(function(data) {
             if (showDialog(data)) {
@@ -354,15 +354,15 @@ define(function(require, exports) {
 
     /**
      * 查看对账明细
-     * @param  {int} gid 游客小组Id
+     * @param  {int} id 账务记录Id
      * @return {[type]}     [description]
      */
-    Client.viewDetails = function(gid){
-        if (!!gid) {
+    Client.viewDetails = function(id){
+        if (!!id) {
             $.ajax({
                 url: KingServices.build_url('financial/customerAccount', 'findCheckCustomerAccountDetail'),
                 type: 'post',
-                data: {trouristGroupId: gid},
+                data: {id: id},
             })
             .done(function(data) {
                 if (showDialog(data)) {
@@ -481,13 +481,13 @@ define(function(require, exports) {
         //绑定表内事件
         var $body = $tab.find('.T-list').on('click', '.T-action', function(event){
             event.preventDefault();
-            var $that = $(this), gid = $that.closest('tr').data('gid');
+            var $that = $(this), id = $that.closest('tr').data('id');
             if($that.hasClass('T-unfold')){
                 Client.unfoldGroup($that);
             }else if($that.hasClass('T-receive')){
-                Client.viewReceive(gid)
+                Client.viewReceive(id)
             }else if($that.hasClass('T-view')){
-                Client.viewDetails(gid)
+                Client.viewDetails(id)
             }
         })
         .on('change', 'input', function(event) {
@@ -568,14 +568,14 @@ define(function(require, exports) {
 
                         $tab.find('.T-list').children('tr:nth-child(2n+1)').each(function() {
                             var $tr = $(this),
-                                gid = $tr.data('gid'),
+                                id = $tr.data('id'),
                                 $receive = $tr.find('.T-reciveMoney'),
                                 hasData = false;
 
                             for (var i = 0, tmp;i < len; i ++) {
                                 tmp = Client.clearDataArray[i];
 
-                                if (tmp.touristGroupId === gid) {
+                                if (tmp.id === id) {
                                     hasData = true;
                                     $receive.val(tmp.temporaryIncomeMoney).trigger('change');
                                     return true;
@@ -635,14 +635,14 @@ define(function(require, exports) {
                     item = {
                         temporaryIncomeMoney: reciveMoney,
                         incomeRemark: $tr.find('.T-remark').val(),
-                        touristGroupId: $tr.data('gid')
+                        id: $tr.data('id')
                     }
 
                     // 设置值
                     var hasItem = false;
                     for (var i = 0, len = Client.clearDataArray.length, temp; i < len; i ++) {
                         temp = Client.clearDataArray[i];
-                        if (temp.touristGroupId === item.touristGroupId) {
+                        if (temp.id === item.id) {
                             $.extend(Client.clearDataArray[i], temp, item);
                             hasItem = true;
                             break;
@@ -668,7 +668,7 @@ define(function(require, exports) {
             if (!!src && src.length) {
                 for (var i = 0, len = dest.length;i < len; i ++ ) {
                     for (var j = 0, cLen = src.length, tmp;j < cLen ; j++) {
-                        if (dest[i].touristGroupId === src[j].touristGroupId) {
+                        if (dest[i].id === src[j].id) {
                             tmp = src[j];
                             dest[i].temporaryIncomeMoney = tmp.temporaryIncomeMoney;
                             dest[i].incomeRemark = tmp.incomeRemark;
@@ -694,7 +694,7 @@ define(function(require, exports) {
                     backMoney: $tr.find('.T-refund').val(),
                     checkRemark: $tr.find('.T-remark').val(),
                     isConfirmAccount: ($tr.find('.T-check').prop('checked')? 1 : 0),
-                    touristGroupId: $tr.data('gid')
+                    id: $tr.data('id')
                 })
             }
         });
