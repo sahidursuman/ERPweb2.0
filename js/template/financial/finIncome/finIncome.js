@@ -96,8 +96,8 @@ define(function(require, exports) {
 				break;
 			case 2:  //购物账务
 				options.url = KingServices.build_url('financial/shopAccount', 'listPager');
-				resArgs.startTime = args.startTime;
-				resArgs.endTime = args.endTime;
+				resArgs.startDate = args.startTime;
+				resArgs.endDate = args.endTime;
 				resArgs.shopName = args.name;
 				break;
 			default:  //代订账务
