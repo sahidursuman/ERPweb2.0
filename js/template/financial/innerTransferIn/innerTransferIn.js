@@ -849,5 +849,5 @@ define(function(require,exports) {
     };
     
 	exports.init = InnerTransferIn.initModule;
-	exports.initPay = InnerTransferIn.initPay;
+	exports.initIncome = InnerTransferIn.initPay;
 });
