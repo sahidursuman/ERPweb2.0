@@ -56,19 +56,19 @@
 							</thead>
 							<tbody class="T-innerOutEditFeeTbody">
 								<tr>
-									<td>内转价</td>
+									<td>转客价</td>
 									<td>大人</td>
 									<td>
-										<input name="adultCount" value="{{if touristGroup != null}}{{touristGroup.adultCount}}{{/if}}" readonly="readonly" type="text" class="col-sm-12  no-padding-right costCount" />
+										<input name="adultCount" value="{{if touristGroup != null}}{{touristGroup.adultCount}}{{/if}}" readonly="readonly" type="text" class="col-sm-12  no-padding-right count" />
 									</td>
 									<td>
-										<input name="transAdultPrice" value="{{if touristGroup.transferFeeStatus == 1}}{{touristGroup.transAdultPrice}}{{/if}}" type="text" class="col-sm-12  no-padding-right  costPrice"  maxlength="10" />
+										<input name="transAdultPrice" value="{{if touristGroup.transferFeeStatus == 1}}{{touristGroup.transAdultPrice}}{{/if}}" type="text" class="col-sm-12  no-padding-right  price"  maxlength="10" />
 									</td>
 									<td></td>
 								</tr>
 								<tr>
 									<td>
-										内转价
+										转客价
 									</td>
 									<td>
 										小孩
@@ -93,10 +93,10 @@
 												<input name="discribe" value="{{transferList.describeInfo}}" type="text" class="col-sm-12  no-padding-right"  maxlength="500" />
 											</td>
 											<td>
-												<input name="count" value="" type="text" class="col-sm-12  no-padding-right count"  maxlength="10" />
+												<input name="count" value="{{transferList.count}}" type="text" class="col-sm-12  no-padding-right count"  maxlength="10" />
 											</td>
 											<td>
-												<input name="otherPrice" value="" type="text" class="col-sm-12  no-padding-right price"  maxlength="10" />
+												<input name="otherPrice" value="{{transferList.price}}" type="text" class="col-sm-12  no-padding-right price"  maxlength="10" />
 											</td>
 											<td><a class="T-delete cursor">删除</a></td>
 										</tr>

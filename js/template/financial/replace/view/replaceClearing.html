@@ -1,103 +1,112 @@
-<div class= "row bookingClearing globalAdd">
-    <div class="col-sm-12 " style="border: 1px solid #ccc">
-        <form class="form-horizontal" role="form" onsubmit="return false">
-            <div class="search-area  editable editable-click" style="margin-top: 10px">
-                <div class="form-group"> <label class=" control-label pull-left " style="margin-left:30px"> 客户：{{travelAgencyName}}</label>
-                    <label class="col-sm-1 control-label no-padding-right">账期：</label>
-                    <select class="col-sm-1" name="year">
-                        {{each yearList as year index}}
-                        <option value="{{year.value}}" {{if searchParam.year == year.value}} selected="selected" {{/if}}>{{year.value}} 年</option>
-                        {{/each}}
-                        <!--<option>2014</option>-->
-                    </select>
-                    <label class="col-sm-1 control-label no-padding-right">起始月：</label>
-                    <select class="col-sm-1" name="startMonth">
-                        {{each monthList as month index}}
-                        <option value="{{month.value}}" {{if searchParam.monthStart == month.value}} selected="selected" {{/if}}>{{month.value}} 月</option>
-                        {{/each}}
-                        <!--<option>2014</option>-->
-                    </select>
-                    <label class="col-sm-1 control-label no-padding-right">结束月：</label>
-                    <select style="margin-left: 20px" class="col-sm-1" name="endMonth">
-                        {{each monthList as month index}}
-                        <option value="{{month.value}}" {{if searchParam.monthEnd == month.value}} selected="selected" {{/if}}>{{month.value}} 月</option>
-                        {{/each}}
-                        <!--<option>4月</option>-->
-                    </select>
-                    <button class="btn-height btn-sm search-btn btn-blance-search marginLeft-30" >
-                        <i class="ace-icon fa fa-search"></i>
-                       		 搜索 
-                    </button> 
-                </div>
+    <div class="row T-search-area border globalAdd" style="padding: 0 20px;">
+        <form class="form-inline" role="form" onsubmit="return false" style="padding-top: 10px;">
+            <div class="form-group">
+                <label>同行客户：</label>
+                <label>{{name}}</label>
+            </div>
+            <div class="form-group marginLeft-30">
+                <label>账期：</label>
+                <input type="text" class="form-control datepicker T-search-start-date" value="{{searchParam.startTime}}">
+                <label>&nbsp;至&nbsp;</label>
+                <input type="text" class="form-control datepicker T-search-end-date" value="{{searchParam.endTime}}">
+            </div>
+            <div class="form-group marginLeft-30">
+                <label>订单号：</label>
+                <input type="text" class="form-control T-search-order" value="{{searchParam.orderNumber || '全部'}}">
+            </div>
+            <div class="form-group marginLeft-30">
+                <label>项目：</label>
+                <input type="text" class="form-control T-search-project" value="{{if searchParam.busCompanyOrderStatus == 1}}车队, {{/if}}{{if searchParam.hotelOrderStatus == 1}}酒店, {{/if}}{{if searchParam.scenicOrderStatus == 1}}景区, {{/if}}{{if searchParam.ticketOrderStatus == 1}}票务, {{/if}}">
+            </div>
+            <div class="form-group marginLeft-30">
+                <button class="btn-sm search-btn T-btn-search">
+                    <i class="ace-icon fa fa-search"></i> 搜索 
+                </button>
             </div>
         </form>
+         <div class="form-inline" style="padding-top: 10px;">
+            <div class="form-group">
+                <label>代订金额合计：</label>
+                <label>{{totalList.sumBookingMoney}}</label>
+            </div>
+            <div class="form-group marginLeft-30">
+                <label>已收金额合计：</label>
+                <label>{{totalList.sumReceiveMoney}}</label>
+            </div>
+            <div class="form-group marginLeft-30">
+                <label>结算金额合计：</label>
+                <label>{{totalList.sumSettlementMoney}}</label>
+            </div>
+            <div class="form-group marginLeft-30">
+                <label>未收金额合计：</label>
+                <label>{{totalList.sumUnReceiveMoney}}</label>
+            </div>
+        </div>
+        <div class="form-inline" style="padding-top: 10px;">
+            <div class="form-group">
+                <label>本次收款金额合计：</label>
+                <input type="text" class="form-control T-sumReciveMoney" name="sumPayMoney" style="width:70px;">
+            </div>
+            <div class="form-group marginLeft-30">
+                <label>收款方式：</label>
+                <select class="form-control T-sumPayType" name="payType">
+                    <option>现金</option>
+                    <option>银行转账</option>
+                    <option>网上支付</option>
+                    <option>支票</option>
+                    <option>其它</option>
+                </select>
+            </div>
+            <div class="form-group marginLeft-30">
+                <label>备注：</label>
+                <input type="text" class="form-control T-sumRemark">
+            </div>
+            <div class="form-group marginLeft-30">
+                <button class="btn btn-xs btn-primary marginLeft-30 T-btn-autofill"><i class="ace-icon fa fa-check-circle"></i> 自动下账</button>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 30px">
+        <table class="table table-striped table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th class="th-border">序号</th>
+                    <th class="th-border">代订单号</th>
+                    <th class="th-border">代订日期（账期）</th>
+                    <th class="th-border">项目</th>
+                    <th class="th-border">明细</th>
+                    <th class="th-border">代订金额</th>
+                    <th class="th-border">已收金额</th>
+                    <th class="th-border">结算金额</th>
+                    <th class="th-border">未收金额</th>
+                    <th class="th-border">本次收款金额</th>
+                    <th class="th-border">备注</th>
+                    <th class="th-border">对账时间</th>
+                    <th class="th-border">对账人</th>
+                    <th class="th-border">对账</th>
+                </tr>
+            </thead>
+            <tbody class="T-list T-clearList">
+            </tbody>
+        </table>
+    </div> 
+    <div class="row pageMode">
+        <div class="col-xs-6">
+            <small>共计 {{searchParam.recordSize}} 条记录</small>
+        </div>
+        <div class="col-xs-6">
+            <div class="dataTables_paginate paging_simple_numbers T-pagenation"></div>
+        </div>
+    </div>
+    <div class="row">
         <form class="form-horizontal" role="form" onsubmit="return false">
-            <div class="form-group col-sm-12" >
-                <label class=" control-label pull-left" style="margin-left: 15px">总账面应收：{{searchParam.SumNeedIncomeMoney}}</label>
-                <label class=" control-label " style="margin-left:30px;">总实际应收：{{searchParam.SumRealNeedIncomeMoney}}</label>
-                <label class=" control-label " style="margin-left:30px;">总实际已收：{{searchParam.SumRealIncomeMoney}}</label>
-                <label class=" control-label " style="margin-left:30px;">总账面未收：{{searchParam.SumUnIncomeMoney}}</label>
-                <label class=" control-label " style="margin-left:30px;">总实际未收：{{searchParam.SumRealUnIncomeMoney}}</label>
+            <div class="form-group" style="text-align: center;">
+                <button class="btn btn-xs btn-primary T-btn-close">
+                    <i class="ace-icon fa fa-times-circle"></i> 关闭
+                </button>
+                <button class="btn btn-xs btn-primary T-btn-save" style="margin-left:20px">
+                    <i class="ace-icon fa fa-check-circle"></i> 确认付款
+                </button>
             </div>
         </form>
     </div>
-    <button class="btn btn-sm btn-success btn-guide-add pull-right btn-bookingBlance-Records pull-left margin-topTicket" > <i class="ace-icon fa fa-wrench icon-animated-wrench bigger-125"></i> 操作记录 </button>
-    <div style="clear: both"></div>
-    <table class="table table-striped table-bordered table-hover all margin-top">
-        <thead>
-        <tr>
-          <th class="th-border"> 账期</th>
-          <th class="th-border"> 账面应收</th>
-          <th class="th-border"> 实际应收</th>
-          <th class="th-border"> 实际已收</th>
-          <th class="th-border"> 账面未收</th>
-          <th class="th-border"> 实际未收</th>
-          <th class="th-border"> 收款金额</th>
-          <th class="th-border"> 收款方式</th>
-          <th class="th-border"> 备注</th>
-          <th class="th-border"> 对账进度</th>
-          <th class="th-border"> 操作</th>
-        </tr>
-        </thead>
-        <tbody>
-        {{each fcBookingOrderSettlementList as SettlementList index}}
-        <tr data-entity-id="{{SettlementList.id}}" data-entity-year="{{SettlementList.year}}" data-entity-month="{{SettlementList.month}}">
-            <td >{{SettlementList.year}}{{"年"}}{{SettlementList.month}}{{"月"}}</td>
-            <td >{{SettlementList.needIncomeMoney}}</td>
-            <td  name="blancerealNeedIncomeMoney">{{SettlementList.realNeedIncomeMoney}}</td>
-            <td  name="blancerealIncomeMoney">{{SettlementList.realIncomeMoney}}</td>
-            <td  name="blanceununIncomeMoney">{{SettlementList.unIncomeMoney}}</td>
-            <td  name="blancerealrealUnIncomeMoney">{{SettlementList.realUnIncomeMoney}}</td>
-            <td class="col-sm-1"><input name="blancerealIncomeMoney" type="text" maxlength="10"></td>
-            <td style="width:120px;">
-                <select style="text-align:center" name="blanceIncomeType">
-                    <option value="" selected="selected">请选择...</option>
-                    <option value="转账">转账</option>
-                    <option value="现金">现金</option>
-                    <option value="在线支付">在线支付</option>
-                    <option value="线下付款">线下付款</option>
-                </select>
-            </td>
-            <td class="col-sm-1" ><input name="blancerealRemark" type="text"  maxlength="1000"></td>
-            <td>
-                {{if SettlementList.allCount != SettlementList.checkedCount}}
-                <span style="color:#ff9900"> {{SettlementList.checkedCount}}{{"/"}}{{SettlementList.allCount}}</span>
-                {{else if SettlementList.allCount == SettlementList.checkedCount}}
-                <span style="color:green">{{SettlementList.checkedCount}}{{"/"}}{{SettlementList.allCount}}</span>
-                {{/if}}
-            </td>
-            <td>
-                <a data-entity-id="{{SettlementList.id}}" data-entity-year="{{SettlementList.year}}"
-                        data-entity-month="{{SettlementList.month}}"  data-entity-startTime=""  class="cursor btn-bookingBlance-save">
-                    	保存
-                </a><a class="cursor"> |</a>
-                <a data-entity-year="{{SettlementList.year}}"  data-entity-month="{{SettlementList.month}}" class="cursor btn-sm btn-bookingBlance-checkDetail">
-                对账明细
-                </a>
-            </td>
-        </tr>
-         {{/each}}
-        </tbody>
-    </table>
-
-</div>

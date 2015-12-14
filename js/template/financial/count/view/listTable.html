@@ -18,10 +18,10 @@
         <th style="min-width:130px">操作</th>
     </tr>
     </thead>
-    <tbody> 
+    <tbody class="T-count-list"> 
     {{each tripPlanList as financialTripPlan}}
         {{if financialTripPlan != null}}
-        <tr data-entity-id="{{financialTripPlan.id}}">
+        <tr id="{{financialTripPlan.id}}" billStatus="{{financialTripPlan.tripPlan.billStatus}}" guideFinancialExamine = "{{financialTripPlan.guideFinancialExamine}}">
         <td style="min-width:50px" {{if financialTripPlan.tripPlan.tripPlanDetails.length > 1}}rowspan="{{financialTripPlan.tripPlan.tripPlanDetails.length}}"{{/if}}>{{financialTripPlan.tripPlan.tripNumber}}</td>
         {{if financialTripPlan.tripPlan.tripPlanDetails.length == 0}}
             <td>{{if financialTripPlan.tripPlan != null}}{{financialTripPlan.tripPlan.startTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
@@ -63,21 +63,21 @@
             {{/if}}
         </td>
            <td style="vertical-align:middle" {{if financialTripPlan.tripPlan.tripPlanDetails.length > 1}}rowspan="{{financialTripPlan.tripPlan.tripPlanDetails.length}}"{{/if}}>
-            <a  data-entity-billStatus="{{financialTripPlan.tripPlan.billStatus}}"  data-entity-id="{{financialTripPlan.id}}" data-guideFinancialExamine="{{financialTripPlan.guideFinancialExamine}}" class="cursor btn-count-update T-audit">
+            <a  data-entity-billStatus="{{financialTripPlan.tripPlan.billStatus}}"  data-entity-id="{{financialTripPlan.id}}" data-guideFinancialExamine="{{financialTripPlan.guideFinancialExamine}}" class="cursor T-action T-update T-audit">
                 审核
                 <label style="padding-left:10px;">|</label>
             </a>
-            <a data-entity-id="{{financialTripPlan.id}}" class=" btn-count-examine cursor">
+            <a data-entity-id="{{financialTripPlan.id}}" class="T-action T-detail cursor">
                 明细
             </a>
             {{if financialTripPlan.tripPlan.billStatus == -1}}
-            <a data-entity-billStatus="{{financialTripPlan.tripPlan.billStatus}}" data-entity-id="{{financialTripPlan.id}}" class="cursor btn-guide-account R-right" data-right="1190004">
+            <a data-entity-billStatus="{{financialTripPlan.tripPlan.billStatus}}" data-entity-id="{{financialTripPlan.id}}" class="cursor T-action T-account R-right" data-right="1190004">
                 <label class="padding-right20">|</label>
                 报账
             </a>
             {{/if}}
             {{if financialTripPlan.tripPlan}}
-               <a  class="cursor R-right T-quality" data-id="{{financialTripPlan.tripPlan.id}}" data-right="1190004">
+               <a  class="cursor R-right T-action T-quality" data-id="{{financialTripPlan.tripPlan.id}}" data-right="1190004">
                    <label class="padding-right20">|</label>
                    质量
                </a>

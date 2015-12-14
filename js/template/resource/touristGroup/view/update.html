@@ -14,7 +14,7 @@
 							<input type="text"  value="{{if touristGroupDetail.lineProduct != null}}{{touristGroupDetail.lineProduct.name}}{{/if}}" name="lineProductIdName" class="col-sm-8 bind-change product-width" readonly="readonly" />
 							<input type="hidden" value="{{touristGroupDetail.lineProductId}}" name="lineProductId" />
 							<input type="hidden" value="{{touristGroupDetail.quoteId}}" name="quoteId" />
-							<button class="col-sm-4 btn btn-sm btn-primary btn-travelLine-search travelLine-search {{if !!type}}T-travelLine-search{{/if}}" style="padding-bottom:5px;width: 62px">
+							<button class="col-sm-4 btn btn-sm btn-primary btn-travelLine-search travelLine-search {{if !!type || touristGroupDetail.status == 1}}T-travelLine-search{{/if}}" style="padding-bottom:5px;width: 62px">
 								<i class="ace-icon fa fa-search "></i>搜索
 							</button> 
 							{{else}}
@@ -103,14 +103,13 @@
 
 						{{/if}}
 						</div> 
-					</div>
-
-					<div class="form-group guideInterval">
-						<div class="col-sm-12">
+						
+                        <div class="col-sm-3">
 							<label class=" control-label no-padding-right margin-leftGroup">组团单号：
 							<input  type="text" name="otaOrderNumber" value="{{touristGroupDetail.otaOrderNumber}}"  maxlength="9" />
 							</label>
 						</div>
+					  </div>
 					</div>
 				</div>
 				<div class="form-group">

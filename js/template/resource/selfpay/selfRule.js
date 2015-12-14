@@ -191,6 +191,14 @@ define(function(require, exports) {
 				        	errMsg: '请输入数字'
 				        }
 				    ]
+				},{	//人数返佣
+					$ele: $obj.find('input[name="customerRebateMoney"]'),
+					rules: [
+				        {
+				        	type: 'float', 
+				        	errMsg: '请输入数字'
+				        }
+				    ]
 				},
 				{	//旅行社返佣
 					$ele: $obj.find('input[name="normalTravelAgencyRate"]'),

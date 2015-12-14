@@ -1,0 +1,22 @@
+<form class="form-horizontal T-lookDetail col-sm-12 margin-top" role="form"  onsubmit="return false">
+<table class="table table-striped table-bordered table-hover col-sm-11">
+    <tr>
+        <th>应付类别</th>
+        <th>发生业务</th>
+        <th>金额</th>
+        <th>备注</th>
+        <th>操作人</th>
+        <th>操作时间</th>
+    </tr>
+    {{each reconciliationDetailsList as order}}
+    <tr>
+        <td>{{order.receivableType}}}</td>
+        <td>{{order.businessType}}}</td>
+        <td>{{order.payDifferenceMoney}}}</td>
+        <td>{{order.remark}}}</td>
+        <td>{{order.checkRealname}}}</td>
+        <td>{{order.checkTime}}}</td> 
+    </tr>
+    {{/each}}
+</table>
+</form>

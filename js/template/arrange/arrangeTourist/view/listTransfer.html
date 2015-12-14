@@ -22,21 +22,23 @@
 			<tr data-value={{touristGroupList.id}} data-entity-adultCount = {{touristGroupList.adultCount}}  data-entity-childCount = {{touristGroupList.childCount}}>
 			    <td><label class="pos-rel"> <input type="checkbox" class="ace T-transferCheckBox T-cheked"> <span class="lbl"></span> </label></td>
 				<td>{{if touristGroupList.partnerAgency!=null}}{{touristGroupList.partnerAgency.travelAgencyName}}{{/if}}</td>
-				<td>{{touristGroupList.lineProduct.name}}</td>
-				<td>{{touristGroupList.lineProduct.type}}</td>
+				<td>{{if touristGroupList.lineProduct!=null}}{{touristGroupList.lineProduct.name}}{{/if}}</td>
+				<td>{{if touristGroupList.lineProduct!=null}}{{touristGroupList.lineProduct.type}}{{/if}}</td>
 				<td>
+				{{if touristGroupList.lineProduct!=null}}
 					{{if touristGroupList.lineProduct.customerType == 0}}散拼
 					    {{else if touristGroupList.lineProduct.customerType == 1}}团体
 					    {{else if touristGroupList.lineProduct.customerType == 2}}转客
 					{{/if}} 
+				{{/if}}
 				</td>
-				<td>{{touristGroupList.lineProduct.days}}</td>
+				<td>{{if touristGroupList.lineProduct!=null}}{{touristGroupList.lineProduct.days}}{{/if}}</td>
 				<td>{{touristGroupList.startTime | dateFormat: 'yyyy-MM-dd' }}</td>
 				<td>{{touristGroupList.contactMember.name}}</td>
 				<td>{{touristGroupList.contactMember.mobileNumber}}</td>
 				<td>{{touristGroupList.adultCount}} 大 {{touristGroupList.childCount}}小</td>
 					
-				<td>{{touristGroupList.ageData}}</td>
+				<td>{{touristGroupList.areaData}}</td>
 				<td>{{touristGroupList.ageData}}</td>
 				<td>{{touristGroupList.remark}}</td>
 				<td><a class="cursor T-arrageTransfer-view T-action"> 查看 </a></td>

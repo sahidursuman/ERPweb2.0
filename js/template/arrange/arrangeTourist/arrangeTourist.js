@@ -470,8 +470,10 @@ define(function(require, exports) {
 				var $that = $(this),$dvi = $that.closest('div.T-checkBox'),$is_ImChecked = $that.is(':checked');
 				    if ( $is_ImChecked ) {
 				    	$dvi.find('.T-To-TimeChecked').addClass('hide');
+				    	$dvi.find('.fa-exclamation').addClass('hide');
 				    } else{
                         $dvi.find('.T-To-TimeChecked').removeClass('hide');
+                        $dvi.find('.fa-exclamation').removeClass('hide');
 				    };
 			});
 
@@ -550,8 +552,10 @@ define(function(require, exports) {
 				var $that = $(this),$dvi = $that.closest('div.T-checkBox'),$is_ImChecked = $that.is(':checked');
 				    if ( $is_ImChecked ) {
 				    	$dvi.find('.T-To-TimeChecked').addClass('hide');
+				    	$dvi.find('.fa-exclamation').addClass('hide');
 				    } else{
                         $dvi.find('.T-To-TimeChecked').removeClass('hide');
+                        $dvi.find('.fa-exclamation').removeClass('hide');
 				    };
 			});
 			$addMergeAddTr.find('.T-checkBox').find('.T-timeChecked').off().on('click', function(event) {
@@ -761,8 +765,10 @@ define(function(require, exports) {
 				var $that = $(this),$dvi = $that.closest('div.T-checkBox'),$is_ImChecked = $that.is(':checked');
 				    if ( $is_ImChecked ) {
 				    	$dvi.find('.T-To-TimeChecked').addClass('hide');
+				    	$dvi.find('.fa-exclamation').addClass('hide');
 				    } else{
                         $dvi.find('.T-To-TimeChecked').removeClass('hide');
+                        $dvi.find('.fa-exclamation').removeClass('hide');
 				    };
 			});
 
@@ -921,7 +927,6 @@ define(function(require, exports) {
 				return objValue;
 			}
 
-		    var executeTimeType=$tab.find(".checkbox input[name=executeTimeType]:radio:checked").val();
 			var planTouristCount = parseInt(getValue("planTouristCount")),
 				memberCount = parseInt($tab.find(".tripPlanAllMemberCount").text());
 			if(planTouristCount < memberCount){
@@ -940,8 +945,9 @@ define(function(require, exports) {
 						"planTouristCount": getValue("planTouristCount"),
 						"setPlacePosition": getValue("setPlacePosition"),
 						"setPlaceTime": getValue("setPlaceTime"),
-						"executeTimeType": executeTimeType+"",  
-						"executeTime": getValue("executeTime")
+						"executeTimeType": getValue("executeTimeType")+"",  
+						"executeTime": getValue("executeTime"),
+						"remark" : getValue("remark")
 					},
 					"lineProductId": getValue("lineProductId"),
 					"driverId": getValue("driverId"),
@@ -1645,7 +1651,8 @@ define(function(require, exports) {
 					$merge.find('.btn-'+lineProductId+'-'+startTime+'').on('click', function(event) {
 						event.preventDefault();
 						/* Act on the event */
-						arrangeTourist.bindRemoveTouristGroupMerge($merge,lineProductId,startTime)
+						arrangeTourist.bindRemoveTouristGroupMerge($merge,lineProductId,startTime);
+
 					});
 					var touristGroupMerge = {
 						lineProductId : lineProductId,
@@ -1697,6 +1704,7 @@ define(function(require, exports) {
 							obj.remove();
 							$( this ).dialog( "close" );
 							arrangeTourist.removeTouristGroupMergeData($merge,lineProductId,startTime);
+
 						} 
 					}
 				],
@@ -1716,6 +1724,9 @@ define(function(require, exports) {
 		arrangeTourist.removeTouristGroupMergeData = function($merge,lineProductId,startTime){
 			$merge.find(".btn-"+lineProductId+"-"+startTime+"").remove();
 			$("#"+tabId+" .tr-"+lineProductId+"-"+startTime+" .T-touristGroupMergeCheckBox").prop("checked",false);
+			//取消选择后==重置计算
+			var $visitorObj = $('#T-Visitor-list');
+			arrangeTourist.choosenAdultAndChildCount($visitorObj);
 			var touristGroupMergeList = arrangeTourist.touristGroupMergeData.touristGroupMergeList;
 			if(touristGroupMergeList.length > 0){
 				for(var i=0;i<touristGroupMergeList.length;i++){
@@ -2075,7 +2086,7 @@ define(function(require, exports) {
 							var html = innerEditFeeTemplate(data);
 							arrangeTourist.editFeeLayer = layer.open({
 							    type: 1,
-							    title:"编辑内转费用信息",
+							    title:"编辑转客费用信息",
 							    skin: 'layui-layer-rim', //加上边框
 							    area: '60%', //宽高
 							    zIndex:1028,
@@ -2105,7 +2116,7 @@ define(function(require, exports) {
 							var html = outEditFeeTemplate(data);
 							arrangeTourist.editFeeLayer = layer.open({
 							    type: 1,
-							    title:"编辑外转费用信息",
+							    title:"编辑转客费用信息",
 							    skin: 'layui-layer-rim', //加上边框
 							    area: '60%', //宽高
 							    zIndex:1028,
@@ -2827,6 +2838,16 @@ define(function(require, exports) {
 				format: 'yyyy-mm-dd',
 				language: 'zh-CN'
 			})
+
+			//定时发送
+			$tabId.find('.dataTimePicker').datetimepicker({
+				autoclose: true,
+				todayHighlight: true,
+				format: 'L',
+				language: 'zh-CN'
+			});
+
+
 		};
 
 		exports.init = arrangeTourist.initModule;

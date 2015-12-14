@@ -1,579 +1,704 @@
+/**
+ * 财务管理--导游账务
+ *
+ * by David Bear 2015-11-24
+ */
 define(function(require, exports) {
-	
-	var rule = require("./rule");
-    var menuKey = "financial_guide",
+    var rule = require("./rule"),
+        menuKey = "financial_guide",
         listTemplate = require("./view/list"),
+        // 对账模板
         guideCheckingTemplate = require("./view/guideChecking"),
+        checkingTableTemplate = require('./view/guideCheckingTable'),
+        operationDetailTemplate = require('./view/operationDetail'),
+        // 付款模板
+        guidePayTemplate = require("./view/guidePaying"),
+        payingTableTemplate = require('./view/guidePayingTable'),
+        // 费用明细
+        costDetailTemplate = require("./view/costDetail"),
         billImagesTemplate = require("./view/billImages"),
-        guideClearingTemplate = require("./view/guideClearing"),
-        costDetail = require("./view/costDetail"),
-        guideRecords = require("./view/guideRecords"),
-        tabId = "tab-"+menuKey+"-content",
-        checkTabId = "tab-"+ menuKey+"-checking"+"-content",
-        clearTabId = "tab-"+ menuKey+"-clearing"+"-content";
-	var guide = {
-		searchData : {
-			page : "",
-			guideId : "",
-			year : "",
-			month : ""
-		},
-		edited : {},
-		isEdited : function(editedType){
-			if(!!guide.edited[editedType] && guide.edited[editedType] != ""){
-				return true;
-			}
-			return false;
-		},
-		oldCheckGuideId : 0,
-        oldBlanceGuideId:0,
-		listFinancialGuide:function(page,guideId,year,month){
-			$.ajax({
-				url:""+APP_ROOT+"back/financialGuide.do?method=listFinancialGuide&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-				type:"POST",
-				data:"pageNo="+page+"&guideId="+guideId+"&year="+year+"&month="+month,
-				dataType:"json",
-				beforeSend:function(){
-					globalLoadingLayer = openLoadingLayer();
-				},
-				success:function(data){
-					layer.close(globalLoadingLayer);
-					var result = showDialog(data);
-					if(result){
-						guide.searchData = {
-							page : page,
-							guideId : guideId,
-							year : year,
-							month : month
-						};
-						var html = listTemplate(data);
-						addTab(menuKey,"导游账务",html);
-						
-						$("#"+tabId+ " select[name=guideId]").val(data.guideId);
-						$("#"+tabId+ " select[name=year]").val(data.year);
-						$("#"+tabId+ " select[name=month]").val(data.month);
-						
-						//搜索按钮事件
-						$("#"+tabId+ " .btn-financialguide-search").click(function(){
-							var guideId = $("#"+tabId+ " select[name=guideId]").val();
-							var year = $("#"+tabId+ " select[name=year]").val();
-							var month = $("#"+tabId+ " select[name=month]").val();
-							guide.listFinancialGuide(0,guideId,year,month);
-						});
-						// 绑定翻页组件
-						laypage({
-						    cont: $('#' + tabId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
-						    pages: data.totalPage, //总页数
-						    curr: (page + 1),
-						    jump: function(obj, first) {
-						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-						    		guide.listFinancialGuide(obj.curr -1,guideId,data.year,data.month);
-						    	}
-						    }
-						});
-						
-						//给对账按钮绑定事件
-						$("#"+tabId+" .btn-divide").click(function(){
-							var guideId = $(this).attr("data-entity-id");
-							guide.listGuideChecking(0,guideId,data.year,data.month);
 
-						});
-						//给结算按钮绑定事件
-						$("#"+tabId+" .btn-transfter").click(function(){
-							var guideId = $(this).attr("data-entity-id");
-							var start_month = 1;
-							var end_month = 12;
-							guide.listGuideSettlement(guideId,data.year,start_month,end_month);
+        checkMenuKey = menuKey + "_checking",
+        payMenuKey = menuKey + "-paying";
 
-						});
-					}
-				}
-			});
-		},
-		listGuideChecking:function(page,guideId,year,month){
-			$.ajax({
-				url:""+APP_ROOT+"back/financialGuide.do?method=listGuideChecking&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-				type:"POST",
-				data:"pageNo="+page+"&guideId="+guideId+"&year="+year+"&month="+month+"&sortType=auto",
-				dataType:"json",
-				beforeSend:function(){
-					globalLoadingLayer = openLoadingLayer();
-				},
-				success:function(data){
-					var $obj = $(".check .form-horizontal");
-					layer.close(globalLoadingLayer);
-					var result = showDialog(data);
-					if(result){
-						var guideList = JSON.parse(data.guideList);
-						data.guideList = guideList;
-						var html = guideCheckingTemplate(data);
-						//addTab(menuKey+"-checking","导游对账",html);
-						if($("#"+checkTabId+"").length > 0) {
-                 	    	if(!!guide.edited["checking"] && guide.edited["checking"] != ""){
-                 	    		addTab(menuKey+"-checking","导游对账");
-                 	    		showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
-                 	    			 validator = rule.check($('.check'));
-				            		 if (!validator.form()) { 
-				            			 return; 
-				            		 }
-				            		 guide.saveCheckingData(page,guideId,year,month,0);
-				            		 addTab(menuKey+"-checking","导游对账",html);
-				            		 guide.initCheck(page,guideId,year,month,data);
-				            		 validator = rule.check($('.check'));
-				            	 },function(){
-				            		 addTab(menuKey+"-checking","导游对账",html);
-				            		 guide.initCheck(page,guideId,year,month,data);
-				            		 guide.edited["checking"] = "";
-				            		 validator = rule.check($('.check'));
-				            	 });
-                 	    	 }else{
-	                 	    	addTab(menuKey+"-checking","导游对账",html);
-	                 	    	guide.initCheck(page,guideId,year,month,data);
-	                 	        validator = rule.check($('.check'));
-                 	    	 }
-             	    		 
-                 	    }else{
-                 	    	addTab(menuKey+"-checking","导游对账",html);
-                 	    	guide.initCheck(page,guideId,year,month,data);
-                 	    	validator = rule.check($('.guide-checking'));
-                 	    	
-                 	    }
-                 	    //取消对账权限过滤
-                 	    var checkList = data.guideList;
-	                    var checkTr = $(".T-checkList tr");
-	                    var rightCode = $(".T-checkList").data("right");
-	                    checkDisabled(checkList,checkTr,rightCode);
-		                    
-                 	    // 绑定翻页组件
-						laypage({
-						    cont: $('#' + checkTabId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
-						    pages: data.totalPage, //总页数
-						    curr: (page + 1),
-						    jump: function(obj, first) {
-						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-						    		guide.listGuideChecking(obj.curr -1,guideId,data.year,data.month);
-						    	}
-						    }
-						});
-					}
-				}
-			});
-		},
-		initCheck : function(page,guideId,year,month,data){
-			console.log("init");
-			$("#"+checkTabId+ " .all").on("change",function(){
-	    		guide.edited["checking"] = "checking"; 
-				guide.oldCheckGuideId = guideId;
-	    	});
-			$("#"+checkTabId+ " select[name=year]").val(data.year);
-			$("#"+checkTabId+ " select[name=month]").val(data.month);
+    var FinGuide = {
+        mock: true,
+        $tab: false,
+        $checkingTab: false,
+        checkingId: null,
+        $clearTab: false,
+        clearId: null
+    };
+    /**
+     * 初始化模块
+     */
+    FinGuide.initModule = function() {
+        FinGuide.$tab = null;
+        FinGuide.getList(0);
+    };
+    /**
+     * 获取购物账务列表，初始化列表页面
+     * @param  {int} page 页码
+     */
+    FinGuide.getList = function(page) {
+        var args = FinancialService.getInitDate();
 
-			//详细费用明细
-            $("#"+checkTabId+ " .check .cost-detail").click(function(){
-                var id = $(this).attr("data-entity-id");
-                $.ajax({
-            		   url:""+APP_ROOT+"back/financialGuide.do?method=listFinancialTripInfo&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-                       type:"POST",
-                       data:"id="+id,
-                       dataType:"json",
-                       beforeSend:function(){
-							globalLoadingLayer = openLoadingLayer();
-						},
-						success:function(data){
-							layer.close(globalLoadingLayer);
-							var result = showDialog(data);
-							if(result){
-								data.financialGuide = JSON.parse(data.financialGuide);
-								var html = costDetail(data);
-								addTab(menuKey+"-costDetail","费用明细",html);
-								//查看图片事件
-								$("#tab-"+menuKey+"-costDetail-content .costDetailImg").click(function(){
-									 var WEB_IMG_URL_BIG = $("#tab-"+menuKey+"-costDetail-content").find("input[name=WEB_IMG_URL_BIG]").val();//大图
-				                	 var WEB_IMG_URL_SMALL = $("#tab-"+menuKey+"-costDetail-content").find("input[name=WEB_IMG_URL_SMALL]").val();//小图
-				                	guide.viewImage(this,WEB_IMG_URL_BIG,WEB_IMG_URL_SMALL);
-								});
-							}
-						}
-            	   });
-            });
-			//搜索按钮事件
-			$("#"+checkTabId+ " .btn-guideChecking-search").click(function(){
-				var year = $("#"+checkTabId+ " select[name=year]").val();
-				var month = $("#"+checkTabId+ " select[name=month]").val();
-				guide.listGuideChecking(0,guideId,year,month);
-			});
-			//导出事件btn-guideExport
-			$("#"+checkTabId+ " .btn-guideExport").click(function(){
-				var year = $("#"+checkTabId+ " select[name=year]").val();
-				var month = $("#"+checkTabId+ " select[name=month]").val();
-				 checkLogin(function(){
-                        	var url = ""+APP_ROOT+"back/export.do?method=guide&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view"+"&guideId="+guideId+"&guideName="+data.guideName+"&year="+year+"&month="+month+"&sortType=auto";
-                        	exportXLS(url)
-                     });
-             });
-			
-			//给全选绑定事件
-            $("#"+checkTabId+ " input[type='checkbox'].selectAll").click(function(){
-            	if(!$(this).prop("checked")){
-            		$("#"+checkTabId+ " input[name='isConfirmAccount']").each(function(){
-            			if($(this).attr("data-entity-checkStatus")==0){
-            				$(this).prop("checked",false);
-	                	}else{
-	                		$(this).prop("checked",true);
-	                	}
-            		});
-            	}else{
-            		$("#"+checkTabId+ " input[name='isConfirmAccount']").prop("checked",true);
-            	}
-            });
-            //给复选框绑定事件
-            $("#"+checkTabId+ " input[name='isConfirmAccount']").click(function(){
-            	var flag = true;
-            	$("#"+checkTabId+ " input[name='isConfirmAccount']").each(function(){
-            		if(!$(this).prop("checked")){
-            			flag = false;
-            		}
-            	});
-            	$("#"+checkTabId+ " input[type='checkbox'].selectAll").prop("checked",flag);
-            });
-            //关闭按钮事件
-            $("#"+checkTabId+ " .btn-guide-close").click(function(){
-            	 showConfirmDialog($( "#confirm-dialog-message" ), "确定关闭本选项卡?",function(){
-            		 closeTab(menuKey+"-checking");
-					 guide.edited["checking"] = "";
-            	 });
-            });
-            
-            //已对账的实际退补款不可修改
-            //$("#"+checkTabId+ " input[name='isConfirmAccount']:checked").parent().siblings().find("input[name='realBackGuideMoney']").prop("disabled",true);
-            
-			//给对账按钮绑定事件
-			$("#"+checkTabId+ " .btn-confirm-guide-checking").click(function(){
-				 if (!validator.form()) { 
-        			 return; 
-        		 }
-        		 guide.saveCheckingData(page,guideId,year,month,0);
-			});
-
-		},
-		listGuideSettlement:function(guideId,year,start_month,end_month){
-			$.ajax({
-				url:""+APP_ROOT+"back/financialGuide.do?method=listGuideSettlement&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-				type:"POST",
-				data:"guideId="+guideId+"&year="+year+"&start_month="+start_month+"&end_month="+end_month,
-				dataType:"json",
-				beforeSend:function(){
-					globalLoadingLayer = openLoadingLayer();
-				},
-				success:function(data){
-					layer.close(globalLoadingLayer);
-					var result = showDialog(data);
-					if(result){
-						var html = guideClearingTemplate(data);
-						//addTab(menuKey+"-clearing","导游结算",html);
-						//判断页面是否存在 #tab-financial_guide-clearing-content  "tab-"+ menuKey+"-clearing"+"-content" 
-                 	    if($("#tab-"+menuKey+"-clearing-content").length > 0) {
-                 	    	if(!!guide.edited["clearing"] && guide.edited["clearing"] != ""){
-                 	    		addTab(menuKey+"-clearing","导游结算");
-                 	    		showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
-                 	    			 guide.validatorTable();
-                 	    			 var saveBtn = $("#"+clearTabId+" .btn-settlement-save");
-	             	    			 if (!$(saveBtn).data('validata').form()) { return; };
-				            		 guide.saveGuideSettlement(guideId,year,start_month,end_month,0);
-				            		 guide.edited["clearing"] = "";
-				            		 addTab(menuKey+"-clearing","导游结算",html);
-				            		 guide.initClear(guideId,year,start_month,end_month,data);
-				            		 guide.validatorTable();
-				            	 },function(){
-				            		 addTab(menuKey+"-clearing","导游结算",html);
-				            		 guide.initClear(guideId,year,start_month,end_month,data);
-				            		 guide.edited["clearing"] = "";
-				            		 guide.validatorTable();
-				            	 });
-                 	    	 }else{
-	                 	    	addTab(menuKey+"-clearing","导游结算",html);
-	                 	    	guide.initClear(guideId,year,start_month,end_month,data);
-	                 	    	guide.validatorTable();
-                 	    	 }
-             	    		 
-                 	    }else{
-                 	    	addTab(menuKey+"-clearing","导游结算",html);
-                 	    	guide.initClear(guideId,year,start_month,end_month,data);
-                 	    	guide.validatorTable();
-                 	    }
-					}
-				}
-			});
-		},
-		initClear : function(guideId,year,start_month,end_month,data){
-			$("#"+clearTabId+" .all").on('change', 'input, select', function() {
-     		  guide.edited["clearing"] = "clear";
-			  guide.oldBlanceGuideId = guideId;
-    		  $(this).closest('tr').data('blanceStatus',true);
-    		});
-			
-			
-			$("#"+clearTabId+ " select[name=year]").val(year);
-			$("#"+clearTabId+ " select[name=start_month]").val(start_month);
-			$("#"+clearTabId+ " select[name=end_month]").val(end_month);
-			
-			//搜索按钮事件
-			$("#"+clearTabId+ " .btn-guideSettlement-search").click(function(){
-				var year = $("#"+clearTabId+ " select[name=year]").val();
-				var start_month = $("#"+clearTabId+ " select[name=start_month]").val();
-				var end_month = $("#"+clearTabId+ " select[name=end_month]").val();
-				guide.listGuideSettlement(guideId,year,start_month,end_month);
-			});
-			
-			//对账明细按钮事件
-            $("#"+clearTabId+ " .btn-guide-checkDetail").click(function(){
-            	var year = $(this).attr("data-entity-year");
-            	var month = $(this).attr("data-entity-month");
-            	guide.listGuideChecking(0,guideId,year,month);
-            });
-			
-			//给操作记录按钮绑定事件
-            $("#"+clearTabId+ " .btn-guide-records").click(function(){
-            	$.ajax({
-            		url:""+APP_ROOT+"back/financialGuide.do?method=listFinancialGuideSettlementRecord&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-                    type:"POST",
-                    data:"guideId="+guideId,
-                    dataType:"json",
-                    beforeSend:function(){
-                        globalLoadingLayer = openLoadingLayer();
-                    },
-                    success:function(data){
-                    	layer.close(globalLoadingLayer);
-                        var result = showDialog(data);
-                    	if(result){
-                    		if(data.financialGuideSettlementRecordList.length == 0){
-                    			showMessageDialog($( "#confirm-dialog-message" ),"暂时还没有操作记录");
-                    		}else{
-                    			var html =guideRecords(data);
-					    		var blanceRecordsTemplateLayer =layer.open({
-					    			type: 1,
-								    title:"操作记录",
-								    skin: 'layui-layer-rim', //加上边框
-								    area: '60%', //宽高
-								    zIndex:1030,
-								    content: html,
-								    scrollbar: false, // 推荐禁用浏览器外部滚动条
-								    success: function(){}
-					    		})
-                    		}
-	                	}
-                    }
-            	});
-            });
-            
-			//保存按钮事件
-            $("#"+clearTabId+" .btn-settlement-save").click(function(){
-            	 if (!$(this).data('validata').form()) { return; };
-        		 guide.saveGuideSettlement(guideId,year,start_month,end_month,0);
-            });
-		},
-		//给每个tr增加验证
-	    validatorTable:function(){
-	       //设置表单验证  tab-financial_guide-clearing-content #tab-financial_guide-clearing-content
-		   var $tr = $("#"+clearTabId+ " .all tbody tr")
-           //给每个tr添加表单验证
-           $tr.each(function(){
-           	$(this).find('.btn-settlement-save').data('validata', rule.check($(this)));
-           });	
-	    },
-		//显示单据
-	    viewImage:function(obj,WEB_IMG_URL_BIG,WEB_IMG_URL_SMALL) {
-	    	var data = {
-	    			"images":[]
-	    	};
-	    	var str = $(obj).attr('url');
-	    	var strs = str.split(",");
-	    	for(var i = 0; i < strs.length; i ++) {
-	    		var s = strs[i];
-	    		if(s != null && s != "" && s.length > 0) {
-		    		var image = {
-		    				"WEB_IMG_URL_BIG":imgUrl+s,
-		    				"WEB_IMG_URL_SMALL":imgUrl+s+"?imageView2/2/w/150",
-		    		}
-		    		data.images.push(image);
-	    		}
-	    	}
-	    	var html = billImagesTemplate(data);
-	    	
-			layer.open({
-				type : 1,
-				title : "单据图片",
-				skin : 'layui-layer-rim', // 加上边框
-				area :'500px', // 宽高
-				zIndex : 1028,
-				content : html,
-				scrollbar: false, // 推荐禁用浏览器外部滚动条
-				success : function() {
-					var colorbox_params = {
-			    			rel: 'colorbox',
-			    			reposition:true,
-			    			scalePhotos:true,
-			    			scrolling:false,
-			    			previous:'<i class="ace-icon fa fa-arrow-left"></i>',
-			    			next:'<i class="ace-icon fa fa-arrow-right"></i>',
-			    			close:'&times;',
-			    			current:'{current} of {total}',
-			    			maxWidth:'100%',
-			    			maxHeight:'100%',
-			    			onOpen:function(){ 
-			    				$overflow = document.body.style.overflow;
-			    				document.body.style.overflow = 'hidden';
-			    			},
-			    			onClosed:function(){
-			    				document.body.style.overflow = $overflow;
-			    			},
-			    			onComplete:function(){
-			    				$.colorbox.resize();
-			    			}
-			    		};
-			    		$('#layer-photos-financial-count [data-rel="colorbox"]').colorbox(colorbox_params);
-				}
-			});
-	    },
-	    //保存对账数据
-	    saveCheckingData:function(page,guideId,year,month,isClose){
-	    	if(!guide.edited["checking"] || guide.edited["checking"] != "checking"){
-                showMessageDialog($( "#confirm-dialog-message" ),"当前未进行任何操作！");
-                return;
+        args.pageNo = page || 0;
+        if (!!FinGuide.$tab) {
+            args = {
+                pageNo: (page || 0),
+                guideId: FinGuide.$tab.find('.T-search-name').data('id'),
+                startDate: FinGuide.$tab.find('.T-search-start-date').val(),
+                endDate: FinGuide.$tab.find('.T-search-end-date').val(),
             }
-            var JsonStr = [],$tr = $("#"+checkTabId+" .all tbody tr"),
-            oldRealBack,
-            newRealBack,
-            oldRemark,
-            newRemark;
-    	    $tr.each(function(i){
-    		    var checkStatus = $(this).attr("data-entity-isConfirmAccount");
-    		    var flag = $(this).find("input[name='isConfirmAccount']").is(":checked");
-    		    newRealBack = $(this).find("input[name='realBackGuideMoney']").val();
-    		    oldRealBack = $(this).attr("data-entity-realBackGuideMoney");
-    		    newRemark = $(this).find("input[name='billRemark']").val();
-    		    oldRemark = $(this).attr("data-entity-billRemark");
-    		   if(flag){
-    			   if(checkStatus == 1){
-    				   //判断是否被修改
-    				   if(oldRemark != newRemark || oldRealBack != newRealBack){
-    				   	   var checkData = {
-    				   	   	   id:$(this).attr("data-entity-id"),
-	    					   guideId:guideId,
-	    					   realBackGuideMoney:newRealBack,
-	    					   billRemark:newRemark,
-	    					   isConfirmAccount:1
-    				   	   }
-    				   	   JsonStr.push(checkData);
-    				    }
-						
-			      }else{
-			      	var checkData = {
-				   	   	id:$(this).attr("data-entity-id"),
-    					   guideId:guideId,
-    					   realBackGuideMoney:newRealBack,
-    					   billRemark:newRemark,
-    					   isConfirmAccount:1
-				   	   }
-				   	   JsonStr.push(checkData);
-			      }
-    		   }else{
-    			   if(checkStatus == 1){
-					   var checkData = {
-    					   id:$(this).attr("data-entity-id"),
-    					   guideId:guideId,
-    					   realBackGuideMoney:newRealBack,
-    					   billRemark:newRemark,
-    					   isConfirmAccount:0
-        			   }
-        			   JsonStr.push(checkData);
-    			   }
-    		   }
-		    });
-    	   
-    	   if(JsonStr.length == 0){
-    		   showMessageDialog($( "#confirm-dialog-message" ),"您当前未进行任何操作");
-    		   return;
-    	   }
-    	   JsonStr = JSON.stringify(JsonStr);
-    	   $.ajax({
-    		   url:""+APP_ROOT+"back/financialGuide.do?method=updateGuideChecking&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
-               type:"POST",
-               data:"financialGuideListStr="+encodeURIComponent(JsonStr),
-               dataType:"json",
-               beforeSend:function(){
-					globalLoadingLayer = openLoadingLayer();
-				},
-				success:function(data){
-					layer.close(globalLoadingLayer);
-					console.log(data);
-					var result = showDialog(data);
-					if(result){
-						showMessageDialog($( "#confirm-dialog-message" ),data.message);
-						guide.edited["checking"] = "";
-						if(isClose == 1){
-							closeTab(checkTabId);
-							guide.listFinancialGuide(guide.searchData.page,guide.searchData.guideId,guide.searchData.year,guide.searchData.month);
-						} else {
-							guide.listGuideChecking(page,guideId,year,month);
-						}
-					}
-				}
-    	   });
-		},
-		//保存结算
-		saveGuideSettlement : function(guideId,year,start_month,end_month,isClose){
-	    	var $tr = $("#"+clearTabId+ " .all tbody tr");
-	    	var id ; 
-        	var payMoney ;
-        	var payType;
-        	var remark;
-	    	$tr.each(function(i){
-          		if($(this).data('blanceStatus')){
-                	 id = $(this).attr("data-entity-id"); 
-                	 payMoney = $tr.eq(i).find("input[name='payMoney']").val();
-                	 payType = $tr.eq(i).find("select[name='payType'] :selected").text();
-                	 remark = $tr.eq(i).find(" input[name='remark']").val();
-          		}
-          	})
-	    	$.ajax({
-        		url:""+APP_ROOT+"back/financialGuide.do?method=saveFinancialGuideSettlement&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
-                type:"POST",
-                data:"id="+id+"&payMoney="+payMoney+"&payType="+payType+"&remark="+remark,
-                dataType:"json",
-                beforeSend:function(){
-                    globalLoadingLayer = openLoadingLayer();
-                },
-                success:function(data){
-                	layer.close(globalLoadingLayer);
-                    var result = showDialog(data);
-                    if(result){
-                    	showMessageDialog($( "#confirm-dialog-message" ),data.message);
-                    	guide.edited["clearing"] = "";
-						if(isClose == 1){
-							closeTab(clearTabId);
-							guide.listFinancialGuide(guide.searchData.page,guide.searchData.guideId,guide.searchData.year,guide.searchData.month);
-						} else {
-							guide.listGuideSettlement(guideId,year,start_month,end_month);
-						}
+
+            var guideName = FinGuide.$tab.find('.T-search-name').val();
+            if (guideName === '全部') {
+                guideName = '';
+            }
+
+            args.guideName = guideName;
+        }
+
+        $.ajax({
+            url: KingServices.build_url('account/guideFinancial', 'listSumFinancialGuide'),
+            type: 'POST',
+            data: args,
+        }).done(function(data) {
+            if (showDialog(data)) {
+                data.guideName = data.guideName || '全部';
+                Tools.addTab(menuKey, "导游账务", listTemplate(data));
+                // 绑定事件
+                FinGuide.init_event();
+                // 缓存页面
+                FinGuide.listPageNo = args.pageNo;
+                // 绑定翻页组件
+                laypage({
+                    cont: FinGuide.$tab.find('.T-pagenation'),
+                    pages: data.totalPage, //总页数
+                    curr: (data.pageNo + 1),
+                    jump: function(obj, first) {
+                        if (!first) { // 避免死循环，第一次进入，不调用页面方法
+                            FinGuide.getList(obj.curr - 1);
+                        }
+                    }
+                });
+            }
+        });
+    };
+
+    /**
+     * 初始化列表页面的事件绑定
+     */
+    FinGuide.init_event = function() {
+        FinGuide.$tab = $('#tab-' + menuKey + '-content');
+        //搜索顶部的事件绑定
+        var $searchArea = FinGuide.$tab.find('.T-search-area'),
+            $datepicker = $searchArea.find('.datepicker');
+
+        // 导游绑定
+        FinGuide.getGuideNameList($searchArea.find('.T-search-name'), [$datepicker.eq(0).val(), $datepicker.eq(1).val()])
+        // 绑定时间控件
+        Tools.setDatePicker($datepicker, true);
+
+
+        $searchArea.find('.T-btn-search').on('click', function(event) {
+            event.preventDefault();
+            FinGuide.getList();
+        });
+        // 报表内的操作
+        FinGuide.$tab.find('.T-list').on('click', '.T-action', function(event) {
+            event.preventDefault();
+            var $that = $(this), $tr = $that.closest('tr'),
+                args = {
+                    guideId: $tr.data('id'),
+                    guideName: $tr.children('td').first().text(),
+                    startDate: $datepicker.eq(0).val(),
+                    endDate: $datepicker.eq(1).val()
+                };
+
+            if ($that.hasClass('T-check')) {
+                // 对账
+                FinGuide.initOperationModule(args, 0);
+            } else if ($that.hasClass('T-pay')) {
+                // 结算
+                FinGuide.initOperationModule(args, 1);
+            }
+        });
+    };
+
+    FinGuide.getGuideNameList = function($obj, valArray) {
+        $obj.autocomplete({
+            minLength: 0,
+            change: function(event, ui) {
+                if (!ui.item) {
+                    $(this).data('id', '');
+                }
+            },
+            select: function(event, ui) {
+                $(this).blur().data('id', ui.item.id);
+            }
+        }).on("click", function() {
+            if (!$obj.data('ajax')) { // 避免重复请求
+                var args = {};
+
+                if (!!valArray && valArray.length === 2) {
+                    args.startDate = valArray[0];
+                    args.endDate = valArray[1];
+                }
+                $.ajax({
+                    url: KingServices.build_url('account/guideFinancial', 'listFinancialGuideQuery'),
+                    type: "POST",
+                    showLoading: false,
+                    data: args
+                }).done(function(data) {
+                    for (var i = 0; i < data.guideList.length; i++) {
+                        data.guideList[i].value = data.guideList[i].realname;
+                        data.guideList[i].id = data.guideList[i].guideId;
+                    }
+                    data.guideList.unshift({
+                        id: '',
+                        value: '全部'
+                    });
+                    $obj.autocomplete('option', 'source', data.guideList);
+                    $obj.autocomplete('search', '');
+
+                    $obj.data('ajax', true);
+                });
+            } else {
+                $obj.autocomplete('search', '');
+            }
+        });
+    };
+
+    /**
+     * 初始化对账页面
+     * @param  {int}  id         导游ID
+     * @param  {string}  id      导游的姓名
+     * @param  {Boolean} isSearchIn true: 来自搜索，false: 来自初始化
+     * @return {[type]}             [description]
+     */
+    FinGuide.initOperationModule = function(args, type, $tab) {
+        if (!!$tab) {
+            var $line = $tab.find('.T-lineProductName');
+
+            args = {
+                guideId: $tab.find('.T-btn-save').data('id'),
+                startDate: $tab.find('.T-search-start-date').val(),
+                endDate: $tab.find('.T-search-end-date').val(),
+                tripPlanNumber: $tab.find('.T-tripPlanNumber').val(),
+                lineProductId: $line.data('id'),
+                lineProductName: $line.val(),
+            };
+
+            if (args.lineProductName === '全部') {
+                args.lineProductName = '';
+            }
+
+            name = $tab.find('.T-guideName').text();
+        }
+
+        $.ajax({
+                url: KingServices.build_url('account/guideFinancial', 'financialGuideSumStaticsByGuideId'),
+                type: 'post',
+                data: args,
+            })
+            .done(function(data) {
+                if (showDialog(data)) {
+                    data.guideName = args.name;
+                    data.id = args.guideId;
+                    data.type = type;
+                    data.lineProductName = data.lineProductName || '全部';
+                    // 临时缓存
+                    FinGuide.checkingTabLineProduct = data.lineProductList;
+
+                    var key = checkMenuKey,
+                        title = '导游对账',
+                        html;
+                    if (type) {
+                        data.isOuter = args.isOuter;
+                        key = payMenuKey, title = '导游付款';
+                        html = guidePayTemplate(data);
+                    } else {
+                        html = guideCheckingTemplate(data);
+                    }
+                    if (Tools.addTab(key, title, html)) {
+                        FinGuide.initOperationEvent($('#tab-' + key + '-content'), type);
                     }
                 }
-        	})
-		},
-		save : function(saveType){
-			console.log(saveType);
-			if(saveType == "checking"){
-				guide.saveCheckingData(0,guide.oldCheckGuideId,"","",1);
-			} else if(saveType == "clearing"){
-				guide.saveGuideSettlement(guide.oldBlanceGuideId,"","","",1);
-			}
-		},
-		clearEdit : function(clearType){
-			guide.edited[clearType] = "";
-		}
-	}
-	exports.listFinancialGuide = guide.listFinancialGuide;
-	exports.isEdited = guide.isEdited;
-	exports.save = guide.save;
-	exports.clearEdit = guide.clearEdit;
+            });
+
+    };
+
+    /**
+     * 对账页面事件初始化及列表初始化
+     * @return {[type]} [description]
+     */
+    FinGuide.initOperationEvent = function($tab, type) {
+        // 绑定搜索
+        var $searchArea = $tab.find('.T-search-area');
+
+        FinGuide.getLineProduct($searchArea.find('.T-lineProductName'), FinGuide.checkingTabLineProduct);
+
+        var $datePicker = Tools.setDatePicker($searchArea.find('.datepicker'), true);
+
+        $searchArea.find('.T-btn-search').on('click', function(event) {
+            event.preventDefault();
+            var $btn = $tab.find('.T-btn-save');
+
+            FinGuide.initOperationModule({
+                                        guideId: $btn.data('id'), 
+                                        guideName:$btn.data('name'),
+                                        startDate: $datePicker.eq(0).val(),
+                                        endDate: $datePicker.eq(1).val()
+                                    }, type, $tab);
+        });
+
+        var validator = rule.check($tab), autoValidator = rule.autoFillCheck($tab.find('.T-auto-fill-area'));
+
+        // 处理关闭与切换tab
+        $tab.off('change').off(SWITCH_TAB_SAVE).off(CLOSE_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT)
+            .on('change', '.T-checkList', function() {
+                $tab.data('isEdited', true);
+            })
+            .on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
+                event.preventDefault();
+                FinGuide.saveCheckingData($tab, [tab_id, title, html]);
+            })
+            .on(SWITCH_TAB_BIND_EVENT, function() {
+                FinGuide.initOperationEvent($tab, type);
+            })
+            .on(CLOSE_TAB_SAVE, function(event) {
+                event.preventDefault();
+                if (!validator.form()) {
+                    return;
+                }
+                FinGuide.saveCheckingData($tab);
+            });
+
+        // 计算
+        if (type) {
+            FinancialService.updateSumPayMoney($tab, rule);
+        } else {
+            FinancialService.updateUnpayMoney($tab, rule);
+        }
+
+        // 绑定表格内容元素的事件
+        $tab.find('.T-checkList').on('click', '.T-action', function(event) {
+            event.preventDefault();
+            var $that = $(this),
+                id = $that.closest('tr').data('id');
+
+            if ($that.hasClass('T-view')) {
+                // 查看应付明细
+                FinGuide.viewOperationDetail(id, 0)
+            } else if ($that.hasClass('T-viewPayedMoney')) {
+                // 查看已付
+                FinGuide.viewOperationDetail(id, 1);
+            } else if ($that.hasClass('T-gid')) {
+                // 查看费用明细
+                FinGuide.viewFeeDetail($that.data('id'));
+            }
+        });
+
+        //确认按钮事件
+        $tab.find(".T-btn-save").click(function() {
+            if (!validator.form()) {
+                return;
+            }
+            if (type) {
+                FinGuide.savePayingData($tab);
+            } else {
+                FinGuide.saveCheckingData($tab);
+            }
+        });
+
+        //关闭页面事件
+        $tab.find(".T-btn-close").click(function() {
+            Tools.closeTab(Tools.getTabKey($tab.prop('id')));
+        });
+
+        // 付款时，自动下账
+        if (type) {
+            $tab.find('.T-btn-autofill').on('click', function(event) {
+                event.preventDefault();
+                if ($(this).hasClass('btn-primary')) {
+                    if (autoValidator.form()) {
+                        FinGuide.autoFillMoney($tab);
+                    }
+                } else {
+                    FinGuide.payingJson = [];
+                    FinGuide.setAutoFillEdit($tab, false);
+                }
+            });
+
+            // 清空数据
+            FinGuide.payingJson = [];
+        }
+
+        // 后续业务
+        FinGuide.getOperationList(0, $tab);
+    }
+
+    /**
+     * 保存对账数据
+     * @param  {object} $tab    对账页面的Jquery对象
+     * @param  {array} tabArgs 翻页提示所需的切换参数
+     * @return {[type]}         [description]
+     */
+    FinGuide.saveCheckingData = function($tab, tabArgs) {
+        var json = FinancialService.checkSaveJson($tab, rule);
+
+        if (json) { // 有值
+            $.ajax({
+                    url: KingServices.build_url('account/guideFinancial', 'operateCheckAccount'),
+                    type: 'post',
+                    data: {
+                        checkJson: json
+                    },
+                })
+                .done(function(data) {
+                    if (showDialog(data)) {
+                        $tab.data('isEdited', false);
+
+                        showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+                            if (!!tabArgs) {
+                                Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
+                                FinGuide.initOperationEvent($tab, 0);
+                            } else {
+                                $tab.find('.T-btn-search').trigger('click');
+                                // FinGuide.getList(FinGuide.listPageNo);
+                            }
+                        })
+                    }
+                });
+        }
+    }
+
+    /**
+     * 保存付款
+     * @param  {object} $tab    对账页面的Jquery对象
+     * @param  {array} tabArgs 翻页提示所需的切换参数
+     * @return {[type]}         [description]
+     */
+    FinGuide.savePayingData = function($tab, tabArgs) {
+        var json = FinancialService.clearSaveJson($tab, FinGuide.payingJson, rule);
+        if (json.length) {
+            $.ajax({
+                    url: KingServices.build_url('account/guideFinancial', 'operatePayAccount'),
+                    type: 'post',
+                    data: {
+                        payJson: JSON.stringify(json),
+                        guideId: $tab.find('.T-btn-save').data('id'),
+                        payType: $tab.find('.T-sumPayType').val(),
+                        remark: $tab.find('.T-remark').val()
+                    },
+                })
+                .done(function(data) {
+                    $tab.data('isEdited', false);
+                    FinGuide.payingJson = [];
+                    showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+                        if (!!tabArgs) {
+                            Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
+                            FinGuide.initOperationEvent($tab, 1);
+                        } else {
+                            $tab.find('.T-btn-search').trigger('click');
+                            // FinGuide.getList(FinGuide.listPageNo);
+                        }
+                    })
+                });
+        } else {
+            showMessageDialog($('#confirm-dialog-message'), '您当前未进行任何操作！');
+        }
+    };
+
+    /**
+     * 自动下账业务逻辑
+     * @param  {[type]} $tab [description]
+     * @return {[type]}      [description]
+     */
+    FinGuide.autoFillMoney = function($tab) {
+        if (!!$tab && $tab.length) {
+            var $line = $tab.find('.T-lineProductName'),
+                $autoPayMoney = $tab.find('.T-sumPayMoney');
+
+            var args = {
+                guideId: $tab.find('.T-btn-save').data('id'),
+                startDate: $tab.find('.T-search-start-date').val(),
+                endDate: $tab.find('.T-search-end-date').val(),
+                tripPlanNumber: $tab.find('.T-tripPlanNumber').val(),
+                lineProductId: $line.data('id'),
+                lineProductName: $line.val(),
+                autoPayMoney: $autoPayMoney.val(),
+                payType: $tab.find('.T-sumPayType').val()
+            };
+
+            if (args.lineProductName === '全部') {
+                args.lineProductName = '';
+            }
+
+            FinancialService.autoPayConfirm(args.startDate, args.endDate, function() {
+                $.ajax({
+                        url: KingServices.build_url('account/guideFinancial', 'autoPay'),
+                        type: 'post',
+                        data: args,
+                        showLoading: false
+                    })
+                    .done(function(data) {
+                        if (showDialog(data)) {
+                            FinGuide.payingJson = data.autoPayList;
+                            $tab.find('input[name="sumPayMoney"]').val(data.realAutoPayMoney);
+                            FinGuide.setAutoFillEdit($tab, true);
+                        }
+                    });
+            })
+        }
+    };
+
+    FinGuide.setAutoFillEdit = function($tab, disable) {
+        var $sum = $tab.find('input[name="sumPayMoney"]').prop('disabled', disable);
+        if (!disable) {
+            $sum.val(0);
+        }
+
+        $tab.find('.T-btn-autofill').html(disable ? '<i class="ace-icon fa fa-times"></i> 取消下账' : '<i class="ace-icon fa fa-check-circle"></i> 自动下账').toggleClass('btn-primary btn-warning');;
+
+        FinGuide.getOperationList(0, $tab);
+
+    };
+    /**
+     * 获取对账列表数据
+     * @param  {int} pageNo 列表页码
+     * @return {[type]}        [description]
+     */
+    FinGuide.getOperationList = function(pageNo, $tab) {
+        if ($tab) {
+            var $line = $tab.find('.T-lineProductName');
+
+            var args = {
+                pageNo: pageNo || 0,
+                guideId: $tab.find('.T-btn-save').data('id'),
+                startDate: $tab.find('.T-search-start-date').val(),
+                endDate: $tab.find('.T-search-end-date').val(),
+                tripPlanNumber: $tab.find('.T-tripPlanNumber').val(),
+                lineProductId: $line.data('id'),
+                lineProductName: $line.val(),
+            };
+
+            if (args.lineProductName === '全部') {
+                args.lineProductName = '';
+            }
+
+            $.ajax({
+                    url: KingServices.build_url('account/guideFinancial', 'listFinancialGuideByGuideId'),
+                    type: 'post',
+                    data: args,
+                    showLoading: false
+                })
+                .done(function(data) {
+                    if (showDialog(data)) {
+                        var html,
+                            type = $tab.find('.T-btn-save').data('type');
+                        if (!!type) {
+                            data.list = FinancialService.getTempDate(data.list, FinGuide.payingJson);
+
+                            html = filterUnAuth(payingTableTemplate(data));
+                        } else {
+                            html = filterUnAuth(checkingTableTemplate(data));
+                        }
+                        $tab.find('.T-checkList').html(html);
+
+                        if (!type) {
+                            //给全选按钮绑定事件: 未去重
+                            FinancialService.initCheckBoxs($tab.find(".T-checkAll"), $tab.find(".T-checkList").find('.T-checkbox'));
+                        }
+
+                        // 设置记录条数及页面
+                        $tab.find('.T-sumItem').text('共计' + data.recordSize + '条记录');
+                        $tab.find('.T-btn-save').data('pageNo', args.pageNo);
+                        // 绑定翻页组件
+                        laypage({
+                            cont: $tab.find('.T-pagenation'),
+                            pages: data.totalPage, //总页数
+                            curr: (data.pageNo + 1),
+                            jump: function(obj, first) {
+                                if (!first) { // 避免死循环，第一次进入，不调用页面方法
+                                    FinGuide.getOperationList(obj.curr - 1, $tab);
+                                }
+                            }
+                        });
+                    }
+                });
+
+        }
+    }
+
+    /**
+     * 绑定线路产品的下拉选择
+     * @param  {object} $obj 绑定对象
+     * @param  {array} list 线路产品的选项
+     * @return {[type]}      [description]
+     */
+    FinGuide.getLineProduct = function($obj, list) {
+        for (var i = 0; i < list.length; i++) {
+            list[i].value = list[i].name;
+            list[i].id = list[i].id;
+        }
+        list.unshift({
+            id: '',
+            value: '全部'
+        });
+
+        $obj.autocomplete({
+                minLength: 0,
+                change: function(event, ui) {
+                    if (!ui.item) {
+                        $(this).data('id', '');
+                    }
+                },
+                select: function(event, ui) {
+                    $(this).blur().data('id', ui.item.id);
+                }
+            }).on("click", function() {
+                $obj.autocomplete('search', '');
+            })
+            .autocomplete('option', 'source', list);
+    }
+
+    /**
+     * 查看操作记录
+     * @param  {int} id   账务id
+     * @param  {int} type 0：应付明细，1：已付明细
+     * @return {[type]}      [description]
+     */
+    FinGuide.viewOperationDetail = function(id, type) {
+        if (!!id) {
+            var method = 'viewCheckRecordList',
+                title = '应付金额明细';
+            if (type) {
+                method = 'viewPayedRecordList';
+                title = '已付金额明细';
+            }
+            $.ajax({
+                    url: KingServices.build_url('account/guideFinancial', method),
+                    type: 'post',
+                    data: {
+                        id: id
+                    },
+                })
+                .done(function(data) {
+                    if (showDialog(data)) {
+                        data.type = type;
+                        layer.open({
+                            type: 1,
+                            title: title,
+                            skin: 'layui-layer-rim',
+                            area: '1024px',
+                            zIndex: 1028,
+                            content: operationDetailTemplate(data),
+                            scrollbar: false
+                        });
+                    }
+                });
+
+        }
+    }
+
+    /**
+     * 查看--导游对账费用明细 
+     * @param  {int} tripId 发团计划ID
+     * @return {[type]}        [description]
+     */
+    FinGuide.viewFeeDetail = function(tripId) {
+        if (!!tripId) {
+            $.ajax({
+                    url: KingServices.build_url('account/guideFinancial', 'viewTripPlanFeeDetail'),
+                    type: 'post',
+                    data: {
+                        tripPlanId: tripId
+                    },
+                })
+                .done(function(data) {
+                    if (showDialog(data)) {
+                    	data.touristGroupList = JSON.parse(data.touristGroupList || false) || [];
+                        Tools.addTab(menuKey + "-costDetail", "费用明细", costDetailTemplate(data));
+                        //查看图片事件
+                        $("#tab-" + menuKey + "-costDetail-content").find(".T-view-bill").click(function() {
+                            var WEB_IMG_URL_BIG = $("#tab-" + menuKey + "-costDetail-content").find("input[name=WEB_IMG_URL_BIG]").val(); //大图
+                            var WEB_IMG_URL_SMALL = $("#tab-" + menuKey + "-costDetail-content").find("input[name=WEB_IMG_URL_SMALL]").val(); //小图
+                            guide.viewBillImage($(this).data('fn'), WEB_IMG_URL_BIG, WEB_IMG_URL_SMALL);
+                        });
+                    }
+                });
+
+        }
+    }
+
+
+    //显示单据
+    FinGuide.viewBillImage = function(fn, WEB_IMG_URL_BIG, WEB_IMG_URL_SMALL) {
+        var data = {
+            "images": []
+        };
+        var strs = fn.split(",");
+        for (var i = 0; i < strs.length; i++) {
+            var s = strs[i];
+            if (s != null && s != "" && s.length > 0) {
+                var image = {
+                    "WEB_IMG_URL_BIG": imgUrl + s,
+                    "WEB_IMG_URL_SMALL": imgUrl + s + "?imageView2/2/w/150",
+                }
+                data.images.push(image);
+            }
+        }
+        var html = billImagesTemplate(data);
+
+        layer.open({
+            type: 1,
+            title: "单据图片",
+            skin: 'layui-layer-rim', // 加上边框
+            area: '500px', // 宽高
+            zIndex: 1028,
+            content: html,
+            scrollbar: false, // 推荐禁用浏览器外部滚动条
+            success: function() {
+                var colorbox_params = {
+                	photo: true,
+                    rel: 'colorbox',
+                    reposition: true,
+                    scalePhotos: true,
+                    scrolling: false,
+                    previous: '<i class="ace-icon fa fa-arrow-left"></i>',
+                    next: '<i class="ace-icon fa fa-arrow-right"></i>',
+                    close: '&times;',
+                    current: '{current} of {total}',
+                    maxWidth: '100%',
+                    maxHeight: '100%',
+                    onOpen: function() {
+                        $overflow = document.body.style.overflow;
+                        document.body.style.overflow = 'hidden';
+                    },
+                    onClosed: function() {
+                        document.body.style.overflow = $overflow;
+                    },
+                    onComplete: function() {
+                        $.colorbox.resize();
+                    }
+                };
+                $('#layer-photos-financial-count [data-rel="colorbox"]').colorbox(colorbox_params);
+            }
+        });
+    };
+
+    FinGuide.initPayModule = function(options) {
+        options.guideId = options.id;
+        delete(options.id);
+        options.isOuter = true;
+
+        FinGuide.initOperationModule(options, 1)
+    };
+
+    // 暴露方法
+    exports.init = FinGuide.initModule;
+    exports.initPay = FinGuide.initPayModule;
 });
