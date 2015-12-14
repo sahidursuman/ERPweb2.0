@@ -25,7 +25,7 @@
         <td>{{checking.unPayedMoney}}</td>
         <td><input name="payMoney" type="text" value="{{checking.payMoney}}"/></td>
         <td><input type="text" maxlength="9" name="payRemark" value="{{checking.checkRemark}}"></td>
-        <td>{{if checking.isConfirmAccount == 0}}<span>-</span>{{else}}{{if checking.checkTime == null || checking.checkTime == ""}}-{{else}}{{checking.checkTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}{{/if}}</td>
+        <td>{{if checking.isConfirmAccount == 0}}<span>-</span>{{else}}{{if checking.checkTime == null || checking.checkTime == ""}}-{{else}}{{checking.checkTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}{{/if}}{{/if}}</td>
         <td>{{if checking.isConfirmAccount == 0}}<span>-</span>{{else}}{{if checking.checkRealname == null || checking.checkRealname == ""}}-{{else}}{{checking.checkRealname}}{{/if}}{{/if}}</td>
         <td>
             <label class="pos-rel">
