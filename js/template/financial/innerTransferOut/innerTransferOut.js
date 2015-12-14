@@ -567,8 +567,6 @@ define(function(require,exports) {
 			    if(result){
 			 	    data.searchParam = $listSearchData;
 			 	    data.showBtnFlag = InnerTransferOut.showBtnFlag;
-			 	    console.log(data);
-				    console.log(data);
 				    var $lineProductData = data.lineProductList;
 				    //return
 					var html = settlementTemplate(data);
