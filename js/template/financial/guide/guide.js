@@ -258,8 +258,11 @@ define(function(require, exports) {
 
         // 处理关闭与切换tab
         $tab.off('change').off(SWITCH_TAB_SAVE).off(CLOSE_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT)
-            .on('change', '.T-checkList', function() {
+            .on('change', '.T-checkList, .T-checkAll', function() {
                 $tab.data('isEdited', true);
+                if($(this).hasClass('T-checkAll')){
+                    $tab.find('.T-checkList tr').data('change', 'true');
+                }
             })
             .on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
                 event.preventDefault();

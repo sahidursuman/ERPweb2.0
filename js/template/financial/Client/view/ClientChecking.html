@@ -84,11 +84,15 @@
                 <td>{{rs.lineProductName}}</td>
                 <td>{{rs.startTime}}</td>
                 <td>{{rs.contactName}}</td>
-                <td>{{rs.adultCount}}大{{rs.adultCount}}小<a class="cursor T-action T-unfold">展开</a></td>
+                <td>{{rs.adultCount}}大{{rs.childCount}}小<a class="cursor T-action T-unfold">展开</a></td>
                 <td>{{rs.creatorName}}</td>
-                <td>{{rs.creatorTime}}</td>
+                <td>{{rs.createTime}}</td>
                 <td class="T-contractMoney">{{rs.contractMoney}}</td>
-                <td>{{rs.detail}}</td>
+                <td>
+                {{each rs.detailList as rsl j}}
+                    {{rsl.describeInfo}}：{{rsl.price}}x{{rsl.count}}={{rsl.price * rsl.count}}{{if j != rs.detailList.length - 1}}，{{/if}}
+                {{/each}}
+                </td>
                 <td><a class="cursor T-action T-receive">社收{{rs.travleReciveMoney}}，导游现收{{rs.guideReciveMoney}}</a></td>
                 <td><input type="text" class="col-sm-12 T-refund money" value="{{rs.backMoney}}" {{if rs.isConfirmAccount}} disabled="disabled"{{/if}}></td>
                 <td class="T-settlementMoney">{{rs.settlementMoney}}</td>

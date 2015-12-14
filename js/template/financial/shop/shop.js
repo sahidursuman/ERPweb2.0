@@ -101,13 +101,23 @@ define(function(require, exports){
 		// 报表内的操作
 		$tab.find('.T-list').on('click', '.T-action', function(event) {
 			event.preventDefault();
-			var $that = $(this), id = $that.closest('tr').data('id'), name = $that.closest('tr').data('name');
+			var $that = $(this), 
+				id = $that.closest('tr').data('id'), 
+				name = $that.closest('tr').data('name'),
+				argsData = {
+					id : id, 
+					name : name,
+					source : true,
+					startTime : $tab.find('.T-search-start-date').val(),
+					endTime : $tab.find('.T-search-end-date').val(),
+				};
 			if ($that.hasClass('T-checking'))  {
 				// 对账
-				FinShop.accountChecking(id, name);
+				FinShop.accountChecking(argsData);
 			} else if ($that.hasClass('T-settlement'))  {
 				// 结算
-				FinShop.settlement(id, name);
+				
+				FinShop.settlement(argsData);
 			}
 		});
 	};
@@ -151,44 +161,85 @@ define(function(require, exports){
 	 * 初始化对账模块
 	 * @param  {[int]} id 购物账务ID
 	 */
-	FinShop.accountChecking = function(id, name){
+	FinShop.accountChecking = function(args){
 		FinShop.$checkingTab = null;
-		FinShop.checkingId = id;
-		FinShop.checkingName = name;
-		FinShop.checkingList(0, id);
+		FinShop.checkingId = args.shopId = args.id;
+		FinShop.checkingName = args.name;
+		args. page = 0;
+		FinShop.initOperationList(args, false);
 	};
-
 	/**
-	 * 获取购物账务-对账列表，初始化列表页面
-	 * @param  {int} page 页码
-	 * @param  {[int]} id 购物账务ID
+	 * 初始化付款模块
+	 * @param  {[type]} args 
 	 */
-	FinShop.checkingList = function(page, id){
-		var args = {
-			pageNo : (page || 0),
-			shopId : id || FinShop.checkingId,
-			startTime: FinShop.$tab.find('.T-search-start-date').val(),
-			endTime : FinShop.$tab.find('.T-search-end-date').val()
-		}
-		if (!!FinShop.$checkingTab) {
+	FinShop.initPay = FinShop.settlement = function(args){
+		FinShop.$settlementTab = null;
+		FinShop.settlementId = args.shopId = args.id;
+		FinShop.settlementName = args.name;
+		FinShop.isBalanceSource = !args.source;
+		args.page = 0;
+		FinShop.initOperationList(args, true);
+	};
+	/**
+	 * 对账和收款列表
+	 * @param  {Object} args 请求参数
+	 * @param  {Boole}  type 是否未收款界面
+	 * @param  {Object} $tab tab
+	 */
+	FinShop.initOperationList = function(args, type, $tab){
+		if (!!$tab) {
 			args = {
-				pageNo: (page || 0),
-				shopId : id || FinShop.checkingId,
-				startTime: FinShop.$checkingTab.find('.T-search-start-date').val(),
-				endTime : FinShop.$checkingTab.find('.T-search-end-date').val(),
-				tripMessage : FinShop.$checkingTab.find('.T-search-trip').val()
-			}
+				pageNo: (args.page || 0),
+				shopId : args.id || FinShop.settlementId,
+				startTime: args.start || FinShop.$settlementTab.find('.T-search-start-date').val(),
+				endTime : args.end || FinShop.$settlementTab.find('.T-search-end-date').val(),
+				tripMessage : FinShop.$settlementTab.find('.T-search-trip').val()
+			};
 		}
+		var method = 'listReciveShopAcccount';
+		if(!type){
+			method = 'listCheckShopAcccount';
+		}
+
 		$.ajax({
-			url: KingServices.build_url('financial/shopAccount', 'listCheckShopAcccount'),
-			type: 'post',
-			data: args,
+			url : KingServices.build_url('financial/shopAccount', method),
+			type : "POST",
+			data : args
 		}).done(function(data){
-			if (showDialog(data)) {
-				data.name = FinShop.checkingName;
-				Tools.addTab(checkMenuKey,"购物对账",shopCheckingTemplate(data));
-				FinShop.$checkingTab = $('#tab-' + checkMenuKey + '-content');
-				FinShop.check_init_event(FinShop.$checkingTab);
+			if(showDialog(data)){
+				var template = shopClearingTemplate,
+					title = '购物收款',
+					key = settMenuKey;
+				if(type){
+					data.name = FinShop.settlementName;
+					data.source = FinShop.isBalanceSource;
+				}else{
+					data.name = FinShop.checkingName;
+					template = shopCheckingTemplate;
+					title = '购物对账';
+					key = checkMenuKey;
+				}
+				var $theTab = null;
+				if(Tools.addTab(key, title, template(data))){
+					if(type){
+						$theTab = FinShop.$settlementTab = $('#tab-' + key + '-content');
+						FinShop.sett_init_event(FinShop.$settlementTab, type);
+					}else{
+						$theTab = FinShop.$checkingTab = $('#tab-' + key + '-content');
+						FinShop.check_init_event(FinShop.$checkingTab, type);
+					}
+				}
+				// 绑定翻页组件
+				laypage({
+				    cont: $theTab.find('.T-pagenation'), 
+				    pages: data.searchParam.totalPage, //总页数
+				    curr: (data.searchParam.pageNo + 1),
+				    jump: function(obj, first) {
+				    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+				    		FinShop.initOperationList({page : obj.curr -1}, type);
+				    	}
+				    }
+				});
 			}
 		});
 	};
@@ -396,54 +447,6 @@ define(function(require, exports){
 		}
 	};
 
-	FinShop.settlement = function(id, name){
-		FinShop.$settlementTab = null;
-		FinShop.settlementId = id;
-		FinShop.settlementName = name;
-		FinShop.isBalanceSource = false;
-		FinShop.settlementList(0, id);
-	};
-	FinShop.initPay = function(args){
-		FinShop.$settlementTab = null;
-		FinShop.settlementId = args.id;
-		FinShop.settlementName = args.name;
-		FinShop.isBalanceSource = true;
-		FinShop.settlementList(0, args.id, args.startDate, args.endDate);
-	}
-	FinShop.settlementList = function(page, id, start, end){
-		var args = {
-			pageNo : (page || 0),
-			shopId : id || FinShop.settlementId,
-			startTime: start || FinShop.$tab.find('.T-search-start-date').val(),
-			endTime : end || FinShop.$tab.find('.T-search-end-date').val()
-		}
-		if (!!FinShop.$settlementTab) {
-			args = {
-				pageNo: (page || 0),
-				shopId : id || FinShop.settlementId,
-				startTime: start || FinShop.$settlementTab.find('.T-search-start-date').val(),
-				endTime : end || FinShop.$settlementTab.find('.T-search-end-date').val(),
-				tripMessage : FinShop.$settlementTab.find('.T-search-trip').val()
-			}
-		}
-		FinShop.settListPageNo = args.pageNo;
-
-		$.ajax({
-			url : KingServices.build_url('financial/shopAccount', 'listReciveShopAcccount'),
-			type : "POST",
-			data : args
-		}).done(function(data){
-			if(showDialog(data)){
-				data.name = FinShop.settlementName;
-				data.source = FinShop.isBalanceSource;
-				Tools.addTab(settMenuKey, "购物结算", shopClearingTemplate(data));
-
-				FinShop.$settlementTab = $('#tab-' + settMenuKey + '-content');
-				FinShop.sett_init_event(FinShop.$settlementTab);
-			}
-		});
-	};
-
 	FinShop.sett_init_event = function($tab){
 		var validator = rule.check($tab);
 
@@ -465,7 +468,10 @@ define(function(require, exports){
 		var $searchArea = $tab.find('.T-search-area');
 		$searchArea.find('.T-btn-search').on('click', function(event){
 			event.preventDefault();
-			FinShop.settlementList(0, FinShop.settlementId);
+			FinShop.initOperationList({
+				page : 0,
+				id : FinShop.settlementId
+			}, true);
 		});
 		var $datepicker = $searchArea.find('.datepicker');
 		Tools.setDatePicker($datepicker, true);
@@ -639,7 +645,7 @@ define(function(require, exports){
                     showMessageDialog($('#confirm-dialog-message'), data.message, function() {
                         if (!!tabArgs) {
                             Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
-                            FinShop.settlementList(0);
+                            FinShop.initOperationList({page : 0}, true);
                         } else {
                             Tools.closeTab(settMenuKey);
                             FinShop.getList(FinShop.listPageNo);
