@@ -92,7 +92,7 @@ define(function(require, exports) {
             var $that = $(this),
                 id = $that.closest('tr').data('id'),
                 transferId = $that.closest('tr').attr('tgTransferId');
-
+                lineProductId = $that.closest('tr').attr('lineProductId');
             if ($that.hasClass('T-showTourist')) {
                 // 查看游客小组
                 innerProfit.clickFlag = 1;
@@ -107,6 +107,9 @@ define(function(require, exports) {
             } else if ($that.hasClass('T-showTransPay')) {
                 // 查看内转明细
                 innerProfit.viewTransfer(this);
+            } else if($that.hasClass('T-lineProductDetail')){
+                //查看线路产品
+                KingServices.viewLineProduct(lineProductId)
             }
         });
     };
@@ -121,12 +124,11 @@ define(function(require, exports) {
     };
     //查看游客小组、收客团款明细
     innerProfit.viewTouristGroup = function(id){
-        var $path = innerProfit.clickFlag == 2?'profitTransfer':'touristGroup';
-        var $method = innerProfit.clickFlag == 2?'findIncome':'viewTransferTouristGroupDetails';
+        var $path = innerProfit.clickFlag == 2?'profitInnerTransfer':'touristGroup';
+        var $method = innerProfit.clickFlag == 2?'profitInnerTransfer':'viewTransferTouristGroupDetails';
         var $title = innerProfit.clickFlag == 2?'收客团款明細':'查看小组';
         $.ajax({
             url:innerProfit.url($path,$method),
-            //url:TurnProfit.url("touristGroup","viewTouristGroupDetails"),
             type:"POST",
             data:{
                 id : id + ""
@@ -173,7 +175,7 @@ define(function(require, exports) {
     //查看中转明细
     innerProfit.viewTransit = function(id){
         $.ajax({
-            url:innerProfit.url("profitTransfer","findOut"),
+            url:innerProfit.url("profitInnerTransfer","findOut"),
             type:"POST",
             data:{
                 id : id + ""
@@ -185,7 +187,7 @@ define(function(require, exports) {
                     var html =transitViewTemplate(data);
                     layer.open({
                         type : 1,
-                        title : "中转成本明细",
+                        title : "内转中转成本",
                         skin : 'layui-layer-rim', // 加上边框
                         area : "70%", // 宽高
                         zIndex : 1028,
@@ -196,12 +198,11 @@ define(function(require, exports) {
             }
         })
     };
-
     //查看我社转出分团转客信息
     innerProfit.viewTransfer = function(obj){
         var id = $(obj).data("inner-id");
         $.ajax({
-            url:innerProfit.url("profitTransfer","findPay"),
+            url:innerProfit.url("profitInnerTransfer","findPay"),
             type:"POST",
             data:{
                 id : id + ""
@@ -213,7 +214,7 @@ define(function(require, exports) {
                     var html = innerTransferInfoTemplate(data);
                     layer.open({
                         type : 1,
-                        title : "内转明细",
+                        title : "内转成本",
                         skin : 'layui-layer-rim',
                         area : "60%", 
                         zIndex : 1028,
@@ -243,19 +244,19 @@ define(function(require, exports) {
 
                     if(lineProductNameList !=null && lineProductNameList.length>0){
                         for(var i = 0;i<lineProductNameList.length;i++){
-                            lineProductNameList[i].value = lineProductNameList[i].lineProductName
+                            lineProductNameList[i].value = lineProductNameList[i].name
                         }
                     }
 
                     if(partnerAgencyNameList !=null && partnerAgencyNameList.length>0){
                         for(var i = 0;i<partnerAgencyNameList.length;i++){
-                            partnerAgencyNameList[i].value = partnerAgencyNameList[i].partnerAgencyName
+                            partnerAgencyNameList[i].value = partnerAgencyNameList[i].name
                         }
                     }
 
                     if(toBusinessGroupNameList !=null && toBusinessGroupNameList.length>0){
                         for(var i = 0;i<toBusinessGroupNameList.length;i++){
-                            toBusinessGroupNameList[i].value = toBusinessGroupNameList[i].toBusinessGroupName
+                            toBusinessGroupNameList[i].value = toBusinessGroupNameList[i].name
                         }
                     }
 
