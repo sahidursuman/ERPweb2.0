@@ -8,6 +8,13 @@
 .table-special tr{
     border-top: 1px solid #ddd;
 }
+/*table溢出*/
+.overflow-table tr td,th{
+    padding-left: 0px!important;
+    padding-right: 0px!important;
+    text-align: center;
+    width: 2%;
+}
 .table-special{
     padding:0!important;
     width: 100%;
