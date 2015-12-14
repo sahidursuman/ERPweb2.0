@@ -99,7 +99,7 @@
 				<tbody> 
 				{{each restaurantList as restaurant}}
 					<tr>
-						<td class="viewWhichDaysContainer" whichDay="{{restaurant.whichDay}}">第{{restaurant.whichDay}}天</td>
+						<td class="T-viewWhichDaysContainer" whichDay="{{restaurant.whichDay}}">第{{restaurant.whichDay}}天</td>
 						<td>{{if restaurant.isChoose == 1}}-导游任选-{{else}}{{if restaurant.restaurant != null}}{{restaurant.restaurant.name}}{{/if}}{{/if}}</td>
 						<td>{{if restaurant.isChoose == 1}}-{{else}}{{if restaurant.restaurant != null}}{{restaurant.restaurant.mobileNumber}}{{/if}}{{/if}}</td>
 						<td>
@@ -143,7 +143,7 @@
 				<tbody>
 				{{each hotelList as hotel}}
 					<tr>
-						<td class="viewWhichDaysContainer" whichDay="{{hotel.whichDay}}">第{{hotel.whichDay}}天</td>
+						<td class="T-viewWhichDaysContainer" whichDay="{{hotel.whichDay}}">第{{hotel.whichDay}}天</td>
 						<td>{{if hotel.hotel.level == 1}}三星以下{{else if hotel.hotel.level == 2}}三星{{else if hotel.hotel.level == 3}}准四星{{else if hotel.hotel.level == 4}}四星{{else if hotel.hotel.level == 5}}准五星{{else if hotel.hotel.level == 6}}五星{{else if hotel.hotel.level == 7}}五星以上{{/if}}</td>
 						<td>{{hotel.hotel.name}}</td>
 						<td>{{hotel.hotel.mobileNumber}}</td>
@@ -183,7 +183,7 @@
 				<tbody>
                 {{each scenicList as scenic}}
 					<tr>
-						<td class="viewWhichDaysContainer" whichDay="{{scenic.whichDay}}">第{{scenic.whichDay}}天</td>
+						<td class="T-viewWhichDaysContainer" whichDay="{{scenic.whichDay}}">第{{scenic.whichDay}}天</td>
 						<td>{{scenic.tourTime}}</td>
 						<td>{{scenic.scenic.name}}</td>
 						<td>{{scenic.scenicItem.name}}</td>
@@ -219,7 +219,7 @@
 				<tbody>
 				{{each shopList as shop}}
 					<tr>
-						<td class="viewWhichDaysContainer" whichDay="{{shop.whichDay}}">第{{shop.whichDay}}天</td>
+						<td class="T-viewWhichDaysContainer" whichDay="{{shop.whichDay}}">第{{shop.whichDay}}天</td>
 						<td>{{shop.shop.name}}</td>
 						<td>{{shop.shopPolicy.name}}</td>
 						<td>{{shop.shop.mobileNumber}}</td>
@@ -254,7 +254,7 @@
 				<tbody>
 				{{each selfPayList as selfPay}}
 					<tr>
-						<td class="viewWhichDaysContainer" whichDay="{{selfPay.whichDay}}">第{{selfPay.whichDay}}天</td>
+						<td class="T-viewWhichDaysContainer" whichDay="{{selfPay.whichDay}}">第{{selfPay.whichDay}}天</td>
 						<td>{{selfPay.selfPay.name}}</td>
 						<td>{{if selfPay.selfPayItem !=null}}{{selfPay.selfPayItem.name}}{{/if}}</td>
 						<td>{{selfPay.selfPay.mobileNumber}}</td>
@@ -347,7 +347,7 @@
 				<tbody>
 				{{each otherList as other}}
 					<tr>
-						<td class="viewWhichDaysContainer" whichDay="{{other.whichDay}}">第{{other.whichDay}}天</td>
+						<td class="T-viewWhichDaysContainer" whichDay="{{other.whichDay}}">第{{other.whichDay}}天</td>
 						<td>{{other.name}}</td>
 						<td>{{other.managerName}}</td>
 						<td>{{other.mobileNumber}}</td>

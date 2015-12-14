@@ -575,6 +575,8 @@ var modalScripts = {
 	'resource_travelLine': 'js/template/resource/travelLine/travelLine.js',
 	//-------------------------------------------发团管理模块---------------------------------------------------
 	'arrange_quote':'js/template/arrange/quote/quote.js',
+	'arrange_transit': 'js/template/arrange/transit/transit.js',
+	'arrange_all':'js/template/resource/tripPlan/tripPlan.js',
 	//-------------------------------------------业务分析模块---------------------------------------------------
 	'business_analyst_saleProduct' : "js/template/businessAnalyst/saleProduct/saleProduct.js",//产品销量
 	'business_analyst_sourDstribution' : "js/template/businessAnalyst/sourDstribution/sourDstribution.js", //客源分布
@@ -612,19 +614,6 @@ function listMenu(menuTemplate){
 				var html = template("menu-template",data);
 				$("#sidebar .nav-list").html(html);
 
-				//绑定发团安排菜单功能
-				$("#sidebar .nav-list .arrange_all").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					console.info('click.....');
-					seajs.use("" + ASSETS_ROOT +"js/template/resource/tripPlan/tripPlan.js",function(tripPlan){
-						console.info('listTripPlan......');
-						tripPlan.listTripPlan(0,"","","","","","","","");
-						modals["arrange_all"] = tripPlan;
-					});
-				});
-
 				//绑定财务管理菜单功能 
 				$("#sidebar .nav-list .financial_guide").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
@@ -633,28 +622,6 @@ function listMenu(menuTemplate){
 					seajs.use("" + ASSETS_ROOT +"js/template/financial/guide/guide.js",function(guide){
 						guide.listFinancialGuide(0,"","","");
 						modals["financial_guide"] = guide;
-					});
-				});
-
-				//绑定分团转客菜单功能
-				/*$("#sidebar .nav-list .arrange_tourist").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/arrange/arrangeTourist/arrangeTourist.js",function(arrangeTourist){
-						arrangeTourist.listArrangeTouristMain();
-						modals["arrange_tourist"] = arrangeTourist;
-					});
-				});*/
-
-				//绑定中转安排菜单功能
-				$("#sidebar .nav-list .arrange_transit").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/arrange/transit/transit.js",function(transit){
-						transit.listTransit(0,"","","","","","","","","","","","");
-						modals["arrange_transit"] = transit;
 					});
 				});
 
@@ -1450,25 +1417,49 @@ Tools.getTabKey = function(id) {
  */
 
 Tools.inputCtrolFloat=function($inputCtrol){
-	$inputCtrol.on('keyup', function (event) {
-	    var $amountInput = $(this);
-	    //响应鼠标事件，允许左右方向键移动 
-	    event = window.event || event;
-	    if (event.keyCode == 37 | event.keyCode == 39) {
-	        return;
-	    }
-	    //先把非数字的都替换掉，除了数字和. 
-	    $amountInput.val($amountInput.val().replace(/[^\d.]/g, "").
-	        //只允许一个小数点              
-	        //replace(/^\./g, "").replace(/\.{2,}/g, ".").
-	        //只能输入小数点后两位
-	        replace(".", "$#$").replace(/\./g, "").replace("$#$", ".").replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3'));
-    });
-	$inputCtrol.on('blur', function () {
-	    var $amountInput = $(this);
-		    //最后一位是小数点的话，移除
-		    $amountInput.val(($amountInput.val().replace(/\.$/g, "")));
-	});
+	if (jQuery.isArray($inputCtrol)) {
+		for (var i = 0, len = $inputCtrol.length; i < len; i++) {
+			$inputCtrol[i].on('keyup', function (event) {
+			    var $amountInput = $(this);
+			    //响应鼠标事件，允许左右方向键移动 
+			    event = window.event || event;
+			    if (event.keyCode == 37 | event.keyCode == 39) {
+			        return;
+			    }
+			    //先把非数字的都替换掉，除了数字和. 
+			    $amountInput.val($amountInput.val().replace(/[^\d.]/g, "").
+			        //只允许一个小数点              
+			        //replace(/^\./g, "").replace(/\.{2,}/g, ".").
+			        //只能输入小数点后两位
+			        replace(".", "$#$").replace(/\./g, "").replace("$#$", ".").replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3'));
+		    });
+			$inputCtrol[i].on('blur', function () {
+			    var $amountInput = $(this);
+				    //最后一位是小数点的话，移除
+				    $amountInput.val(($amountInput.val().replace(/\.$/g, "")));
+			});
+		}
+	}else{
+		$inputCtrol.on('keyup', function (event) {
+		    var $amountInput = $(this);
+		    //响应鼠标事件，允许左右方向键移动 
+		    event = window.event || event;
+		    if (event.keyCode == 37 | event.keyCode == 39) {
+		        return;
+		    }
+		    //先把非数字的都替换掉，除了数字和. 
+		    $amountInput.val($amountInput.val().replace(/[^\d.]/g, "").
+		        //只允许一个小数点              
+		        //replace(/^\./g, "").replace(/\.{2,}/g, ".").
+		        //只能输入小数点后两位
+		        replace(".", "$#$").replace(/\./g, "").replace("$#$", ".").replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3'));
+	    });
+		$inputCtrol.on('blur', function () {
+		    var $amountInput = $(this);
+			    //最后一位是小数点的话，移除
+			    $amountInput.val(($amountInput.val().replace(/\.$/g, "")));
+		});
+	}
 }
 
 /**
