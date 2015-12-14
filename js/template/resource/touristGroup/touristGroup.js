@@ -392,7 +392,7 @@ define(function(require,exports){
 			.on(CLOSE_TAB_SAVE, function(event) {
 				event.preventDefault();
 				if (!touristGroup.validator.form()) { return; }
-				touristGroup.installData($tab,id,tabArgs,typeFlag,typeInner);
+				touristGroup.installData($tab,id,typeFlag,"",typeInner);
 			});
 		}
 	};
@@ -1611,8 +1611,6 @@ define(function(require,exports){
 							touristGroup.updateEvents();}
 							}else{
 								Tools.closeTab(tabId);
-
-								console.info(typeInner+"......");
 								if (!!typeInner && typeInner!='out') {
 									KingServices.listTransit();
 								} else{
