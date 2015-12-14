@@ -103,7 +103,7 @@ define(function(require, exports) {
             var $that = $(this),
                 id = $that.closest('tr').data('id'),
                 transferId = $that.closest('tr').attr('tgTransferId');
-
+                lineProductId = $that.closest('tr').attr('lineProductId');
             if ($that.hasClass('T-showTourist')) {
                 // 查看游客小组
                 TurnProfit.clickFlag = 1;
@@ -118,6 +118,9 @@ define(function(require, exports) {
             } else if ($that.hasClass('T-showTransPay')) {
                 // 查看外转明细
                 TurnProfit.viewTransfer(this);
+            } else if($that.hasClass('T-lineProductDetail')){
+                //查看线路产品
+                KingServices.viewLineProduct(lineProductId);
             }
         });
     };

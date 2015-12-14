@@ -292,11 +292,6 @@ define(function(require, exports) {
     			tr = $this.closest('tr'),
     			funcs = tr.find(".T-function"),
     			index = funcs.index($this);
-    		if(index == 0 && $this.data("descript") == "对账" && !$this.is(":checked")){//取消“对账”权限
-    			funcs.eq(2).prop("checked",false);
-    		} else if(index == 2 && $this.data("descript") == "取消对账" && $this.is(":checked")){//勾选“取消对账”权限
-    			funcs.eq(0).prop("checked",true);
-    		}
     		
     		if($this.is(":checked")){
     			tr.find('.T-submenu-check').prop("checked",true);
