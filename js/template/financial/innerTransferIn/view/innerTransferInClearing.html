@@ -52,9 +52,13 @@
                     </select>
                 </label>
                 <label class=" control-label " style="margin-left:30px;">备注:<input type="text" name="sumRemark"/></label>
+                {{if !btnShowStatus}} 
                 <label class=" control-label " style="margin-left:30px;">
+                
                     <button class="btn-sm btn-primary search-btn T-btn-autofill" style="margin-left:15px;">自动下账</button>
+                
                 </label>
+                {{/if}}
             </div>
         </form>
     </div>
@@ -110,7 +114,7 @@
                 <td>{{checking.unIncomeMoney}}</td>
                 <td><input type="text" maxlength="1000"  name="payMoney" value="{{checking.payMoney}}" style="text-align:center"></td>
                 <td><input type="text" maxlength="9" name="incomeRemark" value="{{checking.incomeRemark}}" style="text-align:center"></td>
-                <td>{{if checking.checkTime == null || checking.checkTime == ""}}-{{else}}{{checking.checkTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
+                <td>{{if checking.checkTime == null || checking.checkTime == ""}}-{{else}}{{checking.checkTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}{{/if}}</td>
                 <td>{{if checking.checkUserRealName == null || checking.checkUserRealName == ""}}-{{else}}{{checking.checkUserRealName}}{{/if}}</td>
                 <td>
                     <label class="pos-rel">

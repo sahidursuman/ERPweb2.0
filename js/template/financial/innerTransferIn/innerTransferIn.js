@@ -198,6 +198,7 @@ define(function(require,exports) {
 				if(result){
                
 				    data.searchParam = $listSearchData;
+				    data.btnShowStatus = args.btnShowStatus;
 				    var title,
 				    	tabId,
 				    	html,
@@ -313,6 +314,10 @@ define(function(require,exports) {
 			
 		});
 		if(InnerTransferIn.btnSatus == 1){
+			$obj.find('input[name=sumPayMoney]').val(InnerTransferIn.saveJson.autoPayMoney);
+			InnerTransferIn.setAutoFillEdit($obj,true);
+		};
+		if($listSearchData.btnShowStatus == 1){
 			$obj.find('input[name=sumPayMoney]').val(InnerTransferIn.saveJson.autoPayMoney);
 			InnerTransferIn.setAutoFillEdit($obj,true);
 		}
@@ -843,7 +848,8 @@ define(function(require,exports) {
 				receiveUserId:'',
 				receiveUserName:'',
 				startAccountTime:options.startDate,
-				endAccountTime:options.endDate
+				endAccountTime:options.endDate,
+				btnShowStatus:true
 			}
         InnerTransferIn.chenking(args,2,"settle"); 
     };

@@ -2,38 +2,36 @@
     <div class="col-sm-12">
         <div class="form-group">
             <div class="search-area border T-search-area" style="margin:0px;border-style:solid solid none solid">
-                <div class="col-xs-1">
-                    <input type="text" value="{{searchParam.lineProductName}}" name="lineProductName" class="col-xs-12 clearBlur" placeholder="线路产品" />
+                <div class="col-xs-2">
+                <label class="control-label pull-left"><span>线路产品：</span></label>
+                    <input type="text" value="{{searchParam.lineProductName}}" name="lineProductName" placeholder="线路产品" />
                     <input type="hidden" value="{{searchParam.lineProductId}}" name="lineProductId" />
                 </div>
-                <div class="col-xs-1">
-                    <input type="text" value="{{searchParam.partnerAgencyName}}"  name="partnerAgencyName" class="col-xs-12" placeholder="组团社" />
+                <div class="col-xs-2 timeStartMore">
+                <label class="control-label pull-left"><span>组团社：</span></label>
+                    <input type="text" value="{{searchParam.partnerAgencyName}}"  name="partnerAgencyName"  placeholder="组团社" />
                     <input type="hidden" value="{{searchParam.partnerAgencyId}}" name="partnerAgencyId" />
                 </div>
-                <div class="col-xs-1">
-                    <input type="text" value="{{searchParam.toBusinessGroupName}}" name="toBusinessGroupName" class="col-xs-12" placeholder="部门" />
+                <div class="col-xs-2 timeStartMore">
+                <label class="control-label pull-left"><span>部门：</span></label>
+                    <input type="text" value="{{searchParam.toBusinessGroupName}}" name="toBusinessGroupName" placeholder="部门" />
                     <input type="hidden" value="{{searchParam.toBusinessGroupId}}" name="toBusinessGroupId" />
                 </div>
-                <div class="col-xs-3">
+                <div class="col-xs-4 timeStartMore">
                     <div class="col-xs-6">
+                    <label class="control-label pull-left"><span>开始日期：</span></label>
                         <div class="input-group">
-                            <input class="col-xs-12 date-picker" name="startTime" placeholder="开始日期" value="{{searchParam.startTime}}" type="text" />
-                        <span class="input-group-addon">
-                            <i class="fa fa-calendar"></i>
-                        </span>
+                            <input class="date-picker" name="startTime" placeholder="开始日期" value="{{searchParam.startTime}}" type="text" />
                         </div>
                     </div>  
                     <div class="col-xs-6">    
-                        <div class="input-group">
-                            <input class="col-xs-12 date-picker" name="endTime" placeholder="结束日期" value="{{searchParam.endTime}}" type="text" />
-                        <span class="input-group-addon">
-                            <i class="fa fa-calendar"></i>   
-                        </span>  
-                        </div>
-
+                       <div class="input-group">
+                       <label class="control-label pull-left"><span>结束日期：</span></label>
+                           <input class="date-picker" name="endTime" placeholder="结束日期" value="{{searchParam.endTime}}" type="text" />
+                       </div>
                     </div>
                 </div>
-                <div class="col-xs-2">
+                <div class="col-xs-2 timeStartMore">
                     <button class="btn-sm  btn-height search-btn T-search" style="border-top-width: 4px;border-bottom-width: 4px;">
                         <i class="ace-icon fa fa-search"></i>
                          搜索
@@ -41,7 +39,7 @@
                 </div>
                 <div style="clear:both;height:0px;line-height:0px;"></div>
                 </div>
-                <div class="form-group border" style="margin:0px;border-style:dashed solid solid solid" >
+                <div class="form-group border" style="margin:0px;border-style:none solid solid solid" >
                     <label class="control-label" style="margin-left:12px;">总人数：{{sumAdultCount+sumChildCount}}</label>
                     <label class="control-label" style="margin-left:12px;">团款应收合计：{{sumTripIncome}}</label>
                     <label class="control-label" style="margin-left:12px;">中转成本合计：{{sumOutCost}}</label>
@@ -71,8 +69,8 @@
                         </thead>
                         <tbody class="T-list">
                         {{each touristGroupInnerTransferList as innerTransferList index}}
-                        <tr data-id = "{{innerTransferList.touristGroupId}}" tgTransferId = "{{innerTransferList.InnerTransferId}}">  
-                            <td>{{innerTransferList.lineProductName}}</td>
+                        <tr data-id = "{{innerTransferList.touristGroupId}}" lineProductId="{{innerTransferList.lineProductId}}" tgTransferId = "{{innerTransferList.InnerTransferId}}">  
+                            <td><a href="javascript:void(0)" class="T-option T-lineProductDetail">{{innerTransferList.lineProductName}}</a></td>
                             <!--给日期转码-->
                             <td>{{innerTransferList.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
                             <td>{{if innerTransferList.contact == null || innerTransferList.contact ==""}}无{{else}}{{innerTransferList.contact}}{{/if}}</td>
