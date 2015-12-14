@@ -1583,4 +1583,6 @@ define(function(require,exports){
 	};
 	exports.init = touristGroup.initModule;
 	exports.viewTouristGroup = touristGroup.viewTouristGroupDetails;
+	exports.addTouristGroup = touristGroup.addTouristGroup;
+	exports.updateTouristGroup = touristGroup.updateTouristGroup;
 });
