@@ -35,7 +35,7 @@ define(function(require, exports){
 	//列表头部
 	Count.listCountHeader = function(pageNo,id,tripNumber,lineProductId,lineProductName,guideId,guideName,startTime,endTime,status){
 		if(Count.$searchArea && arguments.length === 1){
-			id = Count.$searchArea.find('input[name=tripNumber]').val();
+			id:"",
 			tripNumber = Count.$searchArea.find('input[name=chooseTripNumber]').val();
 			lineProductId = Count.$searchArea.find('input[name=lineProductId]').val();
 			lineProductName = Count.$searchArea.find('input[name=chooseLineProductName]').val();
@@ -89,8 +89,6 @@ define(function(require, exports){
                 	//获取搜索区域的列表数据
                 	var $lineProductObj = Count.$searchArea.find("input[name=chooseLineProductName]");//获取线路
                 	Count.getLineproductData($lineProductObj);
-                	var $tripNumberObj = Count.$searchArea.find('input[name=chooseTripNumber]');//获取团号
-                	Count.getTripNumberData($tripNumberObj);
                 	var $guideObj = Count.$searchArea.find('input[name=chooseGuideRealName]');//获取导游
                 	Count.getGuideData($guideObj);
                 	//搜索区域事件绑定
@@ -620,6 +618,12 @@ define(function(require, exports){
 			var id = $(this).attr('data-entity-id');
 			Count.ViewOutDetail(id);
 		});
+		//导游报账事件
+		var $guideAccount = $obj.find('.T-guideAccount');
+		$guideAccount.off('click').on('click',function(){
+			var id = $obj.find('.tripPlanId').val();
+			KingServices.viewFeeDetail(id);
+		});
 		//购物处理--计算、新增
 		var $shopObj = $listObj.find('.T-count-shopping');
 		$shopObj.find('input[type=text]').off('change').on('change',function(){
@@ -782,10 +786,6 @@ define(function(require, exports){
 			id = $obj.find('.financial-tripPlanId').val();
 			Count.viewTripLog(id);
 		});
-		//导游报账表事件
-		$obj.find('.btn-guideAcount').off('click').on('click',function(){
-			
-		});
 	};
 	//查看操作记录事件
 	Count.viewTripLog = function(id){
@@ -886,7 +886,7 @@ define(function(require, exports){
 	//审核通过事件
 	Count.accountCheck = function(id, billStatus, financialTripPlanId,$obj){
 		var method = billStatus==0?"opVerify":"financialVerify";
-		var saveJson = Count.saveTripCount(id,financialTripPlanId,$obj);
+		var saveJson = Count.saveTripCount(id,financialTripPlanId,$obj,1);
 		saveJson = JSON.stringify(saveJson);
 		$.ajax({
         	url:KingServices.build_url('financialTripPlan',method),
@@ -898,8 +898,9 @@ define(function(require, exports){
         	success:function(data){
         		var result = showDialog(data);
         		if(result){
-        			console.log(data);
         			showMessageDialog($( "#confirm-dialog-message" ),data.message);
+        			Count.updateExamine(id);
+        			Count.listCountHeader(0);
         		}
         	}
         });
@@ -2750,46 +2751,6 @@ define(function(require, exports){
             });
 		});
 	};
-	//获取搜索区域数据--团号
-	Count.getTripNumberData = function($obj){
-		$obj.autocomplete({
-			minLength:0,
-			change:function(event,ui){
-				if(ui.item == null){
-					$(this).closest('div').find('input[name="tripNumber"]').val('');
-				}
-			},
-			select:function(event,ui){
-				$(this).blur();
-				console.log(ui);
-				$(this).closest('div').find('input[name="tripNumber"]').val(ui.item.id);
-			}
-		}).off("click").on("click", function(){
-			var obj = this;
-			$.ajax({
-				url:KingServices.build_url("tripPlan","findTripByTripNumber"),
-				type: "POST",
-				data:{
-					menuKey:"arrange_plan"
-				},
-                showLoading: false,
-				success: function(data) {
-					var result = showDialog(data);
-					if(result){
-						console.log(data);
-						var tripPlanList = JSON.parse(data.tripPlanList);
-						if(tripPlanList != null && tripPlanList.length > 0){
-							for(var i=0;i<tripPlanList.length;i++){
-								tripPlanList[i].value = tripPlanList[i].tripNumber;
-							}
-						}
-						$(obj).autocomplete('option','source', tripPlanList);
-						$(obj).autocomplete('search', '');
-					}
-				}
-			});
-		});
-	};
 	//获取搜索区域数据--导游
 	Count.getGuideData = function($obj){
         	$obj.autocomplete({
@@ -2831,14 +2792,6 @@ define(function(require, exports){
 	};
 	//格式化日期控件
 	Count.formatDate = function($obj){
-		/*if($obj.find('.date-Picker')){
-			$obj.datetimepicker({
-				autoclose: true,
-				todayHighlight: true,
-				format: 'L',
-				language: 'zh-CN'
-			});
-		}*/
 		$obj.find('.datepicker').datepicker({
 			autoclose: true,
 			todayHighlight: true,
@@ -2981,15 +2934,19 @@ define(function(require, exports){
 				var result = showDialog(data);
 				if (result) {
 					showMessageDialog($( "#confirm-dialog-message" ),data.message);
-					if(typeFlag == 1){
-						Count.updateExamine(financialTripPlanId);
-					}else{
-						if(typeFlag == 3){
-						Count.webFanishAccount(id);
+					if(data.success == 1){
+						if(typeFlag == 1){
+							Count.updateExamine(financialTripPlanId);
 						}else{
-							Count.Reimbursement(financialTripPlanId);
+							if(typeFlag == 3){
+								Count.webFanishAccount(id);
+								//Tools.closeTab(ReimbursementId);
+							}else{
+								Count.Reimbursement(financialTripPlanId);
+							}
 						}
 					}
+					
 				};
 			}
 		});

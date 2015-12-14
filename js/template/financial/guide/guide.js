@@ -701,4 +701,5 @@ define(function(require, exports) {
     // 暴露方法
     exports.init = FinGuide.initModule;
     exports.initPay = FinGuide.initPayModule;
+	exports.viewFeeDetail = FinGuide.viewFeeDetail;
 });
