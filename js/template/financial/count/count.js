@@ -1976,8 +1976,9 @@ define(function(require, exports){
 		'</select>'+
 		'</td>'+
 		'<td><input type="text" name="startTime" class="date-Picker" style="width:90px;"/></td>'+
-		'<td><input type="text" name="startArea" style="width:90px;"/></td>'+
-		'<td><input type="text" name="endArea" style="width:90px;"/></td>'+
+		'<td><input type="text" name="startArea" style="width:60px;"/></td>'+
+		'<td><input type="text" name="endArea" style="width:60px;"/></td>'+
+		'<td><input type="text" name="shift" style="width:60px;"/></td>'+
 		'<td><input type="text" name="seatLevel" style="width:90px;"/></td>'+
 		'<td><input type="text" name="price" style="width:90px;"/></td>'+
 		'<td><input type="text" name="realCount" style="width:90px;"/></td>'+
@@ -3321,6 +3322,7 @@ define(function(require, exports){
 					arriveCity:$(this).find('input[name=endArea]').val(),
 					seatLevel:$(this).find('input[name=seatLevel]').val(),
 					price:$(this).find('input[name=price]').val(),
+					shift:$(this).find('input[name=shift]').val(),
 					realCount:$(this).find('input[name=realCount]').val(),
 					reduceMoney:$(this).find('input[name=reduceMoney]').val(),
 					payedMoney:$(this).find('input[name=payedMoney]').val(),

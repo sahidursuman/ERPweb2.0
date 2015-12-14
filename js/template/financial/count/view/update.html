@@ -533,7 +533,7 @@
                     <input name="accountFinancialCheckComment" {{if (!(tripPlan.billStatus == 1 && isFinance)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList[3] != null}}{{remarkArrangeList[3].opCheckRemark}}{{/if}}" />
                 
                     <label style="margin:5px 0px 0px 10px;">计调审核批注：</label>
-                    <input name="accountOPCheckComment" {{if (!(tripPlan.billStatus == 0 && isOp)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList[3] != null}}{{remarkArrangeList[3].financeCheckRemark}}{{/if}}" />
+                    <input name="accountOPCheckComment" {{if (!(tripPlan.billStatus == 0 && isOp)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList[11] != null}}{{remarkArrangeList[11].financeCheckRemark}}{{/if}}" />
                 </div>
                 </div>{{/if}}
             </div>
@@ -882,6 +882,7 @@
                         <th class="th-border">日期</th>
                         <th class="th-border">出发地</th>
                         <th class="th-border">目的地</th>
+                        <th class="th-border">班次</th>
                         <th class="th-border">座席</th>
                         <th class="th-border">单价</th>
                         <th class="th-border">数量</th>
@@ -904,6 +905,7 @@
                     {{if index == 0}}<td rowspan="{{ticketArrange.ticketArrangeList.length}}">{{arrange.startTime}}</td>{{/if}}
                     {{if index == 0}}<td rowspan="{{ticketArrange.ticketArrangeList.length}}">{{arrange.startingCity}}</td>{{/if}}
                     {{if index == 0}}<td rowspan="{{ticketArrange.ticketArrangeList.length}}">{{arrange.arriveCity}}</td>{{/if}}
+                    <td>{{arrange.shift}}</td>
                     <td>{{arrange.seatLevel}}</td>
                         <td>{{if arrange.badStatus == 1}}<span>-</span>{{else}}<span>{{arrange.price}}</span>{{/if}}
                         <input type="hidden" name="price" value="{{arrange.price}}" /></td>
