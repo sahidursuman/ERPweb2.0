@@ -577,8 +577,16 @@ define(function(require, exports) {
 		Replace.$balanceTab = null;
 		Replace.balanceId = id;
 		Replace.balanceName = name;
+		Replace.isBalanceSource = false;
 		Replace.balanceList(0, id);
-	}
+	};
+	Replace.initIncome = function(args){
+		Replace.$balanceTab = null;
+		Replace.balanceId = args.id;
+		Replace.balanceName = args.name;
+		Replace.isBalanceSource = true;
+		Replace.balanceList(0, args.id, args.startDate, args.endDate);
+	};
 
 
 	Replace.balanceList = function(page, id, startTime, endTime){
@@ -622,10 +630,10 @@ define(function(require, exports) {
 			if (showDialog(data)) {
 				var html;
 				data.name = Replace.balanceName;
+				data.source = Replace.isBalanceSource;
 				Tools.addTab(blanceMenuKey, "代订收款", replaceClearing(data));
 				Replace.$balanceTab = $('#tab-' + blanceMenuKey + '-content');
 
-				//data.bookinAccountList = FinancialService.getTempDate(data.bookinAccountList);
 				html = payingTableTemplate(data);
 				Replace.$balanceTab.find('.T-clearList').html(html);
 
@@ -677,4 +685,5 @@ define(function(require, exports) {
         }
 	};
 	exports.init = Replace.initModule;
+	exports.initIncome = Replace.initIncome;
 });

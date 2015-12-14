@@ -117,7 +117,7 @@
                 <td>{{rs.tripMessage}}</td>
                 <td>{{rs.accountTime}}</td>
                 <td>{{rs.count}}</td>
-                <td>{{rs.shopName}}{{if rs.shopName}}<a class="cursor T-action">展开</a>{{/if}}</td>
+                <td>{{if rs.shopItem.length >0}}{{rs.shopItem[0].itemName}}{{if rs.shopItem.length >1}}...{{/if}}<a class="cursor T-action T-see-group">展开</a>{{/if}}</td>
                 <td>{{rs.consumeMoney}}</td>
                 <td>{{rs.travelAgencyRebateMoney}}</td>
                 <td>{{rs.guideRebateMoney}}</td>
@@ -136,10 +136,39 @@
                     <label class="pos-rel">
                         <span class="lbl">{{if !!rs.isConfirmAccount}}已{{else}}未{{/if}}对账</span>
                     </label>
-                    <label class="cursor"> <a> |</a></label>
-                    <a class="cursor T-action T-view-details">查看</a>
+                    <label class="cursor R-right" data-right="1310004"> <a> |</a></label>
+                    <a class="cursor T-action T-view-details R-right" data-right="1310004">查看</a>
                 </td>
             </tr>
+            {{if rs.shopItem.length > 0}}
+            <tr class="hide">
+                <td colspan="19">
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th class="th-border" style="min-width: 45px;">序号</th>
+                                <th class="th-border" style="min-width: 70px;">商品</th>
+                                <th class="th-border" style="min-width: 120px;">消费金额</th>
+                                <th class="th-border" style="min-width: 45px;">社佣</th>
+                                <th class="th-border" style="min-width: 45px;">导佣</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{each rs.shopItem as list i}}
+                            <tr>
+                                <td>{{i + 1}}</td>
+                                <td>{{list.itemName}}</td>
+                                <td>{{list.consumeMoney}}</td>
+                                <td>{{list.travelAgencyRebateMoney}}</td>
+                                <td>{{list.guideRebateMoney}}</td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+
+            {{/if}}
         {{/each}}
         </tbody>
     </table>
