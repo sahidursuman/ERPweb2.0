@@ -255,7 +255,6 @@ define(function(require, exports) {
 			});
 			new ZeroClipboard($('.T-copy-clip-btn-share'));
 		}
-
 	};
 	//新增报价
 	quote.addQuote = function(id) {

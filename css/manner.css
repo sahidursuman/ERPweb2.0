@@ -974,9 +974,143 @@ padding-left:0;width: 360px;left: -35px;
     padding-right: 30px !important;
 }
 /*分享*/
-.quoteHr{
-   width: 280px;margin-bottom: 8px;margin-top:18px;border-top:1px solid #DDDDDD;
+.shareQuoteS{
+    width: 1000px;
+    height: auto;
+    padding-bottom: 70px;
+    background-color: #FFFFFF;
+    margin: auto;
+    font-family: '微软雅黑';
+    color: #444;
 }
+.quote-title-style{
+    width: 1000px;
+    height: 135px;
+    background-color:#48A2D2; 
+}
+.share-quote-offer{
+    width: 1000px;
+    height: 420px;
+    /*border: 1px solid #666;*/
+    margin-top: 40px;
+}
+.share-quote-offerdetails{
+    width: 1000px;
+    height: 260px;
+    border-top: 1px solid #DFDFDF;
+    margin-top:30px;
+}
+.share-quote-arrange{
+    width: 1000px;
+    height: auto;
+    padding-bottom: 10px;
+    border-top: 1px solid #DFDFDF;
+    /*border-bottom: 1px solid red;*/
+    margin-top:30px;
+}
+.share-quote-schedule{
+  width: 1000px;
+    height:auto;
+    padding-bottom: 20px;
+    border-top: 1px solid #DFDFDF;
+    /*border-bottom: 1px solid #666;*/
+    margin-top:30px;   
+}
+.share-quote-origin{
+    height: auto;
+    border-bottom: 1px solid #DFDFDF;
+    padding-bottom: 20px;
+    margin-top:20px;
+}
+.share-title-h5{
+     font-size: 30px;font-family:'宋体';color: #fff;
+     text-align: center;line-height: 135px;height: 40px;
+}
+.share-startTime{
+    margin-top: 50px;text-align: center;font-family:'微软雅黑';color: #fff;font-size: 13px;
+}
+.share-thank-p{
+    font-size: 18px;color: #444444;margin-left: 35px;
+}
+.share-agency-name{
+    font-size: 14px;color: #444;margin-left: 490px;
+}
+.share-dividing{
+    color: #48a2d2;font-size: 18px;width: 110px;height: 40px;
+    background-color: #fff;margin-top: -15px;margin-left: 430px;text-align: center;
+}
+.share-attention{
+   display: inline-block;height: 20px;width: 5px;background-color: #FF8B19;border-radius: 5px;
+}
+.share-detailedContent{
+    width: 960px;
+    height: auto;
+    margin: auto;
+    /*overflow:scroll;*/
+    /*background-color: red;*/
+}
+.share-startTime-divid{
+    display: block;width: 90px;height: 20px;
+    background-color: #FF8B19;color: #fff;text-align: center;
+}
+.share-detailedContent img{
+    margin: auto;
+}
+.share-needing-attention{
+  width: 1000px;
+    height:auto;
+    padding-bottom: 20px;
+    border-top: 1px solid #DFDFDF;
+    /*border-bottom: 1px solid red;*/
+    margin-top:30px;   
+}
+p#back-top{
+            position:fixed;
+            bottom:100px;
+            right:280px;
+}
+p#back-top a{
+    text-align:center;
+    text-decoration:none;
+    color:#d1d1d1;
+    display:block;
+    width:44px;
+    -moz-transition:color 1s;
+    -webkit-transition:color 1s;
+    -o-transition:color 1s;
+}
+p#back-top a:hover{
+    color:#979797;
+}
+p#back-top a span{
+    background:#d1d1d1 url(/images/a.png) no-repeat center center;
+    border-radius:6px;
+    display:block;
+    height:44px;
+    width:44px;
+    margin-bottom:5px;
+    -moz-transition:background 1s;
+    -webkit-transition:background 1s;
+    -o-transition:background 1s;
+}
+#back-top a:hover span{
+    background:#979797 url(/images/a.png) no-repeat center center;
+}
+.share-anchor ul li{
+    list-style-type:none;
+    margin-top: 30px;
+
+}
+.share-anchor-ul{
+    width: 20px;
+    /*background-color: red;*/
+    margin-top: -4px;
+    margin-left: 6px;
+}
+.share-anchor ul li a{
+    color: #59bad2;   
+}
+
 .quoteTable td{
     border: 1px solid #ddd !important;
      padding: 7px 0px 7px 0px;
@@ -985,7 +1119,9 @@ padding-left:0;width: 360px;left: -35px;
     text-align: center;
 }
 .quoteTable td td{border: 0!important;padding-right:6px;}
-
+.quoteTable-arrange td{
+ padding-left: 17px;
+}
 /*table表格border*/
 .arrangeTouristMain .widget-main.no-padding .table{
     border-width:1px;
