@@ -55,24 +55,24 @@
     <table class="table table-striped table-bordered table-hover">
         <thead>
             <tr>
-                <th style="min-width: 45px;">序号</th>
-                <th>组团单号</th>
-                <th style="min-width: 125px;">线路产品</th>
-                <th style="min-width: 125px;">出游日期（账期）</th>
-                <th>联系人</th>
-                <th style="min-width: 70px;">人数</th>
-                <th style="min-width: 70px;">录入人</th>
-                <th>录入时间</th>
-                <th style="min-width: 70px;">合同金额</th>
-                <th>明细</th>
-                <th style="min-width: 70px;">已收金额</th>
-                <th style="min-width: 70px;">返款金额</th>
-                <th style="min-width: 70px;">结算金额</th>
-                <th style="min-width: 70px;">未收金额</th>
-                <th>备注</th>
-                <th style="min-width: 85px;">对账时间</th>
-                <th style="min-width: 60px;">对账人</th>
-                <th style="min-width: 105px;">对账</th>
+                <th class="th-border">序号</th>
+                <th class="th-border">组团单号</th>
+                <th class="th-border">线路产品</th>
+                <th class="th-border">出游日期（账期）</th>
+                <th class="th-border">联系人</th>
+                <th class="th-border">人数</th>
+                <th class="th-border">录入人</th>
+                <th class="th-border">录入时间</th>
+                <th class="th-border">合同金额</th>
+                <th class="th-border">明细</th>
+                <th class="th-border">已收金额</th>
+                <th class="th-border">返款金额</th>
+                <th class="th-border">结算金额</th>
+                <th class="th-border">未收金额</th>
+                <th class="th-border">备注</th>
+                <th class="th-border">对账时间</th>
+                <th class="th-border">对账人</th>
+                <th class="th-border">对账</th>
             </tr>
         </thead>
         <tbody class="T-list">
@@ -84,11 +84,15 @@
                 <td>{{rs.lineProductName}}</td>
                 <td>{{rs.startTime}}</td>
                 <td>{{rs.contactName}}</td>
-                <td>{{rs.adultCount}}大{{rs.adultCount}}小<a class="cursor T-action T-unfold">展开</a></td>
+                <td>{{rs.adultCount}}大{{rs.childCount}}小<a class="cursor T-action T-unfold">展开</a></td>
                 <td>{{rs.creatorName}}</td>
-                <td>{{rs.creatorTime}}</td>
+                <td>{{rs.createTime}}</td>
                 <td class="T-contractMoney">{{rs.contractMoney}}</td>
-                <td>{{rs.detail}}</td>
+                <td>
+                {{each rs.detailList as rsl j}}
+                    {{rsl.describeInfo}}：{{rsl.price}}x{{rsl.count}}={{rsl.price * rsl.count}}{{if j != rs.detailList.length - 1}}，{{/if}}
+                {{/each}}
+                </td>
                 <td><a class="cursor T-action T-receive">社收{{rs.travleReciveMoney}}，导游现收{{rs.guideReciveMoney}}</a></td>
                 <td><input type="text" class="col-sm-12 T-refund money" value="{{rs.backMoney}}" {{if rs.isConfirmAccount}} disabled="disabled"{{/if}}></td>
                 <td class="T-settlementMoney">{{rs.settlementMoney}}</td>
