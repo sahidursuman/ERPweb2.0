@@ -22,7 +22,8 @@ define(function(require,exports) {
 		$settlermentValidator:false,
 		$saveJson:false,
 		$settlementSearchArea:false,
-		$autoAccountData:false
+		$autoAccountData:false,
+		showBtnFlag:false
 	};
 	InnerTransferOut.initModule = function(){
 		var dateJson = FinancialService.getInitDate();
@@ -113,6 +114,7 @@ define(function(require,exports) {
 				InnerTransferOut.chenking(0,id,name,"","","",startDate,endDate);
 			}else if($that.hasClass('T-balance')){
 				//付款处理
+				InnerTransferOut.showBtnFlag = false;
 				InnerTransferOut.settlement(0,id,name,"","","",startDate,endDate);
 			}
 		});
@@ -564,6 +566,8 @@ define(function(require,exports) {
 				data.searchParam = $listSearchData;
 			    if(result){
 			 	    data.searchParam = $listSearchData;
+			 	    data.showBtnFlag = InnerTransferOut.showBtnFlag;
+			 	    console.log(data);
 				    console.log(data);
 				    var $lineProductData = data.lineProductList;
 				    //return
@@ -592,7 +596,7 @@ define(function(require,exports) {
 		var remark;
 		var JsonStr = FinancialService.clearSaveJson(InnerTransferOut.$settlementTab,InnerTransferOut.saveJson,rule);
 		console.log(JsonStr);
-		var payType = tab_id.find('select[name=payType]').val();
+		var payType = tab_id.find('select[name=sumPayType]').val();
 		var sumRemark = tab_id.find('name[name=sumRemark]').val();
 		JsonStr = JSON.stringify(JsonStr);
 		console.log(JsonStr);
@@ -769,6 +773,7 @@ define(function(require,exports) {
 		return newVal;
 	};
 	InnerTransferOut.initPay = function(options){
+		InnerTransferOut.showBtnFlag = true;
         InnerTransferOut.settlement(0,options.id,options.name,"","","",options.startDate,options.endDate,2); 
     };
 	exports.init = InnerTransferOut.initModule;

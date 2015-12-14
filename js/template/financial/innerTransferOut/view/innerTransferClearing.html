@@ -45,7 +45,8 @@
                 <label class=" control-label " style="margin-left:30px;">扣款金额合计:{{sumData.sumPunishMoney}}</label>
                 <label class=" control-label " style="margin-left:30px;">结算接合计:{{sumData.sumSettlementMoney}}</label>
                 <label class=" control-label " style="margin-left:30px;">未付金额合计:{{sumData.sumUnPayedMoney}}</label>
-                <label class=" control-label " style="margin-left:30px;">本次付款金额：<input type="text" name="sumPayMoney"/></label>
+                <label class=" control-label " style="margin-left:30px;">本次付款金额：<input type="text" name="sumPayMoney" 
+                {{if showBtnFlag == true}}readonly="true"{{/if}}/></label>
                 <label class=" control-label " style="margin-left:30px;">付款方式：
                     <select name="sumPayType">
                         <option value="0">现金</option>
@@ -56,9 +57,11 @@
                     </select>
                 </label>
                 <label class=" control-label " style="margin-left:30px;">备注：<input type="text" name="sumRemark"/></label>
-                <label class=" control-label " style="margin-left:30px;">
-                    <button class="btn-sm btn-primary search-btn T-btn-autofill marginLeft-30">自动下账</button>
-                </label>
+                {{if !showBtnFlag}}
+                  <label class=" control-label " style="margin-left:30px;">
+                      <button class="btn-sm btn-primary search-btn T-btn-autofill marginLeft-30">自动下账</button>
+                  </label>
+                {{/if}}
             </div>
         </form>
     </div>
