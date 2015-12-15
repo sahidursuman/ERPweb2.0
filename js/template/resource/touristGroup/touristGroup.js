@@ -392,7 +392,7 @@ define(function(require,exports){
 			.on(CLOSE_TAB_SAVE, function(event) {
 				event.preventDefault();
 				if (!touristGroup.validator.form()) { return; }
-				touristGroup.installData($tab,id,tabArgs,typeFlag,typeInner);
+				touristGroup.installData($tab,id,typeFlag,"",typeInner);
 			});
 		}
 	};
@@ -1556,9 +1556,11 @@ define(function(require,exports){
 		}
 		//接送事件点json
 		var outArrangeRemarkJson;
-		if ( !!typeInner && typeInner!='out' ) {
-			var $arrangeChecked = $arrangeForm.find('.T-touristReception','T-smallCar','T-touristSend').is(':checked')
-			if ($arrangeChecked == true ) {
+		if ( !!typeInner && typeInner!='out') {
+			var $arrangeChecked = $arrangeForm.find('.T-touristReception').is(':checked');
+			var $smallCarChecked=$arrangeForm.find('.T-smallCar').is(':checked');
+			var	$touristSendChecked=$arrangeForm.find('.T-touristSend').is(':checked');
+			if ($arrangeChecked == true || $smallCarChecked == true || $touristSendChecked==true ) {
 				outArrangeRemarkJson = touristGroup.installArrangeJson($arrangeForm);
 			} else{
 				showMessageDialog($( "#confirm-dialog-message" ),"请选择中转安排信息!");
@@ -1611,8 +1613,6 @@ define(function(require,exports){
 							touristGroup.updateEvents();}
 							}else{
 								Tools.closeTab(tabId);
-
-								console.info(typeInner+"......");
 								if (!!typeInner && typeInner!='out') {
 									KingServices.listTransit();
 								} else{

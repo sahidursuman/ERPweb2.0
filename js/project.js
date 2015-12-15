@@ -1635,13 +1635,30 @@ KingServices.viewLineProduct = function(id){
 		module.viewLineProduct(id);
 	});
 }
+//查看导游报账
+KingServices.viewFeeDetail = function(id){
+	seajs.use("" + ASSETS_ROOT + modalScripts.financial_guide,function(module){
+		module.viewFeeDetail(id);
+	});
+}
 //查看游客小组
 KingServices.viewTouristGroup = function(id){
 	seajs.use("" + ASSETS_ROOT + modalScripts.resource_touristGroup,function(module){
 		module.viewTouristGroup(id);
 	});
 }
-
+//查看外转情况
+KingServices.viewTurnInfo = function(id){
+	seajs.use("" + ASSETS_ROOT + modalScripts.arrange_transfer,function(module){
+		module.viewTransferOut(id);
+	});
+};
+//查看内转情况
+KingServices.viewInnerInfo = function(id,type){
+	seajs.use("" + ASSETS_ROOT + modalScripts.arrange_inner_Transfer,function(module){
+		module.viewTransferOut(id,type);
+	});
+};
 //报价  修改
 KingServices.updateQuoteToOffer = function(id){
 	seajs.use("" + ASSETS_ROOT + modalScripts.arrange_quote,function(module){
