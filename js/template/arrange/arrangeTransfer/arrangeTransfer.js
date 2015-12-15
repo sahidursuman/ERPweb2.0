@@ -764,6 +764,7 @@ define(function(require, exports) {
 			    transAdultPrice=getValue("transAdultPrice"),
 			    transChildPrice=getValue("transChildPrice"),
 			    transRemark=getValue("transRemark"),
+			    payType = getValue("payType"),
 			    status=getValue("status");
 
 	
@@ -797,14 +798,15 @@ define(function(require, exports) {
 					"id":id,  //转客表ID
 					"remark":remark, //转客备注
 					"status":status,//转客状态，0未完成，1已完成
-					"partnerAgencyId":partnerAgencyId //转到的地接社			
+					"partnerAgencyId":partnerAgencyId, //转到的地接社	
+					"payType":payType		
 				},
 			    transferFee : {
 					"transNeedPayAllMoney":transNeedPayAllMoney,//应付
 					"transPayedMoney":transPayedMoney,//已付
 					"transAdultPrice":transAdultPrice,//大人转客单价
 					"transChildPrice":transChildPrice,//小孩转客单价
-					"transRemark":transRemark//转客费用备注
+					"transRemark":transRemark,//转客费用备注
 				},			
 			}
 			var otherFee=JSON.stringify(otherFeeJsonAdd);

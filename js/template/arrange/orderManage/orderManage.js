@@ -14,6 +14,8 @@ define(function(require, exports) {
 		orderManage={
 			$tab:false,
 			$busCompanyOrder:false,
+			$busCompanyOrderTabId:"",
+			$hotelOrderTabId:"",
 			$hotelOrder:false,
 			$searchJson:{
 				pageNo : 0
@@ -51,8 +53,57 @@ define(function(require, exports) {
 		//房订单Ajax
 	    orderManage.listHotelOrder(0);
 
-	    //导游订单Ajax
-	    //orderManage.listGuidOrder();
+	    //车、酒店订单TabId
+	     orderManage.$busCompanyOrderTabId = orderManage.$tab.find('#T-BusCompany-list');
+	     orderManage.$hotelOrderTabId = orderManage.$tab.find('#T-HotelOrder-list');
+
+	     //车
+	     orderManage.$busCompanyOrderTabId.find('.T-busCompanyOrder-search').on('click', function(event) {
+	     	event.preventDefault();
+	     	/* Act on the event */
+	     	var $searchParam = orderManage.$busCompanyOrderTabId.find('form');
+	     	 console.info(JSON.stringify($searchParam.serializeJson())+"hotel...");
+	     });
+
+	     //酒店
+	     orderManage.$hotelOrderTabId.find('.T-hotelOrder-search').on('click', function(event) {
+	     	event.preventDefault();
+	     	/* Act on the event */
+	     	var $searchParam = orderManage.$hotelOrderTabId.find('form');
+
+	     	   console.info(JSON.stringify($searchParam.serializeJson())+"hotel...");
+	     });
+
+
+	     //车--搜索下拉事件
+    	orderManage.$busCompanyOrderTabId.find(".dropdown-menu a").click(function(){
+    	   var $that=$(this),
+    	       $thatDivObj=$that.closest('div');
+	    	   $thatDivObj.find("button").attr("data-value",$that.data('value'));
+			   $thatDivObj.find("span").text($(this).text());
+			//表单序列化
+			var $form = orderManage.$busCompanyOrderTabId.find('form');
+
+		   
+	    });
+
+    	//酒店--搜索下拉数据
+	    orderManage.$hotelOrderTabId.find(".dropdown-menu a").click(function(){
+    	   var $that=$(this),
+    	       $thatDivObj=$that.closest('div');
+	    	   $thatDivObj.find("button").attr("data-value",$that.data('value'));
+			   $thatDivObj.find("span").text($(this).text());
+			var $form = orderManage.$hotelOrderTabId.find('form');
+		   
+	    });
+	     //模拟Click事件
+	     orderManage.$busCompanyOrderTabId.find('.T-busCompanyOrder-search').trigger('click');
+	     orderManage.$hotelOrderTabId.find('.T-hotelOrder-search').trigger('click');
+
+	    //时间初始化控件
+	    orderManage.initDatePicker(orderManage.$tab);
+
+
 
 	
 	};
@@ -76,7 +127,7 @@ define(function(require, exports) {
 						var listBusHtml=listBusCompanyTemplate(data),
 						    listBusHtml = filterUnAuth(listBusHtml);
 						//车队订单
-				        orderManage.$tab.find('#T-BusCompany-list').html(listBusHtml);
+				        orderManage.$busCompanyOrderTabId.find('.T-busCompany-pagerList').html(listBusHtml);
 
 				        //初始化页面事件
 				        orderManage.init_evet();
@@ -117,7 +168,7 @@ define(function(require, exports) {
 						var listHotelHtml=listHotelTemplate(data),
 						    listHotelHtml = filterUnAuth(listHotelHtml);
 						//房订单
-						orderManage.$tab.find('#T-HotelOrder-list').html(listHotelHtml);
+						orderManage.$hotelOrderTabId.find('.T-HotelOrder-pagerList').html(listHotelHtml);
 
 						//酒店金额的计算
 						orderManage.hotelAmountCal();
@@ -155,15 +206,7 @@ define(function(require, exports) {
 		};
 	};
 
-	/**
-	 * [listGuidOrder 导游订单列表]
-	 * @return {[type]} [description]
-	 
-	orderManage.listGuidOrder=function(){
-		var listGuideHtml=listGuideTemplate();
-		//导订单
-		orderManage.$tab.find('#T-Guide-list').html(listGuideHtml);
-	};*/
+
 
 
 	/**
@@ -253,6 +296,22 @@ define(function(require, exports) {
 			}
 		});
 	};
+
+
+
+   /**
+	 * 时间控件是初始化
+	 * @param  {[type]} $tabId 在外层ID
+	 * @return {[type]}
+	 */
+	orderManage.initDatePicker = function($tabId){
+		$tabId.find('.date-picker').datepicker({
+			autoclose: true,
+			todayHighlight: true,
+			format: 'yyyy-mm-dd',
+			language: 'zh-CN'
+		})
+    };
 
 	exports.init = orderManage.initModule;
 
