@@ -305,3 +305,67 @@ function getValue($obj,name){
     return result;
 } 
 
+/**
+ * 财务校验方法
+ * 使用方法：var rule = new FinRule(0);
+ * @param {int} type 0: 对账、1：收付款、2：自动下账；3：财务收付款
+ */ 
+function FinRule(type) {
+    this.type = type;
+}
+
+/**
+ * 获取校验对象
+ * @param  {object} $obj 需要校验输入框的父容器
+ * @return {object}      校验对象。不支持类型，返回false
+ */
+FinRule.prototype.check = function($obj) {
+    switch(this.type) {
+        case 0:  // 对账
+            return $obj.formValidate([
+                {   //结算金额
+                    $ele: $obj.find('input[name=settlementMoney]'),
+                    rules: [
+                        {
+                            type: 'nonnegative-int',
+                            errMsg: '请输入非负数'
+                        }
+                    ]
+                }]);
+        case 1: // 收付款
+            return $obj.formValidate([
+                {   
+                    $ele: $obj.find('input[name=payMoney]'),
+                    rules: [
+                        {
+                            type: 'positive-float',
+                            errMsg: '请输入正数'
+                        }
+                    ]
+                }]);
+        case 2: // 自动下账
+            return $obj.formValidate([
+                {   
+                    $ele: $obj.find('input[name=sumPayMoney]'),
+                    rules: [
+                        {
+                            type: 'positive-float',
+                            errMsg: '请输入正数'
+                        }
+                    ]
+                }]);
+        case 3: // 财务收付款
+            return $obj.formValidate([
+                {   
+                    $ele: $obj.find('input[name=payMoney]'),
+                    rules: [
+                        {
+                            type: 'float',
+                            errMsg: '请输入数字'
+                        }
+                    ]
+                }]);
+        default:
+            return false;
+    }
+}
