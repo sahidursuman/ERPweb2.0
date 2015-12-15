@@ -1,6 +1,5 @@
 define(function(require, exports) {
-	var rule = require("./rule"),
-        menuKey = "financial_rummery",
+	var menuKey = "financial_rummery",
 	    listTemplate = require("./view/list"),
         scenicChecking = require("./view/scenicChecking"),
         scenicClearing = require("./view/scenicClearing"),
@@ -150,7 +149,7 @@ define(function(require, exports) {
                     // 初始化页面
                     if (Tools.addTab(menuKey + "-checking", "景区对账", html)) {
                         scenic.initCheck(page,scenicId,scenicName); 
-                        validator = rule.check(scenic.$checkTab.find(".T-checkList"));                       
+                        validator = (new FinRule(0)).check(scenic.$checkTab.find(".T-checkList"));                       
                     }
                     //取消对账权限过滤
                     var checkTr = scenic.$checkTab.find(".T-checkTr");
@@ -180,7 +179,7 @@ define(function(require, exports) {
 
         scenic.init_event(page,id,name,scenic.$checkTab,"check");
         Tools.setDatePicker(scenic.$searchArea.find('.datepicker'), true);
-        FinancialService.updateUnpayMoney(scenic.$checkTab,rule);
+        FinancialService.updateUnpayMoney(scenic.$checkTab, new FinRule(0));
 
         //搜索按钮事件
         scenic.$checkSearchArea.find('.T-search').on('click', function(event) {
@@ -212,7 +211,7 @@ define(function(require, exports) {
         });
         //确认对账按钮事件
         scenic.$checkTab.find(".T-saveCheck").click(function(){ 
-            validator = rule.check(scenic.$checkTab.find(".T-checkList"));
+            validator = (new FinRule(0)).check(scenic.$checkTab.find(".T-checkList"));
             if (!validator.form()) { return; }
             scenic.saveChecking(id,name,page);
         });
@@ -229,7 +228,7 @@ define(function(require, exports) {
     //结算
     scenic.scenicClear = function(isAutoPay,page,scenicId,scenicName,accountInfo,startDate,endDate, isOuter){
         if (isAutoPay) {
-            var searchParam = FinancialService.autoPayJson(scenicId,scenic.$clearTab,rule);
+            var searchParam = FinancialService.autoPayJson(scenicId,scenic.$clearTab, FinRule(3));
             searchParam = JSON.parse(searchParam);
             searchParam.scenicId = searchParam.id;   
             delete(searchParam.id);
@@ -292,7 +291,7 @@ define(function(require, exports) {
                     // 初始化页面
                     if (Tools.addTab(menuKey + "-clearing", "景区付款", html)) {
                         scenic.initClear(page,scenicId,scenicName); 
-                        validator = rule.check(scenic.$clearTab.find('.T-clearList'));  
+                        validator = (new FinRule(3)).check(scenic.$clearTab.find('.T-clearList'));  
 
                         if(isAutoPay == 1){
                             scenic.$clearTab.find('input[name=sumPayMoney]').prop("disabled",true);
@@ -312,7 +311,7 @@ define(function(require, exports) {
                             curr: (page + 1),
                             jump: function(obj, first) {
                                 if (!first) { 
-                                    var tempJson = FinancialService.clearSaveJson(scenic.$clearTab,scenic.clearTempData,rule);
+                                    var tempJson = FinancialService.clearSaveJson(scenic.$clearTab,scenic.clearTempData, FinRule(3));
                                     scenic.clearTempData = tempJson;
                                     var sumPayMoney = parseInt(scenic.$clearTab.find('input[name=sumPayMoney]').val());
                                         sumPayType = parseInt(scenic.$clearTab.find('select[name=sumPayType]').val());
@@ -491,7 +490,7 @@ define(function(require, exports) {
     //对账数据保存
     scenic.saveChecking = function(scenicId,scenicName,page,tab_id, title, html){
         var argumentsLen = arguments.length,
-            checkSaveJson = FinancialService.checkSaveJson(scenic.$checkTab,rule);
+            checkSaveJson = FinancialService.checkSaveJson(scenic.$checkTab, new FinRule(0));
         if(!checkSaveJson){ return false; }
 
         $.ajax({
@@ -520,7 +519,7 @@ define(function(require, exports) {
     };
 
     scenic.saveClear = function(id,name,page,tab_id, title, html){
-        if(!FinancialService.isClearSave(scenic.$clearTab,rule)){
+        if(!FinancialService.isClearSave(scenic.$clearTab, new FinRule(3))){
             return false;
         }
 
@@ -564,7 +563,7 @@ define(function(require, exports) {
 
     scenic.init_event = function(page,id,name,$tab,option) {
         if (!!$tab && $tab.length === 1) {
-            var validator = rule.check($tab);
+            var validator = (new FinRule(option == "check" ? 0 : 3)).check($tab);
 
             // 监听修改
             $tab.find(".T-" + option + "List").off('change').on('change',"input",function(event) {

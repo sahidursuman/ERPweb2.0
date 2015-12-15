@@ -4,8 +4,7 @@
  * by David Bear 2015-11-24
  */
 define(function(require, exports){
-	var rule = require("./rule"),
-		listTemplate = require("./view/list"),
+	var listTemplate = require("./view/list"),
 		shopCheckingTemplate = require("./view/shopChecking"),
 		billImagesTemplate = require("./view/shopLookImg"),
 		shopClearingTemplate = require("./view/shopClearing"),
@@ -236,7 +235,7 @@ define(function(require, exports){
 	};
 
 	FinShop.check_init_event = function($tab){
-		var validator = rule.check($tab);
+		var validator = (new FinRule(0)).check($tab);
 
 		$tab.off('change').off(SWITCH_TAB_SAVE).off(CLOSE_TAB_SAVE)
 		.on('change', '.T-checkList, .T-checkAll', function(event) {
@@ -267,7 +266,7 @@ define(function(require, exports){
 		});
 
 		Tools.setDatePicker($searchArea.find('.datepicker'), true);
-		FinancialService.updateUnpayMoney($tab, rule);
+		FinancialService.updateUnpayMoney($tab, new FinRule(0));
 		
 		// 报表内的操作
 		$tab.find('.T-list').on('click', '.T-action', function(event) {
@@ -414,7 +413,7 @@ define(function(require, exports){
 
 	FinShop.saveChecking = function($tab, tabArgs){
 		// 表单校验
-		var json = FinancialService.checkSaveJson($tab, rule);
+		var json = FinancialService.checkSaveJson($tab, new FinRule(0));
 		if(JSON.parse(json).length > 0){
 			$.ajax({
 				url : KingServices.build_url('financial/shopAccount', 'checkShopAccount'),
@@ -441,7 +440,8 @@ define(function(require, exports){
 	};
 
 	FinShop.sett_init_event = function($tab){
-		var validator = rule.check($tab);
+		var validator = (new FinRule(3)).check($tab),
+			autoValidator = (new FinRule(2)).check($tab);
 
 		$tab.off('change').off(SWITCH_TAB_SAVE).off(CLOSE_TAB_SAVE)
 		.on('change', '.T-checkList', function(event) {
@@ -468,7 +468,7 @@ define(function(require, exports){
 		});
 		var $datepicker = $searchArea.find('.datepicker');
 		Tools.setDatePicker($datepicker, true);
-		FinancialService.updateSumPayMoney($tab, rule);
+		FinancialService.updateSumPayMoney($tab, new FinRule(3));
 
 		// 报表内的操作
 		$tab.find('.T-list').on('click', '.T-action', function(event) {
@@ -507,7 +507,7 @@ define(function(require, exports){
 		$tab.find(".T-btn-autofill").on('click', function(event){
 			event.preventDefault();
 			if ($(this).hasClass('btn-primary')) {
-                if (validator.form()) {
+                if (autoValidator.form()) {
                 	FinancialService.autoPayConfirm($datepicker.eq(0).val(), $datepicker.eq(1).val(),function(){
                     	FinShop.autoFillMoney($tab);
                 	});
@@ -611,7 +611,7 @@ define(function(require, exports){
     }
 
 	FinShop.saveSettlement = function($tab, tabArgs){
-		var json = FinancialService.clearSaveJson($tab, FinShop.payingJson, rule);
+		var json = FinancialService.clearSaveJson($tab, FinShop.payingJson, new FinRule(3));
 		console.log(json)
 		if (json.length) {
 			var args = {

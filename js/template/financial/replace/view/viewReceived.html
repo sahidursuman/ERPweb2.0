@@ -17,9 +17,9 @@
             <tr>
                 <td>{{item.resourceType}}</td>
                 <td>{{item.businessType}}</td>
-                <td>{{item.payType}}</td>
-                <td>{{item.incomeDifferenceMoney}}</td>
-                <td>{{item.payType}}</td>
+                <td>{{item.incomeOrPayParty}}</td>
+                <td>{{item.incomeMoney}}</td>
+                <td>{{if item.payType == 0}}现金{{else if item.payType == 1}}银行转账{{else if item.payType == 2}}网上支付{{else if item.payType == 3}}支票{{else}}其它{{/if}}</td>
                 <td>{{item.remark}}</td>
                 <td>{{item.creatorName}}</td>
                 <td>{{item.createTime}}</td>
