@@ -63,24 +63,31 @@
 							
 						</div>
 					</div>
-					<div class="form-group guideInterval">
-						<div class="col-sm-4">
-							<label class=" control-label no-padding-right" style=" margin-left: 30px">应收：
-							<input readonly="readonly"type="text" name="needPayAllMoney" maxlength="9" />
-							</label>
-						</div>
 
-						<div class="col-sm-4">
-							<label class="control-label no-padding-right" style="margin-left: 40px">已收：
-							<input type="text" name="payedMoney"  value="0"  maxlength="9"/>
-							</label>
+
+					<div class="form-group guideInterval"> 
+					    <div class="col-sm-4" style="width:320px;"> 
+						   <label class=" control-label no-padding-right" style=" margin-left: 30px">应收： <input readonly="readonly" type="text" name="needPayAllMoney" maxlength="9"> </label> 
 						</div>
-						<div class="col-sm-4">
-							<label class=" control-label no-padding-right" style="margin-left: 20px">现收：
-							<input type="text"  name="currentNeedPayMoney" value="0" maxlength="9"  />
-						</label>
+						 <div class="col-sm-4" style="width:360px;">
+						     <label class="control-label no-padding-right" style="margin-left: 40px">已收： <input type="text" name="payedMoney" value="0" maxlength="9"> </label>
+						</div> 
+						<div class="col-sm-2"> 
+							   <label class="no-padding-right pull-left">收款方式：</label> 
+							   <select name="incomeType" class="pull-left">
+								    <option selected="selected" value="0">现金</option> 
+								    <option value="1">银行转账</option> 
+								    <option value="2">网上支付</option> 
+								    <option value="3">支票</option> 
+								    <option value="4">其它</option> 
+							    </select> 
+						 </div> 
+						<div class="col-sm-4" style="width:320px;"> 
+							<label class=" control-label no-padding-right" style="margin-left: 20px">现收： <input type="text" name="currentNeedPayMoney" value="0" maxlength="9"> 
+							</label>
 						</div>
 					</div>
+
 					<div class="form-group guideInterval">
 						<div class="col-sm-4">
 							<label class=" control-label no-padding-right" style="margin-left: 30px">未收：

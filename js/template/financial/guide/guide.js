@@ -4,8 +4,7 @@
  * by David Bear 2015-11-24
  */
 define(function(require, exports) {
-    var rule = require("./rule"),
-        menuKey = "financial_guide",
+    var menuKey = "financial_guide",
         listTemplate = require("./view/list"),
         // 对账模板
         guideCheckingTemplate = require("./view/guideChecking"),
@@ -254,8 +253,10 @@ define(function(require, exports) {
                                     }, type, $tab);
         });
 
-        var validator = rule.check($tab), autoValidator = rule.autoFillCheck($tab.find('.T-auto-fill-area'));
-
+        var validator = new FinRule(type ? 3 : 0),
+            autoValidator = new FinRule(2);
+        var validatorCheck = validator.check($tab),
+            autoValidatorCheck = autoValidator.check($tab.find('.T-auto-fill-area'));
         // 处理关闭与切换tab
         $tab.off('change').off(SWITCH_TAB_SAVE).off(CLOSE_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT)
             .on('change', '.T-checkList, .T-checkAll', function() {
@@ -266,6 +267,7 @@ define(function(require, exports) {
             })
             .on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
                 event.preventDefault();
+                if (!validatorCheck.form())return;
                 FinGuide.saveCheckingData($tab, [tab_id, title, html]);
             })
             .on(SWITCH_TAB_BIND_EVENT, function() {
@@ -273,17 +275,15 @@ define(function(require, exports) {
             })
             .on(CLOSE_TAB_SAVE, function(event) {
                 event.preventDefault();
-                if (!validator.form()) {
-                    return;
-                }
+                if (!validatorCheck.form())return;
                 FinGuide.saveCheckingData($tab);
             });
 
         // 计算
         if (type) {
-            FinancialService.updateSumPayMoney($tab, rule);
+            FinancialService.updateSumPayMoney($tab, validator);
         } else {
-            FinancialService.updateUnpayMoney($tab, rule);
+            FinancialService.updateUnpayMoney($tab, validator);
         }
 
         // 绑定表格内容元素的事件
@@ -306,9 +306,7 @@ define(function(require, exports) {
 
         //确认按钮事件
         $tab.find(".T-btn-save").click(function() {
-            if (!validator.form()) {
-                return;
-            }
+            if (!validatorCheck.form())return;
             if (type) {
                 FinGuide.savePayingData($tab);
             } else {
@@ -326,7 +324,7 @@ define(function(require, exports) {
             $tab.find('.T-btn-autofill').on('click', function(event) {
                 event.preventDefault();
                 if ($(this).hasClass('btn-primary')) {
-                    if (autoValidator.form()) {
+                    if (autoValidatorCheck.form()) {
                         FinGuide.autoFillMoney($tab);
                     }
                 } else {
@@ -350,7 +348,8 @@ define(function(require, exports) {
      * @return {[type]}         [description]
      */
     FinGuide.saveCheckingData = function($tab, tabArgs) {
-        var json = FinancialService.checkSaveJson($tab, rule);
+        var validator = new FinRule(0);
+        var json = FinancialService.checkSaveJson($tab, validator);
 
         if (json) { // 有值
             $.ajax({
@@ -385,7 +384,8 @@ define(function(require, exports) {
      * @return {[type]}         [description]
      */
     FinGuide.savePayingData = function($tab, tabArgs) {
-        var json = FinancialService.clearSaveJson($tab, FinGuide.payingJson, rule);
+        var validator = new FinRule(3);
+        var json = FinancialService.clearSaveJson($tab, FinGuide.payingJson, validator);
         if (json.length) {
             $.ajax({
                     url: KingServices.build_url('account/guideFinancial', 'operatePayAccount'),
