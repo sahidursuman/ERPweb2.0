@@ -58,7 +58,7 @@ define(function(require, exports) {
                 if(result){
                 	Transfer.partnerList = data.partnerAgencyNameList;
                 	var html = listTemplate(data);
-                    Tools.addTab(menuKey,"外传账务",html);
+                    Tools.addTab(menuKey,"外转账务",html);
 
                     Transfer.initList(startDate,endDate);
                     // 绑定翻页组件
@@ -233,8 +233,15 @@ define(function(require, exports) {
             operateName : operateName,
             startDate : startDate,
             endDate : endDate,
-            sortType : "auto"
+            sortType : "auto",
+            isAutoPay : isAutoPay
         };
+        if(isAutoPay == 1){
+           searchParam.isAutoPay = isAutoPay;
+           searchParam.sumCurrentPayMoney = Transfer.$clearTab.find('input[name=sumPayMoney]').val();
+           searchParam.payType = Transfer.$clearTab.find('select[name=sumPayType]').val();
+           searchParam.payRemark = Transfer.$clearTab.find('input[name=sumPayRemark]').val();
+        }
         searchParam = JSON.stringify(searchParam);
         $.ajax({
             url:KingServices.build_url("account/financialTransfer","listTransferAccount"),
@@ -244,6 +251,14 @@ define(function(require, exports) {
                 var result = showDialog(data);
                 if(result){
                     data.partnerAgencyName = partnerAgencyName;
+                    if(isAutoPay == 1){
+                        Transfer.clearTempData = data.autoPaymentJson;
+                        Transfer.clearTempSumDate = {
+                            sumPayMoney : Transfer.$clearTab.find('input[name=sumPayMoney]').val(),
+                            sumPayType : Transfer.$clearTab.find('select[name=sumPayType]').val(),
+                            sumPayRemark : Transfer.$clearTab.find('input[name=sumPayRemark]').val()
+                        };
+                    }
 
                     //暂存数据读取
                     if(Transfer.clearTempSumDate){
@@ -341,43 +356,7 @@ define(function(require, exports) {
         Transfer.$clearTab.find(".T-clear-auto").off().on("click",function(){
             var isAutoPay = FinancialService.autoPayJson(id,Transfer.$clearTab,rule);
             if(!isAutoPay){return false;}
-
-            var startDate = Transfer.$clearTab.find("input[name=startDate]").val(),
-                endDate = Transfer.$clearTab.find("input[name=endDate]").val();
-            var searchParam = {
-                partnerAgencyId : id,
-                lineProductName : Transfer.$clearTab.find("input[name=lineProductName]").val(),
-                operateId : Transfer.$clearTab.find('input[name=operateId]').val(),
-                operateName : Transfer.$clearTab.find('input[name=operateName]').val(),
-                sumCurrentPayMoney : Transfer.$clearTab.find('input[name=sumPayMoney]').val(),
-                payType : Transfer.$clearTab.find('select[name=sumPayType]').val(),
-                payRemark : Transfer.$clearTab.find('input[name=sumPayRemark]').val(),
-                startDate : startDate,
-                endDate : endDate,
-                isAutoPay : 1
-            };
-            searchParam = JSON.stringify(searchParam);
-            FinancialService.autoPayConfirm(startDate,endDate,function(){
-                $.ajax({
-                    url:KingServices.build_url("account/financialTransfer","listTransferAccount"),
-                    type:"POST",
-                    data:{ searchParam : searchParam },
-                    success:function(data){
-                        var result = showDialog(data);
-                        if(result){
-                            Transfer.$clearTab.find(".T-clear-auto").toggle();
-                            Transfer.$clearTab.find(".T-cancel-auto").toggle();
-                            Transfer.clearTempData = data.autoPaymentJson;
-                            Transfer.clearTempSumDate = {
-                                sumPayMoney : Transfer.$clearTab.find('input[name=sumPayMoney]').val(),
-                                sumPayType : Transfer.$clearTab.find('select[name=sumPayType]').val(),
-                                sumPayRemark : Transfer.$clearTab.find('input[name=sumPayRemark]').val()
-                            };
-                            Transfer.transferClear(1,0,id,name);
-                        }
-                    }
-                });
-            });
+            Transfer.transferClear(1,0,id,name);
         });
 
         Transfer.$clearTab.find(".T-cancel-auto").off().on("click",function(){
