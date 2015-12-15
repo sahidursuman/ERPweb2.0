@@ -41,6 +41,18 @@
 							<input name="transPayedMoney" value="{{innerTransfer.transPayedMoney}}" maxlength="9" type="text" class="date-picker col-xs-12" />
 						</div>
 
+						<div class="col-sm-2">
+						    <label class="no-padding-right pull-left">付款方式：</label>
+							<select name="payType" class="pull-left">
+								<option{{if innerTransfer.payType == 0}} selected="selected"{{/if}} value="0">现金</option>
+								<option{{if innerTransfer.payType == 1}} selected="selected"{{/if}} value="1">银行转账</option>
+								<option{{if innerTransfer.payType == 2}} selected="selected"{{/if}} value="2">网上支付</option>
+								<option{{if innerTransfer.payType == 3}} selected="selected"{{/if}} value="3">支票</option>
+								<option{{if innerTransfer.payType == 4}} selected="selected"{{/if}} value="4">其它</option>
+							</select>
+						</div>
+
+
 						{{if innerTransfer.touristGroup.operateCurrentNeedPayMoney==0}}
 						<label style="padding-left:0px;">  
 							<input  type="checkbox" class="ace" disabled="disabled" value="{{innerTransfer.touristGroup.operateCurrentNeedPayMoney}}" name="isCurrent">

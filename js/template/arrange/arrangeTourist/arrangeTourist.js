@@ -2394,7 +2394,8 @@ define(function(require, exports) {
 						"transChildPrice" : arrangeTourist.getVal($editFeeObj, "transChildPrice") || 0,
 						"transPayedMoney" : arrangeTourist.getVal($editFeeObj, "transPayedMoney") || 0,
 						"transNeedPayAllMoney": arrangeTourist.getVal($editFeeObj, "transNeedPayAllMoney") || 0 ,
-						"isCurrent" : arrangeTourist.getVal($editFeeObj, "isCurrent") || 0
+						"isCurrent" : arrangeTourist.getVal($editFeeObj, "isCurrent") || 0 ,
+						"transPayType" : arrangeTourist.getVal($editFeeObj, "transPayType")
 				    },
 				otherFeeList = [],
 				inTransferFee = {
@@ -2407,12 +2408,16 @@ define(function(require, exports) {
 				var $that=$(this);
 				if ( i > 1) {
 				   var FeeJson = {
-					    id : $that.attr("data-entity-id"),
 					    type : arrangeTourist.getVal($that, "value"),
 					    discribe : arrangeTourist.getVal($that, "describe"),
 					    otherPrice : arrangeTourist.getVal($that, "otherPrice"), 
 					    count : arrangeTourist.getVal($that, "count")
 					};
+					
+					if (transferFeeStatus==1) {
+						FeeJson.id=$that.attr("data-entity-id");
+					};
+
 					otherFeeList.push(FeeJson);	
 					inTransferFee.innerTransferFeeList.push(FeeJson);
 				};
