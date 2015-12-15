@@ -9,7 +9,7 @@
 					<!--<td class="style-myself CheckPlan">来源部门</td>
 					<td style="text-align: left;padding: 0px 0px 0px 10px">{{innerTransfer.fromBusinessGroup.name}}</td>-->
 					<td class="style-myself CheckPlan">接收部门</td>
-					<td style="text-align: left;padding: 0px 0px 0px 10px">{{innerTransfer.toBusinessGroup.name}}</td>
+					<td style="text-align: left;padding: 0px 0px 0px 10px" colspan="3">{{innerTransfer.toBusinessGroup.name}}</td>
 					</tr>
 				<tr>
 					<td class="style-myself CheckPlan">内转备注</td>
@@ -19,8 +19,16 @@
 				<tr>
 					<td class="style-myself CheckPlan">应付</td>
 					<td style="text-align: left;padding: 0px 0px 0px 10px">{{innerTransfer.transNeedPayMoney}}</td>
-					<td class="style-myself CheckPlan">已付</td>
-					<td style="text-align: left;padding: 0px 0px 0px 10px">{{innerTransfer.transPayedMoney}}</td>
+					<td class="style-myself CheckPlan" style="text-align: left;padding: 0px 0px 0px 10px">已付 {{innerTransfer.transPayedMoney}}</td>
+					 <td style="text-align: left;padding: 0px 0px 0px 10px">
+						付款方式
+						{{if innerTransfer.payType == 0}}现金
+							{{else if innerTransfer.payType == 1}}银行转账
+							{{else if innerTransfer.payType == 2}}网上支付
+							{{else if innerTransfer.payType == 3}}支票
+							{{else if innerTransfer.payType == 4}}其他
+						{{/if}}
+					</td>
 				</tr>
 			</table>
 		</div>
