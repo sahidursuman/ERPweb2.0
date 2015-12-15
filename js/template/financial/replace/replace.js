@@ -150,7 +150,10 @@ define(function(require, exports) {
 		Replace.checkingName = name;
 		Replace.checkingList(0, id);
 	};
-
+	Replace.clearComma = function(str){
+		str = str.replace(/(\uff0c){2,}/g, '，');
+		return str.replace(/(\uff0c)$/g, '');
+	};
 	Replace.checkingList = function(page, id, startTime, endTime){
 		var args = {
 			pageNo : (page || 0),
@@ -189,6 +192,15 @@ define(function(require, exports) {
 		}).done(function(data){
 			if (showDialog(data)) {
 				data.name = Replace.checkingName;
+				for(var j=0; j<data.bookinAccountList.length; j++){
+					var detailList = data.bookinAccountList[j].detailList;
+					data.bookinAccountList[j].newDetail = '';
+					for(var i=0; i<detailList.length; i++){
+						data.bookinAccountList[j].newDetail += detailList[i].name + '，' + detailList[i].type + '，' + detailList[i].shift + '，' + detailList[i].level + '，' + detailList[i].count + "×" + detailList[i].price + "=" + (detailList[i].count * detailList[i].price) + '，';
+					}
+					data.bookinAccountList[j].newDetail = Replace.clearComma(data.bookinAccountList[j].newDetail);
+				}
+				
 				Tools.addTab(checkMenuKey, "代订对账", replaceChecking(data));
 
 				Replace.$checkingTab = $('#tab-' + checkMenuKey + '-content');
@@ -631,6 +643,14 @@ define(function(require, exports) {
 				var html;
 				data.name = Replace.balanceName;
 				data.source = Replace.isBalanceSource;
+				for(var j=0; j<data.bookinAccountList.length; j++){
+					var detailList = data.bookinAccountList[j].detailList;
+					data.bookinAccountList[j].newDetail = '';
+					for(var i=0; i<detailList.length; i++){
+						data.bookinAccountList[j].newDetail += detailList[i].name + '，' + detailList[i].type + '，' + detailList[i].shift + '，' + detailList[i].level + '，' + detailList[i].count + "×" + detailList[i].price + "=" + (detailList[i].count * detailList[i].price) + '，';
+					}
+					data.bookinAccountList[j].newDetail = Replace.clearComma(data.bookinAccountList[j].newDetail);
+				}
 				Tools.addTab(blanceMenuKey, "代订收款", replaceClearing(data));
 				Replace.$balanceTab = $('#tab-' + blanceMenuKey + '-content');
 

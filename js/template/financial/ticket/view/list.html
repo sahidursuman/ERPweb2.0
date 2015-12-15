@@ -41,7 +41,7 @@
                 <td>{{rs.sumPayedMoney}}</td>
                 <td><span {{if rs.sumUnPayedMoney != 0}}style="color:#FF0000;"{{/if}}>{{rs.sumUnPayedMoney}}</span></td>
                 <td><span style="color:#{{if rs.checkedCount == rs.allCheckCount}}00CC00{{else}}FF9900{{/if}};">{{rs.checkedCount}}/{{rs.allCheckCount}}</span></td>
-                <td><span style="color:#{{if rs.sumPayedMoney == rs.allPayCount}}00CC00{{else}}FF9900{{/if}};">{{rs.sumPayedMoney}}/{{rs.allPayCount}}</span></td>
+                <td><span style="color:#{{if rs.payedCount == rs.allPayCount}}00CC00{{else}}FF9900{{/if}};">{{rs.payedCount}}/{{rs.allPayCount}}</span></td>
                 <td>
                     <a class="cursor T-action T-checking" data-right="1210002">对账</a>
                     <label class="cursor R-right" data-right="1210002|1210003"> <a> |</a></label>
