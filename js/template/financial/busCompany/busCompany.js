@@ -145,11 +145,9 @@ define(function(require, exports) {
                     data.busCompanyName = busCompanyName;
                     var html = checkBill(data);
                     
-                    var validator;
                     // 初始化页面
                     if (Tools.addTab(menuKey + "-checking", "车队对账", html)) {
                         busCompany.initCheck(page,busCompanyId,busCompanyName); 
-                        validator = rule.check(busCompany.$checkTab.find(".T-checkList"));                       
                     }
                     //取消对账权限过滤
                     var checkTr = busCompany.$checkTab.find(".T-checkTr");
@@ -174,12 +172,13 @@ define(function(require, exports) {
 
     busCompany.initCheck = function(page,id,name){
     	// 初始化jQuery 对象 
+        var ruleCheck = new FinRule(0); 
         busCompany.$checkTab = $("#tab-" + menuKey + "-checking-content");
         busCompany.$checkSearchArea = busCompany.$checkTab.find('.T-search-area');
 
         busCompany.init_event(page,id,name,busCompany.$checkTab,"check");
         Tools.setDatePicker(busCompany.$checkTab.find(".date-picker"),true);
-        FinancialService.updateUnpayMoney(busCompany.$checkTab,rule);
+        FinancialService.updateUnpayMoney(busCompany.$checkTab,ruleCheck);
 
         //搜索按钮事件
         busCompany.$checkSearchArea.find('.T-search').on('click', function(event) {
@@ -217,7 +216,7 @@ define(function(require, exports) {
         });
     };
 
-    //结算
+    //付款
     busCompany.busCompanyClear = function(isAutoPay,page,busCompanyId,busCompanyName,accountInfo,startDate,endDate){
         if (busCompany.$clearSearchArea && arguments.length === 4) {
             accountInfo = busCompany.$clearSearchArea.find("input[name=accountInfo]").val(),
@@ -237,7 +236,7 @@ define(function(require, exports) {
             startTime: startDate,
             endTime: endDate,
             sortType: "auto"
-        };
+        }, args = arguments;
         searchParam = JSON.stringify(searchParam);
         $.ajax({
             url:KingServices.build_url("account/financialBusCompany","listBusCompanyAccount"),
@@ -261,23 +260,12 @@ define(function(require, exports) {
                     data.financialBusCompanyListData = FinancialService.getTempDate(resultList,busCompany.clearTempData);
 					var html = Clearing(data);
                     
-                    var validator;
+                    args.data = data;
                     // 初始化页面
                     if (Tools.addTab(menuKey + "-clearing", "车队付款", html)) {
-                        busCompany.initClear(page,busCompanyId,busCompanyName); 
-                        validator = rule.check(busCompany.$clearTab.find('.T-clearList'));                       
-                    }
-
-                    if(isAutoPay == 0){
-                        busCompany.$clearTab.find(".T-cancel-auto").hide();
+                        busCompany.initClear(args); 
                     } else {
-                        busCompany.$clearTab.find('input[name=sumPayMoney]').prop("disabled",true);
-                        busCompany.$clearTab.find(".T-clear-auto").hide(); 
-                        if(isAutoPay == 1){
-                            busCompany.$clearTab.data('isEdited',true);
-                        } else if(isAutoPay == 2){
-                            busCompany.$clearTab.find(".T-cancel-auto").hide();
-                        }
+                        busCompany.$clearTab.data('next', args);
                     }
 
                     //绑定翻页组件
@@ -307,12 +295,51 @@ define(function(require, exports) {
         });
     };
 
-    busCompany.initClear = function(page,id,name){
+    busCompany.initClear = function(args){
+        var isAutoPay = args[0],
+            data = args.data,
+            page = args[1] || 0,
+            id = args[2],
+            name = args[3];
         // 初始化jQuery 对象 
         busCompany.$clearTab = $("#tab-" + menuKey + "-clearing-content");
         busCompany.$clearSearchArea = busCompany.$clearTab.find('.T-search-area');
+        var $tab = busCompany.$clearTab, saveRule = new FinRule(isAutoPay== 2?3: 1);
+        args.saveRule = saveRule;
 
-        busCompany.init_event(page,id,name,busCompany.$clearTab,"clear");
+        if(isAutoPay == 0){
+            busCompany.$clearTab.find(".T-cancel-auto").hide();
+        } else {
+            busCompany.$clearTab.find('input[name=sumPayMoney]').prop("disabled",true);
+            busCompany.$clearTab.find(".T-clear-auto").hide(); 
+            if(isAutoPay == 1){
+                busCompany.$clearTab.data('isEdited',true);
+            } else if(isAutoPay == 2){
+                busCompany.$clearTab.find(".T-cancel-auto").hide();
+            }
+        }
+
+        // 监听修改
+        $tab.find(".T-clearList").off('change').on('change',"input",function(event) {
+            event.preventDefault();
+            $(this).closest('tr').data("change",true);
+            $tab.data('isEdited', true);
+        });
+        $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
+            event.preventDefault();
+            busCompany.initClear(busCompany.$clearTab.data('next'));
+            busCompany.$clearTab.find(".T-cancel-auto").hide();
+        })
+        // 监听保存，并切换tab
+        .on('switch.tab.save', function(event, tab_id, title, html) {
+            event.preventDefault();
+            busCompany.saveClear(args,tab_id, title, html);
+        })
+        // 保存后关闭
+        .on('close.tab.save', function(event) {
+            event.preventDefault();
+            busCompany.saveClear(args,true);
+        });
         Tools.setDatePicker(busCompany.$clearTab.find(".date-picker"),true);
 
         //搜索事件
@@ -331,7 +358,7 @@ define(function(require, exports) {
         //保存结算事件
         busCompany.$clearTab.find(".T-saveClear").click(function(){
             if (!rule.check(busCompany.$clearTab).form()) { return; }
-            busCompany.saveClear(id,name,page);
+            busCompany.saveClear(args);
         });
         
         //报表内的操作
@@ -373,7 +400,7 @@ define(function(require, exports) {
                                 sumPayType: busCompany.$clearTab.find('select[name=sumPayType]').val(),
                                 sumPayRemark: busCompany.$clearTab.find('input[name=sumPayRemark]').val()
                             };
-                            busCompany.busCompanyClear(1,page,id,name);
+                            busCompany.busCompanyClear(1,0,id,name);
                         }
                     }
                 });
@@ -388,13 +415,13 @@ define(function(require, exports) {
             busCompany.$clearTab.data('isEdited',false);
             busCompany.busCompanyClear(0,0,id,name);
         });
-        FinancialService.updateSumPayMoney(busCompany.$clearTab,rule);
+        FinancialService.updateSumPayMoney(busCompany.$clearTab,saveRule);
     };
 
     //对账数据保存
     busCompany.saveChecking = function(busCompanyId,busCompanyName,page,tab_id,title,html){
         var argumentsLen = arguments.length,
-            checkSaveJson = FinancialService.checkSaveJson(busCompany.$checkTab,rule);
+            checkSaveJson = FinancialService.checkSaveJson(busCompany.$checkTab,new FinRule(0));
         if(!checkSaveJson){ return false; }
         
         $.ajax({
@@ -424,13 +451,19 @@ define(function(require, exports) {
         });
     };
 
-    busCompany.saveClear = function(id,name,page,tab_id, title, html){
+    busCompany.saveClear = function(args,tab_id, title, html){
         if(!FinancialService.isClearSave(busCompany.$clearTab,rule)){
             return false;
         }
 
+        var isAutoPay = args[0],
+            data = args.data,
+            page = args[1] || 0,
+            id = args[2],
+            name = args[3];
+
         var argumentsLen = arguments.length,
-            clearSaveJson = FinancialService.clearSaveJson(busCompany.$clearTab,busCompany.clearTempData,rule);
+            clearSaveJson = FinancialService.clearSaveJson(busCompany.$clearTab,busCompany.clearTempData,args.saveRule);
         var searchParam = {
             busCompanyId: id,
             sumCurrentPayMoney: busCompany.$clearTab.find('input[name=sumPayMoney]').val(),
@@ -456,13 +489,13 @@ define(function(require, exports) {
                         if(argumentsLen === 2){
                             Tools.closeTab(menuKey + "-clearing");
                             busCompany.listBusCompany(busCompany.searchData.pageNo,busCompany.searchData.busCompanyName,busCompany.searchData.busCompanyId,busCompany.searchData.startDate,busCompany.searchData.endDate);
-                        }else if(argumentsLen === 3){
+                        }else if(argumentsLen === 1){
                             busCompany.$clearTab.data('isEdited',false);
                             busCompany.busCompanyClear(0,page,id,name);
                         } else {
                             busCompany.$clearTab.data('isEdited',false);
                             Tools.addTab(tab_id, title, html);
-                            busCompany.initClear(0,busCompany.$clearTab.find(".T-newData").data("id"),busCompany.$clearTab.find(".T-newData").data("name"));
+                            busCompany.initClear(busCompany.$clearTab.data('next'));
                         }
                     });
                     

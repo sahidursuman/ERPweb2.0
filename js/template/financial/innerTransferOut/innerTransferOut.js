@@ -165,12 +165,11 @@ define(function(require,exports) {
 						var $checkId = $("#tab-"+checkId+"-content");
 						InnerTransferOut.$checkTab = $checkId;
 						InnerTransferOut.$checkSearchArea = $checkId.find(".T-search");
-						//InnerTransferOut.$checkValidator = rule.check($checkId);
 						//获取线路数据
 						var lineProductNameObj = InnerTransferOut.$checkSearchArea.find('input[name=lineProductName]');
 						InnerTransferOut.getCheckLineproduct(lineProductNameObj,$lineProductData);
-						//绑定事件
-						InnerTransferOut.chenkingEvent($checkId,$listSearchData,1);
+						//获取列表数据
+						InnerTransferOut.getListData($checkId,$listSearchData,1);
 					}
 				    
 				}
@@ -205,7 +204,8 @@ define(function(require,exports) {
 					//设置总条数
 					$obj.find('.T-recordSize').text(data.recordSize);
 					validator = rule.check($obj.find('.T-checkList')); 
-					
+					//绑定事件
+						InnerTransferOut.chenkingEvent($obj,$data,typeFlag);
 					// 绑定翻页组件
 					laypage({
 					    cont: $obj.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
@@ -244,7 +244,6 @@ define(function(require,exports) {
 		var name = $obj.find('input[name=toBusinessGroupName]').val();
 		$data.toBusinessGroupId = id;
 		$data.toBusinessGroupName = name;
-		InnerTransferOut.getListData($obj,$data,typeFlag);
 		//切换tab事件
 		InnerTransferOut.init_CRU_event($obj,$data,id,name,typeFlag)
 		//监听已对账的数据是否被修改
@@ -567,8 +566,6 @@ define(function(require,exports) {
 			    if(result){
 			 	    data.searchParam = $listSearchData;
 			 	    data.showBtnFlag = InnerTransferOut.showBtnFlag;
-			 	    console.log(data);
-				    console.log(data);
 				    var $lineProductData = data.lineProductList;
 				    //return
 					var html = settlementTemplate(data);
@@ -581,7 +578,8 @@ define(function(require,exports) {
 						var lineProductNameObj = InnerTransferOut.$settlementSearchArea.find('input[name=lineProductName]');
 						InnerTransferOut.getCheckLineproduct(lineProductNameObj,$lineProductData);
 						//获取列表数据
-						InnerTransferOut.chenkingEvent($settleId,$listSearchData,2);
+						InnerTransferOut.getListData($settleId,$listSearchData,2);
+						
 					}
 				};
 			}

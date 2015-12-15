@@ -738,7 +738,7 @@ define(function(require, exports) {
             success:function(data){
                 if(showDialog(data)){
                     $tab.data('isEdited', false);
-
+                    Client.clearDataArray = [];
                     showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
                         if (argLen === 2) {
                             Client.listClient(0);

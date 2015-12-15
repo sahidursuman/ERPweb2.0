@@ -120,7 +120,7 @@ define(function(require, exports) {
                 TurnProfit.viewTransfer(this);
             } else if($that.hasClass('T-lineProductDetail')){
                 //查看线路产品
-                KingServices.viewLineProduct(lineProductId);
+                KingServices.viewTurnInfo(id);
             }
         });
     };
