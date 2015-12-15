@@ -719,7 +719,7 @@ OtherAccounts.viewOrderDetail = function(id) {
 
 };
 OtherAccounts.initPayModule = function(options) {
-    OtherAccounts.AccountsPayment(0, name, "", startAccountTime, endAccountTime);
+    OtherAccounts.AccountsPayment(0, options.name, "", options.startAccountTime, options.endAccountTime);
 };
 exports.init = OtherAccounts.initModule;
 exports.initPay = OtherAccounts.initPayModule;

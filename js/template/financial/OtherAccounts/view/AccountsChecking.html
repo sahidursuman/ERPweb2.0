@@ -84,7 +84,7 @@
                 <td>{{Checking.checkUser }}</td>
                 <td>
                     <label class="pos-rel">
-                        <input type="checkbox" data-entity-checkStatus="{{Checking.isConfirmAccount}}" class="ace T-insuanceFinancial" checked="checked" />
+                        <input type="checkbox" data-entity-checkStatus="{{Checking.isConfirmAccount}}" class="ace T-insuanceFinancial" {{if Checking.isConfirmAccount}}checked="checked"{{/if}}/>
                         <span class="lbl"></span>
                         <a class="T-action T-viewhandle">查看</a>
                     </label>
