@@ -27,7 +27,6 @@ define(function(require,exports) {
 	};
 	InnerTransferOut.initModule = function(){
 		var dateJson = FinancialService.getInitDate();
-		dateJson.startDate = "2015-11-01";
 		InnerTransferOut.listInnerTransfer(0,"","",dateJson.startDate,dateJson.endDate);
 	};
 	/**
