@@ -237,6 +237,12 @@ define(function(require, exports) {
             endTime: endDate,
             sortType: "auto"
         }, args = arguments;
+        if(isAutoPay == 1){
+           searchParam.isAutoPay = isAutoPay;
+           searchParam.sumCurrentPayMoney = busCompany.$clearTab.find('input[name=sumPayMoney]').val();
+           searchParam.payType = busCompany.$clearTab.find('select[name=sumPayType]').val();
+           searchParam.payRemark = busCompany.$clearTab.find('input[name=sumPayRemark]').val();
+        }
         searchParam = JSON.stringify(searchParam);
         $.ajax({
             url:KingServices.build_url("account/financialBusCompany","listBusCompanyAccount"),
@@ -246,6 +252,14 @@ define(function(require, exports) {
                 var result = showDialog(data);
                 if(result){
 					data.busCompanyName = busCompanyName;
+                    if(isAutoPay == 1){
+                        busCompany.clearTempData = data.autoPaymentJson;
+                        busCompany.clearTempSumDate = {
+                            sumPayMoney : busCompany.$clearTab.find('input[name=sumPayMoney]').val(),
+                            sumPayType : busCompany.$clearTab.find('select[name=sumPayType]').val(),
+                            sumPayRemark : busCompany.$clearTab.find('input[name=sumPayRemark]').val()
+                        };
+                    }
                     //暂存数据读取
                     if(busCompany.clearTempSumDate){
                         data.sumPayMoney = busCompany.clearTempSumDate.sumPayMoney;
@@ -368,43 +382,7 @@ define(function(require, exports) {
         busCompany.$clearTab.find(".T-clear-auto").off().on("click",function(){
             var autoPayJson = FinancialService.autoPayJson(id,busCompany.$clearTab,rule);
             if(!autoPayJson){return false;}
-
-            var startDate = busCompany.$clearTab.find("input[name=startDate]").val(),
-                endDate = busCompany.$clearTab.find("input[name=endDate]").val();
-            var searchParam = {
-                busCompanyId: id,
-                sumCurrentPayMoney: busCompany.$clearTab.find('input[name=sumPayMoney]').val(),
-                payType: busCompany.$clearTab.find('select[name=sumPayType]').val(),
-                payRemark: busCompany.$clearTab.find('input[name=sumPayRemark]').val(),
-                startTime: startDate,
-                endTime: endDate,
-                accountInfo: busCompany.$clearTab.find('input[name=accountInfo]').val(),
-                isAutoPay: 1
-            };
-            searchParam = JSON.stringify(searchParam);
-            FinancialService.autoPayConfirm(startDate,endDate,function(){
-                $.ajax({
-                    url:KingServices.build_url("account/financialBusCompany","listBusCompanyAccount"),
-                    type:"POST",
-                    data:{ searchParam: searchParam },
-                    success:function(data){
-                        var result = showDialog(data);
-                        if(result){
-                            busCompany.$clearTab.find(".T-clear-auto").toggle();
-                            busCompany.$clearTab.find(".T-cancel-auto").toggle();
-                            busCompany.clearTempSumDate = false;
-                            busCompany.clearTempData = false;
-                            busCompany.clearTempData = data.autoPaymentJson;
-                            busCompany.clearTempSumDate = {
-                                sumPayMoney: busCompany.$clearTab.find('input[name=sumPayMoney]').val(),
-                                sumPayType: busCompany.$clearTab.find('select[name=sumPayType]').val(),
-                                sumPayRemark: busCompany.$clearTab.find('input[name=sumPayRemark]').val()
-                            };
-                            busCompany.busCompanyClear(1,0,id,name);
-                        }
-                    }
-                });
-            });
+            busCompany.busCompanyClear(1,0,id,name);
         });
 
         busCompany.$clearTab.find(".T-cancel-auto").off().on("click",function(){

@@ -10,24 +10,15 @@
 					<div class="form-group guideInterval">
 						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>线路产品:</label>
 						<div class="col-sm-2 update-divWidth">
-							{{if touristGroupDetail.status == 1}}
-							<input type="text"  value="{{if touristGroupDetail.lineProduct != null}}{{touristGroupDetail.lineProduct.name}}{{/if}}" name="lineProductIdName" class="col-sm-8 bind-change product-width" readonly="readonly" />
-							<input type="hidden" value="{{touristGroupDetail.lineProductId}}" name="lineProductId" />
-							<input type="hidden" value="{{touristGroupDetail.quoteId}}" name="quoteId" />
-							<button class="col-sm-4 btn btn-sm btn-primary btn-travelLine-search travelLine-search {{if !!type || touristGroupDetail.status == 1}}T-travelLine-search{{/if}}" style="padding-bottom:5px;width: 62px">
-								<i class="ace-icon fa fa-search "></i>搜索
-							</button> 
-							{{else}}
 							<input type="text" value="{{if touristGroupDetail.lineProduct != null}}{{touristGroupDetail.lineProduct.name}}{{/if}}" name="lineProductIdName" class="col-sm-12" readonly="readonly" />
 							<input type="hidden" value="{{touristGroupDetail.lineProductId}}" name="lineProductId" />
 							<input type="hidden" value="{{touristGroupDetail.quoteId}}" name="quoteId" />
-							{{/if}}
 						</div>
 						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>出游日期:</label>
 						<div class="col-sm-2 update-divWidth">
 							{{if touristGroupDetail.status == 1}}
 							<div class="input-group">
-								<input type="text" name="startTime" value="{{touristGroupDetail.startTime | dateFormat: 'yyyy-MM-dd'}}" class="col-sm-12 date-picker datepicker" {{if !!touristGroupDetail.quoteId}} disabled {{/if}} {{if !!type}}readonly="readonly"{{/if}}  />
+								<input type="text" name="startTime" value="{{touristGroupDetail.startTime | dateFormat: 'yyyy-MM-dd'}}" class="col-sm-12 date-picker" {{if !!touristGroupDetail.quoteId}} disabled {{/if}} {{if !!type}}readonly="readonly"{{/if}}  />
 									<span class="input-group-addon icon-tourist {{if !!touristGroupDetail.quoteId}} hidden {{/if}}"  >
 										<i class="fa fa-calendar" style="position: relative;left: -20px"></i>
 									</span>
@@ -58,11 +49,10 @@
 							<div class="input-group">
 								<input class="{{if !!type}}choosePartnerManager{{/if}} col-sm-12 bind-change" value="{{if touristGroupDetail.partnerAgencyContact != null}}{{touristGroupDetail.partnerAgencyContact.contactRealname}} -[{{touristGroupDetail.partnerAgencyContact.contactMobileNumber}}]{{/if}}" name="partnerAgencyNameList" type="text" {{if !!touristGroupDetail.quoteId || !!type}} readonly {{/if}} />
 								<input type="hidden" name="partnerAgencyContactId" value="{{if touristGroupDetail.partnerAgencyContact != null}}{{touristGroupDetail.partnerAgencyContact.id}}{{/if}}" />
-								<span class="input-group-addon T-addPartnerManager {{if !!touristGroupDetail.quoteId}} hidden {{/if}}" style="cursor:pointer;" title="为客户来源添加联系人">
+								<span class="input-group-addon  {{if type==null}}T-addPartnerManager{{/if}} {{if !!touristGroupDetail.quoteId}} hidden {{/if}}" style="cursor:pointer;" title="为客户来源添加联系人">
 									<i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
 								</span>
 							</div>
-							<!-- <input readonly="readonly" value="{{touristGroupDetail.partnerAgency.managerName}}" class="chooseGuide col-sm-12" name="partnerAgencyName" type="text" /> -->
 						</div>
 						<label class="col-sm-1 control-label no-padding-right">获得方式:</label>
 						<div class="col-sm-2">
@@ -88,18 +78,6 @@
 						<div class="col-sm-2 update-divWidth">
 							<input value="{{touristGroupDetail.payedMoney}}" type="text" name="payedMoney" {{if !!type}} readonly="readonly"{{/if}} class="col-sm-12" />
 						</div>
-
-						<div class="col-sm-2">
-						    <label class="no-padding-right pull-left">收款方式：</label>
-							<select name="incomeType" class="pull-left">
-								<option{{if touristGroupDetail.incomeType == 0}} selected="selected"{{/if}} value="0">现金</option>
-								<option{{if touristGroupDetail.incomeType == 1}} selected="selected"{{/if}} value="1">银行转账</option>
-								<option{{if touristGroupDetail.incomeType == 2}} selected="selected"{{/if}} value="2">网上支付</option>
-								<option{{if touristGroupDetail.incomeType == 3}} selected="selected"{{/if}} value="3">支票</option>
-								<option{{if touristGroupDetail.incomeType == 4}} selected="selected"{{/if}} value="4">其它</option>
-							</select>
-						</div>
-
 						<label class="col-sm-1 control-label no-padding-right">现收:</label>
 						<div class="col-sm-2">
 							<input value="{{touristGroupDetail.currentNeedPayMoney}}" {{if touristGroupDetail.isReceived == 1 || !!type }}readonly="readonly"{{/if}} type="text" name="currentNeedPayMoney" class="col-sm-12" />
@@ -116,7 +94,7 @@
 						{{/if}}
 						</div> 
 						
-                        <div class="col-sm-3" style="320px">
+                        <div class="col-sm-3">
 							<label class=" control-label no-padding-right margin-leftGroup">组团单号：
 							<input  type="text" name="otaOrderNumber" value="{{touristGroupDetail.otaOrderNumber}}"  maxlength="9" />
 							</label>
@@ -126,7 +104,7 @@
 				</div>
 				<div class="form-group">
 					<div class="col-sm-8">
-						<button class="btn btn-sm btn-success  T-touristGroup-addOtherCost" style="position: absolute;">
+						<button class="btn btn-sm btn-success  T-touristGroup-addOtherCost" style="position: absolute;" disabled="disabled">
 							<i class="ace-icon fa fa-plus"></i>
 							新增费用项
 						</button>
@@ -153,10 +131,10 @@
 									大人
 								</td>
 								<td>
-									<span class="necessary col-sm-1">*</span><input name="adultCount" value="{{touristGroupDetail.adultCount}}" type="text" class="col-sm-11  no-padding-right T-costCount" maxlength="3" {{if !!touristGroupDetail.quoteId}} readonly {{/if}}/>
+									<span class="necessary col-sm-1">*</span><input name="adultCount" value="{{touristGroupDetail.adultCount}}" type="text" class="col-sm-11  no-padding-right T-costCount" maxlength="3" {{if !!type}} readonly {{/if}}/>
 								</td>
 								<td>
-									<span class="necessary col-sm-1">*</span><input name="adultPrice" value="{{touristGroupDetail.adultPrice}}" type="text" class="col-sm-11  no-padding-right  T-costPrice" maxlength="6" {{if !!touristGroupDetail.quoteId}} readonly {{/if}}/>
+									<span class="necessary col-sm-1">*</span><input name="adultPrice" value="{{touristGroupDetail.adultPrice}}" type="text" class="col-sm-11  no-padding-right  T-costPrice" maxlength="6" {{if !!type}} readonly {{/if}}/>
 								</td>
 								<td></td>
 							</tr>
@@ -168,31 +146,27 @@
 									小孩
 								</td>
 								<td>
-									<input name="childCount" value="{{touristGroupDetail.childCount}}" type="text" class="col-sm-11  no-padding-right T-costCount" style="float:right;" maxlength="3" {{if !!touristGroupDetail.quoteId}} readonly {{/if}}/>
+									<input name="childCount" value="{{touristGroupDetail.childCount}}" type="text" class="col-sm-11  no-padding-right T-costCount" style="float:right;" maxlength="3" {{if !!type}} readonly {{/if}}/>
 								</td>
 								<td>
-									<input name="childPrice" value="{{touristGroupDetail.childPrice}}" type="text" class="col-sm-11  no-padding-right T-costPrice" style="float:right;" maxlength="6" {{if !!touristGroupDetail.quoteId}} readonly {{/if}}/>
+									<input name="childPrice" value="{{touristGroupDetail.childPrice}}" type="text" class="col-sm-11  no-padding-right T-costPrice" style="float:right;" maxlength="6" {{if !!type}} readonly {{/if}}/>
 								</td>
 								<td></td>
 							</tr>{{each touristGroupDetail.touristGroupFeeList as feeList}}
 							<tr data-entity-id="{{feeList.id}}">
 								<td>
 									<span name="addOrReduceSelect" value="0">其他费用</span>
-									<!-- <select name="addOrReduceSelect" class="col-sm-12 addOrReduceSelect">
-                                        <option{{if feeList.type==0}} selected="selected"{{/if}} value="0">增加费用</option>
-                                        <option{{if feeList.type==1}} selected="selected"{{/if}} value="1">减少费用</option>
-                                    </select> -->
 								</td>
 								<td>
-									<input name="describeInfo" value="{{feeList.describeInfo}}" type="text" class="col-sm-12  no-padding-right" />
+									<input name="describeInfo" value="{{feeList.describeInfo}}" type="text" class="col-sm-12  no-padding-right" readonly="readonly" />
 								</td>
 								<td>
-									<input name="count" value="{{feeList.count}}" type="text" class="col-sm-12  no-padding-right T-costCount" />
+									<input name="count" value="{{feeList.count}}" type="text" class="col-sm-12  no-padding-right T-costCount" readonly="readonly" />
 								</td>
 								<td>
-									<input name="price" value="{{feeList.price}}" type="text" class="col-sm-12  no-padding-right T-costPrice" />
+									<input name="price" value="{{feeList.price}}" type="text" class="col-sm-12  no-padding-right T-costPrice" readonly="readonly" />
 								</td>
-								<td><a class="cursor oldaddCost-delete">删除</a></td>
+								<td><a class="cursor oldaddCost-delete" readonly="readonly">删除</a></td>
 							</tr>{{/each}}
 							</tbody>
 						</table>
@@ -238,12 +212,12 @@
 							</div>
 							<div class="form-group margin-top15">
 								<div class="col-sm-8">
-									<button class="btn btn-sm btn-success T-add-tourist" style="float:left;">
+									<button class="btn btn-sm btn-success T-add-tourist" style="float:left;" disabled="disabled">
 										<i class="ace-icon fa fa-plus"></i>
 										添加成员
 									</button>
 									<div style="height:5px;width:25px;float:left;"></div>
-									<button class="btn btn-sm btn-success T-add-tourist-more" style="float:left;">
+									<button class="btn btn-sm btn-success T-add-tourist-more" style="float:left;" disabled="disabled">
 										<i class="ace-icon fa fa-plus"></i>
 										批量添加
 									</button>
@@ -266,32 +240,32 @@
 											<tr data-entity-id="{{memberList.id}}">
 												<td></td>
 												<td>
-													<input name="name" value="{{memberList.name}}" type="text" class="col-sm-12  no-padding-right" />
+													<input name="name" value="{{memberList.name}}" readonly="readonly" type="text" class="col-sm-12  no-padding-right" />
 												</td>
 												<td>
-													<input name="mobileNumber" value="{{memberList.mobileNumber}}" type="text" class="col-sm-12  no-padding-right" maxlength="11" />
+													<input name="mobileNumber" value="{{memberList.mobileNumber}}" readonly="readonly" type="text" class="col-sm-12  no-padding-right" maxlength="11" />
 												</td>
 												<td>
-													<select name="idCardType">
+													<select name="idCardType" disabled="disabled">
 														<option value="0" {{if memberList.idCardType == 0}}selected="selected"{{/if}}>身份证</option>
 														<option value="1" {{if memberList.idCardType == 1}}selected="selected"{{/if}}>护照</option>
 														<option value="2" {{if memberList.idCardType == 2}}selected="selected"{{/if}}>其它</option>
 													</select>
 												</td>
 												<td>
-													<input name="idCardNumber" value="{{memberList.idCardNumber}}" type="text" class="col-sm-12  no-padding-right" />
+													<input name="idCardNumber" value="{{memberList.idCardNumber}}" readonly="readonly" type="text" class="col-sm-12  no-padding-right" />
 												</td>
 												<td>
 													<div class="checkbox">
 														<label>
-															<input type="checkbox" {{if  memberList.isContactUser==1}}checked="checked"{{/if}} class="ace " value="1" name="isContactUser">
+															<input type="checkbox" readonly="readonly" {{if  memberList.isContactUser==1}}checked="checked"{{/if}} class="ace " value="1" name="isContactUser">
 															<span class="lbl">
 															</span>
 														</label>
 													</div>
 												</td>
 												<td>
-													<a class="cursor oldbtnDeleteTourist">
+													<a class="cursor {{if !!type}}oldbtnDeleteTourist{{/if}}">
 														删除
 													</a>
 												</td>

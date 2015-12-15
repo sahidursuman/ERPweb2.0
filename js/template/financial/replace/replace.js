@@ -4,8 +4,7 @@
  * by David Bear 2015-11-27
  */
 define(function(require, exports) {
-	var rule = require("./rule"),
-		menuKey = "financial_replace",
+	var menuKey = "financial_replace",
 		listTemplate = require("./view/list"),
 		billImagesTemplate = require("./view/billImages"),
 		replaceChecking = require("./view/replaceChecking"),
@@ -222,7 +221,8 @@ define(function(require, exports) {
 	};
 
 	Replace.CM_event = function($tab, isCheck){
-		var validator = rule.check($tab);
+		var validator = new FinRule(isCheck ? 0 : 3),
+		validatorCheck = validator.check($tab);
 		// 处理关闭与切换tab
         $tab.off('change').off(SWITCH_TAB_SAVE).off(CLOSE_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT)
         .on('change', '.T-checkList, .T-clearList', function() {
@@ -230,7 +230,12 @@ define(function(require, exports) {
         })
         .on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
             event.preventDefault();
-            Replace.saveCheckingData($tab, [tab_id, title, html]);
+            if (!validatorCheck.form())return;
+            if (!isCheck) {
+            	Replace.saveCheckingData($tab, [tab_id, title, html]);
+        	}else{
+            	Replace.savePayingData($tab, [tab_id, title, html]);
+        	}
         })
         .on(SWITCH_TAB_BIND_EVENT, function() {
             if (!isCheck) {
@@ -241,10 +246,12 @@ define(function(require, exports) {
         })
         .on(CLOSE_TAB_SAVE, function(event) {
             event.preventDefault();
-            if (!validator.form()) {
-                return;
-            }
-            Replace.saveCheckingData($tab);
+            if (!validatorCheck.form())return;
+            if (!isCheck) {
+            	Replace.saveCheckingData($tab);
+        	}else{
+            	Replace.savePayingData($tab);
+        	}
         });
 		//搜索
 		var $searchArea = $tab.find('.T-search-area'),
@@ -278,11 +285,11 @@ define(function(require, exports) {
 		// 计算
         if (!isCheck) {
         	oMenuKey = blanceMenuKey;
-            FinancialService.updateSumPayMoney($tab, rule);
+            FinancialService.updateSumPayMoney($tab, validator);
         } else {
             //给全选按钮绑定事件: 未去重
         	FinancialService.initCheckBoxs($tab.find(".T-checkAll"), $tab.find(".T-checkList").find('.T-checkbox'));
-			FinancialService.updateUnpayMoney($tab, rule);
+			FinancialService.updateUnpayMoney($tab, validator);
         }
 		$tab.find('.T-btn-close').on('click', function(event){
 			if(!!$tab.data('isEdited')){
@@ -298,7 +305,7 @@ define(function(require, exports) {
 			}
 		});
 		$tab.find('.T-btn-save').on('click', function(event){
-			if (!validator.form()) {
+			if (!validatorCheck.form()) {
                 return;
             }
 			if(isCheck){
@@ -314,7 +321,7 @@ define(function(require, exports) {
 				var $that = $(this);
 
 	            if ($that.hasClass('btn-primary')) {
-	                if (validator.form()) {
+	                if (validatorCheck.form()) {
 	                    FinancialService.autoPayConfirm($datepicker.eq(0).val(), $datepicker.eq(1).val(),function(){
 	                    	Replace.autoFillData($tab)
 	                    });
@@ -554,7 +561,8 @@ define(function(require, exports) {
 	};
 
 	Replace.saveCheckingData = function($tab, tabArgs){
-		var json = FinancialService.checkSaveJson($tab, rule);
+		var validator = new FinRule(0);
+		var json = FinancialService.checkSaveJson($tab, validator);
 		if (json) { // 有值
 			$.ajax({
                 url: KingServices.build_url('financial/bookingAccount', 'checkBookingAccount'),
@@ -674,7 +682,8 @@ define(function(require, exports) {
 		});
 	};
 	Replace.savePayingData = function($tab, tabArgs){
-		var json = FinancialService.clearSaveJson($tab, Replace.payingJson, rule);
+		var validator = new FinRule(3);
+		var json = FinancialService.clearSaveJson($tab, Replace.payingJson, validator);
 
 		if (json.length) {
             $.ajax({
