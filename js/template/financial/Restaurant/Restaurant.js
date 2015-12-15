@@ -144,11 +144,9 @@ define(function(require, exports) {
                     data.restaurantName = restaurantName;
                     var html = restaurantChecking(data);
                     
-                    var validator;
                     // 初始化页面
                     if (Tools.addTab(menuKey + "-checking", "餐厅对账", html)) {
                         restaurant.initCheck(page,restaurantId,restaurantName); 
-                        validator = rule.check(restaurant.$checkTab.find(".T-checkList"));                     
                     }
                     //取消对账权限过滤
                     var checkTr = restaurant.$checkTab.find(".T-checkTr");
@@ -173,12 +171,13 @@ define(function(require, exports) {
 
     restaurant.initCheck = function(page,id,name){
     	// 初始化jQuery 对象 
+        var ruleCheck = new FinRule(0);
         restaurant.$checkTab = $("#tab-" + menuKey + "-checking-content");
         restaurant.$checkSearchArea = restaurant.$checkTab.find('.T-search-area');
 
         restaurant.init_event(page,id,name,restaurant.$checkTab,"check");
         Tools.setDatePicker(restaurant.$checkTab.find(".date-picker"),true);
-        FinancialService.updateUnpayMoney(restaurant.$checkTab,rule);
+        FinancialService.updateUnpayMoney(restaurant.$checkTab,ruleCheck);
 
         //搜索按钮事件
         restaurant.$checkSearchArea.find('.T-search').on('click', function(event) {
@@ -234,7 +233,7 @@ define(function(require, exports) {
             startDate : startDate,
             endDate : endDate,
             sortType : "auto"
-        };
+        }, args = arguments;
         searchParam = JSON.stringify(searchParam);
         $.ajax({
             url:KingServices.build_url("account/arrangeRestaurantFinancial","listRestaurantAccount"),
@@ -260,58 +259,88 @@ define(function(require, exports) {
 
                     var html = restaurantClearing(data);
                     
-                    var validator;
+                    args.data = data;
                     // 初始化页面
                     if (Tools.addTab(menuKey + "-clearing", "餐厅付款", html)) {
-                        restaurant.initClear(page,restaurantId,restaurantName); 
-                        validator = rule.check(restaurant.$clearTab.find('.T-clearList'));                       
-                    }
-
-                    if(isAutoPay == 0){
-                        restaurant.$clearTab.find(".T-cancel-auto").hide();
+                        restaurant.initClear(args); 
                     } else {
-                        restaurant.$clearTab.find('input[name=sumPayMoney]').prop("disabled",true);
-                        restaurant.$clearTab.find(".T-clear-auto").hide(); 
-                        if(isAutoPay == 1){
-                            restaurant.$clearTab.data('isEdited',true);
-                        } else if(isAutoPay == 2){
-                            restaurant.$clearTab.find(".T-cancel-auto").hide();
-                        }
+                        restaurant.$clearTab.data('next', args);
                     }
-
-                    //绑定翻页组件
-                    var $tr = restaurant.$clearTab.find('.T-clearList tr');
-                    laypage({
-                        cont: restaurant.$clearTab.find('.T-pagenation'),
-                        pages: data.searchParam.totalPage,
-                        curr: (page + 1),
-                        jump: function(obj, first) {
-                            if (!first) { 
-                                var tempJson = FinancialService.clearSaveJson(restaurant.$clearTab,restaurant.clearTempData,rule);
-                                restaurant.clearTempData = tempJson;
-                                var sumPayMoney = parseFloat(restaurant.$clearTab.find('input[name=sumPayMoney]').val()),
-                                    sumPayType = parseFloat(restaurant.$clearTab.find('select[name=sumPayType]').val()),
-                                    sumPayRemark = restaurant.$clearTab.find('input[name=sumPayRemark]').val();
-                                restaurant.clearTempSumDate = {
-                                    sumPayMoney : sumPayMoney,
-                                    sumPayType : sumPayType,
-                                    sumPayRemark : sumPayRemark
-                                }
-                                restaurant.restaurantClear(isAutoPay,obj.curr -1,restaurantId,restaurantName);
-                            }
-                        }
-                    });
                 }
             }
         });
     };
 
-    restaurant.initClear = function(page,id,name){
+    restaurant.initClear = function(args){
+        var isAutoPay = args[0],
+            data = args.data,
+            page = args[1] || 0,
+            id = args[2],
+            name = args[3];
+
         // 初始化jQuery 对象 
         restaurant.$clearTab = $("#tab-" + menuKey + "-clearing-content");
         restaurant.$clearSearchArea = restaurant.$clearTab.find('.T-search-area');
+        var $tab = restaurant.$clearTab, saveRule = new FinRule(isAutoPay== 2?3: 1);
+        args.saveRule = saveRule;
 
-        restaurant.init_event(page,id,name,restaurant.$clearTab,"clear");
+        if(isAutoPay == 0){
+            restaurant.$clearTab.find(".T-cancel-auto").hide();
+        } else {
+            restaurant.$clearTab.find('input[name=sumPayMoney]').prop("disabled",true);
+            restaurant.$clearTab.find(".T-clear-auto").hide(); 
+            if(isAutoPay == 1){
+                restaurant.$clearTab.data('isEdited',true);
+            } else if(isAutoPay == 2){
+                restaurant.$clearTab.find(".T-cancel-auto").hide();
+            }
+        }
+
+        //绑定翻页组件
+        var $tr = restaurant.$clearTab.find('.T-clearList tr');
+        laypage({
+            cont: restaurant.$clearTab.find('.T-pagenation'),
+            pages: data.searchParam.totalPage,
+            curr: (page + 1),
+            jump: function(obj, first) {
+                if (!first) { 
+                    var tempJson = FinancialService.clearSaveJson(restaurant.$clearTab,restaurant.clearTempData, saveRule);
+                    restaurant.clearTempData = tempJson;
+                    var sumPayMoney = parseFloat(restaurant.$clearTab.find('input[name=sumPayMoney]').val()),
+                        sumPayType = parseFloat(restaurant.$clearTab.find('select[name=sumPayType]').val()),
+                        sumPayRemark = restaurant.$clearTab.find('input[name=sumPayRemark]').val();
+                    restaurant.clearTempSumDate = {
+                        sumPayMoney : sumPayMoney,
+                        sumPayType : sumPayType,
+                        sumPayRemark : sumPayRemark
+                    }
+                    restaurant.restaurantClear(isAutoPay,obj.curr -1,restaurantId,restaurantName);
+                }
+            }
+        });
+
+        // 监听修改
+        $tab.find(".T-clearList").off('change').on('change',"input",function(event) {
+            event.preventDefault();
+            $(this).closest('tr').data("change",true);
+            $tab.data('isEdited', true);
+        });
+        $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
+            event.preventDefault();
+                restaurant.initClear(restaurant.$clearTab.data('next'));
+                restaurant.$clearTab.find(".T-cancel-auto").hide();
+        })
+        // 监听保存，并切换tab
+        .on('switch.tab.save', function(event, tab_id, title, html) {
+            event.preventDefault();
+                restaurant.saveClear(args,tab_id, title, html);
+        })
+        // 保存后关闭
+        .on('close.tab.save', function(event) {
+            event.preventDefault();
+                restaurant.saveClear(args);
+        });
+
         Tools.setDatePicker(restaurant.$clearTab.find(".date-picker"),true);
 
         //搜索事件
@@ -329,7 +358,7 @@ define(function(require, exports) {
 
         //保存付款事件
         restaurant.$clearTab.find(".T-saveClear").click(function(){
-            restaurant.saveClear(id,name,page);
+            restaurant.saveClear(args);
         });
 
         //报表内的操作
@@ -337,7 +366,7 @@ define(function(require, exports) {
 
         //自动下账
         restaurant.$clearTab.find(".T-clear-auto").off().on("click",function(){
-            var isAutoPay = FinancialService.autoPayJson(id,restaurant.$clearTab,rule);
+            var isAutoPay = FinancialService.autoPayJson(id,restaurant.$clearTab,new FinRule(2));
             if(!isAutoPay){return false;}
 
             var startDate = restaurant.$clearTab.find("input[name=startDate]").val(),
@@ -385,7 +414,7 @@ define(function(require, exports) {
             restaurant.restaurantClear(0,0,id,name);
         });
 
-        FinancialService.updateSumPayMoney(restaurant.$clearTab,rule);
+        FinancialService.updateSumPayMoney(restaurant.$clearTab, saveRule);
     };
 
     //显示单据
@@ -497,7 +526,7 @@ define(function(require, exports) {
     //对账数据保存
     restaurant.saveChecking = function(restaurantId,restaurantName,page,tab_id, title, html){
         var argumentsLen = arguments.length,
-            checkSaveJson = FinancialService.checkSaveJson(restaurant.$checkTab,rule);
+            checkSaveJson = FinancialService.checkSaveJson(restaurant.$checkTab,new FinRule(0));
         if(!checkSaveJson){ return false; }
 
         $.ajax({
@@ -527,13 +556,19 @@ define(function(require, exports) {
         });
     };
 
-    restaurant.saveClear = function(id,name,page,tab_id, title, html){
-        if(!FinancialService.isClearSave(restaurant.$clearTab,rule)){
+    restaurant.saveClear = function(args,tab_id, title, html){
+        if(!FinancialService.isClearSave(restaurant.$clearTab,args.saveRule)){
             return false;
         }
 
+        var isAutoPay = args[0],
+            data = args.data,
+            page = args[1] || 0,
+            id = args[2],
+            name = args[3];
+
         var argumentsLen = arguments.length,
-            clearSaveJson = FinancialService.clearSaveJson(restaurant.$clearTab,restaurant.clearTempData,rule);
+            clearSaveJson = FinancialService.clearSaveJson(restaurant.$clearTab,restaurant.clearTempData,args.saveRule);
         var searchParam = {
             restaurantId : id,
             sumCurrentPayMoney : restaurant.$clearTab.find('input[name=sumPayMoney]').val(),
@@ -553,6 +588,7 @@ define(function(require, exports) {
             success:function(data){
                 var result = showDialog(data);
                 if(result){
+                    restaurant.$clearTab.data('isEdited',false);
                     showMessageDialog($("#confirm-dialog-message"),data.message,function(){
                         restaurant.clearTempData = false;
                         restaurant.clearTempSumDate = false;
@@ -560,12 +596,10 @@ define(function(require, exports) {
                             Tools.closeTab(menuKey + "-clearing");
                             restaurant.listRestaurant(restaurant.searchData.pageNo,restaurant.searchData.restaurantName,restaurant.searchData.restaurantId,restaurant.searchData.startDate,restaurant.searchData.endDate);
                         }else if(argumentsLen === 3){
-                            restaurant.$clearTab.data('isEdited',false);
                             restaurant.restaurantClear(0,page,id,name);
                         } else {
-                            restaurant.$clearTab.data('isEdited',false);
                             Tools.addTab(tab_id, title, html);
-                            restaurant.initClear(0,restaurant.$clearTab.find(".T-newData").data("id"),restaurant.$clearTab.find(".T-newData").data("name"));
+                            restaurant.initClear(restaurant.$clearTab.data('next'));
                         }
                     });
                     
