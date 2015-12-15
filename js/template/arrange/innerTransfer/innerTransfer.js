@@ -816,4 +816,5 @@ define(function(require, exports) {
 	exports.isEdited = innerTransfer.isEdited; 
 	exports.save = innerTransfer.save; 
 	exports.clearEdit = innerTransfer.clearEdit; 
+	exports.viewTransferOut = innerTransfer.viewTransferOut;
 });

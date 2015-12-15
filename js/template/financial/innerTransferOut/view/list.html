@@ -1,16 +1,14 @@
 <div class="row FinancialinnerTransferOut" >
     <div class="form-horizontal search-area">    
         <div class="form-group T-search-area" >      
-          <label class="control-label pull-left" style="margin-left: 22px">部门：</label>     
-                <div class="col-xs-2">
-                    <input type="text" name="toBusinessGroupName" value="{{toBusinessGroupName}}" />
-                    <input type="hidden" name="toBusinessGroupId" value="{{toBusinessGroupId}}" />
-                </div>
-             <label class="control-label pull-left marginLeft-30" >账期：
-                <input type="text" class="date-picker" name="startDate" value="{{startDate}}" />
-                <span>至</span>
-                <input type="text" class="date-picker" name="endDate" value="{{endDate}}"/>
-             </label>
+            <label style="margin-left: 22px">部门：</label>  
+                <input type="text" name="toBusinessGroupName" value="{{toBusinessGroupName}}" />
+                <input type="hidden" name="toBusinessGroupId" value="{{toBusinessGroupId}}" />
+            <label class="marginLeft-30" >账期：
+                <input type="text" class="date-picker" style="width:100px;text-align:center" name="startDate" value="{{startDate}}" />
+                <span>&nbsp;至&nbsp;</span>
+                <input type="text" class="date-picker" name="endDate" value="{{endDate}}" style="width:100px;text-align:center"/>
+            </label>
             <button class="marginLeft-30 btn-sm search-btn T-search" style="margin-top:2px;"> <i class="ace-icon fa fa-search"></i> 搜索 </button> 
         </div>
     </div>
