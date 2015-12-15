@@ -500,8 +500,8 @@ define(function(require, exports) {
 				var numberArea = [];
 				var boolNumber = false;
 				for(var j = 0; j < $divList.length; j++){
-					var costMoneyStart = $divList.eq(j).find('input[name=costMoneyStart]').val();
-					var costMoneyEnd = $divList.eq(j).find('input[name=costMoneyEnd]').val();
+					var costMoneyStart = ($divList.eq(j).find('input[name=costMoneyStart]').val() || 0)*1;
+					var costMoneyEnd = ($divList.eq(j).find('input[name=costMoneyEnd]').val() || 0)*1;
 					var pMoney = shop.compare(costMoneyStart, costMoneyEnd);
 					var isRepeat = false;
 					if(costMoneyStart == costMoneyEnd){

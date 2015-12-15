@@ -1,6 +1,5 @@
 {{each list as checking index}}
     <tr data-id="{{checking.id}}" data-entity-createTime="{{checking.createTime}}" isComfirmStatus="{{checking.isConfirmAccount}}" data-entity-realUnPayedMoney="{{checking.realUnPayedMoney}}"  data-entity-remark="{{checking.checkRemark}}">
-        <td>{{index+1}}</td>
         <td>{{checking.lineProductName}}</td>
         <td>{{checking.accountTime | dateFormat: 'yyyy-MM-dd'}}</td>
         <td>111</td><!-- {{checking.contactUserName}} -->

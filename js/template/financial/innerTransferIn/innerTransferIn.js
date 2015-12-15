@@ -24,6 +24,7 @@ define(function(require,exports) {
 	};
 	InnerTransferIn.initModule = function(){
 		var dateJson = FinancialService.getInitDate();
+		//dateJson.startDate = "2015-11-01";
 		InnerTransferIn.listInnerTransfer(0,"","",dateJson.startDate,dateJson.endDate);
 	};
 	/**
@@ -231,6 +232,14 @@ define(function(require,exports) {
 						InnerTransferIn.$checkSearchArea = $checkId.find(".T-search");
 						InnerTransferIn.$checkValidator = rule.check($checkId);
 						var countObj = $checkId.find(".T-count");
+						if(typeFlag !=2){
+							//取消对账权限过滤
+							var fiList= data.innerTransferIncomeDetailsList
+                    		var checkTr = InnerTransferIn.$checkId.find(".T-checkTr");
+                    		var rightCode = InnerTransferIn.$checkId.find(".T-checkList").data("right");
+                    		checkDisabled(fiList,checkTr,rightCode);
+						}
+						
 						//获取统计数据
 						InnerTransferIn.getCountData($listSearchData,countObj);
 						//
@@ -276,7 +285,6 @@ define(function(require,exports) {
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
-					console.log(data);
 					$searchObj.find('.sumTransCount').text(data.totalCount);
 					$searchObj.find('.sumTransNeedPayMoney').text(data.transInMoney);
 					$searchObj.find('.sumPayedMoney').text(data.getedMoney);
@@ -698,7 +706,7 @@ define(function(require,exports) {
 					var html = payedDetailTemplate(data);
 					layer.open({
 						type : 1,
-						title :"应收金额明细",
+						title :"已收金额明细",
 						skin : 'layui-layer-rim',
 						area : "60%", 
 						zIndex : 1028,
@@ -724,7 +732,7 @@ define(function(require,exports) {
 					var html = checkDetailTemplate(data);
 					layer.open({
 						type : 1,
-						title :"对账明细",
+						title :"应收金额明细",
 						skin : 'layui-layer-rim',
 						area : "60%", 
 						zIndex : 1028,
@@ -852,7 +860,6 @@ define(function(require,exports) {
 			}
         InnerTransferIn.chenking(args,2,"settle"); 
     };
-    
 	exports.init = InnerTransferIn.initModule;
 	exports.initIncome = InnerTransferIn.initIncome;
 });
