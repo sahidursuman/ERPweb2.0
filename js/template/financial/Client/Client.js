@@ -738,9 +738,8 @@ define(function(require, exports) {
             success:function(data){
                 if(showDialog(data)){
                     $tab.data('isEdited', false);
-
+                    Client.clearDataArray = [];
                     showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-                        Client.clearDataArray = [];
                         if (argLen === 2) {
                             Client.listClient(0);
                             Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
