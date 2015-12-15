@@ -141,7 +141,7 @@ define(function(require, exports) {
 		    type: 1,
 		    title:"新增保险公司",
 		    skin: 'layui-layer-rim', //加上边框
-		    area: '800px', //宽高
+		    area: '1190px', //宽高
 		    zIndex:1028,
 		    content: html,
 		    scrollbar: false,
@@ -151,10 +151,11 @@ define(function(require, exports) {
 			    ruleData.validator = rule.check($container);
 		    	//初始化地区
 		    	KingServices.provinceCity($container);
+		    	insurance.init_event_edit($container,1,fn);
 		    	//提交事件
-		    	$container.find(".T-btn-submit-insurance").on("click",function(){
-		    		insurance.saveInsurance($container,1,fn);
-		    	});
+		    	// $container.find(".T-btn-submit-insurance").on("click",function(){
+		    	// 	insurance.saveInsurance($container,1,fn);
+		    	// });
 		    }
 		})
 	};
@@ -175,7 +176,7 @@ define(function(require, exports) {
 					    type: 1,
 					    title:"查看保险公司",
 					    skin: 'layui-layer-rim', //加上边框
-					    area: '800px', //宽高
+					    area: '1190px', //宽高
 					    zIndex:1028,
 					    content: html,
 					    scrollbar: false,
@@ -205,7 +206,7 @@ define(function(require, exports) {
 					    type: 1,
 					    title:"编辑保险公司",
 					    skin: 'layui-layer-rim', //加上边框
-					    area: '800px', //宽高
+					    area: '1190px', //宽高
 					    zIndex:1028,
 					    content: html,
 					    scrollbar: false,
@@ -214,11 +215,12 @@ define(function(require, exports) {
 							//初始化地区
 							KingServices.provinceCity($container,provinceId,cityId,districtId);
 							ruleData.Uvalidator = rule.check($container);
-					    	//提交事件
-					    	$container.find(".T-btn-submit-insurance").on("click",function(){
-					    		insurance.saveInsurance($container,2);
-					    	});
+		    				insurance.init_event_edit($container,2);
 
+					    	//提交事件
+					    	// $container.find(".T-btn-submit-insurance").on("click",function(){
+					    	// 	insurance.saveInsurance($container,2);
+					    	// });
 					    }
 					})
 				}
@@ -245,6 +247,40 @@ define(function(require, exports) {
 		}
 	}
 
+	insurance.init_event_edit = function($container,type,fn) {
+		var itemValidator = rule.checkItems($container);
+		$container.find('.T-btn-insurance-add').off('click').on('click', function() {
+			var html = '<tr>'
+				+'<td><input type="text" name="insurance" class="col-sm-12" maxlength="30"></td>'
+				+'<td><input type="text" name="price" class="col-sm-12" maxlength="9"></td>'
+				+'<td><input type="text" name="days" class="col-sm-12" maxlength="5"></td>'
+				+'<td><select name="fitFor"><option value="1">小孩</option><option value="2">成人</option><option value="3">老人</option></select></td>'
+				+'<td><input type="text" name="remark" class="col-sm-12" maxlength="200"></td>'
+				+'<td style="width:80px"><a class="T-insurance-delete">删除</a></td>'
+			+'</tr>';
+			$container.find('.T-insuranceList tbody').append(html);
+			itemValidator = rule.checkItems($container);
+			// 再调整对话框的高度
+			$(window).trigger('resize');
+		})
+		$container.on('click', '.T-insurance-delete', function() {
+			var $this = $(this), $parents = $this.closest('tr'),
+				$id = $parents.data('entity-id');
+			if (!!$id) {
+				$parents.addClass('del').fadeOut(function() {
+					$(this).remove();
+				});
+			}else{
+				$parents.fadeOut(function() {
+					$(this).remove();
+				});
+			}
+		})
+		$container.find('.T-btn-submit-insurance').on('click', function() {
+			insurance.saveInsurance($container,type,fn);
+		})
+	};
+
 	/**
 	 * 新增、修改提交事件
 	 * @param  {[type]} $container [容器]
@@ -265,12 +301,35 @@ define(function(require, exports) {
 		}
 		var form = $container.find(".insuranceMainForm").serialize()+"&status="+status+"",
 			formData = $container.find(".insuranceMainForm").serializeJson();
+		var insuranceJson = [], insuranceDel = [],
+			$table = $container.find('.T-insuranceList tbody');
+			var $tr = $table.find('tr:not(.del)');
+		$tr.each(function(i) {
+			var json = {
+				id: $tr.eq(i).data('entity-id'),
+				insurance: insurance.getValue($tr.eq(i), 'insurance'),
+				price: insurance.getValue($tr.eq(i), 'price'),
+				days: insurance.getValue($tr.eq(i), 'days'),
+				fitFor: insurance.getValue($tr.eq(i), 'fitFor'),
+				remark: insurance.getValue($tr.eq(i), 'remark')
+			}
+			insuranceJson.push(json);
+		})
+		var $trDel = $table.find('tr.del');
+		$trDel.each(function(i) {
+			var json = {
+				id: $trDel.eq(i).data('entity-id')
+			}
+			insuranceDel.push(json);
+		});
+		insuranceJson = JSON.stringify(insuranceJson)
+		insuranceDel = JSON.stringify(insuranceDel)
 		
 		$.ajax({
-			url:insurance.url(method,operation),
-			type:"POST",
-			data:form,
-			success:function(data){
+			url: KingServices.build_url('insurance',method),
+			type: "POST",
+			data: form + '&insuranceJson=' + encodeURIComponent(insuranceJson) + '&insuranceDel=' + encodeURIComponent(insuranceDel),
+			success: function(data){
 				var result = showDialog(data);
 				if(result){
 					if (type == 1) {layer.close(insurance.$addLayer)}else if(type == 2){layer.close(insurance.$updateLayer)}
@@ -297,6 +356,10 @@ define(function(require, exports) {
 		var url = ''+APP_ROOT+'back/insurance.do?method='+method+'&token='+$.cookie('token')+'&menuKey='+menuKey+'&operation='+operation+'';
 		return url;
 	};
+
+	insurance.getValue = function(obj, name) {
+		return obj.find('[name='+name+']').val();
+	}
 
 	exports.init = insurance.initModule;
 	exports.addInsurance = insurance.addInsurance;
