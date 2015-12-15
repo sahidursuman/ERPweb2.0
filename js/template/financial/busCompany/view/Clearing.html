@@ -77,9 +77,16 @@
         <tr data-id="{{rs.id}}">
             <td>{{rs.tripNumber}}{{"，"}}{{rs.lineProductName}}{{"，"}}{{rs.guideName}}</td>
             <td>{{if rs.accountTime == null || rs.accountTime == ""}}-{{else}}{{rs.accountTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
-            <td>{{rs.touristAdultCount}} 大 {{rs.touristChildCount}} 小</td>
+            <td>{{if rs.touristAdultCount == null || rs.touristAdultCount == ""}}0{{else}}{{rs.touristAdultCount}}{{/if}} 大  
+                {{if rs.touristChildCount == null || rs.touristChildCount == ""}}0{{else}}{{rs.touristChildCount}}{{/if}} 小
+            </td>
             <td>{{if rs.driverName == null || rs.driverName == ""}}-{{else}}{{rs.driverName}}{{/if}}</td>
-            <td>{{rs.brand}} {{rs.seatCount}}座</td>
+            <td>{{if (rs.brand == null || rs.brand == "") && (rs.seatCount == null || rs.seatCount == "" || rs.seatCount == 0)}}
+                    -
+                {{else}}
+                    {{rs.brand}} {{if rs.seatCount != null && rs.seatCount != "" && rs.seatCount > 0 }}{{rs.seatCount}}座{{/if}}
+                {{/if}}
+            </td>
             <td>{{if rs.licenseNumber == null || rs.licenseNumber == ""}}-{{else}}{{rs.licenseNumber}}{{/if}}</td>
             <td>{{rs.fee}}</td>
             <td>{{rs.reduceMoney}}</td>
