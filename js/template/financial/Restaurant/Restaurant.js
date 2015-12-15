@@ -170,7 +170,7 @@ define(function(require, exports) {
     };
 
     restaurant.initCheck = function(page,id,name){
-    	// 初始化jQuery 对象 
+    	// 初始化jQuery 对象  
         var ruleCheck = new FinRule(0);
         restaurant.$checkTab = $("#tab-" + menuKey + "-checking-content");
         restaurant.$checkSearchArea = restaurant.$checkTab.find('.T-search-area');
@@ -314,7 +314,7 @@ define(function(require, exports) {
                         sumPayType : sumPayType,
                         sumPayRemark : sumPayRemark
                     }
-                    restaurant.restaurantClear(isAutoPay,obj.curr -1,restaurantId,restaurantName);
+                    restaurant.restaurantClear(isAutoPay,obj.curr -1,id,name);
                 }
             }
         });
@@ -333,7 +333,7 @@ define(function(require, exports) {
         // 监听保存，并切换tab
         .on('switch.tab.save', function(event, tab_id, title, html) {
             event.preventDefault();
-                restaurant.saveClear(args,tab_id, title, html);
+            restaurant.saveClear(args,tab_id, title, html);
         })
         // 保存后关闭
         .on('close.tab.save', function(event) {

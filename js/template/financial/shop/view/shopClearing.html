@@ -110,7 +110,7 @@
                 <th class="th-border">对账</th>
             </tr>
         </thead>
-        <tbody class="T-list T-checkList">
+        <tbody class="T-list T-checkList T-clearList">
         {{each shopAccountList as rs index}}
             <tr class="T-checkTr" data-id="{{rs.id}}" data-confirm="{{if !!rs.isConfirmAccount}}1{{else}}0{{/if}}">
                 <td>{{index + 1}}</td>
@@ -178,9 +178,6 @@
         </div>
         <div class="col-xs-6">
             <div class="dataTables_paginate paging_simple_numbers T-pagenation"></div>
-            <label class="pos-rel pull-right">
-                <input type="checkbox" class="ace T-checkAll"> <span class="lbl">全选</span> 
-            </label>
         </div>
     </div>
     <form class="form-horizontal" role="form" onsubmit="return false">
