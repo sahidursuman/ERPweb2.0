@@ -1635,6 +1635,12 @@ KingServices.viewLineProduct = function(id){
 		module.viewLineProduct(id);
 	});
 }
+//查看导游报账
+KingServices.viewFeeDetail = function(id){
+	seajs.use("" + ASSETS_ROOT + modalScripts.financial_guide,function(module){
+		module.viewFeeDetail(id);
+	});
+}
 //查看游客小组
 KingServices.viewTouristGroup = function(id){
 	seajs.use("" + ASSETS_ROOT + modalScripts.resource_touristGroup,function(module){
