@@ -338,7 +338,7 @@ define(function(require, exports) {
         // 保存后关闭
         .on('close.tab.save', function(event) {
             event.preventDefault();
-                restaurant.saveClear(args);
+                restaurant.saveClear(args, true);
         });
 
         Tools.setDatePicker(restaurant.$clearTab.find(".date-picker"),true);
@@ -595,7 +595,7 @@ define(function(require, exports) {
                         if(argumentsLen === 2){
                             Tools.closeTab(menuKey + "-clearing");
                             restaurant.listRestaurant(restaurant.searchData.pageNo,restaurant.searchData.restaurantName,restaurant.searchData.restaurantId,restaurant.searchData.startDate,restaurant.searchData.endDate);
-                        }else if(argumentsLen === 3){
+                        }else if(argumentsLen === 1){
                             restaurant.restaurantClear(0,page,id,name);
                         } else {
                             Tools.addTab(tab_id, title, html);
