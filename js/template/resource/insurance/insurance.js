@@ -268,7 +268,6 @@ define(function(require, exports) {
 				$id = $parents.data('entity-id');
 			if (!!$id) {
 				$parents.addClass('del').fadeOut(function() {
-					$(this).remove();
 				});
 			}else{
 				$parents.fadeOut(function() {
