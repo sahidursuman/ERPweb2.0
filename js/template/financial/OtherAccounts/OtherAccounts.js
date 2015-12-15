@@ -52,31 +52,32 @@ define(function(require, exports) {
                     success: function(data) {
                         var result = showDialog(data);
                         if (result) {
-                            // console.log(data);
+                            console.log(data);
                             data.startAccountTime = startAccountTime
                             data.endAccountTime = endAccountTime
                             var html = listTemplate(data);
                             Tools.addTab(menuKey, "其他账务", html);
                             OtherAccounts.initList(pageNo, name, startAccountTime, endAccountTime);
-                            //时间控件
+                                // 绑定翻页组件
                             var $container = $(".T-other");
+                            laypage({
+                                cont: OtherAccounts.$tab.find('.T-pagenation'),
+                                pages: data.totalPage,
+                                curr: (pageNo + 1),
+                                jump: function(obj, first) {
+                                    if (!first) {
+                                        OtherAccounts.listFinancialOtherAccounts(obj.curr -1);
+                                    }
+                                }
+                            });
+                            //时间控件
                             $container.find(".T-time").datepicker({
                                 autoclose: true,
                                 todayHighlight: true,
                                 format: 'yyyy-mm-dd',
                                 language: 'zh-CN'
                             });
-                            // 绑定翻页组件
-                            laypage({
-                                cont: $container.find('.T-pagenation'),
-                                pages: data.searchParam.totalPage,
-                                curr: (pageNo + 1),
-                                jump: function(obj, first) {
-                                    if (!first) {
-                                        OtherAccounts.listFinancialOtherAccounts(obj.curr - 1);
-                                    }
-                                }
-                            });
+                     
                         }
                     }
                 })
@@ -292,6 +293,7 @@ OtherAccounts.CheckConfirm = function(name) {
             var oldUnPayedMoney = $that.attr("data-entity-settlementMoney"); //得到对账备注旧的值
             var newUnPayedMoney = $tr.eq(i).find("input[name=settlementMoney]").val(); //得到对账结算金额被修改之后值
             var newRemark = $tr.eq(i).find("input[name=checkRemark]").val(); //得到对账备注金额被修改之后值
+            var unpayMoney = $checkTabId.find('.T-unpayMoney').text();
             var flag = $that.find(".T-insuanceFinancial").is(":checked");
             if (flag) { //勾选
                 if ($(this).attr("data-entity-isConfirmAccount") == 1) { //本来就已对账
@@ -303,6 +305,7 @@ OtherAccounts.CheckConfirm = function(name) {
                             settlementMoney: newUnPayedMoney,
                             checkRemark: newRemark,
                             isConfirmAccount: 1,
+                            unPayedMoney : unpayMoney,
                             sortType: 'auto'
                         }
                         JsonStr.push(OtherAccounts.CheckConfirmData)
@@ -313,6 +316,7 @@ OtherAccounts.CheckConfirm = function(name) {
                         id: id,
                         settlementMoney: newUnPayedMoney,
                         checkRemark: newRemark,
+                        unPayedMoney : unpayMoney,
                         isConfirmAccount: 1,
                         sortType: 'auto'
                     }
@@ -324,6 +328,7 @@ OtherAccounts.CheckConfirm = function(name) {
                         id: id,
                         settlementMoney: newUnPayedMoney,
                         checkRemark: newRemark,
+                        unPayedMoney : unpayMoney,
                         isConfirmAccount: 0,
                         sortType: 'auto'
                     }
@@ -512,12 +517,14 @@ OtherAccounts.paysave = function(name, $PaymentTabId) {
         var payMoney = $tr.eq(i).find("input[name=payMoney]").val(); //得到付款付款金额被修改之后值
         var newRemark = $tr.eq(i).find("input[name=checkRemark]").val(); //得到付款备注金额被修改之后值、
         var paymentMethod = $tr.find('select option:selected').val();
+        var unpayMoney = $PaymentTabId.find('.T-unpayMoney').text();
         if (oldRemark != newRemark) { //是否有修改
             OtherAccounts.CheckConfirmData = {
                 id: id,
                 payMoney: payMoney,
                 payRemark: newRemark,
                 payType: paymentMethod,
+                unPayedMoney : unpayMoney,
                 isConfirmAccount: 1,
                 sortType: 'auto'
             }
