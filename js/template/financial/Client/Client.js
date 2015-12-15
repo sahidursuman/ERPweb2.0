@@ -740,6 +740,7 @@ define(function(require, exports) {
                     $tab.data('isEdited', false);
 
                     showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+                        Client.clearDataArray = [];
                         if (argLen === 2) {
                             Client.listClient(0);
                             Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
