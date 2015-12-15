@@ -68,7 +68,7 @@
             </thead>   
             <tbody class="T-checkList" data-right="1360005">
             {{each innerTransferIncomeDetailsList as checking index}}
-            <tr data-entity-id="{{checking.id}}" data-entity-createTime="{{checking.createTime}}" data-confirm ="{{checking.isConfirmAccount}}" data-entity-UnIncomeMoney="{{checking.checkUnIncomeMoney}}" data-entity-backMoney="{{checking.backMoney}}" data-entity-remark="{{checking.checkRemark}}">
+            <tr class="T-checkTr" data-entity-id="{{checking.id}}" data-entity-createTime="{{checking.createTime}}" data-confirm ="{{checking.isConfirmAccount}}" data-entity-UnIncomeMoney="{{checking.checkUnIncomeMoney}}" data-entity-backMoney="{{checking.backMoney}}" data-entity-remark="{{checking.checkRemark}}">
                 <td>{{checking.lineProductName}}</td>
                 <td name="startTime">{{checking.accountTime | dateFormat: 'yyyy-MM-dd'}}</td>
                 <td>{{checking.contactUserName}}</td>

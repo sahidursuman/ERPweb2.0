@@ -165,6 +165,8 @@ define(function(require,exports) {
 						var $checkId = $("#tab-"+checkId+"-content");
 						InnerTransferOut.$checkTab = $checkId;
 						InnerTransferOut.$checkSearchArea = $checkId.find(".T-search");
+
+					   
 						//获取线路数据
 						var lineProductNameObj = InnerTransferOut.$checkSearchArea.find('input[name=lineProductName]');
 						InnerTransferOut.getCheckLineproduct(lineProductNameObj,$lineProductData);
@@ -204,6 +206,13 @@ define(function(require,exports) {
 					//设置总条数
 					$obj.find('.T-recordSize').text(data.recordSize);
 					validator = rule.check($obj.find('.T-checkList')); 
+					if(typeFlag != 2){
+						 //取消对账权限过滤
+						var fiList= data.list;
+                		var checkTr = $obj.find(".T-checkTr");
+                		var rightCode = $obj.find(".T-checkList").data("right");
+                		checkDisabled(fiList,checkTr,rightCode);
+					}
 					//绑定事件
 						InnerTransferOut.chenkingEvent($obj,$data,typeFlag);
 					// 绑定翻页组件
