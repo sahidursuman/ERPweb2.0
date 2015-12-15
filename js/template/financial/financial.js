@@ -162,7 +162,7 @@ FinancialService.isClearSave = function($tab,rule){
     var sumPayMoney = parseFloat($tab.find('input[name=sumPayMoney]').val()),
         unpayMoney = parseFloat($tab.find('.T-unpayMoney').val());
     if(sumPayMoney > unpayMoney){
-        showMessageDialog($("#confirm-dialog-message"),"付款金额大于已对账未付总额！");
+        showMessageDialog($("#confirm-dialog-message"),"付款金额不能大于已对账未付总额！");
         return false;
     }
     return true;
@@ -192,7 +192,7 @@ FinancialService.autoPayJson = function(id,$tab,rule){
     if(isNaN(sumPayMoney)){ sumPayMoney = 0; }
     if(isNaN(unpayMoney)){ unpayMoney = 0; }
     if(sumPayMoney > unpayMoney){
-        showMessageDialog($("#confirm-dialog-message"),"付款金额大于未付总额！");
+        showMessageDialog($("#confirm-dialog-message"),"付款金额不能大于未付总额！");
         return false;
     }
     var searchParam = {
