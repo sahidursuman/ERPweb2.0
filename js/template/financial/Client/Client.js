@@ -4,7 +4,6 @@
  * by David Bear 2015-11-24
  */
 define(function(require, exports) {
-	var rule = require("./rule"),
         menuKey = "financial_Client",
         listTemplate = require("./view/list"),
         ClientCheckingTemplate = require("./view/ClientChecking"),
@@ -203,6 +202,7 @@ define(function(require, exports) {
     Client.initCheck = function($tab){
         var id = $tab.find('.T-btn-save').data('id');
         $tab.data('id', id);
+        var validator = (new FinRule(0)).check($tab);
         $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
             event.preventDefault();
             Client.initCheck($tab);
@@ -210,11 +210,13 @@ define(function(require, exports) {
         // 监听保存，并切换tab
         .on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
             event.preventDefault();
+            if (!validator.form()) { return; }
             Client.saveCheckingData($tab, [tab_id, title, html])
         })
         // 保存后关闭
         .on(CLOSE_TAB_SAVE, function(event) {
             event.preventDefault();
+            if (!validator.form()) { return; }
             Client.saveCheckingData($tab)
         });
 
@@ -269,7 +271,6 @@ define(function(require, exports) {
             }
         });
 
-        var validator = rule.check($tab);
         //确认对账按钮事件
         $tab.find(".T-btn-save").click(function(){ 
             if (!validator.form()) { return; }
@@ -449,6 +450,9 @@ define(function(require, exports) {
     Client.initClear = function($tab, id){
         var id = $tab.find('.T-btn-save').data('id');
         
+        var validator = (new FinRule(3)).check($tab),
+            autoValidator = (new FinRule(2)).check(Client.$clearSearchArea);
+
         $tab.data('id', id);
 
         $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
@@ -502,8 +506,6 @@ define(function(require, exports) {
                 Client.CalcClear($that);
             }
         });
-
-        var validator = rule.check($tab), autoValidator = rule.autoFillCheck(Client.$clearSearchArea);
         // 自动下账
         $tab.find('.T-btn-autofill').on('click', function(event) {
             event.preventDefault();
@@ -758,7 +760,7 @@ define(function(require, exports) {
         var validator;
         var $tr = $("#tab-financial_Client-checking-content .T-checkList tr");
         $tr.each(function(){
-            validator = rule.check($(this));
+            validator = (new FinRule(3)).check($(this));
         });
         return validator;
     };

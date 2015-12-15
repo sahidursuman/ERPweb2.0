@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":10,"md5":"e4d58ed1f1f7d98a8d54ebef821b458f"}*/
+/*TMODJS:{"debug":true,"version":11,"md5":"999d43a1805f803d69fdde5a7d0801ce"}*/
 define(function(require) {
     return require("../../../template")("financial/replace/view/replacePayingTable", function($data, $filename) {
         try {
@@ -8,7 +8,7 @@ define(function(require) {
                 $out += ' <tr data-id="', $line = 2, $out += $escape(rs.id), $out += '"> <td>', 
                 $line = 3, $out += $escape(index + 1), $out += "</td> <td>", $line = 4, $out += $escape(rs.orderNumber), 
                 $out += "</td> <td>", $line = 5, $out += $escape(rs.startTime), $out += "</td> <td>", 
-                $line = 6, $out += $escape(rs.projectName), $out += "</td> <td>", $line = 7, $out += $escape(rs.detail), 
+                $line = 6, $out += $escape(rs.projectName), $out += "</td> <td>", $line = 7, $out += $escape(rs.newDetail), 
                 $out += "</td> <td>", $line = 8, $out += $escape(rs.bookingMoney), $out += '</td> <td><a class="cursor T-action T-receive-money">', 
                 $line = 9, $out += $escape(rs.receiveMoney), $out += "</a></td> <td>", $line = 10, 
                 $out += $escape(rs.settlementMoney), $out += "</td> <td>", $line = 11, $out += $escape(rs.unReceiveMoney), 
@@ -25,7 +25,7 @@ define(function(require) {
                 name: "Render Error",
                 message: e.message,
                 line: $line,
-                source: '{{each bookinAccountList as rs index}}\r\n    <tr data-id="{{rs.id}}">\r\n        <td>{{index + 1}}</td>\r\n        <td>{{rs.orderNumber}}</td>\r\n        <td>{{rs.startTime}}</td>\r\n        <td>{{rs.projectName}}</td>\r\n        <td>{{rs.detail}}</td>\r\n        <td>{{rs.bookingMoney}}</td>\r\n        <td><a class="cursor T-action T-receive-money">{{rs.receiveMoney}}</a></td>\r\n        <td>{{rs.settlementMoney}}</td>\r\n        <td>{{rs.unReceiveMoney}}</td>\r\n        <th><input type="text" class="col-xs-12 T-reciveMoney" name="payMoney" value="{{rs.payMoney}}"></th>\r\n        <td><input type="text" class="col-xs-12 T-remark" name="payRemark"></td>\r\n        <td>{{rs.checkTime}}</td>\r\n        <td>{{rs.checkUserName}}</td>\r\n        <td>\r\n            <label class="pos-rel">\r\n                <span class="lbl">{{if !!rs.isConfirmAccount}}已{{else}}未{{/if}}对账</span>\r\n            </label>\r\n            <label class="cursor R-right" data-right="1290004"> <a> |</a></label>\r\n            <a class="cursor T-action T-view-Received R-right" data-right="1290004">查看</a>\r\n        </td>\r\n    </tr>\r\n{{/each}}'.split(/\n/)[$line - 1].replace(/^\s+/, "")
+                source: '{{each bookinAccountList as rs index}}\r\n    <tr data-id="{{rs.id}}">\r\n        <td>{{index + 1}}</td>\r\n        <td>{{rs.orderNumber}}</td>\r\n        <td>{{rs.startTime}}</td>\r\n        <td>{{rs.projectName}}</td>\r\n        <td>{{rs.newDetail}}</td>\r\n        <td>{{rs.bookingMoney}}</td>\r\n        <td><a class="cursor T-action T-receive-money">{{rs.receiveMoney}}</a></td>\r\n        <td>{{rs.settlementMoney}}</td>\r\n        <td>{{rs.unReceiveMoney}}</td>\r\n        <th><input type="text" class="col-xs-12 T-reciveMoney" name="payMoney" value="{{rs.payMoney}}"></th>\r\n        <td><input type="text" class="col-xs-12 T-remark" name="payRemark"></td>\r\n        <td>{{rs.checkTime}}</td>\r\n        <td>{{rs.checkUserName}}</td>\r\n        <td>\r\n            <label class="pos-rel">\r\n                <span class="lbl">{{if !!rs.isConfirmAccount}}已{{else}}未{{/if}}对账</span>\r\n            </label>\r\n            <label class="cursor R-right" data-right="1290004"> <a> |</a></label>\r\n            <a class="cursor T-action T-view-Received R-right" data-right="1290004">查看</a>\r\n        </td>\r\n    </tr>\r\n{{/each}}'.split(/\n/)[$line - 1].replace(/^\s+/, "")
             };
         }
     });

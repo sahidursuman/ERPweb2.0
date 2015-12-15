@@ -4,8 +4,7 @@
  * by David Bear 2015-11-24
  */
 define(function(require, exports) {
-	var rule = require("./rule"),
-		menuKey = "financial_ticket",
+	var menuKey = "financial_ticket",
 		listTemplate = require("./view/list"),
 		billImagesTemplate = require("./view/billImages"),
 		ticketChecking = require("./view/TicketChecking"),
@@ -18,36 +17,22 @@ define(function(require, exports) {
 		clearMenuKey = menuKey + '_clearing';
 
 	var Ticket = {
-		$tab : false,
-		ticketNameList : []
+		cacheNameList : []
 	};
 
 	Ticket.initModule = function(){
-		Ticket.$tab = null;
 		Ticket.getList();
 	};
 
-	Ticket.getList = function(page){
-		var date = new Date(),
-        year = date.getFullYear(),
-        month = Tools.addZero2Two(date.getMonth() + 1),
-        day = Tools.addZero2Two(date.getDate()),
-        args = {
-			pageNo : (page || 0),
-			ticketId : "",
-			startDate : year + "-" + month + "-01",
-			endDate : year + "-" + month + "-" + day,
-			ticketName : ""
-		};
-		if(!!Ticket.$tab){
-			var name = Ticket.$tab.find('.T-search-name').val();
-			args = {
-				pageNo : (page || 0),
-				ticketId : Ticket.$tab.find('.T-search-name').data('id'),
-				ticketName : name == "全部" ? '' : name,
-				startDate : Ticket.$tab.find('.T-search-start-date').val(),
-				endDate : Ticket.$tab.find('.T-search-end-date').val()
-			};
+	Ticket.getList = function(page, $tab){
+		var args = FinancialService.getInitDate();
+		args.pageNo = page || 0;
+		if(!!$tab){
+			var name = $tab.find('.T-search-name').val();
+			args.ticketId = $tab.find('.T-search-name').data('id');
+			args.ticketName = name == "全部" ? '' : name;
+			args.startDate = $tab.find('.T-search-start-date').val();
+			args.endDate = $tab.find('.T-search-end-date').val();
 		}
 		$.ajax({
 			url : KingServices.build_url('account/arrangeTicketFinancial', 'listSumFinancialTicket'),
@@ -59,19 +44,20 @@ define(function(require, exports) {
 				Ticket.ticketNameList = data.ticketNameList;
 				//打开TAB
 				Tools.addTab(menuKey, "票务账务", listTemplate(data));
-				Ticket.$tab = $("#tab-"+menuKey+"-content");
-				//绑定事件
-				Ticket.init_event(Ticket.$tab);
 				// 缓存页面
 				Ticket.listPageNo = args.pageNo;
+				Ticket.$tab = $tab || $("#tab-"+menuKey+"-content");
+				//绑定事件
+				Ticket.init_event(Ticket.$tab);
+
 				// 绑定翻页组件
 				laypage({
 				    cont: Ticket.$tab.find('.T-pagenation'), 
-				    pages: data.totalPage, //总页数
-				    curr: (data.pageNo + 1),
+				    pages: data.searchParam.totalPage, //总页数
+				    curr: (data.searchParam.pageNo + 1),
 				    jump: function(obj, first) {
 				    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-				    		Ticket.getList(obj.curr -1);
+				    		Ticket.getList(obj.curr -1, Ticket.$tab);
 				    	}
 				    }
 				});	
@@ -106,7 +92,7 @@ define(function(require, exports) {
 			}
 		});
 	};
-
+	
 	Ticket.getTicketNameList = function($obj){
 		$obj.autocomplete({
 			minLength: 0,
@@ -174,7 +160,7 @@ define(function(require, exports) {
 	};
 
 	Ticket.check_event = function($tab){
-		var validator = rule.check($tab);
+		var validator = (new FinRule(0)).check($tab);
 		// 处理关闭与切换tab
         $tab.off('change').off(SWITCH_TAB_SAVE).off(CLOSE_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT)
         .on('change', '.T-checkList, .T-checkAll', function() {
@@ -197,12 +183,11 @@ define(function(require, exports) {
             }
             Ticket.saveCheckData($tab);
         });
-		var validator = rule.check($tab),
-			$searchArea = $tab.find('.T-search-area'),
+		var $searchArea = $tab.find('.T-search-area'),
 			$datepicker = $searchArea.find('.datepicker');
 
 		Tools.setDatePicker($datepicker, true);
-		FinancialService.updateUnpayMoney($tab, rule);
+		FinancialService.updateUnpayMoney($tab, new FinRule(0));
 
 		$searchArea.find(".T-btn-search").on('click', function(event){
 			event.preventDefault();
@@ -356,7 +341,7 @@ define(function(require, exports) {
 	};
 
 	Ticket.saveCheckData = function($tab, tabArgs){
-		var json = FinancialService.checkSaveJson($tab, rule);
+		var json = FinancialService.checkSaveJson($tab, new FinRule(0));
 		if(json.length > 0){
 			$.ajax({
 				url : KingServices.build_url('account/arrangeTicketFinancial', 'saveAccountChecking'),
@@ -443,8 +428,8 @@ define(function(require, exports) {
 	};
 
 	Ticket.clear_init = function($tab){
-		var validator = rule.check($tab);
-		var reciveValidtor = rule.reciveCheck($tab);
+		var validator = (new FinRule(3)).check($tab);
+		var reciveValidtor = (new FinRule(2)).check($tab);
 		// 处理关闭与切换tab
         $tab.off('change').off(SWITCH_TAB_SAVE).off(CLOSE_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT)
         .on('change', '.T-checkList', function() {
@@ -513,7 +498,7 @@ define(function(require, exports) {
 			Ticket.savePayingData($tab);
 		});
 
-		FinancialService.updateSumPayMoney($tab, rule);
+		FinancialService.updateSumPayMoney($tab, new FinRule(3));
 		
 		$tab.find(".T-btn-autofill").on('click', function(event){
 			event.preventDefault();
@@ -600,11 +585,11 @@ define(function(require, exports) {
 
 	//确认收款
 	Ticket.savePayingData = function($tab, tabArgs){
-        var reciveValidtor = rule.reciveCheck($tab);
+        var reciveValidtor = (new FinRule(2)).reciveCheck($tab);
         if(!reciveValidtor.form()){
     		return;
         }
-		var json = FinancialService.clearSaveJson($tab, Ticket.payingJson, rule);
+		var json = FinancialService.clearSaveJson($tab, Ticket.payingJson, new FinRule(3));
 		if (json.length) {
 			var args = {
                 ticketId: Ticket.clearingId,
