@@ -258,7 +258,11 @@ FinancialService.initCheckBoxs = function($checkAll,checkboxList){//$checkAll全
         } else{
             checkboxList.each(function(i){
                 if(!$(this).prop("disabled")){
-                    $(this).prop("checked",false);
+                    var $tr = $(this).closest('tr');
+                    if($tr.data("confirm") != 1){
+                       $(this).prop("checked",false); 
+                    }
+                    
                 }                                
             });
         } 
