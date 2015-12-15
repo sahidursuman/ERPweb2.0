@@ -161,8 +161,8 @@ define(function(require, exports) {
 				// 绑定翻页组件
 				laypage({
 				    cont: Ticket.$checkingTab.find('.T-pagenation'), 
-				    pages: data.totalPage, //总页数
-				    curr: (data.pageNo + 1),
+				    pages: data.searchParam.totalPage, //总页数
+				    curr: (data.searchParam.pageNo + 1),
 				    jump: function(obj, first) {
 				    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
 				    		Ticket.checkingList(obj.curr -1);
@@ -179,6 +179,9 @@ define(function(require, exports) {
         $tab.off('change').off(SWITCH_TAB_SAVE).off(CLOSE_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT)
         .on('change', '.T-checkList, .T-checkAll', function() {
             $tab.data('isEdited', true);
+            if($(this).hasClass('T-checkAll')){
+            	$tab.find('.T-checkTr').data('change', true);
+            }
         })
         .on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
             event.preventDefault();
@@ -427,8 +430,8 @@ define(function(require, exports) {
 				// 绑定翻页组件
 				laypage({
 				    cont: Ticket.$clearingTab.find('.T-pagenation'), 
-				    pages: data.totalPage, //总页数
-				    curr: (data.pageNo + 1),
+				    pages: data.searchParam.totalPage, //总页数
+				    curr: (data.searchParam.pageNo + 1),
 				    jump: function(obj, first) {
 				    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
 				    		Ticket.clearingList(obj.curr -1);
@@ -606,8 +609,8 @@ define(function(require, exports) {
 						// 绑定翻页组件
 						laypage({
 						    cont: $tab.find('.T-pagenation'), 
-						    pages: data.totalPage, //总页数
-						    curr: (data.pageNo + 1),
+						    pages: data.searchParam.totalPage, //总页数
+						    curr: (data.searchParam.pageNo + 1),
 						    jump: function(obj, first) {
 						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
 						    		Ticket.getOperationList(obj.curr -1);

@@ -778,7 +778,7 @@ define(function(require, exports) {
             },
             select: function(event, ui) {
                 $(this).blur().data('id', ui.item.id);
-                Client.$searchArea.find('.T-search-customer').data('ajax', false);
+                Client.$searchArea.find('.T-search-customer').data('ajax', false).val('全部');
             }
         }).on("click",function(){
             if (!$obj.data('ajax')) {  // 避免重复请求
