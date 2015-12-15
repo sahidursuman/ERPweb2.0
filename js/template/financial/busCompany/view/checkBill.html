@@ -58,7 +58,10 @@
         <tbody class="T-checkList" data-right="230005">
             {{each financialBusCompanyListData as rs index}}
 		    <tr class="T-checkTr" data-id="{{rs.id}}" data-confirm="{{rs.isConfirmAccount}}">
-				<td>{{rs.tripNumber}}{{"，"}}{{rs.lineProductName}}{{"，"}}{{rs.guideName}}</td>
+				<td>{{if rs.tripNumber !=null && rs.tripNumber != ""}}{{rs.tripNumber}}{{/if}}
+                    {{if rs.lineProductName != null && rs.lineProductName != ""}}，{{rs.lineProductName}}{{/if}}
+                    {{if rs.guideName != null && rs.guideName != ""}}，{{rs.guideName}}{{/if}}
+                </td>
 				<td>{{if rs.accountTime == null || rs.accountTime == ""}}
                         -
                     {{else}}
