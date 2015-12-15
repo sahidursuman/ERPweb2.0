@@ -7,6 +7,7 @@
 					<th >线路产品</th>
 					<th>针对客源</th>               
 					<th >出游日期</th>
+					<th >报价单号</th>
 					<th>联系人</th>
 					<th>人数</th>
 					<th>应收</th>
@@ -46,6 +47,7 @@
 					<td>
 						{{touristGroup.startTime | dateFormat: 'yyyy-MM-dd'}}
 					</td>
+					<td>--报价单号--</td>
 					<td>
 						{{if touristGroup.touristGroupMember != null}}
 							{{touristGroup.touristGroupMember.name}}
