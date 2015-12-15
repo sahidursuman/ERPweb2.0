@@ -69,7 +69,7 @@
                 <td>{{rs.orderNumber}}</td>
                 <td>{{rs.startTime}}</td>
                 <td>{{rs.projectName}}</td>
-                <td>{{rs.detail}}</td>
+                <td>{{rs.newDetail}}</td>
                 <td>{{rs.bookingMoney}}</td>
                 <td><a class="cursor T-action T-receive-money">{{rs.receiveMoney}}</a></td>
                 <td>{{if !!rs.isConfirmAccount}}{{rs.settlementMoney}}{{else}}<input type="text" class="col-xs-12" name="settlementMoney">{{/if}}</td>
@@ -96,10 +96,10 @@
             <small>共计 {{searchParam.recordSize}} 条记录</small>
         </div>
         <div class="col-xs-6">
-            <div class="dataTables_paginate paging_simple_numbers T-pagenation"></div>
-            <label class="pos-rel pull-right">
+            <label class="pos-rel pull-right" style="line-height: 2.2em;">
                 <input type="checkbox" class="ace T-checkAll"> <span class="lbl">全选</span> 
             </label>
+            <div class="dataTables_paginate paging_simple_numbers T-pagenation pull-right"></div>
         </div>
     </div>
 </div>

@@ -520,7 +520,7 @@ define(function(require, exports) {
 			if ($(this).hasClass('btn-primary')) {
                 if (validator.form()) {
                 	FinancialService.autoPayConfirm($datepicker.eq(0).val(), $datepicker.eq(1).val(),function(){
-                    	Ticket.autoFillMoney($tab);
+                    	Ticket.setAutoFillEdit($tab, true);
                 	});
                 }
             } else {
@@ -533,46 +533,21 @@ define(function(require, exports) {
 	/**
      * 自动下账业务逻辑
      * @param  {[type]} $tab [description]
-     * @return {[type]}      [description]
      */
-    Ticket.autoFillMoney = function($tab) {
-        if (!!$tab && $tab.length) {
-            var $autoPayMoney = $tab.find('.T-sumPayMoney');
-
-            var args = {
-				ticketId : Ticket.clearingId,
-				startDate : $tab.find('.T-search-start-date').val(),
-				endDate : $tab.find('.T-search-end-date').val(),
-				accountInfo : $tab.find('.T-search-type').val(),
-				isAutoPay : 1,
-				sumCurrentPayMoney : $tab.find('.T-sumReciveMoney').val()
-            };
-
-            $.ajax({
-                    url: KingServices.build_url('account/arrangeTicketFinancial', 'listTicketAccount'),
-                    type: 'post',
-                    data: {searchParam : JSON.stringify(args)},
-                    showLoading: false
-                })
-                .done(function(data) {
-                    if (showDialog(data)) {
-                        Ticket.payingJson = data.autoPaymentJson;
-                        $tab.find('input[name="sumPayMoney"]').val(data.checkedUnPayedMoney);
-                        Ticket.setAutoFillEdit($tab, true);
-                    }
-                });
-        }
-    };
-
     Ticket.setAutoFillEdit = function($tab, disable) {
-        var $sum = $tab.find('input[name="sumPayMoney"]').prop('disabled', disable);
+        var $sum = $tab.find('input[name="sumPayMoney"]').prop('disabled', disable),
+        args = {};
         if (!disable) {
             $sum.val(0);
+            args.sumCurrentPayMoney = 0;
+        }else{
+        	args.isAutoPay = 1;
+        	args.sumCurrentPayMoney = $tab.find('.T-sumReciveMoney').val()
         }
 
         $tab.find('.T-btn-autofill').html(disable ? '<i class="ace-icon fa fa-times"></i> 取消下账' : '<i class="ace-icon fa fa-check-circle"></i> 自动下账').toggleClass('btn-primary btn-warning');;
 
-        Ticket.getOperationList(0, $tab);
+        Ticket.getOperationList(args, $tab);
 
     };
     /**
@@ -580,16 +555,16 @@ define(function(require, exports) {
      * @param  {int} pageNo 列表页码
      * @return {[type]}        [description]
      */
-    Ticket.getOperationList = function(pageNo, $tab) {
-        if ($tab) {
-            var args = {
-                pageNo: pageNo || 0,
+    Ticket.getOperationList = function(args, $tab) {
+        if (!!$tab) {
+            var def = {
+                pageNo: args.pageNo || 0,
 				ticketId : Ticket.clearingId,
 				startDate : $tab.find('.T-search-start-date').val(),
 				endDate : $tab.find('.T-search-end-date').val(),
 				accountInfo : $tab.find('.T-search-type').val()
             };
-
+            $.extend(def, args);
             $.ajax({
                     url : KingServices.build_url('account/arrangeTicketFinancial', 'listTicketAccount'),
 					type : "POST",
@@ -597,13 +572,13 @@ define(function(require, exports) {
                 })
                 .done(function(data) {
                     if (showDialog(data)) {
+                    	$tab.find('input[name="sumPayMoney"]').val(data.searchParam.sumCurrentPayMoney);
+                    	Ticket.payingJson = data.autoPaymentJson;
                     	data.financialTicketList = FinancialService.getTempDate(data.financialTicketList, Ticket.payingJson);
                     	var html = payingTableTemplate(data);
 						Ticket.$clearingTab.find('.T-checkList').html(html);
 
-						//给全选按钮绑定事件: 未去重
-                        FinancialService.initCheckBoxs($tab.find(".T-checkAll"), $tab.find(".T-checkList").find('.T-checkbox'));
-                        // 设置记录条数及页面
+						// 设置记录条数及页面
                         $tab.find('.T-sumItem').text('共计' + data.recordSize + '条记录');
                         $tab.find('.T-btn-save').data('pageNo', args.pageNo);
 						// 绑定翻页组件
@@ -630,7 +605,6 @@ define(function(require, exports) {
     		return;
         }
 		var json = FinancialService.clearSaveJson($tab, Ticket.payingJson, rule);
-		console.log(json);
 		if (json.length) {
 			var args = {
                 ticketId: Ticket.clearingId,
