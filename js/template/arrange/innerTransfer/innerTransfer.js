@@ -618,11 +618,11 @@ define(function(require, exports) {
 									innerTransfer.getSearchParam(divId,type);
 									innerTransfer.innerList(divId,type,0);
 
-									var id=data.touristGroupId,
-									    type='inner';
+									var touristGroupId=data.touristGroupId,
+									    typeOut='inner';
 
 									//是否中转安排提信息
-									innerTransfer.transitMessage(id,type);
+									KingServices.addTouristGroup(touristGroupId,typeOut);
 								}
 
 							 }
@@ -636,42 +636,6 @@ define(function(require, exports) {
 			}
 		});
 	};
-
-
-	innerTransfer.transitMessage=function(id,type){
-	    var dialogObj = $( "#confirm-dialog-message" );
-		dialogObj.removeClass('hide').dialog({
-			modal: true,
-			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-			title_html: true,
-			draggable:false,
-			buttons: [ 
-				{
-					text: "否",
-					"class" : "btn btn-minier",
-					click: function() {
-						$( this ).dialog( "close" );
-					}
-				},
-				{
-					text: "是",
-					"class" : "btn btn-primary btn-minier",
-					click: function() {
-						KingServices.updateTouristGroup(id,type);
-						$( this ).dialog( "close" );
-					}
-				}
-			],
-			open:function(event,ui){
-				$(this).find("p").text("是否中转安排？");
-			}
-		});
-
-	};
-
-
-
-
 
 
 
@@ -854,5 +818,4 @@ define(function(require, exports) {
 	exports.isEdited = innerTransfer.isEdited; 
 	exports.save = innerTransfer.save; 
 	exports.clearEdit = innerTransfer.clearEdit; 
-	exports.viewTransferOut = innerTransfer.viewTransferOut;
 });
