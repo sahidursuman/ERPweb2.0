@@ -225,6 +225,12 @@ define(function(require, exports) {
             endDate : endDate,
             sortType : "auto"
         };
+        if(isAutoPay == 1){
+           searchParam.isAutoPay = isAutoPay;
+           searchParam.sumCurrentPayMoney = Insure.$clearTab.find('input[name=sumPayMoney]').val();
+           searchParam.payType = Insure.$clearTab.find('select[name=sumPayType]').val();
+           searchParam.payRemark = Insure.$clearTab.find('input[name=sumPayRemark]').val();
+        }
         searchParam = JSON.stringify(searchParam);
   		$.ajax({
 	       url:KingServices.build_url("account/insuranceFinancial","listInsuranceAccount"),
@@ -234,6 +240,14 @@ define(function(require, exports) {
 				var result = showDialog(data);
 				if(result){
 					data.insuranceName = insuranceName;
+                    if(isAutoPay == 1){
+                        Insure.clearTempData = data.autoPaymentJson;
+                        Insure.clearTempSumDate = {
+                            sumPayMoney : Insure.$clearTab.find('input[name=sumPayMoney]').val(),
+                            sumPayType : Insure.$clearTab.find('select[name=sumPayType]').val(),
+                            sumPayRemark : Insure.$clearTab.find('input[name=sumPayRemark]').val()
+                        };
+                    }
 
                     //暂存数据读取
                     if(Insure.clearTempSumDate){
@@ -329,41 +343,7 @@ define(function(require, exports) {
         Insure.$clearTab.find(".T-clear-auto").off().on("click",function(){
             var isAutoPay = FinancialService.autoPayJson(id,Insure.$clearTab,rule);
             if(!isAutoPay){return false;}
-
-            var startDate = Insure.$clearTab.find("input[name=startDate]").val(),
-                endDate = Insure.$clearTab.find("input[name=endDate]").val();
-            var searchParam = {
-                insuranceId : id,
-                sumCurrentPayMoney : Insure.$clearTab.find('input[name=sumPayMoney]').val(),
-                payType : Insure.$clearTab.find('select[name=sumPayType]').val(),
-                payRemark : Insure.$clearTab.find('input[name=sumPayRemark]').val(),
-                startDate : startDate,
-                endDate : endDate,
-                accountInfo : Insure.$clearTab.find('input[name=accountInfo]').val(),
-                isAutoPay : 1
-            };
-            searchParam = JSON.stringify(searchParam);
-            FinancialService.autoPayConfirm(startDate,endDate,function(){
-                $.ajax({
-                    url:KingServices.build_url("account/insuranceFinancial","listInsuranceAccount"),
-                    type:"POST",
-                    data:{ searchParam : searchParam },
-                    success:function(data){
-                        var result = showDialog(data);
-                        if(result){
-                            Insure.$clearTab.find(".T-clear-auto").toggle();
-                            Insure.$clearTab.find(".T-cancel-auto").toggle();
-                            Insure.clearTempData = data.autoPaymentJson;
-                            Insure.clearTempSumDate = {
-                                sumPayMoney : Insure.$clearTab.find('input[name=sumPayMoney]').val(),
-                                sumPayType : Insure.$clearTab.find('select[name=sumPayType]').val(),
-                                sumPayRemark : Insure.$clearTab.find('input[name=sumPayRemark]').val()
-                            };
-                            Insure.getClearing(1,0,id,name);
-                        }
-                    }
-                });
-            });
+            Insure.getClearing(1,0,id,name);
         });
 
         Insure.$clearTab.find(".T-cancel-auto").off().on("click",function(){

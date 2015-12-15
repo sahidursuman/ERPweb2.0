@@ -234,6 +234,12 @@ define(function(require, exports) {
             endDate : endDate,
             sortType : "auto"
         }, args = arguments;
+        if(isAutoPay == 1){
+           searchParam.isAutoPay = isAutoPay;
+           searchParam.sumCurrentPayMoney = restaurant.$clearTab.find('input[name=sumPayMoney]').val();
+           searchParam.payType = restaurant.$clearTab.find('select[name=sumPayType]').val();
+           searchParam.payRemark = restaurant.$clearTab.find('input[name=sumPayRemark]').val();
+        }
         searchParam = JSON.stringify(searchParam);
         $.ajax({
             url:KingServices.build_url("account/arrangeRestaurantFinancial","listRestaurantAccount"),
@@ -243,6 +249,14 @@ define(function(require, exports) {
                 var result = showDialog(data);
                 if(result){
                     data.restaurantName = restaurantName;
+                    if(isAutoPay == 1){
+                        restaurant.clearTempData = data.autoPaymentJson;
+                        restaurant.clearTempSumDate = {
+                            sumPayMoney : restaurant.$clearTab.find('input[name=sumPayMoney]').val(),
+                            sumPayType : restaurant.$clearTab.find('select[name=sumPayType]').val(),
+                            sumPayRemark : restaurant.$clearTab.find('input[name=sumPayRemark]').val()
+                        };
+                    }
 
                     //暂存数据读取
                     if(restaurant.clearTempSumDate){
@@ -368,41 +382,7 @@ define(function(require, exports) {
         restaurant.$clearTab.find(".T-clear-auto").off().on("click",function(){
             var isAutoPay = FinancialService.autoPayJson(id,restaurant.$clearTab,new FinRule(2));
             if(!isAutoPay){return false;}
-
-            var startDate = restaurant.$clearTab.find("input[name=startDate]").val(),
-                endDate = restaurant.$clearTab.find("input[name=endDate]").val();
-            var searchParam = {
-                restaurantId : id,
-                sumCurrentPayMoney : restaurant.$clearTab.find('input[name=sumPayMoney]').val(),
-                payType : restaurant.$clearTab.find('select[name=sumPayType]').val(),
-                payRemark : restaurant.$clearTab.find('input[name=sumPayRemark]').val(),
-                startDate : startDate,
-                endDate : endDate,
-                accountInfo : restaurant.$clearTab.find('input[name=accountInfo]').val(), 
-                isAutoPay : 1
-            };
-            searchParam = JSON.stringify(searchParam);
-            FinancialService.autoPayConfirm(startDate,endDate,function(){
-                $.ajax({
-                    url:KingServices.build_url("account/arrangeRestaurantFinancial","listRestaurantAccount"),
-                    type:"POST",
-                    data:{ searchParam : searchParam },
-                    success:function(data){
-                        var result = showDialog(data);
-                        if(result){
-                            restaurant.$clearTab.find(".T-clear-auto").toggle();
-                            restaurant.$clearTab.find(".T-cancel-auto").toggle();
-                            restaurant.clearTempData = data.autoPaymentJson;
-                            restaurant.clearTempSumDate = {
-                                sumPayMoney : restaurant.$clearTab.find('input[name=sumPayMoney]').val(),
-                                sumPayType : restaurant.$clearTab.find('select[name=sumPayType]').val(),
-                                sumPayRemark : restaurant.$clearTab.find('input[name=sumPayRemark]').val()
-                            };
-                            restaurant.restaurantClear(1,0,id,name);
-                        }
-                    }
-                });
-            });
+            restaurant.restaurantClear(1,0,id,name);
         });
 
         restaurant.$clearTab.find(".T-cancel-auto").off().on("click",function(){

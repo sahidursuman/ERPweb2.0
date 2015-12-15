@@ -237,6 +237,12 @@ define(function(require, exports) {
             endTime : endDate,
             sortType : "auto"
         }, args = arguments;
+        if(isAutoPay == 1){
+           searchParam.isAutoPay = isAutoPay;
+           searchParam.sumCurrentPayMoney = hotel.$clearTab.find('input[name=sumPayMoney]').val();
+           searchParam.payType = hotel.$clearTab.find('select[name=sumPayType]').val();
+           searchParam.payRemark = hotel.$clearTab.find('input[name=sumPayRemark]').val();
+        }
         searchParam = JSON.stringify(searchParam);
         $.ajax({
             url:KingServices.build_url("account/financialHotel","listHotelAccount"),
@@ -246,6 +252,14 @@ define(function(require, exports) {
                 var result = showDialog(data);
                 if(result){
                     data.hotelName = hotelName;
+                    if(isAutoPay == 1){
+                        hotel.clearTempData = data.autoPaymentJson;
+                        hotel.clearTempSumDate = {
+                            sumPayMoney : hotel.$clearTab.find('input[name=sumPayMoney]').val(),
+                            sumPayType : hotel.$clearTab.find('select[name=sumPayType]').val(),
+                            sumPayRemark : hotel.$clearTab.find('input[name=sumPayRemark]').val()
+                        };
+                    }
 
                     //暂存数据读取
                     if(hotel.clearTempSumDate){
@@ -368,41 +382,7 @@ define(function(require, exports) {
         hotel.$clearTab.find(".T-clear-auto").click(function(){
             var autoPayJson = FinancialService.autoPayJson(id,hotel.$clearTab,rule);
             if(!autoPayJson){return false;}
-
-            var startDate = hotel.$clearTab.find("input[name=startDate]").val(),
-                endDate = hotel.$clearTab.find("input[name=endDate]").val();
-            var searchParam = {
-                hotelId : id,
-                sumCurrentPayMoney : hotel.$clearTab.find('input[name=sumPayMoney]').val(),
-                payType : hotel.$clearTab.find('select[name=sumPayType]').val(),
-                payRemark : hotel.$clearTab.find('input[name=sumPayRemark]').val(),
-                startTime : startDate,
-                endTime : endDate,
-                accountInfo : hotel.$clearTab.find('input[name=accountInfo]').val(),
-                isAutoPay : 1
-            };
-            searchParam = JSON.stringify(searchParam);
-            FinancialService.autoPayConfirm(startDate,endDate,function(){
-                $.ajax({
-                    url:KingServices.build_url("account/financialHotel","listHotelAccount"),
-                    type:"POST",
-                    data:{ searchParam : searchParam },
-                    success:function(data){
-                        var result = showDialog(data);
-                        if(result){
-                            hotel.$clearTab.find(".T-clear-auto").toggle();
-                            hotel.$clearTab.find(".T-cancel-auto").toggle();
-                            hotel.clearTempData = data.autoPaymentJson;
-                            hotel.clearTempSumDate = {
-                                sumPayMoney : hotel.$clearTab.find('input[name=sumPayMoney]').val(),
-                                sumPayType : hotel.$clearTab.find('select[name=sumPayType]').val(),
-                                sumPayRemark : hotel.$clearTab.find('input[name=sumPayRemark]').val()
-                            };
-                            hotel.hotelClear(1,page,id,name);
-                        }
-                    }
-                });
-            });
+            hotel.hotelClear(1,page,id,name);
         });
 
         hotel.$clearTab.find(".T-cancel-auto").off().on("click",function(){
