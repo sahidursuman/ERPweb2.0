@@ -1,12 +1,14 @@
 define(function(require, exports) {
     var menuKey = "financial_totalProfit",
     listTemplate = require("./view/list"),
+    tableTemplate = require('./view/listTable'),
     tabId = "tab-"+menuKey+"-content";
 
     var TotalProfit = {
         searchData: false,
         $tab: false,
         $searchArea: false,
+        countData:{}
     };
 
     TotalProfit.initModule = function() {
@@ -31,18 +33,24 @@ define(function(require, exports) {
         var searchParam = JSON.stringify(TotalProfit.searchData);
 
         $.ajax({
-            url:KingServices.build_url("financialTotal","findPager"),
+            url:KingServices.build_url("financialTotal","findTotal"),
             type: "POST",
-            data: { searchParam : searchParam },
+            data: TotalProfit.searchData,
             success: function(data) {
                 var result = showDialog(data);
                 if (result) {
+                    console.log(data);
+                    data.searchParam = TotalProfit.searchData
                     var html = listTemplate(data);
                     addTab(menuKey,"总利润表",html);
                     // 初始化jQuery 对象
-                    TotalProfit.$tab = $('#' + tabId);
+                    var $tabId= $('#' + tabId);
+                    TotalProfit.$tab = $tabId
                     TotalProfit.$searchArea = TotalProfit.$tab.find('.T-search-area');
-
+                    //获取列表数据
+                    TotalProfit.getListData($tabId,TotalProfit.searchData);
+                    data.countData = TotalProfit.countData;
+                    console.log(data);
                     Tools.setDatePicker(TotalProfit.$tab.find(".date-picker"),true);
                     //搜索按钮事件
                     TotalProfit.$tab.find('.T-search').on('click', function(event) {
@@ -74,6 +82,22 @@ define(function(require, exports) {
             }
         });
     };
-
+    //获取列表数据
+    TotalProfit.getListData = function($obj,searchData){
+        var resultData;
+        $.ajax({
+            url:KingServices.build_url("financialTotal","findPager"),
+            data:searchData,
+            type:'POST',
+            success:function(data){
+                var result = showDialog(data);
+                if(result){
+                    console.log(data);
+                    var html = tableTemplate(data)
+                    $obj.find('.T-list').html(html)
+                }
+            }
+        });
+    };
     exports.init = TotalProfit.initModule;
 });
