@@ -498,7 +498,7 @@ define(function(require, exports){
 		var $ticketObj = $listObj.find('.T-count-ticket');
 		$ticketObj.find('input[type=text]').off('change').on('change',function(){
 			var $nameFlag = $(this).attr('name');
-			if($nameFlag != "billRemark"){
+			if($nameFlag != "billRemark" && $nameFlag != "shift"){
 				Count.calculateCost($(this));
 				Count.autoTicketSum($(this),$obj);
 			}
@@ -1998,7 +1998,7 @@ define(function(require, exports){
 		//绑定事件
 		$obj.find('input[type=text]').off('change').on('change',function(){
 			var $nameFlag = $(this).attr('name');
-			if($nameFlag != "seatLevel" && $nameFlag != "startArea" && $nameFlag != "ticketType" && $nameFlag != "billRemark" && $nameFlag != "startTime" && $nameFlag != "endArea"){
+			if($nameFlag != "seatLevel" && $nameFlag != "startArea" && $nameFlag != "shift" && $nameFlag != "ticketType" && $nameFlag != "billRemark" && $nameFlag != "startTime" && $nameFlag != "endArea"){
 				Count.calculateCost($(this));
 				//计算金额
 				Count.autoTicketSum($(this),$parentObj);
