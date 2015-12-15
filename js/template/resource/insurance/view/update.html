@@ -101,20 +101,16 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr>
-										<td><input type="text" name="insurance" class="col-sm-12"></td>
-										<td><input type="text" name="price" class="col-sm-12"></td>
-										<td><input type="text" name="days" class="col-sm-12"></td>
-										<td>
-											<select name="fitFor">
-												<option>小孩</option>
-												<option>成人</option>
-												<option>老人</option>
-											</select>
-										</td>
-										<td><input type="text" name="remark" class="col-sm-12"></td>
+								{{each insurance.insuranceItemList as rs}}
+									<tr data-entity-id="{{rs.id}}">
+										<td><input type="text" name="insuranceItem" class="col-sm-12" value="{{rs.name}}"></td>
+										<td><input type="text" name="price" class="col-sm-12" value="{{rs.price}}"></td>
+										<td><input type="text" name="days" class="col-sm-12" value="{{rs.days}}"></td>
+										<td><input type="text" name="type" class="col-sm-12" value="{{rs.type}}"></td>
+										<td><input type="text" name="remark" class="col-sm-12" value="{{rs.remark}}"></td>
 										<td style="width:80px"><a class="T-insurance-delete">删除</a></td>
 									</tr>
+								{{/each}}
 								</tbody>
 							</table>
 						</div>

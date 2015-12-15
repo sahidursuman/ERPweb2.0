@@ -251,11 +251,11 @@ define(function(require, exports) {
 		var itemValidator = rule.checkItems($container);
 		$container.find('.T-btn-insurance-add').off('click').on('click', function() {
 			var html = '<tr>'
-				+'<td><input type="text" name="insurance" class="col-sm-12" maxlength="30"></td>'
+				+'<td><input type="text" name="insuranceItem" class="col-sm-12" maxlength="100"></td>'
 				+'<td><input type="text" name="price" class="col-sm-12" maxlength="9"></td>'
 				+'<td><input type="text" name="days" class="col-sm-12" maxlength="5"></td>'
-				+'<td><select name="fitFor"><option value="1">小孩</option><option value="2">成人</option><option value="3">老人</option></select></td>'
-				+'<td><input type="text" name="remark" class="col-sm-12" maxlength="200"></td>'
+				+'<td><input type="text" name="type" class="col-sm-12" maxlength="100"/>;</td>'
+				+'<td><input type="text" name="remark" class="col-sm-12" maxlength="1000"></td>'
 				+'<td style="width:80px"><a class="T-insurance-delete">删除</a></td>'
 			+'</tr>';
 			$container.find('.T-insuranceList tbody').append(html);
@@ -301,34 +301,34 @@ define(function(require, exports) {
 		}
 		var form = $container.find(".insuranceMainForm").serialize()+"&status="+status+"",
 			formData = $container.find(".insuranceMainForm").serializeJson();
-		var insuranceJson = [], insuranceDel = [],
+		var insuranceItem = [], insuranceItemDel = [],
 			$table = $container.find('.T-insuranceList tbody');
 			var $tr = $table.find('tr:not(.del)');
 		$tr.each(function(i) {
 			var json = {
 				id: $tr.eq(i).data('entity-id'),
-				insurance: insurance.getValue($tr.eq(i), 'insurance'),
+				name: insurance.getValue($tr.eq(i), 'insuranceItem'),
 				price: insurance.getValue($tr.eq(i), 'price'),
 				days: insurance.getValue($tr.eq(i), 'days'),
-				fitFor: insurance.getValue($tr.eq(i), 'fitFor'),
+				type: insurance.getValue($tr.eq(i), 'type'),
 				remark: insurance.getValue($tr.eq(i), 'remark')
 			}
-			insuranceJson.push(json);
+			insuranceItem.push(json);
 		})
 		var $trDel = $table.find('tr.del');
 		$trDel.each(function(i) {
 			var json = {
 				id: $trDel.eq(i).data('entity-id')
 			}
-			insuranceDel.push(json);
+			insuranceItemDel.push(json);
 		});
-		insuranceJson = JSON.stringify(insuranceJson)
-		insuranceDel = JSON.stringify(insuranceDel)
+		insuranceItem = JSON.stringify(insuranceItem)
+		insuranceItemDel = JSON.stringify(insuranceItemDel)
 		
 		$.ajax({
 			url: KingServices.build_url('insurance',method),
 			type: "POST",
-			data: form + '&insuranceJson=' + encodeURIComponent(insuranceJson) + '&insuranceDel=' + encodeURIComponent(insuranceDel),
+			data: form + '&insuranceItem=' + encodeURIComponent(insuranceItem) + '&insuranceItemDel=' + encodeURIComponent(insuranceItemDel),
 			success: function(data){
 				var result = showDialog(data);
 				if(result){
