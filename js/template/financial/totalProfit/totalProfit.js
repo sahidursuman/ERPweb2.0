@@ -1,79 +1,103 @@
 define(function(require, exports) {
     var menuKey = "financial_totalProfit",
     listTemplate = require("./view/list"),
+    tableTemplate = require('./view/listTable'),
     tabId = "tab-"+menuKey+"-content";
 
     var TotalProfit = {
         searchData: false,
         $tab: false,
         $searchArea: false,
+        headerData:{},
+        changeStatus:false
     };
 
     TotalProfit.initModule = function() {
         var dateJson = FinancialService.getInitDate();
-        TotalProfit.listTotalProfit(0,dateJson.startDate,dateJson.endDate,"");
+        TotalProfit.listTotalProfit(dateJson);
     };
 
-    TotalProfit.listTotalProfit = function(page,startTime,endTime,type){
-        if (TotalProfit.$searchArea && arguments.length === 1) {
-            // 初始化页面后，可以获取页面的参数
-            startTime = TotalProfit.$searchArea.find("input[name=startTime]").val(),
-            endTime = TotalProfit.$searchArea.find("input[name=endTime]").val(),
-            type = TotalProfit.$searchArea.find("select[name=type]").val()
+    TotalProfit.listTotalProfit = function(searchData){
+        if (Tools.addTab(menuKey,"总利润表",listTemplate(searchData))) {
+            TotalProfit.initEvents();
         }
-        TotalProfit.searchData = {
-            pageNo : page,
-            startTime:startTime,
-            endTime:endTime,
-            type : type
-        };
+        
+    };
+    //处理事件
+    TotalProfit.initEvents = function($obj,data){
+        TotalProfit.$tab = $('#tab-'+ menuKey + '-content');
+        TotalProfit.$searchArea = TotalProfit.$tab.find('.T-search-area');
 
-        var searchParam = JSON.stringify(TotalProfit.searchData);
+        //格式化时间控件
+        Tools.setDatePicker(TotalProfit.$tab.find(".date-picker"),true);
 
+        //搜索按钮事件
+        TotalProfit.$searchArea.find('.T-search').on('click', function(){
+            var args = {
+                startTime: TotalProfit.$searchArea.find("input[name=startTime]").val(),
+                endTime: TotalProfit.$searchArea.find("input[name=endTime]").val(),
+                type: TotalProfit.$searchArea.find("select[name=type]").val()
+            };
+            //获取数据列表
+            TotalProfit.getListData(0, args);
+            // 获取统计数据
+            TotalProfit.getCountData(args);
+        }).trigger('click');
+    };
+    //获取列表数据
+    TotalProfit.getListData = function(page, args){
+        if (!!args) {
+            args.pageNo = page || 0;
+        } else if (TotalProfit.$searchArea) {
+            args = {
+                startTime: TotalProfit.$searchArea.find("input[name=startTime]").val(),
+                endTime: TotalProfit.$searchArea.find("input[name=endTime]").val(),
+                type: TotalProfit.$searchArea.find("select[name=type]").val(),
+                pageNo: page || 0
+            }
+        }
         $.ajax({
             url:KingServices.build_url("financialTotal","findPager"),
-            type: "POST",
-            data: { searchParam : searchParam },
-            success: function(data) {
-                var result = showDialog(data);
-                if (result) {
-                    var html = listTemplate(data);
-                    addTab(menuKey,"总利润表",html);
-                    // 初始化jQuery 对象
-                    TotalProfit.$tab = $('#' + tabId);
-                    TotalProfit.$searchArea = TotalProfit.$tab.find('.T-search-area');
+            data:args,
+            showLoading:false,
+            type:'POST',
+            success:function(data){
+                if(showDialog(data)){
+                    TotalProfit.$tab.find('.T-list').html(tableTemplate(data));
 
-                    Tools.setDatePicker(TotalProfit.$tab.find(".date-picker"),true);
-                    //搜索按钮事件
-                    TotalProfit.$tab.find('.T-search').on('click', function(event) {
-                        event.preventDefault();
-                        TotalProfit.listTotalProfit(0);
-                    });
-
-                    //报表内的操作
-                    TotalProfit.$tab.find('.T-list').on("click",".T-option",function(){
-                        var $this = $(this);
-                        if($this.hasClass('T-transfer')){
-                            //查看线路产品
-                            KingServices.viewLineProduct($(this).data("id"));
-                        } 
-                    });
+                    TotalProfit.$tab.find('.T-recordSize').html(Tools.getRecordSizeDesc(data.searchParam.totalCount));
 
                     // 绑定翻页组件
                     laypage({
-                        cont: TotalProfit.$tab.find('.T-pagenation'),
-                        pages: data.searchParam.totalPage,
-                        curr: (page + 1),
+                        cont: TotalProfit.$tab.find('.T-pagenation'), 
+                        pages: data.searchParam.totalPage, //总页数
+                        curr: (data.searchParam.pageNo + 1),
                         jump: function(obj, first) {
-                            if (!first) {
-                                TotalProfit.listTotalProfit(obj.curr - 1);
+                            if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+                                TotalProfit.getListData(obj.curr -1);
                             }
                         }
-                    });
+                    }); 
                 }
             }
         });
     };
-
+    //获取统计数据
+    TotalProfit.getCountData = function(args){
+        $.ajax({
+            url:KingServices.build_url("financialTotal","findTotal"),
+            data:args,
+            showLoading:false,
+            type:'POST',
+            success:function(data){
+                if(showDialog(data)){
+                    console.log(data);
+                    TotalProfit.$tab.find('.income').text(data.total.income);
+                    TotalProfit.$tab.find('.cost').text(data.total.cost);
+                    TotalProfit.$tab.find('.profit').text(data.total.profit);
+                }
+            }
+        });
+    };
     exports.init = TotalProfit.initModule;
 });

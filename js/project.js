@@ -1474,9 +1474,23 @@ Tools.setDatePicker = function($obj, isInputRange) {
 }
 
 /**
+ * 获取记录描述信息
+ * 主要是为了统一描述
+ * @param  {int} size 记录条数
+ * @return {string}      记录统计的描述
+ */
+Tools.getRecordSizeDesc = function(size) {
+	if (!!size && !isNaN(size) && size > 0) {
+		return '共计'+ size + '条记录';
+	} else {
+		return '没有查询到相关记录';
+	}
+}
+/**
  * 用于定义公共请求或者与数据相关的公共组件处理
  * @type {Object}
  */
+ 
 var KingServices = {};
 
 /**
