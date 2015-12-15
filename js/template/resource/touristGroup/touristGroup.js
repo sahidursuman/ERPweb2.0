@@ -10,6 +10,7 @@ define(function(require,exports){
 		lineproductSearchList = require("./view/lineproductSearchList"),
 		addPartnerManagerTemplate = require('./view/addPartnerManager'),
 		updateTransferTemplate = require('./view/updateTransfer'),
+		updateTransferInTemplate = require('./view/updateTransferIn'),
 		addVisitorMoreTemplate = require('./view/addVisitorMore'),
 		tabId = "tab-"+menuKey+"-content",
 		addTabId = menuKey+"-add",
@@ -183,7 +184,7 @@ define(function(require,exports){
 					if(result){
 						var touristGroupInfo = JSON.parse(data.touristGroupDetail);
 						data.touristGroupDetail = touristGroupInfo;
-						var html = updateTemplate(data);
+						var html = updateTransferInTemplate(data);
 						if(Tools.addTab(updateTabId,"添加游客",html))
 						{
 							touristGroup.updateEvents(typeOut);
@@ -311,7 +312,7 @@ define(function(require,exports){
 			//游客的序号
 			touristGroup.memberNumber($groupMemberForm);
 			//小组信息模块处理
-			touristGroup.groupInfoDispose($groupInfoForm,2);
+			touristGroup.groupInfoDispose($groupInfoForm,2,typeInner);
 			//游客名单模块处理
 			touristGroup.groupMemberDispose($groupMemberForm,2);
 			//中转安排处理
@@ -392,18 +393,18 @@ define(function(require,exports){
 			.on(CLOSE_TAB_SAVE, function(event) {
 				event.preventDefault();
 				if (!touristGroup.validator.form()) { return; }
-				touristGroup.installData($tab,id,typeFlag,"",typeInner);
+				touristGroup.installData($tab,id,tabArgs,typeFlag,typeInner);
 			});
 		}
 	};
 	//处理小组信息
-	touristGroup.groupInfoDispose = function($obj,typeFlag){
+	touristGroup.groupInfoDispose = function($obj,typeFlag,typeInner){
 		//格式化时间控件
 		touristGroup.formatTime($obj);
 		//搜索线路
 		$obj.find(".T-travelLine-search").on('click',function(){
 			// touristGroup.searchLinproduct(true,0,"",typeFlag);
-			touristGroup.initLineProductSearch(typeFlag == 2);
+			touristGroup.initLineProductSearch(typeFlag == 2,typeInner);
 		});
 		//客户来源
 		var $partnerAgencyObj = $obj.find('input[name=fromPartnerAgency]');
@@ -527,7 +528,7 @@ define(function(require,exports){
 	 * @param  {Boolean} isUpdate true：修改界面，false：添加界面
 	 * @return {[type]}           [description]
 	 */
-	touristGroup.initLineProductSearch = function(isUpdate) {
+	touristGroup.initLineProductSearch = function(isUpdate,typeInner) {
 		var type = isUpdate ?'update': 'add',
 			html =searchTemplate({update: type}),
 			searchTravelLinelayer =layer.open({
@@ -539,7 +540,7 @@ define(function(require,exports){
 				content: html,
 				scrollbar: false,
 			});
-
+	    console.info('initLineProductSearch'+typeInner+"ROGER...................");
 		var $dialog = $('.T-lineproduct-search-' + type);
 		touristGroup.getLineProductList($dialog, 0);
 		touristGroup.getLineProductList($dialog, 1);
@@ -569,7 +570,7 @@ define(function(require,exports){
 			if ($tr.closest('.tab-pane').index() === 1) {
 				// 选择了报价产品，需要初始化游客小组的数据
 				touristGroup.initQuoteData($form, quoteId);
-			} else {
+			} else if($tr.closest('.tab-pane').index() !=1 && typeInner!='out' || typeInner=="" ) {
 				// 清理
 				touristGroup.clearQuoteData($form);
 			}
@@ -1113,10 +1114,10 @@ define(function(require,exports){
     					$countBody = $listObj.find('.T-countData'),
     					$statistics = data.statistics;
     				$countBody.find(".allPerson").text($statistics.adultCount+"大"+$statistics.childCount+"小");
-    				$countBody.find(".needIncome").text($statistics.needPay | toFixed+"小");
-    				$countBody.find(".payedMoney").text($statistics.payedMoney | toFixed+"小");
-    				$countBody.find(".currentNeedPay").text($statistics.currentNeedPay | toFixed+"小");
-    				$countBody.find(".unIncome").text($statistics.unIncomeMoney | toFixed+"小");
+    				$countBody.find(".needIncome").text($statistics.needPay+ "小");
+    				$countBody.find(".payedMoney").text($statistics.payedMoney + "小");
+    				$countBody.find(".currentNeedPay").text($statistics.currentNeedPay + "小");
+    				$countBody.find(".unIncome").text($statistics.unIncomeMoney + "小");
 					
 				}	
 			}
@@ -1556,11 +1557,11 @@ define(function(require,exports){
 		}
 		//接送事件点json
 		var outArrangeRemarkJson;
-		if ( !!typeInner && typeInner!='out') {
-			var $arrangeChecked = $arrangeForm.find('.T-touristReception').is(':checked');
-			var $smallCarChecked=$arrangeForm.find('.T-smallCar').is(':checked');
-			var	$touristSendChecked=$arrangeForm.find('.T-touristSend').is(':checked');
-			if ($arrangeChecked == true || $smallCarChecked == true || $touristSendChecked==true ) {
+		if ( !!typeInner && typeInner!='out' ) {
+			var $touristReChecked = $arrangeForm.find('.T-touristReception').is(':checked'),
+			    $smallCar = $arrangeForm.find('.T-smallCar').is(':checked'),
+			    $touristSend = $arrangeForm.find('.T-touristSend').is(':checked');
+			if ($touristReChecked == true  || $smallCar == true || $touristSend==true ) {
 				outArrangeRemarkJson = touristGroup.installArrangeJson($arrangeForm);
 			} else{
 				showMessageDialog($( "#confirm-dialog-message" ),"请选择中转安排信息!");
@@ -1613,7 +1614,13 @@ define(function(require,exports){
 							touristGroup.updateEvents();}
 							}else{
 								Tools.closeTab(tabId);
-								if (!!typeInner && typeInner!='out') {
+
+								console.info(typeInner+"......");
+								var $arrangeForm = $obj.find(".T-touristGroupMainFormRS");
+								var $touristReChecked = $arrangeForm.find('.T-touristReception').is(':checked'),
+									$smallCar = $arrangeForm.find('.T-smallCar').is(':checked'),
+								    $touristSend = $arrangeForm.find('.T-touristSend').is(':checked');
+								if (!!typeInner && $touristReChecked == true  || $smallCar == true || $touristSend==true) {
 									KingServices.listTransit();
 								} else{
 									touristGroup.freshHeader(touristGroup.$freshData);
