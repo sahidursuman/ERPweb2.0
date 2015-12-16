@@ -271,6 +271,7 @@ define(function(require, exports) {
                     var resultList = data.financialRestaurantList;
                     data.financialRestaurantList = FinancialService.getTempDate(resultList,restaurant.clearTempData);
 
+                    data.isAutoPay = isAutoPay;
                     var html = restaurantClearing(data);
                     
                     args.data = data;
