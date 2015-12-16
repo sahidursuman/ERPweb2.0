@@ -245,7 +245,7 @@ define(function(require,exports) {
 						//获取统计数据
 						InnerTransferIn.getCountData($listSearchData,countObj);
 						//
-						InnerTransferIn.getReceiveUser(InnerTransferIn.$checkSearchArea);
+						InnerTransferIn.getReceiveUser(InnerTransferIn.$checkSearchArea,args);
 					    // 绑定翻页组件
 						laypage({
 						    cont: $checkId.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
@@ -315,16 +315,15 @@ define(function(require,exports) {
 		//切换tab事件
 		InnerTransferIn.init_CRU_event($obj,$listSearchData,typeFlag);
 		//表单验证
-		var validator = new FinRule(typeFlag == 2 ? 1 : 0),
+		var validator = new FinRule(0),
+			settleValidator = new FinRule(4);
             autoValidator = new FinRule(2);
-        var validatorCheck = validator.check($obj);
+        var validatorCheck = validator.check($obj),
+        	autoValidatorCheck,
+			settleCheck = settleValidator.check($obj);
         	if(typeFlag == 2){
         		autoValidatorCheck = autoValidator.check($obj.find('.T-count'));
         	}
-            
-		if(typeFlag == 2){
-			var settlementValidator = rule.settlement($obj);
-		};
 		//搜索事件
 		$obj.find(".T-checking-search").on('click',function(event){
 			event.preventDefault();
@@ -340,10 +339,6 @@ define(function(require,exports) {
 			$obj.find('input[name=sumPayMoney]').val(InnerTransferIn.saveJson.autoPayMoney);
 			InnerTransferIn.setAutoFillEdit($obj,true);
 		};
-		/*if(){
-			$obj.find('input[name=sumPayMoney]').val(InnerTransferIn.saveJson.autoPayMoney);
-			InnerTransferIn.setAutoFillEdit($obj,true);
-		}*/
 		//格式化日期控件
 		FinancialService.initDate(InnerTransferIn.$checkSearchArea);
 		//导出报表事件
@@ -399,8 +394,7 @@ define(function(require,exports) {
         	var $that = $(this);
         	if($that.hasClass('btn-primary')){
         		showConfirmDialog($( "#confirm-dialog-message" ), "是否按当前账期 " + $listSearchData.startAccountTime + " 至 " + $listSearchData.endAccountTime + " 下账？",function(){
-        			//自动下账函数
-        		
+    			//自动下账函数
         		InnerTransferIn.autoAcountMoney($obj,$listSearchData,typeFlag);
         	});
         	
@@ -410,7 +404,7 @@ define(function(require,exports) {
         });
         //确认付款
         $obj.find('.T-incomeMoney').off('click').on('click',function(){
-        	if(!validatorCheck.form()){return;}
+        	if(!settleCheck.form()){return;}
         	InnerTransferIn.saveBlanceData(0,$obj,$listSearchData);
         });
         //关闭事件
@@ -570,13 +564,14 @@ define(function(require,exports) {
 	};
 	
 	//获取接收人--线路名称
-	InnerTransferIn.getReceiveUser = function($obj){
+	InnerTransferIn.getReceiveUser = function($obj,args){
 		var userName = $obj.find('input[name=receiveUserName]');
 		var lineProduct = $obj.find('input[name=lineProductName]');
 		$.ajax({
 				url:KingServices.build_url("account/innerTransferIn","getQueryTermsForDetails"),
 				type:'POST',
 				showLoading:false,
+				data:args,
 				success:function(data){
 					var result = showDialog(data);
 					if(result){
