@@ -129,7 +129,7 @@ define(function(require, exports) {
     TurnProfit.viewTouristGroup = function(id){
         var $path = TurnProfit.clickFlag == 2?'profitTransfer':'touristGroup';
         var $method = TurnProfit.clickFlag == 2?'findIncome':'viewTransferTouristGroupDetails';
-        var $title = TurnProfit.clickFlag == 2?'团款应收明細':'查看小组';
+        var $title = TurnProfit.clickFlag == 2?'团款应收明细':'查看小组';
 		$.ajax({
 			url:TurnProfit.url($path,$method),
 			type:"POST",
