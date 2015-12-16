@@ -23,7 +23,7 @@
             </div>
         </form>
         <form class="form-horizontal" role="form" onsubmit="return false">
-            <div class="form-group " style="padding-bottom: 0">
+            <div class="form-group T-count" style="padding-bottom: 0">
                 <label>人数合计：{{sumPerson}}</label>
                 <label style="margin-left: 10px">外转金额合计：{{sumNeedPayMoney}}</label>
                 <label style="margin-left: 10px">已付金额合计：{{sumPayedMoney}}</label>
@@ -96,8 +96,10 @@
                 <td>{{rs.punishMoney}}</td>
                 <td>{{rs.settlementMoney}}</td>
                 <td>{{rs.unPayedMoney}}</td>
-                <td><input name="payMoney" class="money" type="text" value="{{rs.payMoney}}" maxlength="9"></td>
-                <td class="col-sm-1" ><input name="payRemark" type="text" value="{{rs.payRemark}}" maxlength="1000"></td>
+                <td><input name="payMoney" class="money" type="text" value="{{rs.payMoney}}" maxlength="9"
+                 data-le="{{rs.unPayedMoney}}" {{if isAutoPay != 2 && rs.unPayedMoney <= 0}} disabled {{/if}}></td>
+                <td class="col-sm-1" ><input name="payRemark" type="text" value="{{rs.payRemark}}" maxlength="1000"
+                {{if isAutoPay != 2 && rs.unPayedMoney <= 0}} disabled {{/if}}></td>
                 <td>{{if rs.checkTime == null || rs.checkTime == ""}}-{{else}}{{rs.checkTime | dateFormat:'yyyy-MM-dd hh:mm:ss'}}{{/if}}</td>
                 <td>{{if rs.checkUserName == null || rs.checkUserName == ""}}-{{else}}{{rs.checkUserName}}{{/if}}</td>
                 <td>

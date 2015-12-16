@@ -1,6 +1,6 @@
 define(function(require,exports) {
 	var menuKey = "financial_innerTransfer_out",
-		rule = require("./innerTransferOutRule"),
+		/*rule = require("./innerTransferOutRule"),*/
 		listTemplate = require("./view/list"),
 		checkTemplate = require("./view/innerTransferOutChecking"),
 		settlementTemplate = require("./view/InnerTransferClearing"),
@@ -198,7 +198,8 @@ define(function(require,exports) {
 						data.list[i].touristGroupMemberList = JSON.parse(dataList[i].touristGroupMemberList);
 					};
 					if(typeFlag == 2){
-						data.list.innerTransferFeeList = FinancialService.getTempDate(data.list,InnerTransferOut.saveJson)
+						data.list.innerTransferFeeList = FinancialService.getTempDate(data.list,InnerTransferOut.saveJson);
+						data.showBtnFlag = InnerTransferOut.showBtnFlag;
 						html = clearTableTemplate(data);
 					}else{
 						html = checkTableTemplate(data);
@@ -208,7 +209,6 @@ define(function(require,exports) {
 					$obj.find('.'+$list).html(html);
 					//设置总条数
 					$obj.find('.T-recordSize').text(data.recordSize);
-					validator = rule.check($obj.find('.T-checkList')); 
 					if(typeFlag != 2){
 						//表单验证
 						var validator = new FinRule(0);
@@ -219,10 +219,10 @@ define(function(require,exports) {
                 		var rightCode = $obj.find(".T-checkList").data("right");
                 		checkDisabled(fiList,checkTr,rightCode);
 					}else{
-						    var autoValidator = new FinRule(2),
-						    	settlermentValidator = new FinRule(1);
-						    InnerTransferOut.$settlermentValidator = settlermentValidator.check($obj);
-            				InnerTransferOut.autoValidatorCheck = autoValidator.check($obj.find('.T-count'));
+					    var autoValidator = new FinRule(2),
+					    	settlermentValidator = new FinRule(1);
+					    InnerTransferOut.$settlermentValidator = settlermentValidator.check($obj);
+        				InnerTransferOut.autoValidatorCheck = autoValidator.check($obj.find('.T-count'));
 					}
 
 					//绑定事件
@@ -235,7 +235,7 @@ define(function(require,exports) {
 					    jump: function(obj,first) {
 					    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
 					    		if(typeFlag == 2){
-					    			var tempJson = FinancialService.clearSaveJson($obj,InnerTransferOut.saveJson,rule);
+					    			var tempJson = FinancialService.clearSaveJson($obj,InnerTransferOut.saveJson,new FinRule(1));
 	                                InnerTransferOut.saveJson = tempJson;
 	                                var sumPayMoney = parseFloat($obj.find('input[name=sumPayMoney]').val()),
 	                                    sumPayType = parseFloat($obj.find('select[name=sumPayType]').val()),
@@ -600,7 +600,6 @@ define(function(require,exports) {
 						var $settleId = $("#tab-"+settleId+"-content");
 						InnerTransferOut.$settlementTab = $settleId;
 						InnerTransferOut.$settlementSearchArea = $settleId.find(".T-search");
-						///InnerTransferOut.$checkValidator = rule.check($checkId);
 						//获取线路数据
 						var lineProductNameObj = InnerTransferOut.$settlementSearchArea.find('input[name=lineProductName]');
 						InnerTransferOut.getCheckLineproduct(lineProductNameObj,$lineProductData);

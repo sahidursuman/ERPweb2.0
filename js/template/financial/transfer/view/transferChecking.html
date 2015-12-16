@@ -73,7 +73,7 @@
     	                {{/each}}  
                     </td>
                     <td><a class="T-option T-payedDetail" data-money="{{rs.payedMoney}}">{{"社付："}}{{rs.payedMoney}}</a></td> 
-                    <td><input type="text" maxlength="9" name="punishMoney" value="{{rs.punishMoney}}" style="text-align:center"></td>
+                    <td><input type="text" maxlength="9" name="settlementMoney" value="{{rs.punishMoney}}" style="text-align:center"></td>
                     <td name="settlementMoney">{{rs.settlementMoney}}</td>
                     <td name="unPayedMoney">{{rs.unPayedMoney}}</td>
     	            <td><input type="text" maxlength="1000"  name="checkRemark" value="{{rs.checkRemark}}" style="text-align:center"></td>
@@ -82,9 +82,10 @@
     				<td>
     					<label class="pos-rel">
     						<input type="checkbox" class="ace T-checkbox" {{if rs.isConfirmAccount == 1}}checked="checked"{{/if}} />
-    						<span class="lbl"></span>
+    						<span class="lbl">对账</span>
     					</label>
-                        {{if rs.isConfirmAccount == 1}}<a class="T-option T-needPayDetail">查看</a>{{/if}}
+                        <label>|</label>
+                        <a class="T-option T-needPayDetail">查看</a>
     				</td>
                 </tr>
                 <tr class="hide">
