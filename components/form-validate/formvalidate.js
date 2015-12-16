@@ -93,7 +93,7 @@
 					}
 					
 					function dataTask() {						
-						var res = that.task(data, setting.rules);
+						var res = that.task(data, setting.rules, $that);
 
 						if (res !== true)  {
 							that.setMessage($that, res);
@@ -149,11 +149,11 @@
 		}
 	}
 
-	Validate.prototype.task = function(data, rules) {
+	Validate.prototype.task = function(data, rules, $elem) {
 		var len = rules.length;
 
 		if (len) {
-			for (var i = 0, canNull, res; i < len; i ++)  {
+			for (var i = 0, canNull, res, cmpVal; i < len; i ++)  {
 				res = false;
 				canNull = true;  //暂无意义
 
@@ -212,6 +212,51 @@
 						break;
 					case 'positive-float':	// 正浮点型
 						if (!!data && (isNaN( data ) || data <= 0)) {
+							res = rules[i].errMsg;
+						}
+						break;
+
+					case 'eq': 			// 等于
+						cmpVal = $elem.data('eq');
+
+						if (!!data && data !== cmpVal) {
+							res = rules[i].errMsg;
+						}
+						break;
+					case 'ne': 			// 不等于
+						cmpVal = $elem.data('ne');
+
+						if (!!data && data === cmpVal) {
+							res = rules[i].errMsg;
+						}
+						break;
+					case 'gt': 			// 大于（仅数字）
+						cmpVal = $elem.data('gt');
+
+						if (!!data && (isNaN(cmpVal) || isNaN(data) || data <= cmpVal)) {
+							res = rules[i].errMsg;
+						}
+						break;
+
+					case 'ge': 			// 大于等于（仅数字）
+						cmpVal = $elem.data('ge');
+
+						if (!!data && (isNaN(cmpVal) || isNaN(data) || data < cmpVal)) {
+							res = rules[i].errMsg;
+						}
+						break;
+					case 'lt': 			// 小于（仅数字）
+						cmpVal = $elem.data('lt');
+
+						if (!!data && (isNaN(cmpVal) || isNaN(data) || data >= cmpVal)) {
+							res = rules[i].errMsg;
+						}
+						break;
+
+					case 'le': 			// 小于等于（仅数字）
+						cmpVal = $elem.data('le');
+
+						if (!!data && (isNaN(cmpVal) || isNaN(data) || data > cmpVal)) {
 							res = rules[i].errMsg;
 						}
 						break;
@@ -312,7 +357,7 @@
 					data = tmp.$valObj.eq(j).val();
 				}
 				
-				if ($jTmp.is(':visible') && this.task(data, tmp.rules) !== true) {
+				if ($jTmp.is(':visible') && this.task(data, tmp.rules, $jTmp) !== true) {
 					/**
 					 * visible,用于排除被删除或者被隐藏的元素
 					 */
