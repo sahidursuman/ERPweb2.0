@@ -280,6 +280,7 @@ define(function(require, exports) {
 		    	//精度控制--非法数字退格
 			    var $price = $tbody.find('.T-calc');
 			        Tools.inputCtrolFloat($price);
+			    selfpay.numberRate($tbody);
 		    	//初始化地区
 		    	KingServices.provinceCity($container);
 		    	//添加项目列表
@@ -641,6 +642,7 @@ define(function(require, exports) {
 				// 当人数返佣改变时
 				var customerVal = $tr.find('.T-customerRebateMoney').eq(0).val(),
 					marketVal = $tr.find('.T-marketPrice').eq(index).val();
+					contractVal = $tr.find('.T-contractPrice').eq(index).val();
 					marketVal =parseFloat(marketVal);
     				customerVal =parseFloat(customerVal);
     				contractVal =parseFloat(contractVal);
@@ -650,15 +652,15 @@ define(function(require, exports) {
     				if(isNaN(contractVal)){
     					contractVal = 0;
     				}
-					if(customerVal<=marketVal && contractVal< marketVal ) {
+					if(customerVal<=marketVal && customerVal!=null && contractVal< marketVal && marketVal!=null && !isNaN(marketVal)) {
 						var innerPrice = parseFloat((marketVal-customerVal).toFixed(2));
 							//内部价格
 							$tr.find('.T-contractPrice').eq(index).val(innerPrice);
 						
-					}else if(customerVal > marketVal){
-						$tr.find('.T-customerRebateMoney').eq(index).focus();
-						showMessageDialog($( "#confirm-dialog-message" ),"人数返佣不能大于市场价格");
-						
+					}else if (customerVal!=null && contractVal!=null && !isNaN(contractVal)) {
+						var marketVal = parseFloat((contractVal+customerVal).toFixed(2));
+							//内部价格
+							$tr.find('.T-marketPrice').eq(index).val(marketVal);
 					};
 			} else if ($that.hasClass('T-contractPrice')) {
 				// 内部价格改变时
