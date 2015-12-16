@@ -973,6 +973,31 @@ padding-left:0;width: 360px;left: -35px;
     padding-left: 30px !important;
     padding-right: 30px !important;
 }
+.viewQuoteProduct{
+    height: 140px;border: 1px solid #ddd;width: 80px;
+    text-align: center;background-color:#F3F3F3;
+    font-family: '微软雅黑';font-size: 16px;color:#707070;margin-top: -6px;
+}
+/*查看报价*/
+.addQuoteRemerk{
+    margin-left: -93px;
+}
+.viewQuoteDiv{
+    height: 130px;width:200px;margin-left: 140px;
+    border-top: 4px solid #ddd;border-bottom: 1px solid #ddd;
+    border-left: 2px solid #ddd;border-right: 2px solid #ddd;
+}
+
+.viewQuoteFdiv{
+    height: 130px;width:190px;border-top: 4px solid #ddd;
+    border-bottom: 1px solid #ddd;border-left: 2px solid #ddd;
+    border-right: 2px solid #ddd;margin-left: 70px;
+}
+.addQuoteDiv{
+  height: 130px;width:200px;margin-left: 140px;
+    border-top: 4px solid #ddd;border-bottom: 1px solid #ddd;
+    border-left: 2px solid #ddd;border-right: 2px solid #ddd;  
+}
 /*分享*/
 .shareQuoteS{
     width: 1000px;
@@ -1141,6 +1166,16 @@ p#back-top a span{
 } 
 .line-separatedS{
  height: 15px;width: 92%;border-bottom:  1px solid #428bca;
+}
+.viewQuoteDiv{
+    height: 130px;width:200px;margin-left: 45px;
+    border-top: 4px solid #ddd;border-bottom: 1px solid #ddd;
+    border-left: 2px solid #ddd;border-right: 2px solid #ddd;
+}
+.addQuoteDiv{
+  height: 130px;width:200px;margin-left: 45px;
+    border-top: 4px solid #ddd;border-bottom: 1px solid #ddd;
+    border-left: 2px solid #ddd;border-right: 2px solid #ddd;  
 }
 }
 
@@ -1369,6 +1404,34 @@ width: 840px;
 /*报价媒体css样式*/
 .busQuoteWidth{
     width: 140px;
+}
+.viewQuoteDiv{
+    height: 130px;width:200px;margin-left: 45px;
+    border-top: 4px solid #ddd;border-bottom: 1px solid #ddd;
+    border-left: 2px solid #ddd;border-right: 2px solid #ddd;
+}
+.viewQuoteFdiv{
+    height: 130px;width:190px;border-top: 4px solid #ddd;
+    border-bottom: 1px solid #ddd;border-left: 2px solid #ddd;
+    border-right: 2px solid #ddd;margin-left: 40px;
+}
+.addQuoteDiv{
+  height: 130px;width:200px;margin-left: 30px;
+    border-top: 4px solid #ddd;border-bottom: 1px solid #ddd;
+    border-left: 2px solid #ddd;border-right: 2px solid #ddd;  
+}
+.viewQuoteInformation{
+    width: 270px !important;
+}
+.addQuoteInformation{
+    width: 270px !important;
+    padding-top: 10px;
+}
+.addQuoteRemerk{
+    margin-left: -50px;
+}
+.quoteInprodactName{
+    width: 95px !important;
 }
 }
 

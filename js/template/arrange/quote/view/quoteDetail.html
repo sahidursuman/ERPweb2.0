@@ -93,7 +93,8 @@
                     {{if viewQuoteDaysList.hotelArrange != null}} {{each viewQuoteDaysList.hotelArrange as hotelList index}} {{if index == 0}}
                     <tr>
                         <td rowspan="{{viewQuoteDaysList.hotelArrange.length}}">住宿</td>
-                        <td>{{hotelList.hotel.name}} <span style="margin-left: 15px;">{{hotelList.hotelRoom.type}}</span></td>
+                        <td><span>三星</span><span>{{hotelList.hotel.name}}</span> <span style="margin-left: 15px;">{{hotelList.hotelRoom.type}}</span><span style="margin-left: 15px;display: inline-block;width: 400px;">
+                        含午</span> <span style="margin-left: 15px;">价格很低价格后见到过个电饭锅的加空格年的几个客户把你们国考订房后面句年的几个</span></td>
                         <td>￥{{hotelList.price}}</td>
                     </tr>
                     {{/if}} {{/each}} {{each viewQuoteDaysList.hotelArrange as hotelList index}} {{if index > 0}}
@@ -106,7 +107,7 @@
                     {{if viewQuoteDaysList.scenicArrange != null}} {{each viewQuoteDaysList.scenicArrange as scenicList index}} {{if index == 0}}
                     <tr>
                         <td rowspan="{{viewQuoteDaysList.scenicArrange.length}}">景点</td>
-                        <td>{{scenicList.scenic.name}}</td>
+                        <td>{{scenicList.scenic.name}} <span style="margin-left: 15px;">6小时</span> <span style="margin-left: 15px;">{{scenicList.remark}}</span></td>
                         <td>￥{{scenicList.price}}</td>
                     </tr>
                     {{/if}} {{/each}} {{each viewQuoteDaysList.scenicArrange as scenicList index}} {{if index > 0}}
