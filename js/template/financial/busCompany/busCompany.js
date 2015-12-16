@@ -364,7 +364,7 @@ define(function(require, exports) {
             busCompany.clearTempSumDate = false;
             busCompany.clearTempData = false;
             busCompany.$clearTab.data('isEdited',false);
-            busCompany.busCompanyClear(0,0,id,name);
+            busCompany.busCompanyClear(isAutoPay,0,id,name);
         });
 
         //关闭页面事件
