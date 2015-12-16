@@ -153,11 +153,27 @@ define(function(require,exports){
 	//报表事件
 	touristGroup.listEvents = function($listObj){
 		$listObj.find(".T-touristGroupList").on('click','.T-action',function(){
-			var $that = $(this),id = $that.closest('tr').attr('id');
+			var $that = $(this),$tr=$that.closest('tr'),id=$tr.attr('id'),status = $tr.attr("data-status");
 			if($that.hasClass('T-edit')){
-				//修改小组
-				touristGroup.updateTouristGroup(id,"");
-				touristGroup.typeFlag = 2;
+
+				if (!!status && status==3) {//已转客
+					   var touristGroupId = id,
+						   typeOut = "out";
+							//跳转游客小组新增页面
+						touristGroup.addTouristGroup(touristGroupId,typeOut);
+
+				} else if(!!status && status==6){//已内转
+					var typeOut = 'inner',touristGroupId = id;
+					touristGroup.addTouristGroup(touristGroupId,typeOut);
+
+				}else{
+				    //修改小组
+					touristGroup.updateTouristGroup(id,"");
+					touristGroup.typeFlag = 2;
+				};
+
+			
+
 			};
 			if($that.hasClass('T-view')){
 				//查看小组
