@@ -141,6 +141,7 @@ define(function(require, exports) {
                 var result = showDialog(data);
                 if(result){
                     var frList = data.financialRestaurantList;
+                    data.financialRestaurantList = FinancialService.isGuidePay(frList);
                     data.restaurantName = restaurantName;
                     var html = restaurantChecking(data);
                     
@@ -270,6 +271,7 @@ define(function(require, exports) {
                     }
                     var resultList = data.financialRestaurantList;
                     data.financialRestaurantList = FinancialService.getTempDate(resultList,restaurant.clearTempData);
+                    data.financialRestaurantList = FinancialService.isGuidePay(resultList);
 
                     data.isAutoPay = isAutoPay;
                     var html = restaurantClearing(data);
