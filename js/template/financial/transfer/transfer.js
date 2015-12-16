@@ -1,5 +1,5 @@
 define(function(require, exports) {
-	var rule = require("./rule");
+	
     var menuKey = "financial_transfer",
 	    listTemplate = require("./view/list"),
 	    transferChecking = require("./view/transferChecking"),
@@ -150,8 +150,7 @@ define(function(require, exports) {
                     var validator;
                     // 初始化页面
                     if (Tools.addTab(menuKey + "-checking", "外转对账", html)) {
-                        Transfer.initCheck(page,partnerAgencyId,partnerAgencyName); 
-                        validator = rule.check(Transfer.$checkTab.find(".T-checkList"));                     
+                        Transfer.initCheck(page,partnerAgencyId,partnerAgencyName);                      
                     }
 
                     Transfer.getOperateList(Transfer.$checkTab,data.operateList);
@@ -185,6 +184,17 @@ define(function(require, exports) {
         Tools.setDatePicker(Transfer.$checkTab.find(".date-picker"),true);
         Transfer.updateUnpayMoney();
 
+        //表单验证
+        var validator = new FinRule(0);
+            /*settleValidator = new FinRule(4);
+            autoValidator = new FinRule(2);*/
+        var validatorCheck = validator.check(Transfer.$checkTab);
+            /*autoValidatorCheck,
+            settleCheck = settleValidator.check($obj);
+            if(typeFlag == 2){
+                autoValidatorCheck = autoValidator.check($obj.find('.T-count'));
+            }*/
+
         //搜索按钮事件
         Transfer.$checkSearchArea.find('.T-search').on('click', function(event) {
             event.preventDefault();
@@ -205,6 +215,7 @@ define(function(require, exports) {
         });
         //确认对账按钮事件
         Transfer.$checkTab.find(".T-saveCheck").click(function(){
+            if(!validatorCheck.form()){return;}
             Transfer.saveChecking(id,name,page);
         });
     };
@@ -279,7 +290,7 @@ define(function(require, exports) {
                     // 初始化页面
                     if (Tools.addTab(menuKey + "-clearing", "外转付款", html)) {
                         Transfer.initClear(page,partnerAgencyId,partnerAgencyName); 
-                        validator = rule.check(Transfer.$clearTab.find('.T-clearList'));                       
+                                       
                     }
 
                     Transfer.getOperateList(Transfer.$clearTab,data.operateList);
@@ -304,7 +315,7 @@ define(function(require, exports) {
                         curr: (page + 1),
                         jump: function(obj, first) {
                             if (!first) { 
-                                var tempJson = FinancialService.clearSaveJson(Transfer.$clearTab,Transfer.clearTempData,rule);
+                                var tempJson = FinancialService.clearSaveJson(Transfer.$clearTab,Transfer.clearTempData,new FinRule(1));
                                 Transfer.clearTempData = tempJson;
                                 var sumPayMoney = parseFloat(Transfer.$clearTab.find('input[name=sumPayMoney]').val()),
                                     sumPayType = parseFloat(Transfer.$clearTab.find('select[name=sumPayType]').val()),
@@ -331,6 +342,13 @@ define(function(require, exports) {
         Transfer.init_event(page,id,name,Transfer.$clearTab,"clear");
         Tools.setDatePicker(Transfer.$clearTab.find(".date-picker"),true);
 
+        //表单验证
+        var settleValidator = new FinRule(1),
+            autoValidator = new FinRule(2);
+        var validatorCheck = settleValidator.check(Transfer.$clearTab),
+        autoValidatorCheck = autoValidator.check(Transfer.$clearTab.find('.T-count'));
+            
+
         //搜索事件
         Transfer.$clearTab.find(".T-search").click(function(){
             Transfer.clearTempSumDate = false;
@@ -346,6 +364,7 @@ define(function(require, exports) {
 
         //保存付款事件
         Transfer.$clearTab.find(".T-saveClear").click(function(){
+            if(!validatorCheck.form()){return;}
             Transfer.saveClear(id,name,page);
         });
 
@@ -354,6 +373,7 @@ define(function(require, exports) {
 
         //自动下账
         Transfer.$clearTab.find(".T-clear-auto").off().on("click",function(){
+            if(!autoValidatorCheck.form()){return;}
             var isAutoPay = FinancialService.autoPayJson(id,Transfer.$clearTab,rule);
             if(!isAutoPay){return false;}
             Transfer.transferClear(1,0,id,name);
@@ -368,7 +388,7 @@ define(function(require, exports) {
             Transfer.transferClear(0,0,id,name);
         });
 
-        FinancialService.updateSumPayMoney(Transfer.$clearTab,rule);
+        FinancialService.updateSumPayMoney(Transfer.$clearTab,new FinRule(1));
     };
 
     //已付金额明细
@@ -426,8 +446,6 @@ define(function(require, exports) {
     //对账数据保存
     Transfer.saveChecking = function(partnerAgencyId,partnerAgencyName,page,tab_id, title, html){
         var argumentsLen = arguments.length;
-        var validator = rule.check(Transfer.$checkTab);
-	    if(!validator.form()){return false;}
 
 	    if(!Transfer.$checkTab.data('isEdited')){
 	        showMessageDialog($("#confirm-dialog-message"),"您未进行任何操作！");
@@ -461,7 +479,7 @@ define(function(require, exports) {
 	            if(($this.data("confirm") != isConfirmAccount) || ($this.data("confirm") == 1)){
 	                var checkRecord = {
 	                    id : $this.data("id"),
-	                    punishMoney : getValue($this,"punishMoney"),
+	                    punishMoney : getValue($this,"settlementMoney"),
 	                    settlementMoney : $this.find("td[name=settlementMoney]").text(),
 	                    unPayedMoney : $this.find("td[name=unPayedMoney]").text(),
 	                    checkRemark : $this.find("[name=checkRemark]").val(),
@@ -548,7 +566,6 @@ define(function(require, exports) {
 
     Transfer.init_event = function(page,id,name,$tab,option) {
         if (!!$tab && $tab.length === 1) {
-            var validator = rule.check($tab);
 
             // 监听修改
             $tab.find(".T-" + option + "List").off('change').on('change',"input",function(event) {
@@ -680,10 +697,9 @@ define(function(require, exports) {
             }
         });
     };
-
     //对账-自动计算未付金额
 	Transfer.updateUnpayMoney = function(){
-	    Transfer.$checkTab.find('input[name="punishMoney"]').on('focusin',function() {
+	    Transfer.$checkTab.find('input[name="settlementMoney"]').on('focusin',function() {
 	        $(this).data("oldVal",$(this).val());
 	    })
 	    .on('change',function() {
