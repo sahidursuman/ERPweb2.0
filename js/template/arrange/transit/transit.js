@@ -73,9 +73,9 @@ define(function(require, exports) {
 		var choosePartnerAgency = transit.$searchArea.find('[name=fromPartnerAgencyName]'),
 			chooseLineProduct = transit.$searchArea.find('[name=lineProductName]'),
 			chooseArrangeUser = transit.$searchArea.find('[name=arrangeUserName]');
-		transit.autocompleteSearch(choosePartnerAgency,autocompleteData.partnerAgencyList,'travelAgencyName','fromPartnerAgencyId');
-		transit.autocompleteSearch(chooseLineProduct,autocompleteData.lineProductList,'name','lineProductId');
-		transit.autocompleteSearch(chooseArrangeUser,autocompleteData.arrangeUserList,'realName','arrangeUserId');
+			transit.autocompleteSearch(choosePartnerAgency,autocompleteData.partnerAgencyList,'travelAgencyName','fromPartnerAgencyId');
+			transit.autocompleteSearch(chooseLineProduct,autocompleteData.lineProductList,'name','lineProductId');
+			transit.autocompleteSearch(chooseArrangeUser,autocompleteData.arrangeUserList,'realName','arrangeUserId');
 	};
 	/**
 	 * 查询中转安排列表
@@ -763,12 +763,28 @@ define(function(require, exports) {
 				if(ui.item == null){
 					var $this = $(this),parents = $(this).closest('tr');
 					$this.val("");
+					// parents.find("input[name=busLicenseNumberId]").val("");
+					// parents.find("input[name=driverMobileNumber]").val("");
+				
 					parents.find("input[name=busLicenseNumberId]").val("");
+					parents.find("input[name=busCompanyName]").val("");
+					parents.find("input[name=busCompanyId]").val("");
+					parents.find("input[name=driverName]").val("");
+					parents.find("input[name=driverId]").val("");
 					parents.find("input[name=driverMobileNumber]").val("");
+
 				}
+
 			},
 			select :function(event, ui){
 				var $this = $(this),parents = $(this).closest('tr');
+					// parents.find("input[name=driverMobileNumber]").val("");
+					// parents.find("input[name=busLicenseNumberId]").val(ui.item.id).trigger('change');
+
+					parents.find("input[name=busCompanyName]").val(ui.item.busCompanyName);
+					parents.find("input[name=busCompanyId]").val(ui.item.busCompanyId);
+					parents.find("input[name=driverName]").val("");
+					parents.find("input[name=driverId]").val("");
 					parents.find("input[name=driverMobileNumber]").val("");
 					parents.find("input[name=busLicenseNumberId]").val(ui.item.id).trigger('change');
 			}
