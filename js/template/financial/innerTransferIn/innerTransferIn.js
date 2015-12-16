@@ -1,6 +1,5 @@
 define(function(require,exports) {
 	var menuKey = "financial_innerTransfer_in",
-		//rule = require("./innerTransferInRule"),
 		listTemplate = require("./view/list"),
 		checkTemplate = require("./view/innerTransferInChecking"),
 		settlementTemplate = require("./view/InnerTransferInClearing"),
