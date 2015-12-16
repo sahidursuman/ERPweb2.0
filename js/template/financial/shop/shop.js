@@ -211,10 +211,10 @@ define(function(require, exports){
 				var $theTab = null;
 				if(Tools.addTab(key, title, template(data))){
 					if(type){
-						$theTab = FinShop.$settlementTab = $('#tab-' + key + '-content');
+						$theTab = FinShop.$settlementTab = $tab || $('#tab-' + key + '-content');
 						FinShop.sett_init_event(FinShop.$settlementTab, type);
 					}else{
-						$theTab = FinShop.$checkingTab = $('#tab-' + key + '-content');
+						$theTab = FinShop.$checkingTab = $tab || $('#tab-' + key + '-content');
 						FinShop.check_init_event(FinShop.$checkingTab, type);
 					}
 				}
@@ -226,7 +226,7 @@ define(function(require, exports){
 				    curr: (data.searchParam.pageNo + 1),
 				    jump: function(obj, first) {
 				    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-				    		FinShop.initOperationList({page : obj.curr -1}, type, $tab);
+				    		FinShop.initOperationList({page : obj.curr -1}, type, $theTab);
 				    	}
 				    }
 				});
@@ -591,16 +591,16 @@ define(function(require, exports){
 						FinShop.$settlementTab.find('.T-checkList').html(html);
 
 						// 设置记录条数及页面
-                        $tab.find('.T-sumItem').text('共计' + data.recordSize + '条记录');
+                        $tab.find('.T-sumItem').text('共计' + data.searchParam.recordSize + '条记录');
                         $tab.find('.T-btn-save').data('pageNo', args.pageNo);
 						// 绑定翻页组件
 						laypage({
 						    cont: $tab.find('.T-pagenation'), 
-						    pages: data.totalPage, //总页数
-						    curr: (data.pageNo + 1),
+						    pages: data.searchParam.totalPage, //总页数
+						    curr: (data.searchParam.pageNo + 1),
 						    jump: function(obj, first) {
 						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-						    		FinShop.getOperationList(obj.curr -1);
+						    		FinShop.getOperationList(obj.curr -1, $tab);
 						    	}
 						    }
 						});	
