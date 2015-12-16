@@ -292,7 +292,6 @@ define(function(require, exports) {
                         Transfer.initClear(page,partnerAgencyId,partnerAgencyName); 
                                        
                     }
-
                     Transfer.getOperateList(Transfer.$clearTab,data.operateList);
 
                     if(isAutoPay == 0){
@@ -374,7 +373,7 @@ define(function(require, exports) {
         //自动下账
         Transfer.$clearTab.find(".T-clear-auto").off().on("click",function(){
             if(!autoValidatorCheck.form()){return;}
-            var isAutoPay = FinancialService.autoPayJson(id,Transfer.$clearTab,rule);
+            var isAutoPay = FinancialService.autoPayJson(id,Transfer.$clearTab,new FinRule(1));
             if(!isAutoPay){return false;}
             Transfer.transferClear(1,0,id,name);
         });
@@ -467,8 +466,6 @@ define(function(require, exports) {
 	    $tr.each(function(){
 	        var $this = $(this);
 	        if($this.data("change")){//遍历修改行
-	            var validator = rule.check($this);
-	            if(!validator.form()){ return false; }
 	            var isConfirmAccount = "";
 	            if ($this.find(".T-checkbox").is(':checked')) {
 	                isConfirmAccount = 1;
@@ -519,12 +516,12 @@ define(function(require, exports) {
     };
 
     Transfer.saveClear = function(id,name,page,tab_id, title, html){
-        if(!FinancialService.isClearSave(Transfer.$clearTab,rule)){
+        if(!FinancialService.isClearSave(Transfer.$clearTab,new FinRule(1))){
             return false;
         }
 
         var argumentsLen = arguments.length,
-            clearSaveJson = FinancialService.clearSaveJson(Transfer.$clearTab,Transfer.clearTempData,rule);
+            clearSaveJson = FinancialService.clearSaveJson(Transfer.$clearTab,Transfer.clearTempData,new FinRule(1));
         var searchParam = {
             partnerAgencyId : id,
             sumCurrentPayMoney : Transfer.$clearTab.find('input[name=sumPayMoney]').val(),
@@ -704,9 +701,7 @@ define(function(require, exports) {
 	    })
 	    .on('change',function() {
 	        var $this = $(this),
-	            $tr = $this.closest('tr'),
-	            validator = rule.check($tr);
-	        if(!validator.form()){ return false;}
+	            $tr = $this.closest('tr');
 	        var punishMoney = ($this.val() || 0) * 1;
 
 	        //计算结算金额修改前后差值
