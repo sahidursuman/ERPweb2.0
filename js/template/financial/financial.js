@@ -289,6 +289,19 @@ FinancialService.autoPayConfirm = function(startDate,endDate,fn){
     });
 };
 
+//设置数据来源标识（中转、代订）
+FinancialService.isGuidePay = function(dataList){
+    for(var i = 0; i < dataList.length; i++){
+        var tripNumber = trim(dataList[i].tripNumber),
+            strLen = tripNumber.length;
+            tripType = tripNumber.substring(strLen-2,strLen);
+        if(tripType == "ZZ" ||　tripType == "zz" || tripType == "DD" || tripType == "dd"){
+            dataList[i].isGuidePay = 1;
+        }
+    }
+    return dataList;
+};
+
 //判断列表是否已全选
 function isAllChecked(checkboxList){
     var isAll = true;
