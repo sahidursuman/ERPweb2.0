@@ -74,15 +74,13 @@
                 <td><input type="text" maxlength="1000" name="checkRemark" style="text-align:center" value="{{rs.checkRemark}}" /></td>
 				<td>{{if rs.checkTime == null || rs.checkTime == ""}}-{{else}}{{rs.checkTime | dateFormat:'yyyy-MM-dd hh:mm:ss'}}{{/if}}</td>
                 <td>{{if rs.checkUserName == null || rs.checkUserName == ""}}-{{else}}{{rs.checkUserName}}{{/if}}</td>
-				<td style="text-align:left;padding-left:10px;">
+				<td style="padding-left:10px;">
                     <label class="pos-rel">
 				   	    <input type="checkbox" class="ace T-checkbox" {{if rs.isConfirmAccount == 1}}checked="checked"{{/if}} />
 				   		<span class="lbl"></span>对账
 			        </label>
-                    {{if rs.isConfirmAccount == 1}}
-                        <a class="cursor"> |</a>
-                        <a class="cursor T-option T-needPayDetail">查看</a>
-                    {{/if}}
+                    <a class="cursor"> |</a>
+                    <a class="cursor T-option T-needPayDetail">查看</a>
 			    </td>
 			</tr>
 			{{/each}}
