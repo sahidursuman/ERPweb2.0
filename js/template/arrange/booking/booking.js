@@ -121,10 +121,9 @@ define(function(require, exports) {
 	/**
 	 * 绑定页内事件
 	 */
-	BookingArrange.init_event = function(){
-		
+	BookingArrange.init_event = function(){		
 		//时间时间
-		BookingArrange.datepicker(BookingArrange.$searchArea);
+		Tools.setDatePicker(BookingArrange.$searchArea.find('.datepicker'), true);
 		
 		//搜索按钮事件
 		BookingArrange.$searchArea.find('.T-booking-search').on("click", function (event) {
@@ -196,19 +195,6 @@ define(function(require, exports) {
 			}else if($that.hasClass('T-cancel')){
 				BookingArrange.deleteBooking(id, $that);
 			}
-		});
-	};
-
-	/**
-	 * 绑定日期事件 包含  年月日
-	 * @param  {object}  $container  容器。只jquery对象;
-	 */
-	BookingArrange.datepicker = function($container){
-		$container.find(".datepicker").datepicker({
-			autoclose: true,
-			todayHighlight: true,
-			format: 'yyyy-mm-dd',
-			language: 'zh-CN'
 		});
 	};
 
@@ -353,7 +339,26 @@ define(function(require, exports) {
     		event.preventDefault();
 			BookingArrange.calculation($(this).parents('[class*="Booking"]'));
 		});
-		BookingArrange.datepicker($tab);
+		
+		$tab.find('.datepicker').each(function() {
+			var $datepicker = $(this);
+
+			if (!$datepicker.data('datepicker')) {
+				var $datepickerTr = $datepicker.closest('tr');
+
+				if ($datepickerTr.length) {
+					var $datepickers = $datepickerTr.find('.datepicker');
+
+					Tools.setDatePicker($datepickers, true).on('changeDate.diff.api', function(event) {
+						event.preventDefault();
+						$datepickerTr.find('input[name="days"]').val(Tools.getDateDiff($datepickers.eq(0).val(), $datepickers.eq(1).val()));
+					});
+				} else {
+					Tools.setDatePicker($datepicker);
+				}
+			}
+		});
+
 		BookingArrange.datetimepicker($tab); 
 
 		//酒店联动  

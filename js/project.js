@@ -1472,6 +1472,33 @@ Tools.setDatePicker = function($obj, isInputRange) {
 }
 
 /**
+ * 计算两个日期的差额
+ * @param  {string} startDate 日期字符串
+ * @param  {string} endDate   日期字符串
+ * @return {int}           返回两个日期之间的天数
+ *         					当天的话，返回0
+ *         					开始日期或者结束日期为空，则表示今天
+ */
+Tools.getDateDiff = function(startDate,endDate)  
+{
+	var days = 0;
+
+	if (!!startDate || !!endDate)   {
+		days = Math.floor(Math.abs(getTime(endDate) - getTime(startDate))/(1000*60*60*24));
+	}
+    
+    return days; 
+
+    function getTime(date) {
+    	if (!!date) {
+    		return new Date(Date.parse(date.replace(/-/g,   "/"))).getTime();
+    	} else {
+    		return (new Date()).getTime();
+    	}
+    }
+}
+
+/**
  * 获取记录描述信息
  * 主要是为了统一描述
  * @param  {int} size 记录条数
