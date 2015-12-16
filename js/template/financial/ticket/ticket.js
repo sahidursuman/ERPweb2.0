@@ -555,7 +555,7 @@ define(function(require, exports) {
             $.ajax({
                     url : KingServices.build_url('account/arrangeTicketFinancial', 'listTicketAccount'),
 					type : "POST",
-					data : {searchParam : JSON.stringify(args)}
+					data : {searchParam : JSON.stringify(def)}
                 })
                 .done(function(data) {
                     if (showDialog(data)) {
