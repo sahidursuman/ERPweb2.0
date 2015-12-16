@@ -141,6 +141,7 @@ define(function(require, exports) {
 		}).done(function(data){
 			if(showDialog(data)){
 				data.name = Ticket.checkingName;
+				data.financialTicketList = FinancialService.isGuidePay(data.financialTicketList);
 				Tools.addTab(checkMenuKey, "票务对账", ticketChecking(data));
 				Ticket.$checkingTab = $("#tab-" + checkMenuKey + "-content");
 				Ticket.check_event(Ticket.$checkingTab);
@@ -409,6 +410,7 @@ define(function(require, exports) {
 				data.source = Ticket.isBalanceSource;
 				Tools.addTab(clearMenuKey, "票务付款", ticketClearing(data));
 				Ticket.$clearingTab = $("#tab-" + clearMenuKey + "-content");
+				data.financialTicketList = FinancialService.isGuidePay(data.financialTicketList);
 				var html = payingTableTemplate(data);
 				Ticket.$clearingTab.find('.T-checkList').html(html);
 				Ticket.clear_init(Ticket.$clearingTab);
@@ -536,7 +538,7 @@ define(function(require, exports) {
 
     };
     /**
-     * 获取对账列表数据
+     * 获取付款列表数据
      * @param  {int} pageNo 列表页码
      * @return {[type]}        [description]
      */
@@ -553,12 +555,13 @@ define(function(require, exports) {
             $.ajax({
                     url : KingServices.build_url('account/arrangeTicketFinancial', 'listTicketAccount'),
 					type : "POST",
-					data : {searchParam : JSON.stringify(args)}
+					data : {searchParam : JSON.stringify(def)}
                 })
                 .done(function(data) {
                     if (showDialog(data)) {
                     	$tab.find('input[name="sumPayMoney"]').val(data.searchParam.sumCurrentPayMoney);
                     	Ticket.payingJson = data.autoPaymentJson;
+                    	data.financialTicketList = FinancialService.isGuidePay(data.financialTicketList);
                     	data.financialTicketList = FinancialService.getTempDate(data.financialTicketList, Ticket.payingJson);
                     	var html = payingTableTemplate(data);
 						Ticket.$clearingTab.find('.T-checkList').html(html);

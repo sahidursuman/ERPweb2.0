@@ -280,6 +280,7 @@ define(function(require, exports) {
 		    	//精度控制--非法数字退格
 			    var $price = $tbody.find('.T-calc');
 			        Tools.inputCtrolFloat($price);
+			    selfpay.numberRate($tbody);
 		    	//初始化地区
 		    	KingServices.provinceCity($container);
 		    	//添加项目列表
@@ -496,6 +497,28 @@ define(function(require, exports) {
 	 */
 	selfpay.saveSelfpay = function($container,type,fn){
 		if(!rule.check($container).form()){return;}
+		var $trList=$container.find('.T-selfpayList-Tbody').children('tr'),isTrue;
+		    $trList.each(function(index) {
+		    	var $that = $(this);
+		    	var customerVal = $that.find('.T-customerRebateMoney').eq(0).val(),
+		    	    contractVal = $that.find('.T-contractPrice').eq(index).val(),
+		    	    marketVal = $that.find('.T-marketPrice').eq(index).val(),
+		    	    guideVal = $that.find('.T-guideRate').eq(index).val(),
+		    	    travelVal = $that.find('.T-travelAgencyRate').eq(index).val();
+		    	customerVal =parseFloat(customerVal);
+		    	contractVal = parseFloat(contractVal);
+		    	marketVa= parseFloat(marketVal);
+		    	guideVal= parseFloat(guideVal);
+		    	travelVal=parseFloat(travelVal);
+		    	    
+		    	if (!!customerVal || !!contractVal || !!guideVal ||  !!travelVal ) {
+		    		if ( customerVal > marketVal || contractVal > marketVal ||  guideVal > 100 || travelVal > 100 ) {
+		    			isTrue = true;
+		    		};
+		    	};
+		    });
+		if (isTrue) { return;};
+
 		if(ruleData.validatorList != undefined){
 			if(!ruleData.validatorList.form()){return;}
 		}
@@ -605,10 +628,7 @@ define(function(require, exports) {
 					marketVal =parseFloat(marketVal);
     				customerVal =parseFloat(customerVal);
     				contractVal =parseFloat(contractVal);
-    				if(isNaN(customerVal)){
-    					customerVal = 0;
-    				}
-					if(marketVal!="" && marketVal > customerVal || marketVal == customerVal ) {
+					if(marketVal!="" && marketVal >= customerVal && !isNaN(customerVal) ) {
     					var innerPrice = parseFloat(marketVal-customerVal);
 							//内部价格
 							$tr.find('.T-contractPrice').eq(index).val(innerPrice);
@@ -622,6 +642,7 @@ define(function(require, exports) {
 				// 当人数返佣改变时
 				var customerVal = $tr.find('.T-customerRebateMoney').eq(0).val(),
 					marketVal = $tr.find('.T-marketPrice').eq(index).val();
+					contractVal = $tr.find('.T-contractPrice').eq(index).val();
 					marketVal =parseFloat(marketVal);
     				customerVal =parseFloat(customerVal);
     				contractVal =parseFloat(contractVal);
@@ -631,15 +652,15 @@ define(function(require, exports) {
     				if(isNaN(contractVal)){
     					contractVal = 0;
     				}
-					if(customerVal<marketVal && contractVal< marketVal ) {
-						var innerPrice = parseFloat(marketVal-customerVal);
+					if(customerVal<=marketVal && customerVal!=null && contractVal< marketVal && marketVal!=null && !isNaN(marketVal)) {
+						var innerPrice = parseFloat((marketVal-customerVal).toFixed(2));
 							//内部价格
 							$tr.find('.T-contractPrice').eq(index).val(innerPrice);
 						
-					}else if(customerVal > marketVal){
-						$tr.find('.T-customerRebateMoney').eq(index).focus();
-						showMessageDialog($( "#confirm-dialog-message" ),"人数返佣不能大于市场价格");
-						
+					}else if (customerVal!=null && contractVal!=null && !isNaN(contractVal)) {
+						var marketVal = parseFloat((contractVal+customerVal).toFixed(2));
+							//内部价格
+							$tr.find('.T-marketPrice').eq(index).val(marketVal);
 					};
 			} else if ($that.hasClass('T-contractPrice')) {
 				// 内部价格改变时
@@ -649,18 +670,19 @@ define(function(require, exports) {
 					contractVal = parseFloat(contractVal);
 					customerVal = parseFloat(customerVal);
 					marketVal = parseFloat(marketVal);
-				    if(contractVal>marketVal){
-				    	$tr.find(".T-contractPrice").eq(index).focus();
-						showMessageDialog($( "#confirm-dialog-message" ),"内部价格不能大于市场价格");
+				   if (!!contractVal && !!customerVal  ) {                                            
+                          totalVal =parseFloat((contractVal+customerVal).toFixed(2));         
+				   	     $tr.find('.T-marketPrice').eq(index).val(totalVal);
 				   };
 			} else if ($that.hasClass('T-guideRate')) {
 				// 当导游返佣改变时
 				 var guideVal = $tr.find('.T-guideRate').eq(index).val();
 					 guideVal = parseFloat(guideVal);
+
 				    if ( guideVal!=null && guideVal!="" && guideVal < 0 ) {
 				    	 $tr.find('.T-guideRate').eq(index).focus();
 				    	 showMessageDialog($( "#confirm-dialog-message" ),"导游返佣不能是负数");
-				    }else if(guideVal!=null && guideVal!="" && guideVal < 100){
+				    }else if(guideVal!=null && guideVal!="" && guideVal <= 100){
 				    	var traveVal = parseFloat(100-guideVal);
 				    	    $tr.find('.T-travelAgencyRate').eq(index).val(traveVal);
 				    }else if(guideVal!=null && guideVal!="" && guideVal > 100){
@@ -675,7 +697,7 @@ define(function(require, exports) {
 				    if (traveVal!=null && traveVal!="" && traveVal < 0 ) {
 				    	  $tr.find('.T-travelAgencyRate').eq(index).focus();
 				    	 showMessageDialog($( "#confirm-dialog-message" ),"旅行社返佣不能是负数");
-				    }else if(traveVal!=null && traveVal!="" && traveVal < 100){
+				    }else if(traveVal!=null && traveVal!="" && traveVal <= 100){
 				    	var traveVal = parseFloat(100-traveVal);
 				    	    $tr.find('.T-guideRate').eq(index).val(traveVal);
 				    }else if(traveVal!=null && traveVal!="" && traveVal > 100){
