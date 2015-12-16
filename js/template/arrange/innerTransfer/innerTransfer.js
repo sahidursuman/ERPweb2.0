@@ -514,7 +514,8 @@ define(function(require, exports) {
 			transNeedPayMoney :getValParam("transNeedPayMoney"),//	应付		需要计算
 			transPayedMoney	 : getValParam("transPayedMoney"), //已付		填写
 			transRemark : getValParam("transRemark"),
-			isCurrent : getValParam("isCurrent")
+			isCurrent : getValParam("isCurrent"),
+			payType : getValParam("payType")
 		}   
 
 		//获取新增费用项目

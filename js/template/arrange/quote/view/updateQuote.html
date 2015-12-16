@@ -7,36 +7,35 @@
 				</h5>
 			<div class="pull-right line-bluer line-separated"></div>
 			<div style="clear: both"></div>
-			<div class="widget-body">
-				<div class="widget-main">
-					<div class="form-group">
-						<label class="col-sm-1 control-label no-padding-right">线路产品名称:</label>
-						<div class="col-sm-3">
-							<label class="control-label T-lineProductName">{{quoteDetailJson.lineProduct.name}}</label>
-							<input type="hidden" value="{{quoteDetailJson.lineProduct.id}}" name="lineProductId">
+			<div class="widget-body" style="border: 1px solid #DDD;line-height:30px;width: 98%;margin: auto;padding-top: 6px;height:45px;">
+                <div class="widget-main">
+                    <div class="form-group">
+                        <label class="col-sm-1 control-label no-padding-right quoteInprodactName">线路产品名称:</label>
+                        <div class="col-sm-2">
+                            <label class="control-label T-lineProductName">{{quoteDetailJson.lineProduct.name}}</label>
+                            <input type="hidden" value="{{quoteDetailJson.lineProduct.id}}" name="lineProductId">
 							<input type="hidden" value="{{quoteDetailJson.id}}" name="quoteId">
-						</div>
-						<label class="col-sm-1 control-label no-padding-right">售卖标注:</label>
-						<div class="col-sm-3">
-							<label class="control-label T-lineProductStatus" data-entity-status="{{quoteDetailJson.lineProduct.status}}">{{if quoteDetailJson.lineProduct.status == 1}}售卖中{{else}}未售卖{{/if}}</label> 
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="col-sm-1 control-label no-padding-right">线路天数:</label>
-						<div class="col-sm-3">
-							<label class="control-label T-lineProductDays" name="days">{{quoteDetailJson.lineProduct.days}}天</label> 
-						</div>
-						<label class="col-sm-1 control-label no-padding-right">类别:</label>
-						<div class="col-sm-3">
-							<label class="control-label T-lineProductType">{{quoteDetailJson.lineProduct.type}}</label>
-						</div>
-						<label class="col-sm-1 control-label no-padding-right">应用范围:</label>
-						<div class="col-sm-3">
-							<label class="control-label T-lineProductCusType">{{if quoteDetailJson.lineProduct.customerType == 1}}团体{{else}}散客{{/if}}</label>
-						</div>
-					</div>
-				</div>
-			</div>
+                        </div>
+                        <label class="col-sm-1 control-label no-padding-right">售卖标注:</label>
+                        <div class="col-sm-1">
+                            <label class="control-label T-lineProductStatus" data-entity-status="{{quoteDetailJson.lineProduct.status}}">{{if quoteDetailJson.lineProduct.status == 1}}售卖中{{else}}未售卖{{/if}}</label>
+                        </div>
+                    
+                        <label class="col-sm-1 control-label no-padding-right">线路天数:</label>
+                        <div class="col-sm-1">
+                            <label class="control-label T-lineProductDays" name="days" value="">{{quoteDetailJson.lineProduct.days}}天</label>
+                        </div>
+                        <label class="col-sm-1 control-label no-padding-right">类别:</label>
+                        <div class="col-sm-1">
+                            <label class="control-label T-lineProductType">{{quoteDetailJson.lineProduct.type}}</label>
+                        </div>
+                        <label class="col-sm-1 control-label no-padding-right">应用范围:</label>
+                        <div class="col-sm-1">
+                            <label class="control-label T-lineProductCusType"> {{if quoteDetailJson.lineProduct.customerType == 1}}团体{{else}}散客{{/if}}</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
 		</div>
 	</form>
 	<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
@@ -48,138 +47,116 @@
 			<div class="pull-right line-bluer line-separated"></div>
 			<div style="clear: both"></div>
 			<div class="widget-body">
-				<div class="widget-main">
+				<div class="widget-main"  style="margin: auto;height:auto;line-height:16px;padding-top: 6px;">
 					<div class="form-group">
-						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>出游日期:</label>
-						<div class="col-sm-3">
-							<input type="text" name="startTime" readonly="readonly" class="col-sm-12 datepicker" maxlength="20" value="{{quoteDetailJson.startTime | dateFormat: 'yyyy-MM-dd'}}">
+						<div class="col-sm-2 addQuoteInformation">
+						<label class="col-sm-4 control-label no-padding-right"><span class="necessary">*</span>出游日期：</label>
+							<input type="text" name="startTime" readonly="readonly" class="col-sm-4 T-datePicker datepicker" maxlength="20"value="{{quoteDetailJson.startTime | dateFormat: 'yyyy-MM-dd'}}">
 						</div>
-						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>人数:</label>
-						<div class="col-sm-3">
-							<input type="text" name="adultCount" class="T-changeQuote" maxlength="5" readonly="readonly" style="width:50px;" value="{{quoteDetailJson.adultCount}}">
+						
+						<div class="col-sm-2 addQuoteInformation">
+						<label class="col-sm-3 control-label no-padding-right"><span class="necessary">*</span>人数：</label>
+							<input type="text" name="adultCount" readonly="readonly" class="T-changeQuote" maxlength="5" style="width:50px;" value="{{quoteDetailJson.adultCount}}">
 							<label class="control-label">大人</label> 
-							<input type="text" name="childCount" class="T-changeQuote" maxlength="5" readonly="readonly" style="width:50px;" value="{{quoteDetailJson.childCount}}">
+							<input type="text" name="childCount" readonly="readonly" class="T-changeQuote" maxlength="5" style="width:50px;" value="{{quoteDetailJson.childCount}}">
 							<label class="control-label">小孩</label>
 						</div>
-						<label class="col-sm-1 control-label no-padding-right">单房差数:</label>
-						<div class="col-sm-3">
-							<input type="text" name="singleRoomCount" class="col-sm-12" maxlength="10" value="{{quoteDetailJson.singleRoomCount}}">
+						
+						<div class="col-sm-1 addQuoteInformation">
+						<label class="col-sm-8 control-label no-padding-right">单房差数：</label>
+							<input type="text" name="singleRoomCount" class="col-sm-4" maxlength="10" value="{{quoteDetailJson.singleRoomCount}}">
 						</div>
-					</div>
-					<div class="form-group">
-						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>客户:</label>
-						<div class="col-sm-3">
-							<input type="text" name="partnerAgencyName" class="col-sm-12 T-choosePartnerAgency" value="{{quoteDetailJson.partnerAgency.travelAgencyName}}">
+					
+						
+						<div class="col-sm-2 addQuoteInformation">
+						<label class="col-sm-3 control-label no-padding-right"><span class="necessary">*</span>客户：</label>
+							<input type="text" name="partnerAgencyName" class="col-sm-7 T-choosePartnerAgency" value="{{quoteDetailJson.partnerAgency.travelAgencyName}}">
 							<input type="hidden" name="partnerAgencyId" value="{{quoteDetailJson.partnerAgency.id}}" >
 						</div>
-						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>联系人:</label>
-						<div class="col-sm-3">
-							<input type="text" name="managerName" class="col-sm-12 T-chooseManager" value="{{quoteDetailJson.partnerAgencyContact.contactRealname}}">
+						
+						<div class="col-sm-2 addQuoteInformation">
+						<label class="col-sm-4 control-label no-padding-right"><span class="necessary">*</span>联系人：</label>
+							<input type="text" name="managerName" class="col-sm-4 T-chooseManager" value="{{quoteDetailJson.partnerAgencyContact.contactRealname}}">
 							<input type="hidden" name="managerId" value="{{quoteDetailJson.partnerAgencyContact.id}}">
 						</div>
-						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>联系电话:</label>
-						<div class="col-sm-3">
-							<input type="text" name="mobileNumber" readonly="readonly" class="col-sm-12" value="{{quoteDetailJson.partnerAgencyContact.contactMobileNumber}}">
+						
+						<div class="col-sm-2 addQuoteInformation">
+						<label class="col-sm-4 control-label no-padding-right"><span class="necessary">*</span>联系电话：</label>
+							<input type="text" name="mobileNumber" readonly="readonly" class="col-sm-5" value="{{quoteDetailJson.partnerAgencyContact.contactMobileNumber}}">
 						</div>
 					</div>
 					<div class="form-group T-isChooseService">
 						<div style="width: 500px;margin: auto;">
 							<label style="padding-right: 50px;">
-								<input type="checkbox" {{if quoteDetailJson.isChildNeedRoom == 1}}checked="checked"{{/if}} class="ace T-changeQuote" value="1" name="childNeedBed">
+								<input type="checkbox" class="ace T-changeQuote" value="1" name="childNeedBed">
 								<span class="lbl">
 									小孩占床
 								</span>
 							</label>
 							<label style="padding-right: 50px;">
-								<input type="checkbox" {{if quoteDetailJson.isContainSelfPay == 1}}checked="checked"{{/if}} class="ace T-changeQuote" value="1" name="includeSelfpay">
+								<input type="checkbox" class="ace T-changeQuote" value="1" name="includeSelfpay">
 								<span class="lbl">
 									包含自费
 								</span>
 							</label>
 							<label>
-								<input type="checkbox" {{if quoteDetailJson.isContainGuideFee == 1}}checked="checked"{{/if}} class="ace T-changeQuote" value="1" name="includeGuideFee">
+								<input type="checkbox" class="ace T-changeQuote" value="1" name="includeGuideFee">
 								<span class="lbl">
 									含导服费
 								</span>
 							</label>
 						</div>
 					</div>
-					<div class="form-group T-quoteMath" style="margin-top: 50px;">
-						<div class="form-group">
-							<label class="col-sm-2 control-label no-padding-right">大人成本价:</label>
-							<div class="col-sm-1">
-								<label class="control-label T-adultCost">{{quoteDetailJson.adultCostPrice}}</label> 
-							</div>
-							<div class="col-sm-3">
-								<select name="selectAmAdult" class="T-changeQuote">
-									<option {{if quoteDetailJson.adultAdjustType == 0}}selected="selected"{{/if}} value="0">定额调幅</option>
-									<option {{if quoteDetailJson.adultAdjustType == 1}}selected="selected"{{/if}} value="1">比例调幅</option>
-								</select>
-								<input type="text" class="T-adultAmplitude T-changeQuote" name="adultAdjustValue" value="{{quoteDetailJson.adultAdjustValue}}">
-							</div>
-							<label class="col-sm-1 control-label no-padding-right T-adultQuote">大人报价:</label>
-							<div class="col-sm-2">
-								<input type="text" name="adultQuotePrice" class="col-sm-12 T-adultQuote" readonly="readonly" value="{{quoteDetailJson.adultQuotePrice}}">
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label no-padding-right">小孩成本价:</label>
-							<div class="col-sm-1">
-								<label class="control-label T-childCost">{{quoteDetailJson.childCostPrice}}</label>
-							</div>
-							<div class="col-sm-3">
-								<select name="selectAmChild" class="T-changeQuote">
-									<option {{if quoteDetailJson.childAdjustType == 0}}selected="selected"{{/if}} value="0">定额调幅</option>
-									<option {{if quoteDetailJson.childAdjustType == 1}}selected="selected"{{/if}} value="1">比例调幅</option>
-								</select>
-								<input type="text" class="T-childAmplitude T-changeQuote" name="childAdjustValue" value="{{quoteDetailJson.childAdjustValue}}">
-							</div>
-							<label class="col-sm-1 control-label no-padding-right T-childQuote">小孩报价:</label>
-							<div class="col-sm-2">
-								<input type="text" name="childQuotePrice" class="col-sm-12 T-childQuote" readonly="readonly" value="{{quoteDetailJson.childQuotePrice}}">
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label no-padding-right">总成本:</label>
-							<div class="col-sm-4">
-								<label class="control-label T-allCost">{{quoteDetailJson.sumCostFee}}</label>
-							</div>
-							<label class="col-sm-1 control-label no-padding-right">总报价:</label>
-							<div class="col-sm-2">
-								<input type="text" name="sumQuoteFee" class="col-sm-12 T-allQuote" readonly="readonly" value="{{quoteDetailJson.sumQuoteFee}}">
-							</div>
-							<label class="col-sm-1 control-label no-padding-right">毛利预估:</label>
-							<div class="col-sm-1">
-								<label class="control-label T-grossProfit">{{quoteDetailJson.sumQuoteFee-quoteDetailJson.sumCostFee}}</label>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label no-padding-right">单房差成本:</label>
-							<div class="col-sm-1">
-								<label class="control-label T-oneRoomCost">{{quoteDetailJson.singleRoomCostPrice}}</label>
-							</div>
-							<div class="col-sm-3">
-								<select name="selectAmOneRoom" class="T-changeQuote">
-									<option {{if quoteDetailJson.singleRoomAdjustType == 0}}selected="selected"{{/if}} value="0">定额调幅</option>
-									<option {{if quoteDetailJson.singleRoomAdjustType == 1}}selected="selected"{{/if}} value="1">比例调幅</option>
-								</select>
-								<input type="text" class="T-oneRoomAmplitude T-changeQuote" name="singleRoomAdjustValue" value="{{quoteDetailJson.singleRoomAdjustValue}}">
-							</div>
-							<label class="col-sm-1 control-label no-padding-right T-oneRoomQuote">单房差报价:</label>
-							<div class="col-sm-2">
-								<input type="text" name="singleRoomQuotePrice" class="col-sm-12 T-oneRoomQuote" readonly="readonly" value="{{quoteDetailJson.singleRoomQuotePrice}}">
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label no-padding-right">备注:</label>
-							<div class="col-sm-7">
-								<input type="text" name="quoteRemark" class="col-sm-12" value="{{quoteDetailJson.remark}}">
-							</div>
-						</div>
-					</div>
-				</div>
+			</div>
 			</div>
 		</div>
+
+		<div class="col-xs-12">
+			        <div class="col-xs-2 viewQuoteProduct">	<p style="margin-top: 6px;">报</p><p>价</p><p>产</p><p>品</p>
+			        </div>
+		        	<div class="col-xs-2 viewQuoteFdiv">
+		        	<p style="height: 30px;margin-top: 10px">
+		        	<span>大人成本价</span><input type="text" style="width:80px;margin-left:9px;"/>
+		        	</p>
+		        	<p style="height: 30px"><span>大人报价</span> <input type="text" style="width:80px;margin-left:18px;" />
+		        	</p>
+		        	<p style="height: 30px"><span>大人毛利预估</span><span  style="width:80px;margin-left:9px;">3000.00</span>
+		        	</p>
+		        	<p></p>
+		        	<p></p>
+		        	</div> 
+
+		        	<div class="col-xs-2 addQuoteDiv">
+		        	<p style="height: 30px;margin-top: 10px"><span>小孩成本价</span> <input type="text" style="width:80px;margin-left:9px;"/>
+		        	</p>
+		        	<p style="height: 30px"><span>小孩报价</span> <input type="text" style="width:80px;margin-left:22px;"/>
+		        	</p>
+		        	<p style="height: 30px"><span>小孩毛利预估</span><span  style="width:80px;margin-left:9px;">3000.00</span>
+		        	</p>
+		        	</div>
+		        	<div class="col-xs-2 addQuoteDiv">
+		        	<p style="height: 30px;margin-top: 10px"><span>单房差成本价</span> <input type="text"style="width:80px;margin-left:9px;" />
+		        	</p>
+		        	<p style="height: 30px"><span>单房差报价</span> <input type="text" style="width:80px;margin-left:22px;"/>
+		        	</p>
+		        	<p style="height: 30px"><span>单房差毛利预估</span> <span  style="width:80px;margin-left:9px;">3000.00</span>
+		        	</p>
+		        	</div>
+		        	<div class="col-xs-2 addQuoteDiv">
+		        	<p style="height: 30px;margin-top: 10px"><span>总成本价</span> <input type="text" style="width:80px;margin-left:9px;"/>
+		        	</p>
+		        	<p style="height: 30px"><span>总报价</span> <input type="text" style="width:80px;margin-left:22px;"/>
+		        	</p>
+		        	<p style="height: 30px"><span>毛利预估</span> <span  style="width:80px;margin-left:9px;">3000.00</span>
+		        	</p>
+		        	</div>
+        	</div>
+				<div class="form-group">
+				<div class="col-xs-12" style="margin-top: 14px;">
+				<label class="col-sm-1 control-label no-padding-right addQuoteRemerk" >备注:</label>
+				<textarea class="col-xs-10" name="" rows="1" id="" style="margin-left: 8px;"></textarea>
+				</div>
+				</div>
 	</form>
 	<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
 		<div class="form-group globalAdd">

@@ -10,6 +10,8 @@ define(function(require,exports){
 		lineproductSearchList = require("./view/lineproductSearchList"),
 		addPartnerManagerTemplate = require('./view/addPartnerManager'),
 		addVisitorMoreTemplate = require('./view/addVisitorMore'),
+		chooseQuoteProductTemplate = require('./view/chooseQuoteProduct'),
+		quoteListTemplate = require('./view/quoteList'),
 		tabId = "tab-"+menuKey+"-content",
 		addTabId = menuKey+"-add",
 		updateTabId = menuKey+'-update',
@@ -22,6 +24,7 @@ define(function(require,exports){
 		autocompleteDate : {},
 		typeFlag:0,
 		visitorId:0,
+		chooseQuoteProlayer : "",
 		args:{
 			pageNo: 0,
 			type : 0,
@@ -40,6 +43,7 @@ define(function(require,exports){
 			customerType: "",
 			sortType: 'auto'
 		}
+
 	};
 	//游客管理页面初始化
 	touristGroup.initModule = function(){
@@ -218,13 +222,153 @@ define(function(require,exports){
 			touristGroup.groupMemberDispose($groupMemberForm);
 			//中转安排处理
 			touristGroup.innerTransferDispose($innerTransferForm);
+
+			
+			
 			//提交按钮事件
 			$addTabId.find(".T-submit-addTouristGroup").on('click',function(){
 				if (!touristGroup.validator.form()) { return; }
 				if(!touristGroup.checkInnerValidator.form()){return;}
 				touristGroup.installData($addTabId);
 			});
+
+
+			//报价单号
+			$addTabId.find('.T-ChosenQuoteNumber').on('click', function(event) {
+				event.preventDefault();
+				/* Act on the event */
+				//报价单号的layer层
+				touristGroup.chooseQuoteProduct($addTabId);
+			});
+
+
+
 	};
+
+	/**
+	 * chooseQuoteProduct 选择报价线路产品
+	 * @return {[type]} [description]
+	 */
+    touristGroup.chooseQuoteProduct = function($addTabId){
+		   var html = chooseQuoteProductTemplate();
+			   touristGroup.chooseQuoteProlayer = layer.open({
+					type: 1,
+					title:"选择报价线路产品",
+					skin: 'layui-layer-rim', //加上边框
+					area: '85%;', //宽高
+					zIndex:1029,
+					content: html,
+					scrollbar: false,
+					success:function(){
+						//报价线路初始化
+						touristGroup.init_chooseQuoteProEvent($addTabId);
+					}
+			   });
+			 
+		};
+
+	/**
+	 * init_chooseQuoteProEvent 报价线路数据初始化
+	 * @return {[type]} [description]
+	 */
+	touristGroup.init_chooseQuoteProEvent = function($addTabId){
+
+		var $chooseQuotObj = $('#T-chooseQuoteProduct-layer');
+
+			/*$.ajax({
+				url:touristGroup.url("viewTouristGroupDetails","view"),
+				type:'POST',
+				success:function(data){
+					var result = showDialog(data);
+					if(result){
+
+						var html = quoteListTemplate();
+		                $chooseQuotObj.find('.T-chooseQuoteProduct-Content').html(html);
+					}
+				}
+			});*/
+
+
+			//获取线路产品id
+			var lineProductId = $addTabId.find('.T-lineProductId').val();
+			//判定线路产品ID是否为空
+			if (!!lineProductId && lineProductId!=null) { //若lineProductId不为空根据线路ID查询报价单号
+				var html = quoteListTemplate();
+		        $chooseQuotObj.find('.T-chooseQuoteProduct-Content').html(html);
+			} else{
+				var html = quoteListTemplate();
+		        $chooseQuotObj.find('.T-chooseQuoteProduct-Content').html(html);
+			};
+		    //取消
+		    $chooseQuotObj.find('.T-cancel').on('click', function(event) {
+		    	event.preventDefault();
+		    	/* Act on the event */
+		    	layer.close(touristGroup.chooseQuoteProlayer);
+		    });
+
+		    $chooseQuotObj.find('.T-save').on('click', function(event) {
+		    	event.preventDefault();
+		    	/* Act on the event */
+		    var $trList = $chooseQuotObj.find('tr');
+		    var ids = [],chooseQuotObj={};
+		    	$trList.each(function(i) {
+		    		var $check = $trList.eq(i).find('.T-cheked');
+		    		    if ($check.is(':checked')) {
+		    		    	var $that = $(this),$tr=$that.closest('tr'),
+		    		    	//带出线路产品、出游日期、客户来源、同行联系人、费用项的结算价的数量和单价、自动计算应收
+		    		    	chooseQuot = {
+		    		    		quoteId : $that.closest('tr').attr('data-quoteId'), //报价单号Id
+		    		    	    quoteNumber :  $tr.attr('data-quoteNumber'),  //  报价单号名称
+		    		    	    lineProductName :  $tr.attr('data-lineProductName'),
+		    		    	    lineProducId :  $tr.attr('data-lineProducId'),
+		    		    	    startTime :  $tr.attr('data-startTime'),
+		    		    	    fromPartnerAgencyId :  $tr.attr('data-fromPartnerAgencyId'),
+		    		    	    fromPartnerAgencyName :  $tr.attr('data-fromPartnerAgencyName'),
+		    		    	    partnerAgencyContactName :  $tr.attr('data-partnerAgencyContactName'),
+		    		    	    partnerAgencyContactId : $tr.attr('data-partnerAgencyContactId'),
+		    		    	    adultCount : $tr.attr('data-adultCount'),
+		    		    	    adultPrice : $tr.attr('data-adultPrice'),
+		    		    	    childCount : $tr.attr('data-childCount'),
+		    		    	    childPrice : $tr.attr('data-childPrice')
+		    		    	},
+		    		    	id = {
+		    		    		id : id
+		    		    	};
+		    		    	//选中报价后带出数据组装
+		    		    	chooseQuotObj = chooseQuot;
+		    		    	ids.push(id);
+		    		    }   
+		    	});
+		    	console.info('Mrs Zhang.....'+ids);
+		    	//带出线路产品、出游日期、客户来源、同行联系人、费用项的结算价的数量和单价、自动计算应收
+		    	console.info('dataZuzhuang...'+ JSON.stringify(chooseQuotObj) );
+		    	if (!!ids && ids.length > 0 ) {
+		    		$addTabId.find('.T-quoteNumber').val(chooseQuotObj.quoteNumber);
+		    		$addTabId.find('.T-quoteNumberId').val(chooseQuotObj.quoteId);
+		    		$addTabId.find('.T-lineProductId').val(chooseQuotObj.lineProducId);
+		    		$addTabId.find('.T-lineProductIdName').val(chooseQuotObj.lineProductName);
+		    		$addTabId.find('.T-startTime').val(chooseQuotObj.startTime);
+		    		$addTabId.find('.T-fromPartnerAgencyName').val(chooseQuotObj.fromPartnerAgencyName);
+		    		$addTabId.find('.T-fromPartnerAgencyId').val(chooseQuotObj.fromPartnerAgencyId);
+		    		$addTabId.find('.T-partnerAgencyNameList').val(chooseQuotObj.partnerAgencyContactName);
+		    		$addTabId.find('.T-partnerAgencyContactId').val(chooseQuotObj.partnerAgencyContactId);   
+		    		$addTabId.find('.T-adultCount').val(chooseQuotObj.adultCount);
+		    		$addTabId.find('.T-adultPrice').val(chooseQuotObj.adultPrice);
+		    		$addTabId.find('.T-childCount').val(chooseQuotObj.childCount);
+		    		$addTabId.find('.T-childPrice').val(chooseQuotObj.childPrice).trigger('change');
+
+		    		$addTabId.find('.T-quoteNumber','.T-quoteNumberId','.T-lineProductId','.T-lineProductIdName','.T-startTime','.T-fromPartnerAgencyName','.T-fromPartnerAgencyId').prop("readonly",true);
+		    		$addTabId.find('.T-partnerAgencyNameList','.T-partnerAgencyContactId','.T-adultCount','.T-childCount','.T-childPrice').prop("readonly",true);
+
+		    		layer.close(touristGroup.chooseQuoteProlayer);
+
+
+		    	}else{
+		    		showMessageDialog($( "#confirm-dialog-message" ),"请选择报价线路产品",function(){});
+		    	};
+		    });
+	};
+
 	//修改小组的事件绑定
 	touristGroup.updateEvents = function(){
 		var id = touristGroup.visitorId,
@@ -251,6 +395,15 @@ define(function(require,exports){
 				if(!touristGroup.validator.form()) { return; }
 				if(!touristGroup.checkInnerValidator.form()){return;}
 				touristGroup.installData($updateTabId,id,2);
+			});
+
+
+			//报价单号
+			$updateTabId.find('.T-ChosenQuoteNumber').on('click', function(event) {
+				event.preventDefault();
+				/* Act on the event */
+				//报价单号的layer层
+				touristGroup.chooseQuoteProduct($updateTabId);
 			});
 	};
 	//查看小组信息
@@ -648,7 +801,8 @@ define(function(require,exports){
 			'adultCount',
 			'adultPrice',
 			'childCount',
-			'childPrice'
+			'childPrice',
+			'quoteNumber'
 			];
 		
 		names.forEach(function(name) {

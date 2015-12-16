@@ -91,6 +91,7 @@
 										<th class="th-border">销售单价</th>
 										<th class="th-border">成本</th>
 										<th class="th-border">应收</th>
+										<th class="th-border">已付</th>
 									</tr>
 								</thead>
 								<tbody class="hotelBookingList">{{each bookingOrder.bookingHotelList as hotelList}}
@@ -122,6 +123,7 @@
 										<td>{{hotelList.salePrice}}/天</td>
 										<td>{{hotelList.sumCostMoney}}</td>
 										<td>{{hotelList.sumNeedGetMoney}}</td>
+										<td>{{hotelList.payedMoney}}</td>
 									</tr>{{/each}}
 								</tbody>
 							</table>
@@ -150,6 +152,7 @@
 										<th class="th-border">成本</th>
 										<th class="th-border">应收</th>
 										<th class="th-border">订单号</th>
+										<th class="th-border">已付</th>
 									</tr>
 								</thead>
 								<tbody class="scenicBookingList">{{each bookingOrder.bookingScenicList as scenicList}}
@@ -163,6 +166,7 @@
 										<td>{{scenicList.sumCostMoney}}</td>
 										<td>{{scenicList.sumNeedGetMoney}}</td>
 										<td>{{scenicList.orderNumber}}</td>
+										<td>{{scenicList.payedMoney}}</td>
 									</tr>{{/each}}
 								</tbody>
 							</table>
@@ -194,6 +198,8 @@
 										<th class="th-border">销售单价</th>
 										<th class="th-border">成本</th>
 										<th class="th-border">应收</th>
+										<th class="th-border">已付</th>
+
 									</tr>
 								</thead>
 								<tbody class="ticketBookingList">{{each bookingOrder.bookingTicketList as ticketList}}
@@ -220,6 +226,7 @@
 										<td>{{ticketList.salePrice}}</td>
 										<td>{{ticketList.sumCostMoney}}</td>
 										<td>{{ticketList.sumNeedGetMoney}}</td>
+										<td>{{ticketList.payedMoney}}</td>
 									</tr>{{/each}}
 								</tbody>
 							</table>
@@ -250,6 +257,7 @@
 										<th class="th-border">销售单价</th>
 										<th class="th-border">成本</th>
 										<th class="th-border">应收</th>
+										<th class="th-border">已付</th>
 									</tr>
 								</thead>
 								<tbody class="busBookingList">{{each bookingOrder.bookingBusCompanieList as busList}}
@@ -264,6 +272,7 @@
 										<td>{{busList.salePrice}}</td>
 										<td>{{busList.sumCostMoney}}</td>
 										<td>{{busList.sumNeedGetMoney}}</td>
+										<td>{{busList.payedMoney}}</td>
 									</tr>{{/each}}
 								</tbody>
 							</table>
