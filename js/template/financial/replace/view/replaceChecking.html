@@ -44,10 +44,23 @@
     </div>
 </div>
 <div class="row" style="margin-top: 30px">
-    <table class="table table-striped table-bordered table-hover">
+    <table class="table table-striped table-bordered table-hover table-fixed">
+        <colgroup> 
+            <col style="width:12%;"> 
+            <col style="width:6%;"> 
+            <col style="width:10%;"> 
+            <col style="width:20%;"> 
+            <col style="width:5%;"> 
+            <col style="width:5%;"> 
+            <col style="width:8%;"> 
+            <col style="width:5%;"> 
+            <col style="width:8%;"> 
+            <col style="width:9%;"> 
+            <col style="width:5%;"> 
+            <col style="width:7%;"> 
+        </colgroup>
         <thead>
             <tr>
-                <th class="th-border">序号</th>
                 <th class="th-border">代订单号</th>
                 <th class="th-border">代订日期（账期）</th>
                 <th class="th-border">项目</th>
@@ -65,11 +78,10 @@
         <tbody class="T-list T-checkList">
         {{each bookinAccountList as rs index}}
             <tr class="T-checkTr" data-id="{{rs.id}}">
-                <td>{{index + 1}}</td>
                 <td>{{rs.orderNumber}}</td>
                 <td>{{rs.startTime}}</td>
                 <td>{{rs.projectName}}</td>
-                <td>{{rs.newDetail}}</td>
+                <td class="T-ctrl-tip" title="{{rs.newDetail}}"><span>{{rs.newDetail}}</span></td>
                 <td>{{rs.bookingMoney}}</td>
                 <td><a class="cursor T-action T-receive-money">{{rs.receiveMoney}}</a></td>
                 <td>{{if !!rs.isConfirmAccount}}{{rs.settlementMoney}}{{else}}<input type="text" class="col-xs-12" name="settlementMoney" value="{{rs.settlementMoney}}">{{/if}}</td>
@@ -82,10 +94,8 @@
                         <input type="checkbox" class="ace T-checkbox" {{if !!rs.isConfirmAccount}}checked="checked"{{/if}} /> 
                         <span class="lbl">对账</span>
                     </label>
-                    {{if !!rs.isConfirmAccount}}
                     <label class="cursor"> <a> |</a></label>
                     <a class="cursor T-action T-view-Received">查看</a>
-                    {{/if}}
                 </td>
             </tr>
         {{/each}}

@@ -440,7 +440,7 @@ define(function(require, exports){
 	};
 
 	FinShop.sett_init_event = function($tab){
-		var validator = (new FinRule(3)).check($tab),
+		var validator = (new FinRule(FinShop.isBalanceSource ? 3 : 1)).check($tab),
 			autoValidator = (new FinRule(2)).check($tab);
 
 		$tab.off('change').off(SWITCH_TAB_SAVE).off(CLOSE_TAB_SAVE)
@@ -468,7 +468,7 @@ define(function(require, exports){
 		});
 		var $datepicker = $searchArea.find('.datepicker');
 		Tools.setDatePicker($datepicker, true);
-		FinancialService.updateSumPayMoney($tab, new FinRule(3));
+		FinancialService.updateSumPayMoney($tab, new FinRule(FinShop.isBalanceSource ? 3 : 1));
 
 		// 报表内的操作
 		$tab.find('.T-list').on('click', '.T-action', function(event) {
@@ -611,7 +611,7 @@ define(function(require, exports){
     }
 
 	FinShop.saveSettlement = function($tab, tabArgs){
-		var json = FinancialService.clearSaveJson($tab, FinShop.payingJson, new FinRule(3));
+		var json = FinancialService.clearSaveJson($tab, FinShop.payingJson, new FinRule(FinShop.isBalanceSource ? 3 : 1));
 		console.log(json)
 		if (json.length) {
 			var args = {

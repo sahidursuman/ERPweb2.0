@@ -428,7 +428,7 @@ define(function(require, exports) {
 	};
 
 	Ticket.clear_init = function($tab){
-		var validator = (new FinRule(3)).check($tab);
+		var validator = (new FinRule(Ticket.isBalanceSource ? 3 : 1)).check($tab);
 		var reciveValidtor = (new FinRule(2)).check($tab);
 		// 处理关闭与切换tab
         $tab.off('change').off(SWITCH_TAB_SAVE).off(CLOSE_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT)
@@ -498,7 +498,7 @@ define(function(require, exports) {
 			Ticket.savePayingData($tab);
 		});
 
-		FinancialService.updateSumPayMoney($tab, new FinRule(3));
+		FinancialService.updateSumPayMoney($tab, new FinRule(Ticket.isBalanceSource ? 3 : 1));
 		
 		$tab.find(".T-btn-autofill").on('click', function(event){
 			event.preventDefault();
@@ -589,7 +589,7 @@ define(function(require, exports) {
         if(!reciveValidtor.form()){
     		return;
         }
-		var json = FinancialService.clearSaveJson($tab, Ticket.payingJson, new FinRule(3));
+		var json = FinancialService.clearSaveJson($tab, Ticket.payingJson, new FinRule(Ticket.isBalanceSource ? 3 : 1));
 		if (json.length) {
 			var args = {
                 ticketId: Ticket.clearingId,
