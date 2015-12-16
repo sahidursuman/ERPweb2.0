@@ -451,7 +451,7 @@ define(function(require, exports) {
         var id = $tab.find('.T-btn-save').data('id');
         
         var validator = (new FinRule(3)).check($tab),
-            autoValidator = (new FinRule(2)).check(Client.$clearSearchArea);
+            autoValidator = (new FinRule(2)).check($tab);
 
         $tab.data('id', id);
 
