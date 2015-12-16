@@ -150,8 +150,7 @@ define(function(require, exports) {
 		Replace.checkingList(0, id);
 	};
 	Replace.clearComma = function(str){
-		str = str.replace(/(\uff0c){2,}/g, '，');
-		return str.replace(/(\uff0c)$/g, '');
+		return str.replace(/(\uff0c){2,}/g, '，').replace(/(\uff0c)$/g, '');
 	};
 	Replace.checkingList = function(page, id, startTime, endTime){
 		var args = {

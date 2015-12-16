@@ -69,14 +69,12 @@
 	                            	{{member.idCardType | getCardText}}
 	                            </td>
 	                            <td>{{member.idCardNumber}}</td>
-	                            <td>
-	                            	{{if member.isContactUser == 1}}是{{/if}}
-	                            </td>
                                 {{if memberIndex == 0}}
-                                <td rowspan="{{group.touristGroupMemberList.length}}">{{member.needPayAllMoney}}</td>
-                                <td rowspan="{{group.touristGroupMemberList.length}}">{{member.payedMoney}}</td>
-                                <td rowspan="{{group.touristGroupMemberList.length}}">{{member.currentNeedPayMoney}}</td>
+                                <td rowspan="{{group.touristGroupMemberList.length}}">{{group.needPayAllMoney}}</td>
+                                <td rowspan="{{group.touristGroupMemberList.length}}">{{group.payedMoney}}</td>
+                                <td rowspan="{{group.touristGroupMemberList.length}}">{{group.currentNeedPayMoney}}</td>
                                 {{/if}}
+                                <td>{{if member.isContactUser == 1}}是{{/if}}</td>
 	                        </tr>
 	                        {{/each}} 
                         {{/each}} 

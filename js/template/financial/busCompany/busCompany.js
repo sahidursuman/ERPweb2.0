@@ -143,6 +143,7 @@ define(function(require, exports) {
                 if(result){
                     var fbList = data.financialBusCompanyListData;
                     data.busCompanyName = busCompanyName;
+                    data.financialBusCompanyListData = FinancialService.isGuidePay(fbList);
                     var html = checkBill(data);
                     
                     // 初始化页面
@@ -272,6 +273,8 @@ define(function(require, exports) {
                     }
                     var resultList = data.financialBusCompanyListData;
                     data.financialBusCompanyListData = FinancialService.getTempDate(resultList,busCompany.clearTempData);
+                    data.financialBusCompanyListData = FinancialService.isGuidePay(resultList);
+                    data.isAutoPay = isAutoPay;
 					var html = Clearing(data);
                     
                     args.data = data;

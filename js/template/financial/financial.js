@@ -289,6 +289,19 @@ FinancialService.autoPayConfirm = function(startDate,endDate,fn){
     });
 };
 
+//设置数据来源标识（中转、代订）
+FinancialService.isGuidePay = function(dataList){
+    for(var i = 0; i < dataList.length; i++){
+        var tripNumber = trim(dataList[i].tripNumber),
+            strLen = tripNumber.length;
+            tripType = tripNumber.substring(strLen-2,strLen);
+        if(tripType == "ZZ" ||　tripType == "zz" || tripType == "DD" || tripType == "dd"){
+            dataList[i].isGuidePay = 1;
+        }
+    }
+    return dataList;
+};
+
 //判断列表是否已全选
 function isAllChecked(checkboxList){
     var isAll = true;
@@ -312,7 +325,7 @@ function getValue($obj,name){
 /**
  * 财务校验方法
  * 使用方法：var rule = new FinRule(0);
- * @param {int} type 0: 对账、1：收付款、2：自动下账；3：财务收付款
+ * @param {int} type 0: 对账、1：付款、2：自动下账；3：财务收付款、4：收款
  */ 
 function FinRule(type) {
     this.type = type;
@@ -336,7 +349,7 @@ FinRule.prototype.check = function($obj) {
                         }
                     ]
                 }]);
-        case 1: // 收付款
+        case 1: // 付款
             return $obj.formValidate([
                 {   
                     $ele: $obj.find('input[name=payMoney]'),
@@ -344,6 +357,10 @@ FinRule.prototype.check = function($obj) {
                         {
                             type: 'positive-float',
                             errMsg: '请输入正数'
+                        },
+                        {
+                            type: 'le',
+                            errMsg: '本次付款金额不能超过未付金额'
                         }
                     ]
                 }]);
@@ -366,6 +383,21 @@ FinRule.prototype.check = function($obj) {
                         {
                             type: 'float',
                             errMsg: '请输入数字'
+                        }
+                    ]
+                }]);
+        case 4: // 收款
+            return $obj.formValidate([
+                {   
+                    $ele: $obj.find('input[name=payMoney]'),
+                    rules: [
+                        {
+                            type: 'positive-float',
+                            errMsg: '请输入正数'
+                        },
+                        {
+                            type: 'le',
+                            errMsg: '本次收款金额不能超过未收金额'
                         }
                     ]
                 }]);
