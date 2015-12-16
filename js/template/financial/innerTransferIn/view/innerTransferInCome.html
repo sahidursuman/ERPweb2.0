@@ -15,14 +15,25 @@
 		<tbody>
 		{{each receivedDetailsList as income}}
 			<tr>
-				<td>{{income.receivableType}}</td>
+				<td>{{income.resourceType}}</td>
 				<td>{{income.businessType}}</td>
 				<td>{{income.incomeOrPayParty}}</td>
-				<td>{{income.incomeDifferenceMoney}}</td>
-				<td>{{income.payType}}</td>
+				<td>{{income.incomeMoney}}</td>
+				<td>
+				{{if income.payType == 0}}
+					现金
+				{{else if income.payType == 1}}
+					银行转账
+				{{else if income.payType == 2}}
+					网上支付
+				{{else if income.payType == 3}}
+					支票
+				{{else if income.payType == 4}}
+					其他
+				{{/if}}</td>
 				<td>{{income.remark}}</td>
-				<td>{{income.checkRealname}}</td>
-				<td>{{income.checkTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}</td>
+				<td>{{income.creatorName}}</td>
+				<td>{{income.createTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}</td>
 			</tr>
 		{{/each}}
 		</tbody>
