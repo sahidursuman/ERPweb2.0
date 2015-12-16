@@ -219,7 +219,6 @@ define(function(require,exports) {
 					    			}
 					    		}
 				    		}
-				    		
 				    	}
 				    	html = settlementTemplate(data);
 				    }else{
@@ -254,7 +253,7 @@ define(function(require,exports) {
 						    jump: function(obj, first) {
 						    	if (!first) {
 						    	if(typeFlag == 2){
-						    		var tempJson = FinancialService.clearSaveJson($checkId,InnerTransferIn.saveJson.autoPayList,rule);
+						    		var tempJson = FinancialService.clearSaveJson($checkId,InnerTransferIn.saveJson.autoPayList,new FinRule(4));
 	                                InnerTransferIn.saveJson.autoPayList = tempJson;
 	                                var sumPayMoney = parseFloat($obj.find('input[name=sumPayMoney]').val()),
 	                                    sumPayType = parseFloat($obj.find('select[name=sumPayType]').val()),
@@ -301,10 +300,6 @@ define(function(require,exports) {
 	InnerTransferIn.chenkingEvent = function($obj,$listSearchData,typeFlag){
 		var $list = typeFlag == 2?"T-clearList":"T-checkList";
 		var $checkList = $obj.find('.'+$list);
-	 	/*var validator = new FinRule(typeFlag == 2 ? 2 : 0),
-            autoValidator = new FinRule(2);
-        var validatorCheck = validator.check($tab),
-            autoValidatorCheck = autoValidator.check($tab.find('.T-auto-fill-area'));*/
 		//监听已对账的数据是否被修改
 		if(typeFlag == 2){
 			$obj.find('.'+$list).off('change').on('change','input',function(){
@@ -712,7 +707,7 @@ define(function(require,exports) {
 		var payMoney;
 		var payType;
 		var remark;
-		var JsonStr = FinancialService.clearSaveJson(InnerTransferIn.$settlementTab,InnerTransferIn.saveJson.autoPayList,rule);
+		var JsonStr = FinancialService.clearSaveJson(InnerTransferIn.$settlementTab,InnerTransferIn.saveJson.autoPayList,new FinRule(4));
 		var payType = tab_id.find('select[name=sumPayType]').val();
 		var sumRemark = tab_id.find('name[name=sumRemark]').val();
 		JsonStr = JSON.stringify(JsonStr);
@@ -771,9 +766,9 @@ define(function(require,exports) {
 			$tab.on(SWITCH_TAB_SAVE, function(event,tab_id, title, html) {
 				event.preventDefault();
 				if(typeFlag == 2){
-					InnerTransferIn.saveBlanceData(0,$listSearchData,tab_id, title, html);
+					InnerTransferIn.saveBlanceData(0,$tab,$listSearchData,tab_id, title, html);
 				}else{
-					InnerTransferIn.saveCheckingData(0,$listSearchData,tab_id, title, html);
+					InnerTransferIn.saveCheckingData(0,$tab,$listSearchData,tab_id, title, html);
 				}
 			})
 			.on(SWITCH_TAB_BIND_EVENT, function(event,tab_id, title, html) {
@@ -781,9 +776,17 @@ define(function(require,exports) {
 				Tools.addTab(tab_id, title, html);
 				//通过typeFlag来判断；1--新增的事件绑定；2--修改的事件绑定
 				if(typeFlag == 2){
-					InnerTransferIn.settlementEvent(InnerTransferIn.$settlementTab);
+					var id = $tab.find('input[name=businessGroupId]').val();
+					var name = $tab.find('input[name=businessGroupName]').val();
+					$listSearchData.businessGroupId = id;
+					$listSearchData.businessGroupName = name;
+					InnerTransferIn.chenkingEvent($tab,$listSearchData,typeFlag);
 				}else{
-					InnerTransferIn.chenkingEvent(InnerTransferIn.$checkTab);
+					var id = $tab.find('input[name=businessGroupId]').val();
+					var name = $tab.find('input[name=businessGroupName]').val();
+					$listSearchData.businessGroupId = id;
+					$listSearchData.businessGroupName = name;
+					InnerTransferIn.chenkingEvent($tab,$listSearchData,typeFlag);
 				}
 			})
 			// 保存后关闭
