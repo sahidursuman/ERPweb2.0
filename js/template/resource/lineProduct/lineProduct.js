@@ -13,10 +13,12 @@ define(function(require, exports) {
 		viewDetailTemplate = require("./view/viewDetail"),
 		addQouteTemplate = require("./view/addQoute"),
 		updateLineProductTemplate = require("./view/updateLineProduct"),
-	
+		tabId = "tab-"+menuKey+"-content";
 		// 主体对象
-		ResLineProduct = {};
-
+	var ResLineProduct = {
+		autocompleteDate:{}
+	};
+		
 	// 声明全局变量
 	ResLineProduct.$tab = false;
 	ResLineProduct.updateLineProductIndex = 0;
@@ -27,7 +29,7 @@ define(function(require, exports) {
 	 * @return {[type]} [description]
 	 */
 	ResLineProduct.initModule = function() {
-		ResLineProduct.getProductList(0, '', 1);
+		ResLineProduct.getProductList(0,'','','', 1);
 	};
 
 	/**
@@ -37,9 +39,11 @@ define(function(require, exports) {
 	 * @param  {[type]} status [description]
 	 * @return {[type]}        [description]
 	 */
-	ResLineProduct.getProductList = function(page,name,status){
+	ResLineProduct.getProductList = function(page,name,type,customerType,status){
 		if (ResLineProduct.$tab && arguments.length === 1) {
 			name = ResLineProduct.$tab.find('.T-lineproduct-name').val();
+			type = ResLineProduct.$tab.find('.T-lineproduct-type').val();
+			customerType = ResLineProduct.$tab.find('select[name=customerType]').val();
 			status = ResLineProduct.$tab.find('.T-status').children('button').data('value');
 		}
 
@@ -54,6 +58,8 @@ define(function(require, exports) {
 			data: {
 				pageNo: page,
 				name: name,
+				type: type,
+				customerType:customerType,
 				status: status,
 				sortType: 'auto'
 			},
@@ -66,13 +72,14 @@ define(function(require, exports) {
 					lineProductList = JSON.parse(lineProductList);
 					data.lineProductList = lineProductList;
 					var html = listTemplate(data);
+					ResLineProduct.getQueryTerms();
 					Tools.addTab(menuKey,"线路产品管理",html);
 
 					// init $tab
 					ResLineProduct.$tab = $("#tab-"+menuKey+"-content");
+					ResLineProduct.lineProductType(ResLineProduct.$tab);
 					// init event
 					ResLineProduct.init_event();
-
 					// 绑定翻页组件
 					laypage({
 					    cont: ResLineProduct.$tab.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
@@ -87,7 +94,39 @@ define(function(require, exports) {
 				}
 			}
 		});
+
 	};
+// 线路类型
+	ResLineProduct.lineProductType  = function($obj){
+			var lineProductType = $obj.find(".T-lineproduct-type");
+			lineProductType.autocomplete({
+				minLength:0,
+				select:function(event,ui){
+					
+				},
+				change:function(event,ui){
+					
+				}
+			}).click(function(){
+				var objM = this;
+				var lineObj = ResLineProduct.autocompleteDate.typeList;
+				for(var i = 0;i<lineObj.length;i++){
+					// typeKey赋给value
+					lineObj[i].value = lineObj[i].typeKey;
+				}
+				console.log(lineObj);
+				if(lineObj !=null) {
+					$(objM).autocomplete('option','source', lineObj);
+					$(objM).autocomplete('search', '');
+				}else{
+					layer.tips('无数据', objM, {
+						tips: [1, '#3595CC'],
+						time: 2000
+					});
+				}
+
+			})
+		};
 
 	/**
 	 * 初始化列表页面的绑定
@@ -2119,6 +2158,20 @@ define(function(require, exports) {
 		});
 	};
 
+	ResLineProduct.getQueryTerms = function(){
+			$.ajax({
+				url: KingServices.build_url('lineProduct', 'getQueryTerms'),
+				dateType:"json",
+				type:"POST",
+				success:function(data){
+					var result = showDialog(data);
+					if(result){
+						ResLineProduct.autocompleteDate.typeList = data.typeList;
+
+					}
+				}
+			})
+		};
 	/**
 	 * 解决autocomplete点击sortable区域无法收起的问题
 	 * @param  {object} $tab 区域容器
