@@ -1400,6 +1400,26 @@ Tools.addZero2Two = function(num)  {
 }
 
 /**
+ * 控制精度
+ * @param  {string/float} data   数据
+ * @param  {float} length 精度的长度
+ * @return {float}        返回修正后的数据
+ */
+Tools.toFixed = function(data, length) {
+	if (!!Number.prototype.toFixed) {
+		if (isNaN(length) || !length) {
+			length = 2;
+		}
+
+		if (!isNaN(data)) {
+			data = (data * 1).toFixed(length);
+		}
+	}
+
+	return data;
+};
+
+/**
  * 删除JSON中空字符串或者未定义的
  * @param  {[type]} json [description]
  * @return {[type]}      [description]

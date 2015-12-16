@@ -916,9 +916,9 @@ define(function(require, exports) {
 		var sumCost = eval($costS.join("+"));
 		var sumSale = eval($saleS.join("+"));
 		var sumPayed = eval($payedS.join("+"));
-		$that.find(".sumNeedGetMoney").val(sumSale);
-		$that.find(".sumCostMoney").val(sumCost);
-		$that.find(".sumPayedMoney").val(sumPayed);
+		$that.find(".sumNeedGetMoney").val(Tools.toFixed(sumSale));
+		$that.find(".sumCostMoney").val(Tools.toFixed(sumCost));
+		$that.find(".sumPayedMoney").val(Tools.toFixed(sumPayed));
 	};
 	/**
 	 * 保存模板数据
