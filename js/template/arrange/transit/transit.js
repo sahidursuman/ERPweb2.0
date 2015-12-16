@@ -127,7 +127,7 @@ define(function(require, exports) {
 
 					transit.$tab.find('.T-arrangeTransitList').html(html);
 
-					transit.$tab.on('click', '.T-action', function() {
+					transit.$tab.off('click').on('click', '.T-action', function() {
 						var $this = $(this),id = $this.closest('tr').data('entity-id');
 						if ($this.hasClass('T-send')) {
 							//通知
