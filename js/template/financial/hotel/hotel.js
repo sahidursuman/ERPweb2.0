@@ -142,6 +142,7 @@ define(function(require, exports) {
                 var result = showDialog(data);
                 if(result){
                     var fhList = data.financialHotelListData;
+                    data.financialHotelListData = FinancialService.isGuidePay(fhList);
                     data.hotelName = hotelName;
                     var html = hotelChecking(data);
                     
@@ -273,6 +274,8 @@ define(function(require, exports) {
                     }
                     var resultList = data.financialHotelListData;
                     data.financialHotelListData = FinancialService.getTempDate(resultList,hotel.clearTempData);
+                    data.financialHotelListData = FinancialService.isGuidePay(resultList);
+                    data.isAutoPay = isAutoPay;
                     var html = hotelClearing(data);
                     
                     args.data = data;
