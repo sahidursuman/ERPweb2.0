@@ -250,14 +250,15 @@ define(function(require, exports) {
 	insurance.init_event_edit = function($container,type,fn) {
 		var itemValidator = rule.checkItems($container);
 		$container.find('.T-btn-insurance-add').off('click').on('click', function() {
-			var html = '<tr>'
+			var html = ''
+				+'<tr>'
 				+'<td><input type="text" name="insuranceItem" class="col-sm-12" maxlength="100"></td>'
 				+'<td><input type="text" name="price" class="col-sm-12" maxlength="9"></td>'
 				+'<td><input type="text" name="days" class="col-sm-12" maxlength="5"></td>'
-				+'<td><input type="text" name="type" class="col-sm-12" maxlength="100"/>;</td>'
+				+'<td><input type="text" name="type" class="col-sm-12" maxlength="100"/></td>'
 				+'<td><input type="text" name="remark" class="col-sm-12" maxlength="1000"></td>'
 				+'<td style="width:80px"><a class="T-insurance-delete">删除</a></td>'
-			+'</tr>';
+				+'</tr>';
 			$container.find('.T-insuranceList tbody').append(html);
 			itemValidator = rule.checkItems($container);
 			// 再调整对话框的高度
