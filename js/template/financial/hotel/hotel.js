@@ -273,6 +273,7 @@ define(function(require, exports) {
                     }
                     var resultList = data.financialHotelListData;
                     data.financialHotelListData = FinancialService.getTempDate(resultList,hotel.clearTempData);
+                    data.isAutoPay = isAutoPay;
                     var html = hotelClearing(data);
                     
                     args.data = data;

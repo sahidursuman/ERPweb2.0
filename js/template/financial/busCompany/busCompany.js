@@ -274,6 +274,7 @@ define(function(require, exports) {
                     var resultList = data.financialBusCompanyListData;
                     data.financialBusCompanyListData = FinancialService.getTempDate(resultList,busCompany.clearTempData);
                     data.financialBusCompanyListData = FinancialService.isGuidePay(resultList);
+                    data.isAutoPay = isAutoPay;
 					var html = Clearing(data);
                     
                     args.data = data;
