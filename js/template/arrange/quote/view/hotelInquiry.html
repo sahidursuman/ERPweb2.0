@@ -28,6 +28,21 @@
 		</div>
 		<div class="search-area clearfix" style="margin: 18px 0;border-top: 1px dotted #ccc;padding: 20px 0;border-bottom: 1px dotted #ccc;">
 			<div class="col-xs-12" style="margin-bottom: 15px;">
+	            <div style="float: left" class="T-searchTimeSection">
+		            <div>
+						<label class="text-right control-label no-padding-right"><span class="necessary">*</span>入住日期:</label>
+						<select name="checkInTime" id="">
+						</select>
+						<label class="text-right control-label no-padding-right" style="margin-left: 17px;">离店日期:</label>
+						<select name="checkOutTime" id="">
+						</select>
+					</div>
+				</div>
+	            <button class="btn btn-sm btn-success T-addSearchTimeSection" style="margin-left: 17px; float: left">
+	                <i class="ace-icon fa fa-plus"></i> 增加时段
+	            </button>
+			</div>
+			<div class="col-xs-12" style="margin-bottom: 15px;">
 				<label class="pull-left text-right control-label no-padding-right">要求:</label>
 	            <!-- <span class="R-right T-addSearchCondition cursor" title="添加要求">
 	                <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
@@ -49,15 +64,6 @@
 					<label class="pull-left text-right control-label no-padding-right"><span class="necessary">*</span>询价截止时间:</label>
 					<div class="col-sm-2">
 						<input type="text" class="col-sm-12 T-dateTimePicker busQuoteWidth" name="expiryTime" value=""/>
-					</div>
-					<label class="pull-left text-right control-label no-padding-right"><span class="necessary">*</span>入住日期:</label>
-					<div class="col-sm-2">
-						<!-- <input type="text" class="col-sm-12 T-dateTimePicker busQuoteWidth" name="expiryTime" value=""/> -->
-						<select name="checkInTime" id="">
-						{{each days as day index}}
-							<option value="{{day.time}}">{{day.time}}</option>
-						{{/each}}
-						</select>
 					</div>
 				</div>
 				<button class="btn btn-sm btn-success T-btn-hotelInquiry-search R-right">  搜索 </button>

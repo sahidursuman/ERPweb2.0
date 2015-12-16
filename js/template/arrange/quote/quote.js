@@ -282,7 +282,6 @@ define(function(require, exports) {
 						var htmlT = data.viewLineProduct;
 						var html = mainQuoteTemplate($a);
 						if(Tools.addTab(menukey+'-add',"新增报价",html)){
-							console.log(htmlT);
 							addQuoteInit(htmlT);
 						}
 					}
@@ -747,6 +746,24 @@ define(function(require, exports) {
 			quote.chooseLineProduct($container);
 		})*/
 		
+		/**
+		 * 改变出游日期后
+		 * @param  {[type]} ) {			var      $this [description]
+		 * @return {[type]}   [description]
+		 */
+			
+		$container.find('.T-startTime').on('changeDate', function() {
+			var $this = $(this), $time;
+			var $table = $container.find('.T-daylist table.table-striped');
+			console.log($table)
+			if ($table.length > 0) {
+				showNndoConfirmDialog($( "#confirm-dialog-message" ), '您修改了出游日期，是否重置行程安排成本价？', function() {
+					$time = $this.val();
+					quote.changeStartTime($container, $time);
+				})
+			}
+		})
+
 
 		// 绑定安排的拖动事件				
 		$container.find('.T-timeline-detail-container').sortable({
@@ -841,6 +858,30 @@ define(function(require, exports) {
 			quote.saveQuote(id, $container);
 		})
 	};
+
+	quote.changeStartTime = function($container, $time) {
+		var json = {
+			startTime: $time,
+			days: $container.find('.T-lineProductDays').data('entity-days'),
+			arrange: [
+				{
+					index: '',
+					restaurant: [],
+					hotel: [
+						{
+							id: '',
+							roomId: '',
+							order: '0'
+						}
+					],
+					scenic: [],
+					selfpay: [],
+					ticket: []
+				}
+			]
+		}
+	};
+
 	//选择线路
 	quote.chooseLineProduct = function() {
 		var html = lineProductListMainTemplate();
@@ -901,7 +942,6 @@ define(function(require, exports) {
 										};
 									});
 									if (!!id) {
-										console.log(id)
 										quote.addQuote(id);
 										layer.close(lineProductChooseLayer);
 									}else{
@@ -1144,10 +1184,21 @@ define(function(require, exports) {
 								+'<a class="T-del">删除</a>'
 								+'</div>';
 								$hotelLayerContent.find('.T-searchArea').append(html);
+								$(window).trigger("resize");
 								quote.chooseRoomType($hotelLayerContent);
 								validator = rule.quoteCheckor($hotelLayerContent);
 								$hotelLayerContent.find('.T-del').off('click').on('click', function() {
 									var $this = $(this), $parents = $this.closest('div.T-seachAreaDiv');
+									$parents.remove();
+								})
+							})
+							$hotelLayerContent.find('.T-addSearchTimeSection').off('click').on('click', function() {
+								var html = $hotelLayerContent.find('.T-searchTimeSection div:first-child').html()
+								var html = '<div class="T-timeSectionDiv" style="display:block;margin-top:5px;">'+html+'<a class="T-delTimeSection" style="margin-left:12px">删除</a></div>'
+								$hotelLayerContent.find('.T-searchTimeSection').append(html);
+								$(window).trigger("resize");
+								$hotelLayerContent.find('.T-delTimeSection').off('click').on('click', function() {
+									var $this = $(this), $parents = $this.closest('div.T-timeSectionDiv');
 									$parents.remove();
 								})
 							})
@@ -1241,7 +1292,7 @@ define(function(require, exports) {
 								html += '<option value="'+data.dayStatus[i].arriveTime+'">'+data.dayStatus[i].arriveTime+'[已询价]</option>'
 							}
 						}
-						$layerContainer.find('[name=checkInTime]').html(html);
+						$layerContainer.find('[name=checkInTime],[name=checkOutTime]').html(html);
 					}
 				}
 			})
@@ -1724,13 +1775,14 @@ define(function(require, exports) {
 		//添加行程安排餐饮
 		var scheduleDetails = '<div class="T-timeline-item timeline-item clearfix updateRestaurantList updateLineProductDaysDetail T-RestaurantList ui-sortable-handle" data-entity-index='+quote.updateLineProductIndex+'><div class="timeline-info " style="color:#1fade0" ><i class="ace-icon fa fa-circle" ></i><span>餐饮</span></div>'+
 		'<div class="widget-box transparent" style="margin-top: 20px"><div class="widget-body"><div class=""><table class="table table-striped table-bordered table-hover">'+
-		'<thead><tr><th  class="th-border">餐厅名称</th><th class="th-border">餐厅电话</th><th class="th-border">用餐类型</th><th class="th-border">餐标<span style="font-size:12px;">(元/人)</span></th>	<th class="th-border">菜单</th><th  class="th-border">备注</th>	<th  class="th-border" style="width: 60px;">操作</th></tr></thead>'+
+		'<thead><tr><th  class="th-border">餐厅名称</th><th class="th-border">用餐类型</th><th class="th-border">餐标(成本价)<span style="font-size:12px;">(元/人)</span></th><th class="th-border">市场价<span style="font-size:12px;">(元/人)</span></th><th class="th-border">菜单</th><th class="th-border">餐厅电话</th><th  class="th-border">备注</th>	<th  class="th-border" style="width: 60px;">操作</th></tr></thead>'+
 		'<tbody><tr>'+
 		'<td><input type="text" class="col-xs-12 chooseRestaurantName bind-change"/><input type="hidden" name="restaurantId"/></td>'+
-		'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
 		'<td><select name="type" class="col-xs-12 restauranType"><option value="早餐">早餐</option><option value="午餐">午餐</option><option value="晚餐">晚餐</option></select></td>'+
 		'<td><input type="text" name="price" class="col-xs-12 restaurantStandardsName bind-change T-changeQuote"/><input type="hidden" name="standardId" value="0" /></td>'+
+		'<td><input type="text" name="marketPrice" class="col-sxs-12" maxlength="9" value=""></td>'+
 		'<td><input type="text" class="col-xs-12" readonly="readonly" name="menuList"/></td>'+
+		'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
 		'<td><input type="text" class="col-xs-12" name="remark"/></td><td><a class="cursor btn-restaurant-delete T-delete deleteAllother">删除 </a></td></tr>'+
 		'</tbody></table></div></div></div></div>';
 
@@ -1768,6 +1820,7 @@ define(function(require, exports) {
 					$tr.find("input[name=menuList]").val("");
 					$tr.find("input[name=pricePerPerson]").val("");
 					$tr.find("input[name=price]").val("");
+					$tr.find("input[name=marketPrice]").val("");
 					$tr.find("input[name=standardId]").val(0);
 					quote.costCalculation($container)
 				}
@@ -1782,6 +1835,7 @@ define(function(require, exports) {
 				$tr.find("input[name=menuList]").val("");
 				$tr.find("input[name=pricePerPerson]").val("");
 				$tr.find("input[name=price]").val("");
+				$tr.find("input[name=marketPrice]").val("");
 				$tr.find("input[name=standardId]").val("");
 				quote.costCalculation($container)
 				
@@ -1832,12 +1886,14 @@ define(function(require, exports) {
 					$tr.find("input[name=pricePerPerson]").val("");
 					$tr.find("input[name=menuList]").val("");
 					$tr.find("input[name=standardId]").val(0);
+					$tr.find("input[name=marketPrice]").val("");
 					quote.costCalculation($container)
 				}
 			},select:function(event,ui){
 				var objEatName = this;
 				var objParent = $(objEatName).parent().parent();
 				objParent.find("input[name=standardId]").val(ui.item.id);
+				objParent.find("input[name=marketPrice]").val(ui.item.price);
 				$.ajax({
 					url: KingServices.build_url('restaurant', 'findStandardDetailById'),
                     data:"id="+ui.item.id,
@@ -1890,16 +1946,15 @@ define(function(require, exports) {
 		//添加行程安排酒店
 		var hotelDetails = '<div class="T-timeline-item timeline-item clearfix updateHotelList updateLineProductDaysDetail T-resourceHotelList ui-sortable-handle" data-entity-index='+quote.updateLineProductIndex+'><div class="timeline-info"  style="color:#1fade0" ><i class="ace-icon fa fa-circle" ></i><span >酒店</span></div>'+
 		'<div class="widget-box transparent" style="margin-top: 20px"><div class="widget-body"><div class=""><table class="table table-striped table-bordered table-hover">'+
-		'<thead><tr><th  class="th-border">酒店星级</th><th  class="th-border">酒店名称</th><th class="th-border">房型</th><th class="th-border">价格</th><th class="th-border">数量</th><th class="th-border">含餐</th><th class="th-border">电话</th><th class="th-border">备注</th><th  class="th-border" style="width: 60px;">操作</th></tr></thead>'+
+		'<thead><tr><th  class="th-border">酒店星级</th><th  class="th-border">酒店名称</th><th class="th-border">房型</th><th class="th-border">成本价</th><th class="th-border">市场价</th><th class="th-border">含餐</th><th class="th-border">备注</th><th  class="th-border" style="width: 60px;">操作</th></tr></thead>'+
 		'<tbody><tr>'+
 		'<td><select class="col-xs-12 resourceHotelStar"><option  selected="selected" {{if hotelList.hotel.level==0 }}selected="selected" {{/if}} value="">全部</option>'+
 		'<option value="1">三星以下</option><option value="2">三星</option><option value="3">准四星</option><option value="4">四星</option><option value="5">准五星</option><option value="6">五星</option><option value="7">五星以上</option></select></td>'+
 		'<td><input type="text" class="col-xs-12 chooseHotelName bind-change" name="hotelNmae"/><input type="hidden" name="hotelId"/></td>'+
 		'<td><input type="text" class="col-xs-12 chooseHotelRoom bind-change" name="hotelRoom"/><input type="hidden" name="hotelRoomId"/></td>'+
-		'<td><input type="text" class="col-xs-12 T-changeQuote" name="contractPrice" style="width:70px;"/></td>'+
-		'<td><input type="text" class="col-xs-12 T-changeQuote" name="count" style="width:70px;"/></td>'+
+		'<td><input type="text" class="T-changeQuote" name="contractPrice" style="width:70px;"/></td>'+
+		'<td><input type="text" name="marketPrice" style="width:70px;"/></td>'+
 		'<td><input type="text" class="col-xs-12" readonly="readonly" name="containBreakfast"/></td>'+
-		'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
 		'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
 		'<td><a class="cursor btn-restaurant-delete T-delete deleteAllother">删除 </a></td></tr></tbody></table></div></div></div></div>';
 		var $container=$btn.closest(".T-dailyArrangeList").find(".T-timeline-detail-container");
@@ -1920,6 +1975,7 @@ define(function(require, exports) {
 			parentObj.find("input[name=hotelRoom]").val("");
 			parentObj.find("input[name=hotelRoomId]").val("");
 			parentObj.find("input[name=contractPrice]").val("");
+			parentObj.find("input[name=marketPrice]").val("");
 			parentObj.find("input[name=containBreakfast]").val("");
 			parentObj.find("input[name=mobileNumber]").val("");
 			parentObj.find("input[name=payType]").val("");
@@ -1933,7 +1989,8 @@ define(function(require, exports) {
 				$tr.find("input[name=hotelId]").val(hotelDataId).trigger('change');	
 				$tr.find("input[name=hotelRoom]").val("");
 				$tr.find("input[name=hotelRoomId]").val("");					
-				$tr.find("input[name=contractPrice]").val("");
+				$tr.find("input[name=contractPrice]").val("");				
+				$tr.find("input[name=marketPrice]").val("");
 				$tr.find("input[name=containBreakfast]").val("");
 				quote.costCalculation($container)
 				
@@ -1960,6 +2017,7 @@ define(function(require, exports) {
 					objParent.find("input[name=hotelId]").val("");
 					objParent.find("input[name=hotelRoomId]").val("");
 					objParent.find("input[name=contractPrice]").val("");
+					objParent.find("input[name=marketPrice]").val("");
 					objParent.find("input[name=containBreakfast]").val("");
 					objParent.find("input[name=hotelRoom]").val("");
 					objParent.find("input[name=mobileNumber]").val("");
@@ -2014,6 +2072,7 @@ define(function(require, exports) {
 							var hotelRoom = JSON.parse(data.hotelRoom);
 
 							$tr.find("input[name=contractPrice]").val(hotelRoom.contractPrice);
+							$tr.find("input[name=marketPrice]").val(hotelRoom.contractPrice);
 							$tr.find("input[name=containBreakfast]").val(hotelRoom.containBreakfast == "0" ? "不含" : "包含");
 							quote.costCalculation($container)
 						}
@@ -2025,6 +2084,7 @@ define(function(require, exports) {
 					var $tr = $(this).val("").closest('tr');
 					$tr.find("input[name=hotelRoomId]").val("");
 					$tr.find("input[name=contractPrice]").val("");
+					$tr.find("input[name=marketPrice]").val("");
 					$tr.find("input[name=containBreakfast]").val("");
 					quote.costCalculation($container)
 				}
@@ -2071,11 +2131,12 @@ define(function(require, exports) {
 		//添加行程安排景区
 		var scenicDetails = '<div class="T-timeline-item timeline-item clearfix updateScenicList updateLineProductDaysDetail T-resourceScenicList ui-sortable-handle" data-entity-index='+quote.updateLineProductIndex+'><div class="timeline-info"  style="color:#1fade0" ><i class="ace-icon fa fa-circle" ></i><span >景区</span></div>'+
 		'<div class="widget-box transparent" style="margin-top: 20px"><div class="widget-body"><div class=""><table class="table table-striped table-bordered table-hover">'+
-		'<thead><tr><th class="th-border">景区名称</th><th class="th-border">收费项目</th><th class="th-border">景区价格</th><th class="th-border">联系电话</th><th class="th-border">备注</th><th style="width: 60px;"  class="th-border">操作</th></tr></thead>'+
+		'<thead><tr><th class="th-border">景区名称</th><th class="th-border">收费项目</th><th class="th-border">成本价</th><th class="th-border">市场价</th><th class="th-border">联系电话</th><th class="th-border">备注</th><th style="width: 60px;"  class="th-border">操作</th></tr></thead>'+
 		'<tbody><tr>'+
 		'<td><input type="text" class="col-xs-12 chooseScenicName bind-change"/><input type="hidden" name="scenicId"/></td>'+
 		'<td><input type="text" class="col-xs-12 chooseChargingProjects bind-change" name="chargingProjects"/><input type="hidden" name="chargingId"/></td>'+
 		'<td><input type="text" class="col-xs-12 T-changeQuote" name="price"/></td>'+
+		'<td><input type="text" class="col-xs-12" name="marketPrice"/></td>'+
 		'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
 		'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
 		'<td><a class="cursor btn-restaurant-delete T-delete deleteAllother"> 删除</a></td></tr></tbody></table></div></div></div></div>';
@@ -2098,6 +2159,9 @@ define(function(require, exports) {
 				objParent.find("input[name=scenicId]").val(scenicNameId).trigger('change');
 				objParent.find("input[name=chargingProjects]").val("");
 				objParent.find("input[name=chargingId]").val("");
+				objParent.find("input[name=mobileNumber]").val("");
+				objParent.find("input[name=price]").val("");
+				objParent.find("input[name=marketPrice]").val("");
 				quote.costCalculation($container)
 				// 更新表单验证的配置
 				validator = rule.quoteUpdate(validator);
@@ -2122,6 +2186,7 @@ define(function(require, exports) {
 					$tr.find("input[name=chargingId]").val("");
 					$tr.find("input[name=mobileNumber]").val("");
 					$tr.find("input[name=price]").val("");
+					$tr.find("input[name=marketPrice]").val("");
 					quote.costCalculation($container)
 					// 更新表单验证的配置
 					validator = rule.quoteUpdate(validator);
@@ -2171,6 +2236,7 @@ define(function(require, exports) {
 							var scenicItem = JSON.parse(data.scenicItem);
 
 							thisParent.find("input[name=price]").val(scenicItem.normalInnerPrice);
+							thisParent.find("input[name=marketPrice]").val(scenicItem.normalInnerPrice);
 							quote.costCalculation($container)
 						}
                     }
@@ -2182,6 +2248,7 @@ define(function(require, exports) {
 					var thisParent = $(this).parent().parent();
 					thisParent.find("input[name=chargingId]").val("");
 					thisParent.find("input[name=price]").val("");
+					thisParent.find("input[name=marketPrice]").val("");
 					quote.costCalculation($container)
 				}
 			}
@@ -2228,13 +2295,13 @@ define(function(require, exports) {
 		//添加行程安排购物
 		var shoppingDetails = '<div class="T-timeline-item timeline-item clearfix updateShoppingList updateLineProductDaysDetail T-resourceShoppingList ui-sortable-handle" data-entity-index='+quote.updateLineProductIndex+'><div class="timeline-info "  style="color:#1fade0" ><i class="ace-icon fa fa-circle" ></i><span>购物</span></div>'+
 		'<div class="widget-box transparent" style="margin-top: 20px"><div class="widget-body"><div class=""><table class="table table-striped table-bordered table-hover">'+
-		'<thead><tr><th class="th-border">商家名称</th><th class="th-border">商品政策</th><th class="th-border">联系电话</th><th class="th-border">停车返佣</th><th class="th-border">人数返佣</th><th class="th-border">备注</th><th class="th-border" style="width: 60px;">操作</th></tr></thead>'+
+		'<thead><tr><th class="th-border">商家名称</th><th class="th-border">商品政策</th><th class="th-border">停车返佣</th><th class="th-border">人数返佣</th><th class="th-border">联系电话</th><th class="th-border">备注</th><th class="th-border" style="width: 60px;">操作</th></tr></thead>'+
 		'<tbody><tr>'+
 		'<td><input type="text" class="col-xs-12 chooseVendorName bind-change"/><input type="hidden" name="shopId"/></td>'+
 		'<td><input type="text" class="col-xs-12 chooseGoodsPolicy bind-change" name="goodsPolicy"/><input type="hidden" name="shopPolicyId"/></td>'+
+		'<td><input type="text" class="col-xs-12" readonly="readonly" name="parkingRebateMoney"/></td>'+
+		'<td><input type="text" class="col-xs-12" readonly="readonly" name="customerRebateMoney"/></td>'+
 		'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
-		'<td><input type="text" class="col-xs-12" name="parkingRebateMoney"/></td>'+
-		'<td><input type="text" class="col-xs-12" name="customerRebateMoney"/></td>'+
 		'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
 		'<td><a class="cursor btn-restaurant-delete T-delete deleteAllother"> 删除 </a></td></tr></tbody></table></div></div></div></div>';
 		var $container=$btn.closest(".T-dailyArrangeList").find(".T-timeline-detail-container");
@@ -2380,13 +2447,14 @@ define(function(require, exports) {
 		//添加行程安排自费
 		var selfPayingDetails = '<div class="T-timeline-item timeline-item clearfix updateSelfPayList updateLineProductDaysDetail T-resourceSelfPayList ui-sortable-handle" data-entity-index='+quote.updateLineProductIndex+'><div class="timeline-info" style="color:#1fade0" ><i class="ace-icon fa fa-circle" ></i><span >自费</span></div>'+
 		'<div class="widget-box transparent" style="margin-top: 20px"><div class="widget-body"><div class=""><table class="table table-striped table-bordered table-hover">'+
-		'<thead><tr><th class="th-border">公司名称</th><th class="th-border">项目名称</th><th class="th-border">联系电话</th><th class="th-border">价格</th><th class="th-border">负责人</th><th class="th-border">备注</th><th class="th-border" style="width: 60px;">操作</th></tr></thead>'+
+		'<thead><tr><th class="th-border">公司名称</th><th class="th-border">项目名称</th><th class="th-border">成本价</th><th class="th-border">市场价</th><th class="th-border">联系人</th><th class="th-border">联系电话</th><th class="th-border">备注</th><th class="th-border" style="width: 60px;">操作</th></tr></thead>'+
 		'<tbody><tr>'+
 		'<td><input type="text" class="col-xs-12 chooseCompanyName bind-change"/><input type="hidden" name="companyId"/></td>'+
 		'<td><input type="text" class="col-xs-12 chooseItemName bind-change" name="selfPayItemName"/><input type="hidden" name="selfPayItemId"/></td>'+
-		'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
-		'<td><input type="text" class="col-xs-12 T-changeQuote" name="contractPrice"/><input type="hidden" class="col-xs-12" readonly="readonly" name="marketPrice"/></td>'+
+		'<td><input type="text" class="col-xs-12 T-changeQuote" name="contractPrice"/></td>'+
+		'<td><input type="text" class="col-xs-12" name="marketPrice"/></td>'+
 		'<td><input type="text" class="col-xs-12" readonly="readonly" name="managerName"/></td>'+
+		'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
 		'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
 		'<td><a class="cursor btn-restaurant-delete T-delete deleteAllother"> 删除</a></td></tr></tbody></table></div></div></div></div>';
 		var $container=$btn.closest(".T-dailyArrangeList").find(".T-timeline-detail-container");
@@ -2541,14 +2609,14 @@ define(function(require, exports) {
 		//添加行程安排交通
 		var shoppingDetails = '<div class="T-timeline-item timeline-item clearfix updateTicketList updateLineProductDaysDetail T-resourceTicketList ui-sortable-handle" data-entity-index='+quote.updateLineProductIndex+'><div class="timeline-info" style="color:#1fade0" ><i class="ace-icon fa fa-circle" ></i><span >交通</span></div>'+
 		'<div class="widget-box transparent" style="margin-top: 20px"><div class="widget-body"><div class=""><table class="table table-striped table-bordered table-hover">'+
-		'<thead><tr><th class="th-border">票务公司名称</th><th class="th-border">类型</th><th class="th-border">座位级别</th><th class="th-border">日期</th><th class="th-border">单价</th><th class="th-border">数量</th><th class="th-border">备注</th><th class="th-border" style="width: 60px;">操作</th></tr></thead>'+
+		'<thead><tr><th class="th-border">票务公司名称</th><th class="th-border">类型</th><th class="th-border">成本价</th><th class="th-border">市场价</th><th class="th-border">联系人</th><th class="th-border">联系电话</th><th class="th-border">备注</th><th class="th-border" style="width: 60px;">操作</th></tr></thead>'+
 		'<tbody><tr>'+
 		'<td><input type="text" class="col-xs-12 chooseTicketName bind-change"/><input type="hidden" name="tickeId"/></td>'+
-		'<td><select name="type" class="col-xs-12 form-control" style="font-size: 12px !important;"><option value="1">机票</option><option value="2">汽车票</option><option value="3">火车票</option><option value="4">轮船票</option></select></td>'+
-		'<td><input type="text" class="col-xs-12" name="seatLevel"/></td>'+
-        '<td><input type="text" class="col-xs-12 T-dateTimePicker" name="time" value=""></td>'+
+		'<td><select name="type" class="col-sm-12 no-padding" style="font-size: 12px !important;"><option value="1">机票</option><option value="2">汽车票</option><option value="3">火车票</option><option value="4">轮船票</option></select></td>'+
 		'<td><input type="text" class="col-xs-12 T-changeQuote" name="price"/></td>'+
-		'<td><input type="text" class="col-xs-12 T-changeQuote" name="count"/></td>'+
+		'<td><input type="text" class="col-xs-12" name="marketPrice"/></td>'+
+		'<td><input type="text" class="col-xs-12" readonly="readonly" name="managerName"/></td>'+
+		'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
 		'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
 		'<td><a class="cursor btn-restaurant-delete T-delete deleteAllother">删除</a></td></tr></tbody></table></div></div></div></div>';
 		var $container=$btn.closest(".T-dailyArrangeList").find(".T-timeline-detail-container");
@@ -2593,6 +2661,7 @@ define(function(require, exports) {
 					$tr.find("input[name=tickeId]").val("");
 					$tr.find("select[name=type]").val(1);
 					$tr.find("input[name=price]").val("");
+					$tr.find("input[name=marketPrice]").val("");
 					$tr.find("input[name=managerName]").val("");
 					$tr.find("input[name=mobileNumber]").val("");
 					$tr.find("input[name=telNumber]").val("");
@@ -2915,17 +2984,20 @@ define(function(require, exports) {
 				busCompanyId: quote.getValue(busList,'busCompanyId'),
 				needSeatCount: quote.getValue(busList,'needSeatCount'),
 				price: quote.getValue(busList,'seatcountPrice'),
+				marketPrice: quote.getValue(guideList,'marketPrice'),
 				remark: quote.getValue(busList,'remark')
 			},
 			guide: {
 				arrangeId: quote.getValue(guideList,'arrangeId'),
 				price: quote.getValue(guideList,'guideFee'),
+				marketPrice: quote.getValue(guideList,'marketPrice'),
 				remark: quote.getValue(guideList,'remark')
 			},
 			insurance: {
 				arrangeId: quote.getValue(insuranceList,'arrangeId'),
 				insuranceId: quote.getValue(insuranceList,'insuranceId'),
 				price: quote.getValue(insuranceList,'price'),
+				marketPrice: quote.getValue(guideList,'marketPrice'),
 				remark: quote.getValue(insuranceList,'remark'),
 				type: quote.getValue(insuranceList,'type')
 			},
@@ -2960,6 +3032,7 @@ define(function(require, exports) {
 							restaurantId : restaurantId,
 							standardId : $item.find("input[name=standardId]").val(),
 							price : $item.find("[name=price]").val(),
+							marketPrice: $item.find('[name=marketPrice]'),
 							remark : $item.find("[name=remark]").val(),
 							orderIndex : $item.attr("data-entity-index")
 						}
@@ -2986,6 +3059,7 @@ define(function(require, exports) {
 							hotelRoomId : hotelRoomId,
 							count: $item.find("[name=count]").val(),
 							price : $item.find("[name=contractPrice]").val(),
+							marketPrice: $item.find('[name=marketPrice]'),
 							remark : $item.find("[name=remark]").val(),
 							orderIndex : $item.attr("data-entity-index")
 						}
@@ -3010,6 +3084,7 @@ define(function(require, exports) {
 							scenicId : scenicId,
 							itemId : itemId,
 							price : $item.find("[name=price]").val(),
+							marketPrice: $item.find('[name=marketPrice]'),
 							remark : $item.find("[name=remark]").val(),
 							orderIndex : $item.attr("data-entity-index")
 						}
@@ -3054,7 +3129,7 @@ define(function(require, exports) {
 							selfPayItemId :$item.find("[name=selfPayItemId]").val(),
 							selfPayId : selfPayId,
 							price : $item.find("[name=contractPrice]").val(),
-							marketPrice : $item.find("[name=marketPrice]").val(),
+							marketPrice: $item.find('[name=marketPrice]'),
 							remark : $item.find("[name=remark]").val(),
 							orderIndex : $item.attr("data-entity-index")
 						}
@@ -3075,6 +3150,7 @@ define(function(require, exports) {
 							ticketId : ticketId,
 							type : $item.find("[name=type]").val(),
 							price : $item.find("[name=price]").val(),
+							marketPrice: $item.find('[name=marketPrice]'),
 							remark : $item.find("[name=remark]").val(),
 							orderIndex : $item.attr("data-entity-index"),
 							startTime: $item.find("[name=time]").val(),
@@ -3099,6 +3175,7 @@ define(function(require, exports) {
 							mobileNumber : $item.find("[name=mobileNumber]").val(),
 							memberCount: $item.find("[name=count]").val(),
 							price: $item.find("[name=price]").val(),
+							marketPrice: $item.find('[name=marketPrice]'),
 							remark: $item.find("[name=remark]").val()
 						}
 						saveJson.lineDayList[index].otherArrangeList.push(otherJson);
