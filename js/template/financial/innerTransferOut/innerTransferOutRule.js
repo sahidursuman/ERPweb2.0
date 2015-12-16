@@ -5,10 +5,7 @@ define(function(require, exports) {
 	    	    {	//未收对账
 	    	    	$ele: $obj.find('input[name=payMoney]'),
 	    	    	rules: [
-	    	    	        {
-	    	    	        	type: 'null', 
-	    	    	        	errMsg: '金额不能为空'
-	    	    	        },
+	    	    	        
 	    	    	        {
 	    	    	        	type: 'float',
 	    	    	        	errMsg: '请输入数字'
@@ -18,10 +15,7 @@ define(function(require, exports) {
 	    	    {	//返款
 	    	    	$ele: $obj.find('input[name=backMoney]'),
 	    	    	rules: [
-	    	    	        {
-	    	    	        	type: 'null', 
-	    	    	        	errMsg: '金额不能为空'
-	    	    	        },
+	    	    	        
 	    	    	        {
 	    	    	        	type: 'float',
 	    	    	        	errMsg: '请输入数字'
