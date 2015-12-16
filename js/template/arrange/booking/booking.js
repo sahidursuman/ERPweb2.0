@@ -56,6 +56,7 @@ define(function(require, exports) {
 	 * 页面初始化方法
 	 */
 	BookingArrange.initModule = function () {
+		BookingArrange.$searchArea = false;
 		BookingArrange.listBooking(0);
 	};
 	/**
