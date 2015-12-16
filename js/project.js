@@ -651,6 +651,8 @@ var modalScripts = {
 	//-------------------------------------------发团管理---------------------------------------------------
 	'arrange_plan':"js/template/arrange/tripPlan/tripPlan.js",
 	'resource_travelLine': 'js/template/resource/travelLine/travelLine.js',
+	'arrange_transit': 'js/template/arrange/transit/transit.js',
+	'arrange_all':'js/template/resource/tripPlan/tripPlan.js',
 	//-------------------------------------------发团管理模块---------------------------------------------------
 	'arrange_quote':'js/template/arrange/quote/quote.js',
 	//-------------------------------------------业务分析模块---------------------------------------------------
@@ -711,19 +713,6 @@ function listMenu(menuTemplate){
 				var html = template("menu-template",data);
 				$("#sidebar .nav-list").html(html);
 
-				//绑定发团安排菜单功能
-				$("#sidebar .nav-list .arrange_all").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					console.info('click.....');
-					seajs.use("" + ASSETS_ROOT +"js/template/resource/tripPlan/tripPlan.js",function(tripPlan){
-						console.info('listTripPlan......');
-						tripPlan.listTripPlan(0,"","","","","","","","");
-						modals["arrange_all"] = tripPlan;
-					});
-				});
-
 				//绑定分团转客菜单功能
 				/*$("#sidebar .nav-list .arrange_tourist").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
@@ -734,17 +723,6 @@ function listMenu(menuTemplate){
 						modals["arrange_tourist"] = arrangeTourist;
 					});
 				});*/
-
-				//绑定中转安排菜单功能
-				$("#sidebar .nav-list .arrange_transit").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/arrange/transit/transit.js",function(transit){
-						transit.listTransit(0,"","","","","","","","","","","","");
-						modals["arrange_transit"] = transit;
-					});
-				});
 
 				//绑定系统旅行社
 				$("#sidebar .nav-list .system_travelAgency").click(function(){

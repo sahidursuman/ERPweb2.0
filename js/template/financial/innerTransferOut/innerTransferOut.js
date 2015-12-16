@@ -1,6 +1,6 @@
 define(function(require,exports) {
 	var menuKey = "financial_innerTransfer_out",
-		rule = require("./innerTransferOutRule"),
+		/*rule = require("./innerTransferOutRule"),*/
 		listTemplate = require("./view/list"),
 		checkTemplate = require("./view/innerTransferOutChecking"),
 		settlementTemplate = require("./view/InnerTransferClearing"),
@@ -23,6 +23,8 @@ define(function(require,exports) {
 		$saveJson:false,
 		$settlementSearchArea:false,
 		$autoAccountData:false,
+		validatorCheck:false,
+		autoValidatorCheck:false,
 		showBtnFlag:false
 	};
 	InnerTransferOut.initModule = function(){
@@ -166,7 +168,7 @@ define(function(require,exports) {
 						InnerTransferOut.$checkTab = $checkId;
 						InnerTransferOut.$checkSearchArea = $checkId.find(".T-search");
 
-					   
+					    
 						//获取线路数据
 						var lineProductNameObj = InnerTransferOut.$checkSearchArea.find('input[name=lineProductName]');
 						InnerTransferOut.getCheckLineproduct(lineProductNameObj,$lineProductData);
@@ -196,23 +198,33 @@ define(function(require,exports) {
 						data.list[i].touristGroupMemberList = JSON.parse(dataList[i].touristGroupMemberList);
 					};
 					if(typeFlag == 2){
-						data.list.innerTransferFeeList = FinancialService.getTempDate(data.list,InnerTransferOut.saveJson)
+						data.list.innerTransferFeeList = FinancialService.getTempDate(data.list,InnerTransferOut.saveJson);
+						data.showBtnFlag = InnerTransferOut.showBtnFlag;
 						html = clearTableTemplate(data);
 					}else{
-						html = checkTableTemplate(data)
+						html = checkTableTemplate(data);
+
 					}
 					var $list = typeFlag == 2?"T-clearList":"T-checkList";
 					$obj.find('.'+$list).html(html);
 					//设置总条数
 					$obj.find('.T-recordSize').text(data.recordSize);
-					validator = rule.check($obj.find('.T-checkList')); 
 					if(typeFlag != 2){
-						 //取消对账权限过滤
+						//表单验证
+						var validator = new FinRule(0);
+					    InnerTransferOut.validatorCheck = validator.check($obj);
+						//取消对账权限过滤
 						var fiList= data.list;
                 		var checkTr = $obj.find(".T-checkTr");
                 		var rightCode = $obj.find(".T-checkList").data("right");
                 		checkDisabled(fiList,checkTr,rightCode);
+					}else{
+					    var autoValidator = new FinRule(2),
+					    	settlermentValidator = new FinRule(1);
+					    InnerTransferOut.$settlermentValidator = settlermentValidator.check($obj);
+        				InnerTransferOut.autoValidatorCheck = autoValidator.check($obj.find('.T-count'));
 					}
+
 					//绑定事件
 						InnerTransferOut.chenkingEvent($obj,$data,typeFlag);
 					// 绑定翻页组件
@@ -223,7 +235,7 @@ define(function(require,exports) {
 					    jump: function(obj,first) {
 					    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
 					    		if(typeFlag == 2){
-					    			var tempJson = FinancialService.clearSaveJson($obj,InnerTransferOut.saveJson,rule);
+					    			var tempJson = FinancialService.clearSaveJson($obj,InnerTransferOut.saveJson,new FinRule(1));
 	                                InnerTransferOut.saveJson = tempJson;
 	                                var sumPayMoney = parseFloat($obj.find('input[name=sumPayMoney]').val()),
 	                                    sumPayType = parseFloat($obj.find('select[name=sumPayType]').val()),
@@ -261,7 +273,7 @@ define(function(require,exports) {
 				$(this).closest('tr').data('change',true);
 				FinancialService.updateSumPayMoney($obj,rule);
 			});
-		}
+		};
 		//页面时间控件格式化
 		FinancialService.initDate($checkSearchArea);
 		//搜索事件
@@ -301,7 +313,7 @@ define(function(require,exports) {
 			}
         });
         //监听扣款输入框的改变
-        $obj.find('input[name=punishMoney]').off('change').on('change',function(){
+        $obj.find('input[name=settlementMoney]').off('change').on('change',function(){
         	InnerTransferOut.changeTwoDecimal($(this).val());
         	InnerTransferOut.autoSumMoney($(this));
         });
@@ -317,7 +329,8 @@ define(function(require,exports) {
         });
         //确认对账事件
         $obj.find(".T-checking").on('click',function(event){
-        	event.preventDefault();
+        	console.log(InnerTransferOut.validatorCheck.form());
+        	if(!InnerTransferOut.validatorCheck.form()){return;}
         	InnerTransferOut.saveCheckingData(0,$obj,"")
         });
         //关闭事件
@@ -330,16 +343,21 @@ define(function(require,exports) {
         });
         //自动下账事件
         $obj.find('.T-btn-autofill').off('click').on('click',function(){
+        	if(!InnerTransferOut.autoValidatorCheck.form()){return;}
         	var $that = $(this);
         	if($that.hasClass('btn-primary')){
+        		showConfirmDialog($( "#confirm-dialog-message" ), "是否按当前账期 " + $data.startDate + " 至 " + $data.endDate + " 下账？",function(){
         		//自动下账函数
         		InnerTransferOut.autoAcountMoney($obj,id,name,$data);
+        	});
+        		
         	}else{
         		InnerTransferOut.setAutoFillEdit($obj,false)
         	}
         });
         //确认付款事件
         $obj.find('.T-payMoney').off('click').on('click',function(){
+        	if(!InnerTransferOut.$settlermentValidator.form()){return;}
         	InnerTransferOut.saveBlanceData(0,$obj,"");
         });
 	};
@@ -404,20 +422,20 @@ define(function(require,exports) {
  		   var flag = $(this).is(":checked");
  		   var tr = $(this).closest('tr');
 		   if(flag){
-		   	    if(tr.attr("isComfirmStatus") == 0 ){
+		   	    if(tr.attr("data-confirm") == 0 ){
 		   	    	var checkData = {
 					    id:tr.data("id"),
 					    checkRemark:tr.find('input[name=checkRemark]').val(),
-					    punishMoney:tr.find('input[name=punishMoney]').val()
+					    punishMoney:tr.find('input[name=settlementMoney]').val()
  			    	}
 			    	JsonStr.push(checkData)
 		   	    }
  		   }else{
- 			    if(tr.attr("isComfirmStatus") == 1){
+ 			    if(tr.attr("data-confirm") == 1){
  				    var checkData = {
 	 					    id:tr.data("id"),
 	 					    checkRemark:tr.find('input[name=checkRemark]').val(),
-	 					    punishMoney:tr.find('input[name=punishMoney]').val()
+	 					    punishMoney:tr.find('input[name=settlementMoney]').val()
 	     			    }
  				    JsonStr.push(checkData)
  			    }
@@ -582,7 +600,6 @@ define(function(require,exports) {
 						var $settleId = $("#tab-"+settleId+"-content");
 						InnerTransferOut.$settlementTab = $settleId;
 						InnerTransferOut.$settlementSearchArea = $settleId.find(".T-search");
-						///InnerTransferOut.$checkValidator = rule.check($checkId);
 						//获取线路数据
 						var lineProductNameObj = InnerTransferOut.$settlementSearchArea.find('input[name=lineProductName]');
 						InnerTransferOut.getCheckLineproduct(lineProductNameObj,$lineProductData);
