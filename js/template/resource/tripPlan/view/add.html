@@ -307,6 +307,7 @@
                                                         <th class="th-border">付款方式</th>
                                                         <th class="th-border">导付</th>
                                                         <th class="th-border">备注</th>
+                                                        <th class="th-border">状态</th>
                                                         <th class="th-border" width="110px;">操作</th>
                                                     </tr>
                                                     </thead>
@@ -336,11 +337,19 @@
                                                                 </td>
                                                                 <td><input name="guidePayMoney" type="text" value="{{busCompany.guidePayMoney}}" maxlength="9" class="col-sm-12" style="width: 60px;"/></td>
                                                                 <td><input name="remark" type="text" value="{{busCompany.remark}}" class="col-sm-12" maxlength="500"/></td>
+                                                                <td>
+                                                                    <select>
+                                                                        <option value="0">未预定</option>
+                                                                        <option value="1">预定中</option>
+                                                                        <option value="2">已预订</option>
+                                                                        <option value="3">无需预定</option>
+                                                                    </select>
+                                                                </td>
                                                                 {{if busCompany.offerId!=null}}
                                                                 <td>
-                                                                    <a class="cursor T-bus-SendOrder T-sendOrder-Area R-right T-action" data-value='{{busCompany.qouteId}}' data-right="1450001" data-entity-offerId={{busCompany.offerId}}>
+                                                                    <!-- <a class="cursor T-bus-SendOrder T-sendOrder-Area R-right T-action" data-value='{{busCompany.qouteId}}' data-right="1450001" data-entity-offerId={{busCompany.offerId}}>
                                                                     发送订单
-                                                                   </a>
+                                                                   </a> -->
                                                                 </td>
                                                                 {{/if}}
                                                             </tr>
