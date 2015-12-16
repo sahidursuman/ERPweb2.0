@@ -100,7 +100,7 @@
 							<a data-entity-id="{{touristGroup.id}}" class="T-action T-view btn-touristGroup-view cursor">
 								查看
 							</a>
-							<a data-entity-id="{{touristGroup.id}}" class="{{if !(touristGroup.isInnerTransferConfirm == 1 || touristGroup.isConfirmAccount == 1)}}T-action T-edit btn-touristGroup-edit  {{/if}} cursor  R-right" data-right="1120003" {{if (touristGroup.isInnerTransferConfirm == 1 || touristGroup.isConfirmAccount == 1)}}style="color:#bbb;"{{/if}}>
+							<a data-entity-id="{{touristGroup.id}}" class="{{if (touristGroup.isInnerTransferConfirm == 1 || touristGroup.isConfirmAccount == 0 )}}T-action T-edit btn-touristGroup-edit  {{/if}} cursor  R-right" data-right="1120003" {{if !(touristGroup.isConfirmAccount == 0)}}style="color:#bbb;"{{/if}}>
 								<label class="padding-right20">|</label>
 								编辑
 							</a>
