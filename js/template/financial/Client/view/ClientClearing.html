@@ -55,7 +55,7 @@
         <div class="form-group">
             <label class="control-label">本次收款金额合计：</label>
             <label class="control-label">
-                <input type="text" class="T-sumReciveMoney money"  {{if type}}disabled {{/if}}>
+                <input type="text" name="sumPayMoney" class="T-sumReciveMoney money"  {{if type}}disabled {{/if}}>
             </label>
         </div>
 
@@ -129,7 +129,7 @@
                 <td>{{rs.settlementMoney}}</td>
                 <td>{{rs.unReceivedMoney}}</td>
                 <td>
-                    <input type="text" class="col-sm-12 T-reciveMoney money">
+                    <input type="text" name="payMoney" class="col-sm-12 T-reciveMoney money">
                 </td>
                 <td>
                     <input type="text" class="col-sm-12 T-remark">
