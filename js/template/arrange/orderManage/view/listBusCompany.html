@@ -5,13 +5,18 @@
 					<th class="col-sm-2">订单号</th>
 					<th class="col-sm-1">类型</th>
 					<th class="col-sm-2">类型编号</th>
+					<th class="col-sm-2">车队</th>
 					<th class="col-sm-1">车座数</th>
 					<th class="col-sm-1">车量品牌</th>
 					<th class="col-sm-1">数量</th>
 					<th class="col-sm-1">单价</th>
 					<th class="col-sm-1">金额</th>
-					<th class="col-sm-1">操作人</th>
-					<th class="col-sm-2">车队</th>
+					<th class="col-sm-1">预订人</th>
+					<th class="col-sm-1">预订时间</th>
+					<th class="col-sm-1">撤单人</th>
+					<th class="col-sm-1">撤单时间</th>
+
+					
 					<th class="col-sm-1">备注</th>
 					<th class="col-sm-1">状态</th>
 				</tr>
@@ -22,13 +27,16 @@
 				    <td>{{busOrderList.orderNumber}}</td>
 				    <td>发团</td>
 					<td>{{if busOrderList.tripPlan!=null}}{{busOrderList.tripPlan.tripNumber}}{{/if}}</td>
+					<td>{{if busOrderList.busCompanyArrange!=null && busOrderList.busCompanyArrange.busCompany!=null}}{{busOrderList.busCompanyArrange.busCompany.companyName}}{{/if}}</td>
 					<td>{{busOrderList.seatCount}}</td>
 					<td>{{if busOrderList.busCompanyArrange!=null && busOrderList.busCompanyArrange.bus!=null}}{{busOrderList.busCompanyArrange.bus.brand}}{{/if}}</td>
 					<td>1</td>
 					<td>{{busOrderList.price}}</td>
 					<td>{{busOrderList.price}}</td>
 					<td>{{if busOrderList.user!=null}}{{busOrderList.user.realName}}{{/if}}</td>
-					<td>{{if busOrderList.busCompanyArrange!=null && busOrderList.busCompanyArrange.busCompany!=null}}{{busOrderList.busCompanyArrange.busCompany.companyName}}{{/if}}</td>
+					<td>预订时间</td>
+					<td>撤单人</td>
+					<td>撤单时间</td>
 					<td>{{busOrderList.remark}}</td>
 					<td>
 						{{if busOrderList.statusStr==-1}}
