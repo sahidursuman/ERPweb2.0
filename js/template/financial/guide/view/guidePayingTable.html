@@ -15,8 +15,8 @@
     <td>{{guide.settlementMoney}}</td>
     <td>{{ if (guide.payedMoney > 0)}}<a href="javascript:void(0);" class="T-action T-viewPayedMoney">{{guide.payedMoney}}</a>{{else}} {{guide.payedMoney}} {{/if}}</td>
     <td>{{guide.unPayedMoney}}</td>
-    <td><input type="text" name="payMoney" value="{{guide.payMoney}}" class="money"></td>
-    <td><input type="text" name="payRemark" value="{{guide.payRemark}}"></td>
+    <td><input type="text" name="payMoney" data-le="{{rs.unPayedMoney}}" {{if !isOuter && rs.unPayedMoney <= 0}} disabled {{/if}} value="{{guide.payMoney}}" class="money"></td>
+    <td><input type="text" name="payRemark" {{if !isOuter && rs.unPayedMoney <= 0}} disabled {{/if}} value="{{guide.payRemark}}"></td>
     <td>{{guide.checkTime}}</td>
     <td>{{guide.checkRealName}}</td>
     <td>
