@@ -72,6 +72,7 @@ define(function(require, exports) {
                 var $that = $(this);
                 arrangeTourist.chosenPartAgenOrBussiness($that);
             });
+            arrangeTourist.touristGroupId=[];
             arrangeTourist.listArrangeTourist(0, $searchArgumentsForm, customerType, divId);
 
         });
@@ -105,6 +106,8 @@ define(function(require, exports) {
                 var $that = $(this);
                 arrangeTourist.chosenPartAgenOrBussiness($that);
             });
+            //转客清空操作
+            arrangeTourist.transferId=[];
             arrangeTourist.listArrangeTourist(0, $searchArgumentsForm, customerType, divId);
         });
 
@@ -2613,9 +2616,6 @@ define(function(require, exports) {
                                         inTransferTr.eq(i).find("td.transferFeeStatus").html('<i class ="ace-icon fa fa-check green"></i>已填写');
                                         inTransferTr.eq(i).find("[name=label_payed]").html(data.transPayedMoney);
                                         inTransferTr.eq(i).find("[name=label_needPay]").html(data.transNeedPayAllMoney);
-
-                                        //转客清空操作
-                                        arrangeTourist.transferId=[];
                                     }
                                 })
 
@@ -2643,8 +2643,7 @@ define(function(require, exports) {
                                         transferTr.eq(i).find("[name=label_payed]").html(data.transPayedMoney);
                                         transferTr.eq(i).find("[name=label_needPay]").html(data.transNeedPayAllMoney);
 
-                                        //转客清空操作
-                                        arrangeTourist.transferId=[];
+
                                     }
                                 })
 
