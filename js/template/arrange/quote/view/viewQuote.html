@@ -89,19 +89,19 @@
         <div class="form-group T-isChooseService">
             <div style="width: 500px;margin-left: 13px;">
                 <label style="padding-right: 50px;">
-                    <input type="checkbox" class="ace T-changeQuote" value="1" name="childNeedBed">
+                    <input  type="checkbox" disabled="true" class="ace T-changeQuote" value="1" name="childNeedBed" {{if quoteDetailJson.isChildNeedRoom==1}}checked="checked"{{/if}}>
                     <span class="lbl">
 						小孩占床
 					</span>
                 </label>
                 <label style="padding-right: 50px;">
-                    <input type="checkbox" class="ace T-changeQuote" value="1" name="includeSelfpay">
+                    <input  type="checkbox" disabled="true" class="ace T-changeQuote" value="1" name="includeSelfpay"{{if quoteDetailJson.isContainGuideFee==1}}checked="checked"{{/if}}>
                     <span class="lbl">
 						包含自费
 					</span>
                 </label>
                 <label>
-                    <input type="checkbox" class="ace T-changeQuote" value="1" name="includeGuideFee">
+                    <input  type="checkbox" disabled="true" class="ace T-changeQuote" value="1" name="includeGuideFee"{{if quoteDetailJson.isContainSelfPay==1}}checked="checked"{{/if}}>
                     <span class="lbl">
 						含导服费
 					</span>
@@ -114,22 +114,22 @@
 
         	<div class="col-xs-2 viewQuoteFdiv">
         	<p style="height: 30px;margin-top: 10px">
-        	<span>大人成本价</span><span style="margin-left: 30px;">{{quoteDetailJson.adultQuotePrice}}</span>
+        	<span>大人成本价</span><span style="margin-left: 30px;">{{quoteDetailJson.adultCostPrice}}</span>
         	</p>
         	<p style="height: 30px"><span>大人报价</span> <span style="margin-left: 30px;">{{quoteDetailJson.adultQuotePrice}}</span>
         	</p>
-        	<p style="height: 30px"><span>大人毛利预估</span> <span style="margin-left: 30px;">{{quoteDetailJson.adultQuotePrice}}</span>
+        	<p style="height: 30px"><span>大人毛利预估</span> <span style="margin-left: 15px;">{{quoteDetailJson.adultQuotePrice}}</span>
         	</p>
         	<p></p>
         	<p></p>
         	</div>
 
         	<div class="col-xs-2 viewQuoteDiv">
-        	<p style="height: 30px;margin-top: 10px"><span>小孩成本价</span> <span style="margin-left: 30px;">{{quoteDetailJson.adultQuotePrice}}</span>
+        	<p style="height: 30px;margin-top: 10px"><span>小孩成本价</span> <span style="margin-left: 30px;">{{quoteDetailJson.childCostPrice}}</span>
         	</p>
-        	<p style="height: 30px"><span>小孩报价</span> <span style="margin-left: 30px;">{{quoteDetailJson.adultQuotePrice}}</span>
+        	<p style="height: 30px"><span>小孩报价</span> <span style="margin-left: 30px;">{{quoteDetailJson.childQuotePrice}}</span>
         	</p>
-        	<p style="height: 30px"><span>小孩毛利预估</span> <span style="margin-left: 30px;">{{quoteDetailJson.adultQuotePrice}}</span>
+        	<p style="height: 30px"><span>小孩毛利预估</span> <span style="margin-left: 15px;">{{quoteDetailJson.adultQuotePrice}}</span>
         	</p>
         	</div>
         	<div class="col-xs-2 viewQuoteDiv">
@@ -137,13 +137,13 @@
         	</p>
         	<p style="height: 30px"><span>单房差报价</span> <span style="margin-left: 30px;">{{quoteDetailJson.adultQuotePrice}}</span>
         	</p>
-        	<p style="height: 30px"><span>单房差毛利预估</span> <span style="margin-left:20px;">{{quoteDetailJson.adultQuotePrice}}</span>
+        	<p style="height: 30px"><span>单房差毛利预估</span> <span style="margin-left:10px;">{{quoteDetailJson.adultQuotePrice}}</span>
         	</p>
         	</div>
         	<div class="col-xs-2 viewQuoteDiv">
-        	<p style="height: 30px;margin-top: 10px"><span>总成本价</span> <span style="margin-left: 30px;">{{quoteDetailJson.adultQuotePrice}}</span>
+        	<p style="height: 30px;margin-top: 10px"><span>总成本价</span> <span style="margin-left: 30px;">{{quoteDetailJson.sumCostFee}}</span>
         	</p>
-        	<p style="height: 30px"><span>总报价</span> <span style="margin-left: 30px;">{{quoteDetailJson.adultQuotePrice}}</span>
+        	<p style="height: 30px"><span>总报价</span> <span style="margin-left: 30px;">{{quoteDetailJson.sumQuoteFee}}</span>
         	</p>
         	<p style="height: 30px"><span>毛利预估</span> <span style="margin-left: 30px;">{{quoteDetailJson.adultQuotePrice}}</span>
         	</p>
@@ -184,7 +184,7 @@
                                                     <tr>
                                                         {{if guideArrange != null}}
                                                         <td>{{guideArrange.price}}</td>
-                                                        <td>1000</td>
+                                                        <td>212</td>
                                                         <td>{{guideArrange.remark}}</td>
                                                         {{else}}
                                                         <td></td>
@@ -222,7 +222,7 @@
                                                         {{if insuranceArrange != null}}
                                                         <td>{{insuranceArrange.insurance.name}}</td>
                                                         <td>{{insuranceArrange.type}}</td>
-                                                        <td>1221</td>
+                                                        <td>{{insuranceArrange.quotePrice}}</td>
                                                         <td>{{insuranceArrange.price}}</td>
                                                         <td>{{insuranceArrange.remark}}</td>
                                                         {{/if}}
@@ -264,7 +264,7 @@
                                                         <td>{{busCompanyArrange.busCompany.managerName}}</td>
                                                         <td>{{busCompanyArrange.busCompany.mobileNumber}}</td>
                                                         <td>{{busCompanyArrange.price}}</td>
-                                                        <td>3212</td>
+                                                        <td>{{busCompanyArrange.quotePrice}}</td>
                                                         <td>{{busCompanyArrange.remark}}</td>
                                                         {{else}}
                                                         <td></td>
@@ -350,8 +350,8 @@
                                                                                                 <td>{{restaurantList.restaurant.name}}</td>
                                                                                                 <td>{{restaurantList.restaurant.mobileNumber}}</td>
                                                                                                 <td>{{restaurantList.restaurantStandard.type}}</td>
+                                                                                                <td>{{restaurantList.restaurantStandard.quotePrice}}</td>
                                                                                                 <td>{{restaurantList.restaurantStandard.price}}</td>
-                                                                                                <td>1212</td>
                                                                                                 <td>{{restaurantList.restaurantStandard.menuList}}</td>
                                                                                                 <td>{{restaurantList.remark}}</td>
                                                                                             </tr>
@@ -378,8 +378,8 @@
                                                                                                 <th class="th-border">酒店星级</th>
                                                                                                 <th class="th-border">酒店名称</th>
                                                                                                 <th class="th-border">房型</th>
-                                                                                                <th class="th-border">成本价</th>
                                                                                                 <th class="th-border">市场价</th>
+                                                                                                <th class="th-border">成本价</th>
                                                                                                 <th class="th-border">数量</th>
                                                                                                 <th class="th-border">早餐</th>
                                                                                                 <th class="th-border">电话</th>
@@ -393,8 +393,8 @@
                                                                                                 </td>
                                                                                                 <td>{{hotelList.hotel.name}}</td>
                                                                                                 <td>{{hotelList.hotelRoom.type}}</td>
+                                                                                                <td>{{hotelList.quotePrice}}</td>
                                                                                                 <td>{{hotelList.price}}</td>
-                                                                                                <td>2131</td>
                                                                                                 <td>{{hotelList.memberCount}}</td>
                                                                                                 <td>
                                                                                                     {{if hotelList.hotelRoom.containBreakfast==1}}含早餐{{/if}} {{if hotelList.hotelRoom.containLunch==1}}含午餐{{/if}} {{if hotelList.hotelRoom.containDinner==1}}含晚餐{{/if}}
@@ -424,8 +424,8 @@
                                                                                             <tr>
                                                                                                 <th class="th-border">景区名称</th>
                                                                                                 <th class="th-border">收费项目</th>
-                                                                                                <th class="th-border">成本价</th>
                                                                                                 <th class="th-border">市场价</th>
+                                                                                                <th class="th-border">成本价</th>
                                                                                                 <th class="th-border">联系电话</th>
                                                                                                 <th class="th-border">备注</th>
                                                                                             </tr>
@@ -434,8 +434,8 @@
                                                                                             <tr>
                                                                                                 <td>{{scenicList.scenic.name}}</td>
                                                                                                 <td>{{scenicList.scenicItem.name}}</td>
+                                                                                                <td>{{scenicList.quotePrice}}</td>
                                                                                                 <td>{{scenicList.price}}</td>
-                                                                                                <td>323</td>
                                                                                                 <td>{{scenicList.scenic.mobileNumber}}</td>
                                                                                                 <td>{{scenicList.remark}}</td>
                                                                                             </tr>
@@ -499,8 +499,8 @@
                                                                                                 <th class="th-border">公司名称</th>
                                                                                                 <th class="th-border">项目名称</th>
                                                                                                 <th class="th-border">联系电话</th>
-                                                                                                <th class="th-border">成本价</th>
                                                                                                 <th class="th-border">市场价</th>
+                                                                                                <th class="th-border">成本价</th>
                                                                                                 <th class="th-border">负责人</th>
                                                                                                 <th class="th-border">备注</th>
                                                                                             </tr>
@@ -510,8 +510,9 @@
                                                                                                 <td>{{selfPayList.selfPay.name}}</td>
                                                                                                 <td>{{selfPayList.selfPayItem.name}}</td>
                                                                                                 <td>{{selfPayList.selfPay.mobileNumber}}</td>
+                                                                                                    
+                                                                                                <td>{{selfPayList.quotePrice}}</td>
                                                                                                 <td>{{selfPayList.price}}</td>
-                                                                                                <td>3232</td>
                                                                                                 <td>{{selfPayList.selfPay.managerName}}</td>
                                                                                                 <td>{{selfPayList.remark}}</td>
                                                                                             </tr>
@@ -537,8 +538,8 @@
                                                                                             <tr>
                                                                                                 <th class="th-border">票务公司名称</th>
                                                                                                 <th class="th-border">类型</th>
-                                                                                                <th class="th-border">成本价</th>
                                                                                                 <th class="th-border">市场价</th>
+                                                                                                <th class="th-border">成本价</th>
                                                                                                 <th class="th-border">联系人</th>
                                                                                                 <th class="th-border">联系电话</th>
                                                                                                 <th class="th-border">公司电话</th>
@@ -551,8 +552,8 @@
                                                                                                 <td>
                                                                                                     {{if ticketList.type == 1 }}机票 {{ else if ticketList.type == 2}} 汽车票 {{ else if ticketList.type == 3 }} 火车票 {{ else if ticketList.type == 4}} 轮船票 {{ /if }}
                                                                                                 </td>
+                                                                                                <td>{{ticketList.quotePrice}}</td>
                                                                                                 <td>{{ticketList.price}}</td>
-                                                                                                <td>5353</td>
                                                                                                 <td>王二</td>
                                                                                                 <td>1323234342</td>
                                                                                                 <td>0280987678</td>

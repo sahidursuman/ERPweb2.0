@@ -78,6 +78,7 @@ define(function(require, exports) {
 					// init $tab
 					ResLineProduct.$tab = $("#tab-"+menuKey+"-content");
 					ResLineProduct.lineProductType(ResLineProduct.$tab);
+					ResLineProduct.needSeatCountS(ResLineProduct.$tab);
 					// init event
 					ResLineProduct.init_event();
 					// 绑定翻页组件
@@ -126,6 +127,47 @@ define(function(require, exports) {
 				}
 
 			})
+		};
+
+
+		ResLineProduct.needSeatCountS  = function($obj){
+			var needSeatCountS = $obj.find(".T-needSeatCount");
+			needSeatCountS.autocomplete({
+				minLength:0,
+				select:function(event,ui){
+					
+				},
+				change:function(event,ui){
+					
+				}
+			}).unbind("click").click(function(){
+			var obj = this;
+			$.ajax({
+				url: KingServices.build_url('bookingOrder','getSeatCountList'),
+				showLoading: false,
+				success:function(data){
+					if(showDialog(data)){
+						var seatCountListJson = [];
+						var seatCountList = data.seatCountList;
+						if(seatCountList && seatCountList.length > 0){
+							for(var i=0; i < seatCountList.length; i++){
+								var seatCount = {
+									value : seatCountList[i]
+								}
+								seatCountListJson.push(seatCount);
+							}
+							$(obj).autocomplete('option','source', seatCountListJson);
+							$(obj).autocomplete('search', '');
+						}else{
+							layer.tips('无数据', obj, {
+							    tips: [1, '#3595CC'],
+							    time: 2000
+							});
+						}
+					}
+				}
+			})
+		})
 		};
 
 	/**
