@@ -34,38 +34,38 @@ define(function(require, exports){
 	 * 获取购物账务列表，初始化列表页面
 	 * @param  {int} page 页码
 	 */
-	FinShop.getList = function(page){
+	FinShop.getList = function(page, $tab){
 		var args = FinancialService.getInitDate();
         args.pageNo = page || 0;
-		if (!!FinShop.$tab) {
+		if (!!$tab) {
 			args = {
 				pageNo: (page || 0),
-				startDate: FinShop.$tab.find('.T-search-start-date').val(),
-				endDate : FinShop.$tab.find('.T-search-end-date').val(),
+				startDate: $tab.find('.T-search-start-date').val(),
+				endDate : $tab.find('.T-search-end-date').val(),
 			}
-			var shopName = FinShop.$tab.find('.T-search-name').val();
+			var shopName = $tab.find('.T-search-name').val();
             args.shopName = shopName === '全部' ? '' : shopName;
 		}
 		$.ajax({
 			url: KingServices.build_url('financial/shopAccount', 'listPager'),
 			type: 'post',
-			data: args,
+			data: args//{searchParam : JSON.stringify()},
 		}).done(function(data){
 			if (showDialog(data)) {
 				Tools.addTab(menuKey,"购物账务",listTemplate(data));
 				// 绑定事件
-				FinShop.$tab = $('#tab-' + menuKey + '-content');
-				FinShop.init_event(FinShop.$tab);
+				FinShop.$tab = $tab = $('#tab-' + menuKey + '-content');
+				FinShop.init_event($tab);
 				// 缓存页面
 				FinShop.listPageNo = args.pageNo;
 				// 绑定翻页组件
 				laypage({
-				    cont: FinShop.$tab.find('.T-pagenation'), 
+				    cont: $tab.find('.T-pagenation'), 
 				    pages: data.totalPage, //总页数
 				    curr: (data.pageNo + 1),
 				    jump: function(obj, first) {
 				    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-				    		FinShop.getList(obj.curr -1);
+				    		FinShop.getList(obj.curr -1, $tab);
 				    	}
 				    }
 				});	
@@ -212,30 +212,68 @@ define(function(require, exports){
 				if(Tools.addTab(key, title, template(data))){
 					if(type){
 						$theTab = FinShop.$settlementTab = $tab || $('#tab-' + key + '-content');
-						FinShop.sett_init_event(FinShop.$settlementTab, type);
 					}else{
 						$theTab = FinShop.$checkingTab = $tab || $('#tab-' + key + '-content');
-						FinShop.check_init_event(FinShop.$checkingTab, type);
 					}
+					FinShop.initOperationEvent($theTab, type);
+					$theTab.data('id', args.shopId);
+					// 绑定翻页组件
+					laypage({
+					    cont: $theTab.find('.T-pagenation'), 
+					    pages: data.searchParam.totalPage, //总页数
+					    curr: (data.searchParam.pageNo + 1),
+					    jump: function(obj, first) {
+					    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+					    		FinShop.initOperationList({page : obj.curr -1}, type, $theTab);
+					    	}
+					    }
+					});
 				}
-				$theTab.data('id', args.shopId);
-				// 绑定翻页组件
-				laypage({
-				    cont: $theTab.find('.T-pagenation'), 
-				    pages: data.searchParam.totalPage, //总页数
-				    curr: (data.searchParam.pageNo + 1),
-				    jump: function(obj, first) {
-				    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-				    		FinShop.initOperationList({page : obj.curr -1}, type, $theTab);
-				    	}
-				    }
-				});
 			}
 		});
 	};
+	/**
+	 * 对账和收款绑定事件
+	 * @param  {[type]} $tab [description]
+	 * @param  {[type]} type [description]
+	 * @return {[type]}      [description]
+	 */
+	FinShop.initOperationEvent = function($tab, type){
+		var validator = (new FinRule(!type ? 0 : (FinShop.isBalanceSource ? 3 : 1))).check($tab);
 
-	FinShop.check_init_event = function($tab){
-		var validator = (new FinRule(0)).check($tab);
+		//搜索顶部的事件绑定
+		var $searchArea = $tab.find('.T-search-area');
+		$searchArea.find('.T-btn-search').on('click', function(event){
+			event.preventDefault();
+			FinShop.initOperationList(0, type, $tab);
+		});
+		var $datepicker = $searchArea.find('.datepicker');
+		Tools.setDatePicker($datepicker, true);
+		var operationMenuKey = settMenuKey,
+			saveData = FinShop.saveSettlement;
+		if(type){
+			var autoValidator = (new FinRule(2)).check($tab);
+			FinancialService.updateSumPayMoney($tab, new FinRule(FinShop.isBalanceSource ? 3 : 1));
+			$tab.find(".T-btn-autofill").on('click', function(event){
+				event.preventDefault();
+				if ($(this).hasClass('btn-primary')) {
+	                if (autoValidator.form()) {
+	                	FinancialService.autoPayConfirm($datepicker.eq(0).val(), $datepicker.eq(1).val(),function(){
+	                    	FinShop.autoFillMoney($tab);
+	                	});
+	                }
+	            } else {
+	                FinShop.payingJson = [];
+	                FinShop.setAutoFillEdit($tab, false);
+	            }
+			});
+		}else{
+			saveData = FinShop.saveChecking;
+			operationMenuKey = checkMenuKey;
+			FinancialService.updateUnpayMoney($tab, new FinRule(0));
+			//给全选按钮绑定事件
+        	FinancialService.initCheckBoxs($tab.find(".T-checkAll"), $tab.find(".T-checkList").find('.T-checkbox'));
+		}
 
 		$tab.off('change').off(SWITCH_TAB_SAVE).off(CLOSE_TAB_SAVE)
 		.on('change', '.T-checkList, .T-checkAll', function(event) {
@@ -247,27 +285,17 @@ define(function(require, exports){
 		})
 		.on(SWITCH_TAB_SAVE, function(event, tab_id, title, html){
 			event.preventDefault();
-			FinShop.saveChecking($tab, [tab_id, title, html]);
+			saveData($tab, true);
 		})
 		.on(CLOSE_TAB_SAVE, function(event){
 			event.preventDefault();
-			FinShop.saveChecking($tab);
-		});
-
-		//搜索顶部的事件绑定
-		var $searchArea = $tab.find('.T-search-area');
-		$searchArea.find('.T-btn-search').on('click', function(event){
-			event.preventDefault();
-			FinShop.initOperationList(0, false, $tab);
+			saveData($tab, true);
 		});
 
 		$tab.find('.T-checkTr').on('change', function(){
 			$(this).data('change', 'true');
 		});
 
-		Tools.setDatePicker($searchArea.find('.datepicker'), true);
-		FinancialService.updateUnpayMoney($tab, new FinRule(0));
-		
 		// 报表内的操作
 		$tab.find('.T-list').on('click', '.T-action', function(event) {
 			event.preventDefault();
@@ -283,27 +311,22 @@ define(function(require, exports){
 			}
 		});
 
-		//给全选按钮绑定事件: 未去重
-        FinancialService.initCheckBoxs($tab.find(".T-checkAll"), $tab.find(".T-checkList").find('.T-checkbox'));
-
 		//绑定确定事件
 		$tab.find('.T-btn-save').on('click', function(event){
 			event.preventDefault();
-			FinShop.saveChecking($tab);
+			saveData($tab);
 		});
 		//绑定取消事件
 		$tab.find('.T-btn-close').on('click', function(event){
 			event.preventDefault();
 			if(!!$tab.data('isEdited')){
 				showSaveConfirmDialog($('#confirm-dialog-message'), "内容已经被修改，是否保存?", function(){
-					FinShop.saveCheckData($tab);
+					saveData($tab, true);
 				}, function(){
-					Tools.closeTab(checkMenuKey);
-                	FinShop.getList(FinShop.listPageNo);
+					Tools.closeTab(operationMenuKey);
 				});
 			}else{
-				Tools.closeTab(checkMenuKey);
-                FinShop.getList(FinShop.listPageNo);
+				Tools.closeTab(operationMenuKey);
 			}
 		});
 	};
@@ -311,15 +334,15 @@ define(function(require, exports){
 	FinShop.viewOperationDetail = function(id, type){
 		if (!!id) {
 			var method = 'findCheckAccountDetail',
-                title = '应付金额明细',
+                title = '应收金额明细',
                 html = viewAccountTemplate;
             if (!type) {
                 method = 'findReciveAccountDetail';
-                title = '已付金额明细';
+                title = '已收金额明细';
                 html = viewReceivedTemplate;
             }
             $.ajax({
-                url: KingServices.build_url('financial/bookingAccount', method),
+                url: KingServices.build_url('financial/shopAccount', method),
                 type: 'post',
                 data: {
                     id: id
@@ -424,8 +447,8 @@ define(function(require, exports){
 					$tab.data('isEdited', false);
 	                showMessageDialog($('#confirm-dialog-message'), data.message, function() {
 	                    if (!!tabArgs) {
+							Tools.closeTab(checkMenuKey);
 	                    	FinShop.getList(FinShop.listPageNo);
-	                        Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
 	                    } else {
 	                        FinShop.initOperationList({page:0}, false, $tab);
 	                    }
@@ -437,87 +460,6 @@ define(function(require, exports){
 		}else{
 			showMessageDialog($('#confirm-dialog-message'), '您当前未进行任何操作！');
 		}
-	};
-
-	FinShop.sett_init_event = function($tab){
-		var validator = (new FinRule(FinShop.isBalanceSource ? 3 : 1)).check($tab),
-			autoValidator = (new FinRule(2)).check($tab);
-
-		$tab.off('change').off(SWITCH_TAB_SAVE).off(CLOSE_TAB_SAVE)
-		.on('change', '.T-checkList', function(event) {
-			event.preventDefault();
-			$tab.data('isEdited', true);
-		})
-		.on(SWITCH_TAB_SAVE, function(event, tab_id, title, html){
-			event.preventDefault();
-			FinShop.saveSettlement($tab, [tab_id, title, html]);
-		})
-		.on(CLOSE_TAB_SAVE, function(event){
-			event.preventDefault();
-			FinShop.saveSettlement($tab);
-		});
-
-		//搜索顶部的事件绑定
-		var $searchArea = $tab.find('.T-search-area');
-		$searchArea.find('.T-btn-search').on('click', function(event){
-			event.preventDefault();
-			FinShop.initOperationList({
-				page : 0,
-				id : FinShop.settlementId
-			}, true, $tab);
-		});
-		var $datepicker = $searchArea.find('.datepicker');
-		Tools.setDatePicker($datepicker, true);
-		FinancialService.updateSumPayMoney($tab, new FinRule(FinShop.isBalanceSource ? 3 : 1));
-
-		// 报表内的操作
-		$tab.find('.T-list').on('click', '.T-action', function(event) {
-			event.preventDefault();
-			var $that = $(this), id = $that.closest('tr').data('id');
-			if($that.hasClass('T-see-group')){
-				FinShop.unfold($that);
-			}else if($that.hasClass('T-view-receipts')){
-				FinShop.viewImage($that);
-			}else if($that.hasClass('T-payDetails')){
-				FinShop.viewOperationDetail(id, 0);
-			}else if($that.hasClass('T-view-details')){
-				FinShop.viewOperationDetail(id, 1);
-			}
-		});
-		//绑定确定事件
-		$tab.find('.T-btn-save').on('click', function(event){
-			event.preventDefault();
-			FinShop.saveSettlement($tab);
-		});
-		//绑定取消事件
-		$tab.find('.T-btn-close').on('click', function(event){
-			event.preventDefault();
-			if(!!$tab.data('isEdited')){
-				showSaveConfirmDialog($('#confirm-dialog-message'), "内容已经被修改，是否保存?", function(){
-					FinShop.saveSettlement($tab);
-				}, function(){
-					Tools.closeTab(settMenuKey);
-                	FinShop.getList(FinShop.listPageNo);
-				});
-			}else{
-				Tools.closeTab(settMenuKey);
-                FinShop.getList(FinShop.listPageNo);
-			}
-		});
-		$tab.find(".T-btn-autofill").on('click', function(event){
-			event.preventDefault();
-			if ($(this).hasClass('btn-primary')) {
-                if (autoValidator.form()) {
-                	FinancialService.autoPayConfirm($datepicker.eq(0).val(), $datepicker.eq(1).val(),function(){
-                    	FinShop.autoFillMoney($tab);
-                	});
-                }
-            } else {
-                FinShop.payingJson = [];
-                FinShop.setAutoFillEdit($tab, false);
-            }
-		})
-
 	};
 
 	/**
@@ -589,7 +531,9 @@ define(function(require, exports){
                     	data.shopAccountList = FinancialService.getTempDate(data.shopAccountList, FinShop.payingJson);
                     	var html = payingTableTemplate(data);
 						FinShop.$settlementTab.find('.T-checkList').html(html);
-
+						$tab.find('.T-checkTr').on('change', function(){
+							$(this).data('change', 'true');
+						});
 						// 设置记录条数及页面
                         $tab.find('.T-sumItem').text('共计' + data.searchParam.recordSize + '条记录');
                         $tab.find('.T-btn-save').data('pageNo', args.pageNo);
@@ -612,29 +556,25 @@ define(function(require, exports){
 
 	FinShop.saveSettlement = function($tab, tabArgs){
 		var json = FinancialService.clearSaveJson($tab, FinShop.payingJson, new FinRule(FinShop.isBalanceSource ? 3 : 1));
-		console.log(json)
 		if (json.length) {
 			var args = {
-                ticketId: FinShop.settlementId,
-                sumCurrentPayMoney: $tab.find('.T-sumReciveMoney').val(),
+                shopId: FinShop.settlementId,
                 payType: $tab.find('.T-sumPayType').val(),
-                payRemark: $tab.find('.T-sumRemark').val()
+                remark: $tab.find('.T-sumRemark').val(),
+                reciveAccountList : JSON.stringify(json)
 			}
             $.ajax({
-                    url: KingServices.build_url('account/arrangeTicketFinancial', 'saveAccountSettlement'),
+                    url: KingServices.build_url('financial/shopAccount', 'receiveShopAccount'),
                     type: 'post',
-                    data: {
-                    	searchParam : JSON.stringify(args),
-                    	ticketJson : JSON.stringify(json)
-                    },
+                    data: args,
                 })
                 .done(function(data) {
                     $tab.data('isEdited', false);
                     FinShop.payingJson = [];
                     showMessageDialog($('#confirm-dialog-message'), data.message, function() {
                         if (!!tabArgs) {
+                        	Tools.closeTab(settMenuKey);
                         	FinShop.getList(FinShop.listPageNo);
-                            Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
                         } else {
                             FinShop.initOperationList({page : 0}, true, $tab);
                         }
