@@ -218,7 +218,7 @@ define(function(require,exports) {
                 		checkDisabled(fiList,checkTr,rightCode);
 					}else{
 					    var autoValidator = new FinRule(2),
-					    	settlermentValidator = new FinRule(1);
+					    	settlermentValidator = data.showBtnFlag == true ? new FinRule(3):new FinRule(1);
 					    InnerTransferOut.$settlermentValidator = settlermentValidator.check($obj);
         				InnerTransferOut.autoValidatorCheck = autoValidator.check($obj.find('.T-count'));
 					}
@@ -269,7 +269,8 @@ define(function(require,exports) {
 		if(typeFlag == 2){
 			$obj.find('.'+$list).off('change').on('change','input',function(){
 				$(this).closest('tr').data('change',true);
-				FinancialService.updateSumPayMoney($obj,new FinRule(1));
+				//自动计算本次付款金额
+				InnerTransferOut.autoSumPayMoney($obj);
 			});
 		};
 		//页面时间控件格式化
@@ -789,6 +790,17 @@ define(function(require,exports) {
         	result = 0;
     	}
 		return result;
+	};
+	InnerTransferOut.autoSumPayMoney = function($obj){
+		var sumPayMoney = $obj.find('input[name=sumPayMoney]'),
+			sumMoney = 0;
+		var tr = $obj.find('.T-clearList').find("input[name=payMoney]");
+		tr.each(function(){
+			var $thisVal = $(this).val();
+			$thisVal = InnerTransferOut.changeTwoDecimal($thisVal);
+			sumMoney += $thisVal;
+		});
+		sumPayMoney.val(sumMoney);
 	};
 	//规范输入的数字数据
 	InnerTransferOut.changeTwoDecimal = function($val){

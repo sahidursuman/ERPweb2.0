@@ -25,6 +25,7 @@ define(function(require, exports) {
 
 	//初始化中转模块
 	transit.initModule = function() {
+		transit.$searchArea = false;
 		transit.listMainTransit();
 	};
 
@@ -224,7 +225,7 @@ define(function(require, exports) {
 	 * @param  {[type]} id [安排ID]
 	 * @return {[type]}    [description]
 	 */
-	transit.updateTransit = function(id) {
+	transit.updateTransit = function(id, isOuter) {
 		$.ajax({
 			url: KingServices.build_url('touristGroup','findTouristGroupArrangeById'),
 			type:"POST",
@@ -243,6 +244,7 @@ define(function(require, exports) {
 					data.sendGroup.outRestaurantList = JSON.parse(data.sendGroup.outRestaurantList);
 					data.sendGroup.outOtherList = JSON.parse(data.sendGroup.outOtherList);
 					data.touristGroup = JSON.parse(data.touristGroup);
+					data.isOuter = !!isOuter;
 					var html =arrangeTemplate(data);
 					html  = filterUnAuth(html);
 					if (Tools.addTab(menuKey+'-update','编辑中转安排',html)) {
@@ -346,8 +348,9 @@ define(function(require, exports) {
 		transit.addResource($tab);
 		//提交按钮事件绑定
 		$tab.find('.T-arrange-update').on('click', function() {
-			var $this = $(this), id = $this.data('entity-id');
-			transit.submitUpdateTransit(id, 1, $tab);
+			var $this = $(this), id = $this.data('entity-id'),
+				isOuter = !!$this.data('isouter');
+			transit.submitUpdateTransit(id, !isOuter, $tab);
 		})
 		//change触发计算
 		$tab.on('change', '.count, .price, .discount', transit.calculation);
@@ -1454,6 +1457,7 @@ define(function(require, exports) {
 	}
 
 	exports.init = transit.initModule;
-	exports.save = transit.save;
-	exports.updateTransit = transit.updateTransit;
+	exports.updateTransit = function(id, isOuter) {
+		transit.updateTransit(id, isOuter);
+	}
 })
