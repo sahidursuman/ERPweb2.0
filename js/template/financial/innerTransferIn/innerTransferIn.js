@@ -1,6 +1,5 @@
 define(function(require,exports) {
 	var menuKey = "financial_innerTransfer_in",
-		rule = require("./innerTransferInRule"),
 		listTemplate = require("./view/list"),
 		checkTemplate = require("./view/innerTransferInChecking"),
 		settlementTemplate = require("./view/InnerTransferInClearing"),
@@ -118,9 +117,6 @@ define(function(require,exports) {
 					endAccountTime:endDate
 				}
 			if($that.hasClass('T-check')){
-				//对账处理
-				/*InnerTransferIn.incomeStatus = 0;
-				InnerTransferIn.incomeTab = 0;*/
 				InnerTransferIn.chenking(args,1);
 			}else if($that.hasClass('T-balance')){
 				//结算处理
@@ -219,7 +215,6 @@ define(function(require,exports) {
 					    			}
 					    		}
 				    		}
-				    		
 				    	}
 				    	html = settlementTemplate(data);
 				    }else{
@@ -254,7 +249,7 @@ define(function(require,exports) {
 						    jump: function(obj, first) {
 						    	if (!first) {
 						    	if(typeFlag == 2){
-						    		var tempJson = FinancialService.clearSaveJson($checkId,InnerTransferIn.saveJson.autoPayList,rule);
+						    		var tempJson = FinancialService.clearSaveJson($checkId,InnerTransferIn.saveJson.autoPayList,new FinRule(4));
 	                                InnerTransferIn.saveJson.autoPayList = tempJson;
 	                                var sumPayMoney = parseFloat($obj.find('input[name=sumPayMoney]').val()),
 	                                    sumPayType = parseFloat($obj.find('select[name=sumPayType]').val()),
@@ -301,29 +296,27 @@ define(function(require,exports) {
 	InnerTransferIn.chenkingEvent = function($obj,$listSearchData,typeFlag){
 		var $list = typeFlag == 2?"T-clearList":"T-checkList";
 		var $checkList = $obj.find('.'+$list);
-	 	/*var validator = new FinRule(typeFlag == 2 ? 2 : 0),
-            autoValidator = new FinRule(2);
-        var validatorCheck = validator.check($tab),
-            autoValidatorCheck = autoValidator.check($tab.find('.T-auto-fill-area'));*/
-		//监听已对账的数据是否被修改
-		if(typeFlag == 2){
-			$obj.find('.'+$list).off('change').on('change','input',function(){
-				$(this).closest('tr').data('change',true);
-				FinancialService.updateSumPayMoney($obj,rule);
-			});
-		};
+		
 		//切换tab事件
 		InnerTransferIn.init_CRU_event($obj,$listSearchData,typeFlag);
 		//表单验证
 		var validator = new FinRule(0),
-			settleValidator = new FinRule(4);
+			settleValidator,
             autoValidator = new FinRule(2);
         var validatorCheck = validator.check($obj),
-        	autoValidatorCheck,
+        	settleCheck,
+        	autoValidatorCheck;
+        //监听已对账的数据是否被修改
+		if(typeFlag == 2){
+			settleValidator = $listSearchData.btnShowStatus == true ? new FinRule(3):new FinRule(4);
 			settleCheck = settleValidator.check($obj);
-        	if(typeFlag == 2){
-        		autoValidatorCheck = autoValidator.check($obj.find('.T-count'));
-        	}
+			autoValidatorCheck = autoValidator.check($obj.find('.T-count'));
+			$obj.find('.'+$list).off('change').on('change','input',function(){
+				$(this).closest('tr').data('change',true);
+				//自动计算本次收款金额
+				InnerTransferIn.autoSumIncomeMoney($obj);
+			});
+		};
 		//搜索事件
 		$obj.find(".T-checking-search").on('click',function(event){
 			event.preventDefault();
@@ -335,7 +328,7 @@ define(function(require,exports) {
 			}
 			
 		});
-		if(InnerTransferIn.btnSatus == 1 || $listSearchData.btnShowStatus == 1){
+		if(InnerTransferIn.btnSatus == 1 || $listSearchData.btnShowStatus == true){
 			$obj.find('input[name=sumPayMoney]').val(InnerTransferIn.saveJson.autoPayMoney);
 			InnerTransferIn.setAutoFillEdit($obj,true);
 		};
@@ -379,10 +372,10 @@ define(function(require,exports) {
         	InnerTransferIn.viewPayedDetail(id);
         });
         //计算返款金额
-		$obj.find('.'+$list).on('change','input[name=backMoney]',function(){
+		/*$obj.find('.'+$list).on('change','input[name=backMoney]',function(){
 			InnerTransferIn.autoSumBackMoney($(this),$obj);
 		});
-        //确认对账事件
+*/        //确认对账事件
         $obj.find(".T-checking").on('click',function(event){
         	event.preventDefault();
         	if(!validatorCheck.form()){return;}
@@ -427,6 +420,18 @@ define(function(require,exports) {
         	    url += "&fromBusinessGroupId="+fromBusinessGroupId+"&fromBusinessGroupName="+fromBusinessGroupName+"&year="+year+"&month="+month+"&sortType=auto";
         	exportXLS(url)
         });
+	};
+	//自动计算本次收款金额
+	InnerTransferIn.autoSumIncomeMoney = function($obj){
+		var sumPayMoney = $obj.find('input[name=sumPayMoney]'),
+			sumMoney = 0;
+		var tr = $obj.find('.T-clearList').find("input[name=payMoney]");
+		tr.each(function(){
+			var $thisVal = $(this).val();
+			$thisVal = InnerTransferIn.changeTwoDecimal($thisVal);
+			sumMoney += $thisVal;
+		});
+		sumPayMoney.val(sumMoney);
 	};
 	//自动计算返款
 	InnerTransferIn.autoSumBackMoney = function($obj,$parentObj){
@@ -712,7 +717,7 @@ define(function(require,exports) {
 		var payMoney;
 		var payType;
 		var remark;
-		var JsonStr = FinancialService.clearSaveJson(InnerTransferIn.$settlementTab,InnerTransferIn.saveJson.autoPayList,rule);
+		var JsonStr = FinancialService.clearSaveJson(InnerTransferIn.$settlementTab,InnerTransferIn.saveJson.autoPayList,new FinRule(4));
 		var payType = tab_id.find('select[name=sumPayType]').val();
 		var sumRemark = tab_id.find('name[name=sumRemark]').val();
 		JsonStr = JSON.stringify(JsonStr);
@@ -771,9 +776,9 @@ define(function(require,exports) {
 			$tab.on(SWITCH_TAB_SAVE, function(event,tab_id, title, html) {
 				event.preventDefault();
 				if(typeFlag == 2){
-					InnerTransferIn.saveBlanceData(0,$listSearchData,tab_id, title, html);
+					InnerTransferIn.saveBlanceData(0,$tab,$listSearchData,tab_id, title, html);
 				}else{
-					InnerTransferIn.saveCheckingData(0,$listSearchData,tab_id, title, html);
+					InnerTransferIn.saveCheckingData(0,$tab,$listSearchData,tab_id, title, html);
 				}
 			})
 			.on(SWITCH_TAB_BIND_EVENT, function(event,tab_id, title, html) {
@@ -781,9 +786,17 @@ define(function(require,exports) {
 				Tools.addTab(tab_id, title, html);
 				//通过typeFlag来判断；1--新增的事件绑定；2--修改的事件绑定
 				if(typeFlag == 2){
-					InnerTransferIn.settlementEvent(InnerTransferIn.$settlementTab);
+					var id = $tab.find('input[name=businessGroupId]').val();
+					var name = $tab.find('input[name=businessGroupName]').val();
+					$listSearchData.businessGroupId = id;
+					$listSearchData.businessGroupName = name;
+					InnerTransferIn.chenkingEvent($tab,$listSearchData,typeFlag);
 				}else{
-					InnerTransferIn.chenkingEvent(InnerTransferIn.$checkTab);
+					var id = $tab.find('input[name=businessGroupId]').val();
+					var name = $tab.find('input[name=businessGroupName]').val();
+					$listSearchData.businessGroupId = id;
+					$listSearchData.businessGroupName = name;
+					InnerTransferIn.chenkingEvent($tab,$listSearchData,typeFlag);
 				}
 			})
 			// 保存后关闭
@@ -797,11 +810,6 @@ define(function(require,exports) {
 			});
 		}
 	};
-	/*//表单验证
-	InnerTransferIn.valdatorTable = function($obj,typeFlag){
-		if(typeFlag !=2){
-		}
-	};*/
 	//规范输入的数字数据
 	InnerTransferIn.changeTwoDecimal = function($val){
 		var newVal = parseFloat($val);

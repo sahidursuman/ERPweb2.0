@@ -1400,6 +1400,26 @@ Tools.addZero2Two = function(num)  {
 }
 
 /**
+ * 控制精度
+ * @param  {string/float} data   数据
+ * @param  {float} length 精度的长度
+ * @return {float}        返回修正后的数据
+ */
+Tools.toFixed = function(data, length) {
+	if (!!Number.prototype.toFixed) {
+		if (isNaN(length) || !length) {
+			length = 2;
+		}
+
+		if (!isNaN(data)) {
+			data = (data * 1).toFixed(length);
+		}
+	}
+
+	return data;
+};
+
+/**
  * 删除JSON中空字符串或者未定义的
  * @param  {[type]} json [description]
  * @return {[type]}      [description]
@@ -1449,6 +1469,33 @@ Tools.setDatePicker = function($obj, isInputRange) {
     }
 
     return $obj;
+}
+
+/**
+ * 计算两个日期的差额
+ * @param  {string} startDate 日期字符串
+ * @param  {string} endDate   日期字符串
+ * @return {int}           返回两个日期之间的天数
+ *         					当天的话，返回0
+ *         					开始日期或者结束日期为空，则表示今天
+ */
+Tools.getDateDiff = function(startDate,endDate)  
+{
+	var days = 0;
+
+	if (!!startDate || !!endDate)   {
+		days = Math.floor(Math.abs(getTime(endDate) - getTime(startDate))/(1000*60*60*24));
+	}
+    
+    return days; 
+
+    function getTime(date) {
+    	if (!!date) {
+    		return new Date(Date.parse(date.replace(/-/g,   "/"))).getTime();
+    	} else {
+    		return (new Date()).getTime();
+    	}
+    }
 }
 
 /**

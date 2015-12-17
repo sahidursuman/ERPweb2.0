@@ -215,7 +215,7 @@ define(function(require, exports) {
                         title = '导游对账',
                         html;
                     if (type) {
-                        data.isOuter = args.isOuter;
+                        data.isOuter = FinGuide.isOuter = args.isOuter;
                         key = payMenuKey, title = '导游付款';
                         html = guidePayTemplate(data);
                     } else {
@@ -253,7 +253,7 @@ define(function(require, exports) {
                                     }, type, $tab);
         });
 
-        var validator = new FinRule(type ? 3 : 0),
+        var validator = new FinRule(type ? (FinGuide.isOuter ? 3 : 1) : 0),
             autoValidator = new FinRule(2);
         var validatorCheck = validator.check($tab),
             autoValidatorCheck = autoValidator.check($tab.find('.T-auto-fill-area'));
@@ -384,7 +384,7 @@ define(function(require, exports) {
      * @return {[type]}         [description]
      */
     FinGuide.savePayingData = function($tab, tabArgs) {
-        var validator = new FinRule(3);
+        var validator = new FinRule(FinGuide.isOuter ? 3 : 1);
         var json = FinancialService.clearSaveJson($tab, FinGuide.payingJson, validator);
         if (json.length) {
             $.ajax({

@@ -1,6 +1,5 @@
 define(function(require,exports) {
 	var menuKey = "financial_innerTransfer_out",
-		/*rule = require("./innerTransferOutRule"),*/
 		listTemplate = require("./view/list"),
 		checkTemplate = require("./view/innerTransferOutChecking"),
 		settlementTemplate = require("./view/InnerTransferClearing"),
@@ -29,7 +28,6 @@ define(function(require,exports) {
 	};
 	InnerTransferOut.initModule = function(){
 		var dateJson = FinancialService.getInitDate();
-		dateJson.startDate = "2015-11-01";
 		InnerTransferOut.listInnerTransfer(0,"","",dateJson.startDate,dateJson.endDate);
 	};
 	/**
@@ -220,7 +218,7 @@ define(function(require,exports) {
                 		checkDisabled(fiList,checkTr,rightCode);
 					}else{
 					    var autoValidator = new FinRule(2),
-					    	settlermentValidator = new FinRule(1);
+					    	settlermentValidator = data.showBtnFlag == true ? new FinRule(3):new FinRule(1);
 					    InnerTransferOut.$settlermentValidator = settlermentValidator.check($obj);
         				InnerTransferOut.autoValidatorCheck = autoValidator.check($obj.find('.T-count'));
 					}
@@ -271,7 +269,8 @@ define(function(require,exports) {
 		if(typeFlag == 2){
 			$obj.find('.'+$list).off('change').on('change','input',function(){
 				$(this).closest('tr').data('change',true);
-				FinancialService.updateSumPayMoney($obj,rule);
+				//自动计算本次付款金额
+				InnerTransferOut.autoSumPayMoney($obj);
 			});
 		};
 		//页面时间控件格式化
@@ -618,7 +617,7 @@ define(function(require,exports) {
 		var payMoney;
 		var payType;
 		var remark;
-		var JsonStr = FinancialService.clearSaveJson(InnerTransferOut.$settlementTab,InnerTransferOut.saveJson,rule);
+		var JsonStr = FinancialService.clearSaveJson(InnerTransferOut.$settlementTab,InnerTransferOut.saveJson,new FinRule(1));
 		console.log(JsonStr);
 		var payType = tab_id.find('select[name=sumPayType]').val();
 		var sumRemark = tab_id.find('name[name=sumRemark]').val();
@@ -658,8 +657,6 @@ define(function(require,exports) {
 	};
 	//切换tab页面自动提示
 	InnerTransferOut.init_CRU_event = function($tab,$data,id,name,typeFlag){
-		
-		//var name= $tab.find('input[name=toBusinessGroupName]').val();
 		if(!!$tab && $tab.length === 1){
 			// 监听修改
 			var $tbody,
@@ -687,9 +684,19 @@ define(function(require,exports) {
 				Tools.addTab(tab_id, title, html);
 				//通过typeFlag来判断；1--新增的事件绑定；2--修改的事件绑定
 				if(typeFlag == 2){
-					InnerTransferOut.chenkingEvent(InnerTransferOut.$settlementTab);
+
+					var id = $tab.find('input[name=toBusinessGroupId]').val();
+					var name = $tab.find('input[name=toBusinessGroupName]').val();
+					$data.toBusinessGroupId = id;
+					$data.toBusinessGroupName = name;
+					InnerTransferOut.chenkingEvent($tab,$data,typeFlag);
 				}else{
-					InnerTransferOut.chenkingEvent(InnerTransferOut.$checkTab);
+
+					var id = $tab.find('input[name=toBusinessGroupId]').val();
+					var name = $tab.find('input[name=toBusinessGroupName]').val();
+					$data.toBusinessGroupId = id;
+					$data.toBusinessGroupName = name;
+					InnerTransferOut.chenkingEvent($tab,$data,typeFlag);
 				}
 			})
 			// 保存后关闭
@@ -783,6 +790,17 @@ define(function(require,exports) {
         	result = 0;
     	}
 		return result;
+	};
+	InnerTransferOut.autoSumPayMoney = function($obj){
+		var sumPayMoney = $obj.find('input[name=sumPayMoney]'),
+			sumMoney = 0;
+		var tr = $obj.find('.T-clearList').find("input[name=payMoney]");
+		tr.each(function(){
+			var $thisVal = $(this).val();
+			$thisVal = InnerTransferOut.changeTwoDecimal($thisVal);
+			sumMoney += $thisVal;
+		});
+		sumPayMoney.val(sumMoney);
 	};
 	//规范输入的数字数据
 	InnerTransferOut.changeTwoDecimal = function($val){
