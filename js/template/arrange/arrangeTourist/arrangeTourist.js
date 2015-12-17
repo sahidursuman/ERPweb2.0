@@ -73,6 +73,7 @@ define(function(require, exports) {
                 arrangeTourist.chosenPartAgenOrBussiness($that);
             });
             arrangeTourist.touristGroupId=[];
+            arrangeTourist.touristGroupMergeData.touristGroupMergeList=[];
             arrangeTourist.listArrangeTourist(0, $searchArgumentsForm, customerType, divId);
 
         });
