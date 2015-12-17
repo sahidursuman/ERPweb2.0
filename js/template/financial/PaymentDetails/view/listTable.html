@@ -1,13 +1,13 @@
 {{each result as rs}}
     <tr>
         <td>{{rs.resourceName}}</td>
-        <td>{{rs.receivableType.name}}</td>
-        <td>{{rs.incomeOrPayType.name}}</td>
-        <td>{{rs.costType.name}}</td>
-        <td>{{rs.businessType.name}}</td>
+        <td>{{if rs.receivableType}}{{rs.receivableType.name}}{{/if}}</td>
+        <td>{{if rs.incomeOrPayType}}{{rs.incomeOrPayType.name}}{{/if}}</td>
+        <td>{{if rs.costType}}{{rs.costType.name}}{{/if}}</td>
+        <td>{{if rs.businessType}}{{rs.businessType.name}}{{/if}}</td>
         <td>{{if rs.payType == 0}}现金{{else if rs.payType == 1}}银行转账{{else if rs.payType == 2}}网上支付{{else if rs.payType == 3}}支票{{else if rs.payType == 4}}其它{{/if}}</td>
         <td>{{if rs.incomeDifferenceMoney == 0}}-{{else}}{{rs.incomeDifferenceMoney}}{{/if}}</td>
-        <td>{{rs.payDifferenceMoney}}</td>
+        <td>{{if rs.payDifferenceMoney == 0}}-{{else}}{{rs.payDifferenceMoney}}{{/if}}</td>
         <td>{{rs.remark}}</td>
         <td>{{rs.createTime}}</td>
     </tr>
