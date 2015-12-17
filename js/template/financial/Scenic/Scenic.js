@@ -282,7 +282,7 @@ define(function(require, exports) {
                         data.sumPayMoney = 0;
                         data.sumPayType = 0;
                     }
-                    data.isOuter = scenic.isOuter = !!isOuter;
+                    data.isOuter = scenic.isOuter = !!isOuter || scenic.isOuter;
                     var resultList = data.financialScenicListData;
                     data.financialScenicListData = FinancialService.getTempDate(data.financialScenicListData,scenic.clearTempData);
                     var html = scenicClearing(data);

@@ -150,7 +150,6 @@ define(function(require,exports) {
 				success:function(data){
 					var result = showDialog(data);
 					if(result){
-						console.log(data);
 						var businessGroupList = data.businessGroupList;
 						var allItem = {
 							id:"",
@@ -205,7 +204,6 @@ define(function(require,exports) {
 				    	tabId = settleId;
 				    	title = "内转转入收款";
 				    	if(InnerTransferIn.saveJson.autoPayList){
-				    		console.log(data.innerTransferIncomeDetailsList)
 				    		if(data.innerTransferIncomeDetailsList.length != 0){
 				    			var saveJson = InnerTransferIn.saveJson.autoPayList
 					    		for(var i=0;i<saveJson.length;i++){
@@ -391,12 +389,12 @@ define(function(require,exports) {
 				var payMoney = $obj.find('.T-count').find('input[name=sumPayMoney]').val();
 				var startDate = $obj.find('input[name=startDate]').val();
 				var endDate = $obj.find('input[name=endDate]').val();
-				if(payMoney>unPayMoney || payMoney < 0 || payMoney == "" || startDate>endDate){
+				if(parseFloat(payMoney)>parseFloat(unPayMoney) || payMoney < 0 || payMoney == "" || startDate>endDate){
 					var message;
 					if(payMoney<0 || payMoney == ""){
 						message = "收款金额需大于0！";
 					};
-					if(payMoney>unPayMoney){
+					if(parseFloat(payMoney)>parseFloat(unPayMoney)){
 						message = "本次收款金额不能大于已对账未收总额！";
 					};
 					if(startDate>endDate){
@@ -497,7 +495,6 @@ define(function(require,exports) {
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
-					console.log(data);
 					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
 						InnerTransferIn.saveJson = data
 						InnerTransferIn.btnSatus = 1;
@@ -606,7 +603,6 @@ define(function(require,exports) {
 								}
 							},
 							select:function(event,ui){
-								console.log(ui);
 								$(this).next().val(ui.item.id);
 							}
 						}).off('click').on('click',function(){
@@ -626,7 +622,6 @@ define(function(require,exports) {
 								}
 							},
 							select:function(event,ui){
-								console.log(ui);
 								$(this).next().val(ui.item.id);
 							}
 						}).off('click').on('click',function(){
@@ -657,7 +652,6 @@ define(function(require,exports) {
 				}
 			},
 			select:function(event,ui){
-				console.log(ui);
 				$(this).next().val(ui.item.id);
 			}
 		}).off('click').on('click',function(){
@@ -682,7 +676,6 @@ define(function(require,exports) {
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
-					console.log(data);
 					var html = payedDetailTemplate(data);
 					layer.open({
 						type : 1,
@@ -708,7 +701,6 @@ define(function(require,exports) {
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
-					console.log(data);
 					var html = checkDetailTemplate(data);
 					layer.open({
 						type : 1,
