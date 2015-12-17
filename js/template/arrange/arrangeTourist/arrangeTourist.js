@@ -247,7 +247,7 @@ define(function(require, exports) {
             content: html,
             scrollbar: false,
             success: function() {
-                arrangeTourist.chosenTripPlan();
+                arrangeTourist.chosenTripPlan(0,"");
                 arrangeTourist.mergenTripPlan();
 
             }
@@ -259,11 +259,12 @@ define(function(require, exports) {
      * chosenTripPlan 选择计划
      * @return {[type]} [description]
      */
-    arrangeTourist.chosenTripPlan = function() {
+    arrangeTourist.chosenTripPlan = function(page,searchKey) {
         var $chooseTipPlan = $("#chooseTipPlan");
         $.ajax({
             url: "" + APP_ROOT + "back/tripPlan.do?method=findNoStartTripPlanList&token=" + $.cookie("token") + "&menuKey=" + menuKey + "&operation=view",
             showLoading: false,
+            data:"searchKey="+searchKey+"&pageNo="+page,
             type: "POST",
             success: function(data) {
                 var result = showDialog(data);
@@ -273,16 +274,16 @@ define(function(require, exports) {
                     $chooseTipPlan.find('.T-chooseTipPlan-Content').html(html);
                     arrangeTourist.initchooseTipP_Event($chooseTipPlan);
                     // 绑定共用翻页组件
-                    /*laypage({
-                        cont: $('#' + divId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+                    laypage({
+                        cont: $chooseTipPlan.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
                         pages: data.totalPage, //总页数
                         curr: (page + 1),
                         jump: function(obj, first) {
                         	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-                        		arrangeTourist.listArrangeTourist(obj.curr -1,$searchArgumentsForm,customerType,divId);
+                        		arrangeTourist.chosenTripPlan(obj.curr -1,searchKey);
                         	}
                         }
-                    });*/
+                    });
                 }
             }
         })
@@ -324,6 +325,15 @@ define(function(require, exports) {
         var mergeDataJson = arrangeTourist.touristGroupMergeData.touristGroupMergeList;
         mergeDataJson = JSON.stringify(mergeDataJson);
         var tripPlanId = "";
+
+
+    	//选择计划查询
+		$chooseTipPlan.find('.T-lineProduct-search').on('click', function(event) {
+			event.preventDefault();
+			/* Act on the event */
+			var searchKey = $chooseTipPlan.find('input[name=searchKey]').val();
+			    arrangeTourist.chosenTripPlan(0,searchKey);	
+		});
 
         //确认
         $chooseTipPlan.find('.T-savechooseTipPlan').on('click', function(event) {
