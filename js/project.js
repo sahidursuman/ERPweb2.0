@@ -1558,29 +1558,26 @@ KingServices.getMainList = function(key, onlyStyle) {
 	return res;
 }
 
+/**
+ * 编辑中转安排——
+ * @param  {string} id 游客小组的ID
+ * @return {[type]}    [description]
+ */
+KingServices.updateTransit = function(id)  {
+	seajs.use(ASSETS_ROOT + modalScripts.arrange_transit, function(module){
+		module.updateTransit(id, true);
+	});
+}
 
 /**
  * [listTransit 外转数据
  * @return {[type]} [description]
  */
 KingServices.getListPage = function(event)  {
-	seajs.use("" + ASSETS_ROOT +"js/template/arrange/arrangeTransfer/arrangeTransfer.js",function(module){
+	seajs.use(ASSETS_ROOT + modalScripts.arrange_transfer, function(module){
 		module.getListPage(event);
 	});
 }
-
-
-/**
- * 中转安排——
- * @param  {string} id 游客小组的ID
- * @return {[type]}    [description]
- */
-KingServices.listTransit = function()  {
-	seajs.use(ASSETS_ROOT + modalScripts.arrange_transit,function(module){
-		module.inti();
-	});
-}
-
 
 /**
  * 编辑游客小组
