@@ -365,7 +365,7 @@ define(function(require, exports) {
             hotel.clearTempSumDate = false;
             hotel.clearTempData = false;
             hotel.$clearTab.data('isEdited',false);
-            hotel.hotelClear(0,0,id,name);
+            hotel.hotelClear(isAutoPay,0,id,name);
         });
 
         //报表内的操作

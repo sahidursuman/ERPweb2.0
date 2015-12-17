@@ -1527,39 +1527,47 @@ var KingServices = {};
 KingServices.build_url = function(path,method){
     return APP_ROOT+'back/'+path +'.do?method='+method+'&token='+$.cookie('token');
 };
+
+/**
+ * 获取主列表
+ * @param  {string} key       列表key
+ * @param  {boolean} onlyStyle 是否只设置菜单样式，默认需要打开列表
+ * @return {boolean}           true：操作成功，false：操作失败
+ */
+KingServices.getMainList = function(key, onlyStyle) {
+	var res = false;
+
+	if (!!key && typeof key === 'string') {
+		var $menu = $('.'+ key),
+			$mainMenu = $menu.parent().closest('li');
+
+		// 展开一级菜单
+		if (!$mainMenu.hasClass('open')) {
+			$mainMenu.children('a').trigger('click');
+		}
+
+		if (!!onlyStyle) {
+			$menu.addClass('open active');
+		} else {
+			$menu.trigger('click');
+		}
+
+		res = true;
+	}
+
+	return res;
+}
+
 /**
  * 编辑中转安排——
  * @param  {string} id 游客小组的ID
  * @return {[type]}    [description]
  */
 KingServices.updateTransit = function(id)  {
-	seajs.use("" + ASSETS_ROOT +"js/template/arrange/transit/transit.js",function(module){
-		module.updateTransit(id);
+	seajs.use(ASSETS_ROOT + modalScripts.arrange_transit, function(module){
+		module.updateTransit(id, true);
 	});
 }
-
-/**
- * [listTransit 外转数据
- * @return {[type]} [description]
- */
-KingServices.getListPage = function(event)  {
-	seajs.use("" + ASSETS_ROOT +"js/template/arrange/arrangeTransfer/arrangeTransfer.js",function(module){
-		module.getListPage(event);
-	});
-}
-
-
-/**
- * 中转安排——
- * @param  {string} id 游客小组的ID
- * @return {[type]}    [description]
- */
-KingServices.listTransit = function()  {
-	seajs.use("" + ASSETS_ROOT +"js/template/arrange/transit/transit.js",function(module){
-		module.listTransit(0,"","","","","","","","","","","","");
-	});
-}
-
 
 /**
  * 编辑游客小组
@@ -1567,7 +1575,7 @@ KingServices.listTransit = function()  {
  * @return {[type]}    [description]
  */
 KingServices.updateTouristGroup = function(id,type)  {
-	seajs.use("" + ASSETS_ROOT +modalScripts.resource_touristGroup,function(module){
+	seajs.use(ASSETS_ROOT + modalScripts.resource_touristGroup,function(module){
 		module.updateTouristGroup(id,type);
 	});
 }
@@ -1583,9 +1591,6 @@ KingServices.addTouristGroup = function(touristGroupId,typeOut)  {
 		module.addTouristGroup(touristGroupId,typeOut);
 	});
 }
-
-
-
 
 //导游  新增
 KingServices.addGuide = function(fn){

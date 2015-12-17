@@ -77,7 +77,7 @@ define(function(require, exports) {
 
 		$searchArea.find('.T-btn-search').on('click', function(event) {
 			event.preventDefault();
-			Ticket.getList();
+			Ticket.getList(0, $tab);
 		});
 		// 报表内的操作
 		$tab.find('.T-list').on('click', '.T-action', function(event) {
@@ -588,12 +588,12 @@ define(function(require, exports) {
 
 	//确认收款
 	Ticket.savePayingData = function($tab, tabArgs){
-        var reciveValidtor = (new FinRule(2)).reciveCheck($tab);
+        var reciveValidtor = (new FinRule(2)).check($tab);
         if(!reciveValidtor.form()){
     		return;
         }
 		var json = FinancialService.clearSaveJson($tab, Ticket.payingJson, new FinRule(Ticket.isBalanceSource ? 3 : 1));
-		if (json.length) {
+		if (json && json.length) {
 			var args = {
                 ticketId: Ticket.clearingId,
                 sumCurrentPayMoney: $tab.find('.T-sumReciveMoney').val(),
@@ -616,8 +616,7 @@ define(function(require, exports) {
                             Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
                             Ticket.clearingList(0);
                         } else {
-                            Tools.closeTab(clearMenuKey);
-                            Ticket.getList(Ticket.listPageNo);
+                            Ticket.getOperationList({}, $tab);
                         }
                     })
                 });

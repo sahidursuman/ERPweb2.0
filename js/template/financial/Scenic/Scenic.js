@@ -178,7 +178,7 @@ define(function(require, exports) {
         scenic.$checkSearchArea = scenic.$checkTab.find('.T-search-area');
 
         scenic.init_event(page,id,name,scenic.$checkTab,"check");
-        Tools.setDatePicker(scenic.$searchArea.find('.datepicker'), true);
+        Tools.setDatePicker(scenic.$checkSearchArea.find('.datepicker'), true);
         FinancialService.updateUnpayMoney(scenic.$checkTab, new FinRule(0));
 
         //搜索按钮事件
@@ -228,7 +228,7 @@ define(function(require, exports) {
     //结算
     scenic.scenicClear = function(isAutoPay,page,scenicId,scenicName,accountInfo,startDate,endDate, isOuter){
         if (isAutoPay) {
-            var searchParam = FinancialService.autoPayJson(scenicId,scenic.$clearTab, FinRule(3));
+            var searchParam = FinancialService.autoPayJson(scenicId,scenic.$clearTab, new FinRule(3));
             searchParam = JSON.parse(searchParam);
             searchParam.scenicId = searchParam.id;   
             delete(searchParam.id);
@@ -336,7 +336,7 @@ define(function(require, exports) {
         scenic.$clearSearchArea = scenic.$clearTab.find('.T-search-area');
 
         scenic.init_event(page,id,name,scenic.$clearTab,"clear");
-        Tools.setDatePicker(scenic.$searchArea.find('.datepicker'), true);
+        Tools.setDatePicker(scenic.$clearSearchArea.find('.datepicker'), true);
 
         //搜索事件
         scenic.$clearTab.find(".T-search").click(function(){
@@ -354,7 +354,7 @@ define(function(require, exports) {
         });
         //保存结算事件
         scenic.$clearTab.find(".T-saveClear").click(function(){
-            if (!rule.check(scenic.$clearTab).form()) { return; }
+            if (!(new FinRule(scenic.isOuter ? 3 : 1)).check(scenic.$clearTab).form()) { return; }
             scenic.saveClear(id,name,page);
         });
 
@@ -524,7 +524,7 @@ define(function(require, exports) {
         }
 
         var argumentsLen = arguments.length,
-            clearSaveJson = FinancialService.clearSaveJson(scenic.$clearTab,scenic.clearTempData,rule),
+            clearSaveJson = FinancialService.clearSaveJson(scenic.$clearTab,scenic.clearTempData, new FinRule(scenic.isOuter ? 3 : 1)),
             searchParam = {
                         sumCurrentPayMoney : scenic.$clearTab.find('input[name=sumPayMoney]').val(),
                         payType : scenic.$clearTab.find('select[name=sumPayType]').val(),
