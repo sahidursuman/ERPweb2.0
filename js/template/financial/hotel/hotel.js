@@ -345,7 +345,7 @@ define(function(require, exports) {
         });
         $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
             event.preventDefault();
-            hotel.initClear(page,id,name);
+            hotel.initClear(hotel.$clearTab.data('next'));
             hotel.$clearTab.find(".T-cancel-auto").hide();
         })
         // 监听保存，并切换tab
