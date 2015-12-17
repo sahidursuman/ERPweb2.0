@@ -6,7 +6,7 @@
 				<label class="middle title-size">修改小组信息</label>
 			</h5>
 			<div class="widget-body">
-				<div class="widget-main formOneList updateTouristInput">
+				<div class="widget-main formOneList updateTouristInput" style="margin-left: -15px;">
 					<div class="form-group guideInterval">
 						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>线路产品:</label>
 						<div class="col-sm-2 update-divWidth">
@@ -74,16 +74,13 @@
 								<option{{if touristGroupDetail.getType == 5}} selected="selected"{{/if}} value="5">QQ</option>
 							</select>
 						</div>
-
-						<label class=" control-label no-padding-right margin-leftGroup">组团单号：
-						<input  type="text" name="otaOrderNumber" value="{{touristGroupDetail.otaOrderNumber}}"  maxlength="9" />
-						</label>
-
-
-
 					</div>
-					<div class="form-group guideInterval">
-						<label class="col-sm-1 control-label no-padding-right">应收:</label>
+					<div  class="form-group guideInterval">
+						<label class="col-sm-1 control-label no-padding-right">组团单号：</label>
+						<div  class="col-sm-2">
+						<input  type="text" name="otaOrderNumber" value="{{touristGroupDetail.otaOrderNumber}}"  maxlength="100" />
+						</div>
+						<label class="col-sm-1 control-label no-padding-right touristNeedPayMoneny">应收:</label>
 						<div class="col-sm-2 update-divWidth">
 							{{if !!type}} 
 							<input value="{{touristGroupDetail.needPayAllMoney}}" readonly="readonly" type="text" name="needPayAllMoney" class="col-sm-12" />
@@ -91,28 +88,20 @@
 							<input value="{{touristGroupDetail.needPayAllMoney}}"  type="text" name="needPayAllMoney" class="col-sm-12" />
 						    {{/if}}
 						</div>
-						<label class="col-sm-1 control-label no-padding-right">已收:</label>
-						<div class="col-sm-2 update-divWidth">
-							<input value="{{touristGroupDetail.payedMoney}}" type="text" name="payedMoney" {{if !!type}} readonly="readonly"{{/if}} class="col-sm-12" />
-						</div>
-
-						<div class="col-sm-2">
-						    <label class="no-padding-right pull-left">收款方式：</label>
-							<select name="incomeType" class="pull-left">
-								<option{{if touristGroupDetail.incomeType == 0}} selected="selected"{{/if}} value="0">现金</option>
-								<option{{if touristGroupDetail.incomeType == 1}} selected="selected"{{/if}} value="1">银行转账</option>
-								<option{{if touristGroupDetail.incomeType == 2}} selected="selected"{{/if}} value="2">网上支付</option>
-								<option{{if touristGroupDetail.incomeType == 3}} selected="selected"{{/if}} value="3">支票</option>
-								<option{{if touristGroupDetail.incomeType == 4}} selected="selected"{{/if}} value="4">其它</option>
-							</select>
-						</div>
 
 						<label class="col-sm-1 control-label no-padding-right">现收:</label>
 						<div class="col-sm-2">
 							<input value="{{touristGroupDetail.currentNeedPayMoney}}" {{if touristGroupDetail.isReceived == 1 || !!type }}readonly="readonly"{{/if}} type="text" name="currentNeedPayMoney" class="col-sm-12" />
 						</div>
 					</div>
+					
+					
 					<div class="form-group guideInterval">
+					<label class="col-sm-1 control-label no-padding-right">已收:</label>
+						<div class="col-sm-2 update-divWidth">
+							<input value="{{touristGroupDetail.payedMoney}}" type="text" name="payedMoney" {{if !!type}} readonly="readonly"{{/if}} class="col-sm-12" />
+						</div>
+						
 						<label class="col-sm-1 control-label no-padding-right">未收:</label>
 						<div class="col-sm-2">
 						{{if !!type}}
@@ -122,8 +111,18 @@
 
 						{{/if}}
 						</div> 
-		
-					  </div>
+					  <label class="col-sm-1 control-label no-padding-right touristNeedPayMoneny">收款方式：</label>
+					  <div class="col-sm-2">
+							<select name="incomeType" class="pull-left">
+								<option{{if touristGroupDetail.incomeType == 0}} selected="selected"{{/if}} value="0">现金</option>
+								<option{{if touristGroupDetail.incomeType == 1}} selected="selected"{{/if}} value="1">银行转账</option>
+								<option{{if touristGroupDetail.incomeType == 2}} selected="selected"{{/if}} value="2">网上支付</option>
+								<option{{if touristGroupDetail.incomeType == 3}} selected="selected"{{/if}} value="3">支票</option>
+								<option{{if touristGroupDetail.incomeType == 4}} selected="selected"{{/if}} value="4">其它</option>
+							</select>
+						</div>
+					  </div>	
+					</div>
 					</div>
 				</div>
 				<div class="form-group">

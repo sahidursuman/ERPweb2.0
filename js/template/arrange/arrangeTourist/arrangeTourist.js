@@ -31,7 +31,8 @@ define(function(require, exports) {
         touristGroupMergeData: {
             touristGroupMergeList: []
         },
-        touristGroupId : []
+        touristGroupId : [],
+        transferId : []
     };
 
     /**
@@ -71,6 +72,8 @@ define(function(require, exports) {
                 var $that = $(this);
                 arrangeTourist.chosenPartAgenOrBussiness($that);
             });
+            arrangeTourist.touristGroupId=[];
+            arrangeTourist.touristGroupMergeData.touristGroupMergeList=[];
             arrangeTourist.listArrangeTourist(0, $searchArgumentsForm, customerType, divId);
 
         });
@@ -104,6 +107,8 @@ define(function(require, exports) {
                 var $that = $(this);
                 arrangeTourist.chosenPartAgenOrBussiness($that);
             });
+            //转客清空操作
+            arrangeTourist.transferId=[];
             arrangeTourist.listArrangeTourist(0, $searchArgumentsForm, customerType, divId);
         });
 
@@ -169,6 +174,8 @@ define(function(require, exports) {
                         $divIdObj.find('.T-touristVisitor-list').html(html);
                         //初始化页面事件
                         arrangeTourist.init_visitorEvent();
+                        //散拼分页选中效果
+                        arrangeTourist.pagerChecked(customerType,divId);
                     } else if (customerType == 1) { //团体
                         var html = listGroupTemplate(data);
                         $divIdObj.find('.T-touristGroup-list').html(html);
@@ -180,9 +187,10 @@ define(function(require, exports) {
                         $divIdObj.find('.T-Transfer-list').html(html);
                         //初始化页面事件
                         arrangeTourist.init_transferEvent();
+                     
+                        //转客分页选中效果
+                        arrangeTourist.pagerTransferChecked(customerType,divId);
                     };
-                   //分页选中效果
-                   arrangeTourist.pagerChecked(customerType,divId);
                     // 绑定共用翻页组件
                     laypage({
                         cont: $('#' + divId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
@@ -222,12 +230,38 @@ define(function(require, exports) {
     };
 
 
+     /**
+     * [pagerTransferChecked 转客分页选中效果
+     * @return {[type]} [description]
+     */
+    arrangeTourist.pagerTransferChecked = function(customerType,divId){
+         //分页--勾选游客小组Id
+        if (customerType=='2' && arrangeTourist.transferId.length > 0 ) {
+            for (var i = 0; i < arrangeTourist.transferId.length; i++) {
+                var transferId = arrangeTourist.transferId[i].id,
+                    $transferTr = $('#'+ divId).find('tr');
+                    $transferTr.each(function(index) {
+                       var id = $transferTr.eq(index).data('value');
+                       if (!!id && !!transferId && id == transferId ) {
+                           $transferTr.eq(index).find('.T-cheked').prop('checked',true);
+                       };    
+                });
+            }
+        };
+
+    };
+
+
     /**
      * init_visitorEvent 散拼报表绑定事件
      * @return {[type]} [description]
      */
     arrangeTourist.init_visitorEvent = function() {
         var $visitorObj = $('#T-Visitor-list');
+         //重置计算
+        arrangeTourist.choosenAdultAndChildCount($visitorObj);
+
+        //馋看游客小组
         $visitorObj.find('.T-arrageVisitor-list').on('click', '.T-action', function(event) {
             event.preventDefault();
             /* Act on the event */
@@ -347,7 +381,18 @@ define(function(require, exports) {
         var mergeDataJson = arrangeTourist.touristGroupMergeData.touristGroupMergeList;
         mergeDataJson = JSON.stringify(mergeDataJson);
         var tripPlanId = "";
-
+        var mergeDataList = arrangeTourist.touristGroupMergeData.touristGroupMergeList,mergeTouristGroupIdJson=[];
+        //组装游客小组Id
+        if ( mergeDataList.length > 0) {
+            for (var i = 0; i < mergeDataList.length; i++) {
+            var touristGroupId = mergeDataList[i].touristGroupId,
+                ids = {
+                    id : touristGroupId
+                };
+                mergeTouristGroupIdJson.push(ids);    
+            };
+        };
+        mergeTouristGroupIdJson = JSON.stringify(mergeTouristGroupIdJson);
 
     	//选择计划查询
 		$chooseTipPlan.find('.T-lineProduct-search').on('click', function(event) {
@@ -370,7 +415,7 @@ define(function(require, exports) {
             if (!!tripPlanId && tripPlanId != null) {
                 $.ajax({
                     url: KingServices.build_url("tripPlan", "chooseTripPlanByMerge"),
-                    data: "tripPlanId=" + tripPlanId + "&mergeDataJson=" + encodeURIComponent(mergeDataJson) + "",
+                    data: "tripPlanId=" + tripPlanId + "&mergeTouristGroupIdJson=" + encodeURIComponent(mergeTouristGroupIdJson) + "",
                     type: "POST",
                     success: function(data) {
                         var result = showDialog(data);
@@ -435,39 +480,38 @@ define(function(require, exports) {
         $mergenTripPlan.find('.T-saveMergenTripPlan').on('click', function(event) {
             /* Act on the event */
             event.preventDefault();
-            var mergeDataJson = arrangeTourist.touristGroupMergeData.touristGroupMergeList;
-            //clear组装数组
-            arrangeTourist.touristGroupMergeData = {
-                touristGroupMergeList:[]
+            var mergeDataList = arrangeTourist.touristGroupMergeData.touristGroupMergeList,mergeTouristGroupIdJson=[];
+
+
+            //组装游客小组Id
+            if ( mergeDataList.length > 0) {
+                for (var i = 0; i < mergeDataList.length; i++) {
+                var touristGroupId = mergeDataList[i].touristGroupId,
+                    ids = {
+                        id : touristGroupId
+                    };
+                    mergeTouristGroupIdJson.push(ids);    
+                };
             };
-            mergeDataJson = JSON.stringify(mergeDataJson);
-            var $mergenTrList = $mergenTripPlan.find('.chooseMergeTbody').find('tr');
-            var lineProductId = "",
-                startTime = "";
+            
+            mergeTouristGroupIdJson = JSON.stringify(mergeTouristGroupIdJson)
+
+            console.info('merge...'+JSON.stringify(mergeTouristGroupIdJson));
+
+            //选中游客小组
+            var $mergenTrList = $mergenTripPlan.find('.chooseMergeTbody').find('tr'),
+                 standardTouristGroupId = "";
             $mergenTrList.each(function(i) {
                 if ($mergenTrList.find(".ridioCheck").is(":checked") == true) {
-                    lineProductId = $mergenTrList.eq(i).attr("data-entity-id");
-                    startTime = $mergenTrList.eq(i).attr("data-entity-starttime");
+                    standardTouristGroupId  = $mergenTrList.eq(i).attr("data-entity-id");
                 }
             })
+           
 
-            var $VisitorObj=$('#T-Visitor-list'),
-                $visitorTr = $VisitorObj.find('.T-arrageVisitor-list').children('tr');
-                $visitorTr.each(function(i) {
-                    if ($visitorTr.find(".T-cheked").is(":checked") == true) {
-                        $visitorTr.eq(i).find(".T-cheked").prop("checked",false);
-                    };
-                });
-
-
-              
-
-            console.info("mergeDataJson" + mergeDataJson + "lineProductId" + lineProductId + "startTime=" + startTime);
-
-            if (lineProductId != null && lineProductId.length > 0) {
+            if (standardTouristGroupId != null && mergeTouristGroupIdJson.length > 0) {
                 $.ajax({
                     url: KingServices.build_url("tripPlan", "addTripPlanByMergeData"),
-                    data: "lineProductId=" + lineProductId + "&startTime=" + startTime + "&mergeDataJson=" + mergeDataJson,
+                    data: "standardTouristGroupId=" + standardTouristGroupId + "&mergeTouristGroupIdJson=" + mergeTouristGroupIdJson,
                     dateType: "json",
                     showLoading: false,
                     type: "POST",
@@ -481,6 +525,8 @@ define(function(require, exports) {
                         var html = addMergePlanTemplate(data);
                         var tab_id = menuKey + "-mergeAddTripPlan",
                             title = '并团-生成计划';
+
+
                         // 初始化页面
                         if (Tools.addTab(tab_id, title, html)) {
                             var tab = addMergePlanTabId,
@@ -588,11 +634,17 @@ define(function(require, exports) {
         $updateTripPlan.find(" .T-saveTripPlan").click(function() {
             //($tab,validator, tabArgs,className,status,tbody)
             arrangeTourist.saveAddTripPlan($tab, validator, "", "addTripPlanMain", 0, "updateTripPlanTouristTbody");
+            touristGroupMergeData= {
+                touristGroupMergeList: []
+            };
+            var $visitorObj = $('#T-Visitor-list');
+            //保存后的取消选中操作
+            arrangeTourist.canCelChecked($visitorObj);
         })
 
         //添加资源--导--车			
         arrangeTourist.addResource(tab);
-    };
+    };   
 
 
     /**
@@ -674,6 +726,15 @@ define(function(require, exports) {
             //if (!validator.form()) { return };
             //$tab,validator, tabArgs,className,status,tbody
             arrangeTourist.saveAddTripPlan($addMergeAddTr, validator, "", "addTripPlanMain", 0, "mergeTripPlanTouristTbody");
+            touristGroupMergeData = {
+                touristGroupMergeList: []
+            };
+
+            var $visitorObj = $('#T-Visitor-list');
+            //保存后的取消选中操作
+            arrangeTourist.canCelChecked($visitorObj);
+            
+
         })
 
         //添加资源--导--车			
@@ -681,6 +742,16 @@ define(function(require, exports) {
 
     };
 
+    /**
+     * canCelChecked 保存后的取消选中操作
+     * @return {[type]} [description]
+     */
+    arrangeTourist.canCelChecked =  function($visitorObj){
+        var $trList = $visitorObj.find('tr');
+            $trList.each(function(index) {
+                $trList.eq(index).find('.T-cheked').prop("checked",false) 
+            });
+    };
 
     /**
      * init_groupEvent  团体报表绑定事件
@@ -688,6 +759,11 @@ define(function(require, exports) {
      */
     arrangeTourist.init_groupEvent = function() {
         var $GroupObj = $('#T-Group-list');
+
+         //重置计算
+        arrangeTourist.choosenAdultAndChildCount($GroupObj);
+
+        //查看游客
         $GroupObj.find('.T-arrageGroup-list').on('click', '.T-action', function(event) {
             event.preventDefault();
             /* Act on the event */
@@ -1732,10 +1808,11 @@ define(function(require, exports) {
             lineProductType = $parents.attr("data-entity-type");
             touristGroupId  = $parents.data('value');
         if ($that.is(":checked")) {
-            var touristGroupId = {
+            var touristGroupIds = {
                     touristGroupId : touristGroupId
             },
             touristGroupMerge = {
+                    touristGroupId : touristGroupId,
                     lineProductId: lineProductId,
                     startTime: startTime,
                     days: days,
@@ -1743,7 +1820,7 @@ define(function(require, exports) {
                     lineProductType: lineProductType
             };
             arrangeTourist.touristGroupMergeData.touristGroupMergeList.push(touristGroupMerge);
-            arrangeTourist.touristGroupId.push(touristGroupId);
+            arrangeTourist.touristGroupId.push(touristGroupIds);
 
         }else{  
            //若取消选中状态---用于生成计划查询数组
@@ -1797,6 +1874,8 @@ define(function(require, exports) {
             divId = " T-Transfer-list ",
             $searchArgumentsForm = $transferObj.find('form'),
             customerType = 2;
+         //重置计算
+        arrangeTourist.choosenAdultAndChildCount($transferObj);
 
         //查看小组信息
         $transferObj.find('.T-arrageTransfer-list').on('click', '.T-action', function(event) {
@@ -1829,10 +1908,33 @@ define(function(require, exports) {
 
         //计算转客已选人数
         $transferObj.find('.T-transferCheckBox').on('click', function(event) {
+            var $that=$(this);
+                arrangeTourist.chekedTransfer($that);
             arrangeTourist.choosenAdultAndChildCount($transferObj);
         });
 
     };
+
+
+    //转客Id缓存用于分页选中记录
+     arrangeTourist.chekedTransfer = function($that){
+        var id=$that.closest('tr').data('value');  
+            if ($that.is(":checked")) {
+                var transferIds = {
+                    id: id
+                };
+                arrangeTourist.transferId.push(transferIds);
+            }else{
+                for(var i = 0; i < arrangeTourist.transferId.length; i++) {
+                    console.info(arrangeTourist.transferId[i].transferIds);
+                    if (arrangeTourist.transferId[i].transferIds == id) {
+                        arrangeTourist.transferId.splice(i, 1);
+                        break;
+                    }
+                }
+            };
+     };
+
 
 
     /**
@@ -2440,7 +2542,8 @@ define(function(require, exports) {
     arrangeTourist.saveTransFee = function($editFeeObj, type) {
         var transferFeeStatus = arrangeTourist.getVal($editFeeObj, "transferFeeStatus"),
             $innerForm = $editFeeObj.find('form'),
-            id = arrangeTourist.getVal($editFeeObj, "touristGroupId");
+            id = arrangeTourist.getVal($editFeeObj, "touristGroupId"),
+            cashFlag = arrangeTourist.getVal($editFeeObj, "isCurrent");
         var touristGroup = {
                 "id": id,
                 "transRemark": arrangeTourist.getVal($editFeeObj, "remark") || "无",
@@ -2448,7 +2551,7 @@ define(function(require, exports) {
                 "transChildPrice": arrangeTourist.getVal($editFeeObj, "transChildPrice") || 0,
                 "transPayedMoney": arrangeTourist.getVal($editFeeObj, "transPayedMoney") || 0,
                 "transNeedPayAllMoney": arrangeTourist.getVal($editFeeObj, "transNeedPayAllMoney") || 0,
-                "isCurrent": arrangeTourist.getVal($editFeeObj, "isCurrent") || 0,
+                "cashFlag": arrangeTourist.getVal($editFeeObj, "isCurrent") || 0,
                 "transPayType": arrangeTourist.getVal($editFeeObj, "transPayType")
             },
             otherFeeList = [],
@@ -2462,7 +2565,7 @@ define(function(require, exports) {
             var $that = $(this);
             if (i > 1) {
                 var FeeJson = {
-                    type: arrangeTourist.getVal($that, "value"),
+                    type: arrangeTourist.getVal($that, "type"),
                     discribe: arrangeTourist.getVal($that, "describe"),
                     otherPrice: arrangeTourist.getVal($that, "otherPrice"),
                     count: arrangeTourist.getVal($that, "count")
@@ -2523,7 +2626,7 @@ define(function(require, exports) {
         } else {
             $.ajax({
                 url: KingServices.build_url("transTourist", "saveTransFee"),
-                data: "touristGroup=" + encodeURIComponent(touristGroup) + "&otherFeeList=" + encodeURIComponent(otherFeeList) + "&otherFeeListDel=" + encodeURIComponent(otherFeeListDel),
+                data: "touristGroup=" + encodeURIComponent(touristGroup) + "&otherFeeList=" + encodeURIComponent(otherFeeList) + "&otherFeeListDel=" + encodeURIComponent(otherFeeListDel)+"&cashFlag="+cashFlag,
                 type: "POST",
                 success: function(data) {
                     var result = showDialog(data);
@@ -2538,6 +2641,8 @@ define(function(require, exports) {
                                         transferTr.eq(i).find("td.transferFeeStatus").html('<i class ="ace-icon fa fa-check green"></i>已填写');
                                         transferTr.eq(i).find("[name=label_payed]").html(data.transPayedMoney);
                                         transferTr.eq(i).find("[name=label_needPay]").html(data.transNeedPayAllMoney);
+
+
                                     }
                                 })
 

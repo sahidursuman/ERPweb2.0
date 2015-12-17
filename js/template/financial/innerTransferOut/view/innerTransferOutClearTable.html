@@ -22,7 +22,7 @@
         <td><span>{{checking.punishMoney}}</span></td>
         <td>{{checking.settlementMoney}}</td>
         <td>{{checking.unPayedMoney}}</td>
-        <td><input name="payMoney" type="text" value="{{checking.payMoney}}" data-le="{{checking.unPayedMoney}}" 
+        <td><input name="payMoney" type="text" class="money" value="{{checking.payMoney}}" data-le="{{checking.unPayedMoney}}" 
         {{if !showBtnFlag && checking.unPayedMoney<= 0}} disabled {{/if}}/></td>
         <td><input type="text" maxlength="9" name="payRemark" value="{{checking.checkRemark}}"
         {{if !showBtnFlag && checking.unPayedMoney<= 0}} disabled {{/if}} /></td>
@@ -32,11 +32,9 @@
             <label class="pos-rel">
             {{if checking.isConfirmAccount == 1}}<span>已对账</span>{{else}}<span>未对账</span>{{/if}}
             </label>
-            {{if checking.isConfirmAccount == 1}}
-                <label>
-                    <a href="#" class="T-check-Detail" style="margin-left:5px">查看</a>
-                </label>
-            {{/if}}
+            <label>
+                <a href="#" class="T-check-Detail" style="margin-left:5px">查看</a>
+            </label>
         </td>
     </tr>
     <tr class="hide">

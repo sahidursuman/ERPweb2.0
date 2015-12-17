@@ -144,7 +144,6 @@ define(function(require,exports) {
 				operateUserId:operateUserId,
 				endDate:endDate
 			};
-		console.log($listSearchData);
 		if(startDate > endDate){
             showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
             return false;
@@ -157,7 +156,6 @@ define(function(require,exports) {
 				var result = showDialog(data);
 				if(result){
 					data.searchParam = $listSearchData;
-				    console.log(data);
 				    var $lineProductData = data.lineProductList;
 				    //return
 					var html = checkTemplate(data);
@@ -190,7 +188,6 @@ define(function(require,exports) {
 				if(result){
 					var dataList = data.list;
 					var html;
-					console.log(dataList);
 					for(var i=0;i<dataList.length;i++){
 						data.list[i].innerTransferFeeList = JSON.parse(dataList[i].innerTransferFeeList);
 						data.list[i].touristGroupMemberList = JSON.parse(dataList[i].touristGroupMemberList);
@@ -328,7 +325,6 @@ define(function(require,exports) {
         });
         //确认对账事件
         $obj.find(".T-checking").on('click',function(event){
-        	console.log(InnerTransferOut.validatorCheck.form());
         	if(!InnerTransferOut.validatorCheck.form()){return;}
         	InnerTransferOut.saveCheckingData(0,$obj,"")
         });
@@ -345,6 +341,25 @@ define(function(require,exports) {
         	if(!InnerTransferOut.autoValidatorCheck.form()){return;}
         	var $that = $(this);
         	if($that.hasClass('btn-primary')){
+        		var unPayMoney = $obj.find('.T-count').find('.sumUnPayedMoney').text();
+				var payMoney = $obj.find('.T-count').find('input[name=sumPayMoney]').val();
+				var startDate = $obj.find('input[name=startDate]').val();
+				var endDate = $obj.find('input[name=endDate]').val();
+				if(parseFloat(payMoney)>parseFloat(unPayMoney) || payMoney < 0 || payMoney == "" || startDate>endDate){
+					var message;
+					if(startDate>endDate){
+						message = "开始时间不能大于结束时间，请重新选择！";
+					};
+					if(payMoney<0 || payMoney == ""){
+						message = "付款金额需大于0！";
+					};
+					if(parseFloat(payMoney)>parseFloat(unPayMoney)){
+						message = "本次付款金额不能大于已对账未付总额！";
+					};
+					
+					showMessageDialog($("#confirm-dialog-message"),message);
+					return;
+				};
         		showConfirmDialog($( "#confirm-dialog-message" ), "是否按当前账期 " + $data.startDate + " 至 " + $data.endDate + " 下账？",function(){
         		//自动下账函数
         		InnerTransferOut.autoAcountMoney($obj,id,name,$data);
@@ -487,7 +502,6 @@ define(function(require,exports) {
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
-					console.log(data);
 					var html = payedDetailTemplate(data);
 					layer.open({
 						type : 1,
@@ -513,7 +527,6 @@ define(function(require,exports) {
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
-					console.log(data);
 					var html = checkDetailTemplate(data);
 					layer.open({
 						type : 1,
@@ -618,11 +631,9 @@ define(function(require,exports) {
 		var payType;
 		var remark;
 		var JsonStr = FinancialService.clearSaveJson(InnerTransferOut.$settlementTab,InnerTransferOut.saveJson,new FinRule(1));
-		console.log(JsonStr);
 		var payType = tab_id.find('select[name=sumPayType]').val();
 		var sumRemark = tab_id.find('name[name=sumRemark]').val();
 		JsonStr = JSON.stringify(JsonStr);
-		console.log(JsonStr);
   		$.ajax({
   			url:KingServices.build_url('account/innerTransferOutFinancial','operatePayAccount'),
             type:"POST",
@@ -735,7 +746,6 @@ define(function(require,exports) {
 				success:function(data){
 					var result = showDialog(data);
 					if(result){
-						console.log(data);
 						var businessGroupList = data.businessGroupList;
 						var allItem = {
 							id:"",
@@ -769,7 +779,6 @@ define(function(require,exports) {
 				}
 			},
 			select:function(event,ui){
-				console.log(ui);
 				$(this).next().val(ui.item.id);
 			}
 		}).off('click').on('click',function(){

@@ -52,26 +52,13 @@
 							</select>
 						</div>
 
-
-						{{if innerTransfer.touristGroup.operateCurrentNeedPayMoney==0}}
-						<label style="padding-left:0px;">  
-							<input  type="checkbox" class="ace" disabled="disabled" value="{{innerTransfer.touristGroup.operateCurrentNeedPayMoney}}" name="isCurrent">
+                        <label>
+							<input  type="checkbox" class="ace" checked="{{if cashFlag==1}}checked{{/if}}" disabled="disabled" value="{{cashFlag}}" name="cashFlag" />
 							<span class="lbl">
 							</span>
-							<input type="hidden" name="isCurrent" value="{{innerTransfer.touristGroup.operateCurrentNeedPayMoney}}" />
 						</label>
-						{{else}}
-						<label style="padding-left:0px;">  
-							<input  type="checkbox" class="ace" checked="checked" disabled="disabled" value="{{innerTransfer.touristGroup.operateCurrentNeedPayMoney}}" name="isCurrent">
-							<span class="lbl">
-							</span>
-							<input type="hidden" name="isCurrent" value="{{innerTransfer.touristGroup.operateCurrentNeedPayMoney}}" />
-						</label>
-                        {{/if}}
-
-
-
 						<label class="control-label no-padding-right">对方现收</label>
+
 					</div>
 				</div>
 			</div>
