@@ -134,6 +134,11 @@ define(function(require, exports) {
 			startDate : start || Ticket.$tab.find('.T-search-start-date').val(),
 			endDate : end || Ticket.$tab.find('.T-search-end-date').val()
 		};
+		if(!!Ticket.$checkingTab){
+			args.accountInfo = Ticket.$checkingTab.find('.T-search-type').val();
+			args.startDate = start || Ticket.$checkingTab.find('.T-search-start-date').val();
+			args.endDate = end || Ticket.$checkingTab.find('.T-search-end-date').val();
+		}
 		$.ajax({
 			url : KingServices.build_url('account/arrangeTicketFinancial', 'listTicketAccount'),
 			type : "POST",
@@ -354,10 +359,9 @@ define(function(require, exports) {
 	                showMessageDialog($('#confirm-dialog-message'), data.message, function() {
 	                    if (!!tabArgs) {
 	                        Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
-	                        Ticket.checkList(0);
+	                        Ticket.checkingList(0);
 	                    } else {
-	                        Tools.closeTab(checkMenuKey);
-	                        Ticket.getList(Ticket.listPageNo);
+	                        Ticket.checkingList(0);
 	                    }
 	                });
 	            }
