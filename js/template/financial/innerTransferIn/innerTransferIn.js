@@ -391,12 +391,12 @@ define(function(require,exports) {
 				var payMoney = $obj.find('.T-count').find('input[name=sumPayMoney]').val();
 				var startDate = $obj.find('input[name=startDate]').val();
 				var endDate = $obj.find('input[name=endDate]').val();
-				if(payMoney>unPayMoney || payMoney < 0 || payMoney == "" || startDate>endDate){
+				if(parseFloat(payMoney)>parseFloat(unPayMoney) || payMoney < 0 || payMoney == "" || startDate>endDate){
 					var message;
 					if(payMoney<0 || payMoney == ""){
 						message = "收款金额需大于0！";
 					};
-					if(payMoney>unPayMoney){
+					if(parseFloat(payMoney)>parseFloat(unPayMoney)){
 						message = "本次收款金额不能大于已对账未收总额！";
 					};
 					if(startDate>endDate){
