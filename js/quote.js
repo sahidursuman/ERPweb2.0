@@ -8,6 +8,7 @@ define(function(require, exports) {
 		data: "key="+key+"",
 		success: function(data){
 			if(data.success == 1){
+
 				data.quoteDetailJson = JSON.parse(data.quoteDetailJson);
 				data.daysList = JSON.parse(data.daysList);
 				data.busCompanyArrange = JSON.parse(data.busCompanyArrange);
@@ -17,6 +18,7 @@ define(function(require, exports) {
 					data.daysList[i].times = checkInTime(i,startTime);
 				}
 				var shareQuoteHtml = quoteTemplate(data);
+				console.log(data);
 				$("body").html(shareQuoteHtml);
 
 				//首先将#back-top隐藏
