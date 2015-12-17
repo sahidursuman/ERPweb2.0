@@ -83,7 +83,7 @@
 												</tr>
 											</thead>
 											<tbody>{{each receiveGroup.outBusList as outBus}}
-													{{if outBus.id != null && outBus.busCompany != null && outBus.bus != null && outBus.driver != null}}
+													{{if outBus.id != null && outBus.busCompany != null}}
 												<tr>
 													<td>{{if outBus.busCompany != null}}{{outBus.busCompany.companyName}}{{/if}}</td>
 													<td>{{if outBus.bus != null}}{{outBus.bus.licenseNumber}}{{/if}}</td>
@@ -361,7 +361,7 @@
 												</tr>
 											</thead>
 											<tbody>{{each bus as outBus}}
-													{{if outBus.id != null && outBus.busCompany != null && outBus.bus != null && outBus.driver != null}}
+													{{if outBus.id != null && outBus.busCompany != null}}
 												<tr>
 													<td>{{if outBus.busCompany != null}}{{outBus.busCompany.companyName}}{{/if}}</td>
 													<td>{{if outBus.bus != null}}{{outBus.bus.licenseNumber}}{{/if}}</td>
