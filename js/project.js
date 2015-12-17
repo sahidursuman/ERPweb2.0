@@ -1570,16 +1570,6 @@ KingServices.updateTransit = function(id)  {
 }
 
 /**
- * [listTransit 外转数据
- * @return {[type]} [description]
- */
-KingServices.getListPage = function(event)  {
-	seajs.use(ASSETS_ROOT + modalScripts.arrange_transfer, function(module){
-		module.getListPage(event);
-	});
-}
-
-/**
  * 编辑游客小组
  * @param  {string} id 游客小组的ID
  * @return {[type]}    [description]
