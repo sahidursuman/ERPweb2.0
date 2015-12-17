@@ -33,8 +33,6 @@
             <div class="clearfix"></div>
         </div>
     </div>
-    <input type="hidden" value="{{WEB_IMG_URL_BIG}}" name="WEB_IMG_URL_BIG" />
-    <input type="hidden" value="{{WEB_IMG_URL_SMALL}}" name="WEB_IMG_URL_SMALL" />
     <div class="clearfix"></div>
     <!-- 现收团款 -->
     <div class="col-sm-13 widget-container-col margin-top">
@@ -113,7 +111,7 @@
                         <tr>
                             <td>{{item.time}}</td>
                             <td>{{item.selfPayName}}</td>
-                            <td>{{item.itemName}}</td>
+                            <td>{{item.selfPayItemName}}</td>
                             <td>{{item.marketPrice}}</td>
                             <td>{{item.realCount}}</td>
                             <td>{{item.reduceMoney}}</td>
@@ -581,7 +579,7 @@
 
                         </tr></thead>
                         <tbody>
-                        {{each guideRebateData.shopRebateData as item}}
+                        {{each guideRebateData.selfRebateData as item}}
                         <tr>
                             <td>{{item.time}}</td>
                             <td>{{item.selfPayName}}</td>
