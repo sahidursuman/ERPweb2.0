@@ -372,6 +372,10 @@ FinRule.prototype.check = function($obj) {
                         {
                             type: 'positive-float',
                             errMsg: '请输入正数'
+                        },
+                        {
+                            type : 'null',
+                            errMsg : '下账金额不能为空'
                         }
                     ]
                 }]);
