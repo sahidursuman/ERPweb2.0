@@ -1551,7 +1551,7 @@ define(function(require, exports) {
 						if(result){
 							var selfPayItem = JSON.parse(data.selfPayItem); 
 							$tr.find("input[name=selfPayItemId]").val(ui.item.id).trigger('change');
-							$tr.find("input[name=contractPrice]").val(selfPayItem.normalTravelAgencyRate);
+							$tr.find("input[name=contractPrice]").val(selfPayItem.normalInnerPrice);
 							$tr.find("input[name=marketPrice]").val(selfPayItem.normalMarketPrice);
 						}
                     }
