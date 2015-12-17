@@ -6,6 +6,7 @@
 					<label class="middle title-size">小组信息</label>
 				</h5>
 			<div class="widget-body">
+			<div class="row"> 
 				<div class="widget-main col-sm-9 formOneList tourist-informationWidth updateTouristInput">
 					<div class="form-group guideInterval" >
 						<div class="col-sm-4">
@@ -25,7 +26,7 @@
 								<i class="fa fa-calendar" style="position: relative;left: -20px"></i>
 							</label>
 						</div>
-						<div class="col-sm-4  buyInsurance" >
+						<div class="col-sm-4  buyInsurance">
 							<label class="control-label no-padding-right">是否购买保险：
 								<input checked="checked" type="checkbox" class="ace buyInsurance-status" value="1" name="buyInsurance">
 								<span class="lbl">
@@ -34,23 +35,25 @@
 						</div>
 					</div>
 					<div class="form-group" style="margin-bottom:7px !important;">
-						<div class="col-sm-4" style="width:360px;">
-							<label class=" control-label no-padding-right"><span class="necessary">*</span>客户来源：</label>
-						    <input type="text" name="fromPartnerAgency"class="choosePartnerAgency"  placeholder="请输入客户来源">
-							<input type="hidden" name="fromPartnerAgencyId" style='width:120px'>
+						<div class="col-sm-4">
+							<label class=" control-label no-padding-right" style="margin-left: -8px"><span class="necessary">*</span>客户来源：<input type="text" name="fromPartnerAgency"class="choosePartnerAgency"  placeholder="请输入客户来源">
+							<input type="hidden" name="fromPartnerAgencyId">
 							<span class="input-group-addon T-addPartner R-right" data-right="1150002" style="display: inline-block;left:0" title="添加客户">
 								<i class="ace-icon fa fa-plus bigger-110 icon-only" ></i>
 							</span>
+							</label>
 						</div>
-						<div class="col-sm-4" style="width:360px;">
-							<label class="  no-padding-right"><span class="necessary">*</span>同行联系人：</label>
+						<div class="col-sm-4">
+							<label class="  no-padding-right" style="margin-left: 2px;"><span class="necessary">*</span>同行联系人：
 							<input class="choosePartnerManager bind-change" name="partnerAgencyNameList" type="text" />
 							<input type="hidden"  style='width:120px' name="partnerAgencyContactId" />
 							<span class="input-group-addon T-addPartnerManager" style="display: inline-block;left:0" title="为客户来源添加联系人">
 								<i class="ace-icon fa fa-plus bigger-110 icon-only" ></i>
 							</span>
+							</label>
 						</div>
-					    <label class="no-padding-right pull-left">获得方式：</label>
+						<div class="col-sm-4">
+					    <label class="no-padding-right pull-left" style="margin-left: 23px;">获得方式： </label>&nbsp;&nbsp;
 						<select name="getType" class="pull-left">
 							<option selected="selected" value="1">旅行社系统</option>
 							<option value="2">传真</option>
@@ -58,46 +61,43 @@
 							<option value="4">电话</option>
 							<option value="5">QQ</option>
 						</select>
-
-						<div class="col-sm-4" style="width:360px;">
-							<label class=" control-label no-padding-right" style="margin-left: 8px">组团单号：
-							<input  type="text" name="otaOrderNumber"  maxlength="100" />
-							</label>
-						</div>
-
 					</div>
 
-
 					<div class="form-group guideInterval"> 
-					    <div class="col-sm-4" style="width:320px;"> 
-						   <label class=" control-label no-padding-right" style=" margin-left: 30px">应收： <input readonly="readonly" type="text" name="needPayAllMoney" maxlength="9"> </label> 
+						<div class="col-sm-4">
+							<label class=" control-label no-padding-right" style="margin-left: 5px;">组团单号：
+							<input  type="text" name="otaOrderNumber"  maxlength="9" />
+							</label>
 						</div>
-						 <div class="col-sm-4" style="width:360px;">
-						     <label class="control-label no-padding-right" style="margin-left: 40px">已收： <input type="text" name="payedMoney" value="0" maxlength="9"> </label>
+					    <div class="col-sm-4"> 
+						   <label class=" control-label no-padding-right" style="margin-left:44px;">应收： <input readonly="readonly" type="text" name="needPayAllMoney" maxlength="9"> </label> 
+						</div>
+						<div class="col-sm-4"> 
+							<label class=" control-label no-padding-right" style="margin-left: 46px;">现收： <input type="text" name="currentNeedPayMoney" value="0" maxlength="9" style="width: 87px;"> 
+							</label>
+						</div>
+					</div>
+					<div class="form-group guideInterval">
+						 <div class="col-sm-4">
+						     <label class="control-label no-padding-right" style="margin-left: 28px;">已收： <input type="text" name="payedMoney" value="0" maxlength="9"> </label>
 						</div> 
-						<div class="col-sm-2"> 
-							   <label class="no-padding-right pull-left">收款方式：</label> 
-							   <select name="incomeType" class="pull-left">
+						<div class="col-sm-4">
+							<label class=" control-label no-padding-right" style="margin-left: 44px;">未收：
+							<input readonly="readonly"type="text" name="unIncomeMoney"  maxlength="9" />
+							</label>
+						</div>
+						<div class="col-sm-4"> 
+							   <label class="no-padding-right pull-left" style="margin-left: 23px;">收款方式：</label> 
+							   <select name="incomeType" class="pull-left" style="width: 87px;">
 								    <option selected="selected" value="0">现金</option> 
 								    <option value="1">银行转账</option> 
 								    <option value="2">网上支付</option> 
 								    <option value="3">支票</option> 
 								    <option value="4">其它</option> 
 							    </select> 
-						 </div> 
-						<div class="col-sm-4" style="width:320px;"> 
-							<label class=" control-label no-padding-right" style="margin-left: 20px">现收： <input type="text" name="currentNeedPayMoney" value="0" maxlength="9"> 
-							</label>
-						</div>
+						 </div>
 					</div>
-
-					<div class="form-group guideInterval">
-						<div class="col-sm-4">
-							<label class=" control-label no-padding-right" style="margin-left: 30px">未收：
-							<input readonly="readonly"type="text" name="unIncomeMoney"  maxlength="9" />
-							</label>
-						</div>
-					</div>
+				</div>
 				</div>
 				<div class="form-group">
 					<div class="col-sm-8">
