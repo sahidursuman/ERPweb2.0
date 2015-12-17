@@ -180,9 +180,9 @@ define(function(require, exports) {
                         $divIdObj.find('.T-Transfer-list').html(html);
                         //初始化页面事件
                         arrangeTourist.init_transferEvent();
-
                     };
-                    
+                   //分页选中效果
+                   arrangeTourist.pagerChecked(customerType,divId);
                     // 绑定共用翻页组件
                     laypage({
                         cont: $('#' + divId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
@@ -198,6 +198,27 @@ define(function(require, exports) {
                 }
             }
         })
+    };
+
+    /**
+     * [pagerChecked 分页选中效果
+     * @return {[type]} [description]
+     */
+    arrangeTourist.pagerChecked = function(customerType,divId){
+         //分页--勾选游客小组Id
+        if (customerType=='0' && arrangeTourist.touristGroupId.length > 0 ) {
+            for (var i = 0; i < arrangeTourist.touristGroupId.length; i++) {
+                var touristGroupId = arrangeTourist.touristGroupId[i].touristGroupId,
+                    $vistorTr = $('#'+ divId).find('tr');
+                    $vistorTr.each(function(index) {
+                       var id = $vistorTr.eq(index).data('value');
+                       if (!!id && !!touristGroupId && id == touristGroupId ) {
+                           $vistorTr.eq(index).find('.T-cheked').prop('checked',true);
+                       };
+                        
+                });
+            }
+        };
     };
 
 
@@ -1724,8 +1745,12 @@ define(function(require, exports) {
             arrangeTourist.touristGroupMergeData.touristGroupMergeList.push(touristGroupMerge);
             arrangeTourist.touristGroupId.push(touristGroupId);
 
-        }else{  //若取消选中状态
+        }else{  
+           //若取消选中状态---用于生成计划查询数组
             arrangeTourist.removeTouristGroupMergeData($merge, lineProductId, startTime);
+            //移除取消分页选中效果
+            arrangeTourist.removeTouristGroupId(touristGroupId);
+
         }
 
     };
@@ -1745,6 +1770,20 @@ define(function(require, exports) {
                     touristGroupMergeList.splice(i, 1);
                     break;
                 }
+            }
+        }
+    };
+
+    /**
+     * removeTouristGroupId 移除选中的小组Id
+     * @param  {[type]} touristGroupId 
+     * @return {[type]}
+     */
+    arrangeTourist.removeTouristGroupId = function(touristGroupId){
+        for(var i = 0; i < arrangeTourist.touristGroupId.length; i++) {
+            if (arrangeTourist.touristGroupId[i].touristGroupId == touristGroupId) {
+                arrangeTourist.touristGroupId.splice(i, 1);
+                break;
             }
         }
     };
