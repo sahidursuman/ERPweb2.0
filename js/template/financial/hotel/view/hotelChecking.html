@@ -55,14 +55,14 @@
             </tr>
         </thead>
         <tbody class="T-checkList" data-right="1220005">
-            {{each financialHotelListData as rs index}}
+            {{each financialHotelListData as rs}}
 		    <tr class="T-checkTr" data-id="{{rs.id}}" data-confirm="{{rs.isConfirmAccount}}">
 				<td>{{rs.tripNumber}}{{"，"}}{{rs.lineProductName}}{{"，"}}{{rs.guideName}}</td>
 				<td>{{if rs.accountTime == null || rs.accountTime == ""}}-{{else}}{{rs.accountTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
 				<td>{{if rs.type == null || rs.type == ""}}-{{else}}{{rs.type}}{{/if}}</td>
-				<td>{{rs.price}}</td>
-				<td>{{rs.memberCount}}</td>  
-				<td>{{rs.reduceMoney}}</td>
+				<td>{{if rs.badStatus == 1}}-{{else}}{{rs.price}}{{/if}}</td>
+				<td>{{if rs.badStatus == 1}}-{{else}}{{rs.memberCount}}{{/if}}</td>  
+				<td>{{if rs.badStatus == 1}}-{{else}}{{rs.reduceMoney}}{{/if}}</td>
 				<td>{{rs.needPayMoney}}</td>
 				<td><a class="T-option T-payedDetail" data-money="{{rs.payedMoney + rs.realGuidePayMoney}}">{{"社付："}}{{rs.payedMoney}}{{if !rs.isGuidePay || rs.isGuidePay != 1}}{{"，"}}{{"导付："}}{{rs.realGuidePayMoney}}{{/if}}</a></td> 
 				<td>{{if rs.billImages != null && rs.billImages !=""}}<a href="#" class="T-option T-hotelImg" url="{{rs.billImages}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
