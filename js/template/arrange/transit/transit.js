@@ -43,7 +43,7 @@ define(function(require, exports) {
 					Tools.addTab(menuKey,"中转安排",html);
 
 					transit.$tab = $('#tab-arrange_transit-content');
-					transit.$searchArea = transit.$tab.find('.T-arrangeTransitSearchArea');
+					transit.$searchArea = transit.$tab.find('.T-search-area');
 					transit.init_eventMain();
 					transit.listTransit(0);
 				}
@@ -68,7 +68,8 @@ define(function(require, exports) {
 			transit.listTransit(0);
 		});
 		//时间控件
-		transit.datepicker(transit.$searchArea);
+		Tools.setDatePicker(transit.$searchArea.find('.T-datePicker'));
+		Tools.setDatePicker(transit.$searchArea.find('.T-datePicker-range'), true);
 
 		//autocomplete		
 		var choosePartnerAgency = transit.$searchArea.find('[name=fromPartnerAgencyName]'),
