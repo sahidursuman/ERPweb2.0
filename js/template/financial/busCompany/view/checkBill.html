@@ -37,7 +37,7 @@
     <table class="table table-striped table-bordered table-hover all" style="margin-top: 30px">
         <thead>
             <tr><th class="th-border">账务类别</th>
-                <th class="th-border">用车时间(账期)</th>
+                <th class="th-border" width="170">用车时间(账期)</th>
                 <th class="th-border">人数</th>
                 <th class="th-border">司机</th>
                 <th class="th-border">车型</th>
@@ -62,10 +62,10 @@
                     {{if rs.lineProductName != null && rs.lineProductName != ""}}，{{rs.lineProductName}}{{/if}}
                     {{if rs.guideName != null && rs.guideName != ""}}，{{rs.guideName}}{{/if}}
                 </td>
-				<td>{{if rs.accountTime == null || rs.accountTime == ""}}
+				<td>{{if rs.startTime == null || rs.startTime == ""}}
                         -
                     {{else}}
-                        {{rs.accountTime | dateFormat: 'yyyy-MM-dd'}}
+                        {{rs.startTime | dateFormat: 'yyyy-MM-dd'}} ~ {{rs.endTime | dateFormat: 'yyyy-MM-dd'}}
                     {{/if}}
                 </td>
 				<td>{{if rs.touristAdultCount == null || rs.touristAdultCount == ""}}0{{else}}{{rs.touristAdultCount}}{{/if}} 大  

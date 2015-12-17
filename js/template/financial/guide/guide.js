@@ -627,9 +627,7 @@ define(function(require, exports) {
                         Tools.addTab(menuKey + "-costDetail", "费用明细", costDetailTemplate(data));
                         //查看图片事件
                         $("#tab-" + menuKey + "-costDetail-content").find(".T-view-bill").click(function() {
-                            var WEB_IMG_URL_BIG = $("#tab-" + menuKey + "-costDetail-content").find("input[name=WEB_IMG_URL_BIG]").val(); //大图
-                            var WEB_IMG_URL_SMALL = $("#tab-" + menuKey + "-costDetail-content").find("input[name=WEB_IMG_URL_SMALL]").val(); //小图
-                            guide.viewBillImage($(this).data('fn'), WEB_IMG_URL_BIG, WEB_IMG_URL_SMALL);
+                            FinGuide.viewBillImage($(this).data('fn'));
                         });
                     }
                 });
@@ -639,19 +637,18 @@ define(function(require, exports) {
 
 
     //显示单据
-    FinGuide.viewBillImage = function(fn, WEB_IMG_URL_BIG, WEB_IMG_URL_SMALL) {
+    FinGuide.viewBillImage = function(fn) {
         var data = {
             "images": []
-        };
-        var strs = fn.split(",");
-        for (var i = 0; i < strs.length; i++) {
-            var s = strs[i];
-            if (s != null && s != "" && s.length > 0) {
-                var image = {
-                    "WEB_IMG_URL_BIG": imgUrl + s,
-                    "WEB_IMG_URL_SMALL": imgUrl + s + "?imageView2/2/w/150",
-                }
-                data.images.push(image);
+        }, strs = fn.split(",");
+        for (var i = 0, str; i < strs.length; i++) {
+            str = strs[i];
+
+            if (!!str) {
+                data.images.push({
+                    WEB_IMG_URL_BIG: imgUrl + str,
+                    WEB_IMG_URL_SMALL: imgUrl + str + "?imageView2/2/w/150"
+                })
             }
         }
         var html = billImagesTemplate(data);
