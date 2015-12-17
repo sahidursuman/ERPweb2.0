@@ -472,7 +472,7 @@ define(function(require, exports) {
                             busCompany.listBusCompany(busCompany.searchData.pageNo,busCompany.searchData.busCompanyName,busCompany.searchData.busCompanyId,busCompany.searchData.startDate,busCompany.searchData.endDate);
                         }else if(argumentsLen === 1){
                             busCompany.$clearTab.data('isEdited',false);
-                            busCompany.busCompanyClear(0,page,id,name);
+                            busCompany.busCompanyClear(isAutoPay,page,id,name);
                         } else {
                             busCompany.$clearTab.data('isEdited',false);
                             Tools.addTab(tab_id, title, html);

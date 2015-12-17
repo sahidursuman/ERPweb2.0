@@ -579,7 +579,7 @@ define(function(require, exports) {
                             Tools.closeTab(menuKey + "-clearing");
                             restaurant.listRestaurant(restaurant.searchData.pageNo,restaurant.searchData.restaurantName,restaurant.searchData.restaurantId,restaurant.searchData.startDate,restaurant.searchData.endDate);
                         }else if(argumentsLen === 1){
-                            restaurant.restaurantClear(0,page,id,name);
+                            restaurant.restaurantClear(isAutoPay,page,id,name);
                         } else {
                             Tools.addTab(tab_id, title, html);
                             restaurant.initClear(restaurant.$clearTab.data('next'));

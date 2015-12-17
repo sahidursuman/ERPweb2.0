@@ -577,7 +577,7 @@ define(function(require, exports) {
                             hotel.listhotel(hotel.searchData.pageNo,hotel.searchData.hotelName,hotel.searchData.hotelId,hotel.searchData.startDate,hotel.searchData.endDate);
                         }else if(argumentsLen === 1){
                             hotel.$clearTab.data('isEdited',false);
-                            hotel.hotelClear(0,page,id,name);
+                            hotel.hotelClear(isAutoPay,page,id,name);
                         } else {
                             hotel.$clearTab.data('isEdited',false);
                             Tools.addTab(tab_id, title, html);
