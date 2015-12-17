@@ -55,7 +55,7 @@
             </tr>
         </thead>
         <tbody class="T-checkList" data-right="1220005">
-            {{each financialHotelListData as rs index}}
+            {{each financialHotelListData as rs}}
 		    <tr class="T-checkTr" data-id="{{rs.id}}" data-confirm="{{rs.isConfirmAccount}}">
 				<td>{{rs.tripNumber}}{{"，"}}{{rs.lineProductName}}{{"，"}}{{rs.guideName}}</td>
 				<td>{{if rs.accountTime == null || rs.accountTime == ""}}-{{else}}{{rs.accountTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>

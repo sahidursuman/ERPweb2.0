@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":342,"md5":"e685072ca9704af14fb3bd3e88cdb05f"}*/
+/*TMODJS:{"debug":true,"version":345,"md5":"e685072ca9704af14fb3bd3e88cdb05f"}*/
 define(function(require) {
     return require("../../../template")("financial/busCompany/view/Clearing", function($data, $filename) {
         try {

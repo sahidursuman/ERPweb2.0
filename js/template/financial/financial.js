@@ -195,6 +195,8 @@ FinancialService.autoPayJson = function(id,$tab,rule){
         showMessageDialog($("#confirm-dialog-message"),"付款金额不能大于未付总额！");
         return false;
     }
+
+    $tab.data('isEdited', false);
     var searchParam = {
         id : id,//字段id需与后台协调
         sumCurrentPayMoney : sumPayMoney,
