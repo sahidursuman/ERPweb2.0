@@ -1,5 +1,6 @@
 define(function(require,exports) {
 	var menuKey = "financial_innerTransfer_in",
+		//rule = require("./innerTransferInRule"),
 		listTemplate = require("./view/list"),
 		checkTemplate = require("./view/innerTransferInChecking"),
 		settlementTemplate = require("./view/InnerTransferInClearing"),
@@ -372,10 +373,10 @@ define(function(require,exports) {
         	InnerTransferIn.viewPayedDetail(id);
         });
         //计算返款金额
-		/*$obj.find('.'+$list).on('change','input[name=backMoney]',function(){
+		$obj.find('.'+$list).on('change','input[name=backMoney]',function(){
 			InnerTransferIn.autoSumBackMoney($(this),$obj);
 		});
-*/        //确认对账事件
+        //确认对账事件
         $obj.find(".T-checking").on('click',function(event){
         	event.preventDefault();
         	if(!validatorCheck.form()){return;}
@@ -386,10 +387,28 @@ define(function(require,exports) {
         	if(!autoValidatorCheck.form()){return;}
         	var $that = $(this);
         	if($that.hasClass('btn-primary')){
+        		var unPayMoney = $obj.find('.T-count').find('.sumUnPayedMoney').text();
+				var payMoney = $obj.find('.T-count').find('input[name=sumPayMoney]').val();
+				var startDate = $obj.find('input[name=startDate]').val();
+				var endDate = $obj.find('input[name=endDate]').val();
+				if(payMoney>unPayMoney || payMoney < 0 || payMoney == "" || startDate>endDate){
+					var message;
+					if(payMoney<0 || payMoney == ""){
+						message = "收款金额需大于0！";
+					};
+					if(payMoney>unPayMoney){
+						message = "本次收款金额不能大于已对账未收总额！";
+					};
+					if(startDate>endDate){
+						message = "开始时间不能大于结束时间，请重新选择！";
+					};
+					showMessageDialog($("#confirm-dialog-message"),message);
+					return;
+				};
         		showConfirmDialog($( "#confirm-dialog-message" ), "是否按当前账期 " + $listSearchData.startAccountTime + " 至 " + $listSearchData.endAccountTime + " 下账？",function(){
-    			//自动下账函数
-        		InnerTransferIn.autoAcountMoney($obj,$listSearchData,typeFlag);
-        	});
+	    			//自动下账函数
+	        		InnerTransferIn.autoAcountMoney($obj,$listSearchData,typeFlag);
+	        	});
         	
         	}else{
         		InnerTransferIn.setAutoFillEdit($obj,false)
@@ -441,10 +460,6 @@ define(function(require,exports) {
 		var backMoney = backMoneyObj.find('.sumPunishMoney').text();
 		$tr.each(function(){
 			var $that = $(this);
-			/*<td><span class="transInMoney">{{checking.transInMoney}}</span></td>
-			<td><span class="settlementMoney">{{checking.settlementMoney}}</span></td>
-                <td><span class="unIncomeMoney">{{checking.unIncomeMoney}}</span></td>
-                <span class="transGetedMoney">{{checking.transGetedMoney}}</span>,导游现收:0</span>*/
 			var tr = $(this).closest('tr');
 			var settlementMoney = tr.find('.settlementMoney').text();
 			var unIncomeMoney = tr.find('.unIncomeMoney').text();
@@ -463,7 +478,6 @@ define(function(require,exports) {
 	//自动下账
 	InnerTransferIn.autoAcountMoney = function($obj,$data){
 		var payType = $obj.find('select[name=sumPayType]').val();
-		console.log(payType);
 		var args = {
 			lineProductId:$obj.find('input[name=lineProductId]').val(),
 			lineProductName:$obj.find('input[name=lineProductName]').val(),
@@ -486,7 +500,6 @@ define(function(require,exports) {
 					console.log(data);
 					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
 						InnerTransferIn.saveJson = data
-						console.log(InnerTransferIn.saveJson);
 						InnerTransferIn.btnSatus = 1;
 						$data.autoAccount = 1;
 						InnerTransferIn.chenking($data,2,"settle");
@@ -567,7 +580,6 @@ define(function(require,exports) {
 	     	   });
 	 	   }  	
 	};
-	
 	//获取接收人--线路名称
 	InnerTransferIn.getReceiveUser = function($obj,args){
 		var userName = $obj.find('input[name=receiveUserName]');

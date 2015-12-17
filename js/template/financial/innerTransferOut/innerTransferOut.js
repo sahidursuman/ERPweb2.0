@@ -345,6 +345,25 @@ define(function(require,exports) {
         	if(!InnerTransferOut.autoValidatorCheck.form()){return;}
         	var $that = $(this);
         	if($that.hasClass('btn-primary')){
+        		var unPayMoney = $obj.find('.T-count').find('.sumUnPayedMoney').text();
+				var payMoney = $obj.find('.T-count').find('input[name=sumPayMoney]').val();
+				var startDate = $obj.find('input[name=startDate]').val();
+				var endDate = $obj.find('input[name=endDate]').val();
+				if(parseFloat(payMoney)>parseFloat(unPayMoney) || payMoney < 0 || payMoney == "" || startDate>endDate){
+					var message;
+					if(startDate>endDate){
+						message = "开始时间不能大于结束时间，请重新选择！";
+					};
+					if(payMoney<0 || payMoney == ""){
+						message = "付款金额需大于0！";
+					};
+					if(parseFloat(payMoney)>parseFloat(unPayMoney)){
+						message = "本次付款金额不能大于已对账未付总额！";
+					};
+					
+					showMessageDialog($("#confirm-dialog-message"),message);
+					return;
+				};
         		showConfirmDialog($( "#confirm-dialog-message" ), "是否按当前账期 " + $data.startDate + " 至 " + $data.endDate + " 下账？",function(){
         		//自动下账函数
         		InnerTransferOut.autoAcountMoney($obj,id,name,$data);
