@@ -505,6 +505,7 @@ define(function(require, exports) {
 			showMessageDialog($( "#confirm-dialog-message" ),"计算应付值过大，请确认数据是否有误");
 			return false;
 		}
+		var cashFlag = getValParam("cashFlag");
 		var innerTransferJson = {
 			id : getValParam("id"),//	内转ID		
 			innerTransferFeeSet : "",	//内转的其他费用	array<object>	
@@ -541,7 +542,7 @@ define(function(require, exports) {
 		var innerTransferJson=JSON.stringify(innerTransferJson);
 		$.ajax({
 			url:KingServices.build_url("innerTransfer","update"),
-			data:"innerTransfer="+encodeURIComponent(innerTransferJson),
+			data:"innerTransfer="+encodeURIComponent(innerTransferJson)+"&cashFlag="+cashFlag,
 			success:function(data){
 				var result = showDialog(data);  
 				if(result){ 

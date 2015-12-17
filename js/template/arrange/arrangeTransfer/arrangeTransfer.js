@@ -765,7 +765,8 @@ define(function(require, exports) {
 			    transChildPrice=getValue("transChildPrice"),
 			    transRemark=getValue("transRemark"),
 			    status=getValue("status"),
-			    payType = getValue("payType");
+			    payType = getValue("payType"),
+			    cashFlag = getValue("cashFlag");
 
 	
 	
@@ -812,7 +813,7 @@ define(function(require, exports) {
 			var otherFee=JSON.stringify(otherFeeJsonAdd);
 			$.ajax({
 				url:KingServices.build_url("transfer","update"),
-				data:"id="+id+"&touristGroupTransfer="+JSON.stringify(saveDate.touristGroupTransfer)+"&transferFee="+JSON.stringify(saveDate.transferFee)+"&otherFee="+encodeURIComponent(otherFee),
+				data:"id="+id+"&touristGroupTransfer="+JSON.stringify(saveDate.touristGroupTransfer)+"&transferFee="+JSON.stringify(saveDate.transferFee)+"&otherFee="+encodeURIComponent(otherFee)+"&cashFlag="+cashFlag,
 				success:function(data){
 					var result = showDialog(data);  
 					if(result){
