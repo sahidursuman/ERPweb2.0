@@ -228,7 +228,7 @@ define(function(require, exports) {
     //结算
     scenic.scenicClear = function(isAutoPay,page,scenicId,scenicName,accountInfo,startDate,endDate, isOuter){
         if (isAutoPay) {
-            var searchParam = FinancialService.autoPayJson(scenicId,scenic.$clearTab, FinRule(3));
+            var searchParam = FinancialService.autoPayJson(scenicId,scenic.$clearTab, new FinRule(3));
             searchParam = JSON.parse(searchParam);
             searchParam.scenicId = searchParam.id;   
             delete(searchParam.id);
