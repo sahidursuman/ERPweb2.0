@@ -163,7 +163,7 @@ define(function(require, exports) {
             partnerAgencyName = args.name;
         }
 
-        args.pageNo = pageNo || 0;
+        Client.checkPageNo = args.pageNo = pageNo || 0;
 
         $.ajax({
             url : KingServices.build_url('financial/customerAccount', 'listCheckCustomerAcccount'),
@@ -205,7 +205,7 @@ define(function(require, exports) {
         var validator = (new FinRule(0)).check($tab);
         $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
             event.preventDefault();
-            Client.initCheck($tab);
+            Client.ClientCheck(Client.checkPageNo, false, $tab);
         })
         // 监听保存，并切换tab
         .on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
@@ -281,6 +281,7 @@ define(function(require, exports) {
         $tab.find(".T-btn-close").click(function(){
             Tools.closeTab(ClientCheckTab);
         });
+
     };
 
     /**
