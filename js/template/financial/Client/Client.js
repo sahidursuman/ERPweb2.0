@@ -450,7 +450,9 @@ define(function(require, exports) {
     Client.initClear = function($tab, id){
         var id = $tab.find('.T-btn-save').data('id');
         
-        var validator = (new FinRule(3)).check($tab),
+        Client.$clearSearchArea = $tab.find('.T-search-area');
+        Client.$sumUnReceivedMoney = $tab.find('.T-sumReciveMoney');
+        var validator = (new FinRule($tab.find('.T-btn-save').data('type') ? 3 : 1)).check($tab),
             autoValidator = (new FinRule(2)).check(Client.$clearSearchArea);
 
         $tab.data('id', id);
@@ -462,16 +464,18 @@ define(function(require, exports) {
         // 监听保存，并切换tab
         .on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
             event.preventDefault();
-            Client.saveClearData($tab, [tab_id, title, html]);
+            if (autoValidator.form()) {
+                Client.saveClearData($tab, [tab_id, title, html]);
+            }
         })
         // 保存后关闭
         .on(CLOSE_TAB_SAVE, function(event) {
             event.preventDefault();
-            Client.saveClearData($tab);
+            if (autoValidator.form()) {
+                Client.saveClearData($tab);
+            }
         });
 
-        Client.$clearSearchArea = $tab.find('.T-search-area');
-        Client.$sumUnReceivedMoney = $tab.find('.T-sumReciveMoney');
         Client.datepicker(Client.$clearSearchArea);
         //Client.init_clear_event(id, $cleartab);
         // 初始化下拉选项
@@ -758,9 +762,10 @@ define(function(require, exports) {
     //给每个tr增加验证
     Client.validatorTable = function(){
         var validator;
-        var $tr = $("#tab-financial_Client-checking-content .T-checkList tr");
+        var $tr = $("#tab-financial_Client-checking-content .T-checkList tr"),
+            type = $("#tab-financial_Client-checking-content .T-btn-save").data('type');
         $tr.each(function(){
-            validator = (new FinRule(3)).check($(this));
+            validator = (new FinRule(type ? 3 : 1)).check($(this));
         });
         return validator;
     };

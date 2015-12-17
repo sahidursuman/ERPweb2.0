@@ -211,10 +211,10 @@ define(function(require, exports){
 				var $theTab = null;
 				if(Tools.addTab(key, title, template(data))){
 					if(type){
-						$theTab = FinShop.$settlementTab = $('#tab-' + key + '-content');
+						$theTab = FinShop.$settlementTab = $tab || $('#tab-' + key + '-content');
 						FinShop.sett_init_event(FinShop.$settlementTab, type);
 					}else{
-						$theTab = FinShop.$checkingTab = $('#tab-' + key + '-content');
+						$theTab = FinShop.$checkingTab = $tab || $('#tab-' + key + '-content');
 						FinShop.check_init_event(FinShop.$checkingTab, type);
 					}
 				}
@@ -226,7 +226,7 @@ define(function(require, exports){
 				    curr: (data.searchParam.pageNo + 1),
 				    jump: function(obj, first) {
 				    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-				    		FinShop.initOperationList({page : obj.curr -1}, type, $tab);
+				    		FinShop.initOperationList({page : obj.curr -1}, type, $theTab);
 				    	}
 				    }
 				});
@@ -440,7 +440,7 @@ define(function(require, exports){
 	};
 
 	FinShop.sett_init_event = function($tab){
-		var validator = (new FinRule(3)).check($tab),
+		var validator = (new FinRule(FinShop.isBalanceSource ? 3 : 1)).check($tab),
 			autoValidator = (new FinRule(2)).check($tab);
 
 		$tab.off('change').off(SWITCH_TAB_SAVE).off(CLOSE_TAB_SAVE)
@@ -468,7 +468,7 @@ define(function(require, exports){
 		});
 		var $datepicker = $searchArea.find('.datepicker');
 		Tools.setDatePicker($datepicker, true);
-		FinancialService.updateSumPayMoney($tab, new FinRule(3));
+		FinancialService.updateSumPayMoney($tab, new FinRule(FinShop.isBalanceSource ? 3 : 1));
 
 		// 报表内的操作
 		$tab.find('.T-list').on('click', '.T-action', function(event) {
@@ -591,16 +591,16 @@ define(function(require, exports){
 						FinShop.$settlementTab.find('.T-checkList').html(html);
 
 						// 设置记录条数及页面
-                        $tab.find('.T-sumItem').text('共计' + data.recordSize + '条记录');
+                        $tab.find('.T-sumItem').text('共计' + data.searchParam.recordSize + '条记录');
                         $tab.find('.T-btn-save').data('pageNo', args.pageNo);
 						// 绑定翻页组件
 						laypage({
 						    cont: $tab.find('.T-pagenation'), 
-						    pages: data.totalPage, //总页数
-						    curr: (data.pageNo + 1),
+						    pages: data.searchParam.totalPage, //总页数
+						    curr: (data.searchParam.pageNo + 1),
 						    jump: function(obj, first) {
 						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-						    		FinShop.getOperationList(obj.curr -1);
+						    		FinShop.getOperationList(obj.curr -1, $tab);
 						    	}
 						    }
 						});	
@@ -611,7 +611,7 @@ define(function(require, exports){
     }
 
 	FinShop.saveSettlement = function($tab, tabArgs){
-		var json = FinancialService.clearSaveJson($tab, FinShop.payingJson, new FinRule(3));
+		var json = FinancialService.clearSaveJson($tab, FinShop.payingJson, new FinRule(FinShop.isBalanceSource ? 3 : 1));
 		console.log(json)
 		if (json.length) {
 			var args = {

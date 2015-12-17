@@ -1,6 +1,6 @@
-/*TMODJS:{"debug":true,"version":189,"md5":"44bbcfb5743759d66db1534860f9e65f"}*/
+/*TMODJS:{"debug":true,"version":192,"md5":"03a6eae4074fe670d7e25797f6e6024b"}*/
 define(function(require) {
-    return require("../../../template")("financial/transfer/view/list", function($data, $filename) {
+    return require("../../../../../template")("js/template/financial/transfer/view/list", function($data, $filename) {
         try {
             var $utils = this, $line = ($utils.$helpers, 0), searchParam = $data.searchParam, $escape = $utils.$escape, $each = $utils.$each, financialTransferList = $data.financialTransferList, $out = ($data.rs, 
             $data.$index, "");

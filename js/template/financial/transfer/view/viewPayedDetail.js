@@ -1,6 +1,6 @@
-/*TMODJS:{"debug":true,"version":4,"md5":"cc037e78b2aca7619be80cc1593f89b5"}*/
+/*TMODJS:{"debug":true,"version":7,"md5":"ab66b2051fd163b2a5091f3ca00570df"}*/
 define(function(require) {
-    return require("../../../template")("financial/transfer/view/viewPayedDetail", function($data, $filename) {
+    return require("../../../../../template")("js/template/financial/transfer/view/viewPayedDetail", function($data, $filename) {
         try {
             var $utils = this, $helpers = $utils.$helpers, $line = 0, $each = $utils.$each, payedMoneyDetailList = $data.payedMoneyDetailList, $escape = ($data.rs, 
             $data.$index, $utils.$escape), $out = "";

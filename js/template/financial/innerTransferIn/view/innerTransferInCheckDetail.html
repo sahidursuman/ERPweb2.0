@@ -13,12 +13,12 @@
 		<tbody>
 		{{each incomeDetailsList as detail}}
 			<tr>
-				<td>{{detail.receivableType}}</td>
+				<td>{{detail.resourceType}}</td>
 				<td>{{detail.businessType}}</td>
-				<td>{{detail.incomeDifferenceMoney}}</td>
+				<td>{{detail.incomeMoney}}</td>
 				<td>{{detail.remark}}</td>
-				<td>{{detail.checkRealname}}</td>
-				<td>{{detail.checkTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}</td>
+				<td>{{detail.creatorName}}</td>
+				<td>{{detail.createTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}</td>
 			</tr>
 		{{/each}}
 		</tbody>

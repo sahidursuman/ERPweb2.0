@@ -651,6 +651,8 @@ var modalScripts = {
 	//-------------------------------------------发团管理---------------------------------------------------
 	'arrange_plan':"js/template/arrange/tripPlan/tripPlan.js",
 	'resource_travelLine': 'js/template/resource/travelLine/travelLine.js',
+	'arrange_transit': 'js/template/arrange/transit/transit.js',
+	'arrange_all':'js/template/resource/tripPlan/tripPlan.js',
 	//-------------------------------------------发团管理模块---------------------------------------------------
 	'arrange_quote':'js/template/arrange/quote/quote.js',
 	//-------------------------------------------业务分析模块---------------------------------------------------
@@ -711,19 +713,6 @@ function listMenu(menuTemplate){
 				var html = template("menu-template",data);
 				$("#sidebar .nav-list").html(html);
 
-				//绑定发团安排菜单功能
-				$("#sidebar .nav-list .arrange_all").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					console.info('click.....');
-					seajs.use("" + ASSETS_ROOT +"js/template/resource/tripPlan/tripPlan.js",function(tripPlan){
-						console.info('listTripPlan......');
-						tripPlan.listTripPlan(0,"","","","","","","","");
-						modals["arrange_all"] = tripPlan;
-					});
-				});
-
 				//绑定分团转客菜单功能
 				/*$("#sidebar .nav-list .arrange_tourist").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
@@ -734,17 +723,6 @@ function listMenu(menuTemplate){
 						modals["arrange_tourist"] = arrangeTourist;
 					});
 				});*/
-
-				//绑定中转安排菜单功能
-				$("#sidebar .nav-list .arrange_transit").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/arrange/transit/transit.js",function(transit){
-						transit.listTransit(0,"","","","","","","","","","","","");
-						modals["arrange_transit"] = transit;
-					});
-				});
 
 				//绑定系统旅行社
 				$("#sidebar .nav-list .system_travelAgency").click(function(){
@@ -1422,6 +1400,26 @@ Tools.addZero2Two = function(num)  {
 }
 
 /**
+ * 控制精度
+ * @param  {string/float} data   数据
+ * @param  {float} length 精度的长度
+ * @return {float}        返回修正后的数据
+ */
+Tools.toFixed = function(data, length) {
+	if (!!Number.prototype.toFixed) {
+		if (isNaN(length) || !length) {
+			length = 2;
+		}
+
+		if (!isNaN(data)) {
+			data = (data * 1).toFixed(length);
+		}
+	}
+
+	return data;
+};
+
+/**
  * 删除JSON中空字符串或者未定义的
  * @param  {[type]} json [description]
  * @return {[type]}      [description]
@@ -1474,6 +1472,33 @@ Tools.setDatePicker = function($obj, isInputRange) {
 }
 
 /**
+ * 计算两个日期的差额
+ * @param  {string} startDate 日期字符串
+ * @param  {string} endDate   日期字符串
+ * @return {int}           返回两个日期之间的天数
+ *         					当天的话，返回0
+ *         					开始日期或者结束日期为空，则表示今天
+ */
+Tools.getDateDiff = function(startDate,endDate)  
+{
+	var days = 0;
+
+	if (!!startDate || !!endDate)   {
+		days = Math.floor(Math.abs(getTime(endDate) - getTime(startDate))/(1000*60*60*24));
+	}
+    
+    return days; 
+
+    function getTime(date) {
+    	if (!!date) {
+    		return new Date(Date.parse(date.replace(/-/g,   "/"))).getTime();
+    	} else {
+    		return (new Date()).getTime();
+    	}
+    }
+}
+
+/**
  * 获取记录描述信息
  * 主要是为了统一描述
  * @param  {int} size 记录条数
@@ -1502,39 +1527,47 @@ var KingServices = {};
 KingServices.build_url = function(path,method){
     return APP_ROOT+'back/'+path +'.do?method='+method+'&token='+$.cookie('token');
 };
+
+/**
+ * 获取主列表
+ * @param  {string} key       列表key
+ * @param  {boolean} onlyStyle 是否只设置菜单样式，默认需要打开列表
+ * @return {boolean}           true：操作成功，false：操作失败
+ */
+KingServices.getMainList = function(key, onlyStyle) {
+	var res = false;
+
+	if (!!key && typeof key === 'string') {
+		var $menu = $('.'+ key),
+			$mainMenu = $menu.parent().closest('li');
+
+		// 展开一级菜单
+		if (!$mainMenu.hasClass('open')) {
+			$mainMenu.children('a').trigger('click');
+		}
+
+		if (!!onlyStyle) {
+			$menu.addClass('open active');
+		} else {
+			$menu.trigger('click');
+		}
+
+		res = true;
+	}
+
+	return res;
+}
+
 /**
  * 编辑中转安排——
  * @param  {string} id 游客小组的ID
  * @return {[type]}    [description]
  */
 KingServices.updateTransit = function(id)  {
-	seajs.use("" + ASSETS_ROOT +"js/template/arrange/transit/transit.js",function(module){
-		module.updateTransit(id);
+	seajs.use(ASSETS_ROOT + modalScripts.arrange_transit, function(module){
+		module.updateTransit(id, true);
 	});
 }
-
-/**
- * [listTransit 外转数据
- * @return {[type]} [description]
- */
-KingServices.getListPage = function(event)  {
-	seajs.use("" + ASSETS_ROOT +"js/template/arrange/arrangeTransfer/arrangeTransfer.js",function(module){
-		module.getListPage(event);
-	});
-}
-
-
-/**
- * 中转安排——
- * @param  {string} id 游客小组的ID
- * @return {[type]}    [description]
- */
-KingServices.listTransit = function()  {
-	seajs.use("" + ASSETS_ROOT +"js/template/arrange/transit/transit.js",function(module){
-		module.listTransit(0,"","","","","","","","","","","","");
-	});
-}
-
 
 /**
  * 编辑游客小组
@@ -1542,7 +1575,7 @@ KingServices.listTransit = function()  {
  * @return {[type]}    [description]
  */
 KingServices.updateTouristGroup = function(id,type)  {
-	seajs.use("" + ASSETS_ROOT +modalScripts.resource_touristGroup,function(module){
+	seajs.use(ASSETS_ROOT + modalScripts.resource_touristGroup,function(module){
 		module.updateTouristGroup(id,type);
 	});
 }
@@ -1558,9 +1591,6 @@ KingServices.addTouristGroup = function(touristGroupId,typeOut)  {
 		module.addTouristGroup(touristGroupId,typeOut);
 	});
 }
-
-
-
 
 //导游  新增
 KingServices.addGuide = function(fn){

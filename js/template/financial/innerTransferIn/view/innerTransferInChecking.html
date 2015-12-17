@@ -88,7 +88,7 @@
                     {{/if}} 
                 </td>
                 <td><a href="javascript:void(0)" class="T-viewDetail"><span>社收:<span class="transGetedMoney">{{checking.transGetedMoney}}</span>,导游现收:0</span></a></td>
-                <td>{{if checking.isConfirmAccount == 1}}<input type="text" readonly="readonly" value="{{checking.backMoney}}" name="backMoney"></span>{{else}}<input type="text" name="backMoney" class="backMoney" value="{{checking.backMoney}}" maxlength="9" style="text-align:center">{{/if}}</td>
+                <td>{{if checking.isConfirmAccount == 1}}<input type="text" readonly="readonly" value="{{checking.backMoney}}"></span>{{else}}<input type="text" name="settlementMoney" class="backMoney" value="{{checking.backMoney}}" maxlength="9" style="text-align:center">{{/if}}</td>
                 <td><span class="settlementMoney">{{checking.settlementMoney}}</span></td>
                 <td><span class="unIncomeMoney">{{checking.unIncomeMoney}}</span></td>
                 <td>{{if checking.isConfirmAccount == 1}}{{checking.checkRemark}}{{else}}<input type="text" maxlength="1000"  name="checkRemark" value="{{checking.checkRemark}}" style="text-align:center">{{/if}}</td>
@@ -100,12 +100,10 @@
                         {{if checking.isConfirmAccount == 1}}checked="checked"{{/if}}/>
                         <span class="lbl">对账</span>
                     </label>
-                    {{if checking.isConfirmAccount == 1}}
                     <label>|</label>
                         <label>
                             <a href="#" class="T-check-Detail" style="margin-left:5px">查看</a>
                         </label>
-                    {{/if}}
                 </td>
             </tr>
             <tr class="hide">

@@ -77,7 +77,7 @@ define(function(require, exports) {
 
 		$searchArea.find('.T-btn-search').on('click', function(event) {
 			event.preventDefault();
-			Ticket.getList();
+			Ticket.getList(0, $tab);
 		});
 		// 报表内的操作
 		$tab.find('.T-list').on('click', '.T-action', function(event) {
@@ -141,6 +141,7 @@ define(function(require, exports) {
 		}).done(function(data){
 			if(showDialog(data)){
 				data.name = Ticket.checkingName;
+				data.financialTicketList = FinancialService.isGuidePay(data.financialTicketList);
 				Tools.addTab(checkMenuKey, "票务对账", ticketChecking(data));
 				Ticket.$checkingTab = $("#tab-" + checkMenuKey + "-content");
 				Ticket.check_event(Ticket.$checkingTab);
@@ -409,6 +410,7 @@ define(function(require, exports) {
 				data.source = Ticket.isBalanceSource;
 				Tools.addTab(clearMenuKey, "票务付款", ticketClearing(data));
 				Ticket.$clearingTab = $("#tab-" + clearMenuKey + "-content");
+				data.financialTicketList = FinancialService.isGuidePay(data.financialTicketList);
 				var html = payingTableTemplate(data);
 				Ticket.$clearingTab.find('.T-checkList').html(html);
 				Ticket.clear_init(Ticket.$clearingTab);
@@ -428,7 +430,7 @@ define(function(require, exports) {
 	};
 
 	Ticket.clear_init = function($tab){
-		var validator = (new FinRule(3)).check($tab);
+		var validator = (new FinRule(Ticket.isBalanceSource ? 3 : 1)).check($tab);
 		var reciveValidtor = (new FinRule(2)).check($tab);
 		// 处理关闭与切换tab
         $tab.off('change').off(SWITCH_TAB_SAVE).off(CLOSE_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT)
@@ -498,7 +500,7 @@ define(function(require, exports) {
 			Ticket.savePayingData($tab);
 		});
 
-		FinancialService.updateSumPayMoney($tab, new FinRule(3));
+		FinancialService.updateSumPayMoney($tab, new FinRule(Ticket.isBalanceSource ? 3 : 1));
 		
 		$tab.find(".T-btn-autofill").on('click', function(event){
 			event.preventDefault();
@@ -536,7 +538,7 @@ define(function(require, exports) {
 
     };
     /**
-     * 获取对账列表数据
+     * 获取付款列表数据
      * @param  {int} pageNo 列表页码
      * @return {[type]}        [description]
      */
@@ -553,12 +555,13 @@ define(function(require, exports) {
             $.ajax({
                     url : KingServices.build_url('account/arrangeTicketFinancial', 'listTicketAccount'),
 					type : "POST",
-					data : {searchParam : JSON.stringify(args)}
+					data : {searchParam : JSON.stringify(def)}
                 })
                 .done(function(data) {
                     if (showDialog(data)) {
                     	$tab.find('input[name="sumPayMoney"]').val(data.searchParam.sumCurrentPayMoney);
                     	Ticket.payingJson = data.autoPaymentJson;
+                    	data.financialTicketList = FinancialService.isGuidePay(data.financialTicketList);
                     	data.financialTicketList = FinancialService.getTempDate(data.financialTicketList, Ticket.payingJson);
                     	var html = payingTableTemplate(data);
 						Ticket.$clearingTab.find('.T-checkList').html(html);
@@ -585,12 +588,12 @@ define(function(require, exports) {
 
 	//确认收款
 	Ticket.savePayingData = function($tab, tabArgs){
-        var reciveValidtor = (new FinRule(2)).reciveCheck($tab);
+        var reciveValidtor = (new FinRule(2)).check($tab);
         if(!reciveValidtor.form()){
     		return;
         }
-		var json = FinancialService.clearSaveJson($tab, Ticket.payingJson, new FinRule(3));
-		if (json.length) {
+		var json = FinancialService.clearSaveJson($tab, Ticket.payingJson, new FinRule(Ticket.isBalanceSource ? 3 : 1));
+		if (json && json.length) {
 			var args = {
                 ticketId: Ticket.clearingId,
                 sumCurrentPayMoney: $tab.find('.T-sumReciveMoney').val(),
@@ -613,8 +616,7 @@ define(function(require, exports) {
                             Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
                             Ticket.clearingList(0);
                         } else {
-                            Tools.closeTab(clearMenuKey);
-                            Ticket.getList(Ticket.listPageNo);
+                            Ticket.getOperationList({}, $tab);
                         }
                     })
                 });

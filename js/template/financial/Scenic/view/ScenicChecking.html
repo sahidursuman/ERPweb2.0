@@ -34,7 +34,6 @@
     <table class="table table-striped table-bordered table-hover all" style="margin-top: 30px">
         <thead>
             <tr>
-                <th class="th-border">序号</th>
                 <th class="th-border">账务类别</th>
                 <th class="th-border">游玩日期(账期)</th>
                 <th class="th-border">收费项</th>
@@ -56,7 +55,6 @@
         <tbody class="T-checkList" data-right="1220005">
             {{each financialScenicListData as rs index}}
 		    <tr class="T-checkTr" data-id="{{rs.id}}" data-confirm="{{rs.isConfirmAccount}}">
-	            <td>{{index+1}}</td>
 				<td>{{rs.tripNumber}}{{"，"}}{{rs.lineProductName}}{{"，"}}{{rs.guideName}}</td>
 				<td>{{if rs.accountTime == null || rs.accountTime == ""}}-{{else}}{{rs.accountTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
 				<td>{{rs.name}}</td>
@@ -77,9 +75,8 @@
 				   	    <input type="checkbox" class="ace T-checkbox" {{if rs.isConfirmAccount == 1}}checked="checked"{{/if}} />
 				   		  <span class="lbl">对账</span>
 				    </label>
-                    {{ if rs.isConfirmAccount}}
+                    <label class="cursor"> <a> |</a></label>
                     <a class="T-option T-needPayDetail">查看</a>
-                    {{/if}}
 				</td>
 		    </tr>
 	        {{/each}}

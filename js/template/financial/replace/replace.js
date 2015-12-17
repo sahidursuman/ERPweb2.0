@@ -150,8 +150,7 @@ define(function(require, exports) {
 		Replace.checkingList(0, id);
 	};
 	Replace.clearComma = function(str){
-		str = str.replace(/(\uff0c){2,}/g, '，');
-		return str.replace(/(\uff0c)$/g, '');
+		return str.replace(/(\uff0c){2,}/g, '，').replace(/(\uff0c)$/g, '');
 	};
 	Replace.checkingList = function(page, id, startTime, endTime){
 		var args = {
@@ -221,7 +220,7 @@ define(function(require, exports) {
 	};
 
 	Replace.CM_event = function($tab, isCheck){
-		var validator = new FinRule(isCheck ? 0 : 3),
+		var validator = new FinRule(isCheck ? 0 : (Replace.isBalanceSource ? 3 : 1)),
 		validatorCheck = validator.check($tab);
 		// 处理关闭与切换tab
         $tab.off('change').off(SWITCH_TAB_SAVE).off(CLOSE_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT)
@@ -268,6 +267,7 @@ define(function(require, exports) {
 				Replace.balanceList();
 			}
 		});
+		Tools.descToolTip($tab.find(".T-ctrl-tip"),1);
 
 		$tab.find('.T-checkTr').on('change', function(){
 			$(this).data('change', true);
@@ -682,7 +682,7 @@ define(function(require, exports) {
 		});
 	};
 	Replace.savePayingData = function($tab, tabArgs){
-		var validator = new FinRule(3);
+		var validator = new FinRule(Replace.isBalanceSource ? 3 : 1);
 		var json = FinancialService.clearSaveJson($tab, Replace.payingJson, validator);
 
 		if (json.length) {

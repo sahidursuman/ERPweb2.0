@@ -153,11 +153,27 @@ define(function(require,exports){
 	//报表事件
 	touristGroup.listEvents = function($listObj){
 		$listObj.find(".T-touristGroupList").on('click','.T-action',function(){
-			var $that = $(this),id = $that.closest('tr').attr('id');
+			var $that = $(this),$tr=$that.closest('tr'),id=$tr.attr('id'),status = $tr.attr("data-status");
 			if($that.hasClass('T-edit')){
-				//修改小组
-				touristGroup.updateTouristGroup(id,"");
-				touristGroup.typeFlag = 2;
+
+				if (!!status && status==3) {//已转客
+					   var touristGroupId = id,
+						   typeOut = "out";
+							//跳转游客小组新增页面
+						touristGroup.addTouristGroup(touristGroupId,typeOut);
+
+				} else if(!!status && status==6){//已内转
+					var typeOut = 'inner',touristGroupId = id;
+					touristGroup.addTouristGroup(touristGroupId,typeOut);
+
+				}else{
+				    //修改小组
+					touristGroup.updateTouristGroup(id,"");
+					touristGroup.typeFlag = 2;
+				};
+
+			
+
 			};
 			if($that.hasClass('T-view')){
 				//查看小组
@@ -1413,10 +1429,17 @@ define(function(require,exports){
 			language: 'zh-CN'
 		});
 	};
-	//组装数据
-	touristGroup.installData = function($obj,id,typeFlag,tabArgs,typeInner){
 
-		console.info("installData..."+typeInner);
+	/**
+	 * 组织提交数据
+	 * @param  {object} $obj      最外层父容器
+	 * @param  {int} id        游客小组id
+	 * @param  {int} typeFlag  1：新增游客小组；2：编辑游客小组
+	 * @param  {array} tabArgs   切换tab的参数
+	 * @param  {[type]} typeInner [description]
+	 * @return {[type]}           [description]
+	 */
+	touristGroup.installData = function($obj,id,typeFlag,tabArgs,typeInner){
 		//判断购买保险状态
 		var buyInsuranceS = 1;
 		var $lineInfoForm = $obj.find(".T-touristGroupMainForm");
@@ -1621,7 +1644,8 @@ define(function(require,exports){
 									$smallCar = $arrangeForm.find('.T-smallCar').is(':checked'),
 								    $touristSend = $arrangeForm.find('.T-touristSend').is(':checked');
 								if (!!typeInner && $touristReChecked == true  || $smallCar == true || $touristSend==true) {
-									KingServices.listTransit();
+									// 内外转确认之后，在游客小组选择了中转，需要调整到中转安排的列表界面。
+									KingServices.getMainList('arrange_transit');
 								} else{
 									touristGroup.freshHeader(touristGroup.$freshData);
 									//刷新列表数据
@@ -1630,6 +1654,7 @@ define(function(require,exports){
 							
 							};
 							if (innerStatus) {
+								// 新增游客小组时，选择了中转，跳转到中转安排的编辑界面
 								KingServices.updateTransit(data.touristGroupId);
 							};
 						}
