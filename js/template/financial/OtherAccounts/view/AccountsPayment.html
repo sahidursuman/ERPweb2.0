@@ -31,7 +31,7 @@
             </div>
         </form>
         <form class="form-horizontal" role="form" onsubmit="return false">
-            <div class="form-group ">
+            <div class="form-group T-count">
                 <label class=" control-label pull-left">账面应付合计：{{statistics.sumNeedPayMoney}}</label>
                 <label class=" control-label marginLeft-30">已付金额合计：{{statistics.sumPayedMoney}}</label>
                 <label class=" control-label marginLeft-30">结算金额合计：{{statistics.sumSettlementMoney}}</label>
@@ -90,13 +90,13 @@
                 <td><a class="T-action T-lookPay">{{"社付："}}{{Checking.agencyPayedMoney}}{{";导付："}}{{Checking.guidePayedMoney}}</a></td>
                 <td>{{if Checking.billImage != null && Checking.billImage !=""}}<a href="#" class="T-option T-viewInsuanceImg" url="{{Checking.billImage}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
                 <td>
-                    {{Checking.sumSettlementMoney}}
+                    {{Checking.settlementMoney}}
                 </td>
                 <td>
                     {{Checking.unPayedMoney}}
                 </td>
                 <td>
-                    <input type="text" name="payMoney" class="name">
+                    <input type="text" name="payMoney" data-le="{{Checking.unPayedMoney}}">
                 </td>
                 <td>
                     <input type="text" value="{{Checking. payRemark}}" name="checkRemark">

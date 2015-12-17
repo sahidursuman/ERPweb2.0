@@ -357,7 +357,6 @@ define(function(require, exports) {
                 console.log(data);
                 var result = showDialog(data);
                 if (result) {
-                    console.log(data);
                     if(OtherAccounts.saveJson.autoPayList){
                         var saveJson = OtherAccounts.saveJson.autoPayList;
                         for(var i = 0;i<data.financialOtherDetailsList.length;i++){
@@ -377,6 +376,7 @@ define(function(require, exports) {
                         type: "POST",
                         data: OtherAccounts.PaymentData,
                         success: function(data) {
+                            console.log(dataTable);
                             if (showDialog(data)) {
                                  dataTable.statistics = data.statistics;
                                 if (Tools.addTab(PaymentTabId, "其他付款",AccountsPaymentTemplate(dataTable))) {
@@ -405,8 +405,7 @@ define(function(require, exports) {
         FinancialService.updateSumPayMoney($PaymentTabId, new FinRule(3));
         OtherAccounts.$clearSearchArea = $PaymentTabId.find('.T-search-area');
         var id = OtherAccounts.$PaymentTabId.find('.T-btn-save').data('id');
-        var validator = new FinRule(3).check(OtherAccounts.$PaymentTabId),
-            autoValidator = new FinRule(2).check(OtherAccounts.$clearSearchArea);
+        var autoValidator = new FinRule(2).check($PaymentTabId.find('.T-count'));
         OtherAccounts.$PaymentTabId.data('id', id);
 
         OtherAccounts.$PaymentTabId.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
@@ -423,12 +422,11 @@ define(function(require, exports) {
             event.preventDefault();
             OtherAccounts.paysave($tab);
         });
+        //付款-自动计算本次付款总额
         $PaymentTabId.find('.T-clearList').off('change').on('change','input',function(){
             $(this).closest('tr').data('change',true);
-            //FinancialService.updateSumPayMoney($obj,rule);
+            FinancialService.updateSumPayMoney($PaymentTabId,new FinRule(1));
         });
-        //调用付款自动计算
-        
         //表格内操作
         $PaymentTabId.find('.T-clearList').on('click', '.T-action', function(event) {
             event.preventDefault();
@@ -481,7 +479,9 @@ define(function(require, exports) {
         $PaymentTabId.find(".T-savePayment").click(function(){
            OtherAccounts.paysave(data,$PaymentTabId);
         });
+        // 自动下账
         $PaymentTabId.find(".T-clear-auto").off('click').on("click", function() {
+            //if(!autoValidator.form()){return;}
             var sumPayMoney = parseInt($PaymentTabId.find('input[name=sumPayMoney]').val()),
                 sumPayType = $PaymentTabId.find('select[name=sumPayType]').val(),
                 sumPayRemark = $PaymentTabId.find('input[name=sumPayRemark]').val(),
@@ -489,7 +489,7 @@ define(function(require, exports) {
                 endAccountTime =  $PaymentTabId.find('.T-endTime').val(),
                 names = $PaymentTabId.find(".T-name").text(),
                 $that = $(this);
-            var isAutoPay = FinancialService.autoPayJson(name, $PaymentTabId, new FinRule(2));
+            var isAutoPay = FinancialService.autoPayJson(names,$PaymentTabId, new FinRule(2));
             if (!isAutoPay) {
                 return false;
             }
@@ -539,11 +539,9 @@ define(function(require, exports) {
                 },
             }).done(function(data) {
                 if (showDialog(data)) {
-                    tabId.data('isEdited', false);
+                    tabid.data('isEdited', false);
                     showMessageDialog($('#confirm-dialog-message'), data.message, function() {
                         if (arguementLen == 2) {
-                            /*Tools.addTab(tabid, title, html);
-                            OtherAccounts.checkList(0);*/
                             OtherAccounts.saveJson = {};
                             OtherAccounts.AccountsPayment(0);
                         } else {
