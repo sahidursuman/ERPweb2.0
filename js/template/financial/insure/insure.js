@@ -1,6 +1,5 @@
 define(function(require, exports) {
-	var rule = require("./rule");
-		menuKey = "financial_insure",
+	var menuKey = "financial_insure",
 	    listTemplate = require("./view/list"),
 	    billImageTempLate = require("./view/billImages"),
         payedDetailTempLate = require("./view/viewPayedDetail"),
@@ -147,7 +146,7 @@ define(function(require, exports) {
                     // 初始化页面
                     if (Tools.addTab(checkTabId,"保险对账",html)) {
                         Insure.initCheck(page,insuranceId,insuranceName); 
-                        validator = rule.check(Insure.$checkTab.find(".T-checkList"));                     
+                        validator = new FinRule(0).check(Insure.$checkTab.find(".T-checkList"));                     
                     }
 
                     //取消对账权限过滤
@@ -175,10 +174,10 @@ define(function(require, exports) {
     	// 初始化jQuery 对象 
         Insure.$checkTab = $("#tab-" + menuKey + "-checking-content");
         Insure.$checkSearchArea = Insure.$checkTab.find('.T-search-area');
-
         Insure.init_event(page,id,name,Insure.$checkTab,"check");
         Tools.setDatePicker(Insure.$checkTab.find(".date-picker"),true);
-        FinancialService.updateUnpayMoney(Insure.$checkTab,rule);
+        var checkRule = new FinRule(0);
+        FinancialService.updateUnpayMoney(Insure.$checkTab,new FinRule(1));
 
         //搜索按钮事件
         Insure.$checkSearchArea.find('.T-search').on('click', function(event) {
@@ -206,6 +205,7 @@ define(function(require, exports) {
 
   	// 结算
   	Insure.getClearing = function(isAutoPay,page,insuranceId,insuranceName,accountInfo,startDate,endDate){
+
   		if (Insure.$clearSearchArea && arguments.length === 4) {
             accountInfo = Insure.$clearSearchArea.find("input[name=accountInfo]").val(),
             startDate = Insure.$clearSearchArea.find("input[name=startDate]").val(),
@@ -267,8 +267,9 @@ define(function(require, exports) {
 	  				var validator;
                     // 初始化页面
                     if (Tools.addTab(menuKey + "-clearing", "保险付款", html)) {
+
                         Insure.initClear(page,insuranceId,insuranceName); 
-                        validator = rule.check(Insure.$clearTab.find('.T-clearList'));                       
+                        validator = new FinRule(1).check(Insure.$clearTab.find('.T-clearList'));                       
                     }
 
                     if(isAutoPay == 0){
@@ -291,7 +292,7 @@ define(function(require, exports) {
                         curr: (page + 1),
                         jump: function(obj, first) {
                             if (!first) { 
-                                var tempJson = FinancialService.clearSaveJson(Insure.$clearTab,Insure.clearTempData,rule);
+                                var tempJson = FinancialService.clearSaveJson(Insure.$clearTab,Insure.clearTempData,new FinRule(1));
                                 Insure.clearTempData = tempJson;
                                 var sumPayMoney = parseFloat(Insure.$clearTab.find('input[name=sumPayMoney]').val()),
                                     sumPayType = parseFloat(Insure.$clearTab.find('select[name=sumPayType]').val()),
@@ -341,7 +342,7 @@ define(function(require, exports) {
 
         //自动下账
         Insure.$clearTab.find(".T-clear-auto").off().on("click",function(){
-            var isAutoPay = FinancialService.autoPayJson(id,Insure.$clearTab,rule);
+            var isAutoPay = FinancialService.autoPayJson(id,Insure.$clearTab,new FinRule(2));
             if(!isAutoPay){return false;}
             Insure.getClearing(1,0,id,name);
         });
@@ -355,7 +356,8 @@ define(function(require, exports) {
             Insure.getClearing(0,0,id,name);
         });
 
-        FinancialService.updateSumPayMoney(Insure.$clearTab,rule);
+        
+        
     };
 
     //显示单据
@@ -467,7 +469,7 @@ define(function(require, exports) {
     //对账数据保存
     Insure.saveChecking = function(insuranceId,insuranceName,page,tab_id, title, html){
         var argumentsLen = arguments.length,
-            checkSaveJson = FinancialService.checkSaveJson(Insure.$checkTab,rule);
+            checkSaveJson = FinancialService.checkSaveJson($checkTab, new FinRule(0));
         if(!checkSaveJson){ return false; }
 
         $.ajax({
@@ -498,12 +500,12 @@ define(function(require, exports) {
     };
 
     Insure.saveClear = function(id,name,page,tab_id, title, html){
-        if(!FinancialService.isClearSave(Insure.$clearTab,rule)){
+        if(!FinancialService.isClearSave(Insure.$clearTab,new FinRule(1))){
             return false;
         }
 
         var argumentsLen = arguments.length,
-            clearSaveJson = FinancialService.clearSaveJson(Insure.$clearTab,Insure.clearTempData,rule);
+            clearSaveJson = FinancialService.clearSaveJson(Insure.$clearTab,Insure.clearTempData,new FinRule(1));
         var searchParam = {
             insuranceId : id,
             sumCurrentPayMoney : Insure.$clearTab.find('input[name=sumPayMoney]').val(),
@@ -545,8 +547,6 @@ define(function(require, exports) {
 
 	Insure.init_event = function(page,id,name,$tab,option) {
         if (!!$tab && $tab.length === 1) {
-            var validator = rule.check($tab);
-
             // 监听修改
             $tab.find(".T-" + option + "List").off('change').on('change',"input",function(event) {
                 event.preventDefault();
