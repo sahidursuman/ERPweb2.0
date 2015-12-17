@@ -73,7 +73,7 @@
             </tr>
         </thead>
         <tbody class="T-clearList">
-            {{each financialHotelListData as rs index}}
+            {{each financialHotelListData as rs}}
             <tr data-id="{{rs.id}}">
                 <td>{{rs.tripNumber}}{{"，"}}{{rs.lineProductName}}{{"，"}}{{rs.guideName}}</td>
                 <td>{{if rs.accountTime == null || rs.accountTime == ""}}-{{else}}{{rs.accountTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>

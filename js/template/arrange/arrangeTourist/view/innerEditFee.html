@@ -48,10 +48,10 @@
 
                         <label class="control-label no-padding-right">对方现收</label>
 						<label style="margin: 2px 5px 0">
-							<input type="checkbox" disabled="disabled" {{if touristGroup.operateCurrentNeedPayMoney == 1}}checked="checked"{{/if}} class="ace send-check">
+							<input type="checkbox" disabled="disabled" checked="{{if cashFlag== 1}}checked{{/if}}" class="ace send-check">
 							<span class="lbl">
 							</span>
-							<input type="hidden" name="isCurrent" value="{{touristGroup.operateCurrentNeedPayMoney}}">
+							<input type="hidden" name="cashFlag" value="{{cashFlag}}">
 						</label>
 					</div>
 				<div class="form-group">
@@ -109,10 +109,10 @@
 									{{each touristGroupFeeList as transferList}}         
 										<tr  data-entity-id="{{transferList.id}}">  
 											<td>
-												<span name="type" value="0">其他费用</span>   
+												<span name="type" value="0">其他费用</span>
 											</td>   
 											<td>
-												<input name="discribe" value="{{transferList.describeInfo}}" type="text" class="col-sm-12  no-padding-right"  maxlength="500" />
+												<input name="describe" value="{{transferList.describeInfo}}" type="text" class="col-sm-12  no-padding-right"  maxlength="500" />
 											</td>
 											<td>
 												<input name="count" value="{{transferList.count}}" type="text" class="col-sm-12  no-padding-right count"  maxlength="10" />
@@ -132,7 +132,7 @@
 											<span name="type" value="0">其他费用</span>
 										</td>
 										<td>
-											<input name="discribe" value="{{innerFee.discribe}}" type="text" class="col-sm-12  no-padding-right"  maxlength="500" />
+											<input name="describe" value="{{innerFee.discribe}}" type="text" class="col-sm-12  no-padding-right"  maxlength="500" />
 										</td>
 										<td>
 											<input name="count" value="{{innerFee.count}}" type="text" class="col-sm-12  no-padding-right count"  maxlength="10" />

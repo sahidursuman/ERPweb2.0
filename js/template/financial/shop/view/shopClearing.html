@@ -12,7 +12,7 @@
         </div>
         <div class="form-group marginLeft-30">
             <label>团信息：</label>
-            <input type="text" class="form-control T-search-trip" value="{{searchParam.accountInfo}}">
+            <input type="text" class="form-control T-search-trip" value="{{searchParam.tripMessage}}">
         </div>
         <div class="form-group marginLeft-30">
             <button class="btn-sm search-btn T-btn-search">
@@ -53,13 +53,17 @@
             <label>已收金额合计：</label>
             <label class="T-unpayMoney">{{totalList.sumReceiveMoney}}</label>
         </div>
+    </div>
+    <div class="form-inline" style="padding-top: 10px;">
+        <div class="form-group">
+            <label>结算金额合计：</label>
+            <label class="T-unpayMoney">{{totalList.sumSettlementMoney}}</label>
+        </div>
         <div class="form-group marginLeft-30">
             <label>未收金额合计：</label>
             <label class="T-unpayMoney">{{totalList.sumUnReceiveMoney}}</label>
         </div>
-    </div>
-    <div class="form-inline" style="padding-top: 10px;">
-        <div class="form-group">
+        <div class="form-group marginLeft-30">
             <label>本次收款金额合计：</label>
             <input type="text" class="form-control T-sumReciveMoney" name="sumPayMoney"{{if source}} disabled="disabled"{{/if}} style="width:70px;">
         </div>
@@ -126,8 +130,8 @@
                 <td><a class="cursor T-action T-payDetails">{{rs.receiveMoney}}</a>
                 <td>{{rs.settlementMoney}}</td>
                 <td name="unPayedMoney">{{rs.unReceiveMoney}}</td>
-                <td><input type="text" class="col-sm-12 T-reciveMoney" name="payMoney" data-le="{{rs.unPayedMoney}}" {{if !source && rs.unPayedMoney <= 0}} disabled {{/if}} value="{{rs.payMoney}}"></td>
-                <td><input type="text" class="col-sm-12 T-payRemark" name="payRemark" {{if !source && rs.unPayedMoney <= 0}} disabled {{/if}} value="{{rs.checkRemark}}"></td>
+                <td><input type="text" class="col-sm-12 T-reciveMoney" name="payMoney" data-le="{{rs.unReceiveMoney}}" {{if !source && rs.unReceiveMoney <= 0}} disabled {{/if}} value="{{rs.payMoney}}"></td>
+                <td><input type="text" class="col-sm-12 T-payRemark" name="payRemark" {{if !source && rs.unReceiveMoney <= 0}} disabled {{/if}} value="{{rs.IncomeRemark}}"></td>
                 <td>{{rs.checkTime}}</td>
                 <td>{{rs.checkName}}</td>
                 <td>
