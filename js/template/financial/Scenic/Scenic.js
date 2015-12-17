@@ -354,7 +354,7 @@ define(function(require, exports) {
         });
         //保存结算事件
         scenic.$clearTab.find(".T-saveClear").click(function(){
-            if (!rule.check(scenic.$clearTab).form()) { return; }
+            if (!(new FinRule(scenic.isOuter ? 3 : 1)).check(scenic.$clearTab).form()) { return; }
             scenic.saveClear(id,name,page);
         });
 
@@ -524,7 +524,7 @@ define(function(require, exports) {
         }
 
         var argumentsLen = arguments.length,
-            clearSaveJson = FinancialService.clearSaveJson(scenic.$clearTab,scenic.clearTempData,rule),
+            clearSaveJson = FinancialService.clearSaveJson(scenic.$clearTab,scenic.clearTempData, new FinRule(scenic.isOuter ? 3 : 1)),
             searchParam = {
                         sumCurrentPayMoney : scenic.$clearTab.find('input[name=sumPayMoney]').val(),
                         payType : scenic.$clearTab.find('select[name=sumPayType]').val(),
