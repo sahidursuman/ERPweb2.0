@@ -2562,7 +2562,7 @@ define(function(require, exports) {
             var $that = $(this);
             if (i > 1) {
                 var FeeJson = {
-                    type: arrangeTourist.getVal($that, "value"),
+                    type: arrangeTourist.getVal($that, "type"),
                     discribe: arrangeTourist.getVal($that, "describe"),
                     otherPrice: arrangeTourist.getVal($that, "otherPrice"),
                     count: arrangeTourist.getVal($that, "count")
