@@ -365,7 +365,7 @@ define(function(require, exports) {
             restaurant.clearTempSumDate = false;
             restaurant.clearTempData = false;
             restaurant.$clearTab.data('isEdited',false);
-            restaurant.restaurantClear(0,0,id,name);
+            restaurant.restaurantClear(isAutoPay,0,id,name);
         });
 
         //关闭页面事件
