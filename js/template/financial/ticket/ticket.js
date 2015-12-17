@@ -77,7 +77,7 @@ define(function(require, exports) {
 
 		$searchArea.find('.T-btn-search').on('click', function(event) {
 			event.preventDefault();
-			Ticket.getList();
+			Ticket.getList(0, $tab);
 		});
 		// 报表内的操作
 		$tab.find('.T-list').on('click', '.T-action', function(event) {
