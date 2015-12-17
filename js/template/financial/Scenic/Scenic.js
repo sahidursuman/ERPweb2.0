@@ -178,7 +178,7 @@ define(function(require, exports) {
         scenic.$checkSearchArea = scenic.$checkTab.find('.T-search-area');
 
         scenic.init_event(page,id,name,scenic.$checkTab,"check");
-        Tools.setDatePicker(scenic.$searchArea.find('.datepicker'), true);
+        Tools.setDatePicker(scenic.$checkSearchArea.find('.datepicker'), true);
         FinancialService.updateUnpayMoney(scenic.$checkTab, new FinRule(0));
 
         //搜索按钮事件
