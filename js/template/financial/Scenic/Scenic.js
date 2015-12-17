@@ -336,7 +336,7 @@ define(function(require, exports) {
         scenic.$clearSearchArea = scenic.$clearTab.find('.T-search-area');
 
         scenic.init_event(page,id,name,scenic.$clearTab,"clear");
-        Tools.setDatePicker(scenic.$searchArea.find('.datepicker'), true);
+        Tools.setDatePicker(scenic.$clearSearchArea.find('.datepicker'), true);
 
         //搜索事件
         scenic.$clearTab.find(".T-search").click(function(){
