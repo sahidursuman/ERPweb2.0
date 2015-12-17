@@ -87,7 +87,7 @@
 												</tr>
 											</thead>
 											<tbody>{{each receiveGroup.outBusList as outBus}}
-												{{if outBus.id != null && outBus.busCompany != null && outBus.bus != null && outBus.driver != null}}
+												{{if outBus.id != null && outBus.busCompany != null}}
 												<tr data-entity-id="{{outBus.id}}">
 													<td><input type="text" class="col-sm-12 T-chooseSeatCount" name="seatCount" value="{{if outBus.bus != null}}{{outBus.bus.seatCount}}{{/if}}" /></td>
 													<td><input class="col-sm-12 T-chooseBusBrand" name="busbrand" type="text" value="{{if outBus.bus != null}}{{outBus.bus.brand}}{{/if}}" /></td>
@@ -535,7 +535,7 @@
 												</tr>
 											</thead>
 											<tbody>{{each bus as outBus}}
-												{{if outBus.id != null && outBus.busCompany != null && outBus.bus != null && outBus.driver != null}}
+												{{if outBus.id != null && outBus.busCompany != null}}
 												<tr data-entity-id="{{outBus.id}}">
 													<td><input type="text" class="col-sm-12 T-chooseSeatCount" name="seatCount" value="{{if outBus.bus != null}}{{outBus.bus.seatCount}}{{/if}}" /></td>
 													<td><input class="col-sm-12 T-chooseBusBrand" name="busbrand" type="text" value="{{if outBus.bus != null}}{{outBus.bus.brand}}{{/if}}" /></td>
@@ -638,7 +638,7 @@
 												</tr>
 											</thead>
 											<tbody>{{each sendGroup.outBusList as outBus}}
-												{{if outBus.id != null && outBus.busCompany != null && outBus.bus != null && outBus.driver != null}}
+												{{if outBus.id != null && outBus.busCompany != null}}
 												<tr data-entity-id="{{outBus.id}}">
 													<td><input type="text" class="col-sm-12 T-chooseSeatCount" name="seatCount" value="{{if outBus.bus != null}}{{outBus.bus.seatCount}}{{/if}}" /></td>
 													<td><input class="col-sm-12 T-chooseBusBrand" name="busbrand" type="text" value="{{if outBus.bus != null}}{{outBus.bus.brand}}{{/if}}" /></td>
@@ -1052,7 +1052,7 @@
 		</div>
 		<div class="form-group">
 			<form class="form-horizontal" role="form" onsubmit="return false">
-				<button style="margin-top:50px" class="btn btn-block btn-primary T-arrange-update guideSubmit" data-entity-id="{{touristGroup.id}}">
+				<button style="margin-top:50px" class="btn btn-block btn-primary T-arrange-update guideSubmit" data-entity-id="{{touristGroup.id}}" data-isouter="{{isOuter}}">
 					<i class="ace-icon fa fa-check"></i>
 					保存信息
 				</button>

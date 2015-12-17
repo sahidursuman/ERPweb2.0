@@ -63,7 +63,7 @@
         </thead>
         <tbody class="T-checkListNum T-checkList">
             {{each financialOtherDetailsList as Checking index}}
-            <tr data-id="{{Checking.id}}" data-entity-isConfirmAccount="{{Checking.isConfirmAccount}}" data-entity-checkRemark="{{Checking.checkRemark}}">
+            <tr class="T-checkTr" data-id="{{Checking.id}}" data-entity-isConfirmAccount="{{Checking.isConfirmAccount}}" data-entity-settlementMoney="{{Checking.settlementMoney}}" data-confirm="{{Checking.isConfirmAccount}}">
                 <td>{{Checking.info}}</td>
                 <td name="startTime">{{Checking.accountTime}}</td>
                 <td>{{Checking.adultCount}}{{"大人"}}{{Checking.childCount}}{{"小孩"}}</td>
@@ -74,19 +74,17 @@
                 <td><a class="T-action T-lookDetail T-payedDetail" data-money="{{Checking.agencyPayedMoney + Checking.guidePayedMoney}}">{{"社付："}}{{Checking.agencyPayedMoney}}{{";导付："}}{{Checking.guidePayedMoney}}</a></td>
                 <td>{{if Checking.billImage != null && Checking.billImage !=""}}<a href="#" class="T-option T-viewInsuanceImg" url="{{Checking.billImage}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
                 <td>
-                    <input type="text" maxlength="9" name="settlementMoney" value="{{Checking.settlementMoney}}" class="money">
+                    <input type="text" maxlength="9" name="settlementMoney" value="{{Checking.settlementMoney}}" class="money" {{if Checking.isConfirmAccount}} disabled="disabled" {{/if}}>
                 </td>
+                <td name="unPayedMoney">{{Checking.unPayedMoney}}</td>
                 <td>
-                    {{Checking.unPayedMoney}}
-                </td>
-                <td>
-                    <input type="text" value="{{Checking.checkRemark}}" name="checkRemark">
+                    <input type="text" value="{{Checking.checkRemark}}" name="checkRemark" {{if Checking.isConfirmAccount}} disabled="disabled" {{/if}}>
                 </td>
                 <td>{{Checking.checkTime}}</td>
                 <td>{{Checking.checkUser }}</td>
                 <td>
                     <label class="pos-rel">
-                        <input type="checkbox" data-entity-checkStatus="{{Checking.isConfirmAccount}}" class="ace T-insuanceFinancial" {{if Checking.isConfirmAccount}}checked="checked" {{/if}}/>
+                        <input type="checkbox" data-entity-checkStatus="{{Checking.isConfirmAccount}}" class="ace T-checkbox T-insuanceFinancial" {{if Checking.isConfirmAccount}}checked="checked" {{/if}}/>
                         <span class="lbl"></span> 对账
                         <a class="cursor"> |</a>
                         <a class="T-action T-viewhandle cursor">查看</a>
