@@ -183,6 +183,7 @@ define(function(require, exports) {
                         $divIdObj.find('.T-Transfer-list').html(html);
                         //初始化页面事件
                         arrangeTourist.init_transferEvent();
+                     
                         //转客分页选中效果
                         arrangeTourist.pagerTransferChecked(customerType,divId);
                     };
@@ -2612,6 +2613,9 @@ define(function(require, exports) {
                                         inTransferTr.eq(i).find("td.transferFeeStatus").html('<i class ="ace-icon fa fa-check green"></i>已填写');
                                         inTransferTr.eq(i).find("[name=label_payed]").html(data.transPayedMoney);
                                         inTransferTr.eq(i).find("[name=label_needPay]").html(data.transNeedPayAllMoney);
+
+                                        //转客清空操作
+                                        arrangeTourist.transferId=[];
                                     }
                                 })
 
@@ -2638,6 +2642,9 @@ define(function(require, exports) {
                                         transferTr.eq(i).find("td.transferFeeStatus").html('<i class ="ace-icon fa fa-check green"></i>已填写');
                                         transferTr.eq(i).find("[name=label_payed]").html(data.transPayedMoney);
                                         transferTr.eq(i).find("[name=label_needPay]").html(data.transNeedPayAllMoney);
+
+                                        //转客清空操作
+                                        arrangeTourist.transferId=[];
                                     }
                                 })
 
