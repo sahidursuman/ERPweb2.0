@@ -72,6 +72,8 @@ define(function(require, exports) {
                 var $that = $(this);
                 arrangeTourist.chosenPartAgenOrBussiness($that);
             });
+            arrangeTourist.touristGroupId=[];
+            arrangeTourist.touristGroupMergeData.touristGroupMergeList=[];
             arrangeTourist.listArrangeTourist(0, $searchArgumentsForm, customerType, divId);
 
         });
@@ -105,6 +107,8 @@ define(function(require, exports) {
                 var $that = $(this);
                 arrangeTourist.chosenPartAgenOrBussiness($that);
             });
+            //转客清空操作
+            arrangeTourist.transferId=[];
             arrangeTourist.listArrangeTourist(0, $searchArgumentsForm, customerType, divId);
         });
 
@@ -183,6 +187,7 @@ define(function(require, exports) {
                         $divIdObj.find('.T-Transfer-list').html(html);
                         //初始化页面事件
                         arrangeTourist.init_transferEvent();
+                     
                         //转客分页选中效果
                         arrangeTourist.pagerTransferChecked(customerType,divId);
                     };
@@ -737,7 +742,6 @@ define(function(require, exports) {
 
     };
 
-
     /**
      * canCelChecked 保存后的取消选中操作
      * @return {[type]} [description]
@@ -747,14 +751,7 @@ define(function(require, exports) {
             $trList.each(function(index) {
                 $trList.eq(index).find('.T-cheked').prop("checked",false) 
             });
-
     };
-
-
-
-
-
-
 
     /**
      * init_groupEvent  团体报表绑定事件
@@ -762,6 +759,11 @@ define(function(require, exports) {
      */
     arrangeTourist.init_groupEvent = function() {
         var $GroupObj = $('#T-Group-list');
+
+         //重置计算
+        arrangeTourist.choosenAdultAndChildCount($GroupObj);
+
+        //查看游客
         $GroupObj.find('.T-arrageGroup-list').on('click', '.T-action', function(event) {
             event.preventDefault();
             /* Act on the event */
@@ -2540,7 +2542,8 @@ define(function(require, exports) {
     arrangeTourist.saveTransFee = function($editFeeObj, type) {
         var transferFeeStatus = arrangeTourist.getVal($editFeeObj, "transferFeeStatus"),
             $innerForm = $editFeeObj.find('form'),
-            id = arrangeTourist.getVal($editFeeObj, "touristGroupId");
+            id = arrangeTourist.getVal($editFeeObj, "touristGroupId"),
+            cashFlag = arrangeTourist.getVal($editFeeObj, "isCurrent");
         var touristGroup = {
                 "id": id,
                 "transRemark": arrangeTourist.getVal($editFeeObj, "remark") || "无",
@@ -2548,7 +2551,7 @@ define(function(require, exports) {
                 "transChildPrice": arrangeTourist.getVal($editFeeObj, "transChildPrice") || 0,
                 "transPayedMoney": arrangeTourist.getVal($editFeeObj, "transPayedMoney") || 0,
                 "transNeedPayAllMoney": arrangeTourist.getVal($editFeeObj, "transNeedPayAllMoney") || 0,
-                "isCurrent": arrangeTourist.getVal($editFeeObj, "isCurrent") || 0,
+                "cashFlag": arrangeTourist.getVal($editFeeObj, "isCurrent") || 0,
                 "transPayType": arrangeTourist.getVal($editFeeObj, "transPayType")
             },
             otherFeeList = [],
@@ -2623,7 +2626,7 @@ define(function(require, exports) {
         } else {
             $.ajax({
                 url: KingServices.build_url("transTourist", "saveTransFee"),
-                data: "touristGroup=" + encodeURIComponent(touristGroup) + "&otherFeeList=" + encodeURIComponent(otherFeeList) + "&otherFeeListDel=" + encodeURIComponent(otherFeeListDel),
+                data: "touristGroup=" + encodeURIComponent(touristGroup) + "&otherFeeList=" + encodeURIComponent(otherFeeList) + "&otherFeeListDel=" + encodeURIComponent(otherFeeListDel)+"&cashFlag="+cashFlag,
                 type: "POST",
                 success: function(data) {
                     var result = showDialog(data);
@@ -2638,6 +2641,8 @@ define(function(require, exports) {
                                         transferTr.eq(i).find("td.transferFeeStatus").html('<i class ="ace-icon fa fa-check green"></i>已填写');
                                         transferTr.eq(i).find("[name=label_payed]").html(data.transPayedMoney);
                                         transferTr.eq(i).find("[name=label_needPay]").html(data.transNeedPayAllMoney);
+
+
                                     }
                                 })
 

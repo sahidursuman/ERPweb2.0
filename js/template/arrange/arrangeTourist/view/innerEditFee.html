@@ -48,10 +48,10 @@
 
                         <label class="control-label no-padding-right">对方现收</label>
 						<label style="margin: 2px 5px 0">
-							<input type="checkbox" disabled="disabled" {{if touristGroup.operateCurrentNeedPayMoney == 1}}checked="checked"{{/if}} class="ace send-check">
+							<input type="checkbox" disabled="disabled" checked="{{if cashFlag== 1}}checked{{/if}}" class="ace send-check">
 							<span class="lbl">
 							</span>
-							<input type="hidden" name="isCurrent" value="{{touristGroup.operateCurrentNeedPayMoney}}">
+							<input type="hidden" name="cashFlag" value="{{cashFlag}}">
 						</label>
 					</div>
 				<div class="form-group">
