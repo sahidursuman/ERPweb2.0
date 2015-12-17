@@ -87,7 +87,7 @@
 												</tr>
 											</thead>
 											<tbody>{{each receiveGroup.outBusList as outBus}}
-												{{if outBus.id != null && outBus.busCompany != null && outBus.bus != null && outBus.driver != null}}
+												{{if outBus.id != null && outBus.busCompany != null}}
 												<tr data-entity-id="{{outBus.id}}">
 													<td><input type="text" class="col-sm-12 T-chooseSeatCount" name="seatCount" value="{{if outBus.bus != null}}{{outBus.bus.seatCount}}{{/if}}" /></td>
 													<td><input class="col-sm-12 T-chooseBusBrand" name="busbrand" type="text" value="{{if outBus.bus != null}}{{outBus.bus.brand}}{{/if}}" /></td>
@@ -535,7 +535,7 @@
 												</tr>
 											</thead>
 											<tbody>{{each bus as outBus}}
-												{{if outBus.id != null && outBus.busCompany != null && outBus.bus != null && outBus.driver != null}}
+												{{if outBus.id != null && outBus.busCompany != null}}
 												<tr data-entity-id="{{outBus.id}}">
 													<td><input type="text" class="col-sm-12 T-chooseSeatCount" name="seatCount" value="{{if outBus.bus != null}}{{outBus.bus.seatCount}}{{/if}}" /></td>
 													<td><input class="col-sm-12 T-chooseBusBrand" name="busbrand" type="text" value="{{if outBus.bus != null}}{{outBus.bus.brand}}{{/if}}" /></td>
@@ -638,7 +638,7 @@
 												</tr>
 											</thead>
 											<tbody>{{each sendGroup.outBusList as outBus}}
-												{{if outBus.id != null && outBus.busCompany != null && outBus.bus != null && outBus.driver != null}}
+												{{if outBus.id != null && outBus.busCompany != null}}
 												<tr data-entity-id="{{outBus.id}}">
 													<td><input type="text" class="col-sm-12 T-chooseSeatCount" name="seatCount" value="{{if outBus.bus != null}}{{outBus.bus.seatCount}}{{/if}}" /></td>
 													<td><input class="col-sm-12 T-chooseBusBrand" name="busbrand" type="text" value="{{if outBus.bus != null}}{{outBus.bus.brand}}{{/if}}" /></td>
