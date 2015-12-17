@@ -767,6 +767,11 @@ define(function(require, exports) {
      */
     arrangeTourist.init_groupEvent = function() {
         var $GroupObj = $('#T-Group-list');
+
+         //重置计算
+        arrangeTourist.choosenAdultAndChildCount($GroupObj);
+
+        //查看游客
         $GroupObj.find('.T-arrageGroup-list').on('click', '.T-action', function(event) {
             event.preventDefault();
             /* Act on the event */
