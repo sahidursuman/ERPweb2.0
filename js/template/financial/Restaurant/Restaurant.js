@@ -272,10 +272,9 @@ define(function(require, exports) {
                         data.sumPayMoney = 0;
                         data.sumPayType = 0;
                         data.sumPayRemark = "";
-
-                        restaurant.clearTempData = false;
                     }
                     data.financialRestaurantList = FinancialService.isGuidePay(resultList);
+
                     data.isAutoPay = isAutoPay;
                     var html = restaurantClearing(data);
                     

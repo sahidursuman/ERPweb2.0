@@ -275,8 +275,6 @@ define(function(require, exports) {
                         data.sumPayMoney = 0;
                         data.sumPayType = 0;
                         data.sumPayRemark = "";
-
-                        busCompany.clearTempData = false;
                     }
                     data.financialBusCompanyListData = FinancialService.isGuidePay(resultList);
                     data.isAutoPay = isAutoPay;
