@@ -36,7 +36,7 @@
                 <label class=" control-label marginLeft-30">已付金额合计：{{statistics.sumPayedMoney}}</label>
                 <label class=" control-label marginLeft-30">结算金额合计：{{statistics.sumSettlementMoney}}</label>
                 <label class=" control-label marginLeft-30">未付金额合计：<span class="T-unpayMoney ">{{statistics.sumUnPayedMoney}}</span></label>
-                <label class=" control-label marginLeft-30">本次付款金额：<input name="sumPayMoney" type="text" class="T-btn-autofill" {{if type}}disabled {{/if}} /></label>
+                <label class=" control-label marginLeft-30">本次付款金额合计：<input name="sumPayMoney" type="text" class="T-btn-autofill" {{if type}}disabled {{/if}} /></label>
                 <label class=" control-label marginLeft-30">付款方式：
                     <select name="sumPayType">
                         <option>现金</option>
@@ -48,7 +48,7 @@
                 </label>
                 <label class=" control-label marginLeft-30">备注：<input type="text" name="sumPayRemark"></label>
                 <label class="control-label marginLeft-30">
-                    <button class=" btn-sm search-btn T-clear-auto ">自动下账</button>
+                    <button class="btn btn-xs btn-primary T-clear-auto ">自动下账</button>
                 </label>
             </div>
         </form>
@@ -77,7 +77,7 @@
                 <th class="th-border">对账</th>
             </tr>
         </thead>
-        <tbody class="T-PaymentListNum">
+        <tbody class="T-clearList">
             {{each financialOtherDetailsList as Checking index}}
             <tr data-id="{{Checking.id}}" data-entity-isConfirmAccount="{{Checking.isConfirmAccount}}" data-entity-checkRemark="{{Checking.checkRemark}}" data-entity-settlementMoney="{{Checking.settlementMoney}}">
                 <td>{{Checking.info}}</td>
@@ -124,10 +124,10 @@
     </div>
     <form class="form-horizontal" role="form" onsubmit="return false">
         <div class="form-group text-center">
-            <button class="btn btn-xs btn-primary T-closeTab">
+            <button class="btn btn-xs btn-primary T-close-clear">
                 <i class="ace-icon fa fa-times-circle"></i> 关闭
             </button>
-            <button class="btn btn-xs btn-primary T-save">
+            <button class="btn btn-xs btn-primary T-savePayment">
                 <i class="ace-icon fa fa-check-circle"></i> 确认付款
             </button>
         </div>
