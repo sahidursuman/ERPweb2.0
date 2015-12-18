@@ -270,6 +270,8 @@ define(function(require, exports) {
             arrangeTourist.viewTouristGroup(id);
         });
 
+        Tools.descToolTip($visitorObj.find(".T-ctrl-tip"),1);
+
         //散拼checkbox绑定事件
         $visitorObj.find(".T-touristGroupMergeCheckBox").off().click(arrangeTourist.addTouristGroupMerge);
 
@@ -772,6 +774,8 @@ define(function(require, exports) {
                 id = $that.closest('tr').data('value');
             arrangeTourist.viewTouristGroup(id);
         });
+
+        Tools.descToolTip($GroupObj.find(".T-ctrl-tip"),1);
 
         //为团体生成计划绑定事件--单选
         $GroupObj.find('.T-createTripPlan').on('click', function(event) {
@@ -1886,6 +1890,8 @@ define(function(require, exports) {
                 id = $that.closest('tr').data('value');
             arrangeTourist.viewTouristGroup(id);
         });
+
+        Tools.descToolTip($transferObj.find(".T-ctrl-tip"),1);
 
 
         //内转
