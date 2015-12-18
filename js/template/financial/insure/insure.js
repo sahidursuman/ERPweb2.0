@@ -20,7 +20,8 @@ define(function(require, exports) {
         $clearSearchArea : false,
         insureList : false,
         clearTempData : false,
-        clearTempSumDate : false
+        clearTempSumDate : false,
+        showBtnFlag:false
 	};
 
 	Insure.initModule = function() {
@@ -103,6 +104,7 @@ define(function(require, exports) {
                 Insure.GetChecking(0,id,name,"",startDate,endDate);
             } else if ($that.hasClass('T-clear')) {
                 // 结算
+                Insure.showBtnFlag = false;
                 Insure.getClearing(0,0,id,name,"",startDate,endDate);
             }
         });
@@ -261,6 +263,7 @@ define(function(require, exports) {
                     }
                     var resultList = data.financialInsuranceList;
                     data.financialInsuranceList = FinancialService.getTempDate(resultList,Insure.clearTempData);
+                    data.showBtnFlag = Insure.showBtnFlag
 
 					var html = insureClearing(data);
 	  				
@@ -637,7 +640,8 @@ define(function(require, exports) {
     };
 
     Insure.initPay = function(options){
-        Insure.GetChecking(0,options.id,options.name,"",options.startDate,options.endDate, 2); 
+         Insure.showBtnFlag = true;
+        Insure.getClearing(0,options.id,options.name,"",options.startDate,options.endDate, 2); 
     };
 
     exports.init = Insure.initModule;

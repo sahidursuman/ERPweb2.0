@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":7,"md5":"ab66b2051fd163b2a5091f3ca00570df"}*/
+/*TMODJS:{"debug":true,"version":8,"md5":"ab66b2051fd163b2a5091f3ca00570df"}*/
 define(function(require) {
     return require("../../../../../template")("js/template/financial/transfer/view/viewPayedDetail", function($data, $filename) {
         try {
