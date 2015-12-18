@@ -77,7 +77,7 @@
         </thead>
         <tbody class="T-list T-checkList">
         {{each bookinAccountList as rs index}}
-            <tr class="T-checkTr" data-id="{{rs.id}}">
+            <tr class="T-checkTr" data-id="{{rs.id}}" data-confirm="{{if !!rs.isConfirmAccount}}1{{else}}0{{/if}}">
                 <td>{{rs.orderNumber}}</td>
                 <td>{{rs.startTime}}</td>
                 <td>{{rs.projectName}}</td>
