@@ -51,6 +51,23 @@ define(function(require, exports) {
                         hotel: data.count || 0
                     });
                 });
+                 // 绑定发团安排车队询价回馈结果
+                channel.bind('tripPlan_offer_bus_company_result', function(data) {
+                    console.info(data);
+                });
+                 // 绑定发团安排酒店询价回馈结果
+                channel.bind('tripPlan_offer_hotel_result', function(data) {
+                    console.info(data);
+                    index.tripPlanChangeBookingStatus(data);
+                });
+                //绑定发团安排车队预订回馈结果
+                channel.bind('tripPlan_booking_bus_company_result'), function(data) {
+                    console.info(data);
+                }
+                //绑定发团安排酒店预订回馈结果
+                channel.bind('tripPlan_booking_hotel_result'), function(data) {
+                    console.info(data);
+                }
             },
 
             /**
@@ -453,6 +470,32 @@ define(function(require, exports) {
                 index.updateUserInfoAction = 1; // 修改密码
             }
         });
+    }
+
+    /**
+     * 修改发团安排中 预订状态
+     * @param  {[type]} data [返回值]
+     * @return {[type]}      [description]
+     */
+    index.tripPlanChangeBookingStatus = function(data) {
+        var $rs = data, $tab = $('#tab-arrange_all-update-content'),
+            $tripPlanId = $rs.tripPlanId,
+            $hotelId = $rs.hotelId,
+            $hotelRoomId = $rs.hotelRoomId,
+            $whichDay = $rs.whichDay;
+
+        var tripPlanId = $tab.find('[name=tripPlanId]').val()
+        if (!!$tab && $tripPlanId == tripPlanId) {//T-hotel-bookingStatus
+            var $tr = $tab.find('#tripPlan_addPlan_hotel tbody tr');
+            $tr.each(function(i) {
+                var hotelId = $tr.eq(i).find('[name=hotelId]').val(),
+                    roomId = $tr.eq(i).find('[name=hotelRoomId]').val(),
+                    whichDay = $tr.eq(i).find('[name=whichDay]').val();
+                if ($hotelId == hotelId && $hotelRoomId == roomId && $whichDay == whichDay) {
+                    $tr.eq(i).find('.T-hotel-bookingStatus').addClass('T-hotel-booking').css('color','rgb(51, 122, 183)');
+                }
+            });
+        }
     }
     exports.main = index.main;
 });
