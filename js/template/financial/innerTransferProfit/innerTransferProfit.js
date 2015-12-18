@@ -109,7 +109,7 @@ define(function(require, exports) {
                 innerProfit.viewTransfer(this);
             } else if($that.hasClass('T-lineProductDetail')){
                 //查看线路产品
-                KingServices.viewInnerInfo(id,1)
+                KingServices.viewInnerInfo(transferId,1)
             }
         });
     };

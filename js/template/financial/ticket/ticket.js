@@ -169,11 +169,8 @@ define(function(require, exports) {
 		var validator = (new FinRule(0)).check($tab);
 		// 处理关闭与切换tab
         $tab.off('change').off(SWITCH_TAB_SAVE).off(CLOSE_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT)
-        .on('change', '.T-checkList, .T-checkAll', function() {
+        .on('change', '.T-checkList', function() {
             $tab.data('isEdited', true);
-            if($(this).hasClass('T-checkAll')){
-            	$tab.find('.T-checkTr').data('change', true);
-            }
         })
         .on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
             event.preventDefault();
@@ -508,6 +505,7 @@ define(function(require, exports) {
 		
 		$tab.find(".T-btn-autofill").on('click', function(event){
 			event.preventDefault();
+			if(!reciveValidtor.form())return;
 			if ($(this).hasClass('btn-primary')) {
                 if (validator.form()) {
                 	FinancialService.autoPayConfirm($datepicker.eq(0).val(), $datepicker.eq(1).val(),function(){
@@ -620,7 +618,7 @@ define(function(require, exports) {
                             Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
                             Ticket.clearingList(0);
                         } else {
-                            Ticket.getOperationList({}, $tab);
+                            Ticket.clearingList(0);
                         }
                     })
                 });

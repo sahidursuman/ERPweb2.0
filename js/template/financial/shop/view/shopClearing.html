@@ -64,17 +64,21 @@
             <label class="T-unpayMoney">{{totalList.sumUnReceiveMoney}}</label>
         </div>
         <div class="form-group marginLeft-30">
+            <label>未付金额合计(已对账)：</label>
+            <label class="T-checkedUnPayedMoney">{{totalList.checkedUnPayedMoney}}</label>
+        </div>
+        <div class="form-group marginLeft-30">
             <label>本次收款金额合计：</label>
             <input type="text" class="form-control T-sumReciveMoney" name="sumPayMoney"{{if source}} disabled="disabled"{{/if}} style="width:70px;">
         </div>
         <div class="form-group marginLeft-30">
             <label>收款方式：</label>
             <select class="form-control T-sumPayType" name="payType">
-                <option>现金</option>
-                <option>银行转账</option>
-                <option>网上支付</option>
-                <option>支票</option>
-                <option>其它</option>
+                <option value="0">现金</option>
+                <option value="1">银行转账</option>
+                <option value="2">网上支付</option>
+                <option value="3">支票</option>
+                <option value="4">其它</option>
             </select>
         </div>
         <div class="form-group marginLeft-30">

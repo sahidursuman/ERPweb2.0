@@ -253,17 +253,14 @@ define(function(require, exports) {
                                     }, type, $tab);
         });
 
-        var validator = new FinRule(type ? (FinGuide.isOuter ? 3 : 1) : 0),
+        var validator = new FinRule(type ? (FinGuide.isOuter ? 3 : 1) : 3),
             autoValidator = new FinRule(2);
         var validatorCheck = validator.check($tab),
             autoValidatorCheck = autoValidator.check($tab.find('.T-auto-fill-area'));
         // 处理关闭与切换tab
         $tab.off('change').off(SWITCH_TAB_SAVE).off(CLOSE_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT)
-            .on('change', '.T-checkList, .T-checkAll', function() {
+            .on('change', '.T-checkList', function() {
                 $tab.data('isEdited', true);
-                if($(this).hasClass('T-checkAll')){
-                    $tab.find('.T-checkList tr').data('change', 'true');
-                }
             })
             .on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
                 event.preventDefault();
@@ -348,7 +345,7 @@ define(function(require, exports) {
      * @return {[type]}         [description]
      */
     FinGuide.saveCheckingData = function($tab, tabArgs) {
-        var validator = new FinRule(0);
+        var validator = new FinRule(3);
         var json = FinancialService.checkSaveJson($tab, validator);
 
         if (json) { // 有值

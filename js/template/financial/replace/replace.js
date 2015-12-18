@@ -38,16 +38,16 @@ define(function(require, exports) {
         day = Tools.addZero2Two(date.getDate()),
 		args= {
 			pageNo : (page || 0),
-			startTime : year + "-" + month + "-01",
-			endTime : year + "-" + month + "-" + day
+			startDate : year + "-" + month + "-01",
+			endDate : year + "-" + month + "-" + day
 		};
 		if(!!Replace.$tab){
 			var name = Replace.$tab.find('.T-search-customer').val();
 			args= {
 				pageNo : (page || 0),
 				travelAgencyName : name == '全部' ? '' : name,
-				startTime : Replace.$tab.find('.T-search-start-date').val(),
-				endTime : Replace.$tab.find('.T-search-end-date').val()
+				startDate : Replace.$tab.find('.T-search-start-date').val(),
+				endDate : Replace.$tab.find('.T-search-end-date').val()
 			};
 		}
 		$.ajax({
@@ -152,12 +152,12 @@ define(function(require, exports) {
 	Replace.clearComma = function(str){
 		return str.replace(/(\uff0c){2,}/g, '，').replace(/(\uff0c)$/g, '');
 	};
-	Replace.checkingList = function(page, id, startTime, endTime){
+	Replace.checkingList = function(page, id, startDate, endDate){
 		var args = {
 			pageNo : (page || 0),
 			partnerAgencyId : id || Replace.checkingId,
-			endTime : endTime || Replace.$tab.find('.T-search-end-date').val(),
-			startTime : startTime || Replace.$tab.find('.T-search-start-date').val()
+			endDate : endDate || Replace.$tab.find('.T-search-end-date').val(),
+			startDate : startDate || Replace.$tab.find('.T-search-start-date').val()
 		};
 		if(!!Replace.$checkingTab){
 			var project = Replace.$checkingTab.find(".T-search-project").val().split(', '),
@@ -166,8 +166,8 @@ define(function(require, exports) {
 				pageNo : (page || 0),
 				partnerAgencyId : id || Replace.checkingId,
 				orderNumber : order == '全部' ? '' : order,
-				endTime : Replace.$checkingTab.find(".T-search-end-date").val(),
-				startTime : Replace.$checkingTab.find(".T-search-start-date").val()
+				endDate : Replace.$checkingTab.find(".T-search-end-date").val(),
+				startDate : Replace.$checkingTab.find(".T-search-start-date").val()
 			};
 			if(project.length > 0){
 				for(var i=0; i<project.length; i++){
@@ -194,7 +194,8 @@ define(function(require, exports) {
 					var detailList = data.bookinAccountList[j].detailList;
 					data.bookinAccountList[j].newDetail = '';
 					for(var i=0; i<detailList.length; i++){
-						data.bookinAccountList[j].newDetail += detailList[i].name + '，' + detailList[i].type + '，' + detailList[i].shift + '，' + detailList[i].level + '，' + detailList[i].count + "×" + detailList[i].price + "=" + (detailList[i].count * detailList[i].price) + '，';
+						var formula = detailList[i].count + "×" + (detailList[i].days ? detailList[i].days + "×" : "") + detailList[i].price;
+						data.bookinAccountList[j].newDetail += detailList[i].name + '，' + detailList[i].type + '，' + detailList[i].shift + '，' + detailList[i].level + '，' + formula + "=" + (detailList[i].count * detailList[i].price * (detailList[i].days || 0)) + '，';
 					}
 					data.bookinAccountList[j].newDetail = Replace.clearComma(data.bookinAccountList[j].newDetail);
 				}
@@ -309,9 +310,9 @@ define(function(require, exports) {
                 return;
             }
 			if(isCheck){
-				Replace.saveCheckingData($tab);
+				Replace.saveCheckingData($tab, true);
 			}else{
-				Replace.savePayingData($tab);
+				Replace.savePayingData($tab, true);
 			}
 		});
 
@@ -363,8 +364,8 @@ define(function(require, exports) {
                 scenicOrderStatus : scenic,
                 ticketOrderStatus : ticket,
                 sumTemporaryIncomeMoney : $tab.find('.T-sumReciveMoney').val(),
-                startTime : $tab.find('.T-search-start-date').val(),
-                endTime : $tab.find('.T-search-end-date').val()
+                startDate : $tab.find('.T-search-start-date').val(),
+                endDate : $tab.find('.T-search-end-date').val()
             }
             $.ajax({
                 url: KingServices.build_url('financial/bookingAccount', 'autoBookingAccount'),
@@ -405,8 +406,8 @@ define(function(require, exports) {
 				pageNo : (pageNo || 0),
 				partnerAgencyId : Replace.balanceId,
 				orderNumber : order == '全部' ? '' : order,
-				endTime : Replace.$balanceTab.find(".T-search-end-date").val(),
-				startTime : Replace.$balanceTab.find(".T-search-start-date").val()
+				endDate : Replace.$balanceTab.find(".T-search-end-date").val(),
+				startDate : Replace.$balanceTab.find(".T-search-start-date").val()
 			};
 			if(project.length > 0){
 				for(var i=0; i<project.length; i++){
@@ -436,8 +437,6 @@ define(function(require, exports) {
                     // 设置记录条数及页面
                     $tab.find('.T-sumItem').text('共计' + data.recordSize + '条记录');
                     $tab.find('.T-btn-save').data('pageNo', args.pageNo);
-                    //给全选按钮绑定事件: 未去重
-                    FinancialService.initCheckBoxs($tab.find(".T-checkAll"), $tab.find(".T-clearList").find('.T-checkbox'));
 
 					// 绑定翻页组件
 					laypage({
@@ -577,7 +576,7 @@ define(function(require, exports) {
 
                     showMessageDialog($('#confirm-dialog-message'), data.message, function() {
                         if (!!tabArgs) {
-                            Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
+                            //Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
                             Replace.checkingList(0);
                         } else {
                             Tools.closeTab(checkMenuKey);
@@ -609,12 +608,12 @@ define(function(require, exports) {
 	};
 
 
-	Replace.balanceList = function(page, id, startTime, endTime){
+	Replace.balanceList = function(page, id, startDate, endDate){
 		var args = {
 			pageNo : (page || 0),
 			partnerAgencyId : id || Replace.balanceId,
-			endTime : endTime || Replace.$tab.find('.T-search-end-date').val(),
-			startTime : startTime || Replace.$tab.find('.T-search-start-date').val()
+			endDate : endDate || Replace.$tab.find('.T-search-end-date').val(),
+			startDate : startDate || Replace.$tab.find('.T-search-start-date').val()
 		};
 
 		if(!!Replace.$balanceTab){
@@ -624,8 +623,8 @@ define(function(require, exports) {
 				pageNo : (page || 0),
 				partnerAgencyId : id || Replace.balanceId,
 				orderNumber : order == '全部' ? '' : order,
-				endTime : Replace.$balanceTab.find(".T-search-end-date").val(),
-				startTime : Replace.$balanceTab.find(".T-search-start-date").val()
+				endDate : Replace.$balanceTab.find(".T-search-end-date").val(),
+				startDate : Replace.$balanceTab.find(".T-search-start-date").val()
 			};
 			if(project.length > 0){
 				for(var i=0; i<project.length; i++){
@@ -701,7 +700,7 @@ define(function(require, exports) {
                     Replace.payingJson = [];
                     showMessageDialog($('#confirm-dialog-message'), data.message, function() {
                         if (!!tabArgs) {
-                            Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
+                            //Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
                             Replace.balanceList(0);
                         } else {
                             Tools.closeTab(blanceMenuKey);
