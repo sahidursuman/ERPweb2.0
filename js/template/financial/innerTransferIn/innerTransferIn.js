@@ -506,7 +506,7 @@ define(function(require,exports) {
 		});
 	};
 	//设置按钮样式
-	InnerTransferIn.setAutoFillEdit = function($tab, disable){
+	InnerTransferIn.setAutoFillEdit = function($tab){
 		var $sum = $tab.find('input[name="sumPayMoney"]').prop('disabled', disable);
 		if (!disable) {
 			$sum.val(0);
