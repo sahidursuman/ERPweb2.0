@@ -112,7 +112,7 @@ define(function(require, exports) {
 				for(var i=0; i < operationUserList.length; i++){
 					operationUserList[i].value = operationUserList[i].realName
 				}
-				
+
 				operationUserList.unshift({
                     id: '',
                     value: '全部'
@@ -155,8 +155,10 @@ define(function(require, exports) {
 		if(BookingArrange.$searchArea && arguments.length === 1){
 			orderNumber = BookingArrange.$searchArea.find("input[name=orderNumber]").val(),
 			partnerAgency = BookingArrange.$searchArea.find("input[name=partnerAgency]").val(),
+			partnerAgencyId = BookingArrange.$searchArea.find("input[name=partnerAgencyChooseId]").val(),
 			partnerAgency = partnerAgency === '全部'? '': partnerAgency;
 			operateUser = BookingArrange.$searchArea.find("input[name=operateUser]").val(),
+			operateUserId = BookingArrange.$searchArea.find("input[name=operateUserId]").val(),
 			operateUser = operateUser === '全部'? '': operateUser;
 			startTime = BookingArrange.$searchArea.find("input[name=startTime]").val(),
 			endTime = BookingArrange.$searchArea.find("input[name=endTime]").val();
@@ -170,8 +172,10 @@ define(function(require, exports) {
 				operation : 'view',
 				pageNo : page,
 				orderNumber : orderNumber || '',
-				partnerAgencyId: partnerAgency || '',
+				partnerAgency: partnerAgency || '',
+				partnerAgencyId: partnerAgencyId || '',
 				operateUser : operateUser || '',
+				operateUserId : operateUserId || '',
 				startTime : startTime || '',
 				endTime : endTime || '',
 				sortType : 'operationTime'
@@ -237,20 +241,29 @@ define(function(require, exports) {
 	 * @param  {function}  changeFn           值改变事件返回函数
 	 */
 	BookingArrange.choose = function($chooseContainer, clickFn, selectFn, changeFn){
+		var $that = $chooseContainer;
 		$chooseContainer.autocomplete({
 			minLength:0,
 			change :function(event, ui){
 				if(ui.item == null){
-					$(this).val('');
+					if (!$that.closest('.T-search-area').length) {
+						// 编辑页面
+						$that.val('');
+					}
+
 					if(typeof changeFn == 'function'){
 						changeFn(this, ui);
+					}else if ($that.next().is('input')) {
+						$that.next().val('');
 					}
 				}
 			},
 			select :function(event, ui){
-				$(this).blur();
+				$that.blur();
 				if(typeof selectFn == 'function'){
 					selectFn(this, ui);
+				} else if ($that.next().is('input')) {
+					$that.next().val(ui.item.id);
 				}
 			}
 		}).unbind("click").click(function(){
