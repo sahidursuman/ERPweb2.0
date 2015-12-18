@@ -6,9 +6,9 @@
         </div>
         <div class="form-group marginLeft-30">
             <label class="control-label">账期：</label>
-            <input type="text" class="form-control date-picker T-search-start-date" value="{{searchParam.startTime}}">
+            <input type="text" class="form-control date-picker T-search-start-date" value="{{searchParam.startDate}}">
             <label class="control-label">&nbsp;至&nbsp;</label>
-            <input type="text" class="form-control date-picker T-search-end-date" value="{{searchParam.endTime}}">
+            <input type="text" class="form-control date-picker T-search-end-date" value="{{searchParam.endDate}}">
         </div>
         <div class="form-group marginLeft-30">
             <label class="control-label">线路名称：</label>
@@ -95,7 +95,7 @@
                 <td><input type="text" class="col-sm-12 T-refund money" value="{{rs.backMoney}}" name="settlementMoney" {{if rs.isConfirmAccount}} disabled="disabled"{{/if}}></td>
                 <td class="T-settlementMoney">{{rs.settlementMoney}}</td>
                 <td class="T-unReceivedMoney">{{rs.unReceivedMoney}}</td>
-                <td><input type="text" class="col-sm-12 T-remark"  {{if rs.isConfirmAccount}} disabled="disabled" value="{{rs.checkRemark}}"{{/if}}></td>
+                <td><input type="text" class="col-sm-12 T-remark"  {{if rs.isConfirmAccount}} disabled="disabled"{{/if}} value="{{rs.checkRemark}}"></td>
                 <td>{{rs.checkTime}}</td>
                 <td>{{rs.checkUserName}}</td>
                 <td>
@@ -153,7 +153,7 @@
             <button class="btn btn-xs btn-primary T-btn-close">
                 <i class="ace-icon fa fa-times-circle"></i> 关闭
             </button>
-            <button class="btn btn-xs btn-primary T-btn-save" data-right="1280002|1280005" data-id={{partnerAgencyId}} style="margin-left: 20px">
+            <button class="btn btn-xs btn-primary T-btn-save" data-right="1280002|1280005" data-id="{{fromPartnerAgencyId}}" style="margin-left: 20px">
                 <i class="ace-icon fa fa-check-circle"></i> 确认对账
             </button>
         </div>
