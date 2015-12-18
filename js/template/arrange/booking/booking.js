@@ -11,6 +11,7 @@ define(function(require, exports) {
 		updateTemplate = require("./view/update"),
 		viewTemplate = require("./view/view"),
 		listTemplate = require("./view/list"),
+		listTableTemplate = require("./view/listTable"),
 		addPartnerManagerTemplate = require("./view/addPartnerManager"),
 		tabId = "tab-"+menuKey+"-content";
 	/**
@@ -57,8 +58,90 @@ define(function(require, exports) {
 	 */
 	BookingArrange.initModule = function () {
 		BookingArrange.$searchArea = false;
+		
+		Tools.addTab(menuKey,"项目代订",listTemplate());
+		BookingArrange.$tab = $('#' + tabId);
+		BookingArrange.$searchArea = BookingArrange.$tab.find('.T-search-area');
+		BookingArrange.init_event();
+		// 初始化列表
 		BookingArrange.listBooking(0);
+		// 初始化查询参数
+		BookingArrange.getQueryTerms();		
 	};
+
+
+	/**
+	 * 绑定页内事件
+	 */
+	BookingArrange.init_event = function(){		
+		//时间时间
+		Tools.setDatePicker(BookingArrange.$searchArea.find('.datepicker'), true);
+		
+		//搜索按钮事件
+		BookingArrange.$searchArea.find('.T-booking-search').on("click", function (event) {
+			event.preventDefault();
+			BookingArrange.listBooking(0);
+		});
+
+		//搜索客户模糊查询
+		BookingArrange.choose(BookingArrange.$searchArea.find('.T-partnerAgencyChoose'), function(obj){
+			var partnerAgencyList = BookingArrange.autocompleteDate.partnerAgencyList;
+			if(partnerAgencyList && partnerAgencyList.length > 0){
+				for(var i=0; i < partnerAgencyList.length; i++){
+						partnerAgencyList[i].value = partnerAgencyList[i].travelAgencyName
+					}
+
+				partnerAgencyList.unshift({
+                    id: '',
+                    value: '全部'
+                });
+				$(obj).autocomplete('option','source', partnerAgencyList);
+				$(obj).autocomplete('search', '');
+			}else{
+				layer.tips('没有内容', obj, {
+				    tips: [1, '#3595CC'],
+				    time: 2000
+				});
+			}
+		});
+		//搜索操作人查询
+		BookingArrange.choose(BookingArrange.$searchArea.find('.T-operateUserChoose'),function(obj){
+			var operationUserList = BookingArrange.autocompleteDate.operationUserList;
+			console.log(operationUserList);
+			if(operationUserList && operationUserList.length > 0){
+				for(var i=0; i < operationUserList.length; i++){
+					operationUserList[i].value = operationUserList[i].realName
+				}
+				
+				operationUserList.unshift({
+                    id: '',
+                    value: '全部'
+                });
+				$(obj).autocomplete('option','source', operationUserList);
+				$(obj).autocomplete('search', '');
+			}else{
+				layer.tips('没有内容', obj, {
+				    tips: [1, '#3595CC'],
+			    time: 2000
+				});
+			}
+		});
+		//新增项目代订事件
+		BookingArrange.$searchArea.find('.T-Booking-add').on('click', BookingArrange.addBooking);
+		//查看项目代订
+		BookingArrange.$tab.find('.T-list').on('click', '.T-action', function(event){
+			event.preventDefault();
+			var $that = $(this), id = $that.closest('tr').data('entity-id');
+			if($that.hasClass('T-view')){
+				BookingArrange.viewBooking(id);
+			}else if($that.hasClass('T-edit')){
+				BookingArrange.update(id);
+			}else if($that.hasClass('T-cancel')){
+				BookingArrange.deleteBooking(id, $that);
+			}
+		});
+	};
+
 	/**
 	 * 项目代订列表
 	 * @param  {int}     page             页码
@@ -72,7 +155,9 @@ define(function(require, exports) {
 		if(BookingArrange.$searchArea && arguments.length === 1){
 			orderNumber = BookingArrange.$searchArea.find("input[name=orderNumber]").val(),
 			partnerAgency = BookingArrange.$searchArea.find("input[name=partnerAgency]").val(),
+			partnerAgency = partnerAgency === '全部'? '': partnerAgency;
 			operateUser = BookingArrange.$searchArea.find("input[name=operateUser]").val(),
+			operateUser = operateUser === '全部'? '': operateUser;
 			startTime = BookingArrange.$searchArea.find("input[name=startTime]").val(),
 			endTime = BookingArrange.$searchArea.find("input[name=endTime]").val();
 		}
@@ -98,13 +183,10 @@ define(function(require, exports) {
 				pageNo: page
 			};
 			data.bookingOrderList = JSON.parse(data.bookingOrderList);
-			var html = listTemplate(data);
-			Tools.addTab(menuKey,"项目代订",html);
 
-			// 初始化jQuery 对象
-			BookingArrange.$tab = $('#' + tabId);
-			BookingArrange.$searchArea = BookingArrange.$tab.find('.search-area');
-			BookingArrange.init_event();
+			BookingArrange.$tab.find('.T-list').html(listTableTemplate(data));
+			BookingArrange.$tab.find('.T-recordSize').html(Tools.getRecordSizeDesc(data.recordSize));
+			
 			// 绑定翻页组件
 			laypage({
 				cont: BookingArrange.$tab.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
@@ -119,85 +201,6 @@ define(function(require, exports) {
 		}
 	};
 
-	/**
-	 * 绑定页内事件
-	 */
-	BookingArrange.init_event = function(){		
-		//时间时间
-		Tools.setDatePicker(BookingArrange.$searchArea.find('.datepicker'), true);
-		
-		//搜索按钮事件
-		BookingArrange.$searchArea.find('.T-booking-search').on("click", function (event) {
-			event.preventDefault();
-			BookingArrange.listBooking(0);
-		});
-
-		BookingArrange.getQueryTerms();
-		//搜索订单代号模糊查询
-		BookingArrange.choose(BookingArrange.$searchArea.find('.T-orderNumberChoose'), function(obj){
-			var orderNumberList = BookingArrange.autocompleteDate.orderNumberList;
-
-			if(orderNumberList && orderNumberList.length > 0){
-				for(var i=0; i < orderNumberList.length; i++){
-					orderNumberList[i].value = orderNumberList[i].orderNumber;
-				}
-				$(obj).autocomplete('option','source', orderNumberList);
-				$(obj).autocomplete('search', '');
-			}else{
-				layer.tips('没有内容', obj, {
-				    tips: [1, '#3595CC'],
-				    time: 2000
-				});
-			}
-		});
-		//搜索客户模糊查询
-		BookingArrange.choose(BookingArrange.$searchArea.find('.T-partnerAgencyChoose'), function(obj){
-			var partnerAgencyList = BookingArrange.autocompleteDate.partnerAgencyList;
-			if(partnerAgencyList && partnerAgencyList.length > 0){
-				for(var i=0; i < partnerAgencyList.length; i++){
-						partnerAgencyList[i].value = partnerAgencyList[i].travelAgencyName
-					}
-				$(obj).autocomplete('option','source', partnerAgencyList);
-				$(obj).autocomplete('search', '');
-			}else{
-				layer.tips('没有内容', obj, {
-				    tips: [1, '#3595CC'],
-				    time: 2000
-				});
-			}
-		});
-		//搜索操作人查询
-		BookingArrange.choose(BookingArrange.$searchArea.find('.T-operateUserChoose'),function(obj){
-			var operationUserList = BookingArrange.autocompleteDate.operationUserList;
-			console.log(operationUserList);
-			if(operationUserList && operationUserList.length > 0){
-				for(var i=0; i < operationUserList.length; i++){
-					operationUserList[i].value = operationUserList[i].realName
-				}
-				$(obj).autocomplete('option','source', operationUserList);
-				$(obj).autocomplete('search', '');
-			}else{
-				layer.tips('没有内容', obj, {
-				    tips: [1, '#3595CC'],
-			    time: 2000
-				});
-			}
-		});
-		//新增项目代订事件
-		BookingArrange.$searchArea.find('.T-Booking-add').on('click', BookingArrange.addBooking);
-		//查看项目代订
-		BookingArrange.$tab.find('.T-list').on('click', '.T-action', function(event){
-			event.preventDefault();
-			var $that = $(this), id = $that.closest('tr').data('entity-id');
-			if($that.hasClass('T-view')){
-				BookingArrange.viewBooking(id);
-			}else if($that.hasClass('T-edit')){
-				BookingArrange.update(id);
-			}else if($that.hasClass('T-cancel')){
-				BookingArrange.deleteBooking(id, $that);
-			}
-		});
-	};
 
 	/**
 	 * 绑定事件事件  包含  年月日 时分秒
