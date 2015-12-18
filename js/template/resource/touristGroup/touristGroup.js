@@ -1682,7 +1682,7 @@ define(function(require,exports){
 								var $touristReChecked = $arrangeForm.find('.T-touristReception').is(':checked'),
 									$smallCar = $arrangeForm.find('.T-smallCar').is(':checked'),
 								    $touristSend = $arrangeForm.find('.T-touristSend').is(':checked');
-								if (!!typeInner && $touristReChecked == true  || $smallCar == true || $touristSend==true) {
+								if (!!typeInner && ($touristReChecked == true  || $smallCar == true || $touristSend==true)) {
 									// 内外转确认之后，在游客小组选择了中转，需要调整到中转安排的列表界面。
 									//KingServices.getMainList('arrange_transit');
 									KingServices.updateTransit(touristGroup.touristGroupId);
