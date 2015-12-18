@@ -289,8 +289,7 @@ define(function(require, exports) {
 	BookingArrange.CU_event = function($tab){
 		//表单代订信息验证
 		var validator = rule.checkAddBooking($tab);
-
-		$tab.off('change').off(SWITCH_TAB_SAVE).off(CLOSE_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT)
+		$tab.off('change').off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE)
 		.on('change', function(event){
 			event.preventDefault();
 			$tab.data('isEdited', true);
@@ -302,6 +301,10 @@ define(function(require, exports) {
 		.on(SWITCH_TAB_SAVE, function(event, tab_id, title, html){
 			event.preventDefault();
 			BookingArrange.save($tab, validator, [tab_id, title, html]);
+		})
+		.on(SWITCH_TAB_BIND_EVENT, function(event) {
+			event.preventDefault();
+			BookingArrange.BL_event($tab);
 		})
 		.on(CLOSE_TAB_SAVE, function(event){
 			event.preventDefault();
