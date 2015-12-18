@@ -970,6 +970,7 @@ define(function(require, exports) {
 							var hotel = JSON.parse(data.hotel);
 							parents.find("input[name=hotelMobileNumber]").val(hotel.mobileNumber);
 							parents.find("input[name=hotelManagerName]").val(hotel.managerName);
+							parents.find("select[name=hotelLevel]").val(hotel.level);
 						}
 					}
 				});
