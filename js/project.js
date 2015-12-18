@@ -1734,6 +1734,7 @@ KingServices.addResourceFunction = function(e){
 			if (!!data.id && !!id) {$parents.find('input[name='+id+']').val(data.id).trigger('change');}
 			if (!!data.managerName && !!managerName) {$parents.find('input[name='+managerName+']').val(data.managerName);}
 			if (!!data.mobileNumber && !!mobileNumber) {$parents.find('input[name='+mobileNumber+']').val(data.mobileNumber);}
+			if (!!data.level) {$parents.find('select[name=hotelLevel]').val(data.level);}
 		}
 	$function(fn);
 }
