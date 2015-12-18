@@ -19,10 +19,10 @@ define(function(require,exports) {
 		$checkSearchArea:false,
 		$checkValidator:false,
 		$settlermentValidator:false,
-		$saveJson:false,
 		$settlementSearchArea:false,
 		$autoAccountData:false,
 		validatorCheck:false,
+		saveJson:{},
 		autoValidatorCheck:false,
 		showBtnFlag:false
 	};
@@ -115,6 +115,7 @@ define(function(require,exports) {
 			}else if($that.hasClass('T-balance')){
 				//付款处理
 				InnerTransferOut.showBtnFlag = false;
+				InnerTransferOut.btnSatus = 0;
 				InnerTransferOut.settlement(0,id,name,"","","",startDate,endDate);
 			}
 		});
@@ -193,7 +194,7 @@ define(function(require,exports) {
 						data.list[i].touristGroupMemberList = JSON.parse(dataList[i].touristGroupMemberList);
 					};
 					if(typeFlag == 2){
-						data.list.innerTransferFeeList = FinancialService.getTempDate(data.list,InnerTransferOut.saveJson);
+						data.list.innerTransferFeeList = FinancialService.getTempDate(data.list,InnerTransferOut.saveJson.autoPayList);
 						data.showBtnFlag = InnerTransferOut.showBtnFlag;
 						html = clearTableTemplate(data);
 					}else{
@@ -230,7 +231,7 @@ define(function(require,exports) {
 					    jump: function(obj,first) {
 					    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
 					    		if(typeFlag == 2){
-					    			var tempJson = FinancialService.clearSaveJson($obj,InnerTransferOut.saveJson,new FinRule(1));
+					    			var tempJson = FinancialService.clearSaveJson($obj,InnerTransferOut.saveJson.autoPayList,new FinRule(1));
 	                                InnerTransferOut.saveJson = tempJson;
 	                                var sumPayMoney = parseFloat($obj.find('input[name=sumPayMoney]').val()),
 	                                    sumPayType = parseFloat($obj.find('select[name=sumPayType]').val()),
@@ -269,6 +270,10 @@ define(function(require,exports) {
 				//自动计算本次付款金额
 				InnerTransferOut.autoSumPayMoney($obj);
 			});
+			if(InnerTransferOut.btnSatus == 1 || $data.showBtnFlag == true){
+				$obj.find('input[name=sumPayMoney]').val(InnerTransferOut.saveJson.autoPayMoney);
+				InnerTransferOut.setAutoFillEdit($obj,true);
+			};
 		};
 		//页面时间控件格式化
 		FinancialService.initDate($checkSearchArea);
@@ -408,8 +413,10 @@ define(function(require,exports) {
 				if(result){
 					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
 						InnerTransferOut.setAutoFillEdit($obj,true);
-						InnerTransferOut.saveJson = data.autoPayList;
-						InnerTransferOut.chenkingEvent($obj,$data,2);
+						InnerTransferOut.saveJson = data;
+						console.log(InnerTransferOut.saveJson);
+						InnerTransferOut.btnSatus = 1;
+						InnerTransferOut.settlement(0);
 						//设置按钮样式
 					});
 				}
@@ -630,7 +637,7 @@ define(function(require,exports) {
 		var payMoney;
 		var payType;
 		var remark;
-		var JsonStr = FinancialService.clearSaveJson(InnerTransferOut.$settlementTab,InnerTransferOut.saveJson,new FinRule(1));
+		var JsonStr = FinancialService.clearSaveJson(InnerTransferOut.$settlementTab,InnerTransferOut.saveJson.autoPayList,new FinRule(1));
 		var payType = tab_id.find('select[name=sumPayType]').val();
 		var sumRemark = tab_id.find('name[name=sumRemark]').val();
 		JsonStr = JSON.stringify(JsonStr);
@@ -653,6 +660,8 @@ define(function(require,exports) {
                             InnerTransferOut.listInnerTransfer(0);
                     	} else if(argumentsLen == 3){
                     		InnerTransferOut.saveJson = [];
+                    		InnerTransferOut.showBtnFlag = false;
+							InnerTransferOut.btnSatus = 0;
                             InnerTransferOut.settlement(0);
                     	} else {
                             Tools.addTab(tab_id, title, html);
