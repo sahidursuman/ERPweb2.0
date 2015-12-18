@@ -560,7 +560,6 @@ define(function(require,exports) {
 						if(result){
 							$obj.data('isEdited', false);
 							showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-								//Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
 								if(argumentsLen == 2){
 		                            Tools.closeTab(checkId);
 		                            InnerTransferIn.listInnerTransfer(0);
