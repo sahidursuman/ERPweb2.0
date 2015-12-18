@@ -71,6 +71,52 @@ FinancialService.checkSaveJson = function($tab,rule){
     return saveJson;
 };
 
+//对账-修改但未勾选提醒
+FinancialService.changeUncheck = function(trList,fn){
+    var result = false,uncheckList = [];
+    trList.each(function(){
+        var $this = $(this);
+        if($this.data('change') && $this.data("confirm") == 0 && !$this.find('.T-checkbox').is(":checked")){
+            $this.addClass('success');
+            uncheckList.push($this);
+            result = true;
+        }
+    });
+    if(result){
+        var buttons = [
+            {
+                text: '是',
+                class: "btn btn-primary btn-minier btn-heightMall",
+                click: function() {
+                    $(this).dialog("close");
+                    fn();
+                }
+            }, 
+            {
+                text: '否',
+                class: "btn btn-minier btn-heightMall",
+                click: function() {
+                    $(this).dialog("close");
+                }
+            }
+        ];
+
+        $("#confirm-dialog-message").removeClass('hide').dialog({
+            modal: true,
+            title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i>提示</h4></div>",
+            title_html: true,
+            draggable:false,
+            buttons: buttons,
+            open:function(event,ui){
+                $(this).find("p").text("您有记录已修改但未勾选对账，是否继续？");
+            }
+        });
+    } else {
+        fn();
+    }
+};
+
+
 
 //付款-自动计算本次付款总额
 FinancialService.updateSumPayMoney = function($tab,rule){
@@ -263,11 +309,7 @@ FinancialService.initCheckBoxs = function($checkAll,checkboxList){//$checkAll全
         } else{
             checkboxList.each(function(i){
                 if(!$(this).prop("disabled")){
-                    var $tr = $(this).closest('tr');
-                    if($tr.data("confirm") != 1){
-                       $(this).prop("checked",false); 
-                    }
-                    
+                    $(this).prop("checked",false);
                 }                                
             });
         } 
