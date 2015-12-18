@@ -222,7 +222,9 @@ define(function(require, exports) {
     	tripPlan.licenseNumberChoose($tab);
     	tripPlan.driverChoose($tab);
 		tripPlan.guideChoose($tab);
-		tripPlan.addTripPlanDatepicker("startTime");
+		if (operation === 'add') {
+			Tools.setDatePicker($container.find('input[name="startTime"]'));
+		}
 		tripPlan.setPlanceTimeDateTimePicker();
 		 //发团计划定时
 		tripPlan.setTripPlanPicker();
@@ -1456,12 +1458,13 @@ define(function(require, exports) {
 	};
 
 	tripPlan.addTripPlanDatepicker = function(name){
-		$(".T-plan-container input[name="+name+"]").datepicker({
-			autoclose: true,
-			todayHighlight: true,
-			format: 'yyyy-mm-dd',
-			language: 'zh-CN'
-		});
+		$(".T-plan-container input[name="+name+"]").each(function() {
+			var $timer = $(this);
+
+			if (!$timer.prop('readonly')) {
+				Tools.setDatePicker($timer);
+			}
+		})
 	};
 	//集合时间   时间控件
 	tripPlan.setPlanceTimeDateTimePicker = function(){
