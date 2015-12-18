@@ -512,7 +512,7 @@ define(function(require,exports) {
 					var html = payedDetailTemplate(data);
 					layer.open({
 						type : 1,
-						title :"付款明细",
+						title :"已付金额明细",
 						skin : 'layui-layer-rim',
 						area : "60%", 
 						zIndex : 1028,
