@@ -80,7 +80,7 @@
                 <td>{{rs.settlementMoney}}</td>
                 <td>{{rs.unPayedMoney}}</td>
                 <td>
-                    <input name="payMoney" class="money" type="text" value="{{rs.payMoney}}" maxlength="9">
+                    <input name="payMoney" class="money" type="text" value="{{rs.payMoney}}" data-le="{{rs.unPayedMoney}}" maxlength="9">
                 </td>
                 <td>
                     <input type="text" maxlength="1000" name="payRemark" value="{{rs.payRemark}}" style="text-align:center" />
