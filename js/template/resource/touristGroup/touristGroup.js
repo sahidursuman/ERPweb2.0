@@ -201,9 +201,16 @@ define(function(require,exports){
 						var touristGroupInfo = JSON.parse(data.touristGroupDetail);
 						data.touristGroupDetail = touristGroupInfo;
 						var html = updateTransferInTemplate(data);
-						if(Tools.addTab(updateTabId,"添加游客",html))
-						{
-							touristGroup.updateEvents(typeOut);
+						if( status == undefined && status!=null && status!="" ){
+							if(Tools.addTab(updateTabId,"添加游客",html))
+							{
+								touristGroup.updateEvents(typeOut);
+							}
+						}else{
+							if(Tools.addTab(updateTabId,"编辑游客",html))
+							{
+								touristGroup.updateEvents(typeOut);
+							}
 						}
 					}
 				}
@@ -220,16 +227,20 @@ define(function(require,exports){
 						var touristGroupInfo = JSON.parse(data.touristGroupDetail);
 						data.touristGroupDetail = touristGroupInfo;
 						var html = updateTransferTemplate(data);
-						if(Tools.addTab(updateTabId,"添加游客",html))
-						{   
-							//外转确认需清空线路产品
-							if (status=='' || status==undefined || status==null) {
-								var $updateTabId =$('#'+updateTab);
+						//外转确认需清空线路产品
+						if( status == undefined && status!=null && status!="" ){
+							if(Tools.addTab(updateTabId,"添加游客",html))
+							{                                                     
+							    var $updateTabId =$('#'+updateTab);
 								    $updateTabId.find('input[name=lineProductIdName]').val("");
 								    $updateTabId.find('input[name=lineProductId]').val("");
-
-							};
-							touristGroup.updateEvents(typeOut);
+								touristGroup.updateEvents(typeOut);
+							}
+						}else{
+							if(Tools.addTab(updateTabId,"编辑游客",html))
+							{
+								touristGroup.updateEvents(typeOut);
+							}
 						}
 					}
 				}

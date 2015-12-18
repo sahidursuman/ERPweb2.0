@@ -479,7 +479,8 @@ define(function(require, exports) {
         });
         // 自动下账
         $PaymentTabId.find(".T-clear-auto").off('click').on("click", function() {
-            //if(!autoValidator.form()){return;}
+            var $that = $(this);
+            if($that.hasClass('btn-primary')){
             var sumPayMoney = parseInt($PaymentTabId.find('input[name=sumPayMoney]').val()),
                 sumPayType = $PaymentTabId.find('select[name=sumPayType]').val(),
                 sumPayRemark = $PaymentTabId.find('input[name=sumPayRemark]').val(),
@@ -491,6 +492,7 @@ define(function(require, exports) {
             if (!isAutoPay) {
                 return false;
             }
+        
             var searchParam = {
                 name: names,
                 autoPayMoney: sumPayMoney,
@@ -504,13 +506,9 @@ define(function(require, exports) {
                     type: "POST",
                     data: searchParam,
                    success: function(data) {
-                    $that.addClass('.btn-warning')
-
                         var result = showDialog(data);
                         if (result) {
-                            
                             showMessageDialog($("#confirm-dialog-message"), data.message, function() {
-                                 
                                 OtherAccounts.saveJson = data;
                                 OtherAccounts.saveJson.btnShowStatus = true;
                                 OtherAccounts.setAutoFillEdit($PaymentTabId,true);
@@ -520,6 +518,9 @@ define(function(require, exports) {
                     }
                 });
             });
+            }else{
+                OtherAccounts.setAutoFillEdit($PaymentTabId,true);
+            }
         });
     };
 
