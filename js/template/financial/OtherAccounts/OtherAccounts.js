@@ -15,16 +15,12 @@ define(function(require, exports) {
         $searchArea: false,
         $checkSearchArea: false,
         saveJson:{},
-        $clearSearchArea: false
+        $clearSearchArea: false,
+        showBtnFlag:false
     };
     OtherAccounts.initModule = function() {
-        var myDate = new Date(),
-            thisyear = myDate.getFullYear(),
-            thismonth = myDate.getMonth() + 1,
-            endAccountTime = moment(new Date(myDate)).format("YYYY-MM-DD"), //结束日期
-            myDate = new Date(thisyear + '-' + thismonth + '-01'),
-            startAccountTime = moment(new Date(myDate)).format("YYYY-MM-DD"); //开始日期
-        OtherAccounts.listFinancialOtherAccounts(0, "", startAccountTime, endAccountTime);
+        var dateJson = FinancialService.getInitDate();  
+        OtherAccounts.listFinancialOtherAccounts(0, "",dateJson.startDate,dateJson.endDate);
     };
     OtherAccounts.listFinancialOtherAccounts = function(pageNo, name, startAccountTime, endAccountTime) {
         if (OtherAccounts.$searchArea && arguments.length === 1) {
@@ -101,6 +97,7 @@ define(function(require, exports) {
                 OtherAccounts.AccountsChecking(0, name, "", startAccountTime, endAccountTime);
             } else if ($that.hasClass('T-payment')) {
                 // 付款
+                OtherAccounts.showBtnFlag = false;
                 OtherAccounts.AccountsPayment(0, name, "", startAccountTime, endAccountTime);
             }
         });
@@ -367,9 +364,9 @@ define(function(require, exports) {
                             }
                         }
                     }
-                    
+                    //财务入口调用
+                    data.showBtnFlag = OtherAccounts.showBtnFlag
                     var dataTable = data;
-
                     // 付款头部的接口
                     $.ajax({
                         url: KingServices.build_url("account/arrangeOtherFinancial", "getStatistics"),
@@ -378,6 +375,7 @@ define(function(require, exports) {
                         success: function(data) {
                             console.log(dataTable);
                             if (showDialog(data)) {
+
                                  dataTable.statistics = data.statistics;
                                 if (Tools.addTab(PaymentTabId, "其他付款",AccountsPaymentTemplate(dataTable))) {
                                     OtherAccounts.initPaymentEvent(dataTable);
@@ -732,7 +730,9 @@ define(function(require, exports) {
         }
         $tab.find('.T-clear-auto').html(disable?'<i class="ace-icon fa fa-times"></i> 取消下账': '<i class="ace-icon fa fa-check-circle"></i> 自动下账').toggleClass('btn-primary btn-warning');
     };
+    //暴露方法
     OtherAccounts.initPayModule = function(options) {
+        OtherAccounts.showBtnFlag = true;
         OtherAccounts.AccountsPayment(0, options.name, "", options.startAccountTime, options.endAccountTime);
     };
     exports.init = OtherAccounts.initModule;

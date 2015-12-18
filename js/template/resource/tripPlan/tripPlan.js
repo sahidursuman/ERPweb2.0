@@ -701,7 +701,7 @@ define(function(require, exports) {
 				showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
 					$.ajax({
 						url: KingServices.build_url("tripPlan","deleteTripPlanInfoByCategoryId"),
-	                    type: "PSOT",
+	                    type: "post",
 	                    data:"cateName="+$name+"&cateId="+$id,
 	                    success: function(data) {
 							if(showDialog(data)){
