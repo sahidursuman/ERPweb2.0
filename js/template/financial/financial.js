@@ -304,11 +304,15 @@ FinancialService.initCheckBoxs = function($checkAll,checkboxList){//$checkAll全
                 if($(this).closest('tr').data("confirm") == 0){
                     $(this).closest('tr').data("change",true);
                     $(this).closest('.tab-pane').data("isEdited",true);
+                }else{
+                    $(this).closest('tr').data("change",false);
                 }
             });
         } else{
             checkboxList.each(function(i){
                 if(!$(this).prop("disabled")){
+                    $(this).closest('tr').data("change",true);
+                    $(this).closest('.tab-pane').data("isEdited",true);
                     $(this).prop("checked",false);
                 }                                
             });
