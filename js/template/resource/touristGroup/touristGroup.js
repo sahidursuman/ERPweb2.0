@@ -201,9 +201,16 @@ define(function(require,exports){
 						var touristGroupInfo = JSON.parse(data.touristGroupDetail);
 						data.touristGroupDetail = touristGroupInfo;
 						var html = updateTransferInTemplate(data);
-						if(Tools.addTab(updateTabId,"添加游客",html))
-						{
-							touristGroup.updateEvents(typeOut);
+						if( status == undefined && status!=null && status!="" ){
+							if(Tools.addTab(updateTabId,"添加游客",html))
+							{
+								touristGroup.updateEvents(typeOut);
+							}
+						}else{
+							if(Tools.addTab(updateTabId,"编辑游客",html))
+							{
+								touristGroup.updateEvents(typeOut);
+							}
 						}
 					}
 				}
@@ -220,16 +227,20 @@ define(function(require,exports){
 						var touristGroupInfo = JSON.parse(data.touristGroupDetail);
 						data.touristGroupDetail = touristGroupInfo;
 						var html = updateTransferTemplate(data);
-						if(Tools.addTab(updateTabId,"添加游客",html))
-						{   
-							//外转确认需清空线路产品
-							if (status=='' || status==undefined || status==null) {
-								var $updateTabId =$('#'+updateTab);
+						//外转确认需清空线路产品
+						if( status == undefined && status!=null && status!="" ){
+							if(Tools.addTab(updateTabId,"添加游客",html))
+							{                                                     
+							    var $updateTabId =$('#'+updateTab);
 								    $updateTabId.find('input[name=lineProductIdName]').val("");
 								    $updateTabId.find('input[name=lineProductId]').val("");
-
-							};
-							touristGroup.updateEvents(typeOut);
+								touristGroup.updateEvents(typeOut);
+							}
+						}else{
+							if(Tools.addTab(updateTabId,"编辑游客",html))
+							{
+								touristGroup.updateEvents(typeOut);
+							}
 						}
 					}
 				}
@@ -848,7 +859,7 @@ define(function(require,exports){
 		var html = '<tr>'+
 		'<td>'+'</td>'+
 		'<td><input name="name" type="text" class="col-sm-12  no-padding-right" /></td>'+
-		'<td><input name="mobileNumber" type="text" class="col-sm-12  no-padding-right"  maxlength="11"  /></td>'+
+		'<td><input name="mobileNumber" type="text" class="col-sm-12  no-padding-right T-mobileNumber"  maxlength="11"  /></td>'+
 		'<td><select name="idCardType" value="idCardTypeId"><option value="0" selected="selected">身份证</option><option value="1">护照</option><option value="2">其它</option></select></td>'+
 		'<td><input name="idCardNumber" type="text" class="col-sm-12  no-padding-right" /></td>'+
 		'<td><div class="checkbox"><label><input type="checkbox" class="ace " value="1" name="isContactUser"><span class="lbl"></span></label></div></td>'+
@@ -1600,7 +1611,27 @@ define(function(require,exports){
 		}else{
 				outArrangeRemarkJson = touristGroup.installArrangeJson($arrangeForm);
 		};
-		
+
+		//大人与小孩数量之和
+		var $trList = $lineInfoForm.find('.T-addCostTbody').find('tr:not(.deleted)'),adultChildTotal=0;
+		    $trList.each(function(index) {
+		    	var count=$trList.eq(index).find('.T-costCount').val();
+		    	    count=parseInt(count);
+		    	    adultChildTotal=parseInt(adultChildTotal+count);
+		    });
+	    //游客小组人数
+	    var $vistTr=$visiForm.find('.T-addTouristTbody').children('tr:not(.deleted)'),touristCount=0;	 
+	        $vistTr.each(function(index) {
+	        	touristCount=parseInt(touristCount+1);
+	        });
+	    //游客小组人数不能大于大人小孩数之和
+	    var isSaveReturn=false;
+	    if (touristCount>adultChildTotal) {
+	    	isSaveReturn=true;
+	    	showMessageDialog($( "#confirm-dialog-message" ),"游客小组人数不能大于大人与小孩数之和");
+	    };
+	    if (isSaveReturn) {return};
+
 		//将json对象转换成字符串
 		touristGroupFeeJsonAdd = JSON.stringify(touristGroupFeeJsonAdd);
 		touristGroupMemberJsonAdd = JSON.stringify(touristGroupMemberJsonAdd);

@@ -19,10 +19,10 @@ define(function(require,exports) {
 		$checkSearchArea:false,
 		$checkValidator:false,
 		$settlermentValidator:false,
-		$saveJson:false,
 		$settlementSearchArea:false,
 		$autoAccountData:false,
 		validatorCheck:false,
+		saveJson:{},
 		autoValidatorCheck:false,
 		showBtnFlag:false
 	};
@@ -114,8 +114,17 @@ define(function(require,exports) {
 				InnerTransferOut.chenking(0,id,name,"","","",startDate,endDate);
 			}else if($that.hasClass('T-balance')){
 				//付款处理
-				InnerTransferOut.showBtnFlag = false;
-				InnerTransferOut.settlement(0,id,name,"","","",startDate,endDate);
+				InnerTransferOut.btnSatus = 0;
+				var args = {
+					toBusinessGroupId:id,
+					toBusinessGroupName:name,
+					lineProductId:"",
+					lineProductName:"",
+					operateUserId:"",
+					startDate:startDate,
+					endDate:endDate
+				};
+				InnerTransferOut.settlement(args,0);
 			}
 		});
 	};
@@ -193,8 +202,8 @@ define(function(require,exports) {
 						data.list[i].touristGroupMemberList = JSON.parse(dataList[i].touristGroupMemberList);
 					};
 					if(typeFlag == 2){
-						data.list.innerTransferFeeList = FinancialService.getTempDate(data.list,InnerTransferOut.saveJson);
-						data.showBtnFlag = InnerTransferOut.showBtnFlag;
+						data.list.innerTransferFeeList = FinancialService.getTempDate(data.list,InnerTransferOut.saveJson.autoPayList);
+						console.log(data);
 						html = clearTableTemplate(data);
 					}else{
 						html = checkTableTemplate(data);
@@ -230,7 +239,7 @@ define(function(require,exports) {
 					    jump: function(obj,first) {
 					    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
 					    		if(typeFlag == 2){
-					    			var tempJson = FinancialService.clearSaveJson($obj,InnerTransferOut.saveJson,new FinRule(1));
+					    			var tempJson = FinancialService.clearSaveJson($obj,InnerTransferOut.saveJson.autoPayList,new FinRule(1));
 	                                InnerTransferOut.saveJson = tempJson;
 	                                var sumPayMoney = parseFloat($obj.find('input[name=sumPayMoney]').val()),
 	                                    sumPayType = parseFloat($obj.find('select[name=sumPayType]').val()),
@@ -269,6 +278,10 @@ define(function(require,exports) {
 				//自动计算本次付款金额
 				InnerTransferOut.autoSumPayMoney($obj);
 			});
+			if(InnerTransferOut.btnSatus == 1 || $data.showBtnFlag == true){
+				$obj.find('input[name=sumPayMoney]').val(InnerTransferOut.saveJson.autoPayMoney);
+				InnerTransferOut.setAutoFillEdit($obj,true);
+			};
 		};
 		//页面时间控件格式化
 		FinancialService.initDate($checkSearchArea);
@@ -372,7 +385,7 @@ define(function(require,exports) {
         //确认付款事件
         $obj.find('.T-payMoney').off('click').on('click',function(){
         	if(!InnerTransferOut.$settlermentValidator.form()){return;}
-        	InnerTransferOut.saveBlanceData(0,$obj,"");
+        	InnerTransferOut.saveBlanceData(0,$data,$obj);
         });
 	};
 	//导出事件
@@ -408,8 +421,10 @@ define(function(require,exports) {
 				if(result){
 					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
 						InnerTransferOut.setAutoFillEdit($obj,true);
-						InnerTransferOut.saveJson = data.autoPayList;
-						InnerTransferOut.chenkingEvent($obj,$data,2);
+						InnerTransferOut.saveJson = data;
+						console.log(InnerTransferOut.saveJson);
+						InnerTransferOut.btnSatus = 1;
+						InnerTransferOut.settlement($data);
 						//设置按钮样式
 					});
 				}
@@ -422,9 +437,9 @@ define(function(require,exports) {
 		if (!disable) {
 			$sum.val(0);
 		}
-		$tab.find('.T-btn-autofill').html(disable?'<i class="ace-icon fa fa-times"></i> 取消下账': '<i class="ace-icon fa fa-check-circle"></i> 自动下账').toggleClass('btn-primary btn-warning');;
+		$tab.find('.T-btn-autofill').html(disable?'<i class="ace-icon fa fa-times"></i> 取消下账': '<i class="ace-icon fa fa-check-circle"></i> 自动下账').toggleClass('btn-primary btn-warning');
 	};
-	//确认对账 0,$tab,$data,id,name,tab_id, title, html
+	//确认对账
 	InnerTransferOut.saveCheckingData = function(pageNo,$obj,$data,tab_id, title, html){
 	
     	var JsonStr = [],
@@ -505,7 +520,7 @@ define(function(require,exports) {
 					var html = payedDetailTemplate(data);
 					layer.open({
 						type : 1,
-						title :"付款明细",
+						title :"已付金额明细",
 						skin : 'layui-layer-rim',
 						area : "60%", 
 						zIndex : 1028,
@@ -568,33 +583,24 @@ define(function(require,exports) {
 		//更新数据统计
 	};
 	//付款处理
-	InnerTransferOut.settlement = function(pageNo,toBusinessGroupId,toBusinessGroupName,lineProductId,lineProductName,operateUserId,startDate,endDate){
+	InnerTransferOut.settlement = function(args,pageNo){
 		if(InnerTransferOut.$settlementSearchArea && arguments.length === 1){
 			var $lineProductId = InnerTransferOut.$settlementSearchArea.find('input[name=lineProductId]').val();
 			var $lineProductName = InnerTransferOut.$settlementSearchArea.find('input[name=lineProductName]').val();
-			toBusinessGroupId = InnerTransferOut.$settlementSearchArea.find('input[name=toBusinessGroupId]').val();
-			toBusinessGroupName = InnerTransferOut.$settlementSearchArea.find('input[name=toBusinessGroupName]').val();
-			lineProductId = $lineProductId;
-			lineProductName = $lineProductId == ""?"":$lineProductName;
-			operateUserId= InnerTransferOut.$settlementSearchArea.find('select[name=operater]').val();
-			startDate = InnerTransferOut.$settlementSearchArea.find('input[name=startDate]').val();
-			endDate = InnerTransferOut.$settlementSearchArea.find('input[name=endDate]').val();
+			args.toBusinessGroupId = InnerTransferOut.$settlementSearchArea.find('input[name=toBusinessGroupId]').val();
+			args.toBusinessGroupName = InnerTransferOut.$settlementSearchArea.find('input[name=toBusinessGroupName]').val();
+			args.lineProductId = $lineProductId;
+			args.lineProductName = $lineProductId == ""?"":$lineProductName;
+			args.operateUserId= InnerTransferOut.$settlementSearchArea.find('select[name=operater]').val();
+			args.startDate = InnerTransferOut.$settlementSearchArea.find('input[name=startDate]').val();
+			args.endDate = InnerTransferOut.$settlementSearchArea.find('input[name=endDate]').val();
 		};
-		pageNo = pageNo || 0;
-		if(startDate > endDate){
+		args.pageNo = pageNo || 0;
+		if(args.startDate > args.endDate){
             showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
             return false;
         };
-		var $listSearchData = {
-				pageNo:pageNo,
-				toBusinessGroupId:toBusinessGroupId,
-				toBusinessGroupName:toBusinessGroupName,
-				lineProductId:lineProductId,
-				lineProductName:lineProductName,
-				startDate:startDate,
-				operateUserId:operateUserId,
-				endDate:endDate
-			};
+		var $listSearchData = args;
 		$.ajax({
 			url:KingServices.build_url("account/innerTransferOutFinancial","financialInnerTransferOutSumStaticsByToBusinessGroupId"),
 			data:$listSearchData,
@@ -604,7 +610,7 @@ define(function(require,exports) {
 				data.searchParam = $listSearchData;
 			    if(result){
 			 	    data.searchParam = $listSearchData;
-			 	    data.showBtnFlag = InnerTransferOut.showBtnFlag;
+			 	    data.showBtnFlag = args.showBtnFlag;
 				    var $lineProductData = data.lineProductList;
 				    //return
 					var html = settlementTemplate(data);
@@ -624,13 +630,13 @@ define(function(require,exports) {
 		});
 	};
 	//保存数据
-	InnerTransferOut.saveBlanceData = function(pageNo,tab_id, title, html){
+	InnerTransferOut.saveBlanceData = function(pageNo,$data,tab_id, title, html){
 	    var id; 
 	    var argumentsLen = arguments.length;
 		var payMoney;
 		var payType;
 		var remark;
-		var JsonStr = FinancialService.clearSaveJson(InnerTransferOut.$settlementTab,InnerTransferOut.saveJson,new FinRule(1));
+		var JsonStr = FinancialService.clearSaveJson(InnerTransferOut.$settlementTab,InnerTransferOut.saveJson.autoPayList,new FinRule(1));
 		var payType = tab_id.find('select[name=sumPayType]').val();
 		var sumRemark = tab_id.find('name[name=sumRemark]').val();
 		JsonStr = JSON.stringify(JsonStr);
@@ -653,12 +659,16 @@ define(function(require,exports) {
                             InnerTransferOut.listInnerTransfer(0);
                     	} else if(argumentsLen == 3){
                     		InnerTransferOut.saveJson = [];
-                            InnerTransferOut.settlement(0);
+							InnerTransferOut.btnSatus = 0;
+                            InnerTransferOut.settlement($data);
                     	} else {
                             Tools.addTab(tab_id, title, html);
-                            var id = $obj.find('input[name=toBusinessGroupId]').val();
-                            var toBusinessGroupName = $obj.find('input[name=toBusinessGroupName]').val();
-                            InnerTransferOut.settlement(0,id,toBusinessGroupName,$data.lineProductId,$data.lineProductName,$data.operateUserId,$data.startDate,$data.endDate);
+                            var id = tab_id.find('input[name=toBusinessGroupId]').val();
+                            var toBusinessGroupName = tab_id.find('input[name=toBusinessGroupName]').val();
+                            $data.toBusinessGroupId = id;
+                            $data.toBusinessGroupName = toBusinessGroupName;
+                           // $obj,$data,typeFlag
+                            InnerTransferOut.chenkingEvent(tab_id,$data,2);
                     	}
                 	});
                 	
@@ -713,8 +723,8 @@ define(function(require,exports) {
 			// 保存后关闭
 			.on(CLOSE_TAB_SAVE, function(event) {
 				event.preventDefault();
-				if(typeFlag == 2){
-					InnerTransferOut.saveBlanceData(0,$tab);
+				if(typeFlag == 2){//pageNo,$data,tab_id, title, html
+					InnerTransferOut.saveBlanceData(0,data,$tab);
 				}else{
 					InnerTransferOut.saveCheckingData(0,$tab);
 				}
@@ -824,8 +834,18 @@ define(function(require,exports) {
 		return newVal;
 	};
 	InnerTransferOut.initPay = function(options){
-		InnerTransferOut.showBtnFlag = true;
-        InnerTransferOut.settlement(0,options.id,options.name,"","","",options.startDate,options.endDate,2); 
+		var args = {
+			pageNo:0,
+			toBusinessGroupId:options.id,
+			toBusinessGroupName:options.name,
+			lineProductId:"",
+			lineProductName:"",
+			operateUserId:"",
+			startDate:options.startDate,
+			endDate:options.endDate,
+			showBtnFlag:true
+		};
+        InnerTransferOut.settlement(args,0); 
     };
 	exports.init = InnerTransferOut.initModule;
 	exports.initPay = InnerTransferOut.initPay;
