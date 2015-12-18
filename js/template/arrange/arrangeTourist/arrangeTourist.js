@@ -298,14 +298,13 @@ define(function(require, exports) {
             type: 1,
             title: "选择生成计划",
             skin: 'layui-layer-rim', //加上边框
-            area: '85%;', //宽高
+            area: '85%', //宽高
             zIndex: 1029,
             content: html,
             scrollbar: false,
             success: function() {
                 arrangeTourist.chosenTripPlan(0,"");
                 arrangeTourist.mergenTripPlan();
-
             }
         });
 
@@ -328,6 +327,8 @@ define(function(require, exports) {
                     data.tripPlanList = JSON.parse(data.tripPlanList);
                     var html = chosenTripPlanTemplate(data);
                     $chooseTipPlan.find('.T-chooseTipPlan-Content').html(html);
+                    // 再调整对话框的高度
+                    $(window).trigger('resize');
                     arrangeTourist.initchooseTipP_Event($chooseTipPlan);
                     // 绑定共用翻页组件
                     laypage({
