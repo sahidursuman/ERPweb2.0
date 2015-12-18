@@ -1022,7 +1022,7 @@ define(function(require, exports) {
 					success: function(data) {
 						if(showDialog(data)){
 							var hotelRoom = JSON.parse(data.hotelRoom);
-							$thisRoom.find("input[name=hotelPrice]").val(hotelRoom.contractPrice);
+							$thisRoom.find("input[name=hotelPrice]").val(hotelRoom.contractPrice).trigger('change');
 						}
 					}
 				})
