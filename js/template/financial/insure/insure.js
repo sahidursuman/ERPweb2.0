@@ -56,6 +56,7 @@ define(function(require, exports) {
 			type:"POST",
 			data:{ searchParam : searchParam },
 	        success: function(data){
+                console.log(data,"3")
 	            var result = showDialog(data);
 	            if (result) {
 	            	Insure.insureList = data.insuranceNameList;
