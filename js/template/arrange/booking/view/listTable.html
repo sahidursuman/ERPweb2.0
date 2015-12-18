@@ -1,0 +1,44 @@
+{{each bookingOrderList as booking}}
+<tr data-entity-id="{{booking.id}}">
+    <td>{{booking.orderNumber}}</td>
+    <td>{{if booking.partnerAgency != null}}{{booking.partnerAgency.travelAgencyName}}{{/if}}</td>
+    <td>
+        {{if booking.hotelOrderStatus == 0}}
+        <i class="ace-icon fa fa-times red bigger-125"></i> {{else}}
+        <i class="ace-icon fa fa-check green bigger-130"></i> {{/if}}
+    </td>
+    <td>
+        {{if booking.ticketOrderStatus == 0}}
+        <i class="ace-icon fa fa-times red bigger-125"></i> {{else}}
+        <i class="ace-icon fa fa-check green bigger-130"></i> {{/if}}
+    </td>
+    <td>
+        {{if booking.scenicOrderStatus == 0}}
+        <i class="ace-icon fa fa-times red bigger-125"></i> {{else}}
+        <i class="ace-icon fa fa-check green bigger-130"></i> {{/if}}
+    </td>
+    <td>
+        {{if booking.busCompanyOrderStatus == 0}}
+        <i class="ace-icon fa fa-times red bigger-125"></i> {{else}}
+        <i class="ace-icon fa fa-check green bigger-130"></i> {{/if}}
+    </td>
+    <td>{{booking.sumNeedGetMoney}}</td>
+    <td>{{booking.getedMoney}}</td>
+    <td>{{if booking.operateUser != null}}{{booking.operateUser.realName}}{{/if}}</td>
+    <td>{{booking.operationTime}}</td>
+    <td>{{if booking.isConfirmAccount == 1}}已对账{{else}}未对账{{/if}}</td>
+    <td>
+        <a data-entity-id="{{booking.id}}" title="查看计划" class="T-action cursor T-view">
+							查看
+						</a>
+        <a data-entity-id="{{booking.id}}" title="编辑计划" class=" cursor {{if booking.isConfirmAccount != 1}}T-action T-edit{{/if}} R-right" data-right="1170003" {{if booking.isConfirmAccount==1 }} style="color: #bbb" {{/if}}>
+            <label class="padding-right20">|</label>
+            编辑
+        </a>
+        <a data-entity-id="{{booking.id}}" title="取消计划" class=" cursor {{if booking.isConfirmAccount != 1}}T-action T-cancel{{/if}} R-right" data-right="1170004" {{if booking.isConfirmAccount==1 }} style="color: #bbb" {{/if}}>
+            <label class="padding-right20">|</label>
+            取消
+        </a>
+    </td>
+</tr>
+{{/each}}
