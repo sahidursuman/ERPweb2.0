@@ -409,7 +409,10 @@ define(function(require,exports) {
 	        	});
         	
         	}else{
-        		InnerTransferIn.setAutoFillEdit($obj,false)
+        		InnerTransferIn.setAutoFillEdit($obj,false);
+        		InnerTransferIn.saveJson = [];
+        		InnerTransferIn.btnSatus = 0;
+                InnerTransferIn.chenking($listSearchData,2,"settle");
         	}
         });
         //确认付款
@@ -506,7 +509,7 @@ define(function(require,exports) {
 		});
 	};
 	//设置按钮样式
-	InnerTransferIn.setAutoFillEdit = function($tab){
+	InnerTransferIn.setAutoFillEdit = function($tab, disable){
 		var $sum = $tab.find('input[name="sumPayMoney"]').prop('disabled', disable);
 		if (!disable) {
 			$sum.val(0);
@@ -764,14 +767,7 @@ define(function(require,exports) {
 	InnerTransferIn.init_CRU_event = function($tab,$listSearchData,typeFlag){
 		if(!!$tab && $tab.length === 1){
 			// 监听修改
-			var $tbody,
-				saveBtn;
-			if(typeFlag == 2){
-				$tbody = $tab.find(".T-clearList");
-			}else{
-				$tbody = $tab.find('.T-checkList')
-			};
-			$tbody.on('change', function(event) {
+			$tab.on('change', function(event) {
 				event.preventDefault();
 				$tab.data('isEdited', true);
 				
