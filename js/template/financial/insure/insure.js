@@ -472,7 +472,7 @@ define(function(require, exports) {
     //对账数据保存
     Insure.saveChecking = function(insuranceId,insuranceName,page,tab_id, title, html){
         var argumentsLen = arguments.length,
-            checkSaveJson = FinancialService.checkSaveJson($checkTab, new FinRule(0));
+            checkSaveJson = FinancialService.checkSaveJson(Insure.$checkTab, new FinRule(0));
         if(!checkSaveJson){ return false; }
 
         $.ajax({
