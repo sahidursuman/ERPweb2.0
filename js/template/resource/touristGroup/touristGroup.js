@@ -13,6 +13,7 @@ define(function(require,exports){
 		updateTransferInTemplate = require('./view/updateTransferIn'),
 		addVisitorMoreTemplate = require('./view/addVisitorMore'),
 		tabId = "tab-"+menuKey+"-content",
+		updateTab =  "tab-"+menuKey+"-update-content",
 		addTabId = menuKey+"-add",
 		updateTabId = menuKey+'-update',
 		viewTabId = menuKey+"-view";
@@ -161,7 +162,7 @@ define(function(require,exports){
 					   var touristGroupId = id,
 						   typeOut = "out";
 							//跳转游客小组新增页面
-						touristGroup.addTouristGroup(touristGroupId,typeOut);
+						touristGroup.addTouristGroup(touristGroupId,typeOut,status);
 
 				} else if(!!status && status==6){//已内转
 					var typeOut = 'inner',touristGroupId = id;
@@ -172,9 +173,6 @@ define(function(require,exports){
 					touristGroup.updateTouristGroup(id,"");
 					touristGroup.typeFlag = 2;
 				};
-
-			
-
 			};
 			if($that.hasClass('T-view')){
 				//查看小组
@@ -189,7 +187,7 @@ define(function(require,exports){
 		});
 	};
 	//添加游客小组
-	touristGroup.addTouristGroup = function(touristGroupId,typeOut){
+	touristGroup.addTouristGroup = function(touristGroupId,typeOut,status){
 		//声明一个全局的游客小组ID用于跳转到中转安排
 		touristGroup.touristGroupId=touristGroupId;
 		if ( !!touristGroupId && !!typeOut && typeOut!='out') { //内转
@@ -223,7 +221,14 @@ define(function(require,exports){
 						data.touristGroupDetail = touristGroupInfo;
 						var html = updateTransferTemplate(data);
 						if(Tools.addTab(updateTabId,"添加游客",html))
-						{
+						{   
+							//外转确认需清空线路产品
+							if (status=='' || status==undefined || status==null) {
+								var $updateTabId =$('#'+updateTab);
+								    $updateTabId.find('input[name=lineProductIdName]').val("");
+								    $updateTabId.find('input[name=lineProductId]').val("");
+
+							};
 							touristGroup.updateEvents(typeOut);
 						}
 					}
