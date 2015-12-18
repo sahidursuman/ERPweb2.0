@@ -1934,7 +1934,7 @@ define(function(require, exports) {
             }else{
                 for(var i = 0; i < arrangeTourist.transferId.length; i++) {
                     console.info(arrangeTourist.transferId[i].transferIds);
-                    if (arrangeTourist.transferId[i].transferIds == id) {
+                    if (arrangeTourist.transferId[i].id == id) {
                         arrangeTourist.transferId.splice(i, 1);
                         break;
                     }
@@ -2004,52 +2004,41 @@ define(function(require, exports) {
      * @return {[type]}              内外转标识
      */
     arrangeTourist.inOutTransferTourist = function($transferObj, type) {
-        var ids = [];
-        var $trList = $transferObj.find(".T-arrageTransfer-list").find('tr');
-        $trList.each(function(i) {
-            var $cheked = $trList.eq(i).find('.T-transferCheckBox');
-            if ($cheked.is(":checked")) {
-                var id = $cheked.closest('tr').data('value');
-                var transferIds = {
-                    id: id
-                };
-                console.info(transferIds);
-                ids.push(transferIds);
-            };
-        });
-        if (!!ids && ids.length > 0) {
-            var ids = JSON.stringify(ids);
-            $.ajax({
-                url: KingServices.build_url("touristGroup", "getTouristGroupByIdsForTransit"),
-                type: "POST",
-                data: "ids=" + encodeURIComponent(ids),
-                success: function(data) {
-                    var result = showDialog(data);
-                    if (result) {
-                        data.touristGroupJson = JSON.parse(data.touristGroupJson);
-                        if (type == 1) { //内转
-                            var html = inTransferTemplate(data);
-                            Tools.addTab(menuKey + "-innerTransfer", "内转操作", html);
-                            //初始化时内转页面事件
-                            arrangeTourist.init_innerTransfer_Event();
+       if (!!arrangeTourist.transferId && arrangeTourist.transferId.length > 0) {
+           var ids = JSON.stringify(arrangeTourist.transferId);
+           $.ajax({
+               url: KingServices.build_url("touristGroup", "getTouristGroupByIdsForTransit"),
+               type: "POST",
+               data: "ids=" + encodeURIComponent(ids),
+               success: function(data) {
+                   var result = showDialog(data);
+                   if (result) {
+                       data.touristGroupJson = JSON.parse(data.touristGroupJson);
+                       if (type == 1) { //内转
+                           var html = inTransferTemplate(data);
+                           Tools.addTab(menuKey + "-innerTransfer", "内转操作", html);
+                           //初始化时内转页面事件
+                           arrangeTourist.init_innerTransfer_Event();
 
-                        } else { //外转 
-                            var html = outTransferTemplate(data);
-                            Tools.addTab(menuKey + "-outTransfer", "外转操作", html);
-                            //初始化时内转页面事件
-                            arrangeTourist.init_outTransfer_Event();
+                       } else { //外转 
+                           var html = outTransferTemplate(data);
+                           Tools.addTab(menuKey + "-outTransfer", "外转操作", html);
+                           //初始化时内转页面事件
+                           arrangeTourist.init_outTransfer_Event();
 
-                        };
-                    }
-                }
-            })
+                       };
+                   }
+               }
+           })
 
-        } else {
-            showMessageDialog($("#confirm-dialog-message"), "请选择游客小组", function() {
+       } else {
+           showMessageDialog($("#confirm-dialog-message"), "请选择游客小组", function() {
 
-            });
-        };
-    };
+           });
+       };
+   };
+
+
 
 
 
@@ -2101,6 +2090,7 @@ define(function(require, exports) {
         });
 
     };
+
 
 
     /**
