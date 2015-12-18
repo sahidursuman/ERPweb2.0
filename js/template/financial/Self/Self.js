@@ -1,6 +1,5 @@
 define(function(require, exports) {
-    var rule = require("./rule"),
-        menuKey = "financial_self",
+    var menuKey = "financial_self",
         listTemplate = require("./view/list"),
         billImagesTemplate = require("./view/billImages"),
         SelfChecking = require("./view/SelfChecking"),
@@ -141,7 +140,7 @@ define(function(require, exports) {
                     // 初始化页面
                     if (Tools.addTab(checkTabId, "自费对账", html)) {
                         Self.initCheck(page,selfPayId,selfPayName); 
-                        validator = rule.check(Self.$checkTab.find(".T-checkList"));                     
+                        validator = new FinRule(0).check(Self.$checkTab.find(".T-checkList"));                     
                     }
                     //取消对账权限过滤
                     var checkTr = Self.$checkTab.find(".T-checkTr");
@@ -172,7 +171,7 @@ define(function(require, exports) {
 
         Self.init_event(page,id,name,Self.$checkTab,"check");
         Tools.setDatePicker(Self.$checkTab.find(".date-picker"),true);
-        FinancialService.updateUnpayMoney(Self.$checkTab,rule);
+        FinancialService.updateUnpayMoney(Self.$checkTab,new FinRule(0));
 
         //搜索按钮事件
         Self.$checkSearchArea.find('.T-search').on('click', function(event) {
@@ -245,7 +244,7 @@ define(function(require, exports) {
                     // 初始化页面
                     if (Tools.addTab(blanceTabId, "自费付款", html)) {
                         Self.initClear(page,selfPayId,selfPayName); 
-                        validator = rule.check(Self.$clearTab.find('.T-clearList'));                       
+                        validator = new FinRule(1).check(Self.$clearTab.find('.T-clearList'));                       
                     }
 
                     if(isAutoPay == 0){
@@ -268,7 +267,7 @@ define(function(require, exports) {
                         curr: (page + 1),
                         jump: function(obj, first) {
                             if (!first) { 
-                                var tempJson = FinancialService.clearSaveJson(Self.$clearTab,Self.clearTempData,rule);
+                                var tempJson = FinancialService.clearSaveJson(Self.$clearTab,Self.clearTempData,new FinRule(1));
                                 Self.clearTempData = tempJson;
                                 var sumPayMoney = parseFloat(Self.$clearTab.find('input[name=sumPayMoney]').val()),
                                     sumPayType = parseFloat(Self.$clearTab.find('select[name=sumPayType]').val()),
@@ -288,10 +287,11 @@ define(function(require, exports) {
     };
 
     Self.initClear = function(page,id,name){
+
         // 初始化jQuery 对象 
         Self.$clearTab = $("#tab-" + menuKey + "-clearing-content");
         Self.$clearSearchArea = Self.$clearTab.find('.T-search-area');
-
+        var autoValidator = new FinRule(2).check(Self.$clearTab.find('.T-count'));
         Self.init_event(page,id,name,Self.$clearTab,"clear");
         Tools.setDatePicker(Self.$clearTab.find(".date-picker"),true);
 
@@ -318,7 +318,7 @@ define(function(require, exports) {
 
         //自动下账
         Self.$clearTab.find(".T-clear-auto").off().on("click",function(){
-            var isAutoPay = FinancialService.autoPayJson(id,Self.$clearTab,rule);
+            var isAutoPay = FinancialService.autoPayJson(id,Self.$clearTab,new FinRule(2));
             if(!isAutoPay){return false;}
 
             var startDate = Self.$clearTab.find("input[name=startDate]").val(),
@@ -364,7 +364,7 @@ define(function(require, exports) {
             Self.GetClear(0,0,id,name);
         });
 
-        FinancialService.updateSumPayMoney(Self.$clearTab,rule);
+        FinancialService.updateSumPayMoney(Self.$clearTab,new FinRule(1));
     };
 
     //显示单据
@@ -472,7 +472,7 @@ define(function(require, exports) {
     //对账数据保存
     Self.saveChecking = function(selfId,selfName,page,tab_id, title, html){
         var argumentsLen = arguments.length,
-            checkSaveJson = FinancialService.checkSaveJson(Self.$checkTab,rule);
+            checkSaveJson = FinancialService.checkSaveJson(Self.$checkTab,new FinRule(0));
         if(!checkSaveJson){ return false; }
 
         $.ajax({
@@ -503,12 +503,12 @@ define(function(require, exports) {
     };
 
     Self.saveClear = function(id,name,page,tab_id, title, html){
-        if(!FinancialService.isClearSave(Self.$clearTab,rule)){
+        if(!FinancialService.isClearSave(Self.$clearTab,new FinRule(3))){
             return false;
         }
 
         var argumentsLen = arguments.length,
-            clearSaveJson = FinancialService.clearSaveJson(Self.$clearTab,Self.clearTempData,rule);
+            clearSaveJson = FinancialService.clearSaveJson(Self.$clearTab,Self.clearTempData,new FinRule(3));
 
         clearSaveJson = JSON.stringify(clearSaveJson);
         $.ajax({
@@ -546,7 +546,7 @@ define(function(require, exports) {
 
     Self.init_event = function(page,id,name,$tab,option) {
         if (!!$tab && $tab.length === 1) {
-            var validator = rule.check($tab);
+            var validator = new FinRule(3).check($tab);
 
             // 监听修改
             $tab.find(".T-" + option + "List").off('change').on('change',"input",function(event) {
