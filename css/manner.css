@@ -316,6 +316,11 @@ table tr td{
 .marginLeft-30{
     margin-left: 25px!important;
 }
+
+.mar-l-10 {
+    margin-left: 10px;
+}
+
 .widget-main{padding: 0!important;}
 .form-group{margin-bottom: 13px!important;}
 .color{
