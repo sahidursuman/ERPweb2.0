@@ -42,6 +42,7 @@ define(function(require,exports){
 			customerType: "",
 			sortType: 'auto'
 		},
+		touristGroupId : "",
 		$freshData:false
 	};
 	//游客管理页面初始化
@@ -189,7 +190,8 @@ define(function(require,exports){
 	};
 	//添加游客小组
 	touristGroup.addTouristGroup = function(touristGroupId,typeOut){
-
+		//声明一个全局的游客小组ID用于跳转到中转安排
+		touristGroup.touristGroupId=touristGroupId;
 		if ( !!touristGroupId && !!typeOut && typeOut!='out') { //内转
 			$.ajax({
 				url:touristGroup.url("viewTouristGroupDetails","view"),
@@ -1436,8 +1438,7 @@ define(function(require,exports){
 	 * @param  {int} id        游客小组id
 	 * @param  {int} typeFlag  1：新增游客小组；2：编辑游客小组
 	 * @param  {array} tabArgs   切换tab的参数
-	 * @param  {[type]} typeInner [description]
-	 * @return {[type]}           [description]
+	 * @param  {[type]} typeInner 内外转标识
 	 */
 	touristGroup.installData = function($obj,id,typeFlag,tabArgs,typeInner){
 		//判断购买保险状态
@@ -1580,6 +1581,7 @@ define(function(require,exports){
 		}
 		//接送事件点json
 		var outArrangeRemarkJson;
+		//若是内转确认后必然是要选中转安排信息
 		if ( !!typeInner && typeInner!='out' ) {
 			var $touristReChecked = $arrangeForm.find('.T-touristReception').is(':checked'),
 			    $smallCar = $arrangeForm.find('.T-smallCar').is(':checked'),
@@ -1621,6 +1623,7 @@ define(function(require,exports){
 	//提交数据
 	touristGroup.submitData = function($obj,url,data,innerStatus,tabId,tabArgs,typeFlag,typeInner){
 		console.info("submitData"+typeInner);
+		console.info('touristGroupId....' + data.form + "subMit");
 		$.ajax({
 			url:url,
 			type:"POST",
@@ -1645,7 +1648,8 @@ define(function(require,exports){
 								    $touristSend = $arrangeForm.find('.T-touristSend').is(':checked');
 								if (!!typeInner && $touristReChecked == true  || $smallCar == true || $touristSend==true) {
 									// 内外转确认之后，在游客小组选择了中转，需要调整到中转安排的列表界面。
-									KingServices.getMainList('arrange_transit');
+									//KingServices.getMainList('arrange_transit');
+									KingServices.updateTransit(touristGroup.touristGroupId);
 								} else{
 									touristGroup.freshHeader(touristGroup.$freshData);
 									//刷新列表数据
