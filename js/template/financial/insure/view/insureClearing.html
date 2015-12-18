@@ -26,7 +26,7 @@
                 <label class="marginLeft-30">未付金额合计：{{sumUnPayedMoney}}</label>
                 <label class="marginLeft-30">未付金额合计(已对账)：<span class="T-unpayMoney">{{checkedUnPayedMoney}}</span></label>
                 <label class="marginLeft-30">本次付款金额：</label>
-                <input name="sumPayMoney" type="text" value="{{sumPayMoney}}" maxlength="9" style="float:none;" />
+                <input name="sumPayMoney" type="text" value="{{sumPayMoney}}" maxlength="9" style="float:none;" {{if showBtnFlag == true}}readonly="true"{{/if}}/>
                 <label class="marginLeft-30">付款方式：</label>
                 <select style="text-align:center" name="sumPayType">
                     <option value="0" {{if sumPayType == 0}}selected="selected"{{/if}}>现金</option>
@@ -37,10 +37,11 @@
                 </select>
                 <label class="marginLeft-30">备注：</label>
                 <input name="sumPayRemark" type="text" value="{{sumPayRemark}}" style="float:none;" />
-
+                {{if !showBtnFlag}}
                 <button class="btn btn-xs btn-primary marginLeft-30 T-clear-auto">
                     <i class="ace-icon fa fa-check-circle"></i> 自动下账
                 </button>
+                {{/if}}
                 <button class="btn btn-xs btn-warning marginLeft-30 T-cancel-auto">
                     <i class="ace-icon fa fa-times-circle"></i> 取消下账
                 </button>
