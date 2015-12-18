@@ -56,6 +56,7 @@ define(function(require, exports) {
 			type:"POST",
 			data:{ searchParam : searchParam },
 	        success: function(data){
+                console.log(data,"3")
 	            var result = showDialog(data);
 	            if (result) {
 	            	Insure.insureList = data.insuranceNameList;
@@ -263,14 +264,12 @@ define(function(require, exports) {
                     }
                     var resultList = data.financialInsuranceList;
                     data.financialInsuranceList = FinancialService.getTempDate(resultList,Insure.clearTempData);
+                    // 财务付款入口调用
                     data.showBtnFlag = Insure.showBtnFlag
-
 					var html = insureClearing(data);
-	  				
 	  				var validator;
                     // 初始化页面
                     if (Tools.addTab(menuKey + "-clearing", "保险付款", html)) {
-
                         Insure.initClear(page,insuranceId,insuranceName); 
                         validator = new FinRule(1).check(Insure.$clearTab.find('.T-clearList'));                       
                     }
@@ -641,7 +640,7 @@ define(function(require, exports) {
 
     Insure.initPay = function(options){
          Insure.showBtnFlag = true;
-        Insure.getClearing(0,options.id,options.name,"",options.startDate,options.endDate, 2); 
+        Insure.getClearing(2,0,options.id,options.name,"",options.startDate,options.endDate); 
     };
 
     exports.init = Insure.initModule;
