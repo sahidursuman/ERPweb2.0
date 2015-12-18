@@ -203,7 +203,8 @@ define(function(require,exports) {
 					};
 					if(typeFlag == 2){
 						data.list.innerTransferFeeList = FinancialService.getTempDate(data.list,InnerTransferOut.saveJson.autoPayList);
-						console.log(data);
+						console.log($data);
+						//data.showBtnFlag = 
 						html = clearTableTemplate(data);
 					}else{
 						html = checkTableTemplate(data);
@@ -224,7 +225,7 @@ define(function(require,exports) {
                 		checkDisabled(fiList,checkTr,rightCode);
 					}else{
 					    var autoValidator = new FinRule(2),
-					    	settlermentValidator = data.showBtnFlag == true ? new FinRule(3):new FinRule(1);
+					    	settlermentValidator = $data.showBtnFlag == true ? new FinRule(3):new FinRule(1);
 					    InnerTransferOut.$settlermentValidator = settlermentValidator.check($obj);
         				InnerTransferOut.autoValidatorCheck = autoValidator.check($obj.find('.T-count'));
 					}
@@ -545,7 +546,7 @@ define(function(require,exports) {
 					var html = checkDetailTemplate(data);
 					layer.open({
 						type : 1,
-						title :"对账明细",
+						title :"应付金额明细",
 						skin : 'layui-layer-rim',
 						area : "60%", 
 						zIndex : 1028,

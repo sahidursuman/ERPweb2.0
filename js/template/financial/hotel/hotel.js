@@ -213,15 +213,18 @@ define(function(require, exports) {
         //报表内的操作
         hotel.listOption(hotel.$checkTab);
 
+        var trList = hotel.$checkTab.find(".T-checkTr");
         //关闭页面事件
         hotel.$checkTab.find(".T-close-check").click(function(){
-            Tools.closeTab(menuKey + "-checking");
+            FinancialService.changeUncheck(trList,function(){
+                Tools.closeTab(menuKey + "-checking");
+            });
         });
         //确认对账按钮事件
         hotel.$checkTab.find(".T-saveCheck").click(function(){ 
-            validator = rule.check(hotel.$checkTab.find(".T-checkList"));
-            if (!validator.form()) { return; }
-            hotel.saveChecking(id,name,page);
+            FinancialService.changeUncheck(trList,function(){
+                hotel.saveChecking(id,name,page);
+            });
         });
     };
 

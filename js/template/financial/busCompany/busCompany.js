@@ -213,15 +213,18 @@ define(function(require, exports) {
             $checkAll = busCompany.$checkTab.find(".T-checkAll");
         FinancialService.initCheckBoxs($checkAll,checkboxList);
 
+        var trList = busCompany.$checkTab.find(".T-checkTr");
         //关闭页面事件
         busCompany.$checkTab.find(".T-close-check").click(function(){
-            Tools.closeTab(menuKey + "-checking");
+            FinancialService.changeUncheck(trList,function(){
+                Tools.closeTab(menuKey + "-checking");
+            });
         });
         //确认对账按钮事件
         busCompany.$checkTab.find(".T-saveCheck").click(function(){ 
-            validator = rule.check(busCompany.$checkTab.find(".T-checkList"));
-            if (!validator.form()) { return; }
-            busCompany.saveChecking(id,name,page);
+            FinancialService.changeUncheck(trList,function(){
+                busCompany.saveChecking(id,name,page);
+            });
         });
     };
 
