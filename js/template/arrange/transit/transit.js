@@ -18,7 +18,8 @@ define(function(require, exports) {
 	 */
 	var transit = {
 		$tab: false,
-		$searchArea: false
+		$searchArea: false,
+		pageNo: ""
 	}
 	//搜索数据
 	var autocompleteData = {}
@@ -136,6 +137,7 @@ define(function(require, exports) {
 							transit.sendTransit(id);
 						}else if ($this.hasClass('T-edit')) {
 							//编辑
+							transit.pageNo=transit.$tab.find('.laypage_curr').html();
 							transit.updateTransit(id);
 						}else if ($this.hasClass('T-view')) {
 							//查看
@@ -1303,7 +1305,7 @@ define(function(require, exports) {
 							console.log(argumentsLen);
 							if (argumentsLen == 3) {
 								Tools.closeTab(menuKey+"-update");
-								transit.listTransit(0);
+								transit.listTransit(transit.pageNo-1);
 							}else{
 								$tab.data('isEdited',false);
 								Tools.addTab(tab_id, title, html)

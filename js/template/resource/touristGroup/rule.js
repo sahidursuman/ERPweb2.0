@@ -102,15 +102,15 @@ var rule = {
 				  			errMsg: '小孩单价不合法'
 							}
 						]
-			        },{//小孩
+			        },{//其它
 						$ele: $obj.find('input[name="count"]'),   
 						rules: [
 							{
-				  				type:'int',
+				  				type:'float',
 			  					errMsg: '其他费用的数量的格式不正确'
 							}
 						]
-			         },{//小孩
+			         },{//其它
 							$ele: $obj.find('input[name="price"]'),   
 							rules: [
 								{

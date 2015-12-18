@@ -276,12 +276,9 @@ define(function(require, exports){
 		}
 
 		$tab.off('change').off(SWITCH_TAB_SAVE).off(CLOSE_TAB_SAVE)
-		.on('change', '.T-checkList, .T-checkAll', function(event) {
+		.on('change', '.T-checkList', function(event) {
 			event.preventDefault();
 			$tab.data('isEdited', true);
-			if($(this).hasClass('T-checkAll')){
-				$tab.find('.T-checkTr').data('change', 'true');
-			}
 		})
 		.on(SWITCH_TAB_SAVE, function(event, tab_id, title, html){
 			event.preventDefault();

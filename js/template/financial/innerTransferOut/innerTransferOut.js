@@ -655,7 +655,7 @@ define(function(require,exports) {
                 	tab_id.data('isEdited', false);
                 	showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
                 		
-                		if(argumentsLen == 2){
+                		if(argumentsLen == 4){
                             Tools.closeTab(settleId);
                             InnerTransferOut.listInnerTransfer(0);
                     	} else if(argumentsLen == 3){
@@ -681,14 +681,7 @@ define(function(require,exports) {
 	InnerTransferOut.init_CRU_event = function($tab,$data,id,name,typeFlag){
 		if(!!$tab && $tab.length === 1){
 			// 监听修改
-			var $tbody,
-				saveBtn;
-			if(typeFlag == 2){
-				$tbody = $tab.find(".T-clearList");
-			}else{
-				$tbody = $tab.find('.T-checkList')
-			};
-			$tbody.on('change', function(event) {
+			$tab.on('change', function(event) {
 				event.preventDefault();
 				$tab.data('isEdited', true);
 			});
@@ -725,7 +718,7 @@ define(function(require,exports) {
 			.on(CLOSE_TAB_SAVE, function(event) {
 				event.preventDefault();
 				if(typeFlag == 2){//pageNo,$data,tab_id, title, html
-					InnerTransferOut.saveBlanceData(0,data,$tab);
+					InnerTransferOut.saveBlanceData(0,$data,$tab,"");
 				}else{
 					InnerTransferOut.saveCheckingData(0,$tab);
 				}
