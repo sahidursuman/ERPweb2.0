@@ -274,10 +274,14 @@ define(function(require, exports) {
 		//表单代订信息验证
 		var validator = rule.checkAddBooking($tab);
 
-		$tab.off('change').off(SWITCH_TAB_SAVE).off(CLOSE_TAB_SAVE)
+		$tab.off('change').off(SWITCH_TAB_SAVE).off(CLOSE_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT)
 		.on('change', function(event){
 			event.preventDefault();
 			$tab.data('isEdited', true);
+		})
+		.on(SWITCH_TAB_BIND_EVENT, function(event) {
+			event.preventDefault();
+			BookingArrange.CU_event($tab);
 		})
 		.on(SWITCH_TAB_SAVE, function(event, tab_id, title, html){
 			event.preventDefault();
