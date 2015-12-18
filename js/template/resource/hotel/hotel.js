@@ -407,6 +407,7 @@ define(function(require, exports) {
 					areaSize : hotel.getValue($this ,"areaSize"),
 					guestNumber : hotel.getValue($this ,"guestNumber"),
 					remark : hotel.getValue($this ,"remark"),
+					lowestPrice : hotel.getValue($this ,"lowestPrice"),
 					priceJsonAddList : [],//时间区间新增和删除的数组
 					priceJsonDelList : []
 				};
