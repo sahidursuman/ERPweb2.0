@@ -1075,6 +1075,9 @@ define(function(require, exports) {
 										       typeOut = "out";
 										   //跳转游客小组新增页面
 										   KingServices.addTouristGroup(touristGroupId,typeOut);
+										   //外转确认后数据刷新--模拟Click
+										   transfer.$divIdInObj.find(".T-transferIn-search").off("click").on("click",{divId:"Transfer-In",type:"2"},transfer.getListPage);
+	    	                               transfer.$divIdInObj.find(".T-transferIn-search").trigger("click");
 								
 										}
 									}

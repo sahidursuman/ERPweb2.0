@@ -625,6 +625,11 @@ define(function(require, exports) {
 
 									//是否中转安排提信息
 									KingServices.addTouristGroup(touristGroupId,typeOut);
+
+									//内转确认后数据刷新
+									$innerTrsfInObj=$('#inner-TransferIn');
+									$innerTrsfInObj.find(".T-transferIn-search").off("click").on("click",{divId:"inner-TransferIn",btn:"btn-transferIn-search",type:"2"},innerTransfer.getListPage);
+									$innerTrsfInObj.find(".T-transferIn-search").trigger('click');
 								}
 
 							 }
