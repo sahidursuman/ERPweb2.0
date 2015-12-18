@@ -212,14 +212,19 @@ define(function(require, exports) {
             $checkAll = restaurant.$checkTab.find(".T-checkAll");
         FinancialService.initCheckBoxs($checkAll,checkboxList);
 
+        var trList = restaurant.$checkTab.find(".T-checkTr");
         //关闭页面事件
         restaurant.$checkTab.find(".T-close-check").click(function(){
-            Tools.closeTab(menuKey + "-checking");
+            FinancialService.changeUncheck(trList,function(){
+                Tools.closeTab(menuKey + "-checking");
+            });
         });
         //确认对账按钮事件
         restaurant.$checkTab.find(".T-saveCheck").click(function(){
-            restaurant.saveChecking(id,name,page);
-         });
+            FinancialService.changeUncheck(trList,function(){
+                restaurant.saveChecking(id,name,page);
+            });
+        });
     };
 
     //付款

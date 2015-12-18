@@ -514,6 +514,9 @@ define(function(require, exports) {
 		    	if (!!customerVal || !!contractVal || !!guideVal ||  !!travelVal ) {
 		    		if ( customerVal > marketVal || contractVal > marketVal ||  guideVal > 100 || travelVal > 100 ) {
 		    			isTrue = true;
+		    			if (guideVal>100) {showMessageDialog($("#confirm-dialog-message"),"导游返佣不能大于100")};
+						if (travelVal>100) {showMessageDialog($("#confirm-dialog-message"),"旅行社返佣不能大于100")};
+
 		    		};
 		    	};
 		    });
