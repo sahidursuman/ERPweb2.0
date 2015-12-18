@@ -10,7 +10,7 @@
                     <input class="date-picker" name="endDate" placeholder="结束日期" type="text" value="{{searchParam.endDate}}" style="width:100px;" />   
 
                     <label class="marginLeft-30">线路名称：</label>
-                    <input name="lineProductName" placeholder="线路名称" type="text" value="{{searchParam.lineProductName}}" style="width:200px;" />
+                    <input name="lineProductName" placeholder="线路名称" type="text" value="{{if searchParam.lineProductName == ""}}全部{{else}}{{searchParam.lineProductName}}{{/if}}" style="width:200px;" />
 
                     <label class="marginLeft-30">操作人：</label>
                     <input name="operateName" type="text" value="{{if searchParam.operateName == ""}}全部{{else}}{{searchParam.operateName}}{{/if}}" style="width:100px;" />
@@ -43,7 +43,7 @@
                 </select>
                 <label style="margin-left: 10px">备注：</label>
                 <input name="sumPayRemark" type="text" value="{{sumPayRemark}}" style="float:none;" />
-
+                <input name="isAutoPay" type="hidden" value="{{isAutoPay}}" />
                 <button class="btn btn-xs btn-primary marginLeft-30 T-clear-auto">
                     <i class="ace-icon fa fa-check-circle"></i> 自动下账
                 </button>

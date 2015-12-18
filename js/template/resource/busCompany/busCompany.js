@@ -196,6 +196,7 @@ define(function(require,exports){
 							seatCount : busJsonAddTr.eq(i).find("input[name=seatCount]").val(),
 							buyTime : (buyTime == "") ? "" : buyTime,
 							remark : busJsonAddTr.eq(i).find("input[name=remark]").val(),
+							lowestPrice : busJsonAddTr.eq(i).find("input[name=lowestPrice]").val(),
 							isChartered : busJsonAddTr.eq(i).find("select[name=isChartered]").val(),
 							priceJsonAddList : []
 						};
@@ -420,7 +421,8 @@ define(function(require,exports){
 											isChartered : busListTr.eq(i).find("select[name=isChartered]").val(),
 											priceJsonAdd : [],
 											priceJsonDel : [],
-											remark : busListTr.eq(i).find("input[name=remark]").val()
+											remark : busListTr.eq(i).find("input[name=remark]").val(),
+											lowestPrice : busListTr.eq(i).find("input[name=lowestPrice]").val(),
 										}
 										if(busJson.isChartered==1){
 											var priceUpdate = busListTr.eq(i).find("td.time div:not(.deleted)");
