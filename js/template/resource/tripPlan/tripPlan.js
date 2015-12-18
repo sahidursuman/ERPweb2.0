@@ -994,6 +994,7 @@ define(function(require, exports) {
 							var hotel = JSON.parse(data.hotel);
 							$parents.find("input[name=mobileNumber]").val(hotel.mobileNumber);
 							$parents.find("input[name=managerName]").val(hotel.managerName);
+							$parents.find(".T-tripPlanHotelStar").val(hotel.level);
 							$parents.find("input[name=hotelRoom]").val("");
 							$parents.find("input[name=hotelRoomId]").val("");
 	                    	$parents.find("input[name=fee]").val("");
