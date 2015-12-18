@@ -437,8 +437,6 @@ define(function(require, exports) {
                     // 设置记录条数及页面
                     $tab.find('.T-sumItem').text('共计' + data.recordSize + '条记录');
                     $tab.find('.T-btn-save').data('pageNo', args.pageNo);
-                    //给全选按钮绑定事件: 未去重
-                    FinancialService.initCheckBoxs($tab.find(".T-checkAll"), $tab.find(".T-clearList").find('.T-checkbox'));
 
 					// 绑定翻页组件
 					laypage({
