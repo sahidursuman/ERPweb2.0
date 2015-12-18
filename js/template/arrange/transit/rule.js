@@ -300,7 +300,7 @@ define(function(require, exports) {
 						$ele: $that.find('input[name="price"]'),
 						rules: [
 							{
-								type: 'int',
+								type: 'float',
 								errMsg: '数字格式不正确'
 							}	
 						]

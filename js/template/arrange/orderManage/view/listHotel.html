@@ -6,13 +6,14 @@
 					<th class="col-sm-2">订单号</th>
 					<th class="col-sm-1">类型</th>
 					<th class="col-sm-2">类型编号</th>
+					<th class="col-sm-1">酒店</th>
 					<th class="col-sm-1">星级</th>
 					<th class="col-sm-1">房型</th>
 					<th class="col-sm-1">数量</th>
 					<th class="col-sm-1">单价</th>
 					<th class="col-sm-1">金额</th>
 					<th class="col-sm-1">操作人</th>
-					<th class="col-sm-1">酒店</th>
+					<th class="col-sm-1">操作时间</th>
 					<th class="col-sm-1">备注</th>
 					<th class="col-sm-1">状态</th>
 
@@ -24,6 +25,7 @@
 				    <td rowspan="{{hotOrderList.hotelOrderNeedRoomList.length}}" style="vertical-align:middle">{{hotOrderList.orderNumber}}</td>
 				    <td rowspan="{{hotOrderList.hotelOrderNeedRoomList.length}}" style="vertical-align:middle">发团</td>
 				    <td rowspan="{{hotOrderList.hotelOrderNeedRoomList.length}}" style="vertical-align:middle">{{if hotOrderList.tripPlan!=null}}{{hotOrderList.tripPlan.tripNumber}}{{/if}}</td>
+				    <td rowspan="{{hotOrderList.hotelOrderNeedRoomList.length}}" style="vertical-align:middle">{{if hotOrderList.hotel!=null}}{{hotOrderList.hotel.name}}{{/if}}</td>
 					<td rowspan="{{hotOrderList.hotelOrderNeedRoomList.length}}" style="vertical-align:middle">{{if hotOrderList.hotel!=null}}
 							{{if hotOrderList.hotel.level==1}}三星以下
 								{{else if hotOrderList.hotel.level==2}}三星
@@ -39,9 +41,9 @@
 					{{each hotOrderList.hotelOrderNeedRoomList as htOrderNList index}}
 					{{if index == 0}}
 					<td>{{htOrderNList.type}}</td>
-					<td>{{htOrderNList.needRoomCount}}</td>
-					<td>{{htOrderNList.price}}</td>
-					<td>{{htOrderNList.price}}</td>
+					<td class="count">{{htOrderNList.needRoomCount}}</td>
+					<td class="price">{{htOrderNList.price}}</td>
+					<td class="totalMoney">{{htOrderNList.price}}</td>
 					{{/if}}
 					{{/each}}
 					{{else}}
@@ -50,21 +52,22 @@
 					<td>-</td>
 					<td>-</td>
 					{{/if}}
-					<td rowspan="{{hotOrderList.hotelOrderNeedRoomList.length}}" style="vertical-align:middle">{{if hotOrderList.user!=null}}{{hotOrderList.user.realName}}{{/if}}</td>					    				    	    
+					<td rowspan="{{hotOrderList.hotelOrderNeedRoomList.length}}" style="vertical-align:middle">{{if hotOrderList.user!=null}}{{hotOrderList.user.realName}}{{/if}}</td>
+					<td>{{if hotOrderList.createTime!=null}}{{hotOrderList.createTime}}{{/if}}</td>			    				    	    
 
-					<td rowspan="{{hotOrderList.hotelOrderNeedRoomList.length}}" style="vertical-align:middle">{{if hotOrderList.hotel!=null}}{{hotOrderList.hotel.name}}{{/if}}</td>
+					
 					<td rowspan="{{hotOrderList.hotelOrderNeedRoomList.length}}" style="vertical-align:middle" class="T-ctrl-tip">{{if hotOrderList.hotel!=null}}{{hotOrderList.hotel.remark}}{{/if}}</td>
 
-					<td>
-						{{if hotOrderList.statusStr==-1}}
+					<td rowspan="{{hotOrderList.hotelOrderNeedRoomList.length}}">
+						{{if hotOrderList.status==-1}}
 						  已撤单
-						  {{else if hotOrderList.statusStr==0}}
+						  {{else if hotOrderList.status==0}}
 						  已下单
-						  {{else if hotOrderList.statusStr==1}}
+						  {{else if hotOrderList.status==1}}
 						  已确认
-						  {{else if hotOrderList.statusStr==2}}
+						  {{else if hotOrderList.status==2}}
 						  已完成
-						  {{else if hotOrderList.statusStr==3}}
+						  {{else if hotOrderList.status==3}}
 						  进行中
 						{{/if}}
 					</td>
@@ -73,10 +76,10 @@
 				{{each hotOrderList.hotelOrderNeedRoomList as htOrderNList index}}
 				{{if index > 0}}
 				<tr>
-				<td>{{htOrderNList.type}}</td>
-				<td>{{htOrderNList.needRoomCount}}</td>
-				<td>{{htOrderNList.price}}</td>
-				<td>{{htOrderNList.price}}</td>
+					<td>{{htOrderNList.type}}</td>
+					<td class="count">{{htOrderNList.needRoomCount}}</td>
+					<td class="price">{{htOrderNList.price}}</td>
+					<td class="totalMoney">{{htOrderNList.price}}</td>
 				</tr>
 				{{/if}}
 				{{/each}}

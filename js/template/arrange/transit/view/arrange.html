@@ -72,7 +72,7 @@
 													<th class="th-border">车座数</th>
 													<th class="th-border">车辆品牌</th>
 													<th class="th-border">车牌</th>
-													<th class="th-border">车队</th>              
+													<th class="th-border"><span class="necessary">*</span>车队</th>              
 													<th class="th-border">司机</th>
 													<th class="th-border">司机电话</th>
 													<th class="th-border"><span class="necessary">*</span>用车时间</th>
@@ -87,7 +87,7 @@
 												</tr>
 											</thead>
 											<tbody>{{each receiveGroup.outBusList as outBus}}
-												{{if outBus.id != null && outBus.busCompany != null && outBus.bus != null && outBus.driver != null}}
+												{{if outBus.id != null && outBus.busCompany != null}}
 												<tr data-entity-id="{{outBus.id}}">
 													<td><input type="text" class="col-sm-12 T-chooseSeatCount" name="seatCount" value="{{if outBus.bus != null}}{{outBus.bus.seatCount}}{{/if}}" /></td>
 													<td><input class="col-sm-12 T-chooseBusBrand" name="busbrand" type="text" value="{{if outBus.bus != null}}{{outBus.bus.brand}}{{/if}}" /></td>
@@ -191,7 +191,7 @@
 													<td>
 														<!-- <input class="col-sm-12 tripPlanHotelStar" name="hotelLevel" value="{{outHotel.hotel.level}}" type="text" /> -->
 														<select class="tripPlanHotelStar" name="hotelLevel">
-														<option value="" {{if outHotel.hotel.level == 0}}selected="selected"{{/if}}>--全部--</option>
+														<option value="" {{if outHotel.hotel.level == 0}}selected="selected"{{/if}}>全部</option>
 															<option value="1" {{if outHotel.hotel.level == 1}}selected="selected"{{/if}}>三星以下</option>
 															<option value="2" {{if outHotel.hotel.level == 2}}selected="selected"{{/if}}>三星</option>
 															<option value="3" {{if outHotel.hotel.level == 3}}selected="selected"{{/if}}>准四星</option>
@@ -520,7 +520,7 @@
 													<th class="th-border">车座数</th> 
 													<th class="th-border">车辆品牌</th>
 													<th class="th-border">车牌</th>
-													<th class="th-border">车队</th>              
+													<th class="th-border"><span class="necessary">*</span>车队</th>              
 													<th class="th-border">司机</th>
 													<th class="th-border">司机电话</th>
 													<th class="th-border"><span class="necessary">*</span>用车时间</th>
@@ -535,7 +535,7 @@
 												</tr>
 											</thead>
 											<tbody>{{each bus as outBus}}
-												{{if outBus.id != null && outBus.busCompany != null && outBus.bus != null && outBus.driver != null}}
+												{{if outBus.id != null && outBus.busCompany != null}}
 												<tr data-entity-id="{{outBus.id}}">
 													<td><input type="text" class="col-sm-12 T-chooseSeatCount" name="seatCount" value="{{if outBus.bus != null}}{{outBus.bus.seatCount}}{{/if}}" /></td>
 													<td><input class="col-sm-12 T-chooseBusBrand" name="busbrand" type="text" value="{{if outBus.bus != null}}{{outBus.bus.brand}}{{/if}}" /></td>
@@ -623,7 +623,7 @@
 													<th class="th-border">车座数</th>
 													<th class="th-border">车辆品牌</th>
 													<th class="th-border">车牌</th>
-													<th class="th-border">车队</th>              
+													<th class="th-border"><span class="necessary">*</span>车队</th>              
 													<th class="th-border">司机</th>
 													<th class="th-border">司机电话</th>
 													<th class="th-border"><span class="necessary">*</span>用车时间</th>
@@ -638,7 +638,7 @@
 												</tr>
 											</thead>
 											<tbody>{{each sendGroup.outBusList as outBus}}
-												{{if outBus.id != null && outBus.busCompany != null && outBus.bus != null && outBus.driver != null}}
+												{{if outBus.id != null && outBus.busCompany != null}}
 												<tr data-entity-id="{{outBus.id}}">
 													<td><input type="text" class="col-sm-12 T-chooseSeatCount" name="seatCount" value="{{if outBus.bus != null}}{{outBus.bus.seatCount}}{{/if}}" /></td>
 													<td><input class="col-sm-12 T-chooseBusBrand" name="busbrand" type="text" value="{{if outBus.bus != null}}{{outBus.bus.brand}}{{/if}}" /></td>

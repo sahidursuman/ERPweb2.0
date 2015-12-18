@@ -39,7 +39,7 @@
                             <td>{{quoteDetailJson.childCount}}</td>
                         </tr>
                     </table>
-                    <p><span style="color: #ff6511">*</span>备注：&nbsp;&nbsp;&nbsp;单房差报价：{{quoteDetailJson.singleRoomQuotePrice}}，单方差数量：{{quoteDetailJson.singleRoomCount}}。</p>
+                    <p><span style="color: #ff6511">*</span>备注：&nbsp;&nbsp;&nbsp;单房差报价：{{quoteDetailJson.singleRoomQuotePrice}}，单房差数量：{{quoteDetailJson.singleRoomCount}}。</p>
                     {{if !!busCompanyArrange}}
                     <p style="margin-left: 55px;">交通：
                         <span>{{if !!busCompanyArrange.bus}}{{busCompanyArrange.bus.brand}}{{/if}}</span>
@@ -93,21 +93,64 @@
                     {{if viewQuoteDaysList.hotelArrange != null}} {{each viewQuoteDaysList.hotelArrange as hotelList index}} {{if index == 0}}
                     <tr>
                         <td rowspan="{{viewQuoteDaysList.hotelArrange.length}}">住宿</td>
-                        <td><span>三星</span><span>{{hotelList.hotel.name}}</span> <span style="margin-left: 15px;">{{hotelList.hotelRoom.type}}</span><span style="margin-left: 15px;display: inline-block;width: 400px;">
-                        含午</span> <span style="margin-left: 15px;">价格很低价格后见到过个电饭锅的加空格年的几个客户把你们国考订房后面句年的几个</span></td>
-                        <td>￥{{hotelList.price}}</td>
-                    </tr>
-                    {{/if}} {{/each}} {{each viewQuoteDaysList.hotelArrange as hotelList index}} {{if index > 0}}
-                    <tr>
-                        <td>{{hotelList.hotel.name}} <span style="margin-left: 15px;">{{hotelList.hotelRoom.type}}</span></td>
-                        <td>￥{{hotelList.price}}</td>
-                    </tr>
-                    {{/if}} {{/each}} {{/if}}
+                        <td><span>
+                        {{if hotelList.hotel.level == 0}}   
+                                            未选择
+                                        {{else if hotelList.hotel.level == 1}}
+                                            三星以下
+                                        {{else if hotelList.hotel.level == 2}}
+                                            三星
+                                        {{else if hotelList.hotel.level == 3}}
+                                            准四星
+                                        {{else if hotelList.hotel.level == 4}}
+                                            四星
+                                        {{else if hotelList.hotel.level == 5}}
+                                            准五星
+                                        {{else if hotelList.hotel.level == 6}}
+                                            五星
+                                        {{else if hotelList.hotel.level == 7}}
+                                            五星以上
+                                        {{/if}}</span><span style="margin-left: 15px;">{{hotelList.hotel.name}}</span> <span style="margin-left: 15px;">{{hotelList.hotelRoom.type}}</span>
+                                        <span>{{if hotelList.hotelRoom.containBreakfast == 0}}含早{{else}}{{/if}}</span>
+                                        <span>{{if hotelList.hotelRoom.containLunch == 0}}含午{{else}}{{/if}}</span>
+                                        <span>{{if hotelList.hotelRoom.containDinner == 0}}含晚{{else}}{{/if}}</span>
+                                        <span style="margin-left: 15px;">{{hotelList.hotel.remark}}</span>
+                                        </td>
+                                        <td>￥{{hotelList.price}}</td>
+                         </tr>
+                            {{/if}} {{/each}} {{each viewQuoteDaysList.hotelArrange as hotelList index}} {{if index > 0}}
+                            <tr>
+                                <td> <span>
+                                {{if hotelList.hotel.level == 0}}   
+                                未选择
+                                {{else if hotelList.hotel.level == 1}}
+                                三星以下
+                                {{else if hotelList.hotel.level == 2}}
+                                三星
+                                {{else if hotelList.hotel.level == 3}}
+                                准四星
+                                {{else if hotelList.hotel.level == 4}}
+                                四星
+                                {{else if hotelList.hotel.level == 5}}
+                                准五星
+                                {{else if hotelList.hotel.level == 6}}
+                                五星
+                                {{else if hotelList.hotel.level == 7}}
+                                五星以上
+                                {{/if}}</span> <span style="margin-left: 15px;"> {{hotelList.hotel.name}}</span> <span style="margin-left: 15px;">{{hotelList.hotelRoom.type}}</span>
+                                 <span>{{if hotelList.hotelRoom.containBreakfast == 0}}含早{{else}}{{/if}}</span>
+                                        <span>{{if hotelList.hotelRoom.containLunch == 0}}含午{{else}}{{/if}}</span>
+                                        <span>{{if hotelList.hotelRoom.containDinner == 0}}含晚{{else}}{{/if}}</span>
+                                        <span style="margin-left: 15px;">{{hotelList.hotel.remark}}</span>
+                                        </td>
+                            <td>￥{{hotelList.price}}</td>
+                        </tr>
+                        {{/if}} {{/each}} {{/if}}
                     <!-- 景点 -->
                     {{if viewQuoteDaysList.scenicArrange != null}} {{each viewQuoteDaysList.scenicArrange as scenicList index}} {{if index == 0}}
                     <tr>
                         <td rowspan="{{viewQuoteDaysList.scenicArrange.length}}">景点</td>
-                        <td>{{scenicList.scenic.name}} <span style="margin-left: 15px;">6小时</span> <span style="margin-left: 15px;">{{scenicList.remark}}</span></td>
+                        <td>{{scenicList.scenic.name}} <span style="margin-left: 15px;">{{scenicList.tourDuration}}</span> <span style="margin-left: 15px;">{{scenicList.remark}}</span></td>
                         <td>￥{{scenicList.price}}</td>
                     </tr>
                     {{/if}} {{/each}} {{each viewQuoteDaysList.scenicArrange as scenicList index}} {{if index > 0}}

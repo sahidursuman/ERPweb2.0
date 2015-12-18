@@ -218,6 +218,7 @@ define(function(require, exports) {
 							// window.open(url);
 							// showConfirmDialogOfShare($( "#confirm-dialog-message" ),"复制此分享链接:"+"  "+ url);
 							$btn.data('clipboard-text', url);
+							console.log()
 							bindCopy();
 						}
 					}
