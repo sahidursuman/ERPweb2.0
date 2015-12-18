@@ -421,7 +421,7 @@ define(function(require, exports) {
 	transit.addOutHotel = function(id,type,validator){
 		var html ='<tr>'+
 			'<td><input type="hidden" name="serviceType" value="'+type+'" />'+
-			'<input class="col-sm-12 T-datePicker" name="hotelCheckInTime" value="" type="text" /></td>'+
+			'<input class="col-sm-12 T-datePicker datepicker" name="hotelCheckInTime" value="" type="text" /></td>'+
 			'<td><select class="tripPlanHotelStar" name="hotelLevel">'+
 			'<option  selected="selected" value="" {{if outHotel.hotel.level == 0}}selected="selected"{{/if}}>--全部--</option><option value="1">三星以下</option>'+
 			'<option value="2">三星</option><option value="3">准四星</option>'+
@@ -499,7 +499,7 @@ define(function(require, exports) {
 	//新增餐厅安排
 	transit.addRestaurantList = function(id,type,validator){
 		var html = '<tr data-entity-id="">'+
-			'<td><input class="col-sm-12 T-datePicker" name="startTime" type="text" value="" /></td>'+
+			'<td><input class="col-sm-12 T-datePicker datepicker" name="startTime" type="text" value="" /></td>'+
 			'<td><div class="col-sm-12"><input type="hidden" name="serviceType" value="'+type+'" /><input class="col-sm-12 bind-change T-chooseRestaurant" name="restaurant" type="text" value="" />'+
 			'<input type="hidden" name="restaurantId" value="" />'+
 			'<span class="addResourceBtn T-addRestaurantResource R-right" data-right="1030002" title="添加餐厅"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
@@ -534,7 +534,7 @@ define(function(require, exports) {
 	//新增其他安排
 	transit.addOtherList = function(id,type,validator){
 		var html = '<tr data-entity-id="">'+
-			'<td><input class="col-sm-12 T-datePicker" name="startTime" type="text" value="" /></td>'+
+			'<td><input class="col-sm-12 T-datePicker datepicker" name="startTime" type="text" value="" /></td>'+
 			'<td><input class="col-sm-12" name="name" type="text" value="" maxlength="30" /><input type="hidden" name="serviceType" value="'+type+'" /></td>'+
 			'<td><input class="col-sm-12" name="managerName" type="text" value="" maxlength="20" /></td>'+
 			'<td><input class="col-sm-12" name="mobileNumber" type="text" maxlength="11" value="" /></td>'+
@@ -972,6 +972,7 @@ define(function(require, exports) {
 							var hotel = JSON.parse(data.hotel);
 							parents.find("input[name=hotelMobileNumber]").val(hotel.mobileNumber);
 							parents.find("input[name=hotelManagerName]").val(hotel.managerName);
+							parents.find("select[name=hotelLevel]").val(hotel.level);
 						}
 					}
 				});
@@ -1024,7 +1025,7 @@ define(function(require, exports) {
 					success: function(data) {
 						if(showDialog(data)){
 							var hotelRoom = JSON.parse(data.hotelRoom);
-							$thisRoom.find("input[name=hotelPrice]").val(hotelRoom.contractPrice);
+							$thisRoom.find("input[name=hotelPrice]").val(hotelRoom.contractPrice).trigger('change');
 						}
 					}
 				})

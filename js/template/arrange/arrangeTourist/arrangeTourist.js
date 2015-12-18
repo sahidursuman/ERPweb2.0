@@ -1091,7 +1091,7 @@ define(function(require, exports) {
                 // 表单校验
                 //if (!validator.form()) {return; } 
                 var saveTripP = {
-                    tripPlanId: getValue("tripPlanId"),
+                    tripPlanId : getValue("tripPlanId"),
                     "tripPlan": {
                         "tripPlanId": getValue("tripPlanId"),
                         "startTime": getValue("startTime"),
@@ -1121,10 +1121,10 @@ define(function(require, exports) {
 
                 var saveTripPlan = JSON.stringify(saveTripP);
                 var url = '';
-                if (status == 2) {
-                    url = KingServices.build_url("tripPlan", "updateTripPlan")
-                } else {
+                if (status == 1) {
                     url = KingServices.build_url("tripPlan", "saveTripPlan")
+                } else {
+                    url = KingServices.build_url("tripPlan", "updateTripPlan")
                 }
                 $.ajax({
                     url: url,
@@ -2566,7 +2566,6 @@ define(function(require, exports) {
             var $that = $(this);
             if (i > 1) {
                 var FeeJson = {
-                    type: arrangeTourist.getVal($that, "type"),
                     discribe: arrangeTourist.getVal($that, "describe"),
                     otherPrice: arrangeTourist.getVal($that, "otherPrice"),
                     count: arrangeTourist.getVal($that, "count")

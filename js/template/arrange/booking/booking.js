@@ -11,6 +11,7 @@ define(function(require, exports) {
 		updateTemplate = require("./view/update"),
 		viewTemplate = require("./view/view"),
 		listTemplate = require("./view/list"),
+		listTableTemplate = require("./view/listTable"),
 		addPartnerManagerTemplate = require("./view/addPartnerManager"),
 		tabId = "tab-"+menuKey+"-content";
 	/**
@@ -57,67 +58,17 @@ define(function(require, exports) {
 	 */
 	BookingArrange.initModule = function () {
 		BookingArrange.$searchArea = false;
+		
+		Tools.addTab(menuKey,"项目代订",listTemplate());
+		BookingArrange.$tab = $('#' + tabId);
+		BookingArrange.$searchArea = BookingArrange.$tab.find('.T-search-area');
+		BookingArrange.init_event();
+		// 初始化列表
 		BookingArrange.listBooking(0);
+		// 初始化查询参数
+		BookingArrange.getQueryTerms();		
 	};
-	/**
-	 * 项目代订列表
-	 * @param  {int}     page             页码
-	 * @param  {string}  orderNumber      代订单号
-	 * @param  {string}  partnerAgency    客户
-	 * @param  {string}  operateUser      操作人
-	 * @param  {string}  startTime        开始操作时间
-	 * @param  {string}  endTime          结束操作时间
-	 */
-	BookingArrange.listBooking = function(page, orderNumber, partnerAgency, operateUser, startTime, endTime){
-		if(BookingArrange.$searchArea && arguments.length === 1){
-			orderNumber = BookingArrange.$searchArea.find("input[name=orderNumber]").val(),
-			partnerAgency = BookingArrange.$searchArea.find("input[name=partnerAgency]").val(),
-			operateUser = BookingArrange.$searchArea.find("input[name=operateUser]").val(),
-			startTime = BookingArrange.$searchArea.find("input[name=startTime]").val(),
-			endTime = BookingArrange.$searchArea.find("input[name=endTime]").val();
-		}
-		// 修正页码
-		page = page || 0;
-		var data = {
-				url : 'bookingOrder',
-				method : 'listBookingOrder',
-				'menuKey' : menuKey,
-				operation : 'view',
-				pageNo : page,
-				orderNumber : orderNumber || '',
-				partnerAgencyId: partnerAgency || '',
-				operateUser : operateUser || '',
-				startTime : startTime || '',
-				endTime : endTime || '',
-				sortType : 'operationTime'
-			};
 
-		BookingArrange.ajax(data, listBookingInfo);
-		function listBookingInfo (data) {
-			BookingArrange.searchData =  {
-				pageNo: page
-			};
-			data.bookingOrderList = JSON.parse(data.bookingOrderList);
-			var html = listTemplate(data);
-			Tools.addTab(menuKey,"项目代订",html);
-
-			// 初始化jQuery 对象
-			BookingArrange.$tab = $('#' + tabId);
-			BookingArrange.$searchArea = BookingArrange.$tab.find('.search-area');
-			BookingArrange.init_event();
-			// 绑定翻页组件
-			laypage({
-				cont: BookingArrange.$tab.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
-				pages: data.totalPage, //总页数
-				curr: (page + 1),
-				jump: function(obj, first) {
-					if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-					    BookingArrange.listBooking(obj.curr -1);
-					}
-				}
-			});
-		}
-	};
 
 	/**
 	 * 绑定页内事件
@@ -132,24 +83,6 @@ define(function(require, exports) {
 			BookingArrange.listBooking(0);
 		});
 
-		BookingArrange.getQueryTerms();
-		//搜索订单代号模糊查询
-		BookingArrange.choose(BookingArrange.$searchArea.find('.T-orderNumberChoose'), function(obj){
-			var orderNumberList = BookingArrange.autocompleteDate.orderNumberList;
-
-			if(orderNumberList && orderNumberList.length > 0){
-				for(var i=0; i < orderNumberList.length; i++){
-					orderNumberList[i].value = orderNumberList[i].orderNumber;
-				}
-				$(obj).autocomplete('option','source', orderNumberList);
-				$(obj).autocomplete('search', '');
-			}else{
-				layer.tips('没有内容', obj, {
-				    tips: [1, '#3595CC'],
-				    time: 2000
-				});
-			}
-		});
 		//搜索客户模糊查询
 		BookingArrange.choose(BookingArrange.$searchArea.find('.T-partnerAgencyChoose'), function(obj){
 			var partnerAgencyList = BookingArrange.autocompleteDate.partnerAgencyList;
@@ -157,6 +90,11 @@ define(function(require, exports) {
 				for(var i=0; i < partnerAgencyList.length; i++){
 						partnerAgencyList[i].value = partnerAgencyList[i].travelAgencyName
 					}
+
+				partnerAgencyList.unshift({
+                    id: '',
+                    value: '全部'
+                });
 				$(obj).autocomplete('option','source', partnerAgencyList);
 				$(obj).autocomplete('search', '');
 			}else{
@@ -174,6 +112,11 @@ define(function(require, exports) {
 				for(var i=0; i < operationUserList.length; i++){
 					operationUserList[i].value = operationUserList[i].realName
 				}
+
+				operationUserList.unshift({
+                    id: '',
+                    value: '全部'
+                });
 				$(obj).autocomplete('option','source', operationUserList);
 				$(obj).autocomplete('search', '');
 			}else{
@@ -198,6 +141,70 @@ define(function(require, exports) {
 			}
 		});
 	};
+
+	/**
+	 * 项目代订列表
+	 * @param  {int}     page             页码
+	 * @param  {string}  orderNumber      代订单号
+	 * @param  {string}  partnerAgency    客户
+	 * @param  {string}  operateUser      操作人
+	 * @param  {string}  startTime        开始操作时间
+	 * @param  {string}  endTime          结束操作时间
+	 */
+	BookingArrange.listBooking = function(page, orderNumber, partnerAgency, operateUser, startTime, endTime){
+		if(BookingArrange.$searchArea && arguments.length === 1){
+			orderNumber = BookingArrange.$searchArea.find("input[name=orderNumber]").val(),
+			partnerAgency = BookingArrange.$searchArea.find("input[name=partnerAgency]").val(),
+			partnerAgencyId = BookingArrange.$searchArea.find("input[name=partnerAgencyChooseId]").val(),
+			partnerAgency = partnerAgency === '全部'? '': partnerAgency;
+			operateUser = BookingArrange.$searchArea.find("input[name=operateUser]").val(),
+			operateUserId = BookingArrange.$searchArea.find("input[name=operateUserId]").val(),
+			operateUser = operateUser === '全部'? '': operateUser;
+			startTime = BookingArrange.$searchArea.find("input[name=startTime]").val(),
+			endTime = BookingArrange.$searchArea.find("input[name=endTime]").val();
+		}
+		// 修正页码
+		page = page || 0;
+		var data = {
+				url : 'bookingOrder',
+				method : 'listBookingOrder',
+				'menuKey' : menuKey,
+				operation : 'view',
+				pageNo : page,
+				orderNumber : orderNumber || '',
+				partnerAgency: partnerAgency || '',
+				partnerAgencyId: partnerAgencyId || '',
+				operateUser : operateUser || '',
+				operateUserId : operateUserId || '',
+				startTime : startTime || '',
+				endTime : endTime || '',
+				sortType : 'operationTime'
+			};
+
+		BookingArrange.ajax(data, listBookingInfo);
+		function listBookingInfo (data) {
+			BookingArrange.searchData =  {
+				pageNo: page
+			};
+			data.bookingOrderList = JSON.parse(data.bookingOrderList);
+
+			BookingArrange.$tab.find('.T-list').html(listTableTemplate(data));
+			BookingArrange.$tab.find('.T-recordSize').html(Tools.getRecordSizeDesc(data.recordSize));
+			
+			// 绑定翻页组件
+			laypage({
+				cont: BookingArrange.$tab.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+				pages: data.totalPage, //总页数
+				curr: (page + 1),
+				jump: function(obj, first) {
+					if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+					    BookingArrange.listBooking(obj.curr -1);
+					}
+				}
+			});
+		}
+	};
+
 
 	/**
 	 * 绑定事件事件  包含  年月日 时分秒
@@ -234,20 +241,29 @@ define(function(require, exports) {
 	 * @param  {function}  changeFn           值改变事件返回函数
 	 */
 	BookingArrange.choose = function($chooseContainer, clickFn, selectFn, changeFn){
+		var $that = $chooseContainer;
 		$chooseContainer.autocomplete({
 			minLength:0,
 			change :function(event, ui){
 				if(ui.item == null){
-					$(this).val('');
+					if (!$that.closest('.T-search-area').length) {
+						// 编辑页面
+						$that.val('');
+					}
+
 					if(typeof changeFn == 'function'){
 						changeFn(this, ui);
+					}else if ($that.next().is('input')) {
+						$that.next().val('');
 					}
 				}
 			},
 			select :function(event, ui){
-				$(this).blur();
+				$that.blur();
 				if(typeof selectFn == 'function'){
 					selectFn(this, ui);
+				} else if ($that.next().is('input')) {
+					$that.next().val(ui.item.id);
 				}
 			}
 		}).unbind("click").click(function(){
@@ -274,10 +290,14 @@ define(function(require, exports) {
 		//表单代订信息验证
 		var validator = rule.checkAddBooking($tab);
 
-		$tab.off('change').off(SWITCH_TAB_SAVE).off(CLOSE_TAB_SAVE)
+		$tab.off('change').off(SWITCH_TAB_SAVE).off(CLOSE_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT)
 		.on('change', function(event){
 			event.preventDefault();
 			$tab.data('isEdited', true);
+		})
+		.on(SWITCH_TAB_BIND_EVENT, function(event) {
+			event.preventDefault();
+			BookingArrange.CU_event($tab);
 		})
 		.on(SWITCH_TAB_SAVE, function(event, tab_id, title, html){
 			event.preventDefault();
