@@ -1764,7 +1764,7 @@ define(function(require, exports) {
 					}
 				})
 			}else{
-				layer.tips('请选择保险公司', obj, {
+				layer.tips('请选择保险公司', $this, {
 				    tips: [1, '#3595CC'],
 				    time: 2000
 				});
@@ -3199,7 +3199,7 @@ define(function(require, exports) {
 			insurance: {
 				arrangeId: quote.getValue(insuranceList,'arrangeId'),
 				insuranceId: quote.getValue(insuranceList,'insuranceId'),
-				insuranceItemId: quote.getValue(insuranceList,'insuranceId'),
+				insuranceItemId: quote.getValue(insuranceList,'insuranceItemId'),
 				price: quote.getValue(insuranceList,'price'),
 				marketPrice: quote.getValue(insuranceList,'marketPrice'),
 				remark: quote.getValue(insuranceList,'remark'),
