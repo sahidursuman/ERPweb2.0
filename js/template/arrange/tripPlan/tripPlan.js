@@ -334,6 +334,10 @@ define(function(require, exports) {
 				$tab = $('#tab-arrange_plan-add-content'),
 				quoteId = $tr.data('quote-id');
 
+			if (!$tr.length) {
+				showMessageDialog($( "#confirm-dialog-message" ),"请选择线路产品");
+				return;
+			}
 			if (isUpdate) {
 				$tab = $('#tab-arrange_plan-update-content');
 			}
@@ -350,6 +354,9 @@ define(function(require, exports) {
 			} else if (!!oldQuoteId) {
 				// 清理
 				tripPlan.clearQuoteData($form);
+			} else {
+				// 初始化普通线路产品
+				tripPlan.initNormalLineProduct($tab, $tr.data('id'));
 			}
 
 			layer.close(searchTravelLinelayer);
@@ -451,6 +458,33 @@ define(function(require, exports) {
 				}
 			});
 			
+		}
+	}
+
+	tripPlan.initNormalLineProduct = function($mainForm, pId) {
+		if (!!pId) {
+			$.ajax({
+    			url:KingServices.build_url("lineProduct","findById"),
+    			data:{ lineProductId : pId},
+				type:"POST",
+				success: function(data) {
+					data.lineProduct = JSON.parse(data.lineProduct);
+					data.lineProductDays = JSON.parse(data.lineProductDays);
+					data.guide = JSON.parse(data.guide);
+					data.busCompanyTemplate = JSON.parse(data.busCompanyTemplate);
+                	var result =showDialog(data);
+					if(result){
+						tripPlan.setTripPlanLineValue(data);
+						
+						var daysLength = data.lineProductDays.length;
+						var html = "";
+						for(i=0;i<daysLength;i++){
+							html +="<tr><td>第"+data.lineProductDays[i].whichDay+"天</td><td>"+data.lineProductDays[i].repastDetail+"</td><td>"+KingServices.getHotelDesc(data.lineProductDays[i].hotelLevel,'-')+"</td><td class='col-xs-6'>"+data.lineProductDays[i].title+"</td></tr>";
+						}
+						$mainForm.find(".T-days").html(html);
+					}
+				}
+    		})
 		}
 	}
 
