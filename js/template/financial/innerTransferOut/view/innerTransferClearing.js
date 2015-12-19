@@ -1,6 +1,6 @@
-/*TMODJS:{"debug":true,"version":213,"md5":"a1301822f5ee47bc95d9f49a787a7d2e"}*/
+/*TMODJS:{"debug":true,"version":215,"md5":"1c3ce6c92f21b689961ca8ff77a0b84d"}*/
 define(function(require) {
-    return require("../../../../../template")("js/template/financial/innerTransferOut/view/innerTransferClearing", function($data, $filename) {
+    return require("../../../template")("financial/innerTransferOut/view/innerTransferClearing", function($data, $filename) {
         try {
             var $utils = this, $line = ($utils.$helpers, 0), $escape = $utils.$escape, searchParam = $data.searchParam, $each = $utils.$each, operateTransUserList = $data.operateTransUserList, sumData = ($data.operater, 
             $data.$index, $data.sumData), showBtnFlag = $data.showBtnFlag, $out = "";

@@ -1,6 +1,6 @@
-/*TMODJS:{"debug":true,"version":220,"md5":"49f2ccd776983c86879a26686df5415d"}*/
+/*TMODJS:{"debug":true,"version":222,"md5":"839387b88d312aa183ce25978e472840"}*/
 define(function(require) {
-    return require("../../../../../template")("js/template/financial/innerTransferOut/view/list", function($data, $filename) {
+    return require("../../../template")("financial/innerTransferOut/view/list", function($data, $filename) {
         try {
             var $utils = this, $line = ($utils.$helpers, 0), $escape = $utils.$escape, toBusinessGroupName = $data.toBusinessGroupName, toBusinessGroupId = $data.toBusinessGroupId, startDate = $data.startDate, endDate = $data.endDate, $each = $utils.$each, list = $data.list, recordSize = ($data.innerTransferOut, 
             $data.$index, $data.recordSize), $out = "";
