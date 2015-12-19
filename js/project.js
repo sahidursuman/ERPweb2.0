@@ -1582,29 +1582,6 @@ KingServices.updateTouristGroup = function(id,type)  {
 
 
 /**
- * updateTransfer 外转方法的确认
- * @param  {[type]} touristGroupId [description]
- * @return {[type]}                [description]
- */
-KingServices.updateTransfer = function(touristGroupId)  {
-	seajs.use("" + ASSETS_ROOT +modalScripts.resource_touristGroup,function(module){
-		module.updateTransfer(touristGroupId);
-	});
-}
-
-/**
- * [updateTransferIn 内转方法的确认
- * @param  {[type]} touristGroupId [description]
- * @return {[type]}                [description]
- */
-KingServices.updateTransferIn = function(touristGroupId)  {
-	seajs.use("" + ASSETS_ROOT +modalScripts.resource_touristGroup,function(module){
-		module.updateTransferIn(touristGroupId);
-	});
-}
-
-
-/**
  * 新增游客小组
  * @param  {string} id 游客小组的ID
  * @return {[type]}    [description]
@@ -1614,7 +1591,6 @@ KingServices.addTouristGroup = function(touristGroupId,typeOut)  {
 		module.addTouristGroup(touristGroupId,typeOut);
 	});
 }
-
 
 //导游  新增
 KingServices.addGuide = function(fn){
@@ -1753,12 +1729,14 @@ KingServices.addResourceFunction = function(e){
 		mobileNumber = e.data.mobileNumber,
 		$function = e.data.function,
 		fn = function (data){
+			console.log(data)
 			if (!!data.name && !!name && !!data.id && !!id) {$parents.find('input[name=price],input[name=hotelRoom],input[name=hotelRoomId],input[name=fee],input[name=chargingProjects],input[name=chargingId],input[name=goodsPolicy],input[name=shopPolicyId],input[name=selfitem],input[name=selfitemId],input[name=oldPrice],input[name=hotelRoomType],input[name=hotelRoomTypeId],input[name=hotelPrice],input[name=partnerAgencyNameList],input[name=partnerAgencyContactId]').val("")}
 			if (!!data.name && !!name) {$parents.find('input[name='+name+']').val(data.name).trigger('change');}
 			if (!!data.id && !!id) {$parents.find('input[name='+id+']').val(data.id).trigger('change');}
 			if (!!data.managerName && !!managerName) {$parents.find('input[name='+managerName+']').val(data.managerName);}
 			if (!!data.mobileNumber && !!mobileNumber) {$parents.find('input[name='+mobileNumber+']').val(data.mobileNumber);}
 			if (!!data.level) {$parents.find('select[name=hotelLevel]').val(data.level);}
+			if (!!data.type) {$parents.find('input[name=type]').val(data.type);}
 		}
 	$function(fn);
 }
