@@ -391,7 +391,7 @@ define(function(require, exports) {
 
         //自动下账
         hotel.$clearTab.find(".T-clear-auto").click(function(){
-            var autoPayJson = FinancialService.autoPayJson(id,hotel.$clearTab,rule);
+            var autoPayJson = FinancialService.autoPayJson(id,hotel.$clearTab,new FinRule(2));
             if(!autoPayJson){return false;}
             var startDate = hotel.$clearSearchArea.find("input[name=startDate]").val(),
                 endDate = hotel.$clearSearchArea.find("input[name=endDate]").val();
