@@ -422,7 +422,7 @@ define(function(require, exports) {
 				    curr: (data.searchParam.pageNo + 1),
 				    jump: function(obj, first) {
 				    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-				    		Ticket.clearingList(obj.curr -1);
+				    		Ticket.clearingList(obj.curr -1, args.ticketId, args.startDate, args.endDate);
 				    	}
 				    }
 				});	
