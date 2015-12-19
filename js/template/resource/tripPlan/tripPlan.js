@@ -1661,10 +1661,11 @@ define(function(require, exports) {
 				tripPlan.plusPrice($(this), $tab);
 			});
 			$this.find("select[name=payType]").on("change", function(){
-				if($this.val()!=0){
+				var $type = $(this);
+				if($type.val()!=0){
 					$parents.find("input[name=guidePayMoney]").val("");
 				}else{
-					tripPlan.plusPrice($(this), $tab);
+					tripPlan.plusPrice($type, $tab);
 				}
 			});
 
