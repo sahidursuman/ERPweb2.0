@@ -375,6 +375,7 @@ define(function(require, exports) {
             scenic.$clearTab.find(".T-clear-auto").toggle();
             scenic.clearTempSumDate = false;
             scenic.clearTempData = false;
+			scenic.$clearTab.data('isEdited',false);
             scenic.scenicClear(0,0,id,name);
         });
 
