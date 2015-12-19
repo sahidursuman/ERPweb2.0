@@ -179,12 +179,12 @@ define(function(require, exports) {
             };
             if ($that.hasClass('T-view')) {
                 //查看小组
-                touristGroup.viewTouristGroupDetails(id);
+                touristGroup.viewTouristGroupDetails(touristGroupId);
             };
             if ($that.hasClass('T-del')) {
                 //删除小组
                 showConfirmDialog($("#confirm-dialog-message"), "确定删除该条数据?", function() {
-                    touristGroup.deleteGroup(id);
+                    touristGroup.deleteGroup(touristGroupId);
                 });
             };
         });
