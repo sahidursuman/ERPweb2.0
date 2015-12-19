@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":6,"md5":"879524975101a0b24e8cdd968ae2ecd1"}*/
+/*TMODJS:{"debug":true,"version":8,"md5":"879524975101a0b24e8cdd968ae2ecd1"}*/
 define(function(require) {
     return require("../../../template")("financial/replaceProfit/view/viewCostDetail", function($data, $filename) {
         try {
