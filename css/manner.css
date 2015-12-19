@@ -321,6 +321,10 @@ table tr td{
     margin-left: 10px;
 }
 
+.label-inline-60 {
+    display: inline-block;
+    width: 60px;
+}
 .widget-main{padding: 0!important;}
 .form-group{margin-bottom: 13px!important;}
 .color{
