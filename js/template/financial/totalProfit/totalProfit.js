@@ -66,6 +66,12 @@ define(function(require, exports) {
                     TotalProfit.$tab.find('.T-list').html(tableTemplate(data));
 
                     TotalProfit.$tab.find('.T-recordSize').html(Tools.getRecordSizeDesc(data.searchParam.totalCount));
+					
+					//点击线路产品事件
+                    TotalProfit.$tab.find('.T-list').find('.T-transfer').off('click').on('click',function(){
+                        var id = $(this).closest('tr').data("id");
+                        KingServices.viewLineProduct(id);
+                    });
 
                     // 绑定翻页组件
                     laypage({

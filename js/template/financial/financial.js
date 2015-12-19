@@ -231,14 +231,14 @@ FinancialService.autoPayJson = function(id,$tab,rule){
         return false;
     }
     if(sumPayMoney < 0 || sumPayMoney == ""){
-        showMessageDialog($("#confirm-dialog-message"),"付款金额需大于0！");
+        showMessageDialog($("#confirm-dialog-message"),"本次付款金额合计大于未付金额合计（已对账），请先进行对账");
         return false;
     }
 
     if(isNaN(sumPayMoney)){ sumPayMoney = 0; }
     if(isNaN(unpayMoney)){ unpayMoney = 0; }
     if(sumPayMoney > unpayMoney){
-        showMessageDialog($("#confirm-dialog-message"),"本次收款金额合计大于未收金额合计（已对账），请先进行对账本次付款金额合计大于未付金额合计（已对账），请先进行对账 !");
+        showMessageDialog($("#confirm-dialog-message"),"本次收款金额合计大于未收金额合计（已对账），请先进行对账!");
         return false;
     }
 
