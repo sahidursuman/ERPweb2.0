@@ -185,6 +185,8 @@ define(function(require, exports){
 				tripMessage : $tab.find('.T-search-trip').val()
 			};
 		}
+		args.sortType = 'startTime';
+        args.order='asc';
 		var method = 'listReciveShopAcccount';
 		if(!type){
 			method = 'listCheckShopAcccount';

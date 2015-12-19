@@ -183,6 +183,8 @@ define(function(require, exports) {
 				}
 			}
 		}
+		args.sortType = 'startTime';
+        args.order='asc';
 		$.ajax({
 			url : KingServices.build_url('financial/bookingAccount', 'listCheckBookingAcccount'),
 			type: 'post',
@@ -425,7 +427,8 @@ define(function(require, exports) {
 					}
 				}
 			}
-
+			args.sortType = 'startTime';
+        	args.order='asc';
 			$.ajax({
 				url : KingServices.build_url('financial/bookingAccount', 'listReciveBookingAcccount'),
 				type : "POST",
@@ -643,7 +646,8 @@ define(function(require, exports) {
 				}
 			}
 		}
-
+		args.sortType = 'startTime';
+        args.order='asc';
 		$.ajax({
 			url : KingServices.build_url('financial/bookingAccount', 'listReciveBookingAcccount'),
 			type : "POST",
