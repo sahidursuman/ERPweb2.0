@@ -1,6 +1,6 @@
-/*TMODJS:{"debug":true,"version":223,"md5":"20ee826f94e371f9e2ebe3ad29f5e8c4"}*/
+/*TMODJS:{"debug":true,"version":226,"md5":"7d092e96da412871542627bcf6ea0a29"}*/
 define(function(require) {
-    return require("../../../../../template")("js/template/financial/innerTransferProfit/view/list", function($data, $filename) {
+    return require("../../../template")("financial/innerTransferProfit/view/list", function($data, $filename) {
         try {
             var $utils = this, $helpers = $utils.$helpers, $line = 0, $escape = $utils.$escape, searchParam = $data.searchParam, sumAdultCount = $data.sumAdultCount, sumChildCount = $data.sumChildCount, sumTripIncome = $data.sumTripIncome, sumOutCost = $data.sumOutCost, sumInnerCost = $data.sumInnerCost, sumProfit = $data.sumProfit, sumAverProfit = $data.sumAverProfit, $each = $utils.$each, touristGroupInnerTransferList = $data.touristGroupInnerTransferList, recordSize = ($data.innerTransferList, 
             $data.index, $data.recordSize), $out = "";

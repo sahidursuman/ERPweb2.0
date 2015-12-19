@@ -1,6 +1,6 @@
-/*TMODJS:{"debug":true,"version":135,"md5":"1ccc4acfc97ec0ef3be5a9a2afd673cf"}*/
+/*TMODJS:{"debug":true,"version":137,"md5":"5c5230b12b1e8661334e14db58f78116"}*/
 define(function(require) {
-    return require("../../../../../template")("js/template/financial/transfer/view/transferClearing", function($data, $filename) {
+    return require("../../../template")("financial/transfer/view/transferClearing", function($data, $filename) {
         try {
             var $utils = this, $helpers = $utils.$helpers, $line = 0, $escape = $utils.$escape, searchParam = $data.searchParam, partnerAgencyName = $data.partnerAgencyName, sumPerson = $data.sumPerson, sumNeedPayMoney = $data.sumNeedPayMoney, sumPayedMoney = $data.sumPayedMoney, sumPunishMoney = $data.sumPunishMoney, sumSettlementMoney = $data.sumSettlementMoney, sumUnPayedMoney = $data.sumUnPayedMoney, checkedUnPayedMoney = $data.checkedUnPayedMoney, sumPayMoney = $data.sumPayMoney, sumPayType = $data.sumPayType, sumPayRemark = $data.sumPayRemark, isAutoPay = $data.isAutoPay, $each = $utils.$each, financialTransferList = $data.financialTransferList, $out = ($data.rs, 
             $data.index, $data.detail, $data.$index, $data.member, "");

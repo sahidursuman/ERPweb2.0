@@ -1,6 +1,6 @@
-/*TMODJS:{"debug":true,"version":11,"md5":"3c30838c2230ae26b04c66104b52e6d6"}*/
+/*TMODJS:{"debug":true,"version":14,"md5":"704acdd6fbc5bffb3d547d5296207b68"}*/
 define(function(require) {
-    return require("../../../../../template")("js/template/financial/innerTransferOut/view/innerTransferOutPayed", function($data, $filename) {
+    return require("../../../template")("financial/innerTransferOut/view/innerTransferOutPayed", function($data, $filename) {
         try {
             var $utils = this, $helpers = $utils.$helpers, $line = 0, $each = $utils.$each, payedRecordList = $data.payedRecordList, $escape = ($data.payedRecord, 
             $data.$index, $utils.$escape), $out = "";

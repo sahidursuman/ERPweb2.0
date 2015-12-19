@@ -310,13 +310,11 @@ define(function(require, exports) {
         var $payedMoney = $groupInfoForm.find('input[name=payedMoney]'),
             $currentNeedPayMoney = $groupInfoForm.find('input[name=currentNeedPayMoney]'),
             $adultPrice = $groupInfoForm.find('input[name=adultPrice]'),
-            $childPrice = $groupInfoForm.find('input[name=childPrice]'),
-            $price = $groupInfoForm.find('input[name=price]');
+            $childPrice = $groupInfoForm.find('input[name=childPrice]');
         Tools.inputCtrolFloat($payedMoney);
         Tools.inputCtrolFloat($currentNeedPayMoney);
         Tools.inputCtrolFloat($adultPrice);
         Tools.inputCtrolFloat($childPrice);
-        Tools.inputCtrolFloat($price);
 
         //添加表单验证
         touristGroup.validator = rule.checktouristGroup($groupInfoForm);
@@ -352,13 +350,11 @@ define(function(require, exports) {
         var $payedMoney = $groupInfoForm.find('input[name=payedMoney]'),
             $currentNeedPayMoney = $groupInfoForm.find('input[name=currentNeedPayMoney]'),
             $adultPrice = $groupInfoForm.find('input[name=adultPrice]'),
-            $childPrice = $groupInfoForm.find('input[name=childPrice]'),
-            $price = $groupInfoForm.find('input[name=price]');
+            $childPrice = $groupInfoForm.find('input[name=childPrice]');
         Tools.inputCtrolFloat($payedMoney);
         Tools.inputCtrolFloat($currentNeedPayMoney);
         Tools.inputCtrolFloat($adultPrice);
         Tools.inputCtrolFloat($childPrice);
-        Tools.inputCtrolFloat($price);
 
         //添加验证
         touristGroup.validator = rule.checktouristGroup($groupInfoForm);
@@ -1085,10 +1081,6 @@ define(function(require, exports) {
         var $parentsObj = $obj.closest("form");
         var $tableObj = $parentsObj.find(".T-addCostTbody");
         $tableObj.append(html);
-
-        //精度控制
-        var $price = $tableObj.find('input[name=price]');
-        Tools.inputCtrolFloat($price);
 
         //删除事件
         $tableObj.find(".addCost-delete").off('click').on('click', function() {

@@ -204,7 +204,7 @@ define(function(require, exports) {
             })
             .done(function(data) {
                 if (showDialog(data)) {
-                    data.guideName = args.name;
+                    //data.guideName = args.name;
                     data.id = args.guideId;
                     data.type = type;
                     data.lineProductName = data.lineProductName || '全部';
