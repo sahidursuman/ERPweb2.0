@@ -160,15 +160,11 @@ define(function(require, exports) {
                 $tr = $that.closest('tr'),
                 touristGroupId = $tr.attr('id'),
                 status = $tr.attr("data-status"),
-                InnerTransfer=$tr.attr("data-status");//副游客小组
+                InnerTransfer=$tr.attr("data-InnerTransfer");//副游客小组
             if ($that.hasClass('T-edit')) {
                 if (!!status && status == 1 && !!InnerTransfer && InnerTransfer==1) { //已内转
                     touristGroup.updateTransferIn(touristGroupId,status,InnerTransfer);
-                }else if (!!status && status == 3  && !!InnerTransfer && InnerTransfer==0) { //已转客
-                    //跳转游客小组新增页面
-                    touristGroup.updateTransfer(touristGroupId,status,InnerTransfer);
-
-                } else if (!!status && status == 3 && !!InnerTransfer && InnerTransfer==1) { //已内转
+                }else if (!!status && status == 3 && !!InnerTransfer && InnerTransfer==1) { //已内转
                     touristGroup.updateTransferIn(touristGroupId,status,InnerTransfer);
                 } else if (!!status && status == 6 && !!InnerTransfer && InnerTransfer==1) { //已内转
                     touristGroup.updateTransferIn(touristGroupId,status,InnerTransfer);
@@ -253,7 +249,9 @@ define(function(require, exports) {
                                 var $updateTabId = $('#' + updateTab);
                                 $updateTabId.find('input[name=lineProductIdName]').val("");
                                 $updateTabId.find('input[name=lineProductId]').val("");
-                                $updateTabId.find('.T-touristReception','.T-smallCar','.T-touristSend').prop("checked",false);
+                                $updateTabId.find('.T-touristReception').prop("checked",false);
+                                $updateTabId.find('.T-smallCar').prop("checked",false);
+                                $updateTabId.find('.T-touristSend').prop("checked",false);
                                 touristGroup.updateEvents(typeOut);
                             }
                         } else if(!!status && !!InnerTransfer){
