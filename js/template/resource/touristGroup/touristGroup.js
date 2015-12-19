@@ -179,12 +179,12 @@ define(function(require, exports) {
             };
             if ($that.hasClass('T-view')) {
                 //查看小组
-                touristGroup.viewTouristGroupDetails(id);
+                touristGroup.viewTouristGroupDetails(touristGroupId);
             };
             if ($that.hasClass('T-del')) {
                 //删除小组
                 showConfirmDialog($("#confirm-dialog-message"), "确定删除该条数据?", function() {
-                    touristGroup.deleteGroup(id);
+                    touristGroup.deleteGroup(touristGroupId);
                 });
             };
         });
@@ -310,13 +310,11 @@ define(function(require, exports) {
         var $payedMoney = $groupInfoForm.find('input[name=payedMoney]'),
             $currentNeedPayMoney = $groupInfoForm.find('input[name=currentNeedPayMoney]'),
             $adultPrice = $groupInfoForm.find('input[name=adultPrice]'),
-            $childPrice = $groupInfoForm.find('input[name=childPrice]'),
-            $price = $groupInfoForm.find('input[name=price]');
+            $childPrice = $groupInfoForm.find('input[name=childPrice]');
         Tools.inputCtrolFloat($payedMoney);
         Tools.inputCtrolFloat($currentNeedPayMoney);
         Tools.inputCtrolFloat($adultPrice);
         Tools.inputCtrolFloat($childPrice);
-        Tools.inputCtrolFloat($price);
 
         //添加表单验证
         touristGroup.validator = rule.checktouristGroup($groupInfoForm);
@@ -352,13 +350,11 @@ define(function(require, exports) {
         var $payedMoney = $groupInfoForm.find('input[name=payedMoney]'),
             $currentNeedPayMoney = $groupInfoForm.find('input[name=currentNeedPayMoney]'),
             $adultPrice = $groupInfoForm.find('input[name=adultPrice]'),
-            $childPrice = $groupInfoForm.find('input[name=childPrice]'),
-            $price = $groupInfoForm.find('input[name=price]');
+            $childPrice = $groupInfoForm.find('input[name=childPrice]');
         Tools.inputCtrolFloat($payedMoney);
         Tools.inputCtrolFloat($currentNeedPayMoney);
         Tools.inputCtrolFloat($adultPrice);
         Tools.inputCtrolFloat($childPrice);
-        Tools.inputCtrolFloat($price);
 
         //添加验证
         touristGroup.validator = rule.checktouristGroup($groupInfoForm);
@@ -479,7 +475,7 @@ define(function(require, exports) {
         //新增同行
         $obj.find('.T-addPartner').off('click').on("click", {
             function: KingServices.addPartnerAgency,
-            type: ".form-group",
+            type: ".control-label",
             name: "fromPartnerAgency",
             id: "fromPartnerAgencyId"
         }, KingServices.addResourceFunction);
@@ -1085,10 +1081,6 @@ define(function(require, exports) {
         var $parentsObj = $obj.closest("form");
         var $tableObj = $parentsObj.find(".T-addCostTbody");
         $tableObj.append(html);
-
-        //精度控制
-        var $price = $tableObj.find('input[name=price]');
-        Tools.inputCtrolFloat($price);
 
         //删除事件
         $tableObj.find(".addCost-delete").off('click').on('click', function() {

@@ -21,7 +21,8 @@ define(function(require, exports) {
         insureList : false,
         clearTempData : false,
         clearTempSumDate : false,
-        showBtnFlag:false
+        showBtnFlag:false,
+        saveFlag:false
 	};
 
 	Insure.initModule = function() {
@@ -265,13 +266,19 @@ define(function(require, exports) {
                     var resultList = data.financialInsuranceList;
                     data.financialInsuranceList = FinancialService.getTempDate(resultList,Insure.clearTempData);
                     // 财务付款入口调用
-                    data.showBtnFlag = Insure.showBtnFlag
+                    data.showBtnFlag = Insure.showBtnFlag;
+                    Insure.saveFlag = Insure.showBtnFlag == true ? true:false;
+                    console.log(data);
 					var html = insureClearing(data);
 	  				var validator;
                     // 初始化页面
                     if (Tools.addTab(menuKey + "-clearing", "保险付款", html)) {
-                        Insure.initClear(page,insuranceId,insuranceName); 
-                        validator = new FinRule(1).check(Insure.$clearTab.find('.T-clearList'));                       
+                        var settleValidator = data.showBtnFlag == true ? new FinRule(3) : new FinRule(1);
+
+                        Insure.initClear(page,insuranceId,insuranceName,settleValidator); 
+                        validator = settleValidator.check(Insure.$clearTab.find('.T-clearList'));
+                         FinancialService.updateSumPayMoney(Insure.$clearTab,settleValidator);
+                       
                     }
 
                     if(isAutoPay == 0){
@@ -319,6 +326,7 @@ define(function(require, exports) {
         Insure.$clearSearchArea = Insure.$clearTab.find('.T-search-area');
         Insure.init_event(page,id,name,Insure.$clearTab,"clear");
         Tools.setDatePicker(Insure.$clearTab.find(".date-picker"),true);
+
 
         //搜索事件
         Insure.$clearTab.find(".T-search").click(function(){
@@ -501,12 +509,13 @@ define(function(require, exports) {
     };
 
     Insure.saveClear = function(id,name,page,tab_id, title, html){
-        if(!FinancialService.isClearSave(Insure.$clearTab,new FinRule(1))){
+        var saveRule = Insure.saveFlag == true ? new FinRule(3):new FinRule(1);
+        if(!FinancialService.isClearSave(Insure.$clearTab,saveRule)){
             return false;
         }
 
         var argumentsLen = arguments.length,
-            clearSaveJson = FinancialService.clearSaveJson(Insure.$clearTab,Insure.clearTempData,new FinRule(1));
+            clearSaveJson = FinancialService.clearSaveJson(Insure.$clearTab,Insure.clearTempData,saveRule);
         var searchParam = {
             insuranceId : id,
             sumCurrentPayMoney : Insure.$clearTab.find('input[name=sumPayMoney]').val(),
@@ -533,6 +542,7 @@ define(function(require, exports) {
                             Tools.closeTab(menuKey + "-clearing");
                             Insure.listInsure(Insure.searchData.pageNo,Insure.searchData.insuranceName,Insure.searchData.insuranceId,Insure.searchData.startDate,Insure.searchData.endDate);
                         }else if(argumentsLen === 3){
+                            Insure.saveFlag = false;    
                             Insure.$clearTab.data('isEdited',false);
                             Insure.getClearing(0,page,id,name);
                         } else {
@@ -638,6 +648,7 @@ define(function(require, exports) {
     };
 
     Insure.initPay = function(options){
+        Insure.showBtnFlag = true;
         Insure.getClearing(2,0,options.id,options.name,"",options.startDate,options.endDate); 
     };
 

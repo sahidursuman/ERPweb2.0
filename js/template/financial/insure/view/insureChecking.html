@@ -75,12 +75,9 @@
                     <label class="pos-rel">
                         <input type="checkbox" class="ace T-checkbox" {{if rs.isConfirmAccount==1 }}checked="checked" {{/if}} />
                         <span class="lbl"></span>对账
-                        <a class="cursor R-right"> |</a>
+                        <a class="cursor "> |</a>
                     </label>
-                    {{if rs.isConfirmAccount == 1}}
                     <a class="T-option T-needPayDetail cursor">查看</a>
-                    {{else}} {{disabled}}
-                    {{/if}}
                 </td>
             </tr>
             {{/each}}
