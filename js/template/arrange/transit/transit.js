@@ -832,7 +832,8 @@ define(function(require, exports) {
 			select :function(event, ui){
 				var $this = $(this),parents = $(this).closest('tr');
 					parents.find("input[name=busCompanyName]").val(ui.item.busCompanyName);
-					parents.find("input[name=busCompanyId]").val(ui.item.busCompanyId);
+					parents.find("input[name=driverName]").val('');
+					parents.find("input[name=driverMobileNumber]").val('');
 					parents.find("input[name=busCompanyId]").val(ui.item.id).trigger('change');
 			}
 		}).unbind("click").click(function(){
