@@ -183,6 +183,8 @@ define(function(require, exports) {
 				}
 			}
 		}
+		args.sortType = 'startTime';
+        args.order='asc';
 		$.ajax({
 			url : KingServices.build_url('financial/bookingAccount', 'listCheckBookingAcccount'),
 			type: 'post',
@@ -270,9 +272,12 @@ define(function(require, exports) {
 		});
 		Tools.descToolTip($tab.find(".T-ctrl-tip"),1);
 
-		$tab.find('.T-checkTr').on('change', function(){
-			$(this).data('change', true);
-		});
+		// 监听修改
+        $tab.find(".T-clearList, .T-checkList").off('change').on('change',"input",function(event) {
+            event.preventDefault();
+            $(this).closest('tr').data("change",true);
+            $tab.data('isEdited', true);
+        });
 
 		$tab.find('.T-list').on('click', '.T-action', function(event){
 			var $that = $(this), id = $that.closest('tr').data('id');
@@ -422,7 +427,8 @@ define(function(require, exports) {
 					}
 				}
 			}
-
+			args.sortType = 'startTime';
+        	args.order='asc';
 			$.ajax({
 				url : KingServices.build_url('financial/bookingAccount', 'listReciveBookingAcccount'),
 				type : "POST",
@@ -640,7 +646,8 @@ define(function(require, exports) {
 				}
 			}
 		}
-
+		args.sortType = 'startTime';
+        args.order='asc';
 		$.ajax({
 			url : KingServices.build_url('financial/bookingAccount', 'listReciveBookingAcccount'),
 			type : "POST",
