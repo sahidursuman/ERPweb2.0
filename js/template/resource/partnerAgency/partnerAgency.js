@@ -321,7 +321,7 @@ define(function(require,exports){
 			var contactUpdateJson = JSON.stringify(contactList);
 			var url = PartnerAgency.url("updatePartnerAgency","update");
 			var data = form+"&contactListJsonAdd="+encodeURIComponent(contactUpdateJson);
-			PartnerAgency.submitData(url,data,layerType);
+			PartnerAgency.submitData(url,data,layerType,fn);
 		}
 	};
 	//提交数据
@@ -336,10 +336,12 @@ define(function(require,exports){
 					layer.close($obj);
 					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
 						var formData = {};
+						console.log(data);
                         if (typeof fn === "function") {
                             data.partnerAgency = JSON.parse(data.partnerAgency);
                             formData.id = data.partnerAgency.id;
                             formData.name = data.partnerAgency.travelAgencyName;
+                            formData.type = data.partnerAgency.type;
                             fn(formData);
                         }else{
 							PartnerAgency.listPartnerAgency(0);

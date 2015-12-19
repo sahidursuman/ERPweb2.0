@@ -24,8 +24,8 @@
     </td>
     <td>{{booking.sumNeedGetMoney}}</td>
     <td>{{booking.getedMoney}}</td>
-    <td>{{if booking.operateUser != null}}{{booking.operateUser.realName}}{{/if}}</td>
-    <td>{{booking.operationTime}}</td>
+    <td>{{if booking.createUser != null}}{{booking.createUser.realName}}{{/if}}</td>
+    <td>{{booking.createTime}}</td>
     <td>{{if booking.isConfirmAccount == 1}}已对账{{else}}未对账{{/if}}</td>
     <td>
         <a data-entity-id="{{booking.id}}" title="查看计划" class="T-action cursor T-view">

@@ -62,8 +62,7 @@ define(function(require, exports) {
 			type:"POST",
 			data:tripPlan.searchData,
 			success:function(data){
-				var result = showDialog(data);
-				if(result){
+				if(showDialog(data)){
 					data.tripPlanList = JSON.parse(data.tripPlanList);
 					var html = listTemplate(data);
 					Tools.addTab(menuKey,"发团计划",html);
@@ -231,9 +230,19 @@ define(function(require, exports) {
 
 		//游客短信及时发送显示隐藏
 		$tab.find('.T-timeArea .T-timeArea-input').hide();
-		$tab.find('.T-timeArea input[type=radio]').click(function(){
-			$tab.find('.T-timeArea .T-timeArea-input').toggle();
+		$tab.find('.T-timeArea .T-timeArea-input').val("");
+		$tab.find('.T-ImmSend').on('click', function(event) {
+			/* Act on the event */
+			$tab.find('.T-timeArea .T-timeArea-input').hide();
+			$tab.find('.T-timeArea .T-timeArea-input').val("");
 		});
+		$tab.find('.T-execTime').on('click', function(event) {
+			/* Act on the event */
+			$tab.find('.T-timeArea .T-timeArea-input').show();
+		});
+		/*$tab.find('.T-timeArea input[type=radio]').click(function(){
+			$tab.find('.T-timeArea .T-timeArea-input').toggle();
+		});*/
 
 		tripPlan.MenberNumber($tab);
     	//小组总人数计算
