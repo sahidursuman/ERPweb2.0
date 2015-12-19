@@ -222,11 +222,30 @@ define(function(require, exports) {
     	tripPlan.driverChoose($tab);
 		tripPlan.guideChoose($tab);
 		if (operation === 'add') {
-			Tools.setDatePicker($container.find('input[name="startTime"]'));
+			Tools.setDatePicker($container.find('input[name="startTime"]')).on('changeDate', function(event) {		
+				event.preventDefault();
+				var startTime = $(this).val(), 
+					$placeTime = $container.find('[name="setPlaceTime"]').data('DateTimePicker', false),
+					placeTime = $placeTime.val(),
+					$executeTime = $container.find('[name="executeTime"]').data('DateTimePicker', false),
+					executeTime = $executeTime.val();
+
+				if (!!placeTime && (placeTime.split(' ')[0]> startTime)) {
+					$placeTime.val('');
+				} 
+
+				if (!!executeTime && (executeTime > (startTime + ' 06:00:00'))) {
+					$executeTime.val('');
+				} 
+
+				tripPlan.setPlanceTimeDateTimePicker($tab);
+				 //发团计划定时
+				tripPlan.setTripPlanPicker($tab);
+			});
 		}
-		tripPlan.setPlanceTimeDateTimePicker();
+		tripPlan.setPlanceTimeDateTimePicker($tab);
 		 //发团计划定时
-		tripPlan.setTripPlanPicker();
+		tripPlan.setTripPlanPicker($tab);
 
 		//游客短信及时发送显示隐藏
 		$tab.find('.T-timeArea .T-timeArea-input').hide();
@@ -1476,19 +1495,28 @@ define(function(require, exports) {
 		})
 	};
 	//集合时间   时间控件
-	tripPlan.setPlanceTimeDateTimePicker = function(){
-    	$(".T-plan-container input[name=setPlaceTime]").datetimepicker({
+	tripPlan.setPlanceTimeDateTimePicker = function($tab){
+    	var $container = $tab.find(".T-plan-container");
+    	$container.find("input[name=setPlaceTime]").datetimepicker({
 			autoclose: true,
 			todayHighlight: true,
+			maxDate: new Date($container.find('[name="startTime"]').val() + ' 23:59:59'),
 			format: 'L',
 			language: 'zh-CN'
 		});
+
+		console.info($container.find('[name="startTime"]').val() + ' 06:00:00');
 	};
 	  //发团定时   
-	tripPlan.setTripPlanPicker = function(){
-    	$(".T-plan-container input[name=executeTime]").datetimepicker({
+	tripPlan.setTripPlanPicker = function($tab){
+		var $container = $tab.find(".T-plan-container"),
+			maxDateTime = $container.find('[name="startTime"]').val() + ' 06:00:00';
+		$container.find("input[name=executeTime]").datetimepicker({
 			autoclose: true,
+			useCurrent:false,
 			todayHighlight: true,
+			maxDate: new Date(maxDateTime),
+			defaultDate: new Date(maxDateTime),
 			format: 'L',
 			language: 'zh-CN'
 		});
