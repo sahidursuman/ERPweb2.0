@@ -158,22 +158,22 @@ define(function(require, exports) {
         $listObj.find(".T-touristGroupList").on('click', '.T-action', function() {
             var $that = $(this),
                 $tr = $that.closest('tr'),
-                id = $tr.attr('id'),
+                touristGroupId = $tr.attr('id'),
                 status = $tr.attr("data-status"),
                 InnerTransfer=$tr.attr("data-status");//副游客小组
             if ($that.hasClass('T-edit')) {
 
                 if (!!status && status == 3) { //已转客
-                    var touristGroupId = id;
                     //跳转游客小组新增页面
                     touristGroup.updateTransfer(touristGroupId,status);
 
                 } else if (!!status && status == 6) { //已内转
-                    var touristGroupId = id;
                     touristGroup.updateTransferIn(touristGroupId,status,InnerTransfer);
-                } else {
+                } else if(!!status && status == 1 && InnerTransfer){
+                	    touristGroup.updateTransferIn(touristGroupId,status,InnerTransfer);
+                }else {
                     //修改小组
-                    touristGroup.updateTouristGroup(id, "");
+                    touristGroup.updateTouristGroup(touristGroupId, "");
                     touristGroup.typeFlag = 2;
                 };
             };
@@ -213,7 +213,7 @@ define(function(require, exports) {
                             if (Tools.addTab(updateTabId, "添加游客", html)) {
                                 touristGroup.updateEvents(typeOut);
                             }
-                        }else {
+                        }else if(!!status || !!InnerTransfer==1){
                             if (Tools.addTab(updateTabId, "编辑游客", html)) {
                             	typeOut = "";
                                 touristGroup.updateEvents(typeOut);
@@ -1654,9 +1654,11 @@ define(function(require, exports) {
             adultChildTotal = 0;
         $trList.each(function(index) {
             var count = $trList.eq(index).find('.T-costCount').val();
-            count = parseInt(count);
-            adultChildTotal = parseInt(adultChildTotal + count);
+                count = parseInt(count);
+            if (isNaN(count)) {count=0};
+            adultChildTotal = parseInt(adultChildTotal+count);
         });
+
         //游客小组人数
         var $vistTr = $visiForm.find('.T-addTouristTbody').children('tr:not(.deleted)'),
             touristCount = 0;
