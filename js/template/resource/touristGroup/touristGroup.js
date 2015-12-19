@@ -159,7 +159,8 @@ define(function(require, exports) {
             var $that = $(this),
                 $tr = $that.closest('tr'),
                 id = $tr.attr('id'),
-                status = $tr.attr("data-status");
+                status = $tr.attr("data-status"),
+                InnerTransfer=$tr.attr("data-status");//副游客小组
             if ($that.hasClass('T-edit')) {
 
                 if (!!status && status == 3) { //已转客
@@ -169,7 +170,7 @@ define(function(require, exports) {
 
                 } else if (!!status && status == 6) { //已内转
                     var touristGroupId = id;
-                    touristGroup.updateTransferIn(touristGroupId,status);
+                    touristGroup.updateTransferIn(touristGroupId,status,InnerTransfer);
                 } else {
                     //修改小组
                     touristGroup.updateTouristGroup(id, "");
@@ -194,7 +195,7 @@ define(function(require, exports) {
      * @param  {[type]} touristGroupId 游客小组ID
      * @return {[type]}
      */
-    touristGroup.updateTransferIn=function(touristGroupId,status){
+    touristGroup.updateTransferIn=function(touristGroupId,status,InnerTransfer){
     	var typeOut='inner';
     	 //声明一个全局的游客小组ID用于跳转到中转安排
         touristGroup.touristGroupId = touristGroupId;
@@ -208,7 +209,7 @@ define(function(require, exports) {
                         var touristGroupInfo = JSON.parse(data.touristGroupDetail);
                         data.touristGroupDetail = touristGroupInfo;
                         var html = updateTransferInTemplate(data);
-                        if (status == undefined || status == null ||status == "") {
+                        if (status == undefined || status == null ||status == "" || InnerTransfer ==undefined) {
                             if (Tools.addTab(updateTabId, "添加游客", html)) {
                                 touristGroup.updateEvents(typeOut);
                             }
