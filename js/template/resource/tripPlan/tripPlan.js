@@ -418,7 +418,7 @@ define(function(require, exports) {
 		//查看浮动自选餐厅
 		tripPlan.viewOptionalRestaurant($tab.find('.T-chooseRestaurant'));
 		//计算导付
-		//tripPlan.calculatePrice($tab);
+		tripPlan.calculatePrice($tab);
 		//时间控件
 		tripPlan.dateTimePicker($tab);
 		//提交事件
@@ -1661,15 +1661,16 @@ define(function(require, exports) {
 				tripPlan.plusPrice($(this), $tab);
 			});
 			$this.find("select[name=payType]").on("change", function(){
-				if($this.val()!=0){
+				var $type = $(this);
+				if($type.val()!=0){
 					$parents.find("input[name=guidePayMoney]").val("");
 				}else{
-					tripPlan.plusPrice($(this), $tab);
+					tripPlan.plusPrice($type, $tab);
 				}
 			});
 
 			//加载时自动计算
-			tripPlan.plusPrice($this.find('input[name=fee], input[name=memberCount], input[name=reduceMoney], input[name=payedMoney]'), $tab);
+			//tripPlan.plusPrice($this.find('input[name=fee], input[name=memberCount], input[name=reduceMoney], input[name=payedMoney]'), $tab);
 		});
 	},
 	tripPlan.plusPrice = function($this, $tab){
