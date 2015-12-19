@@ -511,7 +511,7 @@ define(function(require, exports) {
                         } else {
                             scenic.$checkTab.data('isEdited',false);
                             Tools.addTab(tab_id, title, html);
-                            scenic.initCheck(0,scenic.$checkTab.find(".T-newData").data("id"),scenic.$checkTab.find(".T-newData").data("name"));
+                            scenic.scenicCheck(0,scenic.$checkTab.find(".T-newData").data("id"),scenic.$checkTab.find(".T-newData").data("name"));
                         }
                     });
                 }

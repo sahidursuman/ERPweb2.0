@@ -1,6 +1,6 @@
-/*TMODJS:{"debug":true,"version":4,"md5":"2878d9d9796ada10b46d0cbb4afe5ce7"}*/
+/*TMODJS:{"debug":true,"version":6,"md5":"852b6d3834545566550bd6e4a8bb2fc7"}*/
 define(function(require) {
-    return require("../../../../../template")("js/template/financial/totalProfit/view/listTable", function($data, $filename) {
+    return require("../../../template")("financial/totalProfit/view/listTable", function($data, $filename) {
         try {
             var $utils = this, $helpers = $utils.$helpers, $line = 0, $each = $utils.$each, result = $data.result, $escape = ($data.rs, 
             $data.$index, $utils.$escape), $out = "";

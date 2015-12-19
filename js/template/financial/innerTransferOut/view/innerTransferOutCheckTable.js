@@ -1,6 +1,6 @@
-/*TMODJS:{"debug":true,"version":244,"md5":"b8f55e26e974e8bb4d0f10728115b938"}*/
+/*TMODJS:{"debug":true,"version":246,"md5":"e7902d4bcc99430a8ce32dc32665f052"}*/
 define(function(require) {
-    return require("../../../../../template")("js/template/financial/innerTransferOut/view/innerTransferOutCheckTable", function($data, $filename) {
+    return require("../../../template")("financial/innerTransferOut/view/innerTransferOutCheckTable", function($data, $filename) {
         try {
             var $utils = this, $helpers = $utils.$helpers, $line = 0, $each = $utils.$each, list = $data.list, $escape = ($data.checking, 
             $data.index, $utils.$escape), $out = ($data.otherFee, $data.$index, $data.visitor, 
