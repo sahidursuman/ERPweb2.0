@@ -513,7 +513,7 @@ define(function(require, exports) {
 			 */
 			// 导游
 			ResLineProduct.bindGuideChosen($tab.find('.T-guide-name'), validator);
-			ResLineProduct.bindInsuranceChosen($tab.find('.T-insurance-name'), validator);
+			ResLineProduct.bindInsuranceChosen($tab.find('.T-insurance-name'), $tab.find('.T-chooseInsuranceItem'), validator);
 			ResLineProduct.bindBusCompanyChosen($tab.find('.T-buscompany-name'), validator);
 			ResLineProduct.bindBusDetailChosen($tab.find('.T-licenseNumber'), validator);
 
@@ -617,7 +617,7 @@ define(function(require, exports) {
 	 * @param  {object} $input 绑定的Dom
 	 * @return {[type]}        [description]
 	 */
-	ResLineProduct.bindInsuranceChosen = function($input, validator) {
+	ResLineProduct.bindInsuranceChosen = function($input, $item, validator) {
 		if (!$input || !$input.length) {
 			console.error('绑定保险的autocomplete，主体Dom为空!');
 			return;
@@ -629,6 +629,7 @@ define(function(require, exports) {
 					var $tr = $(this).val("").closest('tr');
 					$tr.find("input[name=insuranceId]").val("");
 					$tr.find("input[name=type]").val("");
+					$tr.find("input[name=typeId]").val("");
 					$tr.find("input[name=price]").val("");
 					$tr.find("input[name=telNumber]").val("");
 					$tr.find("input[name=managerName]").val("");
@@ -649,6 +650,9 @@ define(function(require, exports) {
 						if(result){
 							var insurance = JSON.parse(data.insurance), $tr = $that.closest('tr');
 							$tr.find("input[name=insuranceId]").val(insurance.id).trigger('change');
+							$tr.find("input[name=type]").val("");
+							$tr.find("input[name=typeId]").val("");
+							$tr.find("input[name=price]").val("");
 							$tr.find("input[name=telNumber]").val(insurance.telNumber);
 							$tr.find("input[name=managerName]").val(insurance.managerName);
 							$tr.find("input[name=mobileNumber]").val(insurance.telNumber);
@@ -679,6 +683,56 @@ define(function(require, exports) {
 				}
 			});
 		});
+
+		$item.autocomplete({
+			minLength: 0,
+			change: function(event, ui) {
+					if(ui.item == null){
+					var $this = $(this), $parents = $this.closest('tr');
+					$this.val('')
+					$parents.find('[name=typeId]').val('');
+					$parents.find('[name=price]').val('');
+				}
+			},
+			select: function(event, ui) {
+				var $this = $(this), $parents = $this.closest('tr');
+				$parents.find('[name=typeId]').val(ui.item.id).trigger('click');
+				$parents.find('[name=price]').val(ui.item.price);
+			}
+		}).off('click').on('click', function() {
+			var $this = $(this), $parents =$this.closest('tr'),
+				$id = $parents.find('[name=insuranceId]').val();
+			if (!!$id) {
+				$.ajax({
+					url: KingServices.build_url('insurance','selectInsuranceItem'),
+					type: 'POST',
+					showLoading:false,
+					data: {id: $id},
+					success: function(data) {
+						if (showDialog(data)) {
+							var $list = JSON.parse(data.insuranceItem);
+							if ($list != null && $list.length > 0) {
+								for (var i = 0; i < $list.length; i++) {
+									$list[i].value = $list[i].name;
+								}
+							}else{
+								layer.tips('没有内容', obj, {
+								    tips: [1, '#3595CC'],
+								    time: 2000
+								});
+							}
+							$this.autocomplete('option','source', $list);
+							$this.autocomplete('search', '');
+						}
+					}
+				})
+			}else{
+				layer.tips('请选择保险公司', $this, {
+				    tips: [1, '#3595CC'],
+				    time: 2000
+				});
+			}
+		})
 	};
 
 	/**
@@ -1852,6 +1906,7 @@ define(function(require, exports) {
 		travelLineData.insurance = [{
 				id : getValue($form, "templateId"),
 				insuranceId : getValue($form, "insuranceId"),
+				typeId: getValue($form, "typeId"),
 				type : getValue($form, "type"),
 				price : getValue($form, "price"),
 				remark : getValue($form, "remark")
