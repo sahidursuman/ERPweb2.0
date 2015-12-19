@@ -167,7 +167,8 @@ define(function(require, exports) {
         }
 
         Client.checkPageNo = args.pageNo = pageNo || 0;
-
+        args.sortType = 'startTime';
+        args.order='asc';
         $.ajax({
             url : KingServices.build_url('financial/customerAccount', 'listCheckCustomerAcccount'),
             type : "POST",
@@ -416,7 +417,8 @@ define(function(require, exports) {
         }
 
         args.pageNo = pageNo || 0;
-
+        args.sortType = 'startTime';
+        args.order='asc';
         $.ajax({
             url:KingServices.build_url("financial/customerAccount","listReciveCustomerAcccount"),
             type:"POST",

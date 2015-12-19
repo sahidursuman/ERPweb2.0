@@ -501,7 +501,7 @@ define(function(require, exports) {
                             type = $tab.find('.T-btn-save').data('type');
                         if (!!type) {
                             data.list = FinancialService.getTempDate(data.list, FinGuide.payingJson);
-
+                            data.isOuter = FinGuide.isOuter;
                             html = filterUnAuth(payingTableTemplate(data));
                         } else {
                             html = filterUnAuth(checkingTableTemplate(data));
@@ -690,7 +690,7 @@ define(function(require, exports) {
     FinGuide.initPayModule = function(options) {
         options.guideId = options.id;
         delete(options.id);
-        options.isOuter = true;
+        options.isOuter = FinGuide.isOuter = true;
 
         FinGuide.initOperationModule(options, 1)
     };
