@@ -208,7 +208,7 @@ define(function(require, exports) {
 				Ticket.payDetails(id);
 			} else if ($that.hasClass('T-view-receipts'))  {
 				// 单据
-				Ticket.viewReceipts($tab, $that.data('billImage'));
+				Ticket.viewReceipts($tab, $that.data('billimage'));
 			}else if($that.hasClass('T-view-details')){
 				// 查看对账
 				Ticket.viewDetails(id);
@@ -422,7 +422,7 @@ define(function(require, exports) {
 				    curr: (data.searchParam.pageNo + 1),
 				    jump: function(obj, first) {
 				    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-				    		Ticket.clearingList(obj.curr -1);
+				    		Ticket.clearingList(obj.curr -1, args.ticketId, args.startDate, args.endDate);
 				    	}
 				    }
 				});	
@@ -476,7 +476,7 @@ define(function(require, exports) {
 				Ticket.payDetails(id);
 			} else if ($that.hasClass('T-view-receipts'))  {
 				// 单据
-				Ticket.viewReceipts($tab, $that.data('billImage'));
+				Ticket.viewReceipts($tab, $that.data('billimage'));
 			}else if($that.hasClass('T-view-details')){
 				// 查看对账
 				Ticket.viewDetails(id);
@@ -489,11 +489,9 @@ define(function(require, exports) {
 					Ticket.savePayingData($tab);
 				}, function(){
 					Tools.closeTab(clearMenuKey);
-                	Ticket.getList(Ticket.listPageNo);
 				});
 			}else{
 				Tools.closeTab(clearMenuKey);
-                Ticket.getList(Ticket.listPageNo);
 			}
 		});
 		$tab.find(".T-btn-save").on('click', function(event){

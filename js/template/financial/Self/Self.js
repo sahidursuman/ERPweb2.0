@@ -291,7 +291,7 @@ define(function(require, exports) {
         // 初始化jQuery 对象 
         Self.$clearTab = $("#tab-" + menuKey + "-clearing-content");
         Self.$clearSearchArea = Self.$clearTab.find('.T-search-area');
-        var autoValidator = new FinRule(2).check(Self.$clearTab.find('.T-count'));
+        var autoValidator = new FinRule(1).check(Self.$clearTab.find('.T-count'));
         Self.init_event(page,id,name,Self.$clearTab,"clear");
         Tools.setDatePicker(Self.$clearTab.find(".date-picker"),true);
 

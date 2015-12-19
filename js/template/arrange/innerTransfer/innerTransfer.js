@@ -620,11 +620,10 @@ define(function(require, exports) {
 									innerTransfer.getSearchParam(divId,type);
 									innerTransfer.innerList(divId,type,0);
 
-									var touristGroupId=data.touristGroupId,
-									    typeOut='inner';
+									var touristGroupId=data.touristGroupId;
 
 									//是否中转安排提信息
-									KingServices.addTouristGroup(touristGroupId,typeOut);
+									KingServices.updateTransferIn(touristGroupId);
 
 									//内转确认后数据刷新
 									$innerTrsfInObj=$('#inner-TransferIn');
@@ -643,8 +642,6 @@ define(function(require, exports) {
 			}
 		});
 	};
-
-
 
 
 	innerTransfer.deleteTransferIn = function(id){
@@ -824,5 +821,6 @@ define(function(require, exports) {
 	exports.init = innerTransfer.initModule;
 	exports.isEdited = innerTransfer.isEdited; 
 	exports.save = innerTransfer.save; 
-	exports.clearEdit = innerTransfer.clearEdit; 
+	exports.clearEdit = innerTransfer.clearEdit;
+	exports.viewTransferOut = innerTransfer.viewTransferOut;//用于内转利润查看我部转出小组信息--不要再给我删了	
 });

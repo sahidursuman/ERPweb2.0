@@ -826,12 +826,11 @@ define(function(require, exports) {
 				seatCount = parents.find("[name=seatCount]").val(),
 				busBrand = parents.find("[name=busbrand]").val();
 			$.ajax({
-				url:""+APP_ROOT+"back/busCompany.do?method=getAllBusCompanyList&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
+				url: KingServices.build_url('busCompany', 'getAllBusCompanyList'),
 				data: {
 					seatCount: seatCount,
 					brand: busBrand
 				},
-				dateType:"json",
 				showLoading:false,
 				type:"POST",
 				success:function(data){
@@ -1312,6 +1311,7 @@ define(function(require, exports) {
 		for(var i = 0; i<obj.length; i++){
 			var busJson = {//touristGroup.getArrangeTrValue(outBusTr.eq(i),""),
 				id : obj.eq(i).attr("data-entity-id"),
+				seatCount : transit.getArrangeTrValue(obj.eq(i),"seatCount"),
 				serviceType : transit.getArrangeTrValue(obj.eq(i),"serviceType"),
 				busCompanyId : transit.getArrangeTrValue(obj.eq(i),"busCompanyId"),
 				busId : transit.getArrangeTrValue(obj.eq(i),"busLicenseNumberId"),

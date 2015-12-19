@@ -537,7 +537,7 @@
 											<tbody>{{each bus as outBus}}
 												{{if outBus.id != null && outBus.busCompany != null}}
 												<tr data-entity-id="{{outBus.id}}">
-													<td><input type="text" class="col-sm-12 T-chooseSeatCount" name="seatCount" value="{{if outBus.bus != null}}{{outBus.bus.seatCount}}{{/if}}" /></td>
+													<td><input type="text" class="col-sm-12 T-chooseSeatCount" name="seatCount" value="{{if outBus.bus != null}}{{outBus.bus.seatCount}}{{else}}{{outBus.seatCount}}{{/if}}" /></td>
 													<td><input class="col-sm-12 T-chooseBusBrand" name="busbrand" type="text" value="{{if outBus.bus != null}}{{outBus.bus.brand}}{{/if}}" /></td>
 													<td>
 														<div class="col-sm-12">
