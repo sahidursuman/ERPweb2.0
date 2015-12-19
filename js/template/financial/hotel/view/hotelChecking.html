@@ -65,7 +65,7 @@
 				<td>{{rs.reduceMoney}}</td>
 				<td>{{rs.needPayMoney}}</td>
 				<td><a class="T-option T-payedDetail" data-money="{{rs.payedMoney + rs.realGuidePayMoney}}">{{"社付："}}{{rs.payedMoney}}{{if !rs.isGuidePay || rs.isGuidePay != 1}}{{"，"}}{{"导付："}}{{rs.realGuidePayMoney}}{{/if}}</a></td> 
-				<td>{{if rs.billImages != null && rs.billImages !=""}}<a href="#" class="T-option T-hotelImg" url="{{rs.billImages}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
+				<td>{{if rs.billImage != null && rs.billImage !=""}}<a href="#" class="T-option T-hotelImg" url="{{rs.billImage}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
 				<td><input type="text" name="settlementMoney" value="{{rs.settlementMoney}}" class="money"></td>
                 <td name="unPayedMoney">{{rs.unPayedMoney}}</td>
                 <td><input type="text" name="checkRemark" value="{{rs.checkRemark}}" style="text-align:center"/></td>

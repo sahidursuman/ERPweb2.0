@@ -388,7 +388,7 @@ define(function(require, exports) {
                 data.images.push(image);
             }
         }
-        var html = billImageTempLate(data);
+        var html = billImagesTemplate(data);
         
         layer.open({
             type : 1,

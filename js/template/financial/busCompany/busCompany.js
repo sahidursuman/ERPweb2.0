@@ -392,7 +392,7 @@ define(function(require, exports) {
 
         //自动下账
         busCompany.$clearTab.find(".T-clear-auto").off().on("click",function(){
-            var autoPayJson = FinancialService.autoPayJson(id,busCompany.$clearTab,rule);
+            var autoPayJson = FinancialService.autoPayJson(id,busCompany.$clearTab,new FinRule(2));
             if(!autoPayJson){return false;}
             var startDate = busCompany.$clearSearchArea.find("input[name=startDate]").val(),
                 endDate = busCompany.$clearSearchArea.find("input[name=endDate]").val();
