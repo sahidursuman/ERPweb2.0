@@ -923,9 +923,10 @@ define(function(require, exports){
                 	console.log(data);
                 	showMessageDialog($( "#confirm-dialog-message" ),data.message);
                 	if(billStatus == 0) {
-                		
+                		Tools.closeTab(updateTabId);
+                		Count.listCountHeader(0);
                 	}else{
-                		
+                		Count.updateExamine(financialTripPlanId);
                 	}
                 }
             }
