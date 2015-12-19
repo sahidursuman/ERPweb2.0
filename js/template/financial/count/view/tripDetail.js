@@ -1,6 +1,6 @@
-/*TMODJS:{"debug":true,"version":658,"md5":"33dd0317c05703dba2d34efb24e97870"}*/
+/*TMODJS:{"debug":true,"version":659,"md5":"6c85022ae87678486a09b26cd59d534b"}*/
 define(function(require) {
-    return require("../../../../../template")("js/template/financial/count/view/tripDetail", function($data, $filename) {
+    return require("../../../template")("financial/count/view/tripDetail", function($data, $filename) {
         try {
             var $utils = this, $helpers = $utils.$helpers, $line = 0, $escape = $utils.$escape, tripPlan = $data.tripPlan, busCompanyArrange = $data.busCompanyArrange, touristGroup = $data.touristGroup, guideArrange = $data.guideArrange, insurancePrice = $data.insurancePrice, isOp = $data.isOp, WEB_IMG_URL_BIG = $data.WEB_IMG_URL_BIG, WEB_IMG_URL_SMALL = $data.WEB_IMG_URL_SMALL, remarkArrangeList = $data.remarkArrangeList, $each = $utils.$each, dayList = $data.dayList, arrangeIncomePaymentList = ($data.day, 
             $data.$index, $data.shopArrangeList, $data.arrange, $data.index, $data.arrangeList, 
