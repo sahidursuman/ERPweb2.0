@@ -179,12 +179,12 @@ define(function(require, exports) {
             };
             if ($that.hasClass('T-view')) {
                 //查看小组
-                touristGroup.viewTouristGroupDetails(id);
+                touristGroup.viewTouristGroupDetails(touristGroupId);
             };
             if ($that.hasClass('T-del')) {
                 //删除小组
                 showConfirmDialog($("#confirm-dialog-message"), "确定删除该条数据?", function() {
-                    touristGroup.deleteGroup(id);
+                    touristGroup.deleteGroup(touristGroupId);
                 });
             };
         });
@@ -475,7 +475,7 @@ define(function(require, exports) {
         //新增同行
         $obj.find('.T-addPartner').off('click').on("click", {
             function: KingServices.addPartnerAgency,
-            type: ".form-group",
+            type: ".control-label",
             name: "fromPartnerAgency",
             id: "fromPartnerAgencyId"
         }, KingServices.addResourceFunction);
