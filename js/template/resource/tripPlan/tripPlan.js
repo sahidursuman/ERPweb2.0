@@ -418,7 +418,7 @@ define(function(require, exports) {
 		//查看浮动自选餐厅
 		tripPlan.viewOptionalRestaurant($tab.find('.T-chooseRestaurant'));
 		//计算导付
-		tripPlan.calculatePrice($tab);
+		//tripPlan.calculatePrice($tab);
 		//时间控件
 		tripPlan.dateTimePicker($tab);
 		//提交事件

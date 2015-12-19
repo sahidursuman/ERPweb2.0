@@ -321,6 +321,10 @@ table tr td{
     margin-left: 10px;
 }
 
+.label-inline-60 {
+    display: inline-block;
+    width: 60px;
+}
 .widget-main{padding: 0!important;}
 .form-group{margin-bottom: 13px!important;}
 .color{
@@ -343,7 +347,11 @@ table tr td{
 .top-box{
     margin-top: 10px;
 }
-.dropdown-menu{left: -25px;min-width: 70px}
+.dropdown-menu {
+    margin-left: 0;
+    min-width: 70px
+}
+
 #alter-pwd {
     color: #393939;
 }

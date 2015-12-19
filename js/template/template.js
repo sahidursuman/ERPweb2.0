@@ -146,5 +146,22 @@
           default:
             return "其他";
         }
+    }), template.helper("getBillStatusText", function(billStatus, tripPlanStatus) {
+        switch (1 * billStatus) {
+          case -1:
+            return -1 == tripPlanStatus ? "该发团计划已经被取消" : "编辑计划";
+
+          case 0:
+            return "导游已经报账，若需编辑，需要计调退回";
+
+          case 1:
+            return "计调已审核，若需编辑，需要财务和计调退回";
+
+          case 2:
+            return "财务已审核，若需编辑，需要管理员、财务和计调同时操作退回";
+
+          default:
+            return "";
+        }
     });
 }();
