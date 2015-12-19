@@ -1753,12 +1753,14 @@ KingServices.addResourceFunction = function(e){
 		mobileNumber = e.data.mobileNumber,
 		$function = e.data.function,
 		fn = function (data){
+			console.log(data)
 			if (!!data.name && !!name && !!data.id && !!id) {$parents.find('input[name=price],input[name=hotelRoom],input[name=hotelRoomId],input[name=fee],input[name=chargingProjects],input[name=chargingId],input[name=goodsPolicy],input[name=shopPolicyId],input[name=selfitem],input[name=selfitemId],input[name=oldPrice],input[name=hotelRoomType],input[name=hotelRoomTypeId],input[name=hotelPrice],input[name=partnerAgencyNameList],input[name=partnerAgencyContactId]').val("")}
 			if (!!data.name && !!name) {$parents.find('input[name='+name+']').val(data.name).trigger('change');}
 			if (!!data.id && !!id) {$parents.find('input[name='+id+']').val(data.id).trigger('change');}
 			if (!!data.managerName && !!managerName) {$parents.find('input[name='+managerName+']').val(data.managerName);}
 			if (!!data.mobileNumber && !!mobileNumber) {$parents.find('input[name='+mobileNumber+']').val(data.mobileNumber);}
 			if (!!data.level) {$parents.find('select[name=hotelLevel]').val(data.level);}
+			if (!!data.type) {$parents.find('input[name=type]').val(data.type);}
 		}
 	$function(fn);
 }

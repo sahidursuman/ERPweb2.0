@@ -475,7 +475,7 @@ define(function(require, exports) {
         //新增同行
         $obj.find('.T-addPartner').off('click').on("click", {
             function: KingServices.addPartnerAgency,
-            type: ".form-group",
+            type: ".control-label",
             name: "fromPartnerAgency",
             id: "fromPartnerAgencyId"
         }, KingServices.addResourceFunction);
