@@ -375,6 +375,7 @@ define(function(require, exports) {
             scenic.$clearTab.find(".T-clear-auto").toggle();
             scenic.clearTempSumDate = false;
             scenic.clearTempData = false;
+			scenic.$clearTab.data('isEdited',false);
             scenic.scenicClear(0,0,id,name);
         });
 
@@ -510,7 +511,7 @@ define(function(require, exports) {
                         } else {
                             scenic.$checkTab.data('isEdited',false);
                             Tools.addTab(tab_id, title, html);
-                            scenic.initCheck(0,scenic.$checkTab.find(".T-newData").data("id"),scenic.$checkTab.find(".T-newData").data("name"));
+                            scenic.scenicCheck(0,scenic.$checkTab.find(".T-newData").data("id"),scenic.$checkTab.find(".T-newData").data("name"));
                         }
                     });
                 }

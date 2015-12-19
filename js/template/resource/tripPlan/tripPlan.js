@@ -418,7 +418,7 @@ define(function(require, exports) {
 		//查看浮动自选餐厅
 		tripPlan.viewOptionalRestaurant($tab.find('.T-chooseRestaurant'));
 		//计算导付
-		tripPlan.calculatePrice($tab);
+		//tripPlan.calculatePrice($tab);
 		//时间控件
 		tripPlan.dateTimePicker($tab);
 		//提交事件
@@ -994,6 +994,7 @@ define(function(require, exports) {
 							var hotel = JSON.parse(data.hotel);
 							$parents.find("input[name=mobileNumber]").val(hotel.mobileNumber);
 							$parents.find("input[name=managerName]").val(hotel.managerName);
+							$parents.find(".T-tripPlanHotelStar").val(hotel.level);
 							$parents.find("input[name=hotelRoom]").val("");
 							$parents.find("input[name=hotelRoomId]").val("");
 	                    	$parents.find("input[name=fee]").val("");
@@ -1055,7 +1056,7 @@ define(function(require, exports) {
                     },
                     success: function(data) {
 						if(showDialog(data)){
-	                    	$parents.find("input[name=fee]").val(data.price);
+	                    	$parents.find("input[name=fee]").val(data.price).trigger('change');
 						}
                     }
                 });
