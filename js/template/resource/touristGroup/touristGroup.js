@@ -162,7 +162,9 @@ define(function(require, exports) {
                 status = $tr.attr("data-status"),
                 InnerTransfer=$tr.attr("data-status");//副游客小组
             if ($that.hasClass('T-edit')) {
-                if (!!status && status == 3  && !!InnerTransfer && InnerTransfer==0) { //已转客
+                if (!!status && status == 1 && !!InnerTransfer && InnerTransfer==1) { //已内转
+                    touristGroup.updateTransferIn(touristGroupId,status,InnerTransfer);
+                }else if (!!status && status == 3  && !!InnerTransfer && InnerTransfer==0) { //已转客
                     //跳转游客小组新增页面
                     touristGroup.updateTransfer(touristGroupId,status,InnerTransfer);
 
