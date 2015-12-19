@@ -1,6 +1,6 @@
-/*TMODJS:{"debug":true,"version":159,"md5":"ccd487721754ea08bbb53ad4c961ea59"}*/
+/*TMODJS:{"debug":true,"version":160,"md5":"54fc4b2bb756ad40f8000c530c677e5d"}*/
 define(function(require) {
-    return require("../../../../../template")("js/template/financial/totalProfit/view/list", function($data, $filename) {
+    return require("../../../template")("financial/totalProfit/view/list", function($data, $filename) {
         try {
             var $utils = this, $line = ($utils.$helpers, 0), $escape = $utils.$escape, startDate = $data.startDate, endDate = $data.endDate, $out = "";
             return $out += ' <div class="row" > <form class="form-horizontal" role="form" onsubmit="return false"> <div class="T-search-area"> <label>开始时间：</label> <input class="date-picker" name="startTime" value = "', 

@@ -172,8 +172,6 @@ define(function(require,exports) {
 						var $checkId = $("#tab-"+checkId+"-content");
 						InnerTransferOut.$checkTab = $checkId;
 						InnerTransferOut.$checkSearchArea = $checkId.find(".T-search");
-
-					    
 						//获取线路数据
 						var lineProductNameObj = InnerTransferOut.$checkSearchArea.find('input[name=lineProductName]');
 						InnerTransferOut.getCheckLineproduct(lineProductNameObj,$lineProductData);
@@ -368,7 +366,7 @@ define(function(require,exports) {
 						message = "付款金额需大于0！";
 					};
 					if(parseFloat(payMoney)>parseFloat(unPayMoney)){
-						message = "本次付款金额不能大于已对账未付总额！";
+						message = "本次付款金额合计大于未付金额合计（已对账），请先进行对账";
 					};
 					
 					showMessageDialog($("#confirm-dialog-message"),message);
@@ -380,7 +378,10 @@ define(function(require,exports) {
         	});
         		
         	}else{
-        		InnerTransferOut.setAutoFillEdit($obj,false)
+        		InnerTransferOut.setAutoFillEdit($obj,false);
+        		InnerTransferOut.saveJson = [];
+        		InnerTransferOut.btnSatus = 0;
+        		InnerTransferOut.settlement($data);
         	}
         });
         //确认付款事件
@@ -425,6 +426,7 @@ define(function(require,exports) {
 						InnerTransferOut.saveJson = data;
 						console.log(InnerTransferOut.saveJson);
 						InnerTransferOut.btnSatus = 1;
+						$obj.data('isEdited', false);
 						InnerTransferOut.settlement($data);
 						//设置按钮样式
 					});

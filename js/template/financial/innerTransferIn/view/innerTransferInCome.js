@@ -1,6 +1,6 @@
-/*TMODJS:{"debug":true,"version":19,"md5":"839ed1feac594ddd0ecaca72d3000269"}*/
+/*TMODJS:{"debug":true,"version":21,"md5":"f6e30a25410140976ff97cea8a9d9ef7"}*/
 define(function(require) {
-    return require("../../../../../template")("js/template/financial/innerTransferIn/view/innerTransferInCome", function($data, $filename) {
+    return require("../../../template")("financial/innerTransferIn/view/innerTransferInCome", function($data, $filename) {
         try {
             var $utils = this, $helpers = $utils.$helpers, $line = 0, $each = $utils.$each, receivedDetailsList = $data.receivedDetailsList, $escape = ($data.income, 
             $data.$index, $utils.$escape), $out = "";
