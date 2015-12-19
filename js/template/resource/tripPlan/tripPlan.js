@@ -1999,11 +1999,11 @@ define(function(require, exports) {
 			},
 			success: function(data){
 				if(showDialog(data)){
+					tripPlan.listTripPlan(0);
 					showMessageDialog($("#confirm-dialog-message"),data.message, function(){
 						if (isClose == 1) {
 							if (argumentsLen == 3) {
 								Tools.closeTab(menuKey + "-update");
-								tripPlan.listTripPlan(0);
 							}else{
 								$tab.data('isEdited',false);
 								Tools.addTab(tab_id, title, html)
