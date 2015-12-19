@@ -821,5 +821,6 @@ define(function(require, exports) {
 	exports.init = innerTransfer.initModule;
 	exports.isEdited = innerTransfer.isEdited; 
 	exports.save = innerTransfer.save; 
-	exports.clearEdit = innerTransfer.clearEdit; 
+	exports.clearEdit = innerTransfer.clearEdit;
+	exports.viewTransferOut = innerTransfer.viewTransferOut;//用于内转利润查看我部转出小组信息--不要再给我删了	
 });
