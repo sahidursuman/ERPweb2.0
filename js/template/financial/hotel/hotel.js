@@ -101,19 +101,11 @@ define(function(require, exports) {
                 name = $that.closest('tr').data('name');
             if ($that.hasClass('T-check')) {
                 // 对账
-                var $checkTab = $("#tab-" + menuKey + "-checking-content");
-                if($checkTab.length && $checkTab.find('.T-newData').data("id") == id){
-                    $('.tab-' + menuKey + '-checking').children('a').trigger('click');
-                    return false;
-                }
+               
                 hotel.hotelCheck(0,id,name,"",startDate,endDate);
             } else if ($that.hasClass('T-clear')) {
                 // 结算
-                var $clearTab = $("#tab-" + menuKey + "-clearing-content");
-                if($clearTab.length && $clearTab.find('.T-newData').data("id") == id){
-                    $('.tab-' + menuKey + '-clearing').children('a').trigger('click');
-                    return false;
-                }
+                
                 hotel.hotelClear(0,0,id,name,"",startDate,endDate);
             }
         });
