@@ -317,7 +317,6 @@ define(function(require, exports) {
         // 初始化jQuery 对象 
         Insure.$clearTab = $("#tab-" + menuKey + "-clearing-content");
         Insure.$clearSearchArea = Insure.$clearTab.find('.T-search-area');
-
         Insure.init_event(page,id,name,Insure.$clearTab,"clear");
         Tools.setDatePicker(Insure.$clearTab.find(".date-picker"),true);
 
@@ -639,7 +638,6 @@ define(function(require, exports) {
     };
 
     Insure.initPay = function(options){
-         Insure.showBtnFlag = true;
         Insure.getClearing(2,0,options.id,options.name,"",options.startDate,options.endDate); 
     };
 
