@@ -395,7 +395,7 @@ define(function(require,exports) {
 						message = "收款金额需大于0！";
 					};
 					if(parseFloat(payMoney)>parseFloat(unPayMoney)){
-						message = "本次收款金额不能大于已对账未收总额！";
+						message = "本次收款金额合计大于未收金额合计（已对账），请先进行对账";
 					};
 					if(startDate>endDate){
 						message = "开始时间不能大于结束时间，请重新选择！";
