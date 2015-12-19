@@ -148,14 +148,14 @@
                         <i class="ace-icon fa fa-clock-o red bigger-130"></i> 已过期 {{/if}}
                     </td>
                     <td style="vertical-align:middle;width:240px;">
-                        <a billStatus="{{tripPlan.billStatus}}" statusValue="{{tripPlan.status}}" title="确认发团" class="{{if tripPlan.status != -1 && tripPlan.status != 2}}T-option T-confirm{{/if}} cursor R-right" data-right="1140006" {{if tripPlan.status==- 1 || tripPlan.status==2 }} style="color:#bbb;" {{/if}}>
+                        <a billStatus="{{tripPlan.billStatus}}" statusValue="{{tripPlan.status}}" title="确认发团" class="{{if tripPlan.status != -1 && tripPlan.status != 2}}T-option T-confirm{{/if}} cursor R-right" data-right="1140006" {{if tripPlan.status== -1 || tripPlan.status==2 }} style="color:#bbb;" {{/if}}>
 								确认
 								<label style="padding-left:10px;">|</label>
 							</a>
                         <a title="查看计划" class="T-option T-view cursor">
 								查看
 							</a>
-                        <a billStatus="{{tripPlan.billStatus}}" title="编辑计划" class="{{if tripPlan.status != -1}}T-option T-update{{/if}} cursor R-right" data-right="1140003" {{if tripPlan.status==- 1}} style="color:#bbb;" {{/if}}>
+                        <a billStatus="{{tripPlan.billStatus}}" title="{{tripPlan.billStatus | getBillStatusText: tripPlan.status}}" {{if tripPlan.status != -1 && tripPlan.billStatus == -1}} class="T-option T-update cursor R-right" {{else}} style="color:#bbb;" class="cursor R-right" {{/if}}  data-right="1140003">
                             <label class="padding-right20">|</label>
                             编辑
                         </a>
@@ -163,7 +163,7 @@
                             <label class="padding-right20">|</label>
                             导出
                         </a>
-                        <a billStatus="{{tripPlan.billStatus}}" title="取消计划" class="{{if tripPlan.status != -1}}T-option T-cancel{{/if}} cursor R-right" data-right="1140004" {{if tripPlan.status==- 1}} style="color:#bbb;" {{/if}}>
+                        <a billStatus="{{tripPlan.billStatus}}" title="取消计划" class="{{if tripPlan.status != -1}}T-option T-cancel{{/if}} cursor R-right" data-right="1140004" {{if tripPlan.status== -1}} style="color:#bbb;" {{/if}}>
                             <label class="padding-right20">|</label>
                             取消
                         </a>

@@ -62,8 +62,7 @@ define(function(require, exports) {
 			type:"POST",
 			data:tripPlan.searchData,
 			success:function(data){
-				var result = showDialog(data);
-				if(result){
+				if(showDialog(data)){
 					data.tripPlanList = JSON.parse(data.tripPlanList);
 					var html = listTemplate(data);
 					Tools.addTab(menuKey,"发团计划",html);
