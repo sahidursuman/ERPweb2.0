@@ -1637,13 +1637,12 @@ define(function(require, exports) {
         }
 
         //接送事件点json
-        var outArrangeRemarkJson,
-            $touristReChecked = $arrangeForm.find('.T-touristReception').is(':checked'),
-            $smallCar = $arrangeForm.find('.T-smallCar').is(':checked'),
-            $touristSend = $arrangeForm.find('.T-touristSend').is(':checked');
-        if ($touristReChecked == true || $smallCar == true || $touristSend == true) {
-                outArrangeRemarkJson = touristGroup.installArrangeJson($arrangeForm);
-        }
+        var outArrangeRemarkJson={};
+        var $isChecked=$arrangeForm.find('.T-touristReception','.T-smallCar','.T-touristSend').is('checked');
+            if ($isChecked) {
+                 outArrangeRemarkJson = touristGroup.installArrangeJson($arrangeForm)  
+            }
+
 
         //客户来源不能是地接社
         var type=$lineInfoForm.find('input[name=type]').val();
