@@ -1582,6 +1582,29 @@ KingServices.updateTouristGroup = function(id,type)  {
 
 
 /**
+ * updateTransfer 外转方法的确认
+ * @param  {[type]} touristGroupId [description]
+ * @return {[type]}                [description]
+ */
+KingServices.updateTransfer = function(touristGroupId)  {
+	seajs.use("" + ASSETS_ROOT +modalScripts.resource_touristGroup,function(module){
+		module.updateTransfer(touristGroupId);
+	});
+}
+
+/**
+ * [updateTransferIn 内转方法的确认
+ * @param  {[type]} touristGroupId [description]
+ * @return {[type]}                [description]
+ */
+KingServices.updateTransferIn = function(touristGroupId)  {
+	seajs.use("" + ASSETS_ROOT +modalScripts.resource_touristGroup,function(module){
+		module.updateTransferIn(touristGroupId);
+	});
+}
+
+
+/**
  * 新增游客小组
  * @param  {string} id 游客小组的ID
  * @return {[type]}    [description]
@@ -1591,6 +1614,7 @@ KingServices.addTouristGroup = function(touristGroupId,typeOut)  {
 		module.addTouristGroup(touristGroupId,typeOut);
 	});
 }
+
 
 //导游  新增
 KingServices.addGuide = function(fn){
