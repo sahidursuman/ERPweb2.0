@@ -833,8 +833,7 @@ define(function(require, exports){
 		var data = {
 	    			"images":[]
 	    	};
-	    	var str = $(obj).attr('url');
-	    	var strs = str.split(",");
+	    	var strs = url.split(",");
 	    	for(var i = 0; i < strs.length; i ++) {
 	    		var s = strs[i];
 	    		if(s != null && s != "" && s.length > 0) {
