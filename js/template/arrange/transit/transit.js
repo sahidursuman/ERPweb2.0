@@ -839,43 +839,34 @@ define(function(require, exports) {
 			var obj = this,parents = $(obj).closest('tr'),
 				seatCount = parents.find("[name=seatCount]").val(),
 				busBrand = parents.find("[name=busbrand]").val();
-			if (!!seatCount) {
-				$.ajax({
-					url:""+APP_ROOT+"back/busCompany.do?method=getAllBusCompanyList&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-					data: {
-						seatCount: seatCount,
-						brand: busBrand
-					},
-					dateType:"json",
-					showLoading:false,
-					type:"POST",
-					success:function(data){
-						var result = showDialog(data);
-						if(result){
-							console.info(data);
-							var busCompanyList = JSON.parse(data.busCompanyList);
-							if(busCompanyList && busCompanyList.length > 0){
-								for(var i=0; i < busCompanyList.length; i++){
-									busCompanyList[i].value = busCompanyList[i].companyName;
-								}
-								$(obj).autocomplete('option','source', busCompanyList);
-								$(obj).autocomplete('search', '');
-							}else{
-								layer.tips('无数据', obj, {
-								    tips: [1, '#3595CC'],
-								    time: 2000
-								});
+			$.ajax({
+				url: KingServices.build_url('busCompany', 'getAllBusCompanyList'),
+				data: {
+					seatCount: seatCount,
+					brand: busBrand
+				},
+				showLoading:false,
+				type:"POST",
+				success:function(data){
+					var result = showDialog(data);
+					if(result){
+						console.info(data);
+						var busCompanyList = JSON.parse(data.busCompanyList);
+						if(busCompanyList && busCompanyList.length > 0){
+							for(var i=0; i < busCompanyList.length; i++){
+								busCompanyList[i].value = busCompanyList[i].companyName;
 							}
+							$(obj).autocomplete('option','source', busCompanyList);
+							$(obj).autocomplete('search', '');
+						}else{
+							layer.tips('无数据', obj, {
+							    tips: [1, '#3595CC'],
+							    time: 2000
+							});
 						}
 					}
-				})
-			}
-			else{
-				layer.tips('请选择车队', obj, {
-				    tips: [1, '#3595CC'],
-				    time: 2000
-				});
-			}
+				}
+			})
 		});
 		//司机选择
 		var chooseDriver = $tab.find(".T-chooseDriver");
@@ -1334,6 +1325,7 @@ define(function(require, exports) {
 		for(var i = 0; i<obj.length; i++){
 			var busJson = {//touristGroup.getArrangeTrValue(outBusTr.eq(i),""),
 				id : obj.eq(i).attr("data-entity-id"),
+				seatCount : transit.getArrangeTrValue(obj.eq(i),"seatCount"),
 				serviceType : transit.getArrangeTrValue(obj.eq(i),"serviceType"),
 				busCompanyId : transit.getArrangeTrValue(obj.eq(i),"busCompanyId"),
 				busId : transit.getArrangeTrValue(obj.eq(i),"busLicenseNumberId"),
