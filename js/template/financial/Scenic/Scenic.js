@@ -127,12 +127,15 @@ define(function(require, exports) {
         page = page || 0;
         var searchParam = {
             pageNo : page,
-            scenicId : scenicId + "",
+            scenicId : scenicId || scenic.$checkTab.find('.T-newData').data('id'),
             accountInfo : accountInfo,
             startDate : startDate,
             endDate : endDate,
             sortType : "auto"
         };
+        if(!scenicId && !!scenic.$checkTab){
+            scenicName = scenic.$checkTab.find('.T-newData').data('name');
+        }
         searchParam = JSON.stringify(searchParam);
         $.ajax({
             url:KingServices.build_url("financial/financialScenic","listScenicAccount"),
@@ -175,6 +178,7 @@ define(function(require, exports) {
     scenic.initCheck = function(page,id,name){
     	// 初始化jQuery 对象 
         scenic.$checkTab = $("#tab-" + menuKey + "-checking-content");
+
         scenic.$checkSearchArea = scenic.$checkTab.find('.T-search-area');
 
         scenic.init_event(page,id,name,scenic.$checkTab,"check");
@@ -184,7 +188,7 @@ define(function(require, exports) {
         //搜索按钮事件
         scenic.$checkSearchArea.find('.T-search').on('click', function(event) {
             event.preventDefault();
-            scenic.scenicCheck(0,id,name);
+            scenic.scenicCheck(0,null,name);
         });
 
         //导出报表事件 btn-scenicExport
@@ -228,7 +232,7 @@ define(function(require, exports) {
     //结算
     scenic.scenicClear = function(isAutoPay,page,scenicId,scenicName,accountInfo,startDate,endDate, isOuter){
         if (isAutoPay) {
-            var searchParam = FinancialService.autoPayJson(scenicId,scenic.$clearTab, new FinRule(3));
+            var searchParam = FinancialService.autoPayJson(scenic.$clearTab.find('.T-newData').data('id'),scenic.$clearTab, new FinRule(3));
             searchParam = JSON.parse(searchParam);
             searchParam.scenicId = searchParam.id;   
             delete(searchParam.id);
@@ -246,7 +250,7 @@ define(function(require, exports) {
             page = page || 0;
             var searchParam = {
                 pageNo : page,
-                scenicId : scenicId + "",
+                scenicId : scenicId || scenic.$clearTab.find('.T-newData').data('id'),
                 accountInfo : accountInfo,
                 startDate : startDate,
                 endDate : endDate,
@@ -255,6 +259,9 @@ define(function(require, exports) {
         }
         searchParam = JSON.stringify(searchParam);
         
+        if(!scenicId && !!scenic.$clearTab){
+            scenicName = scenic.$clearTab.find('.T-newData').data('name');
+        }
         $.ajax({
             url:KingServices.build_url("financial/financialScenic","listScenicAccount"),
             type:"POST",
@@ -342,7 +349,7 @@ define(function(require, exports) {
         scenic.$clearTab.find(".T-search").click(function(){
             scenic.clearTempSumDate = false;
             scenic.clearTempData = false;
-            scenic.scenicClear(0,0,id,name);
+            scenic.scenicClear(0,0,null,name);
         });
 
         //报表内的操作
@@ -366,7 +373,7 @@ define(function(require, exports) {
             var startDate = scenic.$clearTab.find("input[name=startDate]").val(),
                 endDate = scenic.$clearTab.find("input[name=endDate]").val();
             FinancialService.autoPayConfirm(startDate, endDate, function() {
-                scenic.scenicClear(1,page,id,name);
+                scenic.scenicClear(1,page,null,name);
             });
         });
 
@@ -375,7 +382,7 @@ define(function(require, exports) {
             scenic.$clearTab.find(".T-clear-auto").toggle();
             scenic.clearTempSumDate = false;
             scenic.clearTempData = false;
-            scenic.scenicClear(0,0,id,name);
+            scenic.scenicClear(0,0,null,name);
         });
 
         FinancialService.updateSumPayMoney(scenic.$clearTab,new FinRule(scenic.isOuter ? 3 : 1));
@@ -549,7 +556,7 @@ define(function(require, exports) {
                             scenic.listScenic(scenic.searchData.pageNo,scenic.searchData.scenicName,scenic.searchData.scenicId,scenic.searchData.startDate,scenic.searchData.endDate);
                         }else if(argumentsLen === 3){
                             scenic.$clearTab.data('isEdited',false);
-                            scenic.scenicClear(0,page,id,name);
+                            scenic.scenicClear(0,page,null,name);
                         } else {
                             scenic.$clearTab.data('isEdited',false);
                             Tools.addTab(tab_id, title, html);
