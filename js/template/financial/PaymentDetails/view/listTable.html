@@ -4,7 +4,7 @@
         <td>{{if rs.receivableType}}{{rs.receivableType.name}}{{/if}}</td>
         <td>{{if rs.businessType}}{{rs.businessType.name}}{{/if}}</td>
         <td>{{if rs.payType == 0}}现金{{else if rs.payType == 1}}银行转账{{else if rs.payType == 2}}网上支付{{else if rs.payType == 3}}支票{{else if rs.payType == 4}}其它{{/if}}</td>
-        {{if !!rs.moneyType}}
+        {{if rs.moneyType == 0}}
         <td>{{rs.incomeDifferenceMoney}}</td>
         <td>-</td>
         {{else}}
