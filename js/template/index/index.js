@@ -54,19 +54,22 @@ define(function(require, exports) {
                  // 绑定发团安排车队询价回馈结果
                 channel.bind('tripPlan_offer_bus_company_result', function(data) {
                     console.info(data);
+                    index.tripPlanChangeBookingStatus(data, 'bus');
                 });
                  // 绑定发团安排酒店询价回馈结果
                 channel.bind('tripPlan_offer_hotel_result', function(data) {
                     console.info(data);
-                    index.tripPlanChangeBookingStatus(data);
+                    index.tripPlanChangeBookingStatus(data, 'hotel');
                 });
                 //绑定发团安排车队预订回馈结果
                 channel.bind('tripPlan_booking_bus_company_result'), function(data) {
                     console.info(data);
+                    index.tripPlanChangeBookingStatus(data, 'hotel', 1);
                 }
                 //绑定发团安排酒店预订回馈结果
                 channel.bind('tripPlan_booking_hotel_result'), function(data) {
                     console.info(data);
+                    index.tripPlanChangeBookingStatus(data, 'hotel', 1);
                 }
             },
 
@@ -477,25 +480,43 @@ define(function(require, exports) {
      * @param  {[type]} data [返回值]
      * @return {[type]}      [description]
      */
-    index.tripPlanChangeBookingStatus = function(data) {
-        var $rs = data, $tab = $('#tab-arrange_all-update-content'),
-            $tripPlanId = $rs.tripPlanId,
-            $hotelId = $rs.hotelId,
-            $hotelRoomId = $rs.hotelRoomId,
-            $whichDay = $rs.whichDay;
+    index.tripPlanChangeBookingStatus = function(data, name, type) {
+        if (name == 'hotel') {
+            var $rs = data, $tab = $('#tab-arrange_all-update-content'),
+                $tripPlanId = $rs.tripPlanId,
+                $hotelId = $rs.hotelId,
+                $hotelRoomId = $rs.hotelRoomId,
+                $whichDay = $rs.whichDay;
 
-        var tripPlanId = $tab.find('[name=tripPlanId]').val()
-        if (!!$tab && $tripPlanId == tripPlanId) {//T-hotel-bookingStatus
-            var $tr = $tab.find('#tripPlan_addPlan_hotel tbody tr');
-            $tr.each(function(i) {
-                var hotelId = $tr.eq(i).find('[name=hotelId]').val(),
-                    roomId = $tr.eq(i).find('[name=hotelRoomId]').val(),
-                    whichDay = $tr.eq(i).find('[name=whichDay]').val();
-                if ($hotelId == hotelId && $hotelRoomId == roomId && $whichDay == whichDay) {
-                    $tr.eq(i).find('.T-hotel-bookingStatus').addClass('T-hotel-booking').css('color','rgb(51, 122, 183)');
+            var tripPlanId = $tab.find('[name=tripPlanId]').val()
+            if (!!$tab && $tripPlanId == tripPlanId) {
+                var $tr = $tab.find('#tripPlan_addPlan_hotel tbody tr');
+                $tr.each(function(i) {
+                    var hotelId = $tr.eq(i).find('[name=hotelId]').val(),
+                        roomId = $tr.eq(i).find('[name=hotelRoomId]').val(),
+                        whichDay = $tr.eq(i).find('[name=whichDay]').val();
+                    if ($hotelId == hotelId && $hotelRoomId == roomId && $whichDay == whichDay) {
+                        if (type == 1) {
+                            $tr.eq(i).find('[name=hotelOrder]').val(3);
+                        }else{
+                            $tr.eq(i).find('.T-hotel-bookingStatus').addClass('T-hotel-booking').css('color','rgb(51, 122, 183)');
+                        }
+                    }
+                });
+            }
+        }else if (name == 'bus') {
+            var $rs = data, $tab = $('#tab-arrange_all-update-content'),
+                $tripPlanId = $rs.tripPlanId;
+            var tripPlanId = $tab.find('[name=tripPlanId]').val()
+             if (!!$tab && $tripPlanId == tripPlanId) {
+                if (type == 1) {
+                     $tab.find('#tripPlan_addPlan_bus tbody').find('[name=busOrder]').val(3);
+                }else{
+                    $tab.find('#tripPlan_addPlan_bus tbody').find('.T-bus-bookingStatus').addClass('T-bus-booking').css('color','rgb(51, 122, 183)');
                 }
-            });
+             }
         }
-    }
+    };
+
     exports.main = index.main;
 });
