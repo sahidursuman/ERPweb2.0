@@ -734,7 +734,7 @@ define(function(require, exports) {
             //表单验证
             //if (!validator.form()) { return };
             //$tab,validator, tabArgs,className,status,tbody
-            arrangeTourist.saveAddTripPlan($addMergeAddTr, validator, "", "addTripPlanMain", 0, "mergeTripPlanTouristTbody");
+            arrangeTourist.saveAddTripPlan($addMergeAddTr, validator, "", "addTripPlanMain",1, "mergeTripPlanTouristTbody");
             touristGroupMergeData = {
                 touristGroupMergeList: []
             };
@@ -1133,10 +1133,10 @@ define(function(require, exports) {
 
                 var saveTripPlan = JSON.stringify(saveTripP);
                 var url = '';
-                if (status == 1) {
-                    url = KingServices.build_url("tripPlan", "saveTripPlan")
-                } else {
+                if (status == 0) {   //修改
                     url = KingServices.build_url("tripPlan", "updateTripPlan")
+                } else {
+                    url = KingServices.build_url("tripPlan", "saveTripPlan")
                 }
                 $.ajax({
                     url: url,
@@ -1160,7 +1160,7 @@ define(function(require, exports) {
                                             $searchArgumentsForm = $GroupObj.find('form'),
                                             customerType = 1;
                                         Tools.closeTab(menuKey + "-addTripPlan");
-                                        Tools.closeTab(menuKey + "mergeAddTripPlan");
+                                        Tools.closeTab(menuKey + "-mergeAddTripPlan");
                                         arrangeTourist.listArrangeTourist(0, $searchArgumentsForm, customerType, divId);
                                     }
 
@@ -1169,11 +1169,9 @@ define(function(require, exports) {
                                         $VisitorObj = $('#' + divId),
                                         $searchArgumentsForm = $VisitorObj.find('form'),
                                         customerType = 0;
-                                    closeTab(menuKey + "-mergeAddTripPlan");
-                                    closeTab(menuKey + "-updateTripPlan");
+                                    Tools.closeTab(menuKey + "-mergeAddTripPlan");
+                                    Tools.closeTab(menuKey + "-updateTripPlan");
                                     arrangeTourist.listArrangeTourist(0, $searchArgumentsForm, customerType, divId);
-                                } else {
-                                    arrangeTourist.listArrangeTourist();
                                 }
                             });
                         }
