@@ -489,11 +489,9 @@ define(function(require, exports) {
 					Ticket.savePayingData($tab);
 				}, function(){
 					Tools.closeTab(clearMenuKey);
-                	Ticket.getList(Ticket.listPageNo);
 				});
 			}else{
 				Tools.closeTab(clearMenuKey);
-                Ticket.getList(Ticket.listPageNo);
 			}
 		});
 		$tab.find(".T-btn-save").on('click', function(event){
