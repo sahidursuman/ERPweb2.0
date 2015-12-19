@@ -19,6 +19,18 @@ define(function(require, exports) {
 
 			$bus.each(function() {
 				var $that = $(this);
+
+				
+
+					settings.push({
+						$ele: $that.find('input[name="busCompanyName"]'),
+						rules: [
+							{
+								type: 'null',
+								errMsg: '车队不能为空'
+							}
+						]
+					});
 					
 					settings.push({
 						$ele: $that.find('input[name="bususeTime"]'),
