@@ -726,7 +726,6 @@ define(function(require, exports) {
 		}).unbind("click").click(function(){
 			var obj = this;
 			var seatCount = $(this).closest('tr').find("[name=seatCount]").val();
-			if(!!seatCount){
 				$.ajax({
 					url: KingServices.build_url('bookingOrder','getBusBrandList'),
 					data:"seatCount="+seatCount+"",
@@ -754,12 +753,6 @@ define(function(require, exports) {
 						}
 					}
 				})
-			}else{
-				layer.tips('请选择车座数', obj, {
-				    tips: [1, '#3595CC'],
-				    time: 2000
-				});
-			}
 		});
 		//选择车辆
 		var chooseLicense = $tab.find(".T-chooseBusLicenseNumber");
@@ -782,7 +775,6 @@ define(function(require, exports) {
 			var obj = this,parents = $(obj).closest('tr'),
 				seatCount = parents.find("[name=seatCount]").val(),
 				busBrand = parents.find("[name=busbrand]").val();
-			if (!!seatCount) {
 				$.ajax({
 					url: KingServices.build_url('busCompany','getLicenseNumbers'),
 					data: {
@@ -809,12 +801,6 @@ define(function(require, exports) {
 						}
 					}
 				})
-			}else{
-				layer.tips('请选择车座数', obj, {
-				    tips: [1, '#3595CC'],
-				    time: 2000
-				});
-			}
 		});
 		// 选择车队
 		var chooseLicense = $tab.find(".T-busCompanyName");
@@ -832,7 +818,8 @@ define(function(require, exports) {
 			select :function(event, ui){
 				var $this = $(this),parents = $(this).closest('tr');
 					parents.find("input[name=busCompanyName]").val(ui.item.busCompanyName);
-					parents.find("input[name=busCompanyId]").val(ui.item.busCompanyId);
+					parents.find("input[name=driverName]").val('');
+					parents.find("input[name=driverMobileNumber]").val('');
 					parents.find("input[name=busCompanyId]").val(ui.item.id).trigger('change');
 			}
 		}).unbind("click").click(function(){

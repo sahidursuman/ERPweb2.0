@@ -20,7 +20,8 @@ define(function(require, exports) {
         $clearSearchArea : false,
         selfList : false,
         clearTempData : false,
-        clearTempSumDate : false
+        clearTempSumDate : false,
+        showBtnFlag: false
     };
     Self.initModule = function() {
         var dateJson = FinancialService.getInitDate();
@@ -98,6 +99,7 @@ define(function(require, exports) {
                 Self.Getcheck(0,id,name,"",startDate,endDate);
             } else if ($that.hasClass('T-clear')) {
                 // 结算
+                Self.showBtnFlag = false;
                 Self.clearTempSumDate = false;
                 Self.clearTempData = false;
                 Self.GetClear(0,0,id,name,"",startDate,endDate);
@@ -238,13 +240,16 @@ define(function(require, exports) {
                     }
                     var resultList = data.list;
                     data.list = FinancialService.getTempDate(resultList,Self.clearTempData);
-
+                    
                     var html = SelfClearing(data);
                     var validator;
+                    data.showBtnFlag = Self.showBtnFlag
+
                     // 初始化页面
                     if (Tools.addTab(blanceTabId, "自费付款", html)) {
-                        Self.initClear(page,selfPayId,selfPayName); 
-                        validator = new FinRule(1).check(Self.$clearTab.find('.T-clearList'));                       
+                        var settleValidator = new FinRule(Self.showBtnFlag ? 3 : 1);//data.showBtnFlag == true ? new FinRule(3) : new FinRule(1);
+                        Self.initClear(page,selfPayId,selfPayName,settleValidator); 
+                        validator = new FinRule(Self.showBtnFlag ? 3 : 1).check(Self.$clearTab.find('.T-clearList'));                       
                     }
 
                     if(isAutoPay == 0){
@@ -267,7 +272,7 @@ define(function(require, exports) {
                         curr: (page + 1),
                         jump: function(obj, first) {
                             if (!first) { 
-                                var tempJson = FinancialService.clearSaveJson(Self.$clearTab,Self.clearTempData,new FinRule(1));
+                                var tempJson = FinancialService.clearSaveJson(Self.$clearTab,Self.clearTempData,new FinRule(Self.showBtnFlag ? 3 : 1));
                                 Self.clearTempData = tempJson;
                                 var sumPayMoney = parseFloat(Self.$clearTab.find('input[name=sumPayMoney]').val()),
                                     sumPayType = parseFloat(Self.$clearTab.find('select[name=sumPayType]').val()),
@@ -281,17 +286,18 @@ define(function(require, exports) {
                             }
                         }
                     });
+
                 }
             }
         })
     };
 
-    Self.initClear = function(page,id,name){
+    Self.initClear = function(page,id,name,settleValidator){
 
         // 初始化jQuery 对象 
         Self.$clearTab = $("#tab-" + menuKey + "-clearing-content");
         Self.$clearSearchArea = Self.$clearTab.find('.T-search-area');
-        var autoValidator = new FinRule(1).check(Self.$clearTab.find('.T-count'));
+        var autoValidator = new FinRule(Self.showBtnFlag ? 3 : 1).check(Self.$clearTab.find('.T-count'));
         Self.init_event(page,id,name,Self.$clearTab,"clear");
         Tools.setDatePicker(Self.$clearTab.find(".date-picker"),true);
 
@@ -300,7 +306,7 @@ define(function(require, exports) {
             Self.clearTempSumDate = false;
             Self.clearTempData = false;
             Self.$clearTab.data('isEdited',false);
-            Self.GetClear(0,0,id,name);
+            Self.GetClear(Self.showBtnFlag ? 2 : 0,0,id,name);
         });
 
         //关闭页面事件
@@ -364,7 +370,7 @@ define(function(require, exports) {
             Self.GetClear(0,0,id,name);
         });
 
-        FinancialService.updateSumPayMoney(Self.$clearTab,new FinRule(1));
+        FinancialService.updateSumPayMoney(Self.$clearTab,settleValidator);
     };
 
     //显示单据
@@ -503,12 +509,12 @@ define(function(require, exports) {
     };
 
     Self.saveClear = function(id,name,page,tab_id, title, html){
-        if(!FinancialService.isClearSave(Self.$clearTab,new FinRule(3))){
+        if(!FinancialService.isClearSave(Self.$clearTab,new FinRule(Self.showBtnFlag ? 3 : 1))){
             return false;
         }
 
         var argumentsLen = arguments.length,
-            clearSaveJson = FinancialService.clearSaveJson(Self.$clearTab,Self.clearTempData,new FinRule(3));
+            clearSaveJson = FinancialService.clearSaveJson(Self.$clearTab,Self.clearTempData,new FinRule(Self.showBtnFlag ? 3 : 1));
 
         clearSaveJson = JSON.stringify(clearSaveJson);
         $.ajax({
@@ -531,7 +537,8 @@ define(function(require, exports) {
                             Self.listSelf(Self.searchData.pageNo,Self.searchData.selfPayName,Self.searchData.selfPayId,Self.searchData.startDate,Self.searchData.endDate);
                         }else if(argumentsLen === 3){
                             Self.$clearTab.data('isEdited',false);
-                            Self.GetClear(0,page,id,name);
+                            var isAuto = Self.showBtnFlag ? 2: 0;
+                            Self.GetClear(isAuto,page,id,name);
                         } else {
                             Self.$clearTab.data('isEdited',false);
                             Tools.addTab(tab_id, title, html);
@@ -546,7 +553,7 @@ define(function(require, exports) {
 
     Self.init_event = function(page,id,name,$tab,option) {
         if (!!$tab && $tab.length === 1) {
-            var validator = new FinRule(3).check($tab);
+            var validator = new FinRule(Self.showBtnFlag ? 3 : 1).check($tab);
 
             // 监听修改
             $tab.find(".T-" + option + "List").off('change').on('change',"input",function(event) {
@@ -677,6 +684,7 @@ define(function(require, exports) {
     };
 
     Self.initPay = function(options){
+        Self.showBtnFlag = true;
         Self.GetClear(2,0,options.id,options.name,"",options.startDate,options.endDate); 
     };
 

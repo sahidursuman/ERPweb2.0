@@ -106,11 +106,11 @@ define(function(require, exports) {
 				break;
 			case 5:  //票务账务
 				options.url = KingServices.build_url('account/arrangeTicketFinancial', 'listSumFinancialTicket');
-				resArgs.busCompanyName = args.name;
+				resArgs.ticketName = args.name;
 				break;
 			case 6:  //景区账务
 				options.url = KingServices.build_url('financial/financialScenic', 'listSumFinancialScenic');
-				resArgs.busCompanyName = args.name;
+				resArgs.scenicName = args.name;
 				break;
 			case 7:  //自费账务
 				options.url = KingServices.build_url('account/selfPayFinancial', 'listFinancialSummaryOfSelfPay');
@@ -118,7 +118,7 @@ define(function(require, exports) {
 				break;
 			case 8:  //保险账务
 				options.url = KingServices.build_url('account/insuranceFinancial', 'listSumFinancialInsurance');
-				resArgs.busCompanyName = args.name;
+				resArgs.insuranceName = args.name;
 				break;
 
 			case 9:  //其它账务

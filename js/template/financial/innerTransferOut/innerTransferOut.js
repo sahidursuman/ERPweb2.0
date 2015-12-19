@@ -24,7 +24,6 @@ define(function(require,exports) {
 		validatorCheck:false,
 		saveJson:{},
 		autoValidatorCheck:false,
-		showBtnFlag:false
 	};
 	InnerTransferOut.initModule = function(){
 		var dateJson = FinancialService.getInitDate();
@@ -201,8 +200,8 @@ define(function(require,exports) {
 					};
 					if(typeFlag == 2){
 						data.list.innerTransferFeeList = FinancialService.getTempDate(data.list,InnerTransferOut.saveJson.autoPayList);
-						console.log($data);
-						//data.showBtnFlag = 
+						
+						data.showBtnFlag = $data.showBtnFlag;
 						html = clearTableTemplate(data);
 					}else{
 						html = checkTableTemplate(data);
@@ -290,7 +289,7 @@ define(function(require,exports) {
 			if(typeFlag !=2){
 				InnerTransferOut.chenking(0);
 			}else{
-				InnerTransferOut.settlement(0);
+				InnerTransferOut.settlement($data);
 			}
 		});
 		//导出报表事件
@@ -424,7 +423,6 @@ define(function(require,exports) {
 					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
 						InnerTransferOut.setAutoFillEdit($obj,true);
 						InnerTransferOut.saveJson = data;
-						console.log(InnerTransferOut.saveJson);
 						InnerTransferOut.btnSatus = 1;
 						$obj.data('isEdited', false);
 						InnerTransferOut.settlement($data);

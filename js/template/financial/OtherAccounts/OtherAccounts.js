@@ -356,6 +356,7 @@ define(function(require, exports) {
                 if (result) {
                     if (OtherAccounts.saveJson.autoPayList) {
                         var saveJson = OtherAccounts.saveJson.autoPayList;
+                        console.log(saveJson);
                         for (var i = 0; i < data.financialOtherDetailsList.length; i++) {
                             for (var j = 0; j < saveJson.length; j++) {
                                 if (data.financialOtherDetailsList[i].id == saveJson[j].id) {
@@ -363,9 +364,12 @@ define(function(require, exports) {
                                 }
                             }
                         }
-                    }
+                    };
                     //财务入口调用
                     data.showBtnFlag = OtherAccounts.showBtnFlag
+                    if(OtherAccounts.saveJson.btnShowStatus){
+                        data.btnShowStatus = OtherAccounts.saveJson.btnShowStatus;
+                    }
                     var dataTable = data;
                     // 付款头部的接口
                     $.ajax({
@@ -406,6 +410,10 @@ define(function(require, exports) {
         var autoValidator = new FinRule(2).check($PaymentTabId.find('.T-count'));
         var settleValidator = data.showBtnFlag == true ? new FinRule(3) : new FinRule(1);
         OtherAccounts.$PaymentTabId.data('id', id);
+        if(data.btnShowStatus){
+            $PaymentTabId.find('input[name=sumPayMoney]').val(OtherAccounts.saveJson.autoPayMoney);
+            OtherAccounts.setAutoFillEdit($PaymentTabId,true);
+        }
         OtherAccounts.$PaymentTabId.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
                 event.preventDefault();
                 OtherAccounts.OtherAccounts.AccountsPayment(OtherAccounts.$PaymentTabId, id);
@@ -510,6 +518,7 @@ define(function(require, exports) {
                             var result = showDialog(data);
                             if (result) {
                                 OtherAccounts.saveJson = data;
+                                OtherAccounts.AccountsPayment(0);
                                 OtherAccounts.saveJson.btnShowStatus = true;
                                 OtherAccounts.setAutoFillEdit($PaymentTabId, true);
                             }
