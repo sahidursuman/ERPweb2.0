@@ -19,17 +19,8 @@
 							{{/if}}</td>
 						<td>收款方式</td>
 							<td style="text-align: left;padding: 0px 0px 0px 10px">
-							{{if touristGroupDetail.incomeType==0}}
-									现金
-									{{else if touristGroupDetail.incomeType==1}}
-									银行转账
-									{{else if touristGroupDetail.incomeType==2}}
-									网上支付
-									{{else if touristGroupDetail.incomeType==3}}
-									支票
-									{{else}}
-									其它
-									{{/if}}
+							{{touristGroupDetail.incomeType | getPayTypeText}}
+									
 							</td>
 
 					</tr>
