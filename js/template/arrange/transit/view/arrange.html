@@ -537,7 +537,7 @@
 											<tbody>{{each bus as outBus}}
 												{{if outBus.id != null && outBus.busCompany != null}}
 												<tr data-entity-id="{{outBus.id}}">
-													<td><input type="text" class="col-sm-12 T-chooseSeatCount" name="seatCount" value="{{if outBus.bus != null}}{{outBus.bus.seatCount}}{{else}}{{outBus.seatCount}}{{/if}}" /></td>
+													<td><input type="text" class="col-sm-12 T-chooseSeatCount" name="seatCount" value="{{if !!outBus.bus && !!outBus.bus.seatCount}}{{outBus.bus.seatCount}}{{else if !!outBus.seatCount}}{{outBus.seatCount}}{{/if}}" /></td>
 													<td><input class="col-sm-12 T-chooseBusBrand" name="busbrand" type="text" value="{{if outBus.bus != null}}{{outBus.bus.brand}}{{/if}}" /></td>
 													<td>
 														<div class="col-sm-12">
@@ -551,7 +551,7 @@
 													<td>
 														<div class="col-sm-12">
 															<input type="hidden" name="serviceType" value="2" />
-															<input class="col-sm-12 bind-change" name="busCompanyName" readonly="readonly" type="text" value="{{outBus.busCompany.companyName}}" />
+															<input class="col-sm-12 bind-change T-busCompanyName" name="busCompanyName" type="text" value="{{outBus.busCompany.companyName}}" />
 															<input type="hidden" name="busCompanyId" value="{{if outBus.busCompany != null}}{{outBus.busCompany.id}}{{/if}}" />
 		                                                    <span class="addResourceBtn T-addBusCompanyResource" title="添加车队">
 		                                                        <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>

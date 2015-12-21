@@ -151,7 +151,7 @@
 											<input name="hotelRoom" value="{{if hotelList.hotelRoom != null}}{{hotelList.hotelRoom.type}}{{/if}}" type="text" class="col-sm-12 T-chooseHotelRoom bind-change"/>
 											<input name="hotelRoomId" type="hidden" value="{{if hotelList.hotelRoom != null}}{{hotelList.hotelRoom.id}}{{/if}}" />
 										</td>
-										<td><input name="days" value="{{hotelList.days}}" type="text" class="col-sm-12 T-action-blur" maxlength="4" /></td>
+										<td><input name="days" value="{{hotelList.days}}" type="text" class="col-sm-12 T-action-blur" maxlength="4" readonly="readonly" /></td>
 										<td><input name="roomCount" value="{{hotelList.roomCount}}" type="text" class="col-sm-12 T-action-blur" maxlength="5" /></td>
 										<td><input name="costPrice" value="{{hotelList.costPrice}}" type="text" class="col-sm-12 T-action-blur  price" style="width:55px;" maxlength="9" /><label class="col-sm-4 control-label" style="padding: 7px 0 0 0;width:25px;" >/天</label></td>
 										<td><input name="salePrice" value="{{hotelList.salePrice}}" type="text" class="col-sm-12 T-action-blur  price" style="width:55px;" maxlength="9" /><label class="col-sm-4 control-label" style="padding: 7px 0 0 0;width:25px;" >/天</label></td>

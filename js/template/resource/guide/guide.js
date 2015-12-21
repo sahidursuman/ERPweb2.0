@@ -129,7 +129,7 @@ define(function(require, exports) {
 		});
 
 		// 报表内的操作
-		GuideResource.$tab.find('.T-guide-list').on('click', '.T-action', function(event) {
+		var $tbody = GuideResource.$tab.find('.T-guide-list').on('click', '.T-action', function(event) {
 			event.preventDefault();
 			var $that = $(this), id = $that.closest('tr').data('id');
 
@@ -145,7 +145,7 @@ define(function(require, exports) {
 			}
 		});
 
-		Tools.descToolTip($(".T-ctrl-tip"),1);
+		Tools.descToolTip($tbody.find(".T-ctrl-tip"),1);
 	}
 	/**
 	 * 添加导游
