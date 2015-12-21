@@ -1370,8 +1370,6 @@ define(function(require, exports) {
                 arrangeTourist.delTrouristGroup($obj, id, $tab, tbody)
             })
 
-            $tab.find(".T-addTripPlanView").click(arrangeTourist.viewTouristGroup);
-
             //小组总人数计算
             arrangeTourist.tripPlanAllMemberCount("tripPlanAllMemberCount", $tab, tbody);
         })
