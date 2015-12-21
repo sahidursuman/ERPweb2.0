@@ -237,7 +237,7 @@ define(function(require, exports){
 		var $tripDetailObj = $listObj.find('.T-transit');
 		$tripDetailObj.find('.T-viewTripTransit').off('click').on('click',function(){
 			var id = $(this).attr('data-entity-id');
-			Count.ViewOutDetail(id);
+			KingServices.viewTransit(id);
 		});
 		//购物
 		var $shopObj = $listObj.find('.T-count-shopping');
@@ -381,7 +381,7 @@ define(function(require, exports){
 		var $tripDetailObj = $listObj.find('.T-transit');
 		$tripDetailObj.find('.T-viewTripTransit').off('click').on('click',function(){
 			var id = $(this).attr('data-entity-id');
-			Count.ViewOutDetail(id);
+			KingServices.viewTransit(id);
 		});
 		//购物处理--计算、新增
 		var $shopObj = $listObj.find('.T-count-shopping');
@@ -615,7 +615,7 @@ define(function(require, exports){
 		var $tripDetailObj = $listObj.find('.T-transit');
 		$tripDetailObj.find('.T-viewTripTransit').off('click').on('click',function(){
 			var id = $(this).attr('data-entity-id');
-			Count.ViewOutDetail(id);
+			KingServices.viewTransit(id);
 		});
 		//导游报账事件
 		var $guideAccount = $obj.find('.T-guideAccount');
