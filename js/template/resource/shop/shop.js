@@ -755,13 +755,14 @@ define(function(require, exports) {
 				}
 			});
 		}else{
+			index = div.closest('td').find("div:not(.delete)").index(div);
 			div.fadeOut(function(){
 				$(this).remove();
 			});
-			div.parent().next().find(".div-"+divIndex+"").fadeOut(function(){
+			div.parent().next().children('div').eq(index).fadeOut(function(){
 				$(this).remove();
 			});
-			div.parent().next().next().find(".div-"+divIndex+"").fadeOut(function(){
+			div.parent().next().next().children('div').eq(index).fadeOut(function(){
 				$(this).remove();
 			});
 		}
