@@ -57,8 +57,11 @@
 						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>同行联系人:</label>
 						<div class="col-sm-2 update-divWidth">
 							<div class="input-group">
+							<label>
 								<input class="{{if !!type}}choosePartnerManager{{/if}} col-sm-12 bind-change" value="{{if touristGroupDetail.partnerAgencyContact != null}}{{touristGroupDetail.partnerAgencyContact.contactRealname}} -[{{touristGroupDetail.partnerAgencyContact.contactMobileNumber}}]{{/if}}" name="partnerAgencyNameList" type="text" {{if !!touristGroupDetail.quoteId || !!type}} readonly {{/if}} />
 								<input type="hidden" name="partnerAgencyContactId" value="{{if touristGroupDetail.partnerAgencyContact != null}}{{touristGroupDetail.partnerAgencyContact.id}}{{/if}}" />
+							</label>
+
 								<span class="input-group-addon T-addPartnerManager {{if !!touristGroupDetail.quoteId}} hidden {{/if}}" style="cursor:pointer;" title="为客户来源添加联系人">
 									<i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
 								</span>
