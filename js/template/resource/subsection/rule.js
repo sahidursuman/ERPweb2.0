@@ -34,7 +34,7 @@ define(function(require, exports) {
                     settings.push({ //新增分段操作出游日期
                         $ele: $tr.find('input[name="needPayAllMoney"]'),
                         rules: [{
-                            type: 'positive-float',
+                            type: 'nonnegative-float',
                             errMsg: '应收金额必须为正数'
                         }]
                     });
