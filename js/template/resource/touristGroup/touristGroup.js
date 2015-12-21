@@ -1635,9 +1635,11 @@ define(function(require, exports) {
         }
 
         //接送事件点json
-        var outArrangeRemarkJson={};
-        var $isChecked=$arrangeForm.find('.T-touristReception','.T-smallCar','.T-touristSend').is('checked');
-            if ($isChecked) {
+        var outArrangeRemarkJson={},
+            $touristReChecked=$arrangeForm.find('.T-touristReception').is(':checked'),
+            $smallCarChecked=$arrangeForm.find('.T-smallCar').is(':checked'),
+            $tourSendChecked=$arrangeForm.find('.T-touristSend').is(':checked');
+            if ($touristReChecked ||  $smallCarChecked || $tourSendChecked) {
                  outArrangeRemarkJson = touristGroup.installArrangeJson($arrangeForm)  
             }
 
