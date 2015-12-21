@@ -45,7 +45,7 @@
 						</div>
 					</div>
 					<div class="form-group choosePartnerAgencyDiv guideInterval">
-						<div class="col-sm-3 update-divWidth pull-left">
+						<div class="col-sm-3 update-divWidth pull-left" style="width:320px; margin-left:75px;">
 							<label class=" control-label no-padding-right" style="margin-left: -8px"><span class="necessary">*</span>客户来源：<input type="text" name="fromPartnerAgency" class="choosePartnerAgency"  placeholder="请输入客户来源" value="{{if touristGroupDetail.partnerAgency != null}}{{touristGroupDetail.partnerAgency.travelAgencyName}}{{/if}}" {{if !!touristGroupDetail.quoteId || !!type }} readonly {{/if}}>
 							<input type="hidden" name="fromPartnerAgencyId" value="{{if touristGroupDetail.partnerAgency != null}}{{touristGroupDetail.partnerAgency.id}}{{/if}}">
 							<input type="hidden" name="type" value="">
