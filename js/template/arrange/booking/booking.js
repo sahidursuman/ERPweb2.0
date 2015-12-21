@@ -241,14 +241,14 @@ define(function(require, exports) {
 	 * @param  {function}  changeFn           值改变事件返回函数
 	 */
 	BookingArrange.choose = function($chooseContainer, clickFn, selectFn, changeFn){
-		var $that = $chooseContainer;
 		$chooseContainer.autocomplete({
 			minLength:0,
 			change :function(event, ui){
 				if(ui.item == null){
+					var $that = $(this);
 					if (!$that.closest('.T-search-area').length) {
 						// 编辑页面
-						$that.val('');
+						$(this).val('');
 					}
 
 					if(typeof changeFn == 'function'){
@@ -259,6 +259,7 @@ define(function(require, exports) {
 				}
 			},
 			select :function(event, ui){
+				var $that = $(this);
 				$that.blur();
 				if(typeof selectFn == 'function'){
 					selectFn(this, ui);
@@ -502,7 +503,7 @@ define(function(require, exports) {
 				$parent.find("input[name=costPrice]").val(data.price);
 			});
 		}, function(obj, ui){
-			var $parent = $(obj).closest(tr);
+			var $parent = $(obj).closest('tr');
 			$parent.find("input[name=scenicItemId]").val("");
 		});
 

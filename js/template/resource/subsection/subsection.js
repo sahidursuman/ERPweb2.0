@@ -474,7 +474,7 @@ define(function(require, exports) {
 				$parents.find("input[name=days]").val(ui.item.days);
 				var currentDays = ui.item.days;
 				    currentTime = $parents.find('.T-startTime').val();
-				if ($parents.next('tr').length > 0) {
+				if ($parents.next('tr').length > 0 && !!currentTime && !!currentDays) {
 					$parents.next('tr').find('.T-startTime').val(subsection.startIntime(currentDays,currentTime));
 				};
 				validator = rule.updateCheckdSaveSubsection(validator);
