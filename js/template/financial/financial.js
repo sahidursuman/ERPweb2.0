@@ -67,6 +67,10 @@ FinancialService.checkSaveJson = function($tab,rule){
             }
         }
     });
+    if(saveJson.length == 0){
+        showMessageDialog($("#confirm-dialog-message"),"没有可提交的数据！");
+        return false;
+    }
     saveJson = JSON.stringify(saveJson);
     return saveJson;
 };
