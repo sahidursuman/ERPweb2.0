@@ -1683,7 +1683,7 @@ define(function(require, exports) {
 			});
 		},
 		calculation :function(){
-			var Tr = $(this).parent().parent(),
+			var Tr = $(this).closest("tr"),
 				count = Tr.find(".count").val() || 0,
 				price = Tr.find(".price").val() || 0,
 				discount = Tr.find(".discount").val() || 0,

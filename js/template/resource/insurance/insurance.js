@@ -178,6 +178,7 @@ define(function(require, exports) {
 					    area: '800px', //宽高
 					    zIndex:1028,
 					    content: html,
+					    scrollbar: false,
 					    success:function(){}
 					});
 				}
@@ -207,6 +208,7 @@ define(function(require, exports) {
 					    area: '800px', //宽高
 					    zIndex:1028,
 					    content: html,
+					    scrollbar: false,
 					    success:function(){
 					    	var $container = $(".T-updateInsuranceContainer");
 							//初始化地区
@@ -226,47 +228,23 @@ define(function(require, exports) {
 	/**
 	 * 删除保险公司
 	 */
-	insurance.deleteInsurance = function(id,$that){
-		var dialogObj = $( "#confirm-dialog-message" );
-		dialogObj.removeClass('hide').dialog({
-			modal: true,
-			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-			title_html: true,
-			draggable:false,
-			buttons: [ 
-				{
-					text: "取消",
-					"class" : "btn btn-minier",
-					click: function() {
-						$( this ).dialog( "close" );
-					}
-				},
-				{
-					text: "确定",
-					"class" : "btn btn-primary btn-minier",
-					click: function() {
-						$( this ).dialog( "close" );
-						$.ajax({
-							url:insurance.url("deleteInsurance","delete"),
-							type:"POST",
-							data:"id="+id+"",
-							success:function(data){
-								var result = showDialog(data);
-								if(result){
-									$that.closest('tr').fadeOut(function() {
-										insurance.insuranceList(0);
-									});
-								}
-							}
-						});
-					}
-				}
-			],
-			open:function(event,ui){
-				$(this).find("p").text("你确定要删除该条记录？");
-			}
-		});
-	};
+		insurance.deleteInsurance = function(id,$that){
+				if (!!id) {
+				showConfirmDialog($("#confirm-dialog-message"),"你确定要删除该条记录？", function() {
+					$.ajax({
+						url:insurance.url("deleteInsurance","delete"),
+						type: 'post',
+						data: {id: id},
+					})
+					.done(function(data) {
+						if (showDialog(data)) {
+							insurance.insuranceList(0);
+						}
+					});
+			})
+		}
+	}
+
 	/**
 	 * 新增、修改提交事件
 	 * @param  {[type]} $container [容器]

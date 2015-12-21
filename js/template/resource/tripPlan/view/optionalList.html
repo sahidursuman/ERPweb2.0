@@ -10,7 +10,7 @@
 	</thead>
 	<tbody>{{each restaurantList as restaurant}}
 		<tr data-entity-id="{{restaurant.id}}" data-entity-name="{{restaurant.name}}" data-entity-managerName= "{{restaurant.managerName}}" data-entity-mobileNumber="{{restaurant.mobileNumber}}">
-			<td rowspan="{{restaurant.restaurantStandardList.length}}" style="vertical-align:middle">{{restaurant.name}}</td>
+			<td {{if restaurant.restaurantStandardList.length > 1}}rowspan="{{restaurant.restaurantStandardList.length}}"{{/if}} style="vertical-align:middle">{{restaurant.name}}</td>
 			{{if restaurant.restaurantStandardList.length == 0}}<td></td><td></td><td></td>{{/if}}
 			{{each restaurant.restaurantStandardList as standard index}}
 			{{if index == 0}}
@@ -19,7 +19,7 @@
 			<td>{{standard.menuList}}</td>
 			{{/if}}
 			{{/each}}
-			<td rowspan="{{restaurant.restaurantStandardList.length}}" style="vertical-align:middle"><a class="T-add">添加</a></td>
+			<td {{if restaurant.restaurantStandardList.length > 1}}rowspan="{{restaurant.restaurantStandardList.length}}"{{/if}} style="vertical-align:middle"><a class="T-add">添加</a></td>
 		</tr>
 		{{each restaurant.restaurantStandardList as standard index}}
 		{{if index > 0}}

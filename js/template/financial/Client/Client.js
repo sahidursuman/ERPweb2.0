@@ -111,6 +111,11 @@ define(function(require, exports) {
     };
 
     Client.ClientCheck = function(page,id,year,month){
+    	var $tab = $('#tab-financial_Client-checking-content');    	
+		if ($tab.length && $tab.find('.T-saveCheck').data('id') == id && $tab.find('.T-saveCheck').data('page') == page) {// 如果打开的是相同产品，则不替换
+			$('.tab-financial_Client-checking').children('a').trigger('click');
+			return;
+		}
         if (Client.$checkSearchArea && arguments.length === 2) {
             year = Client.$checkSearchArea.find("select[name=year]").val(),
             month = Client.$checkSearchArea.find("select[name=month]").val()
@@ -167,6 +172,8 @@ define(function(require, exports) {
         // 初始化jQuery 对象 
         var $checktab = $("#tab-" + ClientCheckTab + "-content");
         Client.$checkSearchArea = $checktab.find('.T-search-area');
+        $checktab.find('.T-saveCheck').data('id', id);
+        $checktab.find('.T-saveCheck').data('page', page);
 
         Client.init_check_event(id, $checktab);
 
@@ -239,7 +246,13 @@ define(function(require, exports) {
         });
     };
 
-    Client.ClientClear = function(id,year,startMonth,endMonth){        
+    Client.ClientClear = function(id,year,startMonth,endMonth){
+        var $tab =   $("#tab-"+menuKey + "-clearing"+"-content");
+    	if ($tab.length && $tab.find('.T-saveClear').data('id') == id) {// 如果打开的是相同产品，则不替换
+			$('.tab-financial_Client-clearing').children('a').trigger('click');
+			return;
+		}
+
         if (Client.$clearSearchArea && arguments.length === 1) {
             year = Client.$clearSearchArea.find("select[name=year]").val(),
             startMonth = Client.$clearSearchArea.find("select[name=startMonth]").val(),
@@ -278,6 +291,7 @@ define(function(require, exports) {
         // 初始化jQuery 对象 
         var $cleartab = $("#tab-" + ClientClearTab + "-content");
         Client.$clearSearchArea = $cleartab.find('.T-search-area');
+        $cleartab.find('.T-saveClear').data('id', id);
 
         Client.init_clear_event(id, $cleartab);
 
@@ -383,6 +397,7 @@ define(function(require, exports) {
                              Client.listClient(Client.searchData.pageNo,Client.searchData.fromPartnerAgencyId,Client.searchData.fromPartnerAgencyName,Client.searchData.travelId,Client.searchData.travelName,Client.searchData.year,Client.searchData.month);
                         } else if(argumentsLen == 2){
                             $checktab.data('isEdited',false);
+                            $checktab.find('.T-saveCheck').data('id',"");
                              Client.ClientCheck(page,$checktab.find(".T-data-id").data("id"),"","");
                         } else {
                             $checktab.data('isEdited',false);
@@ -435,6 +450,7 @@ define(function(require, exports) {
                             Client.listClient(Client.searchData.pageNo,Client.searchData.fromPartnerAgencyId,Client.searchData.fromPartnerAgencyName,Client.searchData.travelId,Client.searchData.travelName,Client.searchData.year,Client.searchData.month);
                         }else if(argumentsLen === 2){
                             $cleartab.data('isEdited',false);
+                            $cleartab.find('.T-saveClear').data('id',"");
                             Client.ClientClear($cleartab.find(".T-data-id").data("id"),"","","");
                         } else {
                             $cleartab.data('isEdited',false);
@@ -508,10 +524,14 @@ define(function(require, exports) {
             var validator = rule.check($tab);
 
             // 监听修改
-            $tab.find(".T-checkList").on('change', function(event) {
+            $tab.find(".T-checkList").off('change').on('change', function(event) {
                 event.preventDefault();
                 $tab.data('isEdited', true);
-            })
+            });
+            $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
+				event.preventDefault();
+				Client.initCheck($tab.find('.T-saveCheck').data('page'),$tab.find('.T-saveCheck').data('id'));
+			})
             // 监听保存，并切换tab
             .on('switch.tab.save', function(event, tab_id, title, html) {
                 event.preventDefault();
@@ -529,11 +549,15 @@ define(function(require, exports) {
         if (!!$tab && $tab.length === 1) {
             var validator = rule.check($tab);
 
-            // 监听修改
-            $tab.find(".T-clearList").on('change', function(event) {
+           $tab.find(".T-clearList").off('change').off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE)
+            .on('change', function(event) {
                 event.preventDefault();
                 $tab.data('isEdited', true);
-            })
+            });
+             $tab.off('change').off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
+				event.preventDefault();
+				Client.initClear($tab.find('.T-saveClear').data('id'));
+			})
             // 监听保存，并切换tab
             .on('switch.tab.save', function(event, tab_id, title, html) {
                 event.preventDefault();

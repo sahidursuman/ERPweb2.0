@@ -281,52 +281,24 @@ define(function(require, exports) {
 	 * @param  {int} pageNo 当前页码
 	 * @return {[type]}        [description]
 	 */
-	GuideResource.deleteGuide = function(id){
-		var dialogObj = $( "#confirm-dialog-message" );
-		dialogObj.removeClass('hide').dialog({
-			modal: true,
-			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-			title_html: true,
-			draggable:false,
-			buttons: [ 
-				{
-					text: "取消",
-					"class" : "btn btn-minier",
-					click: function() {
-						$( this ).dialog( "close" );
+	
+		GuideResource.deleteGuide = function(id){
+		if (!!id) {
+			showConfirmDialog($("#confirm-dialog-message"),"你确定要删除该条记录？", function() {
+				$.ajax({
+					url:""+APP_ROOT+"back/guide.do?method=deleteGuide&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=delete",
+					type: 'post',
+					data: {id: id},
+				})
+				.done(function(data) {
+					if (showDialog(data)) {
+						GuideResource.listGuide(0);
 					}
-				},
-				{
-					text: "确定",
-					"class" : "btn btn-primary btn-minier",
-					click: function() {
-						$( this ).dialog( "close" );
-						$.ajax({
-							url:""+APP_ROOT+"back/guide.do?method=deleteGuide&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=delete",
-							type:"POST",
-							data:"id="+id+"",
-							dataType:"json",
-							beforeSend:function(){
-								globalLoadingLayer = openLoadingLayer();
-							},
-							success:function(data){
-								layer.close(globalLoadingLayer);
-								var result = showDialog(data);
-								if(result){
-									GuideResource.$tab.find(".guide-"+id).fadeOut(function(){
-										GuideResource.listGuide(GuideResource.searchData.pageNo);
-									});
-								}
-							}
-						});
-					}
-				}
-			],
-			open:function(event,ui){
-				$(this).find("p").text("你确定要删除该条记录？");
-			}
-		});
-	};
+				});
+			})
+		}
+	}
+
 
 	/**
 	 * 查看导游信息

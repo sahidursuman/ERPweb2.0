@@ -78,7 +78,7 @@ define(function(require, exports) {
         // 初始化jQuery 对象
         innerProfit.$tab = $('#' + tabId);
         innerProfit.$searchArea = innerProfit.$tab.find('.T-search-area');
-
+        innerProfit.formatTime(innerProfit.$searchArea);
         innerProfit.searchAreaList();
         //搜索按钮事件
         innerProfit.$tab.find('.T-search').on('click', function(event) {
@@ -108,11 +108,20 @@ define(function(require, exports) {
             }
         });
     };
-
+    //时间控件格式化
+    innerProfit.formatTime = function($obj){
+         $obj.find(".date-picker").datepicker({
+            autoclose: true,
+            todayHighlight: true,
+            format: 'yyyy-mm-dd',
+            language: 'zh-CN'
+        });
+    };
     //查看游客小组、收客团款明细
     innerProfit.viewTouristGroup = function(id){
         $.ajax({
             url:innerProfit.url("touristGroup","findTouristGroupDetailAtInnerProfit"),
+            //url:TurnProfit.url("touristGroup","viewTouristGroupDetails"),
             type:"POST",
             data:{
                 id : id + ""
@@ -129,10 +138,10 @@ define(function(require, exports) {
                             type : 1,
                             title : "查看小组",
                             skin : 'layui-layer-rim', // 加上边框
-                            area : [ "60%", '50%' ], // 宽高
+                            area : "60%", // 宽高
                             zIndex : 1028,
                             content : html,
-                            scrollbar: false
+                            scrollbar: false // 推荐禁用浏览器外部滚动条
                         });
                     }
                     if(innerProfit.clickFlag == 2){
@@ -141,10 +150,10 @@ define(function(require, exports) {
                             type : 1,
                             title : "收客团款明細",
                             skin : 'layui-layer-rim',
-                            area : [ "65%", '57%' ], 
+                            area : "65%", 
                             zIndex : 1028,
                             content : html,
-                            scrollbar: false
+                            scrollbar: false // 推荐禁用浏览器外部滚动条
                         });
                     }
                 }
@@ -180,10 +189,10 @@ define(function(require, exports) {
                         type : 1,
                         title : "中转明细",
                         skin : 'layui-layer-rim',
-                        area : [ "90%", '80%' ], 
+                        area : "90%", 
                         zIndex : 1028,
                         content : html,
-                        scrollbar: false
+                        scrollbar: false, // 推荐禁用浏览器外部滚动条
                     })
                 }
                 }
@@ -209,10 +218,10 @@ define(function(require, exports) {
                         type : 1,
                         title : "内转明细",
                         skin : 'layui-layer-rim',
-                        area : [ "60%", '50%' ], 
+                        area : "60%", 
                         zIndex : 1028,
                         content : html,
-                        scrollbar: false
+                        scrollbar: false // 推荐禁用浏览器外部滚动条
                     });
                 }
             }

@@ -4,7 +4,7 @@ define(function(require, exports) {
     tabId = "tab-"+menuKey+"-content",
     checkTabId = menuKey+"-checking",
     viewTemplate = require("./view/visitorGroup"),
-    transitViewTemplate = require("../../arrange/transit/view/view"),
+    transitViewTemplate = require("./view/innerTransferView"),
     visitorGroupMainInfo = require("./view/visitorGroupMainInfo"),
     arrangeTransferViewTemplate=require("./view/turnVisitorGroup"),
     blanceTabId = menuKey+"-blance";
@@ -17,6 +17,18 @@ define(function(require, exports) {
 
     TurnProfit.initModule = function() {
     	console.log('modal');
+        TurnProfit.searchParam = {
+            pageNo: 0,
+            lineProductId : "",
+            lineProductName :"",
+            partnerAgencyId : "",
+            partnerAgencyName : "",
+            toBusinessGroupId : "",
+            toBusinessGroupName : "",
+            startTime : "",
+            endTime : "",
+            sortType: 'auto' 
+        };
         TurnProfit.listTurnProfit(0,"","","","","","","","");
     };
 
@@ -112,7 +124,7 @@ define(function(require, exports) {
     //查看遊客小組的信息
     TurnProfit.viewTouristGroup = function(id){
 		$.ajax({
-			url:TurnProfit.url("touristGroup","viewTouristGroupDetails"),
+			url:TurnProfit.url("touristGroup","viewTransferTouristGroupDetails"),
 			type:"POST",
 			data:{
 				id : id + ""
@@ -120,19 +132,21 @@ define(function(require, exports) {
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
-					var touristGroupInfo = JSON.parse(data.touristGroupDetail);
-					data.touristGroupDetail = touristGroupInfo;
-					console.log(data);
+                    console.log(data);
+                    var memberList = JSON.parse(data.touristGroupMemberDetail.touristGroupMemberList);
+                    var otherCost = JSON.parse(data.needIncomeMoneyDetail.touristGroupFeeList);
+                    data.touristGroupMemberDetail.touristGroupMemberList = memberList;
+                    data.needIncomeMoneyDetail.touristGroupFeeList = otherCost;
 					if(TurnProfit.clickFlag == 1){
 						var html = viewTemplate(data);
 						layer.open({
 							type : 1,
 							title : "查看小组",
 							skin : 'layui-layer-rim',
-							area : [ "60%", '50%' ], 
+							area : "60%", 
 							zIndex : 1028,
 							content : html,
-							scrollbar: false
+							scrollbar: false // 推荐禁用浏览器外部滚动条
 						});
 					};
 					if(TurnProfit.clickFlag == 2){
@@ -141,10 +155,10 @@ define(function(require, exports) {
 							type : 1,
 							title : "收客团款明細",
 							skin : 'layui-layer-rim', 
-							area : [ "65%", '57%' ], 
+							area : "65%", 
 							zIndex : 1028,
 							content : html,
-							scrollbar: false
+							scrollbar: false // 推荐禁用浏览器外部滚动条
 						});
 					}
 				}
@@ -166,9 +180,13 @@ define(function(require, exports) {
 					data.receiveGroup.outBusList = JSON.parse(data.receiveGroup.outBusList);
 					data.receiveGroup.outHotelList = JSON.parse(data.receiveGroup.outHotelList);
 					data.receiveGroup.outTicketList = JSON.parse(data.receiveGroup.outTicketList);
+                    data.receiveGroup.outRestaurantList = JSON.parse(data.receiveGroup.outRestaurantList);
+                    data.receiveGroup.outOtherList = JSON.parse(data.receiveGroup.outOtherList);
 					data.sendGroup.outBusList = JSON.parse(data.sendGroup.outBusList);
 					data.sendGroup.outHotelList = JSON.parse(data.sendGroup.outHotelList);
 					data.sendGroup.outTicketList = JSON.parse(data.sendGroup.outTicketList);
+                    data.sendGroup.outRestaurantList = JSON.parse(data.sendGroup.outRestaurantList);
+                    data.sendGroup.outOtherList = JSON.parse(data.sendGroup.outOtherList);
 					data.touristGroup = JSON.parse(data.touristGroup);
 					var html =transitViewTemplate(data);
 					
@@ -176,10 +194,10 @@ define(function(require, exports) {
 						type : 1,
 						title : "中转明细",
 						skin : 'layui-layer-rim', // 加上边框
-						area : [ "70%", '65%' ], // 宽高
+						area : "70%", // 宽高
 						zIndex : 1028,
 						content : html,
-						scrollbar: false
+						scrollbar: false // 推荐禁用浏览器外部滚动条
 					});
 	        	}
 			}
@@ -206,10 +224,10 @@ define(function(require, exports) {
 						type : 1,
 						title : "转客明细",
 						skin : 'layui-layer-rim', // 加上边框
-						area : [ "60%", '50%' ], // 宽高
+						area : "60%", // 宽高
 						zIndex : 1028,
 						content : html,
-						scrollbar: false
+						scrollbar: false // 推荐禁用浏览器外部滚动条
 					});
 				}
 			}

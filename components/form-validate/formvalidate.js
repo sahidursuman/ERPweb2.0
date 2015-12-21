@@ -79,7 +79,6 @@
 			$(setting.$ele).unbind(FOCUS_OUT_EVENT)
 				.bind(FOCUS_OUT_EVENT, '', function(event) {
 					var $that = $(this), data = $that.val(), res;
-					
 					if (!!setting.$valObj && setting.$valObj.length)  {
 						setTimeout(function() {
 							// 为了让设置值之后再读取
@@ -87,7 +86,10 @@
 							dataTask();
 						}, 0);
 					} else {
-						dataTask();
+						setTimeout(function(){
+							data = $that.val();
+							dataTask();
+						}, 0);
 					}
 					
 					function dataTask() {						
@@ -114,7 +116,9 @@
 				setting.$ele
 				.off('change.form-validation.api')
 				.on('change.form-validation.api', function(){ 
-					$(this).trigger(FOCUS_OUT_EVENT);
+						setTimeout(function() {
+							$(this).trigger(FOCUS_OUT_EVENT);
+						}, 0);
 					}
 				);
 			}
@@ -185,13 +189,27 @@
 							res = rules[i].errMsg;
 						}
 						break;
-
+					case 'positive-int': 	// 正整数
+						if (!!data && !/^[1-9]\d*$/.test( data )) {
+							res = rules[i].errMsg;
+						}
+						break;
+					case 'nonnegative-int': 	// 非负整数
+						if (!!data && !/^\d+$/.test( data )) {
+							res = rules[i].errMsg;
+						}
+						break;
 					case 'float':	// 浮点型
 						if (!!data && !/^-?(\d*\.)?\d+$/.test( data )) {
 							res = rules[i].errMsg;
 						}
 						break;
-					case 'positive-float':	// 正浮点型
+					case 'positive-float2':	// 正浮点型
+						if (!!data && !/^(?:[1-9][0-9]*\.[0-9]+|0\.(?!0+$)[0-9]+)|[1-9]\d*$/.test( data )) {
+							res = rules[i].errMsg;
+						}
+						break;
+					case 'positive-float':	// 非负浮点型
 						if (!!data && !/^(\d*\.)?\d+$/.test( data )) {
 							res = rules[i].errMsg;
 						}

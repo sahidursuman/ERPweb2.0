@@ -158,7 +158,6 @@ define(function(require, exports) {
 					    	ruleData.UhotelRoomStandardList = rule.checkRoom($tbody);
 							ruleData.UtimeAreavalidator = rule.checkTimeArea($tbody);
 							/**/
-							console.log(data)
 							//初始化地区
 							KingServices.provinceCity($container,provinceId,cityId,districtId);
 							//新增房间列表
@@ -201,48 +200,24 @@ define(function(require, exports) {
 			}
 		})
 	};
+  //删除酒店消息 
 	hotel.deleteHotel = function(id,$this){
-		var dialogObj = $( "#confirm-dialog-message" );
-		dialogObj.removeClass('hide').dialog({
-			modal: true,
-			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-			title_html: true,
-			draggable:false,
-			buttons: [
-				{
-					text: "取消",
-					"class" : "btn btn-minier",
-					click: function() {
-						$( this ).dialog( "close" );
+		if (!!id) {
+			showConfirmDialog($("#confirm-dialog-message"),"你确定要删除该酒店？", function() {
+				$.ajax({
+					url:hotel.url("deleteHotel","delete"),
+					type: 'post',
+					data: {id: id},
+				})
+				.done(function(data) {
+					if (showDialog(data)) {
+						hotel.listHotel(0);
 					}
-				},
-				{
-					text: "确定",
-					"class" : "btn btn-primary btn-minier",
-					click: function() {
-						$( this ).dialog( "close" );
-						$.ajax({
-							url:hotel.url("deleteHotel","delete"),
-							type:"POST",
-							data:"id="+id+"",
-							success:function(data){
-								var result = showDialog(data);
-								if(result){
-									$this.closest('tr').fadeOut(function() {
-										$(this).remove();
-										hotel.listHotel(0);
-									});
-								}
-							}
-						});
-					}
-				}
-			],
-			open:function(event,ui){
-				$(this).find("p").text("你确定要删除该酒店？");
-			}
-		});
-	};
+				});
+			})
+		}
+	}
+
 	hotel.addHotel = function(fn){
 		var html = addTemplate();
 		hotel.$addLayer = layer.open({
@@ -274,9 +249,9 @@ define(function(require, exports) {
 		var $tbody = $container.find(".T-roomListTbody"),
 			html = '<tr>' +
 			'<td><input name="type" type="text" class="col-sm-12"  maxlength="32" /></td>' +
-			'<td class="T-time"><div data-index="1" class="clearfix div-1" style="margin-top:1px;"><input name="startTime" type="text" class="datepicker" style="width:100px"/><label>&nbsp;至&nbsp;</label><input name="endTime" type="text" class="datepicker" style="width:100px"/><label class="timeArea" style="float:right; padding-top:0px;"><button class="btn btn-success btn-sm btn-white T-add"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button></label></div></td>' +
-			'<td><div data-index="1" class="clearfix marketPrice-1" style="margin-top:1px"><input name="marketPrice" class="col-sm-12 marketPrice" maxlength="9" type="text"/></div></td>' +
-			'<td><div data-index="1" class="clearfix contractPrice-1" style="margin-top:1px"><input name="contractPrice" class="col-sm-12 price" maxlength="9" type="text"/></div></td>' +
+			'<td class="T-time"><div class="clearfix" style="margin-top:1px;">日常价格<label class="timeArea" style="float:right; padding-top:0px;"><button class="btn btn-success btn-sm btn-white T-add"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button></label></div></td>' +
+			'<td><div class="clearfix" style="margin-top:1px"><input name="normalMarketPrice" class="col-sm-12" maxlength="9" type="text"/></div></td>' +
+			'<td><div class="clearfix" style="margin-top:1px"><input name="normalInnerPrice" class="col-sm-12" maxlength="9" type="text"/></div></td>' +
 			'<td><select name="containBreakfast" class="no-padding foodsAll"><option value="0">不含</option><option value="1">包含</option></select></td>' +
 			'<td><select name="containLunch" class="no-padding foodsAll"><option value="0">不含</option><option value="1">包含</option></select></td>' +
 			'<td><select name="containDinner" class="no-padding foodsAll"><option value="0">不含</option><option value="1">包含</option></select></td>' +
@@ -325,11 +300,11 @@ define(function(require, exports) {
 	hotel.addTimeArea = function($this,$tbody){
 		var td = $this.closest('td'),
     		index = td.find("div").length,
-    		timeLimitDiv = '<div data-index="'+(index+1)+'" class="clearfix appendDiv div-'+(index+1)+'" style="margin-top:1px"><input name="startTime" type="text" class="datepicker" style="width:100px"/><label>&nbsp;至&nbsp;</label><input name="endTime" type="text" class="datepicker" style="width:100px"/><label class="timeArea" style="float:right; padding-top:3px;">' + 
+    		timeLimitDiv = '<div data-index="'+(index)+'" class="clearfix T-appendDiv div-'+(index)+'" style="margin-top:1px"><input name="startTime" type="text" class="datepicker" style="width:100px"/><label>&nbsp;至&nbsp;</label><input name="endTime" type="text" class="datepicker" style="width:100px"/><label class="timeArea" style="float:right; padding-top:3px;">' + 
 			'<button class="btn btn-danger btn-sm btn-white T-del" style="margin-top: -3px;"><i class="ace-icon fa fa-minus bigger-110 icon-only"></i></button>'+
 			'</label></div>',
-			marketPriceInput = '<div data-index="'+(index+1)+'" class="clearfix appendDiv marketPrice-'+(index+1)+'" style="margin-top:6px"><input name="marketPrice" type="text" class="col-sm-12 marketPrice" maxlength="9"/></div>',
-			contractPriceInput = '<div data-index="'+(index+1)+'" class="clearfix appendDiv contractPrice-'+(index+1)+'" style="margin-top:6px"><input name="contractPrice" type="text" class="col-sm-12 price" maxlength="9"/></div>';
+			marketPriceInput = '<div data-index="'+(index)+'" class="clearfix appendDiv marketPrice-'+(index)+'" style="margin-top:6px"><input name="marketPrice" type="text" class="col-sm-12 marketPrice" maxlength="9"/></div>',
+			contractPriceInput = '<div data-index="'+(index)+'" class="clearfix appendDiv contractPrice-'+(index)+'" style="margin-top:6px"><input name="contractPrice" type="text" class="col-sm-12 price" maxlength="9"/></div>';
     	ruleData.timeAreaTd = td;
     	ruleData.UtimeAreaTd = td;
     	td.append(timeLimitDiv);
@@ -404,10 +379,11 @@ define(function(require, exports) {
 			formData = $container.find(".hotelMainForm").serializeJson();
 		hotelRoomJsonAddTr.each(function(){
 			var $this = $(this),
-				priceJsonAddTr = $this.find(".T-time div:not(.delete)"),
-				priceJsonDelTr = $this.find(".T-time div.delete"),
+				priceJsonTr = $this.find(".T-time .T-appendDiv"),
 				hotelRoomJson = {
 					id : $this.data("entity-id"),
+					normalMarketPrice : hotel.getValue($this ,"normalMarketPrice"),
+					normalInnerPrice : hotel.getValue($this ,"normalInnerPrice"),
 					type : hotel.getValue($this ,"type"),
 					containBreakfast : hotel.getValue($this ,"containBreakfast"),
 					containLunch : hotel.getValue($this ,"containLunch"),
@@ -419,25 +395,29 @@ define(function(require, exports) {
 					priceJsonAddList : [],//时间区间新增和删除的数组
 					priceJsonDelList : []
 				};
-			priceJsonAddTr.each(function(){
-				var $that = $(this),
-					divIndex = $that.data("index"),
-					priceJsonAdd = {
-						id : $that.data("entity-id"),
-						divIndex : divIndex,
-						startTime : $that.find("input[name=startTime]").val(),
-						endTime : $that.find("input[name=endTime]").val(),
-						marketPrice : $that.closest('tr').find(".marketPrice-" + divIndex + " input[name=marketPrice]").val(),
-						contractPrice : $that.closest('tr').find(".contractPrice-" + divIndex + " input[name=contractPrice]").val()
-					}
-				hotelRoomJson.priceJsonAddList.push(priceJsonAdd);
-			});
-			priceJsonDelTr.each(function(){
-				var $the = $(this),
-					priceJsonDel = {
-					id : $the.data("entity-id")
-				};
-				hotelRoomJson.priceJsonDelList.push(priceJsonDel);
+			console.log(priceJsonTr.length);
+			priceJsonTr.each(function(){
+				if($(this).hasClass('delete')){
+					console.log("has");
+					var $the = $(this),
+						priceJsonDel = {
+							id : $the.data("entity-id")
+						};
+					hotelRoomJson.priceJsonDelList.push(priceJsonDel);
+				} else {
+					console.log("no");
+					var $that = $(this),
+						divIndex = $that.data("index"),
+						priceJsonAdd = {
+							id : $that.data("entity-id"),
+							divIndex : divIndex,
+							startTime : $that.find("input[name=startTime]").val(),
+							endTime : $that.find("input[name=endTime]").val(),
+							marketPrice : $that.closest('tr').find(".marketPrice-" + divIndex + " input[name=marketPrice]").val(),
+							contractPrice : $that.closest('tr').find(".contractPrice-" + divIndex + " input[name=contractPrice]").val()
+						}
+					hotelRoomJson.priceJsonAddList.push(priceJsonAdd);
+				}
 			});
 			hotelRoomJsonAdd.push(hotelRoomJson);
 		})
@@ -450,6 +430,7 @@ define(function(require, exports) {
 		});
 		hotelRoomJsonAdd = JSON.stringify(hotelRoomJsonAdd);
 		hotelRoomJsonDel = JSON.stringify(hotelRoomJsonDel);
+		console.log(hotelRoomJsonDel);
 		var method = "",operation = "";
 		if (type == 1) {
 			method = "addHotel";
