@@ -1,5 +1,5 @@
 define(function(require, exports) {
-	var menuKey = "financial_rummery",
+	var menuKey = "financial_scenic",
 	    listTemplate = require("./view/list"),
         scenicChecking = require("./view/scenicChecking"),
         scenicClearing = require("./view/scenicClearing"),
