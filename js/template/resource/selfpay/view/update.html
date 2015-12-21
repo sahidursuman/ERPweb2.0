@@ -4,7 +4,7 @@
 		<div class=" ui-sortable-handle">
 				<h5 >
 					<span class="badge badge-primary">1</span>
-					<label class="title-size middle">自费项目主体信息</label>
+					<label class="title-size middle">商家主体信息</label>
 				</h5>
 			<div class="widget-body">
 				<div class="widget-main widget-mainFrist">
@@ -47,14 +47,9 @@
 					
                                                                                                              
                                                                                                   
-                   <!--添加人数返佣start-->                  
+                   <!--添加人数返佣start-->               
 					<div class="form-group guideInterval">
-						<label class="col-sm-2 control-label no-padding-right">人数返佣(元/人):</label>
-						<div class="col-sm-3">
-							<input type="text" name="customerRebateMoney" value="{{selfpay.customerRebateMoney}}" class="col-sm-12" maxlength="10">
-						</div>
-
-						<label class="col-sm-1 control-label no-padding-right">公司所在省市:</label>
+						<label class="col-sm-2 control-label no-padding-right">所在地区:</label>
 						<div class="col-sm-4">
 							<select name="provinceId"  style="margin-right:3px">
 								<option selected="selected" value="">未选择</option>
@@ -82,7 +77,7 @@
 
 					</div>
 					<div class="form-group guideInterval">
-						<label class="col-sm-2 control-label no-padding-right">公司简介:</label>
+						<label class="col-sm-2 control-label no-padding-right">商家简介:</label>
 						<div class="col-sm-8">
 							<textarea class="form-control" name="remark" class="col-sm-12" >{{selfpay.remark}}</textarea>
 						</div>
@@ -111,15 +106,18 @@
 							<table class="table table-striped table-bordered table-hover priceList" style="border: 1px solid #ccc">
 								<thead>
 									<tr>
-										<th class="table-border"><span class="necessary">*</span>项目名称</th>
-										<th class="table-border">针对客源</th>
-										<th class="table-border" width="260"><span class="necessary">*</span>时间区间</th>
-										<th class="table-border"><span class="necessary">*</span>内部价格(元)</th>
-										<th class="table-border"><span class="necessary">*</span>市场价格(元)</th>
-										<th class="table-border"><span class="necessary">*</span>导游返佣(%)</th>
-										<th class="table-border"><span class="necessary">*</span>旅行社返佣(%)</th>
-										<th class="table-border">备注</th>
-										<th class="table-border">操作</th>
+										<th class="table-border" width="100"><span class="necessary">*</span>项目名称</th>
+										<th class="table-border" width="100">针对客源</th>
+										<th class="table-border" width="400"><span class="necessary">*</span>时间范围</th>
+										
+										<th class="table-border" width="125"><span class="necessary">*</span>市场价格(元)</th>
+										<th class="table-border" width="125">人数返佣(人/元)</th>
+										<th class="table-border" width="125"><span class="necessary">*</span>内部价格(元)</th>
+										
+										<th class="table-border" width="125"><span class="necessary">*</span>导游返佣(%)</th>
+										<th class="table-border" width="125"><span class="necessary">*</span>旅行社返佣(%)</th>
+										<th class="table-border" width="125">备注</th>
+										<th class="table-border" width="100">操作</th>
 									</tr>
 								</thead>
 								<tbody class="T-selfpayList-Tbody">{{each selfpay.selfPayItemList as itemList}}
@@ -157,40 +155,53 @@
 												</div>
 											{{/each}}
 										</td>
+										
+
 										<td><div class="col-sm-12 no-padding">
-												<input name="normalInnerPrice" value="{{itemList.normalInnerPrice}}" class="col-sm-12" type="text" maxlength="10">
+												<input name="normalMarketPrice" value="{{itemList.normalMarketPrice}}" class="col-sm-12 T-marketPrice T-calc" type="text" maxlength="10" data-index="0">
+											</div>
+											{{each itemList.SelfPayRebateList as rebateList index}}
+												<div class="col-sm-12 no-padding" style="padding-top:5px!important;">
+													<input name="marketPrice" value="{{rebateList.marketPrice}}" class="col-sm-12 T-marketPrice T-calc" type="text" maxlength="10" data-index="{{index+1}}">
+												</div>
+											{{/each}}
+										</td>
+
+										<td>
+											<div class="col-sm-12">
+												<input type="text" name="customerRebateMoney" value="{{itemList.customerRebateMoney}}" class="col-sm-12 T-customerRebateMoney T-calc" maxlength="10" data-index="0">
+											</div>
+											
+										</td>
+
+
+										<td><div class="col-sm-12 no-padding" data-index="0">
+												<input name="normalInnerPrice" value="{{itemList.normalInnerPrice}}" class="col-sm-12 T-contractPrice T-calc" type="text" maxlength="10" data-index="0">
 											</div>
 
 											{{each itemList.SelfPayRebateList as rebateList index}}
 												<div class="col-sm-12 no-padding" style="padding-top:5px!important;">
-													<input name="contractPrice" value="{{rebateList.price}}" class="col-sm-12" type="text" maxlength="10">
+													<input name="contractPrice" value="{{rebateList.price}}" class="col-sm-12 T-contractPrice T-calc" type="text" maxlength="10" data-index="{{index+1}}">
+												</div>
+											{{/each}}
+										</td>
+
+									
+										<td><div class="col-sm-12 no-padding">
+												<input name="normalGuideRate" value="{{itemList.normalGuideRate*100 | toFixed}}" class="col-sm-12 T-guideRate T-calc" type="text" maxlength="5" data-index="0">
+											</div>
+											{{each itemList.SelfPayRebateList as rebateList index}}
+												<div class="col-sm-12 no-padding" style="padding-top:5px!important;" >
+													<input name="guideRate" value="{{rebateList.guideRate*100  | toFixed}}" class="col-sm-12 T-guideRate T-calc" type="text" maxlength="5" data-index="{{index+1}}">
 												</div>
 											{{/each}}
 										</td>
 										<td><div class="col-sm-12 no-padding">
-												<input name="normalMarketPrice" value="{{itemList.normalMarketPrice}}" class="col-sm-12" type="text" maxlength="10">
+												<input name="normalTravelAgencyRate" value="{{itemList.normalTravelAgencyRate*100 | toFixed}}" class="col-sm-12 T-travelAgencyRate T-calc" type="text" maxlength="5" data-index="0">
 											</div>
 											{{each itemList.SelfPayRebateList as rebateList index}}
 												<div class="col-sm-12 no-padding" style="padding-top:5px!important;">
-													<input name="marketPrice" value="{{rebateList.marketPrice}}" class="col-sm-12" type="text" maxlength="10">
-												</div>
-											{{/each}}
-										</td>
-										<td><div class="col-sm-12 no-padding">
-												<input name="normalGuideRate" value="{{itemList.normalGuideRate*100}}" class="col-sm-12" type="text" maxlength="5">
-											</div>
-											{{each itemList.SelfPayRebateList as rebateList index}}
-												<div class="col-sm-12 no-padding" style="padding-top:5px!important;">
-													<input name="guideRate" value="{{rebateList.guideRate*100}}" class="col-sm-12" type="text" maxlength="5">
-												</div>
-											{{/each}}
-										</td>
-										<td><div class="col-sm-12 no-padding">
-												<input name="normalTravelAgencyRate" value="{{itemList.normalTravelAgencyRate*100}}" class="col-sm-12" type="text" maxlength="5">
-											</div>
-											{{each itemList.SelfPayRebateList as rebateList index}}
-												<div class="col-sm-12 no-padding" style="padding-top:5px!important;">
-													<input name="travelAgencyRate" value="{{rebateList.travelAgencyRate*100}}" class="col-sm-12" type="text" maxlength="5">
+													<input name="travelAgencyRate" value="{{rebateList.travelAgencyRate*100 | toFixed}}" class="col-sm-12 T-travelAgencyRate T-calc" type="text" maxlength="5" data-index="{{index+1}}">
 												</div>
 											{{/each}}
 										</td>

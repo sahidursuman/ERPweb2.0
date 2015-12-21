@@ -1,174 +1,172 @@
-<div class="row check shop-rs globalAdd">
-    <div class="col-xs-12 border borderNormal">
-        <form class="form-horizontal" role="form" onsubmit="return false">
-            <div class="search-area  editable editable-click" style="margin-top: 10px">
-                <div class="form-group"> <label style="float: left;margin: 5px auto auto 15px" class=" control-label "> 购物店：{{shopName}}</label>
-                    <label class="col-sm-1 control-label no-padding-right">账期：</label>
-                    <select class="col-sm-1" name="year">
-                        {{each yearList as year}}
-                        <option value="{{year}}">{{year}}</option>
-                        {{/each}}
-                    </select>
-                    <label class="col-sm-1 control-label no-padding-right"></label>
-                    <select class="col-sm-1" name="month">
-                        <option value="">全部</option>
-                        <option value="1">1月</option>
-                        <option value="2">2月</option>
-                        <option value="3">3月</option>
-                        <option value="4">4月</option>
-                        <option value="5">5月</option>
-                        <option value="6">6月</option>
-                        <option value="7">7月</option>
-                        <option value="8">8月</option>
-                        <option value="9">9月</option>
-                        <option value="10">10月</option>
-                        <option value="11">11月</option>
-                        <option value="12">12月</option>
-                    </select>
- 
-                    <button class="marginLeft-30 btn-sm search-btn btn-shopChecking-search" >
-                        <i class="ace-icon fa fa-search"></i>
-                       	 搜索
-                    </button>
-                    <button type="button" class="btn btn-sm btn-primary btn-success btn-shopExport" style="margin-left: 25px">
-							<span>导出报表</span>
-							<i class="ace-icon fa fa-arrow-right icon-on-right"></i>
-						</button>
-                </div>
-            </div>
-        </form>
-        <form class="form-horizontal" role="form" onsubmit="return false">
-            <div class="form-group col-sm-12">
-                <label class="control-label pull-left" >总人数：{{sumPerson}}</label>
-                <label class="control-label no-padding-right" style="margin-left: 15px">总购物金额：{{sumConsumeMoney}}</label>
-                <label class="control-label no-padding-right" style="margin-left: 15px">总社佣：{{sumTravelAgencyRebateMoney}}</label>
-                <label class="control-label no-padding-right"  style="margin-left: 15px">总导佣：{{sumGuideRebateMoney}}</label>
-                <label class="control-label no-padding-right"  style="margin-left: 15px">总人数返佣：{{sumCustomerRebateMoney}}</label>
-                <label class="control-label no-padding-right"  style="margin-left: 15px">总停车返佣：{{sumParkingRebateMoney}}</label>
-                <label class="control-label no-padding-right"  style="margin-left: 15px">总账面返佣：{{sumRebateMoney}}</label>
-                <label class="control-label no-padding-right"  style="margin-left: 15px">总实际返佣：{{sumRealRebateMoney}}</label>
-            </div>
-        </form>
+<div class="row check globalAdd T-search-area">
+    <form class="form-inline" role="form" onsubmit="return false" style="padding-top: 10px;">
+        <div class="form-group">
+            <label>购物店：</label>
+            <label>{{name}}</label>
+        </div>
+        <div class="form-group marginLeft-30">
+            <label>账期：</label>
+            <input type="text" class="form-control datepicker T-search-start-date" value="{{searchParam.startDate}}" style="width: 100px; text-align: center;">
+            <label>&nbsp;至&nbsp;</label>
+            <input type="text" class="form-control datepicker T-search-end-date" value="{{searchParam.endDate}}" style="width: 100px; text-align: center;">
+        </div>
+        <div class="form-group marginLeft-30">
+            <label>团信息：</label>
+            <input type="text" class="form-control T-search-trip" value="{{searchParam.tripMessage}}">
+        </div>
+        <div class="form-group marginLeft-30">
+            <button class="btn-sm search-btn T-btn-search">
+                <i class="ace-icon fa fa-search"></i> 搜索 
+            </button>
+        </div>
+    </form>
+    <div class="form-inline">
+        <div class="form-group">
+            <label>人数合计：</label>
+            <label>{{totalList.sumCount}}</label>
+        </div>
+        <div class="form-group marginLeft-30">
+            <label>购物金额合计：</label>
+            <label>{{totalList.sumConsumeMoney}}</label>
+        </div>
+        <div class="form-group marginLeft-30">
+            <label>社佣合计：</label>
+            <label>{{totalList.sumTravelAgencyRebateMoney}}</label>
+        </div>
+        <div class="form-group marginLeft-30">
+            <label>导佣合计：</label>
+            <label>{{totalList.sumGuideRebateMoney}}</label>
+        </div>
+        <div class="form-group marginLeft-30">
+            <label>人数返佣合计：</label>
+            <label>{{totalList.sumCustomerRebateMoney}}</label>
+        </div>
+        <div class="form-group marginLeft-30">
+            <label>停车返佣合计：</label>
+            <label>{{totalList.sumParkingRebateMoney}}</label>
+        </div>
+        <div class="form-group marginLeft-30">
+            <label>返佣金额合计：</label>
+            <label>{{totalList.sumBackMoney}}</label>
+        </div>
+        <div class="form-group marginLeft-30">
+            <label>已收金额合计：</label>
+            <label>{{totalList.sumReceiveMoney}}</label>
+        </div>
+        <div class="form-group marginLeft-30">
+            <label>未收金额合计：</label>
+            <label class="T-unpayMoney">{{totalList.sumUnReceiveMoney}}</label>
+        </div>
+        <div class="form-group marginLeft-30">
+            <label>未付金额合计(已对账)：</label>
+            <label>{{totalList.checkedUnPayedMoney}}</label>
+        </div>
     </div>
-    <input type="hidden" value="{{WEB_IMG_URL_BIG}}" name="WEB_IMG_URL_BIG" />
-    <input type="hidden" value="{{WEB_IMG_URL_SMALL}}" name="WEB_IMG_URL_SMALL" />
-    <div class="clearfix"></div>
-    <table class="table table-striped table-bordered table-hover all" style="margin-top: 30px">
-            <thead>
+</div>
+<div class="row" style="margin-top: 20px;">
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
             <tr>
-              <th class="th-border" style="min-width:50px"> 序号</th>
-              <th class="th-border" style="min-width:80px"> 团信息</th>
-              <th class="th-border" style="min-width:70px"> 进店日期</th>
-              <th class="th-border" style="min-width:40px"> 人数</th>
-              <th class="th-border" style="min-width:50px"> 商品</th>
-              <th class="th-border" style="min-width:70px"> 购物金额</th>
-              <th class="th-border" style="min-width:50px"> 社佣</th>
-              <th class="th-border" style="min-width:50px"> 导佣</th>
-              <th class="th-border" style="min-width:70px"> 人数返佣</th>
-              <th class="th-border" style="min-width:70px"> 停车返佣</th>
-              <th class="th-border" style="min-width:50px"> 单据</th>
-              <th class="th-border" style="min-width:70px"> 账面返佣</th>
-              <th class="th-border" style="min-width:50px">  <span class="necessary">*</span>实际返佣</th>
-              <th class="th-border" style="min-width:80px"> 说明</th>
-              <th class="th-border" style="min-width:60px"> 对账时间</th>
-              <th class="th-border" style="min-width:60px"> 对账人 </th>
-              <th class="th-border" style="min-width:50px">对账</th>
+                <th class="th-border" >团信息</th>
+                <th class="th-border" >进店日期（账期）</th>
+                <th class="th-border" >人数</th>
+                <th class="th-border" >商品</th>
+                <th class="th-border" >购物金额</th>
+                <th class="th-border" >社佣</th>
+                <th class="th-border" >导佣</th>
+                <th class="th-border" >人数返佣</th>
+                <th class="th-border" >停车返佣</th>
+                <th class="th-border" >单据</th>
+                <th class="th-border" >返佣金额</th>
+                <th class="th-border" >已收金额</th>
+                <th class="th-border" >结算金额</th>
+                <th class="th-border" >未收金额</th>
+                <th class="th-border" >备注</th>
+                <th class="th-border" >对账时间</th>
+                <th class="th-border" >对账人</th>
+                <th class="th-border" style="min-width: 110px;">对账</th>
             </tr>
-            </thead>
-            <tbody class="T-checkList" data-right="1310005">
-            {{each shopList as shop index}}
-            <tr data-entity-id="{{shop.id}}" data-entity-isConfirmAccount="{{shop.isConfirmAccount}}" data-entity-startTime="{{shop.consumeStartTime}}" data-entity-rebateMoney="{{shop.rebateMoney}}" data-entity-billRemark="{{shop.billRemark}}" class="T-showTr">
-                <td>{{index+1}}</td>
-                <td class="cost-detail" style="color: rgb(102,159,199);min-width:70px"> {{shop.tripNumber}},{{shop.lineProductName}},{{shop.guideName}}</td>
-                <td>{{if shop.consumeStartTime == null || shop.consumeStartTime == ""}}-{{else}}{{shop.consumeStartTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
-                <td>{{shop.adultCount}}大{{shop.childCount}}小</td>
-                <td><a href="#" class="seeGroup" style="margin-left:5px">展开</a></td>
-                <td>{{shop.consumeMoney}}</td>
-                <td>{{shop.travelAgencyRebateMoney}}</td>
-                <td>{{shop.guideRebateMoney}}</td>
-                <td>{{shop.sumCustomerRebateMoney}}</td>
-                <td>{{shop.sumParkingRebateMoney}}</td>
-                <td>{{if shop.billImages != null && shop.billImages !=""}}<a href="#" class="shopImg" url="{{shop.billImages}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
-                <td>{{shop.rebateMoney}}</td>
-                <td class="col-sm-1">
-	               	{{if shop.isConfirmAccount == 0}}
-	                   <input data-entity-value="{{shop.rebateMoney}}"  maxlength="9" type="text" name="realRebateMoney" value="{{shop.rebateMoney}}" class="col-sm-12" />
-                   {{else}}
-                   	   <input data-entity-value="{{shop.realRebateMoney}}"  maxlength="1000" type="text" name="realRebateMoney" value="{{shop.realRebateMoney}}" class="col-sm-12"/>
-                   {{/if}}
-				</td>
+        </thead>
+        <tbody class="T-list T-checkList">
+        {{each shopAccountList as rs index}}
+            <tr class="T-checkTr" data-id="{{rs.id}}" data-confirm="{{if !!rs.isConfirmAccount}}1{{else}}0{{/if}}">
+                <td>{{rs.tripMessage}}</td>
+                <td>{{rs.accountTime}}</td>
+                <td>{{rs.count}}</td>
+                <td>{{if rs.shopItem.length >0}}{{rs.shopItem[0].itemName}}{{if rs.shopItem.length >1}}...{{/if}}<a class="cursor T-action T-see-group">展开</a>{{/if}}</td>
+                <td>{{rs.consumeMoney}}</td>
+                <td>{{rs.travelAgencyRebateMoney}}</td>
+                <td>{{rs.guideRebateMoney}}</td>
+                <td>{{rs.customerRebateMoney}}</td>
+                <td>{{rs.parkingRebateMoney}}</td>
+                <td style="white-space: nowrap;">{{if !rs.billImage}}<span style="color:#bbb">查看</span>{{else}}<a class="cursor T-action T-view-receipts" data-billImage="{{rs.billImage}}">查看</a>{{/if}}</td>
+                <td>{{rs.backMoney}}</td>
+                <td><a class="cursor T-action T-payDetails T-payedDetail" data-money="{{rs.receiveMoney}}">{{rs.receiveMoney}}</a>
+                <td>{{if !!rs.isConfirmAccount}}{{rs.settlementMoney}}{{else}}<input type="text" class="col-sm-12" name="settlementMoney" value="{{rs.settlementMoney}}">{{/if}}</td>
+                <td name="unPayedMoney">{{rs.unReceiveMoney}}</td>
+                <td>{{if !!rs.isConfirmAccount}}{{rs.checkRemark}}{{else}}<input type="text" class="col-sm-12" name="checkRemark" value="{{rs.checkRemark}}">{{/if}}</td>
+                <td>{{rs.checkTime}}</td>
+                <td>{{rs.checkName}}</td>
                 <td>
-                    <input data-entity-value="{{shop.billRemark}}" type="text" name="billRemark" value="{{shop.billRemark}}" class="col-sm-12"/>
-                </td>
-                <td>
-                {{if shop.checkTime != null}}
-                	{{shop.checkTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}
-                {{/if}}
-                </td>
-                <td>{{shop.checkUserRealName}}</td>
-                <td>
-                    <input type="checkbox" class="ace" name="isConfirmAccount" data-entity-checkStatus="{{shop.isConfirmAccount}}" {{if shop.isConfirmAccount == 1}}checked="checked"{{/if}} />
-                    <span class="lbl"></span>
+                    <label class="pos-rel">
+                        <input type="checkbox" class="ace T-checkbox" {{if !!rs.isConfirmAccount}}checked="checked"{{/if}} /> 
+                        <span class="lbl">对账</span>
+                    </label>
+                    <label class="cursor"> <a> |</a></label>
+                    <a class="cursor T-action T-view-details">查看</a>
                 </td>
             </tr>
+            {{if rs.shopItem.length > 0}}
             <tr class="hide">
-				<td colspan="17">
-					<table class="table table-striped table-bordered table-hover">
-							<thead>
-								<tr>
-									<th class="th-border">序号</th>
-									<th class="th-border">商品</th>
-									<th class="th-border">消费金额</th>
-									<th class="th-border">社佣</th>
-									<th class="th-border">导佣</th>
-								</tr>
-							</thead>  
-							<tbody>
-							   {{each shop.detailList as detail index}}
-								<tr>
-									<td>{{index+1}}</td>
-									<td>{{detail.name}}</td>
-									<td>{{detail.consumeMoney}}</td>
-									<td>{{detail.travelAgencyRebateMoney}}</td>
-									<td>{{detail.guideRebateMoney}}</td>
-								</tr>
-							  {{/each}}	
-							</tbody>
-					</table>
-				</td>
-			</tr>
-            {{/each}}
-            </tbody>
-        </table>
-        <div class="row pageMode">
-            <div class="col-xs-6">
-                <small>共计 {{recordSize}} 条记录</small>
-            </div>
-            <div class="col-xs-6">
-                <div class="dataTables_paginate paging_simple_numbers T-pagenation">
-                </div>
-            </div>
+                <td colspan="19">
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th class="th-border" style="min-width: 45px;">序号</th>
+                                <th class="th-border" style="min-width: 70px;">商品</th>
+                                <th class="th-border" style="min-width: 120px;">消费金额</th>
+                                <th class="th-border" style="min-width: 45px;">社佣</th>
+                                <th class="th-border" style="min-width: 45px;">导佣</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{each rs.shopItem as list i}}
+                            <tr>
+                                <td>{{i + 1}}</td>
+                                <td>{{list.itemName}}</td>
+                                <td>{{list.consumeMoney}}</td>
+                                <td>{{list.travelAgencyRebateMoney}}</td>
+                                <td>{{list.guideRebateMoney}}</td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+
+            {{/if}}
+        {{/each}}
+        </tbody>
+    </table>
+    <div class="row pageMode">
+        <div class="col-xs-6">
+            <small>共计 {{searchParam.recordSize}} 条记录</small>
         </div>
-        <div class="form-group text-right">
-            <label class="control-label pull-right"/>
-                <input type="checkbox" class="ace pull-right selectAll">
-                <span class="lbl"></span>  
-                全选
+        <div class="col-xs-6">
+            <label class="pos-rel pull-right" style="line-height: 2.2em;">
+                <input type="checkbox" class="ace T-checkAll"> <span class="lbl">全选</span> 
             </label>
+            <div class="dataTables_paginate paging_simple_numbers T-pagenation pull-right"></div>
         </div>
-        <div class="clearfix"></div>
-        <form class="form-horizontal" role="form" onsubmit="return false">
-            <div class="form-group" style="text-align: center;">
-            	<button class="btn btn-xs btn-primary btn-shop-close">
-                    <i class="ace-icon fa fa-times-circle"></i>
-                   	 关闭
-                </button>
-                <button class="btn btn-xs btn-primary btn-confirm-shop-rs"  style="margin-left:20px">
-                    <i class="ace-icon fa fa-check-circle"></i>
-                   	 确认
-                </button>
-            </div>
-        </form>
-
-
+    </div>
+    <form class="form-horizontal" role="form" onsubmit="return false">
+        <div class="form-group" style="text-align: center;">
+            <button class="btn btn-xs btn-primary T-btn-close">
+                <i class="ace-icon fa fa-times-circle"></i> 关闭
+            </button>
+            <button class="btn btn-xs btn-primary T-btn-save" style="margin-left:20px">
+                <i class="ace-icon fa fa-check-circle"></i> 确认
+            </button>
+        </div>
+    </form>
 </div>

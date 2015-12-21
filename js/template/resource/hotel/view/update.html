@@ -51,7 +51,7 @@
 						</div>
 					</div>
 					<div class="form-group guideInterval">
-						<label class="col-sm-2 control-label no-padding-right">酒店所在省市:</label>
+						<label class="col-sm-2 control-label no-padding-right">所在地区:</label>
 						<div class="col-sm-4">
 							<select name="provinceId" style="margin-right:3px">
 								<option selected="selected" value="" >未选择</option>
@@ -96,6 +96,13 @@
 							<textarea class="form-control" name="remark" maxlength="1000" class="col-sm-12" >{{hotel.remark}}</textarea>
 						</div>
 					</div>
+
+					<div class="form-group guideInterval">
+						<label class="col-sm-2 control-label no-padding-right">酒店最低价:</label>
+						<div class="col-sm-4">
+							<input class="form-control" name="lowestPrice" value="{{hotel.lowestPrice}}" maxlength="9" class="col-sm-12" />
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -122,7 +129,7 @@
 									<th class="table-border" width="80"><span class="necessary">*</span>房型</th>
 									<th class="table-border"style="width:300px;"><span class="necessary">*</span>时间范围</th>
 									<th class="table-border" style="width:100px"><span class="necessary">*</span>市场价(元)</th>
-									<th class="table-border" style="width:110px"><span class="necessary">*</span>旅行社价(元)</th>
+									<th class="table-border" style="width:110px"><span class="necessary">*</span>协议价(元)</th>
 									<th class="table-border" style="width: 75px">早餐</th>
 									<th class="table-border" width="70">午餐</th>
 									<th class="table-border" width="70">晚餐</th>
@@ -163,7 +170,7 @@
 												<input name="normalMarketPrice" type="text" class="col-sm-12" value="{{room.normalMarketPrice}}" maxlength="9" />
 											</div>
 											{{each room.priceList as price i}}
-											<div data-index="{{i+1}}" class="clearfix marketPrice-{{i+1}}" style="margin-top:7px">
+											<div data-index="{{i+1}}" class="clearfix T-marketPrice marketPrice-{{i+1}}" style="margin-top:7px">
 												<input name="marketPrice" type="text" class="col-sm-12" value="{{price.marketPrice}}" maxlength="9" />
 											</div>
 											{{/each}}
@@ -173,7 +180,7 @@
 												<input name="normalInnerPrice" type="text" class="col-sm-12" value="{{room.normalInnerPrice}}" maxlength="9" />
 											</div>
 											{{each room.priceList as price i}}
-											<div data-index="{{i+1}}" class="clearfix contractPrice-{{i+1}}" style="margin-top:7px">
+											<div data-index="{{i+1}}" class="clearfix T-contractPrice contractPrice-{{i+1}}" style="margin-top:7px">
 												<input name="contractPrice" type="text" class="col-sm-12" value="{{price.contractPrice}}" maxlength="9" />
 											</div>
 											{{/each}}

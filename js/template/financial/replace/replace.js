@@ -1,588 +1,731 @@
+/**
+ * 财务管理--代订账务
+ * 
+ * by David Bear 2015-11-27
+ */
 define(function(require, exports) {
-    var rule = require("./rule");
-    var menuKey = "financial_replace";
-    var listTemplate = require("./view/list");
-    var billImagesTemplate = require("./view/billImages");
-    var replaceChecking = require("./view/replaceChecking");
-    var replaceClearing = require("./view/replaceClearing");
-    var  blanceRecords = require("./view/replaceRecords"),
-    tabId = "tab-"+menuKey+"-content",
-    checkTabId = menuKey+"-checking",
-    blanceTabId = menuKey+"-blance",
-    yearList=[],
-    monthList = []
-    for(var i=2013;i<=new Date().getFullYear();i++){
-        var yeardata={"value":i}
-        yearList.push(yeardata)
+	var menuKey = "financial_replace",
+		listTemplate = require("./view/list"),
+		billImagesTemplate = require("./view/billImages"),
+		replaceChecking = require("./view/replaceChecking"),
+		replaceClearing = require("./view/replaceClearing"),
+		blanceRecords = require("./view/replaceRecords"),
+		viewReceivedTemplate = require("./view/viewReceived"),
+		viewAccountTemplate = require('./view/viewAccount'),
+		payingTableTemplate = require('./view/replacePayingTable'),
+		checkMenuKey = menuKey+"-checking",
+		blanceMenuKey = menuKey+"-blance";
+
+	var Replace = {
+		$tab : false
+	};
+	/**
+	 * 初始化模块
+	 */
+	Replace.initModule = function(){
+		Replace.$tab = null;
+		Replace.getList(0);
+	};
+
+	/**
+	 * 获取代订账务列表，初始化列表页面
+	 * @param  {int} page 页码
+	 */
+	Replace.getList = function(page){
+	    var date = new Date(),
+        year = date.getFullYear(),
+        month = Tools.addZero2Two(date.getMonth() + 1),
+        day = Tools.addZero2Two(date.getDate()),
+		args= {
+			pageNo : (page || 0),
+			startDate : year + "-" + month + "-01",
+			endDate : year + "-" + month + "-" + day
+		};
+		if(!!Replace.$tab){
+			var name = Replace.$tab.find('.T-search-customer').val();
+			args= {
+				pageNo : (page || 0),
+				travelAgencyName : name == '全部' ? '' : name,
+				startDate : Replace.$tab.find('.T-search-start-date').val(),
+				endDate : Replace.$tab.find('.T-search-end-date').val()
+			};
+		}
+		$.ajax({
+			url : KingServices.build_url('financial/bookingAccount', 'listPager'),
+			type: 'post',
+			data: args
+		}).done(function(data){
+			if(showDialog(data)){
+				Tools.addTab(menuKey, "代订账务", listTemplate(data));
+				//绑定事件
+				Replace.init_event();
+				// 缓存页面
+				Replace.listPageNo = args.pageNo;
+				// 绑定翻页组件
+				laypage({
+				    cont: Replace.$tab.find('.T-pagenation'), 
+				    pages: data.searchParam.totalPage, //总页数
+				    curr: (data.searchParam.pageNo + 1),
+				    jump: function(obj, first) {
+				    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+				    		Replace.getList(obj.curr -1);
+				    	}
+				    }
+				});	
+			}
+		});
+	};
+
+	/**
+	 * 初始化列表页面的事件绑定
+	 */
+	Replace.init_event = function(){
+		Replace.$tab = $('#tab-' + menuKey + '-content');
+		//搜索顶部的事件绑定
+		var $searchArea = Replace.$tab.find('.T-search-area'),
+			$datepicker = $searchArea.find('.datepicker');
+
+		Replace.chooseCustomer($searchArea.find('.T-search-customer'));
+		Tools.setDatePicker($datepicker, true);
+		$searchArea.find('.T-btn-search').on('click', function(event) {
+			event.preventDefault();
+			Replace.getList();
+		});
+		// 报表内的操作
+		Replace.$tab.find('.T-list').on('click', '.T-action', function(event) {
+			event.preventDefault();
+			var $that = $(this), id = $that.closest('tr').data('id'), name = $that.closest('tr').data('name');
+			if ($that.hasClass('T-checking'))  {
+				// 对账
+				Replace.checking(id, name);
+			} else if ($that.hasClass('T-balance'))  {
+				// 结算
+				Replace.balance(id, name);
+			}
+		});
+	};
+
+	Replace.chooseCustomer = function($obj){
+		$obj.autocomplete({
+			minLength: 0,
+		    change: function(event, ui) {
+		        if (!ui.item)  {
+		            $(this).data('id', '');
+		        }
+		    },
+		    select: function(event, ui) {
+		        $(this).blur().data('id', ui.item.id);
+		    }
+		}).on('click', function(){
+			if (!$obj.data('ajax')) {  // 避免重复请求
+				$.ajax({
+					url : KingServices.build_url('financial/bookingAccount', 'selectPartnerAgency'),
+					type : "POST"
+				}).done(function(data){
+					if(showDialog(data)){
+						if(!data.partnerAgencyList)return;
+						for(var i=0; i<data.partnerAgencyList.length; i++){
+			                data.partnerAgencyList[i].value = data.partnerAgencyList[i].fromPartnerAgencyName;
+			                data.partnerAgencyList[i].id = data.partnerAgencyList[i].partnerAgencyId;
+			            }
+			            data.partnerAgencyList.unshift({id:'', value: '全部'});
+			            $obj.autocomplete('option', 'source', data.partnerAgencyList);
+			            $obj.autocomplete('search', '');
+
+			            $obj.data('ajax', true);
+		        	}
+				});
+			} else {
+		        $obj.autocomplete('search', '');
+		    }
+		});
+	};
+	/**
+	 * 对账
+	 * @param  {int} id 客户ID
+	 */
+	Replace.checking = function(id, name){
+		Replace.$checkingTab = null;
+		Replace.checkingId = id;
+		Replace.checkingName = name;
+		Replace.checkingList(0, id);
+	};
+	Replace.clearComma = function(str){
+		return str.replace(/(\uff0c){2,}/g, '，').replace(/(\uff0c)$/g, '');
+	};
+	Replace.checkingList = function(page, id, startDate, endDate){
+		var args = {
+			pageNo : (page || 0),
+			partnerAgencyId : id || Replace.checkingId,
+			endDate : endDate || Replace.$tab.find('.T-search-end-date').val(),
+			startDate : startDate || Replace.$tab.find('.T-search-start-date').val()
+		};
+		if(!!Replace.$checkingTab){
+			var project = Replace.$checkingTab.find(".T-search-project").val().split(', '),
+				order = Replace.$checkingTab.find(".T-search-order").val();
+			args = {
+				pageNo : (page || 0),
+				partnerAgencyId : id || Replace.checkingId,
+				orderNumber : order == '全部' ? '' : order,
+				endDate : Replace.$checkingTab.find(".T-search-end-date").val(),
+				startDate : Replace.$checkingTab.find(".T-search-start-date").val()
+			};
+			if(project.length > 0){
+				for(var i=0; i<project.length; i++){
+					if(project[i] == "车队"){
+						args.busCompanyOrderStatus = 1;
+					}else if(project[i] == "酒店"){
+						args.hotelOrderStatus = 1;
+					}else if(project[i] == "景区"){
+						args.scenicOrderStatus = 1;
+					}else if(project[i] == "票务"){
+						args.ticketOrderStatus = 1;
+					}
+				}
+			}
+		}
+		args.sortType = 'startTime';
+        args.order='asc';
+		$.ajax({
+			url : KingServices.build_url('financial/bookingAccount', 'listCheckBookingAcccount'),
+			type: 'post',
+			data: args
+		}).done(function(data){
+			if (showDialog(data)) {
+				data.name = Replace.checkingName;
+				for(var j=0; j<data.bookinAccountList.length; j++){
+					var detailList = data.bookinAccountList[j].detailList;
+					data.bookinAccountList[j].newDetail = '';
+					for(var i=0; i<detailList.length; i++){
+						var formula = detailList[i].count + "×" + (detailList[i].days ? detailList[i].days + "×" : "") + detailList[i].price;
+						data.bookinAccountList[j].newDetail += detailList[i].name + '，' + detailList[i].type + '，' + detailList[i].shift + '，' + detailList[i].level + '，' + formula + "=" + (detailList[i].count * detailList[i].price * (detailList[i].days || 0)) + '，';
+					}
+					data.bookinAccountList[j].newDetail = Replace.clearComma(data.bookinAccountList[j].newDetail);
+				}
+				
+				Tools.addTab(checkMenuKey, "代订对账", replaceChecking(data));
+
+				Replace.$checkingTab = $('#tab-' + checkMenuKey + '-content');
+
+				Replace.CM_event(Replace.$checkingTab, true);
+				// 绑定翻页组件
+				laypage({
+				    cont: Replace.$checkingTab.find('.T-pagenation'), 
+				    pages: data.searchParam.totalPage, //总页数
+				    curr: (data.searchParam.pageNo + 1),
+				    jump: function(obj, first) {
+				    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+				    		Replace.checkingList(obj.curr -1);
+				    	}
+				    }
+				});	
+			}
+		});
+	};
+
+	Replace.CM_event = function($tab, isCheck){
+		var validator = new FinRule(isCheck ? 0 : (Replace.isBalanceSource ? 3 : 1)),
+		validatorCheck = validator.check($tab);
+		// 处理关闭与切换tab
+        $tab.off('change').off(SWITCH_TAB_SAVE).off(CLOSE_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT)
+        .on('change', '.T-checkList, .T-clearList', function() {
+            $tab.data('isEdited', true);
+        })
+        .on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
+            event.preventDefault();
+            if (!validatorCheck.form())return;
+            if (!isCheck) {
+            	Replace.saveCheckingData($tab, [tab_id, title, html]);
+        	}else{
+            	Replace.savePayingData($tab, [tab_id, title, html]);
+        	}
+        })
+        .on(SWITCH_TAB_BIND_EVENT, function() {
+            if (!isCheck) {
+				Replace.balanceList();
+            }else{
+            	Replace.checkingList();
+            }
+        })
+        .on(CLOSE_TAB_SAVE, function(event) {
+            event.preventDefault();
+            if (!validatorCheck.form())return;
+            if (!isCheck) {
+            	Replace.saveCheckingData($tab);
+        	}else{
+            	Replace.savePayingData($tab);
+        	}
+        });
+		//搜索
+		var $searchArea = $tab.find('.T-search-area'),
+			$datepicker = $searchArea.find('.datepicker');
+		Tools.setDatePicker($datepicker, true);
+		Replace.chooseOrder($searchArea.find('.T-search-order'));
+		Replace.chooseProject($searchArea.find('.T-search-project'));
+
+		$searchArea.find('.T-btn-search').on('click', function(event){
+			event.preventDefault();
+			if(isCheck){
+				Replace.checkingList();
+			}else{
+				Replace.balanceList();
+			}
+		});
+		Tools.descToolTip($tab.find(".T-ctrl-tip"),1);
+
+		// 监听修改
+        $tab.find(".T-clearList, .T-checkList").off('change').on('change',"input",function(event) {
+            event.preventDefault();
+            $(this).closest('tr').data("change",true);
+            $tab.data('isEdited', true);
+        });
+
+		$tab.find('.T-list').on('click', '.T-action', function(event){
+			var $that = $(this), id = $that.closest('tr').data('id');
+			if($that.hasClass('T-view-Received')){
+				Replace.viewOperationDetail(id, true);
+			}else if($that.hasClass('T-receive-money')){
+				Replace.viewOperationDetail(id, false);
+			}
+		});
+		var oMenuKey = checkMenuKey;
+		// 计算
+        if (!isCheck) {
+        	oMenuKey = blanceMenuKey;
+            FinancialService.updateSumPayMoney($tab, validator);
+        } else {
+            //给全选按钮绑定事件: 未去重
+        	FinancialService.initCheckBoxs($tab.find(".T-checkAll"), $tab.find(".T-checkList").find('.T-checkbox'));
+			FinancialService.updateUnpayMoney($tab, validator);
+        }
+		$tab.find('.T-btn-close').on('click', function(event){
+			if(!!$tab.data('isEdited')){
+				showSaveConfirmDialog($('#confirm-dialog-message'), "内容已经被修改，是否保存?", function(){
+					FinancialService.changeUncheck($tab.find('.T-checkTr'), function(){
+						Replace.saveCheckingData($tab);
+		            });
+				}, function(){
+					Tools.closeTab(oMenuKey);
+                	Replace.getList(Replace.listPageNo);
+				});
+			}else{
+				Tools.closeTab(oMenuKey);
+                Replace.getList(Replace.listPageNo);
+			}
+		});
+		$tab.find('.T-btn-save').on('click', function(event){
+			if (!validatorCheck.form()) {
+                return;
+            }
+			if(isCheck){
+				FinancialService.changeUncheck($tab.find('.T-checkTr'), function(){
+					Replace.saveCheckingData($tab, true);
+	            });
+			}else{
+				Replace.savePayingData($tab, true);
+			}
+		});
+
+		if(!isCheck){
+			$tab.find('.T-btn-autofill').on('click', function(event){
+				event.preventDefault();
+				var $that = $(this);
+
+	            if ($that.hasClass('btn-primary')) {
+	                if (validatorCheck.form()) {
+	                    FinancialService.autoPayConfirm($datepicker.eq(0).val(), $datepicker.eq(1).val(),function(){
+	                    	Replace.autoFillData($tab)
+	                    });
+	                }
+	            } else {
+	            	Replace.payingJson = [];
+	                Replace.setAutoFillEdit($tab, false);
+	            }
+			});
+
+            // 清空数据
+            Replace.payingJson = [];
+		}
+	};
+
+	Replace.autoFillData = function($tab){
+		if(!!$tab && $tab.length){
+			var args = FinancialService.autoPayJson(Replace.balanceId, $tab, new FinRule(2), 1);
+			if(!args)return;
+			var project = $tab.find(".T-search-project").val(),
+				bus, hotel, scenic, ticket;
+			if(project.length > 0){
+				for(var i=0; i<project.length; i++){
+					if(project[i] == "车队"){
+						bus = 1;
+					}else if(project[i] == "酒店"){
+						hotel = 1;
+					}else if(project[i] == "景区"){
+						scenic = 1;
+					}else if(project[i] == "票务"){
+						ticket = 1;
+					}
+				}
+			}
+			var order = $tab.find('.T-search-order').val();
+			args = {
+                partnerAgencyId : Replace.balanceId,
+                orderNumber : order == '全部' ? '' : order,
+                busCompanyOrderStatus : bus,
+                hotelOrderStatus : hotel,
+                scenicOrderStatus : scenic,
+                ticketOrderStatus : ticket,
+                sumTemporaryIncomeMoney : $tab.find('.T-sumReciveMoney').val(),
+                startDate : $tab.find('.T-search-start-date').val(),
+                endDate : $tab.find('.T-search-end-date').val()
+            }
+            $.ajax({
+                url: KingServices.build_url('financial/bookingAccount', 'autoBookingAccount'),
+                type: 'post',
+                data: args,
+            })
+            .done(function(data) {
+                if (showDialog(data)) {
+                    Replace.payingJson = data.bookingAccountList;
+					$tab.find('input[name="sumPayMoney"]').val(data.realAutoPayMoney);
+                    Replace.setAutoFillEdit($tab, true);
+                }
+            });
+		}
+	}
+	Replace.setAutoFillEdit = function($tab, disable) {
+        var $sum = $tab.find('input[name="sumPayMoney"]').prop('disabled', disable);
+        if (!disable) {
+            $sum.val(0);
+        }
+
+        $tab.find('.T-btn-autofill').html(disable ? '<i class="ace-icon fa fa-times"></i> 取消下账' : '<i class="ace-icon fa fa-check-circle"></i> 自动下账').toggleClass('btn-primary btn-warning');
+
+        Replace.getOperationList(0, $tab);
+
     };
-    for(var j = 1;j<=12;j++){
-        var monthData = {"value":j}
-        monthList.push(monthData);
-    }
 
-    var Replace = {
-        searchData:{
-            page : "",
-            partnerAgencyId : "",
-            travelAgencyName : "",
-            year : "",
-            month : ""
-        },
+    /**
+     * 获取对账列表数据
+     * @param  {int} pageNo 列表页码
+     * @return {[type]}        [description]
+     */
+    Replace.getOperationList = function(pageNo, $tab) {
+        if ($tab) {
+            var project = Replace.$balanceTab.find(".T-search-project").val().split(', ');
+			var order = Replace.$balanceTab.find(".T-search-order").val();
+			args = {
+				pageNo : (pageNo || 0),
+				partnerAgencyId : Replace.balanceId,
+				orderNumber : order == '全部' ? '' : order,
+				endDate : Replace.$balanceTab.find(".T-search-end-date").val(),
+				startDate : Replace.$balanceTab.find(".T-search-start-date").val()
+			};
+			if(project.length > 0){
+				for(var i=0; i<project.length; i++){
+					if(project[i] == "车队"){
+						args.busCompanyOrderStatus = 1;
+					}else if(project[i] == "酒店"){
+						args.hotelOrderStatus = 1;
+					}else if(project[i] == "景区"){
+						args.scenicOrderStatus = 1;
+					}else if(project[i] == "票务"){
+						args.ticketOrderStatus = 1;
+					}
+				}
+			}
+			args.sortType = 'startTime';
+        	args.order='asc';
+			$.ajax({
+				url : KingServices.build_url('financial/bookingAccount', 'listReciveBookingAcccount'),
+				type : "POST",
+				data : args
+			}).done(function(data){
+				if (showDialog(data)) {
+					var html;
+					data.bookinAccountList = FinancialService.getTempDate(data.bookinAccountList, Replace.payingJson);
+					html = payingTableTemplate(data);
+					Replace.$balanceTab.find('.T-clearList').html(html);
 
-        AutocompleteList:"",
-        searchCheckData:{
-            "partnerAgencyId":"",
-            "travelAgencyName":"",
-            "year":"",
-            "month":""
-        },
-        searchBalanceData:{
-            "partnerAgencyId":"",
-            "travelAgencyName":"",
-            "year":"",
-            "startMonth":"",
-            "endMonth":""
-        },  
-        edited : {},
-        isEdited : function(editedType){
-            if(!!Replace.edited[editedType] && Replace.edited[editedType] != ""){
-                return true;
-            }
-            return false;
-        },
-        oldCheckPartnerAgencyId:0,
-        oldBlancePartnerAgencyId:0,
-        //代订账务列表 back/financial/financialInsurance.do
-        listReplace:function(page,partnerAgencyId,travelAgencyName,year,month){
-            
-            $.ajax({
-                url:""+APP_ROOT+"back/financial/financialBookingOrder.do?method=listSumFcBookingOrder&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-                type:"POST",
-                data:"pageNo="+page+"&partnerAgencyId="+partnerAgencyId+"&travelAgencyName="+travelAgencyName+"&year="+year+"&month="+month+"&sortType=auto",
-                dataType:"json",
-                beforeSend:function(){
-                    globalLoadingLayer = openLoadingLayer();
-                },
-                success:function(data){
-                    layer.close(globalLoadingLayer);
-                    var result = showDialog(data);
-                    if(result){
-                        Replace.searchData={
-                            page : page,
-                            partnerAgencyId:partnerAgencyId,
-                            travelAgencyName : travelAgencyName,
-                            year:year,
-                            month:month
-                        }
-                        data.travelAgencyNameListNew = data.partnerAgencyNameListNew;
-                        Replace.AutocompleteList=data.travelAgencyNameListNew;
-                        data.yearList = yearList;
-                        data.monthList = monthList;
-                        data.searchParam = Replace.searchData;
-                        var html = listTemplate(data);
-                        addTab(menuKey,"代订账务",html);
-                        //搜索按钮事件
-                        $("#"+tabId+ " .btn-financialbooking-search").click(function(){
-                            console.log($("#" + tabId + " input[name=partnerAgencyId]").val());
-                            Replace.searchData = {
-                                    partnerAgencyId:$("#" + tabId + " input[name=partnerAgencyId]").val(),
-                                    travelAgencyName : $("#" + tabId + " input[name=travelAgencyName]").val(),
-                                    year:$("#" + tabId + " select[name=year]").val(),
-                                    month:$("#" + tabId + " select[name=month]").val(),
-                            }
-                            Replace.listReplace(0,Replace.searchData.partnerAgencyId,Replace.searchData.travelAgencyName,Replace.searchData.year, Replace.searchData.month);
-                        });
-                        Replace.getPartnerAgencyList($("#"+tabId+" .choosePartnerAgency"));
+                    // 设置记录条数及页面
+                    $tab.find('.T-sumItem').text('共计' + data.recordSize + '条记录');
+                    $tab.find('.T-btn-save').data('pageNo', args.pageNo);
 
-                        // 绑定翻页组件
-                        laypage({
-                            cont: $('#' + tabId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
-                            pages: data.totalPage, //总页数
-                            curr: (page + 1),
-                            jump: function(obj, first) {
-                                if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-                                    Replace.listReplace(obj.curr -1,Replace.searchData.partnerAgencyId,Replace.searchData.travelAgencyName,Replace.searchData.year,Replace.searchData.month);
-                                }
-                            }
-                        });
-                        //给对账按钮绑定事件
-                        $("#"+tabId+" .btn-financialbooking-check").click(function(){
-                            Replace.searchCheckData={
-                                partnerAgencyId:$(this).attr("data-entity-id"),
-                                travelAgencyName:$(this).attr("data-entity-partneragencyname"),
-                                year:$(this).attr("data-entity-year"),
-                                month:$(this).attr("data-entity-month")
-                            }
-                            console.log(Replace.searchCheckData);
-                            Replace.replaceCheckList(0,Replace.searchCheckData.partnerAgencyId,Replace.searchCheckData.travelAgencyName,Replace.searchCheckData.year,Replace.searchCheckData.month);
-                        });
-
-                        //给结算按钮绑定事件 
-                        $("#"+tabId+"  .btn-financialbooking-balance").click(function(){
-
-                            Replace.searchBalanceData={
-                                "partnerAgencyId":$(this).attr("data-entity-id"),                              
-                                "year":$(this).attr("data-entity-year"),
-                                "travelAgencyName":$(this).attr("data-entity-partneragencyname"),
-                                "startMonth":$(this).attr("data-entity-startMonth"),
-                                "endMonth":$(this).attr("data-entity-endMonth")
-                            }
-                            Replace.replaceBalanceList(0,Replace.searchBalanceData.partnerAgencyId,Replace.searchBalanceData.travelAgencyName,Replace.searchBalanceData.year,Replace.searchBalanceData.startMonth,Replace.searchBalanceData.endMonth)
-                        });
-                    }
-                }
-            });
-        },
-        //代订对账处理
-        replaceCheckList:function(pageNo,partnerAgencyId,travelAgencyName,year,month){
-            $.ajax({
-                url:""+APP_ROOT+"back/financial/financialBookingOrder.do?method=listFcBookingOrder&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-                type:"POST",
-                data:"pageNo="+pageNo+"&partnerAgencyId="+partnerAgencyId+"&year="+year+"&month="+month+"&sortType=auto"+"",
-                dataType:"json",
-                beforeSend:function(){
-                    globalLoadingLayer = openLoadingLayer();
-                },
-                success:function(data){
-                    //表单验证
-                    var $obj = $(".bookingChecking .form-horizontal");
-                    
-                    layer.close(globalLoadingLayer);
-                    var result = showDialog(data);
-                    if(result){
-                    	var checkList = data.financialBookingOrderList;
-                        //data.financialReplaceList = JSON.parse(data.financialReplaceList);
-                        Replace.searchCheckData={
-                            partnerAgencyId:partnerAgencyId,
-                            travelAgencyName:travelAgencyName,
-                            year:year,
-                            month:month
-                        }
-                        console.log(Replace.searchCheckData);
-                        data.yearList = yearList
-                        data.monthList = monthList
-                        data.travelAgencyName = travelAgencyName
-                        data.searchParam = Replace.searchCheckData
-                        var html = replaceChecking(data);
-                        var validator;
-                        //addTab(checkTabId,"代订对账",html);
-                       if($("#" +"tab-"+checkTabId+"-content").length > 0)
-                      {
-                        
-                         if(!!Replace.edited["checking"] && Replace.edited["checking"] != ""){
-                            addTab(checkTabId,"代订对账");
-                            showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
-                                 validator = rule.check($('.bookingChecking'));
-                                     if (!validator.form()) { return; }
-                                     Replace.saveCheckingData(partnerAgencyId,travelAgencyName,0);
-                                     Replace.edited["checking"] = "";
-                                     addTab(checkTabId,"代订对账",html);
-                                     validator = rule.check($('.bookingChecking'));
-                                 },function(){
-                                     addTab(checkTabId,"代订对账",html);
-                                     Replace.edited["checking"] = "";
-                                     validator = rule.check($('.bookingChecking'));
-                                 });
-                         }else{
-                                addTab(checkTabId,"代订对账",html);
-                                validator = rule.check($('.bookingChecking'));
-                         }
-                         
-                    }else{
-                        addTab(checkTabId,"代订对账",html);
-                        validator = rule.check($('.bookingChecking'));
-                    }
-                    //取消对账权限过滤
-                    var checkTr = $(".T-checkList tr");
-                    var rightCode = $(".T-checkList").data("right");
-                    checkDisabled(checkList,checkTr,rightCode);
-
-                    $("#" +"tab-"+checkTabId+"-content .all").on("change",function(){
-                        Replace.edited["checking"] = "checking"; 
-                        oldCheckPartnerAgencyId = partnerAgencyId;
-                    });   
-                        
-                    }
-                    //给搜索按钮绑定事件
-                    $("#" +"tab-"+ checkTabId+"-content"+" .btn-bookingcheck-search").click(function(){
-                        Replace.searchCheckData={
-                            partnerAgencyId:partnerAgencyId,
-                            travelAgencyName:travelAgencyName,
-                            year:$("#" +"tab-"+ checkTabId+"-content"+" select[name=year]").val(),
-                            month:$("#" +"tab-"+ checkTabId+"-content"+" select[name=month]").val(),
-                        }
-                        Replace.replaceCheckList(0,Replace.searchCheckData.partnerAgencyId,Replace.searchCheckData.travelAgencyName,Replace.searchCheckData.year,Replace.searchCheckData.month)
-                    });
-
-                    //代订账务导出事件btn-replaceExport
-                    $("#" +"tab-"+ checkTabId+"-content"+" .btn-replaceExport").click(function(){
-                         var year=$("#" +"tab-"+ checkTabId+"-content"+"  select[name=year]").val();
-                         var month=$("#" +"tab-"+ checkTabId+"-content"+" select[name=month]").val();
-                        checkLogin(function(){
-                            var url = ""+APP_ROOT+"back/export.do?method=bookingOrder&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view"+"&partnerAgencyId="+partnerAgencyId+"&travelAgencyName="+travelAgencyName+"&year="+year+"&month="+month+"&sortType=auto";
-                            exportXLS(url)
-                        });
-                     });
-
-                    // 绑定翻页组件
-                    laypage({
-                        cont: $("#tab-"+ checkTabId+"-content").find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
-                        pages: data.totalPage, //总页数
-                        curr: (pageNo + 1),
-                        jump: function(obj, first) {
-                            if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-                                Replace.replaceCheckList(obj.curr -1,Replace.searchCheckData.partnerAgencyId,Replace.searchCheckData.travelAgencyName,Replace.searchCheckData.year,Replace.searchCheckData.month)
-                            }
-                        }
-                    });
-                    //给全选绑定事件
-                    $("#" +"tab-"+ checkTabId+"-content"+" .selectAll").click(function(){
-                        var flag = this.checked;
-                        $(".bookingChecking .all tbody tr").each(function(){
-                            var checkedbox = $(this).find(".bookingFinancial")
-                            if(flag){
-                                checkedbox.prop("checked",true);
-                            }else{
-                                //判断对账状态
-                                if(checkedbox.attr("data-entity-checkStatus") == 1){
-                                    checkedbox.prop("checked",true);
-                                }else{
-                                    checkedbox.prop("checked",false);
-                                }
-                            }
-                        });
-                    });
-                    //给复选框绑定事件
-                     $("#" +"tab-"+ checkTabId+"-content"+" .bookingFinancial").click(function(){
-                         var flag = true
-                         $("#" +"tab-"+ checkTabId+"-content"+" .bookingFinancial").each(function(){
-                             if(!$(this).prop("checked")){
-                                    flag = false;
-                                } 
-                         })
-                         $("#" +"tab-"+ checkTabId+"-content"+" .selectAll").prop("checked",flag)
-                     });
-                    //给确认对账按钮绑定事件
-                    $("#" +"tab-"+ checkTabId+"-content"+" .btn-bookingFinancial-checking").click(function(){
-                         if (!validator.form()) { return; }
-                         Replace.saveCheckingData(partnerAgencyId,travelAgencyName,0);
-                    })
-                    //取消按钮事件
-                    $("#" +"tab-"+ checkTabId+"-content"+" .btn-bookingFinancial-close").click(function(){
-                        showConfirmDialog($( "#confirm-dialog-message" ), "确定关闭本选项卡?",function(){
-                            closeTab(checkTabId);
-                            Replace.edited["checking"] = "";
-                        });
-                    });
-                }
-            });
-        },
-        //代订帐务结算处理
-       replaceBalanceList:function(pageNo,partnerAgencyId,travelAgencyName,year,startMonth,endMonth){
-            $.ajax({
-                url:""+APP_ROOT+"back/financial/financialBookingOrder.do?method=listFcBookingOrderSettlement&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-                type:"POST",
-                data:"pageNo="+pageNo+"&partnerAgencyId="+partnerAgencyId+"&year="+year+"&monthStart="+startMonth+"&monthEnd="+endMonth+"&sortType=auto"+"",
-                dataType:"json",
-                beforeSend:function(){
-                    globalLoadingLayer = openLoadingLayer();
-                },
-                success:function(data){
-                    layer.close(globalLoadingLayer);
-                    var result = showDialog(data);
-                    if(result){
-                        data.yearList = yearList
-                        data.monthList = monthList
-                        data.travelAgencyName = travelAgencyName
-                        var html = replaceClearing(data);
-                        if($("#" +"tab-"+blanceTabId+"-content").length > 0)
-                        {
-                             if(!!Replace.edited["blance"] && Replace.edited["blance"] != ""){
-                                addTab(blanceTabId,"代订结算");
-                                //给每个tr添加表单验证
-                                showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
-                                     Replace.validatorTable()
-                                     var saveBtn = $("#" +"tab-"+ blanceTabId+"-content"+" .btn-bookingBlance-save")
-                                     if (!$(saveBtn).data('validata').form()) { return; }
-                                     Replace.saveBlanceData(Replace.oldBlancePartnerAgencyId,travelAgencyName,0);
-                                     Replace.edited["blance"] = "";
-                                     addTab(blanceTabId,"代订结算",html);
-                                     Replace.validatorTable();
-                                 },function(){
-                                    addTab(blanceTabId,"代订结算",html);
-                                    Replace.edited["blance"] = "";
-                                    Replace.validatorTable();
-                                 });
-                             }else{
-                                addTab(blanceTabId,"代订结算",html);
-                                Replace.validatorTable();
-                             }
-                             
-                        }else{
-                            addTab(blanceTabId,"代订结算",html);
-                            Replace.validatorTable();
-                        };
-                       $("#" +"tab-"+blanceTabId+"-content .all").on('change', 'input, select', function() {
-                            Replace.edited["blance"] = "blance";
-                            Replace.oldBlancePartnerAgencyId = partnerAgencyId;
-                            $(this).closest('tr').data('blanceStatus',true);
-                        });
- 
-                        
-                        //搜索按钮事件
-                        $("#" +"tab-"+ blanceTabId + "-content"+" .btn-blance-search").click(function(){
-                            Replace.searchBalanceData={
-                                partnerAgencyId:partnerAgencyId,
-                                travelAgencyName:travelAgencyName,
-                                year:$("#" +"tab-"+ blanceTabId + "-content"+"  select[name=year]").val(),
-                                startMonth:$("#" +"tab-"+ blanceTabId + "-content"+" select[name=startMonth]").val(),
-                                endMonth:$("#" +"tab-"+ blanceTabId + "-content"+" select[name=endMonth]").val(),
-                            }
-                            Replace.replaceBalanceList(0,Replace.searchBalanceData.partnerAgencyId,Replace.searchBalanceData.travelAgencyName,Replace.searchBalanceData.year,Replace.searchBalanceData.startMonth,Replace.searchBalanceData.endMonth);
-                        });
-                        //保存按钮事件
-                        $("#" +"tab-"+ blanceTabId+"-content"+" .btn-bookingBlance-save").click(function(){
-                            if (!$(this).data('validata').form()) { return; }
-                             Replace.saveBlanceData(Replace.oldBlancePartnerAgencyId,travelAgencyName,0);
-                        });
-                        //对账明细按钮事件
-                        $("#" +"tab-"+ blanceTabId+"-content"+" .btn-bookingBlance-checkDetail").click(function(){
-                            Replace.searchCheckData={
-                               partnerAgencyId:partnerAgencyId,
-                                travelAgencyName:travelAgencyName,
-                                year:$(this).attr("data-entity-year"),
-                                month:$(this).attr("data-entity-month"),
-                            }
-                            Replace.replaceCheckList(0,Replace.searchCheckData.partnerAgencyId,Replace.searchCheckData.travelAgencyName,Replace.searchCheckData.year,Replace.searchCheckData.month)
-                        });
-                        //给操作记录按钮绑定事件
-                        $("#" +"tab-"+ blanceTabId+"-content"+" .btn-bookingBlance-Records").click(function(){
-                            $.ajax({
-                                url:""+APP_ROOT+"back/financial/financialBookingOrder.do?method=listFcBookingOrderSettlementRecord&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-                                type:"POST",
-                                data:"partnerAgencyId="+partnerAgencyId,
-                                dataType:"json",
-                                beforeSend:function(){
-                                    globalLoadingLayer = openLoadingLayer();
-                                },
-                                success:function(data){
-                                    layer.close(globalLoadingLayer);
-                                    var result = showDialog(data);
-                                    if(result){
-                                        if(data.financialBookingOrderSettlementRecordList.length == 0){
-                                            showMessageDialog($( "#confirm-dialog-message" ),"暂时还没有操作记录");
-                                        }else{
-                                            var html =blanceRecords(data);
-                                            var blanceRecordsTemplateLayer =layer.open({
-                                                type: 1,
-                                                title:"操作记录",
-                                                skin: 'layui-layer-rim', //加上边框
-                                                area: '60%', //宽高
-                                                zIndex:1030,
-                                                content: html,
-                                                scrollbar: false, // 推荐禁用浏览器外部滚动条
-                                                success: function(){}
-                                            })
-                                        }
-                                    }
-                                }
-                            });
-                        });
-                    }
-                }
-            });
-        },
-      //给每个tr增加验证
-        validatorTable:function(){
-            var $tr = $("#" +"tab-"+ blanceTabId + "-content"+" .all tbody tr")
-            //给每个tr添加表单验证
-            $tr.each(function(){
-                $(this).find('.btn-bookingBlance-save').data('validata', rule.check($(this)));
-            });
-        },
-        //对账数据处理
-        saveCheckingData:function(partnerAgencyId,travelAgencyName,isClose){
-            var JsonStr = [],
-                oldrealUnIncomeMoney,
-                newrealUnIncomeMoney,
-                oldRemark,
-                newRemark,
-                $tr = $("#" +"tab-"+ checkTabId+"-content"+" .all tbody tr");
-            $tr.each(function(i){
-                var flag = $(this).find(".bookingFinancial").is(":checked");
-                if(flag){
-                    if($(this).attr("data-entity-isConfirmAccount") == 1){
-                        //取值用于是否修改对账判断
-                        oldrealUnIncomeMoney = $(this).attr("data-entity-realUnIncomeMoney");
-                        oldRemark = $(this).attr("data-entity-remark");
-                        newrealUnIncomeMoney = $tr.eq(i).find("input[name=FinancialBookingRealUnPayedMoney]").val();
-                        newRemark = $tr.eq(i).find("input[name=FinancialbookingRemark]").val();
-                        //判断是否是修改对账
-                        if(oldrealUnIncomeMoney !== newrealUnIncomeMoney || oldRemark !== newRemark){
-                            var checkData = {
-                                id:$(this).attr("data-entity-id"),
-                                partnerAgencyId:partnerAgencyId,
-                                partnerAgencyName:travelAgencyName,
-                                createTime:$(this).attr("data-entity-createTime"),
-                                realUnIncomeMoney:$tr.eq(i).find("input[name=FinancialBookingRealUnPayedMoney]").val(),
-                                remark:$tr.eq(i).find("input[name=FinancialbookingRemark]").val(),
-                                isConfirmAccount:1
-                            }
-                            JsonStr.push(checkData)
-                        }
-                    }else{
-                        var checkData = {
-                            id:$(this).attr("data-entity-id"),
-                            partnerAgencyId:partnerAgencyId,
-                            partnerAgencyName:travelAgencyName,
-                            createTime:$(this).attr("data-entity-createTime"),
-                            realUnIncomeMoney:$tr.eq(i).find("input[name=FinancialBookingRealUnPayedMoney]").val(),
-                            remark:$tr.eq(i).find("input[name=FinancialbookingRemark]").val(),
-                            isConfirmAccount:1
-                        }
-                        JsonStr.push(checkData)
-                    }
-                }else{
-                    if($(this).attr("data-entity-isConfirmAccount") == 1){
-                        var checkData = {
-                            id:$(this).attr("data-entity-id"),
-                            partnerAgencyId:partnerAgencyId,
-                            partnerAgencyName:travelAgencyName,
-                            createTime:$(this).attr("data-entity-createTime"),
-                            realUnIncomeMoney:$tr.eq(i).find("input[name=FinancialBookingRealUnPayedMoney]").val(),
-                            remark:$tr.eq(i).find("input[name=FinancialbookingRemark]").val(),
-                            isConfirmAccount:0
-                        }
-                        JsonStr.push(checkData)
-                    }
-                }
-            });
-            //判断用户是否操作
-               if(JsonStr.length == 0){
-                   showMessageDialog($( "#confirm-dialog-message" ),"您当前未进行任何操作");
-                   return
-               }else{
-                   JsonStr = JSON.stringify(JsonStr);
-                   $.ajax({
-                       url:""+APP_ROOT+"back/financial/financialBookingOrder.do?method=accountChecking&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
-                       type:"POST",
-                       data:"financialBookingOrderListStr="+encodeURIComponent(JsonStr),
-                       dataType:"json",
-                       beforeSend:function(){
-                           globalLoadingLayer = openLoadingLayer();
-                       },
-                       success:function(data){
-                           layer.close(globalLoadingLayer);
-                           var result = showDialog(data);
-                           if(result){
-                               showMessageDialog($( "#confirm-dialog-message" ),data.message);
-                               Replace.edited["checking"] = "";
-                               if(isClose == 1){
-                                   closeTab(checkTabId);
-                                   Replace.listReplace(Replace.searchData.page,Replace.searchData.partnerAgencyId,Replace.searchData.travelAgencyName,Replace.searchData.year,Replace.searchData.month);
-                               } else {
-                                   Replace.replaceCheckList(0,Replace.searchCheckData.partnerAgencyId,Replace.searchCheckData.travelAgencyName,Replace.searchCheckData.year,Replace.searchCheckData.month);                          
-                               }
-                            }
-                       }
-                   });
-               }
-        },
-        saveBlanceData:function(partnerAgencyId,travelAgencyName,isClose){
-            var DataArr = [],
-                JsonData,
-            $tr = $("#" +"tab-"+ blanceTabId+"-content"+" .all tbody tr");
-            $tr.each(function(i){
-                if($(this).data('blanceStatus')){
-                    var blanceData = {
-                        id:$(this).attr("data-entity-id"),
-                        partnerAgencyId:partnerAgencyId,
-                        year:$(this).attr("data-entity-year"),
-                        month:$(this).attr("data-entity-month"),
-                        realNeedIncomeMoney:$tr.eq(i).find("td[name=blancerealNeedIncomeMoney]").text(),
-                        realIncomeMoney:$tr.eq(i).find("td[name=blancerealIncomeMoney]").text(),
-                        unIncomeMoney:$tr.eq(i).find("td[name=blanceununIncomeMoney]").text(),
-                        realUnIncomeMoney:$tr.eq(i).find("td[name=blancerealrealUnIncomeMoney]").text(),
-                        incomeType:$tr.eq(i).find("select[name=blancePayType]").val(),
-                        incomeMoney:$tr.eq(i).find("input[name=blancerealIncomeMoney]").val(),
-                        remark:$tr.eq(i).find("input[name=blancerealRemark]").val()
-                    }
-                     DataArr.push(blanceData)
-                }
-            })
-            JsonData = JSON.stringify(DataArr)
-            $.ajax({
-                url:""+APP_ROOT+"back/financial/financialBookingOrder.do?method=saveFcBookingOrderSettlement&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
-                type:"POST",
-                data:"fcBookingOrderSettlementStr="+JsonData,
-                dataType:"json",
-                beforeSend:function(){
-                    globalLoadingLayer = openLoadingLayer();
-                },
-                success:function(data){
-                    layer.close(globalLoadingLayer);
-                    var result = showDialog(data);
-                    if(result){
-                        showMessageDialog($( "#confirm-dialog-message" ),data.message);
-                        Replace.edited["blance"] = "";
-                        if(isClose == 1){
-                            closeTab(blanceTabId);
-                            Replace.listReplace(Replace.searchData.page,Replace.searchData.partnerAgencyId,Replace.searchData.travelAgencyName,Replace.searchData.year,Replace.searchData.month);
-                        } else {
-                            Replace.replaceBalanceList(0,Replace.searchBalanceData.partnerAgencyId,Replace.searchBalanceData.travelAgencyName,Replace.searchBalanceData.year,Replace.searchBalanceData.startMonth,Replace.searchBalanceData.endMonth);
-                        }
-                    }
-                }
-            })
-        },
-        
-        //代订客户Autocomplete
-        getPartnerAgencyList : function(obj){
-            var $obj=$(obj),list;
-                list =Replace.AutocompleteList;
-                if(list && list.length > 0){
-                    for(var i=0; i < list.length; i++){
-                        list[i].value = list[i].partnerAgencyName;
-                    }
-                }
-        $obj.autocomplete({
-            minLength:0,
-            change :function(event, ui){
-                if(ui.item == null){
-                    var parents = $(this).parent();
-                    parents.find("input[name=partnerAgencyId]").val("");
-                }
-            },
-            select :function(event, ui){
-                var _this = this, parents = $(_this).parent();
-                parents.find("input[name=partnerAgencyId]").val(ui.item.partnerAgencyId).trigger('change');
-            },source: list
-            }).unbind("click").click(function(){
-                var $obj = $(this);
-                    if(!!list && list.length){  
-                        $obj.autocomplete('search', '');
-                    }else{
-                        layer.tips('没有内容', obj, {
-                            tips: [1, '#3595CC'],
-                            time: 2000
-                    });
-                }
-            })
-        },
-        save : function(saveType){
-            console.log(saveType);
-            if(saveType == "checking"){
-                Replace.saveCheckingData(Replace.oldCheckPartnerAgencyId,"",1);
-            } else if(saveType == "blance"){
-                Replace.saveBlanceData(Replace.oldBlancePartnerAgencyId,"",1);
-            }
-        },
-        clearEdit : function(clearType){
-            Replace.edited[clearType] = "";
+					// 绑定翻页组件
+					laypage({
+					    cont: Replace.$balanceTab.find('.T-pagenation'), 
+					    pages: data.searchParam.totalPage, //总页数
+					    curr: (data.searchParam.pageNo + 1),
+					    jump: function(obj, first) {
+					    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+					    		Replace.getOperationList(obj.curr -1);
+					    	}
+					    }
+					});	
+				}
+			});
         }
     }
-    exports.listReplace = Replace.listReplace;
-    exports.isEdited = Replace.isEdited;
-    exports.save = Replace.save;
-    exports.clearEdit = Replace.clearEdit;
+
+	Replace.chooseProject = function($obj){
+		$obj.autocomplete({
+			minLength: 0,
+		    change: function(event, ui) {
+		        if (!ui.item)  {
+		            $(this).val("");
+		        }
+		    },
+		    select: function(event, ui) {
+		    	var terms = this.value.split( /,\s*/ );
+		    	//移除当前输入
+          		terms.pop();
+          		if($(this).val().indexOf(ui.item.value) == -1){
+	          		//添加被选项
+			        terms.push( ui.item.value );
+			        //添加占位符，在结尾添加逗号+空格
+			        terms.push( "" );
+			        this.value = terms.join( ", " );
+          		}
+		        return false;
+		    },
+		    focus : function(){
+		    	// 防止在获得焦点时插入值
+          		return false;
+		    }
+		}).on('click', function(){
+			if (!$obj.data('ajax')) {  // 避免重复请求
+				var data = ["车队", "酒店", "景区", "票务",];
+				$obj.autocomplete('option', 'source', data);
+			    $obj.autocomplete('search', '');
+			    $obj.data('ajax', true);
+			}else{
+				$obj.autocomplete('search', '');
+			}
+
+		});
+	};
+
+	Replace.chooseOrder = function($obj){
+		$obj.autocomplete({
+			minLength: 0,
+		    change: function(event, ui) {
+		        if (!ui.item)  {
+		            $(this).data('id', '');
+		        }
+		    },
+		    select: function(event, ui) {
+		        $(this).blur().data('id', ui.item.id);
+		    }
+		}).on('click', function(){
+			if (!$obj.data('ajax')) {  // 避免重复请求
+				$.ajax({
+					url : KingServices.build_url('financial/bookingAccount', 'selectCheckOrder'),
+					type : "POST",
+					data : {partnerAgencyId : Replace.checkingId}
+				}).done(function(data){
+					for(var i=0; i<data.orderList.length; i++){
+		                data.orderList[i].value = data.orderList[i].orderNumber;
+		            }
+		            data.orderList.unshift({id:'', value: '全部'});
+		            $obj.autocomplete('option', 'source', data.orderList);
+		            $obj.autocomplete('search', '');
+
+		            $obj.data('ajax', true);
+				});
+			} else {
+		        $obj.autocomplete('search', '');
+		    }
+		});
+	};
+
+	Replace.viewOperationDetail = function(id, type){
+		if (!!id) {
+			var method = 'findCheckAccountDetail',
+                title = '应收金额明细',
+                html = viewAccountTemplate;
+            if (!type) {
+                method = 'findReciveAccountDetail';
+                title = '已收金额明细';
+                html = viewReceivedTemplate;
+            }
+            $.ajax({
+                url: KingServices.build_url('financial/bookingAccount', method),
+                type: 'post',
+                data: {
+                    id: id
+                },
+            })
+            .done(function(data) {
+                if (showDialog(data)) {
+                    data.type = type;
+                    layer.open({
+                        type: 1,
+                        title: title,
+                        skin: 'layui-layer-rim',
+                        area: '1024px',
+                        zIndex: 1028,
+                        content: html(data),
+                        scrollbar: false
+                    });
+                }
+            });
+		}
+	};
+
+	Replace.saveCheckingData = function($tab, tabArgs){
+		var validator = new FinRule(0);
+		var json = FinancialService.checkSaveJson($tab, validator);
+		if (json) { // 有值
+			$.ajax({
+                url: KingServices.build_url('financial/bookingAccount', 'checkBookingAccount'),
+                type: 'post',
+                data: {
+                    checkAccountList: json
+                },
+            })
+            .done(function(data) {
+                if (showDialog(data)) {
+                    $tab.data('isEdited', false);
+
+                    showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+                        if (!!tabArgs) {
+                            //Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
+                            Replace.checkingList(0);
+                        } else {
+                            Tools.closeTab(checkMenuKey);
+                            Replace.getList(Replace.listPageNo);
+                        }
+                    })
+                }
+            });
+		}
+	};
+
+	/**
+	 * 收款
+	 * @param  {int} id 客户ID
+	 */
+	Replace.balance = function(id, name){
+		Replace.$balanceTab = null;
+		Replace.balanceId = id;
+		Replace.balanceName = name;
+		Replace.isBalanceSource = false;
+		Replace.balanceList(0, id);
+	};
+	Replace.initIncome = function(args){
+		Replace.$balanceTab = null;
+		Replace.balanceId = args.id;
+		Replace.balanceName = args.name;
+		Replace.isBalanceSource = true;
+		Replace.balanceList(0, args.id, args.startDate, args.endDate);
+	};
+
+
+	Replace.balanceList = function(page, id, startDate, endDate){
+		var args = {
+			pageNo : (page || 0),
+			partnerAgencyId : id || Replace.balanceId,
+			endDate : endDate || Replace.$tab.find('.T-search-end-date').val(),
+			startDate : startDate || Replace.$tab.find('.T-search-start-date').val()
+		};
+
+		if(!!Replace.$balanceTab){
+			var project = Replace.$balanceTab.find(".T-search-project").val().split(', ');
+			var order = Replace.$balanceTab.find(".T-search-order").val();
+			args = {
+				pageNo : (page || 0),
+				partnerAgencyId : id || Replace.balanceId,
+				orderNumber : order == '全部' ? '' : order,
+				endDate : Replace.$balanceTab.find(".T-search-end-date").val(),
+				startDate : Replace.$balanceTab.find(".T-search-start-date").val()
+			};
+			if(project.length > 0){
+				for(var i=0; i<project.length; i++){
+					if(project[i] == "车队"){
+						args.busCompanyOrderStatus = 1;
+					}else if(project[i] == "酒店"){
+						args.hotelOrderStatus = 1;
+					}else if(project[i] == "景区"){
+						args.scenicOrderStatus = 1;
+					}else if(project[i] == "票务"){
+						args.ticketOrderStatus = 1;
+					}
+				}
+			}
+		}
+		args.sortType = 'startTime';
+        args.order='asc';
+		$.ajax({
+			url : KingServices.build_url('financial/bookingAccount', 'listReciveBookingAcccount'),
+			type : "POST",
+			data : args
+		}).done(function(data){
+			if (showDialog(data)) {
+				var html;
+				data.name = Replace.balanceName;
+				data.source = Replace.isBalanceSource;
+				for(var j=0; j<data.bookinAccountList.length; j++){
+					var detailList = data.bookinAccountList[j].detailList;
+					data.bookinAccountList[j].newDetail = '';
+					for(var i=0; i<detailList.length; i++){
+						data.bookinAccountList[j].newDetail += detailList[i].name + '，' + detailList[i].type + '，' + detailList[i].shift + '，' + detailList[i].level + '，' + detailList[i].count + "×" + detailList[i].price + "=" + (detailList[i].count * detailList[i].price) + '，';
+					}
+					data.bookinAccountList[j].newDetail = Replace.clearComma(data.bookinAccountList[j].newDetail);
+				}
+				Tools.addTab(blanceMenuKey, "代订收款", replaceClearing(data));
+				Replace.$balanceTab = $('#tab-' + blanceMenuKey + '-content');
+
+				html = payingTableTemplate(data);
+				Replace.$balanceTab.find('.T-clearList').html(html);
+
+				Replace.CM_event(Replace.$balanceTab, false);
+
+				// 绑定翻页组件
+				laypage({
+				    cont: Replace.$balanceTab.find('.T-pagenation'), 
+				    pages: data.searchParam.totalPage, //总页数
+				    curr: (data.searchParam.pageNo + 1),
+				    jump: function(obj, first) {
+				    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+				    		Replace.balanceList(obj.curr -1);
+				    	}
+				    }
+				});	
+			}
+		});
+	};
+	Replace.savePayingData = function($tab, tabArgs){
+		var validator = new FinRule(Replace.isBalanceSource ? 3 : 1);
+		var json = FinancialService.clearSaveJson($tab, Replace.payingJson, validator);
+
+		if (json.length) {
+            $.ajax({
+                    url: KingServices.build_url('financial/bookingAccount', 'receiveBookingAccount'),
+                    type: 'post',
+                    data: {
+                        reciveAccountList: JSON.stringify(json),
+                        partnerAgencyId: Replace.balanceId,
+                        payType: $tab.find('.T-sumPayType').val(),
+                        remark: $tab.find('.T-sumRemark').val()
+                    },
+                })
+                .done(function(data) {
+                    $tab.data('isEdited', false);
+                    Replace.payingJson = [];
+                    showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+                        if (!!tabArgs) {
+                            //Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
+                            Replace.balanceList(0);
+                        } else {
+                            Tools.closeTab(blanceMenuKey);
+                            Replace.getList(Replace.listPageNo);
+                        }
+                    })
+                });
+        } else {
+            showMessageDialog($('#confirm-dialog-message'), '您当前未进行任何操作！');
+        }
+	};
+	exports.init = Replace.initModule;
+	exports.initIncome = Replace.initIncome;
 });

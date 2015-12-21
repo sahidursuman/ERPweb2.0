@@ -1,104 +1,27 @@
-
-<form class="form-horizontal touristGroupMainForm" role="form" style="margin-top:10px" onsubmit="return false">
-	<table class="whereQ whereOne" style="width:97%">
-		<tr>
-			<td class="style-myself">线路产品：</td>
-			<td class="styleOne-self">{{if needIncomeMoneyDetail.lineProductName != null}}{{needIncomeMoneyDetail.lineProductName}}{{/if}}</td>
-			<td class="style-myself">出游日期：</td>
-			<td class="styleOne-self">{{needIncomeMoneyDetail.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
-
-		</tr>
-		<tr>
-			<td class="style-myself" style="width:150px">是否购买保险：</td>
-			<td class="styleOne-self">{{if needIncomeMoneyDetail.buyInsurance == 0}}
-				否
-				{{else needIncomeMoneyDetail.buyInsurance == 1}}
-				是
-				{{/if}}</td>
-			<td class="style-myself">客户来源：</td>
-			<td class="styleOne-self" >{{if needIncomeMoneyDetail.partnerAgencyName != null}}{{needIncomeMoneyDetail.partnerAgencyName}}{{/if}}</td>
-
-		</tr>
-		<tr>
-			<td class="style-myself" style="width:150px">同行联系人：</td>
-			<td class="styleOne-self" >{{if needIncomeMoneyDetail.partnerAgencyContactName != null}}{{needIncomeMoneyDetail.partnerAgencyContactName}} -[{{needIncomeMoneyDetail.partnerAgencyContactMobileNumber}}]{{/if}}</td>
-			<td class="style-myself">获得方式：</td>
-			<td class="styleOne-self" >{{if needIncomeMoneyDetail.getType == 1}}
-				旅行社系统
-				{{else if needIncomeMoneyDetail.getType == 2}}
-				传真
-				{{else if needIncomeMoneyDetail.getType == 3}}
-				短信
-				{{else if needIncomeMoneyDetail.getType == 4}}
-				电话
-				{{else if needIncomeMoneyDetail.getType == 5}}
-				QQ
-				{{/if}}</td>
-		</tr>
-
-		<tr>
-			<td class="style-myself">应收：</td>
-			<td class="styleOne-self" >{{needIncomeMoneyDetail.needIncomeAllMoney}}</td>
-			<td class="style-myself">已收：</td>
-			<td class="styleOne-self">{{needIncomeMoneyDetail.alreadyIncomeMoney}}</td>
+<div style="form-group">
+	<table class="table table-striped table-bordered table-hover" >
+		<thead>
+			<tr>
+				<th class="th-border">应付类别</th>
+				<th class="th-border">发生业务</th>
+				<th class="th-border">金额</th>
+				<th class="th-border">备注</th>
+				<th class="th-border">操作者</th>
+				<th class="th-border">操作时间</th>
 			</tr>
-		<tr>
-			<td class="style-myself">现收：</td>
-			<td class="styleOne-self">{{needIncomeMoneyDetail.currentNeedInComeMoney}}</td>
-
-			<td class="style-myself">未收：</td>
-			<td class="styleOne-self">{{needIncomeMoneyDetail.unIncomeMoney}}</td></tr>
+		</thead>
+		<tbody>
+		{{each income as detail}}
+			<tr>
+				<td>{{detail.receivableType.name}}</td>
+				<td>{{detail.businessType.name}}</td>
+				<td>{{detail.incomeDifferenceMoney}}</td>
+				<td>{{detail.remark}}</td>
+				<td>{{detail.user.realName}}</td>
+				<td>{{detail.createTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}</td>
+			</tr>
+		{{/each}}
+		</tbody>
 	</table>
+</div>
 
-	<table class="whereQ whereTwo" style="width:97%;margin-top:20px">
-		<!--<tr>-->
-		<!--<td colspan="8" class="HeadManage" style="text-align: left"></td>-->
-		<!--</tr>-->
-		<tr>
-			<td class="style-myself">类型</td>
-			<td class="style-myself">说明</td>
-			<td class="style-myself">数量</td>
-			<td class="style-myself">单价</td>
-		</tr>
-
-		<tr>
-			<td>
-				结算价
-			</td>
-			<td>
-				大人
-			</td>
-			<td>
-				<label class="control-label">{{needIncomeMoneyDetail.adultCount}}</label>
-			</td>
-			<td>
-				<label class="control-label">{{needIncomeMoneyDetail.adultPrice}}</label>
-			</td>
-		</tr>
-		<tr>
-			<td>
-				结算价
-			</td>
-			<td>
-				小孩
-			</td>
-			<td>
-				<label class="control-label">{{needIncomeMoneyDetail.childCount}}</label>
-			</td>
-			<td>
-				<label class="control-label">{{needIncomeMoneyDetail.childPrice}}</label>
-			</td>
-		</tr>
-		<!-- 其他费用 -->
-		  {{each needIncomeMoneyDetail.touristGroupFeeList as transferFee}}
-		    {{if transferFee!=null}}
-		      <tr>   
-		            <td>其他费用</td>  
-		            <td>{{transferFee.describeInfo}}</td>
-		            <td>{{transferFee.count}}</td>  
-		            <td>{{transferFee.price}}</td>
-		      </tr>
-		      {{/if}}  
-		  {{/each}} 
-	</table>
-	</form>

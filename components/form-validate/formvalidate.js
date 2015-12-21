@@ -73,6 +73,11 @@
 		}
 	};
 
+	// 日期校验回调，用于触发校验效果
+	function changeDateCallBack(event) {
+		$(this).trigger(FOCUS_OUT_EVENT);
+	}
+
 	Validate.prototype.activeOnEle = function(setting)  {
 		var that = this;
 		if (setting.$ele)  {
@@ -93,7 +98,7 @@
 					}
 					
 					function dataTask() {						
-						var res = that.task(data, setting.rules);
+						var res = that.task(data, setting.rules, $that);
 
 						if (res !== true)  {
 							that.setMessage($that, res);
@@ -106,11 +111,8 @@
 			if (setting.$ele.hasClass('datepicker'))  {
 				// 时间插件触发处理
 				setting.$ele
-				.off('changeDate')
-				.on('changeDate', function(){ 
-					$(this).trigger(FOCUS_OUT_EVENT);
-					}
-				);
+				.off('changeDate', changeDateCallBack)
+				.on('changeDate', changeDateCallBack);
 			} else if (setting.$ele.hasClass('ui-autocomplete-input') || setting.$ele.hasClass('bind-change'))  {
 				// 自动填充处理
 				setting.$ele
@@ -135,6 +137,7 @@
 					}
 				});
 			}
+
 		}
 		
 	};
@@ -149,11 +152,11 @@
 		}
 	}
 
-	Validate.prototype.task = function(data, rules) {
+	Validate.prototype.task = function(data, rules, $elem) {
 		var len = rules.length;
 
 		if (len) {
-			for (var i = 0, canNull, res; i < len; i ++)  {
+			for (var i = 0, canNull, res, cmpVal; i < len; i ++)  {
 				res = false;
 				canNull = true;  //暂无意义
 
@@ -205,12 +208,58 @@
 						}
 						break;
 					case 'positive-float2':	// 正浮点型
-						if (!!data && !/^(?:[1-9][0-9]*\.[0-9]+|0\.(?!0+$)[0-9]+)|[1-9]\d*$/.test( data )) {
+					case 'nonnegative-float': 	// 非负数
+						if (!!data && (isNaN( data ) || data < 0)) {
 							res = rules[i].errMsg;
 						}
 						break;
-					case 'positive-float':	// 非负浮点型
-						if (!!data && !/^(\d*\.)?\d+$/.test( data )) {
+					case 'positive-float':	// 正浮点型
+						if (!!data && (isNaN( data ) || data <= 0)) {
+							res = rules[i].errMsg;
+						}
+						break;
+
+					case 'eq': 			// 等于
+						cmpVal = $elem.data('eq');
+
+						if (!!data && data !== cmpVal) {
+							res = rules[i].errMsg;
+						}
+						break;
+					case 'ne': 			// 不等于
+						cmpVal = $elem.data('ne');
+
+						if (!!data && data === cmpVal) {
+							res = rules[i].errMsg;
+						}
+						break;
+					case 'gt': 			// 大于（仅数字）
+						cmpVal = $elem.data('gt');
+
+						if (!!data && (isNaN(cmpVal) || isNaN(data) || data <= cmpVal)) {
+							res = rules[i].errMsg;
+						}
+						break;
+
+					case 'ge': 			// 大于等于（仅数字）
+						cmpVal = $elem.data('ge');
+
+						if (!!data && (isNaN(cmpVal) || isNaN(data) || data < cmpVal)) {
+							res = rules[i].errMsg;
+						}
+						break;
+					case 'lt': 			// 小于（仅数字）
+						cmpVal = $elem.data('lt');
+
+						if (!!data && (isNaN(cmpVal) || isNaN(data) || data >= cmpVal)) {
+							res = rules[i].errMsg;
+						}
+						break;
+
+					case 'le': 			// 小于等于（仅数字）
+						cmpVal = $elem.data('le');
+
+						if (!!data && (isNaN(cmpVal) || isNaN(data) || data > cmpVal)) {
 							res = rules[i].errMsg;
 						}
 						break;
@@ -311,7 +360,7 @@
 					data = tmp.$valObj.eq(j).val();
 				}
 				
-				if ($jTmp.is(':visible') && this.task(data, tmp.rules) !== true) {
+				if ($jTmp.is(':visible') && this.task(data, tmp.rules, $jTmp) !== true) {
 					/**
 					 * visible,用于排除被删除或者被隐藏的元素
 					 */

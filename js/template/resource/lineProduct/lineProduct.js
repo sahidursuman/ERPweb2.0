@@ -266,7 +266,14 @@ define(function(require, exports) {
 						}
 						// 绑定autocomplete
 						$tab = $('#tab-'+ tab_id + '-content');
-						
+						//Input控件精度的限制
+						var $guideFee= $tab.find('input[name=guideFee]'),
+						    $price= $tab.find('input[name=price]'),
+						    $seatPrice= $tab.find('input[name=seatPrice]');
+						    Tools.inputCtrolFloat($guideFee);
+						    Tools.inputCtrolFloat($price);
+						    Tools.inputCtrolFloat($seatPrice);
+
 						var $dayListArea = $tab.find('.T-timeline-container');
 						ResLineProduct.bindRestaurantEvent($dayListArea.find('.T-choose-restaurantName'), $dayListArea.find('.T-choose-restaurantStandardsName'));
 						ResLineProduct.bindHotelEvent($dayListArea.find('.T-choose-hotelName'), $dayListArea.find('.T-choose-hotelRoom'), $dayListArea.find('.T-choose-hotelStarLevel'));
@@ -634,7 +641,6 @@ define(function(require, exports) {
 			}
 		}).click(function(){
 			var obj = this;
-			console.log(obj)
 			var needSeatCount = $(obj).parent().parent().find("input[name=needSeatCount]").val();
 			$.ajax({
 				url: KingServices.build_url('busCompany', 'findBusCompanyBySeat'),
@@ -804,7 +810,7 @@ define(function(require, exports) {
 		//添加行程安排餐饮
 		var scheduleDetails = '<div class="T-timeline-item timeline-item clearfix updateRestaurantList updateLineProductDaysDetail T-RestaurantList ui-sortable-handle" data-entity-index='+ResLineProduct.updateLineProductIndex+'><div class="timeline-info " style="color:#1fade0" ><i class="ace-icon fa fa-circle" ></i><span>餐饮</span></div>'+
 		'<div class="widget-box transparent" style="margin-top: 20px"><div class="widget-body"><div class=""><table class="table table-striped table-bordered table-hover">'+
-		'<thead><tr><th  class="th-border">餐厅名称</th><th class="th-border">餐厅电话</th><th class="th-border">用餐类型</th><th class="th-border">餐标</th>	<th class="th-border">菜单</th><th  class="th-border">备注</th>	<th  class="th-border" style="width: 60px;">操作</th></tr></thead>'+
+		'<thead><tr><th  class="th-border">餐厅名称</th><th class="th-border">餐厅电话</th><th class="th-border">用餐类型</th><th class="th-border">餐标<span style="font-size:12px;">(元/人)</span></th>	<th class="th-border">菜单</th><th  class="th-border">备注</th>	<th  class="th-border" style="width: 60px;">操作</th></tr></thead>'+
 		'<tbody><tr>'+
 		'<td><input type="text" class="col-xs-12 chooseRestaurantName bind-change"/><input type="hidden" name="restaurantId"/></td>'+
 		'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
@@ -964,7 +970,7 @@ define(function(require, exports) {
 		'<div class="widget-box transparent" style="margin-top: 20px"><div class="widget-body"><div class=""><table class="table table-striped table-bordered table-hover">'+
 		'<thead><tr><th  class="th-border">酒店星级</th><th  class="th-border">酒店名称</th><th class="th-border">房型</th><th class="th-border">价格</th><th class="th-border">含餐</th><th class="th-border">电话</th><th class="th-border">备注</th><th  class="th-border" style="width: 60px;">操作</th></tr></thead>'+
 		'<tbody><tr>'+
-		'<td><select class="col-xs-12 resourceHotelStar"><option selected="selected" value="1">三星以下</option><option value="2">三星</option><option value="3">准四星</option><option value="4">四星</option><option value="5">准五星</option><option value="6">五星</option><option value="7">五星以上</option></select></td>'+
+		'<td><select class="col-xs-12 resourceHotelStar"><option {{if hotelList.hotel.level==0 }}selected="selected" {{/if}} value="">全部</option><option value="1">三星以下</option><option value="2">三星</option><option value="3">准四星</option><option value="4">四星</option><option value="5">准五星</option><option value="6">五星</option><option value="7">五星以上</option></select></td>'+
 		'<td><input type="text" class="col-xs-12 chooseHotelName bind-change" name="hotelNmae"/><input type="hidden" name="hotelId"/></td>'+
 		'<td><input type="text" class="col-xs-12 chooseHotelRoom bind-change" name="hotelRoom"/><input type="hidden" name="hotelRoomId"/></td>'+
 		'<td><input type="text" class="col-xs-12" name="contractPrice" /></td>'+
@@ -972,8 +978,11 @@ define(function(require, exports) {
 		'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
 		'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
 		'<td><a class="cursor btn-restaurant-delete T-delete deleteAllother">删除 </a></td></tr></tbody></table></div></div></div></div>';
+		var $container=$btn.closest(".T-dailyArrangeList").find(".T-timeline-detail-container");
+		    $container.append(hotelDetails);
+		var $contractPrice=$container.find("input[name=contractPrice]");
+		    Tools.inputCtrolFloat($contractPrice);
 
-		$btn.closest(".T-dailyArrangeList").find(".T-timeline-detail-container").append(hotelDetails);
 		ResLineProduct.updateLineProductIndex += 1;
 		//绑定选择酒店名称事件
 		ResLineProduct.bindHotelEvent($(".updateHotelList .chooseHotelName"), $(".updateHotelList .chooseHotelRoom"), $(".updateHotelList .resourceHotelStar"), validator)
@@ -1142,7 +1151,11 @@ define(function(require, exports) {
 		'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
 		'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
 		'<td><a class="cursor btn-restaurant-delete T-delete deleteAllother"> 删除</a></td></tr></tbody></table></div></div></div></div>';
-		$btn.closest(".T-dailyArrangeList").find(".T-timeline-detail-container").append(scenicDetails);
+		var $container=$btn.closest(".T-dailyArrangeList").find(".T-timeline-detail-container");
+		    $container.append(scenicDetails);
+		var $price=$container.find('input[name=price]');
+		    Tools.inputCtrolFloat($price);
+
 		ResLineProduct.updateLineProductIndex += 1;
 		
 		//绑定选择景区名称事件
@@ -1441,7 +1454,10 @@ define(function(require, exports) {
 		'<td><input type="text" class="col-xs-12" readonly="readonly" name="managerName"/></td>'+
 		'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
 		'<td><a class="cursor btn-restaurant-delete T-delete deleteAllother"> 删除</a></td></tr></tbody></table></div></div></div></div>';
-		$btn.closest(".T-dailyArrangeList").find(".T-timeline-detail-container").append(selfPayingDetails);
+		var $container=$btn.closest(".T-dailyArrangeList").find(".T-timeline-detail-container");
+		    $container.append(selfPayingDetails);
+		var $contractPrice=$container.find('input[name=contractPrice]');
+		    Tools.inputCtrolFloat($contractPrice);
 		ResLineProduct.updateLineProductIndex += 1;
 		
 		//绑定选择自费名称事件
@@ -1535,7 +1551,7 @@ define(function(require, exports) {
 						if(result){
 							var selfPayItem = JSON.parse(data.selfPayItem); 
 							$tr.find("input[name=selfPayItemId]").val(ui.item.id).trigger('change');
-							$tr.find("input[name=contractPrice]").val(selfPayItem.normalTravelAgencyRate);
+							$tr.find("input[name=contractPrice]").val(selfPayItem.normalInnerPrice);
 							$tr.find("input[name=marketPrice]").val(selfPayItem.normalMarketPrice);
 						}
                     }
@@ -1544,7 +1560,7 @@ define(function(require, exports) {
 			change:function(event, ui){
 				if(ui.item == null){
 					var $tr = $(this).val("").closest('tr');
-					$tr.find("input[name=companyId]").val("");
+					// $tr.find("input[name=companyId]").val("");
 					$tr.find("input[name=selfPayItemId]").val("");
 					$tr.find("input[name=mobileNumber]").val("");
 					$tr.find("input[name=contractPrice]").val("");
@@ -1552,8 +1568,8 @@ define(function(require, exports) {
 				}
 			}
 		}).unbind("click").click(function(){
-			var obj = this;
-			var chooseCompanyNameId=$(obj).parent().parent().find("input[name='companyId']").val();
+			var $that = $(this);
+			var chooseCompanyNameId=$that.closest('tr').find("input[name='companyId']").val();
 			$.ajax({
 				url: KingServices.build_url('selfpay', 'findSelfPayItemBySelfPayId'),
 				data:"id="+chooseCompanyNameId,
@@ -1568,10 +1584,10 @@ define(function(require, exports) {
 								
 								selfPayItemList[i].value = selfPayItemList[i].name;
 							}
-							$(obj).autocomplete('option','source', selfPayItemList);
-							$(obj).autocomplete('search', '');
+							$that.autocomplete('option','source', selfPayItemList);
+							$that.autocomplete('search', '');
 						}else{
-							layer.tips('没有内容。', obj, {
+							layer.tips('没有内容。', $that, {
 							    tips: [1, '#3595CC'],
 							    time: 2000
 							});
@@ -1598,7 +1614,10 @@ define(function(require, exports) {
 		'<td><input type="text" class="col-xs-12" readonly="readonly" name="telNumber"/></td>'+
 		'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
 		'<td><a class="cursor btn-restaurant-delete T-delete deleteAllother">删除</a></td></tr></tbody></table></div></div></div></div>';
-		$btn.closest(".T-dailyArrangeList").find(".T-timeline-detail-container").append(shoppingDetails);
+		var $container=$btn.closest(".T-dailyArrangeList").find(".T-timeline-detail-container");
+		    $container.append(shoppingDetails);
+		var $price=$container.find('input[name=price]');
+		    Tools.inputCtrolFloat($price);
 		ResLineProduct.updateLineProductIndex += 1;
 		
 		//绑定选择自费名称事件
@@ -1681,7 +1700,10 @@ define(function(require, exports) {
 		'<td><input type="text" class="col-xs-12" name="price"/></td>'+
 		'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
 		'<td><a class="cursor btn-restaurant-delete T-delete deleteAllother">删除</a></td></tr></tbody></table></div></div></div></div>';
-		$btn.closest(".T-dailyArrangeList").find(".T-timeline-detail-container").append(otherDetails);
+		var $container=$btn.closest(".T-dailyArrangeList").find(".T-timeline-detail-container");
+		    $container.append(otherDetails);
+		var $price=$container.find('input[name=price]');
+		    Tools.inputCtrolFloat($price);
 		ResLineProduct.updateLineProductIndex += 1;
 	};
 
@@ -1695,7 +1717,7 @@ define(function(require, exports) {
 	ResLineProduct.saveProductData = function($tab, validator, tabArgs){
 		if (!validator.form())   return;
 
-		var $form = $tab.find('.T-mainForm'), travelLineData = {},isAjax = true;
+		var $form = $tab.find('.T-mainForm'), travelLineData = {},isAjax = true,$middleForm = $tab.find('.T-middleForm');
 		function getValue(obj, name){
 			var thisObj = obj.find("[name="+name+"]"), objValue;
 			if(thisObj.attr("type") == "checkbox"){
@@ -1719,6 +1741,7 @@ define(function(require, exports) {
 			return false;
 		}
 
+
 		// 获取表单的数据
 		travelLineData.lineProduct = 
 			[{
@@ -1728,6 +1751,10 @@ define(function(require, exports) {
 				remark : getValue($form, "remark"),
 				type : getValue($form, "type"),
 				customerType : getValue($form, "customerType"),
+				includeFee  : getValue($middleForm, "includeFee"),
+				excludeFee  : getValue($middleForm, "excludeFee"),
+				lineFeature : getValue($middleForm, "lineFeature"),
+				lineNotice  : getValue($middleForm, "lineNotice"),
 				status : getValue($form, "status")
 			}];
 		
@@ -1882,17 +1909,17 @@ define(function(require, exports) {
 			if($list.length > 0){
 				for(var j=0; j<$list.length;j++){
 					$item = $list.eq(j);
-					var selfPayId = $item.find("[name=selfPayItemId]").val();
-					if(!selfPayId){
+					var companyId = $item.find("[name=companyId]").val();
+					if(!companyId){
 						showMessageDialog($( "#confirm-dialog-message" ), "请选择自费项目！");
 						isAjax = false;
 						return false;
 					}
-					if(selfPayId){
+					if(companyId){
 						var selfPayJson = {
 							id : $item.find("[name=templateId]").val(),
 							selfPayItemId :$item.find("[name=selfPayItemId]").val(),
-							selfPayId : selfPayId,
+							selfPayId : companyId,
 							price : $item.find("[name=contractPrice]").val(),
 							marketPrice : $item.find("[name=marketPrice]").val(),
 							remark : $item.find("[name=remark]").val(),
@@ -2108,4 +2135,5 @@ define(function(require, exports) {
 	};
 	exports.init = ResLineProduct.initModule;  
 	exports.addLineProduct = ResLineProduct.addLineProduct;  
+	exports.viewLineProduct = ResLineProduct.viewLineProductDetail;
 });

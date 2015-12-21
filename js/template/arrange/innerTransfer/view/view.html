@@ -9,7 +9,7 @@
 					<!--<td class="style-myself CheckPlan">来源部门</td>
 					<td style="text-align: left;padding: 0px 0px 0px 10px">{{innerTransfer.fromBusinessGroup.name}}</td>-->
 					<td class="style-myself CheckPlan">接收部门</td>
-					<td style="text-align: left;padding: 0px 0px 0px 10px">{{innerTransfer.toBusinessGroup.name}}</td>
+					<td style="text-align: left;padding: 0px 0px 0px 10px" colspan="3">{{innerTransfer.toBusinessGroup.name}}</td>
 					</tr>
 				<tr>
 					<td class="style-myself CheckPlan">内转备注</td>
@@ -19,8 +19,16 @@
 				<tr>
 					<td class="style-myself CheckPlan">应付</td>
 					<td style="text-align: left;padding: 0px 0px 0px 10px">{{innerTransfer.transNeedPayMoney}}</td>
-					<td class="style-myself CheckPlan">已付</td>
-					<td style="text-align: left;padding: 0px 0px 0px 10px">{{innerTransfer.transPayedMoney}}</td>
+					<td class="style-myself CheckPlan" style="text-align: left;padding: 0px 0px 0px 10px">已付 {{innerTransfer.transPayedMoney}}</td>
+					 <td style="text-align: left;padding: 0px 0px 0px 10px">
+						付款方式
+						{{if innerTransfer.payType == 0}}现金
+							{{else if innerTransfer.payType == 1}}银行转账
+							{{else if innerTransfer.payType == 2}}网上支付
+							{{else if innerTransfer.payType == 3}}支票
+							{{else if innerTransfer.payType == 4}}其他
+						{{/if}}
+					</td>
 				</tr>
 			</table>
 		</div>
@@ -68,7 +76,7 @@
 						<h5 class="">
 							<label class="middle title-size">内转列表</label>
 						</h5>
-					<div class="widget-body">
+					<div class="widget-body TransferTable">
 						<div class="widget-main no-padding">
 							<table class="table table-striped table-bordered table-hover hotelRoomStandardList">
 								<thead>
@@ -123,6 +131,8 @@
 					<h5 class="">
 						<label class="middle title-size">收客信息</label>
 					</h5>
+
+					{{if isParent ==  0 }}
 					<div class="search-area col-sm-12">
 						<label class="col-sm-1 control-label no-padding-right" style="width:84px;">应收：</label>
 						<div class="col-sm-1">
@@ -138,13 +148,32 @@
 							<input name="currentNeedPayMoney" value="{{innerTransfer.touristGroup.currentNeedPayMoney}}" readonly="readonly" type="text" class="col-xs-12" />
 						</div>
 					</div>
+					{{else}}
+					<div class="search-area col-sm-12">
+						<label class="col-sm-1 control-label no-padding-right" style="width:84px;">应收：</label>
+						<div class="col-sm-1">
+							<input name="needPayAllMoney" value="{{parentTouristGroup.needPayAllMoney}}" readonly="readonly" type="text" class="col-xs-12" />
+						</div>
+						<label class="col-sm-1 control-label no-padding-right">已收：</label>
+						<div class="col-sm-1">
+							<input name="payedMoney" value="{{parentTouristGroup.payedMoney}}" readonly="readonly" type="text" class="col-xs-12" />
+						</div>
+
+						<label class="col-sm-1 control-label no-padding-right">现收：</label>
+						<div class="col-sm-1">
+							<input name="currentNeedPayMoney" value="{{parentTouristGroup.currentNeedPayMoney}}" readonly="readonly" type="text" class="col-xs-12" />
+						</div>
+					</div>
+
+					{{/if}}
+
 					<div class="search-area col-sm-12">
 						<label class="pull-left control-label no-padding-right">收客时的备注：</label>
 						<div class="col-sm-5">
 							<input name="remark" value="{{innerTransfer.touristGroup.remark}}" type="text" class="col-xs-12" readonly="readonly" />
 						</div>
 					</div>
-					<div class="widget-body">
+					<div class="widget-body TransferTable">
 						<div class="widget-main no-padding">
 							<table class="table table-striped table-bordered table-hover hotelRoomStandardList">
 								<thead>
@@ -196,7 +225,7 @@
 						<h5 class="">
 							<label class="middle title-size">游客小组信息</label>
 						</h5>
-					<div class="widget-body">
+					<div class="widget-body TransferTable">
 						<div class="widget-main no-padding">
 							<table class="table table-striped table-bordered table-hover hotelRoomStandardList">
 								<thead>

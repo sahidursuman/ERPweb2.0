@@ -1,0 +1,45 @@
+{{each result as rs}}
+<tr data-id="{{rs.financialId}}">
+	<td ><a class="T-tripDetail">{{rs.tripNumber}}</a></td>
+	<td >{{rs.lineProductName}}</td>
+	<td >{{rs.startTime | dateFormat:'yyyy-MM-dd'}}</td>
+	<td >{{rs.adultCount}} 大 {{rs.childCount}} 小</td>
+	<td >{{rs.guideName}}</td>
+	<td >{{rs.creatorName}}</td>
+	<td >{{if rs.billStatus == -1}}
+			待报账
+		{{else if rs.billStatus == 0}}
+			待审核
+		{{else if rs.billStatus == 1}}
+			计调已审
+		{{else if rs.billStatus == 2}}
+			财务已审
+		{{/if}}
+	</td>
+	<td >{{rs.needPayAllMoney}}</td>
+	<td >{{rs.shopMoney}}</td>
+	<td >{{rs.selfPayMoney}}</td>
+	<td >{{rs.incomeMoney}}</td>
+	<td >{{rs.guideMoney}}</td>
+	<td >{{rs.guideTip}}</td>
+	<td >{{rs.insuranceMoney}}</td>
+	<td >{{rs.busMoney}}</td>
+	<td >{{rs.restaurantMoney}}</td>
+	<td >{{rs.hotelMoney}}</td>
+	<td >{{rs.scenicMoney}}</td>
+	<td >{{rs.ticketMoney}}</td>
+	<td >{{rs.otherMoney}}</td>
+	<td >{{rs.shopCostMoney}}</td>
+	<td >{{rs.selfMoney}}</td>
+	<td >{{rs.outBusMoney}}</td>
+	<td >{{rs.outRestaurantMoney}}</td>
+	<td >{{rs.outHotelMoney}}</td>
+	<td >{{rs.outTicketMoney}}</td>
+	<td >{{rs.outOtherMoney}}</td>
+	<td >{{rs.totalIncome}}</td>
+	<td >{{rs.totalTrip}}</td>
+	<td >{{rs.totalOut}}</td>
+	<td >{{rs.profit}}</td>
+	<td >{{rs.perCapitaProfit}}</td>
+</tr>
+{{/each}}

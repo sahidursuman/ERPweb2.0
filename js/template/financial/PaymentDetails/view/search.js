@@ -1,0 +1,36 @@
+/*TMODJS:{"debug":true,"version":21,"md5":"0f8db271e0d68cb3c754f71969eef8f0"}*/
+define(function(require) {
+    return require("../../../template")("financial/PaymentDetails/view/search", function($data, $filename) {
+        try {
+            var $utils = this, $line = ($utils.$helpers, 0), $each = $utils.$each, receivableTypes = $data.receivableTypes, $escape = ($data.rs, 
+            $data.$index, $utils.$escape), businessTypes = $data.businessTypes, payTypeList = $data.payTypeList, searchParam = ($data.index, 
+            $data.searchParam), total = $data.total, $out = "";
+            return $out += '<form class="form-inline" role="form" onsubmit="return false"> <div class="form-group"> <label class="label-inline-60">收/付款：</label> <select name="fin-type" id="fin-type"> <option value="">全部</option> <option value="0">收款</option> <option value="1">付款</option> </select> </div> <div class="form-group mar-l-10"> <label>收支类别：</label> <select class="form-control T-search-category" style="width: 100px;"> <option value="">全部</option> ', 
+            $line = 15, $each(receivableTypes, function(rs) {
+                $out += ' <option value="', $line = 16, $out += $escape(rs.id), $out += '">', $line = 16, 
+                $out += $escape(rs.name), $out += "</option> ", $line = 17;
+            }), $out += ' </select> </div> <div class="form-group mar-l-10"> <label>发生业务：</label> <select class="form-control T-search-business" style="width: 100px;"> <option value="">全部</option> ', 
+            $line = 26, $each(businessTypes, function(rs) {
+                $out += ' <option value="', $line = 27, $out += $escape(rs.id), $out += '">', $line = 27, 
+                $out += $escape(rs.name), $out += "</option> ", $line = 28;
+            }), $out += ' </select> </div> <div class="form-group mar-l-10"> <label>支付方式：</label> <select class="form-control T-search-payment" style="width: 100px;"> <option value="">全部</option> ', 
+            $line = 35, $each(payTypeList, function(rs, index) {
+                $out += ' <option value="', $line = 36, $out += $escape(index), $out += '">', $line = 36, 
+                $out += $escape(rs), $out += "</option> ", $line = 37;
+            }), $out += ' </select> </div> <div class="form-group mar-l-10"> <button class="btn-sm search-btn T-btn-search"> <i class="ace-icon fa fa-search"></i> 搜索 </button> </div> </form> <form class="form-inline" role="form" onsubmit="return false"> <div class="form-group hidden"> <label>退款冲账：</label> <select class="form-control T-search-cost" style="width: 220px;"> <option value="">全部</option> <option value="0">是</option> <option value="1">否</option> </select> </div> <div class="form-group"> <label>对方单位：</label> <input type="text" class="form-control T-search-unit" style="width: 229px;" value=""> </div> <div class="form-group mar-l-10"> <label>开始日期：</label> <input type="text" class="form-control datepicker T-search-start-time" value="', 
+            $line = 62, $out += $escape(searchParam.startTime), $out += '" style="width: 100px;text-align: center;"> </div> <div class="form-group mar-l-10"> <label>结束日期：</label> <input type="text" class="form-control datepicker T-search-end-time" value="', 
+            $line = 66, $out += $escape(searchParam.endTime), $out += '" style="width: 100px;text-align: center;"> </div> <div class="form-group mar-l-10"> <label>收款合计：</label> <label class="T-incomeMoney">', 
+            $line = 70, $out += $escape(total.incomeMoney), $out += '</label> </div> <div class="form-group mar-l-10"> <label>付款合计：</label> <label class="T-payMoney">', 
+            $line = 74, $out += $escape(total.payMoney), $out += "</label> </div> </form>", 
+            new String($out);
+        } catch (e) {
+            throw {
+                filename: $filename,
+                name: "Render Error",
+                message: e.message,
+                line: $line,
+                source: '<form class="form-inline" role="form" onsubmit="return false">\r\n    <div class="form-group">\r\n        <label class="label-inline-60">收/付款：</label>\r\n        <select name="fin-type" id="fin-type">\r\n            <option value="">全部</option>\r\n            <option value="0">收款</option>\r\n            <option value="1">付款</option>\r\n        </select>\r\n    </div>\r\n    \r\n    <div class="form-group mar-l-10">\r\n        <label>收支类别：</label>\r\n        <select class="form-control T-search-category" style="width: 100px;">\r\n            <option value="">全部</option>\r\n            {{each receivableTypes as rs}}\r\n            <option value="{{rs.id}}">{{rs.name}}</option>\r\n            {{/each}}\r\n        </select>\r\n    </div>\r\n\r\n\r\n    <div class="form-group mar-l-10">\r\n        <label>发生业务：</label>\r\n        <select class="form-control T-search-business" style="width: 100px;">\r\n            <option value="">全部</option>\r\n            {{each businessTypes as rs}}\r\n            <option value="{{rs.id}}">{{rs.name}}</option>\r\n            {{/each}}\r\n        </select>\r\n    </div>\r\n    <div class="form-group mar-l-10">\r\n        <label>支付方式：</label>\r\n        <select class="form-control T-search-payment" style="width: 100px;">\r\n            <option value="">全部</option>\r\n            {{each payTypeList as rs index}}\r\n            <option value="{{index}}">{{rs}}</option>\r\n            {{/each}}\r\n        </select>\r\n    </div>\r\n    \r\n    <div class="form-group mar-l-10">\r\n        <button class="btn-sm search-btn T-btn-search">\r\n            <i class="ace-icon fa fa-search"></i> 搜索 \r\n        </button>\r\n    </div>\r\n</form>\r\n<form class="form-inline" role="form" onsubmit="return false">\r\n    <div class="form-group hidden">\r\n        <label>退款冲账：</label>\r\n        <select class="form-control T-search-cost" style="width: 220px;">\r\n            <option value="">全部</option>\r\n            <option value="0">是</option>\r\n            <option value="1">否</option>\r\n        </select>\r\n    </div>\r\n    <div class="form-group">\r\n        <label>对方单位：</label>\r\n        <input type="text" class="form-control T-search-unit" style="width: 229px;" value="">\r\n    </div>\r\n    <div class="form-group mar-l-10">\r\n        <label>开始日期：</label>\r\n        <input type="text" class="form-control datepicker T-search-start-time" value="{{searchParam.startTime}}" style="width: 100px;text-align: center;">\r\n    </div>\r\n    <div class="form-group mar-l-10">\r\n        <label>结束日期：</label>\r\n        <input type="text" class="form-control datepicker T-search-end-time" value="{{searchParam.endTime}}" style="width: 100px;text-align: center;">\r\n    </div>\r\n    <div class="form-group mar-l-10">\r\n        <label>收款合计：</label>\r\n        <label class="T-incomeMoney">{{total.incomeMoney}}</label>\r\n    </div>\r\n    <div class="form-group mar-l-10">\r\n        <label>付款合计：</label>\r\n        <label class="T-payMoney">{{total.payMoney}}</label>\r\n    </div>\r\n</form>'.split(/\n/)[$line - 1].replace(/^\s+/, "")
+            };
+        }
+    });
+});

@@ -47,7 +47,6 @@ define(function(require, exports) {
 	        	sortType: 'auto' 
 	        }
         }
-        console.log(TurnProfit.searchParam);
         // 修正页码
         page = page || 0;
         $.ajax({
@@ -59,7 +58,7 @@ define(function(require, exports) {
                 if (result) {
                 	data.searchParam = TurnProfit.searchParam;
                     var html = listTurnProfit(data);
-                    addTab(menuKey,"转客利润",html);
+                    addTab(menuKey,"外转利润",html);
                     TurnProfit.searchParam.pageNo = page;
                     
                     TurnProfit.initList();
@@ -101,8 +100,10 @@ define(function(require, exports) {
         // 报表内的操作
         TurnProfit.$tab.find('.T-option').on('click', function(event) {
             event.preventDefault();
-            var $that = $(this),id = $that.closest('tr').data('id');
-
+            var $that = $(this),
+                id = $that.closest('tr').data('id'),
+                transferId = $that.closest('tr').attr('tgTransferId');
+                lineProductId = $that.closest('tr').attr('lineProductId');
             if ($that.hasClass('T-showTourist')) {
                 // 查看游客小组
                 TurnProfit.clickFlag = 1;
@@ -110,21 +111,27 @@ define(function(require, exports) {
             } else if ($that.hasClass('T-showIncomeDetail')) {
                 // 查看收客团款
                 TurnProfit.clickFlag = 2;
-                TurnProfit.viewTouristGroup(id);
+                TurnProfit.viewTouristGroup(transferId);
             } else if ($that.hasClass('T-showChangePay')) {
                 // 查看中转明细
-                TurnProfit.viewTransit(id);
+                TurnProfit.viewTransit(transferId);
             } else if ($that.hasClass('T-showTransPay')) {
-                // 查看内转明细
+                // 查看外转明细
                 TurnProfit.viewTransfer(this);
+            } else if($that.hasClass('T-lineProductDetail')){
+                //查看线路产品
+                KingServices.viewTurnInfo(transferId);
             }
         });
     };
 
     //查看遊客小組的信息
     TurnProfit.viewTouristGroup = function(id){
+        var $path = TurnProfit.clickFlag == 2?'profitTransfer':'touristGroup';
+        var $method = TurnProfit.clickFlag == 2?'findIncome':'viewTransferTouristGroupDetails';
+        var $title = TurnProfit.clickFlag == 2?'团款应收明细':'查看小组';
 		$.ajax({
-			url:TurnProfit.url("touristGroup","viewTransferTouristGroupDetails"),
+			url:TurnProfit.url($path,$method),
 			type:"POST",
 			data:{
 				id : id + ""
@@ -132,34 +139,36 @@ define(function(require, exports) {
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
-                    console.log(data);
-                    var memberList = JSON.parse(data.touristGroupMemberDetail.touristGroupMemberList);
-                    var otherCost = JSON.parse(data.needIncomeMoneyDetail.touristGroupFeeList);
-                    data.touristGroupMemberDetail.touristGroupMemberList = memberList;
-                    data.needIncomeMoneyDetail.touristGroupFeeList = otherCost;
-					if(TurnProfit.clickFlag == 1){
-						var html = viewTemplate(data);
-						layer.open({
-							type : 1,
-							title : "查看小组",
-							skin : 'layui-layer-rim',
-							area : "60%", 
-							zIndex : 1028,
-							content : html,
-							scrollbar: false // 推荐禁用浏览器外部滚动条
-						});
-					};
-					if(TurnProfit.clickFlag == 2){
-						var html = visitorGroupMainInfo(data);
-						layer.open({
-							type : 1,
-							title : "收客团款明細",
-							skin : 'layui-layer-rim', 
-							area : "65%", 
-							zIndex : 1028,
-							content : html,
-							scrollbar: false // 推荐禁用浏览器外部滚动条
-						});
+                    if(TurnProfit.clickFlag == 2){
+                        data.income = JSON.parse(data.income);
+                        console.log(data);
+                        var html = visitorGroupMainInfo(data);
+                        layer.open({
+                            type : 1,
+                            title : $title,
+                            skin : 'layui-layer-rim', 
+                            area : "65%", 
+                            zIndex : 1028,
+                            content : html,
+                            scrollbar: false // 推荐禁用浏览器外部滚动条
+                        });
+                    }else{
+                        var memberList = JSON.parse(data.touristGroupMemberDetail.touristGroupMemberList);
+                        var otherCost = JSON.parse(data.needIncomeMoneyDetail.touristGroupFeeList);
+                        data.touristGroupMemberDetail.touristGroupMemberList = memberList;
+                        data.needIncomeMoneyDetail.touristGroupFeeList = otherCost;
+    					if(TurnProfit.clickFlag == 1){
+    						var html = viewTemplate(data);
+    						layer.open({
+    							type : 1,
+    							title :$title,
+    							skin : 'layui-layer-rim',
+    							area : "60%", 
+    							zIndex : 1028,
+    							content : html,
+    							scrollbar: false // 推荐禁用浏览器外部滚动条
+    						});
+    					};
 					}
 				}
 			}
@@ -168,7 +177,7 @@ define(function(require, exports) {
 
 	TurnProfit.viewTransit = function(id){
 		$.ajax({
-			url:TurnProfit.url("touristGroup","findTouristGroupArrangeById"),
+			url:TurnProfit.url("profitTransfer","findOut"),
 			type:"POST",
 			data:{
 				id : id + ""
@@ -176,23 +185,11 @@ define(function(require, exports) {
 			success:function(data){
 	        	var result = showDialog(data);
 	        	if(result){
-	        		data.bus = JSON.parse(data.bus);
-					data.receiveGroup.outBusList = JSON.parse(data.receiveGroup.outBusList);
-					data.receiveGroup.outHotelList = JSON.parse(data.receiveGroup.outHotelList);
-					data.receiveGroup.outTicketList = JSON.parse(data.receiveGroup.outTicketList);
-                    data.receiveGroup.outRestaurantList = JSON.parse(data.receiveGroup.outRestaurantList);
-                    data.receiveGroup.outOtherList = JSON.parse(data.receiveGroup.outOtherList);
-					data.sendGroup.outBusList = JSON.parse(data.sendGroup.outBusList);
-					data.sendGroup.outHotelList = JSON.parse(data.sendGroup.outHotelList);
-					data.sendGroup.outTicketList = JSON.parse(data.sendGroup.outTicketList);
-                    data.sendGroup.outRestaurantList = JSON.parse(data.sendGroup.outRestaurantList);
-                    data.sendGroup.outOtherList = JSON.parse(data.sendGroup.outOtherList);
-					data.touristGroup = JSON.parse(data.touristGroup);
+                    data.financial = JSON.parse(data.financial);
 					var html =transitViewTemplate(data);
-					
 					layer.open({
 						type : 1,
-						title : "中转明细",
+						title : "中转成本明细",
 						skin : 'layui-layer-rim', // 加上边框
 						area : "70%", // 宽高
 						zIndex : 1028,
@@ -207,7 +204,7 @@ define(function(require, exports) {
 	TurnProfit.viewTransfer = function(obj){
 		var id = $(obj).data("id");
 		$.ajax({
-			url:TurnProfit.url("transfer","findMember"),
+			url:TurnProfit.url("profitTransfer","findPay"),
 			type:"POST",
 			data:{
 				id : id + ""
@@ -215,14 +212,12 @@ define(function(require, exports) {
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
-					data.lineProduct = JSON.parse(data.lineProduct);
-					data.touristGroup =JSON.parse(data.touristGroup);
-					data.partnerAgency=JSON.parse(data.partnerAgency);
+					data.pay = JSON.parse(data.pay);
 					var html = arrangeTransferViewTemplate(data);
 					//addTab(menuKey+"-viewTransfer","查看我社转出",html);
 					layer.open({
 						type : 1,
-						title : "转客明细",
+						title : "外转成本明细",
 						skin : 'layui-layer-rim', // 加上边框
 						area : "60%", // 宽高
 						zIndex : 1028,
