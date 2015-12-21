@@ -109,7 +109,7 @@
                         <a data-toggle="tab" href="#tripPlan_addPlan_other" aria-expanded="false">其他</a>
                     </li>  
                     <li style="border:none; margin-left:12px;">
-                        {{if tripPlan.qouteId!=null}}
+                        {{if !!tripPlan.qouteId}}
                            <button class="T-singleClick-Order R-right" data-right="1450001">一键下单</button>
 
                            <button class="T-update-Quote R-right" data-right="1440002" data-qouteId={{tripPlan.qouteId}}>修改报价</button>
@@ -347,7 +347,7 @@
                                                                 </td>
                                                                
                                                                 <td>
-                                                                 {{if busCompany.offerId!=null}}
+                                                                 {{if !!busCompany.offerId}}
                                                                         <a class="cursor T-bus-SendOrder T-sendOrder-Area R-right T-action" data-value='{{busCompany.qouteId}}' data-right="1450001" data-entity-offerId={{busCompany.offerId}}>
                                                                         发送订单
                                                                        </a>
@@ -472,14 +472,12 @@
                                            <h5 class="title-size">
                                                 <i class="ace-icon fa fa-hotel"></i>
                                                 房安排
-                                                {{if tripPlan.qouteId==null}}
                                                     <a href="javascript:void(0)" class="T-addResource T-addHotel">
                                                         <button class="btn btn-sm btn-success btn-guide-add" style="margin-left: 20px">
                                                         <i class="ace-icon fa fa-plus"></i>
                                                         新增
                                                         </button>
                                                     </a>
-                                                {{/if}}
                                             </h5>
                                         <div class="widget-body">
                                             <div class="widget-main no-padding">
@@ -557,7 +555,7 @@
                                                                     <a class="cursor T-btn-deleteTripPlanList" data-entity-id="{{hotel.id}}" data-entity-name="hotel" title="删除">删除</a>
                                                                     {{/if}}
 
-                                                                    {{if hotel.offerId!=null}}
+                                                                    {{if !!hotel.offerId}}
                                                                     <a class="cursor T-Hotel-SendOrder T-sendOrder-Area R-right T-action" data-value="{{hotel.qouteId}}" data-right="1450001" data-entity-offerId={{hotel.offerId}}>发送订单</a>
                                                                     {{/if}}
                                                                 </td>
