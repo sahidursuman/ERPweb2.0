@@ -799,7 +799,7 @@ define(function(require, exports) {
 		    		saveJson.expiryTime = $container.find('[name=expiryTime]').val();
 		    		if (!!saveJson.expiryTime) {
 						$.ajax({
-							url: KingServices.build_url('hotelInquiry','keySaveHotelArrangeOrder'),
+							url: KingServices.build_url('hotelInquiry','keySaveHotelArrangeInquiry'),
 							type: 'POST',
 							data: {saveJson: JSON.stringify(saveJson)},
 							success: function(data) {
@@ -828,7 +828,7 @@ define(function(require, exports) {
 		$.ajax({
 			url: KingServices.build_url('hotelInquiry','keySaveHotelArrangeOrder'),
 			type: 'POST',
-			data: {searchJson: JSON.stringify(saveJson)},
+			data: {saveJson : JSON.stringify(saveJson)},
 			success: function(data) {
 				if (showDialog(data)) {
 					showMessageDialog($( "#confirm-dialog-message" ), data.message);
