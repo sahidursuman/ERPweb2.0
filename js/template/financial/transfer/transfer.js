@@ -512,12 +512,14 @@ define(function(require, exports) {
     };
 
     Transfer.saveClear = function(id,name,page,tab_id, title, html){
-        if(!FinancialService.isClearSave(Transfer.$clearTab,new FinRule(1))){
+        var isAutoPay = Transfer.$clearTab.find('input[name=isAutoPay]').val();
+        var settleValidator = isAutoPay == 2 ? new FinRule(3) : new FinRule(1);
+        if(!FinancialService.isClearSave(Transfer.$clearTab,settleValidator)){
             return false;
         }
 
         var argumentsLen = arguments.length,
-            clearSaveJson = FinancialService.clearSaveJson(Transfer.$clearTab,Transfer.clearTempData,new FinRule(1));
+            clearSaveJson = FinancialService.clearSaveJson(Transfer.$clearTab,Transfer.clearTempData,settleValidator);
         var searchParam = {
             partnerAgencyId : id,
             sumCurrentPayMoney : Transfer.$clearTab.find('input[name=sumPayMoney]').val(),

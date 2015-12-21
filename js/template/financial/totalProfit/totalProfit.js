@@ -43,6 +43,7 @@ define(function(require, exports) {
             // 获取统计数据
             TotalProfit.getCountData(args);
         }).trigger('click');
+       
     };
     //获取列表数据
     TotalProfit.getListData = function(page, args){
@@ -66,13 +67,11 @@ define(function(require, exports) {
                     TotalProfit.$tab.find('.T-list').html(tableTemplate(data));
 
                     TotalProfit.$tab.find('.T-recordSize').html(Tools.getRecordSizeDesc(data.searchParam.totalCount));
-					
-					//点击线路产品事件
+                    //点击线路产品事件
                     TotalProfit.$tab.find('.T-list').find('.T-transfer').off('click').on('click',function(){
-                        var id = $(this).closest('tr').data("id");
+                        var id = $(this).closest('tr').attr("lineProductId");
                         KingServices.viewLineProduct(id);
                     });
-
                     // 绑定翻页组件
                     laypage({
                         cont: TotalProfit.$tab.find('.T-pagenation'), 
