@@ -286,7 +286,8 @@ define(function(require,exports) {
 					$searchObj.find('.sumPayedMoney').text(data.getedMoney);
 					$searchObj.find('.sumPunishMoney').text(data.backMoney);
 					$searchObj.find('.sumSettlementMoney').text(data.settlementMoney);
-					$searchObj.find('.sumUnPayedMoney').text(data.unIncomeMoney);
+					$searchObj.find('.sumUnPayedMoney').text(data.confirmedMoney);
+					$searchObj.find('.unIncomeMoney').text(data.unIncomeMoney);
 				}
 			}
 		});
@@ -382,9 +383,9 @@ define(function(require,exports) {
 		});
         //确认对账事件
         $obj.find(".T-checking").on('click',function(event){
-        	event.preventDefault();
         	if(!validatorCheck.form()){return;}
-        	InnerTransferIn.saveCheckingData(0,$obj,$listSearchData)
+			InnerTransferIn.saveCheckingData(0,$obj,$listSearchData)
+        	
         });
         //自动下账事件
         $obj.find('.T-btn-autofill').off('click').on('click',function(){
@@ -428,20 +429,32 @@ define(function(require,exports) {
         });
         //关闭事件
         $obj.find(".T-close").on('click',function(event){
-        	var checkBoxList = $obj.find(".T-checkList").find('.innerTransferFinancial');
-        	checkBoxList.each(function(i){
-        		var $this = $(this),
-        			flag = $this.is(":checked"),
-        			$tr = $this.closest('tr');
-        		if($tr.data('change') && $tr.data("confirm") == 0 && !flag){
-        			showConfirmDialog($( "#confirm-dialog-message" ), "您有记录已修改但未勾选对账，是否继续?",function(){
-		        		var tabId = typeFlag == 2?settleId:checkId;
-		        		Tools.closeTab(tabId);
+        	if(typeFlag == 1){
+        		var checkBoxList = $obj.find(".T-checkList").find('.innerTransferFinancial'),
+        		result = false,
+        		unCheckList = [];
+	        	checkBoxList.each(function(i){
+	        		var $this = $(this),
+	        			flag = $this.is(":checked"),
+	        			$tr = $this.closest('tr');
+	        		if($tr.data('change') && $tr.data("confirm") == 0 && !flag){
+	        			result = true;
+	        		}
+	        	});
+	        	if(result){
+	    			showConfirmDialog($( "#confirm-dialog-message" ), "您有记录已修改但未勾选对账，是否继续?",function(){
+		        		Tools.closeTab(checkId);
 		        	})
-        		}
-        	});
+	        	}else{
+	        		Tools.closeTab(checkId);
+	        	}
+        	}else{
+        		Tools.closeTab(settleId);
+        	}
         });
 	};
+	//给修改了但未勾选的得数据打钩
+
 	//导出事件
 	InnerTransferIn.exportData = function($obj){
 		var year=$obj.find("select[name=year]").val(),
@@ -515,6 +528,7 @@ define(function(require,exports) {
 						InnerTransferIn.saveJson = data
 						InnerTransferIn.btnSatus = 1;
 						$data.autoAccount = 1;
+						$obj.data('isEdited', false);
 						InnerTransferIn.chenking($data,2,"settle");
 					});
 				}
