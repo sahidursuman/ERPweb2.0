@@ -371,9 +371,9 @@ define(function(require, exports) {
 	Ticket.clearing = function(id, name){
 		Ticket.$clearingTab = null;
 		Ticket.clearingId = id;
-		Ticket.clearingList(0, id);
 		Ticket.isBalanceSource = false;
 		Ticket.balanceName = name;
+		Ticket.clearingList(0, id, Ticket.$tab.find('.T-search-start-date').val(), Ticket.$tab.find('.T-search-end-date').val());
 	};
 
 	Ticket.initPay = function(args){
@@ -387,8 +387,8 @@ define(function(require, exports) {
 		var args = {
 			pageNo : (page || 0),
 			ticketId : id || Ticket.clearingId,
-			startDate : start || Ticket.$tab.find('.T-search-start-date').val(),
-			endDate : end || Ticket.$tab.find('.T-search-end-date').val(),
+			startDate : start,
+			endDate : end,
 			accountInfo : ""
 		};
 		if(Ticket.$clearingTab){
@@ -527,6 +527,8 @@ define(function(require, exports) {
      * @param  {[type]} $tab [description]
      */
     Ticket.setAutoFillEdit = function($tab, disable) {
+    	var args = FinancialService.autoPayJson(Ticket.clearingId, $tab, new FinRule(2), 0);
+    	if(!args)return;
         var $sum = $tab.find('input[name="sumPayMoney"]').prop('disabled', disable),
         args = {};
         if (!disable) {
