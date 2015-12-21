@@ -300,7 +300,9 @@ define(function(require, exports) {
 		$tab.find('.T-btn-close').on('click', function(event){
 			if(!!$tab.data('isEdited')){
 				showSaveConfirmDialog($('#confirm-dialog-message'), "内容已经被修改，是否保存?", function(){
-					Replace.saveCheckingData($tab);
+					FinancialService.changeUncheck($tab.find('.T-checkTr'), function(){
+						Replace.saveCheckingData($tab);
+		            });
 				}, function(){
 					Tools.closeTab(oMenuKey);
                 	Replace.getList(Replace.listPageNo);
@@ -315,7 +317,9 @@ define(function(require, exports) {
                 return;
             }
 			if(isCheck){
-				Replace.saveCheckingData($tab, true);
+				FinancialService.changeUncheck($tab.find('.T-checkTr'), function(){
+					Replace.saveCheckingData($tab, true);
+	            });
 			}else{
 				Replace.savePayingData($tab, true);
 			}
@@ -345,6 +349,8 @@ define(function(require, exports) {
 
 	Replace.autoFillData = function($tab){
 		if(!!$tab && $tab.length){
+			var args = FinancialService.autoPayJson(Replace.balanceId, $tab, new FinRule(2), 1);
+			if(!args)return;
 			var project = $tab.find(".T-search-project").val(),
 				bus, hotel, scenic, ticket;
 			if(project.length > 0){
@@ -361,7 +367,7 @@ define(function(require, exports) {
 				}
 			}
 			var order = $tab.find('.T-search-order').val();
-			var args = {
+			args = {
                 partnerAgencyId : Replace.balanceId,
                 orderNumber : order == '全部' ? '' : order,
                 busCompanyOrderStatus : bus,
