@@ -551,7 +551,7 @@ define(function(require, exports) {
                 url: KingServices.build_url("account/arrangeOtherFinancial", "savePayment"),
                 type: "POST",
                 data: {
-                    reconciliation: json
+                    payment: json
                 },
             }).done(function(data) {
                 if (showDialog(data)) {
