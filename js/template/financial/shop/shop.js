@@ -123,26 +123,23 @@ define(function(require, exports){
 		        $(this).blur().data('id', ui.item.id);
 		    }
 		}).on('click', function(){
-			if (!$obj.data('ajax')) {  // 避免重复请求
-				$.ajax({
-					url : KingServices.build_url('financial/shopAccount', 'selectShopName'),
-					type : "POST"
-				}).done(function(data){
-					if(showDialog(data)){
-						for(var i=0; i<data.shopList.length; i++){
-			                data.shopList[i].value = data.shopList[i].shopName;
-			                data.shopList[i].id = data.shopList[i].shopId;
-			            }
-			            data.shopList.unshift({id:'', value: '全部'});
-			            $obj.autocomplete('option', 'source', data.shopList);
-			            $obj.autocomplete('search', '');
+			$.ajax({
+				url : KingServices.build_url('financial/shopAccount', 'selectShopName'),
+				type : "POST",
+				showLoading: false
+			}).done(function(data){
+				if(showDialog(data)){
+					for(var i=0; i<data.shopList.length; i++){
+		                data.shopList[i].value = data.shopList[i].shopName;
+		                data.shopList[i].id = data.shopList[i].shopId;
+		            }
+		            data.shopList.unshift({id:'', value: '全部'});
+		            $obj.autocomplete('option', 'source', data.shopList);
+		            $obj.autocomplete('search', '');
 
-			            $obj.data('ajax', true);
-		        	}
-				});
-			} else {
-		        $obj.autocomplete('search', '');
-		    }
+		            //$obj.data('ajax', true);
+	        	}
+			});
 		});
 	};
 
@@ -322,14 +319,27 @@ define(function(require, exports){
 		//绑定确定事件
 		$tab.find('.T-btn-save').on('click', function(event){
 			event.preventDefault();
-			saveData($tab);
+			if(!type){
+				FinancialService.changeUncheck($tab.find('.T-checkTr'), function(){
+					saveData($tab);
+				});
+			}else{
+				saveData($tab);
+			}
+			
 		});
 		//绑定取消事件
 		$tab.find('.T-btn-close').on('click', function(event){
 			event.preventDefault();
 			if(!!$tab.data('isEdited')){
 				showSaveConfirmDialog($('#confirm-dialog-message'), "内容已经被修改，是否保存?", function(){
-					saveData($tab, true);
+					if(!type){
+						FinancialService.changeUncheck($tab.find('.T-checkTr'), function(){
+							saveData($tab, true);
+						});
+					}else{
+						saveData($tab, true);
+					}
 				}, function(){
 					Tools.closeTab(operationMenuKey);
 				});
