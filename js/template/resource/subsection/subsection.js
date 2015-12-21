@@ -482,11 +482,7 @@ define(function(require, exports) {
 				var sum = 0;
 				$parents.siblings('tr').each(function() {
 					sum += ($(this).find('[name="needPayAllMoney"]').val() || 0)*1;
-				})
-
-				$parents.find('[name="needPayAllMoney"]')
-						.prop('placeholder', '最多可输入：'+ (subsection.$tabSub.find(".T-subsectionOperationTbody").data('neepayallmoney')*1 - sum));
-				return false;
+				});
 			}
 		}).unbind("click").click(function(){
 			var obj =this;
