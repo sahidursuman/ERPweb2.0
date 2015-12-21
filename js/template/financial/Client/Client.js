@@ -4,7 +4,7 @@
  * by David Bear 2015-11-24
  */
 define(function(require, exports) {
-        menuKey = "financial_Client",
+    var menuKey = "financial_Client",
         listTemplate = require("./view/list"),
         ClientCheckingTemplate = require("./view/ClientChecking"),
         ClientClearingTemplate = require("./view/ClientClearing"),
