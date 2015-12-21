@@ -307,7 +307,9 @@ define(function(require, exports) {
             if (type) {
                 FinGuide.savePayingData($tab);
             } else {
-                FinGuide.saveCheckingData($tab);
+                FinancialService.changeUncheck($tab.find('.T-checkTr'), function(){
+                    FinGuide.saveCheckingData($tab);
+                });
             }
         });
 

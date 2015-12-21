@@ -278,7 +278,9 @@ define(function(require, exports) {
         //确认对账按钮事件
         $tab.find(".T-btn-save").click(function(){ 
             if (!validator.form()) { return; }
-            Client.saveCheckingData($tab);
+            FinancialService.changeUncheck($tab.find('.T-checkTr'), function(){
+                Client.saveCheckingData($tab);
+            }
          });
 
         //关闭页面事件
