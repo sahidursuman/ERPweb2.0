@@ -305,12 +305,12 @@ define(function(require, exports) {
     OtherAccounts.CheckConfirm = function(name, $checkTab, tabArgs) {
         var argumentLen = arguments.length
         var json = FinancialService.checkSaveJson($checkTab, new FinRule(0));
-        json = JSON.stringify(json);
+        // json = JSON.stringify(json);
         if (json.length > 0) {
             $.ajax({
-                url: KingServices.build_url("account/arrangeOtherFinancial", "savePayment"),
+                url: KingServices.build_url("account/arrangeOtherFinancial", "saveReconciliation"),
                 type: "POST",
-                data: {
+                data:{
                     reconciliation: json
                 },
             }).done(function(data) {
