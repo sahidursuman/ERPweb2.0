@@ -188,14 +188,19 @@ define(function(require, exports) {
         var checkboxList = Self.$checkTab.find(".T-checkList tr .T-checkbox"),
             $checkAll = Self.$checkTab.find(".T-checkAll");
         FinancialService.initCheckBoxs($checkAll,checkboxList);
-
+        var trList = Self.$checkTab.find(".T-checkTr");
         //关闭页面事件
         Self.$checkTab.find(".T-close-check").click(function(){
-            Tools.closeTab(menuKey + "-checking");
+             FinancialService.changeUncheck(trList,function(){
+                Tools.closeTab(menuKey + "-checking");
+            });
+            
         });
         //确认对账按钮事件
         Self.$checkTab.find(".T-saveCheck").click(function(){
-            Self.saveChecking(id,name,page);
+             FinancialService.changeUncheck(trList,function(){
+               Self.saveChecking(id,name,page);
+            });
          });
     };
         // 结算

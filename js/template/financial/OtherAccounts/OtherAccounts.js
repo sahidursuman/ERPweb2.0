@@ -747,7 +747,7 @@ define(function(require, exports) {
     //暴露方法
     OtherAccounts.initPayModule = function(options) {
         OtherAccounts.showBtnFlag = true;
-        OtherAccounts.AccountsPayment(0, options.name, "", options.startAccountTime, options.endAccountTime);
+        OtherAccounts.AccountsPayment(0, options.name, "", options.startDate, options.endDate );
     };
     exports.init = OtherAccounts.initModule;
     exports.initPay = OtherAccounts.initPayModule;
