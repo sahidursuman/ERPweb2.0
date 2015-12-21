@@ -221,7 +221,7 @@ define(function(require,exports) {
                 		var rightCode = $obj.find(".T-checkList").data("right");
                 		checkDisabled(fiList,checkTr,rightCode);
 					}else{
-					    var autoValidator = new FinRule(2),
+					    var autoValidator = $data.showBtnFlag == true ? new FinRule(3) : new FinRule(2),
 					    	settlermentValidator = $data.showBtnFlag == true ? new FinRule(3):new FinRule(1);
 					    InnerTransferOut.$settlermentValidator = settlermentValidator.check($obj);
         				InnerTransferOut.autoValidatorCheck = autoValidator.check($obj.find('.T-count'));
@@ -656,12 +656,13 @@ define(function(require,exports) {
 	};
 	//保存数据
 	InnerTransferOut.saveBlanceData = function(pageNo,$data,tab_id, title, html){
+		var settlermentValidator = $data.showBtnFlag == true ? new FinRule(3):new FinRule(1);
 	    var id; 
 	    var argumentsLen = arguments.length;
 		var payMoney;
 		var payType;
 		var remark;
-		var JsonStr = FinancialService.clearSaveJson(InnerTransferOut.$settlementTab,InnerTransferOut.saveJson.autoPayList,new FinRule(1));
+		var JsonStr = FinancialService.clearSaveJson(InnerTransferOut.$settlementTab,InnerTransferOut.saveJson.autoPayList,settlermentValidator);
 		var payType = tab_id.find('select[name=sumPayType]').val();
 		var sumRemark = tab_id.find('name[name=sumRemark]').val();
 		JsonStr = JSON.stringify(JsonStr);
