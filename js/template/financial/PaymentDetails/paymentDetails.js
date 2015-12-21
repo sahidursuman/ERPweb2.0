@@ -107,8 +107,7 @@ define(function(require, exports){
 		$.ajax({
 			url : KingServices.build_url('financialIncomeOrPay', 'findPager'),
 			type : "POST",
-			data : {searchParam : JSON.stringify(args)},
-			showLoading: false
+			data : {searchParam : JSON.stringify(args)}
 		})
 		.done(function(data){
 			if(showDialog(data)){
