@@ -54,6 +54,14 @@ define(function(require, exports) {
 	  	    	        	errMsg:'管理费不能是非法数字'       
 	  	    	        }
 	  	    	        ]    
+	  			    },{//其它项目校验
+	  			    	$ele: $container.find('input.T-other-name'),
+	  	    	    	rules: [
+	  	    	        {
+	  	    	        	type:'null', 
+	  	    	        	errMsg:'其他项目不能为空'       
+	  	    	        }
+	  	    	        ]    
 	  			    }
 		];
 

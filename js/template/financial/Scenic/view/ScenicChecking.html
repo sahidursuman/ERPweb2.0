@@ -27,7 +27,7 @@
             <label class=" control-label marginLeft-30">已付金额合计：{{sumPayedMoney}}</label>
             <label class=" control-label marginLeft-30">结算金额合计：<span class="T-stMoney">{{sumSettlementMoney}}</span></label>
             <label class=" control-label marginLeft-30">未付金额合计：<span class="T-unpayMoney">{{sumUnPayedMoney}}</span></label>
-            <label class="control-label pull-left marginLeft-30">未付金额合计(已对账)：<span>{{checkedUnPayedMoney}}</span></label>
+            <label class="control-label marginLeft-30">未付金额合计(已对账)：<span>{{checkedUnPayedMoney}}</span></label>
         </form>
     </div>
     <input type="hidden" value="{{WEB_IMG_URL_BIG}}" name="WEB_IMG_URL_BIG" />
@@ -65,7 +65,7 @@
 				<td>{{rs.reduceMoney}}</td>
 				<td>{{rs.needPayMoney}}</td>
 				<td><a class="T-option T-payedDetail" data-money="{{rs.payedMoney + rs.realGuidePayMoney}}">{{"社付："}}{{rs.payedMoney}}{{"，"}}{{"导付："}}{{rs.realGuidePayMoney}}</a></td> 
-				<td>{{if rs.billImages != null && rs.billImage !=""}}<a href="#" class="T-option T-scenicImg" url="{{rs.billImage}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
+				<td>{{if rs.billImage != null && rs.billImage !=""}}<a href="#" class="T-option T-scenicImg" url="{{rs.billImage}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
 				<td><input type="text" name="settlementMoney" value="{{rs.settlementMoney}}" class="money" {{if rs.isConfirmAccount}} disabled="disabled"{{/if}}></td>
                 <td name="unPayedMoney">{{rs.unPayedMoney}}</td>
                 <td><input type="text" name="checkRemark" value="{{rs.checkRemark}}" {{if rs.isConfirmAccount}} disabled="disabled" {{/if}}/></td>

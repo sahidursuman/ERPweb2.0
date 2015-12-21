@@ -170,7 +170,7 @@
 												<input name="normalMarketPrice" type="text" class="col-sm-12" value="{{room.normalMarketPrice}}" maxlength="9" />
 											</div>
 											{{each room.priceList as price i}}
-											<div data-index="{{i+1}}" class="clearfix marketPrice-{{i+1}}" style="margin-top:7px">
+											<div data-index="{{i+1}}" class="clearfix T-marketPrice marketPrice-{{i+1}}" style="margin-top:7px">
 												<input name="marketPrice" type="text" class="col-sm-12" value="{{price.marketPrice}}" maxlength="9" />
 											</div>
 											{{/each}}
@@ -180,7 +180,7 @@
 												<input name="normalInnerPrice" type="text" class="col-sm-12" value="{{room.normalInnerPrice}}" maxlength="9" />
 											</div>
 											{{each room.priceList as price i}}
-											<div data-index="{{i+1}}" class="clearfix contractPrice-{{i+1}}" style="margin-top:7px">
+											<div data-index="{{i+1}}" class="clearfix T-contractPrice contractPrice-{{i+1}}" style="margin-top:7px">
 												<input name="contractPrice" type="text" class="col-sm-12" value="{{price.contractPrice}}" maxlength="9" />
 											</div>
 											{{/each}}
