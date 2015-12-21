@@ -367,7 +367,10 @@ define(function(require, exports) {
 
         //搜索事件
         restaurant.$clearTab.find(".T-search").click(function(){
-            restaurant.restaurantClear(0,0,id,name);
+            if(isAutoPay == 1){
+                isAutoPay = 0;
+            }
+            restaurant.restaurantClear(isAutoPay,0,id,name);
         });
 
         //关闭页面事件

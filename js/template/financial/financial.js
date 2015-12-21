@@ -18,7 +18,7 @@ FinancialService.updateUnpayMoney = function($tab,rule){
             payedMoney = ($tr.find(".T-payedDetail").data("money") || 0) * 1;
 
         // 设置未付金额
-        $tr.find("td[name=unPayedMoney]").text(settlementMoney - payedMoney);
+        $tr.find("td[name=unPayedMoney]").text(Tools.toFixed(settlementMoney - payedMoney));
 
         //计算结算金额修改前后差值
         var spread = settlementMoney - $(this).data("oldVal")*1;

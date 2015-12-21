@@ -375,7 +375,10 @@ define(function(require, exports) {
 
         //搜索事件
         busCompany.$clearTab.find(".T-search").click(function(){
-            busCompany.busCompanyClear(0,0,id,name);
+            if(isAutoPay == 1){
+                isAutoPay = 0;
+            }
+            busCompany.busCompanyClear(isAutoPay,0,id,name);
         });
 
         //关闭页面事件

@@ -365,7 +365,10 @@ define(function(require, exports) {
 
         //搜索事件
         hotel.$clearTab.find(".T-search").click(function(){
-            hotel.hotelClear(0,0,id,name);
+            if(isAutoPay == 1){
+                isAutoPay = 0;
+            }
+            hotel.hotelClear(isAutoPay,0,id,name);
         });
 
         //报表内的操作
