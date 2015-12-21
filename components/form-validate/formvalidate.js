@@ -106,11 +106,8 @@
 			if (setting.$ele.hasClass('datepicker'))  {
 				// 时间插件触发处理
 				setting.$ele
-				.off('changeDate')
-				.on('changeDate', function(){ 
-					$(this).trigger(FOCUS_OUT_EVENT);
-					}
-				);
+				.off('changeDate', changeDateCallBack)
+				.on('changeDate', changeDateCallBack);
 			} else if (setting.$ele.hasClass('ui-autocomplete-input') || setting.$ele.hasClass('bind-change'))  {
 				// 自动填充处理
 				setting.$ele
@@ -134,6 +131,10 @@
 						});
 					}
 				});
+			}
+
+			function changeDateCallBack(event) {
+				$(this).trigger(FOCUS_OUT_EVENT);
 			}
 		}
 		
