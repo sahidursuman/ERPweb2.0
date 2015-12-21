@@ -25,8 +25,8 @@ FinancialService.updateUnpayMoney = function($tab,rule){
         //统计数据更新
         var $st = $tab.find(".T-stMoney"),
             $unpay = $tab.find(".T-unpayMoney");
-        $st.text($st.text()*1 + spread);
-        $unpay.text($unpay.text()*1 + spread);
+        $st.text(Tools.toFixed($st.text()*1 + spread));
+        $unpay.text(Tools.toFixed($unpay.text()*1 + spread));
     });
 };
 
