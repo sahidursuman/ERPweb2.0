@@ -10,8 +10,7 @@
                 
                 </div>
             </div>
-        </form> 
- 
+        </form>
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="search-area  editable editable-click" style="margin-top: 10px;cursor: default;height: 30px">
                 <div class="form-group">
@@ -22,6 +21,7 @@
                     <input type="hidden" name="totalPersonCount" value="{{tripPlan.touristAdultCount+tripPlan.touristChildCount}}"/>
                     <input type="hidden" name='busNumber' class="busNumber" value="{{busCompanyArrange.length}}">
                     <input type="hidden" class="tripPlanId" value="{{tripPlan.id}}">
+                    <input type="hidden" name="billStatus" value="{{tripPlan.billStatus}}">
                 </div>
             </div>
         </form>

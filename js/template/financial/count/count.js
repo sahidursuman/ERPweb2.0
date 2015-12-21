@@ -1086,6 +1086,11 @@ define(function(require, exports){
 	};
 	//新增购物安排--报账、审核通用
 	Count.addShopping = function($bodyObj,$parentObj){
+		var billStatus = $parentObj.find('input[name=billStatus]').val(), 
+			td = '';
+		if(billStatus == 2){
+			td = '<td></td>'
+		};
 		var html = '<tr>'+
 		'<td class="countWhichDaysContainer"></td>'+
 		'<td><input type="text" name="shopName" style="width:90px;"/><input type="hidden" name="shopId" /></td>'+
@@ -1103,7 +1108,9 @@ define(function(require, exports){
 		'<td><span class="sumParkingRebateMoney"></span></td>'+
 		'<td><span class="T-shopIncome"></span></td>'+
 		'<td><input type="text" name="billRemark"/><a href="javascript:void(0)" style="margin-left:20px;" class="T-del">删除</a></td>'+
-		+'</tr>';
+		td+
+		'</tr>';
+		
 		$bodyObj.append(html);
 		//新增获取购物店数据
 		Count.getShopData($bodyObj);
@@ -1471,6 +1478,11 @@ define(function(require, exports){
 	};
 	//新增自费安排
 	Count.addSelf = function($obj,$parentObj){
+		var billStatus = $parentObj.find('input[name=billStatus]').val(), 
+			td = '';
+		if(billStatus == 2){
+			td = '<td></td>'
+		};
 		var html = '<tr>'+
 		'<td class="countWhichDaysContainer"></td>'+
 		'<td><input type="text" name="selfPayName" style="width:90px;"><input type="hidden" name="selfPayId"></td>'+
@@ -1491,6 +1503,7 @@ define(function(require, exports){
 		'<td><input name="guideRate" style="width:60px;" type="text"></td>'+
 		'<td><span class="guideRebateMoney"></span></td>'+
 		'<td><input name="billRemark" style="width:90px;" type="text"><a class="T-del" href="javascript:void(0)" style="margin-left:20px;">删除</a></td>'+
+		td+
 		'</tr>';
 		$obj.append(html);
 		//设置下拉框
@@ -1563,6 +1576,11 @@ define(function(require, exports){
 	};
 	//新增其他收入
 	Count.addOtherIn = function($obj,$parentObj){
+		var billStatus = $parentObj.find('input[name=billStatus]').val(), 
+			td = '';
+		if(billStatus == 2){
+			td = '<td></td>'
+		};
 		var html = '<tr>'+
 		'<td class="countWhichDaysContainer"></td>'+
 		'<td><input type="text" name="title" style="width:90px;"/></td>'+
@@ -1571,6 +1589,7 @@ define(function(require, exports){
 		'<td><span class="needPayMoney">0</span></td>'+
 		'<td><span style="color:#bbb;">查看</span></td>'+
 		'<td><input type="text" name="billRemark" style="width:230px;"/><a href="javascript:void(0)" class="T-del" style="margin-left:20px;">删除</a></td>'+
+		td+
 		'</tr>';
 		$obj.append(html);
 		//设置下拉框
@@ -1722,6 +1741,11 @@ define(function(require, exports){
 	};
 	//新增餐费
 	Count.addRest = function($obj,$parentObj){
+		var billStatus = $parentObj.find('input[name=billStatus]').val(), 
+			td = '';
+		if(billStatus == 2){
+			td = '<td></td>'
+		};
 		var html = '<tr>'+
 		'<td class="countWhichDaysContainer"></td>'+
 		'<td><input type="text" name="restaurantName" style="width:90px;"/><input type="hidden" name="restaurantId"></td>'+
@@ -1741,6 +1765,7 @@ define(function(require, exports){
 		'<td><span style="color:#bbb;">查看</span></td>'+
 		'<td><span class="difference"></span></td>'+
 		'<td><input type="text" name="billRemark" style="width:230px;"/><a href="javascript:void(0)" class="T-del" style="margin-left:20px;">删除</a></td>'+
+		td+
 		'</tr>';
 		$obj.append(html);
 		//获取餐厅数据
@@ -1808,6 +1833,11 @@ define(function(require, exports){
 	};
 	//新增房费
 	Count.addHotel = function($obj,$parentObj){
+		var billStatus = $parentObj.find('input[name=billStatus]').val(), 
+			td = '';
+		if(billStatus == 2){
+			td = '<td></td>'
+		};
 		var html = '<tr>'+
 		'<td class="countWhichDaysContainer"></td>'+
 		'<td><input type="text" name="hotelName" style="width:90px;"/><input name="hotelId" type="hidden"></td>'+
@@ -1821,6 +1851,7 @@ define(function(require, exports){
 		'<td><span style="color:#bbb;">查看</span></td>'+
 		'<td><span class="difference"></span></td>'+
 		'<td><input type="text" name="billRemark" style="width:230px;"/><a href="javascript:void(0)" class="T-del" style="margin-left:20px;">删除</a></td>'+
+		td+
 		'</tr>';
 		$obj.append(html);
 		//获取酒店数据
@@ -1888,6 +1919,11 @@ define(function(require, exports){
 	};
 	//新增景区安排
 	Count.addScenic = function($obj,$parentObj){
+		var billStatus = $parentObj.find('input[name=billStatus]').val(), 
+			td = '';
+		if(billStatus == 2){
+			td = '<td></td>'
+		};
 		var html = '<tr>'+
 		'<td class="countWhichDaysContainer"></td>'+
 		'<td><input type="text" name="scenicName" style="width:90px;"/><input type="hidden" name="scenicId"></td>'+
@@ -1901,6 +1937,7 @@ define(function(require, exports){
 		'<td><span style="color:#bbb;">查看</span></td>'+
 		'<td><span class="difference"></span></td>'+
 		'<td><input type="text" name="billRemark" style="width:230px;"/><a href="javascript:void(0)" class="T-del" style="margin-left:20px;">删除</a></td>'+
+		td+
 		'</tr>';
 		$obj.append(html);
 		//获取景区数据
@@ -1968,6 +2005,11 @@ define(function(require, exports){
 	};
 	//新增票务
 	Count.addTicket = function($obj,$parentObj){
+		var billStatus = $parentObj.find('input[name=billStatus]').val(), 
+			td = '';
+		if(billStatus == 2){
+			td = '<td></td>'
+		};
 		var html = '<tr>'+
 		'<td><input type="text" name="ticketName"><input type="hidden" name="ticketId"></td>'+
 		'<td>'+
@@ -1992,6 +2034,7 @@ define(function(require, exports){
 		'<td><span style="color:#bbb;">查看</span></td>'+
 		'<td><span class="difference"></span></td>'+
 		'<td><input type="text" name="billRemark" style="width:170px;"/><a href="javascript:void(0)" class="T-del" style="margin-left:20px;">删除</a></td>'+
+		td+
 		'</tr>';
 		$obj.append(html);
 		//设置下拉框
@@ -2066,6 +2109,11 @@ define(function(require, exports){
 	};
 	//新增其他支出
 	Count.addOtherOut = function($obj,$parentObj){
+		var billStatus = $parentObj.find('input[name=billStatus]').val(), 
+			td = '';
+		if(billStatus == 2){
+			td = '<td></td>'
+		};
 		var html = '<tr>'+
 		'<td class="countWhichDaysContainer"></td>'+
 		'<td><input type="text" name="addOtherOutName" style="width:90px;"/></td>'+
@@ -2078,6 +2126,7 @@ define(function(require, exports){
 		'<td><span style="color:#bbb;">查看</span></td>'+
 		'<td><span class="difference"></span></td>'+
 		'<td><input type="text" name="billRemark" style="width:230px;"/><a href="javascript:void(0)" class="T-del" style="margin-left:20px;">删除</a></td>'+
+		td+
 		'</tr>';
 		$obj.append(html);
 		//设置下拉框
