@@ -64,8 +64,8 @@ define(function(require, exports) {
 				// 绑定翻页组件
 				laypage({
 				    cont: Replace.$tab.find('.T-pagenation'), 
-				    pages: data.totalPage, //总页数
-				    curr: (data.pageNo + 1),
+				    pages: data.searchParam.totalPage, //总页数
+				    curr: (data.searchParam.pageNo + 1),
 				    jump: function(obj, first) {
 				    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
 				    		Replace.getList(obj.curr -1);
@@ -210,8 +210,8 @@ define(function(require, exports) {
 				// 绑定翻页组件
 				laypage({
 				    cont: Replace.$checkingTab.find('.T-pagenation'), 
-				    pages: data.totalPage, //总页数
-				    curr: (data.pageNo + 1),
+				    pages: data.searchParam.totalPage, //总页数
+				    curr: (data.searchParam.pageNo + 1),
 				    jump: function(obj, first) {
 				    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
 				    		Replace.checkingList(obj.curr -1);
@@ -453,8 +453,8 @@ define(function(require, exports) {
 					// 绑定翻页组件
 					laypage({
 					    cont: Replace.$balanceTab.find('.T-pagenation'), 
-					    pages: data.totalPage, //总页数
-					    curr: (data.pageNo + 1),
+					    pages: data.searchParam.totalPage, //总页数
+					    curr: (data.searchParam.pageNo + 1),
 					    jump: function(obj, first) {
 					    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
 					    		Replace.getOperationList(obj.curr -1);
@@ -682,8 +682,8 @@ define(function(require, exports) {
 				// 绑定翻页组件
 				laypage({
 				    cont: Replace.$balanceTab.find('.T-pagenation'), 
-				    pages: data.totalPage, //总页数
-				    curr: (data.pageNo + 1),
+				    pages: data.searchParam.totalPage, //总页数
+				    curr: (data.searchParam.pageNo + 1),
 				    jump: function(obj, first) {
 				    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
 				    		Replace.balanceList(obj.curr -1);
