@@ -130,7 +130,7 @@ define(function(require, exports) {
             accountInfo : accountInfo,
             startDate : startDate,
             endDate : endDate,
-            sortType : "auto"
+            sortType : "accountTime"
         };
         searchParam = JSON.stringify(searchParam);
         $.ajax({
@@ -238,7 +238,7 @@ define(function(require, exports) {
             accountInfo : accountInfo,
             startDate : startDate,
             endDate : endDate,
-            sortType : "auto"
+            sortType : "accountTime"
         }, args = arguments;
         if(isAutoPay == 1){
            searchParam.isAutoPay = isAutoPay;
@@ -346,8 +346,11 @@ define(function(require, exports) {
         });
         $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
             event.preventDefault();
-                restaurant.initClear(restaurant.$clearTab.data('next'));
-                restaurant.$clearTab.find(".T-cancel-auto").hide();
+            restaurant.clearTempSumDate = false;
+            restaurant.clearTempData = false;
+            restaurant.$clearTab.data('isEdited',false);
+            restaurant.restaurantClear(0,0,restaurant.$clearTab.data('next')[2],restaurant.$clearTab.data('next')[3]);
+            restaurant.$clearTab.find(".T-cancel-auto").hide();
         })
         // 监听保存，并切换tab
         .on('switch.tab.save', function(event, tab_id, title, html) {
@@ -357,17 +360,14 @@ define(function(require, exports) {
         // 保存后关闭
         .on('close.tab.save', function(event) {
             event.preventDefault();
-                restaurant.saveClear(args, true);
+            restaurant.saveClear(args, true);
         });
 
         Tools.setDatePicker(restaurant.$clearTab.find(".date-picker"),true);
 
         //搜索事件
         restaurant.$clearTab.find(".T-search").click(function(){
-            restaurant.clearTempSumDate = false;
-            restaurant.clearTempData = false;
-            restaurant.$clearTab.data('isEdited',false);
-            restaurant.restaurantClear(isAutoPay,0,id,name);
+            restaurant.restaurantClear(0,0,id,name);
         });
 
         //关闭页面事件
@@ -591,10 +591,9 @@ define(function(require, exports) {
                             Tools.closeTab(menuKey + "-clearing");
                             restaurant.listRestaurant(restaurant.searchData.pageNo,restaurant.searchData.restaurantName,restaurant.searchData.restaurantId,restaurant.searchData.startDate,restaurant.searchData.endDate);
                         }else if(argumentsLen === 1){
-                            restaurant.restaurantClear(isAutoPay,page,id,name);
+                            restaurant.restaurantClear(0,page,id,name);
                         } else {
-                            Tools.addTab(tab_id, title, html);
-                            restaurant.initClear(restaurant.$clearTab.data('next'));
+                            restaurant.restaurantClear(0,0,restaurant.$clearTab.data('next')[2],restaurant.$clearTab.data('next')[3]);
                         }
                     });
                     
