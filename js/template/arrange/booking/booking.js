@@ -676,7 +676,7 @@ define(function(require, exports) {
 			'<option value="2">三星</option><option value="3">准四星</option><option value="4">四星</option><option value="5">准五星</option><option value="6">五星</option><option value="7">五星以上</option></select></td>'+
 			'<td><input name="hotelName" value="" type="text" class="col-sm-12 T-chooseHotel bind-change"/><input name="hotelId" type="hidden" value="" /></td>'+
 			'<td><input name="hotelRoom" value="" type="text" class="col-sm-12 T-chooseHotelRoom bind-change"/><input name="hotelRoomId" type="hidden" value="" /></td>'+
-			'<td><input name="days" value="" type="text" class="col-sm-12 T-action-blur" maxlength="5" /></td>'+
+			'<td><input name="days" value="" type="text" class="col-sm-12 T-action-blur" maxlength="5" readonly="readonly" /></td>'+
 			'<td><input name="roomCount" value="" type="text" class="col-sm-12 T-action-blur" maxlength="5" /></td>'+
 			'<td><input name="costPrice" value="" type="text" class="col-sm-12 T-action-blur price" style="width: 55px" maxlength="9" /><label class="col-sm-4 control-label" style="padding: 7px 0 0 0;width:25px;" >/天</label></td>'+
 			'<td><input name="salePrice" value="" type="text" class="col-sm-12 T-action-blur price"  style="width: 55px"  maxlength="9" /><label class="col-sm-4 control-label" style="padding: 7px 0 0 0;width:25px;" >/天</label></td>'+
