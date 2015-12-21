@@ -23,7 +23,7 @@
 				<tr>
 					<td rowspan="{{rs.trLen}}">{{rs.lineProductName}}</td>
 					<td rowspan="{{rs.trLen}}">{{rs.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
-					<td rowspan="{{rs.trLen}}">{{rs.arriveTime | dateFormat: 'yyyy-MM-dd'}}</td>
+					<td rowspan="{{rs.trLen}}">{{rs.arriveTime}}</td>
 					<td rowspan="{{rs.trLen}}">{{rs.condition}}</td>
 					{{each rs.hotelList as offer index}}
 						{{if index == 0}}

@@ -1,0 +1,4 @@
+/*TMODJS:{"debug":true,"version":20,"md5":"8b27d0670043b747bc0d9e10ebfc3d33"}*/
+define(function(require) {
+    return require("../../../template")("resource/tripPlan/view/expiryTime", '<div class=" T-tripPlanExpiryTimeLayer"> <div class="col-sm-12" style="padding: 30px 0 0 75px"> <label class="pull-left control-label align-right"><span class="necessary">*</span><strong>询价截止时间：</strong></label> <input type="text" class="col-sm-6 T-dateTimePicker" name="expiryTime" value=""/> </div> <div class="col-sm-12"> <div class="space-10"></div> <button class="btn btn-block btn-primary T-btn-submit-expiryTime guideSubmit"> <i class="ace-icon fa fa-check"></i> 提交信息 </button> <div class="space-20"></div> </div> </div>');
+});

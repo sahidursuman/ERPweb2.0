@@ -106,8 +106,8 @@
 			if (setting.$ele.hasClass('datepicker'))  {
 				// 时间插件触发处理
 				setting.$ele
-				.off('changeDate')
-				.on('changeDate', function(){ 
+				.off('changeDate.form-validation.api')
+				.on('changeDate.form-validation.api', function(){ 
 					$(this).trigger(FOCUS_OUT_EVENT);
 					}
 				);
