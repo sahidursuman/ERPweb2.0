@@ -1,636 +1,668 @@
 define(function(require, exports) {
-	var rule = require("./rule");
-    var menuKey = "financial_scenic",
-        listTemplate = require("./view/list"),
-        ScenicClearing = require("./view/ScenicClearing"),
-        listScenicChecking = require("./view/ScenicChecking"),
-        billImagesTemplate = require("./view/lookBillsImg"),
-        blanceRecords = require("./view/ScenicRecords"),
-        tabId = "tab-"+menuKey+"-content",
-        checkTabId = menuKey+"-checking",
-        blanceTabId = menuKey+"-blance",
-	    yearList=[],
-	    monthList = []
-	    for(var i=2013;i<=new Date().getFullYear();i++){
-	    	var yeardata={"value":i}
-	    	yearList.push(yeardata)
-	    };
-	    for(var j = 1;j<=12;j++){
-	    	var monthData = {"value":j}
-	    	monthList.push(monthData);
-	    }
-    var Scenic = {
-        searchData:{
-			pageNo : "",
-            scenicId: "",
-            year : "",
-            month :""
-        },
-        searchCheckData:{
-        	"scenicId":"",
-        	"scenicName":"",
-        	"year":"",
-        	"month":""
-        },
-        searchBalanceData:{
-        	"scenicId":"",
-            "scenicName":"",
-        	"year":"",
-        	"startMonth":"",
-        	"endMonth":""
-        }, 
-		edited : {},
-		isEdited : function(editedType){
-			if(!!Scenic.edited[editedType] && Scenic.edited[editedType] != ""){
-				return true;
-			}
-			return false;
-		},
-		oldCheckScenicId : 0,
-        oldBlanceScenicId:0,
-        listScenic:function(pageNo,scenicId,year,month){
-            $.ajax({
-                url:""+APP_ROOT+"back/financial/financialScenic.do?method=listSumFcScenic&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-                type:"POST",
-                data:"pageNo="+pageNo+"&scenicId="+scenicId+"&year="+year+"&month="+month+"&sortType=auto",
-                dataType:"json",
-                beforeSend:function(){
-                    globalLoadingLayer = openLoadingLayer();
-                },
-                success:function(data){
-                	 layer.close(globalLoadingLayer);
-                	 var result = showDialog(data);
-                     if(result){
-                         data.yearList = yearList;
-                         data.monthList = monthList;
-                         Scenic.searchData={
-							 pageNo : pageNo,
-                             scenicId:scenicId,
-                             year:year,
-                             month:month
-                         };
-                         data.searchParam = Scenic.searchData;
-                         var html = listTemplate(data);
-                         addTab(menuKey,"景区账务",html);
-                         //搜索按钮事件
-                         $("#" + tabId + " .btn-scenic-search").click(function(){
-                             Scenic.searchData={
-                                 scenicId:$("#" + tabId + " select[name=scenicId]").val(),
-                                 year:$("#" + tabId + "  select[name=year]").val(),
-                                 month:$("#" + tabId + " select[name=month]").val()
-                             }
-                             Scenic.listScenic(0,Scenic.searchData.scenicId,Scenic.searchData.year,Scenic.searchData.month);
-                         });
+	var menuKey = "financial_scenic",
+	    listTemplate = require("./view/list"),
+        scenicChecking = require("./view/scenicChecking"),
+        scenicClearing = require("./view/scenicClearing"),
+	    billImagesTemplate = require("./view/billImages"),
+        payedDetailTempLate = require("./view/viewPayedDetail"),
+        needPayDetailTempLate = require("./view/viewNeedPayDetail");
 
-                         // 绑定翻页组件
-                        laypage({
-                            cont: $('#' + tabId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
-                            pages: data.totalPage, //总页数
-                            curr: (pageNo + 1),
-                            jump: function(obj, first) {
-                                if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-                                    Scenic.listScenic(obj.curr -1,Scenic.searchData.scenicId,Scenic.searchData.year,Scenic.searchData.month);
-                                }
-                            }
-                        });
+    var scenic = {
+  		searchData : false,
+        $tab :false,
+        $checkTab : false,
+        $clearTab : false,
+        $searchArea : false,
+        $checkSearchArea: false,
+        $clearSearchArea : false,
+        scenicList : false,
+        clearTempData : false,
+        clearTempSumDate : false
+  	};
 
-                         //给对账按钮绑定事件
-                         $("#" + tabId + " .btn-scenic-Check").click(function(){
-                        	 Scenic.searchCheckData={
-                        			 scenicId:$(this).attr("data-entity-id"),
-                        			 scenicName:$(this).attr("data-entity-scenicName"),
-                             		 year:$(this).attr("data-entity-year"),
-                             		 month:$(this).attr("data-entity-month")        
-                            }
-                            Scenic.ScenicChecking(0,Scenic.searchCheckData.scenicId,Scenic.searchCheckData.scenicName,Scenic.searchCheckData.year,Scenic.searchCheckData.month);
-                         });
-                         //给结算按钮绑定事件
-                         $("#" + tabId + " .btn-scenic-balance").click(function(){
-                        	 Scenic.searchBalanceData={
-                             	"scenicId":$(this).attr("data-entity-id"),
-                                "scenicName":$(this).attr("data-entity-scenicName"),
-                             	"year":$(this).attr("data-entity-year"),
-                             	"startMonth":$(this).attr("data-entity-startMonth"),
-                             	"endMonth":$(this).attr("data-entity-endMonth")
-                             },
-                             Scenic.ScenicClearing(Scenic.searchBalanceData.scenicId,Scenic.searchBalanceData.scenicName,Scenic.searchBalanceData.year,Scenic.searchBalanceData.startMonth,Scenic.searchBalanceData.endMonth);
-                         });
-                     }
+  	scenic.initModule = function() {
+        var dateJson = FinancialService.getInitDate();
+        scenic.listScenic(0,"","",dateJson.startDate,dateJson.endDate);
+    };
+
+    scenic.listScenic = function(page,scenicName,scenicId,startDate,endDate){
+    	if (scenic.$searchArea && arguments.length === 1) {
+            scenicName = scenic.$searchArea.find("input[name=scenicName]").val(),
+            scenicId = scenic.$searchArea.find("input[name=scenicId]").val(),
+            startDate = scenic.$searchArea.find("input[name=startDate]").val(),
+            endDate = scenic.$searchArea.find("input[name=endDate]").val()
+        }
+        if(startDate > endDate){
+            showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
+            return false;
+        }
+        scenicName = (scenicName == "全部") ? "" : scenicName;
+        // 修正页码
+        page = page || 0;
+        scenic.searchData = {
+            pageNo : page,
+            scenicName : scenicName,
+            scenicId : scenicId,
+            startDate : startDate,
+            endDate : endDate,
+            sortType: 'auto'
+        };
+
+        var searchParam = JSON.stringify(scenic.searchData);
+        $.ajax({
+            url:KingServices.build_url("financial/financialScenic","listSumFinancialScenic"),
+            type:"POST",
+            data:{ searchParam : searchParam },
+            success:function(data){
+               layer.close(globalLoadingLayer);
+               var result = showDialog(data);
+                if(result){
+                    scenic.scenicList = data.scenicNameList;
+                    data.searchParam.scenicName = scenicName || '全部';
+                    var html = listTemplate(data);
+                    Tools.addTab(menuKey,"景区账务",html);
+
+                    scenic.initList(startDate,endDate);
+
+                    // 绑定翻页组件
+					laypage({
+					    cont: scenic.$tab.find('.T-pagenation'),
+					    pages: data.searchParam.totalPage,
+					    curr: (page + 1),
+					    jump: function(obj, first) {
+					    	if (!first) {
+					    		scenic.listScenic(obj.curr -1);
+                    		}
+					    }
+					});
                 }
-            });
-        },
-        //结算
-        ScenicClearing:function(scenicId,scenicName,year,startMonth,endMonth){
-            $.ajax({
-                url:""+APP_ROOT+"back/financial/financialScenic.do?method=listFcScenicSettlement&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-                type:"POST",
-                data:"scenicId="+scenicId+"&year="+year+"&monthStart="+startMonth+"&monthEnd="+endMonth+"&sortType=auto",
-                dataType:"json",
-                beforeSend:function(){
-                    globalLoadingLayer = openLoadingLayer();
-                },
-                success:function(data){
-                    layer.close(globalLoadingLayer);
-                    var result = showDialog(data);
-                    if(result){
-                    	Scenic.searchData={
-							"scenicId":scenicId,
-							"scenicName":scenicName,
-							"startMonth":startMonth,
-							"endMonth":endMonth,
-							"year":year
-                        };
-                    	data.yearList = yearList;
-                        data.monthList = monthList;
-                        data.scenicName = scenicName;
-                        var html = ScenicClearing(data);
-                        //addTab(blanceTabId,"景区结算",html);
-                        if($("#" +"tab-"+blanceTabId+"-content").length > 0) {
-                 	    	 if(!!Scenic.edited["blance"] && Scenic.edited["blance"] != ""){
-                 	    		addTab(blanceTabId,"景区结算");
-    		                    //给每个tr添加表单验证
-                 	    		showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
-                 	    			 Scenic.validatorTable();
-                 	    			 var saveBtn = $("#" +"tab-"+ blanceTabId+"-content"+" .btn-scenicBlance-save")
-                 	    			 if (!$(saveBtn).data('validata').form()) { return; }
-                 	    			 Scenic.saveBlanceData(Scenic.oldBlanceScenicId,scenicName,0);
-    			            		 Scenic.edited["blance"] = "";
-    			            		 addTab(blanceTabId,"景区结算",html);
-    			            		 Scenic.validatorTable();
-    			            	 },function(){
-    			            		    addTab(blanceTabId,"景区结算",html);
-    			            		    Scenic.edited["blance"] = "";
-    			            		    Scenic.validatorTable();
-    			            	 });
-                 	    	 }else{
-                     	    	addTab(blanceTabId,"景区结算",html);
-                     	    	Scenic.validatorTable();
-                 	    	 }
-             	    		 
-                 	    }else{
-                 	    	addTab(blanceTabId,"景区结算",html);
-                 	    	Scenic.validatorTable();
-                 	    }
+            }
+        });
+    };
 
-                        //取消对账权限过滤
-                        var checkList = data.fcScenicSettlementList;
-                        var checkTr = $(".T-checkList tr");
-                        var rightCode = $(".T-checkList").data("right");
-                        checkDisabled(checkList,checkTr,rightCode);
-                        
-                 	   $("#" +"tab-"+blanceTabId+"-content .all").on('change', 'input, select', function() {
-                 		   Scenic.edited["blance"] = "blance";
-                 		    Scenic.oldBlanceScenicId = scenicId;
-	    	    			$(this).closest('tr').data('blanceStatus',true);
-	    	    		});
-                        //搜索按钮事件
-                        $("#" +"tab-"+ blanceTabId + "-content"+" .btn-blance-search").click(function(){
-                        	Scenic.searchBalanceData={
-                            	scenicId:scenicId,
-                            	scenicName:scenicName,
-                            	year:$("#" +"tab-"+ blanceTabId + "-content"+"  select[name=year]").val(),
-                            	startMonth:$("#" +"tab-"+ blanceTabId + "-content"+" select[name=startMonth]").val(),
-                            	endMonth:$("#" +"tab-"+ blanceTabId + "-content"+" select[name=endMonth]").val(),
-                            }
-                            
-                            Scenic.ScenicClearing(Scenic.searchBalanceData.scenicId,Scenic.searchBalanceData.scenicName,Scenic.searchBalanceData.year,Scenic.searchBalanceData.startMonth,Scenic.searchBalanceData.endMonth);
-                        });
-                        
-                      //保存按钮事件
-                        $("#" +"tab-"+ blanceTabId+"-content"+" .btn-scenicBlance-save").click(function(){
-                        	
-        	    			 if (!$(this).data('validata').form()) { return; }
-        	    			 Scenic.saveBlanceData(Scenic.oldBlanceScenicId,scenicName,0);
-                        });
-                        //对账明细按钮事件
-                        $("#" +"tab-"+ blanceTabId+"-content"+" .btn-scenicBlance-checkDetail").click(function(){
-                        	Scenic.searchCheckData={
-                        			scenicId:scenicId,
-                        			scenicName:scenicName,
-                        			year:$(this).attr("data-entity-year"),
-                        			month:$(this).attr("data-entity-month"),
-                        	}
-                        	Scenic.ScenicChecking(0,Scenic.searchCheckData.scenicId,Scenic.searchCheckData.scenicName,Scenic.searchCheckData.year,Scenic.searchCheckData.month);
-                        });
+    scenic.initList = function(startDate,endDate){
+    	scenic.$tab = $('#tab-' + menuKey + "-content");
+        scenic.$searchArea = scenic.$tab.find('.T-search-area');
 
-                      //给操作记录按钮绑定事件
-                        $("#" +"tab-"+ blanceTabId+"-content"+" .btn-scenicBlance-Records").click(function(){
-                        	$.ajax({
-                        		url:""+APP_ROOT+"back/financial/financialScenic.do?method=listFcScenicSettlementRecord&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-                                type:"POST",
-                                data:"scenicId="+scenicId,
-                                dataType:"json",
-                                beforeSend:function(){
-                                    globalLoadingLayer = openLoadingLayer();
-                                },
-                                success:function(data){
-                                	
-                                	layer.close(globalLoadingLayer);
-                                    var result = showDialog(data);
-                                	if(result){
-                                		if(data.financialScenicSettlementRecordList.length == 0){
-                                			showMessageDialog($( "#confirm-dialog-message" ),"暂时还没有操作记录");
-                                		}else{
-                                			var html =blanceRecords(data);
-            					    		var blanceRecordsTemplateLayer =layer.open({
-            					    			type: 1,
-            								    title:"操作记录",
-            								    skin: 'layui-layer-rim', //加上边框
-            								    area: '60%', //宽高
-            								    zIndex:1030,
-            								    content: html,
-                                                scrollbar: false, // 推荐禁用浏览器外部滚动条
-            								    success: function(){}
-            					    		})
-                                		}
-        		                	}
-                                }
-                        	});
-                        });
+        scenic.getQueryList();
+        Tools.setDatePicker(scenic.$searchArea.find('.datepicker'), true);
+
+        //搜索按钮事件
+        scenic.$tab.find('.T-search').on('click', function(event) {
+            event.preventDefault();
+            scenic.listScenic(0);
+        });
+
+        // 报表内的操作
+        scenic.$tab.find('.T-list').on('click', '.T-option', function(event) {
+            event.preventDefault();
+            var $that = $(this),
+                id = $that.closest('tr').data('id'),
+                name = $that.closest('tr').data('name');
+            if ($that.hasClass('T-check')) {
+                // 对账
+                scenic.scenicCheck(0,id,name,"",startDate,endDate);
+            } else if ($that.hasClass('T-clear')) {
+                // 结算
+                scenic.clearTempSumDate = false;
+                scenic.clearTempData = false;
+                scenic.scenicClear(0,0,id,name,"",startDate,endDate);
+            }
+        });
+    };
+
+    //对账
+    scenic.scenicCheck = function(page,scenicId,scenicName,accountInfo,startDate,endDate){
+        if (scenic.$checkSearchArea && arguments.length === 3) {
+            accountInfo = scenic.$checkSearchArea.find("input[name=accountInfo]").val(),
+            startDate = scenic.$checkSearchArea.find("input[name=startDate]").val(),
+            endDate = scenic.$checkSearchArea.find("input[name=endDate]").val()
+        }
+        if(startDate > endDate){
+            showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
+            return false;
+        }
+
+        // 修正页码
+        page = page || 0;
+        var searchParam = {
+            pageNo : page,
+            scenicId : scenicId || scenic.$checkTab.find('.T-newData').data('id'),
+            accountInfo : accountInfo,
+            startDate : startDate,
+            endDate : endDate,
+            sortType : "auto"
+        };
+        if(!scenicId && !!scenic.$checkTab){
+            scenicName = scenic.$checkTab.find('.T-newData').data('name');
+        }
+        searchParam = JSON.stringify(searchParam);
+        $.ajax({
+            url:KingServices.build_url("financial/financialScenic","listScenicAccount"),
+            type:"POST",
+            data:{ searchParam : searchParam },
+            success:function(data){
+                var result = showDialog(data);
+                if(result){
+                    var fhList = data.financialScenicListData;
+                    data.scenicName = scenicName;
+                    var html = scenicChecking(data);
+                    
+                    var validator;
+                    // 初始化页面
+                    if (Tools.addTab(menuKey + "-checking", "景区对账", html)) {
+                        scenic.initCheck(page,scenicId,scenicName); 
+                        validator = (new FinRule(0)).check(scenic.$checkTab.find(".T-checkList"));                       
                     }
-                }
-            })   
-        },
-        //给每个tr增加验证
-	    validatorTable:function(){
-	    	//获取table中的tr
- 	    	var $tr = $("#" +"tab-"+ blanceTabId + "-content"+" .all tbody tr")
-            //给每个tr添加表单验证
-            $tr.each(function(){
-            	$(this).find('.btn-scenicBlance-save').data('validata', rule.check($(this)));
-            });
-	    },
-        //对账
-        ScenicChecking:function(pageNo,scenicId,scenicName,year,month){ 
-	    	 $.ajax({
-	    		 url:""+APP_ROOT+"back/financial/financialScenic.do?method=listFcScenic&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-	             type:"POST",
-	             data:"pageNo="+pageNo+"&scenicId="+scenicId+"&year="+year+"&month="+month+"&sortType=auto",
-	             dataType:"json",
-	             beforeSend:function(){
-	                 globalLoadingLayer = openLoadingLayer();
-	             },
-	             success:function(data){
-	            	 
-	            	//表单验证
-	            	 var $obj = $('.ScenicChecking .form-horizontal');
-	            	 
-	                layer.close(globalLoadingLayer);
-	                var result = showDialog(data);
-	                if(result){
-   
-	                 	    Scenic.searchCheckData={
-                       		scenicId:scenicId,
-                       		scenicName:scenicName,
-                       		year:year,
-                       		month:month        
-                           }
-		                    data.yearList = yearList
-		                    data.monthList = monthList
-		                    data.scenicName = scenicName
-		                    data.financialScenicList = JSON.parse(data.financialScenicList);
-		                    data.searchParam = Scenic.searchCheckData 
-		                    var html = listScenicChecking(data);
-		                   // addTab(checkTabId,"景区对账",html);
-	                     //设置表单验证
-		                    //var validator = rule.check($('.ScenicChecking'));
-		                    var validator;
-	                 	    //addTab(checkTabId,"景区对账",html);
-	                 	   if($("#" +"tab-"+checkTabId+"-content").length > 0)
-	                	    {
-	                	    	
-	                	    	 if(!!Scenic.edited["checking"] && Scenic.edited["checking"] != ""){
-	                	    		addTab(checkTabId,"景区对账");
-	                	    		showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已更改的数据?",function(){
-	                	    			 validator = rule.check($('.ScenicChecking'));
-					            		 if (!validator.form()) { return; }
-					            		 Scenic.saveCheckingData(scenicId,scenicName,0);
-					            		 Scenic.edited["checking"] = "";
-					            		 addTab(checkTabId,"景区对账",html);
-					            		 validator = rule.check($('.ScenicChecking'));
-					            	 },function(){
-					            		 addTab(checkTabId,"景区对账",html);
-					            		 Scenic.edited["checking"] = "";
-					            		 validator = rule.check($('.ScenicChecking'));
-					            	 });
-	                	    	 }else{
-		                 	    	addTab(checkTabId,"景区对账",html);
-		                 	        validator = rule.check($('.ScenicChecking'));
-	                	    	 }
-	         	    		 
-	                	    }else{
-	                	    	addTab(checkTabId,"景区对账",html);
-	                	    	validator = rule.check($('.ScenicChecking'));
-	                	    };
-	                	    $("#" +"tab-"+checkTabId+"-content .all").on("change",function(){
-                	    		Scenic.edited["checking"] = "checking"; 
-								Scenic.oldCheckScenicId = scenicId;
-                	    	});
-                        }          
-		                 //给搜索按钮绑定事件
-		                 $("#" +"tab-"+ checkTabId+"-content"+" .btn-checking-search").click(function(){
-	                         Scenic.searchCheckData={
-	                            scenicId:scenicId,
-	                            scenicName:scenicName,
-	                         	year:$("#" +"tab-"+ checkTabId+"-content"+"  select[name=year]").val(),
-	                         	month:$("#" +"tab-"+ checkTabId+"-content"+" select[name=month]").val(),
-	                         }
-	                         Scenic.ScenicChecking(0,Scenic.searchCheckData.scenicId,Scenic.searchCheckData.scenicName,Scenic.searchCheckData.year,Scenic.searchCheckData.month)
-	                     });
-		               //导出事件btn-scenicExport
-		                 $("#" +"tab-"+ checkTabId+"-content"+" .btn-scenicExport").click(function(){
+                    //取消对账权限过滤
+                    var checkTr = scenic.$checkTab.find(".T-checkTr");
+                    var rightCode = scenic.$checkTab.find(".T-checkList").data("right");
+                    checkDisabled(fhList,checkTr,rightCode);
 
-	   	                	 var year=$("#" +"tab-"+ checkTabId+"-content"+"  select[name=year]").val();
-	                         var month=$("#" +"tab-"+ checkTabId+"-content"+" select[name=month]").val();
-	                         console.log(year);
-	                         checkLogin(function(){
-	                         	var url = ""+APP_ROOT+"back/export.do?method=scenic&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view"+"&scenicId="+scenicId+"&scenicName="+scenicName+"&year="+year+"&month="+month+"&sortType=auto";
-	                         	exportXLS(url)
-	                         });
-	   	                 
-	                        });
-                         // 绑定翻页组件
-                        laypage({
-                            cont: $("#tab-"+ checkTabId+"-content").find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
-                            pages: data.totalPage, //总页数
-                            curr: (pageNo + 1),
-                            jump: function(obj, first) {
-                                if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-                                    Scenic.ScenicChecking(obj.curr -1,Scenic.searchCheckData.scenicId,Scenic.searchCheckData.scenicName,Scenic.searchCheckData.year,Scenic.searchCheckData.month)
-                                }
+                    //绑定翻页组件
+                    laypage({
+                        cont: scenic.$checkTab.find('.T-pagenation'),
+                        pages: data.searchParam.totalPage,
+                        curr: (page + 1),
+                        jump: function(obj, first) {
+                            if (!first) { 
+                                scenic.scenicCheck(obj.curr-1,scenicId,scenicName);
                             }
-                        });
-	                   
-			             //给全选绑定事件
-			                 $("#" +"tab-"+ checkTabId+"-content"+" .scenicSelectAll").click(function(){
-			                	 var flag = this.checked;
-			                	 $(".restChecking .all tbody tr").each(function(){
-			                		 var checkedbox = $(this).find(".scenicFinancial") 
-			                		 if(flag){
-			                			 checkedbox.prop("checked",true);
-			                		 }else{
-										 //判断对账状态
-										 if(checkedbox.attr("data-entity-checkStatus") == 1){
-											 checkedbox.prop("checked",true);
-										 }else{ 	
-											 checkedbox.prop("checked",false);
-										 }
-									 }
-			                	 });
-			                 }); 
-			               //给复选框绑定事件
-			                 $("#" +"tab-"+ checkTabId+"-content"+" .scenicFinancial").click(function(){
-			                	 var flag = true
-			                	 $("#" +"tab-"+ checkTabId+"-content"+" .scenicFinancial").each(function(){
-			                		 if(!$(this).prop("checked")){
-				                			flag = false;
-				                		} 
-			                	 })
-			                	 $("#" +"tab-"+ checkTabId+"-content"+" .scenicSelectAll").prop("checked",flag)
-			                 });
-		                 //给确认对账按钮绑定事件
-			                 $("#" +"tab-"+ checkTabId+"-content"+" .btn-scenicFinancial-rs").click(function(){
-			                	 Scenic.saveCheckingData(scenicId,scenicName,0);
-		                    })
-		                 //给查看单据绑定事件
-		                 $("#" +"tab-"+ checkTabId+"-content"+" .scenicLookBillsImg").click(function(){
-		                	 var WEB_IMG_URL_BIG = $("#" +"tab-"+ checkTabId+"-content").find("input[name=WEB_IMG_URL_BIG]").val();//大图
-		                	 var WEB_IMG_URL_SMALL = $("#" +"tab-"+ checkTabId+"-content").find("input[name=WEB_IMG_URL_SMALL]").val();//大图
-		                	 Scenic.viewImage(this,WEB_IMG_URL_BIG,WEB_IMG_URL_SMALL);
-		                 });
-						 //关闭按钮事件
-						 $("#" +"tab-"+ checkTabId+"-content"+" .btn-scenicFinancial-close").click(function(){
-							 showConfirmDialog($( "#confirm-dialog-message" ), "确定关闭本选项卡?",function(){
-								 closeTab(checkTabId);
-								 Scenic.edited["checking"] = "";
-							 });
-						 });
-					 //给全选绑定事件
-					 $("#" +"tab-"+ checkTabId+"-content"+" .scenicSelectAll").click(function(){
-						 var flag = this.checked;
-						 $(".ScenicChecking .all tbody tr").each(function(){
-							 var checkedbox = $(this).find(".scenicFinancial");
-							 if(flag){
-								 checkedbox.prop("checked",true);
-							 }else{
-								 //判断对账状态
-								 if(checkedbox.attr("data-entity-isConfirmAccount-scenic") == 1){
-									 checkedbox.prop("checked",true);
-								 }else{
-									 checkedbox.prop("checked",false);
-								 }
-							 }
-						 });
-					 });
-				 }
-	    	 });
-	    },
-	  //显示单据
-	    viewImage:function(obj,WEB_IMG_URL_BIG,WEB_IMG_URL_SMALL) {
-	    	var data = {
-	    			"images":[]
-	    	};
-	    	var str = $(obj).attr('url');
-	    	var strs = str.split(",");
-	    	for(var i = 0; i < strs.length; i ++) {
-	    		var s = strs[i];
-	    		if(s != null && s != "" && s.length > 0) {
-		    		var image = {
-		    				"WEB_IMG_URL_BIG":imgUrl+s,
-		    				"WEB_IMG_URL_SMALL":imgUrl+s+"?imageView2/2/w/150",
-		    		}
-		    		data.images.push(image);
-	    		}
-	    	}
-	    	var html = billImagesTemplate(data);
-	    	
-			layer.open({
-				type : 1,
-				title : "单据图片",
-				skin : 'layui-layer-rim', // 加上边框
-				area : '500px', // 宽高
-				zIndex : 1028,
-				content : html,
-                scrollbar: false, // 推荐禁用浏览器外部滚动条
-				success : function() {
-					var colorbox_params = {
-			    			rel: 'colorbox',
-			    			reposition:true,
-			    			scalePhotos:true,
-			    			scrolling:false,
-			    			previous:'<i class="ace-icon fa fa-arrow-left"></i>',
-			    			next:'<i class="ace-icon fa fa-arrow-right"></i>',
-			    			close:'&times;',
-			    			current:'{current} of {total}',
-			    			maxWidth:'100%',
-			    			maxHeight:'100%',
-			    			onOpen:function(){ 
-			    				$overflow = document.body.style.overflow;
-			    				document.body.style.overflow = 'hidden';
-			    			},
-			    			onClosed:function(){
-			    				document.body.style.overflow = $overflow;
-			    			},
-			    			onComplete:function(){
-			    				$.colorbox.resize();
-			    			}
-			    		};
-			    		$('#layer-photos-financial-count [data-rel="colorbox"]').colorbox(colorbox_params);
-				}
-			});
-	    },
-	    //对账数据处理
-	    saveCheckingData:function(scenicId,scenicName,isClose){
-           var JsonStr = [],
-               oldUnPayedMoney,
-               newUnPayedMoney,
-               oldRemark,
-               newRemark,
-    	       $tr = $("#" +"tab-"+ checkTabId+"-content"+" .all tbody tr");
-    	   $tr.each(function(i){
-    		   var flag = $(this).find(".scenicFinancial").is(":checked"),
-    		   	   newUnPayedMoney = $tr.eq(i).find("input[name=FinancialScenicRealUnPayedMoney]").val(),
-			       newRemark = $tr.eq(i).find("input[name=FinancialScenicRemark]").val();
-    		   if(flag){
-    			   if($(this).attr("data-entity-isConfirmAccount") == 1){
-    				   //取值用于是否修改对账判断
-    				   oldUnPayedMoney = $(this).attr("data-entity-realUnPayedMoney");
-    				   oldRemark = $(this).attr("data-entity-remark");
-    				  
-    				   //判断是否是修改对账
-    				   if(oldUnPayedMoney !== newUnPayedMoney || oldRemark !== newRemark){
-    					   var checkData = {
-            					   id:$(this).attr("data-entity-id"),
-            					   scenicId:scenicId,
-            					   scenicName:scenicName,
-            					   consumeStartTime:$tr.eq(i).find("td[name=consumeStartTime]").text(),
-            					   realUnPayedMoney:newUnPayedMoney,
-            					   remark:newRemark,
-            					   isConfirmAccount:1
-            			   }
-    					   JsonStr.push(checkData)
-    				   }
-    			   }else{
-    				   var checkData = {
-        					   id:$(this).attr("data-entity-id"),
-        					   scenicId:scenicId,
-        					   scenicName:scenicName,
-        					   consumeStartTime:$tr.eq(i).find("td[name=consumeStartTime]").text(),
-        					   realUnPayedMoney:newUnPayedMoney,
-        					   remark:newRemark,
-        					   isConfirmAccount:1
-        			   }
-    				   JsonStr.push(checkData)
-    			   }
-    		   }else{
-    			   if($(this).attr("data-entity-isConfirmAccount") == 1){
-    				   var checkData = {
-        					   id:$(this).attr("data-entity-id"),
-        					   scenicId:scenicId,
-        					   scenicName:scenicName,
-        					   consumeStartTime:$tr.eq(i).find("td[name=consumeStartTime]").text(),
-        					   realUnPayedMoney:newUnPayedMoney,
-        					   remark:newRemark,
-        					   isConfirmAccount:0
-        			   } 
-    				   JsonStr.push(checkData)
-    			   }
-    		   }
-		    });
-    	 //判断用户是否操作
-    	   if(JsonStr.length == 0){
-    		   showMessageDialog($( "#confirm-dialog-message" ),"您当前未进行任何操作");
-    		   return
-    	   }else{
-    		   JsonStr = JSON.stringify(JsonStr);
-        	   $.ajax({
-        		   url:""+APP_ROOT+"back/financial/financialScenic.do?method=accountChecking&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
-                   type:"POST",
-                   data:"financialScenicListStr="+encodeURIComponent(JsonStr),
-                   dataType:"json",
-                   beforeSend:function(){
-						globalLoadingLayer = openLoadingLayer();
-					},
-					success:function(data){
-						layer.close(globalLoadingLayer);
-						var result = showDialog(data);
-						if(result){
-							showMessageDialog($( "#confirm-dialog-message" ),data.message);
-							Scenic.edited["checking"] = "";
-							if(isClose == 1){
-								closeTab(checkTabId);
-								Scenic.listScenic(Scenic.searchData.pageNo,Scenic.searchData.scenicId,Scenic.searchData.year,Scenic.searchData.month);
-							} else {
-								Scenic.ScenicChecking(0,Scenic.searchCheckData.scenicId,Scenic.searchCheckData.scenicName,Scenic.searchCheckData.year,Scenic.searchCheckData.month);
-							}	
-						}
-					}
-        	   });
-    	   }
-	    },
-	    //结算数据处理
-	    saveBlanceData:function(scenicId,scenicName,isClose){
-
-	    	var $tr = $("#" +"tab-"+ blanceTabId+"-content"+" .all tbody tr"),
-	    	DataArr = [],
-		    JsonData;
-	    	$tr.each(function(i){
-          		if($(this).data('blanceStatus')){
-          			var blanceData = {
-                    		id:$(this).attr("data-entity-id"),
-                    		scenicId:scenicId,
-                            year:$(this).attr("data-entity-year"),
-                            month:$(this).attr("data-entity-month"),
-                            realPayedMoney:$tr.eq(i).find("td[name=blancerealrealPayedMoney]").text(),
-                            unPayedMoney:$tr.eq(i).find("td[name=blanceunPayedMoney]").text(),
-                            realUnPayedMoney:$tr.eq(i).find("td[name=blancerealrealUnPayedMoney]").text(),
-                            payMoney:$tr.eq(i).find("input[name=blancerealPayedMoney]").val(),
-                            payType:$tr.eq(i).find("select[name=blancePayType]").val(),
-                            remark:$tr.eq(i).find("input[name=blancerealRemark]").val()
-                    	}
-          			 DataArr.push(blanceData)
-          		}
-          	})
-	    	JsonData = JSON.stringify(DataArr)
-	    	$.ajax({
-        		url:""+APP_ROOT+"back/financial/financialScenic.do?method=saveFcScenicSettlement&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update",
-                type:"POST",
-                data:"fcScenicSettlementStr="+JsonData,
-                dataType:"json",
-                beforeSend:function(){
-                    globalLoadingLayer = openLoadingLayer();
-                },
-                success:function(data){
-                	layer.close(globalLoadingLayer);
-                    var result = showDialog(data);
-                    if(result){
-                    	showMessageDialog($( "#confirm-dialog-message" ),data.message);
-                    	Scenic.edited["blance"] = "";
-						if(isClose == 1){
-							closeTab(blanceTabId);
-							Scenic.listScenic(Scenic.searchData.pageNo,Scenic.searchData.scenicId,Scenic.searchData.year,Scenic.searchData.month);
-						} else {
-							Scenic.ScenicClearing(Scenic.searchBalanceData.scenicId,Scenic.searchBalanceData.scenicName,Scenic.searchBalanceData.year,Scenic.searchBalanceData.startMonth,Scenic.searchBalanceData.endMonth);
-						}	
-                    }
+                        }
+                    });
                 }
-        	})
-	    },
-		save : function(saveType){
-			console.log(saveType);
-			if(saveType == "checking"){
-				Scenic.saveCheckingData(Scenic.oldCheckScenicId,"",1);
-			} else if(saveType == "blance"){
-				Scenic.saveBlanceData(Scenic.oldBlanceScenicId,"",1);
-			}
-		},
-		clearEdit : function(clearType){
-			Scenic.edited[clearType] = "";
-		}
+            }
+        });
+    };
 
+    scenic.initCheck = function(page,id,name){
+    	// 初始化jQuery 对象 
+        scenic.$checkTab = $("#tab-" + menuKey + "-checking-content");
+
+        scenic.$checkSearchArea = scenic.$checkTab.find('.T-search-area');
+
+        scenic.init_event(page,id,name,scenic.$checkTab,"check");
+        Tools.setDatePicker(scenic.$checkSearchArea.find('.datepicker'), true);
+        FinancialService.updateUnpayMoney(scenic.$checkTab, new FinRule(0));
+
+        //搜索按钮事件
+        scenic.$checkSearchArea.find('.T-search').on('click', function(event) {
+            event.preventDefault();
+            scenic.scenicCheck(0,null,name);
+        });
+
+        //导出报表事件 btn-scenicExport
+        // scenic.$checkSearchArea.find(".T-scenicExport").click(function(){
+        //     var year = scenic.$checkSearchArea.find("[name=year]").val();
+        //     var month = scenic.$checkSearchArea.find("[name=month]").val();
+        //     checkLogin(function(){
+        //         var url = KingServices.build_url("export","scenic") + "&scenicId="+id+"&year="+year+"&month="+month+"&sortType=auto";
+        //         exportXLS(url)
+        //     });
+        // });
+
+        //复选框事件初始化
+        var checkboxList = scenic.$checkTab.find(".T-checkList tr .T-checkbox"),
+            $checkAll = scenic.$checkTab.find(".T-checkAll");
+        FinancialService.initCheckBoxs($checkAll,checkboxList);
+
+        //报表内的操作
+        scenic.listOption(scenic.$checkTab);
+
+        //关闭页面事件
+        scenic.$checkTab.find(".T-close-check").click(function(){
+             Tools.closeTab(menuKey + "-checking");
+        });
+        //确认对账按钮事件
+        scenic.$checkTab.find(".T-saveCheck").click(function(){ 
+            validator = (new FinRule(0)).check(scenic.$checkTab.find(".T-checkList"));
+            if (!validator.form()) { return; }
+            FinancialService.changeUncheck(scenic.$checkTab.find('.T-checkTr'), function(){
+                scenic.saveChecking(id,name,page);
+            });
+        });
+    };
+
+    /**
+     * 对外付款接口
+     * @param  {object} options 付款参数
+     * @return {[type]}         [description]
+     */
+    scenic.initPay = function(options) {
+        scenic.scenicClear(0, 0, options.id, options.name, '', options.startDate, options.endDate, true);
     }
-    exports.listScenic = Scenic.listScenic;
-	exports.isEdited = Scenic.isEdited;
-	exports.save = Scenic.save;
-	exports.clearEdit = Scenic.clearEdit;
+    //结算
+    scenic.scenicClear = function(isAutoPay,page,scenicId,scenicName,accountInfo,startDate,endDate, isOuter){
+        if (isAutoPay) {
+            var searchParam = FinancialService.autoPayJson(scenic.$clearTab.find('.T-newData').data('id'),scenic.$clearTab, new FinRule(3), 0);
+            searchParam = JSON.parse(searchParam);
+            searchParam.scenicId = searchParam.id;   
+            delete(searchParam.id);
+        } else {
+            if (scenic.$clearSearchArea && arguments.length === 4) {
+                accountInfo = scenic.$clearSearchArea.find("input[name=accountInfo]").val(),
+                startDate = scenic.$clearSearchArea.find("input[name=startDate]").val(),
+                endDate = scenic.$clearSearchArea.find("input[name=endDate]").val()
+            }
+            if(startDate > endDate){
+                showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
+                return false;
+            }
+
+            page = page || 0;
+            var searchParam = {
+                pageNo : page,
+                scenicId : scenicId || scenic.$clearTab.find('.T-newData').data('id'),
+                accountInfo : accountInfo,
+                startDate : startDate,
+                endDate : endDate,
+                sortType : "auto"
+            };
+        }
+        searchParam = JSON.stringify(searchParam);
+        
+        if(!scenicId && !!scenic.$clearTab){
+            scenicName = scenic.$clearTab.find('.T-newData').data('name');
+        }
+        $.ajax({
+            url:KingServices.build_url("financial/financialScenic","listScenicAccount"),
+            type:"POST",
+            data:{ searchParam : searchParam },
+            success:function(data){
+                var result = showDialog(data);
+                if(result){
+                    data.scenicName = scenicName;
+                    if (isAutoPay && scenic.$clearTab) {
+                        scenic.$clearTab.find(".T-clear-auto").toggle();
+                        scenic.$clearTab.find(".T-cancel-auto").toggle();
+                        scenic.$clearTab.data('isEdited', false);
+                        scenic.clearTempData = data.autoPaymentJson;
+                        scenic.clearTempSumDate = {
+                            sumPayMoney : scenic.$clearTab.find('input[name=sumPayMoney]').val(),
+                            sumPayType : scenic.$clearTab.find('select[name=sumPayType]').val()
+                        };
+                    }
+
+                    //暂存数据读取
+                    if(scenic.clearTempSumDate){
+                        data.sumPayMoney = scenic.clearTempSumDate.sumPayMoney;
+                        data.sumPayType = scenic.clearTempSumDate.sumPayType;
+                    } else {
+                        data.sumPayMoney = 0;
+                        data.sumPayType = 0;
+                    }
+                    data.isOuter = scenic.isOuter = !!isOuter || scenic.isOuter;
+                    var resultList = data.financialScenicListData;
+                    data.financialScenicListData = FinancialService.getTempDate(data.financialScenicListData,scenic.clearTempData);
+                    var html = scenicClearing(data);
+                    
+                    var validator;
+                    // 初始化页面
+                    if (Tools.addTab(menuKey + "-clearing", "景区付款", html)) {
+                        scenic.initClear(page,scenicId,scenicName); 
+                        validator = (new FinRule(isOuter ? 3 : 1)).check(scenic.$clearTab.find('.T-clearList'));  
+
+                        if(isAutoPay == 1){
+                            scenic.$clearTab.find('input[name=sumPayMoney]').prop("disabled",true);
+                            scenic.$clearTab.find(".T-clear-auto").hide(); 
+                            scenic.$clearTab.find(".T-cancel-auto").show();
+                            scenic.$clearTab.data('isEdited', !!data.autoPaymentJson.length);
+                        } else {
+                            scenic.$clearTab.find(".T-clear-auto").show(); 
+                            scenic.$clearTab.find(".T-cancel-auto").hide();
+                        }
+
+                        //绑定翻页组件
+                        var $tr = scenic.$clearTab.find('.T-clearList tr');
+                        laypage({
+                            cont: scenic.$clearTab.find('.T-pagenation'),
+                            pages: data.searchParam.totalPage,
+                            curr: (page + 1),
+                            jump: function(obj, first) {
+                                if (!first) { 
+                                    var tempJson = FinancialService.clearSaveJson(scenic.$clearTab,scenic.clearTempData, FinRule(3));
+                                    scenic.clearTempData = tempJson;
+                                    var sumPayMoney = parseInt(scenic.$clearTab.find('input[name=sumPayMoney]').val());
+                                        sumPayType = parseInt(scenic.$clearTab.find('select[name=sumPayType]').val());
+                                    scenic.clearTempSumDate = {
+                                        sumPayMoney : sumPayMoney,
+                                        sumPayType : sumPayType
+                                    }
+                                    scenic.scenicClear(isAutoPay,obj.curr-1,scenicId,scenicName);
+                                }
+                            }
+                        });
+                    }
+
+                }
+            }
+        });
+    };
+
+    scenic.initClear = function(page,id,name){
+        // 初始化jQuery 对象 
+        scenic.$clearTab = $("#tab-" + menuKey + "-clearing-content");
+        scenic.$clearSearchArea = scenic.$clearTab.find('.T-search-area');
+
+        scenic.init_event(page,id,name,scenic.$clearTab,"clear");
+        Tools.setDatePicker(scenic.$clearSearchArea.find('.datepicker'), true);
+
+        //搜索事件
+        scenic.$clearTab.find(".T-search").click(function(){
+            scenic.clearTempSumDate = false;
+            scenic.clearTempData = false;
+            scenic.scenicClear(0,0,null,name);
+        });
+
+        //报表内的操作
+        scenic.listOption(scenic.$clearTab);
+
+        //关闭页面事件
+        scenic.$clearTab.find(".T-close-clear").click(function(){
+            Tools.closeTab(menuKey + "-clearing");
+        });
+        //保存结算事件
+        scenic.$clearTab.find(".T-saveClear").click(function(){
+            if (!(new FinRule(scenic.isOuter ? 3 : 1)).check(scenic.$clearTab).form()) { return; }
+            scenic.saveClear(id,name,page);
+        });
+
+        //自动下账
+        scenic.$clearTab.find(".T-clear-auto").click(function(){
+            var autoPayJson = FinancialService.autoPayJson(id,scenic.$clearTab,new FinRule(scenic.isOuter ? 3 : 1));
+            if(!autoPayJson){return false;}
+
+            var startDate = scenic.$clearTab.find("input[name=startDate]").val(),
+                endDate = scenic.$clearTab.find("input[name=endDate]").val();
+            FinancialService.autoPayConfirm(startDate, endDate, function() {
+                scenic.scenicClear(1,page,null,name);
+            });
+        });
+
+        scenic.$clearTab.find(".T-cancel-auto").off().on("click",function(){
+            scenic.$clearTab.find(".T-cancel-auto").toggle();
+            scenic.$clearTab.find(".T-clear-auto").toggle();
+            scenic.clearTempSumDate = false;
+            scenic.clearTempData = false;
+            scenic.$clearTab.data('isEdited',false);
+            scenic.scenicClear(0,0,null,name);
+        });
+
+        FinancialService.updateSumPayMoney(scenic.$clearTab,new FinRule(scenic.isOuter ? 3 : 1));
+    };
+
+    //显示单据
+    scenic.viewImage = function(obj,WEB_IMG_URL_BIG,WEB_IMG_URL_SMALL) {
+    	var data = {"images":[] };
+    	var str = $(obj).attr('url');
+    	var strs = str.split(",");
+    	for(var i = 0; i < strs.length; i ++) {
+    		var s = strs[i];
+    		if(s != null && s != "" && s.length > 0) {
+	    		var image = {
+    				"WEB_IMG_URL_BIG":imgUrl+s,
+    				"WEB_IMG_URL_SMALL":imgUrl+s+"?imageView2/2/w/150",
+	    		}
+	    		data.images.push(image);
+    		}
+    	}
+    	var html = billImagesTemplate(data);
+    	
+		layer.open({
+			type : 1,
+			title : "单据图片",
+			skin : 'layui-layer-rim',
+			area : '500px',
+			zIndex : 1028,
+			content : html,
+			scrollbar: false,
+			success : function() {
+				var colorbox_params = {
+                    photo: true,
+	    			rel: 'colorbox',
+	    			reposition:true,
+	    			scalePhotos:true,
+	    			scrolling:false,
+	    			previous:'<i class="ace-icon fa fa-arrow-left"></i>',
+	    			next:'<i class="ace-icon fa fa-arrow-right"></i>',
+	    			close:'&times;',
+	    			current:'{current} of {total}',
+	    			maxWidth:'100%',
+	    			maxHeight:'100%',
+	    			onOpen:function(){ 
+	    				$overflow = document.body.style.overflow;
+	    				document.body.style.overflow = 'hidden';
+	    			},
+	    			onClosed:function(){
+	    				document.body.style.overflow = $overflow;
+	    			},
+	    			onComplete:function(){
+	    				$.colorbox.resize();
+	    			}
+	    		};
+	    		$('#layer-photos-financial-count [data-rel="colorbox"]').colorbox(colorbox_params);
+			}
+		});
+    }; 
+
+    //已付金额明细
+    scenic.payedDetail = function(id){
+        $.ajax({
+            url:KingServices.build_url("financial/financialScenic","getPayedMoneyDetail"),
+            type:"POST",
+            data:{
+                id : id
+            },
+            success:function(data){
+                var result = showDialog(data);
+                if(result){
+                    var html = payedDetailTempLate(data);
+                    layer.open({
+                        type : 1,
+                        title : "已付金额明细",
+                        skin : 'layui-layer-rim',
+                        area : '1000px',
+                        zIndex : 1028,
+                        content : html,
+                        scrollbar: false 
+                    });
+                }
+            }
+        });
+    };
+
+    //应付金额明细
+    scenic.needPayDetail = function(id){
+        $.ajax({
+            url:KingServices.build_url("financial/financialScenic","getNeedPayDetail"),
+            type:"POST",
+            data:{
+                id : id
+            },
+            success:function(data){
+                var result = showDialog(data);
+                if(result){
+                    var html = needPayDetailTempLate(data);
+                    layer.open({
+                        type : 1,
+                        title : "应付金额明细",
+                        skin : 'layui-layer-rim',
+                        area : '800px',
+                        zIndex : 1028,
+                        content : html,
+                        scrollbar: false 
+                    });
+                }
+            }
+        });
+    }; 
+
+    //对账数据保存
+    scenic.saveChecking = function(scenicId,scenicName,page,tab_id, title, html){
+        var argumentsLen = arguments.length,
+            checkSaveJson = FinancialService.checkSaveJson(scenic.$checkTab, new FinRule(0));
+        if(!checkSaveJson){ return false; }
+
+        $.ajax({
+            url:KingServices.build_url("financial/financialScenic","saveAccountChecking"),
+            type:"POST",
+            data:{ scenicJson : checkSaveJson },
+            success:function(data){
+                var result = showDialog(data);
+                if(result){
+                    showMessageDialog($("#confirm-dialog-message"),data.message,function(){
+                        if(argumentsLen == 2){
+                            Tools.closeTab(menuKey + "-checking");
+                            scenic.listScenic(scenic.searchData.pageNo,scenic.searchData.scenicName,scenic.searchData.scenicId,scenic.searchData.startDate,scenic.searchData.endDate);
+                        } else if(argumentsLen == 3){
+                            scenic.$checkTab.data('isEdited',false);
+                            scenic.scenicCheck(page,scenicId,scenicName);
+                        } else {
+                            scenic.$checkTab.data('isEdited',false);
+                            Tools.addTab(tab_id, title, html);
+                            scenic.scenicCheck(0,scenic.$checkTab.find(".T-newData").data("id"),scenic.$checkTab.find(".T-newData").data("name"));
+                        }
+                    });
+                }
+            }
+        });
+    };
+
+    scenic.saveClear = function(id,name,page,tab_id, title, html){
+        if(!FinancialService.isClearSave(scenic.$clearTab, new FinRule(scenic.isOuter ? 3 : 1))){
+            return false;
+        }
+
+        var argumentsLen = arguments.length,
+            clearSaveJson = FinancialService.clearSaveJson(scenic.$clearTab,scenic.clearTempData, new FinRule(scenic.isOuter ? 3 : 1)),
+            searchParam = {
+                        sumCurrentPayMoney : scenic.$clearTab.find('input[name=sumPayMoney]').val(),
+                        payType : scenic.$clearTab.find('select[name=sumPayType]').val(),
+                        payRemark : scenic.$clearTab.find('input[name=sumPayRemark]').val()
+                    };
+
+        $.ajax({
+            url:KingServices.build_url("financial/financialScenic","saveAccountSettlement"),
+            type:"POST",
+            data:{
+                scenicJson : JSON.stringify(clearSaveJson),
+                searchParam : JSON.stringify(searchParam)
+            },
+            success:function(data){
+                var result = showDialog(data);
+                if(result){
+                    showMessageDialog($("#confirm-dialog-message"),data.message,function(){
+                        scenic.clearTempData = false;
+                        scenic.clearTempSumDate = false;
+                        if(argumentsLen === 2){
+                            Tools.closeTab(menuKey + "-clearing");
+                            scenic.listScenic(scenic.searchData.pageNo,scenic.searchData.scenicName,scenic.searchData.scenicId,scenic.searchData.startDate,scenic.searchData.endDate);
+                        }else if(argumentsLen === 3){
+                            scenic.$clearTab.data('isEdited',false);
+                            scenic.scenicClear(0,page,null,name);
+                        } else {
+                            scenic.$clearTab.data('isEdited',false);
+                            Tools.addTab(tab_id, title, html);
+                            scenic.initClear(0,scenic.$clearTab.find(".T-newData").data("id"),scenic.$clearTab.find(".T-newData").data("name"));
+                        }
+                    }); 
+                }
+            }
+        });
+    };
+
+    scenic.init_event = function(page,id,name,$tab,option) {
+        if (!!$tab && $tab.length === 1) {
+            var validator = (new FinRule(option == "check" ? 0 : (scenic.isOuter ? 3 : 1))).check($tab);
+
+            // 监听修改
+            $tab.find(".T-" + option + "List").off('change').on('change',"input",function(event) {
+                event.preventDefault();
+                $(this).closest('tr').data("change",true);
+                $tab.data('isEdited', true);
+            });
+            $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
+				event.preventDefault();
+                if(option == "check"){
+                    scenic.initCheck(page,id,name);
+                } else if(option == "clear"){
+                    scenic.initClear(page,id,name);
+                }
+			})
+            // 监听保存，并切换tab
+            .on('switch.tab.save', function(event,tab_id,title,html) {
+                event.preventDefault();
+                if(option == "check"){
+                    scenic.saveChecking(id,name,0,tab_id,title,html);
+                } else if(option == "clear"){
+                    scenic.saveClear(id,name,0,tab_id,title,html);
+                }
+            })
+            // 保存后关闭
+            .on('close.tab.save', function(event) {
+                event.preventDefault();
+                if(option == "check"){
+                    scenic.saveChecking(id,name);
+                } else if(option == "clear"){
+                    scenic.saveClear(id,name);
+                }
+            });
+        }
+    };
+
+    scenic.getQueryList = function(){
+        var $scenic = scenic.$tab.find(".T-chooseScenic"),
+            scenicList = scenic.scenicList;
+        if(scenicList != null && scenicList.length > 0){
+            for(var i=0;i<scenicList.length;i++){
+                scenicList[i].id = scenicList[i].scenicId;
+                scenicList[i].value = scenicList[i].scenicName;
+            }
+        }
+        var all = {
+            id : "",
+            value : "全部"
+        };
+        scenicList.unshift(all);
+
+        //景区
+        $scenic.autocomplete({
+            minLength: 0,
+            source : scenicList,
+            change: function(event,ui) {
+                if (!ui.item)  {
+                    $(this).nextAll('input[name="scenicId"]').val('');
+                }
+            },
+            select: function(event,ui) {
+                $(this).blur().nextAll('input[name="scenicId"]').val(ui.item.id);
+            }
+        }).on("click",function(){
+            $scenic.autocomplete('search','');
+        });      
+    };
+
+    // 对账、付款报表内的操作
+    scenic.listOption = function($tab){
+        $tab.find('.T-option').on('click',function(event) {
+            event.preventDefault();
+            var $that = $(this),
+                id = $that.closest('tr').data('id');
+            if ($that.hasClass('T-scenicImg')) {
+                // 查看单据
+                var WEB_IMG_URL_BIG = $tab.find("input[name=WEB_IMG_URL_BIG]").val();//大图
+                var WEB_IMG_URL_SMALL = $tab.find("input[name=WEB_IMG_URL_SMALL]").val();//大图
+                scenic.viewImage(this,WEB_IMG_URL_BIG,WEB_IMG_URL_SMALL);
+            } else if ($that.hasClass('T-payedDetail')) {
+                // 已付明细
+                scenic.payedDetail(id);
+            } else if ($that.hasClass('T-needPayDetail')) {
+                // 应收明细
+                scenic.needPayDetail(id);
+            }
+        });
+    };
+
+    exports.init = scenic.initModule;
+    exports.initPay = scenic.initPay;
 });

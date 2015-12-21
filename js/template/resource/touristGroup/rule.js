@@ -21,15 +21,6 @@ var rule = {
 			var $obj = this.$touristGroupContainer,
 
 				settings = [
-				 {
-					$ele: $obj.find('input[name="lineProductIdName"]'),
-					$valObj: $obj.find('input[name="lineProductId"]'),
-					rules: [{
-						type: 'null',
-						errMsg: '线路产品不能为空'
-					}]
-				},
-
 			     {	//出游日期   
 					$ele: $obj.find('input[name="startTime"]'),
 					rules: [
@@ -77,7 +68,7 @@ var rule = {
 						$ele: $obj.find('input[name="adultCount"]'),   
 						rules: [
 							{
-				  			type:'positive-float',
+				  			type:'int',
 				  			errMsg: '大人数量必须为正数'
 							},{
 					  			type:'null',
@@ -88,7 +79,7 @@ var rule = {
 							$ele: $obj.find('input[name="adultPrice"]'),   
 							rules: [
 								{
-					  			type:'positive-float',
+					  			type:'float',
 					  			errMsg: '大人单价不合法'  
 								},{
 						  			type:'null',
@@ -99,7 +90,7 @@ var rule = {
 							$ele: $obj.find('input[name="childCount"]'),   
 							rules: [
 								{
-					  			type:'positive-float',
+					  			type:'int',
 					  			errMsg: '小孩数量必须为正数'
 								}
 							]   
@@ -107,11 +98,11 @@ var rule = {
 						$ele: $obj.find('input[name="childPrice"]'),   
 						rules: [
 							{
-				  			type:'positive-float',
+				  			type:'float',
 				  			errMsg: '小孩单价不合法'
 							}
 						]
-			        },{//小孩
+			        },{//其它
 						$ele: $obj.find('input[name="count"]'),   
 						rules: [
 							{
@@ -119,7 +110,7 @@ var rule = {
 			  					errMsg: '其他费用的数量的格式不正确'
 							}
 						]
-			         },{//小孩
+			         },{//其它
 							$ele: $obj.find('input[name="price"]'),   
 							rules: [
 								{

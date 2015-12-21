@@ -52,7 +52,7 @@ define(function(require, exports) {
 				var result = showDialog(data);
 				if(result){
 					var html = listTemplate(data);
-					addTab(menuKey,"自费管理",html);
+					Tools.addTab(menuKey,"自费管理",html);
 
 					// 初始化jQuery 对象
 					selfpay.$tab = $("#tab-resource_selfpay-content");
@@ -181,9 +181,16 @@ define(function(require, exports) {
 					    content: html,
 						scrollbar: false,    // 推荐禁用浏览器外部滚动条
 					    success:function(){
-
-					    	$container = $(".T-update-selfpay-form"),$tbody = $container.find('.T-selfpayList-Tbody');
+					    	var $container = $(".T-update-selfpay-form"),$tbody = $container.find('.T-selfpayList-Tbody');//T-selfpayList-Tbody
 					    	ruleData.Uvalidator = rule.check($container);
+
+					    	//导游返佣&旅行社返佣计算
+					    	selfpay.numberRate($tbody);
+					    	
+					    	//精度限制--非法数字退格--控制
+						    var $price = $container.find('.T-calc');
+						        Tools.inputCtrolFloat($price);
+
 					    	//初始化地区
 							KingServices.provinceCity($container,provinceId,cityId,districtId);
 					    	//添加项目列表
@@ -205,6 +212,9 @@ define(function(require, exports) {
 								var $this = $(this);
 								selfpay.addTimeArea($this,$tbody);
 							});
+
+						
+
 							//删除时间区间
 							$tbody.find('.T-del').off('click').on('click',function() {
 								var $this = $(this);
@@ -216,6 +226,7 @@ define(function(require, exports) {
 					    		/* Act on the event */
 					    		selfpay.saveSelfpay($container,2);
 					    	});
+
 					    }
 					});
 				}
@@ -264,8 +275,12 @@ define(function(require, exports) {
 			scrollbar: false,    // 推荐禁用浏览器外部滚动条
 		    success:function(){
 
-		    	var $container = $(".T-add-selfpay-form");
+		    	var $container = $(".T-add-selfpay-form"),$tbody= $container.find('.T-selfpayList-Tbody');
 		    	ruleData.validator = rule.check($container);
+		    	//精度控制--非法数字退格
+			    var $price = $tbody.find('.T-calc');
+			        Tools.inputCtrolFloat($price);
+			    selfpay.numberRate($tbody);
 		    	//初始化地区
 		    	KingServices.provinceCity($container);
 		    	//添加项目列表
@@ -288,17 +303,27 @@ define(function(require, exports) {
 	 * @param {[type]} $container [容器]
 	 */
 	selfpay.addSelfpayList = function($container){
-		var $tbody = $container.find('.T-selfpayList-Tbody');
+		var $tbody = $container.find('.T-selfpayList-Tbody'),
+		    index = $tbody.find('tr').find('td').children('div').length;
 		var html = '<tr><td><input name="name" class="col-sm-12" type="text" style="min-width:100px;" maxlength="100"/></td>'+
 			'<td><select class="col-sm-12" name="customerType" style="min-width:100px;"><option value="0">散客</option><option value="1">团体</option></select></td>'+
 			'<td><div class="col-sm-12 no-padding"><label class="col-sm-10">日常价格</label><label class="priceArea col-sm-2" style="padding-top:0px;"><button class="btn btn-success btn-sm btn-white T-add"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button></label></div></td>'+
-			'<td><div class="col-sm-12 no-padding"><input name="normalInnerPrice" class="col-sm-12" type="text" maxlength="10"/></div></td>'+
-			'<td><div class="col-sm-12 no-padding"><input name="normalMarketPrice" class="col-sm-12" type="text" maxlength="10"/></div></td>'+
-			'<td><div class="col-sm-12 no-padding"><input name="normalGuideRate" class="col-sm-12" type="text" maxlength="5"/></div></td>'+
-			'<td><div class="col-sm-12 no-padding"><input name="normalTravelAgencyRate" class="col-sm-12" type="text" maxlength="5"/></div></td>'+
+			'<td><div class="col-sm-12 no-padding"><input data-index="'+(index)+'" name="normalMarketPrice" class="col-sm-12 T-marketPrice T-calc" type="text" maxlength="10"/></div></td>'+
+			'<td><div class="col-sm-12 no-padding"><input data-index="0" name="customerRebateMoney" class="col-sm-12 T-customerRebateMoney T-calc" type="text" maxlength="10"/></div></td>'+
+			'<td><div class="col-sm-12 no-padding"><input data-index="'+(index)+'" name="normalInnerPrice" class="col-sm-12 T-contractPrice T-calc" type="text" maxlength="10"/></div></td>'+
+			'<td><div class="col-sm-12 no-padding"><input data-index="'+(index)+'" name="normalGuideRate" class="col-sm-12 T-guideRate T-calc" type="text" maxlength="5"/></div></td>'+
+			'<td><div class="col-sm-12 no-padding"><input data-index="'+(index)+'" name="normalTravelAgencyRate" class="col-sm-12 T-travelAgencyRate T-calc" type="text" maxlength="5"/></div></td>'+
 			'<td><input name="remark" type="text" class="col-sm-12" style="min-width:100px;" maxlength="1000"/></div></td>'+
 			'<td style="width:70px"><a class="T-btn-price-delete">删除</a></td></tr>';
 		$tbody.append(html);
+
+		//精度控制--非法数字退格
+	    var $price = $tbody.find('.T-calc');
+	        Tools.inputCtrolFloat($price);
+
+		//导返佣、内部、市场、人数计算
+		selfpay.numberRate($tbody);
+
 		// 再调整对话框的高度
 		$(window).trigger('resize');
 		ruleData.validatorList = rule.checkItems($tbody);
@@ -374,21 +399,27 @@ define(function(require, exports) {
 	 * @param {[type]} $this [对象]
 	 */
 	selfpay.addTimeArea = function($this,$tbody){
-		var $parents = $this.closest('tr'), td = $parents.find("td");
-		td.eq(2).append('<div class="col-sm-12 no-padding T-dateTimeArea" style=""><input type="hidden" name="rebateListId" value="" /><input name="startTime" value="" type="text" class="datepicker col-sm-4"><label class="col-sm-2 control-label center">&nbsp;至&nbsp;</label><input name="endTime" value="" type="text" class="datepicker col-sm-4"><label class="priceArea col-sm-2" style="padding-top:0px;"><button class="btn btn-danger btn-sm btn-white T-del"><i class="ace-icon fa fa-minus bigger-110 icon-only" style="line-height: 20px"></i></button></label></div>');
-		td.eq(3).append('<div class="col-sm-12 no-padding" style="padding-top:5px!important;"><input name="contractPrice" value="" class="col-sm-12" type="text" maxlength="10"></div>');
-		td.eq(4).append('<div class="col-sm-12 no-padding" style="padding-top:5px!important;"><input name="marketPrice" value="" class="col-sm-12" type="text" maxlength="10"></div>');
-		td.eq(5).append('<div class="col-sm-12 no-padding" style="padding-top:5px!important;"><input name="guideRate" value="" class="col-sm-12" type="text" maxlength="5"></div>');
-		td.eq(6).append('<div class="col-sm-12 no-padding" style="padding-top:5px!important;"><input name="travelAgencyRate" value="" class="col-sm-12" type="text" maxlength="5"></div>');
+	 var $parents = $this.closest('tr'), $td = $parents.find("td"),index = $td.find('div').length; 
+		$td.eq(2).append('<div class="col-sm-12 no-padding T-dateTimeArea" style=""><input type="hidden" name="rebateListId" value="" /><input name="startTime" value="" type="text" class="datepicker col-sm-4"><label class="col-sm-2 control-label center">&nbsp;至&nbsp;</label><input name="endTime" value="" type="text" class="datepicker col-sm-4"><label class="priceArea col-sm-2" style="padding-top:0px;"><button class="btn btn-danger btn-sm btn-white T-del"><i class="ace-icon fa fa-minus bigger-110 icon-only" style="line-height: 20px"></i></button></label></div>');
+		$td.eq(3).append('<div class="col-sm-12 no-padding" style="padding-top:5px!important;"><input data-index="'+(index)+'" name="marketPrice" value="" class="col-sm-12 T-marketPrice T-calc" type="text" maxlength="10"></div>');
+		$td.eq(5).append('<div class="col-sm-12 no-padding" style="padding-top:5px!important;"><input data-index="'+(index)+'" name="contractPrice" value="" class="col-sm-12 T-contractPrice T-calc" type="text" maxlength="10"></div>');
+		$td.eq(6).append('<div class="col-sm-12 no-padding" style="padding-top:5px!important;"><input data-index="'+(index)+'" name="guideRate" value="" class="col-sm-12 T-guideRate T-calc" type="text" maxlength="5"></div>');
+		$td.eq(7).append('<div class="col-sm-12 no-padding" style="padding-top:5px!important;"><input data-index="'+(index)+'" name="travelAgencyRate" value="" class="col-sm-12 T-travelAgencyRate T-calc" type="text" maxlength="5"></div>');
 		$parents.find(".T-del").off().on("click", selfpay.deteleDateArea);
 		$parents.find(".T-dateTimeArea").eq($parents.find(".T-dateTimeArea").length - 1).attr("data-index", $parents.find(".T-dateTimeArea").length);
 		ruleData.validatorList = rule.checkItems($tbody);
 		selfpay.datepicker($tbody);
+		//精度控制--非法数字退格
+	    var $price = $tbody.find('.T-calc');
+	        Tools.inputCtrolFloat($price);
+		//导返佣计算
+		selfpay.numberRate($tbody);
 		//删除时间区间
 		$tbody.find('.T-del').off('click').on('click',function() {
 			var $this = $(this);
 			selfpay.delTimeArea($this);
 		});
+
 	};
 	/**
 	 * 删除时间区间
@@ -396,7 +427,10 @@ define(function(require, exports) {
 	 * @return {[type]}       [description]
 	 */
 	selfpay.delTimeArea = function($this){
-		var $parents = $this.closest('tr'), td = $parents.find("td"), index = $this.closest('.T-dateTimeArea').index(), id = $this.closest('div').find("input[name=rebateListId]").val();
+		var $parents = $this.closest('tr'), 
+		    td = $parents.find("td"),
+		    index = $this.closest('.T-dateTimeArea').index(), 
+		    id = $this.closest('div').find("input[name=rebateListId]").val();
 		if (!!id) {
 			var dialogObj = $( "#confirm-dialog-message" );
 			dialogObj.removeClass('hide').dialog({
@@ -424,7 +458,7 @@ define(function(require, exports) {
 								success:function(data){
 									var result = showDialog(data);
 									if(result){
-										for(var i=2; i < 7; i++){
+										for(var i=2; i < 8; i++){
 											var $children =  td.eq(i).children("div");
 											$children.eq(index).fadeOut(function(){
 												$(this).remove();
@@ -444,7 +478,7 @@ define(function(require, exports) {
 				}
 			});
 		}else{
-			for(var i=2; i < 7; i++){
+			for(var i=2; i < 8; i++){
 				var $children =  td.eq(i).children("div");
 				$children.eq(index).fadeOut(function(){
 					$(this).remove();
@@ -463,6 +497,31 @@ define(function(require, exports) {
 	 */
 	selfpay.saveSelfpay = function($container,type,fn){
 		if(!rule.check($container).form()){return;}
+		var $trList=$container.find('.T-selfpayList-Tbody').children('tr'),isTrue;
+		    $trList.each(function(index) {
+		    	var $that = $(this);
+		    	var customerVal = $that.find('.T-customerRebateMoney').eq(0).val(),
+		    	    contractVal = $that.find('.T-contractPrice').eq(index).val(),
+		    	    marketVal = $that.find('.T-marketPrice').eq(index).val(),
+		    	    guideVal = $that.find('.T-guideRate').eq(index).val(),
+		    	    travelVal = $that.find('.T-travelAgencyRate').eq(index).val();
+		    	customerVal =parseFloat(customerVal);
+		    	contractVal = parseFloat(contractVal);
+		    	marketVa= parseFloat(marketVal);
+		    	guideVal= parseFloat(guideVal);
+		    	travelVal=parseFloat(travelVal);
+		    	    
+		    	if (!!customerVal || !!contractVal || !!guideVal ||  !!travelVal ) {
+		    		if ( customerVal > marketVal || contractVal > marketVal ||  guideVal > 100 || travelVal > 100 ) {
+		    			isTrue = true;
+		    			if (guideVal>100) {showMessageDialog($("#confirm-dialog-message"),"导游返佣不能大于100")};
+						if (travelVal>100) {showMessageDialog($("#confirm-dialog-message"),"旅行社返佣不能大于100")};
+
+		    		};
+		    	};
+		    });
+		if (isTrue) { return;};
+
 		if(ruleData.validatorList != undefined){
 			if(!ruleData.validatorList.form()){return;}
 		}
@@ -496,6 +555,7 @@ define(function(require, exports) {
 				name : name,
 				customerType : customerType,
 				normalInnerPrice : $(this).find("input[name=normalInnerPrice]").val(),
+				customerRebateMoney : $(this).find("input[name=customerRebateMoney]").val(),
 				normalMarketPrice : $(this).find("input[name=normalMarketPrice]").val(),
 				normalGuideRate : $(this).find("input[name=normalGuideRate]").val(),
 				normalTravelAgencyRate : $(this).find("input[name=normalTravelAgencyRate]").val(),
@@ -551,6 +611,102 @@ define(function(require, exports) {
 			}
 		});
 	};
+
+	/**
+	 * [numberRate description]  市场、内部、人数返佣 导社返佣的计算
+	 * @param  {[type]} $tbody [description]
+	 * @return {[type]}        [description]
+	 */
+	selfpay.numberRate = function($tbody){
+		$tbody.on('change', '.T-calc', function(event) {
+			event.preventDefault();
+			var $that = $(this),
+				$tr = $that.closest('tr');
+				index = $that.closest('div').index();
+
+			if ($that.hasClass('T-marketPrice')) {
+				// 当市场价改变时
+				var marketVal = $tr.find('.T-marketPrice').eq(index).val(),
+					customerVal = $tr.find('.T-customerRebateMoney').eq(0).val();
+					marketVal =parseFloat(marketVal);
+    				customerVal =parseFloat(customerVal);
+    				contractVal =parseFloat(contractVal);
+					if(marketVal!="" && marketVal >= customerVal && !isNaN(customerVal) ) {
+    					var innerPrice = parseFloat(marketVal-customerVal);
+							//内部价格
+							$tr.find('.T-contractPrice').eq(index).val(innerPrice);
+					}else if(marketVal < customerVal){
+						$tr.find(".T-marketPrice").eq(index).focus();
+						showMessageDialog($( "#confirm-dialog-message" ),"市场价格不能小于人数返佣");
+
+					}
+
+			} else if ($that.hasClass('T-customerRebateMoney')) {
+				// 当人数返佣改变时
+				var customerVal = $tr.find('.T-customerRebateMoney').eq(0).val(),
+					marketVal = $tr.find('.T-marketPrice').eq(index).val();
+					contractVal = $tr.find('.T-contractPrice').eq(index).val();
+					marketVal =parseFloat(marketVal);
+    				customerVal =parseFloat(customerVal);
+    				contractVal =parseFloat(contractVal);
+    				if(isNaN(customerVal)){
+    					customerVal = 0;
+    				}
+    				if(isNaN(contractVal)){
+    					contractVal = 0;
+    				}
+					if(customerVal<=marketVal && customerVal!=null && contractVal< marketVal && marketVal!=null && !isNaN(marketVal)) {
+						var innerPrice = parseFloat((marketVal-customerVal).toFixed(2));
+							//内部价格
+							$tr.find('.T-contractPrice').eq(index).val(innerPrice);
+						
+					}else if (customerVal!=null && contractVal!=null && !isNaN(contractVal)) {
+						var marketVal = parseFloat((contractVal+customerVal).toFixed(2));
+							//内部价格
+							$tr.find('.T-marketPrice').eq(index).val(marketVal);
+					};
+			} else if ($that.hasClass('T-contractPrice')) {
+				// 内部价格改变时
+				var contractVal = $tr.find('.T-contractPrice').eq(index).val(),
+					customerVal = $tr.find('.T-customerRebateMoney').eq(0).val();
+					marketVal = $tr.find('.T-marketPrice').eq(index).val();
+					contractVal = parseFloat(contractVal);
+					customerVal = parseFloat(customerVal);
+					marketVal = parseFloat(marketVal);
+				   if (!!contractVal && !!customerVal  ) {                                            
+                          totalVal =parseFloat((contractVal+customerVal).toFixed(2));         
+				   	     $tr.find('.T-marketPrice').eq(index).val(totalVal);
+				   };
+			} else if ($that.hasClass('T-guideRate')) {
+				// 当导游返佣改变时
+				 var guideVal = $tr.find('.T-guideRate').eq(index).val();
+				    if ( guideVal!=null && guideVal!="" && guideVal < 0 ) {
+				    	 $tr.find('.T-guideRate').eq(index).focus();
+				    	 showMessageDialog($( "#confirm-dialog-message" ),"导游返佣不能是负数");
+				    }else if(guideVal!=null && guideVal!="" && guideVal <= 100){
+				    	    $tr.find('.T-travelAgencyRate').eq(index).val(100-guideVal);
+				    }else if(guideVal!=null && guideVal!="" && guideVal > 100){
+				    	 $tr.find('.T-guideRate').eq(index).focus();
+				    	 showMessageDialog($( "#confirm-dialog-message" ),"导游返佣不能大于100");
+				    };
+				
+			} else if ($that.hasClass('T-travelAgencyRate')) {
+				// 当旅行社返佣改变时
+				var traveVal = $tr.find('.T-travelAgencyRate').eq(index).val();
+				    if (traveVal!=null && traveVal!="" && traveVal < 0 ) {
+				    	$tr.find('.T-travelAgencyRate').eq(index).focus();
+				    	 showMessageDialog($( "#confirm-dialog-message" ),"旅行社返佣不能是负数");
+				    }else if(traveVal!=null && traveVal!="" && traveVal <= 100){
+				    	$tr.find('.T-guideRate').eq(index).val(100-traveVal);
+				    }else if(traveVal!=null && traveVal!="" && traveVal > 100){
+				    	$tr.find('.T-travelAgencyRate').eq(index).focus();
+				    	showMessageDialog($( "#confirm-dialog-message" ),"旅行社返佣不能大于100");
+				    };
+				
+			} 
+		});
+	};
+
 	/**
 	 * ajax url方法
 	 * @param  {[type]} method    [方法名]

@@ -41,25 +41,24 @@
 							<input name="transPayedMoney" value="{{innerTransfer.transPayedMoney}}" maxlength="9" type="text" class="date-picker col-xs-12" />
 						</div>
 
-						{{if innerTransfer.touristGroup.operateCurrentNeedPayMoney==0}}
-						<label style="padding-left:0px;">  
-							<input  type="checkbox" class="ace" disabled="disabled" value="{{innerTransfer.touristGroup.operateCurrentNeedPayMoney}}" name="isCurrent">
+						<div class="col-sm-2">
+						    <label class="no-padding-right pull-left">付款方式：</label>
+							<select name="payType" class="pull-left">
+								<option{{if innerTransfer.payType == 0}} selected="selected"{{/if}} value="0">现金</option>
+								<option{{if innerTransfer.payType == 1}} selected="selected"{{/if}} value="1">银行转账</option>
+								<option{{if innerTransfer.payType == 2}} selected="selected"{{/if}} value="2">网上支付</option>
+								<option{{if innerTransfer.payType == 3}} selected="selected"{{/if}} value="3">支票</option>
+								<option{{if innerTransfer.payType == 4}} selected="selected"{{/if}} value="4">其它</option>
+							</select>
+						</div>
+
+                        <label>
+							<input  type="checkbox" class="ace" checked="{{if cashFlag==1}}checked{{/if}}" disabled="disabled" value="{{cashFlag}}" name="cashFlag" />
 							<span class="lbl">
 							</span>
-							<input type="hidden" name="isCurrent" value="{{innerTransfer.touristGroup.operateCurrentNeedPayMoney}}" />
 						</label>
-						{{else}}
-						<label style="padding-left:0px;">  
-							<input  type="checkbox" class="ace" checked="checked" disabled="disabled" value="{{innerTransfer.touristGroup.operateCurrentNeedPayMoney}}" name="isCurrent">
-							<span class="lbl">
-							</span>
-							<input type="hidden" name="isCurrent" value="{{innerTransfer.touristGroup.operateCurrentNeedPayMoney}}" />
-						</label>
-                        {{/if}}
-
-
-
 						<label class="control-label no-padding-right">对方现收</label>
+
 					</div>
 				</div>
 			</div>
@@ -230,7 +229,7 @@
 							<input name="remark" value="{{innerTransfer.touristGroup.remark}}" type="text" class="col-xs-12" readonly="readonly" />
 						</div>
 					</div>
-					<div class="widget-body">
+					<div class="widget-body TransferTable">
 						<div class="widget-main no-padding">
 							<table class="table table-striped table-bordered table-hover hotelRoomStandardList">
 								<thead>
@@ -284,7 +283,7 @@
 							<span class="badge badge-primary">4</span>
 							<label class="middle title-size">游客小组信息</label>
 						</h5>
-					<div class="widget-body">
+					<div class="widget-body TransferTable">
 						<div class="widget-main no-padding">
 							<table class="table table-striped table-bordered table-hover hotelRoomStandardList">
 								<thead>

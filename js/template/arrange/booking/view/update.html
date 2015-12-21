@@ -1,4 +1,4 @@
-<div class="col-xs-12 T-updateBooking globalAdd"><!--  -->
+<div class="col-xs-12 T-updateBooking globalAdd bookingFormOneList"><!--  -->
 	<form class="form-horizontal bookingMainForm formOneList" role="form" style="margin-top:10px" onsubmit="return false">
 		<div class="ui-sortable-handle">
 				<h5 class="">
@@ -19,7 +19,7 @@
 							<div class="input-group">
 								<input type="text" name="contactRealname" class="col-sm-12 T-choosePartnerManager" value="{{if bookingOrder.partnerAgencyContact != null}}{{bookingOrder.partnerAgencyContact.contactRealname}}{{/if}}">
 								<input type="hidden" name="partnerAgencyContactId" value="{{if bookingOrder.partnerAgencyContact != null}}{{bookingOrder.partnerAgencyContact.id}}{{/if}}" />
-								<span class="input-group-addon T-addPartnerManager" style="cursor:pointer;left:-38px;" title="为组团社新添加联系人">
+								<span class="input-group-addon T-addPartnerManager addManagerRight" title="为组团社新添加联系人">
 									<i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
 								</span>
 							</div>
@@ -43,7 +43,8 @@
 					<div class="form-group">
 						<label class="col-sm-1 control-label no-padding-right">备注:</label>
 						<div class="col-sm-8">
-							<input type="text" name="remark" class="col-sm-12" value="{{bookingOrder.remark}}" maxlength="500">
+							<!-- <input type="text" name="remark" class="col-sm-12" value="{{bookingOrder.remark}}" maxlength="500"> -->
+						<textarea name="remark"  value="{{bookingOrder.remark}}" class="col-sm-12" maxlength="500"></textarea>
 						</div>
 					</div>
 					<div class="form-group" style="border-top:1px dotted #ccc;padding-top:20px;">
@@ -53,7 +54,7 @@
 						</div>
 						<label class="col-sm-1 control-label no-padding-right">已收:</label>
 						<div class="col-sm-2">
-							<input type="text" name="getedMoney" class="col-sm-12" value="{{bookingOrder.getedMoney}}" maxlength="9" />
+							<input type="text" name="getedMoney" class="col-sm-12 price" value="{{bookingOrder.getedMoney}}" maxlength="9" />
 						</div>
 						<label class="col-sm-1 control-label no-padding-right">收款方式:</label>
 						<div class="col-sm-2">
@@ -72,16 +73,7 @@
 						</div>
 						<label class="col-sm-1 control-label no-padding-right">已付:</label>
 						<div class="col-sm-2">
-							<input type="text" name="payedMoney" class="col-sm-12" value="{{bookingOrder.payedMoney}}" maxlength="9" />
-						</div>
-						<label class="col-sm-1 control-label no-padding-right">付款方式:</label>
-						<div class="col-sm-2">
-							<select name="payType" class="col-sm-12">
-								<option {{if bookingOrder.payType==0}}selected="selected"{{/if}} value="0">现金</option>
-								<option {{if bookingOrder.payType==1}}selected="selected"{{/if}} value="1">签单</option>
-								<option {{if bookingOrder.payType==2}}selected="selected"{{/if}} value="2">转账</option>
-								<option {{if bookingOrder.payType==3}}selected="selected"{{/if}} value="3">网付</option>
-							</select>
+							<input type="text" name="payedMoney" class="col-sm-12 sumPayedMoney price" readonly="readonly" value="{{bookingOrder.payedMoney}}" maxlength="9" />
 						</div>
 					</div>
 				</div>
@@ -116,6 +108,8 @@
 										<th class="th-border" width="110"> 销售单价</th>
 										<th class="th-border">成本</th>
 										<th class="th-border">应收</th>
+										<th class="th-border">已付</th>
+										<th class="th-border">付款方式</th>
 										<th class="th-border" style="width: 100px">操作</th>
 									</tr>
 								</thead>
@@ -139,7 +133,8 @@
 										</td>
 										<td>
 											<select name="level" class="col-sm-12 T-hotelStar">
-												<option selected="selected" value="1" {{if hotelList.hotel.level == 1}}selected="selected"{{/if}}>三星以下</option>
+											<option selected="selected" value="" {{if hotelList.hotel.level == 0}}selected="selected"{{/if}}>全部</option>
+												<option value="1">三星以下</option>
 												<option value="2" {{if hotelList.hotel.level == 2}}selected="selected"{{/if}}>三星</option>
 												<option value="3" {{if hotelList.hotel.level == 3}}selected="selected"{{/if}}>准四星</option>
 												<option value="4" {{if hotelList.hotel.level == 4}}selected="selected"{{/if}}>四星</option>
@@ -156,12 +151,22 @@
 											<input name="hotelRoom" value="{{if hotelList.hotelRoom != null}}{{hotelList.hotelRoom.type}}{{/if}}" type="text" class="col-sm-12 T-chooseHotelRoom bind-change"/>
 											<input name="hotelRoomId" type="hidden" value="{{if hotelList.hotelRoom != null}}{{hotelList.hotelRoom.id}}{{/if}}" />
 										</td>
-										<td><input name="days" value="{{hotelList.days}}" type="text" class="col-sm-12 T-action-blur" maxlength="4" /></td>
+										<td><input name="days" value="{{hotelList.days}}" type="text" class="col-sm-12 T-action-blur" maxlength="4" readonly="readonly" /></td>
 										<td><input name="roomCount" value="{{hotelList.roomCount}}" type="text" class="col-sm-12 T-action-blur" maxlength="5" /></td>
-										<td><input name="costPrice" value="{{hotelList.costPrice}}" type="text" class="col-sm-12 T-action-blur" style="width:55px;" maxlength="9" /><label class="col-sm-4 control-label" style="padding: 7px 0 0 0;width:25px;" >/天</label></td>
-										<td><input name="salePrice" value="{{hotelList.salePrice}}" type="text" class="col-sm-12 T-action-blur" style="width:55px;" maxlength="9" /><label class="col-sm-4 control-label" style="padding: 7px 0 0 0;width:25px;" >/天</label></td>
+										<td><input name="costPrice" value="{{hotelList.costPrice}}" type="text" class="col-sm-12 T-action-blur  price" style="width:55px;" maxlength="9" /><label class="col-sm-4 control-label" style="padding: 7px 0 0 0;width:25px;" >/天</label></td>
+										<td><input name="salePrice" value="{{hotelList.salePrice}}" type="text" class="col-sm-12 T-action-blur  price" style="width:55px;" maxlength="9" /><label class="col-sm-4 control-label" style="padding: 7px 0 0 0;width:25px;" >/天</label></td>
 										<td><input name="sumCostMoney" value="{{hotelList.sumCostMoney}}" readonly="readonly" type="text" class="col-sm-12"/></td>
 										<td><input name="sumNeedGetMoney" value="{{hotelList.sumNeedGetMoney}}" readonly="readonly" type="text" class="col-sm-12"/></td>
+										<td><input type="text" name="payedMoney" value="{{hotelList.payedMoney}}" class="col-sm-12 T-action-blur" maxlength="9"></td>
+										<td>
+											<select name="payType">
+												<option {{if hotelList.payType==0}}selected="selected"{{/if}} value="0">现金</option>
+												<option {{if hotelList.payType==1}}selected="selected"{{/if}} value="1">银行转账</option>
+												<option {{if hotelList.payType==2}}selected="selected"{{/if}} value="2">网上支付</option>
+												<option {{if hotelList.payType==3}}selected="selected"{{/if}} value="3">支票</option>
+												<option {{if hotelList.payType==4}}selected="selected"{{/if}} value="4">其它</option>
+											</select>
+										</td>
 										<td>
 											<a class="cursor T-action T-hotel-delete">删除</a>
 										</td>
@@ -198,6 +203,8 @@
 										<th class="th-border">成本</th>
 										<th class="th-border">应收</th>
 										<th class="th-border">订单号</th>
+										<th class="th-border">已付</th>
+										<th class="th-border">付款方式</th>
 										<th class="th-border" style="width: 100px">操作</th>
 									</tr>
 								</thead>
@@ -220,11 +227,21 @@
 											<input name="scenicItemId" value="{{if scenicList.scenicItem != null}}{{scenicList.scenicItem.id}}{{/if}}" type="hidden" />
 										</td>
 										<td><input name="roomCount" value="{{scenicList.roomCount}}" type="text" class="col-sm-12 T-action-blur" maxlength="5" /></td>
-										<td><input name="costPrice" value="{{scenicList.costPrice}}" type="text" class="col-sm-12 T-action-blur" maxlength="9" /></td>
-										<td><input name="salePrice" value="{{scenicList.salePrice}}" type="text" class="col-sm-12 T-action-blur" maxlength="9" /></td>
+										<td><input name="costPrice" value="{{scenicList.costPrice}}" type="text" class="col-sm-12 T-action-blur  price" maxlength="9" /></td>
+										<td><input name="salePrice" value="{{scenicList.salePrice}}" type="text" class="col-sm-12 T-action-blur  price" maxlength="9" /></td>
 										<td><input name="sumCostMoney" value="{{scenicList.sumCostMoney}}" type="text" readonly="readonly" class="col-sm-12"/></td>
 										<td><input name="sumNeedGetMoney" value="{{scenicList.sumNeedGetMoney}}" readonly="readonly" type="text" class="col-sm-12"/></td>
 										<td><input name="orderNumber" value="{{scenicList.orderNumber}}" type="text" class="col-sm-12" maxlength="50" /></td>
+										<td><input type="text" name="payedMoney" value="{{scenicList.payedMoney}}" class="col-sm-12 T-action-blur" maxlength="9"></td>
+										<td>
+											<select name="payType">
+												<option {{if scenicList.payType==0}}selected="selected"{{/if}} value="0">现金</option>
+												<option {{if scenicList.payType==1}}selected="selected"{{/if}} value="1">银行转账</option>
+												<option {{if scenicList.payType==2}}selected="selected"{{/if}} value="2">网上支付</option>
+												<option {{if scenicList.payType==3}}selected="selected"{{/if}} value="3">支票</option>
+												<option {{if scenicList.payType==4}}selected="selected"{{/if}} value="4">其它</option>
+											</select>
+										</td>
 										<td>
 											<a class="cursor T-action T-scenic-delete">删除</a>
 										</td>
@@ -264,6 +281,8 @@
 										<th class="th-border">销售单价</th>
 										<th class="th-border">成本</th>
 										<th class="th-border">应收</th>
+										<th class="th-border">已付</th>
+										<th class="th-border">付款方式</th>
 										<th class="th-border" style="width: 100px">操作</th>
 									</tr>
 								</thead>
@@ -295,10 +314,20 @@
 											</div>
 										</td>
 										<td><input name="roomCount" value="{{ticketList.roomCount}}" type="text" class="col-sm-12 T-action-blur" maxlength="5" /></td>
-										<td><input name="costPrice" value="{{ticketList.costPrice}}" type="text" class="col-sm-12 T-action-blur" maxlength="9" /></td>
-										<td><input name="salePrice" value="{{ticketList.salePrice}}" type="text" class="col-sm-12 T-action-blur" maxlength="9" /></td>
+										<td><input name="costPrice" value="{{ticketList.costPrice}}" type="text" class="col-sm-12 T-action-blur  price" maxlength="9" /></td>
+										<td><input name="salePrice" value="{{ticketList.salePrice}}" type="text" class="col-sm-12 T-action-blur  price" maxlength="9" /></td>
 										<td><input name="sumCostMoney" value="{{ticketList.sumCostMoney}}" readonly="readonly" type="text" class="col-sm-12"/></td>
 										<td><input name="sumNeedGetMoney" value="{{ticketList.sumNeedGetMoney}}" readonly="readonly" type="text" class="col-sm-12"/></td>
+										<td><input type="text" name="payedMoney" value="{{ticketList.payedMoney}}" class="col-sm-12 T-action-blur" maxlength="9"></td>
+										<td>
+											<select name="payType">
+												<option {{if ticketList.payType==0}}selected="selected"{{/if}} value="0">现金</option>
+												<option {{if ticketList.payType==1}}selected="selected"{{/if}} value="1">银行转账</option>
+												<option {{if ticketList.payType==2}}selected="selected"{{/if}} value="2">网上支付</option>
+												<option {{if ticketList.payType==3}}selected="selected"{{/if}} value="3">支票</option>
+												<option {{if ticketList.payType==4}}selected="selected"{{/if}} value="4">其它</option>
+											</select>
+										</td>
 										<td>
 											<a class="cursor T-action T-ticket-delete">删除</a>
 										</td>
@@ -336,6 +365,8 @@
 										<th class="th-border"> 销售单价</th>
 										<th class="th-border">成本</th>
 										<th class="th-border">应收</th>
+										<th class="th-border">已付</th>
+										<th class="th-border">付款方式</th>
 										<th class="th-border" style="width: 100px">操作</th>
 									</tr>
 								</thead>
@@ -366,10 +397,20 @@
 											<input name="busCompanyId" value="{{if busList.busCompany != null}}{{busList.busCompany.id}}{{/if}}" type="hidden" />
 										</td>
 										<td><input name="roomCount" value="{{busList.roomCount}}" type="text" class="col-sm-12 T-action-blur" maxlength="5" /></td>
-										<td><input name="costPrice" value="{{busList.costPrice}}" type="text" class="col-sm-12 T-action-blur" maxlength="9" /></td>
-										<td><input name="salePrice" value="{{busList.salePrice}}" type="text" class="col-sm-12 T-action-blur" maxlength="9" /></td>
+										<td><input name="costPrice" value="{{busList.costPrice}}" type="text" class="col-sm-12 T-action-blur  price" maxlength="9" /></td>
+										<td><input name="salePrice" value="{{busList.salePrice}}" type="text" class="col-sm-12 T-action-blur  price" maxlength="9" /></td>
 										<td><input name="sumCostMoney" value="{{busList.sumCostMoney}}" readonly="readonly" type="text" class="col-sm-12"/></td>
 										<td><input name="sumNeedGetMoney" value="{{busList.sumNeedGetMoney}}" readonly="readonly" type="text" class="col-sm-12"/></td>
+										<td><input type="text" name="payedMoney" value="{{busList.payedMoney}}" class="col-sm-12 T-action-blur" maxlength="9"></td>
+										<td>
+											<select name="payType">
+												<option {{if busList.payType==0}}selected="selected"{{/if}} value="0">现金</option>
+												<option {{if busList.payType==1}}selected="selected"{{/if}} value="1">银行转账</option>
+												<option {{if busList.payType==2}}selected="selected"{{/if}} value="2">网上支付</option>
+												<option {{if busList.payType==3}}selected="selected"{{/if}} value="3">支票</option>
+												<option {{if busList.payType==4}}selected="selected"{{/if}} value="4">其它</option>
+											</select>
+										</td>
 										<td>
 											<a class="cursor T-action T-bus-delete">删除</a>
 										</td>

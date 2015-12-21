@@ -12,35 +12,35 @@
 				<td colspan="8" class="HeadManage" style="text-align: left">代订信息</td>
 			</tr> -->
 			<tr>
-				<td class="style-myself">同行客户：</td>
-				<td style="text-align: left">{{if bookingOrder.partnerAgency != null}}{{bookingOrder.partnerAgency.travelAgencyName}}{{/if}}</td>
-				<td class="style-myself">联系人：</td>
-				<td style="text-align: left">{{if bookingOrder.partnerAgencyContact != null}}{{bookingOrder.partnerAgencyContact.contactRealname}}{{/if}}</td>
-				<td class="style-myself">联系电话：</td>
-				<td style="text-align: left">{{if bookingOrder.partnerAgencyContact != null}}{{bookingOrder.partnerAgencyContact.contactMobileNumber}}{{/if}}</td>
+				<td class="style-myself">同行客户 </td>
+				<td style="text-align: left;padding-left: 6px;">{{if bookingOrder.partnerAgency != null}}{{bookingOrder.partnerAgency.travelAgencyName}}{{/if}}</td>
+				<td class="style-myself">联系人 </td>
+				<td style="text-align: left;padding-left: 6px;">{{if bookingOrder.partnerAgencyContact != null}}{{bookingOrder.partnerAgencyContact.contactRealname}}{{/if}}</td>
+				<td class="style-myself">联系电话 </td>
+				<td style="text-align: left;padding-left: 6px;">{{if bookingOrder.partnerAgencyContact != null}}{{bookingOrder.partnerAgencyContact.contactMobileNumber}}{{/if}}</td>
 
 			</tr>
 			<tr>
-				<td class="style-myself">游客：</td> 
-				<td style="text-align: left" colspan="2">{{bookingOrder.touristRealname}}</td>
-				<td class="style-myself">游客电话：</td>
-				<td style="text-align: left" colspan="4">{{bookingOrder.touristMobileNumber}}</td>
+				<td class="style-myself">游客 </td> 
+				<td style="text-align: left;padding-left: 6px;" colspan="2">{{bookingOrder.touristRealname}}</td>
+				<td class="style-myself">游客电话 </td>
+				<td style="text-align: left;padding-left: 6px;" colspan="4">{{bookingOrder.touristMobileNumber}}</td>
 			</tr>
 			<tr>
-				<td class="style-myself">备注：</td>
-				<td style="text-align: left" colspan="5">{{bookingOrder.remark}}</td>
+				<td class="style-myself">备注 </td>
+				<td style="text-align: left;padding-left: 6px;" colspan="5">{{bookingOrder.remark}}</td>
 			</tr>
 		</table>
 
 		<table class="whereQ whereTwo" style="width: 100%;margin-top: 10px">
 
 			<tr>
-				<td class="style-myself">总应收：</td>
-				<td style="text-align: left">{{bookingOrder.sumNeedGetMoney}}</td>
-				<td class="style-myself">已收：</td>
-				<td style="text-align: left">{{bookingOrder.getedMoney}}</td>
-				<td class="style-myself">收款方式：</td>
-				<td style="text-align: left">	{{if bookingOrder.getType==0}}
+				<td class="style-myself">总应收 </td>
+				<td style="text-align: left;padding-left: 6px;">{{bookingOrder.sumNeedGetMoney}}</td>
+				<td class="style-myself">已收 </td>
+				<td style="text-align: left;padding-left: 6px;">{{bookingOrder.getedMoney}}</td>
+				<td class="style-myself">收款方式 </td>
+				<td style="text-align: left;padding-left: 6px;">	{{if bookingOrder.getType==0}}
 					现金
 					{{else if bookingOrder.getType==1}}
 					签单
@@ -51,12 +51,12 @@
 					{{/if}}</td>
 			</tr>
 			<tr>
-				<td class="style-myself">总成本：</td>
-				<td style="text-align: left" >{{bookingOrder.sumCostMoney}}</td>
-				<td class="style-myself">已付：</td>
-				<td style="text-align: left" >{{bookingOrder.payedMoney}}</td>
-				<td class="style-myself">付款方式：</td>
-				<td style="text-align: left" >{{if bookingOrder.payType==0}}
+				<td class="style-myself">总成本 </td>
+				<td style="text-align: left;padding-left: 6px;" >{{bookingOrder.sumCostMoney}}</td>
+				<td class="style-myself">已付 </td>
+				<td style="text-align: left;padding-left: 6px;" >{{bookingOrder.payedMoney}}</td>
+				<td class="style-myself">付款方式 </td>
+				<td style="text-align: left;padding-left: 6px;" >{{if bookingOrder.payType==0}}
 					现金
 					{{else if bookingOrder.payType==1}}
 					签单
@@ -91,6 +91,8 @@
 										<th class="th-border">销售单价</th>
 										<th class="th-border">成本</th>
 										<th class="th-border">应收</th>
+										<th class="th-border">已付</th>
+										<th class="th-border">付款方式</th>
 									</tr>
 								</thead>
 								<tbody class="hotelBookingList">{{each bookingOrder.bookingHotelList as hotelList}}
@@ -122,6 +124,16 @@
 										<td>{{hotelList.salePrice}}/天</td>
 										<td>{{hotelList.sumCostMoney}}</td>
 										<td>{{hotelList.sumNeedGetMoney}}</td>
+										<td>{{hotelList.payedMoney}}</td>
+										<td>{{if hotelList.payType==0}}
+												现金
+												{{else if hotelList.payType==1}}
+												签单
+												{{else if hotelList.payType==2}}
+												转账
+												{{else}}
+												网付
+												{{/if}}</td>
 									</tr>{{/each}}
 								</tbody>
 							</table>
@@ -150,6 +162,8 @@
 										<th class="th-border">成本</th>
 										<th class="th-border">应收</th>
 										<th class="th-border">订单号</th>
+										<th class="th-border">已付</th>
+										<th class="th-border">付款方式</th>
 									</tr>
 								</thead>
 								<tbody class="scenicBookingList">{{each bookingOrder.bookingScenicList as scenicList}}
@@ -163,6 +177,16 @@
 										<td>{{scenicList.sumCostMoney}}</td>
 										<td>{{scenicList.sumNeedGetMoney}}</td>
 										<td>{{scenicList.orderNumber}}</td>
+										<td>{{scenicList.payedMoney}}</td>
+										<td>{{if scenicList.payType==0}}
+												现金
+												{{else if scenicList.payType==1}}
+												签单
+												{{else if scenicList.payType==2}}
+												转账
+												{{else}}
+												网付
+												{{/if}}</td>
 									</tr>{{/each}}
 								</tbody>
 							</table>
@@ -194,6 +218,8 @@
 										<th class="th-border">销售单价</th>
 										<th class="th-border">成本</th>
 										<th class="th-border">应收</th>
+										<th class="th-border">已付</th>
+										<th class="th-border">付款方式</th>
 									</tr>
 								</thead>
 								<tbody class="ticketBookingList">{{each bookingOrder.bookingTicketList as ticketList}}
@@ -220,6 +246,16 @@
 										<td>{{ticketList.salePrice}}</td>
 										<td>{{ticketList.sumCostMoney}}</td>
 										<td>{{ticketList.sumNeedGetMoney}}</td>
+										<td>{{ticketList.payedMoney}}</td>
+										<td>{{if ticketList.payType==0}}
+												现金
+												{{else if ticketList.payType==1}}
+												签单
+												{{else if ticketList.payType==2}}
+												转账
+												{{else}}
+												网付
+												{{/if}}</td>
 									</tr>{{/each}}
 								</tbody>
 							</table>
@@ -250,6 +286,8 @@
 										<th class="th-border">销售单价</th>
 										<th class="th-border">成本</th>
 										<th class="th-border">应收</th>
+										<th class="th-border">已付</th>
+										<th class="th-border">付款方式</th>
 									</tr>
 								</thead>
 								<tbody class="busBookingList">{{each bookingOrder.bookingBusCompanieList as busList}}
@@ -264,6 +302,16 @@
 										<td>{{busList.salePrice}}</td>
 										<td>{{busList.sumCostMoney}}</td>
 										<td>{{busList.sumNeedGetMoney}}</td>
+										<td>{{busList.payedMoney}}</td>
+										<td>{{if busList.payType==0}}
+												现金
+												{{else if busList.payType==1}}
+												签单
+												{{else if busList.payType==2}}
+												转账
+												{{else}}
+												网付
+												{{/if}}</td>
 									</tr>{{/each}}
 								</tbody>
 							</table>

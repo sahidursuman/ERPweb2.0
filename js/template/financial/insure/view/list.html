@@ -1,76 +1,61 @@
-<div class="row Financialinsurance globalAdd" >
-    <div class="form-horizontal search-area">    
+<div class="row">
+    <div class="form-horizontal T-search-area  search-area">    
         <div class="form-group" >      
-          <label class="control-label pull-left" style="margin-left: 15px">保险公司：</label>
-                <select  class="col-xs-12" name="insuranceId" style="width: 220px">
-                    <option value ="">全部</option>
-                    {{each insuranceCompanyNameListNew as insurance index}}
-						<option value="{{insurance.id}}" {{if searchParam.insuranceId == insurance.id}}selected="selected"{{/if}}>{{insurance.name}}</option>
-					{{/each}}
-                </select>        
-                <label class="control-label pull-left marginLeft-30" >账期：</label>
-				<select class="col-sm-1 " name="year" >
-					{{each yearList as year index}}
-						<option value="{{year.value}}" {{if searchParam.year == year.value}}selected="selected"{{/if}}>{{year.value}}</option>
-					{{/each}}
-				</select>
-				<select class="col-sm-1 marginLeft-30" name="month" >
-				    <option value ="">全部</option>
-					{{each monthList as month index}}
-						<option value="{{month.value}}" {{if searchParam.month == month.value}}selected="selected"{{/if}}>{{month.value}}月</option>
-					{{/each}}
-				</select>
-            <button class=" btn-sm marginLeft-30  btn-insurance-search search-btn " > <i class="ace-icon fa fa-search"></i> 搜索 </button> </div>
+            <label style="margin-left:15px;">保险公司：</label>
+            <input type="text" class="T-chooseInsure" name="insuranceName" value="{{if searchParam.insuranceName == ""}}全部{{else}}{{searchParam.insuranceName}}{{/if}}" />
+            <input type="hidden" name="insuranceId" value="{{searchParam.insuranceId}}" />
+
+            <label class="marginLeft-30">账期：</label>
+            <input class="date-picker" name="startDate" placeholder="开始日期" type="text" value="{{searchParam.startDate | dateFormat:'yyyy-MM-dd'}}" style="width:100px;" />   
+            <label>&nbsp;至&nbsp;</label>
+            <input class="date-picker" name="endDate" placeholder="结束日期" type="text" value="{{searchParam.endDate | dateFormat:'yyyy-MM-dd'}}" style="width:100px;" />   
+
+            <button class="btn-sm marginLeft-30 T-search search-btn">
+                <i class="ace-icon fa fa-search"></i> 搜索 
+            </button> 
+        </div>
     </div>
     <div class="row insuranceList">
         <div class="col-xs-12">
             <table class="table table-striped table-bordered table-hover T-showHighLight">
                 <thead>
-                <tr class="bg-blur">
-                    <th>保险公司</th>
-                    <th>总账面应付</th>
-                    <th>总实际应付</th>
-                    <th>总实际已付</th>
-                    <th>总账面未付</th>
-                    <th>总实际未付</th>
-                    <th>对账进度</th>
-                    <th>操作</th>
-                </tr>
+                    <tr class="bg-blur" >
+                        <th>保险公司</th>
+                        <th>账面应付</th>
+                        <th>结算金额</th>
+                        <th>已付金额</th>
+                        <th>未付金额</th>
+                        <th>对账进度</th>
+                        <th>付款进度</th>
+                        <th>操作</th>
+                    </tr>
                 </thead>
-
-                <tbody>
-                {{each financialInsuranceSettlementList as insurance}}
-                <tr>
-                    <td>{{insurance.insuranceCompanyName}}</td>
-                    <td>{{insurance.sumNeedPayMoney}}</td>
-                    <td>{{insurance.sumRealNeedPayMoney}}</td>
-                    <td>{{insurance.sumRealPayedMoney}}</td>
-                    <td>{{insurance.sumUnPayedMoney}}</td>
-                    <td>
-                    	<span style="color:red">{{insurance.sumRealUnPayedMoney}}</span>
+                <tbody class="T-list">
+                {{each financialInsuranceList as rs}}
+                <tr data-id="{{rs.insuranceId}}" data-name="{{rs.insuranceName}}">
+                    <td>{{if rs.insuranceName == null || rs.insuranceName == ""}}-{{else}}{{rs.insuranceName}}{{/if}}</td>
+                    <td>{{rs.sumNeedPayMoney}}</td>
+                    <td>{{rs.sumSettlementMoney}}</td>
+                    <td>{{rs.sumPayedMoney}}</td>
+                    <td><span {{if rs.sumUnPayedMoney != 0}}style="color:red"{{/if}}>{{rs.sumUnPayedMoney}}</span></td>
+                    <td>{{if rs.allCheckCount != rs.checkedCount}}
+                            <span style="color:#ff9900"> {{rs.checkedCount}}{{"/"}}{{rs.allCheckCount}}</span>
+                        {{/if}}
+                        {{if rs.allCheckCount == rs.checkedCount}}
+                            <span style="color:green"> {{rs.checkedCount}}{{"/"}}{{rs.allCheckCount}}</span>
+                        {{/if}}
                     </td>
-                    <td >
-	                    {{if insurance.allCount != insurance.checkedCount}}
-	                      <span style="color:#ff9900"> {{insurance.checkedCount}}{{"/"}}{{insurance.allCount}}</span>
-	                    {{/if}}
-	                    {{if insurance.allCount == insurance.checkedCount}}
-	                      <span style="color:green"> {{insurance.checkedCount}}{{"/"}}{{insurance.allCount}}</span>
-	                    {{/if}}
+                    <td>{{if rs.allPayCount != rs.payedCount}}
+                            <span style="color:#ff9900"> {{rs.payedCount}}{{"/"}}{{rs.allPayCount}}</span>
+                        {{/if}}
+                        {{if rs.allPayCount == rs.payedCount}}
+                            <span style="color:green"> {{rs.payedCount}}{{"/"}}{{rs.allPayCount}}</span>
+                        {{/if}}
                     </td>
                     <td>
-                        <a data-entity-id="{{insurance.insuranceId}}" data-entity-insuranceCompanyName="{{insurance.insuranceCompanyName}}" data-entity-year="{{searchParam.year}}" data-entity-month="{{searchParam.month}}" class="cursor R-right btn-insurance-check" data-right="1270002">
-                            	 对账
-                        </a>
+                        <a class="cursor R-right T-check T-option  " data-right="1270002|1270005">对账</a>
                         <label class="cursor R-right" data-right="1270002"><a class="R-right" data-right="1270003"> |</a></label>
-                        <a data-entity-id="{{insurance.insuranceId}}" data-entity-insuranceCompanyName="{{insurance.insuranceCompanyName}}" data-entity-year="{{searchParam.year}}"
-                                {{if searchParam.month == ""}}
-                                 	 data-entity-startMonth=1 data-entity-endMonth=12 
-                                  {{else}}
-                                 	 data-entity-startMonth="{{searchParam.month}}" data-entity-endMonth="{{searchParam.month}}" 
-                                {{/if}}
-                        		class="cursor R-right btn-insurance-balance" data-right="1270003">
-                           		 结算
-                        </a>
+                        <a class="cursor T-option T-clear R-right" data-right="1270003">付款</a>
                     </td>
                 </tr>
                 {{/each}}
@@ -78,7 +63,7 @@
             </table>
             <div class="row pageMode">
                 <div class="col-xs-6">
-                    <small>共计 {{recordSize}} 条记录</small>
+                    <small>共计{{searchParam.recordSize}}条记录</small>
                 </div>
                 <div class="col-xs-6">
                     <div class="dataTables_paginate paging_simple_numbers T-pagenation">

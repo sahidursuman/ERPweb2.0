@@ -68,7 +68,7 @@
 	 */
 	IndexFun.checkLogin = function() {
 		$.ajax({
-			url:""+APP_ROOT+"base.do?method=checkLogin",
+			url: APP_ROOT+"base.do?method=checkLogin",
 			type:"GET",
 			success:function(data){
 				IndexData.userInfo = data;
@@ -139,7 +139,7 @@
 				var $item = $(e.target).closest('li');
 				$tabList.data('menu-item', $item)
 				$('#tab-menu').find('.T-close').toggleClass('hidden', !$item.find('.tab-close').length);
-				return true;
+				return !!$item.length;
 			},
 			onItem: function (context, e) {
 			  	var $menuItem = $(e.target), $item = $tabList.data('menu-item');

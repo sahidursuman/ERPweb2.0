@@ -59,7 +59,7 @@ define(function(require, exports) {
 				var result = showDialog(data);
 				if(result){
 					var html = listTemplate(data);
-					addTab(menuKey,"保险公司",html);
+					Tools.addTab(menuKey,"保险公司",html);
 
 					insurance.$tab = $("#tab-resource_insurance-content");
 					insurance.$searchArea = insurance.$tab.find(".T-search-area");

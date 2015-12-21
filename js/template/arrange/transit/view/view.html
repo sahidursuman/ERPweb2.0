@@ -11,7 +11,7 @@
 				<td class="style-myself">出游日期：</td>
 				<td style="text-align: left;padding: 0px 0px 0px 10px" colspan="3">{{if touristGroup.startTime != null}}{{touristGroup.startTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
 				<td class="style-myself">人数合计：</td>
-				<td style="text-align: left;padding: 0px 0px 0px 10px" colspan="3">大人{{touristGroup.adultCount}}小孩{{touristGroup.childCount}}</td>
+				<td style="text-align: left;padding: 0px 0px 0px 10px" colspan="3">{{touristGroup.adultCount}}大{{touristGroup.childCount}}小</td>
 			</tr>
 		</table>
 		<div class="form-group" style="margin-left: 23px;margin-top: 10px">
@@ -64,7 +64,7 @@
 									</h5>
 								<div class="widget-body">
 									<div class="widget-main no-padding">
-										<table class="table table-striped table-bordered table-hover busListTable margin-top row" >
+										<table class="table table-striped table-bordered table-hover busListTable margin-top" >
 											<thead>
 												<tr>
 													<th class="th-border">车队</th>
@@ -83,7 +83,7 @@
 												</tr>
 											</thead>
 											<tbody>{{each receiveGroup.outBusList as outBus}}
-													{{if outBus.id != null && outBus.busCompany != null && outBus.bus != null && outBus.driver != null}}
+													{{if outBus.id != null && outBus.busCompany != null}}
 												<tr>
 													<td>{{if outBus.busCompany != null}}{{outBus.busCompany.companyName}}{{/if}}</td>
 													<td>{{if outBus.bus != null}}{{outBus.bus.licenseNumber}}{{/if}}</td>
@@ -249,7 +249,7 @@
 													<th class="th-border">联系人</th>
 													<th class="th-border">联系电话</th>
 													<th class="th-border">类型</th>
-													<th class="th-border">餐标</th>
+													<th class="th-border">餐标<span style="font-size:12px;">(元/人)</span></th>
 													<th class="th-border">人数</th>
 													<th class="th-border">优惠</th>
 													<th class="th-border">应付款</th>
@@ -361,7 +361,7 @@
 												</tr>
 											</thead>
 											<tbody>{{each bus as outBus}}
-													{{if outBus.id != null && outBus.busCompany != null && outBus.bus != null && outBus.driver != null}}
+													{{if outBus.id != null && outBus.busCompany != null}}
 												<tr>
 													<td>{{if outBus.busCompany != null}}{{outBus.busCompany.companyName}}{{/if}}</td>
 													<td>{{if outBus.bus != null}}{{outBus.bus.licenseNumber}}{{/if}}</td>
@@ -583,7 +583,7 @@
 													<th class="th-border">联系人</th>
 													<th class="th-border">联系电话</th>
 													<th class="th-border">类型</th>
-													<th class="th-border">餐标</th>
+													<th class="th-border">餐标<span style="font-size:12px;">(元/人)</span></th>
 													<th class="th-border">人数</th>
 													<th class="th-border">优惠</th>
 													<th class="th-border">应付款</th>

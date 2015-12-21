@@ -27,10 +27,8 @@
 			<td class="styleOne-self">{{selfpay.faxNumber}}</td>
 		</tr>
 		<tr>
-			<td class="style-myselfOne">人数返佣(元/人)：</td>
-			<td class="styleOne-self">{{selfpay.customerRebateMoney}}</td>
-			<td class="style-myself">商家所在省市：</td>
-			<td class="styleOne-self">{{if selfpay.province != null}}
+			<td class="style-myself">所在地区：</td>
+			<td class="styleOne-self" colspan="3">{{if selfpay.province != null}}
 				{{selfpay.province.name}}
 				{{/if}}
 				{{if selfpay.city != null}}
@@ -54,14 +52,15 @@
 <form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
 	<table class="whereQ whereTwo tableWidthImp">
 		<tr>
-			<td colspan="8" class="HeadManage" style="text-align: left">商品列表</td>
+			<td colspan="9" class="HeadManage" style="text-align: left">项目价格列表</td>
 		</tr>
 		<tr>
-			<td class="style-myself">商品名称</td>
+			<td class="style-myself">项目名称</td>
 			<td class="style-myself">针对客源</td>
 			<td class="style-myself">时间范围</td>
-			<td class="style-myself">内部价格（元）</td>
 			<td class="style-myself">市场价格（元）</td>
+			<td class="style-myself">人数返佣（人/元）</td>
+			<td class="style-myself">内部价格（元）</td>
 			<td class="style-myself">导佣比例(%)</td>
 			<td class="style-myself">社佣比例(%)</td>
 			<td>备注</td>
@@ -88,12 +87,7 @@
 				</div>
 				{{/each}}
 			</td>
-			<td class="no-padding">
-				{{shopPolicy.normalInnerPrice}}<br>
-				{{each shopPolicy.SelfPayRebateList as hopTimeArea}}
-					{{hopTimeArea.price}}<br>
-				{{/each}}
-			</td>
+			
 
 			<td class="no-padding">
 				{{shopPolicy.normalMarketPrice}}<br>
@@ -101,6 +95,23 @@
 					{{hopTimeArea.marketPrice}}<br>
 				{{/each}}
 			</td>
+
+
+			<td>
+			    {{shopPolicy.customerRebateMoney}}<br>
+				{{each shopPolicy.SelfPayRebateList as customer}}
+					{{customer.customerRebateMoney}}<br>
+				{{/each}}
+			</td>
+
+			<td class="no-padding">
+				{{shopPolicy.normalInnerPrice}}<br>
+				{{each shopPolicy.SelfPayRebateList as hopTimeArea}}
+					{{hopTimeArea.price}}<br>
+				{{/each}}
+			</td>
+
+			
 			<td class="no-padding">
 				<label class="col-sm-12 control-label center">
 					{{shopPolicy.normalGuideRate*100 | toFixed}}

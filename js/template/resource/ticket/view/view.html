@@ -3,7 +3,7 @@
 		<table class="whereQ" style="width: 96%">
 
 			<tr>
-				<td class="style-myself">票务公司名称：</td>
+				<td class="style-myself">票务公司：</td>
 				<td class="styleOne-self">{{ticket.name}}</td>
 				<td class="style-myself">是否启用：</td>
 				<td class="styleOne-self">{{if ticket.status == 0}}
@@ -26,7 +26,7 @@
 			</tr>
 
 			<tr>
-				<td class="style-myself style-myselfOne">票务公司所在省市：</td>
+				<td class="style-myself style-myselfOne">所在地区：</td>
 				<td class="styleOne-self" colspan="3">{{if ticket.province != null}}
 					{{ticket.province.name}}
 					{{/if}}
@@ -42,7 +42,7 @@
 				<td class="styleOne-self" colspan="3">{{ticket.street}}</td>
 			</tr>
 			<tr>
-				<td class="style-myself">商家简介：</td>
+				<td class="style-myself">公司简介：</td>
 				<td class="styleOne-self" colspan="3">{{ticket.remark}}</td>
 			</tr>
 		</table>

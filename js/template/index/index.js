@@ -2,6 +2,7 @@ define(function(require, exports) {
     var messageTemplate = require("./view/message"),
         viewTemplate = require("../system/message/view/view"),
         settingsTemplate = require('./view/userSettings');
+        
     var index = {
             /**
              * 初始化首页模块
@@ -11,7 +12,10 @@ define(function(require, exports) {
                 that.init_event();
                 that.init_message();
                 that.bind_message();
-                index.MessagePrompt({bus: IndexData.userInfo.unReadBusCompanyOffer || 0, hotel: IndexData.userInfo.unReadHotelOffer || 0});
+                index.MessagePrompt({
+                    bus: IndexData.userInfo.unReadBusCompanyOffer || 0,
+                    hotel: IndexData.userInfo.unReadHotelOffer || 0
+                });
             },
             /**
              * 绑定处理方法
@@ -36,12 +40,16 @@ define(function(require, exports) {
                 // 绑定车队询价消息
                 channel.bind('offer_bus_company', function(data) {
                     console.info(data);
-                    index.MessagePrompt({bus: data.count || 0});
+                    index.MessagePrompt({
+                        bus: data.count || 0
+                    });
                 });
                 // 绑定酒店询价消息
                 channel.bind('offer_hotel', function(data) {
                     console.info(data);
-                    index.MessagePrompt({hotel: data.count || 0});
+                    index.MessagePrompt({
+                        hotel: data.count || 0
+                    });
                 });
             },
 
@@ -55,18 +63,18 @@ define(function(require, exports) {
             },
             message: function() {
                 $.ajax({
-                    url: "" + APP_ROOT + "back/message.do?method=listMessage&token=" + $.cookie("token") + "&menuKey=&operation=self",
+                    url: KingServices.build_url('message', 'listMessage'),
                     type: "POST",
                     success: function(data) {
                         var result = showDialog(data);
                         if (result) {
-                            if (data.unReadMsgCount ==0) {
-                                    $("#unReadCountStr").text("当前没有未读消息");
-                                    // data.unReadMsgCount = 0;
+                            if (data.unReadMsgCount == 0) {
+                                $("#unReadCountStr").text("当前没有未读消息");
+                                // data.unReadMsgCount = 0;
 
-                                } else {
-                                    $("#unReadCountStr").text(data.unReadMsgCount + "  条新消息");
-                                }
+                            } else {
+                                $("#unReadCountStr").text(data.unReadMsgCount + "  条新消息");
+                            }
                             $("#msgCountSpan").text(data.unReadMsgCount);
                             var html = messageTemplate(data);
                             $("#msgContainer .msgList").html(html);
@@ -77,28 +85,18 @@ define(function(require, exports) {
                             $("#msgContainer .msgList .msg-intro").click(function() {
                                 var id = $(this).attr("data-entity-id");
                                 $.ajax({
-                                    url: "" + APP_ROOT + "back/message.do?method=readMessage&token=" + $.cookie("token") + "&menuKey=&operation=self",
+                                    url: KingServices.build_url('message', 'readMessage'),
                                     type: "POST",
                                     data: "id=" + id,
-                                    dataType: "json",
-                                    beforeSend: function() {
-                                        globalLoadingLayer = layer.open({
-                                            type: 3
-                                        });
-                                    },
                                     success: function(data) {
-                                        layer.close(globalLoadingLayer);
-                                        console.log(data);
-                                        var html = viewTemplate(data);
                                         layer.open({
                                             type: 1,
                                             title: "查看信息",
                                             skin: 'layui-layer.-rim', //加上边框
                                             area: '600px', //宽高
                                             zIndex: 1028,
-                                            content: html,
+                                            content: viewTemplate(data),
                                             scrollbar: false, // 推荐禁用浏览器外部滚动条
-                                            success: function() {}
                                         });
                                     }
                                 });
@@ -152,9 +150,8 @@ define(function(require, exports) {
      * 询价消息提示控件
      * @param {object} data { bus: 5, hotel: 2}.只会传递其中一个值，不需要修改另外一个值
      */
-    
-    var html = '<div class="newMessage-prompt"><a class="T-item T-bus"> <i class="fa fa-car" style="font-size: 21px;"></i><span class="T-bus-counter badge badge-important newsMoreT">0</span></a>'
-            + '<a class="T-item T-hotel" style="display: inline-block;margin-top:30px;"><i class="fa fa-home" style="font-size: 25px;margin-top: 20px"></i><span class="T-hotel-counter badge badge-important newsMore">0</span></a></div>';
+
+    var html = '<div class="newMessage-prompt"><a class="T-item T-bus"> <i class="fa fa-car" style="font-size: 21px;"></i><span class="T-bus-counter badge badge-important newsMoreT">0</span></a>' + '<a class="T-item T-hotel" style="display: inline-block;margin-top:30px;"><i class="fa fa-home" style="font-size: 25px;margin-top: 20px"></i><span class="T-hotel-counter badge badge-important newsMore">0</span></a></div>';
     index.MessagePrompt = function(data) {
         var $messager = $('.newMessage-prompt');
 
@@ -164,64 +161,67 @@ define(function(require, exports) {
 
                 // 绑定hover
                 $messager.find('.T-item').hover(
-                function() {
-                    var $that = $(this), url, keys, target;
-                    
-                    $that.data('focus-in', true);
-                    if ($that.hasClass('T-bus')) {
-                        url = KingServices.build_url('busInquiry', 'listUnReadBusCompanyOffer');
-                        keys = ['busCompanyOfferListJson', 'busComnpany', 'companyName'];
-                        target = 'T-bus';
-                    } else if ($that.hasClass('T-hotel')) {
-                        url = KingServices.build_url('hotelInquiry', 'listUnReadHotelOffer');
-                        keys = ['hotelOfferListJson', 'hotel', 'name'];
-                        target = 'T-hotel';
-                    }
-                    if (!$that.data('isSentAjax') && !!url) {
-                        $.ajax({
-                            url: url,
-                            type: 'post',
-                            showLoading: false
-                        })
-                        .done(function(data) {
-                            console.info(data);
-                            if (data.success == 1) {
-                                var str = [], list = JSON.parse(data[keys[0]] || false);
+                    function() {
+                        var $that = $(this),
+                            url, keys, target;
 
-                                if (!!list)  {
-                                    for (var i =0, len = list.length, name, qId, res, tmp; i < len ; i ++)  {
-                                        tmp = list[i];
-                                        name = tmp[keys[1]][keys[2]];
-                                        qId = tmp.quoteId;
-                                        res = tmp.result;
-                                        str.push('<li class="list-group-item boxLiStyle">'+ name + (res == 1? '已同意': (res == -1?'已拒绝': '')) +
-                                            ', <a class="T-view-quote" data-target="'+ target +'" data-quote-id="'+ qId +'">查看</a></li>');
+                        $that.data('focus-in', true);
+                        if ($that.hasClass('T-bus')) {
+                            url = KingServices.build_url('busInquiry', 'listUnReadBusCompanyOffer');
+                            keys = ['busCompanyOfferListJson', 'busComnpany', 'companyName'];
+                            target = 'T-bus';
+                        } else if ($that.hasClass('T-hotel')) {
+                            url = KingServices.build_url('hotelInquiry', 'listUnReadHotelOffer');
+                            keys = ['hotelOfferListJson', 'hotel', 'name'];
+                            target = 'T-hotel';
+                        }
+                        if (!$that.data('isSentAjax') && !!url) {
+                            $.ajax({
+                                    url: url,
+                                    type: 'post',
+                                    showLoading: false
+                                })
+                                .done(function(data) {
+                                    console.info(data);
+                                    if (data.success == 1) {
+                                        var str = [],
+                                            list = JSON.parse(data[keys[0]] || false);
+
+                                        if (!!list) {
+                                            for (var i = 0, len = list.length, name, qId, res, tmp; i < len; i++) {
+                                                tmp = list[i];
+                                                name = tmp[keys[1]][keys[2]];
+                                                qId = tmp.quoteId;
+                                                res = tmp.result;
+                                                str.push('<li class="list-group-item boxLiStyle">' + name + (res == 1 ? '已同意' : (res == -1 ? '已拒绝' : '')) +
+                                                    ', <a class="T-view-quote" data-target="' + target + '" data-quote-id="' + qId + '">查看</a></li>');
+                                            }
+
+                                            if (len) {
+                                                str = '<div class="MessagePrompt-box"><ul class="list-group">' + str.join('') + '</ul></div>';
+                                            } else {
+                                                str = '';
+                                            }
+
+                                            $that.data('html', str);
+                                            Tools.descToolTip($that, 2, 'left');
+
+                                            var action = 'hide';
+
+                                            if ($that.data('focus-in')) {
+                                                action = 'show';
+                                            }
+                                            $that.popover(action);
+                                        }
                                     }
 
-                                    if (len) {
-                                        str = '<div class="MessagePrompt-box"><ul class="list-group">'+ str.join('') +'</ul></div>';
-                                    } else {
-                                        str = '';
-                                    }
-
-                                    $that.data('html', str);
-                                    Tools.descToolTip($that, 2, 'left');
-
-                                    var action = 'hide';
-
-                                    if ($that.data('focus-in')) {
-                                        action = 'show';
-                                    }
-                                    $that.popover(action);
-                                }
-                            }
-
-                            $that.data('isSentAjax', true);
-                        });
-                    }
-                }, function() {
-                    $(this).data('focus-in', false);
-                });
+                                    $that.data('isSentAjax', true);
+                                });
+                        }
+                    },
+                    function() {
+                        $(this).data('focus-in', false);
+                    });
 
                 // 绑定查看事件
                 var $tip = Tools.$descContainer;
@@ -229,24 +229,27 @@ define(function(require, exports) {
                 if ($tip.length) {
                     $tip.on('click', '.T-view-quote', function(event) {
                         event.preventDefault();
-                        var $that = $(this), id = $that.data('quote-id'), 
+                        var $that = $(this),
+                            id = $that.data('quote-id'),
                             target = $that.data('target'),
-                            count = 0;  //target: T-hotel or T-bus
+                            count = 0; //target: T-hotel or T-bus
 
                         // 查看询价                    
-                        seajs.use(ASSETS_ROOT + modalScripts.arrange_quote,function(module){
-                            module.updateQuoteToOffer(id,target);  
+                        seajs.use(ASSETS_ROOT + modalScripts.arrange_quote, function(module) {
+                            module.updateQuoteToOffer(id, target);
                         });
                         // 验证消息条数
                         $that.closest('ul').children('li').each(function(index, el) {
                             if ($(this).children('a').data('quote-id') == id) {
-                                count ++;
+                                count++;
                             }
                         });
 
-                        var $target = $messager.find('.'+ target), curr = $target.find('span').text(), needHide = true,
+                        var $target = $messager.find('.' + target),
+                            curr = $target.find('span').text(),
+                            needHide = true,
                             inAll = curr - count;
-                            $target.find('span').text(inAll),
+                        $target.find('span').text(inAll),
                             $tipHtml = $($target.data('html'));
 
                         // remove this item content
@@ -257,10 +260,10 @@ define(function(require, exports) {
                             }
                         });
                         // 修正提示内容
-                        var newHtml =  $tipHtml.prop('outerHTML');
-                        $target.data('html', newHtml);  // firefox 可能存在兼容性问题
+                        var newHtml = $tipHtml.prop('outerHTML');
+                        $target.data('html', newHtml); // firefox 可能存在兼容性问题
                         if (inAll > 0) {
-                            $target.data('bs.popover').options.content = newHtml;                        
+                            $target.data('bs.popover').options.content = newHtml;
                         } else {
                             // 为零时
                             $target.popover('destroy');
@@ -288,22 +291,22 @@ define(function(require, exports) {
                 $messager.removeClass('hidden');
             }
             if (data.bus != undefined) {
-                $messager.find('.T-bus-counter').text(data.bus).closest('.T-item').data('isSentAjax',false);
+                $messager.find('.T-bus-counter').text(data.bus).closest('.T-item').data('isSentAjax', false);
             }
         }
 
         if (data.hotel != undefined) {
-            $messager.find('.T-hotel-counter').text(data.hotel).closest('.T-item').data('isSentAjax',false);
+            $messager.find('.T-hotel-counter').text(data.hotel).closest('.T-item').data('isSentAjax', false);
         }
 
         if (data.guide != undefined) {
-            $messager.find('.T-guide-counter').text(data.guide).closest('.T-item').data('isSentAjax',false);
+            $messager.find('.T-guide-counter').text(data.guide).closest('.T-item').data('isSentAjax', false);
         }
 
         function hasData() {
             var res = false;
 
-            for( var i in data ){
+            for (var i in data) {
                 if (data[i] > 0) {
                     res = true;
                 }
@@ -371,24 +374,21 @@ define(function(require, exports) {
             }
             //提交修改用户信息
         $.ajax({
-            url: "" + APP_ROOT + "back/user.do?method=updateInfo&token=" + $.cookie("token") + "&menuKey=system_userinfo&operation=self",
-            data: "user=" + encodeURIComponent(JSON.stringify(user)) + "",
-            datatype: "json",
-            beforSend: function() {
-                globalLoadingLayer = openLoadingLayer();
-            },
+            url: KingServices.build_url('user', 'updateInfo'),
+            data: "user=" + encodeURIComponent(JSON.stringify(user)),
             success: function(data) {
-                layer.close(index.updateUserinfoLayer);
-                console.log(data);
-                var result = showDialog(data);
-                if (result) {
-                    showMessageDialog($("#confirm-dialog-message"), data.message);
-                    // 回显设置
-                    var $userInfoContainer = $('#loginUserInfo');
-                    $userInfoContainer.find('.userName').text(realName);
-                    $userInfoContainer.find('.phoneNumber').text(mobileNumber);
-                    IndexData.userInfo.realName = realName;
-                    IndexData.userInfo.mobileNumber = mobileNumber;
+                if (showDialog(data)) {
+                    showMessageDialog($("#confirm-dialog-message"), data.message, function() {
+                        // 关闭对话框
+                        layer.close(index.updateUserinfoLayer);
+
+                        // 回显设置
+                        var $userInfoContainer = $('#loginUserInfo');
+                        $userInfoContainer.find('.userName').text(realName);
+                        $userInfoContainer.find('.phoneNumber').text(mobileNumber);
+                        IndexData.userInfo.realName = realName;
+                        IndexData.userInfo.mobileNumber = mobileNumber;
+                    });
                 }
             }
         })
@@ -408,30 +408,19 @@ define(function(require, exports) {
             return false;
         } else {
             $.ajax({
-                url: "" + APP_ROOT + "back/user.do?method=rePassword&token=" + $.cookie("token") + "&menuKey=system_userinfo&operation=self",
-                data: "oldPassword=" + oldPassword + "&newPassword=" + newPassword,
-                datatype: "json",
-                beforSend: function() {
-                    globalLoadingLayer = openLoadingLayer();
+                url: KingServices.build_url('user', 'rePassword'),
+                data: {
+                    oldPassword: oldPassword,
+                    newPassword: newPassword
                 },
                 success: function(data) {
                     layer.close(index.updateUserinfoLayer);
-
-                    console.log(data);
-                    var result = showDialog(data);
-                    if (result) {
+                    if (showDialog(data)) {
                         showMessageDialog($("#confirm-dialog-message"), data.message, function() {
                             $.ajax({
-                                url: "" + APP_ROOT + "back/user.do?method=logOut&token=" + $.cookie("token") + "&operation=self",
+                                url: APP_ROOT + "base.do?method=logOut&token=" + $.cookie("token") + "&operation=self",
                                 type: "POST",
-                                dataType: "json",
-                                beforeSend: function() {
-                                    globalLoadingLayer = layer.open({
-                                        type: 3
-                                    });
-                                },
                                 success: function(data) {
-                                    layer.close(globalLoadingLayer);
                                     if (data.success == 0) {
                                         showMessageDialog($("#confirm-dialog-message"), data.message);
                                     } else {

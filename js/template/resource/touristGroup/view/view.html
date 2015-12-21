@@ -7,25 +7,30 @@
 			<div class="widget-body">
 				<table class="whereQ whereTwo" style="width: 100%;margin-bottom: 20px">
 					<tr>
-						<td class="style-myself">线路产品：</td>
+						<td class="style-myself">线路产品</td>
 						<td style="text-align: left;padding: 0px 0px 0px 10px">{{if touristGroupDetail.lineProduct != null}}{{touristGroupDetail.lineProduct.name}}{{/if}}</td>
-						<td class="style-myself">出游日期：</td>
+						<td class="style-myself">出游日期</td>
 						<td style="text-align: left;padding: 0px 0px 0px 10px">{{touristGroupDetail.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
-						<td class="style-myself">是否购买保险：</td>
-						<td style="text-align: left;padding: 0px 0px 0px 10px" colspan="3">{{if touristGroupDetail.buyInsurance == 0}}
+						<td class="style-myself">是否购买保险</td>
+						<td style="text-align: left;padding: 0px 0px 0px 10px">{{if touristGroupDetail.buyInsurance == 0}}
 							否
 							{{else touristGroupDetail.buyInsurance == 1}}
 							是
 							{{/if}}</td>
+						<td>收款方式</td>
+							<td style="text-align: left;padding: 0px 0px 0px 10px">
+							{{touristGroupDetail.incomeType | getPayTypeText}}
+									
+							</td>
 
 					</tr>
 					<tr>
-						<td class="style-myself">客户来源：</td>
+						<td class="style-myself">客户来源</td>
 						<td style="text-align: left;padding: 0px 0px 0px 10px">{{if touristGroupDetail.partnerAgency != null}}{{touristGroupDetail.partnerAgency.travelAgencyName}}{{/if}}</td>
-						<td class="style-myself">{{if touristGroupDetail.isInnerTransferConfirm == 1}}部门联系人{{else}}同行联系人{{/if}}：</td>
+						<td class="style-myself">{{if touristGroupDetail.isInnerTransferConfirm == 1}}部门联系人{{else}}同行联系人{{/if}}</td>
 						<td style="text-align: left;padding: 0px 0px 0px 10px">{{if touristGroupDetail.partnerAgencyContact != null}}{{touristGroupDetail.partnerAgencyContact.contactRealname}} -[{{touristGroupDetail.partnerAgencyContact.contactMobileNumber}}]{{/if}}</td>
-						<td class="style-myself">获得方式：</td>
-						<td style="text-align: left;padding: 0px 0px 0px 10px"colspan="3">{{if touristGroupDetail.getType == 1}}
+						<td class="style-myself">获得方式</td>
+						<td style="text-align: left;padding: 0px 0px 0px 10px" >{{if touristGroupDetail.getType == 1}}
 							旅行社系统
 							{{else if touristGroupDetail.getType == 2}}
 							传真
@@ -36,23 +41,21 @@
 							{{else if touristGroupDetail.getType == 5}}
 							QQ
 							{{/if}}</td>
-
+					    <td class="style-myself">组团单号:</td>
+						<td style="text-align: left;padding: 0px 0px 0px 10px;width: 20%;">{{touristGroupDetail.otaOrderNumber}}</td>
 					</tr>
 
 					<tr>
-						<td class="style-myself">应收：</td>
+						<td class="style-myself">应收</td>
 						<td style="text-align: left;padding: 0px 0px 0px 10px;width: 20%;">{{touristGroupDetail.needPayAllMoney}}</td>
-						<td class="style-myself">已收：</td>
+						<td class="style-myself">已收</td>
 						<td style="text-align: left;padding: 0px 0px 0px 10px;width: 20%;">{{touristGroupDetail.payedMoney}}</td>
-						<td class="style-myself">现收：</td>
+						<td class="style-myself">现收</td>
 						<td style="text-align: left;padding: 0px 0px 0px 10px;width: 20%;">{{touristGroupDetail.currentNeedPayMoney}}</td>
-						<td class="style-myself">未收：</td>
+						<td class="style-myself">未收</td>
 						<td style="text-align: left;padding: 0px 0px 0px 10px;width: 20%;">{{touristGroupDetail.unIncomeMoney}}</td>
-
-					</tr>
+						</tr>
 				</table>
-
-
 				<div class="form-group">
 					<div class="col-sm-12">
 						<table class="table table-striped table-bordered table-hover addCostList"> 

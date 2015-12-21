@@ -33,16 +33,16 @@
 								</div>
 								
 								<div class="form-group">
-									<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>车座数：</label>
+									<label class="col-sm-1 control-label no-padding-right">车座数：</label>
 									<div class="col-sm-2">
-										<input class="col-sm-12 T-chooseSeatCount bind-change" type="text" name="seatCount" id="" value="{{bus.seatCount}}" />
+										<input class="col-sm-12 T-chooseSeatCount bind-change" type="text" name="seatCount" id="" value="{{if bus.seatCount==0}}{{else}}{{bus.seatCount}}{{/if}}" />
 									</div>
 									<label class="col-sm-1 control-label no-padding-right">车辆品牌：</label>
 									<div class="col-sm-2">
 										<input class="col-sm-12 T-chooseBusBrand bind-change" type="text" name="needBusBrand" id="" value="{{bus.brand}}" />
 										<input type="hidden" name="busBrandId" value="" />
 									</div>
-									<label class="col-sm-1 control-label no-padding-right"> <span class="necessary">*</span>车牌号：</label>
+									<label class="col-sm-1 control-label no-padding-right"> 车牌号：</label>
 									<div class="col-sm-2">
 										<div class="col-sm-12 no-padding">
 											<input class="col-sm-12 T-chooseLicenseNumber bind-change" type="text" name="LicenseNumber" id="" value="{{bus.licenseNumber}}" />
@@ -64,7 +64,7 @@
 									</div>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-1 control-label no-padding-right"> <span class="necessary">*</span>导游：</label>
+									<label class="col-sm-1 control-label no-padding-right">导游：</label>
 									<div class="col-sm-2">
 										<div class="col-sm-12 no-padding">
 											<input class="col-sm-12 T-chooseGuide bind-change" type="text" name="AddTPchooseGuide" id="" value="{{guide.realname}}" />
@@ -78,7 +78,7 @@
 									<div class="col-sm-2">
 										<input class="col-sm-12" readonly="readonly" type="text" name="GmobileNumber" id="" value="{{guide.mobileNumber}}" />
 									</div>
-									<label class="col-sm-1 control-label no-padding-right"> <span class="necessary">*</span>司机：</label>
+									<label class="col-sm-1 control-label no-padding-right">司机：</label>
 									<div class="col-sm-2">
 										<div class="col-sm-12 no-padding">
 											<input class="col-sm-12 T-chooseDriver bind-change" type="text" name="driverName" id="" value="{{driver.name}}" />
@@ -111,25 +111,34 @@
 										<input class="form-control col-sm-12 dataTimePicker" type="text" name="setPlaceTime" value="{{tripPlan.setPlaceTime}}" />
 									</div>
 								</div>
+
+								<div class="form-group">
+									<label class="col-sm-1 control-label no-padding-right">备注:</label>
+									<div class="col-sm-10">
+									 <textarea class="form-control col-sm-12" name="remark" value=""  maxlength="1000">{{tripPlan.remark}}</textarea>
+										
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</form>
+
 		<div class="form-horizontal col-sm-12 T-timeArea">
 			<div class="pull-left  no-padding-right">
 				<label class="control-label no-padding-right">确认发团后游客短信设置:</label>
 				立即发送
 				<label style="padding-left:0px;">
-					<input type="radio"  checked="" class="ace execTimeRTypeSt" value="{{tripPlan.executeTimeType}}" name="executeTimeType">
+					<input type="radio"  checked="" class="ace execTimeRTypeSt T-ImmSend" value="{{tripPlan.executeTimeType}}" name="executeTimeType">
 					<span class="lbl">
 					</span>
 				</label>
                 &nbsp;&nbsp;&nbsp;&nbsp;
 				定时发送
 				<label style="padding-left:0px;">  
-					<input type="radio" class="ace execTimeClTypeSt" value="{{tripPlan.executeTimeType}}" name="executeTimeType">
+					<input type="radio" class="ace execTimeClTypeSt T-execTime" value="{{tripPlan.executeTimeType}}" name="executeTimeType">
 					<span class="lbl">
 					</span>
 				</label>

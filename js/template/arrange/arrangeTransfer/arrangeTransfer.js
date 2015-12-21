@@ -73,7 +73,7 @@ define(function(require, exports) {
 						transfer.allData.user2 = JSON.parse(data.user2);
 
 						var html=listMainTemplate(transfer.allData);
-						Tools.addTab(menuKey,"转客管理",html);
+						Tools.addTab(menuKey,"外转管理",html);
 
 				    	transfer.$tab=$('#'+ tabId);
 				    	//初始化时间插件
@@ -468,11 +468,11 @@ define(function(require, exports) {
 					})
 					.done(function(data) {
 						if(showDialog(data)){
-										var type="1",
-		 							    divId="Transfer-Out";
-										transfer.getSearchParam(divId,type);
-										transfer.findPager(divId,type,0);
-										transfer.listMainHead(0);
+							var type="1",
+ 							    divId="Transfer-Out";
+								transfer.getSearchParam(divId,type);
+								transfer.findPager(divId,type,0);
+								transfer.listMainHead(0);
 						}
 					})
 					
@@ -580,6 +580,13 @@ define(function(require, exports) {
 					transfer.PayMoneyF($tab);
 				});
 
+				//精度调整
+				var $price=$tab.find('.price'),
+				    $transPayedMoney=$tab.find('input[name=transPayedMoney]');
+				Tools.inputCtrolFloat($transPayedMoney);
+				Tools.inputCtrolFloat($price);
+
+
 				//同行地接
 				transfer.getPartnerAgencyList($tab.find(".T-choosePartnerAgency"),id);
 
@@ -623,7 +630,11 @@ define(function(require, exports) {
 			"<td><input  name=\"otherPrice\" type=\"text\" maxlength=\"11\" class=\"col-sm-12  no-padding-right price\" /></td>"+
 			"<td><a class=\"cursor T-updateTransfer-delete\">删除</a></td>"+
 			"</tr>";
-			$tab.find(".T-addTransferCost").append(html);
+
+			var $tbody=$tab.find(".T-addTransferCost");
+			    $tbody.append(html);
+			var $otherPrice=$tbody.find('input[name=otherPrice]');
+			Tools.inputCtrolFloat($otherPrice);
 			
 			// 更新表单验证的事件绑定
 			rule.update(validator);   
@@ -753,7 +764,9 @@ define(function(require, exports) {
 			    transAdultPrice=getValue("transAdultPrice"),
 			    transChildPrice=getValue("transChildPrice"),
 			    transRemark=getValue("transRemark"),
-			    status=getValue("status");
+			    status=getValue("status"),
+			    payType = getValue("payType"),
+			    cashFlag = getValue("cashFlag");
 
 	
 	
@@ -786,7 +799,8 @@ define(function(require, exports) {
 					"id":id,  //转客表ID
 					"remark":remark, //转客备注
 					"status":status,//转客状态，0未完成，1已完成
-					"partnerAgencyId":partnerAgencyId //转到的地接社			
+					"partnerAgencyId":partnerAgencyId, //转到的地接社
+					"payType":payType				
 				},
 			    transferFee : {
 					"transNeedPayAllMoney":transNeedPayAllMoney,//应付
@@ -799,7 +813,7 @@ define(function(require, exports) {
 			var otherFee=JSON.stringify(otherFeeJsonAdd);
 			$.ajax({
 				url:KingServices.build_url("transfer","update"),
-				data:"id="+id+"&touristGroupTransfer="+JSON.stringify(saveDate.touristGroupTransfer)+"&transferFee="+JSON.stringify(saveDate.transferFee)+"&otherFee="+encodeURIComponent(otherFee),
+				data:"id="+id+"&touristGroupTransfer="+JSON.stringify(saveDate.touristGroupTransfer)+"&transferFee="+JSON.stringify(saveDate.transferFee)+"&otherFee="+encodeURIComponent(otherFee)+"&cashFlag="+cashFlag,
 				success:function(data){
 					var result = showDialog(data);  
 					if(result){
@@ -918,80 +932,59 @@ define(function(require, exports) {
 		};
 
 
-		/**
-		 * 同行转入确认
-		 * @param  {[type]} id [description]
-		 * @return {[type]}    [description]
-		 */
-		transfer.updateTransferIn=function(id){
-			var editTransferInTemplateLayer;
-			$.ajax({
-				url:KingServices.build_url("transfer","edit"),
-				data:"id="+id+"", 
-				success:function(data){
-					var result = showDialog(data);
-					if(result){
-						data.touristGroupTransfer = JSON.parse(data.touristGroupTransfer);	
-						var html = editTransferInTemplate(data);
-						var editTransferInTemplateLayer = layer.open({
-							type: 1,
-							title:"编辑同行转入信息",
-							skin: 'layui-layer-rim', //加上边框
-							area: '45%', //宽高
-							zIndex:1028,
-							content: html,
-							scrollbar: false,
-							success:function(){
-								
+	/**
+	 * [transitMessage description]
+	 * @param  {[type]} touristGroupId [游客小组id]
+	 * @param  {[type]} type           [标识]
+	 * @return {[type]}                [description]
+	 */
+	transfer.updateTransferIn=function(id){
+	  	   var dialogObj = $( "#confirm-dialog-message" );
+				dialogObj.removeClass('hide').dialog({
+					modal: true,
+					title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
+					title_html: true,
+					draggable:false,
+					buttons: [ 
+						{
+							text: "否",
+							"class" : "btn btn-minier",
+							click: function() {
+								$( this ).dialog( "close" );
 							}
-						});
-						//线路产品查询列表
-						var $editTrsferInObj=$("#editTransfer-container"),searchLineProTransferInlayer;
-						$editTrsferInObj.find(".T-searLineProtrsferIn-search").click(function(){
-							//调用线路产品Layer层
-							transfer.searchLineProList(true,0, "",searchLineProTransferInlayer,$editTrsferInObj);
-						});
-						
-						//线路产品保存操作 
-						$editTrsferInObj.find(".T-editLineProInfo").click(function(){
-						    var getValue = function(name){
-									var value = $editTrsferInObj.find("[name="+name+"]").val()
-									return value;
-						        }
-							var lineProductId=getValue("lineProductId"),
-							    tourGroupTransferId=getValue("tourGroupTransferId"),
-							    lineProductIdName=getValue("lineProductIdName");
-
-							
-							if (lineProductIdName==null||lineProductIdName=="") {
-								showMessageDialog($( "#confirm-dialog-message" ),"请选择线路产品！");
-								return ;	
-							}else{
+						},
+						{
+							text: "是",
+							"class" : "btn btn-primary btn-minier",
+							click: function() {
+								$( this ).dialog( "close" );
 								$.ajax({
 									url:KingServices.build_url("transfer","saveLine"),
-									data:"lineProductId="+lineProductId+"&tourGroupTransferId="+tourGroupTransferId,
+									data:"transferId="+id+"",
 									success:function(data){
 										var result = showDialog(data);
-										if(result){  		
-											layer.close(editTransferInTemplateLayer);
-											showMessageDialog($( "#confirm-dialog-message" ),data.message);
-											var type="2",
-											    divId="Transfer-In";
-											transfer.getSearchParam(divId,type);
-											transfer.findPager(divId,type,0);
+										if(result){  	
+										   var touristGroupId = data.touristGroupId;
+										   //跳转游客小组新增页面
+										   KingServices.updateTransfer(touristGroupId);
+										   //外转确认后数据刷新--模拟Click
+										   transfer.$divIdInObj.find(".T-transferIn-search").off("click").on("click",{divId:"Transfer-In",type:"2"},transfer.getListPage);
+	    	                               transfer.$divIdInObj.find(".T-transferIn-search").trigger("click");
+								
 										}
 									}
 								});
+								
 							}
-						})
-						//关闭Layer
-						$editTrsferInObj.find(".T-canceleditTransfer").click(function(){
-							layer.close(editTransferInTemplateLayer);
-						});
-					}	
-				}
-			})	
-		};
+						}
+					],
+					open:function(event,ui){
+						$(this).find("p").text("是否确认外转？");
+					}
+				});
+
+	};
+
 
 		/**
 		 * 调用线路产品Layer层
@@ -1077,4 +1070,7 @@ define(function(require, exports) {
 			    })
 		};
     exports.init = transfer.initModule;
+    exports.getListPage = transfer.getListPage;
+	exports.viewTransferOut	= transfer.viewTransferOut;
+
 });

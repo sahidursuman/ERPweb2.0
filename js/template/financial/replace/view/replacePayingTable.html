@@ -1,0 +1,23 @@
+{{each bookinAccountList as rs index}}
+    <tr data-id="{{rs.id}}">
+        <td>{{rs.orderNumber}}</td>
+        <td>{{rs.startTime}}</td>
+        <td>{{rs.projectName}}</td>
+        <td class="T-ctrl-tip">{{rs.newDetail}}</td>
+        <td>{{rs.bookingMoney}}</td>
+        <td><a class="cursor T-action T-receive-money">{{rs.receiveMoney}}</a></td>
+        <td>{{rs.settlementMoney}}</td>
+        <td>{{rs.unReceiveMoney}}</td>
+        <th><input type="text" class="col-xs-12 T-reciveMoney" data-le="{{rs.unReceiveMoney}}" {{if !source && rs.unReceiveMoney <= 0}} disabled {{/if}} name="payMoney" value="{{rs.payMoney}}"></th>
+        <td><input type="text" class="col-xs-12 T-remark" {{if !source && rs.unReceiveMoney <= 0}} disabled {{/if}} name="payRemark"></td>
+        <td>{{rs.checkTime}}</td>
+        <td>{{rs.checkUserName}}</td>
+        <td>
+            <label class="pos-rel">
+                <span class="lbl">{{if !!rs.isConfirmAccount}}已{{else}}未{{/if}}对账</span>
+            </label>
+            <label class="cursor" data-right="1290004"> <a> |</a></label>
+            <a class="cursor T-action T-view-Received" data-right="1290004">查看</a>
+        </td>
+    </tr>
+{{/each}}

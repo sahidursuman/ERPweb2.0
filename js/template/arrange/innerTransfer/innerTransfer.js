@@ -263,6 +263,7 @@ define(function(require, exports) {
 			data:"id="+id,
 			success:function(data){
 				data.innerTransfer = JSON.parse(data.innerTransfer);
+				data.parentTouristGroup = JSON.parse(data.parentTouristGroup);
 				
 				var html = viewTemplate(data);
 				var outViewTemplate = innerTransferOut(data);
@@ -364,6 +365,13 @@ define(function(require, exports) {
 					innerTransfer.PayMoneyF($tab);
 				});
 
+				//精度调整
+				var $price=$tab.find('.price'),
+				    $transPayedMoney=$tab.find('input[name=transPayedMoney]');
+				Tools.inputCtrolFloat($transPayedMoney);
+				Tools.inputCtrolFloat($price);
+
+
 				//绑定分团转客信息
 				$tab.find('.T-saveTransoutInfo').on('click', function(event) {
 					event.preventDefault();
@@ -402,6 +410,12 @@ define(function(require, exports) {
 			"<td><a class=\"cursor T-edittransfer-delete\">删除</a></td>"+
 			"</tr>";
 			$tab.find(".addTransferCost").append(html);
+
+			var $tbody=$tab.find(".addTransferCost");
+			    $tbody.append(html);
+			var $price=$tbody.find('input[name=price]');
+			Tools.inputCtrolFloat($price);
+
 			//表单验证
 			rule.update(validator);
 
@@ -491,6 +505,7 @@ define(function(require, exports) {
 			showMessageDialog($( "#confirm-dialog-message" ),"计算应付值过大，请确认数据是否有误");
 			return false;
 		}
+		var cashFlag = getValParam("cashFlag");
 		var innerTransferJson = {
 			id : getValParam("id"),//	内转ID		
 			innerTransferFeeSet : "",	//内转的其他费用	array<object>	
@@ -500,7 +515,8 @@ define(function(require, exports) {
 			transNeedPayMoney :getValParam("transNeedPayMoney"),//	应付		需要计算
 			transPayedMoney	 : getValParam("transPayedMoney"), //已付		填写
 			transRemark : getValParam("transRemark"),
-			isCurrent : getValParam("isCurrent")
+			isCurrent : getValParam("isCurrent"),
+			payType : getValParam("payType")
 		}   
 
 		//获取新增费用项目
@@ -509,7 +525,7 @@ define(function(require, exports) {
 		var otherFeeJsonAddLength=$tab.find(".addTransferCost tr").length;
 		$tab.find(".addTransferCost tr").each(function(i){
 			var id=$(this).attr("data-entity-id");
-			var discribe = "\""+$(this).find("input[name=discribe]").val()+"\"";
+			var discribe = $(this).find("input[name=discribe]").val();
 			var count = $(this).find("input[name=count]").val();
 			var price = $(this).find("input[name=price]").val();
 			if(i>1){
@@ -526,7 +542,7 @@ define(function(require, exports) {
 		var innerTransferJson=JSON.stringify(innerTransferJson);
 		$.ajax({
 			url:KingServices.build_url("innerTransfer","update"),
-			data:"innerTransfer="+encodeURIComponent(innerTransferJson),
+			data:"innerTransfer="+encodeURIComponent(innerTransferJson)+"&cashFlag="+cashFlag,
 			success:function(data){
 				var result = showDialog(data);  
 				if(result){ 
@@ -603,7 +619,18 @@ define(function(require, exports) {
 										type = "2";
 									innerTransfer.getSearchParam(divId,type);
 									innerTransfer.innerList(divId,type,0);
+
+									var touristGroupId=data.touristGroupId;
+
+									//是否中转安排提信息
+									KingServices.updateTransferIn(touristGroupId);
+
+									//内转确认后数据刷新
+									$innerTrsfInObj=$('#inner-TransferIn');
+									$innerTrsfInObj.find(".T-transferIn-search").off("click").on("click",{divId:"inner-TransferIn",btn:"btn-transferIn-search",type:"2"},innerTransfer.getListPage);
+									$innerTrsfInObj.find(".T-transferIn-search").trigger('click');
 								}
+
 							 }
 						});
 						$( this ).dialog( "close" );
@@ -615,6 +642,8 @@ define(function(require, exports) {
 			}
 		});
 	};
+
+
 	innerTransfer.deleteTransferIn = function(id){
 		var dialogObj = $( "#confirm-dialog-message" );
 		dialogObj.removeClass('hide').dialog({
@@ -792,5 +821,6 @@ define(function(require, exports) {
 	exports.init = innerTransfer.initModule;
 	exports.isEdited = innerTransfer.isEdited; 
 	exports.save = innerTransfer.save; 
-	exports.clearEdit = innerTransfer.clearEdit; 
+	exports.clearEdit = innerTransfer.clearEdit;
+	exports.viewTransferOut = innerTransfer.viewTransferOut;//用于内转利润查看我部转出小组信息--不要再给我删了	
 });

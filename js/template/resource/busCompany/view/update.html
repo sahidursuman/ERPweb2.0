@@ -45,7 +45,7 @@
 						</div>
 					</div>
 					<div class="form-group guideInterval">
-						<label class="col-sm-2 control-label no-padding-right">车队所在省市:</label>
+						<label class="col-sm-2 control-label no-padding-right">所在地区:</label>
 						<div class="col-sm-4">
 							<select name="provinceId" style="margin-right:3px">
 								<option selected="selected" value="">未选择</option>
@@ -80,6 +80,14 @@
 							<textarea class="form-control" name="remark" class="col-sm-12" maxlength="1000" >{{busCompany.remark}}</textarea>
 						</div>
 					</div>
+
+					<div class="form-group guideInterval">
+						<label class="col-sm-2 control-label no-padding-right">车队最低价:</label>
+						<div class="col-sm-4">
+							<input class="form-control" name="lowestPrice" value="{{busCompany.lowestPrice}}" class="col-sm-12" maxlength="9" />
+						</div>
+					</div>
+
 				</div>
 			</div>
 		</div>

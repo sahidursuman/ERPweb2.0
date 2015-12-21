@@ -80,7 +80,7 @@ define(function(require, exports) {
                         ////给结算按钮绑定事件
                         $("#tab-"+menuKey+"-content  .btn-transfter").click(function(){
                             var Clearing = VerticalClearing();
-                            addTab(menuKey+"-VerticalClearing","地接结算",Clearing);
+                            addTab(menuKey+"-VerticalClearing","地接付款",Clearing);
 
                         });
 
