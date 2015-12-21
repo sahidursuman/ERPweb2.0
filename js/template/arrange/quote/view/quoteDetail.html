@@ -1,4 +1,4 @@
-<div style="background-color:#fff;" id="top">
+<div style="background-color:#fff; font-family: '微软雅黑'" id="top">
     <div class="shareQuoteS" style="" id="D1">
         <div class="quote-title-style">
             <h5 class="share-title-h5">{{quoteDetailJson.lineProduct.name}}</h5>
@@ -58,15 +58,8 @@
                     <!-- 交通 -->
                     <tr>
                         <td style="width: 160px">交通</td>
-                        <td style="text-align: left;"> <span>{{busCompanyArrange.bus.brand}}</span></td>
+                        <td style="text-align: left;"> <span>{{if !!busCompanyArrange}}{{busCompanyArrange.bus.brand}}{{/if}}</span></td>
                         <td style="width: 180px;"></td>
-                    </tr>
-                    <!-- 含餐 -->
-                    <tr>
-                        <td>含餐</td>
-                        <td><span>{{viewQuoteDaysList.lineProductDay.repastDetail}}</span>
-                        </td>
-                        <td></td>
                     </tr>
                     <!-- 购物 -->
                     {{each viewQuoteDaysList.shopArrange as shopList}}
