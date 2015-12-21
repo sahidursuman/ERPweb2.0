@@ -1208,6 +1208,7 @@ define(function(require, exports) {
                             if (ui.item == null) {
                                 $(this).closest('div').find('input[name=fromPartnerAgencyId]').val("");
                                 $(this).closest('div').find('input[name=partnerAgencyNameList]').val("");
+                                $(this).closest('div').find('input[name=type]').val("");
                             }
                         },
                         select: function(event, ui) {
@@ -1218,11 +1219,13 @@ define(function(require, exports) {
                             if (touristGroup.typeFlag == 1) {
                                 var $tabId = $("#tab-resource_touristGroup-add-content");
                                 $tabId.find("input[name=partnerAgencyNameList]").val("");
+                                $tabId.find("input[name=type]").val("");
                                 $tabId.closest('div').find('input[name=partnerAgencyContactId]').val("");
                             }
                             if (touristGroup.typeFlag == 2) {
                                 var $tabId = $("#tab-resource_touristGroup-update-content");
                                 $tabId.find("input[name=partnerAgencyNameList]").val("");
+                                 $tabId.find("input[name=type]").val("");
                                 $tabId.closest('div').find('input[name=partnerAgencyContactId]').val("");
                             }
                         }
@@ -1635,9 +1638,11 @@ define(function(require, exports) {
         }
 
         //接送事件点json
-        var outArrangeRemarkJson={};
-        var $isChecked=$arrangeForm.find('.T-touristReception','.T-smallCar','.T-touristSend').is('checked');
-            if ($isChecked) {
+        var outArrangeRemarkJson={},
+            $touristReChecked=$arrangeForm.find('.T-touristReception').is(':checked'),
+            $smallCarChecked=$arrangeForm.find('.T-smallCar').is(':checked'),
+            $tourSendChecked=$arrangeForm.find('.T-touristSend').is(':checked');
+            if ($touristReChecked ||  $smallCarChecked || $tourSendChecked) {
                  outArrangeRemarkJson = touristGroup.installArrangeJson($arrangeForm)  
             }
 

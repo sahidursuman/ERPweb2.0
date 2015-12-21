@@ -833,6 +833,11 @@ define(function(require, exports) {
 			executeTimeType=1;
 		};
 
+		if (!!executeTimeType && new Date(getValue('executeTime')).getTime() < new Date().getTime()) {
+			showMessageDialog($( "#confirm-dialog-message" ),"您设置的定时发送时间已非常接近出团日期，请使用立即发送！");
+			return false;
+		}
+
 		var planTouristCount = parseInt(getValue("planTouristCount")),
 			memberCount = parseInt($tab.find(".T-groupMemberCount").text()),
 			seatCount = parseInt($tab.find("input[name=seatCount]").val());

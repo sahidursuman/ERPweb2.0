@@ -303,9 +303,10 @@ define(function(require, exports) {
     OtherAccounts.CheckConfirm = function(name, $checkTab, tabArgs) {
         var argumentLen = arguments.length
         var json = FinancialService.checkSaveJson($checkTab, new FinRule(0));
+        json = JSON.stringify(json);
         if (json.length > 0) {
             $.ajax({
-                url: KingServices.build_url("account/arrangeOtherFinancial", "saveReconciliation"),
+                url: KingServices.build_url("account/arrangeOtherFinancial", "savePayment"),
                 type: "POST",
                 data: {
                     reconciliation: json
@@ -543,7 +544,7 @@ define(function(require, exports) {
         json = JSON.stringify(json);
         if (json.length > 0) {
             $.ajax({
-                url: KingServices.build_url("account/arrangeOtherFinancial", "saveReconciliation"),
+                url: KingServices.build_url("account/arrangeOtherFinancial", "savePayment"),
                 type: "POST",
                 data: {
                     reconciliation: json

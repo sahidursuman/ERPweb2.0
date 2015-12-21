@@ -299,10 +299,10 @@
                             <input type="hidden" name="marketPrice" value="{{arrange.marketPrice}}"/></td>
                             <td>{{if arrange.badStatus == 1}}<span>-</span>{{else}}{{arrange.price}}{{/if}}
                             <input type="hidden" name="price" value="{{arrange.price}}" /></td>
-                            <td>11</td>
+                            <td>{{arrange.customerRebateMoney}}</td>
                             <td>
-                            {{if arrange.badStatus == 1}}<span>-</span>{{else}}<span>{{arrange.realCount}}</span>{{/if}}
-                            <input style="width:60px;" type="hidden" name="realCount" {{if arrange.billUpdateTime != null}}value="{{arrange.realCount}}"{{else}}value=0{{/if}} maxlength="5"/><input type="hidden" name="memberCount" value="{{arrange.memberCount}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} /></td>
+                            {{if arrange.badStatus == 1}}<span>-</span>{{else}}<span>{{if arrange.billUpdateTime != null}}{{arrange.realCount}}{{else}}{{arrange.memberCount}}{{/if}}</span>{{/if}}
+                            <input style="width:60px;" type="hidden" name="realCount" {{if arrange.billUpdateTime != null}}value="{{arrange.realCount}}"{{else}}value="{{arrange.memberCount}}"{{/if}} maxlength="5"/><input type="hidden" name="memberCount" value="{{arrange.memberCount}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} /></td> 
                             <td>
                             {{if arrange.badStatus == 1}}<span>-</span>{{else}}<span>{{arrange.reduceMoney}}</span>{{/if}}
                             <input type="hidden" name="reduceMoney" value="{{arrange.reduceMoney}}" style="width:60px;"/></td>
@@ -311,7 +311,7 @@
                             <td><span class="needPayMoney" >{{arrange.needPayMoney}}</span><input type="hidden" class="selfMoney"></td>
                             <td>{{arrange.payedMoney}}</td>
                             <td>
-                            {{if arrange.badStatus == 1}}<span>-</span>{{else}}<span>{{arrange.realGuidePayMoney}}</span>{{/if}}
+                            {{if arrange.badStatus == 1}}<span>-</span>{{else}}<span>{{if arrange.billUpdateTime != null}}{{arrange.realGuidePayMoney}}{{else}}{{arrange.guidePayMoney}}{{/if}}</span>{{/if}}
                             </td>
                             <td>
                             {{if arrange.badStatus == 1}}<span>-</span>{{else}}<span>{{arrange.realGetMoney}}</span>{{/if}}
@@ -544,13 +544,13 @@
                         {{if arrange.billUpdateTime != null}}{{if arrange.restaurant != null}}{{arrange.restaurant.name}}{{/if}}{{else}}{{if arrange.isChoose == 1}}自选{{else}}{{if arrange.restaurant != null}}{{arrange.restaurant.name}}{{/if}}{{/if}}{{/if}}</td>{{/if}}
                         <td>{{arrange.type}}</td> 
                         <td>{{if arrange.badStatus == 1}}<span>-</span>{{else}}<span class="price">{{arrange.price}}</span>{{/if}}<input type="hidden" name="price" value="{{arrange.price}}" /></td>
-                        <td>{{if arrange.badStatus == 1}}<span>-</span>{{else}}<span>{{arrange.realCount}}</span>{{/if}}<input style="width:90px;" type="hidden" name="realCount" {{if arrange.billUpdateTime != null}}value="{{arrange.realCount}}" 
-                        {{else}}value=0{{/if}} old="{{arrange.realCount}}" maxlength="5"
+                        <td>{{if arrange.badStatus == 1}}<span>-</span>{{else}}<span>{{if arrange.billUpdateTime != null}}{{arrange.realCount}}{{else}}{{arrange.memberCount}}{{/if}}</span>{{/if}}<input style="width:90px;" type="hidden" name="realCount" {{if arrange.billUpdateTime != null}}value="{{arrange.realCount}}" 
+                        {{else}}value="{{arrange.memberCount}}"{{/if}} old="{{arrange.realCount}}" maxlength="5"
                         {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
                         <td>{{if arrange.badStatus == 1}}<span>-</span>{{else}}<span>{{arrange.reduceMoney}}</span>{{/if}}<input type="hidden" name="reduceMoney" value="{{arrange.reduceMoney}}" old="{{arrange.reduceMoney}}"/></td>
                         <td>{{if arrange.badStatus == 1}}<span class="restneedPayMoney">{{arrange.needPayMoney}}</span>{{else}}<span class="restneedPayMoney"></span>{{/if}}<input type="hidden" value="{{arrange.needPayMoney}}" name="needPayMoney"></td>
                         <td>{{arrange.payedMoney}}</td>
-                        <td>{{if arrange.badStatus == 1}}<span>-</span>{{else}}<span>{{arrange.realGuidePayMoney}}</span>{{/if}}
+                        <td>{{if arrange.badStatus == 1}}<span>-</span>{{else}}<span>{{if arrange.billUpdateTime != null}}{{arrange.realGuidePayMoney}}{{else}}{{arrange.guidePayMoney}}{{/if}}</span>{{/if}}
 
                             <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" />
                             <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" /></td>
@@ -613,14 +613,14 @@
                         <td>{{if arrange.hotelRoom != null}}{{arrange.hotelRoom.type}}{{/if}}</td>
                         <td>{{if arrange.badStatus == 1}}<span>-</span>{{else}}<span>{{arrange.price}}</span>{{/if}}
                         <input type="hidden" name="price" value="{{arrange.price}}" /></td>
-                        <td>{{if arrange.badStatus == 1}}<span>-</span>{{else}}<span>{{arrange.realCount}}</span>{{/if}}
-                        <input style="width:90px;" type="hidden" name="realCount" {{if arrange.billUpdateTime !=null}}value="{{arrange.realCount}}" {{else}}value="0"{{/if}}/></td>
+                        <td>{{if arrange.badStatus == 1}}<span>-</span>{{else}}<span>{{if arrange.billUpdateTime != null}}{{arrange.realCount}}{{else}}{{arrange.memberCount}}{{/if}}</span>{{/if}}
+                        <input style="width:90px;" type="hidden" name="realCount" {{if arrange.billUpdateTime !=null}}value="{{arrange.realCount}}" {{else}}value="{{arrange.memberCount}}"{{/if}}/></td>
                         <td>{{if arrange.badStatus == 1}}<span>-</span>{{else}}<span>{{arrange.reduceMoney}}</span>{{/if}}
                         <input type="hidden" name="reduceMoney" value="{{arrange.reduceMoney}}" old="{{arrange.reduceMoney}}"/></td>
                         <td>{{if arrange.badStatus == 1}}<span class="hotelneedPayMoney">{{arrange.needPayMoney}}</span>{{else}}<span class="hotelneedPayMoney"></span>{{/if}}
                         <input name="needPayMoney" type="hidden" value="{{arrange.needPayMoney}}"></td>
                         <td>{{arrange.payedMoney}}</td>
-                        <td>{{if arrange.badStatus == 1}}<span>-</span>{{else}}<span>{{arrange.realGuidePayMoney}}</span>{{/if}}
+                        <td>{{if arrange.badStatus == 1}}<span>-</span>{{else}}<span>{{if arrange.billUpdateTime != null}}{{arrange.realGuidePayMoney}}{{else}}{{arrange.guidePayMoney}}{{/if}}</span>{{/if}}
 
                             <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" />
                             <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" /></td>
@@ -682,14 +682,14 @@
                         <td>{{if arrange.scenicItem != null}}{{arrange.scenicItem.name}}{{/if}}</td>
                         <td>{{if arrange.badStatus == 1}}<span>-</span>{{else}}<span> {{arrange.price}}</span>{{/if}}
                        <input type="hidden" name="price" value="{{arrange.price}}" /></td>
-                        <td>{{if arrange.badStatus == 1}}<span>-</span>{{else}}<span>{{arrange.realCount}}</span>{{/if}}
-                        <input style="width:90px;" type="hidden" name="realCount" {{if arrange.billUpdateTime !=null}}value="{{arrange.realCount}}" {{else}}value=0{{/if}}/></td>
+                        <td>{{if arrange.badStatus == 1}}<span>-</span>{{else}}<span>{{if arrange.billUpdateTime != null}}{{arrange.realCount}}{{else}}{{arrange.memberCount}}{{/if}}</span>{{/if}}
+                        <input style="width:90px;" type="hidden" name="realCount" {{if arrange.billUpdateTime !=null}}value="{{arrange.realCount}}" {{else}}value="{{arrange.memberCount}}"{{/if}}/></td>
                         <td>{{if arrange.badStatus == 1}}<span>-</span>{{else}}<span>{{arrange.reduceMoney}}</span>{{/if}}
                         <input type="hidden" name="reduceMoney" value="{{arrange.reduceMoney}}" old="{{arrange.reduceMoney}}"/></td>
                         <td>{{if arrange.badStatus == 1}}<span class="scenicneedPayMoney">{{arrange.needPayMoney}}</span>{{else}}<span class="scenicneedPayMoney"></span>{{/if}}
                         <input type="hidden" name="needPayMoney" value="{{arrange.needPayMoney}}"></td>
                         <td>{{arrange.payedMoney}}</td>
-                        <td>{{if arrange.badStatus == 1}}<span>-</span>{{else}}<span>{{arrange.realGuidePayMoney}}</span>{{/if}}
+                        <td>{{if arrange.badStatus == 1}}<span>-</span>{{else}}<span>{{if arrange.billUpdateTime != null}}{{arrange.realGuidePayMoney}}{{else}}{{arrange.guidePayMoney}}{{/if}}</span>{{/if}}
                             
                             <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" />
                             <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" /></td>
@@ -757,14 +757,14 @@
                     <td>{{arrange.seatLevel}}</td>
                         <td>{{if arrange.badStatus == 1}}<span>-</span>{{else}}<span>{{arrange.price}}</span>{{/if}}
                         <input type="hidden" name="price" value="{{arrange.price}}" /></td>
-                        <td>{{if arrange.badStatus == 1}}<span>-</span>{{else}}<span>{{arrange.realCount}}</span>{{/if}}
-                        <input style="width:90px;" name="realCount" type="hidden" {{if arrange.billUpdateTime !=null}}value="{{arrange.realCount}}" {{else}}value=0{{/if}} /></td>
+                        <td>{{if arrange.badStatus == 1}}<span>-</span>{{else}}<span>{{if arrange.billUpdateTime != null}}{{arrange.realCount}}{{else}}{{arrange.memberCount}}{{/if}}</span>{{/if}}
+                        <input style="width:90px;" name="realCount" type="hidden" {{if arrange.billUpdateTime !=null}}value="{{arrange.realCount}}" {{else}}value="{{arrange.memberCount}}"{{/if}} /></td>
                         <td>{{if arrange.badStatus == 1}}<span>-</span>{{else}}<span>{{arrange.reduceMoney}}</span>{{/if}}
                         <input type="hidden" name="reduceMoney" value="{{arrange.reduceMoney}}" old="{{arrange.reduceMoney}}"/></td>
                         <td>{{if arrange.badStatus == 1}}<span class="ticketneedPayMoney">{{arrange.needPayMoney}}</span>{{else}}<span class="ticketneedPayMoney"></span>{{/if}}
                         <input type="hidden" value="{{arrange.needPayMoney}}" name="needPayMoney"></td>
                         <td>{{arrange.payedMoney}}</td>
-                        <td>{{if arrange.badStatus == 1}}<span>-</span>{{else}}<span>{{arrange.realGuidePayMoney}}</span>{{/if}}
+                        <td>{{if arrange.badStatus == 1}}<span>-</span>{{else}}<span>{{if arrange.billUpdateTime != null}}{{arrange.realGuidePayMoney}}{{else}}{{arrange.guidePayMoney}}{{/if}}</span>{{/if}}
                             <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" />
                             <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" /></td>
                         <td>{{if arrange.billImage != null && arrange.billImage != ""}}
@@ -819,14 +819,14 @@
                         <td>{{arrange.name}}</td>
                         <td>{{if arrange.badStatus == 1}}<span>-</span>{{else}}<span class="price">{{arrange.price}}</span>{{/if}}
                         <input type="hidden" name="price" value="{{arrange.price}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
-                        <td>{{if arrange.badStatus == 1}}<span>-</span>{{else}}<span>{{arrange.realCount}}</span>{{/if}}
-                        <input style="width:90px;" type="hidden" name="realCount" {{if arrange.billUpdateTime}}value="{{arrange.realCount}}"{{else}}value=0 {{/if}} /></td>
+                        <td>{{if arrange.badStatus == 1}}<span>-</span>{{else}}<span>{{if arrange.billUpdateTime != null}}{{arrange.realCount}}{{else}}{{arrange.memberCount}}{{/if}}</span>{{/if}}
+                        <input style="width:90px;" type="hidden" name="realCount" {{if arrange.billUpdateTime}}value="{{arrange.realCount}}"{{else}}value="{{arrange.memberCount}}"{{/if}} /></td>
                         <td>{{if arrange.badStatus == 1}}<span>-</span>{{else}}<span>{{arrange.reduceMoney}}</span>{{/if}}
                         <input type="hidden" name="reduceMoney" value="{{arrange.reduceMoney}}"/></td>
                         <td>{{if arrange.badStatus == 1}}<span class="otherOutNeedPayMoney">{{arrange.needPayMoney}}</span>{{else}}<span class="otherOutNeedPayMoney"></span>{{/if}}
                         <input type="hidden" name="needPayMoney" value="{{arrange.needPayMoney}}"></td>
                         <td>{{arrange.payedMoney}}</td>
-                        <td>{{if arrange.badStatus == 1}}<span>-</span>{{else}}<span>{{arrange.realGuidePayMoney}}</span>{{/if}}
+                        <td>{{if arrange.badStatus == 1}}<span>-</span>{{else}}<span>{{if arrange.billUpdateTime != null}}{{arrange.realGuidePayMoney}}{{else}}{{arrange.guidePayMoney}}{{/if}}</span>{{/if}}
                             
                             <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" />
                             <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" /></td>
