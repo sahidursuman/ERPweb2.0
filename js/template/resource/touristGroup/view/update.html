@@ -45,10 +45,11 @@
 						</div>
 					</div>
 					<div class="form-group choosePartnerAgencyDiv guideInterval">
-						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>客户来源:</label>
-						<div class="col-sm-2 update-divWidth">
-							<input type="text" name="fromPartnerAgency" class="col-sm-12" placeholder="请输入客户来源" value="{{if touristGroupDetail.partnerAgency != null}}{{touristGroupDetail.partnerAgency.travelAgencyName}}{{/if}}" {{if !!touristGroupDetail.quoteId || !!type }} readonly {{/if}}  >
-							<input type="hidden" value="{{if touristGroupDetail.partnerAgency != null}}{{touristGroupDetail.partnerAgency.id}}{{/if}}" name="fromPartnerAgencyId">
+						<div class="col-sm-3 update-divWidth pull-left" style="width:320px; margin-left:75px;">
+							<label class=" control-label no-padding-right" style="margin-left: -8px"><span class="necessary">*</span>客户来源：<input type="text" name="fromPartnerAgency" class="choosePartnerAgency"  placeholder="请输入客户来源" value="{{if touristGroupDetail.partnerAgency != null}}{{touristGroupDetail.partnerAgency.travelAgencyName}}{{/if}}" {{if !!touristGroupDetail.quoteId || !!type }} readonly {{/if}}>
+							<input type="hidden" name="fromPartnerAgencyId" value="{{if touristGroupDetail.partnerAgency != null}}{{touristGroupDetail.partnerAgency.id}}{{/if}}">
+							<input type="hidden" name="type" value="">
+							</label>
 							<span class="input-group-addon {{if type==null}}T-addPartner{{/if}} R-right {{if !!touristGroupDetail.quoteId}} hidden {{/if}}" data-right="1150002" style="display: inline-block;left:0" title="添加客户">
 								<i class="ace-icon fa fa-plus bigger-110 icon-only" ></i>
 							</span>
