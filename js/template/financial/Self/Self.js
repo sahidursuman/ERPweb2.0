@@ -245,14 +245,14 @@ define(function(require, exports) {
                     }
                     var resultList = data.list;
                     data.list = FinancialService.getTempDate(resultList,Self.clearTempData);
-                    
+                    data.isAutoPay = isAutoPay;
                     var html = SelfClearing(data);
                     var validator;
                     data.showBtnFlag = Self.showBtnFlag
-
+                    data.isAutoPay = isAutoPay;
                     // 初始化页面
                     if (Tools.addTab(blanceTabId, "自费付款", html)) {
-                        var settleValidator = new FinRule(Self.showBtnFlag ? 3 : 1);//data.showBtnFlag == true ? new FinRule(3) : new FinRule(1);
+                        var settleValidator = new FinRule(Self.showBtnFlag ? 3 : 1);
                         Self.initClear(page,selfPayId,selfPayName,settleValidator); 
                         validator = new FinRule(Self.showBtnFlag ? 3 : 1).check(Self.$clearTab.find('.T-clearList'));                       
                     }
@@ -302,7 +302,9 @@ define(function(require, exports) {
         // 初始化jQuery 对象 
         Self.$clearTab = $("#tab-" + menuKey + "-clearing-content");
         Self.$clearSearchArea = Self.$clearTab.find('.T-search-area');
-        var autoValidator = new FinRule(Self.showBtnFlag ? 3 : 1).check(Self.$clearTab.find('.T-count'));
+        var isAutoPay = Self.$clearTab.find('input[name=isAutoPay]').val();
+        var settleValidator = isAutoPay == 2 ? new FinRule(3):new FinRule(1);
+        //var autoValidator = new FinRule(Self.showBtnFlag ? 3 : 1).check(Self.$clearTab.find('.T-count'));
         Self.init_event(page,id,name,Self.$clearTab,"clear");
         Tools.setDatePicker(Self.$clearTab.find(".date-picker"),true);
 
@@ -520,7 +522,6 @@ define(function(require, exports) {
 
         var argumentsLen = arguments.length,
             clearSaveJson = FinancialService.clearSaveJson(Self.$clearTab,Self.clearTempData,new FinRule(Self.showBtnFlag ? 3 : 1));
-            console.log(argumentsLen);
         clearSaveJson = JSON.stringify(clearSaveJson);
         $.ajax({
             url:KingServices.build_url("account/selfPayFinancial","confirmSelfPayPayment"),
@@ -538,10 +539,7 @@ define(function(require, exports) {
                         Self.clearTempData = false;
                         Self.clearTempSumDate = false;
                         if(argumentsLen === 2){
-                            console.log(Self.searchData);
-                            console.log(argumentsLen);
                             Tools.closeTab(menuKey + "-clearing");
-
                             Self.listSelf(Self.searchData.pageNo,Self.searchData.selfPayName,Self.searchData.selfPayId,Self.searchData.startDate,Self.searchData.endDate);
                         }else if(argumentsLen === 3){
                             Self.$clearTab.data('isEdited',false);
