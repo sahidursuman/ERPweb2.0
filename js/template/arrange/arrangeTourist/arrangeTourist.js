@@ -1296,6 +1296,12 @@ define(function(require, exports) {
             });
         });
 
+        // 新增对话框，查看游客小组
+        $addTouristGroup.find('tbody').on('click', '.T-addGroupView', function(event) {
+            event.preventDefault();
+            arrangeTourist.viewTouristGroup($(this).data('entity-id'));
+        });
+
         //提交按钮事件绑定
         $addTouristGroup.find(".T-submit-addTouristGroup").click(function() {
             var addGroupIdJson = [];
@@ -1338,49 +1344,23 @@ define(function(require, exports) {
                         "<td>" + addGroupIdJson[i].remark + "</td>" +
                         "<td>" +
                         "<div class=\"hidden-sm hidden-xs btn-group\">" +
-                        "<a data-entity-id=\"" + addGroupIdJson[i].id + "\" class=\"cursor T-addTripPlanView\">" +
+                        "<a data-entity-id=\"" + addGroupIdJson[i].id + "\" class=\"cursor T-action T-addTripPlanView\">" +
                         "查看" +
                         "</a>" + "<a class='cursor'> |</a>" +
-                        "<a data-entity-id=\"" + addGroupIdJson[i].id + "\" class=\"cursor T-addTripPlanDelete\">" +
+                        "<a data-entity-id=\"" + addGroupIdJson[i].id + "\" class=\"cursor T-action T-addTripPlanDelete\">" +
                         "删除" +
                         "</a>" +
                         "</div>" +
                         "</td>" +
                         "</tr>";
                     $tab.find("." + tbody + "").append(html);
-
-                     //查看添加小组游客
-                    $tab.find(".T-addTripPlanView").on('click', function(event) {
-                        event.preventDefault();
-                        /* Act on the event */
-                        $that = $(this), id = $that.closest('tr').data('value');
-                        arrangeTourist.viewTouristGroup(id);
-                    });
                 }
             }
-
-
-           
-
 
             //关闭新增游客小组layer
             layer.close(arrangeTourist.addGroupTemplateLayer);
 
             arrangeTourist.menberNumber(tbody); //新增计划tbody
-
-            $tab.find(".T-addTripPlanDelete").off().on("click", function() {
-                var $obj = $(this),
-                    id = $obj.closest('tr').data("value");
-                arrangeTourist.delTrouristGroup($obj, id, $tab, tbody)
-            })
-
-             //查看添加小组游客
-            $tab.find(".T-addTripPlanView").on('click', function(event) {
-                event.preventDefault();
-                /* Act on the event */
-                $that = $(this), id = $that.closest('tr').data('value');
-                arrangeTourist.viewTouristGroup(id);
-            });
 
             //小组总人数计算
             arrangeTourist.tripPlanAllMemberCount("tripPlanAllMemberCount", $tab, tbody);

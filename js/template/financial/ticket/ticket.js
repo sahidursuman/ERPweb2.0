@@ -599,9 +599,11 @@ define(function(require, exports) {
 
 	//确认收款
 	Ticket.savePayingData = function($tab, tabArgs){
-        var reciveValidtor = (new FinRule(2)).check($tab);
-        if(!reciveValidtor.form()){
-    		return;
+		if ($tab.find('.T-btn-save').data('type') == 1) {
+	        var reciveValidtor = (new FinRule(2)).check($tab);
+	        if(!reciveValidtor.form()){
+	    		return;
+	        }
         }
 		var json = FinancialService.clearSaveJson($tab, Ticket.payingJson, new FinRule(Ticket.isBalanceSource ? 3 : 1));
 		if (json && json.length) {
