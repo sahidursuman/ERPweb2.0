@@ -195,15 +195,21 @@ define(function(require, exports) {
         //复选框事件初始化
         var checkboxList = Insure.$checkTab.find(".T-checkList tr .T-checkbox"),
             $checkAll = Insure.$checkTab.find(".T-checkAll");
-        FinancialService.initCheckBoxs($checkAll,checkboxList);
-
+            FinancialService.initCheckBoxs($checkAll,checkboxList);
+        var trList = Insure.$checkTab.find(".T-checkTr");
         //关闭页面事件
         Insure.$checkTab.find(".T-close-check").click(function(){
-            Tools.closeTab(menuKey + "-checking");
+             FinancialService.changeUncheck(trList,function(){
+                Tools.closeTab(menuKey + "-checking");
+            });
+            
         });
         //确认对账按钮事件
         Insure.$checkTab.find(".T-saveCheck").click(function(){
-            Insure.saveChecking(id,name,page);
+            FinancialService.changeUncheck(trList,function(){
+               Insure.saveChecking(id,name,page);
+            });
+            
          });
     };
 
