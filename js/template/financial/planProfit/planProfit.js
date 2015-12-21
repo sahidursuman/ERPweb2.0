@@ -59,8 +59,8 @@ define(function(require, exports) {
 
                     plan.listPlan(0);
 
-                    var lineProductList = data.lineProducts,
-                        guideList = data.guides;
+                    var lineProductList = JSON.parse(data.lineProducts),
+                        guideList = JSON.parse(data.guides);
 
                     if(lineProductList != null && lineProductList.length > 0){
                         for(var i=0;i<lineProductList.length;i++){
@@ -69,7 +69,7 @@ define(function(require, exports) {
                     }
                     if(guideList != null && guideList.length > 0){
                         for(var i=0;i<guideList.length;i++){
-                            guideList[i].value = guideList[i].realName;
+                            guideList[i].value = guideList[i].realname;
                         }
                     }
                     var all = {
@@ -79,8 +79,8 @@ define(function(require, exports) {
                     lineProductList.unshift(all);
                     guideList.unshift(all);
 
-                    plan.lineProductList = data.lineProducts;
-                    plan.guideList = data.guides;
+                    plan.lineProductList = lineProductList;
+                    plan.guideList = guideList;
 
                     Tools.setDatePicker(plan.$tab.find(".date-picker"),true);
                     plan.$tab.find('.T-status').off().on('click', 'a', function(event) {
