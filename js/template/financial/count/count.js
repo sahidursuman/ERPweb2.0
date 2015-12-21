@@ -3072,6 +3072,46 @@ define(function(require, exports){
 			}
 		}
 
+		var addoOherInList = saveJsonStr.otherInList;
+		for(var i = 0;i<addoOherInList.length;i++){
+			if(addoOherInList[i].title == "" || addoOherInList[i].price == "" || addoOherInList[i].count == ""){
+				var message="";
+				if(addoOherInList[i].title == ""){
+					message = "请输入项目"
+				}else{
+					if(addoOherInList[i].price == ""){
+						message="请输入单价"
+					}else{
+						if(addoOherInList[i].count == ""){
+							message="请输入数量"
+						}
+					}
+				};
+				showMessageDialog($("#confirm-dialog-message"),message);
+				return;
+			}
+		}
+
+		var addoOherList = saveJsonStr.otherArrangeList;
+		for(var i = 0;i<addoOherList.length;i++){
+			if(addoOherList[i].title == "" || addoOherList[i].price == "" || addoOherList[i].realCount == ""){
+				var message="";
+				if(addoOherList[i].title == ""){
+					message = "请输入项目"
+				}else{
+					if(addoOherList[i].price == ""){
+						message="请输入单价"
+					}else{
+						if(addoOherList[i].realCount == ""){
+							message="请输入数量"
+						}
+					}
+				};
+				showMessageDialog($("#confirm-dialog-message"),message);
+				return;
+			}
+		}
+
 		var addTicketList = saveJsonStr.addTicketArrangeList;
 		for(var i = 0;i<addTicketList.length;i++){
 			if(addTicketList[i].ticketId == "" || addTicketList[i].startTime == ""){
@@ -3105,7 +3145,6 @@ define(function(require, exports){
 						}else{
 							if(typeFlag == 3){
 								Count.webFanishAccount(id);
-								//Tools.closeTab(ReimbursementId);
 							}else{
 								Count.Reimbursement(financialTripPlanId);
 							}
