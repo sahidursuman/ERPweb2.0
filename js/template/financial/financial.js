@@ -25,8 +25,8 @@ FinancialService.updateUnpayMoney = function($tab,rule){
         //统计数据更新
         var $st = $tab.find(".T-stMoney"),
             $unpay = $tab.find(".T-unpayMoney");
-        $st.text($st.text()*1 + spread);
-        $unpay.text($unpay.text()*1 + spread);
+        $st.text(Tools.toFixed($st.text()*1 + spread));
+        $unpay.text(Tools.toFixed($unpay.text()*1 + spread));
     });
 };
 
@@ -67,6 +67,10 @@ FinancialService.checkSaveJson = function($tab,rule){
             }
         }
     });
+    if(saveJson.length == 0){
+        showMessageDialog($("#confirm-dialog-message"),"没有可提交的数据！");
+        return false;
+    }
     saveJson = JSON.stringify(saveJson);
     return saveJson;
 };

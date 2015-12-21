@@ -11,14 +11,14 @@
 			</tr>
 		</thead>
 		<tbody>
-		{{each financial as detail}}
+		{{each pay as detail}}
 			<tr>
 				<td>{{detail.receivableType.name}}</td>
 				<td>{{detail.businessType.name}}</td>
-				<td>{{detail.incomeMoney}}</td>
-				<td>{{detail.incomeMoney}}</td>
+				<td>{{detail.payDifferenceMoney}}</td>
+				<td>{{detail.remark}}</td>
 				<td>{{detail.user.realName}}</td>
-				<td>{{detail.createTime | dateFormat: 'yyyy-MM-dd'}}</td>
+				<td>{{detail.createTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}</td>
 			</tr>
 		{{/each}}
 		</tbody>

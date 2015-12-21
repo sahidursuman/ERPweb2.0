@@ -1206,37 +1206,38 @@ define(function(require, exports) {
                         minLength: 0,
                         change: function(event, ui) {
                             if (ui.item == null) {
-                                $(this).closest('div').find('input[name=fromPartnerAgencyId]').val("");
+                                $(this).find('input[name=fromPartnerAgencyId]').val("");
                                 $(this).closest('div').find('input[name=partnerAgencyNameList]').val("");
+                                $(this).closest('label').find('input[name=type]').val("");
                             }
                         },
                         select: function(event, ui) {
-                            $(this).blur();
-                            var obj = this;
-                            $(obj).closest('div').find("input[name=fromPartnerAgencyId]").val(ui.item.id).trigger('change');
+                            var $that = $(this);
+                                $that.blur();
+                                $that.closest('label').find("input[name=fromPartnerAgencyId]").val(ui.item.id).trigger('change');
                             //通过typeFlag来判断--1、新增；2、修改
                             if (touristGroup.typeFlag == 1) {
-                                var $tabId = $("#tab-resource_touristGroup-add-content");
-                                $tabId.find("input[name=partnerAgencyNameList]").val("");
-                                $tabId.closest('div').find('input[name=partnerAgencyContactId]').val("");
+                                $that.find("input[name=partnerAgencyNameList]").val("");
+                                $that.find("input[name=type]").val("");
+                                $that.closest('div').find('input[name=partnerAgencyContactId]').val("");
                             }
                             if (touristGroup.typeFlag == 2) {
-                                var $tabId = $("#tab-resource_touristGroup-update-content");
-                                $tabId.find("input[name=partnerAgencyNameList]").val("");
-                                $tabId.closest('div').find('input[name=partnerAgencyContactId]').val("");
+                                $that.find("input[name=partnerAgencyNameList]").val("");
+                                $that.find("input[name=type]").val("");
+                                $that.closest('div').find('input[name=partnerAgencyContactId]').val("");
                             }
                         }
                     }).off('click').on('click', function() {
                         if (!!$(this).attr('readonly')) return;
-                        var obj = this;
+                        var $that = $(this);
                         var formParObj = data.partnerAgencyList;
                         if (formParObj != null && formParObj.length > 0) {
                             for (var i = 0; i < formParObj.length; i++) {
                                 formParObj[i].value = formParObj[i].travelAgencyName
                             }
                         };
-                        $(obj).autocomplete('option', 'source', formParObj);
-                        $(obj).autocomplete('search', '');
+                        $that.autocomplete('option', 'source', formParObj);
+                        $that.autocomplete('search', '');
                     });
 
                 }
@@ -1250,13 +1251,11 @@ define(function(require, exports) {
             minLength: 0,
             change: function(event, ui) {
                 if (ui.item == null) {
-                    var objParent = $obj.closest('div');
-                    objParent.find("input[name=partnerAgencyContactId]").val("");
+                    $(this).find("input[name=partnerAgencyContactId]").val("");
                 }
             },
             select: function(event, ui) {
-                var objParent = $obj.closest('div');
-                objParent.find("input[name=partnerAgencyContactId]").val(ui.item.id).trigger('change');
+                $(this).closest('label').find("input[name=partnerAgencyContactId]").val(ui.item.id).trigger('change');
             }
         }).off('click').on('click', function() {
             if (!!$(this).attr('readonly')) return;

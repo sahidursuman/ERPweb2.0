@@ -1442,18 +1442,22 @@ Tools.delBlankJson = function(json) {
  * 绑定日期控件
  * @param {object}  $obj         绑定日期控件的元素
  * @param {Boolean} isInputRange true：设置起始控制，false：不设置
+ * @param {object}  options      补充配置
  */
-Tools.setDatePicker = function($obj, isInputRange) {
+Tools.setDatePicker = function($obj, isInputRange, options) {
     if (!$obj || !$obj.length) {
         console.log('元素为空，无法绑定日期控件');
         return;
     }
-    $obj.datepicker({
+
+    options = $.extend({}, {
         autoclose: true,
         todayHighlight: true,
         format: 'yyyy-mm-dd',
         language: 'zh-CN'
-    });
+    }, options);
+    
+    $obj.datepicker(options);
 
     // 设置起始控制
     if (isInputRange && $obj.length === 2) {

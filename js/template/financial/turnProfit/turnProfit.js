@@ -212,7 +212,7 @@ define(function(require, exports) {
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
-					data.financial = JSON.parse(data.income);
+					data.pay = JSON.parse(data.pay);
 					var html = arrangeTransferViewTemplate(data);
 					//addTab(menuKey+"-viewTransfer","查看我社转出",html);
 					layer.open({

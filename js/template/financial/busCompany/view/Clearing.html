@@ -85,8 +85,11 @@
                     {{rs.startTime | dateFormat: 'yyyy-MM-dd'}} ~ {{rs.endTime | dateFormat: 'yyyy-MM-dd'}}
                 {{/if}}
             </td>
-            <td>{{if rs.touristAdultCount == null || rs.touristAdultCount == ""}}0{{else}}{{rs.touristAdultCount}}{{/if}} 大  
-                {{if rs.touristChildCount == null || rs.touristChildCount == ""}}0{{else}}{{rs.touristChildCount}}{{/if}} 小
+            <td>{{if rs.isMemberCount == 1}} - 
+                {{else}}
+                    {{if rs.touristAdultCount == null || rs.touristAdultCount == ""}}0{{else}}{{rs.touristAdultCount}}{{/if}} 大  
+                    {{if rs.touristChildCount == null || rs.touristChildCount == ""}}0{{else}}{{rs.touristChildCount}}{{/if}} 小
+                {{/if}}
             </td>
             <td>{{if rs.driverName == null || rs.driverName == ""}}-{{else}}{{rs.driverName}}{{/if}}</td>
             <td>{{if (rs.brand == null || rs.brand == "") && (rs.seatCount == null || rs.seatCount == "" || rs.seatCount == 0)}}
