@@ -834,7 +834,7 @@ define(function(require, exports){
     			"images":[]
 	    	};
 	    	var strs = url.split(",");
-	         for(var i = 0; i < strs.length; i ++) {
+	        for(var i = 0; i < strs.length; i ++) {
 	            var s = strs[i];
 	            if(s != null && s != "" && s.length > 0) {
 	                var image = {
