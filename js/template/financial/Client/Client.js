@@ -280,7 +280,7 @@ define(function(require, exports) {
             if (!validator.form()) { return; }
             FinancialService.changeUncheck($tab.find('.T-checkTr'), function(){
                 Client.saveCheckingData($tab);
-            }
+            });
          });
 
         //关闭页面事件
