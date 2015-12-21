@@ -98,10 +98,10 @@
                     {{Checking.unPayedMoney}}
                 </td>
                 <td>
-                    <input type="text" name="payMoney" value="{{Checking.payMoney}}" data-le="{{Checking.unPayedMoney}}">
+                    <input type="text" name="payMoney" value="{{Checking.payMoney}}" data-le="{{Checking.unPayedMoney}}" {{if isAutoPay != 2 && Checking.unPayedMoney <= 0}} disabled {{/if}}>
                 </td>
                 <td>
-                    <input type="text" value="{{Checking. payRemark}}" name="checkRemark">
+                    <input type="text" value="{{Checking. payRemark}}" name="checkRemark" {{if isAutoPay != 2 && Checking.unPayedMoney <= 0}} disabled {{/if}}>
                 </td>
                 <td>{{Checking.checkTime}}</td>
                 <td>{{Checking.checkUser }}</td>
