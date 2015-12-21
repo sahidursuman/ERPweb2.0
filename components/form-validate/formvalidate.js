@@ -73,6 +73,11 @@
 		}
 	};
 
+	// 日期校验回调，用于触发校验效果
+	function changeDateCallBack(event) {
+		$(this).trigger(FOCUS_OUT_EVENT);
+	}
+
 	Validate.prototype.activeOnEle = function(setting)  {
 		var that = this;
 		if (setting.$ele)  {
@@ -133,9 +138,6 @@
 				});
 			}
 
-			function changeDateCallBack(event) {
-				$(this).trigger(FOCUS_OUT_EVENT);
-			}
 		}
 		
 	};
