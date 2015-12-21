@@ -175,13 +175,13 @@ define(function(require,exports){
 						Tools.inputCtrolFloat($normalInPrice);
 			    	//给项目列表新增按钮绑定事件
 			    	var $scenicItemObj=$project.find(".T-scenicItemStandardList");
-			    	$project.find(".T-btn-scenic-add").click(function(){
+			    	$project.find(".T-scenic-standard-add").click(function(){
 			    		var html = "<tr>" +
 			    				"<td><input name=\"name\" class='col-sm-12' type=\"text\" maxlength=\"100\"/></td>" +
 			    				"<td class=\"time\"><div class=\"clearfix\" style=\"margin-top:1px\">日常价格<label class=\"timeArea\" style=\"float:right;padding-top:3px;\"><button class=\"btn btn-success btn-sm btn-white T-add addScenice\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i></button></label></div></td>" +
 			    				"<td><div class=\"clearfix\" style=\"margin-top:0px\"><input name=\"normalInnerPrice\" style='margin-top: 2px' class='col-sm-12' type=\"text\" maxlength=\"7\"/></div></td>" +
 			    				"<td><input name=\"remark\" class='col-sm-12' type=\"text\" maxlength=\"1000\"/></td>" +
-			    				"<td style=\"width:70px\"><a data-entity-id=\"\" class=\" T-btn-scenic--delete\">删除</a></td>" +
+			    				"<td style=\"width:70px\"><a data-entity-id=\"\" class=\"T-scenic-standard-delete\">删除</a></td>" +
 			    				"</tr>";
 			    		$scenicItemObj.find("tbody").append(html);
 
@@ -194,7 +194,7 @@ define(function(require,exports){
 			    		//对景区管理的项目列表校验
 			    		itemValidator = rule.checkItems($project);
 			    		//给对景区管理的项目列表绑定事件
-			    		$scenicItemObj.find("tbody .T-btn-scenic--delete").click(function(){
+			    		$scenicItemObj.find("tbody .T-scenic-standard-delete").click(function(){
 				    		$(this).parent().parent().fadeOut(function(){
 				    			$(this).remove();
 				    		});
@@ -223,15 +223,7 @@ define(function(require,exports){
 								language: 'zh-CN'
 							});
 							$scenicItemObj.find(".timeArea button.T-del").click(function(){
-								var $_that=$(this),
-								    $divObj=$_that.closest('div'),
-								    divIndex = $divObj.attr("data-index");
-								$divObj.fadeOut(function(){
-									$(this).remove();
-								});
-								$divObj.parent().next().find(".div-"+divIndex+"").fadeOut(function(){
-									$(this).remove();
-								});
+								ScenicResource.deleteTimeArea($(this));
 							});
 						});
 				    })
@@ -291,8 +283,8 @@ define(function(require,exports){
 						    	});
 						    	
 						    	// 修改时删除原来的standard，
-						    	$scenicItemObj.find(".timeArea button.T-delete").click(function(){
-						    		ScenicResource.deleteOriginalRecord($(this));
+						    	$scenicItemObj.find(".timeArea button.T-del").click(function(){
+						    		ScenicResource.deleteTimeArea($(this));
 								});
 						    	
 						    	$scenicItemObj.find(".T-scenic-standard-delete").click(function(){
@@ -585,7 +577,7 @@ define(function(require,exports){
 	ScenicResource.modifyOriginalRecord=function(obj,$scenicItemObj){
     	var $td = obj.closest('td'), 
 			index = $td.find("div").length,
-			timeLimitDiv = "<div data-index=\""+(index+1)+"\" data-entity-id=\"\" class=\"clearfix T-appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right\"><button class=\"btn btn-danger btn-sm btn-white T-delete\"><i class=\"ace-icon fa fa-minus bigger-110 icon-only\"></i></button></label></div>",
+			timeLimitDiv = "<div data-index=\""+(index+1)+"\" data-entity-id=\"\" class=\"clearfix T-appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right\"><button class=\"btn btn-danger btn-sm btn-white T-del\"><i class=\"ace-icon fa fa-minus bigger-110 icon-only\"></i></button></label></div>",
 			contractPriceInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-top:7px\"><input name=\"contractPrice\" class='col-sm-12' type=\"text\" maxlength=\"7\"/></div>";
 		$td.append(timeLimitDiv);
 		$td.next().append(contractPriceInput);
@@ -595,29 +587,20 @@ define(function(require,exports){
 				format: 'yyyy-mm-dd',
 				language: 'zh-CN'
 		});
-		$scenicItemObj.find(".timeArea button.T-delete").click(function(){
-				var $div = $(this).closest('div'),
-				    entityId = $div.attr("data-entity-id"),
-				    divIndex = $div.attr("data-index");
-				if (entityId != null && entityId != "") {
-					$div.addClass("deleted");
-					$div.fadeOut(function(){
-						$(this).hide();
-					});
-				}else{
-					$div.fadeOut(function(){
-						$(this).remove();
-					});
-				}
-				$div.parent().next().find(".div-"+divIndex+"").fadeOut(function(){
-					$(this).remove();
-				});
+		$scenicItemObj.find(".timeArea button.T-del").click(function(){
+			ScenicResource.deleteTimeArea($(this));
 		});
 	};
-	ScenicResource.deleteOriginalRecord=function($obj){
+	ScenicResource.deleteTimeArea = function($obj){
+		if (!$obj.data('deleted')) {
+			$obj.data('deleted', true);
 			var $div = $obj.closest('div'),
 			    entityId = $div.attr("data-entity-id"),
-			    divIndex = $div.attr("data-index");
+			    divIndex = $div.attr("data-index"),
+			    index = $obj.closest('td').find('div:not(.deleted)').index($div);
+			$div.parent().next().children('div').eq(index).fadeOut(function(){
+				$(this).remove();
+			});
 			if (entityId != null && entityId != "") {
 				$div.addClass("deleted");
 				$div.fadeOut(function(){
@@ -628,9 +611,7 @@ define(function(require,exports){
 					$(this).remove();
 				});
 			}
-			$div.parent().next().find(".div-"+divIndex+"").fadeOut(function(){
-				$(this).remove();
-			});
+		}
 	};
 	exports.init=ScenicResource.initModule;
 	exports.addScenic = ScenicResource.addScenic;

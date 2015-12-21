@@ -191,7 +191,9 @@ define(function(require, exports) {
                 OtherAccounts.lookDetail(id);
             } else if ($that.hasClass('T-viewInsuanceImg')) {
                 // 查看单据
-                OtherAccounts.viewInsuranceImg(this);
+                var bigImg = $checkTab.find('input[name=WEB_IMG_URL_BIG]').val();
+                var smallImg = $checkTab.find('input[name=WEB_IMG_URL_SMALL]').val();
+                OtherAccounts.viewInsuranceImg(this,bigImg,smallImg);
             } else if ($that.hasClass('T-viewhandle')) {
                 // 查看对账明细
                 OtherAccounts.viewhandle(id);
@@ -448,9 +450,11 @@ define(function(require, exports) {
             if ($that.hasClass('T-lookPay')) {
                 // 查看已付明细
                 OtherAccounts.ViewAmountPaid(id);
-            } else if ($that.hasClass('T-insuanceImg')) {
+            } else if ($that.hasClass('T-viewInsuanceImg')) {
                 // 查看单据
-                OtherAccounts.viewInsuranceImg(this);
+                var bigImg = $PaymentTabId.find('input[name=WEB_IMG_URL_BIG]').val();
+                var smallImg = $PaymentTabId.find('input[name=WEB_IMG_URL_SMALL]').val();
+                OtherAccounts.viewInsuranceImg(this,bigImg,smallImg);
             } else if ($that.hasClass('T-viewhandle')) {
                 // 查看对账明细
                 OtherAccounts.viewOrderDetail(id);
@@ -547,7 +551,7 @@ define(function(require, exports) {
                 url: KingServices.build_url("account/arrangeOtherFinancial", "savePayment"),
                 type: "POST",
                 data: {
-                    reconciliation: json
+                    payment: json
                 },
             }).done(function(data) {
                 if (showDialog(data)) {
@@ -568,21 +572,21 @@ define(function(require, exports) {
         }
     };
     //显示单据
-    OtherAccounts.viewInsuranceImg = function(obj) {
+    OtherAccounts.viewInsuranceImg = function(obj,bigImg,smallImg) {
         var data = {
             "images": []
         };
         var str = $(obj).attr('url');
         var strs = str.split(",");
-        for (var i = 0; i < strs.length; i++) {
-            var s = strs[i];
-            if (s != null && s != "" && s.length > 0) {
-                var image = {
-                    "WEB_IMG_URL_BIG": imgUrl + s,
-                    "WEB_IMG_URL_SMALL": imgUrl + s + "?imageView2/2/w/150",
+        for(var i = 0; i < strs.length; i ++) {
+                var s = strs[i];
+                if(s != null && s != "" && s.length > 0) {
+                    var image = {
+                        "WEB_IMG_URL_BIG":imgUrl+s,
+                        "WEB_IMG_URL_SMALL":imgUrl+s+"?imageView2/2/w/150",
+                    }
+                    data.images.push(image);
                 }
-                data.images.push(image);
-            }
         }
         var html = viewImgCheckingTemplate(data);
 
@@ -645,7 +649,6 @@ define(function(require, exports) {
                         zIndex: 1028,
                         content: html,
                         scrollbar: false,
-
                     });
                 }
             }

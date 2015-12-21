@@ -280,6 +280,10 @@ define(function(require,exports) {
 				$obj.find('input[name=sumPayMoney]').val(InnerTransferOut.saveJson.autoPayMoney);
 				InnerTransferOut.setAutoFillEdit($obj,true);
 			};
+		}else{
+			$obj.find('.'+$list).off('change').on('change','input',function(){
+				$(this).closest('tr').data('change',true);
+			});
 		};
 		//页面时间控件格式化
 		FinancialService.initDate($checkSearchArea);
@@ -287,8 +291,10 @@ define(function(require,exports) {
 		$checkSearchArea.find(".T-checking-search").on('click',function(event){
 			event.preventDefault();
 			if(typeFlag !=2){
+				$obj.data('isEdited', false);
 				InnerTransferOut.chenking(0);
 			}else{
+				$obj.data('isEdited', false);
 				InnerTransferOut.settlement($data);
 			}
 		});
@@ -341,11 +347,22 @@ define(function(require,exports) {
         });
         //关闭事件
         $obj.find(".T-close").on('click',function(event){
-        	event.preventDefault();
-        	showConfirmDialog($( "#confirm-dialog-message" ), "确定关闭本选项卡?",function(){
+        	var checkBoxList = $obj.find(".T-checkList").find('.innerTransferFinancial');
+        	checkBoxList.each(function(i){
+        		var $this = $(this),
+        			flag = $this.is(":checked"),
+        			$tr = $this.closest('tr');
+        		if($tr.data('change') && $tr.data("confirm") == 0 && !flag){
+        			showConfirmDialog($( "#confirm-dialog-message" ), "您有记录已修改但未勾选对账，是否继续?",function(){
+		        		var tabId = typeFlag == 2?settleId:checkId;
+		        		Tools.closeTab(tabId);
+		        	})
+        		}
+        	});
+        	/*showConfirmDialog($( "#confirm-dialog-message" ), "确定关闭本选项卡?",function(){
         		var closeId = typeFlag == 2?settleId:checkId;
         		Tools.closeTab(closeId);
-        	});
+        	});*/
         });
         //自动下账事件
         $obj.find('.T-btn-autofill').off('click').on('click',function(){
