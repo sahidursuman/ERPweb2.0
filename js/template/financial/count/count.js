@@ -829,20 +829,21 @@ define(function(require, exports){
 	};
 	//查看单据事件
 	Count.viewImages = function(url,bigImg,smallImg){
-		var data = {
-	    			"images":[]
+
+			var data = {
+    			"images":[]
 	    	};
 	    	var strs = url.split(",");
-	    	for(var i = 0; i < strs.length; i ++) {
-	    		var s = strs[i];
-	    		if(s != null && s != "" && s.length > 0) {
-		    		var image = {
-		    				"bigImg":imgUrl+s,	//原图
-		    				"smallImg":imgUrl+s+"?imageView2/2/w/150",	//缩略图
-		    		}
-		    		data.images.push(image);
-	    		}
-	    	}
+	         for(var i = 0; i < strs.length; i ++) {
+	            var s = strs[i];
+	            if(s != null && s != "" && s.length > 0) {
+	                var image = {
+	                    "WEB_IMG_URL_BIG":imgUrl+s,
+	                    "WEB_IMG_URL_SMALL":imgUrl+s+"?imageView2/2/w/150",
+	                }
+	                data.images.push(image);
+	            }
+	        }
 	    	if(data.images.length == 0) {
 	    		showMessageDialog($( "#confirm-dialog-message" ), "没有回传单据", function(){});
 	    		return;
@@ -3072,6 +3073,46 @@ define(function(require, exports){
 			}
 		}
 
+		var addoOherInList = saveJsonStr.otherInList;
+		for(var i = 0;i<addoOherInList.length;i++){
+			if(addoOherInList[i].title == "" || addoOherInList[i].price == "" || addoOherInList[i].count == ""){
+				var message="";
+				if(addoOherInList[i].title == ""){
+					message = "请输入项目"
+				}else{
+					if(addoOherInList[i].price == ""){
+						message="请输入单价"
+					}else{
+						if(addoOherInList[i].count == ""){
+							message="请输入数量"
+						}
+					}
+				};
+				showMessageDialog($("#confirm-dialog-message"),message);
+				return;
+			}
+		}
+
+		var addoOherList = saveJsonStr.otherArrangeList;
+		for(var i = 0;i<addoOherList.length;i++){
+			if(addoOherList[i].title == "" || addoOherList[i].price == "" || addoOherList[i].realCount == ""){
+				var message="";
+				if(addoOherList[i].title == ""){
+					message = "请输入项目"
+				}else{
+					if(addoOherList[i].price == ""){
+						message="请输入单价"
+					}else{
+						if(addoOherList[i].realCount == ""){
+							message="请输入数量"
+						}
+					}
+				};
+				showMessageDialog($("#confirm-dialog-message"),message);
+				return;
+			}
+		}
+
 		var addTicketList = saveJsonStr.addTicketArrangeList;
 		for(var i = 0;i<addTicketList.length;i++){
 			if(addTicketList[i].ticketId == "" || addTicketList[i].startTime == ""){
@@ -3105,7 +3146,6 @@ define(function(require, exports){
 						}else{
 							if(typeFlag == 3){
 								Count.webFanishAccount(id);
-								//Tools.closeTab(ReimbursementId);
 							}else{
 								Count.Reimbursement(financialTripPlanId);
 							}
