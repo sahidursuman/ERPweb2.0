@@ -56,14 +56,14 @@
                 <th class="th-border">结算金额</th>
                 <th class="th-border">未付金额</th>
                 <th class="th-border">备注</th>
-                <th class="th-border">对账时间</th>
+                <th class="th-border">对账时间1</th>
                 <th class="th-border">对账人</th>
                 <th class="th-border">对账</th>
             </tr>
         </thead>
         <tbody class="T-checkListNum T-checkList">
             {{each financialOtherDetailsList as Checking index}}
-            <tr class="T-checkTr" data-id="{{Checking.id}}" data-entity-isConfirmAccount="{{Checking.isConfirmAccount}}" data-entity-settlementMoney="{{Checking.settlementMoney}}" data-confirm="{{Checking.isConfirmAccount}}">
+            <tr class="T-checkTr" data-id='{{Checking.id}}' data-entity-isConfirmAccount="{{Checking.isConfirmAccount}}" data-entity-settlementMoney="{{Checking.settlementMoney}}" data-confirm="{{Checking.isConfirmAccount}}">
                 <td>{{Checking.info}}</td>
                 <td name="startTime">{{Checking.accountTime}}</td>
                 <td>{{Checking.adultCount}}{{"大人"}}{{Checking.childCount}}{{"小孩"}}</td>
