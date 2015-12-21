@@ -48,7 +48,8 @@ define(function(require, exports) {
     };
     //游客管理页面初始化
     touristGroup.initModule = function() {
-        touristGroup.listTouristGroup(touristGroup.args);
+        touristGroup.$searchArea = false;
+        touristGroup.listTouristGroup({pageNo: 0, type: 0});
     };
     touristGroup.listTouristGroup = function($args) {
         //判断搜索区域的变化--是否改变条件
