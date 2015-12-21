@@ -520,7 +520,7 @@ define(function(require, exports) {
 
         var argumentsLen = arguments.length,
             clearSaveJson = FinancialService.clearSaveJson(Self.$clearTab,Self.clearTempData,new FinRule(Self.showBtnFlag ? 3 : 1));
-
+            console.log(argumentsLen);
         clearSaveJson = JSON.stringify(clearSaveJson);
         $.ajax({
             url:KingServices.build_url("account/selfPayFinancial","confirmSelfPayPayment"),
@@ -538,7 +538,10 @@ define(function(require, exports) {
                         Self.clearTempData = false;
                         Self.clearTempSumDate = false;
                         if(argumentsLen === 2){
+                            console.log(Self.searchData);
+                            console.log(argumentsLen);
                             Tools.closeTab(menuKey + "-clearing");
+
                             Self.listSelf(Self.searchData.pageNo,Self.searchData.selfPayName,Self.searchData.selfPayId,Self.searchData.startDate,Self.searchData.endDate);
                         }else if(argumentsLen === 3){
                             Self.$clearTab.data('isEdited',false);
