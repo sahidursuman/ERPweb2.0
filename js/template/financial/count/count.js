@@ -577,9 +577,8 @@ define(function(require, exports){
 							"busCompanyArrange":JSON.parse(data.busCompanyArrange),
 							"tripPlan":JSON.parse(data.tripPlan),
 							"dayList":JSON.parse(data.dayList),
-							//"user":JSON.parse(data.user),
 							"guideArrange":JSON.parse(data.guideArrange),
-							"insuranceArrange":JSON.parse(data.insuranceArrangeList),
+							"insuranceArrangeList":JSON.parse(data.insuranceArrangeList),
 							"ticketArrangeList":JSON.parse(data.ticketArrangeList),
 							"WEB_IMG_URL_BIG":data.WEB_IMG_URL_BIG,
 							"WEB_IMG_URL_SMALL":data.WEB_IMG_URL_SMALL,
@@ -1494,7 +1493,7 @@ define(function(require, exports){
 		'<td><input name="reduceMoney" style="width:60px;" type="text"><input name="selfMoney" class="selfMoney" style="width:60px;" type="hidden"></td>'+
 		'<td><span class="needIncome"></span></td>'+
 		'<td><span class="needPayMoney"></span></td>'+
-		'<td><input name="hasPayedMoney" style="width:60px;" type="text"></td>'+
+		'<td>0</td>'+
 		'<td><input name="guidePayMoney" style="width:60px;" type="text"></td>'+
 		'<td><input name="currentMonry" style="width:60px;" type="text"></td>'+
 		'<td><span style="color:#bbb;">查看</span></td>'+
@@ -1760,7 +1759,7 @@ define(function(require, exports){
 		'<td><input type="text" name="realCount" style="width:90px;"/></td>'+
 		'<td><input type="text" name="reduceMoney" style="width:90px;"/></td>'+
 		'<td><span class="restneedPayMoney">0</span><input type="hidden" value="0" name="needPayMoney"></td>'+
-		'<td><input type="text" name="payedMoney" style="width:90px;"/></td>'+
+		'<td>0</td>'+
 		'<td><input type="text" name="guidePayMoney" style="width:90px;"/></td>'+
 		'<td><span style="color:#bbb;">查看</span></td>'+
 		'<td><span class="difference"></span></td>'+
@@ -1846,7 +1845,7 @@ define(function(require, exports){
 		'<td><input type="text" name="realCount" style="width:90px;"/></td>'+
 		'<td><input type="text" name="reduceMoney" style="width:90px;"/></td>'+
 		'<td><span class="hotelneedPayMoney">0</span><input type="hidden" value="0" name="needPayMoney"></td>'+
-		'<td><input type="text" name="payedMoney" style="width:90px;"/></td>'+
+		'<td>0</td>'+
 		'<td><input type="text" name="guidePayMoney" style="width:90px;"/></td>'+
 		'<td><span style="color:#bbb;">查看</span></td>'+
 		'<td><span class="difference"></span></td>'+
@@ -1932,7 +1931,7 @@ define(function(require, exports){
 		'<td><input type="text" name="realCount" style="width:90px;"/></td>'+
 		'<td><input type="text" name="reduceMoney" style="width:90px;"/></td>'+
 		'<td><span class="scenicneedPayMoney">0</span><input type="hidden" value="0" name="needPayMoney"></td>'+
-		'<td><input type="text" name="payedMoney" style="width:90px;"/></td>'+
+		'<td>0</td>'+
 		'<td><input type="text" name="guidePayMoney" style="width:90px;"/></td>'+
 		'<td><span style="color:#bbb;">查看</span></td>'+
 		'<td><span class="difference"></span></td>'+
@@ -2029,7 +2028,7 @@ define(function(require, exports){
 		'<td><input type="text" name="realCount" style="width:90px;"/></td>'+
 		'<td><input type="text" name="reduceMoney" style="width:90px;"/></td>'+
 		'<td><span class="ticketneedPayMoney">0</span><input type="hidden" value="0" name="needPayMoney"></td>'+
-		'<td><input type="text" name="payedMoney" style="width:90px;"/></td>'+
+		'<td>0</td>'+
 		'<td><input type="text" name="guidePayMoney" style="width:90px;"/></td>'+
 		'<td><span style="color:#bbb;">查看</span></td>'+
 		'<td><span class="difference"></span></td>'+
@@ -2121,7 +2120,7 @@ define(function(require, exports){
 		'<td><input type="text" name="realCount" style="width:90px;"/></td>'+
 		'<td><input type="text" name="reduceMoney" style="width:90px;"/></td>'+
 		'<td><span class="otherOutNeedPayMoney">0</span><input type="hidden" value="0" name="needPayMoney"></td>'+
-		'<td><input type="text" name="payedMoney" style="width:90px;"/></td>'+
+		'<td>0</td>'+
 		'<td><input type="text" name="guidePayMoney" style="width:90px;"/></td>'+
 		'<td><span style="color:#bbb;">查看</span></td>'+
 		'<td><span class="difference"></span></td>'+
