@@ -12,11 +12,24 @@
 						<td class="style-myself">出游日期</td>
 						<td style="text-align: left;padding: 0px 0px 0px 10px">{{touristGroupDetail.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
 						<td class="style-myself">是否购买保险</td>
-						<td style="text-align: left;padding: 0px 0px 0px 10px" colspan="3">{{if touristGroupDetail.buyInsurance == 0}}
+						<td style="text-align: left;padding: 0px 0px 0px 10px">{{if touristGroupDetail.buyInsurance == 0}}
 							否
 							{{else touristGroupDetail.buyInsurance == 1}}
 							是
 							{{/if}}</td>
+						<td>收款方式</td>
+							<td style="text-align: left;padding: 0px 0px 0px 10px">{{if touristGroupDetail.incomeType==0}}
+									现金
+									{{else if touristGroupDetail.incomeType==1}}
+									银行转账
+									{{else if touristGroupDetail.incomeType==2}}
+									网上支付
+									{{else if touristGroupDetail.incomeType==3}}
+									支票
+									{{else}}
+									其它
+									{{/if}}
+							</td>
 
 					</tr>
 					<tr>
@@ -49,11 +62,8 @@
 						<td style="text-align: left;padding: 0px 0px 0px 10px;width: 20%;">{{touristGroupDetail.currentNeedPayMoney}}</td>
 						<td class="style-myself">未收</td>
 						<td style="text-align: left;padding: 0px 0px 0px 10px;width: 20%;">{{touristGroupDetail.unIncomeMoney}}</td>
-
-					</tr>
+						</tr>
 				</table>
-
-
 				<div class="form-group">
 					<div class="col-sm-12">
 						<table class="table table-striped table-bordered table-hover addCostList"> 
