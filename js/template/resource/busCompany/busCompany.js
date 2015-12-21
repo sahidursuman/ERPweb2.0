@@ -346,7 +346,7 @@ define(function(require,exports){
 								});
 								//删除原有包车区间
 								$busList.find(".T-del").on('click',function(){
-									busCompany.deletedTimeArea($(this),2);
+									BusCompany.deletedTimeArea($(this),2);
 								});
 								//新增车辆
 								var $addBtn = $busList.find(".T-busCompany-add");
@@ -656,11 +656,11 @@ define(function(require,exports){
 			var $td = $($obj).closest('td');
 			var entityId = div.attr("data-entity-id");
 			var divIndex = div.attr("data-index");
-			var index = div.index();
+			var index = $td.find('div:not(.deleted)').index(div);
 			//通过typeF来判断是新增车队页面还是修改车队页面1--新增；2--修改
 			$td.next().children('div').eq(index).fadeOut(function(){
-					$(this).remove();
-				});
+				$(this).remove();
+			});
 			if(typeFlag == 1){
 				div.fadeOut(function(){
 					$(this).remove();
