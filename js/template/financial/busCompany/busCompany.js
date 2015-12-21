@@ -139,7 +139,7 @@ define(function(require, exports) {
             accountInfo: accountInfo,
             startTime: startDate,
             endTime: endDate,
-            sortType: "auto"
+            sortType: "startTime"
         };
         searchParam = JSON.stringify(searchParam);
         $.ajax({
@@ -247,7 +247,7 @@ define(function(require, exports) {
             accountInfo: accountInfo,
             startTime: startDate,
             endTime: endDate,
-            sortType: "auto"
+            sortType: "startTime"
         }, args = arguments;
         if(isAutoPay == 1){
            searchParam.isAutoPay = isAutoPay;
@@ -353,7 +353,10 @@ define(function(require, exports) {
         });
         $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
             event.preventDefault();
-            busCompany.initClear(busCompany.$clearTab.data('next'));
+            busCompany.clearTempSumDate = false;
+            busCompany.clearTempData = false;
+            busCompany.$clearTab.data('isEdited',false);
+            busCompany.busCompanyClear(0,0,busCompany.$clearTab.data('next')[2],busCompany.$clearTab.data('next')[3]);
             busCompany.$clearTab.find(".T-cancel-auto").hide();
         })
         // 监听保存，并切换tab
@@ -370,10 +373,7 @@ define(function(require, exports) {
 
         //搜索事件
         busCompany.$clearTab.find(".T-search").click(function(){
-            busCompany.clearTempSumDate = false;
-            busCompany.clearTempData = false;
-            busCompany.$clearTab.data('isEdited',false);
-            busCompany.busCompanyClear(isAutoPay,0,id,name);
+            busCompany.busCompanyClear(0,0,id,name);
         });
 
         //关闭页面事件
@@ -483,6 +483,7 @@ define(function(require, exports) {
             success:function(data){
                 var result = showDialog(data);
                 if(result){
+                    busCompany.$clearTab.data('isEdited',false);
                     showMessageDialog($("#confirm-dialog-message"),data.message,function(){
                         busCompany.clearTempData = false;
                         busCompany.clearTempSumDate = false;
@@ -490,12 +491,9 @@ define(function(require, exports) {
                             Tools.closeTab(menuKey + "-clearing");
                             busCompany.listBusCompany(busCompany.searchData.pageNo,busCompany.searchData.busCompanyName,busCompany.searchData.busCompanyId,busCompany.searchData.startDate,busCompany.searchData.endDate);
                         }else if(argumentsLen === 1){
-                            busCompany.$clearTab.data('isEdited',false);
-                            busCompany.busCompanyClear(isAutoPay,page,id,name);
+                            busCompany.busCompanyClear(0,page,id,name);
                         } else {
-                            busCompany.$clearTab.data('isEdited',false);
-                            Tools.addTab(tab_id, title, html);
-                            busCompany.initClear(busCompany.$clearTab.data('next'));
+                            busCompany.busCompanyClear(0,0,busCompany.$clearTab.data('next')[2],busCompany.$clearTab.data('next')[3]);
                         }
                     });
                     
