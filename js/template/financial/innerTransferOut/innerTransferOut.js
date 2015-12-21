@@ -343,26 +343,33 @@ define(function(require,exports) {
         //确认对账事件
         $obj.find(".T-checking").on('click',function(event){
         	if(!InnerTransferOut.validatorCheck.form()){return;}
-        	InnerTransferOut.saveCheckingData(0,$obj,"")
+			InnerTransferOut.saveCheckingData(0,$obj,"");
         });
         //关闭事件
         $obj.find(".T-close").on('click',function(event){
-        	var checkBoxList = $obj.find(".T-checkList").find('.innerTransferFinancial');
-        	checkBoxList.each(function(i){
-        		var $this = $(this),
-        			flag = $this.is(":checked"),
-        			$tr = $this.closest('tr');
-        		if($tr.data('change') && $tr.data("confirm") == 0 && !flag){
-        			showConfirmDialog($( "#confirm-dialog-message" ), "您有记录已修改但未勾选对账，是否继续?",function(){
-		        		var tabId = typeFlag == 2?settleId:checkId;
-		        		Tools.closeTab(tabId);
+        	if(typeFlag == 1){
+        		var checkBoxList = $obj.find(".T-checkList").find('.innerTransferFinancial')
+        		result =false;
+        		checkBoxList.each(function(i){
+	        		var $this = $(this),
+	        			flag = $this.is(":checked"),
+	        			$tr = $this.closest('tr');
+	        		if($tr.data('change') && $tr.data("confirm") == 0 && !flag){
+	        			result = true;
+	        		}
+        		});
+        		if(result){
+	        		showConfirmDialog($( "#confirm-dialog-message" ), "您有记录已修改但未勾选对账，是否继续?",function(){
+		        		Tools.closeTab(checkId);
 		        	})
-        		}
-        	});
-        	/*showConfirmDialog($( "#confirm-dialog-message" ), "确定关闭本选项卡?",function(){
-        		var closeId = typeFlag == 2?settleId:checkId;
-        		Tools.closeTab(closeId);
-        	});*/
+	        	}else{
+	        		Tools.closeTab(checkId);
+	        	};
+        	}else{
+        		Tools.closeTab(settleId);
+        	}
+        	
+        	
         });
         //自动下账事件
         $obj.find('.T-btn-autofill').off('click').on('click',function(){
