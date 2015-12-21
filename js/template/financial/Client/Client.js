@@ -278,7 +278,9 @@ define(function(require, exports) {
         //确认对账按钮事件
         $tab.find(".T-btn-save").click(function(){ 
             if (!validator.form()) { return; }
-            Client.saveCheckingData($tab);
+            FinancialService.changeUncheck($tab.find('.T-checkTr'), function(){
+                Client.saveCheckingData($tab);
+            });
          });
 
         //关闭页面事件
@@ -562,7 +564,8 @@ define(function(require, exports) {
 
     Client.autoFillData = function($tab) {
         if(!!$tab && $tab.length){
-            var args = getBaseArgs($tab);
+            var args = getBaseArgs($tab, 1);
+            if(!args)return;
             FinancialService.autoPayConfirm(args.startDate, args.endDate, function() {
                 args.fromPartnerAgencyId = $tab.data('id');
                 args.sumTemporaryIncomeMoney = $tab.find('.T-sumReciveMoney').val();
@@ -940,9 +943,15 @@ define(function(require, exports) {
         });        
     };
 
-    function getBaseArgs($tab) {
-        var args = {
-            creatorId : $tab.find('.T-search-enter').data('id'),
+    function getBaseArgs($tab, isAuto) {
+        var id = $tab.find('.T-search-enter').data('id'),
+            args = {};
+        if(isAuto){
+            args = FinancialService.autoPayJson(id, $tab, new FinRule(2), 1);
+            if(!args)return false;
+        }
+        args = {
+            creatorId : id,
             lineProductId : $tab.find('.T-search-line').data('id'),
             lineProductName : $tab.find('.T-search-line').val(),
             creatorName : $tab.find('.T-search-enter').val(),

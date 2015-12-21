@@ -211,13 +211,15 @@ define(function(require, exports) {
 
         //关闭页面事件
         scenic.$checkTab.find(".T-close-check").click(function(){
-            Tools.closeTab(menuKey + "-checking");
+             Tools.closeTab(menuKey + "-checking");
         });
         //确认对账按钮事件
         scenic.$checkTab.find(".T-saveCheck").click(function(){ 
             validator = (new FinRule(0)).check(scenic.$checkTab.find(".T-checkList"));
             if (!validator.form()) { return; }
-            scenic.saveChecking(id,name,page);
+            FinancialService.changeUncheck(scenic.$checkTab.find('.T-checkTr'), function(){
+                scenic.saveChecking(id,name,page);
+            });
         });
     };
 
@@ -232,7 +234,7 @@ define(function(require, exports) {
     //结算
     scenic.scenicClear = function(isAutoPay,page,scenicId,scenicName,accountInfo,startDate,endDate, isOuter){
         if (isAutoPay) {
-            var searchParam = FinancialService.autoPayJson(scenic.$clearTab.find('.T-newData').data('id'),scenic.$clearTab, new FinRule(3));
+            var searchParam = FinancialService.autoPayJson(scenic.$clearTab.find('.T-newData').data('id'),scenic.$clearTab, new FinRule(3), 0);
             searchParam = JSON.parse(searchParam);
             searchParam.scenicId = searchParam.id;   
             delete(searchParam.id);

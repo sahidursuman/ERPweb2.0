@@ -41,6 +41,10 @@
             <label>未收金额合计：</label>
             <label class="T-unpayMoney">{{totalList.sumUnReceiveMoney}}</label>
         </div>
+        <div class="form-group marginLeft-30">
+            <label>未收金额合计(已对账)：</label>
+            <label>{{totalList.checkedUnPayedMoney}}</label>
+        </div>
     </div>
 </div>
 <div class="row" style="margin-top: 30px">
@@ -57,7 +61,7 @@
             <col style="width:8%;"> 
             <col style="width:9%;"> 
             <col style="width:5%;"> 
-            <col style="width:7%;"> 
+            <col style="width:7%; min-width: 110px;"> 
         </colgroup>
         <thead>
             <tr>

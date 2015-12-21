@@ -6,9 +6,9 @@
         </div>
         <div class="form-group marginLeft-30">
             <label>账期：</label>
-            <input type="text" class="form-control datepicker T-search-start-date" value="{{searchParam.startTime}}" style="width: 100px; text-align: center;">
+            <input type="text" class="form-control datepicker T-search-start-date" value="{{searchParam.startDate}}" style="width: 100px; text-align: center;">
             <label>&nbsp;至&nbsp;</label>
-            <input type="text" class="form-control datepicker T-search-end-date" value="{{searchParam.endTime}}" style="width: 100px; text-align: center;">
+            <input type="text" class="form-control datepicker T-search-end-date" value="{{searchParam.endDate}}" style="width: 100px; text-align: center;">
         </div>
         <div class="form-group marginLeft-30">
             <label>团信息：</label>
@@ -43,7 +43,7 @@
         </div>
         <div class="form-group marginLeft-30">
             <label>停车返佣合计：</label>
-            <label>{{totalList.sumCustomerRebateMoney}}</label>
+            <label>{{totalList.sumParkingRebateMoney}}</label>
         </div>
         <div class="form-group marginLeft-30">
             <label>返佣金额合计：</label>
@@ -56,6 +56,10 @@
         <div class="form-group marginLeft-30">
             <label>未收金额合计：</label>
             <label class="T-unpayMoney">{{totalList.sumUnReceiveMoney}}</label>
+        </div>
+        <div class="form-group marginLeft-30">
+            <label>未付金额合计(已对账)：</label>
+            <label>{{totalList.checkedUnPayedMoney}}</label>
         </div>
     </div>
 </div>
@@ -80,7 +84,7 @@
                 <th class="th-border" >备注</th>
                 <th class="th-border" >对账时间</th>
                 <th class="th-border" >对账人</th>
-                <th class="th-border" >对账</th>
+                <th class="th-border" style="min-width: 110px;">对账</th>
             </tr>
         </thead>
         <tbody class="T-list T-checkList">

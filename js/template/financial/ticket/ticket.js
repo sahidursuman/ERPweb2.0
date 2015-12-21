@@ -219,24 +219,28 @@ define(function(require, exports) {
 
 		$tab.find(".T-btn-close").on('click', function(event){
 			event.preventDefault();
-			if(!!$tab.data('isEdited')){
-				showSaveConfirmDialog($('#confirm-dialog-message'), "内容已经被修改，是否保存?", function(){
-					Ticket.saveCheckData($tab);
-				}, function(){
+			FinancialService.changeUncheck($tab.find('.T-checkTr'), function(){
+				if(!!$tab.data('isEdited')){
+					showSaveConfirmDialog($('#confirm-dialog-message'), "内容已经被修改，是否保存?", function(){
+						Ticket.saveCheckData($tab);
+					}, function(){
+						Tools.closeTab(checkMenuKey);
+	                	Ticket.getList(Ticket.listPageNo);
+					});
+				}else{
 					Tools.closeTab(checkMenuKey);
-                	Ticket.getList(Ticket.listPageNo);
-				});
-			}else{
-				Tools.closeTab(checkMenuKey);
-                Ticket.getList(Ticket.listPageNo);
-			}
+	                Ticket.getList(Ticket.listPageNo);
+				}
+			});
 		});
 		$tab.find(".T-btn-save").on('click', function(event){
 			event.preventDefault();
 		 	if (!validator.form()) {
                 return;
             }
-			Ticket.saveCheckData($tab);
+			FinancialService.changeUncheck($tab.find('.T-checkTr'), function(){
+				Ticket.saveCheckData($tab);
+			});
 		});
 	};
 
@@ -371,9 +375,9 @@ define(function(require, exports) {
 	Ticket.clearing = function(id, name){
 		Ticket.$clearingTab = null;
 		Ticket.clearingId = id;
-		Ticket.clearingList(0, id);
 		Ticket.isBalanceSource = false;
 		Ticket.balanceName = name;
+		Ticket.clearingList(0, id, Ticket.$tab.find('.T-search-start-date').val(), Ticket.$tab.find('.T-search-end-date').val());
 	};
 
 	Ticket.initPay = function(args){
@@ -387,8 +391,8 @@ define(function(require, exports) {
 		var args = {
 			pageNo : (page || 0),
 			ticketId : id || Ticket.clearingId,
-			startDate : start || Ticket.$tab.find('.T-search-start-date').val(),
-			endDate : end || Ticket.$tab.find('.T-search-end-date').val(),
+			startDate : start,
+			endDate : end,
 			accountInfo : ""
 		};
 		if(Ticket.$clearingTab){
@@ -511,6 +515,8 @@ define(function(require, exports) {
 			if(!reciveValidtor.form())return;
 			if ($(this).hasClass('btn-primary')) {
                 if (validator.form()) {
+					var args = FinancialService.autoPayJson(Ticket.clearingId, $tab, new FinRule(2), 0);
+					if(!args)return;
                 	FinancialService.autoPayConfirm($datepicker.eq(0).val(), $datepicker.eq(1).val(),function(){
                     	Ticket.setAutoFillEdit($tab, true);
                 	});
@@ -528,7 +534,7 @@ define(function(require, exports) {
      */
     Ticket.setAutoFillEdit = function($tab, disable) {
         var $sum = $tab.find('input[name="sumPayMoney"]').prop('disabled', disable),
-        args = {};
+        	args = {};
         if (!disable) {
             $sum.val(0);
             args.sumCurrentPayMoney = 0;

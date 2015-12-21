@@ -97,8 +97,8 @@ define(function(require, exports){
 					id : id, 
 					name : name,
 					source : true,
-					startTime : $tab.find('.T-search-start-date').val(),
-					endTime : $tab.find('.T-search-end-date').val(),
+					startDate : $tab.find('.T-search-start-date').val(),
+					endDate : $tab.find('.T-search-end-date').val(),
 				};
 			if ($that.hasClass('T-checking'))  {
 				// 对账
@@ -123,26 +123,23 @@ define(function(require, exports){
 		        $(this).blur().data('id', ui.item.id);
 		    }
 		}).on('click', function(){
-			if (!$obj.data('ajax')) {  // 避免重复请求
-				$.ajax({
-					url : KingServices.build_url('financial/shopAccount', 'selectShopName'),
-					type : "POST"
-				}).done(function(data){
-					if(showDialog(data)){
-						for(var i=0; i<data.shopList.length; i++){
-			                data.shopList[i].value = data.shopList[i].shopName;
-			                data.shopList[i].id = data.shopList[i].shopId;
-			            }
-			            data.shopList.unshift({id:'', value: '全部'});
-			            $obj.autocomplete('option', 'source', data.shopList);
-			            $obj.autocomplete('search', '');
+			$.ajax({
+				url : KingServices.build_url('financial/shopAccount', 'selectShopName'),
+				type : "POST",
+				showLoading: false
+			}).done(function(data){
+				if(showDialog(data)){
+					for(var i=0; i<data.shopList.length; i++){
+		                data.shopList[i].value = data.shopList[i].shopName;
+		                data.shopList[i].id = data.shopList[i].shopId;
+		            }
+		            data.shopList.unshift({id:'', value: '全部'});
+		            $obj.autocomplete('option', 'source', data.shopList);
+		            $obj.autocomplete('search', '');
 
-			            $obj.data('ajax', true);
-		        	}
-				});
-			} else {
-		        $obj.autocomplete('search', '');
-		    }
+		            //$obj.data('ajax', true);
+	        	}
+			});
 		});
 	};
 
@@ -180,12 +177,12 @@ define(function(require, exports){
 			args = {
 				pageNo: (args.page || 0),
 				shopId : args.id || $tab.data('id'),
-				startTime: args.start || $tab.find('.T-search-start-date').val(),
-				endTime : args.end || $tab.find('.T-search-end-date').val(),
+				startDate: args.start || $tab.find('.T-search-start-date').val(),
+				endDate : args.end || $tab.find('.T-search-end-date').val(),
 				tripMessage : $tab.find('.T-search-trip').val()
 			};
 		}
-		args.sortType = 'startTime';
+		args.sortType = 'accountTime';
         args.order='asc';
 		var method = 'listReciveShopAcccount';
 		if(!type){
@@ -247,12 +244,38 @@ define(function(require, exports){
 		var $searchArea = $tab.find('.T-search-area');
 		$searchArea.find('.T-btn-search').on('click', function(event){
 			event.preventDefault();
-			FinShop.initOperationList(0, type, $tab);
+			FinShop.initOperationList({}, type, $tab);
 		});
 		var $datepicker = $searchArea.find('.datepicker');
 		Tools.setDatePicker($datepicker, true);
 		var operationMenuKey = settMenuKey,
 			saveData = FinShop.saveSettlement;
+		
+		$tab.off('change').off(SWITCH_TAB_SAVE).off(CLOSE_TAB_SAVE)
+		.on('change', '.T-checkList', function(event) {
+			event.preventDefault();
+			$tab.data('isEdited', true);
+		})
+		.on(SWITCH_TAB_SAVE, function(event, tab_id, title, html){
+			event.preventDefault();
+			saveData($tab, true);
+		})
+		.on(CLOSE_TAB_SAVE, function(event){
+			event.preventDefault();
+			saveData($tab, true);
+		});
+
+		$tab.find('.T-checkTr').on('change', function(){
+			$(this).data('change', 'true');
+		});
+
+		// 监听修改
+        $tab.find(".T-clearList").off('change').on('change',"input",function(event) {
+            event.preventDefault();
+            $(this).closest('tr').data("change",true);
+            $tab.data('isEdited', true);
+        });
+
 		if(type){
 			var autoValidator = (new FinRule(2)).check($tab);
 			FinancialService.updateSumPayMoney($tab, new FinRule(FinShop.isBalanceSource ? 3 : 1));
@@ -277,24 +300,6 @@ define(function(require, exports){
         	FinancialService.initCheckBoxs($tab.find(".T-checkAll"), $tab.find(".T-checkList").find('.T-checkbox'));
 		}
 
-		$tab.off('change').off(SWITCH_TAB_SAVE).off(CLOSE_TAB_SAVE)
-		.on('change', '.T-checkList', function(event) {
-			event.preventDefault();
-			$tab.data('isEdited', true);
-		})
-		.on(SWITCH_TAB_SAVE, function(event, tab_id, title, html){
-			event.preventDefault();
-			saveData($tab, true);
-		})
-		.on(CLOSE_TAB_SAVE, function(event){
-			event.preventDefault();
-			saveData($tab, true);
-		});
-
-		$tab.find('.T-checkTr').on('change', function(){
-			$(this).data('change', 'true');
-		});
-
 		// 报表内的操作
 		$tab.find('.T-list').on('click', '.T-action', function(event) {
 			event.preventDefault();
@@ -302,7 +307,7 @@ define(function(require, exports){
 			if($that.hasClass('T-see-group')){
 				FinShop.unfold($that);
 			}else if($that.hasClass('T-view-receipts')){
-				FinShop.viewImage($tab, $that.closest('tr').data('images'));
+				FinShop.viewImage($tab, $that.closest('tr').data('billImage'));
 			}else if($that.hasClass('T-payDetails')){
 				FinShop.viewOperationDetail(id, 0);
 			}else if($that.hasClass('T-view-details')){
@@ -310,24 +315,31 @@ define(function(require, exports){
 			}
 		});
 
-		// 监听修改
-        $tab.find(".T-clearList").off('change').on('change',"input",function(event) {
-            event.preventDefault();
-            $(this).closest('tr').data("change",true);
-            $tab.data('isEdited', true);
-        });
 
 		//绑定确定事件
 		$tab.find('.T-btn-save').on('click', function(event){
 			event.preventDefault();
-			saveData($tab);
+			if(!type){
+				FinancialService.changeUncheck($tab.find('.T-checkTr'), function(){
+					saveData($tab);
+				});
+			}else{
+				saveData($tab);
+			}
+			
 		});
 		//绑定取消事件
 		$tab.find('.T-btn-close').on('click', function(event){
 			event.preventDefault();
 			if(!!$tab.data('isEdited')){
 				showSaveConfirmDialog($('#confirm-dialog-message'), "内容已经被修改，是否保存?", function(){
-					saveData($tab, true);
+					if(!type){
+						FinancialService.changeUncheck($tab.find('.T-checkTr'), function(){
+							saveData($tab, true);
+						});
+					}else{
+						saveData($tab, true);
+					}
 				}, function(){
 					Tools.closeTab(operationMenuKey);
 				});
@@ -475,15 +487,14 @@ define(function(require, exports){
      */
     FinShop.autoFillMoney = function($tab) {
         if (!!$tab && $tab.length) {
-            var $autoPayMoney = $tab.find('.T-sumPayMoney');
-
-            var args = {
-				shopId : FinShop.settlementId,
-				startDate : $tab.find('.T-search-start-date').val(),
-				endDate : $tab.find('.T-search-end-date').val(),
-				tripMessage : $tab.find('.T-search-trip').val(),
-				sumTemporaryIncomeMoney : $tab.find('.T-sumReciveMoney').val()
-            };
+        	var args = FinancialService.autoPayJson(FinShop.settlementId, $tab, new FinRule(2), 1);
+        	if(!args)return;
+        	args = JSON.parse(args);
+            args.shopId = args.id;
+            args.sumTemporaryIncomeMoney = args.sumCurrentPayMoney
+            args.tripMessage = $tab.find('.T-search-trip').val();
+            delete args.id;
+            delete args.sumCurrentPayMoney;
 
             $.ajax({
                     url: KingServices.build_url('financial/shopAccount', 'autoShopAccount'),
@@ -522,8 +533,8 @@ define(function(require, exports){
             var args = {
                 pageNo: pageNo || 0,
 				shopId : FinShop.settlementId,
-				startTime : $tab.find('.T-search-start-date').val(),
-				endTime : $tab.find('.T-search-end-date').val(),
+				startDate : $tab.find('.T-search-start-date').val(),
+				endDate : $tab.find('.T-search-end-date').val(),
 				tripMessage : $tab.find('.T-search-trip').val()
             };
 
@@ -540,6 +551,7 @@ define(function(require, exports){
 						$tab.find('.T-checkTr').on('change', function(){
 							$(this).data('change', 'true');
 						});
+						FinShop.initOperationEvent($tab, 1);
 						// 设置记录条数及页面
                         $tab.find('.T-sumItem').text('共计' + data.searchParam.recordSize + '条记录');
                         $tab.find('.T-btn-save').data('pageNo', args.pageNo);
