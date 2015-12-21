@@ -829,20 +829,21 @@ define(function(require, exports){
 	};
 	//查看单据事件
 	Count.viewImages = function(url,bigImg,smallImg){
-		var data = {
-	    			"images":[]
+
+			var data = {
+    			"images":[]
 	    	};
 	    	var strs = url.split(",");
-	    	for(var i = 0; i < strs.length; i ++) {
-	    		var s = strs[i];
-	    		if(s != null && s != "" && s.length > 0) {
-		    		var image = {
-		    				"bigImg":imgUrl+s,	//原图
-		    				"smallImg":imgUrl+s+"?imageView2/2/w/150",	//缩略图
-		    		}
-		    		data.images.push(image);
-	    		}
-	    	}
+	         for(var i = 0; i < strs.length; i ++) {
+	            var s = strs[i];
+	            if(s != null && s != "" && s.length > 0) {
+	                var image = {
+	                    "WEB_IMG_URL_BIG":imgUrl+s,
+	                    "WEB_IMG_URL_SMALL":imgUrl+s+"?imageView2/2/w/150",
+	                }
+	                data.images.push(image);
+	            }
+	        }
 	    	if(data.images.length == 0) {
 	    		showMessageDialog($( "#confirm-dialog-message" ), "没有回传单据", function(){});
 	    		return;
@@ -1420,7 +1421,7 @@ define(function(require, exports){
             guideRate = Count.changeTwoDecimal(guideRate);
             realCount = Count.changeTwoDecimal(realCount);
             reduceMoney = Count.changeTwoDecimal(reduceMoney);
-            var needSum = parseFloat(realCount) * parseFloat(marketPrice)-parseFloat(reduceMoney);
+            var needSum = parseFloat(realCount) * parseFloat(price)-parseFloat(reduceMoney);
             needPayMoney.text(needSum);
             //计算应收（单价*（实际数量-计划数量））
             var needCount = parseFloat(realCount)-parseFloat(memberCount);
@@ -2975,6 +2976,159 @@ define(function(require, exports){
 		var saveJsonStr = Count.installData(id,$obj);
 		console.log(saveJsonStr);
 			saveJsonStr.log.type = "1";
+
+		var addShopList = saveJsonStr.addShopArrangeList;
+		for(var i = 0;i<addShopList.length;i++){
+			if(addShopList[i].shopId == "" || addShopList[i].shopPolicyId == ""){
+				var message="";
+				if(addShopList[i].shopId == ""){
+					message = "请选择购物店"
+				}else{
+					if(addShopList[i].shopPolicyId == ""){
+						message="请选择商品"
+					}
+				};
+				showMessageDialog($("#confirm-dialog-message"),message);
+				return;
+			}
+		}
+
+		var addSelfList = saveJsonStr.addSelfPayArrangeList;
+		for(var i = 0;i<addSelfList.length;i++){
+			if(addSelfList[i].selfPayId == "" || addSelfList[i].selfPayItemId == ""){
+				var message="";
+				if(addSelfList[i].selfPayId == ""){
+					message = "请选择自费商家"
+				}else{
+					if(addSelfList[i].selfPayItemId == ""){
+						message="请选择自费项目"
+					}
+				};
+				showMessageDialog($("#confirm-dialog-message"),message);
+				return;
+			}
+		}
+
+		var addRestList = saveJsonStr.addRestArrangeList;
+		for(var i = 0;i<addRestList.length;i++){
+			if(addRestList[i].restaurantId == "" || addRestList[i].restaurantStandardId == ""){
+				var message="";
+				if(addRestList[i].restaurantId == ""){
+					message = "请选择餐厅"
+				}else{
+					if(addRestList[i].restaurantStandardId == ""){
+						message="请选择餐标"
+					}
+				};
+				showMessageDialog($("#confirm-dialog-message"),message);
+				return;
+			}
+		}
+
+		var addHotelList = saveJsonStr.addHotelArrangeList;
+		for(var i = 0;i<addHotelList.length;i++){
+			if(addHotelList[i].hotelId == "" || addHotelList[i].hotelRoomId == ""){
+				var message="";
+				if(addHotelList[i].hotelId == ""){
+					message = "请选择酒店"
+				}else{
+					if(addHotelList[i].hotelRoomId == ""){
+						message="请选择房型"
+					}
+				};
+				showMessageDialog($("#confirm-dialog-message"),message);
+				return;
+			}
+		}
+
+		var addScenicList = saveJsonStr.addScenicArrangeList;
+		for(var i = 0;i<addScenicList.length;i++){
+			if(addScenicList[i].scenicId == "" || addScenicList[i].scenicItemId == ""){
+				var message="";
+				if(addScenicList[i].scenicId == ""){
+					message = "请选择景区"
+				}else{
+					if(addScenicList[i].scenicItemId == ""){
+						message="请选择景区收费项目"
+					}
+				};
+				showMessageDialog($("#confirm-dialog-message"),message);
+				return;
+			}
+		}
+
+		var addTicketList = saveJsonStr.addTicketArrangeList;
+		for(var i = 0;i<addTicketList.length;i++){
+			if(addTicketList[i].ticketId == "" || addTicketList[i].startTime == ""){
+				var message="";
+				if(addTicketList[i].ticketId == ""){
+					message = "请选择票务商家"
+				}else{
+					if(addTicketList[i].startTime == ""){
+						message="请选择日期"
+					}
+				};
+				showMessageDialog($("#confirm-dialog-message"),message);
+				return;
+			}
+		}
+
+		var addoOherInList = saveJsonStr.otherInList;
+		for(var i = 0;i<addoOherInList.length;i++){
+			if(addoOherInList[i].title == "" || addoOherInList[i].price == "" || addoOherInList[i].count == ""){
+				var message="";
+				if(addoOherInList[i].title == ""){
+					message = "请输入项目"
+				}else{
+					if(addoOherInList[i].price == ""){
+						message="请输入单价"
+					}else{
+						if(addoOherInList[i].count == ""){
+							message="请输入数量"
+						}
+					}
+				};
+				showMessageDialog($("#confirm-dialog-message"),message);
+				return;
+			}
+		}
+
+		var addoOherList = saveJsonStr.otherArrangeList;
+		for(var i = 0;i<addoOherList.length;i++){
+			if(addoOherList[i].title == "" || addoOherList[i].price == "" || addoOherList[i].realCount == ""){
+				var message="";
+				if(addoOherList[i].title == ""){
+					message = "请输入项目"
+				}else{
+					if(addoOherList[i].price == ""){
+						message="请输入单价"
+					}else{
+						if(addoOherList[i].realCount == ""){
+							message="请输入数量"
+						}
+					}
+				};
+				showMessageDialog($("#confirm-dialog-message"),message);
+				return;
+			}
+		}
+
+		var addTicketList = saveJsonStr.addTicketArrangeList;
+		for(var i = 0;i<addTicketList.length;i++){
+			if(addTicketList[i].ticketId == "" || addTicketList[i].startTime == ""){
+				var message="";
+				if(addTicketList[i].ticketId == ""){
+					message = "请选择票务商家"
+				}else{
+					if(addTicketList[i].startTime == ""){
+						message="请选择日期"
+					}
+				};
+				showMessageDialog($("#confirm-dialog-message"),message);
+				return;
+			}
+		}
+
 		saveJsonStr = JSON.stringify(saveJsonStr);
 		$.ajax({
 			url:KingServices.build_url('financialTripPlan',method),
@@ -2992,7 +3146,6 @@ define(function(require, exports){
 						}else{
 							if(typeFlag == 3){
 								Count.webFanishAccount(id);
-								//Tools.closeTab(ReimbursementId);
 							}else{
 								Count.Reimbursement(financialTripPlanId);
 							}
@@ -3120,7 +3273,7 @@ define(function(require, exports){
 					billRemark:$(this).find('input[name=billRemark]').val()
 				};
 				saveJson.addShopArrangeList.push(addShopArrange);
-			}
+			};
 		});
 		//自费数据
 		var $selfObj = $obj.find('.T-count-selfPay'),
@@ -3172,7 +3325,7 @@ define(function(require, exports){
 					billRemark:$(this).find('input[name=billRemark]').val(),
 				}
 				saveJson.addSelfPayArrangeList.push(addSelfArrange)	
-			}
+			};
 		});
 		//其他收入数据
 		var $otherInObj = $obj.find('.T-count-otherIn'),
