@@ -48,8 +48,13 @@
 				</td>
 				<td>{{touristGroupList.lineProduct.days}}</td>
 				<td>{{touristGroupList.startTime | dateFormat: 'yyyy-MM-dd' }}</td>
+				{{if !!touristGroupList.contactMember}}
 				<td>{{touristGroupList.contactMember.name}}</td>
 				<td>{{touristGroupList.contactMember.mobileNumber}}</td>
+				{{else}}
+				<td></td>
+				<td></td>
+				{{/if}}
 				<td>{{touristGroupList.adultCount}} 大 {{touristGroupList.childCount}}小</td>
 					
 				<td>{{touristGroupList.areaData}}</td>

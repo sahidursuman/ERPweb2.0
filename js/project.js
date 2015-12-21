@@ -1734,6 +1734,12 @@ KingServices.viewInnerInfo = function(id,type){
 		module.viewTransferOut(id,type);
 	});
 };
+//查看中转安排exports.viewTransit
+KingServices.viewTransit = function(id){
+	seajs.use("" + ASSETS_ROOT + modalScripts.arrange_transit,function(module){
+		module.viewTransit(id);
+	});
+};
 //报价  修改
 KingServices.updateQuoteToOffer = function(id){
 	seajs.use("" + ASSETS_ROOT + modalScripts.arrange_quote,function(module){

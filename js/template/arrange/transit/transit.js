@@ -1440,6 +1440,7 @@ define(function(require, exports) {
 	}
 
 	exports.init = transit.initModule;
+	exports.viewTransit = transit.viewTransit;
 	exports.updateTransit = function(id, isOuter) {
 		transit.updateTransit(id, isOuter);
 	}

@@ -198,6 +198,7 @@ define(function(require, exports){
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
+					console.log(data.insurancePrice);
 					var tmp = {
 	                    "busCompanyArrange":JSON.parse(data.busCompanyArrange),
 	                    "tripPlan":JSON.parse(data.tripPlan),
@@ -209,6 +210,7 @@ define(function(require, exports){
 	                    "WEB_IMG_URL_SMALL":data.WEB_IMG_URL_SMALL,
 	                    "touristGroup":data.touristGroup,
 	                    "financialTripPlanId":data.financialTripPlanId,
+	                    "insurancePrice":data.insurancePrice,
 	                    "arrangeIncomePaymentList":JSON.parse(data.arrangeIncomePaymentList),
 	                    "remarkArrangeList": JSON.parse(data.remarkArrangeList)
 	                };
@@ -235,7 +237,7 @@ define(function(require, exports){
 		var $tripDetailObj = $listObj.find('.T-transit');
 		$tripDetailObj.find('.T-viewTripTransit').off('click').on('click',function(){
 			var id = $(this).attr('data-entity-id');
-			Count.ViewOutDetail(id);
+			KingServices.viewTransit(id);
 		});
 		//购物
 		var $shopObj = $listObj.find('.T-count-shopping');
@@ -264,9 +266,7 @@ define(function(require, exports){
 			}
 		});
 		
-		//保险公司--计算
-		var $insurance = $listObj.find('.T-count-insurance');
-		Count.autoInsuranceSum($insurance,$obj);
+		
 		//车费--计算、新增
 		var $busObj = $listObj.find('.T-count-bus');
 		$busObj.find('input[type=hidden]').off('change').on('change',function(){
@@ -353,6 +353,7 @@ define(function(require, exports){
 	                    "WEB_IMG_URL_SMALL":data.WEB_IMG_URL_SMALL,
 	                    "touristGroup":data.touristGroup,
 	                    "financialTripPlanId":data.financialTripPlanId,
+	                    "insurancePrice":data.insurancePrice,
 	                    "arrangeIncomePaymentList":JSON.parse(data.arrangeIncomePaymentList),
 	                    "remarkArrangeList": JSON.parse(data.remarkArrangeList)
 	                };
@@ -380,7 +381,7 @@ define(function(require, exports){
 		var $tripDetailObj = $listObj.find('.T-transit');
 		$tripDetailObj.find('.T-viewTripTransit').off('click').on('click',function(){
 			var id = $(this).attr('data-entity-id');
-			Count.ViewOutDetail(id);
+			KingServices.viewTransit(id);
 		});
 		//购物处理--计算、新增
 		var $shopObj = $listObj.find('.T-count-shopping');
@@ -432,9 +433,6 @@ define(function(require, exports){
 		$listObj.find('.T-OtherIn-add').off('click').on('click',function(){
 			Count.addOtherIn($otherIn,$obj);
 		});
-		//保险公司--计算
-		var $insurance = $listObj.find('.T-count-insurance');
-		Count.autoInsuranceSum($insurance,$obj);
 		//车费--计算、新增
 		var $busObj = $listObj.find('.T-count-bus');
 		$busObj.find('input[type=text]').off('change').on('change',function(){
@@ -584,6 +582,7 @@ define(function(require, exports){
 							"WEB_IMG_URL_SMALL":data.WEB_IMG_URL_SMALL,
 							"touristGroup":data.touristGroup,
 							"financialTripPlanId":data.financialTripPlanId,
+							"insurancePrice":data.insurancePrice,
 							"arrangeIncomePaymentList":JSON.parse(data.arrangeIncomePaymentList),
 							"remarkArrangeList": JSON.parse(data.remarkArrangeList)
                         };
@@ -616,7 +615,7 @@ define(function(require, exports){
 		var $tripDetailObj = $listObj.find('.T-transit');
 		$tripDetailObj.find('.T-viewTripTransit').off('click').on('click',function(){
 			var id = $(this).attr('data-entity-id');
-			Count.ViewOutDetail(id);
+			KingServices.viewTransit(id);
 		});
 		//导游报账事件
 		var $guideAccount = $obj.find('.T-guideAccount');
@@ -668,9 +667,6 @@ define(function(require, exports){
 		$listObj.find('.T-OtherIn-add').off('click').on('click',function(){
 			Count.addOtherIn($otherIn,$obj);
 		});
-		//保险公司--计算
-		var $insurance = $listObj.find('.T-count-insurance');
-		Count.autoInsuranceSum($insurance,$obj);
 		//车费--计算、新增
 		var $busObj = $listObj.find('.T-count-bus');
 		$busObj.find('input[type=text]').off('change').on('change',function(){
@@ -1024,7 +1020,7 @@ define(function(require, exports){
 	//中转明细
 	Count.ViewOutDetail = function(id){
 		$.ajax({
-			url:KingServices.build_url('financialTripPlan','findOutTripArrange'),
+			url:KingServices.build_url('touristGroup','findTouristGroupArrangeById'),
 			type:"POST",
 			data:{
 				tripPlanId:id
@@ -1617,19 +1613,6 @@ define(function(require, exports){
 			//计算团收入
 			Count.tripIncome($parentObj);
 		});
-	};
-	//计算保险金额
-	Count.autoInsuranceSum = function($obj,$parentObj){
-		var $tr = $obj.find('tr');
-		var $insuranceSum = 0;
-		$tr.each(function(){
-			var $that = $(this);
-			var needPayMoney = $that.find('.needPayMoney').text();
-			needPayMoney = Count.changeTwoDecimal(needPayMoney);
-			$insuranceSum += needPayMoney
-		});
-		$insuranceSum = Count.changeTwoDecimal($insuranceSum);
-		$parentObj.find('.tripCost-insuranceArrangeNeedPayMoney').text($insuranceSum);
 	};
 	//车费金额计算
 	Count.autoBusSum = function($obj,$parentObj){
