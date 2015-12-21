@@ -5,21 +5,19 @@
 		<th>发生业务</th>
 		<th>付款方</th>
 		<th>金额</th>
-		<th>付款方式</th>
 		<th>备注</th>
 		<th>操作人</th>
 		<th>操作时间</th>
 	</tr>
 	{{each paymentDetailsList as item}}
 	<tr>
-		<td>{{item.receivableType}}}</td>
-		<td>{{item.businessType}}}</td>
-		<td>{{item.payParty}}}</td>
-		<td>{{item.payDifferenceMoney}}}</td>
-		<td>{{item.payType}}}</td>
-		<td>{{item.remark}}}</td> 
-		<td>{{item.checkRealname}}}</td>
-		<td>{{item.checkTime}}}</td>
+		<td>{{item.receivableType}}</td>
+		<td>{{item.businessType}}</td>
+		<td>{{item.payParty}}</td>
+		<td>{{item.payDifferenceMoney}}</td>
+		<td>{{item.remark}}</td> 
+		<td>{{item.checkRealname}}</td>
+		<td>{{item.checkTime}}</td>
 	</tr>
 	{{/each}}
 </table>

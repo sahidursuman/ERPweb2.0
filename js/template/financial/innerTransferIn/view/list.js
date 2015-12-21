@@ -1,6 +1,6 @@
-/*TMODJS:{"debug":true,"version":197,"md5":"4a4dbab4d2fbcf65a0dc4106964a7aab"}*/
+/*TMODJS:{"debug":true,"version":200,"md5":"8e7835cac745f59c010aa03c57393162"}*/
 define(function(require) {
-    return require("../../../../../template")("js/template/financial/innerTransferIn/view/list", function($data, $filename) {
+    return require("../../../template")("financial/innerTransferIn/view/list", function($data, $filename) {
         try {
             var $utils = this, $line = ($utils.$helpers, 0), $escape = $utils.$escape, searchParam = $data.searchParam, $each = $utils.$each, innerTransferIncomeList = $data.innerTransferIncomeList, recordSize = ($data.innerTransfer, 
             $data.$index, $data.recordSize), $out = "";

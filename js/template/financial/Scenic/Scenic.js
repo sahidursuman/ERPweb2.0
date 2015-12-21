@@ -1,6 +1,5 @@
 define(function(require, exports) {
-	var rule = require("./rule"),
-        menuKey = "financial_rummery",
+	var menuKey = "financial_rummery",
 	    listTemplate = require("./view/list"),
         scenicChecking = require("./view/scenicChecking"),
         scenicClearing = require("./view/scenicClearing"),
@@ -128,12 +127,15 @@ define(function(require, exports) {
         page = page || 0;
         var searchParam = {
             pageNo : page,
-            scenicId : scenicId + "",
+            scenicId : scenicId || scenic.$checkTab.find('.T-newData').data('id'),
             accountInfo : accountInfo,
             startDate : startDate,
             endDate : endDate,
             sortType : "auto"
         };
+        if(!scenicId && !!scenic.$checkTab){
+            scenicName = scenic.$checkTab.find('.T-newData').data('name');
+        }
         searchParam = JSON.stringify(searchParam);
         $.ajax({
             url:KingServices.build_url("financial/financialScenic","listScenicAccount"),
@@ -150,7 +152,7 @@ define(function(require, exports) {
                     // 初始化页面
                     if (Tools.addTab(menuKey + "-checking", "景区对账", html)) {
                         scenic.initCheck(page,scenicId,scenicName); 
-                        validator = rule.check(scenic.$checkTab.find(".T-checkList"));                       
+                        validator = (new FinRule(0)).check(scenic.$checkTab.find(".T-checkList"));                       
                     }
                     //取消对账权限过滤
                     var checkTr = scenic.$checkTab.find(".T-checkTr");
@@ -176,16 +178,17 @@ define(function(require, exports) {
     scenic.initCheck = function(page,id,name){
     	// 初始化jQuery 对象 
         scenic.$checkTab = $("#tab-" + menuKey + "-checking-content");
+
         scenic.$checkSearchArea = scenic.$checkTab.find('.T-search-area');
 
         scenic.init_event(page,id,name,scenic.$checkTab,"check");
-        Tools.setDatePicker(scenic.$searchArea.find('.datepicker'), true);
-        FinancialService.updateUnpayMoney(scenic.$checkTab,rule);
+        Tools.setDatePicker(scenic.$checkSearchArea.find('.datepicker'), true);
+        FinancialService.updateUnpayMoney(scenic.$checkTab, new FinRule(0));
 
         //搜索按钮事件
         scenic.$checkSearchArea.find('.T-search').on('click', function(event) {
             event.preventDefault();
-            scenic.scenicCheck(0,id,name);
+            scenic.scenicCheck(0,null,name);
         });
 
         //导出报表事件 btn-scenicExport
@@ -208,13 +211,15 @@ define(function(require, exports) {
 
         //关闭页面事件
         scenic.$checkTab.find(".T-close-check").click(function(){
-            Tools.closeTab(menuKey + "-checking");
+             Tools.closeTab(menuKey + "-checking");
         });
         //确认对账按钮事件
         scenic.$checkTab.find(".T-saveCheck").click(function(){ 
-            validator = rule.check(scenic.$checkTab.find(".T-checkList"));
+            validator = (new FinRule(0)).check(scenic.$checkTab.find(".T-checkList"));
             if (!validator.form()) { return; }
-            scenic.saveChecking(id,name,page);
+            FinancialService.changeUncheck(scenic.$checkTab.find('.T-checkTr'), function(){
+                scenic.saveChecking(id,name,page);
+            });
         });
     };
 
@@ -229,7 +234,7 @@ define(function(require, exports) {
     //结算
     scenic.scenicClear = function(isAutoPay,page,scenicId,scenicName,accountInfo,startDate,endDate, isOuter){
         if (isAutoPay) {
-            var searchParam = FinancialService.autoPayJson(scenicId,scenic.$clearTab,rule);
+            var searchParam = FinancialService.autoPayJson(scenic.$clearTab.find('.T-newData').data('id'),scenic.$clearTab, new FinRule(3), 0);
             searchParam = JSON.parse(searchParam);
             searchParam.scenicId = searchParam.id;   
             delete(searchParam.id);
@@ -247,7 +252,7 @@ define(function(require, exports) {
             page = page || 0;
             var searchParam = {
                 pageNo : page,
-                scenicId : scenicId + "",
+                scenicId : scenicId || scenic.$clearTab.find('.T-newData').data('id'),
                 accountInfo : accountInfo,
                 startDate : startDate,
                 endDate : endDate,
@@ -256,6 +261,9 @@ define(function(require, exports) {
         }
         searchParam = JSON.stringify(searchParam);
         
+        if(!scenicId && !!scenic.$clearTab){
+            scenicName = scenic.$clearTab.find('.T-newData').data('name');
+        }
         $.ajax({
             url:KingServices.build_url("financial/financialScenic","listScenicAccount"),
             type:"POST",
@@ -283,7 +291,7 @@ define(function(require, exports) {
                         data.sumPayMoney = 0;
                         data.sumPayType = 0;
                     }
-                    data.isOuter = !!isOuter;
+                    data.isOuter = scenic.isOuter = !!isOuter || scenic.isOuter;
                     var resultList = data.financialScenicListData;
                     data.financialScenicListData = FinancialService.getTempDate(data.financialScenicListData,scenic.clearTempData);
                     var html = scenicClearing(data);
@@ -292,7 +300,7 @@ define(function(require, exports) {
                     // 初始化页面
                     if (Tools.addTab(menuKey + "-clearing", "景区付款", html)) {
                         scenic.initClear(page,scenicId,scenicName); 
-                        validator = rule.check(scenic.$clearTab.find('.T-clearList'));  
+                        validator = (new FinRule(isOuter ? 3 : 1)).check(scenic.$clearTab.find('.T-clearList'));  
 
                         if(isAutoPay == 1){
                             scenic.$clearTab.find('input[name=sumPayMoney]').prop("disabled",true);
@@ -312,7 +320,7 @@ define(function(require, exports) {
                             curr: (page + 1),
                             jump: function(obj, first) {
                                 if (!first) { 
-                                    var tempJson = FinancialService.clearSaveJson(scenic.$clearTab,scenic.clearTempData,rule);
+                                    var tempJson = FinancialService.clearSaveJson(scenic.$clearTab,scenic.clearTempData, FinRule(3));
                                     scenic.clearTempData = tempJson;
                                     var sumPayMoney = parseInt(scenic.$clearTab.find('input[name=sumPayMoney]').val());
                                         sumPayType = parseInt(scenic.$clearTab.find('select[name=sumPayType]').val());
@@ -337,13 +345,13 @@ define(function(require, exports) {
         scenic.$clearSearchArea = scenic.$clearTab.find('.T-search-area');
 
         scenic.init_event(page,id,name,scenic.$clearTab,"clear");
-        Tools.setDatePicker(scenic.$searchArea.find('.datepicker'), true);
+        Tools.setDatePicker(scenic.$clearSearchArea.find('.datepicker'), true);
 
         //搜索事件
         scenic.$clearTab.find(".T-search").click(function(){
             scenic.clearTempSumDate = false;
             scenic.clearTempData = false;
-            scenic.scenicClear(0,0,id,name);
+            scenic.scenicClear(0,0,null,name);
         });
 
         //报表内的操作
@@ -355,19 +363,19 @@ define(function(require, exports) {
         });
         //保存结算事件
         scenic.$clearTab.find(".T-saveClear").click(function(){
-            if (!rule.check(scenic.$clearTab).form()) { return; }
+            if (!(new FinRule(scenic.isOuter ? 3 : 1)).check(scenic.$clearTab).form()) { return; }
             scenic.saveClear(id,name,page);
         });
 
         //自动下账
         scenic.$clearTab.find(".T-clear-auto").click(function(){
-            var autoPayJson = FinancialService.autoPayJson(id,scenic.$clearTab,rule);
+            var autoPayJson = FinancialService.autoPayJson(id,scenic.$clearTab,new FinRule(scenic.isOuter ? 3 : 1));
             if(!autoPayJson){return false;}
 
             var startDate = scenic.$clearTab.find("input[name=startDate]").val(),
                 endDate = scenic.$clearTab.find("input[name=endDate]").val();
             FinancialService.autoPayConfirm(startDate, endDate, function() {
-                scenic.scenicClear(1,page,id,name);
+                scenic.scenicClear(1,page,null,name);
             });
         });
 
@@ -376,10 +384,11 @@ define(function(require, exports) {
             scenic.$clearTab.find(".T-clear-auto").toggle();
             scenic.clearTempSumDate = false;
             scenic.clearTempData = false;
-            scenic.scenicClear(0,0,id,name);
+            scenic.$clearTab.data('isEdited',false);
+            scenic.scenicClear(0,0,null,name);
         });
 
-        FinancialService.updateSumPayMoney(scenic.$clearTab,rule);
+        FinancialService.updateSumPayMoney(scenic.$clearTab,new FinRule(scenic.isOuter ? 3 : 1));
     };
 
     //显示单据
@@ -491,7 +500,7 @@ define(function(require, exports) {
     //对账数据保存
     scenic.saveChecking = function(scenicId,scenicName,page,tab_id, title, html){
         var argumentsLen = arguments.length,
-            checkSaveJson = FinancialService.checkSaveJson(scenic.$checkTab,rule);
+            checkSaveJson = FinancialService.checkSaveJson(scenic.$checkTab, new FinRule(0));
         if(!checkSaveJson){ return false; }
 
         $.ajax({
@@ -511,7 +520,7 @@ define(function(require, exports) {
                         } else {
                             scenic.$checkTab.data('isEdited',false);
                             Tools.addTab(tab_id, title, html);
-                            scenic.initCheck(0,scenic.$checkTab.find(".T-newData").data("id"),scenic.$checkTab.find(".T-newData").data("name"));
+                            scenic.scenicCheck(0,scenic.$checkTab.find(".T-newData").data("id"),scenic.$checkTab.find(".T-newData").data("name"));
                         }
                     });
                 }
@@ -520,12 +529,12 @@ define(function(require, exports) {
     };
 
     scenic.saveClear = function(id,name,page,tab_id, title, html){
-        if(!FinancialService.isClearSave(scenic.$clearTab,rule)){
+        if(!FinancialService.isClearSave(scenic.$clearTab, new FinRule(scenic.isOuter ? 3 : 1))){
             return false;
         }
 
         var argumentsLen = arguments.length,
-            clearSaveJson = FinancialService.clearSaveJson(scenic.$clearTab,scenic.clearTempData,rule),
+            clearSaveJson = FinancialService.clearSaveJson(scenic.$clearTab,scenic.clearTempData, new FinRule(scenic.isOuter ? 3 : 1)),
             searchParam = {
                         sumCurrentPayMoney : scenic.$clearTab.find('input[name=sumPayMoney]').val(),
                         payType : scenic.$clearTab.find('select[name=sumPayType]').val(),
@@ -550,7 +559,7 @@ define(function(require, exports) {
                             scenic.listScenic(scenic.searchData.pageNo,scenic.searchData.scenicName,scenic.searchData.scenicId,scenic.searchData.startDate,scenic.searchData.endDate);
                         }else if(argumentsLen === 3){
                             scenic.$clearTab.data('isEdited',false);
-                            scenic.scenicClear(0,page,id,name);
+                            scenic.scenicClear(0,page,null,name);
                         } else {
                             scenic.$clearTab.data('isEdited',false);
                             Tools.addTab(tab_id, title, html);
@@ -564,7 +573,7 @@ define(function(require, exports) {
 
     scenic.init_event = function(page,id,name,$tab,option) {
         if (!!$tab && $tab.length === 1) {
-            var validator = rule.check($tab);
+            var validator = (new FinRule(option == "check" ? 0 : (scenic.isOuter ? 3 : 1))).check($tab);
 
             // 监听修改
             $tab.find(".T-" + option + "List").off('change').on('change',"input",function(event) {

@@ -1,6 +1,5 @@
 {{each list as checking index}}
     <tr data-id="{{checking.id}}" data-entity-createTime="{{checking.createTime}}" isComfirmStatus="{{checking.isConfirmAccount}}" data-entity-realUnPayedMoney="{{checking.realUnPayedMoney}}"  data-entity-remark="{{checking.checkRemark}}">
-        <td>{{index+1}}</td>
         <td>{{checking.lineProductName}}</td>
         <td>{{checking.accountTime | dateFormat: 'yyyy-MM-dd'}}</td>
         <td>111</td><!-- {{checking.contactUserName}} -->
@@ -19,23 +18,23 @@
                 -
             {{/if}}
         </td>
-        <td><a href="javascript:void(0)" class="T-viewDetail">社付：{{checking.payedMoney}}<br>导游现收：{{checking.currentNeedPayMoney}}</a></td>
+        <td><a href="javascript:void(0)" class="T-viewDetail">社付：{{checking.payedMoney}}<br></a></td>
         <td><span>{{checking.punishMoney}}</span></td>
         <td>{{checking.settlementMoney}}</td>
         <td>{{checking.unPayedMoney}}</td>
-        <td><input name="payMoney" type="text" value="{{checking.payMoney}}"/></td>
-        <td><input type="text" maxlength="9" name="payRemark" value="{{checking.checkRemark}}"></td>
+        <td><input name="payMoney" type="text" class="money" value="{{checking.payMoney}}" data-le="{{checking.unPayedMoney}}" 
+        {{if !showBtnFlag && checking.unPayedMoney<= 0}} disabled {{/if}}/></td>
+        <td><input type="text" maxlength="9" name="payRemark" value="{{checking.checkRemark}}"
+        {{if !showBtnFlag && checking.unPayedMoney<= 0}} disabled {{/if}} /></td>
         <td>{{if checking.isConfirmAccount == 0}}<span>-</span>{{else}}{{if checking.checkTime == null || checking.checkTime == ""}}-{{else}}{{checking.checkTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}{{/if}}{{/if}}</td>
         <td>{{if checking.isConfirmAccount == 0}}<span>-</span>{{else}}{{if checking.checkRealname == null || checking.checkRealname == ""}}-{{else}}{{checking.checkRealname}}{{/if}}{{/if}}</td>
         <td>
             <label class="pos-rel">
             {{if checking.isConfirmAccount == 1}}<span>已对账</span>{{else}}<span>未对账</span>{{/if}}
             </label>
-            {{if checking.isConfirmAccount == 1}}
-                <label>
-                    <a href="#" class="T-check-Detail" style="margin-left:5px">查看</a>
-                </label>
-            {{/if}}
+            <label>
+                <a href="#" class="T-check-Detail" style="margin-left:5px">查看</a>
+            </label>
         </td>
     </tr>
     <tr class="hide">

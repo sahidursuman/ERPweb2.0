@@ -4,7 +4,6 @@
  * by David Bear 2015-11-24
  */
 define(function(require, exports) {
-	var rule = require("./rule"),
         menuKey = "financial_Client",
         listTemplate = require("./view/list"),
         ClientCheckingTemplate = require("./view/ClientChecking"),
@@ -54,14 +53,14 @@ define(function(require, exports) {
             day = Tools.addZero2Two(date.getDate()),
             args = {
                 pageNo : (page || 0),
-                startTime : year + '-' + month + '-' + '01',
-                endTime : year + '-' + month + '-' + day
+                startDate : year + '-' + month + '-' + '01',
+                endDate : year + '-' + month + '-' + day
             };
         if(Client.$tab){
             args = {
                 pageNo : (page || 0),
-                startTime : Client.$tab.find('.T-search-start-date').val(),
-                endTime : Client.$tab.find('.T-search-end-date').val()
+                startDate : Client.$tab.find('.T-search-start-date').val(),
+                endDate : Client.$tab.find('.T-search-end-date').val()
             };
 
             var $office = Client.$tab.find('.T-search-head-office'),
@@ -137,12 +136,15 @@ define(function(require, exports) {
         Client.$tab.find('.T-list').on('click', '.T-action', function(event) {
             event.preventDefault();
             var $that = $(this),$tr = $that.closest('tr'),
+                agencyName = Client.$tab.find('.T-search-head-office').val(),
                 options = {
                     pageNo: 0,
-                    partnerAgencyId: $tr.data('id'),
+                    headerAgencyName : agencyName === '全部' ? '' : agencyName,
+                    fromPartnerAgencyName : $tr.children('td').eq(1).text(),
+                    fromPartnerAgencyId: $tr.data('id'),
                     name: $tr.children('td').eq(1).text(),
-                    startTime : Client.$tab.find('.T-search-start-date').val(),
-                    endTime : Client.$tab.find('.T-search-end-date').val()
+                    startDate : Client.$tab.find('.T-search-start-date').val(),
+                    endDate : Client.$tab.find('.T-search-end-date').val()
                 };
 
             if ($that.hasClass('T-checking')) {
@@ -158,14 +160,15 @@ define(function(require, exports) {
     Client.ClientCheck = function(pageNo, args, $tab){
         if(!!$tab){
             args = getBaseArgs($tab);
-            args.partnerAgencyId = $tab.data("id");
+            args.fromPartnerAgencyId = $tab.data("id");
             partnerAgencyName = $tab.find('.T-partnerAgencyName').text();
         } else {
             partnerAgencyName = args.name;
         }
 
-        args.pageNo = pageNo || 0;
-
+        Client.checkPageNo = args.pageNo = pageNo || 0;
+        args.sortType = 'startTime';
+        args.order='asc';
         $.ajax({
             url : KingServices.build_url('financial/customerAccount', 'listCheckCustomerAcccount'),
             type : "POST",
@@ -173,7 +176,7 @@ define(function(require, exports) {
         }).done(function(data){
             if(showDialog(data)){
                 data.partnerAgencyName = partnerAgencyName;
-                data.partnerAgencyId = args.partnerAgencyId;
+                data.fromPartnerAgencyId = args.fromPartnerAgencyId;
                 data.searchParam.lineProductName = args.lineProductName || '全部';
                 data.searchParam.creatorName = args.creatorName || '全部';
                 // 合并数据
@@ -203,18 +206,21 @@ define(function(require, exports) {
     Client.initCheck = function($tab){
         var id = $tab.find('.T-btn-save').data('id');
         $tab.data('id', id);
+        var validator = (new FinRule(0)).check($tab);
         $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
             event.preventDefault();
-            Client.initCheck($tab);
+            Client.ClientCheck(Client.checkPageNo, false, $tab);
         })
         // 监听保存，并切换tab
         .on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
             event.preventDefault();
+            if (!validator.form()) { return; }
             Client.saveCheckingData($tab, [tab_id, title, html])
         })
         // 保存后关闭
         .on(CLOSE_TAB_SAVE, function(event) {
             event.preventDefault();
+            if (!validator.form()) { return; }
             Client.saveCheckingData($tab)
         });
 
@@ -269,17 +275,19 @@ define(function(require, exports) {
             }
         });
 
-        var validator = rule.check($tab);
         //确认对账按钮事件
         $tab.find(".T-btn-save").click(function(){ 
             if (!validator.form()) { return; }
-            Client.saveCheckingData($tab);
+            FinancialService.changeUncheck($tab.find('.T-checkTr'), function(){
+                Client.saveCheckingData($tab);
+            });
          });
 
         //关闭页面事件
         $tab.find(".T-btn-close").click(function(){
             Tools.closeTab(ClientCheckTab);
         });
+
     };
 
     /**
@@ -388,10 +396,10 @@ define(function(require, exports) {
     Client.initIncome = function(options) {
         Client.ClientClear(0, {
             pageNo:0,
-            partnerAgencyId: options.id,
+            fromPartnerAgencyId: options.id,
             name: options.name,
-            startTime: options.startDate,
-            endTime: options.endDate,
+            startDate: options.startDate,
+            endDate: options.endDate,
             type: 1
         });
     }
@@ -401,7 +409,7 @@ define(function(require, exports) {
 
         if (!!$tab) {
             args = getBaseArgs($tab);
-            args.partnerAgencyId = $tab.data('id');
+            args.fromPartnerAgencyId = $tab.data('id');
 
             partnerAgencyName = $tab.find('.T-partnerAgencyName').text();
             type = $tab.find('.T-btn-save').data('type');
@@ -411,7 +419,8 @@ define(function(require, exports) {
         }
 
         args.pageNo = pageNo || 0;
-
+        args.sortType = 'startTime';
+        args.order='asc';
         $.ajax({
             url:KingServices.build_url("financial/customerAccount","listReciveCustomerAcccount"),
             type:"POST",
@@ -420,14 +429,14 @@ define(function(require, exports) {
             if(showDialog(data)){
                 data.type = type;
                 data.partnerAgencyName = partnerAgencyName;
-                data.partnerAgencyId = args.partnerAgencyId;
+                data.fromPartnerAgencyId = args.fromPartnerAgencyId;
 
                 data.searchParam.lineProductName = args.lineProductName || '全部';
                 data.searchParam.creatorName = args.creatorName || '全部';
                 
                 if (Tools.addTab(ClientClearTab, "客户收款", ClientClearingTemplate(data))) {
-                    $tab = $("#tab-"+ ClientClearTab + "-content").data('id', args.partnerAgencyId);
-                    Client.initClear($tab, args.partnerAgencyId);                    
+                    $tab = $("#tab-"+ ClientClearTab + "-content").data('id', args.fromPartnerAgencyId);
+                    Client.initClear($tab, args.fromPartnerAgencyId);                    
 
                     // 绑定翻页组件
                     laypage({
@@ -449,6 +458,11 @@ define(function(require, exports) {
     Client.initClear = function($tab, id){
         var id = $tab.find('.T-btn-save').data('id');
         
+        Client.$clearSearchArea = $tab.find('.T-search-area');
+        Client.$sumUnReceivedMoney = $tab.find('.T-sumReciveMoney');
+        var validator = (new FinRule($tab.find('.T-btn-save').data('type') ? 3 : 1)).check($tab),
+            autoValidator = (new FinRule(2)).check(Client.$clearSearchArea);
+
         $tab.data('id', id);
 
         $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
@@ -458,16 +472,18 @@ define(function(require, exports) {
         // 监听保存，并切换tab
         .on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
             event.preventDefault();
-            Client.saveClearData($tab, [tab_id, title, html]);
+            if (autoValidator.form()) {
+                Client.saveClearData($tab, [tab_id, title, html]);
+            }
         })
         // 保存后关闭
         .on(CLOSE_TAB_SAVE, function(event) {
             event.preventDefault();
-            Client.saveClearData($tab);
+            if (autoValidator.form()) {
+                Client.saveClearData($tab);
+            }
         });
 
-        Client.$clearSearchArea = $tab.find('.T-search-area');
-        Client.$sumUnReceivedMoney = $tab.find('.T-sumReciveMoney');
         Client.datepicker(Client.$clearSearchArea);
         //Client.init_clear_event(id, $cleartab);
         // 初始化下拉选项
@@ -502,8 +518,6 @@ define(function(require, exports) {
                 Client.CalcClear($that);
             }
         });
-
-        var validator = rule.check($tab), autoValidator = rule.autoFillCheck(Client.$clearSearchArea);
         // 自动下账
         $tab.find('.T-btn-autofill').on('click', function(event) {
             event.preventDefault();
@@ -550,9 +564,10 @@ define(function(require, exports) {
 
     Client.autoFillData = function($tab) {
         if(!!$tab && $tab.length){
-            var args = getBaseArgs($tab);
-            FinancialService.autoPayConfirm(args.startTime, args.endTime, function() {
-                args.partnerAgencyId = $tab.data('id');
+            var args = getBaseArgs($tab, 1);
+            if(!args)return;
+            FinancialService.autoPayConfirm(args.startDate, args.endDate, function() {
+                args.fromPartnerAgencyId = $tab.data('id');
                 args.sumTemporaryIncomeMoney = $tab.find('.T-sumReciveMoney').val();
 
                 $.ajax({
@@ -738,7 +753,7 @@ define(function(require, exports) {
             success:function(data){
                 if(showDialog(data)){
                     $tab.data('isEdited', false);
-
+                    Client.clearDataArray = [];
                     showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
                         if (argLen === 2) {
                             Client.listClient(0);
@@ -756,9 +771,10 @@ define(function(require, exports) {
     //给每个tr增加验证
     Client.validatorTable = function(){
         var validator;
-        var $tr = $("#tab-financial_Client-checking-content .T-checkList tr");
+        var $tr = $("#tab-financial_Client-checking-content .T-checkList tr"),
+            type = $("#tab-financial_Client-checking-content .T-btn-save").data('type');
         $tr.each(function(){
-            validator = rule.check($(this));
+            validator = (new FinRule(type ? 3 : 1)).check($(this));
         });
         return validator;
     };
@@ -873,7 +889,7 @@ define(function(require, exports) {
                     url : KingServices.build_url('financial/customerAccount', 'selectLineProduct'),
                     type : 'POST',
                     showLoading:false,
-                    data: {partnerAgencyId: id}
+                    data: {fromPartnerAgencyId: id}
                 }).done(function(data) {
                     for(var i=0; i<data.lineProductList.length; i++){
                         data.lineProductList[i].value = data.lineProductList[i].lineProductName;
@@ -908,7 +924,7 @@ define(function(require, exports) {
                     url : KingServices.build_url('financial/customerAccount', 'selectCreator'),
                     type : 'POST',
                     showLoading:false,
-                    data: {partnerAgencyId: id}
+                    data: {fromPartnerAgencyId: id}
                 }).done(function(data) {
                     for(var i=0; i< data.creatorList.length; i++){
                         data.creatorList[i].value = data.creatorList[i].creatorName;
@@ -927,14 +943,20 @@ define(function(require, exports) {
         });        
     };
 
-    function getBaseArgs($tab) {
-        var args = {
-            creatorId : $tab.find('.T-search-enter').data('id'),
+    function getBaseArgs($tab, isAuto) {
+        var id = $tab.find('.T-search-enter').data('id'),
+            args = {};
+        if(isAuto){
+            args = FinancialService.autoPayJson(id, $tab, new FinRule(2), 1);
+            if(!args)return false;
+        }
+        args = {
+            creatorId : id,
             lineProductId : $tab.find('.T-search-line').data('id'),
             lineProductName : $tab.find('.T-search-line').val(),
             creatorName : $tab.find('.T-search-enter').val(),
-            startTime : $tab.find('.T-search-start-date').val(),
-            endTime : $tab.find('.T-search-end-date').val()
+            startDate : $tab.find('.T-search-start-date').val(),
+            endDate : $tab.find('.T-search-end-date').val()
         }
 
         if (args.lineProductName === '全部') {

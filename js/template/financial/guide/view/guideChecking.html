@@ -44,6 +44,7 @@
                 <label class=" control-label marginLeft-30">结算金额合计：<span class="T-stMoney">{{sumData.sumSettlementMoney}}</span></label>
                 <label class=" control-label marginLeft-30">已付金额合计：{{sumData.sumPayedMoney}}</label>
                 <label class=" control-label marginLeft-30">未付金额合计：<span class="T-unpayMoney">{{sumData.sumUnPayedMoney}}</span></label>
+                <label class=" control-label marginLeft-30">未付金额合计(已对账)：<span>{{sumData.sumConfirmedUnPayedMoney}}</span></label>
             </div>
         </form>
     </div>
@@ -69,7 +70,7 @@
                 <th class="th-border col-sm-1">备注</th>
                 <th class="th-border col-sm-1">对账时间</th>
                 <th class="th-border">对账人</th>
-                <th class="th-border">对账</th>
+                <th class="th-border" style="min-width: 105px;">对账</th>
             </tr>
         </thead>
         <tbody class="T-checkList" data-right="1200005">            
@@ -81,12 +82,12 @@
             <small class="T-sumItem">没有查询到相关记录</small>
         </div>
         <div class="col-xs-8">
-            <div class="dataTables_paginate paging_simple_numbers T-pagenation">
-            </div>
-            <label class="pos-rel pull-right">
+            <label class="pos-rel pull-right" style="line-height: 2.2em;">
                 <input type="checkbox" class="ace T-checkAll"/> 
                 <span class="lbl">全选</span>
             </label>
+            <div class="dataTables_paginate paging_simple_numbers T-pagenation pull-right">
+            </div>
         </div>
 
     </div>

@@ -19,6 +19,18 @@ define(function(require, exports) {
 
 			$bus.each(function() {
 				var $that = $(this);
+
+				
+
+					settings.push({
+						$ele: $that.find('input[name="busCompanyName"]'),
+						rules: [
+							{
+								type: 'null',
+								errMsg: '车队不能为空'
+							}
+						]
+					});
 					
 					settings.push({
 						$ele: $that.find('input[name="bususeTime"]'),
@@ -272,6 +284,26 @@ define(function(require, exports) {
 							}
 						]
 					});
+
+					settings.push({
+						$ele: $that.find('input[name="restaurant"]'),
+						rules: [
+							{
+								type: 'null',
+								errMsg: '餐厅不能为空'
+							}
+						]
+					});
+
+					settings.push({
+						$ele: $that.find('input[name="startTime"]'),
+						rules: [
+							{
+								type: 'null',
+								errMsg: '日期不能为空'
+							}
+						]
+					});
 			});
 
 			$other.each(function() {
@@ -280,7 +312,7 @@ define(function(require, exports) {
 						$ele: $that.find('input[name="price"]'),
 						rules: [
 							{
-								type: 'int',
+								type: 'float',
 								errMsg: '数字格式不正确'
 							}	
 						]
@@ -313,6 +345,26 @@ define(function(require, exports) {
 								type: 'int',
 								errMsg: '数字格式不正确'
 							}	
+						]
+					});
+
+					settings.push({
+						$ele: $that.find('input[name="startTime"]'),
+						rules: [
+							{
+								type: 'null',
+								errMsg: '日期不能为空'
+							}
+						]
+					});
+
+					settings.push({
+						$ele: $that.find('input[name="name"]'),
+						rules: [
+							{
+								type: 'null',
+								errMsg: '项目不能为空'
+							}
 						]
 					});
 			});

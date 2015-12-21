@@ -4,8 +4,7 @@
  * by David Bear 2015-11-24
  */
 define(function(require, exports){
-	var rule = require("./rule"),
-		listTemplate = require("./view/list"),
+	var listTemplate = require("./view/list"),
 		listTableTemplate = require("./view/listTable"),
 		listSearchTemplate = require("./view/search"),
 		menuKey = "financial_payment_details";
@@ -18,7 +17,6 @@ define(function(require, exports){
 		isTotal : false,
 		isSelect : false
 	};
-
 	/**
 	 * 初始化模块
 	 */
@@ -27,7 +25,6 @@ define(function(require, exports){
 		Payment.isList = Payment.isTotal = Payment.isSelect = false;
 		Payment.getList();
 	};
-
 	/**
 	 * 获取购物账务列表，初始化列表页面
 	 * @param  {int} page 页码
@@ -48,8 +45,7 @@ define(function(require, exports){
 			args = {
 				pageNo: (page || 0),
 				businessTypeId : Payment.$tab.find('.T-search-business').val(),
-				costTypeId : Payment.$tab.find('.T-search-cost').val(),
-				incomeOrPayTypeId : Payment.$tab.find('.T-search-type').val(),
+				moneyType : Payment.$tab.find('#fin-type').val(),
 				receivableTypeId : Payment.$tab.find('.T-search-category').val(),
 				resourceId : Payment.$tab.find('.T-search-unit').data('id'),
 				resourceName : name == "全部" ? "" : name,
@@ -91,7 +87,6 @@ define(function(require, exports){
 			event.preventDefault();
 			Payment.getList(0);
 		})
-		//Payment.chooseUnit($searchArea.find('.T-search-unit'));
 		
 	};
 
@@ -107,7 +102,6 @@ define(function(require, exports){
 				data.incomeOrPayTypes = JSON.parse(data.incomeOrPayTypes);
 				data.receivableTypes = JSON.parse(data.receivableTypes);
 				data.searchParam = args;
-				//Payment.list.units = data.units;
 
 				Payment.isSelect = true;
 
@@ -151,29 +145,6 @@ define(function(require, exports){
 			}
 		});
 	};
-
-	/*Payment.chooseUnit = function($obj){
-		$obj.autocomplete({
-			minLength: 0,
-		    change: function(event, ui) {
-		        if (!ui.item)  {
-		            $(this).data('id', '');
-		        }
-		    },
-		    select: function(event, ui) {
-		        $(this).blur().data('id', ui.item.id);
-		    }
-		}).on('click', function(){
-			var data = Payment.list.units;
-			for(var i=0; i<data.length; i++){
-                data[i].value = data[i].name;
-                data[i].id = data[i].resourceId;
-            }
-            data.unshift({id:'', value: '全部'});
-            $obj.autocomplete('option', 'source', data);
-            $obj.autocomplete('search', '');
-		});
-	};*/
 
 	Payment.closeLayer = function(){
         if(Payment.isList && Payment.isTotal)

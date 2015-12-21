@@ -6,12 +6,14 @@
 	<td >{{rs.adultCount}} 大 {{rs.childCount}} 小</td>
 	<td >{{rs.guideName}}</td>
 	<td >{{rs.creatorName}}</td>
-	<td >{{if rs.status == 0}}
-			待确认
-		{{else if rs.status == 1}}
-			已发团
-		{{else if rs.status == -1}}
-			已取消
+	<td >{{if rs.billStatus == -1}}
+			待报账
+		{{else if rs.billStatus == 0}}
+			待审核
+		{{else if rs.billStatus == 1}}
+			计调已审
+		{{else if rs.billStatus == 2}}
+			财务已审
 		{{/if}}
 	</td>
 	<td >{{rs.needPayAllMoney}}</td>

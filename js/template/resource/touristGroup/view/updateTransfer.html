@@ -10,19 +10,17 @@
 					<div class="form-group guideInterval">
 						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>线路产品:</label>
 						<div class="col-sm-2 update-divWidth">
-							<input type="text"  value="{{if touristGroupDetail.lineProduct != null}}{{touristGroupDetail.lineProduct.name}}{{/if}}" name="lineProductIdName" class="col-sm-8 bind-change product-width" readonly="readonly" />
+							<input type="text"  name="lineProductIdName" value="{{if touristGroupDetail.lineProduct != null}}{{touristGroupDetail.lineProduct.name}}{{/if}}" class="col-sm-8 bind-change product-width" readonly="readonly" />
 							<input type="hidden" value="{{touristGroupDetail.lineProductId}}" name="lineProductId" />
 							<input type="hidden" value="{{touristGroupDetail.quoteId}}" name="quoteId" />
-						
-							<button class="col-sm-4 btn btn-sm btn-primary btn-travelLine-search travelLine-search T-travelLine-search" style="padding-bottom:5px;width: 62px">
+							<button class="col-sm-4 btn btn-sm btn-primary btn-travelLine-search travelLine-search {{if !!type}}T-travelLine-search{{/if}}" style="padding-bottom:5px;width: 62px">
 								<i class="ace-icon fa fa-search "></i>搜索
-							</button> 
-					  
+							</button>
 						</div>
-						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>出游日期CCCC:</label>
+						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>出游日期:</label>
 						<div class="col-sm-2 update-divWidth">
 							<div class="input-group">
-								<input type="text" name="startTime" value="{{touristGroupDetail.startTime | dateFormat: 'yyyy-MM-dd'}}" class="col-sm-12 date-picker"/>
+								<input type="text" name="startTime" value="{{touristGroupDetail.startTime | dateFormat: 'yyyy-MM-dd'}}" class="col-sm-12 date-picker datepicker"/>
 									<span class="input-group-addon icon-tourist {{if !!touristGroupDetail.quoteId}} hidden {{/if}}"  >
 										<i class="fa fa-calendar" style="position: relative;left: -20px"></i>
 									</span>
@@ -66,12 +64,16 @@
 								<option{{if touristGroupDetail.getType == 5}} selected="selected"{{/if}} value="5">QQ</option>
 							</select>
 						</div>
+
+						<label class=" control-label no-padding-right margin-leftGroup">组团单号：
+						<input  type="text" name="otaOrderNumber" value="{{touristGroupDetail.otaOrderNumber}}"  maxlength="100" />
+						</label>
 					</div>
 					<div class="form-group guideInterval">
 						<label class="col-sm-1 control-label no-padding-right">应收:</label>
 						<div class="col-sm-2 update-divWidth">
 					
-							<input value="{{touristGroupDetail.needPayAllMoney}}"  type="text" name="needPayAllMoney" class="col-sm-12" />
+							<input value="{{touristGroupDetail.needPayAllMoney}}" readonly="readonly"  type="text" name="needPayAllMoney" class="col-sm-12" />
 							
 						</div>
 						<label class="col-sm-1 control-label no-padding-right">已收:</label>
@@ -87,15 +89,11 @@
 						<label class="col-sm-1 control-label no-padding-right">未收:</label>
 						<div class="col-sm-2">
 	
-						<input value="{{touristGroupDetail.unIncomeMoney}}" type="text" name="unIncomeMoney" class="col-sm-12" />
+						<input value="{{touristGroupDetail.unIncomeMoney}}" type="text" name="unIncomeMoney" readonly="readonly" class="col-sm-12" />
 							
-						</div> 
-
-						<div class="col-sm-4">
-							<label class=" control-label no-padding-right margin-leftGroup">组团单号：
-							<input  type="text" name="otaOrderNumber" value="{{touristGroupDetail.otaOrderNumber}}"  maxlength="9" />
-							</label>
 						</div>
+
+					
 					</div>
 
 				</div>
@@ -204,7 +202,7 @@
 							<div class="form-group">
 								<label class="col-sm-1 control-label no-padding-right">备注：</label>
 								<div class="col-sm-11">
-									<input name="touristRemarks" value="{{touristGroupDetail.remark}}"  class="col-sm-12  no-padding-right" type="text">
+									<input name="touristRemarks" value="{{touristGroupDetail.remark}}" maxlength="1000"  class="col-sm-12  no-padding-right" type="text">
 								</div>
 							</div>
 							<div class="form-group margin-top15">
@@ -240,7 +238,7 @@
 													<input name="name" value="{{memberList.name}}" type="text" class="col-sm-12  no-padding-right" />
 												</td>
 												<td>
-													<input name="mobileNumber" value="{{memberList.mobileNumber}}" type="text" class="col-sm-12  no-padding-right" maxlength="11" />
+													<input name="mobileNumber" value="{{memberList.mobileNumber}}" type="text" class="col-sm-12  no-padding-right T-mobileNumber" maxlength="11" />
 												</td>
 												<td>
 													<select name="idCardType">

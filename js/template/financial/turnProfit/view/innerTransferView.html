@@ -10,15 +10,15 @@
 				<th class="th-border">操作时间</th>
 			</tr>
 		</thead>
-		<tbody>
+		<tbody
 		{{each financial as detail}}
 			<tr>
 				<td>{{detail.receivableType.name}}</td>
 				<td>{{detail.businessType.name}}</td>
-				<td>{{detail.incomeMoney}}</td>
-				<td>{{detail.incomeMoney}}</td>
+				<td>{{detail.payDifferenceMoney}}</td>
+				<td>{{detail.remark}}</td>
 				<td>{{detail.user.realName}}</td>
-				<td>{{detail.createTime | dateFormat: 'yyyy-MM-dd'}}</td>
+				<td>{{detail.createTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}</td>
 			</tr>
 		{{/each}}
 		</tbody>

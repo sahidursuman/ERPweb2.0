@@ -505,6 +505,7 @@ define(function(require, exports) {
 			showMessageDialog($( "#confirm-dialog-message" ),"计算应付值过大，请确认数据是否有误");
 			return false;
 		}
+		var cashFlag = getValParam("cashFlag");
 		var innerTransferJson = {
 			id : getValParam("id"),//	内转ID		
 			innerTransferFeeSet : "",	//内转的其他费用	array<object>	
@@ -514,7 +515,8 @@ define(function(require, exports) {
 			transNeedPayMoney :getValParam("transNeedPayMoney"),//	应付		需要计算
 			transPayedMoney	 : getValParam("transPayedMoney"), //已付		填写
 			transRemark : getValParam("transRemark"),
-			isCurrent : getValParam("isCurrent")
+			isCurrent : getValParam("isCurrent"),
+			payType : getValParam("payType")
 		}   
 
 		//获取新增费用项目
@@ -540,7 +542,7 @@ define(function(require, exports) {
 		var innerTransferJson=JSON.stringify(innerTransferJson);
 		$.ajax({
 			url:KingServices.build_url("innerTransfer","update"),
-			data:"innerTransfer="+encodeURIComponent(innerTransferJson),
+			data:"innerTransfer="+encodeURIComponent(innerTransferJson)+"&cashFlag="+cashFlag,
 			success:function(data){
 				var result = showDialog(data);  
 				if(result){ 
@@ -618,11 +620,15 @@ define(function(require, exports) {
 									innerTransfer.getSearchParam(divId,type);
 									innerTransfer.innerList(divId,type,0);
 
-									var touristGroupId=data.touristGroupId,
-									    typeOut='inner';
+									var touristGroupId=data.touristGroupId;
 
 									//是否中转安排提信息
-									KingServices.addTouristGroup(touristGroupId,typeOut);
+									KingServices.updateTransferIn(touristGroupId);
+
+									//内转确认后数据刷新
+									$innerTrsfInObj=$('#inner-TransferIn');
+									$innerTrsfInObj.find(".T-transferIn-search").off("click").on("click",{divId:"inner-TransferIn",btn:"btn-transferIn-search",type:"2"},innerTransfer.getListPage);
+									$innerTrsfInObj.find(".T-transferIn-search").trigger('click');
 								}
 
 							 }
@@ -638,7 +644,7 @@ define(function(require, exports) {
 	};
 
 
-	innerTransfer.deleteTransferIn = function(id){   
+	innerTransfer.deleteTransferIn = function(id){
 		var dialogObj = $( "#confirm-dialog-message" );
 		dialogObj.removeClass('hide').dialog({
 			modal: true,
@@ -815,6 +821,6 @@ define(function(require, exports) {
 	exports.init = innerTransfer.initModule;
 	exports.isEdited = innerTransfer.isEdited; 
 	exports.save = innerTransfer.save; 
-	exports.clearEdit = innerTransfer.clearEdit; 
-	exports.viewTransferOut = innerTransfer.viewTransferOut;
+	exports.clearEdit = innerTransfer.clearEdit;
+	exports.viewTransferOut = innerTransfer.viewTransferOut;//用于内转利润查看我部转出小组信息--不要再给我删了	
 });

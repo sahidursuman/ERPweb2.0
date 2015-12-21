@@ -1,6 +1,6 @@
-/*TMODJS:{"debug":true,"version":287,"md5":"bd1a367f9cca28f4791856449e4d3d4f"}*/
+/*TMODJS:{"debug":true,"version":289,"md5":"c5cbd511c5f486fb6ee724e9f8af43d5"}*/
 define(function(require) {
-    return require("../../../../../template")("js/template/financial/turnProfit/view/list", function($data, $filename) {
+    return require("../../../template")("financial/turnProfit/view/list", function($data, $filename) {
         try {
             var $utils = this, $helpers = $utils.$helpers, $line = 0, $escape = $utils.$escape, searchParam = $data.searchParam, sumAdultCount = $data.sumAdultCount, sumChildCount = $data.sumChildCount, sumTripIncome = $data.sumTripIncome, sumOutCost = $data.sumOutCost, sumTransCost = $data.sumTransCost, sumProfit = $data.sumProfit, sumAverProfit = $data.sumAverProfit, $each = $utils.$each, touristGroupTransferList = $data.touristGroupTransferList, recordSize = ($data.turnProfit, 
             $data.index, $data.recordSize), $out = "";

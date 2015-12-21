@@ -764,7 +764,9 @@ define(function(require, exports) {
 			    transAdultPrice=getValue("transAdultPrice"),
 			    transChildPrice=getValue("transChildPrice"),
 			    transRemark=getValue("transRemark"),
-			    status=getValue("status");
+			    status=getValue("status"),
+			    payType = getValue("payType"),
+			    cashFlag = getValue("cashFlag");
 
 	
 	
@@ -797,7 +799,8 @@ define(function(require, exports) {
 					"id":id,  //转客表ID
 					"remark":remark, //转客备注
 					"status":status,//转客状态，0未完成，1已完成
-					"partnerAgencyId":partnerAgencyId //转到的地接社			
+					"partnerAgencyId":partnerAgencyId, //转到的地接社
+					"payType":payType				
 				},
 			    transferFee : {
 					"transNeedPayAllMoney":transNeedPayAllMoney,//应付
@@ -810,7 +813,7 @@ define(function(require, exports) {
 			var otherFee=JSON.stringify(otherFeeJsonAdd);
 			$.ajax({
 				url:KingServices.build_url("transfer","update"),
-				data:"id="+id+"&touristGroupTransfer="+JSON.stringify(saveDate.touristGroupTransfer)+"&transferFee="+JSON.stringify(saveDate.transferFee)+"&otherFee="+encodeURIComponent(otherFee),
+				data:"id="+id+"&touristGroupTransfer="+JSON.stringify(saveDate.touristGroupTransfer)+"&transferFee="+JSON.stringify(saveDate.transferFee)+"&otherFee="+encodeURIComponent(otherFee)+"&cashFlag="+cashFlag,
 				success:function(data){
 					var result = showDialog(data);  
 					if(result){
@@ -929,113 +932,6 @@ define(function(require, exports) {
 		};
 
 
-
-		
-		/**
-		 * [updateTransferIn 外转确认
-		 * @return {[type]} [description]
-		 
-		transfer.updateTransferIn = function(id){
-			$.ajax({
-				url:KingServices.build_url("transfer","saveLine"),
-				data:"transferId="+id+"",
-				success:function(data){
-					var result = showDialog(data);
-					if(result){  	
-					   var touristGroupId = data.touristGroupId,
-					       typeOut = "out";
-					   //跳转游客小组新增页面
-					   KingServices.addTouristGroup(touristGroupId,typeOut);
-			
-					}
-				}
-			});
-		};*/
-
-		/**
-		 * 同行转入确认
-		 * @param  {[type]} id [description]
-		 * @return {[type]}    [description]
-		 
-		transfer.updateTransferIn=function(id){
-			var editTransferInTemplateLayer;
-			$.ajax({
-				url:KingServices.build_url("transfer","edit"),
-				data:"id="+id+"", 
-				success:function(data){
-					var result = showDialog(data);
-					if(result){
-						data.touristGroupTransfer = JSON.parse(data.touristGroupTransfer);	
-						var html = editTransferInTemplate(data);
-						var editTransferInTemplateLayer = layer.open({
-							type: 1,
-							title:"编辑同行转入信息",
-							skin: 'layui-layer-rim', //加上边框
-							area: '45%', //宽高
-							zIndex:1028,
-							content: html,
-							scrollbar: false,
-							success:function(){
-								
-							}
-						});
-						//线路产品查询列表
-						var $editTrsferInObj=$("#editTransfer-container"),searchLineProTransferInlayer;
-						$editTrsferInObj.find(".T-searLineProtrsferIn-search").click(function(){
-							//调用线路产品Layer层
-							transfer.searchLineProList(true,0, "",searchLineProTransferInlayer,$editTrsferInObj);
-						});
-						
-						//线路产品保存操作 
-						$editTrsferInObj.find(".T-editLineProInfo").click(function(){
-						    var getValue = function(name){
-									var value = $editTrsferInObj.find("[name="+name+"]").val()
-									return value;
-						        }
-							var lineProductId=getValue("lineProductId"),
-							    tourGroupTransferId=getValue("tourGroupTransferId"),
-							    lineProductIdName=getValue("lineProductIdName");
-
-							
-							if (lineProductIdName==null||lineProductIdName=="") {
-								showMessageDialog($( "#confirm-dialog-message" ),"请选择线路产品！");
-								return ;	
-							}else{
-								$.ajax({
-									url:KingServices.build_url("transfer","saveLine"),
-									data:"lineProductId="+lineProductId+"&tourGroupTransferId="+tourGroupTransferId,
-									success:function(data){
-										var result = showDialog(data);
-										if(result){  		
-											layer.close(editTransferInTemplateLayer);
-											//showMessageDialog($( "#confirm-dialog-message" ),data.message);
-											var type="2",
-											    divId="Transfer-In";
-											transfer.getSearchParam(divId,type);
-											transfer.findPager(divId,type,0);
-
-											var touristGroupId=data.touristGroupId,
-											    typeOut="out";
-											//是否跳转到中转安排
-										    transfer.transitMessage(touristGroupId,typeOut);
-
-
-
-										}
-									}
-								});
-							}
-						})
-						//关闭Layer
-						$editTrsferInObj.find(".T-canceleditTransfer").click(function(){
-							layer.close(editTransferInTemplateLayer);
-						});
-					}	
-				}
-			})	
-		};*/
-
-
 	/**
 	 * [transitMessage description]
 	 * @param  {[type]} touristGroupId [游客小组id]
@@ -1068,10 +964,12 @@ define(function(require, exports) {
 									success:function(data){
 										var result = showDialog(data);
 										if(result){  	
-										   var touristGroupId = data.touristGroupId,
-										       typeOut = "out";
+										   var touristGroupId = data.touristGroupId;
 										   //跳转游客小组新增页面
-										   KingServices.addTouristGroup(touristGroupId,typeOut);
+										   KingServices.updateTransfer(touristGroupId);
+										   //外转确认后数据刷新--模拟Click
+										   transfer.$divIdInObj.find(".T-transferIn-search").off("click").on("click",{divId:"Transfer-In",type:"2"},transfer.getListPage);
+	    	                               transfer.$divIdInObj.find(".T-transferIn-search").trigger("click");
 								
 										}
 									}

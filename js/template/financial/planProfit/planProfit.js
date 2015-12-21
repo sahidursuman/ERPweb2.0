@@ -14,7 +14,7 @@ define(function(require, exports) {
     plan.initModule = function() {
         var dateJson = FinancialService.getInitDate();
         plan.searchData = {
-            page : 0,
+            pageNo : 0,
             tripNumber : "",
             lineProductName : "",
             lineProductId : "",
@@ -22,7 +22,7 @@ define(function(require, exports) {
             guideId : "",
             start : dateJson.startDate,
             end : dateJson.endDate,
-            status : "",
+            billStatus : "",
             sortType: 'auto'
         };
         var data = {};
@@ -33,9 +33,9 @@ define(function(require, exports) {
         plan.listMain("","","","","",dateJson.startDate,dateJson.endDate,"");
     };
 
-    plan.listMain = function(tripNumber,lineProductName,lineProductId,guideName,guideId,startTime,endTime,status){
+    plan.listMain = function(tripNumber,lineProductName,lineProductId,guideName,guideId,startTime,endTime,billStatus){
         plan.searchData = {
-            page : 0,
+            pageNo : 0,
             tripNumber : tripNumber,
             lineProductName : lineProductName,
             lineProductId : lineProductId,
@@ -43,7 +43,7 @@ define(function(require, exports) {
             guideId : guideId,
             start : startTime,
             end : endTime,
-            status : status,
+            billStatus : billStatus,
             sortType: 'auto'
         };
         var searchParam = JSON.stringify(plan.searchData);
@@ -99,7 +99,7 @@ define(function(require, exports) {
         });
     };
 
-    plan.listPlan = function(page,tripNumber,lineProductName,lineProductId,guideName,guideId,startTime,endTime,status){
+    plan.listPlan = function(page,tripNumber,lineProductName,lineProductId,guideName,guideId,startTime,endTime,billStatus){
         if (plan.$searchArea && arguments.length === 1) {
             // 初始化页面后，可以获取页面的参数
             tripNumber = plan.$searchArea.find("input[name=tripNumber]").val(),
@@ -109,7 +109,7 @@ define(function(require, exports) {
             guideId = plan.$searchArea.find("input[name=guideId]").val(),
             startTime = plan.$searchArea.find("input[name=startTime]").val(),
             endTime = plan.$searchArea.find("input[name=endTime]").val(),
-            status = plan.$searchArea.find(".T-status button").data("value")
+            billStatus = plan.$searchArea.find(".T-status button").data("value")
         }
         if(startTime > endTime){
             showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
@@ -122,7 +122,7 @@ define(function(require, exports) {
         // 修正页码
         page = page || 0;
         plan.searchData = {
-            page : page,
+            pageNo : page,
             tripNumber : tripNumber,
             lineProductName : lineProductName,
             lineProductId : lineProductId,
@@ -130,7 +130,7 @@ define(function(require, exports) {
             guideId : guideId,
             start : startTime,
             end : endTime,
-            status : status,
+            billStatus : billStatus,
             sortType: 'auto'
         };
 

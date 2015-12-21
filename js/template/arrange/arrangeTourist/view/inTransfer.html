@@ -40,7 +40,7 @@
 								<td><label name="label_needPay">{{touristGroup.transNeedPayAllMoney}}</label></td>
 								<td><label name="label_payed">{{touristGroup.transPayedMoney}}</label></td>
 								<td class="transferFeeStatus">{{if touristGroup.transferFeeStatus == 1}}
-									<i class ="ace-icon fa fa-check"></i>
+									<i class ="ace-icon fa fa-check green"></i>
 									已填写
 									{{else}}
 									<i class="ace-icon fa fa-times red bigger-125"></i>
@@ -56,7 +56,7 @@
 						{{/each}}
 					</tbody>
 				</table>
-			<div style="color:RGB(184,70,53);" class="pull-right">(*提示：转客操作需填写费用信息)</div>
+			<div style="color:RGB(184,70,53);" class="pull-right">(*提示：内转操作需填写费用信息)</div>
 				<form class="form-horizontal" role="form" onsubmit="return false" style="margin-top:25px;">
 					<div class="form-group col-sm-12" style="text-align: center;">
 						<label class="control-label no-padding-right">部门：</label>

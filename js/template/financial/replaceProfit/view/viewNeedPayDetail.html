@@ -18,15 +18,15 @@
 								</thead>
 
 								<tbody>
-									{{each payedMoneyDetailList as rs}}
-									<tr data-id="{{rs.id}}">
-										<td>{{if rs.payType == null || rs.payType == ""}}-{{else}}{{rs.payType}}{{/if}}</td>
-										<td>{{if rs.businessType == null || rs.businessType == ""}}-{{else}}{{rs.businessType}}{{/if}}</td>
-										<td>{{rs.payDifferenceMoney}}</td>
-										<td>{{rs.remark}}</td>
-										<td>{{if rs.checkRealname == null || rs.checkRealname == ""}}-{{else}}{{rs.checkRealname}}{{/if}}</td>
-										<td>{{if rs.checkTime == null || rs.checkTime == ""}}-{{else}}{{rs.checkTime | dateFormat:'yyyy-MM-dd hh:mm:ss'}}{{/if}}</td>
-									</tr>
+									{{each needIncomeDetailsList as rs}}
+										<tr data-id="{{rs.id}}">
+											<td>{{if rs.receivableType == null || rs.receivableType == ""}}-{{else}}{{rs.receivableType}}{{/if}}</td>
+											<td>{{if rs.businessType == null || rs.businessType == ""}}-{{else}}{{rs.businessType}}{{/if}}</td>
+											<td>{{rs.incomeMoney}}</td>
+											<td>{{rs.remark}}</td>
+											<td>{{if rs.checkRealname == null || rs.checkRealname == ""}}-{{else}}{{rs.checkRealname}}{{/if}}</td>
+											<td>{{if rs.checkTime == null || rs.checkTime == ""}}-{{else}}{{rs.checkTime | dateFormat:'yyyy-MM-dd hh:mm:ss'}}{{/if}}</td>
+										</tr>
 									{{/each}}
 								</tbody>
 							</table>

@@ -30,7 +30,7 @@
 						<label class="col-sm-1 control-label no-padding-right">是否购买保险:</label>
 						<div class="col-sm-2 checkbox buyInsurance">
 							<label>
-								<input{{if touristGroupDetail.buyInsurance==1}} checked="checked"{{/if}} value="1" type="checkbox" class="ace buyInsurance-status" name="buyInsurance">
+								<input readonly="readonly" {{if touristGroupDetail.buyInsurance==1}} checked="checked"{{/if}} value="1" type="checkbox" class="ace buyInsurance-status" name="buyInsurance">
 								<span class="lbl"></span>
 							</label>
 						</div>
@@ -64,6 +64,11 @@
 								<option{{if touristGroupDetail.getType == 5}} selected="selected"{{/if}} value="5">QQ</option>
 							</select>
 						</div>
+
+						<label class=" control-label no-padding-right margin-leftGroup">组团单号：
+							<input  type="text" name="otaOrderNumber" value="{{touristGroupDetail.otaOrderNumber}}" readonly="readonly"  maxlength="100" />
+						</label>
+
 					</div>
 					<div class="form-group guideInterval">
 						<label class="col-sm-1 control-label no-padding-right">应收:</label>
@@ -93,12 +98,7 @@
 
 						{{/if}}
 						</div> 
-						
-                        <div class="col-sm-3">
-							<label class=" control-label no-padding-right margin-leftGroup">组团单号：
-							<input  type="text" name="otaOrderNumber" value="{{touristGroupDetail.otaOrderNumber}}"  maxlength="9" />
-							</label>
-						</div>
+		
 					  </div>
 					</div>
 				</div>
@@ -207,7 +207,7 @@
 							<div class="form-group">
 								<label class="col-sm-1 control-label no-padding-right">备注：</label>
 								<div class="col-sm-11">
-									<input name="touristRemarks" value="{{touristGroupDetail.remark}}"  {{if !!type}}readonly="readonly"{{/if}}  class="col-sm-12  no-padding-right" type="text">
+									<input name="touristRemarks" value="{{touristGroupDetail.remark}}"  {{if !!type}}readonly="readonly"{{/if}}  maxlength="1000" class="col-sm-12  no-padding-right" type="text">
 								</div>
 							</div>
 							<div class="form-group margin-top15">
@@ -243,7 +243,7 @@
 													<input name="name" value="{{memberList.name}}" readonly="readonly" type="text" class="col-sm-12  no-padding-right" />
 												</td>
 												<td>
-													<input name="mobileNumber" value="{{memberList.mobileNumber}}" readonly="readonly" type="text" class="col-sm-12  no-padding-right" maxlength="11" />
+													<input name="mobileNumber" value="{{memberList.mobileNumber}}" readonly="readonly" type="text" class="col-sm-12 T-mobileNumber no-padding-right" maxlength="11" />
 												</td>
 												<td>
 													<select name="idCardType" disabled="disabled">

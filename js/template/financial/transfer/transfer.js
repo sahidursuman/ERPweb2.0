@@ -1,5 +1,5 @@
 define(function(require, exports) {
-	var rule = require("./rule");
+	
     var menuKey = "financial_transfer",
 	    listTemplate = require("./view/list"),
 	    transferChecking = require("./view/transferChecking"),
@@ -58,7 +58,7 @@ define(function(require, exports) {
                 if(result){
                 	Transfer.partnerList = data.partnerAgencyNameList;
                 	var html = listTemplate(data);
-                    Tools.addTab(menuKey,"外传账务",html);
+                    Tools.addTab(menuKey,"外转账务",html);
 
                     Transfer.initList(startDate,endDate);
                     // 绑定翻页组件
@@ -123,6 +123,7 @@ define(function(require, exports) {
         }
 
         operateName = (operateName == "全部") ? "" : operateName;
+        lineProductName = (lineProductName == "全部") ? "" : lineProductName;
         // 修正页码
         page = page || 0;
         var searchParam = {
@@ -150,11 +151,11 @@ define(function(require, exports) {
                     var validator;
                     // 初始化页面
                     if (Tools.addTab(menuKey + "-checking", "外转对账", html)) {
-                        Transfer.initCheck(page,partnerAgencyId,partnerAgencyName); 
-                        validator = rule.check(Transfer.$checkTab.find(".T-checkList"));                     
+                        Transfer.initCheck(page,partnerAgencyId,partnerAgencyName);                      
                     }
 
                     Transfer.getOperateList(Transfer.$checkTab,data.operateList);
+                    Transfer.getLineProductList(Transfer.$checkTab,data.lineProductList);
                     //取消对账权限过滤
                     var checkTr = Transfer.$checkTab.find(".T-checkTr");
                     var rightCode = Transfer.$checkTab.find(".T-checkList").data("right");
@@ -185,6 +186,10 @@ define(function(require, exports) {
         Tools.setDatePicker(Transfer.$checkTab.find(".date-picker"),true);
         Transfer.updateUnpayMoney();
 
+        //表单验证
+        var validator = new FinRule(0);
+        var validatorCheck = validator.check(Transfer.$checkTab);
+
         //搜索按钮事件
         Transfer.$checkSearchArea.find('.T-search').on('click', function(event) {
             event.preventDefault();
@@ -205,6 +210,7 @@ define(function(require, exports) {
         });
         //确认对账按钮事件
         Transfer.$checkTab.find(".T-saveCheck").click(function(){
+            if(!validatorCheck.form()){return;}
             Transfer.saveChecking(id,name,page);
         });
     };
@@ -224,6 +230,7 @@ define(function(require, exports) {
         }
 
         operateName = (operateName == "全部") ? "" : operateName;
+        lineProductName = (lineProductName == "全部") ? "" : lineProductName;
         page = page || 0;
         var searchParam = {
             pageNo : page,
@@ -233,8 +240,15 @@ define(function(require, exports) {
             operateName : operateName,
             startDate : startDate,
             endDate : endDate,
-            sortType : "auto"
+            sortType : "auto",
+            isAutoPay : isAutoPay
         };
+        if(isAutoPay == 1){
+           searchParam.isAutoPay = isAutoPay;
+           searchParam.sumCurrentPayMoney = Transfer.$clearTab.find('input[name=sumPayMoney]').val();
+           searchParam.payType = Transfer.$clearTab.find('select[name=sumPayType]').val();
+           searchParam.payRemark = Transfer.$clearTab.find('input[name=sumPayRemark]').val();
+        }
         searchParam = JSON.stringify(searchParam);
         $.ajax({
             url:KingServices.build_url("account/financialTransfer","listTransferAccount"),
@@ -244,6 +258,14 @@ define(function(require, exports) {
                 var result = showDialog(data);
                 if(result){
                     data.partnerAgencyName = partnerAgencyName;
+                    if(isAutoPay == 1){
+                        Transfer.clearTempData = data.autoPaymentJson;
+                        Transfer.clearTempSumDate = {
+                            sumPayMoney : Transfer.$clearTab.find('input[name=sumPayMoney]').val(),
+                            sumPayType : Transfer.$clearTab.find('select[name=sumPayType]').val(),
+                            sumPayRemark : Transfer.$clearTab.find('input[name=sumPayRemark]').val()
+                        };
+                    }
 
                     //暂存数据读取
                     if(Transfer.clearTempSumDate){
@@ -257,18 +279,20 @@ define(function(require, exports) {
                     }
                     var resultList = data.financialTransferList;
                     data.financialTransferList = FinancialService.getTempDate(resultList,Transfer.clearTempData);
-
+                    data.isAutoPay = isAutoPay;
                     var html = transferClearing(data);
-                    
+                    console.log(data);
                     var validator;
                     // 初始化页面
                     if (Tools.addTab(menuKey + "-clearing", "外转付款", html)) {
+                        // 初始化jQuery 对象 
+                        Transfer.$clearTab = $("#tab-" + menuKey + "-clearing-content");
+                        Transfer.$clearSearchArea = Transfer.$clearTab.find('.T-search-area');
                         Transfer.initClear(page,partnerAgencyId,partnerAgencyName); 
-                        validator = rule.check(Transfer.$clearTab.find('.T-clearList'));                       
+                                       
                     }
-
                     Transfer.getOperateList(Transfer.$clearTab,data.operateList);
-
+                    Transfer.getLineProductList(Transfer.$clearTab,data.lineProductList);
                     if(isAutoPay == 0){
                         Transfer.$clearTab.find(".T-cancel-auto").hide();
                     } else {
@@ -280,7 +304,6 @@ define(function(require, exports) {
                             Transfer.$clearTab.find(".T-cancel-auto").hide();
                         }
                     }
-
                     //绑定翻页组件
                     var $tr = Transfer.$clearTab.find('.T-clearList tr');
                     laypage({
@@ -289,7 +312,7 @@ define(function(require, exports) {
                         curr: (page + 1),
                         jump: function(obj, first) {
                             if (!first) { 
-                                var tempJson = FinancialService.clearSaveJson(Transfer.$clearTab,Transfer.clearTempData,rule);
+                                var tempJson = FinancialService.clearSaveJson(Transfer.$clearTab,Transfer.clearTempData,new FinRule(1));
                                 Transfer.clearTempData = tempJson;
                                 var sumPayMoney = parseFloat(Transfer.$clearTab.find('input[name=sumPayMoney]').val()),
                                     sumPayType = parseFloat(Transfer.$clearTab.find('select[name=sumPayType]').val()),
@@ -309,12 +332,17 @@ define(function(require, exports) {
     };
 
     Transfer.initClear = function(page,id,name){
-        // 初始化jQuery 对象 
-        Transfer.$clearTab = $("#tab-" + menuKey + "-clearing-content");
-        Transfer.$clearSearchArea = Transfer.$clearTab.find('.T-search-area');
+       
 
         Transfer.init_event(page,id,name,Transfer.$clearTab,"clear");
         Tools.setDatePicker(Transfer.$clearTab.find(".date-picker"),true);
+        var isAutoPay = Transfer.$clearTab.find('input[name=isAutoPay]').val()
+        //表单验证
+        var settleValidator = isAutoPay == 2 ? new FinRule(3) : new FinRule(1),
+            autoValidator = new FinRule(2);
+        var validatorCheck = settleValidator.check(Transfer.$clearTab),
+        autoValidatorCheck = autoValidator.check(Transfer.$clearTab.find('.T-count'));
+            
 
         //搜索事件
         Transfer.$clearTab.find(".T-search").click(function(){
@@ -331,6 +359,7 @@ define(function(require, exports) {
 
         //保存付款事件
         Transfer.$clearTab.find(".T-saveClear").click(function(){
+            if(!validatorCheck.form()){return;}
             Transfer.saveClear(id,name,page);
         });
 
@@ -339,45 +368,10 @@ define(function(require, exports) {
 
         //自动下账
         Transfer.$clearTab.find(".T-clear-auto").off().on("click",function(){
-            var isAutoPay = FinancialService.autoPayJson(id,Transfer.$clearTab,rule);
+            if(!autoValidatorCheck.form()){return;}
+            var isAutoPay = FinancialService.autoPayJson(id,Transfer.$clearTab,new FinRule(1));
             if(!isAutoPay){return false;}
-
-            var startDate = Transfer.$clearTab.find("input[name=startDate]").val(),
-                endDate = Transfer.$clearTab.find("input[name=endDate]").val();
-            var searchParam = {
-                partnerAgencyId : id,
-                lineProductName : Transfer.$clearTab.find("input[name=lineProductName]").val(),
-                operateId : Transfer.$clearTab.find('input[name=operateId]').val(),
-                operateName : Transfer.$clearTab.find('input[name=operateName]').val(),
-                sumCurrentPayMoney : Transfer.$clearTab.find('input[name=sumPayMoney]').val(),
-                payType : Transfer.$clearTab.find('select[name=sumPayType]').val(),
-                payRemark : Transfer.$clearTab.find('input[name=sumPayRemark]').val(),
-                startDate : startDate,
-                endDate : endDate,
-                isAutoPay : 1
-            };
-            searchParam = JSON.stringify(searchParam);
-            FinancialService.autoPayConfirm(startDate,endDate,function(){
-                $.ajax({
-                    url:KingServices.build_url("account/financialTransfer","listTransferAccount"),
-                    type:"POST",
-                    data:{ searchParam : searchParam },
-                    success:function(data){
-                        var result = showDialog(data);
-                        if(result){
-                            Transfer.$clearTab.find(".T-clear-auto").toggle();
-                            Transfer.$clearTab.find(".T-cancel-auto").toggle();
-                            Transfer.clearTempData = data.autoPaymentJson;
-                            Transfer.clearTempSumDate = {
-                                sumPayMoney : Transfer.$clearTab.find('input[name=sumPayMoney]').val(),
-                                sumPayType : Transfer.$clearTab.find('select[name=sumPayType]').val(),
-                                sumPayRemark : Transfer.$clearTab.find('input[name=sumPayRemark]').val()
-                            };
-                            Transfer.transferClear(1,0,id,name);
-                        }
-                    }
-                });
-            });
+            Transfer.transferClear(1,0,id,name);
         });
 
         Transfer.$clearTab.find(".T-cancel-auto").off().on("click",function(){
@@ -389,7 +383,7 @@ define(function(require, exports) {
             Transfer.transferClear(0,0,id,name);
         });
 
-        FinancialService.updateSumPayMoney(Transfer.$clearTab,rule);
+        FinancialService.updateSumPayMoney(Transfer.$clearTab,settleValidator);
     };
 
     //已付金额明细
@@ -447,8 +441,6 @@ define(function(require, exports) {
     //对账数据保存
     Transfer.saveChecking = function(partnerAgencyId,partnerAgencyName,page,tab_id, title, html){
         var argumentsLen = arguments.length;
-        var validator = rule.check(Transfer.$checkTab);
-	    if(!validator.form()){return false;}
 
 	    if(!Transfer.$checkTab.data('isEdited')){
 	        showMessageDialog($("#confirm-dialog-message"),"您未进行任何操作！");
@@ -470,8 +462,6 @@ define(function(require, exports) {
 	    $tr.each(function(){
 	        var $this = $(this);
 	        if($this.data("change")){//遍历修改行
-	            var validator = rule.check($this);
-	            if(!validator.form()){ return false; }
 	            var isConfirmAccount = "";
 	            if ($this.find(".T-checkbox").is(':checked')) {
 	                isConfirmAccount = 1;
@@ -482,7 +472,7 @@ define(function(require, exports) {
 	            if(($this.data("confirm") != isConfirmAccount) || ($this.data("confirm") == 1)){
 	                var checkRecord = {
 	                    id : $this.data("id"),
-	                    punishMoney : getValue($this,"punishMoney"),
+	                    punishMoney : getValue($this,"settlementMoney"),
 	                    settlementMoney : $this.find("td[name=settlementMoney]").text(),
 	                    unPayedMoney : $this.find("td[name=unPayedMoney]").text(),
 	                    checkRemark : $this.find("[name=checkRemark]").val(),
@@ -522,12 +512,12 @@ define(function(require, exports) {
     };
 
     Transfer.saveClear = function(id,name,page,tab_id, title, html){
-        if(!FinancialService.isClearSave(Transfer.$clearTab,rule)){
+        if(!FinancialService.isClearSave(Transfer.$clearTab,new FinRule(1))){
             return false;
         }
 
         var argumentsLen = arguments.length,
-            clearSaveJson = FinancialService.clearSaveJson(Transfer.$clearTab,Transfer.clearTempData,rule);
+            clearSaveJson = FinancialService.clearSaveJson(Transfer.$clearTab,Transfer.clearTempData,new FinRule(1));
         var searchParam = {
             partnerAgencyId : id,
             sumCurrentPayMoney : Transfer.$clearTab.find('input[name=sumPayMoney]').val(),
@@ -569,7 +559,6 @@ define(function(require, exports) {
 
     Transfer.init_event = function(page,id,name,$tab,option) {
         if (!!$tab && $tab.length === 1) {
-            var validator = rule.check($tab);
 
             // 监听修改
             $tab.find(".T-" + option + "List").off('change').on('change',"input",function(event) {
@@ -605,6 +594,34 @@ define(function(require, exports) {
                 }
             });
         }
+    };
+
+    Transfer.getLineProductList = function($tab,lineProductList){
+        var $lineProduct = $tab.find("input[name=lineProductName]");
+        if(lineProductList != null && lineProductList.length > 0){
+            for(var i=0;i<lineProductList.length;i++){
+                lineProductList[i].value = lineProductList[i].lineProductName;
+            }
+        }
+        var all = {
+            id : "",
+            value : "全部"
+        };
+        lineProductList.unshift(all);
+
+        //餐厅
+        $lineProduct.autocomplete({
+            minLength: 0,
+            source : lineProductList,
+            change: function(event,ui) {
+               
+            },
+            select: function(event,ui) {
+                
+            }
+        }).on("click",function(){
+            $lineProduct.autocomplete('search','');
+        });      
     };
 
     Transfer.getQueryList = function(){
@@ -701,17 +718,14 @@ define(function(require, exports) {
             }
         });
     };
-
     //对账-自动计算未付金额
 	Transfer.updateUnpayMoney = function(){
-	    Transfer.$checkTab.find('input[name="punishMoney"]').on('focusin',function() {
+	    Transfer.$checkTab.find('input[name="settlementMoney"]').on('focusin',function() {
 	        $(this).data("oldVal",$(this).val());
 	    })
 	    .on('change',function() {
 	        var $this = $(this),
-	            $tr = $this.closest('tr'),
-	            validator = rule.check($tr);
-	        if(!validator.form()){ return false;}
+	            $tr = $this.closest('tr');
 	        var punishMoney = ($this.val() || 0) * 1;
 
 	        //计算结算金额修改前后差值
@@ -733,7 +747,7 @@ define(function(require, exports) {
 	};
 
     Transfer.initPay = function(options){
-        Transfer.transferClear(2,0,options.id,options.name,"",options.startDate,options.endDate); 
+        Transfer.transferClear(2,0,options.id,options.name,"","","",options.startDate,options.endDate); 
     };
 
     exports.init = Transfer.initModule;
