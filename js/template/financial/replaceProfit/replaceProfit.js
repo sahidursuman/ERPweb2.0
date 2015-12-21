@@ -173,7 +173,7 @@ define(function(require, exports) {
                         replace.listReplace(0);
                     });
 
-                    replace.$tab.find('.T-list').on('click','.T-option',function(event) {
+                    replace.$tab.find('.T-list').off().on('click','.T-option',function(event) {
                         event.preventDefault();
                         var $that = $(this),
                             id = $that.closest('tr').data('id');
