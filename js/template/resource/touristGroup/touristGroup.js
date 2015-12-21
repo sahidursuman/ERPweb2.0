@@ -1634,8 +1634,8 @@ define(function(require, exports) {
         }
 
         //接送事件点json
-        var outArrangeRemarkJson={},
-            $touristReChecked=$arrangeForm.find('.T-touristReception').is(':checked'),
+        var outArrangeRemarkJson={};
+        var $touristReChecked=$arrangeForm.find('.T-touristReception').is(':checked'),
             $smallCarChecked=$arrangeForm.find('.T-smallCar').is(':checked'),
             $tourSendChecked=$arrangeForm.find('.T-touristSend').is(':checked');
             if ($touristReChecked ||  $smallCarChecked || $tourSendChecked) {

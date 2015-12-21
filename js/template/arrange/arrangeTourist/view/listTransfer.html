@@ -1,19 +1,19 @@
 <table class="table table-striped table-bordered table-hover globalAdd T-showHighLight table-fixed">
-    <colgroup>
-    	<col style="width:5%;"></col>
+     <colgroup>
+    	<col style="width:8%;"></col>
+    	<col style="width:20%;"></col>
+    	<col style="width:25%;"></col>
+    	<col style="width:95px"></col>
+    	<col style="width:95px"></col>
+    	<col style="width:80px;"></col>
+    	<col style="width:15%;"></col>
     	<col style="width:10%;"></col>
-    	<col style="width:10%;"></col>
-    	<col style="width:10%;"></col>
-    	<col style="width:10%;"></col>
-    	<col style="width:10%;"></col>
-    	<col style="width:10%;"></col>
-    	<col style="width:10%;"></col>
-	 	<col style="width:10%;"></col>
+	 	<col style="width:15%;"></col>
  	 	<col style="width:10%;"></col>
- 	 	<col style="width:12%;"></col>
- 	 	<col style="width:12%;"></col>
- 	 	<col style="width:20%;"></col>
- 	 	<col style="width:12%;"></col>
+ 	 	<col style="width:100px;"></col>
+ 	 	<col style="width:80px;"></col>
+ 	 	<col style="width:25%;"></col>
+ 	 	<col style="width:100px;"></col>
     </colgroup>
 	<thead>
 		<tr class="bg-blur">
@@ -37,8 +37,8 @@
 		{{each touristGroupList as touristGroupList}}
 			<tr data-value={{touristGroupList.id}} data-entity-adultCount = {{touristGroupList.adultCount}}  data-entity-childCount = {{touristGroupList.childCount}}>
 			    <td><label class="pos-rel"> <input type="checkbox" class="ace T-transferCheckBox T-cheked"> <span class="lbl"></span> </label></td>
-				<td>{{if touristGroupList.partnerAgency!=null}}{{touristGroupList.partnerAgency.travelAgencyName}}{{/if}}</td>
-				<td>{{if touristGroupList.lineProduct!=null}}{{touristGroupList.lineProduct.name}}{{/if}}</td>
+				<td>{{if touristGroupList.partnerAgency!=null}}{{touristGroupList.partnerAgency.travelAgencyName}}{{/if}}</span></td>
+				<td class="T-ctrl-tip" title="{{touristGroupList.lineProduct.name}}"><span style="height: 35px">{{if touristGroupList.lineProduct!=null}}{{touristGroupList.lineProduct.name}}{{/if}}</span></td>
 				<td>{{if touristGroupList.lineProduct!=null}}{{touristGroupList.lineProduct.type}}{{/if}}</td>
 				<td>
 				{{if touristGroupList.lineProduct!=null}}
