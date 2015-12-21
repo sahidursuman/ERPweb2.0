@@ -634,7 +634,7 @@ define(function(require, exports) {
 	tripPlan.addOther = function($this, validator, $tab){
 		var tableContainer = $this.parents(".ui-sortable-handle").find(".table tbody"),
 			html = '<tr><td class="T-whichDaysContainer"></td>' +
-		'<td><input type="text" name="name" maxlength="32" class="col-sm-12"/></td>' +
+		'<td><input type="text" name="name" maxlength="32" class="col-sm-12 T-other-name"/></td>' +
 		'<td><input type="text" name="managerName" maxlength="32" class="col-sm-12"/></td>' +
 		'<td><input type="text" name="mobileNumber" class="col-sm-12" maxlength="11"/></td>' +
 		'<td><input type="text" name="fee" class="col-sm-12 price" maxlength="6"/></td>' +
