@@ -395,7 +395,7 @@ define(function(require,exports) {
 						message = "收款金额需大于0！";
 					};
 					if(parseFloat(payMoney)>parseFloat(unPayMoney)){
-						message = "本次收款金额不能大于已对账未收总额！";
+						message = "本次收款金额合计大于未收金额合计（已对账），请先进行对账";
 					};
 					if(startDate>endDate){
 						message = "开始时间不能大于结束时间，请重新选择！";
@@ -409,7 +409,10 @@ define(function(require,exports) {
 	        	});
         	
         	}else{
-        		InnerTransferIn.setAutoFillEdit($obj,false)
+        		InnerTransferIn.setAutoFillEdit($obj,false);
+        		InnerTransferIn.saveJson = [];
+        		InnerTransferIn.btnSatus = 0;
+                InnerTransferIn.chenking($listSearchData,2,"settle");
         	}
         });
         //确认付款
@@ -506,7 +509,7 @@ define(function(require,exports) {
 		});
 	};
 	//设置按钮样式
-	InnerTransferIn.setAutoFillEdit = function($tab){
+	InnerTransferIn.setAutoFillEdit = function($tab, disable){
 		var $sum = $tab.find('input[name="sumPayMoney"]').prop('disabled', disable);
 		if (!disable) {
 			$sum.val(0);
@@ -557,7 +560,6 @@ define(function(require,exports) {
 						if(result){
 							$obj.data('isEdited', false);
 							showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-								//Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
 								if(argumentsLen == 2){
 		                            Tools.closeTab(checkId);
 		                            InnerTransferIn.listInnerTransfer(0);
@@ -764,14 +766,7 @@ define(function(require,exports) {
 	InnerTransferIn.init_CRU_event = function($tab,$listSearchData,typeFlag){
 		if(!!$tab && $tab.length === 1){
 			// 监听修改
-			var $tbody,
-				saveBtn;
-			if(typeFlag == 2){
-				$tbody = $tab.find(".T-clearList");
-			}else{
-				$tbody = $tab.find('.T-checkList')
-			};
-			$tbody.on('change', function(event) {
+			$tab.on('change', function(event) {
 				event.preventDefault();
 				$tab.data('isEdited', true);
 				

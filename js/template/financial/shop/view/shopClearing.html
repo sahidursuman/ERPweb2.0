@@ -35,33 +35,37 @@
         </div>
         <div class="form-group marginLeft-30">
             <label>导佣合计：</label>
-            <label class="T-stMoney">{{totalList.sumGuideRebateMoney}}</label>
+            <label>{{totalList.sumGuideRebateMoney}}</label>
         </div>
         <div class="form-group marginLeft-30">
             <label>人数返佣合计：</label>
-            <label class="T-unpayMoney">{{totalList.sumCustomerRebateMoney}}</label>
+            <label>{{totalList.sumCustomerRebateMoney}}</label>
         </div>
         <div class="form-group marginLeft-30">
             <label>停车返佣合计：</label>
-            <label class="T-unpayMoney">{{totalList.sumCustomerRebateMoney}}</label>
+            <label>{{totalList.sumCustomerRebateMoney}}</label>
         </div>
         <div class="form-group marginLeft-30">
             <label>返佣金额合计：</label>
-            <label class="T-unpayMoney">{{totalList.sumBackMoney}}</label>
+            <label>{{totalList.sumBackMoney}}</label>
         </div>
         <div class="form-group marginLeft-30">
             <label>已收金额合计：</label>
-            <label class="T-unpayMoney">{{totalList.sumReceiveMoney}}</label>
+            <label>{{totalList.sumReceiveMoney}}</label>
         </div>
     </div>
     <div class="form-inline" style="padding-top: 10px;">
         <div class="form-group">
             <label>结算金额合计：</label>
-            <label class="T-unpayMoney">{{totalList.sumSettlementMoney}}</label>
+            <label>{{totalList.sumSettlementMoney}}</label>
         </div>
         <div class="form-group marginLeft-30">
             <label>未收金额合计：</label>
-            <label class="T-unpayMoney">{{totalList.sumUnReceiveMoney}}</label>
+            <label>{{totalList.sumUnReceiveMoney}}</label>
+        </div>
+        <div class="form-group marginLeft-30">
+            <label>未付金额合计(已对账)：</label>
+            <label class="T-unpayMoney">{{totalList.checkedUnPayedMoney}}</label>
         </div>
         <div class="form-group marginLeft-30">
             <label>本次收款金额合计：</label>
@@ -70,11 +74,11 @@
         <div class="form-group marginLeft-30">
             <label>收款方式：</label>
             <select class="form-control T-sumPayType" name="payType">
-                <option>现金</option>
-                <option>银行转账</option>
-                <option>网上支付</option>
-                <option>支票</option>
-                <option>其它</option>
+                <option value="0">现金</option>
+                <option value="1">银行转账</option>
+                <option value="2">网上支付</option>
+                <option value="3">支票</option>
+                <option value="4">其它</option>
             </select>
         </div>
         <div class="form-group marginLeft-30">

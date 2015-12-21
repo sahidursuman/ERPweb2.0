@@ -994,6 +994,7 @@ define(function(require, exports) {
 							var hotel = JSON.parse(data.hotel);
 							$parents.find("input[name=mobileNumber]").val(hotel.mobileNumber);
 							$parents.find("input[name=managerName]").val(hotel.managerName);
+							$parents.find(".T-tripPlanHotelStar").val(hotel.level);
 							$parents.find("input[name=hotelRoom]").val("");
 							$parents.find("input[name=hotelRoomId]").val("");
 	                    	$parents.find("input[name=fee]").val("");
@@ -1055,7 +1056,7 @@ define(function(require, exports) {
                     },
                     success: function(data) {
 						if(showDialog(data)){
-	                    	$parents.find("input[name=fee]").val(data.price);
+	                    	$parents.find("input[name=fee]").val(data.price).trigger('change');
 						}
                     }
                 });
@@ -1660,15 +1661,16 @@ define(function(require, exports) {
 				tripPlan.plusPrice($(this), $tab);
 			});
 			$this.find("select[name=payType]").on("change", function(){
-				if($this.val()!=0){
+				var $type = $(this);
+				if($type.val()!=0){
 					$parents.find("input[name=guidePayMoney]").val("");
 				}else{
-					tripPlan.plusPrice($(this), $tab);
+					tripPlan.plusPrice($type, $tab);
 				}
 			});
 
 			//加载时自动计算
-			tripPlan.plusPrice($this.find('input[name=fee], input[name=memberCount], input[name=reduceMoney], input[name=payedMoney]'), $tab);
+			//tripPlan.plusPrice($this.find('input[name=fee], input[name=memberCount], input[name=reduceMoney], input[name=payedMoney]'), $tab);
 		});
 	},
 	tripPlan.plusPrice = function($this, $tab){
@@ -1997,11 +1999,11 @@ define(function(require, exports) {
 			},
 			success: function(data){
 				if(showDialog(data)){
+					tripPlan.listTripPlan(0);
 					showMessageDialog($("#confirm-dialog-message"),data.message, function(){
 						if (isClose == 1) {
 							if (argumentsLen == 3) {
 								Tools.closeTab(menuKey + "-update");
-								tripPlan.listTripPlan(0);
 							}else{
 								$tab.data('isEdited',false);
 								Tools.addTab(tab_id, title, html)

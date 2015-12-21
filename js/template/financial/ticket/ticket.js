@@ -169,11 +169,8 @@ define(function(require, exports) {
 		var validator = (new FinRule(0)).check($tab);
 		// 处理关闭与切换tab
         $tab.off('change').off(SWITCH_TAB_SAVE).off(CLOSE_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT)
-        .on('change', '.T-checkList, .T-checkAll', function() {
+        .on('change', '.T-checkList', function() {
             $tab.data('isEdited', true);
-            if($(this).hasClass('T-checkAll')){
-            	$tab.find('.T-checkTr').data('change', true);
-            }
         })
         .on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
             event.preventDefault();
@@ -211,7 +208,7 @@ define(function(require, exports) {
 				Ticket.payDetails(id);
 			} else if ($that.hasClass('T-view-receipts'))  {
 				// 单据
-				Ticket.viewReceipts($tab, $that.data('billImage'));
+				Ticket.viewReceipts($tab, $that.data('billimage'));
 			}else if($that.hasClass('T-view-details')){
 				// 查看对账
 				Ticket.viewDetails(id);
@@ -425,7 +422,7 @@ define(function(require, exports) {
 				    curr: (data.searchParam.pageNo + 1),
 				    jump: function(obj, first) {
 				    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-				    		Ticket.clearingList(obj.curr -1);
+				    		Ticket.clearingList(obj.curr -1, args.ticketId, args.startDate, args.endDate);
 				    	}
 				    }
 				});	
@@ -455,7 +452,12 @@ define(function(require, exports) {
             }
             Ticket.savePayingData($tab);
         });
-
+        // 监听修改
+        $tab.find(".T-clearList").off('change').on('change',"input",function(event) {
+            event.preventDefault();
+            $(this).closest('tr').data("change",true);
+            $tab.data('isEdited', true);
+        });
 		var $searchArea = $tab.find('.T-search-area'),
 			$datepicker = $searchArea.find('.datepicker');
 
@@ -479,7 +481,7 @@ define(function(require, exports) {
 				Ticket.payDetails(id);
 			} else if ($that.hasClass('T-view-receipts'))  {
 				// 单据
-				Ticket.viewReceipts($tab, $that.data('billImage'));
+				Ticket.viewReceipts($tab, $that.data('billimage'));
 			}else if($that.hasClass('T-view-details')){
 				// 查看对账
 				Ticket.viewDetails(id);
@@ -492,11 +494,9 @@ define(function(require, exports) {
 					Ticket.savePayingData($tab);
 				}, function(){
 					Tools.closeTab(clearMenuKey);
-                	Ticket.getList(Ticket.listPageNo);
 				});
 			}else{
 				Tools.closeTab(clearMenuKey);
-                Ticket.getList(Ticket.listPageNo);
 			}
 		});
 		$tab.find(".T-btn-save").on('click', function(event){
@@ -508,6 +508,7 @@ define(function(require, exports) {
 		
 		$tab.find(".T-btn-autofill").on('click', function(event){
 			event.preventDefault();
+			if(!reciveValidtor.form())return;
 			if ($(this).hasClass('btn-primary')) {
                 if (validator.form()) {
                 	FinancialService.autoPayConfirm($datepicker.eq(0).val(), $datepicker.eq(1).val(),function(){
@@ -620,7 +621,7 @@ define(function(require, exports) {
                             Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
                             Ticket.clearingList(0);
                         } else {
-                            Ticket.getOperationList({}, $tab);
+                            Ticket.clearingList(0);
                         }
                     })
                 });

@@ -45,8 +45,7 @@ define(function(require, exports){
 			args = {
 				pageNo: (page || 0),
 				businessTypeId : Payment.$tab.find('.T-search-business').val(),
-				costTypeId : Payment.$tab.find('.T-search-cost').val(),
-				incomeOrPayTypeId : Payment.$tab.find('.T-search-type').val(),
+				moneyType : Payment.$tab.find('#fin-type').val(),
 				receivableTypeId : Payment.$tab.find('.T-search-category').val(),
 				resourceId : Payment.$tab.find('.T-search-unit').data('id'),
 				resourceName : name == "全部" ? "" : name,

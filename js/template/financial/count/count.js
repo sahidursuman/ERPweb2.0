@@ -357,6 +357,7 @@ define(function(require, exports){
 	                    "remarkArrangeList": JSON.parse(data.remarkArrangeList)
 	                };
 	                var html = Reimbursement(tmp);
+	                console.log(tmp);
 	                Tools.addTab(ReimbursementId,'单团报账',html);
 	                var $ReimbursementId = $("#tab-"+ReimbursementId+"-content");
 					Count.$ReimbursementTab = $ReimbursementId;
@@ -386,7 +387,7 @@ define(function(require, exports){
 
 		$shopObj.find('input[type=text]').off('change').on('change',function(){
 			var $nameFlag = $(this).attr('name');
-			if($nameFlag != "billRemark"){
+			if($nameFlag != "billRemark" && $nameFlag != "consumeMoney"){
 				Count.calculateCost($(this));
 				//计算金额
 				Count.autoShopSum($(this),$obj);
@@ -394,7 +395,7 @@ define(function(require, exports){
 			
 		});
 		//填写金额带出社佣、导佣
-		$shopObj.find('input[name=consumeMoney]').off('change').on('change',function() {
+		$shopObj.find('input[name=consumeMoney]').off('blur').on('blur',function() {
 			Count.getShopRate($(this),$obj);
 		});
 		//新增购物安排
@@ -627,12 +628,14 @@ define(function(require, exports){
 		//购物处理--计算、新增
 		var $shopObj = $listObj.find('.T-count-shopping');
 		$shopObj.find('input[type=text]').off('change').on('change',function(){
+			//if(){}
 			Count.calculateCost($(this));
 			//计算金额
 			Count.autoShopSum($(this),$obj);
+			
 		});
 		//填写金额带出社佣、导佣
-		$shopObj.find('input[name=consumeMoney]').off('change').on('change',function() {
+		$shopObj.find('input[name=consumeMoney]').off('blur').on('blur',function() {
 			Count.getShopRate($(this),$obj);
 		});
 		//新增购物安排
@@ -830,8 +833,7 @@ define(function(require, exports){
 		var data = {
 	    			"images":[]
 	    	};
-	    	var str = $(obj).attr('url');
-	    	var strs = str.split(",");
+	    	var strs = url.split(",");
 	    	for(var i = 0; i < strs.length; i ++) {
 	    		var s = strs[i];
 	    		if(s != null && s != "" && s.length > 0) {
@@ -921,9 +923,10 @@ define(function(require, exports){
                 	console.log(data);
                 	showMessageDialog($( "#confirm-dialog-message" ),data.message);
                 	if(billStatus == 0) {
-                		
+                		Tools.closeTab(updateTabId);
+                		Count.listCountHeader(0);
                 	}else{
-                		
+                		Count.updateExamine(financialTripPlanId);
                 	}
                 }
             }
@@ -3010,9 +3013,9 @@ define(function(require, exports){
 		var tripPlan = {
 				id:Count.changeTwoDecimal($obj.find('.financial-tripPlanId').val()),
 				grossProfitMoney:Count.changeTwoDecimal(parseFloat($obj.find('.grossProfitMoney').text())),
-				perGrossProfitMoney:Count.changeTwoDecimal(parseFloat($obj.find('.main-table .perGrossProfitMoney').text())),
-				getAllMoney:Count.changeTwoDecimal(parseFloat($obj.find('.main-table .tripIncome').text())),
-				payAllMoney:Count.changeTwoDecimal(parseFloat($obj.find('.main-table .tripCost').text()))
+				perGrossProfitMoney:Count.changeTwoDecimal(parseFloat($obj.find('.T-main-table .perGrossProfitMoney').text())),
+				getAllMoney:Count.changeTwoDecimal(parseFloat($obj.find('.T-main-table .tripIncome').text())),
+				payAllMoney:Count.changeTwoDecimal(parseFloat($obj.find('.T-main-table .tripCost').text()))
 		};
 		if(typeof tripPlan.opCheckRemark == "undefined") {
             tripPlan.opCheckRemark = "";

@@ -233,7 +233,7 @@ define(function(require, exports) {
     //成本明细
     replace.viewCostDetail = function(id){
         $.ajax({
-            url:KingServices.build_url("profitBooking","getNeedIncomeDetails"),
+            url:KingServices.build_url("profitBooking","getNeedPayDetails"),
             type:"POST",
             data:{
                 id : id

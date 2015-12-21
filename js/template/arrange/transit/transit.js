@@ -18,7 +18,8 @@ define(function(require, exports) {
 	 */
 	var transit = {
 		$tab: false,
-		$searchArea: false
+		$searchArea: false,
+		pageNo: ""
 	}
 	//搜索数据
 	var autocompleteData = {}
@@ -136,6 +137,7 @@ define(function(require, exports) {
 							transit.sendTransit(id);
 						}else if ($this.hasClass('T-edit')) {
 							//编辑
+							transit.pageNo=transit.$tab.find('.laypage_curr').html();
 							transit.updateTransit(id);
 						}else if ($this.hasClass('T-view')) {
 							//查看
@@ -419,7 +421,7 @@ define(function(require, exports) {
 	transit.addOutHotel = function(id,type,validator){
 		var html ='<tr>'+
 			'<td><input type="hidden" name="serviceType" value="'+type+'" />'+
-			'<input class="col-sm-12 T-datePicker" name="hotelCheckInTime" value="" type="text" /></td>'+
+			'<input class="col-sm-12 T-datePicker datepicker" name="hotelCheckInTime" value="" type="text" /></td>'+
 			'<td><select class="tripPlanHotelStar" name="hotelLevel">'+
 			'<option  selected="selected" value="" {{if outHotel.hotel.level == 0}}selected="selected"{{/if}}>--全部--</option><option value="1">三星以下</option>'+
 			'<option value="2">三星</option><option value="3">准四星</option>'+
@@ -497,7 +499,7 @@ define(function(require, exports) {
 	//新增餐厅安排
 	transit.addRestaurantList = function(id,type,validator){
 		var html = '<tr data-entity-id="">'+
-			'<td><input class="col-sm-12 T-datePicker" name="startTime" type="text" value="" /></td>'+
+			'<td><input class="col-sm-12 T-datePicker datepicker" name="startTime" type="text" value="" /></td>'+
 			'<td><div class="col-sm-12"><input type="hidden" name="serviceType" value="'+type+'" /><input class="col-sm-12 bind-change T-chooseRestaurant" name="restaurant" type="text" value="" />'+
 			'<input type="hidden" name="restaurantId" value="" />'+
 			'<span class="addResourceBtn T-addRestaurantResource R-right" data-right="1030002" title="添加餐厅"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
@@ -532,7 +534,7 @@ define(function(require, exports) {
 	//新增其他安排
 	transit.addOtherList = function(id,type,validator){
 		var html = '<tr data-entity-id="">'+
-			'<td><input class="col-sm-12 T-datePicker" name="startTime" type="text" value="" /></td>'+
+			'<td><input class="col-sm-12 T-datePicker datepicker" name="startTime" type="text" value="" /></td>'+
 			'<td><input class="col-sm-12" name="name" type="text" value="" maxlength="30" /><input type="hidden" name="serviceType" value="'+type+'" /></td>'+
 			'<td><input class="col-sm-12" name="managerName" type="text" value="" maxlength="20" /></td>'+
 			'<td><input class="col-sm-12" name="mobileNumber" type="text" maxlength="11" value="" /></td>'+
@@ -724,7 +726,6 @@ define(function(require, exports) {
 		}).unbind("click").click(function(){
 			var obj = this;
 			var seatCount = $(this).closest('tr').find("[name=seatCount]").val();
-			if(!!seatCount){
 				$.ajax({
 					url: KingServices.build_url('bookingOrder','getBusBrandList'),
 					data:"seatCount="+seatCount+"",
@@ -752,12 +753,6 @@ define(function(require, exports) {
 						}
 					}
 				})
-			}else{
-				layer.tips('请选择车座数', obj, {
-				    tips: [1, '#3595CC'],
-				    time: 2000
-				});
-			}
 		});
 		//选择车辆
 		var chooseLicense = $tab.find(".T-chooseBusLicenseNumber");
@@ -780,7 +775,6 @@ define(function(require, exports) {
 			var obj = this,parents = $(obj).closest('tr'),
 				seatCount = parents.find("[name=seatCount]").val(),
 				busBrand = parents.find("[name=busbrand]").val();
-			if (!!seatCount) {
 				$.ajax({
 					url: KingServices.build_url('busCompany','getLicenseNumbers'),
 					data: {
@@ -807,12 +801,6 @@ define(function(require, exports) {
 						}
 					}
 				})
-			}else{
-				layer.tips('请选择车座数', obj, {
-				    tips: [1, '#3595CC'],
-				    time: 2000
-				});
-			}
 		});
 		// 选择车队
 		var chooseLicense = $tab.find(".T-busCompanyName");
@@ -830,50 +818,42 @@ define(function(require, exports) {
 			select :function(event, ui){
 				var $this = $(this),parents = $(this).closest('tr');
 					parents.find("input[name=busCompanyName]").val(ui.item.busCompanyName);
-					parents.find("input[name=busCompanyId]").val(ui.item.busCompanyId);
+					parents.find("input[name=driverName]").val('');
+					parents.find("input[name=driverMobileNumber]").val('');
 					parents.find("input[name=busCompanyId]").val(ui.item.id).trigger('change');
 			}
 		}).unbind("click").click(function(){
 			var obj = this,parents = $(obj).closest('tr'),
 				seatCount = parents.find("[name=seatCount]").val(),
 				busBrand = parents.find("[name=busbrand]").val();
-			if (!!seatCount) {
-				$.ajax({
-					url:""+APP_ROOT+"back/busCompany.do?method=getAllBusCompanyList&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
-					data: {
-						seatCount: seatCount,
-						brand: busBrand
-					},
-					dateType:"json",
-					showLoading:false,
-					type:"POST",
-					success:function(data){
-						var result = showDialog(data);
-						if(result){
-							console.info(data);
-							var busCompanyList = JSON.parse(data.busCompanyList);
-							if(busCompanyList && busCompanyList.length > 0){
-								for(var i=0; i < busCompanyList.length; i++){
-									busCompanyList[i].value = busCompanyList[i].companyName;
-								}
-								$(obj).autocomplete('option','source', busCompanyList);
-								$(obj).autocomplete('search', '');
-							}else{
-								layer.tips('无数据', obj, {
-								    tips: [1, '#3595CC'],
-								    time: 2000
-								});
+			$.ajax({
+				url: KingServices.build_url('busCompany', 'getAllBusCompanyList'),
+				data: {
+					seatCount: seatCount,
+					brand: busBrand
+				},
+				showLoading:false,
+				type:"POST",
+				success:function(data){
+					var result = showDialog(data);
+					if(result){
+						console.info(data);
+						var busCompanyList = JSON.parse(data.busCompanyList);
+						if(busCompanyList && busCompanyList.length > 0){
+							for(var i=0; i < busCompanyList.length; i++){
+								busCompanyList[i].value = busCompanyList[i].companyName;
 							}
+							$(obj).autocomplete('option','source', busCompanyList);
+							$(obj).autocomplete('search', '');
+						}else{
+							layer.tips('无数据', obj, {
+							    tips: [1, '#3595CC'],
+							    time: 2000
+							});
 						}
 					}
-				})
-			}
-			else{
-				layer.tips('请选择车队', obj, {
-				    tips: [1, '#3595CC'],
-				    time: 2000
-				});
-			}
+				}
+			})
 		});
 		//司机选择
 		var chooseDriver = $tab.find(".T-chooseDriver");
@@ -970,6 +950,7 @@ define(function(require, exports) {
 							var hotel = JSON.parse(data.hotel);
 							parents.find("input[name=hotelMobileNumber]").val(hotel.mobileNumber);
 							parents.find("input[name=hotelManagerName]").val(hotel.managerName);
+							parents.find("select[name=hotelLevel]").val(hotel.level);
 						}
 					}
 				});
@@ -1022,7 +1003,7 @@ define(function(require, exports) {
 					success: function(data) {
 						if(showDialog(data)){
 							var hotelRoom = JSON.parse(data.hotelRoom);
-							$thisRoom.find("input[name=hotelPrice]").val(hotelRoom.contractPrice);
+							$thisRoom.find("input[name=hotelPrice]").val(hotelRoom.contractPrice).trigger('change');
 						}
 					}
 				})
@@ -1311,7 +1292,7 @@ define(function(require, exports) {
 							console.log(argumentsLen);
 							if (argumentsLen == 3) {
 								Tools.closeTab(menuKey+"-update");
-								transit.listTransit(0);
+								transit.listTransit(transit.pageNo-1);
 							}else{
 								$tab.data('isEdited',false);
 								Tools.addTab(tab_id, title, html)
@@ -1331,6 +1312,7 @@ define(function(require, exports) {
 		for(var i = 0; i<obj.length; i++){
 			var busJson = {//touristGroup.getArrangeTrValue(outBusTr.eq(i),""),
 				id : obj.eq(i).attr("data-entity-id"),
+				seatCount : transit.getArrangeTrValue(obj.eq(i),"seatCount"),
 				serviceType : transit.getArrangeTrValue(obj.eq(i),"serviceType"),
 				busCompanyId : transit.getArrangeTrValue(obj.eq(i),"busCompanyId"),
 				busId : transit.getArrangeTrValue(obj.eq(i),"busLicenseNumberId"),

@@ -83,7 +83,7 @@ define(function(require, exports){
 		var $searchArea = $tab.find('.T-search-area');
 		$searchArea.find('.T-btn-search').on('click', function(event) {
 			event.preventDefault();
-			FinShop.getList();
+			FinShop.getList(0, $tab);
 		});
 		Tools.setDatePicker($searchArea.find('.datepicker'), true);
 		FinShop.getShopName($searchArea.find('.T-search-name'));
@@ -185,6 +185,8 @@ define(function(require, exports){
 				tripMessage : $tab.find('.T-search-trip').val()
 			};
 		}
+		args.sortType = 'startTime';
+        args.order='asc';
 		var method = 'listReciveShopAcccount';
 		if(!type){
 			method = 'listCheckShopAcccount';
@@ -276,12 +278,9 @@ define(function(require, exports){
 		}
 
 		$tab.off('change').off(SWITCH_TAB_SAVE).off(CLOSE_TAB_SAVE)
-		.on('change', '.T-checkList, .T-checkAll', function(event) {
+		.on('change', '.T-checkList', function(event) {
 			event.preventDefault();
 			$tab.data('isEdited', true);
-			if($(this).hasClass('T-checkAll')){
-				$tab.find('.T-checkTr').data('change', 'true');
-			}
 		})
 		.on(SWITCH_TAB_SAVE, function(event, tab_id, title, html){
 			event.preventDefault();
@@ -310,6 +309,13 @@ define(function(require, exports){
 				FinShop.viewOperationDetail(id, 1);
 			}
 		});
+
+		// 监听修改
+        $tab.find(".T-clearList").off('change').on('change',"input",function(event) {
+            event.preventDefault();
+            $(this).closest('tr').data("change",true);
+            $tab.data('isEdited', true);
+        });
 
 		//绑定确定事件
 		$tab.find('.T-btn-save').on('click', function(event){

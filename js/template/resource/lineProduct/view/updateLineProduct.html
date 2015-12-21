@@ -61,7 +61,7 @@
                     <div class="form-group">
                         <label class="col-sm-1 control-label no-padding-right">线路产品备注:</label>
                         <div class="col-sm-8">
-                            <textarea class="form-control" name="remark" class="col-sm-12">{{lineProduct.remark}}</textarea>
+                            <textarea class="form-control" name="remark" class="col-sm-12" maxlength="1000">{{lineProduct.remark}}</textarea>
                         </div>
                     </div>
                 </div>
@@ -284,7 +284,7 @@
                                                     {{if busCompanyTemplate != null}}
                                                     <tr>
                                                         <td>
-                                                            <input class="col-xs-12 bind-change" name="needSeatCount" type="text" value="{{busCompanyTemplate.needSeatCount}}" />
+                                                            <input class="col-xs-12 bind-change T-needSeatCount" name="needSeatCount" type="text" value="{{busCompanyTemplate.needSeatCount}}" />
                                                         </td>
                                                         <td>
                                                             <input class="col-xs-12 T-buscompany-name bind-change" name="companyName" type="text" value="{{busCompanyTemplate.busCompany.companyName}}" />

@@ -215,8 +215,16 @@ FinancialService.isClearSave = function($tab,rule){
 };
 
 //自动下账前校验及数据组装
-FinancialService.autoPayJson = function(id,$tab,rule){
-    var validator = rule.check($tab);
+/**
+ * 自动下账数据
+ * @param  {int} id   数据ID？
+ * @param  {object} $tab 父容器
+ * @param  {object} rule 校验规则
+ * @param  {int} type 1：收款，0：付款
+ * @return {[type]}      [description]
+ */
+FinancialService.autoPayJson = function(id,$tab,rule, type){
+    var validator = rule.check($tab), key = !!type?'收': '付';
     if(!validator.form()){ return false; }
 
     var startDate = $tab.find("input[name=startDate]").val(),
@@ -227,18 +235,18 @@ FinancialService.autoPayJson = function(id,$tab,rule){
         sumPayRemark = $tab.find('input[name=sumPayRemark]').val(),
         unpayMoney = parseFloat($tab.find('.T-unpayMoney').text());
     if(startDate > endDate){
-        showMessageDialog($("#confirm-dialog-message"),"本次付款金额合计大于未付金额合计（已对账），请先进行对账！");
+        showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
         return false;
     }
     if(sumPayMoney < 0 || sumPayMoney == ""){
-        showMessageDialog($("#confirm-dialog-message"),"付款金额需大于0！");
+        showMessageDialog($("#confirm-dialog-message"),key + "款金额需大于0！");
         return false;
     }
 
     if(isNaN(sumPayMoney)){ sumPayMoney = 0; }
     if(isNaN(unpayMoney)){ unpayMoney = 0; }
     if(sumPayMoney > unpayMoney){
-        showMessageDialog($("#confirm-dialog-message"),"本次付款金额合计大于未付金额合计（已对账），请先进行对账！");
+        showMessageDialog($("#confirm-dialog-message"),"本次"+ key + "款金额合计大于未"+ key + "金额合计（已对账），请先进行对账！");
         return false;
     }
 
@@ -304,11 +312,15 @@ FinancialService.initCheckBoxs = function($checkAll,checkboxList){//$checkAll全
                 if($(this).closest('tr').data("confirm") == 0){
                     $(this).closest('tr').data("change",true);
                     $(this).closest('.tab-pane').data("isEdited",true);
+                }else{
+                    $(this).closest('tr').data("change",false);
                 }
             });
         } else{
             checkboxList.each(function(i){
                 if(!$(this).prop("disabled")){
+                    $(this).closest('tr').data("change",true);
+                    $(this).closest('.tab-pane').data("isEdited",true);
                     $(this).prop("checked",false);
                 }                                
             });

@@ -6,9 +6,9 @@
         </div>
         <div class="form-group marginLeft-30">
             <label class="control-label">账期：</label>
-            <input type="text" class="form-control date-picker T-search-start-date" value="{{searchParam.startTime}}">
+            <input type="text" class="form-control date-picker T-search-start-date" value="{{searchParam.startDate}}">
             <label class="control-label">&nbsp;至&nbsp;</label>
-            <input type="text" class="form-control date-picker T-search-end-date" value="{{searchParam.endTime}}">
+            <input type="text" class="form-control date-picker T-search-end-date" value="{{searchParam.endDate}}">
         </div>
         <div class="form-group marginLeft-30">
             <label class="control-label">线路名称：</label>
@@ -53,7 +53,11 @@
 
     <div class="form-inline" style="padding-top: 10px;">
         <div class="form-group">
-            <label class="control-label">本次收款金额合计：</label>
+            <label class="control-label">未付金额合计(已对账)：</label>
+            <label class="control-label T-unpayMoney">{{totalList.checkedUnPayedMoney}}</label>
+        </div>
+        <div class="form-group">
+            <label class="control-label marginLeft-30">本次收款金额合计：</label>
             <label class="control-label">
                 <input type="text" name="sumPayMoney" class="T-sumReciveMoney money"  {{if type}}disabled {{/if}}>
             </label>
@@ -183,7 +187,7 @@
             <button class="btn btn-xs btn-primary T-btn-close">
                 <i class="ace-icon fa fa-times-circle"></i> 关闭
             </button>
-            <button class="btn btn-xs btn-primary T-btn-save" data-right="1280003" data-type="{{type}}" data-id={{partnerAgencyId}} style="margin-left: 20px">
+            <button class="btn btn-xs btn-primary T-btn-save" data-right="1280003" data-type="{{type}}" data-id="{{fromPartnerAgencyId}}" style="margin-left: 20px">
                 <i class="ace-icon fa fa-check-circle"></i> 确认收款
             </button>
         </div>

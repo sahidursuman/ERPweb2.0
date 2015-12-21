@@ -178,7 +178,7 @@
                                                     			</select>
                                                     		</td>
                                                     		<td><input type="text" name="remark" value="{{insurance.remark}}" class="col-sm-12" maxlength="500" /></td>
-                                                            <td> <a class="cursor T-btn-deleteTripPlanList" data-entity-id="4" data-entity-name="insurance" title="删除"> 删除 </a> </td>
+                                                            <td> <a class="cursor T-btn-deleteTripPlanList" data-entity-id="{{insurance.id}}" data-entity-name="insurance" title="删除"> 删除 </a> </td>
                                                         </tr>
                                                     	{{/if}}
                                                     	{{/each}}
@@ -554,7 +554,7 @@
                                                                 <td><input type="text" name="remark" class="col-sm-12" value="{{hotel.remark}}" maxlength="500"/></td>
                                                                 <td>
                                                                     {{if hotel.qouteId==null || hotel.qouteId==""}}
-                                                                    <a class="cursor T-btn-deleteTripPlanList" title="删除">删除</a>
+                                                                    <a class="cursor T-btn-deleteTripPlanList" data-entity-id="{{hotel.id}}" data-entity-name="hotel" title="删除">删除</a>
                                                                     {{/if}}
 
                                                                     {{if hotel.offerId!=null}}

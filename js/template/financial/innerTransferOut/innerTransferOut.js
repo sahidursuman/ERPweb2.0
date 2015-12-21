@@ -24,7 +24,6 @@ define(function(require,exports) {
 		validatorCheck:false,
 		saveJson:{},
 		autoValidatorCheck:false,
-		showBtnFlag:false
 	};
 	InnerTransferOut.initModule = function(){
 		var dateJson = FinancialService.getInitDate();
@@ -172,8 +171,6 @@ define(function(require,exports) {
 						var $checkId = $("#tab-"+checkId+"-content");
 						InnerTransferOut.$checkTab = $checkId;
 						InnerTransferOut.$checkSearchArea = $checkId.find(".T-search");
-
-					    
 						//获取线路数据
 						var lineProductNameObj = InnerTransferOut.$checkSearchArea.find('input[name=lineProductName]');
 						InnerTransferOut.getCheckLineproduct(lineProductNameObj,$lineProductData);
@@ -203,7 +200,8 @@ define(function(require,exports) {
 					};
 					if(typeFlag == 2){
 						data.list.innerTransferFeeList = FinancialService.getTempDate(data.list,InnerTransferOut.saveJson.autoPayList);
-						console.log(data);
+						
+						data.showBtnFlag = $data.showBtnFlag;
 						html = clearTableTemplate(data);
 					}else{
 						html = checkTableTemplate(data);
@@ -224,7 +222,7 @@ define(function(require,exports) {
                 		checkDisabled(fiList,checkTr,rightCode);
 					}else{
 					    var autoValidator = new FinRule(2),
-					    	settlermentValidator = data.showBtnFlag == true ? new FinRule(3):new FinRule(1);
+					    	settlermentValidator = $data.showBtnFlag == true ? new FinRule(3):new FinRule(1);
 					    InnerTransferOut.$settlermentValidator = settlermentValidator.check($obj);
         				InnerTransferOut.autoValidatorCheck = autoValidator.check($obj.find('.T-count'));
 					}
@@ -291,7 +289,7 @@ define(function(require,exports) {
 			if(typeFlag !=2){
 				InnerTransferOut.chenking(0);
 			}else{
-				InnerTransferOut.settlement(0);
+				InnerTransferOut.settlement($data);
 			}
 		});
 		//导出报表事件
@@ -367,7 +365,7 @@ define(function(require,exports) {
 						message = "付款金额需大于0！";
 					};
 					if(parseFloat(payMoney)>parseFloat(unPayMoney)){
-						message = "本次付款金额不能大于已对账未付总额！";
+						message = "本次付款金额合计大于未付金额合计（已对账），请先进行对账";
 					};
 					
 					showMessageDialog($("#confirm-dialog-message"),message);
@@ -379,7 +377,10 @@ define(function(require,exports) {
         	});
         		
         	}else{
-        		InnerTransferOut.setAutoFillEdit($obj,false)
+        		InnerTransferOut.setAutoFillEdit($obj,false);
+        		InnerTransferOut.saveJson = [];
+        		InnerTransferOut.btnSatus = 0;
+        		InnerTransferOut.settlement($data);
         	}
         });
         //确认付款事件
@@ -422,8 +423,8 @@ define(function(require,exports) {
 					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
 						InnerTransferOut.setAutoFillEdit($obj,true);
 						InnerTransferOut.saveJson = data;
-						console.log(InnerTransferOut.saveJson);
 						InnerTransferOut.btnSatus = 1;
+						$obj.data('isEdited', false);
 						InnerTransferOut.settlement($data);
 						//设置按钮样式
 					});
@@ -545,7 +546,7 @@ define(function(require,exports) {
 					var html = checkDetailTemplate(data);
 					layer.open({
 						type : 1,
-						title :"对账明细",
+						title :"应付金额明细",
 						skin : 'layui-layer-rim',
 						area : "60%", 
 						zIndex : 1028,
@@ -654,7 +655,7 @@ define(function(require,exports) {
                 	tab_id.data('isEdited', false);
                 	showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
                 		
-                		if(argumentsLen == 2){
+                		if(argumentsLen == 4){
                             Tools.closeTab(settleId);
                             InnerTransferOut.listInnerTransfer(0);
                     	} else if(argumentsLen == 3){
@@ -680,14 +681,7 @@ define(function(require,exports) {
 	InnerTransferOut.init_CRU_event = function($tab,$data,id,name,typeFlag){
 		if(!!$tab && $tab.length === 1){
 			// 监听修改
-			var $tbody,
-				saveBtn;
-			if(typeFlag == 2){
-				$tbody = $tab.find(".T-clearList");
-			}else{
-				$tbody = $tab.find('.T-checkList')
-			};
-			$tbody.on('change', function(event) {
+			$tab.on('change', function(event) {
 				event.preventDefault();
 				$tab.data('isEdited', true);
 			});
@@ -724,7 +718,7 @@ define(function(require,exports) {
 			.on(CLOSE_TAB_SAVE, function(event) {
 				event.preventDefault();
 				if(typeFlag == 2){//pageNo,$data,tab_id, title, html
-					InnerTransferOut.saveBlanceData(0,data,$tab);
+					InnerTransferOut.saveBlanceData(0,$data,$tab,"");
 				}else{
 					InnerTransferOut.saveCheckingData(0,$tab);
 				}

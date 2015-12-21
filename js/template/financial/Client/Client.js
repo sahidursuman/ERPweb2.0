@@ -53,14 +53,14 @@ define(function(require, exports) {
             day = Tools.addZero2Two(date.getDate()),
             args = {
                 pageNo : (page || 0),
-                startTime : year + '-' + month + '-' + '01',
-                endTime : year + '-' + month + '-' + day
+                startDate : year + '-' + month + '-' + '01',
+                endDate : year + '-' + month + '-' + day
             };
         if(Client.$tab){
             args = {
                 pageNo : (page || 0),
-                startTime : Client.$tab.find('.T-search-start-date').val(),
-                endTime : Client.$tab.find('.T-search-end-date').val()
+                startDate : Client.$tab.find('.T-search-start-date').val(),
+                endDate : Client.$tab.find('.T-search-end-date').val()
             };
 
             var $office = Client.$tab.find('.T-search-head-office'),
@@ -136,12 +136,15 @@ define(function(require, exports) {
         Client.$tab.find('.T-list').on('click', '.T-action', function(event) {
             event.preventDefault();
             var $that = $(this),$tr = $that.closest('tr'),
+                agencyName = Client.$tab.find('.T-search-head-office').val(),
                 options = {
                     pageNo: 0,
-                    partnerAgencyId: $tr.data('id'),
+                    headerAgencyName : agencyName === '全部' ? '' : agencyName,
+                    fromPartnerAgencyName : $tr.children('td').eq(1).text(),
+                    fromPartnerAgencyId: $tr.data('id'),
                     name: $tr.children('td').eq(1).text(),
-                    startTime : Client.$tab.find('.T-search-start-date').val(),
-                    endTime : Client.$tab.find('.T-search-end-date').val()
+                    startDate : Client.$tab.find('.T-search-start-date').val(),
+                    endDate : Client.$tab.find('.T-search-end-date').val()
                 };
 
             if ($that.hasClass('T-checking')) {
@@ -157,14 +160,15 @@ define(function(require, exports) {
     Client.ClientCheck = function(pageNo, args, $tab){
         if(!!$tab){
             args = getBaseArgs($tab);
-            args.partnerAgencyId = $tab.data("id");
+            args.fromPartnerAgencyId = $tab.data("id");
             partnerAgencyName = $tab.find('.T-partnerAgencyName').text();
         } else {
             partnerAgencyName = args.name;
         }
 
         Client.checkPageNo = args.pageNo = pageNo || 0;
-
+        args.sortType = 'startTime';
+        args.order='asc';
         $.ajax({
             url : KingServices.build_url('financial/customerAccount', 'listCheckCustomerAcccount'),
             type : "POST",
@@ -172,7 +176,7 @@ define(function(require, exports) {
         }).done(function(data){
             if(showDialog(data)){
                 data.partnerAgencyName = partnerAgencyName;
-                data.partnerAgencyId = args.partnerAgencyId;
+                data.fromPartnerAgencyId = args.fromPartnerAgencyId;
                 data.searchParam.lineProductName = args.lineProductName || '全部';
                 data.searchParam.creatorName = args.creatorName || '全部';
                 // 合并数据
@@ -390,10 +394,10 @@ define(function(require, exports) {
     Client.initIncome = function(options) {
         Client.ClientClear(0, {
             pageNo:0,
-            partnerAgencyId: options.id,
+            fromPartnerAgencyId: options.id,
             name: options.name,
-            startTime: options.startDate,
-            endTime: options.endDate,
+            startDate: options.startDate,
+            endDate: options.endDate,
             type: 1
         });
     }
@@ -403,7 +407,7 @@ define(function(require, exports) {
 
         if (!!$tab) {
             args = getBaseArgs($tab);
-            args.partnerAgencyId = $tab.data('id');
+            args.fromPartnerAgencyId = $tab.data('id');
 
             partnerAgencyName = $tab.find('.T-partnerAgencyName').text();
             type = $tab.find('.T-btn-save').data('type');
@@ -413,7 +417,8 @@ define(function(require, exports) {
         }
 
         args.pageNo = pageNo || 0;
-
+        args.sortType = 'startTime';
+        args.order='asc';
         $.ajax({
             url:KingServices.build_url("financial/customerAccount","listReciveCustomerAcccount"),
             type:"POST",
@@ -422,14 +427,14 @@ define(function(require, exports) {
             if(showDialog(data)){
                 data.type = type;
                 data.partnerAgencyName = partnerAgencyName;
-                data.partnerAgencyId = args.partnerAgencyId;
+                data.fromPartnerAgencyId = args.fromPartnerAgencyId;
 
                 data.searchParam.lineProductName = args.lineProductName || '全部';
                 data.searchParam.creatorName = args.creatorName || '全部';
                 
                 if (Tools.addTab(ClientClearTab, "客户收款", ClientClearingTemplate(data))) {
-                    $tab = $("#tab-"+ ClientClearTab + "-content").data('id', args.partnerAgencyId);
-                    Client.initClear($tab, args.partnerAgencyId);                    
+                    $tab = $("#tab-"+ ClientClearTab + "-content").data('id', args.fromPartnerAgencyId);
+                    Client.initClear($tab, args.fromPartnerAgencyId);                    
 
                     // 绑定翻页组件
                     laypage({
@@ -558,8 +563,8 @@ define(function(require, exports) {
     Client.autoFillData = function($tab) {
         if(!!$tab && $tab.length){
             var args = getBaseArgs($tab);
-            FinancialService.autoPayConfirm(args.startTime, args.endTime, function() {
-                args.partnerAgencyId = $tab.data('id');
+            FinancialService.autoPayConfirm(args.startDate, args.endDate, function() {
+                args.fromPartnerAgencyId = $tab.data('id');
                 args.sumTemporaryIncomeMoney = $tab.find('.T-sumReciveMoney').val();
 
                 $.ajax({
@@ -881,7 +886,7 @@ define(function(require, exports) {
                     url : KingServices.build_url('financial/customerAccount', 'selectLineProduct'),
                     type : 'POST',
                     showLoading:false,
-                    data: {partnerAgencyId: id}
+                    data: {fromPartnerAgencyId: id}
                 }).done(function(data) {
                     for(var i=0; i<data.lineProductList.length; i++){
                         data.lineProductList[i].value = data.lineProductList[i].lineProductName;
@@ -916,7 +921,7 @@ define(function(require, exports) {
                     url : KingServices.build_url('financial/customerAccount', 'selectCreator'),
                     type : 'POST',
                     showLoading:false,
-                    data: {partnerAgencyId: id}
+                    data: {fromPartnerAgencyId: id}
                 }).done(function(data) {
                     for(var i=0; i< data.creatorList.length; i++){
                         data.creatorList[i].value = data.creatorList[i].creatorName;
@@ -941,8 +946,8 @@ define(function(require, exports) {
             lineProductId : $tab.find('.T-search-line').data('id'),
             lineProductName : $tab.find('.T-search-line').val(),
             creatorName : $tab.find('.T-search-enter').val(),
-            startTime : $tab.find('.T-search-start-date').val(),
-            endTime : $tab.find('.T-search-end-date').val()
+            startDate : $tab.find('.T-search-start-date').val(),
+            endDate : $tab.find('.T-search-end-date').val()
         }
 
         if (args.lineProductName === '全部') {

@@ -26,8 +26,8 @@
             <label class="control-label pull-left">账面应付合计：{{sumNeedPayMoney}}元 </label>
             <label class="control-label pull-left marginLeft-30">已付金额合计：{{sumPayedMoney}} </label>
             <label class="control-label pull-left marginLeft-30">结算金额合计：{{sumSettlementMoney}}</label>
-            <label class="control-label pull-left marginLeft-30">未付金额合计：<span class="T-unpayMoney">{{sumUnPayedMoney}}</span></label>
-            <label class="control-label pull-left marginLeft-30">未付金额合计(已对账)：<span class="T-checkedUnPayedMoney">{{checkedUnPayedMoney}}</span></label>
+            <label class="control-label pull-left marginLeft-30">未付金额合计：<span>{{sumUnPayedMoney}}</span></label>
+            <label class="control-label pull-left marginLeft-30">未付金额合计(已对账)：<span class="T-unpayMoney">{{checkedUnPayedMoney}}</span></label>
             <label class="control-label pull-left marginLeft-30">本次付款金额：</label>
             <input class="col-xs-1 pull-left" name="sumPayMoney" type="text" value="{{sumPayMoney}}" maxlength="9" style="float:none;" {{if isOuter}} disabled="disabled" {{/if}}/>
             <label class="control-label pull-left marginLeft-30">付款方式：</label>
@@ -79,7 +79,7 @@
                 <td>{{rs.reduceMoney}}</td>
                 <td>{{rs.needPayMoney}}</td>
                 <td><a class="T-option T-payedDetail">{{"社付："}}{{rs.payedMoney}}{{"，"}}{{"导付："}}{{rs.realGuidePayMoney}}</a></td> 
-                <td>{{if rs.billImage != null && rs.billImage !=""}}<a href="#" class="T-option T-hotelImg" url="{{rs.billImage}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
+                <td>{{if rs.billImage != null && rs.billImage !=""}}<a href="#" class="T-option T-scenicImg" url="{{rs.billImage}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
                 <td>{{rs.settlementMoney}}</td>  
                 <td>{{rs.unPayedMoney}}</td>
                 <td><input name="payMoney" type="text" value="{{rs.payMoney}}" data-le="{{rs.unPayedMoney}}" {{if !isOuter && rs.unPayedMoney <= 0}} disabled {{/if}} class="money" maxlength="9"></td>
