@@ -308,9 +308,9 @@ define(function(require, exports) {
         json = JSON.stringify(json);
         if (json.length > 0) {
             $.ajax({
-                url: KingServices.build_url("account/arrangeOtherFinancial", "savePayment"),
+                url: KingServices.build_url("account/arrangeOtherFinancial", "saveReconciliation"),
                 type: "POST",
-                data: {
+                data:{
                     reconciliation: json
                 },
             }).done(function(data) {
