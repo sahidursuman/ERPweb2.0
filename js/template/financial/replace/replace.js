@@ -1,6 +1,6 @@
 /**
  * 财务管理--代订账务
- * 未优化
+ * 
  * by David Bear 2015-11-27
  */
 define(function(require, exports) {
@@ -123,6 +123,7 @@ define(function(require, exports) {
 					type : "POST"
 				}).done(function(data){
 					if(showDialog(data)){
+						if(!data.partnerAgencyList)return;
 						for(var i=0; i<data.partnerAgencyList.length; i++){
 			                data.partnerAgencyList[i].value = data.partnerAgencyList[i].fromPartnerAgencyName;
 			                data.partnerAgencyList[i].id = data.partnerAgencyList[i].partnerAgencyId;
