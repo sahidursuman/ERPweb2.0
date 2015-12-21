@@ -39,19 +39,21 @@
 							<label class=" control-label no-padding-right" style="margin-left: -8px"><span class="necessary">*</span>客户来源：<input type="text" name="fromPartnerAgency"class="choosePartnerAgency"  placeholder="请输入客户来源">
 							<input type="hidden" name="fromPartnerAgencyId">
 							<input type="hidden" name="type" value="">
+							</label>
 							<span class="input-group-addon T-addPartner R-right" data-right="1150002" style="display: inline-block;left:0" title="添加客户">
 								<i class="ace-icon fa fa-plus bigger-110 icon-only" ></i>
 							</span>
-							</label>
+							
 						</div>
 						<div class="col-sm-4">
 							<label class="  no-padding-right" style="margin-left: 2px;"><span class="necessary">*</span>同行联系人：
 							<input class="choosePartnerManager bind-change" name="partnerAgencyNameList" type="text" />
 							<input type="hidden"  style='width:120px' name="partnerAgencyContactId" />
+							</label>
 							<span class="input-group-addon T-addPartnerManager" style="display: inline-block;left:0" title="为客户来源添加联系人">
 								<i class="ace-icon fa fa-plus bigger-110 icon-only" ></i>
 							</span>
-							</label>
+							
 						</div>
 						<div class="col-sm-4">
 					    <label class="no-padding-right pull-left" style="margin-left: 23px;">获得方式： </label>&nbsp;&nbsp;
@@ -236,7 +238,7 @@
 							<div class="form-group">
 								<div class="col-sm-3">
 									<label class="col-sm-3 control-label no-padding-right">接：
-										<input type="checkbox" class="ace reception-check" value="0" name="touristReception">
+										<input type="checkbox" class="ace reception-check T-touristReception" value="0" name="touristReception">
 											<span class="lbl">
 
 											</span>
@@ -275,14 +277,14 @@
 								</div>
 								<div class="col-sm-3">
 									<label class="col-sm-4 control-label no-padding-right">小车：
-										<input type="checkbox" class="ace smallCar" value="0" name="smallCar">
+										<input type="checkbox" class="ace smallCar T-smallCar" value="0" name="smallCar">
 											<span class="lbl">
 											</span>
 									</label>
 								</div>
 								<div class="col-sm-3">
-									<label class="col-sm-3 control-label no-padding-right">送：
-										<input type="checkbox" class="ace send-check" value="0" name="touristSend">
+									<label class="col-sm-3 control-label no-padding-right">送:
+										<input type="checkbox" class="ace send-check T-touristSend" value="0" name="touristSend">
 										<span class="lbl"></span>
 									</label>
 									<div class="col-sm-12 T-send-div hide" style="padding-top:25px;">

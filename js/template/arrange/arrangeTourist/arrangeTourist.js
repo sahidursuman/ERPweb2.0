@@ -2408,7 +2408,7 @@ define(function(require, exports) {
         $tbody.append(html);
 
         //精度限制
-        var $price = $tbody.find('.price');
+        var $price = $tbody.find('.T-price');
         Tools.inputCtrolFloat($price);
 
         // 更新表单验证的事件绑定

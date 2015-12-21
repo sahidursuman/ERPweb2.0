@@ -87,7 +87,7 @@
                         -
                     {{/if}} 
                 </td>
-                <td><a href="javascript:void(0)" class="T-viewDetail"><span>社收:<span class="transGetedMoney">{{checking.transGetedMoney}}</span></a></td>
+                <td><a href="javascript:void(0)" class="T-viewDetail"><span>社收:<span class="transGetedMoney">{{checking.transGetedMoney}},导游现收：{{checking.currentNeedPayMoney}}</span></a></td>
                 <td>{{if checking.isConfirmAccount == 1}}<input type="text" readonly="readonly" value="{{checking.backMoney}}"></span>{{else}}<input type="text" name="settlementMoney" class="money" class="backMoney" value="{{checking.backMoney}}" maxlength="9" style="text-align:center">{{/if}}</td>
                 <td><span class="settlementMoney">{{checking.settlementMoney}}</span></td>
                 <td><span class="unIncomeMoney">{{checking.unIncomeMoney}}</span></td>

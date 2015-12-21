@@ -310,10 +310,14 @@ define(function(require,exports) {
 			settleValidator = $listSearchData.btnShowStatus == true ? new FinRule(3):new FinRule(4);
 			settleCheck = settleValidator.check($obj);
 			autoValidatorCheck = autoValidator.check($obj.find('.T-count'));
-			$obj.find('.'+$list).off('change').on('change','input',function(){
+			$obj.find('.T-clearList').off('change').on('change','input',function(){
 				$(this).closest('tr').data('change',true);
 				//自动计算本次收款金额
 				InnerTransferIn.autoSumIncomeMoney($obj);
+			});
+		}else{
+			$obj.find('.T-checkList').off('change').on('change','input',function(){
+				$(this).closest('tr').data('change',true);
 			});
 		};
 		//搜索事件
@@ -321,8 +325,10 @@ define(function(require,exports) {
 			event.preventDefault();
 			if(typeFlag == 2){
 				InnerTransferIn.btnSatus = 0 ;
+				$obj.data('isEdited', false);
 				InnerTransferIn.chenking($listSearchData,2,"settle");
 			}else{
+				$obj.data('isEdited', false);
 				InnerTransferIn.chenking($listSearchData,1,"check");
 			}
 			
@@ -422,10 +428,17 @@ define(function(require,exports) {
         });
         //关闭事件
         $obj.find(".T-close").on('click',function(event){
-        	event.preventDefault();
-        	showConfirmDialog($( "#confirm-dialog-message" ), "确定关闭本选项卡?",function(){
-        		var tabId = typeFlag == 2?settleId:checkId;
-        		Tools.closeTab(tabId);
+        	var checkBoxList = $obj.find(".T-checkList").find('.innerTransferFinancial');
+        	checkBoxList.each(function(i){
+        		var $this = $(this),
+        			flag = $this.is(":checked"),
+        			$tr = $this.closest('tr');
+        		if($tr.data('change') && $tr.data("confirm") == 0 && !flag){
+        			showConfirmDialog($( "#confirm-dialog-message" ), "您有记录已修改但未勾选对账，是否继续?",function(){
+		        		var tabId = typeFlag == 2?settleId:checkId;
+		        		Tools.closeTab(tabId);
+		        	})
+        		}
         	});
         });
 	};
