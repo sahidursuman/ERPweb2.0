@@ -1007,7 +1007,9 @@ padding-left:0;width: 360px;left: -35px;
     margin: auto;
     font-family: '微软雅黑';
     color: #444;
+
 }
+
 .quote-title-style{
     width: 1000px;
     height: 135px;
@@ -1133,9 +1135,11 @@ p#back-top a span{
     margin-left: 6px;
 }
 .share-anchor ul li a{
-    color: #59bad2;   
+    color:  #fff; 
 }
-
+.share-anchor-ul li:focus{
+   color: #59bad2; 
+}
 .quoteTable td{
     border: 1px solid #ddd !important;
      padding: 7px 0px 7px 0px;
