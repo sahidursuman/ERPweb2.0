@@ -125,7 +125,7 @@ define(function(require, exports) {
     //查看游客小组、收客团款明细
     innerProfit.viewTouristGroup = function(id){
         var $path = innerProfit.clickFlag == 2?'profitInnerTransfer':'touristGroup';
-        var $method = innerProfit.clickFlag == 2?'profitInnerTransfer':'viewTransferTouristGroupDetails';
+        var $method = innerProfit.clickFlag == 2?'findIncome':'viewTransferTouristGroupDetails';
         var $title = innerProfit.clickFlag == 2?'收客团款明細':'查看小组';
         $.ajax({
             url:innerProfit.url($path,$method),
