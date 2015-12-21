@@ -101,19 +101,11 @@ define(function(require, exports) {
                 name = $that.closest('tr').data('name');
             if ($that.hasClass('T-check')) {
                 // 对账
-                var $checkTab = $("#tab-" + menuKey + "-checking-content");
-                if($checkTab.length && $checkTab.find('.T-newData').data("id") == id){
-                    $('.tab-' + menuKey + '-checking').children('a').trigger('click');
-                    return false;
-                }
+               
                 hotel.hotelCheck(0,id,name,"",startDate,endDate);
             } else if ($that.hasClass('T-clear')) {
                 // 结算
-                var $clearTab = $("#tab-" + menuKey + "-clearing-content");
-                if($clearTab.length && $clearTab.find('.T-newData').data("id") == id){
-                    $('.tab-' + menuKey + '-clearing').children('a').trigger('click');
-                    return false;
-                }
+                
                 hotel.hotelClear(0,0,id,name,"",startDate,endDate);
             }
         });
@@ -139,7 +131,7 @@ define(function(require, exports) {
             accountInfo : accountInfo,
             startTime : startDate,
             endTime : endDate,
-            sortType : "auto"
+            sortType : "accountTime"
         };
         searchParam = JSON.stringify(searchParam);
         $.ajax({
@@ -247,7 +239,7 @@ define(function(require, exports) {
             accountInfo : accountInfo,
             startTime : startDate,
             endTime : endDate,
-            sortType : "auto"
+            sortType : "accountTime"
         }, args = arguments;
         if(isAutoPay == 1){
            searchParam.isAutoPay = isAutoPay;
@@ -353,7 +345,10 @@ define(function(require, exports) {
         });
         $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
             event.preventDefault();
-            hotel.initClear(hotel.$clearTab.data('next'));
+            hotel.clearTempSumDate = false;
+            hotel.clearTempData = false;
+            hotel.$clearTab.data('isEdited',false);
+            hotel.hotelClear(0,0,hotel.$clearTab.data('next')[2],hotel.$clearTab.data('next')[3]);
             hotel.$clearTab.find(".T-cancel-auto").hide();
         })
         // 监听保存，并切换tab
@@ -370,10 +365,7 @@ define(function(require, exports) {
 
         //搜索事件
         hotel.$clearTab.find(".T-search").click(function(){
-            hotel.clearTempSumDate = false;
-            hotel.clearTempData = false;
-            hotel.$clearTab.data('isEdited',false);
-            hotel.hotelClear(isAutoPay,0,id,name);
+            hotel.hotelClear(0,0,id,name);
         });
 
         //报表内的操作
@@ -391,7 +383,7 @@ define(function(require, exports) {
 
         //自动下账
         hotel.$clearTab.find(".T-clear-auto").click(function(){
-            var autoPayJson = FinancialService.autoPayJson(id,hotel.$clearTab,rule);
+            var autoPayJson = FinancialService.autoPayJson(id,hotel.$clearTab,new FinRule(2));
             if(!autoPayJson){return false;}
             var startDate = hotel.$clearSearchArea.find("input[name=startDate]").val(),
                 endDate = hotel.$clearSearchArea.find("input[name=endDate]").val();
@@ -587,6 +579,7 @@ define(function(require, exports) {
             success:function(data){
                 var result = showDialog(data);
                 if(result){
+                    hotel.$clearTab.data('isEdited',false);
                     showMessageDialog($("#confirm-dialog-message"),data.message,function(){
                         hotel.clearTempData = false;
                         hotel.clearTempSumDate = false;
@@ -594,12 +587,9 @@ define(function(require, exports) {
                             Tools.closeTab(menuKey + "-clearing");
                             hotel.listhotel(hotel.searchData.pageNo,hotel.searchData.hotelName,hotel.searchData.hotelId,hotel.searchData.startDate,hotel.searchData.endDate);
                         }else if(argumentsLen === 1){
-                            hotel.$clearTab.data('isEdited',false);
-                            hotel.hotelClear(isAutoPay,page,id,name);
+                            hotel.hotelClear(0,page,id,name);
                         } else {
-                            hotel.$clearTab.data('isEdited',false);
-                            Tools.addTab(tab_id, title, html);
-                            hotel.initClear(hotel.$clearTab.data('next'));
+                            hotel.hotelClear(0,0,hotel.$clearTab.data('next')[2],hotel.$clearTab.data('next')[3]);
                         }
                     }); 
                 }

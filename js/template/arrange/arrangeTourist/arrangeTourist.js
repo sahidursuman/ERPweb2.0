@@ -734,7 +734,7 @@ define(function(require, exports) {
             //表单验证
             //if (!validator.form()) { return };
             //$tab,validator, tabArgs,className,status,tbody
-            arrangeTourist.saveAddTripPlan($addMergeAddTr, validator, "", "addTripPlanMain", 0, "mergeTripPlanTouristTbody");
+            arrangeTourist.saveAddTripPlan($addMergeAddTr, validator, "", "addTripPlanMain",2, "mergeTripPlanTouristTbody");
             touristGroupMergeData = {
                 touristGroupMergeList: []
             };
@@ -875,7 +875,7 @@ define(function(require, exports) {
                 // 监听保存，并切换tab
                 .on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
                     event.preventDefault();
-                    arrangeTourist.saveAddTripPlan($tab, validator, [tab_id, title, html], "addTripPlanMain", 1, tbody + "");
+                    arrangeTourist.saveAddTripPlan($tab, validator, [tab_id, title, html], "addTripPlanMain", type, tbody + "");
                 })
                 .on(SWITCH_TAB_BIND_EVENT, function(event) {
                     event.preventDefault();
@@ -1133,10 +1133,10 @@ define(function(require, exports) {
 
                 var saveTripPlan = JSON.stringify(saveTripP);
                 var url = '';
-                if (status == 1) {
-                    url = KingServices.build_url("tripPlan", "saveTripPlan")
-                } else {
+                if (status == 0) {   //修改
                     url = KingServices.build_url("tripPlan", "updateTripPlan")
+                } else if( status==1 || status==2 ){
+                    url = KingServices.build_url("tripPlan", "saveTripPlan")
                 }
                 $.ajax({
                     url: url,
@@ -1147,7 +1147,7 @@ define(function(require, exports) {
                         if (result) {
                             $tab.data('isEdited', false);
                             showMessageDialog($("#confirm-dialog-message"), data.message, function() {
-                                if (status == 1) { //新增计划
+                                if (status == 1) { //新增计划  T-saveMergnPlan
                                     if (!!tabArgs && tabArgs.length === 3) {
                                         // 切换tab，就不做数据更新
                                         Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
@@ -1160,20 +1160,18 @@ define(function(require, exports) {
                                             $searchArgumentsForm = $GroupObj.find('form'),
                                             customerType = 1;
                                         Tools.closeTab(menuKey + "-addTripPlan");
-                                        Tools.closeTab(menuKey + "mergeAddTripPlan");
+                                        Tools.closeTab(menuKey + "-mergeAddTripPlan");
                                         arrangeTourist.listArrangeTourist(0, $searchArgumentsForm, customerType, divId);
                                     }
 
-                                } else if (status == 0) { //并团--生成计划  并团--修改计划
+                                } else if (status == 0 || status==2) { //并团--生成计划
                                     var divId = "T-Visitor-list",
                                         $VisitorObj = $('#' + divId),
                                         $searchArgumentsForm = $VisitorObj.find('form'),
                                         customerType = 0;
-                                    closeTab(menuKey + "-mergeAddTripPlan");
-                                    closeTab(menuKey + "-updateTripPlan");
+                                    Tools.closeTab(menuKey + "-mergeAddTripPlan");
+                                    Tools.closeTab(menuKey + "-updateTripPlan");
                                     arrangeTourist.listArrangeTourist(0, $searchArgumentsForm, customerType, divId);
-                                } else {
-                                    arrangeTourist.listArrangeTourist();
                                 }
                             });
                         }

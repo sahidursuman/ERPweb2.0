@@ -214,7 +214,7 @@ define(function(require, exports) {
             })
             .on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
                 event.preventDefault();
-                Ticket.saveCheckData($checkTab, [tab_id, title, html]);
+                Ticket.CheckConfirm($checkTab, [tab_id, title, html]);
             })
             .on(SWITCH_TAB_BIND_EVENT, function() {
                 Ticket.checkingList();
@@ -224,7 +224,7 @@ define(function(require, exports) {
                 if (!validator.form()) {
                     return;
                 }
-                Ticket.saveCheckData($checkTab);
+                Ticket.CheckConfirm($checkTab);
             });
 
         //监听关闭tab
@@ -233,7 +233,7 @@ define(function(require, exports) {
             event.preventDefault();
             if (!!$checkTab.data('isEdited')) {
                 showSaveConfirmDialog($('#confirm-dialog-message'), "内容已经被修改，是否保存?", function() {
-                    Ticket.saveCheckData($checkTab);
+                    Ticket.CheckConfirm($checkTab);
                 }, function() {
                     Tools.closeTab(checkMenuKey);
                     Ticket.getList(Ticket.listPageNo);
@@ -301,6 +301,7 @@ define(function(require, exports) {
 
     // 保存对账 主键 结算金额  对账备注 对账状态[0(未对账)、1(已对账)]
     OtherAccounts.CheckConfirm = function(name, $checkTab, tabArgs) {
+        var argumentLen = arguments.length
         var json = FinancialService.checkSaveJson($checkTab, new FinRule(0));
         if (json.length > 0) {
             $.ajax({
@@ -313,12 +314,16 @@ define(function(require, exports) {
                 if (showDialog(data)) {
                     $checkTab.data('isEdited', false);
                     showMessageDialog($('#confirm-dialog-message'), data.message, function() {
-                        if (!!tabArgs) {
-                            Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
-                            OtherAccounts.checkList(0);
-                        } else {
-                            Tools.closeTab(checkTabId);
-                            OtherAccounts.listFinancialOtherAccounts(OtherAccounts.listPageNo);
+						if(argumentLen == 2){
+                            OtherAccounts.AccountsChecking(0);
+                        }else{
+                            if (!!tabArgs) {
+                                Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
+                                OtherAccounts.checkList(0);
+                            } else {
+                                Tools.closeTab(checkTabId);
+                                OtherAccounts.listFinancialOtherAccounts(OtherAccounts.listPageNo);
+                            }
                         }
                     });
                 }

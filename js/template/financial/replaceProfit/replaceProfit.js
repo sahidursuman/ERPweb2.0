@@ -173,7 +173,7 @@ define(function(require, exports) {
                         replace.listReplace(0);
                     });
 
-                    replace.$tab.find('.T-list').on('click','.T-option',function(event) {
+                    replace.$tab.find('.T-list').off().on('click','.T-option',function(event) {
                         event.preventDefault();
                         var $that = $(this),
                             id = $that.closest('tr').data('id');
@@ -233,7 +233,7 @@ define(function(require, exports) {
     //成本明细
     replace.viewCostDetail = function(id){
         $.ajax({
-            url:KingServices.build_url("profitBooking","getNeedIncomeDetails"),
+            url:KingServices.build_url("profitBooking","getNeedPayDetails"),
             type:"POST",
             data:{
                 id : id
