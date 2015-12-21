@@ -1555,7 +1555,6 @@ define(function(require, exports) {
 			useCurrent:false,
 			todayHighlight: true,
 			maxDate: new Date(maxDateTime),
-			defaultDate: new Date(maxDateTime),
 			format: 'L',
 			language: 'zh-CN'
 		});

@@ -151,7 +151,8 @@ define(function(require, exports) {
                 if(result){
                     var fbList = data.financialBusCompanyListData;
                     data.busCompanyName = busCompanyName;
-                    data.financialBusCompanyListData = FinancialService.isGuidePay(fbList);
+                    data.financialBusCompanyListData = FinancialService.isGuidePay(fbList);//获取是否显示导付标识
+                    data.financialBusCompanyListData = busCompany.isMemberCount(data.financialBusCompanyListData);//获取是否显示人数标识
                     var html = checkBill(data);
                     
                     // 初始化页面
@@ -282,6 +283,7 @@ define(function(require, exports) {
                         data.sumPayRemark = "";
                     }
                     data.financialBusCompanyListData = FinancialService.isGuidePay(resultList);
+                    data.financialBusCompanyListData = busCompany.isMemberCount(data.financialBusCompanyListData);
                     data.isAutoPay = isAutoPay;
 					var html = Clearing(data);
                     
@@ -699,6 +701,19 @@ define(function(require, exports) {
                 busCompany.needPayDetail(id);
             }
         });
+    };
+
+    //设置数据来源标识（中转、代订）
+    busCompany.isMemberCount = function(dataList){
+        for(var i = 0; i < dataList.length; i++){
+            var tripNumber = trim(dataList[i].tripNumber),
+                strLen = tripNumber.length;
+                tripType = tripNumber.substring(strLen-2,strLen);
+            if(tripType == "DD" || tripType == "dd"){
+                dataList[i].isMemberCount = 1;
+            }
+        }
+        return dataList;
     };
 
     busCompany.initPay = function(options){
