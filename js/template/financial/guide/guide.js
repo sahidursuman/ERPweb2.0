@@ -307,7 +307,9 @@ define(function(require, exports) {
             if (type) {
                 FinGuide.savePayingData($tab);
             } else {
-                FinGuide.saveCheckingData($tab);
+                FinancialService.changeUncheck($tab.find('.T-checkTr'), function(){
+                    FinGuide.saveCheckingData($tab);
+                });
             }
         });
 
@@ -419,11 +421,13 @@ define(function(require, exports) {
      */
     FinGuide.autoFillMoney = function($tab) {
         if (!!$tab && $tab.length) {
-            var $line = $tab.find('.T-lineProductName'),
+            var id = $tab.find('.T-btn-save').data('id'),
+                args = FinancialService.autoPayJson(id, $tab, new FinRule(2), 0),
+                $line = $tab.find('.T-lineProductName'),
                 $autoPayMoney = $tab.find('.T-sumPayMoney');
-
-            var args = {
-                guideId: $tab.find('.T-btn-save').data('id'),
+            if(!args)return;
+            args = {
+                guideId: id,
                 startDate: $tab.find('.T-search-start-date').val(),
                 endDate: $tab.find('.T-search-end-date').val(),
                 tripPlanNumber: $tab.find('.T-tripPlanNumber').val(),
