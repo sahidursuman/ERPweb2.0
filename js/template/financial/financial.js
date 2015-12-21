@@ -227,7 +227,7 @@ FinancialService.autoPayJson = function(id,$tab,rule){
         sumPayRemark = $tab.find('input[name=sumPayRemark]').val(),
         unpayMoney = parseFloat($tab.find('.T-unpayMoney').text());
     if(startDate > endDate){
-        showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
+        showMessageDialog($("#confirm-dialog-message"),"本次付款金额合计大于未付金额合计（已对账），请先进行对账！");
         return false;
     }
     if(sumPayMoney < 0 || sumPayMoney == ""){
@@ -238,7 +238,7 @@ FinancialService.autoPayJson = function(id,$tab,rule){
     if(isNaN(sumPayMoney)){ sumPayMoney = 0; }
     if(isNaN(unpayMoney)){ unpayMoney = 0; }
     if(sumPayMoney > unpayMoney){
-        showMessageDialog($("#confirm-dialog-message"),"付款金额不能大于未付总额！");
+        showMessageDialog($("#confirm-dialog-message"),"本次付款金额合计大于未付金额合计（已对账），请先进行对账！");
         return false;
     }
 
