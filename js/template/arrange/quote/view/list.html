@@ -15,7 +15,7 @@
 				<th>总报价</th>
 				<th>报价人</th>
 				<th class="col-sm-1">报价时间</th>
-				<th width="251">操作</th>
+				<th width="300">操作</th>
 			</tr>
 		</thead>
 	
@@ -42,7 +42,9 @@
 						<a class="cursor R-right T-action {{if !quote.touristGroupId}} T-update {{/if}}" data-right="1440002" {{if !!quote.touristGroupId}} style="color:#bbb;" {{/if}}>
 							修改  <span style='margin-left:5px;'>|</span>
 						</a>
-						
+						<a class="cursor R-right T-action {{if !quote.touristGroupId}} T-copy {{/if}}" data-right="1440002" {{if !!quote.touristGroupId}} style="color:#bbb;" {{/if}}>
+							复制  <span style='margin-left:5px;'>|</span>
+						</a>
 						<a class="cursor T-action T-view">
 							查看  <span style='margin-left:5px;'>|</span>
 						</a>
