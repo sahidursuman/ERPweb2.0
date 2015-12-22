@@ -307,7 +307,7 @@ define(function(require, exports){
 			if($that.hasClass('T-see-group')){
 				FinShop.unfold($that);
 			}else if($that.hasClass('T-view-receipts')){
-				FinShop.viewImage($tab, $that.closest('tr').data('billImage'));
+				FinShop.viewImage($tab, $that.data('billimage'));
 			}else if($that.hasClass('T-payDetails')){
 				FinShop.viewOperationDetail(id, 0);
 			}else if($that.hasClass('T-view-details')){
