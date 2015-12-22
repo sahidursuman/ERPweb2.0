@@ -1,0 +1,67 @@
+<div class="col-xs-12">
+	<table class="table table-striped table-bordered table-hover row">
+		<thead>
+			<tr>
+				<th>报价单号</th>
+				<th >线路产品名称</th>
+				<th>线路类型</th>               
+				<th>针对客源</th>
+				<th>人数</th>
+				<th>天数</th>
+				<th>出游日期</th>
+				<th>客户</th>
+				<th>联系人</th>
+				<th>报价时间</th>
+				<th style="width:150px;">操作</th>
+			</tr>
+		</thead>
+		<tbody calss="T-chooseQuoteProduct-Tbody">
+			{{each lineProductList as lineProduct}}
+				<tr data-quoteId='1' data-quoteNumber='{{lineProduct.quoteNumber}}' data-lineProductName= '{{if lineProduct.lineProduct!=null}}{{lineProduct.lineProduct.name}}{{/if}}' data-lineProducId= '{{lineProduct.id}}'
+				 data-startTime='{{lineProduct.startTime}}'
+				 data-fromPartnerAgencyId='{{if lineProduct.partnerAgency!=null}}{{lineProduct.partnerAgency.id}}{{/if}}' 
+				 data-fromPartnerAgencyName='{{if lineProduct.partnerAgency!=null}}{{lineProduct.partnerAgency.travelAgencyName}}{{/if}}'
+				 data-partnerAgencyContactName ='{{if lineProduct.partnerAgencyContact!=null}}{{lineProduct.partnerAgencyContact.contactRealname}}-[{{lineProduct.partnerAgencyContact.contactMobileNumber}}]{{/if}}'
+				 data-partnerAgencyContactId = '{{lineProduct.partnerAgencyContact.id}}'
+				 data-adultCount='{{lineProduct.adultCount}}' data-adultPrice='2' data-childCount='{{lineProduct.childCount}}' data-childPrice='2' >
+					<td>
+					    {{lineProduct.quoteNumber}}
+					</td>
+					<td>{{lineProduct.lineProduct.name}}</td>
+
+					<td>{{lineProduct.lineProduct.type}}</td>
+					<td>
+						{{if lineProduct.lineProduct != null}}    
+							{{if lineProduct.lineProduct.customerType==0}}
+								  散客
+								{{else}}             
+								  团体
+							{{/if}}  
+						{{/if}}
+					</td>
+
+					<td>{{lineProduct.adultCount}} 大 {{lineProduct.childCount}} 小</td>
+					<td>{{lineProduct.lineProduct.days}}</td>
+					<td>{{lineProduct.createTime}}</td>
+
+					<td>{{lineProduct.partnerAgency.travelAgencyName}}</td>
+					<td>{{lineProduct.partnerAgencyContact.contactRealname}}</td>
+					<td>{{lineProduct.startTime}}</td>
+					<td>
+					 	<label class="pos-rel"> <input type="radio" class="ace T-cheked" name="form-field-radio"> <span class="lbl"></span> </label>
+				    </td>
+				</tr>
+			{{/each}}
+		</tbody>
+	</table>
+	<div class="row pageMode">
+		<div class="col-xs-6">
+			<small>共计 {{recordSize}} 条记录</small>
+		</div>
+		<div class="col-xs-6">
+			<div class="dataTables_paginate paging_simple_numbers T-pagenation">
+			</div>
+		</div>
+	</div>
+
+</div>

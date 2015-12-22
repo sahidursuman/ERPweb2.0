@@ -133,7 +133,10 @@
 													<tbody class="T-insuranceForm">
 														<tr>
 															<td><input class="T-insurance-name col-xs-12 bind-change" name="insuranceName" type="text"/><input type="hidden" name="insuranceId"/></td>
-															<td><input class="col-xs-12" name="type" type="text" maxlength="100" /></td>
+															<td>
+																<input class="col-xs-12 T-chooseInsuranceItem" name="type" type="text" maxlength="100" />
+																<input type="hidden" name="typeId" value="">
+															</td>
 															<td><input class="col-xs-12" name="price" type="text" maxlength="6" /></td>
 															<td><input class="col-xs-12" name="telNumber" type="text" readonly="readonly"/></td>
 															<td><input class="col-xs-12" name="managerName" type="text" readonly="readonly"/></td>

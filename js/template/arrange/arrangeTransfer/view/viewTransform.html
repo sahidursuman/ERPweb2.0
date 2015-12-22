@@ -15,8 +15,20 @@
 					<td class="style-myself">应付：</td>
 					<td style="text-align: left;padding: 0px 0px 0px 10px">{{touristGroup.transNeedPayAllMoney}}</td>
 					<td class="style-myself">已付：</td>
-					<td style="text-align: left;padding: 0px 0px 0px 10px" readonly="readonly"  class="date-picker" colspan="3">{{touristGroup.transPayedMoney}}
+					<td style="text-align: left;padding: 0px 0px 0px 10px" readonly="readonly"  class="date-picker" colspan="1">{{touristGroup.transPayedMoney}}
+					</td>
 
+					<td>
+						付款方式 :
+						{{if touristGroupTransfer.payType == 0}}现金
+							{{else if touristGroupTransfer.payType == 1}}银行转账
+							{{else if touristGroupTransfer.payType == 2}}网上支付
+							{{else if touristGroupTransfer.payType == 3}}支票
+							{{else if touristGroupTransfer.payType == 4}}其他
+						{{/if}}
+					</td>
+
+					<td>
 						{{if touristGroup.operateCurrentNeedPayMoney==1}}
 						<label>
 							<input  type="checkbox" class="ace buyInsurance-status" checked="checked" value="{{touristGroup.operateCurrentNeedPayMoney}}" name="operateCurrentNeedPayMoney" disabled="disabled">
@@ -32,7 +44,6 @@
 						</label>
 						{{/if}}
 						<label class="control-label no-padding-right">对方现收</label>
-
 					</td>
 				</tr>
 			</table>
