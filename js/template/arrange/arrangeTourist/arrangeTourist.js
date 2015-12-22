@@ -1146,7 +1146,7 @@ define(function(require, exports) {
 				$addTouristGroup.find(".all tbody tr").find("input:checked").each(function(i){
 					var parents = $(this).closest('tr'),
 						groupJson = {
-							id : parents.attr("data-entity-id"),
+							id : parents.attr("data-value"),
 							creatorName : $.text(parents.find("td[name=creatorName]")),
 							lineProductName : $.text(parents.find("td[name=lineProductName]")),
 							travelAgencyName : $.text(parents.find("td[name=travelAgencyName]")),
