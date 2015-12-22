@@ -1292,7 +1292,7 @@ define(function(require, exports) {
 							console.log(argumentsLen);
 							if (argumentsLen == 3) {
 								Tools.closeTab(menuKey+"-update");
-								transit.listTransit(transit.pageNo-1);
+								transit.listTransit(transit.pageNo);
 							}else{
 								$tab.data('isEdited',false);
 								Tools.addTab(tab_id, title, html)
