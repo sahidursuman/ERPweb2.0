@@ -9,26 +9,39 @@
 			<div class="row"> 
 				<div class="widget-main col-sm-9 formOneList tourist-informationWidth updateTouristInput">
 					<div class="form-group guideInterval" >
-						<div class="col-sm-4">
+
+						<div class="col-sm-4" style="width:380px;">
 							<label class=" control-label no-padding-right">
 								<span class="necessary">*</span>
-								线路产品：<input type="text" name="lineProductIdName" class="bind-change Touristwidth" readonly="readonly" />
-								<input type="hidden" name="lineProductId" />
-								<input type="hidden" name="quoteId" />
+								报价单号：<input type="text" name="quoteNumber" class="bind-change  T-quoteNumber" readonly="" />
+								<input type="hidden" name="quoteNumberId"  class="T-quoteNumberId" />
+							</label>
+							<button class=" search-btn btn-sm btn-travelLine-search T-ChosenQuoteNumber">
+								<i class="ace-icon fa fa-search "></i>搜索
+							</button>
+						</div>
+
+
+						<div class="col-sm-4" style="width:380px;">
+							<label class=" control-label no-padding-right">
+								<span class="necessary">*</span>
+								线路产品：<input type="text" name="lineProductIdName" class="bind-change T-lineProductIdName" readonly="" />
+								<input type="hidden" name="lineProductId"  class="T-lineProductId" />
+								<input type="hidden" name="quoteId" class="T-quoteId" />
 							</label>
 							<button class=" search-btn btn-sm btn-travelLine-search T-travelLine-search">
 								<i class="ace-icon fa fa-search "></i>搜索
 							</button>
 						</div>
-						<div class="col-sm-4" >
+						<div class="col-sm-4" style="width:360px;">
 							<label class=" control-label no-padding-right"><span class="necessary">&nbsp;&nbsp;&nbsp;&nbsp;*</span>出游日期：
-								<input type="text" name="startTime" class=" date-picker datepicker"/>
+								<input type="text" name="startTime" class=" date-picker datepicker T-startTime" readonly="" />
 								<i class="fa fa-calendar" style="position: relative;left: -20px"></i>
 							</label>
 						</div>
 						<div class="col-sm-4  buyInsurance">
 							<label class="control-label no-padding-right">是否购买保险：
-								<input checked="checked" type="checkbox" class="ace buyInsurance-status" value="1" name="buyInsurance">
+								<input checked="checked" type="checkbox" class="ace buyInsurance-status" value="1" name="buyInsurance" disabled="">
 								<span class="lbl">
 								</span>
 							</label>
@@ -86,8 +99,8 @@
 						</div> 
 						<div class="col-sm-4">
 							<label class=" control-label no-padding-right" style="margin-left: 44px;">未收：
+
 							<input readonly="readonly"type="text" name="unIncomeMoney"  maxlength="9" />
-							</label>
 						</div>
 						<div class="col-sm-4"> 
 							   <label class="no-padding-right pull-left" style="margin-left: 23px;">收款方式：</label> 
@@ -127,21 +140,21 @@
 									<td>结算价</td> 
 									<td>大人</td> 
 									<td>
-										<span class="necessary col-sm-1">*</span><input name="adultCount" type="text" class="col-sm-11  no-padding-right T-costCount" maxlength="3" />
+										<span class="necessary col-sm-1">*</span><input name="adultCount" type="text" class="col-sm-11  no-padding-right T-costCount T-adultCount" maxlength="3" readonly=""/>
 									</td>
 									<td>
-										<span class="necessary col-sm-1">*</span><input name="adultPrice" type="text" class="col-sm-11  no-padding-right  T-costPrice"  maxlength="6" />
+										<span class="necessary col-sm-1">*</span><input name="adultPrice" type="text" class="col-sm-11  no-padding-right  T-costPrice T-adultPrice"  maxlength="6" readonly="" />
 									</td>
 									<td></td>
 								</tr>
 								<tr>
 									<td>结算价</td>
-									<td>小孩</td>
+									<td>小孩</td>   
 									<td>
-										<input name="childCount" type="text" value="0" class="col-sm-12  no-padding-right T-costCount" style="float:right;" maxlength="3" />
+										<input name="childCount" type="text" value="0" class="col-sm-12  no-padding-right T-childCount T-costCount" style="float:right;" maxlength="3" readonly="" />
 									</td>
 									<td>
-										<input name="childPrice" type="text" value="0" class="col-sm-12  no-padding-right T-costPrice" style="float:right;" maxlength="6" />
+										<input name="childPrice" type="text" value="0" class="col-sm-12  no-padding-right T-childPrice  T-costPrice" style="float:right;" maxlength="6"  readonly=""/>
 									</td>
 									<td></td>
 								</tr>
