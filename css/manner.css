@@ -1155,8 +1155,12 @@ p#back-top a span{
 .share-anchor ul li a{
     color:  #fff; 
 }
+.share-anchor-ul li{
+    width: 17px;
+    height: 20px;
+}
 .share-anchor-ul li:focus{
-   color: #59bad2; 
+   color: #48A2D2; 
 }
 .quoteTable td{
     border: 1px solid #ddd !important;
