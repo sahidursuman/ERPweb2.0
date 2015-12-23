@@ -247,14 +247,11 @@ define(function(require, exports) {
                     data.list = FinancialService.getTempDate(resultList,Self.clearTempData);
                     data.isAutoPay = isAutoPay;
                     var html = SelfClearing(data);
-                    var validator;
-                    data.showBtnFlag = Self.showBtnFlag
                     data.isAutoPay = isAutoPay;
                     // 初始化页面
                     if (Tools.addTab(blanceTabId, "自费付款", html)) {
                         var settleValidator = new FinRule(Self.showBtnFlag ? 3 : 1);
                         Self.initClear(page,selfPayId,selfPayName,settleValidator); 
-                        validator = new FinRule(Self.showBtnFlag ? 3 : 1).check(Self.$clearTab.find('.T-clearList'));                       
                     }
 
                     if(isAutoPay == 0){
@@ -328,6 +325,8 @@ define(function(require, exports) {
 
         //报表内的操作
         Self.listOption(Self.$clearTab);
+
+        var payingCheck = new FinRule(2).check(Self.$clearTab);
 
         //自动下账
         Self.$clearTab.find(".T-clear-auto").off().on("click",function(){
