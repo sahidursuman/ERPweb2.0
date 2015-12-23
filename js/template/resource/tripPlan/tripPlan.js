@@ -1271,7 +1271,7 @@ define(function(require, exports) {
 									$list[i].value = $list[i].name;
 								}
 							}else{
-								layer.tips('没有内容', obj, {
+								layer.tips('没有内容', $this, {
 								    tips: [1, '#3595CC'],
 								    time: 2000
 								});
@@ -2245,7 +2245,7 @@ define(function(require, exports) {
 						payType : tripPlan.getVal(bus.eq(i), "payType"),
 						guidePayMoney : tripPlan.getVal(bus.eq(i), "guidePayMoney"),
 						remark : tripPlan.getVal(bus.eq(i), "remark"),
-						orderStatus: tripPlan.getVal(hotel.eq(i), "busOrder")
+						orderStatus: tripPlan.getVal(bus.eq(i), "busOrder")
 					}
 					tripPlanJson.busCompanyArrange = busJson;
 					guideAllPayMoney += tripPlan.checkParamIsDouble(busJson.guidePayMoney);
