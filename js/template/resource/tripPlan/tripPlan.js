@@ -448,7 +448,7 @@ define(function(require, exports) {
 			}
 			if ($this.hasClass('T-hotel-askPrice')) {
 				//询价
-				tripPlan.hotelAskPrice($this, $tab, saveJson)
+				tripPlan.hotelOfferStatus($this, $tab, saveJson, 'ask');
 			}else if ($this.hasClass('T-hotel-booking')) {
 				//预订
 				tripPlan.hotelBooking($this, $tab, saveJson)
@@ -652,7 +652,7 @@ define(function(require, exports) {
 	 * @param  {[type]} $tab     [页面容器]
 	 * @param  {[type]} saveJson [参数对象]
 	 */
-	tripPlan.hotelOfferStatus = function($this, $tab, saveJson) {
+	tripPlan.hotelOfferStatus = function($this, $tab, saveJson, type) {
 		$.ajax({
 			url: KingServices.build_url('hotelInquiry','listHotelArrangeInquiry'),
 			type: 'POST',
@@ -660,19 +660,40 @@ define(function(require, exports) {
 			success: function(data) {
 				if (showDialog(data)) {
 					data.mapList = JSON.parse(data.mapList);
-					var html = hotelInquiryResultTemplate(data);
-					tripPlan.$hotelOfferLayer = layer.open({
-					    type: 1,
-					    title:"查看酒店询价状态",
-					    skin: 'layui-layer-rim', //加上边框
-					    area: '1190px', //宽高
-					    zIndex:1028,
-					    content: html,
-						scrollbar: false,    // 推荐禁用浏览器外部滚动条
-					    success:function(data){
+					var isAlert = 0;
+					if (!!type) {
+						if (data.mapList.length > 0) {
+							for (var i = 0, len = data.mapList.length; i < len; i++) {
+								var status = data.mapList[i].hotelOffers[0].reserveMinutes
+								if( status != '已拒绝' && status != '等待确认' && status != '已到期' ) {
+									isAlert = 1;
+								}
+							}
+							if (isAlert == 1) {
+								showConfirmDialog($( "#confirm-dialog-message" ), '存在有效询价，可直接预订，是否继续询价', function() {
+									tripPlan.hotelAskPrice($this, $tab, saveJson);
+								})
+							}else {
+								tripPlan.hotelAskPrice($this, $tab, saveJson);
+							}
+						}else {
+							tripPlan.hotelAskPrice($this, $tab, saveJson);
+						}
+					}else{
+						var html = hotelInquiryResultTemplate(data);
+						tripPlan.$hotelOfferLayer = layer.open({
+						    type: 1,
+						    title:"查看酒店询价状态",
+						    skin: 'layui-layer-rim', //加上边框
+						    area: '1190px', //宽高
+						    zIndex:1028,
+						    content: html,
+							scrollbar: false,    // 推荐禁用浏览器外部滚动条
+						    success:function(data){
 
-					    }
-				    });
+						    }
+					    });
+				    }
 				}
 			}
 		})
