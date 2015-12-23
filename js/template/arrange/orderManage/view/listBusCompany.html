@@ -11,10 +11,8 @@
 					<th class="col-sm-1">数量</th>
 					<th class="col-sm-1">单价</th>
 					<th class="col-sm-1">金额</th>
-					<th class="col-sm-1">预订人</th>
-					<th class="col-sm-1">预订时间</th>
-					<th class="col-sm-1">撤单人</th>
-					<th class="col-sm-1">撤单时间</th>
+					<th class="col-sm-1">操作人</th>
+					<th class="col-sm-1">操作时间</th>
 					<th class="col-sm-1">备注</th>
 					<th class="col-sm-1">状态</th>
 				</tr>
@@ -32,9 +30,7 @@
 					<td class="price">{{busOrderList.price}}</td>
 					<td class="totalMoney">{{busOrderList.price}}</td>
 					<td>{{if busOrderList.user!=null}}{{busOrderList.user.realName}}{{/if}}</td>
-					<td>预订时间</td>
-					<td>撤单人</td>
-					<td>撤单时间</td>
+					<td>{{if busOrderList.createTime!=null}}{{busOrderList.createTime}}{{/if}}</td>
 					<td>{{busOrderList.remark}}</td>
 					<td>
 						{{if busOrderList.status==-1}}
