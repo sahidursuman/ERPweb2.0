@@ -563,8 +563,8 @@ define(function(require, exports) {
             });
 
         var $dialog = $('.T-lineproduct-search-' + type);
-        touristGroup.getLineProductList($dialog, 0);
-        touristGroup.getLineProductList($dialog, 1);
+        touristGroup.getLineProductList($dialog, isUpdate?1:0);
+        // touristGroup.getLineProductList($dialog, 1);
         
         // 选择线路产品
         $dialog.find('.T-searchtravelLine').on('click', function(event) {
@@ -1198,7 +1198,6 @@ define(function(require, exports) {
             '<td>' + '</td>' +
             '<td><input name="name" type="text" class="col-sm-12  no-padding-right" /></td>' +
             '<td><input name="mobileNumber" type="text" class="col-sm-12  no-padding-right T-mobileNumber"  maxlength="11"  /></td>' +
-            '<td><input name="mobileNumber" type="text" class="col-sm-12  no-padding-right"  maxlength="11"  /></td>' +
             '<td><select name="idCardType" value="idCardTypeId"><option value="0" selected="selected">身份证</option><option value="1">护照</option><option value="2">其它</option></select></td>' +
             '<td><input name="idCardNumber" type="text" class="col-sm-12  no-padding-right" /></td>' +
             '<td><div class="checkbox"><label><input type="checkbox" class="ace " value="1" name="isContactUser"><span class="lbl"></span></label></div></td>' +
@@ -1316,7 +1315,7 @@ define(function(require, exports) {
     };
     //新增同行联系人
     touristGroup.addPartnerManager = function($obj) {
-        var $parentsObj = $obj.closest('form');
+        var $parentsObj = $obj.closest('.form-inline');
         var partnerAgencyId = $parentsObj.find('input[name=fromPartnerAgencyId]').val();
         var html = addPartnerManagerTemplate();
         if (partnerAgencyId) {
@@ -1377,11 +1376,11 @@ define(function(require, exports) {
         var html = '<tr>' +
             '<td><span name="addOrReduceSelect" value="0">其他费用</span></td>' +
             '<td><input  name="describeInfo" type="text" class="col-sm-12  no-padding-right" /></td>' +
-            '<td><input  name="count" type="text" class="col-sm-12  no-padding-right T-costCount" /></td>' +
-            '<td><input  name="price" type="text" class="col-sm-12  no-padding-right T-costPrice" /></td>' +
+            '<td><input  name="count" type="text" class="col-sm-10 col-sm-offset-1 no-padding-right T-costCount"/></td>' +
+            '<td><input  name="price" type="text" class="col-sm-10 col-sm-offset-1 no-padding-right T-costPrice"/></td>' +
             '<td><a class="cursor addCost-delete">删除</a></td>' +
             '</tr>'
-        var $parentsObj = $obj.closest("form");
+        var $parentsObj = $obj.closest(".T-touristGroupMainForm");
         var $tableObj = $parentsObj.find(".T-addCostTbody");
         $tableObj.append(html);
 
@@ -1511,25 +1510,17 @@ define(function(require, exports) {
                         change: function(event, ui) {
                             if (ui.item == null) {
                                 $(this).find('input[name=fromPartnerAgencyId]').val("");
-                                $(this).closest('div').find('input[name=partnerAgencyNameList]').val("");
-                                $(this).closest('label').find('input[name=type]').val("");
+                                $(this).parent().find('input[name=partnerAgencyNameList]').val("");
+                                $(this).parent().find('input[name=type]').val("");
                             }
                         },
                         select: function(event, ui) {
-                            var $that = $(this);
-                                $that.blur();
-                                $that.closest('label').find("input[name=fromPartnerAgencyId]").val(ui.item.id).trigger('change');
+                            var $parent = $(this).blur().nextAll("input[name=fromPartnerAgencyId]").val(ui.item.id).trigger('change').parent(),
+                                $form = $parent.closest('.form-inline');
                             //通过typeFlag来判断--1、新增；2、修改
-                            if (touristGroup.typeFlag == 1) {
-                                $that.find("input[name=partnerAgencyNameList]").val("");
-                                $that.find("input[name=type]").val("");
-                                $that.closest('div').find('input[name=partnerAgencyContactId]').val("");
-                            }
-                            if (touristGroup.typeFlag == 2) {
-                                $that.find("input[name=partnerAgencyNameList]").val("");
-                                $that.find("input[name=type]").val("");
-                                $that.closest('div').find('input[name=partnerAgencyContactId]').val("");
-                            }
+                            $parent.find("input[name=type]").val("");
+                            $form.find("input[name=partnerAgencyNameList]").val("");
+                            $form.find('input[name=partnerAgencyContactId]').val("");
                         }
                     }).off('click').on('click', function() {
                         if (!!$(this).attr('readonly')) return;
@@ -1559,12 +1550,12 @@ define(function(require, exports) {
                 }
             },
             select: function(event, ui) {
-                $(this).closest('label').find("input[name=partnerAgencyContactId]").val(ui.item.id).trigger('change');
+                $(this).nextAll("input[name=partnerAgencyContactId]").val(ui.item.id).trigger('change');
             }
         }).off('click').on('click', function() {
             if (!!$(this).attr('readonly')) return;
             var objM = this;
-            var $parentsObj = $obj.closest('form');
+            var $parentsObj = $obj.closest('.form-inline');
             var partnerAgencyId = $parentsObj.find('input[name=fromPartnerAgencyId]').val();
             if (partnerAgencyId) {
                 $.ajax({
