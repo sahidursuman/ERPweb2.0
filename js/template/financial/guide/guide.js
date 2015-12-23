@@ -54,6 +54,8 @@ define(function(require, exports) {
             var guideName = FinGuide.$tab.find('.T-search-name').val();
             if (guideName === '全部') {
                 guideName = '';
+            }else{
+                args.guideId = FinGuide.$tab.find('.T-search-name').data('id');
             }
 
             args.guideName = guideName;
@@ -105,6 +107,7 @@ define(function(require, exports) {
             event.preventDefault();
             FinGuide.getList();
         });
+        
         // 报表内的操作
         FinGuide.$tab.find('.T-list').on('click', '.T-action', function(event) {
             event.preventDefault();
@@ -180,7 +183,6 @@ define(function(require, exports) {
     FinGuide.initOperationModule = function(args, type, $tab) {
         if (!!$tab) {
             var $line = $tab.find('.T-lineProductName');
-
             args = {
                 guideId: $tab.find('.T-btn-save').data('id'),
                 startDate: $tab.find('.T-search-start-date').val(),
@@ -196,7 +198,6 @@ define(function(require, exports) {
 
             name = $tab.find('.T-guideName').text();
         }
-
         $.ajax({
                 url: KingServices.build_url('account/guideFinancial', 'financialGuideSumStaticsByGuideId'),
                 type: 'post',
@@ -253,6 +254,7 @@ define(function(require, exports) {
                                     }, type, $tab);
         });
 
+
         var validator = new FinRule(type ? (FinGuide.isOuter ? 3 : 1) : 3),
             autoValidator = new FinRule(2);
         var validatorCheck = validator.check($tab),
@@ -281,6 +283,19 @@ define(function(require, exports) {
             FinancialService.updateSumPayMoney($tab, validator);
         } else {
             FinancialService.updateUnpayMoney($tab, validator);
+            $searchArea.find('.T-btn-export').on('click', function(event) {
+                event.preventDefault();
+                var $btn = $tab.find('.T-btn-save'),
+                args = {
+                    guideId: $btn.data('id'), 
+                    startDate: $datePicker.eq(0).val(),
+                    endDate: $datePicker.eq(1).val(),
+                    tripPlanNumber: $searchArea.find('.T-tripPlanNumber').val(),
+                    lineProductName: $searchArea.find('.T-lineProductName').val(),
+                    lineProductId: $searchArea.find('.T-lineProductName').data('id'),
+                };
+                FinGuide.exportReport(args);
+            });
         }
 
         // 绑定表格内容元素的事件
@@ -697,6 +712,15 @@ define(function(require, exports) {
         options.isOuter = FinGuide.isOuter = true;
 
         FinGuide.initOperationModule(options, 1)
+    };
+
+    FinGuide.exportReport = function(args){
+        args.lineProductName = args.lineProductName === "全部" ? "" : args.lineProductName;
+        var str = '';
+        for(var i in args){
+            str += "&" + i + "=" + args[i];
+        }
+        exportXLS(KingServices.build_url('export', 'exportArrangeGuideFinancial') + str);
     };
 
     // 暴露方法
