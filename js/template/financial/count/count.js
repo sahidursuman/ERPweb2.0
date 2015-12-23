@@ -1430,7 +1430,7 @@ define(function(require, exports){
 				needIncome.text($income);
             };
             //计算自费费用
-            var $selfSum = parseFloat(realCount*price);
+            var $selfSum = parseFloat(realCount*price-reduceMoney);
             $parent.find('.selfMoney').val($selfSum);
 			//导游佣金= (实际数量-计划数量)*(单价-低价)*导佣比例
 			var guideRebateMoney = (parseFloat(realCount)-parseFloat(memberCount)) * (parseFloat(marketPrice)-parseFloat(price)) * parseFloat(guideRate)/100;
