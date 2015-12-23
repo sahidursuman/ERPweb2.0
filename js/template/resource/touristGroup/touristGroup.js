@@ -1144,7 +1144,6 @@ define(function(require, exports) {
             'adultCount',
             'adultPrice',
             'childCount',
-            'childPrice'
             'childPrice',
             'quoteNumber'
         ];
