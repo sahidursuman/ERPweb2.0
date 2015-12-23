@@ -680,6 +680,8 @@ define(function(require, exports) {
 
 				Replace.CM_event(Replace.$balanceTab, false);
 
+				var payingCheck = new FinRule(2).check(Replace.$balanceTab);
+
 				// 绑定翻页组件
 				laypage({
 				    cont: Replace.$balanceTab.find('.T-pagenation'), 
