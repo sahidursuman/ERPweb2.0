@@ -12,6 +12,8 @@ define(function(require, exports) {
         updateTransferTemplate = require('./view/updateTransfer'),
         updateTransferInTemplate = require('./view/updateTransferIn'),
         addVisitorMoreTemplate = require('./view/addVisitorMore'),
+        chooseQuoteProductTemplate = require('./view/chooseQuoteProduct'),
+        quoteListTemplate = require('./view/quoteList'),
         tabId = "tab-" + menuKey + "-content",
         updateTab = "tab-" + menuKey + "-update-content",
         addTabId = menuKey + "-add",
@@ -25,6 +27,7 @@ define(function(require, exports) {
         autocompleteDate: {},
         typeFlag: 0,
         visitorId: 0,
+        chooseQuoteProlayer: "",
         args: {
             pageNo: 0,
             type: 0,
@@ -196,7 +199,7 @@ define(function(require, exports) {
     touristGroup.updateTransferIn=function(touristGroupId,status,InnerTransfer){
     	var typeOut='inner';
     	 //声明一个全局的游客小组ID用于跳转到中转安排
-        touristGroup.touristGroupId = touristGroupId;
+        touristGroup.visitorId=touristGroupId;
     	$.ajax({
                 url: touristGroup.url("viewTouristGroupDetails", "view"),
                 data: "id=" + touristGroupId + "&type=" + typeOut,
@@ -233,7 +236,7 @@ define(function(require, exports) {
     touristGroup.updateTransfer=function(touristGroupId,status,InnerTransfer){
     	var typeOut = 'out';
     	 //声明一个全局的游客小组ID用于跳转到中转安排
-        touristGroup.touristGroupId = touristGroupId;
+        touristGroup.visitorId=touristGroupId;
     	$.ajax({
                 url: touristGroup.url("viewTouristGroupDetails", "view"),
                 data: "id=" + touristGroupId + "&type=" + typeOut,
@@ -303,7 +306,7 @@ define(function(require, exports) {
         });
     };
     //添加小组事件绑定
-    touristGroup.addEvents = function(type) {
+    touristGroup.addEvents = function() {
         var $addTabId = $("#tab-resource_touristGroup-add-content"),
             $groupInfoForm = $addTabId.find(".T-touristGroupMainForm"), //小组信息对象
             $groupMemberForm = $addTabId.find(".T-touristGroupMainFormMember"), //游客名单对象
@@ -329,6 +332,17 @@ define(function(require, exports) {
         touristGroup.groupMemberDispose($groupMemberForm);
         //中转安排处理
         touristGroup.innerTransferDispose($innerTransferForm);
+
+
+        //报价单号
+        $addTabId.find('.T-ChosenQuoteNumber').on('click', function(event) {
+            event.preventDefault();
+            /* Act on the event */
+            //报价单号的layer层
+            var lineProductId = $addTabId.find(".T-lineProductId").val(),addType='1';
+            touristGroup.chooseQuoteProduct(lineProductId,addType);
+        });
+
         //提交按钮事件
         $addTabId.find(".T-submit-addTouristGroup").on('click', function() {
             if (!touristGroup.validator.form()) {
@@ -342,11 +356,11 @@ define(function(require, exports) {
     };
     //修改小组的事件绑定
     touristGroup.updateEvents = function(typeInner) {
-        console.info("updateEvents....." + typeInner);
-        var $updateTabId = $("#tab-resource_touristGroup-update-content"),
+        var id = touristGroup.visitorId,
+            $updateTabId = $("#tab-resource_touristGroup-update-content"),
             $groupInfoForm = $updateTabId.find(".T-touristGroupMainForm"), //小组信息对象
             $groupMemberForm = $updateTabId.find(".T-touristGroupMainFormMember"), //游客名单对象
-            id = $updateTabId.find(".T-submit-updateTouristGroup").attr('data-entity-id'),
+            //id = $updateTabId.find(".T-submit-updateTouristGroup").attr('data-entity-id'),
             $innerTransferForm = $updateTabId.find(".T-touristGroupMainFormRS"); //中转安排对象
         //$updateTabId.find(".T-submit-updateTouristGroup").data('id',id);
         var $payedMoney = $groupInfoForm.find('input[name=payedMoney]'),
@@ -371,6 +385,16 @@ define(function(require, exports) {
         touristGroup.groupMemberDispose($groupMemberForm, 2);
         //中转安排处理
         touristGroup.innerTransferDispose($innerTransferForm, 2);
+
+         //报价单号
+        $updateTabId.find('.T-ChosenQuoteNumber').on('click', function(event) {
+            event.preventDefault();
+            /* Act on the event */
+            //报价单号的layer层
+            var lineProductId = $updateTabId.find(".T-lineProductId").val();
+                touristGroup.chooseQuoteProduct(lineProductId);
+        });
+
         //提交按钮事件
         $updateTabId.find(".T-submit-updateTouristGroup").on('click', function() {
             if (!touristGroup.validator.form()) {
@@ -517,6 +541,60 @@ define(function(require, exports) {
             touristGroup.autoSumNeedPay($obj);
         })
     };
+
+      /**
+     * 初始化选择线路的对话框
+     * @param  {Boolean} isUpdate true：修改界面，false：添加界面
+     * @return {[type]}           [description]
+     */
+    touristGroup.initLineProductSearch = function(isUpdate, typeInner) {
+        var type = isUpdate ? 'update' : 'add',
+            html = searchTemplate({
+                update: type
+            }),
+            searchTravelLinelayer = layer.open({
+                type: 1,
+                title: "选择线路产品",
+                skin: 'layui-layer-rim', //加上边框
+                area: '85%', //宽高
+                zIndex: 1029,
+                content: html,
+                scrollbar: false,
+            });
+
+        var $dialog = $('.T-lineproduct-search-' + type);
+        touristGroup.getLineProductList($dialog, 0);
+        touristGroup.getLineProductList($dialog, 1);
+        
+        // 选择线路产品
+        $dialog.find('.T-searchtravelLine').on('click', function(event) {
+            event.preventDefault();
+            var $tr = $dialog.find('input[name="choice-TravelLine"]:checked').closest('tr'),
+                $tab = $('#tab-resource_touristGroup-add-content'),
+                lineProductId = $tr.data('id');
+
+            if (lineProductId==null || lineProductId=='' || lineProductId==undefined) {
+               showMessageDialog($("#confirm-dialog-message"), "请选择线路产品");
+               return;
+            };
+
+            if (isUpdate) {
+                $tab = $('#tab-resource_touristGroup-update-content');
+            }
+
+            $tab.find('input[name="lineProductIdName"]').val($tr.children('[name="travelLine-select"]').text()).trigger('change');
+            $tab.find('input[name="lineProductId"]').val($tr.data('id'));
+
+            var $form = $tab.find('.T-touristGroupMainForm');  
+            if (typeInner!='out' || typeInner=="" ) {
+                touristGroup.clearQuoteData($form);
+            };
+            
+
+            layer.close(searchTravelLinelayer);
+        });
+    };
+
     //处理游客名单
     touristGroup.groupMemberDispose = function($obj, typeFlag) {
         //添加成员
@@ -590,62 +668,9 @@ define(function(require, exports) {
         touristGroup.formatTime($obj);
     };
 
-    /**
-     * 初始化选择线路的对话框
-     * @param  {Boolean} isUpdate true：修改界面，false：添加界面
-     * @return {[type]}           [description]
-     */
-    touristGroup.initLineProductSearch = function(isUpdate, typeInner) {
-        var type = isUpdate ? 'update' : 'add',
-            html = searchTemplate({
-                update: type
-            }),
-            searchTravelLinelayer = layer.open({
-                type: 1,
-                title: "选择线路产品",
-                skin: 'layui-layer-rim', //加上边框
-                area: '85%', //宽高
-                zIndex: 1029,
-                content: html,
-                scrollbar: false,
-            });
-        console.info('initLineProductSearch' + typeInner + "ROGER...................");
-        var $dialog = $('.T-lineproduct-search-' + type);
-        touristGroup.getLineProductList($dialog, 0);
-        touristGroup.getLineProductList($dialog, 1);
-        // 搜索线路产品
-        $dialog.find('.T-lineProduct-search').on('click', function(event) {
-            event.preventDefault();
-            var $that = $(this),
-                type = $that.closest('.T-lineproduct-search-add').find('ul').find('.active').index();
-            touristGroup.getLineProductList($dialog, type, 0, $dialog.find('input[name="lineProduct_name"]').val());
-        });
-        // 选择线路产品
-        $dialog.find('.T-searchtravelLine').on('click', function(event) {
-            event.preventDefault();
-            var $tr = $dialog.find('input[name="choice-TravelLine"]:checked').closest('tr'),
-                $tab = $('#tab-resource_touristGroup-add-content'),
-                quoteId = $tr.data('quote-id');
 
-            if (isUpdate) {
-                $tab = $('#tab-resource_touristGroup-update-content');
-            }
+   
 
-            $tab.find('input[name="lineProductIdName"]').val($tr.children('[name="travelLine-select"]').text()).trigger('change');
-            $tab.find('input[name="lineProductId"]').val($tr.data('id'));
-            $tab.find('input[name="quoteId"]').val(quoteId);
-
-            var $form = $tab.find('.T-touristGroupMainForm');
-            if ($tr.closest('.tab-pane').index() === 1) {
-                // 选择了报价产品，需要初始化游客小组的数据
-                touristGroup.initQuoteData($form, quoteId);
-            } else if ($tr.closest('.tab-pane').index() != 1 && typeInner != 'out' || typeInner == "") {
-                // 清理
-                touristGroup.clearQuoteData($form);
-            }
-            layer.close(searchTravelLinelayer);
-        });
-    };
 
     /**
      * 获取线路产品数据，并填入选择线路产品的对话框
@@ -659,11 +684,6 @@ define(function(require, exports) {
         page = page || 0;
         var url = KingServices.build_url('lineProduct', 'findAll'),
             $tbody = $dialog.find('.T-normal-list');
-
-        if (type) {
-            url = KingServices.build_url('lineProduct', 'listQuoteLinePorduct');
-            $tbody = $dialog.find('.T-quote-list');
-        }
         $.ajax({
                 url: url,
                 type: 'post',
@@ -675,33 +695,6 @@ define(function(require, exports) {
             .done(function(data) {
                 if (showDialog(data)) {
                     data.lineProductList = JSON.parse(data.lineProductList);
-
-                    if (type) {
-                        var list = [];
-                        for (var i = 0, len = data.lineProductList.length, tmp, lineProduct; i < len; i++) {
-                            tmp = data.lineProductList[i];
-                            lineProduct = tmp.lineProduct;
-                            list.push({
-                                quoteId: tmp.id,
-                                id: lineProduct.id,
-                                name: lineProduct.name,
-                                days: lineProduct.days,
-                                type: lineProduct.type,
-                                customerType: lineProduct.customerType,
-                                status: lineProduct.status,
-                                travelAgencyName: tmp.partnerAgency.travelAgencyName,
-                                createTime: tmp.createTime,
-                                adultCount: tmp.adultCount,
-                                childCount: tmp.childCount,
-                                startTime: tmp.startTime,
-                                contactRealname: tmp.partnerAgencyContact.contactRealname
-                            })
-                        }
-
-                        data.lineProductList = list;
-                        data.quote = type;
-                        console.info(data)
-                    }
                     $tbody.html(lineproductSearchList(data));
                     $tbody.closest('.tab-pane').find('.T-total').text(data.recordSize);
                     // 绑定翻页组件
@@ -720,6 +713,362 @@ define(function(require, exports) {
                 }
             });
     };
+
+
+
+    /**
+     * chooseQuoteProduct 选择报价线路产品
+     * @return {[type]} [description]
+     */
+    touristGroup.chooseQuoteProduct = function(lineProductId,addType) {
+        var html = chooseQuoteProductTemplate();
+        touristGroup.chooseQuoteProlayer = layer.open({
+            type: 1,
+            title: "选择报价线路产品",
+            skin: 'layui-layer-rim', //加上边框
+            area: '85%;', //宽高
+            zIndex: 1029,
+            content: html,
+            scrollbar: false,
+            success: function() {
+                //报价线路初始化
+                touristGroup.getQuoteLineProductList(0, lineProductId,addType);
+            }
+        });
+
+    };
+
+    /**
+     * [getQuoteLineProductList description]
+     * @param  {[type]} pageNo        [description]
+     * @param  {[type]} lineProductId [description]
+     * @return {[type]}               [description]
+     */
+    touristGroup.getQuoteLineProductList = function(pageNo, lineProductId,addType) {
+        var $chooseQuotObj = $('#T-chooseQuoteProduct-layer'),
+            name = '';
+        $.ajax({
+            url: KingServices.build_url("lineProduct", "listQuoteLinePorduct"),
+            type: 'POST',
+            data: "pageNo=" + pageNo + "&lineProductId=" + lineProductId + "&name=" + name,
+            success: function(data) {
+                var result = showDialog(data);
+                if (result) {
+                    var lineProductList = JSON.parse(data.lineProductList);
+                    data.lineProductList = lineProductList;
+                    //数据模板
+                    var html = quoteListTemplate(data);
+                    $chooseQuotObj.find('.T-chooseQuoteProduct-Content').html(html);
+                    // 绑定翻页组件
+                    laypage({
+                        cont: $chooseQuotObj.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+                        pages: data.totalPage, //总页数
+                        curr: (pageNo + 1),
+                        jump: function(obj, first) {
+                            if (!first) { // 避免死循环，第一次进入，不调用页面方法
+                                touristGroup.getQuoteLineProductList(obj.curr - 1,lineProductId,addType);
+                            }
+                        }
+                    });
+                    //事件初始化
+                    touristGroup.initQuoteEvents($chooseQuotObj,addType);
+                    //resize
+                    $(window).trigger('resize');
+
+                }
+            }
+        });
+    };
+
+
+    /**
+     * initQuoteEvents description
+     * @param  {[type]} $chooseQuotObj 报价layer
+     * @return {[type]}
+     * 选择报价产品后
+     * 带出线路产品、出游日期、客户来源、同行联系人、费用项的结算价的数量和单价、自动计算应收
+     */
+    touristGroup.initQuoteEvents = function($chooseQuotObj,addType) {
+        //取消
+        $chooseQuotObj.find('.T-cancel').on('click', function(event) {
+            event.preventDefault();
+            /* Act on the event */
+            layer.close(touristGroup.chooseQuoteProlayer);
+        });
+
+        var $addTabId = $("#tab-resource_touristGroup-update-content");
+            if (!!addType && addType=='1') {
+                $addTabId = $("#tab-resource_touristGroup-add-content");
+            };
+        //var $form = $tab.find('.T-touristGroupMainForm');
+       
+        //保存
+        $chooseQuotObj.find('.T-save').on('click', function(event) {
+            event.preventDefault();
+            /* Act on the event */
+            var $trList = $chooseQuotObj.find('tr'),
+                ids = [],
+                chooseQuotObj = {};
+            $trList.each(function(i) {
+                var $check = $trList.eq(i).find('.T-cheked');
+                if ($check.is(':checked')) {
+                    var $that = $(this),
+                        $tr = $that.closest('tr'),
+                        chooseQuot = {
+                            quoteId: $tr.attr('data-quoteId'), //报价单号Id
+                            quoteNumber: $tr.attr('data-quoteNumber'), //  报价单号名称
+                            lineProductName: $tr.attr('data-lineProductName'),
+                            lineProducId: $tr.attr('data-lineProducId'),
+                            startTime: $tr.attr('data-startTime'),
+                            fromPartnerAgencyId: $tr.attr('data-fromPartnerAgencyId'),
+                            fromPartnerAgencyName: $tr.attr('data-fromPartnerAgencyName'),
+                            partnerAgencyContactName: $tr.attr('data-partnerAgencyContactName'),
+                            partnerAgencyContactId: $tr.attr('data-partnerAgencyContactId'),
+                            adultCount: $tr.attr('data-adultCount'),
+                            adultPrice: $tr.attr('data-adultPrice'),
+                            childCount: $tr.attr('data-childCount'),
+                            childPrice: $tr.attr('data-childPrice')
+                        },
+                        id = {
+                            id: id
+                        };
+                    //选中报价后带出数据组装
+                    chooseQuotObj = chooseQuot;
+                    ids.push(id);
+                }
+            });
+            //带出线路产品、出游日期、客户来源、同行联系人、费用项的结算价的数量和单价、自动计算应收
+            if (!!ids && ids.length > 0) {
+                $addTabId.find('.T-quoteNumber').val(chooseQuotObj.quoteNumber);
+                $addTabId.find('.T-quoteId').val(chooseQuotObj.quoteId);
+                $addTabId.find('.T-lineProductId').val(chooseQuotObj.lineProducId);
+                $addTabId.find('.T-lineProductIdName').val(chooseQuotObj.lineProductName);
+                $addTabId.find('.T-startTime').val(chooseQuotObj.startTime);
+                $addTabId.find('.T-fromPartnerAgencyName').val(chooseQuotObj.fromPartnerAgencyName);
+                $addTabId.find('.T-fromPartnerAgencyId').val(chooseQuotObj.fromPartnerAgencyId);
+                $addTabId.find('.T-partnerAgencyNameList').val(chooseQuotObj.partnerAgencyContactName);
+                $addTabId.find('.T-partnerAgencyContactId').val(chooseQuotObj.partnerAgencyContactId);
+                $addTabId.find('.T-adultCount').val(chooseQuotObj.adultCount);
+                $addTabId.find('.T-adultPrice').val(chooseQuotObj.adultPrice);
+                $addTabId.find('.T-childCount').val(chooseQuotObj.childCount);
+                $addTabId.find('.T-childPrice').val(chooseQuotObj.childPrice).trigger('change');
+                $addTabId.find('.T-quoteNumber', '.T-lineProductId', '.T-lineProductIdName', '.T-startTime', '.T-fromPartnerAgencyName', '.T-fromPartnerAgencyId').prop("readonly", true);
+                $addTabId.find('.T-partnerAgencyNameList', '.T-partnerAgencyContactId').prop("readonly", true);
+                //选择报价设置数据
+                //touristGroup.setQuoteData($form,data);
+
+                layer.close(touristGroup.chooseQuoteProlayer);
+
+            } else {
+                showMessageDialog($("#confirm-dialog-message"), "请选择报价线路产品", function() {});
+            };
+        });
+    };
+
+    //查看小组信息
+    touristGroup.viewTouristGroupDetails = function(id) {
+        $.ajax({
+            url: touristGroup.url("viewTouristGroupDetails", "view"),
+            data: "id=" + id,
+            type: 'POST',
+            success: function(data) {
+                var result = showDialog(data);
+                if (result) {
+                    var touristGroupInfo = JSON.parse(data.touristGroupDetail);
+                    data.touristGroupDetail = touristGroupInfo;
+                    var html = viewTemplate(data);
+                    Tools.addTab(viewTabId, "查看小组", html);
+                    var $viewTabId = $("#tab-resource_touristGroup-view-content"),
+                        $groupInfoForm = $viewTabId.find(".T-touristGroupMainForm"); //小组信息对象
+                    $groupMemberForm = $viewTabId.find(".T-touristGroupMainFormMember"); //游客名单对象
+                    $innerTransferForm = $viewTabId.find(".T-touristGroupMainFormRS"); //中转安排对象
+                    //接送安排
+                    touristGroup.innerTransferDispose($innerTransferForm, 2);
+                    //游客的序号
+                    touristGroup.memberNumber($groupMemberForm);
+                }
+            }
+        });
+    };
+    //删除小组
+    touristGroup.deleteGroup = function(id) {
+        $.ajax({
+            url: touristGroup.url("deleteTouristGroup", "delete"),
+            data: "id=" + id,
+            type: 'POST',
+            success: function(data) {
+                var result = showDialog(data);
+                if (result) {
+                    showMessageDialog($("#confirm-dialog-message"), data.message, function() {
+                        touristGroup.listTouristGroup(touristGroup.args);
+                    });
+                }
+            }
+        });
+    };
+    //切换tab页面自动提示
+    touristGroup.init_CRU_event = function($tab, id, typeFlag) {
+        if (!!$tab && $tab.length === 1) {
+            // 监听修改
+            $tab.on('change', function(event) {
+                    event.preventDefault();
+                    $tab.data('isEdited', true);
+                })
+                // 监听保存，并切换tab
+                .on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
+                    event.preventDefault();
+                    if (!touristGroup.validator.form()) {
+                        return;
+                    }
+                    touristGroup.installData($tab, id, typeFlag, [tab_id, title, html]);
+                })
+                .on(SWITCH_TAB_BIND_EVENT, function(event, tab_id, title, html) {
+                    event.preventDefault();
+                    Tools.addTab(tab_id, title, html);
+                    //通过typeFlag来判断；1--新增的事件绑定；2--修改的事件绑定
+                    if (typeFlag == 2) {
+                        touristGroup.updateEvents();
+                    } else {
+                        touristGroup.addEvents();
+                    }
+                })
+                // 保存后关闭
+                .on(CLOSE_TAB_SAVE, function(event) {
+                    event.preventDefault();
+                    if (!touristGroup.validator.form()) {
+                        return;
+                    }
+                    touristGroup.installData($tab, id, typeFlag);
+                });
+        }
+    };
+    //处理小组信息
+    touristGroup.groupInfoDispose = function($obj, typeFlag ,typeInner) {
+        //格式化时间控件
+        touristGroup.formatTime($obj);
+        //搜索线路
+        $obj.find(".T-travelLine-search").on('click', function() {
+            // touristGroup.searchLinproduct(true,0,"",typeFlag);
+            touristGroup.initLineProductSearch(typeFlag == 2, typeInner);
+        });
+        //客户来源
+        var $partnerAgencyObj = $obj.find('input[name=fromPartnerAgency]');
+        touristGroup.getPartnerAgencyList($partnerAgencyObj);
+        //同行联系人
+        var $contactObj = $obj.find('input[name=partnerAgencyNameList]');
+        touristGroup.getContactList($contactObj);
+        //新增同行联系人
+        $obj.find('.T-addPartnerManager').on('click', function() {
+            touristGroup.addPartnerManager($(this));
+        });
+        //新增费用项
+        $obj.find('.T-touristGroup-addOtherCost').on('click', function() {
+            touristGroup.addOtherCost($obj);
+            touristGroup.validator = rule.checktouristGroup($obj);
+        });
+        //删除原有费用项
+        if (typeFlag == 2) {
+            //addCost-delete
+            $obj.find(".T-addCostTbody").on('click', ".oldaddCost-delete", function() {
+                $tr = $(this).closest('tr');
+                var costListTrId = $tr.attr("data-entity-id");
+                if (costListTrId != null && costListTrId != "") {
+                    $tr.addClass("deleted");
+                    $tr.fadeOut(function() {
+                        $(this).hide();
+                        touristGroup.autoSumNeedPay($obj);
+                    })
+                    touristGroup.autoSumNeedPay($obj);
+                };
+            });
+        };
+        //计算应收，未收
+        $obj.find('input[name=payedMoney]').on('change', function() {
+            touristGroup.autoSumNeedPay($obj);
+        });
+        $obj.find('input[name=currentNeedPayMoney]').on('change', function() {
+            touristGroup.autoSumNeedPay($obj);
+        });
+        $obj.find(".T-addCostTbody").on('change', 'input', function() {
+            touristGroup.autoSumNeedPay($obj);
+        })
+    };
+    //处理游客名单
+    touristGroup.groupMemberDispose = function($obj, typeFlag) {
+        //添加成员
+        $obj.find('.T-add-tourist').on('click', function() {
+            touristGroup.addVisotor($obj);
+            touristGroup.validator = rule.checktouristGroup($obj);
+        });
+        //批量添加
+        $obj.find('.T-add-tourist-more').on('click', function() {
+            touristGroup.addVisotorMore($obj);
+            touristGroup.validator = rule.checktouristGroup($obj);
+        });
+        //删除原有游客
+        if (typeFlag == 2) {
+            $obj.find(".oldbtnDeleteTourist").on('click', function() {
+                var $tr = $(this).closest('tr');
+                var touristListTrId = $tr.attr("data-entity-id");
+                if (touristListTrId != null && touristListTrId != "") {
+                    $tr.addClass("deleted");
+                    $tr.fadeOut(function() {
+                        $(this).hide();
+                    })
+                }
+            });
+        };
+    };
+    //处理中转
+    touristGroup.innerTransferDispose = function($obj, typeFlag) {
+        //接团
+        var $reception = $obj.find('input[name=touristReception]');
+        $reception.on('click', function() {
+            touristGroup.checkInnerValidator = rule.checkInnerTransfer($obj);
+            var $showFlag = $reception.is(":checked");
+            if ($showFlag) {
+                $obj.find('.T-reception-div').removeClass("hide");
+            } else {
+                $obj.find('.T-reception-div').addClass("hide");
+            }
+        });
+        //送团
+        var $send = $obj.find('input[name=touristSend]');
+        $send.on('click', function() {
+            touristGroup.checkInnerValidator = rule.checkInnerTransfer($obj);
+            var $showFlag = $send.is(":checked");
+            if ($showFlag) {
+                $obj.find('.T-send-div').removeClass("hide");
+            } else {
+                $obj.find('.T-send-div').addClass("hide");
+            }
+        });
+        if (typeFlag == 2) {
+
+            var $reception = $obj.find('input[name=touristReception]'); //接团
+            var $send = $obj.find('input[name=touristSend]'); //送团
+            var $receptionFlag = $reception.is(":checked");
+            if ($receptionFlag == true) {
+
+                $obj.find('.T-reception-div').removeClass("hide");
+            } else {
+                $obj.find('.T-reception-div').addClass("hide");
+            }
+            var $sendFlag = $send.is(":checked");
+            if ($sendFlag == true) {
+
+                $obj.find('.T-send-div').removeClass("hide");
+            } else {
+                $obj.find('.T-send-div').addClass("hide");
+            }
+        }
+        //格式化时间
+        touristGroup.formatTime($obj);
+    };
+
+   
+
+
 
     /**
      * 用报价产品信息，初始化小组页面
@@ -796,7 +1145,8 @@ define(function(require, exports) {
             'adultCount',
             'adultPrice',
             'childCount',
-            'childPrice'
+            'childPrice',
+            'quoteNumber'
         ];
 
         names.forEach(function(name) {
@@ -898,6 +1248,7 @@ define(function(require, exports) {
             '<td>' + '</td>' +
             '<td><input name="name" type="text" class="col-sm-12  no-padding-right" /></td>' +
             '<td><input name="mobileNumber" type="text" class="col-sm-12  no-padding-right T-mobileNumber"  maxlength="11"  /></td>' +
+            '<td><input name="mobileNumber" type="text" class="col-sm-12  no-padding-right"  maxlength="11"  /></td>' +
             '<td><select name="idCardType" value="idCardTypeId"><option value="0" selected="selected">身份证</option><option value="1">护照</option><option value="2">其它</option></select></td>' +
             '<td><input name="idCardNumber" type="text" class="col-sm-12  no-padding-right" /></td>' +
             '<td><div class="checkbox"><label><input type="checkbox" class="ace " value="1" name="isContactUser"><span class="lbl"></span></label></div></td>' +
@@ -1167,6 +1518,7 @@ define(function(require, exports) {
             }
         });
     };
+
     //刷新数据合计
     touristGroup.freshHeader = function($args) {
         $.ajax({
@@ -1189,6 +1541,7 @@ define(function(require, exports) {
             }
         });
     };
+
     //获取组团社的数据
     touristGroup.getPartnerAgencyList = function($obj) {
         $.ajax({
@@ -1705,7 +2058,7 @@ define(function(require, exports) {
                                     $touristSend = $arrangeForm.find('.T-touristSend').is(':checked');
                                 if (!!typeInner && ($touristReChecked == true || $smallCar == true || $touristSend == true)) {
                                     // 内外转确认之后，在游客小组选择了中转，需要调整到中转安排的列表界面
-                                    KingServices.updateTransit(touristGroup.touristGroupId);
+                                    KingServices.updateTransit(touristGroup.visitorId);
                                 } else {
                                     touristGroup.freshHeader(touristGroup.$freshData);
                                     //刷新列表数据
@@ -1809,4 +2162,5 @@ define(function(require, exports) {
     exports.updateTransferIn = touristGroup.updateTransferIn;
     exports.updateTransfer = touristGroup.updateTransfer;
 
+    exports.viewTouristGroup = touristGroup.viewTouristGroupDetails;
 });

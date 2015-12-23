@@ -13,7 +13,12 @@ define(function(require, exports) {
 		addTemplate = require("./view/add"),
 		viewTemplate = require("./view/view"),
 		addOptionalTemplate = require("./view/addOptional"),
-		optionalListTemplate = require("./view/optionalList");
+		optionalListTemplate = require("./view/optionalList"),
+		expiryTimeTemplate = require("./view/expiryTime"),
+		hotelInquiryResultTemplate = require("./view/hotelInquiryResult"),
+		hotelbookingViewTemplate = require("./view/hotelbookingView"),
+		busInquiryResultTemplate = require("./view/busInquiryResult"),
+		busbookingViewTemplate = require("./view/busbookingView");
 	/**
 	 * 自定义发团安排对象
 	 * @type {Object}
@@ -400,6 +405,91 @@ define(function(require, exports) {
 				tripPlan.addOther($this, validator, $tab);
 			}
 		});
+		//车队询价、预订操作
+		$tab.find('#tripPlan_addPlan_bus').off('click.busAction').on('click.busAction', '.T-bus-action', function(event) {
+			event.preventDefault();
+			var $this = $(this),
+				$parents = $this.closest('tr');
+				saveJson = {
+					brand: $parents.find('[name=brand]').val(),
+					busCompanyId: $parents.find('[name=busCompanyId]').val(),
+					needSeatCount: $parents.find('[name=needSeatCount]').val(),
+					tripPlanId: $tab.find('[name=tripPlanId]').val(),
+					arrangeId: $parents.data('entity-arrangeid')
+				}
+			if ($this.hasClass('T-bus-askPrice')) {
+				//询价
+				tripPlan.busAskPrice($this, $tab, saveJson);
+			}else if ($this.hasClass('T-bus-booking')) {
+				//预订
+				tripPlan.busBooking($this, $tab, saveJson);
+			}else if ($this.hasClass('T-bus-offerStatus')) {
+				//询价状态
+				tripPlan.busOfferStatus($this, $tab, saveJson);
+			}else if ($this.hasClass('T-bus-bookingView')) {
+				//预订查询
+				tripPlan.busBookingView($this, $tab, saveJson);
+			}
+		});
+		//酒店询价、预订操作
+		$tab.find('#tripPlan_addPlan_hotel').off('click.hotelAction').on('click.hotelAction', '.T-hotel-action', function(event) {
+			event.preventDefault();
+			var	$this = $(this),
+				$parents = $this.closest('tr'),
+				saveJson = { 
+				arrangeId: $parents.data('entity-arrangeid'),
+				count: $parents.find('[name=memberCount]').val(),
+				hotelId: $parents.find('[name=hotelId]').val(),
+				price: $parents.find('[name=fee]').val(),
+				tripPlanId: $tab.find('[name=tripPlanId]').val(),
+				type: $parents.find('[name=hotelRoom]').val(),
+				whichDay: $parents.find('[name=whichDay]').val(),
+				hotelRoomId: $parents.find('[name=hotelRoomId]').val()
+			}
+			if ($this.hasClass('T-hotel-askPrice')) {
+				//询价
+				tripPlan.hotelAskPrice($this, $tab, saveJson)
+			}else if ($this.hasClass('T-hotel-booking')) {
+				//预订
+				tripPlan.hotelBooking($this, $tab, saveJson)
+			}else if ($this.hasClass('T-hotel-offerStatus')) {
+				//询价状态
+				tripPlan.hotelOfferStatus($this, $tab, saveJson);
+			}else if ($this.hasClass('T-hotel-bookingView')) {
+				//预订查询
+				tripPlan.hotelBookingView($this, $tab, saveJson);
+			}
+		});
+		//一键询价、预订操作
+		$tab.find('#tripPlan_addPlan_hotel').off('click.oneClick').on('click.oneClick', '.T-oneClick', function() {
+			event.preventDefault();
+			var $this = $(this),
+				saveJson = {
+					tripPlanId : $tab.find('[name=tripPlanId]').val(),
+					hotelJson: []
+				}
+				var $tr = $tab.find('#tripPlan_addPlan_hotel tbody tr');
+				$tr.each(function(i) {
+					var json = {
+						arrangeId: $tr.data('entity-arrangeid'),
+						count: $tr.find('[name=memberCount]').val(),
+						hotelId: $tr.find('[name=hotelId]').val(),
+						price: $tr.find('[name=fee]').val(),
+						type: $tr.find('[name=hotelRoom]').val(),
+						whichDay: $tr.find('[name=whichDay]').val(),
+						hotelRoomId: $tr.find('[name=hotelRoomId]').val()
+					}
+				saveJson.hotelJson.push(json);
+				});
+			if ($this.hasClass('T-asking')) {
+				//一键询价
+				tripPlan.oneClickAsking($this, $tab, saveJson);
+			}else if ($this.hasClass('T-booking')) {
+				//一键预订
+				tripPlan.oneClickBooking($this, $tab, saveJson);
+			}
+		})
+
 		//精度控件 
 		var $price = $tab.find('.price');
 		Tools.inputCtrolFloat($price);
@@ -409,7 +499,7 @@ define(function(require, exports) {
 		tripPlan.setChooseDays();
 		//删除操作
 		$tab.on('click', '.T-btn-deleteTripPlanList', function() {
-			var $this = $(this), $id = $this.data('entity-id'),
+			var $this = $(this),$parents = $this.closest('tr'), $id = $parents.data('entity-arrangeid'),
 				$name = $this.data('entity-name')
 			tripPlan.deleteTripPlan($this, $id, $name, $tab);
 		});
@@ -428,6 +518,323 @@ define(function(require, exports) {
 			 }
 			tripPlan.submitTripPlan($tab,0,$id);
 		});  
+	};
+
+
+	/**
+	 * 车队询价操作
+	 * @param  {[type]} $this    [按钮]
+	 * @param  {[type]} $tab     [页面容器]
+	 * @param  {[type]} saveJson [参数对象]
+	 */
+	tripPlan.busAskPrice = function($this, $tab, saveJson) {
+		var html = expiryTimeTemplate();
+		tripPlan.$expiryTimeLayer = layer.open({
+		    type: 1,
+		    title:"询价截止时间",
+		    skin: 'layui-layer-rim', //加上边框
+		    area: '500px', //宽高
+		    zIndex:1028,
+		    content: html,
+		    scrollbar: false,
+		    success:function(){
+
+				var $container = $(".T-tripPlanExpiryTimeLayer");
+				tripPlan.dateTimePicker($container);
+		    	//提交事件
+		    	$container.find(".T-btn-submit-expiryTime").off('click').on("click",function() {
+		    		saveJson.expiryTime = $container.find('[name=expiryTime]').val();
+		    		if (!!saveJson.expiryTime) {
+						$.ajax({
+							url: KingServices.build_url('busInquiry','saveBusArrangeInquiry'),
+							type: 'POST',
+							data: {saveJson: JSON.stringify(saveJson)},
+							success: function(data) {
+								if (showDialog(data)) {
+									showMessageDialog($( "#confirm-dialog-message" ), data.message);
+									layer.close(tripPlan.$expiryTimeLayer);
+								}
+							}
+						})
+					}else{
+						showMessageDialog($( "#confirm-dialog-message" ), '请选择询价截止时间');
+					}
+		    	});
+		    }
+		})
+	};
+
+	/**
+	 * 车队预订操作
+	 * @param  {[type]} $this    [按钮]
+	 * @param  {[type]} $tab     [页面容器]
+	 * @param  {[type]} saveJson [参数对象]
+	 */
+	tripPlan.busBooking = function($this, $tab, saveJson) {
+		$.ajax({
+			url: KingServices.build_url('busInquiry','saveBusArrangeOrder'),
+			type: 'POST',
+			data: {saveJson: JSON.stringify(saveJson)},
+			success: function(data) {
+				if (showDialog(data)) {
+					showMessageDialog($( "#confirm-dialog-message" ), data.message);
+					$this.closest('tr').find('[name=busOrder]').val(2);
+				}
+			}
+		})
+	};
+
+	/**
+	 * 酒店询价操作
+	 * @param  {[type]} $this    [按钮]
+	 * @param  {[type]} $tab     [页面容器]
+	 * @param  {[type]} saveJson [参数对象]
+	 */
+	tripPlan.hotelAskPrice = function($this, $tab, saveJson) {
+		var html = expiryTimeTemplate();
+		tripPlan.$expiryTimeLayer = layer.open({
+		    type: 1,
+		    title:"询价截止时间",
+		    skin: 'layui-layer-rim', //加上边框
+		    area: '500px', //宽高
+		    zIndex:1028,
+		    content: html,
+		    scrollbar: false,
+		    success:function(){
+
+				var $container = $(".T-tripPlanExpiryTimeLayer");
+				tripPlan.dateTimePicker($container);
+		    	//提交事件
+		    	$container.find(".T-btn-submit-expiryTime").off('click').on("click",function() {
+		    		saveJson.expiryTime = $container.find('[name=expiryTime]').val();
+		    		if (!!saveJson.expiryTime) {
+						$.ajax({
+							url: KingServices.build_url('hotelInquiry','saveHotelArrangeInquiry'),
+							type: 'POST',
+							data: {saveJson: JSON.stringify(saveJson)},
+							success: function(data) {
+								if (showDialog(data)) {
+									showMessageDialog($( "#confirm-dialog-message" ), data.message);
+									layer.close(tripPlan.$expiryTimeLayer);
+								}
+							}
+						})
+					}else{
+						showMessageDialog($( "#confirm-dialog-message" ), '请选择询价截止时间');
+					}
+		    	});
+		    }
+		})	
+	};
+
+	/**
+	 * 酒店预订操作
+	 * @param  {[type]} $this    [按钮]
+	 * @param  {[type]} $tab     [页面容器]
+	 * @param  {[type]} saveJson [参数对象]
+	 */
+	tripPlan.hotelBooking = function($this, $tab, saveJson) {
+		$.ajax({
+			url: KingServices.build_url('hotelInquiry','saveHotelArrangeOrder'),
+			type: 'POST',
+			data: {saveJson: JSON.stringify(saveJson)},
+			success: function(data) {
+				if (showDialog(data)) {
+					showMessageDialog($( "#confirm-dialog-message" ), data.message);
+				}
+			}
+		})
+	}
+
+	/**
+	 * 酒店询价状态
+	 * @param  {[type]} $this    [按钮]
+	 * @param  {[type]} $tab     [页面容器]
+	 * @param  {[type]} saveJson [参数对象]
+	 */
+	tripPlan.hotelOfferStatus = function($this, $tab, saveJson) {
+		$.ajax({
+			url: KingServices.build_url('hotelInquiry','listHotelArrangeInquiry'),
+			type: 'POST',
+			data: {searchJson: JSON.stringify(saveJson)},
+			success: function(data) {
+				if (showDialog(data)) {
+					data.mapList = JSON.parse(data.mapList);
+					var html = hotelInquiryResultTemplate(data);
+					tripPlan.$hotelOfferLayer = layer.open({
+					    type: 1,
+					    title:"查看酒店询价状态",
+					    skin: 'layui-layer-rim', //加上边框
+					    area: '1190px', //宽高
+					    zIndex:1028,
+					    content: html,
+						scrollbar: false,    // 推荐禁用浏览器外部滚动条
+					    success:function(data){
+
+					    }
+				    });
+				}
+			}
+		})
+	};
+
+	/**
+	 * 车队询价状态
+	 * @param  {[type]} $this    [按钮]
+	 * @param  {[type]} $tab     [页面容器]
+	 * @param  {[type]} saveJson [参数对象]
+	 */
+	tripPlan.busOfferStatus = function($this, $tab, saveJson) {
+		$.ajax({
+			url: KingServices.build_url('busInquiry','listBusArrangeInquiry'),
+			type: 'POST',
+			data: {searchJson: JSON.stringify(saveJson)},
+			success: function(data) {
+				if (showDialog(data)) {
+					data.mapList = JSON.parse(data.mapList);
+					var html = busInquiryResultTemplate(data);
+					tripPlan.$busOfferLayer = layer.open({
+					    type: 1,
+					    title:"查看车队询价状态",
+					    skin: 'layui-layer-rim', //加上边框
+					    area: '1190px', //宽高
+					    zIndex:1028,
+					    content: html,
+						scrollbar: false,    // 推荐禁用浏览器外部滚动条
+					    success:function(data){
+
+					    }
+				    });
+				}
+			}
+		})
+	};
+
+	/**
+	 * 酒店预订查看
+	 * @param  {[type]} $this    [按钮]
+	 * @param  {[type]} $tab     [页面容器]
+	 * @param  {[type]} saveJson [参数对象]
+	 */
+	tripPlan.hotelBookingView = function($this, $tab, saveJson) {
+		$.ajax({
+			url: KingServices.build_url('hotelInquiry','listHotelArrangeOrder'),
+			type: 'POST',
+			data: {searchJson: JSON.stringify(saveJson)},
+			success: function(data) {
+				if (showDialog(data)) {	
+					data.hotelOrderJson = JSON.parse(data.hotelOrderJson);
+					var html = hotelbookingViewTemplate(data);
+					tripPlan.$hotelBookingViewLayer = layer.open({
+					    type: 1,
+					    title:"安排查看住宿订单查询",
+					    skin: 'layui-layer-rim', //加上边框
+					    area: '1190px', //宽高
+					    zIndex:1028,
+					    content: html,
+						scrollbar: false,    // 推荐禁用浏览器外部滚动条
+					    success:function(data){
+
+					    }
+				    });
+				}
+			}
+		})
+	};
+
+	/**
+	 * 车队预订查看
+	 * @param  {[type]} $this    [按钮]
+	 * @param  {[type]} $tab     [页面容器]
+	 * @param  {[type]} saveJson [参数对象]
+	 */
+	tripPlan.busBookingView = function($this, $tab, saveJson) {
+		$.ajax({
+			url: KingServices.build_url('busInquiry','listBusArrangeOrder'),
+			type: 'POST',
+			data: {searchJson: JSON.stringify(saveJson)},
+			success: function(data) {
+				if (showDialog(data)) {	
+					data.busOrderJson = JSON.parse(data.busOrderJson);
+					var html = busbookingViewTemplate(data);
+					tripPlan.$busBookingViewLayer = layer.open({
+					    type: 1,
+					    title:"安排查看车队订单查询",
+					    skin: 'layui-layer-rim', //加上边框
+					    area: '1190px', //宽高
+					    zIndex:1028,
+					    content: html,
+						scrollbar: false,    // 推荐禁用浏览器外部滚动条
+					    success:function(data){
+
+					    }
+				    });
+				}
+			}
+		})
+	};
+
+	/**
+	 * 一键询价
+	 * @param  {[type]} $this    [按钮]
+	 * @param  {[type]} $tab     [页面容器]
+	 * @param  {[type]} saveJson [参数对象]
+	 */
+	tripPlan.oneClickAsking = function($this, $tab, saveJson) {
+		var html = expiryTimeTemplate();
+		tripPlan.$expiryTimeLayer = layer.open({
+		    type: 1,
+		    title:"询价截止时间",
+		    skin: 'layui-layer-rim', //加上边框
+		    area: '500px', //宽高
+		    zIndex:1028,
+		    content: html,
+		    scrollbar: false,
+		    success:function(){
+
+				var $container = $(".T-tripPlanExpiryTimeLayer");
+				tripPlan.dateTimePicker($container);
+		    	//提交事件
+		    	$container.find(".T-btn-submit-expiryTime").off('click').on("click",function() {
+		    		saveJson.expiryTime = $container.find('[name=expiryTime]').val();
+		    		if (!!saveJson.expiryTime) {
+						$.ajax({
+							url: KingServices.build_url('hotelInquiry','keySaveHotelArrangeInquiry'),
+							type: 'POST',
+							data: {saveJson: JSON.stringify(saveJson)},
+							success: function(data) {
+								if (showDialog(data)) {
+									showMessageDialog($( "#confirm-dialog-message" ), data.message);
+									layer.close(tripPlan.$expiryTimeLayer);
+								}
+							}
+						})
+					}else{
+						showMessageDialog($( "#confirm-dialog-message" ), '请选择询价截止时间');
+					}
+		    	});
+		    }
+		})	
+	};
+
+
+	/**
+	 * 一键预订
+	 * @param  {[type]} $this    [按钮]
+	 * @param  {[type]} $tab     [页面容器]
+	 * @param  {[type]} saveJson [参数对象]
+	 */
+	tripPlan.oneClickBooking = function($this, $tab, saveJson){
+		$.ajax({
+			url: KingServices.build_url('hotelInquiry','keySaveHotelArrangeOrder'),
+			type: 'POST',
+			data: {saveJson : JSON.stringify(saveJson)},
+			success: function(data) {
+				if (showDialog(data)) {
+					showMessageDialog($( "#confirm-dialog-message" ), data.message);
+				}
+			}
+		})
 	};
 
 	//添加资源 
@@ -512,7 +919,9 @@ define(function(require, exports) {
 		'<td><select name="payType" class="col-sm-12 no-padding" style="width:55px;"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>' +
 		'<td><input type="text" class="col-sm-12" name="guidePayMoney" style="width: 60px;" maxlength="9"/></td>' +
 		'<td><input type="text" class="col-sm-12" name="remark" maxlength="500"/></td>' +
-		'<td><a class="cursor T-btn-deleteTripPlanList" title="删除">删除</a></td></tr>';
+		'<td><select><option value="0">未预定</option><option value="1">预定中</option><option value="2">已预订</option><option value="3">无需预订</option></select></td>'+
+		'<td><a class="cursor T-hotel-action T-hotel-askPrice">询价</a><a class="cursor T-hotel-action T-hotel-offerStatus"><i class="ace-icon fa fa-search"></i></a>'+
+		'<a class="cursor T-hotel-action T-hotel-bookingStatus" style="color: #bbb">预订</a><a class="cursor T-hotel-action T-hotel-bookingView"><i class="ace-icon fa fa-search"></i></a><a class="cursor T-hotel-action T-btn-deleteTripPlanList" title="删除">删除</a></td></tr>';
 
 		tableContainer.append(filterUnAuth(html));
 		//精度控件
@@ -797,6 +1206,7 @@ define(function(require, exports) {
 					$parents.find('[name=insuranceId]').val('');
 					$parents.find('[name=type]').val('');
 					$parents.find('[name=typeId]').val('');
+					$parents.find('[name=price]').val('');
 				}
 			},
 			select: function(event,ui){
@@ -805,6 +1215,7 @@ define(function(require, exports) {
 				$parents.find('[name=insuranceId]').val(ui.item.id);
 				$parents.find('[name=type]').val('');
 				$parents.find('[name=typeId]').val('');
+				$parents.find('[name=price]').val('');
 			}
 		}).off("click").on("click", function(){
 			var $this = $(this);
@@ -826,6 +1237,57 @@ define(function(require, exports) {
                 }
             });
 		});
+
+		var $item = $tab.find(".T-chooseInsuranceType");
+		$item.autocomplete({
+			minLength: 0,
+			change: function(event, ui) {
+					if(ui.item == null){
+					var $this = $(this), $parents = $this.closest('tr');
+					$this.val('')
+					$parents.find('[name=typeId]').val('');
+					$parents.find('[name=price]').val('');
+				}
+			},
+			select: function(event, ui) {
+				var $this = $(this), $parents = $this.closest('tr');
+				$parents.find('[name=typeId]').val(ui.item.id).trigger('click');
+				$parents.find('[name=price]').val(ui.item.price);
+			}
+		}).off('click').on('click', function() {
+			var $this = $(this), $parents =$this.closest('tr'),
+				$id = $parents.find('[name=insuranceId]').val();
+			if (!!$id) {
+				$.ajax({
+					url: KingServices.build_url('insurance','selectInsuranceItem'),
+					type: 'POST',
+					showLoading:false,
+					data: {id: $id},
+					success: function(data) {
+						if (showDialog(data)) {
+							var $list = JSON.parse(data.insuranceItem);
+							if ($list != null && $list.length > 0) {
+								for (var i = 0; i < $list.length; i++) {
+									$list[i].value = $list[i].name;
+								}
+							}else{
+								layer.tips('没有内容', $this, {
+								    tips: [1, '#3595CC'],
+								    time: 2000
+								});
+							}
+							$this.autocomplete('option','source', $list);
+							$this.autocomplete('search', '');
+						}
+					}
+				})
+			}else{
+				layer.tips('请选择保险公司', $this, {
+				    tips: [1, '#3595CC'],
+				    time: 2000
+				});
+			}
+		})
 	}
 	
 	//餐厅autocomplete
@@ -1661,11 +2123,10 @@ define(function(require, exports) {
 				tripPlan.plusPrice($(this), $tab);
 			});
 			$this.find("select[name=payType]").on("change", function(){
-				var $type = $(this);
-				if($type.val()!=0){
+				if($(this).val()!=0){
 					$parents.find("input[name=guidePayMoney]").val("");
 				}else{
-					tripPlan.plusPrice($type, $tab);
+					tripPlan.plusPrice($(this), $tab);
 				}
 			});
 
@@ -1741,6 +2202,7 @@ define(function(require, exports) {
 						id : tripPlan.getVal(insur.eq(i), "id"),
 						insuranceId : tripPlan.getVal(insur.eq(i), "insuranceId"),
 						type : tripPlan.getVal(insur.eq(i), "type"),
+						typeId: tripPlan.getVal(insur.eq(i), "typeId"),
 						price : tripPlan.getVal(insur.eq(i), "price"),
 						memberCount : tripPlan.getVal(insur.eq(i), "memberCount"),
 						needPayMoney : tripPlan.getVal(insur.eq(i), "needPayMoney"),
@@ -1783,6 +2245,7 @@ define(function(require, exports) {
 						payType : tripPlan.getVal(bus.eq(i), "payType"),
 						guidePayMoney : tripPlan.getVal(bus.eq(i), "guidePayMoney"),
 						remark : tripPlan.getVal(bus.eq(i), "remark"),
+						orderStatus: tripPlan.getVal(bus.eq(i), "busOrder")
 					}
 					tripPlanJson.busCompanyArrange = busJson;
 					guideAllPayMoney += tripPlan.checkParamIsDouble(busJson.guidePayMoney);
@@ -1844,6 +2307,7 @@ define(function(require, exports) {
 						payType : tripPlan.getVal(hotel.eq(i), "payType"),
 						guidePayMoney : tripPlan.getVal(hotel.eq(i), "guidePayMoney"),
 						remark : tripPlan.getVal(hotel.eq(i), "remark"),
+						orderStatus: tripPlan.getVal(hotel.eq(i), "hotelOrder")
 					}
 					tripPlanJson.hotelArrangeList.push(hotelJson);
 					guideAllPayMoney += tripPlan.checkParamIsDouble(hotelJson.guidePayMoney);

@@ -64,11 +64,8 @@ define(function(require, exports) {
 					if(result){
 						transfer.allData.lineProduct1 = JSON.parse(data.lineProduct1);
 						transfer.allData.lineProduct2 = JSON.parse(data.lineProduct2);
-						transfer.allData.partnerAgency = JSON.parse(data.partnerAgency);
+						transfer.allData.partnerAgency = JSON.parse(data.partnerAgency1);
 						transfer.allData.partnerAgency2 = JSON.parse(data.partnerAgency2);
-						transfer.allData.touristGroup1 = JSON.parse(data.touristGroup1);
-						transfer.allData.touristGroup2 = JSON.parse(data.touristGroup2);
-						transfer.allData.travelAgency = JSON.parse(data.travelAgency);
 						transfer.allData.user1 = JSON.parse(data.user1);
 						transfer.allData.user2 = JSON.parse(data.user2);
 

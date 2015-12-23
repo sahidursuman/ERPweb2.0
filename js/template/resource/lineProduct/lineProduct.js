@@ -13,10 +13,12 @@ define(function(require, exports) {
 		viewDetailTemplate = require("./view/viewDetail"),
 		addQouteTemplate = require("./view/addQoute"),
 		updateLineProductTemplate = require("./view/updateLineProduct"),
-	
+		tabId = "tab-"+menuKey+"-content";
 		// 主体对象
-		ResLineProduct = {};
-
+	var ResLineProduct = {
+		autocompleteDate:{}
+	};
+		
 	// 声明全局变量
 	ResLineProduct.$tab = false;
 	ResLineProduct.updateLineProductIndex = 0;
@@ -27,7 +29,7 @@ define(function(require, exports) {
 	 * @return {[type]} [description]
 	 */
 	ResLineProduct.initModule = function() {
-		ResLineProduct.getProductList(0, '', 1);
+		ResLineProduct.getProductList(0,'','','', 1);
 	};
 
 	/**
@@ -37,9 +39,11 @@ define(function(require, exports) {
 	 * @param  {[type]} status [description]
 	 * @return {[type]}        [description]
 	 */
-	ResLineProduct.getProductList = function(page,name,status){
+	ResLineProduct.getProductList = function(page,name,type,customerType,status){
 		if (ResLineProduct.$tab && arguments.length === 1) {
 			name = ResLineProduct.$tab.find('.T-lineproduct-name').val();
+			type = ResLineProduct.$tab.find('.T-lineproduct-type').val();
+			customerType = ResLineProduct.$tab.find('select[name=customerType]').val();
 			status = ResLineProduct.$tab.find('.T-status').children('button').data('value');
 		}
 
@@ -54,6 +58,8 @@ define(function(require, exports) {
 			data: {
 				pageNo: page,
 				name: name,
+				type: type,
+				customerType:customerType,
 				status: status,
 				sortType: 'auto'
 			},
@@ -66,13 +72,15 @@ define(function(require, exports) {
 					lineProductList = JSON.parse(lineProductList);
 					data.lineProductList = lineProductList;
 					var html = listTemplate(data);
+					ResLineProduct.getQueryTerms();
 					Tools.addTab(menuKey,"线路产品管理",html);
 
 					// init $tab
 					ResLineProduct.$tab = $("#tab-"+menuKey+"-content");
+					ResLineProduct.lineProductType(ResLineProduct.$tab);
+					ResLineProduct.needSeatCountS(ResLineProduct.$tab);
 					// init event
 					ResLineProduct.init_event();
-
 					// 绑定翻页组件
 					laypage({
 					    cont: ResLineProduct.$tab.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
@@ -87,7 +95,80 @@ define(function(require, exports) {
 				}
 			}
 		});
+
 	};
+// 线路类型
+	ResLineProduct.lineProductType  = function($obj){
+			var lineProductType = $obj.find(".T-lineproduct-type");
+			lineProductType.autocomplete({
+				minLength:0,
+				select:function(event,ui){
+					
+				},
+				change:function(event,ui){
+					
+				}
+			}).click(function(){
+				var objM = this;
+				var lineObj = ResLineProduct.autocompleteDate.typeList;
+				for(var i = 0;i<lineObj.length;i++){
+					// typeKey赋给value
+					lineObj[i].value = lineObj[i].typeKey;
+				}
+				console.log(lineObj);
+				if(lineObj !=null) {
+					$(objM).autocomplete('option','source', lineObj);
+					$(objM).autocomplete('search', '');
+				}else{
+					layer.tips('无数据', objM, {
+						tips: [1, '#3595CC'],
+						time: 2000
+					});
+				}
+
+			})
+		};
+
+
+		ResLineProduct.needSeatCountS  = function($obj){
+			var needSeatCountS = $obj.find(".T-needSeatCount");
+			needSeatCountS.autocomplete({
+				minLength:0,
+				select:function(event,ui){
+					
+				},
+				change:function(event,ui){
+					
+				}
+			}).unbind("click").click(function(){
+			var obj = this;
+			$.ajax({
+				url: KingServices.build_url('bookingOrder','getSeatCountList'),
+				showLoading: false,
+				success:function(data){
+					if(showDialog(data)){
+						var seatCountListJson = [];
+						var seatCountList = data.seatCountList;
+						if(seatCountList && seatCountList.length > 0){
+							for(var i=0; i < seatCountList.length; i++){
+								var seatCount = {
+									value : seatCountList[i]
+								}
+								seatCountListJson.push(seatCount);
+							}
+							$(obj).autocomplete('option','source', seatCountListJson);
+							$(obj).autocomplete('search', '');
+						}else{
+							layer.tips('无数据', obj, {
+							    tips: [1, '#3595CC'],
+							    time: 2000
+							});
+						}
+					}
+				}
+			})
+		})
+		};
 
 	/**
 	 * 初始化列表页面的绑定
@@ -432,7 +513,7 @@ define(function(require, exports) {
 			 */
 			// 导游
 			ResLineProduct.bindGuideChosen($tab.find('.T-guide-name'), validator);
-			ResLineProduct.bindInsuranceChosen($tab.find('.T-insurance-name'), validator);
+			ResLineProduct.bindInsuranceChosen($tab.find('.T-insurance-name'), $tab.find('.T-chooseInsuranceItem'), validator);
 			ResLineProduct.bindBusCompanyChosen($tab.find('.T-buscompany-name'), validator);
 			ResLineProduct.bindBusDetailChosen($tab.find('.T-licenseNumber'), validator);
 
@@ -449,11 +530,6 @@ define(function(require, exports) {
 	 * @return {[type]}        [description]
 	 */
 	ResLineProduct.bindGuideChosen = function($input, validator) {
-		if (!$input || !$input.length) {
-			console.error('绑定导游的autocomplete，主体Dom为空!');
-			return;
-		}
-
 		$input.autocomplete({
 			minLength:0,
 			change:function(event,ui){
@@ -536,7 +612,7 @@ define(function(require, exports) {
 	 * @param  {object} $input 绑定的Dom
 	 * @return {[type]}        [description]
 	 */
-	ResLineProduct.bindInsuranceChosen = function($input, validator) {
+	ResLineProduct.bindInsuranceChosen = function($input, $item, validator) {
 		if (!$input || !$input.length) {
 			console.error('绑定保险的autocomplete，主体Dom为空!');
 			return;
@@ -548,6 +624,7 @@ define(function(require, exports) {
 					var $tr = $(this).val("").closest('tr');
 					$tr.find("input[name=insuranceId]").val("");
 					$tr.find("input[name=type]").val("");
+					$tr.find("input[name=typeId]").val("");
 					$tr.find("input[name=price]").val("");
 					$tr.find("input[name=telNumber]").val("");
 					$tr.find("input[name=managerName]").val("");
@@ -568,6 +645,9 @@ define(function(require, exports) {
 						if(result){
 							var insurance = JSON.parse(data.insurance), $tr = $that.closest('tr');
 							$tr.find("input[name=insuranceId]").val(insurance.id).trigger('change');
+							$tr.find("input[name=type]").val("");
+							$tr.find("input[name=typeId]").val("");
+							$tr.find("input[name=price]").val("");
 							$tr.find("input[name=telNumber]").val(insurance.telNumber);
 							$tr.find("input[name=managerName]").val(insurance.managerName);
 							$tr.find("input[name=mobileNumber]").val(insurance.telNumber);
@@ -598,6 +678,56 @@ define(function(require, exports) {
 				}
 			});
 		});
+
+		$item.autocomplete({
+			minLength: 0,
+			change: function(event, ui) {
+					if(ui.item == null){
+					var $this = $(this), $parents = $this.closest('tr');
+					$this.val('')
+					$parents.find('[name=typeId]').val('');
+					$parents.find('[name=price]').val('');
+				}
+			},
+			select: function(event, ui) {
+				var $this = $(this), $parents = $this.closest('tr');
+				$parents.find('[name=typeId]').val(ui.item.id).trigger('click');
+				$parents.find('[name=price]').val(ui.item.price);
+			}
+		}).off('click').on('click', function() {
+			var $this = $(this), $parents =$this.closest('tr'),
+				$id = $parents.find('[name=insuranceId]').val();
+			if (!!$id) {
+				$.ajax({
+					url: KingServices.build_url('insurance','selectInsuranceItem'),
+					type: 'POST',
+					showLoading:false,
+					data: {id: $id},
+					success: function(data) {
+						if (showDialog(data)) {
+							var $list = JSON.parse(data.insuranceItem);
+							if ($list != null && $list.length > 0) {
+								for (var i = 0; i < $list.length; i++) {
+									$list[i].value = $list[i].name;
+								}
+							}else{
+								layer.tips('没有内容', obj, {
+								    tips: [1, '#3595CC'],
+								    time: 2000
+								});
+							}
+							$this.autocomplete('option','source', $list);
+							$this.autocomplete('search', '');
+						}
+					}
+				})
+			}else{
+				layer.tips('请选择保险公司', $this, {
+				    tips: [1, '#3595CC'],
+				    time: 2000
+				});
+			}
+		})
 	};
 
 	/**
@@ -1771,6 +1901,7 @@ define(function(require, exports) {
 		travelLineData.insurance = [{
 				id : getValue($form, "templateId"),
 				insuranceId : getValue($form, "insuranceId"),
+				typeId: getValue($form, "typeId"),
 				type : getValue($form, "type"),
 				price : getValue($form, "price"),
 				remark : getValue($form, "remark")
@@ -2119,6 +2250,20 @@ define(function(require, exports) {
 		});
 	};
 
+	ResLineProduct.getQueryTerms = function(){
+			$.ajax({
+				url: KingServices.build_url('lineProduct', 'getQueryTerms'),
+				dateType:"json",
+				type:"POST",
+				success:function(data){
+					var result = showDialog(data);
+					if(result){
+						ResLineProduct.autocompleteDate.typeList = data.typeList;
+
+					}
+				}
+			})
+		};
 	/**
 	 * 解决autocomplete点击sortable区域无法收起的问题
 	 * @param  {object} $tab 区域容器

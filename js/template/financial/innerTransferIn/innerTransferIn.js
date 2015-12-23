@@ -425,7 +425,7 @@ define(function(require,exports) {
         //确认付款
         $obj.find('.T-incomeMoney').off('click').on('click',function(){
         	if(!settleCheck.form()){return;}
-        	InnerTransferIn.saveBlanceData(0,$obj,$listSearchData);
+        	InnerTransferIn.saveBlanceData(0,$obj,$listSearchData,"");
         });
         //关闭事件
         $obj.find(".T-close").on('click',function(event){
@@ -769,10 +769,10 @@ define(function(require,exports) {
                 	tab_id.data('isEdited', false);
                 	showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
                 		
-                		if(argumentsLen == 2){
+                		if(argumentsLen == 3){
                             Tools.closeTab(settleId);
                             InnerTransferIn.listInnerTransfer(0);
-                    	} else if(argumentsLen == 3){
+                    	} else if(argumentsLen == 4){
                     		InnerTransferIn.saveJson = [];
                     		InnerTransferIn.btnSatus = 0;
                             InnerTransferIn.chenking($data,2,"settle");
@@ -830,7 +830,7 @@ define(function(require,exports) {
 			.on(CLOSE_TAB_SAVE, function(event) {
 				event.preventDefault();
 				if(typeFlag == 2){
-					InnerTransferIn.saveBlanceData(0,$tab);
+					InnerTransferIn.saveBlanceData(0,$tab,$listSearchData);
 				}else{
 					InnerTransferIn.saveCheckingData(0,$tab);
 				}

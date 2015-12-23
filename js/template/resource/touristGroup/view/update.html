@@ -8,6 +8,17 @@
 			<div class="widget-body">
 				<div class="widget-main formOneList updateTouristInput" style="margin-left: -15px;">
 					<div class="form-group guideInterval">
+						<div class="col-sm-4" style="width:380px;">
+							<label class=" control-label no-padding-right">
+								<span class="necessary">*</span>
+								报价单号：<input type="text" name="quoteNumber" class="bind-change  T-quoteNumber" readonly="" />
+								<input type="hidden" name="quoteNumberId"  class="T-quoteNumberId" />
+							</label>
+							<button class=" search-btn btn-sm btn-travelLine-search T-ChosenQuoteNumber">
+								<i class="ace-icon fa fa-search "></i>搜索
+							</button>
+						</div>
+
 						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>线路产品:</label>
 						<div class="col-sm-2 update-divWidth">
 							{{if touristGroupDetail.status == 1}}
@@ -88,6 +99,17 @@
 						<div class="col-sm-2 update-divWidth">
 							<input value="{{touristGroupDetail.needPayAllMoney}}" readonly="readonly" type="text" name="needPayAllMoney" class="col-sm-12" />
 	
+						</div>
+
+						<div class="col-sm-2">
+						    <label class="no-padding-right pull-left">收款方式：</label>
+							<select name="incomeType" class="pull-left">
+								<option{{if touristGroupDetail.incomeType == 0}} selected="selected"{{/if}} value="0">现金</option>
+								<option{{if touristGroupDetail.incomeType == 1}} selected="selected"{{/if}} value="1">银行转账</option>
+								<option{{if touristGroupDetail.incomeType == 2}} selected="selected"{{/if}} value="2">网上支付</option>
+								<option{{if touristGroupDetail.incomeType == 3}} selected="selected"{{/if}} value="3">支票</option>
+								<option{{if touristGroupDetail.incomeType == 4}} selected="selected"{{/if}} value="4">其它</option>
+							</select>
 						</div>
 
 						<label class="col-sm-1 control-label no-padding-right">现收:</label>
