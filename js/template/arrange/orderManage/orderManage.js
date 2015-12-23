@@ -643,12 +643,6 @@ define(function(require, exports) {
 			}
 		})
 	};
-
-
-
-
-
-
 	/**
 	 * [init_evet 为页面绑定事件]
 	 * @return {[type]} [description]
@@ -673,9 +667,6 @@ define(function(require, exports) {
 		//tip信息提示
 		Tools.descToolTip(orderManage.$tab.find(".T-ctrl-tip"),1);
 	};
-
-
-
 	/**
 	 * [deleteBusHotelOrder 车队订单的撤销操作]
 	 * @param  {[type]} id 车队或酒店ID
@@ -736,8 +727,6 @@ define(function(require, exports) {
 			}
 		});
 	};
-
-
 
    /**
 	 * 时间控件是初始化
