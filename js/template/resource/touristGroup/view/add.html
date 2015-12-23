@@ -12,7 +12,6 @@
 
 						<div class="col-sm-4" style="width:380px;">
 							<label class=" control-label no-padding-right">
-								<span class="necessary">*</span>
 								报价单号：<input type="text" name="quoteNumber" class="bind-change  T-quoteNumber" readonly="" />
 								<input type="hidden" name="quoteNumberId"  class="T-quoteNumberId" />
 							</label>
@@ -49,8 +48,8 @@
 					</div>
 					<div class="form-group" style="margin-bottom:7px !important;">
 						<div class="col-sm-4">
-							<label class=" control-label no-padding-right" style="margin-left: -8px"><span class="necessary">*</span>客户来源：<input type="text" name="fromPartnerAgency"class="choosePartnerAgency"  placeholder="请输入客户来源">
-							<input type="hidden" name="fromPartnerAgencyId">
+							<label class=" control-label no-padding-right" style="margin-left: -8px"><span class="necessary">*</span>客户来源：<input type="text" name="fromPartnerAgency"class="choosePartnerAgency T-fromPartnerAgencyName"  placeholder="请输入客户来源">
+							<input type="hidden" name="fromPartnerAgencyId"  class="T-fromPartnerAgencyId">
 							<input type="hidden" name="type" value="">
 							</label>
 							<span class="input-group-addon T-addPartner R-right" data-right="1150002" style="display: inline-block;left:0" title="添加客户">
@@ -60,8 +59,8 @@
 						</div>
 						<div class="col-sm-4">
 							<label class="  no-padding-right" style="margin-left: 2px;"><span class="necessary">*</span>同行联系人：
-							<input class="choosePartnerManager bind-change" name="partnerAgencyNameList" type="text" />
-							<input type="hidden"  style='width:120px' name="partnerAgencyContactId" />
+							<input class="choosePartnerManager bind-change T-partnerAgencyNameList" name="partnerAgencyNameList" type="text" />
+							<input type="hidden"  style='width:120px' name="partnerAgencyContactId" class="T-partnerAgencyContactId" />
 							</label>
 							<span class="input-group-addon T-addPartnerManager" style="display: inline-block;left:0" title="为客户来源添加联系人">
 								<i class="ace-icon fa fa-plus bigger-110 icon-only" ></i>
@@ -137,24 +136,24 @@
 							</thead>
 							<tbody class="T-addCostTbody">
 								<tr>
-									<td>结算价</td> 
+									<td>结算价</td>
 									<td>大人</td> 
 									<td>
-										<span class="necessary col-sm-1">*</span><input name="adultCount" type="text" class="col-sm-11  no-padding-right T-costCount T-adultCount" maxlength="3" readonly=""/>
+										<span class="necessary col-sm-1">*</span><input name="adultCount" type="text" class="col-sm-11  no-padding-right T-costCount T-adultCount" maxlength="3" />
 									</td>
 									<td>
-										<span class="necessary col-sm-1">*</span><input name="adultPrice" type="text" class="col-sm-11  no-padding-right  T-costPrice T-adultPrice"  maxlength="6" readonly="" />
+										<span class="necessary col-sm-1">*</span><input name="adultPrice" type="text" class="col-sm-11  no-padding-right  T-costPrice T-adultPrice"  maxlength="6" />
 									</td>
 									<td></td>
 								</tr>
 								<tr>
 									<td>结算价</td>
-									<td>小孩</td>   
+									<td>小孩</td>
 									<td>
-										<input name="childCount" type="text" value="0" class="col-sm-12  no-padding-right T-childCount T-costCount" style="float:right;" maxlength="3" readonly="" />
+										<input name="childCount" type="text" value="0" class="col-sm-12  no-padding-right T-childCount T-costCount" style="float:right;" maxlength="3" />
 									</td>
 									<td>
-										<input name="childPrice" type="text" value="0" class="col-sm-12  no-padding-right T-childPrice  T-costPrice" style="float:right;" maxlength="6"  readonly=""/>
+										<input name="childPrice" type="text" value="0" class="col-sm-12  no-padding-right T-childPrice  T-costPrice" style="float:right;" maxlength="6" />
 									</td>
 									<td></td>
 								</tr>
