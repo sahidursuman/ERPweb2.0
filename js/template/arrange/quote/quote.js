@@ -529,10 +529,9 @@ define(function(require, exports) {
 						"<th class='th-border'>酒店星级</th>" + 
 						"<th class='th-border'>酒店名称</th>" + 
 						"<th class='th-border'>房型</th>" + 
-						"<th class='th-border'>价格</th>" + 
-						"<th class='th-border'>数量</th>" + 
+						"<th class='th-border'>成本价</th>" + 
+						"<th class='th-border'>市场价</th>" + 
 						"<th class='th-border'>含餐</th>" +
-						"<th class='th-border'>电话</th>" + 
 						"<th class='th-border'>备注</th>" + 
 						"<th class='th-border' style='width: 60px;'>操作</th>" + 
 					"</tr></thead>" +
@@ -581,7 +580,7 @@ define(function(require, exports) {
 						 "<td><input type='text' class='T-choose-hotelName col-xs-12 bind-change' name='hotelNmae' value='" + hotelList[i].hotelName + "' disabled='disabled'/><input type='hidden' name='hotelId' value='" + hotelList[i].hotelId + "' /></td>" + 
 						 "<td><input type='text' class='T-choose-hotelRoom col-xs-12 bind-change' name='hotelRoom' value='" + hotelList[i].type + "' disabled='disabled'/><input type='hidden' name='hotelRoomId' value='" + hotelList[i].roomId +"' /></td>" +
 						 "<td><input type='text' readonly='readonly' class='T-changeQuote' name='contractPrice' value='" + hotelList[i].replyPrice + "' style='width:70px;' /></td>" +
-						 "<td><input type='text' readonly='readonly' name='count' class='T-changeQuote' value='" + hotelList[i].needRoomCount + "' style='width:70px;' /></td>" +
+						 "<td><input type='text' readonly='readonly' name='count' class='T-changeQuote' value='" + hotelList[i].replyPrice + "' style='width:70px;' /></td>" +
 						 "<td><input type='text' class='col-xs-12' readonly='readonly' name='containBreakfast' value='";
 						 if (hotelList[i].containBreakfast==1){
 					 		html += "含早餐"; 
@@ -593,7 +592,6 @@ define(function(require, exports) {
 					 		html += "含晚餐";
 					 	}
 					 	html +="' /></td>" + 
-					 	"<td><input type='text' class='col-xs-12' readonly='readonly' name='mobileNumber' value='" + hotelList[i].mobileNumber + "' /></td>" +
 					 	"<td><input type='text' class='col-xs-12' name='remark' value='' /></td>" +
 					 	"<td><a data-entity-type='8' class='cursor btn-restaurant-delete T-delete'>删除</a></td>" +
 					"</tr></tbody>" + 
