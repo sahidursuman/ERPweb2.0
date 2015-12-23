@@ -623,7 +623,6 @@ define(function(require, exports) {
                 content: html,
                 scrollbar: false,
             });
-        console.info('initLineProductSearch' + typeInner + "ROGER...................");
         var $dialog = $('.T-lineproduct-search-' + type);
         touristGroup.getLineProductList($dialog, 0);
         touristGroup.getLineProductList($dialog, 1);
