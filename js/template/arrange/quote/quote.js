@@ -3083,11 +3083,11 @@ define(function(require, exports) {
 			var value = otherMarketPriceArray.eq(i).val()-0 || 0;
 			otherMarketPrice += (value-0);
 		}
-		adultCost = insurancePrice + seatCountPrice*days + scenicPrice + restaurantPrice + ticketPrice + otherPrice + hotelPrice;
-		childCost = insurancePrice + seatCountPrice*days + scenicPrice + restaurantPrice/2 + ticketPrice/2 + otherPrice;
+		adultCost = insurancePrice + seatCountPrice + scenicPrice + restaurantPrice + ticketPrice + otherPrice + hotelPrice;
+		childCost = insurancePrice + seatCountPrice + scenicPrice + restaurantPrice/2 + ticketPrice/2 + otherPrice;
 
-		adultQuote = insuranceMarketPrice + seatCountMarketPrice*days + scenicMarketPrice + restaurantMarketPrice + ticketMarketPrice + otherMarketPrice + hotelMarketPrice;
-		childQuote = insuranceMarketPrice + seatCountMarketPrice*days + scenicMarketPrice + restaurantMarketPrice/2 + ticketMarketPrice/2 + otherMarketPrice;
+		adultQuote = insuranceMarketPrice + seatCountMarketPrice + scenicMarketPrice + restaurantMarketPrice + ticketMarketPrice + otherMarketPrice + hotelMarketPrice;
+		childQuote = insuranceMarketPrice + seatCountMarketPrice + scenicMarketPrice + restaurantMarketPrice/2 + ticketMarketPrice/2 + otherMarketPrice;
 
 		if ($container.find('.T-isChooseService [name=childNeedBed]').prop('checked')) {
 			childCost += hotelPrice;
