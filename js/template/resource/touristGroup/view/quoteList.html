@@ -17,19 +17,19 @@
 		</thead>
 		<tbody calss="T-chooseQuoteProduct-Tbody">
 			{{each lineProductList as lineProduct}}
-				<tr data-quoteId='1' data-quoteNumber='{{lineProduct.quoteNumber}}' data-lineProductName= '{{if lineProduct.lineProduct!=null}}{{lineProduct.lineProduct.name}}{{/if}}' data-lineProducId= '{{lineProduct.id}}'
+				<tr data-quoteId='1' data-quoteNumber='{{lineProduct.quoteNumber}}' data-lineProductName= '{{if lineProduct.lineProduct != null}}{{lineProduct.lineProduct.name}}{{/if}}' data-lineProducId= '{{lineProduct.id}}'
 				 data-startTime='{{lineProduct.startTime}}'
-				 data-fromPartnerAgencyId='{{if lineProduct.partnerAgency!=null}}{{lineProduct.partnerAgency.id}}{{/if}}' 
-				 data-fromPartnerAgencyName='{{if lineProduct.partnerAgency!=null}}{{lineProduct.partnerAgency.travelAgencyName}}{{/if}}'
-				 data-partnerAgencyContactName ='{{if lineProduct.partnerAgencyContact!=null}}{{lineProduct.partnerAgencyContact.contactRealname}}-[{{lineProduct.partnerAgencyContact.contactMobileNumber}}]{{/if}}'
-				 data-partnerAgencyContactId = '{{lineProduct.partnerAgencyContact.id}}'
-				 data-adultCount='{{lineProduct.adultCount}}' data-adultPrice='2' data-childCount='{{lineProduct.childCount}}' data-childPrice='2' >
+				 data-fromPartnerAgencyId='{{if lineProduct.partnerAgency != null}}{{lineProduct.partnerAgency.id}}{{/if}}' 
+				 data-fromPartnerAgencyName='{{if lineProduct.partnerAgency != null}}{{lineProduct.partnerAgency.travelAgencyName}}{{/if}}'
+				 data-partnerAgencyContactName ='{{if lineProduct.partnerAgencyContact != null}}{{lineProduct.partnerAgencyContact.contactRealname}}-[{{lineProduct.partnerAgencyContact.contactMobileNumber}}]{{/if}}'
+				 data-partnerAgencyContactId = '{{if lineProduct.partnerAgencyContact != null}}{{lineProduct.partnerAgencyContact.id}}{{/if}}'
+				 data-adultCount='{{lineProduct.adultCount}}' data-adultPrice='{{lineProduct.adultQuotePrice}}' data-childCount='{{lineProduct.childCount}}' data-childPrice='{{lineProduct.childQuotePrice}}' >
 					<td>
 					    {{lineProduct.quoteNumber}}
 					</td>
-					<td>{{lineProduct.lineProduct.name}}</td>
+					<td>{{if lineProduct.lineProduct != null}}{{lineProduct.lineProduct.name}}{{/if}}</td>
 
-					<td>{{lineProduct.lineProduct.type}}</td>
+					<td>{{if lineProduct.lineProduct != null}}{{lineProduct.lineProduct.type}}{{/if}}</td>
 					<td>
 						{{if lineProduct.lineProduct != null}}    
 							{{if lineProduct.lineProduct.customerType==0}}
@@ -41,11 +41,11 @@
 					</td>
 
 					<td>{{lineProduct.adultCount}} 大 {{lineProduct.childCount}} 小</td>
-					<td>{{lineProduct.lineProduct.days}}</td>
+					<td>{{if lineProduct.lineProduct !=null }}{{lineProduct.lineProduct.days}}{{/if}}</td>
 					<td>{{lineProduct.createTime}}</td>
 
-					<td>{{lineProduct.partnerAgency.travelAgencyName}}</td>
-					<td>{{lineProduct.partnerAgencyContact.contactRealname}}</td>
+					<td>{{if lineProduct.partnerAgency !=null }}{{lineProduct.partnerAgency.travelAgencyName}}{{/if}}</td>
+					<td>{{if lineProduct.partnerAgencyContact !=null }}{{lineProduct.partnerAgencyContact.contactRealname}}{{/if}}</td>
 					<td>{{lineProduct.startTime}}</td>
 					<td>
 					 	<label class="pos-rel"> <input type="radio" class="ace T-cheked" name="form-field-radio"> <span class="lbl"></span> </label>
