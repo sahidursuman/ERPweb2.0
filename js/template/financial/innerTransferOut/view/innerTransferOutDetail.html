@@ -6,7 +6,7 @@
 				<th class="th-border">发生业务</th>
 				<th class="th-border">金额</th>
 				<th class="th-border">备注</th>
-				<th class="th-border">操作者</th>
+				<th class="th-border">操作人</th>
 				<th class="th-border">操作时间</th>
 			</tr>
 		</thead>
@@ -18,8 +18,8 @@
 				<td>{{record.payDifferenceMoney}}</td>
 				<td>{{record.remark}}</td>
 				<td>{{record.checkRealname}}</td>
-				<td>{{record.checkTime | dateFormat: 'yyyy-MM-dd'}}</td>
-			</tr> 
+				<td>{{record.checkTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}</td>
+			</tr>
 		{{/each}}
 		</tbody>
 	</table>

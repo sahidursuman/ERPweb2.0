@@ -6,9 +6,9 @@
         </div>
         <div class="form-group marginLeft-30">
             <label>账期：</label>
-            <input type="text" class="form-control datepicker T-search-start-date" value="{{searchParam.startTime}}">
+            <input type="text" class="form-control datepicker T-search-start-date" value="{{searchParam.startDate}}">
             <label>&nbsp;至&nbsp;</label>
-            <input type="text" class="form-control datepicker T-search-end-date" value="{{searchParam.endTime}}">
+            <input type="text" class="form-control datepicker T-search-end-date" value="{{searchParam.endDate}}">
         </div>
         <div class="form-group marginLeft-30">
             <button class="btn-sm search-btn T-btn-search">
@@ -42,9 +42,9 @@
                 <td><span style="color:#{{if rs.checkStep == rs.allRecord}}00CC00{{else}}FF9900{{/if}};">{{rs.checkStep}}/{{rs.allRecord}}</span></td>
                 <td><span style="color:#{{if rs.reciveStep == rs.allRecord}}00CC00{{else}}FF9900{{/if}};">{{rs.reciveStep}}/{{rs.allRecord}}</span></td>
                 <td>
-                    <a class="cursor T-action T-checking">对账</a>
-                    <label class="cursor"> <a> |</a></label>
-                    <a class="cursor T-action T-balance">收款</a>
+                    <a class="cursor T-action T-checking" data-right="1290002">对账</a>
+                    <label class="cursor R-right" data-right="1290002|1290003"> <a> |</a></label>
+                    <a class="cursor T-action T-balance R-right" data-right="1290003">收款</a>
                 </td>
             </tr>
         {{/each}}

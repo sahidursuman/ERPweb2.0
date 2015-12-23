@@ -116,7 +116,7 @@
 								<div class="form-group">
 									<label class="col-sm-1 control-label no-padding-right">备注:</label>
 									<div class="col-sm-10">
-									 <textarea class="form-control col-sm-12" name="remark" value="" ></textarea>
+									 <textarea class="form-control col-sm-12" name="remark" maxlength="1000"></textarea>
 										
 									</div>
 								</div>
@@ -133,14 +133,14 @@
 
 				立即发送
 				<label style="padding-left:0px;">
-					<input  type="radio" class="ace buyInsurance-status" checked="checked" value="0" name="executeTimeType">
+					<input  type="radio" class="ace buyInsurance-status T-ImmSend" checked="checked" value="0" name="executeTimeType">
 					<span class="lbl">
 					</span>
 				</label>
 				&nbsp;&nbsp;&nbsp;&nbsp;
 				定时发送
 				<label style="padding-left:0px;">
-					<input  type="radio" class="ace buyInsurance-status" value="1" name="executeTimeType">
+					<input  type="radio" class="ace buyInsurance-status T-execTime" value="1" name="executeTimeType">
 					<span class="lbl">
 					</span>
 				</label>

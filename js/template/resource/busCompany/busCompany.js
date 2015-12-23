@@ -196,6 +196,7 @@ define(function(require,exports){
 							seatCount : busJsonAddTr.eq(i).find("input[name=seatCount]").val(),
 							buyTime : (buyTime == "") ? "" : buyTime,
 							remark : busJsonAddTr.eq(i).find("input[name=remark]").val(),
+							lowestPrice : busJsonAddTr.eq(i).find("input[name=lowestPrice]").val(),
 							isChartered : busJsonAddTr.eq(i).find("select[name=isChartered]").val(),
 							priceJsonAddList : []
 						};
@@ -345,22 +346,7 @@ define(function(require,exports){
 								});
 								//删除原有包车区间
 								$busList.find(".T-del").on('click',function(){
-									var div = $(this).parent().parent();
-										var entityId = div.attr("data-entity-id");
-										var divIndex = div.attr("data-index");
-										if (entityId != null && entityId != "") {
-											div.addClass("deleted");
-											div.fadeOut(function(){
-												$(this).hide();
-											});
-										}else{
-											div.fadeOut(function(){
-												$(this).remove();
-											});
-										}
-										div.parent().next().find(".div-"+divIndex+"").fadeOut(function(){
-											$(this).remove();
-										});
+									BusCompany.deletedTimeArea($(this),2);
 								});
 								//新增车辆
 								var $addBtn = $busList.find(".T-busCompany-add");
@@ -420,7 +406,8 @@ define(function(require,exports){
 											isChartered : busListTr.eq(i).find("select[name=isChartered]").val(),
 											priceJsonAdd : [],
 											priceJsonDel : [],
-											remark : busListTr.eq(i).find("input[name=remark]").val()
+											remark : busListTr.eq(i).find("input[name=remark]").val(),
+											lowestPrice : busListTr.eq(i).find("input[name=lowestPrice]").val(),
 										}
 										if(busJson.isChartered==1){
 											var priceUpdate = busListTr.eq(i).find("td.time div:not(.deleted)");
@@ -598,7 +585,7 @@ define(function(require,exports){
 		BusCompany.datepicker($td.find(".datepicker"));
 		BusCompany.addTimeEvents($td);
 		//删除包车时限
-		$td.find(".T-del").off('click').on('click',function(typeFlag){
+		$td.find(".T-del").off('click').on('click',function(event){
 			BusCompany.deletedTimeArea($(this),typeFlag);
 		});
 		validator = rule.update(validator);
@@ -663,21 +650,22 @@ define(function(require,exports){
 	};
 	//删除包车区间
 	BusCompany.deletedTimeArea = function($obj,typeFlag){
+		if (!$obj.data('deleted')) {
+			$obj.data('deleted', true);
 			var div = $($obj).closest('div');
 			var $td = $($obj).closest('td');
 			var entityId = div.attr("data-entity-id");
 			var divIndex = div.attr("data-index");
+			var index = $td.find('div:not(.deleted)').index(div);
 			//通过typeF来判断是新增车队页面还是修改车队页面1--新增；2--修改
-			if(typeFlag.which == 1){
-				$td.next().find(".div-"+divIndex+"").fadeOut(function(){
-					$(this).remove();
-				});
+			$td.next().children('div').eq(index).fadeOut(function(){
+				$(this).remove();
+			});
+			if(typeFlag == 1){
 				div.fadeOut(function(){
 					$(this).remove();
 				});
-				
-			}else if(typeFlag.which == 2){
-				
+			}else if(typeFlag == 2){
 				if (entityId != null && entityId != "") {
 					div.addClass("deleted");
 					div.fadeOut(function(){
@@ -688,10 +676,8 @@ define(function(require,exports){
 						$(this).remove();
 					});
 				}
-			}
-			div.parent().next().find(".div-"+divIndex+"").fadeOut(function(){
-				$(this).remove();
-			});
+			}	
+		}		
 	}
 	//新增司机函数
 	BusCompany.addDriverList = function($obj){

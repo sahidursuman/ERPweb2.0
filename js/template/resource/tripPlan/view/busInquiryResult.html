@@ -25,7 +25,7 @@
 							<td class="T-price">{{offer.price}}</td>
 							<td>{{offer.remark}}</td>
 							<td>{{offer.reserveMinutes}}</td>
-							<td>{{offer.expiryTime}}</td>
+							<td>{{offer.expiryTime | dateFormat: 'yyyy-MM-dd'}}</td>
 							<td class="T-status">{{offer.status}}</td>
 					{{/each}}
 				</tr>

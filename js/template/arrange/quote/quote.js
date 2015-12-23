@@ -139,6 +139,9 @@ define(function(require, exports) {
 				// 编辑报价信息
 				quote.updateQuote(id);
 				//quote.updateQuoteToOffer(id,'1');
+			} else if ($this.hasClass('T-copy')){
+				// 复制报价信息
+				quote.updateQuote(id, '', 'copy');
 			} else if ($this.hasClass('T-delete')){
 				// 删除报价
 				quote.deleteItem(id);
@@ -600,12 +603,14 @@ define(function(require, exports) {
 	};
 
 	//修改报价
-	quote.updateQuote = function(id,target) {
+	quote.updateQuote = function(id, target, isCopy) {
 		var tab_id = menukey + '-update';
 		var $tab = $('#tab-'+ tab_id + '-content');
-		if ($tab.length && $tab.find('input[name=quoteId]').val() == id) {	// 如果打开的是相同报价，则不替换
-			$('.tab-' + tab_id).children('a').trigger('click');
-			return;
+		if (!!isCopy == false) {
+			if ($tab.length && $tab.find('input[name=quoteId]').val() == id) {	// 如果打开的是相同报价，则不替换
+				$('.tab-' + tab_id).children('a').trigger('click');
+				return;
+			}
 		}
 		$tab.find(".T-newData").data("id",id);
 
@@ -626,8 +631,11 @@ define(function(require, exports) {
 						a: 'update'
 					}
 					var html = mainQuoteTemplate($a);
-					if(Tools.addTab(menukey+'-update',"修改报价",html)){
-						var $container = $("#tab-arrange_quote-update-content");
+					var title = (!!isCopy)? '复制报价' : '修改报价';
+					var menuName = (!!isCopy)? 'copy' : 'update';
+					data.isCopy = (!!isCopy)? '1' : '';
+					if(Tools.addTab(menukey+'-'+menuName,title,html)){
+						var $container = $("#tab-arrange_quote-"+menuName+"-content");
 
 						var updateHtml = updateQuoteTemplate(data);
 						// var hotelStarValue = $(this).closest('tr').find('.resourceHotelStar').val();
@@ -2461,7 +2469,7 @@ define(function(require, exports) {
 		
 	};
 	//添加购物
-	quote.addResourceShopping = function($btn, validator){
+	quote.addResourceShopping = function($btn, validator, $container){
 		//添加行程安排购物
 		var shoppingDetails = '<div class="T-timeline-item timeline-item clearfix updateShoppingList updateLineProductDaysDetail T-resourceShoppingList ui-sortable-handle" data-entity-index='+quote.updateLineProductIndex+'><div class="timeline-info "  style="color:#1fade0" ><i class="ace-icon fa fa-circle" ></i><span>购物</span></div>'+
 		'<div class="widget-box transparent" style="margin-top: 20px"><div class="widget-body"><div class=""><table class="table table-striped table-bordered table-hover">'+
@@ -3402,17 +3410,20 @@ define(function(require, exports) {
 							if (idString == "tab-arrange_quote-add-content") {
 								Tools.closeTab("arrange_quote-add");
 								quote.listQuote(0);
-							}
-							else if (idString == "tab-arrange_quote-update-content") {
+							}else if (idString == "tab-arrange_quote-update-content") {
 								Tools.closeTab("arrange_quote-update");
+								quote.listQuote(quote.searchData.pageNo);
+							}else if (idString == "tab-arrange_quote-copy-content") {
+								Tools.closeTab("arrange_quote-copy");
 								quote.listQuote(quote.searchData.pageNo);
 							}
 						}else {
 							$container.data('isEdited',false);
                             if (idString == "tab-arrange_quote-add-content") {
 								quote.addQuote($container.find(".T-newData").data("id"));
-							}
-							else if (idString == "tab-arrange_quote-update-content") {
+							}else if (idString == "tab-arrange_quote-update-content") {
+								quote.updateQuote($container.find(".T-newData").data("id"),"T-bus");
+							}else if (idString == "tab-arrange_quote-copy-content") {
 								quote.updateQuote($container.find(".T-newData").data("id"),"T-bus");
 							}
                         }
@@ -3431,11 +3442,17 @@ define(function(require, exports) {
 					var $this = $(this),$parents = $this.closest('.form-group');
 					$this.val("");
 					$parents.find('[name=partnerAgencyId]').val("");
+					$parents.find('[name=managerName]').val('');
+					$parents.find('[name=managerId]').val('');
+					$parents.find('[name=mobileNumber]').val('');
 				}
 			},
 			select: function(event, ui){
 					var $this = $(this),$parents = $this.closest('.form-group');
 					$parents.find('[name=partnerAgencyId]').val(ui.item.id).trigger('change');
+					$parents.find('[name=managerName]').val('');
+					$parents.find('[name=managerId]').val('');
+					$parents.find('[name=mobileNumber]').val('');
 			}
 		}).off('click').on('click',function(){
 			var obj = this;
@@ -3538,7 +3555,7 @@ define(function(require, exports) {
 		});
 	}
 	quote.updateQuoteToOffer = function(id,target) {
-		var quoteContent = $(document).find('#tab-arrange_quote-add-content,#tab-arrange_quote-update-content'), isThere = 0;
+		var quoteContent = $(document).find('#tab-arrange_quote-add-content,#tab-arrange_quote-update-content,#tab-arrange_quote-copy-content'), isThere = 0;
 		quoteContent.each(function(i){
 			var menukeyId = quoteContent.eq(i).attr("id");
 			var quoteId = quoteContent.eq(i).find('[name=quoteId]').val();

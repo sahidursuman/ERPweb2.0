@@ -15,15 +15,10 @@
 					<td class="style-myself">应付：</td>
 					<td style="text-align: left;padding: 0px 0px 0px 10px">{{touristGroup.transNeedPayAllMoney}}</td>
 					<td class="style-myself">已付：</td>
-					<td style="text-align: left;padding: 0px 0px 0px 10px" readonly="readonly"  class="date-picker" colspan="1">{{touristGroup.transPayedMoney}}
-
-					
-
+					<td style="text-align: left;padding: 0px 0px 0px 10px" readonly="readonly"  class="date-picker" colspan="3">{{touristGroup.transPayedMoney}}
 					</td>
-			
-
-					<td>
-						付款方式 :
+                    <td>
+						付款方式
 						{{if touristGroup.payType == 0}}现金
 							{{else if touristGroup.payType == 1}}银行转账
 							{{else if touristGroup.payType == 2}}网上支付
@@ -33,7 +28,7 @@
 					</td>
 
 					<td>
-					   {{if touristGroup.operateCurrentNeedPayMoney==1}}
+					    {{if touristGroup.operateCurrentNeedPayMoney==1}}
 						<label>
 							<input  type="checkbox" class="ace buyInsurance-status" checked="checked" value="{{touristGroup.operateCurrentNeedPayMoney}}" name="operateCurrentNeedPayMoney" disabled="disabled">
 								<span class="lbl">
@@ -48,9 +43,9 @@
 						</label>
 						{{/if}}
 						<label class="control-label no-padding-right">对方现收</label>
-
 					</td>
 
+					
 				</tr>
 			</table>
 		</div>
@@ -241,7 +236,7 @@
 										
 								      {{each touristGroup.touristGroupFeeList as transferFeeList}}
 										<tr>
-											<td>{{if transferFeeList.type==0}}增加{{else}}减少{{/if}}</td>
+											<td>其他费用</td>
 											<td>{{transferFeeList.describeInfo}}</td>
 											<td>{{transferFeeList.count}}</td>
 											<td>{{transferFeeList.price}}</td>	  

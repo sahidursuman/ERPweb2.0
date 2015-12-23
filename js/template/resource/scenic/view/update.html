@@ -44,7 +44,7 @@
 						</div>
 					</div>
 					<div class="form-group guideInterval">
-						<label class="col-sm-2 control-label no-padding-right">景区所在省市:</label>
+						<label class="col-sm-2 control-label no-padding-right">所在地区:</label>
 						<div class="col-sm-8">
 							<select name="provinceId" style="margin-right:3px">
 								<option selected="selected" value="">未选择</option>
@@ -116,7 +116,7 @@
 											<div data-index="{{i+1}}" data-entity-id="{{price.id}}" class="clearfix T-appendDiv div-{{i+1}}" style="margin-top:2px">
 												<input name="startTime" type="text" class="datepicker" style="width:100px" value="{{price.startTime | dateFormat:'yyyy-MM-dd'}}"/><label>&nbsp;至&nbsp;</label><input name="endTime" type="text" class="datepicker" style="width:100px" value="{{price.endTime | dateFormat:'yyyy-MM-dd'}}"/>
 												<label class="timeArea" style="float:right">
-													<button class="btn btn-danger btn-sm btn-white T-delete">
+													<button class="btn btn-danger btn-sm btn-white T-del">
 														<i class="ace-icon fa fa-minus bigger-110 icon-only"></i>
 													</button>
 												</label>

@@ -799,7 +799,7 @@ define(function(require, exports) {
 		    		saveJson.expiryTime = $container.find('[name=expiryTime]').val();
 		    		if (!!saveJson.expiryTime) {
 						$.ajax({
-							url: KingServices.build_url('hotelInquiry','keySaveHotelArrangeOrder'),
+							url: KingServices.build_url('hotelInquiry','keySaveHotelArrangeInquiry'),
 							type: 'POST',
 							data: {saveJson: JSON.stringify(saveJson)},
 							success: function(data) {
@@ -828,7 +828,7 @@ define(function(require, exports) {
 		$.ajax({
 			url: KingServices.build_url('hotelInquiry','keySaveHotelArrangeOrder'),
 			type: 'POST',
-			data: {searchJson: JSON.stringify(saveJson)},
+			data: {saveJson : JSON.stringify(saveJson)},
 			success: function(data) {
 				if (showDialog(data)) {
 					showMessageDialog($( "#confirm-dialog-message" ), data.message);
@@ -1043,7 +1043,7 @@ define(function(require, exports) {
 	tripPlan.addOther = function($this, validator, $tab){
 		var tableContainer = $this.parents(".ui-sortable-handle").find(".table tbody"),
 			html = '<tr><td class="T-whichDaysContainer"></td>' +
-		'<td><input type="text" name="name" maxlength="32" class="col-sm-12"/></td>' +
+		'<td><input type="text" name="name" maxlength="32" class="col-sm-12 T-other-name"/></td>' +
 		'<td><input type="text" name="managerName" maxlength="32" class="col-sm-12"/></td>' +
 		'<td><input type="text" name="mobileNumber" class="col-sm-12" maxlength="11"/></td>' +
 		'<td><input type="text" name="fee" class="col-sm-12 price" maxlength="6"/></td>' +
@@ -1110,7 +1110,7 @@ define(function(require, exports) {
 				showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
 					$.ajax({
 						url: KingServices.build_url("tripPlan","deleteTripPlanInfoByCategoryId"),
-	                    type: "PSOT",
+	                    type: "post",
 	                    data:"cateName="+$name+"&cateId="+$id,
 	                    success: function(data) {
 							if(showDialog(data)){
@@ -1271,7 +1271,7 @@ define(function(require, exports) {
 									$list[i].value = $list[i].name;
 								}
 							}else{
-								layer.tips('没有内容', obj, {
+								layer.tips('没有内容', $this, {
 								    tips: [1, '#3595CC'],
 								    time: 2000
 								});
@@ -1456,6 +1456,7 @@ define(function(require, exports) {
 							var hotel = JSON.parse(data.hotel);
 							$parents.find("input[name=mobileNumber]").val(hotel.mobileNumber);
 							$parents.find("input[name=managerName]").val(hotel.managerName);
+							$parents.find(".T-tripPlanHotelStar").val(hotel.level);
 							$parents.find("input[name=hotelRoom]").val("");
 							$parents.find("input[name=hotelRoomId]").val("");
 	                    	$parents.find("input[name=fee]").val("");
@@ -1517,7 +1518,7 @@ define(function(require, exports) {
                     },
                     success: function(data) {
 						if(showDialog(data)){
-	                    	$parents.find("input[name=fee]").val(data.price);
+	                    	$parents.find("input[name=fee]").val(data.price).trigger('change');
 						}
                     }
                 });
@@ -2122,7 +2123,7 @@ define(function(require, exports) {
 				tripPlan.plusPrice($(this), $tab);
 			});
 			$this.find("select[name=payType]").on("change", function(){
-				if($this.val()!=0){
+				if($(this).val()!=0){
 					$parents.find("input[name=guidePayMoney]").val("");
 				}else{
 					tripPlan.plusPrice($(this), $tab);
@@ -2244,7 +2245,7 @@ define(function(require, exports) {
 						payType : tripPlan.getVal(bus.eq(i), "payType"),
 						guidePayMoney : tripPlan.getVal(bus.eq(i), "guidePayMoney"),
 						remark : tripPlan.getVal(bus.eq(i), "remark"),
-						orderStatus: tripPlan.getVal(hotel.eq(i), "busOrder")
+						orderStatus: tripPlan.getVal(bus.eq(i), "busOrder")
 					}
 					tripPlanJson.busCompanyArrange = busJson;
 					guideAllPayMoney += tripPlan.checkParamIsDouble(busJson.guidePayMoney);
@@ -2462,11 +2463,11 @@ define(function(require, exports) {
 			},
 			success: function(data){
 				if(showDialog(data)){
+					tripPlan.listTripPlan(0);
 					showMessageDialog($("#confirm-dialog-message"),data.message, function(){
 						if (isClose == 1) {
 							if (argumentsLen == 3) {
 								Tools.closeTab(menuKey + "-update");
-								tripPlan.listTripPlan(0);
 							}else{
 								$tab.data('isEdited',false);
 								Tools.addTab(tab_id, title, html)

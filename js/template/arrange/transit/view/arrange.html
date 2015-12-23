@@ -187,11 +187,11 @@
 												{{if outHotel.id != null && outHotel.hotel != null && outHotel.hotelRoom != null}}
 												<tr data-entity-id="{{outHotel.id}}">
 													<td><input type="hidden" name="serviceType" value="0" />
-													<input class="col-sm-12 T-datePicker" name="hotelCheckInTime" value="{{if outHotel.checkInTime != null}}{{outHotel.checkInTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}" type="text" /></td>
+													<input class="col-sm-12 T-datePicker datepicker" name="hotelCheckInTime" value="{{if outHotel.checkInTime != null}}{{outHotel.checkInTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}" type="text" /></td>
 													<td>
 														<!-- <input class="col-sm-12 tripPlanHotelStar" name="hotelLevel" value="{{outHotel.hotel.level}}" type="text" /> -->
 														<select class="tripPlanHotelStar" name="hotelLevel">
-														<option value="" {{if outHotel.hotel.level == 0}}selected="selected"{{/if}}>全部</option>
+														<option value="" {{if outHotel.hotel.level == 0}}selected="selected"{{/if}}>--全部--</option>
 															<option value="1" {{if outHotel.hotel.level == 1}}selected="selected"{{/if}}>三星以下</option>
 															<option value="2" {{if outHotel.hotel.level == 2}}selected="selected"{{/if}}>三星</option>
 															<option value="3" {{if outHotel.hotel.level == 3}}selected="selected"{{/if}}>准四星</option>
@@ -375,7 +375,7 @@
 											<tbody>{{each receiveGroup.outRestaurantList as outRestaurant}}
 												{{if outRestaurant.id != null && outRestaurant.restaurant != null}}
 												<tr data-entity-id="{{outRestaurant.id}}">
-													<td><input class="col-sm-12 T-datePicker" name="startTime" type="text" value="{{outRestaurant.startTime | dateFormat: 'yyyy-MM-dd'}}" /></td>
+													<td><input class="col-sm-12 T-datePicker datepicker" name="startTime" type="text" value="{{outRestaurant.startTime | dateFormat: 'yyyy-MM-dd'}}" /></td>
 													<td>
 														<div class="col-sm-12">
 															<input type="hidden" name="serviceType" value="0" />
@@ -460,7 +460,7 @@
 											<tbody>{{each receiveGroup.outOtherList as outOther}}
 											{{if outOther != null && outOther.name != null}}
 												<tr data-entity-id="{{outOther.id}}">
-													<td><input class="col-sm-12  T-datePicker" name="startTime" type="text" value="{{outOther.startTime | dateFormat: 'yyyy-MM-dd'}}" /></td>
+													<td><input class="col-sm-12  T-datePicker datepicker" name="startTime" type="text" value="{{outOther.startTime | dateFormat: 'yyyy-MM-dd'}}" /></td>
 													<td>
 														<input class="col-sm-12" name="name" type="text" value="{{outOther.name}}" maxlength="30" />
 														<input type="hidden" name="serviceType" value="0" />
@@ -537,7 +537,7 @@
 											<tbody>{{each bus as outBus}}
 												{{if outBus.id != null && outBus.busCompany != null}}
 												<tr data-entity-id="{{outBus.id}}">
-													<td><input type="text" class="col-sm-12 T-chooseSeatCount" name="seatCount" value="{{if outBus.bus != null}}{{outBus.bus.seatCount}}{{/if}}" /></td>
+													<td><input type="text" class="col-sm-12 T-chooseSeatCount" name="seatCount" value="{{if !!outBus.bus && !!outBus.bus.seatCount}}{{outBus.bus.seatCount}}{{else if !!outBus.seatCount}}{{outBus.seatCount}}{{/if}}" /></td>
 													<td><input class="col-sm-12 T-chooseBusBrand" name="busbrand" type="text" value="{{if outBus.bus != null}}{{outBus.bus.brand}}{{/if}}" /></td>
 													<td>
 														<div class="col-sm-12">
@@ -551,7 +551,7 @@
 													<td>
 														<div class="col-sm-12">
 															<input type="hidden" name="serviceType" value="2" />
-															<input class="col-sm-12 bind-change" name="busCompanyName" readonly="readonly" type="text" value="{{outBus.busCompany.companyName}}" />
+															<input class="col-sm-12 bind-change T-busCompanyName" name="busCompanyName" type="text" value="{{outBus.busCompany.companyName}}" />
 															<input type="hidden" name="busCompanyId" value="{{if outBus.busCompany != null}}{{outBus.busCompany.id}}{{/if}}" />
 		                                                    <span class="addResourceBtn T-addBusCompanyResource" title="添加车队">
 		                                                        <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
@@ -738,7 +738,7 @@
 												{{if outHotel.id != null && outHotel.hotel != null && outHotel.hotelRoom != null}}
 												<tr data-entity-id="{{outHotel.id}}">
 													<td><input type="hidden" name="serviceType" value="1" />
-													<input class="col-sm-12 T-datePicker" name="hotelCheckInTime" value="{{if outHotel.checkInTime != null}}{{outHotel.checkInTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}" type="text" /></td>
+													<input class="col-sm-12 T-datePicker datepicker" name="hotelCheckInTime" value="{{if outHotel.checkInTime != null}}{{outHotel.checkInTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}" type="text" /></td>
 													<td>
 														<!-- <input class="col-sm-12 tripPlanHotelStar" name="hotelLevel" value="{{outHotel.hotel.level}}" type="text" /> -->
 														<select class="tripPlanHotelStar" name="hotelLevel">
@@ -926,7 +926,7 @@
 											<tbody>{{each sendGroup.outRestaurantList as outRestaurant}}
 												{{if outRestaurant.id != null && outRestaurant.restaurant != null}}
 												<tr data-entity-id="{{outRestaurant.id}}">
-													<td><input class="col-sm-12 T-datePicker" name="startTime" type="text" value="{{outRestaurant.startTime | dateFormat: 'yyyy-MM-dd'}}" /></td>
+													<td><input class="col-sm-12 T-datePicker datepicker" name="startTime" type="text" value="{{outRestaurant.startTime | dateFormat: 'yyyy-MM-dd'}}" /></td>
 													<td>
 														<div class="col-sm-12">
 															<input type="hidden" name="serviceType" value="1" />
@@ -1011,7 +1011,7 @@
 											<tbody>{{each sendGroup.outOtherList as outOther}}
 											{{if outOther != null && outOther.name != null}}
 												<tr data-entity-id="{{outOther.id}}">
-													<td><input class="col-sm-12 T-datePicker" name="startTime" type="text" value="{{outOther.startTime | dateFormat: 'yyyy-MM-dd'}}" /></td>
+													<td><input class="col-sm-12 T-datePicker datepicker" name="startTime" type="text" value="{{outOther.startTime | dateFormat: 'yyyy-MM-dd'}}" /></td>
 													<td>
 														<input class="col-sm-12" name="name" type="text" value="{{outOther.name}}" maxlength="30" />
 														<input type="hidden" name="serviceType" value="1" />
@@ -1052,7 +1052,7 @@
 		</div>
 		<div class="form-group">
 			<form class="form-horizontal" role="form" onsubmit="return false">
-				<button style="margin-top:50px" class="btn btn-block btn-primary T-arrange-update guideSubmit" data-entity-id="{{touristGroup.id}}">
+				<button style="margin-top:50px" class="btn btn-block btn-primary T-arrange-update guideSubmit" data-entity-id="{{touristGroup.id}}" data-isouter="{{isOuter?1:0}}">
 					<i class="ace-icon fa fa-check"></i>
 					保存信息
 				</button>

@@ -21,12 +21,10 @@
     <td>
         <label class="pos-rel  R-right" {{ if guide.isConfirmAccount }} data-right="1200005" {{else}} data-right="1200002" {{/if}}>
             <input type="checkbox" class="ace T-checkbox" {{ if guide.isConfirmAccount }} checked="checked" {{/if}}/> 
-            <span class="lbl"></span>
+            <span class="lbl">对账</span>
         </label>
-        {{if guide.isConfirmAccount }}
-        <label class="cursor R-right"  {{ if guide.isConfirmAccount }} data-right="1200005" {{else}} data-right="1200002" {{/if}}> <a class="R-right" data-right="1200003"> |</a></label>
-        <a class="cursor T-action T-view R-right" data-right="1200003">查看</a>
-        {{/if}}
+        <label class="cursor"  {{ if guide.isConfirmAccount }} data-right="1200005" {{else}} data-right="1200002" {{/if}}> <a data-right="1200003"> |</a></label>
+        <a class="cursor T-action T-view" data-right="1200003">查看</a>
     </td>
 </tr>
 {{/each}}

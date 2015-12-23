@@ -14,7 +14,7 @@
                         <div class="col-sm-2">
                             <label class="control-label T-lineProductName">{{quoteDetailJson.lineProduct.name}}</label>
                             <input type="hidden" value="{{quoteDetailJson.lineProduct.id}}" name="lineProductId">
-							<input type="hidden" value="{{quoteDetailJson.id}}" name="quoteId">
+							<input type="hidden" value="{{if isCopy != '1'}}{{quoteDetailJson.id}}{{/if}}" name="quoteId">
                         </div>
                         <label class="col-sm-1 control-label no-padding-right">售卖标注:</label>
                         <div class="col-sm-1">

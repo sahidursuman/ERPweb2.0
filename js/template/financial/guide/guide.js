@@ -4,8 +4,7 @@
  * by David Bear 2015-11-24
  */
 define(function(require, exports) {
-    var rule = require("./rule"),
-        menuKey = "financial_guide",
+    var menuKey = "financial_guide",
         listTemplate = require("./view/list"),
         // 对账模板
         guideCheckingTemplate = require("./view/guideChecking"),
@@ -205,7 +204,7 @@ define(function(require, exports) {
             })
             .done(function(data) {
                 if (showDialog(data)) {
-                    data.guideName = args.name;
+                    //data.guideName = args.name;
                     data.id = args.guideId;
                     data.type = type;
                     data.lineProductName = data.lineProductName || '全部';
@@ -216,7 +215,7 @@ define(function(require, exports) {
                         title = '导游对账',
                         html;
                     if (type) {
-                        data.isOuter = args.isOuter;
+                        data.isOuter = FinGuide.isOuter = args.isOuter;
                         key = payMenuKey, title = '导游付款';
                         html = guidePayTemplate(data);
                     } else {
@@ -254,8 +253,10 @@ define(function(require, exports) {
                                     }, type, $tab);
         });
 
-        var validator = rule.check($tab), autoValidator = rule.autoFillCheck($tab.find('.T-auto-fill-area'));
-
+        var validator = new FinRule(type ? (FinGuide.isOuter ? 3 : 1) : 3),
+            autoValidator = new FinRule(2);
+        var validatorCheck = validator.check($tab),
+            autoValidatorCheck = autoValidator.check($tab.find('.T-auto-fill-area'));
         // 处理关闭与切换tab
         $tab.off('change').off(SWITCH_TAB_SAVE).off(CLOSE_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT)
             .on('change', '.T-checkList', function() {
@@ -263,6 +264,7 @@ define(function(require, exports) {
             })
             .on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
                 event.preventDefault();
+                if (!validatorCheck.form())return;
                 FinGuide.saveCheckingData($tab, [tab_id, title, html]);
             })
             .on(SWITCH_TAB_BIND_EVENT, function() {
@@ -270,17 +272,15 @@ define(function(require, exports) {
             })
             .on(CLOSE_TAB_SAVE, function(event) {
                 event.preventDefault();
-                if (!validator.form()) {
-                    return;
-                }
+                if (!validatorCheck.form())return;
                 FinGuide.saveCheckingData($tab);
             });
 
         // 计算
         if (type) {
-            FinancialService.updateSumPayMoney($tab, rule);
+            FinancialService.updateSumPayMoney($tab, validator);
         } else {
-            FinancialService.updateUnpayMoney($tab, rule);
+            FinancialService.updateUnpayMoney($tab, validator);
         }
 
         // 绑定表格内容元素的事件
@@ -303,13 +303,13 @@ define(function(require, exports) {
 
         //确认按钮事件
         $tab.find(".T-btn-save").click(function() {
-            if (!validator.form()) {
-                return;
-            }
+            if (!validatorCheck.form())return;
             if (type) {
                 FinGuide.savePayingData($tab);
             } else {
-                FinGuide.saveCheckingData($tab);
+                FinancialService.changeUncheck($tab.find('.T-checkTr'), function(){
+                    FinGuide.saveCheckingData($tab);
+                });
             }
         });
 
@@ -323,7 +323,7 @@ define(function(require, exports) {
             $tab.find('.T-btn-autofill').on('click', function(event) {
                 event.preventDefault();
                 if ($(this).hasClass('btn-primary')) {
-                    if (autoValidator.form()) {
+                    if (autoValidatorCheck.form()) {
                         FinGuide.autoFillMoney($tab);
                     }
                 } else {
@@ -347,7 +347,8 @@ define(function(require, exports) {
      * @return {[type]}         [description]
      */
     FinGuide.saveCheckingData = function($tab, tabArgs) {
-        var json = FinancialService.checkSaveJson($tab, rule);
+        var validator = new FinRule(3);
+        var json = FinancialService.checkSaveJson($tab, validator);
 
         if (json) { // 有值
             $.ajax({
@@ -382,7 +383,8 @@ define(function(require, exports) {
      * @return {[type]}         [description]
      */
     FinGuide.savePayingData = function($tab, tabArgs) {
-        var json = FinancialService.clearSaveJson($tab, FinGuide.payingJson, rule);
+        var validator = new FinRule(FinGuide.isOuter ? 3 : 1);
+        var json = FinancialService.clearSaveJson($tab, FinGuide.payingJson, validator);
         if (json.length) {
             $.ajax({
                     url: KingServices.build_url('account/guideFinancial', 'operatePayAccount'),
@@ -419,11 +421,13 @@ define(function(require, exports) {
      */
     FinGuide.autoFillMoney = function($tab) {
         if (!!$tab && $tab.length) {
-            var $line = $tab.find('.T-lineProductName'),
+            var id = $tab.find('.T-btn-save').data('id'),
+                args = FinancialService.autoPayJson(id, $tab, new FinRule(2), 0),
+                $line = $tab.find('.T-lineProductName'),
                 $autoPayMoney = $tab.find('.T-sumPayMoney');
-
-            var args = {
-                guideId: $tab.find('.T-btn-save').data('id'),
+            if(!args)return;
+            args = {
+                guideId: id,
                 startDate: $tab.find('.T-search-start-date').val(),
                 endDate: $tab.find('.T-search-end-date').val(),
                 tripPlanNumber: $tab.find('.T-tripPlanNumber').val(),
@@ -501,7 +505,7 @@ define(function(require, exports) {
                             type = $tab.find('.T-btn-save').data('type');
                         if (!!type) {
                             data.list = FinancialService.getTempDate(data.list, FinGuide.payingJson);
-
+                            data.isOuter = FinGuide.isOuter;
                             html = filterUnAuth(payingTableTemplate(data));
                         } else {
                             html = filterUnAuth(checkingTableTemplate(data));
@@ -624,9 +628,7 @@ define(function(require, exports) {
                         Tools.addTab(menuKey + "-costDetail", "费用明细", costDetailTemplate(data));
                         //查看图片事件
                         $("#tab-" + menuKey + "-costDetail-content").find(".T-view-bill").click(function() {
-                            var WEB_IMG_URL_BIG = $("#tab-" + menuKey + "-costDetail-content").find("input[name=WEB_IMG_URL_BIG]").val(); //大图
-                            var WEB_IMG_URL_SMALL = $("#tab-" + menuKey + "-costDetail-content").find("input[name=WEB_IMG_URL_SMALL]").val(); //小图
-                            guide.viewBillImage($(this).data('fn'), WEB_IMG_URL_BIG, WEB_IMG_URL_SMALL);
+                            FinGuide.viewBillImage($(this).data('fn'));
                         });
                     }
                 });
@@ -636,19 +638,18 @@ define(function(require, exports) {
 
 
     //显示单据
-    FinGuide.viewBillImage = function(fn, WEB_IMG_URL_BIG, WEB_IMG_URL_SMALL) {
+    FinGuide.viewBillImage = function(fn) {
         var data = {
             "images": []
-        };
-        var strs = fn.split(",");
-        for (var i = 0; i < strs.length; i++) {
-            var s = strs[i];
-            if (s != null && s != "" && s.length > 0) {
-                var image = {
-                    "WEB_IMG_URL_BIG": imgUrl + s,
-                    "WEB_IMG_URL_SMALL": imgUrl + s + "?imageView2/2/w/150",
-                }
-                data.images.push(image);
+        }, strs = fn.split(",");
+        for (var i = 0, str; i < strs.length; i++) {
+            str = strs[i];
+
+            if (!!str) {
+                data.images.push({
+                    WEB_IMG_URL_BIG: imgUrl + str,
+                    WEB_IMG_URL_SMALL: imgUrl + str + "?imageView2/2/w/150"
+                })
             }
         }
         var html = billImagesTemplate(data);
@@ -693,7 +694,7 @@ define(function(require, exports) {
     FinGuide.initPayModule = function(options) {
         options.guideId = options.id;
         delete(options.id);
-        options.isOuter = true;
+        options.isOuter = FinGuide.isOuter = true;
 
         FinGuide.initOperationModule(options, 1)
     };
@@ -701,4 +702,5 @@ define(function(require, exports) {
     // 暴露方法
     exports.init = FinGuide.initModule;
     exports.initPay = FinGuide.initPayModule;
+	exports.viewFeeDetail = FinGuide.viewFeeDetail;
 });

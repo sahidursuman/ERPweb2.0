@@ -165,7 +165,7 @@ define(function(require, exports) {
 							needPayMoney: tmp.settlementMoney,
 							payedMoney: tmp.reciveMoney,
 							unPayedMoney: tmp.unReciveMoney,
-							id: tmp.partnerAgencyId
+							id: tmp.shopId
 						})
 					}
 

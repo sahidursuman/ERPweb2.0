@@ -651,6 +651,8 @@ var modalScripts = {
 	//-------------------------------------------发团管理---------------------------------------------------
 	'arrange_plan':"js/template/arrange/tripPlan/tripPlan.js",
 	'resource_travelLine': 'js/template/resource/travelLine/travelLine.js',
+	'arrange_transit': 'js/template/arrange/transit/transit.js',
+	'arrange_all':'js/template/resource/tripPlan/tripPlan.js',
 	//-------------------------------------------发团管理模块---------------------------------------------------
 	'arrange_quote':'js/template/arrange/quote/quote.js',
 	'arrange_transit': 'js/template/arrange/transit/transit.js',
@@ -712,7 +714,6 @@ function listMenu(menuTemplate){
 				data.menuList = menuList;
 				var html = template("menu-template",data);
 				$("#sidebar .nav-list").html(html);
-
 				//绑定系统旅行社
 				$("#sidebar .nav-list .system_travelAgency").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
@@ -1376,6 +1377,26 @@ Tools.addZero2Two = function(num)  {
 }
 
 /**
+ * 控制精度
+ * @param  {string/float} data   数据
+ * @param  {float} length 精度的长度
+ * @return {float}        返回修正后的数据
+ */
+Tools.toFixed = function(data, length) {
+	if (!!Number.prototype.toFixed) {
+		if (isNaN(length) || !length) {
+			length = 2;
+		}
+
+		if (!isNaN(data)) {
+			data = (data * 1).toFixed(length);
+		}
+	}
+
+	return data;
+};
+
+/**
  * 删除JSON中空字符串或者未定义的
  * @param  {[type]} json [description]
  * @return {[type]}      [description]
@@ -1398,18 +1419,22 @@ Tools.delBlankJson = function(json) {
  * 绑定日期控件
  * @param {object}  $obj         绑定日期控件的元素
  * @param {Boolean} isInputRange true：设置起始控制，false：不设置
+ * @param {object}  options      补充配置
  */
-Tools.setDatePicker = function($obj, isInputRange) {
+Tools.setDatePicker = function($obj, isInputRange, options) {
     if (!$obj || !$obj.length) {
         console.log('元素为空，无法绑定日期控件');
         return;
     }
-    $obj.datepicker({
+
+    options = $.extend({}, {
         autoclose: true,
         todayHighlight: true,
         format: 'yyyy-mm-dd',
         language: 'zh-CN'
-    });
+    }, options);
+    
+    $obj.datepicker(options);
 
     // 设置起始控制
     if (isInputRange && $obj.length === 2) {
@@ -1428,9 +1453,50 @@ Tools.setDatePicker = function($obj, isInputRange) {
 }
 
 /**
+ * 计算两个日期的差额
+ * @param  {string} startDate 日期字符串
+ * @param  {string} endDate   日期字符串
+ * @return {int}           返回两个日期之间的天数
+ *         					当天的话，返回0
+ *         					开始日期或者结束日期为空，则表示今天
+ */
+Tools.getDateDiff = function(startDate,endDate)  
+{
+	var days = 0;
+
+	if (!!startDate || !!endDate)   {
+		days = Math.floor(Math.abs(getTime(endDate) - getTime(startDate))/(1000*60*60*24));
+	}
+    
+    return days; 
+
+    function getTime(date) {
+    	if (!!date) {
+    		return new Date(Date.parse(date.replace(/-/g,   "/"))).getTime();
+    	} else {
+    		return (new Date()).getTime();
+    	}
+    }
+}
+
+/**
+ * 获取记录描述信息
+ * 主要是为了统一描述
+ * @param  {int} size 记录条数
+ * @return {string}      记录统计的描述
+ */
+Tools.getRecordSizeDesc = function(size) {
+	if (!!size && !isNaN(size) && size > 0) {
+		return '共计'+ size + '条记录';
+	} else {
+		return '没有查询到相关记录';
+	}
+}
+/**
  * 用于定义公共请求或者与数据相关的公共组件处理
  * @type {Object}
  */
+ 
 var KingServices = {};
 
 /**
@@ -1442,39 +1508,47 @@ var KingServices = {};
 KingServices.build_url = function(path,method){
     return APP_ROOT+'back/'+path +'.do?method='+method+'&token='+$.cookie('token');
 };
+
+/**
+ * 获取主列表
+ * @param  {string} key       列表key
+ * @param  {boolean} onlyStyle 是否只设置菜单样式，默认需要打开列表
+ * @return {boolean}           true：操作成功，false：操作失败
+ */
+KingServices.getMainList = function(key, onlyStyle) {
+	var res = false;
+
+	if (!!key && typeof key === 'string') {
+		var $menu = $('.'+ key),
+			$mainMenu = $menu.parent().closest('li');
+
+		// 展开一级菜单
+		if (!$mainMenu.hasClass('open')) {
+			$mainMenu.children('a').trigger('click');
+		}
+
+		if (!!onlyStyle) {
+			$menu.addClass('open active');
+		} else {
+			$menu.trigger('click');
+		}
+
+		res = true;
+	}
+
+	return res;
+}
+
 /**
  * 编辑中转安排——
  * @param  {string} id 游客小组的ID
  * @return {[type]}    [description]
  */
 KingServices.updateTransit = function(id)  {
-	seajs.use("" + ASSETS_ROOT +"js/template/arrange/transit/transit.js",function(module){
-		module.updateTransit(id);
+	seajs.use(ASSETS_ROOT + modalScripts.arrange_transit, function(module){
+		module.updateTransit(id, true);
 	});
 }
-
-/**
- * [listTransit 外转数据
- * @return {[type]} [description]
- */
-KingServices.getListPage = function(event)  {
-	seajs.use("" + ASSETS_ROOT +"js/template/arrange/arrangeTransfer/arrangeTransfer.js",function(module){
-		module.getListPage(event);
-	});
-}
-
-
-/**
- * 中转安排——
- * @param  {string} id 游客小组的ID
- * @return {[type]}    [description]
- */
-KingServices.listTransit = function()  {
-	seajs.use("" + ASSETS_ROOT +"js/template/arrange/transit/transit.js",function(module){
-		module.listTransit(0,"","","","","","","","","","","","");
-	});
-}
-
 
 /**
  * 编辑游客小组
@@ -1482,11 +1556,38 @@ KingServices.listTransit = function()  {
  * @return {[type]}    [description]
  */
 KingServices.updateTouristGroup = function(id,type)  {
-	seajs.use("" + ASSETS_ROOT +modalScripts.resource_touristGroup,function(module){
+	seajs.use(ASSETS_ROOT + modalScripts.resource_touristGroup,function(module){
 		module.updateTouristGroup(id,type);
 	});
 }
 
+ /**
+ /**
+* updateTransfer 外转方法的确认
+
+* @param  {[type]} touristGroupId [description]
+
+* @return {[type]}                [description]
+
+*/
+
+KingServices.updateTransfer = function(touristGroupId)  {
+	seajs.use("" + ASSETS_ROOT +modalScripts.resource_touristGroup,function(module){
+		module.updateTransfer(touristGroupId);
+	});
+}
+
+/** 
+* [updateTransferIn 内转方法的确认 
+* @param  {[type]} touristGroupId [description] 
+* @return {[type]}                [description] 
+*/ 
+KingServices.updateTransferIn = function(touristGroupId)  {
+	seajs.use("" + ASSETS_ROOT +modalScripts.resource_touristGroup,function(module){
+	module.updateTransferIn(touristGroupId); 
+});
+}
+/**
 
 /**
  * 新增游客小组
@@ -1498,9 +1599,6 @@ KingServices.addTouristGroup = function(touristGroupId,typeOut)  {
 		module.addTouristGroup(touristGroupId,typeOut);
 	});
 }
-
-
-
 
 //导游  新增
 KingServices.addGuide = function(fn){
@@ -1589,13 +1687,36 @@ KingServices.viewLineProduct = function(id){
 		module.viewLineProduct(id);
 	});
 }
+//查看导游报账
+KingServices.viewFeeDetail = function(id){
+	seajs.use("" + ASSETS_ROOT + modalScripts.financial_guide,function(module){
+		module.viewFeeDetail(id);
+	});
+}
 //查看游客小组
 KingServices.viewTouristGroup = function(id){
 	seajs.use("" + ASSETS_ROOT + modalScripts.resource_touristGroup,function(module){
 		module.viewTouristGroup(id);
 	});
 }
-
+//查看外转情况
+KingServices.viewTurnInfo = function(id){
+	seajs.use("" + ASSETS_ROOT + modalScripts.arrange_transfer,function(module){
+		module.viewTransferOut(id);
+	});
+};
+//查看内转情况
+KingServices.viewInnerInfo = function(id,type){
+	seajs.use("" + ASSETS_ROOT + modalScripts.arrange_inner_Transfer,function(module){
+		module.viewTransferOut(id,type);
+	});
+};
+//查看中转安排exports.viewTransit
+KingServices.viewTransit = function(id){
+	seajs.use("" + ASSETS_ROOT + modalScripts.arrange_transit,function(module){
+		module.viewTransit(id);
+	});
+};
 //报价  修改
 KingServices.updateQuoteToOffer = function(id){
 	seajs.use("" + ASSETS_ROOT + modalScripts.arrange_quote,function(module){
@@ -1622,11 +1743,14 @@ KingServices.addResourceFunction = function(e){
 		mobileNumber = e.data.mobileNumber,
 		$function = e.data.function,
 		fn = function (data){
+			console.log(data)
 			if (!!data.name && !!name && !!data.id && !!id) {$parents.find('input[name=price],input[name=hotelRoom],input[name=hotelRoomId],input[name=fee],input[name=chargingProjects],input[name=chargingId],input[name=goodsPolicy],input[name=shopPolicyId],input[name=selfitem],input[name=selfitemId],input[name=oldPrice],input[name=hotelRoomType],input[name=hotelRoomTypeId],input[name=hotelPrice],input[name=partnerAgencyNameList],input[name=partnerAgencyContactId]').val("")}
 			if (!!data.name && !!name) {$parents.find('input[name='+name+']').val(data.name).trigger('change');}
 			if (!!data.id && !!id) {$parents.find('input[name='+id+']').val(data.id).trigger('change');}
 			if (!!data.managerName && !!managerName) {$parents.find('input[name='+managerName+']').val(data.managerName);}
 			if (!!data.mobileNumber && !!mobileNumber) {$parents.find('input[name='+mobileNumber+']').val(data.mobileNumber);}
+			if (!!data.level || data.level == 0) {$parents.find('select[name=hotelLevel]').val(data.level);}
+			if (!!data.type || data.type == 0) {$parents.find('input[name=type]').val(data.type);}
 		}
 	$function(fn);
 }

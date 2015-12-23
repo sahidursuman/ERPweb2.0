@@ -505,6 +505,7 @@ define(function(require, exports) {
 			showMessageDialog($( "#confirm-dialog-message" ),"计算应付值过大，请确认数据是否有误");
 			return false;
 		}
+		var cashFlag = getValParam("cashFlag");
 		var innerTransferJson = {
 			id : getValParam("id"),//	内转ID		
 			innerTransferFeeSet : "",	//内转的其他费用	array<object>	
@@ -541,7 +542,7 @@ define(function(require, exports) {
 		var innerTransferJson=JSON.stringify(innerTransferJson);
 		$.ajax({
 			url:KingServices.build_url("innerTransfer","update"),
-			data:"innerTransfer="+encodeURIComponent(innerTransferJson),
+			data:"innerTransfer="+encodeURIComponent(innerTransferJson)+"&cashFlag="+cashFlag,
 			success:function(data){
 				var result = showDialog(data);  
 				if(result){ 
@@ -619,11 +620,15 @@ define(function(require, exports) {
 									innerTransfer.getSearchParam(divId,type);
 									innerTransfer.innerList(divId,type,0);
 
-									var id=data.touristGroupId,
-									    type='inner';
+									var touristGroupId=data.touristGroupId;
 
 									//是否中转安排提信息
-									innerTransfer.transitMessage(id,type);
+									KingServices.updateTransferIn(touristGroupId);
+
+									//内转确认后数据刷新
+									$innerTrsfInObj=$('#inner-TransferIn');
+									$innerTrsfInObj.find(".T-transferIn-search").off("click").on("click",{divId:"inner-TransferIn",btn:"btn-transferIn-search",type:"2"},innerTransfer.getListPage);
+									$innerTrsfInObj.find(".T-transferIn-search").trigger('click');
 								}
 
 							 }
@@ -637,44 +642,6 @@ define(function(require, exports) {
 			}
 		});
 	};
-
-
-	innerTransfer.transitMessage=function(id,type){
-	    var dialogObj = $( "#confirm-dialog-message" );
-		dialogObj.removeClass('hide').dialog({
-			modal: true,
-			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-			title_html: true,
-			draggable:false,
-			buttons: [ 
-				{
-					text: "否",
-					"class" : "btn btn-minier",
-					click: function() {
-						$( this ).dialog( "close" );
-					}
-				},
-				{
-					text: "是",
-					"class" : "btn btn-primary btn-minier",
-					click: function() {
-						KingServices.updateTouristGroup(id,type);
-						$( this ).dialog( "close" );
-					}
-				}
-			],
-			open:function(event,ui){
-				$(this).find("p").text("是否中转安排？");
-			}
-		});
-
-	};
-
-
-
-
-
-
 
 
 	innerTransfer.deleteTransferIn = function(id){
@@ -854,5 +821,6 @@ define(function(require, exports) {
 	exports.init = innerTransfer.initModule;
 	exports.isEdited = innerTransfer.isEdited; 
 	exports.save = innerTransfer.save; 
-	exports.clearEdit = innerTransfer.clearEdit; 
+	exports.clearEdit = innerTransfer.clearEdit;
+	exports.viewTransferOut = innerTransfer.viewTransferOut;//用于内转利润查看我部转出小组信息--不要再给我删了	
 });

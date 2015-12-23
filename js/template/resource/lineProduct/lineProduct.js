@@ -1686,7 +1686,7 @@ define(function(require, exports) {
 						if(result){
 							var selfPayItem = JSON.parse(data.selfPayItem); 
 							$tr.find("input[name=selfPayItemId]").val(ui.item.id).trigger('change');
-							$tr.find("input[name=contractPrice]").val(selfPayItem.normalTravelAgencyRate);
+							$tr.find("input[name=contractPrice]").val(selfPayItem.normalInnerPrice);
 							$tr.find("input[name=marketPrice]").val(selfPayItem.normalMarketPrice);
 						}
                     }
@@ -1695,7 +1695,7 @@ define(function(require, exports) {
 			change:function(event, ui){
 				if(ui.item == null){
 					var $tr = $(this).val("").closest('tr');
-					$tr.find("input[name=companyId]").val("");
+					// $tr.find("input[name=companyId]").val("");
 					$tr.find("input[name=selfPayItemId]").val("");
 					$tr.find("input[name=mobileNumber]").val("");
 					$tr.find("input[name=contractPrice]").val("");
@@ -1703,8 +1703,8 @@ define(function(require, exports) {
 				}
 			}
 		}).unbind("click").click(function(){
-			var obj = this;
-			var chooseCompanyNameId=$(obj).parent().parent().find("input[name='companyId']").val();
+			var $that = $(this);
+			var chooseCompanyNameId=$that.closest('tr').find("input[name='companyId']").val();
 			$.ajax({
 				url: KingServices.build_url('selfpay', 'findSelfPayItemBySelfPayId'),
 				data:"id="+chooseCompanyNameId,
@@ -1719,10 +1719,10 @@ define(function(require, exports) {
 								
 								selfPayItemList[i].value = selfPayItemList[i].name;
 							}
-							$(obj).autocomplete('option','source', selfPayItemList);
-							$(obj).autocomplete('search', '');
+							$that.autocomplete('option','source', selfPayItemList);
+							$that.autocomplete('search', '');
 						}else{
-							layer.tips('没有内容。', obj, {
+							layer.tips('没有内容。', $that, {
 							    tips: [1, '#3595CC'],
 							    time: 2000
 							});

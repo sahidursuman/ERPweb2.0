@@ -48,10 +48,10 @@
 
                         
 						<label style="margin: 2px 5px 0">
-								<input type="checkbox" disabled="disabled" {{if touristGroup.operateCurrentNeedPayMoney == 1}}checked="checked"{{/if}} class="ace send-check">
+								<input type="checkbox" disabled="disabled" checked="{{if cashFlag == 1}}checked{{/if}}" class="ace send-check">
 								<span class="lbl">
 								</span>
-								<input type="hidden" name="isCurrent" value="{{touristGroup.operateCurrentNeedPayMoney}}">
+								<input type="hidden" name="isCurrent" value="{{cashFlag}}">
 						</label>
                         <label class="col-sm-1 control-label no-padding-right" >对方现收</label>
 						
@@ -82,19 +82,19 @@
 							</thead>
 							<tbody class="T-innerOutEditFeeTbody">
 								<tr>
-									<td>转客价</td>
+									<td>外转价</td>
 									<td>大人</td>
 									<td>
 										<input name="adultCount" value="{{if touristGroup != null}}{{touristGroup.adultCount}}{{/if}}" readonly="readonly" type="text" class="col-sm-12  no-padding-right count" />
 									</td>
 									<td>
-										<input name="transAdultPrice" value="{{if touristGroup.transferFeeStatus==1}}{{touristGroup.transAdultPrice}}{{/if}}" type="text" class="col-sm-12  no-padding-right  price" />
+										<input name="transAdultPrice" value="{{if touristGroup.transferFeeStatus==1}}{{touristGroup.transAdultPrice}}{{/if}}" type="text" class="col-sm-12  no-padding-right  price T-price" />
 									</td>
 									<td></td>
 								</tr>
 								<tr>
 									<td>
-										转客价
+										外转价
 									</td>
 									<td>
 										小孩
@@ -103,7 +103,7 @@
 										<input name="childCount" value="{{if touristGroup != null}}{{touristGroup.childCount}}{{/if}}" readonly="readonly" type="text" class="col-sm-12  no-padding-right count" />
 									</td>
 									<td>
-										<input name="transChildPrice" value="{{if touristGroup.transferFeeStatus==1}}{{touristGroup.transChildPrice}}{{/if}}" type="text" class="col-sm-12  no-padding-right price" />
+										<input name="transChildPrice" value="{{if touristGroup.transferFeeStatus==1}}{{touristGroup.transChildPrice}}{{/if}}" type="text" class="col-sm-12  no-padding-right price T-price" />
 									</td>
 									<td></td>
 								</tr>  
@@ -127,7 +127,7 @@
 										<td><a class="  T-delete cursor">删除</a></td>
 									</tr>
 								{{/each}} 
-								<!--游客小组费end-->    
+								<!--游客小组费end-->
 
 
 								<!--转客其他费用start-->

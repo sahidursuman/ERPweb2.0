@@ -6,7 +6,7 @@
 				<label class="middle title-size">修改小组信息</label>
 			</h5>
 			<div class="widget-body">
-				<div class="widget-main formOneList updateTouristInput">
+				<div class="widget-main formOneList updateTouristInput" style="margin-left: -15px;">
 					<div class="form-group guideInterval">
 						<div class="col-sm-4" style="width:380px;">
 							<label class=" control-label no-padding-right">
@@ -56,10 +56,11 @@
 						</div>
 					</div>
 					<div class="form-group choosePartnerAgencyDiv guideInterval">
-						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>客户来源:</label>
-						<div class="col-sm-2 update-divWidth">
-							<input type="text" name="fromPartnerAgency" class="col-sm-12" placeholder="请输入客户来源" value="{{if touristGroupDetail.partnerAgency != null}}{{touristGroupDetail.partnerAgency.travelAgencyName}}{{/if}}" {{if !!touristGroupDetail.quoteId || !!type }} readonly {{/if}}  >
-							<input type="hidden" value="{{if touristGroupDetail.partnerAgency != null}}{{touristGroupDetail.partnerAgency.id}}{{/if}}" name="fromPartnerAgencyId">
+						<div class="col-sm-3 update-divWidth pull-left" style="width:320px; margin-left:75px;">
+							<label class=" control-label no-padding-right" style="margin-left: -8px"><span class="necessary">*</span>客户来源：<input type="text" name="fromPartnerAgency" class="choosePartnerAgency"  placeholder="请输入客户来源" value="{{if touristGroupDetail.partnerAgency != null}}{{touristGroupDetail.partnerAgency.travelAgencyName}}{{/if}}" {{if !!touristGroupDetail.quoteId || !!type }} readonly {{/if}}>
+							<input type="hidden" name="fromPartnerAgencyId" value="{{if touristGroupDetail.partnerAgency != null}}{{touristGroupDetail.partnerAgency.id}}{{/if}}">
+							<input type="hidden" name="type" value="">
+							</label>
 							<span class="input-group-addon {{if type==null}}T-addPartner{{/if}} R-right {{if !!touristGroupDetail.quoteId}} hidden {{/if}}" data-right="1150002" style="display: inline-block;left:0" title="添加客户">
 								<i class="ace-icon fa fa-plus bigger-110 icon-only" ></i>
 							</span>
@@ -67,8 +68,11 @@
 						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>同行联系人:</label>
 						<div class="col-sm-2 update-divWidth">
 							<div class="input-group">
+							<label>
 								<input class="{{if !!type}}choosePartnerManager{{/if}} col-sm-12 bind-change" value="{{if touristGroupDetail.partnerAgencyContact != null}}{{touristGroupDetail.partnerAgencyContact.contactRealname}} -[{{touristGroupDetail.partnerAgencyContact.contactMobileNumber}}]{{/if}}" name="partnerAgencyNameList" type="text" {{if !!touristGroupDetail.quoteId || !!type}} readonly {{/if}} />
 								<input type="hidden" name="partnerAgencyContactId" value="{{if touristGroupDetail.partnerAgencyContact != null}}{{touristGroupDetail.partnerAgencyContact.id}}{{/if}}" />
+							</label>
+
 								<span class="input-group-addon T-addPartnerManager {{if !!touristGroupDetail.quoteId}} hidden {{/if}}" style="cursor:pointer;" title="为客户来源添加联系人">
 									<i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
 								</span>
@@ -86,18 +90,15 @@
 							</select>
 						</div>
 					</div>
-					<div class="form-group guideInterval">
-						<label class="col-sm-1 control-label no-padding-right">应收:</label>
-						<div class="col-sm-2 update-divWidth">
-							{{if !!type}} 
-							<input value="{{touristGroupDetail.needPayAllMoney}}" readonly="readonly" type="text" name="needPayAllMoney" class="col-sm-12" />
-							{{else}}
-							<input value="{{touristGroupDetail.needPayAllMoney}}"  type="text" name="needPayAllMoney" class="col-sm-12" />
-						    {{/if}}
+					<div  class="form-group guideInterval">
+						<label class="col-sm-1 control-label no-padding-right">组团单号：</label>
+						<div  class="col-sm-2">
+						<input  type="text" name="otaOrderNumber" value="{{touristGroupDetail.otaOrderNumber}}"  maxlength="100" />
 						</div>
-						<label class="col-sm-1 control-label no-padding-right">已收:</label>
+						<label class="col-sm-1 control-label no-padding-right touristNeedPayMoneny">应收:</label>
 						<div class="col-sm-2 update-divWidth">
-							<input value="{{touristGroupDetail.payedMoney}}" type="text" name="payedMoney" {{if !!type}} readonly="readonly"{{/if}} class="col-sm-12" />
+							<input value="{{touristGroupDetail.needPayAllMoney}}" readonly="readonly" type="text" name="needPayAllMoney" class="col-sm-12" />
+	
 						</div>
 
 						<div class="col-sm-2">
@@ -116,7 +117,14 @@
 							<input value="{{touristGroupDetail.currentNeedPayMoney}}" {{if touristGroupDetail.isReceived == 1 || !!type }}readonly="readonly"{{/if}} type="text" name="currentNeedPayMoney" class="col-sm-12" />
 						</div>
 					</div>
+					
+					
 					<div class="form-group guideInterval">
+					<label class="col-sm-1 control-label no-padding-right">已收:</label>
+						<div class="col-sm-2 update-divWidth">
+							<input value="{{touristGroupDetail.payedMoney}}" type="text" name="payedMoney" {{if !!type}} readonly="readonly"{{/if}} class="col-sm-12" />
+						</div>
+						
 						<label class="col-sm-1 control-label no-padding-right">未收:</label>
 						<div class="col-sm-2">
 						{{if !!type}}
@@ -126,13 +134,18 @@
 
 						{{/if}}
 						</div> 
-						
-                        <div class="col-sm-3">
-							<label class=" control-label no-padding-right margin-leftGroup">组团单号：
-							<input  type="text" name="otaOrderNumber" value="{{touristGroupDetail.otaOrderNumber}}"  maxlength="9" />
-							</label>
+					  <label class="col-sm-1 control-label no-padding-right touristNeedPayMoneny">收款方式：</label>
+					  <div class="col-sm-2">
+							<select name="incomeType" class="pull-left">
+								<option{{if touristGroupDetail.incomeType == 0}} selected="selected"{{/if}} value="0">现金</option>
+								<option{{if touristGroupDetail.incomeType == 1}} selected="selected"{{/if}} value="1">银行转账</option>
+								<option{{if touristGroupDetail.incomeType == 2}} selected="selected"{{/if}} value="2">网上支付</option>
+								<option{{if touristGroupDetail.incomeType == 3}} selected="selected"{{/if}} value="3">支票</option>
+								<option{{if touristGroupDetail.incomeType == 4}} selected="selected"{{/if}} value="4">其它</option>
+							</select>
 						</div>
-					  </div>
+					  </div>	
+					</div>
 					</div>
 				</div>
 				<div class="form-group">
@@ -244,7 +257,7 @@
 							<div class="form-group">
 								<label class="col-sm-1 control-label no-padding-right">备注：</label>
 								<div class="col-sm-11">
-									<input name="touristRemarks" value="{{touristGroupDetail.remark}}"  {{if !!type}}readonly="readonly"{{/if}}  class="col-sm-12  no-padding-right" type="text">
+									<input name="touristRemarks" value="{{touristGroupDetail.remark}}" maxlength="1000"  {{if !!type}}readonly="readonly"{{/if}}  class="col-sm-12  no-padding-right" type="text">
 								</div>
 							</div>
 							<div class="form-group margin-top15">
@@ -280,7 +293,7 @@
 													<input name="name" value="{{memberList.name}}" type="text" class="col-sm-12  no-padding-right" />
 												</td>
 												<td>
-													<input name="mobileNumber" value="{{memberList.mobileNumber}}" type="text" class="col-sm-12  no-padding-right" maxlength="11" />
+													<input name="mobileNumber" value="{{memberList.mobileNumber}}" type="text" class="col-sm-12  no-padding-right T-mobileNumber" maxlength="11" />
 												</td>
 												<td>
 													<select name="idCardType">

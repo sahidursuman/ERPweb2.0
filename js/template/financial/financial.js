@@ -18,15 +18,15 @@ FinancialService.updateUnpayMoney = function($tab,rule){
             payedMoney = ($tr.find(".T-payedDetail").data("money") || 0) * 1;
 
         // 设置未付金额
-        $tr.find("td[name=unPayedMoney]").text(settlementMoney - payedMoney);
+        $tr.find("td[name=unPayedMoney]").text(Tools.toFixed(settlementMoney - payedMoney));
 
         //计算结算金额修改前后差值
         var spread = settlementMoney - $(this).data("oldVal")*1;
         //统计数据更新
         var $st = $tab.find(".T-stMoney"),
             $unpay = $tab.find(".T-unpayMoney");
-        $st.text($st.text()*1 + spread);
-        $unpay.text($unpay.text()*1 + spread);
+        $st.text(Tools.toFixed($st.text()*1 + spread));
+        $unpay.text(Tools.toFixed($unpay.text()*1 + spread));
     });
 };
 
@@ -67,9 +67,59 @@ FinancialService.checkSaveJson = function($tab,rule){
             }
         }
     });
+    if(saveJson.length == 0){
+        showMessageDialog($("#confirm-dialog-message"),"没有可提交的数据！");
+        return false;
+    }
     saveJson = JSON.stringify(saveJson);
     return saveJson;
 };
+
+//对账-修改但未勾选提醒
+FinancialService.changeUncheck = function(trList,fn){
+    var result = false,uncheckList = [];
+    trList.each(function(){
+        var $this = $(this);
+        if($this.data('change') && $this.data("confirm") == 0 && !$this.find('.T-checkbox').is(":checked")){
+            $this.addClass('success');
+            uncheckList.push($this);
+            result = true;
+        }
+    });
+    if(result){
+        var buttons = [
+            {
+                text: '是',
+                class: "btn btn-primary btn-minier btn-heightMall",
+                click: function() {
+                    $(this).dialog("close");
+                    fn();
+                }
+            }, 
+            {
+                text: '否',
+                class: "btn btn-minier btn-heightMall",
+                click: function() {
+                    $(this).dialog("close");
+                }
+            }
+        ];
+
+        $("#confirm-dialog-message").removeClass('hide').dialog({
+            modal: true,
+            title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i>提示</h4></div>",
+            title_html: true,
+            draggable:false,
+            buttons: buttons,
+            open:function(event,ui){
+                $(this).find("p").text("您有记录已修改但未勾选对账，是否继续？");
+            }
+        });
+    } else {
+        fn();
+    }
+};
+
 
 
 //付款-自动计算本次付款总额
@@ -162,15 +212,23 @@ FinancialService.isClearSave = function($tab,rule){
     var sumPayMoney = parseFloat($tab.find('input[name=sumPayMoney]').val()),
         unpayMoney = parseFloat($tab.find('.T-unpayMoney').val());
     if(sumPayMoney > unpayMoney){
-        showMessageDialog($("#confirm-dialog-message"),"付款金额大于已对账未付总额！");
+        showMessageDialog($("#confirm-dialog-message"),"付款金额不能大于已对账未付总额！");
         return false;
     }
     return true;
 };
 
 //自动下账前校验及数据组装
-FinancialService.autoPayJson = function(id,$tab,rule){
-    var validator = rule.check($tab);
+/**
+ * 自动下账数据
+ * @param  {int} id   数据ID？
+ * @param  {object} $tab 父容器
+ * @param  {object} rule 校验规则
+ * @param  {int} type 1：收款，0：付款
+ * @return {[type]}      [description]
+ */
+FinancialService.autoPayJson = function(id,$tab,rule, type){
+    var validator = rule.check($tab), key = !!type?'收': '付';
     if(!validator.form()){ return false; }
 
     var startDate = $tab.find("input[name=startDate]").val(),
@@ -185,16 +243,18 @@ FinancialService.autoPayJson = function(id,$tab,rule){
         return false;
     }
     if(sumPayMoney < 0 || sumPayMoney == ""){
-        showMessageDialog($("#confirm-dialog-message"),"付款金额需大于0！");
+        showMessageDialog($("#confirm-dialog-message"),key + "款金额需大于0！");
         return false;
     }
 
     if(isNaN(sumPayMoney)){ sumPayMoney = 0; }
     if(isNaN(unpayMoney)){ unpayMoney = 0; }
     if(sumPayMoney > unpayMoney){
-        showMessageDialog($("#confirm-dialog-message"),"付款金额大于未付总额！");
+        showMessageDialog($("#confirm-dialog-message"),"本次"+ key + "款金额合计大于未"+ key + "金额合计（已对账），请先进行对账！");
         return false;
     }
+
+    $tab.data('isEdited', false);
     var searchParam = {
         id : id,//字段id需与后台协调
         sumCurrentPayMoney : sumPayMoney,
@@ -253,11 +313,18 @@ FinancialService.initCheckBoxs = function($checkAll,checkboxList){//$checkAll全
         if($checkAll.is(":checked")){
             checkboxList.each(function(i){
                 $(this).prop("checked",true);
-                $(this).closest('tr').data("change",true);
+                if($(this).closest('tr').data("confirm") == 0){
+                    $(this).closest('tr').data("change",true);
+                    $(this).closest('.tab-pane').data("isEdited",true);
+                }else{
+                    $(this).closest('tr').data("change",false);
+                }
             });
         } else{
             checkboxList.each(function(i){
                 if(!$(this).prop("disabled")){
+                    $(this).closest('tr').data("change",true);
+                    $(this).closest('.tab-pane').data("isEdited",true);
                     $(this).prop("checked",false);
                 }                                
             });
@@ -285,6 +352,19 @@ FinancialService.autoPayConfirm = function(startDate,endDate,fn){
     });
 };
 
+//设置数据来源标识（中转、代订）
+FinancialService.isGuidePay = function(dataList){
+    for(var i = 0; i < dataList.length; i++){
+        var tripNumber = trim(dataList[i].tripNumber),
+            strLen = tripNumber.length;
+            tripType = tripNumber.substring(strLen-2,strLen);
+        if(tripType == "ZZ" ||　tripType == "zz" || tripType == "DD" || tripType == "dd"){
+            dataList[i].isGuidePay = 1;
+        }
+    }
+    return dataList;
+};
+
 //判断列表是否已全选
 function isAllChecked(checkboxList){
     var isAll = true;
@@ -305,3 +385,90 @@ function getValue($obj,name){
     return result;
 } 
 
+/**
+ * 财务校验方法
+ * 使用方法：var rule = new FinRule(0);
+ * @param {int} type 0: 对账、1：付款、2：自动下账；3：财务收付款、4：收款
+ */ 
+function FinRule(type) {
+    this.type = type;
+}
+
+/**
+ * 获取校验对象
+ * @param  {object} $obj 需要校验输入框的父容器
+ * @return {object}      校验对象。不支持类型，返回false
+ */
+FinRule.prototype.check = function($obj) {
+    switch(this.type) {
+        case 0:  // 对账
+            return $obj.formValidate([
+                {   //结算金额
+                    $ele: $obj.find('input[name=settlementMoney]'),
+                    rules: [
+                        {
+                            type: 'nonnegative-float',
+                            errMsg: '请输入非负数'
+                        }
+                    ]
+                }]);
+        case 1: // 付款
+            return $obj.formValidate([
+                {   
+                    $ele: $obj.find('input[name=payMoney]'),
+                    rules: [
+                        {
+                            type: 'positive-float',
+                            errMsg: '请输入正数'
+                        },
+                        {
+                            type: 'le',
+                            errMsg: '本次付款金额不能超过未付金额'
+                        }
+                    ]
+                }]);
+        case 2: // 自动下账
+            return $obj.formValidate([
+                {   
+                    $ele: $obj.find('input[name=sumPayMoney]'),
+                    rules: [
+                        {
+                            type: 'positive-float',
+                            errMsg: '请输入正数'
+                        },
+                        {
+                            type : 'null',
+                            errMsg : '下账金额不能为空'
+                        }
+                    ]
+                }]);
+        case 3: // 财务收付款
+            return $obj.formValidate([
+                {   
+                    $ele: $obj.find('input[name=payMoney]'),
+                    rules: [
+                        {
+                            type: 'float',
+                            errMsg: '请输入数字'
+                        }
+                    ]
+                }]);
+        case 4: // 收款
+            return $obj.formValidate([
+                {   
+                    $ele: $obj.find('input[name=payMoney]'),
+                    rules: [
+                        {
+                            type: 'positive-float',
+                            errMsg: '请输入正数'
+                        },
+                        {
+                            type: 'le',
+                            errMsg: '本次收款金额不能超过未收金额'
+                        }
+                    ]
+                }]);
+        default:
+            return false;
+    }
+}

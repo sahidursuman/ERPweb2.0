@@ -15,11 +15,11 @@
         <tbody>
             {{each payedMoneyDetailList as item}}
             <tr>
+                <td>{{item.receivableType}}</td>
                 <td>{{item.businessType}}</td>
-                <td>{{item.businessType}}</td>
-                <td>{{item.incomePart}}</td>
-                <td>{{item.incomeMoney}}</td>
-                <td>{{item.payType}}</td>
+                <td>{{item.payParty}}</td>
+                <td>{{item.payDifferenceMoney}}</td>
+                <td>{{if item.payType == 0}}现金{{else if item.payType == 1}}银行转账{{else if item.payType == 2}}网上支付{{else if item.payType == 3}}支票{{else}}其它{{/if}}</td>
                 <td>{{item.remark}}</td>
                 <td>{{item.checkRealname}}</td>
                 <td>{{item.checkTime}}</td>

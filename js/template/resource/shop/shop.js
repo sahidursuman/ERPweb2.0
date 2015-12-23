@@ -23,7 +23,7 @@ define(function(require, exports) {
 		    	'<td data-index="1" class="clearfix div-1" style="margin-bottom:3px"><div><input name=\"startTime\" maxlength=\"100\" type=\"text\" class=\"T-date datepicker\" style=\"width:100px\"/>'+
 		    	'<label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"T-date datepicker\" style=\"width:100px\"/></div></td><td><div data-index="1" class="clearfix div-1" style="margin-bottom:3px">'+
 		    	'<input name="costMoneyStart" maxlength=\"9\" type=\"text\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label>'+
-		    	'<input name=\"costMoneyEnd\" maxlength=\"9\" type=\"text\" style=\"width:100px\"/><label class=\"priceArea\" style=\"float:right\">'+
+		    	'<input name=\"costMoneyEnd\" maxlength=\"9\" type=\"text\" style=\"width:100px\"/><label class=\"priceArea\" style=\"margin-left:10px;\">'+
 		    	'<button class=\"btn btn-success btn-sm btn-white T-action T-add add\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i>'+
 
 		    	'</button></label></div></td><td><div data-index="1" class="clearfix div-1" style="margin-bottom:7px"><input name="guideRate" maxlength=\"5\" type="text" class="form-control"/>'+
@@ -500,8 +500,8 @@ define(function(require, exports) {
 				var numberArea = [];
 				var boolNumber = false;
 				for(var j = 0; j < $divList.length; j++){
-					var costMoneyStart = $divList.eq(j).find('input[name=costMoneyStart]').val();
-					var costMoneyEnd = $divList.eq(j).find('input[name=costMoneyEnd]').val();
+					var costMoneyStart = ($divList.eq(j).find('input[name=costMoneyStart]').val() || 0)*1;
+					var costMoneyEnd = ($divList.eq(j).find('input[name=costMoneyEnd]').val() || 0)*1;
 					var pMoney = shop.compare(costMoneyStart, costMoneyEnd);
 					var isRepeat = false;
 					if(costMoneyStart == costMoneyEnd){
@@ -683,7 +683,7 @@ define(function(require, exports) {
 		var td = obj.closest('td');
 		var index = td.find("div").length;
 		// var priceAreaDiv = "<div data-index=\""+(index+1)+"\" class=\"shopPolicyPriceList clearfix div-"+(index+1)+"\" style=\"margin-bottom:2px\"><input name=\"costMoneyStart\" maxlength=\"9\" type=\"text\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"costMoneyEnd\" type=\"text\" style=\"width:100px\" maxlength=\"9\"/><label class=\"priceArea\" style=\"float:right\"><button class=\"btn btn-danger btn-sm btn-white del\"><i class=\"ace-icon fa fa-minus bigger-110 icon-only delSelf\"></i></button></label></div>";
-		var priceAreaDiv = '<div data-index="'+ (index+1) + '" class="clearfix div-'+ (index+1) + '" style="margin-bottom:2px"> <input name="costMoneyStart" maxlength="9" type="text" style="width:100px" class="input-success"><label>&nbsp;至&nbsp;</label><input name="costMoneyEnd" maxlength="9" type="text" style="width:100px"><label class="priceArea" style="float:right"><button class="btn btn-danger btn-sm btn-white T-action T-del"><i class="ace-icon fa fa-minus bigger-110 icon-only"></i></button></label> </div>';
+		var priceAreaDiv = '<div data-index="'+ (index+1) + '" class="clearfix div-'+ (index+1) + '" style="margin-bottom:2px"> <input name="costMoneyStart" maxlength="9" type="text" style="width:100px" class="input-success"><label>&nbsp;至&nbsp;</label><input name="costMoneyEnd" maxlength="9" type="text" style="width:100px"><label class="priceArea" style="margin-left:10px;"><button class="btn btn-danger btn-sm btn-white T-action T-del"><i class="ace-icon fa fa-minus bigger-110 icon-only"></i></button></label> </div>';
 		var guideRateInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-bottom:7px\"><input name=\"guideRate\" type=\"text\" maxlength=\"5\" class='form-control'/></div>";
 		var travelAgencyRateInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-bottom:7px\"><input name=\"travelAgencyRate\" type=\"text\" maxlength=\"5\"  class='form-control'/></div>";
 		td.append(priceAreaDiv);
@@ -755,13 +755,14 @@ define(function(require, exports) {
 				}
 			});
 		}else{
+			index = div.closest('td').find("div:not(.delete)").index(div);
 			div.fadeOut(function(){
 				$(this).remove();
 			});
-			div.parent().next().find(".div-"+divIndex+"").fadeOut(function(){
+			div.parent().next().children('div').eq(index).fadeOut(function(){
 				$(this).remove();
 			});
-			div.parent().next().next().find(".div-"+divIndex+"").fadeOut(function(){
+			div.parent().next().next().children('div').eq(index).fadeOut(function(){
 				$(this).remove();
 			});
 		}

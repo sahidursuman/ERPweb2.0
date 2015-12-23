@@ -34,60 +34,65 @@
             <label>{{sumSettlementMoney}}</label>
         </div>
         <div class="form-group marginLeft-30">
-            <label>未收金额合计：</label>
+            <label>未付金额合计：</label>
             <label>{{sumUnPayedMoney}}</label>
+        </div>
+        <div class="form-group marginLeft-30">
+            <label>未付金额合计(已对账)：</label>
+            <label class="T-unpayMoney">{{checkedUnPayedMoney}}</label>
         </div>
     </div>
     <div class="form-inline" style="padding-top: 10px;">
         <div class="form-group">
-            <label>本次收款金额合计：</label>
-            <input type="text" class="form-control T-sumReciveMoney" name="sumPayMoney" style="width:70px;">
+            <label>本次付款金额合计：</label>
+            <input type="text" class="form-control T-sumReciveMoney" name="sumPayMoney" {{if source}}readonly="readonly"{{/if}} style="width:70px;">
         </div>
         <div class="form-group marginLeft-30">
-            <label>收款方式：</label>
+            <label>付款方式：</label>
             <select class="form-control T-sumPayType" name="payType">
-                <option>现金</option>
-                <option>银行转账</option>
-                <option>网上支付</option>
-                <option>支票</option>
-                <option>其它</option>
+                <option value="0">现金</option>
+                <option value="1">银行转账</option>
+                <option value="2">网上支付</option>
+                <option value="3">支票</option>
+                <option value="4">其它</option>
             </select>
         </div>
         <div class="form-group marginLeft-30">
             <label>备注：</label>
             <input type="text" class="form-control T-sumRemark">
         </div>
+        {{if !source}}
         <div class="form-group marginLeft-30">
             <button class="btn btn-xs btn-primary marginLeft-30 T-btn-autofill"><i class="ace-icon fa fa-check-circle"></i> 自动下账</button>
         </div>
+        {{/if}}
     </div>
 </div>
 <div class="row" style="margin-top: 30px">
     <table class="table table-striped table-bordered table-hover">
         <thead>
             <tr>
-                <th class="th-border" style="min-width: 45px;">序号</th>
-                <th class="th-border" style="min-width: 70px;">账务类别</th>
-                <th class="th-border" style="min-width: 120px;">发生日期（账期）</th>
-                <th class="th-border" style="min-width: 45px;">类型</th>
-                <th class="th-border" style="min-width: 45px;">班次</th>
-                <th class="th-border" style="min-width: 70px;">座位级别</th>
-                <th class="th-border" style="min-width: 45px;">数量</th>
-                <th class="th-border" style="min-width: 45px;">单价</th>
-                <th class="th-border" style="min-width: 45px;">优惠</th>
-                <th class="th-border" style="min-width: 70px;">账面应付</th>
-                <th class="th-border" style="min-width: 70px;">已付金额</th>
-                <th class="th-border" style="min-width: 45px;">单据</th>
-                <th class="th-border" style="min-width: 70px;">结算金额</th>
-                <th class="th-border" style="min-width: 70px;">未付金额</th>
-                <th class="th-border" style="min-width: 95px;">本次付款金额</th>
-                <th class="th-border" style="min-width: 45px;">备注</th>
-                <th class="th-border" style="min-width: 70px;">对账时间</th>
-                <th class="th-border" style="min-width: 55px;">对账人</th>
-                <th class="th-border" style="min-width: 100px;">对账</th>
+                <th class="th-border">账务类别</th>
+                <th class="th-border">发生日期（账期）</th>
+                <th class="th-border">类型</th>
+                <th class="th-border">班次</th>
+                <th class="th-border">座位级别</th>
+                <th class="th-border">数量</th>
+                <th class="th-border">单价</th>
+                <th class="th-border">优惠</th>
+                <th class="th-border">账面应付</th>
+                <th class="th-border">已付金额</th>
+                <th class="th-border">单据</th>
+                <th class="th-border">结算金额</th>
+                <th class="th-border">未付金额</th>
+                <th class="th-border">本次付款金额</th>
+                <th class="th-border">备注</th>
+                <th class="th-border">对账时间</th>
+                <th class="th-border">对账人</th>
+                <th class="th-border"style="min-width: 105px;">对账</th>
             </tr>
         </thead>
-        <tbody class="T-list T-checkList">
+        <tbody class="T-list T-checkList T-clearList">
 
         </tbody>
     </table>
@@ -106,7 +111,7 @@
             <button class="btn btn-xs btn-primary T-btn-close">
                 <i class="ace-icon fa fa-times-circle"></i> 关闭
             </button>
-            <button class="btn btn-xs btn-primary T-btn-save" style="margin-left:20px">
+            <button class="btn btn-xs btn-primary T-btn-save" style="margin-left:20px" data-type={{source?2:1}}>
                 <i class="ace-icon fa fa-check-circle"></i> 确定付款
             </button>
         </div>

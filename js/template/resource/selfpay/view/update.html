@@ -4,7 +4,7 @@
 		<div class=" ui-sortable-handle">
 				<h5 >
 					<span class="badge badge-primary">1</span>
-					<label class="title-size middle">自费项目主体信息</label>
+					<label class="title-size middle">商家主体信息</label>
 				</h5>
 			<div class="widget-body">
 				<div class="widget-main widget-mainFrist">
@@ -49,7 +49,7 @@
                                                                                                   
                    <!--添加人数返佣start-->               
 					<div class="form-group guideInterval">
-						<label class="col-sm-2 control-label no-padding-right">公司所在省市:</label>
+						<label class="col-sm-2 control-label no-padding-right">所在地区:</label>
 						<div class="col-sm-4">
 							<select name="provinceId"  style="margin-right:3px">
 								<option selected="selected" value="">未选择</option>
@@ -77,7 +77,7 @@
 
 					</div>
 					<div class="form-group guideInterval">
-						<label class="col-sm-2 control-label no-padding-right">公司简介:</label>
+						<label class="col-sm-2 control-label no-padding-right">商家简介:</label>
 						<div class="col-sm-8">
 							<textarea class="form-control" name="remark" class="col-sm-12" >{{selfpay.remark}}</textarea>
 						</div>
@@ -108,10 +108,10 @@
 									<tr>
 										<th class="table-border" width="100"><span class="necessary">*</span>项目名称</th>
 										<th class="table-border" width="100">针对客源</th>
-										<th class="table-border" width="400"><span class="necessary">*</span>时间区间</th>
+										<th class="table-border" width="400"><span class="necessary">*</span>时间范围</th>
 										
 										<th class="table-border" width="125"><span class="necessary">*</span>市场价格(元)</th>
-										<th class="table-border" width="125"><span class="necessary">*</span>人数返佣(人/元)</th>
+										<th class="table-border" width="125">人数返佣(人/元)</th>
 										<th class="table-border" width="125"><span class="necessary">*</span>内部价格(元)</th>
 										
 										<th class="table-border" width="125"><span class="necessary">*</span>导游返佣(%)</th>
@@ -171,11 +171,7 @@
 											<div class="col-sm-12">
 												<input type="text" name="customerRebateMoney" value="{{itemList.customerRebateMoney}}" class="col-sm-12 T-customerRebateMoney T-calc" maxlength="10" data-index="0">
 											</div>
-											{{each itemList.SelfPayRebateList as rebateList index}}
-												<div class="col-sm-12 no-padding" style="padding-top:5px!important;">
-													<input name="customerRebateMoney" value="{{rebateList.customerRebateMoney}}" class="col-sm-12 T-customerRebateMoney T-calc" type="text" maxlength="10" data-index="{{index+1}}">
-												</div>
-											{{/each}}
+											
 										</td>
 
 

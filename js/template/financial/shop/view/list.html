@@ -2,7 +2,7 @@
     <div class="T-search-area">
         <form class="form-inline" role="form" onsubmit="return false">
             <div class="form-group">
-                <label>购物店</label>
+                <label>购物店：</label>
                 <input type="text" class="form-control T-search-name" value="{{searchParam.shopName || "全部"}}" style="width: 220px;">
             </div>
             <div class="form-group marginLeft-30">
@@ -28,9 +28,9 @@
                 <th>返佣金额</th>
                 <th>结算金额</th>
                 <th>已收金额</th>
-                <th>未付金额</th>
+                <th>未收金额</th>
                 <th>对账进度</th>
-                <th>付款进度</th>
+                <th>收款进度</th>
                 <th>操作</th>
             </tr>
         </thead>
@@ -47,9 +47,9 @@
                 <td><span style="color:#{{if rs.checkStep == rs.allRecord}}00CC00{{else}}FF9900{{/if}};">{{rs.checkStep}}/{{rs.allRecord}}</span></td>
                 <td><span style="color:#{{if rs.reciveStep == rs.allRecord}}00CC00{{else}}FF9900{{/if}};">{{rs.reciveStep}}/{{rs.allRecord}}</span></td>
                 <td>
-                    <a class="cursor T-action T-checking">对账</a>
-                    <label class="cursor"> <a> |</a></label>
-                    <a class="cursor T-action T-settlement">付款</a>
+                    <a class="cursor T-action T-checking" data-right="1310002">对账</a>
+                    <label class="cursor R-right" data-right="1310002|1310003"> <a> |</a></label>
+                    <a class="cursor T-action T-settlement R-right" data-right="1310003">收款</a>
                 </td>
             </tr>
         {{/each}}

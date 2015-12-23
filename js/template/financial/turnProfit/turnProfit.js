@@ -103,7 +103,7 @@ define(function(require, exports) {
             var $that = $(this),
                 id = $that.closest('tr').data('id'),
                 transferId = $that.closest('tr').attr('tgTransferId');
-
+                lineProductId = $that.closest('tr').attr('lineProductId');
             if ($that.hasClass('T-showTourist')) {
                 // 查看游客小组
                 TurnProfit.clickFlag = 1;
@@ -118,6 +118,9 @@ define(function(require, exports) {
             } else if ($that.hasClass('T-showTransPay')) {
                 // 查看外转明细
                 TurnProfit.viewTransfer(this);
+            } else if($that.hasClass('T-lineProductDetail')){
+                //查看线路产品
+                KingServices.viewTurnInfo(transferId);
             }
         });
     };
@@ -126,7 +129,7 @@ define(function(require, exports) {
     TurnProfit.viewTouristGroup = function(id){
         var $path = TurnProfit.clickFlag == 2?'profitTransfer':'touristGroup';
         var $method = TurnProfit.clickFlag == 2?'findIncome':'viewTransferTouristGroupDetails';
-        var $title = TurnProfit.clickFlag == 2?'收客团款明細':'查看小组';
+        var $title = TurnProfit.clickFlag == 2?'团款应收明细':'查看小组';
 		$.ajax({
 			url:TurnProfit.url($path,$method),
 			type:"POST",
@@ -209,12 +212,12 @@ define(function(require, exports) {
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
-					data.financial = JSON.parse(data.income);
+					data.pay = JSON.parse(data.pay);
 					var html = arrangeTransferViewTemplate(data);
 					//addTab(menuKey+"-viewTransfer","查看我社转出",html);
 					layer.open({
 						type : 1,
-						title : "转客明细",
+						title : "外转成本明细",
 						skin : 'layui-layer-rim', // 加上边框
 						area : "60%", // 宽高
 						zIndex : 1028,

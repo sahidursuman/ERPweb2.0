@@ -10,12 +10,12 @@
 					<div class="form-group guideInterval">
 						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>线路产品:</label>
 						<div class="col-sm-2 update-divWidth">
-							<input type="text"  value="{{if touristGroupDetail.lineProduct != null}}{{touristGroupDetail.lineProduct.name}}{{/if}}" name="lineProductIdName" class="col-sm-8 bind-change product-width" readonly="readonly" />
+							<input type="text"  name="lineProductIdName" value="{{if touristGroupDetail.lineProduct != null}}{{touristGroupDetail.lineProduct.name}}{{/if}}" class="col-sm-8 bind-change product-width" readonly="readonly" />
 							<input type="hidden" value="{{touristGroupDetail.lineProductId}}" name="lineProductId" />
 							<input type="hidden" value="{{touristGroupDetail.quoteId}}" name="quoteId" />
 							<button class="col-sm-4 btn btn-sm btn-primary btn-travelLine-search travelLine-search {{if !!type}}T-travelLine-search{{/if}}" style="padding-bottom:5px;width: 62px">
 								<i class="ace-icon fa fa-search "></i>搜索
-							</button> 
+							</button>
 						</div>
 						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>出游日期:</label>
 						<div class="col-sm-2 update-divWidth">
@@ -37,8 +37,10 @@
 					<div class="form-group choosePartnerAgencyDiv guideInterval">
 						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>客户来源:</label>
 						<div class="col-sm-2 update-divWidth">
+						<label>
 							<input type="text" name="fromPartnerAgency" class="col-sm-12" placeholder="请输入客户来源" value="{{if touristGroupDetail.partnerAgency != null}}{{touristGroupDetail.partnerAgency.travelAgencyName}}{{/if}}"  >
 							<input type="hidden" value="{{if touristGroupDetail.partnerAgency != null}}{{touristGroupDetail.partnerAgency.id}}{{/if}}" name="fromPartnerAgencyId">
+						</label>
 							<span class="input-group-addon T-addPartner R-right" data-right="1150002" style="display: inline-block;left:0" title="添加客户">
 								<i class="ace-icon fa fa-plus bigger-110 icon-only" ></i>
 							</span>
@@ -46,8 +48,10 @@
 						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>同行联系人:</label>
 						<div class="col-sm-2 update-divWidth">
 							<div class="input-group">
-								<input class="{{if !!type}}choosePartnerManager{{/if}} col-sm-12 bind-change" value="{{if touristGroupDetail.partnerAgencyContact != null}}{{touristGroupDetail.partnerAgencyContact.contactRealname}} -[{{touristGroupDetail.partnerAgencyContact.contactMobileNumber}}]{{/if}}" name="partnerAgencyNameList" type="text" {{if !!touristGroupDetail.quoteId || !!type}} readonly {{/if}} />
-								<input type="hidden" name="partnerAgencyContactId" value="{{if touristGroupDetail.partnerAgencyContact != null}}{{touristGroupDetail.partnerAgencyContact.id}}{{/if}}" />
+								<label>
+									<input class="{{if !!type}}choosePartnerManager{{/if}} col-sm-12 bind-change" value="{{if touristGroupDetail.partnerAgencyContact != null}}{{touristGroupDetail.partnerAgencyContact.contactRealname}} -[{{touristGroupDetail.partnerAgencyContact.contactMobileNumber}}]{{/if}}" name="partnerAgencyNameList" type="text" />
+									<input type="hidden" name="partnerAgencyContactId" value="{{if touristGroupDetail.partnerAgencyContact != null}}{{touristGroupDetail.partnerAgencyContact.id}}{{/if}}" />
+								</label>
 								<span class="input-group-addon T-addPartnerManager" style="cursor:pointer;" title="为客户来源添加联系人">
 									<i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
 								</span>
@@ -64,12 +68,16 @@
 								<option{{if touristGroupDetail.getType == 5}} selected="selected"{{/if}} value="5">QQ</option>
 							</select>
 						</div>
+
+						<label class=" control-label no-padding-right margin-leftGroup">组团单号：
+						<input  type="text" name="otaOrderNumber" value="{{touristGroupDetail.otaOrderNumber}}"  maxlength="100" />
+						</label>
 					</div>
 					<div class="form-group guideInterval">
 						<label class="col-sm-1 control-label no-padding-right">应收:</label>
 						<div class="col-sm-2 update-divWidth">
 					
-							<input value="{{touristGroupDetail.needPayAllMoney}}"  type="text" name="needPayAllMoney" class="col-sm-12" />
+							<input value="{{touristGroupDetail.needPayAllMoney}}" readonly="readonly"  type="text" name="needPayAllMoney" class="col-sm-12" />
 							
 						</div>
 						<label class="col-sm-1 control-label no-padding-right">已收:</label>
@@ -85,15 +93,11 @@
 						<label class="col-sm-1 control-label no-padding-right">未收:</label>
 						<div class="col-sm-2">
 	
-						<input value="{{touristGroupDetail.unIncomeMoney}}" type="text" name="unIncomeMoney" class="col-sm-12" />
+						<input value="{{touristGroupDetail.unIncomeMoney}}" type="text" name="unIncomeMoney" readonly="readonly" class="col-sm-12" />
 							
-						</div> 
-
-						<div class="col-sm-4">
-							<label class=" control-label no-padding-right margin-leftGroup">组团单号：
-							<input  type="text" name="otaOrderNumber" value="{{touristGroupDetail.otaOrderNumber}}"  maxlength="9" />
-							</label>
 						</div>
+
+					
 					</div>
 
 				</div>
@@ -202,7 +206,7 @@
 							<div class="form-group">
 								<label class="col-sm-1 control-label no-padding-right">备注：</label>
 								<div class="col-sm-11">
-									<input name="touristRemarks" value="{{touristGroupDetail.remark}}"  class="col-sm-12  no-padding-right" type="text">
+									<input name="touristRemarks" value="{{touristGroupDetail.remark}}" maxlength="1000"  class="col-sm-12  no-padding-right" type="text">
 								</div>
 							</div>
 							<div class="form-group margin-top15">
@@ -238,7 +242,7 @@
 													<input name="name" value="{{memberList.name}}" type="text" class="col-sm-12  no-padding-right" />
 												</td>
 												<td>
-													<input name="mobileNumber" value="{{memberList.mobileNumber}}" type="text" class="col-sm-12  no-padding-right" maxlength="11" />
+													<input name="mobileNumber" value="{{memberList.mobileNumber}}" type="text" class="col-sm-12  no-padding-right T-mobileNumber" maxlength="11" />
 												</td>
 												<td>
 													<select name="idCardType">

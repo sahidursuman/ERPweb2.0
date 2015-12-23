@@ -8,6 +8,11 @@
 .table-special tr{
     border-top: 1px solid #ddd;
 }
+/*table溢出*/
+.overflow-table tr td,.overflow-table tr th{
+    padding-left: 0px!important;
+    padding-right: 0px!important;
+}
 .table-special{
     padding:0!important;
     width: 100%;
@@ -311,6 +316,15 @@ table tr td{
 .marginLeft-30{
     margin-left: 25px!important;
 }
+
+.mar-l-10 {
+    margin-left: 10px;
+}
+
+.label-inline-60 {
+    display: inline-block;
+    width: 60px;
+}
 .widget-main{padding: 0!important;}
 .form-group{margin-bottom: 13px!important;}
 .color{
@@ -333,7 +347,11 @@ table tr td{
 .top-box{
     margin-top: 10px;
 }
-.dropdown-menu{left: -25px;min-width: 70px}
+.dropdown-menu {
+    margin-left: 0;
+    min-width: 70px
+}
+
 #alter-pwd {
     color: #393939;
 }
