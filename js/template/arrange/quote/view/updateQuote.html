@@ -51,14 +51,14 @@
 					<div class="form-group">
 						<div class="col-sm-2 addQuoteInformation">
 						<label class="col-sm-4 control-label no-padding-right"><span class="necessary">*</span>出游日期：</label>
-							<input type="text" name="startTime" readonly="readonly" class="col-sm-4 datepicker" maxlength="20"value="{{quoteDetailJson.startTime | dateFormat: 'yyyy-MM-dd'}}">
+							<input type="text" name="startTime" {{if isCopy != '1'}}readonly="readonly"{{/if}} class="col-sm-4 datepicker {{if isCopy == '1'}}T-startTime T-datePicker{{/if}}" maxlength="20"value="{{quoteDetailJson.startTime | dateFormat: 'yyyy-MM-dd'}}">
 						</div>
 						
 						<div class="col-sm-2 addQuoteInformation">
 						<label class="col-sm-3 control-label no-padding-right"><span class="necessary">*</span>人数：</label>
-							<input type="text" name="adultCount" readonly="readonly" class="T-changeQuote" maxlength="5" style="width:50px;" value="{{quoteDetailJson.adultCount}}">
+							<input type="text" name="adultCount" {{if isCopy != '1'}}readonly="readonly"{{/if}} class="T-changeQuote" maxlength="5" style="width:50px;" value="{{quoteDetailJson.adultCount}}">
 							<label class="control-label">大人</label> 
-							<input type="text" name="childCount" readonly="readonly" class="T-changeQuote" maxlength="5" style="width:50px;" value="{{quoteDetailJson.childCount}}">
+							<input type="text" name="childCount" {{if isCopy != '1'}}readonly="readonly"{{/if}} class="T-changeQuote" maxlength="5" style="width:50px;" value="{{quoteDetailJson.childCount}}">
 							<label class="control-label">小孩</label>
 						</div>
 						
