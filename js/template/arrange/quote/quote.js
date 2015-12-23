@@ -721,7 +721,7 @@ define(function(require, exports) {
 		})
 		// 初始化富文本插件
 		$container.find('.T-daylist').children('.tab-pane').each(function(index, el) {
-			init_editor($(this).find('.T-editor').prop('id'));
+			init_editor($(this).find('.T-editor').prop('id'), {readonly: true});
 		});
 		//添加具体行程安排相应事件
 		$container.find('.T-daylist').on('click', '.T-add', function(event) {
