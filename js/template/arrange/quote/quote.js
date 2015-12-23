@@ -936,7 +936,7 @@ define(function(require, exports) {
 							$price = $hotelList[k].price,
 							$marketPrice = $hotelList[k].marketPrice;
 
-						var $hotelListA = $container.find('.T-resourceHotelList');
+						var $hotelListA = $container.find('#dayListUpdate-'+i+' .T-resourceHotelList');
 						$hotelListA.each(function(j) {
 							var $hotel = $hotelListA.eq(j).find('[name=hotelId]').val(),
 								$room = $hotelListA.eq(j).find('[name=hotelRoomId]').val()
@@ -953,7 +953,7 @@ define(function(require, exports) {
 							$itemId = $scenicList[k].itemId,
 							$price = $scenicList[k].price;
 
-						var $scenicListA = $container.find('.T-resourceScenicList');
+						var $scenicListA = $container.find('#dayListUpdate-'+i+' .T-resourceScenicList');
 						$scenicListA.each(function(j) {
 							var $scenic = $scenicListA.eq(j).find('[name=scenicId]').val(),
 								$item = $scenicListA.eq(j).find('[name=chargingId]').val();
@@ -970,7 +970,7 @@ define(function(require, exports) {
 							$price = $selfpayList[k].price,
 							$marketPrice = $selfpayList[k].marketPrice;
 
-						var $selfpayListA = $container.find('.T-resourceSelfPayList');
+						var $selfpayListA = $container.find('#dayListUpdate-'+i+' .T-resourceSelfPayList');
 						$selfpayListA.each(function(j) {
 							var $selfpay = $selfpayListA.eq(j).find('[name=companyId]').val(),
 								$item = $selfpayListA.eq(j).find('[name=selfPayItemId]').val();
