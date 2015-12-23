@@ -1398,26 +1398,32 @@ define(function(require, exports) {
 				showLoading: false,
 				success: function(data){
 					if (showDialog(data)) {
-						var html = '';
+						var html = '',htmlOut = '';
 						for (var i = 0; i < data.dayStatus.length; i++) {
 							if(data.dayStatus[i].success == 0){
 								html += '<option value="'+data.dayStatus[i].arriveTime+'">'+data.dayStatus[i].arriveTime+'</option>'
+								htmlOut += '<option value="'+quote.checkInTime(2,data.dayStatus[i].arriveTime)+'">'+quote.checkInTime(2,data.dayStatus[i].arriveTime)+'</option>'
 							}else{
 								html += '<option value="'+data.dayStatus[i].arriveTime+'">'+data.dayStatus[i].arriveTime+'[已询价]</option>'
+								htmlOut += '<option value="'+quote.checkInTime(2,data.dayStatus[i].arriveTime)+'">'+quote.checkInTime(2,data.dayStatus[i].arriveTime)+'[已询价]</option>'
 							}
 						}
-						$layerContainer.find('[name=checkInTime],[name=checkOutTime]').html(html);
+						$layerContainer.find('[name=checkInTime]').html(html);//[name=checkOutTime]
+						$layerContainer.find('[name=checkOutTime]').html(htmlOut);
 					}
 				}
 			})
 		}else{
 			dataHotel.days = [];
-			var html = '';
+			var html = '',htmlOut = '';
+
 			for (var i = 1,len = lineProductInfo.days; i <= len; i++) {
 				var time = quote.checkInTime(i,lineProductInfo.startTime);
-				html += '<option value="'+time+'">'+time+'</option>'
+				html += '<option value="'+quote.checkInTime(2,time)+'">'+quote.checkInTime(2,time)+'</option>'
+				htmlOut += '<option value="'+quote.checkInTime(2,time)+'">'+quote.checkInTime(2,time)+'</option>'
 			}
-			$layerContainer.find('[name=checkInTime],[name=checkOutTime]').html(html);
+			$layerContainer.find('[name=checkInTime]').html(html);//[name=checkOutTime]
+			$layerContainer.find('[name=checkOutTime]').html(htmlOut);
 		}
 	}
 
