@@ -199,11 +199,17 @@
 															<th class="th-border">备注</th>
 														</tr>
 													</thead>  
-													<tbody>
+													<tbody>{{if insuranceTemplate != null}}
+														<tr>
+															<td><input class="col-xs-12 T-changeQuote" value="{{insuranceTemplate.price}}" name="guideFee" type="text" maxlength="9" /></td>
+															<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" /></td>
+														</tr>
+														{{else}}
 														<tr>
 															<td><input class="col-xs-12 T-changeQuote" name="guideFee" type="text" maxlength="9" /></td>
 															<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" /></td>
 														</tr>
+														{{/if}}
 													</tbody>
 												</table>
 											</div>

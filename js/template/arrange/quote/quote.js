@@ -2469,7 +2469,7 @@ define(function(require, exports) {
 		
 	};
 	//添加购物
-	quote.addResourceShopping = function($btn, validator){
+	quote.addResourceShopping = function($btn, validator, $container){
 		//添加行程安排购物
 		var shoppingDetails = '<div class="T-timeline-item timeline-item clearfix updateShoppingList updateLineProductDaysDetail T-resourceShoppingList ui-sortable-handle" data-entity-index='+quote.updateLineProductIndex+'><div class="timeline-info "  style="color:#1fade0" ><i class="ace-icon fa fa-circle" ></i><span>购物</span></div>'+
 		'<div class="widget-box transparent" style="margin-top: 20px"><div class="widget-body"><div class=""><table class="table table-striped table-bordered table-hover">'+
