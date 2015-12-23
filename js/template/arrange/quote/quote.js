@@ -1102,14 +1102,16 @@ define(function(require, exports) {
 			    					startTime = lineProductInfo.startTime,
 			    					expiryTime = quote.getValue($busLayerContent,"expiryTime"),
 			    					busCompany = [];
-			    				for (var i = 0; i < quote.busSelectedArray.length; i++) {
-			    					var json = {
-			    						id: quote.busSelectedArray[i]
-			    					}
-			    					busCompany.push(json);
+			    				if (!!quote.busSelectedArray) {
+				    				for (var i = 0; i < quote.busSelectedArray.length; i++) {
+				    					var json = {
+				    						id: quote.busSelectedArray[i]
+				    					}
+				    					busCompany.push(json);
+				    				}
 			    				}
 			    				if (seatCount-(lineProductInfo.adultCount-0)+(lineProductInfo.childCount-0) >= 0) {
-				    				if (busCompany.length) {
+				    				if (busCompany.length > 0) {
 				    					busCompany = JSON.stringify(busCompany);
 					    				$.ajax({
 					    					url: KingServices.build_url("busInquiry","saveInquiry"),
