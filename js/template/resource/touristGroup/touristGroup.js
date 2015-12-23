@@ -385,6 +385,16 @@ define(function(require, exports) {
         touristGroup.groupMemberDispose($groupMemberForm, 2);
         //中转安排处理
         touristGroup.innerTransferDispose($innerTransferForm, 2);
+
+         //报价单号
+        $updateTabId.find('.T-ChosenQuoteNumber').on('click', function(event) {
+            event.preventDefault();
+            /* Act on the event */
+            //报价单号的layer层
+            var lineProductId = $updateTabId.find(".T-lineProductId").val();
+                touristGroup.chooseQuoteProduct(lineProductId);
+        });
+
         //提交按钮事件
         $updateTabId.find(".T-submit-updateTouristGroup").on('click', function() {
             if (!touristGroup.validator.form()) {
