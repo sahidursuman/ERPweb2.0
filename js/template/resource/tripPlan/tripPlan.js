@@ -463,7 +463,7 @@ define(function(require, exports) {
 		//一键询价、预订操作
 		$tab.find('#tripPlan_addPlan_hotel').off('click.oneClick').on('click.oneClick', '.T-oneClick', function() {
 			event.preventDefault();
-			var $this = $(this),
+			var $this = $(this), isAgree = 1,
 				saveJson = {
 					tripPlanId : $tab.find('[name=tripPlanId]').val(),
 					hotelJson: []
@@ -471,19 +471,25 @@ define(function(require, exports) {
 				var $tr = $tab.find('#tripPlan_addPlan_hotel tbody tr');
 				$tr.each(function(i) {
 					var json = {
-						arrangeId: $tr.data('entity-arrangeid'),
-						count: $tr.find('[name=memberCount]').val(),
-						hotelId: $tr.find('[name=hotelId]').val(),
-						price: $tr.find('[name=fee]').val(),
-						type: $tr.find('[name=hotelRoom]').val(),
-						whichDay: $tr.find('[name=whichDay]').val(),
-						hotelRoomId: $tr.find('[name=hotelRoomId]').val()
+						arrangeId: $tr.eq(i).data('entity-arrangeid'),
+						count: $tr.eq(i).find('[name=memberCount]').val(),
+						hotelId: $tr.eq(i).find('[name=hotelId]').val(),
+						price: $tr.eq(i).find('[name=fee]').val(),
+						type: $tr.eq(i).find('[name=hotelRoom]').val(),
+						whichDay: $tr.eq(i).find('[name=whichDay]').val(),
+						hotelRoomId: $tr.eq(i).find('[name=hotelRoomId]').val()
+					}
+					if (!!json.count == false || !!json.hotelId == false || !!json.price == false || !!json.type == false || !!json.whichDay == false) {
+						showMessageDialog($( "#confirm-dialog-message" ), '请完善酒店信息');
+						isAgree = 0;
 					}
 				saveJson.hotelJson.push(json);
 				});
 			if ($this.hasClass('T-asking')) {
 				//一键询价
-				tripPlan.oneClickAsking($this, $tab, saveJson);
+				if (!!isAgree) {
+					tripPlan.oneClickAsking($this, $tab, saveJson);
+				}
 			}else if ($this.hasClass('T-booking')) {
 				//一键预订
 				tripPlan.oneClickBooking($this, $tab, saveJson);
