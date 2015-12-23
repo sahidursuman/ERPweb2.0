@@ -578,10 +578,12 @@ define(function(require, exports) {
 				});
 
 				//精度调整
-				var $price=$tab.find('.price'),
+				var $price=$tab.find('.T-price'),
+					$count=$tab.find('.count')
 				    $transPayedMoney=$tab.find('input[name=transPayedMoney]');
 				Tools.inputCtrolFloat($transPayedMoney);
 				Tools.inputCtrolFloat($price);
+				Tools.inputCtrolFloat($count);
 
 
 				//同行地接
@@ -630,8 +632,8 @@ define(function(require, exports) {
 
 			var $tbody=$tab.find(".T-addTransferCost");
 			    $tbody.append(html);
-			var $otherPrice=$tbody.find('input[name=otherPrice]');
-			Tools.inputCtrolFloat($otherPrice);
+			var $count=$tbody.find('.count');
+			Tools.inputCtrolFloat($count);
 			
 			// 更新表单验证的事件绑定
 			rule.update(validator);   
