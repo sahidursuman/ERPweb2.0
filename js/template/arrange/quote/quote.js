@@ -477,6 +477,7 @@ define(function(require, exports) {
 						+'<td><input class="col-xs-12" name="manager" type="text" readonly="readonly" value="'+offer.managerName+'"></td>'
 						+'<td><input class="col-xs-12" name="mobileNumber" type="text" readonly="readonly" value="'+offer.mobileNumber+'"></td>'
 						+'<td><input class="col-xs-12 T-changeQuote" readonly="readonly" name="seatcountPrice" type="text" maxlength="9" value="'+offer.seatPrice+'"></td>'
+						+'<td><input class="col-xs-12 T-changeQuote" name="marketPrice" type="text" maxlength="9" value="'+offer.seatPrice+'"></td>'
 						+'<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" value=""></td>'
 						+'</tr>';
 						$obj.find('tbody').html(html);
@@ -767,7 +768,7 @@ define(function(require, exports) {
 			var $this = $(this), $time;
 			var $table = $container.find('.T-daylist table.table-striped');
 			if ($table.length > 0) {
-				showNndoConfirmDialog($( "#confirm-dialog-message" ), '您修改了出游日期，是否重置行程安排成本价？', function() {
+				showNndoConfirmDialog($( "#confirm-dialog-message" ), '是否重置行程安排成本价', function() {
 					$time = $this.val();
 					quote.changeStartTime($container, $time);
 				})
