@@ -360,9 +360,7 @@ define(function(require, exports) {
             $updateTabId = $("#tab-resource_touristGroup-update-content"),
             $groupInfoForm = $updateTabId.find(".T-touristGroupMainForm"), //小组信息对象
             $groupMemberForm = $updateTabId.find(".T-touristGroupMainFormMember"), //游客名单对象
-            //id = $updateTabId.find(".T-submit-updateTouristGroup").attr('data-entity-id'),
             $innerTransferForm = $updateTabId.find(".T-touristGroupMainFormRS"); //中转安排对象
-        //$updateTabId.find(".T-submit-updateTouristGroup").data('id',id);
         var $payedMoney = $groupInfoForm.find('input[name=payedMoney]'),
             $currentNeedPayMoney = $groupInfoForm.find('input[name=currentNeedPayMoney]'),
             $adultPrice = $groupInfoForm.find('input[name=adultPrice]'),
