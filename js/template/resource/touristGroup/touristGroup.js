@@ -942,57 +942,7 @@ define(function(require, exports) {
                 });
         }
     };
-    //处理小组信息
-    touristGroup.groupInfoDispose = function($obj, typeFlag ,typeInner) {
-        //格式化时间控件
-        touristGroup.formatTime($obj);
-        //搜索线路
-        $obj.find(".T-travelLine-search").on('click', function() {
-            // touristGroup.searchLinproduct(true,0,"",typeFlag);
-            touristGroup.initLineProductSearch(typeFlag == 2, typeInner);
-        });
-        //客户来源
-        var $partnerAgencyObj = $obj.find('input[name=fromPartnerAgency]');
-        touristGroup.getPartnerAgencyList($partnerAgencyObj);
-        //同行联系人
-        var $contactObj = $obj.find('input[name=partnerAgencyNameList]');
-        touristGroup.getContactList($contactObj);
-        //新增同行联系人
-        $obj.find('.T-addPartnerManager').on('click', function() {
-            touristGroup.addPartnerManager($(this));
-        });
-        //新增费用项
-        $obj.find('.T-touristGroup-addOtherCost').on('click', function() {
-            touristGroup.addOtherCost($obj);
-            touristGroup.validator = rule.checktouristGroup($obj);
-        });
-        //删除原有费用项
-        if (typeFlag == 2) {
-            //addCost-delete
-            $obj.find(".T-addCostTbody").on('click', ".oldaddCost-delete", function() {
-                $tr = $(this).closest('tr');
-                var costListTrId = $tr.attr("data-entity-id");
-                if (costListTrId != null && costListTrId != "") {
-                    $tr.addClass("deleted");
-                    $tr.fadeOut(function() {
-                        $(this).hide();
-                        touristGroup.autoSumNeedPay($obj);
-                    })
-                    touristGroup.autoSumNeedPay($obj);
-                };
-            });
-        };
-        //计算应收，未收
-        $obj.find('input[name=payedMoney]').on('change', function() {
-            touristGroup.autoSumNeedPay($obj);
-        });
-        $obj.find('input[name=currentNeedPayMoney]').on('change', function() {
-            touristGroup.autoSumNeedPay($obj);
-        });
-        $obj.find(".T-addCostTbody").on('change', 'input', function() {
-            touristGroup.autoSumNeedPay($obj);
-        })
-    };
+
     //处理游客名单
     touristGroup.groupMemberDispose = function($obj, typeFlag) {
         //添加成员
@@ -2058,7 +2008,7 @@ define(function(require, exports) {
                                     $touristSend = $arrangeForm.find('.T-touristSend').is(':checked');
                                 if (!!typeInner && ($touristReChecked == true || $smallCar == true || $touristSend == true)) {
                                     // 内外转确认之后，在游客小组选择了中转，需要调整到中转安排的列表界面
-                                    KingServices.updateTransit(touristGroup.visitorId);
+                                    KingServices.updateTransit(touristGroup.visitorId);  
                                 } else {
                                     touristGroup.freshHeader(touristGroup.$freshData);
                                     //刷新列表数据
