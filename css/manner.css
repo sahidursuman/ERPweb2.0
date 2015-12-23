@@ -1517,6 +1517,22 @@ select {
     /*border-bottom: 1px solid red;*/
     margin-top: 30px;
 }
+.share-anchor-ul{
+    width: 20px;
+    /*background-color: red;*/
+    margin-top: -4px;
+    margin-left: 6px;
+}
+.share-anchor ul li a{
+    color:  #fff; 
+}
+.share-anchor-ul li{
+    width: 17px;
+    height: 20px;
+}
+.share-anchor-ul li:focus{
+   color: #48A2D2; 
+}
 
 p#back-top {
     position: fixed;
