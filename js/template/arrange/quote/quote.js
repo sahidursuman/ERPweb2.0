@@ -3288,9 +3288,6 @@ define(function(require, exports) {
 							remark : $item.find("[name=remark]").val(),
 							orderIndex : $item.attr("data-entity-index")
 						}
-						if (!!restaurantJson.marketPrice == flase) {
-							restaurantJson.marketPrice = restaurantJson.price
-						}
 						saveJson.lineDayList[index].restaurant.push(restaurantJson);
 					}
 				}
@@ -3318,9 +3315,6 @@ define(function(require, exports) {
 							remark : $item.find("[name=remark]").val(),
 							orderIndex : $item.attr("data-entity-index")
 						}
-						if (!!hotelJson.marketPrice == flase) {
-							hotelJson.marketPrice = hotelJson.price
-						}
 						saveJson.lineDayList[index].hotel.push(hotelJson)
 					}
 				}
@@ -3345,9 +3339,6 @@ define(function(require, exports) {
 							marketPrice: $item.find('[name=marketPrice]').val() || $item.find("[name=price]").val(),
 							remark : $item.find("[name=remark]").val(),
 							orderIndex : $item.attr("data-entity-index")
-						}
-						if (!!scenicJson.marketPrice == false) {
-							scenicJson.marketPrice = scenicJson.price
 						}
 						saveJson.lineDayList[index].scenic.push(scenicJson);
 					}
@@ -3394,9 +3385,6 @@ define(function(require, exports) {
 							remark : $item.find("[name=remark]").val(),
 							orderIndex : $item.attr("data-entity-index")
 						}
-						if (!!selfPayJson.marketPrice == false) {
-							selfPayJson.marketPrice = selfPayJson.price
-						}
 						saveJson.lineDayList[index].selfPay.push(selfPayJson);
 					}
 					
@@ -3421,9 +3409,6 @@ define(function(require, exports) {
 							count: $item.find("[name=count]").val(),
 							seatLevel: $item.find("[name=seatLevel]").val()
 						}
-						if (!!ticketJson.marketPrice == false) {
-							ticketJson.marketPrice = ticketJson.price
-						}
 						saveJson.lineDayList[index].ticket.push(ticketJson);
 					}
 				}
@@ -3444,9 +3429,6 @@ define(function(require, exports) {
 							price: $item.find("[name=price]").val(),
 							marketPrice: $item.find('[name=marketPrice]').val() || $item.find("[name=price]").val(),
 							remark: $item.find("[name=remark]").val()
-						}
-						if (!!otherJson.marketPrice == flase) {
-							otherJson.marketPrice = otherJson.price
 						}
 						saveJson.lineDayList[index].otherArrangeList.push(otherJson);
 					}
