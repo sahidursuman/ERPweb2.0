@@ -2016,7 +2016,7 @@ p#back-top a span {
 }
 
 .group-info > .form-inline {
-    margin-bottom: 10px;
+    height: 40px;
 }
 .group-info .form-group {
     margin-right: 25px;
