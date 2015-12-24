@@ -76,13 +76,11 @@
 						{{if hotOrderList.status==-1}}
 						  已撤单
 						  {{else if hotOrderList.status==0}}
-						  已下单
-						  {{else if hotOrderList.status==1}}
-						  已确认
-						  {{else if hotOrderList.status==2}}
-						  已完成
-						  {{else if hotOrderList.status==3}}
-						  进行中
+						  预定中
+						  {{else if hotOrderList.status==1 && hotOrderList.result==-1}}
+						  已拒绝
+						  {{else if hotOrderList.status==1  && hotOrderList.status==1}}
+						  已预订
 						{{/if}}
 					</td>
 				</tr>	

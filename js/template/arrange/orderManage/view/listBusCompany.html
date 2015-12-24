@@ -51,13 +51,11 @@
 						{{if busOrderList.status==-1}}
 						  已撤单
 						  {{else if busOrderList.status==0}}
-						  已下单
-						  {{else if busOrderList.status==1}}
-						  已确认
-						  {{else if busOrderList.status==2}}
-						  已完成
-						  {{else if busOrderList.status==3}}
-						  进行中
+						  预定中
+						  {{else if busOrderList.status==1 && busOrderList.result==-1}}
+						  已拒绝
+						  {{else if busOrderList.status==1  && busOrderList.status==1}}
+						  已预订
 						{{/if}}
 					</td>
 				</tr>
