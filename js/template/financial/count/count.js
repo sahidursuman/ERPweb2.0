@@ -1309,14 +1309,17 @@ define(function(require, exports){
 		//计算团收入
 		var tripSum = (tripNeedIncome+selfPayTravelAgencyRebateMoney+shopTravelAgencyRateMoney+otherInCome+guideManageMoney);
 		tripSum = Count.changeTwoDecimal(tripSum);
+		tripSum = Tools.toFixed(tripSum,2);
 		tripIncome.text(tripSum);
 		//计算毛利
 		var grossProfi = tripSum-tripCost-tripTransitCost;
 		grossProfi = Count.changeTwoDecimal(grossProfi);
+		grossProfi = Tools.toFixed(grossProfi,2);
 		grossProfitMoney.text(grossProfi);
 		//计算人均毛利
 		var perGrossProfit = (grossProfi/allPerson);
 		perGrossProfit = Count.changeTwoDecimal(perGrossProfit);
+		perGrossProfit = Tools.toFixed(perGrossProfit,2);
 		perGrossProfitMoney.text(perGrossProfit);
 	};
 	//计算整个团成本、毛利、人均毛利
@@ -1360,15 +1363,18 @@ define(function(require, exports){
 		var tripCostSum = (hotelArrangeNeedPayMoney+scenicArrangeNeedPayMoney+guideSelfMoney+ticketArrangeNeedPayMoney+otherArrangeNeedPayMoney+selfArrangeNeedPayMoney)
 		tripSum = Count.changeTwoDecimal(tripSum);
 		tripCostSum = Count.changeTwoDecimal(tripCostSum);
-		var allSum = (tripSum+tripCostSum)
+		var allSum = (tripSum+tripCostSum);
+		allSum = Tools.toFixed(allSum,2);
 		tripCost.text(allSum);
 		//计算毛利
 		var grossProfi = tripIncome-allSum-tripTransitCost;
 		grossProfi = Count.changeTwoDecimal(grossProfi);
+		grossProfi = Tools.toFixed(grossProfi,2);
 		grossProfitMoney.text(grossProfi);
 		//计算人均毛利
 		var perGrossProfit = (grossProfi/allPerson);
 		perGrossProfit = Count.changeTwoDecimal(perGrossProfit);
+		perGrossProfit = Tools.toFixed(perGrossProfit,2);
 		perGrossProfitMoney.text(perGrossProfit);
 	};
 	//计算中转成本、毛利、人均毛利
@@ -1391,6 +1397,7 @@ define(function(require, exports){
 		//计算中转成本
 		var transfetCost = (busCompanyNeedPayMoney+outRestaurantMoney+hotelArrangeNeedPayMoney+outOtherMoney+ticketArrangeNeedPayMoney);
 		transfetCost =Count.changeTwoDecimal(transfetCost);
+		transfetCost = Tools.toFixed(transfetCost,2);
 		tripTransitCost.text(transfetCost);
 	};
 	//自费金额计算
@@ -2874,7 +2881,6 @@ define(function(require, exports){
 		if(newVal<0){
 			newVal = 0;
 		};
-		newVal = Tools.toFixed(newVal,2);
 		return newVal;
 	};
 	Count.changeForInstall = function($val){
