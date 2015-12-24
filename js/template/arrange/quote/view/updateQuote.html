@@ -38,7 +38,7 @@
             </div>
 		</div>
 	</form>
-	<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
+	<form class="form-horizontal T-quoteInfo" role="form" style="margin-top:10px" onsubmit="return false">
 		<div class="ui-sortable-handle">
 			<h5 class=" pull-left " >
 				<i class="ace-icon fa fa-info-circle title-size"></i>
@@ -51,14 +51,14 @@
 					<div class="form-group">
 						<div class="col-sm-2 addQuoteInformation">
 						<label class="col-sm-4 control-label no-padding-right"><span class="necessary">*</span>出游日期：</label>
-							<input type="text" name="startTime" readonly="readonly" class="col-sm-4 datepicker" maxlength="20"value="{{quoteDetailJson.startTime | dateFormat: 'yyyy-MM-dd'}}">
+							<input type="text" name="startTime" class="col-sm-4 datepicker T-startTime T-datePicker" maxlength="20"value="{{quoteDetailJson.startTime | dateFormat: 'yyyy-MM-dd'}}">
 						</div>
 						
 						<div class="col-sm-2 addQuoteInformation">
 						<label class="col-sm-3 control-label no-padding-right"><span class="necessary">*</span>人数：</label>
-							<input type="text" name="adultCount" readonly="readonly" class="T-changeQuote" maxlength="5" style="width:50px;" value="{{quoteDetailJson.adultCount}}">
+							<input type="text" name="adultCount" class="T-changeQuote" maxlength="5" style="width:50px;" value="{{quoteDetailJson.adultCount}}">
 							<label class="control-label">大人</label> 
-							<input type="text" name="childCount" readonly="readonly" class="T-changeQuote" maxlength="5" style="width:50px;" value="{{quoteDetailJson.childCount}}">
+							<input type="text" name="childCount" class="T-changeQuote" maxlength="5" style="width:50px;" value="{{quoteDetailJson.childCount}}">
 							<label class="control-label">小孩</label>
 						</div>
 						
@@ -852,25 +852,25 @@
 							<div class="form-group">
 								<label class="col-sm-1 control-label no-padding-right">费用包含:</label>
 								<div class="col-sm-8">
-                                    <textarea class="form-control" class="col-sm-12" readonly="readonly">{{quoteDetailJson.lineProduct.includeFee}}</textarea>
+                                    <textarea class="form-control" name="includeFee" class="col-sm-12">{{quoteDetailJson.lineProduct.includeFee}}</textarea>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-1 control-label no-padding-right">费用不含:</label>
                                 <div class="col-sm-8">
-                                    <textarea class="form-control" class="col-sm-12" readonly="readonly">{{quoteDetailJson.lineProduct.excludeFee}}</textarea>
+                                    <textarea class="form-control" name="excludeFee" class="col-sm-12">{{quoteDetailJson.lineProduct.excludeFee}}</textarea>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-1 control-label no-padding-right">行程特色:</label>
                                 <div class="col-sm-8">
-                                    <textarea class="form-control" class="col-sm-12" readonly="readonly">{{quoteDetailJson.lineProduct.lineFeature}}</textarea>
+                                    <textarea class="form-control" name="lineFeature" class="col-sm-12">{{quoteDetailJson.lineProduct.lineFeature}}</textarea>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-1 control-label no-padding-right">行程须知:</label>
                                 <div class="col-sm-8">
-                                    <textarea class="form-control" class="col-sm-12" readonly="readonly">{{quoteDetailJson.lineProduct.lineNotice}}</textarea>
+                                    <textarea class="form-control" name="lineNotice" class="col-sm-12">{{quoteDetailJson.lineProduct.lineNotice}}</textarea>
 								</div>   
 							</div>
 						</div>

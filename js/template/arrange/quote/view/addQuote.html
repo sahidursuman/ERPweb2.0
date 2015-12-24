@@ -52,7 +52,7 @@
                 </div>
             </div>
 	</form>
-	<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
+	<form class="form-horizontal T-quoteInfo" role="form" style="margin-top:10px" onsubmit="return false">
 		<div class="ui-sortable-handle">
 			<h5 class=" pull-left " >
 				<i class="ace-icon fa fa-info-circle title-size"></i>
@@ -199,11 +199,17 @@
 															<th class="th-border">备注</th>
 														</tr>
 													</thead>  
-													<tbody>
+													<tbody>{{if insuranceTemplate != null}}
+														<tr>
+															<td><input class="col-xs-12 T-changeQuote" value="{{insuranceTemplate.price}}" name="guideFee" type="text" maxlength="9" /></td>
+															<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" /></td>
+														</tr>
+														{{else}}
 														<tr>
 															<td><input class="col-xs-12 T-changeQuote" name="guideFee" type="text" maxlength="9" /></td>
 															<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" /></td>
 														</tr>
+														{{/if}}
 													</tbody>
 												</table>
 											</div>
@@ -849,25 +855,25 @@
 							<div class="form-group">
 								<label class="col-sm-1 control-label no-padding-right">费用包含:</label>
 								<div class="col-sm-8">
-                                    <textarea class="form-control" class="col-sm-12" readonly="readonly">{{if lineProduct != null}}{{lineProduct.includeFee}}{{/if}}</textarea>
+                                    <textarea class="form-control" name="includeFee" class="col-sm-12">{{if lineProduct != null}}{{lineProduct.includeFee}}{{/if}}</textarea>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-1 control-label no-padding-right">费用不含:</label>
                                 <div class="col-sm-8">
-                                    <textarea class="form-control" class="col-sm-12" readonly="readonly">{{if lineProduct != null}}{{lineProduct.excludeFee}}{{/if}}</textarea>
+                                    <textarea class="form-control" name="excludeFee" class="col-sm-12">{{if lineProduct != null}}{{lineProduct.excludeFee}}{{/if}}</textarea>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-1 control-label no-padding-right">行程特色:</label>
                                 <div class="col-sm-8">
-                                    <textarea class="form-control" class="col-sm-12" readonly="readonly">{{if lineProduct != null}}{{lineProduct.lineFeature}}{{/if}}</textarea>
+                                    <textarea class="form-control" name="lineFeature" class="col-sm-12">{{if lineProduct != null}}{{lineProduct.lineFeature}}{{/if}}</textarea>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-1 control-label no-padding-right">行程须知:</label>
                                 <div class="col-sm-8">
-                                    <textarea class="form-control" class="col-sm-12" readonly="readonly">{{if lineProduct != null}}{{lineProduct.lineNotice}}{{/if}}</textarea>
+                                    <textarea class="form-control" name="lineNotice" class="col-sm-12">{{if lineProduct != null}}{{lineProduct.lineNotice}}{{/if}}</textarea>
 								</div>   
 							</div>
 						</div>

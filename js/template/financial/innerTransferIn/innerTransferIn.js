@@ -844,9 +844,6 @@ define(function(require,exports) {
 			return 0;
 		}
 		var newVal = Math.round($val*100)/100;
-		if(newVal<0){
-			newVal = 0;
-		}
 		return newVal;
 	};
 	InnerTransferIn.initIncome = function(options){

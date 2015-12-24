@@ -109,11 +109,6 @@
                         <a data-toggle="tab" href="#tripPlan_addPlan_other" aria-expanded="false">其他</a>
                     </li>  
                     <li style="border:none; margin-left:12px;">
-                        {{if !!tripPlan.qouteId}}
-                           <button class="T-singleClick-Order R-right" data-right="1450001">一键下单</button>
-
-                           <button class="T-update-Quote R-right" data-right="1440002" data-qouteId={{tripPlan.qouteId}}>修改报价</button>
-                        {{/if}}
                    </li>
                 </ul>
                 <div class="tab-content" style="position:relative;top: -2px">
@@ -193,7 +188,10 @@
                                                                     </span>
                                                                 </div>
                                                             </td>
-                                                    		<td><input type="text" name="type" value="" class="col-sm-12" maxlength="32"/></td>
+                                                    		<td>
+                                                                <input type="text" name="type" value="" maxlength="32" class="col-sm-12 T-chooseInsuranceType"/>
+                                                                <input type="hidden" name="typeId" value="">
+                                                            </td>
                                                     		<td><input type="text" name="price" value="" class="col-sm-12" maxlength="9"/></td>
                                                     		<td><input type="text" name="memberCount" value="" class="col-sm-12" maxlength="8"/></td>
                                                     		<td><input type="text" name="needPayMoney" value="" readonly="readonly" class="col-sm-12" maxlength="9"/></td>
@@ -339,10 +337,10 @@
                                                                 <td><input name="remark" type="text" value="{{busCompany.remark}}" class="col-sm-12" maxlength="500"/></td>
                                                                 <td>
                                                                     <select name="busOrder">
-                                                                        <option value="1" {{if busCompany.orderStatus = 1}}selected="selected"{{/if}}>未预定</option>
-                                                                        <option value="2" {{if busCompany.orderStatus = 2}}selected="selected"{{/if}}>预定中</option>
-                                                                        <option value="3" {{if busCompany.orderStatus = 3}}selected="selected"{{/if}}>已预订</option>
-                                                                        <option value="0" {{if busCompany.orderStatus = 0}}selected="selected"{{/if}}>无需预定</option>
+                                                                        <option value="1" {{if busCompany.orderStatus == 1}}selected="selected"{{/if}}>未预定</option>
+                                                                        <option value="2" {{if busCompany.orderStatus == 2}}selected="selected"{{/if}}>预定中</option>
+                                                                        <option value="3" {{if busCompany.orderStatus == 3}}selected="selected"{{/if}}>已预订</option>
+                                                                        <option value="0" {{if busCompany.orderStatus == 0}}selected="selected"{{/if}}>无需预定</option>
                                                                     </select>
                                                                 </td>
                                                                 <td>

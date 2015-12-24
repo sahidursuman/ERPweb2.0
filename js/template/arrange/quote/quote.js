@@ -477,6 +477,7 @@ define(function(require, exports) {
 						+'<td><input class="col-xs-12" name="manager" type="text" readonly="readonly" value="'+offer.managerName+'"></td>'
 						+'<td><input class="col-xs-12" name="mobileNumber" type="text" readonly="readonly" value="'+offer.mobileNumber+'"></td>'
 						+'<td><input class="col-xs-12 T-changeQuote" readonly="readonly" name="seatcountPrice" type="text" maxlength="9" value="'+offer.seatPrice+'"></td>'
+						+'<td><input class="col-xs-12 T-changeQuote" name="marketPrice" type="text" maxlength="9" value="'+offer.seatPrice+'"></td>'
 						+'<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" value=""></td>'
 						+'</tr>';
 						$obj.find('tbody').html(html);
@@ -500,15 +501,18 @@ define(function(require, exports) {
 				if(result){
 					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
 
-						var whichDay = data.hotelList[0].whichDay-1;
+						var whichDays = data.hotelList[0].whichDays;
+							whichDays = JSON.parse(whichDays),
+							hotelList = data.hotelList,
+							html = quote.hotelHtml(hotelList);
+
+						for (var i = 0, len = whichDays.length; i < len; i++) {
+							var whichDay = whichDays[i].whichDay-1;
+							$container.find("#dayListUpdate-"+ whichDay +" .T-timeline-detail-container").append(html);
+						}
+						$container.find('.quoteContent').trigger('click');
 						//删除现有
 						//$container.find("#dayListUpdate-"+whichDay+"  .T-resourceHotelList").remove();
-
-						
-						var html = quote.hotelHtml(data.hotelList);
-						$container.find("#dayListUpdate-"+ whichDay +" .T-timeline-detail-container").append(html);
-
-						$container.find('.quoteContent').trigger('click');
 						//报价计算器
 						quote.costCalculation($container)
 					});
@@ -529,10 +533,9 @@ define(function(require, exports) {
 						"<th class='th-border'>酒店星级</th>" + 
 						"<th class='th-border'>酒店名称</th>" + 
 						"<th class='th-border'>房型</th>" + 
-						"<th class='th-border'>价格</th>" + 
-						"<th class='th-border'>数量</th>" + 
+						"<th class='th-border'>成本价</th>" + 
+						"<th class='th-border'>市场价</th>" + 
 						"<th class='th-border'>含餐</th>" +
-						"<th class='th-border'>电话</th>" + 
 						"<th class='th-border'>备注</th>" + 
 						"<th class='th-border' style='width: 60px;'>操作</th>" + 
 					"</tr></thead>" +
@@ -581,7 +584,7 @@ define(function(require, exports) {
 						 "<td><input type='text' class='T-choose-hotelName col-xs-12 bind-change' name='hotelNmae' value='" + hotelList[i].hotelName + "' disabled='disabled'/><input type='hidden' name='hotelId' value='" + hotelList[i].hotelId + "' /></td>" + 
 						 "<td><input type='text' class='T-choose-hotelRoom col-xs-12 bind-change' name='hotelRoom' value='" + hotelList[i].type + "' disabled='disabled'/><input type='hidden' name='hotelRoomId' value='" + hotelList[i].roomId +"' /></td>" +
 						 "<td><input type='text' readonly='readonly' class='T-changeQuote' name='contractPrice' value='" + hotelList[i].replyPrice + "' style='width:70px;' /></td>" +
-						 "<td><input type='text' readonly='readonly' name='count' class='T-changeQuote' value='" + hotelList[i].needRoomCount + "' style='width:70px;' /></td>" +
+						 "<td><input type='text' name='marketPrice' class='T-changeQuote' value='" + hotelList[i].replyPrice + "' style='width:70px;' /></td>" +
 						 "<td><input type='text' class='col-xs-12' readonly='readonly' name='containBreakfast' value='";
 						 if (hotelList[i].containBreakfast==1){
 					 		html += "含早餐"; 
@@ -593,7 +596,6 @@ define(function(require, exports) {
 					 		html += "含晚餐";
 					 	}
 					 	html +="' /></td>" + 
-					 	"<td><input type='text' class='col-xs-12' readonly='readonly' name='mobileNumber' value='" + hotelList[i].mobileNumber + "' /></td>" +
 					 	"<td><input type='text' class='col-xs-12' name='remark' value='' /></td>" +
 					 	"<td><a data-entity-type='8' class='cursor btn-restaurant-delete T-delete'>删除</a></td>" +
 					"</tr></tbody>" + 
@@ -722,10 +724,10 @@ define(function(require, exports) {
 		})
 		// 初始化富文本插件
 		$container.find('.T-daylist').children('.tab-pane').each(function(index, el) {
-			init_editor($(this).find('.T-editor').prop('id'));
+			init_editor($(this).find('.T-editor').prop('id'), {readonly: true});
 		});
 		//添加具体行程安排相应事件
-		$container.find('.T-daylist').on('click', '.T-add', function(event) {
+		$container.find('.T-daylist').off('click.dayList').on('click.dayList', '.T-add', function(event) {
 			event.preventDefault();
 			var $that = $(this);
 			if ($that.hasClass('T-addRestaurant')) {
@@ -769,7 +771,7 @@ define(function(require, exports) {
 			var $this = $(this), $time;
 			var $table = $container.find('.T-daylist table.table-striped');
 			if ($table.length > 0) {
-				showNndoConfirmDialog($( "#confirm-dialog-message" ), '您修改了出游日期，是否重置行程安排成本价？', function() {
+				showNndoConfirmDialog($( "#confirm-dialog-message" ), '是否重置行程安排成本价', function() {
 					$time = $this.val();
 					quote.changeStartTime($container, $time);
 				})
@@ -799,7 +801,7 @@ define(function(require, exports) {
 		quote.bindSelfPay($dayListArea.find('.T-choose-ticketCompanyName'), validator, $container);
 		quote.bindTicketEvent($dayListArea.find('.chooseTicketName'), validator, $container);
 		//车辆询价
-		$container.find('.T-car').on('click', function(event) {
+		$container.find('.T-car').off('click').on('click', function(event) {
 			event.preventDefault();
 			/* Act on the event */
 			var lineProductInfo = {
@@ -830,7 +832,7 @@ define(function(require, exports) {
 			}
 		});
 		//酒店询价
-		$container.find('.T-hotel').on('click', function(event) {
+		$container.find('.T-hotel').off('click').on('click', function(event) {
 			event.preventDefault();
 			/* Act on the event */
 			var $this = $(this), $whichDiv = $this.closest('.T-dailyArrangeList');
@@ -936,7 +938,7 @@ define(function(require, exports) {
 							$price = $hotelList[k].price,
 							$marketPrice = $hotelList[k].marketPrice;
 
-						var $hotelListA = $container.find('.T-resourceHotelList');
+						var $hotelListA = $container.find('#dayListUpdate-'+i+' .T-resourceHotelList');
 						$hotelListA.each(function(j) {
 							var $hotel = $hotelListA.eq(j).find('[name=hotelId]').val(),
 								$room = $hotelListA.eq(j).find('[name=hotelRoomId]').val()
@@ -953,7 +955,7 @@ define(function(require, exports) {
 							$itemId = $scenicList[k].itemId,
 							$price = $scenicList[k].price;
 
-						var $scenicListA = $container.find('.T-resourceScenicList');
+						var $scenicListA = $container.find('#dayListUpdate-'+i+' .T-resourceScenicList');
 						$scenicListA.each(function(j) {
 							var $scenic = $scenicListA.eq(j).find('[name=scenicId]').val(),
 								$item = $scenicListA.eq(j).find('[name=chargingId]').val();
@@ -970,7 +972,7 @@ define(function(require, exports) {
 							$price = $selfpayList[k].price,
 							$marketPrice = $selfpayList[k].marketPrice;
 
-						var $selfpayListA = $container.find('.T-resourceSelfPayList');
+						var $selfpayListA = $container.find('#dayListUpdate-'+i+' .T-resourceSelfPayList');
 						$selfpayListA.each(function(j) {
 							var $selfpay = $selfpayListA.eq(j).find('[name=companyId]').val(),
 								$item = $selfpayListA.eq(j).find('[name=selfPayItemId]').val();
@@ -1102,14 +1104,16 @@ define(function(require, exports) {
 			    					startTime = lineProductInfo.startTime,
 			    					expiryTime = quote.getValue($busLayerContent,"expiryTime"),
 			    					busCompany = [];
-			    				for (var i = 0; i < quote.busSelectedArray.length; i++) {
-			    					var json = {
-			    						id: quote.busSelectedArray[i]
-			    					}
-			    					busCompany.push(json);
+			    				if (!!quote.busSelectedArray) {
+				    				for (var i = 0; i < quote.busSelectedArray.length; i++) {
+				    					var json = {
+				    						id: quote.busSelectedArray[i]
+				    					}
+				    					busCompany.push(json);
+				    				}
 			    				}
 			    				if (seatCount-(lineProductInfo.adultCount-0)+(lineProductInfo.childCount-0) >= 0) {
-				    				if (busCompany.length) {
+				    				if (busCompany.length > 0) {
 				    					busCompany = JSON.stringify(busCompany);
 					    				$.ajax({
 					    					url: KingServices.build_url("busInquiry","saveInquiry"),
@@ -1398,26 +1402,32 @@ define(function(require, exports) {
 				showLoading: false,
 				success: function(data){
 					if (showDialog(data)) {
-						var html = '';
+						var html = '',htmlOut = '';
 						for (var i = 0; i < data.dayStatus.length; i++) {
 							if(data.dayStatus[i].success == 0){
 								html += '<option value="'+data.dayStatus[i].arriveTime+'">'+data.dayStatus[i].arriveTime+'</option>'
+								htmlOut += '<option value="'+quote.checkInTime(2,data.dayStatus[i].arriveTime)+'">'+quote.checkInTime(2,data.dayStatus[i].arriveTime)+'</option>'
 							}else{
 								html += '<option value="'+data.dayStatus[i].arriveTime+'">'+data.dayStatus[i].arriveTime+'[已询价]</option>'
+								htmlOut += '<option value="'+quote.checkInTime(2,data.dayStatus[i].arriveTime)+'">'+quote.checkInTime(2,data.dayStatus[i].arriveTime)+'[已询价]</option>'
 							}
 						}
-						$layerContainer.find('[name=checkInTime],[name=checkOutTime]').html(html);
+						$layerContainer.find('[name=checkInTime]').html(html);//[name=checkOutTime]
+						$layerContainer.find('[name=checkOutTime]').html(htmlOut);
 					}
 				}
 			})
 		}else{
 			dataHotel.days = [];
-			var html = '';
+			var html = '',htmlOut = '';
+
 			for (var i = 1,len = lineProductInfo.days; i <= len; i++) {
 				var time = quote.checkInTime(i,lineProductInfo.startTime);
 				html += '<option value="'+time+'">'+time+'</option>'
+				htmlOut += '<option value="'+quote.checkInTime(2,time)+'">'+quote.checkInTime(2,time)+'</option>'
 			}
-			$layerContainer.find('[name=checkInTime],[name=checkOutTime]').html(html);
+			$layerContainer.find('[name=checkInTime]').html(html);//[name=checkOutTime]
+			$layerContainer.find('[name=checkOutTime]').html(htmlOut);
 		}
 	}
 
@@ -1736,6 +1746,7 @@ define(function(require, exports) {
 					$parents.find('[name=insuranceItemId]').val('');
 					$parents.find('[name=price]').val('');
 					$parents.find('[name=marketPrice]').val('');
+					quote.costCalculation($container)
 				}
 			},
 			select: function(event, ui) {
@@ -1743,6 +1754,7 @@ define(function(require, exports) {
 				$parents.find('[name=insuranceItemId]').val(ui.item.id).trigger('click');
 				$parents.find('[name=price]').val(ui.item.price);
 				$parents.find('[name=marketPrice]').val(ui.item.price);
+					quote.costCalculation($container)
 			}
 		}).off('click').on('click', function() {
 			var $this = $(this), $parents =$this.closest('tr'),
@@ -1761,7 +1773,7 @@ define(function(require, exports) {
 									$list[i].value = $list[i].name;
 								}
 							}else{
-								layer.tips('没有内容', obj, {
+								layer.tips('没有内容', $this, {
 								    tips: [1, '#3595CC'],
 								    time: 2000
 								});
@@ -2239,19 +2251,25 @@ define(function(require, exports) {
 		typeObj.autocomplete({
 			minLength:0,
 			select:function(event, ui){
-				var $tr = $(this).closest('tr');
+				var $tr = $(this).closest('tr'),
+					startTime = $container.find('input[name=startTime]').val(),
+					whichDay = $(this).closest('.T-dailyArrangeList').data('entity-whichday') - 1;
 				$tr.find("input[name=hotelRoomId]").val(ui.item.id).trigger('change');
 				$.ajax({
 					url: KingServices.build_url('hotel', 'findRoomDetailById'),
-                    data:"id=" + ui.item.id,
+                    data: {
+                    	id: ui.item.id,
+                    	startTime: startTime,
+                    	whichDay: whichDay
+                    },
                     showLoading:false,
                     success: function(data) {
 						var result = showDialog(data);
 						if(result){
 							var hotelRoom = JSON.parse(data.hotelRoom);
 
-							$tr.find("input[name=contractPrice]").val(hotelRoom.contractPrice);
-							$tr.find("input[name=marketPrice]").val(hotelRoom.contractPrice);
+							$tr.find("input[name=contractPrice]").val(hotelRoom.normalInnerPrice);
+							$tr.find("input[name=marketPrice]").val(hotelRoom.normalMarketPrice);
 							$tr.find("input[name=containBreakfast]").val(hotelRoom.containBreakfast == "0" ? "不含" : "包含");
 							quote.costCalculation($container)
 						}
@@ -2280,7 +2298,9 @@ define(function(require, exports) {
 			var hotelDataId = $(objhotelRoom).parent().parent().find("input[name=hotelId]").val()
 			$.ajax({
                 url: KingServices.build_url('hotel', 'findTypeByHotelId'),
-                data:"id=" + hotelDataId,
+                data: {
+                	id: hotelDataId
+                },
                 showLoading:false,
                 success: function(data) {
 					var result = showDialog(data);
@@ -2401,12 +2421,18 @@ define(function(require, exports) {
 			minLength:0,
 			select:function(event, nameUi){
 				var nameUiId = nameUi.item.id, _this = this;
-				var thisParent = $(_this).parent().parent();
+				var thisParent = $(_this).parent().parent(),
+					startTime = $container.find('input[name=startTime]').val(),
+					whichDay = $(_this).closest('.T-dailyArrangeList').data('entity-whichday') - 1;
 				thisParent.find("input[name=chargingId]").val(nameUiId).trigger('change');
 				
 				$.ajax({
                     url: KingServices.build_url('scenic', 'findItemDetailById'),
-                    data: "id="+nameUiId,
+                    data: {
+                    	id: nameUiId,
+                    	startTime: startTime,
+                    	whichDay: whichDay
+                    },
                     showLoading:false,
                     success: function(data) {
 						var result = showDialog(data);
@@ -2432,7 +2458,6 @@ define(function(require, exports) {
 			}
 		}).unbind("click").click(function(){
 			var scenicObj = this;
-			
 			if($(scenicObj).parent().parent().find(".chooseScenicName").val() == ""){
 				layer.tips('请先选景区名称。', scenicObj, {
 				    tips: [1, '#3595CC'],
@@ -2443,7 +2468,9 @@ define(function(require, exports) {
 			var scenicNameId = $(scenicObj).parent().parent().find("input[name=scenicId]").val();
 			$.ajax({
                 url: KingServices.build_url('scenic', 'findItemByScenicId'),
-                data: "id="+scenicNameId,
+                data: {
+                	id: scenicNameId
+                },
                 showLoading:false,
                 success: function(data) {
 					var result = showDialog(data);
@@ -2469,7 +2496,7 @@ define(function(require, exports) {
 		
 	};
 	//添加购物
-	quote.addResourceShopping = function($btn, validator){
+	quote.addResourceShopping = function($btn, validator, $container){
 		//添加行程安排购物
 		var shoppingDetails = '<div class="T-timeline-item timeline-item clearfix updateShoppingList updateLineProductDaysDetail T-resourceShoppingList ui-sortable-handle" data-entity-index='+quote.updateLineProductIndex+'><div class="timeline-info "  style="color:#1fade0" ><i class="ace-icon fa fa-circle" ></i><span>购物</span></div>'+
 		'<div class="widget-box transparent" style="margin-top: 20px"><div class="widget-body"><div class=""><table class="table table-striped table-bordered table-hover">'+
@@ -2722,10 +2749,16 @@ define(function(require, exports) {
 		objItem.autocomplete({
 			minLength:0,
 			select:function(event, ui){
-				var $tr = $(this).closest('tr');
+				var $tr = $(this).closest('tr'),
+					startTime = $container.find('input[name=startTime]').val(),
+					whichDay = $(this).closest('.T-dailyArrangeList').data('entity-whichday') - 1;
 				$.ajax({
                     url: KingServices.build_url('selfpay', 'findSelfPayRebateByItemId'),
-                    data: "id="+ui.item.id,
+                    data: {
+                    	id: ui.item.id,
+                    	startTime: startTime,
+                    	whichDay: whichDay
+                    },
                     showLoading:false,
                     success: function(data) {
 						var result = showDialog(data);
@@ -2755,7 +2788,9 @@ define(function(require, exports) {
 			var chooseCompanyNameId=$(obj).parent().parent().find("input[name='companyId']").val();
 			$.ajax({
 				url: KingServices.build_url('selfpay', 'findSelfPayItemBySelfPayId'),
-				data:"id="+chooseCompanyNameId,
+				data: {
+					id: chooseCompanyNameId
+				},
 				showLoading:false,
 				success:function(data){
 					var result = showDialog(data);
@@ -3076,11 +3111,11 @@ define(function(require, exports) {
 			var value = otherMarketPriceArray.eq(i).val()-0 || 0;
 			otherMarketPrice += (value-0);
 		}
-		adultCost = insurancePrice + seatCountPrice*days + scenicPrice + restaurantPrice + ticketPrice + otherPrice + hotelPrice;
-		childCost = insurancePrice + seatCountPrice*days + scenicPrice + restaurantPrice/2 + ticketPrice/2 + otherPrice;
+		adultCost = insurancePrice + seatCountPrice + scenicPrice + restaurantPrice + ticketPrice + otherPrice + hotelPrice;
+		childCost = insurancePrice + seatCountPrice + scenicPrice + restaurantPrice/2 + ticketPrice/2 + otherPrice;
 
-		adultQuote = insuranceMarketPrice + seatCountMarketPrice*days + scenicMarketPrice + restaurantMarketPrice + ticketMarketPrice + otherMarketPrice + hotelMarketPrice;
-		childQuote = insuranceMarketPrice + seatCountMarketPrice*days + scenicMarketPrice + restaurantMarketPrice/2 + ticketMarketPrice/2 + otherMarketPrice;
+		adultQuote = insuranceMarketPrice + seatCountMarketPrice + scenicMarketPrice + restaurantMarketPrice + ticketMarketPrice + otherMarketPrice + hotelMarketPrice;
+		childQuote = insuranceMarketPrice + seatCountMarketPrice + scenicMarketPrice + restaurantMarketPrice/2 + ticketMarketPrice/2 + otherMarketPrice;
 
 		if ($container.find('.T-isChooseService [name=childNeedBed]').prop('checked')) {
 			childCost += hotelPrice;
@@ -3174,7 +3209,11 @@ define(function(require, exports) {
 			isContainGuideFee: isContainGuideFee,//quote.getValue($container,'includeGuideFee'),
 			isContainSelfPay: isContainSelfPay,//quote.getValue($container,'includeSelfpay'),
 			isChildNeedRoom: isChildNeedRoom,//quote.getValue($container,'childNeedBed'),
-			remark: quote.getValue($container,'quoteRemark')
+			remark: quote.getValue($container,'quoteRemark'),
+			includeFee: quote.getValue($container,'includeFee'),
+			excludeFee: quote.getValue($container,'excludeFee'),
+			lineFeature: quote.getValue($container,'lineFeature'),
+			lineNotice: quote.getValue($container,'lineNotice')
 		}
 
 		if ((quoteJson.adultCount + quoteJson.childCount) == 0) {

@@ -349,7 +349,11 @@ define(function(require, exports) {
             Transfer.clearTempSumDate = false;
             Transfer.clearTempData = false;
             Transfer.$clearTab.data('isEdited',false);
-            Transfer.transferClear(0,0,id,name);
+            if(isAutoPay == 2){
+                Transfer.transferClear(2,0,id,name);
+            }else{
+                Transfer.transferClear(0,0,id,name);
+            }
         });
 
         //关闭页面事件

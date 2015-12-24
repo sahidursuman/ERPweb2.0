@@ -118,7 +118,7 @@
         	</p>
         	<p style="height: 30px"><span>大人报价</span> <span style="margin-left: 30px;">{{quoteDetailJson.adultQuotePrice}}</span>
         	</p>
-        	<p style="height: 30px"><span>大人毛利预估</span> <span style="margin-left: 15px;">{{quoteDetailJson.adultQuotePrice - quoteDetailJson.adultCostPrice |toFixed}}</span>
+        	<p style="height: 30px"><span>大人毛利预估</span> <span style="margin-left: 15px;">{{quoteDetailJson.adultQuotePrice - quoteDetailJson.adultCostPrice | toFixed}}</span>
         	</p>
         	<p></p>
         	<p></p>
@@ -129,15 +129,15 @@
         	</p>
         	<p style="height: 30px"><span>小孩报价</span> <span style="margin-left: 30px;">{{quoteDetailJson.childQuotePrice}}</span>
         	</p>
-        	<p style="height: 30px"><span>小孩毛利预估</span> <span style="margin-left: 15px;">{{quoteDetailJson.childQuotePrice - quoteDetailJson.childCostPrice |toFixed}}</span>
+        	<p style="height: 30px"><span>小孩毛利预估</span> <span style="margin-left: 15px;">{{quoteDetailJson.childQuotePrice - quoteDetailJson.childCostPrice | toFixed}}</span>
         	</p>
         	</div>
         	<div class="col-xs-2 viewQuoteDiv">
-        	<p style="height: 30px;margin-top: 10px"><span>单房差成本价</span> <span style="margin-left: 30px;">{{quoteDetailJson.adultQuotePrice}}</span>
+        	<p style="height: 30px;margin-top: 10px"><span>单房差成本价</span> <span style="margin-left: 30px;">{{quoteDetailJson.singleRoomCostPrice}}</span>
         	</p>
-        	<p style="height: 30px"><span>单房差报价</span> <span style="margin-left: 30px;">{{quoteDetailJson.adultQuotePrice}}</span>
+        	<p style="height: 30px"><span>单房差报价</span> <span style="margin-left: 30px;">{{quoteDetailJson.singleRoomQuotePrice}}</span>
         	</p>
-        	<p style="height: 30px"><span>单房差毛利预估</span> <span style="margin-left:10px;">{{quoteDetailJson.adultQuotePrice - quoteDetailJson.adultQuotePrice |toFixed}}</span>
+        	<p style="height: 30px"><span>单房差毛利预估</span> <span style="margin-left:10px;">{{quoteDetailJson.singleRoomQuotePrice - quoteDetailJson.singleRoomCostPrice | toFixed}}</span>
         	</p>
         	</div>
         	<div class="col-xs-2 viewQuoteDiv">
@@ -145,7 +145,7 @@
         	</p>
         	<p style="height: 30px"><span>总报价</span> <span style="margin-left: 30px;">{{quoteDetailJson.sumQuoteFee}}</span>
         	</p>
-        	<p style="height: 30px"><span>毛利预估</span> <span style="margin-left: 30px;">{{quoteDetailJson.sumQuoteFee - quoteDetailJson.sumCostFee|toFixed}}</span>
+        	<p style="height: 30px"><span>毛利预估</span> <span style="margin-left: 30px;">{{quoteDetailJson.sumQuoteFee - quoteDetailJson.sumCostFee | toFixed}}</span>
         	</p>
         	</div>
         </div>

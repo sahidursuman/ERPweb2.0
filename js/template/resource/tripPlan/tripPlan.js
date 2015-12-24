@@ -129,7 +129,7 @@ define(function(require, exports) {
 			success:function(data){
 				data.tripPlanList = JSON.parse(data.tripPlanList);
 				if(showDialog(data)){
-					tripPlan.$tab.find('.T-tripPlanList').html(listTemplate(data));
+					tripPlan.$tab.find('.T-tripPlanList').html(filterUnAuth(listTemplate(data)));
 					
 					tripPlan.$tab.off('click').on('click', '.T-action', function(event) {
 						event.preventDefault();
@@ -419,7 +419,11 @@ define(function(require, exports) {
 				}
 			if ($this.hasClass('T-bus-askPrice')) {
 				//询价
-				tripPlan.busAskPrice($this, $tab, saveJson);
+				if (!!saveJson.brand == false || !!saveJson.busCompanyId == false || !!saveJson.needSeatCount == false) {
+					showMessageDialog($( "#confirm-dialog-message" ), '请完善车队信息');
+				}else {
+					tripPlan.busAskPrice($this, $tab, saveJson);
+				}
 			}else if ($this.hasClass('T-bus-booking')) {
 				//预订
 				tripPlan.busBooking($this, $tab, saveJson);
@@ -448,7 +452,11 @@ define(function(require, exports) {
 			}
 			if ($this.hasClass('T-hotel-askPrice')) {
 				//询价
-				tripPlan.hotelAskPrice($this, $tab, saveJson)
+				if (!!saveJson.count == false || !!saveJson.hotelId == false || !!saveJson.type == false) {
+					showMessageDialog($( "#confirm-dialog-message" ), '请完善酒店信息');
+				}else {
+					tripPlan.hotelOfferStatus($this, $tab, saveJson, 'ask');
+				}
 			}else if ($this.hasClass('T-hotel-booking')) {
 				//预订
 				tripPlan.hotelBooking($this, $tab, saveJson)
@@ -463,7 +471,7 @@ define(function(require, exports) {
 		//一键询价、预订操作
 		$tab.find('#tripPlan_addPlan_hotel').off('click.oneClick').on('click.oneClick', '.T-oneClick', function() {
 			event.preventDefault();
-			var $this = $(this),
+			var $this = $(this), isAgree = 1,
 				saveJson = {
 					tripPlanId : $tab.find('[name=tripPlanId]').val(),
 					hotelJson: []
@@ -471,19 +479,25 @@ define(function(require, exports) {
 				var $tr = $tab.find('#tripPlan_addPlan_hotel tbody tr');
 				$tr.each(function(i) {
 					var json = {
-						arrangeId: $tr.data('entity-arrangeid'),
-						count: $tr.find('[name=memberCount]').val(),
-						hotelId: $tr.find('[name=hotelId]').val(),
-						price: $tr.find('[name=fee]').val(),
-						type: $tr.find('[name=hotelRoom]').val(),
-						whichDay: $tr.find('[name=whichDay]').val(),
-						hotelRoomId: $tr.find('[name=hotelRoomId]').val()
+						arrangeId: $tr.eq(i).data('entity-arrangeid'),
+						count: $tr.eq(i).find('[name=memberCount]').val(),
+						hotelId: $tr.eq(i).find('[name=hotelId]').val(),
+						price: $tr.eq(i).find('[name=fee]').val(),
+						type: $tr.eq(i).find('[name=hotelRoom]').val(),
+						whichDay: $tr.eq(i).find('[name=whichDay]').val(),
+						hotelRoomId: $tr.eq(i).find('[name=hotelRoomId]').val()
+					}
+					if (!!json.count == false || !!json.hotelId == false || !!json.price == false || !!json.type == false || !!json.whichDay == false) {
+						showMessageDialog($( "#confirm-dialog-message" ), '请完善酒店信息');
+						isAgree = 0;
 					}
 				saveJson.hotelJson.push(json);
 				});
 			if ($this.hasClass('T-asking')) {
 				//一键询价
-				tripPlan.oneClickAsking($this, $tab, saveJson);
+				if (!!isAgree) {
+					tripPlan.oneClickAsking($this, $tab, saveJson);
+				}
 			}else if ($this.hasClass('T-booking')) {
 				//一键预订
 				tripPlan.oneClickBooking($this, $tab, saveJson);
@@ -652,7 +666,7 @@ define(function(require, exports) {
 	 * @param  {[type]} $tab     [页面容器]
 	 * @param  {[type]} saveJson [参数对象]
 	 */
-	tripPlan.hotelOfferStatus = function($this, $tab, saveJson) {
+	tripPlan.hotelOfferStatus = function($this, $tab, saveJson, type) {
 		$.ajax({
 			url: KingServices.build_url('hotelInquiry','listHotelArrangeInquiry'),
 			type: 'POST',
@@ -660,19 +674,40 @@ define(function(require, exports) {
 			success: function(data) {
 				if (showDialog(data)) {
 					data.mapList = JSON.parse(data.mapList);
-					var html = hotelInquiryResultTemplate(data);
-					tripPlan.$hotelOfferLayer = layer.open({
-					    type: 1,
-					    title:"查看酒店询价状态",
-					    skin: 'layui-layer-rim', //加上边框
-					    area: '1190px', //宽高
-					    zIndex:1028,
-					    content: html,
-						scrollbar: false,    // 推荐禁用浏览器外部滚动条
-					    success:function(data){
+					var isAlert = 0;
+					if (!!type) {
+						if (data.mapList.length > 0) {
+							for (var i = 0, len = data.mapList.length; i < len; i++) {
+								var status = data.mapList[i].hotelOffers[0].reserveMinutes
+								if( status != '已拒绝' && status != '等待确认' && status != '已到期' ) {
+									isAlert = 1;
+								}
+							}
+							if (isAlert == 1) {
+								showConfirmDialog($( "#confirm-dialog-message" ), '存在有效询价，可直接预订，是否继续询价', function() {
+									tripPlan.hotelAskPrice($this, $tab, saveJson);
+								})
+							}else {
+								tripPlan.hotelAskPrice($this, $tab, saveJson);
+							}
+						}else {
+							tripPlan.hotelAskPrice($this, $tab, saveJson);
+						}
+					}else{
+						var html = hotelInquiryResultTemplate(data);
+						tripPlan.$hotelOfferLayer = layer.open({
+						    type: 1,
+						    title:"查看酒店询价状态",
+						    skin: 'layui-layer-rim', //加上边框
+						    area: '1190px', //宽高
+						    zIndex:1028,
+						    content: html,
+							scrollbar: false,    // 推荐禁用浏览器外部滚动条
+						    success:function(data){
 
-					    }
-				    });
+						    }
+					    });
+				    }
 				}
 			}
 		})
@@ -1271,7 +1306,7 @@ define(function(require, exports) {
 									$list[i].value = $list[i].name;
 								}
 							}else{
-								layer.tips('没有内容', obj, {
+								layer.tips('没有内容', $this, {
 								    tips: [1, '#3595CC'],
 								    time: 2000
 								});
@@ -2245,7 +2280,7 @@ define(function(require, exports) {
 						payType : tripPlan.getVal(bus.eq(i), "payType"),
 						guidePayMoney : tripPlan.getVal(bus.eq(i), "guidePayMoney"),
 						remark : tripPlan.getVal(bus.eq(i), "remark"),
-						orderStatus: tripPlan.getVal(hotel.eq(i), "busOrder")
+						orderStatus: tripPlan.getVal(bus.eq(i), "busOrder")
 					}
 					tripPlanJson.busCompanyArrange = busJson;
 					guideAllPayMoney += tripPlan.checkParamIsDouble(busJson.guidePayMoney);
@@ -2442,11 +2477,13 @@ define(function(require, exports) {
 		}
 		
 		//获取tripPlan
+		var $addTripTab = $('#tripPlan_addPlan_tripPlan');
 		var tmp = {
-			id : $('#tripPlan_addPlan_tripPlan input[name=tripPlanId]').val(),
-			guideAllPayMoney : $('#tripPlan_addPlan_tripPlan input[name=guideAllPayMoney]').val(),
-			guideAllNowMoney : $('#tripPlan_addPlan_tripPlan input[name=guideAllNowMoney]').val(),
-			guideAllPreMoney : $('#tripPlan_addPlan_tripPlan input[name=guideAllPreMoney]').val()
+			id : $addTripTab.find('input[name=tripPlanId]').val(),
+			guideAllPayMoney : $addTripTab.find('input[name=guideAllPayMoney]').val(),
+			guideAllNowMoney : $addTripTab.find('input[name=guideAllNowMoney]').val(),
+			remark : tripPlan.getVal($addTripTab, "remark"),
+			guideAllPreMoney : $addTripTab.find('input[name=guideAllPreMoney]').val()
 		}
 		tmp.guideAllPayMoney = guideAllPayMoney;
 		

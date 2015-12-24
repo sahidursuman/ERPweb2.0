@@ -85,7 +85,7 @@
 									<td>外转价</td>
 									<td>大人</td>
 									<td>
-										<input name="adultCount" value="{{if touristGroup != null}}{{touristGroup.adultCount}}{{/if}}" readonly="readonly" type="text" class="col-sm-12  no-padding-right count" />
+										<input name="adultCount" value="{{if touristGroup != null}}{{touristGroup.adultCount}}{{/if}}" readonly="readonly" type="text" class="col-sm-12  no-padding-right count T-count" />
 									</td>
 									<td>
 										<input name="transAdultPrice" value="{{if touristGroup.transferFeeStatus==1}}{{touristGroup.transAdultPrice}}{{/if}}" type="text" class="col-sm-12  no-padding-right  price T-price" />
@@ -100,7 +100,7 @@
 										小孩
 									</td>
 									<td>
-										<input name="childCount" value="{{if touristGroup != null}}{{touristGroup.childCount}}{{/if}}" readonly="readonly" type="text" class="col-sm-12  no-padding-right count" />
+										<input name="childCount" value="{{if touristGroup != null}}{{touristGroup.childCount}}{{/if}}" readonly="readonly" type="text" class="col-sm-12  no-padding-right count T-count" />
 									</td>
 									<td>
 										<input name="transChildPrice" value="{{if touristGroup.transferFeeStatus==1}}{{touristGroup.transChildPrice}}{{/if}}" type="text" class="col-sm-12  no-padding-right price T-price" />
@@ -119,7 +119,7 @@
 											<input name="describe" value="{{transferList.describeInfo}}" type="text" class="col-sm-12  no-padding-right" />
 										</td>
 										<td>
-											<input name="count" value="{{transferList.count}}" type="text" class="col-sm-12  no-padding-right count" />
+											<input name="count" value="{{transferList.count}}" type="text" class="col-sm-12  no-padding-right count T-count" />
 										</td>
 										<td>
 											<input name="otherPrice" value="{{if touristGroup.transferFeeStatus==1}}{{transferList.price}}{{/if}}" type="text" class="col-sm-12  no-padding-right price" />
@@ -140,7 +140,7 @@
 										<input name="describe" value="{{transferOtherFee.discribe}}" type="text" class="col-sm-12  no-padding-right" />
 									</td>
 									<td>
-										<input name="count" value="{{transferOtherFee.count}}" type="text" class="col-sm-12  no-padding-right count" />
+										<input name="count" value="{{transferOtherFee.count}}" type="text" class="col-sm-12  no-padding-right count T-count" />
 									</td>
 									<td>
 										<input name="otherPrice" value="{{transferOtherFee.otherPrice}}" type="text" class="col-sm-12  no-padding-right price" />
