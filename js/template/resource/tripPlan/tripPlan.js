@@ -2469,11 +2469,13 @@ define(function(require, exports) {
 		}
 		
 		//获取tripPlan
+		var $addTripTab = $('#tripPlan_addPlan_tripPlan');
 		var tmp = {
-			id : $('#tripPlan_addPlan_tripPlan input[name=tripPlanId]').val(),
-			guideAllPayMoney : $('#tripPlan_addPlan_tripPlan input[name=guideAllPayMoney]').val(),
-			guideAllNowMoney : $('#tripPlan_addPlan_tripPlan input[name=guideAllNowMoney]').val(),
-			guideAllPreMoney : $('#tripPlan_addPlan_tripPlan input[name=guideAllPreMoney]').val()
+			id : $addTripTab.find('input[name=tripPlanId]').val(),
+			guideAllPayMoney : $addTripTab.find('input[name=guideAllPayMoney]').val(),
+			guideAllNowMoney : $addTripTab.find('input[name=guideAllNowMoney]').val(),
+			remark : tripPlan.getVal($addTripTab, "remark"),
+			guideAllPreMoney : $addTripTab.find('input[name=guideAllPreMoney]').val()
 		}
 		tmp.guideAllPayMoney = guideAllPayMoney;
 		
