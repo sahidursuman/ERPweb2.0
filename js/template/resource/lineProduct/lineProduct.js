@@ -530,11 +530,6 @@ define(function(require, exports) {
 	 * @return {[type]}        [description]
 	 */
 	ResLineProduct.bindGuideChosen = function($input, validator) {
-		if (!$input || !$input.length) {
-			console.error('绑定导游的autocomplete，主体Dom为空!');
-			return;
-		}
-
 		$input.autocomplete({
 			minLength:0,
 			change:function(event,ui){

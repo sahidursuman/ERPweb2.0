@@ -1,6 +1,6 @@
 /**
  * 财务管理--导游账务
- * 未完全重构
+ * 
  * by David Bear 2015-11-24
  */
 define(function(require, exports) {
@@ -167,8 +167,7 @@ define(function(require, exports) {
         }
 
         Client.checkPageNo = args.pageNo = pageNo || 0;
-        args.sortType = 'startTime';
-        args.order='asc';
+
         $.ajax({
             url : KingServices.build_url('financial/customerAccount', 'listCheckCustomerAcccount'),
             type : "POST",
@@ -958,7 +957,7 @@ define(function(require, exports) {
             startDate : $tab.find('.T-search-start-date').val(),
             endDate : $tab.find('.T-search-end-date').val()
         }
-
+        console.log(args.lineProductId);
         if (args.lineProductName === '全部') {
             args.lineProductName = '';
         }

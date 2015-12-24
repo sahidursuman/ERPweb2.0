@@ -193,7 +193,10 @@
                                                                     </span>
                                                                 </div>
                                                             </td>
-                                                    		<td><input type="text" name="type" value="" class="col-sm-12" maxlength="32"/></td>
+                                                    		<td>
+                                                                <input type="text" name="type" value="" maxlength="32" class="col-sm-12 T-chooseInsuranceType"/>
+                                                                <input type="hidden" name="typeId" value="">
+                                                            </td>
                                                     		<td><input type="text" name="price" value="" class="col-sm-12" maxlength="9"/></td>
                                                     		<td><input type="text" name="memberCount" value="" class="col-sm-12" maxlength="8"/></td>
                                                     		<td><input type="text" name="needPayMoney" value="" readonly="readonly" class="col-sm-12" maxlength="9"/></td>
@@ -339,10 +342,10 @@
                                                                 <td><input name="remark" type="text" value="{{busCompany.remark}}" class="col-sm-12" maxlength="500"/></td>
                                                                 <td>
                                                                     <select name="busOrder">
-                                                                        <option value="1" {{if busCompany.orderStatus = 1}}selected="selected"{{/if}}>未预定</option>
-                                                                        <option value="2" {{if busCompany.orderStatus = 2}}selected="selected"{{/if}}>预定中</option>
-                                                                        <option value="3" {{if busCompany.orderStatus = 3}}selected="selected"{{/if}}>已预订</option>
-                                                                        <option value="0" {{if busCompany.orderStatus = 0}}selected="selected"{{/if}}>无需预定</option>
+                                                                        <option value="1" {{if busCompany.orderStatus == 1}}selected="selected"{{/if}}>未预定</option>
+                                                                        <option value="2" {{if busCompany.orderStatus == 2}}selected="selected"{{/if}}>预定中</option>
+                                                                        <option value="3" {{if busCompany.orderStatus == 3}}selected="selected"{{/if}}>已预订</option>
+                                                                        <option value="0" {{if busCompany.orderStatus == 0}}selected="selected"{{/if}}>无需预定</option>
                                                                     </select>
                                                                 </td>
                                                                 <td>

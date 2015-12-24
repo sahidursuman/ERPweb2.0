@@ -46,7 +46,7 @@
 					<td>
 						{{touristGroup.startTime | dateFormat: 'yyyy-MM-dd'}}
 					</td>
-					<td>--报价单号--</td>
+					<td>{{if !!touristGroup.quote}}{{touristGroup.quote.quoteNumber}}{{/if}}</td>
 					<td>
 						{{if touristGroup.touristGroupMember != null}}
 							{{touristGroup.touristGroupMember.name}}

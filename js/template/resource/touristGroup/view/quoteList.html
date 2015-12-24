@@ -17,7 +17,9 @@
 		</thead>
 		<tbody calss="T-chooseQuoteProduct-Tbody">
 			{{each lineProductList as lineProduct}}
-				<tr data-quoteId='1' data-quoteNumber='{{lineProduct.quoteNumber}}' data-lineProductName= '{{if lineProduct.lineProduct != null}}{{lineProduct.lineProduct.name}}{{/if}}' data-lineProducId= '{{lineProduct.id}}'
+				<tr data-quoteId='{{lineProduct.id}}' data-quoteNumber='{{lineProduct.quoteNumber}}' 
+				 data-lineProductName= '{{if lineProduct.lineProduct != null}}{{lineProduct.lineProduct.name}}{{/if}}'
+				 data-lineProducId= '{{if !!lineProduct.lineProduct}}{{lineProduct.lineProduct.id}}{{/if}}'
 				 data-startTime='{{lineProduct.startTime}}'
 				 data-fromPartnerAgencyId='{{if lineProduct.partnerAgency != null}}{{lineProduct.partnerAgency.id}}{{/if}}' 
 				 data-fromPartnerAgencyName='{{if lineProduct.partnerAgency != null}}{{lineProduct.partnerAgency.travelAgencyName}}{{/if}}'
