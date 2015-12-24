@@ -618,7 +618,7 @@ define(function(require, exports) {
 		Replace.balanceId = id;
 		Replace.balanceName = name;
 		Replace.isBalanceSource = false;
-		Replace.balanceList(0, id);
+		Replace.balanceList(0, id, Replace.$tab.find('.T-search-end-date').val(), Replace.$tab.find('.T-search-start-date').val());
 	};
 	Replace.initIncome = function(args){
 		Replace.$balanceTab = null;
@@ -633,8 +633,8 @@ define(function(require, exports) {
 		var args = {
 			pageNo : (page || 0),
 			partnerAgencyId : id || Replace.balanceId,
-			endDate : endDate || Replace.$tab.find('.T-search-end-date').val(),
-			startDate : startDate || Replace.$tab.find('.T-search-start-date').val()
+			endDate : endDate,
+			startDate : startDate
 		};
 
 		if(!!Replace.$balanceTab){
