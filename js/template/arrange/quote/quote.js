@@ -1743,6 +1743,7 @@ define(function(require, exports) {
 					$parents.find('[name=insuranceItemId]').val('');
 					$parents.find('[name=price]').val('');
 					$parents.find('[name=marketPrice]').val('');
+					quote.costCalculation($container)
 				}
 			},
 			select: function(event, ui) {
@@ -1750,6 +1751,7 @@ define(function(require, exports) {
 				$parents.find('[name=insuranceItemId]').val(ui.item.id).trigger('click');
 				$parents.find('[name=price]').val(ui.item.price);
 				$parents.find('[name=marketPrice]').val(ui.item.price);
+					quote.costCalculation($container)
 			}
 		}).off('click').on('click', function() {
 			var $this = $(this), $parents =$this.closest('tr'),
@@ -1768,7 +1770,7 @@ define(function(require, exports) {
 									$list[i].value = $list[i].name;
 								}
 							}else{
-								layer.tips('没有内容', obj, {
+								layer.tips('没有内容', $this, {
 								    tips: [1, '#3595CC'],
 								    time: 2000
 								});
