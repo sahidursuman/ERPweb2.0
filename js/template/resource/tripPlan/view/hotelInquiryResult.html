@@ -51,7 +51,7 @@
 									</td>
 							{{/each}}
 							<td rowspan="{{offer.roomOffers.length}}">{{offer.remark}}</td>
-							<td rowspan="{{offer.roomOffers.length}}">{{if offer.status != '已过期'}}{{offer.reserveMinutes}}{{/if}}</td>
+							<td rowspan="{{offer.roomOffers.length}}">{{if offer.status != '已过期' && offer.status != '已拒绝'}}{{offer.reserveMinutes}}{{/if}}</td>
 							<td rowspan="{{offer.roomOffers.length}}">{{offer.expiryTime | dateFormat : 'yyyy-MM-dd hh:mm:ss'}}</td>
 							<td rowspan="{{offer.roomOffers.length}}">{{offer.status}}</td>
 						{{/if}}

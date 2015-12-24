@@ -24,7 +24,7 @@
 							<td>{{offer.companyName}}</td>
 							<td class="T-price">{{offer.price}}</td>
 							<td>{{offer.remark}}</td>
-							<td>{{if offer.status != '已过期'}}{{offer.reserveMinutes}}{{/if}}</td>
+							<td>{{if offer.status != '已过期' && offer.status != '已拒绝'}}{{offer.reserveMinutes}}{{/if}}</td>
 							<td>{{offer.expiryTime | dateFormat: 'yyyy-MM-dd'}}</td>
 							<td class="T-status">{{offer.status}}</td>
 					{{/each}}
