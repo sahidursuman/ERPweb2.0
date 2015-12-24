@@ -44,15 +44,16 @@
         <table class="table table-striped table-bordered table-hover T-showHighLight">
             <thead>
             <tr class="bg-blur">
-                 <th class="col-sm-1"> 线路产品</th>
+                 <th> 转出部门</th>
+                 <th class="col-sm-1">线路产品</th>
                  <th> 出游日期</th>
                  <th> 游客</th>  
                  <th> 人数</th>
                  <th> 组团社</th>   
-                 <th> 团款应收</th>
+                 <th> 团款应收</th> 
                  <th> 中转</th>
                  <th> 中转成本</th>
-                 <th> 部门</th>
+                 <th> 转入部门</th>
                  <th> 内转成本</th>  
                  <th> 毛利</th>
                  <th> 人均毛利</th>
@@ -60,7 +61,8 @@
             </thead>
             <tbody class="T-list">
             {{each touristGroupInnerTransferList as innerTransferList index}}
-            <tr data-id = "{{innerTransferList.touristGroupId}}" lineProductId="{{innerTransferList.lineProductId}}" tgTransferId = "{{innerTransferList.InnerTransferId}}">  
+            <tr data-id = "{{innerTransferList.touristGroupId}}" lineProductId="{{innerTransferList.lineProductId}}" tgTransferId = "{{innerTransferList.InnerTransferId}}"> 
+                <td>{{innerTransferList.fromBusinessGroupName}}</td> 
                 <td><a href="javascript:void(0)" class="T-option T-lineProductDetail">{{innerTransferList.lineProductName}}</a></td>
                 <!--给日期转码-->
                 <td>{{innerTransferList.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
