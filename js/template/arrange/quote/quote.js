@@ -1316,11 +1316,11 @@ define(function(require, exports) {
 							})
 
 							var selectedHotelArray = [];
+							quote.hotelSelectedArray = [];
 							//酒店查询分页
 							var startTime = lineProductInfo.startTime;
 							//quote.hotelInquiryList(0,$hotelLayerContent,whichDay,startTime,quoteId);
 							$hotelLayerContent.find('.T-btn-hotelInquiry-search').off('click').on('click',function(){
-								quote.hotelSelectedArray = [];
 								quote.hotelInquiryList(0,$hotelLayerContent,quoteId);
 							})
 							//保存接口
@@ -1358,6 +1358,9 @@ define(function(require, exports) {
 									}
 									saveJson.params.push(json);
 								})
+								console.log(quote.hotelSelectedArray);
+								console.log(quote.hotelSelectedArray.length);
+
 			    				for (var i = 0; i < quote.hotelSelectedArray.length; i++) {
 			    					var json = {
 			    						hotelId: quote.hotelSelectedArray[i]
