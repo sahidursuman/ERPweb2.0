@@ -506,7 +506,7 @@ define(function(require, exports) {
 							hotelList = data.hotelList,
 							whichDay = whichDays[i].whichDay-1,
 							html = quote.hotelHtml(hotelList);
-							
+
 						for (var i = 0, len = whichDays.length; i < len; i++) {
 							$container.find("#dayListUpdate-"+ whichDay +" .T-timeline-detail-container").append(html);
 						}
@@ -2251,19 +2251,25 @@ define(function(require, exports) {
 		typeObj.autocomplete({
 			minLength:0,
 			select:function(event, ui){
-				var $tr = $(this).closest('tr');
+				var $tr = $(this).closest('tr'),
+					startTime = $container.find('input[name=startTime]').val(),
+					whichDay = $(this).closest('.T-dailyArrangeList').data('entity-whichday') - 1;
 				$tr.find("input[name=hotelRoomId]").val(ui.item.id).trigger('change');
 				$.ajax({
 					url: KingServices.build_url('hotel', 'findRoomDetailById'),
-                    data:"id=" + ui.item.id,
+                    data: {
+                    	id: ui.item.id,
+                    	startTime: startTime,
+                    	whichDay: whichDay
+                    },
                     showLoading:false,
                     success: function(data) {
 						var result = showDialog(data);
 						if(result){
 							var hotelRoom = JSON.parse(data.hotelRoom);
 
-							$tr.find("input[name=contractPrice]").val(hotelRoom.contractPrice);
-							$tr.find("input[name=marketPrice]").val(hotelRoom.contractPrice);
+							$tr.find("input[name=contractPrice]").val(hotelRoom.normalInnerPrice);
+							$tr.find("input[name=marketPrice]").val(hotelRoom.normalMarketPrice);
 							$tr.find("input[name=containBreakfast]").val(hotelRoom.containBreakfast == "0" ? "不含" : "包含");
 							quote.costCalculation($container)
 						}
@@ -2292,7 +2298,9 @@ define(function(require, exports) {
 			var hotelDataId = $(objhotelRoom).parent().parent().find("input[name=hotelId]").val()
 			$.ajax({
                 url: KingServices.build_url('hotel', 'findTypeByHotelId'),
-                data:"id=" + hotelDataId,
+                data: {
+                	id: hotelDataId
+                },
                 showLoading:false,
                 success: function(data) {
 					var result = showDialog(data);
@@ -2413,12 +2421,18 @@ define(function(require, exports) {
 			minLength:0,
 			select:function(event, nameUi){
 				var nameUiId = nameUi.item.id, _this = this;
-				var thisParent = $(_this).parent().parent();
+				var thisParent = $(_this).parent().parent(),
+					startTime = $container.find('input[name=startTime]').val(),
+					whichDay = $(_this).closest('.T-dailyArrangeList').data('entity-whichday') - 1;
 				thisParent.find("input[name=chargingId]").val(nameUiId).trigger('change');
 				
 				$.ajax({
                     url: KingServices.build_url('scenic', 'findItemDetailById'),
-                    data: "id="+nameUiId,
+                    data: {
+                    	id: nameUiId,
+                    	startTime: startTime,
+                    	whichDay: whichDay
+                    },
                     showLoading:false,
                     success: function(data) {
 						var result = showDialog(data);
@@ -2444,7 +2458,6 @@ define(function(require, exports) {
 			}
 		}).unbind("click").click(function(){
 			var scenicObj = this;
-			
 			if($(scenicObj).parent().parent().find(".chooseScenicName").val() == ""){
 				layer.tips('请先选景区名称。', scenicObj, {
 				    tips: [1, '#3595CC'],
@@ -2455,7 +2468,9 @@ define(function(require, exports) {
 			var scenicNameId = $(scenicObj).parent().parent().find("input[name=scenicId]").val();
 			$.ajax({
                 url: KingServices.build_url('scenic', 'findItemByScenicId'),
-                data: "id="+scenicNameId,
+                data: {
+                	id: scenicNameId
+                },
                 showLoading:false,
                 success: function(data) {
 					var result = showDialog(data);
@@ -2734,10 +2749,16 @@ define(function(require, exports) {
 		objItem.autocomplete({
 			minLength:0,
 			select:function(event, ui){
-				var $tr = $(this).closest('tr');
+				var $tr = $(this).closest('tr'),
+					startTime = $container.find('input[name=startTime]').val(),
+					whichDay = $(this).closest('.T-dailyArrangeList').data('entity-whichday') - 1;
 				$.ajax({
                     url: KingServices.build_url('selfpay', 'findSelfPayRebateByItemId'),
-                    data: "id="+ui.item.id,
+                    data: {
+                    	id: ui.item.id,
+                    	startTime: startTime,
+                    	whichDay: whichDay
+                    },
                     showLoading:false,
                     success: function(data) {
 						var result = showDialog(data);
@@ -2767,7 +2788,9 @@ define(function(require, exports) {
 			var chooseCompanyNameId=$(obj).parent().parent().find("input[name='companyId']").val();
 			$.ajax({
 				url: KingServices.build_url('selfpay', 'findSelfPayItemBySelfPayId'),
-				data:"id="+chooseCompanyNameId,
+				data: {
+					id: chooseCompanyNameId
+				},
 				showLoading:false,
 				success:function(data){
 					var result = showDialog(data);
