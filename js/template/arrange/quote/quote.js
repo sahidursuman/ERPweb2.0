@@ -313,8 +313,7 @@ define(function(require, exports) {
 				} 
 				quote.quoteStatus(quoteId,$container,'add','add');
 			});	
-
-			quote.init_event($container,id);
+			quote.init_event($container,id,$a);
 		}
 	};
 
@@ -669,10 +668,10 @@ define(function(require, exports) {
 								showMessageDialog($( "#confirm-dialog-message" ),"请先询价！");
 								return false;
 							} 
-							quote.quoteStatus(quoteId,$container,'update',tag);
+							quote.quoteStatus(quoteId,$container,'update',$a.tag);
 						});	
 
-						quote.init_event($container,id);
+						quote.init_event($container,id,$a);
 						if (!!target) {
 							$container.find('.inquiryContent').trigger('click');
 							if (target == "T-hotel") {
@@ -688,7 +687,7 @@ define(function(require, exports) {
 	};
 
 	//报价详情页事件绑定
-	quote.init_event =function($container,id) {
+	quote.init_event =function($container,id,$a) {
 		var validator = rule.quoteCheckor($container);
 
 		// 监听修改
@@ -779,7 +778,7 @@ define(function(require, exports) {
 			if ($table.length > 0) {
 				showNndoConfirmDialog($( "#confirm-dialog-message" ), '是否重置行程安排成本价', function() {
 					$time = $this.val();
-					quote.changeStartTime($container, $time);
+					quote.changeStartTime($container, $time, $a);
 				})
 			}
 		})
@@ -880,7 +879,15 @@ define(function(require, exports) {
 		})
 	};
 
-	quote.changeStartTime = function($container, $time) {
+	quote.changeStartTime = function($container, $time, $a) {
+		var tagName = '';
+		if ($a.tag == 'add') {
+			tagName = 'Add';
+		}else if ($a.tag == 'update') {
+			tagName = 'update';
+		}else if ($a.tag == 'copy') {
+			tagName = 'copy';
+		}
 		var json = {
 			startTime: $time,
 			days: $container.find('.T-lineProductDays').data('entity-days'),
@@ -938,53 +945,53 @@ define(function(require, exports) {
 				var $dayList = data.dayList;
 				for (var i = 0, len = $dayList.length; i < len; i++) {
 					var $hotelList = $dayList[i].hotel;
-					for (var k = 0, hotelLen = $hotelList.length; k < hotelLen; k++) {
-						var $hotelId = $hotelList[k].id,
-							$roomId = $hotelList[k].roomId,
-							$price = $hotelList[k].price,
-							$marketPrice = $hotelList[k].marketPrice;
+					for (var a = 0, hotelLen = $hotelList.length; a < hotelLen; a++) {
+						var $hotelId = $hotelList[a].id,
+							$roomId = $hotelList[a].roomId,
+							$price = $hotelList[a].price,
+							$marketPrice = $hotelList[a].marketPrice;
 
-						var $hotelListA = $container.find('#dayListUpdate-'+i+' .T-resourceHotelList');
-						$hotelListA.each(function(j) {
-							var $hotel = $hotelListA.eq(j).find('[name=hotelId]').val(),
-								$room = $hotelListA.eq(j).find('[name=hotelRoomId]').val()
+						var $hotelListA = $container.find('#dayList'+tagName+'-'+i+' .T-resourceHotelList');
+						$hotelListA.each(function(b) {
+							var $hotel = $hotelListA.eq(b).find('[name=hotelId]').val(),
+								$room = $hotelListA.eq(b).find('[name=hotelRoomId]').val()
 							if ($hotelId == $hotel && $roomId == $room) {
-								$hotelListA.eq(j).find('[name=contractPrice]').val($price)
-								$hotelListA.eq(j).find('[name=marketPrice]').val($marketPrice)
+								$hotelListA.eq(b).find('[name=contractPrice]').val($price)
+								$hotelListA.eq(b).find('[name=marketPrice]').val($marketPrice)
 							}
 						});
 					};
 
 					var $scenicList = $dayList[i].scenic;
-					for (var k = 0, scenicLen = $scenicList.length; k < scenicLen; k++) {
-						var $scenicId = $scenicList[k].id,
-							$itemId = $scenicList[k].itemId,
-							$price = $scenicList[k].price;
+					for (var c = 0, scenicLen = $scenicList.length; c < scenicLen; c++) {
+						var $scenicId = $scenicList[c].id,
+							$itemId = $scenicList[c].itemId,
+							$price = $scenicList[c].price;
 
-						var $scenicListA = $container.find('#dayListUpdate-'+i+' .T-resourceScenicList');
-						$scenicListA.each(function(j) {
-							var $scenic = $scenicListA.eq(j).find('[name=scenicId]').val(),
-								$item = $scenicListA.eq(j).find('[name=chargingId]').val();
+						var $scenicListA = $container.find('#dayList'+tagName+'-'+i+' .T-resourceScenicList');
+						$scenicListA.each(function(d) {
+							var $scenic = $scenicListA.eq(d).find('[name=scenicId]').val(),
+								$item = $scenicListA.eq(d).find('[name=chargingId]').val();
 							if ($scenic == $scenicId && $itemId == $item) {
-								$scenicListA.eq(j).find('[name=price]').val($price)
+								$scenicListA.eq(d).find('[name=price]').val($price)
 							}
 						});
 					};
 
 					var $selfpayList = $dayList[i].selfpay;
-					for (var k = 0, selfpayLen = $selfpayList.length; k < selfpayLen; k++) {
-						var $selfpayId = $selfpayList[k].id,
-							$itemId = $selfpayList[k].itemId,
-							$price = $selfpayList[k].price,
-							$marketPrice = $selfpayList[k].marketPrice;
+					for (var e = 0, selfpayLen = $selfpayList.length; e < selfpayLen; e++) {
+						var $selfpayId = $selfpayList[e].id,
+							$itemId = $selfpayList[e].itemId,
+							$price = $selfpayList[e].price,
+							$marketPrice = $selfpayList[e].marketPrice;
 
-						var $selfpayListA = $container.find('#dayListUpdate-'+i+' .T-resourceSelfPayList');
-						$selfpayListA.each(function(j) {
-							var $selfpay = $selfpayListA.eq(j).find('[name=companyId]').val(),
-								$item = $selfpayListA.eq(j).find('[name=selfPayItemId]').val();
+						var $selfpayListA = $container.find('#dayList'+tagName+'-'+i+' .T-resourceSelfPayList');
+						$selfpayListA.each(function(f) {
+							var $selfpay = $selfpayListA.eq(f).find('[name=companyId]').val(),
+								$item = $selfpayListA.eq(f).find('[name=selfPayItemId]').val();
 							if ($selfpayId == $selfpay && $itemId == $item) {
-								$selfpayListA.eq(j).find('[name=contractPrice]').val($price)
-								$selfpayListA.eq(j).find('[name=marketPrice]').val($marketPrice)
+								$selfpayListA.eq(f).find('[name=contractPrice]').val($price)
+								$selfpayListA.eq(f).find('[name=marketPrice]').val($marketPrice)
 							}
 						});
 					};	
