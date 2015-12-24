@@ -1005,7 +1005,7 @@ define(function(require, exports) {
 					success: function(data) {
 						if(showDialog(data)){
 							var hotelRoom = JSON.parse(data.hotelRoom);
-							$thisRoom.find("input[name=hotelPrice]").val(hotelRoom.normalMarketPrice).trigger('change');
+							$thisRoom.find("input[name=hotelPrice]").val(hotelRoom.normalInnerPrice).trigger('change');
 						}
 					}
 				})
