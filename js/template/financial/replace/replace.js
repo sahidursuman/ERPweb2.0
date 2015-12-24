@@ -214,6 +214,7 @@ define(function(require, exports) {
 				    pages: data.searchParam.totalPage, //总页数
 				    curr: (data.searchParam.pageNo + 1),
 				    jump: function(obj, first) {
+				    	Replace.$checkingTab.data('isEdited', false);
 				    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
 				    		Replace.checkingList(obj.curr -1);
 				    	}
