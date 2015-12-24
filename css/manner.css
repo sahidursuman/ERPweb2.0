@@ -1530,14 +1530,14 @@ select {
     width: 17px;
     height: 20px;
 }
-.share-anchor-ul li:focus{
+.share-anchor-ul li:hover{
    color: #48A2D2; 
 }
 
 p#back-top {
     position: fixed;
     bottom: 100px;
-    right: 280px;
+    margin-left: 1030px;
 }
 
 p#back-top a {
