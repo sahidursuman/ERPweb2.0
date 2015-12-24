@@ -2043,3 +2043,7 @@ p#back-top a span {
 .group-info .fixed-width > input{
     width: 220px;
 }
+
+.group-info .form-inline .fa-plus {
+    cursor: pointer;
+}
