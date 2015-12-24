@@ -12,7 +12,7 @@
                     <div class="form-group">
                         <label class="col-sm-1 control-label no-padding-right quoteInprodactName">线路产品名称:</label>
                         <div class="col-sm-2">
-                            <label class="control-label T-lineProductName">{{quoteDetailJson.lineProduct.name}}</label>
+                            <label class="control-label T-lineProductName"style="position: absolute;">{{quoteDetailJson.lineProduct.name}}</label>
                             <input type="hidden" value="{{quoteDetailJson.lineProduct.id}}" name="lineProductId">
 							<input type="hidden" value="{{if isCopy != '1'}}{{quoteDetailJson.id}}{{/if}}" name="quoteId">
                         </div>
