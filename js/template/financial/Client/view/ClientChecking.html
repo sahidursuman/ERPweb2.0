@@ -84,7 +84,7 @@
         <tbody class="T-list">
             {{if customerAccountList != null}}
         	{{each customerAccountList as rs index}}
-            <tr data-gid="{{rs.touristGroupId}}" data-id="{{rs.id}}">
+            <tr data-gid="{{rs.touristGroupId}}" data-id="{{rs.id}}" data-confirm="{{rs.isConfirmAccount}}">
                 <td>{{rs.otaOrderNumber}}</td>
                 <td>{{rs.lineProductName}}</td>
                 <td>{{rs.startTime}}</td>
@@ -95,7 +95,7 @@
                 <td class="T-contractMoney">{{rs.contractMoney}}</td>
                 <td>
                 {{each rs.detailList as rsl j}}
-                    {{rsl.describeInfo}}：{{rsl.price}}x{{rsl.count}}={{rsl.price * rsl.count}}{{if j != rs.detailList.length - 1}}，{{/if}}
+                    {{rsl.describeInfo}}：{{rsl.price}}x{{rsl.count}}={{rsl.price * rsl.count}}{{if j != rs.detailList.length - 1}}{{/if}}<br>
                 {{/each}}
                 </td>
                 <td><a class="cursor T-action T-receive">社收{{rs.travleReciveMoney}}，导游现收{{rs.guideReciveMoney}}</a></td>
@@ -107,7 +107,7 @@
                 <td>{{rs.checkUserName}}</td>
                 <td>
                     <label class="pos-rel  R-right" {{ if rs.isConfirmAccount }} data-right="1280005" {{else}}  data-right="1280002"  {{/if}}>
-                        <input type="checkbox" class="ace T-check" {{ if rs.isConfirmAccount }} checked="checked" {{/if}}/> 
+                        <input type="checkbox" class="ace T-check"  {{ if rs.isConfirmAccount }} checked="checked" {{/if}}/> 
                         <span class="lbl">对账</span>
                     </label>
                     <label class="cursor"<a> |</a></label>

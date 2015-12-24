@@ -715,26 +715,41 @@ define(function(require, exports) {
     }
 
     Client.saveCheckingData = function($tab, tabArgs){
-        var dataList = [], argLen = arguments.length;
-
-        // 获取对账数据
-        $tab.find('.T-list').children('tr:nth-child(2n+1)').each(function(index, el) {
-            var $tr = $(this);
-            if ($tr.data('change')) {
-                dataList.push({
-                    backMoney: $tr.find('.T-refund').val(),
-                    checkRemark: $tr.find('.T-remark').val(),
-                    isConfirmAccount: ($tr.find('.T-check').prop('checked')? 1 : 0),
-                    id: $tr.data('id')
-                })
-            }
+        var JsonStr = [],
+            selectFlag = 0,
+            argLen = arguments.length,
+            checkList = $tab.find('.T-list'),
+            $tr = checkList.find('.T-check');
+        $tr.each(function(i){
+           var flag = $(this).is(":checked");
+           var tr = $(this).closest('tr');
+           if(flag){
+                if(tr.attr("data-confirm") == 0 ){
+                    var checkData = {
+                        backMoney: tr.find('.T-refund').val(),
+                        checkRemark: tr.find('.T-remark').val(),
+                        isConfirmAccount: 1,
+                        id: tr.data('id')
+                    };
+                    JsonStr.push(checkData);
+                }
+           }else{
+                if(tr.attr("data-confirm") == 1){
+                    var checkData = {
+                        backMoney: tr.find('.T-refund').val(),
+                        checkRemark: tr.find('.T-remark').val(),
+                        isConfirmAccount: 0,
+                        id: tr.data('id')
+                    };  
+                    JsonStr.push(checkData);
+                }
+           }
         });
-
         $.ajax({
             url:KingServices.build_url("financial/customerAccount","checkCustomerAccount"),
             type:"POST",
             data:{
-                checkAccountList : JSON.stringify(dataList)
+                checkAccountList : JSON.stringify(JsonStr)
             },
             success:function(data){
                 if(showDialog(data)){
