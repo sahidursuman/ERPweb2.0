@@ -501,15 +501,18 @@ define(function(require, exports) {
 				if(result){
 					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
 
-						var whichDay = data.hotelList[0].whichDay-1;
+						var whichDays = data.hotelList[0].whichDays;
+							whichDays = JSON.parse(whichDays),
+							hotelList = data.hotelList,
+							whichDay = whichDays[i].whichDay-1,
+							html = quote.hotelHtml(hotelList);
+							
+						for (var i = 0, len = whichDays.length; i < len; i++) {
+							$container.find("#dayListUpdate-"+ whichDay +" .T-timeline-detail-container").append(html);
+						}
+						//$container.find('.quoteContent').trigger('click');
 						//删除现有
 						//$container.find("#dayListUpdate-"+whichDay+"  .T-resourceHotelList").remove();
-
-						
-						var html = quote.hotelHtml(data.hotelList);
-						$container.find("#dayListUpdate-"+ whichDay +" .T-timeline-detail-container").append(html);
-
-						$container.find('.quoteContent').trigger('click');
 						//报价计算器
 						quote.costCalculation($container)
 					});
