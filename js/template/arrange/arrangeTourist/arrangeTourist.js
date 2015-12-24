@@ -32,7 +32,19 @@ define(function(require, exports) {
             touristGroupMergeList: []
         },
         touristGroupId: [],
-        transferId: []
+        transferId: [],
+        visFromBusinessList:[],
+        visFromPartnerList:[],
+        vislineProductList:[],
+
+        groupFromBusinessList:[],
+        groupFromPartnerList:[],
+        grouplineProductList:[],
+
+        transferFromBusinessList:[],
+        transferFromPartnerList:[],
+        transferProductList:[]
+
     };
 
     /**
@@ -40,6 +52,12 @@ define(function(require, exports) {
      * @return {[type]} [description]
      */
     arrangeTourist.initModule = function() {
+
+        //请求搜索数据
+        arrangeTourist.caCheAutocomData(0);
+        arrangeTourist.caCheAutocomData(1);
+        arrangeTourist.caCheAutocomData(2);
+
         var html = listMainTemplate();
         Tools.addTab(menuKey, "并团转客", html);
         //初始化时间控件
@@ -171,6 +189,7 @@ define(function(require, exports) {
                     data.touristGroupList = JSON.parse(data.touristGroupList);
                     if (customerType == 0) { //散拼
                         var html = listTemplate(data);
+                            html = filterUnAuth(html);
                         $divIdObj.find('.T-touristVisitor-list').html(html);
                         //初始化页面事件
                         arrangeTourist.init_visitorEvent();
@@ -178,12 +197,14 @@ define(function(require, exports) {
                         arrangeTourist.pagerChecked(customerType, divId);
                     } else if (customerType == 1) { //团体
                         var html = listGroupTemplate(data);
+                            html = filterUnAuth(html);
                         $divIdObj.find('.T-touristGroup-list').html(html);
                         //初始化页面事件
                         arrangeTourist.init_groupEvent();
 
                     } else { //转客
                         var html = listTransferTemplate(data);
+                            html = filterUnAuth(html);
                         $divIdObj.find('.T-Transfer-list').html(html);
                         //初始化页面事件
                         arrangeTourist.init_transferEvent();
@@ -825,29 +846,31 @@ define(function(require, exports) {
             type: "POST",
             data: "touristGroupId=" + encodeURIComponent(idJson) + "",
             success: function(data) {
-                data.addTripPlan.touristGroupList = JSON.parse(data.addTripPlan.touristGroupList);
-                data.addTripPlan.lineProduct = JSON.parse(data.addTripPlan.lineProduct);
-                data.addTripPlan.lineProductDayList = JSON.parse(data.addTripPlan.lineProductDayList);
-                data.addTripPlan.bus = JSON.parse(data.addTripPlan.bus);
-                data.addTripPlan.driver = JSON.parse(data.addTripPlan.driver);
-                data.addTripPlan.busCompany = JSON.parse(data.addTripPlan.busCompany);
-                if (data.addTripPlan.quoteId != null) {
-                    data.addTripPlan.busCompanyArrange = JSON.parse(data.addTripPlan.busCompanyArrange);
-                };
-                data.addTripPlan.guide = JSON.parse(data.addTripPlan.guide);
-                var result = showDialog(data);
-                var html = addTripPlanTemplate(data);
+                    if (showDialog(data)) {
+                        data.addTripPlan.touristGroupList = JSON.parse(data.addTripPlan.touristGroupList);
+                        data.addTripPlan.lineProduct = JSON.parse(data.addTripPlan.lineProduct);
+                        data.addTripPlan.lineProductDayList = JSON.parse(data.addTripPlan.lineProductDayList);
+                        data.addTripPlan.bus = JSON.parse(data.addTripPlan.bus);
+                        data.addTripPlan.driver = JSON.parse(data.addTripPlan.driver);
+                        data.addTripPlan.busCompany = JSON.parse(data.addTripPlan.busCompany);
+                        if (data.addTripPlan.quoteId != null) {
+                            data.addTripPlan.busCompanyArrange = JSON.parse(data.addTripPlan.busCompanyArrange);
+                        };
+                        data.addTripPlan.guide = JSON.parse(data.addTripPlan.guide);
+                        var result = showDialog(data);
+                        var html = addTripPlanTemplate(data);
 
-                var tab_id = menuKey + "-addTripPlan",
-                    title = '新增计划';
-                // 初始化页面
-                if (Tools.addTab(tab_id, title, html)) {
-                    var tab = addTripPlanTabId,
-                        $tab = $("#" + tab),
-                        type = '0',
-                        tbody = 'T-addTripPlanTouristTbody-list';
-                    //Tab切换    
-                    arrangeTourist.init_CRU_event($tab, type, tbody);
+                        var tab_id = menuKey + "-addTripPlan",
+                            title = '新增计划';
+                        // 初始化页面
+                        if (Tools.addTab(tab_id, title, html)) {
+                            var tab = addTripPlanTabId,
+                                $tab = $("#" + tab),
+                                type = '0',
+                                tbody = 'T-addTripPlanTouristTbody-list';
+                            //Tab切换    
+                            arrangeTourist.init_CRU_event($tab, type, tbody);
+                    }
                 }
 
             }
@@ -2292,8 +2315,10 @@ define(function(require, exports) {
         var $editFeeObj = $("#T-innerEditFeeMain"),
 
             //精度限制
-            $price = $editFeeObj.find('.price');
+            $price = $editFeeObj.find('.T-price'),
+            $count = $editFeeObj.find('.T-count');
         Tools.inputCtrolFloat($price);
+        Tools.inputCtrolFloat($count);
 
         $editFeeObj.find(".T-newEditFee").on('click', function(event) {
             //新增内外转编辑费用
@@ -2339,8 +2364,10 @@ define(function(require, exports) {
 
         var $outFeeObj = $("#T-outEditFeeMain"),
 
-            //精度限制
-            $price = $outFeeObj.find('.price');
+        //精度限制
+         $price = $outFeeObj.find('.T-price'),
+         $count = $outFeeObj.find('.T-count');
+        Tools.inputCtrolFloat($count);
         Tools.inputCtrolFloat($price);
 
         $outFeeObj.find(".T-newEditFee").on('click', function(event) {
@@ -2391,15 +2418,17 @@ define(function(require, exports) {
     arrangeTourist.newAddFee = function($tab, type) {
         var html = "<tr><td><span name=\"type\" value=\"0\">其他费用</span></td>" +
             "<td><input  name=\"describe\" type=\"text\" class=\"col-sm-12  no-padding-right\" /></td>" +
-            "<td><input  name=\"count\" type=\"text\" class=\"col-sm-12  no-padding-right count\" /></td>" +
+            "<td><input  name=\"count\" type=\"text\" class=\"col-sm-12  no-padding-right count T-count\" /></td>" +
             "<td><input  name=\"otherPrice\" type=\"text\" class=\"col-sm-12  no-padding-right price\" /></td>" +
             "<td><a class=\"cursor T-delete\">删除</a></td></tr>";
         var $tbody = $tab.find(".T-innerOutEditFeeTbody");
         $tbody.append(html);
 
         //精度限制
-        var $price = $tbody.find('.T-price');
+        var $price = $tbody.find('.T-price'),
+            $count = $tbody.find('.T-count');
         Tools.inputCtrolFloat($price);
+        Tools.inputCtrolFloat($count);
 
         // 更新表单验证的事件绑定
         //rule.update(validator);   
@@ -2824,6 +2853,42 @@ define(function(require, exports) {
     };
 
 
+
+    /**
+     * [cacheAutocomData 缓存Autocomplate数据
+     * @param  {[type]} customerType 散客、团体、转客标识
+     * @return {[type]}              [description]
+     */
+    arrangeTourist.caCheAutocomData = function(customerType){
+        $.ajax({
+                url: KingServices.build_url("touristGroup", "getQueryForTripOperation"),
+                type: 'POST',
+                dataType: 'json',
+                data: "customerType=" + customerType,
+                success: function(data) {
+                    var result = showDialog(data);
+                    if (result) {
+                        if (customerType == 0) {//散客
+                             arrangeTourist.visFromBusinessList = data.fromBusinessGroupList;
+                             arrangeTourist.visFromPartnerList = data.fromPartnerAgencyList;
+                             arrangeTourist.vislineProductList = data.lineProductList;
+                        } else if (customerType == 1) {//团队
+                             arrangeTourist.groupFromBusinessList = data.fromBusinessGroupList;
+                             arrangeTourist.groupFromPartnerList = data.fromPartnerAgencyList;
+                             arrangeTourist.grouplineProductList = data.lineProductList;
+                        } else if (customerType == 2) {//转客
+                             arrangeTourist.transferFromBusinessList = data.fromBusinessGroupList;
+                             arrangeTourist.transferFromPartnerList = data.fromPartnerAgencyList;
+                             arrangeTourist.transferProductList = data.lineProductList;
+                        }
+                    }
+                }
+            })
+    };
+
+
+
+
     /**
      * 线路产品Autocomplete
      * @param  {[type]} $obj [description]
@@ -2844,42 +2909,32 @@ define(function(require, exports) {
                 parents.find("input[name=lineProductId]").val(ui.item.id).trigger('change');
             }
         }).unbind("click").click(function() {
-            var obj = this,
-                $obj = $(obj),
-                list;
-            $.ajax({
-                url: KingServices.build_url("touristGroup", "getQueryForTripOperation"),
-                type: 'POST',
-                dataType: 'json',
-                data: "customerType=" + customerType,
-                success: function(data) {
-                    var result = showDialog(data);
-                    if (result) {
-                        var list;
-                        if (customerType == 0) {
-                            list = data.lineProductList;
-                        } else if (customerType == 1) {
-                            list = data.lineProductList;
-                        } else if (customerType == 2) {
-                            list = data.lineProductList;
-                        }
-                        if (!!list && list.length > 0) {
-                            for (var i = 0; i < list.length; i++) {
-                                list[i].value = list[i].name;
-                            };
-                        } else {
-                            layer.tips('没有内容', obj, {
-                                tips: [1, '#3595CC'],
-                                time: 2000
-                            });
-                        };
-                        $obj.autocomplete('option', 'source', list);
-                        $obj.autocomplete('search', '');
-                    }
+            var $obj = $(this),list;
+                if (customerType == 0) {
+                    list = arrangeTourist.vislineProductList;
+                } else if (customerType == 1) {
+                    list = arrangeTourist.grouplineProductList;
+                } else if (customerType == 2) {
+                    list = arrangeTourist.transferProductList;
                 }
-            })
+                if (!!list && list.length > 0) {
+                    for (var i = 0; i < list.length; i++) {
+                        list[i].value = list[i].name;
+                    };
+                } else {
+                    layer.tips('没有内容', obj, {
+                        tips: [1, '#3595CC'],
+                        time: 2000
+                    });
+                };
+                $obj.autocomplete('option', 'source', list);
+                $obj.autocomplete('search', '');
         })
     };
+
+
+
+
 
 
     /**
@@ -2902,40 +2957,26 @@ define(function(require, exports) {
                 parents.find("input[name=fromBussinessGroupId]").val(ui.item.id).trigger('change');
             }
         }).unbind("click").click(function() {
-            var obj = this,
-                $obj = $(obj),
-                list;
-            $.ajax({
-                url: KingServices.build_url("touristGroup", "getQueryForTripOperation"),
-                type: 'POST',
-                dataType: 'json',
-                data: "customerType=" + customerType,
-                success: function(data) {
-                    var result = showDialog(data);
-                    if (result) {
-                        var list;
-                        if (customerType == 0) {
-                            list = data.fromBusinessGroupList;
-                        } else if (customerType == 1) {
-                            list = data.fromBusinessGroupList;
-                        } else if (customerType == 2) {
-                            list = data.fromBusinessGroupList;
-                        }
-                        if (!!list && list.length > 0) {
-                            for (var i = 0; i < list.length; i++) {
-                                list[i].value = list[i].businessGroupName;
-                            };
-                        } else {
-                            layer.tips('没有内容', obj, {
-                                tips: [1, '#3595CC'],
-                                time: 2000
-                            });
-                        };
-                        $obj.autocomplete('option', 'source', list);
-                        $obj.autocomplete('search', '');
-                    }
+            var $obj = $(this),list;
+                if (customerType == 0) {
+                    list = arrangeTourist.visFromBusinessList;
+                } else if (customerType == 1) {
+                    list = arrangeTourist.groupFromBusinessList;
+                } else if (customerType == 2) {
+                    list = arrangeTourist.transferFromBusinessList;
                 }
-            })
+                if (!!list && list.length > 0) {
+                    for (var i = 0; i < list.length; i++) {
+                        list[i].value = list[i].businessGroupName;
+                    };
+                } else {
+                    layer.tips('没有内容', obj, {
+                        tips: [1, '#3595CC'],
+                        time: 2000
+                    });
+                };
+                $obj.autocomplete('option', 'source', list);
+                $obj.autocomplete('search', '');
         })
     };
 
@@ -2959,39 +3000,26 @@ define(function(require, exports) {
                 parents.find("input[name=fromPartnerAgencyId]").val(ui.item.id).trigger('change');
             }
         }).unbind("click").click(function() {
-            var obj = this,
-                $obj = $(obj),
-                list;
-            $.ajax({
-                url: KingServices.build_url("touristGroup", "getQueryForTripOperation"),
-                type: 'POST',
-                dataType: 'json',
-                data: "customerType=" + customerType,
-                success: function(data) {
-                    var result = showDialog(data);
-                    if (result) {
-                        if (customerType == 0) {
-                            list = data.fromPartnerAgencyList;
-                        } else if (customerType == 1) {
-                            list = data.fromPartnerAgencyList;
-                        } else if (customerType == 2) {
-                            list = data.fromPartnerAgencyList;
-                        }
-                        if (!!list && list.length > 0) {
-                            for (var i = 0; i < list.length; i++) {
-                                list[i].value = list[i].travelAgencyName;
-                            };
-                        } else {
-                            layer.tips('没有内容', obj, {
-                                tips: [1, '#3595CC'],
-                                time: 2000
-                            });
-                        };
-                        $obj.autocomplete('option', 'source', list);
-                        $obj.autocomplete('search', '');
-                    }
+            var $obj = $(this),list;
+                if (customerType == 0) {
+                    list = arrangeTourist.visFromPartnerList;
+                } else if (customerType == 1) {
+                    list = arrangeTourist.groupFromPartnerList;
+                } else if (customerType == 2) {
+                    list = arrangeTourist.transferFromPartnerList;
                 }
-            })
+                if (!!list && list.length > 0) {
+                    for (var i = 0; i < list.length; i++) {
+                        list[i].value = list[i].travelAgencyName;
+                    };
+                } else {
+                    layer.tips('没有内容', obj, {
+                        tips: [1, '#3595CC'],
+                        time: 2000
+                    });
+                };
+                $obj.autocomplete('option', 'source', list);
+                $obj.autocomplete('search', '');
         })
     };
 

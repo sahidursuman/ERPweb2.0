@@ -12,16 +12,19 @@
         </div>
         <div class="form-group marginLeft-30">
             <label class="control-label">线路名称：</label>
-            <input type="text" class="form-control T-search-line" value="{{searchParam.lineProductName}}">
+            <input type="text" class="form-control T-search-line" data-id="{{searchParam.lineProductId}}" value="{{searchParam.lineProductName}}">
         </div>
         <div class="form-group marginLeft-30">
             <label class="control-label">录入人：</label>
-            <input type="text" class="form-control T-search-enter" value="{{searchParam.creatorName}}">
+            <input type="text" class="form-control T-search-enter" data-id="{{searchParam.creatorId}}" value="{{searchParam.creatorName}}">
         </div>
         <div class="form-group marginLeft-30">
             <button class="btn-sm search-btn T-btn-search">
                 <i class="ace-icon fa fa-search"></i> 搜索 
             </button>
+        </div>
+        <div class="form-group marginLeft-30">
+            <button class="btn-sm search-btn T-btn-export">导出报表</button>
         </div>
     </form>
     <div class="form-inline T-sum-area" style="padding-top: 10px;">
@@ -81,7 +84,7 @@
         <tbody class="T-list">
             {{if customerAccountList != null}}
         	{{each customerAccountList as rs index}}
-            <tr data-gid="{{rs.touristGroupId}}" data-id="{{rs.id}}">
+            <tr data-gid="{{rs.touristGroupId}}" data-id="{{rs.id}}" data-confirm="{{rs.isConfirmAccount}}">
                 <td>{{rs.otaOrderNumber}}</td>
                 <td>{{rs.lineProductName}}</td>
                 <td>{{rs.startTime}}</td>
@@ -92,7 +95,7 @@
                 <td class="T-contractMoney">{{rs.contractMoney}}</td>
                 <td>
                 {{each rs.detailList as rsl j}}
-                    {{rsl.describeInfo}}：{{rsl.price}}x{{rsl.count}}={{rsl.price * rsl.count}}{{if j != rs.detailList.length - 1}}，{{/if}}
+                    {{rsl.describeInfo}}：{{rsl.price}}x{{rsl.count}}={{rsl.price * rsl.count}}{{if j != rs.detailList.length - 1}}{{/if}}<br>
                 {{/each}}
                 </td>
                 <td><a class="cursor T-action T-receive">社收{{rs.travleReciveMoney}}，导游现收{{rs.guideReciveMoney}}</a></td>
@@ -104,7 +107,7 @@
                 <td>{{rs.checkUserName}}</td>
                 <td>
                     <label class="pos-rel  R-right" {{ if rs.isConfirmAccount }} data-right="1280005" {{else}}  data-right="1280002"  {{/if}}>
-                        <input type="checkbox" class="ace T-check" {{ if rs.isConfirmAccount }} checked="checked" {{/if}}/> 
+                        <input type="checkbox" class="ace T-check"  {{ if rs.isConfirmAccount }} checked="checked" {{/if}}/> 
                         <span class="lbl">对账</span>
                     </label>
                     <label class="cursor"<a> |</a></label>

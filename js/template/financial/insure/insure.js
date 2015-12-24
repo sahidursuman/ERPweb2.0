@@ -355,6 +355,8 @@ define(function(require, exports) {
         //报表内的操作
         Insure.listOption(Insure.$clearTab);
 
+        var payingCheck = new FinRule(2).check(Insure.$clearTab);
+
         //自动下账
         Insure.$clearTab.find(".T-clear-auto").off().on("click",function(){
             var isAutoPay = FinancialService.autoPayJson(id,Insure.$clearTab,new FinRule(2));

@@ -49,9 +49,39 @@ define(function(require, exports) {
 	    	    	        	errMsg: '传真号码格式不正确'
 	    	    	        }
 	    	        ]
-	    	    }   
+	    	    }  
                 ]);
 			return validator;
+		},
+		//对项目列表进行验证
+		checkItems:function($obj){
+			var itemValidator = $obj.formValidate([
+				//对项目列表进行验证
+				{	// 险种 
+	    	    	$ele: $obj.find('input[name="insurance"]'),
+	    	    	rules: [
+							
+	    	    	        {
+	    	    	        	type: 'null',
+	    	    	        	errMsg: '险种不能为空'
+	    	    	        }
+	    	        ]
+	    	    }, {	// 单价  
+	    	    	$ele: $obj.find('input[name="price"]'),
+	    	    	rules: [
+							
+	    	    	        {
+	    	    	        	type: 'null',
+	    	    	        	errMsg: '价格不能为空'
+	    	    	        },
+					        {
+					        	type: 'float', 
+					        	errMsg: '请输入数字'
+					        }
+	    	        ]
+	    	    }     
+                ]);
+			return itemValidator;
 		}
 	}
 	return rule;

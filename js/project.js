@@ -631,73 +631,72 @@ function trim(str){
  */
 
 var modalScripts = {
-	'resource_guide': "js/template/resource/guide/guide.js",
-	'resource_ticket': "js/template/resource/ticket/ticket.js",
-	'resource_restaurant': "js/template/resource/restaurant/restaurant.js",
-	'resource_hotel': "js/template/resource/hotel/hotel.js",
-	'resource_shop': 'js/template/resource/shop/shop.js',
-	'resource_insurance': "js/template/resource/insurance/insurance.js",
-	'resource_selfpay': "js/template/resource/selfpay/selfpay.js",
-	'resource_scenic' : "js/template/resource/scenic/scenic.js",
-	'business_analyst_saleProduct' : "js/template/businessAnalyst/saleProduct/saleProduct.js",
-	'resource_busCompany':"js/template/resource/busCompany/busCompany.js",
-	'resource_lineProduct': 'js/template/resource/lineProduct/lineProduct.js',
+    'resource_guide': "js/template/resource/guide/guide.js",
+    'resource_ticket': "js/template/resource/ticket/ticket.js",
+    'resource_restaurant': "js/template/resource/restaurant/restaurant.js",
+    'resource_hotel': "js/template/resource/hotel/hotel.js",
+    'resource_shop': 'js/template/resource/shop/shop.js',
+    'resource_insurance': "js/template/resource/insurance/insurance.js",
+    'resource_selfpay': "js/template/resource/selfpay/selfpay.js",
+    'resource_scenic': "js/template/resource/scenic/scenic.js",
+    'business_analyst_saleProduct': "js/template/businessAnalyst/saleProduct/saleProduct.js",
+    'resource_busCompany': "js/template/resource/busCompany/busCompany.js",
+    'resource_lineProduct': 'js/template/resource/lineProduct/lineProduct.js',
 
-	//-------------------------------------------发团管理模块--------------------------------------------------
-	'arrange_booking' : 'js/template/arrange/booking/booking.js',
-	'resource_subsection' : 'js/template/resource/subsection/subsection.js',
-	'resource_partnerAgency':'js/template/resource/partnerAgency/partnerAgency.js',
-	'resource_touristGroup':'js/template/resource/touristGroup/touristGroup.js',//游客管理
-	//-------------------------------------------发团管理---------------------------------------------------
-	'arrange_plan':"js/template/arrange/tripPlan/tripPlan.js",
-	'resource_travelLine': 'js/template/resource/travelLine/travelLine.js',
-	'arrange_transit': 'js/template/arrange/transit/transit.js',
-	'arrange_all':'js/template/resource/tripPlan/tripPlan.js',
-	//-------------------------------------------发团管理模块---------------------------------------------------
-	'arrange_quote':'js/template/arrange/quote/quote.js',
-	//-------------------------------------------业务分析模块---------------------------------------------------
-	'business_analyst_saleProduct' : "js/template/businessAnalyst/saleProduct/saleProduct.js",//产品销量
-	'business_analyst_sourDstribution' : "js/template/businessAnalyst/sourDstribution/sourDstribution.js", //客源分布
-	'business_analyst_customerVolume' : "js/template/businessAnalyst/customerVolume/customerVolume.js", //客户客量
-	'business_analyst_employeePerfor' : "js/template/businessAnalyst/employeePerfor/employeePerfor.js", //员工业绩 
-	'business_analyst_tourguidePerfor' : "js/template/businessAnalyst/tourguidePerfor/tourguidePerfor.js", //导游业绩
+    //-------------------------------------------发团管理模块--------------------------------------------------
+    'arrange_quote': 'js/template/arrange/quote/quote.js',
+    'arrange_booking': 'js/template/arrange/booking/booking.js',
+    'resource_subsection': 'js/template/resource/subsection/subsection.js',
+    'resource_partnerAgency': 'js/template/resource/partnerAgency/partnerAgency.js',
+    'resource_touristGroup': 'js/template/resource/touristGroup/touristGroup.js', //游客管理
+    'arrange_plan': "js/template/arrange/tripPlan/tripPlan.js",
+    'resource_travelLine': 'js/template/resource/travelLine/travelLine.js',
+    'arrange_transit': 'js/template/arrange/transit/transit.js',
+    'arrange_all': 'js/template/resource/tripPlan/tripPlan.js',
+    //-------------------------------------------业务分析模块---------------------------------------------------
+    'business_analyst_saleProduct': "js/template/businessAnalyst/saleProduct/saleProduct.js", //产品销量
+    'business_analyst_sourDstribution': "js/template/businessAnalyst/sourDstribution/sourDstribution.js", //客源分布
+    'business_analyst_customerVolume': "js/template/businessAnalyst/customerVolume/customerVolume.js", //客户客量
+    'business_analyst_employeePerfor': "js/template/businessAnalyst/employeePerfor/employeePerfor.js", //员工业绩 
+    'business_analyst_tourguidePerfor': "js/template/businessAnalyst/tourguidePerfor/tourguidePerfor.js", //导游业绩
 
-	//-------------------------------------------财务管理模块--------------------------------------------------------------------
-	'financial_count': "js/template/financial/count/count.js",//报账审核
-	'financial_innerTransfer_profit': "js/template/financial/innerTransferProfit/innerTransferProfit.js",
-	'financial_turnProfit': "js/template/financial/turnProfit/turnProfit.js",
-	'financial_totalProfit': "js/template/financial/totalProfit/totalProfit.js",
-	'financial_Client': "js/template/financial/Client/Client.js",
-	'financial_insure': "js/template/financial/insure/insure.js",
-	'financial_shop': "js/template/financial/shop/shop.js",//购物账务
-	'financial_guide':"js/template/financial/guide/guide.js",//导游账务
-	'financial_innerTransfer_in':"js/template/financial/innerTransferIn/innerTransferIn.js",//内转转入
-	'financial_innerTransfer_out':"js/template/financial/innerTransferOut/innerTransferOut.js",//内转转出
-	'financial_replace' : 'js/template/financial/replace/replace.js',//代订账务
-	'financial_replaceProfit':"js/template/financial/replaceProfit/replaceProfit.js",
-	'financial_payment_details':"js/template/financial/paymentDetails/paymentDetails.js",//收支明细
-	'financial_planProfit': "js/template/financial/planProfit/planProfit.js", //发团利润
-	'financial_Other_accounts':"js/template/financial/OtherAccounts/OtherAccounts.js",//其他账务
-	'financial_replaceProfit':"js/template/financial/replaceProfit/replaceProfit.js",//代订利润
-	'financial_restaurant':"js/template/financial/Restaurant/Restaurant.js",//餐厅账务
-	'financial_rummery':"js/template/financial/hotel/hotel.js",//酒店账务
-	'financial_busCompany':"js/template/financial/busCompany/busCompany.js",//车队账务
-	'financial_ticket':"js/template/financial/ticket/ticket.js",//票务账务
-	'financial_scenic':"js/template/financial/Scenic/Scenic.js",//票务账务
-	'financial_self':"js/template/financial/Self/Self.js",//自费账务
-	'financial_income': 'js/template/financial/FinIncome/finIncome.js',	//财务收款
-	'financial_pay': 'js/template/financial/FinPay/finPay.js',	//财务收款
-	'financial_transfer':"js/template/financial/transfer/transfer.js",
-	//---------------------------------------------------------------------------------------------------------------
-	'public_message':"js/template/system/message/message.js",
-	'system_information':"js/template/system/information/information.js",
-	'system_user':"js/template/system/user/user.js",
-	'system_department':"js/template/system/department/business.js",
-	'arrange_transfer':"js/template/arrange/arrangeTransfer/arrangeTransfer.js",  //转客管理
-	'arrange_inner_Transfer':"js/template/arrange/innerTransfer/innerTransfer.js",
-	'arrange_orderManage':"js/template/arrange/orderManage/orderManage.js",
-	'arrange_tourist':"js/template/arrange/arrangeTourist/arrangeTourist.js"   //并团转客
+    //-------------------------------------------财务管理模块--------------------------------------------------------------------
+    'financial_count': "js/template/financial/count/count.js", //报账审核
+    'financial_innerTransfer_profit': "js/template/financial/innerTransferProfit/innerTransferProfit.js",
+    'financial_turnProfit': "js/template/financial/turnProfit/turnProfit.js",
+    'financial_totalProfit': "js/template/financial/totalProfit/totalProfit.js",
+    'financial_Client': "js/template/financial/Client/Client.js",
+    'financial_insure': "js/template/financial/insure/insure.js",
+    'financial_shop': "js/template/financial/shop/shop.js", //购物账务
+    'financial_guide': "js/template/financial/guide/guide.js", //导游账务
+    'financial_innerTransfer_in': "js/template/financial/innerTransferIn/innerTransferIn.js", //内转转入
+    'financial_innerTransfer_out': "js/template/financial/innerTransferOut/innerTransferOut.js", //内转转出
+    'financial_replace': 'js/template/financial/replace/replace.js', //代订账务
+    'financial_replaceProfit': "js/template/financial/replaceProfit/replaceProfit.js",
+    'financial_payment_details': "js/template/financial/paymentDetails/paymentDetails.js", //收支明细
+    'financial_planProfit': "js/template/financial/planProfit/planProfit.js", //发团利润
+    'financial_Other_accounts': "js/template/financial/OtherAccounts/OtherAccounts.js", //其他账务
+    'financial_replaceProfit': "js/template/financial/replaceProfit/replaceProfit.js", //代订利润
+    'financial_restaurant': "js/template/financial/Restaurant/Restaurant.js", //餐厅账务
+    'financial_rummery': "js/template/financial/hotel/hotel.js", //酒店账务
+    'financial_busCompany': "js/template/financial/busCompany/busCompany.js", //车队账务
+    'financial_ticket': "js/template/financial/ticket/ticket.js", //票务账务
+    'financial_scenic': "js/template/financial/Scenic/Scenic.js", //票务账务
+    'financial_self': "js/template/financial/Self/Self.js", //自费账务
+    'financial_income': 'js/template/financial/FinIncome/finIncome.js', //财务收款
+    'financial_pay': 'js/template/financial/FinPay/finPay.js', //财务收款
+    'financial_transfer': "js/template/financial/transfer/transfer.js",
+    //---------------------------------------------------------------------------------------------------------------
+    'public_message': "js/template/system/message/message.js",
+    'system_information': "js/template/system/information/information.js",
+    'system_user': "js/template/system/user/user.js",
+    'system_department': "js/template/system/department/business.js",
+    'arrange_transfer': "js/template/arrange/arrangeTransfer/arrangeTransfer.js", //转客管理
+    'arrange_inner_Transfer': "js/template/arrange/innerTransfer/innerTransfer.js",
+    'arrange_orderManage': "js/template/arrange/orderManage/orderManage.js",
+    'arrange_tourist': "js/template/arrange/arrangeTourist/arrangeTourist.js" //并团转客
 };
+
 
 function listMenu(menuTemplate){
 	$.ajax({
@@ -712,18 +711,6 @@ function listMenu(menuTemplate){
 				data.menuList = menuList;
 				var html = template("menu-template",data);
 				$("#sidebar .nav-list").html(html);
-
-				//绑定分团转客菜单功能
-				/*$("#sidebar .nav-list .arrange_tourist").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/arrange/arrangeTourist/arrangeTourist.js",function(arrangeTourist){
-						arrangeTourist.listArrangeTouristMain();
-						modals["arrange_tourist"] = arrangeTourist;
-					});
-				});*/
-
 				//绑定系统旅行社
 				$("#sidebar .nav-list .system_travelAgency").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
@@ -733,32 +720,6 @@ function listMenu(menuTemplate){
 						TravelAgency.listTravelAgency();
 					});
 				});
-
-				//绑定转客菜单功能
-				// $("#sidebar .nav-list .financial_transfer").click(function(){
-				// 	$("#sidebar .nav-list li").removeClass("active");
-				// 	$(this).addClass("active");
-				// 	$(this).parent().parent().addClass("active");
-				// 	seajs.use("" + ASSETS_ROOT +"js/template/financial/transfer/transfer.js",function(transfer){
-				// 		var date = new Date();
-				// 		var year = date.getFullYear();
-				// 		transfer.listTransfer(0,"","",year,"");
-				// 		modals["financial_transfer"] = transfer;
-				// 	});
-				// });
-				
-				
-/*
-				//绑定购物菜单功能
-				$("#sidebar .nav-list .financial_shop").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/financial/shop/shop.js",function(shop){
-						shop.listFinancialShop(0,"","","");
-						modals["financial_shop"] = shop;
-					});
-				});*/
 
 				//绑定其他支出菜单功能
 				$("#sidebar .nav-list .financial_else").click(function(){
@@ -780,17 +741,6 @@ function listMenu(menuTemplate){
 					});
 				});
 
-				/*//绑定按团统计菜单功能
-				$("#sidebar .nav-list .financial_count").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/financial/count/count.js",function(count){
-						count.init()
-						modals["financial_count"] = count;
-						// count.getlistCount(0,"","","","","","","","");
-					});
-				});*/
 				//绑定収支明细菜单功能
 				$("#sidebar .nav-list .financial_collectDetail").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
@@ -1370,25 +1320,49 @@ Tools.getTabKey = function(id) {
  */
 
 Tools.inputCtrolFloat=function($inputCtrol){
-	$inputCtrol.on('keyup', function (event) {
-	    var $amountInput = $(this);
-	    //响应鼠标事件，允许左右方向键移动 
-	    event = window.event || event;
-	    if (event.keyCode == 37 | event.keyCode == 39) {
-	        return;
-	    }
-	    //先把非数字的都替换掉，除了数字和. 
-	    $amountInput.val($amountInput.val().replace(/[^\d.]/g, "").
-	        //只允许一个小数点              
-	        //replace(/^\./g, "").replace(/\.{2,}/g, ".").
-	        //只能输入小数点后两位
-	        replace(".", "$#$").replace(/\./g, "").replace("$#$", ".").replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3'));
-    });
-	$inputCtrol.on('blur', function () {
-	    var $amountInput = $(this);
-		    //最后一位是小数点的话，移除
-		    $amountInput.val(($amountInput.val().replace(/\.$/g, "")));
-	});
+	if (jQuery.isArray($inputCtrol)) {
+		for (var i = 0, len = $inputCtrol.length; i < len; i++) {
+			$inputCtrol[i].on('keyup', function (event) {
+			    var $amountInput = $(this);
+			    //响应鼠标事件，允许左右方向键移动 
+			    event = window.event || event;
+			    if (event.keyCode == 37 | event.keyCode == 39) {
+			        return;
+			    }
+			    //先把非数字的都替换掉，除了数字和. 
+			    $amountInput.val($amountInput.val().replace(/[^\d.]/g, "").
+			        //只允许一个小数点              
+			        //replace(/^\./g, "").replace(/\.{2,}/g, ".").
+			        //只能输入小数点后两位
+			        replace(".", "$#$").replace(/\./g, "").replace("$#$", ".").replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3'));
+		    });
+			$inputCtrol[i].on('blur', function () {
+			    var $amountInput = $(this);
+				    //最后一位是小数点的话，移除
+				    $amountInput.val(($amountInput.val().replace(/\.$/g, "")));
+			});
+		}
+	}else{
+		$inputCtrol.on('keyup', function (event) {
+		    var $amountInput = $(this);
+		    //响应鼠标事件，允许左右方向键移动 
+		    event = window.event || event;
+		    if (event.keyCode == 37 | event.keyCode == 39) {
+		        return;
+		    }
+		    //先把非数字的都替换掉，除了数字和. 
+		    $amountInput.val($amountInput.val().replace(/[^\d.]/g, "").
+		        //只允许一个小数点              
+		        //replace(/^\./g, "").replace(/\.{2,}/g, ".").
+		        //只能输入小数点后两位
+		        replace(".", "$#$").replace(/\./g, "").replace("$#$", ".").replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3'));
+	    });
+		$inputCtrol.on('blur', function () {
+		    var $amountInput = $(this);
+			    //最后一位是小数点的话，移除
+			    $amountInput.val(($amountInput.val().replace(/\.$/g, "")));
+		});
+	}
 }
 /**
  * 为满足两位数，在需要的时候补充零
